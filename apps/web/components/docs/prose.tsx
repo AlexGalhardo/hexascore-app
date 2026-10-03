@@ -37,7 +37,8 @@ export function Code({ children, title }: { children: string; title?: string }) 
 				<span>{title ?? ""}</span>
 				<CopyButton text={children} label="Copy" copiedLabel="Copied" />
 			</figcaption>
-			<pre className="overflow-x-auto p-4 font-mono text-sm leading-6">
+			{/* biome-ignore lint/a11y/noNoninteractiveTabindex: horizontally scrollable code must be reachable by keyboard (WCAG 2.1.1, axe scrollable-region-focusable) */}
+			<pre tabIndex={0} className="overflow-x-auto p-4 font-mono text-sm leading-6">
 				<code>{children}</code>
 			</pre>
 		</figure>

@@ -107,10 +107,7 @@ export async function CatalogFilters({ type, genres, platforms, values }: Props)
 				</div>
 			</details>
 			<div className="flex gap-2">
-				<button
-					type="submit"
-					className={`min-h-11 rounded-md px-4 text-sm font-semibold text-black ${accent.bg}`}
-				>
+				<button type="submit" className={`min-h-11 rounded-md px-4 text-sm font-semibold text-bg ${accent.bg}`}>
 					{t("apply")}
 				</button>
 				<Link
