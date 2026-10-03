@@ -34,6 +34,14 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ### Fixed
 
+- Catalog tables use a fixed layout: long titles and genre lists truncate instead of widening the page past the navbar container (no horizontal scroll).
+
+### Changed
+
+- Catalog and search lists show a 2:3 cover thumbnail left of each title (`components/catalog/cover-thumb.tsx`, shared with the search autocomplete).
+
+### Fixed
+
 - Preview deployments allow the Vercel Toolbar iframe (`https://vercel.live`) in `frame-src`/`connect-src`; production CSP is unchanged. Ingestion keeps the Neon connection alive during long fetches.
 
 ### Added

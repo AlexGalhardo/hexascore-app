@@ -5,6 +5,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
+import { CoverThumb } from "@/components/catalog/cover-thumb";
 import { ScoreBadge } from "@/components/score/score-badge";
 import { useRouter } from "@/i18n/navigation";
 
@@ -111,22 +112,7 @@ export function SearchAutocomplete({ action, placeholder }: Props) {
 										onClick={() => router.push(item.path)}
 										className="flex min-h-14 cursor-default items-center gap-3 px-3 py-1.5 text-sm outline-none data-highlighted:bg-surface"
 									>
-										{item.coverUrl ? (
-											// biome-ignore lint/performance/noImgElement: remote covers from ingestion; next/image needs a host allowlist (later)
-											<img
-												src={item.coverUrl}
-												alt=""
-												width={32}
-												height={48}
-												loading="lazy"
-												className="h-12 w-8 shrink-0 rounded-sm border border-border object-cover"
-											/>
-										) : (
-											<span
-												aria-hidden="true"
-												className="h-12 w-8 shrink-0 rounded-sm border border-border bg-surface"
-											/>
-										)}
+										<CoverThumb src={item.coverUrl} />
 										<span className="grid min-w-0 flex-1">
 											<span className="truncate font-medium">{item.title}</span>
 											<span className="text-xs text-muted">
