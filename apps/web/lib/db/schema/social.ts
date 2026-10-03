@@ -14,7 +14,7 @@ import {
 	uuid,
 } from "drizzle-orm/pg-core";
 import { user } from "./auth";
-import { items } from "./catalog";
+import { items, itemType } from "./catalog";
 
 export const ratings = pgTable(
 	"ratings",
@@ -127,6 +127,8 @@ export const lists = pgTable(
 		userId: text()
 			.notNull()
 			.references(() => user.id, { onDelete: "cascade" }),
+		// A list holds items of a single type; the per-type cap (LIST_LIMITS.perType) is counted on (user_id, type).
+		type: itemType().notNull(),
 		title: text().notNull(),
 		description: text(),
 		isPublic: boolean().notNull().default(true),
@@ -137,7 +139,7 @@ export const lists = pgTable(
 			.defaultNow()
 			.$onUpdate(() => new Date()),
 	},
-	(t) => [index("lists_user_idx").on(t.userId)],
+	(t) => [index("lists_user_type_idx").on(t.userId, t.type)],
 );
 
 export const listItems = pgTable(

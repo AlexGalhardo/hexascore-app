@@ -4,6 +4,7 @@ import { getFormatter, getTranslations, setRequestLocale } from "next-intl/serve
 import { cache } from "react";
 import { z } from "zod";
 import { ListForm } from "@/components/lists/list-form";
+import { ListTypeBadge } from "@/components/lists/list-type-badge";
 import { ScoreBadge } from "@/components/score/score-badge";
 import { FollowButton } from "@/components/social/follow-button";
 import { ReportDialog } from "@/components/social/report-dialog";
@@ -15,7 +16,7 @@ import { db } from "@/lib/db/client";
 import { ITEM_TYPES } from "@/lib/db/schema/catalog";
 import { itemHref } from "@/lib/sections";
 import { getSessionUser } from "@/lib/session";
-import { ITEM_STATUSES } from "@/lib/social/constants";
+import { ITEM_STATUSES, LIST_TYPES, type ListType } from "@/lib/social/constants";
 import { getUserLists } from "@/lib/social/lists";
 import {
 	getProfile,
@@ -291,6 +292,7 @@ export default async function PublicProfilePage({ params, searchParams }: Props)
 								<Link href={`/u/${encodeURIComponent(nickname)}/lists/${l.id}`} className="font-medium">
 									{l.title}
 								</Link>
+								<ListTypeBadge type={l.type} label={tt(l.type)} />
 								<p className="text-xs text-muted">
 									{[
 										tl("itemCount", { count: l.itemCount }),
@@ -312,7 +314,13 @@ export default async function PublicProfilePage({ params, searchParams }: Props)
 						<h2 id="new-list" className="font-serif text-lg font-bold">
 							{tl("new")}
 						</h2>
-						<ListForm />
+						<ListForm
+							counts={
+								Object.fromEntries(
+									LIST_TYPES.map((type) => [type, lists.filter((l) => l.type === type).length]),
+								) as Record<ListType, number>
+							}
+						/>
 					</section>
 				) : null}
 			</div>

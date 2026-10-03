@@ -37,16 +37,15 @@ function invalidFields(error: z.ZodError): string[] {
 }
 
 export async function createList(input: unknown, firstItemId?: unknown): Promise<ActionResult<{ id: string }>> {
-	const parsed = lists.listInputSchema.safeParse(input);
+	const parsed = lists.createListInputSchema.safeParse(input);
 	if (!parsed.success) return fail("invalid", invalidFields(parsed.error));
 	const item = z.uuid().optional().safeParse(firstItemId);
 	if (!item.success) return fail("invalid");
 	const me = await member();
 	if (!("id" in me)) return me;
 	try {
-		const created = await lists.createList(db, me.id, parsed.data);
-		if (created === "limit") return fail("limit");
-		if (item.data) await lists.addListItem(db, me.id, created.id, item.data);
+		const created = await lists.createList(db, me.id, parsed.data, item.data);
+		if (typeof created === "string") return fail(created);
 		refresh();
 		return { ok: true, id: created.id };
 	} catch (error) {
@@ -80,7 +79,7 @@ export async function addToList(input: unknown): Promise<ActionResult> {
 	if (!("id" in me)) return me;
 	return run("add", async () => {
 		const result = await lists.addListItem(db, me.id, parsed.data.listId, parsed.data.itemId);
-		return result === "ok" ? true : result === "limit" ? fail("limit") : false;
+		return result === "ok" ? true : result === "notFound" ? false : fail(result);
 	});
 }
 
