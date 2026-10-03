@@ -226,13 +226,13 @@ export function ApiConsole({ keys, children }: { keys: ApiKeyView[]; children: R
 				ref={dialog}
 				onClose={() => setRevoking(null)}
 				aria-labelledby="revoke-title"
-				className="m-auto max-w-md rounded-lg border border-border bg-bg p-6 text-fg backdrop:bg-black/50"
+				className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-lg border border-border bg-bg p-6 text-fg backdrop:bg-black/50"
 			>
 				<h2 id="revoke-title" className="font-serif text-xl font-bold">
 					{t("keys.confirmTitle", { name: revoking?.name ?? "" })}
 				</h2>
 				<p className="mt-2 text-sm">{t("keys.confirmBody")}</p>
-				<div className="mt-6 flex justify-end gap-2">
+				<div className="mt-6 flex flex-wrap justify-end gap-2">
 					<button
 						type="button"
 						onClick={() => dialog.current?.close()}
