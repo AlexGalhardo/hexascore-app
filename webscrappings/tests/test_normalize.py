@@ -32,7 +32,7 @@ def test_parse_time_precisions() -> None:
 
 
 def test_movie_mapping(wikidata_records: dict[str, dict]) -> None:
-    summary = wikipedia.parse_summary(load("wikipedia_summary_en_the_matrix.json"), "Q83495", "en")
+    summary = wikipedia.parse_extracts(load("wikipedia_extracts_en.json"), {"Q83495"}, "en")[0]
     item = normalize.build_item("Q83495", {"wikidata": wikidata_records["Q83495"], "wikipedia:en": summary})
     assert item is not None
     assert item.type == "movie"

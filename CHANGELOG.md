@@ -5,6 +5,11 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Fixed
+
+- Ingestion: Wikipedia synopses come from the Action API (`prop=extracts`, intro, plain text) in batches of 20 titles instead of one REST `page/summary` request per page, which anonymous clients get throttled on (continuous 429, ~1 page/s); redirects are followed and pages are still matched by `wikibase_item` with disambiguation pages skipped. About 20x faster (~1,400 pages/min per language).
+- Ingestion: `store_records` writes each 200-record chunk with one pipelined `executemany` instead of one upsert round trip per record, which capped a remote database at ~6 rows/s.
+
 ## [0.0.22](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.21...v0.0.22) (2026-10-03)
 
 ### Added

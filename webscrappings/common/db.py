@@ -5,6 +5,7 @@ import os
 import threading
 from collections.abc import Iterable
 from dataclasses import dataclass
+from itertools import batched
 from typing import Any
 
 import psycopg
@@ -82,10 +83,15 @@ def existing_ids(conn: psycopg.Connection, source: str) -> set[str]:
 
 def store_records(conn: psycopg.Connection, records: Iterable[Record], commit_every: int = 200) -> tuple[int, int]:
     seen = changed = 0
-    for record in records:
-        seen += 1
-        changed += upsert_source_record(conn, record.source, record.external_id, record.payload)
-        if seen % commit_every == 0:
-            conn.commit()
-    conn.commit()
+    # executemany pipelines each chunk in one round trip; one upsert per record capped a remote DB at ~6 rows/s.
+    for chunk in batched(records, commit_every, strict=False):
+        params = [(r.source, r.external_id, Jsonb(r.payload), canonical_hash(r.payload)) for r in chunk]
+        with conn.cursor() as cur:
+            cur.executemany(UPSERT_SQL, params, returning=True)
+            while True:
+                changed += cur.fetchone() is not None
+                if not cur.nextset():
+                    break
+        conn.commit()
+        seen += len(chunk)
     return seen, changed

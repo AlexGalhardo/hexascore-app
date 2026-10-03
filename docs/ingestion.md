@@ -5,7 +5,7 @@ Sem scraping de HTML: só APIs públicas e Wikidata.
 | Fonte | Como | Fornece |
 | --- | --- | --- |
 | Wikidata | SPARQL (seleção de QIDs) + `wbgetentities` (mesmo JSON do dump) | catálogo base, títulos por idioma, gêneros, datas, IDs externos, notas MC/RT (P444 + P447), trailer YouTube (P1651), imagem Commons (P3383/P18), popularidade (sitelinks) |
-| Wikipedia | REST `page/summary` (en, pt, es) | sinopse por idioma (`CC BY-SA 4.0` + URL da página) |
+| Wikipedia | Action API `prop=extracts` em lotes de 20 (en, pt, es) | sinopse por idioma (`CC BY-SA 4.0` + URL da página) |
 | Open Library | API (`/isbn`, `/books`, `/works`) | páginas (fallback do P1104), capa |
 | Steam | `appdetails` público | capa (`header_image`), plataformas (fallback do P400) |
 | GOG | API pública de catálogo (`catalog.gog.com/v1/catalog`) | link da loja, disponibilidade, capa vertical, plataformas (fallback) |
@@ -71,7 +71,7 @@ Secrets: `DATABASE_URL`, `APP_URL`, `CRON_SECRET`, `BLOB_READ_WRITE_TOKEN`. Os t
 - **semanal** (`ingest-weekly.yml`, domingo 05:00 UTC): relê todas as entidades do catálogo (notas P444 e o que o noturno perdeu) → sinopses alteradas/faltantes → Open Library, GOG → normalize, covers.
 - **CI** (`python-ci.yml`, PR para `dev`/`main` tocando `webscrappings/**`): ruff check, ruff format --check, pytest (testes de banco contra Postgres 18.6 quando as migrations existem no branch).
 
-Wikipedia: 8 requisições simultâneas (`WORKERS`), com o throttle por host do `HttpClient` compartilhado entre threads (20 req/s por wiki). Para retomar um bootstrap sem refazer o Wikidata, dispare o workflow com `skip_catalog=true`.
+Wikipedia: Action API (`action=query&prop=extracts|pageprops|info`, `exintro` + `explaintext`) com 20 títulos por requisição (`BATCH`, teto do TextExtracts para `exintro`) e 4 lotes simultâneos por idioma (`WORKERS`), sob o throttle por host do `HttpClient` compartilhado entre threads (5 req/s por wiki). O REST `page/summary` (1 página por requisição) recebia 429 contínuo como cliente anônimo e ficava em ~1 página/s; em lote, ~1.400 páginas/min por idioma. Redirecionamentos são seguidos (`redirects=1`); a página só vale se o `wikibase_item` bater com o QID do lote e não for desambiguação. `store_records` grava cada bloco de 200 registros com `executemany` (pipeline, 1 round trip), não 1 upsert por registro, o que limitava um banco remoto a ~6 linhas/s. Para retomar um bootstrap sem refazer o Wikidata, dispare o workflow com `skip_catalog=true`.
 
 Limites conhecidos: sinopses só são re-buscadas quando a entidade Wikidata muda ou falta registro; `affiliate_links` (GOG/Steam) ainda não é populado; Commons responde 429 em rajadas (o cliente espera `Retry-After`).
 
