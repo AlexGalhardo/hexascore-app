@@ -113,8 +113,8 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 
 ### 0.1 — Catálogo
 - [ ] Schema do catálogo + `source_records` + migrations
-- [ ] `webscrappings/`: common, conectores Wikidata/Wikipedia/Open Library/Steam/GOG, normalizador, covers, testes
-- [ ] Workflows bootstrap/incremental/semanal + snapshot `.sql.gz`
+- [x] `webscrappings/`: common, conectores Wikidata/Wikipedia/Open Library/Steam/GOG, normalizador, covers, testes
+- [x] Workflows bootstrap/incremental/semanal + snapshot `.sql.gz`
 - [ ] Páginas `/`, catálogos das 4 seções, página do item (sem avaliação ainda), `/search`, autocomplete
 - **Verificar**: bootstrap local carrega ≥ 100k itens; `pytest` verde; busca "zelda" (com typo "zleda") retorna o jogo; página do item renderiza nos 3 idiomas com atribuição de licença.
 
