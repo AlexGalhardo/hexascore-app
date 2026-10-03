@@ -16,6 +16,7 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ### Changed
 
+- Catalog filters: "Minimum Score Per Category" is always visible (no accordion), the top fields share equal widths across the row, and the total matching the filters is shown above the list (`countListItems`, same WHERE as the list, cached under the `catalog` tag).
 - Item page header: the final community score sits at the far right of the title row; year and creators on one line; genres and platforms as labelled chips (first 4/6, a native `<details>` "+N more" reveals the rest) instead of one long dotted line.
 
 ### Changed
