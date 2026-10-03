@@ -3,12 +3,19 @@ import { z } from "zod";
 import type { Locale } from "@/i18n/routing";
 import type { Database } from "@/lib/db/client";
 import { user } from "@/lib/db/schema/auth";
-import { items } from "@/lib/db/schema/catalog";
+import { items, type itemType } from "@/lib/db/schema/catalog";
 import { listItems, lists } from "@/lib/db/schema/social";
-import { LIST_LIMITS } from "./constants";
+import { LIST_LIMITS, LIST_TYPES, type ListType } from "./constants";
 import { displayName, type ItemRef, itemRefColumns, publicUser, titleJoin } from "./repository";
 
-export { LIST_LIMITS };
+export { LIST_LIMITS, LIST_TYPES, type ListType };
+
+type SameTypes = (typeof itemType.enumValues)[number] extends ListType
+	? ListType extends (typeof itemType.enumValues)[number]
+		? true
+		: never
+	: never;
+const _typesMatch: SameTypes = true;
 
 export const listInputSchema = z.object({
 	title: z.string().trim().min(1).max(LIST_LIMITS.title),
@@ -21,8 +28,13 @@ export const listInputSchema = z.object({
 });
 export type ListInput = z.infer<typeof listInputSchema>;
 
+// The type is chosen once, on create; editing a list never changes it.
+export const createListInputSchema = listInputSchema.extend({ type: z.enum(LIST_TYPES) });
+export type CreateListInput = z.infer<typeof createListInputSchema>;
+
 export type ListSummary = {
 	id: string;
+	type: ListType;
 	title: string;
 	description: string | null;
 	isPublic: boolean;
@@ -34,6 +46,7 @@ export type ListDetail = ListSummary & { ownerId: string; ownerNickname: string;
 
 const summaryColumns = {
 	id: lists.id,
+	type: lists.type,
 	title: lists.title,
 	description: lists.description,
 	isPublic: lists.isPublic,
@@ -100,7 +113,7 @@ export async function getList(
 	return { ...toSummary(rest), ownerId, ownerNickname, items: entries };
 }
 
-/** The viewer's lists with a flag for whether `itemId` is already in each (item page menu). */
+/** The viewer's lists of the item's type, with a flag for whether `itemId` is already in each (item page menu). */
 export async function getListsForItem(
 	db: Database,
 	userId: string,
@@ -113,23 +126,46 @@ export async function getListsForItem(
 			contains: sql<boolean>`exists (select 1 from ${listItems} where ${listItems.listId} = ${lists.id} and ${listItems.itemId} = ${itemId})`,
 		})
 		.from(lists)
-		.where(eq(lists.userId, userId))
+		.where(
+			and(
+				eq(lists.userId, userId),
+				eq(lists.type, sql`(select ${items.type} from ${items} where ${items.id} = ${itemId})`),
+			),
+		)
 		.orderBy(desc(lists.updatedAt));
 }
 
-export type ListWriteResult = "ok" | "notFound" | "limit";
+export type ListWriteResult = "ok" | "notFound" | "limit" | "typeMismatch";
 
-export async function createList(db: Database, userId: string, input: ListInput): Promise<{ id: string } | "limit"> {
+/**
+ * Creates a list, optionally with a first item (which must exist and match the list's type), in one transaction.
+ * At most `LIST_LIMITS.perType` lists per user and type.
+ */
+export async function createList(
+	db: Database,
+	userId: string,
+	input: CreateListInput,
+	firstItemId?: string,
+): Promise<{ id: string } | Exclude<ListWriteResult, "ok">> {
 	return db.transaction(async (tx) => {
 		// Serializes concurrent creates of the same user so the cap cannot be raced past.
 		await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${`lists:${userId}`}))`);
-		const [existing] = await tx.select({ n: count() }).from(lists).where(eq(lists.userId, userId));
-		if ((existing?.n ?? 0) >= LIST_LIMITS.lists) return "limit";
+		const [existing] = await tx
+			.select({ n: count() })
+			.from(lists)
+			.where(and(eq(lists.userId, userId), eq(lists.type, input.type)));
+		if ((existing?.n ?? 0) >= LIST_LIMITS.perType) return "limit";
+		if (firstItemId) {
+			const [item] = await tx.select({ type: items.type }).from(items).where(eq(items.id, firstItemId)).limit(1);
+			if (!item) return "notFound";
+			if (item.type !== input.type) return "typeMismatch";
+		}
 		const [row] = await tx
 			.insert(lists)
 			.values({ userId, ...input })
 			.returning({ id: lists.id });
 		if (!row) throw new Error("list insert returned no row");
+		if (firstItemId) await tx.insert(listItems).values({ listId: row.id, itemId: firstItemId, position: 1 });
 		return { id: row.id };
 	});
 }
@@ -148,19 +184,21 @@ export async function deleteList(db: Database, userId: string, listId: string): 
 
 type Tx = Parameters<Parameters<Database["transaction"]>[0]>[0];
 
-// Locks the list row so concurrent edits of the same list (append, reorder) serialize.
-async function lockOwnedList(tx: Tx, userId: string, listId: string): Promise<boolean> {
-	const rows = await tx.select({ id: lists.id }).from(lists).where(owned(userId, listId)).for("update");
-	return rows.length > 0;
+// Locks the list row so concurrent edits of the same list (append, reorder) serialize. Returns its type.
+async function lockOwnedList(tx: Tx, userId: string, listId: string): Promise<ListType | null> {
+	const [row] = await tx.select({ type: lists.type }).from(lists).where(owned(userId, listId)).for("update");
+	return row?.type ?? null;
 }
 
 const touch = (tx: Tx, listId: string) => tx.update(lists).set({ updatedAt: new Date() }).where(eq(lists.id, listId));
 
 export function addListItem(db: Database, userId: string, listId: string, itemId: string): Promise<ListWriteResult> {
 	return db.transaction(async (tx) => {
-		if (!(await lockOwnedList(tx, userId, listId))) return "notFound";
-		const [item] = await tx.select({ id: items.id }).from(items).where(eq(items.id, itemId)).limit(1);
+		const listType = await lockOwnedList(tx, userId, listId);
+		if (!listType) return "notFound";
+		const [item] = await tx.select({ type: items.type }).from(items).where(eq(items.id, itemId)).limit(1);
 		if (!item) return "notFound";
+		if (item.type !== listType) return "typeMismatch";
 		const [stats] = await tx
 			.select({ n: count(), last: max(listItems.position) })
 			.from(listItems)

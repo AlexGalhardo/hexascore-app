@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { cache } from "react";
 import { ListForm } from "@/components/lists/list-form";
 import { DeleteListButton, ListEntryControls } from "@/components/lists/list-owner-controls";
+import { ListTypeBadge } from "@/components/lists/list-type-badge";
 import { ReportDialog } from "@/components/social/report-dialog";
 import { Notice } from "@/components/ui/form";
 import { asLocale } from "@/i18n/locale";
@@ -55,6 +56,7 @@ export default async function ListPage({ params }: Props) {
 					{t("by", { nickname: list.ownerNickname })}
 				</Link>
 				<h1 className="font-serif text-3xl font-bold break-words">{list.title}</h1>
+				<ListTypeBadge type={list.type} label={tt(list.type)} />
 				{list.description ? <p className="whitespace-pre-line">{list.description}</p> : null}
 				<p className="text-sm text-muted">
 					{[t("itemCount", { count: list.items.length }), list.isPublic ? t("public") : t("private")].join(

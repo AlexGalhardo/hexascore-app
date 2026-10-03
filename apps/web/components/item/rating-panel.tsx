@@ -59,7 +59,7 @@ export async function RatingPanel({ itemId, type, labels, path }: Props) {
 				<RatingForm itemId={itemId} labels={labels} initial={rating} />
 				<div className="grid gap-3 border-t border-border pt-4 sm:grid-cols-2 sm:items-start">
 					<ItemStatusSelect itemId={itemId} type={type} initial={status} />
-					<AddToList itemId={itemId} lists={lists} />
+					<AddToList itemId={itemId} type={type} lists={lists} />
 				</div>
 				{type === "game" && status === "completed" ? <TimeToBeatForm itemId={itemId} initial={times} /> : null}
 			</>

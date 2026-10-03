@@ -5,16 +5,19 @@ import { useState, useTransition } from "react";
 import { addToList, createList, removeFromList } from "@/actions/lists";
 import { buttonClass, Input, Notice } from "@/components/ui/form";
 import type { ActionError } from "@/lib/action-result";
+import { LIST_LIMITS, type ListType } from "@/lib/social/constants";
 
-type Props = { itemId: string; lists: { id: string; title: string; contains: boolean }[] };
+// `lists` are only the viewer's lists of the item's type, so their count is the quota used for that type.
+type Props = { itemId: string; type: ListType; lists: { id: string; title: string; contains: boolean }[] };
 
-export function AddToList({ itemId, lists }: Props) {
+export function AddToList({ itemId, type, lists }: Props) {
 	const t = useTranslations("lists");
 	const tAction = useTranslations("actions");
 	const [entries, setEntries] = useState(lists);
 	const [title, setTitle] = useState("");
 	const [error, setError] = useState<ActionError | null>(null);
 	const [pending, startTransition] = useTransition();
+	const atLimit = entries.length >= LIST_LIMITS.perType;
 
 	function toggle(listId: string, contains: boolean): void {
 		setError(null);
@@ -31,7 +34,7 @@ export function AddToList({ itemId, lists }: Props) {
 	function create(): void {
 		setError(null);
 		startTransition(async () => {
-			const result = await createList({ title, description: "", isPublic: true }, itemId);
+			const result = await createList({ title, description: "", isPublic: true, type }, itemId);
 			if (!result.ok) return setError(result.error);
 			setEntries((prev) => [{ id: result.id, title: title.trim(), contains: true }, ...prev]);
 			setTitle("");
@@ -62,28 +65,40 @@ export function AddToList({ itemId, lists }: Props) {
 						))}
 					</ul>
 				) : (
-					<p className="text-sm text-muted">{t("noLists")}</p>
+					<p className="text-sm text-muted">{t("noListsOfType", { type })}</p>
 				)}
-				<form
-					className="flex gap-2"
-					onSubmit={(e) => {
-						e.preventDefault();
-						create();
-					}}
-				>
-					<Input
-						aria-label={t("fieldTitle")}
-						placeholder={t("newWithItem")}
-						maxLength={80}
-						required
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
-					/>
-					<button type="submit" disabled={pending || !title.trim()} className={buttonClass("secondary")}>
-						{t("create")}
-					</button>
-				</form>
-				{error ? <Notice tone="error">{tAction(error)}</Notice> : null}
+				{atLimit ? (
+					<Notice tone="info">{t("limitReached", { type, limit: LIST_LIMITS.perType })}</Notice>
+				) : (
+					<form
+						className="flex gap-2"
+						onSubmit={(e) => {
+							e.preventDefault();
+							create();
+						}}
+					>
+						<Input
+							aria-label={t("fieldTitle")}
+							aria-describedby={`list-quota-${itemId}`}
+							placeholder={t("newWithItem")}
+							maxLength={LIST_LIMITS.title}
+							required
+							value={title}
+							onChange={(e) => setTitle(e.target.value)}
+						/>
+						<button type="submit" disabled={pending || !title.trim()} className={buttonClass("secondary")}>
+							{t("create")}
+						</button>
+					</form>
+				)}
+				<p id={`list-quota-${itemId}`} className="text-xs text-muted">
+					{t("quota", { type, count: entries.length, limit: LIST_LIMITS.perType })}
+				</p>
+				{error ? (
+					<Notice tone="error">
+						{error === "limit" ? t("limitReached", { type, limit: LIST_LIMITS.perType }) : tAction(error)}
+					</Notice>
+				) : null}
 			</div>
 		</details>
 	);

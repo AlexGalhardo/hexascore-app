@@ -113,18 +113,24 @@ test.describe("ratings @auth", () => {
 
 		const panel = page.getByRole("region", { name: "Your rating" });
 		await panel.getByText("Add to list").click();
-		await expect(panel.getByText("You have no lists yet.")).toBeVisible();
+		await expect(panel.getByText("You have no game lists yet.")).toBeVisible();
+		await expect(panel.getByText("Game lists: 0/10")).toBeVisible();
 		const title = `E2E list ${item.id.slice(0, 8)}`;
 		await panel.getByRole("textbox", { name: "Title" }).fill(title);
 		await panel.getByRole("button", { name: "Create list" }).click();
 		const entry = panel.getByRole("checkbox", { name: title });
 		await expect(entry).toBeChecked();
+		await expect(panel.getByText("Game lists: 1/10")).toBeVisible();
 		await expectAccessible(page);
 
 		await page.goto(`/u/${account.nickname}?tab=lists`);
 		await expect(page.getByText(/1 item · Public/)).toBeVisible();
+		// The new-list form requires a category and shows that category's quota.
+		await expect(page.getByRole("combobox", { name: "Category" })).toHaveValue("game");
+		await expect(page.getByText("Game lists: 1/10")).toBeVisible();
 		await page.getByRole("link", { name: title }).click();
 		await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
+		await expect(page.getByRole("article").locator("header").getByText("Game", { exact: true })).toBeVisible();
 		await expect(page.getByRole("link", { name: item.title })).toBeVisible();
 		await expectAccessible(page);
 
