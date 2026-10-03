@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 import { z } from "zod";
 import { ScoreBadge } from "@/components/score/score-badge";
+import { DIALOG_BACKDROP, dialogPopup } from "@/components/ui/dialog";
 import { Link } from "@/i18n/navigation";
 import { abbreviateLabel } from "@/lib/categories";
 import { pageWindow } from "@/lib/page-window";
@@ -70,8 +71,8 @@ export function RatingsDialog({ itemId, categoryLabels }: Props) {
 			</Dialog.Trigger>
 			<Dialog.Portal>
 				{/* z-60: above the sticky navbar (z-40) and the cookie banner (z-50) */}
-				<Dialog.Backdrop className="fixed inset-0 z-60 bg-black/50" />
-				<Dialog.Popup className="fixed top-1/2 left-1/2 z-60 flex max-h-[min(85dvh,48rem)] w-[calc(100%-2rem)] max-w-3xl -translate-x-1/2 -translate-y-1/2 flex-col rounded-lg border border-border bg-bg p-4 text-fg shadow-xl">
+				<Dialog.Backdrop className={DIALOG_BACKDROP} />
+				<Dialog.Popup className={`${dialogPopup("lg")} flex flex-col p-4`}>
 					<div className="flex items-start justify-between gap-4">
 						<div>
 							<Dialog.Title className="font-serif text-xl font-bold">{t("userScores")}</Dialog.Title>
