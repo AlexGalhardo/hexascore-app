@@ -11,6 +11,10 @@ on:
         description: "Item types"
         type: string
         default: "movie,series,game,book"
+      skip_catalog:
+        description: "Skip the Wikidata catalog job (resume enrichment, covers and snapshot of an already loaded catalog)"
+        type: boolean
+        default: false
 
 concurrency:
   group: ingest
@@ -33,6 +37,7 @@ env:
 
 jobs:
   catalog:
+    if: ${{ !inputs.skip_catalog }}
     runs-on: ubuntu-latest
     timeout-minutes: 240
     steps:
@@ -57,6 +62,8 @@ jobs:
   # Each source runs in its own job (6h cap per job); --missing-only makes a re-dispatch resume where it stopped.
   enrich:
     needs: catalog
+    # Runs after a successful catalog job, or on its own when skip_catalog resumes a loaded catalog.
+    if: ${{ !cancelled() && (needs.catalog.result == 'success' || needs.catalog.result == 'skipped') }}
     runs-on: ubuntu-latest
     timeout-minutes: 350
     strategy:
@@ -82,7 +89,7 @@ jobs:
 
   finalize:
     needs: [catalog, enrich]
-    if: ${{ !cancelled() && needs.catalog.result == 'success' }}
+    if: ${{ !cancelled() && (needs.catalog.result == 'success' || needs.catalog.result == 'skipped') }}
     runs-on: ubuntu-latest
     timeout-minutes: 350
     permissions:
