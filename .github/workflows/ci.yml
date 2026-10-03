@@ -1,0 +1,123 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DATABASE_URL: "postgres://postgres:postgres@localhost:5432/perguntae_db?schema=public"
+  NEXTAUTH_SECRET: "ci-only-secret"
+  NEXTAUTH_URL: "http://localhost:3000"
+  NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+  RESEND_API_KEY: "re_ci_dummy"
+  ABACATEPAY_WEBHOOK_SECRET: "ci-dummy"
+  ABACATEPAY_API_KEY: "ci-dummy"
+  UPLOADTHING_TOKEN: "ci-dummy"
+  NEXT_PUBLIC_TEST_MODE: "true"
+  DANGER_MODE: "false"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
+      - run: bun install --frozen-lockfile
+      - run: bun run lint:ci
+      - run: bun run format:ci
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
+      - run: bun install --frozen-lockfile
+      - run: bun run prisma:generate
+      - run: bunx tsc --noEmit
+
+  security-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
+      # GHSA-ggr8-5vv4-36mx (deepmerge-ts, alta): só entra via CLI do Prisma (@prisma/config fixa 7.1.5) e
+      # exige objeto recursivo controlado pelo atacante na config. Não roda em produção; a correção é major.
+      # Revisar a cada upgrade do Prisma (próxima revisão: 2026-12-31).
+      - run: bun audit --audit-level=high --ignore=GHSA-ggr8-5vv4-36mx
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
+      - run: bun install --frozen-lockfile
+      - run: bun run prisma:generate
+      - run: bun run test:unit
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: perguntae_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
+      - run: bun install --frozen-lockfile
+      - run: bun run prisma:generate
+      - run: bunx prisma migrate deploy
+      - run: bun run test:integration
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests]
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: perguntae_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
+      - run: bun install --frozen-lockfile
+      - run: bun run prisma:generate
+      - run: bunx prisma migrate deploy
+      - run: bun run build
+      - run: bun run test:smoke
