@@ -1,0 +1,18 @@
+[    1920ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    2946ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    3385ms] [LOG] %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    3386ms] [LOG] %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {route: /pt-br/signup, path: /pt-br/signup} @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    3386ms] [LOG] %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {route: /pt-br/signup, path: /pt-br/signup} @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    3386ms] [LOG] %c[Vercel Web Analytics]%c [view] http://localhost:3000/pt-br/signup color: rgb(120, 120, 120) color: inherit {o: http://localhost:3000/pt-br/signup, sv: 0.1.3, sdkn: @vercel/analytics/next, sdkv: 2.0.1, ts: 1791037279019} /_vercel/insights/view @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    3386ms] [LOG] %c[Vercel Web Analytics]%c [view] http://localhost:3000/pt-br/signup color: rgb(120, 120, 120) color: inherit {o: http://localhost:3000/pt-br/signup, sv: 0.1.3, sdkn: @vercel/analytics/next, sdkv: 2.0.1, ts: 1791037279020} /_vercel/insights/view @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    3387ms] [LOG] %c[Vercel Speed Insights]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    5846ms] [LOG] Error @ http://localhost:3000/149e9513-01fa-4fb0-aad4-566afd725d1b/2d206a39-8ed7-437e-a3be-862e0f06eea3/a-4-a/c.js?i=0&v=3&h=localhost%3A3000:0
+[    6172ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    8303ms] [LOG] [Fast Refresh] done in 2247ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[   22607ms] [ERROR] Failed to load resource: net::ERR_INSUFFICIENT_RESOURCES @ http://gc.kis.v2.scr.kaspersky-labs.com/85EB9056-DFBD-494E-AB02-C9F80AA6BA7D/73AB2E59-4435-4581-B13F-6DEAF0FBA8A5/from?get&nocache=10d76&tm=2026-10-03T14%3A21%3A37.229Z:0
+[   47057ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[   47832ms] [LOG] [Fast Refresh] done in 814ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[   48814ms] [LOG] [Fast Refresh] done in 814ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[   48994ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[   49075ms] [LOG] [Fast Refresh] done in 93ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[   49789ms] [LOG] [Fast Refresh] done in 93ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781

@@ -204,7 +204,7 @@ export default async function PublicProfilePage({ params, searchParams }: Props)
 								<div className="min-w-0">
 									<Link
 										href={itemHref(r.item.type, r.item.slug)}
-										className="block truncate font-medium hover:underline"
+										className="block truncate font-medium"
 									>
 										{r.item.title}
 									</Link>
@@ -264,10 +264,7 @@ export default async function PublicProfilePage({ params, searchParams }: Props)
 										key={item.id}
 										className="flex min-h-11 items-center gap-2 border-t border-border"
 									>
-										<Link
-											href={itemHref(item.type, item.slug)}
-											className="truncate hover:underline"
-										>
+										<Link href={itemHref(item.type, item.slug)} className="truncate">
 											{item.title}
 										</Link>
 										<span className="ml-auto shrink-0 text-xs text-muted">{tt(item.type)}</span>
@@ -291,10 +288,7 @@ export default async function PublicProfilePage({ params, searchParams }: Props)
 					<ul className="grid">
 						{lists.map((l) => (
 							<li key={l.id} className="grid gap-1 border-t border-border py-3">
-								<Link
-									href={`/u/${encodeURIComponent(nickname)}/lists/${l.id}`}
-									className="font-medium hover:underline"
-								>
+								<Link href={`/u/${encodeURIComponent(nickname)}/lists/${l.id}`} className="font-medium">
 									{l.title}
 								</Link>
 								<p className="text-xs text-muted">
