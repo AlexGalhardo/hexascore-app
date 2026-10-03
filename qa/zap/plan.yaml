@@ -1,0 +1,81 @@
+# OWASP ZAP 2.17.0 Automation Framework plan, run by qa/zap/run.sh (docs/testing.md → "DAST").
+# Baseline: spider + passive scan of the site. API scan: import openapi.json and active-scan /api/v1.
+# Fails (exit 1) only on High alerts; the HTML/JSON reports in qa/reports/zap list everything else.
+# Env (substituted by ZAP): TARGET_URL, QA_API_KEY, VERCEL_AUTOMATION_BYPASS_SECRET.
+env:
+  contexts:
+    - name: site
+      urls: ["${TARGET_URL}"]
+      includePaths: ["${TARGET_URL}.*"]
+      # Auth and Better Auth endpoints are rate limited per IP and would only answer 429.
+      excludePaths: ["${TARGET_URL}/api/auth/.*", "${TARGET_URL}/api/cron/.*"]
+    - name: api
+      urls: ["${TARGET_URL}/api/v1"]
+      includePaths: ["${TARGET_URL}/api/v1/.*"]
+  parameters:
+    failOnError: true
+    failOnWarning: false
+    progressToStdout: true
+
+jobs:
+  - type: replacer
+    rules:
+      - description: Vercel deployment protection bypass (empty and ignored outside Vercel)
+        matchType: req_header
+        matchString: x-vercel-protection-bypass
+        matchRegex: false
+        replacementString: "${VERCEL_AUTOMATION_BYPASS_SECRET}"
+      - description: API key for the public API
+        url: ".*/api/v1/.*"
+        matchType: req_header
+        matchString: Authorization
+        matchRegex: false
+        replacementString: "Bearer ${QA_API_KEY}"
+
+  # Known false positives, each with the reason it does not apply. Only add a filter after checking the
+  # alert by hand; never lower a real finding.
+  - type: alertFilter
+    alertFilters: []
+
+  - type: spider
+    parameters:
+      context: site
+      maxDuration: 2
+      maxChildren: 20
+
+  - type: openapi
+    parameters:
+      apiFile: /zap/openapi.json
+      context: api
+      targetUrl: "${TARGET_URL}/api/v1"
+
+  - type: passiveScan-wait
+    parameters:
+      maxDuration: 5
+
+  - type: activeScan
+    parameters:
+      context: api
+      maxScanDurationInMins: 10
+      # Under the Pro plan's 10 req/s; 429s would hide the responses the rules need to see.
+      threadPerHost: 2
+      delayInMs: 150
+
+  - type: passiveScan-wait
+    parameters:
+      maxDuration: 5
+
+  - type: report
+    parameters:
+      template: traditional-html
+      reportDir: /zap/wrk
+      reportFile: zap-report.html
+  - type: report
+    parameters:
+      template: traditional-json
+      reportDir: /zap/wrk
+      reportFile: zap-report.json
+
+  - type: exitStatus
+    parameters:
+      errorLevel: High

@@ -5,6 +5,10 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Added
+
+- API QA gates in `.github/workflows/qa.yml` (run in sequence against the Vercel preview, pinned Docker images, no npm dependency): k6 2.3.0 load test (`qa/k6`, p95 < 300 ms, 429 with `Retry-After` on a burst, Free key 402 after the quota and 400 on `limit=11`), Schemathesis 4.29.0 fuzzing of `openapi.json` (`qa/schemathesis`, 5xx + response conformance) and an OWASP ZAP 2.17.0 baseline + API active scan (`qa/zap`, fails on High). Secrets `QA_API_KEY` (paid plan) and optional `QA_FREE_API_KEY`; jobs skip with a notice without them.
+
 ## [0.0.16] - 2026-10-03
 
 ### Added
