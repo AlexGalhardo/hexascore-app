@@ -19,7 +19,7 @@ import {
 	type ListItemsParams,
 	listItemsParamsSchema,
 	type Page,
-	type PublicRating,
+	type PublicRatingsPage,
 	type Sort,
 } from "./types";
 
@@ -389,59 +389,61 @@ export async function getAffiliateLinks(db: Database, itemId: string): Promise<A
 // ---------------------------------------------------------------------------------------------------------------
 // Public ratings of an item (only public, active profiles)
 
-const ratingCursorSchema = z.object({ t: z.string().max(64), u: z.string().max(128) });
+// Numbered pages over the newest RATINGS_BROWSE_LIMIT ratings: the count scans at most that many index rows and
+// OFFSET never exceeds RATINGS_BROWSE_LIMIT - RATINGS_PAGE_SIZE, so both queries stay cheap on popular items.
+export const RATINGS_PAGE_SIZE = 10;
+export const RATINGS_MAX_PAGES = 100;
+const RATINGS_BROWSE_LIMIT = RATINGS_PAGE_SIZE * RATINGS_MAX_PAGES;
 
-export async function getItemRatingsPage(
-	db: Database,
-	itemId: string,
-	options: { cursor?: string; limit?: number } = {},
-): Promise<Page<PublicRating>> {
-	const limit = Math.min(Math.max(options.limit ?? 20, 1), 50);
-	const cursor = options.cursor ? decodeCursor(options.cursor, ratingCursorSchema) : null;
-	if (options.cursor && !cursor) throw new InvalidCursorError();
+/** `page` is 1-based; values outside 1..RATINGS_MAX_PAGES are clamped. */
+export async function getItemRatingsPage(db: Database, itemId: string, page = 1): Promise<PublicRatingsPage> {
+	const current = Math.min(Math.max(Math.trunc(page) || 1, 1), RATINGS_MAX_PAGES);
+	const visible = and(
+		eq(ratings.itemId, itemId),
+		eq(user.profilePrivate, false),
+		sql`${user.username} is not null`,
+		sql`coalesce(${user.banned}, false) = false`,
+		isNull(user.deletionScheduledAt),
+	);
 
-	const rows = await db
-		.select({
-			nickname: user.username,
-			overall: ratings.overall,
-			c1: ratings.c1,
-			c2: ratings.c2,
-			c3: ratings.c3,
-			c4: ratings.c4,
-			c5: ratings.c5,
-			c6: ratings.c6,
-			createdAt: ratings.createdAt,
-			cursorTime: sql<string>`${ratings.createdAt}::text`,
-			userId: ratings.userId,
-		})
+	const capped = db
+		.select({ one: sql`1` })
 		.from(ratings)
 		.innerJoin(user, eq(user.id, ratings.userId))
-		.where(
-			and(
-				eq(ratings.itemId, itemId),
-				eq(user.profilePrivate, false),
-				sql`${user.username} is not null`,
-				sql`coalesce(${user.banned}, false) = false`,
-				isNull(user.deletionScheduledAt),
-				cursor
-					? sql`(${ratings.createdAt}, ${ratings.userId}) < (${cursor.t}::timestamptz, ${cursor.u})`
-					: undefined,
-			),
-		)
-		.orderBy(desc(ratings.createdAt), desc(ratings.userId))
-		.limit(limit + 1);
+		.where(visible)
+		.limit(RATINGS_BROWSE_LIMIT)
+		.as("capped");
+	const [[counted], rows] = await Promise.all([
+		db.select({ total: sql<number>`count(*)::int` }).from(capped),
+		db
+			.select({
+				nickname: user.username,
+				overall: ratings.overall,
+				c1: ratings.c1,
+				c2: ratings.c2,
+				c3: ratings.c3,
+				c4: ratings.c4,
+				c5: ratings.c5,
+				c6: ratings.c6,
+				createdAt: ratings.createdAt,
+			})
+			.from(ratings)
+			.innerJoin(user, eq(user.id, ratings.userId))
+			.where(visible)
+			.orderBy(desc(ratings.createdAt), desc(ratings.userId))
+			.limit(RATINGS_PAGE_SIZE)
+			.offset((current - 1) * RATINGS_PAGE_SIZE),
+	]);
 
-	const pageRows = rows.slice(0, limit);
-	const last = pageRows.at(-1);
 	return {
-		data: pageRows.map((r) => ({
+		data: rows.map((r) => ({
 			nickname: r.nickname ?? "",
 			overall: r.overall ?? 0,
 			categories: [r.c1, r.c2, r.c3, r.c4, r.c5, r.c6],
 			ratedAt: new Date(r.createdAt).toISOString(),
 		})),
-		nextCursor: rows.length > limit && last ? encodeCursor({ t: last.cursorTime, u: last.userId }) : null,
-		prevCursor: null,
+		page: current,
+		pageCount: Math.ceil((counted?.total ?? 0) / RATINGS_PAGE_SIZE),
 	};
 }
 

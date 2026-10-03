@@ -267,18 +267,19 @@ describe("side data", () => {
 });
 
 describe("getItemRatingsPage", () => {
-	test("pages through public ratings only", async () => {
+	test("numbered pages over public ratings only, newest first with a stable tie-breaker", async () => {
 		const zelda = ids["the-legend-of-zelda"] as string;
-		const nicknames: string[] = [];
-		let cursor: string | undefined;
-		do {
-			const page = await getItemRatingsPage(db, zelda, { cursor, limit: 7 });
-			nicknames.push(...page.data.map((r) => r.nickname));
-			cursor = page.nextCursor ?? undefined;
-		} while (cursor);
+		const first = await getItemRatingsPage(db, zelda, 1);
+		const second = await getItemRatingsPage(db, zelda, 2);
+		expect([first.page, first.pageCount, second.page, second.pageCount]).toEqual([1, 2, 2, 2]);
+		const nicknames = [...first.data, ...second.data].map((r) => r.nickname);
 		expect(nicknames).toHaveLength(20);
 		expect(new Set(nicknames).size).toBe(20);
 		expect(nicknames).not.toContain("user5");
-		expect(getItemRatingsPage(db, zelda, { cursor: "%%%" })).rejects.toBeInstanceOf(InvalidCursorError);
+		const times = [...first.data, ...second.data].map((r) => r.ratedAt);
+		expect(times).toEqual([...times].sort().reverse());
+		expect(await getItemRatingsPage(db, zelda, 2)).toEqual(second);
+		expect((await getItemRatingsPage(db, zelda, 3)).data).toEqual([]);
+		expect(await getItemRatingsPage(db, uuid(99), 1)).toEqual({ data: [], page: 1, pageCount: 0 });
 	});
 });
