@@ -20,6 +20,7 @@ Comandos exatos de cada camada são adicionados aqui quando a camada for impleme
 | Verificação | Local (raiz do repo) | CI (`.github/workflows/ci.yml`) |
 | --- | --- | --- |
 | Lint + format | `bun run lint:ci` | job `lint` |
+| Contrato OpenAPI | `bun run openapi:check` (regerar: `bun run openapi`) | job `lint` |
 | Tipos | `bun run typecheck` | job `typecheck` |
 | Unitário (PGlite, sem Docker) | `bun run test` (ou `bun test` em `apps/web`) | job `test` |
 | Build | `bun run build` | job `build` (depois de lint/typecheck/test) |
@@ -51,6 +52,19 @@ bun run dev
 - Testes de repositório usam `createTestDatabase()` (`apps/web/lib/db/testing.ts`): PGlite em memória com todas as migrations aplicadas, sem tocar em `.pglite/`. Cada arquivo cria o seu banco no `beforeAll` (~2 s).
 - O seed é determinístico (faker 10.6.0, seed fixa; cada item depende só de `(tipo, índice)`), idempotente (upserts) e recusa rodar com `VERCEL_ENV=production`. Usuários `seed-user-NNNNNN@example.test`; ids de trailer começam com `FAKE` (não existem no YouTube).
 - Smoke manual: `/`, `/games`, `/pt-br/movies?sort=-score`, uma página de item nos 3 idiomas, `/es/search?q=house`, slug inexistente (404), `GET /api/items/<id>/ratings`, `GET /api/search/suggest?q=...`, `POST /api/cron/revalidate` com `Authorization: Bearer $CRON_SECRET`.
+
+## API pública (0.4)
+
+```bash
+cd apps/web && bun test lib/api          # rotas /v1 (PGlite + store em memória) + cota
+bun run openapi:check                    # openapi.json commitado == schemas zod
+bunx @redocly/cli@2 lint apps/web/public/openapi.json   # validação do spec (sem virar dependência)
+```
+
+- `lib/api/v1.test.ts` chama os `GET` exportados das rotas com o `db` mockado (`mock.module("@/lib/db/client")`) para um PGlite em memória e o store de cota em memória (`getStore()` com `NODE_ENV=test`); o throttle é desligado por padrão e religado no teste de 429. Cobre 401, 400 (inclui `limit=11` no Free), 402 na 101ª request, 429 + `Retry-After`, 404, 503 com store quebrado, headers, cada endpoint e a ausência de `external_scores`.
+- Smoke manual com `next start`: o store em memória só existe fora de `NODE_ENV=production`, e o Redis comum (inclusive o `serverless-redis-http` do `infra/`) rejeita o script do `@upstash/ratelimit` (`allow-key-locking`, específico do Upstash) — a API responde 503 (fail closed). Para exercitar tudo localmente: `bun run build` e depois `NODE_ENV=test bun --bun next start` em `apps/web` (store em memória), criar uma chave em `/profile/api` e chamar `curl -H "Authorization: Bearer hx_live_…" localhost:3000/api/v1/games`. Para o host da API: `curl -H "Host: api.localhost:3000" localhost:3000/v1/games ...`.
+- PGlite + `next start`: cada bundle (route handler × página) abre sua própria instância do `.pglite` e não enxerga escritas da outra até reiniciar (o cache em `globalThis` de `lib/db/client.ts` some no build de produção). Ex.: login via `/api/auth/*` só vale nas páginas depois de reiniciar o servidor. Com Postgres (Docker/Neon) não acontece.
+- SDKs: `cd sdks/ts && bun run typecheck`; Python: `uv run --no-project --with ./sdks/python/hexascore python -c "import hexascore"`.
 
 ## Dados de teste
 

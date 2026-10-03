@@ -58,11 +58,14 @@ export type Page<T> = { data: T[]; nextCursor: string | null; prevCursor: string
 export type ItemDetail = ItemSummary & {
 	locale: string;
 	synopsis: string | null;
+	/** Locale the synopsis is written in (the requested one or the English fallback). */
+	synopsisLocale: string | null;
 	synopsisLicense: string | null;
 	synopsisSourceUrl: string | null;
 	/** True when the requested locale had no title/synopsis and English was used instead. */
 	translationFallback: boolean;
 	externalIds: ExternalIds;
+	wikidataQid: string;
 	meta: ItemMeta & { trailers: Trailer[] };
 };
 

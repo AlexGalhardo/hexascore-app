@@ -7,6 +7,18 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ### Added
 
+- Public API v1 (0.4): `GET /api/v1/{games|movies|series|books}` (filters, `min_<category>`, sorts, cursor, plan-bound `limit`), `/{type}/{id}`, `/{type}/genres`, `/search`, `/lookup` (imdb/steam/igdb/tmdb/isbn13/openlibrary/wikidata) and `/me/usage`, all through `apiRoute` with zod response contracts (`lib/api/schemas.ts`); `api.<domain>/v1` served via the proxy.
+- OpenAPI 3.1 generated from the zod schemas (`lib/api/openapi.ts`): `bun run openapi` writes `apps/web/public/openapi.json`, `bun run openapi:check` runs in the CI `lint` job.
+- `/docs` (quickstart, authentication, errors, pagination, rate limits, changelog) and `/docs/reference` with Scalar (`@scalar/api-reference-react` 0.9.77); `api` i18n namespace; navbar "API" link.
+- `/profile/api`: API keys (create once-shown key with copy, revoke with confirmation), plan/quota, today + 30-day usage SVG chart, in-browser "Try it".
+- Generated SDKs: `sdks/ts` (`@hexascore/sdk`, `@hey-api/openapi-ts` 0.99.0, `bun run sdk:generate`) and `sdks/python` (`hexascore`, `openapi-python-client` 0.29.1 via uvx, `bun run sdk:generate:python`); not published yet.
+- Catalog repository: `getItemIdByExternalId`, `listGenreCounts`, `wikidataQid`/`synopsisLocale` on `ItemDetail`; quota store `hget`.
+- Route-level API tests (`lib/api/v1.test.ts`) and project skill `hexascore-api`.
+
+### Changed
+
+- `apiRoute` takes `{ params, query, response }`, validates path params (404), parses responses, maps bad cursors to 400, fails closed (503) when the rate-limit store errors and updates `api_keys.last_used_at` (at most once a minute).
+
 - Billing (0.5): price catalog `lib/billing/catalog.ts` (Pro/Business/credits in BRL/USD/EUR, PIX 12 months for the price of 10, currency by locale).
 - Stripe (`stripe@23.0.0`, API `2026-09-30.endive`): `bun run stripe:setup` creates Products/Prices by `lookup_key` and the Customer Portal config; `startStripeCheckout`/`openBillingPortal` actions; `POST /api/webhooks/stripe` (signature, idempotency via `processed_events`, subscriptions and credit packs).
 - AbacatePay PIX (API v2): `createPixCharge` action, `GET /api/billing/pix/[id]` polling with provider re-check, `POST /api/webhooks/abacatepay` (URL secret + HMAC, idempotent, period stacking).

@@ -20,6 +20,7 @@ export type CounterStore = {
 	throttle(key: string, perSecond: number): Promise<number>;
 	hincr(key: string, field: string, by: number): Promise<void>;
 	hgetall(key: string): Promise<Record<string, number>>;
+	hget(key: string, field: string): Promise<number | null>;
 	del(key: string): Promise<void>;
 	/** Atomic INCRBY that leaves an absent key absent; returns the new value or null. */
 	incrByIfExists(key: string, by: number): Promise<number | null>;
@@ -48,6 +49,10 @@ function redisStore(redis: Redis): CounterStore {
 		async hgetall(key) {
 			const raw = (await redis.hgetall<Record<string, number | string>>(key)) ?? {};
 			return Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, Number(v)]));
+		},
+		async hget(key, field) {
+			const v = await redis.hget<number | string>(key, field);
+			return v === null ? null : Number(v);
 		},
 		async del(key) {
 			await redis.del(key);
@@ -98,6 +103,7 @@ export function memoryStore(): CounterStore {
 			hashes.set(key, h);
 		},
 		hgetall: async (key) => Object.fromEntries(hashes.get(key) ?? []),
+		hget: async (key, field) => hashes.get(key)?.get(field) ?? null,
 		async del(key) {
 			values.delete(key);
 			hashes.delete(key);

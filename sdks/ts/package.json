@@ -1,0 +1,25 @@
+{
+  "name": "@hexascore/sdk",
+  "version": "0.0.0",
+  "description": "Typed client for the Hexascore API (community scores for games, movies, TV series and books).",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" }
+  },
+  "files": ["dist", "README.md"],
+  "keywords": ["hexascore", "api", "games", "movies", "series", "books", "ratings"],
+  "homepage": "https://hexascore.com/docs",
+  "publishConfig": { "access": "public" },
+  "scripts": {
+    "sdk:generate": "openapi-ts",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@hey-api/openapi-ts": "0.99.0",
+    "typescript": "6.0.3"
+  }
+}

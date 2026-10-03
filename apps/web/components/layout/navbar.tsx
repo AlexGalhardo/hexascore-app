@@ -33,6 +33,9 @@ export async function Navbar() {
 					))}
 				</nav>
 				<div className="ml-auto flex items-center gap-2">
+					<Link href="/docs" className="text-sm underline-offset-4 hover:underline">
+						{t("docs")}
+					</Link>
 					<ThemeToggle label={t("theme")} />
 					{user ? (
 						<UserMenu

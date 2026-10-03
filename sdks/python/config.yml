@@ -1,0 +1,7 @@
+# openapi-python-client configuration (pinned 0.29.1, run through uvx: see sdks/python/README.md).
+project_name_override: hexascore
+package_name_override: hexascore
+package_version_override: 0.0.0
+post_hooks:
+  - "uvx ruff@0.16.10 check . --fix-only"
+  - "uvx ruff@0.16.10 format ."

@@ -10,7 +10,7 @@ export type ProblemCode =
 	| "internal_error"
 	| "service_unavailable";
 
-const TITLES: Record<ProblemCode, [number, string]> = {
+export const PROBLEM_STATUS: Record<ProblemCode, [number, string]> = {
 	bad_request: [400, "Invalid request"],
 	unauthorized: [401, "Missing or invalid API key"],
 	payment_required: [402, "Quota exhausted"],
@@ -20,6 +20,8 @@ const TITLES: Record<ProblemCode, [number, string]> = {
 	internal_error: [500, "Internal error"],
 	service_unavailable: [503, "Service unavailable"],
 };
+
+export const PROBLEM_CODES = Object.keys(PROBLEM_STATUS) as [ProblemCode, ...ProblemCode[]];
 
 export type ProblemExtras = { errors?: { path: string; message: string }[]; [key: string]: unknown };
 
@@ -31,7 +33,7 @@ export function problem(
 	extras: ProblemExtras = {},
 	headers: HeadersInit = {},
 ): Response {
-	const [status, title] = TITLES[code];
+	const [status, title] = PROBLEM_STATUS[code];
 	return Response.json(
 		{ type: `${APP_URL}/docs/errors#${code}`, title, status, detail, code, request_id: requestId, ...extras },
 		{ status, headers: { "content-type": "application/problem+json", "x-request-id": requestId, ...headers } },

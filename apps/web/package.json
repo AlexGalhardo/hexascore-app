@@ -12,13 +12,16 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "bun lib/db/migrate.ts",
     "db:seed": "bun lib/db/seed.ts",
-    "stripe:setup": "bun scripts/stripe-setup.ts"
+    "stripe:setup": "bun scripts/stripe-setup.ts",
+    "openapi": "bun scripts/openapi.ts",
+    "openapi:check": "bun scripts/openapi.ts --check"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",
     "@better-auth/passkey": "1.7.7",
     "@electric-sql/pglite": "0.5.8",
     "@react-email/components": "1.0.12",
+    "@scalar/api-reference-react": "0.9.77",
     "@upstash/ratelimit": "2.2.0",
     "@upstash/redis": "1.39.0",
     "better-auth": "1.7.7",
