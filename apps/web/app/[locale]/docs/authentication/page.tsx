@@ -1,5 +1,7 @@
+import { getTranslations } from "next-intl/server";
+import type { ReactNode } from "react";
 import { type DocPageProps, docMetadata, enterDocPage } from "@/components/docs/metadata";
-import { C, Code, DocTitle, H2, Note, P } from "@/components/docs/prose";
+import { C, Code, DocTitle, H2, Note, P, richCode, richLink } from "@/components/docs/prose";
 import { Link } from "@/i18n/navigation";
 import { API_BASE_URL } from "@/lib/api/openapi";
 
@@ -7,47 +9,38 @@ export const generateMetadata = docMetadata("authentication");
 
 export default async function AuthenticationPage(props: DocPageProps) {
 	await enterDocPage(props);
+	const [t, nav] = await Promise.all([getTranslations("docs.authentication"), getTranslations("api.docs.nav")]);
 	return (
 		<>
-			<DocTitle lead="Every request is authenticated with a secret API key sent as a Bearer token.">
-				Authentication
-			</DocTitle>
+			<DocTitle lead={t("lead")}>{nav("authentication")}</DocTitle>
 
-			<H2 id="bearer">Bearer token</H2>
-			<P>
-				Send the key in the <C>Authorization</C> header. Keys look like <C>hx_live_</C> followed by 32 letters
-				and digits. Query-string keys are not accepted, so keys never end up in access logs or browser history.
-			</P>
+			<H2 id="bearer">{t("bearerHeading")}</H2>
+			<P>{t.rich("bearerBody", richCode)}</P>
 			<Code title="HTTP">{`GET /v1/movies?sort=-score HTTP/1.1
 Host: ${new URL(API_BASE_URL).host}
 Authorization: Bearer hx_live_0123456789ABCDEFGHIJabcdefghij`}</Code>
 			<P>
-				A missing, malformed, unknown or revoked key returns <C>401</C> with{" "}
-				<Link href="/docs/errors#unauthorized">
-					<C>code: "unauthorized"</C>
-				</Link>{" "}
-				and a <C>WWW-Authenticate: Bearer</C> header.
+				{t.rich("unauthorized", {
+					...richCode,
+					problemCode: 'code: "unauthorized"',
+					link: (chunks: ReactNode) => (
+						<Link href="/docs/errors#unauthorized">
+							<C>{chunks}</C>
+						</Link>
+					),
+				})}
 			</P>
 
-			<H2 id="managing-keys">Managing keys</H2>
+			<H2 id="managing-keys">{t("managingHeading")}</H2>
 			<ul className="my-3 list-disc space-y-2 pl-6">
-				<li>
-					Create and revoke keys at{" "}
-					<Link href="/profile/api" className="underline underline-offset-4">
-						/profile/api
-					</Link>{" "}
-					(verified email required, up to 5 active keys).
-				</li>
-				<li>The full key is shown once. Only a SHA-256 hash is stored; we cannot recover it for you.</li>
-				<li>Revocation is immediate. Rotate by creating a new key, deploying it, then revoking the old one.</li>
-				<li>All keys of an account share the same plan, quota and per-second rate limit.</li>
+				<li>{t.rich("manageCreate", { link: richLink("/profile/api", "underline underline-offset-4") })}</li>
+				<li>{t("manageOnce")}</li>
+				<li>{t("manageRevoke")}</li>
+				<li>{t("manageShared")}</li>
 			</ul>
 
-			<H2 id="security">Keep keys secret</H2>
-			<Note>
-				Call the API from your server. A key embedded in a web page or mobile app can be extracted and used up
-				your quota. If a key leaks, revoke it right away.
-			</Note>
+			<H2 id="security">{t("securityHeading")}</H2>
+			<Note>{t("securityNote")}</Note>
 		</>
 	);
 }

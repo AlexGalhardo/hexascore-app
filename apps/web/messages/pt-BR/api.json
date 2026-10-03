@@ -13,7 +13,7 @@
 				"changelog": "Changelog e versionamento",
 				"reference": "Referência da API"
 			},
-			"languageNote": "Os guias estão em inglês. A referência da API está traduzida; nomes de campos e parâmetros ficam em inglês.",
+			"languageNote": "Nomes de campos e parâmetros ficam em inglês.",
 			"getKey": "Criar uma chave de API",
 			"loading": "Carregando a referência da API…"
 		},

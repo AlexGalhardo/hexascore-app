@@ -13,7 +13,7 @@
 				"changelog": "Changelog & versioning",
 				"reference": "API reference"
 			},
-			"languageNote": "Guides are in English. The API reference is translated; field and parameter names stay in English.",
+			"languageNote": "Field and parameter names stay in English.",
 			"getKey": "Get an API key",
 			"loading": "Loading the API reference…"
 		},
