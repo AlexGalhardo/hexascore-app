@@ -13,7 +13,9 @@ import io
 import logging
 import os
 import re
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
+from itertools import islice
 from typing import Any
 from urllib.parse import urlsplit
 
@@ -38,6 +40,8 @@ MAX_SIZE = (600, 600)
 WEBP_QUALITY = 78
 # Lists render covers 48 CSS px tall (32x48 / 44x64); 96x144 covers 2x DPR. Same never-upscale fit.
 THUMB_SIZE = (96, 144)
+# Items processed concurrently (download + encode + upload are latency-bound).
+WORKERS = 8
 THUMB_QUALITY = 70
 MAX_SOURCE_BYTES = 15 * 1024 * 1024
 # Pathnames are content-addressed, so a blob never changes and can be cached for a year.
@@ -209,20 +213,25 @@ def targets(
 
 
 def run(
-    conn: psycopg.Connection, refresh: bool = False, limit: int | None = None, client: HttpClient | None = None
+    conn: psycopg.Connection,
+    refresh: bool = False,
+    limit: int | None = None,
+    client: HttpClient | None = None,
+    workers: int = WORKERS,
 ) -> int:
     client = client or HttpClient()
     token = os.environ.get("BLOB_READ_WRITE_TOKEN")
     if not token:
         log.warning("BLOB_READ_WRITE_TOKEN not set: storing source cover URLs, no WebP copies")
-    updated = 0
-    for item_id, item_type, records, current_url, current_thumb in targets(conn, refresh, limit, bool(token)):
+
+    def patch_for(row: tuple[Any, str, dict[str, dict], str | None, str | None]) -> tuple[Jsonb, Any] | None:
+        item_id, item_type, records, current_url, current_thumb = row
         try:
             cover = pick_source_cover(item_type, records)
             if cover is None and (filename := commons_file(records)):
                 cover = commons_cover(client, filename)
             if cover is None:
-                continue
+                return None
             url, thumb = (
                 store_cover(client, token, str(item_id), cover.url, current_url, current_thumb)
                 if token
@@ -231,20 +240,31 @@ def run(
         except (httpx.HTTPError, ValidationError, OSError, ValueError, Image.DecompressionBombError) as exc:
             # OSError covers Pillow's UnidentifiedImageError and truncated files.
             log.warning("cover for %s failed: %s", item_id, exc)
-            continue
+            return None
         if url == current_url and thumb == current_thumb:
-            continue
+            return None
         patch: dict[str, Any] = {"coverUrl": url}
         if thumb:
             patch["coverThumbUrl"] = thumb
         if cover.attribution:
             patch["coverAttribution"] = cover.attribution
-        conn.execute(
-            "UPDATE items SET meta = (meta - 'coverAttribution' - 'coverThumbUrl') || %s WHERE id = %s",
-            (Jsonb(patch), item_id),
-        )
-        conn.commit()
-        updated += 1
+        return Jsonb(patch), item_id
+
+    # Downloads, WebP encodes and Blob uploads run in a thread pool (the HttpClient throttles per host across threads);
+    # the DB connection stays on this thread and each chunk is written in one pipelined executemany + commit.
+    updated = 0
+    pending = iter(targets(conn, refresh, limit, bool(token)))
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        while chunk := list(islice(pending, workers * 8)):
+            patches = [p for p in pool.map(patch_for, chunk) if p]
+            if patches:
+                with conn.cursor() as cur:
+                    cur.executemany(
+                        "UPDATE items SET meta = (meta - 'coverAttribution' - 'coverThumbUrl') || %s WHERE id = %s",
+                        patches,
+                    )
+                conn.commit()
+                updated += len(patches)
     return updated
 
 
