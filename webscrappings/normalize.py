@@ -17,7 +17,7 @@ from psycopg.types.json import Jsonb
 from pydantic import BaseModel, ValidationError
 
 from common.cli import setup_logging
-from common.db import connect
+from common.db import busy, connect
 from connectors.wikidata import Claim, WikidataPayload
 from revalidate import revalidate
 
@@ -372,7 +372,7 @@ def normalize_batch(conn: psycopg.Connection, qids: list[str]) -> tuple[int, int
     saved = skipped = 0
     # Pipeline mode sends the batch's ~8 statements per item without waiting for each reply; one round trip per
     # statement capped a remote database at ~1 item/s. Only a new item's slug check waits for a result.
-    with conn.pipeline():
+    with busy(conn), conn.pipeline():
         for qid in qids:
             try:
                 item = build_item(qid, by_qid.get(qid, {}))

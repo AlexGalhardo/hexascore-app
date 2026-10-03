@@ -29,23 +29,36 @@ def canonical_hash(payload: Any) -> str:
 
 KEEPALIVE_SECONDS = 60
 log = logging.getLogger(__name__)
+_BUSY: dict[int, threading.Lock] = {}
+
+
+def busy(conn: psycopg.Connection) -> threading.Lock:
+    """Held around multi-statement work (pipeline mode, executemany). psycopg's own lock only covers single calls,
+    so a keep-alive ping sent between two pipelined statements fails the batch ("another command is already in
+    progress")."""
+    return _BUSY.setdefault(id(conn), threading.Lock())
 
 
 def keep_alive(conn: psycopg.Connection, interval: float = KEEPALIVE_SECONDS) -> threading.Thread:
     """Pings the connection while it is open. Fetchers spend minutes on HTTP between writes (a SPARQL
     selection, rate-limited enrichment) and Neon drops idle connections, so the next INSERT would fail.
-    psycopg connections serialize calls with an internal lock, so pinging from a thread is safe."""
+    A connection held in `busy` is in use, so that ping is skipped."""
 
     def ping() -> None:
+        lock = busy(conn)
         while not conn.closed:
             threading.Event().wait(interval)
             if conn.closed:
                 return
+            if not lock.acquire(blocking=False):
+                continue
             try:
                 conn.execute("SELECT 1")
             except psycopg.Error as error:
                 log.warning("keep-alive ping failed: %s", error)
                 return
+            finally:
+                lock.release()
 
     thread = threading.Thread(target=ping, name="db-keepalive", daemon=True)
     thread.start()
@@ -86,7 +99,7 @@ def store_records(conn: psycopg.Connection, records: Iterable[Record], commit_ev
     # executemany pipelines each chunk in one round trip; one upsert per record capped a remote DB at ~6 rows/s.
     for chunk in batched(records, commit_every, strict=False):
         params = [(r.source, r.external_id, Jsonb(r.payload), canonical_hash(r.payload)) for r in chunk]
-        with conn.cursor() as cur:
+        with busy(conn), conn.cursor() as cur:
             cur.executemany(UPSERT_SQL, params, returning=True)
             while True:
                 changed += cur.fetchone() is not None
