@@ -1,6 +1,6 @@
 import { type ScoreBand, scoreBand } from "@/lib/categories";
 
-// Dark text on every band: the band colours are mid-lightness, so black keeps ≥ 4.5:1 at any size.
+// Dark text on every band: the band colours are light enough that black keeps ≥ 4.5:1 at any size (axe in E2E).
 export const BAND_BG: Record<ScoreBand, string> = {
 	low: "bg-score-low",
 	mid: "bg-score-mid",

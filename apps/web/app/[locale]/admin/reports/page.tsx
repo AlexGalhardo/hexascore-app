@@ -39,7 +39,7 @@ export default async function AdminReportsPage({ searchParams }: Props) {
 								<td className={cell}>
 									<span className="text-xs uppercase text-muted">{r.targetType}</span>{" "}
 									{r.targetLabel ?? <em className="text-muted">deleted</em>}
-									{r.listHidden ? <span className="ml-1 text-xs text-score-low">hidden</span> : null}
+									{r.listHidden ? <span className="ml-1 text-xs text-danger">hidden</span> : null}
 									<br />
 									<code className="text-xs text-muted">{r.targetId}</code>
 								</td>
@@ -98,7 +98,7 @@ export default async function AdminReportsPage({ searchParams }: Props) {
 												aria-label="Ban reason"
 												className={input}
 											/>
-											<button type="submit" className={`${button} text-score-low`}>
+											<button type="submit" className={`${button} text-danger`}>
 												Ban {r.targetType === "list" ? "owner" : "user"}
 											</button>
 										</ActionForm>

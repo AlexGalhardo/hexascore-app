@@ -14,7 +14,7 @@ export function CancelDeletionButton({ label }: { label: string }) {
 	return (
 		<>
 			{error && (
-				<span role="alert" className="text-score-low">
+				<span role="alert" className="text-danger">
 					{tAction(error)}
 				</span>
 			)}

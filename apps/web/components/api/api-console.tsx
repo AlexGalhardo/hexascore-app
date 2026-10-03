@@ -144,7 +144,7 @@ export function ApiConsole({ keys, children }: { keys: ApiKeyView[]; children: R
 													type="button"
 													onClick={() => askRevoke(key)}
 													disabled={pending}
-													className="min-h-11 rounded-md px-3 text-score-low hover:bg-surface disabled:opacity-50"
+													className="min-h-11 rounded-md px-3 text-danger hover:bg-surface disabled:opacity-50"
 												>
 													{t("keys.revoke")}
 												</button>
@@ -177,7 +177,7 @@ export function ApiConsole({ keys, children }: { keys: ApiKeyView[]; children: R
 					</button>
 				</form>
 				{error && (
-					<p role="alert" className="text-sm text-score-low">
+					<p role="alert" className="text-sm text-danger">
 						{error}
 					</p>
 				)}
@@ -244,7 +244,7 @@ export function ApiConsole({ keys, children }: { keys: ApiKeyView[]; children: R
 						type="button"
 						onClick={confirmRevoke}
 						disabled={pending}
-						className="min-h-11 rounded-md bg-score-low px-4 text-sm font-semibold text-white disabled:opacity-50"
+						className="min-h-11 rounded-md bg-danger px-4 text-sm font-semibold text-bg disabled:opacity-50"
 					>
 						{pending ? t("keys.revoking") : t("keys.revoke")}
 					</button>

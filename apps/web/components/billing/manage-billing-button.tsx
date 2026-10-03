@@ -29,7 +29,7 @@ export function ManageBillingButton() {
 				{pending ? t("working") : t("manage")}
 			</button>
 			{error && (
-				<p role="alert" className="text-sm text-score-low">
+				<p role="alert" className="text-sm text-danger">
 					{error}
 				</p>
 			)}
