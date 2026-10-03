@@ -37,5 +37,8 @@
 		"text": "Solo usamos cookies esenciales (sesión y preferencias). Los videos de YouTube solo se cargan si lo permites.",
 		"accept": "Permitir videos",
 		"decline": "Solo esenciales"
+	},
+	"sandbox": {
+		"banner": "Entorno sandbox — los usuarios, las valoraciones y las listas son ficticios (datos de prueba)."
 	}
 }

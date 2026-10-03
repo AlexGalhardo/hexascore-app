@@ -5,7 +5,9 @@ Targets are the en/pt/es sitelinks of Wikidata records fetched since `since`.
 
 import logging
 from collections.abc import Iterable, Iterator
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
+from itertools import islice
 from urllib.parse import quote
 
 import httpx
@@ -19,6 +21,8 @@ from common.http import HttpClient
 log = logging.getLogger(__name__)
 
 LANGS = ("en", "pt", "es")
+# Concurrent summary requests per run; the per-host throttle in HttpClient still caps the rate.
+WORKERS = 8
 
 
 class DesktopUrls(BaseModel):
@@ -67,27 +71,42 @@ def fetch(
     *,
     only_missing: bool = False,
     langs: Iterable[str] = LANGS,
+    workers: int = WORKERS,
 ) -> Iterator[Record]:
     client = client or HttpClient()
     langs = [lang for lang in langs if lang in LANGS]
     skip = {lang: existing_ids(conn, f"wikipedia:{lang}") if only_missing else set() for lang in langs}
-    for qid, sitelinks in targets(conn, since):
-        for lang in langs:
-            title = sitelinks.get(f"{lang}wiki")
-            if not title or qid in skip[lang]:
-                continue
-            url = f"https://{lang}.wikipedia.org/api/rest_v1/page/summary/{quote(title.replace(' ', '_'), safe='')}"
-            try:
-                response = client.request("GET", url)
-                if response.status_code == httpx.codes.NOT_FOUND:
-                    continue
-                response.raise_for_status()
-                payload = parse_summary(response.json(), qid, lang)
-            except (httpx.HTTPError, ValidationError) as exc:
-                log.warning("wikipedia %s %s failed: %s", qid, lang, exc)
-                continue
-            if payload:
-                yield Record(f"wikipedia:{lang}", qid, payload)
+
+    def tasks() -> Iterator[tuple[str, str, str]]:
+        for qid, sitelinks in targets(conn, since):
+            for lang in langs:
+                title = sitelinks.get(f"{lang}wiki")
+                if title and qid not in skip[lang]:
+                    yield qid, lang, title
+
+    def summary(task: tuple[str, str, str]) -> Record | None:
+        qid, lang, title = task
+        url = f"https://{lang}.wikipedia.org/api/rest_v1/page/summary/{quote(title.replace(' ', '_'), safe='')}"
+        try:
+            response = client.request("GET", url)
+            if response.status_code == httpx.codes.NOT_FOUND:
+                return None
+            response.raise_for_status()
+            payload = parse_summary(response.json(), qid, lang)
+        except (httpx.HTTPError, ValidationError) as exc:
+            log.warning("wikipedia %s %s failed: %s", qid, lang, exc)
+            return None
+        return Record(f"wikipedia:{lang}", qid, payload) if payload else None
+
+    # Requests are latency-bound, so a small pool reaches the per-host rate limit; the shared client throttles
+    # per host. Work is submitted in bounded chunks so memory stays flat, and records are yielded (and stored)
+    # on the caller's thread, which owns the DB connection.
+    pending = tasks()
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        while chunk := list(islice(pending, workers * 8)):
+            for record in pool.map(summary, chunk):
+                if record:
+                    yield record
 
 
 def main() -> None:

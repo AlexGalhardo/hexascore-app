@@ -1,5 +1,6 @@
 import logging
 import os
+import threading
 import time
 from collections.abc import Callable
 from email.utils import parsedate_to_datetime
@@ -18,9 +19,10 @@ HOST_INTERVALS: dict[str, float] = {
     "query.wikidata.org": 1.0,
     "www.wikidata.org": 0.2,
     "commons.wikimedia.org": 0.2,
-    "en.wikipedia.org": 0.1,
-    "pt.wikipedia.org": 0.1,
-    "es.wikipedia.org": 0.1,
+    # Wikimedia REST allows far more; 20 req/s per wiki stays polite with a contact User-Agent.
+    "en.wikipedia.org": 0.05,
+    "pt.wikipedia.org": 0.05,
+    "es.wikipedia.org": 0.05,
     "openlibrary.org": 0.4,
     "store.steampowered.com": 1.6,
     "catalog.gog.com": 0.5,
@@ -63,13 +65,18 @@ class HttpClient:
         self._sleep = sleep
         self._clock = clock
         self._last: dict[str, float] = {}
+        self._lock = threading.Lock()
 
     def _throttle(self, host: str) -> None:
+        # Thread-safe: each caller reserves the next free slot for the host under the lock, then sleeps
+        # outside it, so concurrent workers share one per-host rate instead of each getting its own.
         interval = HOST_INTERVALS.get(host, DEFAULT_INTERVAL)
-        wait = self._last.get(host, float("-inf")) + interval - self._clock()
-        if wait > 0:
-            self._sleep(wait)
-        self._last[host] = self._clock()
+        with self._lock:
+            now = self._clock()
+            slot = max(now, self._last.get(host, float("-inf")) + interval)
+            self._last[host] = slot
+        if slot > now:
+            self._sleep(slot - now)
 
     def request(self, method: str, url: str, **kwargs: Any) -> httpx.Response:
         host = urlsplit(url).hostname or ""
