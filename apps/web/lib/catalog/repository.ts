@@ -7,6 +7,7 @@ import type { Database } from "@/lib/db/client";
 import { user } from "@/lib/db/schema/auth";
 import { affiliateLinks, externalScores, type ItemType, items, itemTranslations } from "@/lib/db/schema/catalog";
 import { ratings } from "@/lib/db/schema/social";
+import { httpsUrlOrNull } from "@/lib/safe-url";
 import { decodeCursor, encodeCursor, InvalidCursorError } from "./cursor";
 import { parseExternalIds, parseMeta } from "./jsonb";
 import {
@@ -216,7 +217,7 @@ async function getItem(db: Database, where: SQL, locale: Locale): Promise<ItemDe
 		locale,
 		synopsis: ownSynopsis ? row.synopsisLocale : row.synopsisEn,
 		synopsisLicense: ownSynopsis ? row.licenseLocale : row.licenseEn,
-		synopsisSourceUrl: ownSynopsis ? row.sourceLocale : row.sourceEn,
+		synopsisSourceUrl: httpsUrlOrNull(ownSynopsis ? row.sourceLocale : row.sourceEn),
 		translationFallback: locale !== "en" && (row.titleLocale === null || synopsisFallback),
 		externalIds: parseExternalIds(row.externalIds, row.id),
 		meta: parseMeta(row.meta, row.id),
@@ -318,11 +319,15 @@ export async function getExternalScores(db: Database, itemId: string): Promise<E
 }
 
 export async function getAffiliateLinks(db: Database, itemId: string): Promise<AffiliateLink[]> {
-	return db
+	const rows = await db
 		.select({ store: affiliateLinks.store, url: affiliateLinks.url })
 		.from(affiliateLinks)
 		.where(and(eq(affiliateLinks.itemId, itemId), eq(affiliateLinks.active, true)))
 		.orderBy(affiliateLinks.store);
+	return rows.flatMap((r) => {
+		const url = httpsUrlOrNull(r.url);
+		return url ? [{ store: r.store, url }] : [];
+	});
 }
 
 // ---------------------------------------------------------------------------------------------------------------

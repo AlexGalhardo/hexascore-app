@@ -1,0 +1,43 @@
+{
+	"categories": {
+		"game": {
+			"gameplay": "Jugabilidad",
+			"fun": "Diversión",
+			"sound": "Sonido",
+			"technical": "Calidad técnica",
+			"visual": "Calidad visual",
+			"storytelling": "Narrativa"
+		},
+		"movie": {
+			"screenplay": "Guion",
+			"acting": "Actuación",
+			"direction": "Dirección",
+			"cinematography": "Fotografía",
+			"soundtrack": "Banda sonora",
+			"entertainment": "Entretenimiento"
+		},
+		"series": {
+			"screenplay": "Guion",
+			"acting": "Actuación",
+			"characters": "Personajes",
+			"pacing": "Ritmo",
+			"production": "Producción",
+			"entertainment": "Entretenimiento"
+		},
+		"book": {
+			"plot": "Trama",
+			"characters": "Personajes",
+			"writing": "Escritura",
+			"pacing": "Ritmo",
+			"originality": "Originalidad",
+			"impact": "Impacto"
+		}
+	},
+	"itemTypes": { "game": "Juego", "movie": "Película", "series": "Serie", "book": "Libro" },
+	"score": {
+		"outOf": "Nota {score} de 100",
+		"none": "Valoraciones insuficientes",
+		"radar": "Promedios por categoría — {summary}",
+		"radarEmpty": "Aún sin promedios por categoría"
+	}
+}

@@ -1,4 +1,5 @@
 import type { ExternalIds, ItemType } from "@/lib/db/schema/catalog";
+import { httpsUrlOrNull } from "@/lib/safe-url";
 import type { ExternalScore } from "./types";
 
 export type ExternalLink = { provider: string; source: string; value: string | null; url: string };
@@ -41,15 +42,6 @@ function providerUrl(provider: Provider, type: ItemType, ids: ExternalIds): stri
 	}
 }
 
-function safeHttps(url: string | null): string | null {
-	if (!url) return null;
-	try {
-		return new URL(url).protocol === "https:" ? url : null;
-	} catch {
-		return null;
-	}
-}
-
 const ID_ONLY: Provider[] = ["imdb", "metacritic", "rottentomatoes", "hltb", "steam", "goodreads", "openlibrary"];
 
 /** Third-party scores first (attributed, linked), then plain links for known ids without a score. */
@@ -59,7 +51,7 @@ export function buildExternalLinks(type: ItemType, ids: ExternalIds, scores: Ext
 	for (const score of scores) {
 		const provider = SOURCE_PROVIDER[score.source];
 		if (!provider) continue;
-		const url = safeHttps(score.url) ?? providerUrl(provider, type, ids);
+		const url = httpsUrlOrNull(score.url) ?? providerUrl(provider, type, ids);
 		if (!url) continue;
 		seen.add(provider);
 		links.push({ provider, source: score.source, value: score.value, url });

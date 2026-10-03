@@ -1,6 +1,7 @@
-import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
+import { getLocale, getTranslations } from "next-intl/server";
+import { getPathname, Link } from "@/i18n/navigation";
 import { APP_NAME } from "@/lib/config";
+import { SearchAutocomplete } from "./search-autocomplete";
 import { ThemeToggle } from "./theme-toggle";
 
 const SECTIONS = [
@@ -12,6 +13,7 @@ const SECTIONS = [
 
 export async function Navbar() {
 	const t = await getTranslations("nav");
+	const locale = await getLocale();
 
 	return (
 		<header className="border-b border-border">
@@ -19,19 +21,8 @@ export async function Navbar() {
 				<Link href="/" className="font-serif text-xl font-bold tracking-tight">
 					{APP_NAME}
 				</Link>
-				<search className="">
-					<form action="/search">
-						<label className="sr-only" htmlFor="q">
-							{t("search")}
-						</label>
-						<input
-							id="q"
-							name="q"
-							type="search"
-							placeholder={t("search")}
-							className="min-h-11 w-full rounded-md border border-border bg-bg px-3"
-						/>
-					</form>
+				<search className="w-full sm:w-72">
+					<SearchAutocomplete action={getPathname({ href: "/search", locale })} placeholder={t("search")} />
 				</search>
 				<nav aria-label="Sections" className="flex gap-3 text-sm">
 					{SECTIONS.map((s) => (

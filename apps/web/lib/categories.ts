@@ -27,6 +27,12 @@ export function overall(...categories: number[]): number {
 	return Math.round(categories.reduce((sum, c) => sum + c, 0) / 6);
 }
 
+/** Short column header: "Gameplay" → "Game", "Qualidade sonora" → "QS", "Trilha/Som" → "TS". */
+export function abbreviateLabel(label: string): string {
+	const words = label.split(/[\s/]+/).filter(Boolean);
+	return words.length > 1 ? words.map((w) => w.charAt(0).toUpperCase()).join("") : label.slice(0, 4);
+}
+
 export function hasEnoughRatings(ratingCount: number): boolean {
 	return ratingCount >= MIN_RATINGS_FOR_SCORE;
 }

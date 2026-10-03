@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { CATEGORY_KEYS, hasEnoughRatings, overall, scoreBand } from "./categories";
+import { abbreviateLabel, CATEGORY_KEYS, hasEnoughRatings, overall, scoreBand } from "./categories";
 
 describe("scoreBand", () => {
 	test.each([
@@ -27,6 +27,12 @@ describe("overall", () => {
 	test("requires exactly 6 values", () => {
 		expect(() => overall(1, 2, 3)).toThrow();
 	});
+});
+
+test("abbreviateLabel", () => {
+	expect(abbreviateLabel("Gameplay")).toBe("Game");
+	expect(abbreviateLabel("Qualidade sonora")).toBe("QS");
+	expect(abbreviateLabel("Trilha/Som")).toBe("TS");
 });
 
 test("metascore threshold is 5 ratings", () => {
