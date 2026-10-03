@@ -71,6 +71,11 @@
 				"failed": "O pagamento falhou. Gere um novo código."
 			},
 			"newCode": "Novo código",
+			"close": "Fechar",
+			"closeIn": "{seconds, plural, one {Você pode fechar em # segundo} other {Você pode fechar em # segundos}}",
+			"sandboxPay": "PAGAR PIX SANDBOX",
+			"sandboxWait": "Aguarde {seconds}s",
+			"sandboxNote": "Modo sandbox: simula o pagamento, nenhum dinheiro é movimentado.",
 			"errors": {
 				"unauthenticated": "Entre novamente para continuar.",
 				"unverified": "Confirme seu e-mail antes de pagar.",
@@ -82,6 +87,8 @@
 				"plan_conflict": "O PIX só renova o seu plano atual. Espere terminar para trocar de plano.",
 				"plan_required": "Créditos extras são para planos Pro e Business ativos.",
 				"no_customer": "Você ainda não tem conta de cobrança no cartão.",
+				"not_found": "Cobrança PIX não encontrada.",
+				"not_pending": "Esta cobrança PIX não está mais aguardando pagamento.",
 				"server": "Algo deu errado. Tente de novo em um minuto."
 			}
 		},

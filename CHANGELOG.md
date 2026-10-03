@@ -7,6 +7,7 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ### Added
 
+- PIX sandbox payment for testing: with `ABACATEPAY_SANDBOX=true` (default off) the PIX QR modal shows a "PAY SANDBOX PIX" button (10 s cooldown) that calls AbacatePay `POST /v2/transparents/simulate-payment` through `simulatePixPaymentAction` (owner's pending charge only); the plan is still applied by the webhook/status poll.
 - SEO: `robots.txt` (indexable only in production, private pages disallowed in every locale) and sitemaps with hreflang alternates: `/sitemap-index.xml` → `/sitemap/0.xml` (static pages) + `/sitemap/<n>.xml` (catalog items, 40k per file).
 - `bun run seo:gsc` (apps/web): Search Console CLI over a service account (sites, sitemaps, submit, Search Analytics queries).
 - Item page credits the cover (source, author, license and link) when the ingestion stored `meta.coverAttribution` (Wikimedia Commons covers under CC BY/BY-SA require it).
@@ -17,6 +18,7 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ### Changed
 
+- PIX checkout shows the QR code in a modal; once paid it cannot be closed for 10 seconds (visible, announced countdown).
 - Navbar: sticky, "HexaScore" wordmark (green "Hexa", blue "Score"), search fills the row up to the actions, only a "Log in" button (no "Sign up"), language menu last and always showing the current language, icon links (Games, Movies, Series, Books, API, Pricing) spread with `justify-between`; on mobile only the brand, a search button and a hamburger menu.
 - Search autocomplete shows the cover, type, year and final score of the 8 best matches.
 - Nickname is 4–16 lowercase letters only (normalized while typing, enforced by the Better Auth username validator); sign-up email is capped at 36 characters and password inputs at 32. Seed and E2E nicknames follow the rule.

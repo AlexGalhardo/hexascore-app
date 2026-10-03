@@ -71,6 +71,11 @@
 				"failed": "The payment failed. Generate a new code."
 			},
 			"newCode": "New code",
+			"close": "Close",
+			"closeIn": "{seconds, plural, one {You can close this in # second} other {You can close this in # seconds}}",
+			"sandboxPay": "PAY SANDBOX PIX",
+			"sandboxWait": "Wait {seconds}s",
+			"sandboxNote": "Sandbox mode: simulates the payment, no money moves.",
 			"errors": {
 				"unauthenticated": "Log in again to continue.",
 				"unverified": "Confirm your email before paying.",
@@ -82,6 +87,8 @@
 				"plan_conflict": "PIX renews your current plan only. Wait until it ends to switch plans.",
 				"plan_required": "Extra credits are for active Pro and Business plans.",
 				"no_customer": "No card billing account yet.",
+				"not_found": "This PIX charge was not found.",
+				"not_pending": "This PIX charge is no longer awaiting payment.",
 				"server": "Something went wrong. Try again in a minute."
 			}
 		},
