@@ -1,0 +1,39 @@
+{
+ "type": "standard",
+ "title": "Matrix",
+ "displaytitle": "<i>Matrix</i>",
+ "namespace": {
+  "id": 0,
+  "text": ""
+ },
+ "wikibase_item": "Q83495",
+ "titles": {
+  "canonical": "Matrix",
+  "normalized": "Matrix",
+  "display": "<i>Matrix</i>"
+ },
+ "pageid": 45595,
+ "lang": "pt",
+ "dir": "ltr",
+ "revision": "72765493",
+ "tid": "bb7f9c73-90a2-11f1-9c76-a949edd5311b",
+ "timestamp": "2026-08-05T07:53:23Z",
+ "description": "filme de 1999 dirigido por Lilly e Lana Wachowski",
+ "description_source": "central",
+ "content_urls": {
+  "desktop": {
+   "page": "https://pt.wikipedia.org/wiki/Matrix",
+   "revisions": "https://pt.wikipedia.org/wiki/Matrix?action=history",
+   "edit": "https://pt.wikipedia.org/wiki/Matrix?action=edit",
+   "talk": "https://pt.wikipedia.org/wiki/Discuss%C3%A3o:Matrix"
+  },
+  "mobile": {
+   "page": "https://pt.wikipedia.org/wiki/Matrix",
+   "revisions": "https://pt.wikipedia.org/wiki/Special:History/Matrix",
+   "edit": "https://pt.wikipedia.org/wiki/Matrix?action=edit",
+   "talk": "https://pt.wikipedia.org/wiki/Discuss%C3%A3o:Matrix"
+  }
+ },
+ "extract": "The Matrix é um filme australo-estadunidense de 1999, dos gêneros ação e ficção científica, dirigido e escrito por Lilly e Lana Wachowski. Estrelado por Keanu Reeves, Laurence Fishburne e Carrie-Anne Moss, o filme retrata um futuro ciberpunk distópico no qual a realidade, como percebida pela maioria dos humanos, é, na verdade, uma realidade simulada por computador chamada \"Matrix\", criada por máquinas sencientes para subjugar a população humana na forma de hibernação, enquanto o calor e a atividade elétrica de seus corpos são usados ​​como fonte de energia; na história, o cibercriminoso e programador de computador Neo descobre este fato e é atraído para uma rebelião contra as máquinas, que envolve outras pessoas que foram libertadas do \"mundo dos sonhos\".",
+ "extract_html": "<p><i><b>The Matrix</b></i> é um filme australo-estadunidense de 1999, dos gêneros ação e ficção científica, dirigido e escrito por Lilly e Lana Wachowski. Estrelado por Keanu Reeves, Laurence Fishburne e Carrie-Anne Moss, o filme retrata um futuro <i>ciberpunk</i> distópico no qual a realidade, como percebida pela maioria dos humanos, é, na verdade, uma realidade simulada por computador chamada \"Matrix\", criada por máquinas sencientes para subjugar a população humana na forma de hibernação, enquanto o calor e a atividade elétrica de seus corpos são usados ​​como fonte de energia; na história, o cibercriminoso e programador de computador Neo descobre este fato e é atraído para uma rebelião contra as máquinas, que envolve outras pessoas que foram libertadas do \"mundo dos sonhos\".</p>"
+}

@@ -1,0 +1,39 @@
+{
+ "type": "standard",
+ "title": "The Matrix",
+ "displaytitle": "<i>The Matrix</i>",
+ "namespace": {
+  "id": 0,
+  "text": ""
+ },
+ "wikibase_item": "Q83495",
+ "titles": {
+  "canonical": "The_Matrix",
+  "normalized": "The Matrix",
+  "display": "<i>The Matrix</i>"
+ },
+ "pageid": 30007,
+ "lang": "en",
+ "dir": "ltr",
+ "revision": "1378003195",
+ "tid": "6ddca096-be51-11f1-99f4-c217bb6a6477",
+ "timestamp": "2026-10-02T11:07:17Z",
+ "description": "1999 film by the Wachowskis",
+ "description_source": "local",
+ "content_urls": {
+  "desktop": {
+   "page": "https://en.wikipedia.org/wiki/The_Matrix",
+   "revisions": "https://en.wikipedia.org/wiki/The_Matrix?action=history",
+   "edit": "https://en.wikipedia.org/wiki/The_Matrix?action=edit",
+   "talk": "https://en.wikipedia.org/wiki/Talk:The_Matrix"
+  },
+  "mobile": {
+   "page": "https://en.wikipedia.org/wiki/The_Matrix",
+   "revisions": "https://en.wikipedia.org/wiki/Special:History/The_Matrix",
+   "edit": "https://en.wikipedia.org/wiki/The_Matrix?action=edit",
+   "talk": "https://en.wikipedia.org/wiki/Talk:The_Matrix"
+  }
+ },
+ "extract": "The Matrix is a 1999 science fiction–action film written and directed by the Wachowskis. The first installment in the Matrix film series, it stars Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss, Hugo Weaving, and Joe Pantoliano. The film follows a disillusioned computer hacker Neo (Reeves) who discovers that the life he knows is an elaborate deception created by intelligent machines. He is recruited by underground insurgents Morpheus (Fishburne) and Trinity (Moss), to join the rebellion against the machines.",
+ "extract_html": "<p><i><b>The Matrix</b></i> is a 1999 science fiction–action film written and directed by the Wachowskis. The first installment in the <span><i>Matrix</i> film series</span>, it stars Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss, Hugo Weaving, and Joe Pantoliano. The film follows a disillusioned computer hacker Neo (Reeves) who discovers that the life he knows is an elaborate deception created by intelligent machines. He is recruited by underground insurgents Morpheus (Fishburne) and Trinity (Moss), to join the rebellion against the machines.</p>"
+}

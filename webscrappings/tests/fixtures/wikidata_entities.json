@@ -1,0 +1,5220 @@
+{
+ "entities": {
+  "Q83495": {
+   "type": "item",
+   "id": "Q83495",
+   "labels": {
+    "es": {
+     "language": "es",
+     "value": "The Matrix"
+    },
+    "pt": {
+     "language": "pt",
+     "value": "Matrix"
+    },
+    "en": {
+     "language": "en",
+     "value": "The Matrix"
+    },
+    "pt-br": {
+     "language": "pt-br",
+     "value": "Matrix"
+    }
+   },
+   "claims": {
+    "P577": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P577",
+       "datavalue": {
+        "value": {
+         "time": "+1999-03-31T00:00:00Z",
+         "timezone": 0,
+         "before": 0,
+         "after": 0,
+         "precision": 11,
+         "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+        },
+        "type": "time"
+       },
+       "datatype": "time"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P291": [
+        {
+         "snaktype": "value",
+         "property": "P291",
+         "hash": "d030038c836f9ed0d37c69cb8c389d689ebeb05a",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 30,
+           "id": "Q30"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P291"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P577",
+       "datavalue": {
+        "value": {
+         "time": "+1999-07-14T00:00:00Z",
+         "timezone": 0,
+         "before": 0,
+         "after": 0,
+         "precision": 11,
+         "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+        },
+        "type": "time"
+       },
+       "datatype": "time"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P291": [
+        {
+         "snaktype": "value",
+         "property": "P291",
+         "hash": "7e3c5acd8ed74c218a2b55f9a0f77447daa0253b",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 34,
+           "id": "Q34"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P291"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P577",
+       "datavalue": {
+        "value": {
+         "time": "+1999-06-17T00:00:00Z",
+         "timezone": 0,
+         "before": 0,
+         "after": 0,
+         "precision": 11,
+         "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+        },
+        "type": "time"
+       },
+       "datatype": "time"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P291": [
+        {
+         "snaktype": "value",
+         "property": "P291",
+         "hash": "a15ed95482d52eea03d59e098dae9e31dafef9bd",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 183,
+           "id": "Q183"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P291"
+      ],
+      "rank": "normal"
+     }
+    ],
+    "P1258": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1258",
+       "datavalue": {
+        "value": "m/matrix",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P57": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 9545711,
+         "id": "Q9545711"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P1545": [
+        {
+         "snaktype": "value",
+         "property": "P1545",
+         "hash": "2a1ced1dca90648ea7e306acbadd74fc81a10722",
+         "datavalue": {
+          "value": "1",
+          "type": "string"
+         },
+         "datatype": "string"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P1545"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 9544977,
+         "id": "Q9544977"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P1545": [
+        {
+         "snaktype": "value",
+         "property": "P1545",
+         "hash": "7241753c62a310cf84895620ea82250dcea65835",
+         "datavalue": {
+          "value": "2",
+          "type": "string"
+         },
+         "datatype": "string"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P1545"
+      ],
+      "rank": "normal"
+     }
+    ],
+    "P345": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P345",
+       "datavalue": {
+        "value": "tt0133093",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P136": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 2484376,
+         "id": "Q2484376"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 20443008,
+         "id": "Q20443008"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 174526,
+         "id": "Q174526"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 3990883,
+         "id": "Q3990883"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 1341051,
+         "id": "Q1341051"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 471839,
+         "id": "Q471839"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 188473,
+         "id": "Q188473"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 185867,
+         "id": "Q185867"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 1535153,
+         "id": "Q1535153"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P495": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P495",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 30,
+         "id": "Q30"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P1545": [
+        {
+         "snaktype": "value",
+         "property": "P1545",
+         "hash": "2a1ced1dca90648ea7e306acbadd74fc81a10722",
+         "datavalue": {
+          "value": "1",
+          "type": "string"
+         },
+         "datatype": "string"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P1545"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P495",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 408,
+         "id": "Q408"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P1545": [
+        {
+         "snaktype": "value",
+         "property": "P1545",
+         "hash": "7241753c62a310cf84895620ea82250dcea65835",
+         "datavalue": {
+          "value": "2",
+          "type": "string"
+         },
+         "datatype": "string"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P1545"
+      ],
+      "rank": "normal"
+     }
+    ],
+    "P1712": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1712",
+       "datavalue": {
+        "value": "movie/the-matrix",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P18": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P18",
+       "datavalue": {
+        "value": "The.Matrix.glmatrix.1.png",
+        "type": "string"
+       },
+       "datatype": "commonsMedia"
+      },
+      "type": "statement",
+      "rank": "preferred"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P18",
+       "datavalue": {
+        "value": "Red and blue pill.jpg",
+        "type": "string"
+       },
+       "datatype": "commonsMedia"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P2047": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P2047",
+       "datavalue": {
+        "value": {
+         "amount": "+136",
+         "unit": "http://www.wikidata.org/entity/Q7727"
+        },
+        "type": "quantity"
+       },
+       "datatype": "quantity"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P4947": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P4947",
+       "datavalue": {
+        "value": "603",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P444": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P444",
+       "datavalue": {
+        "value": "7.8/10",
+        "type": "string"
+       },
+       "datatype": "string"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P447": [
+        {
+         "snaktype": "value",
+         "property": "P447",
+         "hash": "5d03104d280dbd5981c36053631f3d7de1cbcb74",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 105584,
+           "id": "Q105584"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "1ffd9361cb200c3bac79ea1812eaea9f8d3b0ee5",
+         "datavalue": {
+          "value": {
+           "time": "+2021-09-11T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ],
+       "P459": [
+        {
+         "snaktype": "value",
+         "property": "P459",
+         "hash": "74f750011487c8fee0e88d838354735ca69f4a77",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 108403540,
+           "id": "Q108403540"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P447",
+       "P585",
+       "P459"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P444",
+       "datavalue": {
+        "value": "3/4",
+        "type": "string"
+       },
+       "datatype": "string"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P447": [
+        {
+         "snaktype": "value",
+         "property": "P447",
+         "hash": "0657d36d44c8ac43214cd7d629f024a6a9c4e034",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 212173,
+           "id": "Q212173"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "e2891b02ded13ab39c0ac879ad7b3d7a00c8bb9e",
+         "datavalue": {
+          "value": {
+           "time": "+1999-03-31T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P447",
+       "P585"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P444",
+       "datavalue": {
+        "value": "73/100",
+        "type": "string"
+       },
+       "datatype": "string"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P447": [
+        {
+         "snaktype": "value",
+         "property": "P447",
+         "hash": "e8666b800cad4d07decf2c691b480c8acf52b802",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 150248,
+           "id": "Q150248"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "75dd6dd500cee734bdbd55e13d8db9d0bac1f1cd",
+         "datavalue": {
+          "value": {
+           "time": "+2026-01-16T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ],
+       "P459": [
+        {
+         "snaktype": "value",
+         "property": "P459",
+         "hash": "cd037a94d2f7090cb548acead0817f6c1c002880",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 106515043,
+           "id": "Q106515043"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P7887": [
+        {
+         "snaktype": "value",
+         "property": "P7887",
+         "hash": "779e40f59a035eb56fa3c9721af0adb7356488d8",
+         "datavalue": {
+          "value": {
+           "amount": "+36",
+           "unit": "http://www.wikidata.org/entity/Q80698083"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P447",
+       "P585",
+       "P459",
+       "P7887"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P444",
+       "datavalue": {
+        "value": "83%",
+        "type": "string"
+       },
+       "datatype": "string"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P447": [
+        {
+         "snaktype": "value",
+         "property": "P447",
+         "hash": "5d03104d280dbd5981c36053631f3d7de1cbcb74",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 105584,
+           "id": "Q105584"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "75dd6dd500cee734bdbd55e13d8db9d0bac1f1cd",
+         "datavalue": {
+          "value": {
+           "time": "+2026-01-16T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ],
+       "P459": [
+        {
+         "snaktype": "value",
+         "property": "P459",
+         "hash": "0d8dfeb671c7d72238ee6c054ac6e364c9707053",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 108403393,
+           "id": "Q108403393"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P7887": [
+        {
+         "snaktype": "value",
+         "property": "P7887",
+         "hash": "58c1b95ebe9649189a1b108d11e00bee7edb4222",
+         "datavalue": {
+          "value": {
+           "amount": "+209",
+           "unit": "http://www.wikidata.org/entity/Q80698083"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P447",
+       "P585",
+       "P459",
+       "P7887"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P444",
+       "datavalue": {
+        "value": "8.7/10",
+        "type": "string"
+       },
+       "datatype": "string"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P447": [
+        {
+         "snaktype": "value",
+         "property": "P447",
+         "hash": "6f0595052cdc87e75a43515802dacd8c5ec849fc",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 37312,
+           "id": "Q37312"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P7887": [
+        {
+         "snaktype": "value",
+         "property": "P7887",
+         "hash": "c36df39cd70569149b25b0708741ddfafb93055c",
+         "datavalue": {
+          "value": {
+           "amount": "+2200000",
+           "unit": "http://www.wikidata.org/entity/Q137041451"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ],
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "60f212e729ede6d442faba68f13e6929e0c8272a",
+         "datavalue": {
+          "value": {
+           "time": "+2026-02-20T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ],
+       "P459": [
+        {
+         "snaktype": "value",
+         "property": "P459",
+         "hash": "8b266d7beee64197b41c29bc9f02caa1ee6db205",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 107218751,
+           "id": "Q107218751"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P447",
+       "P7887",
+       "P585",
+       "P459"
+      ],
+      "rank": "normal"
+     }
+    ],
+    "P1651": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1651",
+       "datavalue": {
+        "value": "_XrKhqC5rQQ",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P1476": [
+        {
+         "snaktype": "value",
+         "property": "P1476",
+         "hash": "6d2d8ad07a5d8449b17c6a33ce9525b593a791ad",
+         "datavalue": {
+          "value": {
+           "text": "The Matrix",
+           "language": "en"
+          },
+          "type": "monolingualtext"
+         },
+         "datatype": "monolingualtext"
+        }
+       ],
+       "P577": [
+        {
+         "snaktype": "value",
+         "property": "P577",
+         "hash": "aad7685432c3f1d4e203637a0a8c2c67810632cf",
+         "datavalue": {
+          "value": {
+           "time": "+2014-07-31T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ],
+       "P407": [
+        {
+         "snaktype": "value",
+         "property": "P407",
+         "hash": "daf1c4fcb58181b02dff9cc89deb084004ddae4b",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 1860,
+           "id": "Q1860"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P2397": [
+        {
+         "snaktype": "value",
+         "property": "P2397",
+         "hash": "87a9ebe5fcf236a88b83e8cf30685e95fdd9d687",
+         "datavalue": {
+          "value": "UCMEnXIqu07AAw76djRdOnQg",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        }
+       ],
+       "P2047": [
+        {
+         "snaktype": "value",
+         "property": "P2047",
+         "hash": "167f49c798f62d59dbd59c979adc524ba9435a85",
+         "datavalue": {
+          "value": {
+           "amount": "+8179.0",
+           "unit": "http://www.wikidata.org/entity/Q11574"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ],
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "50defc36a3aabde088a3d4ebac411c64644f5c7e",
+         "datavalue": {
+          "value": {
+           "time": "+2026-01-25T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P1476",
+       "P577",
+       "P407",
+       "P2397",
+       "P2047",
+       "P585"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1651",
+       "datavalue": {
+        "value": "8VOG1nI-27Q",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P1810": [
+        {
+         "snaktype": "value",
+         "property": "P1810",
+         "hash": "2e451f6dda2fba6bfb7128405c461025ed3dd213",
+         "datavalue": {
+          "value": "The Matrix",
+          "type": "string"
+         },
+         "datatype": "string"
+        }
+       ],
+       "P577": [
+        {
+         "snaktype": "value",
+         "property": "P577",
+         "hash": "6f8f08df28564a7259735ece4c28c5957562b521",
+         "datavalue": {
+          "value": {
+           "time": "+2026-01-01T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ],
+       "P407": [
+        {
+         "snaktype": "value",
+         "property": "P407",
+         "hash": "daf1c4fcb58181b02dff9cc89deb084004ddae4b",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 1860,
+           "id": "Q1860"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P2047": [
+        {
+         "snaktype": "value",
+         "property": "P2047",
+         "hash": "4c72538912736c87567d8ea5fa56fadc7ab3b2bc",
+         "datavalue": {
+          "value": {
+           "amount": "+8191.0",
+           "unit": "http://www.wikidata.org/entity/Q11574"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ],
+       "P2397": [
+        {
+         "snaktype": "value",
+         "property": "P2397",
+         "hash": "197c6954f04052a8c896c72ee5e15f5dcc703790",
+         "datavalue": {
+          "value": "UCy2Tb3StbfsCrIEVMDsPkbw",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        }
+       ],
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "50defc36a3aabde088a3d4ebac411c64644f5c7e",
+         "datavalue": {
+          "value": {
+           "time": "+2026-01-25T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P1810",
+       "P577",
+       "P407",
+       "P2047",
+       "P2397",
+       "P585"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1651",
+       "datavalue": {
+        "value": "dGnqHj6w5Z4",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P1810": [
+        {
+         "snaktype": "value",
+         "property": "P1810",
+         "hash": "2e451f6dda2fba6bfb7128405c461025ed3dd213",
+         "datavalue": {
+          "value": "The Matrix",
+          "type": "string"
+         },
+         "datatype": "string"
+        }
+       ],
+       "P577": [
+        {
+         "snaktype": "value",
+         "property": "P577",
+         "hash": "98d07ee8a98e9ba2762dff45af957f01f73a818c",
+         "datavalue": {
+          "value": {
+           "time": "+2026-06-01T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ],
+       "P407": [
+        {
+         "snaktype": "value",
+         "property": "P407",
+         "hash": "daf1c4fcb58181b02dff9cc89deb084004ddae4b",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 1860,
+           "id": "Q1860"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P2047": [
+        {
+         "snaktype": "value",
+         "property": "P2047",
+         "hash": "2b0a52818b279a9569df5cc3cb29623bd8c52842",
+         "datavalue": {
+          "value": {
+           "amount": "+8177.0",
+           "unit": "http://www.wikidata.org/entity/Q11574"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ],
+       "P2397": [
+        {
+         "snaktype": "value",
+         "property": "P2397",
+         "hash": "470647fdefae09f2506996c44a0d5b6daab7065d",
+         "datavalue": {
+          "value": "UCuVPpxrm2VAgpH3Ktln4HXg",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        }
+       ],
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "a3a0a672e9d1f411de0694b43190e7ba7255af09",
+         "datavalue": {
+          "value": {
+           "time": "+2026-06-11T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P1810",
+       "P577",
+       "P407",
+       "P2047",
+       "P2397",
+       "P585"
+      ],
+      "rank": "normal"
+     }
+    ]
+   },
+   "sitelinks": {
+    "afwiki": {
+     "site": "afwiki",
+     "title": "The Matrix"
+    },
+    "anwiki": {
+     "site": "anwiki",
+     "title": "The Matrix"
+    },
+    "arwiki": {
+     "site": "arwiki",
+     "title": "ذا ماتريكس (فلم)"
+    },
+    "arzwiki": {
+     "site": "arzwiki",
+     "title": "ماتريكس"
+    },
+    "astwiki": {
+     "site": "astwiki",
+     "title": "The Matrix"
+    },
+    "azbwiki": {
+     "site": "azbwiki",
+     "title": "ماتریکس (فیلم)"
+    },
+    "azwiki": {
+     "site": "azwiki",
+     "title": "Matris (film)"
+    },
+    "be_x_oldwiki": {
+     "site": "be_x_oldwiki",
+     "title": "Матрыца (фільм)"
+    },
+    "bewiki": {
+     "site": "bewiki",
+     "title": "Матрыца (фільм)"
+    },
+    "bgwiki": {
+     "site": "bgwiki",
+     "title": "Матрицата"
+    },
+    "bgwikiquote": {
+     "site": "bgwikiquote",
+     "title": "Матрицата"
+    },
+    "bnwiki": {
+     "site": "bnwiki",
+     "title": "দ্য ম্যাট্রিক্স"
+    },
+    "cawiki": {
+     "site": "cawiki",
+     "title": "Matrix"
+    },
+    "cawikiquote": {
+     "site": "cawikiquote",
+     "title": "Matrix"
+    },
+    "ckbwiki": {
+     "site": "ckbwiki",
+     "title": "مەیتریکس (فیلم)"
+    },
+    "crhwiki": {
+     "site": "crhwiki",
+     "title": "Matriks"
+    },
+    "cswiki": {
+     "site": "cswiki",
+     "title": "Matrix (film)"
+    },
+    "cvwiki": {
+     "site": "cvwiki",
+     "title": "Матрица (фильм)"
+    },
+    "cywiki": {
+     "site": "cywiki",
+     "title": "The Matrix"
+    },
+    "dawiki": {
+     "site": "dawiki",
+     "title": "The Matrix"
+    },
+    "dawikiquote": {
+     "site": "dawikiquote",
+     "title": "The Matrix"
+    },
+    "dewiki": {
+     "site": "dewiki",
+     "title": "Matrix (Film)"
+    },
+    "dewikiquote": {
+     "site": "dewikiquote",
+     "title": "Matrix – Der Film"
+    },
+    "elwiki": {
+     "site": "elwiki",
+     "title": "The Matrix"
+    },
+    "emlwiki": {
+     "site": "emlwiki",
+     "title": "Matrix"
+    },
+    "enwiki": {
+     "site": "enwiki",
+     "title": "The Matrix"
+    },
+    "enwikiquote": {
+     "site": "enwikiquote",
+     "title": "The Matrix (film)"
+    },
+    "eowiki": {
+     "site": "eowiki",
+     "title": "The Matrix"
+    },
+    "eowikiquote": {
+     "site": "eowikiquote",
+     "title": "The Matrix"
+    },
+    "eswiki": {
+     "site": "eswiki",
+     "title": "The Matrix"
+    },
+    "etwiki": {
+     "site": "etwiki",
+     "title": "Matrix"
+    },
+    "euwiki": {
+     "site": "euwiki",
+     "title": "The Matrix"
+    },
+    "fawiki": {
+     "site": "fawiki",
+     "title": "ماتریکس"
+    },
+    "fawikiquote": {
+     "site": "fawikiquote",
+     "title": "ماتریکس"
+    },
+    "fiwiki": {
+     "site": "fiwiki",
+     "title": "Matrix (elokuva)"
+    },
+    "frwiki": {
+     "site": "frwiki",
+     "title": "Matrix (film)"
+    },
+    "frwikiquote": {
+     "site": "frwikiquote",
+     "title": "Matrix"
+    },
+    "fywiki": {
+     "site": "fywiki",
+     "title": "The Matrix (film)"
+    },
+    "glwiki": {
+     "site": "glwiki",
+     "title": "Matrix"
+    },
+    "glwikiquote": {
+     "site": "glwikiquote",
+     "title": "The Matrix"
+    },
+    "hawwiki": {
+     "site": "hawwiki",
+     "title": "The Matrix"
+    },
+    "hewiki": {
+     "site": "hewiki",
+     "title": "מטריקס"
+    },
+    "hewikiquote": {
+     "site": "hewikiquote",
+     "title": "מטריקס"
+    },
+    "hiwiki": {
+     "site": "hiwiki",
+     "title": "द मेट्रिक्स"
+    },
+    "hrwiki": {
+     "site": "hrwiki",
+     "title": "Matrix (1999.)"
+    },
+    "htwiki": {
+     "site": "htwiki",
+     "title": "Matrix"
+    },
+    "huwiki": {
+     "site": "huwiki",
+     "title": "Mátrix (film)"
+    },
+    "huwikiquote": {
+     "site": "huwikiquote",
+     "title": "Mátrix"
+    },
+    "hywiki": {
+     "site": "hywiki",
+     "title": "Մատրիցա"
+    },
+    "iawiki": {
+     "site": "iawiki",
+     "title": "Matrix (1999)"
+    },
+    "idwiki": {
+     "site": "idwiki",
+     "title": "The Matrix"
+    },
+    "inhwiki": {
+     "site": "inhwiki",
+     "title": "Матрица (фильм)"
+    },
+    "iowiki": {
+     "site": "iowiki",
+     "title": "La Matrico"
+    },
+    "iswiki": {
+     "site": "iswiki",
+     "title": "Fylkið"
+    },
+    "iswikiquote": {
+     "site": "iswikiquote",
+     "title": "Fylkið"
+    },
+    "itwiki": {
+     "site": "itwiki",
+     "title": "Matrix"
+    },
+    "itwikiquote": {
+     "site": "itwikiquote",
+     "title": "Matrix"
+    },
+    "jawiki": {
+     "site": "jawiki",
+     "title": "マトリックス (映画)"
+    },
+    "kawiki": {
+     "site": "kawiki",
+     "title": "მატრიცა (ფილმი)"
+    },
+    "kawikiquote": {
+     "site": "kawikiquote",
+     "title": "მატრიცა"
+    },
+    "kkwiki": {
+     "site": "kkwiki",
+     "title": "Матрица (фильм)"
+    },
+    "knwiki": {
+     "site": "knwiki",
+     "title": "ದಿ ಮೆಟ್ರಿಕ್ಸ್ (ಚಲನಚಿತ್ರ)"
+    },
+    "kowiki": {
+     "site": "kowiki",
+     "title": "매트릭스 (영화)"
+    },
+    "kowikiquote": {
+     "site": "kowikiquote",
+     "title": "매트릭스"
+    },
+    "kywiki": {
+     "site": "kywiki",
+     "title": "Матрица (тасма)"
+    },
+    "ladwiki": {
+     "site": "ladwiki",
+     "title": "The Matrix"
+    },
+    "lawiki": {
+     "site": "lawiki",
+     "title": "Matrix (pellicula)"
+    },
+    "liwiki": {
+     "site": "liwiki",
+     "title": "The Matrix"
+    },
+    "ltwiki": {
+     "site": "ltwiki",
+     "title": "Matrica (1999 filmas)"
+    },
+    "lvwiki": {
+     "site": "lvwiki",
+     "title": "Matrikss"
+    },
+    "mkwiki": {
+     "site": "mkwiki",
+     "title": "Матрица (филм)"
+    },
+    "mlwiki": {
+     "site": "mlwiki",
+     "title": "ദ മാട്രിക്സ്"
+    },
+    "mswiki": {
+     "site": "mswiki",
+     "title": "The Matrix"
+    },
+    "ndswiki": {
+     "site": "ndswiki",
+     "title": "The Matrix"
+    },
+    "newiki": {
+     "site": "newiki",
+     "title": "द म्याट्रिक्स"
+    },
+    "nlwiki": {
+     "site": "nlwiki",
+     "title": "The Matrix"
+    },
+    "nlwikibooks": {
+     "site": "nlwikibooks",
+     "title": "Beeldend leren/The Matrix"
+    },
+    "nowiki": {
+     "site": "nowiki",
+     "title": "The Matrix"
+    },
+    "pawiki": {
+     "site": "pawiki",
+     "title": "ਦ ਮੈਟਰਿਕਸ (ਫ਼ਿਲਮ)"
+    },
+    "plwiki": {
+     "site": "plwiki",
+     "title": "Matrix"
+    },
+    "plwikiquote": {
+     "site": "plwikiquote",
+     "title": "Matrix"
+    },
+    "ptwiki": {
+     "site": "ptwiki",
+     "title": "Matrix"
+    },
+    "ptwikiquote": {
+     "site": "ptwikiquote",
+     "title": "The Matrix"
+    },
+    "rowiki": {
+     "site": "rowiki",
+     "title": "Matrix"
+    },
+    "ruwiki": {
+     "site": "ruwiki",
+     "title": "Матрица (фильм)"
+    },
+    "ruwikinews": {
+     "site": "ruwikinews",
+     "title": "Категория:Матрица (фильм)"
+    },
+    "ruwikiquote": {
+     "site": "ruwikiquote",
+     "title": "Матрица (фильм)"
+    },
+    "shwiki": {
+     "site": "shwiki",
+     "title": "Matrix"
+    },
+    "simplewiki": {
+     "site": "simplewiki",
+     "title": "The Matrix"
+    },
+    "skwiki": {
+     "site": "skwiki",
+     "title": "Matrix (film)"
+    },
+    "skwikiquote": {
+     "site": "skwikiquote",
+     "title": "Matrix"
+    },
+    "slwiki": {
+     "site": "slwiki",
+     "title": "Matrica"
+    },
+    "sqwiki": {
+     "site": "sqwiki",
+     "title": "Matriksi"
+    },
+    "sqwikiquote": {
+     "site": "sqwikiquote",
+     "title": "The Matrix"
+    },
+    "srwiki": {
+     "site": "srwiki",
+     "title": "Matriks"
+    },
+    "srwikiquote": {
+     "site": "srwikiquote",
+     "title": "Matrix"
+    },
+    "svwiki": {
+     "site": "svwiki",
+     "title": "Matrix"
+    },
+    "svwikiquote": {
+     "site": "svwikiquote",
+     "title": "Matrix"
+    },
+    "swwiki": {
+     "site": "swwiki",
+     "title": "The Matrix"
+    },
+    "tawiki": {
+     "site": "tawiki",
+     "title": "தி மேட்ரிக்ஸ்"
+    },
+    "tawikiquote": {
+     "site": "tawikiquote",
+     "title": "மேட்ரிக்ஸ் (திரைப்படம்)"
+    },
+    "thwiki": {
+     "site": "thwiki",
+     "title": "เดอะ เมทริกซ์ เพาะพันธุ์มนุษย์เหนือโลก 2199"
+    },
+    "trwiki": {
+     "site": "trwiki",
+     "title": "Matrix (film)"
+    },
+    "trwikiquote": {
+     "site": "trwikiquote",
+     "title": "Matrix (film)"
+    },
+    "ukwiki": {
+     "site": "ukwiki",
+     "title": "Матриця (фільм)"
+    },
+    "ukwikiquote": {
+     "site": "ukwikiquote",
+     "title": "Матриця (фільм)"
+    },
+    "urwiki": {
+     "site": "urwiki",
+     "title": "دی میٹرکس"
+    },
+    "uzwiki": {
+     "site": "uzwiki",
+     "title": "Matritsa (film)"
+    },
+    "viwiki": {
+     "site": "viwiki",
+     "title": "Ma trận (phim)"
+    },
+    "wuuwiki": {
+     "site": "wuuwiki",
+     "title": "黑客帝国"
+    },
+    "xmfwiki": {
+     "site": "xmfwiki",
+     "title": "მატრიცა (ფილმი)"
+    },
+    "zh_yuewiki": {
+     "site": "zh_yuewiki",
+     "title": "廿二世紀殺人網絡"
+    },
+    "zhwiki": {
+     "site": "zhwiki",
+     "title": "黑客帝国"
+    },
+    "zhwikiquote": {
+     "site": "zhwikiquote",
+     "title": "駭客任務"
+    }
+   }
+  },
+  "Q4267401": {
+   "type": "item",
+   "id": "Q4267401",
+   "labels": {
+    "en": {
+     "language": "en",
+     "value": "The Witcher 3: Wild Hunt"
+    },
+    "pt": {
+     "language": "pt",
+     "value": "The Witcher 3: Wild Hunt"
+    },
+    "es": {
+     "language": "es",
+     "value": "The Witcher 3: Wild Hunt"
+    },
+    "mul": {
+     "language": "mul",
+     "value": "The Witcher 3: Wild Hunt"
+    }
+   },
+   "claims": {
+    "P178": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P178",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 1172164,
+         "id": "Q1172164"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P400": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P400",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 1406,
+         "id": "Q1406"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P400",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 13361286,
+         "id": "Q13361286"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P400",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 5014725,
+         "id": "Q5014725"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P400",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 19610114,
+         "id": "Q19610114"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P400",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 63184502,
+         "id": "Q63184502"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P400",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 98973368,
+         "id": "Q98973368"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P136": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 1422746,
+         "id": "Q1422746"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 42409239,
+         "id": "Q42409239"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P577": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P577",
+       "datavalue": {
+        "value": {
+         "time": "+2015-05-19T00:00:00Z",
+         "timezone": 0,
+         "before": 0,
+         "after": 0,
+         "precision": 11,
+         "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+        },
+        "type": "time"
+       },
+       "datatype": "time"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P400": [
+        {
+         "snaktype": "value",
+         "property": "P400",
+         "hash": "0b7430c76aa932002363740d965c9f0a5cd61191",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 1406,
+           "id": "Q1406"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        {
+         "snaktype": "value",
+         "property": "P400",
+         "hash": "9911730726388d7d7f7e8eeae654b34da3cab2d3",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 13361286,
+           "id": "Q13361286"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        {
+         "snaktype": "value",
+         "property": "P400",
+         "hash": "33b09c200f075ccaeda157f9f5e0a0baa0a654cf",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 5014725,
+           "id": "Q5014725"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P400"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P577",
+       "datavalue": {
+        "value": {
+         "time": "+2015-10-15T00:00:00Z",
+         "timezone": 0,
+         "before": 0,
+         "after": 0,
+         "precision": 11,
+         "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+        },
+        "type": "time"
+       },
+       "datatype": "time"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P400": [
+        {
+         "snaktype": "value",
+         "property": "P400",
+         "hash": "2e31cb0a82f44474a5c42bb159a94cc48633fffd",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 19610114,
+           "id": "Q19610114"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P400"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P577",
+       "datavalue": {
+        "value": {
+         "time": "+2021-00-00T00:00:00Z",
+         "timezone": 0,
+         "before": 0,
+         "after": 0,
+         "precision": 9,
+         "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+        },
+        "type": "time"
+       },
+       "datatype": "time"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P400": [
+        {
+         "snaktype": "value",
+         "property": "P400",
+         "hash": "4216894558f8d108400548eab191938a8615d5fe",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 63184502,
+           "id": "Q63184502"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        {
+         "snaktype": "value",
+         "property": "P400",
+         "hash": "f5f230d17257b358f44b83ed8b87dfaa8b01d0ac",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 98973368,
+           "id": "Q98973368"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P400"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P577",
+       "datavalue": {
+        "value": {
+         "time": "+2021-01-28T00:00:00Z",
+         "timezone": 0,
+         "before": 0,
+         "after": 0,
+         "precision": 11,
+         "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+        },
+        "type": "time"
+       },
+       "datatype": "time"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P345": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P345",
+       "datavalue": {
+        "value": "tt2993508",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P1733": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1733",
+       "datavalue": {
+        "value": "292030",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P400": [
+        {
+         "snaktype": "value",
+         "property": "P400",
+         "hash": "0b7430c76aa932002363740d965c9f0a5cd61191",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 1406,
+           "id": "Q1406"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P400"
+      ],
+      "rank": "normal"
+     }
+    ],
+    "P495": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P495",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 36,
+         "id": "Q36"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P2725": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P2725",
+       "datavalue": {
+        "value": "game/the_witcher_3_wild_hunt",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P12727": [
+        {
+         "snaktype": "value",
+         "property": "P12727",
+         "hash": "0d2bbe596b010d92851b98f7e75c554c312a66aa",
+         "datavalue": {
+          "value": "1207664663",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P12727"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P2725",
+       "datavalue": {
+        "value": "game/the_witcher_3_wild_hunt_expansion_pass",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P12727": [
+        {
+         "snaktype": "value",
+         "property": "P12727",
+         "hash": "0d2bbe596b010d92851b98f7e75c554c312a66aa",
+         "datavalue": {
+          "value": "1207664663",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P12727"
+      ],
+      "rank": "normal"
+     }
+    ],
+    "P2816": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P2816",
+       "datavalue": {
+        "value": "10270",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P6278": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P6278",
+       "datavalue": {
+        "value": "the-witcher-3-wild-hunt",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P5794": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P5794",
+       "datavalue": {
+        "value": "the-witcher-3-wild-hunt",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P9043": [
+        {
+         "snaktype": "value",
+         "property": "P9043",
+         "hash": "bc58f7b7f6b51f43b5ce6226bba9d662825b99e3",
+         "datavalue": {
+          "value": "1942",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P9043"
+      ],
+      "rank": "normal"
+     }
+    ],
+    "P444": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P444",
+       "datavalue": {
+        "value": "93/100",
+        "type": "string"
+       },
+       "datatype": "string"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P447": [
+        {
+         "snaktype": "value",
+         "property": "P447",
+         "hash": "04459354e11a0fe66763968915b30c73c420d23b",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 21039459,
+           "id": "Q21039459"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P459": [
+        {
+         "snaktype": "value",
+         "property": "P459",
+         "hash": "5ebc73f9481112a23bb3e37af2f7ccab5b349b72",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 114712322,
+           "id": "Q114712322"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "135b8aa5dbb17bab3de019239540924de2f4f051",
+         "datavalue": {
+          "value": {
+           "time": "+2023-01-09T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ],
+       "P7887": [
+        {
+         "snaktype": "value",
+         "property": "P7887",
+         "hash": "5f5ea05824f2afc868aea7bca0a863ee2ded9b5b",
+         "datavalue": {
+          "value": {
+           "amount": "+176",
+           "unit": "http://www.wikidata.org/entity/Q80698083"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P447",
+       "P459",
+       "P585",
+       "P7887"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P444",
+       "datavalue": {
+        "value": "10/10",
+        "type": "string"
+       },
+       "datatype": "string"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P447": [
+        {
+         "snaktype": "value",
+         "property": "P447",
+         "hash": "02a843af17f9ae06a225333b313af787f54258ba",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 2366665,
+           "id": "Q2366665"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "3b10add765068d0de947ac544a60916c30d8a7dd",
+         "datavalue": {
+          "value": {
+           "time": "+2022-12-12T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ],
+       "P400": [
+        {
+         "snaktype": "value",
+         "property": "P400",
+         "hash": "4216894558f8d108400548eab191938a8615d5fe",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 63184502,
+           "id": "Q63184502"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        {
+         "snaktype": "value",
+         "property": "P400",
+         "hash": "f5f230d17257b358f44b83ed8b87dfaa8b01d0ac",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 98973368,
+           "id": "Q98973368"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P447",
+       "P585",
+       "P400"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P444",
+       "datavalue": {
+        "value": "95%",
+        "type": "string"
+       },
+       "datatype": "string"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P447": [
+        {
+         "snaktype": "value",
+         "property": "P447",
+         "hash": "04459354e11a0fe66763968915b30c73c420d23b",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 21039459,
+           "id": "Q21039459"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P459": [
+        {
+         "snaktype": "value",
+         "property": "P459",
+         "hash": "48ed42366979346c839285e470a3883bca0c4d45",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 119576498,
+           "id": "Q119576498"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "135b8aa5dbb17bab3de019239540924de2f4f051",
+         "datavalue": {
+          "value": {
+           "time": "+2023-01-09T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ],
+       "P7887": [
+        {
+         "snaktype": "value",
+         "property": "P7887",
+         "hash": "5f5ea05824f2afc868aea7bca0a863ee2ded9b5b",
+         "datavalue": {
+          "value": {
+           "amount": "+176",
+           "unit": "http://www.wikidata.org/entity/Q80698083"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P447",
+       "P459",
+       "P585",
+       "P7887"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P444",
+       "datavalue": {
+        "value": "96/100",
+        "type": "string"
+       },
+       "datatype": "string"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P447": [
+        {
+         "snaktype": "value",
+         "property": "P447",
+         "hash": "58a027d1056fca0b2e561643bc2dfee0ec9bba4c",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 117190337,
+           "id": "Q117190337"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P7887": [
+        {
+         "snaktype": "value",
+         "property": "P7887",
+         "hash": "779e40f59a035eb56fa3c9721af0adb7356488d8",
+         "datavalue": {
+          "value": {
+           "amount": "+36",
+           "unit": "http://www.wikidata.org/entity/Q80698083"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P447",
+       "P7887"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P444",
+       "datavalue": {
+        "value": "92/100",
+        "type": "string"
+       },
+       "datatype": "string"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P447": [
+        {
+         "snaktype": "value",
+         "property": "P447",
+         "hash": "5b3c7279206fc799f7f1b02e985a3b32082d95b1",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 131917281,
+           "id": "Q131917281"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P7887": [
+        {
+         "snaktype": "value",
+         "property": "P7887",
+         "hash": "2bcbfc71bb3c7bef198a95def99f649051c578a9",
+         "datavalue": {
+          "value": {
+           "amount": "+31",
+           "unit": "http://www.wikidata.org/entity/Q80698083"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ],
+       "P400": [
+        {
+         "snaktype": "value",
+         "property": "P400",
+         "hash": "0b7430c76aa932002363740d965c9f0a5cd61191",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 1406,
+           "id": "Q1406"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        {
+         "snaktype": "value",
+         "property": "P400",
+         "hash": "33b09c200f075ccaeda157f9f5e0a0baa0a654cf",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 5014725,
+           "id": "Q5014725"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        {
+         "snaktype": "value",
+         "property": "P400",
+         "hash": "9911730726388d7d7f7e8eeae654b34da3cab2d3",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 13361286,
+           "id": "Q13361286"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        {
+         "snaktype": "value",
+         "property": "P400",
+         "hash": "2e31cb0a82f44474a5c42bb159a94cc48633fffd",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 19610114,
+           "id": "Q19610114"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        {
+         "snaktype": "value",
+         "property": "P400",
+         "hash": "4216894558f8d108400548eab191938a8615d5fe",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 63184502,
+           "id": "Q63184502"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        },
+        {
+         "snaktype": "value",
+         "property": "P400",
+         "hash": "f5f230d17257b358f44b83ed8b87dfaa8b01d0ac",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 98973368,
+           "id": "Q98973368"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P459": [
+        {
+         "snaktype": "value",
+         "property": "P459",
+         "hash": "8e00cc9d71456b335afab97ba2e6d2fa98f1818a",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 132178503,
+           "id": "Q132178503"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P447",
+       "P7887",
+       "P400",
+       "P459"
+      ],
+      "rank": "normal"
+     }
+    ],
+    "P18": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P18",
+       "datavalue": {
+        "value": "The Witcher 3 - Standard Edition Unboxing (Official Trailer) cover.jpg",
+        "type": "string"
+       },
+       "datatype": "commonsMedia"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ]
+   },
+   "sitelinks": {
+    "arwiki": {
+     "site": "arwiki",
+     "title": "ذا ويتشر 3: وايلد هانت"
+    },
+    "arzwiki": {
+     "site": "arzwiki",
+     "title": "ذا ويتشر 3: وايلد هانت"
+    },
+    "barwiki": {
+     "site": "barwiki",
+     "title": "Witcher 3: Wild Hunt"
+    },
+    "be_x_oldwiki": {
+     "site": "be_x_oldwiki",
+     "title": "Вядзьмар 3"
+    },
+    "bewiki": {
+     "site": "bewiki",
+     "title": "Вядзьмар 3: Дзікае Паляванне"
+    },
+    "cawiki": {
+     "site": "cawiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "cswiki": {
+     "site": "cswiki",
+     "title": "Zaklínač 3: Divoký hon"
+    },
+    "dewiki": {
+     "site": "dewiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "enwiki": {
+     "site": "enwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "enwikiquote": {
+     "site": "enwikiquote",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "eswiki": {
+     "site": "eswiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "etwiki": {
+     "site": "etwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "euwiki": {
+     "site": "euwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "fawiki": {
+     "site": "fawiki",
+     "title": "ویچر ۳: وایلد هانت"
+    },
+    "fawikiquote": {
+     "site": "fawikiquote",
+     "title": "ویچر ۳: وایلد هانت"
+    },
+    "fiwiki": {
+     "site": "fiwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "frwiki": {
+     "site": "frwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "glwiki": {
+     "site": "glwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "hewiki": {
+     "site": "hewiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "huwiki": {
+     "site": "huwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "hywiki": {
+     "site": "hywiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "idwiki": {
+     "site": "idwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "isvwiki": {
+     "site": "isvwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "itwiki": {
+     "site": "itwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "jawiki": {
+     "site": "jawiki",
+     "title": "ウィッチャー3 ワイルドハント"
+    },
+    "kawiki": {
+     "site": "kawiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "kowiki": {
+     "site": "kowiki",
+     "title": "더 위쳐 3: 와일드 헌트"
+    },
+    "lfnwiki": {
+     "site": "lfnwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "lldwiki": {
+     "site": "lldwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "ltwiki": {
+     "site": "ltwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "mkwiki": {
+     "site": "mkwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "mswiki": {
+     "site": "mswiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "nlwiki": {
+     "site": "nlwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "nowiki": {
+     "site": "nowiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "plwiki": {
+     "site": "plwiki",
+     "title": "Wiedźmin 3: Dziki Gon"
+    },
+    "plwikinews": {
+     "site": "plwikinews",
+     "title": "Kategoria:Wiedźmin 3: Dziki Gon"
+    },
+    "plwikiquote": {
+     "site": "plwikiquote",
+     "title": "Wiedźmin 3: Dziki Gon"
+    },
+    "ptwiki": {
+     "site": "ptwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "rowiki": {
+     "site": "rowiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "ruwiki": {
+     "site": "ruwiki",
+     "title": "Ведьмак 3: Дикая Охота"
+    },
+    "ruwikinews": {
+     "site": "ruwikinews",
+     "title": "Категория:Ведьмак 3: Дикая Охота"
+    },
+    "ruwikiquote": {
+     "site": "ruwikiquote",
+     "title": "Ведьмак 3: Дикая Охота"
+    },
+    "scwiki": {
+     "site": "scwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "shwiki": {
+     "site": "shwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "simplewiki": {
+     "site": "simplewiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "srwiki": {
+     "site": "srwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "svwiki": {
+     "site": "svwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "thwiki": {
+     "site": "thwiki",
+     "title": "เดอะวิตเชอร์ 3: ไวลด์ฮันต์"
+    },
+    "trwiki": {
+     "site": "trwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "ttwiki": {
+     "site": "ttwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "ukwiki": {
+     "site": "ukwiki",
+     "title": "Відьмак 3: Дикий гін"
+    },
+    "viwiki": {
+     "site": "viwiki",
+     "title": "The Witcher 3: Wild Hunt"
+    },
+    "wuuwiki": {
+     "site": "wuuwiki",
+     "title": "巫师3：狂猎"
+    },
+    "zhwiki": {
+     "site": "zhwiki",
+     "title": "巫师3：狂猎"
+    }
+   }
+  },
+  "Q1079": {
+   "type": "item",
+   "id": "Q1079",
+   "labels": {
+    "en": {
+     "language": "en",
+     "value": "Breaking Bad"
+    },
+    "es": {
+     "language": "es",
+     "value": "Breaking Bad"
+    },
+    "pt": {
+     "language": "pt",
+     "value": "Breaking Bad"
+    },
+    "pt-br": {
+     "language": "pt-br",
+     "value": "Breaking Bad"
+    }
+   },
+   "claims": {
+    "P57": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 4500,
+         "id": "Q4500"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 3440795,
+         "id": "Q3440795"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 6196851,
+         "id": "Q6196851"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 7841104,
+         "id": "Q7841104"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 4974114,
+         "id": "Q4974114"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 548834,
+         "id": "Q548834"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 23547,
+         "id": "Q23547"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 1279422,
+         "id": "Q1279422"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 7704779,
+         "id": "Q7704779"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 1699742,
+         "id": "Q1699742"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 1373742,
+         "id": "Q1373742"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 724100,
+         "id": "Q724100"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 462727,
+         "id": "Q462727"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 127800,
+         "id": "Q127800"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 7181639,
+         "id": "Q7181639"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 5144932,
+         "id": "Q5144932"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 3952882,
+         "id": "Q3952882"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 10307893,
+         "id": "Q10307893"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 6834453,
+         "id": "Q6834453"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 621818,
+         "id": "Q621818"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 371455,
+         "id": "Q371455"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 7174311,
+         "id": "Q7174311"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 5542223,
+         "id": "Q5542223"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 15042700,
+         "id": "Q15042700"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P57",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 7407299,
+         "id": "Q7407299"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P1258": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1258",
+       "datavalue": {
+        "value": "tv/breaking-bad",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P2241": [
+        {
+         "snaktype": "value",
+         "property": "P2241",
+         "hash": "74bd46d0bbe97d05804856f1f73b6a7480c68cec",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 45403344,
+           "id": "Q45403344"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P2241"
+      ],
+      "rank": "deprecated"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1258",
+       "datavalue": {
+        "value": "tv/breaking_bad",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P170": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P170",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 4500,
+         "id": "Q4500"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P345": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P345",
+       "datavalue": {
+        "value": "tt0903747",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P495": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P495",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 30,
+         "id": "Q30"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P136": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 9335577,
+         "id": "Q9335577"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 1366112,
+         "id": "Q1366112"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 67175872,
+         "id": "Q67175872"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 20652466,
+         "id": "Q20652466"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 78528852,
+         "id": "Q78528852"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P580": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P580",
+       "datavalue": {
+        "value": {
+         "time": "+2008-01-20T00:00:00Z",
+         "timezone": 0,
+         "before": 0,
+         "after": 0,
+         "precision": 11,
+         "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+        },
+        "type": "time"
+       },
+       "datatype": "time"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P805": [
+        {
+         "snaktype": "value",
+         "property": "P805",
+         "hash": "d298c531b1ffb0ca894227eed077e6884917e476",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 14625947,
+           "id": "Q14625947"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P805"
+      ],
+      "rank": "normal"
+     }
+    ],
+    "P1113": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1113",
+       "datavalue": {
+        "value": {
+         "amount": "+62",
+         "unit": "1"
+        },
+        "type": "quantity"
+       },
+       "datatype": "quantity"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P2437": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P2437",
+       "datavalue": {
+        "value": {
+         "amount": "+5",
+         "unit": "1"
+        },
+        "type": "quantity"
+       },
+       "datatype": "quantity"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P1712": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1712",
+       "datavalue": {
+        "value": "tv/breaking-bad",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P4983": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P4983",
+       "datavalue": {
+        "value": "1396",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ]
+   },
+   "sitelinks": {
+    "afwiki": {
+     "site": "afwiki",
+     "title": "Breaking Bad"
+    },
+    "alswiki": {
+     "site": "alswiki",
+     "title": "Breaking Bad"
+    },
+    "arwiki": {
+     "site": "arwiki",
+     "title": "اختلال ضال (مسلسل)"
+    },
+    "arzwiki": {
+     "site": "arzwiki",
+     "title": "بريكينج باد (مسلسل)"
+    },
+    "astwiki": {
+     "site": "astwiki",
+     "title": "Breaking Bad"
+    },
+    "awawiki": {
+     "site": "awawiki",
+     "title": "ब्रेकिंग बैड"
+    },
+    "azbwiki": {
+     "site": "azbwiki",
+     "title": "سیندیران پیسلیک (سریال)"
+    },
+    "azwiki": {
+     "site": "azwiki",
+     "title": "Breaking Bad"
+    },
+    "bat_smgwiki": {
+     "site": "bat_smgwiki",
+     "title": "Breaking Bad"
+    },
+    "be_x_oldwiki": {
+     "site": "be_x_oldwiki",
+     "title": "На ўсе застаўкі"
+    },
+    "bewiki": {
+     "site": "bewiki",
+     "title": "На ўсе застаўкі"
+    },
+    "bgwiki": {
+     "site": "bgwiki",
+     "title": "В обувките на Сатаната"
+    },
+    "bnwiki": {
+     "site": "bnwiki",
+     "title": "ব্রেকিং ব্যাড"
+    },
+    "bswiki": {
+     "site": "bswiki",
+     "title": "Na putu prema dolje"
+    },
+    "cawiki": {
+     "site": "cawiki",
+     "title": "Breaking Bad"
+    },
+    "cebwiki": {
+     "site": "cebwiki",
+     "title": "Breaking Bad"
+    },
+    "ckbwiki": {
+     "site": "ckbwiki",
+     "title": "گۆڕانی خراپ"
+    },
+    "cswiki": {
+     "site": "cswiki",
+     "title": "Perníkový táta"
+    },
+    "dawiki": {
+     "site": "dawiki",
+     "title": "Breaking Bad"
+    },
+    "dewiki": {
+     "site": "dewiki",
+     "title": "Breaking Bad"
+    },
+    "elwiki": {
+     "site": "elwiki",
+     "title": "Breaking Bad"
+    },
+    "enwiki": {
+     "site": "enwiki",
+     "title": "Breaking Bad"
+    },
+    "enwikiquote": {
+     "site": "enwikiquote",
+     "title": "Breaking Bad"
+    },
+    "enwikivoyage": {
+     "site": "enwikivoyage",
+     "title": "Breaking Bad Tour"
+    },
+    "eowiki": {
+     "site": "eowiki",
+     "title": "Breaking Bad"
+    },
+    "eswiki": {
+     "site": "eswiki",
+     "title": "Breaking Bad"
+    },
+    "etwiki": {
+     "site": "etwiki",
+     "title": "Halvale teele"
+    },
+    "euwiki": {
+     "site": "euwiki",
+     "title": "Breaking Bad"
+    },
+    "fawiki": {
+     "site": "fawiki",
+     "title": "بریکینگ بد"
+    },
+    "fawikiquote": {
+     "site": "fawikiquote",
+     "title": "بریکینگ بد"
+    },
+    "fiwiki": {
+     "site": "fiwiki",
+     "title": "Breaking Bad"
+    },
+    "frwiki": {
+     "site": "frwiki",
+     "title": "Breaking Bad"
+    },
+    "gawiki": {
+     "site": "gawiki",
+     "title": "Breaking Bad"
+    },
+    "glwiki": {
+     "site": "glwiki",
+     "title": "Breaking Bad"
+    },
+    "gnwiki": {
+     "site": "gnwiki",
+     "title": "Breaking Bad"
+    },
+    "hewiki": {
+     "site": "hewiki",
+     "title": "שובר שורות"
+    },
+    "hewikiquote": {
+     "site": "hewikiquote",
+     "title": "שובר שורות"
+    },
+    "hewikivoyage": {
+     "site": "hewikivoyage",
+     "title": "מדריך למטייל באתרי הצילום של שובר שורות"
+    },
+    "hiwiki": {
+     "site": "hiwiki",
+     "title": "ब्रेकिंग बैड"
+    },
+    "hrwiki": {
+     "site": "hrwiki",
+     "title": "Na putu prema dolje"
+    },
+    "htwiki": {
+     "site": "htwiki",
+     "title": "Breaking Bad"
+    },
+    "huwiki": {
+     "site": "huwiki",
+     "title": "Breaking Bad – Totál szívás"
+    },
+    "hywiki": {
+     "site": "hywiki",
+     "title": "Ամբողջ ծանրությամբ"
+    },
+    "idwiki": {
+     "site": "idwiki",
+     "title": "Breaking Bad"
+    },
+    "itwiki": {
+     "site": "itwiki",
+     "title": "Breaking Bad"
+    },
+    "itwikiquote": {
+     "site": "itwikiquote",
+     "title": "Breaking Bad"
+    },
+    "jawiki": {
+     "site": "jawiki",
+     "title": "ブレイキング・バッド"
+    },
+    "kawiki": {
+     "site": "kawiki",
+     "title": "Breaking Bad"
+    },
+    "kkwiki": {
+     "site": "kkwiki",
+     "title": "Жамандыққа бет бұру"
+    },
+    "knwiki": {
+     "site": "knwiki",
+     "title": "ಬ್ರೇಕಿಂಗ್ ಬ್ಯಾಡ್"
+    },
+    "kowiki": {
+     "site": "kowiki",
+     "title": "브레이킹 배드"
+    },
+    "kuwiki": {
+     "site": "kuwiki",
+     "title": "Breaking Bad"
+    },
+    "kywiki": {
+     "site": "kywiki",
+     "title": "Бардык жамандыкка барып"
+    },
+    "lawiki": {
+     "site": "lawiki",
+     "title": "Breaking Bad"
+    },
+    "ltwiki": {
+     "site": "ltwiki",
+     "title": "Bręstantis blogis"
+    },
+    "lvwiki": {
+     "site": "lvwiki",
+     "title": "Pārkāpt robežu"
+    },
+    "mkwiki": {
+     "site": "mkwiki",
+     "title": "Да станеш лош"
+    },
+    "mlwiki": {
+     "site": "mlwiki",
+     "title": "ബ്രേക്കിങ് ബാഡ്"
+    },
+    "mswiki": {
+     "site": "mswiki",
+     "title": "Breaking Bad"
+    },
+    "mznwiki": {
+     "site": "mznwiki",
+     "title": "بریکینگ بد"
+    },
+    "nds_nlwiki": {
+     "site": "nds_nlwiki",
+     "title": "Breaking Bad"
+    },
+    "newiki": {
+     "site": "newiki",
+     "title": "ब्रेकिङ ब्याड"
+    },
+    "nlwiki": {
+     "site": "nlwiki",
+     "title": "Breaking Bad"
+    },
+    "nnwiki": {
+     "site": "nnwiki",
+     "title": "Breaking Bad"
+    },
+    "nowiki": {
+     "site": "nowiki",
+     "title": "Breaking Bad"
+    },
+    "pawiki": {
+     "site": "pawiki",
+     "title": "ਬਰੇਕਿੰਗ ਬੈਡ"
+    },
+    "plwiki": {
+     "site": "plwiki",
+     "title": "Breaking Bad"
+    },
+    "plwikiquote": {
+     "site": "plwikiquote",
+     "title": "Breaking Bad"
+    },
+    "pmswiki": {
+     "site": "pmswiki",
+     "title": "Breaking Bad"
+    },
+    "pnbwiki": {
+     "site": "pnbwiki",
+     "title": "بریکنگ بیڈ"
+    },
+    "ptwiki": {
+     "site": "ptwiki",
+     "title": "Breaking Bad"
+    },
+    "rowiki": {
+     "site": "rowiki",
+     "title": "Breaking Bad"
+    },
+    "ruwiki": {
+     "site": "ruwiki",
+     "title": "Во все тяжкие"
+    },
+    "ruwikinews": {
+     "site": "ruwikinews",
+     "title": "Категория:Во все тяжкие"
+    },
+    "ruwikiquote": {
+     "site": "ruwikiquote",
+     "title": "Во все тяжкие"
+    },
+    "sahwiki": {
+     "site": "sahwiki",
+     "title": "Түгэххэ түһүү (сериал)"
+    },
+    "scowiki": {
+     "site": "scowiki",
+     "title": "Breaking Bad"
+    },
+    "shiwiki": {
+     "site": "shiwiki",
+     "title": "Breaking Bad"
+    },
+    "shwiki": {
+     "site": "shwiki",
+     "title": "Breaking Bad"
+    },
+    "simplewiki": {
+     "site": "simplewiki",
+     "title": "Breaking Bad"
+    },
+    "siwiki": {
+     "site": "siwiki",
+     "title": "බ්‍රේකිං බෑඩ්"
+    },
+    "skwiki": {
+     "site": "skwiki",
+     "title": "Perníkový tatko"
+    },
+    "slwiki": {
+     "site": "slwiki",
+     "title": "Kriva pota"
+    },
+    "sqwiki": {
+     "site": "sqwiki",
+     "title": "Breaking Bad"
+    },
+    "srwiki": {
+     "site": "srwiki",
+     "title": "Чиста хемија"
+    },
+    "svwiki": {
+     "site": "svwiki",
+     "title": "Breaking Bad"
+    },
+    "tawiki": {
+     "site": "tawiki",
+     "title": "பிரேக்கிங் பேட்"
+    },
+    "tewiki": {
+     "site": "tewiki",
+     "title": "బ్రేకింగ్ బాడ్"
+    },
+    "thwiki": {
+     "site": "thwiki",
+     "title": "ดับเครื่องชน คนดีแตก"
+    },
+    "tokwiki": {
+     "site": "tokwiki",
+     "title": "sitelen Pekin Pa"
+    },
+    "trwiki": {
+     "site": "trwiki",
+     "title": "Breaking Bad"
+    },
+    "trwikiquote": {
+     "site": "trwikiquote",
+     "title": "Breaking Bad"
+    },
+    "ttwiki": {
+     "site": "ttwiki",
+     "title": "Кыек юлдан"
+    },
+    "ugwiki": {
+     "site": "ugwiki",
+     "title": "ئەشەددى ئەبلەق (تىياتىر)"
+    },
+    "ukwiki": {
+     "site": "ukwiki",
+     "title": "Пуститися берега"
+    },
+    "urwiki": {
+     "site": "urwiki",
+     "title": "بریکنگ بیڈ"
+    },
+    "uzwiki": {
+     "site": "uzwiki",
+     "title": "Breaking Bad"
+    },
+    "vecwiki": {
+     "site": "vecwiki",
+     "title": "Breaking Bad"
+    },
+    "viwiki": {
+     "site": "viwiki",
+     "title": "Breaking Bad"
+    },
+    "wuuwiki": {
+     "site": "wuuwiki",
+     "title": "绝命毒师"
+    },
+    "zh_min_nanwiki": {
+     "site": "zh_min_nanwiki",
+     "title": "Breaking Bad"
+    },
+    "zh_yuewiki": {
+     "site": "zh_yuewiki",
+     "title": "絕命毒師"
+    },
+    "zhwiki": {
+     "site": "zhwiki",
+     "title": "絕命毒師"
+    }
+   }
+  },
+  "Q208460": {
+   "type": "item",
+   "id": "Q208460",
+   "labels": {
+    "en": {
+     "language": "en",
+     "value": "Nineteen Eighty-Four"
+    },
+    "es": {
+     "language": "es",
+     "value": "1984"
+    },
+    "pt": {
+     "language": "pt",
+     "value": "1984"
+    },
+    "pt-br": {
+     "language": "pt-br",
+     "value": "1984"
+    },
+    "mul": {
+     "language": "mul",
+     "value": "1984"
+    }
+   },
+   "claims": {
+    "P50": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P50",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 3335,
+         "id": "Q3335"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P136": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 944250,
+         "id": "Q944250"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 2254211,
+         "id": "Q2254211"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 24925,
+         "id": "Q24925"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P136",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 15062348,
+         "id": "Q15062348"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P571": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P571",
+       "datavalue": {
+        "value": {
+         "time": "+1948-00-00T00:00:00Z",
+         "timezone": 0,
+         "before": 0,
+         "after": 0,
+         "precision": 9,
+         "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+        },
+        "type": "time"
+       },
+       "datatype": "time"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P648": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P648",
+       "datavalue": {
+        "value": "OL1168091W",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "rank": "deprecated"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P648",
+       "datavalue": {
+        "value": "OL1168083W",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P577": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P577",
+       "datavalue": {
+        "value": {
+         "time": "+1949-00-00T00:00:00Z",
+         "timezone": 0,
+         "before": 0,
+         "after": 0,
+         "precision": 9,
+         "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+        },
+        "type": "time"
+       },
+       "datatype": "time"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P495": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P495",
+       "datavalue": {
+        "value": {
+         "entity-type": "item",
+         "numeric-id": 145,
+         "id": "Q145"
+        },
+        "type": "wikibase-entityid"
+       },
+       "datatype": "wikibase-item"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P8383": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P8383",
+       "datavalue": {
+        "value": "153313",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P18": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P18",
+       "datavalue": {
+        "value": "1984 first edition cover.jpg",
+        "type": "string"
+       },
+       "datatype": "commonsMedia"
+      },
+      "type": "statement",
+      "rank": "normal"
+     }
+    ],
+    "P1651": [
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1651",
+       "datavalue": {
+        "value": "iesAEtjA9wo",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P1810": [
+        {
+         "snaktype": "value",
+         "property": "P1810",
+         "hash": "2aa3588d52fd42993aec0e00f0b8133120d67f74",
+         "datavalue": {
+          "value": "1984 Audiobook by George Orwell",
+          "type": "string"
+         },
+         "datatype": "string"
+        }
+       ],
+       "P5436": [
+        {
+         "snaktype": "value",
+         "property": "P5436",
+         "hash": "3e01d95d8cf817a954cab65a886a46d076577485",
+         "datavalue": {
+          "value": {
+           "amount": "+358154",
+           "unit": "1"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ],
+       "P577": [
+        {
+         "snaktype": "value",
+         "property": "P577",
+         "hash": "afc81c0689d01531c1de68e543edae96c2adc983",
+         "datavalue": {
+          "value": {
+           "time": "+2021-04-08T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ],
+       "P407": [
+        {
+         "snaktype": "value",
+         "property": "P407",
+         "hash": "daf1c4fcb58181b02dff9cc89deb084004ddae4b",
+         "datavalue": {
+          "value": {
+           "entity-type": "item",
+           "numeric-id": 1860,
+           "id": "Q1860"
+          },
+          "type": "wikibase-entityid"
+         },
+         "datatype": "wikibase-item"
+        }
+       ],
+       "P2047": [
+        {
+         "snaktype": "value",
+         "property": "P2047",
+         "hash": "9fa34f5b350b9be9b3a2ea0052c373990b9718f1",
+         "datavalue": {
+          "value": {
+           "amount": "+39433.0",
+           "unit": "http://www.wikidata.org/entity/Q11574"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ],
+       "P2397": [
+        {
+         "snaktype": "value",
+         "property": "P2397",
+         "hash": "a7a11c5a5442df30c9d826a08de3103fe57f4fc1",
+         "datavalue": {
+          "value": "UCkmcI8lTGDa3CNkLgYSnKJw",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        }
+       ],
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "e33609df45bbcc25d2e56851c815c3ea29975ed7",
+         "datavalue": {
+          "value": {
+           "time": "+2023-11-01T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P1810",
+       "P5436",
+       "P577",
+       "P407",
+       "P2047",
+       "P2397",
+       "P585"
+      ],
+      "rank": "normal"
+     },
+     {
+      "mainsnak": {
+       "snaktype": "value",
+       "property": "P1651",
+       "datavalue": {
+        "value": "2QLy4_2spkk",
+        "type": "string"
+       },
+       "datatype": "external-id"
+      },
+      "type": "statement",
+      "qualifiers": {
+       "P1810": [
+        {
+         "snaktype": "value",
+         "property": "P1810",
+         "hash": "357e0a0af3480de99a455b78f5ca2a6a5b4edd15",
+         "datavalue": {
+          "value": "1984 complete Audiobook - New high quality version",
+          "type": "string"
+         },
+         "datatype": "string"
+        }
+       ],
+       "P5436": [
+        {
+         "snaktype": "value",
+         "property": "P5436",
+         "hash": "97e05f5c89d6fe3b463e298d19f93381ed9069bf",
+         "datavalue": {
+          "value": {
+           "amount": "+842726",
+           "unit": "1"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ],
+       "P577": [
+        {
+         "snaktype": "value",
+         "property": "P577",
+         "hash": "bf2f17449c5a4a33d6e348027091c861b16a74a7",
+         "datavalue": {
+          "value": {
+           "time": "+2022-04-29T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ],
+       "P2047": [
+        {
+         "snaktype": "value",
+         "property": "P2047",
+         "hash": "ed8d1a555bf18e51f52e496999522504c39c1141",
+         "datavalue": {
+          "value": {
+           "amount": "+38090.0",
+           "unit": "http://www.wikidata.org/entity/Q11574"
+          },
+          "type": "quantity"
+         },
+         "datatype": "quantity"
+        }
+       ],
+       "P2397": [
+        {
+         "snaktype": "value",
+         "property": "P2397",
+         "hash": "83b7cedcc73bde1ce85ee3b86a4426d7ba831fe0",
+         "datavalue": {
+          "value": "UCkFGKLP476glGN0SRoVK4Bg",
+          "type": "string"
+         },
+         "datatype": "external-id"
+        }
+       ],
+       "P585": [
+        {
+         "snaktype": "value",
+         "property": "P585",
+         "hash": "e33609df45bbcc25d2e56851c815c3ea29975ed7",
+         "datavalue": {
+          "value": {
+           "time": "+2023-11-01T00:00:00Z",
+           "timezone": 0,
+           "before": 0,
+           "after": 0,
+           "precision": 11,
+           "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          },
+          "type": "time"
+         },
+         "datatype": "time"
+        }
+       ]
+      },
+      "qualifiers-order": [
+       "P1810",
+       "P5436",
+       "P577",
+       "P2047",
+       "P2397",
+       "P585"
+      ],
+      "rank": "normal"
+     }
+    ]
+   },
+   "sitelinks": {
+    "abstractwiki": {
+     "site": "abstractwiki",
+     "title": "Q208460"
+    },
+    "afwiki": {
+     "site": "afwiki",
+     "title": "Nineteen Eighty-Four"
+    },
+    "angwiki": {
+     "site": "angwiki",
+     "title": "1984 (bōc)"
+    },
+    "arwiki": {
+     "site": "arwiki",
+     "title": "1984 (رواية)"
+    },
+    "arywiki": {
+     "site": "arywiki",
+     "title": "1984 (رواية)"
+    },
+    "arzwiki": {
+     "site": "arzwiki",
+     "title": "1984 (روايه)"
+    },
+    "astwiki": {
+     "site": "astwiki",
+     "title": "1984 (novela)"
+    },
+    "avkwiki": {
+     "site": "avkwiki",
+     "title": "1984 (suterot)"
+    },
+    "azbwiki": {
+     "site": "azbwiki",
+     "title": "۱۹۸۴ (رومان)"
+    },
+    "azwiki": {
+     "site": "azwiki",
+     "title": "1984 (roman)"
+    },
+    "azwikiquote": {
+     "site": "azwikiquote",
+     "title": "1984"
+    },
+    "barwiki": {
+     "site": "barwiki",
+     "title": "1984 (Roman)"
+    },
+    "be_x_oldwiki": {
+     "site": "be_x_oldwiki",
+     "title": "1984 (раман)"
+    },
+    "bewiki": {
+     "site": "bewiki",
+     "title": "1984 (раман)"
+    },
+    "bgwiki": {
+     "site": "bgwiki",
+     "title": "1984 (книга)"
+    },
+    "bgwikiquote": {
+     "site": "bgwikiquote",
+     "title": "1984 (книга)"
+    },
+    "bhwiki": {
+     "site": "bhwiki",
+     "title": "नाइनटीन एटी फोर"
+    },
+    "bnwiki": {
+     "site": "bnwiki",
+     "title": "নাইন্টিন এইটি-ফোর"
+    },
+    "brwiki": {
+     "site": "brwiki",
+     "title": "Nineteen Eighty-Four"
+    },
+    "bswiki": {
+     "site": "bswiki",
+     "title": "1984 (roman)"
+    },
+    "cawiki": {
+     "site": "cawiki",
+     "title": "1984 (novel·la)"
+    },
+    "cawikiquote": {
+     "site": "cawikiquote",
+     "title": "1984"
+    },
+    "ckbwiki": {
+     "site": "ckbwiki",
+     "title": "١٩٨٤ (ڕۆمان)"
+    },
+    "cswiki": {
+     "site": "cswiki",
+     "title": "1984 (román)"
+    },
+    "cswikiquote": {
+     "site": "cswikiquote",
+     "title": "Dílo:1984"
+    },
+    "cvwiki": {
+     "site": "cvwiki",
+     "title": "1984 (роман)"
+    },
+    "cywiki": {
+     "site": "cywiki",
+     "title": "Nineteen Eighty-Four"
+    },
+    "cywikiquote": {
+     "site": "cywikiquote",
+     "title": "Nineteen Eighty-Four"
+    },
+    "dawiki": {
+     "site": "dawiki",
+     "title": "1984 (roman)"
+    },
+    "dewiki": {
+     "site": "dewiki",
+     "title": "1984 (Roman)"
+    },
+    "elwiki": {
+     "site": "elwiki",
+     "title": "1984 (μυθιστόρημα)"
+    },
+    "elwikiquote": {
+     "site": "elwikiquote",
+     "title": "1984"
+    },
+    "enwiki": {
+     "site": "enwiki",
+     "title": "Nineteen Eighty-Four"
+    },
+    "enwikibooks": {
+     "site": "enwikibooks",
+     "title": "Nineteen Eighty-Four"
+    },
+    "enwikiquote": {
+     "site": "enwikiquote",
+     "title": "Nineteen Eighty-Four"
+    },
+    "eowiki": {
+     "site": "eowiki",
+     "title": "1984 (romano)"
+    },
+    "eswiki": {
+     "site": "eswiki",
+     "title": "1984 (novela)"
+    },
+    "eswikiquote": {
+     "site": "eswikiquote",
+     "title": "1984 (novela)"
+    },
+    "etwiki": {
+     "site": "etwiki",
+     "title": "1984 (Orwell)"
+    },
+    "etwikiquote": {
+     "site": "etwikiquote",
+     "title": "1984"
+    },
+    "euwiki": {
+     "site": "euwiki",
+     "title": "1984 (eleberria)"
+    },
+    "euwikiquote": {
+     "site": "euwikiquote",
+     "title": "1984 (eleberria)"
+    },
+    "fawiki": {
+     "site": "fawiki",
+     "title": "۱۹۸۴ (رمان)"
+    },
+    "fawikiquote": {
+     "site": "fawikiquote",
+     "title": "۱۹۸۴ (رمان)"
+    },
+    "fiwiki": {
+     "site": "fiwiki",
+     "title": "Vuonna 1984"
+    },
+    "frwiki": {
+     "site": "frwiki",
+     "title": "1984 (roman)"
+    },
+    "frwikiquote": {
+     "site": "frwikiquote",
+     "title": "1984"
+    },
+    "fywiki": {
+     "site": "fywiki",
+     "title": "1984 (boek)"
+    },
+    "gawiki": {
+     "site": "gawiki",
+     "title": "Nineteen Eighty-Four"
+    },
+    "glwiki": {
+     "site": "glwiki",
+     "title": "1984 (novela)"
+    },
+    "glwikiquote": {
+     "site": "glwikiquote",
+     "title": "1984 (novela)"
+    },
+    "hewiki": {
+     "site": "hewiki",
+     "title": "1984 (ספר)"
+    },
+    "hewikiquote": {
+     "site": "hewikiquote",
+     "title": "1984"
+    },
+    "hiwiki": {
+     "site": "hiwiki",
+     "title": "उन्नीस सौ चौरासी"
+    },
+    "hrwiki": {
+     "site": "hrwiki",
+     "title": "Tisuću devetsto osamdeset četvrta"
+    },
+    "huwiki": {
+     "site": "huwiki",
+     "title": "1984 (regény)"
+    },
+    "huwikiquote": {
+     "site": "huwikiquote",
+     "title": "1984 (regény)"
+    },
+    "hywiki": {
+     "site": "hywiki",
+     "title": "1984 (գիրք)"
+    },
+    "hywikiquote": {
+     "site": "hywikiquote",
+     "title": "1984 (վեպ)"
+    },
+    "hywwiki": {
+     "site": "hywwiki",
+     "title": "1984 (Վէպ)"
+    },
+    "iawiki": {
+     "site": "iawiki",
+     "title": "1984 (romance)"
+    },
+    "idwiki": {
+     "site": "idwiki",
+     "title": "Nineteen Eighty-Four"
+    },
+    "ilowiki": {
+     "site": "ilowiki",
+     "title": "1984 (Libro)"
+    },
+    "iswiki": {
+     "site": "iswiki",
+     "title": "Nítján hundruð áttatíu og fjögur"
+    },
+    "itwiki": {
+     "site": "itwiki",
+     "title": "1984 (romanzo)"
+    },
+    "itwikiquote": {
+     "site": "itwikiquote",
+     "title": "1984"
+    },
+    "jawiki": {
+     "site": "jawiki",
+     "title": "1984年 (小説)"
+    },
+    "jawikiquote": {
+     "site": "jawikiquote",
+     "title": "1984年"
+    },
+    "jvwiki": {
+     "site": "jvwiki",
+     "title": "Nineteen Eighty-Four"
+    },
+    "kaawiki": {
+     "site": "kaawiki",
+     "title": "1984 (roman)"
+    },
+    "kawiki": {
+     "site": "kawiki",
+     "title": "1984 (რომანი)"
+    },
+    "kawikiquote": {
+     "site": "kawikiquote",
+     "title": "1984 (რომანი)"
+    },
+    "kkwiki": {
+     "site": "kkwiki",
+     "title": "1984 (роман)"
+    },
+    "kowiki": {
+     "site": "kowiki",
+     "title": "1984 (소설)"
+    },
+    "kowikiquote": {
+     "site": "kowikiquote",
+     "title": "1984"
+    },
+    "kvwiki": {
+     "site": "kvwiki",
+     "title": "Nineteen Eighty-Four"
+    },
+    "kywiki": {
+     "site": "kywiki",
+     "title": "1984 (роман)"
+    },
+    "lawiki": {
+     "site": "lawiki",
+     "title": "1984 (liber)"
+    },
+    "lfnwiki": {
+     "site": "lfnwiki",
+     "title": "1984 (novel)"
+    },
+    "liwikiquote": {
+     "site": "liwikiquote",
+     "title": "1984"
+    },
+    "ltwiki": {
+     "site": "ltwiki",
+     "title": "1984-ieji"
+    },
+    "lvwiki": {
+     "site": "lvwiki",
+     "title": "1984 (romāns)"
+    },
+    "mkwiki": {
+     "site": "mkwiki",
+     "title": "Илјада деветстотини осумдесет и четврта"
+    },
+    "mlwiki": {
+     "site": "mlwiki",
+     "title": "1984 (നോവൽ)"
+    },
+    "mnwiki": {
+     "site": "mnwiki",
+     "title": "1984 (роман)"
+    },
+    "mrwiki": {
+     "site": "mrwiki",
+     "title": "नाइंटीन एटी-फोर"
+    },
+    "mswiki": {
+     "site": "mswiki",
+     "title": "Nineteen Eighty-Four"
+    },
+    "mznwiki": {
+     "site": "mznwiki",
+     "title": "۱۹۸۴ (رمان)"
+    },
+    "nlwiki": {
+     "site": "nlwiki",
+     "title": "1984 (boek)"
+    },
+    "nnwiki": {
+     "site": "nnwiki",
+     "title": "Romanen 1984"
+    },
+    "nowiki": {
+     "site": "nowiki",
+     "title": "1984 (roman)"
+    },
+    "ocwiki": {
+     "site": "ocwiki",
+     "title": "1984 (libre)"
+    },
+    "pawiki": {
+     "site": "pawiki",
+     "title": "ਨਾਈਨਟੀਨ ਏਟੀ-ਫ਼ੋਰ"
+    },
+    "plwiki": {
+     "site": "plwiki",
+     "title": "Rok 1984"
+    },
+    "plwikibooks": {
+     "site": "plwikibooks",
+     "title": "Streszczenia obowiązkowych lektur szkolnych dla szkół ponadpodstawowych/George Orwell – Rok 1984"
+    },
+    "plwikiquote": {
+     "site": "plwikiquote",
+     "title": "Rok 1984"
+    },
+    "ptwiki": {
+     "site": "ptwiki",
+     "title": "1984 (livro)"
+    },
+    "ptwikiquote": {
+     "site": "ptwikiquote",
+     "title": "1984 (livro)"
+    },
+    "pwnwiki": {
+     "site": "pwnwiki",
+     "title": "1984"
+    },
+    "rowiki": {
+     "site": "rowiki",
+     "title": "O mie nouă sute optzeci și patru (roman)"
+    },
+    "ruwiki": {
+     "site": "ruwiki",
+     "title": "1984 (роман)"
+    },
+    "ruwikinews": {
+     "site": "ruwikinews",
+     "title": "Категория:1984 (роман)"
+    },
+    "ruwikiquote": {
+     "site": "ruwikiquote",
+     "title": "1984 (роман)"
+    },
+    "sahwiki": {
+     "site": "sahwiki",
+     "title": "Улахан убай 1984"
+    },
+    "scnwiki": {
+     "site": "scnwiki",
+     "title": "1984 (libbru)"
+    },
+    "shiwiki": {
+     "site": "shiwiki",
+     "title": "1984 (ungal)"
+    },
+    "shwiki": {
+     "site": "shwiki",
+     "title": "Nineteen Eighty-Four"
+    },
+    "simplewiki": {
+     "site": "simplewiki",
+     "title": "Nineteen Eighty-Four"
+    },
+    "skwiki": {
+     "site": "skwiki",
+     "title": "1984 (román)"
+    },
+    "slwiki": {
+     "site": "slwiki",
+     "title": "1984 (roman)"
+    },
+    "slwikiquote": {
+     "site": "slwikiquote",
+     "title": "1984 (roman)"
+    },
+    "sqwiki": {
+     "site": "sqwiki",
+     "title": "1984 (libër)"
+    },
+    "srwiki": {
+     "site": "srwiki",
+     "title": "Хиљаду деветсто осамдесет четврта"
+    },
+    "srwikiquote": {
+     "site": "srwikiquote",
+     "title": "1984"
+    },
+    "svwiki": {
+     "site": "svwiki",
+     "title": "1984 (roman)"
+    },
+    "svwikiquote": {
+     "site": "svwikiquote",
+     "title": "1984"
+    },
+    "tewiki": {
+     "site": "tewiki",
+     "title": "నైన్టీన్ ఎయిటీ-ఫోర్"
+    },
+    "tgwiki": {
+     "site": "tgwiki",
+     "title": "1984 (румон)"
+    },
+    "thwiki": {
+     "site": "thwiki",
+     "title": "หนึ่ง-เก้า-แปด-สี่"
+    },
+    "thwikiquote": {
+     "site": "thwikiquote",
+     "title": "หนึ่ง-เก้า-แปด-สี่"
+    },
+    "tokwiki": {
+     "site": "tokwiki",
+     "title": "lipu 1984"
+    },
+    "trwiki": {
+     "site": "trwiki",
+     "title": "Bin Dokuz Yüz Seksen Dört"
+    },
+    "trwikiquote": {
+     "site": "trwikiquote",
+     "title": "Bin Dokuz Yüz Seksen Dört"
+    },
+    "ttwiki": {
+     "site": "ttwiki",
+     "title": "1984 (roman)"
+    },
+    "ukwiki": {
+     "site": "ukwiki",
+     "title": "1984 (роман)"
+    },
+    "ukwikiquote": {
+     "site": "ukwikiquote",
+     "title": "1984 (роман)"
+    },
+    "urwiki": {
+     "site": "urwiki",
+     "title": "انیس سو چوراسی"
+    },
+    "urwikiquote": {
+     "site": "urwikiquote",
+     "title": "انیس سو چوراسی"
+    },
+    "uzwiki": {
+     "site": "uzwiki",
+     "title": "1984 (roman)"
+    },
+    "uzwikiquote": {
+     "site": "uzwikiquote",
+     "title": "1984"
+    },
+    "vecwiki": {
+     "site": "vecwiki",
+     "title": "1984 (libro)"
+    },
+    "viwiki": {
+     "site": "viwiki",
+     "title": "1984 (tiểu thuyết)"
+    },
+    "warwiki": {
+     "site": "warwiki",
+     "title": "Nineteen Eighty-Four"
+    },
+    "wuuwiki": {
+     "site": "wuuwiki",
+     "title": "一九八四"
+    },
+    "zh_classicalwiki": {
+     "site": "zh_classicalwiki",
+     "title": "一九八四"
+    },
+    "zh_yuewiki": {
+     "site": "zh_yuewiki",
+     "title": "一九八四"
+    },
+    "zhwiki": {
+     "site": "zhwiki",
+     "title": "一九八四"
+    },
+    "zhwikiquote": {
+     "site": "zhwikiquote",
+     "title": "一九八四"
+    }
+   }
+  }
+ },
+ "success": 1
+}
