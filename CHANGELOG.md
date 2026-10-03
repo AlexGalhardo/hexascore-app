@@ -9,7 +9,19 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 - `PLAN.md` with decisions and milestones; reference docs in `docs/` (architecture, data model, API, frontend, design system, payments, ingestion, security, testing, process).
 - `AGENTS.md` and `CLAUDE.md` agent guides.
+- `infra/docker-compose.yaml`: Postgres 18.6, Redis 8.10.2 and an Upstash-compatible REST proxy (`serverless-redis-http` 0.0.10, port 8079) with healthchecks; optional `app` profile running the web app from `infra/Dockerfile` (`oven/bun:1.4.2`, multi-stage, non-root, migrates on start).
+- Idempotent local setup scripts in `setups/` (Unix/Windows × Docker/PGlite): check Bun/Docker, install, create/fill `apps/web/.env.local` with generated secrets, start containers, migrate, seed when available.
+- CI workflow (`lint`, `typecheck`, `test`, `build`, `audit`) on PRs and pushes to `dev`/`main`, with a shared `setup-bun` composite action and Bun install cache.
+- CodeQL workflow (JavaScript/TypeScript + Python), gated on `CODE_SCANNING_ENABLED` for private repos.
+- release-please (`simple`, manifest at `0.0.0`, Keep a Changelog sections) on pushes to `main`.
+- Root `README.md` with quickstart, commands and docs index.
+
+### Changed
+
+- Dependabot now covers `bun`, `uv` (`webscrappings/`), `github-actions`, `docker` and `docker-compose` (`infra/`), grouped minor/patch, targeting `dev`.
+- `docs/process.md` and `docs/testing.md` list the implemented workflows and exact commands.
 
 ### Removed
 
 - Files inherited from the previous project (RespondeAê): old plan, docs, setup scripts, tests, REST client samples, graphify output, `vercel.json`.
+- Inherited Prisma-era `ci.yml` and `e2e.yml` workflows (replaced by the new CI; E2E returns in a later milestone).
