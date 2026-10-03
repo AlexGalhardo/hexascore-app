@@ -5,9 +5,30 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Added
+
+- API docs guides (`/docs`, authentication, errors, pagination, rate limits, changelog) are translated to pt-BR and es through the new `docs` namespace (`messages/<locale>/docs.json`), including per-page meta descriptions and the code-block copy button. Inline code and links use `t.rich`; code samples, HTTP headers, field/parameter names, error `code` values and URLs stay in English. E2E checks the Portuguese and Spanish quickstart headings (with axe).
+
+### Changed
+
+- "See users' scores" dialog is centred in the viewport (above the sticky navbar, full width minus margins on mobile) and paginated: 10 ratings per page, at most 100 pages (latest 1000), via `GET /api/items/[id]/ratings?page=1..100` → `{ data, page, page_count }` (count capped by a `LIMIT 1000` subquery, `OFFSET` ≤ 990); TanStack Query keeps the previous page while loading.
+- Docs sidebar note for pt-BR/es now only says that field and parameter names stay in English; the docs `<article>` no longer forces `lang="en"`.
+
+## [0.0.19](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.18...v0.0.19) (2026-10-03)
+
+### Added
+
+* **covers:** add 96x144 WebP list thumbnails ([44852ab](https://github.com/AlexGalhardo/claude-code-internet-api/commit/44852ab810123755e05ce395ab1f3b3cdff8fc25))
+* **covers:** add 96x144 WebP list thumbnails ([1802c6d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/1802c6d02f4230441a8cc39294a0df1d4106b786))
+* **web:** cover thumbnails, item header and sticky navbar fixes ([977fbe5](https://github.com/AlexGalhardo/claude-code-internet-api/commit/977fbe510b62832eb950ba7119319399dae7785a))
+* **web:** cover, title and score together in the item header ([79a5300](https://github.com/AlexGalhardo/claude-code-internet-api/commit/79a5300bb28ec45d1401d30fda005de0af470880))
+* **web:** item header cover and sticky navbar overlap fix ([83083bf](https://github.com/AlexGalhardo/claude-code-internet-api/commit/83083bf732cde5158c1d91decbe64c03d5e2b95e))
+
+### Fixed
+
+* **web:** keep sticky content below an opaque navbar ([64e16e1](https://github.com/AlexGalhardo/claude-code-internet-api/commit/64e16e10205fec3265e5b0d4c6cd3bb59c53f56e))
 
 ## [0.0.18](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.17...v0.0.18) (2026-10-03)
-
 
 ### Added
 
@@ -26,14 +47,12 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 * **web:** onboarding nickname matches sign-up rules ([f7157a1](https://github.com/AlexGalhardo/claude-code-internet-api/commit/f7157a118dfc2dd268a5f8f2c53e3790197c54c3))
 * **web:** show only language codes in the locale menu ([b186fd3](https://github.com/AlexGalhardo/claude-code-internet-api/commit/b186fd3cde9921c8726966260aae44ae53396a0d))
 
-
 ### Fixed
 
 * **api:** reject empty query parameters ([3413e2f](https://github.com/AlexGalhardo/claude-code-internet-api/commit/3413e2f8d4c39d2bc63b201e1aa2609e824d32f2))
 * **api:** reject empty query parameters ([be7f4f0](https://github.com/AlexGalhardo/claude-code-internet-api/commit/be7f4f01e6755c59966ca84e5249f66a3da40568))
 
 ## [0.0.17](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.16...v0.0.17) (2026-10-03)
-
 
 ### Added
 
@@ -49,7 +68,6 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 * **web:** use TanStack Query for client-side fetches ([9596fef](https://github.com/AlexGalhardo/claude-code-internet-api/commit/9596fef098b08cf2170979004d87fb1e798e6f17))
 * **web:** use TanStack Query for client-side fetches ([a8d5c4b](https://github.com/AlexGalhardo/claude-code-internet-api/commit/a8d5c4b2c917e033c9fcff0f91a9874c182d1b9f))
 
-
 ### Fixed
 
 * **account:** revoke api keys and cancel stripe subscription on purge ([6783b28](https://github.com/AlexGalhardo/claude-code-internet-api/commit/6783b280ed12a69e002ce0dace26409cb7031671))
@@ -59,19 +77,14 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 * **security:** allow the vercel toolbar frame on previews ([0a7f84d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/0a7f84d772f33de07f7fec0a90f37eeb8b0fddb9))
 * **security:** allow the vercel toolbar frame on previews ([444891a](https://github.com/AlexGalhardo/claude-code-internet-api/commit/444891aa2050bffee08f80d7cbeb73c735aebc0b))
 
-## [Unreleased]
+## Detailed notes for 0.0.17–0.0.19
 
 ### Added
-
-- API docs guides (`/docs`, authentication, errors, pagination, rate limits, changelog) are translated to pt-BR and es through the new `docs` namespace (`messages/<locale>/docs.json`), including per-page meta descriptions and the code-block copy button. Inline code and links use `t.rich`; code samples, HTTP headers, field/parameter names, error `code` values and URLs stay in English. E2E checks the Portuguese and Spanish quickstart headings (with axe).
 
 - OpenAPI documents in Portuguese and Spanish: `public/openapi.pt-BR.json` and `public/openapi.es.json` next to `openapi.json` (en, unchanged byte for byte, still the SDK source). Every description/summary lives in `messages/<locale>/openapi.json` (typed `openApiText`/`apiDoc` in `lib/api/openapi-text.ts`); `bun run openapi` writes the three files and `openapi:check` verifies all of them. `lib/api/openapi.test.ts` asserts the localized documents are structurally identical to en and fully translated; the messages parity test covers the new file.
 - `/docs/reference` loads the spec of the site language (and sets `lang` on it); the api. host root lists `openapi: { en, "pt-BR", es }` (was a single URL); `/docs/changelog` mentions the translated documents.
 
 ### Changed
-
-- Docs sidebar note for pt-BR/es now only says that field and parameter names stay in English; the docs `<article>` no longer forces `lang="en"`.
-- Docs sidebar note for pt-BR/es now says the guides are in English and the reference is translated with field names kept in English (`api.docs.languageNote`, was `englishOnly`).
 
 - API reference (Scalar) UI follows the site language: `localization.locale` = `pt` for pt-BR and `es` for Spanish (built-in packs). Spec title is now "HexaScore API".
 
