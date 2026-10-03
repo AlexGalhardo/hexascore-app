@@ -5,75 +5,150 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+## [0.0.15] - 2026-10-03
+
 ### Added
 
-- Public API v1 (0.4): `GET /api/v1/{games|movies|series|books}` (filters, `min_<category>`, sorts, cursor, plan-bound `limit`), `/{type}/{id}`, `/{type}/genres`, `/search`, `/lookup` (imdb/steam/igdb/tmdb/isbn13/openlibrary/wikidata) and `/me/usage`, all through `apiRoute` with zod response contracts (`lib/api/schemas.ts`); `api.<domain>/v1` served via the proxy.
-- OpenAPI 3.1 generated from the zod schemas (`lib/api/openapi.ts`): `bun run openapi` writes `apps/web/public/openapi.json`, `bun run openapi:check` runs in the CI `lint` job.
-- `/docs` (quickstart, authentication, errors, pagination, rate limits, changelog) and `/docs/reference` with Scalar (`@scalar/api-reference-react` 0.9.77); `api` i18n namespace; navbar "API" link.
-- `/profile/api`: API keys (create once-shown key with copy, revoke with confirmation), plan/quota, today + 30-day usage SVG chart, in-browser "Try it".
-- Generated SDKs: `sdks/ts` (`@hexascore/sdk`, `@hey-api/openapi-ts` 0.99.0, `bun run sdk:generate`) and `sdks/python` (`hexascore`, `openapi-python-client` 0.29.1 via uvx, `bun run sdk:generate:python`); not published yet.
-- Catalog repository: `getItemIdByExternalId`, `listGenreCounts`, `wikidataQid`/`synopsisLocale` on `ItemDetail`; quota store `hget`.
-- Route-level API tests (`lib/api/v1.test.ts`) and project skill `hexascore-api`.
+- Ratings: save/delete with verified email, nickname and not banned; one transaction locks the item row and recomputes `rating_count`/`score`/`score_c1..c6`; rating panel with six keyboard-accessible score inputs and live overall.
+- Item status (want / in progress / completed / dropped) and "Add to list" on the item page.
+- Public profiles `/u/[nickname]` (private profiles render a minimal page), follow/unfollow, `/feed`, curated lists and reports of lists/users.
+- `/admin` (role `admin`, 404 otherwise): contact messages, reports moderation (hide list, ban), affiliate links, item merge and ingestion status; `bun run admin:grant <email>`.
+- `/onboarding` nickname step for Google sign-ups; migration `0003_social_moderation`.
+
+## [0.0.14] - 2026-10-03
+
+### Fixed
+
+- Override `js-yaml` to 4.3.2 to clear three high-severity advisories reported by `bun audit`.
+
+## [0.0.13] - 2026-10-03
+
+### Added
+
+- Public API v1: list, detail, genres, search, lookup and usage endpoints with zod response contracts and `api.<domain>/v1` host rewrite.
+- OpenAPI 3.1 generated from zod with a CI drift check; public docs and Scalar reference; `/profile/api` keys and usage dashboard.
+- Generated TypeScript (`@hexascore/sdk`) and Python (`hexascore`) SDKs.
+
+## [0.0.12] - 2026-10-03
+
+### Added
+
+- Login, signup, email verification, password recovery and reset pages.
+- Profile with name, set/change password, 2FA with QR and backup codes, passkeys, private profile and 30-day account deletion with a 10-second confirmation and cancel banner; purge cron.
+- Contact form with BotID and rate limit; privacy policy and terms in three languages.
+
+## [0.0.11] - 2026-10-03
 
 ### Changed
 
-- `apiRoute` takes `{ params, query, response }`, validates path params (404), parses responses, maps bad cursors to 400, fails closed (503) when the rate-limit store errors and updates `api_keys.last_used_at` (at most once a minute).
+- Single hashed constant-time check for cron authorization.
 
-- Billing (0.5): price catalog `lib/billing/catalog.ts` (Pro/Business/credits in BRL/USD/EUR, PIX 12 months for the price of 10, currency by locale).
-- Stripe (`stripe@23.0.0`, API `2026-09-30.endive`): `bun run stripe:setup` creates Products/Prices by `lookup_key` and the Customer Portal config; `startStripeCheckout`/`openBillingPortal` actions; `POST /api/webhooks/stripe` (signature, idempotency via `processed_events`, subscriptions and credit packs).
-- AbacatePay PIX (API v2): `createPixCharge` action, `GET /api/billing/pix/[id]` polling with provider re-check, `POST /api/webhooks/abacatepay` (URL secret + HMAC, idempotent, period stacking).
-- Credits purchase writes `credit_ledger` once per `ref` and bumps the cached Redis balance (`addCachedCredits` in `lib/api/quota.ts`).
-- `stripe_customers` table (migration `0002_stripe_customers`).
-- Daily cron `/api/cron/billing-reminders`: PIX renewal emails 7d/1d before the end and expiration of ended PIX periods.
-- Pages `/pricing` and `/profile/api/checkout` (Base UI radios, PIX QR + copy-paste + live status), `billing` i18n namespace (en, pt-BR, es), "payments not configured" fallbacks.
-- Project skill `hexascore-billing` (local webhook testing, idempotency rules).
+### Fixed
 
-- `PLAN.md` with decisions and milestones; reference docs in `docs/` (architecture, data model, API, frontend, design system, payments, ingestion, security, testing, process).
-- `AGENTS.md` and `CLAUDE.md` agent guides.
-- Catalog ingestion in `webscrappings/` (Python 3.14 + uv): Wikidata, Wikipedia, Open Library, Steam and GOG connectors into `source_records`, normalizer to `items`/`item_translations`/`external_scores`, bootstrap with gzipped SQL snapshot export, covers (Vercel Blob optional), revalidation call, pytest suite with recorded fixtures.
-- GitHub Actions: `ingest-bootstrap.yml` (manual), `ingest-incremental.yml` (nightly), `ingest-weekly.yml` (scores and synopses), `python-ci.yml` (ruff + pytest on PRs touching `webscrappings/**`).
-- `infra/docker-compose.yaml`: Postgres 18.6, Redis 8.10.2 (password-protected, not published to the host) and an Upstash-compatible REST proxy (`serverless-redis-http` 0.0.10, port 8079) with healthchecks; ports bound to 127.0.0.1 and credentials documented as dev-only; optional `app` profile running the web app from `infra/Dockerfile` (`oven/bun:1.4.2`, multi-stage, non-root, migrates on start).
-- Idempotent local setup scripts in `setups/` (Unix/Windows × Docker/PGlite): check Bun/Docker, install, create/fill `apps/web/.env.local` with generated secrets, start containers, migrate, seed when available.
-- CI workflow (`lint`, `typecheck`, `test`, `build`, `audit`) on PRs and pushes to `dev`/`main`, with a shared `setup-bun` composite action and Bun install cache.
-- CodeQL workflow (JavaScript/TypeScript + Python), gated on `CODE_SCANNING_ENABLED` for private repos.
-- release-please (`simple`, manifest at `0.0.0`, Keep a Changelog sections) on pushes to `main`.
-- Root `README.md` with quickstart, commands and docs index.
-- `.github/rulesets/protect-main-dev.json`: ruleset for `main`/`dev` (PR required, checks `lint`/`typecheck`/`test`/`build`, no force push/deletion), ready to apply once the GitHub plan allows it.
+- Ingestion revalidation now sends the Vercel automation bypass header.
+
+## [0.0.10] - 2026-10-03
+
+### Added
+
+- Catalog pages for games, movies, series and books with URL filters and cursor pagination.
+- Item page with metascore, hexagonal radar, users' scores dialog, attributed external scores, click-to-load trailers and affiliate links.
+- Search with fuzzy matching and keyboard-accessible autocomplete; tag-based cache revalidation endpoint; deterministic dev seed.
+
+## [0.0.9] - 2026-10-02
+
+### Added
+
+- Billing: Stripe Checkout and Customer Portal (BRL/USD/EUR) and AbacatePay PIX (1 or 12 months, credits) with signed, idempotent webhooks.
+- Pricing page, checkout page with live PIX status, credits ledger and renewal reminder cron.
+
+### Fixed
+
+- Proxy matcher that skipped localized routes and PGlite being bundled into the server build.
+
+## [0.0.8] - 2026-10-02
+
+### Added
+
+- Environment aliases for the Vercel Upstash (`KV_REST_API_*`) and AbacatePay sandbox (`*_SANDBOX`) variable names.
 
 ### Changed
 
-- Dependabot now covers `bun`, `uv` (`webscrappings/`), `github-actions`, `docker` and `docker-compose` (`infra/`), grouped minor/patch, targeting `dev`.
-- `docs/process.md` and `docs/testing.md` list the implemented workflows and exact commands.
+- Branch ruleset hardened: strict status checks, `audit` gate and no bypass actors.
+
+## [0.0.7] - 2026-10-02
+
+### Added
+
+- Local Docker stack (Postgres 18.6, password-protected Redis, Upstash-compatible REST proxy, loopback-only ports) and a non-root `oven/bun:1.4.2` Dockerfile.
+- Idempotent local setup scripts in `setups/` (Unix/Windows, Docker or PGlite).
+- CI (lint, typecheck, test, build, audit), CodeQL, release-please, Dependabot and a ready-to-apply branch ruleset.
+- Typed cover attribution in item metadata.
+
+## [0.0.6] - 2026-10-02
+
+### Added
+
+- Python 3.14 + uv ingestion in `webscrappings/`: Wikidata, Wikipedia, Open Library, Steam and GOG connectors, normalizer, bootstrap with SQL snapshot export, covers, revalidation call and pytest suite.
+- GitHub Actions workflows for bootstrap, nightly incremental and weekly ingestion, plus Python CI.
+
+## [0.0.5] - 2026-10-02
+
+### Added
+
+- API core: hashed API keys, plan limits, Upstash-backed throttle and quota with prepaid credits, refunds on 5xx, RFC 9457 problem responses.
+- API key create/revoke server actions and the daily usage flush cron.
+
+## [0.0.4] - 2026-10-02
+
+### Added
+
+- Localized 404 and 500 pages plus a global error boundary.
+- Better Auth route handler, `getSessionUser()` session helper and namespaced i18n message files.
+- Production migrations during `vercel-build`; `fetchWithTimeout` helper for outbound calls.
+
+## [0.0.3] - 2026-10-02
 
 ### Fixed
 
-- `proxy.ts` matcher skipped every path longer than one character (`.*..*` instead of `.*\..*`), so localized routes 404ed.
-- PGlite is kept out of the server bundle (`serverExternalPackages`) so its WASM/extension files load during build and `next start`.
-- Catalog (0.1): rating categories per type (`lib/categories.ts`), pure catalog repository (`lib/catalog/`) with keyset pagination, filters, `pg_trgm` + `tsvector` search, facets, external scores, affiliate links and public ratings; tagged `unstable_cache` layer (`catalog`, `item:<id>`).
-- Pages: landing highlights per section, `/games` `/movies` `/series` `/books` with URL filters and cursor pagination, item page (score badge, hexagonal radar, users' scores dialog, external scores, click-to-load trailers, details, where to buy, synopsis attribution, `RatingPanel` slot), `/search`, navbar autocomplete.
-- Route handlers: `GET /api/items/[id]/ratings`, `GET /api/search/suggest`, `POST /api/cron/revalidate` (Bearer `CRON_SECRET`).
-- `components/score/` (`ScoreBadge`, `HexRadar`, `ScoreBar`) and i18n namespaces `categories`, `catalog`, `item`, `search` (en, pt-BR, es).
-- Deterministic dev seed `bun run db:seed` (`@faker-js/faker` 10.6.0): 50 users, 400 items, ratings; refuses `VERCEL_ENV=production`.
-- PGlite test helper `createTestDatabase()` and repository tests.
+- Every production build (including Vercel previews) now requires its own auth and cron secrets.
+- Development email logging no longer prints one-time tokens in production; password rules also apply to admin password endpoints.
 
-### Fixed
+## [0.0.2] - 2026-10-02
 
-- i18n proxy matcher only matched `/` (unescaped dot), so locale-less routes like `/games` returned 404.
-- PGlite under Next: listed in `serverExternalPackages` (bundling broke its WASM path) and in-memory during `next build` (parallel workers could not share `.pglite`).
-- Auth & account (0.2): `/login` (email or nickname, Google when configured, passkey, TOTP/backup-code 2FA step, resend verification), `/signup` (live nickname avatar, password checklist), `/verify-email`, `/recover-password`, `/reset-password`, `/profile` (name, set/change password, 2FA with QR + backup codes, passkeys, private profile, account deletion with 10-second confirm and 30-day grace) and a cancel-deletion banner after login. All in EN, pt-BR and ES.
-- Server Actions in `apps/web/actions/` (`account.ts`, `contact.ts`) returning typed `{ ok } | { ok: false, error }` results.
-- `/contact` (session identity overrides the form, DB rate limit per user/IP, optional email to `CONTACT_INBOX`), `/policy` and `/terms` in 3 languages.
-- Daily Vercel cron `/api/cron/purge-accounts` (Bearer `CRON_SECRET`, constant-time) that anonymizes accounts 30 days after scheduled deletion, keeping their ratings.
-- Vercel BotID on signup, login and contact (`botid` 1.5.11), bypassed outside Vercel. `qrcode` 1.5.4 renders the TOTP QR in the browser.
-- Navbar user menu (Profile, API, Log out) and Login/Sign up links.
+### Added
 
-### Fixed
+- Drizzle schema for catalog, ratings, social, billing and ingestion staging with initial migrations (Postgres extensions `pg_trgm`, `unaccent`).
+- Database client using Neon/Postgres via `DATABASE_URL` or in-process PGlite for local development.
+- Better Auth configuration (email + password, Google, username, 2FA, passkeys, admin) with password rules enforced server-side.
+- Zod validation of all environment variables before build and server start, with explicit console errors.
+- Pre-commit hook running Biome and `tsc --noEmit`; Vercel Functions on the Bun runtime.
 
-- `proxy.ts` matcher had an unescaped dot, so no page outside `/pt-br`/`/es` was localized (`/login` returned 404).
-- PGlite is now a server external package and `next build` workers use an in-memory instance, so dev/build no longer crash or corrupt `.pglite`.
-- Dev email log printed `link=(none)`: templates are now passed with `createElement`.
+## [0.0.1] - 2026-10-02
+
+### Added
+
+- Bun workspaces monorepo with `apps/web` on Next.js 16.3 running on the Bun runtime, TypeScript 7, Tailwind CSS 4 and Base UI.
+- i18n with next-intl (EN default, `/pt-br`, `/es`), light/dark theme persisted in a cookie without flash, cookie consent banner, base layout with navbar and footer.
+- Project plan (`PLAN.md`), agent guides (`AGENTS.md`, `CLAUDE.md`) and reference docs in `docs/`.
 
 ### Removed
 
-- Files inherited from the previous project (RespondeAê): old plan, docs, setup scripts, tests, REST client samples, graphify output, `vercel.json`.
-- Inherited Prisma-era `ci.yml` and `e2e.yml` workflows (replaced by the new CI; E2E returns in a later milestone).
+- Files inherited from the previous project (old plan, docs, Prisma setup scripts, tests and workflows).
+
+[Unreleased]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.15...HEAD
+[0.0.15]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.14...v0.0.15
+[0.0.14]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.13...v0.0.14
+[0.0.13]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.12...v0.0.13
+[0.0.12]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.11...v0.0.12
+[0.0.11]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.10...v0.0.11
+[0.0.10]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.9...v0.0.10
+[0.0.9]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.8...v0.0.9
+[0.0.8]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.7...v0.0.8
+[0.0.7]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.6...v0.0.7
+[0.0.6]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.5...v0.0.6
+[0.0.5]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.4...v0.0.5
+[0.0.4]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.3...v0.0.4
+[0.0.3]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.2...v0.0.3
+[0.0.2]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.1...v0.0.2
+[0.0.1]: https://github.com/AlexGalhardo/claude-code-internet-api/releases/tag/v0.0.1

@@ -1,0 +1,17 @@
+{
+	"ratings": {
+		"title": "Tu valoración",
+		"yourOverall": "Tu nota general",
+		"overallHint": "La media de las seis categorías, redondeada.",
+		"save": "Guardar valoración",
+		"update": "Actualizar valoración",
+		"delete": "Eliminar valoración",
+		"saving": "Guardando…",
+		"saved": "Valoración guardada.",
+		"deleted": "Valoración eliminada.",
+		"loginToRate": "Inicia sesión para valorar",
+		"chooseNickname": "Elige un nickname para valorar",
+		"verifyToRate": "Confirma tu correo para valorar.",
+		"verifyLink": "Reenviar el correo de confirmación"
+	}
+}

@@ -126,10 +126,10 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 - **Verificar**: testes de regras de senha/nickname (casos válidos e limites 7/8/32/33); E2E de signup → verificação → login → 2FA → exclusão → cancelamento.
 
 ### 0.3 — Avaliação e social
-- [ ] Ratings + stats na transação, metascore com limiar 5, radar hexagonal, modal de notas
-- [ ] Status por item, follows, `/feed`, listas curadas, perfil público/privado, denúncias
-- [ ] `/admin` (contato, denúncias, afiliados, edição/merge, status da ingestão, banir)
-- [ ] Afiliados na página do item
+- [x] Ratings + stats na transação, metascore com limiar 5, radar hexagonal, modal de notas
+- [x] Status por item, follows, `/feed`, listas curadas, perfil público/privado, denúncias
+- [x] `/admin` (contato, denúncias, afiliados, edição/merge, status da ingestão, banir)
+- [x] Afiliados na página do item
 - **Verificar**: testes do cálculo (média, arredondamento, limiar 4→5 avaliações, edição, exclusão de conta); E2E avaliar → metascore muda.
 
 ### 0.4 — API

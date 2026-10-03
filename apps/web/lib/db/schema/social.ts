@@ -10,6 +10,7 @@ import {
 	smallint,
 	text,
 	timestamp,
+	uniqueIndex,
 	uuid,
 } from "drizzle-orm/pg-core";
 import { user } from "./auth";
@@ -138,10 +139,15 @@ export const reports = pgTable(
 		targetType: reportTarget().notNull(),
 		targetId: text().notNull(),
 		reason: text().notNull(),
+		details: text(),
 		status: reportStatus().notNull().default("open"),
 		createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
 	},
-	(t) => [index("reports_status_idx").on(t.status, t.createdAt)],
+	(t) => [
+		index("reports_status_idx").on(t.status, t.createdAt),
+		// One open report per reporter and target: repeated clicks never pile up in the moderation queue.
+		uniqueIndex("reports_open_unique_idx").on(t.reporterId, t.targetType, t.targetId).where(sql`status = 'open'`),
+	],
 );
 
 export const contactMessages = pgTable("contact_messages", {

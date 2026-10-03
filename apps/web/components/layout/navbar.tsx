@@ -1,6 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { getPathname, Link } from "@/i18n/navigation";
 import { APP_NAME } from "@/lib/config";
+import { isAdmin } from "@/lib/member";
 import { getSessionUser } from "@/lib/session";
 import { SearchAutocomplete } from "./search-autocomplete";
 import { ThemeToggle } from "./theme-toggle";
@@ -40,11 +41,15 @@ export async function Navbar() {
 					{user ? (
 						<UserMenu
 							initial={(user.username ?? user.name).charAt(0).toUpperCase() || "?"}
+							nickname={user.username}
+							admin={isAdmin(user)}
 							labels={{
 								account: t("account"),
 								profile: t("profile"),
 								api: t("api"),
 								logout: t("logout"),
+								feed: t("feed"),
+								publicProfile: t("publicProfile"),
 							}}
 						/>
 					) : (

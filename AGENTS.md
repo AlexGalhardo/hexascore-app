@@ -22,10 +22,12 @@ Codename `hexascore`; final brand name is pending.
 - When a workflow repeats or is easy to get wrong, capture it as a project skill in `.claude/skills/<name>/SKILL.md` and list it here.
 - Project skills:
   - `hexascore-billing` — Stripe/AbacatePay webhooks locally, idempotency rules.
+  - `hexascore-release` — cut or backfill releases (tags, GitHub releases, CHANGELOG, release-please manifest).
   - `hexascore-catalog` — catalog repository/cache layers, Next 16 caching without `cacheComponents`, PGlite tests, dev seed.
   - `hexascore-api` — public API v1: add an endpoint (zod DTO → OpenAPI registry → route via `apiRoute` → route test → regenerate `openapi.json` + SDKs).
 - Record notable changes in `CHANGELOG.md` (Keep a Changelog).
 
 ## Project skills
 
+- `.claude/skills/hexascore-ratings/SKILL.md` — rating write path (lock item row, recompute stats from `ratings` in the same transaction, threshold applied on read), merge, local E2E gotchas. Admin role: `bun run admin:grant <email>`.
 - `.claude/skills/hexascore-auth/SKILL.md` — auth/account work: Better Auth server-only endpoints, Server Action result contract, BotID local setup, testing flows locally (verification link in the dev log, TOTP).

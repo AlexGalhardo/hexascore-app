@@ -25,4 +25,11 @@
 
 **Outros**: `contact_messages` · `source_records` (`source`, `external_id`) PK com `payload jsonb`, `hash`, `fetched_at`, `item_id`.
 
+**0.3 (implementado)**
+- Stats desnormalizadas de `items` são recalculadas a partir de `ratings` (nunca incrementais) na mesma transação da escrita, com `SELECT … FOR UPDATE` na linha do item. Guardam a média **bruta** arredondada mesmo abaixo de 5 avaliações; o limiar `MIN_RATINGS_FOR_SCORE` é aplicado só na leitura (`lib/catalog/repository.ts`). Detalhes: skill `hexascore-ratings`.
+- Migration `0003_social_moderation`: `reports.details text` e índice único parcial `reports_open_unique_idx (reporter_id, target_type, target_id) WHERE status = 'open'` (dedupe de denúncias abertas via `ON CONFLICT DO NOTHING`). `reports.target_id` é o id do usuário ou da lista; `reports.reason` ∈ `spam|offensive|harassment|impersonation|other` (zod).
+- `lists.hidden` = oculta pela moderação. Ordem em `list_items.position` (append = max+1; reordenar troca com o vizinho).
+- Merge de itens (`lib/admin.ts#mergeItems`): copia ratings, item_status, list_items, affiliate_links e external_scores para o alvo (`ON CONFLICT DO NOTHING` → a linha do alvo vence), repointa `source_records.item_id`, apaga a origem e recalcula as stats do alvo, numa transação.
+- Papel admin em `user.role` (string separada por vírgula do plugin admin do Better Auth); `bun run admin:grant <email>`.
+
 Fora por ora: tabela de gêneros/plataformas (entra quando gênero ganhar página traduzida), `ingestion_runs` (logs do Actions bastam).
