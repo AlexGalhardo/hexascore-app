@@ -1,0 +1,39 @@
+{
+	"type": "disambiguation",
+	"title": "Matrix",
+	"displaytitle": "<span lang=\"en\" dir=\"ltr\"><span class=\"mw-page-title-main\">Matrix</span></span>",
+	"namespace": {
+		"id": 0,
+		"text": ""
+	},
+	"wikibase_item": "Q190069",
+	"titles": {
+		"canonical": "Matrix",
+		"normalized": "Matrix",
+		"display": "<span lang=\"en\" dir=\"ltr\"><span class=\"mw-page-title-main\">Matrix</span></span>"
+	},
+	"pageid": 18884,
+	"lang": "en",
+	"dir": "ltr",
+	"revision": "1376200457",
+	"tid": "c920cea7-b6b2-11f1-a7e7-e82d950ff2cc",
+	"timestamp": "2026-09-22T18:24:02Z",
+	"description": "Topics referred to by the same term",
+	"description_source": "local",
+	"content_urls": {
+		"desktop": {
+			"page": "https://en.wikipedia.org/wiki/Matrix",
+			"revisions": "https://en.wikipedia.org/wiki/Matrix?action=history",
+			"edit": "https://en.wikipedia.org/wiki/Matrix?action=edit",
+			"talk": "https://en.wikipedia.org/wiki/Talk:Matrix"
+		},
+		"mobile": {
+			"page": "https://en.wikipedia.org/wiki/Matrix",
+			"revisions": "https://en.wikipedia.org/wiki/Special:History/Matrix",
+			"edit": "https://en.wikipedia.org/wiki/Matrix?action=edit",
+			"talk": "https://en.wikipedia.org/wiki/Talk:Matrix"
+		}
+	},
+	"extract": "Matrix or MATRIX may refer to:",
+	"extract_html": "<p><b>Matrix</b> or <b>MATRIX</b> may refer to:</p>"
+}

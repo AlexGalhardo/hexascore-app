@@ -1,29 +1,76 @@
 # Ingestão de dados
 
+Sem scraping de HTML: só APIs públicas e Wikidata.
 
 | Fonte | Como | Fornece |
 | --- | --- | --- |
-| Wikidata | dump JSON (bootstrap) + SPARQL (incremental) | catálogo base, títulos por idioma, gêneros, datas, IDs externos, notas MC/RT (P444), trailer YouTube (P1651) |
-| Wikipedia | REST `page/summary` | sinopse por idioma (CC BY-SA) |
-| Open Library | dump + API | ISBN, páginas, autores, capas |
-| Steam | `appdetails` público | preço, plataformas, trailers, capa |
-| GOG | API pública de catálogo | disponibilidade, link |
-| Epic, IMDb, MC, RT, HLTB, Goodreads, Skoob | sem fetch | deep-link pelo ID do Wikidata |
-| TMDB, IGDB | fora da v1 | após licença comercial |
+| Wikidata | SPARQL (seleção de QIDs) + `wbgetentities` (mesmo JSON do dump) | catálogo base, títulos por idioma, gêneros, datas, IDs externos, notas MC/RT (P444 + P447), trailer YouTube (P1651), imagem Commons (P3383/P18), popularidade (sitelinks) |
+| Wikipedia | REST `page/summary` (en, pt, es) | sinopse por idioma (`CC BY-SA 4.0` + URL da página) |
+| Open Library | API (`/isbn`, `/books`, `/works`) | páginas (fallback do P1104), capa |
+| Steam | `appdetails` público | capa (`header_image`), plataformas (fallback do P400) |
+| GOG | API pública de catálogo (`catalog.gog.com/v1/catalog`) | link da loja, disponibilidade, capa vertical, plataformas (fallback) |
+| Epic, IMDb, MC, RT, HLTB, Goodreads | sem fetch | deep-link pelo ID do Wikidata em `items.external_ids` |
+| Skoob | sem fetch | Wikidata não tem propriedade de ID do Skoob: chave `skoob` fica vazia por ora |
+| TMDB, IGDB | só ID | fetch fora da v1 (exige licença comercial) |
 
 ```
 webscrappings/
-├─ pyproject.toml   uv, ruff, pytest
-├─ common/          http (rate limit, retry, User-Agent identificado), db (psycopg), upsert source_records
-├─ connectors/      wikidata.py, wikipedia.py, openlibrary.py, steam.py, gog.py
-│                   fetch(since) -> Iterable[Record(source, external_id, payload)]
-├─ normalize.py     source_records → items / item_translations / external_scores (match por QID)
-├─ covers.py        copia capas para Vercel Blob
-└─ tests/           pytest com fixtures gravadas, sem rede
+├─ pyproject.toml   uv, Python ≥ 3.14 (uuid.uuid7), deps fixas: httpx, psycopg[binary], pydantic; dev: pytest, ruff
+├─ common/          http.py (rate limit por host, retry 429/5xx com Retry-After, timeout, User-Agent),
+│                   db.py (Record, canonical_hash, upsert_source_record, store_records), cli.py (--since)
+├─ connectors/      wikidata.py, wikipedia.py, openlibrary.py, steam.py, gog.py → fetch(since, ...) -> Iterable[Record]
+├─ normalize.py     source_records → items / item_translations / external_scores (build_item puro + upsert)
+├─ bootstrap.py     carga completa (top-N por sitelinks) + --export snapshot.sql.gz via COPY
+├─ covers.py        meta.coverUrl (Vercel Blob se houver token)
+├─ revalidate.py    POST ${APP_URL}/api/cron/revalidate {"tags":["catalog"]}
+└─ tests/           pytest com respostas reais gravadas em fixtures/, sem rede; test_db.py opcional
 ```
 
-Padrão: conector grava payload bruto → `hash` igual = no-op → normalizador processa só alterados e faz upsert por `wikidata_qid` (sem QID = descartado na v1) → `POST /api/cron/revalidate` (segredo) invalida tags.
+## Fluxo
 
-Agenda: **bootstrap** manual (`workflow_dispatch`): top 100k por sitelinks (~35k filmes, 15k séries, 25k jogos, 25k livros) · **incremental** noturno (Wikidata + Steam) · **semanal** notas externas + sinopses. Bootstrap exporta snapshot `.sql.gz` (GitHub Release) usado pelo seed de dev/preview.
+1. **Conector** valida a resposta com pydantic e grava em `source_records` um payload enxuto (só os campos usados, para que edições irrelevantes não mudem o hash). `upsert_source_record` calcula sha256 do JSON canônico (chaves ordenadas): hash igual = no-op (nem `fetched_at` muda).
+2. **`external_id` é sempre o QID do Wikidata**, em todas as fontes (o ID nativo fica dentro do payload). Assim a PK `(source, external_id)` serve de índice para juntar todas as fontes de um item. `source` ∈ `wikidata`, `wikipedia:en|pt|es`, `openlibrary`, `steam`, `gog`.
+3. **Normalizador** pega os QIDs com registro pendente (`normalized_at IS NULL OR normalized_at < fetched_at`), relê *todos* os registros desses QIDs e reconstrói o item do zero com `build_item` (função pura, testada). Upsert por `wikidata_qid`, commit a cada 200 QIDs, marca `normalized_at` e `item_id`. Sem registro Wikidata ou sem título em inglês = pulado.
+4. **Capas** (`covers.py`): prioridade Open Library (livros) → Steam → GOG (jogos) → Commons P3383/P18 (todos, com `meta.coverAttribution` = fonte, licença, autor, URL). Com `BLOB_READ_WRITE_TOKEN` copia para Vercel Blob (`covers/<item_id>.<ext>`); senão grava a URL da fonte. O normalizador preserva `coverUrl`/`coverAttribution`.
+5. **Revalidação**: `normalize` e `bootstrap` chamam `POST ${APP_URL}/api/cron/revalidate` com `Authorization: Bearer ${CRON_SECRET}`; falha só gera log.
 
-Fora por ora: orquestrador (Airflow/Prefect), ORM Python.
+## Mapeamento
+
+- `type`: classe usada na seleção SPARQL (`P31`): filme Q11424/Q24869/Q202866 · série Q5398426/Q581714/Q1259759/Q526877 · jogo Q7889 · livro Q7725634/Q571/Q8261. Não muda depois de criado.
+- `slug`: título em inglês em ASCII minúsculo; colisão no mesmo tipo → `-<ano>`, depois `-<qid>`; título sem caracteres latinos → `<qid>`. Não muda depois de criado (URL estável).
+- `release_date`: menor P577 (séries: P580 primeiro; fallback P571). Precisão de mês/ano vira dia/mês 1; abaixo de ano = nulo.
+- Títulos: label `en` (fallback `mul`, depois sitelink enwiki); `pt-BR` ← `pt-br`/`pt`/`mul`; `es` ← `es`/`mul`; sem label usa o título da Wikipedia.
+- `external_ids`: imdb P345, igdb P5794, steam P1733, tmdb P4947 (filme)/P4983 (série), isbn13 P212 (só dígitos), openlibrary P648, hltb P2816, goodreads P8383, metacritic P1712, rottentomatoes P1258, epic P6278, gog P2725. Valor de rank preferido primeiro.
+- `meta`: genres P136, platforms P400 (jogos; fallback Steam/GOG), creators (filme P57, série P170, jogo P178, livro P50), runtimeMinutes P2047, pages P1104 (fallback Open Library), seasons P2437, episodes P1113, countries P495, trailers P1651 (máx. 3), coverUrl. Rótulos em inglês; chaves vazias são omitidas.
+- `external_scores`: P444 com P447 = Metacritic (Q150248, só Metascore `NN/100`) → `metacritic`; Rotten Tomatoes (Q105584, só Tomatometer `NN%`) → `rottentomatoes`. Vale o mais recente (P585), rank preferido primeiro. `value` é o texto do Wikidata (`73/100`, `83%`); `url` montada do ID externo. Notas que sumiram do Wikidata são apagadas.
+- `popularity` = número de sitelinks.
+
+## Comandos
+
+Ver [`webscrappings/README.md`](../webscrappings/README.md). Resumo (em `webscrappings/`):
+
+```sh
+uv sync
+uv run python -m bootstrap --limit 20                     # carga local pequena
+uv run python -m bootstrap --export-only --export snapshot.sql.gz
+uv run python -m connectors.wikidata --since 36h          # --types, --limit, --refresh-known
+uv run python -m connectors.wikipedia --since 8d          # --langs, --missing-only
+uv run python -m normalize
+uv run python -m covers
+uv run ruff check && uv run ruff format --check && uv run pytest
+```
+
+Snapshot: `.sql.gz` com `COPY ... FROM stdin` de `items`, `item_translations`, `external_scores` (sem a coluna gerada `search`), gerado por psycopg (não depende de `pg_dump`). Restaurar num banco migrado: `gunzip -c snapshot.sql.gz | psql "$DATABASE_URL"`.
+
+## Agenda (GitHub Actions)
+
+Secrets: `DATABASE_URL`, `APP_URL`, `CRON_SECRET`, `BLOB_READ_WRITE_TOKEN`. Os três workflows de ingestão compartilham `concurrency: ingest` (nunca dois normalizadores ao mesmo tempo).
+
+- **bootstrap** (`ingest-bootstrap.yml`, manual, inputs `limit`/`types`): job Wikidata top-N por sitelinks (~35k filmes, 15k séries, 25k jogos, 25k livros) → 6 jobs paralelos de enriquecimento (Wikipedia en/pt/es, Open Library, Steam, GOG) com `--missing-only` → normalize, covers, snapshot publicado como GitHub Release pré-release `catalog-snapshot-<n>`. Cada job tem teto de 6h; se algum estourar, basta re-disparar (retoma do que falta).
+- **incremental** (`ingest-incremental.yml`, diário 04:00 UTC): entidades editadas no Wikidata nas últimas 36h (com ≥ 15 sitelinks) → Wikipedia dos registros alterados → Steam dos itens alterados → normalize, covers.
+- **semanal** (`ingest-weekly.yml`, domingo 05:00 UTC): relê todas as entidades do catálogo (notas P444 e o que o noturno perdeu) → sinopses alteradas/faltantes → Open Library, GOG → normalize, covers.
+- **CI** (`python-ci.yml`, PR para `dev`/`main` tocando `webscrappings/**`): ruff check, ruff format --check, pytest (testes de banco contra Postgres 18.6 quando as migrations existem no branch).
+
+Limites conhecidos: sinopses só são re-buscadas quando a entidade Wikidata muda ou falta registro; `affiliate_links` (GOG/Steam) ainda não é populado; Commons responde 429 em rajadas (o cliente espera `Retry-After`).
+
+Fora por ora: orquestrador (Airflow/Prefect), ORM Python, dump JSON do Wikidata (`wbgetentities` em lotes de 50 cobre os ~100k itens em ~1h).

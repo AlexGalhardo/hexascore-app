@@ -1,0 +1,42 @@
+{
+	"head": {
+		"vars": ["item", "links"]
+	},
+	"results": {
+		"bindings": [
+			{
+				"item": {
+					"type": "uri",
+					"value": "http://www.wikidata.org/entity/Q174555"
+				},
+				"links": {
+					"datatype": "http://www.w3.org/2001/XMLSchema#integer",
+					"type": "literal",
+					"value": "169"
+				}
+			},
+			{
+				"item": {
+					"type": "uri",
+					"value": "http://www.wikidata.org/entity/Q44578"
+				},
+				"links": {
+					"datatype": "http://www.w3.org/2001/XMLSchema#integer",
+					"type": "literal",
+					"value": "137"
+				}
+			},
+			{
+				"item": {
+					"type": "uri",
+					"value": "http://www.wikidata.org/entity/Q134773"
+				},
+				"links": {
+					"datatype": "http://www.w3.org/2001/XMLSchema#integer",
+					"type": "literal",
+					"value": "137"
+				}
+			}
+		]
+	}
+}

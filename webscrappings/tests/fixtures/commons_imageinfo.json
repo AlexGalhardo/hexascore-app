@@ -1,0 +1,45 @@
+{
+	"batchcomplete": true,
+	"query": {
+		"pages": [
+			{
+				"pageid": 27439676,
+				"ns": 6,
+				"title": "File:Bryan Cranston by Gage Skidmore 2.jpg",
+				"imagerepository": "local",
+				"imageinfo": [
+					{
+						"thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Bryan_Cranston_by_Gage_Skidmore_2.jpg/960px-Bryan_Cranston_by_Gage_Skidmore_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+						"thumbwidth": 600,
+						"thumbheight": 694,
+						"responsiveUrls": {
+							"2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Bryan_Cranston_by_Gage_Skidmore_2.jpg/1280px-Bryan_Cranston_by_Gage_Skidmore_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+						},
+						"thumbattribs": {
+							"src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Bryan_Cranston_by_Gage_Skidmore_2.jpg/960px-Bryan_Cranston_by_Gage_Skidmore_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+							"decoding": "async",
+							"loading": "lazy",
+							"width": 600,
+							"height": 694,
+							"srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Bryan_Cranston_by_Gage_Skidmore_2.jpg/1280px-Bryan_Cranston_by_Gage_Skidmore_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail 2x"
+						},
+						"url": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Bryan_Cranston_by_Gage_Skidmore_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+						"descriptionurl": "https://commons.wikimedia.org/wiki/File:Bryan_Cranston_by_Gage_Skidmore_2.jpg",
+						"descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=27439676",
+						"extmetadata": {
+							"Artist": {
+								"value": "Gage Skidmore",
+								"source": "commons-desc-page"
+							},
+							"LicenseShortName": {
+								"value": "CC BY-SA 3.0",
+								"source": "commons-desc-page",
+								"hidden": ""
+							}
+						}
+					}
+				]
+			}
+		]
+	}
+}

@@ -1,0 +1,109 @@
+name: Ingest (bootstrap)
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Items per type (0 = default targets: 35k movies, 15k series, 25k games, 25k books)"
+        type: number
+        default: 0
+      types:
+        description: "Item types"
+        type: string
+        default: "movie,series,game,book"
+
+concurrency:
+  group: ingest
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: webscrappings
+
+env:
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  APP_URL: ${{ secrets.APP_URL }}
+  CRON_SECRET: ${{ secrets.CRON_SECRET }}
+  BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
+  INGEST_CONTACT_URL: ${{ github.server_url }}/${{ github.repository }}
+
+jobs:
+  catalog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          version: "0.12.19"
+          enable-cache: true
+          cache-dependency-glob: webscrappings/uv.lock
+      - run: uv sync --locked --no-dev
+      - name: Fetch top Wikidata entities
+        env:
+          LIMIT: ${{ inputs.limit }}
+          TYPES: ${{ inputs.types }}
+        run: |
+          [[ "$TYPES" =~ ^[a-z,]+$ ]] || { echo "invalid types"; exit 1; }
+          args=(--types "$TYPES")
+          if [ "${LIMIT:-0}" -gt 0 ]; then args+=(--limit "$LIMIT"); fi
+          uv run python -m connectors.wikidata "${args[@]}"
+      - run: uv run python -m normalize
+
+  # Each source runs in its own job (6h cap per job); --missing-only makes a re-dispatch resume where it stopped.
+  enrich:
+    needs: catalog
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: wikipedia-en, module: connectors.wikipedia, args: "--langs en" }
+          - { name: wikipedia-pt, module: connectors.wikipedia, args: "--langs pt" }
+          - { name: wikipedia-es, module: connectors.wikipedia, args: "--langs es" }
+          - { name: openlibrary, module: connectors.openlibrary, args: "" }
+          - { name: steam, module: connectors.steam, args: "" }
+          - { name: gog, module: connectors.gog, args: "" }
+    name: enrich (${{ matrix.name }})
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          version: "0.12.19"
+          enable-cache: true
+          cache-dependency-glob: webscrappings/uv.lock
+      - run: uv sync --locked --no-dev
+      - run: uv run python -m ${{ matrix.module }} --missing-only ${{ matrix.args }}
+
+  finalize:
+    needs: [catalog, enrich]
+    if: ${{ !cancelled() && needs.catalog.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          version: "0.12.19"
+          enable-cache: true
+          cache-dependency-glob: webscrappings/uv.lock
+      - run: uv sync --locked --no-dev
+      - run: uv run python -m normalize
+      - run: uv run python -m covers
+      - run: uv run python -m bootstrap --export-only --export snapshot.sql.gz
+      - name: Publish snapshot release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: catalog-snapshot-${{ github.run_number }}
+        run: >-
+          gh release create "$TAG" snapshot.sql.gz
+          --title "Catalog snapshot #${{ github.run_number }}"
+          --notes "Restore: gunzip -c snapshot.sql.gz | psql \"\$DATABASE_URL\" (after the app migrations)."
+          --prerelease --latest=false
