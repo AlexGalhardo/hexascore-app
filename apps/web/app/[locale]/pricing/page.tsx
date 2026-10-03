@@ -83,19 +83,19 @@ export default async function PricingPage({ params, searchParams }: Props) {
 								{paid && <span className="text-muted">{t("perMonth")}</span>}
 							</p>
 							<dl className="mt-4 space-y-2 text-sm">
-								<dt className="sr-only">Quota</dt>
+								<dt className="sr-only">{t("quotaLabel")}</dt>
 								<dd>
 									{limits.period === "lifetime"
 										? t("requestsLifetime", { count: number.format(limits.quota) })
 										: t("requestsMonthly", { count: number.format(limits.quota) })}
 								</dd>
-								<dt className="sr-only">Page size</dt>
+								<dt className="sr-only">{t("pageSizeLabel")}</dt>
 								<dd>{t("maxItems", { count: limits.maxPageSize })}</dd>
-								<dt className="sr-only">Rate limit</dt>
+								<dt className="sr-only">{t("rateLabel")}</dt>
 								<dd>{t("rate", { count: limits.requestsPerSecond })}</dd>
 								{paid && (
 									<>
-										<dt className="sr-only">Credits</dt>
+										<dt className="sr-only">{t("creditsLabel")}</dt>
 										<dd>{t("creditsOnly")}</dd>
 									</>
 								)}

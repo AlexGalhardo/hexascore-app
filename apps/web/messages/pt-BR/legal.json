@@ -3,7 +3,7 @@
 	"policy": {
 		"title": "Política de privacidade",
 		"description": "Quais dados pessoais coletamos, por quê, por quanto tempo e como exercer seus direitos.",
-		"intro": "Esta política explica como tratamos dados pessoais quando você navega no site, cria uma conta, avalia itens, fala com a gente ou usa a API paga. Ela foi escrita para atender à Lei Geral de Proteção de Dados (LGPD, Lei 13.709/2018) e ao Regulamento Geral de Proteção de Dados da União Europeia (GDPR).",
+		"intro": "Esta política explica como o {appName} trata dados pessoais quando você navega no site, cria uma conta, avalia itens, fala conosco ou usa a API paga. Ela foi escrita para atender à Lei Geral de Proteção de Dados (LGPD, Lei 13.709/2018) e ao Regulamento Geral de Proteção de Dados da União Europeia (GDPR).",
 		"sections": [
 			{
 				"heading": "1. Quem é o responsável",
@@ -83,13 +83,13 @@
 	"terms": {
 		"title": "Termos de uso e cookies",
 		"description": "As regras para usar o site, sua conta, as avaliações, a API paga e os links de afiliado.",
-		"intro": "Ao usar o site ou a API você concorda com estes termos. Se não concordar, não use o serviço.",
+		"intro": "Ao usar o {appName} — o site ou a API — você concorda com estes termos. Se não concordar, não use o serviço.",
 		"sections": [
 			{
 				"heading": "1. O serviço",
 				"body": [
 					"Mantemos uma base de jogos, filmes, séries e livros em que usuários cadastrados avaliam cada obra em seis categorias, de 0 a 100. As notas da comunidade são médias das avaliações e só aparecem quando o item tem pelo menos 5 avaliações.",
-					"Os metadados dos itens vêm de fontes abertas: Wikidata (CC0), Open Library e Wikipédia. Sinopses da Wikipédia são licenciadas sob CC BY-SA 4.0 e exibidas com a licença e um link para o artigo original. Links para notas externas (como IMDb ou Metacritic) servem de referência; essas notas e todas as marcas pertencem aos seus donos."
+					"Os metadados dos itens vêm de fontes abertas e de dados públicos de lojas: Wikidata (CC0), Wikipedia, Open Library, Steam e GOG. Sinopses da Wikipedia são licenciadas sob CC BY-SA 4.0 e aparecem com a licença e um link para o artigo original. As capas vêm da Open Library, Steam, GOG ou Wikimedia Commons; quando a licença exige, a página do item credita a fonte, o autor e a licença. Links para notas externas (como IMDb ou Metacritic) servem de referência; essas notas, as capas e todas as marcas pertencem aos seus donos."
 				]
 			},
 			{
@@ -115,21 +115,22 @@
 			{
 				"heading": "5. API pública",
 				"body": [
-					"Chaves de API são pessoais e secretas; você é responsável pelas requisições feitas com elas. Cada plano tem uma cota e um limite de velocidade; o plano gratuito inclui 100 requisições no total por conta e exige e-mail verificado.",
+					"As chaves de API são pessoais e secretas; você responde pelas requisições feitas com elas. Cada plano tem uma cota de requisições, um tamanho máximo de página e um limite de requisições por segundo, informados na página de preços. O plano gratuito inclui 100 requisições por conta no total e exige e-mail verificado; os planos pagos têm cota mensal. Requisições que falham por erro nosso não são contadas. Ao atingir a cota ou o limite de requisições, as requisições são recusadas até a cota renovar ou você comprar créditos.",
 					"A API retorna apenas nossos próprios dados (notas e estatísticas da comunidade), metadados abertos e identificadores externos. Você não pode usá-la para redistribuir dados de terceiros que apenas linkamos. Podemos alterar ou descontinuar versões da API com aviso prévio razoável."
 				]
 			},
 			{
 				"heading": "6. Pagamento, renovação e cancelamento",
 				"body": [
-					"Os planos pagos são cobrados antecipadamente, por mês ou por ano, no cartão via Stripe ou por PIX via AbacatePay. Preços e impostos aparecem antes do pagamento. Assinaturas no cartão renovam automaticamente até serem canceladas; pagamentos por PIX cobrem o período comprado e não renovam sozinhos.",
-					"Você pode cancelar a qualquer momento e manter o acesso até o fim do período pago. Créditos extras não expiram. Quando a lei garantir direito de arrependimento (por exemplo, 7 dias pelo art. 49 do Código de Defesa do Consumidor), você pode exercê-lo pelo formulário de contato e receber o reembolso previsto em lei."
+					"Os planos pagos são cobrados antecipadamente. No cartão, pela Stripe, os planos são assinaturas mensais que renovam automaticamente até serem canceladas; você pode cancelar ou trocar o cartão no portal de cobrança. No PIX, pela AbacatePay (só em reais), você compra 1 mês ou 12 meses (12 meses pelo preço de 10); períodos PIX não renovam automaticamente e avisamos por e-mail 7 dias e 1 dia antes do fim. Preços, moeda e impostos aparecem antes do pagamento.",
+					"Créditos extras só podem ser comprados com um plano Pro ou Business ativo; eles não expiram e são usados depois da cota mensal.",
+					"Você pode cancelar a qualquer momento e mantém o acesso até o fim do período pago. Quando a lei garante o direito de arrependimento (por exemplo, 7 dias pelo art. 49 do Código de Defesa do Consumidor), você pode exercê-lo pelo formulário de contato e receber o reembolso previsto em lei. Se você for cobrado duas vezes pelo mesmo período (por exemplo, um PIX pago com uma assinatura no cartão ativa), devolvemos o pagamento em duplicidade."
 				]
 			},
 			{
 				"heading": "7. Links de afiliado",
 				"body": [
-					"Algumas páginas de livros e jogos têm links para a Amazon e o Mercado Livre. São links de afiliado: podemos receber comissão por compras qualificadas, sem custo extra para você. Os links de afiliado são identificados e nunca influenciam as notas."
+					"Algumas páginas de livros e jogos têm links para a Amazon e o Mercado Livre. São links de afiliado: podemos receber uma comissão por compras qualificadas, sem custo extra para você. Os links de afiliado são identificados na página e nunca influenciam as notas. Preços, disponibilidade, compras e devoluções são de responsabilidade de cada loja."
 				]
 			},
 			{
@@ -141,7 +142,7 @@
 			{
 				"heading": "9. Exclusão da conta",
 				"body": [
-					"Você pode excluir sua conta no seu perfil. A exclusão vale após uma carência de 30 dias, durante a qual você pode entrar e cancelá-la. Suas avaliações permanecem nas notas da comunidade de forma anônima."
+					"Você pode excluir sua conta no seu perfil. A exclusão vale depois de um período de carência de 30 dias, durante o qual você pode entrar e cancelá-la. Suas avaliações continuam nas notas da comunidade de forma anônima. Excluir a conta não cancela uma assinatura no cartão: cancele-a antes no portal de cobrança."
 				]
 			},
 			{
@@ -158,7 +159,9 @@
 			},
 			{
 				"heading": "12. Contato",
-				"body": ["Dúvidas sobre estes termos podem ser enviadas pelo formulário de contato."]
+				"body": [
+					"Dúvidas sobre estes termos, pedidos de arrependimento ou reembolso e pedidos de privacidade podem ser enviados pelo formulário de contato."
+				]
 			}
 		]
 	}
