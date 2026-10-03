@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
+import { openApiPath } from "./lib/api/spec-path";
 import { APP_URL } from "./lib/config";
 import { problem } from "./lib/problem";
 import { API_HEADERS, createNonce, pageCsp } from "./lib/security-headers";
@@ -17,7 +18,7 @@ function apiHostResponse(pathname: string): Response {
 				version: "v1",
 				base_url: `https://api.${new URL(APP_URL).host}/v1`,
 				docs: `${APP_URL}/docs`,
-				openapi: `${APP_URL}/openapi.json`,
+				openapi: Object.fromEntries(routing.locales.map((l) => [l, `${APP_URL}${openApiPath(l)}`])),
 			},
 			{ headers },
 		);

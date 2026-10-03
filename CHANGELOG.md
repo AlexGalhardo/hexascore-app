@@ -32,6 +32,37 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Added
+
+- OpenAPI documents in Portuguese and Spanish: `public/openapi.pt-BR.json` and `public/openapi.es.json` next to `openapi.json` (en, unchanged byte for byte, still the SDK source). Every description/summary lives in `messages/<locale>/openapi.json` (typed `openApiText`/`apiDoc` in `lib/api/openapi-text.ts`); `bun run openapi` writes the three files and `openapi:check` verifies all of them. `lib/api/openapi.test.ts` asserts the localized documents are structurally identical to en and fully translated; the messages parity test covers the new file.
+- `/docs/reference` loads the spec of the site language (and sets `lang` on it); the api. host root lists `openapi: { en, "pt-BR", es }` (was a single URL); `/docs/changelog` mentions the translated documents.
+
+### Changed
+
+- Docs sidebar note for pt-BR/es now says the guides are in English and the reference is translated with field names kept in English (`api.docs.languageNote`, was `englishOnly`).
+
+- API reference (Scalar) UI follows the site language: `localization.locale` = `pt` for pt-BR and `es` for Spanish (built-in packs). Spec title is now "HexaScore API".
+
+### Fixed
+
+- Public API rejects empty query values (`?min_score=`, `?limit=`) with a 400 problem instead of coercing them to 0 (found by Schemathesis on the preview).
+
+### Changed
+
+- Every link looks like a small button: padded and rounded, inverted colours on hover (black/white in light, white/black in dark), no underline effect (`globals.css`; `[data-plain]` opts out the wordmark and Scalar).
+- Navbar: "API Docs" label; the account button shows a user icon instead of the nickname initial; the account menu items carry icons.
+- `/profile` shows `@nickname` at the right of the title; the sign-up hint says the nickname is unique and cannot be changed later. Google onboarding drops the avatar circle and shares the sign-up nickname rules and hint.
+
+### Fixed
+
+- Catalog tables use a fixed layout: long titles and genre lists truncate instead of widening the page past the navbar container (no horizontal scroll).
+
+### Changed
+
+- Curated lists have a category (`lists.type`, the `item_type` enum; migration `0005_list_type` backfills existing lists from their first item, `game` when empty). Each user can have at most 10 lists per category (`LIST_LIMITS.perType`), replacing the global cap of 50; a list only accepts items of its own category (`typeMismatch` error). The item page offers only lists of the item's type and shows the quota (e.g. "Game lists: 3/10"); the profile's new-list form requires a category; profile and list pages show the category badge.
+- Catalog and search lists show a 2:3 cover thumbnail left of each title (`components/catalog/cover-thumb.tsx`, shared with the search autocomplete).
+- Language menu shows codes only (EN / PT-BR / ES) in the trigger and the list; native names stay as accessible labels.
+
 ### Fixed
 
 - Preview deployments allow the Vercel Toolbar iframe (`https://vercel.live`) in `frame-src`/`connect-src`; production CSP is unchanged. Ingestion keeps the Neon connection alive during long fetches.

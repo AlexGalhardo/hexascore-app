@@ -1,0 +1,91 @@
+- generic [active] [ref=f10e1]:
+  - banner [ref=f10e2]:
+    - generic [ref=f10e3]:
+      - link "HexaScore" [ref=f10e4] [cursor=pointer]:
+        - /url: /pt-br
+      - search [ref=f10e5]:
+        - generic [ref=f10e6]:
+          - generic [ref=f10e7]: Buscar
+          - combobox "Buscar" [ref=f10e8]
+          - textbox [aria-hidden] [ref=f10e9]
+      - generic [ref=f10e10]:
+        - generic [ref=f10e11]:
+          - button "Alternar tema" [ref=f10e12]
+          - link "Entrar" [ref=f10e15] [cursor=pointer]:
+            - /url: /pt-br/login
+          - 'button "Idioma: Português" [ref=f10e16]':
+            - generic [ref=f10e20]: PT-BR
+        - navigation "Seções" [ref=f10e21]:
+          - link "Jogos" [ref=f10e22] [cursor=pointer]:
+            - /url: /pt-br/games
+          - link "Filmes" [ref=f10e26] [cursor=pointer]:
+            - /url: /pt-br/movies
+          - link "Séries" [ref=f10e30] [cursor=pointer]:
+            - /url: /pt-br/series
+          - link "Livros" [ref=f10e34] [cursor=pointer]:
+            - /url: /pt-br/books
+          - link "API Docs" [ref=f10e38] [cursor=pointer]:
+            - /url: /pt-br/docs
+          - link "Preços" [ref=f10e41] [cursor=pointer]:
+            - /url: /pt-br/pricing
+  - main [ref=f10e45]:
+    - generic [ref=f10e46]:
+      - heading "Criar conta" [level=1] [ref=f10e47]
+      - generic [ref=f10e49]:
+        - generic [ref=f10e50]:
+          - generic [ref=f10e51]: Nickname
+          - textbox "Nickname" [ref=f10e52]
+        - paragraph [ref=f10e53]: 4–16 letras minúsculas, sem números, espaços ou símbolos. É o seu nome público, único e não pode ser alterado depois.
+        - generic [ref=f10e54]:
+          - generic [ref=f10e55]: Nome
+          - textbox "Nome" [ref=f10e56]
+        - generic [ref=f10e57]:
+          - generic [ref=f10e58]: E-mail
+          - textbox "E-mail" [ref=f10e59]
+        - generic [ref=f10e60]:
+          - generic [ref=f10e61]: Senha
+          - generic [ref=f10e62]:
+            - textbox "Senha" [ref=f10e63]
+            - button "Mostrar senha" [ref=f10e64]
+        - generic [ref=f10e68]:
+          - paragraph [ref=f10e69]: "Sua senha precisa ter:"
+          - list [ref=f10e70]:
+            - listitem [ref=f10e71]:
+              - generic [aria-hidden] [ref=f10e72]: ○
+              - text: De 8 a 32 caracteres
+            - listitem [ref=f10e74]:
+              - generic [aria-hidden] [ref=f10e75]: ○
+              - text: Uma letra maiúscula
+            - listitem [ref=f10e77]:
+              - generic [aria-hidden] [ref=f10e78]: ○
+              - text: Uma letra minúscula
+            - listitem [ref=f10e80]:
+              - generic [aria-hidden] [ref=f10e81]: ○
+              - text: Um número
+            - listitem [ref=f10e83]:
+              - generic [aria-hidden] [ref=f10e84]: ○
+              - text: Um caractere especial
+        - paragraph [ref=f10e86]:
+          - text: Ao criar a conta você concorda com os
+          - link "Termos" [ref=f10e87] [cursor=pointer]:
+            - /url: /pt-br/terms
+          - text: e a
+          - link "Política de privacidade" [ref=f10e88] [cursor=pointer]:
+            - /url: /pt-br/policy
+          - text: .
+        - button "Criar conta" [ref=f10e89]
+      - paragraph [ref=f10e90]:
+        - text: Já tem conta?
+        - link "Entrar" [ref=f10e91] [cursor=pointer]:
+          - /url: /pt-br/login
+  - contentinfo [ref=f10e92]:
+    - generic [ref=f10e93]:
+      - generic [ref=f10e94]: © 2026 Hexascore
+      - link "Termos" [ref=f10e95] [cursor=pointer]:
+        - /url: /pt-br/terms
+      - link "Privacidade" [ref=f10e96] [cursor=pointer]:
+        - /url: /pt-br/policy
+      - link "Contato" [ref=f10e97] [cursor=pointer]:
+        - /url: /pt-br/contact
+  - button "Open Next.js Dev Tools" [ref=f10e103] [cursor=pointer]
+  - alert [ref=f10e107]

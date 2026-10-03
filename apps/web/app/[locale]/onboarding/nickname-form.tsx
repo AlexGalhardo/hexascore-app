@@ -34,29 +34,20 @@ export function NicknameForm({ next }: { next: string }) {
 			}}
 		>
 			{error ? <Notice tone="error">{tAction(error)}</Notice> : null}
-			<div className="flex items-end gap-3">
-				<div
-					role="img"
-					aria-label={ta("signup.avatar")}
-					className="grid size-14 shrink-0 place-items-center rounded-full bg-surface font-serif text-2xl font-bold ring-1 ring-border"
-				>
-					{nickname.trim().charAt(0).toUpperCase() || "?"}
-				</div>
-				<div className="flex-1">
-					<Field id="nickname" label={ta("fields.nickname")} hint={ta("signup.nicknameHint")}>
-						<Input
-							id="nickname"
-							required
-							autoComplete="username"
-							maxLength={NICKNAME_MAX}
-							value={nickname}
-							aria-invalid={error === "invalid" || error === "nicknameTaken"}
-							aria-describedby="nickname-hint"
-							onChange={(e) => setValue(normalizeNickname(e.target.value))}
-						/>
-					</Field>
-				</div>
-			</div>
+			<Field id="nickname" label={ta("fields.nickname")} hint={ta("signup.nicknameHint")}>
+				<Input
+					id="nickname"
+					required
+					autoComplete="username"
+					autoCapitalize="none"
+					spellCheck={false}
+					maxLength={NICKNAME_MAX}
+					value={nickname}
+					aria-invalid={error === "invalid" || error === "nicknameTaken"}
+					aria-describedby="nickname-hint"
+					onChange={(e) => setValue(normalizeNickname(e.target.value))}
+				/>
+			</Field>
 			<button type="submit" disabled={pending || !nickname.trim()} className={buttonClass("primary")}>
 				{t("submit")}
 			</button>

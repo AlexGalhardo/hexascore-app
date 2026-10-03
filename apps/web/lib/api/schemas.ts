@@ -8,6 +8,7 @@ import { APP_URL } from "@/lib/config";
 import { ITEM_TYPES, type ItemType } from "@/lib/db/schema/catalog";
 import { itemHref, SECTION_PATHS, type SectionPath } from "@/lib/sections";
 import { MIN_REPORTS_FOR_TIME_TO_BEAT } from "@/lib/social/constants";
+import { apiDoc } from "./openapi-text";
 import { PLAN_IDS } from "./plans";
 import { PROBLEM_CODES } from "./problem";
 
@@ -18,7 +19,7 @@ const score = z.int().min(0).max(100);
 const count = z.int().min(0);
 
 export const itemTypeSchema = z.enum(ITEM_TYPES).meta({
-	description: "Kind of item. List endpoints use the plural path (`/games`, `/movies`, `/series`, `/books`).",
+	description: apiDoc("schemas.itemType"),
 });
 
 const categoryDescription = Object.entries(CATEGORY_KEYS)
@@ -27,38 +28,50 @@ const categoryDescription = Object.entries(CATEGORY_KEYS)
 
 export const itemSummarySchema = z
 	.object({
-		id: z.uuid().meta({ description: "Stable item id.", examples: ["0190a1b2-0000-7000-8000-000000000001"] }),
+		id: z.uuid().meta({
+			description: apiDoc("schemas.ItemSummary.id"),
+			examples: ["0190a1b2-0000-7000-8000-000000000001"],
+		}),
 		type: itemTypeSchema,
-		slug: z.string().meta({ description: "URL-safe name, unique per type.", examples: ["the-legend-of-zelda"] }),
-		title: z.string().meta({ description: "Title in the requested locale, English when missing." }),
-		release_date: z.iso.date().nullable().meta({ description: "First release (YYYY-MM-DD)." }),
+		slug: z.string().meta({ description: apiDoc("schemas.ItemSummary.slug"), examples: ["the-legend-of-zelda"] }),
+		title: z.string().meta({ description: apiDoc("schemas.ItemSummary.title") }),
+		release_date: z.iso
+			.date()
+			.nullable()
+			.meta({ description: apiDoc("schemas.ItemSummary.release_date") }),
 		year: z.int().nullable(),
 		score: score.nullable().meta({
-			description: "Community score 0–100 (mean of the six categories). `null` until the item has 5 ratings.",
+			description: apiDoc("schemas.ItemSummary.score"),
 			examples: [87],
 		}),
 		categories: z.record(z.string(), score.nullable()).meta({
-			description: `Average per category, 0–100, \`null\` under 5 ratings. Keys by type — ${categoryDescription}.`,
+			description: apiDoc("schemas.ItemSummary.categories", { categories: categoryDescription }),
 			examples: [{ gameplay: 90, fun: 88, sound: 85, technical: 84, visual: 89, storytelling: 86 }],
 		}),
-		rating_count: count.meta({ description: "Number of community ratings." }),
+		rating_count: count.meta({ description: apiDoc("schemas.ItemSummary.rating_count") }),
 		genres: z.array(z.string()),
-		platforms: z.array(z.string()).meta({ description: "Platforms (games only; empty for other types)." }),
+		platforms: z.array(z.string()).meta({ description: apiDoc("schemas.ItemSummary.platforms") }),
 		cover_url: z.url().nullable(),
-		url: z.url().meta({ description: "Public page of the item on the website, in the requested locale." }),
+		url: z.url().meta({ description: apiDoc("schemas.ItemSummary.url") }),
 	})
-	.meta({ description: "Compact item used in lists and search results." });
+	.meta({ description: apiDoc("schemas.ItemSummary._") });
 
 export const synopsisSchema = z
 	.object({
 		text: z.string(),
-		locale: z.enum(routing.locales).meta({ description: "Locale the text is written in." }),
-		license: z.string().nullable().meta({
-			description: "License of the text (e.g. `CC BY-SA 4.0`). Attribute it when you display the synopsis.",
-		}),
-		source_url: z.url().nullable().meta({ description: "Where the text comes from (for attribution)." }),
+		locale: z.enum(routing.locales).meta({ description: apiDoc("schemas.Synopsis.locale") }),
+		license: z
+			.string()
+			.nullable()
+			.meta({
+				description: apiDoc("schemas.Synopsis.license"),
+			}),
+		source_url: z
+			.url()
+			.nullable()
+			.meta({ description: apiDoc("schemas.Synopsis.source_url") }),
 	})
-	.meta({ description: "Synopsis with the license you must honour when showing it." });
+	.meta({ description: apiDoc("schemas.Synopsis._") });
 
 const externalIdsSchema = z
 	.object({
@@ -78,7 +91,7 @@ const externalIdsSchema = z
 		skoob: z.string().optional(),
 	})
 	.meta({
-		description: "Identifiers of the item in other databases. Only known ids are present.",
+		description: apiDoc("schemas.ExternalIds._"),
 		examples: [{ wikidata: "Q12345", igdb: "the-legend-of-zelda", steam: "123456" }],
 	});
 
@@ -88,16 +101,16 @@ const timeToBeatStatSchema = z.object({
 		.min(0)
 		.nullable()
 		.meta({
-			description: `Median hours reported by players who completed the game (1 decimal). \`null\` under ${MIN_REPORTS_FOR_TIME_TO_BEAT} reports.`,
+			description: apiDoc("schemas.TimeToBeatStat.median_hours", { minReports: MIN_REPORTS_FOR_TIME_TO_BEAT }),
 			examples: [42.5],
 		}),
-	reports: count.meta({ description: "Number of players who reported this style." }),
+	reports: count.meta({ description: apiDoc("schemas.TimeToBeatStat.reports") }),
 });
 
 export const timeToBeatSchema = z
 	.object({ main: timeToBeatStatSchema, extras: timeToBeatStatSchema, completionist: timeToBeatStatSchema })
 	.meta({
-		description: "Crowdsourced time to beat per play style: main story, main + extras, completionist.",
+		description: apiDoc("schemas.TimeToBeat._"),
 		examples: [
 			{
 				main: { median_hours: 42.5, reports: 12 },
@@ -111,46 +124,49 @@ export const itemDetailSchema = itemSummarySchema
 	.extend({
 		locale: z.enum(routing.locales),
 		translation_fallback: z.boolean().meta({
-			description: "True when the requested locale had no title or synopsis and English was used.",
+			description: apiDoc("schemas.ItemDetail.translation_fallback"),
 		}),
 		synopsis: synopsisSchema.nullable(),
 		external_ids: externalIdsSchema,
 		trailers: z.array(z.object({ youtube_id: z.string(), title: z.string().nullable() })).meta({
-			description: "YouTube video ids; embed as `https://www.youtube-nocookie.com/embed/{youtube_id}`.",
+			description: apiDoc("schemas.ItemDetail.trailers"),
 		}),
-		creators: z.array(z.string()).meta({ description: "Developers, directors, showrunners or authors." }),
+		creators: z.array(z.string()).meta({ description: apiDoc("schemas.ItemDetail.creators") }),
 		countries: z.array(z.string()),
 		runtime_minutes: z.int().nullable(),
 		pages: z.int().nullable(),
 		seasons: z.int().nullable(),
 		episodes: z.int().nullable(),
-		time_to_beat: timeToBeatSchema.nullable().meta({ description: "Games only; `null` for other types." }),
+		time_to_beat: timeToBeatSchema.nullable().meta({ description: apiDoc("schemas.ItemDetail.time_to_beat") }),
 	})
-	.meta({ description: "Full item: metadata, scores, external ids, trailers and synopsis." });
+	.meta({ description: apiDoc("schemas.ItemDetail._") });
 
 export const itemListSchema = z
 	.object({
 		data: z.array(itemSummarySchema),
-		next_cursor: z.string().nullable().meta({
-			description: "Pass as `cursor` to get the next page. `null` on the last page.",
-		}),
+		next_cursor: z
+			.string()
+			.nullable()
+			.meta({
+				description: apiDoc("schemas.ItemList.next_cursor"),
+			}),
 	})
-	.meta({ description: "One page of items." });
+	.meta({ description: apiDoc("schemas.ItemList._") });
 
 export const searchResultSchema = z
 	.object({ data: z.array(itemSummarySchema) })
-	.meta({ description: "Best matches first. Search is not paginated." });
+	.meta({ description: apiDoc("schemas.SearchResult._") });
 
 export const genreListSchema = z
 	.object({
 		data: z.array(
 			z.object({
-				slug: z.string().meta({ description: "Exact value to pass as `genre`.", examples: ["Adventure"] }),
-				count: count.meta({ description: "Items of this type with the genre." }),
+				slug: z.string().meta({ description: apiDoc("schemas.GenreList.slug"), examples: ["Adventure"] }),
+				count: count.meta({ description: apiDoc("schemas.GenreList.count") }),
 			}),
 		),
 	})
-	.meta({ description: "Genres of a type, most common first." });
+	.meta({ description: apiDoc("schemas.GenreList._") });
 
 export const usageSchema = z
 	.object({
@@ -160,33 +176,36 @@ export const usageSchema = z
 			used: count,
 			remaining: count,
 			period: z.enum(["lifetime", "month"]).meta({
-				description: "`lifetime` on Free (100 requests in total); `month` on paid plans (UTC calendar month).",
+				description: apiDoc("schemas.Usage.period"),
 			}),
-			resets_at: z.iso.datetime().nullable().meta({ description: "Next reset; `null` for lifetime quotas." }),
+			resets_at: z.iso
+				.datetime()
+				.nullable()
+				.meta({ description: apiDoc("schemas.Usage.resets_at") }),
 		}),
 		credits: z.object({
-			balance: count.meta({ description: "Prepaid requests used after the quota runs out (paid plans)." }),
+			balance: count.meta({ description: apiDoc("schemas.Usage.balance") }),
 		}),
 		rate_limit: z.object({ requests_per_second: count }),
 	})
-	.meta({ description: "Quota, credits and rate limit of the key's account. This call counts as one request." });
+	.meta({ description: apiDoc("schemas.Usage._") });
 
 export const problemSchema = z
 	.object({
-		type: z.url().meta({ description: "Link to the documentation of this error." }),
+		type: z.url().meta({ description: apiDoc("schemas.Problem.type") }),
 		title: z.string(),
 		status: z.int(),
-		detail: z.string().meta({ description: "What went wrong and how to fix it." }),
-		code: z.enum(PROBLEM_CODES).meta({ description: "Stable machine-readable error code." }),
-		request_id: z.string().meta({ description: "Quote it when contacting support." }),
+		detail: z.string().meta({ description: apiDoc("schemas.Problem.detail") }),
+		code: z.enum(PROBLEM_CODES).meta({ description: apiDoc("schemas.Problem.code") }),
+		request_id: z.string().meta({ description: apiDoc("schemas.Problem.request_id") }),
 		errors: z
 			.array(z.object({ path: z.string(), message: z.string() }))
 			.optional()
-			.meta({ description: "Invalid parameters (only on `bad_request`)." }),
+			.meta({ description: apiDoc("schemas.Problem.errors") }),
 		plan: z.enum(PLAN_IDS).optional(),
 		limit: z.int().optional(),
 	})
-	.meta({ description: "RFC 9457 problem details (`application/problem+json`)." });
+	.meta({ description: apiDoc("schemas.Problem._") });
 
 // ---------------------------------------------------------------------------------------------------------------
 // Path and query parameters (query values arrive as strings, hence z.coerce)
@@ -207,7 +226,7 @@ const scoreParam = z.coerce.number().int().min(0).max(100);
 const localeParam = z
 	.enum(routing.locales)
 	.default("en")
-	.meta({ description: "Language of titles and synopses (`en`, `pt-BR`, `es`). Falls back to English." });
+	.meta({ description: apiDoc("query.locale") });
 
 function limitParam(maxPageSize: number, upTo = maxPageSize) {
 	const max = Math.min(maxPageSize, upTo);
@@ -217,39 +236,63 @@ function limitParam(maxPageSize: number, upTo = maxPageSize) {
 		.min(1)
 		.max(max, `Your plan allows at most ${max} results per page.`)
 		.default(Math.min(10, max))
-		.meta({ description: `Page size, 1–${upTo}. Free plan: up to 10.` });
+		.meta({ description: apiDoc("query.limit", { upTo }) });
 }
 
 export function listQuerySchema(type: ItemType, maxPageSize: number) {
 	const categoryFilters = Object.fromEntries(
 		CATEGORY_KEYS[type].map((key) => [
 			`min_${key}`,
-			scoreParam.optional().meta({ description: `Minimum \`${key}\` average (0–100).` }),
+			scoreParam.optional().meta({ description: apiDoc("query.min_category", { key }) }),
 		]),
 	);
 	return z.strictObject({
-		genre: z.string().trim().min(1).max(100).optional().meta({
-			description: "Exact genre, as returned by the genres endpoint.",
-		}),
+		genre: z
+			.string()
+			.trim()
+			.min(1)
+			.max(100)
+			.optional()
+			.meta({
+				description: apiDoc("query.genre"),
+			}),
 		...(type === "game"
-			? { platform: z.string().trim().min(1).max(100).optional().meta({ description: "Exact platform name." }) }
+			? {
+					platform: z
+						.string()
+						.trim()
+						.min(1)
+						.max(100)
+						.optional()
+						.meta({ description: apiDoc("query.platform") }),
+				}
 			: {}),
-		year: z.coerce.number().int().min(1800).max(2100).optional().meta({ description: "Release year." }),
-		min_score: scoreParam.optional().meta({ description: "Minimum community score (hides unscored items)." }),
-		max_score: scoreParam.optional().meta({ description: "Maximum community score (hides unscored items)." }),
+		year: z.coerce
+			.number()
+			.int()
+			.min(1800)
+			.max(2100)
+			.optional()
+			.meta({ description: apiDoc("query.year") }),
+		min_score: scoreParam.optional().meta({ description: apiDoc("query.min_score") }),
+		max_score: scoreParam.optional().meta({ description: apiDoc("query.max_score") }),
 		...categoryFilters,
 		sort: z
 			.enum(SORTS)
 			.default("-popularity")
 			.meta({
-				description: "Sort field; prefix with `-` for descending. Unscored/undated items always come last.",
+				description: apiDoc("query.sort"),
 				// Readable enum member names in generated SDKs (`SCORE_DESC` instead of `VALUE_2`).
 				"x-enum-varnames": SORTS.map((s) =>
 					s.startsWith("-") ? `${s.slice(1).toUpperCase()}_DESC` : s.toUpperCase(),
 				),
 			}),
 		limit: limitParam(maxPageSize),
-		cursor: z.string().max(512).optional().meta({ description: "`next_cursor` from the previous page." }),
+		cursor: z
+			.string()
+			.max(512)
+			.optional()
+			.meta({ description: apiDoc("query.cursor") }),
 		locale: localeParam,
 	});
 }
@@ -265,23 +308,21 @@ export function searchQuerySchema(maxPageSize: number) {
 			.trim()
 			.min(2)
 			.max(100)
-			.meta({ description: "Text to search; typo tolerant.", examples: ["zelda"] }),
-		type: itemTypeSchema
-			.optional()
-			.meta({ description: "Restrict to one type (`game`, `movie`, `series`, `book`)." }),
+			.meta({ description: apiDoc("query.q"), examples: ["zelda"] }),
+		type: itemTypeSchema.optional().meta({ description: apiDoc("query.type") }),
 		limit: limitParam(maxPageSize, SEARCH_MAX),
 		locale: localeParam,
 	});
 }
 
 export const lookupQuerySchema = z.strictObject({
-	source: z.enum(LOOKUP_SOURCES).meta({ description: "Database the id belongs to." }),
+	source: z.enum(LOOKUP_SOURCES).meta({ description: apiDoc("query.source") }),
 	id: z
 		.string()
 		.trim()
 		.min(1)
 		.max(100)
-		.meta({ description: "Id in that database.", examples: ["tt0111161"] }),
+		.meta({ description: apiDoc("query.id"), examples: ["tt0111161"] }),
 	locale: localeParam,
 });
 

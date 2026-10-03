@@ -44,6 +44,16 @@ export default async function ChangelogPage(props: DocPageProps) {
 
 			<H2 id="changes">Changes</H2>
 			<section className="border-t border-border py-4">
+				<h3 className="font-semibold">v1 — translated OpenAPI documents (docs only)</h3>
+				<ul className="mt-2 list-disc space-y-1 pl-6 text-sm leading-6">
+					<li>
+						<a href="/openapi.pt-BR.json">/openapi.pt-BR.json</a> and{" "}
+						<a href="/openapi.es.json">/openapi.es.json</a>: the same contract as <C>/openapi.json</C> with
+						descriptions in Portuguese and Spanish. Paths, field names and enum values are unchanged.
+					</li>
+				</ul>
+			</section>
+			<section className="border-t border-border py-4">
 				<h3 className="font-semibold">v1 — time to beat (additive)</h3>
 				<ul className="mt-2 list-disc space-y-1 pl-6 text-sm leading-6">
 					<li>

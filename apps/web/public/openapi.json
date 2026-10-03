@@ -1,12 +1,12 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Hexascore API",
+    "title": "HexaScore API",
     "version": "1.0.0",
     "summary": "Community scores for games, movies, TV series and books.",
-    "description": "Read-only REST API over the Hexascore catalog: every item carries a 0–100 community score and six per-category averages.\n\n- **Auth**: `Authorization: Bearer hx_live_…` — create a key at `/profile/api`.\n- **Format**: JSON, `snake_case` fields, ISO 8601 dates. Errors are RFC 9457 `application/problem+json` with a stable `code`.\n- **Pagination**: cursor based — pass `next_cursor` back as `cursor`.\n- **Plans**: Free = 100 requests in total, 10 items per page, 1 req/s. Pro and Business have monthly quotas, 100 items per page and prepaid credits.\n\nGuides: https://hexascore.app/docs",
+    "description": "Read-only REST API over the HexaScore catalog: every item carries a 0–100 community score and six per-category averages.\n\n- **Auth**: `Authorization: Bearer hx_live_…` — create a key at `/profile/api`.\n- **Format**: JSON, `snake_case` fields, ISO 8601 dates. Errors are RFC 9457 `application/problem+json` with a stable `code`.\n- **Pagination**: cursor based — pass `next_cursor` back as `cursor`.\n- **Plans**: Free = 100 requests in total, 10 items per page, 1 req/s. Pro and Business have monthly quotas, 100 items per page and prepaid credits.\n\nGuides: https://hexascore.app/docs",
     "contact": {
-      "name": "Hexascore",
+      "name": "HexaScore",
       "url": "https://hexascore.app/docs"
     },
     "license": {

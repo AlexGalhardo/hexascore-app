@@ -7,7 +7,12 @@ export type ItemStatus = (typeof ITEM_STATUSES)[number];
 export const REPORT_REASONS = ["spam", "offensive", "harassment", "impersonation", "other"] as const;
 export const REPORT_DETAILS_MAX = 500;
 
-export const LIST_LIMITS = { lists: 50, items: 500, title: 80, description: 500 } as const;
+// Copy of the `item_type` enum (lib/db/schema/catalog.ts); lists.ts asserts they match. Every list has one type.
+export const LIST_TYPES = ["game", "movie", "series", "book"] as const;
+export type ListType = (typeof LIST_TYPES)[number];
+
+/** `perType`: lists per user and item type. */
+export const LIST_LIMITS = { perType: 10, items: 500, title: 80, description: 500 } as const;
 
 // Time to beat (games): hours in 0.5 steps, stored as minutes (CHECK `time_to_beat_range` mirrors the bounds).
 export const TIME_TO_BEAT_STYLES = ["main", "extras", "completionist"] as const;

@@ -1,0 +1,726 @@
+- generic [active] [ref=f13e1]:
+  - banner [ref=f13e2]:
+    - generic [ref=f13e3]:
+      - link "HexaScore" [ref=f13e4] [cursor=pointer]:
+        - /url: /pt-br
+      - search [ref=f13e5]:
+        - generic [ref=f13e6]:
+          - generic [ref=f13e7]: Buscar
+          - combobox "Buscar" [ref=f13e8]
+          - textbox [aria-hidden] [ref=f13e9]
+      - generic [ref=f13e10]:
+        - generic [ref=f13e11]:
+          - button "Alternar tema" [ref=f13e12]
+          - button "Menu da conta" [ref=f13e15]
+          - 'button "Idioma: Português" [ref=f13e19]':
+            - generic [ref=f13e23]: PT-BR
+        - navigation "Seções" [ref=f13e24]:
+          - link "Jogos" [ref=f13e25] [cursor=pointer]:
+            - /url: /pt-br/games
+          - link "Filmes" [ref=f13e29] [cursor=pointer]:
+            - /url: /pt-br/movies
+          - link "Séries" [ref=f13e33] [cursor=pointer]:
+            - /url: /pt-br/series
+          - link "Livros" [ref=f13e37] [cursor=pointer]:
+            - /url: /pt-br/books
+          - link "API Docs" [ref=f13e41] [cursor=pointer]:
+            - /url: /pt-br/docs
+          - link "Preços" [ref=f13e44] [cursor=pointer]:
+            - /url: /pt-br/pricing
+  - main [ref=f13e48]:
+    - generic [ref=f13e49]:
+      - complementary [ref=f13e50]:
+        - navigation "Documentação" [ref=f13e51]:
+          - list [ref=f13e52]:
+            - listitem [ref=f13e53]:
+              - link "Primeiros passos" [ref=f13e54] [cursor=pointer]:
+                - /url: /pt-br/docs
+            - listitem [ref=f13e55]:
+              - link "Autenticação" [ref=f13e56] [cursor=pointer]:
+                - /url: /pt-br/docs/authentication
+            - listitem [ref=f13e57]:
+              - link "Erros" [ref=f13e58] [cursor=pointer]:
+                - /url: /pt-br/docs/errors
+            - listitem [ref=f13e59]:
+              - link "Paginação" [ref=f13e60] [cursor=pointer]:
+                - /url: /pt-br/docs/pagination
+            - listitem [ref=f13e61]:
+              - link "Limites e cotas" [ref=f13e62] [cursor=pointer]:
+                - /url: /pt-br/docs/rate-limits
+            - listitem [ref=f13e63]:
+              - link "Changelog e versionamento" [ref=f13e64] [cursor=pointer]:
+                - /url: /pt-br/docs/changelog
+            - listitem [ref=f13e65]:
+              - link "Referência da API" [ref=f13e66] [cursor=pointer]:
+                - /url: /pt-br/docs/reference
+        - generic [ref=f13e67]:
+          - paragraph [ref=f13e68]: O conteúdo técnico está em inglês.
+          - link "Criar uma chave de API" [ref=f13e69] [cursor=pointer]:
+            - /url: /pt-br/profile/api
+      - article [ref=f13e70]:
+        - heading "Referência da API" [level=1] [ref=f13e71]
+        - generic [ref=f13e90]:
+          - generic [ref=f13e91]:
+            - complementary "Barra lateral de Hexascore API" [ref=f13e92]:
+              - 'button "Abrir Busca Atalho de Teclado: Control k" [ref=f13e94] [cursor=pointer]':
+                - generic [ref=f13e98]:
+                  - generic [ref=f13e99]: Abrir Busca
+                  - text: Buscar
+                - generic [ref=f13e100]:
+                  - generic [ref=f13e101]: "Atalho de Teclado:"
+                  - generic [ref=f13e102]:
+                    - generic [ref=f13e103]: Control
+                    - text: ⌃ k
+              - list [ref=f13e104]:
+                - listitem [ref=f13e105]:
+                  - link "Introdução" [ref=f13e106] [cursor=pointer]:
+                    - /url: "#description/introduction"
+                - listitem [ref=f13e108]:
+                  - generic [ref=f13e109]:
+                    - link "Games" [ref=f13e110] [cursor=pointer]:
+                      - /url: "#tag/games"
+                    - button "Fechar Grupo - Games" [expanded] [ref=f13e113] [cursor=pointer]
+                  - list [ref=f13e119]:
+                    - listitem [ref=f13e120]:
+                      - 'link "List games Método HTTP: GET" [ref=f13e121] [cursor=pointer]':
+                        - /url: "#tag/games/GET/games"
+                        - generic [ref=f13e126]: List games
+                        - generic [ref=f13e127]:
+                          - generic [ref=f13e128]: "Método HTTP:"
+                          - text: GET
+                    - listitem [ref=f13e129]:
+                      - 'link "Get a game Método HTTP: GET" [ref=f13e130] [cursor=pointer]':
+                        - /url: "#tag/games/GET/games/{id}"
+                        - generic [ref=f13e135]: Get a game
+                        - generic [ref=f13e136]:
+                          - generic [ref=f13e137]: "Método HTTP:"
+                          - text: GET
+                    - listitem [ref=f13e138]:
+                      - 'link "List game genres Método HTTP: GET" [ref=f13e139] [cursor=pointer]':
+                        - /url: "#tag/games/GET/games/genres"
+                        - generic [ref=f13e144]: List game genres
+                        - generic [ref=f13e145]:
+                          - generic [ref=f13e146]: "Método HTTP:"
+                          - text: GET
+                - listitem [ref=f13e147]:
+                  - generic [ref=f13e148]:
+                    - link "Movies" [ref=f13e149] [cursor=pointer]:
+                      - /url: "#tag/movies"
+                    - button "Abrir Grupo - Movies" [ref=f13e152] [cursor=pointer]
+                - listitem [ref=f13e158]:
+                  - generic [ref=f13e159]:
+                    - link "Series" [ref=f13e160] [cursor=pointer]:
+                      - /url: "#tag/series"
+                    - button "Abrir Grupo - Series" [ref=f13e163] [cursor=pointer]
+                - listitem [ref=f13e169]:
+                  - generic [ref=f13e170]:
+                    - link "Books" [ref=f13e171] [cursor=pointer]:
+                      - /url: "#tag/books"
+                    - button "Abrir Grupo - Books" [ref=f13e174] [cursor=pointer]
+                - listitem [ref=f13e180]:
+                  - generic [ref=f13e181]:
+                    - link "Search" [ref=f13e182] [cursor=pointer]:
+                      - /url: "#tag/search"
+                    - button "Abrir Grupo - Search" [ref=f13e185] [cursor=pointer]
+                - listitem [ref=f13e191]:
+                  - generic [ref=f13e192]:
+                    - link "Account" [ref=f13e193] [cursor=pointer]:
+                      - /url: "#tag/account"
+                    - button "Abrir Grupo - Account" [ref=f13e196] [cursor=pointer]
+                - listitem [ref=f13e202]:
+                  - generic [ref=f13e203]:
+                    - link "Modelos" [ref=f13e204] [cursor=pointer]:
+                      - /url: "#modelos"
+                    - button "Abrir Grupo - Modelos" [ref=f13e207] [cursor=pointer]
+              - generic [ref=f13e214]:
+                - link "Abrir cliente de API" [ref=f13e215] [cursor=pointer]:
+                  - /url: https://client.scalar.com/?url=http%3A%2F%2Flocalhost%3A3000%2Fopenapi.json&integration=react&utm_source=api-reference&utm_medium=button&utm_campaign=sidebar
+                - link "Desenvolvido com Scalar" [ref=f13e221] [cursor=pointer]:
+                  - /url: https://scalar.com/?utm_source=powered-by&utm_medium=api-reference&utm_campaign=react
+            - main "Documentação da API para Hexascore API" [ref=f13e222]:
+              - generic [ref=f13e223]:
+                - region "Introdução" [ref=f13e225]:
+                  - generic [ref=f13e226]:
+                    - generic [ref=f13e227]:
+                      - generic [ref=f13e228]: v1.0.0
+                      - generic [ref=f13e229]: OpenAPI 3.1.0
+                    - generic [ref=f13e230]:
+                      - heading "Hexascore API" [level=1] [ref=f13e232]
+                      - generic [ref=f13e233]:
+                        - link "Guides" [ref=f13e235] [cursor=pointer]:
+                          - /url: https://hexascore.app/docs
+                        - link "Hexascore" [ref=f13e241] [cursor=pointer]:
+                          - /url: https://hexascore.app/docs
+                        - link "Proprietary" [ref=f13e247] [cursor=pointer]:
+                          - /url: https://hexascore.app/terms
+                    - generic [ref=f13e252]:
+                      - generic [ref=f13e253]:
+                        - generic [ref=f13e254]:
+                          - button "Baixar Documento OpenAPI em JSON" [ref=f13e255] [cursor=pointer]:
+                            - generic [ref=f13e256]: Baixar Documento OpenAPI
+                          - button "Baixar Documento OpenAPI em YAML" [ref=f13e257] [cursor=pointer]:
+                            - generic [ref=f13e258]: Baixar Documento OpenAPI
+                        - generic [ref=f13e261]:
+                          - paragraph [ref=f13e262]: "Read-only REST API over the Hexascore catalog: every item carries a 0–100 community score and six per-category averages."
+                          - list [ref=f13e263]:
+                            - listitem [ref=f13e264]:
+                              - strong [ref=f13e265]: Auth
+                              - text: ":"
+                              - code [ref=f13e266]: "Authorization: Bearer hx_live_…"
+                              - text: — create a key at
+                              - code [ref=f13e267]: /profile/api
+                              - text: .
+                            - listitem [ref=f13e268]:
+                              - strong [ref=f13e269]: Format
+                              - text: ": JSON,"
+                              - code [ref=f13e270]: snake_case
+                              - text: fields, ISO 8601 dates. Errors are RFC 9457
+                              - code [ref=f13e271]: application/problem+json
+                              - text: with a stable
+                              - code [ref=f13e272]: code
+                              - text: .
+                            - listitem [ref=f13e273]:
+                              - strong [ref=f13e274]: Pagination
+                              - text: ": cursor based — pass"
+                              - code [ref=f13e275]: next_cursor
+                              - text: back as
+                              - code [ref=f13e276]: cursor
+                              - text: .
+                            - listitem [ref=f13e277]:
+                              - strong [ref=f13e278]: Plans
+                              - text: ": Free = 100 requests in total, 10 items per page, 1 req/s. Pro and Business have monthly quotas, 100 items per page and prepaid credits."
+                          - paragraph [ref=f13e279]:
+                            - text: "Guides:"
+                            - link "https://hexascore.app/docs" [ref=f13e280] [cursor=pointer]:
+                              - /url: https://hexascore.app/docs
+                      - generic [ref=f13e283]:
+                        - generic [ref=f13e284]:
+                          - generic [ref=f13e285]: Servidor
+                          - 'button "Servidor: https://api.hexascore.app/v1" [ref=f13e288] [cursor=pointer]':
+                            - generic [ref=f13e289]: "Servidor:"
+                            - generic [ref=f13e290]: https://api.hexascore.app/v1
+                          - paragraph [ref=f13e295]: Production
+                        - group [ref=f13e298]:
+                          - button "Autenticação Obrigatório" [disabled] [expanded] [ref=f13e300]:
+                            - generic [ref=f13e303]:
+                              - generic [ref=f13e304]: Autenticação
+                              - generic [ref=f13e305]: Obrigatório
+                          - generic [ref=f13e308]:
+                            - paragraph [ref=f13e311]:
+                              - text: API key from /profile/api, sent as
+                              - code [ref=f13e312]: "Authorization: Bearer hx_live_…"
+                              - text: .
+                            - generic [ref=f13e313]:
+                              - generic [ref=f13e314]: Token Bearer
+                              - text: ":"
+                            - textbox "Token Bearer" [ref=f13e316]:
+                              - /placeholder: Token
+                            - button "Mostrar senha" [ref=f13e317] [cursor=pointer]
+                        - generic [ref=f13e323]:
+                          - generic [ref=f13e324]: Bibliotecas Cliente
+                          - generic [ref=f13e325]:
+                            - tablist "Bibliotecas Cliente" [ref=f13e326]:
+                              - tab "Shell" [selected] [ref=f13e327] [cursor=pointer]
+                              - tab "Ruby" [ref=f13e332] [cursor=pointer]
+                              - tab "Node.js" [ref=f13e337] [cursor=pointer]
+                              - tab "PHP" [ref=f13e343] [cursor=pointer]
+                              - tab "Python" [ref=f13e348] [cursor=pointer]
+                            - button "Mais Selecionar de todos os clientes" [ref=f13e355] [cursor=pointer]:
+                              - generic [ref=f13e359]: Mais
+                              - generic [ref=f13e360]: Selecionar de todos os clientes
+                          - tabpanel "Shell" [ref=f13e362]: Shell Curl
+                - region [ref=f13e364]:
+                  - generic [ref=f13e367]:
+                    - heading "Games" [level=2] [ref=f13e369]
+                    - button "Copiar link" [ref=f13e370] [cursor=pointer]
+                  - generic [ref=f13e376]:
+                    - paragraph [ref=f13e379]: "Games: list, detail and genres."
+                    - group "Games Operações" [ref=f13e381]:
+                      - generic [ref=f13e383]:
+                        - generic [ref=f13e384]: Games
+                        - text: Operações
+                      - list "Endpoints de Games" [ref=f13e386]:
+                        - listitem [ref=f13e387]:
+                          - generic [ref=f13e388] [cursor=pointer]:
+                            - generic [ref=f13e389]: get
+                            - generic [ref=f13e390]: /games
+                        - listitem [ref=f13e391]:
+                          - generic [ref=f13e392] [cursor=pointer]:
+                            - generic [ref=f13e393]: get
+                            - generic [ref=f13e394]: "/games/{id}"
+                        - listitem [ref=f13e395]:
+                          - generic [ref=f13e396] [cursor=pointer]:
+                            - generic [ref=f13e397]: get
+                            - generic [ref=f13e398]: /games/genres
+                  - region [ref=f13e401]:
+                    - generic [ref=f13e403]:
+                      - generic [ref=f13e405]:
+                        - heading "List games" [level=3] [ref=f13e407]
+                        - button "Copiar link" [ref=f13e408] [cursor=pointer]
+                      - generic [ref=f13e413]:
+                        - button "Autenticação Obrigatória" [ref=f13e415] [cursor=pointer]
+                        - button "Copiar como Markdown" [ref=f13e420] [cursor=pointer]
+                      - group "Descrição" [ref=f13e427]:
+                        - paragraph [ref=f13e428]:
+                          - text: "Pages through games with filters. Categories for this type:"
+                          - code [ref=f13e429]: gameplay
+                          - text: ","
+                          - code [ref=f13e430]: fun
+                          - text: ","
+                          - code [ref=f13e431]: sound
+                          - text: ","
+                          - code [ref=f13e432]: technical
+                          - text: ","
+                          - code [ref=f13e433]: visual
+                          - text: ","
+                          - code [ref=f13e434]: storytelling
+                          - text: — filter with
+                          - code [ref=f13e435]: min_<category>
+                          - text: . Pass
+                          - code [ref=f13e436]: next_cursor
+                          - text: back as
+                          - code [ref=f13e437]: cursor
+                          - text: until it is
+                          - code [ref=f13e438]: "null"
+                          - text: .
+                      - generic [ref=f13e439]:
+                        - generic [ref=f13e440]:
+                          - heading "Parâmetros de Consulta" [level=4] [ref=f13e441]
+                          - list "Parâmetros de Consulta" [ref=f13e442]:
+                            - listitem [ref=f13e443]:
+                              - generic [ref=f13e445]:
+                                - generic [ref=f13e446]:
+                                  - generic [ref=f13e447]: genre
+                                  - generic [ref=f13e451]:
+                                    - generic [ref=f13e452]: "Tipo:"
+                                    - generic [ref=f13e453]: string
+                                  - generic [ref=f13e454]:
+                                    - text: ·
+                                    - generic [ref=f13e455]: "tamanho mínimo:"
+                                    - generic [ref=f13e456]: "1"
+                                  - generic [ref=f13e457]:
+                                    - text: ·
+                                    - generic [ref=f13e458]: "tamanho máximo:"
+                                    - generic [ref=f13e459]: "100"
+                                  - button "Copiar link para genre" [ref=f13e460] [cursor=pointer]
+                                - paragraph [ref=f13e467]: Exact genre, as returned by the genres endpoint.
+                            - listitem [ref=f13e468]:
+                              - generic [ref=f13e470]:
+                                - generic [ref=f13e471]:
+                                  - generic [ref=f13e472]: platform
+                                  - generic [ref=f13e476]:
+                                    - generic [ref=f13e477]: "Tipo:"
+                                    - generic [ref=f13e478]: string
+                                  - generic [ref=f13e479]:
+                                    - text: ·
+                                    - generic [ref=f13e480]: "tamanho mínimo:"
+                                    - generic [ref=f13e481]: "1"
+                                  - generic [ref=f13e482]:
+                                    - text: ·
+                                    - generic [ref=f13e483]: "tamanho máximo:"
+                                    - generic [ref=f13e484]: "100"
+                                  - button "Copiar link para platform" [ref=f13e485] [cursor=pointer]
+                                - paragraph [ref=f13e492]: Exact platform name.
+                            - listitem [ref=f13e493]:
+                              - generic [ref=f13e495]:
+                                - generic [ref=f13e496]:
+                                  - generic [ref=f13e497]: year
+                                  - generic [ref=f13e501]:
+                                    - generic [ref=f13e502]: "Tipo:"
+                                    - generic [ref=f13e503]: integer
+                                  - generic [ref=f13e504]:
+                                    - text: ·
+                                    - generic [ref=f13e505]: "mín:"
+                                    - generic [ref=f13e506]: "1800"
+                                  - generic [ref=f13e507]:
+                                    - text: ·
+                                    - generic [ref=f13e508]: "máx:"
+                                    - generic [ref=f13e509]: "2100"
+                                  - button "Copiar link para year" [ref=f13e510] [cursor=pointer]
+                                - paragraph [ref=f13e517]: Release year.
+                            - listitem [ref=f13e518]:
+                              - generic [ref=f13e520]:
+                                - generic [ref=f13e521]:
+                                  - generic [ref=f13e522]: min_score
+                                  - generic [ref=f13e526]:
+                                    - generic [ref=f13e527]: "Tipo:"
+                                    - generic [ref=f13e528]: integer
+                                  - generic [ref=f13e529]:
+                                    - text: ·
+                                    - generic [ref=f13e530]: "mín:"
+                                    - generic [ref=f13e531]: "0"
+                                  - generic [ref=f13e532]:
+                                    - text: ·
+                                    - generic [ref=f13e533]: "máx:"
+                                    - generic [ref=f13e534]: "100"
+                                  - button "Copiar link para min_score" [ref=f13e535] [cursor=pointer]
+                                - paragraph [ref=f13e542]: Minimum community score (hides unscored items).
+                            - listitem [ref=f13e543]:
+                              - generic [ref=f13e545]:
+                                - generic [ref=f13e546]:
+                                  - generic [ref=f13e547]: max_score
+                                  - generic [ref=f13e551]:
+                                    - generic [ref=f13e552]: "Tipo:"
+                                    - generic [ref=f13e553]: integer
+                                  - generic [ref=f13e554]:
+                                    - text: ·
+                                    - generic [ref=f13e555]: "mín:"
+                                    - generic [ref=f13e556]: "0"
+                                  - generic [ref=f13e557]:
+                                    - text: ·
+                                    - generic [ref=f13e558]: "máx:"
+                                    - generic [ref=f13e559]: "100"
+                                  - button "Copiar link para max_score" [ref=f13e560] [cursor=pointer]
+                                - paragraph [ref=f13e567]: Maximum community score (hides unscored items).
+                            - listitem [ref=f13e568]:
+                              - generic [ref=f13e570]:
+                                - generic [ref=f13e571]:
+                                  - generic [ref=f13e572]: min_gameplay
+                                  - generic [ref=f13e576]:
+                                    - generic [ref=f13e577]: "Tipo:"
+                                    - generic [ref=f13e578]: integer
+                                  - generic [ref=f13e579]:
+                                    - text: ·
+                                    - generic [ref=f13e580]: "mín:"
+                                    - generic [ref=f13e581]: "0"
+                                  - generic [ref=f13e582]:
+                                    - text: ·
+                                    - generic [ref=f13e583]: "máx:"
+                                    - generic [ref=f13e584]: "100"
+                                  - button "Copiar link para min_gameplay" [ref=f13e585] [cursor=pointer]
+                                - paragraph [ref=f13e592]:
+                                  - text: Minimum
+                                  - code [ref=f13e593]: gameplay
+                                  - text: average (0–100).
+                            - listitem [ref=f13e594]:
+                              - generic [ref=f13e596]:
+                                - generic [ref=f13e597]:
+                                  - generic [ref=f13e598]: min_fun
+                                  - generic [ref=f13e602]:
+                                    - generic [ref=f13e603]: "Tipo:"
+                                    - generic [ref=f13e604]: integer
+                                  - generic [ref=f13e605]:
+                                    - text: ·
+                                    - generic [ref=f13e606]: "mín:"
+                                    - generic [ref=f13e607]: "0"
+                                  - generic [ref=f13e608]:
+                                    - text: ·
+                                    - generic [ref=f13e609]: "máx:"
+                                    - generic [ref=f13e610]: "100"
+                                  - button "Copiar link para min_fun" [ref=f13e611] [cursor=pointer]
+                                - paragraph [ref=f13e618]:
+                                  - text: Minimum
+                                  - code [ref=f13e619]: fun
+                                  - text: average (0–100).
+                            - listitem [ref=f13e620]:
+                              - generic [ref=f13e622]:
+                                - generic [ref=f13e623]:
+                                  - generic [ref=f13e624]: min_sound
+                                  - generic [ref=f13e628]:
+                                    - generic [ref=f13e629]: "Tipo:"
+                                    - generic [ref=f13e630]: integer
+                                  - generic [ref=f13e631]:
+                                    - text: ·
+                                    - generic [ref=f13e632]: "mín:"
+                                    - generic [ref=f13e633]: "0"
+                                  - generic [ref=f13e634]:
+                                    - text: ·
+                                    - generic [ref=f13e635]: "máx:"
+                                    - generic [ref=f13e636]: "100"
+                                  - button "Copiar link para min_sound" [ref=f13e637] [cursor=pointer]
+                                - paragraph [ref=f13e644]:
+                                  - text: Minimum
+                                  - code [ref=f13e645]: sound
+                                  - text: average (0–100).
+                            - listitem [ref=f13e646]:
+                              - generic [ref=f13e648]:
+                                - generic [ref=f13e649]:
+                                  - generic [ref=f13e650]: min_technical
+                                  - generic [ref=f13e654]:
+                                    - generic [ref=f13e655]: "Tipo:"
+                                    - generic [ref=f13e656]: integer
+                                  - generic [ref=f13e657]:
+                                    - text: ·
+                                    - generic [ref=f13e658]: "mín:"
+                                    - generic [ref=f13e659]: "0"
+                                  - generic [ref=f13e660]:
+                                    - text: ·
+                                    - generic [ref=f13e661]: "máx:"
+                                    - generic [ref=f13e662]: "100"
+                                  - button "Copiar link para min_technical" [ref=f13e663] [cursor=pointer]
+                                - paragraph [ref=f13e670]:
+                                  - text: Minimum
+                                  - code [ref=f13e671]: technical
+                                  - text: average (0–100).
+                            - listitem [ref=f13e672]:
+                              - generic [ref=f13e674]:
+                                - generic [ref=f13e675]:
+                                  - generic [ref=f13e676]: min_visual
+                                  - generic [ref=f13e680]:
+                                    - generic [ref=f13e681]: "Tipo:"
+                                    - generic [ref=f13e682]: integer
+                                  - generic [ref=f13e683]:
+                                    - text: ·
+                                    - generic [ref=f13e684]: "mín:"
+                                    - generic [ref=f13e685]: "0"
+                                  - generic [ref=f13e686]:
+                                    - text: ·
+                                    - generic [ref=f13e687]: "máx:"
+                                    - generic [ref=f13e688]: "100"
+                                  - button "Copiar link para min_visual" [ref=f13e689] [cursor=pointer]
+                                - paragraph [ref=f13e696]:
+                                  - text: Minimum
+                                  - code [ref=f13e697]: visual
+                                  - text: average (0–100).
+                            - listitem [ref=f13e698]:
+                              - generic [ref=f13e700]:
+                                - generic [ref=f13e701]:
+                                  - generic [ref=f13e702]: min_storytelling
+                                  - generic [ref=f13e706]:
+                                    - generic [ref=f13e707]: "Tipo:"
+                                    - generic [ref=f13e708]: integer
+                                  - generic [ref=f13e709]:
+                                    - text: ·
+                                    - generic [ref=f13e710]: "mín:"
+                                    - generic [ref=f13e711]: "0"
+                                  - generic [ref=f13e712]:
+                                    - text: ·
+                                    - generic [ref=f13e713]: "máx:"
+                                    - generic [ref=f13e714]: "100"
+                                  - button "Copiar link para min_storytelling" [ref=f13e715] [cursor=pointer]
+                                - paragraph [ref=f13e722]:
+                                  - text: Minimum
+                                  - code [ref=f13e723]: storytelling
+                                  - text: average (0–100).
+                            - listitem [ref=f13e724]:
+                              - generic [ref=f13e726]:
+                                - generic [ref=f13e727]:
+                                  - generic [ref=f13e728]: sort
+                                  - generic [ref=f13e732]:
+                                    - generic [ref=f13e733]: "Tipo:"
+                                    - generic [ref=f13e734]: string
+                                  - generic [ref=f13e735]:
+                                    - text: ·
+                                    - generic [ref=f13e736]: enum
+                                  - button "Padrão" [ref=f13e738] [cursor=pointer]
+                                  - button "Copiar link para sort" [ref=f13e739] [cursor=pointer]
+                                - paragraph [ref=f13e746]:
+                                  - text: Sort field; prefix with
+                                  - code [ref=f13e747]: "-"
+                                  - text: for descending. Unscored/undated items always come last.
+                                - generic [ref=f13e748]:
+                                  - generic [ref=f13e749]: valores
+                                  - list [ref=f13e750]:
+                                    - listitem [ref=f13e751]:
+                                      - generic [ref=f13e752]: "-popularity = POPULARITY_DESC"
+                                    - listitem [ref=f13e753]:
+                                      - generic [ref=f13e754]: popularity = POPULARITY
+                                    - listitem [ref=f13e755]:
+                                      - generic [ref=f13e756]: "-score = SCORE_DESC"
+                                    - listitem [ref=f13e757]:
+                                      - generic [ref=f13e758]: score = SCORE
+                                    - listitem [ref=f13e759]:
+                                      - generic [ref=f13e760]: "-release_date = RELEASE_DATE_DESC"
+                                    - listitem [ref=f13e761]:
+                                      - generic [ref=f13e762]: release_date = RELEASE_DATE
+                                    - listitem [ref=f13e763]:
+                                      - generic [ref=f13e764]: "-rating_count = RATING_COUNT_DESC"
+                                    - listitem [ref=f13e765]:
+                                      - generic [ref=f13e766]: rating_count = RATING_COUNT
+                            - listitem [ref=f13e767]:
+                              - generic [ref=f13e769]:
+                                - generic [ref=f13e770]:
+                                  - generic [ref=f13e771]: limit
+                                  - generic [ref=f13e775]:
+                                    - generic [ref=f13e776]: "Tipo:"
+                                    - generic [ref=f13e777]: integer
+                                  - generic [ref=f13e778]:
+                                    - text: ·
+                                    - generic [ref=f13e779]: "mín:"
+                                    - generic [ref=f13e780]: "1"
+                                  - generic [ref=f13e781]:
+                                    - text: ·
+                                    - generic [ref=f13e782]: "máx:"
+                                    - generic [ref=f13e783]: "100"
+                                  - button "Padrão" [ref=f13e785] [cursor=pointer]
+                                  - button "Copiar link para limit" [ref=f13e786] [cursor=pointer]
+                                - paragraph [ref=f13e793]: "Page size, 1–100. Free plan: up to 10."
+                            - listitem [ref=f13e794]:
+                              - generic [ref=f13e796]:
+                                - generic [ref=f13e797]:
+                                  - generic [ref=f13e798]: cursor
+                                  - generic [ref=f13e802]:
+                                    - generic [ref=f13e803]: "Tipo:"
+                                    - generic [ref=f13e804]: string
+                                  - generic [ref=f13e805]:
+                                    - text: ·
+                                    - generic [ref=f13e806]: "tamanho máximo:"
+                                    - generic [ref=f13e807]: "512"
+                                  - button "Copiar link para cursor" [ref=f13e808] [cursor=pointer]
+                                - paragraph [ref=f13e815]:
+                                  - code [ref=f13e816]: next_cursor
+                                  - text: from the previous page.
+                            - listitem [ref=f13e817]:
+                              - generic [ref=f13e819]:
+                                - generic [ref=f13e820]:
+                                  - generic [ref=f13e821]: locale
+                                  - generic [ref=f13e825]:
+                                    - generic [ref=f13e826]: "Tipo:"
+                                    - generic [ref=f13e827]: "\"en\" or \"pt-BR\" or \"es\""
+                                  - generic [ref=f13e828]:
+                                    - text: ·
+                                    - generic [ref=f13e829]: enum
+                                  - button "Padrão" [ref=f13e831] [cursor=pointer]
+                                  - button "Copiar link para locale" [ref=f13e832] [cursor=pointer]
+                                - paragraph [ref=f13e839]:
+                                  - text: Language of titles and synopses (
+                                  - code [ref=f13e840]: en
+                                  - text: ","
+                                  - code [ref=f13e841]: pt-BR
+                                  - text: ","
+                                  - code [ref=f13e842]: es
+                                  - text: ). Falls back to English.
+                        - generic [ref=f13e843]:
+                          - heading "Respostas" [level=4] [ref=f13e844]
+                          - list "Respostas" [ref=f13e845]:
+                            - listitem [ref=f13e846]:
+                              - button "200 OK" [ref=f13e847] [cursor=pointer]:
+                                - generic [ref=f13e848]: "200"
+                                - paragraph [ref=f13e856]: OK
+                              - group "Tipo de Conteúdo Selecionado" [ref=f13e859]:
+                                - generic [ref=f13e860]: application/json
+                            - listitem [ref=f13e861]:
+                              - button "400 Invalid query parameter, cursor, or a limit above your plan's page size." [ref=f13e862] [cursor=pointer]:
+                                - generic [ref=f13e863]: "400"
+                                - paragraph [ref=f13e871]:
+                                  - text: Invalid query parameter, cursor, or a
+                                  - code [ref=f13e872]: limit
+                                  - text: above your plan's page size.
+                              - group "Tipo de Conteúdo Selecionado" [ref=f13e875]:
+                                - generic [ref=f13e876]: application/problem+json
+                            - listitem [ref=f13e877]:
+                              - button "401 Missing, malformed, unknown or revoked API key." [ref=f13e878] [cursor=pointer]:
+                                - generic [ref=f13e879]: "401"
+                                - paragraph [ref=f13e887]: Missing, malformed, unknown or revoked API key.
+                              - group "Tipo de Conteúdo Selecionado" [ref=f13e890]:
+                                - generic [ref=f13e891]: application/problem+json
+                            - listitem [ref=f13e892]:
+                              - button "402 Quota (and credits, on paid plans) exhausted. Upgrade or buy credits." [ref=f13e893] [cursor=pointer]:
+                                - generic [ref=f13e894]: "402"
+                                - paragraph [ref=f13e902]: Quota (and credits, on paid plans) exhausted. Upgrade or buy credits.
+                              - group "Tipo de Conteúdo Selecionado" [ref=f13e905]:
+                                - generic [ref=f13e906]: application/problem+json
+                            - listitem [ref=f13e907]:
+                              - button "403 The account that owns the key is suspended." [ref=f13e908] [cursor=pointer]:
+                                - generic [ref=f13e909]: "403"
+                                - paragraph [ref=f13e917]: The account that owns the key is suspended.
+                              - group "Tipo de Conteúdo Selecionado" [ref=f13e920]:
+                                - generic [ref=f13e921]: application/problem+json
+                            - listitem [ref=f13e922]:
+                              - button "429 Too many requests per second. Wait Retry-After seconds." [ref=f13e923] [cursor=pointer]:
+                                - generic [ref=f13e924]: "429"
+                                - paragraph [ref=f13e932]:
+                                  - text: Too many requests per second. Wait
+                                  - code [ref=f13e933]: Retry-After
+                                  - text: seconds.
+                              - group "Tipo de Conteúdo Selecionado" [ref=f13e936]:
+                                - generic [ref=f13e937]: application/problem+json
+                            - listitem [ref=f13e938]:
+                              - button "500 Unexpected error. The request was not counted against your quota." [ref=f13e939] [cursor=pointer]:
+                                - generic [ref=f13e940]: "500"
+                                - paragraph [ref=f13e948]: Unexpected error. The request was not counted against your quota.
+                              - group "Tipo de Conteúdo Selecionado" [ref=f13e951]:
+                                - generic [ref=f13e952]: application/problem+json
+                            - listitem [ref=f13e953]:
+                              - button "503 Temporarily unavailable. Retry after Retry-After seconds." [ref=f13e954] [cursor=pointer]:
+                                - generic [ref=f13e955]: "503"
+                                - paragraph [ref=f13e963]:
+                                  - text: Temporarily unavailable. Retry after
+                                  - code [ref=f13e964]: Retry-After
+                                  - text: seconds.
+                              - group "Tipo de Conteúdo Selecionado" [ref=f13e967]:
+                                - generic [ref=f13e968]: application/problem+json
+                      - generic [ref=f13e969]:
+                        - group "Request Example for get/games" [ref=f13e970]:
+                          - generic [ref=f13e971]:
+                            - generic [ref=f13e972]:
+                              - generic [ref=f13e973]: Request Example for
+                              - generic [ref=f13e974]: get
+                              - generic [ref=f13e975]: /games
+                            - 'button "Alterar a linguagem do exemplo de código: Shell Curl" [ref=f13e978] [cursor=pointer]': Shell Curl
+                          - generic [ref=f13e984]:
+                            - 'group "Exemplo de código: Shell Curl" [ref=f13e985]':
+                              - code [ref=f13e987]:
+                                - generic [ref=f13e988]: curl 'https://api.hexascore.app/v1/games?sort=-popularity&limit=10&locale=en' \
+                                - generic [ref=f13e989]: "--header 'Authorization: Bearer YOUR_SECRET_TOKEN'"
+                            - button "Copy cURL code" [ref=f13e990] [cursor=pointer]
+                          - button "Testar Requisição (get /games)" [ref=f13e1001] [cursor=pointer]:
+                            - generic [ref=f13e1005]: Testar Requisição
+                            - generic [ref=f13e1006]: (get /games)
+                        - region [ref=f13e1007]:
+                          - generic [ref=f13e1008]:
+                            - tablist [ref=f13e1010]:
+                              - 'tab "Status: 200 OK" [selected] [ref=f13e1011] [cursor=pointer]':
+                                - generic [ref=f13e1012]:
+                                  - generic [ref=f13e1013]: "Status:"
+                                  - text: "200"
+                                  - generic [ref=f13e1014]: OK
+                              - 'tab "Status: 400 Invalid query parameter, cursor, or a `limit` above your plan''s page size." [ref=f13e1015] [cursor=pointer]':
+                                - generic [ref=f13e1016]:
+                                  - generic [ref=f13e1017]: "Status:"
+                                  - text: "400"
+                                  - generic [ref=f13e1018]: "Invalid query parameter, cursor, or a `limit` above your plan's page size."
+                              - 'tab "Status: 401 Missing, malformed, unknown or revoked API key." [ref=f13e1019] [cursor=pointer]':
+                                - generic [ref=f13e1020]:
+                                  - generic [ref=f13e1021]: "Status:"
+                                  - text: "401"
+                                  - generic [ref=f13e1022]: Missing, malformed, unknown or revoked API key.
+                              - 'tab "Status: 402 Quota (and credits, on paid plans) exhausted. Upgrade or buy credits." [ref=f13e1023] [cursor=pointer]':
+                                - generic [ref=f13e1024]:
+                                  - generic [ref=f13e1025]: "Status:"
+                                  - text: "402"
+                                  - generic [ref=f13e1026]: Quota (and credits, on paid plans) exhausted. Upgrade or buy credits.
+                              - 'tab "Status: 403 The account that owns the key is suspended." [ref=f13e1027] [cursor=pointer]':
+                                - generic [ref=f13e1028]:
+                                  - generic [ref=f13e1029]: "Status:"
+                                  - text: "403"
+                                  - generic [ref=f13e1030]: The account that owns the key is suspended.
+                              - 'tab "Status: 429 Too many requests per second. Wait `Retry-After` seconds." [ref=f13e1031] [cursor=pointer]':
+                                - generic [ref=f13e1032]:
+                                  - generic [ref=f13e1033]: "Status:"
+                                  - text: "429"
+                                  - generic [ref=f13e1034]: "Too many requests per second. Wait `Retry-After` seconds."
+                              - 'tab "Status: 500 Unexpected error. The request was not counted against your quota." [ref=f13e1035] [cursor=pointer]':
+                                - generic [ref=f13e1036]:
+                                  - generic [ref=f13e1037]: "Status:"
+                                  - text: "500"
+                                  - generic [ref=f13e1038]: Unexpected error. The request was not counted against your quota.
+                              - 'tab "Status: 503 Temporarily unavailable. Retry after `Retry-After` seconds." [ref=f13e1039] [cursor=pointer]':
+                                - generic [ref=f13e1040]:
+                                  - generic [ref=f13e1041]: "Status:"
+                                  - text: "503"
+                                  - generic [ref=f13e1042]: "Temporarily unavailable. Retry after `Retry-After` seconds."
+                            - generic [ref=f13e1044] [cursor=pointer]:
+                              - text: Mostrar Schema
+                              - checkbox "Mostrar Schema"
+                          - generic [ref=f13e1048]:
+                            - group "Code sample" [ref=f13e1049]:
+                              - code [ref=f13e1051]:
+                                - text: "{ \"data\": [ { \"id\": \"0190a1b2-0000-7000-8000-000000000001\", \"type\": \"game\", \"slug\": \"the-legend-of-zelda\", \"title\": \"string\", \"release_date\": \"2026-10-03\", \"year\": -9007199254740991, \"score\": 87, \"categories\": { \"gameplay\": 90, \"fun\": 88, \"sound\": 85, \"technical\": 84, \"visual\": 89, \"storytelling\": 86 }, \"rating_count\": 0, \"genres\": [ \"string\" ], \"platforms\": [ \"string\" ], \"cover_url\": \"https://example.com\", \"url\": \"https://example.com\" } ], \"next_cursor\":"
+                                - generic [ref=f13e1052]: "null"
+                                - text: "}"
+                            - button "Copy JSON code" [ref=f13e1053] [cursor=pointer]
+                          - paragraph [ref=f13e1065]: OK
+          - region "Notifications alt+T":
+            - list
+  - contentinfo [ref=f13e72]:
+    - generic [ref=f13e73]:
+      - generic [ref=f13e74]: © 2026 Hexascore
+      - link "Termos" [ref=f13e75] [cursor=pointer]:
+        - /url: /pt-br/terms
+      - link "Privacidade" [ref=f13e76] [cursor=pointer]:
+        - /url: /pt-br/policy
+      - link "Contato" [ref=f13e77] [cursor=pointer]:
+        - /url: /pt-br/contact
+  - button "Open Next.js Dev Tools" [ref=f13e83] [cursor=pointer]
+  - alert [ref=f13e87]

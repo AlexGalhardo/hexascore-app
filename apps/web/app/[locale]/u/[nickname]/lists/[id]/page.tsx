@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { cache } from "react";
 import { ListForm } from "@/components/lists/list-form";
 import { DeleteListButton, ListEntryControls } from "@/components/lists/list-owner-controls";
+import { ListTypeBadge } from "@/components/lists/list-type-badge";
 import { ReportDialog } from "@/components/social/report-dialog";
 import { Notice } from "@/components/ui/form";
 import { asLocale } from "@/i18n/locale";
@@ -50,11 +51,12 @@ export default async function ListPage({ params }: Props) {
 			<header className="grid gap-2">
 				<Link
 					href={{ pathname: `/u/${encodeURIComponent(list.ownerNickname)}`, query: { tab: "lists" } }}
-					className="text-sm text-muted hover:underline"
+					className="text-sm text-muted"
 				>
 					{t("by", { nickname: list.ownerNickname })}
 				</Link>
 				<h1 className="font-serif text-3xl font-bold break-words">{list.title}</h1>
+				<ListTypeBadge type={list.type} label={tt(list.type)} />
 				{list.description ? <p className="whitespace-pre-line">{list.description}</p> : null}
 				<p className="text-sm text-muted">
 					{[t("itemCount", { count: list.items.length }), list.isPublic ? t("public") : t("private")].join(
@@ -74,7 +76,7 @@ export default async function ListPage({ params }: Props) {
 						>
 							<span className="w-8 font-mono text-sm tabular-nums text-muted">{i + 1}</span>
 							<div className="min-w-0 flex-1">
-								<Link href={itemHref(item.type, item.slug)} className="block truncate hover:underline">
+								<Link href={itemHref(item.type, item.slug)} className="block truncate">
 									{item.title}
 								</Link>
 								<span className="text-xs text-muted">{tt(item.type)}</span>
