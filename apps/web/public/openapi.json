@@ -197,6 +197,16 @@
             "description": "Sort field; prefix with `-` for descending. Unscored/undated items always come last.",
             "schema": {
               "default": "-popularity",
+              "x-enum-varnames": [
+                "POPULARITY_DESC",
+                "POPULARITY",
+                "SCORE_DESC",
+                "SCORE",
+                "RELEASE_DATE_DESC",
+                "RELEASE_DATE",
+                "RATING_COUNT_DESC",
+                "RATING_COUNT"
+              ],
               "type": "string",
               "enum": [
                 "-popularity",
@@ -619,6 +629,16 @@
             "description": "Sort field; prefix with `-` for descending. Unscored/undated items always come last.",
             "schema": {
               "default": "-popularity",
+              "x-enum-varnames": [
+                "POPULARITY_DESC",
+                "POPULARITY",
+                "SCORE_DESC",
+                "SCORE",
+                "RELEASE_DATE_DESC",
+                "RELEASE_DATE",
+                "RATING_COUNT_DESC",
+                "RATING_COUNT"
+              ],
               "type": "string",
               "enum": [
                 "-popularity",
@@ -1041,6 +1061,16 @@
             "description": "Sort field; prefix with `-` for descending. Unscored/undated items always come last.",
             "schema": {
               "default": "-popularity",
+              "x-enum-varnames": [
+                "POPULARITY_DESC",
+                "POPULARITY",
+                "SCORE_DESC",
+                "SCORE",
+                "RELEASE_DATE_DESC",
+                "RELEASE_DATE",
+                "RATING_COUNT_DESC",
+                "RATING_COUNT"
+              ],
               "type": "string",
               "enum": [
                 "-popularity",
@@ -1463,6 +1493,16 @@
             "description": "Sort field; prefix with `-` for descending. Unscored/undated items always come last.",
             "schema": {
               "default": "-popularity",
+              "x-enum-varnames": [
+                "POPULARITY_DESC",
+                "POPULARITY",
+                "SCORE_DESC",
+                "SCORE",
+                "RELEASE_DATE_DESC",
+                "RELEASE_DATE",
+                "RATING_COUNT_DESC",
+                "RATING_COUNT"
+              ],
               "type": "string",
               "enum": [
                 "-popularity",

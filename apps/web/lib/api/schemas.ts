@@ -211,9 +211,16 @@ export function listQuerySchema(type: ItemType, maxPageSize: number) {
 		min_score: scoreParam.optional().meta({ description: "Minimum community score (hides unscored items)." }),
 		max_score: scoreParam.optional().meta({ description: "Maximum community score (hides unscored items)." }),
 		...categoryFilters,
-		sort: z.enum(SORTS).default("-popularity").meta({
-			description: "Sort field; prefix with `-` for descending. Unscored/undated items always come last.",
-		}),
+		sort: z
+			.enum(SORTS)
+			.default("-popularity")
+			.meta({
+				description: "Sort field; prefix with `-` for descending. Unscored/undated items always come last.",
+				// Readable enum member names in generated SDKs (`SCORE_DESC` instead of `VALUE_2`).
+				"x-enum-varnames": SORTS.map((s) =>
+					s.startsWith("-") ? `${s.slice(1).toUpperCase()}_DESC` : s.toUpperCase(),
+				),
+			}),
 		limit: limitParam(maxPageSize),
 		cursor: z.string().max(512).optional().meta({ description: "`next_cursor` from the previous page." }),
 		locale: localeParam,
