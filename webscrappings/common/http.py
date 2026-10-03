@@ -19,10 +19,10 @@ HOST_INTERVALS: dict[str, float] = {
     "query.wikidata.org": 1.0,
     "www.wikidata.org": 0.2,
     "commons.wikimedia.org": 0.2,
-    # Wikimedia REST allows far more; 20 req/s per wiki stays polite with a contact User-Agent.
-    "en.wikipedia.org": 0.05,
-    "pt.wikipedia.org": 0.05,
-    "es.wikipedia.org": 0.05,
+    # Anonymous Wikimedia REST answers 429 well below its documented ceiling: 5 req/s per wiki stays clear of it.
+    "en.wikipedia.org": 0.2,
+    "pt.wikipedia.org": 0.2,
+    "es.wikipedia.org": 0.2,
     "openlibrary.org": 0.4,
     "store.steampowered.com": 1.6,
     "catalog.gog.com": 0.5,
@@ -94,6 +94,9 @@ class HttpClient:
                 return response
             delay = retry_after_seconds(response.headers.get("Retry-After"), time.time())
             delay = min(delay if delay is not None else 2**attempt, 300)
+            # Back off the whole host, not just this thread: concurrent workers would otherwise keep hitting it.
+            with self._lock:
+                self._last[host] = max(self._last.get(host, float("-inf")), self._clock() + delay)
             log.warning("%s %s -> %d, retry %d in %.0fs", method, url, response.status_code, attempt, delay)
             self._sleep(delay)
         raise AssertionError("unreachable")

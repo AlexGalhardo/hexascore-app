@@ -133,3 +133,19 @@ def test_keep_alive_pings_until_closed():
     thread.join(timeout=1)
     assert conn.pings >= 2
     assert not thread.is_alive()
+
+
+def test_rate_limited_response_pauses_the_whole_host() -> None:
+    now = [0.0]
+    sleeps: list[float] = []
+    responses = iter([httpx.Response(429, headers={"Retry-After": "30"}), httpx.Response(200, json={})])
+
+    def sleep(seconds: float) -> None:
+        sleeps.append(seconds)
+        now[0] += seconds
+
+    client = HttpClient(transport=httpx.MockTransport(lambda r: next(responses)), sleep=sleep, clock=lambda: now[0])
+    client.get_json("https://en.wikipedia.org/a")
+    # The retry waits Retry-After; the host slot was pushed forward, so no extra throttle sleep stacks on top.
+    assert sleeps[0] == 30
+    assert sum(sleeps) < 31
