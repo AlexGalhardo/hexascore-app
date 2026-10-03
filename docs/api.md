@@ -1,6 +1,6 @@
 # API pública /v1
 
-- Base `https://api.hexascore.com/v1` (proxy reescreve `api.<domínio>/v1/*` → `/api/v1/*` em `apps/web/proxy.ts`). Até existir o domínio próprio, a mesma API responde em `https://<deploy>/api/v1`. Auth `Authorization: Bearer hx_live_…` (chave exibida 1 vez, só hash sha256 no banco). Só leitura (`GET`).
+- Base `https://api.hexascore.app/v1` (proxy reescreve `api.<domínio>/v1/*` → `/api/v1/*` em `apps/web/proxy.ts`). A mesma API também responde em `https://<deploy>/api/v1`. Auth `Authorization: Bearer hx_live_…` (chave exibida 1 vez, só hash sha256 no banco). Só leitura (`GET`).
 
 | Rota | Uso |
 | --- | --- |

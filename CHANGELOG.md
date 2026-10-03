@@ -5,6 +5,10 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Changed
+
+- Default domain is now `hexascore.app` (API at `api.hexascore.app/v1`): OpenAPI servers/links, docs examples, CSP `connect-src`, SDK base URLs and READMEs. Production `NEXT_PUBLIC_APP_URL` and `BETTER_AUTH_URL` point at `https://hexascore.app`; `www.hexascore.app` redirects to the apex.
+
 ## [0.0.16] - 2026-10-03
 
 ### Added

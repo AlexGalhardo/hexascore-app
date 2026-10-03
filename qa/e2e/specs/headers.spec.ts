@@ -43,7 +43,7 @@ test.describe("security headers", () => {
 	test("Scalar allowances are scoped to the reference pages", async ({ request }) => {
 		const reference = (await request.get("/docs/reference")).headers()["content-security-policy"] ?? "";
 		const docs = (await request.get("/docs")).headers()["content-security-policy"] ?? "";
-		expect(reference).toContain("https://api.hexascore.com");
-		expect(docs).not.toContain("https://api.hexascore.com");
+		expect(reference).toContain("https://api.hexascore.app");
+		expect(docs).not.toContain("https://api.hexascore.app");
 	});
 });

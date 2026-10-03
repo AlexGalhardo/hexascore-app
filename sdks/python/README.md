@@ -1,6 +1,6 @@
 # hexascore (Python SDK)
 
-Typed Python client for the [Hexascore API](https://hexascore.com/docs), generated from
+Typed Python client for the [Hexascore API](https://hexascore.app/docs), generated from
 [`openapi.json`](../../apps/web/public/openapi.json) with
 [`openapi-python-client`](https://github.com/openapi-generators/openapi-python-client) **0.29.1** (pinned, run via
 `uvx`). Python ≥ 3.11, built on `httpx` + `attrs`. The package lives in [`hexascore/`](hexascore/) and is fully
@@ -18,7 +18,7 @@ from hexascore.api.games import get_game, list_games
 from hexascore.api.search import lookup_item
 from hexascore.models import ItemList, ListGamesSort, LookupItemSource, Problem
 
-client = AuthenticatedClient(base_url="https://api.hexascore.com/v1", token=os.environ["HEXASCORE_API_KEY"])
+client = AuthenticatedClient(base_url="https://api.hexascore.app/v1", token=os.environ["HEXASCORE_API_KEY"])
 
 with client as c:
     page = list_games.sync(client=c, sort=ListGamesSort.SCORE_DESC, limit=10, min_gameplay=80)
