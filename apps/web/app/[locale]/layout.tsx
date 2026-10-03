@@ -12,8 +12,10 @@ import { CookieBanner } from "@/components/layout/cookie-banner";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { QueryProvider } from "@/components/layout/query-provider";
+import { SandboxBanner } from "@/components/layout/sandbox-banner";
 import { routing } from "@/i18n/routing";
 import { APP_NAME, APP_URL } from "@/lib/config";
+import { env } from "@/lib/env";
 import { themeBootScript } from "@/lib/preferences";
 import "../globals.css";
 
@@ -34,6 +36,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 		metadataBase: new URL(APP_URL),
 		title: { default: APP_NAME, template: `%s · ${APP_NAME}` },
 		description: t("description"),
+		// Sandbox (fake users and ratings): never indexed, on top of robots.ts disallowing every path.
+		...(env.NEXT_PUBLIC_SANDBOX && { robots: { index: false, follow: false } }),
 	};
 }
 
@@ -58,6 +62,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 			<body className="min-h-dvh font-sans antialiased">
 				<NextIntlClientProvider>
 					<QueryProvider>
+						<SandboxBanner />
 						<Navbar />
 						<DeletionBanner />
 						<main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
