@@ -123,7 +123,7 @@ export default async function ErrorsPage(props: DocPageProps) {
 				return (
 					<section key={code} id={code} className="scroll-mt-20 border-t border-border py-5">
 						<h3 className="font-mono text-lg font-semibold">
-							<a href={`#${code}`} className="hover:underline">
+							<a href={`#${code}`}>
 								{status} {code}
 							</a>
 						</h3>

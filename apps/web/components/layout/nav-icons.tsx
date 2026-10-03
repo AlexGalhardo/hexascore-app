@@ -32,6 +32,33 @@ const PATHS = {
 			<circle cx="7.5" cy="7.5" r="1.5" />
 		</>
 	),
+	user: (
+		<>
+			<circle cx="12" cy="8" r="4" />
+			<path d="M4 21a8 8 0 0 1 16 0" />
+		</>
+	),
+	publicProfile: (
+		<>
+			<rect x="3" y="4" width="18" height="16" rx="2" />
+			<circle cx="9" cy="11" r="2.5" />
+			<path d="M5.5 17a3.5 3.5 0 0 1 7 0M15 10h3M15 14h3" />
+		</>
+	),
+	feed: (
+		<>
+			<path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16" />
+			<circle cx="5" cy="19" r="1" />
+		</>
+	),
+	key: (
+		<>
+			<circle cx="7.5" cy="15.5" r="4.5" />
+			<path d="m10.7 12.3 9.3-9.3M17 6l3 3M14 9l2 2" />
+		</>
+	),
+	admin: <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z" />,
+	logout: <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />,
 	language: (
 		<>
 			<circle cx="12" cy="12" r="10" />

@@ -32,6 +32,12 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Changed
+
+- Every link looks like a small button: padded and rounded, inverted colours on hover (black/white in light, white/black in dark), no underline effect (`globals.css`; `[data-plain]` opts out the wordmark and Scalar).
+- Navbar: "API Docs" label; the account button shows a user icon instead of the nickname initial; the account menu items carry icons.
+- `/profile` shows `@nickname` at the right of the title; the sign-up hint says the nickname is unique and cannot be changed later.
+
 ### Fixed
 
 - Catalog tables use a fixed layout: long titles and genre lists truncate instead of widening the page past the navbar container (no horizontal scroll).

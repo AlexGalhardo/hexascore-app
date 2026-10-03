@@ -64,7 +64,10 @@ export default async function ProfilePage({ params }: Props) {
 
 	return (
 		<div className="mx-auto flex max-w-2xl flex-col gap-8">
-			<h1 className="font-serif text-3xl font-bold">{t("title")}</h1>
+			<div className="flex flex-wrap items-baseline justify-between gap-2">
+				<h1 className="font-serif text-3xl font-bold">{t("title")}</h1>
+				<span className="font-mono text-lg text-muted">@{me.username}</span>
+			</div>
 			<Section title={t("details.title")}>
 				<DetailsForm name={me.name} email={me.email} nickname={me.username} />
 			</Section>

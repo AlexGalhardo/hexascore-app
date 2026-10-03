@@ -59,16 +59,11 @@ export default async function FeedPage({ params, searchParams }: Props) {
 							<ScoreBadge score={entry.overall} size="sm" label={ts("outOf", { score: entry.overall })} />
 							<div className="min-w-0">
 								<p className="truncate">
-									<Link
-										href={`/u/${encodeURIComponent(entry.nickname)}`}
-										className="font-semibold hover:underline"
-									>
+									<Link href={`/u/${encodeURIComponent(entry.nickname)}`} className="font-semibold">
 										{entry.nickname}
 									</Link>{" "}
 									{t("rated")}{" "}
-									<Link href={itemHref(entry.item.type, entry.item.slug)} className="hover:underline">
-										{entry.item.title}
-									</Link>
+									<Link href={itemHref(entry.item.type, entry.item.slug)}>{entry.item.title}</Link>
 								</p>
 								<p className="text-xs text-muted">
 									{tt(entry.item.type)} ·{" "}
@@ -100,10 +95,7 @@ export default async function FeedPage({ params, searchParams }: Props) {
 					<ul className="grid">
 						{suggestions.map((s) => (
 							<li key={s.nickname} className="flex min-h-11 items-center gap-3 border-t border-border">
-								<Link
-									href={`/u/${encodeURIComponent(s.nickname)}`}
-									className="font-medium hover:underline"
-								>
+								<Link href={`/u/${encodeURIComponent(s.nickname)}`} className="font-medium">
 									{s.nickname}
 								</Link>
 								<span className="ml-auto text-sm text-muted">

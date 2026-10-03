@@ -45,31 +45,34 @@ export function ApiReference({ loadingLabel, token, serverUrl }: Props) {
 		);
 	}
 	return (
-		<ApiReferenceReact
-			// Remount on theme/token change: Scalar reads these options once.
-			key={`${theme}:${token ?? ""}`}
-			configuration={{
-				url: "/openapi.json",
-				forceDarkModeState: theme,
-				hideDarkModeToggle: true,
-				withDefaultFonts: false,
-				telemetry: false,
-				persistAuth: false,
-				showDeveloperTools: "never",
-				// No third-party AI/MCP features: requests carry the user's key on /profile/api.
-				agent: { disabled: true },
-				mcp: { disabled: true },
-				defaultHttpClient: { targetKey: "shell", clientKey: "curl" },
-				...(serverUrl ? { servers: [{ url: serverUrl }] } : {}),
-				...(token
-					? {
-							authentication: {
-								preferredSecurityScheme: "bearerAuth",
-								securitySchemes: { bearerAuth: { token } },
-							},
-						}
-					: {}),
-			}}
-		/>
+		// data-plain: Scalar styles its own links; the global button-like link hover must not reach them.
+		<div data-plain>
+			<ApiReferenceReact
+				// Remount on theme/token change: Scalar reads these options once.
+				key={`${theme}:${token ?? ""}`}
+				configuration={{
+					url: "/openapi.json",
+					forceDarkModeState: theme,
+					hideDarkModeToggle: true,
+					withDefaultFonts: false,
+					telemetry: false,
+					persistAuth: false,
+					showDeveloperTools: "never",
+					// No third-party AI/MCP features: requests carry the user's key on /profile/api.
+					agent: { disabled: true },
+					mcp: { disabled: true },
+					defaultHttpClient: { targetKey: "shell", clientKey: "curl" },
+					...(serverUrl ? { servers: [{ url: serverUrl }] } : {}),
+					...(token
+						? {
+								authentication: {
+									preferredSecurityScheme: "bearerAuth",
+									securitySchemes: { bearerAuth: { token } },
+								},
+							}
+						: {}),
+				}}
+			/>
+		</div>
 	);
 }

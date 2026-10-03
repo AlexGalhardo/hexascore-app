@@ -10,12 +10,12 @@ import { ThemeToggle } from "./theme-toggle";
 import { UserMenu } from "./user-menu";
 
 const LINKS = [
-	{ href: "/games", key: "games" },
-	{ href: "/movies", key: "movies" },
-	{ href: "/series", key: "series" },
-	{ href: "/books", key: "books" },
-	{ href: "/docs", key: "api" },
-	{ href: "/pricing", key: "pricing" },
+	{ href: "/games", key: "games", icon: "games" },
+	{ href: "/movies", key: "movies", icon: "movies" },
+	{ href: "/series", key: "series", icon: "series" },
+	{ href: "/books", key: "books", icon: "books" },
+	{ href: "/docs", key: "apiDocs", icon: "api" },
+	{ href: "/pricing", key: "pricing", icon: "pricing" },
 ] as const;
 
 export async function Navbar() {
@@ -27,7 +27,7 @@ export async function Navbar() {
 				labels={{ search: t("openSearch"), menu: t("menu") }}
 				brand={
 					// The brand is final ("HexaScore"): two-tone wordmark, green "Hexa" + blue "Score".
-					<Link href="/" className="font-serif text-2xl font-extrabold tracking-tight">
+					<Link href="/" data-plain className="font-serif text-2xl font-extrabold tracking-tight">
 						<span className="text-emerald-700 dark:text-emerald-400">Hexa</span>
 						<span className="text-blue-600 dark:text-blue-400">Score</span>
 					</Link>
@@ -40,7 +40,6 @@ export async function Navbar() {
 						<ThemeToggle label={t("theme")} />
 						{user ? (
 							<UserMenu
-								initial={(user.username ?? user.name).charAt(0).toUpperCase() || "?"}
 								nickname={user.username}
 								admin={isAdmin(user)}
 								labels={{
@@ -50,6 +49,7 @@ export async function Navbar() {
 									logout: t("logout"),
 									feed: t("feed"),
 									publicProfile: t("publicProfile"),
+									admin: t("admin"),
 								}}
 							/>
 						) : (
@@ -72,9 +72,9 @@ export async function Navbar() {
 							<Link
 								key={l.key}
 								href={l.href}
-								className="flex min-h-11 items-center gap-2 text-muted underline-offset-4 hover:text-fg hover:underline sm:min-h-9 sm:gap-1.5"
+								className="flex min-h-11 items-center gap-2 text-muted sm:min-h-9 sm:gap-1.5"
 							>
-								<NavIcon name={l.key} />
+								<NavIcon name={l.icon} />
 								{t(l.key)}
 							</Link>
 						))}
