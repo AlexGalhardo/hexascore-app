@@ -20,6 +20,7 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ### Changed
 
+- Client-side fetches use TanStack Query (`@tanstack/react-query` 5.104.1, new dependency) through a `QueryProvider` in the `[locale]` layout: search autocomplete (`useQuery`), the user scores modal (`useInfiniteQuery`) and PIX status polling (`useQuery` + `refetchInterval`) replace hand-rolled `useEffect` + `fetch`; zod validation and timeouts kept. Server Components remain the default data path.
 - PIX checkout shows the QR code in a modal; once paid it cannot be closed for 10 seconds (visible, announced countdown).
 - Navbar: sticky, "HexaScore" wordmark (green "Hexa", blue "Score"), search fills the row up to the actions, only a "Log in" button (no "Sign up"), language menu last and always showing the current language, icon links (Games, Movies, Series, Books, API, Pricing) spread with `justify-between`; on mobile only the brand, a search button and a hamburger menu.
 - Search autocomplete shows the cover, type, year and final score of the 8 best matches.
