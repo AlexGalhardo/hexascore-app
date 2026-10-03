@@ -78,6 +78,12 @@
 		"passwordAlreadySet": "This account already has a password.",
 		"weakPassword": "The password does not meet the requirements.",
 		"notScheduled": "This account is not scheduled for deletion.",
+		"emailNotVerified": "Confirm your email first.",
+		"nicknameRequired": "Choose a nickname first.",
+		"nicknameTaken": "This nickname is already taken.",
+		"forbidden": "You cannot do that.",
+		"notFound": "Not found. It may have been removed.",
+		"limit": "You reached the limit for this.",
 		"server": "Something went wrong on our side. Try again."
 	}
 }

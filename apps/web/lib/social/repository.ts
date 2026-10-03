@@ -6,13 +6,20 @@ import { decodeCursor, encodeCursor, InvalidCursorError } from "@/lib/catalog/cu
 import type { Database } from "@/lib/db/client";
 import { user } from "@/lib/db/schema/auth";
 import { ITEM_TYPES, type ItemType, items, itemTranslations } from "@/lib/db/schema/catalog";
-import { follows, itemStatus, itemStatusValue, ratings } from "@/lib/db/schema/social";
+import { follows, itemStatus, type itemStatusValue, ratings } from "@/lib/db/schema/social";
+import { ITEM_STATUSES, type ItemStatus } from "./constants";
 
 // Pure data access for profiles, follows, feed and item status (same contract as lib/catalog/repository.ts:
 // `fn(db, …)` returning JSON-only DTOs). Pages call these directly — this data is per-user and not cached.
 
-export const ITEM_STATUSES = itemStatusValue.enumValues;
-export type ItemStatus = (typeof ITEM_STATUSES)[number];
+type SameStatuses = (typeof itemStatusValue.enumValues)[number] extends ItemStatus
+	? ItemStatus extends (typeof itemStatusValue.enumValues)[number]
+		? true
+		: never
+	: never;
+const _statusesMatch: SameStatuses = true;
+
+export { ITEM_STATUSES, type ItemStatus };
 export const itemStatusSchema = z.enum(ITEM_STATUSES);
 
 export type ItemRef = { id: string; type: ItemType; slug: string; title: string };

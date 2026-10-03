@@ -78,6 +78,12 @@
 		"passwordAlreadySet": "Esta cuenta ya tiene contraseña.",
 		"weakPassword": "La contraseña no cumple los requisitos.",
 		"notScheduled": "Esta cuenta no está programada para eliminarse.",
+		"emailNotVerified": "Primero confirma tu correo.",
+		"nicknameRequired": "Primero elige un nickname.",
+		"nicknameTaken": "Este nickname ya está en uso.",
+		"forbidden": "No puedes hacer eso.",
+		"notFound": "No encontrado. Puede que se haya eliminado.",
+		"limit": "Alcanzaste el límite para esto.",
 		"server": "Algo salió mal de nuestro lado. Vuelve a intentarlo."
 	}
 }

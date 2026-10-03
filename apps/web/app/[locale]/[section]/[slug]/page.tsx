@@ -150,7 +150,6 @@ export default async function ItemPage({ params }: Props) {
 						</div>
 					</div>
 					<div className="flex flex-wrap gap-2">
-						<RatingPanel itemId={item.id} />
 						<RatingsDialog itemId={item.id} categoryLabels={labels} />
 					</div>
 					<div className="grid gap-2">
@@ -168,6 +167,13 @@ export default async function ItemPage({ params }: Props) {
 					className="justify-self-center"
 				/>
 			</section>
+
+			<RatingPanel
+				itemId={item.id}
+				type={item.type}
+				labels={labels}
+				path={getPathname({ href: itemHref(item.type, item.slug), locale })}
+			/>
 
 			{external.length ? (
 				<section aria-labelledby="external" className="grid gap-2">

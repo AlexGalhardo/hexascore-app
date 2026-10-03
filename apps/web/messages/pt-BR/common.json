@@ -15,7 +15,9 @@
 		"profile": "Perfil",
 		"logout": "Sair",
 		"account": "Menu da conta",
-		"api": "API"
+		"api": "API",
+		"feed": "Feed",
+		"publicProfile": "Minha página"
 	},
 	"home": {
 		"title": "Todo jogo, filme, série e livro — avaliado pelas pessoas, categoria por categoria.",

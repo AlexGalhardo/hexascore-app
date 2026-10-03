@@ -15,7 +15,8 @@ export type ActionError =
 	| "limit"
 	| "server";
 
-export type ActionResult = { ok: true } | { ok: false; error: ActionError; fields?: string[] };
+export type ActionFailure = { ok: false; error: ActionError; fields?: string[] };
+export type ActionResult<T extends object = Record<never, never>> = ({ ok: true } & T) | ActionFailure;
 
-export const fail = (error: ActionError, fields?: string[]): ActionResult => ({ ok: false, error, fields });
+export const fail = (error: ActionError, fields?: string[]): ActionFailure => ({ ok: false, error, fields });
 export const ok: ActionResult = { ok: true };

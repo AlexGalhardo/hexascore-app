@@ -5,9 +5,10 @@ import type { Database } from "@/lib/db/client";
 import { user } from "@/lib/db/schema/auth";
 import { items } from "@/lib/db/schema/catalog";
 import { listItems, lists } from "@/lib/db/schema/social";
+import { LIST_LIMITS } from "./constants";
 import { displayName, type ItemRef, itemRefColumns, publicUser, titleJoin } from "./repository";
 
-export const LIST_LIMITS = { lists: 50, items: 500, title: 80, description: 500 } as const;
+export { LIST_LIMITS };
 
 export const listInputSchema = z.object({
 	title: z.string().trim().min(1).max(LIST_LIMITS.title),

@@ -1,0 +1,17 @@
+{
+	"ratings": {
+		"title": "Your rating",
+		"yourOverall": "Your overall score",
+		"overallHint": "The average of the six categories, rounded.",
+		"save": "Save rating",
+		"update": "Update rating",
+		"delete": "Delete rating",
+		"saving": "Saving…",
+		"saved": "Rating saved.",
+		"deleted": "Rating deleted.",
+		"loginToRate": "Log in to rate",
+		"chooseNickname": "Choose a nickname to rate",
+		"verifyToRate": "Confirm your email to rate items.",
+		"verifyLink": "Resend the confirmation email"
+	}
+}

@@ -1,0 +1,83 @@
+{
+	"social": {
+		"profile": {
+			"private": "Este perfil é privado.",
+			"privateOwner": "Perfil privado (só você vê esta página)",
+			"memberSince": "Membro desde {date}",
+			"counts": {
+				"game": "{count, plural, one {# jogo} other {# jogos}}",
+				"movie": "{count, plural, one {# filme} other {# filmes}}",
+				"series": "{count, plural, one {# série} other {# séries}}",
+				"book": "{count, plural, one {# livro} other {# livros}}"
+			},
+			"followers": "{count, plural, one {# seguidor} other {# seguidores}}",
+			"following": "{count} seguindo",
+			"averageGiven": "Nota média dada",
+			"follow": "Seguir",
+			"unfollow": "Deixar de seguir",
+			"sections": "Seções do perfil",
+			"tabs": { "ratings": "Avaliações", "status": "Status", "lists": "Listas" },
+			"sortBy": "Ordenar:",
+			"sorts": { "recent": "Mais recentes", "best": "Maiores notas", "worst": "Menores notas" },
+			"noRatings": "Nenhuma avaliação ainda.",
+			"emptyShelf": "Nada aqui ainda.",
+			"previous": "Anterior",
+			"next": "Próxima"
+		},
+		"status": {
+			"label": "Status",
+			"none": "Sem status",
+			"game": { "want": "Quero jogar", "in_progress": "Jogando", "completed": "Joguei", "dropped": "Abandonei" },
+			"movie": {
+				"want": "Quero assistir",
+				"in_progress": "Assistindo",
+				"completed": "Assisti",
+				"dropped": "Abandonei"
+			},
+			"series": {
+				"want": "Quero assistir",
+				"in_progress": "Assistindo",
+				"completed": "Assisti",
+				"dropped": "Abandonei"
+			},
+			"book": { "want": "Quero ler", "in_progress": "Lendo", "completed": "Li", "dropped": "Abandonei" },
+			"shelves": {
+				"want": "Quero",
+				"in_progress": "Em andamento",
+				"completed": "Concluídos",
+				"dropped": "Abandonados"
+			}
+		},
+		"report": {
+			"reportList": "Denunciar lista",
+			"reportUser": "Denunciar usuário",
+			"title": "Denunciar",
+			"sent": "Obrigado. Um moderador vai analisar.",
+			"reason": "Motivo",
+			"reasons": {
+				"spam": "Spam",
+				"offensive": "Conteúdo ofensivo",
+				"harassment": "Assédio",
+				"impersonation": "Falsidade ideológica",
+				"other": "Outro"
+			},
+			"details": "Detalhes (opcional)",
+			"submit": "Enviar denúncia",
+			"close": "Fechar"
+		},
+		"feed": {
+			"title": "Feed",
+			"rated": "avaliou",
+			"empty": "Seu feed está vazio. Siga pessoas para ver as avaliações delas aqui.",
+			"end": "Não há avaliações mais antigas.",
+			"older": "Avaliações mais antigas",
+			"suggestions": "Quem mais avalia",
+			"ratingCount": "{count, plural, one {# avaliação} other {# avaliações}}"
+		},
+		"onboarding": {
+			"title": "Escolha seu nickname",
+			"body": "Seu nickname é seu nome público em perfis, listas e nas notas da comunidade.",
+			"submit": "Salvar nickname"
+		}
+	}
+}

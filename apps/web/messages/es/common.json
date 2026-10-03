@@ -15,7 +15,9 @@
 		"profile": "Perfil",
 		"logout": "Cerrar sesión",
 		"account": "Menú de la cuenta",
-		"api": "API"
+		"api": "API",
+		"feed": "Feed",
+		"publicProfile": "Mi página"
 	},
 	"home": {
 		"title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",

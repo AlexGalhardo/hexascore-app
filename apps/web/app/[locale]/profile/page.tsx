@@ -40,6 +40,12 @@ export default async function ProfilePage({ params }: Props) {
 			locale,
 		});
 	}
+	if (!me.username) {
+		return redirect({
+			href: { pathname: "/onboarding", query: { next: getPathname({ href: "/profile", locale }) } },
+			locale,
+		});
+	}
 
 	const [credential, keys] = await Promise.all([
 		db

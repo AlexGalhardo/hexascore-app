@@ -4,8 +4,7 @@ import type { Database } from "@/lib/db/client";
 import { user } from "@/lib/db/schema/auth";
 import { lists, reports } from "@/lib/db/schema/social";
 
-export const REPORT_REASONS = ["spam", "offensive", "harassment", "impersonation", "other"] as const;
-export const REPORT_DETAILS_MAX = 500;
+import { REPORT_DETAILS_MAX, REPORT_REASONS } from "./constants";
 
 // Users are reported by nickname (the UI never sees user ids), lists by id.
 export const reportInputSchema = z.object({

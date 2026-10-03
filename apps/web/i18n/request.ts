@@ -15,6 +15,9 @@ export const NAMESPACES = [
 	"auth",
 	"account",
 	"contact",
+	"ratings",
+	"social",
+	"lists",
 ] as const;
 
 export default getRequestConfig(async ({ requestLocale }) => {

@@ -1,0 +1,35 @@
+{
+	"lists": {
+		"addToList": "Añadir a una lista",
+		"noLists": "Aún no tienes listas.",
+		"noPublicLists": "Aún no hay listas públicas.",
+		"newWithItem": "Nueva lista con este ítem",
+		"new": "Nueva lista",
+		"fieldTitle": "Título",
+		"fieldDescription": "Descripción",
+		"publicLabel": "Pública (cualquiera puede verla)",
+		"create": "Crear lista",
+		"created": "Lista creada.",
+		"save": "Guardar cambios",
+		"saved": "Lista guardada.",
+		"edit": "Editar lista",
+		"delete": "Eliminar lista",
+		"deleteConfirm": "¿Eliminar esta lista? No se puede deshacer.",
+		"remove": "Quitar",
+		"removeLabel": "Quitar {title} de la lista",
+		"moveUpLabel": "Subir {title}",
+		"moveDownLabel": "Bajar {title}",
+		"itemCount": "{count, plural, one {# ítem} other {# ítems}}",
+		"public": "Pública",
+		"private": "Privada",
+		"hidden": "Oculta por moderación",
+		"hiddenNotice": "Un moderador ocultó esta lista. Solo tú puedes verla.",
+		"by": "Lista de {nickname}",
+		"empty": "Esta lista está vacía.",
+		"emptyOwner": "Esta lista está vacía. Añade ítems desde la página de cualquier ítem.",
+		"errors": {
+			"title": "1–80 caracteres.",
+			"description": "Hasta 500 caracteres."
+		}
+	}
+}

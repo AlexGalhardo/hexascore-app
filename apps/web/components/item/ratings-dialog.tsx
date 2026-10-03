@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { z } from "zod";
 import { ScoreBadge } from "@/components/score/score-badge";
+import { Link } from "@/i18n/navigation";
 import { abbreviateLabel } from "@/lib/categories";
 
 const responseSchema = z.object({
@@ -87,7 +88,14 @@ export function RatingsDialog({ itemId, categoryLabels }: Props) {
 								<tbody>
 									{ratings.map((r) => (
 										<tr key={`${r.nickname}-${r.ratedAt}`} className="border-t border-border">
-											<td className="max-w-32 truncate py-2 pr-2">{r.nickname}</td>
+											<td className="max-w-32 truncate py-2 pr-2">
+												<Link
+													href={`/u/${encodeURIComponent(r.nickname)}`}
+													className="underline underline-offset-2"
+												>
+													{r.nickname}
+												</Link>
+											</td>
 											<td className="py-2 pr-2">
 												<ScoreBadge
 													score={r.overall}

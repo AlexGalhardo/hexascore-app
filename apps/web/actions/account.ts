@@ -10,7 +10,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db/client";
 import { session, user } from "@/lib/db/schema";
 import { getSessionUser } from "@/lib/session";
-import { nameSchema, passwordSchema } from "@/lib/validation";
+import { nameSchema, nicknameSchema, passwordSchema } from "@/lib/validation";
 
 export async function updateName(name: unknown): Promise<ActionResult> {
 	const me = await getSessionUser();
@@ -24,6 +24,29 @@ export async function updateName(name: unknown): Promise<ActionResult> {
 		return fail("server");
 	}
 	refresh();
+	return ok;
+}
+
+// Google sign-ups have no nickname yet (/onboarding); existing nicknames are never changed here.
+export async function setNickname(nickname: unknown): Promise<ActionResult> {
+	const me = await getSessionUser();
+	if (!me) return fail("unauthorized");
+	if (me.username) return fail("forbidden");
+	const parsed = nicknameSchema.safeParse(nickname);
+	if (!parsed.success) return fail("invalid", ["nickname"]);
+	try {
+		// The username plugin validates, normalizes (lowercase) and enforces uniqueness on /update-user.
+		await auth.api.updateUser({
+			body: { username: parsed.data, displayUsername: parsed.data },
+			headers: await headers(),
+		});
+	} catch (error) {
+		if (error instanceof APIError && error.body?.code === "USERNAME_IS_ALREADY_TAKEN") {
+			return fail("nicknameTaken", ["nickname"]);
+		}
+		console.error("[account] setNickname failed:", error);
+		return fail("server");
+	}
 	return ok;
 }
 
