@@ -57,6 +57,7 @@ export type ItemMeta = {
 	countries?: string[];
 	trailers?: Trailer[];
 	coverUrl?: string;
+	coverAttribution?: { source: string; license?: string; author?: string; url?: string };
 };
 
 export const items = pgTable(
