@@ -5,6 +5,14 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Added
+
+- E2E specs for the 0.3 flows (`qa/e2e/specs/ratings.spec.ts`, `social.spec.ts`, `admin.spec.ts`), replacing the `todo-0.3` placeholders: 6-category rating, edit and the 5-rating score threshold; item status and curated lists; public vs private profile; follow → `/feed`; report → admin resolves; `/admin` 404 for non-admins. DB helpers `createItem`, `createMember`, `insertRating`, `grantAdmin`.
+
+### Fixed
+
+- E2E signup spec waits out Better Auth's per-IP sign-up limit (429) instead of failing when parallel workers create accounts.
+
 ## [0.0.16] - 2026-10-03
 
 ### Added
