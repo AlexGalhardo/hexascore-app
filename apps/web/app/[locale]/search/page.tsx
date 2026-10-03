@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { z } from "zod";
+import { CategoryLabel } from "@/components/catalog/category-label";
 import { ItemTable } from "@/components/catalog/item-table";
 import { asLocale } from "@/i18n/locale";
 import { Link } from "@/i18n/navigation";
@@ -36,7 +37,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
 	})).filter((g) => g.items.length);
 
 	return (
-		<div className="grid gap-6">
+		<div className="grid grid-cols-1 gap-6">
 			<header className="grid gap-3">
 				<h1 className="font-serif text-3xl font-bold">{q ? t("resultsFor", { q }) : t("title")}</h1>
 				<search>
@@ -50,7 +51,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
 							type="search"
 							defaultValue={q}
 							maxLength={100}
-							className="min-h-11 flex-1 rounded-md border border-border bg-bg px-3"
+							className="min-h-11 min-w-0 flex-1 rounded-md border border-border bg-bg px-3"
 						/>
 						{type ? <input type="hidden" name="type" value={type} /> : null}
 						<button type="submit" className="min-h-11 rounded-md bg-fg px-4 text-sm font-medium text-bg">
@@ -67,7 +68,11 @@ export default async function SearchPage({ params, searchParams }: Props) {
 								aria-current={itemType === type ? "page" : undefined}
 								className="inline-flex min-h-11 items-center rounded-md border border-border px-3 aria-[current=page]:bg-fg aria-[current=page]:text-bg"
 							>
-								{itemType ? tcat(`title.${itemType}`) : t("all")}
+								{itemType ? (
+									<CategoryLabel type={itemType}>{tcat(`title.${itemType}`)}</CategoryLabel>
+								) : (
+									t("all")
+								)}
 							</Link>
 						))}
 					</nav>
@@ -79,12 +84,14 @@ export default async function SearchPage({ params, searchParams }: Props) {
 			{q.length >= 2 && !groups.length ? <p className="text-muted">{t("noResults", { q })}</p> : null}
 
 			{groups.map((group) => (
-				<section key={group.type} aria-labelledby={`results-${group.type}`} className="grid gap-2">
+				<section key={group.type} aria-labelledby={`results-${group.type}`} className="grid grid-cols-1 gap-2">
 					<h2
 						id={`results-${group.type}`}
 						className={`border-l-4 pl-2 font-serif text-xl font-bold ${SECTION_ACCENT[group.type].border}`}
 					>
-						{tcat(`title.${group.type}`)}
+						<CategoryLabel type={group.type} size="lg">
+							{tcat(`title.${group.type}`)}
+						</CategoryLabel>
 					</h2>
 					<ItemTable items={group.items} type={group.type} />
 				</section>

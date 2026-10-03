@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
+import { CategoryLabel } from "@/components/catalog/category-label";
 import { ChipList } from "@/components/item/chip-list";
 import { RatingPanel } from "@/components/item/rating-panel";
 import { RatingsDialog } from "@/components/item/ratings-dialog";
@@ -84,8 +85,14 @@ export default async function ItemPage({ params }: Props) {
 		: ts("radarEmpty");
 	const external = buildExternalLinks(item.type, item.externalIds, scores);
 	const { meta } = item;
+	// The category is already the labelled link above the title, so this line only carries year, genres, platforms.
 	const details: [string, ReactNode][] = [
-		[t("fields.type"), tt(item.type)],
+		[
+			t("fields.type"),
+			<CategoryLabel key="type" type={item.type}>
+				{tt(item.type)}
+			</CategoryLabel>,
+		],
 		[
 			t("fields.releaseDate"),
 			item.releaseDate
@@ -133,7 +140,7 @@ export default async function ItemPage({ params }: Props) {
 								href={`/${SECTION_PATHS[item.type]}`}
 								className={`justify-self-start text-xs font-semibold uppercase tracking-wide ${accent.text}`}
 							>
-								{tcat(`title.${item.type}`)}
+								<CategoryLabel type={item.type}>{tcat(`title.${item.type}`)}</CategoryLabel>
 							</Link>
 							<h1 className="font-serif text-3xl font-bold leading-tight break-words sm:text-5xl">
 								{item.title}
