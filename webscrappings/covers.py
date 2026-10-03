@@ -26,7 +26,7 @@ from psycopg.types.json import Jsonb
 from pydantic import BaseModel, ValidationError
 
 from common.cli import setup_logging
-from common.db import connect
+from common.db import busy, connect
 from common.http import HttpClient
 
 log = logging.getLogger("covers")
@@ -258,7 +258,7 @@ def run(
         while chunk := list(islice(pending, workers * 8)):
             patches = [p for p in pool.map(patch_for, chunk) if p]
             if patches:
-                with conn.cursor() as cur:
+                with busy(conn), conn.cursor() as cur:
                     cur.executemany(
                         "UPDATE items SET meta = (meta - 'coverAttribution' - 'coverThumbUrl') || %s WHERE id = %s",
                         patches,
