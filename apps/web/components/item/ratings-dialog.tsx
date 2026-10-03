@@ -1,6 +1,7 @@
 "use client";
 
 import { Dialog } from "@base-ui/react/dialog";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { z } from "zod";
@@ -19,37 +20,38 @@ const responseSchema = z.object({
 	),
 	next_cursor: z.string().nullable(),
 });
-type Rating = z.infer<typeof responseSchema>["data"][number];
+type RatingsPage = z.infer<typeof responseSchema>;
 
 type Props = { itemId: string; categoryLabels: string[] };
 
 export function RatingsDialog({ itemId, categoryLabels }: Props) {
 	const t = useTranslations("item");
 	const ts = useTranslations("score");
-	const [ratings, setRatings] = useState<Rating[]>([]);
-	const [cursor, setCursor] = useState<string | null>(null);
-	const [state, setState] = useState<"idle" | "loading" | "error" | "done">("idle");
-
-	async function load(next: string | null): Promise<void> {
-		setState("loading");
-		try {
-			const url = `/api/items/${itemId}/ratings${next ? `?cursor=${encodeURIComponent(next)}` : ""}`;
-			const response = await fetch(url, { signal: AbortSignal.timeout(10_000) });
-			if (!response.ok) throw new Error(`HTTP ${response.status}`);
-			const body = responseSchema.parse(await response.json());
-			setRatings((prev) => (next ? [...prev, ...body.data] : body.data));
-			setCursor(body.next_cursor);
-			setState("done");
-		} catch (error) {
-			console.error("[ratings] load failed", error);
-			setState("error");
-		}
-	}
+	const [opened, setOpened] = useState(false);
+	const query = useInfiniteQuery({
+		queryKey: ["item-ratings", itemId],
+		queryFn: async ({ pageParam, signal }): Promise<RatingsPage> => {
+			try {
+				const url = `/api/items/${itemId}/ratings${pageParam ? `?cursor=${encodeURIComponent(pageParam)}` : ""}`;
+				const response = await fetch(url, { signal: AbortSignal.any([signal, AbortSignal.timeout(10_000)]) });
+				if (!response.ok) throw new Error(`HTTP ${response.status}`);
+				return responseSchema.parse(await response.json());
+			} catch (error) {
+				if (!signal.aborted) console.error("[ratings] load failed", error);
+				throw error;
+			}
+		},
+		initialPageParam: null as string | null,
+		getNextPageParam: (last) => last.next_cursor,
+		enabled: opened,
+	});
+	const ratings = query.data?.pages.flatMap((page) => page.data) ?? [];
+	const state = query.isFetching ? "loading" : query.isError ? "error" : query.isSuccess ? "done" : "idle";
 
 	return (
 		<Dialog.Root
 			onOpenChange={(open) => {
-				if (open && state === "idle") void load(null);
+				if (open) setOpened(true);
 			}}
 		>
 			<Dialog.Trigger className="inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-surface">
@@ -126,10 +128,10 @@ export function RatingsDialog({ itemId, categoryLabels }: Props) {
 							</p>
 						) : null}
 					</div>
-					{(cursor && state === "done") || state === "error" ? (
+					{(query.hasNextPage && state === "done") || state === "error" ? (
 						<button
 							type="button"
-							onClick={() => void load(state === "error" && !ratings.length ? null : cursor)}
+							onClick={() => void (query.data ? query.fetchNextPage() : query.refetch())}
 							className="mt-3 min-h-11 self-center rounded-md border border-border px-4 text-sm"
 						>
 							{t("loadMore")}
