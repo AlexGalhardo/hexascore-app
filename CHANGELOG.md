@@ -5,6 +5,10 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Fixed
+
+- Account anonymization (`lib/account-purge.ts`) now revokes the user's API keys and cancels a live Stripe subscription before wiping the account; if the cancellation fails or Stripe is not configured, the account stays scheduled and the daily cron retries.
+
 ## [0.0.16] - 2026-10-03
 
 ### Added
