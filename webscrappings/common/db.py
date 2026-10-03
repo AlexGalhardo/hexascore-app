@@ -1,6 +1,8 @@
 import hashlib
 import json
+import logging
 import os
+import threading
 from collections.abc import Iterable
 from dataclasses import dataclass
 from typing import Any
@@ -24,11 +26,38 @@ def canonical_hash(payload: Any) -> str:
     return hashlib.sha256(canonical.encode()).hexdigest()
 
 
+KEEPALIVE_SECONDS = 60
+log = logging.getLogger(__name__)
+
+
+def keep_alive(conn: psycopg.Connection, interval: float = KEEPALIVE_SECONDS) -> threading.Thread:
+    """Pings the connection while it is open. Fetchers spend minutes on HTTP between writes (a SPARQL
+    selection, rate-limited enrichment) and Neon drops idle connections, so the next INSERT would fail.
+    psycopg connections serialize calls with an internal lock, so pinging from a thread is safe."""
+
+    def ping() -> None:
+        while not conn.closed:
+            threading.Event().wait(interval)
+            if conn.closed:
+                return
+            try:
+                conn.execute("SELECT 1")
+            except psycopg.Error as error:
+                log.warning("keep-alive ping failed: %s", error)
+                return
+
+    thread = threading.Thread(target=ping, name="db-keepalive", daemon=True)
+    thread.start()
+    return thread
+
+
 def connect() -> psycopg.Connection:
     url = os.environ.get("DATABASE_URL")
     if not url:
         raise SystemExit("DATABASE_URL is not set")
-    return psycopg.connect(url)
+    conn = psycopg.connect(url, keepalives=1, keepalives_idle=30)
+    keep_alive(conn)
+    return conn
 
 
 UPSERT_SQL = """
