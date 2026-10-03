@@ -1,6 +1,6 @@
 # @hexascore/sdk
 
-Typed TypeScript client for the [Hexascore API](https://hexascore.com/docs): community scores (0–100, six
+Typed TypeScript client for the [Hexascore API](https://hexascore.app/docs): community scores (0–100, six
 categories per item) for games, movies, TV series and books. Generated from
 [`openapi.json`](../../apps/web/public/openapi.json) with [`@hey-api/openapi-ts`](https://heyapi.dev); works in
 Node 18+, Bun, Deno and edge runtimes (uses `fetch`).

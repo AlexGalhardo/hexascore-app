@@ -11,7 +11,7 @@
   },
   "files": ["dist", "README.md"],
   "keywords": ["hexascore", "api", "games", "movies", "series", "books", "ratings"],
-  "homepage": "https://hexascore.com/docs",
+  "homepage": "https://hexascore.app/docs",
   "publishConfig": { "access": "public" },
   "scripts": {
     "sdk:generate": "openapi-ts",

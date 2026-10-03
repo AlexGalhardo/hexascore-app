@@ -4,19 +4,19 @@
     "title": "Hexascore API",
     "version": "1.0.0",
     "summary": "Community scores for games, movies, TV series and books.",
-    "description": "Read-only REST API over the Hexascore catalog: every item carries a 0–100 community score and six per-category averages.\n\n- **Auth**: `Authorization: Bearer hx_live_…` — create a key at `/profile/api`.\n- **Format**: JSON, `snake_case` fields, ISO 8601 dates. Errors are RFC 9457 `application/problem+json` with a stable `code`.\n- **Pagination**: cursor based — pass `next_cursor` back as `cursor`.\n- **Plans**: Free = 100 requests in total, 10 items per page, 1 req/s. Pro and Business have monthly quotas, 100 items per page and prepaid credits.\n\nGuides: https://hexascore.com/docs",
+    "description": "Read-only REST API over the Hexascore catalog: every item carries a 0–100 community score and six per-category averages.\n\n- **Auth**: `Authorization: Bearer hx_live_…` — create a key at `/profile/api`.\n- **Format**: JSON, `snake_case` fields, ISO 8601 dates. Errors are RFC 9457 `application/problem+json` with a stable `code`.\n- **Pagination**: cursor based — pass `next_cursor` back as `cursor`.\n- **Plans**: Free = 100 requests in total, 10 items per page, 1 req/s. Pro and Business have monthly quotas, 100 items per page and prepaid credits.\n\nGuides: https://hexascore.app/docs",
     "contact": {
       "name": "Hexascore",
-      "url": "https://hexascore.com/docs"
+      "url": "https://hexascore.app/docs"
     },
     "license": {
       "name": "Proprietary",
-      "url": "https://hexascore.com/terms"
+      "url": "https://hexascore.app/terms"
     }
   },
   "servers": [
     {
-      "url": "https://api.hexascore.com/v1",
+      "url": "https://api.hexascore.app/v1",
       "description": "Production"
     },
     {
@@ -57,7 +57,7 @@
   ],
   "externalDocs": {
     "description": "Guides",
-    "url": "https://hexascore.com/docs"
+    "url": "https://hexascore.app/docs"
   },
   "paths": {
     "/games": {
@@ -2941,7 +2941,7 @@
               "$ref": "#/components/schemas/Problem"
             },
             "example": {
-              "type": "https://hexascore.com/docs/errors#bad_request",
+              "type": "https://hexascore.app/docs/errors#bad_request",
               "title": "Invalid request",
               "status": 400,
               "detail": "Invalid query parameter, cursor, or a `limit` above your plan's page size.",
@@ -2967,7 +2967,7 @@
               "$ref": "#/components/schemas/Problem"
             },
             "example": {
-              "type": "https://hexascore.com/docs/errors#unauthorized",
+              "type": "https://hexascore.app/docs/errors#unauthorized",
               "title": "Missing or invalid API key",
               "status": 401,
               "detail": "Missing, malformed, unknown or revoked API key.",
@@ -2993,7 +2993,7 @@
               "$ref": "#/components/schemas/Problem"
             },
             "example": {
-              "type": "https://hexascore.com/docs/errors#payment_required",
+              "type": "https://hexascore.app/docs/errors#payment_required",
               "title": "Quota exhausted",
               "status": 402,
               "detail": "Quota (and credits, on paid plans) exhausted. Upgrade or buy credits.",
@@ -3019,7 +3019,7 @@
               "$ref": "#/components/schemas/Problem"
             },
             "example": {
-              "type": "https://hexascore.com/docs/errors#forbidden",
+              "type": "https://hexascore.app/docs/errors#forbidden",
               "title": "Forbidden",
               "status": 403,
               "detail": "The account that owns the key is suspended.",
@@ -3045,7 +3045,7 @@
               "$ref": "#/components/schemas/Problem"
             },
             "example": {
-              "type": "https://hexascore.com/docs/errors#not_found",
+              "type": "https://hexascore.app/docs/errors#not_found",
               "title": "Not found",
               "status": 404,
               "detail": "No such item, type or route.",
@@ -3077,7 +3077,7 @@
               "$ref": "#/components/schemas/Problem"
             },
             "example": {
-              "type": "https://hexascore.com/docs/errors#rate_limited",
+              "type": "https://hexascore.app/docs/errors#rate_limited",
               "title": "Too many requests",
               "status": 429,
               "detail": "Too many requests per second. Wait `Retry-After` seconds.",
@@ -3103,7 +3103,7 @@
               "$ref": "#/components/schemas/Problem"
             },
             "example": {
-              "type": "https://hexascore.com/docs/errors#internal_error",
+              "type": "https://hexascore.app/docs/errors#internal_error",
               "title": "Internal error",
               "status": 500,
               "detail": "Unexpected error. The request was not counted against your quota.",
@@ -3135,7 +3135,7 @@
               "$ref": "#/components/schemas/Problem"
             },
             "example": {
-              "type": "https://hexascore.com/docs/errors#service_unavailable",
+              "type": "https://hexascore.app/docs/errors#service_unavailable",
               "title": "Service unavailable",
               "status": 503,
               "detail": "Temporarily unavailable. Retry after `Retry-After` seconds.",

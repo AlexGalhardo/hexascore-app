@@ -6,7 +6,7 @@ export const generateMetadata = docMetadata("changelog");
 const DEPRECATION = `HTTP/1.1 200 OK
 Deprecation: @1798761600
 Sunset: Tue, 01 Jun 2027 00:00:00 GMT
-Link: <https://hexascore.com/docs/changelog>; rel="deprecation"`;
+Link: <https://hexascore.app/docs/changelog>; rel="deprecation"`;
 
 export default async function ChangelogPage(props: DocPageProps) {
 	await enterDocPage(props);

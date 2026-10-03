@@ -50,7 +50,7 @@ const response = `{
       "genres": ["Adventure"],
       "platforms": ["NES"],
       "cover_url": null,
-      "url": "https://hexascore.com/games/the-legend-of-zelda"
+      "url": "https://hexascore.app/games/the-legend-of-zelda"
     }
   ],
   "next_cursor": "eyJzIjoiLXNjb3JlIiwidiI6IjkwIi..."
@@ -91,8 +91,8 @@ export default async function QuickstartPage(props: DocPageProps) {
 			</P>
 			<Code title="cURL">{curl}</Code>
 			<Note>
-				Until the <C>api.</C> domain is live, use the same API on the website host: <C>{`${APP_URL}/api/v1`}</C>
-				. Paths, parameters and responses are identical.
+				The same API also answers on the website host: <C>{`${APP_URL}/api/v1`}</C>. Paths, parameters and
+				responses are identical.
 			</Note>
 			<Code title="JavaScript (Node 18+, Bun, Deno)">{js}</Code>
 			<Code title="Python (requests)">{python}</Code>

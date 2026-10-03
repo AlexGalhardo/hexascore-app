@@ -57,7 +57,7 @@ Valores ficam em config (não hardcoded). PIX: 1 mês ou 12 meses (12 pelo preç
 | Fontes | **APIs + Wikidata, sem scraping**. IMDb/MC/RT/HLTB/Goodreads/Skoob/Epic = só deep-link via ID do Wikidata. TMDB/IGDB fora da v1 (exigem licença comercial) | Risco jurídico mínimo |
 | Sequência | **Horizontal**: as 4 seções avançam juntas, camada por camada | Escolha do dono |
 | Monorepo | **Bun workspaces** (`apps/web`, `sdks/ts`), **sem Turborepo** | Só 1 consumidor TS real; Turborepo entra com ≥ 3 pacotes JS com dependência de build |
-| API | Dentro do Next (`app/api/v1`), `api.hexascore.com` → rewrite para `/api/v1` | 1 projeto Vercel |
+| API | Dentro do Next (`app/api/v1`), `api.hexascore.app` → rewrite para `/api/v1` | 1 projeto Vercel |
 | Banco | Postgres-only. Prod: **Neon** (branch por preview). Dev/testes: **PGlite**. Paridade/seed/QA: **Docker Postgres 18**. SQLite removido | 1 schema Drizzle, sem dupla manutenção |
 | Busca | Postgres nativo: `pg_trgm` + `unaccent` + `tsvector` por idioma | Suficiente para 100k–1M itens, zero infra |
 | Rate limit/cota | **Upstash Redis** + flush diário para Postgres | Não sobrecarregar o Neon com 1 write/request |
@@ -165,7 +165,7 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 
 Ações do dono (não automatizáveis):
 
-- [ ] Nome/domínio final e domínio verificado no Resend (hoje `onboarding@resend.dev` só entrega para o dono da conta).
+- [ ] Nome/domínio final e domínio verificado no Resend (domínio padrão `hexascore.app` comprado na Vercel em 2026-10-03, com `api.` e `www.` → apex; falta verificar no Resend e trocar `EMAIL_FROM`) (hoje `onboarding@resend.dev` só entrega para o dono da conta).
 - [ ] Chaves live do Stripe e da AbacatePay (hoje sandbox) e teste real de checkout + estorno.
 - [ ] Credenciais npm/PyPI para publicar os SDKs.
 - [ ] Confirmar a carga completa de 100k itens (limite de armazenamento do Neon free; avaliar plano pago).
