@@ -69,6 +69,37 @@ export const itemStatus = pgTable(
 	(t) => [primaryKey({ columns: [t.userId, t.itemId] }), index("item_status_user_idx").on(t.userId, t.status)],
 );
 
+// Crowdsourced "time to beat" for games (one row per user and game, styles optional). Minutes, so the 0.5 h input
+// step stays an integer. Only written while the user's status is `completed`; leaving it deletes the row.
+export const timeToBeat = pgTable(
+	"time_to_beat",
+	{
+		userId: text()
+			.notNull()
+			.references(() => user.id, { onDelete: "cascade" }),
+		itemId: uuid()
+			.notNull()
+			.references(() => items.id, { onDelete: "cascade" }),
+		mainMinutes: integer(),
+		extrasMinutes: integer(),
+		completionistMinutes: integer(),
+		createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+		updatedAt: timestamp({ withTimezone: true })
+			.notNull()
+			.defaultNow()
+			.$onUpdate(() => new Date()),
+	},
+	(t) => [
+		primaryKey({ columns: [t.userId, t.itemId] }),
+		index("time_to_beat_item_idx").on(t.itemId),
+		check(
+			"time_to_beat_range",
+			sql`(main_minutes is null or main_minutes between 30 and 600000) and (extras_minutes is null or extras_minutes between 30 and 600000) and (completionist_minutes is null or completionist_minutes between 30 and 600000)`,
+		),
+		check("time_to_beat_any", sql`coalesce(main_minutes, extras_minutes, completionist_minutes) is not null`),
+	],
+);
+
 export const follows = pgTable(
 	"follows",
 	{

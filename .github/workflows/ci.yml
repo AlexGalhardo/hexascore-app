@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       # Dummy but valid for apps/web/lib/env.ts (zod); optional integrations stay off because their keys are empty.
-      NEXT_PUBLIC_APP_NAME: Hexascore
+      NEXT_PUBLIC_APP_NAME: HexaScore
       NEXT_PUBLIC_APP_URL: http://localhost:3000
       BETTER_AUTH_URL: http://localhost:3000
       BETTER_AUTH_SECRET: ci-only-better-auth-secret-0123456789abcdef

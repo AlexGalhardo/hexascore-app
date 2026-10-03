@@ -60,7 +60,7 @@ export function PasswordSection({ hasPassword }: { hasPassword: boolean }) {
 	}
 
 	return (
-		<form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
+		<form method="post" onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
 			{!hasPassword && <p className="text-sm text-muted">{t("password.setBody")}</p>}
 			{feedback && <Notice tone={feedback.tone}>{feedback.text}</Notice>}
 			{hasPassword && (

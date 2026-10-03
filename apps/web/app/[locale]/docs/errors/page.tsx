@@ -11,7 +11,7 @@ Content-Type: application/problem+json
 X-Request-Id: 5f0c8d3e-4b7a-4f43-9a51-2a8c4f3f9b10
 
 {
-  "type": "https://hexascore.com/docs/errors#bad_request",
+  "type": "https://hexascore.app/docs/errors#bad_request",
   "title": "Invalid request",
   "status": 400,
   "detail": "One or more query parameters are invalid.",

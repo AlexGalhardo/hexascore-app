@@ -57,7 +57,7 @@ Valores ficam em config (não hardcoded). PIX: 1 mês ou 12 meses (12 pelo preç
 | Fontes | **APIs + Wikidata, sem scraping**. IMDb/MC/RT/HLTB/Goodreads/Skoob/Epic = só deep-link via ID do Wikidata. TMDB/IGDB fora da v1 (exigem licença comercial) | Risco jurídico mínimo |
 | Sequência | **Horizontal**: as 4 seções avançam juntas, camada por camada | Escolha do dono |
 | Monorepo | **Bun workspaces** (`apps/web`, `sdks/ts`), **sem Turborepo** | Só 1 consumidor TS real; Turborepo entra com ≥ 3 pacotes JS com dependência de build |
-| API | Dentro do Next (`app/api/v1`), `api.hexascore.com` → rewrite para `/api/v1` | 1 projeto Vercel |
+| API | Dentro do Next (`app/api/v1`), `api.hexascore.app` → rewrite para `/api/v1` | 1 projeto Vercel |
 | Banco | Postgres-only. Prod: **Neon** (branch por preview). Dev/testes: **PGlite**. Paridade/seed/QA: **Docker Postgres 18**. SQLite removido | 1 schema Drizzle, sem dupla manutenção |
 | Busca | Postgres nativo: `pg_trgm` + `unaccent` + `tsvector` por idioma | Suficiente para 100k–1M itens, zero infra |
 | Rate limit/cota | **Upstash Redis** + flush diário para Postgres | Não sobrecarregar o Neon com 1 write/request |
@@ -147,15 +147,17 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 
 ### 0.6 — Hardening
 - [x] Seed 10k usuários sintéticos com notas realistas (`unnest` colunar, ~7 min para 10k/100k/2,2M no Docker; `docs/testing.md`)
-- [~] Playwright E2E completo + axe no gate `dev` → `main` (`qa/e2e`, `qa.yml`) — feito; agente QA, Schemathesis, ZAP, k6 e specs E2E do 0.3 pendentes
+- [~] Playwright E2E completo + axe (incluindo specs do 0.3), k6 (p95 + 429/402), Schemathesis e OWASP ZAP (falha em High) no gate `dev` → `main` (`qa/e2e`, `qa/k6`, `qa/schemathesis`, `qa/zap`, `qa.yml`) — feitos; faltam secrets `QA_API_KEY` (Pro/Business) e `QA_FREE_API_KEY` no repo e o agente QA
 - [~] Auditoria OWASP em `docs/security.md`, CSP com nonce, Flags (`pix-checkout`, `public-api-signup`) — feitos; Firewall documentado, falta aplicar no dashboard
 - [~] Performance (Core Web Vitals no Speed Insights), a11y — Analytics + Speed Insights no layout, axe em todas as páginas públicas; leitura dos CWV pendente (precisa de tráfego)
 - **Verificar**: gate `dev` → `main` todo verde; ZAP sem alertas High; p95 da API < 300 ms no k6.
 
 ### 1.0.0 — Launch
-- [ ] Nome/domínio finais, `APP_NAME`, i18n revisado
-- [ ] Termos/política revisados, avisos de afiliado e licenças
+- [ ] Nome/domínio finais, `APP_NAME`
+- [x] i18n revisado (paridade de chaves e parágrafos legais testada, sem codinome nos textos, e-mails de auth traduzidos)
+- [x] Termos/política revisados, avisos de afiliado e licenças (crédito de capa na página do item; revisão por advogado segue em Pendências)
 - [ ] Bootstrap de 100k itens em produção, Stripe live, AbacatePay live
+- [x] Tempo para zerar colaborativo (jogos, substitui o scraping do HowLongToBeat): relatos de quem marcou "Jogado", mediana por estilo (≥ 3 relatos) na página e em `ItemDetail.time_to_beat` na API
 - **Verificar**: smoke em produção; checkout real de R$ mínimo + estorno; release `v1.0.0` publicada.
 
 ---
@@ -164,7 +166,7 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 
 Ações do dono (não automatizáveis):
 
-- [ ] Nome/domínio final e domínio verificado no Resend (hoje `onboarding@resend.dev` só entrega para o dono da conta).
+- [ ] Nome/domínio final e domínio verificado no Resend (domínio padrão `hexascore.app` comprado na Vercel em 2026-10-03, com `api.` e `www.` → apex; falta verificar no Resend e trocar `EMAIL_FROM`) (hoje `onboarding@resend.dev` só entrega para o dono da conta).
 - [ ] Chaves live do Stripe e da AbacatePay (hoje sandbox) e teste real de checkout + estorno.
 - [ ] Credenciais npm/PyPI para publicar os SDKs.
 - [ ] Confirmar a carga completa de 100k itens (limite de armazenamento do Neon free; avaliar plano pago).

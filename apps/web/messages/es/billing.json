@@ -12,6 +12,10 @@
 			"maxItems": "Hasta {count} elementos por solicitud",
 			"rate": "{count} solicitudes por segundo",
 			"creditsOnly": "Puede comprar créditos extra",
+			"quotaLabel": "Cuota",
+			"pageSizeLabel": "Elementos por solicitud",
+			"rateLabel": "Límite de solicitudes",
+			"creditsLabel": "Créditos",
 			"creditsTitle": "Créditos extra",
 			"creditsBody": "+{count} solicitudes que no caducan, usadas después de la cuota mensual. Solo Pro y Business.",
 			"pixNote": "¿Pagas con PIX (BRL)? Elige 1 mes o 12 meses por el precio de 10.",
@@ -67,6 +71,11 @@
 				"failed": "El pago falló. Genera un código nuevo."
 			},
 			"newCode": "Código nuevo",
+			"close": "Cerrar",
+			"closeIn": "{seconds, plural, one {Podrás cerrar en # segundo} other {Podrás cerrar en # segundos}}",
+			"sandboxPay": "PAGAR PIX SANDBOX",
+			"sandboxWait": "Espera {seconds}s",
+			"sandboxNote": "Modo sandbox: simula el pago, no se mueve dinero.",
 			"errors": {
 				"unauthenticated": "Inicia sesión de nuevo para continuar.",
 				"unverified": "Confirma tu correo antes de pagar.",
@@ -78,6 +87,8 @@
 				"plan_conflict": "PIX solo renueva tu plan actual. Espera a que termine para cambiar de plan.",
 				"plan_required": "Los créditos extra son para planes Pro y Business activos.",
 				"no_customer": "Aún no tienes una cuenta de facturación con tarjeta.",
+				"not_found": "No se encontró este cobro PIX.",
+				"not_pending": "Este cobro PIX ya no está esperando el pago.",
 				"server": "Algo salió mal. Inténtalo de nuevo en un minuto."
 			}
 		},

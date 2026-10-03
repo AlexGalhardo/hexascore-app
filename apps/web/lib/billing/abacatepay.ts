@@ -87,13 +87,14 @@ export async function checkPixQrCode(id: string): Promise<PixProviderStatus> {
 	return data.status;
 }
 
-/** Dev keys only: marks the charge as paid and fires the webhook, like a real payment. */
-export async function simulatePixPayment(id: string): Promise<void> {
-	await call(
+/** Dev keys only (production keys get an error): marks the charge as paid and fires the webhook, like a real payment. */
+export async function simulatePixPayment(id: string): Promise<PixProviderStatus> {
+	const data = await call(
 		`/transparents/simulate-payment?id=${encodeURIComponent(id)}`,
 		{ method: "POST", body: "{}" },
-		z.unknown(),
+		checkSchema,
 	);
+	return data.status;
 }
 
 /** Constant-time string compare that does not leak the length (both sides hashed first). */

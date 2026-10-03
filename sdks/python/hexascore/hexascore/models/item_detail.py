@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from ..models.item_detail_external_ids import ItemDetailExternalIds
     from ..models.item_detail_trailers_item import ItemDetailTrailersItem
     from ..models.synopsis import Synopsis
+    from ..models.time_to_beat import TimeToBeat
 
 
 T = TypeVar("T", bound="ItemDetail")
@@ -54,6 +55,7 @@ class ItemDetail:
         pages (int | None):
         seasons (int | None):
         episodes (int | None):
+        time_to_beat (None | TimeToBeat): Games only; `null` for other types.
     """
 
     id: UUID
@@ -80,9 +82,11 @@ class ItemDetail:
     pages: int | None
     seasons: int | None
     episodes: int | None
+    time_to_beat: None | TimeToBeat
 
     def to_dict(self) -> dict[str, Any]:
         from ..models.synopsis import Synopsis  # noqa: PLC0415
+        from ..models.time_to_beat import TimeToBeat  # noqa: PLC0415
 
         id = str(self.id)
 
@@ -150,6 +154,12 @@ class ItemDetail:
         episodes: int | None
         episodes = self.episodes
 
+        time_to_beat: dict[str, Any] | None
+        if isinstance(self.time_to_beat, TimeToBeat):
+            time_to_beat = self.time_to_beat.to_dict()
+        else:
+            time_to_beat = self.time_to_beat
+
         field_dict: dict[str, Any] = {}
 
         field_dict.update(
@@ -178,6 +188,7 @@ class ItemDetail:
                 "pages": pages,
                 "seasons": seasons,
                 "episodes": episodes,
+                "time_to_beat": time_to_beat,
             }
         )
 
@@ -189,6 +200,7 @@ class ItemDetail:
         from ..models.item_detail_external_ids import ItemDetailExternalIds  # noqa: PLC0415
         from ..models.item_detail_trailers_item import ItemDetailTrailersItem  # noqa: PLC0415
         from ..models.synopsis import Synopsis  # noqa: PLC0415
+        from ..models.time_to_beat import TimeToBeat  # noqa: PLC0415
 
         d = dict(src_dict)
         id = UUID(d.pop("id"))
@@ -305,6 +317,21 @@ class ItemDetail:
 
         episodes = _parse_episodes(d.pop("episodes"))
 
+        def _parse_time_to_beat(data: object) -> None | TimeToBeat:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                time_to_beat_type_0 = TimeToBeat.from_dict(data)
+
+                return time_to_beat_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(None | TimeToBeat, data)
+
+        time_to_beat = _parse_time_to_beat(d.pop("time_to_beat"))
+
         item_detail = cls(
             id=id,
             type_=type_,
@@ -330,6 +357,7 @@ class ItemDetail:
             pages=pages,
             seasons=seasons,
             episodes=episodes,
+            time_to_beat=time_to_beat,
         )
 
         return item_detail

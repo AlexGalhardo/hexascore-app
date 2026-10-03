@@ -1,11 +1,17 @@
 ---
 name: hexascore-qa
-description: Run Hexascore QA layers (Playwright + axe E2E in qa/e2e, security headers/CSP checks, scale seed) locally against next start and in CI (.github/workflows/qa.yml). Use before merging dev into main, when touching proxy.ts / security headers / CSP, or when adding a page, form or flow that needs E2E coverage.
+description: Run Hexascore QA layers (Playwright + axe E2E in qa/e2e, security headers/CSP checks, k6 / Schemathesis / OWASP ZAP API gates in qa/{k6,schemathesis,zap}, scale seed) locally against next start and in CI (.github/workflows/qa.yml). Use before merging dev into main, when touching proxy.ts / security headers / CSP, or when adding a page, form or flow that needs E2E coverage.
 ---
 
 # Hexascore QA
 
-Reference: `docs/testing.md` → "E2E + a11y (0.6)". Layers that exist today: E2E + axe (`qa/e2e`), header/CSP unit tests (`apps/web/lib/security-headers.test.ts`). Schemathesis, ZAP, k6 and the exploratory QA agent are **not built yet** (0.6 gaps in `PLAN.md`).
+Reference: `docs/testing.md` → "E2E + a11y (0.6)" and "API: k6, Schemathesis e ZAP (0.6)". Layers: E2E + axe (`qa/e2e`), header/CSP unit tests (`apps/web/lib/security-headers.test.ts`), k6 / Schemathesis / ZAP (`qa/*/run.sh`, Docker images pinned in each script). The exploratory QA agent is **not built yet** (0.6 gap in `PLAN.md`).
+
+## API gates (k6, Schemathesis, ZAP)
+
+- `QA_BASE_URL=http://localhost:3100 QA_DOCKER_BASE_URL=http://host.docker.internal:3100 QA_API_KEY=… qa/{k6,schemathesis,zap}/run.sh` (the Docker variable only on Docker Desktop). `QA_API_KEY` must be Pro/Business: Free = 100 requests for life at 1 req/s. Locally: insert an `api_keys` row (sha256 of the key) and an active `subscriptions` row instead of going through checkout.
+- k6 + Schemathesis + ZAP share the key and its per-second limit: never run them in parallel (CI chains them). `QA_FREE_API_KEY` is spent once by the 402 check.
+- A Schemathesis/ZAP finding is a bug until proven otherwise; tune only with a written reason (`schemathesis.toml` comments, ZAP `alertFilter` job).
 
 ## Local run (Docker Postgres, never PGlite with `next start`)
 
@@ -30,4 +36,4 @@ Reference: `docs/testing.md` → "E2E + a11y (0.6)". Layers that exist today: E2
 
 ## CI
 
-`.github/workflows/qa.yml` on PR `dev` → `main` and `workflow_dispatch` (`url` input): waits for the Vercel preview of the head SHA, runs the suite with `x-vercel-protection-bypass`. Secrets: `VERCEL_AUTOMATION_BYPASS_SECRET` (exists), `E2E_DATABASE_URL` + `E2E_BETTER_AUTH_SECRET` (needed for `@auth` specs). Advisory gate (branch protection off by owner decision) — do not merge with it red. Validate the workflow: `MSYS_NO_PATHCONV=1 docker run --rm -v "$(pwd -W):/repo" -w /repo rhysd/actionlint:1.7.12`.
+`.github/workflows/qa.yml` on PR `dev` → `main` and `workflow_dispatch` (`url` input): waits for the Vercel preview of the head SHA, runs the suite with `x-vercel-protection-bypass`. Secrets: `VERCEL_AUTOMATION_BYPASS_SECRET` (exists), `E2E_DATABASE_URL` + `E2E_BETTER_AUTH_SECRET` (needed for `@auth` specs), `QA_API_KEY` (Pro/Business key on the preview's database; k6 and Schemathesis skip without it) and `QA_FREE_API_KEY` (k6 402 check). Jobs `k6` → `schemathesis` → `zap` run in sequence next to `e2e`. Advisory gate (branch protection off by owner decision) — do not merge with it red. Validate the workflow: `MSYS_NO_PATHCONV=1 docker run --rm -v "$(pwd -W):/repo" -w /repo rhysd/actionlint:1.7.12`.

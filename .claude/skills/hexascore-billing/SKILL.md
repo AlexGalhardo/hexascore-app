@@ -50,7 +50,7 @@ stripe listen --api-key "$STRIPE_SECRET_KEY" --forward-to localhost:3000/api/web
 ```
 
 1. `/pt-br/profile/api/checkout` → PIX → "Gerar código PIX" (row in `pix_charges`, status `pending`).
-2. Simulate the payment (dev keys only):
+2. Simulate the payment (dev keys only): with `ABACATEPAY_SANDBOX=true` in `.env.local`, click "PAGAR PIX SANDBOX" in the QR modal (`simulatePixPaymentAction`), or by hand:
    ```bash
    curl -X POST "https://api.abacatepay.com/v2/transparents/simulate-payment?id=<provider_ref>" \
      -H "Authorization: Bearer $ABACATEPAY_API_KEY"

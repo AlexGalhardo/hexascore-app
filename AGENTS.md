@@ -27,7 +27,7 @@ Codename `hexascore`; final brand name is pending.
   - `hexascore-release` — cut or backfill releases (tags, GitHub releases, CHANGELOG, release-please manifest).
   - `hexascore-catalog` — catalog repository/cache layers, Next 16 caching without `cacheComponents`, PGlite tests, dev seed.
   - `hexascore-api` — public API v1: add an endpoint (zod DTO → OpenAPI registry → route via `apiRoute` → route test → regenerate `openapi.json` + SDKs).
-  - `hexascore-qa` — QA layers: Playwright + axe E2E (`qa/e2e`) against `next start` or the preview, CSP/security headers, scale seed, `qa.yml` gate.
+  - `hexascore-qa` — QA layers: Playwright + axe E2E (`qa/e2e`) against `next start` or the preview, CSP/security headers, k6 / Schemathesis / OWASP ZAP API gates (`qa/*/run.sh`), scale seed, `qa.yml` gate.
 - Record notable changes in `CHANGELOG.md` (Keep a Changelog).
 
 ## Project skills

@@ -29,3 +29,7 @@ Thumbs.db
 
 .vercel
 .env*
+
+# Google service account keys (never commit)
+hexascore-*.json
+*-service-account*.json
