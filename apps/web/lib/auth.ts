@@ -2,8 +2,10 @@ import { passkey } from "@better-auth/passkey";
 import { APIError, betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { createAuthMiddleware } from "better-auth/api";
+
 import { nextCookies } from "better-auth/next-js";
 import { admin, twoFactor, username } from "better-auth/plugins";
+import { createElement } from "react";
 import { ActionEmail } from "@/emails/action-email";
 import { BOT_PROTECTED_AUTH_PATHS, isBotRequest } from "./bot";
 import { APP_NAME, APP_URL } from "./config";
@@ -45,7 +47,8 @@ export const auth = betterAuth({
 			await sendEmail(
 				user.email,
 				`${APP_NAME}: reset your password`,
-				ActionEmail({
+				// createElement (not a direct call) keeps `url` on the element props, which the dev email log prints.
+				createElement(ActionEmail, {
 					appName: APP_NAME,
 					heading: "Reset your password",
 					body: "Someone asked to reset the password of this account. If it was not you, ignore this email.",
@@ -62,7 +65,7 @@ export const auth = betterAuth({
 			await sendEmail(
 				user.email,
 				`${APP_NAME}: confirm your email`,
-				ActionEmail({
+				createElement(ActionEmail, {
 					appName: APP_NAME,
 					heading: "Confirm your email",
 					body: "Confirm your email address to rate items and create API keys.",

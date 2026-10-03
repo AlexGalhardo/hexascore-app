@@ -1,6 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
+import { createElement } from "react";
 import { ContactEmail } from "@/emails/contact-email";
 import type { ActionResult } from "@/lib/action-result";
 import { isBotRequest } from "@/lib/bot";
@@ -25,7 +26,11 @@ export async function sendContactMessage(_prev: ActionResult | null, form: FormD
 		},
 		notify: async (message) => {
 			if (!env.CONTACT_INBOX) return;
-			await sendEmail(env.CONTACT_INBOX, `${APP_NAME} contact: ${message.subject}`, ContactEmail(message));
+			await sendEmail(
+				env.CONTACT_INBOX,
+				`${APP_NAME} contact: ${message.subject}`,
+				createElement(ContactEmail, message),
+			);
 		},
 	});
 }
