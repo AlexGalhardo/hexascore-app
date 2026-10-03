@@ -81,7 +81,7 @@
 				"description": "As requisições saem do seu navegador para este deploy e contam na sua cota. A chave fica só nesta página — nunca é salva nem registrada em log.",
 				"keyLabel": "Chave de API para o “Testar”",
 				"apply": "Usar chave",
-				"keyHint": "Cole uma chave completa (hx_live_…). Uma chave recém-criada é preenchida automaticamente."
+				"keyHint": "Cole uma chave completa (hx_live_…) e clique em “Usar chave” para abrir a referência interativa. Uma chave recém-criada já vem preenchida."
 			}
 		}
 	}

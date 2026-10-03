@@ -44,7 +44,6 @@ export function ApiConsole({ keys, children }: { keys: ApiKeyView[]; children: R
 			form.reset();
 			setCreated(result.key);
 			setTryKey(result.key);
-			setAppliedKey(result.key);
 			router.refresh();
 		});
 	}
@@ -215,9 +214,12 @@ export function ApiConsole({ keys, children }: { keys: ApiKeyView[]; children: R
 				<p id="try-key-hint" className="text-xs text-muted">
 					{t("tryIt.keyHint")}
 				</p>
-				<div className="rounded-lg border border-border">
-					<ApiReference loadingLabel={td("loading")} token={appliedKey} serverUrl="/api/v1" />
-				</div>
+				{/* Mounted only on demand: Scalar scrolls the window to its own hash routes when it loads. */}
+				{appliedKey && (
+					<div className="rounded-lg border border-border">
+						<ApiReference loadingLabel={td("loading")} token={appliedKey} serverUrl="/api/v1" />
+					</div>
+				)}
 			</section>
 
 			<dialog

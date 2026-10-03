@@ -81,7 +81,7 @@
 				"description": "Las solicitudes salen de tu navegador hacia este despliegue y cuentan en tu cuota. La clave solo vive en esta página: nunca se guarda ni se registra.",
 				"keyLabel": "Clave de API para “Probar”",
 				"apply": "Usar clave",
-				"keyHint": "Pega una clave completa (hx_live_…). Una clave recién creada se rellena automáticamente."
+				"keyHint": "Pega una clave completa (hx_live_…) y pulsa “Usar clave” para abrir la referencia interactiva. Una clave recién creada ya viene rellenada."
 			}
 		}
 	}

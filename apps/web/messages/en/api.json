@@ -81,7 +81,7 @@
 				"description": "Requests run from your browser against this deployment and count against your quota. The key stays in this page only — it is never saved or logged.",
 				"keyLabel": "API key for “Try it”",
 				"apply": "Use key",
-				"keyHint": "Paste a full key (hx_live_…). A key you just created is filled in automatically."
+				"keyHint": "Paste a full key (hx_live_…) and press “Use key” to open the interactive reference. A key you just created is filled in for you."
 			}
 		}
 	}
