@@ -1,0 +1,69 @@
+[     305ms] [LOG] [Fast Refresh] done in 175ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[     517ms] [LOG] [Fast Refresh] done in 175ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[     812ms] [LOG] [Fast Refresh] done in 175ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    2250ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    2363ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    3753ms] [ERROR] Can't perform a React state update on a component that hasn't mounted yet. This indicates that you have a side-effect in your render function that asynchronously tries to update the component. Move this work to useEffect instead. @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:1057
+[    4455ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <InnerScrollHandlerNew focusAndScrollRef={{scrollRef:null, ...}} cacheNode={{rsc:Promise, ...}}>
+      <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+        <LoadingBoundary name="/" loading={null}>
+          <HTTPAccessFallbackBoundary notFound={<SegmentViewNode>} forbidden={undefined} unauthorized={undefined}>
+            <HTTPAccessFallbackErrorBoundary pathname="/pt-br/games" notFound={<SegmentViewNode>} forbidden={undefined} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <InnerLayoutRouter url="/pt-br/games" tree={[...]} params={{locale:"pt-BR"}} ...>
+                    <SegmentViewNode type="layout" pagePath="[locale]/l...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <script>
+                      <script>
+                      <script>
+                      <script>
+                      <script>
+                      <script>
+                      <script>
+                      <script>
+                      <script>
+                      <LocaleLayout>
+                        <html lang="pt-BR" suppressHydrationWarning={true} className="source_ser...">
+                          <head>
+                            <script
++                             nonce="DmdjudxZmNFr4QsnxRx98Q=="
+-                             nonce="a4qMhh3OTidVk7oFrZW9Og=="
+                              dangerouslySetInnerHTML={{__html:"(function(..."}}
+                            >
+                          ...
+                  ...
+      ...
+ @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:1057
+[    4493ms] [LOG] %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    4493ms] [LOG] %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {route: /pt-br/[section], path: /pt-br/games} @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    4493ms] [LOG] %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {route: /pt-br/[section], path: /pt-br/games} @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    4494ms] [LOG] %c[Vercel Web Analytics]%c [view] http://localhost:3000/pt-br/games color: rgb(120, 120, 120) color: inherit {o: http://localhost:3000/pt-br/games, sv: 0.1.3, sdkn: @vercel/analytics/next, sdkv: 2.0.1, ts: 1791036874366} /_vercel/insights/view @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    4494ms] [LOG] %c[Vercel Web Analytics]%c [view] http://localhost:3000/pt-br/games color: rgb(120, 120, 120) color: inherit {o: http://localhost:3000/pt-br/games, sv: 0.1.3, sdkn: @vercel/analytics/next, sdkv: 2.0.1, ts: 1791036874367} /_vercel/insights/view @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    4495ms] [LOG] %c[Vercel Speed Insights]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    7876ms] [LOG] [Fast Refresh] done in 924ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    8542ms] [LOG] [Fast Refresh] done in 924ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    8890ms] [LOG] [Fast Refresh] done in 1942ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    9098ms] [LOG] [Fast Refresh] done in 1942ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    9555ms] [LOG] [Fast Refresh] done in 1942ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[   15024ms] [LOG] [Fast Refresh] done in 913ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[   15693ms] [LOG] [Fast Refresh] done in 913ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[   19098ms] [LOG] [Fast Refresh] done in 917ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[   19748ms] [LOG] [Fast Refresh] done in 917ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
