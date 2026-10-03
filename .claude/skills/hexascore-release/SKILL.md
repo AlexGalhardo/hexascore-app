@@ -7,6 +7,10 @@ description: Cut or backfill Hexascore releases (semver tags, GitHub releases, C
 
 Every `feat`/`fix` that reaches `main` must end up in a GitHub release. Versions started at `v0.0.1`; before 1.0 every release bumps the patch (`bump-patch-for-minor-pre-major`).
 
+## Merge commit titles (important)
+
+release-please only reads commits between HEAD and the last release in date order, so commits of a long-lived branch merged with a hidden type (`chore: merge ...`) are skipped. Title every merge into `dev`/`main` with the user-facing type of its content, e.g. `feat(social): merge ratings, profiles and admin` or `fix(api): merge quota fixes`. If a release was still missed, publish it with the backfill steps below.
+
 ## Normal flow
 
 1. Merge `dev` into `main` (fast-forward) and push.

@@ -5,6 +5,8 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+## [0.0.15] - 2026-10-03
+
 ### Added
 
 - Ratings: save/delete with verified email, nickname and not banned; one transaction locks the item row and recomputes `rating_count`/`score`/`score_c1..c6`; rating panel with six keyboard-accessible score inputs and live overall.
@@ -134,7 +136,8 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 - Files inherited from the previous project (old plan, docs, Prisma setup scripts, tests and workflows).
 
-[Unreleased]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.14...HEAD
+[Unreleased]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.15...HEAD
+[0.0.15]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.14...v0.0.15
 [0.0.14]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.13...v0.0.14
 [0.0.13]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.12...v0.0.13
 [0.0.12]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.11...v0.0.12
