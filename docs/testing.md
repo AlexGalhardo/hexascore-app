@@ -91,6 +91,26 @@ bunx playwright test --project=desktop-light   # um projeto; --last-failed para 
 ### Seed em escala
 
 `bun lib/db/seed.ts --users 10000 --items 100000 --batch 1000` em Docker Postgres 18 (Docker Desktop/WSL2, Windows 11): **~7,3 min** (437 s: 10k usuários 1,5 s; ~105 s por tipo de 25k itens; recálculo das estatísticas 16 s) → 100k itens, **2.175.836 avaliações**, mediana 27 / p90 965 avaliações por usuário (pool de usuários ativos), 99% dos itens com ≥ 5 avaliações. As avaliações entram em `unnest` colunar de 20k linhas (9 parâmetros por statement) com `synchronous_commit off`; ~25% do tempo é geração em JS (faker por avaliação). Idempotente: rodar de novo faz upsert das mesmas linhas.
+
+### Sandbox (dev.hexascore.app)
+
+O sandbox roda num **branch Neon copiado da produção** depois do bootstrap de ~100k itens: catálogo real, usuários/avaliações/listas fictícios. Dados fictícios existem **só nesse branch**, nunca na produção.
+
+1. Criar o branch (console Neon ou `neonctl branches create --name sandbox --parent <branch de produção>`) e pegar a connection string (`neonctl connection-string sandbox`).
+2. Rodar o seed sobre os itens existentes (em `apps/web`, com `DATABASE_URL` do branch):
+   ```bash
+   SEED_TARGET=sandbox bun lib/db/seed.ts --existing-items --users 10000 --batch 1000
+   # se a cópia já tem > 50 usuários reais verificados: acrescente --i-know-this-is-sandbox
+   ```
+   `--existing-items` **não cria nem altera itens** (só `rating_count`/`score`/`score_c_*`): cria os usuários seed, avalia os itens do banco em lotes keyset por id (o catálogo nunca fica inteiro na memória; o rank de popularidade por tipo vem de `row_number()` no Postgres) com a mesma curva Zipf do seed de fixture aplicada ao rank (~2M avaliações em 10k × 100k), qualidade por item derivada do hash do id, viés por usuário e atividade heavy-tailed como antes; recalcula as estatísticas em SQL no mesmo lote (fórmula de `lib/ratings.ts`). Depois, por lote de usuários, SQL set-based: status (70% concluído, 15% em andamento, 10% abandonado; "quero" a partir das avaliações do vizinho), time to beat para metade dos jogos concluídos (30–600000 min, só com status `completed`), 2–21 follows por usuário enviesados para os power raters, e listas (1/3 dos pares usuário×tipo com 5+ avaliações; 1–10 por tipo = `LIST_LIMITS.perType`; ids `md5('seed-list:…')`; até 25 itens do mesmo tipo, os mais bem avaliados pelo dono). Idempotente: rodar de novo converge nas mesmas linhas.
+3. Deploy do sandbox com `DATABASE_URL` do branch e `NEXT_PUBLIC_SANDBOX=true`: faixa fixa (não dispensável, `role="status"`) acima da navbar em en/pt-BR/es, `<meta name="robots" content="noindex, nofollow">` e `robots.txt` com `Disallow: /` (além do bloqueio que já vale fora de `VERCEL_ENV=production`). Depois do seed: `POST /api/cron/revalidate` `{"tags":["catalog"]}`.
+4. Reset: `SEED_TARGET=sandbox bun lib/db/seed.ts --purge` apaga todos os usuários seed (cascade em avaliações, status, time to beat, follows e listas) e recalcula as estatísticas de todos os itens em lotes. Para recomeçar do zero com o catálogo atual da produção, `neonctl branches reset sandbox --parent` é mais rápido.
+
+**Marcador**: usuário seed = id `seed-user-NNNNNN` **e** e-mail `seed-user-NNNNNN@example.test`; todo dado social fictício pertence a um deles. O `--purge` exige os dois.
+
+**Guarda** (`lib/db/seed-guard.ts`, testada em `seed-guard.test.ts`), antes de abrir conexão: `VERCEL_ENV=production` → recusa sempre; `DATABASE_URL` vazio (PGlite) ou host `localhost`/`127.0.0.1`/`::1` → ok; qualquer outro host só com `SEED_TARGET=sandbox` (único valor aceito). Depois de conectar (seed, não purge): recusa se houver **> 50 usuários verificados fora do marcador** (id não `seed-user-*` e e-mail fora de domínio `.test`, que cobre E2E) sem `--i-know-this-is-sandbox`, com a explicação no terminal.
+
+Medição local (Docker Postgres 18 no Windows, 2026-10-03): 5k itens + `--existing-items --users 2000 --batch 1000` = **~60–76 s** (205k avaliações ~30–44 s; status/time to beat/follows/listas ~30 s, metade nos triggers de FK de `item_status`); rerun ~33 s; `--purge` ~2–4 s. Volume e tempo escalam ~linear com as avaliações: **10k × 100k ≈ 2M avaliações → estimativa de ~12–15 min** local. No Neon a rede pesa pouco (poucos statements por lote de 1000 itens/usuários); o que manda é o tamanho do compute.
 ## Comandos
 
 ```bash
@@ -107,7 +127,7 @@ bun run dev
 ```
 
 - Testes de repositório usam `createTestDatabase()` (`apps/web/lib/db/testing.ts`): PGlite em memória com todas as migrations aplicadas, sem tocar em `.pglite/`. Cada arquivo cria o seu banco no `beforeAll` (~2 s).
-- O seed é determinístico (faker 10.6.0, seed fixa; cada item depende só de `(tipo, índice)`), idempotente (upserts) e recusa rodar com `VERCEL_ENV=production`. Usuários `seed-user-NNNNNN@example.test`; ids de trailer começam com `FAKE` (não existem no YouTube).
+- O seed é determinístico (faker 10.6.0, seed fixa; cada item depende só de `(tipo, índice)`), idempotente (upserts) e passa pela guarda de alvo (ver "Sandbox" acima: produção nunca, remoto só com `SEED_TARGET=sandbox`). Usuários `seed-user-NNNNNN@example.test`; ids de trailer começam com `FAKE` (não existem no YouTube).
 - Smoke manual: `/`, `/games`, `/pt-br/movies?sort=-score`, uma página de item nos 3 idiomas, `/es/search?q=house`, slug inexistente (404), `GET /api/items/<id>/ratings`, `GET /api/search/suggest?q=...`, `POST /api/cron/revalidate` com `Authorization: Bearer $CRON_SECRET`.
 
 ## API pública (0.4)
