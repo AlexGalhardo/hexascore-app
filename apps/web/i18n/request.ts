@@ -4,7 +4,18 @@ import { routing } from "./routing";
 
 // One file per namespace (messages/<locale>/<namespace>.json) keeps parallel work conflict-free.
 // Add new namespaces here; a missing file fails the build instead of rendering raw keys.
-export const NAMESPACES = ["common", "errors", "billing", "categories", "catalog", "item", "search"] as const;
+export const NAMESPACES = [
+	"common",
+	"errors",
+	"billing",
+	"categories",
+	"catalog",
+	"item",
+	"search",
+	"auth",
+	"account",
+	"contact",
+] as const;
 
 export default getRequestConfig(async ({ requestLocale }) => {
 	const requested = await requestLocale;

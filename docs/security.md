@@ -7,6 +7,10 @@ Auditoria viva. Revisar a cada milestone; cada mitigação aponta para o código
 | Superfície | Entrada não confiável | Proteções |
 | --- | --- | --- |
 | Server Actions (`actions/`) | form data | sessão via `getSessionUser()`, zod, BotID nos fluxos públicos |
+| `actions/account.ts` (nome, definir senha, perfil privado, agendar/cancelar exclusão) | argumentos da action | exige sessão; alvo sempre é o usuário da sessão; zod (`nameSchema`, `passwordSchema`, `z.boolean()`); `setPassword` só no servidor; exclusão faz sign-out e apaga todas as sessões |
+| `actions/contact.ts` | form data | BotID; usuário logado tem nome/e-mail tirados da sessão (body ignorado); `contactSchema`; rate limit 5/h por usuário ou IP na tabela `rate_limit` |
+| Better Auth `/api/auth/*` | JSON | origin check, rate limit em banco (429), hook de senha em todo endpoint que aceita senha, BotID em `/sign-up/email`, `/sign-in/email`, `/sign-in/username`; verificação de e-mail obrigatória; recuperação e reenvio sempre respondem igual (sem enumeração) |
+| `/api/cron/purge-accounts` | header `Authorization` | `Bearer $CRON_SECRET` comparado em tempo constante (sha256 + `timingSafeEqual`); anonimiza só contas com `deletion_scheduled_at` < agora − 30 dias |
 | API pública `/api/v1` | query string, header `Authorization` | hash da chave, rate limit + cota (Upstash), zod, só leitura |
 | Webhook Stripe `POST /api/webhooks/stripe` | body bruto + `Stripe-Signature` | `constructEventAsync` (tolerância de 5 min), 400 em assinatura inválida, idempotência por `event.id` em `processed_events` na mesma transação dos efeitos, estado da assinatura relido da API (eventos fora de ordem), crédito com `ref` único = id da Checkout Session; 503 com log se `STRIPE_WEBHOOK_SECRET` faltar |
 | Webhook AbacatePay `POST /api/webhooks/abacatepay` | body bruto, `?webhookSecret=`, `X-Webhook-Signature` | secret da URL e HMAC-SHA256 base64 (chave pública da AbacatePay) comparados em tempo constante → 401; zod só nos campos lidos; idempotência por `id` do evento + transição `pending → paid`; valor pago tem de bater com `amount_cents` gravado |
@@ -36,6 +40,8 @@ Auditoria viva. Revisar a cada milestone; cada mitigação aponta para o código
 | Risco | Motivo |
 | --- | --- |
 | Contas múltiplas para multiplicar a cota Free | limitado por e-mail verificado + BotID; 100 req não compensa o abuso |
+| Signup revela "nickname já em uso" | nickname é público (`/u/{nickname}`); e-mail duplicado recebe a mesma resposta genérica de sucesso (Better Auth com `requireEmailVerification`) |
+| BotID não roda fora da Vercel | `lib/bot.ts` só faz bypass quando `VERCEL !== "1"`; na Vercel qualquer falha da checagem nega (fail closed) |
 
 ## Como manter
 

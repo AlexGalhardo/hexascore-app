@@ -1,0 +1,165 @@
+{
+	"updatedLabel": "Last updated",
+	"policy": {
+		"title": "Privacy policy",
+		"description": "What personal data we collect, why, for how long, and how to exercise your rights.",
+		"intro": "This policy explains how we handle personal data when you browse the site, create an account, rate items, contact us or use the paid API. It is written to meet the Brazilian General Data Protection Law (LGPD, Law 13.709/2018) and the EU General Data Protection Regulation (GDPR).",
+		"sections": [
+			{
+				"heading": "1. Who is responsible",
+				"body": [
+					"The service operator is the data controller for the data described here. For any privacy question or request, use the contact form (choose \"Questions\"). We answer requests within 15 days."
+				]
+			},
+			{
+				"heading": "2. Data we collect",
+				"body": [
+					"Account: name, email, nickname, password (stored only as a one-way hash), sign-in method (email/password, Google, passkeys), two-factor settings and the date you scheduled a deletion, if any.",
+					"Activity: your ratings (six categories, 0–100), item status, lists, follows and profile privacy choice.",
+					"Technical: IP address and browser user agent attached to active sessions, and short-lived counters used to block abuse (rate limiting and bot protection).",
+					"Contact messages: the name, email, subject and text you send us.",
+					"API and billing: API key metadata (we store only a hash of the key), request counts, plan, credits and invoices. Card and PIX payment data are handled by Stripe and AbacatePay; we never see or store full card numbers."
+				]
+			},
+			{
+				"heading": "3. Why we use it (legal bases)",
+				"body": [
+					"To provide the service you asked for — account, ratings, API access and billing (performance of a contract).",
+					"To keep the service secure, prevent fraud, spam and bots, and compute community scores (legitimate interest).",
+					"To load optional third-party video embeds, only after you allow them (consent, which you can withdraw at any time).",
+					"To keep billing records required by tax law (legal obligation)."
+				]
+			},
+			{
+				"heading": "4. Cookies",
+				"body": [
+					"We only use essential cookies: the session cookie that keeps you logged in, short-lived two-factor and trusted-device cookies, and preference cookies for theme, language and your cookie choice. We use no advertising or cross-site tracking cookies.",
+					"Traffic statistics are collected without cookies (Vercel Web Analytics), in aggregate. Trailers are served from youtube-nocookie.com and only load after you allow embeds in the cookie banner.",
+					"When you follow an affiliate link to Amazon or Mercado Livre you leave our site; those stores set their own cookies under their own policies."
+				]
+			},
+			{
+				"heading": "5. Who we share data with",
+				"body": [
+					"We do not sell personal data. We share it only with providers that process it on our behalf: Vercel (hosting, bot protection, analytics), Neon (database), Upstash (rate limiting), Resend (transactional email), Stripe and AbacatePay (payments) and Google (only if you choose \"Continue with Google\").",
+					"Some of these providers are located outside your country, including in the United States. Transfers rely on the safeguards allowed by the LGPD and GDPR, such as standard contractual clauses."
+				]
+			},
+			{
+				"heading": "6. How long we keep it",
+				"body": [
+					"Account data is kept while your account exists. When you delete your account, it enters a 30-day grace period during which you can log in and cancel. After that, your name, email, nickname, sessions, sign-in methods and two-factor data are erased and the account is anonymized.",
+					"Your ratings are kept after deletion without any link to your identity, as \"Deleted user\", so community scores are not distorted.",
+					"Contact messages are kept for up to 2 years; billing records for as long as tax law requires (currently 5 years in Brazil); security logs for up to 30 days."
+				]
+			},
+			{
+				"heading": "7. Your rights",
+				"body": [
+					"Under the LGPD (art. 18) and the GDPR you can: confirm whether we process your data; access it; correct it; request anonymization, blocking or deletion; receive it in a portable format; know who we share it with; object to processing based on legitimate interest; and withdraw consent.",
+					"You can edit your name, password, two-factor settings, passkeys and profile privacy, and delete your account, directly in your profile. For anything else, use the contact form. You may also complain to the Brazilian data protection authority (ANPD) or to your local supervisory authority."
+				]
+			},
+			{
+				"heading": "8. Security",
+				"body": [
+					"Passwords are hashed, all traffic uses HTTPS, sessions use HttpOnly cookies, and you can protect your account with two-factor authentication and passkeys. No system is perfectly secure; if we learn of an incident that affects you, we will notify you and the authorities as the law requires."
+				]
+			},
+			{
+				"heading": "9. Children",
+				"body": [
+					"The service is not directed to children. You must be at least 13 years old — or the minimum age for digital consent in your country, if higher — to create an account."
+				]
+			},
+			{
+				"heading": "10. Changes",
+				"body": [
+					"We will update this page when our practices change and change the date above. Material changes are announced on the site or by email before they take effect."
+				]
+			}
+		]
+	},
+	"terms": {
+		"title": "Terms of use and cookies",
+		"description": "The rules for using the site, your account, ratings, the paid API and affiliate links.",
+		"intro": "By using the site or the API you agree to these terms. If you do not agree, please do not use the service.",
+		"sections": [
+			{
+				"heading": "1. The service",
+				"body": [
+					"We run a database of games, movies, TV series and books where registered users score each work in six categories from 0 to 100. Community scores are averages of user ratings and are shown only after an item has at least 5 ratings.",
+					"Item metadata comes from open sources: Wikidata (CC0), Open Library and Wikipedia. Synopses from Wikipedia are licensed under CC BY-SA 4.0 and are shown with their license and a link to the original article. Links to external scores (such as IMDb or Metacritic) are provided for reference; those scores and all trademarks belong to their owners."
+				]
+			},
+			{
+				"heading": "2. Your account",
+				"body": [
+					"Provide accurate information, keep one account per person and keep your credentials secret. We recommend enabling two-factor authentication. Nicknames must not impersonate others or be offensive.",
+					"We may suspend or close accounts that break these terms, manipulate scores or abuse the service."
+				]
+			},
+			{
+				"heading": "3. Ratings",
+				"body": [
+					"You can rate each work once and edit your rating at any time. Ratings must reflect your honest opinion: using multiple accounts, bots or paid ratings to manipulate scores is forbidden.",
+					"You grant us a non-exclusive, worldwide, royalty-free and perpetual license to store your ratings and use them to compute and publish aggregated scores, including after your account is deleted, in anonymized form."
+				]
+			},
+			{
+				"heading": "4. Acceptable use",
+				"body": [
+					"Do not scrape the website — use the public API instead. Do not attempt to bypass rate limits, bot protection or access controls, interfere with the service, or use it for anything illegal."
+				]
+			},
+			{
+				"heading": "5. Public API",
+				"body": [
+					"API keys are personal and secret; you are responsible for requests made with your keys. Each plan has a quota and a rate limit; the free plan includes 100 requests per account in total and requires a verified email.",
+					"The API returns only our own data (scores and community statistics), open metadata and external identifiers. You must not use it to redistribute third-party data that we only link to. We may change or retire API versions with reasonable notice."
+				]
+			},
+			{
+				"heading": "6. Payments, renewal and cancellation",
+				"body": [
+					"Paid plans are billed in advance, monthly or yearly, by card through Stripe or by PIX through AbacatePay. Prices and taxes are shown before you pay. Card subscriptions renew automatically until cancelled; PIX payments cover the period purchased and do not renew automatically.",
+					"You can cancel at any time and keep access until the end of the paid period. Extra credits do not expire. Where the law grants you a right of withdrawal (for example, 7 days under art. 49 of the Brazilian Consumer Code), you can exercise it through the contact form and receive a refund as the law provides."
+				]
+			},
+			{
+				"heading": "7. Affiliate links",
+				"body": [
+					"Some book and game pages include links to Amazon and Mercado Livre. These are affiliate links: we may earn a commission on qualifying purchases, at no extra cost to you. Affiliate links are labeled and never influence scores."
+				]
+			},
+			{
+				"heading": "8. Cookies",
+				"body": [
+					"We use only essential cookies (session, security and preferences) and load video embeds only with your consent. Details are in the Privacy policy."
+				]
+			},
+			{
+				"heading": "9. Account deletion",
+				"body": [
+					"You can delete your account in your profile. Deletion takes effect after a 30-day grace period during which you can log in and cancel it. Your ratings remain in the community scores anonymously."
+				]
+			},
+			{
+				"heading": "10. Disclaimers and liability",
+				"body": [
+					"The service and the API are provided \"as is\". We work to keep data accurate and the service available, but we do not guarantee that information is complete or error-free, or that the service will be uninterrupted. To the extent allowed by law, our liability is limited to the amount you paid us in the 12 months before the claim. Nothing in these terms limits rights that consumer law does not allow to be limited."
+				]
+			},
+			{
+				"heading": "11. Changes and governing law",
+				"body": [
+					"We may update these terms; material changes are announced in advance and continued use means acceptance. These terms are governed by the laws of Brazil, without prejudice to the mandatory consumer protections of the country where you live."
+				]
+			},
+			{
+				"heading": "12. Contact",
+				"body": ["Questions about these terms can be sent through the contact form."]
+			}
+		]
+	}
+}

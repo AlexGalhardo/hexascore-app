@@ -10,6 +10,9 @@ export type SessionUser = {
 	emailVerified: boolean;
 	role: string | null;
 	image: string | null;
+	twoFactorEnabled: boolean;
+	profilePrivate: boolean;
+	deletionScheduledAt: Date | null;
 };
 
 // The only source of "who is acting": never trust a user id from a request body.
@@ -25,5 +28,8 @@ export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
 		emailVerified: u.emailVerified,
 		role: u.role ?? null,
 		image: u.image ?? null,
+		twoFactorEnabled: u.twoFactorEnabled ?? false,
+		profilePrivate: u.profilePrivate ?? false,
+		deletionScheduledAt: u.deletionScheduledAt ? new Date(u.deletionScheduledAt) : null,
 	};
 });

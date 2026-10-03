@@ -1,3 +1,4 @@
+import { withBotId } from "botid/next/config";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 // Fails the build with an explicit list when env vars are missing or malformed.
@@ -13,4 +14,4 @@ const nextConfig: NextConfig = {
 	serverExternalPackages: ["@electric-sql/pglite"],
 };
 
-export default withNextIntl(nextConfig);
+export default withBotId(withNextIntl(nextConfig));

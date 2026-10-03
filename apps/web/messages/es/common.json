@@ -11,14 +11,23 @@
 		"login": "Entrar",
 		"signup": "Crear cuenta",
 		"theme": "Cambiar tema",
-		"docs": "API"
+		"docs": "API",
+		"profile": "Perfil",
+		"logout": "Cerrar sesión",
+		"account": "Menú de la cuenta",
+		"api": "API"
 	},
 	"home": {
 		"title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
 		"subtitle": "Sin reseñas de texto. Seis categorías, de 0 a 100, en una sola nota de la comunidad.",
 		"explore": "Explorar"
 	},
-	"footer": { "terms": "Términos", "privacy": "Privacidad", "contact": "Contacto", "pricing": "Precios de la API" },
+	"footer": {
+		"terms": "Términos",
+		"privacy": "Privacidad",
+		"contact": "Contacto",
+		"pricing": "Precios de la API"
+	},
 	"cookies": {
 		"text": "Solo usamos cookies esenciales (sesión y preferencias). Los videos de YouTube solo se cargan si lo permites.",
 		"accept": "Permitir videos",

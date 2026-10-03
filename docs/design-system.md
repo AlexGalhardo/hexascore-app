@@ -38,6 +38,8 @@ Cor nunca é o único sinal: o número sempre aparece junto.
 - **Score badge**: número grande + cor da faixa; tamanhos `sm`/`md`/`lg`.
 - **Score input**: slider + campo numérico sincronizados (0–100), operável por teclado (setas ±1, PageUp/PageDown ±10).
 - **Data table**: tabela densa com cabeçalho fixo e versão empilhada em mobile.
+- **Formulários** (`components/ui/form.tsx`): `Field` (label + hint + erro), `Input`, `Notice` (erro = `role=alert`, sucesso/info = `role=status`, borda lateral colorida), `Divider`, `buttonClass(primary|secondary|danger)`; alvos ≥ 44 px. Senha: `PasswordInput` (botão olho com `aria-pressed`) + `PasswordChecklist` (5 regras ao vivo, ✓/○ além da cor).
+- **Menu do usuário**: avatar circular com a inicial do nickname, Base UI `Menu`. **Modal destrutivo**: Base UI `Dialog`, botão de confirmação desabilitado com contagem regressiva.
 
 ## Acessibilidade
 

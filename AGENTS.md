@@ -24,3 +24,7 @@ Codename `hexascore`; final brand name is pending.
   - `hexascore-billing` — Stripe/AbacatePay webhooks locally, idempotency rules.
   - `hexascore-catalog` — catalog repository/cache layers, Next 16 caching without `cacheComponents`, PGlite tests, dev seed.
 - Record notable changes in `CHANGELOG.md` (Keep a Changelog).
+
+## Project skills
+
+- `.claude/skills/hexascore-auth/SKILL.md` — auth/account work: Better Auth server-only endpoints, Server Action result contract, BotID local setup, testing flows locally (verification link in the dev log, TOTP).

@@ -119,10 +119,10 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 - **Verificar**: bootstrap local carrega ≥ 100k itens; `pytest` verde; busca "zelda" (com typo "zleda") retorna o jogo; página do item renderiza nos 3 idiomas com atribuição de licença.
 
 ### 0.2 — Auth e conta
-- [ ] Better Auth (e-mail+senha, Google, verificação, 2FA, passkeys, admin), BotID
-- [ ] `/login`, `/signup`, `/recover-password`, `/reset-password`, `/verify-email`
-- [ ] `/profile` (dados, definir/mudar senha, 2FA, passkeys, exclusão com modal de 10s) + cron de anonimização
-- [ ] `/contact`, `/policy`, `/terms`, templates react-email
+- [x] Better Auth (e-mail+senha, Google, verificação, 2FA, passkeys, admin), BotID
+- [x] `/login`, `/signup`, `/recover-password`, `/reset-password`, `/verify-email`
+- [x] `/profile` (dados, definir/mudar senha, 2FA, passkeys, exclusão com modal de 10s) + cron de anonimização
+- [x] `/contact`, `/policy`, `/terms`, templates react-email
 - **Verificar**: testes de regras de senha/nickname (casos válidos e limites 7/8/32/33); E2E de signup → verificação → login → 2FA → exclusão → cancelamento.
 
 ### 0.3 — Avaliação e social

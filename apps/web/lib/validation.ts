@@ -25,10 +25,12 @@ export const nicknameSchema = z
 
 export const emailSchema = z.email("email.invalid").max(254);
 
+export const nameSchema = z.string().trim().min(1, "name.required").max(100, "name.max");
+
 export const CONTACT_SUBJECTS = ["question", "feedback", "bug"] as const;
 
 export const contactSchema = z.object({
-	name: z.string().trim().min(1, "name.required").max(100),
+	name: nameSchema,
 	email: emailSchema,
 	subject: z.enum(CONTACT_SUBJECTS),
 	message: z.string().trim().min(CONTACT_MESSAGE_MIN, "message.min").max(CONTACT_MESSAGE_MAX, "message.max"),
