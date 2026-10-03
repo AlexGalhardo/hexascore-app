@@ -3,6 +3,32 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [0.0.18](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.17...v0.0.18) (2026-10-03)
+
+
+### Added
+
+* **api:** translate the OpenAPI documents to pt-BR and es ([a3aee48](https://github.com/AlexGalhardo/claude-code-internet-api/commit/a3aee48a8678f02c1d7588613a1fb39d7874e036))
+* **api:** translate the OpenAPI documents to pt-BR and es ([832f453](https://github.com/AlexGalhardo/claude-code-internet-api/commit/832f4530c575791123cd19023abd24c221a63ed5))
+* **docs:** localize the Scalar API reference UI ([d3a95a4](https://github.com/AlexGalhardo/claude-code-internet-api/commit/d3a95a4a796d814b2ef457c5ad9f4ab403212dbd))
+* **docs:** localize the Scalar API reference UI ([cf97804](https://github.com/AlexGalhardo/claude-code-internet-api/commit/cf9780408682c2c2133a32ed69ddca867daac723))
+* **lists:** cap lists at 10 per user and item type ([38a1d9d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/38a1d9d13ab02c03ddb7fe1b4c2454b9c7ba7f75))
+* **lists:** cap lists at 10 per user and item type ([6351916](https://github.com/AlexGalhardo/claude-code-internet-api/commit/63519169898a01f07e10d5ab510cca0c2670692e))
+* **web:** button-like link hover, navbar icons and profile nickname ([d7d4f14](https://github.com/AlexGalhardo/claude-code-internet-api/commit/d7d4f14a7b5e320762924633887c7575ead09a60))
+* **web:** button-like link hover, navbar icons and profile nickname ([efe1d1a](https://github.com/AlexGalhardo/claude-code-internet-api/commit/efe1d1ad815093ce11bacf38d7f8863d75634aee))
+* **web:** catalog covers, link hover, navbar and onboarding polish ([a43bfa1](https://github.com/AlexGalhardo/claude-code-internet-api/commit/a43bfa15ebe981d95cd759250f282bcabc22af62))
+* **web:** catalog covers, list limits, localized API docs and UI polish ([a43bfa1](https://github.com/AlexGalhardo/claude-code-internet-api/commit/a43bfa15ebe981d95cd759250f282bcabc22af62))
+* **web:** cover thumbnails in catalog lists and fix table overflow ([af19adb](https://github.com/AlexGalhardo/claude-code-internet-api/commit/af19adb55daacb74ec7c4118d60a86bbef6e05ca))
+* **web:** cover thumbnails in catalog lists and fix table overflow ([3501301](https://github.com/AlexGalhardo/claude-code-internet-api/commit/350130156bd596ca3a3db1542f39e11611028d2e))
+* **web:** onboarding nickname matches sign-up rules ([f7157a1](https://github.com/AlexGalhardo/claude-code-internet-api/commit/f7157a118dfc2dd268a5f8f2c53e3790197c54c3))
+* **web:** show only language codes in the locale menu ([b186fd3](https://github.com/AlexGalhardo/claude-code-internet-api/commit/b186fd3cde9921c8726966260aae44ae53396a0d))
+
+
+### Fixed
+
+* **api:** reject empty query parameters ([3413e2f](https://github.com/AlexGalhardo/claude-code-internet-api/commit/3413e2f8d4c39d2bc63b201e1aa2609e824d32f2))
+* **api:** reject empty query parameters ([be7f4f0](https://github.com/AlexGalhardo/claude-code-internet-api/commit/be7f4f01e6755c59966ca84e5249f66a3da40568))
+
 ## [0.0.17](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.16...v0.0.17) (2026-10-03)
 
 
