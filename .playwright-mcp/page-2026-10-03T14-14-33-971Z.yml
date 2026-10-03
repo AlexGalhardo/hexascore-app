@@ -1,0 +1,913 @@
+- generic [active] [ref=f7e1]:
+  - banner [ref=f7e2]:
+    - generic [ref=f7e3]:
+      - link "HexaScore" [ref=f7e4] [cursor=pointer]:
+        - /url: /pt-br
+      - search [ref=f7e5]:
+        - generic [ref=f7e6]:
+          - generic [ref=f7e7]: Buscar
+          - combobox "Buscar" [ref=f7e8]
+          - textbox [aria-hidden] [ref=f7e9]
+      - generic [ref=f7e10]:
+        - generic [ref=f7e11]:
+          - button "Alternar tema" [ref=f7e12]
+          - link "Entrar" [ref=f7e15] [cursor=pointer]:
+            - /url: /pt-br/login
+          - 'button "Idioma: Português" [ref=f7e16]':
+            - generic [ref=f7e20]: PT-BR
+        - navigation "Seções" [ref=f7e21]:
+          - link "Jogos" [ref=f7e22] [cursor=pointer]:
+            - /url: /pt-br/games
+          - link "Filmes" [ref=f7e26] [cursor=pointer]:
+            - /url: /pt-br/movies
+          - link "Séries" [ref=f7e30] [cursor=pointer]:
+            - /url: /pt-br/series
+          - link "Livros" [ref=f7e34] [cursor=pointer]:
+            - /url: /pt-br/books
+          - link "API" [ref=f7e38] [cursor=pointer]:
+            - /url: /pt-br/docs
+          - link "Preços" [ref=f7e41] [cursor=pointer]:
+            - /url: /pt-br/pricing
+  - main [ref=f7e45]:
+    - generic [ref=f7e46]:
+      - generic [ref=f7e47]:
+        - heading "Jogos" [level=1] [ref=f7e48]
+        - paragraph [ref=f7e49]: Todos os jogos, avaliados por quem jogou em gameplay, diversão, som, qualidade técnica, visual e storytelling.
+      - form "Filtros" [ref=f7e50]:
+        - generic [ref=f7e51]:
+          - generic [ref=f7e52]:
+            - text: Gênero
+            - combobox "Gênero" [ref=f7e53]:
+              - option "Qualquer gênero" [selected]
+              - option "Action"
+              - option "Adventure"
+              - option "Horror"
+              - option "Platformer"
+              - option "Puzzle"
+              - option "RPG"
+              - option "Racing"
+              - option "Shooter"
+              - option "Simulation"
+              - option "Strategy"
+          - generic [ref=f7e54]:
+            - text: Plataforma
+            - combobox "Plataforma" [ref=f7e55]:
+              - option "Qualquer plataforma" [selected]
+              - option "Nintendo Switch"
+              - option "PC"
+              - option "PlayStation 4"
+              - option "PlayStation 5"
+              - option "Xbox Series X|S"
+              - option "iOS"
+              - option "macOS"
+          - generic [ref=f7e56]:
+            - text: Ano
+            - spinbutton "Ano" [ref=f7e57]
+          - generic [ref=f7e58]:
+            - text: Nota mín.
+            - spinbutton "Nota mín." [ref=f7e59]
+          - generic [ref=f7e60]:
+            - text: Ordenar por
+            - combobox "Ordenar por" [ref=f7e61]:
+              - option "Mais populares" [selected]
+              - option "Menos populares"
+              - option "Maior nota"
+              - option "Menor nota"
+              - option "Mais recentes"
+              - option "Mais antigos"
+              - option "Mais avaliados"
+              - option "Menos avaliados"
+        - group [ref=f7e62]:
+          - generic "Mínimo por categoria" [ref=f7e63] [cursor=pointer]
+        - generic [ref=f7e64]:
+          - button "Aplicar" [ref=f7e65]
+          - link "Limpar" [ref=f7e66] [cursor=pointer]:
+            - /url: /pt-br/games
+      - region "Jogos" [ref=f7e67]:
+        - table [ref=f7e68]:
+          - rowgroup [ref=f7e69]:
+            - row [ref=f7e70]:
+              - columnheader "Título" [ref=f7e71]
+              - columnheader "Ano" [ref=f7e72]
+              - columnheader "Nota" [ref=f7e73]
+              - columnheader "Game" [ref=f7e74]
+              - columnheader "Dive" [ref=f7e75]
+              - columnheader "QS" [ref=f7e76]
+              - columnheader "QT" [ref=f7e77]
+              - columnheader "QV" [ref=f7e78]
+              - columnheader "Stor" [ref=f7e79]
+              - columnheader "Avaliações" [ref=f7e80]
+          - rowgroup [ref=f7e81]:
+            - row [ref=f7e82]:
+              - 'cell "Habit: Carefree Epic Shooter, Puzzle, Racing" [ref=f7e83]':
+                - generic [ref=f7e86]:
+                  - 'link "Habit: Carefree Epic" [ref=f7e87] [cursor=pointer]':
+                    - /url: /pt-br/games/habit-carefree-epic
+                  - generic [ref=f7e88]: Shooter, Puzzle, Racing
+              - cell "1989" [ref=f7e89]
+              - cell [ref=f7e90]:
+                - img "Nota 44 de 100" [ref=f7e91]: "44"
+              - cell "43" [ref=f7e92]
+              - cell "46" [ref=f7e93]
+              - cell "42" [ref=f7e94]
+              - cell "45" [ref=f7e95]
+              - cell "46" [ref=f7e96]
+              - cell "44" [ref=f7e97]
+              - cell "30" [ref=f7e98]
+            - row [ref=f7e99]:
+              - cell "Prickly Verve II Strategy, Platformer" [ref=f7e100]:
+                - generic [ref=f7e103]:
+                  - link "Prickly Verve II" [ref=f7e104] [cursor=pointer]:
+                    - /url: /pt-br/games/prickly-verve-ii
+                  - generic [ref=f7e105]: Strategy, Platformer
+              - cell "1989" [ref=f7e106]
+              - cell [ref=f7e107]:
+                - img "Nota 82 de 100" [ref=f7e108]: "82"
+              - cell "82" [ref=f7e109]
+              - cell "83" [ref=f7e110]
+              - cell "83" [ref=f7e111]
+              - cell "83" [ref=f7e112]
+              - cell "81" [ref=f7e113]
+              - cell "83" [ref=f7e114]
+              - cell "30" [ref=f7e115]
+            - row [ref=f7e116]:
+              - cell "Tempestade alto RPG, Action" [ref=f7e117]:
+                - generic [ref=f7e120]:
+                  - link "Tempestade alto" [ref=f7e121] [cursor=pointer]:
+                    - /url: /pt-br/games/airbus-tactics
+                  - generic [ref=f7e122]: RPG, Action
+              - cell "1992" [ref=f7e123]
+              - cell [ref=f7e124]:
+                - img "Nota 47 de 100" [ref=f7e125]: "47"
+              - cell "48" [ref=f7e126]
+              - cell "45" [ref=f7e127]
+              - cell "48" [ref=f7e128]
+              - cell "48" [ref=f7e129]
+              - cell "48" [ref=f7e130]
+              - cell "46" [ref=f7e131]
+              - cell "30" [ref=f7e132]
+            - row [ref=f7e133]:
+              - cell "Pizza normal Shooter, Racing, Puzzle" [ref=f7e134]:
+                - generic [ref=f7e137]:
+                  - link "Pizza normal" [ref=f7e138] [cursor=pointer]:
+                    - /url: /pt-br/games/pliers-second-waist
+                  - generic [ref=f7e139]: Shooter, Racing, Puzzle
+              - cell "2016" [ref=f7e140]
+              - cell [ref=f7e141]:
+                - img "Nota 36 de 100" [ref=f7e142]: "36"
+              - cell "33" [ref=f7e143]
+              - cell "39" [ref=f7e144]
+              - cell "36" [ref=f7e145]
+              - cell "34" [ref=f7e146]
+              - cell "34" [ref=f7e147]
+              - cell "39" [ref=f7e148]
+              - cell "26" [ref=f7e149]
+            - row [ref=f7e150]:
+              - cell "Massa doce Shooter, Horror, Strategy" [ref=f7e151]:
+                - generic [ref=f7e154]:
+                  - link "Massa doce" [ref=f7e155] [cursor=pointer]:
+                    - /url: /pt-br/games/noxious-dusk
+                  - generic [ref=f7e156]: Shooter, Horror, Strategy
+              - cell "1999" [ref=f7e157]
+              - cell [ref=f7e158]:
+                - img "Nota 92 de 100" [ref=f7e159]: "92"
+              - cell "92" [ref=f7e160]
+              - cell "92" [ref=f7e161]
+              - cell "91" [ref=f7e162]
+              - cell "93" [ref=f7e163]
+              - cell "92" [ref=f7e164]
+              - cell "90" [ref=f7e165]
+              - cell "25" [ref=f7e166]
+            - row [ref=f7e167]:
+              - cell "Casa triangular Strategy" [ref=f7e168]:
+                - generic [ref=f7e171]:
+                  - link "Casa triangular" [ref=f7e172] [cursor=pointer]:
+                    - /url: /pt-br/games/deficient-underpants-ii
+                  - generic [ref=f7e173]: Strategy
+              - cell "1995" [ref=f7e174]
+              - cell [ref=f7e175]:
+                - img "Nota 55 de 100" [ref=f7e176]: "55"
+              - cell "54" [ref=f7e177]
+              - cell "52" [ref=f7e178]
+              - cell "55" [ref=f7e179]
+              - cell "57" [ref=f7e180]
+              - cell "54" [ref=f7e181]
+              - cell "58" [ref=f7e182]
+              - cell "21" [ref=f7e183]
+            - row [ref=f7e184]:
+              - cell "Vidro barato Adventure" [ref=f7e185]:
+                - generic [ref=f7e188]:
+                  - link "Vidro barato" [ref=f7e189] [cursor=pointer]:
+                    - /url: /pt-br/games/bidet-tactics
+                  - generic [ref=f7e190]: Adventure
+              - cell "2026" [ref=f7e191]
+              - cell [ref=f7e192]:
+                - img "Nota 71 de 100" [ref=f7e193]: "71"
+              - cell "72" [ref=f7e194]
+              - cell "68" [ref=f7e195]
+              - cell "71" [ref=f7e196]
+              - cell "70" [ref=f7e197]
+              - cell "72" [ref=f7e198]
+              - cell "71" [ref=f7e199]
+              - cell "20" [ref=f7e200]
+            - row [ref=f7e201]:
+              - cell "Sesame Tactics Puzzle" [ref=f7e202]:
+                - generic [ref=f7e205]:
+                  - link "Sesame Tactics" [ref=f7e206] [cursor=pointer]:
+                    - /url: /pt-br/games/sesame-tactics
+                  - generic [ref=f7e207]: Puzzle
+              - cell "1981" [ref=f7e208]
+              - cell [ref=f7e209]:
+                - img "Nota 46 de 100" [ref=f7e210]: "46"
+              - cell "44" [ref=f7e211]
+              - cell "43" [ref=f7e212]
+              - cell "46" [ref=f7e213]
+              - cell "48" [ref=f7e214]
+              - cell "47" [ref=f7e215]
+              - cell "45" [ref=f7e216]
+              - cell "15" [ref=f7e217]
+            - row [ref=f7e218]:
+              - cell "Frango resistente Horror, Adventure" [ref=f7e219]:
+                - generic [ref=f7e222]:
+                  - link "Frango resistente" [ref=f7e223] [cursor=pointer]:
+                    - /url: /pt-br/games/someplace-tactics
+                  - generic [ref=f7e224]: Horror, Adventure
+              - cell "2000" [ref=f7e225]
+              - cell [ref=f7e226]:
+                - img "Nota 40 de 100" [ref=f7e227]: "40"
+              - cell "43" [ref=f7e228]
+              - cell "38" [ref=f7e229]
+              - cell "39" [ref=f7e230]
+              - cell "40" [ref=f7e231]
+              - cell "39" [ref=f7e232]
+              - cell "41" [ref=f7e233]
+              - cell "15" [ref=f7e234]
+            - row [ref=f7e235]:
+              - cell "Ônibus alegre Horror" [ref=f7e236]:
+                - generic [ref=f7e239]:
+                  - link "Ônibus alegre" [ref=f7e240] [cursor=pointer]:
+                    - /url: /pt-br/games/agreement-tactics
+                  - generic [ref=f7e241]: Horror
+              - cell "2005" [ref=f7e242]
+              - cell [ref=f7e243]:
+                - img "Nota 70 de 100" [ref=f7e244]: "70"
+              - cell "71" [ref=f7e245]
+              - cell "70" [ref=f7e246]
+              - cell "69" [ref=f7e247]
+              - cell "73" [ref=f7e248]
+              - cell "70" [ref=f7e249]
+              - cell "70" [ref=f7e250]
+              - cell "13" [ref=f7e251]
+            - row [ref=f7e252]:
+              - cell "Evento resistente Horror, Platformer" [ref=f7e253]:
+                - generic [ref=f7e256]:
+                  - link "Evento resistente" [ref=f7e257] [cursor=pointer]:
+                    - /url: /pt-br/games/solution-tactics
+                  - generic [ref=f7e258]: Horror, Platformer
+              - cell "2007" [ref=f7e259]
+              - cell [ref=f7e260]:
+                - img "Nota 43 de 100" [ref=f7e261]: "43"
+              - cell "44" [ref=f7e262]
+              - cell "40" [ref=f7e263]
+              - cell "41" [ref=f7e264]
+              - cell "43" [ref=f7e265]
+              - cell "47" [ref=f7e266]
+              - cell "40" [ref=f7e267]
+              - cell "13" [ref=f7e268]
+            - row [ref=f7e269]:
+              - cell "Eleição indeciso Shooter, Simulation" [ref=f7e270]:
+                - generic [ref=f7e273]:
+                  - link "Eleição indeciso" [ref=f7e274] [cursor=pointer]:
+                    - /url: /pt-br/games/giving-knickers-ii
+                  - generic [ref=f7e275]: Shooter, Simulation
+              - cell "2006" [ref=f7e276]
+              - cell [ref=f7e277]:
+                - img "Nota 84 de 100" [ref=f7e278]: "84"
+              - cell "88" [ref=f7e279]
+              - cell "82" [ref=f7e280]
+              - cell "85" [ref=f7e281]
+              - cell "86" [ref=f7e282]
+              - cell "78" [ref=f7e283]
+              - cell "83" [ref=f7e284]
+              - cell "12" [ref=f7e285]
+            - row [ref=f7e286]:
+              - cell "Garrafa burro Strategy" [ref=f7e287]:
+                - generic [ref=f7e290]:
+                  - link "Garrafa burro" [ref=f7e291] [cursor=pointer]:
+                    - /url: /pt-br/games/inborn-cappelletti
+                  - generic [ref=f7e292]: Strategy
+              - cell "2002" [ref=f7e293]
+              - cell [ref=f7e294]:
+                - img "Nota 43 de 100" [ref=f7e295]: "43"
+              - cell "48" [ref=f7e296]
+              - cell "44" [ref=f7e297]
+              - cell "39" [ref=f7e298]
+              - cell "41" [ref=f7e299]
+              - cell "44" [ref=f7e300]
+              - cell "44" [ref=f7e301]
+              - cell "12" [ref=f7e302]
+            - row [ref=f7e303]:
+              - cell "Urso passivo RPG, Adventure, Shooter" [ref=f7e304]:
+                - generic [ref=f7e307]:
+                  - link "Urso passivo" [ref=f7e308] [cursor=pointer]:
+                    - /url: /pt-br/games/well-lit-redesign
+                  - generic [ref=f7e309]: RPG, Adventure, Shooter
+              - cell "1978" [ref=f7e310]
+              - cell [ref=f7e311]:
+                - img "Nota 79 de 100" [ref=f7e312]: "79"
+              - cell "77" [ref=f7e313]
+              - cell "80" [ref=f7e314]
+              - cell "79" [ref=f7e315]
+              - cell "81" [ref=f7e316]
+              - cell "78" [ref=f7e317]
+              - cell "79" [ref=f7e318]
+              - cell "11" [ref=f7e319]
+            - row [ref=f7e320]:
+              - cell "Taut Bracelet II Horror, Adventure" [ref=f7e321]:
+                - generic [ref=f7e324]:
+                  - link "Taut Bracelet II" [ref=f7e325] [cursor=pointer]:
+                    - /url: /pt-br/games/taut-bracelet-ii
+                  - generic [ref=f7e326]: Horror, Adventure
+              - cell "1986" [ref=f7e327]
+              - cell [ref=f7e328]:
+                - img "Nota 35 de 100" [ref=f7e329]: "35"
+              - cell "33" [ref=f7e330]
+              - cell "40" [ref=f7e331]
+              - cell "35" [ref=f7e332]
+              - cell "34" [ref=f7e333]
+              - cell "31" [ref=f7e334]
+              - cell "35" [ref=f7e335]
+              - cell "10" [ref=f7e336]
+            - row [ref=f7e337]:
+              - cell "Jet Tactics Racing" [ref=f7e338]:
+                - generic [ref=f7e341]:
+                  - link "Jet Tactics" [ref=f7e342] [cursor=pointer]:
+                    - /url: /pt-br/games/jet-tactics
+                  - generic [ref=f7e343]: Racing
+              - cell "1977" [ref=f7e344]
+              - cell [ref=f7e345]:
+                - img "Nota 36 de 100" [ref=f7e346]: "36"
+              - cell "38" [ref=f7e347]
+              - cell "36" [ref=f7e348]
+              - cell "36" [ref=f7e349]
+              - cell "30" [ref=f7e350]
+              - cell "37" [ref=f7e351]
+              - cell "38" [ref=f7e352]
+              - cell "10" [ref=f7e353]
+            - row [ref=f7e354]:
+              - cell "Finding Tactics Horror, Strategy" [ref=f7e355]:
+                - generic [ref=f7e358]:
+                  - link "Finding Tactics" [ref=f7e359] [cursor=pointer]:
+                    - /url: /pt-br/games/finding-tactics
+                  - generic [ref=f7e360]: Horror, Strategy
+              - cell "1985" [ref=f7e361]
+              - cell [ref=f7e362]:
+                - img "Nota 66 de 100" [ref=f7e363]: "66"
+              - cell "70" [ref=f7e364]
+              - cell "64" [ref=f7e365]
+              - cell "68" [ref=f7e366]
+              - cell "64" [ref=f7e367]
+              - cell "65" [ref=f7e368]
+              - cell "66" [ref=f7e369]
+              - cell "10" [ref=f7e370]
+            - row [ref=f7e371]:
+              - cell "Pertinent Case Racing, Shooter, Simulation" [ref=f7e372]:
+                - generic [ref=f7e375]:
+                  - link "Pertinent Case" [ref=f7e376] [cursor=pointer]:
+                    - /url: /pt-br/games/pertinent-case
+                  - generic [ref=f7e377]: Racing, Shooter, Simulation
+              - cell "2014" [ref=f7e378]
+              - cell [ref=f7e379]:
+                - img "Nota 42 de 100" [ref=f7e380]: "42"
+              - cell "43" [ref=f7e381]
+              - cell "45" [ref=f7e382]
+              - cell "40" [ref=f7e383]
+              - cell "45" [ref=f7e384]
+              - cell "42" [ref=f7e385]
+              - cell "36" [ref=f7e386]
+              - cell "9" [ref=f7e387]
+            - row [ref=f7e388]:
+              - cell "Cimento vazio Puzzle, RPG" [ref=f7e389]:
+                - generic [ref=f7e392]:
+                  - link "Cimento vazio" [ref=f7e393] [cursor=pointer]:
+                    - /url: /pt-br/games/doting-vision-ii
+                  - generic [ref=f7e394]: Puzzle, RPG
+              - cell "1994" [ref=f7e395]
+              - cell [ref=f7e396]:
+                - img "Nota 27 de 100" [ref=f7e397]: "27"
+              - cell "25" [ref=f7e398]
+              - cell "27" [ref=f7e399]
+              - cell "28" [ref=f7e400]
+              - cell "22" [ref=f7e401]
+              - cell "25" [ref=f7e402]
+              - cell "33" [ref=f7e403]
+              - cell "8" [ref=f7e404]
+            - row [ref=f7e405]:
+              - cell "Interruptor humano Racing, Adventure, Strategy" [ref=f7e406]:
+                - generic [ref=f7e409]:
+                  - link "Interruptor humano" [ref=f7e410] [cursor=pointer]:
+                    - /url: /pt-br/games/live-jellyfish-ii
+                  - generic [ref=f7e411]: Racing, Adventure, Strategy
+              - cell "2015" [ref=f7e412]
+              - cell [ref=f7e413]:
+                - img "Nota 36 de 100" [ref=f7e414]: "36"
+              - cell "39" [ref=f7e415]
+              - cell "36" [ref=f7e416]
+              - cell "37" [ref=f7e417]
+              - cell "40" [ref=f7e418]
+              - cell "28" [ref=f7e419]
+              - cell "35" [ref=f7e420]
+              - cell "8" [ref=f7e421]
+            - row [ref=f7e422]:
+              - cell "Utilized Release Horror, Strategy, Adventure" [ref=f7e423]:
+                - generic [ref=f7e426]:
+                  - link "Utilized Release" [ref=f7e427] [cursor=pointer]:
+                    - /url: /pt-br/games/utilized-release
+                  - generic [ref=f7e428]: Horror, Strategy, Adventure
+              - cell "1978" [ref=f7e429]
+              - cell [ref=f7e430]:
+                - img "Nota 33 de 100" [ref=f7e431]: "33"
+              - cell "32" [ref=f7e432]
+              - cell "37" [ref=f7e433]
+              - cell "35" [ref=f7e434]
+              - cell "34" [ref=f7e435]
+              - cell "24" [ref=f7e436]
+              - cell "36" [ref=f7e437]
+              - cell "7" [ref=f7e438]
+            - row [ref=f7e439]:
+              - cell "Reunião sujo Horror" [ref=f7e440]:
+                - generic [ref=f7e443]:
+                  - link "Reunião sujo" [ref=f7e444] [cursor=pointer]:
+                    - /url: /pt-br/games/stormy-traditionalism-ii
+                  - generic [ref=f7e445]: Horror
+              - cell "1999" [ref=f7e446]
+              - cell [ref=f7e447]:
+                - img "Nota 62 de 100" [ref=f7e448]: "62"
+              - cell "67" [ref=f7e449]
+              - cell "55" [ref=f7e450]
+              - cell "61" [ref=f7e451]
+              - cell "57" [ref=f7e452]
+              - cell "66" [ref=f7e453]
+              - cell "62" [ref=f7e454]
+              - cell "7" [ref=f7e455]
+            - row [ref=f7e456]:
+              - cell "Weird Worth II Strategy, RPG, Simulation" [ref=f7e457]:
+                - generic [ref=f7e460]:
+                  - link "Weird Worth II" [ref=f7e461] [cursor=pointer]:
+                    - /url: /pt-br/games/weird-worth-ii
+                  - generic [ref=f7e462]: Strategy, RPG, Simulation
+              - cell "2010" [ref=f7e463]
+              - cell [ref=f7e464]:
+                - img "Nota 79 de 100" [ref=f7e465]: "79"
+              - cell "77" [ref=f7e466]
+              - cell "77" [ref=f7e467]
+              - cell "84" [ref=f7e468]
+              - cell "79" [ref=f7e469]
+              - cell "74" [ref=f7e470]
+              - cell "84" [ref=f7e471]
+              - cell "7" [ref=f7e472]
+            - row [ref=f7e473]:
+              - 'cell "Contrail: Extroverted Innovation Simulation, Horror" [ref=f7e474]':
+                - generic [ref=f7e477]:
+                  - 'link "Contrail: Extroverted Innovation" [ref=f7e478] [cursor=pointer]':
+                    - /url: /pt-br/games/contrail-extroverted-innovation
+                  - generic [ref=f7e479]: Simulation, Horror
+              - cell "1978" [ref=f7e480]
+              - cell [ref=f7e481]:
+                - img "Nota 52 de 100" [ref=f7e482]: "52"
+              - cell "53" [ref=f7e483]
+              - cell "56" [ref=f7e484]
+              - cell "47" [ref=f7e485]
+              - cell "51" [ref=f7e486]
+              - cell "55" [ref=f7e487]
+              - cell "47" [ref=f7e488]
+              - cell "7" [ref=f7e489]
+            - row [ref=f7e490]:
+              - cell "Cadeira escuro Adventure" [ref=f7e491]:
+                - generic [ref=f7e494]:
+                  - link "Cadeira escuro" [ref=f7e495] [cursor=pointer]:
+                    - /url: /pt-br/games/ferret-tactics
+                  - generic [ref=f7e496]: Adventure
+              - cell "1984" [ref=f7e497]
+              - cell [ref=f7e498]:
+                - img "Nota 55 de 100" [ref=f7e499]: "55"
+              - cell "56" [ref=f7e500]
+              - cell "54" [ref=f7e501]
+              - cell "56" [ref=f7e502]
+              - cell "59" [ref=f7e503]
+              - cell "50" [ref=f7e504]
+              - cell "55" [ref=f7e505]
+              - cell "7" [ref=f7e506]
+            - row [ref=f7e507]:
+              - cell "Bolo fechado Horror" [ref=f7e508]:
+                - generic [ref=f7e511]:
+                  - link "Bolo fechado" [ref=f7e512] [cursor=pointer]:
+                    - /url: /pt-br/games/burdensome-fun
+                  - generic [ref=f7e513]: Horror
+              - cell "1997" [ref=f7e514]
+              - cell [ref=f7e515]:
+                - img "Nota 82 de 100" [ref=f7e516]: "82"
+              - cell "81" [ref=f7e517]
+              - cell "78" [ref=f7e518]
+              - cell "86" [ref=f7e519]
+              - cell "90" [ref=f7e520]
+              - cell "79" [ref=f7e521]
+              - cell "81" [ref=f7e522]
+              - cell "6" [ref=f7e523]
+            - row [ref=f7e524]:
+              - cell "Overcooked Saw Action, RPG" [ref=f7e525]:
+                - generic [ref=f7e528]:
+                  - link "Overcooked Saw" [ref=f7e529] [cursor=pointer]:
+                    - /url: /pt-br/games/overcooked-saw
+                  - generic [ref=f7e530]: Action, RPG
+              - cell "1987" [ref=f7e531]
+              - cell [ref=f7e532]:
+                - img "Nota 56 de 100" [ref=f7e533]: "56"
+              - cell "49" [ref=f7e534]
+              - cell "55" [ref=f7e535]
+              - cell "57" [ref=f7e536]
+              - cell "55" [ref=f7e537]
+              - cell "57" [ref=f7e538]
+              - cell "60" [ref=f7e539]
+              - cell "6" [ref=f7e540]
+            - row [ref=f7e541]:
+              - cell "Cinema bom Racing, RPG, Platformer" [ref=f7e542]:
+                - generic [ref=f7e545]:
+                  - link "Cinema bom" [ref=f7e546] [cursor=pointer]:
+                    - /url: /pt-br/games/drab-breastplate
+                  - generic [ref=f7e547]: Racing, RPG, Platformer
+              - cell "2009" [ref=f7e548]
+              - cell [ref=f7e549]:
+                - img "Nota 64 de 100" [ref=f7e550]: "64"
+              - cell "62" [ref=f7e551]
+              - cell "70" [ref=f7e552]
+              - cell "63" [ref=f7e553]
+              - cell "60" [ref=f7e554]
+              - cell "72" [ref=f7e555]
+              - cell "59" [ref=f7e556]
+              - cell "6" [ref=f7e557]
+            - row [ref=f7e558]:
+              - cell "Biblioteca criativo Strategy" [ref=f7e559]:
+                - generic [ref=f7e562]:
+                  - link "Biblioteca criativo" [ref=f7e563] [cursor=pointer]:
+                    - /url: /pt-br/games/decision-tactics
+                  - generic [ref=f7e564]: Strategy
+              - cell "2010" [ref=f7e565]
+              - cell [ref=f7e566]:
+                - img "Nota 71 de 100" [ref=f7e567]: "71"
+              - cell "73" [ref=f7e568]
+              - cell "71" [ref=f7e569]
+              - cell "69" [ref=f7e570]
+              - cell "68" [ref=f7e571]
+              - cell "71" [ref=f7e572]
+              - cell "71" [ref=f7e573]
+              - cell "6" [ref=f7e574]
+            - row [ref=f7e575]:
+              - cell "Teeming Unblinking Adventure, Racing, Puzzle" [ref=f7e576]:
+                - generic [ref=f7e579]:
+                  - link "Teeming Unblinking" [ref=f7e580] [cursor=pointer]:
+                    - /url: /pt-br/games/teeming-unblinking
+                  - generic [ref=f7e581]: Adventure, Racing, Puzzle
+              - cell "1976" [ref=f7e582]
+              - cell [ref=f7e583]:
+                - img "Nota 81 de 100" [ref=f7e584]: "81"
+              - cell "80" [ref=f7e585]
+              - cell "83" [ref=f7e586]
+              - cell "78" [ref=f7e587]
+              - cell "76" [ref=f7e588]
+              - cell "85" [ref=f7e589]
+              - cell "80" [ref=f7e590]
+              - cell "6" [ref=f7e591]
+            - row [ref=f7e592]:
+              - 'cell "Nephew: Colorful Willow RPG" [ref=f7e593]':
+                - generic [ref=f7e596]:
+                  - 'link "Nephew: Colorful Willow" [ref=f7e597] [cursor=pointer]':
+                    - /url: /pt-br/games/nephew-colorful-willow
+                  - generic [ref=f7e598]: RPG
+              - cell "2022" [ref=f7e599]
+              - cell [ref=f7e600]:
+                - img "Nota 67 de 100" [ref=f7e601]: "67"
+              - cell "69" [ref=f7e602]
+              - cell "67" [ref=f7e603]
+              - cell "70" [ref=f7e604]
+              - cell "64" [ref=f7e605]
+              - cell "66" [ref=f7e606]
+              - cell "68" [ref=f7e607]
+              - cell "5" [ref=f7e608]
+            - row [ref=f7e609]:
+              - cell "Cellar Tactics RPG, Platformer, Action" [ref=f7e610]:
+                - generic [ref=f7e613]:
+                  - link "Cellar Tactics" [ref=f7e614] [cursor=pointer]:
+                    - /url: /pt-br/games/cellar-tactics
+                  - generic [ref=f7e615]: RPG, Platformer, Action
+              - cell "2023" [ref=f7e616]
+              - cell [ref=f7e617]:
+                - img "Nota 79 de 100" [ref=f7e618]: "79"
+              - cell "80" [ref=f7e619]
+              - cell "71" [ref=f7e620]
+              - cell "82" [ref=f7e621]
+              - cell "82" [ref=f7e622]
+              - cell "76" [ref=f7e623]
+              - cell "82" [ref=f7e624]
+              - cell "5" [ref=f7e625]
+            - row [ref=f7e626]:
+              - cell "Boi estranho Adventure, Simulation, Horror" [ref=f7e627]:
+                - generic [ref=f7e630]:
+                  - link "Boi estranho" [ref=f7e631] [cursor=pointer]:
+                    - /url: /pt-br/games/finer-tactics
+                  - generic [ref=f7e632]: Adventure, Simulation, Horror
+              - cell "2006" [ref=f7e633]
+              - cell [ref=f7e634]:
+                - img "Nota 83 de 100" [ref=f7e635]: "83"
+              - cell "82" [ref=f7e636]
+              - cell "89" [ref=f7e637]
+              - cell "83" [ref=f7e638]
+              - cell "82" [ref=f7e639]
+              - cell "81" [ref=f7e640]
+              - cell "83" [ref=f7e641]
+              - cell "5" [ref=f7e642]
+            - row [ref=f7e643]:
+              - cell "Supportive Secret II Adventure" [ref=f7e644]:
+                - generic [ref=f7e647]:
+                  - link "Supportive Secret II" [ref=f7e648] [cursor=pointer]:
+                    - /url: /pt-br/games/supportive-secret-ii
+                  - generic [ref=f7e649]: Adventure
+              - cell "2025" [ref=f7e650]
+              - cell [ref=f7e651]:
+                - img "Nota 72 de 100" [ref=f7e652]: "72"
+              - cell "77" [ref=f7e653]
+              - cell "77" [ref=f7e654]
+              - cell "71" [ref=f7e655]
+              - cell "67" [ref=f7e656]
+              - cell "73" [ref=f7e657]
+              - cell "65" [ref=f7e658]
+              - cell "5" [ref=f7e659]
+            - row [ref=f7e660]:
+              - cell "Sofá feliz RPG, Simulation" [ref=f7e661]:
+                - generic [ref=f7e664]:
+                  - link "Sofá feliz" [ref=f7e665] [cursor=pointer]:
+                    - /url: /pt-br/games/gloom-thorough-testing
+                  - generic [ref=f7e666]: RPG, Simulation
+              - cell "2002" [ref=f7e667]
+              - cell [ref=f7e668]:
+                - img "Nota 84 de 100" [ref=f7e669]: "84"
+              - cell "87" [ref=f7e670]
+              - cell "80" [ref=f7e671]
+              - cell "83" [ref=f7e672]
+              - cell "85" [ref=f7e673]
+              - cell "84" [ref=f7e674]
+              - cell "85" [ref=f7e675]
+              - cell "5" [ref=f7e676]
+            - row [ref=f7e677]:
+              - cell "Fogo visível Simulation" [ref=f7e678]:
+                - generic [ref=f7e681]:
+                  - link "Fogo visível" [ref=f7e682] [cursor=pointer]:
+                    - /url: /pt-br/games/wombat-tactics
+                  - generic [ref=f7e683]: Simulation
+              - cell "1979" [ref=f7e684]
+              - cell [ref=f7e685]:
+                - img "Nota 34 de 100" [ref=f7e686]: "34"
+              - cell "35" [ref=f7e687]
+              - cell "30" [ref=f7e688]
+              - cell "30" [ref=f7e689]
+              - cell "44" [ref=f7e690]
+              - cell "37" [ref=f7e691]
+              - cell "25" [ref=f7e692]
+              - cell "5" [ref=f7e693]
+            - row [ref=f7e694]:
+              - cell "Impassioned Valley Horror, Puzzle, Platformer" [ref=f7e695]:
+                - generic [ref=f7e698]:
+                  - link "Impassioned Valley" [ref=f7e699] [cursor=pointer]:
+                    - /url: /pt-br/games/impassioned-valley
+                  - generic [ref=f7e700]: Horror, Puzzle, Platformer
+              - cell "1976" [ref=f7e701]
+              - cell [ref=f7e702]:
+                - img "Nota 88 de 100" [ref=f7e703]: "88"
+              - cell "88" [ref=f7e704]
+              - cell "87" [ref=f7e705]
+              - cell "89" [ref=f7e706]
+              - cell "89" [ref=f7e707]
+              - cell "89" [ref=f7e708]
+              - cell "85" [ref=f7e709]
+              - cell "5" [ref=f7e710]
+            - row [ref=f7e711]:
+              - cell "Senha colorido RPG, Strategy, Action" [ref=f7e712]:
+                - generic [ref=f7e715]:
+                  - link "Senha colorido" [ref=f7e716] [cursor=pointer]:
+                    - /url: /pt-br/games/concentration-tactics
+                  - generic [ref=f7e717]: RPG, Strategy, Action
+              - cell "2011" [ref=f7e718]
+              - cell [ref=f7e719]:
+                - img "Nota 67 de 100" [ref=f7e720]: "67"
+              - cell "63" [ref=f7e721]
+              - cell "65" [ref=f7e722]
+              - cell "71" [ref=f7e723]
+              - cell "72" [ref=f7e724]
+              - cell "69" [ref=f7e725]
+              - cell "59" [ref=f7e726]
+              - cell "5" [ref=f7e727]
+            - row [ref=f7e728]:
+              - cell "Tempestade sujo Shooter" [ref=f7e729]:
+                - generic [ref=f7e732]:
+                  - link "Tempestade sujo" [ref=f7e733] [cursor=pointer]:
+                    - /url: /pt-br/games/translation-tactics
+                  - generic [ref=f7e734]: Shooter
+              - cell "2020" [ref=f7e735]
+              - cell [ref=f7e736]:
+                - img "Nota 48 de 100" [ref=f7e737]: "48"
+              - cell "44" [ref=f7e738]
+              - cell "46" [ref=f7e739]
+              - cell "56" [ref=f7e740]
+              - cell "45" [ref=f7e741]
+              - cell "45" [ref=f7e742]
+              - cell "51" [ref=f7e743]
+              - cell "5" [ref=f7e744]
+            - row [ref=f7e745]:
+              - cell "Likely Remark Puzzle, Adventure, Racing" [ref=f7e746]:
+                - generic [ref=f7e749]:
+                  - link "Likely Remark" [ref=f7e750] [cursor=pointer]:
+                    - /url: /pt-br/games/likely-remark
+                  - generic [ref=f7e751]: Puzzle, Adventure, Racing
+              - cell "2016" [ref=f7e752]
+              - cell [ref=f7e753]:
+                - img "Nota 33 de 100" [ref=f7e754]: "33"
+              - cell "32" [ref=f7e755]
+              - cell "32" [ref=f7e756]
+              - cell "31" [ref=f7e757]
+              - cell "34" [ref=f7e758]
+              - cell "35" [ref=f7e759]
+              - cell "37" [ref=f7e760]
+              - cell "5" [ref=f7e761]
+            - row [ref=f7e762]:
+              - cell "Insolence Tactics Shooter, Puzzle" [ref=f7e763]:
+                - generic [ref=f7e766]:
+                  - link "Insolence Tactics" [ref=f7e767] [cursor=pointer]:
+                    - /url: /pt-br/games/insolence-tactics
+                  - generic [ref=f7e768]: Shooter, Puzzle
+              - cell "2020" [ref=f7e769]
+              - cell [ref=f7e770]:
+                - img "Avaliações insuficientes" [ref=f7e771]: –
+              - cell "–" [ref=f7e772]
+              - cell "–" [ref=f7e773]
+              - cell "–" [ref=f7e774]
+              - cell "–" [ref=f7e775]
+              - cell "–" [ref=f7e776]
+              - cell "–" [ref=f7e777]
+              - cell "4" [ref=f7e778]
+            - row [ref=f7e779]:
+              - cell "Impeccable Napkin II Puzzle" [ref=f7e780]:
+                - generic [ref=f7e783]:
+                  - link "Impeccable Napkin II" [ref=f7e784] [cursor=pointer]:
+                    - /url: /pt-br/games/impeccable-napkin-ii
+                  - generic [ref=f7e785]: Puzzle
+              - cell "2015" [ref=f7e786]
+              - cell [ref=f7e787]:
+                - img "Avaliações insuficientes" [ref=f7e788]: –
+              - cell "–" [ref=f7e789]
+              - cell "–" [ref=f7e790]
+              - cell "–" [ref=f7e791]
+              - cell "–" [ref=f7e792]
+              - cell "–" [ref=f7e793]
+              - cell "–" [ref=f7e794]
+              - cell "4" [ref=f7e795]
+            - row [ref=f7e796]:
+              - cell "Exotic Disconnection II Puzzle" [ref=f7e797]:
+                - generic [ref=f7e800]:
+                  - link "Exotic Disconnection II" [ref=f7e801] [cursor=pointer]:
+                    - /url: /pt-br/games/exotic-disconnection-ii
+                  - generic [ref=f7e802]: Puzzle
+              - cell "1996" [ref=f7e803]
+              - cell [ref=f7e804]:
+                - img "Avaliações insuficientes" [ref=f7e805]: –
+              - cell "–" [ref=f7e806]
+              - cell "–" [ref=f7e807]
+              - cell "–" [ref=f7e808]
+              - cell "–" [ref=f7e809]
+              - cell "–" [ref=f7e810]
+              - cell "–" [ref=f7e811]
+              - cell "4" [ref=f7e812]
+            - row [ref=f7e813]:
+              - cell "Hambúrguer rápido Horror" [ref=f7e814]:
+                - generic [ref=f7e817]:
+                  - link "Hambúrguer rápido" [ref=f7e818] [cursor=pointer]:
+                    - /url: /pt-br/games/jagged-strategy
+                  - generic [ref=f7e819]: Horror
+              - cell "2018" [ref=f7e820]
+              - cell [ref=f7e821]:
+                - img "Avaliações insuficientes" [ref=f7e822]: –
+              - cell "–" [ref=f7e823]
+              - cell "–" [ref=f7e824]
+              - cell "–" [ref=f7e825]
+              - cell "–" [ref=f7e826]
+              - cell "–" [ref=f7e827]
+              - cell "–" [ref=f7e828]
+              - cell "4" [ref=f7e829]
+            - row [ref=f7e830]:
+              - cell "Grave Management Shooter, Action" [ref=f7e831]:
+                - generic [ref=f7e834]:
+                  - link "Grave Management" [ref=f7e835] [cursor=pointer]:
+                    - /url: /pt-br/games/grave-management
+                  - generic [ref=f7e836]: Shooter, Action
+              - cell "2025" [ref=f7e837]
+              - cell [ref=f7e838]:
+                - img "Avaliações insuficientes" [ref=f7e839]: –
+              - cell "–" [ref=f7e840]
+              - cell "–" [ref=f7e841]
+              - cell "–" [ref=f7e842]
+              - cell "–" [ref=f7e843]
+              - cell "–" [ref=f7e844]
+              - cell "–" [ref=f7e845]
+              - cell "4" [ref=f7e846]
+            - row [ref=f7e847]:
+              - cell "Neat Impostor RPG" [ref=f7e848]:
+                - generic [ref=f7e851]:
+                  - link "Neat Impostor" [ref=f7e852] [cursor=pointer]:
+                    - /url: /pt-br/games/neat-impostor
+                  - generic [ref=f7e853]: RPG
+              - cell "2015" [ref=f7e854]
+              - cell [ref=f7e855]:
+                - img "Avaliações insuficientes" [ref=f7e856]: –
+              - cell "–" [ref=f7e857]
+              - cell "–" [ref=f7e858]
+              - cell "–" [ref=f7e859]
+              - cell "–" [ref=f7e860]
+              - cell "–" [ref=f7e861]
+              - cell "–" [ref=f7e862]
+              - cell "4" [ref=f7e863]
+            - row [ref=f7e864]:
+              - cell "Considerate Extension Action" [ref=f7e865]:
+                - generic [ref=f7e868]:
+                  - link "Considerate Extension" [ref=f7e869] [cursor=pointer]:
+                    - /url: /pt-br/games/considerate-extension
+                  - generic [ref=f7e870]: Action
+              - cell "1988" [ref=f7e871]
+              - cell [ref=f7e872]:
+                - img "Avaliações insuficientes" [ref=f7e873]: –
+              - cell "–" [ref=f7e874]
+              - cell "–" [ref=f7e875]
+              - cell "–" [ref=f7e876]
+              - cell "–" [ref=f7e877]
+              - cell "–" [ref=f7e878]
+              - cell "–" [ref=f7e879]
+              - cell "4" [ref=f7e880]
+            - row [ref=f7e881]:
+              - cell "Professor extrovertido Shooter, Simulation, RPG" [ref=f7e882]:
+                - generic [ref=f7e885]:
+                  - link "Professor extrovertido" [ref=f7e886] [cursor=pointer]:
+                    - /url: /pt-br/games/sleepy-fog-ii
+                  - generic [ref=f7e887]: Shooter, Simulation, RPG
+              - cell "1990" [ref=f7e888]
+              - cell [ref=f7e889]:
+                - img "Avaliações insuficientes" [ref=f7e890]: –
+              - cell "–" [ref=f7e891]
+              - cell "–" [ref=f7e892]
+              - cell "–" [ref=f7e893]
+              - cell "–" [ref=f7e894]
+              - cell "–" [ref=f7e895]
+              - cell "–" [ref=f7e896]
+              - cell "4" [ref=f7e897]
+            - row [ref=f7e898]:
+              - cell "Flimsy Hamburger Adventure" [ref=f7e899]:
+                - generic [ref=f7e902]:
+                  - link "Flimsy Hamburger" [ref=f7e903] [cursor=pointer]:
+                    - /url: /pt-br/games/flimsy-hamburger
+                  - generic [ref=f7e904]: Adventure
+              - cell "2014" [ref=f7e905]
+              - cell [ref=f7e906]:
+                - img "Avaliações insuficientes" [ref=f7e907]: –
+              - cell "–" [ref=f7e908]
+              - cell "–" [ref=f7e909]
+              - cell "–" [ref=f7e910]
+              - cell "–" [ref=f7e911]
+              - cell "–" [ref=f7e912]
+              - cell "–" [ref=f7e913]
+              - cell "4" [ref=f7e914]
+            - row [ref=f7e915]:
+              - cell "Quadro transparente Horror" [ref=f7e916]:
+                - generic [ref=f7e919]:
+                  - link "Quadro transparente" [ref=f7e920] [cursor=pointer]:
+                    - /url: /pt-br/games/sociable-tuxedo
+                  - generic [ref=f7e921]: Horror
+              - cell "1987" [ref=f7e922]
+              - cell [ref=f7e923]:
+                - img "Avaliações insuficientes" [ref=f7e924]: –
+              - cell "–" [ref=f7e925]
+              - cell "–" [ref=f7e926]
+              - cell "–" [ref=f7e927]
+              - cell "–" [ref=f7e928]
+              - cell "–" [ref=f7e929]
+              - cell "–" [ref=f7e930]
+              - cell "4" [ref=f7e931]
+        - navigation "Páginas" [ref=f7e932]:
+          - link "Próxima →" [ref=f7e933] [cursor=pointer]:
+            - /url: /pt-br/games?cursor=eyJzIjoiLXBvcHVsYXJpdHkiLCJ2IjoiNDUuNDYiLCJpZCI6IjAxYTEwMWRiLTc2N2QtNzczZC1hOGYzLWY2OTBjNjgxYTQ4OCIsImQiOiJuZXh0In0
+  - contentinfo [ref=f7e934]:
+    - generic [ref=f7e935]:
+      - generic [ref=f7e936]: © 2026 Hexascore
+      - link "Termos" [ref=f7e937] [cursor=pointer]:
+        - /url: /pt-br/terms
+      - link "Privacidade" [ref=f7e938] [cursor=pointer]:
+        - /url: /pt-br/policy
+      - link "Contato" [ref=f7e939] [cursor=pointer]:
+        - /url: /pt-br/contact
+  - button "Open Next.js Dev Tools" [ref=f7e945] [cursor=pointer]
