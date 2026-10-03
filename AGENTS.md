@@ -15,7 +15,9 @@ Codename `hexascore`; final brand name is pending.
 - Follow the Karpathy guidelines (think first, simplicity, surgical changes, verifiable goals), `ponytail` (YAGNI, minimal solution) and `graphify` (map the code before broad searches). Vendored skills live in `.claude/skills/`; always-on rules in `.claude/rules/` (karpathy, ponytail, graphify).
 - Validate every schema and piece of data with zod wherever possible (env, actions, forms, API params/responses, webhooks, external responses, jsonb reads); infer types with `z.infer`.
 - Data fetching: Server Components first; client-side fetches go through TanStack Query (`useQuery`/`useInfiniteQuery`), never `useEffect` + `fetch` (see `docs/frontend.md`).
+- Listing pattern (every item listing, now and future): split by category (one `CategoryLabel` sub-header per type, empty groups hidden), `CoverThumb` left of every item title (queries return `coverUrl`/`coverThumbUrl`), and every category name rendered with `CategoryLabel` (icon in the section accent). See `docs/frontend.md` → "Padrão de listagens".
 - Env vars are validated with zod in `apps/web/lib/env.ts` before build and server start; failures print every bad variable explicitly.
+- Every modal is centred on screen: Base UI `Dialog`/`AlertDialog` use `DIALOG_BACKDROP` and `dialogPopup()` from `apps/web/components/ui/dialog.ts` (enforced by `components/ui/dialog.test.ts`); native `<dialog>` uses `showModal()` with `m-auto`.
 - Handle errors and fallbacks everywhere: timeouts on external calls, `notFound()`/404, `error.tsx`/500, RFC 9457 problems with 402/404/429/500 in the API, graceful degradation of optional services.
 - Security rules in `docs/architecture.md` are mandatory.
 - All reference documentation lives in `docs/` (architecture, data model, API, frontend, design system, payments, ingestion, security, testing, process). Update the matching doc in the same change.
