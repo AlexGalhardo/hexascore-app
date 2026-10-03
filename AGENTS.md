@@ -12,5 +12,6 @@ Codename `hexascore`; final brand name is pending.
 - Only stable, pinned dependency versions (no `^`, no beta/rc/canary). Ask before adding a dependency.
 - Bun is the package manager. Python code lives in `webscrappings/` and uses uv.
 - Follow the Karpathy guidelines (think first, simplicity, surgical changes, verifiable goals), `ponytail` (YAGNI, minimal solution) and `graphify` (map the code before broad searches). Vendored skills live in `.claude/skills/`.
-- Security rules from `PLAN.md` §3 are mandatory.
+- Security rules in `docs/architecture.md` are mandatory.
+- All reference documentation lives in `docs/` (architecture, data model, API, frontend, design system, payments, ingestion, security, testing, process). Update the matching doc in the same change.
 - Record notable changes in `CHANGELOG.md` (Keep a Changelog).

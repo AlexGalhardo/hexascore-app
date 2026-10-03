@@ -78,210 +78,26 @@ Valores ficam em config (não hardcoded). PIX: 1 mês ou 12 meses (12 pelo preç
 
 ---
 
-## 3. Arquitetura
+## 3. Documentação (`docs/`)
 
-```
-hexascore/                 Bun workspaces: apps/web, sdks/ts
-├─ apps/web/               Next 16 — site + /api/v1 + /admin (todo o TS do produto)
-│   ├─ app/[locale]/       páginas
-│   ├─ app/api/v1/         API pública
-│   ├─ app/api/{auth,webhooks,cron}/
-│   ├─ actions/            Server Actions ("use server" só aqui)
-│   ├─ lib/db/             Drizzle schema, migrations, client (Neon | PGlite), seed
-│   ├─ lib/api/            schemas zod → openapi.json (fonte única do contrato)
-│   ├─ lib/                metascore, cota, planos, pagamentos, auth, session
-│   ├─ emails/             react-email (Resend)
-│   ├─ components/         Base UI + Tailwind 4
-│   └─ proxy.ts            locale, host api.* → /api/v1, CSP com nonce
-├─ sdks/ts/  sdks/python/  gerados do openapi.json (zero código à mão)
-├─ webscrappings/          Python 3.13 + uv (ingestão)
-├─ qa/                     Playwright, agente QA, Schemathesis, ZAP, k6
-├─ infra/                  docker-compose (Postgres 18 + Redis)
-└─ docs/                   arquitetura, ADRs, security.md
-```
+Toda documentação de referência vive em `docs/`; este plano só guarda decisões e milestones. Ao mudar um subsistema, atualize o doc correspondente no mesmo PR.
 
-```mermaid
-flowchart LR
-  GH[GitHub Actions cron] --> PY[webscrappings Python]
-  PY -->|payload bruto| SR[(source_records)]
-  SR -->|normalize.py| CAT[(items / translations / external_scores)]
-  PY -->|POST /api/cron/revalidate| WEB
-  U[Usuário] --> WEB[apps/web RSC]
-  WEB --> CAT
-  DEV[Dev cliente API] -->|Bearer hx_live_...| API[/api/v1]
-  API --> R[(Upstash Redis: key cache, rate limit, cota)]
-  API --> CAT
-  R -->|flush diário| AU[(api_usage_daily / credit_ledger)]
-```
-
-### Regras de segurança (obrigatórias)
-
-- Quem age vem sempre da sessão (`getSessionUser()`), nunca do body.
-- `"use server"` só em `actions/` (em `lib/` vira endpoint público) — teste-guarda no CI.
-- Nenhuma linha inteira de `user` vai ao browser: DTOs explícitos.
-- Valores de dinheiro e cota calculados só no servidor.
-- Segredo nunca em `NEXT_PUBLIC_*`.
-- CSP estrita com nonce. Webhooks: assinatura/HMAC com comparação de tempo constante + idempotência.
-- BotID em login, signup, contato e checkout. Regras de rate limit no Vercel Firewall.
-
----
-
-## 4. Modelo de dados (Drizzle + Postgres)
-
-**Catálogo**
-- `items`: `id` uuid v7 (público), `type` (`game|movie|series|book`), `slug` (único por tipo), `wikidata_qid` (único), `release_date`, `external_ids jsonb` (imdb, igdb, steam, tmdb, isbn13, openlibrary, hltb, goodreads, metacritic, rt, epic, gog), `meta jsonb` por tipo (genres, platforms, runtime, pages, seasons, trailers; índice GIN), stats desnormalizadas `rating_count`, `score`, `score_c1..c6` (atualizadas na mesma transação da avaliação).
-- `item_translations` (`item_id`, `locale`) PK: `title`, `synopsis`, `synopsis_license`, `synopsis_source_url`, `search tsvector` gerado, índice `pg_trgm` em `title`.
-- `external_scores` (`item_id`, `source`, `score`, `url`, `fetched_at`) — **nunca sai pela API**.
-- `affiliate_links` (`item_id`, `store`, `url`, `active`).
-
-**Avaliação e social**
-- `ratings` (`user_id`, `item_id`) PK: `c1..c6 smallint CHECK (0..100)`, `overall` gerado = `round((c1+…+c6)/6.0)`. Nomes das categorias vivem em código.
-- `item_status` (`user_id`, `item_id`, `status`) · `follows` (`follower_id`, `followee_id`) · `lists`, `list_items` · `reports`.
-
-**Auth** (gerado pelo Better Auth CLI): `user`, `session`, `account`, `verification`, `two_factor`, `passkey`. Extras em `user`: `nickname` único, `role`, `profile_private`, `deletion_scheduled_at`.
-
-**API e billing**
-- `api_keys`: plugin apiKey do Better Auth se servir; senão 1 tabela (`prefix`, `hash` sha256, `revoked_at`, `last_used_at`).
-- `subscriptions` (`user_id`, `plan`, `provider`, `status`, `current_period_end`, `provider_ref`).
-- `credit_ledger` (`user_id`, `delta`, `reason`, `ref`) — saldo = soma, append-only.
-- `pix_charges` (`provider_ref` único, `amount_cents`, `purpose`, `status`).
-- `api_usage_daily` (`user_id`, `date`, `count`).
-- Últimas 100 requests por usuário ficam no Redis (`LPUSH` + `LTRIM`), não no Postgres.
-
-**Outros**: `contact_messages` · `source_records` (`source`, `external_id`) PK com `payload jsonb`, `hash`, `fetched_at`, `item_id`.
-
-Fora por ora: tabela de gêneros/plataformas (entra quando gênero ganhar página traduzida), `ingestion_runs` (logs do Actions bastam).
-
----
-
-## 5. API pública `/v1`
-
-- Base `https://api.hexascore.com/v1`. Auth `Authorization: Bearer hx_live_…` (chave exibida 1 vez, só hash no banco). Só leitura (`GET`).
-
-| Rota | Uso |
+| Doc | Conteúdo |
 | --- | --- |
-| `/v1/{games\|movies\|series\|books}` | lista + filtros: `genre`, `platform`, `year`, `min_score`, `max_score`, `min_{categoria}` (ex. `min_gameplay=80`), `sort` (`score`, `-score`, `release_date`, `rating_count`), `limit`, `cursor`, `locale` |
-| `/v1/{type}/{id}` | detalhe: metadados, metascore, médias por categoria, IDs externos, sinopse com `license` + `source_url` |
-| `/v1/{type}/genres` | taxonomia para filtros |
-| `/v1/search?q=&type=` | busca fuzzy entre tipos |
-| `/v1/lookup?source=imdb&id=tt…` | busca por ID externo |
-| `/v1/me/usage` | cota restante, plano, créditos |
-
-- Lista: `{ "data": [...], "next_cursor": "…" | null }` (paginação por cursor).
-- Erros RFC 9457 (`application/problem+json`) com `type` linkando a página do erro nas docs e `request_id`.
-- Headers: `RateLimit-*` (IETF), `X-Quota-Remaining`, `X-Request-Id`. 402 sem cota/créditos (link para `/pricing`); 429 com `Retry-After`.
-- Cota conta toda request autenticada, exceto 429 e 5xx.
-- Versionamento por path; quebra → `/v2`, antiga com headers `Deprecation` + `Sunset` e changelog da API.
-- Dados de catálogo com cache do Next (`"use cache"` + tags invalidadas pela ingestão); checagem de cota sempre roda.
-- Contrato: zod 4 → `openapi.json` 3.1 gerado no build; CI falha se o arquivo mudar sem commit.
-- Docs: `/docs` (quickstart, auth, erros, paginação, limites) + referência Scalar (snippets cURL/JS/Python automáticos). `/profile/api` = mesmo Scalar com a chave do usuário + dashboard de uso.
-- SDKs gerados: `@hey-api/openapi-ts` (npm) e `openapi-python-client` (PyPI), publicados via release-please.
-
-Fora por ora: endpoints de escrita, notas individuais de usuários, webhooks para clientes, GraphQL.
+| [`docs/architecture.md`](docs/architecture.md) | monorepo, fluxo de dados, regras de segurança obrigatórias |
+| [`docs/data-model.md`](docs/data-model.md) | tabelas Drizzle/Postgres |
+| [`docs/api.md`](docs/api.md) | API pública `/v1`, contrato, docs e SDKs |
+| [`docs/frontend.md`](docs/frontend.md) | rotas, página do item, formulários, preferências |
+| [`docs/design-system.md`](docs/design-system.md) | direção visual, tokens, tipografia, componentes |
+| [`docs/payments.md`](docs/payments.md) | Stripe, AbacatePay, cota e créditos |
+| [`docs/ingestion.md`](docs/ingestion.md) | fontes, conectores Python, agenda |
+| [`docs/security.md`](docs/security.md) | OWASP Top 10:2025, riscos aceitos |
+| [`docs/testing.md`](docs/testing.md) | camadas de teste e QA/pentest, como rodar |
+| [`docs/process.md`](docs/process.md) | git, CI/CD, releases, regras de agentes |
 
 ---
 
-## 6. Frontend e rotas
-
-Locale: EN sem prefixo, `/pt-br/…`, `/es/…`. Slugs de rota em inglês nos 3 idiomas. Tudo mobile-first, light/dark.
-
-| Rota | Conteúdo |
-| --- | --- |
-| `/` | navbar com busca global (autocomplete) + blocos por seção (melhores, lançamentos, mais avaliados) |
-| `/games` `/movies` `/series` `/books` | catálogo denso com filtros na URL |
-| `/{type}/[slug]` | página do item |
-| `/search?q=` | resultados entre tipos |
-| `/u/[nickname]`, `/u/[nickname]/lists/[id]` | perfil público, listas |
-| `/feed` | avaliações de quem você segue |
-| `/pricing` | planos da API |
-| `/docs/*` | guias + Scalar |
-| `/login` `/signup` `/recover-password` `/reset-password` `/verify-email` | auth |
-| `/profile` | dados, senha (definir/mudar), 2FA, passkeys, excluir conta |
-| `/profile/api` · `/profile/api/checkout` | chaves, uso, Scalar · assinar plano/comprar créditos |
-| `/contact` `/policy` `/terms` | contato, privacidade, termos e cookies |
-| `/admin/*` | contato, denúncias, afiliados, edição/merge de itens, status da ingestão, banir usuário (só EN) |
-
-**Página do item**: cabeçalho (título, ano, tipo, capa pequena, gêneros/plataformas) · metascore grande + radar hexagonal das 6 categorias + nº de avaliações · botão "ver notas dos usuários" (modal paginado, só perfis públicos) · formulário com 6 controles (slider + campo numérico, acessível por teclado, média ao vivo) · notas externas (MC, RT, IMDb, HLTB) como links com atribuição · até 3 trailers (`youtube-nocookie`, carregam só no clique) · tabela de metadados · status + adicionar à lista · "onde comprar" (livros/jogos).
-
-**Formulários** (validação zod idêntica cliente/servidor):
-- Senha: 8–32, ≥ 1 maiúscula, 1 minúscula, 1 número, 1 especial; botão olho. Rodapé do login: "Não tem conta ainda? Criar conta"; do signup: "Já tem conta? Entrar". Ambos com Google.
-- Nickname: 4–16 `[a-zA-Z0-9_]`, único; avatar placeholder mostra a 1ª letra em MAIÚSCULA enquanto digita.
-- Contato: nome + e-mail preenchidos e `disabled` se logado (servidor usa a sessão); select "Dúvidas" / "Sugestões & Feedback" / "Bugs e Problemas Técnicos"; textarea 5 linhas, 32–512 caracteres com contador `0/512`.
-- Excluir conta: modal explicando os 30 dias, botão confirmar desabilitado por 10s com contagem.
-
-**Preferências**: tema, consentimento e locale em cookies próprios; tema lido no servidor (sem flash, sem lib). Banner de cookies: só essenciais (Analytics é cookieless) + consentimento para embeds do YouTube.
-
-**UI**: Base UI + Tailwind 4 (tokens por seção), `next-intl`, radar em SVG puro.
-
----
-
-## 7. Pagamentos, cota e billing
-
-**Stripe**: Checkout hospedado (`mode=subscription` com 1 Price por plano e `currency_options` BRL/USD/EUR; créditos `mode=payment`). Customer Portal para cancelar/trocar cartão/faturas. Webhook `/api/webhooks/stripe` verifica assinatura, idempotente por `event.id`, trata `checkout.session.completed`, `customer.subscription.updated|deleted`, `invoice.paid`. Moeda padrão pelo locale (pt-br→BRL, es→EUR, en→USD), trocável. Upgrade imediato (proration); downgrade no fim do período.
-
-**AbacatePay (PIX)**: servidor cria cobrança com valor da config → QR + copia-e-cola com polling de status → webhook HMAC (tempo constante) idempotente por `provider_ref` → `current_period_end = max(agora, fim atual) + período`. Cron diário: e-mail de renovação 7d e 1d antes; vencido volta a Free.
-
-**Cota por request (Upstash)**:
-1. Resolve a chave pelo hash (cache Redis 60s: plano + `user_id`).
-2. Rate limit por segundo (`@upstash/ratelimit`, janela deslizante).
-3. Cota: `INCR q:{user}:life` (Free) ou `q:{user}:{yyyymm}` (pago).
-4. Mensal esgotada → `DECR credits:{user}` (inicializado do ledger).
-5. Sem cota e sem crédito → 402.
-6. Cron diário grava em `api_usage_daily` e lança débitos no `credit_ledger`.
-
-Fora por ora: faturas próprias, cupons, trial, PIX Automático recorrente.
-
----
-
-## 8. Ingestão (`webscrappings/`)
-
-| Fonte | Como | Fornece |
-| --- | --- | --- |
-| Wikidata | dump JSON (bootstrap) + SPARQL (incremental) | catálogo base, títulos por idioma, gêneros, datas, IDs externos, notas MC/RT (P444), trailer YouTube (P1651) |
-| Wikipedia | REST `page/summary` | sinopse por idioma (CC BY-SA) |
-| Open Library | dump + API | ISBN, páginas, autores, capas |
-| Steam | `appdetails` público | preço, plataformas, trailers, capa |
-| GOG | API pública de catálogo | disponibilidade, link |
-| Epic, IMDb, MC, RT, HLTB, Goodreads, Skoob | sem fetch | deep-link pelo ID do Wikidata |
-| TMDB, IGDB | fora da v1 | após licença comercial |
-
-```
-webscrappings/
-├─ pyproject.toml   uv, ruff, pytest
-├─ common/          http (rate limit, retry, User-Agent identificado), db (psycopg), upsert source_records
-├─ connectors/      wikidata.py, wikipedia.py, openlibrary.py, steam.py, gog.py
-│                   fetch(since) -> Iterable[Record(source, external_id, payload)]
-├─ normalize.py     source_records → items / item_translations / external_scores (match por QID)
-├─ covers.py        copia capas para Vercel Blob
-└─ tests/           pytest com fixtures gravadas, sem rede
-```
-
-Padrão: conector grava payload bruto → `hash` igual = no-op → normalizador processa só alterados e faz upsert por `wikidata_qid` (sem QID = descartado na v1) → `POST /api/cron/revalidate` (segredo) invalida tags.
-
-Agenda: **bootstrap** manual (`workflow_dispatch`): top 100k por sitelinks (~35k filmes, 15k séries, 25k jogos, 25k livros) · **incremental** noturno (Wikidata + Steam) · **semanal** notas externas + sinopses. Bootstrap exporta snapshot `.sql.gz` (GitHub Release) usado pelo seed de dev/preview.
-
-Fora por ora: orquestrador (Airflow/Prefect), ORM Python.
-
----
-
-## 9. Qualidade, segurança e processo
-
-**Git**: `feat/*`/`fix/*` → PR para `dev` (sandbox: preview Vercel + branch Neon + seed sintético) → CI verde → PR `dev` → `main` (produção, Rolling Releases). Push direto bloqueado por branch protection (`gh`). Conventional Commits via commitlint + husky. release-please na `main`.
-
-**CI (GitHub Actions)**
-- Todo PR: Biome (lint + format) · `tsc --noEmit` · `bun test` (PGlite) · integração (Postgres 18 + Redis services) · diff do `openapi.json` · `next build` + smoke · `ruff` + `pytest` · `bun audit --audit-level=high` · CodeQL · Dependabot.
-- PR `dev` → `main` (contra o preview, bloqueante): Playwright E2E (mobile + desktop, light/dark, 3 idiomas, axe) · Schemathesis · OWASP ZAP baseline/API · k6 curto.
-- Agendado/manual: agente QA exploratório (dirige o browser por todas as rotas com edge cases: unicode, limites, payloads XSS) → relatório em `qa/reports/` + issue por bug.
-
-**Segurança**: `docs/security.md` com tabela OWASP Top 10:2025 (A01–A10: superfícies, mitigação, commit, riscos aceitos), revisada a cada milestone.
-
-**Agentes**: `AGENTS.md` é a fonte; `CLAUDE.md` importa `@AGENTS.md`. `.claude/rules/`: `karpathy.md`, `ponytail.md`, `graphify.md`. Skills `respondeae-*` reescritas como `hexascore-secure-endpoint` e `hexascore-local-verification`. Worktrees + agentes paralelos para `webscrappings/`, `sdks/` e `docs/`.
-
-**Dependências**: só versões estáveis, fixadas sem `^`. Imagens Docker com tag fixa (`oven/bun:<versão>`, `postgres:18.x`). Nenhuma dependência nova sem aprovação.
-
----
-
-## 10. Milestones
+## 4. Milestones
 
 Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com uma release.
 

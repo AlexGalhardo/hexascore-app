@@ -7,7 +7,7 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ### Added
 
-- `PLAN.md` with the full project plan (decisions, architecture, data model, API, ingestion, billing, milestones).
+- `PLAN.md` with decisions and milestones; reference docs in `docs/` (architecture, data model, API, frontend, design system, payments, ingestion, security, testing, process).
 - `AGENTS.md` and `CLAUDE.md` agent guides.
 
 ### Removed
