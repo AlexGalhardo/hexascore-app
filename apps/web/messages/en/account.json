@@ -1,0 +1,83 @@
+{
+	"account": {
+		"metaTitle": "Profile",
+		"title": "Your profile",
+		"saved": "Saved.",
+		"details": {
+			"title": "Account details",
+			"name": "Name",
+			"email": "Email",
+			"nickname": "Nickname",
+			"save": "Save name"
+		},
+		"password": {
+			"setTitle": "Set a password",
+			"setBody": "Your account was created with Google or a passkey. Set a password to also log in with email and password.",
+			"changeTitle": "Change password",
+			"set": "Set password",
+			"change": "Change password",
+			"done": "Password updated.",
+			"revokeOthers": "Log out other devices"
+		},
+		"twoFactor": {
+			"title": "Two-factor authentication",
+			"on": "Two-factor authentication is on.",
+			"off": "Add a second step to your login with an authenticator app (TOTP).",
+			"enable": "Enable 2FA",
+			"disable": "Disable 2FA",
+			"confirmPassword": "Confirm with your password",
+			"scan": "Scan this QR code with your authenticator app, then enter the 6-digit code.",
+			"qrAlt": "QR code to add this account to an authenticator app",
+			"manual": "Can't scan? Enter this key manually:",
+			"code": "6-digit code",
+			"verify": "Verify and enable",
+			"backupTitle": "Backup codes",
+			"backupBody": "Save these codes somewhere safe. Each one works once if you lose your phone. They will not be shown again.",
+			"copy": "Copy codes",
+			"copied": "Copied.",
+			"done": "I saved my codes",
+			"disabled": "Two-factor authentication disabled.",
+			"cancel": "Cancel"
+		},
+		"passkeys": {
+			"title": "Passkeys",
+			"body": "Log in with your fingerprint, face or device PIN instead of a password.",
+			"empty": "No passkeys yet.",
+			"add": "Add passkey",
+			"remove": "Remove",
+			"removeLabel": "Remove passkey {name}",
+			"unnamed": "Passkey",
+			"added": "Added {date}",
+			"failed": "The passkey was not saved. Try again."
+		},
+		"privacy": {
+			"title": "Privacy",
+			"label": "Private profile",
+			"help": "Your ratings stay in the community scores, but your profile and lists are hidden from other users."
+		},
+		"delete": {
+			"title": "Delete account",
+			"body": "Your account is deleted 30 days after you confirm. Until then you can log in and cancel.",
+			"button": "Delete my account",
+			"dialogTitle": "Delete your account?",
+			"dialogBody": "You will be logged out now. If you do not log in and cancel within 30 days, your personal data is erased for good. Your ratings remain in the community scores as an anonymous user.",
+			"wait": "Confirm ({seconds})",
+			"confirm": "Yes, delete my account",
+			"cancel": "Keep my account"
+		},
+		"banner": {
+			"text": "Your account is scheduled for deletion on {date}.",
+			"cancel": "Cancel deletion"
+		}
+	},
+	"actions": {
+		"unauthorized": "Your session expired. Log in again.",
+		"invalid": "Check the highlighted fields.",
+		"rateLimited": "Too many attempts. Try again later.",
+		"bot": "Your request was blocked. Reload the page and try again.",
+		"passwordAlreadySet": "This account already has a password.",
+		"weakPassword": "The password does not meet the requirements.",
+		"notScheduled": "This account is not scheduled for deletion.",
+		"server": "Something went wrong on our side. Try again."
+	}
+}
