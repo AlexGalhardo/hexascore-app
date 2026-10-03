@@ -15,7 +15,8 @@
     "stripe:setup": "bun scripts/stripe-setup.ts",
     "openapi": "bun scripts/openapi.ts",
     "openapi:check": "bun scripts/openapi.ts --check",
-    "admin:grant": "bun scripts/admin-grant.ts"
+    "admin:grant": "bun scripts/admin-grant.ts",
+    "seo:gsc": "bun scripts/search-console.ts"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",

@@ -10,7 +10,7 @@ import {
 	itemTranslations,
 	sourceRecords,
 } from "./db/schema/catalog";
-import { contactMessages, itemStatus, listItems, lists, ratings, reports } from "./db/schema/social";
+import { contactMessages, itemStatus, listItems, lists, ratings, reports, timeToBeat } from "./db/schema/social";
 import { recomputeItemStats } from "./ratings";
 
 // Data access for /admin. Callers (actions/admin.ts, app/[locale]/admin) check isAdmin() first.
@@ -79,7 +79,7 @@ export async function deleteAffiliateLink(db: Database, itemId: string, store: A
 export type MergeResult = "ok" | "notFound" | "same" | "typeMismatch";
 
 /**
- * Moves ratings, statuses, list entries, affiliate links, external scores and source records from `sourceId` to
+ * Moves ratings, statuses, time-to-beat reports, list entries, affiliate links, external scores and source records from `sourceId` to
  * `targetId`, deletes the source and recomputes the target stats — all in one transaction. When a user has a
  * row on both items, the target's row wins (the source row is dropped with the source item).
  */
@@ -116,6 +116,14 @@ export function mergeItems(db: Database, sourceId: string, targetId: string): Pr
 					.where(eq(itemStatus.itemId, sourceId)),
 			)
 			.onConflictDoNothing();
+		// Only where the user's (merged) target status is `completed`, so the time-to-beat invariant holds.
+		await tx.execute(sql`
+			insert into ${timeToBeat} (user_id, item_id, main_minutes, extras_minutes, completionist_minutes, created_at, updated_at)
+			select t.user_id, ${targetId}::uuid, t.main_minutes, t.extras_minutes, t.completionist_minutes, t.created_at, t.updated_at
+			from ${timeToBeat} t
+			join ${itemStatus} s on s.user_id = t.user_id and s.item_id = ${targetId}::uuid and s.status = 'completed'
+			where t.item_id = ${sourceId}::uuid
+			on conflict do nothing`);
 		await tx
 			.insert(listItems)
 			.select(

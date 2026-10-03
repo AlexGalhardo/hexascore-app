@@ -192,8 +192,34 @@ async function main(): Promise<void> {
 		.from(stats)
 		.where(eq(schema.items.id, stats.id));
 
+	// Time to beat: about a third of each game's raters "completed" it and report hours around a per-game base
+	// (5–64 h main story, ~1.5× with extras, ~2.5× completionist; fewer reporters for the longer styles).
+	// One set-based statement, deterministic through hashtext, so reruns are idempotent and stay fast.
+	await db.execute(sql`
+		with picked as (
+			select r.user_id, r.item_id,
+				(abs(hashtext(i.wikidata_qid)) % 60 + 5) * 60 as base,
+				abs(hashtext(r.user_id || i.wikidata_qid)) % 100 as jitter
+			from ratings r join items i on i.id = r.item_id
+			where i.type = 'game' and abs(hashtext(i.wikidata_qid || r.user_id)) % 3 = 0
+		), statuses as (
+			insert into item_status (user_id, item_id, status)
+			select user_id, item_id, 'completed' from picked
+			on conflict (user_id, item_id) do update set status = 'completed'
+			returning user_id, item_id
+		)
+		insert into time_to_beat (user_id, item_id, main_minutes, extras_minutes, completionist_minutes)
+		select p.user_id, p.item_id,
+			round(p.base * (0.8 + p.jitter / 250.0) / 30) * 30,
+			case when p.jitter % 2 = 0 then round(p.base * 1.5 * (0.8 + p.jitter / 250.0) / 30) * 30 end,
+			case when p.jitter % 4 = 0 then round(p.base * 2.5 * (0.8 + p.jitter / 250.0) / 30) * 30 end
+		from picked p join statuses s on s.user_id = p.user_id and s.item_id = p.item_id
+		on conflict (user_id, item_id) do update set
+			main_minutes = excluded.main_minutes, extras_minutes = excluded.extras_minutes,
+			completionist_minutes = excluded.completionist_minutes`);
+
 	console.info(
-		`[seed] ${ratingTotal} ratings, stats recomputed — done in ${Math.round(performance.now() - started)} ms`,
+		`[seed] ${ratingTotal} ratings, stats and time to beat — done in ${Math.round(performance.now() - started)} ms`,
 	);
 }
 

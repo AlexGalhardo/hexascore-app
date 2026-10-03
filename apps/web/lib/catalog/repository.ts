@@ -8,6 +8,7 @@ import { user } from "@/lib/db/schema/auth";
 import { affiliateLinks, externalScores, type ItemType, items, itemTranslations } from "@/lib/db/schema/catalog";
 import { ratings } from "@/lib/db/schema/social";
 import { httpsUrlOrNull } from "@/lib/safe-url";
+import { getTimeToBeat } from "@/lib/time-to-beat";
 import { decodeCursor, encodeCursor, InvalidCursorError } from "./cursor";
 import { parseExternalIds, parseMeta } from "./jsonb";
 import {
@@ -211,6 +212,7 @@ async function getItem(db: Database, where: SQL, locale: Locale): Promise<ItemDe
 		.limit(1);
 	if (!row) return null;
 
+	const timeToBeat = row.type === "game" ? await getTimeToBeat(db, row.id) : null;
 	const ownSynopsis = row.synopsisLocale !== null;
 	const synopsisFallback = !ownSynopsis && row.synopsisEn !== null;
 	return {
@@ -224,6 +226,7 @@ async function getItem(db: Database, where: SQL, locale: Locale): Promise<ItemDe
 		externalIds: parseExternalIds(row.externalIds, row.id),
 		wikidataQid: row.wikidataQid,
 		meta: parseMeta(row.meta, row.id),
+		timeToBeat,
 	};
 }
 
@@ -243,6 +246,24 @@ export async function getItemIdBySlug(db: Database, type: ItemType, slug: string
 		.where(and(eq(items.type, type), eq(items.slug, slug)))
 		.limit(1);
 	return row?.id ?? null;
+}
+
+export type SitemapItem = { type: ItemType; slug: string; updatedAt: string };
+
+export async function countItems(db: Database): Promise<number> {
+	const [row] = await db.select({ n: sql<number>`count(*)::int` }).from(items);
+	return row?.n ?? 0;
+}
+
+/** Stable page of items for the sitemap, ordered by id (uuid v7, so new items land in the last chunk). */
+export async function listSitemapItems(db: Database, offset: number, limit: number): Promise<SitemapItem[]> {
+	const rows = await db
+		.select({ type: items.type, slug: items.slug, updatedAt: items.updatedAt })
+		.from(items)
+		.orderBy(asc(items.id))
+		.offset(offset)
+		.limit(limit);
+	return rows.map((r) => ({ type: r.type, slug: r.slug, updatedAt: r.updatedAt.toISOString() }));
 }
 
 export const LOOKUP_SOURCES = ["imdb", "steam", "igdb", "tmdb", "isbn13", "openlibrary", "wikidata"] as const;

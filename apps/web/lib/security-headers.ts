@@ -5,7 +5,7 @@
 const SCALAR_PAGE = /^(?:\/(?:pt-br|es))?\/(?:docs\/reference|profile\/api)\/?$/;
 
 /** Origin of the production API host used by the spec `servers` (Scalar "Try it" on /docs/reference). */
-const PUBLIC_API_ORIGIN = "https://api.hexascore.com";
+const PUBLIC_API_ORIGIN = "https://api.hexascore.app";
 
 export function createNonce(): string {
 	const bytes = new Uint8Array(16);

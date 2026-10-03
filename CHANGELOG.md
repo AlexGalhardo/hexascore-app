@@ -5,6 +5,44 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Added
+
+- PIX sandbox payment for testing: with `ABACATEPAY_SANDBOX=true` (default off) the PIX QR modal shows a "PAY SANDBOX PIX" button (10 s cooldown) that calls AbacatePay `POST /v2/transparents/simulate-payment` through `simulatePixPaymentAction` (owner's pending charge only); the plan is still applied by the webhook/status poll.
+- SEO: `robots.txt` (indexable only in production, private pages disallowed in every locale) and sitemaps with hreflang alternates: `/sitemap-index.xml` → `/sitemap/0.xml` (static pages) + `/sitemap/<n>.xml` (catalog items, 40k per file).
+- `bun run seo:gsc` (apps/web): Search Console CLI over a service account (sites, sitemaps, submit, Search Analytics queries).
+- Item page credits the cover (source, author, license and link) when the ingestion stored `meta.coverAttribution` (Wikimedia Commons covers under CC BY/BY-SA require it).
+- Tests: legal documents must match paragraph-for-paragraph across locales, carry the brand from `APP_NAME` and no locale file may contain the codename; `localeFromRequest` (`i18n/locale.ts`).
+- E2E specs for the 0.3 flows (`qa/e2e/specs/ratings.spec.ts`, `social.spec.ts`, `admin.spec.ts`), replacing the `todo-0.3` placeholders: 6-category rating, edit and the 5-rating score threshold; item status and curated lists; public vs private profile; follow → `/feed`; report → admin resolves; `/admin` 404 for non-admins. DB helpers `createItem`, `createMember`, `insertRating`, `grantAdmin`.
+- API QA gates in `.github/workflows/qa.yml` (run in sequence against the Vercel preview, pinned Docker images, no npm dependency): k6 2.3.0 load test (`qa/k6`, p95 < 300 ms, 429 with `Retry-After` on a burst, Free key 402 after the quota and 400 on `limit=11`), Schemathesis 4.29.0 fuzzing of `openapi.json` (`qa/schemathesis`, 5xx + response conformance) and an OWASP ZAP 2.17.0 baseline + API active scan (`qa/zap`, fails on High). Secrets `QA_API_KEY` (paid plan) and optional `QA_FREE_API_KEY`; jobs skip with a notice without them.
+- Docs: `docs/vercel-costs-monthly.md`, a monthly production cost estimate (Vercel Pro + Flat Rate CDN, Blob for 1M covers, Neon, Upstash, Resend, domain, GitHub Actions, Stripe/AbacatePay fees) with three traffic scenarios in USD/BRL, cost controls and how to upgrade Neon/Upstash through the Vercel Marketplace; prices checked 2026-10-03.
+- Crowdsourced time to beat for games (replaces scraping HowLongToBeat): members whose status is "Played" can report hours (0.5–10000 h, 0.5 steps) for main story, main + extras and completionist; editable and deletable, removed when the status leaves "Played". The item page shows the median per style and the report count ("not enough reports" under 3). New table `time_to_beat` (migration `0004_time_to_beat`), actions `saveTimeToBeat`/`deleteTimeToBeat`, item merge moves the reports, dev seed adds reports for about a third of each game's raters, PGlite tests and an `@auth` E2E spec.
+- Public API: `ItemDetail.time_to_beat` (`main`/`extras`/`completionist`: `{ median_hours, reports }`, `null` for non-games) — additive; `openapi.json` and both SDKs regenerated.
+
+### Changed
+
+- PIX checkout shows the QR code in a modal; once paid it cannot be closed for 10 seconds (visible, announced countdown).
+- Navbar: sticky, "HexaScore" wordmark (green "Hexa", blue "Score"), search fills the row up to the actions, only a "Log in" button (no "Sign up"), language menu last and always showing the current language, icon links (Games, Movies, Series, Books, API, Pricing) spread with `justify-between`; on mobile only the brand, a search button and a hamburger menu.
+- Search autocomplete shows the cover, type, year and final score of the 8 best matches.
+- Nickname is 4–16 lowercase letters only (normalized while typing, enforced by the Better Auth username validator); sign-up email is capped at 48 characters and password inputs at 32. Seed and E2E nicknames follow the rule.
+- Home page has no visible hero text (an `sr-only` h1 remains); footer keeps only "© 2026 HexaScore", Terms, Privacy and Contact. Default `APP_NAME` is "HexaScore".
+- `api.hexascore.app` serves only the API: `/` returns a JSON index (base URL, docs, OpenAPI) and any path outside `/v1` is an RFC 9457 404.
+- Terms of use (en, pt-BR, es): data sources and licenses (Wikidata CC0, Wikipedia CC BY-SA 4.0, Open Library, Steam, GOG, covers incl. Wikimedia Commons), API quotas/page size/rate limits and 5xx not counted, Stripe monthly vs PIX 1/12 months with reminders, credits only for Pro/Business, refund of duplicate charges, store responsibility for affiliate purchases, contact for withdrawal/refund/privacy requests.
+- Terms and privacy intros name the service through `{appName}`, replaced by `APP_NAME` in `lib/legal.ts`.
+- Verification and password-reset emails are translated (`auth.emails` in the three locales), picking the locale from the `locale` cookie or the calling page's prefix.
+- Default domain is now `hexascore.app` (API at `api.hexascore.app/v1`): OpenAPI servers/links, docs examples, CSP `connect-src`, SDK base URLs and READMEs. Production `NEXT_PUBLIC_APP_URL` and `BETTER_AUTH_URL` point at `https://hexascore.app`; `www.hexascore.app` redirects to the apex.
+- Ingestion covers (`webscrappings/covers.py`): with `BLOB_READ_WRITE_TOKEN`, covers are resized to fit 600×600, re-encoded as metadata-free WebP (quality 78, method 6; ~19 KB average, about 60% smaller than the sources) and stored in Vercel Blob at a content-addressed `covers/<item_id>-<hash>.webp` with a one-year cache; unchanged sources skip encode and upload. Without the token the source URL is kept, as before.
+- New Python dependency: `pillow==12.3.0`.
+
+### Fixed
+
+- Hardcoded English left in localized pages: the navbar sections `aria-label` and the screen-reader labels of the pricing plan facts.
+- Account anonymization (`lib/account-purge.ts`) now revokes the user's API keys and cancels a live Stripe subscription before wiping the account; if the cancellation fails or Stripe is not configured, the account stays scheduled and the daily cron retries.
+- E2E signup spec waits out Better Auth's per-IP sign-up limit (429) instead of failing when parallel workers create accounts.
+
+### Security
+
+- Forms that carry a password or 2FA code (`/login`, `/signup`, password, 2FA and reset forms) use `method="post"`, so a submit before hydration never puts the secret in the URL.
+
 ## [0.0.16] - 2026-10-03
 
 ### Added

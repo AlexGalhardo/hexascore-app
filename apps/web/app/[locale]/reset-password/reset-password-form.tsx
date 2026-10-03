@@ -48,7 +48,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
 	}
 
 	return (
-		<form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
+		<form method="post" onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
 			{error && <Notice tone="error">{t(`errors.${error}`)}</Notice>}
 			<Field id="password" label={t("fields.newPassword")}>
 				<PasswordInput

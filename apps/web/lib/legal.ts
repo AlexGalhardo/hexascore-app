@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { Locale } from "@/i18n/routing";
+import { APP_NAME } from "./config";
 
 export const LEGAL_UPDATED_AT = "2026-10-02";
 
@@ -18,5 +19,14 @@ export type LegalDocument = z.infer<typeof documentSchema> & { updatedLabel: str
 export async function loadLegal(locale: Locale, doc: "policy" | "terms"): Promise<LegalDocument> {
 	const raw: unknown = (await import(`../messages/${locale}/legal.json`)).default;
 	const legal = legalSchema.parse(raw);
-	return { ...legal[doc], updatedLabel: legal.updatedLabel };
+	// The brand is not final, so the text says {appName} and gets it from config.
+	const brand = (text: string): string => text.replaceAll("{appName}", APP_NAME);
+	const { title, description, intro, sections } = legal[doc];
+	return {
+		title,
+		description,
+		intro: brand(intro),
+		sections: sections.map((s) => ({ heading: brand(s.heading), body: s.body.map(brand) })),
+		updatedLabel: legal.updatedLabel,
+	};
 }

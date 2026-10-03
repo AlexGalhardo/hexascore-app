@@ -29,3 +29,15 @@ test("accepts an empty local environment", async () => {
 test("requires auth and cron secrets for any production build", async () => {
 	expect(loadWith({ NODE_ENV: "production", BETTER_AUTH_SECRET: "", CRON_SECRET: "" })).rejects.toThrow();
 });
+
+test("ABACATEPAY_SANDBOX is a strict boolean and only enables simulation with an AbacatePay key", async () => {
+	expect(loadWith({ ABACATEPAY_SANDBOX: "maybe" })).rejects.toThrow();
+	const keyless = { ABACATEPAY_API_KEY: "", ABACATEPAY_API_KEY_SANDBOX: "", ABACATEPAY_WEBHOOK_SECRET: "" };
+	const off = (await loadWith({ ...keyless, ABACATEPAY_SANDBOX: "true" })) as { pixSandbox: boolean };
+	expect(off.pixSandbox).toBe(false);
+	const keyed = { ABACATEPAY_API_KEY: "dev_key", ABACATEPAY_WEBHOOK_SECRET: "secret" };
+	const on = (await loadWith({ ...keyed, ABACATEPAY_SANDBOX: "true" })) as { pixSandbox: boolean };
+	expect(on.pixSandbox).toBe(true);
+	const unset = (await loadWith({ ...keyed, ABACATEPAY_SANDBOX: "" })) as { pixSandbox: boolean };
+	expect(unset.pixSandbox).toBe(false);
+});

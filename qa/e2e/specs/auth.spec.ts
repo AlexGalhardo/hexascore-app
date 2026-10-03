@@ -26,7 +26,14 @@ test.describe("auth @auth", () => {
 		await page.getByLabel("Email").fill(account.email);
 		await page.locator("#password").fill(account.password);
 		await expectAccessible(page);
-		await page.getByRole("button", { name: "Create account" }).click();
+		// Parallel workers share one IP and Better Auth's sign-up window (createVerifiedAccount in other specs).
+		for (let attempt = 0; attempt < 4; attempt++) {
+			const response = page.waitForResponse((r) => r.url().includes("/api/auth/sign-up/email"));
+			await page.getByRole("button", { name: "Create account" }).click();
+			if ((await response).status() !== 429) break;
+			test.info().setTimeout(test.info().timeout + 12_000);
+			await page.waitForTimeout(11_000);
+		}
 		await expect(page.getByText("Check your email")).toBeVisible();
 		await expect(page.getByText(account.email)).toBeVisible();
 

@@ -27,13 +27,40 @@ Comandos exatos de cada camada são adicionados aqui quando a camada for impleme
 | Vulnerabilidades | `bun audit --audit-level=high` | job `audit` |
 | SAST | — | `.github/workflows/codeql.yml` |
 | Workflows | `docker run --rm -v "$PWD:/repo" -w /repo rhysd/actionlint:1.7.12` | — |
-| Scripts de setup | `docker run --rm -v "$PWD:/mnt" -w /mnt koalaman/shellcheck:v0.11.0 -x setups/*.sh` | — |
+| Scripts de setup e QA | `docker run --rm -v "$PWD:/mnt" -w /mnt koalaman/shellcheck:v0.11.0 -x setups/*.sh qa/*/run.sh` | — |
+| Carga, fuzzing, DAST | `qa/k6/run.sh`, `qa/schemathesis/run.sh`, `qa/zap/run.sh` (ver abaixo) | `.github/workflows/qa.yml` |
 
 `lint`, `typecheck`, `test` e `build` são os checks obrigatórios do ruleset de `dev` e `main` (`.github/rulesets/protect-main-dev.json`; aplicação pendente, ver `docs/process.md`). Antes de abrir PR rode os quatro localmente.
 
 Banco para testar migrations à mão: `setups/setup-*-docker.*` (Postgres 18 em `localhost:5432`) ou `setups/setup-*-pglite.*`; ambos rodam `bun run db:migrate`.
 
-E2E (Playwright + axe) roda em `.github/workflows/qa.yml` no PR `dev` → `main` (ver abaixo). Schemathesis, OWASP ZAP e k6 **ainda não** têm configuração nem workflow (lacuna do 0.6), assim como o job de integração com Postgres 18 + Redis.
+E2E (Playwright + axe), k6, Schemathesis e OWASP ZAP rodam em `.github/workflows/qa.yml` no PR `dev` → `main` contra o preview da Vercel (ver abaixo). O job de integração com Postgres 18 + Redis ainda é lacuna.
+
+## API: k6, Schemathesis e ZAP (0.6) — `qa/k6/`, `qa/schemathesis/`, `qa/zap/`
+
+Os três rodam em imagens Docker fixas (nenhuma dependência npm): `grafana/k6:2.3.0`, `schemathesis/schemathesis:4.29.0`, `ghcr.io/zaproxy/zaproxy:2.17.0`. Cada um tem um `run.sh` que o CI e o uso local chamam igual. Relatórios em `qa/reports/{k6,schemathesis,zap}/` (gitignored; artifacts no CI).
+
+| Variável | Uso |
+| --- | --- |
+| `QA_BASE_URL` | origem do deploy (`http://localhost:3100`, preview); a API é `$QA_BASE_URL/api/v1` |
+| `QA_DOCKER_BASE_URL` | só no Docker Desktop (sem rede host): `http://host.docker.internal:3100` |
+| `QA_API_KEY` | chave **Pro/Business** no banco do deploy (Free = 100 requests na vida e 1 req/s). Gasto por execução: k6 ~600, Schemathesis ~2k, ZAP alguns milhares |
+| `QA_FREE_API_KEY` | opcional, só k6: chave Free reservada para o 402 (a 1ª execução gasta a cota restante em ~100 s; as seguintes recebem 402 direto) |
+| `VERCEL_AUTOMATION_BYPASS_SECRET` | envia `x-vercel-protection-bypass` |
+
+```bash
+# servidor local como no E2E (NODE_ENV=test = store de cota em memória); chaves criadas em /profile/api,
+# plano pago via linha em `subscriptions` (status active, current_period_end no futuro)
+export QA_BASE_URL=http://localhost:3100 QA_DOCKER_BASE_URL=http://host.docker.internal:3100 QA_API_KEY=hx_live_…
+qa/k6/run.sh             # QA_FREE_API_KEY=… para o 402; RATE=8 (req/s da fase de carga, abaixo do limite do plano)
+qa/schemathesis/run.sh   # args extras vão para `st run` (ex.: --max-examples 5)
+qa/zap/run.sh
+```
+
+- **k6** (`qa/k6/api.js`): `setup` valida a chave (`/me/usage`, recusa Free) e pega ids reais; fase `load` a `RATE` req/s por 60 s em listas, filtros, gêneros, busca e detalhe — thresholds `p(95)<300` ms e 99% de 200; fase `burst` (depois da carga) dispara 3× o limite por segundo e exige ≥ 1 `429` com `Retry-After` e corpo problem; fase `quota` (com `QA_FREE_API_KEY`) exige `limit=11` → 400 e, ao esgotar a cota, `402` problem.
+- **Schemathesis** (`qa/schemathesis/schemathesis.toml`): fuzz de `apps/web/public/openapi.json` (o do commit) com todas as checagens de conformidade (status, content-type, headers, schema da resposta), `not_a_server_error`, `ignored_auth`, aceitação/rejeição de dados; `rate-limit = "8/s"`. Desligados com motivo no arquivo: `unsupported_method` (o servidor HTTP responde 400 a `TRACE` antes do Next; os demais métodos dão 405), `use_after_free`/`ensure_resource_availability` (API só leitura); `cursor` aleatório aceita 400 (é um token opaco). O `run.sh` falha antes de fuzzar se a chave for inválida ou Free. Aviso esperado: detalhe por id e `/lookup` respondem 404 para ids gerados (o 200 do detalhe é coberto por `lib/api/v1.test.ts` e pelo k6).
+- **ZAP** (`qa/zap/plan.yaml`, Automation Framework): spider + passivo no site (exclui `/api/auth` e `/api/cron`), import do `openapi.json` e active scan só em `/api/v1` (2 threads, 150 ms de atraso), relatórios HTML/JSON e `exitStatus` com `errorLevel: High` — **falha só em alerta High**; Medium/Low ficam no relatório. Falsos positivos entram no job `alertFilter` do plano, cada um com a justificativa. Sem `QA_API_KEY` o scan da API vê só 401.
+- CI: `k6` → `schemathesis` → `zap` em sequência (compartilham a chave e o limite por segundo), em paralelo ao `e2e`. Sem `QA_API_KEY`, k6 e Schemathesis são pulados com `::notice::`; o ZAP roda assim mesmo.
 
 ## E2E + a11y (0.6) — `qa/e2e/`
 
@@ -57,8 +84,9 @@ bunx playwright test --project=desktop-light   # um projeto; --last-failed para 
 - Link de verificação: o Better Auth 1.7 **não grava** o token de verificação de e-mail (é um JWT HS256 `{ email }` assinado com `BETTER_AUTH_SECRET`), então `qa/e2e/helpers/auth.ts` gera o mesmo token com o secret do deploy e passa pelo `/api/auth/verify-email` real. Tokens de reset de senha estão na tabela `verification` (`helpers/db.ts` → `latestResetToken`). Nenhum backdoor no app.
 - Toda spec falha se o browser registrar violação de CSP ou exceção não tratada (`helpers/fixtures.ts`); `expectAccessible()` roda axe (WCAG 2.2 AA) e falha em `serious`/`critical`. Scalar é excluído do axe (markup de terceiros).
 - `global-setup.ts` aquece as listagens (o `unstable_cache` serve a versão antiga uma vez depois de um seed novo). Depois de mexer no banco por fora: `POST /api/cron/revalidate` com `{"tags":["catalog"]}`.
-- `specs/todo-0.3.spec.ts`: placeholders `fixme` para avaliação, perfis, feed, listas, denúncias e `/admin` (0.3 entrou na `dev` durante o 0.6; specs reais ficam como lacuna).
-- Resultado local (2026-10-03, `next start` + Docker Postgres com seed 10k/100k, 4 projetos): **415 passaram, 0 falharam, 24 pulados** (os 6 `fixme` do 0.3 × 4 projetos) em 3,9 min.
+- Fluxos do 0.3 (tag `@auth`, exigem `E2E_BETTER_AUTH_SECRET` **e** `E2E_DATABASE_URL`, senão são pulados): `ratings.spec.ts` (avaliar nas 6 categorias, editar, score da comunidade só na 5ª avaliação; status quero/em andamento/concluído/abandonado + estante no perfil; lista criada pela página do item), `social.spec.ts` (perfil público mostra avaliações, privado esconde de todos menos do dono; seguir e ver no `/feed`; `/feed` exige login), `admin.spec.ts` (`/admin` responde 404 para visitante e membro comum; membro denuncia usuário, admin resolve em `/admin/reports`).
+- Dados de apoio vão direto no banco (`helpers/db.ts`): `createItem()` (jogo novo sem avaliações, slug `e2e-game-*`), `createMember()` (membro verificado sem credenciais), `insertRating()` (grava e recalcula as estatísticas como `lib/ratings.ts`; inserir antes da primeira visita ao item, que fica em cache) e `grantAdmin()` (igual a `bun run admin:grant`, antes do login). Itens e usuários de teste não são apagados.
+- Resultado local (2026-10-03, `next start` + Docker Postgres com seed padrão, 4 projetos): **423 passaram, 0 falharam, 0 pulados** (3 falhas por crash do Chromium com a máquina sob carga passaram com `--last-failed`).
 
 ### Seed em escala
 
