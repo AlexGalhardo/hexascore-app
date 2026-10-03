@@ -3,6 +3,7 @@
 import { Dialog } from "@base-ui/react/dialog";
 import { Radio } from "@base-ui/react/radio";
 import { RadioGroup } from "@base-ui/react/radio-group";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { type ReactNode, useEffect, useId, useState, useTransition } from "react";
@@ -109,7 +110,23 @@ export function CheckoutForm({ stripe, pix, pixSandbox, defaultCurrency, default
 	const [pending, start] = useTransition();
 	const [error, setError] = useState<string | null>(null);
 	const [charge, setCharge] = useState<PixChargeView | null>(null);
-	const [pixStatus, setPixStatus] = useState<PixStatus>("pending");
+	// Keyed by charge id, so a new charge starts again at "pending"; polling stops once the status is final.
+	const pixQuery = useQuery({
+		queryKey: ["pix-charge", charge?.id ?? null],
+		queryFn: async ({ signal }): Promise<PixStatus> => {
+			const response = await fetch(`/api/billing/pix/${charge?.id}`, {
+				cache: "no-store",
+				signal: AbortSignal.any([signal, AbortSignal.timeout(POLL_MS)]),
+			});
+			if (!response.ok) throw new Error(`HTTP ${response.status}`);
+			return pixStatusSchema.parse(await response.json()).status;
+		},
+		enabled: charge !== null,
+		refetchInterval: (query) => ((query.state.data ?? "pending") === "pending" ? POLL_MS : false),
+		// Network blips are retried on the next tick.
+		retry: false,
+	});
+	const pixStatus: PixStatus = pixQuery.data ?? "pending";
 	const [copied, setCopied] = useState(false);
 	const [simulating, startSimulate] = useTransition();
 	const [simulatedAt, setSimulatedAt] = useState<number | null>(null);
@@ -131,24 +148,10 @@ export function CheckoutForm({ stripe, pix, pixSandbox, defaultCurrency, default
 				);
 
 	useEffect(() => {
-		if (!charge || pixStatus !== "pending") return;
-		const timer = setInterval(async () => {
-			try {
-				const response = await fetch(`/api/billing/pix/${charge.id}`, { cache: "no-store" });
-				if (!response.ok) return;
-				const parsed = pixStatusSchema.safeParse(await response.json());
-				if (!parsed.success) return;
-				setPixStatus(parsed.data.status);
-				if (parsed.data.status === "paid") {
-					setPaidAt(Date.now());
-					router.refresh();
-				}
-			} catch {
-				// Network blips are retried on the next tick.
-			}
-		}, POLL_MS);
-		return () => clearInterval(timer);
-	}, [charge, pixStatus, router]);
+		if (pixStatus !== "paid") return;
+		setPaidAt(Date.now());
+		router.refresh();
+	}, [pixStatus, router]);
 
 	function submit(): void {
 		setError(null);
@@ -162,7 +165,6 @@ export function CheckoutForm({ stripe, pix, pixSandbox, defaultCurrency, default
 			const result = await createPixCharge({ purpose });
 			if (result.ok) {
 				setCharge(result.charge);
-				setPixStatus("pending");
 				setCopied(false);
 				setPaidAt(null);
 				setSimulatedAt(null);
