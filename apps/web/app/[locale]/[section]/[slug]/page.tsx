@@ -112,7 +112,6 @@ export default async function ItemPage({ params }: Props) {
 						alt={t("coverAlt", { title: item.title })}
 						width={160}
 						height={240}
-						sizes="(min-width: 640px) 160px, 112px"
 						fetchPriority="high"
 						decoding="async"
 						className="aspect-[2/3] w-28 rounded-md border border-border object-cover shadow-sm sm:w-40"

@@ -1,8 +1,9 @@
-"""Sets items.meta.coverUrl for items without one.
+"""Sets items.meta.coverUrl (and coverThumbUrl) for items without one.
 
 Source priority: Open Library (books), Steam header then GOG (games), Wikimedia Commons P3383/P18 (all,
 with license + author in meta.coverAttribution). With BLOB_READ_WRITE_TOKEN the image is resized, re-encoded
-as WebP and uploaded to Vercel Blob under a content-addressed pathname; otherwise the source URL is stored as is.
+as WebP (full + list thumbnail) and uploaded to Vercel Blob under content-addressed pathnames; otherwise the source
+URL is stored as is and coverThumbUrl stays unset.
 """
 
 import argparse
@@ -35,6 +36,9 @@ BLOB_API_VERSION = "12"
 # 600 wide. thumbnail() never upscales.
 MAX_SIZE = (600, 600)
 WEBP_QUALITY = 78
+# Lists render covers 48 CSS px tall (32x48 / 44x64); 96x144 covers 2x DPR. Same never-upscale fit.
+THUMB_SIZE = (96, 144)
+THUMB_QUALITY = 70
 MAX_SOURCE_BYTES = 15 * 1024 * 1024
 # Pathnames are content-addressed, so a blob never changes and can be cached for a year.
 BLOB_CACHE_SECONDS = 31_536_000
@@ -123,17 +127,17 @@ def commons_cover(client: HttpClient, filename: str) -> Cover | None:
     return parse_commons(raw)
 
 
-def to_webp(data: bytes) -> bytes:
-    """Fits the image into MAX_SIZE and encodes a WebP without EXIF/XMP/ICC metadata."""
+def to_webp(data: bytes, max_size: tuple[int, int] = MAX_SIZE, quality: int = WEBP_QUALITY) -> bytes:
+    """Fits the image into max_size and encodes a WebP without EXIF/XMP/ICC metadata."""
     with Image.open(io.BytesIO(data)) as source:
         image = ImageOps.exif_transpose(source)
         # ponytail: non-sRGB ICC profiles are dropped, not converted, so CMYK/wide-gamut sources (rare for covers)
         # may shift slightly. Upgrade path: PIL.ImageCms.profileToProfile to sRGB before encoding.
         has_alpha = image.mode in ("RGBA", "LA", "PA") or (image.mode == "P" and "transparency" in image.info)
         image = image.convert("RGBA" if has_alpha else "RGB")
-        image.thumbnail(MAX_SIZE, Image.Resampling.LANCZOS)
+        image.thumbnail(max_size, Image.Resampling.LANCZOS)
         out = io.BytesIO()
-        image.save(out, "WEBP", quality=WEBP_QUALITY, method=6)
+        image.save(out, "WEBP", quality=quality, method=6)
         return out.getvalue()
 
 
@@ -145,8 +149,8 @@ def download(client: HttpClient, url: str) -> bytes:
     return response.content
 
 
-def blob_pathname(item_id: str, source: bytes) -> str:
-    return f"covers/{item_id}-{hashlib.sha256(source).hexdigest()[:16]}.webp"
+def blob_pathname(item_id: str, source: bytes, suffix: str = "") -> str:
+    return f"covers/{item_id}-{hashlib.sha256(source).hexdigest()[:16]}{suffix}.webp"
 
 
 def upload_to_blob(client: HttpClient, token: str, pathname: str, webp: bytes) -> str:
@@ -170,29 +174,38 @@ def upload_to_blob(client: HttpClient, token: str, pathname: str, webp: bytes) -
     return BlobPut.model_validate(response.json()).url
 
 
-def store_cover(client: HttpClient, token: str, item_id: str, source_url: str, current_url: str | None) -> str:
-    """Blob URL of the WebP copy; encode + upload are skipped when the stored blob already has this source's hash."""
+def store_cover(
+    client: HttpClient, token: str, item_id: str, source_url: str, current_url: str | None, current_thumb: str | None
+) -> tuple[str, str]:
+    """Blob URLs of the full and thumbnail WebP copies. Each size is encoded and uploaded only when its stored URL
+    does not already point at this source's hash, so items stored before thumbnails existed get just the thumb."""
     source = download(client, source_url)
-    pathname = blob_pathname(item_id, source)
-    if current_url and urlsplit(current_url).path.lstrip("/") == pathname:
-        return current_url
-    # ponytail: when a source image changes, the previous blob is left orphaned (a few KB each, rare).
-    # Upgrade path: delete it through the Blob API delete endpoint after the DB update.
-    return upload_to_blob(client, token, pathname, to_webp(source))
+    # ponytail: when a source image changes, the previous blobs are left orphaned (a few KB each, rare).
+    # Upgrade path: delete them through the Blob API delete endpoint after the DB update.
+    sizes = ((current_url, "", MAX_SIZE, WEBP_QUALITY), (current_thumb, "-t", THUMB_SIZE, THUMB_QUALITY))
+    urls = []
+    for current, suffix, max_size, quality in sizes:
+        pathname = blob_pathname(item_id, source, suffix)
+        if current and urlsplit(current).path.lstrip("/") == pathname:
+            urls.append(current)
+        else:
+            urls.append(upload_to_blob(client, token, pathname, to_webp(source, max_size, quality)))
+    return urls[0], urls[1]
 
 
 def targets(
-    conn: psycopg.Connection, refresh: bool, limit: int | None
-) -> list[tuple[Any, str, dict[str, dict], str | None]]:
+    conn: psycopg.Connection, refresh: bool, limit: int | None, thumbs: bool = False
+) -> list[tuple[Any, str, dict[str, dict], str | None, str | None]]:
+    """thumbs (a Blob token is set) also selects covers stored before thumbnails existed or without a token."""
     rows = conn.execute(
         """SELECT i.id, i.type::text, coalesce(jsonb_object_agg(s.source, s.payload)
-            FILTER (WHERE s.source IS NOT NULL), '{}'::jsonb), i.meta->>'coverUrl'
+            FILTER (WHERE s.source IS NOT NULL), '{}'::jsonb), i.meta->>'coverUrl', i.meta->>'coverThumbUrl'
         FROM items i LEFT JOIN source_records s ON s.item_id = i.id
-        WHERE %(refresh)s OR NOT i.meta ? 'coverUrl'
+        WHERE %(refresh)s OR NOT i.meta ? 'coverUrl' OR (%(thumbs)s AND NOT i.meta ? 'coverThumbUrl')
         GROUP BY i.id ORDER BY max(i.popularity) DESC LIMIT %(limit)s""",
-        {"refresh": refresh, "limit": limit},
+        {"refresh": refresh, "thumbs": thumbs, "limit": limit},
     ).fetchall()
-    return [(r[0], r[1], r[2], r[3]) for r in rows]
+    return [(r[0], r[1], r[2], r[3], r[4]) for r in rows]
 
 
 def run(
@@ -203,24 +216,33 @@ def run(
     if not token:
         log.warning("BLOB_READ_WRITE_TOKEN not set: storing source cover URLs, no WebP copies")
     updated = 0
-    for item_id, item_type, records, current_url in targets(conn, refresh, limit):
+    for item_id, item_type, records, current_url, current_thumb in targets(conn, refresh, limit, bool(token)):
         try:
             cover = pick_source_cover(item_type, records)
             if cover is None and (filename := commons_file(records)):
                 cover = commons_cover(client, filename)
             if cover is None:
                 continue
-            url = store_cover(client, token, str(item_id), cover.url, current_url) if token else cover.url
+            url, thumb = (
+                store_cover(client, token, str(item_id), cover.url, current_url, current_thumb)
+                if token
+                else (cover.url, None)
+            )
         except (httpx.HTTPError, ValidationError, OSError, ValueError, Image.DecompressionBombError) as exc:
             # OSError covers Pillow's UnidentifiedImageError and truncated files.
             log.warning("cover for %s failed: %s", item_id, exc)
             continue
-        if url == current_url:
+        if url == current_url and thumb == current_thumb:
             continue
         patch: dict[str, Any] = {"coverUrl": url}
+        if thumb:
+            patch["coverThumbUrl"] = thumb
         if cover.attribution:
             patch["coverAttribution"] = cover.attribution
-        conn.execute("UPDATE items SET meta = (meta - 'coverAttribution') || %s WHERE id = %s", (Jsonb(patch), item_id))
+        conn.execute(
+            "UPDATE items SET meta = (meta - 'coverAttribution' - 'coverThumbUrl') || %s WHERE id = %s",
+            (Jsonb(patch), item_id),
+        )
         conn.commit()
         updated += 1
     return updated

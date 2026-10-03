@@ -52,7 +52,7 @@ export async function ItemTable({ items, type, rankFrom = null }: Props) {
 							{/* table-fixed + min-w-0: long titles and genre lists truncate instead of widening the page. */}
 							<td className="min-w-0 py-2 pr-4">
 								<div className="flex min-w-0 items-center gap-3">
-									<CoverThumb src={item.coverUrl} />
+									<CoverThumb src={item.coverUrl} thumb={item.coverThumbUrl} />
 									<div className="min-w-0">
 										<Link
 											href={itemHref(item.type, item.slug)}
@@ -95,7 +95,7 @@ export async function ItemTable({ items, type, rankFrom = null }: Props) {
 								{rankFrom + i}
 							</span>
 						) : null}
-						<CoverThumb src={item.coverUrl} size="md" />
+						<CoverThumb src={item.coverUrl} thumb={item.coverThumbUrl} size="md" />
 						<div className="min-w-0 flex-1">
 							<Link href={itemHref(item.type, item.slug)} className="font-medium">
 								{item.title}

@@ -3,6 +3,13 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+* **covers:** `covers.py` also uploads a 96×144 WebP list thumbnail (`covers/<item_id>-<hash16>-t.webp`, ~1.8 KB average) stored in `meta.coverThumbUrl`; items stored before thumbnails get only the missing thumb; the normalizer preserves it.
+* **web:** catalog lists, search and autocomplete load the thumbnail via `srcSet`/`sizes` with fallback to the full cover; the item page cover gets `fetchPriority="high"`.
+
 ## [0.0.18](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.17...v0.0.18) (2026-10-03)
 
 
