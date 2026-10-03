@@ -2,7 +2,10 @@
   "name": "hexascore",
   "private": true,
   "packageManager": "bun@1.4.2",
-  "workspaces": ["apps/*", "sdks/ts"],
+  "workspaces": [
+    "apps/*",
+    "sdks/ts"
+  ],
   "scripts": {
     "dev": "bun --filter web dev",
     "build": "bun --filter web build",
@@ -26,5 +29,8 @@
     "@commitlint/cli": "21.2.3",
     "@commitlint/config-conventional": "21.2.3",
     "husky": "9.1.7"
+  },
+  "overrides": {
+    "js-yaml": "4.3.2"
   }
 }
