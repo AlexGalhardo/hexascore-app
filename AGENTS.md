@@ -23,4 +23,5 @@ Codename `hexascore`; final brand name is pending.
 - Project skills:
   - `hexascore-billing` — Stripe/AbacatePay webhooks locally, idempotency rules.
   - `hexascore-catalog` — catalog repository/cache layers, Next 16 caching without `cacheComponents`, PGlite tests, dev seed.
+  - `hexascore-api` — public API v1: add an endpoint (zod DTO → OpenAPI registry → route via `apiRoute` → route test → regenerate `openapi.json` + SDKs).
 - Record notable changes in `CHANGELOG.md` (Keep a Changelog).

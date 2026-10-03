@@ -133,10 +133,10 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 - **Verificar**: testes do cálculo (média, arredondamento, limiar 4→5 avaliações, edição, exclusão de conta); E2E avaliar → metascore muda.
 
 ### 0.4 — API
-- [ ] API keys, middleware de auth/rate limit/cota (Upstash), erros RFC 9457, headers
-- [ ] Endpoints `/v1/*`, `openapi.json` gerado + check no CI
-- [ ] `/docs` + Scalar, `/profile/api` com dashboard de uso e últimas requests
-- [ ] SDKs TS e Python gerados + publicação via release-please
+- [x] API keys, middleware de auth/rate limit/cota (Upstash), erros RFC 9457, headers
+- [x] Endpoints `/v1/*`, `openapi.json` gerado + check no CI
+- [x] `/docs` + Scalar, `/profile/api` com dashboard de uso (lista de últimas requests adiada: não há log por request)
+- [ ] SDKs TS e Python gerados + publicação via release-please (gerados em `sdks/`; publicação pendente de credenciais npm/PyPI)
 - **Verificar**: Free bloqueia na 101ª request (402) e `limit=11` é rejeitado; Schemathesis sem falhas; quickstart das docs funciona copiando e colando.
 
 ### 0.5 — Billing
