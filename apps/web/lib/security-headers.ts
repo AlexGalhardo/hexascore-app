@@ -17,7 +17,10 @@ export function isScalarPage(pathname: string): boolean {
 	return SCALAR_PAGE.test(pathname);
 }
 
-export function pageCsp(nonce: string, pathname: string, isDev: boolean): string {
+// Vercel injects its Toolbar (comments, flag overrides) into preview deployments as an iframe from vercel.live.
+const PREVIEW_TOOLBAR = "https://vercel.live";
+
+export function pageCsp(nonce: string, pathname: string, isDev: boolean, isPreview = false): string {
 	const scalar = isScalarPage(pathname);
 	const directives: Record<string, string[]> = {
 		"default-src": ["'self'"],
@@ -30,9 +33,14 @@ export function pageCsp(nonce: string, pathname: string, isDev: boolean): string
 		// Covers come from several hosts (Open Library, Steam, GOG, Commons, Vercel Blob); QR codes are data: URIs.
 		"img-src": ["'self'", "data:", "blob:", "https:"],
 		"font-src": ["'self'", "data:"],
-		"connect-src": ["'self'", ...(scalar ? [PUBLIC_API_ORIGIN] : []), ...(isDev ? ["ws:"] : [])],
+		"connect-src": [
+			"'self'",
+			...(scalar ? [PUBLIC_API_ORIGIN] : []),
+			...(isDev ? ["ws:"] : []),
+			...(isPreview ? [PREVIEW_TOOLBAR] : []),
+		],
 		// 'self' for the BotID challenge iframe; trailers only from the privacy-enhanced YouTube host.
-		"frame-src": ["'self'", "https://www.youtube-nocookie.com"],
+		"frame-src": ["'self'", "https://www.youtube-nocookie.com", ...(isPreview ? [PREVIEW_TOOLBAR] : [])],
 		"worker-src": ["'self'", "blob:"],
 		"object-src": ["'none'"],
 		"base-uri": ["'self'"],
