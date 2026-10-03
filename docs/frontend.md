@@ -43,6 +43,14 @@ Locale: EN sem prefixo, `/pt-br/…`, `/es/…`. Slugs de rota em inglês nos 3 
 
 **UI**: Base UI + Tailwind 4 (tokens por seção), `next-intl`, radar em SVG puro.
 
+**Busca de dados**:
+- Server Components são o caminho padrão: páginas buscam no servidor (repositórios em `lib/`) e escritas são Server Actions. Não converta página server-rendered em fetch no cliente.
+- Fetch disparado no browser usa **TanStack Query** (`@tanstack/react-query`), nunca `useEffect` + `fetch` à mão. `QueryProvider` (`components/layout/query-provider.tsx`) fica no layout `[locale]` dentro do `NextIntlClientProvider`: um `QueryClient` por sessão do browser (`useState`), `staleTime` 30 s, `retry` 1, sem `refetchOnWindowFocus`.
+- O `queryFn` passa `AbortSignal.any([signal, AbortSignal.timeout(ms)])` ao `fetch`, checa `response.ok` e valida a resposta com zod antes de devolver.
+- Query keys: array começando por um nome kebab-case do recurso, seguido de todo parâmetro que muda a resposta (`["search-suggest", q, locale]`, `["item-ratings", itemId]`, `["pix-charge", chargeId]`).
+- Usos atuais: autocomplete da busca (`useQuery` com debounce de 200 ms, `keepPreviousData`, ativo com q ≥ 2), modal de notas dos usuários (`useInfiniteQuery` por cursor), status do PIX (`useQuery` com `refetchInterval` de 4 s até `paid`/`expired`/`failed`).
+- Server Actions continuam com `useTransition`; não embrulhe em `useMutation` sem ganho claro.
+
 ## Implementação do catálogo (0.1)
 
 - **Rotas**: `app/[locale]/[section]/page.tsx` atende `/games` `/movies` `/series` `/books` (seção validada por `typeFromSection` em `lib/sections.ts`; qualquer outra → `notFound()`), `app/[locale]/[section]/[slug]/page.tsx` é a página do item, `app/[locale]/search/page.tsx` a busca. Rotas estáticas (`/login`, `/profile`…) têm precedência sobre `[section]`.

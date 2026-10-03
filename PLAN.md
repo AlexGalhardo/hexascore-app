@@ -63,6 +63,7 @@ Valores ficam em config (não hardcoded). PIX: 1 mês ou 12 meses (12 pelo preç
 | Rate limit/cota | **Upstash Redis** + flush diário para Postgres | Não sobrecarregar o Neon com 1 write/request |
 | Ingestão | Python 3.13 + uv em `webscrappings/`, rodando em **GitHub Actions cron**, staging `source_records` + normalizador | Custo zero, sem limite de 300s |
 | i18n UI | `next-intl`, EN (padrão, sem prefixo) / `/pt-br` / `/es` | — |
+| Fetch no cliente | Server Components por padrão; **TanStack Query** (`@tanstack/react-query`) só para fetch disparado no browser (autocomplete, paginação de modal, polling) | Cache, cancelamento e polling sem `useEffect` manual |
 | i18n conteúdo | Títulos via Wikidata (CC0); sinopse via Wikipedia (CC BY-SA, com `license` + `source_url`), fallback EN com aviso | — |
 | Auth | **Better Auth**: e-mail+senha, Google, verificação de e-mail obrigatória, 2FA TOTP + backup codes, passkeys, plugin admin | — |
 | Senha Google | Conta Google nasce sem senha; `/profile` oferece "Definir senha" (`setPassword`) | Senha invisível não tem uso e aumenta superfície |

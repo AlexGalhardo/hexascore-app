@@ -1,6 +1,7 @@
 "use client";
 
 import { Autocomplete } from "@base-ui/react/autocomplete";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
@@ -33,40 +34,38 @@ export function SearchAutocomplete({ action, placeholder }: Props) {
 	const locale = useLocale();
 	const router = useRouter();
 	const [value, setValue] = useState("");
-	const [items, setItems] = useState<Suggestion[]>([]);
-	const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
-	const controller = useRef<AbortController | null>(null);
+	const [debounced, setDebounced] = useState("");
 	const highlighted = useRef<Suggestion | undefined>(undefined);
+	const q = value.trim();
 
 	useEffect(() => {
-		const q = value.trim();
-		if (q.length < 2) {
-			setItems([]);
-			setStatus("idle");
-			return;
-		}
-		const timer = setTimeout(async () => {
-			controller.current?.abort();
-			const current = new AbortController();
-			controller.current = current;
-			setStatus("loading");
+		const timer = setTimeout(() => setDebounced(q), 200);
+		return () => clearTimeout(timer);
+	}, [q]);
+
+	const enabled = q.length >= 2 && debounced.length >= 2;
+	const suggestions = useQuery({
+		queryKey: ["search-suggest", debounced, locale],
+		queryFn: async ({ signal }): Promise<Suggestion[]> => {
 			try {
-				const params = new URLSearchParams({ q, locale });
+				const params = new URLSearchParams({ q: debounced, locale });
 				const response = await fetch(`/api/search/suggest?${params}`, {
-					signal: AbortSignal.any([current.signal, AbortSignal.timeout(5000)]),
+					signal: AbortSignal.any([signal, AbortSignal.timeout(5000)]),
 				});
 				if (!response.ok) throw new Error(`HTTP ${response.status}`);
-				setItems(suggestionSchema.parse(await response.json()).data);
-				setStatus("done");
+				return suggestionSchema.parse(await response.json()).data;
 			} catch (error) {
-				if (current.signal.aborted) return;
-				console.warn("[search] suggestions unavailable", error);
-				setItems([]);
-				setStatus("done");
+				if (!signal.aborted) console.warn("[search] suggestions unavailable", error);
+				throw error;
 			}
-		}, 200);
-		return () => clearTimeout(timer);
-	}, [value, locale]);
+		},
+		enabled,
+		// Keep the previous list visible while the next keystroke loads; a failure just shows "no suggestions".
+		placeholderData: keepPreviousData,
+		retry: false,
+	});
+	const items = enabled ? (suggestions.data ?? []) : [];
+	const status = !enabled ? "idle" : suggestions.isFetching ? "loading" : "done";
 
 	return (
 		<form action={action}>
