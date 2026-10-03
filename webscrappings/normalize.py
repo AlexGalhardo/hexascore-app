@@ -49,7 +49,7 @@ MINUTES_PER_UNIT = {"Q7727": 1.0, "Q25235": 60.0, "Q11574": 1 / 60, "1": 1.0}
 METACRITIC, ROTTEN_TOMATOES = "Q150248", "Q105584"
 METASCORE, TOMATOMETER = "Q106515043", "Q108403393"
 SCORE_SOURCES = ["metacritic", "rottentomatoes"]
-COVER_KEYS = ("coverUrl", "coverAttribution")
+COVER_KEYS = ("coverUrl", "coverThumbUrl", "coverAttribution")
 
 
 class WikipediaPayload(BaseModel):
@@ -279,11 +279,12 @@ ON CONFLICT (wikidata_qid) DO UPDATE SET
     external_ids = excluded.external_ids,
     -- covers.py owns the cover keys; keep them across re-normalization.
     meta = excluded.meta || jsonb_strip_nulls(jsonb_build_object(
-        'coverUrl', items.meta->'coverUrl', 'coverAttribution', items.meta->'coverAttribution')),
+        'coverUrl', items.meta->'coverUrl', 'coverThumbUrl', items.meta->'coverThumbUrl',
+        'coverAttribution', items.meta->'coverAttribution')),
     popularity = excluded.popularity,
     updated_at = CASE WHEN items.release_date IS DISTINCT FROM excluded.release_date
         OR items.external_ids <> excluded.external_ids
-        OR (items.meta - 'coverUrl' - 'coverAttribution') <> excluded.meta
+        OR (items.meta - 'coverUrl' - 'coverThumbUrl' - 'coverAttribution') <> excluded.meta
         THEN now() ELSE items.updated_at END
 RETURNING id
 """
