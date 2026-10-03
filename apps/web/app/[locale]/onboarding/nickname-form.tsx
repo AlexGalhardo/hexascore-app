@@ -5,7 +5,7 @@ import { useState, useTransition } from "react";
 import { setNickname } from "@/actions/account";
 import { buttonClass, Field, Input, Notice } from "@/components/ui/form";
 import type { ActionError } from "@/lib/action-result";
-import { NICKNAME_MAX } from "@/lib/validation";
+import { NICKNAME_MAX, normalizeNickname } from "@/lib/validation";
 
 export function NicknameForm({ next }: { next: string }) {
 	const t = useTranslations("social.onboarding");
@@ -52,7 +52,7 @@ export function NicknameForm({ next }: { next: string }) {
 							value={nickname}
 							aria-invalid={error === "invalid" || error === "nicknameTaken"}
 							aria-describedby="nickname-hint"
-							onChange={(e) => setValue(e.target.value)}
+							onChange={(e) => setValue(normalizeNickname(e.target.value))}
 						/>
 					</Field>
 				</div>

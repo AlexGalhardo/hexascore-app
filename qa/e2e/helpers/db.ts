@@ -67,12 +67,17 @@ export async function createItem(): Promise<TestItem> {
 	return { id: row.id, title, href: `/games/${slug}` };
 }
 
+/** Random lowercase letters: nicknames accept only `a-z`. */
+export function letters(n: number): string {
+	return Array.from(randomBytes(n), (b) => String.fromCharCode(97 + (b % 26))).join("");
+}
+
 export type DbMember = { id: string; nickname: string };
 
 /** A verified, public member written straight to the DB: no credentials, it only owns ratings others look at. */
 export async function createMember(tag: string): Promise<DbMember> {
 	const id = randomBytes(4).toString("hex");
-	const nickname = `e2e_${tag}_${id}`;
+	const nickname = `ee${tag.replace(/[^a-z]/g, "").slice(0, 6)}${letters(8)}`;
 	await sql()`
 		insert into "user" (id, name, email, email_verified, username, display_username, updated_at)
 		values (${`e2e-${id}`}, ${`E2E ${tag}`}, ${`e2e-${tag}-${id}@${E2E_EMAIL_DOMAIN}`}, true, ${nickname},

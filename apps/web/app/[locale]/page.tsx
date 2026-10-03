@@ -16,10 +16,8 @@ export default async function HomePage({ params }: Props) {
 
 	return (
 		<div className="grid gap-12">
-			<section className="max-w-3xl">
-				<h1 className="font-serif text-3xl font-bold leading-tight sm:text-5xl">{t("title")}</h1>
-				<p className="mt-4 text-lg text-muted">{t("subtitle")}</p>
-			</section>
+			{/* No visible hero by design; the page still needs one h1 for screen readers and search engines. */}
+			<h1 className="sr-only">{t("title")}</h1>
 			{ITEM_TYPES.map((type) => (
 				<SectionHighlights key={type} type={type} locale={locale} />
 			))}

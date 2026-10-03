@@ -1,6 +1,6 @@
 import { createHmac, randomBytes } from "node:crypto";
 import { type APIRequestContext, expect, type Page, test } from "@playwright/test";
-import { E2E_EMAIL_DOMAIN } from "./db";
+import { E2E_EMAIL_DOMAIN, letters } from "./db";
 
 export const PASSWORD = "E2e-Passw0rd!";
 
@@ -10,7 +10,7 @@ export function newAccount(tag: string): TestAccount {
 	const id = randomBytes(4).toString("hex");
 	return {
 		email: `e2e-${tag}-${id}@${E2E_EMAIL_DOMAIN}`,
-		nickname: `e2e_${id}`,
+		nickname: `ee${letters(8)}`,
 		name: `E2E ${tag}`,
 		password: PASSWORD,
 	};

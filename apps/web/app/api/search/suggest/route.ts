@@ -27,6 +27,8 @@ export async function GET(request: Request): Promise<Response> {
 					type: r.type,
 					title: r.title,
 					year: r.year,
+					score: r.score,
+					coverUrl: r.coverUrl,
 					path: itemHref(r.type, r.slug),
 				})),
 			},

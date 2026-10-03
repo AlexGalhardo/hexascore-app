@@ -5,6 +5,18 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Changed
+
+- Navbar: sticky, "HexaScore" wordmark (green "Hexa", blue "Score"), search fills the row up to the actions, only a "Log in" button (no "Sign up"), language menu last and always showing the current language, icon links (Games, Movies, Series, Books, API, Pricing) spread with `justify-between`; on mobile only the brand, a search button and a hamburger menu.
+- Search autocomplete shows the cover, type, year and final score of the 8 best matches.
+- Nickname is 4–16 lowercase letters only (normalized while typing, enforced by the Better Auth username validator); sign-up email is capped at 36 characters and password inputs at 32. Seed and E2E nicknames follow the rule.
+- Home page has no visible hero text (an `sr-only` h1 remains); footer keeps only "© 2026 HexaScore", Terms, Privacy and Contact. Default `APP_NAME` is "HexaScore".
+- `api.hexascore.app` serves only the API: `/` returns a JSON index (base URL, docs, OpenAPI) and any path outside `/v1` is an RFC 9457 404.
+
+### Security
+
+- Forms that carry a password or 2FA code (`/login`, `/signup`, password, 2FA and reset forms) use `method="post"`, so a submit before hydration never puts the secret in the URL.
+
 ### Added
 
 - Item page credits the cover (source, author, license and link) when the ingestion stored `meta.coverAttribution` (Wikimedia Commons covers under CC BY/BY-SA require it).
