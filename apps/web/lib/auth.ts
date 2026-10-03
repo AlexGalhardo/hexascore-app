@@ -90,7 +90,10 @@ export const auth = betterAuth({
 			const body = ctx.body as { password?: unknown; newPassword?: unknown } | undefined;
 			const candidate = body?.newPassword ?? body?.password;
 			if (!passwordSchema.safeParse(candidate).success) {
-				throw new APIError("BAD_REQUEST", { message: "Password does not meet the requirements." });
+				throw new APIError("BAD_REQUEST", {
+					message: "Password does not meet the requirements.",
+					code: "WEAK_PASSWORD",
+				});
 			}
 		}),
 	},

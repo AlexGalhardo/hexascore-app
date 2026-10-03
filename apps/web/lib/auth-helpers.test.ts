@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { authErrorKey } from "./auth-errors";
 import { isAuthorizedCron } from "./cron-auth";
 import { checkPassword, isPasswordValid } from "./password-rules";
 import { safeNextPath } from "./safe-next";
@@ -49,6 +50,22 @@ describe("isAuthorizedCron", () => {
 		["Bearer ", "", false],
 	])("%s", (header, configured, expected) => {
 		expect(isAuthorizedCron(header, configured)).toBe(expected);
+	});
+});
+
+describe("authErrorKey", () => {
+	test.each([
+		[{ status: 429, code: "INVALID_EMAIL_OR_PASSWORD" }, "rateLimited"],
+		[{ status: 401, code: "INVALID_EMAIL_OR_PASSWORD" }, "invalidCredentials"],
+		[{ status: 401, code: "INVALID_USERNAME_OR_PASSWORD" }, "invalidCredentials"],
+		[{ status: 403, code: "EMAIL_NOT_VERIFIED" }, "emailNotVerified"],
+		[{ status: 403, code: "BOT_DETECTED" }, "bot"],
+		[{ status: 400, code: "WEAK_PASSWORD" }, "weakPassword"],
+		[{ status: 0 }, "network"],
+		[{ status: 500, code: "SOMETHING_NEW" }, "generic"],
+		[null, "generic"],
+	] as const)("%o -> %s", (error, key) => {
+		expect(authErrorKey(error)).toBe(key);
 	});
 });
 
