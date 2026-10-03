@@ -6,7 +6,7 @@ import { user } from "@/lib/db/schema/auth";
 import { items, type itemType } from "@/lib/db/schema/catalog";
 import { listItems, lists } from "@/lib/db/schema/social";
 import { LIST_LIMITS, LIST_TYPES, type ListType } from "./constants";
-import { displayName, type ItemRef, itemRefColumns, publicUser, titleJoin } from "./repository";
+import { displayName, type ItemRef, itemRefColumns, publicUser, titleJoin, toItemRef } from "./repository";
 
 export { LIST_LIMITS, LIST_TYPES, type ListType };
 
@@ -110,7 +110,7 @@ export async function getList(
 		.where(eq(listItems.listId, listId))
 		.orderBy(asc(listItems.position));
 	const { ownerPublic: _, ownerId, ownerNickname, ...rest } = row;
-	return { ...toSummary(rest), ownerId, ownerNickname, items: entries };
+	return { ...toSummary(rest), ownerId, ownerNickname, items: entries.map(toItemRef) };
 }
 
 /** The viewer's lists of the item's type, with a flag for whether `itemId` is already in each (item page menu). */

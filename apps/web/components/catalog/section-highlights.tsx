@@ -1,4 +1,6 @@
 import { getTranslations } from "next-intl/server";
+import { CategoryLabel } from "@/components/catalog/category-label";
+import { CoverThumb } from "@/components/catalog/cover-thumb";
 import { ScoreBadge } from "@/components/score/score-badge";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -31,7 +33,11 @@ export async function SectionHighlights({ type, locale }: { type: ItemType; loca
 		<section aria-labelledby={`home-${type}`} className="grid gap-3">
 			<div className={`flex items-baseline justify-between gap-3 border-b-2 pb-1 ${accent.border}`}>
 				<h2 id={`home-${type}`} className="font-serif text-2xl font-bold">
-					<Link href={sectionPath}>{title}</Link>
+					<Link href={sectionPath}>
+						<CategoryLabel type={type} size="xl">
+							{title}
+						</CategoryLabel>
+					</Link>
 				</h2>
 				<Link href={sectionPath} className={`text-sm font-medium ${accent.text}`}>
 					{t("landing.seeAll", { section: title })} →
@@ -52,6 +58,7 @@ export async function SectionHighlights({ type, locale }: { type: ItemType; loca
 										<span className="w-5 shrink-0 font-mono text-xs text-muted tabular-nums">
 											{rank + 1}
 										</span>
+										<CoverThumb src={item.coverUrl} thumb={item.coverThumbUrl} />
 										<Link
 											href={itemHref(item.type, item.slug)}
 											className="min-w-0 flex-1 truncate text-sm"
