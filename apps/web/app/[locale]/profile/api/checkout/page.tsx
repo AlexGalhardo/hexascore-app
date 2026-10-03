@@ -5,7 +5,7 @@ import { ManageBillingButton } from "@/components/billing/manage-billing-button"
 import { redirect } from "@/i18n/navigation";
 import { currencyForLocale, currencySchema } from "@/lib/billing/catalog";
 import { getBillingSummary } from "@/lib/billing/summary";
-import { features } from "@/lib/env";
+import { features, pixSandbox } from "@/lib/env";
 import { pixCheckoutFlag } from "@/lib/flags";
 import { getSessionUser } from "@/lib/session";
 
@@ -87,6 +87,7 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 				<CheckoutForm
 					stripe={features.stripe}
 					pix={pix}
+					pixSandbox={pix && pixSandbox}
 					defaultCurrency={currency}
 					defaultProduct={product}
 					hasPaidPlan={summary.plan !== "free"}

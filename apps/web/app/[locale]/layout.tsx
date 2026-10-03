@@ -11,6 +11,7 @@ import { DeletionBanner } from "@/components/account/deletion-banner";
 import { CookieBanner } from "@/components/layout/cookie-banner";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
+import { QueryProvider } from "@/components/layout/query-provider";
 import { routing } from "@/i18n/routing";
 import { APP_NAME, APP_URL } from "@/lib/config";
 import { themeBootScript } from "@/lib/preferences";
@@ -56,11 +57,13 @@ export default async function LocaleLayout({ children, params }: Props) {
 			</head>
 			<body className="min-h-dvh font-sans antialiased">
 				<NextIntlClientProvider>
-					<Navbar />
-					<DeletionBanner />
-					<main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
-					<Footer />
-					<CookieBanner text={t("text")} accept={t("accept")} decline={t("decline")} />
+					<QueryProvider>
+						<Navbar />
+						<DeletionBanner />
+						<main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
+						<Footer />
+						<CookieBanner text={t("text")} accept={t("accept")} decline={t("decline")} />
+					</QueryProvider>
 				</NextIntlClientProvider>
 				{/* Cookieless (no consent needed); scripts are injected by these nonced bundles, allowed by 'strict-dynamic'. */}
 				<Analytics />

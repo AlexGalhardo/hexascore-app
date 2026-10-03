@@ -1,6 +1,6 @@
 import { createHmac, randomBytes } from "node:crypto";
 import { type APIRequestContext, expect, type Page, test } from "@playwright/test";
-import { E2E_EMAIL_DOMAIN } from "./db";
+import { E2E_EMAIL_DOMAIN, letters } from "./db";
 
 export const PASSWORD = "E2e-Passw0rd!";
 
@@ -9,8 +9,9 @@ export type TestAccount = { email: string; nickname: string; name: string; passw
 export function newAccount(tag: string): TestAccount {
 	const id = randomBytes(4).toString("hex");
 	return {
-		email: `e2e-${tag}-${id}@${E2E_EMAIL_DOMAIN}`,
-		nickname: `e2e_${id}`,
+		// Sign-up caps emails at 48 characters, so the tag stays out of the address (it is in the name).
+		email: `e2e-${id}@${E2E_EMAIL_DOMAIN}`,
+		nickname: `ee${letters(8)}`,
 		name: `E2E ${tag}`,
 		password: PASSWORD,
 	};

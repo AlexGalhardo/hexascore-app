@@ -97,6 +97,34 @@ export async function settlePixCharge(
 	return result.applied;
 }
 
+export type SandboxPayDeps = {
+	db: Database;
+	enabled: boolean;
+	simulate: (providerRef: string) => Promise<unknown>;
+	now?: () => Date;
+};
+
+/**
+ * Sandbox only: asks AbacatePay to mark the user's pending charge as paid. Never settles here: the plan is still
+ * applied by the webhook or by the status poll's re-check, so the idempotent path stays the only writer.
+ */
+export async function simulateSandboxPayment(
+	userId: string,
+	chargeId: string,
+	deps: SandboxPayDeps,
+): Promise<"ok" | "not_configured" | "not_found" | "not_pending"> {
+	if (!deps.enabled) return "not_configured";
+	const [charge] = await deps.db
+		.select({ status: pixCharges.status, providerRef: pixCharges.providerRef, expiresAt: pixCharges.expiresAt })
+		.from(pixCharges)
+		.where(and(eq(pixCharges.id, chargeId), eq(pixCharges.userId, userId)));
+	if (!charge) return "not_found";
+	const now = deps.now?.() ?? new Date();
+	if (charge.status !== "pending" || (charge.expiresAt && charge.expiresAt <= now)) return "not_pending";
+	await deps.simulate(charge.providerRef);
+	return "ok";
+}
+
 export type AbacateWebhookDeps = { db: Database; store: CounterStore | null; secret: string; now?: () => Date };
 
 /** 401 = not from AbacatePay, 200 = applied/duplicate/ignored, 500 = transient (AbacatePay retries). */

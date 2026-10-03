@@ -49,12 +49,31 @@ beforeAll(async () => {
 	await addUser("due", 31);
 	await addUser("grace", 29);
 	await addUser("active", null);
+	await addUser("paying", 31);
+	await addUser("stuck", 31);
+	await db.insert(schema.apiKeys).values({ userId: "due", name: "k", prefix: "hx_due", hash: "h-due" });
+	for (const id of ["paying", "stuck"]) {
+		await db.insert(schema.subscriptions).values({
+			userId: id,
+			plan: "pro",
+			provider: "stripe",
+			status: "active",
+			currentPeriodEnd: new Date(now.getTime() + DAY),
+			providerRef: `sub_${id}`,
+		});
+	}
 });
+
+const canceled: string[] = [];
+async function cancelStripe(id: string): Promise<void> {
+	if (id === "sub_stuck") throw new Error("stripe down");
+	canceled.push(id);
+}
 
 describe("purgeScheduledAccounts", () => {
 	test("anonymizes only accounts past the 30-day grace period", async () => {
-		const purged = await purgeScheduledAccounts(db, now);
-		expect(purged).toEqual(["due"]);
+		const purged = await purgeScheduledAccounts(db, now, cancelStripe);
+		expect(purged.toSorted()).toEqual(["due", "paying"]);
 
 		const [due] = await db.select().from(schema.user).where(eq(schema.user.id, "due"));
 		expect(due).toMatchObject({
@@ -74,8 +93,30 @@ describe("purgeScheduledAccounts", () => {
 		expect(await db.select().from(schema.account).where(eq(schema.account.userId, "active"))).toHaveLength(1);
 	});
 
-	test("is idempotent", async () => {
+	test("revokes API keys and cancels the live Stripe subscription", async () => {
+		const [key] = await db.select().from(schema.apiKeys).where(eq(schema.apiKeys.userId, "due"));
+		expect(key?.revokedAt).toEqual(now);
+		expect(canceled).toEqual(["sub_paying"]);
+		const [sub] = await db.select().from(schema.subscriptions).where(eq(schema.subscriptions.userId, "paying"));
+		expect(sub?.status).toBe("canceled");
+	});
+
+	test("keeps the account scheduled when Stripe cancellation fails", async () => {
+		const [stuck] = await db.select().from(schema.user).where(eq(schema.user.id, "stuck"));
+		expect(stuck?.email).toBe("stuck@example.com");
+		expect(stuck?.deletionScheduledAt).not.toBeNull();
+		const [sub] = await db.select().from(schema.subscriptions).where(eq(schema.subscriptions.userId, "stuck"));
+		expect(sub?.status).toBe("active");
+	});
+
+	test("without Stripe configured, accounts with a live subscription are not purged", async () => {
 		expect(await purgeScheduledAccounts(db, now)).toEqual([]);
+	});
+
+	test("is idempotent", async () => {
+		canceled.length = 0;
+		expect(await purgeScheduledAccounts(db, now, async (id) => void canceled.push(id))).toEqual(["stuck"]);
+		expect(await purgeScheduledAccounts(db, now, cancelStripe)).toEqual([]);
 	});
 });
 

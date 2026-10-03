@@ -37,6 +37,8 @@ const schema = z
 		STRIPE_WEBHOOK_SECRET: optional.pipe(z.string().startsWith("whsec_", "must start with whsec_").optional()),
 		ABACATEPAY_API_KEY: optional,
 		ABACATEPAY_WEBHOOK_SECRET: optional,
+		// Testing only: shows "pay sandbox PIX" in checkout and lets the server call /transparents/simulate-payment.
+		ABACATEPAY_SANDBOX: optional.pipe(z.stringbool().optional()).transform((v) => v ?? false),
 		BLOB_READ_WRITE_TOKEN: optional,
 		CRON_SECRET: optional.pipe(z.string().min(32, "must have at least 32 characters").optional()),
 		TELEGRAM_BOT_TOKEN: optional,
@@ -112,6 +114,9 @@ export const features = {
 	blob: Boolean(env.BLOB_READ_WRITE_TOKEN),
 	telegram: Boolean(env.TELEGRAM_BOT_TOKEN),
 } as const;
+
+/** Sandbox payment simulation: explicit opt-in on top of a configured AbacatePay key (dev keys only work there). */
+export const pixSandbox: boolean = features.pix && env.ABACATEPAY_SANDBOX;
 
 export function reportDisabledFeatures(): void {
 	const off = Object.entries(features)

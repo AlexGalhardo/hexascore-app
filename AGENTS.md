@@ -14,6 +14,7 @@ Codename `hexascore`; final brand name is pending.
 - Local setup: `setups/` scripts (Unix/Windows × Docker/PGlite, see `setups/README.md`); Docker stack in `infra/`. Before a PR, `bun run lint:ci`, `bun run typecheck`, `bun run test` and `bun run build` must pass (required CI checks).
 - Follow the Karpathy guidelines (think first, simplicity, surgical changes, verifiable goals), `ponytail` (YAGNI, minimal solution) and `graphify` (map the code before broad searches). Vendored skills live in `.claude/skills/`; always-on rules in `.claude/rules/` (karpathy, ponytail, graphify).
 - Validate every schema and piece of data with zod wherever possible (env, actions, forms, API params/responses, webhooks, external responses, jsonb reads); infer types with `z.infer`.
+- Data fetching: Server Components first; client-side fetches go through TanStack Query (`useQuery`/`useInfiniteQuery`), never `useEffect` + `fetch` (see `docs/frontend.md`).
 - Env vars are validated with zod in `apps/web/lib/env.ts` before build and server start; failures print every bad variable explicitly.
 - Handle errors and fallbacks everywhere: timeouts on external calls, `notFound()`/404, `error.tsx`/500, RFC 9457 problems with 402/404/429/500 in the API, graceful degradation of optional services.
 - Security rules in `docs/architecture.md` are mandatory.
@@ -27,7 +28,7 @@ Codename `hexascore`; final brand name is pending.
   - `hexascore-release` — cut or backfill releases (tags, GitHub releases, CHANGELOG, release-please manifest).
   - `hexascore-catalog` — catalog repository/cache layers, Next 16 caching without `cacheComponents`, PGlite tests, dev seed.
   - `hexascore-api` — public API v1: add an endpoint (zod DTO → OpenAPI registry → route via `apiRoute` → route test → regenerate `openapi.json` + SDKs).
-  - `hexascore-qa` — QA layers: Playwright + axe E2E (`qa/e2e`) against `next start` or the preview, CSP/security headers, scale seed, `qa.yml` gate.
+  - `hexascore-qa` — QA layers: Playwright + axe E2E (`qa/e2e`) against `next start` or the preview, CSP/security headers, k6 / Schemathesis / OWASP ZAP API gates (`qa/*/run.sh`), scale seed, `qa.yml` gate.
 - Record notable changes in `CHANGELOG.md` (Keep a Changelog).
 
 ## Project skills

@@ -2,7 +2,7 @@ import { beforeAll, beforeEach, describe, expect, mock, test } from "bun:test";
 import { eq } from "drizzle-orm";
 import type { z } from "zod";
 import type { Database } from "@/lib/db/client";
-import { apiKeys, subscriptions, user } from "@/lib/db/schema";
+import { apiKeys, subscriptions, timeToBeat, user } from "@/lib/db/schema";
 import { externalScores, items, itemTranslations } from "@/lib/db/schema/catalog";
 import { createTestDatabase } from "@/lib/db/testing";
 import { generateApiKey } from "./keys";
@@ -290,6 +290,33 @@ describe("endpoints", () => {
 		expect(item.score).toBeNull();
 		expect(Object.values(item.categories).every((v) => v === null)).toBe(true);
 		expect(item.rating_count).toBe(2);
+	});
+
+	test("detail: time_to_beat on games (median from 3 reports), null on other types", async () => {
+		const reporters = ["ttb1", "ttb2", "ttb3"];
+		await db
+			.insert(user)
+			.values(reporters.map((id) => ({ id, name: id, email: `${id}@example.test`, emailVerified: true })));
+		await db.insert(timeToBeat).values(
+			reporters.map((userId, i) => ({
+				userId,
+				itemId: uuid(1),
+				mainMinutes: (10 + i * 5) * 60,
+				extrasMinutes: i === 0 ? 1800 : null,
+			})),
+		);
+		const game = itemDetailSchema.parse(
+			await call(routes.detail, `/games/${uuid(1)}`, { type: "games", id: uuid(1) }).then((r) => r.json()),
+		);
+		expect(game.time_to_beat).toEqual({
+			main: { median_hours: 15, reports: 3 },
+			extras: { median_hours: null, reports: 1 },
+			completionist: { median_hours: null, reports: 0 },
+		});
+		const movie = itemDetailSchema.parse(
+			await call(routes.detail, `/movies/${uuid(99)}`, { type: "movies", id: uuid(99) }).then((r) => r.json()),
+		);
+		expect(movie.time_to_beat).toBeNull();
 	});
 
 	test("genres with counts", async () => {

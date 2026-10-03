@@ -107,7 +107,7 @@ export function LoginForm({ next, googleEnabled }: Props) {
 
 	if (step !== "credentials") {
 		return (
-			<form onSubmit={onCode} className="flex flex-col gap-4" noValidate>
+			<form method="post" onSubmit={onCode} className="flex flex-col gap-4" noValidate>
 				<h2 className="text-lg font-semibold">{t("login.twoFactorTitle")}</h2>
 				<p className="text-sm text-muted">
 					{step === "totp" ? t("login.twoFactorHelp") : t("login.backupHelp")}
@@ -149,7 +149,7 @@ export function LoginForm({ next, googleEnabled }: Props) {
 
 	return (
 		<div className="flex flex-col gap-4">
-			<form onSubmit={onCredentials} className="flex flex-col gap-4" noValidate>
+			<form method="post" onSubmit={onCredentials} className="flex flex-col gap-4" noValidate>
 				{errorBox}
 				{resent && <Notice tone="success">{t("login.resent")}</Notice>}
 				<Field id="identifier" label={t("fields.identifier")}>

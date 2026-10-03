@@ -23,7 +23,10 @@ describe("nicknameSchema", () => {
 		["a".repeat(16), true],
 		["a".repeat(17), false],
 		["bad name", false],
-		["good_name1", true],
+		["good_name1", false],
+		["Goodname", false],
+		["goodname", true],
+		["name1234", false],
 	])("%s -> %p", (value, ok) => {
 		expect(nicknameSchema.safeParse(value).success).toBe(ok);
 	});

@@ -22,6 +22,7 @@ description: Work on Hexascore ratings and the denormalized item stats (lib/rati
 - `ratings.overall` is a generated column (`round(sum/6.0)`): never insert it. Drizzle's `insert().select()` rejects tables with generated columns — `mergeItems` uses raw SQL for that copy.
 - Deleted accounts are anonymized (`lib/account-purge.ts`), not deleted: their ratings keep counting. `user` row deletion would cascade ratings — never hard-delete users.
 - Lock order when touching several items: by id ascending (`mergeItems` does `ORDER BY id FOR UPDATE`).
+- Time to beat (`lib/time-to-beat.ts`) has no denormalized stats: medians are computed on read inside `getItemById` (cached under `item:<id>`), so writes only `updateTag(item:<id>)`. Reports exist only while the user's status is `completed`; `setItemStatus` deletes them in the same transaction and returns `"cleared"` so the action refreshes the tag.
 - The JS `overall()` in `lib/categories.ts` mirrors the SQL rounding for the live preview; keep them identical.
 
 ## Tests

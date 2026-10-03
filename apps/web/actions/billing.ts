@@ -5,15 +5,15 @@ import { getLocale } from "next-intl/server";
 import { z } from "zod";
 import { getPathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
-import { createPixQrCode } from "@/lib/billing/abacatepay";
+import { createPixQrCode, simulatePixPayment } from "@/lib/billing/abacatepay";
 import { currencySchema, pixOffer, pixPurposeSchema, STRIPE_LOOKUP_KEYS } from "@/lib/billing/catalog";
-import { pixRefusal } from "@/lib/billing/pix";
+import { pixRefusal, simulateSandboxPayment } from "@/lib/billing/pix";
 import { getStripe, portalConfigurationId, priceIdFor } from "@/lib/billing/stripe";
 import { getSubscription, isActive, linkCustomer } from "@/lib/billing/subscriptions";
 import { APP_NAME, APP_URL } from "@/lib/config";
 import { db } from "@/lib/db/client";
 import { pixCharges, stripeCustomers } from "@/lib/db/schema";
-import { features } from "@/lib/env";
+import { features, pixSandbox } from "@/lib/env";
 import { pixCheckoutFlag } from "@/lib/flags";
 import { getSessionUser, type SessionUser } from "@/lib/session";
 
@@ -28,6 +28,8 @@ export type BillingError =
 	| "plan_conflict"
 	| "plan_required"
 	| "no_customer"
+	| "not_found"
+	| "not_pending"
 	| "server";
 
 export type RedirectResult = { ok: true; url: string } | { ok: false; error: BillingError };
@@ -218,6 +220,28 @@ export async function createPixCharge(input: { purpose: string }): Promise<PixRe
 		return view ? { ok: true, charge: view } : { ok: false, error: "server" };
 	} catch (error) {
 		console.error("[billing] pix charge failed", error);
+		return { ok: false, error: "server" };
+	}
+}
+
+export type SimulateResult = { ok: true } | { ok: false; error: BillingError };
+
+/** Sandbox testing only (ABACATEPAY_SANDBOX=true): asks AbacatePay to pay the user's own pending PIX charge. */
+export async function simulatePixPaymentAction(chargeId: string): Promise<SimulateResult> {
+	const user = await payer();
+	if (typeof user === "string") return { ok: false, error: user };
+	if (!pixSandbox) return { ok: false, error: "not_configured" };
+	const parsed = z.uuid().safeParse(chargeId);
+	if (!parsed.success) return { ok: false, error: "invalid" };
+	try {
+		const outcome = await simulateSandboxPayment(user.id, parsed.data, {
+			db,
+			enabled: pixSandbox,
+			simulate: simulatePixPayment,
+		});
+		return outcome === "ok" ? { ok: true } : { ok: false, error: outcome };
+	} catch (error) {
+		console.error("[billing] sandbox pix simulation failed", error);
 		return { ok: false, error: "server" };
 	}
 }

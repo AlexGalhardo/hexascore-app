@@ -9,7 +9,16 @@ import { buttonClass, Divider, Field, Input, Notice } from "@/components/ui/form
 import { getPathname, Link } from "@/i18n/navigation";
 import { authClient } from "@/lib/auth-client";
 import { type AuthErrorKey, authErrorKey } from "@/lib/auth-errors";
-import { emailSchema, NICKNAME_MAX, nameSchema, nicknameSchema, passwordSchema } from "@/lib/validation";
+import {
+	EMAIL_INPUT_MAX,
+	NICKNAME_MAX,
+	nameSchema,
+	nicknameSchema,
+	normalizeNickname,
+	PASSWORD_MAX,
+	passwordSchema,
+	signupEmailSchema,
+} from "@/lib/validation";
 
 type FieldName = "nickname" | "name" | "email" | "password";
 
@@ -42,7 +51,7 @@ export function SignupForm({ googleEnabled }: { googleEnabled: boolean }) {
 		const checks: Record<FieldName, boolean> = {
 			nickname: nicknameSchema.safeParse(values.nickname).success,
 			name: nameSchema.safeParse(values.name).success,
-			email: emailSchema.safeParse(values.email).success,
+			email: signupEmailSchema.safeParse(values.email).success,
 			password: passwordSchema.safeParse(values.password).success,
 		};
 		const bad = new Set((Object.keys(checks) as FieldName[]).filter((k) => !checks[k]));
@@ -85,6 +94,7 @@ export function SignupForm({ googleEnabled }: { googleEnabled: boolean }) {
 	return (
 		<div className="flex flex-col gap-4">
 			<form
+				method="post"
 				onSubmit={onSubmit}
 				// A field's error clears as soon as the user edits it; it is re-validated on the next submit.
 				onChange={(event) => {
@@ -96,30 +106,21 @@ export function SignupForm({ googleEnabled }: { googleEnabled: boolean }) {
 				noValidate
 			>
 				{error && <Notice tone="error">{t(`errors.${error}`)}</Notice>}
-				<div className="flex items-end gap-3">
-					<div
-						role="img"
-						aria-label={t("signup.avatar")}
-						className="grid size-14 shrink-0 place-items-center rounded-full bg-surface font-serif text-2xl font-bold ring-1 ring-border"
-					>
-						{nickname.trim().charAt(0).toUpperCase() || "?"}
-					</div>
-					<div className="flex-1">
-						<Field id="nickname" label={t("fields.nickname")} error={fieldError("nickname")}>
-							<Input
-								id="nickname"
-								name="nickname"
-								required
-								autoComplete="username"
-								maxLength={NICKNAME_MAX}
-								value={nickname}
-								onChange={(e) => setNickname(e.target.value)}
-								aria-invalid={invalid.has("nickname")}
-								aria-describedby={describedBy("nickname", "nickname-hint")}
-							/>
-						</Field>
-					</div>
-				</div>
+				<Field id="nickname" label={t("fields.nickname")} error={fieldError("nickname")}>
+					<Input
+						id="nickname"
+						name="nickname"
+						required
+						autoComplete="username"
+						autoCapitalize="none"
+						spellCheck={false}
+						maxLength={NICKNAME_MAX}
+						value={nickname}
+						onChange={(e) => setNickname(normalizeNickname(e.target.value))}
+						aria-invalid={invalid.has("nickname")}
+						aria-describedby={describedBy("nickname", "nickname-hint")}
+					/>
+				</Field>
 				<p id="nickname-hint" className="-mt-2 text-sm text-muted">
 					{t("signup.nicknameHint")}
 				</p>
@@ -141,6 +142,7 @@ export function SignupForm({ googleEnabled }: { googleEnabled: boolean }) {
 						type="email"
 						required
 						autoComplete="email"
+						maxLength={EMAIL_INPUT_MAX}
 						aria-invalid={invalid.has("email")}
 						aria-describedby={describedBy("email")}
 					/>
@@ -151,6 +153,7 @@ export function SignupForm({ googleEnabled }: { googleEnabled: boolean }) {
 						name="password"
 						required
 						autoComplete="new-password"
+						maxLength={PASSWORD_MAX}
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 						aria-invalid={invalid.has("password")}

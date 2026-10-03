@@ -5,7 +5,7 @@ import type { Database } from "../db/client";
 import { creditLedger, pixCharges, subscriptions } from "../db/schema";
 import { safeEqual, signAbacatePayload, verifyAbacateSignature } from "./abacatepay";
 import { pixOffer } from "./catalog";
-import { handleAbacateWebhook, settlePixCharge } from "./pix";
+import { handleAbacateWebhook, settlePixCharge, simulateSandboxPayment } from "./pix";
 import { createTestDb, createTestUser } from "./test-db";
 
 const SECRET = "hook-secret";
@@ -138,5 +138,60 @@ describe("handleAbacateWebhook", () => {
 
 	test("acknowledges other events without changes", async () => {
 		expect((await send({ id: "log_o", event: "transparent.refunded", data: {} })).status).toBe(200);
+	});
+});
+
+describe("simulateSandboxPayment", () => {
+	const now = new Date("2026-10-15T00:00:00Z");
+	function deps(enabled = true) {
+		const calls: string[] = [];
+		return {
+			calls,
+			deps: {
+				db,
+				enabled,
+				now: () => now,
+				simulate: async (ref: string) => {
+					calls.push(ref);
+				},
+			},
+		};
+	}
+
+	test("simulates only the owner's pending charge and never settles it locally", async () => {
+		const id = await charge("u_plan", "pro_1m", "pix_sim_ok");
+		const { calls, deps: d } = deps();
+		expect(await simulateSandboxPayment("u_plan", id, d)).toBe("ok");
+		expect(calls).toEqual(["pix_sim_ok"]);
+		const [row] = await db.select().from(pixCharges).where(eq(pixCharges.id, id));
+		expect(row?.status).toBe("pending");
+	});
+
+	test("is refused when sandbox is off, before touching the database or AbacatePay", async () => {
+		const id = await charge("u_plan", "pro_1m", "pix_sim_off");
+		const { calls, deps: d } = deps(false);
+		expect(await simulateSandboxPayment("u_plan", id, d)).toBe("not_configured");
+		expect(calls).toEqual([]);
+	});
+
+	test("another user's charge reads as not found", async () => {
+		const id = await charge("u_plan", "pro_1m", "pix_sim_other");
+		const { calls, deps: d } = deps();
+		expect(await simulateSandboxPayment("u_credit", id, d)).toBe("not_found");
+		expect(calls).toEqual([]);
+	});
+
+	test("paid or expired charges are not simulated again", async () => {
+		const paid = await charge("u_plan", "pro_1m", "pix_sim_paid");
+		await db.update(pixCharges).set({ status: "paid" }).where(eq(pixCharges.id, paid));
+		const stale = await charge("u_plan", "pro_1m", "pix_sim_stale");
+		await db
+			.update(pixCharges)
+			.set({ expiresAt: new Date(now.getTime() - 1000) })
+			.where(eq(pixCharges.id, stale));
+		const { calls, deps: d } = deps();
+		expect(await simulateSandboxPayment("u_plan", paid, d)).toBe("not_pending");
+		expect(await simulateSandboxPayment("u_plan", stale, d)).toBe("not_pending");
+		expect(calls).toEqual([]);
 	});
 });

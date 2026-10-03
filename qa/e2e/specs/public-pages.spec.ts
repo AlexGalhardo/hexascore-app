@@ -1,4 +1,5 @@
 import { expect, expectAccessible, LOCALES, test } from "../helpers/fixtures";
+import { openNavMenu } from "../helpers/session";
 
 const PAGES = [
 	"/",
@@ -42,6 +43,7 @@ test("theme toggle persists across reloads", async ({ page }, info) => {
 	await page.goto("/");
 	const initial = info.project.use.colorScheme === "dark" ? "dark" : "light";
 	const flipped = initial === "dark" ? "light" : "dark";
+	await openNavMenu(page);
 	await page.getByRole("button", { name: "Toggle theme" }).click();
 	await expect(page.locator("html")).toHaveAttribute("data-theme", flipped);
 	await page.reload();

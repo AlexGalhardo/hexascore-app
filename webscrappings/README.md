@@ -18,7 +18,7 @@ export DATABASE_URL=postgresql://hexascore:hexascore@localhost:5432/hexascore   
 | `DATABASE_URL` | yes | Postgres with the app migrations applied (`apps/web/lib/db/migrations`) |
 | `INGEST_CONTACT_URL` | no | contact URL in the `HexascoreBot/0.1 (+url)` User-Agent (default: the GitHub repo) |
 | `APP_URL`, `CRON_SECRET` | no | `POST $APP_URL/api/cron/revalidate` after changes; skipped when unset |
-| `BLOB_READ_WRITE_TOKEN` | no | copy covers to Vercel Blob; without it `meta.coverUrl` is the source URL |
+| `BLOB_READ_WRITE_TOKEN` | no | store covers as optimized WebP (max 600 px, q78) in Vercel Blob; without it `meta.coverUrl` is the source URL |
 | `TEST_DATABASE_URL` | no | enables the DB tests (`tests/test_db.py`), which roll back everything |
 
 ## Run
@@ -60,5 +60,5 @@ Tests use recorded API responses in `tests/fixtures/` (no network).
 
 ## Dependencies
 
-Runtime: `httpx`, `psycopg[binary]`, `pydantic` (validates every external payload). Dev: `pytest`, `ruff`.
+Runtime: `httpx`, `pillow` (cover WebP encoding), `psycopg[binary]`, `pydantic` (validates every external payload). Dev: `pytest`, `ruff`.
 All pinned to exact versions in `pyproject.toml`; nothing else is needed.

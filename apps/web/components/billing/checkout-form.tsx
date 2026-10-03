@@ -1,12 +1,16 @@
 "use client";
 
+import { Dialog } from "@base-ui/react/dialog";
 import { Radio } from "@base-ui/react/radio";
 import { RadioGroup } from "@base-ui/react/radio-group";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { type ReactNode, useEffect, useId, useState, useTransition } from "react";
 import { z } from "zod";
-import { createPixCharge, type PixChargeView, startStripeCheckout } from "@/actions/billing";
+import { createPixCharge, type PixChargeView, simulatePixPaymentAction, startStripeCheckout } from "@/actions/billing";
+import { buttonClass } from "@/components/ui/form";
+import { secondsLeft } from "@/lib/account-deletion";
 import {
 	CREDIT_PACK_PRICE_CENTS,
 	CURRENCIES,
@@ -23,10 +27,31 @@ type PixStatus = "pending" | "paid" | "expired" | "failed";
 
 const pixStatusSchema = z.object({ status: z.enum(["pending", "paid", "expired", "failed"]) });
 const POLL_MS = 4000;
+const SANDBOX_COOLDOWN_SECONDS = 10;
+const PAID_LOCK_SECONDS = 10;
+
+// Seconds left of a `total`-second window that started at `startedAt` (0 when not started).
+function useSecondsLeft(startedAt: number | null, total: number): number {
+	const [now, setNow] = useState(() => Date.now());
+	useEffect(() => {
+		if (startedAt === null) return;
+		setNow(Date.now());
+		const timer = setInterval(() => {
+			const current = Date.now();
+			setNow(current);
+			if (secondsLeft(startedAt, current, total) === 0) clearInterval(timer);
+		}, 250);
+		return () => clearInterval(timer);
+	}, [startedAt, total]);
+	// `now` can lag one render behind a fresh start, which would read as more than `total`.
+	return startedAt === null ? 0 : Math.min(total, secondsLeft(startedAt, now, total));
+}
 
 type Props = {
 	stripe: boolean;
 	pix: boolean;
+	/** Server-side ABACATEPAY_SANDBOX: shows the simulated payment button. */
+	pixSandbox: boolean;
 	defaultCurrency: Currency;
 	defaultProduct: Product;
 	hasPaidPlan: boolean;
@@ -71,7 +96,7 @@ function Choices<T extends string>(props: {
 	);
 }
 
-export function CheckoutForm({ stripe, pix, defaultCurrency, defaultProduct, hasPaidPlan }: Props) {
+export function CheckoutForm({ stripe, pix, pixSandbox, defaultCurrency, defaultProduct, hasPaidPlan }: Props) {
 	const t = useTranslations("billing.checkout");
 	const tp = useTranslations("billing.plans");
 	const locale = useLocale();
@@ -85,8 +110,31 @@ export function CheckoutForm({ stripe, pix, defaultCurrency, defaultProduct, has
 	const [pending, start] = useTransition();
 	const [error, setError] = useState<string | null>(null);
 	const [charge, setCharge] = useState<PixChargeView | null>(null);
-	const [pixStatus, setPixStatus] = useState<PixStatus>("pending");
+	// Keyed by charge id, so a new charge starts again at "pending"; polling stops once the status is final.
+	const pixQuery = useQuery({
+		queryKey: ["pix-charge", charge?.id ?? null],
+		queryFn: async ({ signal }): Promise<PixStatus> => {
+			const response = await fetch(`/api/billing/pix/${charge?.id}`, {
+				cache: "no-store",
+				signal: AbortSignal.any([signal, AbortSignal.timeout(POLL_MS)]),
+			});
+			if (!response.ok) throw new Error(`HTTP ${response.status}`);
+			return pixStatusSchema.parse(await response.json()).status;
+		},
+		enabled: charge !== null,
+		refetchInterval: (query) => ((query.state.data ?? "pending") === "pending" ? POLL_MS : false),
+		// Network blips are retried on the next tick.
+		retry: false,
+	});
+	const pixStatus: PixStatus = pixQuery.data ?? "pending";
 	const [copied, setCopied] = useState(false);
+	const [simulating, startSimulate] = useTransition();
+	const [simulatedAt, setSimulatedAt] = useState<number | null>(null);
+	const [simulateError, setSimulateError] = useState<string | null>(null);
+	const [paidAt, setPaidAt] = useState<number | null>(null);
+	const cooldownLeft = useSecondsLeft(simulatedAt, SANDBOX_COOLDOWN_SECONDS);
+	const lockLeft = useSecondsLeft(paidAt, PAID_LOCK_SECONDS);
+	const locked = pixStatus === "paid" && lockLeft > 0;
 
 	const purpose: PixPurpose = product === "credits" ? "credits" : `${product}_${months}m`;
 	// Display only: the server recomputes every amount from the same catalog.
@@ -100,21 +148,10 @@ export function CheckoutForm({ stripe, pix, defaultCurrency, defaultProduct, has
 				);
 
 	useEffect(() => {
-		if (!charge || pixStatus !== "pending") return;
-		const timer = setInterval(async () => {
-			try {
-				const response = await fetch(`/api/billing/pix/${charge.id}`, { cache: "no-store" });
-				if (!response.ok) return;
-				const parsed = pixStatusSchema.safeParse(await response.json());
-				if (!parsed.success) return;
-				setPixStatus(parsed.data.status);
-				if (parsed.data.status === "paid") router.refresh();
-			} catch {
-				// Network blips are retried on the next tick.
-			}
-		}, POLL_MS);
-		return () => clearInterval(timer);
-	}, [charge, pixStatus, router]);
+		if (pixStatus !== "paid") return;
+		setPaidAt(Date.now());
+		router.refresh();
+	}, [pixStatus, router]);
 
 	function submit(): void {
 		setError(null);
@@ -128,10 +165,26 @@ export function CheckoutForm({ stripe, pix, defaultCurrency, defaultProduct, has
 			const result = await createPixCharge({ purpose });
 			if (result.ok) {
 				setCharge(result.charge);
-				setPixStatus("pending");
 				setCopied(false);
+				setPaidAt(null);
+				setSimulatedAt(null);
+				setSimulateError(null);
 			} else setError(t(`errors.${result.error}`));
 		});
+	}
+
+	function simulatePayment(): void {
+		if (!charge || simulating || cooldownLeft > 0) return;
+		setSimulateError(null);
+		setSimulatedAt(Date.now());
+		startSimulate(async () => {
+			const result = await simulatePixPaymentAction(charge.id);
+			if (!result.ok) setSimulateError(t(`errors.${result.error}`));
+		});
+	}
+
+	function closeCharge(): void {
+		if (!locked) setCharge(null);
 	}
 
 	async function copy(): Promise<void> {
@@ -144,16 +197,37 @@ export function CheckoutForm({ stripe, pix, defaultCurrency, defaultProduct, has
 		}
 	}
 
-	if (charge) {
+	const pixDialog = (
+		<Dialog.Root
+			open={charge !== null}
+			onOpenChange={(open) => {
+				if (!open) closeCharge();
+			}}
+			disablePointerDismissal={locked}
+		>
+			<Dialog.Portal>
+				<Dialog.Backdrop className="fixed inset-0 bg-black/40" />
+				<Dialog.Popup className="fixed inset-x-2 top-[5dvh] mx-auto grid max-h-[90dvh] max-w-md gap-4 overflow-y-auto rounded-lg border border-border bg-bg p-5 text-fg shadow-xl">
+					{charge && renderCharge(charge)}
+					<Dialog.Close disabled={locked} className={buttonClass("secondary")}>
+						{t("close")}
+					</Dialog.Close>
+				</Dialog.Popup>
+			</Dialog.Portal>
+		</Dialog.Root>
+	);
+
+	function renderCharge(charge: PixChargeView): ReactNode {
 		const expires = new Intl.DateTimeFormat(locale, { timeStyle: "short" }).format(new Date(charge.expiresAt));
 		return (
-			<section aria-labelledby="pix-title" className="space-y-4 rounded-lg border border-border p-5">
-				<h2 id="pix-title" className="font-serif text-2xl font-bold">
-					{t("pixTitle")}
-				</h2>
+			<>
+				<Dialog.Title className="font-serif text-2xl font-bold">{t("pixTitle")}</Dialog.Title>
 				<p className="font-mono text-xl tabular-nums">{formatPrice(charge.amountCents, "brl", locale)}</p>
 				<p role="status" aria-live="polite" className="text-sm font-medium">
 					{t(`pixStatus.${pixStatus}`)}
+					{locked && (
+						<span className="mt-1 block font-normal text-muted">{t("closeIn", { seconds: lockLeft })}</span>
+					)}
 				</p>
 				{pixStatus === "pending" && (
 					<>
@@ -186,6 +260,25 @@ export function CheckoutForm({ stripe, pix, defaultCurrency, defaultProduct, has
 							</button>
 							<span className="text-sm text-muted">{t("expires", { time: expires })}</span>
 						</div>
+						{pixSandbox && (
+							<div className="space-y-2 rounded-md border border-dashed border-border p-3">
+								<p className="text-xs text-muted">{t("sandboxNote")}</p>
+								<button
+									type="button"
+									onClick={simulatePayment}
+									disabled={simulating || cooldownLeft > 0}
+									aria-describedby={simulateError ? "pix-sandbox-error" : undefined}
+									className={buttonClass("primary", "w-full font-mono tracking-wide")}
+								>
+									{cooldownLeft > 0 ? t("sandboxWait", { seconds: cooldownLeft }) : t("sandboxPay")}
+								</button>
+								{simulateError && (
+									<p id="pix-sandbox-error" role="alert" className="text-sm text-danger">
+										{simulateError}
+									</p>
+								)}
+							</div>
+						)}
 					</>
 				)}
 				{(pixStatus === "expired" || pixStatus === "failed") && (
@@ -197,79 +290,82 @@ export function CheckoutForm({ stripe, pix, defaultCurrency, defaultProduct, has
 						{t("newCode")}
 					</button>
 				)}
-			</section>
+			</>
 		);
 	}
 
 	return (
-		<form
-			className="space-y-5 rounded-lg border border-border p-5"
-			onSubmit={(e) => {
-				e.preventDefault();
-				submit();
-			}}
-		>
-			<h2 className="font-serif text-2xl font-bold">{t("buy")}</h2>
-			<Choices<Product>
-				label={t("product")}
-				value={product}
-				onChange={setProduct}
-				options={[
-					{ value: "pro", label: tp("pro") },
-					{ value: "business", label: tp("business") },
-					{ value: "credits", label: tp("credits"), disabled: !hasPaidPlan },
-				]}
-			/>
-			<Choices<Method>
-				label={t("method")}
-				value={method}
-				onChange={setMethod}
-				options={[
-					{ value: "card", label: t("card"), disabled: !stripe },
-					{ value: "pix", label: t("pix"), disabled: !pix },
-				]}
-			/>
-			{method === "pix" && product !== "credits" && (
-				<Choices<"1" | "12">
-					label={t("period")}
-					value={months}
-					onChange={setMonths}
+		<>
+			{pixDialog}
+			<form
+				className="space-y-5 rounded-lg border border-border p-5"
+				onSubmit={(e) => {
+					e.preventDefault();
+					submit();
+				}}
+			>
+				<h2 className="font-serif text-2xl font-bold">{t("buy")}</h2>
+				<Choices<Product>
+					label={t("product")}
+					value={product}
+					onChange={setProduct}
 					options={[
-						{ value: "1", label: t("oneMonth") },
-						{ value: "12", label: t("twelveMonths") },
+						{ value: "pro", label: tp("pro") },
+						{ value: "business", label: tp("business") },
+						{ value: "credits", label: tp("credits"), disabled: !hasPaidPlan },
 					]}
 				/>
-			)}
-			{method === "card" && (
-				<Choices<Currency>
-					label={t("currency")}
-					value={currency}
-					onChange={setCurrency}
-					options={CURRENCIES.map((c) => ({
-						value: c,
-						label: <span className="font-mono">{c.toUpperCase()}</span>,
-					}))}
+				<Choices<Method>
+					label={t("method")}
+					value={method}
+					onChange={setMethod}
+					options={[
+						{ value: "card", label: t("card"), disabled: !stripe },
+						{ value: "pix", label: t("pix"), disabled: !pix },
+					]}
 				/>
-			)}
-			<p className="flex items-baseline justify-between border-t border-border pt-4">
-				<span>{t("total")}</span>
-				<span className="font-mono text-2xl tabular-nums">{total}</span>
-			</p>
-			<p className="text-sm text-muted">
-				{method === "card" && product !== "credits" ? t("recurring") : t("oneTime")}
-			</p>
-			{error && (
-				<p role="alert" className="text-sm text-danger">
-					{error}
+				{method === "pix" && product !== "credits" && (
+					<Choices<"1" | "12">
+						label={t("period")}
+						value={months}
+						onChange={setMonths}
+						options={[
+							{ value: "1", label: t("oneMonth") },
+							{ value: "12", label: t("twelveMonths") },
+						]}
+					/>
+				)}
+				{method === "card" && (
+					<Choices<Currency>
+						label={t("currency")}
+						value={currency}
+						onChange={setCurrency}
+						options={CURRENCIES.map((c) => ({
+							value: c,
+							label: <span className="font-mono">{c.toUpperCase()}</span>,
+						}))}
+					/>
+				)}
+				<p className="flex items-baseline justify-between border-t border-border pt-4">
+					<span>{t("total")}</span>
+					<span className="font-mono text-2xl tabular-nums">{total}</span>
 				</p>
-			)}
-			<button
-				type="submit"
-				disabled={pending}
-				className="min-h-11 w-full rounded-md bg-fg px-4 text-bg disabled:opacity-50 sm:w-auto"
-			>
-				{pending ? t("working") : method === "pix" ? t("payPix") : t("pay")}
-			</button>
-		</form>
+				<p className="text-sm text-muted">
+					{method === "card" && product !== "credits" ? t("recurring") : t("oneTime")}
+				</p>
+				{error && (
+					<p role="alert" className="text-sm text-danger">
+						{error}
+					</p>
+				)}
+				<button
+					type="submit"
+					disabled={pending}
+					className="min-h-11 w-full rounded-md bg-fg px-4 text-bg disabled:opacity-50 sm:w-auto"
+				>
+					{pending ? t("working") : method === "pix" ? t("payPix") : t("pay")}
+				</button>
+			</form>
+		</>
 	);
 }

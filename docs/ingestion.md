@@ -21,7 +21,7 @@ webscrappings/
 ├─ connectors/      wikidata.py, wikipedia.py, openlibrary.py, steam.py, gog.py → fetch(since, ...) -> Iterable[Record]
 ├─ normalize.py     source_records → items / item_translations / external_scores (build_item puro + upsert)
 ├─ bootstrap.py     carga completa (top-N por sitelinks) + --export snapshot.sql.gz via COPY
-├─ covers.py        meta.coverUrl (Vercel Blob se houver token)
+├─ covers.py        meta.coverUrl (WebP no Vercel Blob se houver token)
 ├─ revalidate.py    POST ${APP_URL}/api/cron/revalidate {"tags":["catalog"]}
 └─ tests/           pytest com respostas reais gravadas em fixtures/, sem rede; test_db.py opcional
 ```
@@ -31,7 +31,7 @@ webscrappings/
 1. **Conector** valida a resposta com pydantic e grava em `source_records` um payload enxuto (só os campos usados, para que edições irrelevantes não mudem o hash). `upsert_source_record` calcula sha256 do JSON canônico (chaves ordenadas): hash igual = no-op (nem `fetched_at` muda).
 2. **`external_id` é sempre o QID do Wikidata**, em todas as fontes (o ID nativo fica dentro do payload). Assim a PK `(source, external_id)` serve de índice para juntar todas as fontes de um item. `source` ∈ `wikidata`, `wikipedia:en|pt|es`, `openlibrary`, `steam`, `gog`.
 3. **Normalizador** pega os QIDs com registro pendente (`normalized_at IS NULL OR normalized_at < fetched_at`), relê *todos* os registros desses QIDs e reconstrói o item do zero com `build_item` (função pura, testada). Upsert por `wikidata_qid`, commit a cada 200 QIDs, marca `normalized_at` e `item_id`. Sem registro Wikidata ou sem título em inglês = pulado.
-4. **Capas** (`covers.py`): prioridade Open Library (livros) → Steam → GOG (jogos) → Commons P3383/P18 (todos, com `meta.coverAttribution` = fonte, licença, autor, URL). Com `BLOB_READ_WRITE_TOKEN` copia para Vercel Blob (`covers/<item_id>.<ext>`); senão grava a URL da fonte. O normalizador preserva `coverUrl`/`coverAttribution`.
+4. **Capas** (`covers.py`): prioridade Open Library (livros) → Steam → GOG (jogos) → Commons P3383/P18 (todos, com `meta.coverAttribution` = fonte, licença, autor, URL). Com `BLOB_READ_WRITE_TOKEN` baixa a imagem (máx. 15 MB), aplica a orientação EXIF, redimensiona para caber em 600×600 (mantém proporção, nunca amplia), codifica WebP (Pillow, `quality=78`, `method=6`, sem EXIF/XMP/ICC) e sobe para o Vercel Blob em `covers/<item_id>-<sha256(fonte)[:16]>.webp` (público, `cache-control` 1 ano, pois o conteúdo de um pathname nunca muda). Idempotente: se o `coverUrl` atual já aponta para o pathname do hash da imagem baixada, não recodifica nem sobe (com `--refresh`, só baixa a fonte). Sem token grava a URL da fonte e registra um aviso. Falha num item (HTTP, imagem inválida, resposta do Blob fora do schema) só gera log; o item fica sem capa e é tentado de novo na próxima execução. Média medida em 12 capas reais (6 Open Library L, 5 headers Steam, 1 Commons): fonte 56,7 KB → WebP 18,7 KB (~19 GB por 1M capas). Sem variante miniatura: o app só usa a capa na página do item (YAGNI); blobs antigos de uma capa trocada ficam órfãos (raro). O normalizador preserva `coverUrl`/`coverAttribution`.
 5. **Revalidação**: `normalize` e `bootstrap` chamam `POST ${APP_URL}/api/cron/revalidate` com `Authorization: Bearer ${CRON_SECRET}`; falha só gera log.
 
 ## Mapeamento

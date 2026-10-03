@@ -48,7 +48,8 @@ test.describe("profile @auth", () => {
 		await expect(confirm).toHaveText("Yes, delete my account", { timeout: 15_000 });
 		await expect(confirm).toBeEnabled();
 		await confirm.click();
-		await expect(page.getByRole("link", { name: "Log in" }).first()).toBeVisible();
+		// On mobile the navbar link sits inside the closed hamburger menu: attached, not visible.
+		await expect(page.getByRole("link", { name: "Log in" }).first()).toBeAttached();
 		if (hasDatabase()) expect((await findUser(account.email))?.deletionScheduledAt).not.toBeNull();
 
 		await logIn(page, account);

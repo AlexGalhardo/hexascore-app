@@ -1,9 +1,11 @@
 "use client";
 
 import { Autocomplete } from "@base-ui/react/autocomplete";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
+import { ScoreBadge } from "@/components/score/score-badge";
 import { useRouter } from "@/i18n/navigation";
 
 const suggestionSchema = z.object({
@@ -13,6 +15,8 @@ const suggestionSchema = z.object({
 			type: z.enum(["game", "movie", "series", "book"]),
 			title: z.string(),
 			year: z.number().nullable(),
+			score: z.number().int().min(0).max(100).nullable(),
+			coverUrl: z.string().nullable(),
 			path: z.string().startsWith("/"),
 		}),
 	),
@@ -26,43 +30,42 @@ type Props = { action: string; placeholder: string };
 export function SearchAutocomplete({ action, placeholder }: Props) {
 	const t = useTranslations("search");
 	const tt = useTranslations("itemTypes");
+	const ts = useTranslations("score");
 	const locale = useLocale();
 	const router = useRouter();
 	const [value, setValue] = useState("");
-	const [items, setItems] = useState<Suggestion[]>([]);
-	const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
-	const controller = useRef<AbortController | null>(null);
+	const [debounced, setDebounced] = useState("");
 	const highlighted = useRef<Suggestion | undefined>(undefined);
+	const q = value.trim();
 
 	useEffect(() => {
-		const q = value.trim();
-		if (q.length < 2) {
-			setItems([]);
-			setStatus("idle");
-			return;
-		}
-		const timer = setTimeout(async () => {
-			controller.current?.abort();
-			const current = new AbortController();
-			controller.current = current;
-			setStatus("loading");
+		const timer = setTimeout(() => setDebounced(q), 200);
+		return () => clearTimeout(timer);
+	}, [q]);
+
+	const enabled = q.length >= 2 && debounced.length >= 2;
+	const suggestions = useQuery({
+		queryKey: ["search-suggest", debounced, locale],
+		queryFn: async ({ signal }): Promise<Suggestion[]> => {
 			try {
-				const params = new URLSearchParams({ q, locale });
+				const params = new URLSearchParams({ q: debounced, locale });
 				const response = await fetch(`/api/search/suggest?${params}`, {
-					signal: AbortSignal.any([current.signal, AbortSignal.timeout(5000)]),
+					signal: AbortSignal.any([signal, AbortSignal.timeout(5000)]),
 				});
 				if (!response.ok) throw new Error(`HTTP ${response.status}`);
-				setItems(suggestionSchema.parse(await response.json()).data);
-				setStatus("done");
+				return suggestionSchema.parse(await response.json()).data;
 			} catch (error) {
-				if (current.signal.aborted) return;
-				console.warn("[search] suggestions unavailable", error);
-				setItems([]);
-				setStatus("done");
+				if (!signal.aborted) console.warn("[search] suggestions unavailable", error);
+				throw error;
 			}
-		}, 200);
-		return () => clearTimeout(timer);
-	}, [value, locale]);
+		},
+		enabled,
+		// Keep the previous list visible while the next keystroke loads; a failure just shows "no suggestions".
+		placeholderData: keepPreviousData,
+		retry: false,
+	});
+	const items = enabled ? (suggestions.data ?? []) : [];
+	const status = !enabled ? "idle" : suggestions.isFetching ? "loading" : "done";
 
 	return (
 		<form action={action}>
@@ -100,18 +103,43 @@ export function SearchAutocomplete({ action, placeholder }: Props) {
 							<Autocomplete.Empty className="px-3 py-2 text-sm text-muted empty:hidden">
 								{status === "done" ? t("noSuggestions") : null}
 							</Autocomplete.Empty>
-							<Autocomplete.List className="max-h-80 overflow-y-auto">
+							<Autocomplete.List className="max-h-[32rem] overflow-y-auto">
 								{(item: Suggestion) => (
 									<Autocomplete.Item
 										key={item.id}
 										value={item}
 										onClick={() => router.push(item.path)}
-										className="flex min-h-11 cursor-default items-center justify-between gap-3 px-3 text-sm outline-none data-highlighted:bg-surface"
+										className="flex min-h-14 cursor-default items-center gap-3 px-3 py-1.5 text-sm outline-none data-highlighted:bg-surface"
 									>
-										<span className="truncate">{item.title}</span>
-										<span className="shrink-0 text-xs text-muted">
-											{[tt(item.type), item.year].filter(Boolean).join(" · ")}
+										{item.coverUrl ? (
+											// biome-ignore lint/performance/noImgElement: remote covers from ingestion; next/image needs a host allowlist (later)
+											<img
+												src={item.coverUrl}
+												alt=""
+												width={32}
+												height={48}
+												loading="lazy"
+												className="h-12 w-8 shrink-0 rounded-sm border border-border object-cover"
+											/>
+										) : (
+											<span
+												aria-hidden="true"
+												className="h-12 w-8 shrink-0 rounded-sm border border-border bg-surface"
+											/>
+										)}
+										<span className="grid min-w-0 flex-1">
+											<span className="truncate font-medium">{item.title}</span>
+											<span className="text-xs text-muted">
+												{[tt(item.type), item.year].filter(Boolean).join(" · ")}
+											</span>
 										</span>
+										<ScoreBadge
+											score={item.score}
+											label={
+												item.score === null ? ts("none") : ts("outOf", { score: item.score })
+											}
+											size="sm"
+										/>
 									</Autocomplete.Item>
 								)}
 							</Autocomplete.List>
