@@ -111,3 +111,25 @@ def test_revalidate_failures_are_not_fatal(monkeypatch: pytest.MonkeyPatch) -> N
     assert revalidate(["catalog"], unauthorized) is False
     monkeypatch.delenv("APP_URL")
     assert revalidate(["catalog"], unauthorized) is False
+
+
+def test_keep_alive_pings_until_closed():
+    import time
+
+    from common.db import keep_alive
+
+    class FakeConn:
+        closed = False
+        pings = 0
+
+        def execute(self, query):
+            assert query == "SELECT 1"
+            self.pings += 1
+
+    conn = FakeConn()
+    thread = keep_alive(conn, interval=0.01)  # type: ignore[arg-type]
+    time.sleep(0.08)
+    conn.closed = True
+    thread.join(timeout=1)
+    assert conn.pings >= 2
+    assert not thread.is_alive()

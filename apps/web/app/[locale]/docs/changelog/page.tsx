@@ -6,7 +6,7 @@ export const generateMetadata = docMetadata("changelog");
 const DEPRECATION = `HTTP/1.1 200 OK
 Deprecation: @1798761600
 Sunset: Tue, 01 Jun 2027 00:00:00 GMT
-Link: <https://hexascore.com/docs/changelog>; rel="deprecation"`;
+Link: <https://hexascore.app/docs/changelog>; rel="deprecation"`;
 
 export default async function ChangelogPage(props: DocPageProps) {
 	await enterDocPage(props);
@@ -43,6 +43,16 @@ export default async function ChangelogPage(props: DocPageProps) {
 			<Code title="Headers on a deprecated version">{DEPRECATION}</Code>
 
 			<H2 id="changes">Changes</H2>
+			<section className="border-t border-border py-4">
+				<h3 className="font-semibold">v1 — time to beat (additive)</h3>
+				<ul className="mt-2 list-disc space-y-1 pl-6 text-sm leading-6">
+					<li>
+						<C>ItemDetail.time_to_beat</C>: crowdsourced median hours and report count for <C>main</C>,{" "}
+						<C>extras</C> and <C>completionist</C> on games (<C>median_hours</C> is <C>null</C> under 3
+						reports); <C>null</C> for movies, series and books.
+					</li>
+				</ul>
+			</section>
 			<section className="border-t border-border py-4">
 				<h3 className="font-semibold">v1 — first release</h3>
 				<ul className="mt-2 list-disc space-y-1 pl-6 text-sm leading-6">

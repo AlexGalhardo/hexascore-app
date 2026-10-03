@@ -17,6 +17,7 @@ import {
 	searchQuerySchema,
 	searchResultSchema,
 	synopsisSchema,
+	timeToBeatSchema,
 	usageSchema,
 } from "./schemas";
 
@@ -26,13 +27,14 @@ import {
 type Json = Record<string, unknown>;
 
 // The public docs show this host; until the custom domain exists, `/api/v1` on the deployment is the same API.
-export const API_BASE_URL = "https://api.hexascore.com/v1";
-const DOCS_URL = "https://hexascore.com/docs";
+export const API_BASE_URL = "https://api.hexascore.app/v1";
+const DOCS_URL = "https://hexascore.app/docs";
 
 const components = z.registry<{ id: string }>();
 components.add(itemSummarySchema, { id: "ItemSummary" });
 components.add(itemDetailSchema, { id: "ItemDetail" });
 components.add(synopsisSchema, { id: "Synopsis" });
+components.add(timeToBeatSchema, { id: "TimeToBeat" });
 components.add(itemListSchema, { id: "ItemList" });
 components.add(searchResultSchema, { id: "SearchResult" });
 components.add(genreListSchema, { id: "GenreList" });
@@ -234,7 +236,7 @@ export function buildOpenApiDocument(): Json {
 				`Guides: ${DOCS_URL}`,
 			].join("\n"),
 			contact: { name: "Hexascore", url: DOCS_URL },
-			license: { name: "Proprietary", url: "https://hexascore.com/terms" },
+			license: { name: "Proprietary", url: "https://hexascore.app/terms" },
 		},
 		servers: [
 			{ url: API_BASE_URL, description: "Production" },

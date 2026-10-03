@@ -1,14 +1,22 @@
+import type { Page } from "@playwright/test";
 import { expect, expectAccessible, test } from "../helpers/fixtures";
+
+/** Mobile hides the search behind the navbar's search button; desktop shows it inline. */
+async function openSearch(page: Page): Promise<void> {
+	const toggle = page.locator('button[aria-controls="nav-search"]');
+	if (await toggle.isVisible()) await toggle.click();
+}
 
 test.describe("search", () => {
 	test("autocomplete is keyboard operable and opens the highlighted item", async ({ page }) => {
 		await page.goto("/");
+		await openSearch(page);
 		const input = page.locator("#site-search");
 		await input.click();
 		await input.pressSequentially("the", { delay: 30 });
 		const options = page.getByRole("option");
 		await expect(options.first()).toBeVisible();
-		const title = (await options.first().locator("span").first().textContent())?.trim() ?? "";
+		const title = (await options.first().locator(".truncate").textContent())?.trim() ?? "";
 		await input.press("ArrowDown");
 		await input.press("Enter");
 		await expect(page.locator("h1")).toHaveText(title);
@@ -16,6 +24,7 @@ test.describe("search", () => {
 
 	test("Enter without a highlighted suggestion runs a full search", async ({ page }) => {
 		await page.goto("/");
+		await openSearch(page);
 		await page.locator("#site-search").fill("the");
 		await page.locator("#site-search").press("Enter");
 		await expect(page).toHaveURL(/\/search\?q=the/);

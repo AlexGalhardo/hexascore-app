@@ -4,6 +4,7 @@ import { getFormatter, getTranslations, setRequestLocale } from "next-intl/serve
 import type { ReactNode } from "react";
 import { RatingPanel } from "@/components/item/rating-panel";
 import { RatingsDialog } from "@/components/item/ratings-dialog";
+import { TimeToBeat } from "@/components/item/time-to-beat";
 import { Trailers } from "@/components/item/trailers";
 import { HexRadar } from "@/components/score/hex-radar";
 import { ScoreBadge } from "@/components/score/score-badge";
@@ -169,6 +170,8 @@ export default async function ItemPage({ params }: Props) {
 				/>
 			</section>
 
+			{item.timeToBeat ? <TimeToBeat stats={item.timeToBeat} /> : null}
+
 			<RatingPanel
 				itemId={item.id}
 				type={item.type}
@@ -257,6 +260,31 @@ export default async function ItemPage({ params }: Props) {
 							</div>
 						))}
 				</dl>
+				{item.coverUrl && meta.coverAttribution ? (
+					<p className="text-xs text-muted">
+						{t("coverCredit", {
+							credit: [
+								meta.coverAttribution.source,
+								meta.coverAttribution.author,
+								meta.coverAttribution.license,
+							]
+								.filter(Boolean)
+								.join(" · "),
+						})}
+						{meta.coverAttribution.url ? (
+							<>
+								{" · "}
+								<a
+									href={meta.coverAttribution.url}
+									rel="noopener noreferrer nofollow"
+									className="underline"
+								>
+									{t("source")}
+								</a>
+							</>
+						) : null}
+					</p>
+				) : null}
 			</section>
 
 			{affiliates.length ? (

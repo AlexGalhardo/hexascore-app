@@ -1,11 +1,11 @@
 # API pública /v1
 
-- Base `https://api.hexascore.com/v1` (proxy reescreve `api.<domínio>/v1/*` → `/api/v1/*` em `apps/web/proxy.ts`). Até existir o domínio próprio, a mesma API responde em `https://<deploy>/api/v1`. Auth `Authorization: Bearer hx_live_…` (chave exibida 1 vez, só hash sha256 no banco). Só leitura (`GET`).
+- Base `https://api.hexascore.app/v1` (proxy reescreve `api.<domínio>/v1/*` → `/api/v1/*` em `apps/web/proxy.ts`). A mesma API também responde em `https://<deploy>/api/v1`. Auth `Authorization: Bearer hx_live_…` (chave exibida 1 vez, só hash sha256 no banco). Só leitura (`GET`).
 
 | Rota | Uso |
 | --- | --- |
 | `/v1/{games\|movies\|series\|books}` | lista + filtros: `genre`, `platform` (só games), `year`, `min_score`, `max_score`, `min_{categoria}` (chaves de `lib/categories.ts` por tipo, ex. `min_gameplay=80`), `sort` (`score\|-score\|release_date\|-release_date\|rating_count\|-rating_count\|popularity\|-popularity`, padrão `-popularity`), `limit` (1..`maxPageSize` do plano: Free 10, pagos 100, padrão 10), `cursor`, `locale` (`en\|pt-BR\|es`, padrão `en`). Resposta `{ data: ItemSummary[], next_cursor }` |
-| `/v1/{type}/{id}` | `ItemDetail`: metadados, `score` + `categories` (null abaixo de 5 notas) + `rating_count`, `external_ids` (inclui `wikidata`), `trailers` (YouTube), `synopsis { text, locale, license, source_url }` ou null, `url` da página. Id de outro tipo → 404 |
+| `/v1/{type}/{id}` | `ItemDetail`: metadados, `score` + `categories` (null abaixo de 5 notas) + `rating_count`, `external_ids` (inclui `wikidata`), `trailers` (YouTube), `synopsis { text, locale, license, source_url }` ou null, `url` da página, `time_to_beat { main, extras, completionist: { median_hours, reports } }` (só jogos, `null` nos outros tipos; `median_hours` null abaixo de 3 relatos). Id de outro tipo → 404 |
 | `/v1/{type}/genres` | `{ data: { slug, count }[] }` (mais comuns primeiro; `slug` = valor exato para `genre`) |
 | `/v1/search?q=&type=&limit=&locale=` | busca fuzzy entre tipos (`type` = `game\|movie\|series\|book`), até 50, sem paginação |
 | `/v1/lookup?source=imdb\|steam\|igdb\|tmdb\|isbn13\|openlibrary\|wikidata&id=` | `ItemDetail` ou 404 |

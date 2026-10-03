@@ -81,7 +81,7 @@ export function TwoFactorSection({ enabled, needsPassword }: Props) {
 
 	if (step === "password") {
 		return (
-			<form onSubmit={onPassword} className="flex flex-col gap-4" noValidate>
+			<form method="post" onSubmit={onPassword} className="flex flex-col gap-4" noValidate>
 				{errorBox}
 				<Field id="tf-password" label={t("confirmPassword")}>
 					<PasswordInput
@@ -106,7 +106,7 @@ export function TwoFactorSection({ enabled, needsPassword }: Props) {
 
 	if (step === "scan" && setup) {
 		return (
-			<form onSubmit={onVerify} className="flex flex-col gap-4" noValidate>
+			<form method="post" onSubmit={onVerify} className="flex flex-col gap-4" noValidate>
 				<p className="text-sm">{t("scan")}</p>
 				{/* biome-ignore lint/performance/noImgElement: data: URL generated in the browser, nothing to optimize */}
 				<img src={setup.qr} alt={t("qrAlt")} width={208} height={208} className="rounded-md bg-white" />

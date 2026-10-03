@@ -218,6 +218,13 @@ export function seedUserId(index: number): string {
 	return `seed-user-${String(index).padStart(6, "0")}`;
 }
 
+/** Index as 5 base-26 letters (aaaaa, aaaab, …): unique for up to 11.8M users. */
+function letterCode(index: number): string {
+	let code = "";
+	for (let n = index, i = 0; i < 5; i++, n = Math.floor(n / 26)) code = String.fromCharCode(97 + (n % 26)) + code;
+	return code;
+}
+
 export function generateUser(index: number): SeedUser {
 	fakerEN.seed([SEED, 99, index]);
 	const first = fakerEN.person.firstName();
@@ -226,8 +233,12 @@ export function generateUser(index: number): SeedUser {
 		id,
 		name: `${first} ${fakerEN.person.lastName()}`,
 		email: `${id}@example.test`,
-		// nickname rule: 4–16 chars of [A-Za-z0-9_]; the index suffix keeps it unique.
-		username: `${slugify(first).replace(/-/g, "").slice(0, 9) || "user"}_${index}`.slice(0, 16),
+		// nickname rule: 4–16 lowercase letters; a fixed-width letter code of the index keeps it unique.
+		username: `${
+			slugify(first)
+				.replace(/[^a-z]/g, "")
+				.slice(0, 9) || "user"
+		}${letterCode(index)}`,
 		profilePrivate: index % 7 === 0,
 	};
 }

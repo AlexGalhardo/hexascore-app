@@ -6,7 +6,7 @@ import { decodeCursor, encodeCursor, InvalidCursorError } from "@/lib/catalog/cu
 import type { Database } from "@/lib/db/client";
 import { user } from "@/lib/db/schema/auth";
 import { ITEM_TYPES, type ItemType, items, itemTranslations } from "@/lib/db/schema/catalog";
-import { follows, itemStatus, type itemStatusValue, ratings } from "@/lib/db/schema/social";
+import { follows, itemStatus, type itemStatusValue, ratings, timeToBeat } from "@/lib/db/schema/social";
 import { ITEM_STATUSES, type ItemStatus } from "./constants";
 
 // Pure data access for profiles, follows, feed and item status (same contract as lib/catalog/repository.ts:
@@ -305,25 +305,35 @@ export async function getItemStatus(db: Database, userId: string, itemId: string
 	return row?.status ?? null;
 }
 
-/** `null` clears the status. False = unknown item. */
-export async function setItemStatus(
+/**
+ * `null` clears the status. Leaving `completed` also deletes the user's time-to-beat report (only completers
+ * report), in the same transaction: "cleared" tells the caller to refresh the item's cached medians.
+ */
+export function setItemStatus(
 	db: Database,
 	userId: string,
 	itemId: string,
 	status: ItemStatus | null,
-): Promise<boolean> {
-	const [exists] = await db.select({ id: items.id }).from(items).where(eq(items.id, itemId)).limit(1);
-	if (!exists) return false;
-	if (status === null) {
-		await db.delete(itemStatus).where(and(eq(itemStatus.userId, userId), eq(itemStatus.itemId, itemId)));
-	} else {
-		await db
-			.insert(itemStatus)
-			.values({ userId, itemId, status })
-			.onConflictDoUpdate({
-				target: [itemStatus.userId, itemStatus.itemId],
-				set: { status, updatedAt: new Date() },
-			});
-	}
-	return true;
+): Promise<"ok" | "cleared" | "notFound"> {
+	return db.transaction(async (tx) => {
+		const [exists] = await tx.select({ id: items.id }).from(items).where(eq(items.id, itemId)).limit(1);
+		if (!exists) return "notFound";
+		if (status === null) {
+			await tx.delete(itemStatus).where(and(eq(itemStatus.userId, userId), eq(itemStatus.itemId, itemId)));
+		} else {
+			await tx
+				.insert(itemStatus)
+				.values({ userId, itemId, status })
+				.onConflictDoUpdate({
+					target: [itemStatus.userId, itemStatus.itemId],
+					set: { status, updatedAt: new Date() },
+				});
+		}
+		if (status === "completed") return "ok";
+		const cleared = await tx
+			.delete(timeToBeat)
+			.where(and(eq(timeToBeat.userId, userId), eq(timeToBeat.itemId, itemId)))
+			.returning({ itemId: timeToBeat.itemId });
+		return cleared.length > 0 ? "cleared" : "ok";
+	});
 }
