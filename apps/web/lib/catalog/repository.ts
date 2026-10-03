@@ -84,6 +84,7 @@ function toSummary(row: SummaryRow): ItemSummary {
 		genres: meta.genres ?? [],
 		platforms: meta.platforms ?? [],
 		coverUrl: meta.coverUrl ?? null,
+		coverThumbUrl: meta.coverThumbUrl ?? null,
 	};
 }
 

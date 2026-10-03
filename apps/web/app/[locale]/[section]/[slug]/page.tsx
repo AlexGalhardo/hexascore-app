@@ -110,6 +110,8 @@ export default async function ItemPage({ params }: Props) {
 						alt=""
 						width={120}
 						height={180}
+						fetchPriority="high"
+						decoding="async"
 						className="h-44 w-30 rounded-md border border-border object-cover"
 					/>
 				) : null}
