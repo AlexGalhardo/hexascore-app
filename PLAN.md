@@ -107,7 +107,7 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 - [ ] Bun workspaces, `apps/web` Next 16 + Tailwind 4 + Base UI, Biome 2, tsconfig estrito
 - [ ] Drizzle + client Neon/PGlite, `infra/docker-compose.yaml` (Postgres 18 + Redis)
 - [ ] `next-intl` (en/pt-br/es), tema via cookie, layout base, navbar, footer, banner de cookies
-- [ ] CI básico (lint, typecheck, test, build), husky, commitlint, release-please, Dependabot, CodeQL
+- [x] CI básico (lint, typecheck, test, build), husky, commitlint, release-please, Dependabot, CodeQL
 - [ ] Projeto Vercel + Neon + Upstash via Marketplace, `vercel env pull`
 - **Verificar**: `bun run lint:ci && bunx tsc --noEmit && bun test && bun run build` verdes local e no CI; preview da `dev` abre `/`, `/pt-br`, `/es` com tema persistido.
 

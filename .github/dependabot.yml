@@ -1,8 +1,22 @@
 version: 2
 updates:
-  # O projeto usa Bun (bun.lock); o ecossistema npm_and_yarn não sabe atualizar esse lockfile.
+  # Bun workspaces (bun.lock); the npm_and_yarn ecosystem cannot update this lockfile.
   - package-ecosystem: "bun"
     directory: "/"
+    target-branch: "dev"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+    open-pull-requests-limit: 5
+
+  # Python ingestion (uv.lock in webscrappings/).
+  - package-ecosystem: "uv"
+    directory: "/webscrappings"
+    target-branch: "dev"
     schedule:
       interval: "weekly"
     commit-message:
@@ -13,8 +27,34 @@ updates:
     open-pull-requests-limit: 5
 
   - package-ecosystem: "github-actions"
-    directory: "/"
+    directories: ["/", "/.github/actions/*"]
+    target-branch: "dev"
     schedule:
       interval: "weekly"
     commit-message:
       prefix: "ci"
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "docker"
+    directory: "/infra"
+    target-branch: "dev"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "docker-compose"
+    directory: "/infra"
+    target-branch: "dev"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]

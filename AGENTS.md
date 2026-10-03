@@ -11,6 +11,7 @@ Codename `hexascore`; final brand name is pending.
 - Conventional Commits (commitlint). Changes go through PR to `dev`, then `dev` → `main`.
 - Only stable, pinned dependency versions (no `^`, no beta/rc/canary). Ask before adding a dependency.
 - Bun is the package manager. Python code lives in `webscrappings/` and uses uv.
+- Local setup: `setups/` scripts (Unix/Windows × Docker/PGlite, see `setups/README.md`); Docker stack in `infra/`. Before a PR, `bun run lint:ci`, `bun run typecheck`, `bun run test` and `bun run build` must pass (required CI checks).
 - Follow the Karpathy guidelines (think first, simplicity, surgical changes, verifiable goals), `ponytail` (YAGNI, minimal solution) and `graphify` (map the code before broad searches). Vendored skills live in `.claude/skills/`.
 - Validate every schema and piece of data with zod wherever possible (env, actions, forms, API params/responses, webhooks, external responses, jsonb reads); infer types with `z.infer`.
 - Env vars are validated with zod in `apps/web/lib/env.ts` before build and server start; failures print every bad variable explicitly.
