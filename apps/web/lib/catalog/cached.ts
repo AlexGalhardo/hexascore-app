@@ -19,6 +19,12 @@ export const listItems = unstable_cache((params: ListItemsParams) => repo.listIt
 	revalidate: HOUR,
 });
 
+export const countListItems = unstable_cache(
+	(params: ListItemsParams) => repo.countListItems(db, params),
+	["catalog:list-count"],
+	{ tags: [CATALOG_TAG], revalidate: HOUR },
+);
+
 export const searchItems = unstable_cache(
 	(q: string, options: { type?: ItemType; locale: Locale; limit?: number }) => repo.searchItems(db, q, options),
 	["catalog:search"],

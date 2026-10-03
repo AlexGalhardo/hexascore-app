@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
+import { ChipList } from "@/components/item/chip-list";
 import { RatingPanel } from "@/components/item/rating-panel";
 import { RatingsDialog } from "@/components/item/ratings-dialog";
 import { TimeToBeat } from "@/components/item/time-to-beat";
@@ -124,38 +125,50 @@ export default async function ItemPage({ params }: Props) {
 						<NavIcon name={SECTION_PATHS[item.type]} className="size-10" />
 					</div>
 				)}
-				<div className="grid min-w-0 content-start gap-2">
-					<Link
-						href={`/${SECTION_PATHS[item.type]}`}
-						className={`justify-self-start text-xs font-semibold uppercase tracking-wide ${accent.text}`}
-					>
-						{tcat(`title.${item.type}`)}
-					</Link>
-					<h1 className="font-serif text-3xl font-bold leading-tight break-words sm:text-5xl">
-						{item.title}
-					</h1>
-					<p className="text-sm text-muted">
-						{[item.year, tt(item.type), meta.genres?.join(", "), meta.platforms?.join(", ")]
-							.filter(Boolean)
-							.join(" · ")}
-					</p>
-					{meta.creators?.length ? <p className="text-sm">{meta.creators.join(", ")}</p> : null}
-					<div className="mt-2 flex items-center gap-4">
-						<ScoreBadge
-							score={item.score}
-							size="lg"
-							label={item.score === null ? ts("none") : ts("outOf", { score: item.score })}
-						/>
-						<div>
-							<p className="text-sm font-semibold">{t("communityScore")}</p>
-							<p className="text-sm text-muted">{tcat("ratingCount", { count: item.ratingCount })}</p>
-							{item.score === null ? (
-								<p className="text-sm text-muted">
-									{t("notEnough")} — {t("notEnoughHint", { min: MIN_RATINGS_FOR_SCORE })}
-								</p>
-							) : null}
+				<div className="grid min-w-0 content-start gap-3">
+					{/* Title and the final score share the first row; the score stays at the far right on every width. */}
+					<div className="flex items-start justify-between gap-4">
+						<div className="grid min-w-0 gap-1">
+							<Link
+								href={`/${SECTION_PATHS[item.type]}`}
+								className={`justify-self-start text-xs font-semibold uppercase tracking-wide ${accent.text}`}
+							>
+								{tcat(`title.${item.type}`)}
+							</Link>
+							<h1 className="font-serif text-3xl font-bold leading-tight break-words sm:text-5xl">
+								{item.title}
+							</h1>
+						</div>
+						<div className="grid shrink-0 justify-items-end gap-1 text-right">
+							<ScoreBadge
+								score={item.score}
+								size="lg"
+								label={item.score === null ? ts("none") : ts("outOf", { score: item.score })}
+							/>
+							<p className="text-xs font-semibold">{t("communityScore")}</p>
+							<p className="text-xs text-muted">{tcat("ratingCount", { count: item.ratingCount })}</p>
 						</div>
 					</div>
+					<p className="text-sm text-muted">
+						{[item.year, meta.creators?.join(", ")].filter(Boolean).join(" · ")}
+					</p>
+					<ChipList
+						label={t("fields.genres")}
+						items={meta.genres}
+						max={4}
+						moreLabel={(n) => t("moreCount", { count: n })}
+					/>
+					<ChipList
+						label={t("fields.platforms")}
+						items={meta.platforms}
+						max={6}
+						moreLabel={(n) => t("moreCount", { count: n })}
+					/>
+					{item.score === null ? (
+						<p className="text-sm text-muted">
+							{t("notEnough")} — {t("notEnoughHint", { min: MIN_RATINGS_FOR_SCORE })}
+						</p>
+					) : null}
 				</div>
 			</header>
 

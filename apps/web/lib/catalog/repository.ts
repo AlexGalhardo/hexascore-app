@@ -134,17 +134,8 @@ function parseSort(sort: Sort): { field: SortField; dir: Direction } {
 		: { field: sort as SortField, dir: "asc" };
 }
 
-export async function listItems(db: Database, input: ListItemsParams): Promise<Page<ItemSummary>> {
-	const p = listItemsParamsSchema.parse(input);
-	const { field, dir } = parseSort(p.sort);
-	const { expr, cast } = sortExpression(field, dir);
-
-	const cursor = p.cursor ? decodeCursor(p.cursor, sortCursorSchema) : null;
-	if (p.cursor && (!cursor || cursor.s !== p.sort)) throw new InvalidCursorError();
-	const backwards = cursor?.d === "prev";
-	// Walking backwards flips both the comparison and the order; rows are reversed again below.
-	const effectiveDir: Direction = backwards ? (dir === "asc" ? "desc" : "asc") : dir;
-
+/** WHERE clauses shared by the catalog list and its total count (everything except the cursor). */
+function filterConditions(p: z.infer<typeof listItemsParamsSchema>): (SQL | undefined)[] {
 	const where: (SQL | undefined)[] = [eq(items.type, p.type)];
 	if (p.genre) where.push(sql`${items.meta} @> ${JSON.stringify({ genres: [p.genre] })}::jsonb`);
 	if (p.platform) where.push(sql`${items.meta} @> ${JSON.stringify({ platforms: [p.platform] })}::jsonb`);
@@ -157,6 +148,31 @@ export async function listItems(db: Database, input: ListItemsParams): Promise<P
 		const column = scoreColumns[Number(key.slice(1)) - 1];
 		if (column && min !== undefined) where.push(visible, gte(column, min));
 	}
+	return where;
+}
+
+/** Total items matching the catalog filters (cursor ignored), shown above the list. */
+export async function countListItems(db: Database, input: ListItemsParams): Promise<number> {
+	const p = listItemsParamsSchema.parse({ ...input, cursor: undefined });
+	const [row] = await db
+		.select({ n: sql<number>`count(*)::int` })
+		.from(items)
+		.where(and(...filterConditions(p)));
+	return row?.n ?? 0;
+}
+
+export async function listItems(db: Database, input: ListItemsParams): Promise<Page<ItemSummary>> {
+	const p = listItemsParamsSchema.parse(input);
+	const { field, dir } = parseSort(p.sort);
+	const { expr, cast } = sortExpression(field, dir);
+
+	const cursor = p.cursor ? decodeCursor(p.cursor, sortCursorSchema) : null;
+	if (p.cursor && (!cursor || cursor.s !== p.sort)) throw new InvalidCursorError();
+	const backwards = cursor?.d === "prev";
+	// Walking backwards flips both the comparison and the order; rows are reversed again below.
+	const effectiveDir: Direction = backwards ? (dir === "asc" ? "desc" : "asc") : dir;
+
+	const where = filterConditions(p);
 	if (cursor) {
 		const op = sql.raw(effectiveDir === "asc" ? ">" : "<");
 		where.push(sql`(${expr}, ${items.id}) ${op} (cast(${cursor.v} as ${sql.raw(cast)}), ${cursor.id}::uuid)`);
