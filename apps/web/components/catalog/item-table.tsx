@@ -27,7 +27,7 @@ export async function ItemTable({ items, type, rankFrom = null }: Props) {
 	return (
 		<>
 			<table className="hidden w-full table-fixed border-collapse text-sm md:table">
-				<thead className="sticky top-0 bg-bg">
+				<thead className="sticky top-(--nav-h) z-10 bg-bg">
 					<tr className="border-b border-border text-left text-xs uppercase tracking-wide text-muted">
 						{rankFrom !== null ? <th className="w-10 py-2 pr-2 font-medium">#</th> : null}
 						<th className="py-2 pr-4 font-medium">{t("columns.title")}</th>

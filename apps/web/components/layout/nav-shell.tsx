@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { usePathname } from "@/i18n/navigation";
 
 type Props = {
@@ -18,6 +18,19 @@ const iconButton = "grid size-11 place-items-center rounded-md border border-bor
 export function NavShell({ brand, search, actions, links, labels }: Props) {
 	const [open, setOpen] = useState<"search" | "menu" | null>(null);
 	const pathname = usePathname();
+	const bar = useRef<HTMLDivElement>(null);
+
+	// Publishes the real bar height as --nav-h so sticky elements and anchor jumps sit below it, whatever wraps.
+	useEffect(() => {
+		const header = bar.current?.parentElement;
+		if (!header) return;
+		const root = document.documentElement;
+		const update = (): void => root.style.setProperty("--nav-h", `${header.offsetHeight}px`);
+		update();
+		const observer = new ResizeObserver(update);
+		observer.observe(header);
+		return () => observer.disconnect();
+	}, []);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: close the panels whenever the route changes.
 	useEffect(() => setOpen(null), [pathname]);
@@ -29,7 +42,7 @@ export function NavShell({ brand, search, actions, links, labels }: Props) {
 	const toggle = (panel: "search" | "menu") => setOpen((current) => (current === panel ? null : panel));
 
 	return (
-		<div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3">
+		<div ref={bar} className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3">
 			{brand}
 			<div className="ml-auto flex items-center gap-2 sm:hidden">
 				<button
