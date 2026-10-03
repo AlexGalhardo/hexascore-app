@@ -17,6 +17,7 @@ import { writeRating } from "@/lib/ratings";
 import {
 	addListItem,
 	createList,
+	createListInputSchema,
 	deleteList,
 	getList,
 	getListsForItem,
@@ -145,21 +146,25 @@ describe("item status", () => {
 
 describe("lists", () => {
 	const input = listInputSchema.parse({ title: " Best ", description: "", isPublic: true });
+	const games = createListInputSchema.parse({ title: " Best ", description: "", isPublic: true, type: "game" });
 
 	test("schema limits", () => {
 		expect(input).toEqual({ title: "Best", description: null, isPublic: true });
 		expect(listInputSchema.safeParse({ ...input, title: "x".repeat(81) }).success).toBe(false);
 		expect(listInputSchema.safeParse({ ...input, title: "  " }).success).toBe(false);
 		expect(listInputSchema.safeParse({ ...input, description: "x".repeat(501) }).success).toBe(false);
+		expect(createListInputSchema.safeParse(input).success).toBe(false); // the category is required on create
+		expect(createListInputSchema.safeParse({ ...input, type: "album" }).success).toBe(false);
 	});
 
 	test("create, add, reorder, remove, visibility, delete", async () => {
-		const created = await createList(db, "alice", input);
-		if (created === "limit") throw new Error("unexpected limit");
+		const created = await createList(db, "alice", games);
+		if (typeof created === "string") throw new Error(`unexpected ${created}`);
 		const id = created.id;
 		for (const n of [1, 2, 3]) expect(await addListItem(db, "alice", id, item(n))).toBe("ok");
 		expect(await addListItem(db, "alice", id, item(1))).toBe("ok"); // duplicate is a no-op
 		expect(await addListItem(db, "bob", id, item(4))).toBe("notFound"); // not the owner
+		expect(await addListItem(db, "alice", id, item(4))).toBe("typeMismatch"); // a movie in a game list
 		expect(await moveListItem(db, "alice", id, item(3), "up")).toBe(true);
 		expect(await moveListItem(db, "alice", id, item(1), "up")).toBe(true); // already first
 		const list = await getList(db, id, "bob", "en");
@@ -168,6 +173,7 @@ describe("lists", () => {
 		expect(await removeListItem(db, "alice", id, item(3))).toBe(true);
 		expect((await getListsForItem(db, "alice", item(2)))[0]).toMatchObject({ id, contains: true });
 		expect((await getListsForItem(db, "alice", item(3)))[0]).toMatchObject({ id, contains: false });
+		expect(await getListsForItem(db, "alice", item(4))).toEqual([]); // only lists of the item's type
 
 		expect(await updateList(db, "bob", id, { ...input, isPublic: false })).toBe(false);
 		expect(await updateList(db, "alice", id, { ...input, isPublic: false })).toBe(true);
@@ -175,7 +181,7 @@ describe("lists", () => {
 		expect(await getList(db, id, null, "en")).toBeNull();
 		expect(await getList(db, id, "alice", "en")).not.toBeNull();
 		expect(await getUserLists(db, "alice", false)).toEqual([]);
-		expect(await getUserLists(db, "alice", true)).toHaveLength(1);
+		expect(await getUserLists(db, "alice", true)).toMatchObject([{ id, type: "game" }]);
 
 		await updateList(db, "alice", id, input);
 		expect(await setListHidden(db, id, true)).toBe(true);
@@ -189,17 +195,29 @@ describe("lists", () => {
 	});
 
 	test("lists of a private profile are hidden from others", async () => {
-		const created = await createList(db, "carol", input);
-		if (created === "limit") throw new Error("unexpected limit");
+		const created = await createList(db, "carol", games);
+		if (typeof created === "string") throw new Error(`unexpected ${created}`);
 		expect(await getList(db, created.id, "bob", "en")).toBeNull();
 		expect(await getList(db, created.id, "carol", "en")).not.toBeNull();
 	});
 
-	test("caps the number of lists per user", async () => {
-		await db
-			.insert(lists)
-			.values(Array.from({ length: LIST_LIMITS.lists }, (_, i) => ({ userId: "bob", title: `L${i}` })));
-		expect(await createList(db, "bob", input)).toBe("limit");
+	test("caps the number of lists per user and type", async () => {
+		for (let i = 0; i < LIST_LIMITS.perType; i++) {
+			expect(await createList(db, "bob", { ...games, title: `L${i}` })).toHaveProperty("id");
+		}
+		expect(await createList(db, "bob", games)).toBe("limit");
+		expect(await createList(db, "bob", { ...games, type: "movie" })).toHaveProperty("id");
+		expect(await createList(db, "alice", games)).toHaveProperty("id"); // the cap is per user
+	});
+
+	test("create with a first item checks it exists and matches the type", async () => {
+		const movies = { ...games, type: "movie" as const };
+		expect(await createList(db, "carol", movies, item(1))).toBe("typeMismatch");
+		expect(await createList(db, "carol", movies, "01900000-0000-7000-8000-0000000000ff")).toBe("notFound");
+		expect(await getUserLists(db, "carol", true)).toHaveLength(1); // nothing was created by the failures
+		const created = await createList(db, "carol", movies, item(4));
+		if (typeof created === "string") throw new Error(`unexpected ${created}`);
+		expect((await getList(db, created.id, "carol", "en"))?.items.map((i) => i.id)).toEqual([item(4)]);
 	});
 });
 
@@ -226,7 +244,7 @@ describe("reports", () => {
 			),
 		).toBe("notFound");
 
-		const [list] = await db.insert(lists).values({ userId: "alice", title: "Spammy" }).returning();
+		const [list] = await db.insert(lists).values({ userId: "alice", type: "game", title: "Spammy" }).returning();
 		if (!list) throw new Error("no list");
 		const listReport = parse({ target: { type: "list", id: list.id }, reason: "offensive", details: "rude title" });
 		expect(await createReport(db, "bob", listReport)).toBe("ok");
@@ -273,7 +291,7 @@ describe("admin", () => {
 		await db
 			.insert(sourceRecords)
 			.values({ source: "steam", externalId: "1", payload: {}, hash: "h", itemId: source });
-		const [list] = await db.insert(lists).values({ userId: "carol", title: "Mine" }).returning();
+		const [list] = await db.insert(lists).values({ userId: "carol", type: "game", title: "Mine" }).returning();
 		if (!list) throw new Error("no list");
 		await db.insert(listItems).values({ listId: list.id, itemId: source, position: 1 });
 

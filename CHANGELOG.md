@@ -44,6 +44,7 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ### Changed
 
+- Curated lists have a category (`lists.type`, the `item_type` enum; migration `0005_list_type` backfills existing lists from their first item, `game` when empty). Each user can have at most 10 lists per category (`LIST_LIMITS.perType`), replacing the global cap of 50; a list only accepts items of its own category (`typeMismatch` error). The item page offers only lists of the item's type and shows the quota (e.g. "Game lists: 3/10"); the profile's new-list form requires a category; profile and list pages show the category badge.
 - Catalog and search lists show a 2:3 cover thumbnail left of each title (`components/catalog/cover-thumb.tsx`, shared with the search autocomplete).
 - Language menu shows codes only (EN / PT-BR / ES) in the trigger and the list; native names stay as accessible labels.
 

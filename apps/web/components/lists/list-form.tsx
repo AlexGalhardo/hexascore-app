@@ -5,27 +5,41 @@ import { useId, useState, useTransition } from "react";
 import { createList, updateList } from "@/actions/lists";
 import { buttonClass, Field, Input, inputClass, Notice } from "@/components/ui/form";
 import type { ActionError } from "@/lib/action-result";
-import { LIST_LIMITS } from "@/lib/social/constants";
+import { LIST_LIMITS, LIST_TYPES, type ListType } from "@/lib/social/constants";
 
 type Values = { title: string; description: string; isPublic: boolean };
-type Props = { listId?: string; initial?: Values };
+/** Edit mode: `listId` + `initial`. Create mode: `counts` = the owner's lists per type (quota display). */
+type Props =
+	| { listId: string; initial: Values; counts?: never }
+	| { listId?: never; initial?: never; counts: Record<ListType, number> };
 
-/** Creates a list (no `listId`) or edits one. */
-export function ListForm({ listId, initial }: Props) {
+const empty: Values = { title: "", description: "", isPublic: true };
+
+/** Creates a list (no `listId`, the category is required) or edits one (the category cannot change). */
+export function ListForm({ listId, initial, counts }: Props) {
 	const t = useTranslations("lists");
 	const tAction = useTranslations("actions");
+	const tType = useTranslations("itemTypes");
 	const id = useId();
-	const [values, setValues] = useState<Values>(initial ?? { title: "", description: "", isPublic: true });
+	const [values, setValues] = useState<Values>(initial ?? empty);
+	const [used, setUsed] = useState(counts);
+	const [type, setType] = useState<ListType>(
+		() => LIST_TYPES.find((ty) => (counts?.[ty] ?? 0) < LIST_LIMITS.perType) ?? LIST_TYPES[0],
+	);
 	const [result, setResult] = useState<{ error: ActionError; fields?: string[] } | "saved" | null>(null);
 	const [pending, startTransition] = useTransition();
+	const atLimit = used ? used[type] >= LIST_LIMITS.perType : false;
 
 	function submit(): void {
 		setResult(null);
 		startTransition(async () => {
-			const response = listId ? await updateList(listId, values) : await createList(values);
+			const response = listId ? await updateList(listId, values) : await createList({ ...values, type });
 			if (!response.ok) return setResult({ error: response.error, fields: response.fields });
 			setResult("saved");
-			if (!listId) setValues({ title: "", description: "", isPublic: true });
+			if (!listId) {
+				setValues(empty);
+				setUsed((prev) => (prev ? { ...prev, [type]: prev[type] + 1 } : prev));
+			}
 		});
 	}
 
@@ -40,6 +54,31 @@ export function ListForm({ listId, initial }: Props) {
 				submit();
 			}}
 		>
+			{used ? (
+				<Field
+					id={`${id}-type`}
+					label={t("fieldType")}
+					hint={t("quota", { type, count: used[type], limit: LIST_LIMITS.perType })}
+					error={fieldError("type")}
+				>
+					<select
+						id={`${id}-type`}
+						required
+						value={type}
+						onChange={(e) => {
+							setResult(null);
+							setType(e.target.value as ListType);
+						}}
+						className={`${inputClass} sm:w-60`}
+					>
+						{LIST_TYPES.map((ty) => (
+							<option key={ty} value={ty}>
+								{tType(ty)}
+							</option>
+						))}
+					</select>
+				</Field>
+			) : null}
 			<Field id={`${id}-title`} label={t("fieldTitle")} error={fieldError("title")}>
 				<Input
 					id={`${id}-title`}
@@ -74,9 +113,16 @@ export function ListForm({ listId, initial }: Props) {
 				/>
 				{t("publicLabel")}
 			</label>
+			{atLimit ? <Notice tone="info">{t("limitReached", { type, limit: LIST_LIMITS.perType })}</Notice> : null}
 			{result === "saved" ? <Notice tone="success">{listId ? t("saved") : t("created")}</Notice> : null}
-			{result && result !== "saved" ? <Notice tone="error">{tAction(result.error)}</Notice> : null}
-			<button type="submit" disabled={pending} className={buttonClass("primary", "w-fit")}>
+			{result && result !== "saved" ? (
+				<Notice tone="error">
+					{result.error === "limit" && !listId
+						? t("limitReached", { type, limit: LIST_LIMITS.perType })
+						: tAction(result.error)}
+				</Notice>
+			) : null}
+			<button type="submit" disabled={pending || atLimit} className={buttonClass("primary", "w-fit")}>
 				{listId ? t("save") : t("create")}
 			</button>
 		</form>

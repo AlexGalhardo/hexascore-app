@@ -2,6 +2,10 @@
 	"lists": {
 		"addToList": "Añadir a una lista",
 		"noLists": "Aún no tienes listas.",
+		"fieldType": "Categoría",
+		"quota": "{type, select, game {Listas de juegos} movie {Listas de películas} series {Listas de series} other {Listas de libros}}: {count}/{limit}",
+		"limitReached": "Ya tienes {limit} listas de {type, select, game {juegos} movie {películas} series {series} other {libros}}. Elimina una para crear otra.",
+		"noListsOfType": "Aún no tienes listas de {type, select, game {juegos} movie {películas} series {series} other {libros}}.",
 		"noPublicLists": "Aún no hay listas públicas.",
 		"newWithItem": "Nueva lista con este ítem",
 		"new": "Nueva lista",

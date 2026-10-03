@@ -83,6 +83,7 @@
 		"nicknameTaken": "Este nickname já está em uso.",
 		"forbidden": "Você não pode fazer isso.",
 		"notFound": "Não encontrado. Pode ter sido removido.",
+		"typeMismatch": "Esta lista só aceita itens da mesma categoria.",
 		"limit": "Você atingiu o limite para isso.",
 		"server": "Algo deu errado do nosso lado. Tente de novo."
 	}
