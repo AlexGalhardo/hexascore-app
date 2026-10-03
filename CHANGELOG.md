@@ -5,6 +5,8 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+## [0.0.16] - 2026-10-03
+
 ### Added
 
 - Strict Content Security Policy with a per-request nonce (`proxy.ts`, `lib/security-headers.ts`): scripts only by nonce + `strict-dynamic`, `frame-ancestors 'none'`, frames only from `youtube-nocookie.com`, Scalar allowances scoped to `/docs/reference` and `/profile/api`; HSTS, `nosniff`, `Referrer-Policy`, `Permissions-Policy` and COOP on every response; `/api/*` locked to `default-src 'none'`.
@@ -155,7 +157,8 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 - Files inherited from the previous project (old plan, docs, Prisma setup scripts, tests and workflows).
 
-[Unreleased]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.15...HEAD
+[Unreleased]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.16...HEAD
+[0.0.16]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.15...v0.0.16
 [0.0.15]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.14...v0.0.15
 [0.0.14]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.13...v0.0.14
 [0.0.13]: https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.12...v0.0.13
