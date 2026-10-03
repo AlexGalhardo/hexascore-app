@@ -14,6 +14,10 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Fixed
+
+- Ingestion: anonymous Wikimedia REST answered 429 at 20 req/s, so Wikipedia hosts are throttled to 5 req/s with 4 workers, and a 429/503 `Retry-After` now pauses the whole host for every thread instead of each worker retrying on its own.
+
 ### Changed
 
 - Ingestion: Wikipedia summaries are fetched with 8 concurrent requests per run; `HttpClient`'s per-host throttle is thread-safe (slot reservation under a lock) and Wikipedia hosts allow 20 req/s. The bootstrap workflow gains a `skip_catalog` input to resume enrichment, covers and snapshot without re-running the Wikidata catalog job.

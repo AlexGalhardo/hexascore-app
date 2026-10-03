@@ -22,7 +22,7 @@ log = logging.getLogger(__name__)
 
 LANGS = ("en", "pt", "es")
 # Concurrent summary requests per run; the per-host throttle in HttpClient still caps the rate.
-WORKERS = 8
+WORKERS = 4
 
 
 class DesktopUrls(BaseModel):
