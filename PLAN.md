@@ -167,7 +167,7 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 
 Ações do dono (não automatizáveis):
 
-- [ ] Nome/domínio final e domínio verificado no Resend (domínio padrão `hexascore.app` comprado na Vercel em 2026-10-03, com `api.` e `www.` → apex; falta verificar no Resend e trocar `EMAIL_FROM`) (hoje `onboarding@resend.dev` só entrega para o dono da conta).
+- [x] Domínio verificado no Resend: `hexascore.app` (comprado na Vercel em 2026-10-03, com `api.` e `www.` → apex) está `verified` com envio ativo (us-east-1), `EMAIL_FROM` = `HexaScore <no-reply@hexascore.app>`. Conta Resend: `aleexgalhardoo@gmail.com`.
 - [ ] Chaves live do Stripe e da AbacatePay (hoje sandbox) e teste real de checkout + estorno.
 - [ ] Credenciais npm/PyPI para publicar os SDKs.
 - [ ] Confirmar a carga completa de 100k itens (limite de armazenamento do Neon free; avaliar plano pago).
