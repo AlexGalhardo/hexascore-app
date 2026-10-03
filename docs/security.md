@@ -18,6 +18,13 @@ Auditoria viva. Revisar a cada milestone; cada mitigação aponta para o código
 | `GET /api/billing/pix/[id]` | `id` | sessão, zod `uuid`, filtro por dono (404 para os demais), `no-store`; reconsulta a AbacatePay com timeout |
 | Páginas `/pricing`, `/profile/api/checkout` | query `currency`/`plan`/`status` | allowlist via zod; DTO `BillingSummary` sem ids de provedor |
 | Cron `/api/cron/*` (`flush-usage`, `billing-reminders`) | header | `Authorization: Bearer $CRON_SECRET` (tempo constante); lembrete gravado em `processed_events` antes do envio (sem e-mail duplicado) |
+| `actions/ratings.ts` (`saveRating`, `deleteRating`) | `{ itemId, scores[6] }` / `itemId` | zod (uuid, 6 inteiros 0–100); `asMember()` = sessão + não banido + e-mail verificado + nickname; rate limit 30/min por usuário; alvo sempre o usuário da sessão; stats recalculadas no servidor numa transação com lock na linha do item (sem lost update); CHECK 0..100 no banco |
+| `actions/item-status.ts`, `actions/follows.ts`, `actions/lists.ts` | ids, status, nickname, título/descrição | zod; `asMember()`; rate limit (60/min, 30/min, 60/min); escrita filtrada por dono (`user_id` da sessão) — lista de outro usuário = `notFound`; limites 50 listas / 500 itens / título 80 / descrição 500 no servidor (cap de listas com advisory lock); não segue a si mesmo (zod + CHECK) nem perfil privado/banido |
+| `actions/reports.ts` | `{ target, reason, details }` | zod (alvo lista=uuid ou usuário=nickname, reason enum, details ≤ 500); `asMember()`; 10/h; denúncia aberta duplicada ignorada (índice único parcial); não denuncia a si/à própria lista |
+| `actions/account.ts#setNickname` (`/onboarding`) | nickname | sessão; só quando `username` é nulo; `nicknameSchema` + validação/unicidade do plugin username |
+| Páginas `/u/[nickname]`, `/u/[nickname]/lists/[id]`, `/feed` | params/query | zod com `.catch` para `tab/sort/page/cursor`; perfil privado → página mínima sem dados (200), banido/inexistente → 404; listas privadas/ocultas/de perfil privado → 404 para terceiros; feed só inclui perfis públicos; DTOs sem e-mail nem id de usuário |
+| `/admin/*` + `actions/admin.ts` | form data | `isAdmin()` (role `admin`, não banido) no layout, em cada página e em cada action → 404/`notFound` para os demais; zod em todo form; ban via `auth.api.banUser` (revoga sessões); afiliados só `https:`, sem credenciais/porta, host no allowlist da loja; merge em transação com lock nos dois itens e mesmo tipo |
+| `scripts/admin-grant.ts` | e-mail (CLI) | roda só com acesso ao banco; zod `email` |
 | Ingestão (Python) | payloads de terceiros | escrita só em `source_records`; normalizador valida antes do upsert; texto renderizado sempre escapado |
 
 ## A01–A10

@@ -7,6 +7,17 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ### Added
 
+- Ratings (0.3): `saveRating`/`deleteRating` actions (`actions/ratings.ts`) — verified email + nickname + not banned, rate limit 30/min, one transaction that locks the item row (`SELECT … FOR UPDATE`), upserts the rating and recomputes `rating_count`/`score`/`score_c1..c6` from `ratings`; `updateTag(item:<id>)` + `revalidateTag(catalog, "max")`. Raw rounded averages are stored; the 5-rating threshold stays on the read side.
+- Rating panel on the item page: 6 `ScoreInput`s (slider + number, arrows ±1, PageUp/PageDown ±10, Home/End), live overall, prefilled edit, optimistic save/delete with translated errors; login link with `?next=`, verify-email and choose-nickname states.
+- Item status (want / in progress / completed / dropped, labels per type) and "Add to list" on the item page.
+- Public profile `/u/[nickname]` (counts by type, average given, followers/following, follow/unfollow, ratings sorted + paginated, status shelves, lists); private profiles render a minimal 200 page; banned/unknown → 404. Nicknames in the item ratings modal link to profiles.
+- `/feed` (followed users' ratings, keyset cursor, top-raters suggestions), curated lists (`/u/[nickname]/lists/[id]`, create/edit/delete, add/remove/reorder; 50 lists/user, 500 items/list, title ≤ 80, description ≤ 500), reports of lists/users (reason enum + details, 10/h, open reports deduped).
+- `/admin` (role `admin`, 404 otherwise; English UI): overview, contact messages, reports (resolve/dismiss, hide list, ban via Better Auth), affiliate links per item (https + store domain allowlist), merge duplicate items (one transaction), ingestion status per source. `bun run admin:grant <email>`.
+- `/onboarding`: Google sign-ups choose a nickname before rating, feed and profile (`setNickname` action).
+- Migration `0003_social_moderation`: `reports.details` and a partial unique index on open reports.
+- i18n namespaces `ratings`, `social`, `lists` (en, pt-BR, es); new `actions` error codes.
+- Project skill `hexascore-ratings` (write path and stats invariants).
+
 - Billing (0.5): price catalog `lib/billing/catalog.ts` (Pro/Business/credits in BRL/USD/EUR, PIX 12 months for the price of 10, currency by locale).
 - Stripe (`stripe@23.0.0`, API `2026-09-30.endive`): `bun run stripe:setup` creates Products/Prices by `lookup_key` and the Customer Portal config; `startStripeCheckout`/`openBillingPortal` actions; `POST /api/webhooks/stripe` (signature, idempotency via `processed_events`, subscriptions and credit packs).
 - AbacatePay PIX (API v2): `createPixCharge` action, `GET /api/billing/pix/[id]` polling with provider re-check, `POST /api/webhooks/abacatepay` (URL secret + HMAC, idempotent, period stacking).
