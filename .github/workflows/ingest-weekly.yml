@@ -1,0 +1,46 @@
+name: Ingest (weekly scores and synopses)
+
+on:
+  schedule:
+    - cron: "0 5 * * 0"
+  workflow_dispatch:
+
+concurrency:
+  group: ingest
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: webscrappings
+
+env:
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  APP_URL: ${{ secrets.APP_URL }}
+  CRON_SECRET: ${{ secrets.CRON_SECRET }}
+  BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
+  INGEST_CONTACT_URL: ${{ github.server_url }}/${{ github.repository }}
+
+jobs:
+  weekly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          version: "0.12.19"
+          enable-cache: true
+          cache-dependency-glob: webscrappings/uv.lock
+      - run: uv sync --locked --no-dev
+      # Re-reads every catalog entity: refreshes Metacritic/RT scores (P444) and anything nightly missed.
+      - run: uv run python -m connectors.wikidata --refresh-known
+      - run: uv run python -m normalize
+      - run: uv run python -m connectors.wikipedia --since 8d
+      - run: uv run python -m connectors.wikipedia --missing-only
+      - run: uv run python -m connectors.openlibrary --since 8d
+      - run: uv run python -m connectors.gog --since 8d
+      - run: uv run python -m normalize
+      - run: uv run python -m covers

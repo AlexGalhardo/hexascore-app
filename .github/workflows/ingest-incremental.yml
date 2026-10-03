@@ -1,0 +1,45 @@
+name: Ingest (incremental)
+
+on:
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+# Shared with the other ingest workflows so two normalizers never run at once.
+concurrency:
+  group: ingest
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: webscrappings
+
+env:
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  APP_URL: ${{ secrets.APP_URL }}
+  CRON_SECRET: ${{ secrets.CRON_SECRET }}
+  BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
+  INGEST_CONTACT_URL: ${{ github.server_url }}/${{ github.repository }}
+
+jobs:
+  incremental:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          version: "0.12.19"
+          enable-cache: true
+          cache-dependency-glob: webscrappings/uv.lock
+      - run: uv sync --locked --no-dev
+      # 36h windows overlap consecutive nightly runs, so a late or failed run loses nothing.
+      - run: uv run python -m connectors.wikidata --since 36h
+      - run: uv run python -m normalize
+      - run: uv run python -m connectors.wikipedia --since 36h
+      - run: uv run python -m connectors.steam --since 36h
+      - run: uv run python -m normalize
+      - run: uv run python -m covers
