@@ -4,17 +4,26 @@ import { Menu } from "@base-ui/react/menu";
 import { useLocale } from "next-intl";
 import { getPathname, Link } from "@/i18n/navigation";
 import { authClient } from "@/lib/auth-client";
+import { NavIcon } from "./nav-icons";
 
 type Props = {
-	initial: string;
 	nickname: string | null;
 	admin: boolean;
-	labels: { account: string; profile: string; api: string; logout: string; feed: string; publicProfile: string };
+	labels: {
+		account: string;
+		profile: string;
+		api: string;
+		logout: string;
+		feed: string;
+		publicProfile: string;
+		admin: string;
+	};
 };
 
-const itemClass = "flex min-h-11 cursor-default items-center px-3 text-sm outline-none data-[highlighted]:bg-surface";
+const itemClass =
+	"flex min-h-11 cursor-default items-center gap-2.5 px-3 text-sm outline-none data-[highlighted]:bg-surface";
 
-export function UserMenu({ initial, nickname, admin, labels }: Props) {
+export function UserMenu({ nickname, admin, labels }: Props) {
 	const locale = useLocale();
 
 	async function logout(): Promise<void> {
@@ -26,9 +35,9 @@ export function UserMenu({ initial, nickname, admin, labels }: Props) {
 		<Menu.Root>
 			<Menu.Trigger
 				aria-label={labels.account}
-				className="grid size-11 place-items-center rounded-full bg-fg font-serif text-lg font-bold text-bg"
+				className="grid size-11 place-items-center rounded-full bg-fg text-bg"
 			>
-				{initial}
+				<NavIcon name="user" className="size-6" />
 			</Menu.Trigger>
 			<Menu.Portal>
 				<Menu.Positioner align="end" sideOffset={6} className="z-50">
@@ -38,25 +47,31 @@ export function UserMenu({ initial, nickname, admin, labels }: Props) {
 								render={<Link href={`/u/${encodeURIComponent(nickname)}`} />}
 								className={itemClass}
 							>
+								<NavIcon name="publicProfile" />
 								{labels.publicProfile}
 							</Menu.LinkItem>
 						) : null}
 						<Menu.LinkItem render={<Link href="/feed" />} className={itemClass}>
+							<NavIcon name="feed" />
 							{labels.feed}
 						</Menu.LinkItem>
 						<Menu.LinkItem render={<Link href="/profile" />} className={itemClass}>
+							<NavIcon name="user" />
 							{labels.profile}
 						</Menu.LinkItem>
 						<Menu.LinkItem render={<Link href="/profile/api" />} className={itemClass}>
+							<NavIcon name="key" />
 							{labels.api}
 						</Menu.LinkItem>
 						{admin ? (
 							<Menu.LinkItem render={<Link href="/admin" />} className={itemClass}>
-								Admin
+								<NavIcon name="admin" />
+								{labels.admin}
 							</Menu.LinkItem>
 						) : null}
 						<Menu.Separator className="my-1 h-px bg-border" />
 						<Menu.Item onClick={logout} className={itemClass}>
+							<NavIcon name="logout" />
 							{labels.logout}
 						</Menu.Item>
 					</Menu.Popup>

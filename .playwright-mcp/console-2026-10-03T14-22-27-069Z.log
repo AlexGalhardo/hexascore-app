@@ -1,0 +1,4 @@
+[     141ms] [LOG] [Fast Refresh] done in 93ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[     721ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[   23606ms] [ERROR] Failed to load resource: net::ERR_INSUFFICIENT_RESOURCES @ http://gc.kis.v2.scr.kaspersky-labs.com/85EB9056-DFBD-494E-AB02-C9F80AA6BA7D/73AB2E59-4435-4581-B13F-6DEAF0FBA8A5/from?get&nocache=1ed13&tm=2026-10-03T14%3A22%3A49.655Z:0
+[   25300ms] [LOG] [Fast Refresh] done in 24693ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
