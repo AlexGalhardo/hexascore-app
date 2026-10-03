@@ -45,7 +45,6 @@ const schema = z
 		const pairs = [
 			["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"],
 			["UPSTASH_REDIS_REST_URL", "UPSTASH_REDIS_REST_TOKEN"],
-			["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET"],
 			["ABACATEPAY_API_KEY", "ABACATEPAY_WEBHOOK_SECRET"],
 			["TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID"],
 		] as const;
@@ -82,7 +81,16 @@ function format(error: z.ZodError): string {
 }
 
 function load(): Env {
-	const result = schema.safeParse(process.env);
+	// Aliases: the Vercel Upstash integration sets KV_REST_API_*; AbacatePay sandbox keys may use *_SANDBOX names.
+	const source = {
+		...process.env,
+		UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL,
+		UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN,
+		ABACATEPAY_API_KEY: process.env.ABACATEPAY_API_KEY || process.env.ABACATEPAY_API_KEY_SANDBOX,
+		ABACATEPAY_WEBHOOK_SECRET:
+			process.env.ABACATEPAY_WEBHOOK_SECRET || process.env.ABACATEPAY_WEBHOOK_SECRET_SANDBOX,
+	};
+	const result = schema.safeParse(source);
 	if (!result.success) {
 		const message = `\n[env] Invalid environment variables:\n${format(result.error)}\n\nFix them in apps/web/.env.local (see .env.example) or in the Vercel project settings.\n`;
 		console.error(message);
@@ -98,6 +106,7 @@ export const features = {
 	redis: Boolean(env.UPSTASH_REDIS_REST_URL),
 	email: Boolean(env.RESEND_API_KEY),
 	stripe: Boolean(env.STRIPE_SECRET_KEY),
+	stripeWebhooks: Boolean(env.STRIPE_WEBHOOK_SECRET),
 	pix: Boolean(env.ABACATEPAY_API_KEY),
 	blob: Boolean(env.BLOB_READ_WRITE_TOKEN),
 	telegram: Boolean(env.TELEGRAM_BOT_TOKEN),
