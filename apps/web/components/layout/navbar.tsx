@@ -22,7 +22,7 @@ export async function Navbar() {
 	const [t, locale, user] = await Promise.all([getTranslations("nav"), getLocale(), getSessionUser()]);
 
 	return (
-		<header className="sticky top-0 z-40 border-b border-border bg-bg/95 backdrop-blur supports-[backdrop-filter]:bg-bg/80">
+		<header className="sticky top-0 z-40 border-b border-border bg-bg">
 			<NavShell
 				labels={{ search: t("openSearch"), menu: t("menu") }}
 				brand={

@@ -58,6 +58,10 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Fixed
+
+- Sticky navbar is opaque and publishes its measured height as `--nav-h`; the docs sidebar, Scalar's sticky sidebar (`--scalar-custom-header-height`), the catalog table header and anchor jumps (`scroll-padding-top`) now sit below it instead of under it.
+
 ### Changed
 
 - Item page header shows the cover (or a section-coloured placeholder), title, metadata and the big community score together at the top, so the item is recognisable at a glance on desktop and mobile.
