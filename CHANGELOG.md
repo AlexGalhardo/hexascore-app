@@ -5,6 +5,25 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Added
+
+- Strict Content Security Policy with a per-request nonce (`proxy.ts`, `lib/security-headers.ts`): scripts only by nonce + `strict-dynamic`, `frame-ancestors 'none'`, frames only from `youtube-nocookie.com`, Scalar allowances scoped to `/docs/reference` and `/profile/api`; HSTS, `nosniff`, `Referrer-Policy`, `Permissions-Policy` and COOP on every response; `/api/*` locked to `default-src 'none'`.
+- Vercel Analytics 2.0.1 and Speed Insights 2.0.0 (cookieless) in the locale layout.
+- Feature flags (`flags` 4.3.1): `pix-checkout` and `public-api-signup` kill switches, server-side, default on (`FLAG_*=off` or Vercel Toolbar overrides).
+- Playwright + axe E2E suite in `qa/e2e` (desktop/mobile × light/dark, en/pt-br/es): public pages, headers/CSP, catalog filters and pagination, item page (trailer consent, users' scores modal), search + autocomplete keyboard, 404s, signup → verification → login, TOTP 2FA, change password, account deletion countdown, contact, pricing/checkout states, docs + Scalar, API key lifecycle. Workflow `.github/workflows/qa.yml` runs it against the Vercel preview on PRs `dev` → `main`.
+- Skill `hexascore-qa`; app icon (`app/icon.svg`).
+
+### Changed
+
+- Seed: ratings are written with columnar `unnest` upserts (10k users / 100k items / 2.2M ratings in ~7 min on Docker Postgres), raters follow a heavy-tailed activity curve and have a per-user strictness bias; phase timings are logged.
+- Every `[locale]` page is now dynamically rendered (required by the nonce).
+
+### Fixed
+
+- `/favicon.ico` (and any unknown first segment) reached catalog queries with locale `favicon.ico` and logged a ZodError on every page view; unknown locales now 404 before any query (`asLocale`).
+- `?genre=%00` on catalog pages and `q=%00` on `/search`, the autocomplete and `/v1/search` answered 500.
+- Accessibility (axe): light-theme section accents, the filter button, the low score band, error/destructive colors and satisfied password rules were below 4.5:1; docs code blocks were not keyboard-scrollable; the API key revoke dialog overflowed at 360 px.
+
 ## [0.0.15] - 2026-10-03
 
 ### Added

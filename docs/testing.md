@@ -33,7 +33,36 @@ Comandos exatos de cada camada são adicionados aqui quando a camada for impleme
 
 Banco para testar migrations à mão: `setups/setup-*-docker.*` (Postgres 18 em `localhost:5432`) ou `setups/setup-*-pglite.*`; ambos rodam `bun run db:migrate`.
 
-Ainda **não** existem workflows de E2E (Playwright), Schemathesis, OWASP ZAP nem k6: entram no milestone em que as respectivas camadas forem criadas (gatilho: PR `dev` → `main`), junto com o job de integração com Postgres 18 + Redis como service containers.
+E2E (Playwright + axe) roda em `.github/workflows/qa.yml` no PR `dev` → `main` (ver abaixo). Schemathesis, OWASP ZAP e k6 **ainda não** têm configuração nem workflow (lacuna do 0.6), assim como o job de integração com Postgres 18 + Redis.
+
+## E2E + a11y (0.6) — `qa/e2e/`
+
+Workspace Bun `qa/e2e` (`@playwright/test` 1.63.0, `@axe-core/playwright` 4.13.0). Projetos: `desktop-light`, `desktop-dark` (1280×800) e `mobile-light`, `mobile-dark` (360×740); specs públicas percorrem en/pt-br/es. Fluxos de conta (tag `@auth`) rodam só em `desktop-light` e `mobile-dark` por causa do rate limit por IP do Better Auth.
+
+```bash
+# 1. Postgres de QA (container próprio, porta livre) + migrations + seed
+docker run -d --name hexascore-qa-pg -e POSTGRES_USER=hexascore -e POSTGRES_PASSWORD=hexascore -e POSTGRES_DB=hexascore -p 127.0.0.1:55432:5432 postgres:18.6-alpine
+cd apps/web
+export DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:55432/hexascore BETTER_AUTH_SECRET=<64 hex> CRON_SECRET=<64 hex> BETTER_AUTH_URL=http://localhost:3100 NEXT_PUBLIC_APP_URL=http://localhost:3100
+bun run db:migrate && bun lib/db/seed.ts --users 10000 --items 100000 --batch 1000
+# 2. build + start (NODE_ENV=test = store de cota em memória, a API responde em vez de 503)
+bun run build && NODE_ENV=test bun --bun next start -p 3100
+# 3. suíte (outro terminal)
+cd qa/e2e && bunx playwright install chromium
+E2E_BASE_URL=http://localhost:3100 E2E_DATABASE_URL=$DATABASE_URL E2E_BETTER_AUTH_SECRET=$BETTER_AUTH_SECRET bunx playwright test
+bunx playwright test --project=desktop-light   # um projeto; --last-failed para repetir falhas
+```
+
+- `E2E_BASE_URL` (padrão `http://localhost:3000`), `VERCEL_AUTOMATION_BYPASS_SECRET` (envia `x-vercel-protection-bypass`), `E2E_DATABASE_URL` e `E2E_BETTER_AUTH_SECRET` (opcionais; sem eles as specs `@auth` são puladas com o motivo).
+- Link de verificação: o Better Auth 1.7 **não grava** o token de verificação de e-mail (é um JWT HS256 `{ email }` assinado com `BETTER_AUTH_SECRET`), então `qa/e2e/helpers/auth.ts` gera o mesmo token com o secret do deploy e passa pelo `/api/auth/verify-email` real. Tokens de reset de senha estão na tabela `verification` (`helpers/db.ts` → `latestResetToken`). Nenhum backdoor no app.
+- Toda spec falha se o browser registrar violação de CSP ou exceção não tratada (`helpers/fixtures.ts`); `expectAccessible()` roda axe (WCAG 2.2 AA) e falha em `serious`/`critical`. Scalar é excluído do axe (markup de terceiros).
+- `global-setup.ts` aquece as listagens (o `unstable_cache` serve a versão antiga uma vez depois de um seed novo). Depois de mexer no banco por fora: `POST /api/cron/revalidate` com `{"tags":["catalog"]}`.
+- `specs/todo-0.3.spec.ts`: placeholders `fixme` para avaliação, perfis, feed, listas, denúncias e `/admin` (0.3 entrou na `dev` durante o 0.6; specs reais ficam como lacuna).
+- Resultado local (2026-10-03, `next start` + Docker Postgres com seed 10k/100k): ver `CHANGELOG.md` [Unreleased].
+
+### Seed em escala
+
+`bun lib/db/seed.ts --users 10000 --items 100000 --batch 1000` em Docker Postgres 18 (Docker Desktop/WSL2, Windows 11): **~7,3 min** (437 s: 10k usuários 1,5 s; ~105 s por tipo de 25k itens; recálculo das estatísticas 16 s) → 100k itens, **2.175.836 avaliações**, mediana 27 / p90 965 avaliações por usuário (pool de usuários ativos), 99% dos itens com ≥ 5 avaliações. As avaliações entram em `unnest` colunar de 20k linhas (9 parâmetros por statement) com `synchronous_commit off`; ~25% do tempo é geração em JS (faker por avaliação). Idempotente: rodar de novo faz upsert das mesmas linhas.
 ## Comandos
 
 ```bash
@@ -44,7 +73,7 @@ BETTER_AUTH_SECRET=<64 hex> CRON_SECRET=<64 hex> bun run build
 
 # Ambiente local com dados (PGlite em apps/web/.pglite, sem Docker)
 bun run db:migrate
-bun run db:seed                       # 50 usuários, 400 itens (100 por tipo), ~4.6k avaliações
+bun run db:seed                       # 50 usuários, 400 itens (100 por tipo), ~2.4k avaliações
 (cd apps/web && bun lib/db/seed.ts --users 10000 --items 100000 --batch 1000)   # escala maior
 bun run dev
 ```

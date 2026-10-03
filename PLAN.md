@@ -146,10 +146,10 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 - **Verificar**: `stripe trigger` e simulação PIX ativam o plano; reenvio do mesmo evento não duplica; valor adulterado no client é ignorado.
 
 ### 0.6 — Hardening
-- [ ] Seed 10k usuários sintéticos com notas realistas
-- [ ] Playwright E2E completo + axe, agente QA, Schemathesis, ZAP, k6 no gate `dev` → `main`
-- [ ] Auditoria OWASP em `docs/security.md`, CSP, Firewall, Flags
-- [ ] Performance (Core Web Vitals no Speed Insights), a11y
+- [x] Seed 10k usuários sintéticos com notas realistas (`unnest` colunar, ~7 min para 10k/100k/2,2M no Docker; `docs/testing.md`)
+- [~] Playwright E2E completo + axe no gate `dev` → `main` (`qa/e2e`, `qa.yml`) — feito; agente QA, Schemathesis, ZAP, k6 e specs E2E do 0.3 pendentes
+- [~] Auditoria OWASP em `docs/security.md`, CSP com nonce, Flags (`pix-checkout`, `public-api-signup`) — feitos; Firewall documentado, falta aplicar no dashboard
+- [~] Performance (Core Web Vitals no Speed Insights), a11y — Analytics + Speed Insights no layout, axe em todas as páginas públicas; leitura dos CWV pendente (precisa de tráfego)
 - **Verificar**: gate `dev` → `main` todo verde; ZAP sem alertas High; p95 da API < 300 ms no k6.
 
 ### 1.0.0 — Launch
