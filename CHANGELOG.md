@@ -58,6 +58,10 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Changed
+
+- Item page header shows the cover (or a section-coloured placeholder), title, metadata and the big community score together at the top, so the item is recognisable at a glance on desktop and mobile.
+
 ### Added
 
 - OpenAPI documents in Portuguese and Spanish: `public/openapi.pt-BR.json` and `public/openapi.es.json` next to `openapi.json` (en, unchanged byte for byte, still the SDK source). Every description/summary lives in `messages/<locale>/openapi.json` (typed `openApiText`/`apiDoc` in `lib/api/openapi-text.ts`); `bun run openapi` writes the three files and `openapi:check` verifies all of them. `lib/api/openapi.test.ts` asserts the localized documents are structurally identical to en and fully translated; the messages parity test covers the new file.
