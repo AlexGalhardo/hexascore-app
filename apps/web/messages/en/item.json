@@ -2,6 +2,7 @@
 	"item": {
 		"metaDescription": "{title} ({type}) — community score and 6-category averages.",
 		"communityScore": "Community score",
+		"coverAlt": "Cover of {title}",
 		"notEnough": "Not enough ratings",
 		"notEnoughHint": "The score appears after {min} ratings.",
 		"categoryScores": "Category averages",
