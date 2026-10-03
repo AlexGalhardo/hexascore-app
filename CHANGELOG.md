@@ -16,6 +16,10 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ### Changed
 
+- Item page header: the final community score sits at the far right of the title row; year and creators on one line; genres and platforms as labelled chips (first 4/6, a native `<details>` "+N more" reveals the rest) instead of one long dotted line.
+
+### Changed
+
 - Ingestion: Wikipedia summaries are fetched with 8 concurrent requests per run; `HttpClient`'s per-host throttle is thread-safe (slot reservation under a lock) and Wikipedia hosts allow 20 req/s. The bootstrap workflow gains a `skip_catalog` input to resume enrichment, covers and snapshot without re-running the Wikidata catalog job.
 
 ### Added
