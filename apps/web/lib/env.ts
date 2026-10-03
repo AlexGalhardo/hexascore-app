@@ -58,9 +58,19 @@ const schema = z
 				});
 			}
 		}
-		if (env.VERCEL_ENV === "production") {
-			for (const key of ["DATABASE_URL", "BETTER_AUTH_SECRET", "BETTER_AUTH_URL", "CRON_SECRET"] as const) {
-				if (!env[key]) ctx.addIssue({ code: "custom", path: [key], message: "required in production" });
+		// Any production build/server (including Vercel previews, which are publicly reachable) must have its own
+		// secrets: without them Better Auth would sign sessions with a known default.
+		const required: (keyof typeof env)[] = [];
+		if (env.NODE_ENV === "production") required.push("BETTER_AUTH_SECRET", "CRON_SECRET");
+		if (env.VERCEL_ENV) required.push("DATABASE_URL");
+		if (env.VERCEL_ENV === "production") required.push("BETTER_AUTH_URL");
+		for (const key of required) {
+			if (!env[key]) {
+				ctx.addIssue({
+					code: "custom",
+					path: [key],
+					message: `required when NODE_ENV=${env.NODE_ENV}${env.VERCEL_ENV ? ` / VERCEL_ENV=${env.VERCEL_ENV}` : ""}`,
+				});
 			}
 		}
 	});

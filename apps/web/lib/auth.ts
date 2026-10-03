@@ -12,7 +12,15 @@ import { sendEmail } from "./email";
 import { env } from "./env";
 import { NICKNAME_MAX, NICKNAME_MIN, PASSWORD_MAX, PASSWORD_MIN, passwordSchema } from "./validation";
 
-const PASSWORD_PATHS = new Set(["/sign-up/email", "/reset-password", "/change-password", "/set-password"]);
+// Every endpoint that accepts a new password, including the admin plugin's, enforces the same rules.
+const PASSWORD_PATHS = new Set([
+	"/sign-up/email",
+	"/reset-password",
+	"/change-password",
+	"/set-password",
+	"/admin/set-user-password",
+	"/admin/create-user",
+]);
 
 const google =
 	env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
@@ -21,7 +29,7 @@ const google =
 
 export const auth = betterAuth({
 	appName: APP_NAME,
-	baseURL: env.BETTER_AUTH_URL ?? APP_URL,
+	baseURL: env.BETTER_AUTH_URL ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : APP_URL),
 	secret: env.BETTER_AUTH_SECRET,
 	database: drizzleAdapter(db, { provider: "pg", schema }),
 	emailAndPassword: {

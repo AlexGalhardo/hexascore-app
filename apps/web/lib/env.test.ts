@@ -25,3 +25,7 @@ test("requires core keys in production", async () => {
 test("accepts an empty local environment", async () => {
 	expect(loadWith({ DATABASE_URL: "" })).resolves.toBeDefined();
 });
+
+test("requires auth and cron secrets for any production build", async () => {
+	expect(loadWith({ NODE_ENV: "production", BETTER_AUTH_SECRET: "", CRON_SECRET: "" })).rejects.toThrow();
+});
