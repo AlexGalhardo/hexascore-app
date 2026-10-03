@@ -52,6 +52,7 @@ export type ItemSummary = {
 	genres: string[];
 	platforms: string[];
 	coverUrl: string | null;
+	coverThumbUrl: string | null;
 };
 
 export type Page<T> = { data: T[]; nextCursor: string | null; prevCursor: string | null };

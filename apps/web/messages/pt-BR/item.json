@@ -2,6 +2,7 @@
 	"item": {
 		"metaDescription": "{title} ({type}) — nota da comunidade e médias nas 6 categorias.",
 		"communityScore": "Nota da comunidade",
+		"coverAlt": "Capa de {title}",
 		"notEnough": "Avaliações insuficientes",
 		"notEnoughHint": "A nota aparece a partir de {min} avaliações.",
 		"categoryScores": "Médias por categoria",
