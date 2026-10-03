@@ -2,7 +2,7 @@ import { openTopItem } from "../helpers/catalog";
 import { expect, expectAccessible, LOCALES, test } from "../helpers/fixtures";
 
 test.describe("item page", () => {
-	test("shows score, categories and opens the users' scores modal", async ({ page }) => {
+	test("shows score, categories and a centered, paginated users' scores modal", async ({ page }) => {
 		await openTopItem(page, "games");
 		await expect(page.locator("h1")).toBeVisible();
 		await expect(page.getByText("Community score").first()).toBeVisible();
@@ -13,6 +13,36 @@ test.describe("item page", () => {
 		await expect(dialog).toBeVisible();
 		await expect(dialog.getByRole("table")).toBeVisible();
 		await expectAccessible(page);
+
+		// centered in the viewport and stacked above the sticky navbar
+		const box = await dialog.boundingBox();
+		const viewport = page.viewportSize();
+		if (!box || !viewport) throw new Error("dialog or viewport has no size");
+		expect(Math.abs(box.x + box.width / 2 - viewport.width / 2)).toBeLessThan(2);
+		expect(Math.abs(box.y + box.height / 2 - viewport.height / 2)).toBeLessThan(2);
+		const onTop = await page.evaluate(
+			({ x, y }) => Boolean(document.elementFromPoint(x, y)?.closest('[role="dialog"]')),
+			{ x: viewport.width / 2, y: box.y + 4 },
+		);
+		expect(onTop).toBe(true);
+
+		const pages = dialog.getByRole("navigation", { name: "Ratings pages" });
+		await expect(pages).toBeVisible(); // the seed gives the top item ~26 public ratings → 3 pages
+		const status = pages.getByText(/^Page \d+ of \d+$/);
+		await expect(status).toHaveText(/^Page 1 of [2-9]\d*$/);
+		await expect(pages.getByRole("button", { name: "Previous" })).toBeDisabled();
+		const firstRow = dialog.locator("tbody tr").first();
+		const before = await firstRow.textContent();
+		await pages.getByRole("button", { name: "Next" }).click();
+		await expect(status).toHaveText(/^Page 2 of \d+$/);
+		await expect(firstRow).not.toHaveText(before ?? "");
+		await expect(dialog.locator("tbody tr")).not.toHaveCount(0);
+		const numbered = pages.getByRole("button", { name: "Go to page 2" });
+		if (await numbered.isVisible()) await expect(numbered).toHaveAttribute("aria-current", "page");
+		await pages.getByRole("button", { name: "Previous" }).click();
+		await expect(status).toHaveText(/^Page 1 of \d+$/);
+		await expectAccessible(page);
+
 		await page.keyboard.press("Escape");
 		await expect(dialog).toBeHidden();
 	});

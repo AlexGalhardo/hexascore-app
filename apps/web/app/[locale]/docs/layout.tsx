@@ -36,9 +36,7 @@ export default async function DocsLayout({ children, params }: Props) {
 					</Link>
 				</div>
 			</aside>
-			<article lang="en" className="min-w-0">
-				{children}
-			</article>
+			<article className="min-w-0">{children}</article>
 		</div>
 	);
 }
