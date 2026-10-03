@@ -31,7 +31,7 @@ Diferencial: usuários **não escrevem resenhas** — avaliam cada obra em **6 c
 
 ### Social (v1.0.0)
 
-Perfil público `/u/{nickname}` (opção privado) · status por item (quero / em andamento / concluído / abandonado) · seguir usuários + feed · listas curadas públicas · denúncias + moderação no `/admin`.
+Perfil público `/u/{nickname}` (opção privado) · status por item (quero / em andamento / concluído / abandonado) · seguir usuários + feed · listas curadas públicas (uma categoria por lista, até 10 por categoria) · denúncias + moderação no `/admin`.
 
 ### Monetização
 

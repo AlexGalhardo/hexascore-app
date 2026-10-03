@@ -83,6 +83,7 @@
 		"nicknameTaken": "This nickname is already taken.",
 		"forbidden": "You cannot do that.",
 		"notFound": "Not found. It may have been removed.",
+		"typeMismatch": "This list only accepts items of its own category.",
 		"limit": "You reached the limit for this.",
 		"server": "Something went wrong on our side. Try again."
 	}

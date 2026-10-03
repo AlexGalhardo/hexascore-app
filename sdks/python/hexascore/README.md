@@ -1,5 +1,5 @@
 # hexascore
-A client library for accessing Hexascore API
+A client library for accessing HexaScore API
 
 ## Usage
 First, create a client:

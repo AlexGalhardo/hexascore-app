@@ -1,0 +1,54 @@
+[     289ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    2771ms] [LOG] [Fast Refresh] done in 2597ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    3887ms] [VERBOSE] [DOM] Password forms should have (optionally hidden) username fields for accessibility: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:3000/pt-br/profile:0
+[    4688ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    5147ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    6758ms] [LOG] %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    6758ms] [LOG] %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {route: /pt-br/profile, path: /pt-br/profile} @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    6764ms] [LOG] %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {route: /pt-br/profile, path: /pt-br/profile} @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    6764ms] [LOG] %c[Vercel Web Analytics]%c [view] http://localhost:3000/pt-br/profile color: rgb(120, 120, 120) color: inherit {o: http://localhost:3000/pt-br/profile, sv: 0.1.3, sdkn: @vercel/analytics/next, sdkv: 2.0.1, ts: 1791037413872} /_vercel/insights/view @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    6766ms] [LOG] %c[Vercel Web Analytics]%c [view] http://localhost:3000/pt-br/profile color: rgb(120, 120, 120) color: inherit {o: http://localhost:3000/pt-br/profile, sv: 0.1.3, sdkn: @vercel/analytics/next, sdkv: 2.0.1, ts: 1791037413873} /_vercel/insights/view @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[    6784ms] [LOG] %c[Vercel Speed Insights]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  102735ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  103012ms] [LOG] [Fast Refresh] done in 395ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  124445ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  124611ms] [LOG] [Fast Refresh] done in 7ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  124618ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  124622ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  124794ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  125219ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  126726ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  127956ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  129469ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  129548ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  129798ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  130423ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  130958ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  132648ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  135808ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  135930ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  139328ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  142166ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  273862ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  273939ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  292520ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  294139ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  304059ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  304912ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[  413508ms] [LOG] [Fast Refresh] done in 5ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 1461361ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 1462099ms] [LOG] [Fast Refresh] done in 734ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 1463049ms] [LOG] [Fast Refresh] done in 734ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 1494876ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 1494938ms] [LOG] [Fast Refresh] done in 105ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 1495617ms] [LOG] [Fast Refresh] done in 105ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 1502553ms] [LOG] [Fast Refresh] done in 105ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 1502765ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 1502860ms] [LOG] [Fast Refresh] done in 144ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 1503513ms] [LOG] [Fast Refresh] done in 144ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 1516070ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 1516085ms] [LOG] [Fast Refresh] done in 127ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 2269840ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 2270083ms] [LOG] [Fast Refresh] done in 236ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 2271127ms] [LOG] [Fast Refresh] done in 236ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781
+[ 2271579ms] [LOG] [Fast Refresh] done in 236ms @ http://localhost:3000/_next/static/chunks/15ny_next_dist_0ned0kl._.js:781

@@ -13,6 +13,7 @@ export type ActionError =
 	| "forbidden"
 	| "notFound"
 	| "limit"
+	| "typeMismatch"
 	| "server";
 
 export type ActionFailure = { ok: false; error: ActionError; fields?: string[] };
