@@ -14,32 +14,31 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
-### Fixed
-
-- Ingestion: anonymous Wikimedia REST answered 429 at 20 req/s, so Wikipedia hosts are throttled to 5 req/s with 4 workers, and a 429/503 `Retry-After` now pauses the whole host for every thread instead of each worker retrying on its own.
-
-### Changed
-
-- Catalog filters: "Minimum Score Per Category" is always visible (no accordion), the top fields share equal widths across the row, and the total matching the filters is shown above the list (`countListItems`, same WHERE as the list, cached under the `catalog` tag).
-- Item page header: the final community score sits at the far right of the title row; year and creators on one line; genres and platforms as labelled chips (first 4/6, a native `<details>` "+N more" reveals the rest) instead of one long dotted line.
-
-### Changed
-
-- Ingestion: Wikipedia summaries are fetched with 8 concurrent requests per run; `HttpClient`'s per-host throttle is thread-safe (slot reservation under a lock) and Wikipedia hosts allow 20 req/s. The bootstrap workflow gains a `skip_catalog` input to resume enrichment, covers and snapshot without re-running the Wikidata catalog job.
-
 ### Added
 
 - Sandbox seed: `lib/db/seed.ts --existing-items` rates the catalog already in the database (sandbox Neon branch copied from production) without touching item rows except stats — keyset batches by id, popularity rank per type via `row_number()`, Zipf curve, per-item quality from the id hash, columnar `unnest` upsert, stats recomputed in SQL per batch — and creates statuses, time to beat (completed games only), follows and lists (≤ `LIST_LIMITS.perType` per type, items of the list's type) for seed users, idempotently. `--purge` deletes every seed user (id `seed-user-*` + `@example.test`, cascade) and recomputes all item stats.
 - Seed target guard (`lib/db/seed-guard.ts`): always refuses `VERCEL_ENV=production`, refuses non-local databases unless `SEED_TARGET=sandbox`, and refuses databases with more than 50 verified non-seed users unless `--i-know-this-is-sandbox` is passed.
 - `NEXT_PUBLIC_SANDBOX` env (`"true"`/`"false"`, default false): non-dismissable "sandbox — fake data" banner above the navbar (en/pt-BR/es, `role="status"`), `noindex, nofollow` metadata and `robots.txt` disallowing everything.
-
 - API docs guides (`/docs`, authentication, errors, pagination, rate limits, changelog) are translated to pt-BR and es through the new `docs` namespace (`messages/<locale>/docs.json`), including per-page meta descriptions and the code-block copy button. Inline code and links use `t.rich`; code samples, HTTP headers, field/parameter names, error `code` values and URLs stay in English. E2E checks the Portuguese and Spanish quickstart headings (with axe).
+- Seed creates a default admin for local and sandbox only (`admin@hexascore.test` / `hexascoreBR@123`, overridable with `SEED_ADMIN_EMAIL`/`SEED_ADMIN_PASSWORD`; `--admin-only` creates just it). `docs/admin.md` documents `/admin`, its sections and the admin accounts.
+- Listing pattern for every item listing (`docs/frontend.md`): split by category, cover thumbnail left of every title, category icon in the section accent next to every category name. New `components/catalog/category-label.tsx` (`<CategoryLabel type size>`) replaces `ListTypeBadge` and ad-hoc type text on home highlights, catalog titles, the item page label and "Type" detail, search groups and chips, autocomplete, profile counts, list pages and admin items.
+- Profile ratings tab: category chips (`?type=`) and, without a type, one section per rated category with its 5 latest/best/worst ratings and "See all (N)"; with a type, the usual 20-per-page pagination. `getProfileRatings` takes optional `type` and `limit`.
 
 ### Changed
 
+- Catalog filters: "Minimum Score Per Category" is always visible (no accordion), the top fields share equal widths across the row, and the total matching the filters is shown above the list (`countListItems`, same WHERE as the list, cached under the `catalog` tag).
+- Item page header: the final community score sits at the far right of the title row; year and creators on one line; genres and platforms as labelled chips (first 4/6, a native `<details>` "+N more" reveals the rest) instead of one long dotted line.
+- Ingestion: Wikipedia summaries are fetched with 8 concurrent requests per run; `HttpClient`'s per-host throttle is thread-safe (slot reservation under a lock) and Wikipedia hosts allow 20 req/s. The bootstrap workflow gains a `skip_catalog` input to resume enrichment, covers and snapshot without re-running the Wikidata catalog job.
 - Fixture seed recomputes item stats in keyset batches with raw SQL (only rows whose stats changed) instead of one catalog-wide `UPDATE`, and the seed's `hashtext` buckets use `abs(0::bigint + hashtext(…))` so an `int4` minimum can no longer overflow `abs`.
 - "See users' scores" dialog is centred in the viewport (above the sticky navbar, full width minus margins on mobile) and paginated: 10 ratings per page, at most 100 pages (latest 1000), via `GET /api/items/[id]/ratings?page=1..100` → `{ data, page, page_count }` (count capped by a `LIMIT 1000` subquery, `OFFSET` ≤ 990); TanStack Query keeps the previous page while loading.
 - Docs sidebar note for pt-BR/es now only says that field and parameter names stay in English; the docs `<article>` no longer forces `lang="en"`.
+- Catalog, search, profile, feed and list pages no longer scroll horizontally at 360 px (root grids use `grid-cols-1` so truncated rows cannot widen the track; the search input can shrink). Ratings E2E reads the community score from the item header, where it moved with the cover/title/score header.
+- Profile status tab is grouped by category first (each with its non-empty shelves and the category's own labels, e.g. "Want to play"), the lists tab groups lists by category, and each `/feed` page groups its entries by category (cursor still pages the whole chronological feed). Home highlight rows, profile tabs, feed, list pages and admin item search show cover thumbnails; `ItemRef` (social repository) and admin items now carry `coverUrl`/`coverThumbUrl` read as two `meta->>` keys and filtered to `https:`.
+
+### Fixed
+
+- Ingestion: anonymous Wikimedia REST answered 429 at 20 req/s, so Wikipedia hosts are throttled to 5 req/s with 4 workers, and a 429/503 `Retry-After` now pauses the whole host for every thread instead of each worker retrying on its own.
+- All modals share one centred layout (`components/ui/dialog.ts`): the report dialog no longer sits at the top under the navbar, and the PIX QR, ratings and delete-account dialogs use the same backdrop, z-index and sizing; a test enforces the rule for every Base UI dialog.
 
 ## [0.0.19](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.18...v0.0.19) (2026-10-03)
 

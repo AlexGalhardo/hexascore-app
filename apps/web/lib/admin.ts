@@ -6,12 +6,14 @@ import {
 	affiliateLinks,
 	affiliateStore,
 	externalScores,
+	type ItemType,
 	items,
 	itemTranslations,
 	sourceRecords,
 } from "./db/schema/catalog";
 import { contactMessages, itemStatus, listItems, lists, ratings, reports, timeToBeat } from "./db/schema/social";
 import { recomputeItemStats } from "./ratings";
+import { httpsUrlOrNull } from "./safe-url";
 
 // Data access for /admin. Callers (actions/admin.ts, app/[locale]/admin) check isAdmin() first.
 
@@ -300,11 +302,13 @@ export async function setContactHandled(db: Database, id: string, handled: boole
 
 export type AdminItem = {
 	id: string;
-	type: string;
+	type: ItemType;
 	slug: string;
 	title: string;
 	ratingCount: number;
 	score: number | null;
+	coverUrl: string | null;
+	coverThumbUrl: string | null;
 };
 
 const adminItemColumns = {
@@ -314,17 +318,23 @@ const adminItemColumns = {
 	title: sql<string>`coalesce((select ${itemTranslations.title} from ${itemTranslations} where ${itemTranslations.itemId} = ${items.id} and ${itemTranslations.locale} = 'en'), ${items.slug})`,
 	ratingCount: items.ratingCount,
 	score: items.score,
+	coverUrl: sql<string | null>`${items.meta}->>'coverUrl'`,
+	coverThumbUrl: sql<string | null>`${items.meta}->>'coverThumbUrl'`,
 };
+
+// Cover URLs come from ingestion-written jsonb: anything but https is dropped.
+const safeCovers = (rows: AdminItem[]): AdminItem[] =>
+	rows.map((r) => ({ ...r, coverUrl: httpsUrlOrNull(r.coverUrl), coverThumbUrl: httpsUrlOrNull(r.coverThumbUrl) }));
 
 /** By exact id, or slug / English title substring (case-insensitive). */
 export async function findItems(db: Database, q: string): Promise<AdminItem[]> {
 	const term = q.trim();
 	if (!term) return [];
 	if (z.uuid().safeParse(term).success) {
-		return db.select(adminItemColumns).from(items).where(eq(items.id, term));
+		return safeCovers(await db.select(adminItemColumns).from(items).where(eq(items.id, term)));
 	}
 	const like = `%${term.replace(/[%_\\]/g, "\\$&")}%`;
-	return db
+	const rows = await db
 		.select(adminItemColumns)
 		.from(items)
 		.where(
@@ -332,6 +342,7 @@ export async function findItems(db: Database, q: string): Promise<AdminItem[]> {
 		)
 		.orderBy(desc(items.ratingCount), items.slug)
 		.limit(50);
+	return safeCovers(rows);
 }
 
 export async function getAdminItem(

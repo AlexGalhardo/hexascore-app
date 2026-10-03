@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { cache } from "react";
+import { CategoryLabel } from "@/components/catalog/category-label";
+import { CoverThumb } from "@/components/catalog/cover-thumb";
 import { ListForm } from "@/components/lists/list-form";
 import { DeleteListButton, ListEntryControls } from "@/components/lists/list-owner-controls";
-import { ListTypeBadge } from "@/components/lists/list-type-badge";
 import { ReportDialog } from "@/components/social/report-dialog";
 import { Notice } from "@/components/ui/form";
 import { asLocale } from "@/i18n/locale";
@@ -47,7 +48,7 @@ export default async function ListPage({ params }: Props) {
 	const [t, tt] = await Promise.all([getTranslations("lists"), getTranslations("itemTypes")]);
 
 	return (
-		<article className="grid max-w-3xl gap-6">
+		<article className="grid max-w-3xl grid-cols-1 gap-6">
 			<header className="grid gap-2">
 				<Link
 					href={{ pathname: `/u/${encodeURIComponent(list.ownerNickname)}`, query: { tab: "lists" } }}
@@ -56,7 +57,9 @@ export default async function ListPage({ params }: Props) {
 					{t("by", { nickname: list.ownerNickname })}
 				</Link>
 				<h1 className="font-serif text-3xl font-bold break-words">{list.title}</h1>
-				<ListTypeBadge type={list.type} label={tt(list.type)} />
+				<CategoryLabel type={list.type} className="text-xs font-medium">
+					{tt(list.type)}
+				</CategoryLabel>
 				{list.description ? <p className="whitespace-pre-line">{list.description}</p> : null}
 				<p className="text-sm text-muted">
 					{[t("itemCount", { count: list.items.length }), list.isPublic ? t("public") : t("private")].join(
@@ -75,12 +78,10 @@ export default async function ListPage({ params }: Props) {
 							className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border py-2"
 						>
 							<span className="w-8 font-mono text-sm tabular-nums text-muted">{i + 1}</span>
-							<div className="min-w-0 flex-1">
-								<Link href={itemHref(item.type, item.slug)} className="block truncate">
-									{item.title}
-								</Link>
-								<span className="text-xs text-muted">{tt(item.type)}</span>
-							</div>
+							<CoverThumb src={item.coverUrl} thumb={item.coverThumbUrl} />
+							<Link href={itemHref(item.type, item.slug)} className="min-w-0 flex-1 truncate">
+								{item.title}
+							</Link>
 							{isOwner ? (
 								<ListEntryControls
 									listId={list.id}

@@ -7,6 +7,7 @@ import type { Database } from "@/lib/db/client";
 import { user } from "@/lib/db/schema/auth";
 import { ITEM_TYPES, type ItemType, items, itemTranslations } from "@/lib/db/schema/catalog";
 import { follows, itemStatus, type itemStatusValue, ratings, timeToBeat } from "@/lib/db/schema/social";
+import { httpsUrlOrNull } from "@/lib/safe-url";
 import { ITEM_STATUSES, type ItemStatus } from "./constants";
 
 // Pure data access for profiles, follows, feed and item status (same contract as lib/catalog/repository.ts:
@@ -22,7 +23,14 @@ const _statusesMatch: SameStatuses = true;
 export { ITEM_STATUSES, type ItemStatus };
 export const itemStatusSchema = z.enum(ITEM_STATUSES);
 
-export type ItemRef = { id: string; type: ItemType; slug: string; title: string };
+export type ItemRef = {
+	id: string;
+	type: ItemType;
+	slug: string;
+	title: string;
+	coverUrl: string | null;
+	coverThumbUrl: string | null;
+};
 
 const tl = alias(itemTranslations, "tl");
 const ten = alias(itemTranslations, "ten");
@@ -32,7 +40,22 @@ export const itemRefColumns = {
 	type: items.type,
 	slug: items.slug,
 	title: sql<string>`coalesce(${tl.title}, ${ten.title}, ${items.slug})`,
+	// Only the two cover keys, not the whole meta jsonb (genres, trailers…): these rows feed light listings.
+	coverUrl: sql<string | null>`${items.meta}->>'coverUrl'`,
+	coverThumbUrl: sql<string | null>`${items.meta}->>'coverThumbUrl'`,
 };
+
+/** jsonb is written by the ingestion, so cover URLs are untrusted: anything but https is dropped. */
+export function toItemRef(r: ItemRef): ItemRef {
+	return {
+		id: r.id,
+		type: r.type,
+		slug: r.slug,
+		title: r.title,
+		coverUrl: httpsUrlOrNull(r.coverUrl),
+		coverThumbUrl: httpsUrlOrNull(r.coverThumbUrl),
+	};
+}
 export const titleJoin = (locale: Locale) => ({
 	tl: [tl, and(eq(tl.itemId, items.id), eq(tl.locale, locale))] as const,
 	ten: [ten, and(eq(ten.itemId, items.id), eq(ten.locale, "en"))] as const,
@@ -126,8 +149,9 @@ export type ProfileRating = { item: ItemRef; overall: number; categories: number
 export async function getProfileRatings(
 	db: Database,
 	userId: string,
-	options: { sort: ProfileSort; page: number; locale: Locale },
+	options: { sort: ProfileSort; page: number; locale: Locale; type?: ItemType; limit?: number },
 ): Promise<{ data: ProfileRating[]; hasMore: boolean }> {
+	const size = options.limit ?? PROFILE_PAGE_SIZE;
 	const order = {
 		recent: [desc(ratings.createdAt)],
 		best: [desc(ratings.overall), desc(ratings.createdAt)],
@@ -150,18 +174,18 @@ export async function getProfileRatings(
 		.innerJoin(items, eq(items.id, ratings.itemId))
 		.leftJoin(...j.tl)
 		.leftJoin(...j.ten)
-		.where(eq(ratings.userId, userId))
+		.where(and(eq(ratings.userId, userId), options.type ? eq(items.type, options.type) : undefined))
 		.orderBy(...order, ratings.itemId)
-		.limit(PROFILE_PAGE_SIZE + 1)
-		.offset((Math.max(options.page, 1) - 1) * PROFILE_PAGE_SIZE);
+		.limit(size + 1)
+		.offset((Math.max(options.page, 1) - 1) * size);
 	return {
-		data: rows.slice(0, PROFILE_PAGE_SIZE).map((r) => ({
-			item: { id: r.id, type: r.type, slug: r.slug, title: r.title },
+		data: rows.slice(0, size).map((r) => ({
+			item: toItemRef(r),
 			overall: r.overall ?? 0,
 			categories: [r.c1, r.c2, r.c3, r.c4, r.c5, r.c6],
 			ratedAt: new Date(r.createdAt).toISOString(),
 		})),
-		hasMore: rows.length > PROFILE_PAGE_SIZE,
+		hasMore: rows.length > size,
 	};
 }
 
@@ -181,7 +205,7 @@ export async function getStatusShelves(
 		.orderBy(desc(itemStatus.updatedAt))
 		.limit(400);
 	const shelves = Object.fromEntries(ITEM_STATUSES.map((s) => [s, [] as ItemRef[]])) as Record<ItemStatus, ItemRef[]>;
-	for (const r of rows) shelves[r.status].push({ id: r.id, type: r.type, slug: r.slug, title: r.title });
+	for (const r of rows) shelves[r.status].push(toItemRef(r));
 	return shelves;
 }
 
@@ -268,7 +292,7 @@ export async function getFeed(
 	return {
 		data: page.map((r) => ({
 			nickname: r.nickname,
-			item: { id: r.id, type: r.type, slug: r.slug, title: r.title },
+			item: toItemRef(r),
 			overall: r.overall ?? 0,
 			ratedAt: new Date(r.createdAt).toISOString(),
 		})),
