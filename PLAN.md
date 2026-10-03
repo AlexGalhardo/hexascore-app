@@ -157,6 +157,7 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 - [x] i18n revisado (paridade de chaves e parágrafos legais testada, sem codinome nos textos, e-mails de auth traduzidos)
 - [x] Termos/política revisados, avisos de afiliado e licenças (crédito de capa na página do item; revisão por advogado segue em Pendências)
 - [ ] Bootstrap de 100k itens em produção, Stripe live, AbacatePay live
+- [x] Tempo para zerar colaborativo (jogos, substitui o scraping do HowLongToBeat): relatos de quem marcou "Jogado", mediana por estilo (≥ 3 relatos) na página e em `ItemDetail.time_to_beat` na API
 - **Verificar**: smoke em produção; checkout real de R$ mínimo + estorno; release `v1.0.0` publicada.
 
 ---

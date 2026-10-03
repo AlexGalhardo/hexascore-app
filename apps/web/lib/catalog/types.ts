@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { routing } from "@/i18n/routing";
 import { type ExternalIds, ITEM_TYPES, type ItemMeta, type ItemType, type Trailer } from "@/lib/db/schema/catalog";
+import type { TimeToBeatStyle } from "@/lib/social/constants";
 
 // DTOs are plain JSON (dates as ISO strings) so they survive unstable_cache and route-handler serialization.
 
@@ -67,7 +68,13 @@ export type ItemDetail = ItemSummary & {
 	externalIds: ExternalIds;
 	wikidataQid: string;
 	meta: ItemMeta & { trailers: Trailer[] };
+	/** Games only (null for other types). */
+	timeToBeat: TimeToBeat | null;
 };
+
+/** `medianHours` is null below MIN_REPORTS_FOR_TIME_TO_BEAT reports for that style. */
+export type TimeToBeatStat = { medianHours: number | null; reports: number };
+export type TimeToBeat = Record<TimeToBeatStyle, TimeToBeatStat>;
 
 export type ExternalScore = { source: string; value: string; url: string | null };
 export type AffiliateLink = { store: string; url: string };

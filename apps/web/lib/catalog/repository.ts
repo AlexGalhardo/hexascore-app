@@ -8,6 +8,7 @@ import { user } from "@/lib/db/schema/auth";
 import { affiliateLinks, externalScores, type ItemType, items, itemTranslations } from "@/lib/db/schema/catalog";
 import { ratings } from "@/lib/db/schema/social";
 import { httpsUrlOrNull } from "@/lib/safe-url";
+import { getTimeToBeat } from "@/lib/time-to-beat";
 import { decodeCursor, encodeCursor, InvalidCursorError } from "./cursor";
 import { parseExternalIds, parseMeta } from "./jsonb";
 import {
@@ -211,6 +212,7 @@ async function getItem(db: Database, where: SQL, locale: Locale): Promise<ItemDe
 		.limit(1);
 	if (!row) return null;
 
+	const timeToBeat = row.type === "game" ? await getTimeToBeat(db, row.id) : null;
 	const ownSynopsis = row.synopsisLocale !== null;
 	const synopsisFallback = !ownSynopsis && row.synopsisEn !== null;
 	return {
@@ -224,6 +226,7 @@ async function getItem(db: Database, where: SQL, locale: Locale): Promise<ItemDe
 		externalIds: parseExternalIds(row.externalIds, row.id),
 		wikidataQid: row.wikidataQid,
 		meta: parseMeta(row.meta, row.id),
+		timeToBeat,
 	};
 }
 

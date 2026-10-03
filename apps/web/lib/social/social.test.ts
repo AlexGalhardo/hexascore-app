@@ -129,10 +129,10 @@ describe("follows and feed", () => {
 
 describe("item status", () => {
 	test("set, change, clear and group into shelves", async () => {
-		expect(await setItemStatus(db, "bob", item(1), "want")).toBe(true);
-		expect(await setItemStatus(db, "bob", item(1), "completed")).toBe(true);
-		expect(await setItemStatus(db, "bob", item(2), "dropped")).toBe(true);
-		expect(await setItemStatus(db, "bob", "01900000-0000-7000-8000-0000000000ff", "want")).toBe(false);
+		expect(await setItemStatus(db, "bob", item(1), "want")).toBe("ok");
+		expect(await setItemStatus(db, "bob", item(1), "completed")).toBe("ok");
+		expect(await setItemStatus(db, "bob", item(2), "dropped")).toBe("ok");
+		expect(await setItemStatus(db, "bob", "01900000-0000-7000-8000-0000000000ff", "want")).toBe("notFound");
 		expect(await getItemStatus(db, "bob", item(1))).toBe("completed");
 		const shelves = await getStatusShelves(db, "bob", "en");
 		expect(shelves.completed.map((i) => i.id)).toEqual([item(1)]);

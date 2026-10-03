@@ -4,6 +4,7 @@ import { getFormatter, getTranslations, setRequestLocale } from "next-intl/serve
 import type { ReactNode } from "react";
 import { RatingPanel } from "@/components/item/rating-panel";
 import { RatingsDialog } from "@/components/item/ratings-dialog";
+import { TimeToBeat } from "@/components/item/time-to-beat";
 import { Trailers } from "@/components/item/trailers";
 import { HexRadar } from "@/components/score/hex-radar";
 import { ScoreBadge } from "@/components/score/score-badge";
@@ -168,6 +169,8 @@ export default async function ItemPage({ params }: Props) {
 					className="justify-self-center"
 				/>
 			</section>
+
+			{item.timeToBeat ? <TimeToBeat stats={item.timeToBeat} /> : null}
 
 			<RatingPanel
 				itemId={item.id}
