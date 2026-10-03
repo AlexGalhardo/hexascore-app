@@ -2,7 +2,14 @@ import { and, count, desc, eq, inArray, max, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { Database } from "./db/client";
 import { user } from "./db/schema/auth";
-import { affiliateLinks, affiliateStore, externalScores, items, sourceRecords } from "./db/schema/catalog";
+import {
+	affiliateLinks,
+	affiliateStore,
+	externalScores,
+	items,
+	itemTranslations,
+	sourceRecords,
+} from "./db/schema/catalog";
 import { contactMessages, itemStatus, listItems, lists, ratings, reports } from "./db/schema/social";
 import { recomputeItemStats } from "./ratings";
 
@@ -281,4 +288,72 @@ export async function setContactHandled(db: Database, id: string, handled: boole
 		.where(eq(contactMessages.id, id))
 		.returning({ id: contactMessages.id });
 	return rows.length > 0;
+}
+
+export type AdminItem = {
+	id: string;
+	type: string;
+	slug: string;
+	title: string;
+	ratingCount: number;
+	score: number | null;
+};
+
+const adminItemColumns = {
+	id: items.id,
+	type: items.type,
+	slug: items.slug,
+	title: sql<string>`coalesce((select ${itemTranslations.title} from ${itemTranslations} where ${itemTranslations.itemId} = ${items.id} and ${itemTranslations.locale} = 'en'), ${items.slug})`,
+	ratingCount: items.ratingCount,
+	score: items.score,
+};
+
+/** By exact id, or slug / English title substring (case-insensitive). */
+export async function findItems(db: Database, q: string): Promise<AdminItem[]> {
+	const term = q.trim();
+	if (!term) return [];
+	if (z.uuid().safeParse(term).success) {
+		return db.select(adminItemColumns).from(items).where(eq(items.id, term));
+	}
+	const like = `%${term.replace(/[%_\\]/g, "\\$&")}%`;
+	return db
+		.select(adminItemColumns)
+		.from(items)
+		.where(
+			sql`${items.slug} ilike ${like} or exists (select 1 from ${itemTranslations} where ${itemTranslations.itemId} = ${items.id} and ${itemTranslations.title} ilike ${like})`,
+		)
+		.orderBy(desc(items.ratingCount), items.slug)
+		.limit(50);
+}
+
+export async function getAdminItem(
+	db: Database,
+	id: string,
+): Promise<(AdminItem & { affiliates: { store: AffiliateStore; url: string; active: boolean }[] }) | null> {
+	if (!z.uuid().safeParse(id).success) return null;
+	const [item] = await db.select(adminItemColumns).from(items).where(eq(items.id, id));
+	if (!item) return null;
+	const affiliates = await db
+		.select({ store: affiliateLinks.store, url: affiliateLinks.url, active: affiliateLinks.active })
+		.from(affiliateLinks)
+		.where(eq(affiliateLinks.itemId, id))
+		.orderBy(affiliateLinks.store);
+	return { ...item, affiliates };
+}
+
+export async function getAdminOverview(
+	db: Database,
+): Promise<{ openReports: number; unhandledMessages: number; hiddenLists: number; bannedUsers: number }> {
+	const [[r], [m], [l], [u]] = await Promise.all([
+		db.select({ n: count() }).from(reports).where(eq(reports.status, "open")),
+		db.select({ n: count() }).from(contactMessages).where(eq(contactMessages.handled, false)),
+		db.select({ n: count() }).from(lists).where(eq(lists.hidden, true)),
+		db.select({ n: count() }).from(user).where(eq(user.banned, true)),
+	]);
+	return {
+		openReports: r?.n ?? 0,
+		unhandledMessages: m?.n ?? 0,
+		hiddenLists: l?.n ?? 0,
+		bannedUsers: u?.n ?? 0,
+	};
 }

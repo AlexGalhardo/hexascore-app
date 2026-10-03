@@ -51,8 +51,7 @@ export function UserMenu({ initial, nickname, admin, labels }: Props) {
 							{labels.api}
 						</Menu.LinkItem>
 						{admin ? (
-							// Plain anchor: /admin is EN-only and has no localized prefix.
-							<Menu.LinkItem render={<a href="/admin" />} className={itemClass}>
+							<Menu.LinkItem render={<Link href="/admin" />} className={itemClass}>
 								Admin
 							</Menu.LinkItem>
 						) : null}

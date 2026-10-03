@@ -15,6 +15,7 @@
     "db:generate": "bun --filter web db:generate",
     "db:migrate": "bun --filter web db:migrate",
     "db:seed": "bun --filter web db:seed",
+    "admin:grant": "bun --cwd apps/web scripts/admin-grant.ts",
     "prepare": "husky"
   },
   "devDependencies": {
