@@ -8,6 +8,7 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 ### Added
 
 - SEO: `robots.txt` (indexable only in production, private pages disallowed in every locale) and sitemaps with hreflang alternates: `/sitemap-index.xml` → `/sitemap/0.xml` (static pages) + `/sitemap/<n>.xml` (catalog items, 40k per file).
+- `bun run seo:gsc` (apps/web): Search Console CLI over a service account (sites, sitemaps, submit, Search Analytics queries).
 - Item page credits the cover (source, author, license and link) when the ingestion stored `meta.coverAttribution` (Wikimedia Commons covers under CC BY/BY-SA require it).
 - Tests: legal documents must match paragraph-for-paragraph across locales, carry the brand from `APP_NAME` and no locale file may contain the codename; `localeFromRequest` (`i18n/locale.ts`).
 - E2E specs for the 0.3 flows (`qa/e2e/specs/ratings.spec.ts`, `social.spec.ts`, `admin.spec.ts`), replacing the `todo-0.3` placeholders: 6-category rating, edit and the 5-rating score threshold; item status and curated lists; public vs private profile; follow → `/feed`; report → admin resolves; `/admin` 404 for non-admins. DB helpers `createItem`, `createMember`, `insertRating`, `grantAdmin`.
