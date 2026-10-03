@@ -313,10 +313,19 @@ def choose_slug(conn: psycopg.Connection, item: NormalizedItem) -> str:
     raise RuntimeError(f"no free slug for {item.qid}")
 
 
-def save_item(conn: psycopg.Connection, item: NormalizedItem) -> uuid.UUID:
-    existing = conn.execute("SELECT id, slug FROM items WHERE wikidata_qid = %s", (item.qid,)).fetchone()
+def known_items(conn: psycopg.Connection, qids: list[str]) -> dict[str, tuple[uuid.UUID, str]]:
+    rows = conn.execute("SELECT wikidata_qid, id, slug FROM items WHERE wikidata_qid = ANY(%s)", (qids,))
+    return {r[0]: (r[1], r[2]) for r in rows}
+
+
+def save_item(
+    conn: psycopg.Connection, item: NormalizedItem, known: dict[str, tuple[uuid.UUID, str]] | None = None
+) -> uuid.UUID:
+    """`known` (from `known_items` for the whole batch) skips the per-item lookup. An existing item keeps its id, so
+    nothing here waits for a result and the statements stay queued in the caller's pipeline."""
+    existing = known.get(item.qid) if known is not None else known_items(conn, [item.qid]).get(item.qid)
     item_id, slug = existing if existing else (uuid.uuid7(), choose_slug(conn, item))
-    row = conn.execute(
+    conn.execute(
         UPSERT_ITEM,
         {
             "id": item_id,
@@ -328,9 +337,7 @@ def save_item(conn: psycopg.Connection, item: NormalizedItem) -> uuid.UUID:
             "meta": Jsonb(item.meta),
             "popularity": item.popularity,
         },
-    ).fetchone()
-    assert row is not None
-    item_id = row[0]
+    )
     for t in item.translations:
         conn.execute(
             UPSERT_TRANSLATION,
@@ -361,21 +368,25 @@ def normalize_batch(conn: psycopg.Connection, qids: list[str]) -> tuple[int, int
     by_qid: dict[str, dict[str, dict]] = {}
     for source, qid, payload in rows:
         by_qid.setdefault(qid, {})[source] = payload
+    known = known_items(conn, qids)
     saved = skipped = 0
-    for qid in qids:
-        try:
-            item = build_item(qid, by_qid.get(qid, {}))
-        except ValidationError as exc:
-            log.warning("skipping %s: invalid payload: %s", qid, exc)
-            item = None
-        item_id = save_item(conn, item) if item else None
-        saved += item is not None
-        skipped += item is None
-        conn.execute(
-            """UPDATE source_records SET normalized_at = now(), item_id = %s
-            WHERE source = ANY(%s) AND external_id = %s""",
-            (item_id, SOURCES, qid),
-        )
+    # Pipeline mode sends the batch's ~8 statements per item without waiting for each reply; one round trip per
+    # statement capped a remote database at ~1 item/s. Only a new item's slug check waits for a result.
+    with conn.pipeline():
+        for qid in qids:
+            try:
+                item = build_item(qid, by_qid.get(qid, {}))
+            except ValidationError as exc:
+                log.warning("skipping %s: invalid payload: %s", qid, exc)
+                item = None
+            item_id = save_item(conn, item, known) if item else None
+            saved += item is not None
+            skipped += item is None
+            conn.execute(
+                """UPDATE source_records SET normalized_at = now(), item_id = %s
+                WHERE source = ANY(%s) AND external_id = %s""",
+                (item_id, SOURCES, qid),
+            )
     return saved, skipped
 
 
