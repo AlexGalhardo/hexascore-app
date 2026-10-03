@@ -43,6 +43,7 @@
 			"countries": "Countries"
 		},
 		"runtimeValue": "{minutes} min",
+		"moreCount": "+{count} more",
 		"whereToBuy": "Where to buy",
 		"affiliateNotice": "Affiliate links: we may earn a commission, at no extra cost to you.",
 		"stores": { "amazon": "Amazon", "mercadolivre": "Mercado Livre", "steam": "Steam", "gog": "GOG" },

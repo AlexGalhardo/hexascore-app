@@ -21,11 +21,12 @@ export async function CatalogFilters({ type, genres, platforms, values }: Props)
 	const t = await getTranslations("catalog");
 	const tc = await getTranslations("categories");
 	const accent = SECTION_ACCENT[type];
-	const anyCategory = CATEGORY_KEYS[type].some((k) => values[`min_${k}`]);
 
 	return (
 		<form method="get" className="grid gap-3 rounded-md border border-border p-3" aria-label={t("filters")}>
-			<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+			<div
+				className={`grid grid-cols-2 gap-3 sm:grid-cols-3 ${type === "game" ? "lg:grid-cols-5" : "lg:grid-cols-4"}`}
+			>
 				<label className={label}>
 					{t("genre")}
 					<select name="genre" defaultValue={values.genre ?? ""} className={field}>
@@ -74,7 +75,7 @@ export async function CatalogFilters({ type, genres, platforms, values }: Props)
 						className={field}
 					/>
 				</label>
-				<label className={`${label} col-span-2 sm:col-span-1`}>
+				<label className={label}>
 					{t("sort")}
 					<select name="sort" defaultValue={values.sort ?? SORTS[0]} className={field}>
 						{SORTS.map((s) => (
@@ -85,11 +86,9 @@ export async function CatalogFilters({ type, genres, platforms, values }: Props)
 					</select>
 				</label>
 			</div>
-			<details open={anyCategory} className="group">
-				<summary className="min-h-11 cursor-pointer content-center text-sm font-medium">
-					{t("minCategories")}
-				</summary>
-				<div className="grid grid-cols-2 gap-3 pt-2 sm:grid-cols-3 lg:grid-cols-6">
+			<fieldset className="grid gap-2">
+				<legend className="pb-2 text-sm font-semibold">{t("minCategories")}</legend>
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
 					{CATEGORY_KEYS[type].map((key) => (
 						<label key={key} className={label}>
 							{tc(`${type}.${key}`)}
@@ -105,7 +104,7 @@ export async function CatalogFilters({ type, genres, platforms, values }: Props)
 						</label>
 					))}
 				</div>
-			</details>
+			</fieldset>
 			<div className="flex gap-2">
 				<button type="submit" className={`min-h-11 rounded-md px-4 text-sm font-semibold text-bg ${accent.bg}`}>
 					{t("apply")}

@@ -5,7 +5,7 @@ import { CatalogFilters } from "@/components/catalog/catalog-filters";
 import { ItemTable } from "@/components/catalog/item-table";
 import { Pagination } from "@/components/catalog/pagination";
 import { asLocale } from "@/i18n/locale";
-import { listGenres, listItems, listPlatforms } from "@/lib/catalog/cached";
+import { countListItems, listGenres, listItems, listPlatforms } from "@/lib/catalog/cached";
 import { InvalidCursorError } from "@/lib/catalog/cursor";
 import { parseCatalogSearchParams, type RawSearchParams } from "@/lib/catalog/search-params";
 import type { ItemSummary, Page } from "@/lib/catalog/types";
@@ -40,9 +40,10 @@ export default async function CatalogPage({ params, searchParams }: Props) {
 		if (!(error instanceof InvalidCursorError || (error as Error)?.name === "InvalidCursorError")) throw error;
 		page = await listItems({ ...base, cursor: undefined });
 	}
-	const [genres, platforms] = await Promise.all([
+	const [genres, platforms, total] = await Promise.all([
 		listGenres(type),
 		type === "game" ? listPlatforms(type) : Promise.resolve([]),
+		countListItems(base),
 	]);
 	const t = await getTranslations("catalog");
 	const accent = SECTION_ACCENT[type];
@@ -54,6 +55,9 @@ export default async function CatalogPage({ params, searchParams }: Props) {
 				<p className="mt-1 max-w-3xl text-muted">{t(`intro.${type}`)}</p>
 			</header>
 			<CatalogFilters type={type} genres={genres} platforms={platforms} values={query} />
+			<p role="status" className="-mb-2 text-sm text-muted">
+				{t("resultCount", { count: total })}
+			</p>
 			{page.data.length ? (
 				<section aria-label={t(`title.${type}`)}>
 					<ItemTable items={page.data} type={type} />
