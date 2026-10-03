@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CatalogFilters } from "@/components/catalog/catalog-filters";
+import { CategoryLabel } from "@/components/catalog/category-label";
 import { ItemTable } from "@/components/catalog/item-table";
 import { Pagination } from "@/components/catalog/pagination";
 import { asLocale } from "@/i18n/locale";
-import { listGenres, listItems, listPlatforms } from "@/lib/catalog/cached";
+import { countListItems, listGenres, listItems, listPlatforms } from "@/lib/catalog/cached";
 import { InvalidCursorError } from "@/lib/catalog/cursor";
 import { parseCatalogSearchParams, type RawSearchParams } from "@/lib/catalog/search-params";
 import type { ItemSummary, Page } from "@/lib/catalog/types";
@@ -40,20 +41,28 @@ export default async function CatalogPage({ params, searchParams }: Props) {
 		if (!(error instanceof InvalidCursorError || (error as Error)?.name === "InvalidCursorError")) throw error;
 		page = await listItems({ ...base, cursor: undefined });
 	}
-	const [genres, platforms] = await Promise.all([
+	const [genres, platforms, total] = await Promise.all([
 		listGenres(type),
 		type === "game" ? listPlatforms(type) : Promise.resolve([]),
+		countListItems(base),
 	]);
 	const t = await getTranslations("catalog");
 	const accent = SECTION_ACCENT[type];
 
 	return (
-		<div className="grid gap-6">
+		<div className="grid grid-cols-1 gap-6">
 			<header className={`border-l-4 pl-3 ${accent.border}`}>
-				<h1 className="font-serif text-3xl font-bold sm:text-4xl">{t(`title.${type}`)}</h1>
+				<h1 className="font-serif text-3xl font-bold sm:text-4xl">
+					<CategoryLabel type={type} size="xl">
+						{t(`title.${type}`)}
+					</CategoryLabel>
+				</h1>
 				<p className="mt-1 max-w-3xl text-muted">{t(`intro.${type}`)}</p>
 			</header>
 			<CatalogFilters type={type} genres={genres} platforms={platforms} values={query} />
+			<p role="status" className="-mb-2 text-sm text-muted">
+				{t("resultCount", { count: total })}
+			</p>
 			{page.data.length ? (
 				<section aria-label={t(`title.${type}`)}>
 					<ItemTable items={page.data} type={type} />
