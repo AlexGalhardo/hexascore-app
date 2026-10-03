@@ -15,6 +15,8 @@
     "db:generate": "bun --filter web db:generate",
     "db:migrate": "bun --filter web db:migrate",
     "db:seed": "bun --filter web db:seed",
+    "openapi": "bun --filter web openapi",
+    "openapi:check": "bun --filter web openapi:check",
     "prepare": "husky"
   },
   "devDependencies": {

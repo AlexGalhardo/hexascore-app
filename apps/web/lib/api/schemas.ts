@@ -8,6 +8,7 @@ import { APP_URL } from "@/lib/config";
 import { ITEM_TYPES, type ItemType } from "@/lib/db/schema/catalog";
 import { itemHref, SECTION_PATHS, type SectionPath } from "@/lib/sections";
 import { PLAN_IDS } from "./plans";
+import { PROBLEM_CODES } from "./problem";
 
 // Single source of truth for the public API: route handlers parse every response through these schemas and
 // lib/api/openapi.ts turns the same objects into openapi.json. Wire format is snake_case; dates are ISO 8601.
@@ -142,17 +143,6 @@ export const usageSchema = z
 		rate_limit: z.object({ requests_per_second: count }),
 	})
 	.meta({ description: "Quota, credits and rate limit of the key's account. This call counts as one request." });
-
-export const PROBLEM_CODES = [
-	"bad_request",
-	"unauthorized",
-	"payment_required",
-	"forbidden",
-	"not_found",
-	"rate_limited",
-	"internal_error",
-	"service_unavailable",
-] as const;
 
 export const problemSchema = z
 	.object({

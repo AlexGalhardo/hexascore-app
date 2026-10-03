@@ -12,7 +12,9 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "bun lib/db/migrate.ts",
     "db:seed": "bun lib/db/seed.ts",
-    "stripe:setup": "bun scripts/stripe-setup.ts"
+    "stripe:setup": "bun scripts/stripe-setup.ts",
+    "openapi": "bun scripts/openapi.ts",
+    "openapi:check": "bun scripts/openapi.ts --check"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",

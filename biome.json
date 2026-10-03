@@ -32,7 +32,8 @@
 			"!.claude",
 			"!.agents",
 			"!**/lib/db/migrations",
-			"!sdks"
+			"!sdks",
+			"!**/public/openapi.json"
 		]
 	}
 }

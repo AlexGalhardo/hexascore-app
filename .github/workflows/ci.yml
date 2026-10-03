@@ -23,6 +23,8 @@ jobs:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-bun
       - run: bun run lint:ci
+      # The committed openapi.json must match the zod schemas (contract drift fails the PR).
+      - run: bun run openapi:check
 
   typecheck:
     runs-on: ubuntu-24.04
