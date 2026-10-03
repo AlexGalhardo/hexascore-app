@@ -87,7 +87,8 @@ export async function logIn(page: Page, account: TestAccount, locale = ""): Prom
 		const done = page
 			.getByRole("button", { name: /account menu|menu da conta|menú de la cuenta/i })
 			.or(page.locator("#code"))
-			.or(page.getByRole("alert"));
+			// Not getByRole("alert"): Next's route announcer is an always-present role=alert node.
+			.or(page.getByText(/Wrong email\/nickname or password|Confirm your email before logging in/));
 		await expect(limited.or(done).first()).toBeVisible();
 		if (!(await limited.isVisible())) return;
 		// Better Auth's sign-in window can last up to a minute; extend the test instead of failing it.

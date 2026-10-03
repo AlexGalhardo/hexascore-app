@@ -12,8 +12,8 @@ const mobile = {
 	deviceScaleFactor: 2,
 };
 
-// Account flows hit Better Auth's per-IP rate limit (3 sign-ins / 10 s); they run in one desktop and one mobile
-// project only, so a full run does not trip it.
+// Account flows hit Better Auth's per-IP rate limit (3 sign-ins / 10 s); they run in desktop-light only,
+// so a full run does not trip it.
 const AUTH = /@auth/;
 
 export default defineConfig({
@@ -42,6 +42,6 @@ export default defineConfig({
 		{ name: "desktop-light", use: { ...desktop, colorScheme: "light" } },
 		{ name: "desktop-dark", use: { ...desktop, colorScheme: "dark" }, grepInvert: AUTH },
 		{ name: "mobile-light", use: { ...mobile, colorScheme: "light" }, grepInvert: AUTH },
-		{ name: "mobile-dark", use: { ...mobile, colorScheme: "dark" } },
+		{ name: "mobile-dark", use: { ...mobile, colorScheme: "dark" }, grepInvert: AUTH },
 	],
 });
