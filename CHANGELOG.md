@@ -14,6 +14,10 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Changed
+
+- Ingestion: Wikipedia summaries are fetched with 8 concurrent requests per run; `HttpClient`'s per-host throttle is thread-safe (slot reservation under a lock) and Wikipedia hosts allow 20 req/s. The bootstrap workflow gains a `skip_catalog` input to resume enrichment, covers and snapshot without re-running the Wikidata catalog job.
+
 ### Added
 
 - Sandbox seed: `lib/db/seed.ts --existing-items` rates the catalog already in the database (sandbox Neon branch copied from production) without touching item rows except stats — keyset batches by id, popularity rank per type via `row_number()`, Zipf curve, per-item quality from the id hash, columnar `unnest` upsert, stats recomputed in SQL per batch — and creates statuses, time to beat (completed games only), follows and lists (≤ `LIST_LIMITS.perType` per type, items of the list's type) for seed users, idempotently. `--purge` deletes every seed user (id `seed-user-*` + `@example.test`, cascade) and recomputes all item stats.

@@ -71,6 +71,8 @@ Secrets: `DATABASE_URL`, `APP_URL`, `CRON_SECRET`, `BLOB_READ_WRITE_TOKEN`. Os t
 - **semanal** (`ingest-weekly.yml`, domingo 05:00 UTC): relê todas as entidades do catálogo (notas P444 e o que o noturno perdeu) → sinopses alteradas/faltantes → Open Library, GOG → normalize, covers.
 - **CI** (`python-ci.yml`, PR para `dev`/`main` tocando `webscrappings/**`): ruff check, ruff format --check, pytest (testes de banco contra Postgres 18.6 quando as migrations existem no branch).
 
+Wikipedia: 8 requisições simultâneas (`WORKERS`), com o throttle por host do `HttpClient` compartilhado entre threads (20 req/s por wiki). Para retomar um bootstrap sem refazer o Wikidata, dispare o workflow com `skip_catalog=true`.
+
 Limites conhecidos: sinopses só são re-buscadas quando a entidade Wikidata muda ou falta registro; `affiliate_links` (GOG/Steam) ainda não é populado; Commons responde 429 em rajadas (o cliente espera `Retry-After`).
 
 Fora por ora: orquestrador (Airflow/Prefect), ORM Python, dump JSON do Wikidata (`wbgetentities` em lotes de 50 cobre os ~100k itens em ~1h).
