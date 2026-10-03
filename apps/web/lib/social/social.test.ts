@@ -90,6 +90,20 @@ describe("profiles", () => {
 		const worst = await getProfileRatings(db, "alice", { sort: "worst", page: 1, locale: "en" });
 		expect(worst.data[0]?.overall).toBe(40);
 	});
+
+	test("ratings filter by category, honour a preview limit and carry https covers only", async () => {
+		await db
+			.update(items)
+			.set({ meta: { coverUrl: "https://img.example/1.jpg", coverThumbUrl: "javascript:alert(1)" } })
+			.where(eq(items.id, item(1)));
+		const games = await getProfileRatings(db, "alice", { sort: "best", page: 1, locale: "en", type: "game" });
+		expect(games.data.map((r) => r.item.type)).toEqual(["game", "game"]);
+		expect(games.data[0]?.item).toMatchObject({ coverUrl: "https://img.example/1.jpg", coverThumbUrl: null });
+		expect(games.data[1]?.item).toMatchObject({ coverUrl: null, coverThumbUrl: null });
+		const preview = await getProfileRatings(db, "alice", { sort: "best", page: 1, locale: "en", limit: 1 });
+		expect(preview.data).toHaveLength(1);
+		expect(preview.hasMore).toBe(true);
+	});
 });
 
 describe("follows and feed", () => {
