@@ -34,6 +34,18 @@ test.describe("API docs", () => {
 		});
 	});
 
+	for (const [path, heading, section] of [
+		["/pt-br/docs", "Primeiros passos", "1. Crie uma chave de API"],
+		["/es/docs", "Primeros pasos", "1. Crea una clave de API"],
+	] as const) {
+		test(`${path} guide is translated`, async ({ page }) => {
+			await page.goto(path);
+			await expect(page.locator("h1")).toHaveText(heading);
+			await expect(page.getByRole("heading", { level: 2, name: section })).toBeVisible();
+			await expectAccessible(page);
+		});
+	}
+
 	for (const path of ["/openapi.json", "/openapi.pt-BR.json", "/openapi.es.json"]) {
 		test(`${path} is served as JSON`, async ({ request }) => {
 			const response = await request.get(path);

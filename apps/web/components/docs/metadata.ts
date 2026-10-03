@@ -7,8 +7,11 @@ export type DocPageProps = { params: Promise<{ locale: string }> };
 export function docMetadata(key: DocKey): (props: DocPageProps) => Promise<Metadata> {
 	return async ({ params }) => {
 		const { locale } = await params;
-		const t = await getTranslations({ locale, namespace: "api.docs" });
-		return { title: t(`nav.${key}`) };
+		const [nav, docs] = await Promise.all([
+			getTranslations({ locale, namespace: "api.docs" }),
+			getTranslations({ locale, namespace: "docs" }),
+		]);
+		return { title: nav(`nav.${key}`), description: docs(`${key}.lead`) };
 	};
 }
 
