@@ -24,7 +24,7 @@ export default async function DocsLayout({ children, params }: Props) {
 
 	return (
 		<div className="grid gap-8 lg:grid-cols-[14rem_minmax(0,1fr)]">
-			<aside className="space-y-4 lg:sticky lg:top-4 lg:self-start">
+			<aside className="space-y-4 lg:sticky lg:top-[calc(var(--nav-h)+1rem)] lg:self-start">
 				<DocsNav label={t("navLabel")} labels={labels} />
 				<div className="hidden space-y-3 px-3 text-xs text-muted lg:block">
 					{locale !== "en" && <p lang={locale}>{t("languageNote")}</p>}
