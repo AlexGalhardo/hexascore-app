@@ -10,6 +10,14 @@ from common.http import HttpClient
 log = logging.getLogger("revalidate")
 
 
+def _headers(secret: str) -> dict[str, str]:
+    headers = {"Authorization": f"Bearer {secret}"}
+    # Deployments behind Vercel Authentication need the automation bypass secret.
+    if bypass := os.environ.get("VERCEL_AUTOMATION_BYPASS_SECRET"):
+        headers["x-vercel-protection-bypass"] = bypass
+    return headers
+
+
 def revalidate(tags: list[str], client: HttpClient | None = None) -> bool:
     app_url, secret = os.environ.get("APP_URL"), os.environ.get("CRON_SECRET")
     if not app_url or not secret:
@@ -20,7 +28,7 @@ def revalidate(tags: list[str], client: HttpClient | None = None) -> bool:
         response = client.request(
             "POST",
             f"{app_url.rstrip('/')}/api/cron/revalidate",
-            headers={"Authorization": f"Bearer {secret}"},
+            headers=_headers(secret),
             json={"tags": tags},
         )
     except httpx.HTTPError as exc:
