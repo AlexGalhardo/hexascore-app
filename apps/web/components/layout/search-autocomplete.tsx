@@ -5,6 +5,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
+import { CategoryLabel } from "@/components/catalog/category-label";
 import { CoverThumb } from "@/components/catalog/cover-thumb";
 import { ScoreBadge } from "@/components/score/score-badge";
 import { useRouter } from "@/i18n/navigation";
@@ -116,9 +117,9 @@ export function SearchAutocomplete({ action, placeholder }: Props) {
 										<CoverThumb src={item.coverUrl} thumb={item.coverThumbUrl} />
 										<span className="grid min-w-0 flex-1">
 											<span className="truncate font-medium">{item.title}</span>
-											<span className="text-xs text-muted">
+											<CategoryLabel type={item.type} className="text-xs text-muted">
 												{[tt(item.type), item.year].filter(Boolean).join(" · ")}
-											</span>
+											</CategoryLabel>
 										</span>
 										<ScoreBadge
 											score={item.score}
