@@ -15,6 +15,7 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 - CodeQL workflow (JavaScript/TypeScript + Python), gated on `CODE_SCANNING_ENABLED` for private repos.
 - release-please (`simple`, manifest at `0.0.0`, Keep a Changelog sections) on pushes to `main`.
 - Root `README.md` with quickstart, commands and docs index.
+- `.github/rulesets/protect-main-dev.json`: ruleset for `main`/`dev` (PR required, checks `lint`/`typecheck`/`test`/`build`, no force push/deletion), ready to apply once the GitHub plan allows it.
 
 ### Changed
 

@@ -28,7 +28,7 @@ Comandos exatos de cada camada são adicionados aqui quando a camada for impleme
 | Workflows | `docker run --rm -v "$PWD:/repo" -w /repo rhysd/actionlint:1.7.12` | — |
 | Scripts de setup | `docker run --rm -v "$PWD:/mnt" -w /mnt koalaman/shellcheck:v0.11.0 -x setups/*.sh` | — |
 
-`lint`, `typecheck`, `test` e `build` são os checks obrigatórios da branch protection de `dev` e `main`. Antes de abrir PR rode os quatro localmente.
+`lint`, `typecheck`, `test` e `build` são os checks obrigatórios do ruleset de `dev` e `main` (`.github/rulesets/protect-main-dev.json`; aplicação pendente, ver `docs/process.md`). Antes de abrir PR rode os quatro localmente.
 
 Banco para testar migrations à mão: `setups/setup-*-docker.*` (Postgres 18 em `localhost:5432`) ou `setups/setup-*-pglite.*`; ambos rodam `bun run db:migrate`.
 

@@ -1,7 +1,15 @@
 # Processo: git, CI/CD, qualidade
 
 
-**Git**: `feat/*`/`fix/*` → PR para `dev` (sandbox: preview Vercel + branch Neon + seed sintético) → CI verde → PR `dev` → `main` (produção, Rolling Releases). Push direto bloqueado por branch protection (`gh`). Conventional Commits via commitlint + husky. release-please na `main`.
+**Git**: `feat/*`/`fix/*` → PR para `dev` (sandbox: preview Vercel + branch Neon + seed sintético) → CI verde → PR `dev` → `main` (produção, Rolling Releases). Push direto deve ser bloqueado por ruleset (ver abaixo; hoje pendente). Conventional Commits via commitlint + husky. release-please na `main`.
+
+**Proteção de `main` e `dev` — pendente (plano do GitHub)**: o repo é privado no plano Free, e tanto branch protection quanto rulesets respondem `HTTP 403 Upgrade to GitHub Pro or make this repository public`. A regra está pronta em `.github/rulesets/protect-main-dev.json` (PR obrigatório com 0 aprovações, checks `lint`/`typecheck`/`test`/`build`, sem force push nem deleção); aplicar após upgrade ou ao tornar o repo público:
+
+```sh
+gh api -X POST repos/AlexGalhardo/claude-code-internet-api/rulesets --input .github/rulesets/protect-main-dev.json
+```
+
+Até lá o fluxo por PR é convenção, não bloqueio. Para o release-please abrir PRs, habilite em Settings → Actions → General "Allow GitHub Actions to create and approve pull requests" (hoje desligado).
 
 **CI (GitHub Actions) — implementado**
 
@@ -14,7 +22,7 @@
 
 Todos os jobs usam `.github/actions/setup-bun` (Bun `1.4.2` via `oven-sh/setup-bun@v2` + cache de `~/.bun/install/cache` + `bun install --frozen-lockfile`), `concurrency` com `cancel-in-progress` e `permissions` mínimas. Actions fixadas por major: `actions/checkout@v7`, `actions/cache@v6`, `github/codeql-action@v4`. Validar localmente: `docker run --rm -v "$PWD:/repo" -w /repo rhysd/actionlint:1.7.12`.
 
-**Releases**: release-please (tipo `simple`, manifest em `0.0.0`) abre/atualiza um PR de release na `main` a cada push; `feat`/`fix` antes da 1.0 sobem o patch (primeira release `0.0.1`), merge do PR cria tag `vX.Y.Z` + GitHub Release e escreve a seção no `CHANGELOG.md` (`feat`→Added, `fix`→Fixed, `perf`/`refactor`/`revert`→Changed; `docs`/`chore`/`ci`/`test`/`build`/`style` ocultos). A seção `[Unreleased]` do `CHANGELOG.md` continua manual. PRs abertos pelo `GITHUB_TOKEN` não disparam workflows, então os checks obrigatórios não rodam no PR de release: o dono faz o merge como admin (branch protection não força admins).
+**Releases**: release-please (tipo `simple`, manifest em `0.0.0`) abre/atualiza um PR de release na `main` a cada push; `feat`/`fix` antes da 1.0 sobem o patch (primeira release `0.0.1`), merge do PR cria tag `vX.Y.Z` + GitHub Release e escreve a seção no `CHANGELOG.md` (`feat`→Added, `fix`→Fixed, `perf`/`refactor`/`revert`→Changed; `docs`/`chore`/`ci`/`test`/`build`/`style` ocultos). A seção `[Unreleased]` do `CHANGELOG.md` continua manual. PRs abertos pelo `GITHUB_TOKEN` não disparam workflows, então os checks obrigatórios não rodam no PR de release: o dono faz o merge como admin (o ruleset permite bypass do papel admin só via PR, nunca push direto).
 
 **CI — alvo (milestones seguintes)**
 - Todo PR: Biome (lint + format) · `tsc --noEmit` · `bun test` (PGlite) · integração (Postgres 18 + Redis services) · diff do `openapi.json` · `next build` + smoke · `ruff` + `pytest` · `bun audit --audit-level=high` · CodeQL · Dependabot.
