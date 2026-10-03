@@ -4,6 +4,7 @@ import { Dialog } from "@base-ui/react/dialog";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState, useTransition } from "react";
 import { scheduleDeletion } from "@/actions/account";
+import { DIALOG_BACKDROP, dialogPopup } from "@/components/ui/dialog";
 import { buttonClass, Notice } from "@/components/ui/form";
 import { getPathname } from "@/i18n/navigation";
 import { DELETION_CONFIRM_SECONDS, secondsLeft } from "@/lib/account-deletion";
@@ -55,8 +56,8 @@ export function DeleteAccount() {
 			>
 				<Dialog.Trigger className={buttonClass("danger", "self-start")}>{t("button")}</Dialog.Trigger>
 				<Dialog.Portal>
-					<Dialog.Backdrop className="fixed inset-0 z-50 bg-black/50" />
-					<Dialog.Popup className="fixed top-1/2 left-1/2 z-50 flex w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 flex-col gap-4 rounded-lg border border-border bg-bg p-6 shadow-xl">
+					<Dialog.Backdrop className={DIALOG_BACKDROP} />
+					<Dialog.Popup className={`${dialogPopup()} flex flex-col gap-4 p-6`}>
 						<Dialog.Title className="font-serif text-xl font-bold">{t("dialogTitle")}</Dialog.Title>
 						<Dialog.Description className="text-sm">{t("dialogBody")}</Dialog.Description>
 						{error && <Notice tone="error">{tAction(error)}</Notice>}

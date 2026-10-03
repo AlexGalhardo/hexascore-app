@@ -14,6 +14,10 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Fixed
+
+- All modals share one centred layout (`components/ui/dialog.ts`): the report dialog no longer sits at the top under the navbar, and the PIX QR, ratings and delete-account dialogs use the same backdrop, z-index and sizing; a test enforces the rule for every Base UI dialog.
+
 ### Changed
 
 - Ingestion: Wikipedia summaries are fetched with 8 concurrent requests per run; `HttpClient`'s per-host throttle is thread-safe (slot reservation under a lock) and Wikipedia hosts allow 20 req/s. The bootstrap workflow gains a `skip_catalog` input to resume enrichment, covers and snapshot without re-running the Wikidata catalog job.
