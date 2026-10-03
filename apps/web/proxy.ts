@@ -40,7 +40,7 @@ export default function proxy(request: NextRequest): NextResponse | Response {
 	// Next reads the nonce from the request CSP header while rendering and stamps it on its own scripts; next-intl
 	// copies `request.headers` into the request it forwards, so setting them here reaches the render.
 	const nonce = createNonce();
-	const csp = pageCsp(nonce, pathname, process.env.NODE_ENV === "development");
+	const csp = pageCsp(nonce, pathname, process.env.NODE_ENV === "development", process.env.VERCEL_ENV === "preview");
 	request.headers.set("x-nonce", nonce);
 	request.headers.set("Content-Security-Policy", csp);
 	const response = intl(request);
