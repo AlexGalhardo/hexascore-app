@@ -1,5 +1,7 @@
+import { getTranslations } from "next-intl/server";
+import type { ReactNode } from "react";
 import { type DocPageProps, docMetadata, enterDocPage } from "@/components/docs/metadata";
-import { C, Code, DocTitle, H2, P } from "@/components/docs/prose";
+import { Code, DocTitle, H2, P, richCode } from "@/components/docs/prose";
 
 export const generateMetadata = docMetadata("changelog");
 
@@ -8,73 +10,53 @@ Deprecation: @1798761600
 Sunset: Tue, 01 Jun 2027 00:00:00 GMT
 Link: <https://hexascore.app/docs/changelog>; rel="deprecation"`;
 
+// Static files (not localized routes), so plain anchors instead of the i18n Link.
+const file = (href: string) => (chunks: ReactNode) => <a href={href}>{chunks}</a>;
+
 export default async function ChangelogPage(props: DocPageProps) {
 	await enterDocPage(props);
+	const [t, nav] = await Promise.all([getTranslations("docs.changelog"), getTranslations("api.docs.nav")]);
 	return (
 		<>
-			<DocTitle lead="The version is part of the path. v1 only changes in backwards-compatible ways.">
-				Changelog & versioning
-			</DocTitle>
+			<DocTitle lead={t("lead")}>{nav("changelog")}</DocTitle>
 
-			<H2 id="policy">Versioning policy</H2>
-			<P>
-				Within <C>/v1</C> we only make additive changes: new endpoints, new optional parameters, new response
-				fields, new enum values in <C>categories</C> keys for new types, and new error <C>detail</C> texts.
-				Ignore unknown fields and do not rely on field order.
-			</P>
-			<P>
-				Breaking changes — removing or renaming a field, changing a type, making a parameter required — ship as
-				a new path (<C>/v2</C>). Error <C>code</C> values, category keys and sort names are part of the
-				contract.
-			</P>
+			<H2 id="policy">{t("policyHeading")}</H2>
+			<P>{t.rich("policyAdditive", richCode)}</P>
+			<P>{t.rich("policyBreaking", richCode)}</P>
 
-			<H2 id="deprecation">Deprecation and sunset</H2>
+			<H2 id="deprecation">{t("deprecationHeading")}</H2>
 			<ul className="my-3 list-disc space-y-2 pl-6">
-				<li>A deprecated version keeps working for at least 6 months after its successor is released.</li>
-				<li>
-					Its responses carry <C>Deprecation</C> (RFC 9745) and <C>Sunset</C> (RFC 8594) headers with the date
-					it stops working, plus a <C>Link</C> to this page.
-				</li>
-				<li>
-					Account owners with recent traffic on the old version are emailed at deprecation and 30 days before
-					sunset.
-				</li>
+				<li>{t("deprecationWindow")}</li>
+				<li>{t.rich("deprecationHeaders", richCode)}</li>
+				<li>{t("deprecationEmail")}</li>
 			</ul>
-			<Code title="Headers on a deprecated version">{DEPRECATION}</Code>
+			<Code title={t("deprecationTitle")}>{DEPRECATION}</Code>
 
-			<H2 id="changes">Changes</H2>
+			<H2 id="changes">{t("changesHeading")}</H2>
 			<section className="border-t border-border py-4">
-				<h3 className="font-semibold">v1 — translated OpenAPI documents (docs only)</h3>
+				<h3 className="font-semibold">{t("openapiI18nTitle")}</h3>
 				<ul className="mt-2 list-disc space-y-1 pl-6 text-sm leading-6">
 					<li>
-						<a href="/openapi.pt-BR.json">/openapi.pt-BR.json</a> and{" "}
-						<a href="/openapi.es.json">/openapi.es.json</a>: the same contract as <C>/openapi.json</C> with
-						descriptions in Portuguese and Spanish. Paths, field names and enum values are unchanged.
+						{t.rich("openapiI18nBody", {
+							...richCode,
+							ptBr: file("/openapi.pt-BR.json"),
+							es: file("/openapi.es.json"),
+						})}
 					</li>
 				</ul>
 			</section>
 			<section className="border-t border-border py-4">
-				<h3 className="font-semibold">v1 — time to beat (additive)</h3>
+				<h3 className="font-semibold">{t("timeToBeatTitle")}</h3>
 				<ul className="mt-2 list-disc space-y-1 pl-6 text-sm leading-6">
-					<li>
-						<C>ItemDetail.time_to_beat</C>: crowdsourced median hours and report count for <C>main</C>,{" "}
-						<C>extras</C> and <C>completionist</C> on games (<C>median_hours</C> is <C>null</C> under 3
-						reports); <C>null</C> for movies, series and books.
-					</li>
+					<li>{t.rich("timeToBeatBody", richCode)}</li>
 				</ul>
 			</section>
 			<section className="border-t border-border py-4">
-				<h3 className="font-semibold">v1 — first release</h3>
+				<h3 className="font-semibold">{t("firstTitle")}</h3>
 				<ul className="mt-2 list-disc space-y-1 pl-6 text-sm leading-6">
-					<li>
-						Lists, details and genres for <C>games</C>, <C>movies</C>, <C>series</C> and <C>books</C>.
-					</li>
-					<li>
-						<C>/search</C>, <C>/lookup</C> by external id and <C>/me/usage</C>.
-					</li>
-					<li>
-						OpenAPI 3.1 document at <a href="/openapi.json">/openapi.json</a>.
-					</li>
+					<li>{t.rich("firstLists", richCode)}</li>
+					<li>{t.rich("firstEndpoints", richCode)}</li>
+					<li>{t.rich("firstOpenapi", { openapi: file("/openapi.json") })}</li>
 				</ul>
 			</section>
 		</>

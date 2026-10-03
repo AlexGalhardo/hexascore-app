@@ -1,0 +1,156 @@
+{
+	"docs": {
+		"copy": "Copiar",
+		"copied": "Copiado",
+		"quickstart": {
+			"lead": "Notas da comunidade para jogos, filmes, séries e livros — de 0 a 100, em seis categorias por item — por meio de uma API JSON somente leitura.",
+			"keyHeading": "1. Crie uma chave de API",
+			"keyBody": "<dashboard>Abra o painel da API</dashboard> e crie uma chave. Ela começa com <code>hx_live_</code> e é exibida uma única vez — guarde-a em uma variável de ambiente, nunca em código do lado do cliente:",
+			"freePlan": "O plano Free inclui {quota} requisições no total — o suficiente para desenvolver e testar uma integração.",
+			"requestHeading": "2. Faça sua primeira requisição",
+			"requestBody": "A URL base é <code>{baseUrl}</code>. Todo endpoint é um <code>GET</code>. Aqui estão os cinco jogos mais bem avaliados:",
+			"hostNote": "A mesma API também responde no domínio do site: <code>{siteUrl}</code>. Caminhos, parâmetros e respostas são idênticos.",
+			"responseHeading": "3. Leia a resposta",
+			"responseBody": "Listas retornam <code>data</code> e um <code>next_cursor</code> para a próxima página. Os nomes de campos usam snake_case e as datas seguem a ISO 8601. <code>score</code> e <code>categories</code> são <code>null</code> até o item ter 5 avaliações.",
+			"nextHeading": "Próximos passos",
+			"nextDetail": "Busque um item com <code>{path}</code> para obter ids externos, trailers e a sinopse licenciada.",
+			"nextLookup": "Converta ids que você já tem com <code>{path}</code> (também <code>steam</code>, <code>igdb</code>, <code>tmdb</code>, <code>isbn13</code>, <code>openlibrary</code>, <code>wikidata</code>).",
+			"nextGuides": "Trate <errors>erros</errors> e <limits>limites de requisições</limits> e depois explore a <reference>referência da API</reference>.",
+			"sdkHeading": "SDKs",
+			"sdkBody": "Clientes tipados são gerados a partir do <openapi>documento OpenAPI</openapi>: TypeScript (<code>{tsPackage}</code>) e Python (<code>{pyPackage}</code>). Eles ainda não estão no npm/PyPI — até a primeira versão, gere-os a partir de <code>sdks/</code> no repositório.",
+			"sdkTitle": "SDK TypeScript"
+		},
+		"authentication": {
+			"lead": "Toda requisição é autenticada com uma chave de API secreta enviada como token Bearer.",
+			"bearerHeading": "Token Bearer",
+			"bearerBody": "Envie a chave no cabeçalho <code>Authorization</code>. As chaves têm o formato <code>hx_live_</code> seguido de 32 letras e dígitos. Chaves na query string não são aceitas, para que nunca apareçam em logs de acesso ou no histórico do navegador.",
+			"unauthorized": "Uma chave ausente, malformada, desconhecida ou revogada retorna <code>401</code> com <link>{problemCode}</link> e o cabeçalho <code>WWW-Authenticate: Bearer</code>.",
+			"managingHeading": "Gerenciando chaves",
+			"manageCreate": "Crie e revogue chaves em <link>/profile/api</link> (exige e-mail verificado, até 5 chaves ativas).",
+			"manageOnce": "A chave completa é exibida uma única vez. Guardamos apenas um hash SHA-256, então não conseguimos recuperá-la para você.",
+			"manageRevoke": "A revogação é imediata. Para rotacionar, crie uma chave nova, coloque-a em produção e só então revogue a antiga.",
+			"manageShared": "Todas as chaves de uma conta compartilham o mesmo plano, a mesma cota e o mesmo limite de requisições por segundo.",
+			"securityHeading": "Mantenha as chaves em segredo",
+			"securityNote": "Chame a API a partir do seu servidor. Uma chave embutida em uma página web ou em um app mobile pode ser extraída e consumir sua cota. Se uma chave vazar, revogue-a imediatamente."
+		},
+		"errors": {
+			"lead": "Os erros usam problem details da RFC 9457 com um código estável, legível por máquina.",
+			"formatHeading": "Formato",
+			"formatBody": "Todo erro tem <code>Content-Type: application/problem+json</code>. Decida pelo <code>code</code> (estável), e não por <code>title</code> ou <code>detail</code> (textos para humanos que podem mudar). <code>type</code> aponta para a seção correspondente abaixo, e <code>request_id</code> é igual ao cabeçalho <code>X-Request-Id</code> — informe-o ao falar com o suporte.",
+			"exampleTitle": "Exemplo",
+			"codesHeading": "Códigos",
+			"when": "Quando",
+			"fix": "O que fazer",
+			"codes": {
+				"bad_request": {
+					"title": "Requisição inválida",
+					"when": "Um parâmetro de query é desconhecido ou está fora do intervalo, o <code>cursor</code> foi adulterado ou pertence a outra consulta, ou <code>limit</code> é maior que o tamanho de página do seu plano (10 no Free). <code>errors</code> lista cada problema com seu <code>path</code>.",
+					"fix": "Corrija os parâmetros listados. Não conta na sua cota quando os parâmetros falham na validação."
+				},
+				"unauthorized": {
+					"title": "Chave de API ausente ou inválida",
+					"when": "Sem o cabeçalho <code>Authorization: Bearer</code>, chave malformada, ou uma chave que não existe ou foi revogada.",
+					"fix": "Confira o cabeçalho e a chave em <link>/profile/api</link>. Nunca repita automaticamente."
+				},
+				"payment_required": {
+					"title": "Cota esgotada",
+					"when": "A cota acabou: as 100 requisições vitalícias do Free, ou a cota mensal mais os créditos pré-pagos nos planos pagos. O corpo inclui <code>plan</code> e <code>limit</code>.",
+					"fix": "Faça upgrade ou compre créditos em <link>/pricing</link>. As cotas pagas renovam no dia 1º de cada mês (UTC)."
+				},
+				"forbidden": {
+					"title": "Acesso proibido",
+					"when": "A conta dona da chave está suspensa.",
+					"fix": "Fale com a gente em <link>/contact</link> informando o <code>request_id</code>."
+				},
+				"not_found": {
+					"title": "Não encontrado",
+					"when": "Id de item desconhecido, um id de outro tipo (por exemplo, um id de jogo em <code>/movies</code>), um caminho de tipo desconhecido ou nenhum resultado em <code>/lookup</code>.",
+					"fix": "Confira o id e o tipo. Lookups exigem um id exato (por exemplo, tt0111161)."
+				},
+				"rate_limited": {
+					"title": "Requisições demais",
+					"when": "Mais requisições por segundo do que o seu plano permite. O cabeçalho <code>Retry-After</code> informa quantos segundos esperar. Não conta na sua cota.",
+					"fix": "Espere os segundos de Retry-After e tente de novo; espace os picos ou faça upgrade para um limite maior."
+				},
+				"internal_error": {
+					"title": "Erro interno",
+					"when": "Algo falhou do nosso lado. A requisição é devolvida à sua cota.",
+					"fix": "Tente de novo com backoff exponencial. Se persistir, envie-nos o <code>request_id</code>."
+				},
+				"service_unavailable": {
+					"title": "Serviço indisponível",
+					"when": "Uma dependência está temporariamente fora do ar. Vem acompanhado de <code>Retry-After</code>.",
+					"fix": "Tente de novo após o intervalo indicado."
+				}
+			},
+			"retriesHeading": "Novas tentativas",
+			"retriesBody": "Repita apenas <code>429</code>, <code>500</code> e <code>503</code>, respeitando <code>Retry-After</code> quando presente e usando backoff exponencial nos demais casos. Todo endpoint é um <code>GET</code> somente leitura, então repetir é sempre seguro."
+		},
+		"pagination": {
+			"lead": "Endpoints de listagem usam cursores opacos: estáveis diante de inserções e rápidos em qualquer profundidade.",
+			"howHeading": "Como funciona",
+			"howBody": "<code>GET /games</code>, <code>/movies</code>, <code>/series</code> e <code>/books</code> retornam <code>{shape}</code>. Para obter a próxima página, repita a mesma requisição com <code>{param}</code>. Quando <code>next_cursor</code> for <code>null</code>, você chegou ao fim.",
+			"sameParams": "Mantenha todos os outros parâmetros idênticos. Um cursor de outro <code>sort</code> retorna <code>400</code>.",
+			"opaque": "Cursores são opacos: não os interprete nem os monte, pois o formato pode mudar.",
+			"stable": "A ordenação é estável: empates são desfeitos pelo id do item, e itens sem nota ou sem data sempre ficam por último.",
+			"limitHeading": "Tamanho da página",
+			"limitBody": "<code>limit</code> é 10 por padrão. O máximo depende do seu plano: {free} no Free, {paid} no Pro e no Business. Um valor maior retorna <code>400 bad_request</code> — a API nunca trunca em silêncio. Cada página conta como uma requisição.",
+			"exampleHeading": "Exemplo: percorrer todas as páginas",
+			"searchHeading": "Busca",
+			"searchBody": "<code>GET /search</code> não é paginado: retorna os melhores resultados (até 50) para uma consulta, do mais relevante para o menos relevante."
+		},
+		"limits": {
+			"lead": "Cada plano tem uma cota de requisições, um limite de requisições por segundo e um tamanho máximo de página.",
+			"plansHeading": "Planos",
+			"colPlan": "Plano",
+			"colQuota": "Cota",
+			"colRate": "Requisições / segundo",
+			"colPageSize": "Tamanho máx. da página",
+			"colCredits": "Créditos",
+			"lifetimeQuota": "{quota} no total",
+			"monthlyQuota": "{quota} / mês",
+			"creditPacks": "Pacotes de {requests} requisições",
+			"pricing": "Preços e upgrades: <link>/pricing</link>. Créditos são requisições pré-pagas, gastas só depois que a cota mensal acaba; eles não expiram com a virada do mês.",
+			"countingHeading": "O que conta",
+			"countEvery": "Toda requisição autenticada que chega a um endpoint conta como uma, inclusive as que retornam 404.",
+			"countNot": "Não contam: <code>401</code>, <code>400</code> por parâmetros inválidos, <code>429</code> e qualquer <code>5xx</code> (devolvida).",
+			"countUsage": "<code>GET /me/usage</code> também conta — quando puder, leia os cabeçalhos de resposta das suas chamadas normais.",
+			"countReset": "As cotas pagas renovam às 00:00 UTC do dia 1º de cada mês. A cota do Free nunca renova.",
+			"headersHeading": "Cabeçalhos de resposta",
+			"headersBody": "Respostas bem-sucedidas informam sua situação (campos de cabeçalho RateLimit do IETF):",
+			"headersTitle": "Cabeçalhos",
+			"colHeader": "Cabeçalho",
+			"colMeaning": "Significado",
+			"headerLimit": "Requisições no período atual (a cota do seu plano).",
+			"headerRemaining": "Requisições restantes antes do 402 (sem contar os créditos).",
+			"headerReset": "Segundos até a cota renovar; 0 para a cota vitalícia do Free.",
+			"headerQuota": "O mesmo que RateLimit-Remaining.",
+			"headerRetry": "Em 429 e 503: segundos a esperar antes de tentar de novo.",
+			"exceedingHeading": "Quando você atinge um limite",
+			"exceedingNote": "Requisições demais por segundo → <rateLimited>429 rate_limited</rateLimited>: espere <code>Retry-After</code> segundos. Cota (e créditos) esgotada → <paymentRequired>402 payment_required</paymentRequired>: faça upgrade ou compre créditos; tentar de novo não adianta até a renovação."
+		},
+		"changelog": {
+			"lead": "A versão faz parte do caminho. A v1 só muda de forma retrocompatível.",
+			"policyHeading": "Política de versionamento",
+			"policyAdditive": "Dentro de <code>/v1</code> fazemos apenas mudanças aditivas: novos endpoints, novos parâmetros opcionais, novos campos na resposta, novos valores de enum nas chaves de <code>categories</code> para novos tipos e novos textos de <code>detail</code> nos erros. Ignore campos desconhecidos e não dependa da ordem dos campos.",
+			"policyBreaking": "Mudanças incompatíveis — remover ou renomear um campo, mudar um tipo, tornar um parâmetro obrigatório — saem em um novo caminho (<code>/v2</code>). Os valores de <code>code</code> dos erros, as chaves de categoria e os nomes de ordenação fazem parte do contrato.",
+			"deprecationHeading": "Descontinuação e desativação",
+			"deprecationWindow": "Uma versão descontinuada continua funcionando por pelo menos 6 meses após o lançamento da sucessora.",
+			"deprecationHeaders": "Suas respostas trazem os cabeçalhos <code>Deprecation</code> (RFC 9745) e <code>Sunset</code> (RFC 8594) com a data em que ela deixa de funcionar, além de um <code>Link</code> para esta página.",
+			"deprecationEmail": "Donos de contas com tráfego recente na versão antiga recebem um e-mail na descontinuação e 30 dias antes da desativação.",
+			"deprecationTitle": "Cabeçalhos em uma versão descontinuada",
+			"changesHeading": "Mudanças",
+			"openapiI18nTitle": "v1 — documentos OpenAPI traduzidos (só documentação)",
+			"openapiI18nBody": "<ptBr>/openapi.pt-BR.json</ptBr> e <es>/openapi.es.json</es>: o mesmo contrato de <code>/openapi.json</code> com descrições em português e espanhol. Caminhos, nomes de campos e valores de enum não mudam.",
+			"timeToBeatTitle": "v1 — tempo para zerar (aditivo)",
+			"timeToBeatBody": "<code>ItemDetail.time_to_beat</code>: mediana de horas e número de relatos da comunidade para <code>main</code>, <code>extras</code> e <code>completionist</code> em jogos (<code>median_hours</code> é <code>null</code> com menos de 3 relatos); <code>null</code> para filmes, séries e livros.",
+			"firstTitle": "v1 — primeira versão",
+			"firstLists": "Listas, detalhes e gêneros para <code>games</code>, <code>movies</code>, <code>series</code> e <code>books</code>.",
+			"firstEndpoints": "<code>/search</code>, <code>/lookup</code> por id externo e <code>/me/usage</code>.",
+			"firstOpenapi": "Documento OpenAPI 3.1 em <openapi>/openapi.json</openapi>."
+		},
+		"reference": {
+			"lead": "Todos os endpoints, parâmetros e schemas de resposta da API pública, gerados a partir do documento OpenAPI."
+		}
+	}
+}
