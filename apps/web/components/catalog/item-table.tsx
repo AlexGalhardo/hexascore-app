@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { CoverThumb } from "@/components/catalog/cover-thumb";
 import { ScoreBadge } from "@/components/score/score-badge";
 import { Link } from "@/i18n/navigation";
 import type { ItemSummary } from "@/lib/catalog/types";
@@ -25,7 +26,7 @@ export async function ItemTable({ items, type, rankFrom = null }: Props) {
 
 	return (
 		<>
-			<table className="hidden w-full border-collapse text-sm md:table">
+			<table className="hidden w-full table-fixed border-collapse text-sm md:table">
 				<thead className="sticky top-0 bg-bg">
 					<tr className="border-b border-border text-left text-xs uppercase tracking-wide text-muted">
 						{rankFrom !== null ? <th className="w-10 py-2 pr-2 font-medium">#</th> : null}
@@ -48,13 +49,25 @@ export async function ItemTable({ items, type, rankFrom = null }: Props) {
 							{rankFrom !== null ? (
 								<td className="py-2 pr-2 font-mono text-muted tabular-nums">{rankFrom + i}</td>
 							) : null}
-							<td className="py-2 pr-4">
-								<Link href={itemHref(item.type, item.slug)} className="font-medium hover:underline">
-									{item.title}
-								</Link>
-								<span className="block truncate text-xs text-muted">
-									{type ? item.genres.join(", ") : `${tt(item.type)} · ${item.genres.join(", ")}`}
-								</span>
+							{/* table-fixed + min-w-0: long titles and genre lists truncate instead of widening the page. */}
+							<td className="min-w-0 py-2 pr-4">
+								<div className="flex min-w-0 items-center gap-3">
+									<CoverThumb src={item.coverUrl} />
+									<div className="min-w-0">
+										<Link
+											href={itemHref(item.type, item.slug)}
+											className="block truncate font-medium hover:underline"
+											title={item.title}
+										>
+											{item.title}
+										</Link>
+										<span className="block truncate text-xs text-muted">
+											{type
+												? item.genres.join(", ")
+												: `${tt(item.type)} · ${item.genres.join(", ")}`}
+										</span>
+									</div>
+								</div>
 							</td>
 							<td className="py-2 pr-4 font-mono tabular-nums">{item.year ?? "—"}</td>
 							<td className="py-2 pr-4">
@@ -82,6 +95,7 @@ export async function ItemTable({ items, type, rankFrom = null }: Props) {
 								{rankFrom + i}
 							</span>
 						) : null}
+						<CoverThumb src={item.coverUrl} size="md" />
 						<div className="min-w-0 flex-1">
 							<Link href={itemHref(item.type, item.slug)} className="font-medium">
 								{item.title}
