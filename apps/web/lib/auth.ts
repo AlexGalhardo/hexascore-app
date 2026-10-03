@@ -19,7 +19,15 @@ import { db } from "./db/client";
 import * as schema from "./db/schema";
 import { sendEmail } from "./email";
 import { env } from "./env";
-import { NICKNAME_MAX, NICKNAME_MIN, PASSWORD_MAX, PASSWORD_MIN, passwordSchema } from "./validation";
+import {
+	NICKNAME_MAX,
+	NICKNAME_MIN,
+	NICKNAME_PATTERN,
+	PASSWORD_MAX,
+	PASSWORD_MIN,
+	passwordSchema,
+	signupEmailSchema,
+} from "./validation";
 
 // Every endpoint that accepts a new password, including the admin plugin's, enforces the same rules.
 const PASSWORD_PATHS = new Set([
@@ -94,6 +102,12 @@ export const auth = betterAuth({
 			if (BOT_PATHS.has(ctx.path) && ctx.request && (await isBotRequest(ctx.headers))) {
 				throw new APIError("FORBIDDEN", { message: "Request blocked.", code: "BOT_DETECTED" });
 			}
+			if (
+				ctx.path === "/sign-up/email" &&
+				!signupEmailSchema.safeParse((ctx.body as { email?: unknown })?.email).success
+			) {
+				throw new APIError("BAD_REQUEST", { message: "Invalid email.", code: "INVALID_EMAIL" });
+			}
 			if (!PASSWORD_PATHS.has(ctx.path)) return;
 			const body = ctx.body as { password?: unknown; newPassword?: unknown } | undefined;
 			const candidate = body?.newPassword ?? body?.password;
@@ -106,7 +120,11 @@ export const auth = betterAuth({
 		}),
 	},
 	plugins: [
-		username({ minUsernameLength: NICKNAME_MIN, maxUsernameLength: NICKNAME_MAX }),
+		username({
+			minUsernameLength: NICKNAME_MIN,
+			maxUsernameLength: NICKNAME_MAX,
+			usernameValidator: (value) => NICKNAME_PATTERN.test(value),
+		}),
 		// Passwordless lets Google/passkey-only accounts use 2FA; accounts with a password must still confirm it.
 		twoFactor({ issuer: APP_NAME, allowPasswordless: true }),
 		passkey({ rpName: APP_NAME }),

@@ -8,22 +8,10 @@ export async function Footer() {
 	return (
 		<footer className="mt-16 border-t border-border">
 			<div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 px-4 py-6 text-sm text-muted">
-				<span>© {APP_NAME}</span>
+				<span className="mr-auto">© 2026 {APP_NAME}</span>
 				<Link href="/terms">{t("terms")}</Link>
 				<Link href="/policy">{t("privacy")}</Link>
 				<Link href="/contact">{t("contact")}</Link>
-				<Link href="/pricing">{t("pricing")}</Link>
-				<span className="ml-auto flex gap-3">
-					<Link href="/" locale="en">
-						EN
-					</Link>
-					<Link href="/" locale="pt-BR">
-						PT
-					</Link>
-					<Link href="/" locale="es">
-						ES
-					</Link>
-				</span>
 			</div>
 		</footer>
 	);

@@ -18,7 +18,10 @@ test.describe("API docs", () => {
 	test("Scalar reference renders under the strict CSP", async ({ page }) => {
 		await page.goto("/docs/reference");
 		// Scalar renders each operation id/summary; "List games" style summaries come from openapi.json.
-		await expect(page.getByText(/games/i).first()).toBeVisible({ timeout: 30_000 });
+		// Scalar collapses its sidebar on mobile, so match the first rendered occurrence, not the first in the DOM.
+		await expect(page.getByRole("main").getByText(/games/i).filter({ visible: true }).first()).toBeVisible({
+			timeout: 30_000,
+		});
 		await expect(page.getByText("Loading the API reference…")).toBeHidden();
 		// Scalar ships its own markup; only our shell is held to axe here.
 		await expectAccessible(page, { exclude: [".scalar-app", ".scalar-api-reference", "[class*='scalar']"] });

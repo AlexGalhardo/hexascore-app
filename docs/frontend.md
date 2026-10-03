@@ -23,7 +23,8 @@ Locale: EN sem prefixo, `/pt-br/…`, `/es/…`. Slugs de rota em inglês nos 3 
 
 **Formulários** (validação zod idêntica cliente/servidor):
 - Senha: 8–32, ≥ 1 maiúscula, 1 minúscula, 1 número, 1 especial; botão olho. Rodapé do login: "Não tem conta ainda? Criar conta"; do signup: "Já tem conta? Entrar". Ambos com Google.
-- Nickname: 4–16 `[a-zA-Z0-9_]`, único; avatar placeholder mostra a 1ª letra em MAIÚSCULA enquanto digita.
+- Nickname: 4–16 letras minúsculas `[a-z]` (sem números, espaços ou símbolos), único; o input normaliza enquanto digita (`normalizeNickname`) e o plugin username do Better Auth valida no servidor (`usernameValidator`). No signup, e-mail tem no máximo 36 caracteres (`signupEmailSchema`, também checado no hook de `/sign-up/email`) e senha 32; contas antigas com e-mail maior continuam logando e recuperando senha.
+- **Navbar** (`components/layout/navbar.tsx` + `nav-shell.tsx`, fixa no topo): marca "HexaScore" ("Hexa" verde, "Score" azul); no desktop busca ocupa o espaço até os botões (tema, Entrar ou menu da conta, idioma por último) e os links com ícone (Jogos, Filmes, Séries, Livros, API, Preços) ficam numa linha `justify-between`; no mobile só marca + lupa (abre a busca) + menu hambúrguer (links, ações e idioma). Idioma: `locale-menu.tsx` mostra o idioma atual. Footer: só "© 2026 HexaScore", Termos, Privacidade e Contato.
 - Contato: nome + e-mail preenchidos e `disabled` se logado (servidor usa a sessão); select "Dúvidas" / "Sugestões & Feedback" / "Bugs e Problemas Técnicos"; textarea 5 linhas, 32–512 caracteres com contador `0/512`.
 - Excluir conta: modal explicando os 30 dias, botão confirmar desabilitado por 10s com contagem.
 
@@ -52,7 +53,7 @@ Locale: EN sem prefixo, `/pt-br/…`, `/es/…`. Slugs de rota em inglês nos 3 
 - **Nota visível**: `score` e médias por categoria só aparecem com `rating_count >= 5` (`MIN_RATINGS_FOR_SCORE`); abaixo disso o DTO traz `null` e a UI mostra "avaliações insuficientes". Filtros de nota também exigem o limiar.
 - **Busca**: `pg_trgm` `word_similarity` no título (limiar 0.2 via `set_config` local na transação, tolera erros como "zleda" → "Zelda") OU `tsvector` (`websearch_to_tsquery('simple')`) em título + sinopse, em todos os idiomas; resultado no idioma pedido com fallback para inglês.
 - **Página do item**: `generateMetadata` (título, descrição, OpenGraph, `alternates` hreflang); `<RatingPanel />` é o slot do formulário de avaliação (0.3) e hoje só linka para login; modal "ver notas dos usuários" busca `GET /api/items/[id]/ratings?cursor=` (só perfis públicos, não banidos, sem exclusão agendada); trailers `youtube-nocookie` só carregam com cookie `consent=all` ou clique; links de afiliado com `rel="sponsored nofollow noopener"` e aviso; sinopse com licença + fonte e aviso quando o idioma caiu para inglês.
-- **Autocomplete**: `components/layout/search-autocomplete.tsx` (Base UI `Autocomplete`, debounce 200 ms, `GET /api/search/suggest?q=&locale=`). É um `<form action="/<locale>/search">` com `name="q"`: sem JS, ou com Enter sem sugestão destacada, vira busca normal.
+- **Autocomplete**: `components/layout/search-autocomplete.tsx` (Base UI `Autocomplete`, debounce 200 ms, `GET /api/search/suggest?q=&locale=`, 8 resultados por relevância com capa, tipo, ano e nota final; ↑/↓ percorrem, Enter abre). É um `<form action="/<locale>/search">` com `name="q"`: sem JS, ou com Enter sem sugestão destacada, vira busca normal.
 - **jsonb**: `items.meta`/`items.external_ids` são validados com zod na leitura (`lib/catalog/jsonb.ts`) de forma leniente — campo inválido é descartado e logado, a página não quebra. Ids externos têm formato restrito porque viram URLs; URLs vindas do banco só passam se forem `https:` (`lib/safe-url.ts`).
 
 ## Avaliação e social (0.3)

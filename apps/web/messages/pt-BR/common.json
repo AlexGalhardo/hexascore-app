@@ -9,27 +9,27 @@
 		"books": "Livros",
 		"search": "Buscar jogos, filmes, séries, livros…",
 		"login": "Entrar",
-		"signup": "Criar conta",
 		"theme": "Alternar tema",
-		"docs": "API",
 		"profile": "Perfil",
 		"logout": "Sair",
 		"account": "Menu da conta",
 		"api": "API",
 		"feed": "Feed",
 		"publicProfile": "Minha página",
-		"sections": "Seções"
+		"sections": "Seções",
+		"pricing": "Preços",
+		"language": "Idioma",
+		"openSearch": "Abrir busca",
+		"menu": "Menu"
 	},
 	"home": {
 		"title": "Todo jogo, filme, série e livro — avaliado pelas pessoas, categoria por categoria.",
-		"subtitle": "Sem resenhas em texto. Seis categorias, de 0 a 100, numa nota única da comunidade.",
 		"explore": "Explorar"
 	},
 	"footer": {
 		"terms": "Termos",
 		"privacy": "Privacidade",
-		"contact": "Contato",
-		"pricing": "Preços da API"
+		"contact": "Contato"
 	},
 	"cookies": {
 		"text": "Usamos apenas cookies essenciais (sessão e preferências). Vídeos do YouTube só carregam se você permitir.",
