@@ -32,6 +32,10 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Fixed
+
+- Public API rejects empty query values (`?min_score=`, `?limit=`) with a 400 problem instead of coercing them to 0 (found by Schemathesis on the preview).
+
 ### Changed
 
 - Every link looks like a small button: padded and rounded, inverted colours on hover (black/white in light, white/black in dark), no underline effect (`globals.css`; `[data-plain]` opts out the wordmark and Scalar).
