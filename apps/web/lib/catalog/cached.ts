@@ -25,6 +25,19 @@ export const searchItems = unstable_cache(
 	{ tags: [CATALOG_TAG], revalidate: HOUR },
 );
 
+const DAY = 24 * HOUR;
+
+export const countItems = unstable_cache(() => repo.countItems(db), ["catalog:count"], {
+	tags: [CATALOG_TAG],
+	revalidate: DAY,
+});
+
+export const listSitemapItems = unstable_cache(
+	(offset: number, limit: number) => repo.listSitemapItems(db, offset, limit),
+	["catalog:sitemap"],
+	{ tags: [CATALOG_TAG], revalidate: DAY },
+);
+
 export const listGenres = unstable_cache((type: ItemType) => repo.listGenres(db, type), ["catalog:genres"], {
 	tags: [CATALOG_TAG],
 	revalidate: HOUR,

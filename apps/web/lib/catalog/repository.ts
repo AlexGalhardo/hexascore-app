@@ -245,6 +245,24 @@ export async function getItemIdBySlug(db: Database, type: ItemType, slug: string
 	return row?.id ?? null;
 }
 
+export type SitemapItem = { type: ItemType; slug: string; updatedAt: string };
+
+export async function countItems(db: Database): Promise<number> {
+	const [row] = await db.select({ n: sql<number>`count(*)::int` }).from(items);
+	return row?.n ?? 0;
+}
+
+/** Stable page of items for the sitemap, ordered by id (uuid v7, so new items land in the last chunk). */
+export async function listSitemapItems(db: Database, offset: number, limit: number): Promise<SitemapItem[]> {
+	const rows = await db
+		.select({ type: items.type, slug: items.slug, updatedAt: items.updatedAt })
+		.from(items)
+		.orderBy(asc(items.id))
+		.offset(offset)
+		.limit(limit);
+	return rows.map((r) => ({ type: r.type, slug: r.slug, updatedAt: r.updatedAt.toISOString() }));
+}
+
 export const LOOKUP_SOURCES = ["imdb", "steam", "igdb", "tmdb", "isbn13", "openlibrary", "wikidata"] as const;
 export type LookupSource = (typeof LOOKUP_SOURCES)[number];
 
