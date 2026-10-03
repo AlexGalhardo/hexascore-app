@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
 	reactStrictMode: true,
 	poweredByHeader: false,
 	typedRoutes: true,
+	// PGlite loads its WASM/data files relative to its own module URL; bundling breaks that path.
+	serverExternalPackages: ["@electric-sql/pglite"],
 };
 
 export default withNextIntl(nextConfig);
