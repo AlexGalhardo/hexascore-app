@@ -12,6 +12,9 @@ Codename `hexascore`; final brand name is pending.
 - Only stable, pinned dependency versions (no `^`, no beta/rc/canary). Ask before adding a dependency.
 - Bun is the package manager. Python code lives in `webscrappings/` and uses uv.
 - Follow the Karpathy guidelines (think first, simplicity, surgical changes, verifiable goals), `ponytail` (YAGNI, minimal solution) and `graphify` (map the code before broad searches). Vendored skills live in `.claude/skills/`.
+- Validate every schema and piece of data with zod wherever possible (env, actions, forms, API params/responses, webhooks, external responses, jsonb reads); infer types with `z.infer`.
+- Env vars are validated with zod in `apps/web/lib/env.ts` before build and server start; failures print every bad variable explicitly.
+- Handle errors and fallbacks everywhere: timeouts on external calls, `notFound()`/404, `error.tsx`/500, RFC 9457 problems with 402/404/429/500 in the API, graceful degradation of optional services.
 - Security rules in `docs/architecture.md` are mandatory.
 - All reference documentation lives in `docs/` (architecture, data model, API, frontend, design system, payments, ingestion, security, testing, process). Update the matching doc in the same change.
 - Record notable changes in `CHANGELOG.md` (Keep a Changelog).
