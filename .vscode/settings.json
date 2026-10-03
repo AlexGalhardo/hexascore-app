@@ -50,9 +50,7 @@
 		"**/.trunk/*logs/": true,
 		"**/.trunk/*plugins/": true
 	},
-	"errorLens.excludeBySource": [
-		"dockerfile-utils(37)"
-	],
+	"errorLens.excludeBySource": ["dockerfile-utils(37)"],
 	"[typescript]": {},
 	"files.associations": {
 		"*.ts": "typescript"

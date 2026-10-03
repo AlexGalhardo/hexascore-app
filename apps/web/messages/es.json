@@ -1,0 +1,27 @@
+{
+	"meta": {
+		"description": "Puntuaciones de la comunidad para juegos, películas, series y libros — valorados en 6 categorías de 0 a 100."
+	},
+	"nav": {
+		"games": "Juegos",
+		"movies": "Películas",
+		"series": "Series",
+		"books": "Libros",
+		"search": "Buscar juegos, películas, series, libros…",
+		"login": "Entrar",
+		"signup": "Crear cuenta",
+		"theme": "Cambiar tema",
+		"docs": "API"
+	},
+	"home": {
+		"title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
+		"subtitle": "Sin reseñas de texto. Seis categorías, de 0 a 100, en una sola nota de la comunidad.",
+		"explore": "Explorar"
+	},
+	"footer": { "terms": "Términos", "privacy": "Privacidad", "contact": "Contacto", "pricing": "Precios de la API" },
+	"cookies": {
+		"text": "Solo usamos cookies esenciales (sesión y preferencias). Los videos de YouTube solo se cargan si lo permites.",
+		"accept": "Permitir videos",
+		"decline": "Solo esenciales"
+	}
+}

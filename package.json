@@ -1,0 +1,26 @@
+{
+  "name": "hexascore",
+  "private": true,
+  "packageManager": "bun@1.4.2",
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "dev": "bun --filter web dev",
+    "build": "bun --filter web build",
+    "start": "bun --filter web start",
+    "typecheck": "bun --filter web typecheck",
+    "test": "bun --filter web test",
+    "lint": "biome check .",
+    "lint:ci": "biome ci .",
+    "format": "biome format --write .",
+    "db:generate": "bun --filter web db:generate",
+    "db:migrate": "bun --filter web db:migrate",
+    "db:seed": "bun --filter web db:seed",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@commitlint/cli": "21.2.3",
+    "@commitlint/config-conventional": "21.2.3",
+    "husky": "9.1.7"
+  }
+}

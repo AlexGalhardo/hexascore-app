@@ -1,2 +1,2 @@
-bun run format
-bunx lint-staged
+bunx biome check --write --staged --no-errors-on-unmatched
+git update-index --again
