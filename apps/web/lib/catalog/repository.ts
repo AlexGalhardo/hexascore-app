@@ -196,6 +196,7 @@ async function getItem(db: Database, where: SQL, locale: Locale): Promise<ItemDe
 		.select({
 			...summaryColumns,
 			externalIds: items.externalIds,
+			wikidataQid: items.wikidataQid,
 			synopsisLocale: tl.synopsis,
 			licenseLocale: tl.synopsisLicense,
 			sourceLocale: tl.synopsisSourceUrl,
@@ -216,10 +217,12 @@ async function getItem(db: Database, where: SQL, locale: Locale): Promise<ItemDe
 		...toSummary(row),
 		locale,
 		synopsis: ownSynopsis ? row.synopsisLocale : row.synopsisEn,
+		synopsisLocale: ownSynopsis ? locale : row.synopsisEn !== null ? "en" : null,
 		synopsisLicense: ownSynopsis ? row.licenseLocale : row.licenseEn,
 		synopsisSourceUrl: httpsUrlOrNull(ownSynopsis ? row.sourceLocale : row.sourceEn),
 		translationFallback: locale !== "en" && (row.titleLocale === null || synopsisFallback),
 		externalIds: parseExternalIds(row.externalIds, row.id),
+		wikidataQid: row.wikidataQid,
 		meta: parseMeta(row.meta, row.id),
 	};
 }
@@ -239,6 +242,19 @@ export async function getItemIdBySlug(db: Database, type: ItemType, slug: string
 		.from(items)
 		.where(and(eq(items.type, type), eq(items.slug, slug)))
 		.limit(1);
+	return row?.id ?? null;
+}
+
+export const LOOKUP_SOURCES = ["imdb", "steam", "igdb", "tmdb", "isbn13", "openlibrary", "wikidata"] as const;
+export type LookupSource = (typeof LOOKUP_SOURCES)[number];
+
+/** Exact match on an external id (GIN containment on `external_ids`, unique index for Wikidata). */
+export async function getItemIdByExternalId(db: Database, source: LookupSource, id: string): Promise<string | null> {
+	const where =
+		source === "wikidata"
+			? eq(items.wikidataQid, id)
+			: sql`${items.externalIds} @> ${JSON.stringify({ [source]: id })}::jsonb`;
+	const [row] = await db.select({ id: items.id }).from(items).where(where).limit(1);
 	return row?.id ?? null;
 }
 
@@ -304,6 +320,20 @@ async function listMetaValues(db: Database, type: ItemType, key: "genres" | "pla
 
 export function listGenres(db: Database, type: ItemType): Promise<string[]> {
 	return listMetaValues(db, type, "genres");
+}
+
+/** Genres with how many items of the type carry each one, most common first (ties by name). */
+export async function listGenreCounts(db: Database, type: ItemType): Promise<{ value: string; count: number }[]> {
+	const value = sql<string>`jsonb_array_elements_text(${items.meta}->'genres')`;
+	const rows = await db
+		.select({ value, count: sql<number>`count(*)::int` })
+		.from(items)
+		.where(and(eq(items.type, type), sql`jsonb_typeof(${items.meta}->'genres') = 'array'`))
+		.groupBy(sql`1`)
+		.orderBy(sql`2 desc`, sql`1`);
+	return rows
+		.map((r) => ({ value: r.value, count: Number(r.count) }))
+		.filter((r) => r.value.trim().length > 0 && r.value.length <= 100);
 }
 
 export function listPlatforms(db: Database, type: ItemType): Promise<string[]> {
