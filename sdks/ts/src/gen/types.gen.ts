@@ -145,6 +145,10 @@ export type ItemDetail = {
     pages: number | null;
     seasons: number | null;
     episodes: number | null;
+    /**
+     * Games only; `null` for other types.
+     */
+    time_to_beat: TimeToBeat | null;
 };
 
 /**
@@ -164,6 +168,42 @@ export type Synopsis = {
      * Where the text comes from (for attribution).
      */
     source_url: string | null;
+};
+
+/**
+ * Crowdsourced time to beat per play style: main story, main + extras, completionist.
+ */
+export type TimeToBeat = {
+    main: {
+        /**
+         * Median hours reported by players who completed the game (1 decimal). `null` under 3 reports.
+         */
+        median_hours: number | null;
+        /**
+         * Number of players who reported this style.
+         */
+        reports: number;
+    };
+    extras: {
+        /**
+         * Median hours reported by players who completed the game (1 decimal). `null` under 3 reports.
+         */
+        median_hours: number | null;
+        /**
+         * Number of players who reported this style.
+         */
+        reports: number;
+    };
+    completionist: {
+        /**
+         * Median hours reported by players who completed the game (1 decimal). `null` under 3 reports.
+         */
+        median_hours: number | null;
+        /**
+         * Number of players who reported this style.
+         */
+        reports: number;
+    };
 };
 
 /**

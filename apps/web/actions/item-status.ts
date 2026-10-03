@@ -1,8 +1,9 @@
 "use server";
 
-import { refresh } from "next/cache";
+import { refresh, updateTag } from "next/cache";
 import { z } from "zod";
 import { type ActionResult, fail, ok } from "@/lib/action-result";
+import { itemTag } from "@/lib/catalog/cached";
 import { db } from "@/lib/db/client";
 import { asMember } from "@/lib/member";
 import { hitRateLimit } from "@/lib/rate-limit";
@@ -18,12 +19,16 @@ export async function saveItemStatus(input: unknown): Promise<ActionResult> {
 	const member = asMember(await getSessionUser());
 	if (typeof member === "string") return fail(member);
 	if (!(await hitRateLimit(db, `status:${member.id}`, 60, 60_000))) return fail("rateLimited");
+	let result: Awaited<ReturnType<typeof setItemStatus>>;
 	try {
-		if (!(await setItemStatus(db, member.id, parsed.data.itemId, parsed.data.status))) return fail("notFound");
+		result = await setItemStatus(db, member.id, parsed.data.itemId, parsed.data.status);
 	} catch (error) {
 		console.error("[item-status] save failed:", error);
 		return fail("server");
 	}
+	if (result === "notFound") return fail("notFound");
+	// Leaving `completed` deleted a time-to-beat report: the item's cached medians must drop it.
+	if (result === "cleared") updateTag(itemTag(parsed.data.itemId));
 	refresh();
 	return ok;
 }
