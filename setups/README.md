@@ -33,13 +33,15 @@ powershell -ExecutionPolicy Bypass -File setups\setup-windows-docker.ps1
 | Serviço | Endereço | Credenciais |
 | --- | --- | --- |
 | Postgres 18 | `postgres://hexascore:hexascore@localhost:5432/hexascore` | user/senha/db `hexascore` |
-| Redis 8 | `redis://localhost:6379` | nenhuma |
+| Redis 8 | só na rede interna do compose (não publicado no host) | senha `hexascore` |
 | Proxy REST Upstash (`serverless-redis-http`) | `http://localhost:8079` | token `local-dev-token` |
+
+Credenciais **só para dev local**: são fixas e públicas neste repo, e todas as portas são publicadas apenas em `127.0.0.1` (nada fica acessível pela rede). Nunca reuse esses valores em preview/produção.
 
 Parar: `docker compose -f infra/docker-compose.yaml down` (com `-v` apaga também os volumes de dados). App em container: `docker compose -f infra/docker-compose.yaml --profile app up -d --build` (usa `infra/Dockerfile` e aplica as migrations ao subir).
 
 ## Problemas comuns
 
-- **Porta em uso** (5432, 6379, 8079): pare o outro Postgres/Redis ou troque a porta do host em `infra/docker-compose.yaml` e no `DATABASE_URL`.
+- **Porta em uso** (5432, 8079): pare o outro Postgres/Redis ou troque a porta do host em `infra/docker-compose.yaml` e no `DATABASE_URL`.
 - **`[env] Invalid environment variables`**: a mensagem lista cada chave inválida; corrija em `apps/web/.env.local` (veja `.env.example`).
 - **Resetar o PGlite**: apague `apps/web/.pglite` e rode o script de novo.

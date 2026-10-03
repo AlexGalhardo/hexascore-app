@@ -23,7 +23,7 @@ Install-Deps
 Initialize-EnvFile "docker"
 
 Write-Step "Starting containers (Postgres, Redis, Upstash REST proxy)"
-Invoke-Native "containers did not become healthy. Inspect: docker compose -f infra/docker-compose.yaml logs (is port 5432/6379/8079 already in use?)" {
+Invoke-Native "containers did not become healthy. Inspect: docker compose -f infra/docker-compose.yaml logs (is port 5432/8079 already in use?)" {
 	docker compose -f $ComposeFile up -d --wait --wait-timeout 120
 }
 Write-Ok "postgres, redis and Upstash REST proxy healthy"

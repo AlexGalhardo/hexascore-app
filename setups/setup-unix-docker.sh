@@ -19,7 +19,7 @@ prepare_env docker
 
 step "Starting containers (Postgres, Redis, Upstash REST proxy)"
 "${COMPOSE[@]}" up -d --wait --wait-timeout 120 ||
-	fail "containers did not become healthy. Inspect: docker compose -f infra/docker-compose.yaml logs (is port 5432/6379/8079 already in use?)"
+	fail "containers did not become healthy. Inspect: docker compose -f infra/docker-compose.yaml logs (is port 5432/8079 already in use?)"
 ok "postgres, redis and Upstash REST proxy healthy"
 
 migrate_and_seed
