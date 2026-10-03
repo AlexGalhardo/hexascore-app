@@ -147,3 +147,5 @@ bunx @redocly/cli@2 lint apps/web/public/openapi.json   # validação do spec (s
 
 - Unitário/integração: fixtures mínimas por teste.
 - Dev/preview/sandbox: snapshot de ~100k itens + 10k usuários sintéticos (faker com seed fixa). Nunca em produção.
+
+Admin padrão do seed (local/sandbox): ver [`docs/admin.md`](admin.md).

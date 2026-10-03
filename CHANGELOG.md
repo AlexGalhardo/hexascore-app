@@ -14,6 +14,10 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Added
+
+- Seed creates a default admin for local and sandbox only (`admin@hexascore.test` / `hexascoreBR@123`, overridable with `SEED_ADMIN_EMAIL`/`SEED_ADMIN_PASSWORD`; `--admin-only` creates just it). `docs/admin.md` documents `/admin`, its sections and the admin accounts.
+
 ### Changed
 
 - Ingestion: Wikipedia summaries are fetched with 8 concurrent requests per run; `HttpClient`'s per-host throttle is thread-safe (slot reservation under a lock) and Wikipedia hosts allow 20 req/s. The bootstrap workflow gains a `skip_catalog` input to resume enrichment, covers and snapshot without re-running the Wikidata catalog job.

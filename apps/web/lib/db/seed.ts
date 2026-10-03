@@ -16,7 +16,8 @@ import {
 import { checkRealUsers, checkSeedTarget, seedEnvSchema } from "./seed-guard";
 
 // Fixture data: `bun run db:seed [--users 50] [--items 400] [--batch 250]` builds a fake catalog plus raters.
-// `--existing-items` rates the catalog already in the database instead (sandbox Neon branch copied from production)
+// Every run (except `--purge`) also upserts the default admin (`lib/db/seed-admin.ts`, docs/admin.md); `--admin-only`
+// stops there. `--existing-items` rates the catalog already in the database instead (sandbox Neon branch copied from production)
 // and adds statuses, time to beat, follows and lists; `--purge` deletes every seed user and recomputes the stats.
 // Idempotent (upserts keyed by deterministic ids) and streaming (keyset batches), so it scales to 10k users / 100k
 // items / millions of ratings without holding the catalog in memory.
@@ -31,6 +32,7 @@ const argsSchema = z.object({
 	existingItems: z.boolean().default(false),
 	purge: z.boolean().default(false),
 	sandboxAcknowledged: z.boolean().default(false),
+	adminOnly: z.boolean().default(false),
 });
 type SeedOptions = z.infer<typeof argsSchema>;
 
@@ -48,6 +50,7 @@ async function main(): Promise<void> {
 			"existing-items": { type: "boolean" },
 			purge: { type: "boolean" },
 			"i-know-this-is-sandbox": { type: "boolean" },
+			"admin-only": { type: "boolean" },
 		},
 	});
 	const opts = argsSchema.parse({
@@ -57,6 +60,7 @@ async function main(): Promise<void> {
 		existingItems: values["existing-items"],
 		purge: values.purge,
 		sandboxAcknowledged: values["i-know-this-is-sandbox"],
+		adminOnly: values["admin-only"],
 	});
 
 	// Imported lazily so the target guard above runs before any connection is opened.
@@ -82,6 +86,10 @@ async function main(): Promise<void> {
 		);
 	const realRefusal = checkRealUsers(real?.n ?? 0, opts.sandboxAcknowledged);
 	if (realRefusal) throw new Error(realRefusal);
+
+	const { seedAdmin } = await import("./seed-admin");
+	console.info(`[seed] admin account ${await seedAdmin(db)} (role admin, see docs/admin.md)`);
+	if (opts.adminOnly) return;
 
 	if (opts.existingItems) {
 		const ratings = await seedExistingItems(db, opts);
