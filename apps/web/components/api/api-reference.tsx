@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { hasLocale, useLocale } from "next-intl";
-import { useEffect, useState } from "react";
+import { type CSSProperties, useEffect, useState } from "react";
 import { routing } from "@/i18n/routing";
 import { openApiPath } from "@/lib/api/spec-path";
 import type { Theme } from "@/lib/preferences";
@@ -57,7 +57,8 @@ export function ApiReference({ loadingLabel, token, serverUrl }: Props) {
 	return (
 		// data-plain: Scalar styles its own links; the global button-like link hover must not reach them.
 		// lang: the docs <article> is lang="en" (guides), but the reference text follows the site locale.
-		<div data-plain lang={siteLocale}>
+		// --scalar-custom-header-height keeps Scalar's sticky sidebar below our sticky navbar.
+		<div data-plain lang={siteLocale} style={{ "--scalar-custom-header-height": "var(--nav-h)" } as CSSProperties}>
 			<ApiReferenceReact
 				// Remount on theme/locale/token change: Scalar reads these options once.
 				key={`${theme}:${locale}:${specUrl}:${token ?? ""}`}
