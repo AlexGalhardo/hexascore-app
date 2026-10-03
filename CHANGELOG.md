@@ -23,6 +23,8 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 - Terms and privacy intros name the service through `{appName}`, replaced by `APP_NAME` in `lib/legal.ts`.
 - Verification and password-reset emails are translated (`auth.emails` in the three locales), picking the locale from the `locale` cookie or the calling page's prefix.
 - Default domain is now `hexascore.app` (API at `api.hexascore.app/v1`): OpenAPI servers/links, docs examples, CSP `connect-src`, SDK base URLs and READMEs. Production `NEXT_PUBLIC_APP_URL` and `BETTER_AUTH_URL` point at `https://hexascore.app`; `www.hexascore.app` redirects to the apex.
+- Ingestion covers (`webscrappings/covers.py`): with `BLOB_READ_WRITE_TOKEN`, covers are resized to fit 600×600, re-encoded as metadata-free WebP (quality 78, method 6; ~19 KB average, about 60% smaller than the sources) and stored in Vercel Blob at a content-addressed `covers/<item_id>-<hash>.webp` with a one-year cache; unchanged sources skip encode and upload. Without the token the source URL is kept, as before.
+- New Python dependency: `pillow==12.3.0`.
 
 ### Fixed
 
