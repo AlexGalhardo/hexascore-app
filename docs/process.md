@@ -1,7 +1,7 @@
 # Processo: git, CI/CD, qualidade
 
 
-**Git**: `feat/*`/`fix/*` → PR para `dev` (sandbox: preview Vercel + branch Neon + seed sintético) → CI verde → PR `dev` → `main` (produção, Rolling Releases). Push direto deve ser bloqueado por ruleset (ver abaixo; hoje pendente). Conventional Commits via commitlint + husky. release-please na `main`.
+**Git**: `feat/*`/`fix/*` → PR para `dev` (sandbox `dev.hexascore.app`: deploy Vercel com `NEXT_PUBLIC_SANDBOX=true` + branch Neon copiado da produção + `seed.ts --existing-items`, ver `docs/testing.md` → Sandbox) → CI verde → PR `dev` → `main` (produção, Rolling Releases). Push direto deve ser bloqueado por ruleset (ver abaixo; hoje pendente). Conventional Commits via commitlint + husky. release-please na `main`.
 
 **Proteção de `main` e `dev` — pendente (plano do GitHub)**: o repo é privado no plano Free, e tanto branch protection quanto rulesets respondem `HTTP 403 Upgrade to GitHub Pro or make this repository public`. A regra está pronta em `.github/rulesets/protect-main-dev.json` (PR obrigatório com 0 aprovações — risco aceito: projeto com um único dono —, checks `lint`/`typecheck`/`test`/`build`/`audit` em modo estrito (branch atualizada com a base), sem bypass, sem force push nem deleção); aplicar após upgrade ou ao tornar o repo público:
 

@@ -39,6 +39,10 @@ const schema = z
 		ABACATEPAY_WEBHOOK_SECRET: optional,
 		// Testing only: shows "pay sandbox PIX" in checkout and lets the server call /transparents/simulate-payment.
 		ABACATEPAY_SANDBOX: optional.pipe(z.stringbool().optional()).transform((v) => v ?? false),
+		// dev.hexascore.app (Neon branch with seed users): banner on every page, noindex, robots disallow all.
+		NEXT_PUBLIC_SANDBOX: optional
+			.pipe(z.enum(["true", "false"], { message: 'must be "true" or "false"' }).optional())
+			.transform((v) => v === "true"),
 		BLOB_READ_WRITE_TOKEN: optional,
 		CRON_SECRET: optional.pipe(z.string().min(32, "must have at least 32 characters").optional()),
 		TELEGRAM_BOT_TOKEN: optional,

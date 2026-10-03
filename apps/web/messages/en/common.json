@@ -37,5 +37,8 @@
 		"text": "We only use essential cookies (session and preferences). Video embeds from YouTube load only if you allow them.",
 		"accept": "Allow embeds",
 		"decline": "Essential only"
+	},
+	"sandbox": {
+		"banner": "Sandbox environment — users, ratings and lists are fictitious (test data)."
 	}
 }
