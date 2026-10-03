@@ -45,16 +45,16 @@ def test_invalid_entity_payload_is_rejected() -> None:
         wikidata.RawEntity.model_validate({"id": "Q1", "claims": {"P31": [{"rank": "weird"}]}})
 
 
-def test_wikipedia_summary() -> None:
-    payload = wikipedia.parse_summary(load("wikipedia_summary_en_the_matrix.json"), "Q83495", "en")
-    assert payload is not None
-    assert payload["url"] == "https://en.wikipedia.org/wiki/The_Matrix"
-    assert payload["extract"].startswith("The Matrix")
+def test_wikipedia_extracts() -> None:
+    payloads = wikipedia.parse_extracts(load("wikipedia_extracts_en.json"), {"Q83495", "Q189600"}, "en")
+    assert [p["qid"] for p in payloads] == ["Q83495", "Q189600"]
+    assert payloads[0]["url"] == "https://en.wikipedia.org/wiki/The_Matrix"
+    assert payloads[0]["extract"].startswith("The Matrix")
 
 
-def test_wikipedia_rejects_disambiguation_and_other_entities() -> None:
-    assert wikipedia.parse_summary(load("wikipedia_summary_en_matrix.json"), "Q83495", "en") is None
-    assert wikipedia.parse_summary(load("wikipedia_summary_pt_the_matrix.json"), "Q1", "pt") is None
+def test_wikipedia_rejects_disambiguation_missing_and_other_entities() -> None:
+    # Q190069 is the "Matrix" disambiguation page; Q1 matches nothing; the missing page has no pageprops.
+    assert wikipedia.parse_extracts(load("wikipedia_extracts_en.json"), {"Q190069", "Q1"}, "en") == []
 
 
 def test_openlibrary_paths_prefer_editions() -> None:
@@ -122,25 +122,40 @@ def test_wikipedia_fetch_runs_requests_concurrently(monkeypatch) -> None:
 
     from common.http import HttpClient
 
-    summary = load("wikipedia_summary_en_the_matrix.json")
     active = {"now": 0, "max": 0}
     lock = threading.Lock()
+    batch_sizes: list[int] = []
 
     def handler(request: httpx.Request) -> httpx.Response:
+        titles = request.url.params["titles"].split("|")
         with lock:
+            batch_sizes.append(len(titles))
             active["now"] += 1
             active["max"] = max(active["max"], active["now"])
         time.sleep(0.02)
         with lock:
             active["now"] -= 1
-        return httpx.Response(200, json=summary)
+        pages = [
+            {
+                "title": t,
+                "extract": f"{t} intro.",
+                "fullurl": f"https://en.wikipedia.org/wiki/{t}",
+                "pageprops": {"wikibase_item": f"Q{t[1:]}"},
+            }
+            for t in titles
+        ]
+        return httpx.Response(200, json={"query": {"pages": pages}})
 
-    rows = [("Q83495", {"enwiki": "The Matrix"})] * 12
+    # Title "T<n>" belongs to Q<n>; 85 targets -> batches of 20, 20, 20, 20, 5.
+    rows = [(f"Q{n}", {"enwiki": f"T{n}"}) for n in range(85)]
     monkeypatch.setattr(wikipedia, "targets", lambda conn, since: rows)
-    monkeypatch.setattr(wikipedia, "existing_ids", lambda conn, source: set())
+    monkeypatch.setattr(wikipedia, "existing_ids", lambda conn, source: {"Q0"} if source == "wikipedia:en" else set())
     client = HttpClient(transport=httpx.MockTransport(handler), sleep=lambda _: None)
     monkeypatch.setitem(__import__("common.http").http.HOST_INTERVALS, "en.wikipedia.org", 0.0)
 
-    records = list(wikipedia.fetch(None, conn=None, client=client, langs=["en"], workers=4))  # type: ignore[arg-type]
-    assert len(records) == 12
+    records = list(
+        wikipedia.fetch(None, conn=None, client=client, only_missing=True, langs=["en"], workers=4)  # type: ignore[arg-type]
+    )
+    assert sorted(r.external_id for r in records) == sorted(f"Q{n}" for n in range(1, 85))
+    assert sorted(batch_sizes) == [4, 20, 20, 20, 20]
     assert active["max"] > 1

@@ -1,0 +1,38 @@
+{
+	"batchcomplete": true,
+	"query": {
+		"normalized": [{ "fromencoded": false, "from": "The_Matrix_Reloaded", "to": "The Matrix Reloaded" }],
+		"pages": [
+			{
+				"ns": 0,
+				"title": "Nonexistent page xyz123",
+				"missing": true,
+				"fullurl": "https://en.wikipedia.org/wiki/Nonexistent_page_xyz123"
+			},
+			{
+				"pageid": 18884,
+				"ns": 0,
+				"title": "Matrix",
+				"extract": "Matrix (pl.: matrices or matrixes) or MATRIX may refer to:",
+				"pageprops": { "disambiguation": "", "wikibase_item": "Q190069" },
+				"fullurl": "https://en.wikipedia.org/wiki/Matrix"
+			},
+			{
+				"pageid": 30007,
+				"ns": 0,
+				"title": "The Matrix",
+				"extract": "The Matrix is a 1999 science fiction–action film written and directed by the Wachowskis. The first installment in the Matrix film series, it stars Keanu Reeves,",
+				"pageprops": { "wikibase_item": "Q83495" },
+				"fullurl": "https://en.wikipedia.org/wiki/The_Matrix"
+			},
+			{
+				"pageid": 123417,
+				"ns": 0,
+				"title": "The Matrix Reloaded",
+				"extract": "The Matrix Reloaded is a 2003 American science fiction action film written and directed by the Wachowskis. It is the second installment in the Matrix film serie",
+				"pageprops": { "wikibase_item": "Q189600" },
+				"fullurl": "https://en.wikipedia.org/wiki/The_Matrix_Reloaded"
+			}
+		]
+	}
+}
