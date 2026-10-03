@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "bun --bun next dev",
     "build": "bun --bun next build",
+    "vercel-build": "bun lib/db/migrate.ts --deploy && bun --bun next build",
     "start": "bun --bun next start",
     "typecheck": "tsc --noEmit",
     "test": "bun test",

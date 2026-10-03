@@ -13,6 +13,11 @@ export async function runMigrations(): Promise<void> {
 }
 
 if (import.meta.main) {
+	// `--deploy` runs from vercel-build: only production deployments migrate the shared database.
+	if (process.argv.includes("--deploy") && env.VERCEL_ENV !== "production") {
+		console.info(`[db] skipping migrations (VERCEL_ENV=${env.VERCEL_ENV ?? "unset"})`);
+		process.exit(0);
+	}
 	const started = performance.now();
 	try {
 		await runMigrations();
