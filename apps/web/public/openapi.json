@@ -426,7 +426,7 @@
         "tags": [
           "Games"
         ],
-        "summary": "List games genres",
+        "summary": "List game genres",
         "description": "Every genre used by this type with its item count. Use `slug` as the `genre` filter.",
         "parameters": [],
         "responses": {
@@ -848,7 +848,7 @@
         "tags": [
           "Movies"
         ],
-        "summary": "List movies genres",
+        "summary": "List movie genres",
         "description": "Every genre used by this type with its item count. Use `slug` as the `genre` filter.",
         "parameters": [],
         "responses": {
@@ -1270,7 +1270,7 @@
         "tags": [
           "Series"
         ],
-        "summary": "List TV series genres",
+        "summary": "List series genres",
         "description": "Every genre used by this type with its item count. Use `slug` as the `genre` filter.",
         "parameters": [],
         "responses": {
@@ -1692,7 +1692,7 @@
         "tags": [
           "Books"
         ],
-        "summary": "List books genres",
+        "summary": "List book genres",
         "description": "Every genre used by this type with its item count. Use `slug` as the `genre` filter.",
         "parameters": [],
         "responses": {

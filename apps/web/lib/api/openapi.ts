@@ -201,7 +201,7 @@ function typePaths(type: ItemType): Record<string, Json> {
 			get: operation({
 				id: `list${one}Genres`,
 				tag,
-				summary: `List ${label} genres`,
+				summary: `List ${one.toLowerCase()} genres`,
 				description: "Every genre used by this type with its item count. Use `slug` as the `genre` filter.",
 				query: z.strictObject({}),
 				schema: "GenreList",

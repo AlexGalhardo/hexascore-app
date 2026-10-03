@@ -206,6 +206,18 @@ describe("quota and rate limit", () => {
 	});
 });
 
+test("a failing rate-limit store fails closed with 503", async () => {
+	const original = store.incr;
+	store.incr = () => Promise.reject(new Error("redis down"));
+	try {
+		const res = await call(routes.genres, "/games/genres", { type: "games" });
+		await expectProblem(res, 503, "service_unavailable");
+		expect(res.headers.get("retry-after")).toBe("30");
+	} finally {
+		store.incr = original;
+	}
+});
+
 describe("endpoints", () => {
 	test("list: shape, headers, filters, sort and cursor", async () => {
 		const res = await call(routes.list, "/games?sort=-score&limit=2", { type: "games" });

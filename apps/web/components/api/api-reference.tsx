@@ -3,6 +3,8 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import type { Theme } from "@/lib/preferences";
+// The package JS does not import its stylesheet; without it Scalar renders unstyled.
+import "@scalar/api-reference-react/style.css";
 
 // Scalar is large and browser-only: load it on demand, never during SSR.
 const ApiReferenceReact = dynamic(() => import("@scalar/api-reference-react").then((m) => m.ApiReferenceReact), {
@@ -54,6 +56,8 @@ export function ApiReference({ loadingLabel, token, serverUrl }: Props) {
 				telemetry: false,
 				persistAuth: false,
 				showDeveloperTools: "never",
+				// No third-party AI/MCP features: requests carry the user's key on /profile/api.
+				agent: { disabled: true },
 				mcp: { disabled: true },
 				defaultHttpClient: { targetKey: "shell", clientKey: "curl" },
 				...(serverUrl ? { servers: [{ url: serverUrl }] } : {}),

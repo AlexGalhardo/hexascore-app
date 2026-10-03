@@ -136,7 +136,20 @@ export function apiRoute<P, Q extends z.ZodType, R extends z.ZodType>(
 			});
 		}
 
-		const decision = await consumeRequest(store, owner.userId, owner.plan);
+		let decision: Awaited<ReturnType<typeof consumeRequest>>;
+		try {
+			decision = await consumeRequest(store, owner.userId, owner.plan);
+		} catch (error) {
+			// Fail closed: without the counter there is no quota enforcement, so no data is served.
+			console.error(`[api] ${requestId} rate-limit store failed`, error);
+			return problem(
+				"service_unavailable",
+				"The API is temporarily unavailable. Try again later.",
+				requestId,
+				{},
+				{ "retry-after": "30" },
+			);
+		}
 		if (!decision.ok && decision.reason === "rate_limited") {
 			return problem(
 				"rate_limited",
