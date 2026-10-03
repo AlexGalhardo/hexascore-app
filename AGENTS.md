@@ -16,6 +16,7 @@ Codename `hexascore`; final brand name is pending.
 - Validate every schema and piece of data with zod wherever possible (env, actions, forms, API params/responses, webhooks, external responses, jsonb reads); infer types with `z.infer`.
 - Data fetching: Server Components first; client-side fetches go through TanStack Query (`useQuery`/`useInfiniteQuery`), never `useEffect` + `fetch` (see `docs/frontend.md`).
 - Env vars are validated with zod in `apps/web/lib/env.ts` before build and server start; failures print every bad variable explicitly.
+- Every modal is centred on screen: Base UI `Dialog`/`AlertDialog` use `DIALOG_BACKDROP` and `dialogPopup()` from `apps/web/components/ui/dialog.ts` (enforced by `components/ui/dialog.test.ts`); native `<dialog>` uses `showModal()` with `m-auto`.
 - Handle errors and fallbacks everywhere: timeouts on external calls, `notFound()`/404, `error.tsx`/500, RFC 9457 problems with 402/404/429/500 in the API, graceful degradation of optional services.
 - Security rules in `docs/architecture.md` are mandatory.
 - All reference documentation lives in `docs/` (architecture, data model, API, frontend, design system, payments, ingestion, security, testing, process). Update the matching doc in the same change.
