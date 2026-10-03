@@ -41,10 +41,7 @@ export async function SectionHighlights({ type, locale }: { type: ItemType; loca
 				{BLOCKS.map((block, i) => (
 					<div key={block.key}>
 						<h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted">
-							<Link
-								href={{ pathname: sectionPath, query: { sort: block.sort } }}
-								className="hover:underline"
-							>
+							<Link href={{ pathname: sectionPath, query: { sort: block.sort } }}>
 								{t(`landing.${block.key}`)}
 							</Link>
 						</h3>
@@ -57,7 +54,7 @@ export async function SectionHighlights({ type, locale }: { type: ItemType; loca
 										</span>
 										<Link
 											href={itemHref(item.type, item.slug)}
-											className="min-w-0 flex-1 truncate text-sm hover:underline"
+											className="min-w-0 flex-1 truncate text-sm"
 										>
 											{item.title}
 										</Link>

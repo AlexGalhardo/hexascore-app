@@ -56,7 +56,7 @@ export async function ItemTable({ items, type, rankFrom = null }: Props) {
 									<div className="min-w-0">
 										<Link
 											href={itemHref(item.type, item.slug)}
-											className="block truncate font-medium hover:underline"
+											className="block truncate font-medium"
 											title={item.title}
 										>
 											{item.title}

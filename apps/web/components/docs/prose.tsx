@@ -15,9 +15,7 @@ export function DocTitle({ children, lead }: { children: ReactNode; lead?: React
 export function H2({ id, children }: { id: string; children: ReactNode }) {
 	return (
 		<h2 id={id} className="mt-10 mb-3 scroll-mt-20 font-serif text-2xl font-bold">
-			<a href={`#${id}`} className="hover:underline">
-				{children}
-			</a>
+			<a href={`#${id}`}>{children}</a>
 		</h2>
 	);
 }
