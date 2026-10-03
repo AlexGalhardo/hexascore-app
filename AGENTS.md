@@ -29,4 +29,5 @@ Codename `hexascore`; final brand name is pending.
 
 ## Project skills
 
+- `.claude/skills/hexascore-ratings/SKILL.md` — rating write path (lock item row, recompute stats from `ratings` in the same transaction, threshold applied on read), merge, local E2E gotchas. Admin role: `bun run admin:grant <email>`.
 - `.claude/skills/hexascore-auth/SKILL.md` — auth/account work: Better Auth server-only endpoints, Server Action result contract, BotID local setup, testing flows locally (verification link in the dev log, TOTP).

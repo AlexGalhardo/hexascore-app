@@ -53,6 +53,7 @@ Este documento cresce junto com `apps/web/components/`; toda nova peça de UI re
 | --- | --- | --- |
 | `ScoreBadge` | `score: number \| null`, `label` (texto acessível), `size: sm \| md \| lg` | `role="img"` + `aria-label`; cor da faixa via `scoreBand()` (`lib/categories.ts`), texto preto em todas as faixas (contraste ≥ 4.5:1); `null` mostra "–" em `--score-none`. |
 | `HexRadar` | `values` (6, `null` = sem dado), `labels` (6), `summary`, `accentClass` | SVG puro, `role="img"` + `<title>`/`aria-label` com o resumo textual; anéis em 25/50/75/100, polígono em `currentColor` (acento da seção). Geometria em `hexVertex`/`radarPoints` (testadas). |
+| `ScoreInput` | `label`, `value`, `onChange`, `disabled` | Client. `range` + `number` sincronizados (0–100 inteiros); as mesmas teclas nos dois: setas ±1, PageUp/PageDown ±10, Home/End 0/100 (navegadores divergem no range). O campo numérico aceita rascunho e volta ao valor válido no blur. Usado no `RatingForm`. |
 | `ScoreBar` | `label`, `value` | Barra horizontal com o número sempre visível; acompanha o radar como alternativa legível em telas pequenas. |
 
 Outros reutilizáveis: `components/catalog/item-table.tsx` (data table densa ≥ `md`, lista empilhada abaixo; colunas das 6 categorias a partir de `lg` com cabeçalho abreviado por `abbreviateLabel` + `<abbr title>`), `catalog-filters.tsx`, `pagination.tsx`, `section-highlights.tsx` (blocos da landing). Acento por seção via `SECTION_ACCENT` em `lib/sections.ts` (classes literais `text-game`, `border-movie`…).

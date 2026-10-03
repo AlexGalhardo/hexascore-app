@@ -5,6 +5,14 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Added
+
+- Ratings: save/delete with verified email, nickname and not banned; one transaction locks the item row and recomputes `rating_count`/`score`/`score_c1..c6`; rating panel with six keyboard-accessible score inputs and live overall.
+- Item status (want / in progress / completed / dropped) and "Add to list" on the item page.
+- Public profiles `/u/[nickname]` (private profiles render a minimal page), follow/unfollow, `/feed`, curated lists and reports of lists/users.
+- `/admin` (role `admin`, 404 otherwise): contact messages, reports moderation (hide list, ban), affiliate links, item merge and ingestion status; `bun run admin:grant <email>`.
+- `/onboarding` nickname step for Google sign-ups; migration `0003_social_moderation`.
+
 ## [0.0.14] - 2026-10-03
 
 ### Fixed

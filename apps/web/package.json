@@ -14,7 +14,8 @@
     "db:seed": "bun lib/db/seed.ts",
     "stripe:setup": "bun scripts/stripe-setup.ts",
     "openapi": "bun scripts/openapi.ts",
-    "openapi:check": "bun scripts/openapi.ts --check"
+    "openapi:check": "bun scripts/openapi.ts --check",
+    "admin:grant": "bun scripts/admin-grant.ts"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",
