@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import { deleteAffiliateLink, mergeItems, saveAffiliateLink } from "@/actions/admin";
 import { ActionForm } from "@/components/admin/action-form";
+import { CategoryLabel } from "@/components/catalog/category-label";
+import { CoverThumb } from "@/components/catalog/cover-thumb";
 import { Link } from "@/i18n/navigation";
 import { AFFILIATE_STORES, getAdminItem } from "@/lib/admin";
 import { db } from "@/lib/db/client";
-import type { ItemType } from "@/lib/db/schema/catalog";
 import { itemHref } from "@/lib/sections";
 import { button, cell, head, input, requireAdmin } from "../../guard";
 
@@ -16,14 +17,18 @@ export default async function AdminItemPage({ params }: Props) {
 	if (!item) notFound();
 	return (
 		<section className="grid gap-6">
-			<header className="grid gap-1">
-				<h1 className="font-serif text-2xl font-bold">{item.title}</h1>
-				<p className="text-sm text-muted">
-					{item.type} · {item.slug} · {item.ratingCount} ratings · <code>{item.id}</code> ·{" "}
-					<Link href={itemHref(item.type as ItemType, item.slug)} className="underline">
-						public page
-					</Link>
-				</p>
+			<header className="flex items-center gap-3">
+				<CoverThumb src={item.coverUrl} thumb={item.coverThumbUrl} size="md" />
+				<div className="grid min-w-0 gap-1">
+					<h1 className="font-serif text-2xl font-bold">{item.title}</h1>
+					<p className="text-sm text-muted">
+						<CategoryLabel type={item.type}>{item.type}</CategoryLabel> · {item.slug} · {item.ratingCount}{" "}
+						ratings · <code>{item.id}</code> ·{" "}
+						<Link href={itemHref(item.type, item.slug)} className="underline">
+							public page
+						</Link>
+					</p>
+				</div>
 			</header>
 
 			<section className="grid gap-2">
