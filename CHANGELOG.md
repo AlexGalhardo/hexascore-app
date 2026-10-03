@@ -39,6 +39,7 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 ### Changed
 
 - Catalog and search lists show a 2:3 cover thumbnail left of each title (`components/catalog/cover-thumb.tsx`, shared with the search autocomplete).
+- Language menu shows codes only (EN / PT-BR / ES) in the trigger and the list; native names stay as accessible labels.
 
 ### Fixed
 
