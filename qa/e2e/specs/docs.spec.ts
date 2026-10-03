@@ -27,11 +27,20 @@ test.describe("API docs", () => {
 		await expectAccessible(page, { exclude: [".scalar-app", ".scalar-api-reference", "[class*='scalar']"] });
 	});
 
-	test("openapi.json is served as JSON", async ({ request }) => {
-		const response = await request.get("/openapi.json");
-		expect(response.status()).toBe(200);
-		const spec = (await response.json()) as { openapi: string; paths: Record<string, unknown> };
-		expect(spec.openapi).toMatch(/^3\./);
-		expect(Object.keys(spec.paths).length).toBeGreaterThan(3);
+	test("localized reference loads the translated spec", async ({ page }) => {
+		await page.goto("/pt-br/docs/reference");
+		await expect(page.getByRole("main").getByText("Listar jogos").filter({ visible: true }).first()).toBeVisible({
+			timeout: 30_000,
+		});
 	});
+
+	for (const path of ["/openapi.json", "/openapi.pt-BR.json", "/openapi.es.json"]) {
+		test(`${path} is served as JSON`, async ({ request }) => {
+			const response = await request.get(path);
+			expect(response.status()).toBe(200);
+			const spec = (await response.json()) as { openapi: string; paths: Record<string, unknown> };
+			expect(spec.openapi).toMatch(/^3\./);
+			expect(Object.keys(spec.paths).length).toBeGreaterThan(3);
+		});
+	}
 });

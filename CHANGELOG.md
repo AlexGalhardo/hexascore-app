@@ -32,9 +32,16 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Added
+
+- OpenAPI documents in Portuguese and Spanish: `public/openapi.pt-BR.json` and `public/openapi.es.json` next to `openapi.json` (en, unchanged byte for byte, still the SDK source). Every description/summary lives in `messages/<locale>/openapi.json` (typed `openApiText`/`apiDoc` in `lib/api/openapi-text.ts`); `bun run openapi` writes the three files and `openapi:check` verifies all of them. `lib/api/openapi.test.ts` asserts the localized documents are structurally identical to en and fully translated; the messages parity test covers the new file.
+- `/docs/reference` loads the spec of the site language (and sets `lang` on it); the api. host root lists `openapi: { en, "pt-BR", es }` (was a single URL); `/docs/changelog` mentions the translated documents.
+
 ### Changed
 
-- API reference (Scalar) UI follows the site language: `localization.locale` = `pt` for pt-BR and `es` for Spanish (built-in packs); the OpenAPI text stays English. Spec title is now "HexaScore API".
+- Docs sidebar note for pt-BR/es now says the guides are in English and the reference is translated with field names kept in English (`api.docs.languageNote`, was `englishOnly`).
+
+- API reference (Scalar) UI follows the site language: `localization.locale` = `pt` for pt-BR and `es` for Spanish (built-in packs). Spec title is now "HexaScore API".
 
 ### Fixed
 
