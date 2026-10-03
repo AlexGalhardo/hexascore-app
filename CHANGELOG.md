@@ -5,10 +5,6 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
-### Added
-
-* **covers:** `covers.py` also uploads a 96×144 WebP list thumbnail (`covers/<item_id>-<hash16>-t.webp`, ~1.8 KB average) stored in `meta.coverThumbUrl`; items stored before thumbnails get only the missing thumb; the normalizer preserves it.
-* **web:** catalog lists, search and autocomplete load the thumbnail via `srcSet`/`sizes` with fallback to the full cover; the item page cover gets `fetchPriority="high"`.
 
 ## [0.0.18](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.17...v0.0.18) (2026-10-03)
 
@@ -64,14 +60,6 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 * **security:** allow the vercel toolbar frame on previews ([444891a](https://github.com/AlexGalhardo/claude-code-internet-api/commit/444891aa2050bffee08f80d7cbeb73c735aebc0b))
 
 ## [Unreleased]
-
-### Fixed
-
-- Sticky navbar is opaque and publishes its measured height as `--nav-h`; the docs sidebar, Scalar's sticky sidebar (`--scalar-custom-header-height`), the catalog table header and anchor jumps (`scroll-padding-top`) now sit below it instead of under it.
-
-### Changed
-
-- Item page header shows the cover (or a section-coloured placeholder), title, metadata and the big community score together at the top, so the item is recognisable at a glance on desktop and mobile.
 
 ### Added
 
