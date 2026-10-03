@@ -9,6 +9,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { type ReactNode, useEffect, useId, useState, useTransition } from "react";
 import { z } from "zod";
 import { createPixCharge, type PixChargeView, simulatePixPaymentAction, startStripeCheckout } from "@/actions/billing";
+import { DIALOG_BACKDROP, dialogPopup } from "@/components/ui/dialog";
 import { buttonClass } from "@/components/ui/form";
 import { secondsLeft } from "@/lib/account-deletion";
 import {
@@ -206,8 +207,8 @@ export function CheckoutForm({ stripe, pix, pixSandbox, defaultCurrency, default
 			disablePointerDismissal={locked}
 		>
 			<Dialog.Portal>
-				<Dialog.Backdrop className="fixed inset-0 bg-black/40" />
-				<Dialog.Popup className="fixed inset-x-2 top-[5dvh] mx-auto grid max-h-[90dvh] max-w-md gap-4 overflow-y-auto rounded-lg border border-border bg-bg p-5 text-fg shadow-xl">
+				<Dialog.Backdrop className={DIALOG_BACKDROP} />
+				<Dialog.Popup className={`${dialogPopup()} grid gap-4 p-5`}>
 					{charge && renderCharge(charge)}
 					<Dialog.Close disabled={locked} className={buttonClass("secondary")}>
 						{t("close")}

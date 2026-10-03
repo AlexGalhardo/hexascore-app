@@ -4,6 +4,7 @@ import { Dialog } from "@base-ui/react/dialog";
 import { useTranslations } from "next-intl";
 import { useId, useState, useTransition } from "react";
 import { report } from "@/actions/reports";
+import { DIALOG_BACKDROP, dialogPopup } from "@/components/ui/dialog";
 import { buttonClass, inputClass, Notice } from "@/components/ui/form";
 import type { ActionError } from "@/lib/action-result";
 import { REPORT_DETAILS_MAX, REPORT_REASONS } from "@/lib/social/constants";
@@ -33,8 +34,8 @@ export function ReportDialog({ target }: { target: Target }) {
 				{target.type === "list" ? t("reportList") : t("reportUser")}
 			</Dialog.Trigger>
 			<Dialog.Portal>
-				<Dialog.Backdrop className="fixed inset-0 bg-black/40" />
-				<Dialog.Popup className="fixed inset-x-2 top-[10dvh] mx-auto grid max-w-md gap-4 rounded-lg border border-border bg-bg p-4 text-fg shadow-xl">
+				<Dialog.Backdrop className={DIALOG_BACKDROP} />
+				<Dialog.Popup className={`${dialogPopup()} grid gap-4 p-4`}>
 					<Dialog.Title className="font-serif text-xl font-bold">{t("title")}</Dialog.Title>
 					{result === "sent" ? (
 						<Notice tone="success">{t("sent")}</Notice>
