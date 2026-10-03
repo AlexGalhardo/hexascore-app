@@ -35,6 +35,10 @@ from .search_items_type import SearchItemsType
 from .search_result import SearchResult
 from .synopsis import Synopsis
 from .synopsis_locale import SynopsisLocale
+from .time_to_beat import TimeToBeat
+from .time_to_beat_completionist import TimeToBeatCompletionist
+from .time_to_beat_extras import TimeToBeatExtras
+from .time_to_beat_main import TimeToBeatMain
 from .usage import Usage
 from .usage_credits import UsageCredits
 from .usage_plan import UsagePlan
@@ -78,6 +82,10 @@ __all__ = (
     "SearchResult",
     "Synopsis",
     "SynopsisLocale",
+    "TimeToBeat",
+    "TimeToBeatCompletionist",
+    "TimeToBeatExtras",
+    "TimeToBeatMain",
     "Usage",
     "UsageCredits",
     "UsagePlan",

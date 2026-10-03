@@ -58,6 +58,25 @@
 			"hltb_main": "HLTB historia principal",
 			"hltb_complete": "HLTB 100%",
 			"openlibrary": "Open Library"
+		},
+		"timeToBeat": {
+			"title": "Tiempo para terminar",
+			"styles": {
+				"main": "Historia principal",
+				"extras": "Principal + extras",
+				"completionist": "Completista"
+			},
+			"hours": "{hours} h",
+			"reports": "{count, plural, =0 {ningún reporte} one {# reporte} other {# reportes}}",
+			"notEnough": "Aún no hay suficientes reportes (mínimo {min})",
+			"hint": "Mediana de las horas que informaron quienes completaron el juego.",
+			"yours": "Tu tiempo para terminar",
+			"yoursHint": "Opcional. Horas, de 0,5 en 0,5; deja vacío el estilo que no jugaste.",
+			"hoursPlaceholder": "Horas",
+			"save": "Guardar tiempos",
+			"delete": "Borrar tiempos",
+			"saved": "Tiempos guardados.",
+			"deleted": "Tiempos borrados."
 		}
 	}
 }
