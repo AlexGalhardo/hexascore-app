@@ -95,3 +95,12 @@ export const processedEvents = pgTable("processed_events", {
 	provider: paymentProvider().notNull(),
 	processedAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
 });
+
+/** One Stripe Customer per user, reused by every Checkout (subscriptions and credit packs). */
+export const stripeCustomers = pgTable("stripe_customers", {
+	userId: text()
+		.primaryKey()
+		.references(() => user.id, { onDelete: "cascade" }),
+	customerId: text().notNull().unique(),
+	createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+});
