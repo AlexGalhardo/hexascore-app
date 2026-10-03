@@ -3,6 +3,22 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [0.0.19](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.18...v0.0.19) (2026-10-03)
+
+
+### Added
+
+* **covers:** add 96x144 WebP list thumbnails ([44852ab](https://github.com/AlexGalhardo/claude-code-internet-api/commit/44852ab810123755e05ce395ab1f3b3cdff8fc25))
+* **covers:** add 96x144 WebP list thumbnails ([1802c6d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/1802c6d02f4230441a8cc39294a0df1d4106b786))
+* **web:** cover thumbnails, item header and sticky navbar fixes ([977fbe5](https://github.com/AlexGalhardo/claude-code-internet-api/commit/977fbe510b62832eb950ba7119319399dae7785a))
+* **web:** cover, title and score together in the item header ([79a5300](https://github.com/AlexGalhardo/claude-code-internet-api/commit/79a5300bb28ec45d1401d30fda005de0af470880))
+* **web:** item header cover and sticky navbar overlap fix ([83083bf](https://github.com/AlexGalhardo/claude-code-internet-api/commit/83083bf732cde5158c1d91decbe64c03d5e2b95e))
+
+
+### Fixed
+
+* **web:** keep sticky content below an opaque navbar ([64e16e1](https://github.com/AlexGalhardo/claude-code-internet-api/commit/64e16e10205fec3265e5b0d4c6cd3bb59c53f56e))
+
 ## [Unreleased]
 
 ### Added
