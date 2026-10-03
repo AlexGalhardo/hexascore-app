@@ -4,7 +4,7 @@ import type { Locale } from "@/i18n/routing";
 import { db } from "@/lib/db/client";
 import type { ItemType } from "@/lib/db/schema/catalog";
 import * as repo from "./repository";
-import type { AffiliateLink, ExternalScore, ItemDetail, ListItemsParams, Page, PublicRating } from "./types";
+import type { AffiliateLink, ExternalScore, ItemDetail, ListItemsParams, PublicRatingsPage } from "./types";
 
 // Next 16 without `cacheComponents`: `"use cache"` + cacheTag is unavailable, so catalog reads go through
 // unstable_cache (Data Cache, survives deploys) tagged `catalog` and `item:<id>`. The ingestion invalidates them
@@ -75,9 +75,9 @@ export function getAffiliateLinks(id: string): Promise<AffiliateLink[]> {
 	return forItem(id, "affiliates", () => repo.getAffiliateLinks(db, id));
 }
 
-/** `id` must be a validated UUID; an invalid cursor rejects with InvalidCursorError (not cached). */
-export function getItemRatingsPage(id: string, cursor?: string): Promise<Page<PublicRating>> {
-	return forItem(id, `ratings:${cursor ?? ""}`, () => repo.getItemRatingsPage(db, id, { cursor }));
+/** `id` must be a validated UUID and `page` an integer in 1..RATINGS_MAX_PAGES. */
+export function getItemRatingsPage(id: string, page: number): Promise<PublicRatingsPage> {
+	return forItem(id, `ratings:p${page}`, () => repo.getItemRatingsPage(db, id, page));
 }
 
 export function itemExists(id: string): Promise<boolean> {

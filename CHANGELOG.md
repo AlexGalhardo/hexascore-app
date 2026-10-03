@@ -3,6 +3,13 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+* **web:** the "See users' scores" dialog is centered in the viewport (above the sticky navbar, internal scroll, near full-width on phones) and replaces "Load more" with numbered pagination (Previous / Next, "Page X of Y", compact page numbers with `aria-current`).
+* **web:** `GET /api/items/[id]/ratings` takes `?page=1..100` (400 outside the range) instead of `?cursor=` and returns `{ data, page, page_count }`: 10 ratings per page, newest first, only the latest 1000 browsable (count capped by a `LIMIT 1000` subquery, `OFFSET` ≤ 990).
+
 ## [0.0.18](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.17...v0.0.18) (2026-10-03)
 
 

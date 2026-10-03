@@ -85,3 +85,6 @@ export type PublicRating = {
 	categories: number[];
 	ratedAt: string;
 };
+
+/** `pageCount` is capped at RATINGS_MAX_PAGES (only the newest ratings are browsable). */
+export type PublicRatingsPage = { data: PublicRating[]; page: number; pageCount: number };
