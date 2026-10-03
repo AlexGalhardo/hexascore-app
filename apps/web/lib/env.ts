@@ -27,6 +27,7 @@ const schema = z
 		UPSTASH_REDIS_REST_TOKEN: optional,
 		RESEND_API_KEY: optional.pipe(z.string().startsWith("re_", "must start with re_").optional()),
 		EMAIL_FROM: optional,
+		CONTACT_INBOX: optional.pipe(z.email().optional()),
 		STRIPE_SECRET_KEY: optional.pipe(
 			z
 				.string()

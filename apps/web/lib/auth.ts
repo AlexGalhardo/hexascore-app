@@ -5,6 +5,7 @@ import { createAuthMiddleware } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
 import { admin, twoFactor, username } from "better-auth/plugins";
 import { ActionEmail } from "@/emails/action-email";
+import { BOT_PROTECTED_AUTH_PATHS, isBotRequest } from "./bot";
 import { APP_NAME, APP_URL } from "./config";
 import { db } from "./db/client";
 import * as schema from "./db/schema";
@@ -21,6 +22,8 @@ const PASSWORD_PATHS = new Set([
 	"/admin/set-user-password",
 	"/admin/create-user",
 ]);
+
+const BOT_PATHS = new Set<string>(BOT_PROTECTED_AUTH_PATHS);
 
 const google =
 	env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
@@ -79,6 +82,10 @@ export const auth = betterAuth({
 	rateLimit: { enabled: true, storage: "database" },
 	hooks: {
 		before: createAuthMiddleware(async (ctx) => {
+			// Server-side auth.api calls carry no browser request, so only real HTTP requests are bot-checked.
+			if (BOT_PATHS.has(ctx.path) && ctx.request && (await isBotRequest(ctx.headers))) {
+				throw new APIError("FORBIDDEN", { message: "Request blocked.", code: "BOT_DETECTED" });
+			}
 			if (!PASSWORD_PATHS.has(ctx.path)) return;
 			const body = ctx.body as { password?: unknown; newPassword?: unknown } | undefined;
 			const candidate = body?.newPassword ?? body?.password;
@@ -89,7 +96,8 @@ export const auth = betterAuth({
 	},
 	plugins: [
 		username({ minUsernameLength: NICKNAME_MIN, maxUsernameLength: NICKNAME_MAX }),
-		twoFactor({ issuer: APP_NAME }),
+		// Passwordless lets Google/passkey-only accounts use 2FA; accounts with a password must still confirm it.
+		twoFactor({ issuer: APP_NAME, allowPasswordless: true }),
 		passkey({ rpName: APP_NAME }),
 		admin(),
 		nextCookies(),
