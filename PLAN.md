@@ -147,7 +147,7 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 
 ### 0.6 — Hardening
 - [x] Seed 10k usuários sintéticos com notas realistas (`unnest` colunar, ~7 min para 10k/100k/2,2M no Docker; `docs/testing.md`)
-- [~] Playwright E2E completo + axe no gate `dev` → `main` (`qa/e2e`, `qa.yml`) — feito, incluindo specs E2E do 0.3; agente QA, Schemathesis, ZAP e k6 pendentes
+- [~] Playwright E2E completo + axe (incluindo specs do 0.3), k6 (p95 + 429/402), Schemathesis e OWASP ZAP (falha em High) no gate `dev` → `main` (`qa/e2e`, `qa/k6`, `qa/schemathesis`, `qa/zap`, `qa.yml`) — feitos; faltam secrets `QA_API_KEY` (Pro/Business) e `QA_FREE_API_KEY` no repo e o agente QA
 - [~] Auditoria OWASP em `docs/security.md`, CSP com nonce, Flags (`pix-checkout`, `public-api-signup`) — feitos; Firewall documentado, falta aplicar no dashboard
 - [~] Performance (Core Web Vitals no Speed Insights), a11y — Analytics + Speed Insights no layout, axe em todas as páginas públicas; leitura dos CWV pendente (precisa de tráfego)
 - **Verificar**: gate `dev` → `main` todo verde; ZAP sem alertas High; p95 da API < 300 ms no k6.
