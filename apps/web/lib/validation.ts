@@ -4,7 +4,7 @@ export const PASSWORD_MIN = 8;
 export const PASSWORD_MAX = 32;
 export const NICKNAME_MIN = 4;
 export const NICKNAME_MAX = 16;
-export const EMAIL_INPUT_MAX = 36;
+export const EMAIL_INPUT_MAX = 48;
 export const NICKNAME_PATTERN = /^[a-z]+$/;
 
 /** What the nickname inputs keep while typing: lowercase letters only (no digits, spaces or symbols). */
