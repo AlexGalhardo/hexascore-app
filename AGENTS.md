@@ -20,3 +20,7 @@ Codename `hexascore`; final brand name is pending.
 - Pre-commit runs Biome and `tsc --noEmit`; never bypass hooks.
 - When a workflow repeats or is easy to get wrong, capture it as a project skill in `.claude/skills/<name>/SKILL.md` and list it here.
 - Record notable changes in `CHANGELOG.md` (Keep a Changelog).
+
+## Project skills
+
+- `.claude/skills/hexascore-auth/SKILL.md` — auth/account work: Better Auth server-only endpoints, Server Action result contract, BotID local setup, testing flows locally (verification link in the dev log, TOTP).
