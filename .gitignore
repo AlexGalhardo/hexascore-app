@@ -24,3 +24,4 @@ test-results/
 .DS_Store
 Thumbs.db
 .pglite/
+.claude/worktrees/
