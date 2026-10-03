@@ -38,7 +38,7 @@ describe("page CSP", () => {
 	test("Scalar allowances only on its two pages, in every locale", () => {
 		for (const path of ["/docs/reference", "/pt-br/docs/reference", "/es/profile/api", "/profile/api"]) {
 			expect(isScalarPage(path)).toBe(true);
-			expect(directives(pageCsp(nonce, path, false)).get("connect-src")).toContain("https://api.hexascore.com");
+			expect(directives(pageCsp(nonce, path, false)).get("connect-src")).toContain("https://api.hexascore.app");
 		}
 		for (const path of ["/docs", "/profile", "/profile/api/checkout", "/games/docs/reference"]) {
 			expect(isScalarPage(path)).toBe(false);
