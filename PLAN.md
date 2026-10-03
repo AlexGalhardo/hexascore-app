@@ -140,9 +140,9 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 - **Verificar**: Free bloqueia na 101ª request (402) e `limit=11` é rejeitado; Schemathesis sem falhas; quickstart das docs funciona copiando e colando.
 
 ### 0.5 — Billing
-- [ ] Config de planos, Products/Prices Stripe (test mode via CLI), Checkout, Portal, webhook
-- [ ] AbacatePay PIX (cobrança, polling, webhook), créditos, cron de renovação/expiração
-- [ ] `/pricing`, `/profile/api/checkout`
+- [x] Config de planos, Products/Prices Stripe (test mode via CLI), Checkout, Portal, webhook
+- [x] AbacatePay PIX (cobrança, polling, webhook), créditos, cron de renovação/expiração
+- [x] `/pricing`, `/profile/api/checkout`
 - **Verificar**: `stripe trigger` e simulação PIX ativam o plano; reenvio do mesmo evento não duplica; valor adulterado no client é ignorado.
 
 ### 0.6 — Hardening

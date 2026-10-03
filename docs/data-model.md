@@ -18,6 +18,8 @@
 - `subscriptions` (`user_id`, `plan`, `provider`, `status`, `current_period_end`, `provider_ref`).
 - `credit_ledger` (`user_id`, `delta`, `reason`, `ref`) — saldo = soma, append-only.
 - `pix_charges` (`provider_ref` único, `amount_cents`, `purpose`, `status`).
+- `stripe_customers` (`user_id` PK, `customer_id` único) — 1 Customer Stripe por usuário, reusado em assinatura e créditos.
+- `processed_events` (`id` do evento, `provider`) — idempotência de webhooks e dos e-mails de lembrete PIX.
 - `api_usage_daily` (`user_id`, `date`, `count`).
 - Últimas 100 requests por usuário ficam no Redis (`LPUSH` + `LTRIM`), não no Postgres.
 

@@ -8,8 +8,12 @@ Auditoria viva. Revisar a cada milestone; cada mitigação aponta para o código
 | --- | --- | --- |
 | Server Actions (`actions/`) | form data | sessão via `getSessionUser()`, zod, BotID nos fluxos públicos |
 | API pública `/api/v1` | query string, header `Authorization` | hash da chave, rate limit + cota (Upstash), zod, só leitura |
-| Webhooks Stripe / AbacatePay | body + assinatura | verificação de assinatura/HMAC em tempo constante, idempotência |
-| Cron `/api/cron/*` | header | `Authorization: Bearer $CRON_SECRET` |
+| Webhook Stripe `POST /api/webhooks/stripe` | body bruto + `Stripe-Signature` | `constructEventAsync` (tolerância de 5 min), 400 em assinatura inválida, idempotência por `event.id` em `processed_events` na mesma transação dos efeitos, estado da assinatura relido da API (eventos fora de ordem), crédito com `ref` único = id da Checkout Session; 503 com log se `STRIPE_WEBHOOK_SECRET` faltar |
+| Webhook AbacatePay `POST /api/webhooks/abacatepay` | body bruto, `?webhookSecret=`, `X-Webhook-Signature` | secret da URL e HMAC-SHA256 base64 (chave pública da AbacatePay) comparados em tempo constante → 401; zod só nos campos lidos; idempotência por `id` do evento + transição `pending → paid`; valor pago tem de bater com `amount_cents` gravado |
+| Server Actions `actions/billing.ts` | `{ product, currency }` / `{ purpose }` | sessão + e-mail verificado; zod; preço por `lookup_key` (Stripe) ou catálogo (PIX), nunca do client; `client_reference_id`/metadata = id da sessão; regras de conflito Stripe×PIX no servidor; QR pendente reaproveitado (sem spam de cobranças) |
+| `GET /api/billing/pix/[id]` | `id` | sessão, zod `uuid`, filtro por dono (404 para os demais), `no-store`; reconsulta a AbacatePay com timeout |
+| Páginas `/pricing`, `/profile/api/checkout` | query `currency`/`plan`/`status` | allowlist via zod; DTO `BillingSummary` sem ids de provedor |
+| Cron `/api/cron/*` (`flush-usage`, `billing-reminders`) | header | `Authorization: Bearer $CRON_SECRET` (tempo constante); lembrete gravado em `processed_events` antes do envio (sem e-mail duplicado) |
 | Ingestão (Python) | payloads de terceiros | escrita só em `source_records`; normalizador valida antes do upsert; texto renderizado sempre escapado |
 
 ## A01–A10

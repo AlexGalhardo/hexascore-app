@@ -15,6 +15,13 @@
       "when": 1790993904931,
       "tag": "0001_init",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790995291346,
+      "tag": "0002_stripe_customers",
+      "breakpoints": true
     }
   ]
 }

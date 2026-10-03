@@ -1,0 +1,160 @@
+- generic [ref=f3e1]:
+  - banner [ref=f3e2]:
+    - generic [ref=f3e3]:
+      - link "Hexascore" [ref=f3e696] [cursor=pointer]:
+        - /url: /pt-br
+      - search [ref=f3e5]:
+        - generic [ref=f3e6]:
+          - generic [ref=f3e7]: Buscar
+          - combobox "Buscar" [active] [ref=f3e8]: The Trustworthy Hierarchy
+          - textbox [aria-hidden] [ref=f3e9]: The Trustworthy Hierarchy
+      - navigation "Sections" [ref=f3e697]:
+        - link "Jogos" [ref=f3e698] [cursor=pointer]:
+          - /url: /pt-br/games
+        - link "Filmes" [ref=f3e699] [cursor=pointer]:
+          - /url: /pt-br/movies
+        - link "Séries" [ref=f3e700] [cursor=pointer]:
+          - /url: /pt-br/series
+        - link "Livros" [ref=f3e701] [cursor=pointer]:
+          - /url: /pt-br/books
+      - generic [ref=f3e15]:
+        - button "Alternar tema" [ref=f3e702]
+        - link "Entrar" [ref=f3e703] [cursor=pointer]:
+          - /url: /pt-br/login
+  - main [ref=f3e20]:
+    - article [ref=f3e704]:
+      - generic [ref=f3e706]:
+        - link "Filmes" [ref=f3e707] [cursor=pointer]:
+          - /url: /pt-br/movies
+        - heading "The Trustworthy Hierarchy" [level=1] [ref=f3e708]
+        - paragraph [ref=f3e709]: 2022 · Filme · Thriller, Animation, Romance
+        - paragraph [ref=f3e710]: Mr. Kristopher Braun, Deanna Littel
+      - region "Nota da comunidade" [ref=f3e711]:
+        - generic [ref=f3e712]:
+          - generic [ref=f3e713]:
+            - img "Nota 49 de 100" [ref=f3e714]: "49"
+            - generic [ref=f3e715]:
+              - paragraph [ref=f3e716]: Nota da comunidade
+              - paragraph [ref=f3e717]: 45 avaliações
+          - generic [ref=f3e718]:
+            - region "Sua avaliação" [ref=f3e719]:
+              - link "Entre para avaliar" [ref=f3e720] [cursor=pointer]:
+                - /url: /pt-br/login
+            - button "Ver notas dos usuários" [ref=f3e721]
+          - generic [ref=f3e722]:
+            - heading "Médias por categoria" [level=2] [ref=f3e723]
+            - generic [ref=f3e724]:
+              - generic [ref=f3e725]: Roteiro
+              - generic [ref=f3e726]: "46"
+            - generic [ref=f3e729]:
+              - generic [ref=f3e730]: Atuação
+              - generic [ref=f3e731]: "52"
+            - generic [ref=f3e734]:
+              - generic [ref=f3e735]: Direção
+              - generic [ref=f3e736]: "50"
+            - generic [ref=f3e739]:
+              - generic [ref=f3e740]: Visual/Fotografia
+              - generic [ref=f3e741]: "49"
+            - generic [ref=f3e744]:
+              - generic [ref=f3e745]: Trilha/Som
+              - generic [ref=f3e746]: "50"
+            - generic [ref=f3e749]:
+              - generic [ref=f3e750]: Entretenimento
+              - generic [ref=f3e751]: "48"
+        - img "Médias por categoria — Roteiro 46, Atuação 52, Direção 50, Visual/Fotografia 49, Trilha/Som 50, Entretenimento 48" [ref=f3e754]:
+          - generic [ref=f3e765]: Roteiro 46
+          - generic [ref=f3e766]: Atuação 52
+          - generic [ref=f3e767]: Direção 50
+          - generic [ref=f3e768]: Visual/Fotografia 49
+          - generic [ref=f3e769]: Trilha/Som 50
+          - generic [ref=f3e770]: Entretenimento 48
+      - region [ref=f3e771]:
+        - heading "Em outros sites" [level=2] [ref=f3e772]
+        - list [ref=f3e773]:
+          - listitem [ref=f3e774]:
+            - link "IMDb" [ref=f3e775] [cursor=pointer]:
+              - /url: https://www.imdb.com/title/tt95194402/
+              - generic [aria-hidden] [ref=f3e777]: ↗
+          - listitem [ref=f3e778]:
+            - link "Metacritic" [ref=f3e779] [cursor=pointer]:
+              - /url: https://www.metacritic.com/movie/the-trustworthy-hierarchy/
+              - generic [aria-hidden] [ref=f3e781]: ↗
+          - listitem [ref=f3e782]:
+            - link "Rotten Tomatoes" [ref=f3e783] [cursor=pointer]:
+              - /url: https://www.rottentomatoes.com/m/the_trustworthy_hierarchy
+              - generic [aria-hidden] [ref=f3e785]: ↗
+        - paragraph [ref=f3e786]: Notas de outros sites pertencem a eles; cada link abre a fonte.
+      - region [ref=f3e787]:
+        - heading "Sinopse" [level=2] [ref=f3e788]
+        - paragraph [ref=f3e789]: The Bruna Pizza is the latest in a series of curioso products from Souza e Associados
+        - paragraph [ref=f3e790]:
+          - text: "Licença do texto: CC BY-SA 4.0 ·"
+          - link "Fonte" [ref=f3e791] [cursor=pointer]:
+            - /url: https://example.test/wiki/the-trustworthy-hierarchy
+      - region [ref=f3e792]:
+        - heading "Trailers" [level=2] [ref=f3e793]
+        - generic [ref=f3e794]:
+          - paragraph [ref=f3e795]: Os trailers vêm do YouTube (youtube-nocookie.com) e só carregam quando você pede.
+          - list [ref=f3e796]:
+            - listitem [ref=f3e797]:
+              - button "Carregar trailer Seed trailer (fake id)" [ref=f3e798]:
+                - generic [aria-hidden] [ref=f3e799]: ▶
+                - generic [ref=f3e800]: Carregar trailer
+                - generic [ref=f3e801]: Seed trailer (fake id)
+            - listitem [ref=f3e802]:
+              - button "Carregar trailer Seed trailer (fake id)" [ref=f3e803]:
+                - generic [aria-hidden] [ref=f3e804]: ▶
+                - generic [ref=f3e805]: Carregar trailer
+                - generic [ref=f3e806]: Seed trailer (fake id)
+            - listitem [ref=f3e807]:
+              - button "Carregar trailer Seed trailer (fake id)" [ref=f3e808]:
+                - generic [aria-hidden] [ref=f3e809]: ▶
+                - generic [ref=f3e810]: Carregar trailer
+                - generic [ref=f3e811]: Seed trailer (fake id)
+      - region [ref=f3e812]:
+        - heading "Detalhes" [level=2] [ref=f3e813]
+        - generic [ref=f3e814]:
+          - generic [ref=f3e815]:
+            - term [ref=f3e816]: Tipo
+            - definition [ref=f3e817]: Filme
+          - generic [ref=f3e818]:
+            - term [ref=f3e819]: Lançamento
+            - definition [ref=f3e820]: 17 de outubro de 2022
+          - generic [ref=f3e821]:
+            - term [ref=f3e822]: Gêneros
+            - definition [ref=f3e823]: Thriller, Animation, Romance
+          - generic [ref=f3e824]:
+            - term [ref=f3e825]: Criado por
+            - definition [ref=f3e826]: Mr. Kristopher Braun, Deanna Littel
+          - generic [ref=f3e827]:
+            - term [ref=f3e828]: Duração
+            - definition [ref=f3e829]: 147 min
+          - generic [ref=f3e830]:
+            - term [ref=f3e831]: Países
+            - definition [ref=f3e832]: FR
+  - contentinfo [ref=f3e457]:
+    - generic [ref=f3e458]:
+      - generic [ref=f3e459]: © Hexascore
+      - link "Termos" [ref=f3e833] [cursor=pointer]:
+        - /url: /pt-br/terms
+      - link "Privacidade" [ref=f3e834] [cursor=pointer]:
+        - /url: /pt-br/policy
+      - link "Contato" [ref=f3e835] [cursor=pointer]:
+        - /url: /pt-br/contact
+      - link "Preços da API" [ref=f3e836] [cursor=pointer]:
+        - /url: /pt-br/pricing
+      - generic [ref=f3e464]:
+        - link "EN" [ref=f3e837] [cursor=pointer]:
+          - /url: /en
+        - link "PT" [ref=f3e838] [cursor=pointer]:
+          - /url: /pt-br
+        - link "ES" [ref=f3e839] [cursor=pointer]:
+          - /url: /es
+  - button "Open Next.js Dev Tools" [ref=f3e473] [cursor=pointer]
+  - alert [ref=f3e678]: The Trustworthy Hierarchy
+  - region "Cookies" [ref=f3e840]:
+    - generic [ref=f3e680]:
+      - paragraph [ref=f3e681]: Usamos apenas cookies essenciais (sessão e preferências). Vídeos do YouTube só carregam se você permitir.
+      - generic [ref=f3e682]:
+        - button "Só essenciais" [ref=f3e841]
+        - button "Permitir vídeos" [ref=f3e842]

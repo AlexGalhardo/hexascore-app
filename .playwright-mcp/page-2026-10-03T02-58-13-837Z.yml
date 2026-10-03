@@ -1,0 +1,571 @@
+- generic [active] [ref=f3e1]:
+  - banner [ref=f3e2]:
+    - generic [ref=f3e3]:
+      - link "Hexascore" [ref=f3e4] [cursor=pointer]:
+        - /url: /pt-br
+      - search [ref=f3e5]:
+        - generic [ref=f3e6]:
+          - generic [ref=f3e7]: Buscar
+          - combobox "Buscar" [ref=f3e8]
+          - textbox [aria-hidden] [ref=f3e9]
+      - navigation "Sections" [ref=f3e10]:
+        - link "Jogos" [ref=f3e11] [cursor=pointer]:
+          - /url: /pt-br/games
+        - link "Filmes" [ref=f3e12] [cursor=pointer]:
+          - /url: /pt-br/movies
+        - link "Séries" [ref=f3e13] [cursor=pointer]:
+          - /url: /pt-br/series
+        - link "Livros" [ref=f3e14] [cursor=pointer]:
+          - /url: /pt-br/books
+      - generic [ref=f3e15]:
+        - button "Alternar tema" [ref=f3e16]
+        - link "Entrar" [ref=f3e19] [cursor=pointer]:
+          - /url: /pt-br/login
+  - main [ref=f3e20]:
+    - generic [ref=f3e21]:
+      - generic [ref=f3e22]:
+        - heading "Todo jogo, filme, série e livro — avaliado pelas pessoas, categoria por categoria." [level=1] [ref=f3e23]
+        - paragraph [ref=f3e24]: Sem resenhas em texto. Seis categorias, de 0 a 100, numa nota única da comunidade.
+      - region [ref=f3e25]:
+        - generic [ref=f3e26]:
+          - heading [level=2] [ref=f3e27]:
+            - link "Jogos" [ref=f3e28] [cursor=pointer]:
+              - /url: /pt-br/games
+          - link "Ver tudo em Jogos →" [ref=f3e29] [cursor=pointer]:
+            - /url: /pt-br/games
+        - generic [ref=f3e30]:
+          - generic [ref=f3e31]:
+            - heading [level=3] [ref=f3e32]:
+              - link "Melhores notas" [ref=f3e33] [cursor=pointer]:
+                - /url: /pt-br/games?sort=-score
+            - list [ref=f3e34]:
+              - listitem [ref=f3e35]:
+                - generic [ref=f3e36]: "1"
+                - 'link "Reasoning: Colossal Exterior" [ref=f3e37] [cursor=pointer]':
+                  - /url: /pt-br/games/reasoning-colossal-exterior
+                - generic [ref=f3e38]: "1986"
+                - img "Nota 94 de 100" [ref=f3e39]: "94"
+              - listitem [ref=f3e40]:
+                - generic [ref=f3e41]: "2"
+                - link "Unimportant Suspension II" [ref=f3e42] [cursor=pointer]:
+                  - /url: /pt-br/games/unimportant-suspension-ii
+                - generic [ref=f3e43]: "2000"
+                - img "Nota 93 de 100" [ref=f3e44]: "93"
+              - listitem [ref=f3e45]:
+                - generic [ref=f3e46]: "3"
+                - 'link "Armchair: Quick Someplace" [ref=f3e47] [cursor=pointer]':
+                  - /url: /pt-br/games/armchair-quick-someplace
+                - generic [ref=f3e48]: "2006"
+                - img "Nota 92 de 100" [ref=f3e49]: "92"
+              - listitem [ref=f3e50]:
+                - generic [ref=f3e51]: "4"
+                - 'link "Understanding: Talkative Information" [ref=f3e52] [cursor=pointer]':
+                  - /url: /pt-br/games/understanding-talkative-information
+                - generic [ref=f3e53]: "1999"
+                - img "Nota 91 de 100" [ref=f3e54]: "91"
+              - listitem [ref=f3e55]:
+                - generic [ref=f3e56]: "5"
+                - link "Massa doce" [ref=f3e57] [cursor=pointer]:
+                  - /url: /pt-br/games/noxious-dusk
+                - generic [ref=f3e58]: "1999"
+                - img "Nota 91 de 100" [ref=f3e59]: "91"
+              - listitem [ref=f3e60]:
+                - generic [ref=f3e61]: "6"
+                - link "Insolence Tactics" [ref=f3e62] [cursor=pointer]:
+                  - /url: /pt-br/games/insolence-tactics
+                - generic [ref=f3e63]: "2020"
+                - img "Nota 88 de 100" [ref=f3e64]: "88"
+          - generic [ref=f3e65]:
+            - heading [level=3] [ref=f3e66]:
+              - link "Lançamentos" [ref=f3e67] [cursor=pointer]:
+                - /url: /pt-br/games?sort=-release_date
+            - list [ref=f3e68]:
+              - listitem [ref=f3e69]:
+                - generic [ref=f3e70]: "1"
+                - 'link "Lieu: Repentant Discourse" [ref=f3e71] [cursor=pointer]':
+                  - /url: /pt-br/games/lieu-repentant-discourse
+                - generic [ref=f3e72]: "2026"
+                - img "Nota 61 de 100" [ref=f3e73]: "61"
+              - listitem [ref=f3e74]:
+                - generic [ref=f3e75]: "2"
+                - link "Vidro barato" [ref=f3e76] [cursor=pointer]:
+                  - /url: /pt-br/games/bidet-tactics
+                - generic [ref=f3e77]: "2026"
+                - img "Nota 69 de 100" [ref=f3e78]: "69"
+              - listitem [ref=f3e79]:
+                - generic [ref=f3e80]: "3"
+                - link "Grave Management" [ref=f3e81] [cursor=pointer]:
+                  - /url: /pt-br/games/grave-management
+                - generic [ref=f3e82]: "2025"
+                - img "Nota 59 de 100" [ref=f3e83]: "59"
+              - listitem [ref=f3e84]:
+                - generic [ref=f3e85]: "4"
+                - link "Supportive Secret II" [ref=f3e86] [cursor=pointer]:
+                  - /url: /pt-br/games/supportive-secret-ii
+                - generic [ref=f3e87]: "2025"
+                - img "Nota 68 de 100" [ref=f3e88]: "68"
+              - listitem [ref=f3e89]:
+                - generic [ref=f3e90]: "5"
+                - link "Biblioteca impaciente" [ref=f3e91] [cursor=pointer]:
+                  - /url: /pt-br/games/joy-blue-step
+                - generic [ref=f3e92]: "2025"
+                - img "Nota 61 de 100" [ref=f3e93]: "61"
+              - listitem [ref=f3e94]:
+                - generic [ref=f3e95]: "6"
+                - link "Cruelty Tactics" [ref=f3e96] [cursor=pointer]:
+                  - /url: /pt-br/games/cruelty-tactics
+                - generic [ref=f3e97]: "2024"
+                - img "Nota 61 de 100" [ref=f3e98]: "61"
+          - generic [ref=f3e99]:
+            - heading [level=3] [ref=f3e100]:
+              - link "Mais avaliados" [ref=f3e101] [cursor=pointer]:
+                - /url: /pt-br/games?sort=-rating_count
+            - list [ref=f3e102]:
+              - listitem [ref=f3e103]:
+                - generic [ref=f3e104]: "1"
+                - link "Pizza normal" [ref=f3e105] [cursor=pointer]:
+                  - /url: /pt-br/games/pliers-second-waist
+                - generic [ref=f3e106]: "45"
+                - img "Nota 36 de 100" [ref=f3e107]: "36"
+              - listitem [ref=f3e108]:
+                - generic [ref=f3e109]: "2"
+                - link "Massa doce" [ref=f3e110] [cursor=pointer]:
+                  - /url: /pt-br/games/noxious-dusk
+                - generic [ref=f3e111]: "45"
+                - img "Nota 91 de 100" [ref=f3e112]: "91"
+              - listitem [ref=f3e113]:
+                - generic [ref=f3e114]: "3"
+                - link "Tempestade alto" [ref=f3e115] [cursor=pointer]:
+                  - /url: /pt-br/games/airbus-tactics
+                - generic [ref=f3e116]: "45"
+                - img "Nota 48 de 100" [ref=f3e117]: "48"
+              - listitem [ref=f3e118]:
+                - generic [ref=f3e119]: "4"
+                - link "Prickly Verve II" [ref=f3e120] [cursor=pointer]:
+                  - /url: /pt-br/games/prickly-verve-ii
+                - generic [ref=f3e121]: "45"
+                - img "Nota 81 de 100" [ref=f3e122]: "81"
+              - listitem [ref=f3e123]:
+                - generic [ref=f3e124]: "5"
+                - 'link "Habit: Carefree Epic" [ref=f3e125] [cursor=pointer]':
+                  - /url: /pt-br/games/habit-carefree-epic
+                - generic [ref=f3e126]: "45"
+                - img "Nota 44 de 100" [ref=f3e127]: "44"
+              - listitem [ref=f3e128]:
+                - generic [ref=f3e129]: "6"
+                - link "Casa triangular" [ref=f3e130] [cursor=pointer]:
+                  - /url: /pt-br/games/deficient-underpants-ii
+                - generic [ref=f3e131]: "42"
+                - img "Nota 56 de 100" [ref=f3e132]: "56"
+      - region [ref=f3e133]:
+        - generic [ref=f3e134]:
+          - heading [level=2] [ref=f3e135]:
+            - link "Filmes" [ref=f3e136] [cursor=pointer]:
+              - /url: /pt-br/movies
+          - link "Ver tudo em Filmes →" [ref=f3e137] [cursor=pointer]:
+            - /url: /pt-br/movies
+        - generic [ref=f3e138]:
+          - generic [ref=f3e139]:
+            - heading [level=3] [ref=f3e140]:
+              - link "Melhores notas" [ref=f3e141] [cursor=pointer]:
+                - /url: /pt-br/movies?sort=-score
+            - list [ref=f3e142]:
+              - listitem [ref=f3e143]:
+                - generic [ref=f3e144]: "1"
+                - link "A Dependent Avalanche" [ref=f3e145] [cursor=pointer]:
+                  - /url: /pt-br/movies/a-dependent-avalanche
+                - generic [ref=f3e146]: "1996"
+                - img "Nota 95 de 100" [ref=f3e147]: "95"
+              - listitem [ref=f3e148]:
+                - generic [ref=f3e149]: "2"
+                - link "A Wiggly Ownership" [ref=f3e150] [cursor=pointer]:
+                  - /url: /pt-br/movies/a-wiggly-ownership
+                - generic [ref=f3e151]: "1993"
+                - img "Nota 94 de 100" [ref=f3e152]: "94"
+              - listitem [ref=f3e153]:
+                - generic [ref=f3e154]: "3"
+                - link "Vision" [ref=f3e155] [cursor=pointer]:
+                  - /url: /pt-br/movies/vision
+                - generic [ref=f3e156]: "2016"
+                - img "Nota 93 de 100" [ref=f3e157]: "93"
+              - listitem [ref=f3e158]:
+                - generic [ref=f3e159]: "4"
+                - link "A Impure Plain" [ref=f3e160] [cursor=pointer]:
+                  - /url: /pt-br/movies/a-impure-plain
+                - generic [ref=f3e161]: "1978"
+                - img "Nota 93 de 100" [ref=f3e162]: "93"
+              - listitem [ref=f3e163]:
+                - generic [ref=f3e164]: "5"
+                - link "Cérebro fácil" [ref=f3e165] [cursor=pointer]:
+                  - /url: /pt-br/movies/hovercraft-of-desk
+                - generic [ref=f3e166]: "2018"
+                - img "Nota 92 de 100" [ref=f3e167]: "92"
+              - listitem [ref=f3e168]:
+                - generic [ref=f3e169]: "6"
+                - link "Link estranho" [ref=f3e170] [cursor=pointer]:
+                  - /url: /pt-br/movies/finger-of-baseboard
+                - generic [ref=f3e171]: "2024"
+                - img "Nota 92 de 100" [ref=f3e172]: "92"
+          - generic [ref=f3e173]:
+            - heading [level=3] [ref=f3e174]:
+              - link "Lançamentos" [ref=f3e175] [cursor=pointer]:
+                - /url: /pt-br/movies?sort=-release_date
+            - list [ref=f3e176]:
+              - listitem [ref=f3e177]:
+                - generic [ref=f3e178]: "1"
+                - link "A Oblong Swine" [ref=f3e179] [cursor=pointer]:
+                  - /url: /pt-br/movies/a-oblong-swine
+                - generic [ref=f3e180]: "2026"
+                - img "Nota 91 de 100" [ref=f3e181]: "91"
+              - listitem [ref=f3e182]:
+                - generic [ref=f3e183]: "2"
+                - link "Galo inteligente" [ref=f3e184] [cursor=pointer]:
+                  - /url: /pt-br/movies/a-improbable-lieu
+                - generic [ref=f3e185]: "2026"
+                - img "Nota 28 de 100" [ref=f3e186]: "28"
+              - listitem [ref=f3e187]:
+                - generic [ref=f3e188]: "3"
+                - link "Governo mau" [ref=f3e189] [cursor=pointer]:
+                  - /url: /pt-br/movies/the-intent-operating
+                - generic [ref=f3e190]: "2025"
+                - img "Nota 84 de 100" [ref=f3e191]: "84"
+              - listitem [ref=f3e192]:
+                - generic [ref=f3e193]: "4"
+                - link "Tapete cansado" [ref=f3e194] [cursor=pointer]:
+                  - /url: /pt-br/movies/cassava
+                - generic [ref=f3e195]: "2024"
+                - img "Avaliações insuficientes" [ref=f3e196]: –
+              - listitem [ref=f3e197]:
+                - generic [ref=f3e198]: "5"
+                - link "Link estranho" [ref=f3e199] [cursor=pointer]:
+                  - /url: /pt-br/movies/finger-of-baseboard
+                - generic [ref=f3e200]: "2024"
+                - img "Nota 92 de 100" [ref=f3e201]: "92"
+              - listitem [ref=f3e202]:
+                - generic [ref=f3e203]: "6"
+                - link "A Ecstatic Hawk" [ref=f3e204] [cursor=pointer]:
+                  - /url: /pt-br/movies/a-ecstatic-hawk
+                - generic [ref=f3e205]: "2023"
+                - img "Nota 71 de 100" [ref=f3e206]: "71"
+          - generic [ref=f3e207]:
+            - heading [level=3] [ref=f3e208]:
+              - link "Mais avaliados" [ref=f3e209] [cursor=pointer]:
+                - /url: /pt-br/movies?sort=-rating_count
+            - list [ref=f3e210]:
+              - listitem [ref=f3e211]:
+                - generic [ref=f3e212]: "1"
+                - link "Trovão pontudo" [ref=f3e213] [cursor=pointer]:
+                  - /url: /pt-br/movies/sauerkraut
+                - generic [ref=f3e214]: "45"
+                - img "Nota 53 de 100" [ref=f3e215]: "53"
+              - listitem [ref=f3e216]:
+                - generic [ref=f3e217]: "2"
+                - link "Behest of Guide" [ref=f3e218] [cursor=pointer]:
+                  - /url: /pt-br/movies/behest-of-guide
+                - generic [ref=f3e219]: "45"
+                - img "Nota 75 de 100" [ref=f3e220]: "75"
+              - listitem [ref=f3e221]:
+                - generic [ref=f3e222]: "3"
+                - link "Casa aberto" [ref=f3e223] [cursor=pointer]:
+                  - /url: /pt-br/movies/cd
+                - generic [ref=f3e224]: "45"
+                - img "Nota 30 de 100" [ref=f3e225]: "30"
+              - listitem [ref=f3e226]:
+                - generic [ref=f3e227]: "4"
+                - link "The Trustworthy Hierarchy" [ref=f3e228] [cursor=pointer]:
+                  - /url: /pt-br/movies/the-trustworthy-hierarchy
+                - generic [ref=f3e229]: "45"
+                - img "Nota 49 de 100" [ref=f3e230]: "49"
+              - listitem [ref=f3e231]:
+                - generic [ref=f3e232]: "5"
+                - link "Link estranho" [ref=f3e233] [cursor=pointer]:
+                  - /url: /pt-br/movies/finger-of-baseboard
+                - generic [ref=f3e234]: "45"
+                - img "Nota 92 de 100" [ref=f3e235]: "92"
+              - listitem [ref=f3e236]:
+                - generic [ref=f3e237]: "6"
+                - link "Hospital jovem" [ref=f3e238] [cursor=pointer]:
+                  - /url: /pt-br/movies/marimba
+                - generic [ref=f3e239]: "45"
+                - img "Nota 82 de 100" [ref=f3e240]: "82"
+      - region [ref=f3e241]:
+        - generic [ref=f3e242]:
+          - heading [level=2] [ref=f3e243]:
+            - link "Séries" [ref=f3e244] [cursor=pointer]:
+              - /url: /pt-br/series
+          - link "Ver tudo em Séries →" [ref=f3e245] [cursor=pointer]:
+            - /url: /pt-br/series
+        - generic [ref=f3e246]:
+          - generic [ref=f3e247]:
+            - heading [level=3] [ref=f3e248]:
+              - link "Melhores notas" [ref=f3e249] [cursor=pointer]:
+                - /url: /pt-br/series?sort=-score
+            - list [ref=f3e250]:
+              - listitem [ref=f3e251]:
+                - generic [ref=f3e252]: "1"
+                - link "Zebra seguro" [ref=f3e253] [cursor=pointer]:
+                  - /url: /pt-br/series/worthy-tentacle
+                - generic [ref=f3e254]: "1994"
+                - img "Nota 93 de 100" [ref=f3e255]: "93"
+              - listitem [ref=f3e256]:
+                - generic [ref=f3e257]: "2"
+                - link "Década musculoso" [ref=f3e258] [cursor=pointer]:
+                  - /url: /pt-br/series/front-perfection
+                - generic [ref=f3e259]: "1989"
+                - img "Nota 92 de 100" [ref=f3e260]: "92"
+              - listitem [ref=f3e261]:
+                - generic [ref=f3e262]: "3"
+                - link "Débito livre" [ref=f3e263] [cursor=pointer]:
+                  - /url: /pt-br/series/house-of-muscat
+                - generic [ref=f3e264]: "2018"
+                - img "Nota 91 de 100" [ref=f3e265]: "91"
+              - listitem [ref=f3e266]:
+                - generic [ref=f3e267]: "4"
+                - link "Caneta criativo" [ref=f3e268] [cursor=pointer]:
+                  - /url: /pt-br/series/house-of-dandelion
+                - generic [ref=f3e269]: "2003"
+                - img "Nota 90 de 100" [ref=f3e270]: "90"
+              - listitem [ref=f3e271]:
+                - generic [ref=f3e272]: "5"
+                - link "Ferro estreito" [ref=f3e273] [cursor=pointer]:
+                  - /url: /pt-br/series/fledgling-street
+                - generic [ref=f3e274]: "1993"
+                - img "Nota 90 de 100" [ref=f3e275]: "90"
+              - listitem [ref=f3e276]:
+                - generic [ref=f3e277]: "6"
+                - link "Edredom indiferente" [ref=f3e278] [cursor=pointer]:
+                  - /url: /pt-br/series/language-street
+                - generic [ref=f3e279]: "1983"
+                - img "Nota 90 de 100" [ref=f3e280]: "90"
+          - generic [ref=f3e281]:
+            - heading [level=3] [ref=f3e282]:
+              - link "Lançamentos" [ref=f3e283] [cursor=pointer]:
+                - /url: /pt-br/series?sort=-release_date
+            - list [ref=f3e284]:
+              - listitem [ref=f3e285]:
+                - generic [ref=f3e286]: "1"
+                - link "House of Technician" [ref=f3e287] [cursor=pointer]:
+                  - /url: /pt-br/series/house-of-technician
+                - generic [ref=f3e288]: "2026"
+                - img "Nota 31 de 100" [ref=f3e289]: "31"
+              - listitem [ref=f3e290]:
+                - generic [ref=f3e291]: "2"
+                - link "House of Viability" [ref=f3e292] [cursor=pointer]:
+                  - /url: /pt-br/series/house-of-viability
+                - generic [ref=f3e293]: "2024"
+                - img "Nota 25 de 100" [ref=f3e294]: "25"
+              - listitem [ref=f3e295]:
+                - generic [ref=f3e296]: "3"
+                - link "Borracha limpo" [ref=f3e297] [cursor=pointer]:
+                  - /url: /pt-br/series/the-minions
+                - generic [ref=f3e298]: "2024"
+                - img "Nota 76 de 100" [ref=f3e299]: "76"
+              - listitem [ref=f3e300]:
+                - generic [ref=f3e301]: "4"
+                - link "Gaseous Cantaloupe" [ref=f3e302] [cursor=pointer]:
+                  - /url: /pt-br/series/gaseous-cantaloupe
+                - generic [ref=f3e303]: "2024"
+                - img "Nota 61 de 100" [ref=f3e304]: "61"
+              - listitem [ref=f3e305]:
+                - generic [ref=f3e306]: "5"
+                - link "House of Deployment" [ref=f3e307] [cursor=pointer]:
+                  - /url: /pt-br/series/house-of-deployment
+                - generic [ref=f3e308]: "2024"
+                - img "Nota 26 de 100" [ref=f3e309]: "26"
+              - listitem [ref=f3e310]:
+                - generic [ref=f3e311]: "6"
+                - link "Hawk Street" [ref=f3e312] [cursor=pointer]:
+                  - /url: /pt-br/series/hawk-street
+                - generic [ref=f3e313]: "2024"
+                - img "Nota 73 de 100" [ref=f3e314]: "73"
+          - generic [ref=f3e315]:
+            - heading [level=3] [ref=f3e316]:
+              - link "Mais avaliados" [ref=f3e317] [cursor=pointer]:
+                - /url: /pt-br/series?sort=-rating_count
+            - list [ref=f3e318]:
+              - listitem [ref=f3e319]:
+                - generic [ref=f3e320]: "1"
+                - link "Edredom indiferente" [ref=f3e321] [cursor=pointer]:
+                  - /url: /pt-br/series/language-street
+                - generic [ref=f3e322]: "45"
+                - img "Nota 90 de 100" [ref=f3e323]: "90"
+              - listitem [ref=f3e324]:
+                - generic [ref=f3e325]: "2"
+                - link "Década gentil" [ref=f3e326] [cursor=pointer]:
+                  - /url: /pt-br/series/frizzy-impostor
+                - generic [ref=f3e327]: "45"
+                - img "Nota 28 de 100" [ref=f3e328]: "28"
+              - listitem [ref=f3e329]:
+                - generic [ref=f3e330]: "3"
+                - link "Barco chato" [ref=f3e331] [cursor=pointer]:
+                  - /url: /pt-br/series/black-citizen
+                - generic [ref=f3e332]: "45"
+                - img "Nota 27 de 100" [ref=f3e333]: "27"
+              - listitem [ref=f3e334]:
+                - generic [ref=f3e335]: "4"
+                - link "Charlatan Street" [ref=f3e336] [cursor=pointer]:
+                  - /url: /pt-br/series/charlatan-street
+                - generic [ref=f3e337]: "45"
+                - img "Nota 59 de 100" [ref=f3e338]: "59"
+              - listitem [ref=f3e339]:
+                - generic [ref=f3e340]: "5"
+                - link "House of Flu" [ref=f3e341] [cursor=pointer]:
+                  - /url: /pt-br/series/house-of-flu
+                - generic [ref=f3e342]: "45"
+                - img "Nota 33 de 100" [ref=f3e343]: "33"
+              - listitem [ref=f3e344]:
+                - generic [ref=f3e345]: "6"
+                - link "Fluffy Embossing" [ref=f3e346] [cursor=pointer]:
+                  - /url: /pt-br/series/fluffy-embossing
+                - generic [ref=f3e347]: "45"
+                - img "Nota 43 de 100" [ref=f3e348]: "43"
+      - region [ref=f3e349]:
+        - generic [ref=f3e350]:
+          - heading [level=2] [ref=f3e351]:
+            - link "Livros" [ref=f3e352] [cursor=pointer]:
+              - /url: /pt-br/books
+          - link "Ver tudo em Livros →" [ref=f3e353] [cursor=pointer]:
+            - /url: /pt-br/books
+        - generic [ref=f3e354]:
+          - generic [ref=f3e355]:
+            - heading [level=3] [ref=f3e356]:
+              - link "Melhores notas" [ref=f3e357] [cursor=pointer]:
+                - /url: /pt-br/books?sort=-score
+            - list [ref=f3e358]:
+              - listitem [ref=f3e359]:
+                - generic [ref=f3e360]: "1"
+                - link "Juros magro" [ref=f3e361] [cursor=pointer]:
+                  - /url: /pt-br/books/made-up-numeracy
+                - generic [ref=f3e362]: "2008"
+                - img "Nota 92 de 100" [ref=f3e363]: "92"
+              - listitem [ref=f3e364]:
+                - generic [ref=f3e365]: "2"
+                - link "Letters from Andersonboro" [ref=f3e366] [cursor=pointer]:
+                  - /url: /pt-br/books/letters-from-andersonboro
+                - generic [ref=f3e367]: "1991"
+                - img "Nota 91 de 100" [ref=f3e368]: "91"
+              - listitem [ref=f3e369]:
+                - generic [ref=f3e370]: "3"
+                - link "Atmosfera seguro" [ref=f3e371] [cursor=pointer]:
+                  - /url: /pt-br/books/the-tentacle-of-squid
+                - generic [ref=f3e372]: "2008"
+                - img "Nota 90 de 100" [ref=f3e373]: "90"
+              - listitem [ref=f3e374]:
+                - generic [ref=f3e375]: "4"
+                - link "Raio pontudo" [ref=f3e376] [cursor=pointer]:
+                  - /url: /pt-br/books/the-sore-sauerkraut
+                - generic [ref=f3e377]: "1984"
+                - img "Nota 90 de 100" [ref=f3e378]: "90"
+              - listitem [ref=f3e379]:
+                - generic [ref=f3e380]: "5"
+                - link "Café ativo" [ref=f3e381] [cursor=pointer]:
+                  - /url: /pt-br/books/competent-avalanche
+                - generic [ref=f3e382]: "2005"
+                - img "Nota 90 de 100" [ref=f3e383]: "90"
+              - listitem [ref=f3e384]:
+                - generic [ref=f3e385]: "6"
+                - link "Letters from Los Angeles" [ref=f3e386] [cursor=pointer]:
+                  - /url: /pt-br/books/letters-from-los-angeles
+                - generic [ref=f3e387]: "2022"
+                - img "Nota 89 de 100" [ref=f3e388]: "89"
+          - generic [ref=f3e389]:
+            - heading [level=3] [ref=f3e390]:
+              - link "Lançamentos" [ref=f3e391] [cursor=pointer]:
+                - /url: /pt-br/books?sort=-release_date
+            - list [ref=f3e392]:
+              - listitem [ref=f3e393]:
+                - generic [ref=f3e394]: "1"
+                - link "Untried Ocelot" [ref=f3e395] [cursor=pointer]:
+                  - /url: /pt-br/books/untried-ocelot
+                - generic [ref=f3e396]: "2025"
+                - img "Nota 87 de 100" [ref=f3e397]: "87"
+              - listitem [ref=f3e398]:
+                - generic [ref=f3e399]: "2"
+                - link "Enchanting Dulcimer" [ref=f3e400] [cursor=pointer]:
+                  - /url: /pt-br/books/enchanting-dulcimer
+                - generic [ref=f3e401]: "2025"
+                - img "Nota 83 de 100" [ref=f3e402]: "83"
+              - listitem [ref=f3e403]:
+                - generic [ref=f3e404]: "3"
+                - link "Sofá consciente" [ref=f3e405] [cursor=pointer]:
+                  - /url: /pt-br/books/thorny-council
+                - generic [ref=f3e406]: "2025"
+                - img "Nota 61 de 100" [ref=f3e407]: "61"
+              - listitem [ref=f3e408]:
+                - generic [ref=f3e409]: "4"
+                - link "Parallel Vibration" [ref=f3e410] [cursor=pointer]:
+                  - /url: /pt-br/books/parallel-vibration
+                - generic [ref=f3e411]: "2024"
+                - img "Nota 69 de 100" [ref=f3e412]: "69"
+              - listitem [ref=f3e413]:
+                - generic [ref=f3e414]: "5"
+                - link "Nimble Accountability" [ref=f3e415] [cursor=pointer]:
+                  - /url: /pt-br/books/nimble-accountability
+                - generic [ref=f3e416]: "2024"
+                - img "Avaliações insuficientes" [ref=f3e417]: –
+              - listitem [ref=f3e418]:
+                - generic [ref=f3e419]: "6"
+                - link "Letters from Catonsville" [ref=f3e420] [cursor=pointer]:
+                  - /url: /pt-br/books/letters-from-catonsville
+                - generic [ref=f3e421]: "2023"
+                - img "Avaliações insuficientes" [ref=f3e422]: –
+          - generic [ref=f3e423]:
+            - heading [level=3] [ref=f3e424]:
+              - link "Mais avaliados" [ref=f3e425] [cursor=pointer]:
+                - /url: /pt-br/books?sort=-rating_count
+            - list [ref=f3e426]:
+              - listitem [ref=f3e427]:
+                - generic [ref=f3e428]: "1"
+                - link "Tangible Pomelo" [ref=f3e429] [cursor=pointer]:
+                  - /url: /pt-br/books/tangible-pomelo
+                - generic [ref=f3e430]: "45"
+                - img "Nota 70 de 100" [ref=f3e431]: "70"
+              - listitem [ref=f3e432]:
+                - generic [ref=f3e433]: "2"
+                - link "Café ativo" [ref=f3e434] [cursor=pointer]:
+                  - /url: /pt-br/books/competent-avalanche
+                - generic [ref=f3e435]: "45"
+                - img "Nota 90 de 100" [ref=f3e436]: "90"
+              - listitem [ref=f3e437]:
+                - generic [ref=f3e438]: "3"
+                - link "Juros magro" [ref=f3e439] [cursor=pointer]:
+                  - /url: /pt-br/books/made-up-numeracy
+                - generic [ref=f3e440]: "45"
+                - img "Nota 92 de 100" [ref=f3e441]: "92"
+              - listitem [ref=f3e442]:
+                - generic [ref=f3e443]: "4"
+                - link "The Collaboration of Tentacle" [ref=f3e444] [cursor=pointer]:
+                  - /url: /pt-br/books/the-collaboration-of-tentacle
+                - generic [ref=f3e445]: "45"
+                - img "Nota 75 de 100" [ref=f3e446]: "75"
+              - listitem [ref=f3e447]:
+                - generic [ref=f3e448]: "5"
+                - link "The Yarmulke of Breastplate" [ref=f3e449] [cursor=pointer]:
+                  - /url: /pt-br/books/the-yarmulke-of-breastplate
+                - generic [ref=f3e450]: "42"
+                - img "Nota 30 de 100" [ref=f3e451]: "30"
+              - listitem [ref=f3e452]:
+                - generic [ref=f3e453]: "6"
+                - link "Grama falso" [ref=f3e454] [cursor=pointer]:
+                  - /url: /pt-br/books/the-forgery-of-countess
+                - generic [ref=f3e455]: "39"
+                - img "Nota 34 de 100" [ref=f3e456]: "34"
+  - contentinfo [ref=f3e457]:
+    - generic [ref=f3e458]:
+      - generic [ref=f3e459]: © Hexascore
+      - link "Termos" [ref=f3e460] [cursor=pointer]:
+        - /url: /pt-br/terms
+      - link "Privacidade" [ref=f3e461] [cursor=pointer]:
+        - /url: /pt-br/policy
+      - link "Contato" [ref=f3e462] [cursor=pointer]:
+        - /url: /pt-br/contact
+      - link "Preços da API" [ref=f3e463] [cursor=pointer]:
+        - /url: /pt-br/pricing
+      - generic [ref=f3e464]:
+        - link "EN" [ref=f3e465] [cursor=pointer]:
+          - /url: /en
+        - link "PT" [ref=f3e466] [cursor=pointer]:
+          - /url: /pt-br
+        - link "ES" [ref=f3e467] [cursor=pointer]:
+          - /url: /es
+  - button "Open Next.js Dev Tools" [ref=f3e473] [cursor=pointer]

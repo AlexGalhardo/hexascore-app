@@ -21,6 +21,8 @@ export type CounterStore = {
 	hincr(key: string, field: string, by: number): Promise<void>;
 	hgetall(key: string): Promise<Record<string, number>>;
 	del(key: string): Promise<void>;
+	/** Atomic INCRBY that leaves an absent key absent; returns the new value or null. */
+	incrByIfExists(key: string, by: number): Promise<number | null>;
 };
 
 function redisStore(redis: Redis): CounterStore {
@@ -49,6 +51,14 @@ function redisStore(redis: Redis): CounterStore {
 		},
 		async del(key) {
 			await redis.del(key);
+		},
+		async incrByIfExists(key, by) {
+			const v = await redis.eval<[number], number | null>(
+				"if redis.call('exists', KEYS[1]) == 1 then return redis.call('incrby', KEYS[1], ARGV[1]) end return nil",
+				[key],
+				[by],
+			);
+			return v === null ? null : Number(v);
 		},
 		async throttle(key, perSecond) {
 			let limiter = limiters.get(perSecond);
@@ -92,6 +102,12 @@ export function memoryStore(): CounterStore {
 			values.delete(key);
 			hashes.delete(key);
 		},
+		async incrByIfExists(key, by) {
+			const current = values.get(key);
+			if (current === undefined) return null;
+			values.set(key, current + by);
+			return current + by;
+		},
 		async throttle(key, perSecond) {
 			const second = Math.floor(Date.now() / 1000);
 			const w = windows.get(key);
@@ -131,6 +147,7 @@ export function dayId(now = new Date()): string {
 	return now.toISOString().slice(0, 10);
 }
 
+export const creditsCacheKey = (userId: string): string => `hx:credits:${userId}`;
 export const usageKey = (day: string): string => `hx:usage:${day}`;
 export const creditsUsedKey = (day: string): string => `hx:credits-used:${day}`;
 
@@ -172,7 +189,7 @@ export async function consumeRequest(
 	await s.decr(key);
 
 	if (plan !== "free") {
-		const creditsKey = `hx:credits:${userId}`;
+		const creditsKey = creditsCacheKey(userId);
 		if ((await s.get(creditsKey)) === null) await s.setIfAbsent(creditsKey, await loadCredits(userId));
 		const left = await s.decr(creditsKey);
 		if (left >= 0) {
@@ -190,9 +207,17 @@ export async function refundRequest(s: CounterStore, userId: string, plan: PlanI
 	const day = dayId();
 	await s.hincr(usageKey(day), userId, -1);
 	if (usedCredit) {
-		await s.incr(`hx:credits:${userId}`);
+		await s.incr(creditsCacheKey(userId));
 		await s.hincr(creditsUsedKey(day), userId, -1);
 	} else {
 		await s.decr(quotaKey(userId, plan));
 	}
+}
+
+/**
+ * Mirrors a purchase into the cached balance. Call only after the ledger row is committed: an absent key is
+ * left alone because the next request rebuilds it from the ledger (which already includes the purchase).
+ */
+export async function addCachedCredits(s: CounterStore, userId: string, amount: number): Promise<void> {
+	await s.incrByIfExists(creditsCacheKey(userId), amount);
 }
