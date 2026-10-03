@@ -29,7 +29,8 @@ test.describe("ratings @auth", () => {
 		await expectLoggedIn(page);
 
 		await page.goto(item.href);
-		const community = page.getByRole("region", { name: "Community score" });
+		// The community score, rating count and threshold note live in the item header (cover · title · score).
+		const community = page.getByRole("article").locator("header");
 		await expect(community.getByText("4 ratings")).toBeVisible();
 		await expect(community.getByText(/Not enough ratings/)).toBeVisible();
 		await expect(community.getByRole("img", { name: "Not enough ratings yet" })).toBeVisible();
