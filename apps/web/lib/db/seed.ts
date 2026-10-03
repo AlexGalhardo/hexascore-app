@@ -28,6 +28,7 @@ async function main(): Promise<void> {
 	const { db } = await import("./client");
 	const schema = await import("./schema");
 	const started = performance.now();
+	const elapsed = () => `${((performance.now() - started) / 1000).toFixed(1)} s`;
 
 	for (let start = 0; start < opts.users; start += opts.batch) {
 		const rows = Array.from({ length: Math.min(opts.batch, opts.users - start) }, (_, i) => ({
@@ -46,7 +47,7 @@ async function main(): Promise<void> {
 				},
 			});
 	}
-	console.info(`[seed] ${opts.users} users`);
+	console.info(`[seed] ${opts.users} users (${elapsed()})`);
 
 	const perType = Math.floor(opts.items / ITEM_TYPES.length);
 	let ratingTotal = 0;
@@ -60,6 +61,8 @@ async function main(): Promise<void> {
 			const slugs = batch.map((item) => uniqueSlug(item, usedSlugs));
 
 			await db.transaction(async (tx) => {
+				// Fixture data: skipping the WAL flush wait per commit is safe (a crash just means re-running the seed).
+				await tx.execute(sql`set local synchronous_commit to off`);
 				const inserted = await tx
 					.insert(schema.items)
 					.values(
@@ -128,54 +131,32 @@ async function main(): Promise<void> {
 						});
 				}
 
-				const ratingRows = batch.flatMap((item, i) => {
+				const columns: RatingColumns = { user: [], item: [], c: [[], [], [], [], [], []], at: [] };
+				batch.forEach((item, i) => {
 					const itemOrdinal = ordinal + i;
-					return raterIndexes(itemOrdinal, item.ratingCount, opts.users).map((u, k) => {
-						const [c1, c2, c3, c4, c5, c6] = generateRating(item, u) as [
-							number,
-							number,
-							number,
-							number,
-							number,
-							number,
-						];
-						return {
-							userId: seedUserId(u),
-							itemId: idOf(item),
-							c1,
-							c2,
-							c3,
-							c4,
-							c5,
-							c6,
-							createdAt: new Date(Date.UTC(2026, 0, 1) - (itemOrdinal * 31 + k) * 3_600_000),
-						};
+					const itemId = idOf(item);
+					raterIndexes(itemOrdinal, item.ratingCount, opts.users).forEach((u, k) => {
+						columns.user.push(seedUserId(u));
+						columns.item.push(itemId);
+						generateRating(item, u).forEach((score, c) => {
+							columns.c[c]?.push(score);
+						});
+						columns.at.push(
+							new Date(Date.UTC(2026, 0, 1) - (itemOrdinal * 31 + k) * 3_600_000).toISOString(),
+						);
 					});
 				});
-				for (let r = 0; r < ratingRows.length; r += 1000) {
-					await tx
-						.insert(schema.ratings)
-						.values(ratingRows.slice(r, r + 1000))
-						.onConflictDoUpdate({
-							target: [schema.ratings.userId, schema.ratings.itemId],
-							set: {
-								c1: sql`excluded.c1`,
-								c2: sql`excluded.c2`,
-								c3: sql`excluded.c3`,
-								c4: sql`excluded.c4`,
-								c5: sql`excluded.c5`,
-								c6: sql`excluded.c6`,
-								createdAt: sql`excluded.created_at`,
-							},
-						});
+				for (let r = 0; r < columns.user.length; r += RATING_CHUNK) {
+					await tx.execute(insertRatings(columns, r, r + RATING_CHUNK));
 				}
-				ratingTotal += ratingRows.length;
+				ratingTotal += columns.user.length;
 			});
 			ordinal += batch.length;
 		}
-		console.info(`[seed] ${perType} ${type} items`);
+		console.info(`[seed] ${perType} ${type} items (${elapsed()})`);
 	}
 
+	console.info(`[seed] ${ratingTotal} ratings written (${elapsed()}), recomputing stats…`);
 	// Denormalized stats, same formula the rating write path (0.3) keeps up to date transactionally.
 	const r = schema.ratings;
 	const avg = (column: SQL | AnyPgColumn) => sql<number | null>`round(avg(${column}))::smallint`;
@@ -214,6 +195,34 @@ async function main(): Promise<void> {
 	console.info(
 		`[seed] ${ratingTotal} ratings, stats recomputed — done in ${Math.round(performance.now() - started)} ms`,
 	);
+}
+
+type RatingColumns = { user: string[]; item: string[]; c: number[][]; at: string[] };
+
+/** Rows per ratings statement: one array parameter per column, so the size is not bound by the 65k-parameter cap. */
+const RATING_CHUNK = 20_000;
+
+// Postgres array literal. Only generated values go in (seed ids, uuids, integers, ISO dates): none contain commas,
+// quotes, braces or spaces, so no element quoting is needed.
+const pgArray = (values: (string | number)[]): string => `{${values.join(",")}}`;
+
+/**
+ * Columnar upsert via `unnest`: ~10× faster than multi-row VALUES (one parse/plan per 20k rows, 9 parameters total)
+ * and portable across postgres-js and PGlite.
+ */
+function insertRatings(cols: RatingColumns, from: number, to: number): SQL {
+	const slice = <T extends string | number>(a: T[]) => pgArray(a.slice(from, to));
+	const [c1, c2, c3, c4, c5, c6] = cols.c.map((c) => slice(c)) as [string, string, string, string, string, string];
+	return sql`
+		insert into ratings (user_id, item_id, c1, c2, c3, c4, c5, c6, created_at)
+		select * from unnest(
+			${slice(cols.user)}::text[], ${slice(cols.item)}::uuid[],
+			${c1}::smallint[], ${c2}::smallint[], ${c3}::smallint[], ${c4}::smallint[], ${c5}::smallint[], ${c6}::smallint[],
+			${slice(cols.at)}::timestamptz[]
+		)
+		on conflict (user_id, item_id) do update set
+			c1 = excluded.c1, c2 = excluded.c2, c3 = excluded.c3, c4 = excluded.c4, c5 = excluded.c5, c6 = excluded.c6,
+			created_at = excluded.created_at`;
 }
 
 function uniqueSlug(item: SeedItem, used: Set<string>): string {
