@@ -15,7 +15,8 @@ async function load(locale: string, ns: string): Promise<unknown> {
 
 // A key missing in one locale renders as the raw key in production; keep all locales in lockstep.
 describe("messages", () => {
-	for (const ns of NAMESPACES) {
+	// openapi.json is read only by the OpenAPI generator (lib/api/openapi-text.ts), not by next-intl.
+	for (const ns of [...NAMESPACES, "openapi"]) {
 		test(`${ns}: every locale has the same keys as en`, async () => {
 			const reference = keys(await load("en", ns)).sort();
 			for (const locale of routing.locales) {
@@ -50,7 +51,7 @@ describe("messages", () => {
 	// The brand is pending: user-facing copy must interpolate APP_NAME instead of naming it.
 	test("no locale hardcodes the codename", async () => {
 		for (const locale of routing.locales) {
-			for (const ns of [...NAMESPACES, "legal"]) {
+			for (const ns of [...NAMESPACES, "openapi", "legal"]) {
 				expect(JSON.stringify(await load(locale, ns)).toLowerCase()).not.toContain("hexascore");
 			}
 		}

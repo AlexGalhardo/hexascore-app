@@ -33,7 +33,7 @@
 			"!.agents",
 			"!**/lib/db/migrations",
 			"!sdks",
-			"!**/public/openapi.json"
+			"!**/public/openapi*.json"
 		]
 	}
 }
