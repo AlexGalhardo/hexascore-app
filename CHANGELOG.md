@@ -3,31 +3,9 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
-## [0.0.21](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.20...v0.0.21) (2026-10-03)
-
-
-### Added
-
-* **ingest:** sandbox seed and faster wikipedia enrichment ([7942f4d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/7942f4d1be5b66f6e78b6c0bed4d7a5d8bc275ec))
-* **seed:** sandbox mode on existing items, purge, target guard and banner ([bc9b27f](https://github.com/AlexGalhardo/claude-code-internet-api/commit/bc9b27f7378498c2ea802c87f3abafcf7ad0a073))
-* **seed:** sandbox mode on existing items, purge, target guard and banner ([ebf4ae2](https://github.com/AlexGalhardo/claude-code-internet-api/commit/ebf4ae2827434e0db4c595453fc91c0df8ecb1b7))
-
-
-### Changed
-
-* **ingest:** fetch wikipedia summaries concurrently ([3669be6](https://github.com/AlexGalhardo/claude-code-internet-api/commit/3669be686a26cb9beed62277c8a88548a8e7d9b8))
-* **ingest:** fetch wikipedia summaries concurrently ([a704d22](https://github.com/AlexGalhardo/claude-code-internet-api/commit/a704d222301e26663ff50bc118811aee6a26b30b))
-
-## [0.0.20](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.19...v0.0.20) (2026-10-03)
-
-
-### Added
-
-* **docs:** translate the API guides to pt-BR and es ([99ab46d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/99ab46d88b174caa8c6b9068989bb34f0bfa24d7))
-* **web:** center the users' scores dialog and paginate it by page number ([3783518](https://github.com/AlexGalhardo/claude-code-internet-api/commit/37835183f70a680f3f94b2796aadfb0e19bde4aa))
-* **web:** ratings dialog pagination and translated API guides ([731ff7d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/731ff7d065d077abb6f1403f42518937a0c3dff8))
-
 ## [Unreleased]
+
+## [0.0.22](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.21...v0.0.22) (2026-10-03)
 
 ### Added
 
@@ -55,6 +33,27 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 - Ingestion: anonymous Wikimedia REST answered 429 at 20 req/s, so Wikipedia hosts are throttled to 5 req/s with 4 workers, and a 429/503 `Retry-After` now pauses the whole host for every thread instead of each worker retrying on its own.
 - All modals share one centred layout (`components/ui/dialog.ts`): the report dialog no longer sits at the top under the navbar, and the PIX QR, ratings and delete-account dialogs use the same backdrop, z-index and sizing; a test enforces the rule for every Base UI dialog.
+
+## [0.0.21](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.20...v0.0.21) (2026-10-03)
+
+### Added
+
+* **ingest:** sandbox seed and faster wikipedia enrichment ([7942f4d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/7942f4d1be5b66f6e78b6c0bed4d7a5d8bc275ec))
+* **seed:** sandbox mode on existing items, purge, target guard and banner ([bc9b27f](https://github.com/AlexGalhardo/claude-code-internet-api/commit/bc9b27f7378498c2ea802c87f3abafcf7ad0a073))
+* **seed:** sandbox mode on existing items, purge, target guard and banner ([ebf4ae2](https://github.com/AlexGalhardo/claude-code-internet-api/commit/ebf4ae2827434e0db4c595453fc91c0df8ecb1b7))
+
+### Changed
+
+* **ingest:** fetch wikipedia summaries concurrently ([3669be6](https://github.com/AlexGalhardo/claude-code-internet-api/commit/3669be686a26cb9beed62277c8a88548a8e7d9b8))
+* **ingest:** fetch wikipedia summaries concurrently ([a704d22](https://github.com/AlexGalhardo/claude-code-internet-api/commit/a704d222301e26663ff50bc118811aee6a26b30b))
+
+## [0.0.20](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.19...v0.0.20) (2026-10-03)
+
+### Added
+
+* **docs:** translate the API guides to pt-BR and es ([99ab46d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/99ab46d88b174caa8c6b9068989bb34f0bfa24d7))
+* **web:** center the users' scores dialog and paginate it by page number ([3783518](https://github.com/AlexGalhardo/claude-code-internet-api/commit/37835183f70a680f3f94b2796aadfb0e19bde4aa))
+* **web:** ratings dialog pagination and translated API guides ([731ff7d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/731ff7d065d077abb6f1403f42518937a0c3dff8))
 
 ## [0.0.19](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.18...v0.0.19) (2026-10-03)
 
