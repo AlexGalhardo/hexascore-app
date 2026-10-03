@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useLocale } from "next-intl";
 import { useEffect, useState } from "react";
 import type { Theme } from "@/lib/preferences";
 // The package JS does not import its stylesheet; without it Scalar renders unstyled.
@@ -10,6 +11,9 @@ import "@scalar/api-reference-react/style.css";
 const ApiReferenceReact = dynamic(() => import("@scalar/api-reference-react").then((m) => m.ApiReferenceReact), {
 	ssr: false,
 });
+
+// Scalar ships built-in UI packs; our pt-BR maps to its `pt`. The spec text itself (openapi.json) stays English.
+const SCALAR_LOCALE = { en: "en", "pt-BR": "pt", es: "es" } as const;
 
 function currentTheme(): Theme {
 	return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
@@ -37,6 +41,7 @@ type Props = {
 
 export function ApiReference({ loadingLabel, token, serverUrl }: Props) {
 	const theme = useAppTheme();
+	const locale = SCALAR_LOCALE[useLocale() as keyof typeof SCALAR_LOCALE] ?? "en";
 	if (!theme) {
 		return (
 			<p role="status" className="text-sm text-muted">
@@ -49,13 +54,14 @@ export function ApiReference({ loadingLabel, token, serverUrl }: Props) {
 		<div data-plain>
 			<ApiReferenceReact
 				// Remount on theme/token change: Scalar reads these options once.
-				key={`${theme}:${token ?? ""}`}
+				key={`${theme}:${locale}:${token ?? ""}`}
 				configuration={{
 					url: "/openapi.json",
 					forceDarkModeState: theme,
 					hideDarkModeToggle: true,
 					withDefaultFonts: false,
 					telemetry: false,
+					localization: { locale },
 					persistAuth: false,
 					showDeveloperTools: "never",
 					// No third-party AI/MCP features: requests carry the user's key on /profile/api.
