@@ -48,3 +48,13 @@ Todos os jobs usam `.github/actions/setup-bun` (Bun `1.4.2` via `oven-sh/setup-b
 **SDKs da API (0.4)**: `sdks/ts` (`@hexascore/sdk`, workspace Bun, `@hey-api/openapi-ts` 0.99.0) e `sdks/python` (`hexascore`, `openapi-python-client` 0.29.1 via `uvx`), gerados de `apps/web/public/openapi.json` (`bun run sdk:generate` / `bun run sdk:generate:python`) e commitados. Regerar sempre que `bun run openapi` mudar o spec. **Publicação ainda não feita** (sem credenciais): metadados prontos (`name`, `version` 0.0.0, `files`, `publishConfig.access=public` no npm; `pyproject.toml` gerado com backend `uv_build`). Para ligar: secrets `NPM_TOKEN` e `PYPI_API_TOKEN` (ou Trusted Publishing do PyPI), adicionar os pacotes ao `release-please-config.json` (`node` para `sdks/ts`, `python` para `sdks/python/hexascore`) e um job de publish disparado pela release (`bun run build && npm publish --provenance` / `uv build && uv publish`). O gerador TS exige o compilador JS do TypeScript, por isso `sdks/ts` fixa `typescript` 6.0.3 (o app usa o 7.0.2 nativo, sem API JS).
 
 **Dependências**: só versões estáveis, fixadas sem `^`. Imagens Docker com tag fixa (`oven/bun:<versão>`, `postgres:18.x`). Nenhuma dependência nova sem aprovação.
+
+## CI local (GitHub Actions desativado)
+
+Desde 2026-10-03 os workflows do GitHub estão **desativados no GitHub** (`gh workflow disable`, por bloqueio de cobrança do Actions); os arquivos em `.github/workflows/` continuam no repositório, intactos. Para reativar: `gh workflow enable "CI"` (idem `Python CI`, `QA`, `CodeQL`, `Release Please`, `Ingest (bootstrap|incremental|weekly scores and synopses)`).
+
+No lugar deles, o hook **pre-push** do husky roda `bun run ci:local` (`scripts/ci-local.sh`), o mesmo conjunto do `ci.yml`: `lint:ci`, `typecheck`, `test`, `openapi:check` e `build` (com o env fictício do CI; se o `bun --bun next build` quebrar no Windows, repete com `bunx next build`), mais `ruff` e `pytest` quando o diff contra `origin/dev` toca `webscrappings/`. Falhou, o push não sai. Emergência: `CI_LOCAL_SKIP=1 git push` (exceção, nunca rotina).
+
+O deploy continua na Vercel (Git integration, independente do Actions): push na `dev` publica `dev.hexascore.app`, merge na `main` publica `hexascore.app`.
+
+Sem o `Release Please`, as releases são manuais: atualizar `CHANGELOG.md` e `.release-please-manifest.json`, criar a tag e `gh release create vX.Y.Z --notes-file …` (skill `hexascore-release`, seção Backfill). Ingestão agendada (crons) também parou: rodar os conectores localmente contra produção (`docs/ingestion.md`).

@@ -14,6 +14,10 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Changed
+
+- CI runs locally: the husky pre-push hook runs `bun run ci:local` (`scripts/ci-local.sh`: lint, typecheck, test, OpenAPI check, build, plus ruff/pytest when `webscrappings/` changed). GitHub Actions workflows are kept but disabled on GitHub; releases are cut manually while Release Please is off (`docs/process.md`).
+
 ### Fixed
 
 - Ingestion: anonymous Wikimedia REST answered 429 at 20 req/s, so Wikipedia hosts are throttled to 5 req/s with 4 workers, and a 429/503 `Retry-After` now pauses the whole host for every thread instead of each worker retrying on its own.
