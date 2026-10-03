@@ -102,17 +102,17 @@ Toda documentação de referência vive em `docs/`; este plano só guarda decis�
 Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com uma release.
 
 ### 0.0.x — Fundação
-- [ ] `git init`, `.gitignore`, remote `origin`, branches `main` + `dev`, branch protection
-- [ ] `AGENTS.md`, `CLAUDE.md`, `.claude/rules/{karpathy,ponytail,graphify}.md`, reescrever skills `respondeae-*`
-- [ ] Bun workspaces, `apps/web` Next 16 + Tailwind 4 + Base UI, Biome 2, tsconfig estrito
-- [ ] Drizzle + client Neon/PGlite, `infra/docker-compose.yaml` (Postgres 18 + Redis)
-- [ ] `next-intl` (en/pt-br/es), tema via cookie, layout base, navbar, footer, banner de cookies
+- [x] `git init`, `.gitignore`, remote `origin`, branches `main` + `dev` (branch protection: desligada por decisão do dono; ruleset pronto em `.github/rulesets/`)
+- [x] `AGENTS.md`, `CLAUDE.md`, `.claude/rules/{karpathy,ponytail,graphify}.md`, reescrever skills `respondeae-*`
+- [x] Bun workspaces, `apps/web` Next 16 + Tailwind 4 + Base UI, Biome 2, tsconfig estrito
+- [x] Drizzle + client Neon/PGlite, `infra/docker-compose.yaml` (Postgres 18 + Redis)
+- [x] `next-intl` (en/pt-br/es), tema via cookie, layout base, navbar, footer, banner de cookies
 - [x] CI básico (lint, typecheck, test, build), husky, commitlint, release-please, Dependabot, CodeQL
-- [ ] Projeto Vercel + Neon + Upstash via Marketplace, `vercel env pull`
+- [x] Projeto Vercel + Neon + Upstash via Marketplace, `vercel env pull`
 - **Verificar**: `bun run lint:ci && bunx tsc --noEmit && bun test && bun run build` verdes local e no CI; preview da `dev` abre `/`, `/pt-br`, `/es` com tema persistido.
 
 ### 0.1 — Catálogo
-- [ ] Schema do catálogo + `source_records` + migrations
+- [x] Schema do catálogo + `source_records` + migrations
 - [x] `webscrappings/`: common, conectores Wikidata/Wikipedia/Open Library/Steam/GOG, normalizador, covers, testes
 - [x] Workflows bootstrap/incremental/semanal + snapshot `.sql.gz`
 - [x] Páginas `/`, catálogos das 4 seções, página do item (sem avaliação ainda), `/search`, autocomplete
@@ -161,6 +161,13 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 ---
 
 ## Pendências antes do launch
+
+Ações do dono (não automatizáveis):
+
+- [ ] Nome/domínio final e domínio verificado no Resend (hoje `onboarding@resend.dev` só entrega para o dono da conta).
+- [ ] Chaves live do Stripe e da AbacatePay (hoje sandbox) e teste real de checkout + estorno.
+- [ ] Credenciais npm/PyPI para publicar os SDKs.
+- [ ] Confirmar a carga completa de 100k itens (limite de armazenamento do Neon free; avaliar plano pago).
 
 - [ ] **Nome final** (codinome `hexascore`). `.com` livres consultados em 2026-10-02: hexascore.com, scorara.com, averago.com, kultscore.com, talescore.com, crowdcrit.com, hexmeter.com. Checar marca registrada (INPI/USPTO/EUIPO) antes de comprar.
 - [ ] Revisar preços dos planos.
