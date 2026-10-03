@@ -9,7 +9,7 @@
 gh api -X POST repos/AlexGalhardo/claude-code-internet-api/rulesets --input .github/rulesets/protect-main-dev.json
 ```
 
-Até lá o fluxo por PR é convenção, não bloqueio. Para o release-please abrir PRs, habilite em Settings → Actions → General "Allow GitHub Actions to create and approve pull requests" (hoje desligado).
+Decisão do dono (2026-10-03): seguir sem proteção por enquanto; o fluxo `feat/*` → `dev` → `main` é convenção, não bloqueio. "Allow GitHub Actions to create and approve pull requests" já está habilitado, então o release-please abre o PR de release.
 
 **CI (GitHub Actions) — implementado**
 
