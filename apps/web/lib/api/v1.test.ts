@@ -162,6 +162,14 @@ describe("validation", () => {
 		expect(JSON.stringify(body.errors)).toContain("min_acting");
 	});
 
+	test("empty query values are rejected instead of coerced to 0", async () => {
+		for (const query of ["min_score=", "limit=", "year=&genre=Action"]) {
+			const res = await call(routes.list, `/games?${query}`, { type: "games" });
+			const body = await expectProblem(res, 400, "bad_request");
+			expect(JSON.stringify(body)).toContain("Must not be empty.");
+		}
+	});
+
 	test("limit=11 is rejected on Free and accepted on Pro", async () => {
 		const res = await call(routes.list, "/games?limit=11", { type: "games" });
 		const body = await expectProblem(res, 400, "bad_request");
