@@ -3,7 +3,7 @@
 	"policy": {
 		"title": "Política de privacidad",
 		"description": "Qué datos personales recopilamos, por qué, durante cuánto tiempo y cómo ejercer tus derechos.",
-		"intro": "Esta política explica cómo tratamos los datos personales cuando navegas por el sitio, creas una cuenta, puntúas obras, nos contactas o usas la API de pago. Está redactada para cumplir la Ley General de Protección de Datos de Brasil (LGPD, Ley 13.709/2018) y el Reglamento General de Protección de Datos de la Unión Europea (RGPD).",
+		"intro": "Esta política explica cómo {appName} trata los datos personales cuando navegas por el sitio, creas una cuenta, valoras elementos, nos contactas o usas la API de pago. Está redactada para cumplir la Ley General de Protección de Datos de Brasil (LGPD, Ley 13.709/2018) y el Reglamento General de Protección de Datos de la UE (RGPD).",
 		"sections": [
 			{
 				"heading": "1. Responsable",
@@ -83,13 +83,13 @@
 	"terms": {
 		"title": "Términos de uso y cookies",
 		"description": "Las reglas para usar el sitio, tu cuenta, las puntuaciones, la API de pago y los enlaces de afiliado.",
-		"intro": "Al usar el sitio o la API aceptas estos términos. Si no estás de acuerdo, no uses el servicio.",
+		"intro": "Al usar {appName} — el sitio o la API — aceptas estos términos. Si no estás de acuerdo, no uses el servicio.",
 		"sections": [
 			{
 				"heading": "1. El servicio",
 				"body": [
 					"Mantenemos una base de datos de juegos, películas, series y libros en la que los usuarios registrados puntúan cada obra en seis categorías de 0 a 100. Las puntuaciones de la comunidad son medias de las puntuaciones de los usuarios y solo se muestran cuando la obra tiene al menos 5 puntuaciones.",
-					"Los metadatos provienen de fuentes abiertas: Wikidata (CC0), Open Library y Wikipedia. Las sinopsis de Wikipedia tienen licencia CC BY-SA 4.0 y se muestran con su licencia y un enlace al artículo original. Los enlaces a puntuaciones externas (como IMDb o Metacritic) son de referencia; esas puntuaciones y todas las marcas pertenecen a sus dueños."
+					"Los metadatos de los elementos provienen de fuentes abiertas y de datos públicos de tiendas: Wikidata (CC0), Wikipedia, Open Library, Steam y GOG. Las sinopsis de Wikipedia tienen licencia CC BY-SA 4.0 y se muestran con su licencia y un enlace al artículo original. Las portadas provienen de Open Library, Steam, GOG o Wikimedia Commons; cuando la licencia lo exige, la página del elemento acredita la fuente, el autor y la licencia. Los enlaces a notas externas (como IMDb o Metacritic) son de referencia; esas notas, las portadas y todas las marcas pertenecen a sus dueños."
 				]
 			},
 			{
@@ -115,21 +115,22 @@
 			{
 				"heading": "5. API pública",
 				"body": [
-					"Las claves de API son personales y secretas; eres responsable de las solicitudes hechas con ellas. Cada plan tiene una cuota y un límite de velocidad; el plan gratuito incluye 100 solicitudes en total por cuenta y requiere un correo verificado.",
+					"Las claves de API son personales y secretas; eres responsable de las solicitudes hechas con ellas. Cada plan tiene una cuota de solicitudes, un tamaño máximo de página y un límite de solicitudes por segundo, indicados en la página de precios. El plan gratuito incluye 100 solicitudes por cuenta en total y exige un correo verificado; los planes de pago tienen una cuota mensual. Las solicitudes que fallan por un error nuestro no se cuentan. Al alcanzar la cuota o el límite de solicitudes, las solicitudes se rechazan hasta que la cuota se renueve o compres créditos.",
 					"La API devuelve solo nuestros propios datos (puntuaciones y estadísticas de la comunidad), metadatos abiertos e identificadores externos. No puedes usarla para redistribuir datos de terceros que solo enlazamos. Podemos cambiar o retirar versiones de la API con un aviso razonable."
 				]
 			},
 			{
 				"heading": "6. Pagos, renovación y cancelación",
 				"body": [
-					"Los planes de pago se cobran por adelantado, mensual o anualmente, con tarjeta a través de Stripe o por PIX a través de AbacatePay. Los precios e impuestos se muestran antes de pagar. Las suscripciones con tarjeta se renuevan automáticamente hasta que las canceles; los pagos por PIX cubren el periodo comprado y no se renuevan solos.",
-					"Puedes cancelar en cualquier momento y mantener el acceso hasta el final del periodo pagado. Los créditos extra no caducan. Cuando la ley te conceda un derecho de desistimiento (por ejemplo, 14 días en la Unión Europea o 7 días según el art. 49 del Código de Defensa del Consumidor de Brasil), puedes ejercerlo a través del formulario de contacto y recibir el reembolso que la ley prevea."
+					"Los planes de pago se cobran por adelantado. Con tarjeta, a través de Stripe, los planes son suscripciones mensuales que se renuevan automáticamente hasta que las canceles; puedes cancelar o cambiar la tarjeta en el portal de facturación. Con PIX, a través de AbacatePay (solo en reales brasileños), compras 1 mes o 12 meses (12 meses al precio de 10); los periodos PIX no se renuevan automáticamente y te avisamos por correo 7 días y 1 día antes de que terminen. Los precios, la moneda y los impuestos se muestran antes de pagar.",
+					"Los créditos extra solo se pueden comprar con un plan Pro o Business activo; no caducan y se usan después de la cuota mensual.",
+					"Puedes cancelar en cualquier momento y mantienes el acceso hasta el final del periodo pagado. Cuando la ley te concede un derecho de desistimiento (por ejemplo, 7 días según el art. 49 del Código de Defensa del Consumidor de Brasil), puedes ejercerlo mediante el formulario de contacto y recibir el reembolso que establezca la ley. Si se te cobra dos veces por el mismo periodo (por ejemplo, un pago PIX con una suscripción con tarjeta activa), devolvemos el pago duplicado."
 				]
 			},
 			{
 				"heading": "7. Enlaces de afiliado",
 				"body": [
-					"Algunas páginas de libros y juegos incluyen enlaces a Amazon y Mercado Libre. Son enlaces de afiliado: podemos recibir una comisión por compras que cumplan los requisitos, sin coste adicional para ti. Los enlaces de afiliado están señalados y nunca influyen en las puntuaciones."
+					"Algunas páginas de libros y juegos incluyen enlaces a Amazon y Mercado Libre. Son enlaces de afiliado: podemos recibir una comisión por compras que cumplan los requisitos, sin coste extra para ti. Los enlaces de afiliado están señalados en la página y nunca influyen en las notas. Los precios, la disponibilidad, las compras y las devoluciones son responsabilidad de cada tienda."
 				]
 			},
 			{
@@ -141,7 +142,7 @@
 			{
 				"heading": "9. Eliminación de la cuenta",
 				"body": [
-					"Puedes eliminar tu cuenta desde tu perfil. La eliminación se hace efectiva tras un periodo de gracia de 30 días en el que puedes entrar y cancelarla. Tus puntuaciones permanecen en las medias de la comunidad de forma anónima."
+					"Puedes eliminar tu cuenta en tu perfil. La eliminación se hace efectiva tras un periodo de gracia de 30 días en el que puedes entrar y cancelarla. Tus valoraciones siguen en las notas de la comunidad de forma anónima. Cuando la eliminación se hace efectiva, tus claves de API se revocan y una suscripción activa con tarjeta se cancela, sin nuevos cobros."
 				]
 			},
 			{
@@ -158,7 +159,9 @@
 			},
 			{
 				"heading": "12. Contacto",
-				"body": ["Las dudas sobre estos términos pueden enviarse a través del formulario de contacto."]
+				"body": [
+					"Las dudas sobre estos términos, las solicitudes de desistimiento o reembolso y las solicitudes de privacidad pueden enviarse mediante el formulario de contacto."
+				]
 			}
 		]
 	}

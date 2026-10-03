@@ -44,6 +44,7 @@
 		"noSynopsis": "No synopsis yet.",
 		"license": "Text license: {license}",
 		"source": "Source",
+		"coverCredit": "Cover: {credit}",
 		"fallbackNotice": "Not available in your language yet — showing the English version.",
 		"sources": {
 			"metacritic": "Metacritic",
