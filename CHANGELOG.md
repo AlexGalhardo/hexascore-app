@@ -5,6 +5,10 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Fixed
+
+- Preview deployments allow the Vercel Toolbar iframe (`https://vercel.live`) in `frame-src`/`connect-src`; production CSP is unchanged. Ingestion keeps the Neon connection alive during long fetches.
+
 ### Added
 
 - PIX sandbox payment for testing: with `ABACATEPAY_SANDBOX=true` (default off) the PIX QR modal shows a "PAY SANDBOX PIX" button (10 s cooldown) that calls AbacatePay `POST /v2/transparents/simulate-payment` through `simulatePixPaymentAction` (owner's pending charge only); the plan is still applied by the webhook/status poll.

@@ -51,6 +51,11 @@ describe("page CSP", () => {
 		expect(dev.get("script-src")).toContain("'unsafe-eval'");
 		expect(dev.get("connect-src")).toContain("ws:");
 	});
+
+	test("only previews allow the Vercel Toolbar frame", () => {
+		expect(directives(pageCsp(nonce, "/", false, true)).get("frame-src")).toContain("https://vercel.live");
+		expect(directives(pageCsp(nonce, "/", false)).get("frame-src")).not.toContain("https://vercel.live");
+	});
 });
 
 describe("next.config headers", async () => {
