@@ -28,7 +28,7 @@
 				"lifetime": "La cuota del plan Free nunca se renueva.",
 				"resets": "Se renueva el {date}.",
 				"credits": "{count} créditos prepagados",
-				"rate": "{count} solicitudes por segundo",
+				"rate": "{count, plural, one {# solicitud} other {# solicitudes}} por segundo",
 				"pageSize": "Hasta {count} resultados por página",
 				"upgrade": "Ver planes",
 				"checkout": "Mejorar el plan o comprar créditos"

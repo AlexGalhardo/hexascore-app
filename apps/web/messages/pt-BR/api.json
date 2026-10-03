@@ -28,7 +28,7 @@
 				"lifetime": "A cota do plano Free nunca é renovada.",
 				"resets": "Renova em {date}.",
 				"credits": "{count} créditos pré-pagos",
-				"rate": "{count} requisições por segundo",
+				"rate": "{count, plural, one {# requisição} other {# requisições}} por segundo",
 				"pageSize": "Até {count} resultados por página",
 				"upgrade": "Ver planos",
 				"checkout": "Fazer upgrade ou comprar créditos"

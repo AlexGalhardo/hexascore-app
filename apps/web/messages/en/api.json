@@ -28,7 +28,7 @@
 				"lifetime": "Free plan quota never resets.",
 				"resets": "Resets on {date}.",
 				"credits": "{count} prepaid credits",
-				"rate": "{count} requests per second",
+				"rate": "{count, plural, one {# request} other {# requests}} per second",
 				"pageSize": "Up to {count} results per page",
 				"upgrade": "See plans",
 				"checkout": "Upgrade or buy credits"
