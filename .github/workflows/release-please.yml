@@ -23,3 +23,5 @@ jobs:
         with:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+          # A PAT makes the release PR trigger CI; falls back to GITHUB_TOKEN (CI then needs a close/reopen).
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
