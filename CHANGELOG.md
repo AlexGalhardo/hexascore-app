@@ -3,6 +3,33 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [0.0.17](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.16...v0.0.17) (2026-10-03)
+
+
+### Added
+
+* 1.0 launch prep (domain, navbar, legal, QA gates, covers webp, costs) ([df1046a](https://github.com/AlexGalhardo/claude-code-internet-api/commit/df1046abf58290736f06f7c31123283c21615359))
+* **billing:** add sandbox PIX payment button with paid-modal lock ([60947a3](https://github.com/AlexGalhardo/claude-code-internet-api/commit/60947a34e511a29ac0a6ad7ce03ad94c23c49152))
+* **ingest:** store covers as optimized webp in vercel blob ([6092491](https://github.com/AlexGalhardo/claude-code-internet-api/commit/6092491ebdb640ee0c55379b9c49c7c3f9a379c4))
+* **legal:** affiliate and license notices, i18n review ([2d91ea2](https://github.com/AlexGalhardo/claude-code-internet-api/commit/2d91ea254f3ce09b04976ec17c715dccc79d27f5))
+* **seo:** add robots.txt and sitemaps with hreflang ([7c3f78d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/7c3f78d71596126db80f05fde0de788d2a208a1e))
+* **seo:** add search console cli ([d46eadf](https://github.com/AlexGalhardo/claude-code-internet-api/commit/d46eadff08aebdcf5fcd71be7428d02283bf3c05))
+* **web:** crowdsourced time to beat for games ([bc77d10](https://github.com/AlexGalhardo/claude-code-internet-api/commit/bc77d10c1044f938c7e688ce6831243fcb1d2beb))
+* **web:** new navbar, search previews, nickname rules and api host ([f011932](https://github.com/AlexGalhardo/claude-code-internet-api/commit/f011932e936cf42b7755097dd38ebf81ad7cbb9d))
+* **web:** use hexascore.app as the default domain ([a6c654b](https://github.com/AlexGalhardo/claude-code-internet-api/commit/a6c654b9250611e15ace1db41b71799ba325ac7c))
+* **web:** use TanStack Query for client-side fetches ([9596fef](https://github.com/AlexGalhardo/claude-code-internet-api/commit/9596fef098b08cf2170979004d87fb1e798e6f17))
+* **web:** use TanStack Query for client-side fetches ([a8d5c4b](https://github.com/AlexGalhardo/claude-code-internet-api/commit/a8d5c4b2c917e033c9fcff0f91a9874c182d1b9f))
+
+
+### Fixed
+
+* **account:** revoke api keys and cancel stripe subscription on purge ([6783b28](https://github.com/AlexGalhardo/claude-code-internet-api/commit/6783b280ed12a69e002ce0dace26409cb7031671))
+* **auth:** allow sign-up emails up to 48 characters ([83978bc](https://github.com/AlexGalhardo/claude-code-internet-api/commit/83978bc9be30567dbeb353982232cf85de583b3d))
+* **ingest:** keep the database connection alive during long fetches ([668ed2e](https://github.com/AlexGalhardo/claude-code-internet-api/commit/668ed2eab5f93181b66977c2ad5bd14dd965bb9b))
+* **ingest:** keep the database connection alive during long fetches ([7fd737d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/7fd737d3d801db9c9919b440080b0b0902ee829a))
+* **security:** allow the vercel toolbar frame on previews ([0a7f84d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/0a7f84d772f33de07f7fec0a90f37eeb8b0fddb9))
+* **security:** allow the vercel toolbar frame on previews ([444891a](https://github.com/AlexGalhardo/claude-code-internet-api/commit/444891aa2050bffee08f80d7cbeb73c735aebc0b))
+
 ## [Unreleased]
 
 ### Fixed
