@@ -163,6 +163,27 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 
 ---
 
+## Próxima sessão (ingestão do sandbox `dev.hexascore.app`, estado em 2026-10-03 22:45 UTC)
+
+A ingestão roda **localmente** (GitHub Actions parado por falha de cobrança: "recent account payments have failed or your spending limit needs to be increased"; workflows `disabled_manually`). Comando de cada etapa em `webscrappings/`, contra o banco do sandbox (`ep-falling-sky`, `apps/web/.env.sandbox`) e o token Blob de `webscrappings/.env.local`:
+`uv run --env-file ../apps/web/.env.sandbox --env-file .env.local python -m <módulo> [--missing-only]`. Tudo é retomável (`--missing-only`, `normalized_at`, capas sem `coverUrl`).
+
+Estado medido no banco do sandbox (99k itens):
+
+- Wikidata 99.960 (completo). Wikipedia en 90.568 / es 45.837 / pt 35.107 registros (enriquecimento concluído). Open Library 10.187, GOG 1.951, Steam 2.551 (Steam incompleto: 429 da loja e conexão derrubada pelo Neon).
+- Sinopses nas traduções: en 57.808, pt-BR 26.017, es 32.332, subindo enquanto o `normalize` termina (34.060 QIDs pendentes no momento).
+- Capas WebP: **0**.
+
+Pendências:
+
+- [ ] **Store do Vercel Blob público** (ação do dono): o token em `webscrappings/.env.local` aponta para um store **privado**, e todo `PUT` de capa retorna 400 "Cannot use public access on a private store". Criar/ligar um store público (as capas são servidas direto ao navegador) e trocar `BLOB_READ_WRITE_TOKEN`/`BLOB_STORE_ID` em `webscrappings/.env.local`, nos secrets do GitHub e na Vercel (`next.config` `images.remotePatterns` / CSP `img-src` se o host mudar).
+- [ ] Terminar o `normalize` (retoma sozinho) e rodar `covers` (paralelo, 8 workers) depois do store público; conferir `meta.coverUrl` em `*.blob.vercel-storage.com` por tipo.
+- [ ] Rodar de novo `connectors.steam --missing-only` e depois `normalize` + `covers` para os jogos que faltarem.
+- [ ] Regularizar a cobrança do GitHub Actions e reativar os workflows (`gh workflow enable <nome>`), ou manter a ingestão local e documentar isso em `docs/ingestion.md`.
+- [ ] Confirmar para qual banco aponta o secret `DATABASE_URL` dos workflows de ingestão (sandbox ou produção) antes de reativá-los.
+- [ ] Remover as worktrees antigas em `.claude/worktrees/` (todas mescladas e limpas; `git worktree remove` foi bloqueado pelo modo automático).
+- [ ] Produção (`hexascore.app`): repetir a mesma ingestão contra o banco de produção quando o sandbox estiver validado.
+
 ## Pendências antes do launch
 
 Ações do dono (não automatizáveis):

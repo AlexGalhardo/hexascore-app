@@ -60,6 +60,17 @@ uv run python -m covers
 uv run ruff check && uv run ruff format --check && uv run pytest
 ```
 
+Contra o sandbox, sem o GitHub Actions (o mesmo que o bootstrap com `skip_catalog=true`): os enriquecimentos rodam em paralelo, um processo por fonte/idioma, e depois `normalize` e `covers`. O código lê só `DATABASE_URL` e `BLOB_READ_WRITE_TOKEN` do ambiente:
+
+```sh
+E="--env-file ../apps/web/.env.sandbox --env-file .env.local"
+uv run $E python -m connectors.wikipedia --missing-only --langs en &   # idem pt, es, openlibrary, steam, gog
+wait
+uv run $E python -m normalize && uv run $E python -m covers
+```
+
+O token do Blob precisa ser de um store **público**: num store privado todo upload de capa responde 400 ("Cannot use public access on a private store") e o item fica sem capa.
+
 Snapshot: `.sql.gz` com `COPY ... FROM stdin` de `items`, `item_translations`, `external_scores` (sem a coluna gerada `search`), gerado por psycopg (não depende de `pg_dump`). Restaurar num banco migrado: `gunzip -c snapshot.sql.gz | psql "$DATABASE_URL"`.
 
 ## Agenda (GitHub Actions)
