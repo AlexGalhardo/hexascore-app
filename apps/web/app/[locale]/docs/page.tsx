@@ -1,6 +1,7 @@
+import { getTranslations } from "next-intl/server";
+import type { ReactNode } from "react";
 import { type DocPageProps, docMetadata, enterDocPage } from "@/components/docs/metadata";
-import { C, Code, DocTitle, H2, Note, P } from "@/components/docs/prose";
-import { Link } from "@/i18n/navigation";
+import { Code, DocTitle, H2, Note, P, richCode, richLink } from "@/components/docs/prose";
 import { API_BASE_URL } from "@/lib/api/openapi";
 import { PLAN_LIMITS } from "@/lib/api/plans";
 import { APP_URL } from "@/lib/config";
@@ -64,68 +65,55 @@ if (error) throw new Error(\`\${error.code}: \${error.detail}\`);`;
 
 export default async function QuickstartPage(props: DocPageProps) {
 	await enterDocPage(props);
+	const [t, nav] = await Promise.all([getTranslations("docs.quickstart"), getTranslations("api.docs.nav")]);
 	return (
 		<>
-			<DocTitle lead="Community scores for games, movies, TV series and books — 0 to 100, in six categories per item — over a read-only JSON API.">
-				Quickstart
-			</DocTitle>
+			<DocTitle lead={t("lead")}>{nav("quickstart")}</DocTitle>
 
-			<H2 id="key">1. Create an API key</H2>
+			<H2 id="key">{t("keyHeading")}</H2>
 			<P>
-				<Link href="/profile/api" className="underline underline-offset-4">
-					Open your API dashboard
-				</Link>{" "}
-				and create a key. It starts with <C>hx_live_</C> and is shown only once — store it in an environment
-				variable, never in client-side code:
+				{t.rich("keyBody", {
+					...richCode,
+					dashboard: richLink("/profile/api", "underline underline-offset-4"),
+				})}
 			</P>
 			<Code title="shell">{'export HEXASCORE_API_KEY="hx_live_..."'}</Code>
-			<P>
-				The Free plan includes {PLAN_LIMITS.free.quota} requests in total — enough to build and test an
-				integration.
-			</P>
+			<P>{t("freePlan", { quota: PLAN_LIMITS.free.quota })}</P>
 
-			<H2 id="first-request">2. Make your first request</H2>
-			<P>
-				The base URL is <C>{API_BASE_URL}</C>. Every endpoint is a <C>GET</C>. Here are the five best-rated
-				games:
-			</P>
+			<H2 id="first-request">{t("requestHeading")}</H2>
+			<P>{t.rich("requestBody", { ...richCode, baseUrl: API_BASE_URL })}</P>
 			<Code title="cURL">{curl}</Code>
-			<Note>
-				The same API also answers on the website host: <C>{`${APP_URL}/api/v1`}</C>. Paths, parameters and
-				responses are identical.
-			</Note>
+			<Note>{t.rich("hostNote", { ...richCode, siteUrl: `${APP_URL}/api/v1` })}</Note>
 			<Code title="JavaScript (Node 18+, Bun, Deno)">{js}</Code>
 			<Code title="Python (requests)">{python}</Code>
 
-			<H2 id="response">3. Read the response</H2>
-			<P>
-				Lists return <C>data</C> plus a <C>next_cursor</C> for the next page. Field names are snake_case and
-				dates are ISO 8601. <C>score</C> and <C>categories</C> are <C>null</C> until an item has 5 ratings.
-			</P>
+			<H2 id="response">{t("responseHeading")}</H2>
+			<P>{t.rich("responseBody", richCode)}</P>
 			<Code title="200 OK">{response}</Code>
 
-			<H2 id="next">Next steps</H2>
+			<H2 id="next">{t("nextHeading")}</H2>
 			<ul className="my-3 list-disc space-y-2 pl-6">
+				<li>{t.rich("nextDetail", { ...richCode, path: "GET /games/{id}" })}</li>
+				<li>{t.rich("nextLookup", { ...richCode, path: "GET /lookup?source=imdb&id=tt0111161" })}</li>
 				<li>
-					Fetch one item with <C>GET /games/{"{id}"}</C> for external ids, trailers and the licensed synopsis.
-				</li>
-				<li>
-					Map ids you already have with <C>GET /lookup?source=imdb&id=tt0111161</C> (also <C>steam</C>,{" "}
-					<C>igdb</C>, <C>tmdb</C>, <C>isbn13</C>, <C>openlibrary</C>, <C>wikidata</C>).
-				</li>
-				<li>
-					Handle <Link href="/docs/errors">errors</Link> and <Link href="/docs/rate-limits">rate limits</Link>
-					, then browse the <Link href="/docs/reference">API reference</Link>.
+					{t.rich("nextGuides", {
+						errors: richLink("/docs/errors"),
+						limits: richLink("/docs/rate-limits"),
+						reference: richLink("/docs/reference"),
+					})}
 				</li>
 			</ul>
 
-			<H2 id="sdks">SDKs</H2>
+			<H2 id="sdks">{t("sdkHeading")}</H2>
 			<P>
-				Typed clients are generated from the <a href="/openapi.json">OpenAPI document</a>: TypeScript (
-				<C>@hexascore/sdk</C>) and Python (<C>hexascore</C>). They are not on npm/PyPI yet — build them from{" "}
-				<C>sdks/</C> in the repository until the first release.
+				{t.rich("sdkBody", {
+					...richCode,
+					openapi: (chunks: ReactNode) => <a href="/openapi.json">{chunks}</a>,
+					tsPackage: "@hexascore/sdk",
+					pyPackage: "hexascore",
+				})}
 			</P>
-			<Code title="TypeScript SDK">{sdk}</Code>
+			<Code title={t("sdkTitle")}>{sdk}</Code>
 		</>
 	);
 }
