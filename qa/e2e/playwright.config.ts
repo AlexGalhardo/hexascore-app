@@ -18,6 +18,7 @@ const AUTH = /@auth/;
 
 export default defineConfig({
 	testDir: "./specs",
+	globalSetup: "./global-setup.ts",
 	outputDir: "./test-results",
 	timeout: 60_000,
 	expect: { timeout: 10_000 },

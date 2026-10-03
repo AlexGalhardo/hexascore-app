@@ -1,5 +1,5 @@
 import { createHmac, randomBytes } from "node:crypto";
-import { type APIRequestContext, expect, type Page } from "@playwright/test";
+import { type APIRequestContext, expect, type Page, test } from "@playwright/test";
 import { E2E_EMAIL_DOMAIN } from "./db";
 
 export const PASSWORD = "E2e-Passw0rd!";
@@ -73,14 +73,27 @@ export async function createVerifiedAccount(
 	return account;
 }
 
+/** Submits the login form; waits out Better Auth's per-IP rate limit (parallel workers share one IP). */
 export async function logIn(page: Page, account: TestAccount, locale = ""): Promise<void> {
-	await page.goto(`${locale}/login`);
-	await page.getByLabel(/email or nickname|e-mail ou apelido|correo o apodo/i).fill(account.email);
-	await page.locator("#password").fill(account.password);
-	await page
-		.locator("form")
-		.getByRole("button", { name: /^(log in|entrar|iniciar sesión)$/i })
-		.click();
+	for (let attempt = 0; attempt < 6; attempt++) {
+		await page.goto(`${locale}/login`);
+		await page.locator("#identifier").fill(account.email);
+		await page.locator("#password").fill(account.password);
+		await page
+			.locator("form")
+			.getByRole("button", { name: /^(log in|entrar|iniciar sesión)$/i })
+			.click();
+		const limited = page.getByText(/Too many attempts|Muitas tentativas|Demasiados intentos/);
+		const done = page
+			.getByRole("button", { name: /account menu|menu da conta|menú de la cuenta/i })
+			.or(page.locator("#code"))
+			.or(page.getByRole("alert"));
+		await expect(limited.or(done).first()).toBeVisible();
+		if (!(await limited.isVisible())) return;
+		// Better Auth's sign-in window can last up to a minute; extend the test instead of failing it.
+		test.info().setTimeout(test.info().timeout + 25_000);
+		await page.waitForTimeout(20_000);
+	}
 }
 
 export async function expectLoggedIn(page: Page): Promise<void> {

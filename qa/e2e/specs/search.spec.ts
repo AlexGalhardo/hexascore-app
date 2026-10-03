@@ -29,12 +29,13 @@ test.describe("search", () => {
 
 		const payload = `"><img src=x onerror=alert(1)>`;
 		await page.goto(`/search?q=${encodeURIComponent(payload)}`);
+		await expect(page.locator("h1")).toContainText(payload);
 		await expect(page.locator("img[src=x]")).toHaveCount(0);
-		await expect(page.getByText(/Nothing found for/)).toBeVisible();
 
-		const sqli = "' OR 1=1 --";
-		const response = await page.goto(`/search?q=${encodeURIComponent(sqli)}`);
-		expect(response?.status()).toBe(200);
+		for (const q of ["' OR 1=1 --", "\u0000\u0000", "😀😀😀", "a".repeat(500)]) {
+			const response = await page.goto(`/search?q=${encodeURIComponent(q)}`);
+			expect(response?.status(), q).toBe(200);
+		}
 	});
 
 	test("typo-tolerant search finds items (trigram)", async ({ request }) => {

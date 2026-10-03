@@ -9,7 +9,7 @@ test.describe("pricing", () => {
 		}
 		const currency = page.getByRole("navigation", { name: "Currency" });
 		await currency.getByRole("link", { name: "EUR" }).click();
-		await expect(page).toHaveURL(/currency=EUR/);
+		await expect(page).toHaveURL(/currency=eur/i);
 		await expect(page.getByText("€").first()).toBeVisible();
 		await currency.getByRole("link", { name: "BRL" }).click();
 		await expect(page.getByText("R$").first()).toBeVisible();

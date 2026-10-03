@@ -4,14 +4,12 @@ test.describe("API docs", () => {
 	test("navigation reaches every docs page", async ({ page }) => {
 		await page.goto("/docs");
 		const nav = page.getByRole("navigation", { name: "Documentation" });
-		for (const name of [
-			"Authentication",
-			"Errors",
-			"Pagination",
-			"Rate limits & quotas",
-			"Changelog & versioning",
-		]) {
-			await nav.getByRole("link", { name }).click();
+		await nav.getByRole("link", { name: "Authentication" }).click();
+		await expect(nav.getByRole("link", { name: "Authentication" })).toHaveAttribute("aria-current", "page");
+		// The nav scrolls horizontally on mobile; follow the remaining hrefs instead of chasing off-screen links.
+		for (const name of ["Errors", "Pagination", "Rate limits & quotas", "Changelog & versioning"]) {
+			const href = await nav.getByRole("link", { name }).getAttribute("href");
+			await page.goto(href ?? "/docs");
 			await expect(page.locator("h1")).toBeVisible();
 			await expect(nav.getByRole("link", { name })).toHaveAttribute("aria-current", "page");
 		}

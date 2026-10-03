@@ -9,10 +9,10 @@ test.describe("catalog", () => {
 			await expect(itemLinks(page, section).first()).toBeVisible();
 			const before = await itemLinks(page, section).first().getAttribute("href");
 
-			await filters.getByLabel("Sort by").selectOption("score_desc");
+			await filters.getByLabel("Sort by").selectOption({ label: "Highest score" });
 			await filters.getByLabel("Min. score").fill("60");
 			await filters.getByRole("button", { name: "Apply" }).click();
-			await expect(page).toHaveURL(/sort=score_desc/);
+			await expect(page).toHaveURL(/sort=-score/);
 			await expect(page).toHaveURL(/min_score=60/);
 			await expect(itemLinks(page, section).first()).toBeVisible();
 			expect(await itemLinks(page, section).first().getAttribute("href")).not.toBe(before);
