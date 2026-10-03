@@ -20,5 +20,7 @@ Codename `hexascore`; final brand name is pending.
 - All reference documentation lives in `docs/` (architecture, data model, API, frontend, design system, payments, ingestion, security, testing, process). Update the matching doc in the same change.
 - Pre-commit runs Biome and `tsc --noEmit`; never bypass hooks.
 - When a workflow repeats or is easy to get wrong, capture it as a project skill in `.claude/skills/<name>/SKILL.md` and list it here.
-- Project skills: `hexascore-billing` (Stripe/AbacatePay webhooks locally, idempotency rules).
+- Project skills:
+  - `hexascore-billing` — Stripe/AbacatePay webhooks locally, idempotency rules.
+  - `hexascore-catalog` — catalog repository/cache layers, Next 16 caching without `cacheComponents`, PGlite tests, dev seed.
 - Record notable changes in `CHANGELOG.md` (Keep a Changelog).

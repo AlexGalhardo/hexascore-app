@@ -1,0 +1,45 @@
+{
+	"catalog": {
+		"title": { "game": "Jogos", "movie": "Filmes", "series": "Séries", "book": "Livros" },
+		"intro": {
+			"game": "Todos os jogos, avaliados por quem jogou em gameplay, diversão, som, qualidade técnica, visual e storytelling.",
+			"movie": "Todos os filmes, avaliados em roteiro, atuação, direção, fotografia, trilha e entretenimento.",
+			"series": "Todas as séries, avaliadas por inteiro: roteiro, atuação, personagens, ritmo, produção e entretenimento.",
+			"book": "Todos os livros, avaliados em enredo, personagens, escrita, ritmo, originalidade e impacto."
+		},
+		"filters": "Filtros",
+		"genre": "Gênero",
+		"anyGenre": "Qualquer gênero",
+		"platform": "Plataforma",
+		"anyPlatform": "Qualquer plataforma",
+		"year": "Ano",
+		"minScore": "Nota mín.",
+		"minCategories": "Mínimo por categoria",
+		"sort": "Ordenar por",
+		"apply": "Aplicar",
+		"reset": "Limpar",
+		"sorts": {
+			"popularity_desc": "Mais populares",
+			"popularity_asc": "Menos populares",
+			"score_desc": "Maior nota",
+			"score_asc": "Menor nota",
+			"release_date_desc": "Mais recentes",
+			"release_date_asc": "Mais antigos",
+			"rating_count_desc": "Mais avaliados",
+			"rating_count_asc": "Menos avaliados"
+		},
+		"columns": { "title": "Título", "year": "Ano", "score": "Nota", "ratings": "Avaliações" },
+		"ratingCount": "{count, plural, =0 {nenhuma avaliação} one {# avaliação} other {# avaliações}}",
+		"empty": "Nenhum item corresponde a esses filtros.",
+		"next": "Próxima",
+		"previous": "Anterior",
+		"pagination": "Páginas",
+		"landing": {
+			"topRated": "Melhores notas",
+			"newest": "Lançamentos",
+			"mostRated": "Mais avaliados",
+			"seeAll": "Ver tudo em {section}",
+			"empty": "Nada por aqui ainda."
+		}
+	}
+}

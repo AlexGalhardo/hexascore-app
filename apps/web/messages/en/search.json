@@ -1,0 +1,15 @@
+{
+	"search": {
+		"title": "Search",
+		"label": "Search",
+		"submit": "Search",
+		"resultsFor": "Results for “{q}”",
+		"prompt": "Search games, movies, TV series and books by title.",
+		"tooShort": "Type at least 2 characters.",
+		"noResults": "Nothing found for “{q}”. Check the spelling or try another title.",
+		"all": "All",
+		"suggestions": "Suggestions",
+		"noSuggestions": "No matches",
+		"searching": "Searching…"
+	}
+}
