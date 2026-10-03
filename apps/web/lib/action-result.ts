@@ -7,6 +7,12 @@ export type ActionError =
 	| "passwordAlreadySet"
 	| "weakPassword"
 	| "notScheduled"
+	| "emailNotVerified"
+	| "nicknameRequired"
+	| "nicknameTaken"
+	| "forbidden"
+	| "notFound"
+	| "limit"
 	| "server";
 
 export type ActionResult = { ok: true } | { ok: false; error: ActionError; fields?: string[] };

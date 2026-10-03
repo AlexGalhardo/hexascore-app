@@ -9,6 +9,7 @@ export type SessionUser = {
 	username: string | null;
 	emailVerified: boolean;
 	role: string | null;
+	banned: boolean;
 	image: string | null;
 	twoFactorEnabled: boolean;
 	profilePrivate: boolean;
@@ -27,6 +28,7 @@ export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
 		username: u.username ?? null,
 		emailVerified: u.emailVerified,
 		role: u.role ?? null,
+		banned: u.banned ?? false,
 		image: u.image ?? null,
 		twoFactorEnabled: u.twoFactorEnabled ?? false,
 		profilePrivate: u.profilePrivate ?? false,
