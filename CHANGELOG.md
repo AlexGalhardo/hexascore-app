@@ -5,6 +5,10 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Added
+
+- Docs: `docs/vercel-costs-monthly.md`, a monthly production cost estimate (Vercel Pro + Flat Rate CDN, Blob for 1M covers, Neon, Upstash, Resend, domain, GitHub Actions, Stripe/AbacatePay fees) with three traffic scenarios in USD/BRL, cost controls and how to upgrade Neon/Upstash through the Vercel Marketplace; prices checked 2026-10-03.
+
 ## [0.0.16] - 2026-10-03
 
 ### Added
