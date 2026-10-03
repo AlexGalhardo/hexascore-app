@@ -1,7 +1,21 @@
+import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import { CopyButton } from "@/components/api/copy-button";
+import { Link } from "@/i18n/navigation";
 
-// Building blocks of the /docs pages. Technical content is English-only, so labels here are not translated.
+// Building blocks of the /docs pages. Prose comes from the `docs` namespace; code samples stay in English.
+
+/** `t.rich` tag for inline code: `<code>Authorization</code>` in messages renders as {@link C}. */
+export const richCode = { code: (chunks: ReactNode) => <C>{chunks}</C> };
+
+/** `t.rich` tag for a localized internal link. */
+export function richLink(href: string, className?: string): (chunks: ReactNode) => ReactNode {
+	return (chunks) => (
+		<Link href={href} className={className}>
+			{chunks}
+		</Link>
+	);
+}
 
 export function DocTitle({ children, lead }: { children: ReactNode; lead?: ReactNode }) {
 	return (
@@ -28,12 +42,13 @@ export function C({ children }: { children: ReactNode }) {
 	return <code className="rounded bg-surface px-1.5 py-0.5 font-mono text-[0.9em]">{children}</code>;
 }
 
-export function Code({ children, title }: { children: string; title?: string }) {
+export async function Code({ children, title }: { children: string; title?: string }) {
+	const t = await getTranslations("docs");
 	return (
 		<figure className="my-4 overflow-hidden rounded-lg border border-border">
 			<figcaption className="flex items-center justify-between gap-2 border-b border-border bg-surface px-3 py-1.5 text-xs text-muted">
 				<span>{title ?? ""}</span>
-				<CopyButton text={children} label="Copy" copiedLabel="Copied" />
+				<CopyButton text={children} label={t("copy")} copiedLabel={t("copied")} />
 			</figcaption>
 			{/* biome-ignore lint/a11y/noNoninteractiveTabindex: horizontally scrollable code must be reachable by keyboard (WCAG 2.1.1, axe scrollable-region-focusable) */}
 			<pre tabIndex={0} className="overflow-x-auto p-4 font-mono text-sm leading-6">
