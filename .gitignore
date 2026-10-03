@@ -33,3 +33,6 @@ Thumbs.db
 # Google service account keys (never commit)
 hexascore-*.json
 *-service-account*.json
+
+# Playwright MCP screenshots, snapshots and console logs (local browser checks)
+.playwright-mcp/
