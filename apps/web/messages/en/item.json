@@ -58,6 +58,25 @@
 			"hltb_main": "HLTB main story",
 			"hltb_complete": "HLTB completionist",
 			"openlibrary": "Open Library"
+		},
+		"timeToBeat": {
+			"title": "Time to beat",
+			"styles": {
+				"main": "Main story",
+				"extras": "Main + extras",
+				"completionist": "Completionist"
+			},
+			"hours": "{hours} h",
+			"reports": "{count, plural, =0 {no reports} one {# report} other {# reports}}",
+			"notEnough": "Not enough reports yet (needs {min})",
+			"hint": "Median of the hours reported by players who completed the game.",
+			"yours": "Your time to beat",
+			"yoursHint": "Optional. Hours, in steps of 0.5; leave a style empty if you did not play it that way.",
+			"hoursPlaceholder": "Hours",
+			"save": "Save times",
+			"delete": "Delete times",
+			"saved": "Times saved.",
+			"deleted": "Times deleted."
 		}
 	}
 }

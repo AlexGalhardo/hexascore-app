@@ -7,10 +7,12 @@ import { getUserRating } from "@/lib/ratings";
 import { getSessionUser } from "@/lib/session";
 import { getListsForItem } from "@/lib/social/lists";
 import { getItemStatus } from "@/lib/social/repository";
+import { getUserTimeToBeat } from "@/lib/time-to-beat";
 import { buttonClass, Notice } from "../ui/form";
 import { AddToList } from "./add-to-list";
 import { ItemStatusSelect } from "./item-status-select";
 import { RatingForm } from "./rating-form";
+import { TimeToBeatForm } from "./time-to-beat-form";
 
 type Props = { itemId: string; type: ItemType; labels: string[]; path: string };
 
@@ -46,10 +48,11 @@ export async function RatingPanel({ itemId, type, labels, path }: Props) {
 			</Notice>
 		);
 	} else {
-		const [rating, status, lists] = await Promise.all([
+		const [rating, status, lists, times] = await Promise.all([
 			getUserRating(db, me.id, itemId),
 			getItemStatus(db, me.id, itemId),
 			getListsForItem(db, me.id, itemId),
+			type === "game" ? getUserTimeToBeat(db, me.id, itemId) : null,
 		]);
 		body = (
 			<>
@@ -58,6 +61,7 @@ export async function RatingPanel({ itemId, type, labels, path }: Props) {
 					<ItemStatusSelect itemId={itemId} type={type} initial={status} />
 					<AddToList itemId={itemId} lists={lists} />
 				</div>
+				{type === "game" && status === "completed" ? <TimeToBeatForm itemId={itemId} initial={times} /> : null}
 			</>
 		);
 	}

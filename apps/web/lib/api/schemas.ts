@@ -2,11 +2,12 @@ import { z } from "zod";
 import { getPathname } from "@/i18n/navigation";
 import { type Locale, routing } from "@/i18n/routing";
 import { LOOKUP_SOURCES } from "@/lib/catalog/repository";
-import { type ItemDetail, type ItemSummary, SORTS } from "@/lib/catalog/types";
+import { type ItemDetail, type ItemSummary, SORTS, type TimeToBeatStat } from "@/lib/catalog/types";
 import { CATEGORY_KEYS } from "@/lib/categories";
 import { APP_URL } from "@/lib/config";
 import { ITEM_TYPES, type ItemType } from "@/lib/db/schema/catalog";
 import { itemHref, SECTION_PATHS, type SectionPath } from "@/lib/sections";
+import { MIN_REPORTS_FOR_TIME_TO_BEAT } from "@/lib/social/constants";
 import { PLAN_IDS } from "./plans";
 import { PROBLEM_CODES } from "./problem";
 
@@ -81,6 +82,31 @@ const externalIdsSchema = z
 		examples: [{ wikidata: "Q12345", igdb: "the-legend-of-zelda", steam: "123456" }],
 	});
 
+const timeToBeatStatSchema = z.object({
+	median_hours: z
+		.number()
+		.min(0)
+		.nullable()
+		.meta({
+			description: `Median hours reported by players who completed the game (1 decimal). \`null\` under ${MIN_REPORTS_FOR_TIME_TO_BEAT} reports.`,
+			examples: [42.5],
+		}),
+	reports: count.meta({ description: "Number of players who reported this style." }),
+});
+
+export const timeToBeatSchema = z
+	.object({ main: timeToBeatStatSchema, extras: timeToBeatStatSchema, completionist: timeToBeatStatSchema })
+	.meta({
+		description: "Crowdsourced time to beat per play style: main story, main + extras, completionist.",
+		examples: [
+			{
+				main: { median_hours: 42.5, reports: 12 },
+				extras: { median_hours: 61, reports: 7 },
+				completionist: { median_hours: null, reports: 2 },
+			},
+		],
+	});
+
 export const itemDetailSchema = itemSummarySchema
 	.extend({
 		locale: z.enum(routing.locales),
@@ -98,6 +124,7 @@ export const itemDetailSchema = itemSummarySchema
 		pages: z.int().nullable(),
 		seasons: z.int().nullable(),
 		episodes: z.int().nullable(),
+		time_to_beat: timeToBeatSchema.nullable().meta({ description: "Games only; `null` for other types." }),
 	})
 	.meta({ description: "Full item: metadata, scores, external ids, trailers and synopsis." });
 
@@ -287,6 +314,11 @@ export function toItemSummary(item: ItemSummary, locale: Locale): z.input<typeof
 	};
 }
 
+const toTimeToBeatStat = (s: TimeToBeatStat): z.input<typeof timeToBeatStatSchema> => ({
+	median_hours: s.medianHours,
+	reports: s.reports,
+});
+
 export function toItemDetail(item: ItemDetail, locale: Locale): z.input<typeof itemDetailSchema> {
 	const synopsisLocale = routing.locales.find((l) => l === item.synopsisLocale);
 	return {
@@ -310,5 +342,12 @@ export function toItemDetail(item: ItemDetail, locale: Locale): z.input<typeof i
 		pages: item.meta.pages ?? null,
 		seasons: item.meta.seasons ?? null,
 		episodes: item.meta.episodes ?? null,
+		time_to_beat: item.timeToBeat
+			? {
+					main: toTimeToBeatStat(item.timeToBeat.main),
+					extras: toTimeToBeatStat(item.timeToBeat.extras),
+					completionist: toTimeToBeatStat(item.timeToBeat.completionist),
+				}
+			: null,
 	};
 }

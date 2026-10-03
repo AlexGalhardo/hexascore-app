@@ -17,6 +17,7 @@ import {
 	searchQuerySchema,
 	searchResultSchema,
 	synopsisSchema,
+	timeToBeatSchema,
 	usageSchema,
 } from "./schemas";
 
@@ -33,6 +34,7 @@ const components = z.registry<{ id: string }>();
 components.add(itemSummarySchema, { id: "ItemSummary" });
 components.add(itemDetailSchema, { id: "ItemDetail" });
 components.add(synopsisSchema, { id: "Synopsis" });
+components.add(timeToBeatSchema, { id: "TimeToBeat" });
 components.add(itemListSchema, { id: "ItemList" });
 components.add(searchResultSchema, { id: "SearchResult" });
 components.add(genreListSchema, { id: "GenreList" });

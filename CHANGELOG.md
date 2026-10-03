@@ -7,6 +7,8 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ### Added
 
+- Crowdsourced time to beat for games (replaces scraping HowLongToBeat): members whose status is "Played" can report hours (0.5–10000 h, 0.5 steps) for main story, main + extras and completionist; editable and deletable, removed when the status leaves "Played". The item page shows the median per style and the report count ("not enough reports" under 3). New table `time_to_beat` (migration `0004_time_to_beat`), actions `saveTimeToBeat`/`deleteTimeToBeat`, item merge moves the reports, dev seed adds reports for about a third of each game's raters, PGlite tests and an `@auth` E2E spec.
+- Public API: `ItemDetail.time_to_beat` (`main`/`extras`/`completionist`: `{ median_hours, reports }`, `null` for non-games) — additive; `openapi.json` and both SDKs regenerated.
 - Item page credits the cover (source, author, license and link) when the ingestion stored `meta.coverAttribution` (Wikimedia Commons covers under CC BY/BY-SA require it).
 - Tests: legal documents must match paragraph-for-paragraph across locales, carry the brand from `APP_NAME` and no locale file may contain the codename; `localeFromRequest` (`i18n/locale.ts`).
 - E2E specs for the 0.3 flows (`qa/e2e/specs/ratings.spec.ts`, `social.spec.ts`, `admin.spec.ts`), replacing the `todo-0.3` placeholders: 6-category rating, edit and the 5-rating score threshold; item status and curated lists; public vs private profile; follow → `/feed`; report → admin resolves; `/admin` 404 for non-admins. DB helpers `createItem`, `createMember`, `insertRating`, `grantAdmin`.
