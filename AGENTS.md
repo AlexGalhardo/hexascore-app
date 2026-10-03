@@ -19,7 +19,7 @@ Codename `hexascore`; final brand name is pending.
 - Handle errors and fallbacks everywhere: timeouts on external calls, `notFound()`/404, `error.tsx`/500, RFC 9457 problems with 402/404/429/500 in the API, graceful degradation of optional services.
 - Security rules in `docs/architecture.md` are mandatory.
 - All reference documentation lives in `docs/` (architecture, data model, API, frontend, design system, payments, ingestion, security, testing, process). Update the matching doc in the same change.
-- Pre-commit runs Biome and `tsc --noEmit`; never bypass hooks.
+- Pre-commit runs Biome and `tsc --noEmit`; pre-push runs `bun run ci:local` (`scripts/ci-local.sh`: lint, typecheck, test, openapi check, build, and ruff/pytest when `webscrappings/` changed) as the stand-in for GitHub Actions, whose workflows are kept in `.github/workflows/` but disabled on GitHub (`gh workflow enable <name>` re-enables). Never bypass hooks.
 - When a workflow repeats or is easy to get wrong, capture it as a project skill in `.claude/skills/<name>/SKILL.md` and list it here.
 - Project skills:
   - `hexascore-billing` — Stripe/AbacatePay webhooks locally, idempotency rules.
