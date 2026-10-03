@@ -29,6 +29,7 @@ export async function GET(request: Request): Promise<Response> {
 					year: r.year,
 					score: r.score,
 					coverUrl: r.coverUrl,
+					coverThumbUrl: r.coverThumbUrl,
 					path: itemHref(r.type, r.slug),
 				})),
 			},
