@@ -266,3 +266,34 @@ export function raterIndexes(itemOrdinal: number, count: number, users: number):
 	const start = (itemOrdinal * 7919) % pool;
 	return Array.from({ length: n }, (_, k) => (start + k) % pool);
 }
+
+/** FNV-1a 32-bit: stable per-string hash for deterministic choices about rows that were not generated here. */
+export function hash32(text: string): number {
+	let h = 0x811c9dc5;
+	for (let i = 0; i < text.length; i++) {
+		h ^= text.charCodeAt(i);
+		h = Math.imul(h, 0x01000193);
+	}
+	return h >>> 0;
+}
+
+/**
+ * Rating plan for a real catalog item (`--existing-items`), from its id and its popularity rank within its type
+ * (0 = most popular). Same Zipf-like curve as generateItem(), applied to the rank instead of the fixture index, so
+ * the volume does not depend on the scale of the real `popularity` values (Wikidata sitelinks): ~2M ratings at
+ * 10k users / 100k items. Quality (the "true" score raters scatter around) comes from the id hash, as items have
+ * no fixture quality.
+ */
+export function existingItemPlan(
+	id: string,
+	rank: number,
+	users: number,
+): { ordinal: number; ratingCount: number; quality: number } {
+	const h = hash32(id);
+	const popularity = (1000 / (rank + 1) ** 0.8) * (0.8 + ((h >>> 8) % 1000) / 2500);
+	return {
+		ordinal: h,
+		ratingCount: Math.round(Math.min(0.6, popularity / 600) * users),
+		quality: 25 + ((h >>> 16) % 71),
+	};
+}

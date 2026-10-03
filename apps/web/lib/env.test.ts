@@ -30,6 +30,14 @@ test("requires auth and cron secrets for any production build", async () => {
 	expect(loadWith({ NODE_ENV: "production", BETTER_AUTH_SECRET: "", CRON_SECRET: "" })).rejects.toThrow();
 });
 
+test("NEXT_PUBLIC_SANDBOX accepts only true/false and defaults to off", async () => {
+	expect(loadWith({ NEXT_PUBLIC_SANDBOX: "yes" })).rejects.toThrow();
+	const off = (await loadWith({ NEXT_PUBLIC_SANDBOX: "" })) as { env: { NEXT_PUBLIC_SANDBOX: boolean } };
+	expect(off.env.NEXT_PUBLIC_SANDBOX).toBe(false);
+	const on = (await loadWith({ NEXT_PUBLIC_SANDBOX: "true" })) as { env: { NEXT_PUBLIC_SANDBOX: boolean } };
+	expect(on.env.NEXT_PUBLIC_SANDBOX).toBe(true);
+});
+
 test("ABACATEPAY_SANDBOX is a strict boolean and only enables simulation with an AbacatePay key", async () => {
 	expect(loadWith({ ABACATEPAY_SANDBOX: "maybe" })).rejects.toThrow();
 	const keyless = { ABACATEPAY_API_KEY: "", ABACATEPAY_API_KEY_SANDBOX: "", ABACATEPAY_WEBHOOK_SECRET: "" };

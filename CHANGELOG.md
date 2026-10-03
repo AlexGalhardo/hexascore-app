@@ -16,10 +16,15 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ### Added
 
+- Sandbox seed: `lib/db/seed.ts --existing-items` rates the catalog already in the database (sandbox Neon branch copied from production) without touching item rows except stats — keyset batches by id, popularity rank per type via `row_number()`, Zipf curve, per-item quality from the id hash, columnar `unnest` upsert, stats recomputed in SQL per batch — and creates statuses, time to beat (completed games only), follows and lists (≤ `LIST_LIMITS.perType` per type, items of the list's type) for seed users, idempotently. `--purge` deletes every seed user (id `seed-user-*` + `@example.test`, cascade) and recomputes all item stats.
+- Seed target guard (`lib/db/seed-guard.ts`): always refuses `VERCEL_ENV=production`, refuses non-local databases unless `SEED_TARGET=sandbox`, and refuses databases with more than 50 verified non-seed users unless `--i-know-this-is-sandbox` is passed.
+- `NEXT_PUBLIC_SANDBOX` env (`"true"`/`"false"`, default false): non-dismissable "sandbox — fake data" banner above the navbar (en/pt-BR/es, `role="status"`), `noindex, nofollow` metadata and `robots.txt` disallowing everything.
+
 - API docs guides (`/docs`, authentication, errors, pagination, rate limits, changelog) are translated to pt-BR and es through the new `docs` namespace (`messages/<locale>/docs.json`), including per-page meta descriptions and the code-block copy button. Inline code and links use `t.rich`; code samples, HTTP headers, field/parameter names, error `code` values and URLs stay in English. E2E checks the Portuguese and Spanish quickstart headings (with axe).
 
 ### Changed
 
+- Fixture seed recomputes item stats in keyset batches with raw SQL (only rows whose stats changed) instead of one catalog-wide `UPDATE`, and the seed's `hashtext` buckets use `abs(0::bigint + hashtext(…))` so an `int4` minimum can no longer overflow `abs`.
 - "See users' scores" dialog is centred in the viewport (above the sticky navbar, full width minus margins on mobile) and paginated: 10 ratings per page, at most 100 pages (latest 1000), via `GET /api/items/[id]/ratings?page=1..100` → `{ data, page, page_count }` (count capped by a `LIMIT 1000` subquery, `OFFSET` ≤ 990); TanStack Query keeps the previous page while loading.
 - Docs sidebar note for pt-BR/es now only says that field and parameter names stay in English; the docs `<article>` no longer forces `lang="en"`.
 

@@ -30,4 +30,11 @@ description: Work on Hexascore catalog data access, caching and PGlite tests (li
 
 ## Seed
 
-`bun run db:seed` (defaults 50 users / 400 items). Flags `--users --items --batch` (run `bun lib/db/seed.ts ...` inside `apps/web`). Records are derived from `(type, index)` only, so raising `--items` never changes existing rows; upserts make reruns idempotent. Stats (`rating_count`, `score`, `score_c*`) are recomputed with one `UPDATE ... FROM` at the end.
+`bun run db:seed` (defaults 50 users / 400 items). Flags `--users --items --batch` (run `bun lib/db/seed.ts ...` inside `apps/web`). Records are derived from `(type, index)` only, so raising `--items` never changes existing rows; upserts make reruns idempotent. Stats (`rating_count`, `score`, `score_c_1..6` in SQL) are recomputed by `recomputeStats()` in keyset batches of item ids (raw SQL, only rows whose stats changed, same formula as `lib/ratings.ts`).
+
+Sandbox (Neon branch copied from production, see `docs/testing.md` → Sandbox):
+- `SEED_TARGET=sandbox bun lib/db/seed.ts --existing-items --users 10000 --batch 1000` rates the items already in the DB (never touches item columns other than stats) and builds statuses, time to beat, follows and lists for seed users. `--purge` deletes every seed user (cascade) and recomputes all stats.
+- Marker: id `seed-user-NNNNNN` + e-mail `@example.test`. Never write fake rows that do not hang off a seed user, or `--purge` cannot clean them.
+- Guard (`lib/db/seed-guard.ts`): refuses `VERCEL_ENV=production` always, remote hosts without `SEED_TARGET=sandbox`, and > 50 verified non-seed users without `--i-know-this-is-sandbox`. Do not weaken it to make a run pass.
+- Social SQL uses `abs(0::bigint + hashtext(…))` (int4 `abs(-2^31)` overflows) and deterministic ids (`md5(...)::uuid` for lists) so reruns converge. Most time goes to FK triggers on bulk inserts; that is expected.
+- Sandbox deploy: `NEXT_PUBLIC_SANDBOX=true` (banner, noindex, robots disallow all).
