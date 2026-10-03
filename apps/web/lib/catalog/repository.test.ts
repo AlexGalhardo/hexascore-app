@@ -63,6 +63,8 @@ beforeAll(async () => {
 				platforms: i === 0 ? ["NES", 42] : ["PC"],
 				trailers: [{ youtubeId: "AAAAAAAAAAA" }, { youtubeId: "bad" }],
 				runtimeMinutes: "long",
+				coverUrl: "https://blob.example/covers/a.webp",
+				coverThumbUrl: i === 0 ? "http://blob.example/covers/a-t.webp" : "https://blob.example/covers/a-t.webp",
 			} as never,
 			externalIds: { imdb: "tt0000001", steam: "javascript:alert(1)" } as never,
 		});
@@ -197,6 +199,7 @@ describe("listItems", () => {
 	test("uses the locale title with English fallback", async () => {
 		const page = await listItems(db, { type: "game", locale: "pt-BR", sort: "-score", limit: 2 });
 		expect(page.data.map((i) => i.title)).toEqual(["A Lenda de Zelda", "Neon Drift"]);
+		expect(page.data[1]?.coverThumbUrl).toBe("https://blob.example/covers/a-t.webp");
 	});
 });
 
@@ -207,6 +210,8 @@ describe("item detail", () => {
 		expect(item?.meta.platforms).toEqual(["NES"]);
 		expect(item?.meta.trailers).toEqual([{ youtubeId: "AAAAAAAAAAA" }]);
 		expect(item?.meta.runtimeMinutes).toBeUndefined();
+		expect(item?.coverUrl).toBe("https://blob.example/covers/a.webp");
+		expect(item?.coverThumbUrl).toBeNull(); // non-https URLs are dropped
 		expect(item?.externalIds).toEqual({ imdb: "tt0000001" });
 		expect(item?.score).toBe(90);
 		expect(item?.translationFallback).toBe(false);

@@ -6,6 +6,7 @@ import { RatingPanel } from "@/components/item/rating-panel";
 import { RatingsDialog } from "@/components/item/ratings-dialog";
 import { TimeToBeat } from "@/components/item/time-to-beat";
 import { Trailers } from "@/components/item/trailers";
+import { NavIcon } from "@/components/layout/nav-icons";
 import { HexRadar } from "@/components/score/hex-radar";
 import { ScoreBadge } from "@/components/score/score-badge";
 import { ScoreBar } from "@/components/score/score-bar";
@@ -102,40 +103,44 @@ export default async function ItemPage({ params }: Props) {
 
 	return (
 		<article className="grid gap-8">
-			<header className="grid gap-4 sm:grid-cols-[auto_1fr]">
+			{/* Cover + title + final score first: the item is recognisable at a glance on any screen size. */}
+			<header className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-4 sm:gap-6">
 				{item.coverUrl ? (
 					// biome-ignore lint/performance/noImgElement: remote covers from ingestion; next/image needs a host allowlist (later)
 					<img
 						src={item.coverUrl}
-						alt=""
-						width={120}
-						height={180}
-						className="h-44 w-30 rounded-md border border-border object-cover"
+						alt={t("coverAlt", { title: item.title })}
+						width={160}
+						height={240}
+						fetchPriority="high"
+						decoding="async"
+						className="aspect-[2/3] w-28 rounded-md border border-border object-cover shadow-sm sm:w-40"
 					/>
-				) : null}
-				<div className="min-w-0">
+				) : (
+					<div
+						aria-hidden="true"
+						className={`grid aspect-[2/3] w-28 place-items-center rounded-md border border-border bg-surface sm:w-40 ${accent.text}`}
+					>
+						<NavIcon name={SECTION_PATHS[item.type]} className="size-10" />
+					</div>
+				)}
+				<div className="grid min-w-0 content-start gap-2">
 					<Link
 						href={`/${SECTION_PATHS[item.type]}`}
-						className={`text-xs font-semibold uppercase tracking-wide ${accent.text}`}
+						className={`justify-self-start text-xs font-semibold uppercase tracking-wide ${accent.text}`}
 					>
 						{tcat(`title.${item.type}`)}
 					</Link>
-					<h1 className="mt-1 font-serif text-3xl font-bold leading-tight sm:text-5xl">{item.title}</h1>
-					<p className="mt-2 text-sm text-muted">
+					<h1 className="font-serif text-3xl font-bold leading-tight break-words sm:text-5xl">
+						{item.title}
+					</h1>
+					<p className="text-sm text-muted">
 						{[item.year, tt(item.type), meta.genres?.join(", "), meta.platforms?.join(", ")]
 							.filter(Boolean)
 							.join(" · ")}
 					</p>
-					{meta.creators?.length ? <p className="mt-1 text-sm">{meta.creators.join(", ")}</p> : null}
-				</div>
-			</header>
-
-			<section
-				aria-label={t("communityScore")}
-				className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]"
-			>
-				<div className="grid content-start gap-4">
-					<div className="flex items-center gap-4">
+					{meta.creators?.length ? <p className="text-sm">{meta.creators.join(", ")}</p> : null}
+					<div className="mt-2 flex items-center gap-4">
 						<ScoreBadge
 							score={item.score}
 							size="lg"
@@ -151,6 +156,14 @@ export default async function ItemPage({ params }: Props) {
 							) : null}
 						</div>
 					</div>
+				</div>
+			</header>
+
+			<section
+				aria-label={t("communityScore")}
+				className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]"
+			>
+				<div className="grid content-start gap-4">
 					<div className="flex flex-wrap gap-2">
 						<RatingsDialog itemId={item.id} categoryLabels={labels} />
 					</div>
