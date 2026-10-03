@@ -58,7 +58,7 @@ bunx playwright test --project=desktop-light   # um projeto; --last-failed para 
 - Toda spec falha se o browser registrar violação de CSP ou exceção não tratada (`helpers/fixtures.ts`); `expectAccessible()` roda axe (WCAG 2.2 AA) e falha em `serious`/`critical`. Scalar é excluído do axe (markup de terceiros).
 - `global-setup.ts` aquece as listagens (o `unstable_cache` serve a versão antiga uma vez depois de um seed novo). Depois de mexer no banco por fora: `POST /api/cron/revalidate` com `{"tags":["catalog"]}`.
 - `specs/todo-0.3.spec.ts`: placeholders `fixme` para avaliação, perfis, feed, listas, denúncias e `/admin` (0.3 entrou na `dev` durante o 0.6; specs reais ficam como lacuna).
-- Resultado local (2026-10-03, `next start` + Docker Postgres com seed 10k/100k): ver `CHANGELOG.md` [Unreleased].
+- Resultado local (2026-10-03, `next start` + Docker Postgres com seed 10k/100k, 4 projetos): **415 passaram, 0 falharam, 24 pulados** (os 6 `fixme` do 0.3 × 4 projetos) em 3,9 min.
 
 ### Seed em escala
 
