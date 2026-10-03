@@ -4,7 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CatalogFilters } from "@/components/catalog/catalog-filters";
 import { ItemTable } from "@/components/catalog/item-table";
 import { Pagination } from "@/components/catalog/pagination";
-import type { Locale } from "@/i18n/routing";
+import { asLocale } from "@/i18n/locale";
 import { listGenres, listItems, listPlatforms } from "@/lib/catalog/cached";
 import { InvalidCursorError } from "@/lib/catalog/cursor";
 import { parseCatalogSearchParams, type RawSearchParams } from "@/lib/catalog/search-params";
@@ -31,7 +31,7 @@ export default async function CatalogPage({ params, searchParams }: Props) {
 	setRequestLocale(locale);
 
 	const { params: filters, query } = parseCatalogSearchParams(type, await searchParams);
-	const base = { ...filters, type, locale: locale as Locale, limit: 50 };
+	const base = { ...filters, type, locale: asLocale(locale), limit: 50 };
 	let page: Page<ItemSummary>;
 	try {
 		page = await listItems(base);

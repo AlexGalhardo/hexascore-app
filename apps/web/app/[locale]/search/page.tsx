@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { z } from "zod";
 import { ItemTable } from "@/components/catalog/item-table";
+import { asLocale } from "@/i18n/locale";
 import { Link } from "@/i18n/navigation";
-import type { Locale } from "@/i18n/routing";
 import { searchItems } from "@/lib/catalog/cached";
 import type { RawSearchParams } from "@/lib/catalog/search-params";
 import { ITEM_TYPES } from "@/lib/db/schema/catalog";
@@ -29,7 +29,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
 	const { q, type } = querySchema.parse(await searchParams);
 	const [t, tcat] = await Promise.all([getTranslations("search"), getTranslations("catalog")]);
 	const results =
-		q.length >= 2 ? await searchItems(q.toLowerCase(), { locale: locale as Locale, type, limit: 40 }) : [];
+		q.length >= 2 ? await searchItems(q.toLowerCase(), { locale: asLocale(locale), type, limit: 40 }) : [];
 	const groups = ITEM_TYPES.map((itemType) => ({
 		type: itemType,
 		items: results.filter((r) => r.type === itemType),

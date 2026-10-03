@@ -1,13 +1,13 @@
 import { connection } from "next/server";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SectionHighlights } from "@/components/catalog/section-highlights";
-import type { Locale } from "@/i18n/routing";
+import { asLocale } from "@/i18n/locale";
 import { ITEM_TYPES } from "@/lib/db/schema/catalog";
 
 type Props = { params: Promise<{ locale: string }> };
 
 export default async function HomePage({ params }: Props) {
-	const { locale } = await params;
+	const locale = asLocale((await params).locale);
 	setRequestLocale(locale);
 	// Render per request (data still comes from the tagged Data Cache): prerendering at build time would need a
 	// reachable, migrated database in every build environment.
@@ -21,7 +21,7 @@ export default async function HomePage({ params }: Props) {
 				<p className="mt-4 text-lg text-muted">{t("subtitle")}</p>
 			</section>
 			{ITEM_TYPES.map((type) => (
-				<SectionHighlights key={type} type={type} locale={locale as Locale} />
+				<SectionHighlights key={type} type={type} locale={locale} />
 			))}
 		</div>
 	);

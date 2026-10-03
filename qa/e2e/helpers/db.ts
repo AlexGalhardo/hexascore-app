@@ -42,8 +42,3 @@ export async function latestResetToken(email: string): Promise<string | undefine
 		order by v.created_at desc limit 1`;
 	return rows[0]?.identifier.slice("reset-password:".length);
 }
-
-/** Removes accounts created by previous runs (cascades to sessions, accounts, keys). */
-export async function deleteE2eUsers(): Promise<void> {
-	await sql()`delete from "user" where email like ${`%@${E2E_EMAIL_DOMAIN}`}`;
-}

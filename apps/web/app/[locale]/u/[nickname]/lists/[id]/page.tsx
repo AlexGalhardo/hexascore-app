@@ -6,6 +6,7 @@ import { ListForm } from "@/components/lists/list-form";
 import { DeleteListButton, ListEntryControls } from "@/components/lists/list-owner-controls";
 import { ReportDialog } from "@/components/social/report-dialog";
 import { Notice } from "@/components/ui/form";
+import { asLocale } from "@/i18n/locale";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { db } from "@/lib/db/client";
@@ -25,7 +26,7 @@ const load = cache(async (nickname: string, id: string, locale: Locale) => {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { locale, nickname, id } = await params;
-	const loaded = await load(nickname, id, locale as Locale);
+	const loaded = await load(nickname, id, asLocale(locale));
 	if (!loaded) return {};
 	const { list } = loaded;
 	return {
@@ -38,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ListPage({ params }: Props) {
 	const { locale, nickname, id } = await params;
 	setRequestLocale(locale);
-	const loaded = await load(nickname, id, locale as Locale);
+	const loaded = await load(nickname, id, asLocale(locale));
 	if (!loaded) notFound();
 	const { list, me } = loaded;
 	const isOwner = me?.id === list.ownerId;
