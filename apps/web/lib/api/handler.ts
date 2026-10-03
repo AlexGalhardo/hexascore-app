@@ -129,6 +129,13 @@ export function apiRoute<P, Q extends z.ZodType, R extends z.ZodType>(
 
 		const limits = PLAN_LIMITS[owner.plan];
 		const schema = typeof options.query === "function" ? options.query(limits, params) : options.query;
+		// An empty value (`?min_score=`) is never meaningful, and z.coerce would silently read "" as 0.
+		const empty = [...url.searchParams].filter(([, value]) => value.trim() === "").map(([key]) => key);
+		if (empty.length > 0) {
+			return problem("bad_request", "One or more query parameters are invalid.", requestId, {
+				errors: empty.map((key) => ({ path: key, message: "Must not be empty." })),
+			});
+		}
 		const parsed = schema.safeParse(Object.fromEntries(url.searchParams));
 		if (!parsed.success) {
 			return problem("bad_request", "One or more query parameters are invalid.", requestId, {

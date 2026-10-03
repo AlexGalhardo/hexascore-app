@@ -39,3 +39,4 @@
 - Publicação (npm/PyPI via release-please) pendente de credenciais — ver `docs/process.md`.
 
 Fora por ora: endpoints de escrita, notas individuais de usuários, webhooks para clientes, GraphQL, lista de últimas requests no dashboard.
+- Parâmetro de query vazio (`?min_score=`) é sempre 400 `bad_request` (`errors[].message = "Must not be empty."`), validado em `apiRoute` antes do zod: `z.coerce` leria `""` como `0`.
