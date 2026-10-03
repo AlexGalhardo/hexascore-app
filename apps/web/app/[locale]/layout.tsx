@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
+import { DeletionBanner } from "@/components/account/deletion-banner";
 import { CookieBanner } from "@/components/layout/cookie-banner";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
@@ -51,6 +52,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 			<body className="min-h-dvh font-sans antialiased">
 				<NextIntlClientProvider>
 					<Navbar />
+					<DeletionBanner />
 					<main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
 					<Footer />
 					<CookieBanner text={t("text")} accept={t("accept")} decline={t("decline")} />

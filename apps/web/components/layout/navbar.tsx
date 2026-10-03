@@ -1,7 +1,9 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { APP_NAME } from "@/lib/config";
+import { getSessionUser } from "@/lib/session";
 import { ThemeToggle } from "./theme-toggle";
+import { UserMenu } from "./user-menu";
 
 const SECTIONS = [
 	{ href: "/games", key: "games", accent: "decoration-game" },
@@ -11,7 +13,7 @@ const SECTIONS = [
 ] as const;
 
 export async function Navbar() {
-	const t = await getTranslations("nav");
+	const [t, user] = await Promise.all([getTranslations("nav"), getSessionUser()]);
 
 	return (
 		<header className="border-b border-border">
@@ -42,9 +44,29 @@ export async function Navbar() {
 				</nav>
 				<div className="ml-auto flex items-center gap-2">
 					<ThemeToggle label={t("theme")} />
-					<Link href="/login" className="text-sm">
-						{t("login")}
-					</Link>
+					{user ? (
+						<UserMenu
+							initial={(user.username ?? user.name).charAt(0).toUpperCase() || "?"}
+							labels={{
+								account: t("account"),
+								profile: t("profile"),
+								api: t("api"),
+								logout: t("logout"),
+							}}
+						/>
+					) : (
+						<>
+							<Link href="/login" className="grid min-h-11 place-items-center px-2 text-sm">
+								{t("login")}
+							</Link>
+							<Link
+								href="/signup"
+								className="grid min-h-11 place-items-center rounded-md bg-fg px-3 text-sm font-medium text-bg"
+							>
+								{t("signup")}
+							</Link>
+						</>
+					)}
 				</div>
 			</div>
 		</header>
