@@ -48,6 +48,13 @@ test("ignores invalid values instead of failing", () => {
 	expect(query).toEqual({ genre: "Drama" });
 });
 
+test("control characters in text filters are ignored, not sent to Postgres", () => {
+	const { params, query } = parseCatalogSearchParams("game", { genre: "\u0000", platform: "PC\u0007" });
+	expect(params.genre).toBeUndefined();
+	expect(params.platform).toBeUndefined();
+	expect(query.genre).toBeUndefined();
+});
+
 test("sort message keys", () => {
 	expect(sortMessageKey("-release_date")).toBe("release_date_desc");
 	expect(sortMessageKey("score")).toBe("score_asc");

@@ -8,6 +8,7 @@ import { ScoreBadge } from "@/components/score/score-badge";
 import { FollowButton } from "@/components/social/follow-button";
 import { ReportDialog } from "@/components/social/report-dialog";
 import { buttonClass } from "@/components/ui/form";
+import { asLocale } from "@/i18n/locale";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { db } from "@/lib/db/client";
@@ -155,13 +156,13 @@ export default async function PublicProfilePage({ params, searchParams }: Props)
 			{query.tab === "ratings" ? (
 				<RatingsTab
 					userId={profile.id}
-					locale={locale as Locale}
+					locale={asLocale(locale)}
 					sort={query.sort}
 					page={query.page}
 					tabHref={tabHref}
 				/>
 			) : null}
-			{query.tab === "status" ? <StatusTab userId={profile.id} locale={locale as Locale} /> : null}
+			{query.tab === "status" ? <StatusTab userId={profile.id} locale={asLocale(locale)} /> : null}
 			{query.tab === "lists" ? (
 				<ListsTab userId={profile.id} nickname={profile.nickname} isOwner={isOwner} />
 			) : null}

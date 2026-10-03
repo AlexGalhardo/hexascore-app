@@ -14,6 +14,7 @@ import { APP_NAME, APP_URL } from "@/lib/config";
 import { db } from "@/lib/db/client";
 import { pixCharges, stripeCustomers } from "@/lib/db/schema";
 import { features } from "@/lib/env";
+import { pixCheckoutFlag } from "@/lib/flags";
 import { getSessionUser, type SessionUser } from "@/lib/session";
 
 export type BillingError =
@@ -162,7 +163,7 @@ function toView(row: typeof pixCharges.$inferSelect): PixChargeView | null {
 export async function createPixCharge(input: { purpose: string }): Promise<PixResult> {
 	const user = await payer();
 	if (typeof user === "string") return { ok: false, error: user };
-	if (!features.pix) return { ok: false, error: "not_configured" };
+	if (!features.pix || !(await pixCheckoutFlag())) return { ok: false, error: "not_configured" };
 	const parsed = pixPurposeSchema.safeParse(input?.purpose);
 	if (!parsed.success) return { ok: false, error: "invalid" };
 	const purpose = parsed.data;

@@ -93,7 +93,8 @@ export function generateItem(type: ItemType, index: number, users: number): Seed
 		.slice(0, 10);
 	// Zipf-like popularity: a few hits, a long tail (drives how many seed users rate the item).
 	const popularity = Math.round((1000 / (index + 1) ** 0.8) * f.number.float({ min: 0.8, max: 1.2 }) * 100) / 100;
-	const ratingCount = Math.round(Math.min(0.9, popularity / 300) * users);
+	// Capped at 60% of users; at 10k users / 100k items this yields ~2M ratings (~200 per user on average).
+	const ratingCount = Math.round(Math.min(0.6, popularity / 600) * users);
 
 	const meta: ItemMeta = {
 		genres: f.helpers.arrayElements(GENRES[type], { min: 1, max: 3 }),
@@ -234,15 +235,23 @@ export function generateUser(index: number): SeedUser {
 /** c1..c6 for user `u` rating an item of the given quality — deterministic, clamped to 0..100. */
 export function generateRating(item: { wikidataQid: string; quality: number }, userIndex: number): number[] {
 	fakerEN.seed([SEED, 77, userIndex, ...[...item.wikidataQid].map((c) => c.charCodeAt(0))]);
-	const mood = fakerEN.number.int({ min: -12, max: 12 });
+	// Per-user strictness (some raters are harsh, some generous) plus a per-rating mood.
+	const strictness = ((userIndex * 7) % 17) - 8;
+	const mood = fakerEN.number.int({ min: -10, max: 10 }) + strictness;
 	return Array.from({ length: 6 }, () =>
 		Math.max(0, Math.min(100, item.quality + mood + fakerEN.number.int({ min: -15, max: 15 }))),
 	);
 }
 
-/** Which user indexes (0-based) rate the item: a deterministic stride through the user list. */
+/**
+ * Which user indexes (0-based) rate the item: a deterministic stride through a pool of the first `pool` users.
+ * Small (long-tail) items draw from the low-index "active" fifth of users, popular items from almost everyone, so
+ * per-user activity is heavy-tailed like real communities: a few hundred power raters, most users rate only hits.
+ */
 export function raterIndexes(itemOrdinal: number, count: number, users: number): number[] {
 	if (users === 0) return [];
-	const start = (itemOrdinal * 7919) % users;
-	return Array.from({ length: Math.min(count, users) }, (_, k) => (start + k) % users);
+	const n = Math.min(count, users);
+	const pool = Math.min(users, Math.max(n * 3, Math.ceil(users / 5)));
+	const start = (itemOrdinal * 7919) % pool;
+	return Array.from({ length: n }, (_, k) => (start + k) % pool);
 }

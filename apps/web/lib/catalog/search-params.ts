@@ -9,7 +9,15 @@ export type RawSearchParams = Record<string, string | string[] | undefined>;
 const optional = <T extends z.ZodType>(schema: T) =>
 	z.preprocess((v) => (Array.isArray(v) ? v[0] : v === "" ? undefined : v), schema.optional()).catch(undefined);
 
-const text = optional(z.string().trim().min(1).max(100));
+// Control characters are rejected: Postgres refuses NUL in text (`?genre=%00` used to answer 500).
+const text = optional(
+	z
+		.string()
+		.trim()
+		.min(1)
+		.max(100)
+		.regex(/^[^\p{Cc}]*$/u),
+);
 const score = optional(z.coerce.number().int().min(0).max(100));
 
 const baseSchema = z.object({

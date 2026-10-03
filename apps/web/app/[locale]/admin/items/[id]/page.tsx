@@ -101,7 +101,7 @@ export default async function AdminItemPage({ params }: Props) {
 						aria-label="Source item id"
 						className={`${input} w-80 font-mono`}
 					/>
-					<button type="submit" className={`${button} text-score-low`}>
+					<button type="submit" className={`${button} text-danger`}>
 						Merge into this item
 					</button>
 				</ActionForm>

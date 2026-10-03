@@ -4,13 +4,14 @@
   "packageManager": "bun@1.4.2",
   "workspaces": [
     "apps/*",
-    "sdks/ts"
+    "sdks/ts",
+    "qa/e2e"
   ],
   "scripts": {
     "dev": "bun --filter web dev",
     "build": "bun --filter web build",
     "start": "bun --filter web start",
-    "typecheck": "bun --filter web typecheck",
+    "typecheck": "bun --filter web typecheck && bun --filter e2e typecheck",
     "test": "bun --filter web test",
     "lint": "biome check .",
     "lint:ci": "biome ci .",

@@ -70,6 +70,7 @@
 				"errors": {
 					"unauthenticated": "Tu sesión expiró. Inicia sesión de nuevo.",
 					"unverified": "Verifica tu correo antes de crear claves de API.",
+					"disabled": "La creación de nuevas claves de API está desactivada temporalmente. Las claves existentes siguen funcionando.",
 					"invalid": "Ponle a la clave un nombre de hasta 40 caracteres.",
 					"limit": "Puedes tener como máximo 5 claves activas. Revoca una primero.",
 					"not_found": "Esta clave ya no existe.",

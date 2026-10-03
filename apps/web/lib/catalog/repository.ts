@@ -269,7 +269,12 @@ export async function searchItems(
 	q: string,
 	options: { type?: ItemType; locale: Locale; limit?: number },
 ): Promise<ItemSummary[]> {
-	const query = q.trim().slice(0, 100);
+	// Control characters (NUL makes Postgres throw) are never meaningful in a title search: page, autocomplete and
+	// /v1/search all reach this function.
+	const query = q
+		.replace(/\p{Cc}/gu, " ")
+		.trim()
+		.slice(0, 100);
 	if (query.length < 2) return [];
 	const limit = Math.min(Math.max(options.limit ?? 20, 1), 50);
 

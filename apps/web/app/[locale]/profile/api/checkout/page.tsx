@@ -6,6 +6,7 @@ import { redirect } from "@/i18n/navigation";
 import { currencyForLocale, currencySchema } from "@/lib/billing/catalog";
 import { getBillingSummary } from "@/lib/billing/summary";
 import { features } from "@/lib/env";
+import { pixCheckoutFlag } from "@/lib/flags";
 import { getSessionUser } from "@/lib/session";
 
 type Props = {
@@ -33,11 +34,13 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 	const product = query.plan === "business" || query.plan === "credits" ? query.plan : "pro";
 	const status = query.status === "success" || query.status === "canceled" ? query.status : null;
 
-	const [t, tp, summary] = await Promise.all([
+	const [t, tp, summary, pixFlag] = await Promise.all([
 		getTranslations("billing.checkout"),
 		getTranslations("billing.plans"),
 		getBillingSummary(user.id),
+		pixCheckoutFlag(),
 	]);
+	const pix = features.pix && pixFlag;
 	const date = (iso: string) => new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(new Date(iso));
 	const renews = summary.provider === "stripe" && !summary.cancelAtPeriodEnd;
 
@@ -80,10 +83,10 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 				)}
 			</section>
 
-			{features.stripe || features.pix ? (
+			{features.stripe || pix ? (
 				<CheckoutForm
 					stripe={features.stripe}
-					pix={features.pix}
+					pix={pix}
 					defaultCurrency={currency}
 					defaultProduct={product}
 					hasPaidPlan={summary.plan !== "free"}

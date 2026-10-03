@@ -25,7 +25,7 @@ export function ActionForm({ action, children, className, confirm }: Props) {
 				{children}
 			</fieldset>
 			{state && !state.ok ? (
-				<span role="alert" className="text-xs text-score-low">
+				<span role="alert" className="text-xs text-danger">
 					{state.error}
 					{state.fields?.length ? ` (${state.fields.join(", ")})` : ""}
 				</span>

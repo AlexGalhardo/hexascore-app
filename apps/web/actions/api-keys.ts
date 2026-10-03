@@ -6,13 +6,14 @@ import { z } from "zod";
 import { generateApiKey } from "@/lib/api/keys";
 import { db } from "@/lib/db/client";
 import { apiKeys } from "@/lib/db/schema";
+import { publicApiSignupFlag } from "@/lib/flags";
 import { getSessionUser } from "@/lib/session";
 
 const MAX_ACTIVE_KEYS = 5;
 
 export type CreateKeyResult =
 	| { ok: true; key: string }
-	| { ok: false; error: "unauthenticated" | "unverified" | "invalid" | "limit" | "server" };
+	| { ok: false; error: "unauthenticated" | "unverified" | "invalid" | "limit" | "disabled" | "server" };
 
 const nameSchema = z.string().trim().min(1).max(40);
 
@@ -20,6 +21,7 @@ export async function createApiKeyAction(name: string): Promise<CreateKeyResult>
 	const user = await getSessionUser();
 	if (!user) return { ok: false, error: "unauthenticated" };
 	if (!user.emailVerified) return { ok: false, error: "unverified" };
+	if (!(await publicApiSignupFlag())) return { ok: false, error: "disabled" };
 	const parsed = nameSchema.safeParse(name);
 	if (!parsed.success) return { ok: false, error: "invalid" };
 

@@ -28,20 +28,36 @@ Auditoria viva. Revisar a cada milestone; cada mitigação aponta para o código
 | `scripts/admin-grant.ts` | e-mail (CLI) | roda só com acesso ao banco; zod `email` |
 | Ingestão (Python) | payloads de terceiros | escrita só em `source_records`; normalizador valida antes do upsert; texto renderizado sempre escapado |
 
-## A01–A10
+## A01–A10 (auditoria 0.6, 2026-10-03)
 
-| Risco | Mitigação planejada |
-| --- | --- |
-| A01 Broken Access Control | identidade só da sessão; checagem de dono em toda escrita; `/admin` exige `role=admin` no servidor; perfis privados filtrados no repositório |
-| A02 Security Misconfiguration | CSP estrita com nonce, HSTS, `X-Content-Type-Options`, `Referrer-Policy`, cookies `HttpOnly`/`Secure`/`SameSite=Lax`; ZAP no gate `dev` → `main` |
-| A03 Software Supply Chain Failures | versões fixadas, lockfile commitado, `bun audit`, Dependabot, CodeQL |
-| A04 Cryptographic Failures | senhas com o hash do Better Auth; API keys só como sha256; segredos fora de `NEXT_PUBLIC_*` |
-| A05 Injection | Drizzle com parâmetros; zero SQL concatenado; React escapa saída; sinopses de terceiros como texto puro |
-| A06 Insecure Design | valores de dinheiro e cota calculados no servidor; limiar de 5 avaliações; cota Free amarrada a e-mail verificado |
-| A07 Authentication Failures | regras de senha, verificação de e-mail, 2FA, passkeys, rate limit em login/reset, BotID |
-| A08 Software or Data Integrity Failures | webhooks assinados e idempotentes; migrations revisadas; release-please com tags |
-| A09 Logging & Alerting Failures | Vercel Observability, `request_id` em toda resposta da API, alertas Telegram para falhas de webhook/cron |
-| A10 Mishandling of Exceptional Conditions | erros RFC 9457 sem stack trace; falhas de captcha/BotID e de verificação fecham (deny); timeouts nas chamadas externas |
+Evidência = arquivo:linha em `apps/web/` (salvo indicação), teste que prova e commit. Status: ✅ implementado e testado · ⚠️ parcial (ver lacunas).
+
+| Risco | Mitigação | Evidência | Status |
+| --- | --- | --- | --- |
+| A01 Broken Access Control | identidade só da sessão; dono em toda escrita; `/admin` exige `role=admin` (404 caso contrário); perfis privados filtrados no repositório | `lib/session.ts:20` (`getSessionUser`), `app/[locale]/admin/guard.ts:5` (`requireAdmin`), `lib/social/repository.ts:43` (`profile_private = false`); revogação de chave filtrada por dono em `actions/api-keys.ts`; E2E `qa/e2e/specs/profile.spec.ts` "profile requires login", `pricing.spec.ts` "checkout requires login" | ✅ |
+| A02 Security Misconfiguration | CSP por request com nonce + `strict-dynamic` (sem `unsafe-inline`/`unsafe-eval` em script), `frame-ancestors 'none'`, iframes só `youtube-nocookie.com`, HSTS 2 anos + preload, `nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` restritiva, COOP `same-origin`; `/api/*` com `default-src 'none'`; `poweredByHeader: false` | `lib/security-headers.ts`, `proxy.ts`, `next.config.ts` (commit `8a35c7a`); testes `lib/security-headers.test.ts` (7) e E2E `qa/e2e/specs/headers.spec.ts` (página + rota de API; todo `<script>` carrega o nonce); toda spec E2E falha em violação de CSP no console (`qa/e2e/helpers/fixtures.ts`) | ✅ (ZAP: lacuna) |
+| A03 Software Supply Chain Failures | versões fixadas sem `^`, lockfile, `bun audit --audit-level=high` no CI, override `js-yaml` 4.3.2, Dependabot, CodeQL; actions fixadas por major | `.github/workflows/ci.yml` job `audit`; `package.json` `overrides`; `bun audit --audit-level=high` local em 2026-10-03: sem achados high | ✅ |
+| A04 Cryptographic Failures | hash de senha do Better Auth; API keys só como sha256; comparações de segredo em tempo constante; segredos nunca `NEXT_PUBLIC_*`; HSTS | `lib/api/keys.ts:15`, `lib/cron-auth.ts:1` (`timingSafeEqual`), `lib/env.ts` (zod; segredos obrigatórios em produção) | ✅ |
+| A05 Injection | Drizzle parametrizado; arrays do seed como parâmetro único; React escapa saída; caracteres de controle nunca chegam ao Postgres | `lib/catalog/search-params.ts` (rejeita `\p{Cc}`), `lib/catalog/repository.ts` `searchItems` (remove `\p{Cc}`) — commit `566c919`, testes `search-params.test.ts` e `repository.test.ts` "control characters (NUL)…"; E2E `search.spec.ts` (XSS refletido não executa, `' OR 1=1 --`, NUL, 500 chars) e `catalog.spec.ts` "a tampered cursor or filter never breaks the page" | ✅ |
+| A06 Insecure Design | dinheiro e cota calculados no servidor; limiar de 5 avaliações aplicado na leitura; cota Free amarrada a e-mail verificado; kill switches `pix-checkout`/`public-api-signup` | `lib/billing/catalog.ts`, `lib/api/quota.ts`; `lib/flags.ts` + `actions/billing.ts`/`actions/api-keys.ts` (commit `5a91c5b`) | ✅ |
+| A07 Authentication Failures | regras de senha em todo endpoint com senha, verificação de e-mail obrigatória, 2FA TOTP, passkeys, rate limit em banco (429), BotID nos fluxos públicos | `lib/auth.ts:86-95` (hook `passwordSchema`), `lib/bot.ts:10`; E2E `auth.spec.ts` (signup → link → login; regras no client; senha errada genérica; login com TOTP e código inválido) e `profile.spec.ts` (troca de senha, exclusão com contagem de 10 s e cancelamento) | ✅ |
+| A08 Software or Data Integrity Failures | webhooks assinados (Stripe `constructEventAsync`, AbacatePay HMAC) e idempotentes em `processed_events` na mesma transação; migrations só novas; release-please com tags | `lib/billing/stripe-webhook.ts:127`; testes `lib/billing/*.test.ts` | ✅ |
+| A09 Logging & Alerting Failures | `x-request-id` em toda resposta da API; logs estruturados com o id; Vercel Observability; Telegram para falhas de cron/webhook | `lib/api/handler.ts:88,175` | ⚠️ alertas de pico de 4xx/5xx ainda manuais |
+| A10 Mishandling of Exceptional Conditions | RFC 9457 sem stack; store de cota fail closed (503); BotID nega em erro na Vercel; locale inválido vira 404 antes de consultar (antes: ZodError logado a cada `/favicon.ico`) | `lib/api/handler.ts:102-105`, `i18n/locale.ts` (`asLocale`, commit `7362487`); E2E `not-found.spec.ts` (404 localizados + problemas da API) | ✅ |
+
+### Vercel Firewall (configuração a aplicar no dashboard)
+
+As ferramentas disponíveis nesta sessão não aplicaram a configuração; aplicar em **Project → Firewall → Configure** (ou `vercel firewall`/API `PUT /v1/security/firewall/config`):
+
+| Regra | Condição | Ação |
+| --- | --- | --- |
+| `auth-rate-limit` | `path` começa com `/api/auth/` | rate limit fixed window 60 s, 30 req por IP (`ip`), ação `deny` 429 por 5 min |
+| `api-v1-rate-limit` | `path` começa com `/api/v1/` **ou** `host` começa com `api.` | rate limit fixed window 60 s, 600 req por IP — teto anti-abuso acima do throttle por chave (Upstash) |
+| Bot Protection (managed) | — | `challenge` |
+| AI Bots (managed) | — | `deny` |
+| OWASP core ruleset | sqli, xss, rce, lfi, rfi | `log` por 7 dias, depois `deny` |
+
+O bypass de automação (`x-vercel-protection-bypass`) usado pelo CI não contorna o Firewall; regras com `deny` em `/api/auth/*` podem afetar a suíte E2E contra o preview — rode o gate com no máximo 2 workers (padrão no CI).
 
 ## Riscos aceitos
 
@@ -50,6 +66,10 @@ Auditoria viva. Revisar a cada milestone; cada mitigação aponta para o código
 | Contas múltiplas para multiplicar a cota Free | limitado por e-mail verificado + BotID; 100 req não compensa o abuso |
 | Signup revela "nickname já em uso" | nickname é público (`/u/{nickname}`); e-mail duplicado recebe a mesma resposta genérica de sucesso (Better Auth com `requireEmailVerification`) |
 | BotID não roda fora da Vercel | `lib/bot.ts` só faz bypass quando `VERCEL !== "1"`; na Vercel qualquer falha da checagem nega (fail closed) |
+| `style-src 'unsafe-inline'` na CSP | atributos `style` do React/Base UI e os `<style>` em runtime do Scalar não aceitam nonce; injeção de CSS sem execução de script tem impacto baixo. Scripts continuam só por nonce |
+| `img-src https:` | capas vêm de várias origens (Open Library, Steam, GOG, Commons, Vercel Blob); imagens não executam código |
+| Todas as páginas são dinâmicas | exigência do nonce por request (guia de CSP do Next 16); o catálogo segue no Data Cache (`unstable_cache`), então o custo é só o SSR |
+| Toolbar/feedback da Vercel em previews bloqueados pela CSP | só afeta membros do time em previews; não se relaxa a CSP de produção por isso |
 
 ## Como manter
 

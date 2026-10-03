@@ -242,6 +242,12 @@ describe("searchItems", () => {
 		expect(results.map((r) => r.slug)).toContain("zelda-the-movie");
 	});
 
+	test("control characters (NUL) are stripped instead of reaching Postgres", async () => {
+		expect(await searchItems(db, "\u0000\u0000", { locale: "en" })).toEqual([]);
+		const results = await searchItems(db, "zel\u0000da", { locale: "en" });
+		expect(Array.isArray(results)).toBe(true);
+	});
+
 	test("filters by type and matches localized titles", async () => {
 		const results = await searchItems(db, "lenda", { locale: "pt-BR", type: "game" });
 		expect(results.map((r) => r.title)).toEqual(["A Lenda de Zelda"]);

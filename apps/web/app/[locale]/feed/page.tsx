@@ -3,8 +3,8 @@ import { getFormatter, getTranslations, setRequestLocale } from "next-intl/serve
 import { z } from "zod";
 import { ScoreBadge } from "@/components/score/score-badge";
 import { buttonClass } from "@/components/ui/form";
+import { asLocale } from "@/i18n/locale";
 import { getPathname, Link, redirect } from "@/i18n/navigation";
-import type { Locale } from "@/i18n/routing";
 import { db } from "@/lib/db/client";
 import { itemHref } from "@/lib/sections";
 import { getSessionUser } from "@/lib/session";
@@ -38,10 +38,10 @@ export default async function FeedPage({ params, searchParams }: Props) {
 		getTranslations("score"),
 		getFormatter(),
 	]);
-	const feed = await getFeed(db, me.id, { cursor, locale: locale as Locale }).catch((error: unknown) => {
+	const feed = await getFeed(db, me.id, { cursor, locale: asLocale(locale) }).catch((error: unknown) => {
 		// A tampered cursor restarts from the newest entries instead of failing the page.
 		if (error instanceof Error && error.name === "InvalidCursorError")
-			return getFeed(db, me.id, { locale: locale as Locale });
+			return getFeed(db, me.id, { locale: asLocale(locale) });
 		throw error;
 	});
 	const suggestions = feed.data.length || cursor ? [] : await getTopRaters(db, me.id);

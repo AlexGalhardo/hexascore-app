@@ -1,12 +1,12 @@
 import type { ComponentProps, ReactNode } from "react";
 
 export const inputClass =
-	"min-h-11 w-full rounded-md border border-border bg-bg px-3 text-base disabled:cursor-not-allowed disabled:bg-surface disabled:text-muted aria-invalid:border-score-low";
+	"min-h-11 w-full rounded-md border border-border bg-bg px-3 text-base disabled:cursor-not-allowed disabled:bg-surface disabled:text-muted aria-invalid:border-danger";
 
 const buttonVariants = {
 	primary: "bg-fg text-bg hover:opacity-90",
 	secondary: "border border-border hover:bg-surface",
-	danger: "bg-score-low text-white hover:opacity-90",
+	danger: "bg-danger text-bg hover:opacity-90",
 } as const;
 
 export function buttonClass(variant: keyof typeof buttonVariants = "primary", extra = ""): string {
@@ -34,7 +34,7 @@ export function Field({ id, label, hint, error, children }: FieldProps) {
 				</p>
 			)}
 			{error && (
-				<p id={`${id}-error`} className="text-sm text-score-low">
+				<p id={`${id}-error`} className="text-sm text-danger">
 					{error}
 				</p>
 			)}
@@ -49,7 +49,7 @@ export function Input(props: ComponentProps<"input">) {
 type NoticeProps = { tone: "error" | "success" | "info"; children: ReactNode };
 
 const tones = {
-	error: "border-score-low text-score-low",
+	error: "border-danger text-danger",
 	success: "border-score-high",
 	info: "border-border",
 } as const;

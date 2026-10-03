@@ -1,5 +1,8 @@
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -38,6 +41,8 @@ export default async function LocaleLayout({ children, params }: Props) {
 	if (!hasLocale(routing.locales, locale)) notFound();
 	setRequestLocale(locale);
 	const t = await getTranslations("cookies");
+	// Set by proxy.ts. Reading it also makes every page dynamic, which a per-request nonce requires.
+	const nonce = (await headers()).get("x-nonce") ?? undefined;
 
 	return (
 		<html
@@ -47,7 +52,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 		>
 			<head>
 				{/* biome-ignore lint/security/noDangerouslySetInnerHtml: static theme boot script, no user input */}
-				<script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+				<script nonce={nonce} dangerouslySetInnerHTML={{ __html: themeBootScript }} />
 			</head>
 			<body className="min-h-dvh font-sans antialiased">
 				<NextIntlClientProvider>
@@ -57,6 +62,9 @@ export default async function LocaleLayout({ children, params }: Props) {
 					<Footer />
 					<CookieBanner text={t("text")} accept={t("accept")} decline={t("decline")} />
 				</NextIntlClientProvider>
+				{/* Cookieless (no consent needed); scripts are injected by these nonced bundles, allowed by 'strict-dynamic'. */}
+				<Analytics />
+				<SpeedInsights />
 			</body>
 		</html>
 	);

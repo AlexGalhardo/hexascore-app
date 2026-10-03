@@ -259,7 +259,7 @@ export function CheckoutForm({ stripe, pix, defaultCurrency, defaultProduct, has
 				{method === "card" && product !== "credits" ? t("recurring") : t("oneTime")}
 			</p>
 			{error && (
-				<p role="alert" className="text-sm text-score-low">
+				<p role="alert" className="text-sm text-danger">
 					{error}
 				</p>
 			)}

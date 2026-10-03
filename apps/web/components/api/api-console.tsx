@@ -144,7 +144,7 @@ export function ApiConsole({ keys, children }: { keys: ApiKeyView[]; children: R
 													type="button"
 													onClick={() => askRevoke(key)}
 													disabled={pending}
-													className="min-h-11 rounded-md px-3 text-score-low hover:bg-surface disabled:opacity-50"
+													className="min-h-11 rounded-md px-3 text-danger hover:bg-surface disabled:opacity-50"
 												>
 													{t("keys.revoke")}
 												</button>
@@ -177,7 +177,7 @@ export function ApiConsole({ keys, children }: { keys: ApiKeyView[]; children: R
 					</button>
 				</form>
 				{error && (
-					<p role="alert" className="text-sm text-score-low">
+					<p role="alert" className="text-sm text-danger">
 						{error}
 					</p>
 				)}
@@ -226,13 +226,13 @@ export function ApiConsole({ keys, children }: { keys: ApiKeyView[]; children: R
 				ref={dialog}
 				onClose={() => setRevoking(null)}
 				aria-labelledby="revoke-title"
-				className="m-auto max-w-md rounded-lg border border-border bg-bg p-6 text-fg backdrop:bg-black/50"
+				className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-lg border border-border bg-bg p-6 text-fg backdrop:bg-black/50"
 			>
 				<h2 id="revoke-title" className="font-serif text-xl font-bold">
 					{t("keys.confirmTitle", { name: revoking?.name ?? "" })}
 				</h2>
 				<p className="mt-2 text-sm">{t("keys.confirmBody")}</p>
-				<div className="mt-6 flex justify-end gap-2">
+				<div className="mt-6 flex flex-wrap justify-end gap-2">
 					<button
 						type="button"
 						onClick={() => dialog.current?.close()}
@@ -244,7 +244,7 @@ export function ApiConsole({ keys, children }: { keys: ApiKeyView[]; children: R
 						type="button"
 						onClick={confirmRevoke}
 						disabled={pending}
-						className="min-h-11 rounded-md bg-score-low px-4 text-sm font-semibold text-white disabled:opacity-50"
+						className="min-h-11 rounded-md bg-danger px-4 text-sm font-semibold text-bg disabled:opacity-50"
 					>
 						{pending ? t("keys.revoking") : t("keys.revoke")}
 					</button>

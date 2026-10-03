@@ -8,8 +8,9 @@ import { Trailers } from "@/components/item/trailers";
 import { HexRadar } from "@/components/score/hex-radar";
 import { ScoreBadge } from "@/components/score/score-badge";
 import { ScoreBar } from "@/components/score/score-bar";
+import { asLocale } from "@/i18n/locale";
 import { getPathname, Link } from "@/i18n/navigation";
-import { type Locale, routing } from "@/i18n/routing";
+import { routing } from "@/i18n/routing";
 import { getAffiliateLinks, getExternalScores, getItemBySlug } from "@/lib/catalog/cached";
 import { buildExternalLinks } from "@/lib/catalog/external-links";
 import { CATEGORY_KEYS, MIN_RATINGS_FOR_SCORE } from "@/lib/categories";
@@ -21,8 +22,8 @@ async function load(params: Props["params"]) {
 	const { locale, section, slug } = await params;
 	const type = typeFromSection(section);
 	if (!type || slug.length > 200) return null;
-	const item = await getItemBySlug(type, slug, locale as Locale);
-	return item ? { item, locale: locale as Locale } : null;
+	const item = await getItemBySlug(type, slug, asLocale(locale));
+	return item ? { item, locale: asLocale(locale) } : null;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
