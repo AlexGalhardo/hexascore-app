@@ -127,8 +127,18 @@ class FakeConn:
     def __init__(self) -> None:
         self.updates: dict[str, dict] = {}
 
-    def execute(self, _sql: str, params: tuple[Any, Any]) -> None:
-        self.updates[params[1]] = json.loads(json.dumps(params[0].obj))
+    def cursor(self) -> FakeConn:
+        return self
+
+    def __enter__(self) -> FakeConn:
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        pass
+
+    def executemany(self, _sql: str, params_seq: list[tuple[Any, Any]]) -> None:
+        for params in params_seq:
+            self.updates[params[1]] = json.loads(json.dumps(params[0].obj))
 
     def commit(self) -> None:
         pass
@@ -188,3 +198,29 @@ def test_run_skips_item_with_both_sizes_current(monkeypatch: pytest.MonkeyPatch)
     conn = FakeConn()
     assert covers.run(conn, client=mock_client(blob_handler([]))) == 0
     assert conn.updates == {}
+
+
+def test_run_processes_items_concurrently(monkeypatch: pytest.MonkeyPatch) -> None:
+    import threading
+    import time
+
+    monkeypatch.delenv("BLOB_READ_WRITE_TOKEN", raising=False)
+    rows = [(f"i{n}", "game", {}, None, None) for n in range(20)]
+    monkeypatch.setattr(covers, "targets", lambda *_: rows)
+    active = {"now": 0, "max": 0}
+    lock = threading.Lock()
+
+    def slow_cover(item_type: str, records: dict[str, dict]) -> covers.Cover:
+        with lock:
+            active["now"] += 1
+            active["max"] = max(active["max"], active["now"])
+        time.sleep(0.02)
+        with lock:
+            active["now"] -= 1
+        return covers.Cover(SOURCE_URL)
+
+    monkeypatch.setattr(covers, "pick_source_cover", slow_cover)
+    conn = FakeConn()
+    assert covers.run(conn, client=mock_client(blob_handler([])), workers=4) == 20
+    assert len(conn.updates) == 20
+    assert active["max"] > 1
