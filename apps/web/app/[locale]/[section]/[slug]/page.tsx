@@ -257,6 +257,31 @@ export default async function ItemPage({ params }: Props) {
 							</div>
 						))}
 				</dl>
+				{item.coverUrl && meta.coverAttribution ? (
+					<p className="text-xs text-muted">
+						{t("coverCredit", {
+							credit: [
+								meta.coverAttribution.source,
+								meta.coverAttribution.author,
+								meta.coverAttribution.license,
+							]
+								.filter(Boolean)
+								.join(" · "),
+						})}
+						{meta.coverAttribution.url ? (
+							<>
+								{" · "}
+								<a
+									href={meta.coverAttribution.url}
+									rel="noopener noreferrer nofollow"
+									className="underline"
+								>
+									{t("source")}
+								</a>
+							</>
+						) : null}
+					</p>
+				) : null}
 			</section>
 
 			{affiliates.length ? (

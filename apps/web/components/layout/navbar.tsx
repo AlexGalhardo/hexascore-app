@@ -26,7 +26,7 @@ export async function Navbar() {
 				<search className="w-full sm:w-72">
 					<SearchAutocomplete action={getPathname({ href: "/search", locale })} placeholder={t("search")} />
 				</search>
-				<nav aria-label="Sections" className="flex gap-3 text-sm">
+				<nav aria-label={t("sections")} className="flex gap-3 text-sm">
 					{SECTIONS.map((s) => (
 						<Link key={s.key} href={s.href} className={`underline-offset-4 hover:underline ${s.accent}`}>
 							{t(s.key)}

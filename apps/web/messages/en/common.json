@@ -17,7 +17,8 @@
 		"account": "Account menu",
 		"api": "API",
 		"feed": "Feed",
-		"publicProfile": "My page"
+		"publicProfile": "My page",
+		"sections": "Sections"
 	},
 	"home": {
 		"title": "Every game, movie, series and book — scored by people, category by category.",

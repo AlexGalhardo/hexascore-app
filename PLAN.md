@@ -153,8 +153,9 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 - **Verificar**: gate `dev` → `main` todo verde; ZAP sem alertas High; p95 da API < 300 ms no k6.
 
 ### 1.0.0 — Launch
-- [ ] Nome/domínio finais, `APP_NAME`, i18n revisado
-- [ ] Termos/política revisados, avisos de afiliado e licenças
+- [ ] Nome/domínio finais, `APP_NAME`
+- [x] i18n revisado (paridade de chaves e parágrafos legais testada, sem codinome nos textos, e-mails de auth traduzidos)
+- [x] Termos/política revisados, avisos de afiliado e licenças (crédito de capa na página do item; revisão por advogado segue em Pendências)
 - [ ] Bootstrap de 100k itens em produção, Stripe live, AbacatePay live
 - **Verificar**: smoke em produção; checkout real de R$ mínimo + estorno; release `v1.0.0` publicada.
 
