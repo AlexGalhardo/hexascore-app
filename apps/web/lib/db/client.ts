@@ -14,7 +14,11 @@ function createDatabase(): Database {
 	const url = env.DATABASE_URL;
 	if (url) return drizzlePostgres(postgres(url, { max: 10 }), { schema, casing: "snake_case" });
 	// No DATABASE_URL: in-process Postgres (PGlite) so `bun run dev` works without Docker.
-	const client = new PGlite(process.env.PGLITE_DIR ?? ".pglite", { extensions: { pg_trgm, unaccent } });
+	// `next build` imports this module in many parallel workers; they cannot share one on-disk PGlite
+	// (WASM abort), and the build never queries it, so each worker gets a throwaway in-memory instance.
+	const dataDir =
+		process.env.NEXT_PHASE === "phase-production-build" ? undefined : (process.env.PGLITE_DIR ?? ".pglite");
+	const client = new PGlite({ dataDir, extensions: { pg_trgm, unaccent } });
 	return drizzlePglite(client, { schema, casing: "snake_case" }) as unknown as Database;
 }
 
