@@ -222,11 +222,11 @@ export function buildOpenApiDocument(): Json {
 	return {
 		openapi: "3.1.0",
 		info: {
-			title: "Hexascore API",
+			title: "HexaScore API",
 			version: "1.0.0",
 			summary: "Community scores for games, movies, TV series and books.",
 			description: [
-				"Read-only REST API over the Hexascore catalog: every item carries a 0–100 community score and six per-category averages.",
+				"Read-only REST API over the HexaScore catalog: every item carries a 0–100 community score and six per-category averages.",
 				"",
 				"- **Auth**: `Authorization: Bearer hx_live_…` — create a key at `/profile/api`.",
 				"- **Format**: JSON, `snake_case` fields, ISO 8601 dates. Errors are RFC 9457 `application/problem+json` with a stable `code`.",
@@ -235,7 +235,7 @@ export function buildOpenApiDocument(): Json {
 				"",
 				`Guides: ${DOCS_URL}`,
 			].join("\n"),
-			contact: { name: "Hexascore", url: DOCS_URL },
+			contact: { name: "HexaScore", url: DOCS_URL },
 			license: { name: "Proprietary", url: "https://hexascore.app/terms" },
 		},
 		servers: [

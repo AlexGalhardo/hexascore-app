@@ -1,7 +1,7 @@
 [project]
 name = "hexascore"
 version = "0.0.0"
-description = "A client library for accessing Hexascore API"
+description = "A client library for accessing HexaScore API"
 authors = []
 requires-python = ">=3.11"
 readme = "README.md"
