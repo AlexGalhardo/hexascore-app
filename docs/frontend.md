@@ -67,3 +67,9 @@ Locale: EN sem prefixo, `/pt-br/…`, `/es/…`. Slugs de rota em inglês nos 3 
 - **Denúncias**: `ReportDialog` (Base UI `Dialog`) em perfis e listas de terceiros; usuário é denunciado por nickname (o browser nunca vê ids de usuário).
 - **`/admin/*`**: UI só em inglês, sem i18n, servida sob qualquer prefixo de locale (o middleware do next-intl redireciona `/admin` para o locale do cookie; um 404 por locale trancaria admins em pt-BR/es). `requireAdmin()` (`app/[locale]/admin/guard.ts`) no layout **e** em cada página → 404 para não-admin; cada action de `actions/admin.ts` reverifica. Formulários simples via `components/admin/action-form.tsx` (`useActionState`, mostra o código do resultado). Páginas: visão geral, `reports`, `contact`, `items` (busca por id/slug/título → `items/[id]` com afiliados e merge), `ingestion`.
 - Namespaces novos: `ratings`, `social`, `lists`. Constantes usadas no client (sem drizzle) em `lib/social/constants.ts`.
+
+## SEO
+
+- `/robots.txt` (`app/robots.ts`): só produção (`VERCEL_ENV=production`) é indexável; previews e local respondem `Disallow: /`. Em produção bloqueia `/api/` e, em todos os idiomas, `/admin`, `/profile`, `/feed`, `/onboarding`, `/search`, `/verify-email`, `/reset-password`, `/recover-password` (`lib/seo.ts`).
+- `/sitemap-index.xml` (`app/sitemap-index.xml/route.ts`): índice para enviar ao Search Console, aponta para `/sitemap/<id>.xml`. `/sitemap/0.xml` = páginas estáticas; `/sitemap/1..n.xml` = itens do catálogo em blocos de 40k (`SITEMAP_CHUNK`), ordenados por id. Cada URL leva `hreflang` dos 3 idiomas + `x-default`. Contagem e páginas vêm do Data Cache (`catalog`, 1 dia); sem banco no build, o sitemap cai para só o bloco estático.
+- Search Console: propriedade de domínio `hexascore.app` verificada por TXT no DNS da Vercel.
