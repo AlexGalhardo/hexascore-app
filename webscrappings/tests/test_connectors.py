@@ -112,3 +112,35 @@ def test_enrichment_skips_failed_targets() -> None:
 
     records = list(steam.fetch(None, FakeConn(), mock_client(handler)))
     assert [r.external_id for r in records] == ["Q2"]
+
+
+def test_wikipedia_fetch_runs_requests_concurrently(monkeypatch) -> None:
+    import threading
+    import time
+
+    import httpx
+
+    from common.http import HttpClient
+
+    summary = load("wikipedia_summary_en_the_matrix.json")
+    active = {"now": 0, "max": 0}
+    lock = threading.Lock()
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        with lock:
+            active["now"] += 1
+            active["max"] = max(active["max"], active["now"])
+        time.sleep(0.02)
+        with lock:
+            active["now"] -= 1
+        return httpx.Response(200, json=summary)
+
+    rows = [("Q83495", {"enwiki": "The Matrix"})] * 12
+    monkeypatch.setattr(wikipedia, "targets", lambda conn, since: rows)
+    monkeypatch.setattr(wikipedia, "existing_ids", lambda conn, source: set())
+    client = HttpClient(transport=httpx.MockTransport(handler), sleep=lambda _: None)
+    monkeypatch.setitem(__import__("common.http").http.HOST_INTERVALS, "en.wikipedia.org", 0.0)
+
+    records = list(wikipedia.fetch(None, conn=None, client=client, langs=["en"], workers=4))  # type: ignore[arg-type]
+    assert len(records) == 12
+    assert active["max"] > 1
