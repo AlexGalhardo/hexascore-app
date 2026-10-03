@@ -70,6 +70,7 @@
 				"errors": {
 					"unauthenticated": "Your session expired. Log in again.",
 					"unverified": "Verify your email before creating API keys.",
+					"disabled": "Creating new API keys is temporarily disabled. Existing keys keep working.",
 					"invalid": "Give the key a name of up to 40 characters.",
 					"limit": "You can have at most 5 active keys. Revoke one first.",
 					"not_found": "This key no longer exists.",
