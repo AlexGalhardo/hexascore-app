@@ -2,7 +2,7 @@
   "name": "hexascore",
   "private": true,
   "packageManager": "bun@1.4.2",
-  "workspaces": ["apps/*"],
+  "workspaces": ["apps/*", "sdks/ts"],
   "scripts": {
     "dev": "bun --filter web dev",
     "build": "bun --filter web build",
@@ -17,6 +17,7 @@
     "db:seed": "bun --filter web db:seed",
     "openapi": "bun --filter web openapi",
     "openapi:check": "bun --filter web openapi:check",
+    "sdk:generate": "bun --filter @hexascore/sdk sdk:generate",
     "prepare": "husky"
   },
   "devDependencies": {

@@ -56,14 +56,11 @@ const response = `{
   "next_cursor": "eyJzIjoiLXNjb3JlIiwidiI6IjkwIi..."
 }`;
 
-const sdk = `import { createClient } from "@hexascore/sdk/client";
-import { listGames } from "@hexascore/sdk";
+const sdk = `import { createHexascoreClient, listGames } from "@hexascore/sdk";
 
-const client = createClient({
-  baseUrl: "${API_BASE_URL}",
-  headers: { Authorization: \`Bearer \${process.env.HEXASCORE_API_KEY}\` },
-});
-const { data, error } = await listGames({ client, query: { sort: "-score", limit: 5 } });`;
+const client = createHexascoreClient({ apiKey: process.env.HEXASCORE_API_KEY });
+const { data, error } = await listGames({ client, query: { sort: "-score", limit: 5 } });
+if (error) throw new Error(\`\${error.code}: \${error.detail}\`);`;
 
 export default async function QuickstartPage(props: DocPageProps) {
 	await enterDocPage(props);
