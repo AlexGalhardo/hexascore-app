@@ -27,7 +27,7 @@ export default async function DocsLayout({ children, params }: Props) {
 			<aside className="space-y-4 lg:sticky lg:top-4 lg:self-start">
 				<DocsNav label={t("navLabel")} labels={labels} />
 				<div className="hidden space-y-3 px-3 text-xs text-muted lg:block">
-					{locale !== "en" && <p lang={locale}>{t("englishOnly")}</p>}
+					{locale !== "en" && <p lang={locale}>{t("languageNote")}</p>}
 					<Link
 						href="/profile/api"
 						className="inline-block font-semibold text-fg underline underline-offset-4"

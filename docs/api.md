@@ -23,13 +23,14 @@
 
 - `lib/api/handler.ts` — `apiRoute({ params?, query, response }, handler)`: request id, auth por chave (atualiza `last_used_at` no máx. 1×/min), plano, schema de query (pode depender do plano e dos params), cota/throttle, `response.parse` no corpo (contrato = fio), `NotFoundError`/`BadRequestError`, estorno em 5xx.
 - `lib/api/schemas.ts` — DTOs zod (fonte única) + schemas de params/query + mapeadores repositório → snake_case.
-- `lib/api/openapi.ts` — OpenAPI 3.1 a partir dos mesmos schemas (`z.toJSONSchema`, registry próprio). `bun run openapi` grava `apps/web/public/openapi.json`; `bun run openapi:check` falha se o arquivo commitado estiver desatualizado (job `lint` do CI).
+- `lib/api/openapi.ts` — OpenAPI 3.1 a partir dos mesmos schemas (`z.toJSONSchema`, registry próprio). `bun run openapi` grava `apps/web/public/openapi.json` (en, base dos SDKs) + `openapi.pt-BR.json` + `openapi.es.json`; `bun run openapi:check` falha se algum dos três estiver desatualizado (job `lint` do CI).
+- Textos do spec (info, tags, summaries/descriptions de operações, parâmetros, campos, headers, erros, security scheme) ficam em `apps/web/messages/<locale>/openapi.json` (fora dos `NAMESPACES` do next-intl). `lib/api/openapi-text.ts`: `openApiText(locale, key, params)` tipado pelas chaves do en; nos schemas zod, `.meta({ description: apiDoc(key) })` grava o inglês e registra a chave, e `localizeDescriptions` troca pelo idioma depois do `z.toJSONSchema` (descrição sem chave = erro). Estrutura idêntica entre idiomas (só description/summary mudam), garantida por `lib/api/openapi.test.ts`; paridade de chaves em `messages/messages.test.ts`. `example.detail` dos erros fica em inglês (é o corpo real).
 - Rotas em `apps/web/app/api/v1/` (`[type]`, `[type]/[id]`, `[type]/genres`, `search`, `lookup`, `me/usage`). Testes de rota em `lib/api/v1.test.ts` (PGlite + store em memória).
 - Passo a passo para novo endpoint: skill `.claude/skills/hexascore-api/SKILL.md`.
 
 ## Docs e dashboard
 
-- `/docs` (chrome traduzido en/pt-BR/es, conteúdo técnico em inglês): quickstart, authentication, errors (âncora por `code`), pagination, rate-limits (tabela de `PLAN_LIMITS`), changelog; `/docs/reference` = Scalar (`@scalar/api-reference-react` 0.9.77) carregando `/openapi.json`, tema seguindo `data-theme`, IA/MCP do Scalar desligados.
+- `/docs` (chrome traduzido en/pt-BR/es, guias em inglês): quickstart, authentication, errors (âncora por `code`), pagination, rate-limits (tabela de `PLAN_LIMITS`), changelog; `/docs/reference` = Scalar (`@scalar/api-reference-react` 0.9.77) carregando o spec do idioma do site (`openApiPath(locale)` em `lib/api/spec-path.ts`: `/openapi.json`, `/openapi.pt-BR.json`, `/openapi.es.json`) com a UI do Scalar no mesmo idioma, tema seguindo `data-theme`, IA/MCP do Scalar desligados. A raiz de `api.<domínio>` lista os três em `openapi: { en, "pt-BR", es }`.
 - `/profile/api` (login obrigatório → `/login?next=/profile/api`): chaves (criar com exibição única + copiar, revogar com confirmação), plano/cota, uso de hoje (Redis) + 30 dias (`api_usage_daily`) em gráfico SVG, links para `/pricing` e `/profile/api/checkout`, "Try it" com Scalar e a chave só em memória (persistência de auth desligada).
 
 ## SDKs
