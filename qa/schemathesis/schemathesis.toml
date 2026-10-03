@@ -1,0 +1,31 @@
+# Schemathesis 4.29.0 config, used by qa/schemathesis/run.sh (docs/testing.md → "Fuzzing da API").
+# Base URL and headers (API key, Vercel bypass) come from the CLI so secrets never land in a file.
+# The container runs in qa/reports/schemathesis (gitignored): junit.xml, schema-coverage.html and the
+# .hypothesis example database land there.
+
+# Stays under the Pro plan's 10 req/s: 429s are valid responses, but a throttled run fuzzes nothing.
+rate-limit = "8/s"
+workers = 1
+request-timeout = 15
+max-failures = 50
+
+[generation]
+max-examples = 50
+
+[checks]
+# Read-only API: these two need create/delete links between operations.
+use_after_free.enabled = false
+ensure_resource_availability.enabled = false
+# TRACE is answered 400 by the HTTP server before Next.js runs (the app never sees it); every other
+# undeclared method gets Next's 405. Nothing in the app can change that, so the check only adds noise.
+unsupported_method.enabled = false
+
+# `cursor` is an opaque token the API mints (`next_cursor`); a schema-valid random string is still not a
+# real cursor, and the documented answer for it is 400 `bad_request` ("The cursor is invalid or expired.").
+[[operations]]
+include-path-regex = "^/(games|movies|series|books)$"
+checks.positive_data_acceptance.expected-statuses = ["2xx", "400", "401", "403", "404", "409", "429", "5xx"]
+
+[reports.junit]
+enabled = true
+path = "junit.xml"
