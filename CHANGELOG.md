@@ -3,6 +3,21 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [0.0.21](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.20...v0.0.21) (2026-10-03)
+
+
+### Added
+
+* **ingest:** sandbox seed and faster wikipedia enrichment ([7942f4d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/7942f4d1be5b66f6e78b6c0bed4d7a5d8bc275ec))
+* **seed:** sandbox mode on existing items, purge, target guard and banner ([bc9b27f](https://github.com/AlexGalhardo/claude-code-internet-api/commit/bc9b27f7378498c2ea802c87f3abafcf7ad0a073))
+* **seed:** sandbox mode on existing items, purge, target guard and banner ([ebf4ae2](https://github.com/AlexGalhardo/claude-code-internet-api/commit/ebf4ae2827434e0db4c595453fc91c0df8ecb1b7))
+
+
+### Changed
+
+* **ingest:** fetch wikipedia summaries concurrently ([3669be6](https://github.com/AlexGalhardo/claude-code-internet-api/commit/3669be686a26cb9beed62277c8a88548a8e7d9b8))
+* **ingest:** fetch wikipedia summaries concurrently ([a704d22](https://github.com/AlexGalhardo/claude-code-internet-api/commit/a704d222301e26663ff50bc118811aee6a26b30b))
+
 ## [0.0.20](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.19...v0.0.20) (2026-10-03)
 
 
