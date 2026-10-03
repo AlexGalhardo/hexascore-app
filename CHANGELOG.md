@@ -20,6 +20,7 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 - Seed target guard (`lib/db/seed-guard.ts`): always refuses `VERCEL_ENV=production`, refuses non-local databases unless `SEED_TARGET=sandbox`, and refuses databases with more than 50 verified non-seed users unless `--i-know-this-is-sandbox` is passed.
 - `NEXT_PUBLIC_SANDBOX` env (`"true"`/`"false"`, default false): non-dismissable "sandbox — fake data" banner above the navbar (en/pt-BR/es, `role="status"`), `noindex, nofollow` metadata and `robots.txt` disallowing everything.
 - API docs guides (`/docs`, authentication, errors, pagination, rate limits, changelog) are translated to pt-BR and es through the new `docs` namespace (`messages/<locale>/docs.json`), including per-page meta descriptions and the code-block copy button. Inline code and links use `t.rich`; code samples, HTTP headers, field/parameter names, error `code` values and URLs stay in English. E2E checks the Portuguese and Spanish quickstart headings (with axe).
+- Seed creates a default admin for local and sandbox only (`admin@hexascore.test` / `hexascoreBR@123`, overridable with `SEED_ADMIN_EMAIL`/`SEED_ADMIN_PASSWORD`; `--admin-only` creates just it). `docs/admin.md` documents `/admin`, its sections and the admin accounts.
 
 ### Changed
 
