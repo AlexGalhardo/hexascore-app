@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AuthCard } from "@/components/auth/auth-card";
-import { getPathname, Link } from "@/i18n/navigation";
+import { Link, redirect } from "@/i18n/navigation";
 import { features } from "@/lib/env";
 import { getSessionUser } from "@/lib/session";
 import { SignupForm } from "./signup-form";
@@ -18,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SignupPage({ params }: Props) {
 	const { locale } = await params;
 	setRequestLocale(locale);
-	if (await getSessionUser()) redirect(getPathname({ href: "/profile", locale }));
+	if (await getSessionUser()) redirect({ href: "/profile", locale });
 	const t = await getTranslations("auth.signup");
 
 	return (

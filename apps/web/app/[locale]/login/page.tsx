@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Route } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AuthCard } from "@/components/auth/auth-card";
@@ -21,7 +21,7 @@ export default async function LoginPage({ params, searchParams }: Props) {
 	setRequestLocale(locale);
 	const next = safeNextPath((await searchParams).next, getPathname({ href: "/", locale }));
 	// `next` is already a localized path: the plain Next redirect avoids a second locale prefix.
-	if (await getSessionUser()) redirect(next);
+	if (await getSessionUser()) redirect(next as Route);
 	const t = await getTranslations("auth.login");
 
 	return (

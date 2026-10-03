@@ -84,7 +84,17 @@ export function SignupForm({ googleEnabled }: { googleEnabled: boolean }) {
 
 	return (
 		<div className="flex flex-col gap-4">
-			<form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
+			<form
+				onSubmit={onSubmit}
+				// A field's error clears as soon as the user edits it; it is re-validated on the next submit.
+				onChange={(event) => {
+					const target = event.target;
+					const name = target instanceof HTMLInputElement ? (target.name as FieldName) : null;
+					if (name && invalid.has(name)) setInvalid(new Set([...invalid].filter((f) => f !== name)));
+				}}
+				className="flex flex-col gap-4"
+				noValidate
+			>
 				{error && <Notice tone="error">{t(`errors.${error}`)}</Notice>}
 				<div className="flex items-end gap-3">
 					<div
