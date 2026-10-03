@@ -59,33 +59,62 @@ def test_to_webp_applies_exif_orientation() -> None:
         assert image.size == (200, 300)
 
 
-def test_store_cover_uploads_content_addressed_webp() -> None:
+def test_to_webp_thumb_fits_list_size() -> None:
+    thumb = covers.to_webp(SOURCE, covers.THUMB_SIZE, covers.THUMB_QUALITY)
+    with Image.open(io.BytesIO(thumb)) as image:
+        assert image.size == (96, 111)  # 720x833 fits 96x144 by width, aspect kept
+        assert "exif" not in image.info and "icc_profile" not in image.info
+    assert len(thumb) < 8 * 1024
+    with Image.open(io.BytesIO(covers.to_webp(png("RGB", (40, 60)), covers.THUMB_SIZE))) as image:
+        assert image.size == (40, 60)
+
+
+FULL = BLOB_HOST + covers.blob_pathname("item-1", SOURCE)
+THUMB = BLOB_HOST + covers.blob_pathname("item-1", SOURCE, "-t")
+
+
+def test_store_cover_uploads_content_addressed_full_and_thumb() -> None:
     calls: list[httpx.Request] = []
-    url = covers.store_cover(mock_client(blob_handler(calls)), "tok", "item-1", SOURCE_URL, None)
+    urls = covers.store_cover(mock_client(blob_handler(calls)), "tok", "item-1", SOURCE_URL, None, None)
 
     pathname = covers.blob_pathname("item-1", SOURCE)
     assert pathname.startswith("covers/item-1-") and pathname.endswith(".webp")
-    assert url == BLOB_HOST + pathname
-    put = calls[1]
-    assert put.method == "PUT" and put.url.params["pathname"] == pathname
-    assert put.headers["authorization"] == "Bearer tok"
-    assert put.headers["x-content-type"] == "image/webp"
-    assert put.headers["x-cache-control-max-age"] == "31536000"
-    assert put.content[:4] == b"RIFF" and put.content[8:12] == b"WEBP"
+    assert pathname.removesuffix(".webp") + "-t.webp" == THUMB.removeprefix(BLOB_HOST)
+    assert urls == (FULL, THUMB)
+    assert [r.method for r in calls] == ["GET", "PUT", "PUT"]
+    for put in calls[1:]:
+        assert put.headers["authorization"] == "Bearer tok"
+        assert put.headers["x-content-type"] == "image/webp"
+        assert put.headers["x-cache-control-max-age"] == "31536000"
+        assert put.content[:4] == b"RIFF" and put.content[8:12] == b"WEBP"
+    assert len(calls[2].content) < len(calls[1].content) / 3
 
 
 def test_store_cover_skips_upload_when_same_source_is_stored() -> None:
     calls: list[httpx.Request] = []
-    current = BLOB_HOST + covers.blob_pathname("item-1", SOURCE)
-    assert covers.store_cover(mock_client(blob_handler(calls)), "tok", "item-1", SOURCE_URL, current) == current
+    assert covers.store_cover(mock_client(blob_handler(calls)), "tok", "item-1", SOURCE_URL, FULL, THUMB) == (
+        FULL,
+        THUMB,
+    )
     assert [r.method for r in calls] == ["GET"]
+
+
+def test_store_cover_adds_only_missing_thumb() -> None:
+    calls: list[httpx.Request] = []
+    urls = covers.store_cover(mock_client(blob_handler(calls)), "tok", "item-1", SOURCE_URL, FULL, None)
+    assert urls == (FULL, THUMB)
+    assert [(r.method, r.url.params.get("pathname")) for r in calls] == [
+        ("GET", None),
+        ("PUT", covers.blob_pathname("item-1", SOURCE, "-t")),
+    ]
 
 
 def test_store_cover_reuploads_when_source_changed() -> None:
     calls: list[httpx.Request] = []
     stale = BLOB_HOST + "covers/item-1-0000000000000000.webp"
-    url = covers.store_cover(mock_client(blob_handler(calls)), "tok", "item-1", SOURCE_URL, stale)
-    assert url != stale and [r.method for r in calls] == ["GET", "PUT"]
+    stale_thumb = BLOB_HOST + "covers/item-1-0000000000000000-t.webp"
+    urls = covers.store_cover(mock_client(blob_handler(calls)), "tok", "item-1", SOURCE_URL, stale, stale_thumb)
+    assert urls == (FULL, THUMB) and [r.method for r in calls] == ["GET", "PUT", "PUT"]
 
 
 def test_upload_rejects_unexpected_blob_response() -> None:
@@ -111,7 +140,7 @@ def steam(header: str) -> dict[str, dict]:
 
 def test_run_without_token_keeps_source_url(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("BLOB_READ_WRITE_TOKEN", raising=False)
-    monkeypatch.setattr(covers, "targets", lambda *_: [("a", "game", steam(SOURCE_URL), None)])
+    monkeypatch.setattr(covers, "targets", lambda *_: [("a", "game", steam(SOURCE_URL), None, None)])
     conn = FakeConn()
     calls: list[httpx.Request] = []
     assert covers.run(conn, client=mock_client(blob_handler(calls))) == 1
@@ -122,9 +151,9 @@ def test_run_without_token_keeps_source_url(monkeypatch: pytest.MonkeyPatch) -> 
 def test_run_isolates_per_item_failures(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("BLOB_READ_WRITE_TOKEN", "tok")
     rows = [
-        ("broken", "game", steam("https://cdn.example/broken.jpg"), None),
-        ("gone", "game", steam("https://cdn.example/404.jpg"), None),
-        ("ok", "game", steam(SOURCE_URL), None),
+        ("broken", "game", steam("https://cdn.example/broken.jpg"), None, None),
+        ("gone", "game", steam("https://cdn.example/404.jpg"), None, None),
+        ("ok", "game", steam(SOURCE_URL), None, None),
     ]
     monkeypatch.setattr(covers, "targets", lambda *_: rows)
     ok = blob_handler([])
@@ -140,3 +169,22 @@ def test_run_isolates_per_item_failures(monkeypatch: pytest.MonkeyPatch) -> None
     assert covers.run(conn, client=mock_client(handler)) == 1
     assert list(conn.updates) == ["ok"]
     assert conn.updates["ok"]["coverUrl"] == BLOB_HOST + covers.blob_pathname("ok", SOURCE)
+    assert conn.updates["ok"]["coverThumbUrl"] == BLOB_HOST + covers.blob_pathname("ok", SOURCE, "-t")
+
+
+def test_run_backfills_thumb_for_legacy_cover(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("BLOB_READ_WRITE_TOKEN", "tok")
+    monkeypatch.setattr(covers, "targets", lambda *_: [("item-1", "game", steam(SOURCE_URL), FULL, None)])
+    conn = FakeConn()
+    calls: list[httpx.Request] = []
+    assert covers.run(conn, client=mock_client(blob_handler(calls))) == 1
+    assert conn.updates == {"item-1": {"coverUrl": FULL, "coverThumbUrl": THUMB}}
+    assert [r.method for r in calls] == ["GET", "PUT"]
+
+
+def test_run_skips_item_with_both_sizes_current(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("BLOB_READ_WRITE_TOKEN", "tok")
+    monkeypatch.setattr(covers, "targets", lambda *_: [("item-1", "game", steam(SOURCE_URL), FULL, THUMB)])
+    conn = FakeConn()
+    assert covers.run(conn, client=mock_client(blob_handler([]))) == 0
+    assert conn.updates == {}

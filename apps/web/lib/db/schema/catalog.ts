@@ -57,6 +57,8 @@ export type ItemMeta = {
 	countries?: string[];
 	trailers?: Trailer[];
 	coverUrl?: string;
+	/** 96x144 list thumbnail; set only when covers.py uploaded WebP copies to the Blob. */
+	coverThumbUrl?: string;
 	coverAttribution?: { source: string; license?: string; author?: string; url?: string };
 };
 

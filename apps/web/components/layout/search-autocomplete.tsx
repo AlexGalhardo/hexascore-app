@@ -18,6 +18,7 @@ const suggestionSchema = z.object({
 			year: z.number().nullable(),
 			score: z.number().int().min(0).max(100).nullable(),
 			coverUrl: z.string().nullable(),
+			coverThumbUrl: z.string().nullable(),
 			path: z.string().startsWith("/"),
 		}),
 	),
@@ -112,7 +113,7 @@ export function SearchAutocomplete({ action, placeholder }: Props) {
 										onClick={() => router.push(item.path)}
 										className="flex min-h-14 cursor-default items-center gap-3 px-3 py-1.5 text-sm outline-none data-highlighted:bg-surface"
 									>
-										<CoverThumb src={item.coverUrl} />
+										<CoverThumb src={item.coverUrl} thumb={item.coverThumbUrl} />
 										<span className="grid min-w-0 flex-1">
 											<span className="truncate font-medium">{item.title}</span>
 											<span className="text-xs text-muted">
