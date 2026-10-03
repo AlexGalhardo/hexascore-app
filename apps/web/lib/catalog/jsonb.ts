@@ -26,6 +26,7 @@ const metaFields = {
 		}),
 	),
 	coverUrl: z.url({ protocol: /^https$/ }),
+	coverThumbUrl: z.url({ protocol: /^https$/ }),
 	coverAttribution: z.object({
 		source: z.string().max(200),
 		license: z.string().max(200).optional(),
