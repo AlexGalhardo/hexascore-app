@@ -15,6 +15,11 @@ max_line_length = 120
 indent_style = space
 indent_size = 2
 
+# PEP 8: Python usa 4 espaços (ruff format).
+[*.py]
+indent_style = space
+indent_size = 4
+
 # Espaços no fim da linha são quebra de linha forçada em Markdown.
 [*.md]
 trim_trailing_whitespace = false
