@@ -1,0 +1,88 @@
+{
+	"api": {
+		"docs": {
+			"metaTitle": "Documentación de la API",
+			"metaDescription": "API REST de solo lectura con las puntuaciones de la comunidad para juegos, películas, series y libros.",
+			"navLabel": "Documentación",
+			"nav": {
+				"quickstart": "Primeros pasos",
+				"authentication": "Autenticación",
+				"errors": "Errores",
+				"pagination": "Paginación",
+				"limits": "Límites y cuotas",
+				"changelog": "Changelog y versionado",
+				"reference": "Referencia de la API"
+			},
+			"englishOnly": "El contenido técnico está en inglés.",
+			"getKey": "Crear una clave de API",
+			"loading": "Cargando la referencia de la API…"
+		},
+		"profile": {
+			"metaTitle": "Claves y uso de la API",
+			"title": "API",
+			"intro": "Crea claves, sigue tu uso y prueba cada endpoint con tu propia clave.",
+			"docsLink": "Leer la documentación",
+			"plan": {
+				"title": "Plan actual",
+				"quota": "{used} de {limit} solicitudes usadas",
+				"lifetime": "La cuota del plan Free nunca se renueva.",
+				"resets": "Se renueva el {date}.",
+				"credits": "{count} créditos prepagados",
+				"rate": "{count} solicitudes por segundo",
+				"pageSize": "Hasta {count} resultados por página",
+				"upgrade": "Ver planes",
+				"checkout": "Mejorar el plan o comprar créditos"
+			},
+			"usage": {
+				"title": "Uso",
+				"today": "Hoy",
+				"last30": "Últimos 30 días",
+				"chartLabel": "Solicitudes por día en los últimos 30 días, {total} en total",
+				"bar": "{day}: {count} solicitudes",
+				"note": "Los días anteriores se consolidan una vez al día; hoy es en tiempo real."
+			},
+			"keys": {
+				"title": "Claves de API",
+				"empty": "Aún no tienes claves. Crea una para hacer tu primera solicitud.",
+				"name": "Nombre",
+				"prefix": "Clave",
+				"created": "Creada",
+				"lastUsed": "Último uso",
+				"status": "Estado",
+				"never": "Nunca",
+				"active": "Activa",
+				"revoked": "Revocada",
+				"actions": "Acciones",
+				"newName": "Nombre de la clave",
+				"newNamePlaceholder": "p. ej. servidor de producción",
+				"create": "Crear clave",
+				"creating": "Creando…",
+				"createdTitle": "Tu nueva clave de API",
+				"createdWarning": "Cópiala ahora. Por seguridad solo se guarda su hash y no se volverá a mostrar.",
+				"copy": "Copiar",
+				"copied": "Copiada",
+				"dismiss": "Ya la guardé",
+				"revoke": "Revocar",
+				"revoking": "Revocando…",
+				"confirmTitle": "¿Revocar “{name}”?",
+				"confirmBody": "Las solicitudes con esta clave fallarán con 401 de inmediato. No se puede deshacer.",
+				"cancel": "Cancelar",
+				"errors": {
+					"unauthenticated": "Tu sesión expiró. Inicia sesión de nuevo.",
+					"unverified": "Verifica tu correo antes de crear claves de API.",
+					"invalid": "Ponle a la clave un nombre de hasta 40 caracteres.",
+					"limit": "Puedes tener como máximo 5 claves activas. Revoca una primero.",
+					"not_found": "Esta clave ya no existe.",
+					"server": "Algo salió mal. Inténtalo de nuevo."
+				}
+			},
+			"tryIt": {
+				"title": "Probar",
+				"description": "Las solicitudes salen de tu navegador hacia este despliegue y cuentan en tu cuota. La clave solo vive en esta página: nunca se guarda ni se registra.",
+				"keyLabel": "Clave de API para “Probar”",
+				"apply": "Usar clave",
+				"keyHint": "Pega una clave completa (hx_live_…). Una clave recién creada se rellena automáticamente."
+			}
+		}
+	}
+}
