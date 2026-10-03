@@ -3,6 +3,15 @@
 All notable changes to this project are documented here.
 Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioning: [SemVer](https://semver.org/).
 
+## [0.0.20](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.19...v0.0.20) (2026-10-03)
+
+
+### Added
+
+* **docs:** translate the API guides to pt-BR and es ([99ab46d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/99ab46d88b174caa8c6b9068989bb34f0bfa24d7))
+* **web:** center the users' scores dialog and paginate it by page number ([3783518](https://github.com/AlexGalhardo/claude-code-internet-api/commit/37835183f70a680f3f94b2796aadfb0e19bde4aa))
+* **web:** ratings dialog pagination and translated API guides ([731ff7d](https://github.com/AlexGalhardo/claude-code-internet-api/commit/731ff7d065d077abb6f1403f42518937a0c3dff8))
+
 ## [Unreleased]
 
 ### Added
