@@ -32,6 +32,10 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Changed
+
+- API reference (Scalar) UI follows the site language: `localization.locale` = `pt` for pt-BR and `es` for Spanish (built-in packs); the OpenAPI text stays English. Spec title is now "HexaScore API".
+
 ### Fixed
 
 - Public API rejects empty query values (`?min_score=`, `?limit=`) with a 400 problem instead of coercing them to 0 (found by Schemathesis on the preview).
