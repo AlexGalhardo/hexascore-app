@@ -1,0 +1,11 @@
+{
+	"errors": {
+		"notFoundTitle": "Página no encontrada",
+		"notFoundBody": "La página que buscas no existe o fue movida.",
+		"serverTitle": "Algo salió mal",
+		"serverBody": "Ocurrió un error inesperado de nuestro lado. Inténtalo de nuevo en un momento.",
+		"retry": "Intentar de nuevo",
+		"home": "Volver al inicio",
+		"reference": "Referencia del error"
+	}
+}

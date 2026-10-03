@@ -25,6 +25,14 @@
 	"javascript": { "formatter": { "quoteStyle": "double" } },
 	"css": { "parser": { "cssModules": true, "tailwindDirectives": true } },
 	"files": {
-		"includes": ["**", "!**/package.json", "!**/next-env.d.ts", "!.claude", "!**/lib/db/migrations", "!sdks"]
+		"includes": [
+			"**",
+			"!**/package.json",
+			"!**/next-env.d.ts",
+			"!.claude",
+			"!.agents",
+			"!**/lib/db/migrations",
+			"!sdks"
+		]
 	}
 }
