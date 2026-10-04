@@ -53,7 +53,7 @@ Todos os jobs usam `.github/actions/setup-bun` (Bun `1.4.2` via `oven-sh/setup-b
 
 Desde 2026-10-03 os workflows do GitHub estão **desativados no GitHub** (`gh workflow disable`, por bloqueio de cobrança do Actions); os arquivos em `.github/workflows/` continuam no repositório, intactos. Para reativar: `gh workflow enable "CI"` (idem `Python CI`, `QA`, `CodeQL`, `Release Please`, `Ingest (bootstrap|incremental|weekly scores and synopses)`).
 
-No lugar deles, o hook **pre-push** do husky roda `bun run ci:local` (`scripts/ci-local.sh`), o mesmo conjunto do `ci.yml`: `lint:ci`, `typecheck`, `test`, `openapi:check` e `build` (com o env fictício do CI; se o `bun --bun next build` quebrar no Windows, repete com `bunx next build`), mais `ruff` e `pytest` quando o diff contra `origin/dev` toca `webscrappings/`. Falhou, o push não sai. Emergência: `CI_LOCAL_SKIP=1 git push` (exceção, nunca rotina).
+No lugar deles, o hook **pre-push** do husky roda `bun run ci:local` (`scripts/ci-local.sh`), o mesmo conjunto do `ci.yml`: `lint:ci`, `typecheck`, `test`, `openapi:check` e `build` (com o env fictício do CI; se o `bun --bun next build` quebrar no Windows, repete com `bunx next build`; o build roda com `NODE_OPTIONS=--max-old-space-size=8192`, salvo se já definido, porque o worker do Node estourava o heap padrão), mais `ruff` e `pytest` quando o diff contra `origin/dev` toca `webscrappings/`. Falhou, o push não sai. Emergência: `CI_LOCAL_SKIP=1 git push` (exceção, nunca rotina).
 
 O deploy continua na Vercel (Git integration, independente do Actions): push na `dev` publica `dev.hexascore.app`, merge na `main` publica `hexascore.app`.
 
