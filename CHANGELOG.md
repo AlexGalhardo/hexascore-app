@@ -12,6 +12,7 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 - Ingestion: `normalize` looks up the batch's existing items in one query and writes each 200-item batch in psycopg pipeline mode instead of waiting on ~8 round trips per item, which capped a remote database at ~1 item/s (now ~70 items/s against Neon).
 - Ingestion: `covers.py` processes items in a thread pool (8 workers for download, WebP encode and Blob upload) and writes each chunk of updates with one `executemany` + commit, instead of handling and committing one item at a time. An unexpected error on one item (e.g. a malformed stored payload) is logged and skipped instead of aborting the chunk and dropping its other patches.
 - Ingestion: the per-connection lock used by the keep-alive ping (`common/db.busy`) is held in a `WeakKeyDictionary`, so it is released with its connection instead of accumulating under reusable `id()` keys.
+- `ci:local`: the build step sets `NODE_OPTIONS=--max-old-space-size=8192` (unless already set), since the Node fallback's build worker crashed with V8 `FatalOOM` on Windows and blocked the push.
 
 ## [0.0.22](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.21...v0.0.22) (2026-10-03)
 

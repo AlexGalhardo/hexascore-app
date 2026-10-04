@@ -29,6 +29,8 @@ bun run openapi:check
 step "build"
 export NEXT_PUBLIC_APP_NAME=HexaScore NEXT_PUBLIC_APP_URL=http://localhost:3000 BETTER_AUTH_URL=http://localhost:3000
 export BETTER_AUTH_SECRET=ci-only-better-auth-secret-0123456789abcdef CRON_SECRET=ci-only-cron-secret-0123456789abcdef0123
+# The Node fallback's build worker hit V8's default heap limit (FatalOOM) on Windows; a caller-set value wins.
+export NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=8192}"
 if ! bun run build; then
 	# `bun --bun next build` can crash its workers on Windows (exit 3/9) even on a clean tree; retry under Node.
 	echo "[ci:local] bun build failed, retrying with Node (bunx next build)"
