@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import threading
+import weakref
 from collections.abc import Iterable
 from dataclasses import dataclass
 from itertools import batched
@@ -29,14 +30,15 @@ def canonical_hash(payload: Any) -> str:
 
 KEEPALIVE_SECONDS = 60
 log = logging.getLogger(__name__)
-_BUSY: dict[int, threading.Lock] = {}
+# Weak keys: the entry dies with its connection, so a reused id() never inherits a stale lock.
+_BUSY: weakref.WeakKeyDictionary[psycopg.Connection, threading.Lock] = weakref.WeakKeyDictionary()
 
 
 def busy(conn: psycopg.Connection) -> threading.Lock:
     """Held around multi-statement work (pipeline mode, executemany). psycopg's own lock only covers single calls,
     so a keep-alive ping sent between two pipelined statements fails the batch ("another command is already in
     progress")."""
-    return _BUSY.setdefault(id(conn), threading.Lock())
+    return _BUSY.setdefault(conn, threading.Lock())
 
 
 def keep_alive(conn: psycopg.Connection, interval: float = KEEPALIVE_SECONDS) -> threading.Thread:

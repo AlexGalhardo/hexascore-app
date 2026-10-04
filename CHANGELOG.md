@@ -10,7 +10,8 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 - Ingestion: Wikipedia synopses come from the Action API (`prop=extracts`, intro, plain text) in batches of 20 titles instead of one REST `page/summary` request per page, which anonymous clients get throttled on (continuous 429, ~1 page/s); redirects are followed and pages are still matched by `wikibase_item` with disambiguation pages skipped. About 20x faster (~1,400 pages/min per language).
 - Ingestion: `store_records` writes each 200-record chunk with one pipelined `executemany` instead of one upsert round trip per record, which capped a remote database at ~6 rows/s.
 - Ingestion: `normalize` looks up the batch's existing items in one query and writes each 200-item batch in psycopg pipeline mode instead of waiting on ~8 round trips per item, which capped a remote database at ~1 item/s (now ~70 items/s against Neon).
-- Ingestion: `covers.py` processes items in a thread pool (8 workers for download, WebP encode and Blob upload) and writes each chunk of updates with one `executemany` + commit, instead of handling and committing one item at a time.
+- Ingestion: `covers.py` processes items in a thread pool (8 workers for download, WebP encode and Blob upload) and writes each chunk of updates with one `executemany` + commit, instead of handling and committing one item at a time. An unexpected error on one item (e.g. a malformed stored payload) is logged and skipped instead of aborting the chunk and dropping its other patches.
+- Ingestion: the per-connection lock used by the keep-alive ping (`common/db.busy`) is held in a `WeakKeyDictionary`, so it is released with its connection instead of accumulating under reusable `id()` keys.
 
 ## [0.0.22](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.21...v0.0.22) (2026-10-03)
 

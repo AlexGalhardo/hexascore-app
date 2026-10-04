@@ -241,6 +241,10 @@ def run(
             # OSError covers Pillow's UnidentifiedImageError and truncated files.
             log.warning("cover for %s failed: %s", item_id, exc)
             return None
+        except Exception:
+            # A malformed stored payload must not abort pool.map and drop the chunk's other patches.
+            log.exception("cover for %s failed unexpectedly", item_id)
+            return None
         if url == current_url and thumb == current_thumb:
             return None
         patch: dict[str, Any] = {"coverUrl": url}
