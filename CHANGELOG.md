@@ -5,6 +5,16 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Added
+
+- SDKs ready to publish at version `0.1.0`: `@hexascore/sdk` for npm and JSR (`sdks/ts`, with `jsr.json`, tests, `HEXASCORE_BASE_URL`, a `fetch` option and a required `apiKey`) and `hexascore` for PyPI (`sdks/python`, hand-written `pyproject.toml`, tests, `py.typed`). MIT `LICENSE` in both.
+- Docs: step-by-step publishing guides `docs/sdk-publish-npm.md`, `docs/sdk-publish-jsr.md` and `docs/sdk-publish-pypi.md`.
+
+### Changed
+
+- TypeScript SDK: generated imports carry the `.ts` extension (required by JSR) and the npm build rewrites them to `.js`, so the published package loads in Node ESM without a bundler; before, the emitted imports had no extension.
+- Python SDK: generated with `--meta none` into `sdks/python/hexascore` (was a nested generated project in `sdks/python/hexascore/hexascore`), so regenerating no longer overwrites the project metadata.
+
 ## [0.0.24](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.23...v0.0.24) (2026-10-10)
 
 ### Added
