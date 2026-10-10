@@ -29,6 +29,10 @@ bun run openapi:check
 step "build"
 export NEXT_PUBLIC_APP_NAME=HexaScore NEXT_PUBLIC_APP_URL=http://localhost:3000 BETTER_AUTH_URL=http://localhost:3000
 export BETTER_AUTH_SECRET=ci-only-better-auth-secret-0123456789abcdef CRON_SECRET=ci-only-cron-secret-0123456789abcdef0123
+# `next build` also loads apps/web/.env.production.local when it exists, and `vercel env pull` writes a placeholder
+# for every sensitive variable, which fails the env validation. Process env wins over .env files, and an empty
+# value means "integration disabled", as in the CI build job, which has no such file.
+export RESEND_API_KEY="" STRIPE_WEBHOOK_SECRET="" ABACATEPAY_SANDBOX=""
 # The Node fallback's build worker hit V8's default heap limit (FatalOOM) on Windows; a caller-set value wins.
 export NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=8192}"
 if ! bun run build; then
