@@ -36,6 +36,7 @@ uv run python -m connectors.wikipedia --since 8d       # also: --langs en,pt,es,
 uv run python -m connectors.openlibrary --since 8d     # every enrichment connector takes --since / --missing-only
 uv run python -m connectors.steam --since 36h
 uv run python -m connectors.gog --since 8d
+uv run python -m trailers                              # which YouTube trailers still embed (--missing-only)
 uv run python -m normalize                             # pending source_records -> catalog, then revalidate
 uv run python -m covers                                # fill meta.coverUrl (--refresh, --limit)
 uv run python -m revalidate
