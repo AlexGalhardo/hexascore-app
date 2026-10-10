@@ -33,6 +33,7 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 - Ingestion: `covers.py` runs 32 workers, and the cover CDNs (Open Library, Steam, GOG) and the Vercel Blob API get short per-host intervals (`upload.wikimedia.org` stays at 2 req/s, since it answers 429 at 10 req/s); under the 0.5 s default the two uploads per item capped the whole run at ~1 item/s (now ~200 items in under 50 s, startup query included).
 - Ingestion: `covers.py` selects only the sources and keys it reads (Wikidata P18/P3383 claims, Open Library `covers`, Steam `header_image`, GOG `cover`) instead of every full source payload; against 100k production items the old query streamed for 15+ minutes before the first cover (now ~1.4 s server time).
 - Ingestion: the per-connection lock used by the keep-alive ping (`common/db.busy`) is held in a `WeakKeyDictionary`, so it is released with its connection instead of accumulating under reusable `id()` keys.
+- `ci:local`: the build step sets `RESEND_API_KEY`, `STRIPE_WEBHOOK_SECRET` and `ABACATEPAY_SANDBOX` empty, so a local `apps/web/.env.production.local` from `vercel env pull` (placeholders for sensitive values) no longer fails the env validation and blocks the push.
 - `ci:local`: the build step sets `NODE_OPTIONS=--max-old-space-size=8192` (unless already set), since the Node fallback's build worker crashed with V8 `FatalOOM` on Windows and blocked the push.
 
 ## [0.0.22](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.21...v0.0.22) (2026-10-03)
