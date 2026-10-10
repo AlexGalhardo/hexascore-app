@@ -1,5 +1,12 @@
 import { describe, expect, test } from "bun:test";
-import { checkRealUsers, checkSeedTarget, isLocalDatabase, REAL_USER_THRESHOLD, seedEnvSchema } from "./seed-guard";
+import {
+	checkRealUsers,
+	checkSeedTarget,
+	isLocalDatabase,
+	isProductionSeed,
+	REAL_USER_THRESHOLD,
+	seedEnvSchema,
+} from "./seed-guard";
 
 const NEON = "postgresql://owner:pw@ep-cool-name-123456.us-east-2.aws.neon.tech/hexascore?sslmode=require";
 
@@ -27,9 +34,23 @@ describe("checkSeedTarget", () => {
 		expect(checkSeedTarget({ VERCEL_ENV: "preview", DATABASE_URL: NEON, SEED_TARGET: "sandbox" })).toBeNull();
 	});
 
-	test("SEED_TARGET only accepts sandbox", () => {
-		expect(seedEnvSchema.safeParse({ SEED_TARGET: "production" }).success).toBe(false);
+	test("SEED_TARGET only accepts sandbox or production", () => {
+		expect(seedEnvSchema.safeParse({ SEED_TARGET: "prod" }).success).toBe(false);
+		expect(seedEnvSchema.safeParse({ SEED_TARGET: "production" }).success).toBe(true);
 		expect(seedEnvSchema.safeParse({ SEED_TARGET: "sandbox" }).success).toBe(true);
+	});
+
+	test("production needs SEED_TARGET=production and the acknowledgement flag together", () => {
+		const prod = { VERCEL_ENV: "production", DATABASE_URL: NEON } as const;
+		expect(checkSeedTarget({ ...prod, SEED_TARGET: "production" }, true)).toBeNull();
+		expect(checkSeedTarget({ ...prod, SEED_TARGET: "production" })).toContain("--i-know-this-is-production");
+		expect(checkSeedTarget({ DATABASE_URL: NEON, SEED_TARGET: "production" })).toContain(
+			"--i-know-this-is-production",
+		);
+		expect(checkSeedTarget(prod, true)).toContain("VERCEL_ENV=production");
+		expect(checkSeedTarget({ ...prod, SEED_TARGET: "sandbox" }, true)).toContain("VERCEL_ENV=production");
+		expect(isProductionSeed({ SEED_TARGET: "production" }, true)).toBe(true);
+		expect(isProductionSeed({ SEED_TARGET: "sandbox" }, true)).toBe(false);
 	});
 });
 

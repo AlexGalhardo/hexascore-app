@@ -3,7 +3,7 @@ from datetime import date
 import covers
 import normalize
 from common.db import canonical_hash
-from connectors import openlibrary, steam, wikipedia
+from connectors import igdb, openlibrary, steam, tmdb, wikipedia
 from tests.conftest import load
 
 
@@ -32,7 +32,7 @@ def test_parse_time_precisions() -> None:
 
 
 def test_movie_mapping(wikidata_records: dict[str, dict]) -> None:
-    summary = wikipedia.parse_summary(load("wikipedia_summary_en_the_matrix.json"), "Q83495", "en")
+    summary = wikipedia.parse_extracts(load("wikipedia_extracts_en.json"), {"Q83495"}, "en")[0]
     item = normalize.build_item("Q83495", {"wikidata": wikidata_records["Q83495"], "wikipedia:en": summary})
     assert item is not None
     assert item.type == "movie"
@@ -92,6 +92,59 @@ def test_book_mapping_uses_open_library_pages_as_fallback(wikidata_records: dict
     assert covers.pick_source_cover("book", records) == covers.Cover(
         "https://covers.openlibrary.org/b/id/15257377-L.jpg"
     )
+
+
+def test_tmdb_fills_only_what_wikidata_lacks(wikidata_records: dict[str, dict]) -> None:
+    tmdb_payload = tmdb.parse_details(load("tmdb_movie.json"), "movie", "Q83495")
+    wd = wikidata_records["Q83495"]
+    item = normalize.build_item("Q83495", {"wikidata": wd, "tmdb": tmdb_payload})
+    assert item is not None
+    assert "science fiction film" in item.meta["genres"]  # Wikidata wins
+    assert "Science Fiction" not in item.meta["genres"]
+
+    bare = wd | {"claims": {k: v for k, v in wd["claims"].items() if k not in ("P136", "P2047", "P577", "P4947")}}
+    item = normalize.build_item("Q83495", {"wikidata": bare, "tmdb": tmdb_payload})
+    assert item is not None
+    assert item.meta["genres"] == tmdb_payload["genres"]
+    assert item.meta["runtimeMinutes"] == 136
+    assert item.release_date == date(1999, 3, 31)
+    assert item.external_ids["tmdb"] == "603"
+    record = {"tmdb": tmdb_payload}
+    assert covers.pick_source_cover("movie", record) == covers.Cover(
+        tmdb_payload["cover"], {"source": "TMDB", "url": "https://www.themoviedb.org/movie/603"}
+    )
+    assert covers.pick_source_cover("game", record) is None
+
+
+def test_igdb_cover_wins_over_steam(wikidata_records: dict[str, dict]) -> None:
+    igdb_payload = igdb.parse_games(load("igdb_games.json"), {"the-witcher-3-wild-hunt": "Q4267401"})[0]
+    steam_payload = steam.parse_appdetails(load("steam_appdetails.json"), "292030", "Q4267401")
+    records = {"wikidata": wikidata_records["Q4267401"], "steam": steam_payload, "igdb": igdb_payload}
+    cover = covers.pick_source_cover("game", records)
+    assert cover is not None
+    assert cover.url == igdb_payload["cover"]
+    assert cover.attribution == {"source": "IGDB", "url": igdb_payload["url"]}
+
+    bare = records["wikidata"] | {"claims": {}}
+    item = normalize.build_item("Q4267401", records | {"wikidata": bare})
+    assert item is not None
+    assert "PlayStation 4" in item.meta["platforms"]  # IGDB before Steam's OS list
+    assert item.meta["creators"] == ["CD Projekt RED"]
+    assert item.release_date == date(2015, 5, 19)
+
+
+def test_own_synopsis_only_fills_locales_without_wikipedia(wikidata_records: dict[str, dict]) -> None:
+    summary = wikipedia.parse_extracts(load("wikipedia_extracts_en.json"), {"Q83495"}, "en")[0]
+    own = {"en": "Own English text.", "pt-BR": "Texto próprio.", "es": ""}
+    records = {"wikidata": wikidata_records["Q83495"], "wikipedia:en": summary, "synopsis": own}
+    item = normalize.build_item("Q83495", records)
+    assert item is not None
+    by_locale = {t.locale: t for t in item.translations}
+    assert by_locale["en"].synopsis == summary["extract"]
+    assert by_locale["pt-BR"].synopsis == "Texto próprio."
+    assert by_locale["pt-BR"].synopsis_license is None
+    assert by_locale["pt-BR"].synopsis_source_url is None
+    assert by_locale["es"].synopsis is None
 
 
 def test_items_without_wikidata_or_english_title_are_skipped(wikidata_records: dict[str, dict]) -> None:

@@ -54,7 +54,7 @@ Valores ficam em config (não hardcoded). PIX: 1 mês ou 12 meses (12 pelo preç
 | Tema | Decisão | Motivo |
 | --- | --- | --- |
 | Licença de dados | **Híbrido**: API expõe só dados próprios (notas, metascore), metadados de fontes livres (Wikidata CC0, Open Library) e IDs externos. Notas de terceiros só no frontend, com atribuição + link | IMDb/TMDB/IGDB/Metacritic/RT/Goodreads/HLTB proíbem redistribuição comercial |
-| Fontes | **APIs + Wikidata, sem scraping**. IMDb/MC/RT/HLTB/Goodreads/Skoob/Epic = só deep-link via ID do Wikidata. TMDB/IGDB fora da v1 (exigem licença comercial) | Risco jurídico mínimo |
+| Fontes | **APIs + Wikidata, sem scraping**. IMDb/MC/RT/HLTB/Goodreads/Skoob/Epic = só deep-link via ID do Wikidata. TMDB (filmes, séries) e IGDB (jogos) são buscados desde 2026-10-10 para capa oficial e campos que o Wikidata não tem, com atribuição em `meta.coverAttribution`; sinopses deles nunca são copiadas | Decisão do dono em 2026-10-10: seguir com TMDB/IGDB também em produção e na API paga, assumindo o risco de licença (ambos restringem uso comercial sem acordo; ver pendências do launch) |
 | Sequência | **Horizontal**: as 4 seções avançam juntas, camada por camada | Escolha do dono |
 | Monorepo | **Bun workspaces** (`apps/web`, `sdks/ts`), **sem Turborepo** | Só 1 consumidor TS real; Turborepo entra com ≥ 3 pacotes JS com dependência de build |
 | API | Dentro do Next (`app/api/v1`), `api.hexascore.app` → rewrite para `/api/v1` | 1 projeto Vercel |
@@ -163,16 +163,47 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 
 ---
 
+## Próxima sessão (ingestão em produção `hexascore.app`, estado em 2026-10-04 20:15 local)
+
+O branch sandbox `ep-falling-sky` se apagou sozinho (expiração de 1 dia configurada pelo dono); a ingestão passou a rodar **localmente contra produção** (`ep-blue-hall`). GitHub Actions segue parado por falha de cobrança. Comando de cada etapa em `webscrappings/`:
+`uv run --env-file ../apps/web/.env.production.local --env-file .env.local python -m <módulo> [--missing-only]` (`.env.production.local` vem de `vercel env pull --environment production`; os segredos chegam como `[SENSITIVE]`, só `DATABASE_URL` é usado). Tudo é retomável.
+
+Estado medido no banco de produção (99.960 itens):
+
+- Wikidata 99.960, Wikipedia en 90.569 / es 45.837 / pt 35.107, Open Library 10.187, Steam 6.049, GOG 1.974; `normalize` com 0 pendentes.
+- Capas WebP (capa + miniatura, HTTP 200 conferido por tipo): **27.469** — filmes 6.902, séries 1.006, livros 12.711, jogos 6.850. Filmes e séries estão no teto das fontes (só itens com imagem no Commons, P18/P3383; pôsteres costumam ter copyright); 2 itens falharam (503 do Internet Archive) e entram na próxima execução de `covers`.
+- Seed de demonstração: 10.000 usuários `seed-user-*`, 2.145.882 avaliações + status/follows/listas (`docs/testing.md` → "Produção"); remover com `--purge` antes do launch.
+
+Pendências:
+
+- [x] **Store do Vercel Blob público**: o store privado `hexascore-blob` foi apagado e trocado pelo público `hexascore-covers` (`store_a9K51nn0eemlqu9Z`, iad1, `a9k51nn0eemlqu9z.public.blob.vercel-storage.com`), ligado ao projeto em Production/Preview/Development; `webscrappings/.env.local` atualizado; `covers --limit 3` no sandbox gravou 3 capas + miniaturas (HTTP 200). CSP `img-src https:` e sem `remotePatterns`: nada a mudar no app.
+- [ ] Atualizar o secret `BLOB_READ_WRITE_TOKEN` do GitHub com o token do store novo (`gh secret set BLOB_READ_WRITE_TOKEN`) antes de reativar os workflows de ingestão.
+- [x] `normalize` e `covers` completos em produção (26.758 capas gravadas nesta rodada, ~3,5 itens/s; a seleção do `covers` agora traz só as chaves usadas de cada fonte).
+- [ ] Rodar de novo `connectors.steam --missing-only` e depois `normalize` + `covers` para os jogos que faltarem.
+- [ ] Regularizar a cobrança do GitHub Actions e reativar os workflows (`gh workflow enable <nome>`), ou manter a ingestão local e documentar isso em `docs/ingestion.md`.
+- [ ] Confirmar para qual banco aponta o secret `DATABASE_URL` dos workflows de ingestão (sandbox ou produção) antes de reativá-los.
+- [ ] Remover as worktrees antigas em `.claude/worktrees/` (todas mescladas e limpas; `git worktree remove` foi bloqueado pelo modo automático).
+- [x] Produção (`hexascore.app`): ingestão completa (enriquecimento, `normalize`, `covers`) e seed de demonstração.
+- [ ] `POST /api/cron/revalidate` `{"tags":["catalog"]}` com o `CRON_SECRET` (dono) para o site refletir capas e notas novas.
+- [ ] Deploy das mudanças do seed/flag e `FLAG_SEED_DATA=on` na Vercel; `seed.ts --purge --i-know-this-is-production` + flag off antes do launch.
+- [x] Fonte de pôsteres para filmes/séries: conector TMDB (`connectors/tmdb.py`), capa oficial com prioridade sobre o Commons.
+- [x] Rodada TMDB em produção (2026-10-10): 48.485 registros; capa em 34.657 de 34.968 filmes (99%) e 13.300 de 14.911 séries (89%), antes 6.902 e 1.006.
+- [x] Rodada IGDB em produção (2026-10-10): 22.848 registros; capa em 22.799 de 24.873 jogos (92%), antes 6.850 (credenciais em `docs/igdb-credentials.md`).
+- [x] Rodada Open Library em produção (2026-10-10): 2.702 registros refeitos. Livros ficaram com 8.148 capas de 24.089 (34%): as 4.635 capas vindas do P18 do Commons foram removidas e a Open Library não tem imagem para esses livros.
+- [ ] Capas de livros: 15.941 livros sem capa. Avaliar outra fonte de capa oficial (ex.: Google Books) ou busca na Open Library por título + autor.
+- [ ] Sinopses próprias onde não há Wikipedia: escrever o passo que gera o registro `synopsis` (LLM a partir do `overview` de TMDB/IGDB/Open Library); depende de chave de API, modelo e teto de custo. O `normalize` já lê esse registro. Alvo medido em 2026-10-10: 3.021 itens sem sinopse em inglês que têm `overview` (2.121 jogos, 475 séries, 258 livros, 167 filmes); outros 5.251 não têm texto em fonte nenhuma.
+- [ ] Aviso de atribuição do TMDB no site ("This product uses the TMDB API but is not endorsed or certified by TMDB") e incluir os conectores novos nos workflows de ingestão.
+
 ## Pendências antes do launch
 
 Ações do dono (não automatizáveis):
 
-- [ ] Nome/domínio final e domínio verificado no Resend (domínio padrão `hexascore.app` comprado na Vercel em 2026-10-03, com `api.` e `www.` → apex; falta verificar no Resend e trocar `EMAIL_FROM`) (hoje `onboarding@resend.dev` só entrega para o dono da conta).
+- [x] Domínio verificado no Resend: `hexascore.app` (comprado na Vercel em 2026-10-03, com `api.` e `www.` → apex) está `verified` com envio ativo (us-east-1), `EMAIL_FROM` = `HexaScore <no-reply@hexascore.app>`. Conta Resend: `aleexgalhardoo@gmail.com`.
 - [ ] Chaves live do Stripe e da AbacatePay (hoje sandbox) e teste real de checkout + estorno.
 - [ ] Credenciais npm/PyPI para publicar os SDKs.
 - [ ] Confirmar a carga completa de 100k itens (limite de armazenamento do Neon free; avaliar plano pago).
 
 - [ ] **Nome final** (codinome `hexascore`). `.com` livres consultados em 2026-10-02: hexascore.com, scorara.com, averago.com, kultscore.com, talescore.com, crowdcrit.com, hexmeter.com. Checar marca registrada (INPI/USPTO/EUIPO) antes de comprar.
 - [ ] Revisar preços dos planos.
-- [ ] Licenças comerciais TMDB/IGDB (se quiser enriquecer além de Wikidata).
+- [ ] Licenças comerciais TMDB/IGDB: os dois já são usados em produção e na API paga (decisão de 2026-10-10); fechar o acordo comercial com cada um antes do launch.
 - [ ] Revisão jurídica de termos/privacidade (LGPD/GDPR).

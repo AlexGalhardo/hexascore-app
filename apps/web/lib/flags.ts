@@ -23,6 +23,16 @@ export const pixCheckoutFlag = flag<boolean>({
 	decide: () => envFlag("FLAG_PIX_CHECKOUT"),
 });
 
+// Unlike the kill switches above, off by default: the owner sets FLAG_SEED_DATA=on while synthetic seed users live
+// in production, and /admin shows a reminder to remove them (`seed.ts --purge`, docs/testing.md).
+export const seedDataFlag = flag<boolean>({
+	key: "seed-data",
+	description: "Synthetic seed users are in this database; /admin reminds to purge them. Env: FLAG_SEED_DATA=on",
+	defaultValue: false,
+	options,
+	decide: () => (process.env.FLAG_SEED_DATA ?? "").trim().toLowerCase() === "on",
+});
+
 export const publicApiSignupFlag = flag<boolean>({
 	key: "public-api-signup",
 	description: "Creating new public API keys on /profile/api. Env: FLAG_PUBLIC_API_SIGNUP",
