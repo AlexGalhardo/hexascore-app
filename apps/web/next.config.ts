@@ -20,6 +20,15 @@ const nextConfig: NextConfig = {
 			{ source: "/api/:path*", headers: API_HEADERS },
 		];
 	},
+	// The sitemap index is public at /sitemap.xml only. `app/sitemap.ts` with `generateSitemaps` owns that route id
+	// without serving anything at it (a route file there is a "duplicate page" and every metadata route answers 500),
+	// so the handler stays at app/sitemap-index.xml: the public URL is rewritten to it and the old URL redirects.
+	async redirects() {
+		return [{ source: "/sitemap-index.xml", destination: "/sitemap.xml", permanent: true }];
+	},
+	async rewrites() {
+		return [{ source: "/sitemap.xml", destination: "/sitemap-index.xml" }];
+	},
 };
 
 export default withBotId(withNextIntl(nextConfig));
