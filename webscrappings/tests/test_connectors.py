@@ -2,7 +2,7 @@ import httpx
 import pytest
 from pydantic import ValidationError
 
-from connectors import gog, openlibrary, steam, wikidata, wikipedia
+from connectors import gog, igdb, openlibrary, steam, tmdb, wikidata, wikipedia
 from tests.conftest import load, mock_client, wikidata_handler
 
 
@@ -45,16 +45,16 @@ def test_invalid_entity_payload_is_rejected() -> None:
         wikidata.RawEntity.model_validate({"id": "Q1", "claims": {"P31": [{"rank": "weird"}]}})
 
 
-def test_wikipedia_summary() -> None:
-    payload = wikipedia.parse_summary(load("wikipedia_summary_en_the_matrix.json"), "Q83495", "en")
-    assert payload is not None
-    assert payload["url"] == "https://en.wikipedia.org/wiki/The_Matrix"
-    assert payload["extract"].startswith("The Matrix")
+def test_wikipedia_extracts() -> None:
+    payloads = wikipedia.parse_extracts(load("wikipedia_extracts_en.json"), {"Q83495", "Q189600"}, "en")
+    assert [p["qid"] for p in payloads] == ["Q83495", "Q189600"]
+    assert payloads[0]["url"] == "https://en.wikipedia.org/wiki/The_Matrix"
+    assert payloads[0]["extract"].startswith("The Matrix")
 
 
-def test_wikipedia_rejects_disambiguation_and_other_entities() -> None:
-    assert wikipedia.parse_summary(load("wikipedia_summary_en_matrix.json"), "Q83495", "en") is None
-    assert wikipedia.parse_summary(load("wikipedia_summary_pt_the_matrix.json"), "Q1", "pt") is None
+def test_wikipedia_rejects_disambiguation_missing_and_other_entities() -> None:
+    # Q190069 is the "Matrix" disambiguation page; Q1 matches nothing; the missing page has no pageprops.
+    assert wikipedia.parse_extracts(load("wikipedia_extracts_en.json"), {"Q190069", "Q1"}, "en") == []
 
 
 def test_openlibrary_paths_prefer_editions() -> None:
@@ -66,7 +66,136 @@ def test_openlibrary_paths_prefer_editions() -> None:
 
 def test_openlibrary_edition() -> None:
     payload = openlibrary.parse_doc(load("openlibrary_isbn.json"), "Q208460")
-    assert payload == {"qid": "Q208460", "key": "/books/OL62592264M", "pages": None, "covers": [15257377]}
+    assert payload == {
+        "qid": "Q208460",
+        "key": "/books/OL62592264M",
+        "pages": None,
+        "covers": [15257377],
+        "overview": None,
+    }
+
+
+def test_openlibrary_work_fills_what_the_edition_lacks() -> None:
+    edition = load("openlibrary_isbn.json")
+    assert openlibrary.work_path(edition) == "/works/OL1168083W.json"
+    work = load("openlibrary_work.json")
+    assert openlibrary.work_path(work) is None
+
+    payload = openlibrary.parse_doc(edition | {"covers": [-1]}, "Q208460", work)
+    assert payload["covers"] == work["covers"][:3]
+    assert payload["overview"]
+    assert payload["key"] == "/books/OL62592264M"
+    # The edition's own cover still wins.
+    assert openlibrary.parse_doc(edition, "Q208460", work)["covers"] == [15257377]
+
+
+def test_openlibrary_reads_typed_descriptions() -> None:
+    raw = {"key": "/works/OL1W", "description": {"type": "/type/text", "value": " A story. "}}
+    assert openlibrary.parse_doc(raw, "Q1")["overview"] == "A story."
+
+
+def test_tmdb_movie_details() -> None:
+    payload = tmdb.parse_details(load("tmdb_movie.json"), "movie", "Q83495")
+    assert payload["id"] == 603
+    assert payload["url"] == "https://www.themoviedb.org/movie/603"
+    assert payload["cover"].startswith("https://image.tmdb.org/t/p/w780/")
+    assert payload["runtime"] == 136
+    assert payload["release_date"] == "1999-03-31"
+    assert {"Lana Wachowski", "Lilly Wachowski"} <= set(payload["creators"])
+    assert "Science Fiction" in payload["genres"]
+    assert payload["overview"]
+    assert len(payload["trailers"]) <= tmdb.MAX_TRAILERS
+    assert payload["seasons"] is None
+
+
+def test_tmdb_series_details() -> None:
+    payload = tmdb.parse_details(load("tmdb_tv.json"), "tv", "Q1079")
+    assert payload["url"] == "https://www.themoviedb.org/tv/1396"
+    assert payload["seasons"] == 5
+    assert payload["episodes"] == 62
+    assert payload["creators"] == ["Vince Gilligan"]
+    assert payload["release_date"] == "2008-01-20"
+
+
+def test_tmdb_find_picks_the_result_of_the_item_type() -> None:
+    found = load("tmdb_find.json")
+    assert tmdb.parse_find(found, "movie") == 603
+    assert tmdb.parse_find(found, "tv") is None
+
+
+def test_tmdb_fetch_resolves_missing_ids_through_imdb(monkeypatch: pytest.MonkeyPatch) -> None:
+    rows = [("Q83495", "movie", None, "tt0133093"), ("Q1079", "series", "1396", None), ("Q1", "movie", "9", None)]
+    monkeypatch.setattr(tmdb, "targets", lambda conn, since: rows)
+    monkeypatch.setenv("THEMOVIEDATABASE_API_READ_ACCESS_TOKEN", "token")
+    paths: list[str] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.headers["authorization"] == "Bearer token"
+        paths.append(request.url.path)
+        fixtures = {
+            "/3/find/tt0133093": "tmdb_find.json",
+            "/3/movie/603": "tmdb_movie.json",
+            "/3/tv/1396": "tmdb_tv.json",
+        }
+        name = fixtures.get(request.url.path)
+        return httpx.Response(200, json=load(name)) if name else httpx.Response(404, json={"success": False})
+
+    records = list(tmdb.fetch(None, conn=None, client=mock_client(handler), workers=1))  # type: ignore[arg-type]
+    assert [(r.source, r.external_id, r.payload["id"]) for r in records] == [
+        ("tmdb", "Q83495", 603),
+        ("tmdb", "Q1079", 1396),
+    ]
+    assert "/3/find/tt0133093" in paths
+
+
+def test_tmdb_rejected_token_stops_the_run(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(tmdb, "targets", lambda conn, since: [("Q1", "movie", "9", None)])
+    monkeypatch.setenv("THEMOVIEDATABASE_API_READ_ACCESS_TOKEN", "bad")
+    client = mock_client(lambda request: httpx.Response(401, json={"success": False}))
+    with pytest.raises(PermissionError):
+        list(tmdb.fetch(None, conn=None, client=client, workers=1))  # type: ignore[arg-type]
+
+
+def test_igdb_games() -> None:
+    raw = load("igdb_games.json")
+    assert igdb.parse_games(raw, {"some-other-game": "Q1"}) == []
+    payloads = igdb.parse_games(raw, {"the-witcher-3-wild-hunt": "Q4267401"})
+    assert len(payloads) == 1
+    payload = payloads[0]
+    assert payload["qid"] == "Q4267401"
+    assert payload["cover"] == "https://images.igdb.com/igdb/image/upload/t_cover_big_2x/coaarl.jpg"
+    assert payload["url"] == "https://www.igdb.com/games/the-witcher-3-wild-hunt"
+    assert payload["release_date"] == "2015-05-19"
+    assert payload["creators"] == ["CD Projekt RED"]
+    assert "PlayStation 4" in payload["platforms"]
+    assert payload["trailers"] == ["yowv6_rspoM", "xQGam9OHSUo", "QrwGXAcE6ZA"]
+    assert payload["overview"]
+
+
+def test_igdb_release_dates_before_1970() -> None:
+    raw = [{"id": 1, "slug": "spacewar", "first_release_date": -244252800}]
+    assert igdb.parse_games(raw, {"spacewar": "Q1"})[0]["release_date"] == "1962-04-06"
+
+
+def test_igdb_fetch_authenticates_and_drops_unsafe_slugs(monkeypatch: pytest.MonkeyPatch) -> None:
+    rows = [("Q4267401", "the-witcher-3-wild-hunt"), ("Q2", 'x"; fields *;')]
+    monkeypatch.setattr(igdb, "targets", lambda conn, since: rows)
+    monkeypatch.setenv("IGDB_TWITCH_CLIENT_ID", "id")
+    monkeypatch.setenv("IGDB_TWITCH_CLIENT_SECRET", "secret")
+    bodies: list[str] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.host == "id.twitch.tv":
+            assert request.url.params["grant_type"] == "client_credentials"
+            return httpx.Response(200, json={"access_token": "abc", "expires_in": 5000, "token_type": "bearer"})
+        assert request.headers["client-id"] == "id"
+        assert request.headers["authorization"] == "Bearer abc"
+        bodies.append(request.content.decode())
+        return httpx.Response(200, json=load("igdb_games.json"))
+
+    records = list(igdb.fetch(None, conn=None, client=mock_client(handler)))  # type: ignore[arg-type]
+    assert [r.external_id for r in records] == ["Q4267401"]
+    assert bodies == [f'fields {igdb.FIELDS}; where slug = ("the-witcher-3-wild-hunt"); limit 1;']
 
 
 def test_openlibrary_drops_placeholder_covers() -> None:
@@ -122,25 +251,40 @@ def test_wikipedia_fetch_runs_requests_concurrently(monkeypatch) -> None:
 
     from common.http import HttpClient
 
-    summary = load("wikipedia_summary_en_the_matrix.json")
     active = {"now": 0, "max": 0}
     lock = threading.Lock()
+    batch_sizes: list[int] = []
 
     def handler(request: httpx.Request) -> httpx.Response:
+        titles = request.url.params["titles"].split("|")
         with lock:
+            batch_sizes.append(len(titles))
             active["now"] += 1
             active["max"] = max(active["max"], active["now"])
         time.sleep(0.02)
         with lock:
             active["now"] -= 1
-        return httpx.Response(200, json=summary)
+        pages = [
+            {
+                "title": t,
+                "extract": f"{t} intro.",
+                "fullurl": f"https://en.wikipedia.org/wiki/{t}",
+                "pageprops": {"wikibase_item": f"Q{t[1:]}"},
+            }
+            for t in titles
+        ]
+        return httpx.Response(200, json={"query": {"pages": pages}})
 
-    rows = [("Q83495", {"enwiki": "The Matrix"})] * 12
+    # Title "T<n>" belongs to Q<n>; 85 targets -> batches of 20, 20, 20, 20, 5.
+    rows = [(f"Q{n}", {"enwiki": f"T{n}"}) for n in range(85)]
     monkeypatch.setattr(wikipedia, "targets", lambda conn, since: rows)
-    monkeypatch.setattr(wikipedia, "existing_ids", lambda conn, source: set())
+    monkeypatch.setattr(wikipedia, "existing_ids", lambda conn, source: {"Q0"} if source == "wikipedia:en" else set())
     client = HttpClient(transport=httpx.MockTransport(handler), sleep=lambda _: None)
     monkeypatch.setitem(__import__("common.http").http.HOST_INTERVALS, "en.wikipedia.org", 0.0)
 
-    records = list(wikipedia.fetch(None, conn=None, client=client, langs=["en"], workers=4))  # type: ignore[arg-type]
-    assert len(records) == 12
+    records = list(
+        wikipedia.fetch(None, conn=None, client=client, only_missing=True, langs=["en"], workers=4)  # type: ignore[arg-type]
+    )
+    assert sorted(r.external_id for r in records) == sorted(f"Q{n}" for n in range(1, 85))
+    assert sorted(batch_sizes) == [4, 20, 20, 20, 20]
     assert active["max"] > 1

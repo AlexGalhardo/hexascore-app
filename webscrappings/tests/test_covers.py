@@ -124,11 +124,28 @@ def test_upload_rejects_unexpected_blob_response() -> None:
 
 
 class FakeConn:
+    rowcount = 0
+
     def __init__(self) -> None:
         self.updates: dict[str, dict] = {}
+        self.statements: list[str] = []
 
-    def execute(self, _sql: str, params: tuple[Any, Any]) -> None:
-        self.updates[params[1]] = json.loads(json.dumps(params[0].obj))
+    def execute(self, sql: str, *_: object) -> FakeConn:
+        self.statements.append(sql)
+        return self
+
+    def cursor(self) -> FakeConn:
+        return self
+
+    def __enter__(self) -> FakeConn:
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        pass
+
+    def executemany(self, _sql: str, params_seq: list[tuple[Any, Any]]) -> None:
+        for params in params_seq:
+            self.updates[params[1]] = json.loads(json.dumps(params[0].obj))
 
     def commit(self) -> None:
         pass
@@ -136,6 +153,27 @@ class FakeConn:
 
 def steam(header: str) -> dict[str, dict]:
     return {"steam": {"header_image": header}}
+
+
+def test_commons_cover_only_from_film_poster() -> None:
+    claim = [{"value": "Mario arcade.jpg"}]
+    assert covers.commons_file({"wikidata": {"claims": {"P18": claim}}}) is None
+    assert covers.commons_file({"wikidata": {"claims": {"P18": claim, "P3383": [{"value": "Poster.jpg"}]}}}) == (
+        "Poster.jpg"
+    )
+
+
+def test_only_a_full_run_removes_loose_commons_covers(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("BLOB_READ_WRITE_TOKEN", raising=False)
+    monkeypatch.setattr(covers, "targets", lambda *_: [])
+    limited, sharded, full = FakeConn(), FakeConn(), FakeConn()
+    covers.run(limited, limit=20, client=mock_client(blob_handler([])))
+    covers.run(sharded, client=mock_client(blob_handler([])), shard=(1, 4))
+    covers.run(full, client=mock_client(blob_handler([])))
+    assert limited.statements == []
+    assert sharded.statements == []
+    assert len(full.statements) == 1
+    assert "'Wikimedia Commons'" in full.statements[0]
 
 
 def test_run_without_token_keeps_source_url(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -188,3 +226,29 @@ def test_run_skips_item_with_both_sizes_current(monkeypatch: pytest.MonkeyPatch)
     conn = FakeConn()
     assert covers.run(conn, client=mock_client(blob_handler([]))) == 0
     assert conn.updates == {}
+
+
+def test_run_processes_items_concurrently(monkeypatch: pytest.MonkeyPatch) -> None:
+    import threading
+    import time
+
+    monkeypatch.delenv("BLOB_READ_WRITE_TOKEN", raising=False)
+    rows = [(f"i{n}", "game", {}, None, None) for n in range(20)]
+    monkeypatch.setattr(covers, "targets", lambda *_: rows)
+    active = {"now": 0, "max": 0}
+    lock = threading.Lock()
+
+    def slow_cover(item_type: str, records: dict[str, dict]) -> covers.Cover:
+        with lock:
+            active["now"] += 1
+            active["max"] = max(active["max"], active["now"])
+        time.sleep(0.02)
+        with lock:
+            active["now"] -= 1
+        return covers.Cover(SOURCE_URL)
+
+    monkeypatch.setattr(covers, "pick_source_cover", slow_cover)
+    conn = FakeConn()
+    assert covers.run(conn, client=mock_client(blob_handler([])), workers=4) == 20
+    assert len(conn.updates) == 20
+    assert active["max"] > 1

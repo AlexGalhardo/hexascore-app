@@ -13,6 +13,6 @@ export default function robots(): MetadataRoute.Robots {
 		rules: indexable
 			? { userAgent: "*", allow: "/", disallow: disallowedPaths() }
 			: { userAgent: "*", disallow: "/" },
-		sitemap: `${APP_URL}/sitemap-index.xml`,
+		sitemap: `${APP_URL}/sitemap.xml`,
 	};
 }
