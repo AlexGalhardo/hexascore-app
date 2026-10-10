@@ -19,6 +19,8 @@ export DATABASE_URL=postgresql://hexascore:hexascore@localhost:5432/hexascore   
 | `INGEST_CONTACT_URL` | no | contact URL in the `HexascoreBot/0.1 (+url)` User-Agent (default: the GitHub repo) |
 | `APP_URL`, `CRON_SECRET` | no | `POST $APP_URL/api/cron/revalidate` after changes; skipped when unset |
 | `BLOB_READ_WRITE_TOKEN` | no | store covers as optimized WebP (max 600 px, q78) in Vercel Blob; without it `meta.coverUrl` is the source URL |
+| `THEMOVIEDATABASE_API_READ_ACCESS_TOKEN` | `connectors.tmdb` | TMDB v4 read access token, sent as Bearer to the v3 endpoints |
+| `IGDB_TWITCH_CLIENT_ID`, `IGDB_TWITCH_CLIENT_SECRET` | `connectors.igdb` | Twitch app credentials for the IGDB API (`docs/igdb-credentials.md`) |
 | `TEST_DATABASE_URL` | no | enables the DB tests (`tests/test_db.py`), which roll back everything |
 
 ## Run

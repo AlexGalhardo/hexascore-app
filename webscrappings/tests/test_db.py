@@ -8,7 +8,7 @@ import psycopg
 import pytest
 
 import normalize
-from common.db import upsert_source_record
+from common.db import Record, store_records, upsert_source_record
 
 URL = os.environ.get("TEST_DATABASE_URL")
 pytestmark = pytest.mark.skipif(not URL, reason="TEST_DATABASE_URL not set")
@@ -68,3 +68,15 @@ def test_slug_collision_appends_year(conn: psycopg.Connection, wikidata_records:
     normalize.normalize_batch(conn, ["Q83495", "Q999000001"])
     slug = conn.execute("SELECT slug FROM items WHERE wikidata_qid = 'Q999000001'").fetchone()
     assert slug == ("the-matrix-2031",)
+
+
+def test_store_records_counts_inserts_and_changes(conn: psycopg.Connection) -> None:
+    # store_records commits, so this test cleans up its own rows instead of relying on the rollback.
+    records = [Record("test-store", f"Q{n}", {"n": n}) for n in range(5)]
+    try:
+        assert store_records(conn, records, commit_every=2) == (5, 5)
+        changed = [Record("test-store", "Q0", {"n": 99}), *records[1:]]
+        assert store_records(conn, changed, commit_every=2) == (5, 1)
+    finally:
+        conn.execute("DELETE FROM source_records WHERE source = 'test-store'")
+        conn.commit()
