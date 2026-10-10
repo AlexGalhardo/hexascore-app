@@ -1,7 +1,7 @@
 // Google Search Console CLI over a service account (no SDK: a signed JWT is exchanged for an OAuth token).
 //   bun run seo:gsc sites                      properties the service account can see
 //   bun run seo:gsc sitemaps                   submitted sitemaps and their status
-//   bun run seo:gsc submit [url]               submit a sitemap (default: <site>/sitemap-index.xml)
+//   bun run seo:gsc submit [url]               submit a sitemap (default: <site>/sitemap.xml)
 //   bun run seo:gsc queries [days] [dimension] top rows from Search Analytics (dimension: query|page|country|device)
 // Env: GSC_KEY_FILE (service account JSON, gitignored, never committed), GSC_SITE (default sc-domain:hexascore.app).
 import { createSign } from "node:crypto";
@@ -71,7 +71,7 @@ try {
 	} else if (command === "sitemaps") {
 		console.log(JSON.stringify(await call(token, `/sites/${site}/sitemaps`), null, 2));
 	} else if (command === "submit") {
-		const feed = args[0] ?? `${siteUrl}/sitemap-index.xml`;
+		const feed = args[0] ?? `${siteUrl}/sitemap.xml`;
 		await call(token, `/sites/${site}/sitemaps/${encodeURIComponent(feed)}`, { method: "PUT" });
 		console.log(`submitted ${feed}`);
 	} else if (command === "queries") {
