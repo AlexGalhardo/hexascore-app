@@ -1,12 +1,15 @@
 import { z } from "zod";
 
-// Pure safety checks for lib/db/seed.ts: fake users/ratings/lists must only ever land in a local database or in the
-// sandbox Neon branch, never in production (they would distort real scores and the public API).
+// Pure safety checks for lib/db/seed.ts: fake users/ratings/lists land in a local database or in the sandbox Neon
+// branch. Production is allowed only with an explicit double opt-in (SEED_TARGET=production and
+// --i-know-this-is-production), for the pre-launch demo data the owner removes later with `--purge`.
 
 export const seedEnvSchema = z.object({
 	DATABASE_URL: z.string().trim().optional(),
 	VERCEL_ENV: z.string().optional(),
-	SEED_TARGET: z.enum(["sandbox"], { message: 'SEED_TARGET only accepts "sandbox"' }).optional(),
+	SEED_TARGET: z
+		.enum(["sandbox", "production"], { message: 'SEED_TARGET only accepts "sandbox" or "production"' })
+		.optional(),
 });
 export type SeedEnv = z.infer<typeof seedEnvSchema>;
 
@@ -25,10 +28,22 @@ export function isLocalDatabase(databaseUrl: string | undefined): boolean {
 	}
 }
 
+/** True when both production opt-ins are present. */
+export function isProductionSeed(env: SeedEnv, productionAcknowledged: boolean): boolean {
+	return env.SEED_TARGET === "production" && productionAcknowledged;
+}
+
 /** Checked before any connection is opened. Returns the refusal reason, or null when the target is allowed. */
-export function checkSeedTarget(env: SeedEnv): string | null {
+export function checkSeedTarget(env: SeedEnv, productionAcknowledged = false): string | null {
+	if (isProductionSeed(env, productionAcknowledged)) return null;
+	if (env.SEED_TARGET === "production") {
+		return "Refusing to seed: SEED_TARGET=production also needs --i-know-this-is-production.";
+	}
 	if (env.VERCEL_ENV === "production") {
-		return "Refusing to seed: VERCEL_ENV=production (fake users/ratings would distort real metascores).";
+		return [
+			"Refusing to seed: VERCEL_ENV=production (fake users/ratings would distort real metascores).",
+			"To seed production on purpose, run with SEED_TARGET=production and --i-know-this-is-production.",
+		].join("\n");
 	}
 	if (isLocalDatabase(env.DATABASE_URL) || env.SEED_TARGET === "sandbox") return null;
 	return [
