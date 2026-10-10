@@ -5,6 +5,8 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+## [0.0.23](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.22...v0.0.23) (2026-10-10)
+
 ### Added
 
 - Seed: production target behind a double opt-in (`SEED_TARGET=production` plus `--i-know-this-is-production`), limited to `--existing-items` and `--purge` and never creating the default admin, for pre-launch demo users; new `seed-data` flag (off by default, `FLAG_SEED_DATA=on`) shows a purge reminder on `/admin`.
