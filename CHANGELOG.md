@@ -5,12 +5,33 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Added
+
+- Seed: production target behind a double opt-in (`SEED_TARGET=production` plus `--i-know-this-is-production`), limited to `--existing-items` and `--purge` and never creating the default admin, for pre-launch demo users; new `seed-data` flag (off by default, `FLAG_SEED_DATA=on`) shows a purge reminder on `/admin`.
+- Ingestion: TMDB connector (`connectors/tmdb.py`, source `tmdb`) for movies and series with a TMDB ID, or an IMDb ID resolved through `/find`: official poster, runtime, genres, release date, seasons, episodes, creators, countries and trailers. Needs `THEMOVIEDATABASE_API_READ_ACCESS_TOKEN`.
+- Ingestion: IGDB connector (`connectors/igdb.py`, source `igdb`) for games with an IGDB slug, 200 slugs per request: official cover, genres, platforms, developers, release date and trailers. Needs `IGDB_TWITCH_CLIENT_ID` and `IGDB_TWITCH_CLIENT_SECRET` (`docs/igdb-credentials.md`).
+- Ingestion: the Open Library connector follows an edition to its work when the edition has no cover or the item has no Wikipedia synopsis, and stores the description; `--missing-only` re-fetches only records that still lack something.
+- Ingestion: `normalize` fills genres, creators, runtime, seasons, episodes, countries, trailers, platforms, release date and the TMDB ID from the TMDB/IGDB record only where Wikidata has no value, and reads own-text synopses from a `synopsis` source record for locales without a Wikipedia extract.
+
+- Ingestion: `covers.py --shard INDEX/COUNT` processes only the items whose id hashes to that slice, so several processes can split a run (6 shards: ~25 covers/s against ~14 for one process). The removal of loose Commons covers only runs on an unsharded, unlimited run.
+- Docs: `docs/igdb-credentials.md` (how to get the Twitch Client ID and Client Secret for IGDB) and `docs/backup-local.md` (measured size of a local JSON backup of the catalog per category, with source records and covers).
+
+### Changed
+
+- Ingestion: cover priority is now Open Library (books), TMDB poster (movies, series), IGDB cover then Steam then GOG (games), Wikimedia Commons last. `covers.py` re-selects items whose cover came from a lesser source once TMDB/IGDB/Open Library has an image, and stores `meta.coverAttribution` (`source` + page `url`) for TMDB and IGDB covers.
+- Ingestion: Wikidata P18 (any image of the subject) is no longer a cover source; only the P3383 film poster is read from Commons. A full `covers.py` run removes the Commons covers of items without a P3383 poster that no official source replaced.
+- Item page: the cover keeps the image's own proportion (portrait poster or landscape art) and is shown whole instead of cropped into a fixed 2:3 box, and is larger: up to 320 px tall or 384 px wide (176 px / 45vw on small screens), up from 160×240.
+- SEO: the sitemap index is served at `/sitemap.xml` (rewrite to the existing handler); `/sitemap-index.xml` answers 308 to it, and `robots.txt` and `bun run seo:gsc submit` point at the new URL.
+- Data sources: TMDB and IGDB are fetched (previously ID only, pending a commercial licence); see `PLAN.md`.
+
 ### Fixed
 
 - Ingestion: Wikipedia synopses come from the Action API (`prop=extracts`, intro, plain text) in batches of 20 titles instead of one REST `page/summary` request per page, which anonymous clients get throttled on (continuous 429, ~1 page/s); redirects are followed and pages are still matched by `wikibase_item` with disambiguation pages skipped. About 20x faster (~1,400 pages/min per language).
 - Ingestion: `store_records` writes each 200-record chunk with one pipelined `executemany` instead of one upsert round trip per record, which capped a remote database at ~6 rows/s.
 - Ingestion: `normalize` looks up the batch's existing items in one query and writes each 200-item batch in psycopg pipeline mode instead of waiting on ~8 round trips per item, which capped a remote database at ~1 item/s (now ~70 items/s against Neon).
 - Ingestion: `covers.py` processes items in a thread pool (8 workers for download, WebP encode and Blob upload) and writes each chunk of updates with one `executemany` + commit, instead of handling and committing one item at a time. An unexpected error on one item (e.g. a malformed stored payload) is logged and skipped instead of aborting the chunk and dropping its other patches.
+- Ingestion: `covers.py` runs 32 workers, and the cover CDNs (Open Library, Steam, GOG) and the Vercel Blob API get short per-host intervals (`upload.wikimedia.org` stays at 2 req/s, since it answers 429 at 10 req/s); under the 0.5 s default the two uploads per item capped the whole run at ~1 item/s (now ~200 items in under 50 s, startup query included).
+- Ingestion: `covers.py` selects only the sources and keys it reads (Wikidata P18/P3383 claims, Open Library `covers`, Steam `header_image`, GOG `cover`) instead of every full source payload; against 100k production items the old query streamed for 15+ minutes before the first cover (now ~1.4 s server time).
 - Ingestion: the per-connection lock used by the keep-alive ping (`common/db.busy`) is held in a `WeakKeyDictionary`, so it is released with its connection instead of accumulating under reusable `id()` keys.
 - `ci:local`: the build step sets `NODE_OPTIONS=--max-old-space-size=8192` (unless already set), since the Node fallback's build worker crashed with V8 `FatalOOM` on Windows and blocked the push.
 
