@@ -34,9 +34,11 @@ SOURCES = [
     "tmdb",
     "igdb",
     "synopsis",
+    "youtube",
 ]
 BATCH = 200
 SYNOPSIS_LICENSE = "CC BY-SA 4.0"
+MAX_TRAILERS = 2
 
 EXTERNAL_ID_PROPS = {
     "imdb": "P345",
@@ -75,6 +77,10 @@ class OpenLibraryPayload(BaseModel):
 
 class PlatformsPayload(BaseModel):
     platforms: list[str] = []
+
+
+class TrailersPayload(BaseModel):
+    available: list[str] = []
 
 
 class EnrichmentPayload(BaseModel):
@@ -250,7 +256,12 @@ def build_meta(wd: WikidataPayload, records: dict[str, dict]) -> dict[str, Any]:
     pages = quantity(wd, "P1104") if wd.type == "book" else None
     if wd.type == "book" and not pages and "openlibrary" in records:
         pages = OpenLibraryPayload.model_validate(records["openlibrary"]).pages
-    trailers = list(dict.fromkeys(str(c.value) for c in _ranked(wd.claims.get("P1651", []))))[:3]
+    # Candidates in display order (Wikidata, then TMDB / IGDB). Once trailers.py has checked the item, only the
+    # ids it found embeddable are kept, so the page never shows YouTube's "Video unavailable" player.
+    trailers = list(dict.fromkeys([*(str(c.value) for c in _ranked(wd.claims.get("P1651", []))), *extra.trailers]))
+    if "youtube" in records:
+        available = set(TrailersPayload.model_validate(records["youtube"]).available)
+        trailers = [t for t in trailers if t in available]
     screen = wd.type in ("movie", "series")
     meta: dict[str, Any] = {
         "genres": ref_labels(wd, "P136") or extra.genres,
@@ -261,7 +272,7 @@ def build_meta(wd: WikidataPayload, records: dict[str, dict]) -> dict[str, Any]:
         "seasons": (quantity(wd, "P2437") or extra.seasons) if wd.type == "series" else None,
         "episodes": (quantity(wd, "P1113") or extra.episodes) if wd.type == "series" else None,
         "countries": ref_labels(wd, "P495") or extra.countries,
-        "trailers": [{"youtubeId": t} for t in trailers or extra.trailers[:3]],
+        "trailers": [{"youtubeId": t} for t in trailers[:MAX_TRAILERS]],
     }
     return {k: v for k, v in meta.items() if v}
 
