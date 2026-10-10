@@ -5,6 +5,8 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+## [0.0.24](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.23...v0.0.24) (2026-10-10)
+
 ### Added
 
 - Ingestion: `trailers.py` asks YouTube's oEmbed endpoint which candidate trailers (Wikidata P1651, then TMDB/IGDB) are still public and embeddable and stores the verdicts as a `youtube` source record; `normalize` then shows only those, at most 2 per item (was up to 3, unchecked, so removed or private videos rendered as "Video unavailable").
