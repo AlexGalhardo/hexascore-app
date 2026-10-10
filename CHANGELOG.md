@@ -5,6 +5,15 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+### Added
+
+- Ingestion: `trailers.py` asks YouTube's oEmbed endpoint which candidate trailers (Wikidata P1651, then TMDB/IGDB) are still public and embeddable and stores the verdicts as a `youtube` source record; `normalize` then shows only those, at most 2 per item (was up to 3, unchecked, so removed or private videos rendered as "Video unavailable").
+- Seed: admin dashboard data for the seed users (`seedModeration`): banned users, hidden lists, reports against lists and users (mostly open) and contact messages (mostly unhandled), deterministic and idempotent. Runs at the end of `--existing-items`, or alone with `--moderation-only` (also allowed in production with the double opt-in); `--purge` removes it, including the contact messages.
+
+### Fixed
+
+- Seed: ids of seed lists, reports and contact messages are valid RFC 9562 UUIDs (md5 with the version and variant nibbles forced). The bare `md5(…)::uuid` ids failed `z.uuid()`, so admin actions on those rows answered `invalid (id)` and most seed list pages were not found. `repairSeedIds` rewrites the ids already stored (a list keeps its items and its reports) and runs before every seed pass.
+
 ## [0.0.23](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.22...v0.0.23) (2026-10-10)
 
 ### Added

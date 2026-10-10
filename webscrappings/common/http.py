@@ -31,6 +31,8 @@ HOST_INTERVALS: dict[str, float] = {
     "api.igdb.com": 0.3,
     "image.tmdb.org": 0.02,
     "images.igdb.com": 0.05,
+    # oEmbed lookups of trailers.py: one small JSON per video id.
+    "www.youtube.com": 0.04,
     # Cover downloads and Blob uploads: CDNs and the Blob API take far more than the 2 req/s default, which would cap
     # covers at ~1 item/s (two uploads each). Open Library cover-by-ID requests are not rate-limited.
     # upload.wikimedia.org answers 429 ("bot is making too many requests") at 10 req/s; keep it at 2 req/s.
