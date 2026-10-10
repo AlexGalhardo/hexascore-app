@@ -5,6 +5,8 @@ Format: [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/). Versioni
 
 ## [Unreleased]
 
+## [0.0.25](https://github.com/AlexGalhardo/claude-code-internet-api/compare/v0.0.24...v0.0.25) (2026-10-10)
+
 ### Added
 
 - SDKs ready to publish at version `0.1.0`: `@hexascore/sdk` for npm and JSR (`sdks/ts`, with `jsr.json`, tests, `HEXASCORE_BASE_URL`, a `fetch` option and a required `apiKey`) and `hexascore` for PyPI (`sdks/python`, hand-written `pyproject.toml`, tests, `py.typed`). MIT `LICENSE` in both.
