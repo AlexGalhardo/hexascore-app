@@ -114,20 +114,22 @@ export default async function ItemPage({ params }: Props) {
 			{/* Cover + title + final score first: the item is recognisable at a glance on any screen size. */}
 			<header className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-4 sm:gap-6">
 				{item.coverUrl ? (
+					// The box follows the image's own proportion (portrait poster or landscape art) and shows it whole:
+					// only the longest side is capped, nothing is cropped.
+					// ponytail: no width/height attributes, so the header shifts once when the cover loads. Upgrade
+					// path: store the cover's pixel size in meta (covers.py knows it) and reserve the box.
 					// biome-ignore lint/performance/noImgElement: remote covers from ingestion; next/image needs a host allowlist (later)
 					<img
 						src={item.coverUrl}
 						alt={t("coverAlt", { title: item.title })}
-						width={160}
-						height={240}
 						fetchPriority="high"
 						decoding="async"
-						className="aspect-[2/3] w-28 rounded-md border border-border object-cover shadow-sm sm:w-40"
+						className="h-auto max-h-44 w-auto max-w-[45vw] rounded-md border border-border shadow-sm sm:max-h-80 sm:max-w-96"
 					/>
 				) : (
 					<div
 						aria-hidden="true"
-						className={`grid aspect-[2/3] w-28 place-items-center rounded-md border border-border bg-surface sm:w-40 ${accent.text}`}
+						className={`grid aspect-[2/3] w-28 place-items-center rounded-md border border-border bg-surface sm:w-52 ${accent.text}`}
 					>
 						<NavIcon name={SECTION_PATHS[item.type]} className="size-10" />
 					</div>
