@@ -1,6 +1,9 @@
 import { parseArgs } from "node:util";
 import { and, count, eq, gt, inArray, like, notLike, type SQL, sql } from "drizzle-orm";
+import type { PgColumn, PgTable } from "drizzle-orm/pg-core";
 import { z } from "zod";
+import { REPORT_REASONS } from "@/lib/social/constants";
+import { CONTACT_SUBJECTS } from "@/lib/validation";
 import type { Database } from "./client";
 import * as schema from "./schema";
 import { ITEM_TYPES } from "./schema/catalog";
@@ -18,8 +21,11 @@ import { checkRealUsers, checkSeedTarget, isProductionSeed, seedEnvSchema } from
 // Fixture data: `bun run db:seed [--users 50] [--items 400] [--batch 250]` builds a fake catalog plus raters.
 // Every run (except `--purge`) also upserts the default admin (`lib/db/seed-admin.ts`, docs/admin.md); `--admin-only`
 // stops there. `--existing-items` rates the catalog already in the database instead (sandbox Neon branch copied from production)
-// and adds statuses, time to beat, follows and lists; `--purge` deletes every seed user and recomputes the stats.
-// Production takes only `--existing-items` / `--purge`, with SEED_TARGET=production and --i-know-this-is-production
+// and adds statuses, time to beat, follows and lists, then the admin dashboard data (banned users, hidden lists,
+// reports, contact messages); `--moderation-only` adds just that last part on top of the seed users already there.
+// `--purge` deletes every seed user and recomputes the stats.
+// Production takes only `--existing-items` / `--moderation-only` / `--purge`, with SEED_TARGET=production and
+// --i-know-this-is-production
 // (pre-launch demo data; the `seed-data` flag shows the admin a reminder to purge it).
 // Idempotent (upserts keyed by deterministic ids) and streaming (keyset batches), so it scales to 10k users / 100k
 // items / millions of ratings without holding the catalog in memory.
@@ -35,6 +41,7 @@ const argsSchema = z.object({
 	purge: z.boolean().default(false),
 	sandboxAcknowledged: z.boolean().default(false),
 	adminOnly: z.boolean().default(false),
+	moderationOnly: z.boolean().default(false),
 });
 type SeedOptions = z.infer<typeof argsSchema>;
 
@@ -49,6 +56,7 @@ async function main(): Promise<void> {
 			"i-know-this-is-sandbox": { type: "boolean" },
 			"i-know-this-is-production": { type: "boolean" },
 			"admin-only": { type: "boolean" },
+			"moderation-only": { type: "boolean" },
 		},
 	});
 	const productionAcknowledged = values["i-know-this-is-production"] ?? false;
@@ -57,8 +65,11 @@ async function main(): Promise<void> {
 	const refusal = checkSeedTarget(target.data, productionAcknowledged);
 	if (refusal) throw new Error(refusal);
 	const production = isProductionSeed(target.data, productionAcknowledged);
-	if (production && !values.purge && (values["admin-only"] || !values["existing-items"])) {
-		throw new Error("Refusing to seed production: only --existing-items (or --purge) is allowed there.");
+	const productionMode = values["existing-items"] || values["moderation-only"];
+	if (production && !values.purge && (values["admin-only"] || !productionMode)) {
+		throw new Error(
+			"Refusing to seed production: only --existing-items, --moderation-only or --purge is allowed there.",
+		);
 	}
 	const opts = argsSchema.parse({
 		users: values.users,
@@ -68,6 +79,7 @@ async function main(): Promise<void> {
 		purge: values.purge,
 		sandboxAcknowledged: values["i-know-this-is-sandbox"],
 		adminOnly: values["admin-only"],
+		moderationOnly: values["moderation-only"],
 	});
 
 	// Imported lazily so the target guard above runs before any connection is opened.
@@ -100,6 +112,12 @@ async function main(): Promise<void> {
 		console.info(`[seed] admin account ${await seedAdmin(db)} (role admin, see docs/admin.md)`);
 	}
 	if (opts.adminOnly) return;
+
+	if (opts.moderationOnly) {
+		const totals = await seedModeration(db, opts.users);
+		console.info(`[seed] moderation ${JSON.stringify(totals)} — done in ${elapsedSince(started)}`);
+		return;
+	}
 
 	if (opts.existingItems) {
 		const ratings = await seedExistingItems(db, opts);
@@ -343,6 +361,7 @@ export async function seedExistingItems(db: Database, opts: { users: number; bat
 	}
 	console.info(`[seed] ${itemTotal} items, ${ratingTotal} ratings + stats (${elapsedSince(started)})`);
 
+	await repairSeedIds(db);
 	for (let lo = 0; lo < opts.users; lo += opts.batch) {
 		const hi = Math.min(opts.users, lo + opts.batch) - 1;
 		await db.transaction(async (tx) => {
@@ -351,7 +370,51 @@ export async function seedExistingItems(db: Database, opts: { users: number; bat
 		});
 	}
 	console.info(`[seed] statuses, time to beat, follows and lists (${elapsedSince(started)})`);
+	console.info(
+		`[seed] moderation ${JSON.stringify(await seedModeration(db, opts.users))} (${elapsedSince(started)})`,
+	);
 	return ratingTotal;
+}
+
+/**
+ * Deterministic id for seed rows: the md5 of the key with the version (4) and variant (8) nibbles forced, so it is a
+ * valid RFC 9562 UUID. A bare `md5(…)::uuid` fails `z.uuid()` 7 times out of 8, and every action that validates
+ * the id (admin resolve/dismiss/mark handled, list pages, reports) rejects the row.
+ */
+const seedUuid = (key: SQL): SQL => sql`overlay(overlay(md5(${key}) placing '4' from 13) placing '8' from 17)::uuid`;
+
+/**
+ * Rewrites seed ids written by earlier versions (bare md5) into the `seedUuid` form, which is the same md5 with the
+ * two nibbles forced, so a rerun then conflicts on the right rows instead of duplicating them. A list keeps its
+ * items and the reports that target it. Only rows owned by seed users are touched.
+ */
+export async function repairSeedIds(db: Database): Promise<void> {
+	// Positions in the dashed text form: 15 is the version nibble, 20 the variant nibble.
+	const fixed = (id: SQL): SQL => sql`overlay(overlay(${id} placing '4' from 15) placing '8' from 20)`;
+	const legacy = (id: SQL): SQL => sql`(substr(${id}, 15, 1) <> '4' or substr(${id}, 20, 1) <> '8')`;
+	await db.transaction(async (tx) => {
+		await tx.execute(sql`set local synchronous_commit to off`);
+		await tx.execute(sql`
+			update reports set id = ${fixed(sql`id::text`)}::uuid
+			where reporter_id like 'seed-user-%' and ${legacy(sql`id::text`)}`);
+		await tx.execute(sql`
+			update reports set target_id = ${fixed(sql`target_id`)}
+			where reporter_id like 'seed-user-%' and target_type = 'list' and ${legacy(sql`target_id`)}`);
+		await tx.execute(sql`
+			update contact_messages set id = ${fixed(sql`id::text`)}::uuid
+			where email like 'seed-user-%@example.test' and ${legacy(sql`id::text`)}`);
+		// list_items references lists without ON UPDATE CASCADE: copy the list, repoint its items, drop the old row.
+		await tx.execute(sql`
+			insert into lists (id, user_id, type, title, description, is_public, hidden, created_at, updated_at)
+			select ${fixed(sql`id::text`)}::uuid, user_id, type, title, description, is_public, hidden, created_at, updated_at
+			from lists where user_id like 'seed-user-%' and ${legacy(sql`id::text`)}
+			on conflict (id) do nothing`);
+		await tx.execute(sql`
+			update list_items li set list_id = ${fixed(sql`li.list_id::text`)}::uuid
+			from lists l
+			where l.id = li.list_id and l.user_id like 'seed-user-%' and ${legacy(sql`li.list_id::text`)}`);
+		await tx.execute(sql`delete from lists where user_id like 'seed-user-%' and ${legacy(sql`id::text`)}`);
+	});
 }
 
 const LIST_TITLES = [
@@ -444,7 +507,7 @@ function socialStatements(lo: number, hi: number, users: number): SQL[] {
 		// A third of (user, type) pairs with 5+ ratings get 1..10 lists (one more per 25 ratings), ids from md5.
 		sql`
 			insert into lists (id, user_id, type, title, is_public)
-			select md5('seed-list:' || c.user_id || ':' || c.type::text || ':' || n::text)::uuid, c.user_id, c.type,
+			select ${seedUuid(sql`'seed-list:' || c.user_id || ':' || c.type::text || ':' || n::text`)}, c.user_id, c.type,
 				(${titles})[n], abs(0::bigint + hashtext(c.user_id || c.type::text || n::text)) % 5 <> 0
 			from (
 				select r.user_id, i.type, count(*) as cnt
@@ -472,12 +535,109 @@ function socialStatements(lo: number, hi: number, users: number): SQL[] {
 	];
 }
 
+const BAN_REASONS = ["Spam", "Harassment of other users", "Impersonation", "Repeated offensive content"];
+const REPORT_DETAILS = [
+	"The title and description advertise an external store.",
+	"Same text posted on several lists in a few minutes.",
+	"Uses another person's name and avatar.",
+	"Insults aimed at a specific user in the description.",
+	"Not sure which rule applies, but it looks wrong.",
+];
+// Every entry respects CONTACT_MESSAGE_MIN..MAX (32..512 characters).
+const CONTACT_BODIES = [
+	"How is the final score calculated from the six categories? I could not find it in the docs.",
+	"The cover of this game is from another title with the same name. Can you fix it?",
+	"I would like to export my ratings and lists to a file. Is there a way to do it?",
+	"The search does not find a book when I type the title in Portuguese.",
+	"Love the site. A dark theme for the public profile page would be great.",
+	"My API key returns 429 well before the limit shown on the pricing page.",
+	"Is there a plan with more requests per minute for a small mobile app?",
+	"The page of a series shows the wrong number of seasons and episodes.",
+];
+const sqlTextArray = (values: readonly string[]): SQL =>
+	sql.raw(`array[${values.map((v) => `'${v.replaceAll("'", "''")}'`).join(", ")}]`);
+const SEED_EPOCH = sql`timestamptz '2026-01-01 00:00:00+00'`;
+
+export type ModerationCounts = { banned: number; hiddenLists: number; reports: number; contactMessages: number };
+
+/**
+ * Admin dashboard data on top of the seed users and their lists: banned users (1 in 50), hidden lists (1 in 60),
+ * reports against lists (1 in 6) and users (1 in 8), contact messages (1 user in 6). About 85% of the reports stay
+ * open and 80% of the messages unhandled. Everything is derived from deterministic hashes and keyed by md5 ids, so a
+ * rerun adds nothing and never reopens what an admin already handled. Rules mirrored from the app: the reporter is
+ * a different seed user than the target (or the list's owner), reasons and subjects come from the app's enums.
+ * `users` is the number of seed users (ids 0..users-1): reporters are picked among them.
+ * Returns the totals of seed moderation data after the run.
+ */
+export async function seedModeration(db: Database, users: number): Promise<ModerationCounts> {
+	await repairSeedIds(db);
+	if (users < 2) return { banned: 0, hiddenLists: 0, reports: 0, contactMessages: 0 };
+	const seedUser = sql`u.id like 'seed-user-%' and u.email like '%@example.test'`;
+	const hash = (salt: string, column: SQL): SQL => sql`abs(0::bigint + hashtext(${salt} || ${column}))`;
+	const reporter = (owner: SQL): SQL =>
+		sql`'seed-user-' || lpad(((${owner} + 1 + (x.h / 8) % (${users}::int - 1)) % ${users}::int)::text, 6, '0')`;
+	const reportColumns = sql`
+		(${sqlTextArray(REPORT_REASONS)})[(1 + (x.h / 64) % ${REPORT_REASONS.length})::int],
+		case when (x.h / 512) % 3 = 0 then (${sqlTextArray(REPORT_DETAILS)})[(1 + (x.h / 2048) % ${REPORT_DETAILS.length})::int] end,
+		(case when (x.h / 16384) % 20 < 17 then 'open' when (x.h / 16384) % 20 < 19 then 'resolved' else 'dismissed' end)::report_status,
+		${SEED_EPOCH} - make_interval(mins => ((x.h / 4096) % 43200)::int)`;
+
+	await db.transaction(async (tx) => {
+		await tx.execute(sql`
+			update "user" u set banned = true, ban_reason = (${sqlTextArray(BAN_REASONS)})[(1 + (x.h / 50) % ${BAN_REASONS.length})::int]
+			from (select id, ${hash("ban:", sql`id`)} as h from "user") x
+			where u.id = x.id and ${seedUser} and x.h % 50 = 0 and u.banned is distinct from true`);
+		await tx.execute(sql`
+			update lists l set hidden = true
+			where l.user_id like 'seed-user-%' and ${hash("hide:", sql`l.id::text`)} % 60 = 0 and not l.hidden`);
+		await tx.execute(sql`
+			insert into reports (id, reporter_id, target_type, target_id, reason, details, status, created_at)
+			select ${seedUuid(sql`'seed-report:list:' || l.id::text`)}, ${reporter(sql`substr(l.user_id, 11)::int`)},
+				'list', l.id::text, ${reportColumns}
+			from lists l
+			cross join lateral (select ${hash("report:", sql`l.id::text`)} as h) x
+			where l.user_id like 'seed-user-%' and x.h % 6 = 0
+			on conflict do nothing`);
+		await tx.execute(sql`
+			insert into reports (id, reporter_id, target_type, target_id, reason, details, status, created_at)
+			select ${seedUuid(sql`'seed-report:user:' || u.id`)}, ${reporter(sql`substr(u.id, 11)::int`)},
+				'user', u.id, ${reportColumns}
+			from "user" u
+			cross join lateral (select ${hash("report:", sql`u.id`)} as h) x
+			where ${seedUser} and x.h % 8 = 0
+			on conflict do nothing`);
+		await tx.execute(sql`
+			insert into contact_messages (id, user_id, name, email, subject, message, handled, created_at)
+			select ${seedUuid(sql`'seed-contact:' || u.id`)}, u.id, u.name, u.email,
+				(${sqlTextArray(CONTACT_SUBJECTS)})[(1 + (x.h / 8) % ${CONTACT_SUBJECTS.length})::int],
+				(${sqlTextArray(CONTACT_BODIES)})[(1 + (x.h / 64) % ${CONTACT_BODIES.length})::int],
+				(x.h / 1024) % 5 = 0,
+				${SEED_EPOCH} - make_interval(mins => ((x.h / 4096) % 43200)::int)
+			from "user" u
+			cross join lateral (select ${hash("contact:", sql`u.id`)} as h) x
+			where ${seedUser} and x.h % 6 = 0
+			on conflict (id) do nothing`);
+	});
+
+	const total = async (table: PgTable, where: SQL | undefined): Promise<number> =>
+		(await db.select({ n: count() }).from(table).where(where))[0]?.n ?? 0;
+	const seedOwned = (column: PgColumn): SQL => like(column, "seed-user-%");
+	return {
+		banned: await total(schema.user, and(seedOwned(schema.user.id), eq(schema.user.banned, true))),
+		hiddenLists: await total(schema.lists, and(seedOwned(schema.lists.userId), eq(schema.lists.hidden, true))),
+		reports: await total(schema.reports, seedOwned(schema.reports.reporterId)),
+		contactMessages: await total(schema.contactMessages, seedOwned(schema.contactMessages.email)),
+	};
+}
+
 /**
  * `--purge`: deletes every seed user (both markers: id prefix and @example.test), which cascades to their ratings,
- * statuses, time to beat, follows and lists, then recomputes the stats of every item. Returns the users deleted.
+ * statuses, time to beat, follows, lists and reports, then recomputes the stats of every item. Their contact messages
+ * are deleted by e-mail first (that foreign key only sets null). Returns the users deleted.
  */
 export async function purgeSeedUsers(db: Database, batch: number): Promise<number> {
 	const isSeedUser = and(like(schema.user.id, "seed-user-%"), like(schema.user.email, "%@example.test"));
+	await db.delete(schema.contactMessages).where(like(schema.contactMessages.email, "seed-user-%@example.test"));
 	let purged = 0;
 	for (;;) {
 		const chunk = db.select({ id: schema.user.id }).from(schema.user).where(isSeedUser).limit(batch);
