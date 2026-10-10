@@ -26,6 +26,19 @@ HOST_INTERVALS: dict[str, float] = {
     "openlibrary.org": 0.4,
     "store.steampowered.com": 1.6,
     "catalog.gog.com": 0.5,
+    # TMDB allows ~40 req/s per IP; IGDB allows 4 req/s per client.
+    "api.themoviedb.org": 0.04,
+    "api.igdb.com": 0.3,
+    "image.tmdb.org": 0.02,
+    "images.igdb.com": 0.05,
+    # Cover downloads and Blob uploads: CDNs and the Blob API take far more than the 2 req/s default, which would cap
+    # covers at ~1 item/s (two uploads each). Open Library cover-by-ID requests are not rate-limited.
+    # upload.wikimedia.org answers 429 ("bot is making too many requests") at 10 req/s; keep it at 2 req/s.
+    "covers.openlibrary.org": 0.1,
+    "upload.wikimedia.org": 0.5,
+    "shared.akamai.steamstatic.com": 0.02,
+    "images.gog-statics.com": 0.05,
+    "vercel.com": 0.01,
 }
 DEFAULT_INTERVAL = 0.5
 

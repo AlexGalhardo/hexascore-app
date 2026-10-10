@@ -1,0 +1,180 @@
+[
+	{
+		"id": 1942,
+		"cover": {
+			"id": 480513,
+			"image_id": "coaarl"
+		},
+		"first_release_date": 1431993600,
+		"genres": [
+			{
+				"id": 12,
+				"name": "Role-playing (RPG)"
+			},
+			{
+				"id": 31,
+				"name": "Adventure"
+			}
+		],
+		"involved_companies": [
+			{
+				"id": 17436,
+				"company": {
+					"id": 50,
+					"name": "WB Games"
+				},
+				"developer": false
+			},
+			{
+				"id": 17769,
+				"company": {
+					"id": 3119,
+					"name": "cdp.pl"
+				},
+				"developer": false
+			},
+			{
+				"id": 17771,
+				"company": {
+					"id": 1217,
+					"name": "Spike Chunsoft"
+				},
+				"developer": false
+			},
+			{
+				"id": 17768,
+				"company": {
+					"id": 248,
+					"name": "Bandai Namco Entertainment"
+				},
+				"developer": false
+			},
+			{
+				"id": 64293,
+				"company": {
+					"id": 5696,
+					"name": "D3T Limited"
+				},
+				"developer": false
+			},
+			{
+				"id": 196544,
+				"company": {
+					"id": 946,
+					"name": "Saber Interactive"
+				},
+				"developer": false
+			},
+			{
+				"id": 418547,
+				"company": {
+					"id": 908,
+					"name": "CD Projekt RED"
+				},
+				"developer": true
+			}
+		],
+		"platforms": [
+			{
+				"id": 169,
+				"name": "Xbox Series X|S"
+			},
+			{
+				"id": 48,
+				"name": "PlayStation 4"
+			},
+			{
+				"id": 508,
+				"name": "Nintendo Switch 2"
+			},
+			{
+				"id": 6,
+				"name": "PC (Microsoft Windows)"
+			},
+			{
+				"id": 167,
+				"name": "PlayStation 5"
+			},
+			{
+				"id": 49,
+				"name": "Xbox One"
+			},
+			{
+				"id": 130,
+				"name": "Nintendo Switch"
+			}
+		],
+		"slug": "the-witcher-3-wild-hunt",
+		"summary": "The Witcher 3: Wild Hunt is an open-world action role-playing game developed by CD Projekt Red.\n\nSet in a dark fantasy world, the game follows Geralt of Rivia, a monster hunter searching for his adopted daughter, Ciri, while navigating political conflicts and supernatural threats. Gameplay features exploration, combat, character progression, and branching narratives shaped by player choices. Widely acclaimed for its writing, world-building, and depth, it is considered one of the most influential RPGs of its generation.",
+		"videos": [
+			{
+				"id": 9648,
+				"video_id": "yowv6_rspoM"
+			},
+			{
+				"id": 5993,
+				"video_id": "xQGam9OHSUo"
+			},
+			{
+				"id": 5990,
+				"video_id": "QrwGXAcE6ZA"
+			},
+			{
+				"id": 5992,
+				"video_id": "bcEAsOC_8L0"
+			},
+			{
+				"id": 5987,
+				"video_id": "5nLipy-Z4yo"
+			},
+			{
+				"id": 5995,
+				"video_id": "8ZLfJjlZKvc"
+			},
+			{
+				"id": 5994,
+				"video_id": "p14dHAwLOmo"
+			},
+			{
+				"id": 5991,
+				"video_id": "6f8TbvsZ5Mk"
+			},
+			{
+				"id": 5989,
+				"video_id": "_IBAovRNCuA"
+			},
+			{
+				"id": 5988,
+				"video_id": "FP7no968jVU"
+			},
+			{
+				"id": 5996,
+				"video_id": "sb81f-ejNSI"
+			},
+			{
+				"id": 150458,
+				"video_id": "TWOkT7l0yWQ"
+			},
+			{
+				"id": 15748,
+				"video_id": "ZpiczsigQto"
+			},
+			{
+				"id": 120257,
+				"video_id": "gRmKKjQu9Tw"
+			},
+			{
+				"id": 141704,
+				"video_id": "MqQ3LeBgGDM"
+			},
+			{
+				"id": 141210,
+				"video_id": "c0i88t0Kacs"
+			},
+			{
+				"id": 141211,
+				"video_id": "1-l29HlKkXU"
+			}
+		]
+	}
+]

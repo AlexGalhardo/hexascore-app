@@ -5,7 +5,7 @@ import { passwordSchema } from "@/lib/validation";
 import type { Database } from "./client";
 import * as schema from "./schema";
 
-// Default admin for local and sandbox only (the seed refuses production). The `.test` domain (RFC 2606) never
+// Default admin for local and sandbox only (the seed skips it in production). The `.test` domain (RFC 2606) never
 // receives mail, so nobody can request a password reset for it. Documented in docs/admin.md.
 export const SEED_ADMIN_ID = "seed-admin";
 export const SEED_ADMIN_DEFAULTS = { email: "admin@hexascore.test", password: "hexascoreBR@123", username: "admin" };

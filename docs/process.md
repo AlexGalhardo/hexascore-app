@@ -28,6 +28,7 @@ Decisão do dono (2026-10-03): seguir sem proteção por enquanto; o fluxo `feat
 | --- | --- | --- |
 | `pix-checkout` | opção PIX em `/profile/api/checkout` e `createPixCharge` | env `FLAG_PIX_CHECKOUT=off` no projeto Vercel + redeploy |
 | `public-api-signup` | criação de novas chaves em `/profile/api` (chaves existentes seguem válidas) | env `FLAG_PUBLIC_API_SIGNUP=off` + redeploy |
+| `seed-data` | **desligada por padrão**; ligada (`FLAG_SEED_DATA=on` + redeploy) enquanto há usuários seed em produção, mostra em `/admin` o lembrete de removê-los com `--purge` (`docs/testing.md`) | env `FLAG_SEED_DATA` sem valor ou `off` + redeploy, depois do `--purge` |
 
 Override por navegador (sem redeploy): definir `FLAGS_SECRET` (32 bytes base64url, `openssl rand -base64 32 | tr '+/' '-_' | tr -d =`) no projeto; a Vercel Toolbar lista as flags via `/.well-known/vercel/flags`.
 | `.github/dependabot.yml` | semanal | `bun` (raiz), `uv` (`webscrappings/`), `github-actions`, `docker` + `docker-compose` (`infra/`); minor/patch agrupados, PRs para `dev`, prefixos `chore(deps)`/`ci` |
@@ -53,7 +54,7 @@ Todos os jobs usam `.github/actions/setup-bun` (Bun `1.4.2` via `oven-sh/setup-b
 
 Desde 2026-10-03 os workflows do GitHub estão **desativados no GitHub** (`gh workflow disable`, por bloqueio de cobrança do Actions); os arquivos em `.github/workflows/` continuam no repositório, intactos. Para reativar: `gh workflow enable "CI"` (idem `Python CI`, `QA`, `CodeQL`, `Release Please`, `Ingest (bootstrap|incremental|weekly scores and synopses)`).
 
-No lugar deles, o hook **pre-push** do husky roda `bun run ci:local` (`scripts/ci-local.sh`), o mesmo conjunto do `ci.yml`: `lint:ci`, `typecheck`, `test`, `openapi:check` e `build` (com o env fictício do CI; se o `bun --bun next build` quebrar no Windows, repete com `bunx next build`), mais `ruff` e `pytest` quando o diff contra `origin/dev` toca `webscrappings/`. Falhou, o push não sai. Emergência: `CI_LOCAL_SKIP=1 git push` (exceção, nunca rotina).
+No lugar deles, o hook **pre-push** do husky roda `bun run ci:local` (`scripts/ci-local.sh`), o mesmo conjunto do `ci.yml`: `lint:ci`, `typecheck`, `test`, `openapi:check` e `build` (com o env fictício do CI; se o `bun --bun next build` quebrar no Windows, repete com `bunx next build`; o build roda com `NODE_OPTIONS=--max-old-space-size=8192`, salvo se já definido, porque o worker do Node estourava o heap padrão), mais `ruff` e `pytest` quando o diff contra `origin/dev` toca `webscrappings/`. Falhou, o push não sai. Emergência: `CI_LOCAL_SKIP=1 git push` (exceção, nunca rotina).
 
 O deploy continua na Vercel (Git integration, independente do Actions): push na `dev` publica `dev.hexascore.app`, merge na `main` publica `hexascore.app`.
 

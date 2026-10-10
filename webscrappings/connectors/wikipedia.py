@@ -1,14 +1,15 @@
-"""Wikipedia REST `page/summary` connector: synopsis per locale (CC BY-SA 4.0).
+"""Wikipedia intro extracts per locale (CC BY-SA 4.0), via the Action API in batches of titles.
 
-Targets are the en/pt/es sitelinks of Wikidata records fetched since `since`.
+Targets are the en/pt/es sitelinks of Wikidata records fetched since `since`. The REST `page/summary`
+endpoint answers one page per request and is rate limited hard for anonymous clients (a few req/s per
+IP across all wikis); `action=query&prop=extracts` returns up to 20 intros per request.
 """
 
 import logging
 from collections.abc import Iterable, Iterator
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
-from itertools import islice
-from urllib.parse import quote
+from itertools import batched, islice
 
 import httpx
 import psycopg
@@ -21,38 +22,38 @@ from common.http import HttpClient
 log = logging.getLogger(__name__)
 
 LANGS = ("en", "pt", "es")
-# Concurrent summary requests per run; the per-host throttle in HttpClient still caps the rate.
+# Concurrent batch requests per run; the per-host throttle in HttpClient still caps the rate.
 WORKERS = 4
+# TextExtracts caps `exintro` results at 20 pages per request.
+BATCH = 20
 
 
-class DesktopUrls(BaseModel):
-    page: str
-
-
-class ContentUrls(BaseModel):
-    desktop: DesktopUrls
-
-
-class Summary(BaseModel):
-    type: str
+class Page(BaseModel):
     title: str
     extract: str = ""
-    wikibase_item: str | None = None
-    content_urls: ContentUrls
+    fullurl: str = ""
+    pageprops: dict[str, str] = {}
 
 
-def parse_summary(raw: object, qid: str, lang: str) -> dict | None:
-    summary = Summary.model_validate(raw)
-    # A redirect can land on a different entity; a disambiguation page has no usable synopsis.
-    if summary.type != "standard" or summary.wikibase_item != qid or not summary.extract.strip():
-        return None
-    return {
-        "qid": qid,
-        "lang": lang,
-        "title": summary.title,
-        "extract": summary.extract.strip(),
-        "url": summary.content_urls.desktop.page,
-    }
+class Query(BaseModel):
+    pages: list[Page] = []
+
+
+class QueryResponse(BaseModel):
+    query: Query = Query()
+
+
+def parse_extracts(raw: object, qids: set[str], lang: str) -> list[dict]:
+    payloads = []
+    for page in QueryResponse.model_validate(raw).query.pages:
+        qid = page.pageprops.get("wikibase_item")
+        # A redirect can land on a different entity; a disambiguation page has no usable synopsis.
+        if qid not in qids or "disambiguation" in page.pageprops or not page.extract.strip():
+            continue
+        payloads.append(
+            {"qid": qid, "lang": lang, "title": page.title, "extract": page.extract.strip(), "url": page.fullurl}
+        )
+    return payloads
 
 
 def targets(conn: psycopg.Connection, since: datetime | None) -> list[tuple[str, dict[str, str]]]:
@@ -77,26 +78,41 @@ def fetch(
     langs = [lang for lang in langs if lang in LANGS]
     skip = {lang: existing_ids(conn, f"wikipedia:{lang}") if only_missing else set() for lang in langs}
 
-    def tasks() -> Iterator[tuple[str, str, str]]:
-        for qid, sitelinks in targets(conn, since):
-            for lang in langs:
-                title = sitelinks.get(f"{lang}wiki")
-                if title and qid not in skip[lang]:
-                    yield qid, lang, title
+    rows = targets(conn, since)
 
-    def summary(task: tuple[str, str, str]) -> Record | None:
-        qid, lang, title = task
-        url = f"https://{lang}.wikipedia.org/api/rest_v1/page/summary/{quote(title.replace(' ', '_'), safe='')}"
+    def tasks() -> Iterator[tuple[str, list[tuple[str, str]]]]:
+        for lang in langs:
+            pairs = (
+                (qid, sitelinks[f"{lang}wiki"])
+                for qid, sitelinks in rows
+                if sitelinks.get(f"{lang}wiki") and qid not in skip[lang]
+            )
+            for batch in batched(pairs, BATCH, strict=False):
+                yield lang, list(batch)
+
+    def extracts(task: tuple[str, list[tuple[str, str]]]) -> list[Record]:
+        lang, batch = task
+        params = {
+            "action": "query",
+            "format": "json",
+            "formatversion": "2",
+            "redirects": "1",
+            "prop": "extracts|pageprops|info",
+            "exintro": "1",
+            "explaintext": "1",
+            "exlimit": str(BATCH),
+            "ppprop": "wikibase_item|disambiguation",
+            "inprop": "url",
+            "titles": "|".join(title for _, title in batch),
+        }
         try:
-            response = client.request("GET", url)
-            if response.status_code == httpx.codes.NOT_FOUND:
-                return None
+            response = client.request("GET", f"https://{lang}.wikipedia.org/w/api.php", params=params)
             response.raise_for_status()
-            payload = parse_summary(response.json(), qid, lang)
+            payloads = parse_extracts(response.json(), {qid for qid, _ in batch}, lang)
         except (httpx.HTTPError, ValidationError) as exc:
-            log.warning("wikipedia %s %s failed: %s", qid, lang, exc)
-            return None
-        return Record(f"wikipedia:{lang}", qid, payload) if payload else None
+            log.warning("wikipedia %s batch of %d from %s failed: %s", lang, len(batch), batch[0][0], exc)
+            return []
+        return [Record(f"wikipedia:{lang}", p["qid"], p) for p in payloads]
 
     # Requests are latency-bound, so a small pool reaches the per-host rate limit; the shared client throttles
     # per host. Work is submitted in bounded chunks so memory stays flat, and records are yielded (and stored)
@@ -104,9 +120,8 @@ def fetch(
     pending = tasks()
     with ThreadPoolExecutor(max_workers=workers) as pool:
         while chunk := list(islice(pending, workers * 8)):
-            for record in pool.map(summary, chunk):
-                if record:
-                    yield record
+            for records in pool.map(extracts, chunk):
+                yield from records
 
 
 def main() -> None:
