@@ -64,7 +64,7 @@
     },
     "sdks/ts": {
       "name": "@hexascore/sdk",
-      "version": "0.0.0",
+      "version": "0.1.0",
       "devDependencies": {
         "@hey-api/openapi-ts": "0.99.0",
         "typescript": "6.0.3",
