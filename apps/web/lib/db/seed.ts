@@ -13,12 +13,14 @@ import {
 	type SeedItem,
 	seedUserId,
 } from "./seed-data";
-import { checkRealUsers, checkSeedTarget, seedEnvSchema } from "./seed-guard";
+import { checkRealUsers, checkSeedTarget, isProductionSeed, seedEnvSchema } from "./seed-guard";
 
 // Fixture data: `bun run db:seed [--users 50] [--items 400] [--batch 250]` builds a fake catalog plus raters.
 // Every run (except `--purge`) also upserts the default admin (`lib/db/seed-admin.ts`, docs/admin.md); `--admin-only`
 // stops there. `--existing-items` rates the catalog already in the database instead (sandbox Neon branch copied from production)
 // and adds statuses, time to beat, follows and lists; `--purge` deletes every seed user and recomputes the stats.
+// Production takes only `--existing-items` / `--purge`, with SEED_TARGET=production and --i-know-this-is-production
+// (pre-launch demo data; the `seed-data` flag shows the admin a reminder to purge it).
 // Idempotent (upserts keyed by deterministic ids) and streaming (keyset batches), so it scales to 10k users / 100k
 // items / millions of ratings without holding the catalog in memory.
 //
@@ -37,11 +39,6 @@ const argsSchema = z.object({
 type SeedOptions = z.infer<typeof argsSchema>;
 
 async function main(): Promise<void> {
-	const target = seedEnvSchema.safeParse(process.env);
-	if (!target.success) throw new Error(`Refusing to seed: ${target.error.issues.map((i) => i.message).join("; ")}`);
-	const refusal = checkSeedTarget(target.data);
-	if (refusal) throw new Error(refusal);
-
 	const { values } = parseArgs({
 		options: {
 			users: { type: "string" },
@@ -50,9 +47,19 @@ async function main(): Promise<void> {
 			"existing-items": { type: "boolean" },
 			purge: { type: "boolean" },
 			"i-know-this-is-sandbox": { type: "boolean" },
+			"i-know-this-is-production": { type: "boolean" },
 			"admin-only": { type: "boolean" },
 		},
 	});
+	const productionAcknowledged = values["i-know-this-is-production"] ?? false;
+	const target = seedEnvSchema.safeParse(process.env);
+	if (!target.success) throw new Error(`Refusing to seed: ${target.error.issues.map((i) => i.message).join("; ")}`);
+	const refusal = checkSeedTarget(target.data, productionAcknowledged);
+	if (refusal) throw new Error(refusal);
+	const production = isProductionSeed(target.data, productionAcknowledged);
+	if (production && !values.purge && (values["admin-only"] || !values["existing-items"])) {
+		throw new Error("Refusing to seed production: only --existing-items (or --purge) is allowed there.");
+	}
 	const opts = argsSchema.parse({
 		users: values.users,
 		items: values.items,
@@ -84,11 +91,14 @@ async function main(): Promise<void> {
 				notLike(schema.user.email, "%.test"),
 			),
 		);
-	const realRefusal = checkRealUsers(real?.n ?? 0, opts.sandboxAcknowledged);
+	const realRefusal = checkRealUsers(real?.n ?? 0, opts.sandboxAcknowledged || production);
 	if (realRefusal) throw new Error(realRefusal);
 
-	const { seedAdmin } = await import("./seed-admin");
-	console.info(`[seed] admin account ${await seedAdmin(db)} (role admin, see docs/admin.md)`);
+	// The default admin's password is public (docs/admin.md): never create it in production.
+	if (!production) {
+		const { seedAdmin } = await import("./seed-admin");
+		console.info(`[seed] admin account ${await seedAdmin(db)} (role admin, see docs/admin.md)`);
+	}
 	if (opts.adminOnly) return;
 
 	if (opts.existingItems) {

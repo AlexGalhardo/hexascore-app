@@ -36,3 +36,5 @@ hexascore-*.json
 
 # Playwright MCP screenshots, snapshots and console logs (local browser checks)
 .playwright-mcp/
+
+.env*

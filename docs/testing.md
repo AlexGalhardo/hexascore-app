@@ -110,6 +110,15 @@ O sandbox roda num **branch Neon copiado da produção** depois do bootstrap de 
 
 **Guarda** (`lib/db/seed-guard.ts`, testada em `seed-guard.test.ts`), antes de abrir conexão: `VERCEL_ENV=production` → recusa sempre; `DATABASE_URL` vazio (PGlite) ou host `localhost`/`127.0.0.1`/`::1` → ok; qualquer outro host só com `SEED_TARGET=sandbox` (único valor aceito). Depois de conectar (seed, não purge): recusa se houver **> 50 usuários verificados fora do marcador** (id não `seed-user-*` e e-mail fora de domínio `.test`, que cobre E2E) sem `--i-know-this-is-sandbox`, com a explicação no terminal.
 
+**Produção** (decisão do dono, 2026-10-04: dados de demonstração antes do launch): `SEED_TARGET=production` **e** `--i-know-this-is-production` juntos liberam o alvo mesmo com `VERCEL_ENV=production`; só `--existing-items` ou `--purge` são aceitos, a checagem de usuários reais é dispensada e o admin padrão (senha pública) **não** é criado. Rodar localmente com um env mínimo (o `.env.production.local` puxado da Vercel tem placeholders `[SENSITIVE]` que o `env.ts` recusa): `DATABASE_URL` de produção, `VERCEL_ENV=production`, `BETTER_AUTH_URL=https://hexascore.app`.
+
+```sh
+SEED_TARGET=production bun --env-file=<env mínimo> lib/db/seed.ts --existing-items --users 10000 --batch 1000 --i-know-this-is-production
+SEED_TARGET=production bun --env-file=<env mínimo> lib/db/seed.ts --purge --i-know-this-is-production   # remover
+```
+
+Enquanto os dados existirem, `FLAG_SEED_DATA=on` na Vercel liga a flag `seed-data`, que mostra o lembrete em `/admin`; desligue depois do `--purge` e rode `POST /api/cron/revalidate` `{"tags":["catalog"]}`.
+
 Medição local (Docker Postgres 18 no Windows, 2026-10-03): 5k itens + `--existing-items --users 2000 --batch 1000` = **~60–76 s** (205k avaliações ~30–44 s; status/time to beat/follows/listas ~30 s, metade nos triggers de FK de `item_status`); rerun ~33 s; `--purge` ~2–4 s. Volume e tempo escalam ~linear com as avaliações: **10k × 100k ≈ 2M avaliações → estimativa de ~12–15 min** local. No Neon a rede pesa pouco (poucos statements por lote de 1000 itens/usuários); o que manda é o tamanho do compute.
 ## Comandos
 
@@ -146,6 +155,6 @@ bunx @redocly/cli@2 lint apps/web/public/openapi.json   # validação do spec (s
 ## Dados de teste
 
 - Unitário/integração: fixtures mínimas por teste.
-- Dev/preview/sandbox: snapshot de ~100k itens + 10k usuários sintéticos (faker com seed fixa). Nunca em produção.
+- Dev/preview/sandbox: snapshot de ~100k itens + 10k usuários sintéticos (faker com seed fixa). Em produção só como dado de demonstração pré-launch, com opt-in duplo (ver "Produção" abaixo da Guarda).
 
 Admin padrão do seed (local/sandbox): ver [`docs/admin.md`](admin.md).

@@ -28,6 +28,7 @@ Decisão do dono (2026-10-03): seguir sem proteção por enquanto; o fluxo `feat
 | --- | --- | --- |
 | `pix-checkout` | opção PIX em `/profile/api/checkout` e `createPixCharge` | env `FLAG_PIX_CHECKOUT=off` no projeto Vercel + redeploy |
 | `public-api-signup` | criação de novas chaves em `/profile/api` (chaves existentes seguem válidas) | env `FLAG_PUBLIC_API_SIGNUP=off` + redeploy |
+| `seed-data` | **desligada por padrão**; ligada (`FLAG_SEED_DATA=on` + redeploy) enquanto há usuários seed em produção, mostra em `/admin` o lembrete de removê-los com `--purge` (`docs/testing.md`) | env `FLAG_SEED_DATA` sem valor ou `off` + redeploy, depois do `--purge` |
 
 Override por navegador (sem redeploy): definir `FLAGS_SECRET` (32 bytes base64url, `openssl rand -base64 32 | tr '+/' '-_' | tr -d =`) no projeto; a Vercel Toolbar lista as flags via `/.well-known/vercel/flags`.
 | `.github/dependabot.yml` | semanal | `bun` (raiz), `uv` (`webscrappings/`), `github-actions`, `docker` + `docker-compose` (`infra/`); minor/patch agrupados, PRs para `dev`, prefixos `chore(deps)`/`ci` |
