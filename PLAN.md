@@ -88,6 +88,7 @@ Toda documentação de referência vive em `docs/`; este plano só guarda decis�
 | [`docs/architecture.md`](docs/architecture.md) | monorepo, fluxo de dados, regras de segurança obrigatórias |
 | [`docs/data-model.md`](docs/data-model.md) | tabelas Drizzle/Postgres |
 | [`docs/api.md`](docs/api.md) | API pública `/v1`, contrato, docs e SDKs |
+| [`docs/sdk-publish-npm.md`](docs/sdk-publish-npm.md) · [`sdk-publish-jsr.md`](docs/sdk-publish-jsr.md) · [`sdk-publish-pypi.md`](docs/sdk-publish-pypi.md) | Passo a passo para publicar os SDKs no npm, no JSR e no PyPI |
 | [`docs/frontend.md`](docs/frontend.md) | rotas, página do item, formulários, preferências |
 | [`docs/design-system.md`](docs/design-system.md) | direção visual, tokens, tipografia, componentes |
 | [`docs/payments.md`](docs/payments.md) | Stripe, AbacatePay, cota e créditos |
@@ -137,7 +138,8 @@ Horizontal: cada milestone cobre as 4 seções. Ordem fixa; cada uma fecha com u
 - [x] API keys, middleware de auth/rate limit/cota (Upstash), erros RFC 9457, headers
 - [x] Endpoints `/v1/*`, `openapi.json` gerado + check no CI
 - [x] `/docs` + Scalar, `/profile/api` com dashboard de uso (lista de últimas requests adiada: não há log por request)
-- [ ] SDKs TS e Python gerados + publicação via release-please (gerados em `sdks/`; publicação pendente de credenciais npm/PyPI)
+- [x] SDKs prontos para publicar, versão `0.1.0`: `@hexascore/sdk` (npm e JSR, `sdks/ts`) e `hexascore` (PyPI, `sdks/python`), com testes, licença MIT e guias `docs/sdk-publish-npm.md`, `docs/sdk-publish-jsr.md`, `docs/sdk-publish-pypi.md`. Conferido em 2026-10-10: `npm pack --dry-run`, `jsr publish --dry-run`, `uv build` + `twine check` + instalação do wheel em ambiente limpo.
+- [ ] Publicar os SDKs (manual, pelo dono): criar organização `hexascore` no npm, escopo `@hexascore` no JSR e contas PyPI/TestPyPI; seguir os três guias. Nomes livres em 2026-10-10.
 - **Verificar**: Free bloqueia na 101ª request (402) e `limit=11` é rejeitado; Schemathesis sem falhas; quickstart das docs funciona copiando e colando.
 
 ### 0.5 — Billing
@@ -200,7 +202,7 @@ Ações do dono (não automatizáveis):
 
 - [x] Domínio verificado no Resend: `hexascore.app` (comprado na Vercel em 2026-10-03, com `api.` e `www.` → apex) está `verified` com envio ativo (us-east-1), `EMAIL_FROM` = `HexaScore <no-reply@hexascore.app>`. Conta Resend: `aleexgalhardoo@gmail.com`.
 - [ ] Chaves live do Stripe e da AbacatePay (hoje sandbox) e teste real de checkout + estorno.
-- [ ] Credenciais npm/PyPI para publicar os SDKs.
+- [ ] Contas e escopos para publicar os SDKs: organização `hexascore` no npm (com 2FA), escopo `@hexascore` no JSR (login pelo GitHub), contas PyPI e TestPyPI (com 2FA e token). Passo a passo em `docs/sdk-publish-*.md`.
 - [ ] Confirmar a carga completa de 100k itens (limite de armazenamento do Neon free; avaliar plano pago).
 
 - [ ] **Nome final** (codinome `hexascore`). `.com` livres consultados em 2026-10-02: hexascore.com, scorara.com, averago.com, kultscore.com, talescore.com, crowdcrit.com, hexmeter.com. Checar marca registrada (INPI/USPTO/EUIPO) antes de comprar.

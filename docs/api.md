@@ -35,9 +35,19 @@
 
 ## SDKs
 
-- `sdks/ts` (`@hexascore/sdk`, workspace): `@hey-api/openapi-ts` 0.99.0 (client fetch), `bun run sdk:generate`; único código manual: `createHexascoreClient` em `src/index.ts`.
-- `sdks/python` (`hexascore`): `openapi-python-client` 0.29.1 via `uvx`, `bun run sdk:generate:python`.
-- Publicação (npm/PyPI via release-please) pendente de credenciais — ver `docs/process.md`.
+Três destinos, dois pacotes, todos na versão `0.1.0` e ainda não publicados (falta criar as contas e os escopos):
+
+| Destino | Pacote | Pasta | O que vai | Guia |
+| --- | --- | --- | --- | --- |
+| npm | `@hexascore/sdk` | `sdks/ts` | `dist/` (ESM + `.d.ts`) | [`sdk-publish-npm.md`](sdk-publish-npm.md) |
+| JSR | `@hexascore/sdk` | `sdks/ts` | o TypeScript de `src/` (`jsr.json`) | [`sdk-publish-jsr.md`](sdk-publish-jsr.md) |
+| PyPI | `hexascore` | `sdks/python` | sdist + wheel (`uv build`) | [`sdk-publish-pypi.md`](sdk-publish-pypi.md) |
+
+- `sdks/ts` (workspace): `@hey-api/openapi-ts` 0.99.0 (client fetch), `bun run sdk:generate`. Único código manual: `src/index.ts` (`createHexascoreClient`, `HEXASCORE_BASE_URL`). O gerador emite imports relativos com `.ts` (`importFileExtension`), exigência do JSR; o build do npm reescreve para `.js` (`rewriteRelativeImportExtensions`), o que faz o pacote funcionar no ESM do Node sem bundler. Testes: `bun test` em `sdks/ts` (fetch simulado). Sem dependências de runtime.
+- `sdks/python`: `openapi-python-client` 0.29.1 via `uvx`, `bun run sdk:generate:python`, com `--meta none`: só o pacote `sdks/python/hexascore/` é gerado; `pyproject.toml`, `README.md`, `LICENSE` e `tests/` são escritos à mão e sobrevivem à regeneração (o script recria o `py.typed`). Testes: `uv run pytest -q` em `sdks/python`. Dependências: `httpx`, `attrs`.
+- Versão: a mesma em `sdks/ts/package.json`, `sdks/ts/jsr.json` e `sdks/python/pyproject.toml`, independente da versão do site. Sobe quando o contrato muda.
+- Publicação é manual (GitHub Actions desativado); cada guia traz o caminho de automação por OIDC para quando voltar.
+- Os testes dos SDKs não entram no `ci:local`; rode-os à mão antes de publicar (estão no checklist de cada guia).
 
 Fora por ora: endpoints de escrita, notas individuais de usuários, webhooks para clientes, GraphQL, lista de últimas requests no dashboard.
 - Parâmetro de query vazio (`?min_score=`) é sempre 400 `bad_request` (`errors[].message = "Must not be empty."`), validado em `apiRoute` antes do zod: `z.coerce` leria `""` como `0`.
