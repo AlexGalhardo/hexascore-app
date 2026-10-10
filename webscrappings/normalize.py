@@ -23,7 +23,18 @@ from revalidate import revalidate
 
 log = logging.getLogger("normalize")
 
-SOURCES = ["wikidata", "wikipedia:en", "wikipedia:pt", "wikipedia:es", "openlibrary", "steam", "gog"]
+SOURCES = [
+    "wikidata",
+    "wikipedia:en",
+    "wikipedia:pt",
+    "wikipedia:es",
+    "openlibrary",
+    "steam",
+    "gog",
+    "tmdb",
+    "igdb",
+    "synopsis",
+]
 BATCH = 200
 SYNOPSIS_LICENSE = "CC BY-SA 4.0"
 
@@ -64,6 +75,26 @@ class OpenLibraryPayload(BaseModel):
 
 class PlatformsPayload(BaseModel):
     platforms: list[str] = []
+
+
+class EnrichmentPayload(BaseModel):
+    """Shared shape of the TMDB and IGDB payloads. Every field is a fallback: Wikidata wins when it has a value."""
+
+    id: int | None = None
+    genres: list[str] = []
+    platforms: list[str] = []
+    creators: list[str] = []
+    countries: list[str] = []
+    trailers: list[str] = []
+    runtime: int | None = None
+    seasons: int | None = None
+    episodes: int | None = None
+    release_date: date | None = None
+
+
+def enrichment(records: dict[str, dict]) -> EnrichmentPayload:
+    # TMDB only has movie/series records and IGDB only games, so at most one of them exists per item.
+    return EnrichmentPayload.model_validate(records.get("tmdb") or records.get("igdb") or {})
 
 
 @dataclass(frozen=True)
@@ -210,7 +241,9 @@ def scores(wd: WikidataPayload, ids: dict[str, str]) -> list[Score]:
 
 
 def build_meta(wd: WikidataPayload, records: dict[str, dict]) -> dict[str, Any]:
-    platforms = ref_labels(wd, "P400") if wd.type == "game" else []
+    extra = enrichment(records)
+    # IGDB lists every platform; Steam and GOG only know the PC operating systems.
+    platforms = (ref_labels(wd, "P400") or extra.platforms) if wd.type == "game" else []
     for source in ("steam", "gog"):
         if not platforms and source in records:
             platforms = PlatformsPayload.model_validate(records[source]).platforms
@@ -218,16 +251,17 @@ def build_meta(wd: WikidataPayload, records: dict[str, dict]) -> dict[str, Any]:
     if wd.type == "book" and not pages and "openlibrary" in records:
         pages = OpenLibraryPayload.model_validate(records["openlibrary"]).pages
     trailers = list(dict.fromkeys(str(c.value) for c in _ranked(wd.claims.get("P1651", []))))[:3]
+    screen = wd.type in ("movie", "series")
     meta: dict[str, Any] = {
-        "genres": ref_labels(wd, "P136"),
+        "genres": ref_labels(wd, "P136") or extra.genres,
         "platforms": platforms,
-        "creators": ref_labels(wd, CREATOR_PROP[wd.type]),
-        "runtimeMinutes": quantity(wd, "P2047", MINUTES_PER_UNIT) if wd.type in ("movie", "series") else None,
+        "creators": ref_labels(wd, CREATOR_PROP[wd.type]) or extra.creators,
+        "runtimeMinutes": (quantity(wd, "P2047", MINUTES_PER_UNIT) or extra.runtime) if screen else None,
         "pages": pages,
-        "seasons": quantity(wd, "P2437") if wd.type == "series" else None,
-        "episodes": quantity(wd, "P1113") if wd.type == "series" else None,
-        "countries": ref_labels(wd, "P495"),
-        "trailers": [{"youtubeId": t} for t in trailers],
+        "seasons": (quantity(wd, "P2437") or extra.seasons) if wd.type == "series" else None,
+        "episodes": (quantity(wd, "P1113") or extra.episodes) if wd.type == "series" else None,
+        "countries": ref_labels(wd, "P495") or extra.countries,
+        "trailers": [{"youtubeId": t} for t in trailers or extra.trailers[:3]],
     }
     return {k: v for k, v in meta.items() if v}
 
@@ -246,7 +280,9 @@ def build_translations(wd: WikidataPayload, records: dict[str, dict]) -> list[Tr
         if summary:
             out.append(Translation(locale, title, summary.extract, SYNOPSIS_LICENSE, summary.url))
         else:
-            out.append(Translation(locale, title))
+            # Own text from the synopsis rewriting step (source `synopsis`): no third-party license or source link.
+            own = records.get("synopsis", {}).get(locale)
+            out.append(Translation(locale, title, own if isinstance(own, str) and own else None))
     return out
 
 
@@ -259,10 +295,14 @@ def build_item(qid: str, records: dict[str, dict]) -> NormalizedItem | None:
     if not any(t.locale == "en" for t in translations):
         return None
     ids = external_ids(wd)
+    extra = enrichment(records)
+    if "tmdb" in records and extra.id and "tmdb" not in ids:
+        # Resolved by the TMDB connector through the IMDb ID.
+        ids["tmdb"] = str(extra.id)
     return NormalizedItem(
         qid=qid,
         type=wd.type,
-        release_date=release_date(wd),
+        release_date=release_date(wd) or extra.release_date,
         external_ids=ids,
         meta=build_meta(wd, records),
         popularity=float(wd.sitelinks_count),
