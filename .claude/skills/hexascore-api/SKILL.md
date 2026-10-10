@@ -28,7 +28,11 @@ Reference: `docs/api.md`. Code: `apps/web/lib/api/` (`handler.ts`, `schemas.ts`,
    bun run openapi              # apps/web/public/openapi.json (en) + openapi.pt-BR.json + openapi.es.json
    bun run sdk:generate         # sdks/ts/src/gen (from the en openapi.json)
    bun run sdk:generate:python  # sdks/python/hexascore (needs uv)
+   (cd sdks/ts && bun run typecheck && bun test)   # SDK tests are not part of ci:local
+   (cd sdks/python && uv run pytest -q)
    ```
+   When the contract changed, bump the SDK version in `sdks/ts/package.json`, `sdks/ts/jsr.json` and
+   `sdks/python/pyproject.toml` (same value in all three). Publishing: `docs/sdk-publish-*.md`.
 6. **Docs**: update `docs/api.md`, the `/docs` page if behaviour changed (e.g. errors, limits), `/docs/changelog` entries and `CHANGELOG.md`.
 7. **Verify**: `bun run lint:ci && bun run typecheck && (cd apps/web && bun test lib/api messages) && bun run openapi:check`, then `bunx @redocly/cli@2 lint apps/web/public/openapi*.json`. `lib/api/openapi.test.ts` fails when a locale's document differs structurally from en or keeps an English description; `messages/messages.test.ts` fails on key drift.
 
