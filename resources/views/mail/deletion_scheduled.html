@@ -1,10 +1,10 @@
 {{/* layout: none */}}
 <!doctype html>
-<html lang="en">
+<html lang="{{.Locale}}">
 <body>
-	<p>Hello {{.User.Name}},</p>
-	<p>Your HexaScore account is scheduled for deletion on {{.Date.Format "2006-01-02"}}. Until then you can log in and cancel the deletion.</p>
-	<p><a href="{{.CancelLink}}">Log in to cancel</a></p>
-	<p>If this was not you, log in and cancel now, then reset your password.</p>
+	<p>{{.Text.greeting}}</p>
+	<p>{{.Text.body}}</p>
+	<p><a href="{{.CancelLink}}">{{.Text.action}}</a></p>
+	<p>{{.Text.footer}}</p>
 </body>
 </html>

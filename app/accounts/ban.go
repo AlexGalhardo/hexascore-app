@@ -280,6 +280,6 @@ func (a *Accounts) ResetTwoFactor(ctx context.Context, email, reason string) err
 
 	return a.Mailer.SendLater(ctx, mail.TwoFactorReset{
 		User: u, ResetLink: a.URL + "/recover-password",
-		Subject: a.T(ctx, "auth.mail.two_factor_reset_subject"),
+		Strings: a.mailStrings(ctx, u, "two_factor_reset", nil),
 	})
 }

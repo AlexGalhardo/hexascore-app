@@ -599,7 +599,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.C.5 Mail and bot protection
 
-- [ ] **P1.C.5.1** Add the localised account mail templates and send queued mail with the locale carried in the job payload.
+- [x] **P1.C.5.1** Add the localised account mail templates and send queued mail with the locale carried in the job payload.
   - Files/modules: `resources/views/mail/{password_changed,two_factor_changed,deletion_scheduled,account_anonymized}.html`, `app/mail/locale.go`, `lang/*.json` (mail keys), `tests/mail_test.go`
   - Refs: SDD 03 §6.5; open-issues 03-8; VF-013; <https://vukem.dev/docs/digging-deeper/mail>
   - Depends on: P1.C.2.2, P1.C.3.2

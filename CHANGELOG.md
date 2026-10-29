@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **auth:** Localised account mails (en, pt-BR, es) rendered from the locale saved on the user instead of the request, so queued mail outside a request keeps the user's language (VF-013 workaround); new `password_changed` and `two_factor_changed` notices sent on password reset and on 2FA enable, disable and recovery-code use; `es` auth message catalogue.
 - **ui:** App shell: skip link, navigation with locale and theme switchers, footer, flash toasts, SEO head (canonical, hreflang, robots, Open Graph, JSON-LD), Base UI `Dialog` (`@base-ui/react` 1.9.0) and `CoverThumb`; unmatched pages render the `Error` page with `noindex`.
 - **search:** `/search`, `/search/suggest` and `POST /search/events` with a 120 s/300 s result cache, ETag/304 on JSON, the legacy `/api/search/suggest` 308 redirect, `search_events` (redacted queries) and the daily `search:purge` (30 days).
 

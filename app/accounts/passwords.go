@@ -55,7 +55,7 @@ func (a *Accounts) SendResetLink(ctx context.Context, email string) error {
 	link := a.URL + "/reset-password/" + token + "?email=" + url.QueryEscape(email)
 
 	return a.Mailer.SendLater(ctx, mail.ResetPassword{
-		User: u, Link: link, Subject: a.T(ctx, "auth.mail.reset_subject"),
+		User: u, Link: link, Strings: a.mailStrings(ctx, u, "reset", nil),
 	})
 }
 
@@ -114,7 +114,12 @@ func (a *Accounts) ResetPassword(ctx context.Context, email, token, password str
 	}
 
 	// After the commit: the session store may share SQLite's one writer.
-	return u, a.revokeServerSessions(ctx, u.ID, "")
+	if err := a.revokeServerSessions(ctx, u.ID, ""); err != nil {
+		return u, err
+	}
+	a.sendPasswordChanged(ctx, u.ID)
+
+	return u, nil
 }
 
 func digest(token string) string {
