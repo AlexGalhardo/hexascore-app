@@ -267,3 +267,20 @@ Acceptance (2026-10-29):
 - Final run: `bunx lhci autorun` -> `All results processed!`, `Done running autorun.`, exit 0, 78 s for 3 runs after the container is up. Per run (LCP ms / TBT ms / CLS / script bytes): 1367 / 0 / 0 / 115,585; 1373 / 11 / 0 / 115,585; 1380 / 0 / 0 / 115,585. Performance score 1.
 
 Sizing for P1.I.5.1: about 25 s per run, so ~80 s for 3 runs of one URL, plus image build (68 s cold in this run) and container start (~6 s). The page measured is the starter Home, not an item page: budgets on the real item page (images, fonts) are untested.
+
+## P0.F.7.2 First-party client, typed routes and legacy SDK generators
+
+Verdict: works for the first-party client and routes; the legacy SDK suites need a decision on operation names (below).
+
+Spike branch `agent/senior/P0.F.7.2` (on spike main with P0.F.7.1). `app codegen:client -prefix /app/v1 -o packages/app-client/src/api.ts` and `app codegen:routes -o resources/js/routes.ts` both exit 0. `packages/app-client` has a `package.json` (private `@hexascore/app-client`) and a strict `tsconfig.json`. `codegen:types` (SDD 09 section 6.1) was not run: `[NOT IN VUKEM DOCS]` on the reference-runtime page; the `codegen:client` output already types props-shaped DTOs (`Item`, `Problem`), but Inertia page props are not covered by any generator.
+
+Acceptance (2026-10-29):
+
+- `bunx tsc --noEmit -p packages/app-client` -> exit 0, no errors; `bun run typecheck` (root, includes `resources/js/routes.ts`) -> exit 0.
+- `routes.ts` lists named routes with method and path (`"app.v1.getAppItem": { method: "GET", path: "/app/v1/{type}/{id}" }`), including page routes.
+- Legacy generators on temporary copies of `legacy/sdks/ts` and `legacy/sdks/python` (legacy untouched; copies in the session scratchpad, input pointed at `openapi/api-v1.json`): `@hey-api/openapi-ts` 0.99.0 `bun run sdk:generate` -> exit 0, `sdk.gen.ts` exports `ping` and `getItem`; `tsc --noEmit` passes. `openapi-python-client` 0.29.1 (installed with pip in a venv because `uv` is not on this machine; `uvx ruff` hook replaced by `ruff` 0.16.10) -> client generated with a warning for `ping` (`*/*` response).
+- Legacy test suites fail as predicted: `bun test` -> `SyntaxError: Export named 'getGame' not found`; `pytest` -> `ModuleNotFoundError: No module named 'hexascore.api.games'`. Cause: the legacy contract names operations per type (`getGame`, `listGames`, `getBook`, `listBookGenres`, tags per type) while SDD 05 section 6.2 defines `getItem` and `listItems` over `/{type}`.
+
+Decision needed (for the orchestrator): keep the legacy SDK surface by registering per-type typed routes (`GET /api/v1/games/{id}` named `getGame`, literal beats `{type}` in the mux) or accept a breaking SDK rename at v2 of the packages. Parity (D-20) points to the first.
+
+Limits: only two public operations exist in the spike document, so the SDK regeneration is not a full compatibility check; response properties are all optional in generated types (VF-NEW-P0.F.7.2); the Python run used pip, not `uvx`.
