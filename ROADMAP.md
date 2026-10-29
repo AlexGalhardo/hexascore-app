@@ -929,7 +929,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test ./app/http/... -run 'TestInertiaPages/Home'` → component `Home/Index`, `sections` has four entries, anonymous and logged in
   - Notes: the `trending` props of SDD 09 depend on SDD 08 trending (P6.C). Phase 1 keeps legacy parity with section highlights computed by the catalogue read model; the trending prop is added in P6.C. Public SEO props are eager, not `Defer` (08-8).
 
-- [ ] **P1.G.2.2** Build `Catalog/Index` listings with filters, facets and `Scroll` infinite pages.
+- [x] **P1.G.2.2** Build `Catalog/Index` listings with filters, facets and `Scroll` infinite pages.
   - Files/modules: `app/http/controllers/catalog_controller.go`, `resources/js/pages/Catalog/Index.tsx`, `resources/js/components/catalog/{Filters,ItemCard}.tsx`
   - Refs: SDD 09 §6.2, §7.3; SDD 01 §6.2; legacy `app/[locale]/[section]/page.tsx`, `lib/page-window.ts`
   - Depends on: P1.G.2.1, P1.B.2.2
@@ -961,7 +961,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.G.3 Search, library and account pages
 
-- [ ] **P1.G.3.1** Build the `Search/Index` page and the header suggest combobox.
+- [x] **P1.G.3.1** Build the `Search/Index` page and the header suggest combobox.
   - Files/modules: `resources/js/pages/Search/Index.tsx`, `resources/js/components/search/{SuggestBox,ResultGroup}.tsx`
   - Refs: SDD 07 §6, §7.7; SDD 09 §6.2, §7.6; legacy `app/[locale]/search/page.tsx`, `qa/e2e/specs/search.spec.ts`
   - Depends on: P1.G.1.1, P1.E.3.1
