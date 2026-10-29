@@ -55,7 +55,7 @@ VALUES ($1, 'game', $2, $3, $4, '2020-05-01', $5, $6)`,
 		HasProp("sections.0.topRated", 1).
 		HasProp("sections.0.newest", 2).
 		PropEquals("sections.0.topRated.0.title", "Game 0").
-		PropEquals("sections.0.topRated.0.score", 87.3).
+		PropEquals("sections.0.topRated.0.score", 8.7).
 		PropEquals("sections.0.mostRated.0.ratingCount", 9).
 		PropEquals("sections.0.newest.0.score", nil)
 	page.HasProp("sections.1.topRated", 0)

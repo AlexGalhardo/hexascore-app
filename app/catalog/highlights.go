@@ -56,7 +56,7 @@ func Highlights(ctx context.Context, db Querier, typ, locale string) (SectionHig
 		q := `SELECT i.id, i.type, i.slug,
   coalesce(t.title, te.title, i.original_title, i.slug),
   extract(year FROM i.release_date)::int,
-  CASE WHEN ` + visibleScore + ` THEN round(i.score, 1)::float8 END,
+  ` + starsScore + `,
   i.rating_count
 FROM items i
 LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $2
