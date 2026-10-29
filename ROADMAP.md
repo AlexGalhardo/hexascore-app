@@ -72,7 +72,7 @@ Microtasks for each group are in the phase sections below.
 
 Goal: prove the ten riskiest vukem capabilities on a throwaway app before the real repository exists, and turn every related `vukem-feedback.md` entry into "works", "workaround" or "blocked". The spike app lives in the sibling folder `C:\dev\hexascore-app\hexascore-spike` (never committed, deleted after P0.F.11.1); only `docs/spike-report.md` and `vukem-feedback.md` changes land in this repository. Each microtask appends its findings (commands run, decisive output, verdict) to a scratch section of `docs/spike-report.md` so P0.F.11.1 only consolidates.
 
-vukem facts cited below come from https://vukem.dev/docs/cli/reference-new, `/docs/cli/reference-install`, `/docs/cli/reference-runtime`, `/docs/starters`, `/docs/frontend/inertia`, `/docs/security/authentication`, `/docs/digging-deeper/billing`, `/docs/rest-apis/openapi`, `/docs/rest-apis/client-generation`, `/docs/database/migrations` and `/docs/testing/overview` (read 2026-10-28).
+vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/docs/cli/reference-install`, `/docs/cli/reference-runtime`, `/docs/starters`, `/docs/frontend/inertia`, `/docs/security/authentication`, `/docs/digging-deeper/billing`, `/docs/rest-apis/openapi`, `/docs/rest-apis/client-generation`, `/docs/database/migrations` and `/docs/testing/overview` (read 2026-10-28).
 
 ### P0.F Framework spike
 
@@ -80,7 +80,7 @@ vukem facts cited below come from https://vukem.dev/docs/cli/reference-new, `/do
 
 - [ ] **P0.F.1.1** Create the throwaway Inertia React app on Postgres and run the auth scaffold with Google and 2FA, recording the generated tables, columns, pages, routes and session env names.
   - Files/modules: `hexascore-spike/` (via `vukem new hexascore-spike --inertia react --pm bun -framework ../vukem`), `bootstrap/app.go` (Postgres driver), `docker-compose.yml` with `postgres:18.6-alpine3.24`, `docs/spike-report.md` (section "Auth scaffold")
-  - Refs: SDD 03 §5, §6.1, §11 issues 7 and 10; SDD 11 §7.7; ADR 0008; https://vukem.dev/docs/starters "Inertia (React, Vue, Svelte)"; https://vukem.dev/docs/cli/reference-install "`vukem install:auth`"
+  - Refs: SDD 03 §5, §6.1, §11 issues 7 and 10; SDD 11 §7.7; ADR 0008; <https://vukem.dev/docs/starters> "Inertia (React, Vue, Svelte)"; <https://vukem.dev/docs/cli/reference-install> "`vukem install:auth`"
   - Depends on: —
   - Model: Sonnet
   - Acceptance:
@@ -101,7 +101,7 @@ vukem facts cited below come from https://vukem.dev/docs/cli/reference-new, `/do
 
 - [ ] **P0.F.1.3** Prove a compatibility hasher that verifies Better Auth scrypt hashes and rehashes to argon2id on login.
   - Files/modules: spike `app/accounts/compat_hasher.go`, `app/accounts/compat_hasher_test.go`, user model wiring for `NeedsRehash` and `PasswordUpdater`
-  - Refs: SDD 03 §7.2, §9; ADR 0008; https://vukem.dev/docs/security/authentication "The idea" (hasher, optional interfaces)
+  - Refs: SDD 03 §7.2, §9; ADR 0008; <https://vukem.dev/docs/security/authentication> "The idea" (hasher, optional interfaces)
   - Depends on: P0.F.1.1, P0.F.1.2
   - Model: Opus
   - Acceptance:
@@ -112,7 +112,7 @@ vukem facts cited below come from https://vukem.dev/docs/cli/reference-new, `/do
 
 - [ ] **P0.F.2.1** Enable Inertia SSR with a Vite SSR bundle, a failure counter and an `ssr` health check.
   - Files/modules: spike `bootstrap/app.go` (`inertia.SSRConfig{Bundle: "bootstrap/ssr/ssr.js", OnFailure: ...}`), `resources/js/ssr.tsx`, `package.json` script `build:ssr` (`vite build --ssr`)
-  - Refs: SDD 09 §6.1, §9; ADR 0004; VF-002, VF-027; https://vukem.dev/docs/frontend/inertia "Server-side rendering"; https://vukem.dev/docs/cli/reference-runtime "`vukem ssr:start` and `vukem ssr:check`"
+  - Refs: SDD 09 §6.1, §9; ADR 0004; VF-002, VF-027; <https://vukem.dev/docs/frontend/inertia> "Server-side rendering"; <https://vukem.dev/docs/cli/reference-runtime> "`vukem ssr:start` and `vukem ssr:check`"
   - Depends on: P0.F.1.1
   - Model: Opus
   - Acceptance:
@@ -134,7 +134,7 @@ vukem facts cited below come from https://vukem.dev/docs/cli/reference-new, `/do
 
 - [ ] **P0.F.2.3** Prove URL-prefix locales, the i18n `Once` prop and the theme cookie under SSR.
   - Files/modules: spike `app/http/middleware/locale_prefix.go`, `resources/views/app.html` (theme view function), `lang/en.json`, `lang/pt-BR.json`
-  - Refs: SDD 09 §6.1, §7.1; open-issues 09-1, 09-5, 09-6; VF-024, VF-028; https://vukem.dev/docs/frontend/inertia-i18n "Testing"
+  - Refs: SDD 09 §6.1, §7.1; open-issues 09-1, 09-5, 09-6; VF-024, VF-028; <https://vukem.dev/docs/frontend/inertia-i18n> "Testing"
   - Depends on: P0.F.2.1
   - Model: Sonnet
   - Acceptance:
@@ -159,7 +159,7 @@ vukem facts cited below come from https://vukem.dev/docs/cli/reference-new, `/do
 
 - [ ] **P0.F.4.1** Serve `api.<host>/v1/*` from the `/api/v1` route group with a host-matching middleware and set the OpenAPI `servers` entry.
   - Files/modules: spike `app/http/middleware/api_host.go`, `api_host_test.go`, `routes/api.go`
-  - Refs: SDD 05 §6.1; open-issues 05-1; VF-015; https://vukem.dev/docs/digging-deeper/billing "Routes" (`r.UseServer` example)
+  - Refs: SDD 05 §6.1; open-issues 05-1; VF-015; <https://vukem.dev/docs/digging-deeper/billing> "Routes" (`r.UseServer` example)
   - Depends on: P0.F.1.1
   - Model: Sonnet
   - Acceptance:
@@ -172,7 +172,7 @@ vukem facts cited below come from https://vukem.dev/docs/cli/reference-new, `/do
 
 - [ ] **P0.F.5.1** Prove raw `jsonb`, `text` + `CHECK` enums and a generated column through migrations and the ORM.
   - Files/modules: spike `database/migrations/*_create_items_table.go`, `*_create_ratings_table.go`, `tests/orm_generated_test.go`
-  - Refs: SDD 01 §5.2; SDD 02 §5; open-issues 01-5, 02-5; VF-006, VF-009; https://vukem.dev/docs/database/migrations "Creating migrations", "Running migrations"
+  - Refs: SDD 01 §5.2; SDD 02 §5; open-issues 01-5, 02-5; VF-006, VF-009; <https://vukem.dev/docs/database/migrations> "Creating migrations", "Running migrations"
   - Depends on: P0.F.1.1
   - Model: Sonnet
   - Acceptance:
@@ -194,7 +194,7 @@ vukem facts cited below come from https://vukem.dev/docs/cli/reference-new, `/do
 
 - [ ] **P0.F.6.1** Run database-driver queue workers and the scheduler inside `serve`, with per-family semaphores, `WithoutOverlapping` and jobs that survive a restart mid-run.
   - Files/modules: spike `app/jobs/recompute.go`, `app/jobs/semaphore.go`, `app/jobs/counter.go`, `routes/schedule.go`, `.env` (`QUEUE_CONNECTION=database`, `QUEUE_NAMES`, `QUEUE_CONCURRENCY`, `SCHEDULE_TIMEZONE=America/Sao_Paulo`)
-  - Refs: SDD 02 §6 (jobs); SDD 11 §6.1; ADR 0007; open-issues 06-5, 08-10, 11-7; VF-018, VF-021; https://vukem.dev/docs/digging-deeper/queue "Inside serve"; https://vukem.dev/docs/digging-deeper/scheduler "Inside serve (default)"
+  - Refs: SDD 02 §6 (jobs); SDD 11 §6.1; ADR 0007; open-issues 06-5, 08-10, 11-7; VF-018, VF-021; <https://vukem.dev/docs/digging-deeper/queue> "Inside serve"; <https://vukem.dev/docs/digging-deeper/scheduler> "Inside serve (default)"
   - Depends on: P0.F.5.1
   - Model: Opus
   - Acceptance:
@@ -207,7 +207,7 @@ vukem facts cited below come from https://vukem.dev/docs/cli/reference-new, `/do
 
 - [ ] **P0.F.7.1** Export two OpenAPI 3.1 documents by prefix, with RFC 9457 problems carrying kebab-case `code` extension members.
   - Files/modules: spike `routes/api.go`, `routes/app_api.go` (typed handlers via `api.Register`), `app/http/problems/problem.go`, `openapi/api-v1.json`, `openapi/app-v1.json`
-  - Refs: SDD 05 §6.2, §6.5, §9; SDD README "Problem codes", "JSON field names"; open-issues 05-6, 05-7; VF-014, VF-016; https://vukem.dev/docs/rest-apis/openapi; https://vukem.dev/docs/cli/reference-runtime "`vukem openapi:export`"
+  - Refs: SDD 05 §6.2, §6.5, §9; SDD README "Problem codes", "JSON field names"; open-issues 05-6, 05-7; VF-014, VF-016; <https://vukem.dev/docs/rest-apis/openapi>; <https://vukem.dev/docs/cli/reference-runtime> "`vukem openapi:export`"
   - Depends on: P0.F.4.1
   - Model: Opus
   - Acceptance:
@@ -218,7 +218,7 @@ vukem facts cited below come from https://vukem.dev/docs/cli/reference-new, `/do
 
 - [ ] **P0.F.7.2** Generate the first-party TypeScript client and typed routes, and run the legacy SDK generators against the new document.
   - Files/modules: spike `packages/app-client/src/api.ts`, `resources/js/routes.ts`, temporary copies of `legacy/sdks/ts` and `legacy/sdks/python`
-  - Refs: SDD 05 §6.5; SDD 09 §6.1; ADR 0009; https://vukem.dev/docs/cli/reference-runtime "`vukem codegen:client`", "`vukem codegen:routes`"; https://vukem.dev/docs/rest-apis/client-generation
+  - Refs: SDD 05 §6.5; SDD 09 §6.1; ADR 0009; <https://vukem.dev/docs/cli/reference-runtime> "`vukem codegen:client`", "`vukem codegen:routes`"; <https://vukem.dev/docs/rest-apis/client-generation>
   - Depends on: P0.F.7.1
   - Model: Sonnet
   - Acceptance:
@@ -231,7 +231,7 @@ vukem facts cited below come from https://vukem.dev/docs/cli/reference-new, `/do
 
 - [ ] **P0.F.8.1** Run the billing scaffold, rename plans to `pro`/`business` with per-currency prices, and pass the fake-Stripe tests.
   - Files/modules: spike `config/billing.go`, `routes/billing.go`, `tests/billing_test.go`, `.env.example` (`STRIPE_PRICE_PRO`, `STRIPE_PRICE_BUSINESS`)
-  - Refs: SDD 05 §6.3, §7.5, §9; ADR 0015; D-14; https://vukem.dev/docs/cli/reference-install "`vukem install:billing`"; https://vukem.dev/docs/digging-deeper/billing "Configuration", "Testing"
+  - Refs: SDD 05 §6.3, §7.5, §9; ADR 0015; D-14; <https://vukem.dev/docs/cli/reference-install> "`vukem install:billing`"; <https://vukem.dev/docs/digging-deeper/billing> "Configuration", "Testing"
   - Depends on: P0.F.1.1
   - Model: Sonnet
   - Acceptance:
@@ -243,7 +243,7 @@ vukem facts cited below come from https://vukem.dev/docs/cli/reference-new, `/do
 
 - [ ] **P0.F.9.1** Write, read, presign and serve objects on an S3-compatible disk (RustFS locally) and write a queued export ZIP into the bucket.
   - Files/modules: spike `config/storage.go`, `app/covers/serve.go`, `app/exports/zip_job.go`, `docker-compose.yml` (`rustfs/rustfs:1.0.2`)
-  - Refs: SDD 11 §5 (bucket prefixes), §7.7; SDD 14 §7.4; SDD 05 §6.2 (`getExport` presign); open-issues 06-4, 11-1, 11-2, 14-6; VF-029; https://vukem.dev/docs/digging-deeper/storage
+  - Refs: SDD 11 §5 (bucket prefixes), §7.7; SDD 14 §7.4; SDD 05 §6.2 (`getExport` presign); open-issues 06-4, 11-1, 11-2, 14-6; VF-029; <https://vukem.dev/docs/digging-deeper/storage>
   - Depends on: P0.F.6.1
   - Model: Sonnet
   - Acceptance:
@@ -291,7 +291,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.A.1.1** Scaffold the real application from the Inertia React starter with bun and the pinned vukem module, on Postgres.
   - Files/modules: `go.mod` (`github.com/AlexGalhardo/vukem` exact version, no `replace`), `bootstrap/app.go`, `cmd/app/`, `resources/js/`, `resources/views/app.html`, `package.json` (`packageManager` bun), `.env.example`, `Dockerfile`, `.gitignore` (`go.work`, `.env`)
-  - Refs: SDD 09 §7.10; SDD 11 §6.3, §7.7; ADR 0001, 0004; https://vukem.dev/docs/cli/reference-new "`vukem new`"; https://vukem.dev/docs/starters "Inertia (React, Vue, Svelte)", "What every starter shares"
+  - Refs: SDD 09 §7.10; SDD 11 §6.3, §7.7; ADR 0001, 0004; <https://vukem.dev/docs/cli/reference-new> "`vukem new`"; <https://vukem.dev/docs/starters> "Inertia (React, Vue, Svelte)", "What every starter shares"
   - Depends on: P0.F.11.1
   - Model: Sonnet
   - Acceptance:
@@ -302,7 +302,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.A.1.2** Add the local stack (Postgres 18.6, RustFS) and the Windows/Unix setup scripts.
   - Files/modules: `docker-compose.yml`, `setups/setup-windows.ps1`, `setups/setup-unix.sh`, `.env.example` (`DATABASE_URL`, `TEST_DATABASE_URL`, storage keys), `AGENTS.md` commands table
-  - Refs: SDD 11 §5, §7.7; `legacy/setups/`; https://vukem.dev/docs/testing/overview "Testing against PostgreSQL"
+  - Refs: SDD 11 §5, §7.7; `legacy/setups/`; <https://vukem.dev/docs/testing/overview> "Testing against PostgreSQL"
   - Depends on: P1.A.1.1
   - Model: Sonnet
   - Acceptance:
@@ -345,7 +345,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.A.3.2** Create `packages/i18n`, port the legacy catalogues to flat JSON, and serve them as the Inertia `Once` prop with the catalogue hash in the asset version.
   - Files/modules: `packages/i18n/src/flatten.ts`, `lang/en.json`, `lang/pt-BR.json`, `lang/es.json` (from `legacy/apps/web/messages/{en,pt-BR,es}/`), `bootstrap/app.go` (`inertia.Config{Version: ...}`), `app/i18n/plural_test.go`
-  - Refs: SDD 09 §6.1, §9; open-issues 02-6, 09-5; ADR 0009; https://vukem.dev/docs/frontend/inertia-i18n
+  - Refs: SDD 09 §6.1, §9; open-issues 02-6, 09-5; ADR 0009; <https://vukem.dev/docs/frontend/inertia-i18n>
   - Depends on: P1.A.1.1
   - Model: Opus
   - Acceptance:
@@ -498,7 +498,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.B.4.3** Write the `DemoCatalog` seeder and factories used by tests and local development.
   - Files/modules: `database/seeders/demo_catalog.go`, `database/factories/*.go`
-  - Refs: SDD 11 §7.7; SDD 01 §10; https://vukem.dev/docs/database/factories-seeders
+  - Refs: SDD 11 §7.7; SDD 01 §10; <https://vukem.dev/docs/database/factories-seeders>
   - Depends on: P1.B.1.3
   - Model: Sonnet
   - Acceptance:
@@ -523,7 +523,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.C.1.1** Install vukem auth with Google and 2FA in the real app and extend `users` with the SDD 03 columns plus `account_events`.
   - Files/modules: output of `vukem install:auth -social google -2fa -locales en,pt-BR,es`, `database/migrations/*_add_profile_columns_to_users_table.go`, `*_create_account_events_table.go`, `app/models/user.go`, `routes/auth.go`, `database/seeders/demo_catalog.go`, `docs/sdd/03-users-auth.md` (names recorded in P0.F.1.1)
-  - Refs: SDD 03 §5, §6.1, §9; ADR 0008; D-05; open-issues 03-7, 03-10; https://vukem.dev/docs/cli/reference-install "`vukem install:auth`"
+  - Refs: SDD 03 §5, §6.1, §9; ADR 0008; D-05; open-issues 03-7, 03-10; <https://vukem.dev/docs/cli/reference-install> "`vukem install:auth`"
   - Depends on: P1.A.5.1
   - Model: Opus
   - Acceptance:
@@ -567,7 +567,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.C.3.1** Install the admin panel, define the admin gate, add the `users` resource with ban/unban (replaces `banUser`) and the admin CLI commands.
   - Files/modules: `vukem install:admin` output, `app/admin/admin.go` (gate), `app/admin/users_resource.go`, `app/console/{admin_grant,admin_revoke,user_reset_2fa}.go`, `app/accounts/ban.go`, `tests/admin_users_test.go`
-  - Refs: SDD 03 §6.3, §9; open-issues 02-8, 03-6; VF-010, VF-012; legacy `actions/admin.ts` (`banUser`), `app/[locale]/admin/page.tsx`; https://vukem.dev/docs/starters "Add-ons" (`install:admin`)
+  - Refs: SDD 03 §6.3, §9; open-issues 02-8, 03-6; VF-010, VF-012; legacy `actions/admin.ts` (`banUser`), `app/[locale]/admin/page.tsx`; <https://vukem.dev/docs/starters> "Add-ons" (`install:admin`)
   - Depends on: P1.C.1.1
   - Model: Opus
   - Acceptance:
@@ -589,7 +589,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.C.4.1** Implement `/app/v1/tokens` (password and Google ID token), rotation, listing and revocation with the six abilities.
   - Files/modules: `app/http/controllers/appapi/tokens_controller.go`, `app/accounts/app_tokens.go`, `routes/app_api.go`, `tests/app_tokens_test.go`
-  - Refs: SDD 03 §6.2, §7.4, §9; SDD 05 §6.4; SDD README "Access-token abilities"; A-01; ADR 0009; https://vukem.dev/docs/security/api-tokens
+  - Refs: SDD 03 §6.2, §7.4, §9; SDD 05 §6.4; SDD README "Access-token abilities"; A-01; ADR 0009; <https://vukem.dev/docs/security/api-tokens>
   - Depends on: P1.C.3.1
   - Model: Opus
   - Acceptance:
@@ -601,7 +601,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.C.5.1** Add the localised account mail templates and send queued mail with the locale carried in the job payload.
   - Files/modules: `resources/views/mail/{password_changed,two_factor_changed,deletion_scheduled,account_anonymized}.html`, `app/mail/locale.go`, `lang/*.json` (mail keys), `tests/mail_test.go`
-  - Refs: SDD 03 §6.5; open-issues 03-8; VF-013; https://vukem.dev/docs/digging-deeper/mail
+  - Refs: SDD 03 §6.5; open-issues 03-8; VF-013; <https://vukem.dev/docs/digging-deeper/mail>
   - Depends on: P1.C.2.2, P1.C.3.2
   - Model: Sonnet
   - Acceptance:
@@ -610,7 +610,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.C.5.2** Protect login, signup, recover, contact and token routes with the proof-of-work challenge, honeypot fields and rate limits.
   - Files/modules: `app/security/pow.go`, `app/security/pow_test.go`, `app/http/middleware/challenge.go`, `resources/js/lib/pow-worker.ts`
-  - Refs: SDD 03 §7.3, §9; ADR 0016; open-issues 03-4; VF-003; legacy `lib/bot.ts`, `lib/rate-limit.ts`; https://vukem.dev/docs/security/rate-limiting
+  - Refs: SDD 03 §7.3, §9; ADR 0016; open-issues 03-4; VF-003; legacy `lib/bot.ts`, `lib/rate-limit.ts`; <https://vukem.dev/docs/security/rate-limiting>
   - Depends on: P1.C.2.1
   - Model: Opus
   - Acceptance:
@@ -670,7 +670,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.D.2.2** Prove concurrent writers and the nightly recompute never diverge, and measure hot-item recompute latency.
   - Files/modules: `tests/scoring/concurrent_test.go`, `qa/k6/rating-hot-item.js`
-  - Refs: SDD 02 §4 (NFR-02-1), §9, §10; open-issues 02-3; https://vukem.dev/docs/testing/overview "Testing against PostgreSQL"
+  - Refs: SDD 02 §4 (NFR-02-1), §9, §10; open-issues 02-3; <https://vukem.dev/docs/testing/overview> "Testing against PostgreSQL"
   - Depends on: P1.D.2.1
   - Model: Opus
   - Acceptance:
@@ -698,7 +698,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
   - Acceptance:
     - `go test -tags=integration ./tests/scoring -run 'TestBanRecompute|TestMergeMovesRatings|TestNightlyRepairsDrift'` → PASS (batches of 500 item ids ascending; drift count 0 after the nightly job)
     - `vukem schedule:list` → `RecomputeScores` daily 04:00 `America/Sao_Paulo`, `ReleaseBursts` hourly, `PruneRatingEvents` daily 04:30
-  - Notes: `schedule:list` per https://vukem.dev/docs/cli/reference-runtime "`vukem schedule:run`, `schedule:work`, `schedule:list`" (prints `TASK EXPRESSION NEXT RUN`). Entity `avg_score` (P1.B.1.2 job) now reads real scores.
+  - Notes: `schedule:list` per <https://vukem.dev/docs/cli/reference-runtime> "`vukem schedule:run`, `schedule:work`, `schedule:list`" (prints `TASK EXPRESSION NEXT RUN`). Entity `avg_score` (P1.B.1.2 job) now reads real scores.
 
 #### P1.D.4 Status, time-to-beat, widget and help page
 
@@ -820,7 +820,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.F.1.1** Migrate `lists` and `list_items`, add `ListPolicy` and the list limits, and implement create, update and delete on web and `/app/v1` (replaces `createList`, `updateList`, `deleteList`).
   - Files/modules: `database/migrations/*_create_lists_table.go`, `*_create_list_items_table.go`, `app/policies/list_policy.go` (`vukem make:policy List`), `app/library/lists.go`, `app/http/controllers/lists_controller.go`, `routes/web.go`, `routes/app_api.go`
-  - Refs: SDD 14 §5, §6.1, §6.3, §7.1, §9; open-issues 08-2; legacy `actions/lists.ts`, `lib/db/schema/social.ts`; https://vukem.dev/docs/security/authorization
+  - Refs: SDD 14 §5, §6.1, §6.3, §7.1, §9; open-issues 08-2; legacy `actions/lists.ts`, `lib/db/schema/social.ts`; <https://vukem.dev/docs/security/authorization>
   - Depends on: P1.D.5.1
   - Model: Opus
   - Acceptance:
@@ -853,7 +853,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.F.3.1** Implement the `user_notifications` inbox, `notifications.Send` with dedupe, the unread shared prop and the read routes.
   - Files/modules: `database/migrations/*_create_user_notifications_table.go`, `app/notifications/send.go`, `app/notifications/send_test.go`, `app/http/middleware/unread_notifications.go`, routes `/me/notifications`, `POST /me/notifications/{id}/read`, `POST /me/notifications/read-all`, `/app/v1/me/notifications*`
-  - Refs: SDD 14 §5, §6.2, §6.3, §6.5, §7.5, §10; open-issues 04-6, 10-1, 14-1; VF-011; https://vukem.dev/docs/frontend/inertia "Shared props"
+  - Refs: SDD 14 §5, §6.2, §6.3, §6.5, §7.5, §10; open-issues 04-6, 10-1, 14-1; VF-011; <https://vukem.dev/docs/frontend/inertia> "Shared props"
   - Depends on: P1.F.1.1
   - Model: Sonnet
   - Acceptance:
@@ -910,7 +910,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.G.1.2** Add the nonce-based CSP with `strict-dynamic` and the security headers, with `TestSecurity_*` tests and a CSP violation check.
   - Files/modules: `app/http/middleware/security_headers.go`, `app/http/middleware/security_headers_test.go`, `resources/views/app.html` (nonce meta)
-  - Refs: SDD 09 §7.8, §9; legacy `lib/security-headers.ts`, `qa/e2e/specs/headers.spec.ts`; https://vukem.dev/docs/security/security-headers
+  - Refs: SDD 09 §7.8, §9; legacy `lib/security-headers.ts`, `qa/e2e/specs/headers.spec.ts`; <https://vukem.dev/docs/security/security-headers>
   - Depends on: P1.G.1.1
   - Model: Opus
   - Acceptance:
@@ -1020,7 +1020,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.H.1.1** Migrate `api_keys`, implement the fail-closed `hx_live_` key guard and the key management page (replaces `createApiKeyAction`, `revokeApiKeyAction`).
   - Files/modules: `database/migrations/*_create_api_keys_table.go`, `app/api/keys.go`, `app/api/guard.go`, `app/http/controllers/developer/api_keys_controller.go`, `resources/js/pages/Developer/ApiKeys.tsx`, `routes/web.go`
-  - Refs: SDD 05 §5, §6.1, §7.1, §9; SDD 09 §6.2 (`/profile/api`); legacy `actions/api-keys.ts`, `app/[locale]/profile/api/page.tsx`; https://vukem.dev/docs/security/api-tokens
+  - Refs: SDD 05 §5, §6.1, §7.1, §9; SDD 09 §6.2 (`/profile/api`); legacy `actions/api-keys.ts`, `app/[locale]/profile/api/page.tsx`; <https://vukem.dev/docs/security/api-tokens>
   - Depends on: P1.G.1.1
   - Model: Opus
   - Acceptance:
@@ -1065,7 +1065,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.H.3.1** Install billing in the real app with `pro`/`business` plans in BRL/USD/EUR, the webhook events, the plan state machine and the checkout pages (replaces `startStripeCheckout`, `openBillingPortal`).
   - Files/modules: `vukem install:billing` output, `config/billing.go`, `app/billing/plan_state.go`, `app/billing/listeners.go`, `resources/js/pages/Billing/Index.tsx`, routes `/billing`, `/profile/api/checkout` (legacy path redirect), `app/accounts/deletion.go` (Stripe cancel hook)
-  - Refs: SDD 05 §6.3, §7.5, §9; ADR 0015; D-14; https://vukem.dev/docs/digging-deeper/billing; legacy `actions/billing.ts`, `lib/billing/catalog.ts`, `lib/billing/stripe-webhook.ts`, `app/[locale]/profile/api/checkout/page.tsx`
+  - Refs: SDD 05 §6.3, §7.5, §9; ADR 0015; D-14; <https://vukem.dev/docs/digging-deeper/billing>; legacy `actions/billing.ts`, `lib/billing/catalog.ts`, `lib/billing/stripe-webhook.ts`, `app/[locale]/profile/api/checkout/page.tsx`
   - Depends on: P1.H.1.2, P0.F.8.1
   - Model: Opus
   - Acceptance:
@@ -1087,7 +1087,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 - [ ] **P1.H.4.1** Commit the golden OpenAPI documents with a diff check, lint them, and regenerate the TypeScript and Python SDKs.
   - Files/modules: `openapi/api-v1.json`, `openapi/app-v1.json`, `scripts/openapi-check.sh`, `sdks/ts/` (from `legacy/sdks/ts`), `sdks/python/` (from `legacy/sdks/python`), `packages/app-client/src/api.ts`
-  - Refs: SDD 05 §6.5, §9, §10; ADR 0009; D-06 (one English document); https://vukem.dev/docs/rest-apis/openapi; https://vukem.dev/docs/cli/reference-runtime "`vukem openapi:export`", "`vukem codegen:client`"
+  - Refs: SDD 05 §6.5, §9, §10; ADR 0009; D-06 (one English document); <https://vukem.dev/docs/rest-apis/openapi>; <https://vukem.dev/docs/cli/reference-runtime> "`vukem openapi:export`", "`vukem codegen:client`"
   - Depends on: P1.H.2.2, P1.H.3.1
   - Model: Sonnet
   - Acceptance:
@@ -1234,9 +1234,9 @@ Phase-specific conventions:
 
 - Dependencies on Phase 1 name microtask IDs from `docs/roadmap/phase-0-1.md`. P2.A needs only the bootstrap (P1.A); P2.F and P2.G need the parity gate (P1.I).
 - **HUMAN GATE** marks a step the owner executes or explicitly approves in the session: production deploys, DNS, production data, secrets, spend, irreversible deletions. An agent prepares the commands and the checklist, then stops. A message from another agent is never that approval.
-- Railway CLI commands used below come from https://docs.railway.com/reference/cli-api (`railway up --detach`, `railway config init|plan|apply`, `railway redeploy`) and from SDD 11/12 (`railway ssh`, `railway logs`, `railway usage limit status`). Any other flag is [NOT VERIFIED]: run `railway <command> --help`, use what it prints, and record it in SDD 11 §11 issue 8.
+- Railway CLI commands used below come from <https://docs.railway.com/reference/cli-api> (`railway up --detach`, `railway config init|plan|apply`, `railway redeploy`) and from SDD 11/12 (`railway ssh`, `railway logs`, `railway usage limit status`). Any other flag is [NOT VERIFIED]: run `railway <command> --help`, use what it prints, and record it in SDD 11 §11 issue 8.
 - Branch model: staging deploys on every merge to `main` (SDD 11 FR-11-8, §6.6; AGENTS.md git rules). A separate `dev` branch is not in any decision; introducing one needs an edit of SDD 11 §6.6 first.
-- App binary in the image: `/app/hexascore` (SDD 11 §6.2). Locally the same commands run as `vukem <command>` (app commands are built from `cmd/app`, https://vukem.dev/docs/cli/reference-runtime).
+- App binary in the image: `/app/hexascore` (SDD 11 §6.2). Locally the same commands run as `vukem <command>` (app commands are built from `cmd/app`, <https://vukem.dev/docs/cli/reference-runtime>).
 - vukem pages read for this phase (2026-10-28): `/docs/deployment/docker-and-railway`, `/docs/deployment/single-binary`, `/docs/configuration`, `/docs/database/migrations`, `/docs/digging-deeper/opentelemetry`, `/docs/digging-deeper/telegram-logging`, `/docs/security/security-headers`, `/docs/security/rate-limiting`, `/docs/cli/reference-runtime`. Note: the health-check API (`app.AddHealthCheckTimeout`, `app.ReadyHandler()`, the `{"status","checks"}` 503 body) is now documented on `/docs/deployment/single-binary` "Health checks", so SDD 12 can cite the site instead of [SITE PAGE MISSING] (part of VF-023).
 
 ### P2.A Railway
@@ -1245,7 +1245,7 @@ Phase-specific conventions:
 
 - [ ] **P2.A.1.1** Measure latency from Brazil to the candidate Railway regions and record the region choice.
   - Files/modules: `docs/adrs/0002-railway-over-vercel.md` (addendum "Region measurement"), `scripts/infra/region-latency.sh`
-  - Refs: SDD 11 §6.1 (Region, Measurement); ADR 0002; A-03; https://docs.railway.com/reference/deployment-regions
+  - Refs: SDD 11 §6.1 (Region, Measurement); ADR 0002; A-03; <https://docs.railway.com/reference/deployment-regions>
   - Depends on: P1.A.5.1
   - Model: Sonnet
   - Acceptance:
@@ -1255,7 +1255,7 @@ Phase-specific conventions:
 
 - [ ] **P2.A.1.2** Create the Railway project on the Pro plan with environments `production` and `staging`, the `postgres` service per environment, and the spend controls.
   - Files/modules: `docs/sdd/11-infra-deploy.md` (§6.1 plan line, §11 issues 6 and 13 notes), `docs/sdd/12-observability.md` (§11 issue 4 closed: Pro, 30-day logs, monitors available)
-  - Refs: SDD 11 §5, §6.1, §6.5, FR-11-1, NFR-11-1; SDD 12 §7.5 A15, §11 issues 4 and 9; ADR 0002, 0003; D-08, D-27; https://docs.railway.com/reference/pricing/plans; https://docs.railway.com/guides/postgresql; https://docs.railway.com/pricing/cost-control
+  - Refs: SDD 11 §5, §6.1, §6.5, FR-11-1, NFR-11-1; SDD 12 §7.5 A15, §11 issues 4 and 9; ADR 0002, 0003; D-08, D-27; <https://docs.railway.com/reference/pricing/plans>; <https://docs.railway.com/guides/postgresql>; <https://docs.railway.com/pricing/cost-control>
   - Depends on: P2.A.1.1
   - Model: Sonnet
   - Acceptance:
@@ -1268,7 +1268,7 @@ Phase-specific conventions:
 
 - [ ] **P2.A.2.1** Create one private bucket per environment, store its credentials as service variables and upload the storage health sentinel.
   - Files/modules: `.env.example` (`S3_*`), `docs/sdd/11-infra-deploy.md` §6.4 (exact credential names from the Credentials tab), `app/storage/health.go` (sentinel key `health/sentinel.txt`)
-  - Refs: SDD 11 §5 (bucket prefixes), §6.1, §6.4; SDD 12 §7.1 (`storage` check); ADR 0014 (amended); https://docs.railway.com/guides/storage-buckets; https://vukem.dev/docs/digging-deeper/storage
+  - Refs: SDD 11 §5 (bucket prefixes), §6.1, §6.4; SDD 12 §7.1 (`storage` check); ADR 0014 (amended); <https://docs.railway.com/guides/storage-buckets>; <https://vukem.dev/docs/digging-deeper/storage>
   - Depends on: P2.A.1.2
   - Model: Sonnet
   - Acceptance:
@@ -1291,7 +1291,7 @@ Phase-specific conventions:
 
 - [ ] **P2.A.3.1** Turn the bootstrap Dockerfile into the production image: pinned digests, `build:ssr` stage, Node runtime for SSR, `postgresql18-client` and `cwebp`, non-root user.
   - Files/modules: `Dockerfile`, `.dockerignore`, `.buildtags`, `scripts/infra/check-image.sh`, `docs/sdd/11-infra-deploy.md` §6.3 (apk versions found)
-  - Refs: SDD 11 §6.3, §9 items 1–2, FR-11-2, NFR-11-3, NFR-11-5; ADR 0004; VF-027; https://vukem.dev/docs/deployment/docker-and-railway "What the Dockerfile does"; https://vukem.dev/docs/deployment/single-binary
+  - Refs: SDD 11 §6.3, §9 items 1–2, FR-11-2, NFR-11-3, NFR-11-5; ADR 0004; VF-027; <https://vukem.dev/docs/deployment/docker-and-railway> "What the Dockerfile does"; <https://vukem.dev/docs/deployment/single-binary>
   - Depends on: P1.A.4.2
   - Model: Opus
   - Acceptance:
@@ -1302,7 +1302,7 @@ Phase-specific conventions:
 
 - [ ] **P2.A.3.2** Harden `serve` for production: signal forwarding to the SSR child, shutdown budget, memory limits and the four readiness checks.
   - Files/modules: `app/ssr/supervisor.go`, `bootstrap/app.go` (health checks), `app/scheduler/heartbeat.go`, `tests/ready_test.go`, `.env.example` (`SHUTDOWN_TIMEOUT=30s`, `GOMEMLIMIT=900MiB`, `NODE_OPTIONS=--max-old-space-size=384`, `QUEUE_NAMES=default,ingest`, `QUEUE_CONCURRENCY=3`, `SCHEDULE_IN_SERVE=true`)
-  - Refs: SDD 11 §6.3 (Process, Health, Shutdown), §6.4; SDD 12 FR-12-5, §7.1; VF-002, VF-018, VF-027; https://vukem.dev/docs/deployment/single-binary "Health checks"; https://vukem.dev/docs/cli/reference-runtime "`vukem ssr:start` and `vukem ssr:check`"
+  - Refs: SDD 11 §6.3 (Process, Health, Shutdown), §6.4; SDD 12 FR-12-5, §7.1; VF-002, VF-018, VF-027; <https://vukem.dev/docs/deployment/single-binary> "Health checks"; <https://vukem.dev/docs/cli/reference-runtime> "`vukem ssr:start` and `vukem ssr:check`"
   - Depends on: P2.A.3.1, P2.A.2.1
   - Model: Opus
   - Acceptance:
@@ -1315,7 +1315,7 @@ Phase-specific conventions:
 
 - [ ] **P2.A.4.1** Commit `.railway/railway.ts` for both environments and the full variable table, and set the service settings IaC cannot express.
   - Files/modules: `.railway/railway.ts`, `.env.example` (every key of SDD 11 §6.4, empty secrets), `docs/sdd/11-infra-deploy.md` §6.2, §6.4, §11 issue 8
-  - Refs: SDD 11 §6.2, §6.4, FR-11-3; VF-026; https://vukem.dev/docs/deployment/docker-and-railway "Config as Code", "Start commands replace the entrypoint", "Trusted proxies on Railway"; https://docs.railway.com/reference/config-as-code; https://docs.railway.com/reference/cli-api "Infrastructure as Code"
+  - Refs: SDD 11 §6.2, §6.4, FR-11-3; VF-026; <https://vukem.dev/docs/deployment/docker-and-railway> "Config as Code", "Start commands replace the entrypoint", "Trusted proxies on Railway"; <https://docs.railway.com/reference/config-as-code>; <https://docs.railway.com/reference/cli-api> "Infrastructure as Code"
   - Depends on: P2.A.3.2, P2.A.2.1
   - Model: Sonnet
   - Acceptance:
@@ -1326,7 +1326,7 @@ Phase-specific conventions:
 
 - [ ] **P2.A.4.2** Generate and store the per-environment secrets and keep the owner's offline copy.
   - Files/modules: `docs/runbooks/secrets.md` (inventory: name, environment, provider, rotation, where the offline copy lives; never values)
-  - Refs: SDD 11 §5 (Railway variables not backed up), §6.4, NFR-11-5; SDD 13 §7.4; SDD 12 §7.8 R9; https://vukem.dev/docs/configuration "APP_KEY"; https://vukem.dev/docs/deployment/docker-and-railway "Quick start" (`docker run --rm blog key:generate`)
+  - Refs: SDD 11 §5 (Railway variables not backed up), §6.4, NFR-11-5; SDD 13 §7.4; SDD 12 §7.8 R9; <https://vukem.dev/docs/configuration> "APP_KEY"; <https://vukem.dev/docs/deployment/docker-and-railway> "Quick start" (`docker run --rm blog key:generate`)
   - Depends on: P2.A.4.1
   - Model: Sonnet
   - Acceptance:
@@ -1336,7 +1336,7 @@ Phase-specific conventions:
 
 - [ ] **P2.A.4.3** Deploy `main` to staging through Railway's GitHub autodeploy, then verify the Postgres facts and apply the tuning.
   - Files/modules: `docs/sdd/11-infra-deploy.md` (§5 version and extensions, §9 item "SHOW server_version", §11 issue 6 closed), `docs/sdd/07-search.md` (§11 issue 9), `docs/sdd/open-issues.md` (rows 07-9, 11-6 closed)
-  - Refs: SDD 11 §5, §6.1, §9, §11 issue 6; SDD 07 §11 issue 9; https://vukem.dev/docs/deployment/docker-and-railway "Deploy on Railway", "Trusted proxies on Railway"; https://docs.railway.com/reference/healthchecks; https://docs.railway.com/reference/private-networking
+  - Refs: SDD 11 §5, §6.1, §9, §11 issue 6; SDD 07 §11 issue 9; <https://vukem.dev/docs/deployment/docker-and-railway> "Deploy on Railway", "Trusted proxies on Railway"; <https://docs.railway.com/reference/healthchecks>; <https://docs.railway.com/reference/private-networking>
   - Depends on: P2.A.4.2, P2.A.2.2
   - Model: Sonnet
   - Acceptance:
@@ -1347,7 +1347,7 @@ Phase-specific conventions:
 
 - [ ] **P2.A.4.4** Prove a staging deploy drops no requests and a failing migration aborts the deploy.
   - Files/modules: `qa/k6/deploy-switch.js`, `docs/qa/deploy-switch.md`, `docs/sdd/11-infra-deploy.md` §11 issue 8 (overlap/draining values observed)
-  - Refs: SDD 11 §7.2, §9 items 4–5, FR-11-4, NFR-11-2; https://docs.railway.com/guides/pre-deploy-command ("the deployment will not proceed")
+  - Refs: SDD 11 §7.2, §9 items 4–5, FR-11-4, NFR-11-2; <https://docs.railway.com/guides/pre-deploy-command> ("the deployment will not proceed")
   - Depends on: P2.A.4.3
   - Model: Sonnet
   - Acceptance:
@@ -1384,7 +1384,7 @@ Phase-specific conventions:
 
 - [ ] **P2.B.1.2** Add the `test` job: Go unit and integration tests on a Postgres 18.6 service, TypeScript unit tests, and the Windows setup check.
   - Files/modules: `.github/workflows/ci.yml` (`test`, `setup-windows`), `setups/setup-windows.ps1`, `setups/setup-unix.sh`
-  - Refs: SDD 11 §6.6 (`test`), §7.7, FR-11-9, §9 last item; https://vukem.dev/docs/testing/overview "Testing against PostgreSQL"
+  - Refs: SDD 11 §6.6 (`test`), §7.7, FR-11-9, §9 last item; <https://vukem.dev/docs/testing/overview> "Testing against PostgreSQL"
   - Depends on: P2.B.1.1
   - Model: Sonnet
   - Acceptance:
@@ -1404,7 +1404,7 @@ Phase-specific conventions:
 
 - [ ] **P2.B.1.4** Add the `openapi` job: export diff, Redocly lint, and Schemathesis against the built container.
   - Files/modules: `.github/workflows/ci.yml` (`openapi`), `redocly.yaml`, `qa/schemathesis/run.sh` (from P1.I.4.1)
-  - Refs: SDD 11 §6.6 (`openapi`); SDD 05 §6.5, §10; D-37; https://vukem.dev/docs/cli/reference-runtime (`openapi:export`)
+  - Refs: SDD 11 §6.6 (`openapi`); SDD 05 §6.5, §10; D-37; <https://vukem.dev/docs/cli/reference-runtime> (`openapi:export`)
   - Depends on: P2.B.1.3
   - Model: Sonnet
   - Acceptance:
@@ -1426,7 +1426,7 @@ Phase-specific conventions:
 
 - [ ] **P2.B.2.1** Gate staging on CI, add the post-deploy `smoke` job and make the PR checks required on `main`.
   - Files/modules: `.github/workflows/staging-smoke.yml`, `qa/k6/smoke.js`, `docs/runbooks/release.md` (section "Staging")
-  - Refs: SDD 11 §6.6 (`smoke`, "Staging: Railway GitHub autodeploy of `main`"), §7.1 step 1, FR-11-8; https://vukem.dev/docs/deployment/docker-and-railway "Deploy on Railway"
+  - Refs: SDD 11 §6.6 (`smoke`, "Staging: Railway GitHub autodeploy of `main`"), §7.1 step 1, FR-11-8; <https://vukem.dev/docs/deployment/docker-and-railway> "Deploy on Railway"
   - Depends on: P2.B.1.2, P2.B.1.4, P2.B.1.5
   - Model: Sonnet
   - Acceptance:
@@ -1436,7 +1436,7 @@ Phase-specific conventions:
 
 - [ ] **P2.B.2.2** Write `release.yml`: tag `v*` and `workflow_dispatch(version)` deploy production with notes taken from `CHANGELOG.md`, behind a GitHub environment approval.
   - Files/modules: `.github/workflows/release.yml`, `Taskfile.yml` (`release`), `docs/runbooks/release.md` (release, missed run, rollback by `-f version=vPREV`)
-  - Refs: SDD 11 §6.6 (`release`), §7.1, §8 ("Tag pushed without a run"); ADR 0013; D-20, D-37; https://docs.railway.com/reference/cli-api "Deployment" (`railway up --detach`)
+  - Refs: SDD 11 §6.6 (`release`), §7.1, §8 ("Tag pushed without a run"); ADR 0013; D-20, D-37; <https://docs.railway.com/reference/cli-api> "Deployment" (`railway up --detach`)
   - Depends on: P2.B.2.1
   - Model: Opus
   - Acceptance:
@@ -1447,7 +1447,7 @@ Phase-specific conventions:
 
 - [ ] **P2.B.2.3** Inject the release version into the binary and expose it on every response, in `about` and on `/up`.
   - Files/modules: `cmd/app/main.go` (`version`, `commit`), `app/http/middleware/version.go`, `app/http/middleware/version_test.go`, `Dockerfile` (`VERSION`, `COMMIT` build args)
-  - Refs: SDD 11 §6.6 (Version), §7.1 step 5, §9 item 8; SDD 12 §7.8; VF-027; https://vukem.dev/docs/deployment/single-binary
+  - Refs: SDD 11 §6.6 (Version), §7.1 step 5, §9 item 8; SDD 12 §7.8; VF-027; <https://vukem.dev/docs/deployment/single-binary>
   - Depends on: P2.B.1.3
   - Model: Sonnet
   - Acceptance:
@@ -1473,7 +1473,7 @@ Phase-specific conventions:
 
 - [ ] **P2.C.1.1** Replace the built-in request logger with the privacy-preserving JSON logger: hashed user id, truncated IP, trace id, sampling, redaction.
   - Files/modules: `app/http/middleware/request_log.go`, `app/http/middleware/request_log_test.go`, `app/logging/redact.go`, `bootstrap/app.go` (`WithLogger`), `docs/sdd/12-observability.md` §6.1
-  - Refs: SDD 12 FR-12-1, FR-12-8, §6.1, §11 issue 2; SDD 13 NFR-13-4; VF-022; https://vukem.dev/docs/digging-deeper/opentelemetry (`otel.LogHandler`); https://vukem.dev/docs/configuration (`LOG_FORMAT`, `LOG_DEDUP_WINDOW`)
+  - Refs: SDD 12 FR-12-1, FR-12-8, §6.1, §11 issue 2; SDD 13 NFR-13-4; VF-022; <https://vukem.dev/docs/digging-deeper/opentelemetry> (`otel.LogHandler`); <https://vukem.dev/docs/configuration> (`LOG_FORMAT`, `LOG_DEDUP_WINDOW`)
   - Depends on: P2.A.5.1
   - Model: Opus
   - Acceptance:
@@ -1483,7 +1483,7 @@ Phase-specific conventions:
 
 - [ ] **P2.C.1.2** Wire the Telegram channel (page chat and silent error chat), dedup, and the daily error-fingerprint digest.
   - Files/modules: `bootstrap/app.go` (handler chain), `app/errors/fingerprint.go`, `app/errors/digest.go`, migration `create_error_digest_daily`, `app/errors/digest_test.go`, `.env.example` (`TELEGRAM_*`)
-  - Refs: SDD 12 FR-12-6, §5, §7.2, §7.5 (Channels); https://vukem.dev/docs/digging-deeper/telegram-logging "Quick start"; https://vukem.dev/docs/configuration (`LOG_DEDUP_WINDOW`)
+  - Refs: SDD 12 FR-12-6, §5, §7.2, §7.5 (Channels); <https://vukem.dev/docs/digging-deeper/telegram-logging> "Quick start"; <https://vukem.dev/docs/configuration> (`LOG_DEDUP_WINDOW`)
   - Depends on: P2.C.1.1
   - Model: Sonnet
   - Acceptance:
@@ -1495,7 +1495,7 @@ Phase-specific conventions:
 
 - [ ] **P2.C.2.1** Create the Grafana Cloud stack and send traces and metrics there over OTLP, with Railway's receiver as the trace-only fallback.
   - Files/modules: `bootstrap/app.go` (`otel.New` first in `WithProviders`, `Config.Global`), `.railway/railway.ts` (`OTEL_*`), `docs/sdd/12-observability.md` §6.3, §11 issue 8 (OTLP URL, Telegram contact point, cert checks verified)
-  - Refs: SDD 12 §6.2, §6.3, §7.3, §11 issues 1 and 8; SDD 11 §6.4 (`OTEL_*`); D-35; https://vukem.dev/docs/digging-deeper/opentelemetry "Configuration", "Outbound HTTP calls", "Security"; https://vukem.dev/docs/deployment/docker-and-railway "OpenTelemetry on Railway"; https://grafana.com/pricing/
+  - Refs: SDD 12 §6.2, §6.3, §7.3, §11 issues 1 and 8; SDD 11 §6.4 (`OTEL_*`); D-35; <https://vukem.dev/docs/digging-deeper/opentelemetry> "Configuration", "Outbound HTTP calls", "Security"; <https://vukem.dev/docs/deployment/docker-and-railway> "OpenTelemetry on Railway"; <https://grafana.com/pricing/>
   - Depends on: P2.C.1.1
   - Model: Sonnet
   - Acceptance:
@@ -1505,7 +1505,7 @@ Phase-specific conventions:
 
 - [ ] **P2.C.2.2** Register the platform metrics of the SDD 12 catalogue through the global meter provider, with label caps.
   - Files/modules: `app/metrics/metrics.go`, `app/metrics/labels.go` (caps → `other`), `app/metrics/sql_gauges.go`, `app/scheduler/instrument.go` (`hexa.schedule.runs` wrapper), `tests/metrics_test.go`
-  - Refs: SDD 12 FR-12-2, FR-12-3, §6.2, NFR-12-2, §11 issues 1, 7, 10; SDD 02, 05, 07 metric rows (verify registered); VF-019, VF-021; https://vukem.dev/docs/digging-deeper/opentelemetry "Metrics", "Configuration"
+  - Refs: SDD 12 FR-12-2, FR-12-3, §6.2, NFR-12-2, §11 issues 1, 7, 10; SDD 02, 05, 07 metric rows (verify registered); VF-019, VF-021; <https://vukem.dev/docs/digging-deeper/opentelemetry> "Metrics", "Configuration"
   - Depends on: P2.C.2.1
   - Model: Sonnet
   - Acceptance:
@@ -1537,7 +1537,7 @@ Phase-specific conventions:
 
 - [ ] **P2.C.3.3** Implement the app-side alerts: SSR fallback page (A5), job failed twice (A6), quota flush errors (A10).
   - Files/modules: `bootstrap/app.go` (`SSRConfig.OnFailure`), `app/alerts/jobs.go` (`q.AddObserver`), `app/api/quota/flush.go`, `tests/alerts_test.go`
-  - Refs: SDD 12 FR-12-3, §7.2, §7.5 (A5, A6, A10), §8, §9 item 4; D-07; VF-002; https://vukem.dev/docs/frontend/inertia "Server-side rendering"; https://vukem.dev/docs/digging-deeper/telegram-logging
+  - Refs: SDD 12 FR-12-3, §7.2, §7.5 (A5, A6, A10), §8, §9 item 4; D-07; VF-002; <https://vukem.dev/docs/frontend/inertia> "Server-side rendering"; <https://vukem.dev/docs/digging-deeper/telegram-logging>
   - Depends on: P2.C.1.2, P2.C.2.2
   - Model: Sonnet
   - Acceptance:
@@ -1547,7 +1547,7 @@ Phase-specific conventions:
 
 - [ ] **P2.C.3.4** Build the A17 projected-spend alert as a daily GitHub Actions job with a calendar fallback.
   - Files/modules: `.github/workflows/projected-spend.yml`, `scripts/ops/projected-spend.ts`, `scripts/ops/projected-spend.test.ts`, `docs/runbooks/cost.md`
-  - Refs: SDD 12 FR-12-10, §7.5 A17, §7.9; SDD 11 NFR-11-1, §6.5; D-27; https://docs.railway.com/pricing/cost-control
+  - Refs: SDD 12 FR-12-10, §7.5 A17, §7.9; SDD 11 NFR-11-1, §6.5; D-27; <https://docs.railway.com/pricing/cost-control>
   - Depends on: P2.C.1.2
   - Model: Sonnet
   - Acceptance:
@@ -1579,7 +1579,7 @@ Phase-specific conventions:
 
 - [ ] **P2.C.4.2** Commit runbooks R1–R9 and the monthly cost checklist under `docs/runbooks/`, and rehearse R1 and R7 on staging.
   - Files/modules: `docs/runbooks/{ssr-crash-loop,pg-connections,ingestion-stuck,quota-drift,suggestion-backlog,disk-full,rollback,restore,leaked-secret}.md`, `docs/runbooks/cost.md`, `docs/runbooks/README.md` (index with alert → runbook map)
-  - Refs: SDD 12 §7.8, §7.9; SDD 11 §7.5; SDD 13 §7.9; https://vukem.dev/docs/cli/reference-runtime "`vukem down` and `vukem up`"; https://docs.railway.com/guides/roll-back-bad-deploy
+  - Refs: SDD 12 §7.8, §7.9; SDD 11 §7.5; SDD 13 §7.9; <https://vukem.dev/docs/cli/reference-runtime> "`vukem down` and `vukem up`"; <https://docs.railway.com/guides/roll-back-bad-deploy>
   - Depends on: P2.C.3.3
   - Model: Sonnet
   - Acceptance:
@@ -1605,7 +1605,7 @@ Phase-specific conventions:
 
 - [ ] **P2.D.1.1** Configure the web and API header sets of SDD 13 §6.2 and the CSP violation endpoint, with tests and staging checks.
   - Files/modules: `bootstrap/app.go` (`MiddlewareOptions.SecureHeaders`, `APIMiddlewareOptions.SecureHeaders`), `app/http/csp_reports.go`, `tests/security_headers_test.go`, `qa/e2e/specs/{headers,csp}.spec.ts`
-  - Refs: SDD 13 §6.1, §6.2, §7.1 (`/csp-reports` 30/min, 16 KiB), §9 items 1–2; SDD 09 §7.8; https://vukem.dev/docs/security/security-headers "Configuration", "What CSPSources refuses", "Collecting violation reports", "Common mistakes"
+  - Refs: SDD 13 §6.1, §6.2, §7.1 (`/csp-reports` 30/min, 16 KiB), §9 items 1–2; SDD 09 §7.8; <https://vukem.dev/docs/security/security-headers> "Configuration", "What CSPSources refuses", "Collecting violation reports", "Common mistakes"
   - Depends on: P2.C.5.1, P1.G.1.2
   - Model: Sonnet
   - Acceptance:
@@ -1618,7 +1618,7 @@ Phase-specific conventions:
 
 - [ ] **P2.D.2.1** Implement the full rate-limit table on the shared cache store with fail-closed wiring.
   - Files/modules: `app/http/limits/limits.go` (one named limiter per row of §7.1), `routes/*.go`, `tests/security_limits_test.go`
-  - Refs: SDD 13 FR-13-2, NFR-13-2, §7.1, §9 item 4; SDD 03 NFR-03-3; ADR 0016; https://vukem.dev/docs/security/rate-limiting "Failure behaviour", "Common mistakes"
+  - Refs: SDD 13 FR-13-2, NFR-13-2, §7.1, §9 item 4; SDD 03 NFR-03-3; ADR 0016; <https://vukem.dev/docs/security/rate-limiting> "Failure behaviour", "Common mistakes"
   - Depends on: P2.D.1.1
   - Model: Sonnet
   - Acceptance:
@@ -1629,7 +1629,7 @@ Phase-specific conventions:
 
 - [ ] **P2.D.2.2** Add the route stack inventory and the per-route body limits.
   - Files/modules: `tests/security_inventory_test.go`, `app/http/limits/body.go`, `routes/*.go`
-  - Refs: SDD 13 FR-13-1, FR-13-4, §6.1, §7.3 (body limits table), §7.0.1; https://vukem.dev/docs/security/overview
+  - Refs: SDD 13 FR-13-1, FR-13-4, §6.1, §7.3 (body limits table), §7.0.1; <https://vukem.dev/docs/security/overview>
   - Depends on: P2.D.2.1
   - Model: Sonnet
   - Acceptance:
@@ -1650,7 +1650,7 @@ Phase-specific conventions:
 
 - [ ] **P2.D.3.1** Add the admin middleware: mandatory confirmed 2FA, idle 30 min and absolute 12 h sessions, optional IP allowlist.
   - Files/modules: `app/http/middleware/admin_guard.go`, `app/http/middleware/admin_guard_test.go`, `routes/admin.go`, `.env.example` (`ADMIN_IP_ALLOWLIST`), `vukem-feedback.md` (new entry: role-scoped 2FA, session lifetime, IP allowlist)
-  - Refs: SDD 13 FR-13-5, §7.5 (Admin), §9 last item, §11 issue 7; SDD 03 §7.1; https://vukem.dev/docs/security/rate-limiting (`c.IP()` behind `TRUSTED_PROXIES`)
+  - Refs: SDD 13 FR-13-5, §7.5 (Admin), §9 last item, §11 issue 7; SDD 03 §7.1; <https://vukem.dev/docs/security/rate-limiting> (`c.IP()` behind `TRUSTED_PROXIES`)
   - Depends on: P2.D.2.2, P1.C.3.1
   - Model: Opus
   - Acceptance:
@@ -1721,7 +1721,7 @@ Phase-specific conventions:
 
 - [ ] **P2.E.1.1** Build `hexascore:predeploy`: advisory lock around the migration runner, then the concurrent index step, as the Railway pre-deploy command.
   - Files/modules: `app/console/predeploy.go`, `app/console/index_concurrently.go` (`db:index-concurrently`), `database/concurrent/` (`NNN_name.sql`), `tests/predeploy_test.go`, `docs/runbooks/migrations.md`
-  - Refs: SDD 11 §7.2, FR-11-4, §8 (long index build), §11 issues 3–4; SDD 07 §5; ADR 0014; VF-017, VF-026; https://vukem.dev/docs/database/migrations "Running migrations"; https://docs.railway.com/guides/pre-deploy-command
+  - Refs: SDD 11 §7.2, FR-11-4, §8 (long index build), §11 issues 3–4; SDD 07 §5; ADR 0014; VF-017, VF-026; <https://vukem.dev/docs/database/migrations> "Running migrations"; <https://docs.railway.com/guides/pre-deploy-command>
   - Depends on: P2.D.6.1, P1.A.4.3
   - Model: Opus
   - Acceptance:
@@ -1731,7 +1731,7 @@ Phase-specific conventions:
 
 - [ ] **P2.E.1.2** Add the CI expand/contract policy check and a down-migration round trip.
   - Files/modules: `scripts/ci/migration-policy.ts`, `scripts/ci/migration-policy.test.ts`, `.github/workflows/ci.yml` (`migrations` job), `docs/runbooks/migrations.md` (policy, contract marker)
-  - Refs: SDD 11 §7.2 (forward-only; expand → migrate → contract two releases later; `down` tested, never run in production); ADR 0014; SDD 06 §7.8 (backfill job); https://vukem.dev/docs/database/migrations "Running migrations"
+  - Refs: SDD 11 §7.2 (forward-only; expand → migrate → contract two releases later; `down` tested, never run in production); ADR 0014; SDD 06 §7.8 (backfill job); <https://vukem.dev/docs/database/migrations> "Running migrations"
   - Depends on: P2.E.1.1
   - Model: Sonnet
   - Acceptance:
@@ -1743,7 +1743,7 @@ Phase-specific conventions:
 
 - [ ] **P2.E.2.1** Implement `backup:run`: streamed `pg_dump`, client-side frame encryption, SHA-256 and multipart upload, recorded in `backup_runs`.
   - Files/modules: migration `create_backup_runs`, `app/backup/dump.go`, `app/backup/crypt.go` (4 MiB frames, `crypt.New(BACKUP_KEY)`, `Seal(frame, "backup:<key>:<n>")`), `app/backup/crypt_test.go`, `app/console/backup_run.go`
-  - Refs: SDD 11 §5 (`backup_runs`, prefixes), §7.3 steps 2–3, FR-11-5; ADR 0014 (amended); https://vukem.dev/docs/security/encryption; https://vukem.dev/docs/digging-deeper/storage
+  - Refs: SDD 11 §5 (`backup_runs`, prefixes), §7.3 steps 2–3, FR-11-5; ADR 0014 (amended); <https://vukem.dev/docs/security/encryption>; <https://vukem.dev/docs/digging-deeper/storage>
   - Depends on: P2.E.1.1
   - Model: Opus
   - Acceptance:
@@ -1753,7 +1753,7 @@ Phase-specific conventions:
 
 - [ ] **P2.E.2.2** Verify each dump, schedule the daily run, prune by retention, and copy the monthly snapshot.
   - Files/modules: `app/backup/verify.go`, `app/backup/prune.go`, `app/backup/prune_test.go`, `routes/schedule.go` (`backup.daily` 06:00 America/Sao_Paulo, `WithoutOverlapping()`), `app/metrics/backup.go`
-  - Refs: SDD 11 §7.3 steps 1, 4, 5, 7, §9 item 6; SDD 12 §6.2 (`backup.*`), §7.5 A8; ADR 0014; https://vukem.dev/docs/digging-deeper/scheduler
+  - Refs: SDD 11 §7.3 steps 1, 4, 5, 7, §9 item 6; SDD 12 §6.2 (`backup.*`), §7.5 A8; ADR 0014; <https://vukem.dev/docs/digging-deeper/scheduler>
   - Depends on: P2.E.2.1
   - Model: Sonnet
   - Acceptance:
@@ -1764,7 +1764,7 @@ Phase-specific conventions:
 
 - [ ] **P2.E.2.3** Mail the owner a 7-day signed link to the encrypted monthly dump (off-site copy).
   - Files/modules: `app/backup/offsite.go`, `resources/views/mail/backup_offsite.*`, `tests/backup_offsite_test.go`, `docs/runbooks/restore.md` (section "Off-site copy")
-  - Refs: SDD 11 §7.3 step 6, §11 issue 11; D-32; https://vukem.dev/docs/security/signed-urls
+  - Refs: SDD 11 §7.3 step 6, §11 issue 11; D-32; <https://vukem.dev/docs/security/signed-urls>
   - Depends on: P2.E.2.2
   - Model: Sonnet
   - Acceptance:
@@ -1785,7 +1785,7 @@ Phase-specific conventions:
 
 - [ ] **P2.E.3.2** Run a timed RTO game day on staging and add the migration rehearsal script.
   - Files/modules: `scripts/ops/migration-rehearsal.sh` (restore latest dump into staging, deploy candidate, record duration and lock waits), `docs/runbooks/restore.md` (timings), `docs/runbooks/migrations.md` (rehearsal section)
-  - Refs: SDD 11 §7.2 (rehearsal; > 5 s `ACCESS EXCLUSIVE` blocks the release), §7.5 (RTO steps 1–6), NFR-11-2; SDD 12 §7.8 R8; ADR 0014; https://vukem.dev/docs/cli/reference-runtime "`vukem down` and `vukem up`"
+  - Refs: SDD 11 §7.2 (rehearsal; > 5 s `ACCESS EXCLUSIVE` blocks the release), §7.5 (RTO steps 1–6), NFR-11-2; SDD 12 §7.8 R8; ADR 0014; <https://vukem.dev/docs/cli/reference-runtime> "`vukem down` and `vukem up`"
   - Depends on: P2.E.3.1
   - Model: Sonnet
   - Acceptance:
@@ -2094,7 +2094,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Acceptance:
     - `go test ./tests -run 'TestAPIEntities|TestAPIContract'` → `ok`; `/v1/people/{id}` with an organisation id → 404 `not-found`
     - `curl -si -H "Authorization: Bearer $K" -H "If-None-Match: $ETAG" http://localhost:3000/api/v1/entities/$ID` → `304`, `X-Quota-Remaining` down by 1 (FR-05-4)
-  - Notes: typed routes via `api.Register` with `Op.ValidateResponse: true` and `Op.Name` in the `api.v1.` group (https://vukem.dev/docs/rest-apis/openapi "OpenAPI"). Entity ids are UUID v7 (README convention). Relations are emitted only for rows whose `source` is allowed (SDD 01 §6.1). Do not add `/app/v1` twins here (P3.C.2.1).
+  - Notes: typed routes via `api.Register` with `Op.ValidateResponse: true` and `Op.Name` in the `api.v1.` group (<https://vukem.dev/docs/rest-apis/openapi> "OpenAPI"). Entity ids are UUID v7 (README convention). Relations are emitted only for rows whose `source` is allowed (SDD 01 §6.1). Do not add `/app/v1` twins here (P3.C.2.1).
 
 - [ ] **P3.A.1.2** Serve `listEntityItems` (`/v1/entities/{id}/items?type=&role=`) with the signed keyset cursor.
   - Files/modules: `app/api/v1/entities.go`, `app/api/cursor/cursor.go` (reuse the P1.H cursor), `tests/api_entities_test.go`
@@ -2103,7 +2103,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Model: Sonnet
   - Acceptance:
     - `go test ./tests -run 'TestAPIEntityItems|TestAPICursorTamper'` → `ok`; tampered cursor → 400 `invalid-cursor`; `limit` above plan cap → 400 naming the cap
-  - Notes: VF-005 workaround: predicate built with `WhereRaw` over `(sort column, id)` and an HMAC-signed opaque cursor; envelope `{data, meta:{next_cursor}, links:{next}}` exactly as vukem emits it (https://vukem.dev/docs/rest-apis/pagination "Envelopes"; VF-014 casing accepted). Never pass `sort` to `req.CursorPaginate` (it rejects it, "Query conventions").
+  - Notes: VF-005 workaround: predicate built with `WhereRaw` over `(sort column, id)` and an HMAC-signed opaque cursor; envelope `{data, meta:{next_cursor}, links:{next}}` exactly as vukem emits it (<https://vukem.dev/docs/rest-apis/pagination> "Envelopes"; VF-014 casing accepted). Never pass `sort` to `req.CursorPaginate` (it rejects it, "Query conventions").
 
 - [ ] **P3.A.1.3** Serve `listEditions` (`/v1/books/{id}/editions`) for book works.
   - Files/modules: `app/api/v1/editions.go`, `app/catalog/readmodel/edition.go`, `tests/api_editions_test.go`
@@ -2166,13 +2166,13 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Acceptance:
     - `go test ./tests -run 'TestAPIChanges'` → `ok`; `since` 14 days + 1 s back → 400 `changes-window-exceeded`; exactly 14 days → 200; future → 400
     - merged item appears as `deleted` with `mergedInto`
-  - Notes: cursor on `(changed_at, id)` using the P3.A.1.2 signed cursor. Schedule with the vukem scheduler (https://vukem.dev/docs/digging-deeper/scheduler); VF-021: use a cron expression if a typed helper is not documented.
+  - Notes: cursor on `(changed_at, id)` using the P3.A.1.2 signed cursor. Schedule with the vukem scheduler (<https://vukem.dev/docs/digging-deeper/scheduler>); VF-021: use a cron expression if a typed helper is not documented.
 
 #### P3.A.4 Daily ID exports
 
 - [ ] **P3.A.4.1** Add the `jobs.ExportIDs` daily job (07:00 UTC) writing gzip NDJSON per type to the bucket and deleting objects older than 90 days.
   - Files/modules: `app/jobs/export_ids.go`, `routes/schedule.go`, `tests/export_ids_test.go`
-  - Refs: SDD 05 FR-05-10, §7.3, NFR-05-6; VF-029; https://vukem.dev/docs/digging-deeper/storage "Reading and writing"
+  - Refs: SDD 05 FR-05-10, §7.3, NFR-05-6; VF-029; <https://vukem.dev/docs/digging-deeper/storage> "Reading and writing"
   - Depends on: P3.A.3.2
   - Model: Sonnet
   - Acceptance:
@@ -2182,7 +2182,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 - [ ] **P3.A.4.2** Serve `listExports` and `getExport` (`/v1/exports/{type}/{day}` → 302 to a 5-minute presigned URL) for pro and business.
   - Files/modules: `app/api/v1/exports.go`, `tests/api_exports_test.go`
-  - Refs: SDD 05 §6.2; https://vukem.dev/docs/digging-deeper/storage (`PresignGet(p, ttl)`)
+  - Refs: SDD 05 §6.2; <https://vukem.dev/docs/digging-deeper/storage> (`PresignGet(p, ttl)`)
   - Depends on: P3.A.4.1
   - Model: Sonnet
   - Acceptance:
@@ -2193,7 +2193,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 - [ ] **P3.A.5.1** Add `webhook_endpoints`/`webhook_cursor` and serve `listWebhooks`, `createWebhook` (secret shown once), `deleteWebhook` with plan caps.
   - Files/modules: `database/migrations/<ts>_create_webhook_endpoints.go`, `app/api/v1/webhooks.go`, `app/webhooks/endpoints.go`, `tests/api_webhooks_test.go`, `tests/security_webhooks_test.go`
-  - Refs: SDD 05 FR-05-11, §5, §6.2, §8, NFR-05-4; https://vukem.dev/docs/digging-deeper/webhooks "Sending webhooks"; https://vukem.dev/docs/security/building-blocks "Outgoing webhooks"
+  - Refs: SDD 05 FR-05-11, §5, §6.2, §8, NFR-05-4; <https://vukem.dev/docs/digging-deeper/webhooks> "Sending webhooks"; <https://vukem.dev/docs/security/building-blocks> "Outgoing webhooks"
   - Depends on: P3.A.3.2
   - Model: Opus
   - Acceptance:
@@ -2202,7 +2202,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 - [ ] **P3.A.5.2** Add the per-minute fan-out job: read ≤ 10,000 `api_changes` after `webhook_cursor`, coalesce per item, send `item.batch` (≤ 100 events) through `webhook.Sender` with `webhook.SQLDeliveryLog`.
   - Files/modules: `app/webhooks/fanout.go`, `app/webhooks/sender.go`, `routes/schedule.go`, `tests/webhook_delivery_test.go`
-  - Refs: SDD 05 §6.2 "Webhook batch", §7.3, FR-05-11; https://vukem.dev/docs/digging-deeper/webhooks "The delivery log"; SDD 12 §6 (`api.webhook.deliveries`)
+  - Refs: SDD 05 §6.2 "Webhook batch", §7.3, FR-05-11; <https://vukem.dev/docs/digging-deeper/webhooks> "The delivery log"; SDD 12 §6 (`api.webhook.deliveries`)
   - Depends on: P3.A.5.1
   - Model: Opus
   - Acceptance:
@@ -2212,7 +2212,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 - [ ] **P3.A.5.3** Serve `testWebhook`, prune `webhook_deliveries` older than 30 days, and emit `api.webhook.deliveries{outcome}`.
   - Files/modules: `app/api/v1/webhooks.go`, `app/jobs/prune_webhook_deliveries.go`, `app/observability/metrics.go`, `tests/api_webhooks_test.go`
-  - Refs: SDD 05 §6.2; SDD 12 §6 metrics table, §7.6 "API customers"; https://vukem.dev/docs/digging-deeper/webhooks "The delivery log" (table grows forever)
+  - Refs: SDD 05 §6.2; SDD 12 §6 metrics table, §7.6 "API customers"; <https://vukem.dev/docs/digging-deeper/webhooks> "The delivery log" (table grows forever)
   - Depends on: P3.A.5.2
   - Model: Sonnet
   - Acceptance:
@@ -2223,7 +2223,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 - [ ] **P3.A.6.1** Wire `api.Deprecate` for deprecated operations and document the policy (≥ 6 months before `Sunset`, changelog entry, mail to key owners).
   - Files/modules: `app/api/v1/deprecation.go`, `tests/api_deprecation_test.go`, `docs/runbooks/api-deprecation.md`
-  - Refs: SDD 05 §6.1 headers, §6.5 "Versioning"; https://vukem.dev/docs/rest-apis/overview "Versioning" (`Deprecation: @<unix>`, `Sunset`, `Link`)
+  - Refs: SDD 05 §6.1 headers, §6.5 "Versioning"; <https://vukem.dev/docs/rest-apis/overview> "Versioning" (`Deprecation: @<unix>`, `Sunset`, `Link`)
   - Depends on: P3.A.5.3
   - Model: Sonnet
   - Acceptance:
@@ -2343,7 +2343,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 - [ ] **P3.C.1.1** Build the `/app/v1` stack: `hx_app_` token guard, `NotBanned`, `auth.Verified`, `auth.Ability`, per-token limits, `Idempotency-Key` on writes, `X-App-Version`/426.
   - Files/modules: `routes/app_v1.go`, `app/appapi/middleware.go`, `app/appapi/version.go`, `tests/app_stack_test.go`, `tests/security_app_test.go`
-  - Refs: SDD 05 §6.4, FR-05-13, FR-05-14; SDD 03 §6.2; README abilities convention; https://vukem.dev/docs/security/api-tokens "Routing"; https://vukem.dev/docs/rest-apis/idempotency
+  - Refs: SDD 05 §6.4, FR-05-13, FR-05-14; SDD 03 §6.2; README abilities convention; <https://vukem.dev/docs/security/api-tokens> "Routing"; <https://vukem.dev/docs/rest-apis/idempotency>
   - Depends on: P2.G
   - Model: Opus
   - Acceptance:
@@ -2433,7 +2433,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 - [ ] **P3.C.5.1** Export `openapi/app-v1.json`, generate the private `@hexascore/app-client` package, and gate it in CI with Schemathesis and k6.
   - Files/modules: `openapi/app-v1.json`, `packages/app-client/package.json`, `packages/app-client/src/api.ts` (generated), `packages/app-client/src/index.test.ts`, `qa/k6/app-v1.js`, `.github/workflows/ci.yml`
-  - Refs: SDD 05 §6.5, FR-05-15, §9; ADR 0009 decision 1; https://vukem.dev/docs/rest-apis/client-generation "The command"
+  - Refs: SDD 05 §6.5, FR-05-15, §9; ADR 0009 decision 1; <https://vukem.dev/docs/rest-apis/client-generation> "The command"
   - Depends on: P3.C.4.1, P3.C.3.3, P3.C.2.3
   - Model: Sonnet
   - Acceptance:
@@ -2521,7 +2521,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 - [ ] **P4.A.2.4** Add the honeypot, burst limits, `POST /suggestions/uploads/cover`, and the `community.check_sources` / `community.cover_fetch` jobs over `httpclient.Safe`.
   - Files/modules: `app/community/abuse.go`, `app/community/uploads.go`, `app/jobs/check_sources.go`, `app/jobs/cover_fetch.go`, `tests/security_community_test.go`
-  - Refs: SDD 04 §6 jobs, §7.2 covers, §7.3 honeypot and burst, NFR-04-4, §10 security tests; https://vukem.dev/docs/digging-deeper/uploads; https://vukem.dev/docs/security/rate-limiting
+  - Refs: SDD 04 §6 jobs, §7.2 covers, §7.3 honeypot and burst, NFR-04-4, §10 security tests; <https://vukem.dev/docs/digging-deeper/uploads>; <https://vukem.dev/docs/security/rate-limiting>
   - Depends on: P4.A.2.3
   - Model: Opus
   - Acceptance:
@@ -2553,7 +2553,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 - [ ] **P4.A.3.3** Build `Community/SuggestionStatus` and `Community/MySuggestions` with submit and withdraw actions.
   - Files/modules: `resources/js/pages/Community/{SuggestionStatus,MySuggestions}.tsx`, `app/web/community.go`, `app/policies/suggestion.go`
-  - Refs: SDD 04 FR-04-12, §6 (POST `/suggestions/{id}/submit`, `/withdraw`, GET `/suggestions/{id}`, `/me/suggestions`); https://vukem.dev/docs/security/authorization (`authz.DenyAsNotFound`)
+  - Refs: SDD 04 FR-04-12, §6 (POST `/suggestions/{id}/submit`, `/withdraw`, GET `/suggestions/{id}`, `/me/suggestions`); <https://vukem.dev/docs/security/authorization> (`authz.DenyAsNotFound`)
   - Depends on: P4.A.3.2
   - Model: Sonnet
   - Acceptance:
@@ -2565,7 +2565,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 - [ ] **P4.A.4.1** Release `v1.4.0` to staging with submission routes behind a feature flag that stays off in production until P4.B ships.
   - Files/modules: `CHANGELOG.md`, `app/flags/flags.go`
-  - Refs: ADR 0013; https://vukem.dev/docs/digging-deeper/admin "Feature flags"
+  - Refs: ADR 0013; <https://vukem.dev/docs/digging-deeper/admin> "Feature flags"
   - Depends on: P4.A.3.3
   - Model: Sonnet
   - Acceptance:
@@ -2578,7 +2578,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 - [ ] **P4.B.1.1** Add the gate abilities `moderate`, `viewCatalogAudit`, `revertCatalog`, `lockCatalog`, the `community.trusted_moderators` flag, and an app-rendered page shell that reuses the vukem admin layout.
   - Files/modules: `app/admin/admin.go`, `app/admin/abilities.go`, `resources/views/admin/layouts/admin.html` (override), `resources/views/moderation/layout.html`, `routes/admin_moderation.go`, `tests/admin_moderation_gate_test.go`
-  - Refs: SDD 04 §6 (pages as `html/template` views in the admin layout, abilities, flag); VF-008; open issue 04-5; https://vukem.dev/docs/digging-deeper/admin "Customizing the look", "Feature flags"; https://vukem.dev/docs/basics/views
+  - Refs: SDD 04 §6 (pages as `html/template` views in the admin layout, abilities, flag); VF-008; open issue 04-5; <https://vukem.dev/docs/digging-deeper/admin> "Customizing the look", "Feature flags"; <https://vukem.dev/docs/basics/views>
   - Depends on: P4.A.4.1
   - Model: Opus
   - Acceptance:
@@ -2608,7 +2608,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 - [ ] **P4.B.2.1** Implement the apply transaction (§7.4 steps 1–6): locks, `confirm_stale`, catalogue write with provenance `community`, one audit row per field, `api_changes`, `DispatchTx` of `catalog.changed` and `community.notify`.
   - Files/modules: `app/community/apply.go`, `app/catalog/write.go`, `tests/community_apply_test.go`
-  - Refs: SDD 04 FR-04-9, §7.4, §8 (deadlock retried once); SDD 05 §7.3; P3.A.3.1 writer; https://vukem.dev/docs/digging-deeper/queue "Jobs and transactions"
+  - Refs: SDD 04 FR-04-9, §7.4, §8 (deadlock retried once); SDD 05 §7.3; P3.A.3.1 writer; <https://vukem.dev/docs/digging-deeper/queue> "Jobs and transactions"
   - Depends on: P4.B.1.3, P3.A.3.1
   - Model: Opus
   - Acceptance:
@@ -2645,7 +2645,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 - [ ] **P4.B.2.5** Make admin-panel catalogue edits write `catalog_audit` (`source=admin`) inside the panel transaction.
   - Files/modules: `app/admin/resources/items.go`, `app/admin/resources/entities.go`, `app/admin/resources/editions.go`, `tests/admin_catalog_audit_test.go`
-  - Refs: SDD 04 §7.4 last paragraph, open issue 04-4; VF-010; https://vukem.dev/docs/digging-deeper/admin "Resources" (`BeforeSave`)
+  - Refs: SDD 04 §7.4 last paragraph, open issue 04-4; VF-010; <https://vukem.dev/docs/digging-deeper/admin> "Resources" (`BeforeSave`)
   - Depends on: P4.B.2.4
   - Model: Sonnet
   - Acceptance:
@@ -2654,7 +2654,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 - [ ] **P4.B.2.6** Add the locks pages (`POST/DELETE /admin/locks`) and the `catalog_audit` export (`export.csv`, `export.ndjson`).
   - Files/modules: `app/moderation/locks.go`, `app/moderation/audit_export.go`, `resources/views/moderation/locks.html`, `tests/moderation_locks_test.go`
-  - Refs: SDD 04 FR-04-15 (export), §6 routes; https://vukem.dev/docs/digging-deeper/exports "Exports", "Streaming and failures"
+  - Refs: SDD 04 FR-04-15 (export), §6 routes; <https://vukem.dev/docs/digging-deeper/exports> "Exports", "Streaming and failures"
   - Depends on: P4.B.2.5
   - Model: Sonnet
   - Acceptance:
@@ -2675,7 +2675,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 - [ ] **P4.B.3.1** Implement `community.notify`: `notifications.Send` with dedupe key `suggestion:<id>:<state>` and a localized mail via `SendLaterTx` (opt-out respected).
   - Files/modules: `app/jobs/community_notify.go`, `resources/views/mail/suggestion_{decided,reverted,expired}.html`, `tests/community_notify_test.go`
-  - Refs: SDD 04 FR-04-14, §6 jobs, open issue 04-6; SDD 14 §5, §6.5, §7.5; VF-011; https://vukem.dev/docs/digging-deeper/mail
+  - Refs: SDD 04 FR-04-14, §6 jobs, open issue 04-6; SDD 14 §5, §6.5, §7.5; VF-011; <https://vukem.dev/docs/digging-deeper/mail>
   - Depends on: P4.B.2.1
   - Model: Sonnet
   - Acceptance:
@@ -2790,7 +2790,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 - [ ] **P5.A.3.1** Wrap `@hexascore/app-client` in `src/api/`: base URL from `EXPO_PUBLIC_API_BASE_URL`, headers (`Authorization`, `X-App-Version`, `Accept-Language`, UUID v7 `Idempotency-Key` on writes), mapping of RFC 9457 `code` to `errors.<code>`, and detection of `X-App-Min-Version` and 426.
   - Files/modules: `apps/mobile/src/api/client.ts`, `src/api/problems.ts`, `src/api/version.ts`, `src/api/client.test.ts`
-  - Refs: SDD 10 §6.1 "Headers", §7.4, FR-10-1, FR-10-5; SDD 05 §6.4; https://vukem.dev/docs/rest-apis/client-generation "The command"; https://vukem.dev/docs/rest-apis/idempotency
+  - Refs: SDD 10 §6.1 "Headers", §7.4, FR-10-1, FR-10-5; SDD 05 §6.4; <https://vukem.dev/docs/rest-apis/client-generation> "The command"; <https://vukem.dev/docs/rest-apis/idempotency>
   - Depends on: P5.A.2.1
   - Model: Opus
   - Acceptance:
@@ -2851,7 +2851,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 - [ ] **P5.A.4.2** Implement the offline mutation queue in `src/queue/`: persisted entries `{id, op, itemId, payload, idempotencyKey, createdAt, attempts}` (≤ 50, 72 h), replacement per `(itemId, op)` with a fresh key, FIFO drain on reconnect/foreground with 2 s/10 s/60 s backoff, the §7.3 response table, user binding, and pause on 426.
   - Files/modules: `apps/mobile/src/queue/store.ts`, `src/queue/drain.ts`, `src/queue/policy.ts`, `src/queue/queue.test.ts`
-  - Refs: SDD 10 §5 (mutation queue row), §7.3, §8, FR-10-4; https://vukem.dev/docs/rest-apis/idempotency (409 in flight, 422 reused key)
+  - Refs: SDD 10 §5 (mutation queue row), §7.3, §8, FR-10-4; <https://vukem.dev/docs/rest-apis/idempotency> (409 in flight, 422 reused key)
   - Depends on: P5.A.4.1
   - Model: Opus
   - Acceptance:
@@ -2994,7 +2994,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 - [ ] **P5.B.5.1** Serve `GET /.well-known/assetlinks.json` from the Go app and declare verified App Links in the Expo config (`autoVerify: true`, host `hexascore.app`, prefixes `/games`, `/movies`, `/series`, `/books`, `/entities`, `/lists`, `/pt-br`, `/es`).
   - Files/modules: `routes/web.go` (well-known route), `app/wellknown/assetlinks.go`, `tests/assetlinks_test.go`, `.env.example` (`ANDROID_PACKAGE`, `ANDROID_CERT_SHA256`), `apps/mobile/app.config.ts` (`android.intentFilters`), `apps/mobile/src/linking.test.ts`, `.maestro/smoke/deep-link.yaml`
-  - Refs: SDD 10 §7.6, FR-10-7, §9; https://vukem.dev/docs/basics/routing "Defining routes"; [E12]
+  - Refs: SDD 10 §7.6, FR-10-7, §9; <https://vukem.dev/docs/basics/routing> "Defining routes"; [E12]
   - Depends on: P5.B.2.5, P5.B.4.1
   - Model: Sonnet
   - Acceptance:
@@ -3131,7 +3131,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 - [ ] **P6.A.1.2** Create the ingestion tables (`source_records` extensions, `source_record_history`, `job_runs`, `ingest_failures`, `entity_match_reviews`, `dq_results`, `catalog_counts`, `field_coverage`) and the record store: canonical SHA-256, upsert that writes history in the same CTE, and `checked_at`-only on an unchanged hash.
   - Files/modules: `database/migrations/<ts>_create_ingestion_tables.go`, `internal/ingest/store/hash.go`, `internal/ingest/store/records.go`, `internal/ingest/store/records_test.go`
-  - Refs: SDD 06 §5, FR-06-1; https://vukem.dev/docs/database/migrations "Migrations" (`s.Raw`); VF-006; legacy `common/db.py` `canonical_hash`, `upsert_source_record`, `store_records`
+  - Refs: SDD 06 §5, FR-06-1; <https://vukem.dev/docs/database/migrations> "Migrations" (`s.Raw`); VF-006; legacy `common/db.py` `canonical_hash`, `upsert_source_record`, `store_records`
   - Depends on: P2.F, P6.A.1.1
   - Model: Opus
   - Acceptance:
@@ -3141,17 +3141,17 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 - [ ] **P6.A.1.3** Build the run framework: the `job_runs` lifecycle, heartbeat (stale > 15 min → `failed`, resumable), chunked continuation (≤ 500 targets or 5 min, cursor saved, successor via `q.DispatchTx` in the same transaction), `queue.ErrPermanent`, closing the run on the last attempt, per-target `ingest_failures` (parked after 5 runs), and fail-closed kill switches.
   - Files/modules: `internal/ingest/run/run.go`, `internal/ingest/run/continuation.go`, `internal/ingest/run/flags.go`, `internal/ingest/run/failures.go`, `tests/ingest/resume_test.go`, `tests/ingest/killswitch_test.go`
-  - Refs: SDD 06 §6 (jobs, kill switches), §7.6 "Dead letter", FR-06-6, FR-06-7; https://vukem.dev/docs/digging-deeper/queue "Jobs and transactions", "Retries, backoff and timeouts"; https://vukem.dev/docs/digging-deeper/feature-flags "Feature flags"; VF-018
+  - Refs: SDD 06 §6 (jobs, kill switches), §7.6 "Dead letter", FR-06-6, FR-06-7; <https://vukem.dev/docs/digging-deeper/queue> "Jobs and transactions", "Retries, backoff and timeouts"; <https://vukem.dev/docs/digging-deeper/feature-flags> "Feature flags"; VF-018
   - Depends on: P6.A.1.2
   - Model: Opus
   - Acceptance:
     - `TEST_DATABASE_URL=… go test ./tests/ingest -run TestResumeAfterCancel -count=20` → tables equal an uninterrupted run (SDD 06 §9)
     - `go test ./tests/ingest -run 'TestKillSwitchSkips|TestOneActiveRunPerJob'` → disabled source ends `skipped` with zero `httptest` hits; a second queued run → 409 `run-active` (unique index)
-  - Notes: queue `ingest`, `queue.Timeout(10*time.Minute)`, `queue.Retries(3)` (that is four attempts, per the queue page). VF-018 workaround: an app-level semaphore caps concurrent ingestion jobs at 2 (NFR-06-2) whatever `QUEUE_CONCURRENCY` is. The "close the run on the last attempt" helper SDD 06 §6 names (`queue.AttemptFrom(ctx).Last()`) is not on the fetched queue page; confirm it on https://vukem.dev/docs/digging-deeper/queue before use. If it is missing, write `[NOT IN VUKEM DOCS]`, add a `vukem-feedback.md` entry, and close the run from a `q.AddObserver` failure hook instead.
+  - Notes: queue `ingest`, `queue.Timeout(10*time.Minute)`, `queue.Retries(3)` (that is four attempts, per the queue page). VF-018 workaround: an app-level semaphore caps concurrent ingestion jobs at 2 (NFR-06-2) whatever `QUEUE_CONCURRENCY` is. The "close the run on the last attempt" helper SDD 06 §6 names (`queue.AttemptFrom(ctx).Last()`) is not on the fetched queue page; confirm it on <https://vukem.dev/docs/digging-deeper/queue> before use. If it is missing, write `[NOT IN VUKEM DOCS]`, add a `vukem-feedback.md` entry, and close the run from a `q.AddObserver` failure hook instead.
 
 - [ ] **P6.A.1.4** Build the outbound client on `httpclient.Safe`: per-host throttle with slot reservation, retries for transport errors and 429/5xx (5 attempts, `2^n` s ≤ 60 s), `Retry-After` ≤ 300 s that pauses the whole host, rate halving after 20 hits, a per-host breaker, the bot User-Agent, a host allowlist and size caps.
   - Files/modules: `internal/ingest/httpx/client.go`, `internal/ingest/httpx/throttle.go`, `internal/ingest/httpx/breaker.go`, `internal/ingest/httpx/client_test.go`, `tests/ingest/security_ssrf_test.go`
-  - Refs: SDD 06 §7.2, NFR-06-5, NFR-06-6; https://vukem.dev/docs/security/overview "A01"; VF-020; legacy `common/http.py` (`_throttle`, `retry_after_seconds`, `user_agent`), `tests/test_http.py`
+  - Refs: SDD 06 §7.2, NFR-06-5, NFR-06-6; <https://vukem.dev/docs/security/overview> "A01"; VF-020; legacy `common/http.py` (`_throttle`, `retry_after_seconds`, `user_agent`), `tests/test_http.py`
   - Depends on: P6.A.1.3
   - Model: Opus
   - Acceptance:
@@ -3232,7 +3232,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 - [ ] **P6.A.3.4** Build the `normalize` job: pending QIDs from `source_records_pending_idx`, one transaction per 200 QIDs, slug collision against the database, `catalog.ItemsChanged{IDs}` per committed batch, and `RecomputeItemScore` via `DispatchTx` when a rated item's date, precision or status changes.
   - Files/modules: `internal/ingest/normalize/job.go`, `internal/ingest/normalize/save.go`, `tests/ingest/normalize_job_test.go`
-  - Refs: SDD 06 §6 "Events", §7.3, NFR-06-3; SDD 02 §6; https://vukem.dev/docs/digging-deeper/events "Queued listeners"; https://vukem.dev/docs/digging-deeper/queue "Jobs and transactions"; legacy `normalize.py` `choose_slug`, `known_items`, `save_item`, `pending_qids`, `normalize_batch`; tests `test_normalize_writes_item_translations_and_scores`, `test_slug_collision_appends_year`
+  - Refs: SDD 06 §6 "Events", §7.3, NFR-06-3; SDD 02 §6; <https://vukem.dev/docs/digging-deeper/events> "Queued listeners"; <https://vukem.dev/docs/digging-deeper/queue> "Jobs and transactions"; legacy `normalize.py` `choose_slug`, `known_items`, `save_item`, `pending_qids`, `normalize_batch`; tests `test_normalize_writes_item_translations_and_scores`, `test_slug_collision_appends_year`
   - Depends on: P6.A.3.2, P6.A.3.3
   - Model: Opus
   - Acceptance:
@@ -3252,7 +3252,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 - [ ] **P6.A.4.1** Wire the schedules and chains for the open sources (`bootstrap` command, `fetch.wikidata` incremental at 00:30, weekly Sunday Wikidata + entities, Monday Wikipedia, Tuesday Open Library, each followed by normalise) with `SCHEDULE_TIMEZONE=America/Sao_Paulo` and `WithoutOverlapping()`.
   - Files/modules: `routes/schedule.go`, `internal/ingest/chains.go`, `cmd/app/ingest_bootstrap.go`, `tests/ingest/schedule_test.go`
-  - Refs: SDD 06 §7.6; https://vukem.dev/docs/digging-deeper/scheduler "Frequencies", "Overlapping runs"; https://vukem.dev/docs/digging-deeper/queue "Inside serve"; ADR 0007; D-08; VF-018
+  - Refs: SDD 06 §7.6; <https://vukem.dev/docs/digging-deeper/scheduler> "Frequencies", "Overlapping runs"; <https://vukem.dev/docs/digging-deeper/queue> "Inside serve"; ADR 0007; D-08; VF-018
   - Depends on: P6.A.3.5
   - Model: Sonnet
   - Acceptance:
@@ -3313,11 +3313,11 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
   - Acceptance:
     - `go test ./internal/ingest/covers/... -run 'TestToWebp|TestWebpSizeParity'` → the four ported tests `ok`; each fixture's 600 px (q78) and 96×144 (q70) outputs are within ±10 % of the Pillow byte size
     - `go test ./tests/ingest -run TestSecurity_A05_ImageBomb` → a 25+ MP or > 15 MB input is rejected before decoding
-  - Notes: `contrib/engine` is [NOT IN VUKEM DOCS]. https://vukem.dev/docs/deployment/single-binary does not cover it, and SDD 06/11 cite only the local `vukem/docs/subsystems.md` (not a reference per AGENTS.md). Read the package godoc in the pinned vukem module. If `engine.Limits{CPUTime, AddressSpace}` exists, use it with 30 s / 512 MiB. Otherwise use `exec.CommandContext` with a 30 s timeout and no inherited env, and add a `vukem-feedback.md` entry. VF-004 workaround if `cwebp` is unavailable: keep JPEG and note it. One encode at a time (NFR-06-2).
+  - Notes: `contrib/engine` is [NOT IN VUKEM DOCS]. <https://vukem.dev/docs/deployment/single-binary> does not cover it, and SDD 06/11 cite only the local `vukem/docs/subsystems.md` (not a reference per AGENTS.md). Read the package godoc in the pinned vukem module. If `engine.Limits{CPUTime, AddressSpace}` exists, use it with 30 s / 512 MiB. Otherwise use `exec.CommandContext` with a 30 s timeout and no inherited env, and add a `vukem-feedback.md` entry. VF-004 workaround if `cwebp` is unavailable: keep JPEG and note it. One encode at a time (NFR-06-2).
 
 - [ ] **P6.B.2.2** Port the covers job: source order (Open Library → TMDB → IGDB → Steam → GOG → Commons P3383, never P18), download via `httpclient.Safe`, sniff, EXIF, the two variants, the immutable key `covers/<id>-<sha256(source)[:16]>.webp` and `-t.webp` with `Put` on `drivers/s3`, skip on the same hash, and `covers.gc` 30-day deferred delete.
   - Files/modules: `internal/ingest/covers/job.go`, `internal/ingest/covers/pick.go`, `internal/ingest/covers/gc.go`, `internal/ingest/covers/job_test.go`
-  - Refs: SDD 06 §7.5, NFR-06-7; SDD 11 §5 (bucket prefixes), open issues 11-1, 11-2, 06-4; ADR 0014 (amended); https://vukem.dev/docs/digging-deeper/storage "Reading and writing", "What the S3 disk does"; legacy `covers.py` `pick_source_cover`, `commons_cover`, `blob_pathname`, `store_cover`, `targets`, `run`, `drop_loose_commons_covers`; tests `test_store_cover_*`, `test_commons_cover_only_from_film_poster`, `test_only_a_full_run_removes_loose_commons_covers`, `test_run_isolates_per_item_failures`, `test_run_backfills_thumb_for_legacy_cover`, `test_run_skips_item_with_both_sizes_current`, `test_run_processes_items_concurrently`
+  - Refs: SDD 06 §7.5, NFR-06-7; SDD 11 §5 (bucket prefixes), open issues 11-1, 11-2, 06-4; ADR 0014 (amended); <https://vukem.dev/docs/digging-deeper/storage> "Reading and writing", "What the S3 disk does"; legacy `covers.py` `pick_source_cover`, `commons_cover`, `blob_pathname`, `store_cover`, `targets`, `run`, `drop_loose_commons_covers`; tests `test_store_cover_*`, `test_commons_cover_only_from_film_poster`, `test_only_a_full_run_removes_loose_commons_covers`, `test_run_isolates_per_item_failures`, `test_run_backfills_thumb_for_legacy_cover`, `test_run_skips_item_with_both_sizes_current`, `test_run_processes_items_concurrently`
   - Depends on: P6.B.2.1, P6.B.1.1, P6.B.1.2, P6.B.1.3
   - Model: Opus
   - Acceptance:
@@ -3385,7 +3385,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 - [ ] **P6.B.4.3** Build `/admin/ingest`: last run per job, failures, failing asserts, oldest TMDB age and the coverage trend, plus `POST /admin/ingest/runs` (trigger), `POST /admin/ingest/runs/{id}/cancel`, and read-only panel resources for `job_runs`, `ingest_failures` and `dq_results`.
   - Files/modules: `app/admin/ingest/status.go`, `app/admin/ingest/runs.go`, `resources/js/Pages/Admin/Ingest/Index.tsx`, `tests/admin_ingest_test.go`, `qa/e2e/admin-ingest.spec.ts`
-  - Refs: SDD 06 §6 (admin table), FR-06-8; https://vukem.dev/docs/digging-deeper/admin; VF-008; open issue 06-6
+  - Refs: SDD 06 §6 (admin table), FR-06-8; <https://vukem.dev/docs/digging-deeper/admin>; VF-008; open issue 06-6
   - Depends on: P6.B.4.1, P4.B.1.1
   - Model: Sonnet
   - Acceptance:
@@ -3404,7 +3404,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 - [ ] **P6.B.4.5** Add the pressure gate (in-flight count and last-minute item-page p95 hold batches above 16 or 300 ms), the `ingest.*` metrics on the global OTel meter, alert A7 and the ingestion dashboard, then wire the remaining weekly and daily schedules (Wed steam, Thu gog, Fri tmdb, Sat igdb, `tmdb.expire`, `igdb.refresh`, covers and trailer chains).
   - Files/modules: `app/http/middleware/inflight.go`, `internal/ingest/pressure.go`, `internal/ingest/metrics.go`, `routes/schedule.go`, `ops/grafana/ingestion.json`, `ops/grafana/alerts/a7.yaml`, `qa/k6/ingest-pressure.js`
-  - Refs: SDD 06 §7.5 "Pressure gate", §7.6, §10 "Observability", NFR-06-1, NFR-06-2; SDD 12 §6.2, §7.5 (A6, A7); https://vukem.dev/docs/digging-deeper/queue "Metrics"; VF-019; open issues 06-7, 12-1
+  - Refs: SDD 06 §7.5 "Pressure gate", §7.6, §10 "Observability", NFR-06-1, NFR-06-2; SDD 12 §6.2, §7.5 (A6, A7); <https://vukem.dev/docs/digging-deeper/queue> "Metrics"; VF-019; open issues 06-7, 12-1
   - Depends on: P6.B.4.4
   - Model: Sonnet
   - Acceptance:
@@ -3440,7 +3440,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 - [ ] **P6.C.1.2** Count views and search clicks in memory: middleware on 200 item-page GETs and `/app/v1` item reads, dedup by `cache.Add` with `HMAC-SHA256(daily_salt, visitor|item)` until 00:00 UTC, exclusions (prefetch, partial reloads, bots, > 50 items per visitor per day), the `SearchResultClicked` listener, and a buffered counter flushed by `s.Func("trending:flush", …).EveryMinute()` and on shutdown.
   - Files/modules: `app/recommend/primitives/views.go`, `app/recommend/primitives/counter.go`, `app/recommend/primitives/flush.go`, `routes/schedule.go`, `tests/recommend_views_test.go`
-  - Refs: SDD 08 FR-08-1, NFR-08-4, NFR-08-5, §7.1, §8 (flush failure, 100k keys); https://vukem.dev/docs/digging-deeper/cache; https://vukem.dev/docs/digging-deeper/scheduler "Frequencies"; https://vukem.dev/docs/digging-deeper/events; VF-021; open issues 08-10, 10-5
+  - Refs: SDD 08 FR-08-1, NFR-08-4, NFR-08-5, §7.1, §8 (flush failure, 100k keys); <https://vukem.dev/docs/digging-deeper/cache>; <https://vukem.dev/docs/digging-deeper/scheduler> "Frequencies"; <https://vukem.dev/docs/digging-deeper/events>; VF-021; open issues 08-10, 10-5
   - Depends on: P6.C.1.1, P1.E
   - Model: Opus
   - Acceptance:
@@ -3470,7 +3470,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 - [ ] **P6.C.2.2** Build `ComputeTrending` (`Cron("5 * * * *")`, `WithoutOverlapping()`): rollup, then the per-type snapshot in one transaction ordered `(T desc, popularity_prior desc, id)` with gapless ranks and prior fill, then `trending:v1:{type}` invalidation. Add `PruneTrending` at 04:45 (90 days), the queued `trending_rebuild` on `user.banned`, the `trending.*` metrics and alert A14.
   - Files/modules: `app/jobs/compute_trending.go`, `app/jobs/prune_trending.go`, `app/recommend/trending/snapshot.go`, `app/recommend/trending/rebuild.go`, `routes/schedule.go`, `ops/grafana/alerts/a14.yaml`, `app/recommend/trending/snapshot_test.go`
-  - Refs: SDD 08 §6 "Jobs", "Metrics", §7.3, FR-08-4, FR-08-6, FR-08-7, NFR-08-2, §9, §10; SDD 12 §6.2, §7.5 (A14); https://vukem.dev/docs/digging-deeper/scheduler "Overlapping runs"; https://vukem.dev/docs/digging-deeper/queue
+  - Refs: SDD 08 §6 "Jobs", "Metrics", §7.3, FR-08-4, FR-08-6, FR-08-7, NFR-08-2, §9, §10; SDD 12 §6.2, §7.5 (A14); <https://vukem.dev/docs/digging-deeper/scheduler> "Overlapping runs"; <https://vukem.dev/docs/digging-deeper/queue>
   - Depends on: P6.C.2.1, P6.C.1.2
   - Model: Opus
   - Acceptance:
@@ -3482,7 +3482,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 - [ ] **P6.C.3.1** Render the home trending sections: an eager SSR Inertia prop `trending` from `cache.NewMemory` (one query on a miss), the listing pattern, the "Popular" chip and title rule, and `?from=trending` links that the canonical URL drops.
   - Files/modules: `app/web/home.go`, `resources/js/Pages/Home.tsx`, `resources/js/components/TrendingSection.tsx`, `tests/home_trending_test.go`, `qa/e2e/home.spec.ts`, `qa/k6/home.js`
-  - Refs: SDD 08 §6 "Inertia props", FR-08-5, FR-08-6, FR-08-11, NFR-08-1; SDD 09; D-02; D-07; open issue 08-8; https://vukem.dev/docs/digging-deeper/cache
+  - Refs: SDD 08 §6 "Inertia props", FR-08-5, FR-08-6, FR-08-11, NFR-08-1; SDD 09; D-02; D-07; open issue 08-8; <https://vukem.dev/docs/digging-deeper/cache>
   - Depends on: P6.C.2.2
   - Model: Sonnet
   - Acceptance:
@@ -3492,7 +3492,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 - [ ] **P6.C.3.2** Close P3.A.1.4 and the trending part of P3.C.2.1: serve `listTrending` and the business-only `getItemActivity` on `/api/v1`, and `/app/v1/{type}/trending`, with `web.ETagOf`, `c.NotModified` and `Cache-Control: public, max-age=300`.
   - Files/modules: `app/api/v1/trending.go`, `app/appapi/catalog.go`, `app/recommend/trending/read.go`, `tests/api_trending_test.go`, `openapi/api-v1.json`, `openapi/app-v1.json`
-  - Refs: SDD 08 §6 (contracts table), §9; SDD 05 §6.2, FR-05-17; P3.A.1.4; https://vukem.dev/docs/rest-apis/overview "Cross-cutting"
+  - Refs: SDD 08 §6 (contracts table), §9; SDD 05 §6.2, FR-05-17; P3.A.1.4; <https://vukem.dev/docs/rest-apis/overview> "Cross-cutting"
   - Depends on: P6.C.2.2, P3.A.1.3, P3.C.2.1
   - Model: Sonnet
   - Acceptance:
@@ -3528,7 +3528,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 - [ ] **P6.D.1.2** Build `ComputeSimilar` (`DailyAt("02:00")`, `WithoutOverlapping()`): candidates sharing a feature with `n_f ≤ 5 %·N_t`, the keep rule, ordering by `round(sim,2)`, list `cooccur`, popularity and id, ≤ 20 neighbours, `Chunk(ctx, 500, …)` with a 50 ms pause, skipping unchanged `feature_hash`, and the site and API variants.
   - Files/modules: `app/jobs/compute_similar.go`, `app/recommend/similar/job.go`, `app/recommend/similar/job_test.go`, `app/recommend/similar/bench_test.go`
-  - Refs: SDD 08 §7.4, FR-08-8, NFR-08-2, NFR-08-3; open issues 08-9, 08-11; https://vukem.dev/docs/database/orm "Query builder"; https://vukem.dev/docs/digging-deeper/scheduler
+  - Refs: SDD 08 §7.4, FR-08-8, NFR-08-2, NFR-08-3; open issues 08-9, 08-11; <https://vukem.dev/docs/database/orm> "Query builder"; <https://vukem.dev/docs/digging-deeper/scheduler>
   - Depends on: P6.D.1.1
   - Model: Opus
   - Acceptance:
@@ -3558,7 +3558,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 - [ ] **P6.D.2.2** Serve "For you": the `recommend_user {UserID, Type}` queue job (`Retries(2)`, `Timeout(30s)`), stale-while-refresh (row > 24 h or ≥ 5 newer `rating_events`), a synchronous compute when there is no row, the opt-out (D-29) that deletes rows and stops jobs, `/app/v1/me/for-you`, the home `forYou` `Defer` group and the `ForYou/Index` page.
   - Files/modules: `app/jobs/recommend_user.go`, `app/recommend/foryou/service.go`, `app/appapi/foryou.go`, `app/web/foryou.go`, `resources/js/Pages/ForYou/Index.tsx`, `tests/foryou_test.go`, `qa/k6/foryou.js`
-  - Refs: SDD 08 §6 (contracts, jobs, privacy), §7.5, FR-08-10, NFR-08-6, §8 (opt-out while queued); SDD 03 FR-03-19; D-29; https://vukem.dev/docs/frontend/inertia; https://vukem.dev/docs/digging-deeper/queue
+  - Refs: SDD 08 §6 (contracts, jobs, privacy), §7.5, FR-08-10, NFR-08-6, §8 (opt-out while queued); SDD 03 FR-03-19; D-29; <https://vukem.dev/docs/frontend/inertia>; <https://vukem.dev/docs/digging-deeper/queue>
   - Depends on: P6.D.2.1
   - Model: Opus
   - Acceptance:

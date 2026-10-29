@@ -6,7 +6,7 @@ Living record of the architecture programme (Phase 0 to Phase 4 in `PROMPT.md`).
 
 - Everything in this file and in `docs/` is English. Chat with the owner is pt-BR.
 - Absolute dates (YYYY-MM-DD). Sources cited as URL + access date; unverified claims are tagged `[NOT VERIFIED]`.
-- vukem facts cite the public site https://vukem.dev/docs (owner rule, 2026-10-28), never the local `vukem/docs/` folder, except when the site has no page (`[SITE PAGE MISSING]`). Page map in [sdd/README.md](sdd/README.md).
+- vukem facts cite the public site <https://vukem.dev/docs> (owner rule, 2026-10-28), never the local `vukem/docs/` folder, except when the site has no page (`[SITE PAGE MISSING]`). Page map in [sdd/README.md](sdd/README.md).
 - Workspace layout (owner decisions, 2026-10-28). `C:\dev\hexascore-app` is a plain folder, not a git repository: its `.git` was removed on 2026-10-28 at the owner's request so the nested `vukem/` clone is never mixed with the application repository. Before removal, `main` and `legacy` were identical to `origin` and there was no stash.
   - `legacy/`: read-only working copy of the Next.js application. Its history lives in branch `legacy` of `github.com/AlexGalhardo/hexascore-app`.
   - `vukem/`: clone of `github.com/AlexGalhardo/vukem` with its own `.git` (framework under active development, v0.32.0 on 2026-10-25). Never committed into the application repository; the application depends on it as a Go module.
@@ -116,7 +116,7 @@ Living record of the architecture programme (Phase 0 to Phase 4 in `PROMPT.md`).
 - 14 SDDs in [sdd/](sdd/README.md) (catalog, scoring, users/auth, community edits, public API, ingestion, search, recommendation, web, mobile, infra/deploy, observability, security, user library), written by parallel agents (owner approved up to 4 in parallel) from briefs bound to the decisions, then a cross-document consistency pass (abilities, problem codes, id types, route prefixes, metric names, export flow, visibility column, release-date fields, alt titles, item links).
 - 16 ADRs in [adrs/](adrs/README.md) (MADR), including 0016 bot protection added when SDD 03 found the gap; ADR 0014 amended for Railway buckets (no versioning or server-side encryption).
 - [sdd/open-issues.md](sdd/open-issues.md): triage of every SDD open issue (decided / roadmap / vukem / owner). All `owner` rows answered by the owner (D-22 to D-39 in brainstorming.md).
-- [vukem-feedback.md](../vukem-feedback.md): 31 entries (VF-001 to VF-031) with the owner's format; every entry cites https://vukem.dev/docs pages (owner rule of 2026-10-28; local `vukem/docs` only with `[SITE PAGE MISSING]`).
+- [vukem-feedback.md](../vukem-feedback.md): 31 entries (VF-001 to VF-031) with the owner's format; every entry cites <https://vukem.dev/docs> pages (owner rule of 2026-10-28; local `vukem/docs` only with `[SITE PAGE MISSING]`).
 - Requirement coverage table in [sdd/README.md](sdd/README.md): every requirement maps to at least one SDD and one ADR.
 
 ### Gate
