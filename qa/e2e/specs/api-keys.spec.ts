@@ -15,8 +15,13 @@ test.describe("api keys", () => {
 			"needs docker access to the app container logs (E2E_APP_CONTAINER)",
 		);
 
-		test("a key is shown once, listed by prefix, then revoked", async ({ page, prefix, t }) => {
-			await createVerifiedAccount(page, prefix, t);
+		test("a key is shown once, listed by prefix, then revoked", async ({
+			page,
+			prefix,
+			t,
+			any,
+		}) => {
+			await createVerifiedAccount(page, prefix, any);
 			await open(page, `${prefix}/profile/api`);
 			await expect(page.getByText(t("api.profile.keys.empty"))).toBeVisible();
 			await expectNoSeriousA11yViolations(page);
@@ -28,19 +33,19 @@ test.describe("api keys", () => {
 			const full = ((await secret.textContent()) ?? "").trim();
 			await expectNoSeriousA11yViolations(page);
 
-			await page.getByRole("button", { name: t("api.profile.keys.dismiss") }).click();
+			await page.getByRole("button", { name: any("api.profile.keys.dismiss") }).click();
 			await expect(secret).toBeHidden();
 			await page.reload();
 			await expect(page.getByText(full, { exact: true })).toHaveCount(0);
 			const row = page.getByRole("row", { name: /e2e key/ });
-			await expect(row.getByText(t("api.profile.keys.active"))).toBeVisible();
+			await expect(row.getByText(any("api.profile.keys.active"))).toBeVisible();
 
-			await row.getByRole("button", { name: t("api.profile.keys.revoke") }).click();
+			await row.getByRole("button", { name: any("api.profile.keys.revoke") }).click();
 			await row
 				.getByRole("group")
-				.getByRole("button", { name: t("api.profile.keys.revoke") })
+				.getByRole("button", { name: any("api.profile.keys.revoke") })
 				.click();
-			await expect(row.getByText(t("api.profile.keys.revoked"))).toBeVisible();
+			await expect(row.getByText(any("api.profile.keys.revoked"))).toBeVisible();
 		});
 	});
 });
