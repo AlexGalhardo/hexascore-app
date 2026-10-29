@@ -792,7 +792,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - An event at `now() - 31 days` is gone after `search:purge`.
   - Notes: the page UI is P1.G.3.1; here the controller renders `Search/Index` props and the tests assert them. `/api/v1/search` is P1.H.2.1. `localhost:8080` in the SDD criterion means `$WEB`.
 
-- [ ] **P1.E.3.2** Add the search k6 scenario and record suggest p95 at 2-character prefixes and index sizes.
+- [x] **P1.E.3.2** Add the search k6 scenario and record suggest p95 at 2-character prefixes and index sizes.
   - Files/modules: `qa/k6/search.js`, `docs/sdd/07-search.md` (measured numbers)
   - Refs: SDD 07 §4, §9, §10; open-issues 07-8, 07-9; `legacy/qa/k6/api.js` line 58
   - Depends on: P1.E.3.1
@@ -872,7 +872,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.F.4 Data export
 
-- [ ] **P1.F.4.1** Implement the background ZIP export with a signed 24 h link, the 7-day cooldown and the CSV formula guard.
+- [x] **P1.F.4.1** Implement the background ZIP export with a signed 24 h link, the 7-day cooldown and the CSV formula guard.
   - Files/modules: `database/migrations/*_create_data_exports_table.go`, `app/library/export.go`, `app/jobs/library_export.go`, routes `POST /profile/export`, `POST /app/v1/me/export`, `resources/views/mail/export_ready.html`
   - Refs: SDD 14 §5, §6.3, §6.5, §7.4, §9; SDD 03 §6.4; open-issues 14-4, 14-6; VF-029
   - Depends on: P1.F.3.1, P1.C.5.1, P0.F.9.1
@@ -993,7 +993,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `curl -s $WEB/robots.txt` → disallows `/admin`, `/profile`, `/me`, lists the sitemap
   - Notes: docs bodies are English with translated chrome (open-issues 05-7); coverage, webhooks, exports and changes docs pages arrive with P3. Markdown rendering library: none new; use the build step already present or ask the owner. The privacy policy text change for personalisation (D-29) needs the owner's legal review before cutover.
 
-- [ ] **P1.G.4.2** Wire the admin area: items list and detail with the merge form and affiliate links, contact and reports queues, and the ingestion status page (replaces `saveAffiliateLink`, `deleteAffiliateLink` and the UI of `mergeItems`).
+- [x] **P1.G.4.2** Wire the admin area: items list and detail with the merge form and affiliate links, contact and reports queues, and the ingestion status page (replaces `saveAffiliateLink`, `deleteAffiliateLink` and the UI of `mergeItems`).
   - Files/modules: `app/admin/items_resource.go`, `app/admin/affiliate_links_resource.go`, `app/http/controllers/admin/{items,merge,ingestion}_controller.go`, `resources/views/admin/*.html`, `routes/admin.go`
   - Refs: SDD 09 §6.2, open-issues 09-12 (vukem views inside `/admin`, not Inertia); SDD 01 §7.5; VF-008; legacy `app/[locale]/admin/{items,items/[id],ingestion,contact,reports}/`, `actions/admin.ts`
   - Depends on: P1.B.3.2, P1.C.3.1, P1.F.3.2
