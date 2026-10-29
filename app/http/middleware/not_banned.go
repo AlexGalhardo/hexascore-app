@@ -8,6 +8,7 @@ import (
 
 	"github.com/AlexGalhardo/vukem/web"
 
+	"github.com/AlexGalhardo/hexascore-app/app/logging"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
 
@@ -47,7 +48,12 @@ func NotBanned(
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			c := web.NewCtx(w, r, web.ServicesFrom(r.Context()))
 
-			if u, err := user(c); err == nil && u.IsBanned(now()) {
+			u, err := user(c)
+			if err == nil {
+				logging.SetUser(r.Context(), u.AuthID())
+			}
+
+			if err == nil && u.IsBanned(now()) {
 				web.SecurityEvent(r, "auth.banned_request", "user", u.ID)
 
 				if err := BannedProblem(c, problemBase, u); err != nil {
