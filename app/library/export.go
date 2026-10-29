@@ -159,18 +159,30 @@ func (s *Exports) Build(ctx context.Context, id string) error {
 	now := s.Now().UTC()
 	expires := now.Add(ExportLinkTTL)
 
+	gone := false
 	err = s.DB.Tx(ctx, func(tx *database.Tx) error {
-		if _, err := tx.ExecContext(ctx, `UPDATE data_exports
+		res, err := tx.ExecContext(ctx, `UPDATE data_exports
 SET status = 'ready', path = $2, size_bytes = $3, ready_at = $4, expires_at = $5 WHERE id = $1`,
-			id, path, len(data), now, expires); err != nil {
+			id, path, len(data), now, expires)
+		if err != nil {
 			return err
 		}
 
-		_, err := tx.ExecContext(ctx, `INSERT INTO account_events (user_id, kind, data, created_at)
+		if n, err := res.RowsAffected(); err != nil || n == 0 {
+			gone = err == nil
+			return err
+		}
+
+		_, err = tx.ExecContext(ctx, `INSERT INTO account_events (user_id, kind, data, created_at)
 VALUES ($1, 'exported', jsonb_build_object('exportId', $2::text), $3)`, userID, id, now)
 
 		return err
 	})
+	if gone {
+		// Purge removed the row while the ZIP was built: delete the file nothing would ever expire (SDD 14 §8).
+		return s.Disk.Delete(ctx, path)
+	}
+
 	if err != nil || s.Ready == nil {
 		return err
 	}

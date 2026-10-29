@@ -5,8 +5,10 @@ package tests
 import (
 	"archive/zip"
 	"bytes"
+	"context"
 	"encoding/csv"
 	"html"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -19,6 +21,7 @@ import (
 	"time"
 
 	"github.com/AlexGalhardo/vukem/drivers/postgres/pgtest"
+	"github.com/AlexGalhardo/vukem/storage"
 	"github.com/AlexGalhardo/vukem/uuid"
 	"github.com/AlexGalhardo/vukem/vukemtest"
 
@@ -296,5 +299,56 @@ func TestExportPurgeRemovesRowsAndFiles(t *testing.T) {
 	if err := acc.DB.QueryRowContext(t.Context(), `SELECT count(*) FROM data_exports WHERE id = $1`, keep).
 		Scan(&n); err != nil || n != 1 {
 		t.Errorf("other user's export rows = %d, %v; want 1", n, err)
+	}
+}
+
+// purgeOnPut runs purge just before the file is written, like an account purge landing mid-build.
+type purgeOnPut struct {
+	storage.Disk
+	purge func()
+}
+
+func (d purgeOnPut) Put(ctx context.Context, p string, r io.Reader) error {
+	d.purge()
+	return d.Disk.Put(ctx, p, r)
+}
+
+func TestExportBuildAfterPurgeLeavesNoFile(t *testing.T) {
+	dir := t.TempDir()
+	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{
+		Env: map[string]string{"DATABASE_URL": pgtest.Database(t, ""), "EXPORTS_DIR": dir},
+	})
+
+	acc, err := accounts.New(app.App)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	svc, err := library.NewExports(app.App, acc)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	u := makeUser(t, app, "race@example.com", "user", true)
+	id := uuid.NewV7().String()
+
+	if _, err := acc.DB.ExecContext(t.Context(),
+		`INSERT INTO data_exports (id, user_id, status) VALUES ($1, $2, 'queued')`, id, u.ID); err != nil {
+		t.Fatal(err)
+	}
+
+	svc.Disk = purgeOnPut{Disk: svc.Disk, purge: func() {
+		if err := svc.Purge(t.Context(), u.ID); err != nil {
+			t.Fatal(err)
+		}
+	}}
+
+	if err := svc.Build(t.Context(), id); err != nil {
+		t.Fatal(err)
+	}
+
+	path := filepath.Join(dir, strconv.FormatInt(u.ID, 10), id+".zip")
+	if _, err := os.Stat(path); !os.IsNotExist(err) {
+		t.Errorf("export file survived a purge during the build: %v", err)
 	}
 }
