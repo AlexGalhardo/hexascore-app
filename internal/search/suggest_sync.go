@@ -62,6 +62,10 @@ func SyncSuggest(ctx context.Context, db *database.DB, limit int) (int, error) {
 		return nil
 	})
 
+	if err == nil && synced > 0 {
+		BumpEpoch()
+	}
+
 	return synced, err
 }
 
