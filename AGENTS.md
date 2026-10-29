@@ -49,6 +49,7 @@ This file is the single source of truth for agent behaviour. `CLAUDE.md` only po
 | `vukem build` + `bun run build:ssr` | production build (Go binary, Vite assets, SSR bundle) |
 | `go test ./...` | unit and integration tests (Postgres via `docker compose`) |
 | `golangci-lint run` | Go lint and format check |
+| `golangci-lint run --build-tags integration ./...` | Go lint incl. integration tests (CI pins v2.15.0) |
 | `bun run lint` / `bun run typecheck` / `bun run test` | TypeScript lint, types, unit tests |
 | `vukem openapi:export` | regenerate the OpenAPI documents (diff checked in CI) |
 | `bun run e2e` | Playwright + axe against a built container |
