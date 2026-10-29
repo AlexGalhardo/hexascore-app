@@ -1,15 +1,18 @@
-# Handoff especialista (2026-10-29)
-STATUS: HANDOFF (heavy context after 5 tasks). Queue left: 1-REV-P1.G.4.2.md, 1-REV-P1.H.1.1.md (both untouched).
+# Handoff especialista (2026-10-29, session 2)
+STATUS: HANDOFF (heavy context after 6 reviews). Queue left: 2-P1.H.2.1a.md (untouched, Opus implementation; needs a fresh context).
 Done this session:
-- REV-P1.G.2.2 APROVADO -> agent/senior-b/P1.G.2.2 (already merged)
-- REV-P1.G.3.1 CORRIGIDO_E_APROVADO -> agent/especialista/P1.G.3.1-fix (searchId in partial reload `only`)
-- P1.F.3.2-fix (self) -> agent/especialista/P1.F.3.2-fix (duplicate "contact" i18n block + duplicate-key vitest)
-- P1.F.4.1 (self, Opus) -> agent/especialista/P1.F.4.1 (LGPD export); follow-ups queued in senior/2-P1.F.4.1-followup-*.md
-- REV-P1.G.4.1 CORRIGIDO_E_APROVADO -> agent/especialista/P1.G.4.1-fix (main build broken on clean checkout: resources/public/.gitkeep; /\host doc link)
+- REV-P1.E.3.2 APROVADO -> agent/senior/P1.E.3.2 (merged). k6 re-run: search p95 88.9 ms, suggest 16.0 ms.
+- REV-P1.G.4.2 CORRIGIDO_E_APROVADO -> agent/especialista/P1.G.4.2-fix (merge conflicts 409 per SDD 01 §7.5; audit previous affiliate `active`).
+- REV-P1.H.1.1 CORRIGIDO_E_APROVADO -> agent/especialista/P1.H.1.1-fix (guard 503 + Retry-After: 30; TestKeysStoreOutageFailsClosed).
+- REV-P1.H.1.2 CORRIGIDO_E_APROVADO -> agent/especialista/P1.H.1.2-fix, STACKED on P1.H.1.1-fix (exports api.Unavailable; quota/plan 503 + Retry-After). Merging H.1.2-fix brings both.
+- REV-P1.F.4.1-followup-problem-codes APROVADO (merged).
+- REV-P1.F.4.1-followup-ui-purge APROVADO; my agent/especialista/P1.F.4.1-followup-ui-purge-fix is SUPERSEDED by FIX-export-purge (do not merge).
+- REV-FIX-export-purge APROVADO (merged).
 Pitfalls:
-- main currently fails `go test`/`go build` on a clean checkout until P1.G.4.1-fix merges (embed all:public).
-- hexascore-postgres-1 container gets removed by someone (compose down?); `docker compose up -d postgres` in $APP restores it.
-- Don't use python text-mode writes on Windows; use Edit tool. Git-bash sed `a\` loses newlines.
-- errs.NewKey params are i18n params, not problem members (VF-016/039) -> codes missing in reports/scoring problems (senior follow-up queued).
-- Worktree C:\dev\hexascore-app\wt\especialista is on agent/especialista/P1.G.4.1-fix, clean. Scratch DB esp_schema (migrated) exists in local Postgres.
-Skills: karpathy-guidelines loaded; caveman/golang-security not loaded (context economy).
+- hexascore-postgres-1 disappears sometimes: `docker compose up -d postgres` in $APP (data volume survives).
+- Running the app locally: build `go build -o <tmp>/hxapp.exe ./cmd/app`; env APP_KEY=base64:<32 random bytes>, APP_ENV=development (not "local"), PORT, DATABASE_URL to a scratch DB; `hxapp migrate`, `hxapp db:seed`, `hxapp serve`. search_suggest fills via the scheduler job inside serve (QUEUE_CONNECTION=sync).
+- k6 from Docker on Windows: `MSYS_NO_PATHCONV=1 docker run --rm -e BASE_URL=http://host.docker.internal:<port> -v "C:/.../qa:/qa" grafana/k6:2.3.0 run /qa/k6/search.js`.
+- golangci-lint fails with "parallel golangci-lint is running" when another worker lints: retry loop.
+- Orchestrator merges before review, so check `git merge-base --is-ancestor` and review the task commit, not merge diffs.
+- Worktree C:\dev\hexascore-app\wt\especialista is detached at origin/main, clean.
+Skills: karpathy-guidelines and golang-security loaded; caveman not loaded (context economy).
