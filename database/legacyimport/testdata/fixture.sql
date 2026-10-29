@@ -1,7 +1,7 @@
 -- Synthetic legacy dump restored as schema legacy_import (SDD 11 §7.6 step 3).
 -- Better Auth tables keep the legacy column names (legacy apps/web/lib/db/schema/auth.ts);
 -- the other tables carry only what the runner reads today and grow with each stage task.
--- No real data: every address is under example.test and every secret is a placeholder.
+-- No real data: every address is under example.test; secrets are placeholders, except a01, a hash of a public test password.
 DROP SCHEMA IF EXISTS legacy_import CASCADE;
 CREATE SCHEMA legacy_import;
 
@@ -18,7 +18,10 @@ CREATE TABLE legacy_import."user" (
   two_factor_enabled boolean DEFAULT false,
   role text,
   banned boolean DEFAULT false,
-  ban_reason text
+  ban_reason text,
+  ban_expires timestamp,
+  profile_private boolean NOT NULL DEFAULT false,
+  deletion_scheduled_at timestamp
 );
 
 CREATE TABLE legacy_import.account (
@@ -26,6 +29,9 @@ CREATE TABLE legacy_import.account (
   account_id text NOT NULL,
   provider_id text NOT NULL,
   user_id text NOT NULL REFERENCES legacy_import."user"(id) ON DELETE CASCADE,
+  access_token text,
+  refresh_token text,
+  id_token text,
   password text,
   created_at timestamp NOT NULL DEFAULT now()
 );
@@ -60,22 +66,27 @@ CREATE TABLE legacy_import.stripe_customers (id text PRIMARY KEY);
 CREATE TABLE legacy_import.processed_events (id text PRIMARY KEY);
 CREATE TABLE legacy_import.credit_ledger (id text PRIMARY KEY);
 
-INSERT INTO legacy_import."user" (id, name, email, email_verified, two_factor_enabled) VALUES
-  ('u01', 'Ana', 'ana@example.test', true, false),
-  ('u02', 'Bruno', 'bruno@example.test', true, true),
-  ('u03', 'Carla', 'carla@example.test', false, false),
-  ('u04', 'Davi', 'davi@example.test', true, false),
-  ('u05', 'Eva', 'eva@example.test', true, false),
-  ('u06', 'Fabio', 'fabio@example.test', true, false),
-  ('u07', 'Gil', 'gil@example.test', true, false);
+-- u01 mixed-case email, u03 unverified and scheduled for deletion, u04 admin with
+-- a live ban, u06 with an expired ban.
+INSERT INTO legacy_import."user" (id, name, email, email_verified, created_at, updated_at, username, display_username,
+  two_factor_enabled, role, banned, ban_reason, ban_expires, profile_private, deletion_scheduled_at) VALUES
+  ('u01', 'Ana', 'Ana@Example.test', true, '2025-01-02 10:00', '2025-01-03 11:00', 'anaana', 'AnaAna', false, 'user', false, NULL, NULL, true, NULL),
+  ('u02', 'Bruno', 'bruno@example.test', true, '2025-01-02 10:00', NULL, NULL, NULL, true, NULL, false, NULL, NULL, false, NULL),
+  ('u03', 'Carla', 'carla@example.test', false, '2025-01-02 10:00', NULL, NULL, NULL, false, 'user', false, NULL, NULL, false, '2099-01-01 00:00'),
+  ('u04', 'Davi', 'davi@example.test', true, '2025-01-02 10:00', NULL, NULL, NULL, false, 'user,admin', true, 'spam', '2099-01-01 00:00', false, NULL),
+  ('u05', 'Eva', 'eva@example.test', true, '2025-01-02 10:00', NULL, NULL, NULL, false, 'user', false, NULL, NULL, false, NULL),
+  ('u06', 'Fabio', 'fabio@example.test', true, '2025-01-02 10:00', NULL, NULL, NULL, false, 'user', true, 'old', '2020-01-01 00:00', false, NULL),
+  ('u07', 'Gil', 'gil@example.test', true, '2025-01-02 10:00', NULL, NULL, NULL, false, 'user', false, NULL, NULL, false, NULL);
 
-INSERT INTO legacy_import.account (id, account_id, provider_id, user_id, password) VALUES
-  ('a01', 'u01', 'credential', 'u01', 'placeholder-scrypt-hash'),
-  ('a02', 'u02', 'credential', 'u02', 'placeholder-scrypt-hash'),
-  ('a03', 'g-1003', 'google', 'u03', NULL),
-  ('a04', 'u04', 'credential', 'u04', 'placeholder-scrypt-hash'),
-  ('a05', 'g-1005', 'google', 'u05', NULL),
-  ('a06', 'u06', 'credential', 'u06', 'placeholder-scrypt-hash');
+-- a01 holds a Better Auth 1.7.7 hash of "correct horse battery staple" (testdata/betterauth_hashes.json).
+INSERT INTO legacy_import.account (id, account_id, provider_id, user_id, access_token, refresh_token, id_token, password) VALUES
+  ('a01', 'u01', 'credential', 'u01', NULL, NULL, NULL, 'f784aeba634fcc3813d2fed8886d1f4f:beaf7dbabd716f288bf679caddface38ac825862263cef82ed40e0c93f9949269bf3d57e5986a080b8005361fb11dde09950ec22d09924efbf33bf3b5cdf7a16'),
+  ('a02', 'u02', 'credential', 'u02', NULL, NULL, NULL, 'placeholder-scrypt-hash'),
+  ('a03', 'g-1003', 'google', 'u03', 'placeholder-access', 'placeholder-refresh', 'placeholder-id', NULL),
+  ('a04', 'u04', 'credential', 'u04', NULL, NULL, NULL, 'placeholder-scrypt-hash'),
+  ('a05', 'g-1005', 'google', 'u05', 'placeholder-access', NULL, NULL, NULL),
+  ('a06', 'u06', 'credential', 'u06', NULL, NULL, NULL, 'placeholder-scrypt-hash'),
+  ('a16', 'g-1006', 'google', 'u06', NULL, NULL, NULL, NULL);
 
 INSERT INTO legacy_import.two_factor (id, secret, backup_codes, user_id) VALUES
   ('t02', 'placeholder-encrypted-secret', 'placeholder-encrypted-codes', 'u02');
