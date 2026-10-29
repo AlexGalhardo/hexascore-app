@@ -15,7 +15,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-004 | 2026-10-28 | low | open |
 | VF-005 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#11](https://github.com/AlexGalhardo/vukem/pull/11)) |
 | VF-006 | 2026-10-28 | low | in_progress (framework), PR #38 green, merge pending (owner) |
-| VF-007 | 2026-10-28 | low | open |
+| VF-007 | 2026-10-28 | low | in_progress (framework), PR #56 |
 | VF-008 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#22](https://github.com/AlexGalhardo/vukem/pull/22)) |
 | VF-009 | 2026-10-28 | low | in_progress (framework), PR #37 green, merge pending (owner) |
 | VF-010 | 2026-10-28 | low | fixed in v0.33.0 (PR [#27](https://github.com/AlexGalhardo/vukem/pull/27), via VF-046: `AfterSave` receives `admin.Saved[T].Before`, a copy of the record before the form was applied) |
@@ -565,4 +565,3 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
   - Validation: params decoded strictly (unknown fields rejected, size limits) and validated with the existing validation package; panics recovered as -32603 without leaking internals.
   - Docs: OpenRPC document generation from the registered methods (parallel to the OpenAPI export), and a typed client (`jsonrpc.Client`) for Go; optional TypeScript client generation alongside the existing client generation.
   - Tests: spec conformance table tests, fuzzing of the decoder, `TestSecurity_*` (oversized batch, deep nesting, method enumeration with auth, notification side effects under auth).
-
