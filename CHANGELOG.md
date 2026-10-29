@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - **ui:** App shell: skip link, navigation with locale and theme switchers, footer, flash toasts, SEO head (canonical, hreflang, robots, Open Graph, JSON-LD), Base UI `Dialog` (`@base-ui/react` 1.9.0) and `CoverThumb`; unmatched pages render the `Error` page with `noindex`.
+- **search:** `/search`, `/search/suggest` and `POST /search/events` with a 120 s/300 s result cache, ETag/304 on JSON, the legacy `/api/search/suggest` 308 redirect, `search_events` (redacted queries) and the daily `search:purge` (30 days).
 
 ### Changed
 
