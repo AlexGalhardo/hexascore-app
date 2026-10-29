@@ -339,7 +339,7 @@ func mapMergeErr(err error) error {
 		return errs.ErrNotFound
 	case errors.Is(err, catalog.ErrMergeSelf), errors.Is(err, catalog.ErrMergeTypeMismatch),
 		errors.Is(err, catalog.ErrMergeRedirected):
-		return errs.New(http.StatusUnprocessableEntity, err.Error())
+		return errs.New(http.StatusConflict, err.Error())
 	}
 
 	return err

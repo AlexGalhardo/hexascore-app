@@ -91,7 +91,7 @@ func TestAdminMerge(t *testing.T) {
 	base := "/admin/items/" + itemA
 
 	admin.PostForm(base+"/merge", url.Values{"into": {itemB}}).AssertStatus(303)
-	admin.PostForm(base+"/merge", url.Values{"into": {itemA}, "confirm": {"merge"}}).AssertStatus(422)
+	admin.PostForm(base+"/merge", url.Values{"into": {itemA}, "confirm": {"merge"}}).AssertStatus(409)
 	admin.PostForm(base+"/merge", url.Values{"into": {itemB}, "confirm": {"merge"}}).
 		AssertRedirect("/admin/items/" + itemB)
 
