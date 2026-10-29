@@ -6,17 +6,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-29
+
 ### Added
 
-- **search:** `qa/k6/search.js` (search 20 rps, suggest 50 rps at 2-character prefixes) and `SEARCH_CACHE=off` to bypass the anonymous result cache; measured p95 recorded in SDD 07 (open issue 07-8 closed).
+- **api:** Add hx_live_ api keys, fail-closed key guard and key management page ([5c0cb60](https://github.com/AlexGalhardo/hexascore-app/commit/5c0cb60784ec817fc4931a4d0e82720182bc7291))
+- **web:** Add docs, legal pages and robots.txt ([b837a88](https://github.com/AlexGalhardo/hexascore-app/commit/b837a88648e2ca5fbad8ab2e0769031c3b78537b))
+- **api:** Add plans, /api/v1 stack and quota metering in postgres ([99bf4f6](https://github.com/AlexGalhardo/hexascore-app/commit/99bf4f6f9063c8cbd3189ef3e451701ab418e4be))
+- **admin:** Wire items, merge, affiliate links and ingestion pages ([b9c2432](https://github.com/AlexGalhardo/hexascore-app/commit/b9c2432890abdc6c431126aa81e1a893f4bf8fe6))
+- **library:** Add background LGPD data export with signed 24 h link ([f1eae97](https://github.com/AlexGalhardo/hexascore-app/commit/f1eae97906e78e5e6ae689be9f0aa4f0d82c570d))
 
-- **api:** `api_keys` table (sha256 hex at rest, legacy format), `hx_live_` key guard for `/api/v1` (fail closed: unknown, malformed or revoked key 401, store outage 503; app tokens refused) and the `/profile/api` key page (`Developer/ApiKeys`: create with a one-time `newKey` flash, revoke, at most 10 live keys).
-- **api:** Plans (free 100 lifetime, pro 50,000/month, business 500,000/month), the `/api/v1` middleware stack (IP limit, key guard, ban, per-plan throttle, quota meter) and quota metering in Postgres: `api_quota_counters`, `api_credit_balances` (legacy credits spent first), `api_usage_daily`; `X-Quota-Limit/Remaining/Reset`, 402 `quota-exhausted`, 400 and 5xx refunded, deltas flushed every minute and on shutdown, 503 once 10 minutes go unflushed. Every user is on the free plan until billing (P1.H.3.1).
-- Admin: items resource, item manage page (audited affiliate links, irreversible merge via `catalog.Merge`), report resolve form and `/admin/ingestion` status page.
+### Changed
 
-### Removed
+- **search:** Add k6 search scenario and SEARCH_CACHE=off bypass ([be1af49](https://github.com/AlexGalhardo/hexascore-app/commit/be1af496091bb25fbc38e2b15b792f265ee6bcbe))
 
-- `ReportButton` stub on the item page (items are not a report target).
+### Fixed
+
+- **api:** Keep flushing quota deltas visible to admission ([d5a4710](https://github.com/AlexGalhardo/hexascore-app/commit/d5a4710a1a33ea12f87262d834f13e280296ecad))
+- **repo:** Keep resources/public tracked so the all:public embed builds on a clean checkout ([c13deac](https://github.com/AlexGalhardo/hexascore-app/commit/c13deac7c061847ca3fe20ffa8fae125a9b62cbe))
+- **web:** Refuse /\host doc links that browsers resolve to another host ([02030cb](https://github.com/AlexGalhardo/hexascore-app/commit/02030cba74574c532a7e5abc089946a7de094f95))
+- **search:** Reload searchId with paginated results so page clicks are recorded ([1f0537e](https://github.com/AlexGalhardo/hexascore-app/commit/1f0537e33582dc320b29120405d2f2c096f203a4))
+- **i18n:** Drop duplicate contact block that hid the contact page strings ([89eb8dc](https://github.com/AlexGalhardo/hexascore-app/commit/89eb8dc392a0414a68de10d281fae489f1d0054f))
 
 ## [0.4.0] - 2026-10-29
 
