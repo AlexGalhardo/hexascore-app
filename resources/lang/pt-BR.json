@@ -164,7 +164,7 @@
           "unverified": "Confirme seu e-mail antes de criar chaves de API.",
           "disabled": "A criação de novas chaves de API está temporariamente desativada. As chaves existentes continuam funcionando.",
           "invalid": "Dê à chave um nome de até 40 caracteres.",
-          "limit": "Você pode ter no máximo 5 chaves ativas. Revogue uma antes.",
+          "limit": "Você pode ter no máximo {count} chaves ativas. Revogue uma antes.",
           "not_found": "Esta chave não existe mais.",
           "server": "Algo deu errado. Tente de novo."
         }

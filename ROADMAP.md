@@ -1018,7 +1018,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.H.1 Keys and quota
 
-- [ ] **P1.H.1.1** Migrate `api_keys`, implement the fail-closed `hx_live_` key guard and the key management page (replaces `createApiKeyAction`, `revokeApiKeyAction`).
+- [x] **P1.H.1.1** Migrate `api_keys`, implement the fail-closed `hx_live_` key guard and the key management page (replaces `createApiKeyAction`, `revokeApiKeyAction`).
   - Files/modules: `database/migrations/*_create_api_keys_table.go`, `app/api/keys.go`, `app/api/guard.go`, `app/http/controllers/developer/api_keys_controller.go`, `resources/js/pages/Developer/ApiKeys.tsx`, `routes/web.go`
   - Refs: SDD 05 §5, §6.1, §7.1, §9; SDD 09 §6.2 (`/profile/api`); legacy `actions/api-keys.ts`, `app/[locale]/profile/api/page.tsx`; <https://vukem.dev/docs/security/api-tokens>
   - Depends on: P1.G.1.1
