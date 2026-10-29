@@ -42,7 +42,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-031 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#24](https://github.com/AlexGalhardo/vukem/pull/24)) |
 | VF-032 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#31](https://github.com/AlexGalhardo/vukem/pull/31)) |
 | VF-033 | 2026-10-28 | low | open |
-| VF-034 | 2026-10-28 | low | open |
+| VF-034 | 2026-10-28 | low | in review (framework): vukem PR #72 (`openapi.Info.StripPrefix`, `OPENAPI_SERVERS`, `OPENAPI_STRIP_PREFIX`) |
 | VF-035 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#25](https://github.com/AlexGalhardo/vukem/pull/25)), adopted in models only (ADOPT-VF-035) |
 | VF-036 | 2026-10-29 | low | fixed in v0.33.0 (PR [#34](https://github.com/AlexGalhardo/vukem/pull/34), adopted 4a2d8ec) |
 | VF-037 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#26](https://github.com/AlexGalhardo/vukem/pull/26)) |
@@ -58,7 +58,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-047 | 2026-10-29 | low | in_progress (framework), PR #40 (nullable filters/search; composite keys open) |
 | VF-048 | 2026-10-29 | low | fixed in v0.33.0 (PR [#33](https://github.com/AlexGalhardo/vukem/pull/33), adopted 4a2d8ec) |
 | VF-049 | 2026-10-29 | low | in review (framework): vukem PR #71 (typed handler finishes response; OPENAPI_PREFIX hint) |
-| VF-050 | 2026-10-29 | low | open |
+| VF-050 | 2026-10-29 | low | in review (framework): vukem PR #72 (`openapi.Info.StripPrefix`; extensions already in `errs.HTTPError.WithExtension`) |
 | VF-051 | 2026-10-29 | medium | in_progress (framework), PR #36 green, merge pending (owner) |
 | VF-052 | 2026-10-29 | high | in_progress (framework), PRs #46 (client IP + origin lock), #47 (Turnstile action), #48 (visitor headers), #49 (edge cache + purge), #50 (Access JWT); merges pending |
 | VF-053 | 2026-10-29 | low | in_progress (framework), PR #52 |
@@ -360,7 +360,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-034: OpenAPI cannot map a host-rewritten public path (`/v1`) to the `/api/v1` router group
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: in review (framework): vukem PR #72.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/openapi`, `https://vukem.dev/docs/cli/reference-runtime`, `https://vukem.dev/docs/digging-deeper/billing` ("Routes", `r.UseServer`).
 - **Context**: `api.<host>/v1/*` is served from the `/api/v1` group through an app `r.UseServer` rewrite (VF-015). `openapi.Info.Servers` can list `https://api.<host>/v1`, but the document keeps router paths (`/api/v1/ping`), so the full URL becomes `/v1/api/v1/ping`. `Servers` is a static option (no config key; only the `APP_URL` default), so it needs a process env read in `bootstrap.New`.
 - **Repro**: spike `agent/senior/P0.F.4.1`: `API_URL=<http://api.localhost:3001/v1> vukem openapi:export -prefix /api/v1 | jq -r '.servers[0].url, (.paths|keys[])'` gives `http://api.localhost:3001/v1` and `/api/v1/ping`.
@@ -493,7 +493,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-050: OpenAPI paths cannot be rebased under a server prefix (host alias `/v1`)
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: in review (framework): vukem PR #72.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/overview` "Versioning", "Errors" [no server-prefix or extension-member option on the page 2026-10-29].
 - **Context**: the API is served at `/api/v1/*` and, on `api.hexascore.app`, also as `/v1/*` (app `APIEdge` rewrite, VF-015). `openapi.Info` has `Servers` and `PathPrefix` (filter only), so the document cannot say "server `https://api.hexascore.app/v1`, paths without `/api/v1`" as SDD 05 §6.1 wants. Typed-route and router-raised problems also cannot carry `code` (VF-016): `APIEdge` rewrites problem bodies and takes an optional `X-Problem-Code` header from handlers.
 - **Workaround**: `Servers` lists `https://api.hexascore.app` only; paths keep `/api/v1` (valid on both hosts). SDD 05 §6.1 should say so.
