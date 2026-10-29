@@ -140,6 +140,11 @@ func (h *Controller) ListItems(c *web.Ctx, in ListItemsInput) (ItemPageJSON, err
 	}
 	params.Limit = limit
 
+	return h.itemPage(c, params, locale, limit)
+}
+
+// itemPage runs one keyset page of params and renders it in the vukem envelope.
+func (h *Controller) itemPage(c *web.Ctx, params catalog.ListParams, locale string, limit int) (ItemPageJSON, error) {
 	page, err := catalog.List(c.Context(), h.DB, h.Codec, params)
 	if err != nil {
 		return ItemPageJSON{}, badQuery(err)

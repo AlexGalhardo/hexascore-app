@@ -42,3 +42,10 @@ func RoleCompatible(role, entityKind, itemType string) bool {
 	}
 	return slices.Contains(rule.kinds, entityKind) && slices.Contains(rule.itemTypes, itemType)
 }
+
+// KnownRole reports whether role is an item_entities role.
+func KnownRole(role string) bool {
+	_, ok := roleRules[role]
+
+	return ok
+}

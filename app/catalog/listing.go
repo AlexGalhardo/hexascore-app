@@ -70,7 +70,9 @@ func ParseSort(sort string) (field string, desc bool, err error) {
 
 // ListParams are the listing inputs; scores are stars (0-10).
 type ListParams struct {
-	Type        string             // game|movie|series|book
+	Type        string             // game|movie|series|book ("" only with EntityID)
+	EntityID    string             // items related to this entity id (API entity items)
+	Role        string             // item_entities role, with EntityID
 	Genre       string             // genre entity slug
 	Platform    string             // platform entity slug
 	Year        int                // 0 = any
@@ -117,11 +119,22 @@ func (b *queryBuilder) add(cond string, args ...any) {
 
 func (p ListParams) filters() (*queryBuilder, error) {
 	keys, ok := CategoryKeys[p.Type]
-	if !ok {
+	if !ok && (p.Type != "" || p.EntityID == "") {
 		return nil, fmt.Errorf("%w: unknown type %q", ErrInvalidQuery, p.Type)
 	}
 	b := &queryBuilder{}
-	b.add("i.type = ?", p.Type)
+	if p.Type != "" {
+		b.add("i.type = ?", p.Type)
+	}
+	if p.EntityID != "" {
+		cond, args := "EXISTS (SELECT 1 FROM item_entities ie WHERE ie.item_id = i.id AND ie.entity_id = ?::uuid", []any{
+			p.EntityID,
+		}
+		if p.Role != "" {
+			cond, args = cond+" AND ie.role = ?", append(args, p.Role)
+		}
+		b.add(cond+")", args...)
+	}
 	b.add("i.visibility = 'public'") // FR-01-14
 	entity := func(kind, slug string) {
 		b.add(`EXISTS (SELECT 1 FROM item_entities ie JOIN entities e ON e.id = ie.entity_id

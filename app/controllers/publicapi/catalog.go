@@ -33,13 +33,14 @@ type GenreListJSON struct {
 	Data []GenreJSON `json:"data"`
 }
 
-// ListGenres is listGenres: GET /api/v1/{type}/genres. Genre slugs are HexaScore identifiers; names stay out
-// because their source is not tracked per relation.
-func (h *Controller) ListGenres(c *web.Ctx, in TypeInput) (GenreListJSON, error) {
-	typ, ok := typeOf[in.Type]
-	if !ok {
-		return GenreListJSON{}, invalid("unknown type")
-	}
+// ListGenres is listGenres for one type: GET /api/v1/{games,movies,series,books}/genres. Genre slugs are HexaScore
+// identifiers; names stay out because their source is not tracked per relation. The type is part of the path
+// literal because "/{type}/genres" overlaps "/entities/{id}" in the ServeMux.
+func (h *Controller) ListGenres(section string) func(*web.Ctx, struct{}) (GenreListJSON, error) {
+	return func(c *web.Ctx, _ struct{}) (GenreListJSON, error) { return h.genres(c, typeOf[section]) }
+}
+
+func (h *Controller) genres(c *web.Ctx, typ string) (GenreListJSON, error) {
 	if err := checkQuery(c); err != nil {
 		return GenreListJSON{}, err
 	}
