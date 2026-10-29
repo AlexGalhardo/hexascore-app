@@ -145,7 +145,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
 
 #### P0.F.3 Cursor pagination
 
-- [ ] **P0.F.3.1** Implement a signed keyset cursor over `(sort value, id)` with `WhereRaw` and feed it to `inertia.Scroll`.
+- [x] **P0.F.3.1** Implement a signed keyset cursor over `(sort value, id)` with `WhereRaw` and feed it to `inertia.Scroll`.
   - Files/modules: spike `app/catalog/cursor.go`, `cursor_test.go`, a 300-row seeded `items` table, one Inertia page using `Scroll`
   - Refs: SDD 01 §7.2, §9; SDD 05 §6.2 "Cursors"; open-issues 01-4, 05-8, 07-4, 09-4; VF-005
   - Depends on: P0.F.1.1
