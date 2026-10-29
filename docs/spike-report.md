@@ -286,3 +286,16 @@ Decision needed (for the orchestrator): keep the legacy SDK surface by registeri
 Limits: only two public operations exist in the spike document, so the SDK regeneration is not a full compatibility check; response properties are all optional in generated types (VF-044); the Python run used pip, not `uvx`.
 
 Orchestrator decision on P0.F.7.2 (2026-10-29): SDD 05 §6.2 is final and names the operations `listItems`/`getItem` over `/v1/{type}`, so the legacy per-type SDK names (`getGame`, `listGames`, ...) are not kept. The SDKs get a new major version; their tests are rewritten against the new document in P1.H.4.
+
+## P0.F.9.1 Storage bucket
+
+Spike branch `agent/senior/P0.F.9.1` (b2113ce, on spike main 783ad2f). RustFS `rustfs/rustfs:1.0.4` added to the spike `compose.yaml`; `drivers/s3` v0.3.1 (vukem module) via `config.Storage(app)` (`S3_*` env, path style, insecure HTTP for local only); `app/covers/serve.go` serves `GET /covers/{key}`; `app/exports/zip_job.go` is the queued `exports.build` job (database queue, `QUEUE_CONNECTION=database`).
+
+Acceptance (2026-10-29), `go test ./tests -run "TestCoversServe|TestPresignExpires|TestExportJob|TestZipCSV" -v` against the running RustFS and Postgres:
+
+- `TestCoversServe` PASS: `/covers/42-0123456789abcdef.webp` -> 200, `Cache-Control: public, max-age=31536000, immutable`, `X-Content-Type-Options: nosniff`; missing key, non-hash name and `.png` -> 404 without Cache-Control.
+- `TestExportJobWritesZip` PASS: dispatch `exports.Build`, `q.Work(StopWhenEmpty)` writes `exports/<user>/<id>.zip`; a presigned GET downloads a valid ZIP whose `profile.csv` holds the guarded cell `'=cmd|calc`.
+- `TestPresignExpires` PASS: presigned GET (2 s) -> 200 with the body; after 3 s -> 403. Put, Exists and Open also exercised.
+- `TestZipCSVMatchesRecorder` PASS: the VF-029 choice. The job uses `encoding/csv` plus exported `export.SafeCell`; its bytes equal `export.CSV` through an `httptest.ResponseRecorder`. The re-implementation is smaller (no request, no recorder) and needs no extra code beyond the guard.
+
+Limits: the literal `curl -sI localhost:3000/covers/...` was proven through the in-process test client, not a running server; the covers route resolves the disk lazily so other routes and tests boot without `S3_*` (production must fail at boot or in a readiness check, to do in P1); the export reads only name and email (the real job per SDD 14 reads the full data set in a repeatable-read transaction); `storage.Handler` gaps filed as `VF-NEW-P0.F.9.1`.
