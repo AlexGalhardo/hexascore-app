@@ -9,6 +9,7 @@ import (
 	"encoding/csv"
 	"errors"
 	"fmt"
+	"io/fs"
 	"strconv"
 	"time"
 
@@ -137,8 +138,13 @@ func (s *Exports) Build(ctx context.Context, id string) error {
 		return err
 	}
 
-	if _, err := s.DB.ExecContext(ctx, `UPDATE data_exports SET status = 'running' WHERE id = $1`, id); err != nil {
+	res, err := s.DB.ExecContext(ctx, `UPDATE data_exports SET status = 'running' WHERE id = $1`, id)
+	if err != nil {
 		return err
+	}
+
+	if n, _ := res.RowsAffected(); n == 0 {
+		return nil
 	}
 
 	data, err := s.zip(ctx, userID)
@@ -159,20 +165,39 @@ func (s *Exports) Build(ctx context.Context, id string) error {
 	now := s.Now().UTC()
 	expires := now.Add(ExportLinkTTL)
 
+	settled := true
+
 	err = s.DB.Tx(ctx, func(tx *database.Tx) error {
-		if _, err := tx.ExecContext(ctx, `UPDATE data_exports
-SET status = 'ready', path = $2, size_bytes = $3, ready_at = $4, expires_at = $5 WHERE id = $1`,
-			id, path, len(data), now, expires); err != nil {
+		// A purge that ran meanwhile deleted the row: no row, no ZIP and no mail.
+		res, err := tx.ExecContext(ctx, `UPDATE data_exports
+SET status = 'ready', path = $2, size_bytes = $3, ready_at = $4, expires_at = $5
+WHERE id = $1 AND status = 'running'`,
+			id, path, len(data), now, expires)
+		if err != nil {
 			return err
 		}
 
-		_, err := tx.ExecContext(ctx, `INSERT INTO account_events (user_id, kind, data, created_at)
+		if n, _ := res.RowsAffected(); n == 0 {
+			settled = false
+
+			return nil
+		}
+
+		_, err = tx.ExecContext(ctx, `INSERT INTO account_events (user_id, kind, data, created_at)
 VALUES ($1, 'exported', jsonb_build_object('exportId', $2::text), $3)`, userID, id, now)
 
 		return err
 	})
-	if err != nil || s.Ready == nil {
+	if err != nil {
 		return err
+	}
+
+	if !settled {
+		return s.deleteFile(ctx, path)
+	}
+
+	if s.Ready == nil {
+		return nil
 	}
 
 	return s.Ready(ctx, userID, s.URL+link, expires.Format("2006-01-02 15:04 UTC"))
@@ -467,10 +492,22 @@ CSV cells that start with =, +, -, @, tab or carriage return are prefixed with '
 Passwords, two-factor secrets, token hashes and other people's data are never included.
 `
 
-// Purge deletes every export file of userID and their rows, so no ZIP survives the account purge
-// (SDD 14 §8). A row whose file cannot be deleted is kept for the next run.
+// deleteFile removes a file; one that is already gone counts as deleted.
+func (s *Exports) deleteFile(ctx context.Context, p string) error {
+	if err := s.Disk.Delete(ctx, p); err != nil && !errors.Is(err, fs.ErrNotExist) {
+		return err
+	}
+
+	return nil
+}
+
+// Purge deletes every export file of userID (rows' paths and the user's whole export directory) and their
+// rows, so no ZIP survives the account purge (SDD 14 §8). Missing files are fine; a failing file keeps its
+// row for the next run while the others still go, and all errors are joined. A Build still running finds its
+// row gone at its final step and deletes its own file.
 func (s *Exports) Purge(ctx context.Context, userID int64) error {
-	rows, err := s.DB.QueryContext(ctx, `SELECT id, coalesce(path, '') FROM data_exports WHERE user_id = $1`, userID)
+	rows, err := s.DB.QueryContext(ctx,
+		`SELECT id, coalesce(path, '') FROM data_exports WHERE user_id = $1 AND status <> 'expired'`, userID)
 	if err != nil {
 		return err
 	}
@@ -491,17 +528,77 @@ func (s *Exports) Purge(ctx context.Context, userID int64) error {
 		return err
 	}
 
+	var errs error
+
+	files, err := s.Disk.List(ctx, strconv.FormatInt(userID, 10))
+	if err != nil {
+		errs = err
+	}
+
+	failed := map[string]bool{}
+
+	for _, f := range files {
+		if err := s.deleteFile(ctx, f); err != nil {
+			failed[f] = true
+			errs = errors.Join(errs, err)
+		}
+	}
+
 	for _, d := range all {
+		if d.path != "" && failed[d.path] {
+			continue
+		}
+
 		if d.path != "" {
-			if err := s.Disk.Delete(ctx, d.path); err != nil {
-				return err
+			if err := s.deleteFile(ctx, d.path); err != nil {
+				errs = errors.Join(errs, err)
+
+				continue
 			}
 		}
 
 		if _, err := s.DB.ExecContext(ctx, `DELETE FROM data_exports WHERE id = $1`, d.id); err != nil {
-			return err
+			errs = errors.Join(errs, err)
 		}
 	}
 
-	return nil
+	if _, err := s.DB.ExecContext(ctx, `DELETE FROM data_exports WHERE user_id = $1 AND status = 'expired'`,
+		userID); err != nil {
+		errs = errors.Join(errs, err)
+	}
+
+	return errs
+}
+
+// PurgeAnonymised purges the exports of every anonymised user that still has rows, so a purge that failed on
+// an earlier run is retried. Returns the joined per-user errors.
+func (s *Exports) PurgeAnonymised(ctx context.Context) error {
+	rows, err := s.DB.QueryContext(ctx, `SELECT DISTINCT e.user_id FROM data_exports e
+JOIN users u ON u.id = e.user_id WHERE u.anonymized_at IS NOT NULL`)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	var ids []int64
+
+	for rows.Next() {
+		var id int64
+		if err := rows.Scan(&id); err != nil {
+			return err
+		}
+
+		ids = append(ids, id)
+	}
+
+	if err := rows.Err(); err != nil {
+		return err
+	}
+
+	var errs error
+	for _, id := range ids {
+		errs = errors.Join(errs, s.Purge(ctx, id))
+	}
+
+	return errs
 }
