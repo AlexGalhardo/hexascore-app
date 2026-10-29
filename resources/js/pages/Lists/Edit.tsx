@@ -1,5 +1,5 @@
 import { Link, router, useForm, usePage } from "@inertiajs/react";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 import Field from "../../components/Field";
 import ItemLink, { type ItemRef } from "../../components/library/ItemLink";
 import Seo from "../../components/Seo";
@@ -39,7 +39,20 @@ export default function Edit({ list, items, version }: Props) {
 	const base = `/lists/${list.id}`;
 	const dirty = order.some((e, i) => e.item.id !== items[i]?.item.id);
 
+	// Reordering moves the row's DOM node, which drops keyboard focus; put it back on the same row's button
+	// (or the opposite one when the row reached an end and its button became disabled).
+	const refocus = useRef<string | null>(null);
+	useEffect(() => {
+		if (!order || !refocus.current) return;
+		document.getElementById(refocus.current)?.focus();
+		refocus.current = null;
+	}, [order]);
+
 	const move = (from: number, to: number) => {
+		let dir = to < from ? "up" : "down";
+		if (to === 0) dir = "down";
+		if (to === order.length - 1) dir = "up";
+		refocus.current = `move-${dir}-${order[from].item.id}`;
 		const next = [...order];
 		const [moved] = next.splice(from, 1);
 		next.splice(to, 0, moved);
@@ -101,7 +114,7 @@ export default function Edit({ list, items, version }: Props) {
 					</button>
 				</div>
 			</form>
-			<h2 className="mt-8 text-lg font-semibold">{t("lists.addToList")}</h2>
+			<h2 className="mt-8 text-lg font-semibold">{t("userLists.items")}</h2>
 			{order.length === 0 ? (
 				<p className="mt-2">{t("userLists.empty")}</p>
 			) : (
@@ -117,6 +130,7 @@ export default function Edit({ list, items, version }: Props) {
 								<button
 									type="button"
 									className={button}
+									id={`move-up-${e.item.id}`}
 									disabled={i === 0}
 									aria-label={`${t("userLists.moveUp")}: ${e.item.title}`}
 									onClick={() => move(i, i - 1)}
@@ -126,6 +140,7 @@ export default function Edit({ list, items, version }: Props) {
 								<button
 									type="button"
 									className={button}
+									id={`move-down-${e.item.id}`}
 									disabled={i === order.length - 1}
 									aria-label={`${t("userLists.moveDown")}: ${e.item.title}`}
 									onClick={() => move(i, i + 1)}

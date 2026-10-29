@@ -1280,6 +1280,7 @@
     "score": "Tu puntuación: {stars}"
   },
   "userLists": {
+    "items": "Elementos",
     "title": "Tus listas",
     "new": "Nueva lista",
     "titleField": "Título",

@@ -61,7 +61,7 @@ func (h *Lists) Show(c *web.Ctx) error {
 		return err
 	}
 
-	nick, err := h.svc.OwnerNickname(ctx, l.UserID)
+	nick, banned, err := h.svc.OwnerNickname(ctx, l.UserID)
 	if err != nil {
 		return err
 	}
@@ -78,8 +78,13 @@ func (h *Lists) Show(c *web.Ctx) error {
 	viewer, err := auth.UserFrom[models.User](ctx, h.guard)
 	canEdit := err == nil && viewer.ID == l.UserID
 
+	indexable := l.IsPublic && !l.Hidden && !l.OwnerPrivate && !banned
+	if !indexable {
+		c.Writer().Header().Set("X-Robots-Tag", "noindex")
+	}
+
 	return inertia.Render(c, "User/List", inertia.Props{
 		"list": listJSON(l), "owner": map[string]string{"nickname": nick}, "items": items, "canEdit": canEdit,
-		"seo": map[string]any{"indexable": l.IsPublic && !l.Hidden && !l.OwnerPrivate},
+		"seo": map[string]any{"indexable": indexable},
 	})
 }
