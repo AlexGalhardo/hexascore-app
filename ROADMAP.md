@@ -521,7 +521,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.C.1 Scaffold and hashing
 
-- [ ] **P1.C.1.1** Install vukem auth with Google and 2FA in the real app and extend `users` with the SDD 03 columns plus `account_events`.
+- [x] **P1.C.1.1** Install vukem auth with Google and 2FA in the real app and extend `users` with the SDD 03 columns plus `account_events`.
   - Files/modules: output of `vukem install:auth -social google -2fa -locales en,pt-BR,es`, `database/migrations/*_add_profile_columns_to_users_table.go`, `*_create_account_events_table.go`, `app/models/user.go`, `routes/auth.go`, `database/seeders/demo_catalog.go`, `docs/sdd/03-users-auth.md` (names recorded in P0.F.1.1)
   - Refs: SDD 03 §5, §6.1, §9; ADR 0008; D-05; open-issues 03-7, 03-10; <https://vukem.dev/docs/cli/reference-install> "`vukem install:auth`"
   - Depends on: P1.A.5.1

@@ -1,12 +1,5 @@
-# senior handoff (2026-10-29, third session)
-
-Done: P0.F.9.1 (spike b2113ce in worktree wt/spike-senior9; app docs branch 73b910e), P1.A.2.1 (app 905620e), P1.A.4.3 (app c4c7f62). Reports in reports/, REV tasks queued. Earlier four tasks were approved and merged.
-
-Queue left for senior: check queue/senior and reserve/senior (was empty after these).
-
-Pitfalls:
-- App worktree `C:\dev\hexascore-app\wt\senior`: branch each task from `origin/main`. Spike worktrees: wt/spike-senior (old), wt/spike-senior9 (P0.F.9.1). RustFS container `hexascore-spike-rustfs-1` (127.0.0.1:9000) and spike Postgres (5432, app/app) are running; real-app Postgres at 127.0.0.1:5433 (hexascore/hexascore).
-- Bash tool denies commands that mention `.env` after a pipe (`| tail ...; ls .env`): keep such commands separate.
-- Biome: tabs width 4 via .editorconfig; tsc include excludes packages/ (needs @types/node = new dependency, owner yes). golangci-lint 2.15.0 `fmt` (golines) rewrites long lines; nolint directives go on their own line above the statement.
-- CI web job now runs `bun run lint` and `bun run test` (vitest); parity test moved from bun:test to vitest.
-- Open for orchestrator: setups scripts do not install golangci-lint; Railway pre-deploy still `migrate` (switch to `migrate:locked` is an owner deploy change); covers route in spike resolves the S3 disk lazily (production needs a boot/readiness check).
+# senior handoff (2026-10-29, fourth session)
+Done, all in especialista queue (1-REV-*): P1.A.2.2 (branch agent/senior/P1.A.2.2, 42dcca0), P1.A.3.1 (agent/senior/P1.A.3.1, 82dbd72), P1.B.1.2 (agent/senior/P1.B.1.2, 4792f5d), P1.B.1.3 (agent/senior/P1.B.1.3, stacked on P1.B.1.2: merge it first).
+Queue left: check queue/senior and reserve/senior (empty when this was written).
+Pitfalls: worktree wt/senior; Postgres 5433 hexascore/hexascore (TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable); psql not installed; `golangci-lint fmt ./...` fixes golines; python text-mode writes on Windows produce CRLF (use newline=''); biome excludes generated packages/tokens/tokens.{css,ts}.
+Open: git-cliff not installed by setup scripts; entity stats job needs a queue worker/driver check on Railway [NÃO VERIFICADO]; `vukem schedule:list` not run (needs APP_KEY).
