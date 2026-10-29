@@ -7,6 +7,8 @@ Doubts and decisions the orchestrator could not take safely while the owner was 
 - Q-001: `golang.org/x/crypto v0.58.0` approved as a direct dependency (scrypt verifier for Better Auth hashes, ADR 0008).
 - FQ-001 (VF-001 passkeys): option (a) chosen, passkeys stay post-1.0; no new framework dependency. Change it here if you prefer (b) stdlib or (c) `contrib/webauthn`.
 - vukem releases: the framework engineer may tag releases after merged VFs (never BREAKING CHANGE without you).
+- P1.A.2.1 dev dependencies beyond D-22's list: `jsdom` 30.1.3 (Vitest DOM environment) and `@testing-library/dom` 10.4.2 (peer of Testing Library) kept; `@types/node` approved so `tsc` can cover `packages/`.
+- P1.A.2.2 tooling: git-cliff (named by ADR 0013) plus a POSIX commit-msg hook and `scripts/release.sh`; no commitlint, no Task.
 
 ## Held back: irreversible or outside what an agent can do alone
 
