@@ -100,6 +100,8 @@ create unique index on subscriptions(user_id) where state in ('active','past_due
 
 Exports are listed from the bucket prefix (no table). `processed_events` keeps its legacy shape for reminder idempotency.
 
+Legacy import (P2.F.2.7, `database/legacyimport/billing.go`): remaining credits per user = `greatest(sum(credit_ledger.delta), 0)`, the legacy `creditBalance` formula (`legacy/apps/web/lib/billing/subscriptions.ts`); debits still in the legacy Redis cache and not yet flushed to the ledger are forgiven, as legacy does when that key is lost. Subscriptions with plan `free` are not imported; the others keep `plan`, `provider` and `status` (as `status` and `state`), with `provider_ref` as `stripe_subscription_id`. `credit_ledger` and `pix_charges` are copied into tables of the legacy shape (migration `20261029200000_create_legacy_billing_tables`) that nothing in v1 writes. `processed_events` is not imported: the app has no such table, Stripe webhook ids are deduplicated by vukem `contrib/stripe` in the cache store, and a replayed legacy event fails the 5-minute signature window first [open: orchestrator decision, see the P2.F.2.7 report].
+
 ## 6. Contracts
 
 ### 6.1 Host, stack, headers
