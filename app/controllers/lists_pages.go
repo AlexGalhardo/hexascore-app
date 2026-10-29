@@ -85,6 +85,6 @@ func (h *Lists) Show(c *web.Ctx) error {
 
 	return inertia.Render(c, "User/List", inertia.Props{
 		"list": listJSON(l), "owner": map[string]string{"nickname": nick}, "items": items, "canEdit": canEdit,
-		"seo": map[string]any{"indexable": indexable},
+		"indexable": indexable,
 	})
 }

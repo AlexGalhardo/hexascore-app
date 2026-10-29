@@ -68,7 +68,7 @@ export function renderMarkdown(md: string): { title: string; body: string; toc: 
 			for (i++; i < lines.length && !(lines[i] ?? "").startsWith("```"); i++) code.push(lines[i] ?? "");
 			i++;
 			html.push(
-				`<pre><code${lang ? ` class="language-${lang}"` : ""}>${escapeHtml(code.join("\n"))}</code></pre>`,
+				`<pre tabindex="0"><code${lang ? ` class="language-${lang}"` : ""}>${escapeHtml(code.join("\n"))}</code></pre>`,
 			);
 			continue;
 		}

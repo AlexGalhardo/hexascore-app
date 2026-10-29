@@ -37,7 +37,7 @@ func TestInertiaPages_UserLibraryLists(t *testing.T) {
 		own.Get("/u/pageowner").AssertOK().AssertInertia("User/Profile").
 			PropEquals("profile.isOwner", true).HasProp("lists", 1)
 		oth.Get("/u/pageowner").AssertOK().AssertInertia("User/Profile").PropEquals("profile.isOwner", false)
-		anon.Get("/u/pageowner").AssertOK().AssertInertia("User/Profile").PropEquals("seo.indexable", true)
+		anon.Get("/u/pageowner").AssertOK().AssertInertia("User/Profile").PropEquals("indexable", true)
 	})
 
 	t.Run("User/List", func(*testing.T) {
@@ -45,15 +45,15 @@ func TestInertiaPages_UserLibraryLists(t *testing.T) {
 			PropEquals("canEdit", true).HasProp("items", 1)
 		oth.Get("/u/pageowner/lists/"+pub).AssertOK().AssertInertia("User/List").PropEquals("canEdit", false)
 		anon.Get("/u/pageowner/lists/"+pub).AssertOK().AssertInertia("User/List").
-			PropEquals("canEdit", false).PropEquals("seo.indexable", true)
-		own.Get("/u/pageowner/lists/"+priv).AssertOK().AssertInertia("User/List").PropEquals("seo.indexable", false)
+			PropEquals("canEdit", false).PropEquals("indexable", true)
+		own.Get("/u/pageowner/lists/"+priv).AssertOK().AssertInertia("User/List").PropEquals("indexable", false)
 		oth.Get("/u/pageowner/lists/" + priv).AssertNotFound()
 		anon.Get("/u/pageowner/lists/" + priv).AssertNotFound()
 		anon.Get("/u/pageother/lists/" + pub).AssertNotFound()
 
 		r.exec(`UPDATE users SET banned_at = now() WHERE id = $1`, owner.ID)
 		anon.Get("/u/pageowner/lists/"+pub).AssertOK().AssertHeader("X-Robots-Tag", "noindex").
-			AssertInertia("User/List").PropEquals("seo.indexable", false)
+			AssertInertia("User/List").PropEquals("indexable", false)
 		r.exec(`UPDATE users SET banned_at = NULL WHERE id = $1`, owner.ID)
 	})
 
