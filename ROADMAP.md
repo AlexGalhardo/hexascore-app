@@ -507,7 +507,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.B.5 Release
 
-- [ ] **P1.B.5.1** Release `v0.2.0` (catalogue model and read paths).
+- [x] **P1.B.5.1** Release `v0.2.0` (catalogue model and read paths).
   - Files/modules: `CHANGELOG.md`, tag `v0.2.0`
   - Refs: ADR 0013; SDD 11 §7.1
   - Depends on: P1.B.2.2, P1.B.3.2, P1.B.4.1, P1.B.4.2, P1.B.4.3
