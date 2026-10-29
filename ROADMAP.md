@@ -1814,7 +1814,7 @@ Phase-specific conventions:
 
 #### P2.E.3 Drills
 
-- [ ] **P2.E.3.1** Implement `backup:restore` and the monthly `backup:drill` on staging, including the deletion replay.
+- [x] **P2.E.3.1** Implement `backup:restore` and the monthly `backup:drill` on staging, including the deletion replay.
   - Files/modules: `app/console/backup_restore.go` (`--target-url`), `app/console/backup_drill.go`, `routes/schedule.go` (first Sunday 07:00, staging only), `tests/backup_drill_test.go`, `docs/runbooks/restore.md`
   - Refs: SDD 11 §7.4, §7.5 step 3, FR-11-6, §9 item 6, §10; SDD 13 §8 (restore re-applies deletions), §11 issue 11; ADR 0014; D-18
   - Depends on: P2.E.2.2
@@ -1823,6 +1823,7 @@ Phase-specific conventions:
     - `go test -tags=integration ./tests -run 'TestBackupDrill|TestRestoreReappliesDeletions'` → PASS
     - on staging with `BACKUP_SOURCE_S3_*` set: `/app/hexascore backup:drill` → exit 0, `backup_runs(kind='drill')` with `duration_s < 3600`, row counts equal to the dump manifest
   - Notes: the drill creates and drops `hexascore_drill`; it never restores over the staging database. `dq:asserts` runs the catalogue asserts that exist (SDD 01 §7.6); SDD 06 asserts join in P6. HUMAN GATE (production data): granting staging read access to the production bucket is the owner's call.
+  - Status (2026-10-29): local acceptance green (`TestBackupDrill`, `TestRestoreReappliesDeletions` PASS in `golang:1.27.3-alpine3.24` + `postgresql18-client`; they skip on hosts without `pg_dump`/`pg_restore`). Deferred (owner gate): the staging run with `BACKUP_SOURCE_S3_*`. Manifest = per-table row counts in the `pg_dump --snapshot` snapshot; `pg_restore` single job on stdin (SDD 11 §7.4 amended). Found and fixed: `hs_norm` unqualified call made every dump unrestorable.
 
 - [ ] **P2.E.3.2** Run a timed RTO game day on staging and add the migration rehearsal script.
   - Files/modules: `scripts/ops/migration-rehearsal.sh` (restore latest dump into staging, deploy candidate, record duration and lock waits), `docs/runbooks/restore.md` (timings), `docs/runbooks/migrations.md` (rehearsal section)

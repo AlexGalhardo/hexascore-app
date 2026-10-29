@@ -9,9 +9,7 @@ import (
 	"slices"
 
 	vukem "github.com/AlexGalhardo/vukem"
-	"github.com/AlexGalhardo/vukem/config"
 	"github.com/AlexGalhardo/vukem/crypt"
-	"github.com/AlexGalhardo/vukem/drivers/s3"
 
 	"github.com/AlexGalhardo/hexascore-app/app/backup"
 )
@@ -32,29 +30,9 @@ func BackupRun() vukem.Command {
 				return fmt.Errorf("backup:run: --kind must be one of %v", backup.Kinds)
 			}
 
-			enc, err := backupEncrypter(app.Source.Get("BACKUP_KEY"))
+			r, err := backupRunner(app, app.Source)
 			if err != nil {
 				return err
-			}
-
-			cfg, err := config.Load[s3.Config](app.Source)
-			if err != nil {
-				return fmt.Errorf("backup:run: S3 config: %w", err)
-			}
-
-			disk, err := s3.New(cfg)
-			if err != nil {
-				return fmt.Errorf("backup:run: S3 disk: %w", err)
-			}
-
-			db, err := app.DB()
-			if err != nil {
-				return err
-			}
-
-			r := &backup.Runner{
-				DB: db, Disk: disk, Enc: enc, DatabaseURL: app.Source.Get("DATABASE_URL"),
-				PgDump: "pg_dump", PgRestore: "pg_restore", Env: string(app.Config.Env), Now: app.Now,
 			}
 
 			res, err := r.Run(ctx, *kind)
