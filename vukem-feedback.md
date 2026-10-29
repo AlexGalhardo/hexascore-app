@@ -322,3 +322,21 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 - **Repro**: spike `agent/senior/P0.F.4.1`: `API_URL=http://api.localhost:3001/v1 vukem openapi:export -prefix /api/v1 | jq -r '.servers[0].url, (.paths|keys[])'` gives `http://api.localhost:3001/v1` and `/api/v1/ping`.
 - **Workaround**: post-process the export: `jq '.paths |= with_entries(.key |= sub("^/api/v1";""))'` gives paths `/ping`, matching the server URL.
 - **Request**: `openapi.Info.StripPrefix` (or `PathPrefix` stripping) and an `OPENAPI_SERVERS` config key. Also note: in Git Bash `-prefix //api/v1` was passed through literally and failed (`path prefix matches no route "//api/v1"`); `MSYS_NO_PATHCONV=1 ... -prefix /api/v1` works.
+
+## VF-035: Migration builder lacks uuid/composite primary keys, smallint and generated columns; ORM has a single-column key
+
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` ("Creating migrations"), `https://vukem.dev/docs/database/orm` ("Defining models").
+- **Context**: SDD 01 `items` (uuid primary key) and SDD 02 `ratings` (composite key `(user_id, item_id)`, `smallint` scores, stored generated `overall`) cannot be expressed with `schema.Table`: no `smallint`, no primary key on a `t.UUID` column, no composite primary key, no generated column. `t.JSON` is `jsonb` and `t.Enum` is `text` + CHECK on PostgreSQL (verified, spike `TestGeneratedOverallColumn`), which closes the doubt in VF-006 for those two types. The ORM filters `Update`/`Delete` by one key column (`Keyer.PrimaryKey`), so on a composite-key table `orm.Update`/`orm.Delete` would match every row of the first key.
+- **Workaround**: `s.Raw` for whole `CREATE TABLE` statements (guard with `s.Dialect() == "postgres"`); ORM model `Rating` with `PrimaryKey() = "user_id"` used only for `orm.Create` and `orm.QueryOf[Rating](db).Where("user_id", u).Where("item_id", i).Update(...)`; never `orm.Update`/`orm.Delete` on it.
+- **Request**: `t.SmallInteger`, `t.Primary(cols...)`/`Column.Primary()`, `Column.GeneratedAs(expr).Stored()`, and composite keys in `Keyer` (or a loud error when a model with a non-unique key calls `Update`/`Delete`).
+
+## VF-036: ORM column naming splits acronyms (`ExternalIDs` becomes `external_i_ds`)
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` ("Defining models").
+- **Context**: `naming.Snake("ExternalIDs")` yields `external_i_ds`; `orm.Create` failed with `column "external_i_ds" of relation "items" does not exist`.
+- **Workaround**: explicit `db:"external_ids"` tag on fields ending in an acronym (`ID`, `URL`, `IDs`).
+- **Request**: treat trailing runs of capitals as one word (`ExternalIDs` becomes `external_ids`), or document the rule and the `db` tag on the models page.
+
+Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so a model that maps a generated column fails on `orm.Create` with `cannot insert a non-DEFAULT value into column "overall"` (SQLSTATE 428C9). Map the column with `db:"-"` (never written, never read) or read it through a separate read-only model. Insert and update through the ORM then succeed. A `generated` tag is still the request.

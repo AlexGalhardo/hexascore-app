@@ -81,3 +81,18 @@ Decisive output (server on port 3001, spike Postgres):
 - `go test ./app/http/middleware/` `ok`; `go test ./tests/ -run APIHost` `ok`; full `go test ./...` `ok hexascore-spike/tests`.
 
 Verdict: works (workaround: OpenAPI servers via `bootstrap` process env, paths post-processed, VF-034; host routing itself is app middleware, VF-015).
+
+## P0.F.5.1 jsonb, CHECK enums and a generated column
+
+Spike branch `agent/senior/P0.F.5.1` (eba1939). Files: `database/migrations/20261029010000_create_items_table.go`, `20261029010001_create_ratings_table.go` (registered in `registry.go`), `tests/orm_generated_test.go`. Both migrations use `s.Raw` for the whole table (uuid primary key, composite key, smallint and generated column are not in the builder: VF-035) and return early when `s.Dialect() != "postgres"` so the SQLite-based scaffold tests keep passing (VF-033). `items_type_probe` is a builder-made table that records the type mapping.
+
+Env the test needs: `TEST_DATABASE_URL` (postgres admin URL; `pgtest.Database` creates and drops a private database). Migrations: `DATABASE_URL` (DB `spike_senior`), loaded from the spike `.env`.
+
+Decisive output:
+
+- `vukem migrate; vukem migrate:rollback; vukem migrate` each exit 0 (`Rolled back: ..._create_ratings_table`, `..._create_items_table`, then both `Migrated:` again); `migrate:status --json` shows both `"ran":true`.
+- `go test ./tests -run TestGeneratedOverallColumn -v` PASS: insert via `orm.Create` succeeds; after `Update(orm.Set{"c1": 100})` through the query builder `overall` goes from 525/6 to 545/6 and `round(overall)` equals `round(sum/6)`; `go test ./...` `ok hexascore-spike/tests`.
+- Type mapping on PostgreSQL 18 (information_schema): `t.JSON` is `jsonb`, `t.Enum` is `text` plus a CHECK (a value outside the list is rejected), `t.UUID` is `uuid`, `ratings.overall` is `numeric` with `is_generated = ALWAYS`.
+- ORM: `orm.JSON[T]` round-trips `jsonb`; CHECK violations (`type = 'podcast'`) surface as errors; the ORM writes every mapped column, so a model mapping `overall` fails with `cannot insert a non-DEFAULT value into column "overall"` (SQLSTATE 428C9): leave the column out of the write model (or `db:"-"`) and read it through a separate read model. `orm.Update`/`orm.Delete` filter by the single `PrimaryKey()` column, so composite-key tables must use `orm.QueryOf[T](db).Where(...).Where(...).Update(...)` (VF-035). Acronym fields need a `db` tag (VF-036). Fallback raw SQL was not needed.
+
+Verdict: workaround (raw DDL for these tables; ORM works with the models above; VF-009 updated, VF-035, VF-036).
