@@ -1,0 +1,1129 @@
+{
+  "account": {
+    "metaTitle": "Profile",
+    "title": "Your profile",
+    "saved": "Saved.",
+    "details": {
+      "title": "Account details",
+      "name": "Name",
+      "email": "Email",
+      "nickname": "Nickname",
+      "save": "Save name"
+    },
+    "password": {
+      "setTitle": "Set a password",
+      "setBody": "Your account was created with Google or a passkey. Set a password to also log in with email and password.",
+      "changeTitle": "Change password",
+      "set": "Set password",
+      "change": "Change password",
+      "done": "Password updated.",
+      "revokeOthers": "Log out other devices"
+    },
+    "twoFactor": {
+      "title": "Two-factor authentication",
+      "on": "Two-factor authentication is on.",
+      "off": "Add a second step to your login with an authenticator app (TOTP).",
+      "enable": "Enable 2FA",
+      "disable": "Disable 2FA",
+      "confirmPassword": "Confirm with your password",
+      "scan": "Scan this QR code with your authenticator app, then enter the 6-digit code.",
+      "qrAlt": "QR code to add this account to an authenticator app",
+      "manual": "Can't scan? Enter this key manually:",
+      "code": "6-digit code",
+      "verify": "Verify and enable",
+      "backupTitle": "Backup codes",
+      "backupBody": "Save these codes somewhere safe. Each one works once if you lose your phone. They will not be shown again.",
+      "copy": "Copy codes",
+      "copied": "Copied.",
+      "done": "I saved my codes",
+      "disabled": "Two-factor authentication disabled.",
+      "cancel": "Cancel"
+    },
+    "privacy": {
+      "title": "Privacy",
+      "label": "Private profile",
+      "help": "Your ratings stay in the community scores, but your profile and lists are hidden from other users."
+    },
+    "delete": {
+      "title": "Delete account",
+      "body": "Your account is deleted 30 days after you confirm. Until then you can log in and cancel.",
+      "button": "Delete my account",
+      "dialogTitle": "Delete your account?",
+      "dialogBody": "You will be logged out now. If you do not log in and cancel within 30 days, your personal data is erased for good. Your ratings remain in the community scores as an anonymous user.",
+      "wait": "Confirm ({seconds})",
+      "confirm": "Yes, delete my account",
+      "cancel": "Keep my account"
+    },
+    "banner": {
+      "text": "Your account is scheduled for deletion on {date}.",
+      "cancel": "Cancel deletion"
+    }
+  },
+  "actions": {
+    "unauthorized": "Your session expired. Log in again.",
+    "invalid": "Check the highlighted fields.",
+    "rateLimited": "Too many attempts. Try again later.",
+    "bot": "Your request was blocked. Reload the page and try again.",
+    "passwordAlreadySet": "This account already has a password.",
+    "weakPassword": "The password does not meet the requirements.",
+    "notScheduled": "This account is not scheduled for deletion.",
+    "emailNotVerified": "Confirm your email first.",
+    "nicknameRequired": "Choose a nickname first.",
+    "nicknameTaken": "This nickname is already taken.",
+    "forbidden": "You cannot do that.",
+    "notFound": "Not found. It may have been removed.",
+    "typeMismatch": "This list only accepts items of its own category.",
+    "limit": "You reached the limit for this.",
+    "server": "Something went wrong on our side. Try again."
+  },
+  "api": {
+    "docs": {
+      "metaTitle": "API documentation",
+      "metaDescription": "Read-only REST API with community scores for games, movies, TV series and books.",
+      "navLabel": "Documentation",
+      "nav": {
+        "quickstart": "Quickstart",
+        "authentication": "Authentication",
+        "errors": "Errors",
+        "pagination": "Pagination",
+        "limits": "Rate limits & quotas",
+        "changelog": "Changelog & versioning",
+        "reference": "API reference"
+      },
+      "languageNote": "Field and parameter names stay in English.",
+      "getKey": "Get an API key",
+      "loading": "Loading the API reference…"
+    },
+    "profile": {
+      "metaTitle": "API keys and usage",
+      "title": "API",
+      "intro": "Create keys, watch your usage and try every endpoint with your own key.",
+      "docsLink": "Read the docs",
+      "plan": {
+        "title": "Current plan",
+        "quota": "{used} of {limit} requests used",
+        "lifetime": "Free plan quota never resets.",
+        "resets": "Resets on {date}.",
+        "rate": {
+          "one": "{count} request per second",
+          "other": "{count} requests per second"
+        },
+        "pageSize": "Up to {count} results per page",
+        "upgrade": "See plans",
+        "checkout": "Upgrade or buy credits"
+      },
+      "usage": {
+        "title": "Usage",
+        "today": "Today",
+        "last30": "Last 30 days",
+        "chartLabel": "Requests per day over the last 30 days, {total} in total",
+        "bar": "{day}: {count} requests",
+        "note": "Past days are consolidated once a day; today is live."
+      },
+      "keys": {
+        "title": "API keys",
+        "empty": "No keys yet. Create one to make your first request.",
+        "name": "Name",
+        "prefix": "Key",
+        "created": "Created",
+        "lastUsed": "Last used",
+        "status": "Status",
+        "never": "Never",
+        "active": "Active",
+        "revoked": "Revoked",
+        "actions": "Actions",
+        "newName": "Key name",
+        "newNamePlaceholder": "e.g. production server",
+        "create": "Create key",
+        "creating": "Creating…",
+        "createdTitle": "Your new API key",
+        "createdWarning": "Copy it now. For your security it is stored only as a hash and will never be shown again.",
+        "copy": "Copy",
+        "copied": "Copied",
+        "dismiss": "I saved it",
+        "revoke": "Revoke",
+        "revoking": "Revoking…",
+        "confirmTitle": "Revoke “{name}”?",
+        "confirmBody": "Requests using this key will fail with 401 immediately. This cannot be undone.",
+        "cancel": "Cancel",
+        "errors": {
+          "unauthenticated": "Your session expired. Log in again.",
+          "unverified": "Verify your email before creating API keys.",
+          "disabled": "Creating new API keys is temporarily disabled. Existing keys keep working.",
+          "invalid": "Give the key a name of up to 40 characters.",
+          "limit": "You can have at most 5 active keys. Revoke one first.",
+          "not_found": "This key no longer exists.",
+          "server": "Something went wrong. Try again."
+        }
+      },
+      "tryIt": {
+        "title": "Try it",
+        "description": "Requests run from your browser against this deployment and count against your quota. The key stays in this page only — it is never saved or logged.",
+        "keyLabel": "API key for “Try it”",
+        "apply": "Use key",
+        "keyHint": "Paste a full key (hx_live_…) and press “Use key” to open the interactive reference. A key you just created is filled in for you."
+      }
+    }
+  },
+  "auth": {
+    "fields": {
+      "identifier": "Email or nickname",
+      "email": "Email",
+      "password": "Password",
+      "newPassword": "New password",
+      "currentPassword": "Current password",
+      "nickname": "Nickname",
+      "name": "Name",
+      "show": "Show password",
+      "hide": "Hide password"
+    },
+    "rules": {
+      "title": "Your password must have:",
+      "length": "8 to 32 characters",
+      "uppercase": "One uppercase letter",
+      "lowercase": "One lowercase letter",
+      "number": "One number",
+      "special": "One special character"
+    },
+    "or": "or",
+    "google": "Continue with Google",
+    "errors": {
+      "invalidCredentials": "Wrong email/nickname or password.",
+      "emailNotVerified": "Confirm your email before logging in.",
+      "rateLimited": "Too many attempts. Wait a minute and try again.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "generic": "Something went wrong. Try again.",
+      "emailTaken": "This email is already registered.",
+      "usernameTaken": "This nickname is taken. Try another one.",
+      "invalidCode": "Invalid code. Try again.",
+      "locked": "Too many wrong codes. Try again later.",
+      "weakPassword": "The password does not meet the requirements.",
+      "bot": "Your request was blocked. Reload the page and try again.",
+      "invalidNickname": "4–16 characters: letters, numbers and underscore.",
+      "invalidEmail": "Enter a valid email.",
+      "invalidName": "Enter your name.",
+      "invalidToken": "This link is invalid or expired."
+    },
+    "login": {
+      "metaTitle": "Log in",
+      "title": "Log in",
+      "submit": "Log in",
+      "forgot": "Forgot your password?",
+      "noAccount": "Don't have an account yet?",
+      "createAccount": "Create account",
+      "resend": "Resend confirmation email",
+      "resent": "If the account exists, a new confirmation email is on its way.",
+      "twoFactorTitle": "Two-factor authentication",
+      "twoFactorHelp": "Enter the 6-digit code from your authenticator app.",
+      "backupHelp": "Enter one of your backup codes. Each code works once.",
+      "code": "Code",
+      "useBackup": "Use a backup code",
+      "useTotp": "Use the authenticator app",
+      "trustDevice": "Trust this device for 30 days",
+      "verify": "Verify"
+    },
+    "signup": {
+      "metaTitle": "Create account",
+      "title": "Create account",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "logIn": "Log in",
+      "nicknameHint": "4–16 lowercase letters, no numbers, spaces or symbols. It is your public handle, unique and cannot be changed later.",
+      "checkTitle": "Check your email",
+      "checkBody": "We sent a confirmation link to {email}. Open it to activate your account.",
+      "agree": "By creating an account you agree to the <terms>Terms</terms> and the <privacy>Privacy policy</privacy>."
+    },
+    "verify": {
+      "metaTitle": "Verify email",
+      "title": "Verify your email",
+      "success": "Email confirmed",
+      "successBody": "Your account is active. You can now rate items and create API keys.",
+      "continue": "Continue",
+      "invalid": "This confirmation link is invalid or expired. Request a new one below.",
+      "pending": "Open the link we sent to your inbox. Did not get it? Request a new one.",
+      "resend": "Send a new link",
+      "resent": "If the account exists and is not verified yet, a new link is on its way."
+    },
+    "recover": {
+      "metaTitle": "Recover password",
+      "title": "Recover password",
+      "body": "Enter the email of your account and we will send you a link to choose a new password.",
+      "submit": "Send link",
+      "sent": "If an account exists for this email, a reset link is on its way. It expires in 1 hour.",
+      "back": "Back to log in"
+    },
+    "reset": {
+      "metaTitle": "Choose a new password",
+      "title": "Choose a new password",
+      "submit": "Save password",
+      "done": "Password changed. You can now log in.",
+      "invalid": "This reset link is invalid or expired.",
+      "requestNew": "Request a new link"
+    },
+    "emails": {
+      "verify": {
+        "subject": "confirm your email",
+        "heading": "Confirm your email",
+        "body": "Confirm your email address to rate items and create API keys.",
+        "action": "Confirm email"
+      },
+      "reset": {
+        "subject": "reset your password",
+        "heading": "Reset your password",
+        "body": "Someone asked to reset the password of this account. If it was not you, ignore this email.",
+        "action": "Reset password"
+      }
+    }
+  },
+  "billing": {
+    "plans": {
+      "free": "Free",
+      "pro": "Pro",
+      "business": "Business"
+    },
+    "pricing": {
+      "metaTitle": "API pricing",
+      "title": "API pricing",
+      "subtitle": "Start free, upgrade when you need more. Prices are charged by the server in the currency you pick.",
+      "currency": "Currency",
+      "perMonth": "/month",
+      "requestsLifetime": "{count} requests in total",
+      "requestsMonthly": "{count} requests per month",
+      "maxItems": "Up to {count} items per request",
+      "rate": "{count} requests per second",
+      "quotaLabel": "Quota",
+      "pageSizeLabel": "Items per request",
+      "rateLabel": "Rate limit",
+      "ctaFree": "Create free account",
+      "ctaFreeLogged": "Get an API key",
+      "ctaPaid": "Choose {plan}",
+      "ctaSignup": "Sign up to subscribe",
+      "notConfigured": "Online payments are not available yet. Paid plans will open soon."
+    },
+    "checkout": {
+      "metaTitle": "Plan and billing",
+      "title": "Plan and billing",
+      "current": "Current plan",
+      "status": {
+        "active": "Active",
+        "past_due": "Payment pending",
+        "canceled": "Canceled",
+        "expired": "Expired"
+      },
+      "via": {
+        "stripe": "card"
+      },
+      "renews": "Renews on {date}",
+      "ends": "Ends on {date}",
+      "manage": "Manage subscription",
+      "success": "Payment received. Your plan updates as soon as the payment provider confirms it (usually seconds).",
+      "canceled": "Checkout canceled. Nothing was charged.",
+      "notConfigured": "Payments are not configured on this server.",
+      "buy": "Subscribe or buy credits",
+      "product": "What do you want?",
+      "method": "Payment method",
+      "card": "Card (Stripe)",
+      "period": "Period",
+      "oneMonth": "1 month",
+      "twelveMonths": "12 months (pay 10)",
+      "currency": "Currency",
+      "total": "Total",
+      "recurring": "Charged every month until you cancel.",
+      "oneTime": "One-time payment, no automatic renewal.",
+      "pay": "Continue to payment",
+      "working": "Please wait…",
+      "copy": "Copy code",
+      "copied": "Copied",
+      "expires": "Expires at {time}",
+      "newCode": "New code",
+      "close": "Close",
+      "closeIn": {
+        "one": "You can close this in {count} second",
+        "other": "You can close this in {count} seconds"
+      },
+      "sandboxWait": "Wait {seconds}s",
+      "sandboxNote": "Sandbox mode: simulates the payment, no money moves.",
+      "errors": {
+        "unauthenticated": "Log in again to continue.",
+        "unverified": "Confirm your email before paying.",
+        "not_configured": "This payment method is not configured.",
+        "invalid": "Invalid selection.",
+        "already_subscribed": "You already have a card subscription. Use “Manage subscription” to change plans.",
+        "stripe_active": "You have an active card subscription. Manage it in the billing portal.",
+        "no_customer": "No card billing account yet.",
+        "server": "Something went wrong. Try again in a minute."
+      }
+    }
+  },
+  "catalog": {
+    "title": {
+      "game": "Games",
+      "movie": "Movies",
+      "series": "TV series",
+      "book": "Books"
+    },
+    "intro": {
+      "game": "Every game, scored by players in gameplay, fun, sound, technical quality, visuals and storytelling.",
+      "movie": "Every movie, scored by viewers in screenplay, acting, direction, cinematography, sound and entertainment.",
+      "series": "Every TV series, scored as a whole: screenplay, acting, characters, pacing, production and entertainment.",
+      "book": "Every book, scored by readers in plot, characters, writing, pacing, originality and impact."
+    },
+    "filters": "Filters",
+    "genre": "Genre",
+    "anyGenre": "Any genre",
+    "platform": "Platform",
+    "anyPlatform": "Any platform",
+    "year": "Year",
+    "minScore": "Min. score",
+    "minCategories": "Minimum Score Per Category",
+    "resultCount": {
+      "zero": "No items found",
+      "one": "{count} item found",
+      "other": "{count} items found"
+    },
+    "sort": "Sort by",
+    "apply": "Apply",
+    "reset": "Reset",
+    "sorts": {
+      "popularity_desc": "Most popular",
+      "popularity_asc": "Least popular",
+      "score_desc": "Highest score",
+      "score_asc": "Lowest score",
+      "release_date_desc": "Newest",
+      "release_date_asc": "Oldest",
+      "rating_count_desc": "Most rated",
+      "rating_count_asc": "Least rated"
+    },
+    "columns": {
+      "title": "Title",
+      "year": "Year",
+      "score": "Score",
+      "ratings": "Ratings"
+    },
+    "ratingCount": {
+      "zero": "no ratings",
+      "one": "{count} rating",
+      "other": "{count} ratings"
+    },
+    "empty": "No items match these filters.",
+    "next": "Next",
+    "previous": "Previous",
+    "pagination": "Pages",
+    "landing": {
+      "topRated": "Top rated",
+      "newest": "New releases",
+      "mostRated": "Most rated",
+      "seeAll": "All {section}",
+      "empty": "Nothing here yet."
+    }
+  },
+  "categories": {
+    "game": {
+      "gameplay": "Gameplay",
+      "fun": "Fun",
+      "sound": "Sound",
+      "technical": "Technical",
+      "visual": "Visuals",
+      "storytelling": "Storytelling"
+    },
+    "movie": {
+      "screenplay": "Screenplay",
+      "acting": "Acting",
+      "direction": "Direction",
+      "cinematography": "Cinematography",
+      "soundtrack": "Soundtrack",
+      "entertainment": "Entertainment"
+    },
+    "series": {
+      "screenplay": "Screenplay",
+      "acting": "Acting",
+      "characters": "Characters",
+      "pacing": "Pacing",
+      "production": "Production",
+      "entertainment": "Entertainment"
+    },
+    "book": {
+      "plot": "Plot",
+      "characters": "Characters",
+      "writing": "Writing",
+      "pacing": "Pacing",
+      "originality": "Originality",
+      "impact": "Impact"
+    }
+  },
+  "itemTypes": {
+    "game": "Game",
+    "movie": "Movie",
+    "series": "TV series",
+    "book": "Book"
+  },
+  "score": {
+    "outOf": "Score {score} out of 100",
+    "none": "Not enough ratings yet",
+    "radar": "Category averages — {summary}",
+    "radarEmpty": "No category averages yet"
+  },
+  "meta": {
+    "description": "Community scores for games, movies, TV series and books — rated in 6 categories from 0 to 100."
+  },
+  "nav": {
+    "games": "Games",
+    "movies": "Movies",
+    "series": "TV Series",
+    "books": "Books",
+    "search": "Search games, movies, series, books…",
+    "login": "Log in",
+    "theme": "Toggle theme",
+    "profile": "Profile",
+    "logout": "Log out",
+    "admin": "Admin",
+    "account": "Account menu",
+    "api": "API",
+    "apiDocs": "API Docs",
+    "publicProfile": "My page",
+    "sections": "Sections",
+    "pricing": "Pricing",
+    "language": "Language",
+    "openSearch": "Open search",
+    "menu": "Menu"
+  },
+  "home": {
+    "title": "Every game, movie, series and book — scored by people, category by category.",
+    "explore": "Explore"
+  },
+  "footer": {
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "contact": "Contact"
+  },
+  "cookies": {
+    "text": "We only use essential cookies (session and preferences). Video embeds from YouTube load only if you allow them.",
+    "accept": "Allow embeds",
+    "decline": "Essential only"
+  },
+  "sandbox": {
+    "banner": "Sandbox environment — users, ratings and lists are fictitious (test data)."
+  },
+  "contact": {
+    "metaTitle": "Contact",
+    "title": "Contact us",
+    "intro": "Questions, ideas or something broken? Write to us — we read every message.",
+    "name": "Name",
+    "email": "Email",
+    "loggedIn": "Sent from your account. Name and email come from your profile.",
+    "subject": "Subject",
+    "subjects": {
+      "question": "Questions",
+      "feedback": "Suggestions & Feedback",
+      "bug": "Bugs & Technical Problems"
+    },
+    "message": "Message",
+    "minHint": "At least {min} characters.",
+    "submit": "Send message",
+    "sent": "Message sent. Thank you! We usually reply within a few days."
+  },
+  "docs": {
+    "copy": "Copy",
+    "copied": "Copied",
+    "quickstart": {
+      "lead": "Community scores for games, movies, TV series and books — 0 to 100, in six categories per item — over a read-only JSON API.",
+      "keyHeading": "1. Create an API key",
+      "keyBody": "<dashboard>Open your API dashboard</dashboard> and create a key. It starts with <code>hx_live_</code> and is shown only once — store it in an environment variable, never in client-side code:",
+      "freePlan": "The Free plan includes {quota} requests in total — enough to build and test an integration.",
+      "requestHeading": "2. Make your first request",
+      "requestBody": "The base URL is <code>{baseUrl}</code>. Every endpoint is a <code>GET</code>. Here are the five best-rated games:",
+      "hostNote": "The same API also answers on the website host: <code>{siteUrl}</code>. Paths, parameters and responses are identical.",
+      "responseHeading": "3. Read the response",
+      "responseBody": "Lists return <code>data</code> plus a <code>next_cursor</code> for the next page. Field names are snake_case and dates are ISO 8601. <code>score</code> and <code>categories</code> are <code>null</code> until an item has 5 ratings.",
+      "nextHeading": "Next steps",
+      "nextDetail": "Fetch one item with <code>{path}</code> for external ids, trailers and the licensed synopsis.",
+      "nextLookup": "Map ids you already have with <code>{path}</code> (also <code>steam</code>, <code>igdb</code>, <code>tmdb</code>, <code>isbn13</code>, <code>openlibrary</code>, <code>wikidata</code>).",
+      "nextGuides": "Handle <errors>errors</errors> and <limits>rate limits</limits>, then browse the <reference>API reference</reference>.",
+      "sdkHeading": "SDKs",
+      "sdkBody": "Typed clients are generated from the <openapi>OpenAPI document</openapi>: TypeScript (<code>{tsPackage}</code>) and Python (<code>{pyPackage}</code>). They are not on npm/PyPI yet — build them from <code>sdks/</code> in the repository until the first release.",
+      "sdkTitle": "TypeScript SDK"
+    },
+    "authentication": {
+      "lead": "Every request is authenticated with a secret API key sent as a Bearer token.",
+      "bearerHeading": "Bearer token",
+      "bearerBody": "Send the key in the <code>Authorization</code> header. Keys look like <code>hx_live_</code> followed by 32 letters and digits. Query-string keys are not accepted, so keys never end up in access logs or browser history.",
+      "unauthorized": "A missing, malformed, unknown or revoked key returns <code>401</code> with <link>{problemCode}</link> and a <code>WWW-Authenticate: Bearer</code> header.",
+      "managingHeading": "Managing keys",
+      "manageCreate": "Create and revoke keys at <link>/profile/api</link> (verified email required, up to 5 active keys).",
+      "manageOnce": "The full key is shown once. Only a SHA-256 hash is stored; we cannot recover it for you.",
+      "manageRevoke": "Revocation is immediate. Rotate by creating a new key, deploying it, then revoking the old one.",
+      "manageShared": "All keys of an account share the same plan, quota and per-second rate limit.",
+      "securityHeading": "Keep keys secret",
+      "securityNote": "Call the API from your server. A key embedded in a web page or mobile app can be extracted and used up your quota. If a key leaks, revoke it right away."
+    },
+    "errors": {
+      "lead": "Errors use RFC 9457 problem details with a stable machine-readable code.",
+      "formatHeading": "Format",
+      "formatBody": "Every error has <code>Content-Type: application/problem+json</code>. Branch on <code>code</code> (stable) rather than on <code>title</code> or <code>detail</code> (human text that may change). <code>type</code> links to the matching section below, and <code>request_id</code> equals the <code>X-Request-Id</code> header — include it when you contact support.",
+      "exampleTitle": "Example",
+      "codesHeading": "Codes",
+      "when": "When",
+      "fix": "What to do",
+      "codes": {
+        "bad_request": {
+          "title": "Invalid request",
+          "when": "A query parameter is unknown or out of range, the <code>cursor</code> was tampered with or belongs to another query, or <code>limit</code> is above your plan's page size (10 on Free). <code>errors</code> lists each problem with its <code>path</code>.",
+          "fix": "Fix the listed parameters. Not counted against your quota when the parameters fail validation."
+        },
+        "unauthorized": {
+          "title": "Missing or invalid API key",
+          "when": "No <code>Authorization: Bearer</code> header, a malformed key, or a key that does not exist or was revoked.",
+          "fix": "Check the header and the key at <link>/profile/api</link>. Never retried automatically."
+        },
+        "payment_required": {
+          "title": "Quota exhausted",
+          "when": "The quota is exhausted: the 100 lifetime requests on Free, or the monthly quota plus prepaid credits on paid plans. The body includes <code>plan</code> and <code>limit</code>.",
+          "fix": "Upgrade or buy credits at <link>/pricing</link>. Paid quotas reset on the 1st of each month (UTC)."
+        },
+        "forbidden": {
+          "title": "Forbidden",
+          "when": "The account that owns the key is suspended.",
+          "fix": "Contact us through <link>/contact</link> with the <code>request_id</code>."
+        },
+        "not_found": {
+          "title": "Not found",
+          "when": "Unknown item id, an id that belongs to another type (e.g. a game id under <code>/movies</code>), an unknown type path, or no match for <code>/lookup</code>.",
+          "fix": "Check the id and the type. Lookups require an exact id (e.g. tt0111161)."
+        },
+        "rate_limited": {
+          "title": "Too many requests",
+          "when": "More requests per second than your plan allows. The <code>Retry-After</code> header says how many seconds to wait. Not counted against your quota.",
+          "fix": "Wait Retry-After seconds and retry; space out bursts or upgrade for a higher rate."
+        },
+        "internal_error": {
+          "title": "Internal error",
+          "when": "Something failed on our side. The request is refunded to your quota.",
+          "fix": "Retry with exponential backoff. If it persists, send us the <code>request_id</code>."
+        },
+        "service_unavailable": {
+          "title": "Service unavailable",
+          "when": "A dependency is temporarily down. Comes with <code>Retry-After</code>.",
+          "fix": "Retry after the indicated delay."
+        }
+      },
+      "retriesHeading": "Retries",
+      "retriesBody": "Retry only <code>429</code>, <code>500</code> and <code>503</code>, honouring <code>Retry-After</code> when present and backing off exponentially otherwise. Every endpoint is a read-only <code>GET</code>, so retries are always safe."
+    },
+    "pagination": {
+      "lead": "List endpoints use opaque cursors: stable under inserts, fast at any depth.",
+      "howHeading": "How it works",
+      "howBody": "<code>GET /games</code>, <code>/movies</code>, <code>/series</code> and <code>/books</code> return <code>{shape}</code>. To get the next page, repeat the same request with <code>{param}</code>. When <code>next_cursor</code> is <code>null</code> you reached the end.",
+      "sameParams": "Keep every other parameter identical. A cursor from another <code>sort</code> returns <code>400</code>.",
+      "opaque": "Cursors are opaque: do not parse or build them, their format may change.",
+      "stable": "Ordering is stable: ties are broken by item id, and unscored or undated items always come last.",
+      "limitHeading": "Page size",
+      "limitBody": "<code>limit</code> defaults to 10. The maximum depends on your plan: {free} on Free, {paid} on Pro and Business. A larger value returns <code>400 bad_request</code> — the API never silently truncates. Each page counts as one request.",
+      "exampleHeading": "Example: iterate over every page",
+      "searchHeading": "Search",
+      "searchBody": "<code>GET /search</code> is not paginated: it returns the best matches (up to 50) for a query, best first."
+    },
+    "limits": {
+      "lead": "Each plan has a request quota, a per-second rate limit and a maximum page size.",
+      "plansHeading": "Plans",
+      "colPlan": "Plan",
+      "colQuota": "Quota",
+      "colRate": "Requests / second",
+      "colPageSize": "Max page size",
+      "lifetimeQuota": "{quota} in total",
+      "monthlyQuota": "{quota} / month",
+      "pricing": "Prices and upgrades: <link>/pricing</link>. Credits are prepaid requests spent only after the monthly quota runs out; they do not expire with the month.",
+      "countingHeading": "What counts",
+      "countEvery": "Every authenticated request that reaches an endpoint counts as one, including 404s.",
+      "countNot": "Not counted: <code>401</code>, <code>400</code> for invalid parameters, <code>429</code> and any <code>5xx</code> (refunded).",
+      "countUsage": "<code>GET /me/usage</code> counts too — read the response headers of your regular calls when you can.",
+      "countReset": "Paid quotas reset at 00:00 UTC on the 1st of each month. The Free quota never resets.",
+      "headersHeading": "Response headers",
+      "headersBody": "Successful responses tell you where you stand (IETF RateLimit header fields):",
+      "headersTitle": "Headers",
+      "colHeader": "Header",
+      "colMeaning": "Meaning",
+      "headerLimit": "Requests in the current period (your plan quota).",
+      "headerRemaining": "Requests left before 402 (credits not included).",
+      "headerReset": "Seconds until the quota resets; 0 for the lifetime Free quota.",
+      "headerQuota": "Same as RateLimit-Remaining.",
+      "headerRetry": "On 429 and 503: seconds to wait before retrying.",
+      "exceedingHeading": "When you hit a limit",
+      "exceedingNote": "Too many requests per second → <rateLimited>429 rate_limited</rateLimited>: wait <code>Retry-After</code> seconds. Quota (and credits) exhausted → <paymentRequired>402 payment_required</paymentRequired>: upgrade or buy credits; retrying will not help until the reset."
+    },
+    "changelog": {
+      "lead": "The version is part of the path. v1 only changes in backwards-compatible ways.",
+      "policyHeading": "Versioning policy",
+      "policyAdditive": "Within <code>/v1</code> we only make additive changes: new endpoints, new optional parameters, new response fields, new enum values in <code>categories</code> keys for new types, and new error <code>detail</code> texts. Ignore unknown fields and do not rely on field order.",
+      "policyBreaking": "Breaking changes — removing or renaming a field, changing a type, making a parameter required — ship as a new path (<code>/v2</code>). Error <code>code</code> values, category keys and sort names are part of the contract.",
+      "deprecationHeading": "Deprecation and sunset",
+      "deprecationWindow": "A deprecated version keeps working for at least 6 months after its successor is released.",
+      "deprecationHeaders": "Its responses carry <code>Deprecation</code> (RFC 9745) and <code>Sunset</code> (RFC 8594) headers with the date it stops working, plus a <code>Link</code> to this page.",
+      "deprecationEmail": "Account owners with recent traffic on the old version are emailed at deprecation and 30 days before sunset.",
+      "deprecationTitle": "Headers on a deprecated version",
+      "changesHeading": "Changes",
+      "timeToBeatTitle": "v1 — time to beat (additive)",
+      "timeToBeatBody": "<code>ItemDetail.time_to_beat</code>: crowdsourced median hours and report count for <code>main</code>, <code>extras</code> and <code>completionist</code> on games (<code>median_hours</code> is <code>null</code> under 3 reports); <code>null</code> for movies, series and books.",
+      "firstTitle": "v1 — first release",
+      "firstLists": "Lists, details and genres for <code>games</code>, <code>movies</code>, <code>series</code> and <code>books</code>.",
+      "firstEndpoints": "<code>/search</code>, <code>/lookup</code> by external id and <code>/me/usage</code>."
+    },
+    "reference": {
+      "lead": "Every endpoint, parameter and response schema of the public API, generated from the OpenAPI document."
+    }
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "The page you are looking for does not exist or was moved.",
+    "serverTitle": "Something went wrong",
+    "serverBody": "An unexpected error happened on our side. Try again in a moment.",
+    "retry": "Try again",
+    "home": "Back to home",
+    "reference": "Error reference"
+  },
+  "item": {
+    "metaDescription": "{title} ({type}) — community score and 6-category averages.",
+    "communityScore": "Community score",
+    "coverAlt": "Cover of {title}",
+    "notEnough": "Not enough ratings",
+    "notEnoughHint": "The score appears after {min} ratings.",
+    "categoryScores": "Category averages",
+    "seeUserScores": "See users' scores",
+    "userScores": "Users' scores",
+    "userScoresHint": "Only public profiles are listed.",
+    "close": "Close",
+    "ratingsPages": "Ratings pages",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {count}",
+    "goToPage": "Go to page {page}",
+    "retry": "Try again",
+    "loading": "Loading…",
+    "loadError": "Could not load the ratings. Try again.",
+    "noPublicRatings": "No public ratings yet.",
+    "user": "User",
+    "overall": "Overall",
+    "rate": "Your rating",
+    "loginToRate": "Log in to rate",
+    "externalScores": "Elsewhere",
+    "externalNotice": "Scores from other sites belong to them; each link opens the source.",
+    "trailers": "Trailers",
+    "trailerConsent": "Trailers are embedded from YouTube (youtube-nocookie.com) and load only when you ask.",
+    "loadTrailer": "Load trailer",
+    "trailerTitle": "Trailer {n}",
+    "details": "Details",
+    "fields": {
+      "type": "Type",
+      "releaseDate": "Release date",
+      "genres": "Genres",
+      "platforms": "Platforms",
+      "creators": "Created by",
+      "runtime": "Runtime",
+      "pages": "Pages",
+      "seasons": "Seasons",
+      "episodes": "Episodes",
+      "countries": "Countries"
+    },
+    "runtimeValue": "{minutes} min",
+    "moreCount": "+{count} more",
+    "whereToBuy": "Where to buy",
+    "affiliateNotice": "Affiliate links: we may earn a commission, at no extra cost to you.",
+    "stores": {
+      "amazon": "Amazon",
+      "mercadolivre": "Mercado Livre",
+      "steam": "Steam",
+      "gog": "GOG"
+    },
+    "synopsis": "Synopsis",
+    "noSynopsis": "No synopsis yet.",
+    "license": "Text license: {license}",
+    "source": "Source",
+    "coverCredit": "Cover: {credit}",
+    "fallbackNotice": "Not available in your language yet — showing the English version.",
+    "sources": {
+      "metacritic": "Metacritic",
+      "metacritic_user": "Metacritic users",
+      "rottentomatoes": "Rotten Tomatoes",
+      "rottentomatoes_audience": "RT audience",
+      "imdb": "IMDb",
+      "steam": "Steam",
+      "goodreads": "Goodreads",
+      "hltb": "HowLongToBeat",
+      "hltb_main": "HLTB main story",
+      "hltb_complete": "HLTB completionist",
+      "openlibrary": "Open Library"
+    },
+    "timeToBeat": {
+      "title": "Time to beat",
+      "styles": {
+        "main": "Main story",
+        "extras": "Main + extras",
+        "completionist": "Completionist"
+      },
+      "hours": "{hours} h",
+      "reports": {
+        "zero": "no reports",
+        "one": "{count} report",
+        "other": "{count} reports"
+      },
+      "notEnough": "Not enough reports yet (needs {min})",
+      "hint": "Median of the hours reported by players who completed the game.",
+      "yours": "Your time to beat",
+      "yoursHint": "Optional. Hours, in steps of 0.5; leave a style empty if you did not play it that way.",
+      "hoursPlaceholder": "Hours",
+      "save": "Save times",
+      "delete": "Delete times",
+      "saved": "Times saved.",
+      "deleted": "Times deleted."
+    }
+  },
+  "updatedLabel": "Last updated",
+  "policy": {
+    "title": "Privacy policy",
+    "description": "What personal data we collect, why, for how long, and how to exercise your rights.",
+    "intro": "This policy explains how {appName} handles personal data when you browse the site, create an account, rate items, contact us or use the paid API. It is written to meet the Brazilian General Data Protection Law (LGPD, Law 13.709/2018) and the EU General Data Protection Regulation (GDPR).",
+    "sections": {
+      "0": {
+        "heading": "1. Who is responsible",
+        "body": {
+          "0": "The service operator is the data controller for the data described here. For any privacy question or request, use the contact form (choose \"Questions\"). We answer requests within 15 days."
+        }
+      },
+      "1": {
+        "heading": "2. Data we collect",
+        "body": {
+          "0": "Account: name, email, nickname, password (stored only as a one-way hash), sign-in method (email/password, Google, passkeys), two-factor settings and the date you scheduled a deletion, if any.",
+          "1": "Activity: your ratings (six categories, 0–100), item status, lists, follows and profile privacy choice.",
+          "2": "Technical: IP address and browser user agent attached to active sessions, and short-lived counters used to block abuse (rate limiting and bot protection).",
+          "3": "Contact messages: the name, email, subject and text you send us.",
+          "4": "API and billing: API key metadata (we store only a hash of the key), request counts, plan, credits and invoices. Card and PIX payment data are handled by Stripe and AbacatePay; we never see or store full card numbers."
+        }
+      },
+      "2": {
+        "heading": "3. Why we use it (legal bases)",
+        "body": {
+          "0": "To provide the service you asked for — account, ratings, API access and billing (performance of a contract).",
+          "1": "To keep the service secure, prevent fraud, spam and bots, and compute community scores (legitimate interest).",
+          "2": "To load optional third-party video embeds, only after you allow them (consent, which you can withdraw at any time).",
+          "3": "To keep billing records required by tax law (legal obligation)."
+        }
+      },
+      "3": {
+        "heading": "4. Cookies",
+        "body": {
+          "0": "We only use essential cookies: the session cookie that keeps you logged in, short-lived two-factor and trusted-device cookies, and preference cookies for theme, language and your cookie choice. We use no advertising or cross-site tracking cookies.",
+          "1": "Traffic statistics are collected without cookies (Vercel Web Analytics), in aggregate. Trailers are served from youtube-nocookie.com and only load after you allow embeds in the cookie banner.",
+          "2": "When you follow an affiliate link to Amazon or Mercado Livre you leave our site; those stores set their own cookies under their own policies."
+        }
+      },
+      "4": {
+        "heading": "5. Who we share data with",
+        "body": {
+          "0": "We do not sell personal data. We share it only with providers that process it on our behalf: Vercel (hosting, bot protection, analytics), Neon (database), Upstash (rate limiting), Resend (transactional email), Stripe and AbacatePay (payments) and Google (only if you choose \"Continue with Google\").",
+          "1": "Some of these providers are located outside your country, including in the United States. Transfers rely on the safeguards allowed by the LGPD and GDPR, such as standard contractual clauses."
+        }
+      },
+      "5": {
+        "heading": "6. How long we keep it",
+        "body": {
+          "0": "Account data is kept while your account exists. When you delete your account, it enters a 30-day grace period during which you can log in and cancel. After that, your name, email, nickname, sessions, sign-in methods and two-factor data are erased and the account is anonymized.",
+          "1": "Your ratings are kept after deletion without any link to your identity, as \"Deleted user\", so community scores are not distorted.",
+          "2": "Contact messages are kept for up to 2 years; billing records for as long as tax law requires (currently 5 years in Brazil); security logs for up to 30 days."
+        }
+      },
+      "6": {
+        "heading": "7. Your rights",
+        "body": {
+          "0": "Under the LGPD (art. 18) and the GDPR you can: confirm whether we process your data; access it; correct it; request anonymization, blocking or deletion; receive it in a portable format; know who we share it with; object to processing based on legitimate interest; and withdraw consent.",
+          "1": "You can edit your name, password, two-factor settings, passkeys and profile privacy, and delete your account, directly in your profile. For anything else, use the contact form. You may also complain to the Brazilian data protection authority (ANPD) or to your local supervisory authority."
+        }
+      },
+      "7": {
+        "heading": "8. Security",
+        "body": {
+          "0": "Passwords are hashed, all traffic uses HTTPS, sessions use HttpOnly cookies, and you can protect your account with two-factor authentication and passkeys. No system is perfectly secure; if we learn of an incident that affects you, we will notify you and the authorities as the law requires."
+        }
+      },
+      "8": {
+        "heading": "9. Children",
+        "body": {
+          "0": "The service is not directed to children. You must be at least 13 years old — or the minimum age for digital consent in your country, if higher — to create an account."
+        }
+      },
+      "9": {
+        "heading": "10. Changes",
+        "body": {
+          "0": "We will update this page when our practices change and change the date above. Material changes are announced on the site or by email before they take effect."
+        }
+      }
+    }
+  },
+  "terms": {
+    "title": "Terms of use and cookies",
+    "description": "The rules for using the site, your account, ratings, the paid API and affiliate links.",
+    "intro": "By using {appName} — the site or the API — you agree to these terms. If you do not agree, please do not use the service.",
+    "sections": {
+      "0": {
+        "heading": "1. The service",
+        "body": {
+          "0": "We run a database of games, movies, TV series and books where registered users score each work in six categories from 0 to 100. Community scores are averages of user ratings and are shown only after an item has at least 5 ratings.",
+          "1": "Item metadata comes from open sources and public store data: Wikidata (CC0), Wikipedia, Open Library, Steam and GOG. Synopses from Wikipedia are licensed under CC BY-SA 4.0 and are shown with their license and a link to the original article. Covers come from Open Library, Steam, GOG or Wikimedia Commons; when the license requires it, the item page credits the source, author and license. Links to external scores (such as IMDb or Metacritic) are provided for reference; those scores, the cover art and all trademarks belong to their owners."
+        }
+      },
+      "1": {
+        "heading": "2. Your account",
+        "body": {
+          "0": "Provide accurate information, keep one account per person and keep your credentials secret. We recommend enabling two-factor authentication. Nicknames must not impersonate others or be offensive.",
+          "1": "We may suspend or close accounts that break these terms, manipulate scores or abuse the service."
+        }
+      },
+      "2": {
+        "heading": "3. Ratings",
+        "body": {
+          "0": "You can rate each work once and edit your rating at any time. Ratings must reflect your honest opinion: using multiple accounts, bots or paid ratings to manipulate scores is forbidden.",
+          "1": "You grant us a non-exclusive, worldwide, royalty-free and perpetual license to store your ratings and use them to compute and publish aggregated scores, including after your account is deleted, in anonymized form."
+        }
+      },
+      "3": {
+        "heading": "4. Acceptable use",
+        "body": {
+          "0": "Do not scrape the website — use the public API instead. Do not attempt to bypass rate limits, bot protection or access controls, interfere with the service, or use it for anything illegal."
+        }
+      },
+      "4": {
+        "heading": "5. Public API",
+        "body": {
+          "0": "API keys are personal and secret; you are responsible for requests made with your keys. Each plan has a request quota, a maximum page size and a rate limit, listed on the pricing page. The free plan includes 100 requests per account in total and requires a verified email; paid plans have a monthly quota. Requests that fail because of an error on our side are not counted. Once you reach the quota or the rate limit, requests are refused until the quota renews or you add credits.",
+          "1": "The API returns only our own data (scores and community statistics), open metadata and external identifiers. You must not use it to redistribute third-party data that we only link to. We may change or retire API versions with reasonable notice."
+        }
+      },
+      "5": {
+        "heading": "6. Payments, renewal and cancellation",
+        "body": {
+          "0": "Paid plans are billed in advance. By card, through Stripe, plans are monthly subscriptions that renew automatically until cancelled; you can cancel or change your card in the billing portal. By PIX, through AbacatePay (Brazilian reais only), you buy 1 month or 12 months (12 months for the price of 10); PIX periods do not renew automatically and we email you 7 days and 1 day before they end. Prices, currency and taxes are shown before you pay.",
+          "1": "Extra credits can only be bought with an active Pro or Business plan; they do not expire and are used after the monthly quota.",
+          "2": "You can cancel at any time and keep access until the end of the paid period. Where the law grants you a right of withdrawal (for example, 7 days under art. 49 of the Brazilian Consumer Code), you can exercise it through the contact form and receive a refund as the law provides. If you are charged twice for the same period (for example, a PIX payment while a card subscription is active), we refund the duplicate payment."
+        }
+      },
+      "6": {
+        "heading": "7. Affiliate links",
+        "body": {
+          "0": "Some book and game pages include links to Amazon and Mercado Livre. These are affiliate links: we may earn a commission on qualifying purchases, at no extra cost to you. Affiliate links are labeled on the page and never influence scores. Prices, availability, purchases and returns are the responsibility of each store."
+        }
+      },
+      "7": {
+        "heading": "8. Cookies",
+        "body": {
+          "0": "We use only essential cookies (session, security and preferences) and load video embeds only with your consent. Details are in the Privacy policy."
+        }
+      },
+      "8": {
+        "heading": "9. Account deletion",
+        "body": {
+          "0": "You can delete your account in your profile. Deletion takes effect after a 30-day grace period during which you can log in and cancel it. Your ratings remain in the community scores anonymously. When the deletion takes effect, your API keys are revoked and an active card subscription is cancelled with no further charges."
+        }
+      },
+      "9": {
+        "heading": "10. Disclaimers and liability",
+        "body": {
+          "0": "The service and the API are provided \"as is\". We work to keep data accurate and the service available, but we do not guarantee that information is complete or error-free, or that the service will be uninterrupted. To the extent allowed by law, our liability is limited to the amount you paid us in the 12 months before the claim. Nothing in these terms limits rights that consumer law does not allow to be limited."
+        }
+      },
+      "10": {
+        "heading": "11. Changes and governing law",
+        "body": {
+          "0": "We may update these terms; material changes are announced in advance and continued use means acceptance. These terms are governed by the laws of Brazil, without prejudice to the mandatory consumer protections of the country where you live."
+        }
+      },
+      "11": {
+        "heading": "12. Contact",
+        "body": {
+          "0": "Questions about these terms, withdrawal or refund requests and privacy requests can be sent through the contact form."
+        }
+      }
+    }
+  },
+  "lists": {
+    "addToList": "Add to list",
+    "noLists": "You have no lists yet.",
+    "fieldType": "Category",
+    "quota": {
+      "game": "Game lists: {count}/{limit}",
+      "movie": "Movie lists: {count}/{limit}",
+      "series": "TV series lists: {count}/{limit}",
+      "other": "Book lists: {count}/{limit}"
+    },
+    "limitReached": {
+      "game": "You already have {limit} game lists. Delete one to create another.",
+      "movie": "You already have {limit} movie lists. Delete one to create another.",
+      "series": "You already have {limit} TV series lists. Delete one to create another.",
+      "other": "You already have {limit} book lists. Delete one to create another."
+    },
+    "noListsOfType": {
+      "game": "You have no game lists yet.",
+      "movie": "You have no movie lists yet.",
+      "series": "You have no TV series lists yet.",
+      "other": "You have no book lists yet."
+    },
+    "noPublicLists": "No public lists yet.",
+    "newWithItem": "New list with this item",
+    "new": "New list",
+    "fieldTitle": "Title",
+    "fieldDescription": "Description",
+    "publicLabel": "Public (anyone can see it)",
+    "create": "Create list",
+    "created": "List created.",
+    "save": "Save changes",
+    "saved": "List saved.",
+    "edit": "Edit list",
+    "delete": "Delete list",
+    "deleteConfirm": "Delete this list? This cannot be undone.",
+    "remove": "Remove",
+    "removeLabel": "Remove {title} from the list",
+    "moveUpLabel": "Move {title} up",
+    "moveDownLabel": "Move {title} down",
+    "itemCount": {
+      "one": "{count} item",
+      "other": "{count} items"
+    },
+    "public": "Public",
+    "private": "Private",
+    "hidden": "Hidden by moderation",
+    "hiddenNotice": "This list was hidden by a moderator. Only you can see it.",
+    "by": "List by {nickname}",
+    "empty": "This list is empty.",
+    "emptyOwner": "This list is empty. Add items from any item page.",
+    "errors": {
+      "title": "1–80 characters.",
+      "description": "Up to 500 characters."
+    }
+  },
+  "ratings": {
+    "title": "Your rating",
+    "yourOverall": "Your overall score",
+    "overallHint": "The average of the six categories, rounded.",
+    "save": "Save rating",
+    "update": "Update rating",
+    "delete": "Delete rating",
+    "saving": "Saving…",
+    "saved": "Rating saved.",
+    "deleted": "Rating deleted.",
+    "loginToRate": "Log in to rate",
+    "chooseNickname": "Choose a nickname to rate",
+    "verifyToRate": "Confirm your email to rate items.",
+    "verifyLink": "Resend the confirmation email"
+  },
+  "search": {
+    "title": "Search",
+    "label": "Search",
+    "submit": "Search",
+    "resultsFor": "Results for “{q}”",
+    "prompt": "Search games, movies, TV series and books by title.",
+    "tooShort": "Type at least 2 characters.",
+    "noResults": "Nothing found for “{q}”. Check the spelling or try another title.",
+    "all": "All",
+    "suggestions": "Suggestions",
+    "noSuggestions": "No matches",
+    "searching": "Searching…"
+  },
+  "social": {
+    "profile": {
+      "private": "This profile is private.",
+      "privateOwner": "Private profile (only you see this page)",
+      "memberSince": "Member since {date}",
+      "counts": {
+        "game": {
+          "one": "{count} game",
+          "other": "{count} games"
+        },
+        "movie": {
+          "one": "{count} movie",
+          "other": "{count} movies"
+        },
+        "series": {
+          "one": "{count} series",
+          "other": "{count} series"
+        },
+        "book": {
+          "one": "{count} book",
+          "other": "{count} books"
+        }
+      },
+      "averageGiven": "Average score given",
+      "sections": "Profile sections",
+      "tabs": {
+        "ratings": "Ratings",
+        "status": "Status",
+        "lists": "Lists"
+      },
+      "byCategory": "Ratings by category",
+      "allTypes": "All",
+      "seeAll": "See all ({count})",
+      "sortBy": "Sort:",
+      "sorts": {
+        "recent": "Newest",
+        "best": "Highest",
+        "worst": "Lowest"
+      },
+      "noRatings": "No ratings yet.",
+      "emptyShelf": "Nothing here yet.",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "status": {
+      "label": "Status",
+      "none": "No status",
+      "game": {
+        "want": "Want to play",
+        "in_progress": "Playing",
+        "completed": "Played",
+        "dropped": "Dropped"
+      },
+      "movie": {
+        "want": "Want to watch",
+        "in_progress": "Watching",
+        "completed": "Watched",
+        "dropped": "Dropped"
+      },
+      "series": {
+        "want": "Want to watch",
+        "in_progress": "Watching",
+        "completed": "Watched",
+        "dropped": "Dropped"
+      },
+      "book": {
+        "want": "Want to read",
+        "in_progress": "Reading",
+        "completed": "Read",
+        "dropped": "Dropped"
+      },
+      "shelves": {
+        "want": "Want to",
+        "in_progress": "In progress",
+        "completed": "Completed",
+        "dropped": "Dropped"
+      }
+    },
+    "report": {
+      "reportList": "Report list",
+      "reportUser": "Report user",
+      "title": "Report",
+      "sent": "Thanks. A moderator will review it.",
+      "reason": "Reason",
+      "reasons": {
+        "spam": "Spam",
+        "offensive": "Offensive content",
+        "harassment": "Harassment",
+        "impersonation": "Impersonation",
+        "other": "Other"
+      },
+      "details": "Details (optional)",
+      "submit": "Send report",
+      "close": "Close"
+    },
+    "onboarding": {
+      "title": "Choose your nickname",
+      "body": "Your nickname is your public handle on profiles, lists and the community scores.",
+      "submit": "Save nickname"
+    }
+  }
+}
