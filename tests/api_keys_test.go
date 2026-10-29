@@ -3,6 +3,7 @@
 package tests
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -11,6 +12,7 @@ import (
 
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/drivers/postgres/pgtest"
+	"github.com/AlexGalhardo/vukem/errs"
 	"github.com/AlexGalhardo/vukem/vukemtest"
 	"github.com/AlexGalhardo/vukem/web"
 
@@ -178,4 +180,21 @@ func TestSecurity_A01_CrossSurfaceCredentials(t *testing.T) {
 	// An API key on /app/v1 is refused by the token guard, while the app token works there.
 	r.app.Client(t).WithToken(plain).GetJSON("/app/v1/tokens").AssertUnauthorized()
 	r.app.Client(t).WithToken(app.Token).GetJSON("/app/v1/tokens").AssertOK()
+}
+
+// A lookup that cannot run fails closed with 503 and Retry-After: 30 (SDD 05 NFR-05-3), never 401 or a pass.
+func TestKeysStoreOutageFailsClosed(t *testing.T) {
+	r := newKeyRig(t)
+
+	ctx, cancel := context.WithCancel(t.Context())
+	cancel()
+
+	req := httptest.NewRequestWithContext(ctx, http.MethodGet, "/api/v1/games", nil)
+	req.Header.Set("Authorization", "Bearer "+api.KeyPrefix+"0123456789abcdefghijABCDEFGHIJ01")
+
+	var he *errs.HTTPError
+	if err := r.guard.Authenticate(web.NewCtx(httptest.NewRecorder(), req, nil)); !errors.As(err, &he) ||
+		he.Status != http.StatusServiceUnavailable || he.Headers.Get("Retry-After") != "30" {
+		t.Fatalf("outage = %v, want 503 with Retry-After: 30", err)
+	}
 }
