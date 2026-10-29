@@ -6,7 +6,8 @@ import AppLayout from "./layouts/AppLayout";
 // (localStorage.theme = "dark" | "light") or the system preference. A theme
 // toggle flips the class and saves it.
 try {
-	const theme = localStorage.getItem("theme");
+	// The server sets data-theme from the theme cookie (explicit choice wins).
+	const theme = document.documentElement.dataset.theme ?? localStorage.getItem("theme");
 	const dark = theme ? theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
 	document.documentElement.classList.toggle("dark", dark);
 } catch {
