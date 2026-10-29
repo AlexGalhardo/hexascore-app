@@ -25,5 +25,6 @@ func All() []func(r *router.Router, app *vukem.App) error {
 		APIV1,
 		Exports,
 		AppAPI,
+		Billing,
 	}
 }

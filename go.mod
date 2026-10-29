@@ -4,6 +4,7 @@ go 1.27.3
 
 require (
 	github.com/AlexGalhardo/vukem v0.32.0
+	github.com/AlexGalhardo/vukem/contrib/stripe v0.4.1
 	github.com/AlexGalhardo/vukem/drivers/postgres v0.5.1
 	github.com/google/go-cmp v0.7.0
 	golang.org/x/crypto v0.58.0

@@ -36,7 +36,7 @@ func (r *quotaRig) meter() *api.Meter { return &api.Meter{Store: r.store, Now: r
 func (r *quotaRig) serve(m *api.Meter, status int) *httptest.ResponseRecorder {
 	r.t.Helper()
 
-	q := api.Quota(m, api.FreeForAll, "https://hexascore.app/problems/")(
+	q := api.Quota(m, freeForAll, "https://hexascore.app/problems/")(
 		http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) { w.WriteHeader(status) }))
 	rec := httptest.NewRecorder()
 	c := web.NewCtx(rec, httptest.NewRequestWithContext(r.t.Context(), http.MethodGet, "/api/v1/games", nil), nil)
@@ -152,4 +152,9 @@ func TestQuotaFlushCrash(t *testing.T) {
 	if n := r.used(); n != 6 {
 		t.Fatalf("used %d, want 6", n)
 	}
+}
+
+func freeForAll(context.Context, int64) (api.Plan, error) {
+	p, _ := api.PlanByID(api.PlanFree)
+	return p, nil
 }

@@ -29,14 +29,10 @@ var ErrNotScheduled = errors.New("accounts: deletion is not scheduled")
 // SubscriptionCanceller ends a user's live paid subscription before the
 // account is anonymised. CancelLive returns nil when there is nothing to
 // cancel; an error keeps the user scheduled and the purge retries next run, so
-// a deleted account is never billed again. P1.H.3.1 implements it for Stripe.
+// a deleted account is never billed again. billing.Canceller implements it for Stripe.
 type SubscriptionCanceller interface {
 	CancelLive(ctx context.Context, userID int64) error
 }
-
-type noSubscriptions struct{}
-
-func (noSubscriptions) CancelLive(context.Context, int64) error { return nil }
 
 // DeletionDate is when a deletion scheduled at scheduledAt takes effect.
 func DeletionDate(scheduledAt time.Time) time.Time {
