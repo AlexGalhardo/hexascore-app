@@ -1791,7 +1791,7 @@ Phase-specific conventions:
     - `vukem backup:run --kind daily` against the compose Postgres and RustFS → object under `backups/postgres/daily/YYYY/MM/DD/`, `backup_runs.status='uploaded'`, `sha256` matches the object
   - Notes: `pg_dump -Fc -Z 6 --no-owner` through `contrib/engine` `RunStream` ([SITE PAGE MISSING], `vukem/docs/subsystems.md`); the child environment is not inherited, so `PG*` values are passed explicitly. The plaintext dump never touches disk. Each frame's additional data carries its index and the last frame is marked, so frames cannot be swapped, dropped or truncated unnoticed.
 
-- [ ] **P2.E.2.2** Verify each dump, schedule the daily run, prune by retention, and copy the monthly snapshot.
+- [x] **P2.E.2.2** Verify each dump, schedule the daily run, prune by retention, and copy the monthly snapshot.
   - Files/modules: `app/backup/verify.go`, `app/backup/prune.go`, `app/backup/prune_test.go`, `routes/schedule.go` (`backup.daily` 06:00 America/Sao_Paulo, `WithoutOverlapping()`), `app/metrics/backup.go`
   - Refs: SDD 11 §7.3 steps 1, 4, 5, 7, §9 item 6; SDD 12 §6.2 (`backup.*`), §7.5 A8; ADR 0014; <https://vukem.dev/docs/digging-deeper/scheduler>
   - Depends on: P2.E.2.1
@@ -1801,6 +1801,7 @@ Phase-specific conventions:
     - on staging, `railway ssh` then `/app/hexascore backup:run --kind daily` → `status='verified'` after decrypt → `pg_restore --list` contains `items`, `users`, `ratings`
     - `backup.last_success_age_seconds` visible in Grafana; the A8 fixture in `ops/alerts/tests.yaml` still passes
   - Notes: buckets have no lifecycle rules: pruning is app code. The task will run after the SDD 06 asserts once they exist (P6); until then 06:00 alone.
+  - Status (2026-10-29): verify, monthly copy, prune and the 06:00 schedule delivered; `app/metrics/backup.go` moves to P2.C.2.2 (no meter provider before P2.C.2.1); staging and Grafana checks deferred (owner gate).
 
 - [ ] **P2.E.2.3** Mail the owner a 7-day signed link to the encrypted monthly dump (off-site copy).
   - Files/modules: `app/backup/offsite.go`, `resources/views/mail/backup_offsite.*`, `tests/backup_offsite_test.go`, `docs/runbooks/restore.md` (section "Off-site copy")
@@ -1813,7 +1814,7 @@ Phase-specific conventions:
 
 #### P2.E.3 Drills
 
-- [ ] **P2.E.3.1** Implement `backup:restore` and the monthly `backup:drill` on staging, including the deletion replay.
+- [x] **P2.E.3.1** Implement `backup:restore` and the monthly `backup:drill` on staging, including the deletion replay.
   - Files/modules: `app/console/backup_restore.go` (`--target-url`), `app/console/backup_drill.go`, `routes/schedule.go` (first Sunday 07:00, staging only), `tests/backup_drill_test.go`, `docs/runbooks/restore.md`
   - Refs: SDD 11 §7.4, §7.5 step 3, FR-11-6, §9 item 6, §10; SDD 13 §8 (restore re-applies deletions), §11 issue 11; ADR 0014; D-18
   - Depends on: P2.E.2.2
@@ -1822,6 +1823,7 @@ Phase-specific conventions:
     - `go test -tags=integration ./tests -run 'TestBackupDrill|TestRestoreReappliesDeletions'` → PASS
     - on staging with `BACKUP_SOURCE_S3_*` set: `/app/hexascore backup:drill` → exit 0, `backup_runs(kind='drill')` with `duration_s < 3600`, row counts equal to the dump manifest
   - Notes: the drill creates and drops `hexascore_drill`; it never restores over the staging database. `dq:asserts` runs the catalogue asserts that exist (SDD 01 §7.6); SDD 06 asserts join in P6. HUMAN GATE (production data): granting staging read access to the production bucket is the owner's call.
+  - Status (2026-10-29): local acceptance green (`TestBackupDrill`, `TestRestoreReappliesDeletions` PASS in `golang:1.27.3-alpine3.24` + `postgresql18-client`; they skip on hosts without `pg_dump`/`pg_restore`). Deferred (owner gate): the staging run with `BACKUP_SOURCE_S3_*`. Manifest = per-table row counts in the `pg_dump --snapshot` snapshot; `pg_restore` single job on stdin (SDD 11 §7.4 amended). Found and fixed: `hs_norm` unqualified call made every dump unrestorable.
 
 - [ ] **P2.E.3.2** Run a timed RTO game day on staging and add the migration rehearsal script.
   - Files/modules: `scripts/ops/migration-rehearsal.sh` (restore latest dump into staging, deploy candidate, record duration and lock waits), `docs/runbooks/restore.md` (timings), `docs/runbooks/migrations.md` (rehearsal section)
@@ -1896,7 +1898,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
   - Notes: `session`, `verification` and `rate_limit` are not imported. Legacy `passkey` rows are imported (ADR 0017, depends on P1.C.7.1); the Better Auth storage encoding (base64 vs base64url, COSE key layout) is [NOT VERIFIED] until proven on a Neon copy. Only if it proves incompatible: passkey-only users are counted and mailed the `passkeys_retired` reset notice 14 days before the window (P2.G.1.2). OAuth tokens dropped. Never log hashes or key material.
   - Status (2026-10-29): `users` stage and the scrypt login proof delivered; `passkeys.go` and `TestPasskeysStage` wait for P1.C.7.1 (no `passkeys` table before the vukem release with VF-001), tracked as P2.F.2.2b.
 
-- [ ] **P2.F.2.3** Export the 2FA secrets with a Bun script using Better Auth's own helpers and import them over stdin.
+- [x] **P2.F.2.3** Export the 2FA secrets with a Bun script using Better Auth's own helpers and import them over stdin.
   - Files/modules: `scripts/legacy/twofactor-export.ts` (run from a temp copy of `legacy/apps/web` with its `node_modules`), `database/legacyimport/twofactor.go`, `database/legacyimport/twofactor_test.go`
   - Refs: SDD 03 §7.6, §11 issue 2 (03-2 decided); SDD 13 §5 (`orm.Encrypted`); P0.F.1.2 (which Better Auth function decrypts)
   - Depends on: P2.F.2.2
@@ -1936,15 +1938,16 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
     - `go test -tags=integration ./database/legacyimport -run 'TestSocialStage|TestLibraryStage'` → PASS: `list_items.added_at := lists.created_at`, positions dense, legacy mixed-type lists keep their rows, `follows` not imported (archived in the dump)
   - Notes: ratings of purged users are already gone (P2.F.1.2 guard). Notifications have no legacy table.
 
-- [ ] **P2.F.2.7** Implement the `billing` stage: API keys unchanged, subscriptions, Stripe customers, processed events, usage, and the D-23 credit balances.
+- [x] **P2.F.2.7** Implement the `billing` stage: API keys unchanged, subscriptions, Stripe customers, usage, and the D-23 credit balances.
   - Files/modules: `database/legacyimport/billing.go`, `database/legacyimport/billing_test.go`, `docs/sdd/05-public-api.md` §5 (remaining-credit formula)
   - Refs: SDD 05 §5 (legacy source, `api_credit_balances`), §7.2; SDD 11 §7.6 step 5, §11 issue 9; D-23; ADR 0015
   - Depends on: P2.F.2.2
   - Model: Opus
   - Acceptance:
     - `go test -tags=integration ./database/legacyimport -run TestBillingStage` → PASS: `api_keys.hash` copied verbatim (a fixture key authenticates on `/api/v1` after import), subscriptions mapped to `plan`/`provider`/`state` with at most one active per user, `api_credit_balances.remaining` = legacy remaining credits per user (≥ 0), `credit_ledger` and `pix_charges` copied verbatim
-    - `go test ./... -run TestSecurity_A08_HexaStripeReplayIgnored` → PASS with imported `processed_events`
+    - `go test ./... -run TestSecurity_A08_StripeReplayIgnored` → PASS: a replayed `customer.subscription.updated` / `invoice.paid` event id is a no-op (vukem `contrib/stripe` cache-backed dedup) and a new event about the same subscription converges on one row; `processed_events` is not imported (SDD 05 §5: production `CACHE_STORE=database`, handlers idempotent by Stripe object id)
   - Notes: derive the remaining-credit formula from `legacy/apps/web/lib/db/schema/billing.ts` and the legacy ledger code, and write it into SDD 05 §5 before coding. No refund flow (D-23).
+  - Status (2026-10-29): done. `TestBillingStage` PASS; `processed_events` dropped by orchestrator decision (QUESTIONS.md), SDD 05, SDD 11 §7.6 and SDD 13 A08 amended (DOC-processed-events); `TestSecurity_A08_StripeReplayIgnored` PASS.
 
 #### P2.F.3 Covers
 

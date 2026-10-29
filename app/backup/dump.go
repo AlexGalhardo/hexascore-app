@@ -5,11 +5,13 @@ import (
 	"cmp"
 	"context"
 	"crypto/sha256"
+	"database/sql"
 	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
 	"net/url"
+	"os"
 	"os/exec"
 	"time"
 
@@ -32,6 +34,8 @@ type Runner struct {
 	DatabaseURL string
 	// PgDump is the pg_dump binary (the image ships postgresql18-client).
 	PgDump string
+	// PgRestore is the pg_restore binary Verify runs with --list.
+	PgRestore string
 	// Env names the environment in the object key.
 	Env string
 	Now func() time.Time
@@ -63,6 +67,28 @@ VALUES ($1, $2, $3, 'running', $4)`, res.ID, kind, res.Key, started); err != nil
 		return res, fmt.Errorf("backup: record start: %w", err)
 	}
 
+	snap, err := r.DB.SQL().BeginTx(ctx, &sql.TxOptions{Isolation: sql.LevelRepeatableRead, ReadOnly: true})
+	if err != nil {
+		err = fmt.Errorf("backup: snapshot: %w", err)
+
+		return res, errors.Join(err, r.finish(context.WithoutCancel(ctx), res, started, err))
+	}
+	// The exported snapshot lives as long as this transaction: pg_dump must finish first.
+	defer func() { _ = snap.Rollback() }()
+
+	var snapshotID string
+
+	if err := snap.QueryRowContext(ctx, `SELECT pg_export_snapshot()`).Scan(&snapshotID); err != nil {
+		err = fmt.Errorf("backup: export snapshot: %w", err)
+
+		return res, errors.Join(err, r.finish(context.WithoutCancel(ctx), res, started, err))
+	}
+
+	counts, err := CountRows(ctx, snap)
+	if err != nil {
+		return res, errors.Join(err, r.finish(context.WithoutCancel(ctx), res, started, err))
+	}
+
 	sum := sha256.New()
 	size := &counter{}
 	pr, pw := io.Pipe()
@@ -70,7 +96,7 @@ VALUES ($1, $2, $3, 'running', $4)`, res.ID, kind, res.Key, started); err != nil
 
 	go func() {
 		fw := NewFrameWriter(io.MultiWriter(pw, sum, size), r.Enc, res.Key)
-		err := errors.Join(r.dump(ctx, fw), fw.Close())
+		err := errors.Join(r.dump(ctx, fw, snapshotID), fw.Close())
 		_ = pw.CloseWithError(err)
 		dumped <- err
 	}()
@@ -82,9 +108,14 @@ VALUES ($1, $2, $3, 'running', $4)`, res.ID, kind, res.Key, started); err != nil
 	runErr := errors.Join(<-dumped, putErr)
 	res.SHA256, res.Bytes = hex.EncodeToString(sum.Sum(nil)), size.n
 
+	if runErr == nil {
+		runErr = r.putManifest(ctx, Manifest{Key: res.Key, Tables: counts})
+	}
+
 	if runErr != nil {
 		// A disk that kept a partial object (Local) must not leave it behind.
 		_ = r.Disk.Delete(context.WithoutCancel(ctx), res.Key)
+		_ = r.Disk.Delete(context.WithoutCancel(ctx), ManifestKey(res.Key))
 	}
 
 	return res, errors.Join(runErr, r.finish(context.WithoutCancel(ctx), res, started, runErr))
@@ -111,9 +142,10 @@ finished_at = $4 WHERE id = $1`, res.ID, msg[:min(len(msg), 2000)], dur, finishe
 	return nil
 }
 
-// dump runs pg_dump -Fc -Z 6 --no-owner into w. The child gets only the
-// PG* variables it needs, never the app environment (secrets).
-func (r *Runner) dump(ctx context.Context, w io.Writer) error {
+// dump runs pg_dump -Fc -Z 6 --no-owner into w, inside the exported snapshot
+// the manifest was counted in. The child gets only the PG* variables it
+// needs, never the app environment (secrets).
+func (r *Runner) dump(ctx context.Context, w io.Writer, snapshot string) error {
 	env, err := pgEnv(r.DatabaseURL)
 	if err != nil {
 		return err
@@ -121,7 +153,7 @@ func (r *Runner) dump(ctx context.Context, w io.Writer) error {
 
 	stderr := &capped{max: 4 << 10}
 	//nolint:gosec // G204: binary and args set in code
-	cmd := exec.CommandContext(ctx, r.PgDump, "-Fc", "-Z", "6", "--no-owner")
+	cmd := exec.CommandContext(ctx, r.PgDump, "-Fc", "-Z", "6", "--no-owner", "--snapshot="+snapshot)
 	cmd.Env, cmd.Stdout, cmd.Stderr = env, w, stderr
 
 	if err := cmd.Run(); err != nil {
@@ -145,6 +177,7 @@ func pgEnv(dsn string) ([]string, error) {
 		"PGUSER=" + u.User.Username(),
 		"PGPASSWORD=" + pass,
 		"PGDATABASE=" + u.Path[min(1, len(u.Path)):],
+		binPath(),
 	}
 
 	if mode := u.Query().Get("sslmode"); mode != "" {
@@ -153,6 +186,10 @@ func pgEnv(dsn string) ([]string, error) {
 
 	return env, nil
 }
+
+// binPath passes PATH on: pg_restore resolves its own location from argv[0]
+// through PATH ("could not find a pg_restore to execute" without it).
+func binPath() string { return "PATH=" + os.Getenv("PATH") }
 
 type counter struct{ n int64 }
 

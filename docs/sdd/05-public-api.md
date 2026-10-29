@@ -45,7 +45,7 @@ Out of scope: PIX/AbacatePay and credit packs (D-06, D-14; boundary in 7.6); per
 
 ## 5. Data model
 
-Legacy source: `legacy/apps/web/lib/db/schema/billing.ts` (`api_keys`, `subscriptions`, `api_usage_daily`, `processed_events`, `stripe_customers` migrate per A-04; `credit_ledger` balances become `api_credit_balances` rows (D-23); `credit_ledger` and `pix_charges` are also copied verbatim for the second release). Id types follow the README: `users.id` is `text` (SDD 03 §5), item ids are `uuid`.
+Legacy source: `legacy/apps/web/lib/db/schema/billing.ts` (`api_keys`, `subscriptions`, `api_usage_daily`, `stripe_customers` migrate per A-04 (`processed_events` does not, see below); `credit_ledger` balances become `api_credit_balances` rows (D-23); `credit_ledger` and `pix_charges` are also copied verbatim for the second release). Id types follow the README: `users.id` is `text` (SDD 03 §5), item ids are `uuid`.
 
 ```sql
 -- Own table, not vukem access_tokens: legacy keys are sha256(full key), not the
@@ -98,7 +98,9 @@ alter table subscriptions                   -- install:billing table (https://vu
 create unique index on subscriptions(user_id) where state in ('active','past_due');
 ```
 
-Exports are listed from the bucket prefix (no table). `processed_events` keeps its legacy shape for reminder idempotency.
+Exports are listed from the bucket prefix (no table). There is no `processed_events` table (orchestrator decision 2026-10-29, P2.F.2.7): Stripe webhook dedup is vukem `contrib/stripe`'s cache-backed idempotency by event id, under two conditions: production uses a shared, persistent cache store (`CACHE_STORE=database`, SDD 11 §6.4) so dedup survives restarts and the cutover window, and every billing webhook handler stays idempotent by Stripe object id (it re-reads the subscription from Stripe and upserts by `stripe_subscription_id`). Proof: `TestSecurity_A08_StripeReplayIgnored` (`tests/billing_test.go`).
+
+Legacy import (P2.F.2.7, `database/legacyimport/billing.go`): remaining credits per user = `greatest(sum(credit_ledger.delta), 0)`, the legacy `creditBalance` formula (`legacy/apps/web/lib/billing/subscriptions.ts`); debits still in the legacy Redis cache and not yet flushed to the ledger are forgiven, as legacy does when that key is lost. Subscriptions with plan `free` are not imported; the others keep `plan`, `provider` and `status` (as `status` and `state`), with `provider_ref` as `stripe_subscription_id`. `credit_ledger` and `pix_charges` are copied into tables of the legacy shape (migration `20261029200000_create_legacy_billing_tables`) that nothing in v1 writes. `processed_events` is not imported: the app has no such table, Stripe webhook ids are deduplicated by vukem `contrib/stripe` in the cache store, and a replayed legacy event fails the 5-minute signature window first (orchestrator decision 2026-10-29; conditions above).
 
 ## 6. Contracts
 
@@ -275,7 +277,7 @@ IP limit → key guard (401/503) → ban (403) → validation (400, free) → th
 
 Each sync re-reads with `GetSubscription` and upserts by `stripe_subscription_id`; `cancel_at_period_end` stays active to the end. Falling to free applies free limits next request; the `life` counter continues. Duplicates are acknowledged by the vukem event claim (`CACHE_STORE=database`, `https://vukem.dev/docs/digging-deeper/billing`); the upsert is idempotent anyway. Deletion cancels subscriptions first (SDD 03).
 
-Reminders: `s.Job(jobs.BillingReminders{}).DailyAt("12:00")` UTC (legacy `/api/cron/billing-reminders`) mails 7 days and 1 day before `current_period_end` when `cancel_at_period_end` is true; idempotency `reminder:<user>:<end>:<days>` in `processed_events`; marks non-Stripe past-period rows `expired`. Card renewal and failure emails are Stripe's [NOT VERIFIED].
+Reminders: `s.Job(jobs.BillingReminders{}).DailyAt("12:00")` UTC (legacy `/api/cron/billing-reminders`) mails 7 days and 1 day before `current_period_end` when `cancel_at_period_end` is true; idempotency key `reminder:<user>:<end>:<days>` in the cache store (same persistent `database` store as webhook dedup, TTL past `current_period_end`); marks non-Stripe past-period rows `expired`. Card renewal and failure emails are Stripe's [NOT VERIFIED].
 
 ### 7.6 PIX boundary (second release)
 

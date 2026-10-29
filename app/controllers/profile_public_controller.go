@@ -72,7 +72,7 @@ func (h *PublicProfile) Show(c *web.Ctx) error {
 		})
 	}
 
-	props := inertia.Props{"profile": head, "seo": map[string]any{"indexable": indexable}}
+	props := inertia.Props{"profile": head, "indexable": indexable}
 	if !hidden {
 		meta := inertia.ScrollMeta{PageName: "cursor"}
 		if p.NextRatings >= 0 {

@@ -194,9 +194,11 @@ Rollback: `gh workflow run release.yml -f version=vPREV` (schema stays compatibl
 6. Off-site copy (D-32): on day 1 the app mails the owner a signed link (`storage.TemporaryURL`, 7 days, <https://vukem.dev/docs/security/signed-urls>) to the encrypted monthly dump; the job records `backup_runs(kind='offsite')` when the link is mailed and the owner downloads it to personal storage. Daily dumps stay on Railway. Replaced by an external bucket when the budget allows.
 7. Missed or failed run → SDD 12 alert within 2 h.
 
+Implementation (P2.E.2.2): `backup:run` uploads, then verifies (`app/backup/verify.go`: the median is over `verified` rows of the same kind from the previous 7 days, none means no size check; `pg_restore --list` runs with an empty environment and must list `TABLE public items|users|ratings`), copies the dump on UTC day 1 to `ObjectKey("monthly", ...)` by decrypting and sealing it again for the new key (frames are bound to their object key, so a byte copy would not decrypt), then prunes by count: the newest 30 daily and 12 monthly objects under each prefix stay (`app/backup/prune.go`). The `backup.*` gauges are registered with the other platform metrics (P2.C.2.2) once the OTel meter exists.
+
 ### 7.4 Restore drill (staging, first Sunday 07:00)
 
-`backup:drill`: latest production daily via `BACKUP_SOURCE_S3_*` → decrypt → `createdb hexascore_drill` → `pg_restore -j 2` → `dq:asserts` (SDD 06 §7.7) → row counts vs dump manifest → drop → `backup_runs(kind='drill')`. Pass: < 60 min, 0 assert errors, counts equal.
+`backup:drill`: latest production daily via `BACKUP_SOURCE_S3_*` (and `BACKUP_SOURCE_BACKUP_KEY`; each falls back to the unprefixed name) → decrypt → `createdb hexascore_drill` → `pg_restore` on stdin (single job: `-j` needs a seekable file and the plaintext never touches disk; amended 2026-10-29, P2.E.3.1) → row counts vs dump manifest → `catalog:check` asserts (SDD 01 §7.6 plus scoring; SDD 06 §7.7 asserts join in P6) → drop → `backup_runs(kind='drill')`. Pass: < 60 min, 0 assert errors, counts equal. The manifest is written by `backup:run`: row counts of every `public` table taken in a `REPEATABLE READ` transaction whose snapshot `pg_dump --snapshot` reuses, sealed with `BACKUP_KEY` at `backups/manifests/postgres/<kind>/.../<dump name>.json`. Scheduled only where `BACKUP_SOURCE_S3_BUCKET` is set (staging also runs `APP_ENV=production`), weekly Sunday 07:00 with `--first-sunday`. Runbook: `docs/runbooks/restore.md`.
 
 ### 7.5 RTO runbook
 
@@ -204,7 +206,7 @@ Consistency note (SDD 13 open issue 11, 2026-10-28): after a restore, re-apply a
 
 1. Status page notice (GitHub Pages, SDD 12 §7.7); `down` [vk-cli] via `railway ssh` (Git Bash: `MSYS_NO_PATHCONV=1`, `vukem/docs/tooling.md` [SITE PAGE MISSING]).
 2. New Postgres service, same region (~5 min).
-3. `/app/hexascore backup:restore backups/postgres/daily/<latest> --target-url "$NEW_DATABASE_URL"` (~20 min at 3 GB).
+3. `/app/app backup:restore backups/postgres/daily/<latest> --target-url "$NEW_DATABASE_URL"` (~20 min at 3 GB); it then replays the deletions recorded in `DATABASE_URL` (or `--replay-from`) after the dump; `--no-replay` only when that database is lost (runbook `docs/runbooks/restore.md`).
 4. Point `DATABASE_URL` at the new service, redeploy (pre-deploy migrates).
 5. `hexascore:cutover-verify --counts-only`, `dq:asserts`; `up`.
 6. Users told the lost window (≤ 24 h, no replay, ADR 0014). Delete the old service after 7 days.
@@ -218,10 +220,10 @@ Consistency note (SDD 13 open issue 11, 2026-10-28): after a restore, re-apply a
 Window (target 45 min, max 60):
 
 1. Freeze: on Neon `ALTER DATABASE <db> SET default_transaction_read_only = on;` and terminate app sessions (legacy write-error UX [NOT VERIFIED]); disable the legacy Stripe webhook (Stripe retries).
-2. `pg_dump -Fc --no-owner --no-acl` of `user, account, two_factor, verification, items, item_translations, source_records, ratings, item_status, time_to_beat, lists, list_items, api_keys, api_usage_daily, subscriptions, stripe_customers, processed_events, credit_ledger, pix_charges, contact_messages, reports, affiliate_links`; excluded `session`, `passkey` (D-06), `external_scores` (D-09), `rate_limit`, `follows` (D-06, kept in the final dump) — ~8 min.
+2. `pg_dump -Fc --no-owner --no-acl` of `user, account, two_factor, verification, items, item_translations, source_records, ratings, item_status, time_to_beat, lists, list_items, api_keys, api_usage_daily, subscriptions, stripe_customers, credit_ledger, pix_charges, contact_messages, reports, affiliate_links`; excluded `session`, `passkey` (D-06), `external_scores` (D-09), `rate_limit`, `follows` (D-06, kept in the final dump), `processed_events` (webhook dedup is `contrib/stripe`'s cache, SDD 05 §5) — ~8 min.
 3. `pg_restore` into schema `legacy_import`.
 4. Purge synthetic users in the copy only: `user.id LIKE 'seed-user-%'` or `@example.test` emails and dependent rows (marker in `legacy/apps/web/lib/db/seed.ts`); counts logged.
-5. `hexascore:import-legacy` (P2.F.2.1: SDD 03 §5 pre-flight first, abort with counts; stages `users`, `twofactor`, `catalog`, `entities`, `social`, `library`, `billing`, `finalise` in that order; checkpoint per stage in `legacy_import_runs`, written in each batch's transaction; `--dry-run` prints planned counts) `--stage users` (SDD 03), `catalog` (SDD 06 §7.9), `social` (ratings, statuses, TTB, lists), `billing` (api_keys unchanged, subscriptions, stripe_customers, processed_events; `credit_ledger`, `pix_charges` kept for release two, issue 9); covers delta; `search:rebuild`; score recompute (SDD 02).
+5. `hexascore:import-legacy` (P2.F.2.1: SDD 03 §5 pre-flight first, abort with counts; stages `users`, `twofactor`, `catalog`, `entities`, `social`, `library`, `billing`, `finalise` in that order; checkpoint per stage in `legacy_import_runs`, written in each batch's transaction; `--dry-run` prints planned counts) `--stage users` (SDD 03), `catalog` (SDD 06 §7.9), `social` (ratings, statuses, TTB, lists), `billing` (api_keys unchanged, subscriptions, stripe_customers; no `processed_events`, SDD 05 §5; `credit_ledger`, `pix_charges` kept for release two, issue 9); covers delta; `search:rebuild`; score recompute (SDD 02).
 6. `hexascore:cutover-verify`: per-table counts equal; 1 % id-sample `md5(string_agg(<cols>, '|' ORDER BY id))` equal; recomputed scores ±1 on 0–100; every cover key exists; 0 orphan FKs. Failure → R1–R2.
 7. DNS switch (apex, `www`, `api`); Stripe live webhook to the new route and secret.
 8. Watch 2 h, then daily for 7 days: 5xx < 0.5 %, SSR fallback 0, login success ≥ 95 % of legacy, Stripe events processed, job failures.

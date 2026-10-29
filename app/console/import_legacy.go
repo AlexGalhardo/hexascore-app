@@ -12,7 +12,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/database/legacyimport"
 )
 
-// ImportLegacy is `hexascore:import-legacy --stage all|<name>[,<name>] [--dry-run]`
+// ImportLegacy is `hexascore:import-legacy --stage all|<name>[,<name>] [--dry-run] [--stdin]`
 // (SDD 11 §7.6 step 5). It reads the restored dump in schema legacy_import:
 // the dry run prints the pre-flight counts and the planned rows per stage and
 // writes nothing; a real run aborts on any pre-flight failure, then imports
@@ -22,6 +22,7 @@ func ImportLegacy() vukem.Command {
 		stage  *string
 		dryRun *bool
 		batch  *int
+		stdin  *bool
 	)
 
 	return vukem.CommandFunc{
@@ -35,6 +36,7 @@ func ImportLegacy() vukem.Command {
 			)
 			dryRun = fs.Bool("dry-run", false, "print pre-flight and planned counts, write nothing")
 			batch = fs.Int("batch", legacyimport.DefaultBatch, "rows per transaction")
+			stdin = fs.Bool("stdin", false, "read the twofactor export (NDJSON) from stdin")
 		},
 		Fn: func(ctx context.Context, app *vukem.App, _ []string) error {
 			stages, err := legacyimport.Select(legacyimport.Stages(), strings.Split(*stage, ","))
@@ -84,6 +86,17 @@ func ImportLegacy() vukem.Command {
 
 			if preErr != nil {
 				return preErr
+			}
+
+			// The 2FA secrets arrive only on stdin, decrypted by scripts/legacy/twofactor-export.ts (SDD 03 §7.6).
+			for i := range stages {
+				if stages[i].Name == "twofactor" {
+					if !*stdin {
+						return legacyimport.ErrNeedsStdin
+					}
+
+					stages[i].Batch = legacyimport.TwoFactorBatch(app.Stdin(), app.Now)
+				}
 			}
 
 			r := &legacyimport.Runner{DB: db, Batch: *batch, Out: out, Now: app.Now}

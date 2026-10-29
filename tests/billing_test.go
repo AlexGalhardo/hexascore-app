@@ -419,6 +419,46 @@ func TestStripeWebhookProcessedOnce(t *testing.T) {
 	vukemtest.AssertDatabaseCount(t, app, "subscriptions", 1)
 }
 
+// A08 (SDD 13): a replayed event id is dropped by contrib/stripe's cache-backed
+// dedup, and a new event about the same Stripe object converges on one row.
+func TestSecurity_A08_StripeReplayIgnored(t *testing.T) {
+	t.Parallel()
+
+	f := newFakeStripe(t)
+	app := billingApp(t, f)
+	u := newUser(t, app, "replay@example.com")
+	setCustomer(t, app, u)
+	f.setSubscription("active", "price_pro")
+
+	updated := map[string]any{"id": "sub_1", "customer": "cus_1"}
+	paid := map[string]any{
+		"id": "in_1", "parent": map[string]any{"subscription_details": map[string]any{"subscription": "sub_1"}},
+	}
+
+	for i, step := range []struct {
+		id, typ string
+		object  map[string]any
+		reads   int
+	}{
+		{"evt_upd", "customer.subscription.updated", updated, 1},
+		{"evt_upd", "customer.subscription.updated", updated, 1},
+		{"evt_paid", "invoice.paid", paid, 2},
+		{"evt_paid", "invoice.paid", paid, 2},
+		{"evt_paid_2", "invoice.paid", paid, 3},
+	} {
+		postWebhook(t, app, step.id, step.typ, step.object).AssertOK()
+
+		if _, reads, _, _ := f.stats(); reads != step.reads {
+			t.Fatalf("step %d (%s %s): %d subscription reads, want %d", i, step.id, step.typ, reads, step.reads)
+		}
+	}
+
+	vukemtest.AssertDatabaseCount(t, app, "subscriptions", 1)
+	vukemtest.AssertDatabaseHas(t, app, "subscriptions", map[string]any{
+		"user_id": u.ID, "stripe_subscription_id": "sub_1", "status": "active", "price_id": "price_pro",
+	})
+}
+
 func TestStripeWebhookRejectsBadSignature(t *testing.T) {
 	t.Parallel()
 

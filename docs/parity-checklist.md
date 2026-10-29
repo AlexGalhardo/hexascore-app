@@ -26,7 +26,7 @@ Test names are Go tests under `tests/` (or `tests/scoring/`) unless marked other
 | R02 | `/[...rest]` | `GET /{path...}` (`controllers.NotFound`) | TestErrorPage | done |
 | R03 | `/[section]` | `GET /{section}` (catalog listings) | TestInertiaPages_Catalog_Index | done |
 | R04 | `/[section]/[slug]` | `GET /{section}/{slug}` (item pages) | TestInertiaPages_Catalog_Show | done |
-| R05 | `/admin` | admin panel root (admin registry) | TestAdminPanelAccess | done |
+| R05 | `/admin` | admin panel root (admin registry) | TestAdminPanelAccess, e2e `admin.spec.ts` | done (guests are redirected to `/login`, legacy answered 404; accepted by the orchestrator 2026-10-29) |
 | R06 | `/admin/contact` | `/admin/contact-messages` (`ContactMessagesResource`) | none | open (P1.I.2.3) |
 | R07 | `/admin/ingestion` | `GET /admin/ingestion` | none | open (P1.I.2.3) |
 | R08 | `/admin/items` | admin items resource | none | open (P1.I.2.3) |
