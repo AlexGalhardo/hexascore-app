@@ -253,3 +253,17 @@ Acceptance (2026-10-29):
 - `go test ./tests -run TestAPIContract` → `ok` (both prefixes: 200, 404 `not-found`, 422 `validation-failed` with field errors, 202; every response passes `AssertMatchesOpenAPI()`); `go test ./app/http/problems/` ok (extension member, reserved-member guard, 5xx detail hidden, other paths untouched); `go test ./...` all `ok` with `TEST_DATABASE_URL` set.
 
 Limits: the exported documents are checked in from the spike only as samples (no CI diff yet); `servers` shows `http://localhost:3000` because `API_URL` was unset; auth, quota and rate-limit headers are not wired (other tasks); `listItems` and the rest of SDD 05 section 6.2 are not implemented; unmatched routes (router 404) are not under the problem handler when the path is outside the installed prefixes.
+
+## P0.F.10.1 Lighthouse CI budgets on the SSR container
+
+Verdict: works, after one app change (gzip) and one environment mitigation.
+
+Spike branch `agent/senior/P0.F.10.1`. `lighthouserc.json` (mobile emulation, Lighthouse default Moto G Power with slow 4G simulation, 3 runs, median) asserts on `http://localhost:3010/`: `largest-contentful-paint` <= 2000 ms, `cumulative-layout-shift` <= 0.05, `total-blocking-time` <= 200 ms, `resource-summary:script:size` <= 153,600 B (150 kB transfer). `@lhci/cli` 0.15.1 (npm `latest` on 2026-10-29), exact, dev-only; Chrome from the host (`CHROME_PATH`), reports in `.lighthouseci/` (gitignored). The target is the Docker image built from spike main (`hexascore-spike`, 298 MB) run as in P0.F.2.2.
+
+Acceptance (2026-10-29):
+
+- First run, container without compression: `bunx lhci autorun` exit 1: `resource-summary.script.size` found 568,467 (expected <= 153,600) and LCP 4,589 ms. Cause 1: `app-*.js` served raw (353,925 B). Fix: `r.UseServer(middleware.Gzip())` (`GET` with gzip: 112,898 B), VF-NEW-P0.F.10.1.
+- Cause 2 (environment): the host's Kaspersky web shield injects a 212 kB script, a stylesheet and polling XHRs from `gc.kis.v2.scr.kaspersky-labs.com` into every page, which inflated script size and delayed FCP/LCP. `blockedUrlPatterns: ["*kaspersky-labs.com*"]` in `lighthouserc.json` removes it (harmless on CI runners).
+- Final run: `bunx lhci autorun` -> `All results processed!`, `Done running autorun.`, exit 0, 78 s for 3 runs after the container is up. Per run (LCP ms / TBT ms / CLS / script bytes): 1367 / 0 / 0 / 115,585; 1373 / 11 / 0 / 115,585; 1380 / 0 / 0 / 115,585. Performance score 1.
+
+Sizing for P1.I.5.1: about 25 s per run, so ~80 s for 3 runs of one URL, plus image build (68 s cold in this run) and container start (~6 s). The page measured is the starter Home, not an item page: budgets on the real item page (images, fonts) are untested.
