@@ -572,6 +572,10 @@
   "docs": {
     "copy": "Copiar",
     "copied": "Copiado",
+    "title": "Documentação da API",
+    "navLabel": "Documentação",
+    "nav": { "index": "Início rápido", "authentication": "Autenticação", "pagination": "Paginação", "rate-limits": "Limites de uso", "errors": "Erros", "changelog": "Histórico de mudanças" },
+    "tocLabel": "Nesta página",
     "quickstart": {
       "lead": "Notas da comunidade para jogos, filmes, séries e livros — de 0 a 100, em seis categorias por item — por meio de uma API JSON somente leitura.",
       "keyHeading": "1. Crie uma chave de API",

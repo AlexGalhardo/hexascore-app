@@ -572,6 +572,10 @@
   "docs": {
     "copy": "Copy",
     "copied": "Copied",
+    "title": "API documentation",
+    "navLabel": "Documentation",
+    "nav": { "index": "Quickstart", "authentication": "Authentication", "pagination": "Pagination", "rate-limits": "Rate limits", "errors": "Errors", "changelog": "Changelog" },
+    "tocLabel": "On this page",
     "quickstart": {
       "lead": "Community scores for games, movies, TV series and books — 0 to 100, in six categories per item — over a read-only JSON API.",
       "keyHeading": "1. Create an API key",

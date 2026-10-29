@@ -115,7 +115,22 @@ func Web(r *router.Router, app *vukem.App) error {
 		}))
 	}
 
+	docsJSON, err := resources.DocsJSON()
+	if err != nil {
+		return err
+	}
+
+	docs, err := controllers.Docs(docsJSON)
+	if err != nil {
+		return err
+	}
+
 	r.Get("/help/score", controllers.HelpScore).Name("help.score")
+	r.Get("/robots.txt", controllers.Robots(app)).Name("robots")
+	r.Get("/terms", controllers.Legal("terms")).Name("terms")
+	r.Get("/policy", controllers.Legal("policy")).Name("policy")
+	r.Get("/docs", docs).Name("docs")
+	r.Get("/docs/{slug}", docs).Name("docs.page")
 	r.Get("/", controllers.Home(app)).Name("home")
 	// Least specific pattern: unmatched GET pages render the Error page with
 	// the shell, since vukem's own hook only covers Inertia visits.
