@@ -603,4 +603,3 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
   - `vukem doctor` (or the existing environment checks) reports whether the scanner is installed and its version.
   - Docs and a site page "Secret scanning"; validation/analysis/revocation features of Betterleaks stay off by default (they call credential providers) and are documented as opt-in.
   - Tests: scaffold golden/e2e tests assert the generated files; a fixture with a fake `APP_KEY` and `vk_` token is detected by the starter config, and `.env.example` placeholders are not.
-

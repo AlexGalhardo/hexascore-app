@@ -1,19 +1,14 @@
-# Handoff especialista (2026-10-29, session 9)
-STATUS: standby (owner rule: no HANDOFF). Last delivered: P2.E.2.1 (agent/especialista/P2.E.2.1). Earlier this session: Worktree C:\dev\hexascore-app\wt\especialista on agent/especialista/P2.C.1.1, clean.
-Queue left: 4-P2.D.3.1, 5-P2.F.2.1, 9-APP-PASSKEYS-b (blocked). Wait for orchestrator message before claiming the next.
-Done this session:
-- REV-P1.H.4.1b -> APROVADO (agent/senior/P1.H.4.1b), no changes.
-- P2.E.1.1 -> self PRONTO (agent/especialista/P2.E.1.1): hexascore:predeploy = drop INVALID indexes + native vukem m.Up (v0.33 lock + NoTransaction); VF-NEW-P2.E.1.1.
-- P2.C.1.1 -> self PRONTO (agent/especialista/P2.C.1.1): app/logging handler wrapping app.Log + RequestLog/RequestRoute + NotBanned SetUser.
-Pitfalls (new):
-- vukem v0.33.0 already ships VF-017/VF-026 fixes: ROADMAP items still describing database/concurrent/ or hashtext lock are stale.
-- vukem Logger captures app.Log when routes.Web calls DefaultMiddlewareWith; wrap app.Log in an earlier WithRoutes callback.
-- Logger logs the outer request: inner context values are invisible; use a mutable holder put in ctx by an outer server middleware.
-- Python on Windows text mode writes CRLF: use binary read/write for repo files.
-- vukemtest: AppOptions vukem.WithStdout / WithLogOutput override the io.Discard defaults (appended later).
-Merge overlap: P2.E.1.1 vs senior ADOPT-VF-040 (bootstrap/commands.go, runbook); CHANGELOG [Unreleased] on all branches.
-- P2.E.2.1: app/backup frames + backup:run; added vukem drivers/s3 v0.3.1 (flagged). Local pg_dump: host has none; build GOOS=linux binary and run it in postgres:18.6-alpine3.24 with --add-host host.docker.internal:host-gateway, APP_ENV=development. RustFS creds hexascore/hexascore-local-secret; bucket hexascore-local exists.
-- Session 9 cont.: REV-ADOPT-VF-024 CORRIGIDO (agent/especialista/ADOPT-VF-024-fix: double locale prefix on Back redirects + sampler prefix), REV-P1.I.2.1 APROVADO (+senior 2-E2E-HARDEN-P1.I.2.1), REV-ADOPT-VF-035 APROVADO, REV-ADOPT-VF-040 APROVADO.
-- e2e isolation: COMPOSE_PROJECT_NAME=hx-especialista + override file (postgres/rustfs ports !reset [], app 127.0.0.1:3010), E2E_BASE_URL, E2E_APP_CONTAINER=hx-especialista-app-1; down -v after.
-- P2.D.3.1 delivered (agent/especialista/P2.D.3.1): AdminGuard router-wide; VF-058.
-- P2.F.2.1 delivered (agent/especialista/P2.F.2.1): legacyimport runner/preflight/fixture.
+# Handoff especialista (2026-10-29, end of session 9: context limit)
+STATUS: IDLE, no task in progress. Worktree C:\dev\hexascore-app\wt\especialista (last on agent/especialista/P2.F.2.1, clean; next task: git fetch, switch -c from origin/main).
+Queue for the next session, in order: 3-P2.F.2.2, 4-P2.F.2.3, 5-P2.F.2.7, 6-P2.E.2.2, 7-P2.E.3.1 (9-APP-PASSKEYS-b blocked until a vukem release with VF-001). Chain them without waiting; report each with PRONTO_PARA_MERGE (self, needs orchestrator sampling).
+Delivered and merged this session: REV-P1.H.4.1b, P2.E.1.1 (hexascore:predeploy), P2.C.1.1 (privacy log handler), P2.E.2.1 (backup:run, drivers/s3 v0.3.1 accepted), REV ADOPT-VF-024 (fix), P1.I.2.1, ADOPT-VF-035/040/046, P2.D.3.1 (AdminGuard), P2.F.2.1 (legacyimport runner).
+Context for the queue:
+- Legacy import (P2.F.2.2/2.3/2.7): database/legacyimport. Stages() returns stages with nil Batch; fill Batch (BatchFunc: keyset after `after`, idempotent upserts, runner writes the checkpoint in the same tx). Fixture testdata/fixture.sql is synthetic (Better Auth column names from legacy apps/web/lib/db/schema/auth.ts); extend it per stage. Preflight "no_login_method" = no credential account with password, no google, no passkey.
+- Backups (P2.E.2.2 verify/prune): app/backup FrameReader(r, enc, objectKey) decrypts; object key bound in AD; backup_runs table; Runner in dump.go. Host has no pg_dump/pg_restore: build GOOS=linux binary and run in postgres:18.6-alpine3.24 with --add-host host.docker.internal:host-gateway, APP_ENV=development; RustFS creds hexascore/hexascore-local-secret, bucket hexascore-local exists.
+Pitfalls:
+- vukem v0.33.0 already ships many VF fixes; check vukem-feedback.md status before building a workaround (VF-017/026/030/035 were fixed natively).
+- Test admins need two_factor_confirmed_at (tests/admin_users_test.go makeUser does it) because of AdminGuard.
+- e2e isolation: COMPOSE_PROJECT_NAME=hx-especialista + override file (postgres/rustfs ports !reset [], app 127.0.0.1:3010), E2E_BASE_URL, E2E_APP_CONTAINER=hx-especialista-app-1; `down -v` after.
+- Python on Windows: use binary read/write; multi-occurrence replaces need unique context (assert count).
+- golangci: nolint needs an explanation and its own line when the line is long (golines).
+- Long suites: `timeout 590 env TEST_DATABASE_URL=... go test -tags integration ./...` > file; they may go to background; wait with an until-loop on the output file.
