@@ -1,0 +1,3 @@
+Review P1.B.3.1. repo: app. branch: agent/senior/P1.B.3.1. report: C:/dev/hexascore-app/hexascore-vukem/.orchestration/reports/P1.B.3.1.md
+Re-run: go test -tags integration ./app/catalog/... -run "TestRedirect|TestSlugify"; go test -tags integration ./tests -run TestRedirect; golangci-lint run --build-tags integration ./...
+rodada: 0
