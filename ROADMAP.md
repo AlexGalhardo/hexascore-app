@@ -110,7 +110,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
 
 #### P0.F.2 Inertia SSR in one container
 
-- [ ] **P0.F.2.1** Enable Inertia SSR with a Vite SSR bundle, a failure counter and an `ssr` health check.
+- [x] **P0.F.2.1** Enable Inertia SSR with a Vite SSR bundle, a failure counter and an `ssr` health check.
   - Files/modules: spike `bootstrap/app.go` (`inertia.SSRConfig{Bundle: "bootstrap/ssr/ssr.js", OnFailure: ...}`), `resources/js/ssr.tsx`, `package.json` script `build:ssr` (`vite build --ssr`)
   - Refs: SDD 09 §6.1, §9; ADR 0004; VF-002, VF-027; <https://vukem.dev/docs/frontend/inertia> "Server-side rendering"; <https://vukem.dev/docs/cli/reference-runtime> "`vukem ssr:start` and `vukem ssr:check`"
   - Depends on: P0.F.1.1
