@@ -7,3 +7,6 @@ Branch: agent/senior/ADOPT-VF-046 (pushed). Files: app/accounts/ban.go, app/admi
 - New test TestAdminFormBansAndUnbans (ban via form, events, unban, omitted-checkbox edit, self-ban rollback).
 - go build ok; golangci-lint 0 issues; `go test -tags integration ./...` 0 FAIL (19 ok).
 - Not verified in a browser: the checkbox UI rendering of the vukem form.
+
+REV (especialista): APROVADO, see reports/REV-ADOPT-VF-046.md (CHANGELOG conflict only)
+PRONTO_PARA_MERGE agent/senior/ADOPT-VF-046

@@ -33,3 +33,10 @@ Owner answered "merge your own green PRs" in chat, but `gh pr merge 39 --squash`
 - ISSUES-19-5: PR #45 (`chore/scorecard-vulns`: x/net v0.62.0, bench echo v5.4.2, maintenance.md Scorecard history + levers). `gh issue comment/close` denied by the classifier: texts for #19/#5 in `reports/ISSUES-19-5.md` for the orchestrator.
 - Next: VF-052 (`queue/framework/2-VF-052.md`). Owner rule: after each task open PR, report, end with `STATUS: IDLE`.
 - Windows: `internal/testutil` test exe "Acesso negado" now persistent (AV lock), not code.
+
+## Session 8, later (2026-10-29)
+
+- Open PRs from this session: #44 (VF-001 scaffold, stacked on #43), #45 (Scorecard vulns), #46/#48/#49/#50 (VF-052 chain, in that order), #47 (Turnstile action), #51 (VF-054), #52 (VF-053), #53 (VF-022 IP truncation), #54 (VF-039 signed.Token).
+- After squash merges: rebase stacked work onto main as NEW branches + replacement PRs when the orchestrator says a base landed.
+- Remaining open VFs (all low): 004, 007, 012, 020, 023, 033, 034, 042, 044, 049, 050 (skip 011, 014: owner).
+- A throwaway container `vukem-pg-test` (postgres:17, 127.0.0.1:55432) may still run: `docker rm -f vukem-pg-test`.

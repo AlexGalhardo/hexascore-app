@@ -47,7 +47,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-036 | 2026-10-29 | low | fixed in v0.33.0 (PR [#34](https://github.com/AlexGalhardo/vukem/pull/34), adopted 4a2d8ec) |
 | VF-037 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#26](https://github.com/AlexGalhardo/vukem/pull/26)) |
 | VF-038 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#17](https://github.com/AlexGalhardo/vukem/pull/17)) |
-| VF-039 | 2026-10-29 | low | open |
+| VF-039 | 2026-10-29 | low | in_progress (framework), PR #54 (signed.Token; extensions and keyset cursor already in v0.33.0) |
 | VF-040 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#13](https://github.com/AlexGalhardo/vukem/pull/13)) |
 | VF-041 | 2026-10-29 | low | fixed in v0.33.0 (PR [#28](https://github.com/AlexGalhardo/vukem/pull/28)) |
 | VF-042 | 2026-10-29 | low | open |
