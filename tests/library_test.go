@@ -8,6 +8,7 @@ import (
 
 	"github.com/AlexGalhardo/vukem/uuid"
 
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
 
@@ -155,6 +156,11 @@ func TestPublicProfilePrivacy(t *testing.T) {
 
 	anon.Get("/u/nobody").AssertNotFound()
 
+	r.exec(`UPDATE users SET banned_at = now() WHERE id = $1`, pub.ID)
+	anon.Get("/u/openone").AssertOK().AssertHeader("X-Robots-Tag", "noindex").AssertInertia("User/Profile").
+		PropEquals("seo.indexable", false).HasProp("stats")
+	r.exec(`UPDATE users SET banned_at = NULL WHERE id = $1`, pub.ID)
+
 	var body struct {
 		Profile map[string]any `json:"profile"`
 		Stats   any            `json:"stats"`
@@ -171,4 +177,43 @@ func TestPublicProfilePrivacy(t *testing.T) {
 
 	owner := browserFor(t, r.app, priv).Inertia("")
 	owner.Get("/u/secretone").AssertOK().AssertInertia("User/Profile").HasProp("stats")
+}
+
+// TestMergeMovesUserEditions: a chosen edition follows its work into the merge target; where the user already
+// picked an edition of the target, the target's choice wins (SDD 14 §8).
+func TestMergeMovesUserEditions(t *testing.T) {
+	r := newListRig(t)
+	a, _ := r.user("eda@example.com")
+	b, _ := r.user("edb@example.com")
+	db, err := r.app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	q, err := r.app.Queue()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	from, into := r.item("book", "public"), r.item("book", "public")
+	edFrom, edInto := r.edition(from), r.edition(into)
+	r.exec(`INSERT INTO user_item_editions (user_id, item_id, edition_id)
+VALUES ($1, $2, $3), ($4, $2, $3), ($4, $5, $6)`, a.ID, from, edFrom, b.ID, into, edInto)
+
+	if err := catalog.Merge(t.Context(), db, q, from, into, 0); err != nil {
+		t.Fatal(err)
+	}
+
+	for _, c := range []struct {
+		user    int64
+		edition string
+	}{{a.ID, edFrom}, {b.ID, edInto}} {
+		if got := queryInts(t, r, `SELECT count(*) FROM user_item_editions WHERE user_id = $1 AND item_id = $2
+AND edition_id = $3`, c.user, into, c.edition); got[0] != 1 {
+			t.Errorf("user %d: edition %s on target missing", c.user, c.edition)
+		}
+	}
+	if got := queryInts(t, r, `SELECT count(*) FROM user_item_editions WHERE item_id = $1 OR user_id = $2 AND
+edition_id <> $3`, from, b.ID, edInto); got[0] != 0 {
+		t.Errorf("%d stale edition rows", got[0])
+	}
 }
