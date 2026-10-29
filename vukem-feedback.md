@@ -46,6 +46,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-035 | 2026-10-29 | medium | open |
 | VF-036 | 2026-10-29 | low | open |
 | VF-037 | 2026-10-29 | medium | open |
+| VF-038 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -355,3 +356,11 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Workaround** (spike `agent/senior/P0.F.8.1`): rename the plans in `plans()` and in the tests; add `Plan.Amounts` (display only) and a `config.Currency` allowlist; pass `"currency"` in the `stripe.Params` of `CreateCheckoutSession` (`Params` is a free-form map, so no dependency change); the controller reads the `currency` form field and an unsupported value returns 422 before any Stripe call. Whether Stripe accepts `currency` with a `currency_options` price in a live sandbox is [NOT VERIFIED] here (only the fake-Stripe tests ran; test keys only).
 - **Request**: document the `currency_options` pattern, accept a currency (or locale to currency map) in the scaffold's `Checkout`, and generate plans from config rather than code.
 - Also: `POST /stripe/webhook` is mounted with `r.UseServer` and is not listed by `vukem route:list` (documented as such); the acceptance check for it is the webhook tests.
+
+## VF-038: No signed opaque-token helper and no problem+json extension members
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/pagination` ("Query conventions", "Envelopes"), `https://vukem.dev/docs/frontend/inertia` (Scroll), `https://vukem.dev/docs/digging-deeper/storage` (signed URLs).
+- **Context**: SDD 01 §7.2 assumed `signed.Signer` can sign a cursor payload; it only signs URLs (`Sign(rawURL, ttl)`, `Verify(*http.Request)`), so the spike uses `crypto/hmac` with a key from `App.DeriveKey("catalog-cursor", 32)`. `web.Problem` (RFC 9457) has no extension members, so the SDD 05 problem code `invalid-cursor` needs a hand-written `application/problem+json` body. `orm.CursorPaginate` rejects `sort`, hence the app-owned keyset (VF-005).
+- **Workaround**: `app/catalog/cursor.go` (HMAC-SHA256, constant-time compare, sort key and direction inside the signed payload) and `invalidCursor` in `app/controllers/items.go`.
+- **Request**: `signed.Token` (sign and verify arbitrary payloads with key rotation), `Problem.Extensions`/`Code`, and a documented keyset cursor over `(sort, id)` in the ORM.

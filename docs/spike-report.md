@@ -110,3 +110,20 @@ Decisive output:
 - Fit of BRL/USD/EUR: one Stripe price per plan (`STRIPE_PRICE_PRO`, `STRIPE_PRICE_BUSINESS`) with `currency_options`; the checkout sends `currency` in `stripe.Params`; `config.Plan.Amounts` holds the SDD amounts (pro 2900/600/600, business 14900/2900/2700 minor units, BRL/USD/EUR) for display only. Locale-to-currency default (pt-BR to BRL, es to EUR, en to USD) is not implemented: the default is `usd`. Live Stripe acceptance of `currency` with a `currency_options` price was not run (test keys only, human gate): [NÃO VERIFICADO].
 
 Verdict: workaround (scaffold code edited for plan names and currency; VF-037).
+
+## P0.F.3.1 Signed keyset cursor with inertia.Scroll
+
+Spike branch `agent/senior/P0.F.3.1` (8522ef6, from spike `main` a7c27a1). Files: `app/catalog/cursor.go` (+ `cursor_test.go`), `app/catalog/list.go`, `app/catalog/seed.go`, `database/seeders/items_seeder.go` (300 items, Postgres only), `app/controllers/items.go`, `routes/web.go` (`GET /items`), `resources/js/pages/Items/Index.tsx` (`InfiniteScroll`), `tests/items_cursor_test.go`.
+
+Design: cursor is `base64url(json{s,v,id}).base64url(HMAC-SHA256)`, key from `App.DeriveKey("catalog-cursor", 32)`, compared with `hmac.Equal`; the sort key (with direction) is inside the signed payload, so a cursor from another sort fails. Query: `ORDER BY col, id` plus `WhereRaw("((col > ?) OR (col = ? AND id > ?))")` (`<` for descending), fetching `perPage+1` rows to know whether a next page exists. `col` comes only from the `catalog.Sorts` allowlist (`slug`, `-slug`, `type`, `-type`). Nulls-last is not covered (both columns are NOT NULL).
+
+Env the tests need: `TEST_DATABASE_URL` (postgres admin URL, `pgtest.Database` creates a private database) for `tests/items_cursor_test.go`; `go test ./app/catalog/...` needs none.
+
+Decisive output:
+
+- `go test ./app/catalog/... -run TestCursor -v`: `TestCursorRoundTrip`, `TestCursorRejected` PASS (tampered payload, missing or empty signature, garbage, other sort, other direction and other key all give `ErrInvalidCursor`).
+- `go test ./tests -run 'TestCursor|TestSecurity_A08' -v` PASS: `TestCursorPagesWithoutDuplicates` walks `/items` by Inertia partial visits (`X-Inertia-Partial-Component: Items/Index`, `X-Inertia-Partial-Data: items`) for the four sorts: 13 pages (12 of 24, then 12), 300 unique rows, ordered by `(sort value, id)` including the 75-way ties of `type`; `TestSecurity_A08_CursorTamperRejected` gets 400 `application/problem+json` with `code: invalid-cursor` for a tampered, cross-sort, reversed and garbage cursor. `go test ./...` `ok`; `bun run typecheck` clean.
+- `ScrollMeta` with an opaque cursor is accepted: the page object has `scrollProps.items = {pageName: "cursor", previousPage: null, currentPage: null, nextPage: "<opaque token>", reset: false}` and `mergeProps: ["items.data"]`, built with `inertia.ScrollCursor(orm.CursorPage{...}, "cursor")`. This closes 07-4 and 09-4 with `Scroll`; the `WhenVisible` fallback is not needed. `previousPage` stays null (append-only scroll). The browser behaviour of `<InfiniteScroll data="items">` was not run (typecheck only): [NÃO VERIFICADO].
+- Note: the items seeder returns early on non-Postgres dialects so the scaffold's SQLite seeder test keeps passing.
+
+Verdict: works (workaround: app-owned HMAC cursor and hand-written problem body, VF-038; VF-005).
