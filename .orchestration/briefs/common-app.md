@@ -57,3 +57,7 @@ Files, code, commits: normal English prose. Reports: terse. Unknown facts: `[NÃ
 ## VF numbering (2026-10-29)
 
 Never pick a VF number yourself (two workers collided on VF-038). Title new entries `## VF-NEW-<task ID>: <title>` with an index row `| VF-NEW-<task ID> | <date> | <severity> | open |`, and cite them as `VF-NEW-<task ID>` in the spike report; the orchestrator assigns the real number at merge.
+
+## Compose isolation (2026-10-29)
+
+Every worktree shares container names. For the `app` profile and e2e runs set `COMPOSE_PROJECT_NAME=hx-<role>` and a free host port (`APP_PORT`, if the compose file exposes one) so you never restart another worker's containers. The shared Postgres on 5433 stays the default project; do not `docker compose down` it while others run.
