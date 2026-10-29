@@ -1,8 +1,12 @@
 package bootstrap
 
-import vukem "github.com/AlexGalhardo/vukem"
+import (
+	vukem "github.com/AlexGalhardo/vukem"
+
+	"github.com/AlexGalhardo/hexascore-app/app/console"
+)
 
 // Commands lists the application commands; vukem make:command appends here.
 func Commands() []vukem.Command {
-	return []vukem.Command{}
+	return []vukem.Command{console.MigrateLocked()}
 }
