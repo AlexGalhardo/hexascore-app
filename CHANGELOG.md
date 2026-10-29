@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Conventional Commits `commit-msg` hook (`.githooks/`, enabled by the setup scripts), `.config/cliff.toml` and `scripts/release.sh` (git-cliff, no Task or commitlint) (P1.A.2.2).
 - `packages/tokens`: design tokens (OKLCH, light and dark) emitted as CSS variables with a Tailwind v4 `@theme` mapping and a TypeScript module with sRGB hex, plus WCAG AA contrast tests (P1.A.3.1).
+- Book editions, `isbn13_is_valid` (SQL and `catalog.ValidISBN13`), `affiliate_links` and `catalog_redirects` migrations, with a composite foreign key keeping `items.primary_edition_id` inside the same work (P1.B.1.3).
 - Entity schema (`entities`, `entity_translations`, `item_entities`, `entity_links`, `item_links`, `entity_stats`), `catalog.RoleCompatible` and the hourly `catalog.refresh_entity_stats` scheduled job (P1.B.1.2).
 - Frontend and Go tooling: Biome 2.6.4 (`bun run lint`), Vitest 5.0.5 with Testing Library and jsdom (`bun run test`), `tsc` over `resources/js` and `vitest.config.ts`, `.golangci.yml` for golangci-lint 2.15.0; the i18n parity test moved from `bun:test` to Vitest and the TypeScript sources were reformatted to tabs (P1.A.2.1).
 - `migrate:locked` command (Postgres advisory lock around the migration runner), `scripts/concurrent-index.sh` and `docs/runbooks/migrations.md` ported from the P0.F.5.2 spike (P1.A.4.3).

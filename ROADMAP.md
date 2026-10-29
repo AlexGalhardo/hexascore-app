@@ -421,7 +421,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test -tags=integration ./app/catalog/... -run 'TestEntityConstraints|TestEntityStats'` → PASS; stats counts equal a recount on the fixture
   - Notes: engines, edition contributors and episodes are deferred (D-30); add no role values for them. `avg_score` stays null until P1.D.3.2 provides scores.
 
-- [ ] **P1.B.1.3** Migrate `editions` with `isbn13_is_valid`, plus `affiliate_links` and `catalog_redirects`.
+- [x] **P1.B.1.3** Migrate `editions` with `isbn13_is_valid`, plus `affiliate_links` and `catalog_redirects`.
   - Files/modules: `database/migrations/*_create_editions_table.go`, `*_create_isbn13_function.go`, `*_create_affiliate_links_table.go`, `*_create_catalog_redirects_table.go`
   - Refs: SDD 01 §5.2, §9; D-10; ADR 0012; open-issues 01-1
   - Depends on: P1.B.1.1
