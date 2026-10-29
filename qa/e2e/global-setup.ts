@@ -7,6 +7,8 @@ export default async function globalSetup(): Promise<void> {
 	const res = await context.get("/up", { timeout: 15_000 }).catch(() => null);
 	await context.dispose();
 	if (!res?.ok()) {
-		throw new Error(`${baseURL}/up is not healthy; run: docker compose --profile app up -d --wait app`);
+		throw new Error(
+			`${baseURL}/up is not healthy; run: docker compose --profile app up -d --wait app`,
+		);
 	}
 }

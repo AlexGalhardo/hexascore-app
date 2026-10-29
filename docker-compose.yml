@@ -47,8 +47,8 @@ services:
       APP_KEY: ${APP_KEY:?run setups/setup-unix.sh or vukem key:generate}
       DATABASE_URL: postgres://hexascore:hexascore@postgres:5432/hexascore?sslmode=disable
       SESSION_DRIVER: database
-    # Migrate, then seed DemoCatalog (1 admin, 50 users, 300 items); a second seed may fail, so tolerate it.
-    entrypoint: ["/bin/sh", "-c", "/app/app migrate && (/app/app db:seed --force DemoCatalog || true)"]
+    # Migrate, then seed DemoCatalog (1 admin, 50 users, 300 items); the seeder is idempotent, so a failure is real.
+    entrypoint: ["/bin/sh", "-c", "/app/app migrate && /app/app db:seed --force DemoCatalog"]
     restart: "no"
 
   app:

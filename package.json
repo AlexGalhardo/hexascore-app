@@ -8,7 +8,7 @@
     "typecheck": "tsc --noEmit",
     "build:ssr": "vite build --ssr resources/js/ssr.tsx",
     "build:docs": "bun scripts/build-docs.ts",
-    "lint": "biome ci resources/js packages",
+    "lint": "biome ci resources/js packages qa/e2e",
     "test": "vitest run",
     "e2e": "playwright test -c qa/e2e/playwright.config.ts",
     "openapi:check": "bash scripts/openapi-check.sh",
