@@ -476,7 +476,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.B.4 Data quality, sitemap and seed data
 
-- [ ] **P1.B.4.1** Add the `catalog:check` command with the SDD 01 data-quality asserts and a JSON report.
+- [x] **P1.B.4.1** Add the `catalog:check` command with the SDD 01 data-quality asserts and a JSON report.
   - Files/modules: `app/console/catalog_check.go`, `app/catalog/dq.go`, `app/catalog/dq_test.go`
   - Refs: SDD 01 §7.6, §9
   - Depends on: P1.B.2.1

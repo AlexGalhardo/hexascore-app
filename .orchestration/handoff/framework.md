@@ -1,33 +1,37 @@
-# Framework engineer handoff (2026-10-29)
+# Framework engineer handoff (2026-10-29, session 2)
 
-Reason: HANDOFF after 7 VFs plus the CI fix (context budget, brief "Limits").
+Reason: HANDOFF after 5 VFs plus a flaky-test fix (brief "Limits", context budget).
 
 ## Environment
 
-- Worktree `C:\dev\hexascore-app\wt\framework` (detached at origin/main when idle). `task` v3.54.0 installed with `go install github.com/go-task/task/v3/cmd/task@v3.54.0` (vukem pins none; docs say `@latest`, latest stable used).
-- Site MDX check without installing: junction `site\node_modules` -> `C:\dev\hexascore-app\vukem\site\node_modules`, run `node scripts/check-mdx.ts <files>`, delete the junction after (PowerShell `(Get-Item ...).Delete()`).
-- Ruleset: PR + required checks + strict up-to-date + linear history. After each merge the other PRs go BEHIND: `gh pr update-branch <n>`, wait for CI, squash-merge. A serial merge loop (state BEHIND -> update, CLEAN -> merge, failing check -> stop) works well in the background.
-- Python edits on Windows: open files with `newline=''` (text mode writes CRLF); heredoc backslashes may be collapsed by the tool, prefer the Edit tool for strings with `\n`.
+- Worktree `C:\dev\hexascore-app\wt\framework` (leave detached at origin/main when idle). `task` v3.54.0 (`go install github.com/go-task/task/v3/cmd/task@v3.54.0`).
+- Site MDX check: PowerShell junction `site\node_modules` -> `C:\dev\hexascore-app\vukem\site\node_modules`, `node scripts/check-mdx.ts <files>`, then `(Get-Item node_modules).Delete()`.
+- Ruleset: PR + required checks + strict up-to-date + linear history. Serial merge loop script: `C:\Users\aleex\AppData\Local\Temp\claude\C--dev-hexascore-app\35ef99b5-5e29-468c-b239-25473d83c159\scratchpad\merge-loop.sh <pr>...` (BEHIND -> update-branch, CLEAN -> squash, failing check -> exit 1). Scratchpad may be gone in a new session: it is 20 lines, rewrite if needed.
+- `task ci | tail` hides the exit code; redirect to a log and `echo $?` instead. Long runs go to the background (180 s tool limit).
+- Python heredocs collapse `\\n`; use the Edit tool for Go strings with `\n`.
+- Port 13714 is shared: another agent's SSR server was running there. Never POST `/shutdown` without checking who owns the listener (see "Incident").
 
-## Done
+## Done this session
 
 | Item | PR | State |
 | --- | --- | --- |
-| FW-CI-MONGO (mongo:8 -> 9.0.4 digest + health check; kernel >= 6.19 incompatibility) | #8 | merged |
-| VF-002 strict SSR (`SSRConfig.Strict`, `inertia.RequireSSR`) | #7 | merged |
-| VF-027 `serve -with-ssr`, `build -ssr`/`-ldflags`, `WithVersion` | #9 | merged |
-| VF-024 i18n path prefixes (`PathPrefixes`, `SourcePath`, `StripPathPrefix`, `LocalizePath`) | #10 | merged |
-| VF-005 `CursorPaginate` over `OrderBy` (composite keyset) | #11 | merged |
-| VF-015 `Router.Host` | #12 | merged |
-| VF-017 `Migration.NoTransaction` + VF-026 migration lock | #13 | merged (b5a2253) |
-| VF-001 | - | wontfix (post-1.0, FQ-001) |
+| VF-018 queue per-queue limits (`WorkOptions.Limits`, `QUEUE_LIMITS`) | #14 | merged (2b5ed18) |
+| VF-019 app metrics docs + `TestProvider_AppMetrics` (no new API) | #15 | merged (ae9276e) |
+| VF-025 SSR render cache (`SSRConfig.Cache/CacheTTL/CacheWhen`) | #16 | merged |
+| VF-038 SSR starter entry, plugin `isSsrBuild` branch, `build:ssr`, `ssr:start` error on immediate exit | #17 | see final STATUS |
+| VF-040 | - | status only: duplicate of VF-017/026, fixed by PR #13 |
+| session flaky test (all-digit handle) | #18 | see final STATUS |
 
-Reports: `$ORCH/reports/{FW-CI-MONGO,VF-002,VF-005,VF-015,VF-017,VF-024,VF-026,VF-027}.md`. vukem `main` head: b5a2253.
+Reports: `$ORCH/reports/VF-{018,019,025,038,040}.md`.
+
+## Incident
+
+While checking the VF-038 SSR bundle I POSTed `/shutdown` to 127.0.0.1:13714, which was another process's SSR server (the port was taken; my own bundle failed with EADDRINUSE). That server stopped cleanly. Whoever runs SSR locally (spike/senior) must restart it with `vukem ssr:start` or `serve -with-ssr`.
 
 ## Open
 
-- Docker compose services postgres/mysql/mariadb (project `vukem`) were started from the worktree for local integration runs; stop with `docker compose -f .config/compose.yaml stop` if unwanted.
-- vukem-feedback.md: wrap links as `<https://...>` (app markdownlint MD034).
-- Release v0.33.0 BLOCKED (owner question Q-D-006, do not retry the tool): the permission classifier denied `go run ./internal/tools/release v0.33.0` ("Create Public Surface"). Request FR-001 in `docs/orchestration/QUESTIONS.md`. Nothing committed or tagged. After the release: adoption task `$ORCH/queue/senior/1-ADOPT-vukem-v0.33.0.md` targeting `C:\dev\hexascore-app\hexascore-spike`, VF statuses `fixed in v0.33.0`.
-- Next VFs by brief order (medium first, roadmap refs): VF-018 (queue priority/concurrency), then VF-019, VF-025, VF-008, VF-003, VF-030, VF-031, VF-035, VF-037, VF-038, VF-040; lows after.
+- Release v0.33.0 still BLOCKED (Q-D-006 / FR-001). Do not run the release tool. It now also carries VF-018, 019, 025, 038 (and 040 via #13). After the release: `$ORCH/queue/senior/1-ADOPT-vukem-v0.33.0.md` targeting `C:\dev\hexascore-app\hexascore-spike` (bump, remove workarounds: per-family semaphore -> `QUEUE_LIMITS`; anonymous HTML cache -> `SSRConfig.Cache`; `migrate:locked` and `scripts/concurrent-index.sh` -> built-in lock/`NoTransaction`; SSR plugin branch now upstream), VF statuses `fixed in v0.33.0`.
+- Next VFs (all medium, all sizeable): VF-030 (admin hardening), VF-003, VF-008, VF-031, VF-035, VF-037, then lows.
+- VF-030 design notes (not started): 2FA state lives in the app (install:auth scaffold), so the panel needs a callback, e.g. `admin.Config{TwoFactor func(ctx) (bool, error), MaxSessionAge time.Duration, AllowCIDRs []netip.Prefix}`; IP from `web.Ctx.IP()` (trusted-proxy aware); session age from the session `_created` key (`session/manager.go`); fail closed (callback error -> 403); `TestSecurity_A01_*`/`A07_*` tests. API design: consider asking the owner first (vukem AGENTS.md "When stuck").
+- Docker compose services from session 1 may still run (`docker compose -f .config/compose.yaml stop` in the worktree).
 - Do not touch vukem PR #6 (owner's).
