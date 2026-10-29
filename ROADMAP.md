@@ -121,7 +121,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
     - `curl -s localhost:3000/up?checks=1` → `ssr: ok`; after killing the SSR process → `ssr: fail` and the fallback counter > 0
   - Notes: `OnFailure` defaults to a warning log (inertia page): the spike must prove a counter increments per failure (VF-002 workaround). The health-check wiring (`vukem.WithHealthCheck`, `app.Inertia.SSRHealthy`) is cited by SDD 09 from `/docs/deployment/docker-and-railway`; if the API differs, record it.
 
-- [ ] **P0.F.2.2** Run Go and the Node SSR server in one container, with the Go process starting and restarting Node.
+- [x] **P0.F.2.2** Run Go and the Node SSR server in one container, with the Go process starting and restarting Node.
   - Files/modules: spike `Dockerfile` (starter Dockerfile plus a pinned Node runtime), `app/ssr/supervisor.go`
   - Refs: SDD 11 §6.1, §6.3; ADR 0004; D-07, D-08; VF-027
   - Depends on: P0.F.2.1
