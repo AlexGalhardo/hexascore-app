@@ -53,7 +53,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-042 | 2026-10-29 | low | open |
 | VF-043 | 2026-10-29 | low | open |
 | VF-044 | 2026-10-29 | low | open |
-| VF-NEW-P0.F.9.1 | 2026-10-29 | low | open |
+| VF-045 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -421,7 +421,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Workaround**: register every public route through `api.Register` with typed output; accept optional properties in the first-party client.
 - **Request**: mark non-pointer, non-`omitempty` output fields `required` in the generated schemas (or a `doc:"required"` tag), and document or reject plain handlers inside OpenAPI prefixes.
 
-## VF-NEW-P0.F.9.1: `storage.Handler` sets no Cache-Control or ETag, and S3 objects get no Last-Modified
+## VF-045: `storage.Handler` sets no Cache-Control or ETag, and S3 objects get no Last-Modified
 
 - **Date**: 2026-10-29. **Severity**: low. **Status**: open.
 - **vukem version**: v0.32.0 (`drivers/s3` v0.3.1). **Docs consulted**: `https://vukem.dev/docs/digging-deeper/storage` (Serving files; the page documents `X-Content-Type-Options`, the sandbox CSP and `Last-Modified` for seekable disks only), `https://vukem.dev/docs/digging-deeper/exports` (VF-029 confirmed: `export.CSV` needs an `http.ResponseWriter`; `export.SafeCell` is exported and is the smaller workaround).

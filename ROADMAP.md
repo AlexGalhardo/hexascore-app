@@ -241,7 +241,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
 
 #### P0.F.9 Storage bucket
 
-- [ ] **P0.F.9.1** Write, read, presign and serve objects on an S3-compatible disk (RustFS locally) and write a queued export ZIP into the bucket.
+- [x] **P0.F.9.1** Write, read, presign and serve objects on an S3-compatible disk (RustFS locally) and write a queued export ZIP into the bucket.
   - Files/modules: spike `config/storage.go`, `app/covers/serve.go`, `app/exports/zip_job.go`, `docker-compose.yml` (`rustfs/rustfs:1.0.4`)
   - Refs: SDD 11 §5 (bucket prefixes), §7.7; SDD 14 §7.4; SDD 05 §6.2 (`getExport` presign); open-issues 06-4, 11-1, 11-2, 14-6; VF-029; <https://vukem.dev/docs/digging-deeper/storage>
   - Depends on: P0.F.6.1
