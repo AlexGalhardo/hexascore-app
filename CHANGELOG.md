@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Fixed
 
 - Public lists of a banned owner are `noindex` (header and `seo.indexable`); the library filters and "next page" link keep the locale prefix; list reordering keeps keyboard focus on the moved row; the list-edit items heading no longer reads "Add to list".
+- `GET /api/v1/lookup` resolves only public items (a hidden item with the same third-party id no longer shadows the public one) and uses one indexable query per source instead of a full scan.
 
 ## [0.6.0] - 2026-10-29
 
