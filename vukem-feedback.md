@@ -23,7 +23,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-012 | 2026-10-28 | low | open |
 | VF-013 | 2026-10-28 | low | open |
 | VF-014 | 2026-10-28 | low | open |
-| VF-015 | 2026-10-28 | medium | in_progress (framework, vukem PR #12) |
+| VF-015 | 2026-10-28 | medium | merged in main (PR #12), unreleased |
 | VF-016 | 2026-10-28 | low | open |
 | VF-017 | 2026-10-28 | medium | in_progress (framework, vukem PR #13) |
 | VF-018 | 2026-10-28 | medium | open |
@@ -175,7 +175,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-015: No host-based routing helper
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #12, https://github.com/AlexGalhardo/vukem/pull/12), unreleased. Native API: `r.Host("api.hexascore.app", func(g *router.Group) {...})` (ServeMux host patterns, port ignored); `r.URL` returns `//host/path` for host routes; `RouteInfo.Host`.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/routing` "Routing", `https://vukem.dev/docs/rest-apis/overview` "Routing", "Versioning".
 - **Context**: the paid API is served at `api.hexascore.app/v1/...` while the app also serves `hexascore.app`. The router documents path groups only. The app needs a `Host`-matched group (or a middleware that rewrites `/v1/*` to `/api/v1/*` when the host matches) plus per-host CORS and security headers.
 - **Workaround**: app middleware inspecting `r.Host` and rewriting `r.URL.Path`, registered before the router; OpenAPI `servers` entry set by hand.
