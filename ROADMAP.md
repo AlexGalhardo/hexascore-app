@@ -1373,7 +1373,7 @@ Phase-specific conventions:
 
 #### P2.B.1 Pull request pipeline
 
-- [ ] **P2.B.1.1** Add the `lint` and `vuln` jobs: golangci-lint with format diff, `go vet`, Biome, `tsc`, markdownlint, commitlint, PR title, and pinned `govulncheck`.
+- [x] **P2.B.1.1** Add the `lint` and `vuln` jobs: golangci-lint with format diff, `go vet`, Biome, `tsc`, markdownlint, commitlint, PR title, and pinned `govulncheck`.
   - Files/modules: `.github/workflows/ci.yml`, `.golangci.yml`, `.markdownlint-cli2.jsonc`, `commitlint.config.ts`, `go.mod` (`tool golang.org/x/vuln/cmd/govulncheck`), `docs/sdd/11-infra-deploy.md` §6.6 (`ESLint` → Biome), `docs/sdd/13-security.md` §11 issue 3 closed
   - Refs: SDD 11 §6.6 (`lint`, `vuln`); SDD 13 §7.7, §7.8, NFR-13-5, §11 issue 3; D-22, D-26, D-37; ADR 0013
   - Depends on: P2.A.5.1
@@ -1384,7 +1384,7 @@ Phase-specific conventions:
     - `grep -nE 'uses: [^@]+@v?[0-9]' .github/workflows/*.yml` → no output (every action pinned by full SHA with a version comment)
   - Notes: D-37 approves markdownlint-cli2, commitlint and Redocly; versions exact. The lefthook `pre-push` mirror in SDD 11 §6.6 is not in D-22/D-37: keep `scripts/ci-local.sh` as a plain script called from a git hook and ask the owner before adding lefthook.
 
-- [ ] **P2.B.1.2** Add the `test` job: Go unit and integration tests on a Postgres 18.6 service, TypeScript unit tests, and the Windows setup check.
+- [x] **P2.B.1.2** Add the `test` job: Go unit and integration tests on a Postgres 18.6 service, TypeScript unit tests, and the Windows setup check.
   - Files/modules: `.github/workflows/ci.yml` (`test`, `setup-windows`), `setups/setup-windows.ps1`, `setups/setup-unix.sh`
   - Refs: SDD 11 §6.6 (`test`), §7.7, FR-11-9, §9 last item; <https://vukem.dev/docs/testing/overview> "Testing against PostgreSQL"
   - Depends on: P2.B.1.1
@@ -1394,7 +1394,7 @@ Phase-specific conventions:
     - CI `setup-windows` on `windows-2025` → `setups\setup-windows.ps1` exit 0 and `go test ./...` (unit, no Postgres) green
   - Notes: GitHub service containers run only on Linux runners; the Windows job proves setup and unit tests, not integration. Image tag exactly as SDD 11 (digest pinned).
 
-- [ ] **P2.B.1.3** Add the `build` job: image build with the version argument, size and pin checks, and the image artifact reused by later jobs.
+- [x] **P2.B.1.3** Add the `build` job: image build with the version argument, size and pin checks, and the image artifact reused by later jobs.
   - Files/modules: `.github/workflows/ci.yml` (`build`), `scripts/infra/check-image.sh`
   - Refs: SDD 11 §6.3, §6.6 (`build`), §9 items 1–2, NFR-11-3
   - Depends on: P2.B.1.1
