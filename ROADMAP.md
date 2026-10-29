@@ -897,7 +897,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.G.1 Shell and security headers
 
-- [ ] **P1.G.1.1** Build the app shell: root view, shared props, layout and navigation, SEO head (canonical, hreflang, Open Graph, JSON-LD), flash, the `Error` page and Base UI primitives.
+- [x] **P1.G.1.1** Build the app shell: root view, shared props, layout and navigation, SEO head (canonical, hreflang, Open Graph, JSON-LD), flash, the `Error` page and Base UI primitives.
   - Files/modules: `resources/views/app.html`, `app/http/middleware/share_props.go`, `app/seo/seo.go`, `resources/js/layouts/AppLayout.tsx`, `resources/js/components/{Seo,Nav,Footer,CoverThumb,Dialog}.tsx`, `resources/js/pages/Error.tsx`, `resources/js/ssr.tsx`, `package.json` (Base UI exact version)
   - Refs: SDD 09 §6.1, §7.5, §7.6, §7.7, §9; D-17, D-22; open-issues 09-2; legacy `lib/seo.ts`, `components/`
   - Depends on: P1.A.5.1, P1.A.3.1, P1.C.6.1
