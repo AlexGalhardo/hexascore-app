@@ -255,6 +255,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/opentelemetry`, `https://vukem.dev/docs/basics/middleware` (Logger, RequestID); local `vukem/docs/subsystems.md` "Logging & observability" `[SITE PAGE MISSING]` for the request-log fields.
 - **Context**: LGPD-minded logging (SDD 12/13) needs the user id hashed, the client IP truncated (/24, /48) and the request id equal to the trace id so logs and traces join. None of these are documented options of the request logger.
 - **Workaround**: a custom logging middleware replacing the built-in one.
+- **Update (2026-10-29, P2.C.1.1, vukem v0.33.0)**: the built-in `Logger` cannot be replaced inside `DefaultMiddlewareWith` (`MiddlewareOptions` has no logger field) and `WithLogger` loses vukem's `LOG_FORMAT`/dedup chain ("used as given"). Adopted instead: `app.Log` wrapped by `app/logging.Handler` in the first `WithRoutes` callback, plus a request-scoped holder that inner middleware fills (route, user id) because the `Logger` only sees the outer request. Also asked: a documented hook to add attributes to the request line from inner middleware.
 - **Request**: `middleware.LoggerOptions{HashUserID, TruncateIP, RequestIDFromTrace}` documented on the site.
 
 ## VF-023: Site documentation gaps found while writing the observability spec
