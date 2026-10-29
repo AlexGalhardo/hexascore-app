@@ -20,6 +20,7 @@ if ! grep -q '^APP_KEY=.' .env; then
 	vukem key:generate
 fi
 
+git config core.hooksPath .githooks
 docker compose up -d --wait
 bun install --frozen-lockfile
 vukem migrate

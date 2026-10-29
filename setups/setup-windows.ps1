@@ -25,6 +25,7 @@ if (-not (Select-String -Path '.env' -Pattern '^APP_KEY=.' -Quiet)) {
 	Invoke-Checked 'vukem' @('key:generate')
 }
 
+Invoke-Checked 'git' @('config', 'core.hooksPath', '.githooks')
 Invoke-Checked 'docker' @('compose', 'up', '-d', '--wait')
 Invoke-Checked 'bun' @('install', '--frozen-lockfile')
 Invoke-Checked 'vukem' @('migrate')

@@ -322,7 +322,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `bun run test` → pass; `golangci-lint run` → 0 issues
   - Notes: exact versions in `package.json` (no `^`). `golangci-lint` is a dev binary, pinned in the setup scripts. markdownlint is not in D-22: propose it to the owner, do not add it without a yes.
 
-- [ ] **P1.A.2.2** Add Conventional Commits enforcement, the git-cliff config, the Keep a Changelog file and the release task.
+- [x] **P1.A.2.2** Add Conventional Commits enforcement, the git-cliff config, the Keep a Changelog file and the release task.
   - Files/modules: `.config/cliff.toml` (adapted from vukem), `CHANGELOG.md` (`[Unreleased]` with Added/Changed/Fixed/Removed), `Taskfile.yml` (`release` task), commit-msg hook, `.github/workflows/release.yml` skeleton
   - Refs: ADR 0013; SDD 11 §7.1; D-20
   - Depends on: P1.A.2.1
