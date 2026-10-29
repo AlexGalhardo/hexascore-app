@@ -14,6 +14,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
+	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
@@ -54,7 +55,7 @@ func Reports(r *router.Router, app *vukem.App) error {
 	limit := limiters("reports", 10, time.Hour)
 
 	h := controllers.NewReports(svc, acc.Web.Name(), false)
-	r.Post("/reports", h.Create).Name("reports.create").
+	r.Post("/reports", appmiddleware.CodedProblem(acc.ProblemBase, h.Create)).Name("reports.create").
 		Use(auth.Required(acc.Web), auth.Verified(acc.Web), ratelimit.Middleware(limit, ratelimit.ByUser(acc.Web.Name())))
 
 	api := controllers.NewReports(svc, acc.API.Name(), true)
@@ -66,7 +67,7 @@ func Reports(r *router.Router, app *vukem.App) error {
 			auth.Ability(acc.API, "profile:write"),
 			ratelimit.Middleware(limit, ratelimit.ByUser(acc.API.Name())),
 		)
-		g.Post("/reports", api.Create).Name("reports.create")
+		g.Post("/reports", appmiddleware.CodedProblem(acc.ProblemBase, api.Create)).Name("reports.create")
 	}).Name("app.v1.")
 
 	key, err := app.DeriveKey("contact.form", 32)
@@ -79,7 +80,7 @@ func Reports(r *router.Router, app *vukem.App) error {
 	}, func(c *web.Ctx) (models.User, error) { return acc.Web.User(c) })
 	byIP := ratelimit.Middleware(limiters("contact", 5, time.Hour), ratelimit.ByIP)
 	r.Get("/contact", contact.Index).Name("contact")
-	r.Post("/contact", contact.Send).Name("contact.send").Use(byIP)
+	r.Post("/contact", appmiddleware.CodedProblem(acc.ProblemBase, contact.Send)).Name("contact.send").Use(byIP)
 
 	return nil
 }
