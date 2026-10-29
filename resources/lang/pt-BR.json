@@ -12,7 +12,7 @@
     },
     "password": {
       "setTitle": "Definir senha",
-      "setBody": "Sua conta foi criada com Google ou passkey. Defina uma senha para também entrar com e-mail e senha.",
+      "setBody": "Sua conta foi criada com Google. Defina uma senha para também entrar com e-mail e senha.",
       "changeTitle": "Alterar senha",
       "set": "Definir senha",
       "change": "Alterar senha",
@@ -110,7 +110,7 @@
         },
         "pageSize": "Até {count} resultados por página",
         "upgrade": "Ver planos",
-        "checkout": "Fazer upgrade ou comprar créditos"
+        "checkout": "Fazer upgrade do plano"
       },
       "usage": {
         "title": "Uso",
@@ -319,7 +319,7 @@
       "success": "Pagamento recebido. Seu plano é atualizado assim que o provedor confirmar (normalmente em segundos).",
       "canceled": "Checkout cancelado. Nada foi cobrado.",
       "notConfigured": "Pagamentos não estão configurados neste servidor.",
-      "buy": "Assinar ou comprar créditos",
+      "buy": "Assinar",
       "product": "O que você quer?",
       "method": "Forma de pagamento",
       "card": "Cartão (Stripe)",
@@ -577,8 +577,8 @@
         },
         "payment_required": {
           "title": "Cota esgotada",
-          "when": "A cota acabou: as 100 requisições vitalícias do Free, ou a cota mensal mais os créditos pré-pagos nos planos pagos. O corpo inclui <code>plan</code> e <code>limit</code>.",
-          "fix": "Faça upgrade ou compre créditos em <link>/pricing</link>. As cotas pagas renovam no dia 1º de cada mês (UTC)."
+          "when": "A cota acabou: as 100 requisições vitalícias do Free, ou a cota mensal nos planos pagos. O corpo inclui <code>plan</code> e <code>limit</code>.",
+          "fix": "Faça upgrade do plano em <link>/pricing</link>. As cotas pagas renovam no dia 1º de cada mês (UTC)."
         },
         "forbidden": {
           "title": "Acesso proibido",
@@ -631,7 +631,7 @@
       "colPageSize": "Tamanho máx. da página",
       "lifetimeQuota": "{quota} no total",
       "monthlyQuota": "{quota} / mês",
-      "pricing": "Preços e upgrades: <link>/pricing</link>. Créditos são requisições pré-pagas, gastas só depois que a cota mensal acaba; eles não expiram com a virada do mês.",
+      "pricing": "Preços e upgrades: <link>/pricing</link>.",
       "countingHeading": "O que conta",
       "countEvery": "Toda requisição autenticada que chega a um endpoint conta como uma, inclusive as que retornam 404.",
       "countNot": "Não contam: <code>401</code>, <code>400</code> por parâmetros inválidos, <code>429</code> e qualquer <code>5xx</code> (devolvida).",
@@ -643,12 +643,12 @@
       "colHeader": "Cabeçalho",
       "colMeaning": "Significado",
       "headerLimit": "Requisições no período atual (a cota do seu plano).",
-      "headerRemaining": "Requisições restantes antes do 402 (sem contar os créditos).",
+      "headerRemaining": "Requisições restantes antes do 402.",
       "headerReset": "Segundos até a cota renovar; 0 para a cota vitalícia do Free.",
       "headerQuota": "O mesmo que RateLimit-Remaining.",
       "headerRetry": "Em 429 e 503: segundos a esperar antes de tentar de novo.",
       "exceedingHeading": "Quando você atinge um limite",
-      "exceedingNote": "Requisições demais por segundo → <rateLimited>429 rate_limited</rateLimited>: espere <code>Retry-After</code> segundos. Cota (e créditos) esgotada → <paymentRequired>402 payment_required</paymentRequired>: faça upgrade ou compre créditos; tentar de novo não adianta até a renovação."
+      "exceedingNote": "Requisições demais por segundo → <rateLimited>429 rate_limited</rateLimited>: espere <code>Retry-After</code> segundos. Cota esgotada → <paymentRequired>402 payment_required</paymentRequired>: faça upgrade do plano; tentar de novo não adianta até a renovação."
     },
     "changelog": {
       "lead": "A versão faz parte do caminho. A v1 só muda de forma retrocompatível.",
