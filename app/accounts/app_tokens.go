@@ -89,7 +89,7 @@ func (a *Accounts) IssueAppToken(ctx context.Context, u models.User, device stri
 }
 
 // ErrTokenAlreadyRotated is returned when the token presented for rotation
-// was revoked by a concurrent rotation or revoke.
+// was revoked by a concurrent rotation or revoke, or carries no app ability.
 var ErrTokenAlreadyRotated = errors.New("accounts: token already rotated")
 
 // RotateAppToken revokes current and issues a replacement named like it.
@@ -100,6 +100,15 @@ var ErrTokenAlreadyRotated = errors.New("accounts: token already rotated")
 func (a *Accounts) RotateAppToken(ctx context.Context, u models.User, current auth.Token) (string, auth.Token, error) {
 	uid := strconv.FormatInt(u.ID, 10)
 
+	// The successor never gains an ability: it keeps current's app abilities
+	// only, and a token without any (or a non-app token) is not rotated.
+	abilities := slices.DeleteFunc(slices.Clone(current.Abilities), func(ab string) bool {
+		return !slices.Contains(AppAbilities(), ab)
+	})
+	if len(abilities) == 0 {
+		return "", auth.Token{}, ErrTokenAlreadyRotated
+	}
+
 	ok, err := a.Tokens.RevokeFor(ctx, uid, current.ID)
 	if err != nil {
 		return "", auth.Token{}, err
@@ -109,7 +118,7 @@ func (a *Accounts) RotateAppToken(ctx context.Context, u models.User, current au
 		return "", auth.Token{}, ErrTokenAlreadyRotated
 	}
 
-	return a.Tokens.Create(ctx, uid, current.Name, AppAbilities(), AppTokenTTL)
+	return a.Tokens.Create(ctx, uid, current.Name, abilities, AppTokenTTL)
 }
 
 // LiveAppTokens lists u's unrevoked, unexpired tokens, newest first.

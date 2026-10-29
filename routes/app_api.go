@@ -51,7 +51,7 @@ func AppAPI(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	h := appapi.NewTokens(acc, googleVerifiers(app.Source.Get))
+	h := appapi.NewTokens(acc, googleVerifiers(app.Source.Get), limiters("app.2fa", 5, 15*time.Minute))
 	issueLimit := ratelimit.Middleware(limiters("app.tokens", 10, time.Minute), ratelimit.ByIP)
 	// Per identifier across IPs: someone holding a password cannot rotate
 	// IPs to brute-force the 6-digit TOTP (security review, P1.C.4.1).

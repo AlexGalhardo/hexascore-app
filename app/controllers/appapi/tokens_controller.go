@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/auth/jwt"
 	"github.com/AlexGalhardo/vukem/errs"
+	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/social"
 	"github.com/AlexGalhardo/vukem/web"
 	"github.com/AlexGalhardo/vukem/z"
@@ -28,11 +30,14 @@ type Tokens struct {
 	a *accounts.Accounts
 	// google holds one verifier per accepted client id (Android and web); an empty list refuses every ID token.
 	google []*jwt.Verifier
+	// twoFactor caps second-factor attempts per user on every issue path
+	// (password and Google), whatever IP or identifier spelling is used.
+	twoFactor ratelimit.Limiter
 }
 
 // NewTokens builds the handlers; google verifies Google ID tokens against the accepted audiences.
-func NewTokens(a *accounts.Accounts, google []*jwt.Verifier) *Tokens {
-	return &Tokens{a: a, google: google}
+func NewTokens(a *accounts.Accounts, google []*jwt.Verifier, twoFactor ratelimit.Limiter) *Tokens {
+	return &Tokens{a: a, google: google, twoFactor: twoFactor}
 }
 
 type passwordInput struct {
@@ -188,6 +193,15 @@ func (h *Tokens) issue(c *web.Ctx, u models.User, device, code, recovery string)
 	if tf.Enabled() {
 		if code == "" && recovery == "" {
 			return h.problem(c, http.StatusUnprocessableEntity, "two-factor-required", "Two-factor code required")
+		}
+
+		res, err := h.twoFactor.Allow(c.Context(), "app.2fa:"+strconv.FormatInt(u.ID, 10))
+		if err != nil {
+			return err
+		}
+
+		if !res.Allowed {
+			return h.problem(c, http.StatusTooManyRequests, "too-many-attempts", "Too many attempts")
 		}
 
 		valid, err := h.a.VerifyTwoFactor(c.Context(), u.ID, code, recovery)
