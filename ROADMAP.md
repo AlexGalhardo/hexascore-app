@@ -908,7 +908,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `curl -s $WEB/no-such-page` → 404 rendered by `Error` with `<meta name="robots" content="noindex">`
   - Notes: pages are lazy on the client and eager in `ssr.tsx`. No ETag on HTML documents (09-2). Icon set and ICU message helper as named by SDD 09.
 
-- [ ] **P1.G.1.2** Add the nonce-based CSP with `strict-dynamic` and the security headers, with `TestSecurity_*` tests and a CSP violation check.
+- [x] **P1.G.1.2** Add the nonce-based CSP with `strict-dynamic` and the security headers, with `TestSecurity_*` tests and a CSP violation check.
   - Files/modules: `app/http/middleware/security_headers.go`, `app/http/middleware/security_headers_test.go`, `resources/views/app.html` (nonce meta)
   - Refs: SDD 09 §7.8, §9; legacy `lib/security-headers.ts`, `qa/e2e/specs/headers.spec.ts`; <https://vukem.dev/docs/security/security-headers>
   - Depends on: P1.G.1.1
