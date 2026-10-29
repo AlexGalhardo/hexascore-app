@@ -54,7 +54,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-043 | 2026-10-29 | low | open |
 | VF-044 | 2026-10-29 | low | open |
 | VF-045 | 2026-10-29 | low | open |
-| VF-NEW-P1.C.3.1 | 2026-10-29 | medium | open |
+| VF-046 | 2026-10-29 | medium | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -444,7 +444,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Workaround**: `app/covers/serve.go` validates the key with a regexp, delegates to `storage.Handler` and adds `Cache-Control` on 200 responses only (spike branch `agent/senior/P0.F.9.1`).
 - **Request**: `storage.HandlerWith(d, signer, storage.Options{CacheControl: ...})` and `Last-Modified`/`ETag` from `s3.Disk.Stat` for non-seekable disks.
 
-## VF-NEW-P1.C.3.1: admin `Resource.BeforeSave` has no transaction handle or after-commit hook, and schema keys must map to a column
+## VF-046: admin `Resource.BeforeSave` has no transaction handle or after-commit hook, and schema keys must map to a column
 
 - **Date**: 2026-10-29. **Severity**: medium. **Status**: open.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin` ("Resources"). `[NOT IN VUKEM DOCS]`: what `BeforeSave` may do with side effects (read from `admin/handlers.go` `Resource.save` in the module).

@@ -565,7 +565,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.C.3 Admin, bans and deletion
 
-- [ ] **P1.C.3.1** Install the admin panel, define the admin gate, add the `users` resource with ban/unban (replaces `banUser`) and the admin CLI commands.
+- [x] **P1.C.3.1** Install the admin panel, define the admin gate, add the `users` resource with ban/unban (replaces `banUser`) and the admin CLI commands.
   - Files/modules: `vukem install:admin` output, `app/admin/admin.go` (gate), `app/admin/users_resource.go`, `app/console/{admin_grant,admin_revoke,user_reset_2fa}.go`, `app/accounts/ban.go`, `tests/admin_users_test.go`
   - Refs: SDD 03 §6.3, §9; open-issues 02-8, 03-6; VF-010, VF-012; legacy `actions/admin.ts` (`banUser`), `app/[locale]/admin/page.tsx`; <https://vukem.dev/docs/starters> "Add-ons" (`install:admin`)
   - Depends on: P1.C.1.1
