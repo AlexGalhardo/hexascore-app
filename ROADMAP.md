@@ -737,7 +737,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.E.1 Search schema
 
-- [ ] **P1.E.1.1** Add the extensions, normalisation functions, per-locale text search configurations, the trigger-maintained `search_tsv`, trigram indexes and `search_dirty`.
+- [x] **P1.E.1.1** Add the extensions, normalisation functions, per-locale text search configurations, the trigger-maintained `search_tsv`, trigram indexes and `search_dirty`.
   - Files/modules: `database/migrations/*_create_search_extensions.go`, `*_create_hs_norm_function.go`, `*_create_text_search_configurations.go`, `*_add_search_columns_to_item_translations_table.go`, `*_create_search_indexes.go`, `*_create_search_dirty_table.go`
   - Refs: SDD 07 §5, §7.9, §9; ADR 0011; D-16; open-issues 07-1, 07-3, 07-9; VF-017
   - Depends on: P1.B.5.1
