@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Legacy import `billing` stage: API keys with their sha256 hash unchanged, paid subscriptions, Stripe customer ids, daily usage, D-23 credit balances (`greatest(sum(delta), 0)`), and verbatim copies of `credit_ledger` and `pix_charges` in new legacy-shaped tables (P2.F.2.7).
 - Legacy import `twofactor` stage: `scripts/legacy/twofactor-export.ts` decrypts the Better Auth 2FA rows with Better Auth's own `symmetricDecrypt` and pipes NDJSON into `hexascore:import-legacy --stage twofactor --stdin`, which seals the secret, hashes the unused backup codes as recovery codes and confirms verified rows (P2.F.2.3).
 - Legacy import `users` stage: Better Auth users upserted on `legacy_id` (email lowercased, verification date, admin role, live bans only, deletion grace kept), credential hashes copied verbatim, Google accounts linked in `social_accounts`, random argon2id for accounts without a password (P2.F.2.2).
 - Admin hardening (SDD 13 FR-13-5, §7.5): `AdminGuard` requires confirmed 2FA on `/admin`, ends admin sessions after 30 min idle or 12 h, and applies the optional `ADMIN_IP_ALLOWLIST` (404 outside it); 2FA confirmation regenerates the session id and `admin:grant`/`admin:revoke` end the user's sessions (P2.D.3.1).

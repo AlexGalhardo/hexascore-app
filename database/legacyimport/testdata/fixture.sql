@@ -62,12 +62,61 @@ CREATE TABLE legacy_import.reports (id text PRIMARY KEY);
 CREATE TABLE legacy_import.contact_messages (id text PRIMARY KEY);
 CREATE TABLE legacy_import.item_status (id text PRIMARY KEY);
 CREATE TABLE legacy_import.time_to_beat (id text PRIMARY KEY);
-CREATE TABLE legacy_import.api_keys (id text PRIMARY KEY);
-CREATE TABLE legacy_import.api_usage_daily (id text PRIMARY KEY);
-CREATE TABLE legacy_import.subscriptions (id text PRIMARY KEY);
-CREATE TABLE legacy_import.stripe_customers (id text PRIMARY KEY);
-CREATE TABLE legacy_import.processed_events (id text PRIMARY KEY);
-CREATE TABLE legacy_import.credit_ledger (id text PRIMARY KEY);
+-- Billing tables keep the legacy shape (apps/web/lib/db/schema/billing.ts); the enums are text here.
+CREATE TABLE legacy_import.api_keys (
+  id uuid PRIMARY KEY,
+  user_id text NOT NULL REFERENCES legacy_import."user"(id) ON DELETE CASCADE,
+  name text NOT NULL,
+  prefix text NOT NULL,
+  hash text NOT NULL UNIQUE,
+  last_used_at timestamptz,
+  revoked_at timestamptz,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE TABLE legacy_import.api_usage_daily (
+  user_id text NOT NULL REFERENCES legacy_import."user"(id) ON DELETE CASCADE,
+  day date NOT NULL,
+  count integer NOT NULL,
+  PRIMARY KEY (user_id, day)
+);
+CREATE TABLE legacy_import.subscriptions (
+  user_id text PRIMARY KEY REFERENCES legacy_import."user"(id) ON DELETE CASCADE,
+  plan text NOT NULL,
+  provider text NOT NULL,
+  status text NOT NULL,
+  current_period_end timestamptz NOT NULL,
+  cancel_at_period_end boolean NOT NULL DEFAULT false,
+  provider_customer_id text,
+  provider_ref text,
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE TABLE legacy_import.stripe_customers (
+  user_id text PRIMARY KEY REFERENCES legacy_import."user"(id) ON DELETE CASCADE,
+  customer_id text NOT NULL UNIQUE,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE TABLE legacy_import.processed_events (id text PRIMARY KEY, provider text NOT NULL, processed_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE legacy_import.credit_ledger (
+  id uuid PRIMARY KEY,
+  user_id text NOT NULL REFERENCES legacy_import."user"(id) ON DELETE CASCADE,
+  delta integer NOT NULL,
+  reason text NOT NULL,
+  ref text UNIQUE,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE TABLE legacy_import.pix_charges (
+  id uuid PRIMARY KEY,
+  user_id text NOT NULL REFERENCES legacy_import."user"(id) ON DELETE CASCADE,
+  provider_ref text NOT NULL UNIQUE,
+  purpose text NOT NULL,
+  amount_cents integer NOT NULL,
+  status text NOT NULL DEFAULT 'pending',
+  br_code text,
+  br_code_base64 text,
+  expires_at timestamptz,
+  paid_at timestamptz,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
 
 -- u01 mixed-case email, u03 unverified and scheduled for deletion, u04 admin with
 -- a live ban, u06 with an expired ban.
@@ -110,9 +159,22 @@ INSERT INTO legacy_import.reports VALUES ('rp1');
 INSERT INTO legacy_import.contact_messages VALUES ('cm1');
 INSERT INTO legacy_import.item_status SELECT 'st' || g FROM generate_series(1, 8) g;
 INSERT INTO legacy_import.time_to_beat SELECT 'ttb' || g FROM generate_series(1, 3) g;
-INSERT INTO legacy_import.api_keys VALUES ('k1');
-INSERT INTO legacy_import.api_usage_daily VALUES ('ud1'), ('ud2');
-INSERT INTO legacy_import.subscriptions VALUES ('sub1');
-INSERT INTO legacy_import.stripe_customers VALUES ('cus1');
-INSERT INTO legacy_import.processed_events VALUES ('evt1'), ('evt2'), ('evt3');
-INSERT INTO legacy_import.credit_ledger VALUES ('cl1');
+-- Legacy keys are sha256(full key) in hex; this one is a test key, never issued.
+INSERT INTO legacy_import.api_keys (id, user_id, name, prefix, hash, created_at) VALUES
+  ('01920000-0000-7000-8000-000000000001', 'u01', 'ci', 'hx_live_Ab3d',
+   encode(sha256('hx_live_Ab3dEf6hIj9kLm2nOp5qRs8tUv1wXy4z'::bytea), 'hex'), '2025-02-01 00:00+00');
+INSERT INTO legacy_import.api_usage_daily VALUES ('u01', '2025-03-01', 120), ('u01', '2025-03-02', 80);
+-- u01 pays Pro through Stripe; u04 is back on free (no row is imported for free).
+INSERT INTO legacy_import.subscriptions (user_id, plan, provider, status, current_period_end, provider_customer_id, provider_ref) VALUES
+  ('u01', 'pro', 'stripe', 'active', '2099-01-01 00:00+00', 'cus_legacy1', 'sub_legacy1'),
+  ('u04', 'free', 'stripe', 'canceled', '2025-01-01 00:00+00', NULL, NULL);
+INSERT INTO legacy_import.stripe_customers (user_id, customer_id) VALUES ('u01', 'cus_legacy1');
+INSERT INTO legacy_import.processed_events (id, provider) VALUES ('evt1', 'stripe'), ('evt2', 'stripe'), ('evt3', 'abacatepay');
+-- u01: 25000 bought, 1200 spent; u05 overspent (balance below zero becomes 0).
+INSERT INTO legacy_import.credit_ledger (id, user_id, delta, reason, ref) VALUES
+  ('01920000-0000-7000-8000-0000000000c1', 'u01', 25000, 'purchase', 'cs_legacy1'),
+  ('01920000-0000-7000-8000-0000000000c2', 'u01', -1200, 'usage', 'usage:u01:2025-03-01'),
+  ('01920000-0000-7000-8000-0000000000c3', 'u05', 100, 'purchase', 'cs_legacy2'),
+  ('01920000-0000-7000-8000-0000000000c4', 'u05', -150, 'usage', 'usage:u05:2025-03-01');
+INSERT INTO legacy_import.pix_charges (id, user_id, provider_ref, purpose, amount_cents, status, paid_at) VALUES
+  ('01920000-0000-7000-8000-0000000000d1', 'u05', 'pix_legacy1', 'credits', 1990, 'paid', '2025-03-01 00:00+00');

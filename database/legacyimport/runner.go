@@ -52,8 +52,8 @@ func Stages() []Stage {
 		{Name: "social", Tables: []string{"ratings", "lists", "list_items", "reports", "contact_messages"}},
 		{Name: "library", Tables: []string{"item_status", "time_to_beat"}},
 		{Name: "billing", Tables: []string{
-			"api_keys", "api_usage_daily", "subscriptions", "stripe_customers", "processed_events", "credit_ledger",
-		}},
+			"api_keys", "api_usage_daily", "subscriptions", "stripe_customers", "credit_ledger", "pix_charges",
+		}, Batch: billingBatch(time.Now)},
 		{Name: "finalise"},
 	}
 }
