@@ -293,17 +293,27 @@ func filterEdition(e Edition, source string, p Policy) APIEdition {
 	return out
 }
 
-// LookupItemID finds the item id of a third-party id. Wikidata matches items.wikidata_qid; other sources match
-// items.external_ids by GIN containment (string and numeric forms), and isbn13 also matches the work of an
-// edition. source comes from an allowlist and is bound, not concatenated.
+// LookupItemID finds the public item id of a third-party id. Wikidata matches items.wikidata_qid; other sources
+// match items.external_ids by GIN containment (string and numeric forms), and isbn13 also matches the work of an
+// edition. source comes from an allowlist and is bound, not concatenated. Each source gets its own indexable
+// branch: one WHERE with ORs across them would scan every item.
 func LookupItemID(ctx context.Context, db Querier, source, id string) (string, bool, error) {
+	match := `SELECT id FROM items WHERE external_ids @> jsonb_build_object($1::text, $2::text)
+UNION ALL SELECT id FROM items
+WHERE external_ids @> jsonb_build_object($1::text, CASE WHEN $2 ~ '^[0-9]{1,15}$' THEN $2::bigint END)`
+	args := []any{source, id}
+	switch source {
+	case "wikidata":
+		match, args = `SELECT id FROM items WHERE wikidata_qid = $1`, []any{id}
+	case "isbn13":
+		// char(13) cast keeps the editions index usable; the length guard stops it truncating longer input.
+		match += `
+UNION ALL SELECT work_id FROM editions WHERE length($2) = 13 AND isbn13 = $2::char(13)`
+	}
+
 	var out string
-	err := db.QueryRowContext(ctx, `SELECT i.id::text FROM items i
-WHERE ($1 = 'wikidata' AND i.wikidata_qid = $2)
-  OR ($1 <> 'wikidata' AND (i.external_ids @> jsonb_build_object($1::text, $2::text)
-    OR i.external_ids @> jsonb_build_object($1::text, CASE WHEN $2 ~ '^[0-9]{1,15}$' THEN $2::bigint END)))
-  OR ($1 = 'isbn13' AND EXISTS (SELECT 1 FROM editions e WHERE e.work_id = i.id AND e.isbn13 = $2))
-ORDER BY i.id LIMIT 1`, source, id).Scan(&out)
+	err := db.QueryRowContext(ctx, `SELECT id::text FROM items WHERE visibility = 'public' AND id IN (`+match+`)
+ORDER BY id LIMIT 1`, args...).Scan(&out)
 	if errors.Is(err, sql.ErrNoRows) {
 		return "", false, nil
 	}
