@@ -1,14 +1,12 @@
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 
+import ResultGroup, { type Hit } from "../../components/search/ResultGroup";
+import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
+import type { SharedProps } from "../../types";
 
-interface Hit {
-	id: string;
-	type: string;
-	title: string;
-	path: string;
-	matchedTitle?: string;
-}
+const PER_PAGE = 20;
+const TYPES = ["game", "movie", "series", "book"] as const;
 
 interface Group {
 	type: string;
@@ -28,50 +26,31 @@ interface Props {
 	query: { q: string; type: string; locale: string; page: number };
 	groups: Group[];
 	results: Hit[];
+	total: number;
 	entities: Entity[];
 	didYouMean: string | null;
 	searchId: string;
 	tooShort: boolean;
 }
 
-// Reports a click without delaying the navigation (SDD 07 §7.8).
-function report(searchId: string, hit: Hit, position: number, group: string) {
-	const body = JSON.stringify({ searchId, refId: hit.id, position, group });
-	navigator.sendBeacon?.("/search/events", new Blob([body], { type: "application/json" }));
-}
-
-function HitList({ hits, searchId, group }: { hits: Hit[]; searchId: string; group: string }) {
-	return (
-		<ol className="mt-2 space-y-1">
-			{hits.map((hit, i) => (
-				<li key={hit.id}>
-					<Link
-						href={hit.path}
-						onClick={() => report(searchId, hit, i + 1, group)}
-						className="text-indigo-600 hover:underline dark:text-indigo-400"
-					>
-						{hit.title}
-					</Link>
-					{hit.matchedTitle && (
-						<span className="ml-2 text-sm text-zinc-500">{hit.matchedTitle}</span>
-					)}
-				</li>
-			))}
-		</ol>
-	);
-}
-
-// Minimal page until P1.G.3.1 styles it: props are the contract (SDD 07 §6).
 export default function Index({
 	query,
 	groups,
 	results,
+	total,
 	entities,
 	didYouMean,
 	searchId,
 	tooShort,
 }: Props) {
 	const t = useT();
+	const { locale } = usePage<SharedProps>().props;
+	const href = (type: string, page: number) =>
+		localized(
+			`/search?${new URLSearchParams({ q: query.q, ...(type && { type }), ...(page > 1 && { page: String(page) }) })}`,
+			locale,
+		);
+	const pages = Math.ceil(total / PER_PAGE);
 	const empty = !tooShort && query.q !== "" && groups.length === 0 && results.length === 0;
 
 	return (
@@ -105,16 +84,65 @@ export default function Index({
 					<Link href={`/search?q=${encodeURIComponent(didYouMean)}`}>{didYouMean}</Link>
 				</p>
 			)}
+			{query.q !== "" && !tooShort && (
+				<nav aria-label={t("search.filter")} className="mt-4 flex flex-wrap gap-1">
+					{["", ...TYPES].map((type) => (
+						<Link
+							key={type}
+							href={href(type, 1)}
+							aria-current={query.type === type ? "page" : undefined}
+							className={`inline-flex min-h-11 items-center rounded-md px-3 hover:underline ${query.type === type ? "bg-surface font-semibold" : ""}`}
+						>
+							{type ? t(`itemTypes.${type}`) : t("search.all")}
+						</Link>
+					))}
+				</nav>
+			)}
 			{groups.map((g) => (
 				<section key={g.type} className="mt-6">
 					<h2 className="text-lg font-semibold">
-						<Link href={g.moreHref}>{t(`itemTypes.${g.type}`)}</Link> ({g.total})
+						<Link href={g.moreHref} className="hover:underline">
+							{t(`itemTypes.${g.type}`)}
+						</Link>{" "}
+						({g.total})
 					</h2>
-					<HitList hits={g.items} searchId={searchId} group={g.type} />
+					<ResultGroup hits={g.items} searchId={searchId} group={g.type} q={query.q} />
 				</section>
 			))}
 			{results.length > 0 && (
-				<HitList hits={results} searchId={searchId} group={query.type} />
+				<ResultGroup
+					hits={results}
+					searchId={searchId}
+					group={query.type}
+					q={query.q}
+					offset={(query.page - 1) * PER_PAGE}
+				/>
+			)}
+			{results.length > 0 && pages > 1 && (
+				<nav aria-label={t("search.pagination")} className="mt-4 flex gap-4">
+					{query.page > 1 && (
+						<Link
+							href={href(query.type, query.page - 1)}
+							only={["query", "results", "total"]}
+							preserveScroll
+							rel="prev"
+							className="inline-flex min-h-11 items-center hover:underline"
+						>
+							{t("search.previous")}
+						</Link>
+					)}
+					{query.page < pages && (
+						<Link
+							href={href(query.type, query.page + 1)}
+							only={["query", "results", "total"]}
+							preserveScroll
+							rel="next"
+							className="inline-flex min-h-11 items-center hover:underline"
+						>
+							{t("search.next")}
+						</Link>
+					)}
+				</nav>
 			)}
 			{entities.length > 0 && (
 				<ul className="mt-6 space-y-1">
