@@ -60,7 +60,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-049 | 2026-10-29 | low | open |
 | VF-050 | 2026-10-29 | low | open |
 | VF-051 | 2026-10-29 | medium | in_progress (framework), PR #36 green, merge pending (owner) |
-| VF-052 | 2026-10-29 | high | in_progress (framework), part 1 PR #46 (client IP + origin lock); 4 parts left |
+| VF-052 | 2026-10-29 | high | in_progress (framework), PRs #46 (client IP + origin lock), #47 (Turnstile action), #48 (visitor headers), #49 (edge cache + purge), #50 (Access JWT); merges pending |
 | VF-053 | 2026-10-29 | low | open |
 | VF-054 | 2026-10-29 | low | open |
 
