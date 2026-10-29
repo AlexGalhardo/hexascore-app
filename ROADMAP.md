@@ -411,7 +411,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test -tags=integration ./app/catalog/... -run TestItemConstraints` → PASS (type CHECK, unique `(type, slug)`, unique `wikidata_qid`, `visibility` in `public|hidden|takedown`)
   - Notes: UUID v7 keys (SDD README conventions). Search columns and indexes belong to P1.E.1.1. `external_scores` is not created (D-09).
 
-- [ ] **P1.B.1.2** Migrate entities and relations (`entities`, `entity_translations`, `entity_links`, `item_entities`, `item_links`, `entity_stats`) and schedule the entity stats refresh job.
+- [x] **P1.B.1.2** Migrate entities and relations (`entities`, `entity_translations`, `entity_links`, `item_entities`, `item_links`, `entity_stats`) and schedule the entity stats refresh job.
   - Files/modules: `database/migrations/*_create_entities_table.go` and the five siblings, `app/models/entity.go`, `app/catalog/roles.go`, `app/catalog/entity_stats.go`, `app/jobs/refresh_entity_stats.go`, `routes/schedule.go`
   - Refs: SDD 01 §5.2, §5.3, §7.4; D-01, D-30; ADR 0007; open-issues 08-1; VF-018
   - Depends on: P1.B.1.1
