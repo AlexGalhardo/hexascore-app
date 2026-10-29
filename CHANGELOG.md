@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Playwright specs `catalog`, `item`, `search`, `ratings` and `time-to-beat` in three locales and two viewports (keyboard-driven half-star slider, status picker, search autocomplete); the users' scores modal and trailer consent of the legacy item page are not ported because the new item page has neither yet (P1.I.2.2).
+
 - `backup:run --kind daily|monthly`: streamed `pg_dump -Fc -Z 6 --no-owner`, client-side 4 MiB frame encryption with `BACKUP_KEY` (reorder and truncation detected), SHA-256 and multipart upload to `backups/postgres/<kind>/YYYY/MM/DD/` via vukem `drivers/s3` v0.3.1, recorded in the new `backup_runs` table (P2.E.2.1).
 - Privacy-preserving request log (SDD 12 §6.1, FR-12-1, FR-12-8): `app/logging` redacts passwords, tokens, API keys, emails and search text, truncates `ip`/`peer` to /24 or /48, adds `route`, `user_hash` and `duration_ms`, and samples fast successes on `/up`, `/build/*` and `/search/suggest|events` 1 in 100; `scripts/ops/check-logs.sh` checks a log stream (P2.C.1.1).
 - `@redocly/cli` 2.72.1 (dev), `redocly.yaml` (recommended ruleset) and `bun run openapi:lint` in the CI `lint` job; unfixable vukem gaps are scoped overrides, see VF-053 (P1.H.4.1b).
@@ -27,6 +29,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Adopt vukem v0.33.0: problem codes are raised with `errs.HTTPError.WithExtension("code", ...)` (VF-016, VF-048) and `APIEdge` sets the problem `type` from it on `/api/v1` and `/app/v1` (CORS stays on `/api/v1` only), replacing the `CodedProblem` route wrapper; the LGPD ZIP export uses `export.EncodeCSV` (VF-029).
 
 ### Fixed
+
+- Catalogue listings answer 400 instead of 500 for a NUL byte or invalid UTF-8 in `genre`, `platform`, `sort` or `cursor` (found by the catalog e2e spec, P1.I.2.2).
 
 - API keys table scrolls inside its own focusable region instead of overflowing a 360 px viewport, which hid the Revoke button behind the Status cell (P1.I.2.1).
 

@@ -8,6 +8,7 @@ import (
 	"math"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 )
 
 // ErrInvalidQuery is returned for an out-of-range or unknown listing
@@ -310,6 +311,13 @@ func ParseListQuery(get func(string) string, typ string) (ListParams, error) {
 	p := ListParams{
 		Type: typ, Genre: get("genre"), Platform: get("platform"),
 		Sort: get("sort"), Cursor: get("cursor"),
+	}
+
+	// PostgreSQL rejects NUL and invalid UTF-8 in text parameters (SQLSTATE 22021), which would be a 500.
+	for _, v := range []string{p.Genre, p.Platform, p.Sort, p.Cursor} {
+		if !utf8.ValidString(v) || strings.ContainsRune(v, 0) {
+			return p, ErrInvalidQuery
+		}
 	}
 
 	if v := get("year"); v != "" {
