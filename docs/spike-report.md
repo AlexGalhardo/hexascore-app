@@ -283,4 +283,6 @@ Acceptance (2026-10-29):
 
 Decision needed (for the orchestrator): keep the legacy SDK surface by registering per-type typed routes (`GET /api/v1/games/{id}` named `getGame`, literal beats `{type}` in the mux) or accept a breaking SDK rename at v2 of the packages. Parity (D-20) points to the first.
 
-Limits: only two public operations exist in the spike document, so the SDK regeneration is not a full compatibility check; response properties are all optional in generated types (VF-NEW-P0.F.7.2); the Python run used pip, not `uvx`.
+Limits: only two public operations exist in the spike document, so the SDK regeneration is not a full compatibility check; response properties are all optional in generated types (VF-044); the Python run used pip, not `uvx`.
+
+Orchestrator decision on P0.F.7.2 (2026-10-29): SDD 05 §6.2 is final and names the operations `listItems`/`getItem` over `/v1/{type}`, so the legacy per-type SDK names (`getGame`, `listGames`, ...) are not kept. The SDKs get a new major version; their tests are rewritten against the new document in P1.H.4.

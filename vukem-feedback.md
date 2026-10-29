@@ -49,7 +49,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-038 | 2026-10-29 | medium | open |
 | VF-039 | 2026-10-29 | low | open |
 | VF-040 | 2026-10-29 | medium | open |
-| VF-NEW-P0.F.7.2 | 2026-10-29 | low | open |
+| VF-044 | 2026-10-29 | low | open |
 | VF-043 | 2026-10-29 | low | open |
 | VF-041 | 2026-10-29 | low | open |
 | VF-042 | 2026-10-29 | low | open |
@@ -412,7 +412,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Workaround** (spike `agent/senior/P0.F.10.1`): `r.UseServer(middleware.Gzip())` before `StaticFS` in `routes.Web`. Brotli is not offered by `middleware.Gzip` (`HEAD` and `Range` are passed through).
 - **Request**: starter template enables gzip (or documents it as a required deploy step), and a Brotli option for static assets.
 
-## VF-NEW-P0.F.7.2: Generated types mark every response property optional; untyped routes appear as `*/*` in the document
+## VF-044: Generated types mark every response property optional; untyped routes appear as `*/*` in the document
 
 - **Date**: 2026-10-29. **Severity**: low. **Status**: open.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/client-generation`, `https://vukem.dev/docs/cli/reference-runtime` ("`vukem codegen:client`", "`vukem codegen:routes`"). `[NOT IN VUKEM DOCS]`: nothing on `required` in output schemas or on plain handlers.
