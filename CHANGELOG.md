@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Phase 0 spike report `docs/spike-report.md` (P0.F.1.1 auth scaffold, P0.F.1.2 Better Auth hash format with fixtures, P0.F.4.1 API host routing) and VF-032 to VF-034.
 - Application scaffold from the vukem Inertia React starter (vukem v0.32.0, Postgres driver v0.5.1, bun), example posts CRUD removed (P1.A.1.1).
 - Orchestration files: `docs/orchestration/BOARD.md`, `docs/orchestration/QUESTIONS.md`, `questions-to-dev.md`.
+- Local stack `docker-compose.yml` (Postgres 18.6 on 127.0.0.1:5433, RustFS 1.0.4 on 127.0.0.1:9000/9001) and idempotent setup scripts `setups/setup-windows.ps1` and `setups/setup-unix.sh` (P1.A.1.2).
 
 ### Changed
 
