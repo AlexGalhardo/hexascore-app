@@ -355,7 +355,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.A.4 Platform middleware
 
-- [ ] **P1.A.4.1** Productionise the spike's locale-prefix middleware, prefixed route helpers and theme view function.
+- [x] **P1.A.4.1** Productionise the spike's locale-prefix middleware, prefixed route helpers and theme view function.
   - Files/modules: `app/http/middleware/locale_prefix.go`, `app/http/middleware/locale_prefix_test.go`, `resources/views/app.html`, `resources/js/lib/route.ts` (wraps `vukem codegen:routes` output with the prefix)
   - Refs: SDD 09 §7.1, §9; D-17; VF-024, VF-028
   - Depends on: P1.A.3.2

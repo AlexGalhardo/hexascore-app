@@ -46,7 +46,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-035 | 2026-10-29 | medium | open |
 | VF-036 | 2026-10-29 | low | open |
 | VF-037 | 2026-10-29 | medium | open |
-| VF-038 | 2026-10-29 | medium | open |
+| VF-038 | 2026-10-29 | medium | in_progress (framework) |
 | VF-039 | 2026-10-29 | low | open |
 | VF-040 | 2026-10-29 | medium | open |
 | VF-041 | 2026-10-29 | low | open |
