@@ -61,6 +61,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-050 | 2026-10-29 | low | open |
 | VF-051 | 2026-10-29 | medium | in_progress (framework), PR #36 green, merge pending (owner) |
 | VF-052 | 2026-10-29 | high | open |
+| VF-NEW-P2.E.1.1 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -513,3 +514,12 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
   - CDN: `Cache-Control` / `CDN-Cache-Control` / `Cloudflare-CDN-Cache-Control` helpers and cache-tag headers for HTML and assets; a purge client (by URL, tag, prefix, everything) using an API token with zone-scoped permissions, usable from jobs.
   - Security: helpers for WAF-friendly headers, a CSP report endpoint compatible with Cloudflare Page Shield reports, and Cloudflare Access JWT validation (`Cf-Access-Jwt-Assertion`) for admin routes.
   - `TestSecurity_*` coverage: spoofed `CF-Connecting-IP` from a non-Cloudflare peer ignored, Turnstile replay/hostname mismatch rejected, Turnstile outage fails closed, Access JWT with wrong audience/expired rejected.
+
+## VF-NEW-P2.E.1.1: `NoTransaction` + `IF NOT EXISTS` silently accepts an `INVALID` index after a failed concurrent build
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.33.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` "Migrations outside a transaction" `[NOT IN VUKEM DOCS]`: what happens when a `CREATE INDEX CONCURRENTLY` migration fails half-way.
+- **Context**: PostgreSQL leaves an `INVALID` index when `CREATE INDEX CONCURRENTLY` fails (unique violation, timeout, cancel). The migration is not recorded, and the documented retry (`IF NOT EXISTS`) then skips the existing invalid index and records the migration, so the index is never usable and nothing reports it.
+- **Repro**: a `NoTransaction` migration `CREATE UNIQUE INDEX CONCURRENTLY IF NOT EXISTS t_k_uq ON t (k)` over duplicate rows fails; remove the duplicates; `migrate` reports the migration as ran while `pg_index.indisvalid` stays false (`tests/predeploy_test.go` `TestIndexConcurrently_DropsInvalid` shows the drop that avoids it).
+- **Workaround**: `hexascore:predeploy` (`app/console/predeploy.go`) drops `INVALID` indexes of the current schema that no backend is building before `migrate`.
+- **Request**: document the leftover in "Migrations outside a transaction", and either drop an `INVALID` index named by a failing `NoTransaction` migration or fail `migrate` when a `NoTransaction` migration finishes with an `INVALID` index on PostgreSQL.

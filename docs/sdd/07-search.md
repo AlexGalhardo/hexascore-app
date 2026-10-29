@@ -126,7 +126,7 @@ create table search_dirty (ref_id uuid primary key, kind text not null,
 
 Decided (07-1): the tsvectors are trigger-maintained plain columns from the first migration; no generated tsvector column. `title_norm`/`name_norm` stay generated because `hs_norm` is an `IMMUTABLE` wrapper.
 
-Index builds on populated tables use `CREATE INDEX CONCURRENTLY`, which cannot run inside a migration transaction [NOT IN VUKEM DOCS] (VF-017): migrations create indexes while the tables are still near-empty before cutover; later concurrent builds run as a one-off pre-deploy script (`hexascore:index-concurrently`, SDD 11 pre-deploy step) outside the migration runner, idempotent via `IF NOT EXISTS` and a check for an `INVALID` index left by a failed build.
+Index builds on populated tables use `CREATE INDEX CONCURRENTLY`, which cannot run inside a migration transaction [NOT IN VUKEM DOCS] (VF-017): migrations create indexes while the tables are still near-empty before cutover; later concurrent builds are `NoTransaction` migrations (vukem v0.33.0) run by the pre-deploy command `hexascore:predeploy` (SDD 11 §7.2), idempotent via `IF NOT EXISTS` after the pre-deploy drops any `INVALID` index left by a failed build.
 
 Analytics: `search_events(id uuid pk, at, search_id, surface web|app|suggest, query_norm, user_id null, locale, types text[], result_count, latency_ms, page, clicked_ref, click_position, click_group)` indexed on `at`; `search_query_daily(day, query_norm, locale, searches, zero_results, clicks)` pk `(day, query_norm, locale)`.
 
