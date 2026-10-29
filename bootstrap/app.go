@@ -8,6 +8,7 @@ import (
 	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/router"
 
+	"github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/i18nhash"
 	"github.com/AlexGalhardo/hexascore-app/app/jobs"
 	"github.com/AlexGalhardo/hexascore-app/app/listeners"
@@ -63,8 +64,9 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 		}),
 	}
 
-	base = append(base, vukem.WithRoutes(func(_ *router.Router, app *vukem.App) error {
+	base = append(base, vukem.WithRoutes(func(r *router.Router, app *vukem.App) error {
 		app.AddHealthCheck("ssr", app.Inertia.SSRHealthy)
+		r.UseServer(middleware.Version(middleware.ResolveVersion(app.Source.Get)))
 		return nil
 	}))
 

@@ -39,6 +39,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: APP_VERSION=${{ github.ref_name }}
       - name: Extract changelog section
         run: |
           version="${GITHUB_REF_NAME#v}"
