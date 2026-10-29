@@ -17,16 +17,18 @@ Reason: HANDOFF after 5 VFs plus a flaky-test fix (brief "Limits", context budge
 | --- | --- | --- |
 | VF-018 queue per-queue limits (`WorkOptions.Limits`, `QUEUE_LIMITS`) | #14 | merged (2b5ed18) |
 | VF-019 app metrics docs + `TestProvider_AppMetrics` (no new API) | #15 | merged (ae9276e) |
-| VF-025 SSR render cache (`SSRConfig.Cache/CacheTTL/CacheWhen`) | #16 | merged |
-| VF-038 SSR starter entry, plugin `isSsrBuild` branch, `build:ssr`, `ssr:start` error on immediate exit | #17 | see final STATUS |
+| VF-025 SSR render cache (`SSRConfig.Cache/CacheTTL/CacheWhen`) | #16 | merged (d9aec2d) |
+| VF-038 SSR starter entry, plugin `isSsrBuild` branch, `build:ssr`, `ssr:start` error on immediate exit | #17 | merged (0a03f26) |
 | VF-040 | - | status only: duplicate of VF-017/026, fixed by PR #13 |
-| session flaky test (all-digit handle) | #18 | see final STATUS |
+| session flaky test (all-digit handle) | #18 | merged (4a3bef2) |
 
 Reports: `$ORCH/reports/VF-{018,019,025,038,040}.md`.
 
 ## Incident
 
 While checking the VF-038 SSR bundle I POSTed `/shutdown` to 127.0.0.1:13714, which was another process's SSR server (the port was taken; my own bundle failed with EADDRINUSE). That server stopped cleanly. Whoever runs SSR locally (spike/senior) must restart it with `vukem ssr:start` or `serve -with-ssr`.
+
+vukem `main` head: 0a03f26.
 
 ## Open
 

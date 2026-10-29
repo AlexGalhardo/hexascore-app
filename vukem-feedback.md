@@ -46,7 +46,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-035 | 2026-10-29 | medium | open |
 | VF-036 | 2026-10-29 | low | open |
 | VF-037 | 2026-10-29 | medium | open |
-| VF-038 | 2026-10-29 | medium | in_progress (framework) |
+| VF-038 | 2026-10-29 | medium | merged in main (PR #17), unreleased |
 | VF-039 | 2026-10-29 | low | open |
 | VF-040 | 2026-10-29 | medium | merged in main (PR #13), unreleased |
 | VF-041 | 2026-10-29 | low | open |
@@ -381,7 +381,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-038: Starter Vite plugin breaks `vite build --ssr`; SSR entry pattern undocumented; `ssr:start` exits silently
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: merged in main (PR #17, <https://github.com/AlexGalhardo/vukem/pull/17>), unreleased. Native: the starter Vite plugin sends `vite build --ssr` to `bootstrap/ssr` (self-contained, client build untouched); Inertia starters ship `resources/js/ssr.ts(x)` with a top-level `createInertiaApp(...)` and a `build:ssr` script; `vukem build -ssr` builds it; `ssr:start` fails with an entry-shape hint when the bundle exits within 2 s; entry shape documented on the Inertia page.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` "Server-side rendering"; `https://vukem.dev/docs/cli/reference-runtime` "`vukem ssr:start` and `vukem ssr:check`"; `https://vukem.dev/docs/frontend/vite`.
 - **Context**: ROADMAP P0.F.2.1, SDD 09 §6.1, ADR 0004.
 - **Reproduction**: in an app from `vukem new -inertia react`, run `vite build --ssr resources/js/ssr.tsx`. The starter plugin `resources/vite/vukem.js` sets `build.outDir = resources/public/build` and `emptyOutDir: true` for every build, so the server bundle becomes publicly served and the client build is deleted. With an `export default createInertiaApp(...)` entry, `@inertiajs/vite` 3.9.1 does not inject `createServer`; `vukem ssr:start` then runs a bundle that exits at once and itself exits 0 with no output.
