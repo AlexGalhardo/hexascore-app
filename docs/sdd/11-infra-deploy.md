@@ -89,6 +89,8 @@ Overlap 20 s, draining 35 s, restart `ALWAYS` max 5 are documented settings [cac
 
 ### 6.3 Container
 
+Image as built (P2.A.3.1, 2026-10-29): assets stage `oven/bun:1.4.3-alpine` (the starter's, kept instead of `node` plus a pinned Bun binary), build stage `golang:1.27.3-alpine3.24`, runtime `node:26.13.0-alpine3.24` (latest LTS on the day, replacing the planned 24.22.0), every `FROM` pinned by digest; runtime packages `postgresql18-client=18.6-r0` and `libwebp-tools=1.6.0-r0` (both present on Alpine 3.24); non-root user `app`; `scripts/infra/check-image.sh` enforces ≤ 400 MB compressed (73 MB measured), user `app`, pinned bases, `pg_dump` 18.x, `cwebp`, and `/app/storage` plus `/tmp` as the only writable paths.
+
 Stages, starting from the pins of the vukem starter Dockerfile [vk-deploy], each with `@sha256:` digest (Dependabot `docker`):
 
 1. `node:24.22.0-alpine3.24` with a pinned Bun binary (the repo uses `bun.lock`, SDD 09 §7.10): `bun install --frozen-lockfile`, `bun x vite build`, then the permanent `bun run build:ssr` step for `bootstrap/ssr/ssr.js`, because `vukem build` does not build the SSR bundle (VF-027, open issue 09-7).

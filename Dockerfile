@@ -2,7 +2,7 @@
 # Railway, Fly, Render and plain Docker build it as is:
 # https://vukem.dev/docs/deployment/docker-and-railway
 
-FROM oven/bun:1.4.3-alpine AS assets
+FROM oven/bun:1.4.3-alpine@sha256:629e17411f1f129dbec3af78d5af9c9f2a937435c80349437206c6b0b7422373 AS assets
 WORKDIR /src
 COPY package.json bun.lock* ./
 # The lockfile is a required build input: the image installs exactly the
@@ -18,7 +18,7 @@ RUN if ! ls bun.lock* >/dev/null 2>&1; then \
 COPY . .
 RUN bun run build && bun run build:ssr
 
-FROM golang:1.27.3-alpine3.24 AS build
+FROM golang:1.27.3-alpine3.24@sha256:d200d2dd76b03a99b52651fd1325aff7dcd35422c35c01bac56571b0507f3deb AS build
 WORKDIR /src
 ENV CGO_ENABLED=0
 COPY go.mod go.sum ./
@@ -32,12 +32,14 @@ RUN tags="$(sed 's/#.*//' .buildtags 2>/dev/null | tr -s ', \t\r\n' ',' | sed 's
 
 # Node runs the self-contained SSR bundle; the Go binary starts and restarts it
 # (SSR_SUPERVISE, app/ssr/supervisor.go). Exact tag: node 26.13.0 LTS.
-FROM node:26.13.0-alpine3.24
+FROM node:26.13.0-alpine3.24@sha256:c6ad9e9c1d80f6eb607c26b4b0a132ff7a2344fad1c78ea3baa2a7d4c8de6d94
 # Release name for the X-Hexascore-Version header (release.yml passes the tag;
 # Railway builds fall back to RAILWAY_GIT_COMMIT_SHA at runtime).
 ARG APP_VERSION=
 ENV APP_VERSION=${APP_VERSION}
-RUN apk add --no-cache ca-certificates tzdata \
+# pg_dump for the backup job (SDD 11 §7.3) and cwebp for covers (SDD 06);
+# exact Alpine 3.24 versions so a rebuild never changes them silently.
+RUN apk add --no-cache ca-certificates tzdata postgresql18-client=18.6-r0 libwebp-tools=1.6.0-r0 \
 	&& adduser -D -H -u 10001 app \
 	&& mkdir -p /app/storage \
 	&& chown app:app /app/storage
