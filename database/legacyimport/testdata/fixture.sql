@@ -186,16 +186,16 @@ INSERT INTO legacy_import.two_factor (id, secret, backup_codes, user_id, verifie
 -- u07 signs in with a passkey only: counted by the pre-flight, not an abort.
 INSERT INTO legacy_import.passkey (id, user_id) VALUES ('p07', 'u07');
 
--- i1 game with Blob covers, i2 announced movie whose cover never reached the Blob, i3 book without
+-- i1 game with Blob covers and Wikidata-resolvable genre and developer, i2 announced movie whose cover never reached the Blob, i3 book without
 -- a date, i4 series, i5 game without meta. Ids end in the item number.
 INSERT INTO legacy_import.items (id, type, slug, wikidata_qid, release_date, external_ids, meta, popularity, rating_count, score, created_at, updated_at) VALUES
   ('01900000-0000-7000-8000-000000000001', 'game', 'half-life', 'Q279744', '1998-11-19', '{"steam": "70"}',
-   '{"genres": ["shooter"], "trailers": [{"youtubeId": "abc123"}], "coverUrl": "https://store1.public.blob.vercel-storage.com/covers/01900000-0000-7000-8000-000000000001-0123456789abcdef.webp", "coverThumbUrl": "https://store1.public.blob.vercel-storage.com/covers/01900000-0000-7000-8000-000000000001-0123456789abcdef-t.webp", "coverAttribution": {"source": "IGDB", "url": "https://www.igdb.com/games/half-life"}}',
+   '{"genres": ["shooter"], "platforms": ["Windows"], "creators": ["Valve"], "countries": ["United States"], "trailers": [{"youtubeId": "abc123"}], "coverUrl": "https://store1.public.blob.vercel-storage.com/covers/01900000-0000-7000-8000-000000000001-0123456789abcdef.webp", "coverThumbUrl": "https://store1.public.blob.vercel-storage.com/covers/01900000-0000-7000-8000-000000000001-0123456789abcdef-t.webp", "coverAttribution": {"source": "IGDB", "url": "https://www.igdb.com/games/half-life"}}',
    12.5, 40, 91, '2025-01-01 00:00+00', '2025-02-01 00:00+00'),
   ('01900000-0000-7000-8000-000000000002', 'movie', 'future-film', 'Q2', '2099-01-01', '{"imdb": "tt0000002"}',
    '{"runtimeMinutes": 136, "coverUrl": "https://image.tmdb.org/t/p/w500/poster.jpg"}', 3, 0, NULL, '2025-01-01 00:00+00', '2025-01-01 00:00+00'),
-  ('01900000-0000-7000-8000-000000000003', 'book', 'some-book', 'Q3', NULL, '{"isbn13": "9780000000002"}', '{"pages": 300}', 1, 0, NULL, '2025-01-01 00:00+00', '2025-01-01 00:00+00'),
-  ('01900000-0000-7000-8000-000000000004', 'series', 'some-series', 'Q4', '2010-05-05', '{}', '{"seasons": 2, "episodes": 20}', 0, 0, NULL, '2025-01-01 00:00+00', '2025-01-01 00:00+00'),
+  ('01900000-0000-7000-8000-000000000003', 'book', 'some-book', 'Q3', NULL, '{"isbn13": "978-0-00-000000-2"}', '{"pages": 300, "creators": ["Ana Writer"], "genres": ["shooter"]}', 1, 0, NULL, '2025-01-01 00:00+00', '2025-01-01 00:00+00'),
+  ('01900000-0000-7000-8000-000000000004', 'series', 'some-series', 'Q4', '2010-05-05', '{}', '{"seasons": 2, "episodes": 20, "creators": ["宮崎駿"]}', 0, 0, NULL, '2025-01-01 00:00+00', '2025-01-01 00:00+00'),
   ('01900000-0000-7000-8000-000000000005', 'game', 'bare-game', 'Q5', '2001-01-01', '{}', '{}', 0, 0, NULL, '2025-01-01 00:00+00', '2025-01-01 00:00+00');
 -- i1 en from Wikipedia, i1 pt-BR own rewritten text (no licence, no URL), the rest titles only.
 INSERT INTO legacy_import.item_translations (item_id, locale, title, synopsis, synopsis_license, synopsis_source_url) VALUES
@@ -210,7 +210,7 @@ INSERT INTO legacy_import.affiliate_links (item_id, store, url) VALUES
   ('01900000-0000-7000-8000-000000000001', 'steam', 'https://store.steampowered.com/app/70');
 -- Q999 was fetched but never normalised into an item.
 INSERT INTO legacy_import.source_records (source, external_id, payload, hash, fetched_at, normalized_at, item_id) VALUES
-  ('wikidata', 'Q279744', '{"labels": {"en": "Half-Life"}}', repeat('a', 64), '2025-01-01 00:00+00', '2025-01-02 00:00+00', '01900000-0000-7000-8000-000000000001'),
+  ('wikidata', 'Q279744', '{"labels": {"en": "Half-Life"}, "claims": {"P136": [{"value": "Q185029", "rank": "normal"}], "P178": [{"value": "Q193559", "rank": "preferred"}]}, "refs": {"Q185029": "shooter", "Q193559": "Valve"}}', repeat('a', 64), '2025-01-01 00:00+00', '2025-01-02 00:00+00', '01900000-0000-7000-8000-000000000001'),
   ('steam', 'Q279744', '{"header_image": "https://example.test/h.jpg"}', repeat('b', 64), '2025-01-01 00:00+00', NULL, '01900000-0000-7000-8000-000000000001'),
   ('wikidata', 'Q999', '{}', repeat('c', 64), '2025-01-01 00:00+00', NULL, NULL);
 INSERT INTO legacy_import.ratings SELECT 'r' || g FROM generate_series(1, 20) g;

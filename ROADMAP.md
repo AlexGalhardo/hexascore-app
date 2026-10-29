@@ -1918,7 +1918,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
     - `external_scores` in the new schema → none (dropped, D-09; kept only in the legacy dump)
   - Notes: typed columns (`runtimeMinutes`, `pages`, `seasons`, `episodes`, `trailers`) copied 1:1; `affiliate_links` copied if any. Entities and editions are the next stage.
 
-- [ ] **P2.F.2.5** Implement the `entities` stage: genres, platforms, creators and countries from `meta`, and book editions from `isbn13`.
+- [x] **P2.F.2.5** Implement the `entities` stage: genres, platforms, creators and countries from `meta`, and book editions from `isbn13`.
   - Files/modules: `database/legacyimport/entities.go`, `database/legacyimport/entities_test.go`, `docs/migration/entity-resolution.md` (counts: resolved by QID, native, roleless)
   - Refs: SDD 01 §5.4 (`meta.*` and book rows), §7.6 (DQ-09, DQ-10), §11 issue 1; SDD 06 §7.4, §7.9; ADR 0012
   - Depends on: P2.F.2.4
