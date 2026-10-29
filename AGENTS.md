@@ -25,6 +25,7 @@ This file is the single source of truth for agent behaviour. `CLAUDE.md` only po
 | `CHANGELOG.md` | Keep a Changelog; generated per release, `[Unreleased]` edited by hand only before release |
 | `legacy/` (sibling folder, not in this repo) | read-only Next.js reference; history on branch `legacy` |
 | `vukem/` (sibling folder, own git) | framework checkout for local `go.work`/`replace` only, never committed |
+| `.claude/` | project skills and rules for Claude Code (adapted from vukem-marketplace-reactjs) |
 
 ## Rules
 
