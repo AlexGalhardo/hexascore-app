@@ -170,7 +170,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
 
 #### P0.F.5 Migrations and the concurrent index script
 
-- [ ] **P0.F.5.1** Prove raw `jsonb`, `text` + `CHECK` enums and a generated column through migrations and the ORM.
+- [x] **P0.F.5.1** Prove raw `jsonb`, `text` + `CHECK` enums and a generated column through migrations and the ORM.
   - Files/modules: spike `database/migrations/*_create_items_table.go`, `*_create_ratings_table.go`, `tests/orm_generated_test.go`
   - Refs: SDD 01 §5.2; SDD 02 §5; open-issues 01-5, 02-5; VF-006, VF-009; <https://vukem.dev/docs/database/migrations> "Creating migrations", "Running migrations"
   - Depends on: P0.F.1.1
@@ -229,7 +229,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
 
 #### P0.F.8 Stripe scaffold
 
-- [ ] **P0.F.8.1** Run the billing scaffold, rename plans to `pro`/`business` with per-currency prices, and pass the fake-Stripe tests.
+- [x] **P0.F.8.1** Run the billing scaffold, rename plans to `pro`/`business` with per-currency prices, and pass the fake-Stripe tests.
   - Files/modules: spike `config/billing.go`, `routes/billing.go`, `tests/billing_test.go`, `.env.example` (`STRIPE_PRICE_PRO`, `STRIPE_PRICE_BUSINESS`)
   - Refs: SDD 05 §6.3, §7.5, §9; ADR 0015; D-14; <https://vukem.dev/docs/cli/reference-install> "`vukem install:billing`"; <https://vukem.dev/docs/digging-deeper/billing> "Configuration", "Testing"
   - Depends on: P0.F.1.1
