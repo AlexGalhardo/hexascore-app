@@ -11,7 +11,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | --- | --- | --- | --- |
 | VF-001 | 2026-10-28 | high | wontfix (post-1.0, FQ-001) |
 | VF-002 | 2026-10-28 | medium | merged in main (PR #7), unreleased |
-| VF-003 | 2026-10-28 | medium | open |
+| VF-003 | 2026-10-28 | medium | in_progress (framework) |
 | VF-004 | 2026-10-28 | low | open |
 | VF-005 | 2026-10-28 | medium | merged in main (PR #11), unreleased |
 | VF-006 | 2026-10-28 | low | open |
@@ -77,7 +77,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-003: No built-in bot/abuse challenge for auth and form routes
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/rate-limiting` "Rate limiting", `https://vukem.dev/docs/security/rate-limiting` "Rate limiting", `https://vukem.dev/docs/security/overview`.
 - **Context**: the legacy app used Vercel BotID on signup, login and contact. vukem offers GCRA rate limiting by IP/token and login throttling, but no challenge mechanism (proof-of-work, CAPTCHA adapter) when thresholds trip.
 - **Reproduction**: n/a (feature gap).

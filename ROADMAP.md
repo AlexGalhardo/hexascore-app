@@ -680,7 +680,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.D.3 Anti-manipulation and jobs
 
-- [ ] **P1.D.3.1** Implement the burst detector, per-user daily caps and the admin approve/exclude/restore routes.
+- [x] **P1.D.3.1** Implement the burst detector, per-user daily caps and the admin approve/exclude/restore routes.
   - Files/modules: `app/scoring/burst.go`, `app/scoring/caps.go`, `app/http/controllers/admin/scoring_controller.go`, `routes/admin.go`, admin read-only resources for `score_bursts`, `rating_flags`, `score_actions`, `score_formula_versions`
   - Refs: SDD 02 §6 (admin), §7.5, §7.6, §9; VF-008; open-issues 02-4, 02-7
   - Depends on: P1.D.2.1, P1.C.3.1
