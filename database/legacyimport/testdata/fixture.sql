@@ -1,7 +1,7 @@
 -- Synthetic legacy dump restored as schema legacy_import (SDD 11 §7.6 step 3).
 -- Better Auth tables keep the legacy column names (legacy apps/web/lib/db/schema/auth.ts);
 -- the other tables carry only what the runner reads today and grow with each stage task.
--- No real data: every address is under example.test; secrets are placeholders, except a01, a hash of a public test password.
+-- No real data: every address is under example.test; secrets are placeholders, except a01 and a02, hashes of a public test password.
 DROP SCHEMA IF EXISTS legacy_import CASCADE;
 CREATE SCHEMA legacy_import;
 
@@ -40,7 +40,10 @@ CREATE TABLE legacy_import.two_factor (
   id text PRIMARY KEY,
   secret text NOT NULL,
   backup_codes text NOT NULL,
-  user_id text NOT NULL REFERENCES legacy_import."user"(id) ON DELETE CASCADE
+  user_id text NOT NULL REFERENCES legacy_import."user"(id) ON DELETE CASCADE,
+  verified boolean DEFAULT true,
+  failed_verification_count integer DEFAULT 0,
+  locked_until timestamp
 );
 
 CREATE TABLE legacy_import.passkey (
@@ -78,18 +81,20 @@ INSERT INTO legacy_import."user" (id, name, email, email_verified, created_at, u
   ('u06', 'Fabio', 'fabio@example.test', true, '2025-01-02 10:00', NULL, NULL, NULL, false, 'user', true, 'old', '2020-01-01 00:00', false, NULL),
   ('u07', 'Gil', 'gil@example.test', true, '2025-01-02 10:00', NULL, NULL, NULL, false, 'user', false, NULL, NULL, false, NULL);
 
--- a01 holds a Better Auth 1.7.7 hash of "correct horse battery staple" (testdata/betterauth_hashes.json).
+-- a01 and a02 hold a Better Auth 1.7.7 hash of "correct horse battery staple" (testdata/betterauth_hashes.json).
 INSERT INTO legacy_import.account (id, account_id, provider_id, user_id, access_token, refresh_token, id_token, password) VALUES
   ('a01', 'u01', 'credential', 'u01', NULL, NULL, NULL, 'f784aeba634fcc3813d2fed8886d1f4f:beaf7dbabd716f288bf679caddface38ac825862263cef82ed40e0c93f9949269bf3d57e5986a080b8005361fb11dde09950ec22d09924efbf33bf3b5cdf7a16'),
-  ('a02', 'u02', 'credential', 'u02', NULL, NULL, NULL, 'placeholder-scrypt-hash'),
+  ('a02', 'u02', 'credential', 'u02', NULL, NULL, NULL, 'f784aeba634fcc3813d2fed8886d1f4f:beaf7dbabd716f288bf679caddface38ac825862263cef82ed40e0c93f9949269bf3d57e5986a080b8005361fb11dde09950ec22d09924efbf33bf3b5cdf7a16'),
   ('a03', 'g-1003', 'google', 'u03', 'placeholder-access', 'placeholder-refresh', 'placeholder-id', NULL),
   ('a04', 'u04', 'credential', 'u04', NULL, NULL, NULL, 'placeholder-scrypt-hash'),
   ('a05', 'g-1005', 'google', 'u05', 'placeholder-access', NULL, NULL, NULL),
   ('a06', 'u06', 'credential', 'u06', NULL, NULL, NULL, 'placeholder-scrypt-hash'),
   ('a16', 'g-1006', 'google', 'u06', NULL, NULL, NULL, NULL);
 
-INSERT INTO legacy_import.two_factor (id, secret, backup_codes, user_id) VALUES
-  ('t02', 'placeholder-encrypted-secret', 'placeholder-encrypted-codes', 'u02');
+-- t04 never finished the TOTP setup (verified false).
+INSERT INTO legacy_import.two_factor (id, secret, backup_codes, user_id, verified) VALUES
+  ('t02', 'placeholder-encrypted-secret', 'placeholder-encrypted-codes', 'u02', true),
+  ('t04', 'placeholder-encrypted-secret', 'placeholder-encrypted-codes', 'u04', false);
 
 -- u07 signs in with a passkey only: counted by the pre-flight, not an abort.
 INSERT INTO legacy_import.passkey (id, user_id) VALUES ('p07', 'u07');
