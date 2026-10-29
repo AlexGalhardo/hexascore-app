@@ -219,7 +219,7 @@ Weight factors:
 
 Prior `C_{t,k}`: mean over items of type `t` with `N ≥ 5` of their weighted raw means `S_k / W`, item-level so blockbusters do not dominate; if fewer than 20 such items, `C_{t,k} = 60` (6.0 stars). Rebuilt nightly into `score_priors` before items are recomputed.
 
-Default `m_t` (version 1): game 10, movie 10, series 8, book 8 [NOT VERIFIED against the migrated distribution]. Tuning, at most quarterly on production data: `m_t = clamp(median N over items of type t with N ≥ 1, 5, 50)`. Any change to `m_t`, weights, thresholds or the prior rule is a new `score_formula_versions` row (`params` + changelog), activated by migration ≥ 14 days after announcement (NFR-02-6) and followed by a full recompute; API `formulaVersion` is the active version.
+Default `m_t` (version 1): game 10, movie 10, series 8, book 8 [NOT VERIFIED against the migrated distribution]; seeded as version 1 by migration `20261029120001_seed_score_formula_v1` (P1.D.1.2). Reminder for P2.F: measure the median N per type on the first staging copy and, if needed, add version 2. Tuning, at most quarterly on production data: `m_t = clamp(median N over items of type t with N ≥ 1, 5, 50)`. Any change to `m_t`, weights, thresholds or the prior rule is a new `score_formula_versions` row (`params` + changelog), activated by migration ≥ 14 days after announcement (NFR-02-6) and followed by a full recompute; API `formulaVersion` is the active version.
 
 Confidence (`SE` on the 0–100 scale, weighted standard deviation `σ = sqrt(Σ w_u (overall_u − S/W)² / W)`, `SE = σ / sqrt(W)`):
 
