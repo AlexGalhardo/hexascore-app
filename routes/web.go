@@ -3,11 +3,13 @@ package routes
 import (
 	"cmp"
 	"strings"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/i18n"
 	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/middleware"
+	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/router"
 	"github.com/AlexGalhardo/vukem/web"
 
@@ -115,7 +117,14 @@ func Web(r *router.Router, app *vukem.App) error {
 		sc := controllers.NewSearch(app, search.New(db, nil), acc.Web.User)
 		r.Get("/search", sc.Index).Name("search")
 		r.Get("/search/suggest", sc.Suggest).Name("search.suggest")
-		r.Post("/search/events", sc.Event).Name("search.events")
+		limiters, err := app.RateLimiters()
+		if err != nil {
+			return err
+		}
+		// Each click needs a search that returned the ref; this caps how
+		// fast one client can mint searches and clicks to skew analytics.
+		clicks := ratelimit.Middleware(limiters("search.events", 30, time.Minute), ratelimit.ByIP)
+		r.Post("/search/events", sc.Event).Use(clicks).Name("search.events")
 		r.Get("/api/search/suggest", controllers.LegacySuggest).Name("search.suggest.legacy")
 	}
 
