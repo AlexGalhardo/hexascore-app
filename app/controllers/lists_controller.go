@@ -125,3 +125,68 @@ func listJSON(l models.List) map[string]any {
 		"updatedAt":   l.UpdatedAt,
 	}
 }
+
+// AddItem puts the item in {itemId} at the end of the list in {id}.
+func (h *Lists) AddItem(c *web.Ctx) error {
+	l, err := h.owned(c, "addItem")
+	if err != nil {
+		return err
+	}
+
+	in, err := web.Parse(c, requests.ListItemSchema)
+	if err != nil {
+		return err
+	}
+
+	out, err := h.svc.AddItem(c.Context(), l, c.Param("itemId"), in.Note)
+	if err != nil {
+		return err
+	}
+
+	if !h.api {
+		return c.Back("/lists")
+	}
+
+	return c.JSON(200, listJSON(out))
+}
+
+// RemoveItem takes the item in {itemId} out of the list in {id}.
+func (h *Lists) RemoveItem(c *web.Ctx) error {
+	l, err := h.owned(c, "addItem")
+	if err != nil {
+		return err
+	}
+	if err := h.svc.RemoveItem(c.Context(), l, c.Param("itemId")); err != nil {
+		return err
+	}
+
+	if !h.api {
+		return c.Back("/lists")
+	}
+
+	return c.NoContent()
+}
+
+// Reorder replaces the order of the list in {id}.
+func (h *Lists) Reorder(c *web.Ctx) error {
+	l, err := h.owned(c, "reorder")
+	if err != nil {
+		return err
+	}
+
+	in, err := web.Parse(c, requests.ListOrderSchema)
+	if err != nil {
+		return err
+	}
+
+	version, err := h.svc.Reorder(c.Context(), l, in.Version, in.ItemIDs)
+	if err != nil {
+		return err
+	}
+
+	if !h.api {
+		return c.Back("/lists")
+	}
+
+	return c.JSON(200, map[string]any{"version": version})
+}
