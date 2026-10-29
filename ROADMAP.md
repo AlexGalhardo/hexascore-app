@@ -949,7 +949,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test ./app/http/... -run 'TestInertiaPages/Catalog/Show'` → `item`, `ratingSummary`, `entities`, `editions` (books, first 10 + `editionCount`), `timeToBeat` (games), `me` only when logged in
   - Notes: mutations use the session routes from P1.D and P1.F; optimistic UI must reconcile with the returned aggregate. TMDB/IGDB attribution visible where those fields render (ADR 0006).
 
-- [ ] **P1.G.2.4** Build `Entity/Show` for people, companies, franchises, platforms, genres, game modes, countries and languages.
+- [x] **P1.G.2.4** Build `Entity/Show` for people, companies, franchises, platforms, genres, game modes, countries and languages.
   - Files/modules: `app/http/controllers/entity_controller.go`, `resources/js/pages/Entity/Show.tsx`
   - Refs: SDD 09 §6.2; SDD 01 §6.2, §7.4; D-01; open-issues 01-8
   - Depends on: P1.G.2.2
@@ -1004,7 +1004,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.G.5 Release
 
-- [ ] **P1.G.5.1** Release `v0.7.0` (web app parity).
+- [x] **P1.G.5.1** Release `v0.7.0` (web app parity).
   - Files/modules: `CHANGELOG.md`, tag `v0.7.0`
   - Refs: ADR 0013; SDD 11 §7.1
   - Depends on: P1.G.1.2, P1.G.2.3, P1.G.2.4, P1.G.3.1, P1.G.3.2, P1.G.4.1, P1.G.4.2
