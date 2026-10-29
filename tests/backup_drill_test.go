@@ -66,6 +66,11 @@ func TestBackupDrill(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	// Verify runs pg_restore --list with PATH as its only variable (FIX-backup-child-path).
+	if err := r.Verify(ctx, "daily", res); err != nil {
+		t.Fatalf("verify: %v", err)
+	}
+
 	// Rows written after the dump are not in it: the manifest still matches the restore.
 	newUser(t, app, "drill-late@example.com")
 
