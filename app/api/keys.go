@@ -186,7 +186,8 @@ func (s *Keys) Revoke(ctx context.Context, userID int64, id string) error {
 
 // Resolve returns the key id and owner of a live key, ErrUnknownKey for a malformed, unknown or revoked one, and
 // any other error when the lookup could not run (the guard fails closed on it).
-// shortcut: one indexed query per request, no in-process LRU (SDD 05 §7.1); add it with plan resolution in P1.H.1.2.
+// shortcut: one indexed query per request, no in-process LRU (SDD 05 §7.1); add it with the subscription plan
+// lookup in P1.H.3.1, or earlier if the k6 API scenario (P1.I.3.1) misses its budget.
 func (s *Keys) Resolve(ctx context.Context, key string) (keyID string, userID int64, err error) {
 	if !WellFormed(key) {
 		return "", 0, ErrUnknownKey

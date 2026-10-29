@@ -1028,7 +1028,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test ./tests -run 'TestSecurity_A07_ApiKeyHashedAtRest|TestSecurity_A01_CrossSurfaceCredentials'` → app tokens refused on `/api/v1`, API keys refused on `/app/v1`
   - Notes: legacy keys migrate as hashes in P2.F, so keep the legacy hash format (sha256 hex) exactly.
 
-- [ ] **P1.H.1.2** Implement plans, quota metering in Postgres with legacy credit balances, quota and rate-limit headers, and 5xx refunds.
+- [x] **P1.H.1.2** Implement plans, quota metering in Postgres with legacy credit balances, quota and rate-limit headers, and 5xx refunds.
   - Files/modules: `database/migrations/*_create_api_quota_counters_table.go`, `*_create_api_usage_daily_table.go`, `app/api/plans.go`, `app/api/quota.go`, `app/api/quota_test.go`, `app/jobs/flush_api_usage.go`
   - Refs: SDD 05 §5, §6.1, §7.2, §7.4, §9; ADR 0003, 0015; D-23, D-33; open-issues 05-4, 11-9; legacy `app/api/cron/flush-usage/`
   - Depends on: P1.H.1.1
