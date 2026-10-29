@@ -5,7 +5,12 @@
 set -eu
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-LEGACY="${1:-$ROOT/../../legacy}"
+# legacy/ is a sibling of the main checkout and two levels up from a worktree under wt/.
+LEGACY="${1:-}"
+if [ -z "$LEGACY" ]; then
+	LEGACY="$ROOT/../legacy"
+	[ -d "$LEGACY/apps/web" ] || LEGACY="$ROOT/../../legacy"
+fi
 
 if [ ! -d "$LEGACY/apps/web" ]; then
 	echo "parity-inventory: legacy tree not found at $LEGACY" >&2
