@@ -40,6 +40,12 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-029 | 2026-10-28 | low | open |
 | VF-030 | 2026-10-28 | medium | open |
 | VF-031 | 2026-10-28 | medium | open |
+| VF-032 | 2026-10-28 | medium | open |
+| VF-033 | 2026-10-28 | low | open |
+| VF-034 | 2026-10-28 | low | open |
+| VF-035 | 2026-10-29 | medium | open |
+| VF-036 | 2026-10-29 | low | open |
+| VF-037 | 2026-10-29 | medium | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -340,3 +346,12 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 - **Request**: treat trailing runs of capitals as one word (`ExternalIDs` becomes `external_ids`), or document the rule and the `db` tag on the models page.
 
 Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so a model that maps a generated column fails on `orm.Create` with `cannot insert a non-DEFAULT value into column "overall"` (SQLSTATE 428C9). Map the column with `db:"-"` (never written, never read) or read it through a separate read-only model. Insert and update through the ORM then succeed. A `generated` tag is still the request.
+
+## VF-037: `install:billing` has no per-currency prices and its plan names are fixed in code
+
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0 (`contrib/stripe` v0.4.1). **Docs consulted**: `https://vukem.dev/docs/cli/reference-install` ("`vukem install:billing`"), `https://vukem.dev/docs/digging-deeper/billing` ("Configuration", "Testing").
+- **Context**: the scaffold writes plans `basic` and `pro` in `config/billing.go` (`plans()`), one `STRIPE_PRICE_<NAME>` id per plan and a `Checkout(ctx, user, plan)` without a currency. HexaScore sells `pro` and `business` in BRL, USD and EUR (SDD 05 §6.3, ADR 0015) using one Stripe price per plan with `currency_options`.
+- **Workaround** (spike `agent/senior/P0.F.8.1`): rename the plans in `plans()` and in the tests; add `Plan.Amounts` (display only) and a `config.Currency` allowlist; pass `"currency"` in the `stripe.Params` of `CreateCheckoutSession` (`Params` is a free-form map, so no dependency change); the controller reads the `currency` form field and an unsupported value returns 422 before any Stripe call. Whether Stripe accepts `currency` with a `currency_options` price in a live sandbox is [NOT VERIFIED] here (only the fake-Stripe tests ran; test keys only).
+- **Request**: document the `currency_options` pattern, accept a currency (or locale to currency map) in the scaffold's `Checkout`, and generate plans from config rather than code.
+- Also: `POST /stripe/webhook` is mounted with `r.UseServer` and is not listed by `vukem route:list` (documented as such); the acceptance check for it is the webhook tests.
