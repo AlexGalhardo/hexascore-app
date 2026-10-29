@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-29
+
+### Added
+
+- **profile:** Data export button and purge of export files on account deletion ([5c86d73](https://github.com/AlexGalhardo/hexascore-app/commit/5c86d73ea0ef8e7c06cb20b184250da6288d65a9))
+- **lists:** Add library view, edition choice and public profile ([5f48e74](https://github.com/AlexGalhardo/hexascore-app/commit/5f48e7437a3ea4497aee0db3e0d9b281b64bbfef))
+
+### Fixed
+
+- **api:** Render service error codes as problem+json code members ([e665b22](https://github.com/AlexGalhardo/hexascore-app/commit/e665b22578102d817cb31c706aed2e34b6f98f33))
+- Close export purge retention gaps ([5e0cf29](https://github.com/AlexGalhardo/hexascore-app/commit/5e0cf299b245faa30487615ded87f9cb484068aa))
+- **admin:** Answer 409 on merge conflicts as SDD 01 §7.5 requires ([b180cb4](https://github.com/AlexGalhardo/hexascore-app/commit/b180cb44804374add4539905674316a9fd44c91f))
+- **admin:** Audit the previous active flag of an affiliate link ([8048388](https://github.com/AlexGalhardo/hexascore-app/commit/80483882242fc870e68ccab2aa902a7e95b73c5e))
+- **api:** Send Retry-After: 30 on the key guard's fail-closed 503 ([74d1451](https://github.com/AlexGalhardo/hexascore-app/commit/74d1451498455bed1137cece5e14dbb0a7e6b47a))
+- **api:** Fail closed with Retry-After on quota and plan errors ([9bf7306](https://github.com/AlexGalhardo/hexascore-app/commit/9bf730640632dfa5e3be608c4b68908dae626b7b))
+
 ## [0.5.0] - 2026-10-29
 
 ### Added
