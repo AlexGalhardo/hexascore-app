@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
-- Adopt vukem v0.33.0: problem codes are raised with `errs.HTTPError.WithExtension("code", ...)` (VF-016, VF-048) and `APIEdge` sets the problem `type` from it, replacing the `CodedProblem` route wrapper; the LGPD ZIP export uses `export.EncodeCSV` (VF-029).
+- Adopt vukem v0.33.0: problem codes are raised with `errs.HTTPError.WithExtension("code", ...)` (VF-016, VF-048) and `APIEdge` sets the problem `type` from it on `/api/v1` and `/app/v1` (CORS stays on `/api/v1` only), replacing the `CodedProblem` route wrapper; the LGPD ZIP export uses `export.EncodeCSV` (VF-029).
 
 ### Fixed
 

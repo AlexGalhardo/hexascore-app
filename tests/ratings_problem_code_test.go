@@ -49,5 +49,6 @@ func TestRatingItemLimitedProblemCode(t *testing.T) {
 		PutJSON("/app/v1/items/"+item+"/rating", map[string]any{"scores": map[string]float64{"gameplay": 7.5, "fun": 7, "sound": 7, "storytelling": 7, "technical": 7, "visual": 7}}).
 		AssertStatus(429).
 		AssertSee(`"code":"item-ratings-limited"`).
+		AssertJSONPath("type", "https://hexascore.app/problems/item-ratings-limited").
 		AssertHeaderContains("Retry-After", "")
 }
