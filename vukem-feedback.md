@@ -16,7 +16,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-005 | 2026-10-28 | medium | merged in main (PR #11), unreleased |
 | VF-006 | 2026-10-28 | low | open |
 | VF-007 | 2026-10-28 | low | open |
-| VF-008 | 2026-10-28 | medium | open |
+| VF-008 | 2026-10-28 | medium | in_progress (framework) |
 | VF-009 | 2026-10-28 | low | open |
 | VF-010 | 2026-10-28 | low | open |
 | VF-011 | 2026-10-28 | low | open |
@@ -38,7 +38,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-027 | 2026-10-28 | medium | merged in main (PR #9), unreleased |
 | VF-028 | 2026-10-28 | low | open |
 | VF-029 | 2026-10-28 | low | open |
-| VF-030 | 2026-10-28 | medium | in_progress (framework) |
+| VF-030 | 2026-10-28 | medium | merged in main (PR #20), unreleased |
 | VF-031 | 2026-10-28 | medium | open |
 | VF-032 | 2026-10-28 | medium | open |
 | VF-033 | 2026-10-28 | low | open |
@@ -123,7 +123,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-008: Admin panel has no custom row actions, bulk actions, assignment or diff view
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin`.
 - **Context**: moderation of community suggestions (SDD 04) and anti-abuse review (SDD 02) need per-row actions ("approve", "reject with reason", "revert"), bulk actions, assignment to a moderator and a before/after diff. The documented admin panel generates CRUD from models and `z` schemas with an audit log.
 - **Workaround**: a custom admin page in the app at `/admin/moderation` using the admin layout and auth.
@@ -312,7 +312,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-030: No admin hardening options (mandatory 2FA, shorter sessions, IP allowlist)
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR <https://github.com/AlexGalhardo/vukem/pull/20>), unreleased. Native API: `admin.Config{TwoFactor, MaxSessionAge, AllowCIDRs}` and `session.CreatedAt`.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin`, `https://vukem.dev/docs/security/two-factor`, `https://vukem.dev/docs/basics/sessions`.
 - **Context**: SDD 13 requires admins to have 2FA enabled, a shorter absolute session lifetime than regular users, and an optional IP allowlist for `/admin`. The admin panel documents role gating and an audit log, but none of these three controls.
 - **Workaround**: app middleware on the `/admin` group (checks `two_factor_enabled`, applies a separate session timeout, compares the client IP with a configured CIDR list).
