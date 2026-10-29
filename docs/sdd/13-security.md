@@ -10,7 +10,7 @@ Keep accounts, scores and the catalogue trustworthy on one Railway container (D-
 
 ## 2. Scope
 
-In (v1): web, `/api/v1`, `/app/v1`, admin, webhooks, ingestion. Out: passkeys (D-06), impersonation (VF-012), WAF/CDN (D-08), antivirus service (issue 9), mobile certificate pinning (SDD 10 §7.7 still holds: tokens carry no billing power), bug bounty.
+In (v1): web (including passkeys, ADR 0017), `/api/v1`, `/app/v1`, admin, webhooks, ingestion. Out: impersonation (VF-012), WAF/CDN (D-08), antivirus service (issue 9), mobile certificate pinning (SDD 10 §7.7 still holds: tokens carry no billing power), bug bounty.
 
 ## 3. Functional requirements
 
@@ -82,7 +82,7 @@ Marketing: none.
 | `Referrer-Policy` | `strict-origin-when-cross-origin` | `no-referrer` |
 | `Cross-Origin-Opener-Policy` | `same-origin` | same |
 | `Cross-Origin-Resource-Policy` | `same-site` | `cross-origin` |
-| `Permissions-Policy` | `accelerometer=(), autoplay=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), browsing-topics=(), publickey-credentials-get=()` | same |
+| `Permissions-Policy` | `accelerometer=(), autoplay=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), browsing-topics=(), publickey-credentials-get=()` | same; becomes `publickey-credentials-get=(self), publickey-credentials-create=(self)` when passkeys ship (ADR 0017) |
 | CORS | none | `*`, no credentials (SDD 05) |
 
 Notes:
