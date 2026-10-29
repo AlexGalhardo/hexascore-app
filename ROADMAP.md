@@ -531,7 +531,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `vukem migrate:status --json` → the auth and profile migrations ran
   - Notes: columns per SDD 03 §5 (`username`, `role`, ban fields, `locale`, `profile_private`, `personalization_opt_out`, `password_set_at`, deletion fields). Rename scaffold paths to the legacy paths in the user-owned `routes/auth.go` (SDD 03 §6.1). Seeder gains 1 admin and 50 users.
 
-- [ ] **P1.C.1.2** Port the compatibility hasher and enforce the password rules (legacy minimum, maximum 128).
+- [x] **P1.C.1.2** Port the compatibility hasher and enforce the password rules (legacy minimum, maximum 128).
   - Files/modules: `app/accounts/compat_hasher.go`, `app/accounts/compat_hasher_test.go`, `app/accounts/password_rules.go`, `testdata/betterauth_hashes.json`
   - Refs: SDD 03 §7.2, §9; D-24; ADR 0008; legacy `lib/password-rules.ts`
   - Depends on: P1.C.1.1, P0.F.1.3
