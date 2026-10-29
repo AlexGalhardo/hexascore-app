@@ -187,6 +187,20 @@ func (m *Meter) Admit(ctx context.Context, userID int64, keyID string, plan Plan
 	return u, nil
 }
 
+// Used is the plan quota userID consumed in the current period: the stored counter plus the unflushed delta
+// (credits excluded), so it agrees with X-Quota-Remaining of the same request.
+func (m *Meter) Used(ctx context.Context, userID int64, plan Plan) (int, error) {
+	period := plan.Period(m.Now())
+
+	s, err := m.state(ctx, userID, period)
+	if err != nil {
+		return 0, err
+	}
+	defer m.mu.Unlock()
+
+	return s.used[period] + s.pending.Used[period], nil
+}
+
 // Refund uncounts an admitted request whose response is not counted (FR-05-4): a query 400, or a 5xx, which is
 // also recorded as refunded.
 func (m *Meter) Refund(u Usage, serverError bool) {

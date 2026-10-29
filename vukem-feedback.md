@@ -57,6 +57,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-046 | 2026-10-29 | medium | merged in main (PR #27), unreleased |
 | VF-047 | 2026-10-29 | low | open |
 | VF-048 | 2026-10-29 | low | in_progress (framework), PR #33 (via VF-016 `WithExtension`) |
+| VF-NEW-P1.H.2.1a | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -469,3 +470,11 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Context**: SDD 02 section 6 lists stable codes (`status-not-completed`, `not-a-game`, `rating-not-released`, ...) for clients. `errs.NewKey(status, key, message, params)` only takes translation params; the last argument is not rendered, so the response carries `title` and `detail` but no `code` (observed on `PUT /app/v1/items/{id}/time-to-beat` 409).
 - **Workaround**: the codes stay in the `params` map (as the rating write path already does) and clients branch on status plus `detail`; the codes are exported as `scoring.Code*` constants.
 - **Request**: `HTTPError.WithExtension(key, value)` (or a `Code` field) rendered as a top-level member of the problem document, and documented under Errors.
+
+## VF-NEW-P1.H.2.1a: typed handlers cannot answer 304 or 301, and OpenAPI needs a prefix when route names repeat across groups
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/typed-handlers` ("Registering a route", "Checking responses"), `https://vukem.dev/docs/rest-apis/openapi` ("OpenAPI"). `[NOT IN VUKEM DOCS]`: conditional requests (`c.NotModified`) and redirects inside an `api.Register` handler; how `OPENAPI_PREFIX` interacts with `AssertMatchesOpenAPI` (read from `api/typed.go`, `web/conditional.go`, `http.go` in the module).
+- **Context**: SDD 05 FR-05-8 wants a strong `ETag` and `304` on every `/api/v1` read, and `getItem` answers `301` for merged ids. A typed handler returns `(Out, error)` and `api.Register` always writes `Out` as JSON afterwards, so `c.NotModified` (which writes the 304) is followed by a body write and, with `ValidateResponse`, a check of the zero value. Separately, `AssertMatchesOpenAPI()` builds the document from the whole router; the app's web routes `dashboard` and `admin.dashboard` collide on operationId, so every assertion fails until `OPENAPI_PREFIX=/api/v1` is set.
+- **Workaround**: the handler calls `c.NotModified` and returns `errs.New(304, ...)`: `DefaultErrorHandler` sees the response written and only logs it at debug. Merged ids return `errs.New(301, ...).WithHeader("Location", ...)`, rendered as a problem body with the redirect status. `OPENAPI_PREFIX=/api/v1` in `.env.example` and the API test rig (`app/controllers/publicapi/items.go`, `tests/api_keys_test.go`).
+- **Request**: a documented way for typed handlers to finish the response themselves (for example an `api.NotModified` / `api.Redirect` sentinel, or skip writing when `c.Written()`), and a per-group operationId namespace or a clearer default for `AssertMatchesOpenAPI` when the router mixes web and API routes.
