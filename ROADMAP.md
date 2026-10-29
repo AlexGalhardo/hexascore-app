@@ -242,7 +242,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
 #### P0.F.9 Storage bucket
 
 - [ ] **P0.F.9.1** Write, read, presign and serve objects on an S3-compatible disk (RustFS locally) and write a queued export ZIP into the bucket.
-  - Files/modules: spike `config/storage.go`, `app/covers/serve.go`, `app/exports/zip_job.go`, `docker-compose.yml` (`rustfs/rustfs:1.0.2`)
+  - Files/modules: spike `config/storage.go`, `app/covers/serve.go`, `app/exports/zip_job.go`, `docker-compose.yml` (`rustfs/rustfs:1.0.4`)
   - Refs: SDD 11 §5 (bucket prefixes), §7.7; SDD 14 §7.4; SDD 05 §6.2 (`getExport` presign); open-issues 06-4, 11-1, 11-2, 14-6; VF-029; <https://vukem.dev/docs/digging-deeper/storage>
   - Depends on: P0.F.6.1
   - Model: Sonnet
@@ -300,13 +300,13 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go list -m github.com/AlexGalhardo/vukem` → an exact `vX.Y.Z`, not a pseudo-version
   - Notes: keep the files that already exist (`docs/`, `AGENTS.md`, `ROADMAP.md`, ...). Delete the starter's example posts CRUD here. Postgres driver wiring as proven in the spike. `install:auth` is P1.C.1.1, not here.
 
-- [ ] **P1.A.1.2** Add the local stack (Postgres 18.6, RustFS) and the Windows/Unix setup scripts.
+- [x] **P1.A.1.2** Add the local stack (Postgres 18.6, RustFS) and the Windows/Unix setup scripts.
   - Files/modules: `docker-compose.yml`, `setups/setup-windows.ps1`, `setups/setup-unix.sh`, `.env.example` (`DATABASE_URL`, `TEST_DATABASE_URL`, storage keys), `AGENTS.md` commands table
   - Refs: SDD 11 §5, §7.7; `legacy/setups/`; <https://vukem.dev/docs/testing/overview> "Testing against PostgreSQL"
   - Depends on: P1.A.1.1
   - Model: Sonnet
   - Acceptance:
-    - `docker compose up -d && docker compose ps` → `postgres` (`postgres:18.6-alpine3.24`) and `rustfs` (`rustfs/rustfs:1.0.2`) healthy
+    - `docker compose up -d && docker compose ps` → `postgres` (`postgres:18.6-alpine3.24`) and `rustfs` (`rustfs/rustfs:1.0.4`) healthy
     - `pwsh setups/setup-windows.ps1` on Windows 11 → exit 0, then `vukem migrate` → exit 0
   - Notes: bind Postgres to `127.0.0.1` only. Image tags exactly as SDD 11.
 
