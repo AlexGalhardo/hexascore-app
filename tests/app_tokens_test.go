@@ -7,6 +7,8 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"slices"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -392,5 +394,70 @@ func TestSecurity_A07_AppTokenRotationSingleUse(t *testing.T) {
 	live, err := acc.LiveAppTokens(t.Context(), u)
 	if err != nil || len(live) != 1 {
 		t.Fatalf("live tokens = %d, %v", len(live), err)
+	}
+}
+
+// TestSecurity_A07_AppTokenTwoFactorAttemptsPerUser: wrong second factors
+// are capped per user, so a correct code after the cap is refused too.
+func TestSecurity_A07_AppTokenTwoFactorAttemptsPerUser(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+	secret, _ := enableTwoFactor(t, app, app.Client(t).Inertia(""), "cap2fa@example.com")
+
+	body := map[string]any{
+		"identifier": "cap2fa@example.com", "password": testPassword, "deviceName": "Pixel", "code": "000000",
+	}
+	for range 5 {
+		app.Client(t).PostJSON("/app/v1/tokens", body).AssertUnprocessable()
+	}
+
+	body["code"] = totpCode(t, secret, 1)
+	if got := codeOf(
+		app.Client(t).PostJSON("/app/v1/tokens", body).AssertStatus(http.StatusTooManyRequests),
+	); got != "too-many-attempts" {
+		t.Errorf("code after cap = %q, want too-many-attempts", got)
+	}
+}
+
+func TestSecurity_A01_AppTokenRotationKeepsAbilities(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+	signedUp(t, app, "narrow@example.com")
+
+	acc, err := accounts.New(app.App)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	u, err := acc.Users.ByCredentials(t.Context(), map[string]string{"email": "narrow@example.com"})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	uid := strconv.FormatInt(u.ID, 10)
+
+	_, narrow, err := acc.Tokens.Create(t.Context(), uid, "narrow", []string{"catalog:read", "admin:all"}, time.Hour)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, next, err := acc.RotateAppToken(t.Context(), u, narrow)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !slices.Equal(next.Abilities, []string{"catalog:read"}) {
+		t.Errorf("rotated abilities = %v, want [catalog:read]", next.Abilities)
+	}
+
+	_, foreign, err := acc.Tokens.Create(t.Context(), uid, "foreign", []string{"admin:all"}, time.Hour)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if _, _, err := acc.RotateAppToken(t.Context(), u, foreign); !errors.Is(err, accounts.ErrTokenAlreadyRotated) {
+		t.Errorf("rotating a non-app token err = %v", err)
 	}
 }
