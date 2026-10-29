@@ -37,5 +37,6 @@ func All() []schema.Migration {
 		m20261029140004AddNormColumnsToSearchTables(),
 		m20261029140005CreateSearchIndexes(),
 		m20261029140006CreateSearchDirtyTable(),
+		m20261029140007CreateSearchSuggestTable(),
 	}
 }
