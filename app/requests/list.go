@@ -33,3 +33,23 @@ var ListUpdateSchema = z.Struct[ListUpdate](z.Shape{
 	"description": z.String().Trim().Max(500).Optional(),
 	"isPublic":    z.Bool().Optional(),
 })
+
+// ListItem is the add-to-list form; the note is stored on the first add only.
+type ListItem struct {
+	Note string `json:"note" form:"note"`
+}
+
+// ListItemSchema validates ListItem.
+var ListItemSchema = z.Struct[ListItem](z.Shape{"note": z.String().Trim().Max(280).Default("")})
+
+// ListOrder is the full new order of a list with the version it was read at.
+type ListOrder struct {
+	Version int      `json:"version" form:"version"`
+	ItemIDs []string `json:"itemIds" form:"itemIds"`
+}
+
+// ListOrderSchema validates ListOrder; set equality is checked by library.PlanOrder.
+var ListOrderSchema = z.Struct[ListOrder](z.Shape{
+	"version": z.Int().Min(0),
+	"itemIds": z.Slice(z.String().UUID()).Max(500),
+})
