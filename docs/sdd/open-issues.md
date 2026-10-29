@@ -14,7 +14,7 @@ Every SDD ends with an "Open issues" section. This file is the architect's triag
 | 01 | 8 | Sitemap helper missing; thin entity pages | vukem + decided | VF-007 for the helper. Entities enter the sitemap only with ≥ 3 linked items; others are `noindex,follow` until they qualify. |
 | 02 | 1 | Release-date precision and lifecycle field needed for the release gate | decided | SDD 01 gains `release_precision` (`day`, `month`, `year`, `unknown`) and `release_status` (`announced`, `released`, `cancelled`); applied in the review pass. |
 | 02 | 2 | Default `m` per type and prior unverified | roadmap | Measure on the first staging copy; formula v1 constants frozen before cutover. |
-| 02 | 3 | Recompute latency on 10k-rating items unmeasured | roadmap | k6 scenario in the scoring milestone; add covering index if p95 > 60 ms. |
+| 02 | 3 | Recompute latency on 10k-rating items unmeasured | decided | P1.D.2.2 measured the recompute statement: p95 28.6 ms at 5,000 and 48.4 ms at 10,000 ratings, under the 60 ms bar, so no covering index. The k6 scenario `qa/k6/rating-hot-item.js` re-checks the end-to-end write on staging. |
 | 02 | 4 | Admin custom row actions not in vukem docs | vukem | VF-008. Custom admin routes in the app. |
 | 02 | 5 | ORM handling of generated column `ratings.overall` | vukem | VF-009. Test at implementation; fall back to raw SQL insert. |
 | 02 | 6 | Delivering i18n catalogues to Inertia/React | decided | SDD 09 specifies: catalogues served as a shared Inertia prop per locale (`Once`), same JSON files as mobile (ADR 0009). |
