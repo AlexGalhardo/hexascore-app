@@ -50,14 +50,17 @@ export async function fillSignup(
 	account: Account,
 ): Promise<void> {
 	await open(page, `${prefix}/signup`);
-	await page.getByLabel(t("auth.fields.name")).first().fill(account.name);
-	await page.getByLabel(t("auth.fields.email")).fill(account.email);
-	// The password inputs intermittently lose a value filled right after hydration on narrow viewports; retry until it sticks.
-	for (const name of ["password", "password_confirmation"]) {
-		const input = page.locator(`input[name=${name}]`);
+	// Inputs intermittently lose a value filled right after hydration on narrow viewports; retry until each sticks.
+	const fields = [
+		[page.getByLabel(t("auth.fields.name")).first(), account.name],
+		[page.getByLabel(t("auth.fields.email")), account.email],
+		[page.locator("input[name=password]"), account.password],
+		[page.locator("input[name=password_confirmation]"), account.password],
+	] as const;
+	for (const [input, value] of fields) {
 		await expect(async () => {
-			await input.fill(account.password);
-			await expect(input).toHaveValue(account.password, { timeout: 1_000 });
+			await input.fill(value);
+			await expect(input).toHaveValue(value, { timeout: 1_000 });
 		}).toPass();
 	}
 }
@@ -89,8 +92,11 @@ export async function createVerifiedAccount(
 ): Promise<Account> {
 	const account = newAccount();
 	await fillSignup(page, prefix, t, account);
-	await page.getByRole("button", { name: t("auth.signup.submit") }).click();
-	await expect(page).toHaveURL(/\/signup\/check-email$/, { timeout: POW_TIMEOUT });
+	// A click right after hydration is intermittently dropped on the signup form; click again until the post goes out.
+	await expect(async () => {
+		await page.getByRole("button", { name: t("auth.signup.submit") }).click();
+		await expect(page).toHaveURL(/\/signup\/check-email$/, { timeout: 20_000 });
+	}).toPass({ timeout: POW_TIMEOUT * 2 });
 	const link = await mailLink(account.email, "/verify-email/confirm/");
 	await open(page, link);
 	await expect(page).toHaveURL(/\/login/);
