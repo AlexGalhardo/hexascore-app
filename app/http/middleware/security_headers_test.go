@@ -49,11 +49,16 @@ func TestSecurity_A05_HeadersOnHTMLAndJSON(t *testing.T) {
 			"object-src":      "'none'",
 			"base-uri":        "'self'",
 			"frame-ancestors": "'none'",
-			"frame-src":       "https://www.youtube-nocookie.com",
+			"frame-src":       "frame-src https://www.youtube-nocookie.com",
 			"form-action":     "https://checkout.stripe.com",
-			"worker-src":      "'self'",
+			"worker-src":      "worker-src 'self'",
 		} {
-			if got := directive(csp, dir); !strings.Contains(got, want) {
+			got := directive(csp, dir)
+			if (dir == "frame-src" || dir == "worker-src") && got != want {
+				t.Errorf("%s: %s = %q, want exactly %q", path, dir, got, want)
+			}
+
+			if !strings.Contains(got, strings.TrimPrefix(want, dir+" ")) {
 				t.Errorf("%s: %s = %q, want %q", path, dir, got, want)
 			}
 		}

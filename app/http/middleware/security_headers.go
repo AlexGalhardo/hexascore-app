@@ -18,7 +18,9 @@ const permissionsPolicy = "accelerometer=(), autoplay=(), camera=(), display-cap
 // server must keep working). extraImgHosts lists additional image origins such as a cover CDN.
 func SecureHeaders(production bool, extraImgHosts ...string) func(*vukemmw.SecureHeadersConfig) {
 	return func(cfg *vukemmw.SecureHeadersConfig) {
-		cfg.CSP = vukemmw.DefaultCSP
+		// frame-src and worker-src are written out: through CSPSources they would start from script-src and
+		// inherit its nonce and 'strict-dynamic'.
+		cfg.CSP = vukemmw.DefaultCSP + "; frame-src https://www.youtube-nocookie.com; worker-src 'self'"
 		if production {
 			cfg.CSP += "; upgrade-insecure-requests"
 		}
@@ -27,8 +29,6 @@ func SecureHeaders(production bool, extraImgHosts ...string) func(*vukemmw.Secur
 		cfg.CSPSources = map[string][]string{
 			"script-src": {"'strict-dynamic'"},
 			"img-src":    extraImgHosts,
-			"frame-src":  {"https://www.youtube-nocookie.com"},
-			"worker-src": {"'self'"},
 			"form-action": {
 				"https://checkout.stripe.com", "https://billing.stripe.com", "https://accounts.google.com",
 			},
