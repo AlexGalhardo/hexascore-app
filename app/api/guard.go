@@ -58,7 +58,7 @@ func (g *Guard) Authenticate(c *web.Ctx) error {
 	}
 
 	if err != nil {
-		return unavailable(fmt.Errorf("resolve api key: %w", err))
+		return Unavailable(fmt.Errorf("resolve api key: %w", err))
 	}
 
 	u, err := g.User(c.Context(), strconv.FormatInt(userID, 10))
@@ -68,7 +68,7 @@ func (g *Guard) Authenticate(c *web.Ctx) error {
 			return auth.ErrUnauthenticated
 		}
 
-		return unavailable(fmt.Errorf("load api key owner: %w", err))
+		return Unavailable(fmt.Errorf("load api key owner: %w", err))
 	}
 
 	auth.SetUser(c, GuardName, u)
@@ -83,7 +83,7 @@ func KeyID(c *web.Ctx) (string, bool) {
 	return id, ok
 }
 
-// unavailable is the fail-closed 503 of a store outage, with Retry-After: 30 (SDD 05 NFR-05-3).
-func unavailable(err error) error {
+// Unavailable is the fail-closed 503 of a store outage, with Retry-After: 30 (SDD 05 NFR-05-3).
+func Unavailable(err error) error {
 	return errs.Wrap(http.StatusServiceUnavailable, err).WithHeader("Retry-After", "30")
 }
