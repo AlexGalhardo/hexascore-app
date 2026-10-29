@@ -97,16 +97,17 @@ WHERE li.list_id = $1 ORDER BY li.position`, listID, locale)
 	return out, rows.Err()
 }
 
-// OwnerNickname is the display nickname of the user, or "" for an unknown or anonymised one.
-func (s *Lists) OwnerNickname(ctx context.Context, userID int64) (string, error) {
-	var nick sql.NullString
+// OwnerNickname is the display nickname of the user, or "" for an unknown or anonymised one; banned reports a
+// current ban, which keeps the user's lists visible but noindex (SDD 14 §8).
+func (s *Lists) OwnerNickname(ctx context.Context, userID int64) (nick string, banned bool, err error) {
+	var n sql.NullString
 
-	err := s.DB.SQL().QueryRowContext(ctx,
-		`SELECT coalesce(display_username, username) FROM users WHERE id = $1 AND anonymized_at IS NULL`, userID).
-		Scan(&nick)
+	err = s.DB.SQL().QueryRowContext(ctx, `SELECT coalesce(display_username, username),
+  banned_at IS NOT NULL AND (ban_expires_at IS NULL OR ban_expires_at > now())
+FROM users WHERE id = $1 AND anonymized_at IS NULL`, userID).Scan(&n, &banned)
 	if errors.Is(err, sql.ErrNoRows) {
-		return "", nil
+		return "", false, nil
 	}
 
-	return nick.String, err
+	return n.String, banned, err
 }

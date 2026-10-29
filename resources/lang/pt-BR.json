@@ -1280,6 +1280,7 @@
     "score": "Sua nota: {stars}"
   },
   "userLists": {
+    "items": "Itens",
     "title": "Suas listas",
     "new": "Nova lista",
     "titleField": "Título",

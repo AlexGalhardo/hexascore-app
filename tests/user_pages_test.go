@@ -50,6 +50,11 @@ func TestInertiaPages_UserLibraryLists(t *testing.T) {
 		oth.Get("/u/pageowner/lists/" + priv).AssertNotFound()
 		anon.Get("/u/pageowner/lists/" + priv).AssertNotFound()
 		anon.Get("/u/pageother/lists/" + pub).AssertNotFound()
+
+		r.exec(`UPDATE users SET banned_at = now() WHERE id = $1`, owner.ID)
+		anon.Get("/u/pageowner/lists/"+pub).AssertOK().AssertHeader("X-Robots-Tag", "noindex").
+			AssertInertia("User/List").PropEquals("seo.indexable", false)
+		r.exec(`UPDATE users SET banned_at = NULL WHERE id = $1`, owner.ID)
 	})
 
 	t.Run("Library/Index", func(*testing.T) {
