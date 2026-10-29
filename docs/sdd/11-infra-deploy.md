@@ -230,7 +230,7 @@ T+30 d: final Neon dump to `backups/legacy/` (12 months); delete Vercel project 
 
 ### 7.7 Local development
 
-Compose: `postgres:18.6-alpine3.24` [vk-deploy] on `127.0.0.1:5432`, `rustfs/rustfs:1.0.2` (vukem's S3 test server [vk-storage]). `vukem serve` + Vite HMR. `vukem db:seed DemoCatalog` [vk-seed]: `Seed(42)`, 1 admin, 50 users, 300 items, 2,000 ratings (replaces legacy 10k users / 2.1M ratings). Windows 11 first-class: `setups/setup-windows.ps1`, `setup-unix.sh` (port of `legacy/setups/`).
+Compose: `postgres:18.6-alpine3.24` [vk-deploy] on `127.0.0.1:5432`, `rustfs/rustfs:1.0.4` (vukem's S3 test server [vk-storage]). `vukem serve` + Vite HMR. `vukem db:seed DemoCatalog` [vk-seed]: `Seed(42)`, 1 admin, 50 users, 300 items, 2,000 ratings (replaces legacy 10k users / 2.1M ratings). Windows 11 first-class: `setups/setup-windows.ps1`, `setup-unix.sh` (port of `legacy/setups/`).
 
 ### 7.8 Hooks for SDD 12
 
