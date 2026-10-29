@@ -55,6 +55,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-044 | 2026-10-29 | low | open |
 | VF-045 | 2026-10-29 | low | open |
 | VF-046 | 2026-10-29 | medium | open |
+| VF-NEW-P1.D.4.1 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -451,3 +452,11 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Context**: SDD 03 section 6.3 wanted ban and unban as panel form fields mapped in `BeforeSave`, with `account_events`, token revocation and an after-commit `user.banned` event in the same transaction. `BeforeSave(ctx, rec)` runs inside `DB.Tx` but receives only the context: no `*database.Tx`, no `AfterCommit`, no previous values (VF-010). Any write through the app's `*database.DB` inside it deadlocks on the single SQLite writer used by tests and is outside the panel transaction on Postgres. A schema key also has to match a model column, so a virtual `banned` checkbox cannot exist.
 - **Workaround**: ban and unban are `accounts.Ban`/`accounts.Unban` (own transaction, `tx.AfterCommit` dispatch) behind `POST /admin/users/{id}/ban|unban` (admin gate, CSRF). The panel form edits only `banReason` and `banExpiresAt`, and `BeforeSave` rejects them for users who are not banned.
 - **Request**: pass `*database.Tx` to `BeforeSave` (or add `AfterSave(ctx, tx, rec, before)`), and support virtual form fields (schema keys without a column) handled by the hook.
+
+## VF-NEW-P1.D.4.1: `errs.HTTPError` has no way to add a stable problem `code` extension member
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/validation` ("Errors"). `[NOT IN VUKEM DOCS]`: extension members on a problem+json response.
+- **Context**: SDD 02 section 6 lists stable codes (`status-not-completed`, `not-a-game`, `rating-not-released`, ...) for clients. `errs.NewKey(status, key, message, params)` only takes translation params; the last argument is not rendered, so the response carries `title` and `detail` but no `code` (observed on `PUT /app/v1/items/{id}/time-to-beat` 409).
+- **Workaround**: the codes stay in the `params` map (as the rating write path already does) and clients branch on status plus `detail`; the codes are exported as `scoring.Code*` constants.
+- **Request**: `HTTPError.WithExtension(key, value)` (or a `Code` field) rendered as a top-level member of the problem document, and documented under Errors.
