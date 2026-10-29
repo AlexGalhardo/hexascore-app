@@ -119,7 +119,7 @@ LEFT JOIN users n ON n.legacy_id = t.user_id WHERE t.user_id = $1 ORDER BY t.id 
 // recoveryHashes hashes Better Auth's unused backup codes the way vukem's
 // totp.UseRecoveryCode checks them.
 //
-// workaround(vukem): VF-NEW-P2.F.2.3, totp has no exported hash for an
+// workaround(vukem): VF-060, totp has no exported hash for an
 // existing code; TestTwoFactorUsersPassChallenge proves the format still matches.
 func recoveryHashes(codes []string) []string {
 	out := make([]string, 0, len(codes))

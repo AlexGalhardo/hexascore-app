@@ -68,7 +68,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-057 | 2026-10-29 | medium | in review (vukem PRs #61, #62) |
 | VF-058 | 2026-10-29 | low | open |
 | VF-059 | 2026-10-29 | medium | in progress (framework): part 1 vukem PR #63 |
-| VF-NEW-P2.F.2.3 | 2026-10-29 | low | open |
+| VF-060 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -605,7 +605,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
   - Docs and a site page "Secret scanning"; validation/analysis/revocation features of Betterleaks stay off by default (they call credential providers) and are documented as opt-in.
   - Tests: scaffold golden/e2e tests assert the generated files; a fixture with a fake `APP_KEY` and `vk_` token is detected by the starter config, and `.env.example` placeholders are not.
 
-## VF-NEW-P2.F.2.3: `auth/totp` cannot hash recovery codes that it did not generate
+## VF-060: `auth/totp` cannot hash recovery codes that it did not generate
 
 - **Date**: 2026-10-29. **Severity**: low. **Status**: open.
 - **vukem version**: v0.33.0. **Docs consulted**: `https://vukem.dev/docs/security/two-factor` `[NOT IN VUKEM DOCS]`: the stored recovery code format is not documented; the package godoc exports only `RecoveryCodes(n)` (generate and hash) and `UseRecoveryCode(code, hashes)`.
