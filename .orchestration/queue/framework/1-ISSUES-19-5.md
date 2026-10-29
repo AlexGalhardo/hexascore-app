@@ -1,8 +1,0 @@
-# Task ISSUES-19-5 (priority 1, framework; take it right after VF-001 part 2)
-
-Owner request (2026-10-29, in chat): resolve and close the two open vukem issues.
-
-1. #19 "CI failure: Scorecard" (run 40811578472 on 0a03f26). Orchestrator triage: the failing step logged `scorecard had an error: internal error: ListCommits:error during graphqlHandler.setup: internal error: githubv4.Query: Something went wrong while exe...`, a GitHub GraphQL error inside the Scorecard action, not a repo problem. Confirm with `gh run list --workflow Scorecard -L 5` that later runs pass (re-run the workflow with `gh workflow run` if none ran since). If it is transient: comment the triage per `docs/maintenance.md` (false positive / upstream transient, link the green run) and close. If it reproduces: fix the workflow (pinned action versions only, no `latest`) in a PR, then close via `Fixes #19`.
-2. #5 "Scorecard tracking". Fetch the current score from https://api.scorecard.dev/projects/github.com/AlexGalhardo/vukem, add the v0.33.0 row (date, commit, score, notes on check changes) to the table, and do every lever that needs no human: e.g. Token-Permissions/Pinned-Dependencies regressions if any. Levers that need the owner (OpenSSF Best Practices badge application, a second human reviewer for Code-Review, Maintained rising with time) move into `docs/maintenance.md` "Metrics" as the standing tracking list (that doc already describes the per-release score check), in a docs PR. Then comment on #5 with the final table and the PR link and close it as completed: tracking continues per release in docs/maintenance.md.
-
-PRs: open them; the orchestrator merges (do not run `gh pr merge`). No release or tag. Report `$ORCH/reports/ISSUES-19-5.md`.
