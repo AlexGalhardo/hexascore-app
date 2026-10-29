@@ -56,6 +56,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-045 | 2026-10-29 | low | open |
 | VF-046 | 2026-10-29 | medium | open |
 | VF-047 | 2026-10-29 | low | open |
+| VF-048 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -460,3 +461,11 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Context**: `rating_flags` is keyed by `(user_id, item_id)`; the ORM and the panel take one `PrimaryKey()` column, so a detail URL resolves by `user_id` alone and could show another row of the same user. `Filter` on a `sql.NullString` column and `Search` on `sql.NullString` fail at boot (`cannot be filtered`, `is not a string`), so nullable enums (`resolution`) and `note` cannot be filtered or searched.
 - **Workaround**: `rating_flags` exposes the list only (`View` denied by policy); `resolution` and `note` stay unfiltered (`app/admin/scoring_resources.go`).
 - **Request**: support composite keys in resources (`{a}-{b}` ids) and accept `sql.Null*` string types in `Filter` and `Search`.
+
+## VF-048: `errs.HTTPError` has no way to add a stable problem `code` extension member
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/validation` ("Errors"). `[NOT IN VUKEM DOCS]`: extension members on a problem+json response.
+- **Context**: SDD 02 section 6 lists stable codes (`status-not-completed`, `not-a-game`, `rating-not-released`, ...) for clients. `errs.NewKey(status, key, message, params)` only takes translation params; the last argument is not rendered, so the response carries `title` and `detail` but no `code` (observed on `PUT /app/v1/items/{id}/time-to-beat` 409).
+- **Workaround**: the codes stay in the `params` map (as the rating write path already does) and clients branch on status plus `detail`; the codes are exported as `scoring.Code*` constants.
+- **Request**: `HTTPError.WithExtension(key, value)` (or a `Code` field) rendered as a top-level member of the problem document, and documented under Errors.
