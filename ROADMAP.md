@@ -619,7 +619,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.C.6 Release
 
-- [ ] **P1.C.6.1** Release `v0.3.0` (auth and accounts).
+- [x] **P1.C.6.1** Release `v0.3.0` (auth and accounts).
   - Files/modules: `CHANGELOG.md`, tag `v0.3.0`
   - Refs: ADR 0013; SDD 11 §7.1
   - Depends on: P1.C.4.1, P1.C.5.1, P1.C.5.2
