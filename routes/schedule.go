@@ -24,4 +24,5 @@ func Schedule(s *schedule.Schedule, _ *vukem.App) {
 	s.Job(jobs.RecomputeScores{}).DailyAt("04:00").WithoutOverlapping()
 	s.Job(jobs.ReleaseBursts{}).Hourly().WithoutOverlapping()
 	s.Job(jobs.PruneRatingEvents{}).DailyAt("04:30").WithoutOverlapping()
+	s.Job(jobs.ExpireExports{}).Hourly().WithoutOverlapping()
 }
