@@ -38,7 +38,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-027 | 2026-10-28 | medium | merged in main (PR #9), unreleased |
 | VF-028 | 2026-10-28 | low | open |
 | VF-029 | 2026-10-28 | low | open |
-| VF-030 | 2026-10-28 | medium | open |
+| VF-030 | 2026-10-28 | medium | in_progress (framework) |
 | VF-031 | 2026-10-28 | medium | open |
 | VF-032 | 2026-10-28 | medium | open |
 | VF-033 | 2026-10-28 | low | open |
@@ -312,7 +312,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-030: No admin hardening options (mandatory 2FA, shorter sessions, IP allowlist)
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin`, `https://vukem.dev/docs/security/two-factor`, `https://vukem.dev/docs/basics/sessions`.
 - **Context**: SDD 13 requires admins to have 2FA enabled, a shorter absolute session lifetime than regular users, and an optional IP allowlist for `/admin`. The admin panel documents role gating and an audit log, but none of these three controls.
 - **Workaround**: app middleware on the `/admin` group (checks `two_factor_enabled`, applies a separate session timeout, compares the client IP with a configured CIDR list).
