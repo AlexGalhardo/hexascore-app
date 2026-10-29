@@ -111,7 +111,7 @@ func (w *Writer) write(ctx context.Context, userID int64, itemID string, stars m
 
 		var it lockedItem
 		err := tx.QueryRowContext(ctx, `SELECT type, release_date, release_precision, release_status, score, ratings_limited_until
-FROM items WHERE id = $1 FOR UPDATE`, itemID).
+FROM items WHERE id = $1 AND visibility = 'public' FOR UPDATE`, itemID).
 			Scan(&it.typ, &it.release, &it.precision, &it.status, &it.before, &it.limited)
 		if errors.Is(err, sql.ErrNoRows) {
 			return errNotFound()

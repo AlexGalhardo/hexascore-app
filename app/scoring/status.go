@@ -44,11 +44,15 @@ func (w *Writer) mutateItem(ctx context.Context, itemID string, apply itemWrite)
 
 	err := w.DB.Tx(ctx, func(tx *database.Tx) error {
 		now := w.Now().UTC()
+		version := 0
 
 		var typ string
 		var before sql.NullFloat64
-		err := tx.QueryRowContext(ctx, `SELECT type, score FROM items WHERE id = $1 FOR UPDATE`, itemID).
-			Scan(&typ, &before)
+		var limited sql.NullTime
+		// Hidden and taken-down items are not writable (same 404 as unknown ids).
+		err := tx.QueryRowContext(ctx, `SELECT type, score, ratings_limited_until, coalesce(score_formula_version, 0)
+FROM items WHERE id = $1 AND visibility = 'public' FOR UPDATE`, itemID).
+			Scan(&typ, &before, &limited, &version)
 		if errors.Is(err, sql.ErrNoRows) {
 			return errNotFound()
 		}
@@ -61,9 +65,13 @@ func (w *Writer) mutateItem(ctx context.Context, itemID string, apply itemWrite)
 			return err
 		}
 
-		version, err := recomputeItem(ctx, tx, itemID, typ, now)
-		if err != nil {
-			return err
+		// Status and time-to-beat change rating weights, so while a burst
+		// limits the item the score stays frozen; the burst release recomputes
+		// it (security review, P1.D.4.1).
+		if !limited.Valid || !limited.Time.After(now) {
+			if version, err = recomputeItem(ctx, tx, itemID, typ, now); err != nil {
+				return err
+			}
 		}
 		if out, err = summarize(ctx, tx, itemID); err != nil {
 			return err
