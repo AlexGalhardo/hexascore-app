@@ -1,0 +1,3 @@
+# Task FIX-backup-child-path (priority 1, especialista)
+
+Objective: P2.E.3.1 found that `pg_restore` fails when the child process has no `PATH`. Check every child process the backup code starts (`backup:run` pg_dump and Verify `pg_restore --list`, prune/monthly copy, restore, drill) and give each a minimal env: the `PG*` variables plus `PATH` (and `HOME`/`TMPDIR` only if needed), never the full app environment. Add a test that runs the Verify step with an env lacking PATH in the parent and still succeeds (inside the golang+postgresql18-client container like TestBackupDrill). Branch from origin/main; self-delivery PRONTO_PARA_MERGE (self, needs orchestrator sampling).
