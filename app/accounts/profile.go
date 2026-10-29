@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"strconv"
-	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
 	"github.com/AlexGalhardo/vukem/errs"
@@ -25,15 +24,20 @@ type Profile struct {
 
 // Profile loads the profile columns of userID.
 func (a *Accounts) Profile(ctx context.Context, userID int64) (Profile, error) {
-	var (
-		p   Profile
-		set *time.Time
-	)
+	var p Profile
 
+	// Fail closed: only an account positively known to be social-only (a
+	// linked social account and no password_set_at) may set a password
+	// without the current one. Accounts created before password_set_at
+	// existed, or imported without it, keep requiring their password
+	// (security review, P1.C.2.2).
 	err := a.DB.QueryRowContext(ctx,
-		"SELECT locale, password_set_at, profile_private, personalization_opt_out FROM users WHERE id = "+
-			a.DB.Dialect().Placeholder(1), userID).Scan(&p.Locale, &set, &p.ProfilePrivate, &p.PersonalizationOptOut)
-	p.PasswordSet = set != nil
+		`SELECT locale, password_set_at IS NOT NULL
+  OR NOT EXISTS (SELECT 1 FROM social_accounts s WHERE s.user_id = users.id),
+  profile_private, personalization_opt_out FROM users WHERE id = `+
+			a.DB.Dialect().
+				Placeholder(1),
+		userID).Scan(&p.Locale, &p.PasswordSet, &p.ProfilePrivate, &p.PersonalizationOptOut)
 
 	return p, err
 }
@@ -138,6 +142,16 @@ func (a *Accounts) RevokeSession(ctx context.Context, userID int64, handle strin
 	if errors.Is(err, session.ErrSessionNotFound) {
 		return errs.ErrNotFound
 	}
+
+	if err != nil {
+		return err
+	}
+
+	// Remember-me tokens are not tied to a session, so a revoked device could
+	// sign itself back in with one; drop them all. Live sessions survive and
+	// re-issue a token on the next "remember me" sign-in (security review, P1.C.2.2).
+	_, err = a.DB.ExecContext(ctx, "DELETE FROM remember_tokens WHERE user_id = "+a.DB.Dialect().Placeholder(1),
+		strconv.FormatInt(userID, 10))
 
 	return err
 }
