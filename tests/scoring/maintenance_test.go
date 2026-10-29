@@ -211,6 +211,41 @@ VALUES ($1, now() - $2 * interval '1 day', now(), 'volume', '{}') RETURNING id`
 	}
 }
 
+// TestSecurity_A04_BurstStillLimitedNotReleased: an old burst whose limit was
+// extended by fresh activity keeps its flags and the item limit.
+func TestSecurity_A04_BurstStillLimitedNotReleased(t *testing.T) {
+	r := newRig(t)
+	item := r.item("game", "2020-01-01", "day", "released")
+	r.rateAs(1, item, 8)
+	db, _ := r.app.DB()
+
+	var id int64
+	if err := db.SQL().
+		QueryRowContext(t.Context(), `INSERT INTO score_bursts (item_id, started_at, limited_until, trigger, stats)
+VALUES ($1, now() - interval '15 days', now() + interval '1 day', 'volume', '{}') RETURNING id`, item).
+		Scan(&id); err != nil {
+		t.Fatal(err)
+	}
+	r.exec(`UPDATE items SET ratings_limited_until = now() + interval '1 day' WHERE id = $1`, item)
+	r.exec(
+		`INSERT INTO rating_flags (user_id, item_id, shadow_weight, reason, burst_id) VALUES ($1, $2, 0.25, 'burst_hold', $3)`,
+		r.userID(1),
+		item,
+		id,
+	)
+
+	n, err := scoring.ReleaseBursts(t.Context(), db, time.Now().UTC())
+	if err != nil || n != 0 {
+		t.Fatalf("resolved = %d err %v, want 0", n, err)
+	}
+	if c := r.countOf(`SELECT count(*) FROM rating_flags WHERE burst_id = $1`, id); c != 1 {
+		t.Fatal("flags of a still-limited burst were removed")
+	}
+	if c := r.countOf(`SELECT count(*) FROM items WHERE id = $1 AND ratings_limited_until > now()`, item); c != 1 {
+		t.Fatal("item limit cleared while the burst is still limited")
+	}
+}
+
 func TestPruneRatingEvents(t *testing.T) {
 	r := newRig(t)
 	item := r.item("game", "2020-01-01", "day", "released")
