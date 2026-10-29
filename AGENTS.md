@@ -51,6 +51,9 @@ This file is the single source of truth for agent behaviour. `CLAUDE.md` only po
 | `bun run lint` / `bun run typecheck` / `bun run test` | TypeScript lint, types, unit tests |
 | `vukem openapi:export` | regenerate the OpenAPI documents (diff checked in CI) |
 | `bun run e2e` | Playwright + axe against a built container |
+| `docker compose up -d --wait` | local Postgres 18.6 (127.0.0.1:5433) and RustFS (127.0.0.1:9000/9001), both healthy |
+| `setups/setup-windows.ps1` | idempotent Windows setup: tools, `.env`, `APP_KEY`, compose stack, `bun install`, `vukem migrate` |
+| `setups/setup-unix.sh` | same setup for Linux and macOS |
 
 ## Models
 
