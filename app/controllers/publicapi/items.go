@@ -40,7 +40,7 @@ var (
 
 // errNotModified ends a typed handler after c.NotModified wrote the 304: the error handler sees the response
 // written and only logs it at debug level.
-// workaround(vukem): VF-NEW-P1.H.2.1a, typed handlers have no documented way to answer 304.
+// workaround(vukem): VF-049, typed handlers have no documented way to answer 304.
 var errNotModified = errs.New(http.StatusNotModified, "not modified")
 
 // Controller holds the /api/v1 read handlers.

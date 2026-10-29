@@ -57,7 +57,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-046 | 2026-10-29 | medium | merged in main (PR #27), unreleased |
 | VF-047 | 2026-10-29 | low | open |
 | VF-048 | 2026-10-29 | low | in_progress (framework), PR #33 (via VF-016 `WithExtension`) |
-| VF-NEW-P1.H.2.1a | 2026-10-29 | low | open |
+| VF-049 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -471,7 +471,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Workaround**: the codes stay in the `params` map (as the rating write path already does) and clients branch on status plus `detail`; the codes are exported as `scoring.Code*` constants.
 - **Request**: `HTTPError.WithExtension(key, value)` (or a `Code` field) rendered as a top-level member of the problem document, and documented under Errors.
 
-## VF-NEW-P1.H.2.1a: typed handlers cannot answer 304 or 301, and OpenAPI needs a prefix when route names repeat across groups
+## VF-049: typed handlers cannot answer 304 or 301, and OpenAPI needs a prefix when route names repeat across groups
 
 - **Date**: 2026-10-29. **Severity**: low. **Status**: open.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/typed-handlers` ("Registering a route", "Checking responses"), `https://vukem.dev/docs/rest-apis/openapi` ("OpenAPI"). `[NOT IN VUKEM DOCS]`: conditional requests (`c.NotModified`) and redirects inside an `api.Register` handler; how `OPENAPI_PREFIX` interacts with `AssertMatchesOpenAPI` (read from `api/typed.go`, `web/conditional.go`, `http.go` in the module).
