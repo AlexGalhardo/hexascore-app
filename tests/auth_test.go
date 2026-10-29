@@ -64,8 +64,8 @@ func register(t *testing.T, app *vukemtest.App, c *vukemtest.Client, email strin
 	c.PostJSON("/signup", signUpForm("Ana Silva", email, testPassword)).
 		AssertRedirect("/signup/check-email")
 	verifyEmail(t, app, email)
-	c.PostJSON("/login", map[string]any{"email": email, "password": testPassword}).
-		AssertRedirect("/dashboard")
+	c.PostJSON("/login", map[string]any{"identifier": email, "password": testPassword}).
+		AssertRedirect("/onboarding")
 }
 
 // verifyEmail marks email verified directly (the mail may be queued).
@@ -114,7 +114,7 @@ func TestRegisterAndVerifyEmail(t *testing.T) {
 	// as the intended URL and verifies once the login comes back to it.
 	c.Get(verify).AssertRedirect("/login")
 	vukemtest.AssertDatabaseHas(t, app, "users", map[string]any{"email": "ana@example.com", "email_verified_at": nil})
-	c.PostJSON("/login", map[string]any{"email": "ana@example.com", "password": testPassword}).
+	c.PostJSON("/login", map[string]any{"identifier": "ana@example.com", "password": testPassword}).
 		AssertRedirect(verify)
 	c.Get(verify + "x").AssertForbidden() // tampered signature
 	c.Get(verify).AssertRedirect("/dashboard")
@@ -173,8 +173,8 @@ func TestSecurity_A07_SignupIsEnumerationSafe(t *testing.T) {
 	vukemtest.AssertDatabaseCount(t, app, "users", 2)
 	vukemtest.AssertDatabaseHas(t, app, "users", map[string]any{"email": "ana@example.com", "name": "Ana Silva"})
 	app.Client(t).Inertia("").
-		PostJSON("/login", map[string]any{"email": "ana@example.com", "password": testPassword}).
-		AssertRedirect("/dashboard")
+		PostJSON("/login", map[string]any{"identifier": "ana@example.com", "password": testPassword}).
+		AssertRedirect("/onboarding")
 }
 
 // An unverified account can log in but reaches only the verification
@@ -188,7 +188,7 @@ func TestUnverifiedUsersSeeTheNotice(t *testing.T) {
 
 	c.PostJSON("/signup", signUpForm("Uma", "uma@example.com", testPassword)).
 		AssertRedirect("/signup/check-email")
-	c.PostJSON("/login", map[string]any{"email": "uma@example.com", "password": testPassword}).
+	c.PostJSON("/login", map[string]any{"identifier": "uma@example.com", "password": testPassword}).
 		AssertRedirect("/dashboard")
 	c.Get("/dashboard").AssertRedirect("/verify-email")
 	c.Get("/verify-email").AssertInertia("Auth/VerifyNotice").PropEquals("auth.user.email", "uma@example.com")
@@ -295,7 +295,7 @@ func TestSecurity_A07_ProvingTheEmailEndsSquatterAccess(t *testing.T) {
 	squatter := app.Client(t).Inertia("")
 	squatter.PostJSON("/signup", signUpForm("Mallory", "vic@example.com", testPassword)).
 		AssertRedirect("/signup/check-email")
-	squatter.PostJSON("/login", map[string]any{"email": "vic@example.com", "password": testPassword, "remember": true}).
+	squatter.PostJSON("/login", map[string]any{"identifier": "vic@example.com", "password": testPassword, "remember": true}).
 		AssertRedirect("/dashboard")
 	squatter.Get("/verify-email").AssertInertia("Auth/VerifyNotice")
 
@@ -312,7 +312,7 @@ func TestSecurity_A07_ProvingTheEmailEndsSquatterAccess(t *testing.T) {
 	// Signed in as the account, the link verifies it and ends the rest.
 	device := app.Client(t).Inertia("")
 	device.Get(verify).AssertRedirect("/login")
-	device.PostJSON("/login", map[string]any{"email": "vic@example.com", "password": testPassword}).
+	device.PostJSON("/login", map[string]any{"identifier": "vic@example.com", "password": testPassword}).
 		AssertRedirect(verify)
 	device.Get(verify).AssertRedirect("/dashboard")
 	device.Get("/dashboard").AssertOK()
@@ -365,7 +365,7 @@ func TestExpiredVerificationLinkOffersANewOne(t *testing.T) {
 	expired = parsed.RequestURI()
 
 	c.Get(expired).AssertRedirect("/login")
-	c.PostJSON("/login", map[string]any{"email": "exp@example.com", "password": testPassword}).
+	c.PostJSON("/login", map[string]any{"identifier": "exp@example.com", "password": testPassword}).
 		AssertRedirect(expired)
 	c.Get(expired).AssertRedirect("/verify-email")
 	flash := fmt.Sprint(c.Get("/verify-email").AssertInertia("Auth/VerifyNotice").Page()["flash"])
@@ -385,8 +385,8 @@ func TestVerifiedLinkKeepsOtherSessions(t *testing.T) {
 	register(t, app, c, "done@example.com")
 
 	other := app.Client(t).Inertia("")
-	other.PostJSON("/login", map[string]any{"email": "done@example.com", "password": testPassword}).
-		AssertRedirect("/dashboard")
+	other.PostJSON("/login", map[string]any{"identifier": "done@example.com", "password": testPassword}).
+		AssertRedirect("/onboarding")
 
 	c.Get(link(t, app, "done@example.com")).AssertRedirect("/dashboard")
 	flash := fmt.Sprint(c.Get("/dashboard").AssertInertia("Dashboard").Page()["flash"])
@@ -420,7 +420,7 @@ func TestSecurity_A01_VerificationLinkBoundToEmail(t *testing.T) {
 	}
 
 	c.Get(verify).AssertRedirect("/login")
-	c.PostJSON("/login", map[string]any{"email": "new@example.com", "password": testPassword}).
+	c.PostJSON("/login", map[string]any{"identifier": "new@example.com", "password": testPassword}).
 		AssertRedirect(verify)
 	c.Get(verify).AssertForbidden()
 	vukemtest.AssertDatabaseHas(t, app, "users", map[string]any{"email": "new@example.com", "email_verified_at": nil})
@@ -433,11 +433,11 @@ func TestSecurity_A07_LoginThrottle(t *testing.T) {
 	register(t, app, app.Client(t).Inertia(""), "bob@example.com")
 
 	c := app.Client(t).Inertia("").WithHeader("Referer", "/login")
-	c.PostJSON("/login", map[string]any{"email": "bob@example.com", "password": "wrong"}).AssertRedirect("/login")
-	c.Get("/login").AssertInertia("Auth/Login").HasProp("errors.email")
+	c.PostJSON("/login", map[string]any{"identifier": "bob@example.com", "password": "wrong"}).AssertRedirect("/login")
+	c.Get("/login").AssertInertia("Auth/Login").HasProp("errors.identifier")
 
-	c.PostJSON("/login", map[string]any{"email": "bob@example.com", "password": testPassword}).
-		AssertRedirect("/dashboard")
+	c.PostJSON("/login", map[string]any{"identifier": "bob@example.com", "password": testPassword}).
+		AssertRedirect("/onboarding")
 	c.Get("/login").AssertRedirect("/")
 	c.PostJSON("/logout", nil).AssertRedirect("/")
 	c.Get("/").AssertInertia("Home").PropEquals("auth.user", nil)
@@ -446,10 +446,10 @@ func TestSecurity_A07_LoginThrottle(t *testing.T) {
 	attacker := app.Client(t).Inertia("")
 	// Spaces and case do not open new buckets: they are the same account.
 	for _, email := range []string{"bob@example.com", " bob@example.com", "BOB@example.com ", "	bob@example.com"} {
-		attacker.PostJSON("/login", map[string]any{"email": email, "password": "guess"})
+		attacker.PostJSON("/login", map[string]any{"identifier": email, "password": "guess"})
 	}
 
-	attacker.PostJSON("/login", map[string]any{"email": "bob@example.com", "password": "guess"}).AssertStatus(429)
+	attacker.PostJSON("/login", map[string]any{"identifier": "bob@example.com", "password": "guess"}).AssertStatus(429)
 }
 
 func TestPasswordReset(t *testing.T) {
@@ -498,8 +498,8 @@ func TestPasswordReset(t *testing.T) {
 	// Single use.
 	c.WithHeader("Referer", reset).PostJSON("/reset-password", form).AssertRedirect(reset)
 
-	c.PostJSON("/login", map[string]any{"email": "cid@example.com", "password": newPassword}).
-		AssertRedirect("/dashboard")
+	c.PostJSON("/login", map[string]any{"identifier": "cid@example.com", "password": newPassword}).
+		AssertRedirect("/onboarding")
 }
 
 // apiTokenFor issues an API token for email directly, to check that a

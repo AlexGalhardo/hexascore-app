@@ -112,7 +112,7 @@ func enableTwoFactor(t *testing.T, app *vukemtest.App, c *vukemtest.Client, emai
 
 func passwordStep(c *vukemtest.Client, email string, remember bool) *vukemtest.Response {
 	return c.PostJSON("/login", map[string]any{
-		"email": email, "password": testPassword, "remember": remember,
+		"identifier": email, "password": testPassword, "remember": remember,
 	})
 }
 
@@ -137,7 +137,7 @@ func TestTwoFactorLogin(t *testing.T) {
 
 	// The confirmation used the current step: the next one logs in.
 	code := totpCode(t, secret, 1)
-	c.PostJSON("/two-factor-challenge", map[string]any{"code": code, "recovery_code": ""}).AssertRedirect("/dashboard")
+	c.PostJSON("/two-factor-challenge", map[string]any{"code": code, "recovery_code": ""}).AssertRedirect("/onboarding")
 	c.Get("/dashboard").AssertInertia("Dashboard").PropEquals("auth.user.email", "ana2fa@example.com")
 
 	if c.CookieValue("remember_web") == "" {
@@ -162,7 +162,7 @@ func TestTwoFactorRecoveryCodes(t *testing.T) {
 	c := app.Client(t).Inertia("")
 	passwordStep(c, "bob2fa@example.com", false).AssertRedirect("/two-factor-challenge")
 	c.PostJSON("/two-factor-challenge", map[string]any{"code": "", "recovery_code": codes[0]}).
-		AssertRedirect("/dashboard")
+		AssertRedirect("/onboarding")
 	c.PostJSON("/logout", nil).AssertRedirect("/")
 
 	// A recovery code works once.
@@ -170,7 +170,7 @@ func TestTwoFactorRecoveryCodes(t *testing.T) {
 	rejected(t, c, "/two-factor-challenge", "/two-factor-challenge", "Auth/TwoFactorChallenge", "recovery_code",
 		map[string]any{"code": "", "recovery_code": codes[0]})
 	c.PostJSON("/two-factor-challenge", map[string]any{"code": "", "recovery_code": codes[1]}).
-		AssertRedirect("/dashboard")
+		AssertRedirect("/onboarding")
 
 	owner.Get("/user/two-factor").AssertInertia("Auth/TwoFactor").PropEquals("recoveryCodesLeft", 6)
 
@@ -234,7 +234,7 @@ func TestSecurity_A07_TwoFactorDisableNeedsPassword(t *testing.T) {
 	c.Get("/user/two-factor").AssertInertia("Auth/TwoFactor").PropEquals("enabled", false).PropEquals("pending", false)
 
 	c.PostJSON("/logout", nil).AssertRedirect("/")
-	passwordStep(c, "eve2fa@example.com", false).AssertRedirect("/dashboard")
+	passwordStep(c, "eve2fa@example.com", false).AssertRedirect("/onboarding")
 }
 
 func TestSecurity_A07_TwoFactorChallengeNeedsPasswordStep(t *testing.T) {

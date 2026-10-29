@@ -170,11 +170,11 @@ func TestSecurity_A07_Ban(t *testing.T) {
 	victim.Get("/dashboard").AssertRedirect("/login")
 
 	// ... and the correct password no longer logs in.
-	victim.PostJSON("/login", map[string]any{"email": "victim@example.com", "password": testPassword}).
+	victim.PostJSON("/login", map[string]any{"identifier": "victim@example.com", "password": testPassword}).
 		AssertStatus(403).AssertSee("account-banned").AssertSee("spam")
 
 	// Wrong passwords still reveal nothing about the ban.
-	victim.PostJSON("/login", map[string]any{"email": "victim@example.com", "password": "wrong"}).
+	victim.PostJSON("/login", map[string]any{"identifier": "victim@example.com", "password": "wrong"}).
 		AssertDontSee("account-banned")
 
 	// Banning twice, banning yourself and banning an admin are refused.
@@ -194,8 +194,8 @@ func TestSecurity_A07_Ban(t *testing.T) {
 	}
 
 	adminC.PostForm("/admin/users/"+id+"/unban", url.Values{}).AssertStatus(409)
-	victim.PostJSON("/login", map[string]any{"email": "victim@example.com", "password": testPassword}).
-		AssertRedirect("/dashboard")
+	victim.PostJSON("/login", map[string]any{"identifier": "victim@example.com", "password": testPassword}).
+		AssertRedirect("/onboarding")
 }
 
 // A session that survives a ban (here the ban was written by plain SQL, so

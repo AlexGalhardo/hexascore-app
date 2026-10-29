@@ -206,9 +206,7 @@ func (h *TwoFactorHandlers) Challenge(c *web.Ctx) error {
 		return err
 	}
 
-	target, _ := c.Session().Pull(auth.IntendedKey).(string)
-
-	return c.Redirect(web.SafeRedirect(c.Request(), target, "/dashboard"))
+	return h.a.RedirectAfterLogin(c, u)
 }
 
 func (h *TwoFactorHandlers) expiredChallenge(c *web.Ctx, err error) error {
