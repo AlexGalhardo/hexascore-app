@@ -1,0 +1,196 @@
+# Golden relevance set (SDD 07 section 10): 60 queries, 20 per locale. Every expected slug must appear in the
+# top 3 results. Keys: q (query text), locale, types (optional item-type filter), entity (true = entity search),
+# expect (1 to 3 slugs). Parsed by the minimal reader in golden_test.go; keep one key per line.
+# Relevance bugs add a line here first.
+
+# --- en ---
+- q: "zleda"
+  locale: en
+  expect: [the-legend-of-zelda-breath-of-the-wild, the-legend-of-zelda-tears-of-the-kingdom]
+- q: '"the last of us" -part'
+  locale: en
+  expect: [the-last-of-us, the-last-of-us-hbo]
+- q: "gojira"
+  locale: en
+  expect: [godzilla-1954, godzilla-minus-one]
+- q: "harry potter"
+  locale: en
+  entity: true
+  expect: [harry-potter]
+- q: "harry potter"
+  locale: en
+  types: [book]
+  expect: [harry-potter-and-the-philosophers-stone, harry-potter-and-the-prisoner-of-azkaban, harry-potter-and-the-chamber-of-secrets]
+- q: "978-0-7475-3269-9"
+  locale: en
+  expect: [harry-potter-and-the-philosophers-stone]
+- q: "the fellowship of the ring"
+  locale: en
+  expect: [the-fellowship-of-the-ring]
+- q: "pokemon"
+  locale: en
+  expect: [pokemon-red, pokemon-gold, pokemon-detective-pikachu]
+- q: "starfield"
+  locale: en
+  expect: [starfield]
+- q: "witcher 3"
+  locale: en
+  expect: [the-witcher-3-wild-hunt]
+- q: "god of war ragnarok"
+  locale: en
+  expect: [god-of-war-ragnarok]
+- q: "dune"
+  locale: en
+  expect: [dune-2021, dune-part-two, dune-novel]
+- q: "breaking bad"
+  locale: en
+  expect: [breaking-bad, el-camino-a-breaking-bad-movie]
+- q: "stranger things"
+  locale: en
+  expect: [stranger-things]
+- q: "incepton"
+  locale: en
+  expect: [inception]
+- q: "mario kart"
+  locale: en
+  expect: [mario-kart-8-deluxe, mario-kart-world, super-mario-kart]
+- q: "cyberpunk"
+  locale: en
+  expect: [cyberpunk-2077, cyberpunk-edgerunners]
+- q: "nineteen eighty four"
+  locale: en
+  expect: [nineteen-eighty-four]
+- q: "the thing"
+  locale: en
+  expect: [the-thing-1982, the-thing-2011]
+- q: "hamlet"
+  locale: en
+  expect: [hamlet-book, hamlet-1996, hamlet-2000]
+
+# --- pt-BR ---
+- q: "acao"
+  locale: pt-BR
+  expect: [acao-explosiva, acao-total, acao-maxima]
+- q: "ações"
+  locale: pt-BR
+  expect: [acoes-secretas]
+- q: "o senhor dos aneis"
+  locale: pt-BR
+  types: [movie]
+  expect: [the-fellowship-of-the-ring, the-two-towers, the-return-of-the-king]
+- q: "o senhor dos aneis"
+  locale: pt-BR
+  expect: [the-lord-of-the-rings]
+- q: "dom casmurro"
+  locale: pt-BR
+  expect: [dom-casmurro]
+- q: "machado de assis"
+  locale: pt-BR
+  entity: true
+  expect: [machado-de-assis]
+- q: "memorias postumas de bras cubas"
+  locale: pt-BR
+  expect: [memorias-postumas-de-bras-cubas]
+- q: "harry potter e a pedra filosofal"
+  locale: pt-BR
+  expect: [harry-potter-and-the-philosophers-stone]
+- q: "cidade de deus"
+  locale: pt-BR
+  expect: [cidade-de-deus]
+- q: "tropa de elite"
+  locale: pt-BR
+  expect: [tropa-de-elite, tropa-de-elite-2]
+- q: "auto da compadecida"
+  locale: pt-BR
+  expect: [o-auto-da-compadecida]
+- q: "central do brasil"
+  locale: pt-BR
+  expect: [central-do-brasil]
+- q: "grande sertao veredas"
+  locale: pt-BR
+  expect: [grande-sertao-veredas]
+- q: "capitaes da areia"
+  locale: pt-BR
+  expect: [capitaes-da-areia]
+- q: "o cortico"
+  locale: pt-BR
+  expect: [o-cortico]
+- q: "coracoes"
+  locale: pt-BR
+  expect: [coracoes-de-ferro, coracao-valente]
+- q: "cancao do mar"
+  locale: pt-BR
+  expect: [a-cancao-do-mar]
+- q: "o poderoso chefao"
+  locale: pt-BR
+  expect: [o-poderoso-chefao, o-poderoso-chefao-ii, o-poderoso-chefao-iii]
+- q: "ilha do medo"
+  locale: pt-BR
+  expect: [ilha-do-medo]
+- q: "gojira"
+  locale: pt-BR
+  expect: [godzilla-1954, godzilla-minus-one]
+
+# --- es ---
+- q: "senor de los anillos"
+  locale: es
+  types: [movie]
+  expect: [the-fellowship-of-the-ring, the-two-towers, the-return-of-the-king]
+- q: "el senor de los anillos"
+  locale: es
+  expect: [the-lord-of-the-rings]
+- q: "harry potter y la piedra filosofal"
+  locale: es
+  expect: [harry-potter-and-the-philosophers-stone]
+- q: "cien anos de soledad"
+  locale: es
+  expect: [cien-anos-de-soledad]
+- q: "don quijote"
+  locale: es
+  expect: [don-quijote-de-la-mancha, don-quijote-1957]
+- q: "laberinto del fauno"
+  locale: es
+  expect: [el-laberinto-del-fauno]
+- q: "volver"
+  locale: es
+  expect: [volver]
+- q: "todo sobre mi madre"
+  locale: es
+  expect: [todo-sobre-mi-madre]
+- q: "la casa de papel"
+  locale: es
+  expect: [la-casa-de-papel]
+- q: "pedro paramo"
+  locale: es
+  expect: [pedro-paramo]
+- q: "el orfanato"
+  locale: es
+  expect: [el-orfanato]
+- q: "accion"
+  locale: es
+  expect: [accion-mutante, accion-salvaje]
+- q: "acciones"
+  locale: es
+  expect: [acciones-secretas-serie, accion-mutante, accion-salvaje]
+- q: "corazon"
+  locale: es
+  expect: [corazon-valiente-pelicula, corazones-de-hierro]
+- q: "gojira"
+  locale: es
+  expect: [godzilla-1954, godzilla-minus-one]
+- q: "lagrimas del reino"
+  locale: es
+  expect: [the-legend-of-zelda-tears-of-the-kingdom]
+- q: "sociedad de la nieve"
+  locale: es
+  expect: [la-sociedad-de-la-nieve]
+- q: "el principito"
+  locale: es
+  expect: [el-principito]
+- q: "cronica de una muerte anunciada"
+  locale: es
+  expect: [cronica-de-una-muerte-anunciada]
+- q: "gabriel garcia marquez"
+  locale: es
+  entity: true
+  expect: [gabriel-garcia-marquez]

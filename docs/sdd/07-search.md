@@ -244,7 +244,9 @@ Events `search.performed` and `search.clicked` (position 1-based within its grou
 
 ### 7.9 Accents, pt-BR, transliteration
 
-"ação", "Ação", "acao" all normalise to `acao`, and the FTS configs unaccent before stemming, so they share lexemes. The Portuguese snowball stemmer has accented-suffix rules (`-ção`), so unaccenting first may weaken "ação"/"ações" conflation [NOT VERIFIED]; the golden set holds both. Non-Latin titles: SDD 06 writes Wikidata romanisations and aliases into `item_alt_titles` (`kind = transliteration`, `lang` with `-Latn`); the properties are SDD 06's mapping [NOT VERIFIED]. Native-script queries match only via trigram; CJK trigram behaviour is [NOT VERIFIED].
+"ação", "Ação", "acao" all normalise to `acao`, and the FTS configs unaccent before stemming, so they share lexemes. The Portuguese snowball stemmer has accented-suffix rules (`-ção`), so unaccenting first may weaken "ação"/"ações" conflation.
+
+Decided (07-2, P1.E.2.2, measured on Postgres 18.6): `hs_pt` keeps `unaccent` before `portuguese_stem`; only the unaccented form is indexed, no second vector. `to_tsvector('hs_pt', w)` against stock `portuguese`: `ação` → `'aca'` vs `'açã'`, `acao` → `'aca'` vs `'aca'` (stock never conflates the unaccented spelling users type); `ações` → `'aco'`, `acoes` → `'aco'`. The cost is `-ção`/`-ções` plural conflation: `informação` and `informações` share the stock lexeme `inform`, but are `informaca` and `informaco` under `hs_pt`; `ação` (`aca`) and `ações` (`aco`) differ in both configs. The trigram tier covers the gap: `word_similarity('acoes','acao explosiva') = 0.33`, `('coracoes','coracao valente') = 0.56`, `('informacoes','informacao') = 0.67`, all above θ = 0.2, so plural variants still match, ranked in the S tier below exact and prefix hits. Side effect seen in the golden set: query `ações` also ranks `Corações de Ferro` (substring `acoes`) above `Ação Explosiva`, so that line only requires the exact title `Ações Secretas`. Spanish stems `accion` and `acciones` to the same lexeme, so `acciones` finds `Acción mutante` through FTS. Non-Latin Non-Latin titles: SDD 06 writes Wikidata romanisations and aliases into `item_alt_titles` (`kind = transliteration`, `lang` with `-Latn`); the properties are SDD 06's mapping [NOT VERIFIED]. Native-script queries match only via trigram; CJK trigram behaviour is [NOT VERIFIED].
 
 ### 7.10 Sizing and maintenance
 
@@ -278,7 +280,7 @@ Estimate [NOT VERIFIED]: translations 220k rows (tsv GIN ~90 MB, trigram ~20 MB)
 
 - Unit: parser (control chars, lengths, ISBN, exclusion-only), cache key, redaction, audience filter.
 - Integration (Postgres 17, `-tags=integration`): migrations up/down, generated and trigger-maintained columns (site vs api vectors), tier order with crafted fixtures, suggest sync with two concurrent runners.
-- Relevance: `internal/search/testdata/golden.yaml`, 60 queries (20 per locale) over a 3k-item fixture from the migrated catalogue, ≤ 3 expected slugs each, all required in the top 3; any miss fails CI. Seeds: `zleda`, `acao`, `ações`, `o senhor dos aneis`, `senor de los anillos`, `"the last of us" -part`, `gojira`, `dom casmurro`, `machado de assis` (entity top 1), `harry potter` (franchise top 1), one ISBN-13. Relevance bugs add a golden line first.
+- Relevance: `internal/search/testdata/golden.yaml`, 60 queries (20 per locale) over a 3k-item fixture from the migrated catalogue, ≤ 3 expected slugs each, all required in the top 3; any miss fails CI. Seeds (fixture `internal/search/testdata/fixture.sql`: 82 curated items plus generated filler to 3,000 items): `zleda`, `acao`, `ações`, `o senhor dos aneis`, `senor de los anillos`, `"the last of us" -part`, `gojira`, `dom casmurro`, `machado de assis` (entity top 1), `harry potter` (franchise top 1), one ISBN-13. Relevance bugs add a golden line first.
 - Contract: Schemathesis on `searchItems`, `searchEntities` (SDD 05).
 - E2E: Playwright + axe, port of `legacy/qa/e2e/specs/search.spec.ts` plus grouped page and scroll.
 - Load: `qa/k6/search.js`, 200 queries including legacy `["the","star","love","war","zelda"]` (`legacy/qa/k6/api.js` line 58).
@@ -287,7 +289,7 @@ Estimate [NOT VERIFIED]: translations 220k rows (tsv GIN ~90 MB, trigram ~20 MB)
 ## 11. Open issues
 
 1. `CASE` over `regconfig` in a generated column may be rejected. Decided (07-1): trigger-maintained column from the start (§5).
-2. `unaccent` before `portuguese_stem` may weaken conflation. Owner: architect. Closes when the pt-BR golden queries pass or the dictionary order changes.
+2. `unaccent` before `portuguese_stem` may weaken conflation. Decided and closed (07-2, §7.9): keep the order; the pt-BR golden queries pass.
 3. Non-transactional migrations (`CREATE INDEX CONCURRENTLY`) are [NOT IN VUKEM DOCS]. VF-017; workaround: pre-deploy script (§5). Owner: vukem.
 4. `inertia.Scroll` meta for non-`orm` offset pages is [NOT VERIFIED]. Owner: vukem. Closes when SDD 09 ships a working page.
 5. Route prefix. Decided (07-5): README convention `/api/v1`; SDD 01 §6.2 aligned.
@@ -295,3 +297,4 @@ Estimate [NOT VERIFIED]: translations 220k rows (tsv GIN ~90 MB, trigram ~20 MB)
 7. API search over third-party text. Decided (07-7): API ranks on allowlisted-source text only (`search_tsv_api`), site on all text.
 8. Suggest 50 ms p95 for 2-character prefixes over 650k rows is [NOT VERIFIED]. Owner: architect. Closes with the k6 run; fallback is a 3-character prefix minimum.
 9. Railway Postgres version (≥ 15) and index sizes are [NOT VERIFIED]. Owner: architect (SDD 11). Closes with the provisioned version and the §9 size query.
+10. Transposition typos sit exactly at θ: `word_similarity('zleda','zelda') = 0.200` while `('zleda','cien anos de soledad') = 0.333`, so in the golden set `zleda` returns `Cien años de soledad` among the top 3 and `Zelda II` falls out; the golden line requires only the two most popular Zelda titles. Candidate fixes (blend `similarity()`, `fuzzystrmatch` `levenshtein`) need an extension decision. Owner: architect.
