@@ -17,8 +17,8 @@ Conventions:
 | Field | Value |
 | --- | --- |
 | Current phase | P0 (framework spike) |
-| Next microtask | P0.F.1.1 |
-| Updated | 2026-10-28 |
+| Next microtask | P0.F.1.3 (blocked on Q-001), P0.F.4.1, P0.F.5.1, P0.F.8.1 |
+| Updated | 2026-10-29 |
 
 ## Phase map
 
@@ -78,7 +78,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
 
 #### P0.F.1 Auth scaffold and Better Auth hash compatibility
 
-- [ ] **P0.F.1.1** Create the throwaway Inertia React app on Postgres and run the auth scaffold with Google and 2FA, recording the generated tables, columns, pages, routes and session env names.
+- [x] **P0.F.1.1** Create the throwaway Inertia React app on Postgres and run the auth scaffold with Google and 2FA, recording the generated tables, columns, pages, routes and session env names.
   - Files/modules: `hexascore-spike/` (via `vukem new hexascore-spike --inertia react --pm bun -framework ../vukem`), `bootstrap/app.go` (Postgres driver), `docker-compose.yml` with `postgres:18.6-alpine3.24`, `docs/spike-report.md` (section "Auth scaffold")
   - Refs: SDD 03 §5, §6.1, §11 issues 7 and 10; SDD 11 §7.7; ADR 0008; <https://vukem.dev/docs/starters> "Inertia (React, Vue, Svelte)"; <https://vukem.dev/docs/cli/reference-install> "`vukem install:auth`"
   - Depends on: —
@@ -89,7 +89,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
     - `go test ./tests/...` → `ok` (scaffold tests on Postgres through `pgtest`, `TEST_DATABASE_URL` set)
   - Notes: closes open issues 03-7 (session timeout env names) and 03-10 (column and page names) by writing the exact names into the report; SDD 03 is updated later in P1.C.1.1, not here. `-framework` is the documented local-checkout flag (reference-new error table); never commit a `replace`. `install:auth` on an Inertia app writes React `Auth/*` pages (starters page): record whether they are TypeScript and whether they reuse the starter layout.
 
-- [ ] **P0.F.1.2** Pin Better Auth 1.7.7's password hash format from its own source and produce fixture hashes from the legacy seed script.
+- [x] **P0.F.1.2** Pin Better Auth 1.7.7's password hash format from its own source and produce fixture hashes from the legacy seed script.
   - Files/modules: `legacy/` (read-only; run `bun install` in a temporary copy if writing `node_modules` into `legacy/` is not wanted), `legacy/apps/web/scripts/seed-admin.ts` or `admin-grant.ts`, spike `testdata/betterauth_hashes.json`
   - Refs: SDD 03 §7.2, §11 issue 1; open-issues 03-1, 03-2; ADR 0008
   - Depends on: —
