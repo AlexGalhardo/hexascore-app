@@ -117,6 +117,10 @@ func (a *Accounts) ConfirmTwoFactor(
 		return err
 	})
 
+	if err == nil && ok {
+		a.sendTwoFactorChanged(ctx, userID, "enabled")
+	}
+
 	return plain, ok, err
 }
 
@@ -154,6 +158,10 @@ func (a *Accounts) VerifyTwoFactor(ctx context.Context, userID int64, code, reco
 
 		return err
 	})
+
+	if ok && err == nil && code == "" {
+		a.sendTwoFactorChanged(ctx, userID, "recovery_used")
+	}
 
 	return ok && err == nil, err
 }
@@ -210,12 +218,15 @@ func (a *Accounts) RegenerateRecoveryCodes(ctx context.Context, userID int64) ([
 // DisableTwoFactor removes the secret and the recovery codes (check the
 // password first).
 func (a *Accounts) DisableTwoFactor(ctx context.Context, userID int64) error {
-	_, err := orm.QueryOf[models.TwoFactor](a.DB).Where("id", userID).Update(ctx, orm.Set{
+	n, err := orm.QueryOf[models.TwoFactor](a.DB).Where("id", userID).Update(ctx, orm.Set{
 		"two_factor_secret":         nil,
 		"two_factor_recovery_codes": nil,
 		"two_factor_confirmed_at":   nil,
 		"two_factor_last_step":      0,
 	})
+	if err == nil && n > 0 {
+		a.sendTwoFactorChanged(ctx, userID, "disabled")
+	}
 
 	return err
 }

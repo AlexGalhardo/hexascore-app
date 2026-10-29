@@ -97,7 +97,8 @@ func (a *Accounts) ScheduleDeletion(ctx context.Context, userID int64) (time.Tim
 
 	err = a.Mailer.SendLater(ctx, mail.DeletionScheduled{
 		User: u, Date: DeletionDate(now), CancelLink: a.URL + "/login",
-		Subject: a.T(ctx, "auth.mail.deletion_scheduled_subject"),
+		Strings: a.mailStrings(
+			ctx, u, "deletion_scheduled", noticeFields, "date", DeletionDate(now).Format("2006-01-02")),
 	})
 
 	return DeletionDate(now), err
@@ -262,7 +263,7 @@ func (a *Accounts) anonymise(ctx context.Context, userID int64) (bool, error) {
 	}
 
 	err = a.Mailer.SendLater(ctx, mail.AccountAnonymized{
-		User: old, Subject: a.T(ctx, "auth.mail.account_anonymized_subject"),
+		User: old, Strings: a.mailStrings(ctx, old, "account_anonymized", bodyFields),
 	})
 	if err != nil {
 		a.log.ErrorContext(ctx, "purge: notice not queued", "user", userID, "err", err)

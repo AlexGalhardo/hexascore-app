@@ -58,8 +58,11 @@ func loadMessages() (*i18n.Bundle, error) {
 // its language (resources/lang/pt-BR.json, then pt.json) wins, so the app
 // can reword a message or add a locale without editing lang/.
 func (a *Accounts) T(ctx context.Context, key string, args ...any) string {
-	locale := i18n.Locale(ctx)
+	return a.tIn(ctx, i18n.Locale(ctx), key, args...)
+}
 
+// tIn is T for an explicit locale (mail to a user outside any request).
+func (a *Accounts) tIn(ctx context.Context, locale, key string, args ...any) string {
 	if app := i18n.BundleFrom(ctx); app != nil {
 		if locale == "" {
 			locale = app.Default()
