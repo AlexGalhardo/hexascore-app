@@ -1,1 +1,1 @@
-2026-10-29T01:45:22Z VF-017/026 PR #13; PRs #10 #11 #12 CI
+2026-10-29T02:22:06Z HANDOFF written; 7 VFs merged, release blocked (FR-001)

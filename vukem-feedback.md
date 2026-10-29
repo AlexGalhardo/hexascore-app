@@ -25,7 +25,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-014 | 2026-10-28 | low | open |
 | VF-015 | 2026-10-28 | medium | merged in main (PR #12), unreleased |
 | VF-016 | 2026-10-28 | low | open |
-| VF-017 | 2026-10-28 | medium | in_progress (framework, vukem PR #13) |
+| VF-017 | 2026-10-28 | medium | merged in main (PR #13), unreleased |
 | VF-018 | 2026-10-28 | medium | open |
 | VF-019 | 2026-10-28 | medium | open |
 | VF-020 | 2026-10-28 | low | open |
@@ -34,7 +34,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-023 | 2026-10-28 | low | open |
 | VF-024 | 2026-10-28 | medium | merged in main (PR #10), unreleased |
 | VF-025 | 2026-10-28 | medium | open |
-| VF-026 | 2026-10-28 | medium | in_progress (framework, vukem PR #13) |
+| VF-026 | 2026-10-28 | medium | merged in main (PR #13), unreleased |
 | VF-027 | 2026-10-28 | medium | merged in main (PR #9), unreleased |
 | VF-028 | 2026-10-28 | low | open |
 | VF-029 | 2026-10-28 | low | open |
@@ -199,7 +199,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-017: No non-transactional migrations (`CREATE INDEX CONCURRENTLY`)
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #13, <https://github.com/AlexGalhardo/vukem/pull/13>), unreleased. Native API: `schema.Migration{NoTransaction: true}` (Up/Down outside a transaction, recorded after Up).
 - **Spike (2026-10-29)**: P0.F.5.2: workaround proven, a `scripts/concurrent-index.sh` run outside a transaction; no AccessExclusiveLock observed (P0.F.5.2).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` "Migrations", "Managing them with migrate".
 - **Context**: Postgres refuses `CREATE INDEX CONCURRENTLY` inside a transaction. HexaScore's search indexes (SDD 07) and later index additions on the 100k-row `items` table and larger `ratings` table must be built without locking writes in production. The docs do not show a per-migration "no transaction" flag.
@@ -275,7 +275,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-026: Migration runner has no documented lock for concurrent starts
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #13, <https://github.com/AlexGalhardo/vukem/pull/13>), unreleased. Native: `Migrator.Up/Rollback/Reset/Fresh` hold `pg_advisory_lock` (MySQL `GET_LOCK`) for the whole run; documented per dialect (SQLite: none).
 - **Spike (2026-10-29)**: P0.F.5.2: workaround proven, a `migrate:locked` command holding a Postgres advisory lock (P0.F.5.2).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations`, `https://vukem.dev/docs/deployment/docker-and-railway`.
 - **Context**: zero-downtime deploys can start a new container while the old one still runs; if migrations run at boot, two runners can race. The docs do not mention a Postgres advisory lock or a `migrations` table row lock.

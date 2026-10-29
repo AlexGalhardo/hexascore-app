@@ -18,14 +18,16 @@ Reason: HANDOFF after 7 VFs plus the CI fix (context budget, brief "Limits").
 | VF-027 `serve -with-ssr`, `build -ssr`/`-ldflags`, `WithVersion` | #9 | merged |
 | VF-024 i18n path prefixes (`PathPrefixes`, `SourcePath`, `StripPathPrefix`, `LocalizePath`) | #10 | merged |
 | VF-005 `CursorPaginate` over `OrderBy` (composite keyset) | #11 | merged |
-| VF-015 `Router.Host` | #12 | see "Open" |
-| VF-017 `Migration.NoTransaction` + VF-026 migration lock | #13 | see "Open" |
+| VF-015 `Router.Host` | #12 | merged |
+| VF-017 `Migration.NoTransaction` + VF-026 migration lock | #13 | merged (b5a2253) |
 | VF-001 | - | wontfix (post-1.0, FQ-001) |
 
-Reports: `$ORCH/reports/{FW-CI-MONGO,VF-002,VF-005,VF-024,VF-027}.md` (VF-015, VF-017, VF-026 reports written once merged).
+Reports: `$ORCH/reports/{FW-CI-MONGO,VF-002,VF-005,VF-015,VF-017,VF-024,VF-026,VF-027}.md`. vukem `main` head: b5a2253.
 
 ## Open
 
-- Release v0.33.0 BLOCKED: the permission classifier denied `go run ./internal/tools/release v0.33.0` ("Create Public Surface"). Request FR-001 in `docs/orchestration/QUESTIONS.md`. Nothing committed or tagged. After the release: adoption task `$ORCH/queue/senior/1-ADOPT-vukem-v0.33.0.md` targeting `C:\dev\hexascore-app\hexascore-spike`, VF statuses `fixed in v0.33.0`.
+- Docker compose services postgres/mysql/mariadb (project `vukem`) were started from the worktree for local integration runs; stop with `docker compose -f .config/compose.yaml stop` if unwanted.
+- vukem-feedback.md: wrap links as `<https://...>` (app markdownlint MD034).
+- Release v0.33.0 BLOCKED (owner question Q-D-006, do not retry the tool): the permission classifier denied `go run ./internal/tools/release v0.33.0` ("Create Public Surface"). Request FR-001 in `docs/orchestration/QUESTIONS.md`. Nothing committed or tagged. After the release: adoption task `$ORCH/queue/senior/1-ADOPT-vukem-v0.33.0.md` targeting `C:\dev\hexascore-app\hexascore-spike`, VF statuses `fixed in v0.33.0`.
 - Next VFs by brief order (medium first, roadmap refs): VF-018 (queue priority/concurrency), then VF-019, VF-025, VF-008, VF-003, VF-030, VF-031, VF-035, VF-037, VF-038, VF-040; lows after.
 - Do not touch vukem PR #6 (owner's).
