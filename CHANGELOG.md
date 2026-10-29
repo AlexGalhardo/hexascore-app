@@ -6,25 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-29
+
 ### Added
 
-- Conventional Commits `commit-msg` hook (`.githooks/`, enabled by the setup scripts), `.config/cliff.toml` and `scripts/release.sh` (git-cliff, no Task or commitlint) (P1.A.2.2).
-- `packages/tokens`: design tokens (OKLCH, light and dark) emitted as CSS variables with a Tailwind v4 `@theme` mapping and a TypeScript module with sRGB hex, plus WCAG AA contrast tests (P1.A.3.1).
-- Book editions, `isbn13_is_valid` (SQL and `catalog.ValidISBN13`), `affiliate_links` and `catalog_redirects` migrations, with a composite foreign key keeping `items.primary_edition_id` inside the same work (P1.B.1.3).
-- Entity schema (`entities`, `entity_translations`, `item_entities`, `entity_links`, `item_links`, `entity_stats`), `catalog.RoleCompatible` and the hourly `catalog.refresh_entity_stats` scheduled job (P1.B.1.2).
-- Frontend and Go tooling: Biome 2.6.4 (`bun run lint`), Vitest 5.0.5 with Testing Library and jsdom (`bun run test`), `tsc` over `resources/js` and `vitest.config.ts`, `.golangci.yml` for golangci-lint 2.15.0; the i18n parity test moved from `bun:test` to Vitest and the TypeScript sources were reformatted to tabs (P1.A.2.1).
-- `migrate:locked` command (Postgres advisory lock around the migration runner), `scripts/concurrent-index.sh` and `docs/runbooks/migrations.md` ported from the P0.F.5.2 spike (P1.A.4.3).
-- Architecture programme documents for the vukem rewrite: `docs/PROGRESS.md`, `docs/web-research.md`, `docs/brainstorming.md`, 14 SDDs in `docs/sdd/`, 16 ADRs in `docs/adrs/`, `ROADMAP.md` (316 microtasks), `architect-feedback-and-roadmap.md`, `vukem-feedback.md` (VF-001 to VF-031), `AGENTS.md`, `CLAUDE.md`, `.editorconfig`, `.markdownlint.jsonc`.
-- Phase 0 spike report `docs/spike-report.md` (P0.F.1.1 auth scaffold, P0.F.1.2 Better Auth hash format with fixtures, P0.F.4.1 API host routing) and VF-032 to VF-034.
-- Auth: vukem `install:auth` with Google and 2FA (en, pt-BR; es catalogue pending VF-032), legacy paths (`/signup`, `/recover-password`, `/verify-email`), SDD 03 profile columns and `account_events`, security tests renamed to `TestSecurity_*` (P1.C.1.1).
-- CI/CD adapted from vukem-marketplace-reactjs: `ci.yml` (Go lint/vet/race tests on Postgres/govulncheck, web typecheck/tests/builds, markdownlint, image smoke test), `release.yml` (GHCR image and GitHub release on tags), `dast.yml` (weekly ZAP and nuclei), Dependabot; `.claude/` skills and rules adapted from the same repo.
-- i18n: legacy next-intl catalogues ported to `resources/lang/{en,pt-BR,es}.json` (794 keys per locale after D-06 drops) by `packages/i18n/src/flatten.ts`; shared as the Inertia once prop with the catalogue hash in the asset version; Go and TypeScript plural outputs checked by `TestPluralGolden` (P1.A.3.2).
-- Inertia SSR in the app: Go-supervised Node (`SSR_SUPERVISE`), `ssr` readiness check, fallback counter, `build:ssr`, Node 26.13.0 runtime image (P1.A.4.2).
-- Application scaffold from the vukem Inertia React starter (vukem v0.32.0, Postgres driver v0.5.1, bun), example posts CRUD removed (P1.A.1.1).
-- Orchestration files: `docs/orchestration/BOARD.md`, `docs/orchestration/QUESTIONS.md`, `questions-to-dev.md`.
-- Local stack `docker-compose.yml` (Postgres 18.6 on 127.0.0.1:5433, RustFS 1.0.4 on 127.0.0.1:9000/9001) and idempotent setup scripts `setups/setup-windows.ps1` and `setups/setup-unix.sh` (P1.A.1.2).
+- Scaffold the vukem Inertia React app on Postgres ([82352b6](https://github.com/AlexGalhardo/hexascore-app/commit/82352b61dc1fa6efc8a179ed91e0b590293eb6f0))
+- **ssr:** Enable Inertia SSR with Go-supervised Node, ssr health check and fallback counter ([91ce5b5](https://github.com/AlexGalhardo/hexascore-app/commit/91ce5b5b914ee38652aa3903f5498e0c6f1e194a))
+- **infra:** Add local compose stack and setup scripts ([7fb1c52](https://github.com/AlexGalhardo/hexascore-app/commit/7fb1c528bc4403ea757288c61173fc98e333eaba))
+- **i18n:** Port legacy catalogues to vukem and share them as a once prop ([5badb3f](https://github.com/AlexGalhardo/hexascore-app/commit/5badb3f3fee0727aef1dd1d198b59de4aef1ead6))
+- **catalog:** Migrate data sources, items, translations and alt titles ([0920901](https://github.com/AlexGalhardo/hexascore-app/commit/0920901accad8c1fb91bc4ae6dc14154e28492c3))
+- **infra:** Add advisory-locked migrate command and concurrent index script ([c4c7f62](https://github.com/AlexGalhardo/hexascore-app/commit/c4c7f625e0ade224b8f7ca3b0fe071dbce1ce569))
+- **auth:** Install vukem auth with Google and 2FA on the legacy paths ([a5fd712](https://github.com/AlexGalhardo/hexascore-app/commit/a5fd7124d904a898abb1e134a2cac9f6a710712c))
+- **ui:** Add design tokens package with contrast tests ([82dbd72](https://github.com/AlexGalhardo/hexascore-app/commit/82dbd727929a2fbcee1f77b7a77e73866b9a7f83))
+- **catalog:** Migrate entities and relations with hourly stats refresh ([4792f5d](https://github.com/AlexGalhardo/hexascore-app/commit/4792f5d7cd6093d15ba99cd136b220ccc4e3b4b2))
+- **catalog:** Migrate editions, isbn13 function, affiliate links and redirects ([7855349](https://github.com/AlexGalhardo/hexascore-app/commit/785534911beb26f9052b1199c61a1f30c6b5a959))
+- **catalog:** Add the audience-filtered item read model ([e25d275](https://github.com/AlexGalhardo/hexascore-app/commit/e25d27540133818cc147a84c37c3cdfa2aece37b))
+- **ui:** Add locale-prefix middleware, prefixed route helper and theme attribute ([aab1ba1](https://github.com/AlexGalhardo/hexascore-app/commit/aab1ba1cc16b080a59fcaecf4a1cc0274e2e56bb))
 
-### Changed
+### Fixed
 
-- Git flow: branches merge straight into `main` (no `dev`/staging step), per owner rule of 2026-10-29 (AGENTS.md).
-- Documentation lint and vukem.dev heading citations aligned (E-004, E-009, E-010, E-011).
+- **i18n:** Drop copy for features removed by D-06 ([3aacf1a](https://github.com/AlexGalhardo/hexascore-app/commit/3aacf1a5ee7bc50e2e1c72e0bfd3b0e103a4ded8))
+
