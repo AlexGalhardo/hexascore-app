@@ -15,7 +15,7 @@ import (
 
 // all: keeps build/.vite/manifest.json (a dot directory) in the binary.
 //
-//go:embed views lang all:public
+//go:embed views lang docs/docs.json all:public
 var embedded embed.FS
 
 // Views returns the html/template views.
@@ -58,3 +58,6 @@ func production() bool {
 
 	return err != nil || src.Env() == config.Production
 }
+
+// DocsJSON returns the pre-rendered API docs built by scripts/build-docs.ts.
+func DocsJSON() ([]byte, error) { return embedded.ReadFile("docs/docs.json") }

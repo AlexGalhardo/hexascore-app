@@ -572,6 +572,10 @@
   "docs": {
     "copy": "Copiar",
     "copied": "Copiado",
+    "title": "Documentación de la API",
+    "navLabel": "Documentación",
+    "nav": { "index": "Inicio rápido", "authentication": "Autenticación", "pagination": "Paginación", "rate-limits": "Límites de uso", "errors": "Errores", "changelog": "Historial de cambios" },
+    "tocLabel": "En esta página",
     "quickstart": {
       "lead": "Puntuaciones de la comunidad para juegos, películas, series y libros — de 0 a 100, en seis categorías por elemento — a través de una API JSON de solo lectura.",
       "keyHeading": "1. Crea una clave de API",

@@ -1,0 +1,72 @@
+package tests
+
+import (
+	"testing"
+
+	"github.com/AlexGalhardo/vukem/vukemtest"
+
+	"github.com/AlexGalhardo/hexascore-app/bootstrap"
+)
+
+func TestDocsPages(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+
+	app.Client(t).Get("/docs").AssertOK().AssertInertia("Docs/Page").PropEquals("slug", "index")
+
+	for _, prefix := range []string{"", "/pt-br", "/es"} {
+		app.Client(t).Get(prefix+"/docs/errors").AssertOK().AssertInertia("Docs/Page").
+			PropEquals("slug", "errors").
+			HasProp("body").
+			HasProp("toc")
+	}
+
+	app.Client(t).Get("/docs/no-such-doc").AssertStatus(404).AssertInertia("Error")
+	app.Client(t).Get("/docs/index").AssertStatus(404)
+}
+
+func TestLegalPages(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+
+	for _, slug := range []string{"terms", "policy"} {
+		for _, prefix := range []string{"", "/pt-br", "/es"} {
+			app.Client(t).Get(prefix+"/"+slug).AssertOK().AssertInertia("Legal/Page").
+				PropEquals("slug", slug).
+				HasProp("updatedAt").
+				HasProp("messages")
+		}
+	}
+}
+
+func TestRobots(t *testing.T) {
+	t.Parallel()
+
+	// Non-production environments must not be indexable.
+	app := vukemtest.New(
+		t,
+		bootstrap.New,
+		vukemtest.Options{Env: map[string]string{"APP_URL": "https://example.test/"}},
+	)
+	app.Client(t).Get("/robots.txt").AssertOK().
+		AssertSee("Disallow: /\n").
+		AssertSee("Sitemap: https://example.test/sitemap.xml")
+}
+
+func TestRobots_Production(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{
+		"APP_ENV": "production", "APP_URL": "https://example.test/",
+	}})
+	app.Client(t).Get("/robots.txt").AssertOK().
+		AssertSee("Allow: /" + nl).
+		AssertSee("Disallow: /admin" + nl).
+		AssertSee("Disallow: /profile" + nl).
+		AssertSee("Disallow: /me" + nl).
+		AssertSee("Sitemap: https://example.test/sitemap.xml")
+}
+
+const nl = "\n"
