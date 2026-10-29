@@ -17,8 +17,8 @@ Reason: HANDOFF after 4 VFs (brief "Limits", context budget).
 | --- | --- | --- |
 | VF-035 composite keys (`orm.CompositeKeyer`, `orm.ErrKeyNotUnique`, `orm.PrimaryKeysOf`; schema `SmallInteger`, `Primary`, `StoredAs`) | #25 | merged (fcb7631) |
 | VF-037 `install:billing -plans`, `STRIPE_CURRENCIES` + checkout `currency`, `currency_options` docs | #26 | merged (c12321b) |
-| VF-046 admin `Resource.AfterSave(func(ctx, admin.Saved[T]) error)` + `Resource.Virtual(key, value)` | #27 | see vukem-feedback.md index |
-| VF-041 `inertia.Config.ViewData` -> `RootData.Data`; `Page.URL` keeps the i18n path prefix | #28 | see vukem-feedback.md index |
+| VF-046 admin `Resource.AfterSave(func(ctx, admin.Saved[T]) error)` + `Resource.Virtual(key, value)` | #27 | merged (3a174b7) |
+| VF-041 `inertia.Config.ViewData` -> `RootData.Data`; `Page.URL` keeps the i18n path prefix | #28 | merged (425a277) |
 
 Reports: `$ORCH/reports/VF-{035,037,046,041}.md`.
 

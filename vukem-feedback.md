@@ -49,7 +49,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-038 | 2026-10-29 | medium | merged in main (PR #17), unreleased |
 | VF-039 | 2026-10-29 | low | open |
 | VF-040 | 2026-10-29 | medium | merged in main (PR #13), unreleased |
-| VF-041 | 2026-10-29 | low | in_progress (framework) |
+| VF-041 | 2026-10-29 | low | merged in main (PR #28), unreleased |
 | VF-042 | 2026-10-29 | low | open |
 | VF-043 | 2026-10-29 | low | open |
 | VF-044 | 2026-10-29 | low | open |
@@ -408,7 +408,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-041: Custom view functions are not request-bound; the page URL is the stripped URL under a path-prefix rewrite
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: in_progress (framework).
+- **Date**: 2026-10-29. **Severity**: low. **Status**: merged in main (PR #28, <https://github.com/AlexGalhardo/vukem/pull/28>), unreleased. Native: `inertia.Config.ViewData func(*http.Request) map[string]any` -> `RootData.Data` in the root view (full page visits, not in the page object); `Page.URL` and the version-conflict `X-Inertia-Location` restore the prefix removed by `i18n.StripPathPrefix`.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` (root view), `https://vukem.dev/docs/frontend/inertia-i18n`. The two behaviours below were confirmed in the v0.32.0 source (`view/funcs.go`, `inertia/inertia.go`), not found in the docs: `[NOT IN VUKEM DOCS]`.
 - **Context**: refines VF-024 and VF-028 after proving them under SSR. (1) `WithViewFuncs` functions take no `context.Context`, so a view function cannot read a cookie (VF-028 workaround as written is impossible). (2) Inertia builds `Page.URL` from `r.URL.RequestURI()`, so a path-prefix middleware that strips `/pt-br` before routing (VF-024 workaround) makes every page object report `/` and breaks client history.
 - **Workaround** (spike `agent/senior/P0.F.2.3`): the theme cookie is validated and shared as an Inertia prop `theme`, read by the root view as `.Page.Props.theme`; a route-level `RestoreURL` middleware puts the original prefixed URL back on the request after routing, before the Inertia middleware.
