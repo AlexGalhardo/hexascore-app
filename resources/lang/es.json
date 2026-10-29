@@ -500,7 +500,8 @@
     "menu": "Menú",
     "skip": "Ir al contenido",
     "dismiss": "Descartar",
-    "home": "Inicio"
+    "home": "Inicio",
+    "notifications": "Notificaciones"
   },
   "home": {
     "title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
@@ -1187,5 +1188,20 @@
   "rating": {
     "valuetext": "{value} de 10 estrellas",
     "unset": "Sin valorar"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "empty": "No tienes notificaciones.",
+    "markAllRead": "Marcar todo como leído",
+    "markRead": "Marcar como leída",
+    "kind": {
+      "suggestion_decided": "Tu sugerencia fue revisada.",
+      "suggestion_reverted": "Un cambio que sugeriste fue revertido.",
+      "suggestion_expired": "Tu sugerencia caducó.",
+      "report_resolved": "Tu denuncia fue revisada. Gracias.",
+      "rating_flagged": "Una de tus valoraciones fue marcada para revisión.",
+      "list_hidden": "Un moderador ocultó una de tus listas.",
+      "system": "Aviso del equipo."
+    }
   }
 }
