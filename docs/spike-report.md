@@ -262,7 +262,7 @@ Spike branch `agent/senior/P0.F.10.1`. `lighthouserc.json` (mobile emulation, Li
 
 Acceptance (2026-10-29):
 
-- First run, container without compression: `bunx lhci autorun` exit 1: `resource-summary.script.size` found 568,467 (expected <= 153,600) and LCP 4,589 ms. Cause 1: `app-*.js` served raw (353,925 B). Fix: `r.UseServer(middleware.Gzip())` (`GET` with gzip: 112,898 B), VF-NEW-P0.F.10.1.
+- First run, container without compression: `bunx lhci autorun` exit 1: `resource-summary.script.size` found 568,467 (expected <= 153,600) and LCP 4,589 ms. Cause 1: `app-*.js` served raw (353,925 B). Fix: `r.UseServer(middleware.Gzip())` (`GET` with gzip: 112,898 B), VF-043.
 - Cause 2 (environment): the host's Kaspersky web shield injects a 212 kB script, a stylesheet and polling XHRs from `gc.kis.v2.scr.kaspersky-labs.com` into every page, which inflated script size and delayed FCP/LCP. `blockedUrlPatterns: ["*kaspersky-labs.com*"]` in `lighthouserc.json` removes it (harmless on CI runners).
 - Final run: `bunx lhci autorun` -> `All results processed!`, `Done running autorun.`, exit 0, 78 s for 3 runs after the container is up. Per run (LCP ms / TBT ms / CLS / script bytes): 1367 / 0 / 0 / 115,585; 1373 / 11 / 0 / 115,585; 1380 / 0 / 0 / 115,585. Performance score 1.
 
