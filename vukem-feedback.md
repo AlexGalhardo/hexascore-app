@@ -36,7 +36,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-025 | 2026-10-28 | medium | merged in main (PR #16), unreleased |
 | VF-026 | 2026-10-28 | medium | merged in main (PR #13), unreleased |
 | VF-027 | 2026-10-28 | medium | merged in main (PR #9), unreleased |
-| VF-028 | 2026-10-28 | low | open |
+| VF-028 | 2026-10-28 | low | merged in main (PR #28, via VF-041 `inertia.Config.ViewData`), unreleased |
 | VF-029 | 2026-10-28 | low | open |
 | VF-030 | 2026-10-28 | medium | merged in main (PR #20), unreleased |
 | VF-031 | 2026-10-28 | medium | merged in main (PR #24), unreleased |
@@ -53,7 +53,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-042 | 2026-10-29 | low | open |
 | VF-043 | 2026-10-29 | low | open |
 | VF-044 | 2026-10-29 | low | open |
-| VF-045 | 2026-10-29 | low | open |
+| VF-045 | 2026-10-29 | low | in_progress (framework), PR #29 |
 | VF-046 | 2026-10-29 | medium | merged in main (PR #27), unreleased |
 | VF-047 | 2026-10-29 | low | open |
 | VF-048 | 2026-10-29 | low | open |
@@ -296,7 +296,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-028: Root view data has no theme hook
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: merged in main (PR #28, via VF-041: `inertia.Config.ViewData func(*http.Request) map[string]any`, read as `RootData.Data` in the root view), unreleased.
 - **Spike (2026-10-29)**: P0.F.2.3: workaround proven, the theme passed as a shared prop and read in the view (P0.F.2.3).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` (root view, `inertia.RootData`).
 - **Context**: dark mode without a flash of the wrong theme needs `data-theme` on `<html>` from a cookie at render time; the root view receives only `inertia.RootData` plus view functions.

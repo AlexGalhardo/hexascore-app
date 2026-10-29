@@ -1,0 +1,2 @@
+Task: P1.G.3.1 | branch: agent/senior/P1.G.3.1 | repo: app | report: .orchestration/reports/P1.G.3.1.md | rodada: 0
+Re-run: bunx vitest run resources/js/components/search; TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable go test -tags integration ./tests/ -run 'TestInertiaPages/Search'; golangci-lint run --build-tags integration ./...; bun run lint && bun run typecheck && bun run test
