@@ -30,7 +30,7 @@ func TestSocialSignUpAndLogin(t *testing.T) {
 	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: vukemtest.FakeSocial(user)})
 
 	c := app.Client(t)
-	signIn(t, c).AssertRedirect("/dashboard")
+	signIn(t, c).AssertRedirect("/onboarding")
 	c.Get("/dashboard").AssertOK().AssertSee("Lia").AssertSee("verified")
 
 	vukemtest.AssertDatabaseCount(t, app, "users", 1)
@@ -39,7 +39,7 @@ func TestSocialSignUpAndLogin(t *testing.T) {
 	})
 
 	// Signing in again reuses the link.
-	signIn(t, app.Client(t)).AssertRedirect("/dashboard")
+	signIn(t, app.Client(t)).AssertRedirect("/onboarding")
 	vukemtest.AssertDatabaseCount(t, app, "users", 1)
 
 	app.Client(t).Get("/auth/myspace/redirect").AssertNotFound()
@@ -61,13 +61,13 @@ func TestSecurity_A07_SocialLinkEndsSquatterAccess(t *testing.T) {
 		"password": {testPassword}, "password_confirmation": {testPassword},
 	}).AssertRedirect("/signup/check-email")
 	squatter.PostForm("/login", url.Values{
-		"email": {"vic@example.com"}, "password": {testPassword}, "remember": {"true"},
+		"identifier": {"vic@example.com"}, "password": {testPassword}, "remember": {"true"},
 	}).AssertRedirect("/dashboard")
 
 	userID := apiTokenFor(t, app, "vic@example.com")
 
 	c := app.Client(t)
-	signIn(t, c).AssertRedirect("/dashboard")
+	signIn(t, c).AssertRedirect("/onboarding")
 	c.Get("/dashboard").AssertOK()
 
 	squatter.Get("/verify-email").AssertRedirect("/login")
@@ -76,8 +76,8 @@ func TestSecurity_A07_SocialLinkEndsSquatterAccess(t *testing.T) {
 	vukemtest.AssertDatabaseMissing(t, app, "access_tokens", map[string]any{"user_id": userID, "revoked_at": nil})
 	vukemtest.AssertDatabaseHas(t, app, "access_tokens", map[string]any{"user_id": userID})
 	app.Client(t).WithHeader("Referer", "/login").PostForm("/login", url.Values{
-		"email": {"vic@example.com"}, "password": {testPassword},
-	}).AssertSessionHasErrors("email")
+		"identifier": {"vic@example.com"}, "password": {testPassword},
+	}).AssertSessionHasErrors("identifier")
 }
 
 func TestSecurity_A07_SocialDoesNotTakeOverUnverifiedEmails(t *testing.T) {

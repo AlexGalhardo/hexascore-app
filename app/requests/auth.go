@@ -2,18 +2,18 @@ package requests
 
 import "github.com/AlexGalhardo/vukem/z"
 
-// Login is the login form.
+// Login is the login form; Identifier is an email or a nickname.
 type Login struct {
-	Email    string `json:"email"    form:"email"`
-	Password string `json:"password" form:"password"`
-	Remember bool   `json:"remember" form:"remember"`
+	Identifier string `json:"identifier" form:"identifier"`
+	Password   string `json:"password"   form:"password"`
+	Remember   bool   `json:"remember"   form:"remember"`
 }
 
 // LoginSchema validates Login.
 var LoginSchema = z.Struct[Login](z.Shape{
-	"email":    z.String().Trim().Email(),
-	"password": z.String().Min(1),
-	"remember": z.Bool().Optional(),
+	"identifier": z.String().Trim().Min(1).Max(254),
+	"password":   z.String().Min(1),
+	"remember":   z.Bool().Optional(),
 })
 
 // Register is the registration form.

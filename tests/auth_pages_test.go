@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/AlexGalhardo/vukem/vukemtest"
@@ -35,13 +36,23 @@ func TestInertiaPages(t *testing.T) {
 
 			signed := app.Client(t).Inertia("")
 			signed.PostJSON("/signup", signUpForm("Ana Silva", "ana@example.com", testPassword))
-			signed.PostJSON("/login", map[string]any{"email": "ana@example.com", "password": testPassword})
+			signed.PostJSON("/login", map[string]any{"identifier": "ana@example.com", "password": testPassword})
 			signed.Get(l.prefix+"/verify-email").AssertOK().AssertInertia("Auth/VerifyNotice").
 				PropEquals("locale", l.locale)
 
 			verifyEmail(t, app, "ana@example.com")
 			signed.Get(l.prefix+"/onboarding").AssertOK().AssertInertia("Auth/Onboarding").
 				PropEquals("locale", l.locale)
+
+			email := "twofa-" + strings.ToLower(l.locale) + "@example.com"
+			owner := app.Client(t).Inertia("")
+			enableTwoFactor(t, app, owner, email)
+			owner.PostJSON("/logout", nil).AssertRedirect("/")
+
+			pending := app.Client(t).Inertia("")
+			passwordStep(pending, email, false).AssertRedirect("/two-factor-challenge")
+			pending.Get(l.prefix+"/two-factor-challenge").AssertOK().AssertInertia("Auth/TwoFactorChallenge").
+				PropEquals("locale", l.locale).HasProp("messages")
 		})
 	}
 }
