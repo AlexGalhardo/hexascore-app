@@ -20,3 +20,7 @@
 1. Finish vukem #33, #34, release v0.33.0, adoption task.
 2. P1.H.3.2 (Pricing + API docs pages), P1.H.5.1 release v0.8.0, P1.I group, P1.I.7.1 v0.9.0.
 3. Phase 2 from P2.A.1.2 on needs owner gates (Railway plan/buckets/DNS/secrets/spend).
+
+## P1.I.2.1 paused
+
+WIP committed on `agent/senior/P1.I.2.1` (03be2de), draft PR https://github.com/AlexGalhardo/hexascore-app/pull/54; task back in `queue/senior/1-P1.I.2.1.md`. Specs not yet green end to end.
