@@ -15,6 +15,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - The supervised SSR child now stops only after the HTTP server drained, with SIGTERM and a 5 s grace before SIGKILL; it was killed on the first SIGTERM, while requests could still render (P2.A.3.2).
 
+### Changed
+
+- Adopt vukem v0.33.0: problem codes are raised with `errs.HTTPError.WithExtension("code", ...)` (VF-016, VF-048) and `APIEdge` sets the problem `type` from it on `/api/v1` and `/app/v1` (CORS stays on `/api/v1` only), replacing the `CodedProblem` route wrapper; the LGPD ZIP export uses `export.EncodeCSV` (VF-029).
+
 ### Fixed
 
 - The Playwright suite under `qa/e2e` is now covered by `bun run lint` and `bun run typecheck`, and the e2e compose seed step no longer hides seeder failures.
