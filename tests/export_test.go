@@ -244,3 +244,57 @@ func TestExportExpirySweep(t *testing.T) {
 		t.Errorf("status = %q, %v; want expired", status, err)
 	}
 }
+
+func TestExportPurgeRemovesRowsAndFiles(t *testing.T) {
+	dir := t.TempDir()
+	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{
+		Env: map[string]string{"DATABASE_URL": pgtest.Database(t, ""), "EXPORTS_DIR": dir},
+	})
+
+	acc, err := accounts.New(app.App)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	svc, err := library.NewExports(app.App, acc)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	u := makeUser(t, app, "purge@example.com", "user", true)
+	other := makeUser(t, app, "keep@example.com", "user", true)
+
+	id, err := svc.Request(t.Context(), u.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	keep, err := svc.Request(t.Context(), other.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	path := filepath.Join(dir, strconv.FormatInt(u.ID, 10), id+".zip")
+	if _, err := os.Stat(path); err != nil {
+		t.Fatalf("export file missing before purge: %v", err)
+	}
+
+	if err := svc.Purge(t.Context(), u.ID); err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := os.Stat(path); !os.IsNotExist(err) {
+		t.Errorf("file survived the purge: %v", err)
+	}
+
+	var n int
+	if err := acc.DB.QueryRowContext(t.Context(), `SELECT count(*) FROM data_exports WHERE user_id = $1`, u.ID).
+		Scan(&n); err != nil || n != 0 {
+		t.Errorf("%d rows left for the purged user, %v", n, err)
+	}
+
+	if err := acc.DB.QueryRowContext(t.Context(), `SELECT count(*) FROM data_exports WHERE id = $1`, keep).
+		Scan(&n); err != nil || n != 1 {
+		t.Errorf("other user's export rows = %d, %v; want 1", n, err)
+	}
+}
