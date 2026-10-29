@@ -180,7 +180,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
     - `go test ./tests -run TestGeneratedOverallColumn` → insert and update through the ORM succeed and `overall` equals `round(sum/6)`; if the ORM writes the column, the test documents the raw-SQL fallback
   - Notes: `s.Raw` for `jsonb` and CHECK constraints (VF-006 workaround). Record whether `t.JSON` maps to `jsonb` on Postgres.
 
-- [ ] **P0.F.5.2** Prove an advisory lock around the migration runner and a one-off `CREATE INDEX CONCURRENTLY` script outside a transaction.
+- [x] **P0.F.5.2** Prove an advisory lock around the migration runner and a one-off `CREATE INDEX CONCURRENTLY` script outside a transaction.
   - Files/modules: spike custom command `migrate:locked` (via `vukem make:command`), `scripts/concurrent-index.sh`
   - Refs: SDD 11 §7.2; SDD 07 §7.10; open-issues 07-3, 11-3, 11-4; VF-017, VF-026; ADR 0014
   - Depends on: P0.F.5.1

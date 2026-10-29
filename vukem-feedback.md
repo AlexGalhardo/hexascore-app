@@ -48,6 +48,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-037 | 2026-10-29 | medium | open |
 | VF-038 | 2026-10-29 | medium | open |
 | VF-039 | 2026-10-29 | low | open |
+| VF-040 | 2026-10-29 | medium | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -374,3 +375,11 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Context**: SDD 01 §7.2 assumed `signed.Signer` can sign a cursor payload; it only signs URLs (`Sign(rawURL, ttl)`, `Verify(*http.Request)`), so the spike uses `crypto/hmac` with a key from `App.DeriveKey("catalog-cursor", 32)`. `web.Problem` (RFC 9457) has no extension members, so the SDD 05 problem code `invalid-cursor` needs a hand-written `application/problem+json` body. `orm.CursorPaginate` rejects `sort`, hence the app-owned keyset (VF-005).
 - **Workaround**: `app/catalog/cursor.go` (HMAC-SHA256, constant-time compare, sort key and direction inside the signed payload) and `invalidCursor` in `app/controllers/items.go`.
 - **Request**: `signed.Token` (sign and verify arbitrary payloads with key rotation), `Problem.Extensions`/`Code`, and a documented keyset cursor over `(sort, id)` in the ORM.
+
+## VF-040: Migration runner has no lock hook and no non-transactional migrations (custom command needed)
+
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` ("Managing them with migrate"), `https://vukem.dev/docs/deployment/docker-and-railway`, `https://vukem.dev/docs/cli/reference-runtime`.
+- **Context**: confirms VF-026 and VF-017 on a real run. `app.Migrator().Up` takes no lock, so two `migrate` processes can race; `schema.Migration` has no hook for a lock and no non-transactional mode.
+- **Workaround** (spike `agent/senior/P0.F.5.2`): custom command `migrate:locked` (`vukem.CommandFunc`) holding `pg_advisory_lock(hashtext('hexascore:migrate'))` on a dedicated `*sql.Conn` from `db.SQL()` around `Migrator().Up`, duplicating the output of `migrate` (`Migrated:` lines, `Nothing to migrate.`); and `scripts/concurrent-index.sh` running `database/concurrent/<name>.sql` through psql outside a transaction after dropping an INVALID leftover. Concurrent indexes are not recorded by `migrate:status`.
+- **Request**: lock inside `Migrator.Up` (Postgres advisory, MySQL `GET_LOCK`, documented), `schema.Migration{NoTransaction: true}` recorded like the others, and an exported helper for the `migrate` command output so wrappers do not copy it.
