@@ -12,17 +12,34 @@ Owner documents: SDD 11 §7.2, SDD 07 §7.10, ADR 0014. Migrations are forward-o
 
 The lock lives on a dedicated connection that is closed after the run, so a crashed runner never leaves the lock held. PostgreSQL only; any other dialect is an error.
 
-The Railway pre-deploy command is still `/app/app migrate`. Switching it to `/app/app migrate:locked` is a deploy configuration change for the owner.
+## Pre-deploy
+
+`hexascore:predeploy` is the single pre-deploy entry point (SDD 11 §7.2). It drops `INVALID` index leftovers of a failed concurrent build, then runs `migrate`, printing `Dropped INVALID index: <name>`, `Migrated: <id>` or `Nothing to migrate.`. Any error exits non-zero, so Railway does not proceed with the deployment and the previous one keeps serving.
+
+```sh
+/app/hexascore hexascore:predeploy
+```
+
+Since vukem v0.33.0 `migrate` itself holds an advisory lock for the whole run (VF-026): two overlapping pre-deploys serialise and the second prints `Nothing to migrate.`. The Railway pre-deploy command is still `/app/app migrate`; switching it to `/app/app hexascore:predeploy` is a deploy configuration change for the owner.
 
 ## Concurrent indexes
 
-`CREATE INDEX CONCURRENTLY` cannot run inside a migration transaction (VF-017). Put the statement in `database/concurrent/<name>.sql` (index name `[a-z0-9_]+`), keep a regular migration with `CREATE INDEX IF NOT EXISTS` so `migrate:status` records it, and run after `migrate`:
+`CREATE INDEX CONCURRENTLY` cannot run inside a transaction. Since vukem v0.33.0 (VF-017) it is a regular migration with `NoTransaction: true`, one statement per migration, written to be re-run:
 
-```sh
-PSQL='psql "$DATABASE_URL"' scripts/concurrent-index.sh <name>
+```go
+var IndexItemsTitleTrgm = schema.Migration{
+	ID:            "20261101120000_index_items_title_trgm",
+	NoTransaction: true,
+	Up: func(s *schema.Schema) error {
+		return s.Raw("CREATE INDEX CONCURRENTLY IF NOT EXISTS items_title_trgm ON items USING gin (title gin_trgm_ops)")
+	},
+	Down: func(s *schema.Schema) error {
+		return s.Raw("DROP INDEX CONCURRENTLY IF EXISTS items_title_trgm")
+	},
+}
 ```
 
-The script drops an `INVALID` leftover of a failed earlier build, builds the index outside a transaction and exits non-zero unless `indisvalid` is true. `WATCH_LOCKS=1` samples `pg_locks` during the build and reports whether an `AccessExclusiveLock` on the table was ever granted; more than 5 s of `ACCESS EXCLUSIVE` blocks the release.
+A failed build (timeout, unique violation) leaves an `INVALID` index and the migration unrecorded; `IF NOT EXISTS` would skip that leftover on the retry. `hexascore:predeploy` therefore drops every `INVALID` index of the current schema that no backend is building (`pg_stat_progress_create_index`) before migrating; partitioned parent indexes are left alone. Ship a big index build alone in its release so it fits the pre-deploy timeout (SDD 11 §8). The P0.F.5.2 workaround (`database/concurrent/`, `scripts/concurrent-index.sh`) is not used for new indexes.
 
 ## Failure handling
 
