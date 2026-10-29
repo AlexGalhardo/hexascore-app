@@ -36,7 +36,7 @@ func Auth(r *router.Router, app *vukem.App) error {
 	// Signed-in pages also need a verified email; unverified users are sent
 	// to the verification notice.
 	verified := auth.Verified(acc.Web)
-	loginIP, loginAccount := auth.ThrottleKeys("identifier")
+	loginIP, loginAccount := acc.LoginThrottleKeys("identifier")
 	throttle := ratelimit.Middleware(limiters("login", 5, time.Minute), loginIP)
 	perAccount := ratelimit.Middleware(limiters("login.account", 20, 10*time.Minute), loginAccount)
 	mails := ratelimit.Middleware(limiters("mails", 3, time.Minute), ratelimit.ByIP)
