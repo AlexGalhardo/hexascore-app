@@ -49,6 +49,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-038 | 2026-10-29 | medium | open |
 | VF-039 | 2026-10-29 | low | open |
 | VF-040 | 2026-10-29 | medium | open |
+| VF-NEW-P0.F.7.2 | 2026-10-29 | low | open |
 | VF-043 | 2026-10-29 | low | open |
 | VF-041 | 2026-10-29 | low | open |
 | VF-042 | 2026-10-29 | low | open |
@@ -410,3 +411,11 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Context**: the performance budgets (NFR-09-5, LCP) are measured on transfer size. The scaffold ships no compression, so a container behind a proxy that does not compress fails the JS budget (354 kB raw `app-*.js`).
 - **Workaround** (spike `agent/senior/P0.F.10.1`): `r.UseServer(middleware.Gzip())` before `StaticFS` in `routes.Web`. Brotli is not offered by `middleware.Gzip` (`HEAD` and `Range` are passed through).
 - **Request**: starter template enables gzip (or documents it as a required deploy step), and a Brotli option for static assets.
+
+## VF-NEW-P0.F.7.2: Generated types mark every response property optional; untyped routes appear as `*/*` in the document
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/client-generation`, `https://vukem.dev/docs/cli/reference-runtime` ("`vukem codegen:client`", "`vukem codegen:routes`"). `[NOT IN VUKEM DOCS]`: nothing on `required` in output schemas or on plain handlers.
+- **Context**: (1) the OpenAPI schemas generated from `Out` types have no `required` list, so `codegen:client` emits `Item = { id?: string; slug?: string; ... }` and the SDKs force null checks on fields the server always sends (inputs keep `required` from `validate` tags). (2) A route registered with a plain handler (`g.Get("/ping", ...)`) is documented with a `*/*` response and an empty schema; `openapi-python-client` 0.29.1 warns and omits the response.
+- **Workaround**: register every public route through `api.Register` with typed output; accept optional properties in the first-party client.
+- **Request**: mark non-pointer, non-`omitempty` output fields `required` in the generated schemas (or a `doc:"required"` tag), and document or reject plain handlers inside OpenAPI prefixes.
