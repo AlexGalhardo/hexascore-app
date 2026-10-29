@@ -322,3 +322,12 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 - **Repro**: spike `agent/senior/P0.F.4.1`: `API_URL=http://api.localhost:3001/v1 vukem openapi:export -prefix /api/v1 | jq -r '.servers[0].url, (.paths|keys[])'` gives `http://api.localhost:3001/v1` and `/api/v1/ping`.
 - **Workaround**: post-process the export: `jq '.paths |= with_entries(.key |= sub("^/api/v1";""))'` gives paths `/ping`, matching the server URL.
 - **Request**: `openapi.Info.StripPrefix` (or `PathPrefix` stripping) and an `OPENAPI_SERVERS` config key. Also note: in Git Bash `-prefix //api/v1` was passed through literally and failed (`path prefix matches no route "//api/v1"`); `MSYS_NO_PATHCONV=1 ... -prefix /api/v1` works.
+
+## VF-037: `install:billing` has no per-currency prices and its plan names are fixed in code
+
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0 (`contrib/stripe` v0.4.1). **Docs consulted**: `https://vukem.dev/docs/cli/reference-install` ("`vukem install:billing`"), `https://vukem.dev/docs/digging-deeper/billing` ("Configuration", "Testing").
+- **Context**: the scaffold writes plans `basic` and `pro` in `config/billing.go` (`plans()`), one `STRIPE_PRICE_<NAME>` id per plan and a `Checkout(ctx, user, plan)` without a currency. HexaScore sells `pro` and `business` in BRL, USD and EUR (SDD 05 §6.3, ADR 0015) using one Stripe price per plan with `currency_options`.
+- **Workaround** (spike `agent/senior/P0.F.8.1`): rename the plans in `plans()` and in the tests; add `Plan.Amounts` (display only) and a `config.Currency` allowlist; pass `"currency"` in the `stripe.Params` of `CreateCheckoutSession` (`Params` is a free-form map, so no dependency change); the controller reads the `currency` form field and an unsupported value returns 422 before any Stripe call. Whether Stripe accepts `currency` with a `currency_options` price in a live sandbox is [NOT VERIFIED] here (only the fake-Stripe tests ran; test keys only).
+- **Request**: document the `currency_options` pattern, accept a currency (or locale to currency map) in the scaffold's `Checkout`, and generate plans from config rather than code.
+- Also: `POST /stripe/webhook` is mounted with `r.UseServer` and is not listed by `vukem route:list` (documented as such); the acceptance check for it is the webhook tests.
