@@ -65,6 +65,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-054 | 2026-10-29 | low | in_progress (framework), PR #51 |
 | VF-055 | 2026-10-29 | medium | open |
 | VF-056 | 2026-10-29 | medium | open |
+| VF-057 | 2026-10-29 | medium | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -565,3 +566,16 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
   - Validation: params decoded strictly (unknown fields rejected, size limits) and validated with the existing validation package; panics recovered as -32603 without leaking internals.
   - Docs: OpenRPC document generation from the registered methods (parallel to the OpenAPI export), and a typed client (`jsonrpc.Client`) for Go; optional TypeScript client generation alongside the existing client generation.
   - Tests: spec conformance table tests, fuzzing of the decoder, `TestSecurity_*` (oversized batch, deep nesting, method enumeration with auth, notification side effects under auth).
+
+## VF-057: HTTP/2 only as h2c on the main server; no TLS serving and no HTTP/3
+
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: open (requested by the owner 2026-10-29).
+- **vukem version**: v0.33.0 (main at the time of writing). **Docs consulted**: <https://vukem.dev/docs> search for `http2`, `http3`, `quic`, `tls`; the local `docs/api.md` "HTTP/2" bullet `[SITE PAGE MISSING]`.
+- **Context**: the app server speaks HTTP/1.1 and, with `HTTP_H2C` (always on outside production), HTTP/2 cleartext with prior knowledge (`app.go` `H2C`). HTTP/2 over TLS (ALPN `h2`) exists only in `contrib/grpc` on its own port (`grpc.ServerOptions{TLS: ...}`). The main server has no TLS serving at all, so self-hosted deployments without a TLS-terminating proxy cannot offer HTTP/2, and there is no HTTP/3 (QUIC) support anywhere. Behind Railway/Cloudflare the edge terminates TLS and HTTP/3, so this matters for self-hosting, direct origin connections and gRPC on the main port.
+- **Reproduction**: `git grep -n -E "http3|quic|ListenAndServeTLS|TLSConfig"` on vukem `main`: only `contrib/grpc`.
+- **Workaround**: terminate TLS, HTTP/2 and HTTP/3 at a proxy/CDN in front of the app.
+- **Request**:
+  - HTTP/2 over TLS on the main server: `TLS_CERT_FILE`/`TLS_KEY_FILE` (or `vukem.WithTLSConfig(*tls.Config)`), ALPN `h2` + `http/1.1` via stdlib `http.Protocols`, secure defaults (TLS 1.2 minimum, modern cipher suites, HSTS stays in the security headers middleware), optional HTTP→HTTPS redirect listener, hot certificate reload on file change or `GetCertificate`; `HTTP_H2C` behaviour unchanged.
+  - HTTP/3 as an opt-in nested module (`contrib/http3`) so core stays stdlib-only: QUIC listener on the same port (UDP) sharing the TLS config and the app handler, `Alt-Svc` header advertised from the HTTP/1.1 and HTTP/2 responses, graceful shutdown wired into the app runners, limits (max streams, idle timeout, header size matching `HTTP_MAX_HEADER_BYTES`). The QUIC implementation may be a third-party module (for example `github.com/quic-go/quic-go`, exact pinned stable version) if the stdlib has no production-ready HTTP/3 server at implementation time; check `golang.org/x/net` first and record the choice.
+  - Docs and site page "HTTP/2 and HTTP/3" (when you need them, proxy vs direct, Railway/Cloudflare notes); tests: h2 over TLS with `httptest`, ALPN negotiation, h2c unchanged, HTTP/3 round trip on loopback, `Alt-Svc` present only when HTTP/3 is on, `TestSecurity_*` (TLS < 1.2 refused, no plaintext fallback when TLS is configured unless the redirect listener is on).
+
