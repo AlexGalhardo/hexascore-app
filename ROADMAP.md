@@ -702,7 +702,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.D.4 Status, time-to-beat, widget and help page
 
-- [ ] **P1.D.4.1** Implement status and time-to-beat writes on web and `/app/v1` (replaces `saveItemStatus`, `saveTimeToBeat`, `deleteTimeToBeat`).
+- [x] **P1.D.4.1** Implement status and time-to-beat writes on web and `/app/v1` (replaces `saveItemStatus`, `saveTimeToBeat`, `deleteTimeToBeat`).
   - Files/modules: `app/scoring/status.go`, `app/scoring/time_to_beat.go`, `app/http/controllers/status_controller.go`, `routes/web.go`, `routes/app_api.go`, tests
   - Refs: SDD 02 §6, §7.7; legacy `actions/item-status.ts`, `actions/time-to-beat.ts`, `lib/time-to-beat.ts`
   - Depends on: P1.D.2.1
