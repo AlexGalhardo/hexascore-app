@@ -1,0 +1,25 @@
+{{define "content"}}
+<div class="toolbar"><h1>{{.Title}}</h1></div>
+{{if not .Ready}}
+<p class="muted">The ingestion tables do not exist yet; they arrive with the ingestion phase.</p>
+{{else}}
+<h2>Source records</h2>
+{{if not .Sources}}<p class="muted">No source records yet.</p>{{else}}
+<table>
+	<thead><tr><th>Source</th><th>Records</th><th>Pending</th><th>Last fetched</th><th>Last checked</th></tr></thead>
+	<tbody>
+	{{range .Sources}}<tr><td>{{.Source}}</td><td>{{.Records}}</td><td>{{.Pending}}</td><td>{{.LastFetched}}</td><td>{{.LastChecked}}</td></tr>{{end}}
+	</tbody>
+</table>
+{{end}}
+<h2>Last run per job</h2>
+{{if not .Runs}}<p class="muted">No runs yet.</p>{{else}}
+<table>
+	<thead><tr><th>Job</th><th>Source</th><th>Status</th><th>Seen</th><th>Changed</th><th>Failed</th><th>Started</th><th>Finished</th></tr></thead>
+	<tbody>
+	{{range .Runs}}<tr><td>{{.Job}}</td><td>{{.Source}}</td><td>{{.Status}}</td><td>{{.Seen}}</td><td>{{.Changed}}</td><td>{{.Failed}}</td><td>{{.Started}}</td><td>{{.Finished}}</td></tr>{{end}}
+	</tbody>
+</table>
+{{end}}
+{{end}}
+{{end}}

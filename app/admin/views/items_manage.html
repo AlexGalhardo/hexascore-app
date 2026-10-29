@@ -1,0 +1,36 @@
+{{define "content"}}
+<div class="toolbar"><h1>{{.Title}}</h1></div>
+<p><a href="/admin/items/{{.Item.ID}}">Back to item</a> · {{.Item.Type}} · {{.Item.Slug}}</p>
+
+<h2>Affiliate links</h2>
+{{if not .Affiliates}}<p class="muted">No affiliate links. They only show on the site while the affiliates flag is on.</p>{{end}}
+<table>
+	<thead><tr><th>Store</th><th>URL</th><th>Active</th><th></th></tr></thead>
+	<tbody>
+	{{range .Affiliates}}
+	<tr>
+		<td>{{.Store}}</td><td>{{.URL}}</td><td>{{if .Active}}yes{{else}}no{{end}}</td>
+		<td><form method="post" action="/admin/items/{{$.Item.ID}}/affiliate-links/{{.Store}}/delete">{{csrfField}}<button type="submit" class="button danger">Delete</button></form></td>
+	</tr>
+	{{end}}
+	</tbody>
+</table>
+<form method="post" action="/admin/items/{{.Item.ID}}/affiliate-links" class="stack">
+	{{csrfField}}
+	<label>Store
+		<select name="store"><option>amazon</option><option>mercadolivre</option><option>steam</option><option>gog</option></select>
+	</label>
+	<label>URL <input type="url" name="url" required maxlength="2048" placeholder="https://"></label>
+	<label><input type="checkbox" name="active" value="true" checked> Active</label>
+	<button type="submit" class="button">Save link</button>
+</form>
+
+<h2>Merge into another item</h2>
+<p>Moves translations, entities, editions, links and user data to the target and deletes this item. It cannot be undone.</p>
+<form method="post" action="/admin/items/{{.Item.ID}}/merge" class="stack">
+	{{csrfField}}
+	<label>Target item id <input name="into" required pattern="[0-9a-fA-F-]{36}" maxlength="36"></label>
+	<label><input type="checkbox" name="confirm" value="merge" required> I understand this is irreversible</label>
+	<button type="submit" class="button danger">Merge</button>
+</form>
+{{end}}
