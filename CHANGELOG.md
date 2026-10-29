@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-29
+
+### Added
+
+- **reports:** Add reports, contact form and admin resolve route ([54a802d](https://github.com/AlexGalhardo/hexascore-app/commit/54a802d44a2501230f5222c0f6b27319613c38c3))
+- **catalog:** Add Catalog/Index listings with filters, facets and infinite scroll ([5526d6e](https://github.com/AlexGalhardo/hexascore-app/commit/5526d6e58f1d29868da1b208e619397b29f1327c))
+- **search:** Add Search/Index page and header suggest combobox ([df04924](https://github.com/AlexGalhardo/hexascore-app/commit/df0492473b73d9c64edfa135609b617a9eb68336))
+
 ## [0.3.0] - 2026-10-29
 
 ### Added
