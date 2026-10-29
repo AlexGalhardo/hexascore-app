@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"slices"
 	"testing"
 	"time"
 
@@ -130,6 +131,17 @@ func TestCancelLiveOnDeletion(t *testing.T) {
 		map[string]any{"id": "sub_1", "customer": "cus_1"},
 	).AssertOK()
 
+	// A row retired locally by a newer subscription is still live in Stripe and must be cancelled too.
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.ExecContext(t.Context(), `INSERT INTO subscriptions
+(user_id, stripe_subscription_id, status, price_id, plan, provider, state, created_at, updated_at)
+VALUES ($1, 'sub_old', 'active', 'price_pro', 'pro', 'stripe', 'canceled', $2, $2)`, u.ID, time.Now()); err != nil {
+		t.Fatal(err)
+	}
+
 	acc, err := accounts.New(app.App)
 	if err != nil {
 		t.Fatal(err)
@@ -165,5 +177,9 @@ func TestCancelLiveOnDeletion(t *testing.T) {
 
 	if len(f.cancels) != calls {
 		t.Fatalf("cancelled subscription cancelled again: %v", f.cancels)
+	}
+
+	if !slices.Contains(f.cancels, "sub_old") || !slices.Contains(f.cancels, "sub_1") {
+		t.Fatalf("cancels = %v; want sub_1 and sub_old", f.cancels)
 	}
 }
