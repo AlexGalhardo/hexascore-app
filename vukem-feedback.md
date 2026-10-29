@@ -9,7 +9,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 | id | date | severity | status |
 | --- | --- | --- | --- |
-| VF-001 | 2026-10-28 | high | in_progress (framework), PR #43 core `auth/webauthn` (merge pending); scaffold next |
+| VF-001 | 2026-10-28 | high | in_progress (framework), PR #43 core `auth/webauthn` + PR #44 `install:auth --passkeys` scaffold (stacked on #43), merges pending |
 | VF-002 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#7](https://github.com/AlexGalhardo/vukem/pull/7)) |
 | VF-003 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#21](https://github.com/AlexGalhardo/vukem/pull/21)) |
 | VF-004 | 2026-10-28 | low | open |
@@ -60,13 +60,13 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-049 | 2026-10-29 | low | open |
 | VF-050 | 2026-10-29 | low | open |
 | VF-051 | 2026-10-29 | medium | in_progress (framework), PR #36 green, merge pending (owner) |
-| VF-052 | 2026-10-29 | high | open |
+| VF-052 | 2026-10-29 | high | in_progress (framework), part 1 PR #46 (client IP + origin lock); 4 parts left |
 | VF-053 | 2026-10-29 | low | open |
 | VF-054 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
-- **Date**: 2026-10-28. **Severity**: high. **Status**: in_progress (framework) (reopened 2026-10-29: the owner authorized the framework work in chat, superseding the FQ-001 post-1.0 deferral).
+- **Date**: 2026-10-28. **Severity**: high. **Status**: in_progress (framework): PR #43 core + PR #44 scaffold open, merges pending (reopened 2026-10-29: the owner authorized the framework work in chat, superseding the FQ-001 post-1.0 deferral).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/two-factor` (Concepts, Guards, Hashing [heading not on page 2026-10-29], `install:auth`, Two-factor, Social login).
 - **Context**: HexaScore's legacy app (Better Auth 1.7.7) offers passkeys. The rewrite drops them at launch (brainstorming D-06) because the framework has no WebAuthn registration/assertion flow, credential storage or recovery path.
 - **Reproduction**: search `docs/` and `auth/` for `webauthn`, `passkey`, `FIDO`: no matches.

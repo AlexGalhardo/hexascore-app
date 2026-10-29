@@ -26,3 +26,10 @@ Owner answered "merge your own green PRs" in chat, but `gh pr merge 39 --squash`
 2. Then the queued task `$ORCH/queue/framework/2-VF-052.md` (Cloudflare `contrib/cloudflare`, high). New deps allowed there only with an exact pinned stable version recorded in the PR and docs.
 3. VF-022 triage note: trace/log correlation already exists (`otel.LogHandler` puts `trace_id` on the request log line, `TestProvider_CorrelatesRequestLogs`); the request logger does not log a user id. Remaining real gap: an option to truncate `ip` (/24, /48) in `middleware.Logger`. Answer VF-022 with that and implement only IP truncation.
 4. FD-011 / FD-014 still have no owner answer: do not code them.
+
+## Session 8 (2026-10-29)
+
+- VF-001 part 2: PR #44 (`feat/vf-001-passkeys-scaffold`, base `feat/vf-001-webauthn`). Rebase onto main on a NEW branch after #43 squash-merges (no force-push). Report `reports/VF-001.md`.
+- ISSUES-19-5: PR #45 (`chore/scorecard-vulns`: x/net v0.62.0, bench echo v5.4.2, maintenance.md Scorecard history + levers). `gh issue comment/close` denied by the classifier: texts for #19/#5 in `reports/ISSUES-19-5.md` for the orchestrator.
+- Next: VF-052 (`queue/framework/2-VF-052.md`). Owner rule: after each task open PR, report, end with `STATUS: IDLE`.
+- Windows: `internal/testutil` test exe "Acesso negado" now persistent (AV lock), not code.

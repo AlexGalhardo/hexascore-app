@@ -1,6 +1,6 @@
 # Handoff especialista (2026-10-29, session 9)
-STATUS: HANDOFF after 3 deliveries. Worktree C:\dev\hexascore-app\wt\especialista on agent/especialista/P2.C.1.1, clean.
-Queue left: 9-APP-PASSKEYS-b (blocked until a vukem release with VF-001).
+STATUS: standby (owner rule: no HANDOFF). Last delivered: P2.E.2.1 (agent/especialista/P2.E.2.1). Earlier this session: Worktree C:\dev\hexascore-app\wt\especialista on agent/especialista/P2.C.1.1, clean.
+Queue left: 4-P2.D.3.1, 5-P2.F.2.1, 9-APP-PASSKEYS-b (blocked). Wait for orchestrator message before claiming the next.
 Done this session:
 - REV-P1.H.4.1b -> APROVADO (agent/senior/P1.H.4.1b), no changes.
 - P2.E.1.1 -> self PRONTO (agent/especialista/P2.E.1.1): hexascore:predeploy = drop INVALID indexes + native vukem m.Up (v0.33 lock + NoTransaction); VF-NEW-P2.E.1.1.
@@ -12,3 +12,4 @@ Pitfalls (new):
 - Python on Windows text mode writes CRLF: use binary read/write for repo files.
 - vukemtest: AppOptions vukem.WithStdout / WithLogOutput override the io.Discard defaults (appended later).
 Merge overlap: P2.E.1.1 vs senior ADOPT-VF-040 (bootstrap/commands.go, runbook); CHANGELOG [Unreleased] on all branches.
+- P2.E.2.1: app/backup frames + backup:run; added vukem drivers/s3 v0.3.1 (flagged). Local pg_dump: host has none; build GOOS=linux binary and run it in postgres:18.6-alpine3.24 with --add-host host.docker.internal:host-gateway, APP_ENV=development. RustFS creds hexascore/hexascore-local-secret; bucket hexascore-local exists.
