@@ -7,7 +7,6 @@ import (
 	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
-	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/i18n"
 	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/middleware"
@@ -144,10 +143,6 @@ func Web(r *router.Router, app *vukem.App) error {
 			r.Get("/"+section+"/{slug}", items.Show(typ)).Name("item." + typ)
 		}
 		r.Get("/books/{slug}/editions/{id}", items.Edition).Name("item.edition")
-		byUser := ratelimit.Middleware(limiters("item.report", 10, time.Minute), ratelimit.ByUser(acc.Web.Name()))
-		r.Post("/items/{id}/report", items.Report).
-			Name("item.report").
-			Use(auth.Required(acc.Web), auth.Verified(acc.Web), byUser)
 		r.Get("/api/search/suggest", controllers.LegacySuggest).Name("search.suggest.legacy")
 	}
 
