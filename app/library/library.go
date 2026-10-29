@@ -222,9 +222,7 @@ func editionNotOfWork() error {
 	return errs.NewKey(
 		http.StatusUnprocessableEntity,
 		"library.edition_not_of_work",
-		"This edition belongs to another work.",
-		map[string]any{"code": CodeEditionNotOfWork},
-	)
+		"This edition belongs to another work.", nil).WithExtension("code", CodeEditionNotOfWork)
 }
 
 // SetEdition records editionID as userID's edition of the book itemID. An unknown or non-public item is 404;

@@ -49,8 +49,8 @@ func (s *Lists) AddItem(ctx context.Context, l models.List, itemID, note string)
 			return nil
 		}
 		if l.ItemCount >= MaxItemsPerList {
-			return errs.NewKey(http.StatusConflict, "lists.item_limit_reached", "This list is full.",
-				map[string]any{"code": CodeItemLimit})
+			return errs.NewKey(http.StatusConflict, "lists.item_limit_reached", "This list is full.", nil).
+				WithExtension("code", CodeItemLimit)
 		}
 
 		now := s.Now().UTC()

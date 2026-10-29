@@ -18,6 +18,7 @@ const ProblemCodeHeader = "X-Problem-Code"
 
 const (
 	apiPrefix    = "/api/v1"
+	appPrefix    = "/app/v1"
 	hostV1Prefix = "/v1"
 )
 
@@ -57,7 +58,7 @@ func APIEdge(apiHost, problemBase string) (func(http.Handler) http.Handler, erro
 				r.URL.RawPath = ""
 			}
 
-			if underPrefix(r.URL.Path, apiPrefix) {
+			if underPrefix(r.URL.Path, apiPrefix) || underPrefix(r.URL.Path, appPrefix) {
 				api.ServeHTTP(w, r)
 				return
 			}
@@ -134,7 +135,13 @@ func (p *problemWriter) finish() {
 
 	var doc map[string]any
 	if json.Unmarshal(body, &doc) == nil {
-		if _, has := doc["code"]; !has {
+		if c, has := doc["code"].(string); has {
+			// Handlers raise errs.HTTPError.WithExtension("code", ...); vukem keeps type about:blank.
+			if c != "" {
+				doc["type"] = p.base + c
+				body = mustJSON(doc, body)
+			}
+		} else {
 			code := forced
 			if !problems.Known(code) {
 				code = problems.ForStatus(p.status)
@@ -144,9 +151,7 @@ func (p *problemWriter) finish() {
 				doc["code"] = code
 				doc["type"] = p.base + code
 
-				if out, err := json.Marshal(doc); err == nil {
-					body = out
-				}
+				body = mustJSON(doc, body)
 			}
 		}
 	}
@@ -154,4 +159,12 @@ func (p *problemWriter) finish() {
 	h.Del("Content-Length")
 	p.ResponseWriter.WriteHeader(p.status)
 	_, _ = p.ResponseWriter.Write(body)
+}
+
+func mustJSON(doc map[string]any, fallback []byte) []byte {
+	if out, err := json.Marshal(doc); err == nil {
+		return out
+	}
+
+	return fallback
 }

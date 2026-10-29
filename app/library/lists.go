@@ -74,7 +74,7 @@ type UpdateInput struct {
 
 // ErrNotFound answers an unknown list or item as 404.
 func ErrNotFound() error {
-	return errs.NewKey(http.StatusNotFound, "lists.not_found", "Not found.", map[string]any{"code": "not-found"})
+	return errs.NewKey(http.StatusNotFound, "lists.not_found", "Not found.", nil).WithExtension("code", "not-found")
 }
 
 const listCols = `l.id, l.user_id, l.type, l.title, l.description, l.is_public, l.hidden, l.item_count, l.version,
@@ -125,8 +125,8 @@ func (s *Lists) Create(ctx context.Context, userID int64, in CreateInput) (model
 			return err
 		}
 		if n >= MaxListsPerType {
-			return errs.NewKey(http.StatusConflict, "lists.limit_reached", "List limit reached for this type.",
-				map[string]any{"code": CodeListLimit})
+			return errs.NewKey(http.StatusConflict, "lists.limit_reached", "List limit reached for this type.", nil).
+				WithExtension("code", CodeListLimit)
 		}
 
 		if in.FirstItemID != "" {
@@ -207,9 +207,7 @@ func requireItemOfType(ctx context.Context, tx *database.Tx, itemID, listType st
 		return errs.NewKey(
 			http.StatusUnprocessableEntity,
 			"lists.type_mismatch",
-			"This list holds another type of item.",
-			map[string]any{"code": CodeTypeMismatch},
-		)
+			"This list holds another type of item.", nil).WithExtension("code", CodeTypeMismatch)
 	}
 
 	return nil

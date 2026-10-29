@@ -24,7 +24,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-013 | 2026-10-28 | low | open |
 | VF-014 | 2026-10-28 | low | open |
 | VF-015 | 2026-10-28 | medium | merged in main (PR #12), unreleased |
-| VF-016 | 2026-10-28 | low | in_progress (framework), PR #33 |
+| VF-016 | 2026-10-28 | low | fixed in v0.33.0 (adopted ADOPTSHA) |
 | VF-017 | 2026-10-28 | medium | merged in main (PR #13), unreleased |
 | VF-018 | 2026-10-28 | medium | merged in main (PR #14), unreleased |
 | VF-019 | 2026-10-28 | medium | merged in main (PR #15), unreleased |
@@ -37,26 +37,26 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-026 | 2026-10-28 | medium | merged in main (PR #13), unreleased |
 | VF-027 | 2026-10-28 | medium | merged in main (PR #9), unreleased |
 | VF-028 | 2026-10-28 | low | merged in main (PR #28, via VF-041 `inertia.Config.ViewData`), unreleased |
-| VF-029 | 2026-10-28 | low | in_progress (framework), PR #32 |
+| VF-029 | 2026-10-28 | low | fixed in v0.33.0 (adopted ADOPTSHA) |
 | VF-030 | 2026-10-28 | medium | merged in main (PR #20), unreleased |
 | VF-031 | 2026-10-28 | medium | merged in main (PR #24), unreleased |
 | VF-032 | 2026-10-28 | medium | in_progress (framework), PR #31 |
 | VF-033 | 2026-10-28 | low | open |
 | VF-034 | 2026-10-28 | low | open |
 | VF-035 | 2026-10-29 | medium | merged in main (PR #25), unreleased |
-| VF-036 | 2026-10-29 | low | in_progress (framework), PR #34 (documented; rename rule change is breaking) |
+| VF-036 | 2026-10-29 | low | fixed in v0.33.0 (adopted ADOPTSHA) |
 | VF-037 | 2026-10-29 | medium | merged in main (PR #26), unreleased |
 | VF-038 | 2026-10-29 | medium | merged in main (PR #17), unreleased |
 | VF-039 | 2026-10-29 | low | open |
 | VF-040 | 2026-10-29 | medium | merged in main (PR #13), unreleased |
 | VF-041 | 2026-10-29 | low | merged in main (PR #28), unreleased |
 | VF-042 | 2026-10-29 | low | open |
-| VF-043 | 2026-10-29 | low | in_progress (framework), PR #30 |
+| VF-043 | 2026-10-29 | low | fixed in v0.33.0 (adopted ADOPTSHA) |
 | VF-044 | 2026-10-29 | low | open |
 | VF-045 | 2026-10-29 | low | PR #29 green, merge blocked (FR-002) |
 | VF-046 | 2026-10-29 | medium | merged in main (PR #27), unreleased |
 | VF-047 | 2026-10-29 | low | open |
-| VF-048 | 2026-10-29 | low | in_progress (framework), PR #33 (via VF-016 `WithExtension`) |
+| VF-048 | 2026-10-29 | low | fixed in v0.33.0 (adopted ADOPTSHA) |
 | VF-049 | 2026-10-29 | low | open |
 | VF-050 | 2026-10-29 | low | open |
 | VF-051 | 2026-10-29 | medium | open |
