@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -353,5 +354,43 @@ func TestSecurity_A07_GoogleIDTokenAudience(t *testing.T) {
 		post(sign("android-client", unverified)).AssertStatus(http.StatusConflict),
 	); got != "email-unverified-at-provider" {
 		t.Errorf("unverified code = %q", got)
+	}
+}
+
+// TestSecurity_A07_AppTokenRotationSingleUse: the token a rotation consumes
+// cannot be rotated again, so two concurrent rotations with a stolen token
+// never leave two live successors.
+func TestSecurity_A07_AppTokenRotationSingleUse(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+	signedUp(t, app, "rotate@example.com")
+
+	acc, err := accounts.New(app.App)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	u, err := acc.Users.ByCredentials(t.Context(), map[string]string{"email": "rotate@example.com"})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, cur, err := acc.IssueAppToken(t.Context(), u, "phone")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if _, _, err := acc.RotateAppToken(t.Context(), u, cur); err != nil {
+		t.Fatal(err)
+	}
+
+	if _, _, err := acc.RotateAppToken(t.Context(), u, cur); !errors.Is(err, accounts.ErrTokenAlreadyRotated) {
+		t.Fatalf("second rotation err = %v, want ErrTokenAlreadyRotated", err)
+	}
+
+	live, err := acc.LiveAppTokens(t.Context(), u)
+	if err != nil || len(live) != 1 {
+		t.Fatalf("live tokens = %d, %v", len(live), err)
 	}
 }

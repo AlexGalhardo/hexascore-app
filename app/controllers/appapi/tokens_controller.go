@@ -227,6 +227,10 @@ func (h *Tokens) Rotate(c *web.Ctx) error {
 	}
 
 	plain, tok, err := h.a.RotateAppToken(c.Context(), u, cur)
+	if errors.Is(err, accounts.ErrTokenAlreadyRotated) {
+		return h.problem(c, http.StatusUnauthorized, "token-revoked", "Token revoked")
+	}
+
 	if err != nil {
 		return err
 	}
