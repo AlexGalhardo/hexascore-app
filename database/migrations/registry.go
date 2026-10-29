@@ -28,5 +28,6 @@ func All() []schema.Migration {
 		m20261029110001CreateAccountEventsTable(),
 		m20261029120000CreateScoringTables(),
 		m20261029120001SeedScoreFormulaV1(),
+		m20261029130100CreateCatalogMergeAuditTable(),
 	}
 }
