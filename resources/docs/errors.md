@@ -30,6 +30,10 @@ HTTP 400. A query parameter is unknown or out of range, or `limit` is above your
 
 HTTP 400. The `cursor` was tampered with or belongs to another query. Restart from the first page.
 
+### changes-window-exceeded
+
+HTTP 400. The `since` window of `/v1/changes` is larger than the endpoint allows. Request a more recent `since`.
+
 ### unauthorized
 
 HTTP 401. No `Authorization: Bearer` header, a malformed key, or a key that does not exist or was revoked. Check the header and the key at [/profile/api](/profile/api). Never retried automatically.
