@@ -690,7 +690,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test ./tests/scoring -run TestDailyCap` → 21st insert of a 2-day account returns 429 with `Retry-After`.
   - Notes: custom admin routes `/admin/scoring/bursts/{id}/approve|exclude` and `/admin/scoring/flags/{user}/{item}/restore` because row actions are not in vukem (VF-008). Thresholds are untuned until the 90-day review (02-7).
 
-- [ ] **P1.D.3.2** Schedule the nightly recompute, burst release and event prune, subscribe to ban/unban and merge events, and add the scoring DQ asserts.
+- [x] **P1.D.3.2** Schedule the nightly recompute, burst release and event prune, subscribe to ban/unban and merge events, and add the scoring DQ asserts.
   - Files/modules: `app/jobs/recompute_scores.go`, `app/jobs/recompute_item_score.go`, `app/jobs/release_bursts.go`, `app/jobs/prune_rating_events.go`, `app/scoring/listeners.go`, `routes/schedule.go`, `app/scoring/dq.go`
   - Refs: SDD 02 §6 (jobs, subscriptions), §10; open-issues 02-8; SDD 01 §7.5 (merge); VF-018, VF-021
   - Depends on: P1.D.3.1, P1.B.3.2

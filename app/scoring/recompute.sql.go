@@ -7,12 +7,12 @@ import (
 	"time"
 )
 
-// recomputeSQL is formula v1 (SDD 02 §7.1) in one statement: $1 item id,
-// $2 compute time, $3 m_t, $4 priors C_{t,1..6} as numeric[], $5 formula version. It must stay
-// equal to Compute and Weight (TestSQLMatchesGo).
-const recomputeSQL = `
+// weightedRatingsSQL is the head of the "w" CTE: one row per rating with its weight w_u
+// (SDD 02 §7.1), at compute time $2. The caller appends the WHERE clause. It must stay
+// equal to Weight (TestSQLMatchesGo).
+const weightedRatingsSQL = `
 WITH w AS (
-  SELECT r.c1, r.c2, r.c3, r.c4, r.c5, r.c6, r.overall,
+  SELECT r.item_id, r.c1, r.c2, r.c3, r.c4, r.c5, r.c6, r.overall,
     (CASE WHEN $2::timestamptz - u.created_at < interval '7 days' THEN 0.25
           WHEN $2::timestamptz - u.created_at < interval '30 days' THEN 0.5
           WHEN $2::timestamptz - u.created_at < interval '90 days' THEN 0.75 ELSE 1 END)
@@ -33,7 +33,11 @@ WITH w AS (
   JOIN users u ON u.id = r.user_id
   LEFT JOIN item_status st ON st.user_id = r.user_id AND st.item_id = r.item_id
   LEFT JOIN time_to_beat t ON t.user_id = r.user_id AND t.item_id = r.item_id
-  LEFT JOIN rating_flags f ON f.user_id = r.user_id AND f.item_id = r.item_id
+  LEFT JOIN rating_flags f ON f.user_id = r.user_id AND f.item_id = r.item_id`
+
+// recomputeSQL is formula v1 (SDD 02 §7.1) in one statement: $1 item id,
+// $2 compute time, $3 m_t, $4 priors C_{t,1..6} as numeric[], $5 formula version.
+const recomputeSQL = weightedRatingsSQL + `
   WHERE r.item_id = $1
 ), agg AS (
   SELECT count(*) FILTER (WHERE weight > 0) AS n,
