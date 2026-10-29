@@ -155,3 +155,17 @@ Living record of the architecture programme (Phase 0 to Phase 4 in `PROMPT.md`).
 
 1. Run the orchestration prompt (`C:\dev\hexascore-app\PROMPT-WORKERS.md`, pure Markdown) with Claude Opus 5.5; it starts at `P0.F.1.1`.
 2. Owner tasks on the critical path: read and record the Twitch Developer Services Agreement (D-36) and the Open Library licence (A-05); create `privacy@hexascore.app` (D-39); move DNS to Cloudflare before cutover (D-28).
+
+## Execution: orchestrated Phase 0 and start of Phase 1 (2026-10-29)
+
+Orchestrator (Opus 5.5) with persistent workers: estagiario (Haiku), senior (Sonnet), framework engineer (Opus, on `vukem`). The Opus especialista worker was refused twice by the auto-mode classifier; the orchestrator covers reviews. State lives in `.orchestration/` (not versioned); readable mirror in `docs/orchestration/BOARD.md`; owner questions in `questions-to-dev.md`.
+
+Owner rules recorded this session: blanket approval of pending decisions while away (Q-001 `golang.org/x/crypto v0.58.0`, FQ-001 passkeys post-1.0, vukem releases pre-approved except BREAKING CHANGE); no `dev` branch, merge straight into `main` without waiting for CI; deploy and release progressively; irreversible items (production cutover, real data, Stripe live, Play Store) stay with the owner.
+
+Phase 0 spike (`C:\dev\hexascore-app\hexascore-spike`, local git) integrated: P0.F.1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 4.1, 5.1, 5.2, 6.1, 7.1, 8.1; results per capability in `docs/spike-report.md`; VF-032 to VF-042 filed. Pending: P0.F.7.2, P0.F.9.1, P0.F.10.1 (senior), P0.F.11.1 (consolidation).
+
+Phase 1 started in parallel with the last spike items: P1.A.1.1 (vukem v0.32.0 Inertia React scaffold on Postgres, posts demo removed) and P1.A.4.2 (SSR supervision, `ssr` readiness check, fallback counter, Node 26.13.0 runtime image) are on `main`. Queued: P1.A.1.2 (estagiario), P1.A.2.1 (senior).
+
+vukem: CI fixed (PR #8, Mongo service pinned to 9.0.4 by digest after `mongo:8` moved to an image that fails on kernel ≥ 6.19); VF-002 (strict SSR) and VF-027 (`serve -with-ssr`, `build -ssr`, `WithVersion`) merged; release v0.33.0 requested.
+
+Local facts: Vercel "development" env pulled to `C:\dev\hexascore-app\vercel-env\` (Stripe test keys usable; database variables forbidden). Spike Postgres container `hexascore-spike-postgres-1` on 5432 (user `app`).
