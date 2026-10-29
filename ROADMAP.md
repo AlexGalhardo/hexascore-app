@@ -543,7 +543,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.C.2 Auth and profile pages
 
-- [ ] **P1.C.2.1** Build the localised `Auth/*` Inertia pages on the legacy paths, including onboarding with a nickname (replaces `setNickname`).
+- [x] **P1.C.2.1** Build the localised `Auth/*` Inertia pages on the legacy paths, including onboarding with a nickname (replaces `setNickname`).
   - Files/modules: `resources/js/pages/Auth/{Login,Signup,CheckEmail,VerifyNotice,Recover,Reset,TwoFactorChallenge,Onboarding}.tsx`, `app/http/controllers/auth/onboarding_controller.go`, `tests/auth_pages_test.go`
   - Refs: SDD 03 §6.1, §7.1; SDD 09 §6.2 (`Auth/*` SSR, `noindex`); legacy `app/[locale]/{login,signup,verify-email,recover-password,reset-password,onboarding}/`, `actions/account.ts`
   - Depends on: P1.C.1.2, P1.A.4.1
