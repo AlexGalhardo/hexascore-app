@@ -413,8 +413,12 @@ func TestSecurity_A07_AppTokenTwoFactorAttemptsPerUser(t *testing.T) {
 	}
 
 	body["code"] = totpCode(t, secret, 1)
+	// Past the sixth attempt from one IP the route also asks for proof of work.
+	c := app.Client(t)
 	if got := codeOf(
-		app.Client(t).PostJSON("/app/v1/tokens", body).AssertStatus(http.StatusTooManyRequests),
+		c.WithHeader(middlewareHeader, solved(t, c, "token")).
+			PostJSON("/app/v1/tokens", body).
+			AssertStatus(http.StatusTooManyRequests),
 	); got != "too-many-attempts" {
 		t.Errorf("code after cap = %q, want too-many-attempts", got)
 	}

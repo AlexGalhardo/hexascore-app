@@ -3,16 +3,27 @@ import type { FormEvent } from "react";
 
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
+import { challengeHeaders } from "../../lib/challenge";
 import { checkConfirmation, checkPassword, passwordAdvice } from "../../lib/password-policy";
 import { useT } from "../../lib/useT";
 
 export default function Signup() {
 	const t = useT();
-	const form = useForm({ name: "", email: "", password: "", password_confirmation: "" });
+	const form = useForm({
+		name: "",
+		email: "",
+		password: "",
+		password_confirmation: "",
+		website: "",
+	});
 
-	const submit = (e: FormEvent) => {
+	const submit = async (e: FormEvent) => {
 		e.preventDefault();
-		form.post("/signup", { onFinish: () => form.reset("password", "password_confirmation") });
+		const headers = await challengeHeaders("signup");
+		form.post("/signup", {
+			headers,
+			onFinish: () => form.reset("password", "password_confirmation"),
+		});
 	};
 
 	return (
@@ -20,6 +31,17 @@ export default function Signup() {
 			<Head title={t("auth.signup.metaTitle")} />
 			<h1 className="mb-4 text-2xl font-semibold">{t("auth.signup.title")}</h1>
 			<form onSubmit={submit} className="space-y-4">
+				{/* Honeypot: invisible to people and assistive tech, bots fill it. */}
+				<input
+					type="text"
+					name="website"
+					tabIndex={-1}
+					autoComplete="off"
+					aria-hidden="true"
+					className="absolute -left-[9999px]"
+					value={form.data.website}
+					onChange={(e) => form.setData("website", e.target.value)}
+				/>
 				<Field
 					label={t("auth.fields.name")}
 					autoComplete="name"
