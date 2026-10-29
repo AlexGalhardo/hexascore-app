@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Legacy import `users` stage: Better Auth users upserted on `legacy_id` (email lowercased, verification date, admin role, live bans only, deletion grace kept), credential hashes copied verbatim, Google accounts linked in `social_accounts`, random argon2id for accounts without a password (P2.F.2.2).
 - Admin hardening (SDD 13 FR-13-5, §7.5): `AdminGuard` requires confirmed 2FA on `/admin`, ends admin sessions after 30 min idle or 12 h, and applies the optional `ADMIN_IP_ALLOWLIST` (404 outside it); 2FA confirmation regenerates the session id and `admin:grant`/`admin:revoke` end the user's sessions (P2.D.3.1).
 - `hexascore:import-legacy --stage all|<names> [--dry-run] [--batch N]`: legacy import runner over schema `legacy_import` with the SDD 03 §5 pre-flight asserts (abort with counts), stage order, per-stage checkpoints in the new `legacy_import_runs` table (committed with each batch, resumable) and a dry run that prints planned counts and writes nothing; stages are filled in by P2.F.2.2 to P2.F.4.1 (P2.F.2.1).
+- Playwright specs `social`, `contact`, `admin`, `docs`, `public-pages`, `headers` and `not-found` (P1.I.2.3); not ported: follow/feed (D-06), report-a-user dialog, cookie banner, Scalar reference and `/openapi*.json` (no counterpart in the vukem app yet), pricing (Q-H31).
 - Playwright specs `catalog`, `item`, `search`, `ratings` and `time-to-beat` in three locales and two viewports (keyboard-driven half-star slider, status picker, search autocomplete); the users' scores modal and trailer consent of the legacy item page are not ported because the new item page has neither yet (P1.I.2.2).
 
 - `backup:run --kind daily|monthly`: streamed `pg_dump -Fc -Z 6 --no-owner`, client-side 4 MiB frame encryption with `BACKUP_KEY` (reorder and truncation detected), SHA-256 and multipart upload to `backups/postgres/<kind>/YYYY/MM/DD/` via vukem `drivers/s3` v0.3.1, recorded in the new `backup_runs` table (P2.E.2.1).
@@ -38,6 +39,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- Public profile and list pages no longer crash on the client: their page-level `seo` prop replaced the shared one (breaking `Seo`'s hreflang list); it is now a top-level `indexable` prop (found by the social e2e spec, P1.I.2.3).
+- Rendered docs code blocks are keyboard focusable (`tabindex="0"` on `<pre>`), fixing axe `scrollable-region-focusable` on the docs pages (P1.I.2.3).
 - Catalogue listings answer 400 instead of 500 for a NUL byte or invalid UTF-8 in `genre`, `platform`, `sort` or `cursor` (found by the catalog e2e spec, P1.I.2.2).
 
 - API keys table scrolls inside its own focusable region instead of overflowing a 360 px viewport, which hid the Revoke button behind the Status cell (P1.I.2.1).

@@ -115,8 +115,15 @@ export async function completeOnboarding(
 	await page.waitForURL((url) => !/\/(login|signup)/.test(url.pathname), {
 		timeout: POW_TIMEOUT,
 	});
+	// Login lands on the dashboard; the nickname form is only shown when asked for.
+	await page.goto("/onboarding");
 	const nickname = page.getByLabel(t("auth.fields.nickname"));
-	if (await nickname.isVisible().catch(() => false)) {
+	if (
+		await nickname.waitFor({ timeout: 5_000 }).then(
+			() => true,
+			() => false,
+		)
+	) {
 		await nickname.fill(account.nickname);
 		await page.getByRole("button", { name: t("auth.onboarding.submit") }).click();
 		await page.waitForURL((url) => !url.pathname.includes("onboarding"));

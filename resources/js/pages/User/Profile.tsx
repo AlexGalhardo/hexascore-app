@@ -29,10 +29,10 @@ interface Props {
 	};
 	ratings?: { data: Rating[] };
 	lists?: ProfileList[];
-	seo: { indexable: boolean };
+	indexable: boolean;
 }
 
-export default function Profile({ profile, stats, ratings, lists, seo }: Props) {
+export default function Profile({ profile, stats, ratings, lists, indexable }: Props) {
 	const t = useT();
 	const page = usePage<SharedProps>();
 	const base = localized(`/u/${profile.nickname.toLowerCase()}`, page.props.locale);
@@ -41,7 +41,7 @@ export default function Profile({ profile, stats, ratings, lists, seo }: Props) 
 
 	return (
 		<>
-			<Seo title={profile.nickname} noindex={!seo.indexable} />
+			<Seo title={profile.nickname} noindex={!indexable} />
 			<header className="flex items-center gap-3">
 				<span
 					aria-hidden="true"
