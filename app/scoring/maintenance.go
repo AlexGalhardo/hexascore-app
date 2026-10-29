@@ -206,6 +206,18 @@ func autoResolve(ctx context.Context, db *database.DB, burstID int64, itemID str
 			return err
 		}
 
+		// Fresh triggering activity (volume or skew) extends limited_until, so
+		// a burst still limited stays open and is retried on a later run
+		// (security review, P1.D.3.2).
+		var limitedUntil time.Time
+		if err := tx.QueryRowContext(ctx, `SELECT limited_until FROM score_bursts WHERE id = $1`, burstID).
+			Scan(&limitedUntil); err != nil {
+			return err
+		}
+		if limitedUntil.After(now) {
+			return nil
+		}
+
 		skew, err := skewTriggered(ctx, tx, itemID, now)
 		if err != nil {
 			return err
@@ -233,8 +245,9 @@ WHERE id = $1 AND resolution IS NULL`, burstID, resolution, now)
 				return err
 			}
 			if _, err := tx.ExecContext(ctx,
-				`UPDATE items SET ratings_limited_until = NULL, unusual_activity_until = NULL WHERE id = $1`,
-				itemID); err != nil {
+				`UPDATE items SET ratings_limited_until = NULL, unusual_activity_until = NULL
+WHERE id = $1 AND (ratings_limited_until IS NULL OR ratings_limited_until <= $2)`,
+				itemID, now); err != nil {
 				return err
 			}
 		}
