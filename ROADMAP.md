@@ -983,7 +983,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.G.4 Content pages and admin
 
-- [ ] **P1.G.4.1** Build `Docs/Page` (Markdown rendered and sanitised at build), `Legal/Page`, `Contact/Index`, robots and the legacy catch-all.
+- [x] **P1.G.4.1** Build `Docs/Page` (Markdown rendered and sanitised at build), `Legal/Page`, `Contact/Index`, robots and the legacy catch-all.
   - Files/modules: `resources/docs/*.md`, `scripts/build-docs.ts`, `resources/js/pages/{Docs/Page,Legal/Page,Contact/Index}.tsx`, `app/http/controllers/{docs,legal,contact}_controller.go`, `app/http/controllers/robots_controller.go`
   - Refs: SDD 09 §6.2, §7.7; SDD 05 §6.5 (docs list); legacy `app/[locale]/{docs,policy,terms,contact,[...rest]}/`, `lib/legal.ts`
   - Depends on: P1.G.1.1, P1.F.3.2
