@@ -70,6 +70,14 @@
       "revokeAll": "Log out all other devices",
       "empty": "No other sessions to show.",
       "lastSeen": "Last active"
+    },
+    "export": {
+      "title": "Download my data",
+      "body": "Request a ZIP with your ratings, lists and account data. We email you a link that works for 24 hours. You can request one export every 7 days.",
+      "button": "Request export",
+      "requested": "Export requested. You will get an email with the link soon.",
+      "cooldown": "You can request one export every 7 days. Try again later.",
+      "failed": "Could not request the export. Try again."
     }
   },
   "actions": {

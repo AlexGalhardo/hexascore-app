@@ -1,6 +1,7 @@
 import { Head, Link, router, useForm } from "@inertiajs/react";
 import type { FormEvent } from "react";
 
+import DataExport from "../../components/DataExport";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
 import { checkPassword, passwordAdvice } from "../../lib/password-policy";
@@ -231,6 +232,10 @@ export default function Index({ details, passwordSet, twoFactor, sessions, priva
 						{t("account.details.save")}
 					</button>
 				</form>
+			</Section>
+
+			<Section id="export" title={t("account.export.title")}>
+				<DataExport className={button} />
 			</Section>
 
 			<Section id="delete" title={t("account.delete.title")}>
