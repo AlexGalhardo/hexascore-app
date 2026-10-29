@@ -88,3 +88,11 @@ func (c Config) For(r *http.Request) Meta {
 		OG:         OG{Type: "website"},
 	}
 }
+
+// Disallowed lists the robots.txt Disallow rules (SDD 09 §7.7).
+func Disallowed() []string {
+	rules := make([]string, 0, len(privatePrefixes)+1)
+	rules = append(rules, privatePrefixes...)
+
+	return append(rules, "/*?cursor=")
+}

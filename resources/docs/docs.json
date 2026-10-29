@@ -1,0 +1,204 @@
+[
+	{
+		"slug": "index",
+		"title": "Quickstart",
+		"body": "<h1 id=\"quickstart\">Quickstart</h1>\n<p>Community scores for games, movies, TV series and books, from 0 to 10 in six categories per item, over a read-only JSON API.</p>\n<h2 id=\"1-create-an-api-key\">1. Create an API key</h2>\n<p>Open your <a href=\"/profile/api\">API dashboard</a> and create a key. It starts with <code>hx_live_</code> and is shown only once, so store it in an environment variable and never in client-side code.</p>\n<p>The Free plan includes 100 requests in total, enough to build and test an integration.</p>\n<h2 id=\"2-make-your-first-request\">2. Make your first request</h2>\n<p>The base URL is <code>https://api.hexascore.app/v1</code>. Every endpoint is a <code>GET</code>. Here are the five best-rated games:</p>\n<pre><code class=\"language-sh\">curl -H &quot;Authorization: Bearer $HEXASCORE_API_KEY&quot; \\\n  &quot;https://api.hexascore.app/v1/games?sort=score&amp;limit=5&quot;</code></pre>\n<h2 id=\"3-read-the-response\">3. Read the response</h2>\n<p>Lists return <code>data</code> plus a <code>next_cursor</code> for the next page. Field names are snake_case and dates are ISO 8601. <code>score</code> and <code>categories</code> are <code>null</code> until an item has 5 ratings.</p>\n<h2 id=\"next-steps\">Next steps</h2>\n<ul><li>Fetch one item with <code>GET /v1/games/{id}</code>.</li><li>Map ids you already have with <code>GET /v1/lookup</code>.</li><li>Handle <a href=\"/docs/errors\">errors</a> and <a href=\"/docs/rate-limits\">rate limits</a>, then browse the <a href=\"/docs/reference\">API reference</a>.</li></ul>",
+		"toc": [
+			{
+				"id": "1-create-an-api-key",
+				"text": "1. Create an API key",
+				"level": 2
+			},
+			{
+				"id": "2-make-your-first-request",
+				"text": "2. Make your first request",
+				"level": 2
+			},
+			{
+				"id": "3-read-the-response",
+				"text": "3. Read the response",
+				"level": 2
+			},
+			{
+				"id": "next-steps",
+				"text": "Next steps",
+				"level": 2
+			}
+		]
+	},
+	{
+		"slug": "authentication",
+		"title": "Authentication",
+		"body": "<h1 id=\"authentication\">Authentication</h1>\n<p>Every request is authenticated with a secret API key sent as a Bearer token.</p>\n<h2 id=\"bearer-token\">Bearer token</h2>\n<p>Send the key in the <code>Authorization</code> header. Keys look like <code>hx_live_</code> followed by 32 letters and digits. Query-string keys are not accepted, so keys never end up in access logs or browser history.</p>\n<pre><code class=\"language-sh\">curl -H &quot;Authorization: Bearer hx_live_...&quot; https://api.hexascore.app/v1/games</code></pre>\n<p>A missing, malformed, unknown or revoked key returns <code>401</code> with the <a href=\"/docs/errors#unauthorized\"><code>unauthorized</code></a> code and a <code>WWW-Authenticate: Bearer</code> header.</p>\n<h2 id=\"managing-keys\">Managing keys</h2>\n<ul><li>Create and revoke keys at <a href=\"/profile/api\">/profile/api</a> (verified email required, up to 5 active keys).</li><li>The full key is shown once. Only a SHA-256 hash is stored; we cannot recover it for you.</li><li>Revocation is immediate. Rotate by creating a new key, deploying it, then revoking the old one.</li><li>All keys of an account share the same plan, quota and per-second rate limit.</li></ul>\n<h2 id=\"keep-keys-secret\">Keep keys secret</h2>\n<p>Call the API from your server. A key embedded in a web page or mobile app can be extracted and used to burn your quota. If a key leaks, revoke it right away.</p>",
+		"toc": [
+			{
+				"id": "bearer-token",
+				"text": "Bearer token",
+				"level": 2
+			},
+			{
+				"id": "managing-keys",
+				"text": "Managing keys",
+				"level": 2
+			},
+			{
+				"id": "keep-keys-secret",
+				"text": "Keep keys secret",
+				"level": 2
+			}
+		]
+	},
+	{
+		"slug": "pagination",
+		"title": "Pagination",
+		"body": "<h1 id=\"pagination\">Pagination</h1>\n<p>List endpoints use opaque cursors: stable under inserts, fast at any depth.</p>\n<h2 id=\"how-it-works\">How it works</h2>\n<p><code>GET /v1/games</code>, <code>/v1/movies</code>, <code>/v1/series</code> and <code>/v1/books</code> return <code>{ &quot;data&quot;: [...], &quot;next_cursor&quot;: &quot;...&quot; }</code>. To get the next page, repeat the same request with <code>cursor=&lt;next_cursor&gt;</code>. When <code>next_cursor</code> is <code>null</code> you reached the end.</p>\n<ul><li>Keep every other parameter identical. A cursor from another <code>sort</code> returns <code>400</code>.</li><li>Cursors are opaque: do not parse or build them, their format may change.</li><li>Ordering is stable: ties are broken by item id, and unscored or undated items always come last.</li></ul>\n<h2 id=\"page-size\">Page size</h2>\n<p><code>limit</code> defaults to 10. The maximum depends on your plan: 10 on Free, 100 on Pro and Business. A larger value returns <code>400 invalid-query</code>; the API never silently truncates. Each page counts as one request.</p>\n<h2 id=\"example-iterate-over-every-page\">Example: iterate over every page</h2>\n<pre><code class=\"language-js\">let cursor = null;\ndo {\n  const url = new URL(&quot;https://api.hexascore.app/v1/games&quot;);\n  url.searchParams.set(&quot;limit&quot;, &quot;100&quot;);\n  if (cursor) url.searchParams.set(&quot;cursor&quot;, cursor);\n  const res = await fetch(url, { headers: { Authorization: `Bearer ${process.env.HEXASCORE_API_KEY}` } });\n  const page = await res.json();\n  for (const game of page.data) console.log(game.title);\n  cursor = page.next_cursor;\n} while (cursor);</code></pre>\n<h2 id=\"search\">Search</h2>\n<p><code>GET /v1/search</code> is not paginated: it returns the best matches (up to 50) for a query, best first.</p>",
+		"toc": [
+			{
+				"id": "how-it-works",
+				"text": "How it works",
+				"level": 2
+			},
+			{
+				"id": "page-size",
+				"text": "Page size",
+				"level": 2
+			},
+			{
+				"id": "example-iterate-over-every-page",
+				"text": "Example: iterate over every page",
+				"level": 2
+			},
+			{
+				"id": "search",
+				"text": "Search",
+				"level": 2
+			}
+		]
+	},
+	{
+		"slug": "rate-limits",
+		"title": "Rate limits",
+		"body": "<h1 id=\"rate-limits\">Rate limits</h1>\n<p>Each plan has a request quota, a per-second rate limit and a maximum page size.</p>\n<h2 id=\"plans\">Plans</h2>\n<table><thead><tr><th scope=\"col\">Plan</th><th scope=\"col\">Quota</th><th scope=\"col\">Requests / second</th><th scope=\"col\">Max page size</th></tr></thead><tbody><tr><td>Free</td><td>100 in total</td><td>1</td><td>10</td></tr><tr><td>Pro</td><td>50,000 / month</td><td>10</td><td>100</td></tr><tr><td>Business</td><td>500,000 / month</td><td>50</td><td>100</td></tr></tbody></table>\n<p>Prices and upgrades: <a href=\"/pricing\">/pricing</a>.</p>\n<h2 id=\"what-counts\">What counts</h2>\n<ul><li>Every authenticated request that reaches an endpoint counts as one, including 404s.</li><li>Not counted: <code>401</code>, <code>400</code> for invalid parameters, <code>429</code> and any <code>5xx</code> (refunded).</li><li><code>GET /v1/me/usage</code> counts too, so read the response headers of your regular calls when you can.</li><li>Paid quotas reset at 00:00 UTC on the 1st of each month. The Free quota never resets.</li></ul>\n<h2 id=\"response-headers\">Response headers</h2>\n<p>Successful responses tell you where you stand (IETF RateLimit header fields).</p>\n<table><thead><tr><th scope=\"col\">Header</th><th scope=\"col\">Meaning</th></tr></thead><tbody><tr><td><code>RateLimit-Limit</code></td><td>Requests in the current period (your plan quota).</td></tr><tr><td><code>RateLimit-Remaining</code></td><td>Requests left before 402.</td></tr><tr><td><code>RateLimit-Reset</code></td><td>Seconds until the quota resets; 0 for the lifetime Free quota.</td></tr><tr><td><code>Retry-After</code></td><td>On 429 and 503: seconds to wait before retrying.</td></tr></tbody></table>\n<h2 id=\"when-you-hit-a-limit\">When you hit a limit</h2>\n<p>Too many requests per second returns <a href=\"/docs/errors#rate-limited\"><code>429 rate-limited</code></a>: wait <code>Retry-After</code> seconds. Quota exhausted returns <a href=\"/docs/errors#quota-exhausted\"><code>402 quota-exhausted</code></a>: upgrade your plan; retrying will not help until the reset.</p>",
+		"toc": [
+			{
+				"id": "plans",
+				"text": "Plans",
+				"level": 2
+			},
+			{
+				"id": "what-counts",
+				"text": "What counts",
+				"level": 2
+			},
+			{
+				"id": "response-headers",
+				"text": "Response headers",
+				"level": 2
+			},
+			{
+				"id": "when-you-hit-a-limit",
+				"text": "When you hit a limit",
+				"level": 2
+			}
+		]
+	},
+	{
+		"slug": "errors",
+		"title": "Errors",
+		"body": "<h1 id=\"errors\">Errors</h1>\n<p>Errors use RFC 9457 problem details with a stable machine-readable code.</p>\n<h2 id=\"format\">Format</h2>\n<p>Every error has <code>Content-Type: application/problem+json</code>. Branch on <code>code</code> (stable) rather than on <code>title</code> or <code>detail</code> (human text that may change). <code>type</code> links to the matching section below, and <code>request_id</code> equals the <code>X-Request-Id</code> header: include it when you contact support.</p>\n<pre><code class=\"language-json\">{\n  &quot;type&quot;: &quot;https://hexascore.app/problems/quota-exhausted&quot;,\n  &quot;title&quot;: &quot;Quota exhausted&quot;,\n  &quot;status&quot;: 402,\n  &quot;detail&quot;: &quot;Monthly quota is exhausted. Upgrade at https://hexascore.app/pricing.&quot;,\n  &quot;instance&quot;: &quot;/api/v1/games&quot;,\n  &quot;request_id&quot;: &quot;01JB7Q4V0Q8M3K2Y7T9H5N6C1D&quot;,\n  &quot;code&quot;: &quot;quota-exhausted&quot;,\n  &quot;plan&quot;: &quot;pro&quot;,\n  &quot;limit&quot;: 50000\n}</code></pre>\n<h2 id=\"codes\">Codes</h2>\n<h3 id=\"invalid-query\">invalid-query</h3>\n<p>HTTP 400. A query parameter is unknown or out of range, or <code>limit</code> is above your plan's page size (10 on Free). <code>errors</code> lists each problem with its <code>path</code>. Fix the listed parameters. Not counted against your quota.</p>\n<h3 id=\"invalid-cursor\">invalid-cursor</h3>\n<p>HTTP 400. The <code>cursor</code> was tampered with or belongs to another query. Restart from the first page.</p>\n<h3 id=\"unauthorized\">unauthorized</h3>\n<p>HTTP 401. No <code>Authorization: Bearer</code> header, a malformed key, or a key that does not exist or was revoked. Check the header and the key at <a href=\"/profile/api\">/profile/api</a>. Never retried automatically.</p>\n<h3 id=\"quota-exhausted\">quota-exhausted</h3>\n<p>HTTP 402. The 100 lifetime requests on Free, or the monthly quota on paid plans. The body includes <code>plan</code> and <code>limit</code>. Upgrade your plan at <a href=\"/pricing\">/pricing</a>. Paid quotas reset on the 1st of each month (UTC).</p>\n<h3 id=\"plan-required\">plan-required</h3>\n<p>HTTP 403. The endpoint needs a higher plan. Upgrade at <a href=\"/pricing\">/pricing</a>.</p>\n<h3 id=\"account-banned\">account-banned</h3>\n<p>HTTP 403. The account that owns the key is suspended. Contact us through <a href=\"/contact\">/contact</a> with the <code>request_id</code>.</p>\n<h3 id=\"not-found\">not-found</h3>\n<p>HTTP 404. Unknown item id, an id that belongs to another type (for example a game id under <code>/movies</code>), an unknown type path, or no match for <code>/lookup</code>. Lookups require an exact id.</p>\n<h3 id=\"rate-limited\">rate-limited</h3>\n<p>HTTP 429. More requests per second than your plan allows. The <code>Retry-After</code> header says how many seconds to wait. Not counted against your quota. Space out bursts or upgrade for a higher rate.</p>\n<h3 id=\"internal-error\">internal-error</h3>\n<p>HTTP 500. Something failed on our side. The request is refunded to your quota. Retry with exponential backoff; if it persists, send us the <code>request_id</code>.</p>\n<h3 id=\"service-unavailable\">service-unavailable</h3>\n<p>HTTP 503. A dependency is temporarily down. Comes with <code>Retry-After</code>. Retry after the indicated delay.</p>\n<h2 id=\"retries\">Retries</h2>\n<p>Retry only <code>429</code>, <code>500</code> and <code>503</code>, honouring <code>Retry-After</code> when present and backing off exponentially otherwise. Every endpoint is a read-only <code>GET</code>, so retries are always safe.</p>",
+		"toc": [
+			{
+				"id": "format",
+				"text": "Format",
+				"level": 2
+			},
+			{
+				"id": "codes",
+				"text": "Codes",
+				"level": 2
+			},
+			{
+				"id": "invalid-query",
+				"text": "invalid-query",
+				"level": 3
+			},
+			{
+				"id": "invalid-cursor",
+				"text": "invalid-cursor",
+				"level": 3
+			},
+			{
+				"id": "unauthorized",
+				"text": "unauthorized",
+				"level": 3
+			},
+			{
+				"id": "quota-exhausted",
+				"text": "quota-exhausted",
+				"level": 3
+			},
+			{
+				"id": "plan-required",
+				"text": "plan-required",
+				"level": 3
+			},
+			{
+				"id": "account-banned",
+				"text": "account-banned",
+				"level": 3
+			},
+			{
+				"id": "not-found",
+				"text": "not-found",
+				"level": 3
+			},
+			{
+				"id": "rate-limited",
+				"text": "rate-limited",
+				"level": 3
+			},
+			{
+				"id": "internal-error",
+				"text": "internal-error",
+				"level": 3
+			},
+			{
+				"id": "service-unavailable",
+				"text": "service-unavailable",
+				"level": 3
+			},
+			{
+				"id": "retries",
+				"text": "Retries",
+				"level": 2
+			}
+		]
+	},
+	{
+		"slug": "changelog",
+		"title": "Changelog",
+		"body": "<h1 id=\"changelog\">Changelog</h1>\n<p>The version is part of the path. v1 only changes in backwards-compatible ways.</p>\n<h2 id=\"versioning-policy\">Versioning policy</h2>\n<p>Within <code>/v1</code> we only make additive changes: new endpoints, new optional parameters, new response fields and new error <code>detail</code> texts. Ignore unknown fields and do not rely on field order.</p>\n<p>Breaking changes (removing or renaming a field, changing a type, making a parameter required) ship as a new path (<code>/v2</code>). Error <code>code</code> values, category keys and sort names are part of the contract.</p>\n<h2 id=\"deprecation-and-sunset\">Deprecation and sunset</h2>\n<ul><li>A deprecated version keeps working for at least 6 months after its successor is released.</li><li>Its responses carry <code>Deprecation</code> (RFC 9745) and <code>Sunset</code> (RFC 8594) headers with the date it stops working, plus a <code>Link</code> to this page.</li><li>Account owners with recent traffic on the old version are emailed at deprecation and 30 days before sunset.</li></ul>\n<h2 id=\"changes\">Changes</h2>\n<h3 id=\"v1-first-release\">v1: first release</h3>\n<ul><li>Lists, details and genres for <code>games</code>, <code>movies</code>, <code>series</code> and <code>books</code>.</li><li><code>/search</code>, <code>/lookup</code> by external id and <code>/me/usage</code>.</li></ul>",
+		"toc": [
+			{
+				"id": "versioning-policy",
+				"text": "Versioning policy",
+				"level": 2
+			},
+			{
+				"id": "deprecation-and-sunset",
+				"text": "Deprecation and sunset",
+				"level": 2
+			},
+			{
+				"id": "changes",
+				"text": "Changes",
+				"level": 2
+			},
+			{
+				"id": "v1-first-release",
+				"text": "v1: first release",
+				"level": 3
+			}
+		]
+	}
+]
