@@ -189,7 +189,7 @@ Rollback: `gh workflow run release.yml -f version=vPREV` (schema stays compatibl
 3. Encrypt in 4 MiB frames with `crypt.New(BACKUP_KEY)` `Seal(frame, "backup:<key>:<n>")` [vk-crypt]; SHA-256 over the ciphertext; multipart `Put` [vk-storage]. Railway buckets have no server-side encryption [buckets].
 4. Verify: size > 50 % of the 7-day median; decrypt → `pg_restore --list` contains `items`, `users`, `ratings`; status `verified`.
 5. Day 1: copy to `monthly/YYYY-MM/`. Prune daily > 30, monthly > 12 in app code (no bucket lifecycle rules [buckets]).
-6. Off-site copy (D-32): on day 1 the app mails the owner a signed link (`storage.TemporaryURL`, 7 days, https://vukem.dev/docs/security/signed-urls) to the encrypted monthly dump; the job records `backup_runs(kind='offsite')` when the link is mailed and the owner downloads it to personal storage. Daily dumps stay on Railway. Replaced by an external bucket when the budget allows.
+6. Off-site copy (D-32): on day 1 the app mails the owner a signed link (`storage.TemporaryURL`, 7 days, <https://vukem.dev/docs/security/signed-urls>) to the encrypted monthly dump; the job records `backup_runs(kind='offsite')` when the link is mailed and the owner downloads it to personal storage. Daily dumps stay on Railway. Replaced by an external bucket when the budget allows.
 7. Missed or failed run → SDD 12 alert within 2 h.
 
 ### 7.4 Restore drill (staging, first Sunday 07:00)

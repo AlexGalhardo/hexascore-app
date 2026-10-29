@@ -55,7 +55,7 @@ One table for four types (legacy parity, `legacy/apps/web/lib/db/schema/catalog.
 
 ### 5.2 DDL sketch (PostgreSQL)
 
-Migrations use vukem `schema` (https://vukem.dev/docs/database/migrations "Migrations"). Generated columns, GIN/trigram indexes, SQL functions and composite foreign keys go through `s.Raw`; whether `t.JSON` maps to `jsonb` on Postgres is [NOT VERIFIED], so `jsonb` columns are created with `s.Raw`. Enumerations are `text` + `t.Check` because the Postgres mapping of `t.Enum` is not documented [NOT VERIFIED]. Ids are `uuid` v7 set in Go (`uuid.NewV7`, https://vukem.dev/docs/database/migrations "UUIDs"; "Models" says to set non-integer keys before `Create`).
+Migrations use vukem `schema` (<https://vukem.dev/docs/database/migrations> "Migrations"). Generated columns, GIN/trigram indexes, SQL functions and composite foreign keys go through `s.Raw`; whether `t.JSON` maps to `jsonb` on Postgres is [NOT VERIFIED], so `jsonb` columns are created with `s.Raw`. Enumerations are `text` + `t.Check` because the Postgres mapping of `t.Enum` is not documented [NOT VERIFIED]. Ids are `uuid` v7 set in Go (`uuid.NewV7`, <https://vukem.dev/docs/database/migrations> "UUIDs"; "Models" says to set non-integer keys before `Create`).
 
 ```sql
 create table data_sources (
@@ -273,7 +273,7 @@ Genres are shared across types (genre page has type tabs). The Wikidata property
 
 ### 6.1 Audiences and field visibility
 
-Audience `site` = web Inertia props and first-party app API (`/app/v1`, A-01). Audience `api` = paid read API (SDD 05). `CATALOG_API_SOURCES` (default `wikidata,wikipedia,openlibrary,hexascore`) is loaded with vukem `config.Load` (pattern shown in https://vukem.dev/docs/digging-deeper/storage "S3"). Open Library's licence is pending A-05 [NOT VERIFIED]: until `docs/legal/open-library.md` exists, `openlibrary` is allowed in the API for identifiers and titles only (01-2), and it leaves the default if A-05 fails.
+Audience `site` = web Inertia props and first-party app API (`/app/v1`, A-01). Audience `api` = paid read API (SDD 05). `CATALOG_API_SOURCES` (default `wikidata,wikipedia,openlibrary,hexascore`) is loaded with vukem `config.Load` (pattern shown in <https://vukem.dev/docs/digging-deeper/storage> "S3"). Open Library's licence is pending A-05 [NOT VERIFIED]: until `docs/legal/open-library.md` exists, `openlibrary` is allowed in the API for identifiers and titles only (01-2), and it leaves the default if A-05 fails.
 
 HexaScore-sourced fields (`hexascore` and `community` sources: scores, counts, trending, community edits, HexaScore ids and slugs) reach API customers under the API terms (A-07): use inside the customer's product, attribution "Data by HexaScore" with a link, no bulk redistribution, no model training without written permission; no open-data licence at launch. The provenance columns let a field be opened later without a migration.
 
@@ -305,7 +305,7 @@ Excluded fields are omitted (not `null`); `meta.omittedFields` is an array of th
 
 Paths follow the README route-prefix convention (07-5): `/api/v1` in the app router, published as `https://api.hexascore.app/v1` by host routing (SDD 05, VF-015). Every route serves `public` items only (FR-01-14).
 
-`{type}` path values are `games|movies|series|books` (`legacy/apps/web/lib/sections.ts`). Query: `genre`, `platform` (entity slugs), `year` (1800–2100), `min_score`/`max_score` (0–10, step 0.5), `min_<category>` (keys from `legacy/apps/web/lib/categories.ts`, A-06), `sort`, `limit`, `cursor`. RFC 9457 errors: `invalid-query` (400), `invalid-cursor` (400), `not-found` (404). Envelope per https://vukem.dev/docs/rest-apis/pagination "Envelopes" with `meta.next_cursor`/`prev_cursor`.
+`{type}` path values are `games|movies|series|books` (`legacy/apps/web/lib/sections.ts`). Query: `genre`, `platform` (entity slugs), `year` (1800–2100), `min_score`/`max_score` (0–10, step 0.5), `min_<category>` (keys from `legacy/apps/web/lib/categories.ts`, A-06), `sort`, `limit`, `cursor`. RFC 9457 errors: `invalid-query` (400), `invalid-cursor` (400), `not-found` (404). Envelope per <https://vukem.dev/docs/rest-apis/pagination> "Envelopes" with `meta.next_cursor`/`prev_cursor`.
 
 Inertia pages (SDD 09 owns layout): `Catalog/Index` props `{type, filters, items: ItemSummary[], cursor, total}`; `Catalog/Show` `{item: ItemDetail, editions?, ratingSummary}`; `Entity/Show` `{entity: EntityDetail, items, cursor}`. Web paths: `/{section}/{slug}`, `/people/{slug}`, `/companies/{slug}`, `/franchises/{slug}`, `/platforms/{slug}`, `/genres/{slug}`, `/game-modes/{slug}`, `/countries/{code}`, `/languages/{code}`, all with `/pt-br` and `/es` prefixes (D-17).
 
@@ -350,7 +350,7 @@ Generated from the `en` title: NFKD, strip marks, lowercase, non-alphanumerics �
 
 ### 7.2 Listing and cursor
 
-vukem `CursorPaginate` pages by primary key only and rejects `?sort` with a cursor (https://vukem.dev/docs/rest-apis/pagination "Query conventions"), so keyset paging over `(sort expression, id)` is built with `WhereRaw` (https://vukem.dev/docs/database/orm "Query builder") and an opaque cursor `{s, v, id, d}` signed with `signed.Signer` (https://vukem.dev/docs/digging-deeper/storage "Storage"). Composite-key cursors are [NOT IN VUKEM DOCS] (`vukem-feedback.md` candidate). Nulls sort last both ways (legacy `sortExpression`); score filters use SDD 02's visibility rule; `total` is counted on the first page only.
+vukem `CursorPaginate` pages by primary key only and rejects `?sort` with a cursor (<https://vukem.dev/docs/rest-apis/pagination> "Query conventions"), so keyset paging over `(sort expression, id)` is built with `WhereRaw` (<https://vukem.dev/docs/database/orm> "Query builder") and an opaque cursor `{s, v, id, d}` signed with `signed.Signer` (<https://vukem.dev/docs/digging-deeper/storage> "Storage"). Composite-key cursors are [NOT IN VUKEM DOCS] (`vukem-feedback.md` candidate). Nulls sort last both ways (legacy `sortExpression`); score filters use SDD 02's visibility rule; `total` is counted on the first page only.
 
 ### 7.3 Read-model assembly
 
@@ -358,15 +358,15 @@ Item detail: 1 query item + translation (locale and `en` in one `IN`), 1 query `
 
 ### 7.4 Entity stats
 
-Hourly scheduler job (https://vukem.dev/docs/digging-deeper/scheduler "Scheduler", BETA; D-08) upserts `entity_stats` in batches of 10k entities; `avg_score` = mean of visible item scores per type, shown when `scored_count >= 5`. Idempotent; restart reruns the batch.
+Hourly scheduler job (<https://vukem.dev/docs/digging-deeper/scheduler> "Scheduler", BETA; D-08) upserts `entity_stats` in batches of 10k entities; `avg_score` = mean of visible item scores per type, shown when `scored_count >= 5`. Idempotent; restart reruns the batch.
 
 ### 7.5 Merge
 
-Admin action, same type/kind, one transaction: `LockForUpdate` both rows ordered by id; 409 on self-merge or an already-redirected source; move relations, editions and user data (`on conflict do nothing`, target wins, legacy `mergeItems` rule); copy missing translations; union `external_ids`; insert `merge` redirects (id, slug) and rewrite redirects to the source; write the SDD 04 audit event carrying a jsonb snapshot of both items (row, translations, relations, editions, external ids) taken before the move, for manual restore (04-9; a reversible merge is post-launch); delete source; `tx.AfterCommit` enqueues SDD 02 recompute and SDD 07 reindex (https://vukem.dev/docs/database/relations "Query builder").
+Admin action, same type/kind, one transaction: `LockForUpdate` both rows ordered by id; 409 on self-merge or an already-redirected source; move relations, editions and user data (`on conflict do nothing`, target wins, legacy `mergeItems` rule); copy missing translations; union `external_ids`; insert `merge` redirects (id, slug) and rewrite redirects to the source; write the SDD 04 audit event carrying a jsonb snapshot of both items (row, translations, relations, editions, external ids) taken before the move, for manual restore (04-9; a reversible merge is post-launch); delete source; `tx.AfterCommit` enqueues SDD 02 recompute and SDD 07 reindex (<https://vukem.dev/docs/database/relations> "Query builder").
 
 ### 7.6 Data quality asserts
 
-Each assert is a SQL query returning violating ids; `vukem catalog:check [--json]` is an app command (`vukem make:command`, https://vukem.dev/docs/cli/reference-make) that runs them, prints counts, and exits 1 on any `error`. Schedule: daily 04:00 UTC via the scheduler, results logged and alerted by SDD 12; also a CI step on the fixture DB and a mandatory gate after the legacy data copy (D-21).
+Each assert is a SQL query returning violating ids; `vukem catalog:check [--json]` is an app command (`vukem make:command`, <https://vukem.dev/docs/cli/reference-make>) that runs them, prints counts, and exits 1 on any `error`. Schedule: daily 04:00 UTC via the scheduler, results logged and alerted by SDD 12; also a CI step on the fixture DB and a mandatory gate after the legacy data copy (D-21).
 
 | ID | Assert | Level |
 | --- | --- | --- |
@@ -413,7 +413,7 @@ Each assert is a SQL query returning violating ids; `vukem catalog:check [--json
 ## 10. Test strategy
 
 - Unit: slugs, locale resolver, cursor, audience filter, role compatibility, ISBN.
-- Integration (Postgres, `-tags=integration`, https://vukem.dev/docs/database/factories-seeders "PostgreSQL"; fixtures via "Factories and seeders"): constraints, merge, redirects, filters, sorts, entity stats, DQ asserts.
+- Integration (Postgres, `-tags=integration`, <https://vukem.dev/docs/database/factories-seeders> "PostgreSQL"; fixtures via "Factories and seeders"): constraints, merge, redirects, filters, sorts, entity stats, DQ asserts.
 - Contract: vukem OpenAPI (SDD 05) + Schemathesis; visibility test with TMDB/IGDB fixtures. E2E: Playwright + axe (SDD 09). Load: k6 (NFR-01-1).
 - Migration: run on a legacy dump; compare counts per type (items, translations, covers); DQ gate.
 

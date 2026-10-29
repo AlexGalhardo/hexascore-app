@@ -108,7 +108,7 @@ Paths shown without locale prefix; every public path also exists under `/pt-br` 
 | `Pricing/Index` | `/pricing` | SSR | `plans`, `currency`, `coverage` |
 | `Account/Notifications` | `/me/notifications` | CSR | `notifications` (`Scroll`, 20), SDD 14 §6.2 |
 | `Community/*` | SDD 04 §6 | CSR | SDD 04 |
-| (vukem views) | `/admin/moderation…` (SDD 04), `/admin/ingest` (SDD 06) | Go `html/template` | not Inertia: server-rendered views inside the vukem admin layout (https://vukem.dev/docs/digging-deeper/admin, https://vukem.dev/docs/basics/views), open issue 09-12 |
+| (vukem views) | `/admin/moderation…` (SDD 04), `/admin/ingest` (SDD 06) | Go `html/template` | not Inertia: server-rendered views inside the vukem admin layout (<https://vukem.dev/docs/digging-deeper/admin>, <https://vukem.dev/docs/basics/views>), open issue 09-12 |
 | `Docs/Page` | `/docs`, `/docs/{authentication,errors,pagination,rate-limits,coverage,webhooks,exports,changes,changelog}` | SSR | `slug`, `body` (pre-rendered HTML from Markdown at build, sanitised), `toc` |
 | (vukem `apidocs`) | `/docs/reference` | Go | Scalar, SDD 05 §6 |
 | `Help/Score` | `/help/score` | SSR | SDD 02 help outline |

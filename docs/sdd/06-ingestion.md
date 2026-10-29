@@ -33,12 +33,12 @@ Out: IMDb datasets (ADR 0006); critic scores (D-09); HTML scraping; IGDB webhook
 - NFR-06-3 Memory: ≤ 256 MB; rows streamed in batches of 200; selections read only needed JSON keys (legacy `covers.py` `targets`).
 - NFR-06-4 Freshness: Wikidata edits live within 26 h; TMDB ≤ 7 days in steady state, cap 180.
 - NFR-06-5 Politeness: §7.2 rates never exceeded. Verify: fake-clock port of `test_rate_limit_spaces_requests_per_host`.
-- NFR-06-6 Security: outbound HTTP only through vukem `httpclient.Safe` (https://vukem.dev/docs/security/overview "A01"), since cover URLs come from third-party payloads; host allowlist per connector; JSON ≤ 20 MB, images ≤ 15 MB; credentials are `config.Secret`.
+- NFR-06-6 Security: outbound HTTP only through vukem `httpclient.Safe` (<https://vukem.dev/docs/security/overview> "A01"), since cover URLs come from third-party payloads; host allowlist per connector; JSON ≤ 20 MB, images ≤ 15 MB; credentials are `config.Secret`.
 - NFR-06-7 Cost: covers ≈ 2.1 GB per 100k items (legacy measured 20.5 GB per 1M).
 
 ## 5. Data model
 
-Catalogue tables: SDD 01 §5.2, plus `items.release_precision` (`day|month|year|unknown`) and `items.release_status` (`announced|released|cancelled`) decided in `open-issues.md` (02-1) and filled here. Ingestion tables (via `s.Raw`, https://vukem.dev/docs/database/migrations "Migrations"):
+Catalogue tables: SDD 01 §5.2, plus `items.release_precision` (`day|month|year|unknown`) and `items.release_status` (`announced|released|cancelled`) decided in `open-issues.md` (02-1) and filled here. Ingestion tables (via `s.Raw`, <https://vukem.dev/docs/database/migrations> "Migrations"):
 
 ```sql
 create table source_records (            -- legacy catalog.ts shape + checked_at, last_run_id
@@ -128,9 +128,9 @@ Invariants: history is written in the same statement as the update (CTE); `job_r
 
 ## 6. Contracts
 
-Jobs (https://vukem.dev/docs/digging-deeper/queue "Queue"): payload `{run_id}`, parameters in `job_runs.params`; queue `ingest`, `queue.Timeout(10*time.Minute)`, `queue.Retries(3)`; `QUEUE_NAMES=default,ingest` (priority with the database driver inside `serve` [NOT VERIFIED], issue 5). Chunked continuation: a handler processes ≤ 500 targets or 5 min, saves `cursor` and dispatches its successor with `q.DispatchTx` in that transaction. Permanent errors (TMDB 401, bad config) wrap `queue.ErrPermanent`; `queue.AttemptFrom(ctx).Last()` closes the run row ("Progress is not a queue feature").
+Jobs (<https://vukem.dev/docs/digging-deeper/queue> "Queue"): payload `{run_id}`, parameters in `job_runs.params`; queue `ingest`, `queue.Timeout(10*time.Minute)`, `queue.Retries(3)`; `QUEUE_NAMES=default,ingest` (priority with the database driver inside `serve` [NOT VERIFIED], issue 5). Chunked continuation: a handler processes ≤ 500 targets or 5 min, saves `cursor` and dispatches its successor with `q.DispatchTx` in that transaction. Permanent errors (TMDB 401, bad config) wrap `queue.ErrPermanent`; `queue.AttemptFrom(ctx).Last()` closes the run row ("Progress is not a queue feature").
 
-Events (https://vukem.dev/docs/digging-deeper/events "Events"): `catalog.ItemsChanged{IDs}` per committed normalise batch (SDD 07 search, SDD 09 cache); SDD 02 `RecomputeItemScore{ItemID}` via `DispatchTx` when a rated item's release date, precision or status changes.
+Events (<https://vukem.dev/docs/digging-deeper/events> "Events"): `catalog.ItemsChanged{IDs}` per committed normalise batch (SDD 07 search, SDD 09 cache); SDD 02 `RecomputeItemScore{ItemID}` via `DispatchTx` when a rated item's release date, precision or status changes.
 
 Admin: read-only panel resources for `job_runs`, `ingest_failures`, `dq_results`; actions are app routes, custom panel actions being [NOT IN VUKEM DOCS] (VF-008).
 
@@ -142,7 +142,7 @@ Admin: read-only panel resources for `job_runs`, `ingest_failures`, `dq_results`
 | POST | `/admin/ingest/runs/{id}/rollback` | `rollbackIngestion` | `{reason}` | 303; 409 `history-expired` |
 | GET/POST | `/admin/ingest/reviews[/{id}]` | `runIngestion` | `{action: link|create|dismiss, entity_id?}` | match queue |
 
-Kill switches (https://vukem.dev/docs/digging-deeper/feature-flags "Feature flags"): `ingest_enabled`, `ingest_<source>` (plus `covers`, `youtube`), code default `false` (fail closed), on in production via `FLAG_INGEST_<SOURCE>=true`; a stored `false` at `/admin/_flags` wins within the 30 s cache TTL.
+Kill switches (<https://vukem.dev/docs/digging-deeper/feature-flags> "Feature flags"): `ingest_enabled`, `ingest_<source>` (plus `covers`, `youtube`), code default `false` (fail closed), on in production via `FLAG_INGEST_<SOURCE>=true`; a stored `false` at `/admin/_flags` wins within the 30 s cache TTL.
 
 ## 7. Behaviour and algorithms
 
@@ -173,7 +173,7 @@ Per-host throttle shared across goroutines (slot reservation, legacy `common/htt
 | Host | Rate | In flight | Batch | Budget |
 | --- | --- | --- | --- | --- |
 | query.wikidata.org | 1/s | 1 | 1 query/type | ≤ 50/day |
-| www.wikidata.org | 5/s | 2 | 50 ids | ≤ 1,000/day; full ≈ 8,000 |
+| [www.wikidata.org](https://www.wikidata.org) | 5/s | 2 | 50 ids | ≤ 1,000/day; full ≈ 8,000 |
 | {en,pt,es}.wikipedia.org | 5/s each | 4 | 20 titles | ≈ 15,000/week |
 | commons / upload.wikimedia.org | 5/s / 2/s | 2 | 1 | ≤ 2,000/day |
 | openlibrary.org / covers.openlibrary.org | 2.5/s / 10/s | 2 / 4 | 1 | ≈ 50,000/week |
@@ -181,7 +181,7 @@ Per-host throttle shared across goroutines (slot reservation, legacy `common/htt
 | api.igdb.com | 3.3/s, cap 4/s | 4 (limit 8) | 200 slugs | ≈ 150/week |
 | store.steampowered.com | 1 per 1.6 s | 1 | 1 | ≈ 15,000/week |
 | catalog.gog.com | 2/s | 1 | 1 | ≈ 3,000/week |
-| www.youtube.com oEmbed | 10/s | 4 | 1 | ≤ 20,000/week |
+| [www.youtube.com](https://www.youtube.com) oEmbed | 10/s | 4 | 1 | ≤ 20,000/week |
 | image.tmdb.org / images.igdb.com | 20/s | 4 | 1 | covers |
 
 User-Agent `HexaScoreBot/1.0 (+$INGEST_CONTACT_URL)`; timeout 60 s; retry transport errors and 429/500/502/503/504, 5 attempts, `2^n` s ≤ 60 s, `Retry-After` ≤ 300 s applied to the whole host; other 4xx final (legacy `test_http.py`). After 20 rate-limit hits a run halves the host rate. Breaker per host: opens after 10 consecutive failures or ≥ 50 % of the last 50; open 5 min doubling to 1 h; one half-open probe; ends the run `partial` with its cursor.
@@ -218,7 +218,7 @@ Pressure gate: app middleware counts in-flight requests; batches wait while > 16
 
 ### 7.6 Jobs and schedules
 
-`SCHEDULE_TIMEZONE=America/Sao_Paulo` (as SDD 02); tasks `WithoutOverlapping()` (https://vukem.dev/docs/digging-deeper/scheduler "Scheduler"); a successful stage dispatches the next.
+`SCHEDULE_TIMEZONE=America/Sao_Paulo` (as SDD 02); tasks `WithoutOverlapping()` (<https://vukem.dev/docs/digging-deeper/scheduler> "Scheduler"); a successful stage dispatches the next.
 
 | Job | When | Chain / notes |
 | --- | --- | --- |
@@ -295,7 +295,7 @@ Parity: `testdata/parity/qids.txt`, 200 QIDs (50 per type; top/mid/tail; non-Lat
 - Unit: fixture-based parsers, normaliser, ISBN, name normalisation, throttle/breaker on a fake clock.
 - Integration (Postgres, vukem `pgtest`): history, continuation, rollback, matching, expiry, kill switches, `httptest` stubs.
 - Parity (§7.9) in CI for `internal/ingest`; security `TestSecurity_A01_IngestSSRF`, image bombs; k6 during ingestion; asserts nightly and in the monthly restore drill.
-- Observability (SDD 12): `ingest.run.duration{job,source,status}`, `ingest.records{source,outcome}`, `ingest.http.rate_limited{host}`, `ingest.breaker.open{host}`, `ingest.dq.failed{code}`, `ingest.tmdb.max_age_days`, plus built-in `messaging.process.duration`, `http.client.request.duration` (https://vukem.dev/docs/digging-deeper/queue "Metrics"); app metrics API [NOT IN VUKEM DOCS] (issue 7). Alerts: `failed` run; no successful incremental in 26 h; `error` assert; TMDB age > 170 d; breaker open > 1 h; `failed_jobs` growth.
+- Observability (SDD 12): `ingest.run.duration{job,source,status}`, `ingest.records{source,outcome}`, `ingest.http.rate_limited{host}`, `ingest.breaker.open{host}`, `ingest.dq.failed{code}`, `ingest.tmdb.max_age_days`, plus built-in `messaging.process.duration`, `http.client.request.duration` (<https://vukem.dev/docs/digging-deeper/queue> "Metrics"); app metrics API [NOT IN VUKEM DOCS] (issue 7). Alerts: `failed` run; no successful incremental in 26 h; `error` assert; TMDB age > 170 d; breaker open > 1 h; `failed_jobs` growth.
 
 ## 11. Open issues
 
