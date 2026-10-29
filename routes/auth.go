@@ -14,6 +14,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers/account"
+	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
 
 // Auth registers login, registration, password reset and email
@@ -69,6 +70,20 @@ func Auth(r *router.Router, app *vukem.App) error {
 
 	r.Get("/onboarding", h.ShowOnboarding).Name("onboarding").Use(required, verified)
 	r.Post("/onboarding", h.Onboarding).Use(required, verified)
+
+	// 5 schedules per hour per user (SDD 03 section 4); cancelling is not limited.
+	deleteKey := func(r *http.Request) string {
+		u, err := auth.UserFrom[models.User](r.Context(), "web")
+		if err != nil {
+			return ratelimit.ByIP(r)
+		}
+
+		return "deletion:" + u.AuthID()
+	}
+	r.Post("/profile/deletion", h.ScheduleDeletion).Name("deletion.schedule").
+		Use(required, ratelimit.Middleware(limiters("deletion", 5, time.Hour), deleteKey))
+	r.Delete("/profile/deletion", h.CancelDeletion).Name("deletion.cancel").Use(required)
+	r.Get("/help/delete-account", h.HelpDeleteAccount).Name("help.delete-account")
 
 	r.Get("/dashboard", h.Dashboard).Name("dashboard").Use(required, verified)
 

@@ -1137,5 +1137,22 @@
       "body": "Your nickname is your public handle on profiles, lists and the community scores.",
       "submit": "Save nickname"
     }
+  },
+  "help": {
+    "deleteAccount": {
+      "metaTitle": "Delete your account",
+      "title": "How to delete your HexaScore account",
+      "intro": "You can delete your account yourself, in the app or on the website. No support request is needed.",
+      "steps": {
+        "0": "Log in and open your profile.",
+        "1": "Choose \"Delete my account\" and confirm after the 10-second countdown.",
+        "2": "You are logged out on every device."
+      },
+      "grace": "Deletion takes effect after 30 days. Until then you can log in and cancel it.",
+      "erased": "When it takes effect your name, email, nickname, picture, password, sign-in links and API keys are erased, and any card subscription is cancelled.",
+      "kept": "Your ratings stay in the community scores without any link to you, as \"Deleted user\".",
+      "cta": "Go to my profile",
+      "login": "Log in"
+    }
   }
 }
