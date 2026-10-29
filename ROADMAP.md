@@ -723,7 +723,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.D.5 Release
 
-- [ ] **P1.D.5.1** Release `v0.4.0` (scoring).
+- [x] **P1.D.5.1** Release `v0.4.0` (scoring).
   - Files/modules: `CHANGELOG.md`, tag `v0.4.0`
   - Refs: ADR 0013; SDD 11 §7.1
   - Depends on: P1.D.2.2, P1.D.3.2, P1.D.4.1, P1.D.4.2
