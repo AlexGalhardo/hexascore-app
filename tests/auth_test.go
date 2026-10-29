@@ -24,8 +24,8 @@ import (
 // Passwords other than testPassword: otherPassword signs up throwaway
 // accounts, newPassword is the one a reset or a change moves to.
 const (
-	otherPassword = "another long password"
-	newPassword   = "a brand new password"
+	otherPassword = "Another long pass 7!"
+	newPassword   = "A brand new pass 5!"
 )
 
 var linkRe = regexp.MustCompile(`https?://[^\s)"]+`)
@@ -524,4 +524,18 @@ func apiTokenFor(t *testing.T, app *vukemtest.App, email string) string {
 	}
 
 	return u.AuthID()
+}
+
+func TestSignUpRejectsWeakPassword(t *testing.T) {
+	t.Parallel()
+
+	for _, weak := range []string{"Short1!", "alllowercase1!", "NoSpecial1abc", strings.Repeat("Aa1!", 33)} {
+		t.Run(weak[:min(len(weak), 8)], func(t *testing.T) {
+			t.Parallel()
+
+			app := vukemtest.New(t, bootstrap.New)
+			c := app.Client(t).Inertia("").WithHeader("Referer", "/signup")
+			c.PostJSON("/signup", signUpForm("Ana Silva", "weak@example.com", weak)).AssertRedirect("/signup")
+		})
+	}
 }
