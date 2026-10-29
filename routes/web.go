@@ -9,6 +9,7 @@ import (
 	"github.com/AlexGalhardo/vukem/middleware"
 	"github.com/AlexGalhardo/vukem/router"
 
+	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/resources"
@@ -36,6 +37,11 @@ func Web(r *router.Router, app *vukem.App) error {
 		Query:    localeQuery,
 		Cookie:   "locale",
 	}))
+
+	acc, err := accounts.New(app)
+	if err != nil {
+		return err
+	}
 
 	db, err := app.DB()
 	if err != nil {
@@ -80,6 +86,7 @@ func Web(r *router.Router, app *vukem.App) error {
 			"social.",
 		),
 		shareProps(app),
+		appmiddleware.NotBanned(acc.Web.User, acc.ProblemBase, app.Now),
 	)
 
 	r.Get("/", controllers.Home).Name("home")
