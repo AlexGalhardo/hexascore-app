@@ -668,7 +668,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test ./tests -run TestSecurity_A01_RatingNeedsAbility` → token without `ratings:write` → 403
   - Notes: per-user limit 30/min via `ratelimit.ByUser` (SDD 02 §6). Events dispatched from `tx.AfterCommit`. Web validation failures answer 303 with `props.errors`.
 
-- [ ] **P1.D.2.2** Prove concurrent writers and the nightly recompute never diverge, and measure hot-item recompute latency.
+- [x] **P1.D.2.2** Prove concurrent writers and the nightly recompute never diverge, and measure hot-item recompute latency.
   - Files/modules: `tests/scoring/concurrent_test.go`, `qa/k6/rating-hot-item.js`
   - Refs: SDD 02 §4 (NFR-02-1), §9, §10; open-issues 02-3; <https://vukem.dev/docs/testing/overview> "Testing against PostgreSQL"
   - Depends on: P1.D.2.1
