@@ -110,3 +110,21 @@ Decisive output:
 - Fit of BRL/USD/EUR: one Stripe price per plan (`STRIPE_PRICE_PRO`, `STRIPE_PRICE_BUSINESS`) with `currency_options`; the checkout sends `currency` in `stripe.Params`; `config.Plan.Amounts` holds the SDD amounts (pro 2900/600/600, business 14900/2900/2700 minor units, BRL/USD/EUR) for display only. Locale-to-currency default (pt-BR to BRL, es to EUR, en to USD) is not implemented: the default is `usd`. Live Stripe acceptance of `currency` with a `currency_options` price was not run (test keys only, human gate): [NÃO VERIFICADO].
 
 Verdict: workaround (scaffold code edited for plan names and currency; VF-037).
+
+## P0.F.2.1 Inertia SSR with failure counter and health check
+
+Verdict: workaround (works; two project-side fixes and VF-038).
+
+Spike branch `agent/orchestrator/P0.F.2.1` (merged into spike `main` as 13b4c0a). Port 3000, database `spike_orch`.
+
+- `bootstrap/app.go`: `inertia.SSRConfig{Bundle: "bootstrap/ssr/ssr.js", OnFailure: ssrFailures.Observe}`; `app.AddHealthCheck("ssr", app.Inertia.SSRHealthy)` adds `ssr` to `GET /up?checks=1` (https://vukem.dev/docs/deployment/single-binary "Health checks"); `GET /up/ssr-fallbacks` exposes the counter for the spike only (production exports a metric, SDD 12).
+- `app/ssr/failures.go`: atomic counter plus a warning log per fallback (VF-002 workaround); `TestFailuresCountsEachFallback` passes.
+- `resources/js/ssr.tsx`: the `@inertiajs/vite` 3.9.1 plugin wraps a top-level `createInertiaApp({...})` **expression statement** with `createServer` and `renderToString`. An `export default createInertiaApp(...)` entry builds without errors, but it produces a bundle that never listens, and `ssr:start` then exits 0 with no log.
+- `resources/vite/vukem.js` (project-owned starter plugin): during the SSR build it forced `outDir` to `resources/public/build` with `emptyOutDir: true`. The server bundle then landed in the public directory and the client build was wiped. Fixed: when `isSsrBuild` is set, the output goes to `bootstrap/ssr`. `package.json` gets `build:ssr` = `vite build --ssr resources/js/ssr.tsx`.
+
+Acceptance (run on 2026-10-29):
+
+- `bun run build:ssr && <app> ssr:start`, then `<app> ssr:check` → `SSR server is healthy`, exit 0.
+- `GET /` → exactly one `data-page` attribute, and `#app` holds server-rendered markup (`<header ...><a ...>HexaScoreSpike</a><nav ...>`).
+- `GET /up?checks=1` → `200 {"status":"ok","checks":{"db":"ok","ssr":"ok"}}`. After the SSR process is stopped: `503 {"status":"fail","checks":{"db":"ok","ssr":"fail"}}`, two page loads render an empty `#app` (client fallback), and `/up/ssr-fallbacks` → `{"fallbacks":2}`.
+- `go test ./...` on spike `main` → all packages `ok`.
