@@ -34,6 +34,10 @@ var CategoryKeys = map[string][6]string{
 // visibleScore is SDD 02's read gate: scores show from 5 counted ratings.
 const visibleScore = "(i.rating_count >= 5 AND i.score IS NOT NULL)"
 
+// starsScore is the stored 0-100 score on the 0-10 one-decimal scale, gated; matches scoreFields.
+// numeric rounding is half-away-from-zero like Go math.Round.
+const starsScore = "CASE WHEN " + visibleScore + " THEN (round(i.score::numeric) / 10)::float8 END"
+
 // sortSpec is one legacy sort field. Each expression embeds a null sentinel
 // so nulls sort last in both directions (legacy sortExpression).
 type sortSpec struct {
