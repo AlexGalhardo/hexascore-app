@@ -117,7 +117,7 @@ Headers: `X-Request-Id`; `RateLimit-Limit/Remaining/Reset` = per-second throttle
 | `listItems` | GET `/v1/{type}` | games/movies/series/books; `genre`, `platform` (games), `year` 1800–2100, `min_score`/`max_score` 0–10 step 0.5, `min_<category>` (A-06), legacy `sort`, `limit` 1..cap (default 10), `cursor`, `locale` |
 | `getItem` | GET `/v1/{type}/{id}` | 301 for merged ids (SDD 01); non-`public` items 404 (SDD 01 FR-01-14) |
 | `getItemActivity` | GET `/v1/{type}/{id}/activity` | business plan only (else 403 `plan-required`), counts as 1 request (SDD 08 §6, open issue 08-6) |
-| `listGenres` | GET `/v1/{type}/genres` | `{data:[{slug,count}]}` |
+| `listGameGenres`, `listMovieGenres`, `listSeriesGenres`, `listBookGenres` | GET `/v1/{type}/genres` | `{data:[{slug,count}]}`; one operation per type because Go's ServeMux rejects `/{type}/genres` next to `/entities/{id}` (2026-10-29, P1.H.2.1b) |
 | `listTrending` | GET `/v1/{type}/trending` | `window=day\|week` (SDD 08), top 100 |
 | `listEditions` | GET `/v1/books/{id}/editions` | D-10 |
 | `getEntity`, `listEntityItems` | GET `/v1/entities/{id}`, `/v1/entities/{id}/items` | SDD 01 |

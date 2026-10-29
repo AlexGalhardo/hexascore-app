@@ -1040,7 +1040,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.H.2 Read endpoints
 
-- [ ] **P1.H.2.1** Implement the `/api/v1` read endpoints at legacy parity plus the SDD 01/07 additions, with the licence filter and ETags.
+- [x] **P1.H.2.1** Implement the `/api/v1` read endpoints at legacy parity plus the SDD 01/07 additions, with the licence filter and ETags.
   - Files/modules: `app/http/controllers/api/{items,entities,search,lookup,usage}_controller.go`, `routes/api.go` (typed handlers via `api.Register`), `tests/api_*_test.go`
   - Refs: SDD 05 §6.2, §9; SDD 01 §6.2; SDD 07 §6; open-issues 05-3; ADR 0006; legacy `app/api/v1/`, `lib/api/schemas.ts`
   - Depends on: P1.H.1.2, P1.E.4.1, P1.D.5.1
@@ -1049,7 +1049,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test ./tests -run TestAPILicenceFilter` → TMDB/IGDB fixture fields absent from `/api/v1`, present in `/app/v1`.
     - `go test ./tests -run TestAPIContract` → every response passes `AssertMatchesOpenAPI()`.
     - `curl -si -H "Authorization: Bearer $K" -H "If-None-Match: $ETAG" $API/v1/games/<id>` → 304, `X-Quota-Remaining` down by 1
-  - Notes: operations: `listItems`, `getItem`, `listGenres`, `listEditions`, `getEntity`, `listEntityItems`, `getPerson`, `getOrganization`, `getFranchise`, `getPlatform`, `searchItems`, `searchEntities`, `lookupItem`, `getUsage`. `listTrending`, `listChanges`, exports and webhooks are P3.A. The `/app/v1` side of `TestAPILicenceFilter` needs the app read endpoints of P3.C: until then assert against the `site` read model directly.
+  - Notes: operations: `listItems`, `getItem`, `listGenres` (four per-type operations, see SDD 05 §6.2), `listEditions`, `getEntity`, `listEntityItems`, `getPerson`, `getOrganization`, `getFranchise`, `getPlatform`, `searchItems`, `searchEntities`, `lookupItem`, `getUsage`. `listTrending`, `listChanges`, exports and webhooks are P3.A. The `/app/v1` side of `TestAPILicenceFilter` needs the app read endpoints of P3.C: until then assert against the `site` read model directly.
 
 - [ ] **P1.H.2.2** Finish the API surface: host routing in production config, the problem catalogue with `/docs/errors` anchors, CORS, IP limits and the OpenAPI `servers` entry.
   - Files/modules: `app/http/middleware/api_host.go`, `app/http/problems/catalog.go`, `routes/api.go`, `resources/docs/errors.md`
