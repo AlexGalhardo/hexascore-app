@@ -26,3 +26,7 @@ coverage/
 /resources/public/build/
 /resources/public/hot
 storage/*
+
+# Playwright
+qa/e2e/test-results/
+playwright-report/

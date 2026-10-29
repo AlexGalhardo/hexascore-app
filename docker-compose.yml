@@ -35,6 +35,34 @@ services:
       timeout: 3s
       retries: 12
 
+  # Built container for the QA gate (ROADMAP P1.I): docker compose --profile app up -d --wait
+  # APP_KEY comes from .env (setup script) or the shell. Dev-only credentials, same as above.
+  app-init:
+    profiles: ["app"]
+    build: .
+    image: hexascore-app:e2e
+    depends_on:
+      postgres: { condition: service_healthy }
+    environment: &app-env
+      APP_KEY: ${APP_KEY:?run setups/setup-unix.sh or vukem key:generate}
+      DATABASE_URL: postgres://hexascore:hexascore@postgres:5432/hexascore?sslmode=disable
+      SESSION_DRIVER: database
+    # Migrate, then seed DemoCatalog (1 admin, 50 users, 300 items); a second seed may fail, so tolerate it.
+    entrypoint: ["/bin/sh", "-c", "/app/app migrate && (/app/app db:seed --force DemoCatalog || true)"]
+    restart: "no"
+
+  app:
+    profiles: ["app"]
+    image: hexascore-app:e2e
+    depends_on:
+      app-init: { condition: service_completed_successfully }
+    environment: *app-env
+    ports: ["127.0.0.1:3000:3000"]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:3000/up"]
+      interval: 3s
+      retries: 20
+
 volumes:
   postgres:
   rustfs:

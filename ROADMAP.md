@@ -1113,7 +1113,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
 
 #### P1.I.1 Playwright harness
 
-- [ ] **P1.I.1.1** Set up Playwright with axe against the built container, three locales, mobile and desktop projects, and seeded fixtures.
+- [x] **P1.I.1.1** Set up Playwright with axe against the built container, three locales, mobile and desktop projects, and seeded fixtures.
   - Files/modules: `qa/e2e/playwright.config.ts`, `qa/e2e/global-setup.ts`, `qa/e2e/helpers/{auth,axe,db}.ts`, `package.json` (`e2e` script, exact `@playwright/test` and `@axe-core/playwright` versions), `docker-compose.yml` profile `app`
   - Refs: SDD 09 §9, §10; D-21, D-22; legacy `qa/e2e/`
   - Depends on: P1.H.5.1
