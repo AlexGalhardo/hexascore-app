@@ -539,3 +539,25 @@ func TestSignUpRejectsWeakPassword(t *testing.T) {
 		})
 	}
 }
+
+func TestSecurity_A07_LoginThrottleSharedAcrossIdentifiers(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+	register(t, app, app.Client(t).Inertia(""), "eve@example.com")
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.ExecContext(t.Context(), `UPDATE users SET username = 'evenick' WHERE email = 'eve@example.com'`); err != nil {
+		t.Fatal(err)
+	}
+
+	attacker := app.Client(t).Inertia("")
+	// Email and nickname are the same account: alternating them must not
+	// open a second bucket (5 attempts per account and IP per minute).
+	for _, id := range []string{"eve@example.com", "evenick", "EVENICK", "eve@example.com", "evenick"} {
+		attacker.PostJSON("/login", map[string]any{"identifier": id, "password": "guess"})
+	}
+	attacker.PostJSON("/login", map[string]any{"identifier": "evenick", "password": "guess"}).AssertStatus(429)
+}
