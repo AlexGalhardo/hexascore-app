@@ -13,12 +13,19 @@ import (
 func TestLocaleCookieRedirect(t *testing.T) {
 	t.Parallel()
 
-	prefixes := map[string]string{"pt-br": "pt-BR"}
+	prefixes := map[string]string{"pt-br": "pt-BR", "es": "es"}
 	cfg := middleware.LocalePrefixConfig{Prefixes: prefixes, Cookie: "locale"}
 	h := i18n.StripPathPrefix(prefixes)(middleware.LocaleCookieRedirect(cfg)(
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if r.URL.Path == "/login-redirect" {
 				http.Redirect(w, r, "/login", http.StatusSeeOther)
+
+				return
+			}
+
+			// web.Ctx.Back and locale switchers redirect to already-prefixed paths.
+			if target := r.URL.Query().Get("to"); target != "" {
+				http.Redirect(w, r, target, http.StatusSeeOther)
 
 				return
 			}
@@ -40,6 +47,17 @@ func TestLocaleCookieRedirect(t *testing.T) {
 		{"asset is not redirected", "GET", "/logo.svg", "pt-BR", "", 200, ""},
 		{"prefixed request redirects keep the prefix", "POST", "/pt-br/login-redirect", "", "", 303, "/pt-br/login"},
 		{"unprefixed request redirects are untouched", "POST", "/login-redirect", "", "", 303, "/login"},
+		{
+			"already prefixed target is not prefixed twice",
+			"POST",
+			"/pt-br/lists?to=/pt-br/lists/x",
+			"",
+			"",
+			303,
+			"/pt-br/lists/x",
+		},
+		{"bare prefix target is not prefixed twice", "POST", "/pt-br/lists?to=/pt-br", "", "", 303, "/pt-br"},
+		{"target in another locale keeps its prefix", "GET", "/pt-br/locale?to=/es/games", "", "", 303, "/es/games"},
 	}
 
 	for _, tc := range cases {
