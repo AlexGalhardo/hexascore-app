@@ -66,7 +66,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-055 | 2026-10-29 | medium | open |
 | VF-056 | 2026-10-29 | medium | open |
 | VF-057 | 2026-10-29 | medium | open |
-| VF-NEW-P2.D.3.1 | 2026-10-29 | low | open |
+| VF-058 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -580,7 +580,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
   - HTTP/3 as an opt-in nested module (`contrib/http3`) so core stays stdlib-only: QUIC listener on the same port (UDP) sharing the TLS config and the app handler, `Alt-Svc` header advertised from the HTTP/1.1 and HTTP/2 responses, graceful shutdown wired into the app runners, limits (max streams, idle timeout, header size matching `HTTP_MAX_HEADER_BYTES`). The QUIC implementation may be a third-party module (for example `github.com/quic-go/quic-go`, exact pinned stable version) if the stdlib has no production-ready HTTP/3 server at implementation time; check `golang.org/x/net` first and record the choice.
   - Docs and site page "HTTP/2 and HTTP/3" (when you need them, proxy vs direct, Railway/Cloudflare notes); tests: h2 over TLS with `httptest`, ALPN negotiation, h2c unchanged, HTTP/3 round trip on loopback, `Alt-Svc` present only when HTTP/3 is on, `TestSecurity_*` (TLS < 1.2 refused, no plaintext fallback when TLS is configured unless the redirect listener is on).
 
-## VF-NEW-P2.D.3.1: Admin hardening covers only the panel's routes and has no idle timeout
+## VF-058: Admin hardening covers only the panel's routes and has no idle timeout
 
 - **Date**: 2026-10-29. **Severity**: low. **Status**: open.
 - **vukem version**: v0.33.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin` `[NOT IN VUKEM DOCS]`: `admin.Config{TwoFactor, MaxSessionAge, AllowCIDRs}` (VF-030 fix) is in the package godoc, not on the site page.

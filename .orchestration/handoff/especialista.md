@@ -15,5 +15,5 @@ Merge overlap: P2.E.1.1 vs senior ADOPT-VF-040 (bootstrap/commands.go, runbook);
 - P2.E.2.1: app/backup frames + backup:run; added vukem drivers/s3 v0.3.1 (flagged). Local pg_dump: host has none; build GOOS=linux binary and run it in postgres:18.6-alpine3.24 with --add-host host.docker.internal:host-gateway, APP_ENV=development. RustFS creds hexascore/hexascore-local-secret; bucket hexascore-local exists.
 - Session 9 cont.: REV-ADOPT-VF-024 CORRIGIDO (agent/especialista/ADOPT-VF-024-fix: double locale prefix on Back redirects + sampler prefix), REV-P1.I.2.1 APROVADO (+senior 2-E2E-HARDEN-P1.I.2.1), REV-ADOPT-VF-035 APROVADO, REV-ADOPT-VF-040 APROVADO.
 - e2e isolation: COMPOSE_PROJECT_NAME=hx-especialista + override file (postgres/rustfs ports !reset [], app 127.0.0.1:3010), E2E_BASE_URL, E2E_APP_CONTAINER=hx-especialista-app-1; down -v after.
-- P2.D.3.1 delivered (agent/especialista/P2.D.3.1): AdminGuard router-wide; VF-NEW-P2.D.3.1.
+- P2.D.3.1 delivered (agent/especialista/P2.D.3.1): AdminGuard router-wide; VF-058.
 - P2.F.2.1 delivered (agent/especialista/P2.F.2.1): legacyimport runner/preflight/fixture.
