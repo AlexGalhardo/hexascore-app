@@ -644,7 +644,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test -tags=integration ./app/catalog/... -run TestListingFilters` → still PASS with real score columns
   - Notes: generated column inserts follow the P0.F.5.1 verdict (raw SQL if the ORM writes it). `rating_migration_audit` stays empty until P2.F.
 
-- [ ] **P1.D.1.2** Implement formula v1 (Bayesian per category, weights, confidence) as pure Go plus the equivalent SQL recompute.
+- [x] **P1.D.1.2** Implement formula v1 (Bayesian per category, weights, confidence) as pure Go plus the equivalent SQL recompute.
   - Files/modules: `app/scoring/formula.go`, `app/scoring/formula_test.go`, `app/scoring/recompute.sql.go`
   - Refs: SDD 02 §7.1, §9, §10; ADR 0005; D-13; open-issues 02-2
   - Depends on: P1.D.1.1
