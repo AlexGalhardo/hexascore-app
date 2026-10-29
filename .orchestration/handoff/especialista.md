@@ -1,12 +1,15 @@
-# Handoff especialista (2026-10-29, session 3)
-STATUS: HANDOFF (heavy context after the P1.H.2.1a implementation). Queue left: 1-REV-P1.F.2.1.md, 1-REV-P1.G.3.2.md (untouched).
-Done this session:
-- P1.H.2.1a concluida -> agent/especialista/P1.H.2.1a (pushed, PRONTO_PARA_MERGE self, needs orchestrator sampling). Report reports/P1.H.2.1a.md has the pattern for H.2.1b/c.
+# Handoff especialista (2026-10-29, session 4)
+STATUS: HANDOFF (heavy context). Queue left: 1-REV-P1.H.2.1b.md (untouched).
+Done this session (all CORRIGIDO_E_APROVADO, pushed):
+- REV-P1.F.2.1 -> agent/especialista/P1.F.2.1-fix (banned owner profile noindex; merge test for user_item_editions).
+- REV-P1.G.3.2 -> agent/especialista/P1.G.3.2-fix (banned owner list noindex; Library/Index locale prefix; Lists/Edit keyboard focus + heading key). New task queue/senior/2-P1.G.3.2b.md.
+- REV-P1.H.3.1 (r1 + orchestrator r2) -> agent/especialista/P1.H.3.1-fix (from the unmerged senior branch; merge still waits Q-H31). VF-NEW-P1.H.3.1 filed.
 Pitfalls (new):
-- Python text-mode writes on Windows emit CRLF: use newline='\n' or run gofmt -w afterwards.
-- /api/v1 tests: free plan is 1 rps and the memory limiter ignores the fake clock; use newKeyRigWith(t, vukem.WithRateLimiters(... ratelimit.NewMemory(1000, window))).
-- AssertMatchesOpenAPI needs OPENAPI_PREFIX=/api/v1 (operationId collision dashboard/admin.dashboard); newKeyRigWith sets it.
-- Typed handler 304/301: c.NotModified + return errs.New(304) / errs.New(301).WithHeader("Location") (VF-049).
-- Previous pitfalls (postgres container, golangci-lint parallel retry, merge-before-review) still apply.
-Worktree C:\dev\hexascore-app\wt\especialista on branch agent/especialista/P1.H.2.1a, clean.
-Skills: karpathy-guidelines/caveman not loaded this session (context economy).
+- Both G.3.2-fix and H.3.1-fix touch CHANGELOG [Unreleased]: expect a trivial merge conflict.
+- contrib/stripe: Subscription has custom UnmarshalJSON; embedding it to add fields silently drops them. Use Client.Call + raw JSON (app/billing/stripe_calls.go).
+- golines: run `golangci-lint fmt ./tests/... ./app/...` instead of hand-wrapping.
+- markdownlint-cli2 on one file may lint CHANGELOG too (config globs).
+- No axe-core installed: a11y checks only via vitest/jsdom keyboard tests.
+Previous pitfalls (handoff session 3) still apply.
+Worktree C:\dev\hexascore-app\wt\especialista on branch agent/especialista/P1.H.3.1-fix, clean.
+Skills: karpathy-guidelines/caveman not loaded (context economy).
