@@ -25,15 +25,19 @@ const localeQuery = "_locale"
 func Web(r *router.Router, app *vukem.App) error {
 	// workaround(vukem): VF-024. The URL prefix is the only locale source
 	// i18n.Middleware reads; the locale cookie only drives the redirect (SDD 09 §7.1).
-	err := vukem.DefaultMiddlewareWith(app, r, vukem.MiddlewareOptions{I18n: &i18n.MiddlewareConfig{
-		Query:   localeQuery,
-		Order:   []i18n.Source{i18n.SourceQuery},
-		Locales: []string{"en", "pt-BR", "es"},
-	}})
+	err := vukem.DefaultMiddlewareWith(app, r, vukem.MiddlewareOptions{
+		SecureHeaders: appmiddleware.SecureHeaders(app.Config.IsProduction()),
+		I18n: &i18n.MiddlewareConfig{
+			Query:   localeQuery,
+			Order:   []i18n.Source{i18n.SourceQuery},
+			Locales: []string{"en", "pt-BR", "es"},
+		},
+	})
 	if err != nil {
 		return err
 	}
 
+	r.UseServer(appmiddleware.CrossOriginResourcePolicy("same-site"))
 	r.UseServer(middleware.StaticFS(resources.Public(), middleware.StaticConfig{Prefix: "/"}))
 	r.UseServer(appmiddleware.LocalePrefix(appmiddleware.LocalePrefixConfig{
 		Prefixes: map[string]string{"pt-br": "pt-BR", "es": "es"},
