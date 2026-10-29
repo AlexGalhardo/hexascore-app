@@ -1,5 +1,6 @@
 import { expect, type Page } from "@playwright/test";
 import { mailLink } from "./mail";
+import { translator } from "./t";
 
 export interface Account {
 	name: string;
@@ -30,7 +31,6 @@ export function newAccount(): Account {
 	};
 }
 
-// Labels are matched in any locale because form posts land on unprefixed (default-locale) pages; see anyLocale.
 // Server-rendered forms submit natively (a GET that reloads the page) when clicked before React hydrates,
 // so wait until the first form carries React props. Pages without a form only need the load event.
 export async function open(page: Page, url: string): Promise<void> {
@@ -41,7 +41,9 @@ export async function open(page: Page, url: string): Promise<void> {
 	});
 }
 
-type Translate = (key: string) => RegExp;
+type Translate = (key: string) => string;
+
+export const en: Translate = translator("en");
 
 export async function fillSignup(
 	page: Page,
@@ -94,10 +96,11 @@ export async function createVerifiedAccount(
 	const link = await mailLink(account.email, "/verify-email/confirm/");
 	await open(page, link);
 	await expect(page).toHaveURL(/\/login/);
-	await page.getByLabel(t("auth.fields.identifier")).fill(account.email);
+	// Mailed links carry no locale prefix, so everything after the link renders in English.
+	await page.getByLabel(en("auth.fields.identifier")).fill(account.email);
 	await page.locator("input[name=password]").fill(account.password);
-	await page.getByRole("button", { name: t("auth.login.submit") }).click();
-	await completeOnboarding(page, t, account);
+	await page.getByRole("button", { name: en("auth.login.submit") }).click();
+	await completeOnboarding(page, en, account);
 	return account;
 }
 

@@ -46,6 +46,13 @@ func TestSecurity_A07_PowSignup(t *testing.T) {
 		signupAs(c, i).AssertRedirect("/signup/check-email")
 	}
 
+	// The probe announces the attempt that will cross the limit, so the client solves before posting.
+	var announced powChallenge
+	c.GetJSON("/challenge?route=signup").AssertOK().JSON(&announced)
+	if !announced.Required {
+		t.Fatal("/challenge must require a solution for the attempt past the limit")
+	}
+
 	// Past the threshold: no solution, 428 with a fresh challenge.
 	var problem struct {
 		Code      string `json:"code"`

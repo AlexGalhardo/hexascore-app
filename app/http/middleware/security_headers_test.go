@@ -157,3 +157,22 @@ func TestSecurity_A05_DevPolicyStaysPlainHTTP(t *testing.T) {
 		t.Errorf("dev CSP must not upgrade requests: %s", cfg.CSP)
 	}
 }
+
+func TestSecurity_A05_UpgradeInsecureOnlyForHTTPSProduction(t *testing.T) {
+	cases := []struct {
+		production bool
+		url        string
+		want       bool
+	}{
+		{true, "https://hexascore.app", true},
+		{true, "http://127.0.0.1:3000", false},
+		{false, "https://hexascore.app", false},
+		{false, "http://localhost:3000", false},
+	}
+
+	for _, c := range cases {
+		if got := middleware.UpgradeInsecure(c.production, c.url); got != c.want {
+			t.Errorf("UpgradeInsecure(%v, %q) = %v, want %v", c.production, c.url, got, c.want)
+		}
+	}
+}

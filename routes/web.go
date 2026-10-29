@@ -31,7 +31,9 @@ var localePrefixes = map[string]string{"pt-br": "pt-BR", "es": "es"}
 func Web(r *router.Router, app *vukem.App) error {
 	// The URL prefix is the only locale source; the locale cookie only drives the redirect (SDD 09 §7.1).
 	err := vukem.DefaultMiddlewareWith(app, r, vukem.MiddlewareOptions{
-		SecureHeaders: appmiddleware.SecureHeaders(app.Config.IsProduction()),
+		SecureHeaders: appmiddleware.SecureHeaders(
+			appmiddleware.UpgradeInsecure(app.Config.IsProduction(), app.Config.URL),
+		),
 		I18n: &i18n.MiddlewareConfig{
 			Order:        []i18n.Source{i18n.SourcePath},
 			Locales:      []string{"en", "pt-BR", "es"},
