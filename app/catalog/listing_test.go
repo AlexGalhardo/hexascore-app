@@ -40,10 +40,6 @@ func TestListingFilters(t *testing.T) {
 		}
 	}
 
-	// Score columns land in P1.D.1.1, which re-runs this test against the real ones.
-	exec(`ALTER TABLE items ADD rating_count int NOT NULL DEFAULT 0, ADD score numeric(7,4),
-ADD score_c1 numeric(7,4), ADD score_c2 numeric(7,4), ADD score_c3 numeric(7,4),
-ADD score_c4 numeric(7,4), ADD score_c5 numeric(7,4), ADD score_c6 numeric(7,4)`)
 	exec(
 		`INSERT INTO data_sources (code, name, licence, url) VALUES ('wikidata','Wikidata','CC0-1.0','https://www.wikidata.org')`,
 	)
