@@ -191,3 +191,23 @@ VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
 		t.Errorf("cursor reused for another sort: %v", err)
 	}
 }
+
+func TestParseListQueryRejectsNulAndInvalidUTF8(t *testing.T) {
+	t.Parallel()
+
+	for _, name := range []string{"genre", "platform", "sort", "cursor"} {
+		for _, bad := range []string{"a\x00b", "\xff\xfe"} {
+			get := func(k string) string {
+				if k == name {
+					return bad
+				}
+
+				return ""
+			}
+
+			if _, err := catalog.ParseListQuery(get, "game"); !errors.Is(err, catalog.ErrInvalidQuery) {
+				t.Errorf("%s=%q: err = %v, want ErrInvalidQuery", name, bad, err)
+			}
+		}
+	}
+}
