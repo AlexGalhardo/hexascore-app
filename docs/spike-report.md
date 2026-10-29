@@ -195,3 +195,25 @@ Acceptance (2026-10-29):
 - `go test ./app/accounts -run TestSecurity_A07_LegacyScryptVerifiesAndRehashes` → PASS. The test runs real HTTP sign-up and login. A wrong password redirects back to `/login` and leaves the stored Better Auth hash untouched. The fixture password logs in, and the stored value then starts with `$argon2id$`.
 - `TestCompatHasherBetterAuthFixtures` → 3/3 fixtures verify (including the NFKC-equivalent input), and a wrong password or a malformed value fails.
 - `go test ./...` on the spike → all packages `ok`.
+
+## P0.F.2.3 URL-prefix locales, i18n Once prop and theme cookie under SSR
+
+Verdict: workaround (VF-024 and VF-028 stay open; refined in VF-NEW-P0.F.2.3).
+
+Spike branch `agent/senior/P0.F.2.3`. `vukem.WithTranslations(resources.Lang())` loads `resources/lang/en.json` and `pt-BR.json` (the roadmap says `lang/`; `resources/lang` is where the `WithTranslations` docs put catalogs). Design:
+
+- `app/http/middleware/locale_prefix.go`: `LocalePrefix` (server-level, before routing) strips `/pt-br`, drops any client `_locale` and passes the locale as that query parameter; `i18n.Middleware` is configured with `Query: "_locale"`, `Order: [SourceQuery]`, so the URL is the only locale source (Accept-Language and the `lang` cookie no longer matter). A GET/HEAD without prefix whose `locale` cookie is `pt-BR` gets a 307 to the prefixed URL (not for Inertia visits, `/up`, `/api/`, `/build/`, file-like paths).
+- `RestoreURL` (route-level, first in `r.Use`) puts the original URL back so Inertia's `url` keeps `/pt-br/` (Inertia uses `r.URL.RequestURI()`).
+- `inertia.I18n("ui.")` shares `locale`, `locales` and the once prop `messages` keyed `i18n:<locale>`; `server.*` keys stay out of the page. Messages are flat dotted keys (`"ui.nav.home"`).
+- Theme: view functions have no request access, so the cookie (`dark`|`light` only) is shared as prop `theme` and the root view renders `{{with .Page.Props.theme}} data-theme="{{.}}"{{end}}`.
+
+Acceptance (spike built with `bun run build && bun run build:ssr`, `app serve` plus `app ssr:start`, port 3011 because 3001 was taken by another process):
+
+- `/up?checks=1` → `{"status":"ok","checks":{"db":"ok","ssr":"ok"}}`.
+- `curl -s localhost:3011/pt-br/ | grep -o '<html lang="[^"]*"'` → `<html lang="pt-BR"`; the SSR body contains the page and `"url":"\/pt-br\/"`.
+- `curl -sI -H 'Cookie: locale=pt-BR' localhost:3011/` → `HTTP/1.1 307 Temporary Redirect`, `Location: /pt-br/`.
+- `curl -s -H 'Cookie: theme=dark' localhost:3011/ | grep -c 'data-theme="dark"'` → `1`.
+- Inertia visit `/pt-br/` returns `messages`; with `X-Inertia-Except-Once-Props: i18n:pt-BR` the props hold only `appName, auth, errors, locale, locales` (no `messages`), `onceProps` still lists `i18n:pt-BR`.
+- `go test ./app/http/middleware/` ok (16 cases incl. open-redirect and client `_locale` spoof); `go test ./tests/ -run TestLocalePrefix` 4 tests PASS (prefix, cookie redirect, Once omission, theme incl. attribute-injection cookie). `go test ./...`: only the Postgres tests fail locally (no `TEST_DATABASE_URL` exported in this shell).
+
+Limits: in-app links and `router.visit` must add the prefix themselves (no prefix-aware `route()`/URLFor, VF-024); `es` is not enabled (no app catalog yet); locale switching must set the `locale` cookie and navigate (not built); the 307 is per request, so a CDN must `Vary: Cookie` (set on the redirect only).
