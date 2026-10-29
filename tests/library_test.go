@@ -118,6 +118,28 @@ func TestEditionPickerList(t *testing.T) {
 		t.Fatalf("editions = %+v; want only %s", body.Data, ed)
 	}
 
+	var page struct {
+		Data []struct{} `json:"data"`
+		Next int        `json:"next"`
+	}
+	web.GetJSON("/items/" + book + "/editions").AssertOK().JSON(&page)
+	if page.Next != -1 {
+		t.Fatalf("next = %d; want -1 on a single page", page.Next)
+	}
+
+	many := r.item("book", "public")
+	for range 11 {
+		r.edition(many)
+	}
+	web.GetJSON("/items/" + many + "/editions").AssertOK().JSON(&page)
+	if len(page.Data) != 10 || page.Next != 10 {
+		t.Fatalf("page 1 = %d next %d; want 10 next 10", len(page.Data), page.Next)
+	}
+	web.GetJSON("/items/" + many + "/editions?cursor=10").AssertOK().JSON(&page)
+	if len(page.Data) != 1 || page.Next != -1 {
+		t.Fatalf("page 2 = %d next %d; want 1 next -1", len(page.Data), page.Next)
+	}
+
 	web.GetJSON("/items/" + game + "/editions").AssertNotFound()
 	web.GetJSON("/items/" + r.item("book", "hidden") + "/editions").AssertNotFound()
 	web.GetJSON("/items/not-a-uuid/editions").AssertNotFound()

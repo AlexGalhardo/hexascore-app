@@ -96,7 +96,7 @@ func (h *Library) PutEdition(c *web.Ctx) error {
 
 // Editions lists the editions of the book in {id} for the picker.
 func (h *Library) Editions(c *web.Ctx) error {
-	eds, err := catalog.LoadBookEditions(c.Context(), h.db, c.Param("id"))
+	eds, next, err := catalog.LoadBookEditions(c.Context(), h.db, c.Param("id"), library.ParseOffset(c.Query("cursor")))
 	if errors.Is(err, catalog.ErrItemNotFound) {
 		return NotFound(c)
 	}
@@ -104,7 +104,7 @@ func (h *Library) Editions(c *web.Ctx) error {
 		return err
 	}
 
-	return c.JSON(200, map[string]any{"data": eds})
+	return c.JSON(200, map[string]any{"data": eds, "next": next})
 }
 
 // DeleteEdition forgets the signed-in user's edition of the book in {id}.
