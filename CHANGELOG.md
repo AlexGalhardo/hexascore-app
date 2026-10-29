@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **ui:** Keyboard-operable half-star `StarRating` slider (arrows, Page Up/Down, Home, End, Delete, pointer halves, +/- buttons) and the localised `/help/score` page; `rating.valuetext`/`rating.unset` and `help.score.*` keys in en, pt-BR, es; `TestCategoryKeys` checks every category key per locale.
 - **scoring:** `RecomputeScores` (daily 04:00, rebuilds `score_priors` first), `ReleaseBursts` (hourly, auto-resolves bursts unreviewed for 14 days), `PruneRatingEvents` (daily 04:30, 180-day retention), queued `RecomputeItemScore`, ban/unban listeners (batches of 500 item ids), post-merge recompute, scoring DQ asserts SC-01..SC-03 in `catalog:check`; `entity_stats` now carries real `avg_score`/`scored_count`; `SCHEDULE_TIMEZONE=America/Sao_Paulo` in `.env.example` (set it on Railway too).
 - **auth:** Localised account mails (en, pt-BR, es) rendered from the locale saved on the user instead of the request, so queued mail outside a request keeps the user's language (VF-013 workaround); new `password_changed` and `two_factor_changed` notices sent on password reset and on 2FA enable, disable and recovery-code use; `es` auth message catalogue.
 - **ui:** App shell: skip link, navigation with locale and theme switchers, footer, flash toasts, SEO head (canonical, hreflang, robots, Open Graph, JSON-LD), Base UI `Dialog` (`@base-ui/react` 1.9.0) and `CoverThumb`; unmatched pages render the `Error` page with `noindex`.

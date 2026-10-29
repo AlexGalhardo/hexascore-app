@@ -1157,6 +1157,35 @@
       "kept": "Your ratings stay in the community scores without any link to you, as \"Deleted user\".",
       "cta": "Go to my profile",
       "login": "Log in"
+    },
+    "score": {
+      "metaTitle": "How scores work",
+      "title": "How HexaScore scores work",
+      "intro": "Every score is a weighted average of community ratings. The rules below are public and versioned.",
+      "categoriesTitle": "Rating categories",
+      "categoriesIntro": "Each title type is rated in six categories.",
+      "inputTitle": "Rating input",
+      "input": "Rate each category from 0.5 to 10 stars in half-star steps. Click or tap a star half, or focus the control and use the arrow keys, Page Up/Down, Home, End and Delete.",
+      "formulaTitle": "The formula",
+      "formula": "The score is a Bayesian weighted mean: each rating counts with a weight, and a prior pulls titles with few ratings toward the type average. The result is shown as stars from 0 to 10 with one decimal.",
+      "minimumTitle": "Minimum ratings",
+      "minimum": "A score is shown only after 5 counted ratings.",
+      "confidenceTitle": "Confidence",
+      "confidence": "Confidence is low from 5 ratings, medium from 15 ratings with a small spread, and high from 50 ratings with a very small spread.",
+      "weightsTitle": "Rating weights",
+      "weights": "A rating weighs more when the account is older and when the user marked the title as played, watched or read. New accounts and ratings without a status weigh less.",
+      "releaseTitle": "Release gate",
+      "release": "Titles can be rated only from their release date. Ratings sent earlier do not count until then.",
+      "burstTitle": "Unusual activity",
+      "burst": "A sudden spike of ratings on one title temporarily limits new ratings from young accounts and shows a notice. Staff review the burst and either approve or exclude the affected ratings.",
+      "capsTitle": "Daily limits",
+      "caps": "Each account can add a limited number of new ratings and edits per day.",
+      "versionsTitle": "Version history",
+      "versions": "Formula changes are announced at least 14 days before they apply. The active version is version 1."
     }
+  },
+  "rating": {
+    "valuetext": "{value} of 10 stars",
+    "unset": "Not rated"
   }
 }
