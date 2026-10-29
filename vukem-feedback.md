@@ -47,6 +47,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-036 | 2026-10-29 | low | open |
 | VF-037 | 2026-10-29 | medium | open |
 | VF-038 | 2026-10-29 | medium | open |
+| VF-039 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -365,3 +366,11 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Reproduction**: in an app from `vukem new -inertia react`, run `vite build --ssr resources/js/ssr.tsx`. The starter plugin `resources/vite/vukem.js` sets `build.outDir = resources/public/build` and `emptyOutDir: true` for every build, so the server bundle becomes publicly served and the client build is deleted. With an `export default createInertiaApp(...)` entry, `@inertiajs/vite` 3.9.1 does not inject `createServer`; `vukem ssr:start` then runs a bundle that exits at once and itself exits 0 with no output.
 - **Workaround**: plugin returns `{ build: { outDir: "bootstrap/ssr", emptyOutDir: true } }` when `isSsrBuild`; SSR entry is a top-level `createInertiaApp({...})` statement; `build:ssr` script added by hand.
 - **Request**: ship the `isSsrBuild` branch, a `resources/js/ssr.tsx` and a `build:ssr` script in the Inertia starters (or have `vukem build` produce the SSR bundle, see VF-027); document the entry shape on the Inertia page; make `ssr:start` log and exit non-zero when the bundle exits without listening.
+
+## VF-039: No signed opaque-token helper and no problem+json extension members
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/pagination` ("Query conventions", "Envelopes"), `https://vukem.dev/docs/frontend/inertia` (Scroll), `https://vukem.dev/docs/digging-deeper/storage` (signed URLs).
+- **Context**: SDD 01 §7.2 assumed `signed.Signer` can sign a cursor payload; it only signs URLs (`Sign(rawURL, ttl)`, `Verify(*http.Request)`), so the spike uses `crypto/hmac` with a key from `App.DeriveKey("catalog-cursor", 32)`. `web.Problem` (RFC 9457) has no extension members, so the SDD 05 problem code `invalid-cursor` needs a hand-written `application/problem+json` body. `orm.CursorPaginate` rejects `sort`, hence the app-owned keyset (VF-005).
+- **Workaround**: `app/catalog/cursor.go` (HMAC-SHA256, constant-time compare, sort key and direction inside the signed payload) and `invalidCursor` in `app/controllers/items.go`.
+- **Request**: `signed.Token` (sign and verify arbitrary payloads with key rotation), `Problem.Extensions`/`Code`, and a documented keyset cursor over `(sort, id)` in the ORM.
