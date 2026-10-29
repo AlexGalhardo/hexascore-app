@@ -316,3 +316,7 @@ Acceptance (2026-10-29), `go test ./tests -run "TestCoversServe|TestPresignExpir
 - `TestZipCSVMatchesRecorder` PASS: the VF-029 choice. The job uses `encoding/csv` plus exported `export.SafeCell`; its bytes equal `export.CSV` through an `httptest.ResponseRecorder`. The re-implementation is smaller (no request, no recorder) and needs no extra code beyond the guard.
 
 Limits: the literal `curl -sI localhost:3000/covers/...` was proven through the in-process test client, not a running server; the covers route resolves the disk lazily so other routes and tests boot without `S3_*` (production must fail at boot or in a readiness check, to do in P1); the export reads only name and email (the real job per SDD 14 reads the full data set in a repeatable-read transaction); `storage.Handler` gaps filed as `VF-045`.
+
+## P1.A.4.3 Migration lock in the real app
+
+Ported from P0.F.5.2 to `app/console` (`migrate:locked`, registered in `bootstrap/commands.go`), `scripts/concurrent-index.sh`, `docs/runbooks/migrations.md`; SDD 11 §7.2 now names the command and the script. The spike design held unchanged. Two parallel `./bin/app migrate:locked` runs against a fresh Postgres with a temporary migration (not committed): one printed `Migrated: ...`, the other `Nothing to migrate.`, both exit 0. The real app has no migrations yet, so the race was shown with that throwaway migration. The Railway pre-deploy command is unchanged (`migrate`).

@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- `migrate:locked` command (Postgres advisory lock around the migration runner), `scripts/concurrent-index.sh` and `docs/runbooks/migrations.md` ported from the P0.F.5.2 spike (P1.A.4.3).
 - Architecture programme documents for the vukem rewrite: `docs/PROGRESS.md`, `docs/web-research.md`, `docs/brainstorming.md`, 14 SDDs in `docs/sdd/`, 16 ADRs in `docs/adrs/`, `ROADMAP.md` (316 microtasks), `architect-feedback-and-roadmap.md`, `vukem-feedback.md` (VF-001 to VF-031), `AGENTS.md`, `CLAUDE.md`, `.editorconfig`, `.markdownlint.jsonc`.
 - Phase 0 spike report `docs/spike-report.md` (P0.F.1.1 auth scaffold, P0.F.1.2 Better Auth hash format with fixtures, P0.F.4.1 API host routing) and VF-032 to VF-034.
 - CI/CD adapted from vukem-marketplace-reactjs: `ci.yml` (Go lint/vet/race tests on Postgres/govulncheck, web typecheck/tests/builds, markdownlint, image smoke test), `release.yml` (GHCR image and GitHub release on tags), `dast.yml` (weekly ZAP and nuclei), Dependabot; `.claude/` skills and rules adapted from the same repo.
