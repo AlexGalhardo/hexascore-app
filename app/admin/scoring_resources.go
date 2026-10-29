@@ -28,7 +28,7 @@ func ScoreBurstsResource() *vadmin.Resource[models.ScoreBurst] {
 
 // RatingFlagsResource lists shadow-weighted ratings. The key is composite
 // (user_id, item_id) and the panel resolves a record by one column, so only
-// the list is exposed (VF-NEW-P1.D.3.1b).
+// the list is exposed (VF-047).
 func RatingFlagsResource() *vadmin.Resource[models.RatingFlag] {
 	return vadmin.NewResource[models.RatingFlag](noInputSchema).
 		Slug("rating-flags").

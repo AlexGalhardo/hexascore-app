@@ -55,7 +55,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-044 | 2026-10-29 | low | open |
 | VF-045 | 2026-10-29 | low | open |
 | VF-046 | 2026-10-29 | medium | open |
-| VF-NEW-P1.D.3.1b | 2026-10-29 | low | open |
+| VF-047 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -453,7 +453,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Workaround**: ban and unban are `accounts.Ban`/`accounts.Unban` (own transaction, `tx.AfterCommit` dispatch) behind `POST /admin/users/{id}/ban|unban` (admin gate, CSRF). The panel form edits only `banReason` and `banExpiresAt`, and `BeforeSave` rejects them for users who are not banned.
 - **Request**: pass `*database.Tx` to `BeforeSave` (or add `AfterSave(ctx, tx, rec, before)`), and support virtual form fields (schema keys without a column) handled by the hook.
 
-## VF-NEW-P1.D.3.1b: admin resources cannot address composite-key rows, and filters reject nullable string columns
+## VF-047: admin resources cannot address composite-key rows, and filters reject nullable string columns
 
 - **Date**: 2026-10-29. **Severity**: low. **Status**: open.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin` ("Resources"). `[NOT IN VUKEM DOCS]`: composite primary keys and which column types `Filter` and `Search` accept (errors read from `NewResource` boot checks).
