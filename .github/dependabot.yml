@@ -6,7 +6,7 @@ updates:
     groups:
       go: { patterns: ["*"] }
   - package-ecosystem: bun
-    directory: /
+    directories: ["/", "/sdks/ts"]
     schedule: { interval: weekly }
     groups:
       js: { patterns: ["*"] }
