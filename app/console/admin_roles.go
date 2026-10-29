@@ -1,3 +1,4 @@
+// Package console holds the app's custom console commands.
 package console
 
 import (
