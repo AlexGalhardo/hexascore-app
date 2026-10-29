@@ -1,9 +1,0 @@
-**/node_modules
-**/.next
-**/.pglite
-**/.env*
-!.env.example
-.git
-.claude
-webscrappings
-qa

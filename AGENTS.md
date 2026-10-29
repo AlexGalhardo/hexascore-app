@@ -1,39 +1,58 @@
-# Hexascore — Guide for AI agents
+# HexaScore (vukem rewrite): guide for AI agents
 
-Media database (games, movies, TV series, books) with 6-category 0–100 user scores and a paid public REST API.
-Codename `hexascore`; final brand name is pending.
+HexaScore (hexascore.app) is a catalogue, rating and recommendation platform for games, movies, series and books, with a paid read-only public API and an Android app. This repository is the Go rewrite on the [vukem](https://vukem.dev) framework; it replaces the Next.js app kept on branch `legacy` of `github.com/AlexGalhardo/hexascore-app`.
 
-**Status: planning.** No application code yet. The single source of truth is [`PLAN.md`](PLAN.md): decisions, architecture, data model, API, milestones. Read it before any work and keep its checkboxes up to date.
+This file is the single source of truth for agent behaviour. `CLAUDE.md` only points here.
+
+## Session start (mandatory)
+
+1. Load these skills before any work, in this order: `karpathy-guidelines`, `graphify`, `caveman`. Availability check on 2026-10-28: `karpathy-guidelines` and `caveman` exist as skills; `graphify` exists only as a CLI (`graphify update .` / `graphify query "<question>"`), its skill folder has no `SKILL.md`. If the skill cannot be loaded, run the CLI instead and note it in the session; never silently skip.
+2. Read [docs/PROGRESS.md](docs/PROGRESS.md) (state, decisions, pending items) and [ROADMAP.md](ROADMAP.md) (next task).
+3. Pick the first unchecked microtask of the current roadmap phase unless the owner names another.
+
+## Where things live
+
+| Path | What |
+| --- | --- |
+| `docs/PROGRESS.md` | programme log per phase; update at the end of every session |
+| `docs/brainstorming.md` | owner decisions D-xx and architect decisions A-xx; final unless edited first |
+| `docs/web-research.md` | competitor research with sources |
+| `docs/sdd/` | one design document per domain; `open-issues.md` is the triage of their open points |
+| `docs/adrs/` | architecture decision records (MADR) |
+| `architect-feedback-and-roadmap.md` | architect's assessment and executive summary |
+| `ROADMAP.md` | phases, tasks, subtasks, microtasks with acceptance criteria |
+| `vukem-feedback.md` | framework bugs, gaps and DX feedback (VF-xxx); append, never delete |
+| `CHANGELOG.md` | Keep a Changelog; generated per release, `[Unreleased]` edited by hand only before release |
+| `legacy/` (sibling folder, not in this repo) | read-only Next.js reference; history on branch `legacy` |
+| `vukem/` (sibling folder, own git) | framework checkout for local `go.work`/`replace` only, never committed |
 
 ## Rules
 
-- Communicate with the owner in pt-BR; code, identifiers and commit messages in English.
-- Conventional Commits (commitlint). Changes go through PR to `dev`, then `dev` → `main`.
-- Only stable, pinned dependency versions (no `^`, no beta/rc/canary). Ask before adding a dependency.
-- Bun is the package manager. Python code lives in `webscrappings/` and uses uv.
-- Local setup: `setups/` scripts (Unix/Windows × Docker/PGlite, see `setups/README.md`); Docker stack in `infra/`. Before a PR, `bun run lint:ci`, `bun run typecheck`, `bun run test` and `bun run build` must pass (required CI checks).
-- Follow the Karpathy guidelines (think first, simplicity, surgical changes, verifiable goals), `ponytail` (YAGNI, minimal solution) and `graphify` (map the code before broad searches). Vendored skills live in `.claude/skills/`; always-on rules in `.claude/rules/` (karpathy, ponytail, graphify).
-- Validate every schema and piece of data with zod wherever possible (env, actions, forms, API params/responses, webhooks, external responses, jsonb reads); infer types with `z.infer`.
-- Data fetching: Server Components first; client-side fetches go through TanStack Query (`useQuery`/`useInfiniteQuery`), never `useEffect` + `fetch` (see `docs/frontend.md`).
-- Listing pattern (every item listing, now and future): split by category (one `CategoryLabel` sub-header per type, empty groups hidden), `CoverThumb` left of every item title (queries return `coverUrl`/`coverThumbUrl`), and every category name rendered with `CategoryLabel` (icon in the section accent). See `docs/frontend.md` → "Padrão de listagens".
-- Env vars are validated with zod in `apps/web/lib/env.ts` before build and server start; failures print every bad variable explicitly.
-- Every modal is centred on screen: Base UI `Dialog`/`AlertDialog` use `DIALOG_BACKDROP` and `dialogPopup()` from `apps/web/components/ui/dialog.ts` (enforced by `components/ui/dialog.test.ts`); native `<dialog>` uses `showModal()` with `m-auto`.
-- Handle errors and fallbacks everywhere: timeouts on external calls, `notFound()`/404, `error.tsx`/500, RFC 9457 problems with 402/404/429/500 in the API, graceful degradation of optional services.
-- Security rules in `docs/architecture.md` are mandatory.
-- All reference documentation lives in `docs/` (architecture, data model, API, frontend, design system, payments, ingestion, security, testing, process). Update the matching doc in the same change.
-- Pre-commit runs Biome and `tsc --noEmit`; pre-push runs `bun run ci:local` (`scripts/ci-local.sh`: lint, typecheck, test, openapi check, build, and ruff/pytest when `webscrappings/` changed) as the stand-in for GitHub Actions, whose workflows are kept in `.github/workflows/` but disabled on GitHub (`gh workflow enable <name>` re-enables). Never bypass hooks.
-- When a workflow repeats or is easy to get wrong, capture it as a project skill in `.claude/skills/<name>/SKILL.md` and list it here.
-- Project skills:
-  - `hexascore-billing` — Stripe/AbacatePay webhooks locally, idempotency rules.
-  - `hexascore-secure-endpoint` — checklist for actions, routes, webhooks and crons.
-  - `hexascore-local-verification` — run the CI gates locally before done.
-  - `hexascore-release` — cut or backfill releases (tags, GitHub releases, CHANGELOG, release-please manifest).
-  - `hexascore-catalog` — catalog repository/cache layers, Next 16 caching without `cacheComponents`, PGlite tests, dev seed.
-  - `hexascore-api` — public API v1: add an endpoint (zod DTO → OpenAPI registry → route via `apiRoute` → route test → regenerate `openapi.json` + SDKs).
-  - `hexascore-qa` — QA layers: Playwright + axe E2E (`qa/e2e`) against `next start` or the preview, CSP/security headers, k6 / Schemathesis / OWASP ZAP API gates (`qa/*/run.sh`), scale seed, `qa.yml` gate.
-- Record notable changes in `CHANGELOG.md` (Keep a Changelog).
+- Language: everything in this repository is English (code, identifiers, comments, docs, commits). Chat with the owner in pt-BR. UI strings in `en`, `pt-BR`, `es` only through the i18n catalogues.
+- Framework facts come from https://vukem.dev/docs (cite the page); the local `vukem/docs` folder is not a reference. Never invent a vukem API: write `[NOT IN VUKEM DOCS]` and add an entry to `vukem-feedback.md`.
+- Native vukem subsystems first; a third-party Go or npm dependency needs the owner's yes and an ADR. Pinned exact versions only (no `^`, no `latest`, no pre-releases); Docker images with fixed tags or digests.
+- Decisions in `docs/brainstorming.md` and `docs/adrs/` are final; to change one, edit the decision first, then the SDD, then the code.
+- Test first. A microtask is done only when its acceptance commands in `ROADMAP.md` pass. Prefer the specific test, lint and typecheck over the whole suite; the full gate runs before a PR.
+- Security defaults are never weakened; every security behaviour has a `TestSecurity_<Axx>_<Behaviour>` test (vukem convention).
+- Surgical changes: touch only what the task needs; no speculative abstractions; comment only the why.
+- Git: Conventional Commits; feature branches `agent/<role>/<task-id>` and PRs into `dev` (integration branch, deploys staging); `dev` → `main` by PR when a task group closes; tags `vX.Y.Z` on `main` deploy production; never rewrite history or force-push; branch `legacy` is immutable. Commit and push only when the owner asks.
+- Releases follow the vukem pattern (`vX.Y.Z` tags one at a time, generated changelog, GitHub release); versions start at `v0.1.0`; `v1.0.0` = parity with the legacy app and successful cutover.
+- Documentation: update the SDD, `CHANGELOG.md` and this file in the same change when behaviour, commands or conventions change. Never claim a file was updated without editing it.
+- Parallel agents and worktrees only with the owner's explicit yes in the session; sequential research or review subagents are fine.
 
-## Project skills
+## Commands (fill in as the codebase appears; keep in sync with ROADMAP tasks)
 
-- `.claude/skills/hexascore-ratings/SKILL.md` — rating write path (lock item row, recompute stats from `ratings` in the same transaction, threshold applied on read), merge, local E2E gotchas. Admin role: `bun run admin:grant <email>`.
-- `.claude/skills/hexascore-auth/SKILL.md` — auth/account work: Better Auth server-only endpoints, Server Action result contract, BotID local setup, testing flows locally (verification link in the dev log, TOTP).
+| Command | Purpose |
+| --- | --- |
+| `vukem serve` | development server with Vite HMR |
+| `vukem build` + `bun run build:ssr` | production build (Go binary, Vite assets, SSR bundle) |
+| `go test ./...` | unit and integration tests (Postgres via `docker compose`) |
+| `golangci-lint run` | Go lint and format check |
+| `bun run lint` / `bun run typecheck` / `bun run test` | TypeScript lint, types, unit tests |
+| `vukem openapi:export` | regenerate the OpenAPI documents (diff checked in CI) |
+| `bun run e2e` | Playwright + axe against a built container |
+
+## Models
+
+- Development in the main session with the model the owner chose; roadmap tasks state a suggested model (Opus 5.5 for architectural or risky work, Sonnet 5.5 for well-bounded work).
+- External documentation research: `researcher` subagent. Text and i18n edits: `text-editor` subagent.
