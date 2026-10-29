@@ -1291,7 +1291,7 @@ Phase-specific conventions:
 
 #### P2.A.3 Container
 
-- [ ] **P2.A.3.1** Turn the bootstrap Dockerfile into the production image: pinned digests, `build:ssr` stage, Node runtime for SSR, `postgresql18-client` and `cwebp`, non-root user.
+- [x] **P2.A.3.1** Turn the bootstrap Dockerfile into the production image: pinned digests, `build:ssr` stage, Node runtime for SSR, `postgresql18-client` and `cwebp`, non-root user.
   - Files/modules: `Dockerfile`, `.dockerignore`, `.buildtags`, `scripts/infra/check-image.sh`, `docs/sdd/11-infra-deploy.md` §6.3 (apk versions found)
   - Refs: SDD 11 §6.3, §9 items 1–2, FR-11-2, NFR-11-3, NFR-11-5; ADR 0004; VF-027; <https://vukem.dev/docs/deployment/docker-and-railway> "What the Dockerfile does"; <https://vukem.dev/docs/deployment/single-binary>
   - Depends on: P1.A.4.2
