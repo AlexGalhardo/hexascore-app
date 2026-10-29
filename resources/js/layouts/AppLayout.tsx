@@ -37,7 +37,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 							<Link href="/login" className={link}>
 								Log in
 							</Link>
-							<Link href="/register" className={link}>
+							<Link href="/signup" className={link}>
 								Register
 							</Link>
 						</>
