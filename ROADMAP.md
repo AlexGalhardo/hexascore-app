@@ -192,7 +192,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
 
 #### P0.F.6 Queue and scheduler inside `serve`
 
-- [ ] **P0.F.6.1** Run database-driver queue workers and the scheduler inside `serve`, with per-family semaphores, `WithoutOverlapping` and jobs that survive a restart mid-run.
+- [x] **P0.F.6.1** Run database-driver queue workers and the scheduler inside `serve`, with per-family semaphores, `WithoutOverlapping` and jobs that survive a restart mid-run.
   - Files/modules: spike `app/jobs/recompute.go`, `app/jobs/semaphore.go`, `app/jobs/counter.go`, `routes/schedule.go`, `.env` (`QUEUE_CONNECTION=database`, `QUEUE_NAMES`, `QUEUE_CONCURRENCY`, `SCHEDULE_TIMEZONE=America/Sao_Paulo`)
   - Refs: SDD 02 §6 (jobs); SDD 11 §6.1; ADR 0007; open-issues 06-5, 08-10, 11-7; VF-018, VF-021; <https://vukem.dev/docs/digging-deeper/queue> "Inside serve"; <https://vukem.dev/docs/digging-deeper/scheduler> "Inside serve (default)"
   - Depends on: P0.F.5.1

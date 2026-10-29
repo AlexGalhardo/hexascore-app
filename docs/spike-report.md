@@ -195,3 +195,21 @@ Acceptance (2026-10-29):
 - `go test ./app/accounts -run TestSecurity_A07_LegacyScryptVerifiesAndRehashes` → PASS. The test runs real HTTP sign-up and login. A wrong password redirects back to `/login` and leaves the stored Better Auth hash untouched. The fixture password logs in, and the stored value then starts with `$argon2id$`.
 - `TestCompatHasherBetterAuthFixtures` → 3/3 fixtures verify (including the NFKC-equivalent input), and a wrong password or a malformed value fails.
 - `go test ./...` on the spike → all packages `ok`.
+
+## P0.F.6.1 Queue workers and scheduler inside serve
+
+Verdict: workaround (works; per-family semaphore and idempotency table are app code, VF-018).
+
+Spike branch `agent/orchestrator/P0.F.6.1`. `QUEUE_CONNECTION=database`, `QUEUE_NAMES=heavy,default`, `QUEUE_CONCURRENCY=8`, `JOBS_HEAVY_CONCURRENCY=2`, `SCHEDULE_TIMEZONE=America/Sao_Paulo`, `SHUTDOWN_TIMEOUT=15s`. The `jobs` and `failed_jobs` tables are created by vukem at boot (https://vukem.dev/docs/digging-deeper/queue "database").
+
+- `app/jobs/recompute.go`: `spike.recompute` (heavy family, `queue.OnQueue("heavy")`, holds a semaphore slot for `Work`) and `spike.touch` (light). Both apply their effect through `applyOnce`, which inserts the idempotency key into `job_effects` (`ON CONFLICT DO NOTHING`) and runs the effect in the same transaction, so redelivery under at-least-once semantics changes nothing.
+- `app/jobs/semaphore.go`: in-process per-family cap (buffered channel) with a `job_family_stats` row (`active`, `max_active`) as evidence. vukem queues are strict priority with one concurrency for all kinds (VF-018).
+- `app/jobs/counter.go`: `BufferedCounter` for view counts. Each light job adds a hit; the `views:flush` task (`Cron("* * * * *")`, `WithoutOverlapping()`) writes one upsert per item. A failed write merges the counts back. Counts buffered at a crash are lost (accepted for views). Note: `HourlyAt` is documented on https://vukem.dev/docs/digging-deeper/scheduler "Frequencies" as of 2026-10-29, so VF-021 may be stale; cron is used anyway.
+- Wiring: `bootstrap/app.go` builds one `jobs.Deps` and passes it to `WithJobsFunc` and `WithSchedule` through closures (no package globals). `jobs:demo -n -run -work` dispatches the test load.
+
+Acceptance (2026-10-29, in the Linux container so `docker stop` delivers SIGTERM):
+
+- Container log: `scheduler running inside serve; set SCHEDULE_IN_SERVE=false if you run schedule:work` (`"tasks":1`).
+- 200 jobs (100 heavy, 100 light). `docker stop` after 4 s gave `shutting down cause="terminated signal received"`, with 46 effects applied and 154 jobs left. After restart: `jobs_left=0 failed=0 effects=200 distinct_keys=200 heavy=100 light=100 heavy_peak=2`.
+- Hard kill: 40 more jobs with 3 s heavy work; `docker kill` (SIGKILL) after 5 s left 2 effects and 38 jobs. After restart, the expired reservations were redelivered in about 105 s, ending with `jobs_left=0 failed=0 r2_effects=40`. Every key was applied once. The stats row read `heavy_peak=4` because the two jobs killed mid-run never decremented `active`. That is a measurement artifact: the cap is enforced in process, and the graceful run plus `TestSemaphoreCapsConcurrency` show it holds at 2. The real app records concurrency as a metric (SDD 12), not as a row.
+- `go test ./app/jobs/... -run TestBufferedCounterFlush` → PASS (with `-race`). `go test ./...` on spike `main` → all `ok`.
