@@ -250,6 +250,16 @@ func (a *Accounts) anonymise(ctx context.Context, userID int64) (bool, error) {
 			return err
 		}
 
+		if tx.Dialect().Name() == "postgres" {
+			if _, err := tx.ExecContext(
+				ctx,
+				"DELETE FROM user_item_editions WHERE user_id = "+p(1),
+				userID,
+			); err != nil {
+				return err
+			}
+		}
+
 		done = true
 
 		return recordEvent(ctx, tx, userID, nil, "anonymized", map[string]any{}, now)
