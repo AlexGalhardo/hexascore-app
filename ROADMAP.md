@@ -1051,7 +1051,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `curl -si -H "Authorization: Bearer $K" -H "If-None-Match: $ETAG" $API/v1/games/<id>` → 304, `X-Quota-Remaining` down by 1
   - Notes: operations: `listItems`, `getItem`, `listGenres` (four per-type operations, see SDD 05 §6.2), `listEditions`, `getEntity`, `listEntityItems`, `getPerson`, `getOrganization`, `getFranchise`, `getPlatform`, `searchItems`, `searchEntities`, `lookupItem`, `getUsage`. `listTrending`, `listChanges`, exports and webhooks are P3.A. The `/app/v1` side of `TestAPILicenceFilter` needs the app read endpoints of P3.C: until then assert against the `site` read model directly.
 
-- [ ] **P1.H.2.2** Finish the API surface: host routing in production config, the problem catalogue with `/docs/errors` anchors, CORS, IP limits and the OpenAPI `servers` entry.
+- [x] **P1.H.2.2** Finish the API surface: host routing in production config, the problem catalogue with `/docs/errors` anchors, CORS, IP limits and the OpenAPI `servers` entry.
   - Files/modules: `app/http/middleware/api_host.go`, `app/http/problems/catalog.go`, `routes/api.go`, `resources/docs/errors.md`
   - Refs: SDD 05 §6.1, §6.2 (problems); SDD README "Problem codes", "Route prefixes"; VF-014, VF-015, VF-016
   - Depends on: P1.H.2.1, P0.F.4.1

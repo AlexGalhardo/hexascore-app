@@ -1,15 +1,12 @@
-# Handoff especialista (2026-10-29, session 4)
-STATUS: HANDOFF (heavy context). Queue left: 1-REV-P1.H.2.1b.md (untouched).
-Done this session (all CORRIGIDO_E_APROVADO, pushed):
-- REV-P1.F.2.1 -> agent/especialista/P1.F.2.1-fix (banned owner profile noindex; merge test for user_item_editions).
-- REV-P1.G.3.2 -> agent/especialista/P1.G.3.2-fix (banned owner list noindex; Library/Index locale prefix; Lists/Edit keyboard focus + heading key). New task queue/senior/2-P1.G.3.2b.md.
-- REV-P1.H.3.1 (r1 + orchestrator r2) -> agent/especialista/P1.H.3.1-fix (from the unmerged senior branch; merge still waits Q-H31). VF-NEW-P1.H.3.1 filed.
+# Handoff especialista (2026-10-29, session 5)
+STATUS: IDLE (queue empty). Worktree C:\dev\hexascore-app\wt\especialista on agent/especialista/P1.H.2.2-fix, clean.
+Done this session:
+- REV-P1.H.2.1b -> CORRIGIDO_E_APROVADO, agent/especialista/P1.H.2.1b-fix (relation filters/counts restricted to allowlisted item_entities.source via Policy.RelationSources; entity default_name without provenance omitted).
+- REV-P1.H.2.1c -> CORRIGIDO_E_APROVADO, agent/especialista/P1.H.2.1c-fix (lookup public-only + per-source indexable query).
+- REV-P1.G.3.2b -> APROVADO, agent/senior/P1.G.3.2b (choose-edition still bloqueada: needs editions source decision).
+- REV-P1.H.2.2 -> CORRIGIDO_E_APROVADO, agent/especialista/P1.H.2.2-fix (stale docs.json).
 Pitfalls (new):
-- Both G.3.2-fix and H.3.1-fix touch CHANGELOG [Unreleased]: expect a trivial merge conflict.
-- contrib/stripe: Subscription has custom UnmarshalJSON; embedding it to add fields silently drops them. Use Client.Call + raw JSON (app/billing/stripe_calls.go).
-- golines: run `golangci-lint fmt ./tests/... ./app/...` instead of hand-wrapping.
-- markdownlint-cli2 on one file may lint CHANGELOG too (config globs).
-- No axe-core installed: a11y checks only via vitest/jsdom keyboard tests.
-Previous pitfalls (handoff session 3) still apply.
-Worktree C:\dev\hexascore-app\wt\especialista on branch agent/especialista/P1.H.3.1-fix, clean.
-Skills: karpathy-guidelines/caveman not loaded (context economy).
+- 1b-fix and 1c-fix both add a line to CHANGELOG [Unreleased] Fixed: trivial conflict.
+- Editing resources/docs/*.md needs `bun run build:docs`, else vitest build-docs test fails.
+- Pending note: addEntities shows entity names under the relation source, not the name source (pre-existing).
+- TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable per Bash call.

@@ -1,0 +1,7 @@
+# REV-P1.H.2.2
+VERDICT: CORRIGIDO_E_APROVADO. Final branch agent/especialista/P1.H.2.2-fix (from agent/senior/P1.H.2.2 + 1 commit).
+Fixed: resources/docs/errors.md changed without `bun run build:docs` -> `bun run test` failed (scripts/build-docs.test.ts "docs.json is up to date"; 1 failed | 50 passed). Regenerated docs.json -> 51 passed. Senior report claimed "No TS changes" and did not run bun test.
+Re-run: `go test -count=1 -tags integration ./tests -run 'TestAPIEdge|TestProblemCatalog|TestAPIContract'` -> ok; `go test ./...` -> all ok; `golangci-lint run --build-tags integration ./...` -> 0 issues.
+problemWriter: only application/problem+json is held; other responses stream (WriteHeader passes through, Unwrap exposes Flush to http.ResponseController). X-Problem-Code always stripped. No compression middleware in the app, so the JSON rewrite is safe; a gzip layer added inside the edge later would silently skip `code` (no corruption).
+Notes (not fixed): OpenAPI servers read API_HOST via os.Getenv (options built before app), edge via app.Source.Get: a value only in .env could diverge [NÃO VERIFICADO whether vukem exports .env to process env]; Railway uses real env vars. Rewrite clears RawPath (encoded slashes in /v1 paths decode) - harmless for current routes.
+SDD 05 §6.1 servers divergence (https://api.hexascore.app vs .../v1): orchestrator to amend SDD; VF-NEW-P1.H.2.2 filed correctly.

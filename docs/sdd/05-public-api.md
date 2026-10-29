@@ -104,7 +104,7 @@ Exports are listed from the bucket prefix (no table). `processed_events` keeps i
 
 ### 6.1 Host, stack, headers
 
-`api.hexascore.app/v1/*` maps to the `/api/v1` group (legacy `apps/web/proxy.ts`). Host routing is [NOT IN VUKEM DOCS] (VF-015); v1 uses an `r.UseServer` middleware (shown in `https://vukem.dev/docs/digging-deeper/billing` "Routes") rewriting `/v1/` → `/api/v1/` when `Host` matches the API host; OpenAPI `servers` lists `https://api.hexascore.app/v1`. Route tables below write paths in their public form (`/v1/...` = `/api/v1/...` in the router).
+`api.hexascore.app/v1/*` maps to the `/api/v1` group (legacy `apps/web/proxy.ts`). Host routing is [NOT IN VUKEM DOCS] (VF-015); v1 uses an `r.UseServer` middleware (shown in `https://vukem.dev/docs/digging-deeper/billing` "Routes") rewriting `/v1/` → `/api/v1/` when `Host` matches the API host; OpenAPI `servers` lists `https://api.hexascore.app` and the documented paths keep the `/api/v1` prefix, because vukem cannot strip a path prefix from the exported document (VF-050, 2026-10-29); both `/v1/...` and `/api/v1/...` answer on the API host. Route tables below write paths in their public form (`/v1/...` = `/api/v1/...` in the router).
 
 Stack: `middleware.JSONOnly()`, CORS `*` without credentials, IP limit 120/min (`https://vukem.dev/docs/security/api-tokens` "Routing"), `auth.Required(apiKeyGuard)` (custom guard implementing `auth.APIGuard` + `auth.FailClosedChecker`, `https://vukem.dev/docs/security/rate-limiting` "Middleware", "JWT guard"), `NotBanned` (SDD 03), plan throttle `ratelimit.Middleware(limiters("api-<plan>", rps, time.Second), ratelimit.ByUser(apiKeyGuard))` (`https://vukem.dev/docs/security/rate-limiting` "Rate limiting"), quota meter, handler.
 
