@@ -343,7 +343,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `bun run --cwd packages/tokens build && bunx vitest run packages/tokens` → pass, including a WCAG AA contrast assertion for every foreground/background pair
   - Notes: values start from the legacy Tailwind theme. Base UI enters with the components in P1.G.1.1.
 
-- [ ] **P1.A.3.2** Create `packages/i18n`, port the legacy catalogues to flat JSON, and serve them as the Inertia `Once` prop with the catalogue hash in the asset version.
+- [x] **P1.A.3.2** Create `packages/i18n`, port the legacy catalogues to flat JSON, and serve them as the Inertia `Once` prop with the catalogue hash in the asset version.
   - Files/modules: `packages/i18n/src/flatten.ts`, `lang/en.json`, `lang/pt-BR.json`, `lang/es.json` (from `legacy/apps/web/messages/{en,pt-BR,es}/`), `bootstrap/app.go` (`inertia.Config{Version: ...}`), `app/i18n/plural_test.go`
   - Refs: SDD 09 §6.1, §9; open-issues 02-6, 09-5; ADR 0009; <https://vukem.dev/docs/frontend/inertia-i18n>
   - Depends on: P1.A.1.1

@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Architecture programme documents for the vukem rewrite: `docs/PROGRESS.md`, `docs/web-research.md`, `docs/brainstorming.md`, 14 SDDs in `docs/sdd/`, 16 ADRs in `docs/adrs/`, `ROADMAP.md` (316 microtasks), `architect-feedback-and-roadmap.md`, `vukem-feedback.md` (VF-001 to VF-031), `AGENTS.md`, `CLAUDE.md`, `.editorconfig`, `.markdownlint.jsonc`.
 - Phase 0 spike report `docs/spike-report.md` (P0.F.1.1 auth scaffold, P0.F.1.2 Better Auth hash format with fixtures, P0.F.4.1 API host routing) and VF-032 to VF-034.
+- i18n: legacy next-intl catalogues ported to `resources/lang/{en,pt-BR,es}.json` (794 keys per locale after D-06 drops) by `packages/i18n/src/flatten.ts`; shared as the Inertia once prop with the catalogue hash in the asset version; Go and TypeScript plural outputs checked by `TestPluralGolden` (P1.A.3.2).
 - Inertia SSR in the app: Go-supervised Node (`SSR_SUPERVISE`), `ssr` readiness check, fallback counter, `build:ssr`, Node 26.13.0 runtime image (P1.A.4.2).
 - Application scaffold from the vukem Inertia React starter (vukem v0.32.0, Postgres driver v0.5.1, bun), example posts CRUD removed (P1.A.1.1).
 - Orchestration files: `docs/orchestration/BOARD.md`, `docs/orchestration/QUESTIONS.md`, `questions-to-dev.md`.
