@@ -33,6 +33,10 @@ RUN tags="$(sed 's/#.*//' .buildtags 2>/dev/null | tr -s ', \t\r\n' ',' | sed 's
 # Node runs the self-contained SSR bundle; the Go binary starts and restarts it
 # (SSR_SUPERVISE, app/ssr/supervisor.go). Exact tag: node 26.13.0 LTS.
 FROM node:26.13.0-alpine3.24
+# Release name for the X-Hexascore-Version header (release.yml passes the tag;
+# Railway builds fall back to RAILWAY_GIT_COMMIT_SHA at runtime).
+ARG APP_VERSION=
+ENV APP_VERSION=${APP_VERSION}
 RUN apk add --no-cache ca-certificates tzdata \
 	&& adduser -D -H -u 10001 app \
 	&& mkdir -p /app/storage \
