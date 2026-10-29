@@ -139,8 +139,13 @@ func Web(r *router.Router, app *vukem.App) error {
 		clicks := ratelimit.Middleware(limiters("search.events", 30, time.Minute), ratelimit.ByIP)
 		r.Post("/search/events", sc.Event).Use(clicks).Name("search.events")
 
+		listings, err := controllers.NewCatalog(app)
+		if err != nil {
+			return err
+		}
 		items := controllers.NewItem(app, &scoring.Writer{DB: acc.DB, Events: app.Events, Now: app.Now}, acc.Web.User)
 		for section, typ := range map[string]string{"games": "game", "movies": "movie", "series": "series", "books": "book"} {
+			r.Get("/"+section, listings.Index(typ)).Name("catalog." + typ)
 			r.Get("/"+section+"/{slug}", items.Show(typ)).Name("item." + typ)
 		}
 		r.Get("/books/{slug}/editions/{id}", items.Edition).Name("item.edition")
