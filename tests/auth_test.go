@@ -440,7 +440,7 @@ func TestSecurity_A07_LoginThrottle(t *testing.T) {
 		AssertRedirect("/onboarding")
 	c.Get("/login").AssertRedirect("/")
 	c.PostJSON("/logout", nil).AssertRedirect("/")
-	c.Get("/").AssertInertia("Home").PropEquals("auth.user", nil)
+	c.Get("/").AssertInertia("Home/Index").PropEquals("auth.user", nil)
 	c.Get("/dashboard").AssertRedirect("/login")
 
 	attacker := app.Client(t).Inertia("")
