@@ -58,6 +58,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-047 | 2026-10-29 | low | open |
 | VF-048 | 2026-10-29 | low | in_progress (framework), PR #33 (via VF-016 `WithExtension`) |
 | VF-049 | 2026-10-29 | low | open |
+| VF-NEW-P1.H.2.2 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -478,3 +479,12 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Context**: SDD 05 FR-05-8 wants a strong `ETag` and `304` on every `/api/v1` read, and `getItem` answers `301` for merged ids. A typed handler returns `(Out, error)` and `api.Register` always writes `Out` as JSON afterwards, so `c.NotModified` (which writes the 304) is followed by a body write and, with `ValidateResponse`, a check of the zero value. Separately, `AssertMatchesOpenAPI()` builds the document from the whole router; the app's web routes `dashboard` and `admin.dashboard` collide on operationId, so every assertion fails until `OPENAPI_PREFIX=/api/v1` is set.
 - **Workaround**: the handler calls `c.NotModified` and returns `errs.New(304, ...)`: `DefaultErrorHandler` sees the response written and only logs it at debug. Merged ids return `errs.New(301, ...).WithHeader("Location", ...)`, rendered as a problem body with the redirect status. `OPENAPI_PREFIX=/api/v1` in `.env.example` and the API test rig (`app/controllers/publicapi/items.go`, `tests/api_keys_test.go`).
 - **Request**: a documented way for typed handlers to finish the response themselves (for example an `api.NotModified` / `api.Redirect` sentinel, or skip writing when `c.Written()`), and a per-group operationId namespace or a clearer default for `AssertMatchesOpenAPI` when the router mixes web and API routes.
+
+## VF-NEW-P1.H.2.2: OpenAPI paths cannot be rebased under a server prefix (host alias `/v1`)
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/overview` "Versioning", "Errors" [no server-prefix or extension-member option on the page 2026-10-29].
+- **Context**: the API is served at `/api/v1/*` and, on `api.hexascore.app`, also as `/v1/*` (app `APIEdge` rewrite, VF-015). `openapi.Info` has `Servers` and `PathPrefix` (filter only), so the document cannot say "server `https://api.hexascore.app/v1`, paths without `/api/v1`" as SDD 05 §6.1 wants. Typed-route and router-raised problems also cannot carry `code` (VF-016): `APIEdge` rewrites problem bodies and takes an optional `X-Problem-Code` header from handlers.
+- **Workaround**: `Servers` lists `https://api.hexascore.app` only; paths keep `/api/v1` (valid on both hosts). SDD 05 §6.1 should say so.
+- **Request**: `openapi.Info.PathStrip` (or per-server path base) and `errs.HTTPError.WithExtension` rendered by the default handler (VF-016).
+

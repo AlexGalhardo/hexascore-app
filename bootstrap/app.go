@@ -3,9 +3,13 @@
 package bootstrap
 
 import (
+	"cmp"
+	"os"
+
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/drivers/postgres"
 	"github.com/AlexGalhardo/vukem/inertia"
+	"github.com/AlexGalhardo/vukem/openapi"
 	"github.com/AlexGalhardo/vukem/router"
 
 	"github.com/AlexGalhardo/hexascore-app/app/http/middleware"
@@ -13,6 +17,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/jobs"
 	"github.com/AlexGalhardo/hexascore-app/app/listeners"
 	"github.com/AlexGalhardo/hexascore-app/app/ssr"
+	"github.com/AlexGalhardo/hexascore-app/config"
 	"github.com/AlexGalhardo/hexascore-app/database/migrations"
 	"github.com/AlexGalhardo/hexascore-app/database/seeders"
 	"github.com/AlexGalhardo/hexascore-app/resources"
@@ -53,6 +58,8 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 		vukem.WithViews(resources.Views()),
 		vukem.WithVite(resources.Public()),
 		vukem.WithTranslations(resources.Lang()),
+		// Routes keep the /api/v1 prefix; the api host also serves them as /v1 (APIEdge), so the host alone is the server.
+		vukem.WithOpenAPI(openapi.Info{Servers: []string{"https://" + config.APIHost(os.Getenv)}}),
 		vukem.WithInertia(inertia.Config{
 			Version: version,
 			SSR: &inertia.SSRConfig{
@@ -66,6 +73,12 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 
 	base = append(base, vukem.WithRoutes(func(r *router.Router, app *vukem.App) error {
 		app.AddHealthCheck("ssr", app.Inertia.SSRHealthy)
+		edge, err := middleware.APIEdge(config.APIHost(app.Source.Get),
+			cmp.Or(app.Source.Get("APP_PROBLEM_BASE_URL"), "https://hexascore.app/problems/"))
+		if err != nil {
+			return err
+		}
+		r.UseServer(edge)
 		r.UseServer(middleware.Version(middleware.ResolveVersion(app.Source.Get)))
 		return nil
 	}))
