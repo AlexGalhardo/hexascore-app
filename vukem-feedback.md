@@ -10,7 +10,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | id | date | severity | status |
 | --- | --- | --- | --- |
 | VF-001 | 2026-10-28 | high | open |
-| VF-002 | 2026-10-28 | medium | in_progress (framework) |
+| VF-002 | 2026-10-28 | medium | in_progress (framework, vukem PR #7) |
 | VF-003 | 2026-10-28 | medium | open |
 | VF-004 | 2026-10-28 | low | open |
 | VF-005 | 2026-10-28 | medium | open |
@@ -35,7 +35,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-024 | 2026-10-28 | medium | open |
 | VF-025 | 2026-10-28 | medium | open |
 | VF-026 | 2026-10-28 | medium | open |
-| VF-027 | 2026-10-28 | medium | open |
+| VF-027 | 2026-10-28 | medium | in_progress (framework) |
 | VF-028 | 2026-10-28 | low | open |
 | VF-029 | 2026-10-28 | low | open |
 | VF-030 | 2026-10-28 | medium | open |
@@ -259,7 +259,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-027: `serve` and `build` gaps for the SSR sidecar and release metadata
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/cli/reference-runtime`, `https://vukem.dev/docs/frontend/inertia`, `https://vukem.dev/docs/deployment/single-binary`.
 - **Context**: HexaScore runs the Node SSR process inside the same container as the Go app (D-08). The docs show `vukem ssr:start` as a separate command and `vukem build` without the SSR bundle; there is no documented way to have `serve` supervise the SSR process in production, to expose the build version at `/up`, or to pass extra `-ldflags` through `vukem build`.
 - **Workaround**: a `build:ssr` step (`vite build --ssr`) in the pipeline; the app starts and restarts the Node process itself; version injected by a plain `go build -ldflags` step and reported by a custom health field.
