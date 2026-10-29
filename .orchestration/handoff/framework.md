@@ -1,32 +1,31 @@
-# Framework engineer handoff (2026-10-29, session 3)
+# Framework engineer handoff (2026-10-29, session 4)
 
-Reason: HANDOFF after 4 VFs plus a flaky-test fix (brief "Limits", context budget).
+Reason: HANDOFF after 4 VFs (brief "Limits", context budget).
 
 ## Environment
 
 - Worktree `C:\dev\hexascore-app\wt\framework` (leave detached at origin/main when idle). `task` v3.54.0.
-- `task ci` often dies with `parallel golangci-lint is running` (other agents lint at the same time). Run the gate by hand instead: `golangci-lint run --allow-parallel-runners ./... && npx --yes markdownlint-cli2 <changed md> && task vet && task mod:check && task snippets:check && task test`, redirected to a log in the background, `echo "exit=$?"`.
+- Run the gate by hand (parallel golangci-lint runs from other agents break `task ci`): `golangci-lint run --allow-parallel-runners ./... && npx --yes markdownlint-cli2 <changed md> && task vet && task mod:check && task snippets:check && task test && task api:check`, redirected to a log in a background Bash call, `echo "exit=$?"`.
 - Site MDX check: PowerShell junction `site\node_modules` -> `C:\dev\hexascore-app\vukem\site\node_modules`, `node scripts/check-mdx.ts <files>`, then `(Get-Item node_modules).Delete()`.
-- Serial merge loop: `C:\Users\aleex\AppData\Local\Temp\claude\C--dev-hexascore-app\35ef99b5-5e29-468c-b239-25473d83c159\scratchpad\merge-loop.sh <pr>...` (BEHIND -> update-branch and wait 90 s, CLEAN -> squash, failing check -> exit 1). Chaining it behind an `until` wait in one Bash call was denied by the auto-mode classifier; call it directly with `run_in_background`.
-- Python heredocs turn `\\n` inside Go strings into real newlines; fix with the Edit tool. Python text writes on Windows emit CRLF unless `newline='\n'`.
-- `newTestApp` in the root package defaults to `storage/database.sqlite` when a test calls `app.DB()`: pass `WithSource(testSource(map[string]string{"DATABASE_URL": ":memory:"}))`.
+- Scaffold changes (`internal/cli/scaffolds/*`): also run `go test ./internal/cli -count=1 -run 'TestNewProjectEndToEnd|TestNewInertiaProjectEndToEnd'` (about 1 min; it lints and tests the generated apps).
+- Merging: wait with a background `until` loop on `gh pr checks <n> --json bucket`, then `gh pr merge <n> --squash` by hand; after a merge the next PR is BEHIND: `gh pr update-branch <n>` and wait again. No merge script (Q-D-008), never `--admin`.
+- Bash heredocs passed to `python -` turn `\\n` into real newlines: write multi-line edit scripts with the Write tool into the scratchpad and run them with `python <file>`; write with `newline='\n'`.
 
 ## Done this session
 
-| Item | PR | State |
+| VF | PR | State |
 | --- | --- | --- |
-| VF-030 admin hardening (`admin.Config.TwoFactor/MaxSessionAge/AllowCIDRs/Now`, `session.CreatedAt`) | #20 | merged (7dbd6f9) |
-| VF-003 bot challenge (new package `challenge`: `Middleware`, `Turnstile`, `HCaptcha`, `SiteVerify`, `Verifier`) | #21 | merged (74bf415) |
-| VF-008 admin custom row/bulk actions + JSON-key audit diff | #22 | merged (5893fd2) |
-| VF-031 `orm.Reseal[T]` + `vukem.ResealCommand` (`crypt:reseal`) | #24 | merged |
-| flaky `TestObserverPanicIsContained` (hex job id contained "4242") | #23 | merged |
+| VF-035 composite keys (`orm.CompositeKeyer`, `orm.ErrKeyNotUnique`, `orm.PrimaryKeysOf`; schema `SmallInteger`, `Primary`, `StoredAs`) | #25 | merged (fcb7631) |
+| VF-037 `install:billing -plans`, `STRIPE_CURRENCIES` + checkout `currency`, `currency_options` docs | #26 | merged (c12321b) |
+| VF-046 admin `Resource.AfterSave(func(ctx, admin.Saved[T]) error)` + `Resource.Virtual(key, value)` | #27 | see vukem-feedback.md index |
+| VF-041 `inertia.Config.ViewData` -> `RootData.Data`; `Page.URL` keeps the i18n path prefix | #28 | see vukem-feedback.md index |
 
-Reports: `$ORCH/reports/VF-{030,003,008,031}.md`.
+Reports: `$ORCH/reports/VF-{035,037,046,041}.md`.
 
 ## Open
 
-- All PRs of this session are merged; vukem `main` head: 74bf415. The merge loop script was later denied by the auto-mode classifier (after it was edited); use `gh pr checks <n> --watch` in the background, then `gh pr update-branch` / `gh pr merge <n> --squash` by hand.
-- VF-003: the stdlib proof-of-work verifier was not built (needs replay storage and a JS client); it fits `challenge.Verifier`. Mention it if the owner wants it as a follow-up VF.
-- Release v0.33.0 still BLOCKED (Q-D-006 / FR-001). Do not run the release tool. It now also carries VF-030, 003, 008, 031. Adoption task after the release (`$ORCH/queue/senior/1-ADOPT-vukem-v0.33.0.md`, target `C:\dev\hexascore-app\hexascore-spike` while Phase 0 lasts): previous list (QUEUE_LIMITS, SSRConfig.Cache, migrate lock, SSR plugin) plus: `/admin` hardening middleware -> `admin.Config{TwoFactor, MaxSessionAge, AllowCIDRs}`; hand-wired Turnstile -> `challenge.Middleware(challenge.Turnstile(...), when)`; custom `/admin/moderation` page -> `Resource.Actions`; one-off re-encrypt job -> `vukem.ResealCommand(orm.Reseal[...])`.
-- Next VFs: VF-035 (schema smallint/uuid/composite PK/generated columns + ORM composite keys; large, consider the "loud error on Update/Delete for non-unique key" part first), VF-037 (install:billing currencies, contrib/stripe scaffold), then VF-041..046 and lows.
+- Release v0.33.0 still BLOCKED (Q-D-006). Never run the release tool or push tags. Pending adoption list for `1-ADOPT-vukem-v0.33.0.md` (target `C:\dev\hexascore-app\hexascore-spike` while Phase 0 lasts) adds: VF-035 (`t.UUID("id").Primary()`, `t.Primary("user_id","item_id")`, `t.SmallInteger`, `StoredAs`; `Rating` gets `PrimaryKeys()`), VF-037 (regenerate billing with `-plans pro,business`, `STRIPE_CURRENCIES=brl,usd,eur`), VF-046 (ban/unban as `Virtual("banned")` + `AfterSave` with `s.Tx`), VF-041 (`ViewData` theme, drop `RestoreURL`).
+- VF-047 (admin composite-key rows, nullable string filters): composite-key models now panic in `admin.NewResource` (PR #25); addressing them by a composite id is still open.
+- VF-009 (`generated` ORM tag) still open; generated columns need `db:"-"`.
+- Next VFs by severity: remaining mediums (check the index), then lows VF-042..045, VF-039, VF-014/016, VF-028 (likely closable by VF-041's `ViewData`: verify and mark).
 - Do not touch vukem PR #6 (owner's). Do not touch other agents' servers or ports.

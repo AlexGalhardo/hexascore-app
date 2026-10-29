@@ -54,7 +54,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-043 | 2026-10-29 | low | open |
 | VF-044 | 2026-10-29 | low | open |
 | VF-045 | 2026-10-29 | low | open |
-| VF-046 | 2026-10-29 | medium | in_progress (framework) |
+| VF-046 | 2026-10-29 | medium | merged in main (PR #27), unreleased |
 | VF-047 | 2026-10-29 | low | open |
 | VF-048 | 2026-10-29 | low | open |
 
@@ -448,7 +448,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-046: admin `Resource.BeforeSave` has no transaction handle or after-commit hook, and schema keys must map to a column
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: in_progress (framework).
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: merged in main (PR #27, <https://github.com/AlexGalhardo/vukem/pull/27>), unreleased. Native: `Resource.AfterSave(func(ctx, admin.Saved[T]) error)` runs inside the panel transaction before the audit entry with `Saved{Tx, Action, Record, Before, Virtual}` (`Tx.AfterCommit` for events; an error rolls everything back); `Resource.Virtual(key, value)` declares schema keys without a column (validated, never written, value in `Saved.Virtual`, edit-form state from `value`).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin` ("Resources"). `[NOT IN VUKEM DOCS]`: what `BeforeSave` may do with side effects (read from `admin/handlers.go` `Resource.save` in the module).
 - **Context**: SDD 03 section 6.3 wanted ban and unban as panel form fields mapped in `BeforeSave`, with `account_events`, token revocation and an after-commit `user.banned` event in the same transaction. `BeforeSave(ctx, rec)` runs inside `DB.Tx` but receives only the context: no `*database.Tx`, no `AfterCommit`, no previous values (VF-010). Any write through the app's `*database.DB` inside it deadlocks on the single SQLite writer used by tests and is outside the panel transaction on Postgres. A schema key also has to match a model column, so a virtual `banned` checkbox cannot exist.
 - **Workaround**: ban and unban are `accounts.Ban`/`accounts.Unban` (own transaction, `tx.AfterCommit` dispatch) behind `POST /admin/users/{id}/ban|unban` (admin gate, CSRF). The panel form edits only `banReason` and `banExpiresAt`, and `BeforeSave` rejects them for users who are not banned.

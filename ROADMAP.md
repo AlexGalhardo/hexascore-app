@@ -608,7 +608,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test ./tests -run TestMailLocaleFromPayload` → a `pt-BR` user's queued mail renders the Portuguese subject outside a request
   - Notes: `passkeys_retired` belongs to the cutover (P2.G). Copy through the `text-editor` subagent.
 
-- [ ] **P1.C.5.2** Protect login, signup, recover, contact and token routes with the proof-of-work challenge, honeypot fields and rate limits.
+- [x] **P1.C.5.2** Protect login, signup, recover, contact and token routes with the proof-of-work challenge, honeypot fields and rate limits.
   - Files/modules: `app/security/pow.go`, `app/security/pow_test.go`, `app/http/middleware/challenge.go`, `resources/js/lib/pow-worker.ts`
   - Refs: SDD 03 §7.3, §9; ADR 0016; open-issues 03-4; VF-003; legacy `lib/bot.ts`, `lib/rate-limit.ts`; <https://vukem.dev/docs/security/rate-limiting>
   - Depends on: P1.C.2.1
