@@ -54,7 +54,7 @@ func ImportLegacy() vukem.Command {
 			out := app.Stdout()
 
 			pre, preErr := legacyimport.Preflight(ctx, db)
-			if preErr != nil && !errors.As(preErr, new(*legacyimport.PreflightError)) {
+			if preErr != nil && !isPreflight(preErr) {
 				return preErr
 			}
 
@@ -91,4 +91,9 @@ func ImportLegacy() vukem.Command {
 			return r.Run(ctx, stages)
 		},
 	}
+}
+
+func isPreflight(err error) bool {
+	_, ok := errors.AsType[*legacyimport.PreflightError](err)
+	return ok
 }

@@ -28,6 +28,8 @@ WHERE NOT EXISTS (SELECT 1 FROM legacy_import.account a WHERE a.user_id = u.id
 
 // passkeyOnlySQL counts users whose only login is a passkey: not an abort,
 // they get the reset notice (SDD 03 §5, P2.F.2.2).
+//
+//nolint:gosec // G101: SQL counting rows, the word "password" is a column name
 const passkeyOnlySQL = `SELECT count(*) FROM legacy_import."user" u
 WHERE NOT EXISTS (SELECT 1 FROM legacy_import.account a WHERE a.user_id = u.id
   AND ((a.provider_id = 'credential' AND a.password IS NOT NULL) OR a.provider_id = 'google'))

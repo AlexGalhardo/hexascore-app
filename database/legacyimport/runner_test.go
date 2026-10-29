@@ -203,8 +203,7 @@ func TestPreflightAborts(t *testing.T) {
 
 	res, err = legacyimport.Preflight(ctx, db)
 
-	var pf *legacyimport.PreflightError
-	if !errors.As(err, &pf) {
+	if _, ok := errors.AsType[*legacyimport.PreflightError](err); !ok {
 		t.Fatalf("err = %v, want *PreflightError", err)
 	}
 
