@@ -20,9 +20,12 @@ func m20261029140008CreateSearchEventsTable() schema.Migration {
   page integer NOT NULL DEFAULT 1,
   clicked_ref uuid,
   click_position integer,
-  click_group text
+  click_group text,
+  -- ids the search returned: a click is accepted only for one of them
+  result_refs uuid[] NOT NULL DEFAULT '{}'
 )`,
-			`CREATE INDEX search_events_at_idx ON search_events (at)`,
+			`CREATE UNIQUE INDEX search_events_one_click_uq ON search_events (search_id, clicked_ref) WHERE clicked_ref IS NOT NULL;
+CREATE INDEX search_events_at_idx ON search_events (at)`,
 			`CREATE INDEX search_events_search_id_idx ON search_events (search_id)`,
 		},
 		[]string{`DROP TABLE IF EXISTS search_events`},

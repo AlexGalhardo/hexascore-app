@@ -127,7 +127,7 @@ func TestSearchEventsClickAndPurge(t *testing.T) {
 	}
 
 	var searchID, ref string
-	if err := db.QueryRowContext(t.Context(), `SELECT search_id::text, (SELECT id::text FROM items LIMIT 1) FROM search_events`).
+	if err := db.QueryRowContext(t.Context(), `SELECT search_id::text, result_refs[1]::text FROM search_events`).
 		Scan(&searchID, &ref); err != nil {
 		t.Fatal(err)
 	}
@@ -137,6 +137,16 @@ func TestSearchEventsClickAndPurge(t *testing.T) {
 
 	if n := count(`clicked_ref = $1::uuid AND click_position = 1`, ref); n != 1 {
 		t.Fatalf("click rows = %d", n)
+	}
+
+	// TestSecurity_A04: a repeated click and a ref the search never returned
+	// store nothing, so click analytics cannot be inflated.
+	app.Client(t).PostJSON("/search/events", click).AssertNoContent()
+	forged := map[string]any{"searchId": searchID, "refId": uuid.NewV7().String(), "position": 1, "group": "game"}
+	app.Client(t).PostJSON("/search/events", forged).AssertNoContent()
+
+	if n := count(`clicked_ref IS NOT NULL`); n != 1 {
+		t.Fatalf("click rows after repeat and forged ref = %d", n)
 	}
 
 	// Unknown search ids store nothing; malformed bodies are rejected.
