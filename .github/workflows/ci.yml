@@ -7,6 +7,9 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    - cron: "23 5 * * 1"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -17,16 +20,49 @@ concurrency:
 
 env:
   GOLANGCI_LINT_VERSION: v2.15.0
-  GOVULNCHECK_VERSION: v1.9.0
   MARKDOWNLINT_VERSION: 0.24.0
 
 jobs:
-  go:
-    name: Go (lint, vet, test -race on Postgres, govulncheck)
-    runs-on: ubuntu-latest
+  lint:
+    name: Lint (golangci-lint, format, vet, Biome, tsc, markdownlint, commit messages)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
+        with:
+          version: ${{ env.GOLANGCI_LINT_VERSION }}
+          args: --build-tags integration ./...
+      - name: Format diff
+        run: go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@${{ env.GOLANGCI_LINT_VERSION }} fmt --diff
+      - run: go vet ./...
+      - run: bun run lint
+      - run: bun run typecheck
+      - run: bunx markdownlint-cli2@${{ env.MARKDOWNLINT_VERSION }} "**/*.md"
+      - name: Commit messages
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: bunx commitlint --from "$BASE_SHA" --to "$HEAD_SHA"
+      - name: PR title
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: printf '%s\n' "$PR_TITLE" | bunx commitlint
+
+  test:
+    name: Tests (Go unit and integration on Postgres, TypeScript)
+    runs-on: ubuntu-24.04
     services:
       postgres:
-        image: postgres:18.6-alpine3.24
+        image: postgres:18.6-alpine3.24@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5
         env:
           POSTGRES_USER: hexascore
           POSTGRES_PASSWORD: hexascore
@@ -37,53 +73,52 @@ jobs:
     env:
       TEST_DATABASE_URL: postgres://hexascore:hexascore@localhost:5432/postgres?sslmode=disable
     steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: actions/setup-go@v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: go.mod
-      - uses: oven-sh/setup-bun@v2.2.0
-        with:
-          bun-version-file: package.json
-      - uses: golangci/golangci-lint-action@v9.3.0
-        with:
-          version: ${{ env.GOLANGCI_LINT_VERSION }}
-          args: --build-tags integration ./...
-      - run: go vet ./...
-      # bun is on PATH so TestPluralGolden compares Go and TypeScript output.
-      - run: go test -race -count=1 -tags integration ./...
-      - run: go run golang.org/x/vuln/cmd/govulncheck@${{ env.GOVULNCHECK_VERSION }} ./...
-
-  web:
-    name: Web (tsc, tests, build, SSR build)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: oven-sh/setup-bun@v2.2.0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version-file: package.json
       - run: bun install --frozen-lockfile --ignore-scripts
-      - run: bun run lint
-      - run: bun run typecheck
+      - run: go test -race -count=1 ./...
+      # bun is on PATH so TestPluralGolden compares Go and TypeScript output.
+      - run: go test -race -count=1 -tags integration ./...
       - run: bun run test
-      - run: bun run build
-      - run: bun run build:ssr
 
-  docs:
-    name: Markdown lint
-    runs-on: ubuntu-latest
+  vuln:
+    name: Vulnerability scan (govulncheck, weekly)
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: oven-sh/setup-bun@v2.2.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+      - run: go tool govulncheck ./...
+
+  setup-windows:
+    name: Windows setup script and unit tests
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version-file: package.json
-      - run: bunx markdownlint-cli2@${{ env.MARKDOWNLINT_VERSION }}
+      - run: .\setups\setup-windows.ps1
+      - run: go test -count=1 ./...
 
-  image:
-    name: Docker image (build and /up smoke test)
-    runs-on: ubuntu-latest
+  build:
+    name: Docker image (build, checks, /up smoke test, artifact)
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v7.0.1
-      - run: docker build -t hexascore:ci .
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Build image
+        run: docker build --build-arg APP_VERSION=${{ github.sha }} -t hexascore:ci .
+      - name: Image checks
+        run: scripts/infra/check-image.sh hexascore:ci
       - name: Smoke test
         run: |
           docker run -d --name app -p 3000:3000 -e APP_KEY="base64:$(openssl rand -base64 32)" -e APP_URL=http://localhost:3000 hexascore:ci
@@ -93,3 +128,9 @@ jobs:
       - name: Container logs
         if: failure()
         run: docker logs app
+      - name: Save image
+        run: docker save hexascore:ci -o image.tar
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: image
+          path: image.tar
