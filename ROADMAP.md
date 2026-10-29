@@ -16,9 +16,23 @@ Conventions:
 
 | Field | Value |
 | --- | --- |
-| Current phase | P1 (foundation and parity) |
-| Next microtask | P1.A.2.1, P1.A.4.3 (senior); P1.A.3.1, P1.A.4.1 (after vukem v0.33.0) |
-| Updated | 2026-10-29 |
+| Current phase | P1 (foundation and parity): P1.A to P1.G done, P1.H mostly done, P1.I started |
+| Last release | app `v0.7.0` (more merged on `main` since); vukem `v0.32.0` in `go.mod` |
+| Next microtask | finish vukem v0.33.0 (below), then P1.H.4.1b, P1.H.3.2, P1.H.5.1, P1.I.2.x |
+| Updated | 2026-10-29 (session paused by the owner) |
+
+## Resuming work (read first in a new session)
+
+The work runs through the orchestration in [`.orchestration/`](.orchestration/) (briefs, queues, reports, handoffs; versioned in git). The owner set the goal "finish ROADMAP.md using `.orchestration`" and approved 4 background workers (senior/Sonnet, especialista/Opus, estagiario/Haiku, framework/Opus) with the main session as orchestrator (Opus).
+
+1. Read [`.orchestration/handoff/orchestrator.md`](.orchestration/handoff/orchestrator.md) (state at pause), then [docs/orchestration/BOARD.md](docs/orchestration/BOARD.md) and [docs/orchestration/QUESTIONS.md](docs/orchestration/QUESTIONS.md) (owner gates and answers).
+2. Delete `.orchestration/STOP` (it pauses every worker), then `git pull` in `hexascore-vukem` and run the gate once: `go build ./...`, `golangci-lint run --build-tags integration ./...`, `bun install && bun run lint && bun run typecheck && bun run test`, `TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable go test -tags integration ./...` (`docker compose up -d --wait` first).
+3. Finish vukem v0.33.0 (owner approved 2026-10-29): in `C:\dev\hexascore-appukem`, PRs #29 to #32 are merged; for #33 then #34 run `gh pr update-branch <n>`, wait until `gh pr checks <n>` is all pass, then `gh pr merge <n> --squash` (`--admin` is denied by the Claude Code classifier; do not bypass). Then release per `vukem/docs/maintenance.md` "Releasing through a pull request" and write `.orchestration/queue/senior/1-ADOPT-vukem-v0.33.0.md` (bump `require github.com/AlexGalhardo/vukem` in `go.mod`, remove the workarounds of the VFs it fixes, tests green).
+4. Relaunch the workers in background with the Agent tool, one per role, each told to read `.orchestration/briefs/<role>.md` + `briefs/common-app.md` and its `handoff/<role>.md`; the framework worker reads `briefs/framework.md`. Workers usually hand off after one or two tasks: relaunch them when they report.
+5. Orchestrator loop: when a worker reports, merge its branch into `main` with `git merge --no-ff`, resolve conflicts (usually `CHANGELOG.md` `[Unreleased]` and registries), run the gate above, tick the microtask here, push (`main` auto-deploys to Railway production), queue the review (`queue/especialista/1-REV-<ID>.md`) and the next briefs. Number `VF-NEW-<ID>` entries in `vukem-feedback.md` at merge (next free: VF-052).
+6. Releases: `scripts/release.sh vX.Y.Z` on a clean tree, then `git push origin main && git push origin vX.Y.Z`; the Release workflow publishes the GitHub release.
+
+Open owner items: real Stripe values replacing the `*_FAKE_replace_me` placeholders on Railway service `app`; Phase 2 from P2.A.1.2 on needs owner gates (Railway plan, buckets, DNS, secrets, spend). The P1.I group was pulled forward before P1.H.5.1; billing and pricing specs join it after P1.H.3.2.
 
 ## Phase map
 
