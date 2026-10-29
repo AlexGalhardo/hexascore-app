@@ -1,0 +1,3 @@
+# REV P1.F.4.1-followup-problem-codes (rodada: 1)
+Branch: agent/senior/P1.F.4.1-followup-problem-codes, repo: app. Report: reports/P1.F.4.1-followup-problem-codes.md
+Re-run: TEST_DATABASE_URL=... go test -tags integration ./... ; golangci-lint run ./...

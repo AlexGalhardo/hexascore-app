@@ -1,0 +1,3 @@
+# REV P1.F.4.1-followup-ui-purge (rodada: 1)
+Branch: agent/senior/P1.F.4.1-followup-ui-purge, repo: app. Report: reports/P1.F.4.1-followup-ui-purge.md
+Re-run: bun run lint && bun run typecheck && bun run test; TEST_DATABASE_URL=... go test -tags integration ./...; golangci-lint run --build-tags integration ./...
