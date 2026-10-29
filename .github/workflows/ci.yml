@@ -21,6 +21,8 @@ concurrency:
 env:
   GOLANGCI_LINT_VERSION: v2.15.0
   MARKDOWNLINT_VERSION: 0.24.0
+  OSV_SCANNER_VERSION: v2.7.0
+  OSV_SCANNER_SHA256: 160c6253e2922e9e0a6a9771c5c4c40a4b3c6090b34a3cdd5e80c96cc2e4218b
 
 jobs:
   lint:
@@ -95,6 +97,23 @@ jobs:
         with:
           go-version-file: go.mod
       - run: go tool govulncheck ./...
+
+  deps:
+    name: Dependency audit (osv-scanner, bun audit)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - name: Install osv-scanner (pinned release, checksum verified)
+        run: |
+          curl -fsSLo osv-scanner "https://github.com/google/osv-scanner/releases/download/${OSV_SCANNER_VERSION}/osv-scanner_linux_amd64"
+          echo "${OSV_SCANNER_SHA256}  osv-scanner" | sha256sum -c -
+          chmod +x osv-scanner
+      - run: ./osv-scanner scan source -L go.mod -L bun.lock
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - run: bun audit --audit-level=high
 
   setup-windows:
     name: Windows setup script and unit tests
