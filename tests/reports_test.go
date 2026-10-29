@@ -43,7 +43,10 @@ func TestSecurity_A01_ReportSelf(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	c.PostJSON("/app/v1/reports", reportBody("list", list.ID)).AssertForbidden().AssertSee("cannot report yourself").AssertSee(`"code":"report-self"`)
+	c.PostJSON("/app/v1/reports", reportBody("list", list.ID)).
+		AssertForbidden().
+		AssertSee("cannot report yourself").
+		AssertSee(`"code":"report-self"`)
 	c.PostJSON("/app/v1/reports", reportBody("user", "SelFie")).AssertForbidden().AssertSee("cannot report yourself")
 
 	// A private list is invisible to others, so reporting it is a 404, like a missing one.
