@@ -10,7 +10,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | id | date | severity | status |
 | --- | --- | --- | --- |
 | VF-001 | 2026-10-28 | high | open |
-| VF-002 | 2026-10-28 | medium | open |
+| VF-002 | 2026-10-28 | medium | in_progress (framework) |
 | VF-003 | 2026-10-28 | medium | open |
 | VF-004 | 2026-10-28 | low | open |
 | VF-005 | 2026-10-28 | medium | open |
@@ -52,7 +52,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-002: Inertia SSR falls back to client rendering silently by default
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` "Inertia v3 (BETA)" → SSR row: "falls back to client-side rendering on any failure (reported to `OnFailure`, default a warning log)".
 - **Context**: for a catalogue that depends on search indexing (ADR 0004), a silent fallback hides an SEO incident. HexaScore needs per-route policy: public routes must fail readiness or page an alert when SSR fails; logged-in routes may fall back.
 - **Reproduction**: stop the SSR process; request a public page; observe a 200 with client-rendered shell and only a warning log.
