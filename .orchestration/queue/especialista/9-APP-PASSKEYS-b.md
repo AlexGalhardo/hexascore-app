@@ -1,0 +1,5 @@
+# Task APP-PASSKEYS-b (priority 2, rodada 0, model: Opus, especialista pool)
+
+Remainder of APP-PASSKEYS (step 3). BLOCKED until a vukem release with VF-001 exists (owner releases it). Docs part merged from agent/especialista/APP-PASSKEYS (ADR 0017, SDD 03 FR-03-20..24 §7.8, ROADMAP P1.C.7.1, P1.C.7.2, P1.I.2.1 passkeys.spec.ts). Execute P1.C.7.1 then P1.C.7.2 and the passkeys.spec.ts of P1.I.2.1 per ROADMAP; then queue 1-REV-APP-PASSKEYS.md for an independent especialista review (auth), never self-approve.
+
+App work: branch `agent/<your-role>/APP-PASSKEYS` from `origin/main`. Acceptance: `go build ./...`; `golangci-lint run --build-tags integration ./...` → 0 issues; `TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable go test -tags integration ./...` → no FAIL; `bun run lint && bun run typecheck && bun run test`; markdownlint on changed docs. This touches auth/security: when you deliver code (step 3), queue `1-REV-APP-PASSKEYS.md` for an independent review by a fresh especialista session (the orchestrator samples it) instead of self-approving.
