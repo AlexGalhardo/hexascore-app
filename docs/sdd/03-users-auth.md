@@ -65,7 +65,8 @@ The `install:auth` scaffold owns its migrations (user-owned code); HexaScore edi
 
 ```sql
 CREATE TABLE users (
-  id                     text PRIMARY KEY,            -- legacy Better Auth ids kept; new rows ULID
+  id                     bigint PRIMARY KEY,          -- vukem scaffold identity (amended 2026-10-29)
+  legacy_id              text UNIQUE,                 -- Better Auth id of migrated users; NULL for new rows
   email                  text NOT NULL,
   email_verified_at      timestamptz,
   password               text NOT NULL,               -- argon2id PHC | bcrypt | legacy scrypt "salt:key"
@@ -112,11 +113,14 @@ vukem-owned tables reused unchanged: `sessions` (framework, `https://vukem.dev/d
 
 Invariants: `username` is stored lowercase (case folding is the identity rule; the legacy pattern already allows only `a-z`); emails compared by `lower()`; a banned user has `banned_at` set; `anonymized_at` set implies `email = 'deleted-' || id || '@invalid'`, `username IS NULL`, 2FA columns NULL. Retention: `account_events` 2 years, then deleted by a monthly job; revoked/expired tokens pruned after 90 days (`Tokens.Prune`).
 
+Amendment (2026-10-29, P1.C.1.1): `users.id` stays the vukem scaffold's `bigint` identity instead of `text`. Rewriting every `install:auth` file and the SQLite-based scaffold tests for text ids bought nothing the `legacy_id` column does not give: the data migration (P2.F) stores the Better Auth id in `legacy_id` and maps every legacy `user_id` foreign key through it. `account_events.user_id` and `actor_id` are `bigint` accordingly. Scaffold facts recorded by P0.F.1.1: session env names `SESSION_LIFETIME`, `SESSION_IDLE_TIMEOUT`, `SESSION_DRIVER`, `SESSION_COOKIE`, `SESSION_SECURE`, `SESSION_RECORD_CLIENT` (open issue 03-7); pages are TypeScript `Auth/*.tsx` reusing the starter layout (03-10). Paths follow §6.1 (`/signup`, `/signup/check-email`, `/recover-password`, `/verify-email`, `/verify-email/confirm/{id}`, `/verify-email/resend`).
+
 Migration mapping from `legacy/apps/web/lib/db/schema/auth.ts` (A-04; the 10k synthetic users are purged first):
 
 | Legacy | Target | Rule |
 | --- | --- | --- |
-| `user.id, name, email, image, created_at` | same columns | email lowercased; collision check below |
+| `user.id` | `legacy_id` | new `bigint` id assigned; every legacy `user_id` FK is mapped through `legacy_id` |
+| `user.name, email, image, created_at` | same columns | email lowercased; collision check below |
 | `user.email_verified` | `email_verified_at` | `true` → `updated_at`; `false` → NULL |
 | `user.username, display_username` | same | already lowercase and unique |
 | `user.role` (comma list) | `role` | contains `admin` → `admin`, else `user` |
