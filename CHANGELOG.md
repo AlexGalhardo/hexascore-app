@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- **search:** `/search`, `/search/suggest` and `POST /search/events` with a 120 s/300 s result cache, ETag/304 on JSON, the legacy `/api/search/suggest` 308 redirect, `search_events` (redacted queries) and the daily `search:purge` (30 days).
+
 ### Changed
 
 - **ci:** Pin every workflow action by full commit SHA; add `lint` (format diff, Biome, tsc, markdownlint, commitlint on PR commits and PR title), `test` (Go unit and integration on Postgres 18.6, TypeScript tests), weekly `vuln` (`go tool govulncheck`), `setup-windows` and `build` (`scripts/infra/check-image.sh`, `image` artifact) jobs.

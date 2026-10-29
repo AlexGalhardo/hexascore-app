@@ -14,7 +14,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/database/migrations"
 )
 
-const searchMigrations = 8
+const searchMigrations = 9
 
 func scalar(t *testing.T, db *database.DB, query string) string {
 	t.Helper()

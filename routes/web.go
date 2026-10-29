@@ -12,6 +12,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
+	"github.com/AlexGalhardo/hexascore-app/internal/search"
 	"github.com/AlexGalhardo/hexascore-app/resources"
 )
 
@@ -96,6 +97,12 @@ func Web(r *router.Router, app *vukem.App) error {
 	if db.Dialect().Name() == "postgres" {
 		r.Get("/sitemap.xml", controllers.SitemapIndex(app)).Name("sitemap.index")
 		r.Get("/sitemaps/{file}", controllers.Sitemap(app)).Name("sitemap.child")
+
+		sc := controllers.NewSearch(app, search.New(db, nil), acc.Web.User)
+		r.Get("/search", sc.Index).Name("search")
+		r.Get("/search/suggest", sc.Suggest).Name("search.suggest")
+		r.Post("/search/events", sc.Event).Name("search.events")
+		r.Get("/api/search/suggest", controllers.LegacySuggest).Name("search.suggest.legacy")
 	}
 
 	return nil
