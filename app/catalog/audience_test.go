@@ -23,7 +23,14 @@ func fixtureItem() ItemSource {
 		Cover:            &Sourced[string]{"https://cdn.example/c.webp", "igdb"},
 		ExternalIDs:      map[string]string{"wikidata": "Q279744", "igdb": "231", "steam": "70"},
 		Entities: []EntityRefIn{
-			{ID: "e1", Kind: "organization", Role: "developer", Name: "Valve", Source: "wikidata"},
+			{
+				ID:         "e1",
+				Kind:       "organization",
+				Role:       "developer",
+				Name:       "Valve",
+				NameSource: "wikidata",
+				Source:     "wikidata",
+			},
 			{ID: "e2", Kind: "person", Role: "composer", Name: "Kelly Bailey", Source: "igdb"},
 		},
 		AffiliateLinks: []string{"https://store.example/hl"},

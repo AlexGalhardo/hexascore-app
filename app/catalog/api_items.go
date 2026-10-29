@@ -137,7 +137,9 @@ ORDER BY o.n`, "{"+strings.Join(ids, ",")+"}", locale)
 func addEntities(ctx context.Context, db Querier, item *APIItem, locale string, p Policy) error {
 	rows, err := db.QueryContext(
 		ctx,
-		`SELECT e.id::text, e.kind, ie.role, coalesce(t.name, te.name, e.default_name), ie.source
+		`SELECT e.id::text, e.kind, ie.role, coalesce(t.name, te.name, e.default_name),
+  CASE WHEN t.name IS NOT NULL THEN t.name_source WHEN te.name IS NOT NULL THEN te.name_source
+    ELSE e.provenance->>'default_name' END, ie.source
 FROM item_entities ie
 JOIN entities e ON e.id = ie.entity_id
 LEFT JOIN entity_translations t ON t.entity_id = e.id AND t.locale = $2
@@ -154,10 +156,14 @@ ORDER BY ie.role, ie.position, e.slug`,
 
 	var src ItemSource
 	for rows.Next() {
-		var e EntityRefIn
-		if err := rows.Scan(&e.ID, &e.Kind, &e.Role, &e.Name, &e.Source); err != nil {
+		var (
+			e  EntityRefIn
+			ns sql.NullString
+		)
+		if err := rows.Scan(&e.ID, &e.Kind, &e.Role, &e.Name, &ns, &e.Source); err != nil {
 			return fmt.Errorf("scan api entity: %w", err)
 		}
+		e.NameSource = ns.String
 		src.Entities = append(src.Entities, e)
 	}
 	if err := rows.Err(); err != nil {
@@ -167,11 +173,16 @@ ORDER BY ie.role, ie.position, e.slug`,
 	rel := Assemble(src, p)
 	item.Detail.Entities = rel.Entities
 	// src carries only relations: keep the relation omission, not the empty title's.
-	if rel.Meta != nil && slices.Contains(rel.Meta.OmittedFields, "entities") {
-		if item.Detail.Meta == nil {
-			item.Detail.Meta = &Meta{}
+	if rel.Meta != nil {
+		for _, f := range rel.Meta.OmittedFields {
+			if f == "entities" || f == "entities.name" {
+				if item.Detail.Meta == nil {
+					item.Detail.Meta = &Meta{}
+				}
+				item.Detail.Meta.OmittedFields = append(item.Detail.Meta.OmittedFields, f)
+				slices.Sort(item.Detail.Meta.OmittedFields)
+			}
 		}
-		item.Detail.Meta.OmittedFields = append(item.Detail.Meta.OmittedFields, "entities")
 	}
 
 	return nil
