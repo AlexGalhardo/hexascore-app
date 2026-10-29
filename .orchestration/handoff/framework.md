@@ -48,3 +48,11 @@ Owner answered "merge your own green PRs" in chat, but `gh pr merge 39 --squash`
 - Then remaining low VFs: 044 (output `required` needs a design: components are shared by input and output types), 049, 050, 004, 012, 020, 023, 033, 034; VF-042 part (2) per-group error handler.
 - Gate notes: Windows `internal/testutil` "Acesso negado" is an AV exe lock, not code. Postgres integration: `docker run -d --rm --name vukem-pg-test -e POSTGRES_USER=vukem -e POSTGRES_PASSWORD=vukem -e POSTGRES_DB=vukem_test -p 127.0.0.1:55432:5432 postgres:17`, then `go test -tags integration ./...` in drivers/postgres; remove the container after.
 - Python edit scripts: write with Write tool into the scratchpad and run them (heredoc python through bash mangles backslash escapes).
+
+## Session 9 (2026-10-29)
+
+- #44 superseded by #57 (VF-001 scaffold rebased onto main after #43 merged; #44 closed with a pointer).
+- VF-055 React Email: PR #58 (`feat/vf-055-react-email`). Report `reports/VF-055.md`.
+- Next: VF-056 jsonrpc (claimed), then VF-057, VF-011 (notify), VF-014.
+- Gate flake: `TestKeyRotateWarnsOnLongPreviousList` Windows TempDir cleanup ("A pasta não está vazia"), passes on re-run.
+- Scratch React Email install for real-export checks: scratchpad `re/` (react-email 6.11.6; `npx email export --dir <d> --outDir <o> -s`).

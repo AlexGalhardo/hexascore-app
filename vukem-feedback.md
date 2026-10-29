@@ -63,7 +63,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-052 | 2026-10-29 | high | in_progress (framework), PRs #46 (client IP + origin lock), #47 (Turnstile action), #48 (visitor headers), #49 (edge cache + purge), #50 (Access JWT); merges pending |
 | VF-053 | 2026-10-29 | low | in_progress (framework), PR #52 |
 | VF-054 | 2026-10-29 | low | in_progress (framework), PR #51 |
-| VF-055 | 2026-10-29 | medium | open |
+| VF-055 | 2026-10-29 | medium | in review (vukem PR #58) |
 | VF-056 | 2026-10-29 | medium | open |
 | VF-057 | 2026-10-29 | medium | open |
 | VF-058 | 2026-10-29 | low | open |
@@ -541,7 +541,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-055: No native React Email support for mail templates
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: open (requested by the owner 2026-10-29).
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: in review (vukem PR #58, `mail.React` + `WithReactEmails` + `make:mail --react`), unreleased.
 - **vukem version**: v0.33.0. **Docs consulted**: <https://vukem.dev/docs> mail pages and search for `react-email`, `jsx`: no page `[NOT IN VUKEM DOCS]`. External: <https://react.email> (`@react-email/components`, `@react-email/render`).
 - **Context**: HexaScore already ships React + TypeScript for Inertia pages and runs Node for SSR (ADR 0004). Mail templates are written separately as Go templates, so the design tokens, components and i18n of the web app are not reused in e-mails, and previewing them needs custom tooling.
 - **Reproduction**: no way to author a `mail.Message` body as a React Email component; `install:mail`/scaffolds only offer Go `html/template` bodies.
