@@ -57,6 +57,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-046 | 2026-10-29 | medium | merged in main (PR #27), unreleased |
 | VF-047 | 2026-10-29 | low | open |
 | VF-048 | 2026-10-29 | low | in_progress (framework), PR #33 (via VF-016 `WithExtension`) |
+| VF-NEW-P1.H.3.1 | 2026-10-29 | medium | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -469,3 +470,12 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Context**: SDD 02 section 6 lists stable codes (`status-not-completed`, `not-a-game`, `rating-not-released`, ...) for clients. `errs.NewKey(status, key, message, params)` only takes translation params; the last argument is not rendered, so the response carries `title` and `detail` but no `code` (observed on `PUT /app/v1/items/{id}/time-to-beat` 409).
 - **Workaround**: the codes stay in the `params` map (as the rating write path already does) and clients branch on status plus `detail`; the codes are exported as `scoring.Code*` constants.
 - **Request**: `HTTPError.WithExtension(key, value)` (or a `Code` field) rendered as a top-level member of the problem document, and documented under Errors.
+
+## VF-NEW-P1.H.3.1: `contrib/stripe` lacks subscription and Checkout Session list calls and `Subscription.Created`
+
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0, `contrib/stripe` v0.4.1. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/billing`. `[NOT IN VUKEM DOCS]`: listing a customer's subscriptions, listing/expiring Checkout Sessions, the subscription `created` time.
+- **Context**: the `install:billing` sync keeps one live row per user but a second Checkout tab creates a second Stripe subscription; deleting an account must cancel every subscription Stripe may still bill. Both need `GET /v1/subscriptions?customer=&status=all`, `GET /v1/checkout/sessions?customer=&status=open`, `POST /v1/checkout/sessions/{id}/expire` and `created` to pick the newest subscription. `stripe.Subscription` has a custom `UnmarshalJSON`, so a struct embedding it cannot add `created` (the method is promoted and drops the extra field).
+- **Repro**: decode a subscription JSON into a struct that embeds `stripe.Subscription` and adds `Created int64` with tag `json:"created"`: `Created` stays zero.
+- **Workaround**: `app/billing/stripe_calls.go` uses `Client.Call` and decodes the raw JSON twice (`workaround(vukem): VF-NEW-P1.H.3.1`).
+- **Request**: `ListSubscriptions(ctx, Params)`, `ListCheckoutSessions`, `ExpireCheckoutSession`, a `Created int64` on `Subscription`, and an `install:billing` scaffold that cancels superseded subscriptions and expires open sessions before creating a new one.

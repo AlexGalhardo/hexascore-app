@@ -131,16 +131,8 @@ func TestCancelLiveOnDeletion(t *testing.T) {
 		map[string]any{"id": "sub_1", "customer": "cus_1"},
 	).AssertOK()
 
-	// A row retired locally by a newer subscription is still live in Stripe and must be cancelled too.
-	db, err := app.DB()
-	if err != nil {
-		t.Fatal(err)
-	}
-	if _, err := db.ExecContext(t.Context(), `INSERT INTO subscriptions
-(user_id, stripe_subscription_id, status, price_id, plan, provider, state, created_at, updated_at)
-VALUES ($1, 'sub_old', 'active', 'price_pro', 'pro', 'stripe', 'canceled', $2, $2)`, u.ID, time.Now()); err != nil {
-		t.Fatal(err)
-	}
+	// Known only to Stripe (no local row): the hook reads the customer's subscriptions from Stripe.
+	f.addSubscription("sub_old", "active", "price_pro", 1_600_000_000)
 
 	acc, err := accounts.New(app.App)
 	if err != nil {
@@ -148,6 +140,15 @@ VALUES ($1, 'sub_old', 'active', 'price_pro', 'pro', 'stripe', 'canceled', $2, $
 	}
 
 	f.mu.Lock()
+	f.failList = true
+	f.mu.Unlock()
+
+	if err := acc.Subscriptions.CancelLive(t.Context(), u.ID); err == nil {
+		t.Fatal("a failed Stripe list must be returned so the deletion stays scheduled")
+	}
+
+	f.mu.Lock()
+	f.failList = false
 	f.failCancel = true
 	f.mu.Unlock()
 
