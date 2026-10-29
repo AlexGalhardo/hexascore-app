@@ -205,7 +205,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
 
 #### P0.F.7 OpenAPI export and client generation
 
-- [ ] **P0.F.7.1** Export two OpenAPI 3.1 documents by prefix, with RFC 9457 problems carrying kebab-case `code` extension members.
+- [x] **P0.F.7.1** Export two OpenAPI 3.1 documents by prefix, with RFC 9457 problems carrying kebab-case `code` extension members.
   - Files/modules: spike `routes/api.go`, `routes/app_api.go` (typed handlers via `api.Register`), `app/http/problems/problem.go`, `openapi/api-v1.json`, `openapi/app-v1.json`
   - Refs: SDD 05 §6.2, §6.5, §9; SDD README "Problem codes", "JSON field names"; open-issues 05-6, 05-7; VF-014, VF-016; <https://vukem.dev/docs/rest-apis/openapi>; <https://vukem.dev/docs/cli/reference-runtime> "`vukem openapi:export`"
   - Depends on: P0.F.4.1
