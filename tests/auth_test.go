@@ -563,5 +563,6 @@ func TestSecurity_A07_LoginThrottleSharedAcrossIdentifiers(t *testing.T) {
 	for i := range 10 {
 		attacker.PostJSON("/login", map[string]any{"identifier": ids[i%2], "password": "guess"})
 	}
-	attacker.PostJSON("/login", map[string]any{"identifier": "someone-else@example.com", "password": "guess"}).AssertStatus(429)
+	attacker.PostJSON("/login", map[string]any{"identifier": "someone-else@example.com", "password": "guess"}).
+		AssertStatus(429)
 }
