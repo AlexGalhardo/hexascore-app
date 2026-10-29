@@ -105,7 +105,6 @@ func Web(r *router.Router, app *vukem.App) error {
 		appmiddleware.NotBanned(acc.Web.User, acc.ProblemBase, app.Now),
 	)
 
-	r.Get("/", controllers.Home).Name("home")
 	r.Get("/help/score", controllers.HelpScore).Name("help.score")
 	r.Get("/", controllers.Home(app)).Name("home")
 	// Least specific pattern: unmatched GET pages render the Error page with
