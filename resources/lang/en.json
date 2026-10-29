@@ -551,24 +551,6 @@
   "sandbox": {
     "banner": "Sandbox environment — users, ratings and lists are fictitious (test data)."
   },
-  "contact": {
-    "metaTitle": "Contact",
-    "title": "Contact us",
-    "intro": "Questions, ideas or something broken? Write to us — we read every message.",
-    "name": "Name",
-    "email": "Email",
-    "loggedIn": "Sent from your account. Name and email come from your profile.",
-    "subject": "Subject",
-    "subjects": {
-      "question": "Questions",
-      "feedback": "Suggestions & Feedback",
-      "bug": "Bugs & Technical Problems"
-    },
-    "message": "Message",
-    "minHint": "At least {min} characters.",
-    "submit": "Send message",
-    "sent": "Message sent. Thank you! We usually reply within a few days."
-  },
   "docs": {
     "copy": "Copy",
     "copied": "Copied",
