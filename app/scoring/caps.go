@@ -83,6 +83,6 @@ FROM users u WHERE u.id = $1`, userID, itemID, now).Scan(&ok)
 func tooMany(key, msg, code string, retry time.Duration) error {
 	secs := max(int(retry.Seconds())+1, 1)
 
-	return errs.NewKey(http.StatusTooManyRequests, key, msg, map[string]any{"code": code}).
+	return errs.NewKey(http.StatusTooManyRequests, key, msg, nil).WithExtension("code", code).
 		WithHeader("Retry-After", strconv.Itoa(secs))
 }

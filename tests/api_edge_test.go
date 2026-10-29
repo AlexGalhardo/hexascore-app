@@ -38,6 +38,13 @@ func TestAPIEdge(t *testing.T) {
 		if s := pre.Recorder().Code; s != 204 {
 			t.Fatalf("preflight status = %d, want 204", s)
 		}
+
+		// SDD 13: /app/v1 is first-party only, so no CORS, but its problems are still coded.
+		app := r.app.Client(t).WithHeader("Origin", "https://example.org").GetJSON("/app/v1/nope").
+			AssertStatus(404).AssertJSONPath("type", "https://hexascore.app/problems/not-found")
+		if o := app.Recorder().Header().Get("Access-Control-Allow-Origin"); o != "" {
+			t.Fatalf("/app/v1 Access-Control-Allow-Origin = %q, want none", o)
+		}
 	})
 
 	t.Run("problem_codes", func(t *testing.T) {

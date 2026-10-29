@@ -14,13 +14,13 @@ const (
 )
 
 func errVersionConflict() error {
-	return errs.NewKey(http.StatusConflict, "lists.version_conflict", "The list changed; reload it and retry.",
-		map[string]any{"code": CodeVersionConflict})
+	return errs.NewKey(http.StatusConflict, "lists.version_conflict", "The list changed; reload it and retry.", nil).
+		WithExtension("code", CodeVersionConflict)
 }
 
 func errOrderMismatch() error {
 	return errs.NewKey(http.StatusUnprocessableEntity, "lists.order_mismatch",
-		"The order must contain every item of the list exactly once.", map[string]any{"code": CodeOrderMismatch})
+		"The order must contain every item of the list exactly once.", nil).WithExtension("code", CodeOrderMismatch)
 }
 
 // PlanOrder validates a full-permutation reorder (SDD 14 §7.1): a stale version is a 409, and ids that are not

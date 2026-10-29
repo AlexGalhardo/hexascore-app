@@ -18,13 +18,14 @@ const ProblemCodeHeader = "X-Problem-Code"
 
 const (
 	apiPrefix    = "/api/v1"
+	appPrefix    = "/app/v1"
 	hostV1Prefix = "/v1"
 )
 
 // APIEdge is the workaround(vukem) VF-015/VF-016 for the public API edge. Install it with Router.UseServer
 // before every other server middleware. It (1) rewrites /v1/... to /api/v1/... when the request Host is apiHost
 // (port ignored), (2) answers CORS for /api/v1 with origin "*" and no credentials, and (3) makes every
-// application/problem+json under /api/v1 carry a catalogue `code` and a `type` ending in it, including problems
+// application/problem+json under /api/v1 and /app/v1 carry a catalogue `code` and a `type` ending in it, including problems
 // vukem raises itself (404, 405, typed-route 400s), which cannot carry extension members (VF-016).
 func APIEdge(apiHost, problemBase string) (func(http.Handler) http.Handler, error) {
 	cors, err := vmw.CORS(vmw.CORSConfig{
@@ -44,11 +45,12 @@ func APIEdge(apiHost, problemBase string) (func(http.Handler) http.Handler, erro
 	base := strings.TrimSuffix(problemBase, "/") + "/"
 
 	return func(next http.Handler) http.Handler {
-		api := cors(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		coded := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			pw := &problemWriter{ResponseWriter: w, base: base}
 			next.ServeHTTP(pw, r)
 			pw.finish()
-		}))
+		})
+		api := cors(coded)
 
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if hostOnly(r.Host) == apiHost && underPrefix(r.URL.Path, hostV1Prefix) {
@@ -59,6 +61,12 @@ func APIEdge(apiHost, problemBase string) (func(http.Handler) http.Handler, erro
 
 			if underPrefix(r.URL.Path, apiPrefix) {
 				api.ServeHTTP(w, r)
+				return
+			}
+
+			// /app/v1 gets coded problems but never CORS headers (SDD 13: first-party clients only).
+			if underPrefix(r.URL.Path, appPrefix) {
+				coded.ServeHTTP(w, r)
 				return
 			}
 
@@ -134,7 +142,13 @@ func (p *problemWriter) finish() {
 
 	var doc map[string]any
 	if json.Unmarshal(body, &doc) == nil {
-		if _, has := doc["code"]; !has {
+		if c, has := doc["code"].(string); has {
+			// Handlers raise errs.HTTPError.WithExtension("code", ...); vukem keeps type about:blank.
+			if c != "" {
+				doc["type"] = p.base + c
+				body = mustJSON(doc, body)
+			}
+		} else {
 			code := forced
 			if !problems.Known(code) {
 				code = problems.ForStatus(p.status)
@@ -144,9 +158,7 @@ func (p *problemWriter) finish() {
 				doc["code"] = code
 				doc["type"] = p.base + code
 
-				if out, err := json.Marshal(doc); err == nil {
-					body = out
-				}
+				body = mustJSON(doc, body)
 			}
 		}
 	}
@@ -154,4 +166,12 @@ func (p *problemWriter) finish() {
 	h.Del("Content-Length")
 	p.ResponseWriter.WriteHeader(p.status)
 	_, _ = p.ResponseWriter.Write(body)
+}
+
+func mustJSON(doc map[string]any, fallback []byte) []byte {
+	if out, err := json.Marshal(doc); err == nil {
+		return out
+	}
+
+	return fallback
 }

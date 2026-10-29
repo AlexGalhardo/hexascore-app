@@ -11,7 +11,6 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
-	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 )
 
@@ -35,10 +34,10 @@ func Ratings(r *router.Router, app *vukem.App) error {
 	web := controllers.NewRatings(w, acc.Web.Name(), false)
 	required, verified := auth.Required(acc.Web), auth.Verified(acc.Web)
 	byUser := ratelimit.Middleware(rating, ratelimit.ByUser(acc.Web.Name()))
-	r.Put("/items/{id}/rating", appmiddleware.CodedProblem(acc.ProblemBase, web.Put)).
+	r.Put("/items/{id}/rating", web.Put).
 		Name("ratings.put").
 		Use(required, verified, byUser)
-	r.Delete("/items/{id}/rating", appmiddleware.CodedProblem(acc.ProblemBase, web.Delete)).
+	r.Delete("/items/{id}/rating", web.Delete).
 		Name("ratings.delete").
 		Use(required, verified, byUser)
 
@@ -46,8 +45,8 @@ func Ratings(r *router.Router, app *vukem.App) error {
 	r.Group("/app/v1", func(g *router.Group) {
 		g.Use(middleware.JSONOnly(), auth.Required(acc.API), auth.Ability(acc.API, "ratings:write"),
 			ratelimit.Middleware(rating, ratelimit.ByUser(acc.API.Name())))
-		g.Put("/items/{id}/rating", appmiddleware.CodedProblem(acc.ProblemBase, api.Put)).Name("ratings.put")
-		g.Delete("/items/{id}/rating", appmiddleware.CodedProblem(acc.ProblemBase, api.Delete)).Name("ratings.delete")
+		g.Put("/items/{id}/rating", api.Put).Name("ratings.put")
+		g.Delete("/items/{id}/rating", api.Delete).Name("ratings.delete")
 	}).Name("app.v1.")
 
 	return nil

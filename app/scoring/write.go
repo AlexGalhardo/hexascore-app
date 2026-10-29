@@ -175,8 +175,8 @@ func (w *Writer) upsert(
 		release = &it.release.Time
 	}
 	if RatedBeforeRelease(now, release, it.precision, it.status) {
-		return "", 0, errs.NewKey(http.StatusConflict, "ratings.not_released", "This title is not released yet.",
-			map[string]any{"code": CodeNotReleased})
+		return "", 0, errs.NewKey(http.StatusConflict, "ratings.not_released", "This title is not released yet.", nil).
+			WithExtension("code", CodeNotReleased)
 	}
 
 	keys := CategoryKeys[it.typ]
@@ -397,9 +397,7 @@ func errNotFound() error {
 	return errs.NewKey(
 		http.StatusNotFound,
 		"ratings.not_found",
-		"Item not found.",
-		map[string]any{"code": CodeNotFound},
-	)
+		"Item not found.", nil).WithExtension("code", CodeNotFound)
 }
 
 func nullable(n sql.NullFloat64) *float64 {
