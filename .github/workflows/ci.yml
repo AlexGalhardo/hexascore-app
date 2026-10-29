@@ -46,6 +46,8 @@ jobs:
       - run: go vet ./...
       - name: OpenAPI goldens
         run: bash scripts/openapi-check.sh
+      - name: OpenAPI lint
+        run: bun run openapi:lint
       - run: bun run lint
       - run: bun run typecheck
       - run: bunx markdownlint-cli2@${{ env.MARKDOWNLINT_VERSION }} "**/*.md"

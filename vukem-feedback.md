@@ -61,6 +61,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-050 | 2026-10-29 | low | open |
 | VF-051 | 2026-10-29 | medium | in_progress (framework), PR #36 green, merge pending (owner) |
 | VF-052 | 2026-10-29 | high | open |
+| VF-NEW-P1.H.4.1b | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -513,3 +514,12 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
   - CDN: `Cache-Control` / `CDN-Cache-Control` / `Cloudflare-CDN-Cache-Control` helpers and cache-tag headers for HTML and assets; a purge client (by URL, tag, prefix, everything) using an API token with zone-scoped permissions, usable from jobs.
   - Security: helpers for WAF-friendly headers, a CSP report endpoint compatible with Cloudflare Page Shield reports, and Cloudflare Access JWT validation (`Cf-Access-Jwt-Assertion`) for admin routes.
   - `TestSecurity_*` coverage: spoofed `CF-Connecting-IP` from a non-Cloudflare peer ignored, Turnstile replay/hostname mismatch rejected, Turnstile outage fails closed, Access JWT with wrong audience/expired rejected.
+
+## VF-NEW-P1.H.4.1b: OpenAPI export cannot carry a license, and plain routes carry no security, 4XX response or used Problem components
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/openapi` `[NOT IN VUKEM DOCS]`: `openapi.Info` fields beyond title, version, description, servers, `SecuritySchemes`.
+- **Context**: `redocly lint` (recommended ruleset) on the exported documents reports `info-license` on both, and on `app-v1` (session-cookie web routes registered without `api.Register`) 27 `security-defined` errors, 27 `operation-4xx-response` warnings and 2 `no-unused-components` warnings (`Problem`, `ValidationError`).
+- **Repro**: `bun run openapi:lint` with the three rules enabled.
+- **Workaround**: `redocly.yaml` disables `info-license` (both documents) and the other three rules for `app@v1` only.
+- **Request**: `openapi.Info.License` (name, identifier/url); let plain routes declare `Security` (or a document-level default) and a 4XX response via `.Doc(...)`; emit `Problem`/`ValidationError` components only when referenced.
