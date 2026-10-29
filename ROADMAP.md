@@ -1085,7 +1085,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.H.4 Contract and SDKs
 
-- [ ] **P1.H.4.1** Commit the golden OpenAPI documents with a diff check, lint them, and regenerate the TypeScript and Python SDKs.
+- [x] **P1.H.4.1** Commit the golden OpenAPI documents with a diff check, lint them, and regenerate the TypeScript and Python SDKs.
   - Files/modules: `openapi/api-v1.json`, `openapi/app-v1.json`, `scripts/openapi-check.sh`, `sdks/ts/` (from `legacy/sdks/ts`), `sdks/python/` (from `legacy/sdks/python`), `packages/app-client/src/api.ts`
   - Refs: SDD 05 §6.5, §9, §10; ADR 0009; D-06 (one English document); <https://vukem.dev/docs/rest-apis/openapi>; <https://vukem.dev/docs/cli/reference-runtime> "`vukem openapi:export`", "`vukem codegen:client`"
   - Depends on: P1.H.2.2, P1.H.3.1
@@ -1675,7 +1675,7 @@ Phase-specific conventions:
 
 #### P2.D.5 Supply chain, scans and incidents
 
-- [ ] **P2.D.5.1** Add Dependabot, `osv-scanner` and `bun audit` to the pipeline and document the fix SLA.
+- [x] **P2.D.5.1** Add Dependabot, `osv-scanner` and `bun audit` to the pipeline and document the fix SLA.
   - Files/modules: `.github/dependabot.yml` (`gomod`, `bun`, `docker`, `github-actions`, weekly), `.github/workflows/ci.yml` (`deps` job), `docs/runbooks/dependencies.md`
   - Refs: SDD 13 NFR-13-5, §7.7, §7.8; SDD 11 §6.3 (Dependabot `docker`)
   - Depends on: P2.B.1.1
