@@ -84,6 +84,12 @@ func Web(r *router.Router, app *vukem.App) error {
 
 	r.Get("/", controllers.Home).Name("home")
 
+	// catalog_* tables exist only on Postgres (VF-033).
+	if db.Dialect().Name() == "postgres" {
+		r.Get("/sitemap.xml", controllers.SitemapIndex(app)).Name("sitemap.index")
+		r.Get("/sitemaps/{file}", controllers.Sitemap(app)).Name("sitemap.child")
+	}
+
 	return nil
 }
 
