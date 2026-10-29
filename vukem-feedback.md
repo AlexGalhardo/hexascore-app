@@ -30,7 +30,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-019 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#15](https://github.com/AlexGalhardo/vukem/pull/15)) |
 | VF-020 | 2026-10-28 | low | open |
 | VF-021 | 2026-10-28 | low | withdrawn (2026-10-29: `HourlyAt` documented) |
-| VF-022 | 2026-10-28 | low | open |
+| VF-022 | 2026-10-28 | low | in_progress (framework), PR #53 (IP truncation; trace id already correlated, no user id logged) |
 | VF-023 | 2026-10-28 | low | open |
 | VF-024 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#10](https://github.com/AlexGalhardo/vukem/pull/10)), adopted (ADOPT-VF-024) |
 | VF-025 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#16](https://github.com/AlexGalhardo/vukem/pull/16)) |

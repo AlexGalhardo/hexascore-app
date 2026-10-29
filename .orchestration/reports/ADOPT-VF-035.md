@@ -6,3 +6,6 @@ Branch: agent/senior/ADOPT-VF-035 (pushed, origin/main merged). Files: app/model
 - RatingFlag keeps single-column PrimaryKey(): vadmin.NewResource panics on composite models (admin lists it).
 - Writes to ratings stay raw SQL (INSERT .. ON CONFLICT, DELETE .. RETURNING overall); orm.Update/Delete not used.
 - go build ok; golangci-lint 0 issues; `go test -tags integration ./...` no FAIL (19 ok).
+
+REV (especialista): APROVADO, see reports/REV-ADOPT-VF-035.md (CHANGELOG conflict only)
+PRONTO_PARA_MERGE agent/senior/ADOPT-VF-035
