@@ -2,8 +2,10 @@ import { Head, useForm } from "@inertiajs/react";
 import type { FormEvent } from "react";
 
 import Field from "../../components/Field";
+import { useT } from "../../lib/useT";
 
-export default function ForgotPassword() {
+export default function Recover() {
+	const t = useT();
 	const form = useForm({ email: "" });
 
 	const submit = (e: FormEvent) => {
@@ -13,14 +15,12 @@ export default function ForgotPassword() {
 
 	return (
 		<>
-			<Head title="Forgot your password?" />
-			<h1 className="mb-2 text-2xl font-semibold">Forgot your password?</h1>
-			<p className="mb-4 text-zinc-600 dark:text-zinc-400">
-				We will email you a link to choose a new one.
-			</p>
+			<Head title={t("auth.recover.metaTitle")} />
+			<h1 className="mb-2 text-2xl font-semibold">{t("auth.recover.title")}</h1>
+			<p className="mb-4 text-zinc-600 dark:text-zinc-400">{t("auth.recover.body")}</p>
 			<form onSubmit={submit} className="space-y-4">
 				<Field
-					label="Email"
+					label={t("auth.fields.email")}
 					type="email"
 					autoComplete="email"
 					required
@@ -33,7 +33,7 @@ export default function ForgotPassword() {
 					disabled={form.processing}
 					className="rounded-md bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
 				>
-					Email me a reset link
+					{t("auth.recover.submit")}
 				</button>
 			</form>
 		</>

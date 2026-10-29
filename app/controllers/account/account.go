@@ -85,7 +85,7 @@ func (h *Handlers) Login(c *web.Ctx) error {
 }
 
 // ShowRegister renders the registration page.
-func (*Handlers) ShowRegister(c *web.Ctx) error { return inertia.Render(c, "Auth/Register", nil) }
+func (*Handlers) ShowRegister(c *web.Ctx) error { return inertia.Render(c, "Auth/Signup", nil) }
 
 // Register answers the same for new and existing emails (no account
 // enumeration) and does not log in: the user is asked to check the inbox,

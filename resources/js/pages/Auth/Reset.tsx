@@ -4,8 +4,10 @@ import type { FormEvent } from "react";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
 import { checkConfirmation, checkPassword, passwordAdvice } from "../../lib/password-policy";
+import { useT } from "../../lib/useT";
 
-export default function ResetPassword({ token, email }: { token: string; email: string }) {
+export default function Reset({ token, email }: { token: string; email: string }) {
+	const t = useT();
 	const form = useForm({ token, email, password: "", password_confirmation: "" });
 
 	const submit = (e: FormEvent) => {
@@ -17,11 +19,11 @@ export default function ResetPassword({ token, email }: { token: string; email: 
 
 	return (
 		<>
-			<Head title="Choose a new password" />
-			<h1 className="mb-4 text-2xl font-semibold">Choose a new password</h1>
+			<Head title={t("auth.reset.metaTitle")} />
+			<h1 className="mb-4 text-2xl font-semibold">{t("auth.reset.title")}</h1>
 			<form onSubmit={submit} className="space-y-4">
 				<Field
-					label="Email"
+					label={t("auth.fields.email")}
 					type="email"
 					autoComplete="email"
 					required
@@ -30,7 +32,7 @@ export default function ResetPassword({ token, email }: { token: string; email: 
 					error={form.errors.email}
 				/>
 				<PasswordField
-					label="New password"
+					label={t("auth.fields.newPassword")}
 					name="password"
 					autoComplete="new-password"
 					value={form.data.password}
@@ -40,7 +42,7 @@ export default function ResetPassword({ token, email }: { token: string; email: 
 					advice={passwordAdvice(form.data.password)}
 				/>
 				<PasswordField
-					label="Confirm password"
+					label={t("auth.fields.confirmPassword")}
 					name="password_confirmation"
 					autoComplete="new-password"
 					value={form.data.password_confirmation}
@@ -53,7 +55,7 @@ export default function ResetPassword({ token, email }: { token: string; email: 
 					disabled={form.processing}
 					className="rounded-md bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
 				>
-					Reset password
+					{t("auth.reset.submit")}
 				</button>
 			</form>
 		</>

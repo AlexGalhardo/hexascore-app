@@ -175,11 +175,12 @@
       "nickname": "Nickname",
       "name": "Nombre",
       "show": "Mostrar contraseña",
-      "hide": "Ocultar contraseña"
+      "hide": "Ocultar contraseña",
+      "confirmPassword": "Confirmar contraseña"
     },
     "rules": {
       "title": "Tu contraseña debe tener:",
-      "length": "De 8 a 32 caracteres",
+      "length": "De 8 a 128 caracteres",
       "uppercase": "Una letra mayúscula",
       "lowercase": "Una letra minúscula",
       "number": "Un número",
@@ -199,7 +200,7 @@
       "locked": "Demasiados códigos incorrectos. Inténtalo más tarde.",
       "weakPassword": "La contraseña no cumple los requisitos.",
       "bot": "Tu solicitud fue bloqueada. Recarga la página y vuelve a intentarlo.",
-      "invalidNickname": "4–16 caracteres: letras, números y guion bajo.",
+      "invalidNickname": "De 4 a 16 letras minúsculas, sin números ni símbolos.",
       "invalidEmail": "Introduce un correo válido.",
       "invalidName": "Introduce tu nombre.",
       "invalidToken": "Este enlace no es válido o ha caducado."
@@ -220,7 +221,9 @@
       "useBackup": "Usar un código de respaldo",
       "useTotp": "Usar la app de autenticación",
       "trustDevice": "Confiar en este dispositivo durante 30 días",
-      "verify": "Verificar"
+      "verify": "Verificar",
+      "rememberMe": "Recordarme",
+      "backupCode": "Código de respaldo"
     },
     "signup": {
       "metaTitle": "Crear cuenta",
@@ -231,7 +234,9 @@
       "nicknameHint": "4–16 letras minúsculas, sin números, espacios ni símbolos. Es tu nombre público, único y no se puede cambiar después.",
       "checkTitle": "Revisa tu correo",
       "checkBody": "Enviamos un enlace de confirmación a {email}. Ábrelo para activar tu cuenta.",
-      "agree": "Al crear la cuenta aceptas los <terms>Términos</terms> y la <privacy>Política de privacidad</privacy>."
+      "agree": "Al crear la cuenta aceptas los <terms>Términos</terms> y la <privacy>Política de privacidad</privacy>.",
+      "checkNotice": "Si la dirección puede usarse, le enviamos un enlace para verificarla. Si ya tiene una cuenta, enviamos un enlace para iniciar sesión o restablecer la contraseña.",
+      "goLogin": "Ir a la página de inicio de sesión"
     },
     "verify": {
       "metaTitle": "Verificar correo",
@@ -242,7 +247,8 @@
       "invalid": "Este enlace de confirmación no es válido o ha caducado. Pide uno nuevo abajo.",
       "pending": "Abre el enlace que enviamos a tu bandeja de entrada. ¿No lo recibiste? Pide uno nuevo.",
       "resend": "Enviar un enlace nuevo",
-      "resent": "Si la cuenta existe y aún no está verificada, un enlace nuevo está en camino."
+      "resent": "Si la cuenta existe y aún no está verificada, un enlace nuevo está en camino.",
+      "sentTo": "Enviamos un enlace a {email}. Ábrelo para verificar tu dirección."
     },
     "recover": {
       "metaTitle": "Recuperar contraseña",
@@ -273,6 +279,12 @@
         "body": "Alguien pidió restablecer la contraseña de esta cuenta. Si no fuiste tú, ignora este correo.",
         "action": "Restablecer contraseña"
       }
+    },
+    "onboarding": {
+      "metaTitle": "Elige tu nickname",
+      "title": "Elige tu nickname",
+      "body": "Tu nickname es tu nombre público en HexaScore. Es único y no se puede cambiar después.",
+      "submit": "Guardar nickname"
     }
   },
   "billing": {

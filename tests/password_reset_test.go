@@ -52,7 +52,7 @@ func TestPasswordResetAnswersAlike(t *testing.T) {
 		c := app.Client(t).Inertia("")
 		c.PostJSON("/recover-password", map[string]any{"email": tc.email}).AssertRedirect("/recover-password")
 
-		page := c.Get("/recover-password").AssertInertia("Auth/ForgotPassword").Page()
+		page := c.Get("/recover-password").AssertInertia("Auth/Recover").Page()
 		flashes = append(flashes, fmt.Sprint(page["flash"]))
 
 		if got := mailJobs() - queuedBefore; got != tc.jobs {

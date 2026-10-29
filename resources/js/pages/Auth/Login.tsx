@@ -3,8 +3,10 @@ import type { FormEvent } from "react";
 
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
+import { useT } from "../../lib/useT";
 
 export default function Login() {
+	const t = useT();
 	const form = useForm({ email: "", password: "", remember: false });
 
 	const submit = (e: FormEvent) => {
@@ -14,11 +16,11 @@ export default function Login() {
 
 	return (
 		<>
-			<Head title="Log in" />
-			<h1 className="mb-4 text-2xl font-semibold">Log in</h1>
+			<Head title={t("auth.login.metaTitle")} />
+			<h1 className="mb-4 text-2xl font-semibold">{t("auth.login.title")}</h1>
 			<form onSubmit={submit} className="space-y-4">
 				<Field
-					label="Email"
+					label={t("auth.fields.email")}
 					type="email"
 					autoComplete="username"
 					required
@@ -29,7 +31,7 @@ export default function Login() {
 				{/* No rule checklist here: logging in must not advertise the policy,
             and an existing password may predate the current rules. */}
 				<PasswordField
-					label="Password"
+					label={t("auth.fields.password")}
 					name="password"
 					autoComplete="current-password"
 					value={form.data.password}
@@ -42,14 +44,14 @@ export default function Login() {
 						checked={form.data.remember}
 						onChange={(e) => form.setData("remember", e.target.checked)}
 					/>
-					Remember me
+					{t("auth.login.rememberMe")}
 				</label>
 				<button
 					type="submit"
 					disabled={form.processing}
 					className="rounded-md bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
 				>
-					Log in
+					{t("auth.login.submit")}
 				</button>
 			</form>
 			<p className="mt-6 flex gap-4 text-sm">
@@ -57,13 +59,13 @@ export default function Login() {
 					href="/recover-password"
 					className="text-indigo-600 hover:underline dark:text-indigo-400"
 				>
-					Forgot your password?
+					{t("auth.login.forgot")}
 				</Link>
 				<Link
 					href="/signup"
 					className="text-indigo-600 hover:underline dark:text-indigo-400"
 				>
-					Create an account
+					{t("auth.login.createAccount")}
 				</Link>
 			</p>
 		</>

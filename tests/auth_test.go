@@ -191,7 +191,7 @@ func TestUnverifiedUsersSeeTheNotice(t *testing.T) {
 	c.PostJSON("/login", map[string]any{"email": "uma@example.com", "password": testPassword}).
 		AssertRedirect("/dashboard")
 	c.Get("/dashboard").AssertRedirect("/verify-email")
-	c.Get("/verify-email").AssertInertia("Auth/VerifyEmail").PropEquals("auth.user.email", "uma@example.com")
+	c.Get("/verify-email").AssertInertia("Auth/VerifyNotice").PropEquals("auth.user.email", "uma@example.com")
 
 	c.Get(link(t, app, "uma@example.com")).AssertRedirect("/dashboard")
 	c.Get("/dashboard").AssertInertia("Dashboard").PropEquals("auth.user.name", "Uma")
@@ -297,7 +297,7 @@ func TestSecurity_A07_ProvingTheEmailEndsSquatterAccess(t *testing.T) {
 		AssertRedirect("/signup/check-email")
 	squatter.PostJSON("/login", map[string]any{"email": "vic@example.com", "password": testPassword, "remember": true}).
 		AssertRedirect("/dashboard")
-	squatter.Get("/verify-email").AssertInertia("Auth/VerifyEmail")
+	squatter.Get("/verify-email").AssertInertia("Auth/VerifyNotice")
 
 	userID := apiTokenFor(t, app, "vic@example.com")
 	vukemtest.AssertDatabaseHas(t, app, "remember_tokens", map[string]any{"user_id": userID})
@@ -307,7 +307,7 @@ func TestSecurity_A07_ProvingTheEmailEndsSquatterAccess(t *testing.T) {
 	// The mailbox owner, signed out, only reaches the login page.
 	app.Client(t).Inertia("").Get(verify).AssertRedirect("/login")
 	vukemtest.AssertDatabaseHas(t, app, "users", map[string]any{"email": "vic@example.com", "email_verified_at": nil})
-	squatter.Get("/verify-email").AssertInertia("Auth/VerifyEmail")
+	squatter.Get("/verify-email").AssertInertia("Auth/VerifyNotice")
 
 	// Signed in as the account, the link verifies it and ends the rest.
 	device := app.Client(t).Inertia("")
@@ -368,7 +368,7 @@ func TestExpiredVerificationLinkOffersANewOne(t *testing.T) {
 	c.PostJSON("/login", map[string]any{"email": "exp@example.com", "password": testPassword}).
 		AssertRedirect(expired)
 	c.Get(expired).AssertRedirect("/verify-email")
-	flash := fmt.Sprint(c.Get("/verify-email").AssertInertia("Auth/VerifyEmail").Page()["flash"])
+	flash := fmt.Sprint(c.Get("/verify-email").AssertInertia("Auth/VerifyNotice").Page()["flash"])
 	if !strings.Contains(flash, "expired") {
 		t.Errorf("flash = %q, want the expired-link notice", flash)
 	}
@@ -468,7 +468,7 @@ func TestPasswordReset(t *testing.T) {
 	}
 
 	c.PostJSON("/recover-password", map[string]any{"email": "cid@example.com"}).AssertRedirect("/recover-password")
-	c.Get("/recover-password").AssertInertia("Auth/ForgotPassword")
+	c.Get("/recover-password").AssertInertia("Auth/Recover")
 
 	reset := link(t, app, "cid@example.com")
 	if !strings.HasPrefix(reset, "/reset-password/") {
@@ -478,7 +478,7 @@ func TestPasswordReset(t *testing.T) {
 	u, _ := url.Parse(reset)
 	token := strings.TrimPrefix(u.Path, "/reset-password/")
 
-	c.Get(reset).AssertOK().AssertInertia("Auth/ResetPassword").PropEquals("token", token)
+	c.Get(reset).AssertOK().AssertInertia("Auth/Reset").PropEquals("token", token)
 
 	form := map[string]any{
 		"token": token, "email": "cid@example.com",
