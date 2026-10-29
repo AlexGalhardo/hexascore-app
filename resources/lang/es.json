@@ -497,7 +497,10 @@
     "pricing": "Precios",
     "language": "Idioma",
     "openSearch": "Abrir búsqueda",
-    "menu": "Menú"
+    "menu": "Menú",
+    "skip": "Ir al contenido",
+    "dismiss": "Descartar",
+    "home": "Inicio"
   },
   "home": {
     "title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
@@ -506,7 +509,8 @@
   "footer": {
     "terms": "Términos",
     "privacy": "Privacidad",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "rights": "Todos los derechos reservados."
   },
   "cookies": {
     "text": "Solo usamos cookies esenciales (sesión y preferencias). Los videos de YouTube solo se cargan si lo permites.",

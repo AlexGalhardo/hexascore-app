@@ -1,17 +1,20 @@
 package routes
 
 import (
-	"net/http"
+	"cmp"
+	"strings"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/i18n"
 	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/middleware"
 	"github.com/AlexGalhardo/vukem/router"
+	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
+	"github.com/AlexGalhardo/hexascore-app/app/seo"
 	"github.com/AlexGalhardo/hexascore-app/resources"
 )
 
@@ -86,11 +89,18 @@ func Web(r *router.Router, app *vukem.App) error {
 			"search.",
 			"social.",
 		),
-		shareProps(app),
+		appmiddleware.ShareProps(appmiddleware.ShareConfig{
+			AppName: app.Config.Name,
+			SEO:     seoConfig(app),
+			User:    func(c *web.Ctx) (any, error) { return acc.Web.User(c) },
+		}),
 		appmiddleware.NotBanned(acc.Web.User, acc.ProblemBase, app.Now),
 	)
 
 	r.Get("/", controllers.Home).Name("home")
+	// Least specific pattern: unmatched GET pages render the Error page with
+	// the shell, since vukem's own hook only covers Inertia visits.
+	r.Get("/{path...}", controllers.NotFound).Name("not-found")
 
 	// catalog_* tables exist only on Postgres (VF-033).
 	if db.Dialect().Name() == "postgres" {
@@ -101,18 +111,11 @@ func Web(r *router.Router, app *vukem.App) error {
 	return nil
 }
 
-// shareProps adds the props every page receives (usePage().props).
-func shareProps(app *vukem.App) func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			inertia.Share(r.Context(), "appName", app.Config.Name)
-
-			// The root view reads it as .Page.Props.theme (VF-028: custom view
-			// funcs are not request-bound), so only known values pass.
-			if c, err := r.Cookie("theme"); err == nil && (c.Value == "dark" || c.Value == "light") {
-				inertia.Share(r.Context(), "theme", c.Value)
-			}
-			next.ServeHTTP(w, r)
-		})
+// seoConfig derives canonical and hreflang URLs from APP_URL and the locale
+// prefixes LocalePrefix serves (SDD 09 §7.1, §7.7).
+func seoConfig(app *vukem.App) seo.Config {
+	return seo.Config{
+		BaseURL: strings.TrimRight(cmp.Or(app.Source.Get("APP_URL"), "https://hexascore.app"), "/"),
+		Locales: []seo.Locale{{Code: "en"}, {Code: "pt-BR", Prefix: "/pt-br"}, {Code: "es", Prefix: "/es"}},
 	}
 }
