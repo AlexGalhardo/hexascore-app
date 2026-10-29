@@ -35,7 +35,7 @@ var catalogSections = map[string]catalogSection{
 // the live slug (SDD 01 §7.1). A live slug can never also be a redirect
 // (invariant I-1), so one indexed lookup in catalog_redirects is enough and
 // misses fall through to routing and its 404. Install it with Router.UseServer
-// right after LocalePrefix: it sees the stripped path and keeps the prefix.
+// right after LocaleCookieRedirect: it sees the stripped path, and that middleware puts the visitor's prefix back on the Location.
 // A failed lookup is logged and the request continues: a redirect is a
 // convenience, not an access check.
 func CatalogRedirect(ex database.Executor, log *slog.Logger) func(http.Handler) http.Handler {
@@ -48,16 +48,7 @@ func CatalogRedirect(ex database.Executor, log *slog.Logger) func(http.Handler) 
 				return
 			}
 
-			// The stripped request carries LocalePrefix's reserved query; the visitor's own is the original.
-			query := r.URL.RawQuery
-			prefix := ""
-
-			if orig, ok := r.Context().Value(originalURLKey{}).(*url.URL); ok {
-				query = orig.RawQuery
-				prefix = strings.ToLower(strings.TrimSuffix(orig.Path, r.URL.Path))
-			}
-
-			loc := url.URL{Path: prefix + path, RawQuery: query}
+			loc := url.URL{Path: path, RawQuery: r.URL.RawQuery}
 			http.Redirect(w, r, loc.String(), http.StatusMovedPermanently)
 		})
 	}

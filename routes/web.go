@@ -24,19 +24,18 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/resources"
 )
 
-// localeQuery is the reserved parameter LocalePrefix hands to i18n.Middleware.
-const localeQuery = "_locale"
+// localePrefixes maps the URL prefixes to locales (SDD 09 §7.1).
+var localePrefixes = map[string]string{"pt-br": "pt-BR", "es": "es"}
 
 // Web registers the browser routes. vukem route:list shows them.
 func Web(r *router.Router, app *vukem.App) error {
-	// workaround(vukem): VF-024. The URL prefix is the only locale source
-	// i18n.Middleware reads; the locale cookie only drives the redirect (SDD 09 §7.1).
+	// The URL prefix is the only locale source; the locale cookie only drives the redirect (SDD 09 §7.1).
 	err := vukem.DefaultMiddlewareWith(app, r, vukem.MiddlewareOptions{
 		SecureHeaders: appmiddleware.SecureHeaders(app.Config.IsProduction()),
 		I18n: &i18n.MiddlewareConfig{
-			Query:   localeQuery,
-			Order:   []i18n.Source{i18n.SourceQuery},
-			Locales: []string{"en", "pt-BR", "es"},
+			Order:        []i18n.Source{i18n.SourcePath},
+			Locales:      []string{"en", "pt-BR", "es"},
+			PathPrefixes: localePrefixes,
 		},
 	})
 	if err != nil {
@@ -45,9 +44,8 @@ func Web(r *router.Router, app *vukem.App) error {
 
 	r.UseServer(appmiddleware.CrossOriginResourcePolicy("same-site"))
 	r.UseServer(middleware.StaticFS(resources.Public(), middleware.StaticConfig{Prefix: "/"}))
-	r.UseServer(appmiddleware.LocalePrefix(appmiddleware.LocalePrefixConfig{
-		Prefixes: map[string]string{"pt-br": "pt-BR", "es": "es"},
-		Query:    localeQuery,
+	r.UseServer(appmiddleware.LocaleCookieRedirect(appmiddleware.LocalePrefixConfig{
+		Prefixes: localePrefixes,
 		Cookie:   "locale",
 	}))
 
@@ -68,7 +66,6 @@ func Web(r *router.Router, app *vukem.App) error {
 	// Only the app catalogue namespaces reach the browser, never framework
 	// messages or future server-only keys (SDD 09 §6.1).
 	r.Use(
-		appmiddleware.RestoreURL,
 		app.Inertia.Middleware,
 		inertia.I18n(
 			"account.",
@@ -186,7 +183,7 @@ func Web(r *router.Router, app *vukem.App) error {
 }
 
 // seoConfig derives canonical and hreflang URLs from APP_URL and the locale
-// prefixes LocalePrefix serves (SDD 09 §7.1, §7.7).
+// prefixes localePrefixes serves (SDD 09 §7.1, §7.7).
 func seoConfig(app *vukem.App) seo.Config {
 	return seo.Config{
 		BaseURL: strings.TrimRight(cmp.Or(app.Source.Get("APP_URL"), "https://hexascore.app"), "/"),

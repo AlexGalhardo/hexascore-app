@@ -2,68 +2,51 @@
 package middleware
 
 import (
-	"context"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/AlexGalhardo/vukem/i18n"
 )
 
-type originalURLKey struct{}
-
-// LocalePrefixConfig configures LocalePrefix.
+// LocalePrefixConfig configures LocaleCookieRedirect.
 type LocalePrefixConfig struct {
-	// Prefixes maps a lower-case first path segment to a locale, for
-	// example {"pt-br": "pt-BR"}. The default locale has no prefix.
+	// Prefixes maps a first path segment to a locale, as in
+	// i18n.MiddlewareConfig.PathPrefixes ({"pt-br": "pt-BR"}).
 	Prefixes map[string]string
-	// Query is the reserved query parameter handed to i18n.Middleware
-	// (MiddlewareConfig.Query). A client-supplied value is always dropped.
-	Query string
 	// Cookie names the cookie holding a visitor's preferred locale.
 	Cookie string
 }
 
-// LocalePrefix is the workaround(vukem) VF-024, to drop when v0.33.0 ships
-// i18n.PathPrefixes: vukem's i18n.Middleware has no
-// path-prefix source. Install it with Router.UseServer, so it runs before
-// routing and before i18n.Middleware: it strips "/pt-br" from the path and
-// passes the locale as cfg.Query, which i18n.Middleware reads
-// (Order: SourceQuery). A GET/HEAD without a prefix from a visitor whose
-// cookie names a prefixed locale gets a 307 to the prefixed URL.
-func LocalePrefix(cfg LocalePrefixConfig) func(http.Handler) http.Handler {
+// LocaleCookieRedirect sends a GET/HEAD page navigation without a locale
+// prefix from a visitor whose cookie names a prefixed locale to the prefixed
+// URL with a 307 (SDD 09 §7.1); vukem has no cookie-driven redirect. It also
+// puts the visitor's prefix on same-site redirect targets so a form post does
+// not drop the locale. Install it with Router.UseServer after
+// i18n.StripPathPrefix (vukem.DefaultMiddlewareWith).
+func LocaleCookieRedirect(cfg LocalePrefixConfig) func(http.Handler) http.Handler {
 	byLocale := make(map[string]string, len(cfg.Prefixes))
 	for prefix, locale := range cfg.Prefixes {
-		byLocale[locale] = prefix
+		byLocale[locale] = "/" + prefix
 	}
 
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			q := r.URL.Query()
-			q.Del(cfg.Query)
-
-			first, rest, _ := strings.Cut(strings.TrimPrefix(r.URL.Path, "/"), "/")
-			if locale, ok := cfg.Prefixes[strings.ToLower(first)]; ok {
-				q.Set(cfg.Query, locale)
-
-				r2 := r.Clone(context.WithValue(r.Context(), originalURLKey{}, r.URL))
-				r2.URL.Path = "/" + rest
-				r2.URL.RawPath = ""
-				r2.URL.RawQuery = q.Encode()
-				next.ServeHTTP(w, r2)
+			if i18n.PathPrefix(r.Context()) != "" {
+				next.ServeHTTP(&localizedRedirects{ResponseWriter: w, r: r, prefixes: cfg.Prefixes}, r)
 
 				return
 			}
 
 			if prefix, ok := redirectPrefix(r, cfg, byLocale); ok {
-				target := url.URL{Path: "/" + prefix + r.URL.Path, RawQuery: r.URL.RawQuery}
+				target := url.URL{Path: prefix + r.URL.Path, RawQuery: r.URL.RawQuery}
 				w.Header().Add("Vary", "Cookie")
 				http.Redirect(w, r, target.String(), http.StatusTemporaryRedirect)
 
 				return
 			}
 
-			r2 := r.Clone(r.Context())
-			r2.URL.RawQuery = q.Encode()
-			next.ServeHTTP(w, r2)
+			next.ServeHTTP(w, r)
 		})
 	}
 }
@@ -91,18 +74,39 @@ func redirectPrefix(r *http.Request, cfg LocalePrefixConfig, byLocale map[string
 	return prefix, ok
 }
 
-// RestoreURL puts the original, prefixed URL back on the request after
-// routing, so Inertia's page object url and redirects keep the prefix.
-// Install it first in Router.Use (route-level), before the Inertia
-// middleware; without a stripped prefix it does nothing.
-func RestoreURL(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if u, ok := r.Context().Value(originalURLKey{}).(*url.URL); ok {
-			r2 := r.Clone(r.Context())
-			*r2.URL = *u
-			r = r2
-		}
+// localizedRedirects prefixes the Location of a redirect to an absolute
+// in-site page path when the request came under a locale prefix.
+type localizedRedirects struct {
+	http.ResponseWriter
+	r        *http.Request
+	prefixes map[string]string
+}
 
-		next.ServeHTTP(w, r)
-	})
+func (l *localizedRedirects) WriteHeader(code int) {
+	if code >= 300 && code < 400 {
+		h := l.Header()
+		if loc := h.Get(
+			"Location",
+		); strings.HasPrefix(loc, "/") && !strings.HasPrefix(loc, "//") &&
+			l.localizable(loc) {
+			h.Set("Location", i18n.LocalizePath(l.r.Context(), loc))
+		}
+	}
+
+	l.ResponseWriter.WriteHeader(code)
+}
+
+func (l *localizedRedirects) Unwrap() http.ResponseWriter { return l.ResponseWriter }
+
+// localizable skips targets that already carry a locale prefix: web.Ctx.Back
+// returns the prefixed Referer path, and a locale switch targets another prefix.
+func (l *localizedRedirects) localizable(loc string) bool {
+	seg, _, _ := strings.Cut(strings.TrimPrefix(loc, "/"), "/")
+	seg, _, _ = strings.Cut(seg, "?")
+
+	if _, prefixed := l.prefixes[seg]; prefixed {
+		return false
+	}
+
+	return loc != "/up" && !strings.HasPrefix(loc, "/api/") && !strings.HasPrefix(loc, "/build/")
 }
