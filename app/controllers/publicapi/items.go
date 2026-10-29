@@ -23,6 +23,7 @@ import (
 	hxapi "github.com/AlexGalhardo/hexascore-app/app/api"
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/internal/search"
 )
 
 // Score provenance: HexaScore aggregates reach customers under the API terms (A-07).
@@ -50,6 +51,7 @@ type Controller struct {
 	Codec  *catalog.CursorCodec
 	Meter  *hxapi.Meter
 	Plans  hxapi.PlanResolver
+	Search search.Searcher
 	// Redirects resolves merged item ids (catalog.ResolveID needs a database.Executor).
 	Redirects func(ctx context.Context, typ, id string) (catalog.Target, bool, error)
 }
