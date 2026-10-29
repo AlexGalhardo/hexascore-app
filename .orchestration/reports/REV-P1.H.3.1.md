@@ -1,0 +1,8 @@
+# REV-P1.H.3.1 (rodada 0)
+VERDICT: CORRIGIDO_E_APROVADO (merge still blocked by Q-H31: Stripe vars on Railway — human gate)
+Branch: agent/especialista/P1.H.3.1-fix (from agent/senior/P1.H.3.1, commit d7d182e). Files: app/billing/canceller.go, tests/plan_state_test.go.
+Fix: CancelLive (account deletion) selected by local state active/past_due; a row retired locally by a newer subscription (state canceled, Stripe status active) was never cancelled -> deleted account kept being billed. Now filters on Stripe status != canceled/incomplete_expired. TestCancelLiveOnDeletion extended (fails before: "cancels = [sub_1 ...]; want sub_1 and sub_old").
+Checked OK: contrib/stripe v0.4.1 approved by ADR 0015 and latest stable; webhook signature (forged 400), event dedupe, re-read via GetSubscription (order-safe), unknown price -> free (fail closed), checkout plan/currency from server catalogue only, linkCustomer never moves another user's customer, .env.example has no secrets, boot check not weakened.
+Re-run: go test -count=1 ./tests -run 'TestStripeWebhook|TestBilling|TestPlan|TestLegacy|TestCancel|TestDeletion' -> 14 PASS, ok; -tags integration same -> ok; go test -tags integration ./... -> no failures; golangci-lint 0 issues; bun lint ok, typecheck 0 errors, bun test 50 passed.
+Risks/new: double Stripe subscription (two Checkout tabs) -> local flip-flop and double billing -> queue/senior/2-P1.H.3.1b.md (needs owner decision). No rate limit on POST /billing/checkout (Stripe calls per click; low). PlanResolver one query/request (as reported).
+PRONTO_PARA_MERGE agent/especialista/P1.H.3.1-fix (after Q-H31)
