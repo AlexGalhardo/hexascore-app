@@ -303,9 +303,14 @@ WHERE s.user_id = $1::bigint`,
 FROM time_to_beat b JOIN items i ON i.id = b.item_id ` + exportTitleJn + `
 WHERE b.user_id = $1::bigint`,
 	},
-	// shortcut: user_item_editions (SDD 14 §5) and edit suggestions (SDD 04) have no tables yet; fill these
-	// when they land so the ZIP keeps its 12 files.
-	{"editions", `SELECT '[]'::json WHERE $1::bigint IS NOT NULL AND $2::text IS NOT NULL`},
+	{
+		"editions",
+		`SELECT coalesce(json_agg(json_build_object('itemId', i.id, 'editionId', e.id, 'isbn13', e.isbn13,
+  'title', e.title, 'updatedAt', ue.updated_at) ORDER BY ue.updated_at), '[]')
+FROM user_item_editions ue JOIN items i ON i.id = ue.item_id JOIN editions e ON e.id = ue.edition_id
+WHERE ue.user_id = $1::bigint AND $2::text IS NOT NULL`,
+	},
+	// shortcut: edit suggestions (SDD 04) have no table yet; fill this when it lands so the ZIP keeps its 12 files.
 	{"suggestions", `SELECT '[]'::json WHERE $1::bigint IS NOT NULL AND $2::text IS NOT NULL`},
 	{"lists", `SELECT coalesce(json_agg(json_build_object('id', l.id, 'type', l.type, 'title', l.title,
   'description', l.description, 'isPublic', l.is_public, 'hidden', l.hidden,
