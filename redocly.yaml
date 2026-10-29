@@ -1,7 +1,7 @@
 extends:
   - recommended
 
-# vukem openapi.Info has no license field, so no document can carry one (VF-NEW-P1.H.4.1b).
+# vukem openapi.Info has no license field, so no document can carry one (VF-053).
 rules:
   info-license: off
 
@@ -11,7 +11,7 @@ apis:
   app@v1:
     root: openapi/app-v1.json
     # Session-cookie web routes are plain (untyped) routes: vukem emits no security requirement,
-    # no 4XX response and an unused Problem/ValidationError component for them (VF-NEW-P1.H.4.1b).
+    # no 4XX response and an unused Problem/ValidationError component for them (VF-053).
     rules:
       security-defined: off
       operation-4xx-response: off

@@ -61,7 +61,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-050 | 2026-10-29 | low | open |
 | VF-051 | 2026-10-29 | medium | in_progress (framework), PR #36 green, merge pending (owner) |
 | VF-052 | 2026-10-29 | high | open |
-| VF-NEW-P1.H.4.1b | 2026-10-29 | low | open |
+| VF-053 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -515,7 +515,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
   - Security: helpers for WAF-friendly headers, a CSP report endpoint compatible with Cloudflare Page Shield reports, and Cloudflare Access JWT validation (`Cf-Access-Jwt-Assertion`) for admin routes.
   - `TestSecurity_*` coverage: spoofed `CF-Connecting-IP` from a non-Cloudflare peer ignored, Turnstile replay/hostname mismatch rejected, Turnstile outage fails closed, Access JWT with wrong audience/expired rejected.
 
-## VF-NEW-P1.H.4.1b: OpenAPI export cannot carry a license, and plain routes carry no security, 4XX response or used Problem components
+## VF-053: OpenAPI export cannot carry a license, and plain routes carry no security, 4XX response or used Problem components
 
 - **Date**: 2026-10-29. **Severity**: low. **Status**: open.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/openapi` `[NOT IN VUKEM DOCS]`: `openapi.Info` fields beyond title, version, description, servers, `SecuritySchemes`.
