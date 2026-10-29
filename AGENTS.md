@@ -55,7 +55,7 @@ This file is the single source of truth for agent behaviour. `CLAUDE.md` only po
 | `vukem openapi:export` | regenerate the OpenAPI documents (diff checked in CI) |
 | `bun run e2e` | Playwright + axe against a built container |
 | `docker compose up -d --wait` | local Postgres 18.6 (127.0.0.1:5433) and RustFS (127.0.0.1:9000/9001), both healthy |
-| `setups/setup-windows.ps1` | idempotent Windows setup: tools, `core.hooksPath .githooks` (commit-msg Conventional Commits check), `.env`, `APP_KEY`, compose stack, `bun install`, `vukem migrate` |
+| `setups/setup-windows.ps1 [-NoServices]` | idempotent Windows setup: tools, `core.hooksPath .githooks` (commit-msg Conventional Commits check), `.env`, `APP_KEY`, compose stack, `bun install`, `vukem migrate`; `-NoServices` skips compose and migrate (CI Windows job) |
 | push to `main` | Railway service `app` (source `AlexGalhardo/hexascore-app`, branch `main`) builds and deploys automatically; `.github/workflows/ci.yml` reports regressions after the fact |
 | `railway up --service app --detach` | manual deploy of the working tree to Railway project `hexascore`, environment `production` (<https://app-production-785f.up.railway.app>; healthcheck `/up`, pre-deploy `/app/app migrate`) |
 | `./app admin:grant <email>` / `admin:revoke <email>` / `user:reset-2fa <email> --reason "<text>"` | role changes and manual 2FA reset (account_events with actor NULL, `data.cli=true`); admins are users with `role = admin`, not `ADMIN_EMAILS` |

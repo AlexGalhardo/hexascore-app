@@ -1,4 +1,7 @@
 # Idempotent local setup: tools, .env, APP_KEY, local stack, JS deps, migrations.
+# -NoServices skips the Docker stack and migrations (CI Windows runners have
+# no Linux containers); everything else still runs.
+param([switch]$NoServices)
 $ErrorActionPreference = 'Stop'
 
 Set-Location (Join-Path $PSScriptRoot '..')
@@ -10,7 +13,9 @@ function Invoke-Checked([string]$Command, [string[]]$Arguments) {
 	}
 }
 
-foreach ($tool in 'go', 'bun', 'docker', 'vukem') {
+$tools = @('go', 'bun', 'vukem')
+if (-not $NoServices) { $tools += 'docker' }
+foreach ($tool in $tools) {
 	if (-not (Get-Command $tool -ErrorAction SilentlyContinue)) {
 		throw "setup: missing tool: $tool"
 	}
@@ -47,6 +52,10 @@ if ((Get-GolangciLintVersion) -ne $golangciLintVersion) {
 	throw "setup: golangci-lint is not $golangciLintVersion; make sure $(go env GOPATH)\bin is on PATH"
 }
 
-Invoke-Checked 'docker' @('compose', 'up', '-d', '--wait')
+if (-not $NoServices) {
+	Invoke-Checked 'docker' @('compose', 'up', '-d', '--wait')
+}
 Invoke-Checked 'bun' @('install', '--frozen-lockfile')
-Invoke-Checked 'vukem' @('migrate')
+if (-not $NoServices) {
+	Invoke-Checked 'vukem' @('migrate')
+}

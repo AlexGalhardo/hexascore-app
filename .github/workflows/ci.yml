@@ -107,7 +107,9 @@ jobs:
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version-file: package.json
-      - run: .\setups\setup-windows.ps1
+      - name: Install the vukem CLI (version from go.mod)
+        run: go install "github.com/AlexGalhardo/vukem/cmd/vukem@$((go list -m -f '{{.Version}}' github.com/AlexGalhardo/vukem))"
+      - run: .\setups\setup-windows.ps1 -NoServices
       - run: go test -count=1 ./...
 
   build:
