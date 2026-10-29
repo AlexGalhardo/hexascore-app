@@ -4,6 +4,7 @@ package tests
 
 import (
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 	"testing"
@@ -95,10 +96,14 @@ func TestAPILicenceFilter(t *testing.T) {
 
 	res := r.client.GetJSON("/api/v1/games/" + r.game).AssertOK().AssertMatchesOpenAPI()
 	body := res.Body()
-	for _, leak := range []string{"tmdb", "igdb", "999", "1234", "TMDB overview", "Metroidvania", "metroidvania"} {
+	for _, leak := range []string{"tmdb", "igdb", "TMDB overview", "Metroidvania", "metroidvania"} {
 		if strings.Contains(body, leak) {
 			t.Errorf("api body leaks %q: %s", leak, body)
 		}
+	}
+	// The TMDB/IGDB ids only count as a leak as whole JSON values: random UUIDs may contain "1234".
+	if m := regexp.MustCompile(`[:\[,]\s*"?(999|1234)"?\s*[,}\]]`).FindString(body); m != "" {
+		t.Errorf("api body leaks a TMDB/IGDB id (%s): %s", m, body)
 	}
 	res.AssertJSONPath("title", "Hollow Knight").
 		AssertJSONPath("releaseDate", "2017-02-24").
