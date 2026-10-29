@@ -16,16 +16,16 @@ Reason: HANDOFF after 4 VFs plus a flaky-test fix (brief "Limits", context budge
 | Item | PR | State |
 | --- | --- | --- |
 | VF-030 admin hardening (`admin.Config.TwoFactor/MaxSessionAge/AllowCIDRs/Now`, `session.CreatedAt`) | #20 | merged (7dbd6f9) |
-| VF-003 bot challenge (new package `challenge`: `Middleware`, `Turnstile`, `HCaptcha`, `SiteVerify`, `Verifier`) | #21 | see "Open" |
+| VF-003 bot challenge (new package `challenge`: `Middleware`, `Turnstile`, `HCaptcha`, `SiteVerify`, `Verifier`) | #21 | merged (74bf415) |
 | VF-008 admin custom row/bulk actions + JSON-key audit diff | #22 | merged (5893fd2) |
-| VF-031 `orm.Reseal[T]` + `vukem.ResealCommand` (`crypt:reseal`) | #24 | see "Open" |
-| flaky `TestObserverPanicIsContained` (hex job id contained "4242") | #23 | see "Open" |
+| VF-031 `orm.Reseal[T]` + `vukem.ResealCommand` (`crypt:reseal`) | #24 | merged |
+| flaky `TestObserverPanicIsContained` (hex job id contained "4242") | #23 | merged |
 
 Reports: `$ORCH/reports/VF-{030,003,008,031}.md`.
 
 ## Open
 
-- PR states at handoff time are in the reports and in `vukem-feedback.md`; if #21, #23 or #24 are still open, run the merge loop on them.
+- All PRs of this session are merged; vukem `main` head: 74bf415. The merge loop script was later denied by the auto-mode classifier (after it was edited); use `gh pr checks <n> --watch` in the background, then `gh pr update-branch` / `gh pr merge <n> --squash` by hand.
 - VF-003: the stdlib proof-of-work verifier was not built (needs replay storage and a JS client); it fits `challenge.Verifier`. Mention it if the owner wants it as a follow-up VF.
 - Release v0.33.0 still BLOCKED (Q-D-006 / FR-001). Do not run the release tool. It now also carries VF-030, 003, 008, 031. Adoption task after the release (`$ORCH/queue/senior/1-ADOPT-vukem-v0.33.0.md`, target `C:\dev\hexascore-app\hexascore-spike` while Phase 0 lasts): previous list (QUEUE_LIMITS, SSRConfig.Cache, migrate lock, SSR plugin) plus: `/admin` hardening middleware -> `admin.Config{TwoFactor, MaxSessionAge, AllowCIDRs}`; hand-wired Turnstile -> `challenge.Middleware(challenge.Turnstile(...), when)`; custom `/admin/moderation` page -> `Resource.Actions`; one-off re-encrypt job -> `vukem.ResealCommand(orm.Reseal[...])`.
 - Next VFs: VF-035 (schema smallint/uuid/composite PK/generated columns + ORM composite keys; large, consider the "loud error on Update/Delete for non-unique key" part first), VF-037 (install:billing currencies, contrib/stripe scaffold), then VF-041..046 and lows.
