@@ -77,6 +77,7 @@ func TestDemoCatalog(t *testing.T) {
 		`SELECT count(*) FROM items`:                                                    300,
 		`SELECT count(DISTINCT type) FROM items`:                                        4,
 		`SELECT count(*) FROM item_translations`:                                        900,
+		`SELECT count(*) FROM ratings`:                                                  2000,
 		`SELECT count(*) FROM users`:                                                    51,
 		`SELECT count(*) FROM users WHERE role = 'admin'`:                               1,
 		`SELECT count(*) FROM editions`:                                                 75 + 25,

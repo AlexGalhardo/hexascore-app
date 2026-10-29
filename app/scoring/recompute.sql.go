@@ -69,8 +69,13 @@ UPDATE items SET
 FROM k, se
 WHERE items.id = $1`
 
+// Executor runs a statement; *sql.DB and *database.Tx satisfy it.
+type Executor interface {
+	ExecContext(ctx context.Context, query string, args ...any) (sql.Result, error)
+}
+
 // Recompute stores formula v1 for one item, computed in SQL.
-func Recompute(ctx context.Context, db *sql.DB, itemID string, at time.Time, p Params) error {
+func Recompute(ctx context.Context, db Executor, itemID string, at time.Time, p Params) error {
 	prior := fmt.Sprintf("{%g,%g,%g,%g,%g,%g}", p.Prior[0], p.Prior[1], p.Prior[2], p.Prior[3], p.Prior[4], p.Prior[5])
 	if _, err := db.ExecContext(ctx, recomputeSQL, itemID, at, p.M, prior); err != nil {
 		return fmt.Errorf("recompute item %s: %w", itemID, err)
