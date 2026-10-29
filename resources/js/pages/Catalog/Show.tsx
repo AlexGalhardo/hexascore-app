@@ -26,6 +26,7 @@ interface EntityLink {
 	id: string;
 	kind: string;
 	slug: string;
+	code?: string;
 	name: string;
 	character?: string;
 }
@@ -180,7 +181,7 @@ export default function Show({
 											{i > 0 && ", "}
 											<Link
 												href={localized(
-													`/${ENTITY_PATH[e.kind]}/${e.slug}`,
+													`/${ENTITY_PATH[e.kind]}/${e.code ?? e.slug}`,
 													locale,
 												)}
 											>
