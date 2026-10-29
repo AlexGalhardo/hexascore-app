@@ -145,8 +145,13 @@ Living record of the architecture programme (Phase 0 to Phase 4 in `PROMPT.md`).
 - Trending API follows SDD 08 (top 10, 30 days) and depends on P6.C; Google sign-in library for the app is an owner decision with ADR (default `expo-auth-session`); `contrib/engine` is `[NOT IN VUKEM DOCS]` on the site, fallback `exec.CommandContext`.
 - Log user-id hash key is `DeriveKey("log", 32)` in SDD 12 and 13.
 
+### Git (done 2026-10-28, owner request)
+
+- `hexascore-vukem/` initialised and pushed as `main` of `github.com/AlexGalhardo/hexascore-app` on top of the existing history (commit `efcd256` "chore: start the vukem rewrite on main" replaces the Next.js tree; no force-push). Branch `dev` created from it (integration branch, SDD 11 FR-11-8).
+- Remote branches deleted (33): every `chore/*`, `feat/*`, `fix/*`, `perf/*`, `release/*` branch plus `release-please--branches--main--components--hexascore` (tip `552182f`, 2026-10-03, the only one not merged into `main`; bot branch, nothing to keep). Remaining: `main`, `dev`, `legacy`.
+- `.gitignore` excludes `go.work*`, `.orchestration/`, env files and build output.
+
 ### Next step for the owner
 
-1. Initialise `hexascore-vukem/` as a git repository, add the remote `git@github.com:AlexGalhardo/hexascore-app.git`, commit these documents on `main` (the Next.js tree stays on branch `legacy`), create `dev`.
-2. Run the orchestration prompt (`PROMPT-WORKERS.md`) with Claude Opus 5.5; it starts at `P0.F.1.1`.
-3. Owner tasks on the critical path: read and record the Twitch Developer Services Agreement (D-36) and the Open Library licence (A-05); create `privacy@hexascore.app` (D-39); move DNS to Cloudflare before cutover (D-28).
+1. Run the orchestration prompt (`C:\dev\hexascore-app\PROMPT-WORKERS.md`, pure Markdown) with Claude Opus 5.5; it starts at `P0.F.1.1`.
+2. Owner tasks on the critical path: read and record the Twitch Developer Services Agreement (D-36) and the Open Library licence (A-05); create `privacy@hexascore.app` (D-39); move DNS to Cloudflare before cutover (D-28).
