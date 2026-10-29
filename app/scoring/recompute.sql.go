@@ -8,7 +8,7 @@ import (
 )
 
 // recomputeSQL is formula v1 (SDD 02 §7.1) in one statement: $1 item id,
-// $2 compute time, $3 m_t, $4 priors C_{t,1..6} as numeric[]. It must stay
+// $2 compute time, $3 m_t, $4 priors C_{t,1..6} as numeric[], $5 formula version. It must stay
 // equal to Compute and Weight (TestSQLMatchesGo).
 const recomputeSQL = `
 WITH w AS (
@@ -65,6 +65,7 @@ UPDATE items SET
   score_confidence = CASE WHEN k.n < 5 THEN NULL
     WHEN k.n >= 50 AND se.se <= 2.0 THEN 'high'
     WHEN k.n >= 15 AND se.se <= 4.0 THEN 'medium' ELSE 'low' END,
+  score_formula_version = NULLIF($5::int, 0),
   score_computed_at = $2
 FROM k, se
 WHERE items.id = $1`
@@ -77,7 +78,7 @@ type Executor interface {
 // Recompute stores formula v1 for one item, computed in SQL.
 func Recompute(ctx context.Context, db Executor, itemID string, at time.Time, p Params) error {
 	prior := fmt.Sprintf("{%g,%g,%g,%g,%g,%g}", p.Prior[0], p.Prior[1], p.Prior[2], p.Prior[3], p.Prior[4], p.Prior[5])
-	if _, err := db.ExecContext(ctx, recomputeSQL, itemID, at, p.M, prior); err != nil {
+	if _, err := db.ExecContext(ctx, recomputeSQL, itemID, at, p.M, prior, p.Version); err != nil {
 		return fmt.Errorf("recompute item %s: %w", itemID, err)
 	}
 	return nil
