@@ -41,6 +41,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- Backup child processes (`pg_dump`, `pg_restore` for restore and `--list` verify) are covered by tests for their minimal environment (`PG*` plus `PATH`, never the app environment) (FIX-backup-child-path).
 - Public profile and list pages no longer crash on the client: their page-level `seo` prop replaced the shared one (breaking `Seo`'s hreflang list); it is now a top-level `indexable` prop (found by the social e2e spec, P1.I.2.3).
 - Rendered docs code blocks are keyboard focusable (`tabindex="0"` on `<pre>`), fixing axe `scrollable-region-focusable` on the docs pages (P1.I.2.3).
 - Dumps could not be restored: `hs_norm` called `hs_unaccent` unqualified and `pg_restore` runs with an empty `search_path`; migration `20261029210000_qualify_hs_norm_function` qualifies it. Backup child processes now get `PATH`, without which `pg_restore` cannot locate itself (P2.E.3.1).

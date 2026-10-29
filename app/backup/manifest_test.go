@@ -58,3 +58,22 @@ func TestManifestRoundTripAndKey(t *testing.T) {
 		t.Fatal("a missing manifest was read")
 	}
 }
+
+// Child processes get the PG* variables and PATH only: pg_restore locates
+// itself through PATH, and the app environment holds secrets.
+func TestPgEnvIsMinimal(t *testing.T) {
+	t.Setenv("PATH", "/usr/bin")
+	t.Setenv("APP_KEY", "secret")
+
+	env, err := pgEnv("postgres://u:p@db:5433/hx?sslmode=disable")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	want := []string{
+		"PGHOST=db", "PGPORT=5433", "PGUSER=u", "PGPASSWORD=p", "PGDATABASE=hx", "PATH=/usr/bin", "PGSSLMODE=disable",
+	}
+	if !slices.Equal(env, want) {
+		t.Fatalf("env = %q, want %q", env, want)
+	}
+}
