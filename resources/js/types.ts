@@ -29,6 +29,6 @@ export interface SharedProps {
 	errors: Record<string, string>;
 	auth?: { user: User | null };
 	seo?: SeoMeta;
-	notifications?: { unread: number };
+	unreadNotifications?: number;
 	[key: string]: unknown;
 }

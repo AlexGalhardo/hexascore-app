@@ -35,7 +35,7 @@ export function toggleTheme() {
 export default function Nav() {
 	const t = useT();
 	const page = usePage<SharedProps>();
-	const { auth, locale } = page.props;
+	const { auth, locale, unreadNotifications: unread = 0 } = page.props;
 	const user = auth?.user;
 	const here = unlocalized(page.url);
 
@@ -79,6 +79,14 @@ export default function Nav() {
 									{t("nav.admin")}
 								</Link>
 							)}
+							<Link href={localized("/me/notifications", locale)} className={item}>
+								{t("nav.notifications")}
+								{unread > 0 && (
+									<span className="ml-1 text-xs">
+										({unread > 99 ? "99+" : unread})
+									</span>
+								)}
+							</Link>
 							<Link href="/profile" className={item}>
 								{user.name}
 							</Link>
