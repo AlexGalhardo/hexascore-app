@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"strconv"
 	"time"
 
@@ -11,6 +12,7 @@ import (
 	"github.com/AlexGalhardo/vukem/web"
 	"github.com/AlexGalhardo/vukem/z"
 
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
@@ -90,6 +92,19 @@ func (h *Library) PutEdition(c *web.Ctx) error {
 	}
 
 	return c.JSON(200, map[string]any{"itemId": c.Param("id"), "editionId": in.EditionID})
+}
+
+// Editions lists the editions of the book in {id} for the picker.
+func (h *Library) Editions(c *web.Ctx) error {
+	eds, err := catalog.LoadBookEditions(c.Context(), h.db, c.Param("id"))
+	if errors.Is(err, catalog.ErrItemNotFound) {
+		return NotFound(c)
+	}
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(200, map[string]any{"data": eds})
 }
 
 // DeleteEdition forgets the signed-in user's edition of the book in {id}.
