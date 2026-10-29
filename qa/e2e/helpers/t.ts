@@ -9,8 +9,12 @@ function load(locale: string, file?: string): Catalogue {
 	const id = `${locale}/${file ?? ""}`;
 	let catalogue = cache.get(id);
 	if (!catalogue) {
-		const path = file ? `app/accounts/lang/${locale}/${file}.json` : `resources/lang/${locale}.json`;
-		catalogue = JSON.parse(readFileSync(fileURLToPath(new URL(`../../../${path}`, import.meta.url)), "utf8")) as Catalogue;
+		const path = file
+			? `app/accounts/lang/${locale}/${file}.json`
+			: `resources/lang/${locale}.json`;
+		catalogue = JSON.parse(
+			readFileSync(fileURLToPath(new URL(`../../../${path}`, import.meta.url)), "utf8"),
+		) as Catalogue;
 		cache.set(id, catalogue);
 	}
 	return catalogue;
@@ -19,10 +23,13 @@ function load(locale: string, file?: string): Catalogue {
 // Translator over the same catalogues the app ships, so specs assert the visible copy in every locale
 // without duplicating strings. `server.<file>.<key>` reads the Go-side catalogue app/accounts/lang/<locale>/<file>.json
 // (flash messages). `{name}` placeholders are replaced from params; a missing key throws.
-export function translator(locale: string): (key: string, params?: Record<string, string | number>) => string {
+export function translator(
+	locale: string,
+): (key: string, params?: Record<string, string | number>) => string {
 	return (key, params = {}) => {
 		const parts = key.split(".");
-		let node: string | Catalogue | undefined = parts[0] === "server" ? load(locale, parts[1]) : load(locale);
+		let node: string | Catalogue | undefined =
+			parts[0] === "server" ? load(locale, parts[1]) : load(locale);
 		for (const part of parts.slice(parts[0] === "server" ? 2 : 0)) {
 			node = typeof node === "object" ? node[part] : undefined;
 		}

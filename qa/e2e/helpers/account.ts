@@ -14,7 +14,9 @@ export const POW_TIMEOUT = 60_000;
 const LETTERS = "abcdefghijklmnopqrstuvwxyz";
 
 function randomLetters(length: number): string {
-	return Array.from({ length }, () => LETTERS[Math.floor(Math.random() * LETTERS.length)]).join("");
+	return Array.from({ length }, () => LETTERS[Math.floor(Math.random() * LETTERS.length)]).join(
+		"",
+	);
 }
 
 // Nicknames are 4 to 16 lowercase letters, so uniqueness comes from random letters rather than digits.
@@ -33,21 +35,31 @@ export function newAccount(): Account {
 // so wait until the first form carries React props. Pages without a form only need the load event.
 export async function open(page: Page, url: string): Promise<void> {
 	await page.goto(url);
-	await page
-		.waitForFunction(() => {
-			const form = document.querySelector("main form");
-			return !form || Object.keys(form).some((key) => key.startsWith("__reactProps$"));
-		});
+	await page.waitForFunction(() => {
+		const form = document.querySelector("main form");
+		return !form || Object.keys(form).some((key) => key.startsWith("__reactProps$"));
+	});
 }
 
 type Translate = (key: string) => RegExp;
 
-export async function fillSignup(page: Page, prefix: string, t: Translate, account: Account): Promise<void> {
+export async function fillSignup(
+	page: Page,
+	prefix: string,
+	t: Translate,
+	account: Account,
+): Promise<void> {
 	await open(page, `${prefix}/signup`);
 	await page.getByLabel(t("auth.fields.name")).first().fill(account.name);
 	await page.getByLabel(t("auth.fields.email")).fill(account.email);
-	await page.locator("input[name=password]").fill(account.password);
-	await page.locator("input[name=password_confirmation]").fill(account.password);
+	// The password inputs intermittently lose a value filled right after hydration on narrow viewports; retry until it sticks.
+	for (const name of ["password", "password_confirmation"]) {
+		const input = page.locator(`input[name=${name}]`);
+		await expect(async () => {
+			await input.fill(account.password);
+			await expect(input).toHaveValue(account.password, { timeout: 1_000 });
+		}).toPass();
+	}
 }
 
 // Waits for the post to settle (unless a failure is expected) so a following navigation cannot cancel it mid-request.
@@ -59,16 +71,22 @@ export async function logIn(
 	password: string,
 	{ expectFailure = false } = {},
 ): Promise<void> {
-	if (!/\/login$/.test(new URL(page.url(), "http://x").pathname)) await open(page, `${prefix}/login`);
+	if (!/\/login$/.test(new URL(page.url(), "http://x").pathname))
+		await open(page, `${prefix}/login`);
 	await page.getByLabel(t("auth.fields.identifier")).fill(identifier);
 	await page.locator("input[name=password]").fill(password);
 	await page.getByRole("button", { name: t("auth.login.submit") }).click();
-	if (!expectFailure) await page.waitForURL((url) => !/\/login$/.test(url.pathname), { timeout: POW_TIMEOUT });
+	if (!expectFailure)
+		await page.waitForURL((url) => !/\/login$/.test(url.pathname), { timeout: POW_TIMEOUT });
 }
 
 // Signs up through the UI, follows the mailed link (the guard sends a guest to /login and back to it),
 // then picks the nickname on the onboarding page; the account ends up verified and signed in.
-export async function createVerifiedAccount(page: Page, prefix: string, t: Translate): Promise<Account> {
+export async function createVerifiedAccount(
+	page: Page,
+	prefix: string,
+	t: Translate,
+): Promise<Account> {
 	const account = newAccount();
 	await fillSignup(page, prefix, t, account);
 	await page.getByRole("button", { name: t("auth.signup.submit") }).click();
@@ -83,8 +101,14 @@ export async function createVerifiedAccount(page: Page, prefix: string, t: Trans
 	return account;
 }
 
-export async function completeOnboarding(page: Page, t: Translate, account: Account): Promise<void> {
-	await page.waitForURL((url) => !/\/(login|signup)/.test(url.pathname), { timeout: POW_TIMEOUT });
+export async function completeOnboarding(
+	page: Page,
+	t: Translate,
+	account: Account,
+): Promise<void> {
+	await page.waitForURL((url) => !/\/(login|signup)/.test(url.pathname), {
+		timeout: POW_TIMEOUT,
+	});
 	const nickname = page.getByLabel(t("auth.fields.nickname"));
 	if (await nickname.isVisible().catch(() => false)) {
 		await nickname.fill(account.nickname);

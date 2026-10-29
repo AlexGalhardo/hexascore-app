@@ -51,6 +51,11 @@ services:
       LOG_LEVEL: debug
       # The suite sends a distinct X-Forwarded-For per test so the strict auth rate limits (5 logins/min per IP) do not couple specs.
       TRUSTED_PROXIES: 172.16.0.0/12
+      # Billing routes refuse to boot without Stripe settings; these are inert placeholders (no Stripe call is made by the auth, profile and api-keys specs).
+      STRIPE_KEY: sk_test_placeholder_e2e
+      STRIPE_WEBHOOK_SECRET: whsec_placeholder_e2e
+      STRIPE_PRICE_PRO: price_placeholder_pro
+      STRIPE_PRICE_BUSINESS: price_placeholder_business
     # Migrate, then seed DemoCatalog (1 admin, 50 users, 300 items); the seeder is idempotent, so a failure is real.
     entrypoint: ["/bin/sh", "-c", "/app/app migrate && /app/app db:seed --force DemoCatalog"]
     restart: "no"

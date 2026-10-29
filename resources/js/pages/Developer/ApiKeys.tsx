@@ -124,82 +124,89 @@ export default function ApiKeys({ keys, maxKeys }: Props) {
 				{keys.length === 0 ? (
 					<p>{t("api.profile.keys.empty")}</p>
 				) : (
-					<table className="w-full text-left">
-						<thead>
-							<tr>
-								<th scope="col">{t("api.profile.keys.name")}</th>
-								<th scope="col">{t("api.profile.keys.prefix")}</th>
-								<th scope="col">{t("api.profile.keys.created")}</th>
-								<th scope="col">{t("api.profile.keys.lastUsed")}</th>
-								<th scope="col">{t("api.profile.keys.status")}</th>
-								<th scope="col">{t("api.profile.keys.actions")}</th>
-							</tr>
-						</thead>
-						<tbody>
-							{keys.map((k) => (
-								<tr key={k.id}>
-									<td>{k.name}</td>
-									<td>
-										<code>{k.prefix}…</code>
-									</td>
-									<td>{date(k.createdAt)}</td>
-									<td>
-										{k.lastUsedAt
-											? date(k.lastUsedAt)
-											: t("api.profile.keys.never")}
-									</td>
-									<td>
-										{k.revokedAt
-											? t("api.profile.keys.revoked")
-											: t("api.profile.keys.active")}
-									</td>
-									<td>
-										{!k.revokedAt &&
-											(confirming === k.id ? (
-												<fieldset>
-													<legend className="font-medium">
-														{t("api.profile.keys.confirmTitle", {
-															name: k.name,
-														})}
-													</legend>
-													<p>{t("api.profile.keys.confirmBody")}</p>
-													<button
-														type="button"
-														className="mr-3 font-medium text-red-700 underline dark:text-red-400"
-														onClick={() =>
-															router.delete(
-																`/profile/api/keys/${k.id}`,
-																{
-																	onFinish: () =>
-																		setConfirming(null),
-																},
-															)
-														}
-													>
-														{t("api.profile.keys.revoke")}
-													</button>
+					<section
+						className="overflow-x-auto"
+						aria-labelledby="keys-h"
+						// biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region must be keyboard focusable (WCAG 2.1.1)
+						tabIndex={0}
+					>
+						<table className="w-full text-left">
+							<thead>
+								<tr>
+									<th scope="col">{t("api.profile.keys.name")}</th>
+									<th scope="col">{t("api.profile.keys.prefix")}</th>
+									<th scope="col">{t("api.profile.keys.created")}</th>
+									<th scope="col">{t("api.profile.keys.lastUsed")}</th>
+									<th scope="col">{t("api.profile.keys.status")}</th>
+									<th scope="col">{t("api.profile.keys.actions")}</th>
+								</tr>
+							</thead>
+							<tbody>
+								{keys.map((k) => (
+									<tr key={k.id}>
+										<td>{k.name}</td>
+										<td>
+											<code>{k.prefix}…</code>
+										</td>
+										<td>{date(k.createdAt)}</td>
+										<td>
+											{k.lastUsedAt
+												? date(k.lastUsedAt)
+												: t("api.profile.keys.never")}
+										</td>
+										<td>
+											{k.revokedAt
+												? t("api.profile.keys.revoked")
+												: t("api.profile.keys.active")}
+										</td>
+										<td>
+											{!k.revokedAt &&
+												(confirming === k.id ? (
+													<fieldset>
+														<legend className="font-medium">
+															{t("api.profile.keys.confirmTitle", {
+																name: k.name,
+															})}
+														</legend>
+														<p>{t("api.profile.keys.confirmBody")}</p>
+														<button
+															type="button"
+															className="mr-3 font-medium text-red-700 underline dark:text-red-400"
+															onClick={() =>
+																router.delete(
+																	`/profile/api/keys/${k.id}`,
+																	{
+																		onFinish: () =>
+																			setConfirming(null),
+																	},
+																)
+															}
+														>
+															{t("api.profile.keys.revoke")}
+														</button>
+														<button
+															type="button"
+															className="underline"
+															onClick={() => setConfirming(null)}
+														>
+															{t("api.profile.keys.cancel")}
+														</button>
+													</fieldset>
+												) : (
 													<button
 														type="button"
 														className="underline"
-														onClick={() => setConfirming(null)}
+														onClick={() => setConfirming(k.id)}
 													>
-														{t("api.profile.keys.cancel")}
+														{t("api.profile.keys.revoke")}
 													</button>
-												</fieldset>
-											) : (
-												<button
-													type="button"
-													className="underline"
-													onClick={() => setConfirming(k.id)}
-												>
-													{t("api.profile.keys.revoke")}
-												</button>
-											))}
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
+												))}
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</section>
 				)}
 			</section>
 		</>
