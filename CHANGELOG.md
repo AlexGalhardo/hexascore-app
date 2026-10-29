@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- `/api/v1` item entity relations filter the entity name by its own source (`entities.default_name` provenance / translation `name_source`), not the relation source; a disallowed or unknown name is omitted and listed as `entities.name` in `meta.omittedFields`.
+
 - Public lists of a banned owner are `noindex` (header and `seo.indexable`); the library filters and "next page" link keep the locale prefix; list reordering keeps keyboard focus on the moved row; the list-edit items heading no longer reads "Add to list".
 - `/api/v1` relation filters and counts (`listEntityItems`, `listItems` `genre`/`platform`, `listGenres`) match only relations from allowlisted sources, so they no longer reveal TMDB/IGDB-sourced relations; an entity `name` from `default_name` without a provenance source is omitted (fail closed).
 - `GET /api/v1/lookup` resolves only public items (a hidden item with the same third-party id no longer shadows the public one) and uses one indexable query per source instead of a full scan.

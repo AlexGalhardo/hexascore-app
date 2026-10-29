@@ -18,7 +18,8 @@ type SynopsisIn struct {
 
 // EntityRefIn is one item-entity relation as stored.
 type EntityRefIn struct {
-	ID, Kind, Role, Name, Source string
+	// NameSource is where Name came from; empty means unknown, which the API audience treats as not allowed.
+	ID, Kind, Role, Name, NameSource, Source string
 }
 
 // ItemSource is everything the loader read for one item, before filtering.
@@ -48,7 +49,7 @@ type EntityRef struct {
 	ID   string `json:"id"`
 	Kind string `json:"kind"`
 	Role string `json:"role"`
-	Name string `json:"name"`
+	Name string `json:"name,omitempty"`
 }
 
 // FieldSource is the provenance of one exposed field (SDD 05 §6.2); the
@@ -163,7 +164,15 @@ func Assemble(src ItemSource, p Policy) ItemDetail {
 
 	for _, e := range src.Entities {
 		if p.Allows(e.Source) {
-			d.Entities = append(d.Entities, EntityRef{ID: e.ID, Kind: e.Kind, Role: e.Role, Name: e.Name})
+			ref := EntityRef{ID: e.ID, Kind: e.Kind, Role: e.Role, Name: e.Name}
+			if !p.Allows(e.NameSource) {
+				// The relation is allowed but the name has its own source (ADR 0006): fail closed.
+				ref.Name = ""
+				if !slices.Contains(omitted, "entities.name") {
+					omit("entities.name")
+				}
+			}
+			d.Entities = append(d.Entities, ref)
 		} else if !slices.Contains(omitted, "entities") {
 			omit("entities")
 		}

@@ -33,8 +33,12 @@ func newAPICatalog(t *testing.T) *apiCatalog {
 		return ratelimit.NewMemory(1000, window)
 	}))
 	plain := r.create(r.signIn("reader@example.com"), "ci")
-	game, book, genre, studio := uuid.NewV7().
+	game, book, genre, studio, pub, named := uuid.NewV7().
 		String(),
+		uuid.NewV7().
+			String(),
+		uuid.NewV7().
+			String(),
 		uuid.NewV7().
 			String(),
 		uuid.NewV7().
@@ -54,10 +58,12 @@ VALUES ($1, 'game', 'hollow-knight', 'Q20984815', '2017-02-24', 'day', 40,
   12, 87.25, 90, 'high', 1)`, game},
 		{`INSERT INTO item_translations (item_id, locale, title, title_source, synopsis, synopsis_source, synopsis_licence)
 VALUES ($1, 'en', 'Hollow Knight', 'wikidata', 'TMDB overview text', 'tmdb', 'proprietary')`, game},
-		{`INSERT INTO entities (id, kind, slug, default_name) VALUES ($1, 'genre', 'metroidvania', 'Metroidvania'),
-  ($2, 'organization', 'team-cherry', 'Team Cherry')`, genre, studio},
+		{`INSERT INTO entities (id, kind, slug, default_name, provenance) VALUES ($1, 'genre', 'metroidvania', 'Metroidvania', '{}'),
+  ($2, 'organization', 'team-cherry', 'Team Cherry', '{}'),
+  ($3, 'organization', 'igdb-published', 'IGDB Published', '{"default_name":"igdb"}'),
+  ($4, 'organization', 'sourced-studio', 'Sourced Studio', '{"default_name":"wikidata"}')`, genre, studio, pub, named},
 		{`INSERT INTO item_entities (item_id, role, entity_id, source) VALUES ($1, 'genre', $2, 'igdb'),
-  ($1, 'developer', $3, 'wikidata')`, game, genre, studio},
+  ($1, 'developer', $3, 'wikidata'), ($1, 'publisher', $4, 'wikidata'), ($1, 'developer', $5, 'wikidata')`, game, genre, studio, pub, named},
 		{`INSERT INTO items (id, type, slug, wikidata_qid, provenance) VALUES ($1, 'book', 'dune', 'Q190192', '{}')`, book},
 		{`INSERT INTO item_translations (item_id, locale, title, title_source) VALUES ($1, 'en', 'Dune', 'wikidata')`, book},
 		{`INSERT INTO editions (id, work_id, openlibrary_id, title, language, page_count, isbn13, source)
@@ -101,14 +107,21 @@ func TestAPILicenceFilter(t *testing.T) {
 		AssertJSONPath("provenance.score.source", "hexascore").
 		AssertJSONPath("score", 8.7).
 		AssertJSONPath("scoreByCategory.gameplay", 9.0).
-		AssertJSONPath("entities.0.name", "Team Cherry").
-		AssertJSONPath("meta.omittedFields", []string{"entities", "externalIds", "runtimeMinutes", "synopsis"})
+		AssertJSONPath("entities.0.name", "Sourced Studio").
+		AssertJSONPath("meta.omittedFields", []string{"entities", "entities.name", "externalIds", "runtimeMinutes", "synopsis"})
+	// Allowed relation, but an IGDB-sourced or unsourced name: the relation stays, the name goes (ADR 0006).
+	for _, name := range []string{"IGDB Published", "Team Cherry"} {
+		if strings.Contains(body, name) {
+			t.Errorf("api body leaks name %q: %s", name, body)
+		}
+	}
 
 	site, err := catalog.LoadItemPage(t.Context(), r.acc.DB, "game", "hollow-knight", "en")
 	if err != nil {
 		t.Fatal(err)
 	}
-	if site.Item.Synopsis == nil || site.Item.RuntimeMinutes == nil || len(site.Entities["genre"]) != 1 {
+	if site.Item.Synopsis == nil || site.Item.RuntimeMinutes == nil || len(site.Entities["genre"]) != 1 ||
+		!siteHasName(site, "IGDB Published") {
 		t.Fatalf("site read model lost licensed fields: %+v", site.Item)
 	}
 }
@@ -206,4 +219,16 @@ func TestAPIItems(t *testing.T) {
 		r.client.GetJSON("/api/v1/books/" + r.book).AssertNotFound()
 		r.client.GetJSON("/api/v1/books/" + r.book + "/editions").AssertNotFound()
 	})
+}
+
+func siteHasName(p catalog.ItemPage, name string) bool {
+	for _, links := range p.Entities {
+		for _, l := range links {
+			if l.Name == name {
+				return true
+			}
+		}
+	}
+
+	return false
 }
