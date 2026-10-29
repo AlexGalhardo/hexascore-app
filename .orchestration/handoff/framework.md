@@ -80,3 +80,16 @@ Owner answered "merge your own green PRs" in chat, but `gh pr merge 39 --squash`
 - #63 secrets: the `docs/security.md:45` finding seen in a `dir` scan is a history item already in `.betterleaksignore` (6 entries for that file); #63 CI Betterleaks passes.
 - Next: remaining low VFs (044 needs design, 049, 050, 004, 012, 020, 023, 033, 034, 060; VF-042 part 2).
 - VF-060: PR #70 (totp.HashRecoveryCode). Stopping near context limit; next low VFs: 049, 050, 004, 012, 020, 023, 033, 034, 044 (design), VF-042 part 2.
+
+## Session 11 (2026-10-29)
+
+- VF-049: PR #71 (`feat/vf-049-typed-written`; typed handler that wrote the response skips output; AssertMatchesOpenAPI hints OPENAPI_PREFIX).
+- VF-050 + VF-034: PR #72 (`feat/vf-050-openapi-strip`; `Info.StripPrefix`, `OPENAPI_SERVERS`, `OPENAPI_STRIP_PREFIX`).
+- VF-004: PR #73 (`docs/vf-004-imaging`; docs + determinism test). WebP encoding = FQ-004 in QUESTIONS.md (owner).
+- #61 CI fix pushed (1e075a7): `HTTPServer.Run` used ServeTLS on a caller's tls listener (grpc TLS inside TLS); now TLS only when Run opens the listener. Merged into #62 branch (merge commit, no force). macOS apidocs Chrome "WaitDelay expired" = flake, re-run.
+- #60 replaced by #74 (`feat/vf-056-openrpc-main`, on main); #60 closed with pointer.
+- Still stacked: #62 on #61, #66 on #65, #67 on #66.
+- Next low VFs: 012, 020, 023, 033, 042 part 2; VF-044 design in QUESTIONS.md.
+- Later in session 11: VF-012 PR #75 (`SessionGuard.Impersonate`), VF-020 PR #76 (`httpclient.Throttle/Retry/Breaker`), VF-023 PR #77 (site `deployment/logging`, `deployment/releases-and-stability`), VF-042 part 2 PR #78 (`Group.ErrorHandler`). VF-033 wontfix (already on site testing/overview). VF-044: design FD-044 in QUESTIONS.md (owner). VF-004 WebP encode: FQ-004 (owner).
+- #61 had merge conflicts with main (so CI did not run): merged origin/main into it (app.go, options_runtime.go, navigation.ts), then #61 into #62 (Taskfile.yml MODULES, go.work). No force-push.
+- Low-VF queue now empty except owner-gated FD-044, FQ-004, FD-011/FD-014 done earlier.

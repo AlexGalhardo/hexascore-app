@@ -12,7 +12,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-001 | 2026-10-28 | high | in_progress (framework), PR #43 core `auth/webauthn` + PR #44 `install:auth --passkeys` scaffold (stacked on #43), merges pending |
 | VF-002 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#7](https://github.com/AlexGalhardo/vukem/pull/7)) |
 | VF-003 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#21](https://github.com/AlexGalhardo/vukem/pull/21)) |
-| VF-004 | 2026-10-28 | low | open |
+| VF-004 | 2026-10-28 | low | wontfix for WebP encoding (FQ-004: cwebp in the app); docs in PR #73 |
 | VF-005 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#11](https://github.com/AlexGalhardo/vukem/pull/11)) |
 | VF-006 | 2026-10-28 | low | in_progress (framework), PR #38 green, merge pending (owner) |
 | VF-007 | 2026-10-28 | low | in_progress (framework), PR #56 |
@@ -20,7 +20,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-009 | 2026-10-28 | low | in_progress (framework), PR #37 green, merge pending (owner) |
 | VF-010 | 2026-10-28 | low | fixed in v0.33.0 (PR [#27](https://github.com/AlexGalhardo/vukem/pull/27), via VF-046: `AfterSave` receives `admin.Saved[T].Before`, a copy of the record before the form was applied) |
 | VF-011 | 2026-10-28 | low | in review (framework): vukem PR #68 (`notify`) |
-| VF-012 | 2026-10-28 | low | open |
+| VF-012 | 2026-10-28 | low | in review (framework): vukem PR #75 (`SessionGuard.Impersonate` / `StopImpersonating` / `Impersonator`) |
 | VF-013 | 2026-10-28 | low | in_progress (framework), PR #41 (docs) |
 | VF-014 | 2026-10-28 | low | in review (framework): vukem PR #69 (`api.CollectionOf/PageOf/CursorOf`, docs) |
 | VF-015 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#12](https://github.com/AlexGalhardo/vukem/pull/12)) |
@@ -28,10 +28,10 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-017 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#13](https://github.com/AlexGalhardo/vukem/pull/13)), adopted (ADOPT-VF-040) |
 | VF-018 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#14](https://github.com/AlexGalhardo/vukem/pull/14)) |
 | VF-019 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#15](https://github.com/AlexGalhardo/vukem/pull/15)) |
-| VF-020 | 2026-10-28 | low | open |
+| VF-020 | 2026-10-28 | low | in review (framework): vukem PR #76 (`httpclient.Throttle` / `Retry` / `Breaker`) |
 | VF-021 | 2026-10-28 | low | withdrawn (2026-10-29: `HourlyAt` documented) |
 | VF-022 | 2026-10-28 | low | in_progress (framework), PR #53 (IP truncation; trace id already correlated, no user id logged) |
-| VF-023 | 2026-10-28 | low | open |
+| VF-023 | 2026-10-28 | low | in review (framework): vukem PR #77 (site pages `deployment/logging`, `deployment/releases-and-stability`) |
 | VF-024 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#10](https://github.com/AlexGalhardo/vukem/pull/10)), adopted (ADOPT-VF-024) |
 | VF-025 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#16](https://github.com/AlexGalhardo/vukem/pull/16)) |
 | VF-026 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#13](https://github.com/AlexGalhardo/vukem/pull/13)), adopted (ADOPT-VF-040) |
@@ -41,7 +41,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-030 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#20](https://github.com/AlexGalhardo/vukem/pull/20)) |
 | VF-031 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#24](https://github.com/AlexGalhardo/vukem/pull/24)) |
 | VF-032 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#31](https://github.com/AlexGalhardo/vukem/pull/31)) |
-| VF-033 | 2026-10-28 | low | open |
+| VF-033 | 2026-10-28 | low | wontfix (framework): already documented, testing/overview "Testing against PostgreSQL" |
 | VF-034 | 2026-10-28 | low | in review (framework): vukem PR #72 (`openapi.Info.StripPrefix`, `OPENAPI_SERVERS`, `OPENAPI_STRIP_PREFIX`) |
 | VF-035 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#25](https://github.com/AlexGalhardo/vukem/pull/25)), adopted in models only (ADOPT-VF-035) |
 | VF-036 | 2026-10-29 | low | fixed in v0.33.0 (PR [#34](https://github.com/AlexGalhardo/vukem/pull/34), adopted 4a2d8ec) |
@@ -50,9 +50,9 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-039 | 2026-10-29 | low | in_progress (framework), PR #54 (signed.Token; extensions and keyset cursor already in v0.33.0) |
 | VF-040 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#13](https://github.com/AlexGalhardo/vukem/pull/13)), adopted (ADOPT-VF-040) |
 | VF-041 | 2026-10-29 | low | fixed in v0.33.0 (PR [#28](https://github.com/AlexGalhardo/vukem/pull/28)) |
-| VF-042 | 2026-10-29 | low | in_progress (framework), PR #55 (struct{} + status = no body; extensions in v0.33.0; per-group error handler open) |
+| VF-042 | 2026-10-29 | low | in review (framework): #55 merged (struct{} + status = no body), extensions in v0.33.0, per-group error handler vukem PR #78 (`Group.ErrorHandler`) |
 | VF-043 | 2026-10-29 | low | fixed in v0.33.0 (PR [#30](https://github.com/AlexGalhardo/vukem/pull/30), adopted 4a2d8ec) |
-| VF-044 | 2026-10-29 | low | open |
+| VF-044 | 2026-10-29 | low | open: design FD-044 in docs/orchestration/QUESTIONS.md (owner) |
 | VF-045 | 2026-10-29 | low | fixed in v0.33.0 (PR [#29](https://github.com/AlexGalhardo/vukem/pull/29)) |
 | VF-046 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#27](https://github.com/AlexGalhardo/vukem/pull/27)), adopted (ADOPT-VF-046) |
 | VF-047 | 2026-10-29 | low | in_progress (framework), PR #40 (nullable filters/search; composite keys open) |
@@ -100,7 +100,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-004: `contrib/imaging` flagged as needing work in the framework's own review
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: in review (framework): vukem PR #73 (docs + determinism test); WebP encoding waits for FQ-004 in docs/orchestration/QUESTIONS.md.
 - **vukem version**: v0.32.0. **Docs consulted**: `vukem/vukem-feedback.md` (framework's own review, item FUN-08 / FB-10 on `contrib/imaging`).
 - **Context**: HexaScore's cover pipeline (ADR 0007) needs WebP encode at 600 px and 96×144 thumbnails with deterministic output matching the legacy Python pipeline. The framework review marks imaging as confirmed-needs-work with large effort.
 - **Reproduction**: pending; SDD 06 defines a fixture set and expected hashes to test against.
@@ -171,7 +171,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-012: No admin impersonation ("login as user")
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: in review (framework): vukem PR #75.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/authentication`, `https://vukem.dev/docs/digging-deeper/admin`.
 - **Context**: the legacy app (Better Auth admin plugin) let admins impersonate a user to reproduce support issues, with `session.impersonated_by` recorded. vukem documents no equivalent. HexaScore v1 ships without it (SDD 03); admins use read-only views.
 - **Workaround**: none safe in-app; read-only "view as" pages.
@@ -241,7 +241,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-020: `httpclient` lacks per-host throttling and circuit breaking
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: in review (framework): vukem PR #76.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/architecture/lifecycle` (`httpclient/` SSRF protection), `https://vukem.dev/docs/digging-deeper/queue`.
 - **Context**: ingestion (SDD 06) must respect per-host rate limits (IGDB 4 rps / 8 in flight; TMDB 429 handling; Wikimedia etiquette) and stop hammering a failing host. The SSRF-safe client has no documented rate limiter, retry/backoff policy or circuit breaker.
 - **Workaround**: app-level wrapper with `ratelimit.NewMemory` per host, exponential backoff on 429/5xx honouring `Retry-After`, and a simple breaker.
@@ -266,7 +266,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-023: Site documentation gaps found while writing the observability spec
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: in review (framework): vukem PR #77. Health checks already on `deployment/single-binary`; the request log has no route name or user id (repo doc was wrong); no scheduler metrics hook exists (page shows a wrapper).
 - **vukem version**: v0.32.0. **Docs consulted**: <https://vukem.dev/docs> (full page map) versus local `vukem/docs/*.md`.
 - **Context**: facts that exist only in the repository docs, tagged `[SITE PAGE MISSING]` in the HexaScore SDDs: health-check API (`AddHealthCheckTimeout`, `ReadyHandler`, `ok`/`fail` output format), route name and user id fields in request logs, `logging.NewDedup` and `WithLogger` behaviour with a custom logger, the `TestSecurity_A09_*`/`A10_*` test names, tooling/release process, stability policy, performance baselines, and a metric hook for scheduled tasks.
 - **Workaround**: cite the local file.
@@ -352,7 +352,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-033: `vukemtest.New` always uses in-memory SQLite
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: wontfix (framework, 2026-10-29): the pattern is documented at <https://vukem.dev/docs/testing/overview> "Testing against PostgreSQL" (since 2026-10-17: `pgtest.Database` before `vukemtest.New`, `DATABASE_URL` in `Options.Env`); `vukemtest.Options.Postgres` would make the core module import `drivers/postgres`, which the architecture forbids.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/testing/overview`.
 - **Context**: scaffold tests generated by `install:auth` pass without any database server because `vukemtest.New` sets `DATABASE_URL` to a shared in-memory SQLite file; `TEST_DATABASE_URL` is only read by `pgtest.Database`. So "tests green" does not prove Postgres compatibility of the scaffold.
 - **Workaround**: `url := pgtest.Database(t, ""); vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{"DATABASE_URL": url}})` (verified, `TestRegisterOnPostgres` passes).
@@ -429,7 +429,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-042: Problem extension members, group-level error handling and bodyless 202 (confirms VF-014, VF-016)
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: in review (framework): (1) extensions in v0.33.0 (`errs.HTTPError.WithExtension`); (3) merged in main (PR #55), unreleased; (2) vukem PR #78 `Group.ErrorHandler`.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/openapi`, `https://vukem.dev/docs/cli/reference-runtime` ("`vukem openapi:export`"), `https://vukem.dev/docs/rest-apis/overview` ("Errors"). The three behaviours below were confirmed by running them and reading the v0.32.0 source (`web/errors.go`, `auth/middleware.go`, `api/typed.go`): `[NOT IN VUKEM DOCS]`.
 - **Context**: (1) `web.Problem` has fixed members (`request_id` snake_case, no `code`, no extensions) and the OpenAPI `Problem` schema is derived from it, so a `code` member is invisible to generated clients (VF-014, VF-016 confirmed). (2) Errors returned by handlers reach only the router-wide `Services.Errors`; `auth.ProblemJSON`-style group middleware that swaps services does not see them, so per-group problem formatting is impossible. (3) `api.Op{Status: 202}` with an `Out` of `struct{}` writes the body `{}` while the OpenAPI document says "no body", so `AssertMatchesOpenAPI` fails.
 - **Workaround** (spike `agent/senior/P0.F.7.1`): `problems.Install(router, prefixes...)` wraps `Services.Errors`, runs vukem's default handler into a buffer and adds `code` plus extension members to its JSON; `problems.Error` carries the code. The 202 route returns a one-field `Accepted` struct.
@@ -445,7 +445,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-044: Generated types mark every response property optional; untyped routes appear as `*/*` in the document
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open, waiting for the owner: design proposal FD-044 in docs/orchestration/QUESTIONS.md (framework, 2026-10-29).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/client-generation`, `https://vukem.dev/docs/cli/reference-runtime` ("`vukem codegen:client`", "`vukem codegen:routes`"). `[NOT IN VUKEM DOCS]`: nothing on `required` in output schemas or on plain handlers.
 - **Context**: (1) the OpenAPI schemas generated from `Out` types have no `required` list, so `codegen:client` emits `Item = { id?: string; slug?: string; ... }` and the SDKs force null checks on fields the server always sends (inputs keep `required` from `validate` tags). (2) A route registered with a plain handler (`g.Get("/ping", ...)`) is documented with a `*/*` response and an empty schema; `openapi-python-client` 0.29.1 warns and omits the response.
 - **Workaround**: register every public route through `api.Register` with typed output; accept optional properties in the first-party client.

@@ -1,0 +1,8 @@
+STATUS: concluida
+Branch: agent/senior/E2E-HARDEN-P1.I.2.1 (origin/main merged in). Files: app/http/middleware/{challenge,security_headers}.go (+tests), routes/web.go, tests/pow_test.go, resources/js/lib/pow-worker.ts (+test), qa/e2e/{playwright.config.ts,helpers/{account,mail}.ts,specs/auth.spec.ts}, CHANGELOG.md.
+Acceptance: two consecutive runs of auth+profile+api-keys on isolated stack (COMPOSE_PROJECT_NAME=hx-senior, port 3100): 78 passed, 78 passed. bun lint/typecheck/test (60) green; go build, golangci-lint --build-tags integration 0 issues, middleware + Pow tests pass.
+1. Signup flake root causes (2): (a) /challenge probe read the counter without counting the announced attempt, so the post crossing the limit got a raw 428 JSON in the Inertia modal; probe now counts it (Go test added). (b) PoW solver too slow in loaded Chrome at 21 bits (global signup limit 30/h is exceeded by the suite): no POST within 60 s; solver made allocation-free (3.2x, same nonces).
+2. `any` -> `t` only where redirects keep the prefix (login, signup, check-email, reset). Redirects from /profile/*, /profile/api, account deletion and /two-factor-challenge still land unprefixed in English, so `any` stays there (api-keys, profile, TOTP challenge): app gap, possible follow-up.
+3. bypassCSP removed; UpgradeInsecure(production, APP_URL) sends upgrade-insecure-requests only for production + https (Go test both cases).
+Also: mail helper restores email query param that the privacy log redacts ([REDACTED]) in reset links; mailed-link flows use the English translator (links carry no prefix).
+Risks: build overwrites shared image tag hexascore-app:e2e. Skipped: nothing.
