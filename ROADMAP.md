@@ -1945,6 +1945,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
     - `go test -tags=integration ./database/legacyimport -run TestBillingStage` → PASS: `api_keys.hash` copied verbatim (a fixture key authenticates on `/api/v1` after import), subscriptions mapped to `plan`/`provider`/`state` with at most one active per user, `api_credit_balances.remaining` = legacy remaining credits per user (≥ 0), `credit_ledger` and `pix_charges` copied verbatim
     - `go test ./... -run TestSecurity_A08_HexaStripeReplayIgnored` → PASS with imported `processed_events`
   - Notes: derive the remaining-credit formula from `legacy/apps/web/lib/db/schema/billing.ts` and the legacy ledger code, and write it into SDD 05 §5 before coding. No refund flow (D-23).
+  - Status (2026-10-29): stage delivered and `TestBillingStage` green; the `processed_events` acceptance contradicts the code (no `processed_events` table, vukem `contrib/stripe` dedupes in the cache, no `TestSecurity_A08_HexaStripeReplayIgnored` yet): amendment pending.
 
 #### P2.F.3 Covers
 
