@@ -27,5 +27,6 @@ func All() []schema.Migration {
 		m20261029110000AddProfileColumnsToUsersTable(),
 		m20261029110001CreateAccountEventsTable(),
 		m20261029120000CreateScoringTables(),
+		m20261029130100CreateCatalogMergeAuditTable(),
 	}
 }
