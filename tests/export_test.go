@@ -5,8 +5,11 @@ package tests
 import (
 	"archive/zip"
 	"bytes"
+	"context"
 	"encoding/csv"
+	"errors"
 	"html"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -19,6 +22,7 @@ import (
 	"time"
 
 	"github.com/AlexGalhardo/vukem/drivers/postgres/pgtest"
+	"github.com/AlexGalhardo/vukem/storage"
 	"github.com/AlexGalhardo/vukem/uuid"
 	"github.com/AlexGalhardo/vukem/vukemtest"
 
@@ -296,5 +300,159 @@ func TestExportPurgeRemovesRowsAndFiles(t *testing.T) {
 	if err := acc.DB.QueryRowContext(t.Context(), `SELECT count(*) FROM data_exports WHERE id = $1`, keep).
 		Scan(&n); err != nil || n != 1 {
 		t.Errorf("other user's export rows = %d, %v; want 1", n, err)
+	}
+}
+
+// hookDisk runs after hooks around the real disk so a test can interleave a purge with a build.
+type hookDisk struct {
+	storage.Disk
+	afterPut func(ctx context.Context)
+	delErr   error
+}
+
+func (d *hookDisk) Put(ctx context.Context, p string, r io.Reader) error {
+	if err := d.Disk.Put(ctx, p, r); err != nil {
+		return err
+	}
+
+	if d.afterPut != nil {
+		d.afterPut(ctx)
+	}
+
+	return nil
+}
+
+func (d *hookDisk) Delete(ctx context.Context, p string) error {
+	if d.delErr != nil {
+		return d.delErr
+	}
+
+	return d.Disk.Delete(ctx, p)
+}
+
+func newPurgeFixture(t *testing.T) (*library.Exports, *hookDisk, *accounts.Accounts, string, *vukemtest.App) {
+	t.Helper()
+
+	dir := t.TempDir()
+	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{
+		Env: map[string]string{"DATABASE_URL": pgtest.Database(t, ""), "EXPORTS_DIR": dir},
+	})
+
+	acc, err := accounts.New(app.App)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	svc, err := library.NewExports(app.App, acc)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	hd := &hookDisk{Disk: svc.Disk}
+	svc.Disk = hd
+
+	return svc, hd, acc, dir, app
+}
+
+func TestExportBuildAfterPurgeLeavesNoFileAndNoMail(t *testing.T) {
+	svc, hd, acc, dir, app := newPurgeFixture(t)
+	u := makeUser(t, app, "race@example.com", "user", true)
+
+	mails := 0
+	svc.Ready = func(context.Context, int64, string, string) error { mails++; return nil }
+
+	// The purge deletes the row while the ZIP is being written.
+	hd.afterPut = func(ctx context.Context) {
+		if _, err := acc.DB.ExecContext(ctx, `DELETE FROM data_exports WHERE user_id = $1`, u.ID); err != nil {
+			t.Error(err)
+		}
+	}
+
+	id := uuid.NewV7().String()
+	if _, err := acc.DB.ExecContext(
+		t.Context(),
+		`INSERT INTO data_exports (id, user_id, status, requested_at) VALUES ($1, $2, 'queued', now())`,
+		id,
+		u.ID,
+	); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := svc.Build(t.Context(), id); err != nil {
+		t.Fatal(err)
+	}
+
+	left, _ := filepath.Glob(filepath.Join(dir, strconv.FormatInt(u.ID, 10), "*"))
+	if len(left) != 0 || mails != 0 {
+		t.Errorf("files left = %v, mails = %d; want none", left, mails)
+	}
+}
+
+func TestExportPurgeToleratesMissingFilesAndExpiredRows(t *testing.T) {
+	svc, _, acc, dir, app := newPurgeFixture(t)
+	u := makeUser(t, app, "missing@example.com", "user", true)
+
+	id, err := svc.Request(t.Context(), u.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if err := os.Remove(filepath.Join(dir, strconv.FormatInt(u.ID, 10), id+".zip")); err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := acc.DB.ExecContext(t.Context(),
+		`INSERT INTO data_exports (id, user_id, status, requested_at) VALUES ($1, $2, 'expired', now())`,
+		uuid.NewV7().String(), u.ID); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := svc.Purge(t.Context(), u.ID); err != nil {
+		t.Fatalf("Purge with a missing file and an expired row: %v", err)
+	}
+
+	var n int
+	if err := acc.DB.QueryRowContext(t.Context(), `SELECT count(*) FROM data_exports WHERE user_id = $1`, u.ID).
+		Scan(&n); err != nil || n != 0 {
+		t.Errorf("%d rows left, %v", n, err)
+	}
+}
+
+func TestExportPurgeFailureIsRetriedForAnonymisedUsers(t *testing.T) {
+	svc, hd, acc, dir, app := newPurgeFixture(t)
+	u := makeUser(t, app, "retry@example.com", "user", true)
+
+	if _, err := svc.Request(t.Context(), u.ID); err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := acc.DB.ExecContext(
+		t.Context(),
+		`UPDATE users SET anonymized_at = now() WHERE id = $1`,
+		u.ID,
+	); err != nil {
+		t.Fatal(err)
+	}
+
+	hd.delErr = errors.New("disk down")
+	if err := svc.PurgeAnonymised(t.Context()); err == nil {
+		t.Fatal("PurgeAnonymised succeeded with a failing disk")
+	}
+
+	var n int
+	if err := acc.DB.QueryRowContext(t.Context(), `SELECT count(*) FROM data_exports WHERE user_id = $1`, u.ID).
+		Scan(&n); err != nil || n != 1 {
+		t.Fatalf("row must be kept for the retry: %d, %v", n, err)
+	}
+
+	hd.delErr = nil
+	if err := svc.PurgeAnonymised(t.Context()); err != nil {
+		t.Fatal(err)
+	}
+
+	left, _ := filepath.Glob(filepath.Join(dir, strconv.FormatInt(u.ID, 10), "*"))
+	if err := acc.DB.QueryRowContext(t.Context(), `SELECT count(*) FROM data_exports WHERE user_id = $1`, u.ID).
+		Scan(&n); err != nil || n != 0 || len(left) != 0 {
+		t.Errorf("rows = %d, files = %v, %v; want none", n, left, err)
 	}
 }
