@@ -4,11 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"math/rand/v2"
 	"strings"
 
 	"github.com/AlexGalhardo/vukem/auth/hash"
 	"github.com/AlexGalhardo/vukem/database"
+	"github.com/AlexGalhardo/vukem/factory"
 	"github.com/AlexGalhardo/vukem/orm"
 	"github.com/AlexGalhardo/vukem/uuid"
 
@@ -86,7 +86,7 @@ VALUES ('hexascore', 'HexaScore demo data', 'proprietary', 'https://hexascore.ap
 		return fmt.Errorf("seed entities: %w", err)
 	}
 
-	rng := rand.New(rand.NewPCG(demoSeed, demoSeed))
+	rng := factory.NewFaker(demoSeed)
 
 	for _, typ := range []string{"game", "movie", "series", "book"} {
 		if err := seedDemoItems(ctx, tx, rng, typ, entities); err != nil {
@@ -210,7 +210,7 @@ var links = map[string][]struct {
 	"book":   {{"author", "person", 1}, {"publisher", "organization", 1}, {"genre", "genre", 2}},
 }
 
-func seedDemoItems(ctx context.Context, tx *database.Tx, rng *rand.Rand, typ string, entities demoEntities) error {
+func seedDemoItems(ctx context.Context, tx *database.Tx, rng *factory.Faker, typ string, entities demoEntities) error {
 	for n, item := range factories.Item(typ).Seed(demoSeed).Count(demoItemsPerTyp).Make() {
 		title := item.OriginalTitle.String
 
@@ -235,7 +235,12 @@ VALUES ($1, $2, $3, 'hexascore', $4, 'hexascore', 'proprietary')`,
 
 		for _, l := range links[typ] {
 			ids := entities[l.kind]
-			for position, i := range rng.Perm(len(ids))[:l.n] {
+			// l.n consecutive ids from a random start: distinct and deterministic.
+			start := rng.Int(0, len(ids)-1)
+
+			for position := range l.n {
+				i := (start + position) % len(ids)
+
 				if !catalog.RoleCompatible(l.role, l.kind, typ) {
 					return fmt.Errorf("incompatible demo link %s/%s/%s", l.role, l.kind, typ)
 				}
@@ -255,7 +260,7 @@ VALUES ($1, $2, $3, $4, 'hexascore')`, item.ID, ids[i], l.role, position); err !
 				title,
 				slug,
 				n,
-				entities["organization"][rng.IntN(len(entities["organization"]))],
+				entities["organization"][rng.Int(0, len(entities["organization"])-1)],
 			); err != nil {
 				return err
 			}
