@@ -42,6 +42,9 @@ func plans() []Plan {
 	}
 }
 
+// Catalogue lists the paid plans with their display amounts; it needs no Stripe settings, so public pages can show it.
+func Catalogue() []Plan { return plans() }
+
 // Billing configures Stripe (vukem install:billing).
 type Billing struct {
 	// Key is the Stripe API key (STRIPE_KEY). Use a restricted key (rk_...)

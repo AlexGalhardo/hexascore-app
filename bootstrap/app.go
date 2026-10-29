@@ -77,7 +77,7 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 		vukem.WithVite(resources.Public()),
 		vukem.WithTranslations(resources.Lang()),
 		// Routes keep the /api/v1 prefix; the api host also serves them as /v1 (APIEdge), so the host alone is the server.
-		vukem.WithOpenAPI(openapi.Info{Servers: []string{"https://" + config.APIHost(os.Getenv)}}),
+		vukem.WithOpenAPI(openapi.Info{Title: "HexaScore API", Servers: []string{"https://" + config.APIHost(os.Getenv)}}),
 		vukem.WithInertia(inertia.Config{
 			Version: version,
 			SSR: &inertia.SSRConfig{

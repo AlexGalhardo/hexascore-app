@@ -124,7 +124,7 @@ export function renderMarkdown(md: string): { title: string; body: string; toc: 
 }
 
 // index.md is /docs; the rest keep their file name as slug. Order drives the sidebar.
-const ORDER = ["index", "authentication", "pagination", "rate-limits", "errors", "changelog"];
+const ORDER = ["index", "authentication", "pagination", "rate-limits", "errors", "coverage", "changelog"];
 
 export function buildDocs(dir: string): DocPage[] {
 	const files = readdirSync(dir).filter((f) => f.endsWith(".md"));

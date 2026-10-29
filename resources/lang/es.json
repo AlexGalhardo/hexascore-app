@@ -348,7 +348,11 @@
       "ctaFreeLogged": "Obtener una clave de API",
       "ctaPaid": "Elegir {plan}",
       "ctaSignup": "Regístrate para suscribirte",
-      "notConfigured": "Los pagos en línea aún no están disponibles. Los planes de pago abrirán pronto."
+      "notConfigured": "Los pagos en línea aún no están disponibles. Los planes de pago abrirán pronto.",
+      "coverageTitle": "Cobertura de datos",
+      "coverageBody": "La API solo devuelve campos que podemos republicar, así que algunos son irregulares y otros siempre se omiten (portadas, tráilers). Los porcentajes de cobertura aún no se han publicado.",
+      "coverageLink": "Ver los detalles de la cobertura",
+      "ctaManage": "Gestionar plan"
     },
     "checkout": {
       "metaTitle": "Plan y facturación",
@@ -564,7 +568,7 @@
     "copied": "Copiado",
     "title": "Documentación de la API",
     "navLabel": "Documentación",
-    "nav": { "index": "Inicio rápido", "authentication": "Autenticación", "pagination": "Paginación", "rate-limits": "Límites de uso", "errors": "Errores", "changelog": "Historial de cambios" },
+    "nav": { "index": "Inicio rápido", "authentication": "Autenticación", "pagination": "Paginación", "rate-limits": "Límites de uso", "errors": "Errores", "coverage": "Cobertura", "changelog": "Historial de cambios", "reference": "Referencia de la API" },
     "tocLabel": "En esta página",
     "quickstart": {
       "lead": "Puntuaciones de la comunidad para juegos, películas, series y libros — de 0 a 100, en seis categorías por elemento — a través de una API JSON de solo lectura.",

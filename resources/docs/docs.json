@@ -180,6 +180,23 @@
 		]
 	},
 	{
+		"slug": "coverage",
+		"title": "Data coverage",
+		"body": "<h1 id=\"data-coverage\">Data coverage</h1>\n<p>Every field the API returns comes from a source we are allowed to republish. Some fields are therefore patchy, and some are always omitted. This page states what to expect before you build on it.</p>\n<h2 id=\"fields-and-their-sources\">Fields and their sources</h2>\n<table><thead><tr><th scope=\"col\">Field</th><th scope=\"col\">Source</th><th scope=\"col\">Expected gap</th></tr></thead><tbody><tr><td><code>id</code>, <code>type</code>, <code>slug</code>, <code>url</code>, score fields, <code>trending</code>, <code>timeToBeat</code></td><td>HexaScore (API terms)</td><td>none</td></tr><tr><td><code>title</code>, <code>releaseDate</code>, <code>genres</code>, <code>people</code>, <code>organisations</code>, <code>franchises</code>, <code>platforms</code>, <code>countries</code>, runtime, pages, seasons, episodes</td><td>Wikidata (CC0) and the community</td><td>runtime, platforms and episode counts are patchy</td></tr><tr><td><code>synopsis</code></td><td>Wikipedia (CC BY-SA 4.0, with <code>sourceUrl</code>)</td><td>items without an article</td></tr><tr><td>editions and book covers</td><td>Open Library and Wikidata</td><td>not applicable to other types</td></tr><tr><td>covers for films, series and games, and trailers</td><td>none in v1</td><td>always omitted</td></tr><tr><td><code>externalIds</code></td><td>Wikidata, ISBN-13, Open Library</td><td>TMDB, IGDB and Steam ids are omitted</td></tr></tbody></table>\n<p>Every response lists the fields it left out in <code>meta.omittedFields</code>, and each sourced value carries its <code>provenance</code> (source and licence).</p>\n<h2 id=\"coverage-percentages\">Coverage percentages</h2>\n<p>Per-field coverage percentages are not published yet. They are measured on a copy of the production catalogue and will be added here with the date of the measurement.</p>",
+		"toc": [
+			{
+				"id": "fields-and-their-sources",
+				"text": "Fields and their sources",
+				"level": 2
+			},
+			{
+				"id": "coverage-percentages",
+				"text": "Coverage percentages",
+				"level": 2
+			}
+		]
+	},
+	{
 		"slug": "changelog",
 		"title": "Changelog",
 		"body": "<h1 id=\"changelog\">Changelog</h1>\n<p>The version is part of the path. v1 only changes in backwards-compatible ways.</p>\n<h2 id=\"versioning-policy\">Versioning policy</h2>\n<p>Within <code>/v1</code> we only make additive changes: new endpoints, new optional parameters, new response fields and new error <code>detail</code> texts. Ignore unknown fields and do not rely on field order.</p>\n<p>Breaking changes (removing or renaming a field, changing a type, making a parameter required) ship as a new path (<code>/v2</code>). Error <code>code</code> values, category keys and sort names are part of the contract.</p>\n<h2 id=\"deprecation-and-sunset\">Deprecation and sunset</h2>\n<ul><li>A deprecated version keeps working for at least 6 months after its successor is released.</li><li>Its responses carry <code>Deprecation</code> (RFC 9745) and <code>Sunset</code> (RFC 8594) headers with the date it stops working, plus a <code>Link</code> to this page.</li><li>Account owners with recent traffic on the old version are emailed at deprecation and 30 days before sunset.</li></ul>\n<h2 id=\"changes\">Changes</h2>\n<h3 id=\"v1-first-release\">v1: first release</h3>\n<ul><li>Lists, details and genres for <code>games</code>, <code>movies</code>, <code>series</code> and <code>books</code>.</li><li><code>/search</code>, <code>/lookup</code> by external id and <code>/me/usage</code>.</li></ul>",

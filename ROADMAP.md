@@ -1110,7 +1110,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test ./jobs -run TestDeletionPurge` → still passes with the real Stripe hook (Stripe failure keeps the user scheduled)
   - Notes: `CACHE_STORE=database` for processed event ids (billing page). PIX and credit packs stay out (D-06, D-14); the legacy `billing-reminders` cron is not ported. `TestWebhookDelivery` and `TestAppMinVersion` from the same SDD criterion belong to P3.A and P3.C.
 
-- [ ] **P1.H.3.2** Build `Pricing/Index` and the API docs pages (quickstart, authentication, errors, pagination, rate limits, coverage, changelog) and serve the Scalar reference.
+- [x] **P1.H.3.2** Build `Pricing/Index` and the API docs pages (quickstart, authentication, errors, pagination, rate limits, coverage, changelog) and serve the Scalar reference.
   - Files/modules: `resources/js/pages/Pricing/Index.tsx`, `resources/docs/{index,authentication,errors,pagination,rate-limits,coverage,changelog}.md`, `routes/docs.go` (`apidocs.Serve` at `/docs/reference`, `vukem.ServeOpenAPIWith` at `/api/v1/openapi.json`)
   - Refs: SDD 05 §6.5; SDD 09 §6.2; ADR 0006; D-03, D-33; open-issues 05-7, 05-11; legacy `app/[locale]/{pricing,docs}/`
   - Depends on: P1.H.3.1, P1.G.4.1
