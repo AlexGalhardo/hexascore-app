@@ -198,7 +198,7 @@ Implementation (P2.E.2.2): `backup:run` uploads, then verifies (`app/backup/veri
 
 ### 7.4 Restore drill (staging, first Sunday 07:00)
 
-`backup:drill`: latest production daily via `BACKUP_SOURCE_S3_*` → decrypt → `createdb hexascore_drill` → `pg_restore -j 2` → `dq:asserts` (SDD 06 §7.7) → row counts vs dump manifest → drop → `backup_runs(kind='drill')`. Pass: < 60 min, 0 assert errors, counts equal.
+`backup:drill`: latest production daily via `BACKUP_SOURCE_S3_*` (and `BACKUP_SOURCE_BACKUP_KEY`; each falls back to the unprefixed name) → decrypt → `createdb hexascore_drill` → `pg_restore` on stdin (single job: `-j` needs a seekable file and the plaintext never touches disk; amended 2026-10-29, P2.E.3.1) → row counts vs dump manifest → `catalog:check` asserts (SDD 01 §7.6 plus scoring; SDD 06 §7.7 asserts join in P6) → drop → `backup_runs(kind='drill')`. Pass: < 60 min, 0 assert errors, counts equal. The manifest is written by `backup:run`: row counts of every `public` table taken in a `REPEATABLE READ` transaction whose snapshot `pg_dump --snapshot` reuses, sealed with `BACKUP_KEY` at `backups/manifests/postgres/<kind>/.../<dump name>.json`. Scheduled only where `BACKUP_SOURCE_S3_BUCKET` is set (staging also runs `APP_ENV=production`), weekly Sunday 07:00 with `--first-sunday`. Runbook: `docs/runbooks/restore.md`.
 
 ### 7.5 RTO runbook
 
@@ -206,7 +206,7 @@ Consistency note (SDD 13 open issue 11, 2026-10-28): after a restore, re-apply a
 
 1. Status page notice (GitHub Pages, SDD 12 §7.7); `down` [vk-cli] via `railway ssh` (Git Bash: `MSYS_NO_PATHCONV=1`, `vukem/docs/tooling.md` [SITE PAGE MISSING]).
 2. New Postgres service, same region (~5 min).
-3. `/app/hexascore backup:restore backups/postgres/daily/<latest> --target-url "$NEW_DATABASE_URL"` (~20 min at 3 GB).
+3. `/app/app backup:restore backups/postgres/daily/<latest> --target-url "$NEW_DATABASE_URL"` (~20 min at 3 GB); it then replays the deletions recorded in `DATABASE_URL` (or `--replay-from`) after the dump; `--no-replay` only when that database is lost (runbook `docs/runbooks/restore.md`).
 4. Point `DATABASE_URL` at the new service, redeploy (pre-deploy migrates).
 5. `hexascore:cutover-verify --counts-only`, `dq:asserts`; `up`.
 6. Users told the lost window (≤ 24 h, no replay, ADR 0014). Delete the old service after 7 days.

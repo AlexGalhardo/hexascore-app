@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- `backup:restore <key> --target-url <url>` (streamed decrypt into `pg_restore`, then replays account deletions, schedules and cancellations newer than the dump from `DATABASE_URL` or `--replay-from`; `--no-replay` when that database is lost) and `backup:drill` (latest daily into a scratch `hexascore_drill`, row counts vs the dump manifest, `catalog:check` asserts, drop, `backup_runs(kind='drill')`; scheduled first Sunday 07:00 where `BACKUP_SOURCE_S3_BUCKET` is set); `backup:run` now writes a sealed per-table row-count manifest counted in the snapshot `pg_dump --snapshot` reuses; runbook `docs/runbooks/restore.md` (P2.E.3.1).
 - Legacy import `billing` stage: API keys with their sha256 hash unchanged, paid subscriptions, Stripe customer ids, daily usage, D-23 credit balances (`greatest(sum(delta), 0)`), and verbatim copies of `credit_ledger` and `pix_charges` in new legacy-shaped tables (P2.F.2.7).
 - Legacy import `twofactor` stage: `scripts/legacy/twofactor-export.ts` decrypts the Better Auth 2FA rows with Better Auth's own `symmetricDecrypt` and pipes NDJSON into `hexascore:import-legacy --stage twofactor --stdin`, which seals the secret, hashes the unused backup codes as recovery codes and confirms verified rows (P2.F.2.3).
 - `backup:run` now verifies each dump (size above half the 7-day median, decrypt and `pg_restore --list` with `items`, `users`, `ratings`, status `verified`), keeps a re-encrypted monthly copy on day 1, prunes to 30 daily and 12 monthly dumps, and runs daily at 06:00 America/Sao_Paulo (P2.E.2.2).
@@ -38,6 +39,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- Dumps could not be restored: `hs_norm` called `hs_unaccent` unqualified and `pg_restore` runs with an empty `search_path`; migration `20261029210000_qualify_hs_norm_function` qualifies it. Backup child processes now get `PATH`, without which `pg_restore` cannot locate itself (P2.E.3.1).
 - Catalogue listings answer 400 instead of 500 for a NUL byte or invalid UTF-8 in `genre`, `platform`, `sort` or `cursor` (found by the catalog e2e spec, P1.I.2.2).
 
 - API keys table scrolls inside its own focusable region instead of overflowing a 360 px viewport, which hid the Revoke button behind the Status cell (P1.I.2.1).

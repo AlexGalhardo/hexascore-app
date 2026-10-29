@@ -111,10 +111,10 @@ AND started_at >= $2 AND id <> $3 AND bytes IS NOT NULL`, kind, since, res.ID)
 	defer func() { _ = obj.Close() }()
 
 	stderr := &capped{max: 4 << 10}
-	// pg_restore --list reads the archive from stdin and needs no connection, so it gets no environment.
+	// pg_restore --list reads the archive from stdin and needs no connection, so it gets PATH only.
 	//nolint:gosec // G204: binary and args set in code
 	cmd := exec.CommandContext(ctx, r.PgRestore, "--list")
-	cmd.Env, cmd.Stdin, cmd.Stderr = []string{}, NewFrameReader(obj, r.Enc, res.Key), stderr
+	cmd.Env, cmd.Stdin, cmd.Stderr = []string{binPath()}, NewFrameReader(obj, r.Enc, res.Key), stderr
 
 	toc, err := cmd.Output()
 	if err != nil {
