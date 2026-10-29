@@ -22,12 +22,12 @@ func UpgradeInsecure(production bool, appURL string) bool {
 // vukem's default policy keeps its per-request nonce on scripts and styles; this adds strict-dynamic, the
 // YouTube, Stripe and Google origins, and, when upgrade is requested, upgrade-insecure-requests (a plain-HTTP dev
 // server must keep working). extraImgHosts lists additional image origins such as a cover CDN.
-func SecureHeaders(production bool, extraImgHosts ...string) func(*vukemmw.SecureHeadersConfig) {
+func SecureHeaders(upgradeInsecure bool, extraImgHosts ...string) func(*vukemmw.SecureHeadersConfig) {
 	return func(cfg *vukemmw.SecureHeadersConfig) {
 		// frame-src and worker-src are written out: through CSPSources they would start from script-src and
 		// inherit its nonce and 'strict-dynamic'.
 		cfg.CSP = vukemmw.DefaultCSP + "; frame-src https://www.youtube-nocookie.com; worker-src 'self'"
-		if production {
+		if upgradeInsecure {
 			cfg.CSP += "; upgrade-insecure-requests"
 		}
 
