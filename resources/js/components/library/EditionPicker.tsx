@@ -1,5 +1,5 @@
 import { router } from "@inertiajs/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { useT } from "../../lib/useT";
 
@@ -20,8 +20,12 @@ export default function EditionPicker({ itemId }: { itemId: string }) {
 	const [failed, setFailed] = useState(false);
 	const [choice, setChoice] = useState("");
 	const [next, setNext] = useState(-1);
+	// A ref, not state: two quick clicks in one render would both pass a state check and append a page twice.
+	const busy = useRef(false);
 
 	const load = async (cursor: number) => {
+		if (busy.current) return;
+		busy.current = true;
 		setFailed(false);
 		try {
 			const res = await fetch(`/items/${itemId}/editions?cursor=${cursor}`, {
@@ -34,6 +38,8 @@ export default function EditionPicker({ itemId }: { itemId: string }) {
 			setNext(body.next);
 		} catch {
 			setFailed(true);
+		} finally {
+			busy.current = false;
 		}
 	};
 
