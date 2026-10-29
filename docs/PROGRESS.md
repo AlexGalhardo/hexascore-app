@@ -171,4 +171,3 @@ vukem: CI fixed (PR #8, Mongo service pinned to 9.0.4 by digest after `mongo:8` 
 Local facts: Vercel "development" env pulled to `C:\dev\hexascore-app\vercel-env\` (Stripe test keys usable; database variables forbidden). Spike Postgres container `hexascore-spike-postgres-1` on 5432 (user `app`).
 
 Deploy (owner request, 2026-10-29): Railway project `hexascore` (id `51b50f39-b99d-4720-b177-e5b7f4f530d3`), environment `production` only (owner: no staging for now), services `app` (Dockerfile, healthcheck `/up`, pre-deploy `/app/app migrate`, restart on failure) and `Postgres`, region us-east4. Public URL <https://app-production-785f.up.railway.app>: `/up` 200, `/up?checks=1` `ssr: ok`, server-rendered home, `?lang=pt-BR` serves the pt-BR catalogue. `hexascore.app` DNS still points at Vercel (cutover P2.G is owner-gated).
-

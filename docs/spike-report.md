@@ -67,11 +67,11 @@ Acceptance:
 - `rg -n "scrypt|NFKC" <copy>/node_modules/better-auth/dist <copy>/node_modules/@better-auth` → `@better-auth/utils/dist/password.node.mjs:1` (`import { randomBytes, scrypt } from 'node:crypto'`), `:12` (`password.normalize("NFKC")`); constants quoted above with lines.
 - `jq '.cases | length' docs/spike/testdata/betterauth_hashes.json` → `3`.
 
-## P0.F.4.1 Host routing for api.<host>/v1
+## P0.F.4.1 Host routing for `api.<host>/v1`
 
 Spike branch `agent/senior/P0.F.4.1` (commit 6570235). Files: `app/http/middleware/api_host.go` (+ `_test.go`), `routes/api.go` (`/api/v1/ping` group and `r.UseServer(middleware.APIHost(API_HOST))`), `routes/registry.go`, `bootstrap/app.go` (`vukem.WithOpenAPI(openapi.Info{Servers: ...})` from `API_URL`), `tests/api_host_test.go`. The server middleware runs before the mux (`router.build`: `r.server` wraps `dispatch`), so it rewrites `/v1/` to `/api/v1/` before route matching; on the API host any other path (`/`, `/login`, `/api/v1/*`, `/v10/*`) is 404.
 
-Env vars the tests need: none for `go test ./app/http/middleware/` and `go test ./tests/ -run APIHost` (in-memory SQLite, `API_HOST` is set through `vukemtest.Options.Env`). The full `go test ./...` also needs `TEST_DATABASE_URL` (postgres admin URL) for `TestRegisterOnPostgres`. Runtime env: `API_HOST=api.localhost`, `API_URL=http://api.localhost:3001/v1` (process env, for OpenAPI servers), `PORT=3001`.
+Env vars the tests need: none for `go test ./app/http/middleware/` and `go test ./tests/ -run APIHost` (in-memory SQLite, `API_HOST` is set through `vukemtest.Options.Env`). The full `go test ./...` also needs `TEST_DATABASE_URL` (postgres admin URL) for `TestRegisterOnPostgres`. Runtime env: `API_HOST=api.localhost`, `API_URL=<http://api.localhost:3001/v1>` (process env, for OpenAPI servers), `PORT=3001`.
 
 Decisive output (server on port 3001, spike Postgres):
 
@@ -117,7 +117,7 @@ Verdict: workaround (works; two project-side fixes and VF-038).
 
 Spike branch `agent/orchestrator/P0.F.2.1` (merged into spike `main` as 13b4c0a). Port 3000, database `spike_orch`.
 
-- `bootstrap/app.go`: `inertia.SSRConfig{Bundle: "bootstrap/ssr/ssr.js", OnFailure: ssrFailures.Observe}`; `app.AddHealthCheck("ssr", app.Inertia.SSRHealthy)` adds `ssr` to `GET /up?checks=1` (https://vukem.dev/docs/deployment/single-binary "Health checks"); `GET /up/ssr-fallbacks` exposes the counter for the spike only (production exports a metric, SDD 12).
+- `bootstrap/app.go`: `inertia.SSRConfig{Bundle: "bootstrap/ssr/ssr.js", OnFailure: ssrFailures.Observe}`; `app.AddHealthCheck("ssr", app.Inertia.SSRHealthy)` adds `ssr` to `GET /up?checks=1` (<https://vukem.dev/docs/deployment/single-binary> "Health checks"); `GET /up/ssr-fallbacks` exposes the counter for the spike only (production exports a metric, SDD 12).
 - `app/ssr/failures.go`: atomic counter plus a warning log per fallback (VF-002 workaround); `TestFailuresCountsEachFallback` passes.
 - `resources/js/ssr.tsx`: the `@inertiajs/vite` 3.9.1 plugin wraps a top-level `createInertiaApp({...})` **expression statement** with `createServer` and `renderToString`. An `export default createInertiaApp(...)` entry builds without errors, but it produces a bundle that never listens, and `ssr:start` then exits 0 with no log.
 - `resources/vite/vukem.js` (project-owned starter plugin): during the SSR build it forced `outDir` to `resources/public/build` with `emptyOutDir: true`. The server bundle then landed in the public directory and the client build was wiped. Fixed: when `isSsrBuild` is set, the output goes to `bootstrap/ssr`. `package.json` gets `build:ssr` = `vite build --ssr resources/js/ssr.tsx`.
@@ -184,7 +184,7 @@ Verdict: workaround (lock and index script are app code; VF-040, VF-026, VF-017)
 
 Verdict: works (no framework change needed).
 
-Spike branch `agent/orchestrator/P0.F.1.3`. vukem's `auth.NewSessionGuard` takes any `hash.Hasher` (`Make`, `Verify`, `NeedsRehash`), and the guard stores a fresh hash through the provider's `PasswordUpdater` when `NeedsRehash` is true after a successful login (https://vukem.dev/docs/security/authentication "Password hashing"). So no VF is needed.
+Spike branch `agent/orchestrator/P0.F.1.3`. vukem's `auth.NewSessionGuard` takes any `hash.Hasher` (`Make`, `Verify`, `NeedsRehash`), and the guard stores a fresh hash through the provider's `PasswordUpdater` when `NeedsRehash` is true after a successful login (<https://vukem.dev/docs/security/authentication> "Password hashing"). So no VF is needed.
 
 - `app/accounts/compat_hasher.go`: `CompatHasher` wraps the scaffold's hasher (`hash.Default()`, or `hash.Fake()` in tests). Values matching `^[0-9a-f]{32}:[0-9a-f]{128}$` are verified with scrypt N=16384, r=16, p=1, dkLen=64 over `norm.NFKC` of the password, with the hex salt text as the salt and `subtle.ConstantTimeCompare`; `NeedsRehash` is always true for them. Everything else is delegated, and `Make` always produces argon2id.
 - `app/accounts/accounts.go`: `hasher = NewCompatHasher(hasher)`.
@@ -200,11 +200,11 @@ Acceptance (2026-10-29):
 
 Verdict: workaround (works; per-family semaphore and idempotency table are app code, VF-018).
 
-Spike branch `agent/orchestrator/P0.F.6.1`. `QUEUE_CONNECTION=database`, `QUEUE_NAMES=heavy,default`, `QUEUE_CONCURRENCY=8`, `JOBS_HEAVY_CONCURRENCY=2`, `SCHEDULE_TIMEZONE=America/Sao_Paulo`, `SHUTDOWN_TIMEOUT=15s`. The `jobs` and `failed_jobs` tables are created by vukem at boot (https://vukem.dev/docs/digging-deeper/queue "database").
+Spike branch `agent/orchestrator/P0.F.6.1`. `QUEUE_CONNECTION=database`, `QUEUE_NAMES=heavy,default`, `QUEUE_CONCURRENCY=8`, `JOBS_HEAVY_CONCURRENCY=2`, `SCHEDULE_TIMEZONE=America/Sao_Paulo`, `SHUTDOWN_TIMEOUT=15s`. The `jobs` and `failed_jobs` tables are created by vukem at boot (<https://vukem.dev/docs/digging-deeper/queue> "database").
 
 - `app/jobs/recompute.go`: `spike.recompute` (heavy family, `queue.OnQueue("heavy")`, holds a semaphore slot for `Work`) and `spike.touch` (light). Both apply their effect through `applyOnce`, which inserts the idempotency key into `job_effects` (`ON CONFLICT DO NOTHING`) and runs the effect in the same transaction, so redelivery under at-least-once semantics changes nothing.
 - `app/jobs/semaphore.go`: in-process per-family cap (buffered channel) with a `job_family_stats` row (`active`, `max_active`) as evidence. vukem queues are strict priority with one concurrency for all kinds (VF-018).
-- `app/jobs/counter.go`: `BufferedCounter` for view counts. Each light job adds a hit; the `views:flush` task (`Cron("* * * * *")`, `WithoutOverlapping()`) writes one upsert per item. A failed write merges the counts back. Counts buffered at a crash are lost (accepted for views). Note: `HourlyAt` is documented on https://vukem.dev/docs/digging-deeper/scheduler "Frequencies" as of 2026-10-29, so VF-021 may be stale; cron is used anyway.
+- `app/jobs/counter.go`: `BufferedCounter` for view counts. Each light job adds a hit; the `views:flush` task (`Cron("* * * * *")`, `WithoutOverlapping()`) writes one upsert per item. A failed write merges the counts back. Counts buffered at a crash are lost (accepted for views). Note: `HourlyAt` is documented on <https://vukem.dev/docs/digging-deeper/scheduler> "Frequencies" as of 2026-10-29, so VF-021 may be stale; cron is used anyway.
 - Wiring: `bootstrap/app.go` builds one `jobs.Deps` and passes it to `WithJobsFunc` and `WithSchedule` through closures (no package globals). `jobs:demo -n -run -work` dispatches the test load.
 
 Acceptance (2026-10-29, in the Linux container so `docker stop` delivers SIGTERM):
