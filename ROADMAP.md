@@ -1896,7 +1896,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
   - Notes: `session`, `verification` and `rate_limit` are not imported. Legacy `passkey` rows are imported (ADR 0017, depends on P1.C.7.1); the Better Auth storage encoding (base64 vs base64url, COSE key layout) is [NOT VERIFIED] until proven on a Neon copy. Only if it proves incompatible: passkey-only users are counted and mailed the `passkeys_retired` reset notice 14 days before the window (P2.G.1.2). OAuth tokens dropped. Never log hashes or key material.
   - Status (2026-10-29): `users` stage and the scrypt login proof delivered; `passkeys.go` and `TestPasskeysStage` wait for P1.C.7.1 (no `passkeys` table before the vukem release with VF-001), tracked as P2.F.2.2b.
 
-- [ ] **P2.F.2.3** Export the 2FA secrets with a Bun script using Better Auth's own helpers and import them over stdin.
+- [x] **P2.F.2.3** Export the 2FA secrets with a Bun script using Better Auth's own helpers and import them over stdin.
   - Files/modules: `scripts/legacy/twofactor-export.ts` (run from a temp copy of `legacy/apps/web` with its `node_modules`), `database/legacyimport/twofactor.go`, `database/legacyimport/twofactor_test.go`
   - Refs: SDD 03 §7.6, §11 issue 2 (03-2 decided); SDD 13 §5 (`orm.Encrypted`); P0.F.1.2 (which Better Auth function decrypts)
   - Depends on: P2.F.2.2
