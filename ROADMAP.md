@@ -1063,7 +1063,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.H.3 Billing and pricing
 
-- [ ] **P1.H.3.1** Install billing in the real app with `pro`/`business` plans in BRL/USD/EUR, the webhook events, the plan state machine and the checkout pages (replaces `startStripeCheckout`, `openBillingPortal`).
+- [x] **P1.H.3.1** Install billing in the real app with `pro`/`business` plans in BRL/USD/EUR, the webhook events, the plan state machine and the checkout pages (replaces `startStripeCheckout`, `openBillingPortal`).
   - Files/modules: `vukem install:billing` output, `config/billing.go`, `app/billing/plan_state.go`, `app/billing/listeners.go`, `resources/js/pages/Billing/Index.tsx`, routes `/billing`, `/profile/api/checkout` (legacy path redirect), `app/accounts/deletion.go` (Stripe cancel hook)
   - Refs: SDD 05 §6.3, §7.5, §9; ADR 0015; D-14; <https://vukem.dev/docs/digging-deeper/billing>; legacy `actions/billing.ts`, `lib/billing/catalog.ts`, `lib/billing/stripe-webhook.ts`, `app/[locale]/profile/api/checkout/page.tsx`
   - Depends on: P1.H.1.2, P0.F.8.1
