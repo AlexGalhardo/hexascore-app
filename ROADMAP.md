@@ -1928,7 +1928,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
     - a book without edition data never fails the stage (01-1)
   - Notes: this is the minimal mapping of SDD 01 §5.4. The full Go normaliser over all records named in SDD 06 §7.9 belongs to P6.A and re-runs later; do not build it here.
 
-- [ ] **P2.F.2.6** Implement the `social` and `library` stages: ratings with the legacy rounding, statuses, time-to-beat, lists, list items, reports, contact messages.
+- [x] **P2.F.2.6** Implement the `social` and `library` stages: ratings with the legacy rounding, statuses, time-to-beat, lists, list items, reports, contact messages.
   - Files/modules: `database/legacyimport/social.go`, `database/legacyimport/library.go`, `tests/migration/legacy_rounding_test.go`, `database/legacyimport/social_test.go`
   - Refs: SDD 02 FR-02-13, §5 (`rating_migration_audit`, `score_actions` `legacy_rounding`), §9; SDD 14 §5 ("Migration" paragraph, invariants); A-04; D-06
   - Depends on: P2.F.2.2, P2.F.2.4

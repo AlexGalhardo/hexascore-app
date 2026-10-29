@@ -53,8 +53,12 @@ func Stages() []Stage {
 			Batch:  catalogBatch(time.Now),
 		},
 		{Name: "entities", Tables: []string{"items"}, Batch: entitiesBatch()},
-		{Name: "social", Tables: []string{"ratings", "lists", "list_items", "reports", "contact_messages"}},
-		{Name: "library", Tables: []string{"item_status", "time_to_beat"}},
+		{
+			Name:   "social",
+			Tables: []string{"ratings", "lists", "list_items", "reports", "contact_messages"},
+			Batch:  socialBatch(time.Now),
+		},
+		{Name: "library", Tables: []string{"item_status", "time_to_beat"}, Batch: libraryBatch(time.Now)},
 		{Name: "billing", Tables: []string{
 			"api_keys", "api_usage_daily", "subscriptions", "stripe_customers", "credit_ledger", "pix_charges",
 		}, Batch: billingBatch(time.Now)},
