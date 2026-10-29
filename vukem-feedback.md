@@ -50,7 +50,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-039 | 2026-10-29 | low | in_progress (framework), PR #54 (signed.Token; extensions and keyset cursor already in v0.33.0) |
 | VF-040 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#13](https://github.com/AlexGalhardo/vukem/pull/13)), adopted (ADOPT-VF-040) |
 | VF-041 | 2026-10-29 | low | fixed in v0.33.0 (PR [#28](https://github.com/AlexGalhardo/vukem/pull/28)) |
-| VF-042 | 2026-10-29 | low | open |
+| VF-042 | 2026-10-29 | low | in_progress (framework), PR #55 (struct{} + status = no body; extensions in v0.33.0; per-group error handler open) |
 | VF-043 | 2026-10-29 | low | fixed in v0.33.0 (PR [#30](https://github.com/AlexGalhardo/vukem/pull/30), adopted 4a2d8ec) |
 | VF-044 | 2026-10-29 | low | open |
 | VF-045 | 2026-10-29 | low | fixed in v0.33.0 (PR [#29](https://github.com/AlexGalhardo/vukem/pull/29)) |
@@ -63,6 +63,8 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-052 | 2026-10-29 | high | in_progress (framework), PRs #46 (client IP + origin lock), #47 (Turnstile action), #48 (visitor headers), #49 (edge cache + purge), #50 (Access JWT); merges pending |
 | VF-053 | 2026-10-29 | low | in_progress (framework), PR #52 |
 | VF-054 | 2026-10-29 | low | in_progress (framework), PR #51 |
+| VF-055 | 2026-10-29 | medium | open |
+| VF-056 | 2026-10-29 | medium | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -534,3 +536,33 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Repro**: a `NoTransaction` migration `CREATE UNIQUE INDEX CONCURRENTLY IF NOT EXISTS t_k_uq ON t (k)` over duplicate rows fails; remove the duplicates; `migrate` reports the migration as ran while `pg_index.indisvalid` stays false (`tests/predeploy_test.go` `TestIndexConcurrently_DropsInvalid` shows the drop that avoids it).
 - **Workaround**: `hexascore:predeploy` (`app/console/predeploy.go`) drops `INVALID` indexes of the current schema that no backend is building before `migrate`.
 - **Request**: document the leftover in "Migrations outside a transaction", and either drop an `INVALID` index named by a failing `NoTransaction` migration or fail `migrate` when a `NoTransaction` migration finishes with an `INVALID` index on PostgreSQL.
+
+## VF-055: No native React Email support for mail templates
+
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: open (requested by the owner 2026-10-29).
+- **vukem version**: v0.33.0. **Docs consulted**: <https://vukem.dev/docs> mail pages and search for `react-email`, `jsx`: no page `[NOT IN VUKEM DOCS]`. External: <https://react.email> (`@react-email/components`, `@react-email/render`).
+- **Context**: HexaScore already ships React + TypeScript for Inertia pages and runs Node for SSR (ADR 0004). Mail templates are written separately as Go templates, so the design tokens, components and i18n of the web app are not reused in e-mails, and previewing them needs custom tooling.
+- **Reproduction**: no way to author a `mail.Message` body as a React Email component; `install:mail`/scaffolds only offer Go `html/template` bodies.
+- **Workaround**: hand-written Go HTML templates per mail.
+- **Request**: native React Email support, keeping the Go core stdlib-only:
+  - Authoring: `.tsx` mail components under `resources/js/emails/` in browser starters, typed props, shared tokens and i18n catalogs.
+  - Rendering: the preferred route is build time: `vukem mail:build` (or a Vite plugin step) renders each component to HTML + plain text with placeholder props into Go `html/template`/`text/template` files embedded in the binary, so production sends need no Node call; an optional runtime path through the existing SSR child (`ssr` render endpoint with a timeout and fallback to the prebuilt template) for dynamic layouts. Pick one as default and document the trade-off.
+  - Go API: `mail.ReactTemplate("welcome", props)` (or equivalent) that produces `mail.Message` HTML and text bodies, escaping all props, with locale selection matching the existing mail locale rules (VF-013).
+  - Preview: `vukem mail:preview` dev route or the React Email dev server wired into `task dev`, never mounted in production.
+  - Tests: golden tests of rendered HTML/text, XSS escaping of props (`TestSecurity_*`), missing-template and render-timeout behaviour.
+  - Pinned exact npm versions for `@react-email/*` in the starter templates (no ranges), recorded in docs.
+
+## VF-056: No native JSON-RPC 2.0 support
+
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: open (requested by the owner 2026-10-29).
+- **vukem version**: v0.33.0. **Docs consulted**: <https://vukem.dev/docs> REST/API pages and search for `json-rpc`, `rpc`: no page `[NOT IN VUKEM DOCS]`. Spec: <https://www.jsonrpc.org/specification>.
+- **Context**: vukem offers REST (`api.Register`, OpenAPI) but no RPC style endpoint. Some clients (mobile, internal tools, agent/MCP-style integrations) prefer one JSON-RPC endpoint with typed methods.
+- **Reproduction**: no `jsonrpc` package; a hand-written handler has to re-implement batching, notifications, error codes and validation.
+- **Workaround**: none in the app today.
+- **Request**: a stdlib-only `jsonrpc` package implementing JSON-RPC 2.0 fully:
+  - Server: `jsonrpc.NewServer()`, typed registration with generics `jsonrpc.Method(s, "items.get", func(ctx, P) (R, error))`, mounted as a normal `http.Handler` on the vukem router so auth, rate limits, request ids, logging and tracing middleware apply; method-level middleware/guards (abilities, auth).
+  - Spec compliance: request/response/notification, batches (with a configurable max batch size), `id` echoing (string/number/null), standard error codes (-32700, -32600, -32601, -32602, -32603) and app errors mapped from `errs` (code, message, data), no response for notifications, HTTP status rules documented.
+  - Validation: params decoded strictly (unknown fields rejected, size limits) and validated with the existing validation package; panics recovered as -32603 without leaking internals.
+  - Docs: OpenRPC document generation from the registered methods (parallel to the OpenAPI export), and a typed client (`jsonrpc.Client`) for Go; optional TypeScript client generation alongside the existing client generation.
+  - Tests: spec conformance table tests, fuzzing of the decoder, `TestSecurity_*` (oversized batch, deep nesting, method enumeration with auth, notification side effects under auth).
+

@@ -36,7 +36,7 @@ Owner answered "merge your own green PRs" in chat, but `gh pr merge 39 --squash`
 
 ## Session 8, later (2026-10-29)
 
-- Open PRs from this session: #44 (VF-001 scaffold, stacked on #43), #45 (Scorecard vulns), #46/#48/#49/#50 (VF-052 chain, in that order), #47 (Turnstile action), #51 (VF-054), #52 (VF-053), #53 (VF-022 IP truncation), #54 (VF-039 signed.Token).
+- Open PRs from this session: #44 (VF-001 scaffold, stacked on #43), #45 (Scorecard vulns), #46/#48/#49/#50 (VF-052 chain, in that order), #47 (Turnstile action), #51 (VF-054), #52 (VF-053), #53 (VF-022 IP truncation), #54 (VF-039 signed.Token), #55 (VF-042 no-body status).
 - After squash merges: rebase stacked work onto main as NEW branches + replacement PRs when the orchestrator says a base landed.
 - Remaining open VFs (all low): 004, 007, 012, 020, 023, 033, 034, 042, 044, 049, 050 (skip 011, 014: owner).
 - A throwaway container `vukem-pg-test` (postgres:17, 127.0.0.1:55432) may still run: `docker rm -f vukem-pg-test`.
