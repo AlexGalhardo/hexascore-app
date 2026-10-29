@@ -22,14 +22,6 @@ const (
 
 var nicknameRe = regexp.MustCompile(`^[a-z]{4,16}$`)
 
-func (h *Handlers) hasNickname(c *web.Ctx, id int64) (bool, error) {
-	var has bool
-
-	err := h.a.DB.QueryRowContext(c.Context(), `SELECT username IS NOT NULL FROM users WHERE id = $1`, id).Scan(&has)
-
-	return has, err
-}
-
 // ShowOnboarding asks a signed-in, verified user without a nickname for one;
 // users who have it go to the dashboard.
 func (h *Handlers) ShowOnboarding(c *web.Ctx) error {
@@ -38,7 +30,7 @@ func (h *Handlers) ShowOnboarding(c *web.Ctx) error {
 		return err
 	}
 
-	if has, err := h.hasNickname(c, u.ID); err != nil || has {
+	if has, err := h.a.HasNickname(c.Context(), u.ID); err != nil || has {
 		if err != nil {
 			return err
 		}

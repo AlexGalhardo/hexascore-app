@@ -24,7 +24,7 @@ func TestOnboardingNickname(t *testing.T) {
 
 	raw := app.Client(t)
 	raw.PostJSON("/signup", signUpForm("Bia Souza", "bia@example.com", testPassword))
-	raw.PostJSON("/login", map[string]any{"email": "bia@example.com", "password": testPassword})
+	raw.PostJSON("/login", map[string]any{"identifier": "bia@example.com", "password": testPassword})
 	raw.Get("/onboarding").AssertRedirect("/verify-email")
 	raw.PostJSON("/onboarding", map[string]any{"nickname": "bianca"}).AssertForbidden()
 

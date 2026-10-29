@@ -7,7 +7,7 @@ import { useT } from "../../lib/useT";
 
 export default function Login() {
 	const t = useT();
-	const form = useForm({ email: "", password: "", remember: false });
+	const form = useForm({ identifier: "", password: "", remember: false });
 
 	const submit = (e: FormEvent) => {
 		e.preventDefault();
@@ -20,13 +20,12 @@ export default function Login() {
 			<h1 className="mb-4 text-2xl font-semibold">{t("auth.login.title")}</h1>
 			<form onSubmit={submit} className="space-y-4">
 				<Field
-					label={t("auth.fields.email")}
-					type="email"
+					label={t("auth.fields.identifier")}
 					autoComplete="username"
 					required
-					value={form.data.email}
-					onChange={(e) => form.setData("email", e.target.value)}
-					error={form.errors.email}
+					value={form.data.identifier}
+					onChange={(e) => form.setData("identifier", e.target.value)}
+					error={form.errors.identifier}
 				/>
 				{/* No rule checklist here: logging in must not advertise the policy,
             and an existing password may predate the current rules. */}

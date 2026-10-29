@@ -7,7 +7,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"net/http"
-	"strings"
 
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/inertia"
@@ -58,7 +57,12 @@ func (h *Handlers) Login(c *web.Ctx) error {
 		return err
 	}
 
-	creds := map[string]string{"email": strings.ToLower(in.Email), "password": in.Password}
+	email, err := h.a.EmailForIdentifier(c.Context(), in.Identifier)
+	if err != nil {
+		return err
+	}
+
+	creds := map[string]string{"email": email, "password": in.Password}
 
 	u, err := h.a.Web.Validate(c, creds)
 	if err != nil {
@@ -79,9 +83,7 @@ func (h *Handlers) Login(c *web.Ctx) error {
 		return err
 	}
 
-	target, _ := c.Session().Pull(auth.IntendedKey).(string)
-
-	return c.Redirect(web.SafeRedirect(c.Request(), target, "/dashboard"))
+	return h.a.RedirectAfterLogin(c, u)
 }
 
 // ShowRegister renders the registration page.
