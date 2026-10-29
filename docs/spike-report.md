@@ -213,3 +213,25 @@ Acceptance (2026-10-29, in the Linux container so `docker stop` delivers SIGTERM
 - 200 jobs (100 heavy, 100 light). `docker stop` after 4 s gave `shutting down cause="terminated signal received"`, with 46 effects applied and 154 jobs left. After restart: `jobs_left=0 failed=0 effects=200 distinct_keys=200 heavy=100 light=100 heavy_peak=2`.
 - Hard kill: 40 more jobs with 3 s heavy work; `docker kill` (SIGKILL) after 5 s left 2 effects and 38 jobs. After restart, the expired reservations were redelivered in about 105 s, ending with `jobs_left=0 failed=0 r2_effects=40`. Every key was applied once. The stats row read `heavy_peak=4` because the two jobs killed mid-run never decremented `active`. That is a measurement artifact: the cap is enforced in process, and the graceful run plus `TestSemaphoreCapsConcurrency` show it holds at 2. The real app records concurrency as a metric (SDD 12), not as a row.
 - `go test ./app/jobs/... -run TestBufferedCounterFlush` → PASS (with `-race`). `go test ./...` on spike `main` → all `ok`.
+
+## P0.F.2.3 URL-prefix locales, i18n Once prop and theme cookie under SSR
+
+Verdict: workaround (VF-024 and VF-028 stay open; refined in VF-041).
+
+Spike branch `agent/senior/P0.F.2.3`. `vukem.WithTranslations(resources.Lang())` loads `resources/lang/en.json` and `pt-BR.json` (the roadmap says `lang/`; `resources/lang` is where the `WithTranslations` docs put catalogs). Design:
+
+- `app/http/middleware/locale_prefix.go`: `LocalePrefix` (server-level, before routing) strips `/pt-br`, drops any client `_locale` and passes the locale as that query parameter; `i18n.Middleware` is configured with `Query: "_locale"`, `Order: [SourceQuery]`, so the URL is the only locale source (Accept-Language and the `lang` cookie no longer matter). A GET/HEAD without prefix whose `locale` cookie is `pt-BR` gets a 307 to the prefixed URL (not for Inertia visits, `/up`, `/api/`, `/build/`, file-like paths).
+- `RestoreURL` (route-level, first in `r.Use`) puts the original URL back so Inertia's `url` keeps `/pt-br/` (Inertia uses `r.URL.RequestURI()`).
+- `inertia.I18n("ui.")` shares `locale`, `locales` and the once prop `messages` keyed `i18n:<locale>`; `server.*` keys stay out of the page. Messages are flat dotted keys (`"ui.nav.home"`).
+- Theme: view functions have no request access, so the cookie (`dark`|`light` only) is shared as prop `theme` and the root view renders `{{with .Page.Props.theme}} data-theme="{{.}}"{{end}}`.
+
+Acceptance (spike built with `bun run build && bun run build:ssr`, `app serve` plus `app ssr:start`, port 3011 because 3001 was taken by another process):
+
+- `/up?checks=1` → `{"status":"ok","checks":{"db":"ok","ssr":"ok"}}`.
+- `curl -s localhost:3011/pt-br/ | grep -o '<html lang="[^"]*"'` → `<html lang="pt-BR"`; the SSR body contains the page and `"url":"\/pt-br\/"`.
+- `curl -sI -H 'Cookie: locale=pt-BR' localhost:3011/` → `HTTP/1.1 307 Temporary Redirect`, `Location: /pt-br/`.
+- `curl -s -H 'Cookie: theme=dark' localhost:3011/ | grep -c 'data-theme="dark"'` → `1`.
+- Inertia visit `/pt-br/` returns `messages`; with `X-Inertia-Except-Once-Props: i18n:pt-BR` the props hold only `appName, auth, errors, locale, locales` (no `messages`), `onceProps` still lists `i18n:pt-BR`.
+- `go test ./app/http/middleware/` ok (16 cases incl. open-redirect and client `_locale` spoof); `go test ./tests/ -run TestLocalePrefix` 4 tests PASS (prefix, cookie redirect, Once omission, theme incl. attribute-injection cookie). `go test ./...`: only the Postgres tests fail locally (no `TEST_DATABASE_URL` exported in this shell).
+
+Limits: in-app links and `router.visit` must add the prefix themselves (no prefix-aware `route()`/URLFor, VF-024); `es` is not enabled (no app catalog yet); locale switching must set the `locale` cookie and navigate (not built); the 307 is per request, so a CDN must `Vary: Cookie` (set on the redirect only).
