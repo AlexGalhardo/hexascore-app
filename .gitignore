@@ -2,8 +2,6 @@
 go.work
 go.work.sum
 
-# orchestration state (PROMPT-WORKERS.md)
-.orchestration/
 
 # secrets and local env
 .env
