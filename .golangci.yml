@@ -1,0 +1,99 @@
+# yaml-language-server: $schema=https://golangci-lint.run/jsonschema/golangci.jsonschema.json
+# Adapted from the vukem repository's config; golangci-lint v2.15.0 (pinned in
+# setups/ and .github/workflows/ci.yml).
+version: "2"
+
+run:
+  timeout: 5m
+  relative-path-mode: gomod
+  tests: true
+
+formatters:
+  enable:
+    - gofumpt
+    - gci
+    - golines
+  settings:
+    gofumpt:
+      module-path: github.com/AlexGalhardo/hexascore-app
+    gci:
+      sections:
+        - standard
+        - default
+        - prefix(github.com/AlexGalhardo/hexascore-app)
+    golines:
+      max-len: 120
+      tab-len: 4
+  exclusions:
+    generated: lax
+
+linters:
+  default: standard
+  enable:
+    - bodyclose
+    - durationcheck
+    - errorlint
+    - exhaustive
+    - gosec
+    - noctx
+    - nilerr
+    - rowserrcheck
+    - sqlclosecheck
+    - copyloopvar
+    - godot
+    - intrange
+    - misspell
+    - modernize
+    - nolintlint
+    - perfsprint
+    - predeclared
+    - revive
+    - unconvert
+    - usestdlibvars
+    - thelper
+    - tparallel
+    - usetesting
+    - depguard
+  settings:
+    depguard:
+      rules:
+        crypto-randomness:
+          list-mode: lax
+          deny:
+            - pkg: math/rand
+              desc: security-sensitive code must use crypto/rand
+            - pkg: github.com/stretchr/testify
+              desc: use the standard library (AGENTS.md "Rules")
+    errcheck:
+      check-type-assertions: true
+    exhaustive:
+      default-signifies-exhaustive: true
+    nolintlint:
+      require-explanation: true
+      require-specific: true
+    revive:
+      rules:
+        - name: context-as-argument
+        - name: error-return
+        - name: error-strings
+        - name: exported
+        - name: package-comments
+        - name: receiver-naming
+        - name: unexported-return
+        - name: unused-parameter
+        - name: var-naming
+  exclusions:
+    generated: lax
+    presets:
+      - std-error-handling
+      - common-false-positives
+    rules:
+      - path: _test\.go
+        linters:
+          - errcheck
+          - gosec
+          - noctx
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
