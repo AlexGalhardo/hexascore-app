@@ -216,6 +216,14 @@ WHERE (from_item_id = $1 AND to_item_id = $2) OR (from_item_id = $2 AND to_item_
 		}
 	}
 
+	// A user's chosen edition follows its work through ON UPDATE CASCADE; where the user already picked one
+	// for the target, the target wins.
+	if _, err := ex.ExecContext(ctx, `DELETE FROM user_item_editions s WHERE s.item_id = $1
+AND EXISTS (SELECT 1 FROM user_item_editions t WHERE t.user_id = s.user_id AND t.item_id = $2)`,
+		from, into); err != nil {
+		return fmt.Errorf("drop duplicate user editions: %w", err)
+	}
+
 	// Editions have no conflicting key (isbn13 is globally unique).
 	if _, err := ex.ExecContext(ctx, `UPDATE editions SET work_id = $2, updated_at = now() WHERE work_id = $1`,
 		from, into); err != nil {
