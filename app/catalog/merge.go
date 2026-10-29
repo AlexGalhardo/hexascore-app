@@ -20,7 +20,7 @@ var (
 )
 
 // Merged is the `catalog.merged` job dispatched in the merge transaction;
-// score recompute (P1.D.3.2), list and status moves (P1.F.1.2) and reindex
+// score recompute (P1.D.3.2) and reindex
 // (SDD 07) subscribe to it.
 type Merged struct {
 	Type   string `json:"type"`
@@ -270,6 +270,10 @@ FROM items f WHERE f.id = $1 AND t.id = $2`,
 		}
 	}
 
+	if err := moveListItems(ctx, ex, from, into); err != nil {
+		return err
+	}
+
 	if _, err := ex.ExecContext(
 		ctx,
 		`UPDATE rating_events SET item_id = $2 WHERE item_id = $1`,
@@ -277,6 +281,29 @@ FROM items f WHERE f.id = $1 AND t.id = $2`,
 		into,
 	); err != nil {
 		return fmt.Errorf("move rating_events: %w", err)
+	}
+
+	return nil
+}
+
+// moveListItems repoints list entries of the source at the target; a list that already holds the target keeps
+// its entry (target wins). It runs here, not in a `catalog.merged` subscriber, because deleting the source
+// cascades to list_items first. Positions stay as they are (gaps are allowed, SDD 14 §5); item_count is
+// recounted and version bumped so a stale editor gets a 409 instead of reordering a changed list.
+func moveListItems(ctx context.Context, ex database.Executor, from, into string) error {
+	stmts := []string{
+		`UPDATE lists SET version = version + 1, updated_at = now()
+WHERE id IN (SELECT list_id FROM list_items WHERE item_id = $1) AND $2::uuid IS NOT NULL`,
+		`DELETE FROM list_items s WHERE s.item_id = $1
+AND EXISTS (SELECT 1 FROM list_items t WHERE t.list_id = s.list_id AND t.item_id = $2)`,
+		`UPDATE list_items SET item_id = $2 WHERE item_id = $1`,
+		`UPDATE lists SET item_count = (SELECT count(*) FROM list_items WHERE list_id = lists.id)
+WHERE id IN (SELECT list_id FROM list_items WHERE item_id = $2) AND $1::uuid IS NOT NULL`,
+	}
+	for _, q := range stmts {
+		if _, err := ex.ExecContext(ctx, q, from, into); err != nil {
+			return fmt.Errorf("move list items: %w", err)
+		}
 	}
 
 	return nil

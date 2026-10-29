@@ -60,6 +60,9 @@ func Lists(r *router.Router, app *vukem.App) error {
 	r.Post("/lists", web.Create).Name("lists.create").Use(required, verified, byUser)
 	r.Patch("/lists/{id}", web.Update).Name("lists.update").Use(required, verified, byUser)
 	r.Delete("/lists/{id}", web.Delete).Name("lists.delete").Use(required, verified, byUser)
+	r.Put("/lists/{id}/items/{itemId}", web.AddItem).Name("lists.items.put").Use(required, verified, byUser)
+	r.Delete("/lists/{id}/items/{itemId}", web.RemoveItem).Name("lists.items.delete").Use(required, verified, byUser)
+	r.Put("/lists/{id}/order", web.Reorder).Name("lists.order").Use(required, verified, byUser)
 
 	h := controllers.NewLists(svc, gate, acc.API.Name(), true)
 	idem := api.Idempotency(c.Store(), api.IdempotencyOptions{Methods: []string{"POST", "PATCH", "PUT", "DELETE"}})
@@ -69,6 +72,9 @@ func Lists(r *router.Router, app *vukem.App) error {
 		g.Post("/lists", h.Create).Name("lists.create")
 		g.Patch("/lists/{id}", h.Update).Name("lists.update")
 		g.Delete("/lists/{id}", h.Delete).Name("lists.delete")
+		g.Put("/lists/{id}/items/{itemId}", h.AddItem).Name("lists.items.put")
+		g.Delete("/lists/{id}/items/{itemId}", h.RemoveItem).Name("lists.items.delete")
+		g.Put("/lists/{id}/order", h.Reorder).Name("lists.order")
 	}).Name("app.v1.")
 
 	return nil
