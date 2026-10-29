@@ -101,10 +101,7 @@ func TestAPILicenceFilter(t *testing.T) {
 			t.Errorf("api body leaks %q: %s", leak, body)
 		}
 	}
-	// The TMDB/IGDB ids only count as a leak as whole JSON values: random UUIDs may contain "1234".
-	if m := regexp.MustCompile(`[:\[,]\s*"?(999|1234)"?\s*[,}\]]`).FindString(body); m != "" {
-		t.Errorf("api body leaks a TMDB/IGDB id (%s): %s", m, body)
-	}
+	assertNoExternalIDs(t, body)
 	res.AssertJSONPath("title", "Hollow Knight").
 		AssertJSONPath("releaseDate", "2017-02-24").
 		AssertJSONPath("externalIds.wikidata", "Q20984815").
@@ -236,4 +233,15 @@ func siteHasName(p catalog.ItemPage, name string) bool {
 	}
 
 	return false
+}
+
+// leakedExternalID matches the fixture's TMDB/IGDB ids only as whole JSON values: random UUIDs may contain "999" or "1234".
+var leakedExternalID = regexp.MustCompile(`[:\[,]\s*"?(999|1234)"?\s*[,}\]]`)
+
+func assertNoExternalIDs(t *testing.T, body string) {
+	t.Helper()
+
+	if m := leakedExternalID.FindString(body); m != "" {
+		t.Errorf("api body leaks a TMDB/IGDB id (%s): %s", m, body)
+	}
 }
