@@ -1260,5 +1260,54 @@
       "list_hidden": "Uma das suas listas foi ocultada por um moderador.",
       "system": "Aviso da equipe."
     }
+  },
+  "library": {
+    "title": "Sua biblioteca",
+    "empty": "Sua biblioteca está vazia. Defina um status em um item para vê-lo aqui.",
+    "allStatuses": "Todos os status",
+    "status": "Status",
+    "type": "Tipo",
+    "allTypes": "Todos os tipos",
+    "sort": "Ordenar",
+    "sorts": {
+      "updated": "Atualizados recentemente",
+      "title": "Título",
+      "score": "Nota"
+    },
+    "apply": "Aplicar",
+    "showing": "{count} de {total}",
+    "edition": "Edição: {title}",
+    "score": "Sua nota: {stars}"
+  },
+  "userLists": {
+    "title": "Suas listas",
+    "new": "Nova lista",
+    "titleField": "Título",
+    "description": "Descrição",
+    "public": "Pública",
+    "private": "Privada",
+    "hiddenByMod": "Ocultada por um moderador",
+    "create": "Criar lista",
+    "itemCount": {
+      "one": "{count} item",
+      "other": "{count} itens"
+    },
+    "edit": "Editar",
+    "delete": "Excluir",
+    "confirmDelete": "Excluir esta lista? Isso não pode ser desfeito.",
+    "save": "Salvar",
+    "back": "Voltar às listas",
+    "viewPublic": "Ver página pública",
+    "empty": "Esta lista está vazia.",
+    "moveUp": "Mover para cima",
+    "moveDown": "Mover para baixo",
+    "remove": "Remover",
+    "reorderHelp": "Use os botões de mover para mudar a ordem e depois salve a ordem.",
+    "saveOrder": "Salvar ordem",
+    "position": "Posição {position}",
+    "note": "Nota",
+    "by": "Lista de {nickname}",
+    "edited": "Editar lista",
+    "limit": "Até {limit} listas por tipo."
   }
 }
