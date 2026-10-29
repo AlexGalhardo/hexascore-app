@@ -442,7 +442,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test ./app/catalog/... -run TestVisibility` → PASS (TMDB/IGDB fixture fields omitted for `api`, present for `site`; omitted, not `null`; `meta.omittedFields` set)
   - Notes: default `CATALOG_API_SOURCES=wikidata,wikipedia,openlibrary,hexascore`; until `docs/legal/open-library.md` exists, `openlibrary` is allowed only for identifiers and titles (the licence check itself is a P6 blocking task).
 
-- [ ] **P1.B.2.2** Implement listing queries with the legacy filters and sorts over the signed keyset cursor.
+- [x] **P1.B.2.2** Implement listing queries with the legacy filters and sorts over the signed keyset cursor.
   - Files/modules: `app/catalog/listing.go`, `app/catalog/cursor.go`, `app/catalog/listing_test.go`
   - Refs: SDD 01 §6.2, §7.2, §9; SDD 05 §6.2 "Cursors"; VF-005; `legacy/apps/web/lib/sections.ts`, `legacy/apps/web/lib/categories.ts`
   - Depends on: P1.B.2.1, P0.F.3.1
@@ -454,7 +454,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.B.3 Slugs, redirects and merge
 
-- [ ] **P1.B.3.1** Implement slug generation and `catalog_redirects`, answering 301 for old slugs and merged ids.
+- [x] **P1.B.3.1** Implement slug generation and `catalog_redirects`, answering 301 for old slugs and merged ids.
   - Files/modules: `app/catalog/slugs.go`, `app/catalog/redirects.go`, `app/http/middleware/catalog_redirect.go`, tests
   - Refs: SDD 01 §7.1, §9; D-17
   - Depends on: P1.B.1.3
