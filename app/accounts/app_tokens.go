@@ -2,6 +2,7 @@ package accounts
 
 import (
 	"context"
+	"errors"
 	"slices"
 	"strconv"
 	"strings"
@@ -87,22 +88,28 @@ func (a *Accounts) IssueAppToken(ctx context.Context, u models.User, device stri
 	return a.Tokens.Create(ctx, uid, device, AppAbilities(), AppTokenTTL)
 }
 
-// RotateAppToken issues a replacement named like current and revokes current. The replacement is created
-// first so a failure never leaves the device without a token; vukem's Tokens has no transaction hook
-// (shortcut: two statements, not one transaction; upgrade when auth.Tokens accepts an executor per call).
+// ErrTokenAlreadyRotated is returned when the token presented for rotation
+// was revoked by a concurrent rotation or revoke.
+var ErrTokenAlreadyRotated = errors.New("accounts: token already rotated")
+
+// RotateAppToken revokes current and issues a replacement named like it.
+// The conditional revoke runs first so only one of two concurrent rotations
+// with the same token wins: a stolen token cannot mint a second live token
+// next to the device's (security review, P1.C.4.1). A failure after the
+// revoke leaves the device without a token; it signs in again.
 func (a *Accounts) RotateAppToken(ctx context.Context, u models.User, current auth.Token) (string, auth.Token, error) {
 	uid := strconv.FormatInt(u.ID, 10)
 
-	plain, tok, err := a.Tokens.Create(ctx, uid, current.Name, AppAbilities(), AppTokenTTL)
+	ok, err := a.Tokens.RevokeFor(ctx, uid, current.ID)
 	if err != nil {
 		return "", auth.Token{}, err
 	}
 
-	if _, err := a.Tokens.RevokeFor(ctx, uid, current.ID); err != nil {
-		return "", auth.Token{}, err
+	if !ok {
+		return "", auth.Token{}, ErrTokenAlreadyRotated
 	}
 
-	return plain, tok, nil
+	return a.Tokens.Create(ctx, uid, current.Name, AppAbilities(), AppTokenTTL)
 }
 
 // LiveAppTokens lists u's unrevoked, unexpired tokens, newest first.
