@@ -247,7 +247,7 @@ Versioning: API SemVer 1.0.0 at parity (D-20); additive = minor, fix = patch, br
 
 - Memory per user: `{period, base, delta}`; `base` loaded from `api_quota_counters` on first use.
 - Admit if `base + delta < quota`, then `delta++`; 5xx refund `delta--`, `refunded++`.
-- Flush every minute (scheduler) and on shutdown: per 500 users one transaction, `insert ... on conflict do update set used = used + excluded.used` into both tables; deltas cleared after commit.
+- Flush every minute and on shutdown by an app runner in the serving process (`api.Meter`, registered in `routes/api_v1.go`; a scheduled job could run in another process without the in-memory deltas): per 500 users one transaction, `insert ... on conflict do update set used = used + excluded.used` into both tables; deltas cleared after commit.
 - Crash loses ≤ 60 s of deltas: free requests, never overcharge (free worst case 60 extra).
 - Rollover at 00:00 UTC on the 1st (`YYYYMM`), lifetime row `life`; plan change applies new limits immediately.
 - Flush failure: keep deltas, retry; alert after 5 failures (SDD 12); fail closed (503) once 10 min are unflushed.
