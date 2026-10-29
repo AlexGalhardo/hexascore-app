@@ -760,7 +760,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.E.2 Searcher and relevance
 
-- [ ] **P1.E.2.1** Implement the `Searcher` interface (search, suggest, entities) with tiered ranking, query parsing and `site`/`api` audiences.
+- [x] **P1.E.2.1** Implement the `Searcher` interface (search, suggest, entities) with tiered ranking, query parsing and `site`/`api` audiences.
   - Files/modules: `internal/search/searcher.go`, `internal/search/query.go`, `internal/search/rank.go`, `internal/search/*_test.go`
   - Refs: SDD 07 §6, §7.1–§7.4, §7.7, §9; open-issues 07-7; ADR 0006
   - Depends on: P1.E.1.2, P1.B.2.1
