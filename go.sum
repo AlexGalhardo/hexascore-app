@@ -4,6 +4,8 @@ github.com/AlexGalhardo/vukem/contrib/stripe v0.4.1 h1:mTG+KL08nASbZ6tld4Srp8Oo2
 github.com/AlexGalhardo/vukem/contrib/stripe v0.4.1/go.mod h1:i4wlZLk9UZY6LYCOl1lTTiJyJnEpYaB3nUnOgPfbilE=
 github.com/AlexGalhardo/vukem/drivers/postgres v0.5.1 h1:EyASdTjEQR3culTcKQc6IRHJNlyznlVTG2Pde9s1DOg=
 github.com/AlexGalhardo/vukem/drivers/postgres v0.5.1/go.mod h1:sZoYAkqI6C8qrSy7/TsCH7N9jHe3uHzHSFloq2F5oMs=
+github.com/AlexGalhardo/vukem/drivers/s3 v0.3.1 h1:qrV3KxHVwVE5SH+FPJJsZUkVqPpb42WyopMwOkSvyjU=
+github.com/AlexGalhardo/vukem/drivers/s3 v0.3.1/go.mod h1:3yvz8doy9r+JdW77VmskcOJXWv/9+9gR4GumPpLjer0=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

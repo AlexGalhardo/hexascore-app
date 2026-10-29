@@ -187,8 +187,8 @@ Rollback: `gh workflow run release.yml -f version=vPREV` (schema stays compatibl
 ### 7.3 Backups
 
 1. Task `backup.daily` 06:00 America/Sao_Paulo, `WithoutOverlapping()` [vk-sched], after SDD 06 asserts.
-2. `pg_dump -Fc -Z 6 --no-owner` via `contrib/engine` `RunStream` (`vukem/docs/subsystems.md` [SITE PAGE MISSING]); env not inherited, `PG*` passed explicitly.
-3. Encrypt in 4 MiB frames with `crypt.New(BACKUP_KEY)` `Seal(frame, "backup:<key>:<n>")` [vk-crypt]; SHA-256 over the ciphertext; multipart `Put` [vk-storage]. Railway buckets have no server-side encryption [buckets].
+2. `pg_dump -Fc -Z 6 --no-owner` via `os/exec` (`app/backup/dump.go`; `contrib/engine` `RunStream` is [NOT IN VUKEM DOCS] on the site, so the documented fallback of `docs/PROGRESS.md` applies); the child gets only `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`, `PGSSLMODE` from `DATABASE_URL`, never the app environment.
+3. Encrypt in 4 MiB frames with `crypt.New(BACKUP_KEY)` `Seal(frame, "backup:<key>:<n>")` [vk-crypt] (`<key>` is the object key; the last frame's additional data ends in `:last`; one base64url token per line), so frames cannot be reordered, moved to another object, dropped or truncated unnoticed (`app/backup/crypt.go`); SHA-256 over the ciphertext; multipart `Put` through `drivers/s3` [vk-storage]. `backup:run --kind daily|monthly` (P2.E.2.1) records `running`, then `uploaded` or `failed` (scrubbed error), and deletes a partial object on failure. Railway buckets have no server-side encryption [buckets].
 4. Verify: size > 50 % of the 7-day median; decrypt → `pg_restore --list` contains `items`, `users`, `ratings`; status `verified`.
 5. Day 1: copy to `monthly/YYYY-MM/`. Prune daily > 30, monthly > 12 in app code (no bucket lifecycle rules [buckets]).
 6. Off-site copy (D-32): on day 1 the app mails the owner a signed link (`storage.TemporaryURL`, 7 days, <https://vukem.dev/docs/security/signed-urls>) to the encrypted monthly dump; the job records `backup_runs(kind='offsite')` when the link is mailed and the owner downloads it to personal storage. Daily dumps stay on Railway. Replaced by an external bucket when the budget allows.

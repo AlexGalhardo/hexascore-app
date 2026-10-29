@@ -1781,7 +1781,7 @@ Phase-specific conventions:
 
 #### P2.E.2 Daily dump
 
-- [ ] **P2.E.2.1** Implement `backup:run`: streamed `pg_dump`, client-side frame encryption, SHA-256 and multipart upload, recorded in `backup_runs`.
+- [x] **P2.E.2.1** Implement `backup:run`: streamed `pg_dump`, client-side frame encryption, SHA-256 and multipart upload, recorded in `backup_runs`.
   - Files/modules: migration `create_backup_runs`, `app/backup/dump.go`, `app/backup/crypt.go` (4 MiB frames, `crypt.New(BACKUP_KEY)`, `Seal(frame, "backup:<key>:<n>")`), `app/backup/crypt_test.go`, `app/console/backup_run.go`
   - Refs: SDD 11 §5 (`backup_runs`, prefixes), §7.3 steps 2–3, FR-11-5; ADR 0014 (amended); <https://vukem.dev/docs/security/encryption>; <https://vukem.dev/docs/digging-deeper/storage>
   - Depends on: P2.E.1.1
