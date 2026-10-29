@@ -16,7 +16,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-005 | 2026-10-28 | medium | merged in main (PR #11), unreleased |
 | VF-006 | 2026-10-28 | low | open |
 | VF-007 | 2026-10-28 | low | open |
-| VF-008 | 2026-10-28 | medium | in_progress (framework) |
+| VF-008 | 2026-10-28 | medium | merged in main (PR #22), unreleased |
 | VF-009 | 2026-10-28 | low | open |
 | VF-010 | 2026-10-28 | low | open |
 | VF-011 | 2026-10-28 | low | open |
@@ -123,7 +123,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-008: Admin panel has no custom row actions, bulk actions, assignment or diff view
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR <https://github.com/AlexGalhardo/vukem/pull/22>), unreleased. Native API: `Resource.Actions(admin.Action[T]{Name, Label, Reason, Bulk, Run})`, JSON-key diff in the audit page; assignment stays a column (`assignee_id`) edited by form or set by an action.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin`.
 - **Context**: moderation of community suggestions (SDD 04) and anti-abuse review (SDD 02) need per-row actions ("approve", "reject with reason", "revert"), bulk actions, assignment to a moderator and a before/after diff. The documented admin panel generates CRUD from models and `z` schemas with an audit log.
 - **Workaround**: a custom admin page in the app at `/admin/moderation` using the admin layout and auth.
