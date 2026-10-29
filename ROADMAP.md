@@ -496,7 +496,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `curl -s $WEB/sitemap.xml` → index; every child ≤ 40,000 `<url>`; no entity with < 3 items.
   - Notes: a 40,000 cap satisfies both SDD criteria. Entities with < 3 linked items stay out and are `noindex,follow` (01-8).
 
-- [ ] **P1.B.4.3** Write the `DemoCatalog` seeder and factories used by tests and local development.
+- [x] **P1.B.4.3** Write the `DemoCatalog` seeder and factories used by tests and local development.
   - Files/modules: `database/seeders/demo_catalog.go`, `database/factories/*.go`
   - Refs: SDD 11 §7.7; SDD 01 §10; <https://vukem.dev/docs/database/factories-seeders>
   - Depends on: P1.B.1.3
