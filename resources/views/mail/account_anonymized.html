@@ -1,8 +1,8 @@
 {{/* layout: none */}}
 <!doctype html>
-<html lang="en">
+<html lang="{{.Locale}}">
 <body>
-	<p>Hello {{.User.Name}},</p>
-	<p>Your HexaScore account deletion took effect. Your personal data was erased; your ratings remain in community scores without any link to you.</p>
+	<p>{{.Text.greeting}}</p>
+	<p>{{.Text.body}}</p>
 </body>
 </html>
