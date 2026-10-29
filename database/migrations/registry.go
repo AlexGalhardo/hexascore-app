@@ -14,8 +14,6 @@ func All() []schema.Migration {
 		m20261029100001CreateItemsTable(),
 		m20261029100002CreateItemTranslationsTable(),
 		m20261029100003CreateItemAltTitlesTable(),
-		m20261029110000AddProfileColumnsToUsersTable(),
-		m20261029110001CreateAccountEventsTable(),
 		m20261029100004CreateEntitiesTable(),
 		m20261029100005CreateEntityTranslationsTable(),
 		m20261029100006CreateItemEntitiesTable(),
@@ -26,5 +24,7 @@ func All() []schema.Migration {
 		m20261029100011CreateEditionsTable(),
 		m20261029100012CreateAffiliateLinksTable(),
 		m20261029100013CreateCatalogRedirectsTable(),
+		m20261029110000AddProfileColumnsToUsersTable(),
+		m20261029110001CreateAccountEventsTable(),
 	}
 }
