@@ -1,2 +1,0 @@
-ALTER TABLE "reports" ADD COLUMN "details" text;--> statement-breakpoint
-CREATE UNIQUE INDEX "reports_open_unique_idx" ON "reports" USING btree ("reporter_id","target_type","target_id") WHERE status = 'open';

@@ -1,0 +1,298 @@
+# vukem feedback from HexaScore
+
+Long-term log of bugs, problems, DX improvements and feedback found while building HexaScore on vukem (`github.com/AlexGalhardo/vukem`). One entry per finding; never delete, only update `status`. Entries are written for the vukem maintainers: reproducible, with the vukem version and the doc or file that was consulted.
+
+Documentation reference (owner rule, 2026-10-28): every entry cites the public docs site https://vukem.dev/docs (page URL + heading). The local checkout `vukem/docs/*.md` is cited only when the site has no page for the fact, tagged `[SITE PAGE MISSING]`.
+
+Severity: `critical` (blocks a roadmap task), `high` (workaround costs more than a day), `medium` (workaround under a day), `low` (DX or docs).
+Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdrawn`.
+
+| id | date | severity | status |
+| --- | --- | --- | --- |
+| VF-001 | 2026-10-28 | high | open |
+| VF-002 | 2026-10-28 | medium | open |
+| VF-003 | 2026-10-28 | medium | open |
+| VF-004 | 2026-10-28 | low | open |
+| VF-005 | 2026-10-28 | medium | open |
+| VF-006 | 2026-10-28 | low | open |
+| VF-007 | 2026-10-28 | low | open |
+| VF-008 | 2026-10-28 | medium | open |
+| VF-009 | 2026-10-28 | low | open |
+| VF-010 | 2026-10-28 | low | open |
+| VF-011 | 2026-10-28 | low | open |
+| VF-012 | 2026-10-28 | low | open |
+| VF-013 | 2026-10-28 | low | open |
+| VF-014 | 2026-10-28 | low | open |
+| VF-015 | 2026-10-28 | medium | open |
+| VF-016 | 2026-10-28 | low | open |
+| VF-017 | 2026-10-28 | medium | open |
+| VF-018 | 2026-10-28 | medium | open |
+| VF-019 | 2026-10-28 | medium | open |
+| VF-020 | 2026-10-28 | low | open |
+| VF-021 | 2026-10-28 | low | open |
+| VF-022 | 2026-10-28 | low | open |
+| VF-023 | 2026-10-28 | low | open |
+| VF-024 | 2026-10-28 | medium | open |
+| VF-025 | 2026-10-28 | medium | open |
+| VF-026 | 2026-10-28 | medium | open |
+| VF-027 | 2026-10-28 | medium | open |
+| VF-028 | 2026-10-28 | low | open |
+| VF-029 | 2026-10-28 | low | open |
+| VF-030 | 2026-10-28 | medium | open |
+| VF-031 | 2026-10-28 | medium | open |
+
+## VF-001: No passkey / WebAuthn support in `auth`
+
+- **Date**: 2026-10-28. **Severity**: high. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/two-factor` (Concepts, Guards, Hashing, `install:auth`, Two-factor, Social login).
+- **Context**: HexaScore's legacy app (Better Auth 1.7.7) offers passkeys. The rewrite drops them at launch (brainstorming D-06) because the framework has no WebAuthn registration/assertion flow, credential storage or recovery path.
+- **Reproduction**: search `docs/` and `auth/` for `webauthn`, `passkey`, `FIDO`: no matches.
+- **Workaround**: none in-framework; a third-party Go WebAuthn library would be a new dependency and a parallel credential model. Deferred feature.
+- **Request**: a `install:auth --passkeys` option with credential table, registration/login endpoints, and `TestSecurity_*` coverage.
+
+## VF-002: Inertia SSR falls back to client rendering silently by default
+
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` "Inertia v3 (BETA)" → SSR row: "falls back to client-side rendering on any failure (reported to `OnFailure`, default a warning log)".
+- **Context**: for a catalogue that depends on search indexing (ADR 0004), a silent fallback hides an SEO incident. HexaScore needs per-route policy: public routes must fail readiness or page an alert when SSR fails; logged-in routes may fall back.
+- **Reproduction**: stop the SSR process; request a public page; observe a 200 with client-rendered shell and only a warning log.
+- **Workaround**: implement `OnFailure` to increment a metric and alert; add the SSR process to `AddHealthCheck` so `/up?checks=1` reports it.
+- **Request**: a `SSRConfig.Strict` (or per-route `inertia.RequireSSR(ctx)`) that returns 503 with `Retry-After` instead of falling back, plus a built-in health check for the SSR endpoint.
+
+## VF-003: No built-in bot/abuse challenge for auth and form routes
+
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/rate-limiting` "Rate limiting", `https://vukem.dev/docs/security/rate-limiting` "Rate limiting", `https://vukem.dev/docs/security/overview`.
+- **Context**: the legacy app used Vercel BotID on signup, login and contact. vukem offers GCRA rate limiting by IP/token and login throttling, but no challenge mechanism (proof-of-work, CAPTCHA adapter) when thresholds trip.
+- **Reproduction**: n/a (feature gap).
+- **Workaround**: rate limits plus honeypot fields plus an optional third-party challenge (Cloudflare Turnstile) wired by hand; specified in SDD 13.
+- **Request**: a `middleware.Challenge` hook point with a reference adapter (Turnstile/hCaptcha) and a stdlib proof-of-work option.
+
+## VF-004: `contrib/imaging` flagged as needing work in the framework's own review
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `vukem/vukem-feedback.md` (framework's own review, item FUN-08 / FB-10 on `contrib/imaging`).
+- **Context**: HexaScore's cover pipeline (ADR 0007) needs WebP encode at 600 px and 96×144 thumbnails with deterministic output matching the legacy Python pipeline. The framework review marks imaging as confirmed-needs-work with large effort.
+- **Reproduction**: pending; SDD 06 defines a fixture set and expected hashes to test against.
+- **Workaround**: if WebP encoding is unavailable, store JPEG/PNG and serve with content negotiation, or run a one-off conversion job later.
+- **Request**: document supported formats and determinism guarantees; WebP encode support.
+
+## VF-005: No keyset (cursor) pagination helper in the ORM
+
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` "Query builder"; `https://vukem.dev/docs/rest-apis/pagination` "Query conventions"; `https://vukem.dev/docs/frontend/inertia` Inertia `ScrollCursor(orm.CursorPage, name)`.
+- **Context**: `ScrollCursor` accepts an `orm.CursorPage`, but the documented query builder shows no way to build a keyset page over a composite order (`score DESC, id DESC`) with an opaque signed cursor. HexaScore lists (SDD 01, 05, 07) need this for every listing and for the paid API.
+- **Reproduction**: search `https://vukem.dev/docs/database/overview` for `Cursor`: only the Inertia prop is documented.
+- **Workaround**: the app builds the predicate with `WhereRaw` and signs/encodes the cursor itself.
+- **Request**: document `orm.CursorPage` construction and add a `Query.CursorAfter(cursor, orderColumns...)` helper with a signed cursor.
+
+## VF-006: Postgres mapping of `t.JSON` and `t.Enum` undocumented
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` "Migrations".
+- **Context**: SDD 01 needs `jsonb` columns with GIN indexes and enum-like columns. The migration builder's column types for these on Postgres are not documented, so the DDL sketches use `s.Raw`.
+- **Reproduction**: n/a (docs gap).
+- **Workaround**: `s.Raw` statements in migrations.
+- **Request**: a table in `https://vukem.dev/docs/database/overview` with each builder type and its SQL per dialect, and `jsonb` + GIN index support in the builder.
+
+## VF-007: No sitemap helper
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/routing`, `https://vukem.dev/docs/digging-deeper/queue`, `https://vukem.dev/docs/rest-apis/overview`.
+- **Context**: a catalogue with hundreds of thousands of URLs needs a sitemap index with gzip chunks of 50,000 URLs, `lastmod`, and `hreflang` alternates.
+- **Workaround**: app handler streaming XML (SDD 01/09).
+- **Request**: a `sitemap` package (index + chunks, streaming, `hreflang`) in core or contrib.
+
+## VF-008: Admin panel has no custom row actions, bulk actions, assignment or diff view
+
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin`.
+- **Context**: moderation of community suggestions (SDD 04) and anti-abuse review (SDD 02) need per-row actions ("approve", "reject with reason", "revert"), bulk actions, assignment to a moderator and a before/after diff. The documented admin panel generates CRUD from models and `z` schemas with an audit log.
+- **Workaround**: a custom admin page in the app at `/admin/moderation` using the admin layout and auth.
+- **Request**: `admin.Action` (row and bulk) with confirmation and audit; a diff renderer for JSON patch-like fields.
+
+## VF-009: Generated columns and the ORM on insert/update
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` "Models", "Query builder".
+- **Context**: `ratings.overall` is a Postgres generated column (SDD 02). It is unclear whether `orm.Create`/`Save` omit generated columns from INSERT/UPDATE.
+- **Reproduction**: pending at implementation (test: create a model with a generated column on Postgres and call `orm.Create`).
+- **Workaround**: raw SQL for inserts on that table.
+- **Request**: a `generated` tag or documented behaviour.
+
+## VF-010: Admin `BeforeSave` hook does not expose previous values
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin`.
+- **Context**: the catalogue audit log (SDD 04) needs before/after values for every admin edit; the hook as documented receives only the new values.
+- **Workaround**: the hook re-reads the row before saving.
+- **Request**: pass the previous record to `BeforeSave`/`AfterSave`.
+
+## VF-011: No persistent in-app notifications
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/mail` (Mail, Events, Broadcasting).
+- **Context**: suggestion decisions (SDD 04) and moderation outcomes need a per-user inbox with read state; vukem has mail and real-time broadcasting but no stored notification model.
+- **Workaround**: app-owned `user_notifications` table and page.
+- **Request**: a `notify` package (database channel, mail channel, mark-as-read, unread count) like Laravel notifications.
+
+## VF-012: No admin impersonation ("login as user")
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/authentication`, `https://vukem.dev/docs/digging-deeper/admin`.
+- **Context**: the legacy app (Better Auth admin plugin) let admins impersonate a user to reproduce support issues, with `session.impersonated_by` recorded. vukem documents no equivalent. HexaScore v1 ships without it (SDD 03); admins use read-only views.
+- **Workaround**: none safe in-app; read-only "view as" pages.
+- **Request**: `auth.Impersonate(ctx, adminID, userID)` creating a flagged session with a time limit, an audit entry and a visible banner; `auth.StopImpersonating`.
+
+## VF-013: Locale for mail sent from queued jobs
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/queue` "Mail", "i18n", "Queue".
+- **Context**: transactional mail (verification, reset, suggestion decisions) is often sent from a job without a request context; the docs describe locale resolution through the locale middleware and request context only.
+- **Workaround**: the job payload carries the user's locale and the mailer is called with an explicit locale value.
+- **Request**: document `i18n.WithLocale(ctx, locale)` (or equivalent) for use outside requests, and let mail templates take the locale from the context set that way.
+
+## VF-014: Envelope and problem key casing is fixed to snake_case
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/overview` "Envelopes", "Errors".
+- **Context**: HexaScore payload fields are camelCase (legacy API contract and SDKs); the documented envelope keys (`next_cursor`, `request_id`) are snake_case and no option to change them is documented, so responses mix conventions.
+- **Workaround**: accept the mix and document it; or bypass the envelope helper and write the envelope by hand.
+- **Request**: an envelope/problem key naming option (`api.KeyCase(api.CamelCase)`) or documented custom envelope types.
+
+## VF-015: No host-based routing helper
+
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/routing` "Routing", `https://vukem.dev/docs/rest-apis/overview` "Routing", "Versioning".
+- **Context**: the paid API is served at `api.hexascore.app/v1/...` while the app also serves `hexascore.app`. The router documents path groups only. The app needs a `Host`-matched group (or a middleware that rewrites `/v1/*` to `/api/v1/*` when the host matches) plus per-host CORS and security headers.
+- **Workaround**: app middleware inspecting `r.Host` and rewriting `r.URL.Path`, registered before the router; OpenAPI `servers` entry set by hand.
+- **Request**: `router.Host("api.example.com", func(g *router.Group) {...})` with URL generation aware of the host.
+
+## VF-016: Problem+json extension members undocumented
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/overview` "Errors", `https://vukem.dev/docs/basics/error-handling` errors section.
+- **Context**: RFC 9457 allows extension members; HexaScore's API uses `code`, `plan`, `limit`, `retryAfter` on quota and plan problems (legacy `lib/api/problem.ts`). The docs do not show how to add members to `errs.HTTPError` output or to the problem catalogue entries used by OpenAPI.
+- **Workaround**: a custom error type implementing the problem interface, if one exists, or a hand-written handler for API routes.
+- **Request**: `errs.WithExtension(key, value)` and OpenAPI schema generation for documented extensions.
+
+## VF-017: No non-transactional migrations (`CREATE INDEX CONCURRENTLY`)
+
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` "Migrations", "Managing them with migrate".
+- **Context**: Postgres refuses `CREATE INDEX CONCURRENTLY` inside a transaction. HexaScore's search indexes (SDD 07) and later index additions on the 100k-row `items` table and larger `ratings` table must be built without locking writes in production. The docs do not show a per-migration "no transaction" flag.
+- **Workaround**: a one-off script run by hand, or building indexes before the table receives traffic.
+- **Request**: `schema.Migration{Transactional: false}` (or a `//vukem:no-transaction` marker) with the runner executing such migrations outside a transaction and recording them like the others.
+
+## VF-018: Queue priority and per-queue concurrency with the database driver inside `serve`
+
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/scheduler` "Queue", "Scheduler"; `https://vukem.dev/docs/cli/reference-runtime` `serve`.
+- **Context**: HexaScore runs HTTP, scheduler and queue workers in one process under a US$30/month budget (brainstorming D-08). Ingestion jobs (SDD 06) must run at low concurrency (1–2) and lower priority than user-facing jobs (mail, recompute). The docs do not state whether named queues, priorities and per-queue worker counts apply to the database driver when workers run inside `serve`, nor how to cap CPU use of workers.
+- **Reproduction**: n/a (docs gap).
+- **Workaround**: a single worker pool with app-level semaphores per job family and a scheduler window at night.
+- **Request**: document named queues, priority and `Workers(queue, n)` for the database driver in `serve`; expose a "pause queue" switch for operators.
+
+## VF-019: No documented API for app-level OpenTelemetry metrics
+
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/opentelemetry` "OpenTelemetry", "Logging & observability"; `drivers/otel` description in `https://vukem.dev/docs/architecture/lifecycle`.
+- **Context**: HexaScore needs custom counters and histograms (ingestion items/s, SSR fallbacks, suggestion queue age, quota flushes) exported with the framework's traces. The docs cover tracing setup and built-in instrumentation only.
+- **Workaround**: the app wires `go.opentelemetry.io/otel/metric` itself and shares the exporter configuration.
+- **Request**: `otel.Meter()` accessor and a documented pattern for app metrics, plus a Prometheus-compatible `/metrics` option for hosts without an OTLP collector.
+
+## VF-020: `httpclient` lacks per-host throttling and circuit breaking
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/architecture/lifecycle` (`httpclient/` SSRF protection), `https://vukem.dev/docs/digging-deeper/queue`.
+- **Context**: ingestion (SDD 06) must respect per-host rate limits (IGDB 4 rps / 8 in flight; TMDB 429 handling; Wikimedia etiquette) and stop hammering a failing host. The SSRF-safe client has no documented rate limiter, retry/backoff policy or circuit breaker.
+- **Workaround**: app-level wrapper with `ratelimit.NewMemory` per host, exponential backoff on 429/5xx honouring `Retry-After`, and a simple breaker.
+- **Request**: `httpclient.WithRateLimit(host, limit)`, `WithRetry(policy)` and `WithBreaker(...)` options.
+
+## VF-021: No buffered counter primitive and no documented `HourlyAt` schedule helper
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/scheduler` "Cache", "Scheduler", "Events".
+- **Context**: trending primitives (SDD 08) and API quota metering (SDD 05) need an in-process counter that aggregates increments and flushes to Postgres once per minute (ADR 0003, no Redis). The scheduler docs show cron expressions; a typed `HourlyAt(minute)` helper used in the SDD sketch is not documented.
+- **Workaround**: app-level `sync.Map` counter with a ticker flush; cron expressions for schedules.
+- **Request**: `cache.Counter` with `Incr`/`FlushEvery(d, fn)` semantics, and typed schedule helpers (`EveryMinute`, `HourlyAt`, `DailyAt`) in the scheduler docs.
+
+## VF-022: Request logger lacks privacy options (hashed user id, truncated IP, request id = trace id)
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/opentelemetry`, `https://vukem.dev/docs/basics/middleware` (Logger, RequestID); local `vukem/docs/subsystems.md` "Logging & observability" `[SITE PAGE MISSING]` for the request-log fields.
+- **Context**: LGPD-minded logging (SDD 12/13) needs the user id hashed, the client IP truncated (/24, /48) and the request id equal to the trace id so logs and traces join. None of these are documented options of the request logger.
+- **Workaround**: a custom logging middleware replacing the built-in one.
+- **Request**: `middleware.LoggerOptions{HashUserID, TruncateIP, RequestIDFromTrace}` documented on the site.
+
+## VF-023: Site documentation gaps found while writing the observability spec
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: https://vukem.dev/docs (full page map) versus local `vukem/docs/*.md`.
+- **Context**: facts that exist only in the repository docs, tagged `[SITE PAGE MISSING]` in the HexaScore SDDs: health-check API (`AddHealthCheckTimeout`, `ReadyHandler`, `ok`/`fail` output format), route name and user id fields in request logs, `logging.NewDedup` and `WithLogger` behaviour with a custom logger, the `TestSecurity_A09_*`/`A10_*` test names, tooling/release process, stability policy, performance baselines, and a metric hook for scheduled tasks.
+- **Workaround**: cite the local file.
+- **Request**: publish those sections on vukem.dev (an "Operations" page for health checks and logging; "Releases and stability" page).
+
+## VF-024: `i18n.Middleware` has no URL-prefix locale source
+
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/localization`, `https://vukem.dev/docs/frontend/inertia-i18n`.
+- **Context**: HexaScore keeps the legacy URL scheme (`/`, `/pt-br/...`, `/es/...`, brainstorming D-17). The documented locale sources are query, cookie and `Accept-Language`; a path-prefix source with prefix stripping and URL generation that re-adds the prefix is not documented.
+- **Workaround**: app middleware that reads the first path segment, sets the locale in the context and rewrites the path; `route` helpers wrapped to add the prefix.
+- **Request**: `i18n.SourcePath(prefixes map[string]string)` plus prefix-aware `URLFor`.
+
+## VF-025: No cache hook for Inertia SSR output
+
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` (SSR).
+- **Context**: public catalogue pages are rendered for anonymous users thousands of times with identical props; the SSR call (Node, 3 s timeout) runs on every request. A documented hook to cache the rendered `head`/`body` by a key (component + props hash + locale) for a short TTL would cut CPU in the single container (D-08).
+- **Workaround**: an app middleware caching the whole HTML response for anonymous requests, which must also handle the per-request CSP nonce (re-inject the nonce into cached markup).
+- **Request**: `SSRConfig.Cache cache.Store` with TTL and a key function, nonce-safe.
+
+## VF-026: Migration runner has no documented lock for concurrent starts
+
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations`, `https://vukem.dev/docs/deployment/docker-and-railway`.
+- **Context**: zero-downtime deploys can start a new container while the old one still runs; if migrations run at boot, two runners can race. The docs do not mention a Postgres advisory lock or a `migrations` table row lock.
+- **Workaround**: the app takes `pg_advisory_lock` before calling the runner, or migrations run as a separate pre-deploy command.
+- **Request**: document the locking behaviour of the runner per dialect, or add it.
+
+## VF-027: `serve` and `build` gaps for the SSR sidecar and release metadata
+
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/cli/reference-runtime`, `https://vukem.dev/docs/frontend/inertia`, `https://vukem.dev/docs/deployment/single-binary`.
+- **Context**: HexaScore runs the Node SSR process inside the same container as the Go app (D-08). The docs show `vukem ssr:start` as a separate command and `vukem build` without the SSR bundle; there is no documented way to have `serve` supervise the SSR process in production, to expose the build version at `/up`, or to pass extra `-ldflags` through `vukem build`.
+- **Workaround**: a `build:ssr` step (`vite build --ssr`) in the pipeline; the app starts and restarts the Node process itself; version injected by a plain `go build -ldflags` step and reported by a custom health field.
+- **Request**: `serve --with-ssr` (supervised child with restart and health), `vukem build --ssr`, `--ldflags` pass-through, and a `version` field in `/up`.
+
+## VF-028: Root view data has no theme hook
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` (root view, `inertia.RootData`).
+- **Context**: dark mode without a flash of the wrong theme needs `data-theme` on `<html>` from a cookie at render time; the root view receives only `inertia.RootData` plus view functions.
+- **Workaround**: a custom view function reading the theme cookie.
+- **Request**: `inertia.Config.RootData func(r *http.Request) map[string]any` to add arbitrary root-view values.
+
+## VF-029: Export helpers only target `http.ResponseWriter`
+
+- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/exports`.
+- **Context**: the LGPD data export (SDD 14) builds a ZIP of CSV/JSON files in a background job and uploads it to storage behind a signed URL; the documented streaming CSV/JSON/NDJSON helpers (with the CSV formula guard) write to a response, not to an `io.Writer`.
+- **Workaround**: re-implement the formula guard and encoders for the job, or call the helpers with an in-memory `ResponseRecorder`.
+- **Request**: `export.CSV(w io.Writer, ...)` variants usable outside a request, sharing the same safety rules.
+
+## VF-030: No admin hardening options (mandatory 2FA, shorter sessions, IP allowlist)
+
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin`, `https://vukem.dev/docs/security/two-factor`, `https://vukem.dev/docs/basics/sessions`.
+- **Context**: SDD 13 requires admins to have 2FA enabled, a shorter absolute session lifetime than regular users, and an optional IP allowlist for `/admin`. The admin panel documents role gating and an audit log, but none of these three controls.
+- **Workaround**: app middleware on the `/admin` group (checks `two_factor_enabled`, applies a separate session timeout, compares the client IP with a configured CIDR list).
+- **Request**: `admin.Config{Require2FA, SessionTTL, AllowCIDRs}` with `TestSecurity_*` coverage.
+
+## VF-031: No re-encryption command after `APP_KEY` rotation
+
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/encryption`, `https://vukem.dev/docs/configuration`.
+- **Context**: encrypted columns (2FA secrets, OAuth tokens) are keyed by `APP_KEY`; the encryption page describes key rotation for cookies/values but no CLI to re-encrypt stored columns under the new key, so a rotation leaves rows readable only with the previous key.
+- **Workaround**: keep the previous key configured as a secondary decrypt key and run a one-off app job that reads and rewrites every encrypted column.
+- **Request**: `vukem crypt:rotate --from <old> --to <new>` that walks registered encrypted columns in batches, plus docs for the previous-key grace window.

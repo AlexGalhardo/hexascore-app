@@ -1,40 +1,19 @@
-node_modules/
-.next/
-out/
-dist/
-build/
-coverage/
-*.tsbuildinfo
-next-env.d.ts
+# local framework checkout wiring (never committed)
+go.work
+go.work.sum
 
+# orchestration state (PROMPT-WORKERS.md)
+.orchestration/
+
+# secrets and local env
 .env
-.env*.local
-.vercel/
+.env.*
+!.env.example
 
-__pycache__/
-.venv/
-.pytest_cache/
-.ruff_cache/
-*.sql.gz
-
+# build and tooling output
+node_modules/
+dist/
+bootstrap/ssr/
 graphify-out/
-qa/reports/
-playwright-report/
-test-results/
-
-.DS_Store
-Thumbs.db
-.pglite/
-.claude/worktrees/
-
-.vercel
-.env*
-
-# Google service account keys (never commit)
-hexascore-*.json
-*-service-account*.json
-
-# Playwright MCP screenshots, snapshots and console logs (local browser checks)
-.playwright-mcp/
-
-.env*
+coverage/
+*.log
