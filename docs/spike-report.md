@@ -81,3 +81,17 @@ Decisive output (server on port 3001, spike Postgres):
 - `go test ./app/http/middleware/` `ok`; `go test ./tests/ -run APIHost` `ok`; full `go test ./...` `ok hexascore-spike/tests`.
 
 Verdict: works (workaround: OpenAPI servers via `bootstrap` process env, paths post-processed, VF-034; host routing itself is app middleware, VF-015).
+
+## P0.F.8.1 Billing scaffold, pro/business and per-currency prices
+
+Spike branch `agent/senior/P0.F.8.1` (c316d45, from spike `main` 01bdac9). `vukem install:billing` added `app/billing`, `app/controllers/account/billing*.go`, `app/models/billing.go`, `config/billing.go`, `routes/billing.go`, `tests/billing_test.go`, `tests/billing_page_test.go`, `resources/js/pages/Billing.tsx`, migration `20261029011004_add_billing_tables.go`, and `contrib/stripe v0.4.1` in `go.mod` (latest tag, no `replace`). Beyond the listed files I also edited `app/billing/billing.go` and `app/controllers/account/billing.go` (plan names in comments, `Checkout` takes a currency, plan view exposes `amounts`), because the currency has to reach `CreateCheckoutSession`.
+
+Env the tests need: `TEST_DATABASE_URL` is not required for these tests (they use `vukemtest` on in-memory SQLite with a fake Stripe server and the env set in `billingApp`: `STRIPE_KEY=rk_test_vukem`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_API_BASE`, `STRIPE_PRICE_PRO`, `STRIPE_PRICE_BUSINESS`; all fake). Real runs set the same names in `.env`; `.env.example` now lists `STRIPE_PRICE_PRO` and `STRIPE_PRICE_BUSINESS` instead of `..._BASIC`/`..._PRO`.
+
+Decisive output:
+
+- `vukem install:billing` exit 0. `vukem route:list` shows `GET /billing`, `POST /billing/checkout/{plan}`, `POST /billing/portal`; `POST /stripe/webhook` is not listed because it is mounted with `r.UseServer` (documented), so it is proven by the webhook tests below.
+- `go test ./tests/... -run 'TestBilling|TestStripeWebhook' -v`: all PASS, including `TestBillingWebhookProcessedOnce` (duplicate event processed once), `TestBillingWebhookRejectsBadSignature` (forged signature 400), `TestBillingWebhookSyncsSubscription` (a `past_due` subscription loses access, free), and the new `TestBillingCheckoutCurrency` (BRL on `business` and default USD on `pro` reach Stripe with `currency` and the right price; `gbp` returns 422 and never reaches Stripe). There is no test named `TestStripeWebhook*`; the webhook tests are named `TestBillingWebhook*` and match the `TestBilling` alternative. Full `go test ./...` is `ok`. `vukem migrate` applied `add_billing_tables`.
+- Fit of BRL/USD/EUR: one Stripe price per plan (`STRIPE_PRICE_PRO`, `STRIPE_PRICE_BUSINESS`) with `currency_options`; the checkout sends `currency` in `stripe.Params`; `config.Plan.Amounts` holds the SDD amounts (pro 2900/600/600, business 14900/2900/2700 minor units, BRL/USD/EUR) for display only. Locale-to-currency default (pt-BR to BRL, es to EUR, en to USD) is not implemented: the default is `usd`. Live Stripe acceptance of `currency` with a `currency_options` price was not run (test keys only, human gate): [NÃO VERIFICADO].
+
+Verdict: workaround (scaffold code edited for plan names and currency; VF-037).
