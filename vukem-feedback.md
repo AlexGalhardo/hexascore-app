@@ -29,7 +29,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-018 | 2026-10-28 | medium | open |
 | VF-019 | 2026-10-28 | medium | open |
 | VF-020 | 2026-10-28 | low | open |
-| VF-021 | 2026-10-28 | low | open |
+| VF-021 | 2026-10-28 | low | withdrawn (2026-10-29: `HourlyAt` documented) |
 | VF-022 | 2026-10-28 | low | open |
 | VF-023 | 2026-10-28 | low | open |
 | VF-024 | 2026-10-28 | medium | merged in main (PR #10), unreleased |
@@ -223,7 +223,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-021: No buffered counter primitive and no documented `HourlyAt` schedule helper
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: withdrawn (2026-10-29: https://vukem.dev/docs/digging-deeper/scheduler "Frequencies" now lists `HourlyAt(7)`; verified during P0.F.6.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/scheduler` "Cache", "Scheduler" [heading not on page 2026-10-29], "Events".
 - **Context**: trending primitives (SDD 08) and API quota metering (SDD 05) need an in-process counter that aggregates increments and flushes to Postgres once per minute (ADR 0003, no Redis). The scheduler docs show cron expressions; a typed `HourlyAt(minute)` helper used in the SDD sketch is not documented.
 - **Workaround**: app-level `sync.Map` counter with a ticker flush; cron expressions for schedules.
