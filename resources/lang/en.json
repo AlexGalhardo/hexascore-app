@@ -781,6 +781,35 @@
       "hltb_complete": "HLTB completionist",
       "openlibrary": "Open Library"
     },
+    "editions": {
+      "title": "Editions",
+      "edition": "Edition",
+      "backToWork": "Back to the book"
+    },
+    "roles": {
+      "director": "Director",
+      "writer": "Writer",
+      "creator": "Creator",
+      "author": "Author",
+      "developer": "Developer",
+      "publisher": "Publisher",
+      "network": "Network",
+      "production_company": "Production",
+      "genre": "Genres",
+      "platform": "Platforms",
+      "game_mode": "Game modes",
+      "franchise": "Franchise",
+      "series": "Series",
+      "cast": "Cast"
+    },
+    "editionFields": {
+      "isbn": "ISBN-13",
+      "language": "Language",
+      "publisher": "Publisher",
+      "year": "Year",
+      "format": "Format"
+    },
+    "attribution": "Attribution: data from TMDB and IGDB where shown.",
     "timeToBeat": {
       "title": "Time to beat",
       "styles": {
