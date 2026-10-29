@@ -1137,5 +1137,22 @@
       "body": "Tu nickname es tu nombre público en perfiles, listas y en las notas de la comunidad.",
       "submit": "Guardar nickname"
     }
+  },
+  "help": {
+    "deleteAccount": {
+      "metaTitle": "Eliminar tu cuenta",
+      "title": "Cómo eliminar tu cuenta de HexaScore",
+      "intro": "Puedes eliminar tu cuenta tú mismo, en la app o en la web. No hace falta contactar con soporte.",
+      "steps": {
+        "0": "Inicia sesión y abre tu perfil.",
+        "1": "Elige \"Eliminar mi cuenta\" y confirma tras la cuenta atrás de 10 segundos.",
+        "2": "Se cierra tu sesión en todos los dispositivos."
+      },
+      "grace": "La eliminación se aplica a los 30 días. Hasta entonces puedes iniciar sesión y cancelarla.",
+      "erased": "Al aplicarse se borran tu nombre, correo, apodo, foto, contraseña, inicios de sesión vinculados y claves de API, y se cancela cualquier suscripción con tarjeta.",
+      "kept": "Tus valoraciones permanecen en las puntuaciones de la comunidad sin ningún vínculo contigo, como \"Usuario eliminado\".",
+      "cta": "Ir a mi perfil",
+      "login": "Iniciar sesión"
+    }
   }
 }

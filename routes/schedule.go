@@ -18,4 +18,5 @@ import (
 //	s.Job(jobs.PruneSessions{}).Hourly()
 func Schedule(s *schedule.Schedule, _ *vukem.App) {
 	s.Job(jobs.RefreshEntityStats{}).Hourly().WithoutOverlapping()
+	s.Job(jobs.DeletionPurge{}).DailyAt("03:00").WithoutOverlapping()
 }
