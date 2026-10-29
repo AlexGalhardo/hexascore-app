@@ -32,6 +32,8 @@ type Runner struct {
 	DatabaseURL string
 	// PgDump is the pg_dump binary (the image ships postgresql18-client).
 	PgDump string
+	// PgRestore is the pg_restore binary Verify runs with --list.
+	PgRestore string
 	// Env names the environment in the object key.
 	Env string
 	Now func() time.Time
