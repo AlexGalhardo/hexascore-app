@@ -16,7 +16,7 @@ RUN if ! ls bun.lock* >/dev/null 2>&1; then \
 	fi \
 	&& bun install --frozen-lockfile
 COPY . .
-RUN bun run build
+RUN bun run build && bun run build:ssr
 
 FROM golang:1.27.3-alpine3.24 AS build
 WORKDIR /src
@@ -30,13 +30,16 @@ COPY --from=assets /src/resources/public/build resources/public/build
 RUN tags="$(sed 's/#.*//' .buildtags 2>/dev/null | tr -s ', \t\r\n' ',' | sed 's/^,//; s/,$//')" \
 	&& go build -trimpath -ldflags="-s -w" -tags "$tags" -o /out/app ./cmd/app
 
-FROM alpine:3.24.2
+# Node runs the self-contained SSR bundle; the Go binary starts and restarts it
+# (SSR_SUPERVISE, app/ssr/supervisor.go). Exact tag: node 26.13.0 LTS.
+FROM node:26.13.0-alpine3.24
 RUN apk add --no-cache ca-certificates tzdata \
 	&& adduser -D -H -u 10001 app \
 	&& mkdir -p /app/storage \
 	&& chown app:app /app/storage
 WORKDIR /app
 COPY --from=build /out/app /app/app
+COPY --from=assets /src/bootstrap/ssr /app/bootstrap/ssr
 USER app
 # The platform's PORT overrides this one; HOST=0.0.0.0 makes the server
 # reachable from outside the container. Pass secrets at runtime, never here.
@@ -44,7 +47,8 @@ USER app
 # mailer stops every command at boot, serve and `about` alike, as soon as a
 # route needs one. "log" writes each message to the JSON log, so nothing is
 # lost silently; set smtp, resend or mailtrap on the deploy to send for real.
-ENV APP_ENV=production HOST=0.0.0.0 PORT=3000 LOG_FORMAT=json MAIL_MAILER=log
+ENV APP_ENV=production HOST=0.0.0.0 PORT=3000 LOG_FORMAT=json MAIL_MAILER=log \
+	NODE_ENV=production SSR_SUPERVISE=true
 # A platform start command (Railway, Fly) replaces this entrypoint, so it has
 # to name the binary: "/app/app queue:work", never "queue:work".
 EXPOSE 3000
