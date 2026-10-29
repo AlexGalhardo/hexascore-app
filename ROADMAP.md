@@ -401,7 +401,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.B.1 Schema
 
-- [ ] **P1.B.1.1** Migrate `data_sources`, `items` (visibility, release precision and status, provenance), `item_translations` and `item_alt_titles`.
+- [x] **P1.B.1.1** Migrate `data_sources`, `items` (visibility, release precision and status, provenance), `item_translations` and `item_alt_titles`.
   - Files/modules: `database/migrations/*_create_data_sources_table.go`, `*_create_items_table.go`, `*_create_item_translations_table.go`, `*_create_item_alt_titles_table.go`, `app/models/item.go`
   - Refs: SDD 01 §5.2, §5.3, §9; ADR 0012; open-issues 02-1, 07-6, 08-3; VF-006
   - Depends on: P1.A.5.1
