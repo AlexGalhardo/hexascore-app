@@ -12,7 +12,7 @@
     },
     "password": {
       "setTitle": "Set a password",
-      "setBody": "Your account was created with Google or a passkey. Set a password to also log in with email and password.",
+      "setBody": "Your account was created with Google. Set a password to also log in with email and password.",
       "changeTitle": "Change password",
       "set": "Set password",
       "change": "Change password",
@@ -110,7 +110,7 @@
         },
         "pageSize": "Up to {count} results per page",
         "upgrade": "See plans",
-        "checkout": "Upgrade or buy credits"
+        "checkout": "Upgrade your plan"
       },
       "usage": {
         "title": "Usage",
@@ -319,7 +319,7 @@
       "success": "Payment received. Your plan updates as soon as the payment provider confirms it (usually seconds).",
       "canceled": "Checkout canceled. Nothing was charged.",
       "notConfigured": "Payments are not configured on this server.",
-      "buy": "Subscribe or buy credits",
+      "buy": "Subscribe",
       "product": "What do you want?",
       "method": "Payment method",
       "card": "Card (Stripe)",
@@ -577,8 +577,8 @@
         },
         "payment_required": {
           "title": "Quota exhausted",
-          "when": "The quota is exhausted: the 100 lifetime requests on Free, or the monthly quota plus prepaid credits on paid plans. The body includes <code>plan</code> and <code>limit</code>.",
-          "fix": "Upgrade or buy credits at <link>/pricing</link>. Paid quotas reset on the 1st of each month (UTC)."
+          "when": "The quota is exhausted: the 100 lifetime requests on Free, or the monthly quota on paid plans. The body includes <code>plan</code> and <code>limit</code>.",
+          "fix": "Upgrade your plan at <link>/pricing</link>. Paid quotas reset on the 1st of each month (UTC)."
         },
         "forbidden": {
           "title": "Forbidden",
@@ -631,7 +631,7 @@
       "colPageSize": "Max page size",
       "lifetimeQuota": "{quota} in total",
       "monthlyQuota": "{quota} / month",
-      "pricing": "Prices and upgrades: <link>/pricing</link>. Credits are prepaid requests spent only after the monthly quota runs out; they do not expire with the month.",
+      "pricing": "Prices and upgrades: <link>/pricing</link>.",
       "countingHeading": "What counts",
       "countEvery": "Every authenticated request that reaches an endpoint counts as one, including 404s.",
       "countNot": "Not counted: <code>401</code>, <code>400</code> for invalid parameters, <code>429</code> and any <code>5xx</code> (refunded).",
@@ -643,12 +643,12 @@
       "colHeader": "Header",
       "colMeaning": "Meaning",
       "headerLimit": "Requests in the current period (your plan quota).",
-      "headerRemaining": "Requests left before 402 (credits not included).",
+      "headerRemaining": "Requests left before 402.",
       "headerReset": "Seconds until the quota resets; 0 for the lifetime Free quota.",
       "headerQuota": "Same as RateLimit-Remaining.",
       "headerRetry": "On 429 and 503: seconds to wait before retrying.",
       "exceedingHeading": "When you hit a limit",
-      "exceedingNote": "Too many requests per second → <rateLimited>429 rate_limited</rateLimited>: wait <code>Retry-After</code> seconds. Quota (and credits) exhausted → <paymentRequired>402 payment_required</paymentRequired>: upgrade or buy credits; retrying will not help until the reset."
+      "exceedingNote": "Too many requests per second → <rateLimited>429 rate_limited</rateLimited>: wait <code>Retry-After</code> seconds. Quota exhausted → <paymentRequired>402 payment_required</paymentRequired>: upgrade your plan; retrying will not help until the reset."
     },
     "changelog": {
       "lead": "The version is part of the path. v1 only changes in backwards-compatible ways.",

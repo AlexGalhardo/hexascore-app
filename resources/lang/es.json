@@ -12,7 +12,7 @@
     },
     "password": {
       "setTitle": "Definir contraseña",
-      "setBody": "Tu cuenta se creó con Google o una passkey. Define una contraseña para entrar también con correo y contraseña.",
+      "setBody": "Tu cuenta se creó con Google. Define una contraseña para entrar también con correo y contraseña.",
       "changeTitle": "Cambiar contraseña",
       "set": "Definir contraseña",
       "change": "Cambiar contraseña",
@@ -110,7 +110,7 @@
         },
         "pageSize": "Hasta {count} resultados por página",
         "upgrade": "Ver planes",
-        "checkout": "Mejorar el plan o comprar créditos"
+        "checkout": "Mejorar el plan"
       },
       "usage": {
         "title": "Uso",
@@ -319,7 +319,7 @@
       "success": "Pago recibido. Tu plan se actualiza en cuanto el proveedor lo confirme (normalmente en segundos).",
       "canceled": "Pago cancelado. No se cobró nada.",
       "notConfigured": "Los pagos no están configurados en este servidor.",
-      "buy": "Suscribirse o comprar créditos",
+      "buy": "Suscribirse",
       "product": "¿Qué quieres?",
       "method": "Método de pago",
       "card": "Tarjeta (Stripe)",
@@ -577,8 +577,8 @@
         },
         "payment_required": {
           "title": "Cuota agotada",
-          "when": "La cuota se ha agotado: las 100 solicitudes de por vida del plan Free, o la cuota mensual más los créditos prepagados en los planes de pago. El cuerpo incluye <code>plan</code> y <code>limit</code>.",
-          "fix": "Mejora tu plan o compra créditos en <link>/pricing</link>. Las cuotas de pago se renuevan el día 1 de cada mes (UTC)."
+          "when": "La cuota se ha agotado: las 100 solicitudes de por vida del plan Free, o la cuota mensual en los planes de pago. El cuerpo incluye <code>plan</code> y <code>limit</code>.",
+          "fix": "Mejora tu plan en <link>/pricing</link>. Las cuotas de pago se renuevan el día 1 de cada mes (UTC)."
         },
         "forbidden": {
           "title": "Acceso prohibido",
@@ -631,7 +631,7 @@
       "colPageSize": "Tamaño máx. de página",
       "lifetimeQuota": "{quota} en total",
       "monthlyQuota": "{quota} / mes",
-      "pricing": "Precios y mejoras de plan: <link>/pricing</link>. Los créditos son solicitudes prepagadas que solo se gastan cuando se agota la cuota mensual; no caducan con el cambio de mes.",
+      "pricing": "Precios y mejoras de plan: <link>/pricing</link>.",
       "countingHeading": "Qué cuenta",
       "countEvery": "Cada solicitud autenticada que llega a un endpoint cuenta como una, incluidas las que devuelven 404.",
       "countNot": "No cuentan: <code>401</code>, <code>400</code> por parámetros no válidos, <code>429</code> y cualquier <code>5xx</code> (se devuelve).",
@@ -643,12 +643,12 @@
       "colHeader": "Cabecera",
       "colMeaning": "Significado",
       "headerLimit": "Solicitudes del período actual (la cuota de tu plan).",
-      "headerRemaining": "Solicitudes restantes antes del 402 (sin contar los créditos).",
+      "headerRemaining": "Solicitudes restantes antes del 402.",
       "headerReset": "Segundos hasta que se renueve la cuota; 0 para la cuota de por vida del plan Free.",
       "headerQuota": "Igual que RateLimit-Remaining.",
       "headerRetry": "En 429 y 503: segundos que esperar antes de reintentar.",
       "exceedingHeading": "Cuando alcanzas un límite",
-      "exceedingNote": "Demasiadas solicitudes por segundo → <rateLimited>429 rate_limited</rateLimited>: espera <code>Retry-After</code> segundos. Cuota (y créditos) agotada → <paymentRequired>402 payment_required</paymentRequired>: mejora tu plan o compra créditos; reintentar no servirá hasta la renovación."
+      "exceedingNote": "Demasiadas solicitudes por segundo → <rateLimited>429 rate_limited</rateLimited>: espera <code>Retry-After</code> segundos. Cuota agotada → <paymentRequired>402 payment_required</paymentRequired>: mejora tu plan; reintentar no servirá hasta la renovación."
     },
     "changelog": {
       "lead": "La versión forma parte de la ruta. La v1 solo cambia de forma retrocompatible.",
