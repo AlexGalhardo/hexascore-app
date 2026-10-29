@@ -1,5 +1,7 @@
-# P2.D.5.2: high advisories in the TypeScript SDK toolchain (js-yaml 4.2.0)
+# Task FIX-sdk-jsyaml (priority 1; renamed by the orchestrator: P2.D.5.2 is the ZAP microtask)
 Model: Sonnet. Repo: app. Branch: agent/senior/P2.D.5.2 from origin/main. rodada: 0
 Found in REV-P2.D.5.1: `cd sdks/ts && bun audit --audit-level=high` -> 3 high on js-yaml@4.2.0 (GHSA-52cp-r559-cp3m, GHSA-5p4m-2wfm-xmqj, GHSA-2883-xcg3-v3hh; fixed in 4.3.2). Path: dev @hey-api/openapi-ts 0.99.0 -> @hey-api/json-schema-ref-parser 1.4.4 (pins js-yaml exactly 4.2.0). Dev-only codegen over our own openapi/api-v1.json, so low exploitability, but the CI `deps` job (now scanning sdks/ts/bun.lock, agent/especialista/P2.D.5.1-fix) fails until fixed.
 Do: find the latest stable @hey-api/openapi-ts whose ref-parser uses js-yaml >= 4.3.2; if one exists, bump (exact pin) and update SDD 05 §10 version, regenerate (`bun run sdk:generate`), keep generated diff reviewed. If none exists, do NOT add an override silently: mark bloqueada with the options (bun `overrides` js-yaml 4.3.2 vs. documented exception in docs/runbooks/dependencies.md) for the orchestrator.
 Acceptance: (cd sdks/ts && bun audit --audit-level=high) -> no vulnerabilities; bun run typecheck && bun test in sdks/ts; bash scripts/openapi-check.sh.
+Orchestrator: base this on `origin/agent/especialista/P2.D.5.1-fix` merged into your branch (that fix is held back until this one is ready, so the deps job does not go red on main); the orchestrator merges both together.
+Also (small, same branch is fine): `/countries/{code}` and `/languages/{code}` compare the code case-sensitively, so `/countries/br` is 404; redirect a lowercase code to the canonical uppercase/canonical form (301) with a test.
