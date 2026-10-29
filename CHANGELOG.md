@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - Conventional Commits `commit-msg` hook (`.githooks/`, enabled by the setup scripts), `.config/cliff.toml` and `scripts/release.sh` (git-cliff, no Task or commitlint) (P1.A.2.2).
+- `packages/tokens`: design tokens (OKLCH, light and dark) emitted as CSS variables with a Tailwind v4 `@theme` mapping and a TypeScript module with sRGB hex, plus WCAG AA contrast tests (P1.A.3.1).
 - Frontend and Go tooling: Biome 2.6.4 (`bun run lint`), Vitest 5.0.5 with Testing Library and jsdom (`bun run test`), `tsc` over `resources/js` and `vitest.config.ts`, `.golangci.yml` for golangci-lint 2.15.0; the i18n parity test moved from `bun:test` to Vitest and the TypeScript sources were reformatted to tabs (P1.A.2.1).
 - `migrate:locked` command (Postgres advisory lock around the migration runner), `scripts/concurrent-index.sh` and `docs/runbooks/migrations.md` ported from the P0.F.5.2 spike (P1.A.4.3).
 - Architecture programme documents for the vukem rewrite: `docs/PROGRESS.md`, `docs/web-research.md`, `docs/brainstorming.md`, 14 SDDs in `docs/sdd/`, 16 ADRs in `docs/adrs/`, `ROADMAP.md` (316 microtasks), `architect-feedback-and-roadmap.md`, `vukem-feedback.md` (VF-001 to VF-031), `AGENTS.md`, `CLAUDE.md`, `.editorconfig`, `.markdownlint.jsonc`.

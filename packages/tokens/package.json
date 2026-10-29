@@ -1,0 +1,8 @@
+{
+  "name": "@hexascore/tokens",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "bun build.ts"
+  }
+}
