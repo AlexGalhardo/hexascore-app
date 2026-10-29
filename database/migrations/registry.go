@@ -22,5 +22,9 @@ func All() []schema.Migration {
 		m20261029100007CreateEntityLinksTable(),
 		m20261029100008CreateItemLinksTable(),
 		m20261029100009CreateEntityStatsTable(),
+		m20261029100010CreateIsbn13Function(),
+		m20261029100011CreateEditionsTable(),
+		m20261029100012CreateAffiliateLinksTable(),
+		m20261029100013CreateCatalogRedirectsTable(),
 	}
 }
