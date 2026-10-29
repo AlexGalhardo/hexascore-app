@@ -36,10 +36,25 @@ interface Props {
 	filters: Filters;
 }
 
-export default function Index({ groups, filters }: Props) {
+const sum = (counts: Props["counts"], status: string, type: string): number =>
+	Object.entries(counts ?? {})
+		.filter(([s]) => !status || s === status)
+		.reduce(
+			(n, [, byType]) =>
+				n + (type ? (byType[type] ?? 0) : Object.values(byType).reduce((a, b) => a + b, 0)),
+			0,
+		);
+
+export default function Index({ counts, groups, filters }: Props) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
 	const path = localized("/library", locale);
+
+	const pageHref = (type: string, cursor?: number) =>
+		`${path}?${new URLSearchParams({ ...(filters.status && { status: filters.status }), type, ...(filters.sort && { sort: filters.sort }), ...(cursor !== undefined && { cursor: String(cursor) }) })}`;
+
+	const clearEdition = (id: string) =>
+		router.delete(`/items/${id}/edition`, { preserveScroll: true });
 
 	const apply = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -67,7 +82,7 @@ export default function Index({ groups, filters }: Props) {
 						<option value="">{t("library.allStatuses")}</option>
 						{STATUSES.map((s) => (
 							<option key={s} value={s}>
-								{t(`social.status.shelves.${s}`)}
+								{t(`social.status.shelves.${s}`)} ({sum(counts, s, filters.type)})
 							</option>
 						))}
 					</select>
@@ -82,7 +97,7 @@ export default function Index({ groups, filters }: Props) {
 						<option value="">{t("library.allTypes")}</option>
 						{TYPES.map((s) => (
 							<option key={s} value={s}>
-								{t(`itemTypes.${s}`)}
+								{t(`itemTypes.${s}`)} ({sum(counts, filters.status, s)})
 							</option>
 						))}
 					</select>
@@ -136,18 +151,27 @@ export default function Index({ groups, filters }: Props) {
 									)}
 									{item.edition && (
 										<span className="text-sm text-muted">
-											{t("library.edition", { title: item.edition.title })}
+											{t("library.edition", { title: item.edition.title })}{" "}
+											<button
+												type="button"
+												className="underline"
+												onClick={() => clearEdition(item.id)}
+											>
+												{t("library.clearEdition")}
+											</button>
 										</span>
 									)}
 								</li>
 							))}
 						</ul>
-						{filters.type && g.next >= 0 && (
+						{g.next >= 0 && (
 							<Link
 								className="mt-2 inline-block underline"
-								href={`${path}?${new URLSearchParams({ ...(filters.status && { status: filters.status }), type: filters.type, ...(filters.sort && { sort: filters.sort }), cursor: String(g.next) })}`}
+								href={
+									filters.type ? pageHref(filters.type, g.next) : pageHref(g.type)
+								}
 							>
-								{t("lists.next")}
+								{filters.type ? t("lists.next") : t("library.seeAll")}
 							</Link>
 						)}
 					</section>
