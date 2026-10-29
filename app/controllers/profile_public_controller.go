@@ -52,7 +52,8 @@ func (h *PublicProfile) Show(c *web.Ctx) error {
 	}
 
 	hidden := p.IsPrivate && !p.IsOwner
-	if hidden {
+	indexable := !hidden && !p.Banned
+	if !indexable {
 		c.Writer().Header().Set("X-Robots-Tag", "noindex")
 	}
 
@@ -71,7 +72,7 @@ func (h *PublicProfile) Show(c *web.Ctx) error {
 		})
 	}
 
-	props := inertia.Props{"profile": head, "seo": map[string]any{"indexable": !hidden}}
+	props := inertia.Props{"profile": head, "seo": map[string]any{"indexable": indexable}}
 	if !hidden {
 		meta := inertia.ScrollMeta{PageName: "cursor"}
 		if p.NextRatings >= 0 {

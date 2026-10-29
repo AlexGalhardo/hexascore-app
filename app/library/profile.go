@@ -22,6 +22,8 @@ type ProfileHead struct {
 	Initial   string `json:"initial"`
 	IsPrivate bool   `json:"isPrivate"`
 	IsOwner   bool   `json:"isOwner"`
+	// Banned is a currently banned owner: the profile still shows but is noindex (SDD 14 §8).
+	Banned bool `json:"-"`
 }
 
 // ProfileRating is one recent rating on a profile; Stars are 0.5–10.
@@ -61,15 +63,17 @@ type Profile struct {
 }
 
 // LoadProfile finds the profile of nickname (case-insensitive) as seen by viewerID (0 when anonymous). Unknown,
-// anonymised and banned-out accounts are ErrNotFound. ratingsOffset pages the recent ratings.
+// and anonymised accounts are ErrNotFound. ratingsOffset pages the recent ratings.
 func LoadProfile(
 	ctx context.Context, db *database.DB, nickname string, viewerID int64, locale string, ratingsOffset int,
 ) (Profile, error) {
 	p := Profile{NextRatings: -1}
 	var display sql.NullString
 
-	err := db.SQL().QueryRowContext(ctx, `SELECT id, coalesce(display_username, username), profile_private FROM users
-WHERE username = $1 AND anonymized_at IS NULL`, strings.ToLower(nickname)).Scan(&p.UserID, &display, &p.IsPrivate)
+	err := db.SQL().QueryRowContext(ctx, `SELECT id, coalesce(display_username, username), profile_private,
+  banned_at IS NOT NULL AND (ban_expires_at IS NULL OR ban_expires_at > now()) FROM users
+WHERE username = $1 AND anonymized_at IS NULL`, strings.ToLower(nickname)).
+		Scan(&p.UserID, &display, &p.IsPrivate, &p.Banned)
 	if errors.Is(err, sql.ErrNoRows) {
 		return p, ErrNotFound()
 	}
