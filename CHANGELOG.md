@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Inertia SSR in the app: Go-supervised Node (`SSR_SUPERVISE`), `ssr` readiness check, fallback counter, `build:ssr`, Node 26.13.0 runtime image (P1.A.4.2).
 - Application scaffold from the vukem Inertia React starter (vukem v0.32.0, Postgres driver v0.5.1, bun), example posts CRUD removed (P1.A.1.1).
 - Orchestration files: `docs/orchestration/BOARD.md`, `docs/orchestration/QUESTIONS.md`, `questions-to-dev.md`.
+- Local stack `docker-compose.yml` (Postgres 18.6 on 127.0.0.1:5433, RustFS 1.0.4 on 127.0.0.1:9000/9001) and idempotent setup scripts `setups/setup-windows.ps1` and `setups/setup-unix.sh` (P1.A.1.2).
 
 ### Changed
 
