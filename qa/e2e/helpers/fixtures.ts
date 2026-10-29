@@ -1,6 +1,6 @@
 import { test as base } from "@playwright/test";
-import { anyLocale, translator } from "./t";
 import { localePrefix } from "./locale";
+import { anyLocale, translator } from "./t";
 
 export { expect } from "@playwright/test";
 
@@ -11,10 +11,18 @@ function fakeIp(): string {
 	return `10.${octet()}.${octet()}.${octet()}`;
 }
 
-export const test = base.extend<{ t: ReturnType<typeof translator>; any: typeof anyLocale; prefix: string; locale: string }>({
+export const test = base.extend<{
+	t: ReturnType<typeof translator>;
+	any: typeof anyLocale;
+	prefix: string;
+	locale: string;
+}>({
+	// biome-ignore lint/correctness/noEmptyPattern: Playwright requires destructuring the first fixture argument
 	extraHTTPHeaders: async ({}, use) => use({ "X-Forwarded-For": fakeIp() }),
+	// biome-ignore lint/correctness/noEmptyPattern: Playwright requires destructuring the first fixture argument
 	locale: async ({}, use, testInfo) => use(String(testInfo.project.use.locale ?? "en")),
 	t: async ({ locale }, use) => use(translator(locale)),
+	// biome-ignore lint/correctness/noEmptyPattern: Playwright requires destructuring the first fixture argument
 	any: async ({}, use) => use(anyLocale),
 	prefix: async ({ locale }, use) => use(localePrefix(locale)),
 });

@@ -3,7 +3,7 @@ import { createHmac } from "node:crypto";
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 const STEP_SECONDS = 30;
 
-function base32Decode(input: string): Buffer {
+function base32Decode(input: string): Uint8Array {
 	let bits = "";
 	for (const char of input.replace(/[\s=]/g, "").toUpperCase()) {
 		const index = ALPHABET.indexOf(char);
@@ -11,8 +11,9 @@ function base32Decode(input: string): Buffer {
 		bits += index.toString(2).padStart(5, "0");
 	}
 	const bytes: number[] = [];
-	for (let i = 0; i + 8 <= bits.length; i += 8) bytes.push(Number.parseInt(bits.slice(i, i + 8), 2));
-	return Buffer.from(bytes);
+	for (let i = 0; i + 8 <= bits.length; i += 8)
+		bytes.push(Number.parseInt(bits.slice(i, i + 8), 2));
+	return Uint8Array.from(bytes);
 }
 
 export function currentStep(now = Date.now()): number {
@@ -21,11 +22,13 @@ export function currentStep(now = Date.now()): number {
 
 // RFC 6238 (HMAC-SHA1, 30 s step, 6 digits), the defaults every authenticator app uses.
 export function totp(secret: string, step = currentStep()): string {
-	const counter = Buffer.alloc(8);
-	counter.writeBigUInt64BE(BigInt(step));
-	const digest = createHmac("sha1", base32Decode(secret)).update(counter).digest();
+	const counter = new DataView(new ArrayBuffer(8));
+	counter.setBigUint64(0, BigInt(step));
+	const digest = createHmac("sha1", base32Decode(secret))
+		.update(new Uint8Array(counter.buffer))
+		.digest();
 	const offset = (digest[digest.length - 1] ?? 0) & 0x0f;
-	const binary = digest.readUInt32BE(offset) & 0x7fffffff;
+	const binary = new DataView(digest.buffer, digest.byteOffset).getUint32(offset) & 0x7fffffff;
 	return String(binary % 1_000_000).padStart(6, "0");
 }
 
