@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"strconv"
 	"strings"
 )
 
@@ -277,4 +278,55 @@ func List(ctx context.Context, db Querier, codec *CursorCodec, p ListParams) (Li
 		page.PrevCursor = mk(first, DirPrev)
 	}
 	return page, nil
+}
+
+// ParseListQuery reads the listing filters of typ through get (a query
+// lookup); malformed numbers are ErrInvalidQuery. Limit stays 0 (default).
+func ParseListQuery(get func(string) string, typ string) (ListParams, error) {
+	p := ListParams{
+		Type: typ, Genre: get("genre"), Platform: get("platform"),
+		Sort: get("sort"), Cursor: get("cursor"),
+	}
+
+	if v := get("year"); v != "" {
+		year, err := strconv.Atoi(v)
+		if err != nil {
+			return p, ErrInvalidQuery
+		}
+		p.Year = year
+	}
+	stars := func(name string) (*float64, error) {
+		v := get(name)
+		if v == "" {
+			return nil, nil
+		}
+		f, err := strconv.ParseFloat(v, 64)
+		if err != nil {
+			return nil, ErrInvalidQuery
+		}
+
+		return &f, nil
+	}
+
+	var err error
+	if p.MinScore, err = stars("min_score"); err != nil {
+		return p, err
+	}
+	if p.MaxScore, err = stars("max_score"); err != nil {
+		return p, err
+	}
+	for _, key := range CategoryKeys[typ] {
+		v, err := stars("min_" + key)
+		if err != nil {
+			return p, err
+		}
+		if v != nil {
+			if p.MinCategory == nil {
+				p.MinCategory = map[string]float64{}
+			}
+			p.MinCategory[key] = *v
+		}
+	}
+
+	return p, nil
 }
