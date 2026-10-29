@@ -44,6 +44,8 @@ jobs:
       - name: Format diff
         run: go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@${{ env.GOLANGCI_LINT_VERSION }} fmt --diff
       - run: go vet ./...
+      - name: OpenAPI goldens
+        run: bash scripts/openapi-check.sh
       - run: bun run lint
       - run: bun run typecheck
       - run: bunx markdownlint-cli2@${{ env.MARKDOWNLINT_VERSION }} "**/*.md"
@@ -87,6 +89,9 @@ jobs:
       # bun is on PATH so TestPluralGolden compares Go and TypeScript output.
       - run: go test -race -count=1 -tags integration ./...
       - run: bun run test
+      - name: TypeScript SDK
+        working-directory: sdks/ts
+        run: bun install --frozen-lockfile --ignore-scripts && bun run typecheck && bun test
 
   vuln:
     name: Vulnerability scan (govulncheck, weekly)
