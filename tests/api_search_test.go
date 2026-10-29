@@ -62,6 +62,16 @@ func TestAPILookup(t *testing.T) {
 		AssertJSONPath("id", r.book)
 
 	r.client.GetJSON("/api/v1/lookup?source=tmdb&id=1").AssertNotFound()
+	r.client.GetJSON("/api/v1/lookup?source=isbn13&id=9780441013593x").AssertNotFound()
+
+	// A hidden item sharing the id and sorting first must not shadow the public one (FR-01-14).
+	if _, err := r.acc.DB.ExecContext(t.Context(), `INSERT INTO items (id, type, slug, wikidata_qid, external_ids,
+  provenance, visibility) VALUES ('00000000-0000-7000-8000-000000000001', 'game', 'hidden-game', 'Q42',
+  '{"igdb":1234}', '{}', 'hidden')`); err != nil {
+		t.Fatal(err)
+	}
+	r.client.GetJSON("/api/v1/lookup?source=igdb&id=1234").AssertOK().AssertJSONPath("id", r.game)
+	r.client.GetJSON("/api/v1/lookup?source=wikidata&id=Q42").AssertNotFound()
 	for _, q := range []string{"", "?source=tmdb", "?source=bogus&id=1", "?source=tmdb&id=", "?source=tmdb&id=1&x=1"} {
 		r.client.GetJSON("/api/v1/lookup" + q).AssertStatus(http.StatusBadRequest)
 	}
