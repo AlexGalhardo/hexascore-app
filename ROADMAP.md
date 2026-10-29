@@ -939,7 +939,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `curl -s $WEB/movies?genre=<slug> | grep -c '<h1'` → 1
   - Notes: scroll meta shape as decided in P0.F.3.1.
 
-- [ ] **P1.G.2.3** Build `Catalog/Show` and `Catalog/Edition` with the rating widget, status, time-to-beat, add-to-list, report and editions.
+- [x] **P1.G.2.3** Build `Catalog/Show` and `Catalog/Edition` with the rating widget, status, time-to-beat, add-to-list, report and editions.
   - Files/modules: `resources/js/pages/Catalog/{Show,Edition}.tsx`, `resources/js/components/item/{RatingPanel,StatusPicker,TimeToBeat,AddToList,ReportButton,Editions}.tsx`, `app/http/controllers/item_controller.go`
   - Refs: SDD 09 §6.2, §7.4, §9; SDD 02 §6; SDD 14 §6.2; SDD 01 §6.1 (attribution); legacy `app/[locale]/[section]/[slug]/page.tsx`
   - Depends on: P1.G.2.2, P1.D.4.2, P1.F.1.2, P1.F.3.2

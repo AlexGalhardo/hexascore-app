@@ -781,6 +781,35 @@
       "hltb_complete": "HLTB 100%",
       "openlibrary": "Open Library"
     },
+    "editions": {
+      "title": "Ediciones",
+      "edition": "Edición",
+      "backToWork": "Volver al libro"
+    },
+    "roles": {
+      "director": "Dirección",
+      "writer": "Guion",
+      "creator": "Creación",
+      "author": "Autor",
+      "developer": "Desarrolladora",
+      "publisher": "Editorial",
+      "network": "Cadena",
+      "production_company": "Producción",
+      "genre": "Géneros",
+      "platform": "Plataformas",
+      "game_mode": "Modos de juego",
+      "franchise": "Franquicia",
+      "series": "Serie",
+      "cast": "Reparto"
+    },
+    "editionFields": {
+      "isbn": "ISBN-13",
+      "language": "Idioma",
+      "publisher": "Editorial",
+      "year": "Año",
+      "format": "Formato"
+    },
+    "attribution": "Atribución: datos de TMDB e IGDB donde se muestran.",
     "timeToBeat": {
       "title": "Tiempo para terminar",
       "styles": {
