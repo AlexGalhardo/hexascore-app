@@ -78,19 +78,19 @@ Citation numbers in this section refer to the "Sources (IMDb)" list at its end.
 3. <https://m.imdb.com/conditions> (search mirror; live page not fetched), accessed 2026-10-28
 4. <https://data.imdb.com/documentation/api-documentation/getting-access/>, accessed 2026-10-28
 5. <https://aws.amazon.com/marketplace/pp/IMDb-MovieTVOTT-Data/prodview-yeuyizioqmfsy>, accessed 2026-10-28
-7. <https://help.imdb.com/article/contribution/contribution-information/when-will-my-update-be-added/GEKS9SBHDEHBAVC7>, accessed 2026-10-28
-8. <https://contribute.imdb.com/charter>, accessed 2026-10-28
-9. <https://help.imdb.com/article/contribution/contribution-information/adding-data/G6BXD2JFDCCETUF4> (search summary), accessed 2026-10-28
-10. <https://en.wikipedia.org/wiki/IMDb>, accessed 2026-10-28
-11. <https://help.imdb.com/article/imdb/discover-watch/using-the-advanced-search-feature/GLUEUYWPQNPTEVPU> (search summary), accessed 2026-10-28
-12. <https://help.imdb.com/article/imdb/track-movies-tv/check-ins-faq/GG59ELYW45FMC7J3> (search summary), accessed 2026-10-28
-13. <https://help.imdb.com/article/imdb/general-information/why-should-i-register-on-imdb/GHB62T7USTMYMCDC> (search summary), accessed 2026-10-28
-14. <https://fortune.com/2023/05/30/imdb-revamps-rating-system-the-little-mermaid>, accessed 2026-10-28
-15. <https://thegrio.com/2023/06/01/imdb-updates-rating-system-the-little-mermaid-negative-review-bombing/> (search summary), accessed 2026-10-28
-16. <https://help.imdb.com/article/imdbpro/industry-research/faq-for-starmeter-moviemeter-and-companymeter/GSPB7HDNPKVT5VHC> (search summary), accessed 2026-10-28
-17. <https://developer.imdb.com/documentation/bulk-data-documentation/data-dictionary/meters/> (search summary), accessed 2026-10-28
-18. <https://help.imdb.com/article/contribution/contribution-information/user-review-guidelines/GABTWSNLDNFLPRRH> (search summary), accessed 2026-10-28
-19. <https://api.market/blog/sleeyax/entertainment/best-movie-apis> (third-party, unverified), accessed 2026-10-28
+6. <https://help.imdb.com/article/contribution/contribution-information/when-will-my-update-be-added/GEKS9SBHDEHBAVC7>, accessed 2026-10-28
+7. <https://contribute.imdb.com/charter>, accessed 2026-10-28
+8. <https://help.imdb.com/article/contribution/contribution-information/adding-data/G6BXD2JFDCCETUF4> (search summary), accessed 2026-10-28
+9. <https://en.wikipedia.org/wiki/IMDb>, accessed 2026-10-28
+10. <https://help.imdb.com/article/imdb/discover-watch/using-the-advanced-search-feature/GLUEUYWPQNPTEVPU> (search summary), accessed 2026-10-28
+11. <https://help.imdb.com/article/imdb/track-movies-tv/check-ins-faq/GG59ELYW45FMC7J3> (search summary), accessed 2026-10-28
+12. <https://help.imdb.com/article/imdb/general-information/why-should-i-register-on-imdb/GHB62T7USTMYMCDC> (search summary), accessed 2026-10-28
+13. <https://fortune.com/2023/05/30/imdb-revamps-rating-system-the-little-mermaid>, accessed 2026-10-28
+14. <https://thegrio.com/2023/06/01/imdb-updates-rating-system-the-little-mermaid-negative-review-bombing/> (search summary), accessed 2026-10-28
+15. <https://help.imdb.com/article/imdbpro/industry-research/faq-for-starmeter-moviemeter-and-companymeter/GSPB7HDNPKVT5VHC> (search summary), accessed 2026-10-28
+16. <https://developer.imdb.com/documentation/bulk-data-documentation/data-dictionary/meters/> (search summary), accessed 2026-10-28
+17. <https://help.imdb.com/article/contribution/contribution-information/user-review-guidelines/GABTWSNLDNFLPRRH> (search summary), accessed 2026-10-28
+18. <https://api.market/blog/sleeyax/entertainment/best-movie-apis> (third-party, unverified), accessed 2026-10-28
 
 (Number 6 intentionally unused; source 2 also covers the demographic-breakdown removal.)
 
