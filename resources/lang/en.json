@@ -1278,6 +1278,7 @@
     "showing": "{count} of {total}",
     "edition": "Edition: {title}",
     "clearEdition": "Clear edition",
+    "moreEditions": "More editions",
     "chooseEdition": "Choose edition",
     "pickEdition": "Edition",
     "saveEdition": "Save edition",

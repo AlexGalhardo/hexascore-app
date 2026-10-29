@@ -153,7 +153,7 @@ WHERE i.type = $1 AND i.slug = $2 AND i.visibility = 'public'`, typ, slug, local
 
 	switch typ {
 	case "book":
-		if page.Editions, page.EditionCount, err = loadEditions(ctx, db, src.ID); err != nil {
+		if page.Editions, page.EditionCount, err = loadEditions(ctx, db, src.ID, 0, EditionPageSize); err != nil {
 			return page, err
 		}
 	case "game":
@@ -262,7 +262,7 @@ func scanEdition(row interface{ Scan(...any) error }) (Edition, error) {
 	return e, nil
 }
 
-func loadEditions(ctx context.Context, db Querier, workID string) ([]Edition, int, error) {
+func loadEditions(ctx context.Context, db Querier, workID string, offset, limit int) ([]Edition, int, error) {
 	var count int
 	if err := db.QueryRowContext(ctx, `SELECT count(*) FROM editions WHERE work_id = $1`, workID).
 		Scan(&count); err != nil {
@@ -270,7 +270,7 @@ func loadEditions(ctx context.Context, db Querier, workID string) ([]Edition, in
 	}
 
 	rows, err := db.QueryContext(ctx, editionSelect+` WHERE e.work_id = $1
-ORDER BY e.is_brazilian DESC, e.publication_year DESC NULLS LAST, e.id LIMIT `+strconv.Itoa(EditionPageSize), workID)
+ORDER BY e.is_brazilian DESC, e.publication_year DESC NULLS LAST, e.id LIMIT `+strconv.Itoa(limit)+` OFFSET `+strconv.Itoa(offset), workID)
 	if err != nil {
 		return nil, 0, fmt.Errorf("load editions: %w", err)
 	}
@@ -288,26 +288,33 @@ ORDER BY e.is_brazilian DESC, e.publication_year DESC NULLS LAST, e.id LIMIT `+s
 	return out, count, rows.Err()
 }
 
-// LoadBookEditions lists the editions of the public book workID for the edition picker (site audience);
+// LoadBookEditions lists one EditionPageSize page of the editions of the public book workID, starting at
+// offset, for the edition picker (site audience). next is the following offset, or -1 on the last page;
 // ErrItemNotFound when the work is not a public book.
-func LoadBookEditions(ctx context.Context, db Querier, workID string) ([]Edition, error) {
+func LoadBookEditions(ctx context.Context, db Querier, workID string, offset int) ([]Edition, int, error) {
 	if _, err := uuid.Parse(workID); err != nil {
-		return nil, ErrItemNotFound
+		return nil, 0, ErrItemNotFound
 	}
 
 	var exists bool
 	if err := db.QueryRowContext(ctx,
 		`SELECT EXISTS (SELECT 1 FROM items WHERE id = $1 AND type = 'book' AND visibility = 'public')`, workID).
 		Scan(&exists); err != nil {
-		return nil, fmt.Errorf("check book: %w", err)
+		return nil, 0, fmt.Errorf("check book: %w", err)
 	}
 	if !exists {
-		return nil, ErrItemNotFound
+		return nil, 0, ErrItemNotFound
 	}
 
-	out, _, err := loadEditions(ctx, db, workID)
+	out, _, err := loadEditions(ctx, db, workID, offset, EditionPageSize+1)
+	if err != nil {
+		return nil, 0, err
+	}
+	if len(out) > EditionPageSize {
+		return out[:EditionPageSize], offset + EditionPageSize, nil
+	}
 
-	return out, err
+	return out, -1, nil
 }
 
 // LoadEdition reads one edition of the book work; ErrItemNotFound when the
