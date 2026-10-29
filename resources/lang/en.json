@@ -1277,6 +1277,8 @@
     "apply": "Apply",
     "showing": "{count} of {total}",
     "edition": "Edition: {title}",
+    "clearEdition": "Clear edition",
+    "seeAll": "See all",
     "score": "Your score: {stars}"
   },
   "userLists": {

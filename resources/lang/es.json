@@ -1277,6 +1277,8 @@
     "apply": "Aplicar",
     "showing": "{count} de {total}",
     "edition": "Edición: {title}",
+    "clearEdition": "Quitar edición",
+    "seeAll": "Ver todos",
     "score": "Tu puntuación: {stars}"
   },
   "userLists": {
