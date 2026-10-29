@@ -1,0 +1,18 @@
+extends:
+  - recommended
+
+# vukem openapi.Info has no license field, so no document can carry one (VF-NEW-P1.H.4.1b).
+rules:
+  info-license: off
+
+apis:
+  api@v1:
+    root: openapi/api-v1.json
+  app@v1:
+    root: openapi/app-v1.json
+    # Session-cookie web routes are plain (untyped) routes: vukem emits no security requirement,
+    # no 4XX response and an unused Problem/ValidationError component for them (VF-NEW-P1.H.4.1b).
+    rules:
+      security-defined: off
+      operation-4xx-response: off
+      no-unused-components: off
