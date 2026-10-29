@@ -32,10 +32,10 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-021 | 2026-10-28 | low | open |
 | VF-022 | 2026-10-28 | low | open |
 | VF-023 | 2026-10-28 | low | open |
-| VF-024 | 2026-10-28 | medium | open |
+| VF-024 | 2026-10-28 | medium | in_progress (framework) |
 | VF-025 | 2026-10-28 | medium | open |
 | VF-026 | 2026-10-28 | medium | open |
-| VF-027 | 2026-10-28 | medium | in_progress (framework) |
+| VF-027 | 2026-10-28 | medium | in_progress (framework, vukem PR #9) |
 | VF-028 | 2026-10-28 | low | open |
 | VF-029 | 2026-10-28 | low | open |
 | VF-030 | 2026-10-28 | medium | open |
@@ -235,7 +235,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-024: `i18n.Middleware` has no URL-prefix locale source
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/localization`, `https://vukem.dev/docs/frontend/inertia-i18n`.
 - **Context**: HexaScore keeps the legacy URL scheme (`/`, `/pt-br/...`, `/es/...`, brainstorming D-17). The documented locale sources are query, cookie and `Accept-Language`; a path-prefix source with prefix stripping and URL generation that re-adds the prefix is not documented.
 - **Workaround**: app middleware that reads the first path segment, sets the locale in the context and rewrites the path; `route` helpers wrapped to add the prefix.
