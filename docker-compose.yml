@@ -47,6 +47,10 @@ services:
       APP_KEY: ${APP_KEY:?run setups/setup-unix.sh or vukem key:generate}
       DATABASE_URL: postgres://hexascore:hexascore@postgres:5432/hexascore?sslmode=disable
       SESSION_DRIVER: database
+      # Debug level makes the log mail transport print message bodies, which is how the e2e suite reads verification and reset links.
+      LOG_LEVEL: debug
+      # The suite sends a distinct X-Forwarded-For per test so the strict auth rate limits (5 logins/min per IP) do not couple specs.
+      TRUSTED_PROXIES: 172.16.0.0/12
     # Migrate, then seed DemoCatalog (1 admin, 50 users, 300 items); a second seed may fail, so tolerate it.
     entrypoint: ["/bin/sh", "-c", "/app/app migrate && (/app/app db:seed --force DemoCatalog || true)"]
     restart: "no"
