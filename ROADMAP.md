@@ -920,7 +920,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.G.2 Catalogue pages
 
-- [ ] **P1.G.2.1** Build `Home/Index` with the legacy per-type section highlights.
+- [x] **P1.G.2.1** Build `Home/Index` with the legacy per-type section highlights.
   - Files/modules: `app/http/controllers/home_controller.go`, `resources/js/pages/Home/Index.tsx`, `resources/js/components/catalog/SectionHighlights.tsx`, `tests/inertia_pages_test.go`
   - Refs: SDD 09 §6.2 (`Home/Index`); D-02; open-issues 08-8; legacy `app/[locale]/page.tsx` (`SectionHighlights` per item type)
   - Depends on: P1.G.1.1, P1.D.5.1
