@@ -228,7 +228,9 @@ func (m *Meter) pendingLocked() bool {
 }
 
 // Flush writes every pending delta, flushBatch users per transaction. A failed batch keeps its deltas for the
-// next flush; batches before it stay written.
+// next flush; batches before it stay written. Snapshotted deltas move into the base under the lock before the
+// write, so requests admitted while it runs still see them (no over-admission during a flush); restore takes
+// them back out on failure.
 func (m *Meter) Flush(ctx context.Context) error {
 	m.mu.Lock()
 
@@ -239,6 +241,11 @@ func (m *Meter) Flush(ctx context.Context) error {
 			continue
 		}
 
+		for p, n := range s.pending.Used {
+			s.used[p] += n
+		}
+
+		s.credits -= s.pending.Credits
 		batch = append(batch, s.pending)
 		s.pending = newDelta(id)
 	}
@@ -268,7 +275,7 @@ func (m *Meter) Flush(ctx context.Context) error {
 	return nil
 }
 
-// applied moves written deltas into the stored base and drops periods that are no longer current.
+// applied drops periods that are no longer current once their deltas are written.
 func (m *Meter) applied(chunk []UserDelta) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
@@ -277,12 +284,6 @@ func (m *Meter) applied(chunk []UserDelta) {
 
 	for _, d := range chunk {
 		s := m.users[d.UserID]
-		for p, n := range d.Used {
-			s.used[p] += n
-		}
-
-		s.credits -= d.Credits
-
 		for p := range s.used {
 			if p != "life" && p != now && s.pending.Used[p] == 0 {
 				delete(s.used, p)
@@ -291,17 +292,20 @@ func (m *Meter) applied(chunk []UserDelta) {
 	}
 }
 
-// restore puts unwritten deltas back in front of whatever arrived during the flush.
+// restore takes unwritten deltas out of the base and puts them back in front of whatever arrived during the flush.
 func (m *Meter) restore(unwritten []UserDelta) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
 	for _, d := range unwritten {
-		p := &m.users[d.UserID].pending
+		s := m.users[d.UserID]
+		p := &s.pending
 		p.Credits += d.Credits
+		s.credits += d.Credits
 
 		for k, n := range d.Used {
 			p.Used[k] += n
+			s.used[k] -= n
 		}
 
 		for k, n := range d.Count {
