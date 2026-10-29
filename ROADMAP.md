@@ -575,7 +575,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test ./tests -run TestSecurity_A01_AdminRoleNotEditableInPanel` → crafted `role=admin` POST changes nothing.
   - Notes: `BeforeSave` lacks previous values (VF-010): re-read the row inside the transaction. No impersonation in v1 (VF-012). `/admin` answers 404 to non-admins (legacy `admin.spec.ts`).
 
-- [ ] **P1.C.3.2** Implement deletion scheduling and cancellation, the purge job and the public `/help/delete-account` page (replaces `scheduleDeletion`, `cancelDeletion`).
+- [x] **P1.C.3.2** Implement deletion scheduling and cancellation, the purge job and the public `/help/delete-account` page (replaces `scheduleDeletion`, `cancelDeletion`).
   - Files/modules: `app/accounts/deletion.go`, `jobs/deletion_purge.go`, `routes/schedule.go`, `resources/js/pages/Help/DeleteAccount.tsx`, `tests/deletion_test.go`
   - Refs: SDD 03 §6.1, §7.5, §9; open-issues 10-7, 14-7; legacy `lib/account-deletion.ts`, `lib/account-purge.ts`, `app/api/cron/purge-accounts/`
   - Depends on: P1.C.3.1
