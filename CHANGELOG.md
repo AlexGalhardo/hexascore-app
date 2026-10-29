@@ -33,6 +33,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- `/challenge` probe counts the attempt it announces, so a client right below the proof-of-work limit solves before posting instead of receiving a raw 428; e2e signup flake root cause (E2E-HARDEN-P1.I.2.1).
+- CSP `upgrade-insecure-requests` is sent only when production and `APP_URL` is https (the plain-HTTP e2e container works without `bypassCSP`); e2e specs assert copy with the locale-prefixed `t` and read mailed-link emails restored from the log redaction (E2E-HARDEN-P1.I.2.1).
 - API keys table scrolls inside its own focusable region instead of overflowing a 360 px viewport, which hid the Revoke button behind the Status cell (P1.I.2.1).
 
 - The Playwright suite under `qa/e2e` is now covered by `bun run lint` and `bun run typecheck`, and the e2e compose seed step no longer hides seeder failures.

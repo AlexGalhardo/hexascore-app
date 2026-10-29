@@ -64,6 +64,8 @@ func (ch *Challenger) state(
 		return false, 0, err
 	}
 
+	// A read-only probe reports the answer for the attempt it announces, so it counts that attempt
+	// too; otherwise the client is told "not required" and the post that crosses the limit gets a 428.
 	read := func(key string) (int64, error) {
 		if count {
 			return c.Increment(ctx, key, 1, rule.Window)
@@ -71,7 +73,7 @@ func (ch *Challenger) state(
 
 		n, _, err := cache.Get[int64](ctx, c, key)
 
-		return n, err
+		return n + 1, err
 	}
 
 	n, err := read(ch.key(rule, ip))

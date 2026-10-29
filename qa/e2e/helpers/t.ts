@@ -41,13 +41,3 @@ export function translator(
 export function escapeRegExp(value: string): string {
 	return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
-
-const LOCALES = ["en", "pt-BR", "es"] as const;
-
-// Matches the copy of `key` in any locale. Form posts redirect to unprefixed URLs (/signup/check-email,
-// /two-factor-challenge, /login), which render in the default locale, so a pt-BR or es run cannot assume
-// the page language after a post; it still must show the right page.
-export function anyLocale(key: string, params?: Record<string, string | number>): RegExp {
-	const copies = LOCALES.map((locale) => escapeRegExp(translator(locale)(key, params)));
-	return new RegExp(`^(${copies.join("|")})$`);
-}
