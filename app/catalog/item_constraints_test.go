@@ -25,20 +25,33 @@ func TestItemConstraints(t *testing.T) {
 	}
 	ctx := context.Background()
 
-	if _, err := db.ExecContext(ctx, `INSERT INTO data_sources (code, name, licence, url) VALUES ('wikidata', 'Wikidata', 'CC0-1.0', 'https://www.wikidata.org')`); err != nil {
+	if _, err := db.ExecContext(ctx, `INSERT INTO data_sources (code, name, licence, url)
+VALUES ('wikidata', 'Wikidata', 'CC0-1.0', 'https://www.wikidata.org')`); err != nil {
 		t.Fatal(err)
 	}
 
 	item := models.Item{
-		ID: uuid.NewV7().String(), Type: "game", Slug: "half-life", WikidataQID: "Q279744",
-		ReleasePrecision: "day", ReleaseStatus: "released", Visibility: "public",
-		Trailers: orm.JSON[[]models.Trailer]{V: []models.Trailer{}}, ExternalIDs: orm.JSON[map[string]string]{V: map[string]string{"igdb": "231"}},
-		Provenance: orm.JSON[map[string]string]{V: map[string]string{}},
+		ID:               uuid.NewV7().String(),
+		Type:             "game",
+		Slug:             "half-life",
+		WikidataQID:      "Q279744",
+		ReleasePrecision: "day",
+		ReleaseStatus:    "released",
+		Visibility:       "public",
+		Trailers: orm.JSON[[]models.Trailer]{
+			V: []models.Trailer{},
+		},
+		ExternalIDs: orm.JSON[map[string]string]{V: map[string]string{"igdb": "231"}},
+		Provenance:  orm.JSON[map[string]string]{V: map[string]string{}},
 	}
 	if err := orm.Create(ctx, db, &item); err != nil {
 		t.Fatalf("valid item: %v", err)
 	}
-	if _, err := db.ExecContext(ctx, `INSERT INTO item_translations (item_id, locale, title, title_source) VALUES ($1, 'pt-BR', 'Half-Life', 'wikidata')`, item.ID); err != nil {
+	if _, err := db.ExecContext(
+		ctx,
+		`INSERT INTO item_translations (item_id, locale, title, title_source) VALUES ($1, 'pt-BR', 'Half-Life', 'wikidata')`,
+		item.ID,
+	); err != nil {
 		t.Fatalf("translation: %v", err)
 	}
 
