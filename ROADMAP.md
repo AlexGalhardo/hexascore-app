@@ -289,7 +289,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.A.1 Project scaffold
 
-- [ ] **P1.A.1.1** Scaffold the real application from the Inertia React starter with bun and the pinned vukem module, on Postgres.
+- [x] **P1.A.1.1** Scaffold the real application from the Inertia React starter with bun and the pinned vukem module, on Postgres.
   - Files/modules: `go.mod` (`github.com/AlexGalhardo/vukem` exact version, no `replace`), `bootstrap/app.go`, `cmd/app/`, `resources/js/`, `resources/views/app.html`, `package.json` (`packageManager` bun), `.env.example`, `Dockerfile`, `.gitignore` (`go.work`, `.env`)
   - Refs: SDD 09 §7.10; SDD 11 §6.3, §7.7; ADR 0001, 0004; <https://vukem.dev/docs/cli/reference-new> "`vukem new`"; <https://vukem.dev/docs/starters> "Inertia (React, Vue, Svelte)", "What every starter shares"
   - Depends on: P0.F.11.1
