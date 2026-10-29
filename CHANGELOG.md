@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- `models.Rating` declares the composite key with `PrimaryKeys()` (vukem `orm.CompositeKeyer`), replacing the single-column `PrimaryKey()` hack; released `items`/`ratings` migrations stay raw DDL (forward-only) (ADOPT-VF-035).
 - The supervised SSR child now stops only after the HTTP server drained, with SIGTERM and a 5 s grace before SIGKILL; it was killed on the first SIGTERM, while requests could still render (P2.A.3.2).
 - Adopt vukem v0.33.0: problem codes are raised with `errs.HTTPError.WithExtension("code", ...)` (VF-016, VF-048) and `APIEdge` sets the problem `type` from it on `/api/v1` and `/app/v1` (CORS stays on `/api/v1` only), replacing the `CodedProblem` route wrapper; the LGPD ZIP export uses `export.EncodeCSV` (VF-029).
 
