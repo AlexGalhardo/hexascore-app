@@ -3,6 +3,7 @@ package tests
 import (
 	"bytes"
 	"encoding/json"
+	"maps"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -40,8 +41,12 @@ const (
 type fakeStripe struct {
 	cancels    []string
 	failCancel bool
-	t          *testing.T
-	srv        *httptest.Server
+	failList   bool
+	expired    []string
+	// openSessions are the open Checkout Sessions GET /v1/checkout/sessions serves.
+	openSessions []map[string]any
+	t            *testing.T
+	srv          *httptest.Server
 
 	mu        sync.Mutex
 	customers int
@@ -87,6 +92,9 @@ func newFakeStripe(t *testing.T) *fakeStripe {
 		f.mu.Lock()
 		f.cancels = append(f.cancels, r.PathValue("id"))
 		fail := f.failCancel
+		if sub, ok := f.subs[r.PathValue("id")]; ok && !fail {
+			sub["status"] = "canceled"
+		}
 		f.mu.Unlock()
 
 		if fail {
@@ -97,6 +105,39 @@ func newFakeStripe(t *testing.T) *fakeStripe {
 		}
 
 		f.json(w, map[string]any{"id": r.PathValue("id"), "status": "canceled"})
+	})
+	mux.HandleFunc("GET /v1/subscriptions", func(w http.ResponseWriter, r *http.Request) {
+		f.mu.Lock()
+		defer f.mu.Unlock()
+
+		if f.failList {
+			w.WriteHeader(http.StatusInternalServerError)
+			f.json(w, map[string]any{"error": map[string]any{"type": "api_error"}})
+
+			return
+		}
+
+		data := []any{}
+		for _, id := range slices.Sorted(maps.Keys(f.subs)) {
+			if f.subs[id]["customer"] == r.URL.Query().Get("customer") {
+				data = append(data, f.subs[id])
+			}
+		}
+
+		f.json(w, map[string]any{"data": data, "has_more": false})
+	})
+	mux.HandleFunc("GET /v1/checkout/sessions", func(w http.ResponseWriter, _ *http.Request) {
+		f.mu.Lock()
+		defer f.mu.Unlock()
+
+		f.json(w, map[string]any{"data": f.openSessions, "has_more": false})
+	})
+	mux.HandleFunc("POST /v1/checkout/sessions/{id}/expire", func(w http.ResponseWriter, r *http.Request) {
+		f.mu.Lock()
+		f.expired = append(f.expired, r.PathValue("id"))
+		f.mu.Unlock()
+
+		f.json(w, map[string]any{"id": r.PathValue("id"), "status": "expired"})
 	})
 	mux.HandleFunc("GET /v1/subscriptions/{id}", func(w http.ResponseWriter, r *http.Request) {
 		f.mu.Lock()
@@ -146,11 +187,16 @@ func (f *fakeStripe) stats() (customers, subReads int, checkouts, portals []url.
 
 // setSubscription makes the fake API serve the test subscription.
 func (f *fakeStripe) setSubscription(status, price string) {
+	f.addSubscription(testSubscription, status, price, 1_700_000_000)
+}
+
+// addSubscription makes the fake API serve subscription id of the test customer, created at the unix time created.
+func (f *fakeStripe) addSubscription(id, status, price string, created int64) {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 
-	f.subs[testSubscription] = map[string]any{
-		"id": testSubscription, "customer": testCustomer, "status": status, "cancel_at_period_end": false,
+	f.subs[id] = map[string]any{
+		"id": id, "customer": testCustomer, "status": status, "cancel_at_period_end": false, "created": created,
 		"items": map[string]any{"data": []any{map[string]any{
 			"id": "si_1", "price": map[string]any{"id": price}, "quantity": 1,
 			"current_period_end": time.Now().Add(30 * 24 * time.Hour).Unix(),
@@ -491,5 +537,76 @@ func TestBillingCheckoutCurrency(t *testing.T) {
 		if got := checkouts[i].Get("line_items[0][price]"); got != want.price {
 			t.Errorf("checkout %d price = %q, want %q", i, got, want.price)
 		}
+	}
+}
+
+// TestStripeWebhookSupersedesSubscription: two live subscriptions (two Checkout tabs) keep the newest by Stripe
+// created time and cancel the other at Stripe, whatever order the webhooks arrive in.
+func TestStripeWebhookSupersedesSubscription(t *testing.T) {
+	t.Parallel()
+
+	f := newFakeStripe(t)
+	app := billingApp(t, f)
+	u := newUser(t, app, "twice@example.com")
+	setCustomer(t, app, u)
+
+	sync := func(evt, id string) {
+		t.Helper()
+		postWebhook(t, app, evt, "customer.subscription.updated", map[string]any{"id": id, "customer": "cus_1"}).
+			AssertOK()
+	}
+
+	f.addSubscription("sub_1", "active", "price_pro", 1_700_000_000)
+	sync("evt_s1", "sub_1")
+
+	// A newer subscription supersedes sub_1.
+	f.addSubscription("sub_2", "active", "price_business", 1_700_000_100)
+	sync("evt_s2", "sub_2")
+
+	// An older one arriving late is cancelled itself and does not unseat sub_2.
+	f.addSubscription("sub_0", "active", "price_pro", 1_600_000_000)
+	sync("evt_s0", "sub_0")
+
+	// sub_1's own late event (now canceled at Stripe) changes nothing either.
+	sync("evt_s1b", "sub_1")
+
+	f.mu.Lock()
+	cancels := slices.Clone(f.cancels)
+	f.mu.Unlock()
+	if slices.Sort(cancels); !slices.Equal(cancels, []string{"sub_0", "sub_1"}) {
+		t.Fatalf("cancelled at Stripe = %v, want [sub_0 sub_1]", cancels)
+	}
+
+	for id, state := range map[string]string{"sub_2": "active", "sub_1": "canceled", "sub_0": "canceled"} {
+		vukemtest.AssertDatabaseHas(
+			t,
+			app,
+			"subscriptions",
+			map[string]any{"stripe_subscription_id": id, "state": state},
+		)
+	}
+	app.Client(t).ActingAs("web", u).Get("/test/business").AssertOK()
+}
+
+// TestBillingCheckoutExpiresOpenSessions: a new Checkout expires the customer's other open subscription sessions,
+// so a second tab cannot start a second subscription.
+func TestBillingCheckoutExpiresOpenSessions(t *testing.T) {
+	t.Parallel()
+
+	f := newFakeStripe(t)
+	app := billingApp(t, f)
+	u := newUser(t, app, "tabs@example.com")
+	setCustomer(t, app, u)
+	f.openSessions = []map[string]any{
+		{"id": "cs_old", "mode": "subscription", "status": "open"},
+		{"id": "cs_pay", "mode": "payment", "status": "open"},
+	}
+
+	app.Client(t).ActingAs("web", u).PostForm("/billing/checkout/pro", nil).AssertStatus(http.StatusSeeOther)
+
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	if !slices.Equal(f.expired, []string{"cs_old"}) {
+		t.Fatalf("expired = %v, want [cs_old]", f.expired)
 	}
 }

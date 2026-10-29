@@ -8,8 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-
-- Billing (`vukem install:billing`, `contrib/stripe` v0.4.1): pro/business plans in BRL/USD/EUR, `/billing` page, Stripe webhook sync with the plan state machine (`subscriptions.plan/provider/state`, one live row per user), the subscriptions-backed API plan resolver (replaces `api.FreeForAll`), the Stripe cancel hook on account deletion and the `/profile/api/checkout` redirect. Production boot needs `STRIPE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO`, `STRIPE_PRICE_BUSINESS`.
+- Billing (`vukem install:billing`, `contrib/stripe` v0.4.1): pro/business plans in BRL/USD/EUR, `/billing` page, Stripe webhook sync with the plan state machine (`subscriptions.plan/provider/state`, one live row per user), the subscriptions-backed API plan resolver (replaces `api.FreeForAll`), the Stripe cancel hook on account deletion and the `/profile/api/checkout` redirect. Production boot needs `STRIPE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO`, `STRIPE_PRICE_BUSINESS`. A second live subscription (two Checkout tabs) is cancelled at Stripe (newest wins), a new Checkout expires other open subscription sessions, and account deletion cancels every subscription Stripe may still bill.
 - Profile, public list, library, lists-management and list-edit pages (`User/Profile`, `User/List`, `Library/Index`, `Lists/Index`, `Lists/Edit`) with GET `/lists`, `/lists/{id}/edit` and `/u/{nickname}/lists/{id}`; reorder uses move up/down buttons.
 
 ## [0.6.0] - 2026-10-29

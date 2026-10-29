@@ -241,6 +241,10 @@ func (b *Billing) Checkout(ctx context.Context, user models.User, plan, currency
 		return "", err
 	}
 
+	if err := expireOpenCheckouts(ctx, b.Stripe, customer); err != nil {
+		return "", err
+	}
+
 	// No payment_method_types: Stripe picks the payment methods enabled
 	// in the Dashboard.
 	cs, err := b.Stripe.CreateCheckoutSession(ctx, stripe.Params{
@@ -296,7 +300,7 @@ func (b *Billing) SyncSubscription(ctx context.Context, id string) error {
 		return ErrNotConfigured
 	}
 
-	sub, err := b.Stripe.GetSubscription(ctx, id)
+	sub, created, err := getSubscription(ctx, b.Stripe, id)
 	if err != nil {
 		return err
 	}
@@ -331,14 +335,24 @@ func (b *Billing) SyncSubscription(ctx context.Context, id string) error {
 		}
 	}
 
+	if row.State == StateActive {
+		if row.State, err = b.supersede(ctx, row.UserID, sub.ID, created); err != nil {
+			return err
+		}
+
+		if row.State == StateCanceled {
+			row.Status = "canceled"
+		}
+	}
+
 	return b.DB.Tx(ctx, func(tx *database.Tx) error {
 		var periodEnd any
 		if row.CurrentPeriodEnd.Valid {
 			periodEnd = row.CurrentPeriodEnd.V
 		}
 
-		// One live row per user: a newer active subscription (plan swap through a
-		// new checkout) retires the previous live one.
+		// One live row per user: supersede already cancelled the other live
+		// subscriptions at Stripe; their rows follow.
 		if row.State == StateActive {
 			_, err := orm.QueryOf[models.Subscription](tx).Where("user_id", row.UserID).
 				Where("state", StateActive).Where("stripe_subscription_id", "!=", sub.ID).
@@ -414,4 +428,41 @@ func (b *Billing) allows(ctx context.Context, allowed func(models.Subscription) 
 	}
 
 	return ok && sub.Valid() && allowed(sub)
+}
+
+// supersede keeps one billing subscription per user when two go live (for
+// example two Checkout tabs): the newest by Stripe created time wins and the
+// other is cancelled at Stripe, so the user never pays for a subscription the
+// app ignores. It returns the state the synced subscription keeps.
+func (b *Billing) supersede(ctx context.Context, userID int64, id string, created int64) (string, error) {
+	others, err := orm.QueryOf[models.Subscription](b.DB).Where("user_id", userID).
+		Where("state", StateActive).Where("stripe_subscription_id", "!=", id).Get(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	for _, o := range others {
+		other, otherCreated, err := getSubscription(ctx, b.Stripe, o.StripeSubscriptionID)
+		if err != nil {
+			return "", err
+		}
+
+		if StateOf(other.Status) != StateActive {
+			continue // stale local row: the transaction retires it
+		}
+
+		if otherCreated > created || (otherCreated == created && other.ID > id) {
+			b.Log.WarnContext(ctx, "cancelling a superseded stripe subscription", "subscription", id, "kept", other.ID)
+
+			return StateCanceled, cancelSubscription(ctx, b.Stripe, id)
+		}
+
+		b.Log.WarnContext(ctx, "cancelling a superseded stripe subscription", "subscription", other.ID, "kept", id)
+
+		if err := cancelSubscription(ctx, b.Stripe, other.ID); err != nil {
+			return "", err
+		}
+	}
+
+	return StateActive, nil
 }

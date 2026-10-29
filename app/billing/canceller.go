@@ -3,8 +3,6 @@ package billing
 import (
 	"context"
 	"errors"
-	"fmt"
-	"net/http"
 
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/contrib/stripe"
@@ -32,17 +30,18 @@ func NewCanceller(app *vukem.App, db *database.DB) (*Canceller, error) {
 	return &Canceller{DB: db, Stripe: c}, nil
 }
 
-// CancelLive cancels every Stripe subscription of the user that Stripe may
-// still bill (any status but canceled or incomplete_expired). A Stripe failure is returned so the deletion
-// stays scheduled and retries; a subscription Stripe no longer knows counts as
-// cancelled.
+// CancelLive cancels every subscription of the user's Stripe customer that
+// Stripe may still bill, read from Stripe itself (status=all) rather than
+// from the local rows, which can lag or be retired. Any Stripe failure,
+// including the list call, is returned so the deletion stays scheduled and
+// retries.
 func (c *Canceller) CancelLive(ctx context.Context, userID int64) error {
-	subs, err := orm.QueryOf[models.Subscription](c.DB).Where("user_id", userID).
-		Where("provider", "stripe").
-		// Filter on Stripe's status, not the local state: a row retired by a newer subscription
-		// (state canceled) can still bill in Stripe.
-		Where("status", "!=", "canceled").Where("status", "!=", "incomplete_expired").Get(ctx)
-	if err != nil || len(subs) == 0 {
+	u, err := orm.QueryOf[models.Billable](c.DB).Where("id", userID).First(ctx)
+	if errors.Is(err, orm.ErrNotFound) || (err == nil && !u.StripeCustomerID.Valid) {
+		return nil // never reached Stripe: nothing can bill
+	}
+
+	if err != nil {
 		return err
 	}
 
@@ -50,19 +49,23 @@ func (c *Canceller) CancelLive(ctx context.Context, userID int64) error {
 		return ErrNotConfigured
 	}
 
+	subs, err := customerSubscriptions(ctx, c.Stripe, u.StripeCustomerID.V)
+	if err != nil {
+		return err
+	}
+
 	for _, s := range subs {
-		if _, err := c.Stripe.CancelSubscription(ctx, s.StripeSubscriptionID); err != nil {
-			if se, ok := errors.AsType[*stripe.Error](err); !ok || se.Status != http.StatusNotFound {
-				return fmt.Errorf("cancel stripe subscription %s: %w", s.StripeSubscriptionID, err)
-			}
+		if s.Status == "canceled" || s.Status == "incomplete_expired" {
+			continue
 		}
 
-		_, err := orm.QueryOf[models.Subscription](c.DB).Where("id", s.ID).
-			Update(ctx, orm.Set{"state": StateCanceled, "status": "canceled"})
-		if err != nil {
+		if err := cancelSubscription(ctx, c.Stripe, s.ID); err != nil {
 			return err
 		}
 	}
 
-	return nil
+	_, err = orm.QueryOf[models.Subscription](c.DB).Where("user_id", userID).Where("provider", "stripe").
+		Update(ctx, orm.Set{"state": StateCanceled, "status": "canceled"})
+
+	return err
 }
