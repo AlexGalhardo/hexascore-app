@@ -85,6 +85,7 @@ type lockedItem struct {
 	precision string
 	status    string
 	before    sql.NullFloat64
+	limited   sql.NullTime
 }
 
 // Save upserts userID's rating of itemID (stars per category key, already
@@ -109,8 +110,9 @@ func (w *Writer) write(ctx context.Context, userID int64, itemID string, stars m
 		now := w.Now().UTC()
 
 		var it lockedItem
-		err := tx.QueryRowContext(ctx, `SELECT type, release_date, release_precision, release_status, score
-FROM items WHERE id = $1 FOR UPDATE`, itemID).Scan(&it.typ, &it.release, &it.precision, &it.status, &it.before)
+		err := tx.QueryRowContext(ctx, `SELECT type, release_date, release_precision, release_status, score, ratings_limited_until
+FROM items WHERE id = $1 FOR UPDATE`, itemID).
+			Scan(&it.typ, &it.release, &it.precision, &it.status, &it.before, &it.limited)
 		if errors.Is(err, sql.ErrNoRows) {
 			return errNotFound()
 		}
@@ -119,8 +121,9 @@ FROM items WHERE id = $1 FOR UPDATE`, itemID).Scan(&it.typ, &it.release, &it.pre
 		}
 
 		var wrote string
+		var burstAction int64
 		if stars != nil {
-			wrote, err = w.upsert(ctx, tx, userID, itemID, it, stars, now)
+			wrote, burstAction, err = w.upsert(ctx, tx, userID, itemID, it, stars, now)
 		} else {
 			wrote, err = deleteRating(ctx, tx, userID, itemID, it.typ, now)
 		}
@@ -134,12 +137,14 @@ FROM items WHERE id = $1 FOR UPDATE`, itemID).Scan(&it.typ, &it.release, &it.pre
 			return err
 		}
 
-		p, version, err := loadParams(ctx, tx, it.typ, now)
+		version, err := recomputeItem(ctx, tx, itemID, it.typ, now)
 		if err != nil {
 			return err
 		}
-		if err := Recompute(ctx, tx, itemID, now, p); err != nil {
-			return err
+		if burstAction != 0 {
+			if err := setActionAfter(ctx, tx, burstAction, itemID); err != nil {
+				return err
+			}
 		}
 		if out, err = summarize(ctx, tx, itemID); err != nil {
 			return err
@@ -164,13 +169,13 @@ FROM items WHERE id = $1 FOR UPDATE`, itemID).Scan(&it.typ, &it.release, &it.pre
 func (w *Writer) upsert(
 	ctx context.Context, tx *database.Tx, userID int64, itemID string, it lockedItem,
 	stars map[string]float64, now time.Time,
-) (string, error) {
+) (kind string, burstAction int64, err error) {
 	var release *time.Time
 	if it.release.Valid {
 		release = &it.release.Time
 	}
 	if RatedBeforeRelease(now, release, it.precision, it.status) {
-		return "", errs.NewKey(http.StatusConflict, "ratings.not_released", "This title is not released yet.",
+		return "", 0, errs.NewKey(http.StatusConflict, "ratings.not_released", "This title is not released yet.",
 			map[string]any{"code": CodeNotReleased})
 	}
 
@@ -191,17 +196,27 @@ func (w *Writer) upsert(
 		}
 	}
 	if !v.Empty() {
-		return "", v
+		return "", 0, v
 	}
 
 	var before sql.NullFloat64
-	err := tx.QueryRowContext(ctx, `SELECT overall FROM ratings WHERE user_id = $1 AND item_id = $2`, userID, itemID).
+	err = tx.QueryRowContext(ctx, `SELECT overall FROM ratings WHERE user_id = $1 AND item_id = $2`, userID, itemID).
 		Scan(&before)
-	kind := "rating_updated"
-	if errors.Is(err, sql.ErrNoRows) {
+	kind = "rating_updated"
+	isNew := errors.Is(err, sql.ErrNoRows)
+	if isNew {
 		kind = "rating_created"
 	} else if err != nil {
-		return "", err
+		return "", 0, err
+	}
+
+	if err := checkDailyCap(ctx, tx, userID, isNew, now); err != nil {
+		return "", 0, err
+	}
+	if isNew {
+		if err := checkItemLimiter(ctx, tx, userID, itemID, it.limited, now); err != nil {
+			return "", 0, err
+		}
 	}
 
 	if _, err := tx.ExecContext(
@@ -219,14 +234,21 @@ ON CONFLICT (user_id, item_id) DO UPDATE SET c1 = $3, c2 = $4, c3 = $5, c4 = $6,
 		c[5],
 		now,
 	); err != nil {
-		return "", err
+		return "", 0, err
 	}
 
 	if err := appendEvent(ctx, tx, kind, userID, itemID, it.typ, now, before); err != nil {
-		return "", err
+		return "", 0, err
 	}
 
-	return kind, nil
+	if isNew {
+		burstAction, err = detectBurst(ctx, tx, itemID, now)
+		if err != nil {
+			return "", 0, err
+		}
+	}
+
+	return kind, burstAction, nil
 }
 
 func deleteRating(
@@ -315,6 +337,7 @@ WHERE activated_at <= $1 ORDER BY version DESC LIMIT 1`, at, typ).Scan(&version,
 	if err != nil {
 		return p, 0, err
 	}
+	p.Version = version
 
 	for i := range p.Prior {
 		p.Prior[i] = defaultPrior
@@ -385,4 +408,14 @@ func nullable(n sql.NullFloat64) *float64 {
 	}
 
 	return &n.Float64
+}
+
+// recomputeItem stores formula v1 for the item with the active version's inputs and returns the version.
+func recomputeItem(ctx context.Context, tx *database.Tx, itemID, typ string, now time.Time) (int, error) {
+	p, version, err := loadParams(ctx, tx, typ, now)
+	if err != nil {
+		return 0, err
+	}
+
+	return version, Recompute(ctx, tx, itemID, now, p)
 }
