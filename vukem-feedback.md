@@ -23,18 +23,18 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-012 | 2026-10-28 | low | open |
 | VF-013 | 2026-10-28 | low | open |
 | VF-014 | 2026-10-28 | low | open |
-| VF-015 | 2026-10-28 | medium | open |
+| VF-015 | 2026-10-28 | medium | in_progress (framework, vukem PR #12) |
 | VF-016 | 2026-10-28 | low | open |
-| VF-017 | 2026-10-28 | medium | open |
+| VF-017 | 2026-10-28 | medium | in_progress (framework, vukem PR #13) |
 | VF-018 | 2026-10-28 | medium | open |
 | VF-019 | 2026-10-28 | medium | open |
 | VF-020 | 2026-10-28 | low | open |
 | VF-021 | 2026-10-28 | low | open |
 | VF-022 | 2026-10-28 | low | open |
 | VF-023 | 2026-10-28 | low | open |
-| VF-024 | 2026-10-28 | medium | in_progress (framework, vukem PR #10) |
+| VF-024 | 2026-10-28 | medium | merged in main (PR #10), unreleased |
 | VF-025 | 2026-10-28 | medium | open |
-| VF-026 | 2026-10-28 | medium | open |
+| VF-026 | 2026-10-28 | medium | in_progress (framework, vukem PR #13) |
 | VF-027 | 2026-10-28 | medium | merged in main (PR #9), unreleased |
 | VF-028 | 2026-10-28 | low | open |
 | VF-029 | 2026-10-28 | low | open |
@@ -171,7 +171,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-015: No host-based routing helper
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/routing` "Routing", `https://vukem.dev/docs/rest-apis/overview` "Routing", "Versioning".
 - **Context**: the paid API is served at `api.hexascore.app/v1/...` while the app also serves `hexascore.app`. The router documents path groups only. The app needs a `Host`-matched group (or a middleware that rewrites `/v1/*` to `/api/v1/*` when the host matches) plus per-host CORS and security headers.
 - **Workaround**: app middleware inspecting `r.Host` and rewriting `r.URL.Path`, registered before the router; OpenAPI `servers` entry set by hand.
@@ -187,7 +187,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-017: No non-transactional migrations (`CREATE INDEX CONCURRENTLY`)
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` "Migrations", "Managing them with migrate".
 - **Context**: Postgres refuses `CREATE INDEX CONCURRENTLY` inside a transaction. HexaScore's search indexes (SDD 07) and later index additions on the 100k-row `items` table and larger `ratings` table must be built without locking writes in production. The docs do not show a per-migration "no transaction" flag.
 - **Workaround**: a one-off script run by hand, or building indexes before the table receives traffic.
@@ -244,7 +244,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-024: `i18n.Middleware` has no URL-prefix locale source
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #10, https://github.com/AlexGalhardo/vukem/pull/10), unreleased. Native API: `i18n.MiddlewareConfig{PathPrefixes: map[string]string{"pt-br": "pt-BR"}}` + `i18n.SourcePath`; `StripPathPrefix` installed by `DefaultMiddlewareWith`; `i18n.PathPrefix(ctx)`, `i18n.LocalizePath(ctx, path)`.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/localization`, `https://vukem.dev/docs/frontend/inertia-i18n`.
 - **Context**: HexaScore keeps the legacy URL scheme (`/`, `/pt-br/...`, `/es/...`, brainstorming D-17). The documented locale sources are query, cookie and `Accept-Language`; a path-prefix source with prefix stripping and URL generation that re-adds the prefix is not documented.
 - **Workaround**: app middleware that reads the first path segment, sets the locale in the context and rewrites the path; `route` helpers wrapped to add the prefix.
@@ -260,7 +260,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-026: Migration runner has no documented lock for concurrent starts
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations`, `https://vukem.dev/docs/deployment/docker-and-railway`.
 - **Context**: zero-downtime deploys can start a new container while the old one still runs; if migrations run at boot, two runners can race. The docs do not mention a Postgres advisory lock or a `migrations` table row lock.
 - **Workaround**: the app takes `pg_advisory_lock` before calling the runner, or migrations run as a separate pre-deploy command.
