@@ -1874,7 +1874,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
 
 #### P2.F.2 Import stages
 
-- [ ] **P2.F.2.1** Build the `hexascore:import-legacy` runner: stage ordering, checkpoints, dry run, pre-flight asserts.
+- [x] **P2.F.2.1** Build the `hexascore:import-legacy` runner: stage ordering, checkpoints, dry run, pre-flight asserts.
   - Files/modules: `app/console/import_legacy.go`, `database/legacyimport/runner.go`, `database/legacyimport/preflight.go`, migration `create_legacy_import_runs`, `database/legacyimport/testdata/fixture.sql` (synthetic Better Auth-shaped data), `database/legacyimport/runner_test.go`
   - Refs: SDD 11 §7.6 step 5, §10; SDD 03 §5 (pre-flight asserts); SDD 06 §7.9 (idempotent, resumable; registration [NOT VERIFIED]); A-04
   - Depends on: P2.F.1.1
