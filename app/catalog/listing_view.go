@@ -17,7 +17,7 @@ func Summaries(ctx context.Context, db Querier, ids []string, locale string) ([]
 	rows, err := db.QueryContext(ctx, `SELECT i.id, i.type, i.slug,
   coalesce(t.title, te.title, i.original_title, i.slug),
   extract(year FROM i.release_date)::int,
-  CASE WHEN `+visibleScore+` THEN round(i.score, 1)::float8 END,
+  `+starsScore+`,
   i.rating_count
 FROM unnest($1::uuid[]) WITH ORDINALITY AS o(id, n)
 JOIN items i ON i.id = o.id
