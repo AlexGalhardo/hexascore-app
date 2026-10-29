@@ -851,7 +851,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.F.3 Reports, contact and notifications
 
-- [ ] **P1.F.3.1** Implement the `user_notifications` inbox, `notifications.Send` with dedupe, the unread shared prop and the read routes.
+- [x] **P1.F.3.1** Implement the `user_notifications` inbox, `notifications.Send` with dedupe, the unread shared prop and the read routes.
   - Files/modules: `database/migrations/*_create_user_notifications_table.go`, `app/notifications/send.go`, `app/notifications/send_test.go`, `app/http/middleware/unread_notifications.go`, routes `/me/notifications`, `POST /me/notifications/{id}/read`, `POST /me/notifications/read-all`, `/app/v1/me/notifications*`
   - Refs: SDD 14 §5, §6.2, §6.3, §6.5, §7.5, §10; open-issues 04-6, 10-1, 14-1; VF-011; <https://vukem.dev/docs/frontend/inertia> "Shared props"
   - Depends on: P1.F.1.1
