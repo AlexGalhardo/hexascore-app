@@ -15,6 +15,7 @@ import (
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
 )
 
@@ -62,6 +63,11 @@ func (h *Handlers) Login(c *web.Ctx) error {
 	u, err := h.a.Web.Validate(c, creds)
 	if err != nil {
 		return err
+	}
+
+	// Checked after the password, so a wrong guess reveals nothing (SDD 03 section 7.1).
+	if u.IsBanned(h.a.Clock()) {
+		return middleware.BannedProblem(c, h.a.ProblemBase, u)
 	}
 
 	// Users with two-factor authentication enter a code first (vukem install:auth --2fa).

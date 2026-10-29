@@ -8,5 +8,10 @@ import (
 
 // Commands lists the application commands; vukem make:command appends here.
 func Commands() []vukem.Command {
-	return []vukem.Command{console.MigrateLocked()}
+	return []vukem.Command{
+		console.MigrateLocked(),
+		console.AdminGrant(),
+		console.AdminRevoke(),
+		console.UserReset2FA(),
+	}
 }

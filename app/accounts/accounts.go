@@ -4,6 +4,7 @@
 package accounts
 
 import (
+	"cmp"
 	"context"
 	"errors"
 	"log/slog"
@@ -16,6 +17,7 @@ import (
 	"github.com/AlexGalhardo/vukem/auth/hash"
 	"github.com/AlexGalhardo/vukem/cache"
 	"github.com/AlexGalhardo/vukem/database"
+	"github.com/AlexGalhardo/vukem/events"
 	"github.com/AlexGalhardo/vukem/i18n"
 	"github.com/AlexGalhardo/vukem/mail"
 	"github.com/AlexGalhardo/vukem/session"
@@ -34,6 +36,10 @@ type Accounts struct {
 	Tokens *auth.Tokens
 	Hasher hash.Hasher
 	Signer *signed.Signer
+	// Events receives UserBanned and UserUnbanned after commit (nil: none).
+	Events *events.Bus
+	// ProblemBase prefixes problem type URLs (APP_PROBLEM_BASE_URL).
+	ProblemBase string
 	// Messages holds the auth messages of lang/ (see T).
 	Messages *i18n.Bundle
 	// URL is the public base URL used in emails (APP_URL).
@@ -143,13 +149,15 @@ func New(app *vukem.App) (*Accounts, error) {
 		Signer: signed.New(signingKey).
 			WithPreviousKeys(app.DerivePreviousKeys("signed.urls", 32)...).
 			WithClock(app.Now),
-		Messages:  messages,
-		URL:       strings.TrimSuffix(app.Config.URL, "/"),
-		ResetTTL:  time.Hour,
-		VerifyTTL: time.Hour,
-		now:       time.Now,
-		sessions:  app.Sessions,
-		cache:     app.Cache,
-		log:       app.Log,
+		Events:      app.Events,
+		ProblemBase: cmp.Or(app.Source.Get("APP_PROBLEM_BASE_URL"), "https://hexascore.app/problems/"),
+		Messages:    messages,
+		URL:         strings.TrimSuffix(app.Config.URL, "/"),
+		ResetTTL:    time.Hour,
+		VerifyTTL:   time.Hour,
+		now:         time.Now,
+		sessions:    app.Sessions,
+		cache:       app.Cache,
+		log:         app.Log,
 	}, nil
 }
