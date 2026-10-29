@@ -1280,6 +1280,7 @@
     "score": "Your score: {stars}"
   },
   "userLists": {
+    "items": "Items",
     "title": "Your lists",
     "new": "New list",
     "titleField": "Title",

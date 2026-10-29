@@ -1,9 +1,11 @@
-import { Link, router } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import type { FormEvent } from "react";
 
 import ItemLink, { type ItemRef } from "../../components/library/ItemLink";
 import Seo from "../../components/Seo";
+import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
+import type { SharedProps } from "../../types";
 
 const STATUSES = ["want", "in_progress", "completed", "dropped"] as const;
 const TYPES = ["game", "movie", "series", "book"] as const;
@@ -36,6 +38,8 @@ interface Props {
 
 export default function Index({ groups, filters }: Props) {
 	const t = useT();
+	const { locale } = usePage<SharedProps>().props;
+	const path = localized("/library", locale);
 
 	const apply = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -45,7 +49,7 @@ export default function Index({ groups, filters }: Props) {
 			const value = String(data.get(key) ?? "");
 			if (value) query[key] = value;
 		}
-		router.get("/library", query);
+		router.get(path, query);
 	};
 
 	return (
@@ -141,7 +145,7 @@ export default function Index({ groups, filters }: Props) {
 						{filters.type && g.next >= 0 && (
 							<Link
 								className="mt-2 inline-block underline"
-								href={`/library?${new URLSearchParams({ ...(filters.status && { status: filters.status }), type: filters.type, ...(filters.sort && { sort: filters.sort }), cursor: String(g.next) })}`}
+								href={`${path}?${new URLSearchParams({ ...(filters.status && { status: filters.status }), type: filters.type, ...(filters.sort && { sort: filters.sort }), cursor: String(g.next) })}`}
 							>
 								{t("lists.next")}
 							</Link>
