@@ -53,6 +53,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-042 | 2026-10-29 | low | open |
 | VF-043 | 2026-10-29 | low | open |
 | VF-044 | 2026-10-29 | low | open |
+| VF-NEW-P0.F.9.1 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -419,3 +420,11 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Context**: (1) the OpenAPI schemas generated from `Out` types have no `required` list, so `codegen:client` emits `Item = { id?: string; slug?: string; ... }` and the SDKs force null checks on fields the server always sends (inputs keep `required` from `validate` tags). (2) A route registered with a plain handler (`g.Get("/ping", ...)`) is documented with a `*/*` response and an empty schema; `openapi-python-client` 0.29.1 warns and omits the response.
 - **Workaround**: register every public route through `api.Register` with typed output; accept optional properties in the first-party client.
 - **Request**: mark non-pointer, non-`omitempty` output fields `required` in the generated schemas (or a `doc:"required"` tag), and document or reject plain handlers inside OpenAPI prefixes.
+
+## VF-NEW-P0.F.9.1: `storage.Handler` sets no Cache-Control or ETag, and S3 objects get no Last-Modified
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0 (`drivers/s3` v0.3.1). **Docs consulted**: `https://vukem.dev/docs/digging-deeper/storage` (Serving files; the page documents `X-Content-Type-Options`, the sandbox CSP and `Last-Modified` for seekable disks only), `https://vukem.dev/docs/digging-deeper/exports` (VF-029 confirmed: `export.CSV` needs an `http.ResponseWriter`; `export.SafeCell` is exported and is the smaller workaround).
+- **Context**: covers are content-addressed (`covers/<id>-<hash16>.webp`) and must answer `Cache-Control: public, max-age=31536000, immutable`. `storage.Handler` over an S3 disk sends no `Cache-Control`, no `ETag` and (the S3 reader is not an `io.ReadSeeker`) no `Last-Modified`, so conditional requests never get a 304 [NOT IN VUKEM DOCS].
+- **Workaround**: `app/covers/serve.go` validates the key with a regexp, delegates to `storage.Handler` and adds `Cache-Control` on 200 responses only (spike branch `agent/senior/P0.F.9.1`).
+- **Request**: `storage.HandlerWith(d, signer, storage.Options{CacheControl: ...})` and `Last-Modified`/`ETag` from `s3.Disk.Stat` for non-seekable disks.
