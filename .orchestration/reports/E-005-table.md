@@ -1,0 +1,12 @@
+| # | fact | source URL | heading | date read |
+|---|---|---|---|---|
+| 1 | Per-service RAM max by plan (includes replica multiplication): Trial 1 GB, Free 0.5 GB, Hobby 48 GB, Pro 1 TB, Enterprise 2.4 TB | https://docs.railway.com/pricing/plans | Default plan resources | 2026-10-29 |
+| 2 | Per-replica memory limit: Hobby 8 GB, Pro 24 GB (vCPU 8 / 24). Conflicts in scope with fact 1; the page calls it a per-replica ceiling | https://docs.railway.com/deployments/troubleshooting/slow-deployments | What upgrading provides | 2026-10-29 |
+| 3 | Image size: Trial and Free 4 GB, Hobby 100 GB, Pro and Enterprise Unlimited | https://docs.railway.com/pricing/plans | Default plan resources | 2026-10-29 |
+| 4 | Ephemeral storage per service: Trial and Free 1 GB, Hobby, Pro, Enterprise 100 GB | https://docs.railway.com/pricing/plans | Default plan resources | 2026-10-29 |
+| 5 | Healthcheck: Railway polls the path until a 2xx; default timeout 300 s, otherwise the deploy fails; override with service setting or RAILWAY_HEALTHCHECK_TIMEOUT_SEC | https://docs.railway.com/deployments/healthchecks | Healthcheck timeout | 2026-10-29 |
+| 6 | Healthcheck: the new deployment becomes active only after a 2xx and the previous one goes inactive; Railway does NOT monitor the endpoint after the deployment is live | https://docs.railway.com/deployments/healthchecks | How it works | 2026-10-29 |
+| 7 | Restart policy default is On Failure with max 10 restarts; options ON_FAILURE, ALWAYS, NEVER; restartPolicyMaxRetries | https://docs.railway.com/deployments/restart-policy ; https://docs.railway.com/config-as-code/reference | Restart Policy ; Restart policy type | 2026-10-29 |
+| 8 | Free and trial plans: Always not available, On Failure capped at 10 restarts; paid plans any policy and count. With several replicas, only the crashed replica is restarted | https://docs.railway.com/deployments/restart-policy | Plan limitations | 2026-10-29 |
+| 9 | Config as code fields: healthcheckPath, healthcheckTimeout, restartPolicyType, restartPolicyMaxRetries | https://docs.railway.com/config-as-code/reference | Restart policy max retries ; Healthcheck timeout | 2026-10-29 |
+| 10 | NOT IN RAILWAY DOCS [NAO VERIFICADO]: how a crashing Node child process inside a Go container is treated (container exit vs child exit). Railway restarts the service on exit with non-zero code; the child-process case is not documented | none | none | 2026-10-29 |
