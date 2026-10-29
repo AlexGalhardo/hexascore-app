@@ -1937,16 +1937,16 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
     - `go test -tags=integration ./database/legacyimport -run 'TestSocialStage|TestLibraryStage'` → PASS: `list_items.added_at := lists.created_at`, positions dense, legacy mixed-type lists keep their rows, `follows` not imported (archived in the dump)
   - Notes: ratings of purged users are already gone (P2.F.1.2 guard). Notifications have no legacy table.
 
-- [ ] **P2.F.2.7** Implement the `billing` stage: API keys unchanged, subscriptions, Stripe customers, processed events, usage, and the D-23 credit balances.
+- [x] **P2.F.2.7** Implement the `billing` stage: API keys unchanged, subscriptions, Stripe customers, usage, and the D-23 credit balances.
   - Files/modules: `database/legacyimport/billing.go`, `database/legacyimport/billing_test.go`, `docs/sdd/05-public-api.md` §5 (remaining-credit formula)
   - Refs: SDD 05 §5 (legacy source, `api_credit_balances`), §7.2; SDD 11 §7.6 step 5, §11 issue 9; D-23; ADR 0015
   - Depends on: P2.F.2.2
   - Model: Opus
   - Acceptance:
     - `go test -tags=integration ./database/legacyimport -run TestBillingStage` → PASS: `api_keys.hash` copied verbatim (a fixture key authenticates on `/api/v1` after import), subscriptions mapped to `plan`/`provider`/`state` with at most one active per user, `api_credit_balances.remaining` = legacy remaining credits per user (≥ 0), `credit_ledger` and `pix_charges` copied verbatim
-    - `go test ./... -run TestSecurity_A08_HexaStripeReplayIgnored` → PASS with imported `processed_events`
+    - `go test ./... -run TestSecurity_A08_StripeReplayIgnored` → PASS: a replayed `customer.subscription.updated` / `invoice.paid` event id is a no-op (vukem `contrib/stripe` cache-backed dedup) and a new event about the same subscription converges on one row; `processed_events` is not imported (SDD 05 §5: production `CACHE_STORE=database`, handlers idempotent by Stripe object id)
   - Notes: derive the remaining-credit formula from `legacy/apps/web/lib/db/schema/billing.ts` and the legacy ledger code, and write it into SDD 05 §5 before coding. No refund flow (D-23).
-  - Status (2026-10-29): stage delivered and `TestBillingStage` green; the `processed_events` acceptance contradicts the code (no `processed_events` table, vukem `contrib/stripe` dedupes in the cache, no `TestSecurity_A08_HexaStripeReplayIgnored` yet): amendment pending.
+  - Status (2026-10-29): done. `TestBillingStage` PASS; `processed_events` dropped by orchestrator decision (QUESTIONS.md), SDD 05, SDD 11 §7.6 and SDD 13 A08 amended (DOC-processed-events); `TestSecurity_A08_StripeReplayIgnored` PASS.
 
 #### P2.F.3 Covers
 
