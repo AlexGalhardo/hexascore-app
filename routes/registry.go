@@ -22,6 +22,7 @@ func All() []func(r *router.Router, app *vukem.App) error {
 		Reports,
 		APIKeys,
 		APIV1,
+		Exports,
 		AppAPI,
 	}
 }
