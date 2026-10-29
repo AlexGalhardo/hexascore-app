@@ -5,6 +5,7 @@ package bootstrap
 import (
 	"cmp"
 	"context"
+	"log/slog"
 	"os"
 	"strconv"
 	"time"
@@ -22,6 +23,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/jobs"
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/listeners"
+	"github.com/AlexGalhardo/hexascore-app/app/logging"
 	"github.com/AlexGalhardo/hexascore-app/app/scheduler"
 	"github.com/AlexGalhardo/hexascore-app/app/ssr"
 	"github.com/AlexGalhardo/hexascore-app/config"
@@ -91,6 +93,16 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 		if err := addReadyChecks(app, heartbeat); err != nil {
 			return err
 		}
+		// workaround(vukem): VF-022. vukem's Logger takes app.Log when routes.Web installs the
+		// default stack, which runs after this callback; wrapping app.Log here keeps
+		// LOG_FORMAT, dedup and trace correlation from vukem's own handler chain.
+		logKey, err := app.DeriveKey("log", 32)
+		if err != nil {
+			return err
+		}
+		app.Log = slog.New(logging.NewHandler(app.Log.Handler(), logKey))
+		r.UseServer(middleware.RequestLog)
+		r.Use(middleware.RequestRoute)
 		edge, err := middleware.APIEdge(config.APIHost(app.Source.Get),
 			cmp.Or(app.Source.Get("APP_PROBLEM_BASE_URL"), "https://hexascore.app/problems/"))
 		if err != nil {
