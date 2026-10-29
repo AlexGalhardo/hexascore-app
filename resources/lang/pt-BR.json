@@ -70,6 +70,14 @@
       "revokeAll": "Sair de todos os outros dispositivos",
       "empty": "Nenhuma outra sessão para mostrar.",
       "lastSeen": "Última atividade"
+    },
+    "export": {
+      "title": "Baixar meus dados",
+      "body": "Peça um ZIP com suas avaliações, listas e dados da conta. Enviamos por e-mail um link válido por 24 horas. Você pode pedir uma exportação a cada 7 dias.",
+      "button": "Pedir exportação",
+      "requested": "Exportação pedida. Você receberá um e-mail com o link em breve.",
+      "cooldown": "Você pode pedir uma exportação a cada 7 dias. Tente de novo mais tarde.",
+      "failed": "Não foi possível pedir a exportação. Tente de novo."
     }
   },
   "actions": {

@@ -466,3 +466,42 @@ Your personal records on HexaScore, read at one instant. Dates are ISO 8601. Sco
 CSV cells that start with =, +, -, @, tab or carriage return are prefixed with ' so spreadsheets do not run them.
 Passwords, two-factor secrets, token hashes and other people's data are never included.
 `
+
+// Purge deletes every export file of userID and their rows, so no ZIP survives the account purge
+// (SDD 14 §8). A row whose file cannot be deleted is kept for the next run.
+func (s *Exports) Purge(ctx context.Context, userID int64) error {
+	rows, err := s.DB.QueryContext(ctx, `SELECT id, coalesce(path, '') FROM data_exports WHERE user_id = $1`, userID)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	var all []dueExport
+
+	for rows.Next() {
+		var d dueExport
+		if err := rows.Scan(&d.id, &d.path); err != nil {
+			return err
+		}
+
+		all = append(all, d)
+	}
+
+	if err := rows.Err(); err != nil {
+		return err
+	}
+
+	for _, d := range all {
+		if d.path != "" {
+			if err := s.Disk.Delete(ctx, d.path); err != nil {
+				return err
+			}
+		}
+
+		if _, err := s.DB.ExecContext(ctx, `DELETE FROM data_exports WHERE id = $1`, d.id); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

@@ -70,6 +70,14 @@
       "revokeAll": "Cerrar sesión en todos los demás dispositivos",
       "empty": "No hay otras sesiones que mostrar.",
       "lastSeen": "Última actividad"
+    },
+    "export": {
+      "title": "Descargar mis datos",
+      "body": "Pide un ZIP con tus valoraciones, listas y datos de la cuenta. Te enviamos por correo un enlace válido durante 24 horas. Puedes pedir una exportación cada 7 días.",
+      "button": "Pedir exportación",
+      "requested": "Exportación solicitada. Pronto recibirás un correo con el enlace.",
+      "cooldown": "Puedes pedir una exportación cada 7 días. Inténtalo más tarde.",
+      "failed": "No se pudo pedir la exportación. Inténtalo de nuevo."
     }
   },
   "actions": {
