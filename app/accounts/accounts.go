@@ -140,6 +140,7 @@ func New(app *vukem.App) (*Accounts, error) {
 	}
 
 	web := auth.NewSessionGuard("web", users, hasher, auth.NewRememberStore(db))
+	web.IdentifierField = "identifier"
 	web.InsecureCookies = !app.Config.IsProduction() && !strings.HasPrefix(app.Config.URL, "https://")
 
 	return &Accounts{

@@ -91,7 +91,7 @@ func TestSecurity_A07_LegacyScryptVerifiesAndRehashes(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	c.PostJSON("/login", map[string]any{"email": email, "password": f.Password + "x"}).AssertRedirect("/login")
+	c.PostJSON("/login", map[string]any{"identifier": email, "password": f.Password + "x"}).AssertRedirect("/login")
 
 	var stored string
 	read := func() string {
@@ -105,7 +105,7 @@ func TestSecurity_A07_LegacyScryptVerifiesAndRehashes(t *testing.T) {
 		t.Fatal("failed login must not touch the stored hash")
 	}
 
-	c.PostJSON("/login", map[string]any{"email": email, "password": f.Password}).AssertRedirect("/dashboard")
+	c.PostJSON("/login", map[string]any{"identifier": email, "password": f.Password}).AssertRedirect("/onboarding")
 	if got := read(); !strings.HasPrefix(got, "$argon2id$") {
 		t.Fatalf("stored hash after login = %.12q..., want $argon2id$ prefix", got)
 	}
