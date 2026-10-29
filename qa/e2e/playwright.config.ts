@@ -15,7 +15,8 @@ export default defineConfig({
 	testDir: "./specs",
 	globalSetup: "./global-setup.ts",
 	outputDir: "./test-results",
-	timeout: 60_000,
+	// Signup, login and password reset solve a proof of work in the browser, so flows chain several of them.
+	timeout: 120_000,
 	expect: { timeout: 10_000 },
 	fullyParallel: true,
 	forbidOnly: Boolean(process.env.CI),
@@ -24,7 +25,15 @@ export default defineConfig({
 	reporter: process.env.CI
 		? [["list"], ["html", { open: "never" }], ["github"]]
 		: [["list"], ["html", { open: "never" }]],
-	use: { baseURL, trace: "retain-on-failure", screenshot: "only-on-failure" },
+	use: {
+		baseURL,
+		// The production CSP carries upgrade-insecure-requests, which Chrome applies to the redirect hop of
+		// an Inertia form post even on 127.0.0.1 (ERR_SSL_PROTOCOL_ERROR over plain HTTP). Specs that assert
+		// the CSP itself opt back in with test.use({ bypassCSP: false }) and read the header instead.
+		bypassCSP: true,
+		trace: "retain-on-failure",
+		screenshot: "only-on-failure",
+	},
 	projects: Object.entries(devicesByProject).flatMap(([device, use]) =>
 		locales.map((locale) => ({ name: `${device}-${locale}`, use: { ...use, locale } })),
 	),
