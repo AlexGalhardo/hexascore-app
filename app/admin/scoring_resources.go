@@ -61,7 +61,9 @@ type readOnlyPolicy[T any] struct {
 	detail bool
 }
 
-func (p readOnlyPolicy[T]) ViewAny(_ context.Context, u *models.User) bool { return IsAdmin(u, p.now()) }
+func (p readOnlyPolicy[T]) ViewAny(_ context.Context, u *models.User) bool {
+	return IsAdmin(u, p.now())
+}
 
 func (p readOnlyPolicy[T]) View(_ context.Context, u *models.User, _ *T) bool {
 	return p.detail && IsAdmin(u, p.now())
