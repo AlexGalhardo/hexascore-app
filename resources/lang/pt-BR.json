@@ -1157,6 +1157,35 @@
       "kept": "Suas notas permanecem nas pontuações da comunidade sem qualquer vínculo com você, como \"Usuário excluído\".",
       "cta": "Ir para meu perfil",
       "login": "Entrar"
+    },
+    "score": {
+      "metaTitle": "Como as notas funcionam",
+      "title": "Como as notas do HexaScore funcionam",
+      "intro": "Toda nota é uma média ponderada das avaliações da comunidade. As regras abaixo são públicas e versionadas.",
+      "categoriesTitle": "Categorias de avaliação",
+      "categoriesIntro": "Cada tipo de título é avaliado em seis categorias.",
+      "inputTitle": "Como avaliar",
+      "input": "Avalie cada categoria de 0,5 a 10 estrelas, em passos de meia estrela. Clique ou toque em uma metade de estrela, ou foque o controle e use as setas, Page Up/Down, Home, End e Delete.",
+      "formulaTitle": "A fórmula",
+      "formula": "A nota é uma média ponderada bayesiana: cada avaliação conta com um peso, e uma referência puxa títulos com poucas avaliações para a média do tipo. O resultado aparece em estrelas de 0 a 10 com uma casa decimal.",
+      "minimumTitle": "Mínimo de avaliações",
+      "minimum": "A nota só aparece depois de 5 avaliações contadas.",
+      "confidenceTitle": "Confiança",
+      "confidence": "A confiança é baixa a partir de 5 avaliações, média a partir de 15 com pouca dispersão e alta a partir de 50 com dispersão muito pequena.",
+      "weightsTitle": "Pesos das avaliações",
+      "weights": "Uma avaliação pesa mais quando a conta é mais antiga e quando o usuário marcou o título como jogado, assistido ou lido. Contas novas e avaliações sem status pesam menos.",
+      "releaseTitle": "Trava de lançamento",
+      "release": "Títulos só podem ser avaliados a partir da data de lançamento. Avaliações enviadas antes não contam até lá.",
+      "burstTitle": "Atividade incomum",
+      "burst": "Um pico repentino de avaliações em um título limita temporariamente novas avaliações de contas recentes e exibe um aviso. A equipe revisa o pico e aprova ou exclui as avaliações afetadas.",
+      "capsTitle": "Limites diários",
+      "caps": "Cada conta pode adicionar um número limitado de novas avaliações e edições por dia.",
+      "versionsTitle": "Histórico de versões",
+      "versions": "Mudanças na fórmula são anunciadas com pelo menos 14 dias de antecedência. A versão ativa é a versão 1."
     }
+  },
+  "rating": {
+    "valuetext": "{value} de 10 estrelas",
+    "unset": "Sem avaliação"
   }
 }

@@ -1157,6 +1157,35 @@
       "kept": "Tus valoraciones permanecen en las puntuaciones de la comunidad sin ningún vínculo contigo, como \"Usuario eliminado\".",
       "cta": "Ir a mi perfil",
       "login": "Iniciar sesión"
+    },
+    "score": {
+      "metaTitle": "Cómo funcionan las notas",
+      "title": "Cómo funcionan las notas de HexaScore",
+      "intro": "Cada nota es una media ponderada de las valoraciones de la comunidad. Las reglas siguientes son públicas y están versionadas.",
+      "categoriesTitle": "Categorías de valoración",
+      "categoriesIntro": "Cada tipo de título se valora en seis categorías.",
+      "inputTitle": "Cómo valorar",
+      "input": "Valora cada categoría de 0,5 a 10 estrellas, en pasos de media estrella. Haz clic o toca una mitad de estrella, o enfoca el control y usa las flechas, Page Up/Down, Home, End y Delete.",
+      "formulaTitle": "La fórmula",
+      "formula": "La nota es una media ponderada bayesiana: cada valoración cuenta con un peso y una referencia acerca los títulos con pocas valoraciones a la media del tipo. El resultado se muestra en estrellas de 0 a 10 con un decimal.",
+      "minimumTitle": "Mínimo de valoraciones",
+      "minimum": "La nota solo se muestra tras 5 valoraciones contadas.",
+      "confidenceTitle": "Confianza",
+      "confidence": "La confianza es baja desde 5 valoraciones, media desde 15 con poca dispersión y alta desde 50 con dispersión muy pequeña.",
+      "weightsTitle": "Pesos de las valoraciones",
+      "weights": "Una valoración pesa más cuando la cuenta es más antigua y cuando el usuario marcó el título como jugado, visto o leído. Las cuentas nuevas y las valoraciones sin estado pesan menos.",
+      "releaseTitle": "Control de estreno",
+      "release": "Los títulos solo se pueden valorar desde su fecha de estreno. Las valoraciones enviadas antes no cuentan hasta entonces.",
+      "burstTitle": "Actividad inusual",
+      "burst": "Un pico repentino de valoraciones en un título limita temporalmente las nuevas valoraciones de cuentas recientes y muestra un aviso. El equipo revisa el pico y aprueba o excluye las valoraciones afectadas.",
+      "capsTitle": "Límites diarios",
+      "caps": "Cada cuenta puede añadir un número limitado de valoraciones nuevas y ediciones por día.",
+      "versionsTitle": "Historial de versiones",
+      "versions": "Los cambios en la fórmula se anuncian con al menos 14 días de antelación. La versión activa es la versión 1."
     }
+  },
+  "rating": {
+    "valuetext": "{value} de 10 estrellas",
+    "unset": "Sin valorar"
   }
 }
