@@ -22,3 +22,6 @@ Release requests and approvals for vukem (the framework engineer never tags with
 
 - Q-H31 (2026-10-29, orchestrator): P1.H.3.1 installs billing; the vukem scaffold refuses to boot in production without `STRIPE_KEY` (restricted `rk_`), `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO`, `STRIPE_PRICE_BUSINESS`, and `main` auto-deploys to Railway production. Owner action: create the two prices (with BRL/USD/EUR `currency_options`) and the webhook endpoint in Stripe (test mode is fine until cutover), then set the four variables on Railway service `app`. Until then the billing branch stays unmerged.
   - Answer:
+
+- Q-REDOCLY (2026-10-29, orchestrator): P1.H.4.1 and SDD 05 §9 lint the OpenAPI documents with Redocly CLI, which is not in the approved dependency list (D-22). Approve a pinned `@redocly/cli` dev dependency, or confirm that the golden diff plus `AssertMatchesOpenAPI` and Schemathesis are enough.
+  - Answer:
