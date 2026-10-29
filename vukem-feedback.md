@@ -19,10 +19,10 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-008 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#22](https://github.com/AlexGalhardo/vukem/pull/22)) |
 | VF-009 | 2026-10-28 | low | in_progress (framework), PR #37 green, merge pending (owner) |
 | VF-010 | 2026-10-28 | low | fixed in v0.33.0 (PR [#27](https://github.com/AlexGalhardo/vukem/pull/27), via VF-046: `AfterSave` receives `admin.Saved[T].Before`, a copy of the record before the form was applied) |
-| VF-011 | 2026-10-28 | low | open |
+| VF-011 | 2026-10-28 | low | in review (framework): vukem PR #68 (`notify`) |
 | VF-012 | 2026-10-28 | low | open |
 | VF-013 | 2026-10-28 | low | in_progress (framework), PR #41 (docs) |
-| VF-014 | 2026-10-28 | low | open |
+| VF-014 | 2026-10-28 | low | in review (framework): vukem PR #69 (`api.CollectionOf/PageOf/CursorOf`, docs) |
 | VF-015 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#12](https://github.com/AlexGalhardo/vukem/pull/12)) |
 | VF-016 | 2026-10-28 | low | fixed in v0.33.0 (PR [#33](https://github.com/AlexGalhardo/vukem/pull/33), adopted 4a2d8ec) |
 | VF-017 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#13](https://github.com/AlexGalhardo/vukem/pull/13)), adopted (ADOPT-VF-040) |
@@ -42,7 +42,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-031 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#24](https://github.com/AlexGalhardo/vukem/pull/24)) |
 | VF-032 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#31](https://github.com/AlexGalhardo/vukem/pull/31)) |
 | VF-033 | 2026-10-28 | low | open |
-| VF-034 | 2026-10-28 | low | open |
+| VF-034 | 2026-10-28 | low | in review (framework): vukem PR #72 (`openapi.Info.StripPrefix`, `OPENAPI_SERVERS`, `OPENAPI_STRIP_PREFIX`) |
 | VF-035 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#25](https://github.com/AlexGalhardo/vukem/pull/25)), adopted in models only (ADOPT-VF-035) |
 | VF-036 | 2026-10-29 | low | fixed in v0.33.0 (PR [#34](https://github.com/AlexGalhardo/vukem/pull/34), adopted 4a2d8ec) |
 | VF-037 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#26](https://github.com/AlexGalhardo/vukem/pull/26)) |
@@ -57,17 +57,18 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-046 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#27](https://github.com/AlexGalhardo/vukem/pull/27)), adopted (ADOPT-VF-046) |
 | VF-047 | 2026-10-29 | low | in_progress (framework), PR #40 (nullable filters/search; composite keys open) |
 | VF-048 | 2026-10-29 | low | fixed in v0.33.0 (PR [#33](https://github.com/AlexGalhardo/vukem/pull/33), adopted 4a2d8ec) |
-| VF-049 | 2026-10-29 | low | open |
-| VF-050 | 2026-10-29 | low | open |
+| VF-049 | 2026-10-29 | low | in review (framework): vukem PR #71 (typed handler finishes response; OPENAPI_PREFIX hint) |
+| VF-050 | 2026-10-29 | low | in review (framework): vukem PR #72 (`openapi.Info.StripPrefix`; extensions already in `errs.HTTPError.WithExtension`) |
 | VF-051 | 2026-10-29 | medium | in_progress (framework), PR #36 green, merge pending (owner) |
 | VF-052 | 2026-10-29 | high | in_progress (framework), PRs #46 (client IP + origin lock), #47 (Turnstile action), #48 (visitor headers), #49 (edge cache + purge), #50 (Access JWT); merges pending |
 | VF-053 | 2026-10-29 | low | in_progress (framework), PR #52 |
 | VF-054 | 2026-10-29 | low | in_progress (framework), PR #51 |
 | VF-055 | 2026-10-29 | medium | in review (vukem PR #58) |
 | VF-056 | 2026-10-29 | medium | in review (vukem PRs #59, #60) |
-| VF-057 | 2026-10-29 | medium | open |
+| VF-057 | 2026-10-29 | medium | in review (vukem PRs #61, #62) |
 | VF-058 | 2026-10-29 | low | open |
-| VF-059 | 2026-10-29 | medium | open |
+| VF-059 | 2026-10-29 | medium | in review (framework): vukem PR #63 (repo), #64 (scaffold, doctor, site page) |
+| VF-060 | 2026-10-29 | low | in review (framework): vukem PR #70 (`totp.HashRecoveryCode`) |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -162,7 +163,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-011: No persistent in-app notifications
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: in review (framework): new `notify` package per FD-011 in vukem PR #68.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/mail` (Mail, Events, Broadcasting [heading not on page 2026-10-29]).
 - **Context**: suggestion decisions (SDD 04) and moderation outcomes need a per-user inbox with read state; vukem has mail and real-time broadcasting but no stored notification model.
 - **Workaround**: app-owned `user_notifications` table and page.
@@ -186,7 +187,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-014: Envelope and problem key casing is fixed to snake_case
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: in review (framework): per FD-014 (a) snake_case documented by design and (b) `api.CollectionOf/PageOf/CursorOf[E]` with an app envelope builder, documented by OpenAPI, in vukem PR #69.
 - **Spike (2026-10-29)**: P0.F.7.1: camelCase payload fields work through `json` tags; envelope and problem keys stay snake_case (P0.F.7.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/overview` "Envelopes" [heading not on page 2026-10-29], "Errors".
 - **Context**: HexaScore payload fields are camelCase (legacy API contract and SDKs); the documented envelope keys (`next_cursor`, `request_id`) are snake_case and no option to change them is documented, so responses mix conventions.
@@ -359,7 +360,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-034: OpenAPI cannot map a host-rewritten public path (`/v1`) to the `/api/v1` router group
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: in review (framework): vukem PR #72.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/openapi`, `https://vukem.dev/docs/cli/reference-runtime`, `https://vukem.dev/docs/digging-deeper/billing` ("Routes", `r.UseServer`).
 - **Context**: `api.<host>/v1/*` is served from the `/api/v1` group through an app `r.UseServer` rewrite (VF-015). `openapi.Info.Servers` can list `https://api.<host>/v1`, but the document keeps router paths (`/api/v1/ping`), so the full URL becomes `/v1/api/v1/ping`. `Servers` is a static option (no config key; only the `APP_URL` default), so it needs a process env read in `bootstrap.New`.
 - **Repro**: spike `agent/senior/P0.F.4.1`: `API_URL=<http://api.localhost:3001/v1> vukem openapi:export -prefix /api/v1 | jq -r '.servers[0].url, (.paths|keys[])'` gives `http://api.localhost:3001/v1` and `/api/v1/ping`.
@@ -484,7 +485,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-049: typed handlers cannot answer 304 or 301, and OpenAPI needs a prefix when route names repeat across groups
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: in review (framework): vukem PR #71.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/typed-handlers` ("Registering a route", "Checking responses"), `https://vukem.dev/docs/rest-apis/openapi` ("OpenAPI"). `[NOT IN VUKEM DOCS]`: conditional requests (`c.NotModified`) and redirects inside an `api.Register` handler; how `OPENAPI_PREFIX` interacts with `AssertMatchesOpenAPI` (read from `api/typed.go`, `web/conditional.go`, `http.go` in the module).
 - **Context**: SDD 05 FR-05-8 wants a strong `ETag` and `304` on every `/api/v1` read, and `getItem` answers `301` for merged ids. A typed handler returns `(Out, error)` and `api.Register` always writes `Out` as JSON afterwards, so `c.NotModified` (which writes the 304) is followed by a body write and, with `ValidateResponse`, a check of the zero value. Separately, `AssertMatchesOpenAPI()` builds the document from the whole router; the app's web routes `dashboard` and `admin.dashboard` collide on operationId, so every assertion fails until `OPENAPI_PREFIX=/api/v1` is set.
 - **Workaround**: the handler calls `c.NotModified` and returns `errs.New(304, ...)`: `DefaultErrorHandler` sees the response written and only logs it at debug. Merged ids return `errs.New(301, ...).WithHeader("Location", ...)`, rendered as a problem body with the redirect status. `OPENAPI_PREFIX=/api/v1` in `.env.example` and the API test rig (`app/controllers/publicapi/items.go`, `tests/api_keys_test.go`).
@@ -492,7 +493,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-050: OpenAPI paths cannot be rebased under a server prefix (host alias `/v1`)
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: in review (framework): vukem PR #72.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/overview` "Versioning", "Errors" [no server-prefix or extension-member option on the page 2026-10-29].
 - **Context**: the API is served at `/api/v1/*` and, on `api.hexascore.app`, also as `/v1/*` (app `APIEdge` rewrite, VF-015). `openapi.Info` has `Servers` and `PathPrefix` (filter only), so the document cannot say "server `https://api.hexascore.app/v1`, paths without `/api/v1`" as SDD 05 §6.1 wants. Typed-route and router-raised problems also cannot carry `code` (VF-016): `APIEdge` rewrites problem bodies and takes an optional `X-Problem-Code` header from handlers.
 - **Workaround**: `Servers` lists `https://api.hexascore.app` only; paths keep `/api/v1` (valid on both hosts). SDD 05 §6.1 should say so.
@@ -571,7 +572,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-057: HTTP/2 only as h2c on the main server; no TLS serving and no HTTP/3
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: open (requested by the owner 2026-10-29).
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: in review: HTTPS + HTTP/2 on the main server in vukem PR #61, opt-in `contrib/http3` (quic-go v0.64.1) in PR #62 (stacked). Unreleased.
 - **vukem version**: v0.33.0 (main at the time of writing). **Docs consulted**: <https://vukem.dev/docs> search for `http2`, `http3`, `quic`, `tls`; the local `docs/api.md` "HTTP/2" bullet `[SITE PAGE MISSING]`.
 - **Context**: the app server speaks HTTP/1.1 and, with `HTTP_H2C` (always on outside production), HTTP/2 cleartext with prior knowledge (`app.go` `H2C`). HTTP/2 over TLS (ALPN `h2`) exists only in `contrib/grpc` on its own port (`grpc.ServerOptions{TLS: ...}`). The main server has no TLS serving at all, so self-hosted deployments without a TLS-terminating proxy cannot offer HTTP/2, and there is no HTTP/3 (QUIC) support anywhere. Behind Railway/Cloudflare the edge terminates TLS and HTTP/3, so this matters for self-hosting, direct origin connections and gRPC on the main port.
 - **Reproduction**: `git grep -n -E "http3|quic|ListenAndServeTLS|TLSConfig"` on vukem `main`: only `contrib/grpc`.
@@ -592,7 +593,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-059: No native secret scanning (Betterleaks) in vukem's own repo or in generated projects
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: open (requested by the owner 2026-10-29).
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: in review (framework): vukem repo CI + task + config in vukem PR #63; scaffold (config, pre-commit, secrets:scan, CI job), `vukem doctor` and site page in vukem PR #64.
 - **vukem version**: v0.33.0. **Docs consulted**: <https://vukem.dev/docs> search for `secret`, `gitleaks`, `betterleaks`: no page `[NOT IN VUKEM DOCS]`; vukem `docs/maintenance.md` only lists GitHub secret scanning and push protection `[SITE PAGE MISSING]`. External: <https://github.com/betterleaks/betterleaks> (MIT, Go; maintained by the Gitleaks authors; latest stable `v1.9.0` released 2026-09-29, `v2.0.0-rc.*` are pre-releases and are excluded until a stable v2 exists; read 2026-10-29).
 - **Context**: apps generated by vukem hold `APP_KEY`, database URLs, Stripe, Resend and OAuth secrets in `.env` files. Nothing in vukem's CI or in the scaffolded CI, git hooks or `task` targets scans commits or history for leaked secrets; GitHub's server-side scanning only covers public patterns and only after a push.
 - **Reproduction**: `git grep -i -E "gitleaks|betterleaks"` on vukem `main`: no match in `.github/`, `Taskfile.yml` or the starter templates.
@@ -603,3 +604,12 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
   - `vukem doctor` (or the existing environment checks) reports whether the scanner is installed and its version.
   - Docs and a site page "Secret scanning"; validation/analysis/revocation features of Betterleaks stay off by default (they call credential providers) and are documented as opt-in.
   - Tests: scaffold golden/e2e tests assert the generated files; a fixture with a fake `APP_KEY` and `vk_` token is detected by the starter config, and `.env.example` placeholders are not.
+
+## VF-060: `auth/totp` cannot hash recovery codes that it did not generate
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: in review (framework): `totp.HashRecoveryCode(code)` in vukem PR #70.
+- **vukem version**: v0.33.0. **Docs consulted**: `https://vukem.dev/docs/security/two-factor` `[NOT IN VUKEM DOCS]`: the stored recovery code format is not documented; the package godoc exports only `RecoveryCodes(n)` (generate and hash) and `UseRecoveryCode(code, hashes)`.
+- **Context**: importing users from another auth system (here Better Auth backup codes, SDD 03 §7.6) needs to store their existing unused codes so they keep working. `totp.hashCode` (`sha256("totp-recovery:" + upper(trim(code)))`, hex) is unexported.
+- **Repro**: try to build the `[]string` of hashes for a known list of codes with the public API: impossible without copying the private format.
+- **Workaround**: `database/legacyimport/twofactor.go` `recoveryHashes` copies the format; `TestTwoFactorUsersPassChallenge` signs in with an imported code through `UseRecoveryCode`, so a format change fails the test.
+- **Request**: export `totp.HashRecoveryCode(code string) string` (or `RecoveryHashes(codes []string) []string`) and document the stored format on the two-factor page.

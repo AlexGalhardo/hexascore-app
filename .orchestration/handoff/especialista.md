@@ -1,14 +1,8 @@
-# Handoff especialista (2026-10-29, end of session 9: context limit)
-STATUS: IDLE, no task in progress. Worktree C:\dev\hexascore-app\wt\especialista (last on agent/especialista/P2.F.2.1, clean; next task: git fetch, switch -c from origin/main).
-Queue for the next session, in order: 3-P2.F.2.2, 4-P2.F.2.3, 5-P2.F.2.7, 6-P2.E.2.2, 7-P2.E.3.1 (9-APP-PASSKEYS-b blocked until a vukem release with VF-001). Chain them without waiting; report each with PRONTO_PARA_MERGE (self, needs orchestrator sampling).
-Delivered and merged this session: REV-P1.H.4.1b, P2.E.1.1 (hexascore:predeploy), P2.C.1.1 (privacy log handler), P2.E.2.1 (backup:run, drivers/s3 v0.3.1 accepted), REV ADOPT-VF-024 (fix), P1.I.2.1, ADOPT-VF-035/040/046, P2.D.3.1 (AdminGuard), P2.F.2.1 (legacyimport runner).
-Context for the queue:
-- Legacy import (P2.F.2.2/2.3/2.7): database/legacyimport. Stages() returns stages with nil Batch; fill Batch (BatchFunc: keyset after `after`, idempotent upserts, runner writes the checkpoint in the same tx). Fixture testdata/fixture.sql is synthetic (Better Auth column names from legacy apps/web/lib/db/schema/auth.ts); extend it per stage. Preflight "no_login_method" = no credential account with password, no google, no passkey.
-- Backups (P2.E.2.2 verify/prune): app/backup FrameReader(r, enc, objectKey) decrypts; object key bound in AD; backup_runs table; Runner in dump.go. Host has no pg_dump/pg_restore: build GOOS=linux binary and run in postgres:18.6-alpine3.24 with --add-host host.docker.internal:host-gateway, APP_ENV=development; RustFS creds hexascore/hexascore-local-secret, bucket hexascore-local exists.
-Pitfalls:
-- vukem v0.33.0 already ships many VF fixes; check vukem-feedback.md status before building a workaround (VF-017/026/030/035 were fixed natively).
-- Test admins need two_factor_confirmed_at (tests/admin_users_test.go makeUser does it) because of AdminGuard.
-- e2e isolation: COMPOSE_PROJECT_NAME=hx-especialista + override file (postgres/rustfs ports !reset [], app 127.0.0.1:3010), E2E_BASE_URL, E2E_APP_CONTAINER=hx-especialista-app-1; `down -v` after.
-- Python on Windows: use binary read/write; multi-occurrence replaces need unique context (assert count).
-- golangci: nolint needs an explanation and its own line when the line is long (golines).
-- Long suites: `timeout 590 env TEST_DATABASE_URL=... go test -tags integration ./...` > file; they may go to background; wait with an until-loop on the output file.
+# Handoff especialista (2026-10-29, session 11)
+STATUS: IDLE (context limit). No task in progress. Next in queue: 3-P2.F.2.4, 4-P2.F.2.5, 5-P2.F.2.6, 6-P2.F.3.1, 7-P2.D.2.1, 8-P2.D.2.2 (untouched); blocked 9-*. Senior REVs go first when they arrive.
+Done this session: REV-P1.I.2.2 APROVADO, REV-P1.I.2.3 APROVADO, DOC-processed-events (self, branch agent/especialista/DOC-processed-events), P2.E.3.1 (self; staging drill deferred), FIX-backup-child-path (self, branch agent/especialista/FIX-backup-child-path; also parity-checklist R05 note). Orchestrator merged I.2.2, I.2.3, DOC-processed-events, P2.E.3.1.
+Tools of this session (scratchpad of session 27958981..., recreate if gone):
+- Isolated e2e stack: override file with postgres/rustfs `ports: !reset []`, app-init/app image hexascore-app:e2e-esp, app port 127.0.0.1:3200; COMPOSE_PROJECT_NAME=hx-especialista, APP_KEY=base64:$(openssl rand -base64 32); playwright with E2E_BASE_URL=http://127.0.0.1:3200 E2E_APP_CONTAINER=hx-especialista-app-1.
+- Tests needing pg_dump/pg_restore: docker run golang:1.27.3-alpine3.24, mount worktree at /src and C:/Users/aleex/go/pkg/mod at /go/pkg/mod, volume hx-esp-gocache, GOFLAGS=-buildvcs=false, TEST_DATABASE_URL=...@host.docker.internal:5433/postgres, `apk add postgresql18-client`, MSYS_NO_PATHCONV=1.
+- Integration scratch DB: docker exec hexascore-postgres-1 psql -U hexascore -d postgres (create/drop hx_esp_test).
+Pitfalls: golangci-lint --allow-parallel-runners and `golangci-lint fmt` for golines; .env reads denied; staging runs APP_ENV=production (cannot gate on env); vukem cron ORs day-of-month and day-of-week; pg_restore needs PATH in its env.

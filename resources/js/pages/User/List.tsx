@@ -17,10 +17,10 @@ interface Props {
 	owner: { nickname: string };
 	items: { position: number; note: string | null; item: ItemRef }[];
 	canEdit: boolean;
-	seo: { indexable: boolean };
+	indexable: boolean;
 }
 
-export default function List({ list, owner, items, canEdit, seo }: Props) {
+export default function List({ list, owner, items, canEdit, indexable }: Props) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
 
@@ -29,7 +29,7 @@ export default function List({ list, owner, items, canEdit, seo }: Props) {
 			<Seo
 				title={list.title}
 				description={list.description ?? undefined}
-				noindex={!seo.indexable}
+				noindex={!indexable}
 			/>
 			<h1 className="text-2xl font-semibold">{list.title}</h1>
 			<p className="mt-1 text-muted">

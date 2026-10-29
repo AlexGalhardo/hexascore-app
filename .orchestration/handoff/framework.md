@@ -59,3 +59,24 @@ Owner answered "merge your own green PRs" in chat, but `gh pr merge 39 --squash`
 - VF-056 part 1 (server): PR #59 (`feat/vf-056-jsonrpc`). Part 2 = OpenRPC doc + Go client, stacked on #59. TS client generation: optional, likely skip (note in report).
 - New queue item from orchestrator: 3-VF-059 (Betterleaks v1.9.0) after VF-057, before 4-VF-011.
 - VF-056 done: #59 + #60 (stacked). Next VF-057 (claimed).
+- VF-057 part 1: PR #61 (`feat/vf-057-http2-tls`). PR body claims x/net has no production-ready HTTP/3 server: VERIFY before part 2 and correct the PR/docs if wrong.
+- Next, in order: VF-057 part 2 (`contrib/http3`, branch from main; may need #61 merged first for WithTLSConfig), 3-VF-059 (Betterleaks v1.9.0, queue file), 4-VF-011 (notify), 4-VF-014 (docs + PageOf/CursorOf[E]).
+- Stacked PRs to rebase as NEW branches after their base merges: #60 (on #59).
+- VF-057 part 2: PR #62 (stacked on #61). #61 body corrected (x/net check). Next: 3-VF-059 Betterleaks.
+- VF-059 part 1: PR #63 (`ci/vf-059-betterleaks`). Part 2 (scaffold + doctor + site page) NOT started; see reports/VF-059.md. Local binary: scratchpad `bl/bin/betterleaks.exe` (v1.9.0, sha256-verified).
+- contrib/http3 needs no dependabot change (`/contrib/*` glob).
+- Remaining after VF-059 part 2: 4-VF-011 (notify), 4-VF-014. Stacked: #60 on #59, #62 on #61.
+- A background `go run github.com/betterleaks/betterleaks@v1.9.0 version` was started only to test feasibility; ignore its output.
+
+## Session 10 (2026-10-29)
+
+- VF-059 part 2: PR #64 (`feat/vf-059-scaffold-secrets`): starter `.betterleaks.toml`, pre-commit scan, `secrets:scan` script, starter CI `secrets` job, new `vukem doctor`, site page `security/secret-scanning`. Report `reports/VF-059.md`. GitHub push protection blocks literal `sk_test_` + 24 alnum placeholders: build such strings at run time in tests.
+- VF-052 chain rebased after #46 merged: #48 -> #65 (base main), #49 -> #66 (base `feat/vf-052-cloudflare-visitor-main`), #50 -> #67 (base `feat/vf-052-cloudflare-cache-main`); old PRs closed with pointers. After #65 squash-merges, recreate #66 on main (then #67) the same way.
+- Still stacked: #60 on #59, #62 on #61, #66 on #65, #67 on #66.
+- Next: 4-VF-011 `notify` (queue/framework, not claimed yet), then 4-VF-014, then low VFs.
+- git bash: `git show origin/x:path` needs `MSYS_NO_PATHCONV=1`.
+- VF-011 notify: PR #68 (`feat/vf-011-notify`; user ids are string, Postgres checked with a throwaway test; add a drivers/postgres integration test after a core release has `notify`).
+- VF-014: PR #69 (`feat/vf-014-envelope-of`, `api.CollectionOf/PageOf/CursorOf`).
+- #63 secrets: the `docs/security.md:45` finding seen in a `dir` scan is a history item already in `.betterleaksignore` (6 entries for that file); #63 CI Betterleaks passes.
+- Next: remaining low VFs (044 needs design, 049, 050, 004, 012, 020, 023, 033, 034, 060; VF-042 part 2).
+- VF-060: PR #70 (totp.HashRecoveryCode). Stopping near context limit; next low VFs: 049, 050, 004, 012, 020, 023, 033, 034, 044 (design), VF-042 part 2.

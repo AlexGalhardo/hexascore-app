@@ -207,58 +207,9 @@ func (a *Accounts) anonymise(ctx context.Context, userID int64) (bool, error) {
 	err = a.DB.Tx(ctx, func(tx *database.Tx) error {
 		var err error
 
-		old, err = orm.QueryOf[models.User](tx).Where("id", userID).LockForUpdate().First(ctx)
-		if err != nil {
-			return err
-		}
+		old, done, err = a.anonymiseTx(ctx, tx, userID, pw, now)
 
-		if !old.DeletionScheduledAt.Valid || old.AnonymizedAt.Valid {
-			return nil
-		}
-
-		p := tx.Dialect().Placeholder
-		res, err := tx.ExecContext(ctx, `UPDATE users SET email = 'deleted-' || id || '@invalid', name = 'Deleted user',
-  username = NULL, display_username = NULL, image_url = NULL, email_verified_at = NULL, password = `+p(1)+`,
-  profile_private = `+p(2)+`, two_factor_secret = NULL, two_factor_recovery_codes = NULL,
-  two_factor_confirmed_at = NULL, two_factor_last_step = 0, deletion_scheduled_at = NULL,
-  anonymized_at = `+p(3)+`, updated_at = `+p(3)+` WHERE id = `+p(4), pw, true, now, userID)
-		if err != nil {
-			return err
-		}
-
-		if n, _ := res.RowsAffected(); n == 0 {
-			return nil
-		}
-
-		if _, err := tx.ExecContext(ctx, "DELETE FROM social_accounts WHERE user_id = "+p(1), userID); err != nil {
-			return err
-		}
-
-		if _, err := tx.ExecContext(ctx, "DELETE FROM password_resets WHERE email = "+p(1), old.Email); err != nil {
-			return err
-		}
-
-		if err := a.revokeAccess(ctx, tx, userID); err != nil {
-			return err
-		}
-
-		if err := purgeUserLists(ctx, tx, userID); err != nil {
-			return err
-		}
-
-		if tx.Dialect().Name() == "postgres" {
-			if _, err := tx.ExecContext(
-				ctx,
-				"DELETE FROM user_item_editions WHERE user_id = "+p(1),
-				userID,
-			); err != nil {
-				return err
-			}
-		}
-
-		done = true
-
-		return recordEvent(ctx, tx, userID, nil, "anonymized", map[string]any{}, now)
+		return err
 	})
 	if err != nil || !done {
 		return false, err
@@ -276,6 +227,69 @@ func (a *Accounts) anonymise(ctx context.Context, userID int64) (bool, error) {
 	}
 
 	return true, nil
+}
+
+// anonymiseTx is the database part of anonymise: it rewrites the user row of
+// a user whose deletion is scheduled and drops what identifies them. Callers
+// handle mail and the session store; ReplayDeletions runs it on a restored
+// database with password a fresh random hash and now the original time.
+func (a *Accounts) anonymiseTx(
+	ctx context.Context,
+	tx *database.Tx,
+	userID int64,
+	pw string,
+	now time.Time,
+) (models.User, bool, error) {
+	old, err := orm.QueryOf[models.User](tx).Where("id", userID).LockForUpdate().First(ctx)
+	if err != nil {
+		return old, false, err
+	}
+
+	if !old.DeletionScheduledAt.Valid || old.AnonymizedAt.Valid {
+		return old, false, nil
+	}
+
+	p := tx.Dialect().Placeholder
+	res, err := tx.ExecContext(ctx, `UPDATE users SET email = 'deleted-' || id || '@invalid', name = 'Deleted user',
+  username = NULL, display_username = NULL, image_url = NULL, email_verified_at = NULL, password = `+p(1)+`,
+  profile_private = `+p(2)+`, two_factor_secret = NULL, two_factor_recovery_codes = NULL,
+  two_factor_confirmed_at = NULL, two_factor_last_step = 0, deletion_scheduled_at = NULL,
+  anonymized_at = `+p(3)+`, updated_at = `+p(3)+` WHERE id = `+p(4), pw, true, now, userID)
+	if err != nil {
+		return old, false, err
+	}
+
+	if n, _ := res.RowsAffected(); n == 0 {
+		return old, false, nil
+	}
+
+	if _, err := tx.ExecContext(ctx, "DELETE FROM social_accounts WHERE user_id = "+p(1), userID); err != nil {
+		return old, false, err
+	}
+
+	if _, err := tx.ExecContext(ctx, "DELETE FROM password_resets WHERE email = "+p(1), old.Email); err != nil {
+		return old, false, err
+	}
+
+	if err := a.revokeAccess(ctx, tx, userID); err != nil {
+		return old, false, err
+	}
+
+	if err := purgeUserLists(ctx, tx, userID); err != nil {
+		return old, false, err
+	}
+
+	if tx.Dialect().Name() == "postgres" {
+		if _, err := tx.ExecContext(
+			ctx,
+			"DELETE FROM user_item_editions WHERE user_id = "+p(1),
+			userID,
+		); err != nil {
+			return old, false, err
+		}
+	}
+
+	return old, true, recordEvent(ctx, tx, userID, nil, "anonymized", map[string]any{}, now)
 }
 
 // purgeUserLists applies the architect default of open issue 14-7: public

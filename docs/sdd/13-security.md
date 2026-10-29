@@ -34,7 +34,7 @@ In (v1): web (including passkeys, ADR 0017), `/api/v1`, `/app/v1`, admin, webhoo
 
 ## 5. Data model
 
-No security-only tables. Owned elsewhere: `account_events` (SDD 03, 2 years), vukem `admin.AuditLog` (forever, [ADM] "The audit log"), `catalog_audit` (SDD 04), `processed_events` (SDD 05), limiter and `pow:<c>` cache rows (pruned hourly by `cache:prune`, [RL]).
+No security-only tables. Owned elsewhere: `account_events` (SDD 03, 2 years), vukem `admin.AuditLog` (forever, [ADM] "The audit log"), `catalog_audit` (SDD 04), limiter and `pow:<c>` cache rows (pruned hourly by `cache:prune`, [RL]; the cache also holds `contrib/stripe`'s webhook event-id dedup, SDD 05 §5).
 
 LGPD inventory (bases per [LGPD] Art. 7; D-29 for personalisation):
 
@@ -118,7 +118,7 @@ Actors: anonymous abusers, score manipulators, scrapers, malicious contributors,
 | Users → scores | T | sockpuppets | verified email, age weights, bursts, daily caps | 02 |
 | Contributor → catalogue | T | vandalism, SSRF, image bombs | moderation, quota, `httpclient.Safe`, `upload` | 04 |
 | Sources → ingestion | T | poisoned payloads | `z` before upsert, host allowlist, size caps | 06 |
-| Stripe → webhook | S, R | forged or replayed events | signature, 5-min window, `processed_events` | 05 |
+| Stripe → webhook | S, R | forged or replayed events | signature, 5-min window, `contrib/stripe` event-id dedup in the persistent cache, handlers idempotent by Stripe object id | 05 |
 | Admin → panel | E, R | compromised admin | 2FA, short session, audit, CLI-only role grant | 03, 13 |
 | App ↔ Railway | I | leaked variables or logs | `config.Secret`, redaction, minimal team | 11, 12 |
 | App ↔ bucket | I, T | public exports, traversal | private prefix, signed links, `os.Root` | 11, 14 |
@@ -135,7 +135,7 @@ Actors: anonymous abusers, score manipulators, scrapers, malicious contributors,
 | A05 | `z`, bound parameters [VAL] "Security" | search caps (SDD 07), diff escaping | `TestSecurity_A05_HexaSearchControlChars` | 04, 07 |
 | A06 | body cap 10 MiB, `BodyLimit` [OV] A06; limiter fails closed [RL] | §7.1, PoW, server-side quotas | `TestSecurity_A06_HexaLimits` | 02, 05 |
 | A07 | enumeration-safe flows [AUTHN]; `Regenerate` [SES] | admin 2FA, PoW | `TestSecurity_A07_*` (SDD 03) | 03 |
-| A08 | signed billing webhook outside CSRF [BILL] "Security"; `webhook.Dedupe` [BB] | `processed_events` in the effect's transaction | `TestSecurity_A08_HexaStripeReplayIgnored` | 05 |
+| A08 | signed billing webhook outside CSRF [BILL] "Security"; `webhook.Dedupe` [BB] | event-id dedup in the `database` cache store (shared, survives restarts) + handlers idempotent by Stripe object id (SDD 05 §5) | `TestSecurity_A08_StripeReplayIgnored` | 05 |
 | A09 | `web.SecurityEvent`, `web.AuditEvent` [BB] "Audit events"; `config.Secret` [OV] | hashed ids, alerts (SDD 12) | `TestSecurity_A09_HexaLogsRedacted` | 12 |
 | A10 | central error handler [OV] A10 | store down → 503 | `TestSecurity_A10_HexaPowStoreDown503` | 13 |
 
@@ -263,7 +263,7 @@ Legacy text is `legacy/apps/web/messages/en/legal.json`; drop its Vercel, Neon, 
 - Payments: Stripe Checkout and Portal by redirect, so no card field exists on HexaScore pages (PCI DSS SAQ-A).
   - Access comes from webhooks only.
   - Signatures older than 5 minutes are refused ([BILL] "Security").
-  - `processed_events` deduplicates (SDD 05).
+  - `contrib/stripe` deduplicates event ids in the persistent `database` cache store; handlers are idempotent by Stripe object id (SDD 05 §5).
 - Go:
   - Pinned `go.sum`; checksum DB never disabled ([OV] A03).
   - `govulncheck` pinned as a `tool` directive (`vukem/docs/security.md`, `[SITE PAGE MISSING]`).
@@ -346,5 +346,5 @@ Review in `docs/incidents/YYYY-MM-DD-<slug>.md` within 5 working days: UTC timel
 8. No documented re-seal command after key rotation `[NOT IN VUKEM DOCS]`; VF candidate. Owner: vukem. Closes when documented or the app job's test passes.
 9. No antivirus for uploads (D-08); accepted with §7.3 controls. Owner: owner. Revisit if uploads go beyond moderated images.
 10. HSTS `preload` deferred. Owner: owner. Revisit 2027-06.
-11. The restore runbook must re-apply deletions made after the dump. Owner: architect (SDD 11). Closes when the monthly drill covers it.
+11. The restore runbook must re-apply deletions made after the dump. Owner: architect (SDD 11). Closes when the monthly drill covers it. Status 2026-10-29: `backup:restore` replays deletions, schedules and cancellations from the running database (`TestRestoreReappliesDeletions`, P2.E.3.1, runbook `docs/runbooks/restore.md`); stays open until the first staging drill.
 12. Turnstile in production needs an ADR 0016 update and a policy line. Owner: owner. Closes on the ADR edit.

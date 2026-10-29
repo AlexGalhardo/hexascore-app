@@ -51,11 +51,12 @@ func TestAPILookup(t *testing.T) {
 	// FR-05-16: the TMDB and IGDB ids are accepted as input and never echoed.
 	for _, q := range []string{"source=tmdb&id=999", "source=igdb&id=1234", "source=wikidata&id=Q20984815"} {
 		res := r.client.GetJSON("/api/v1/lookup?"+q).AssertOK().AssertMatchesOpenAPI().AssertJSONPath("id", r.game)
-		for _, leak := range []string{"tmdb", "igdb", "999", "1234"} {
+		for _, leak := range []string{"tmdb", "igdb"} {
 			if strings.Contains(res.Body(), leak) {
 				t.Errorf("lookup %s leaks %q: %s", q, leak, res.Body())
 			}
 		}
+		assertNoExternalIDs(t, res.Body())
 		res.AssertJSONPath("externalIds.wikidata", "Q20984815")
 	}
 	r.client.GetJSON("/api/v1/lookup?source=isbn13&id=9780441013593").AssertOK().AssertMatchesOpenAPI().
