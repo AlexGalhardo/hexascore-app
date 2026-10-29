@@ -99,6 +99,31 @@ func TestLibraryGroups(t *testing.T) {
 	web.Get("/library").AssertOK()
 }
 
+func TestEditionPickerList(t *testing.T) {
+	r := newListRig(t)
+	u, _ := r.user("picker@example.com", "catalog:read", "status:write")
+	web := browserFor(t, r.app, u)
+
+	book, game := r.item("book", "public"), r.item("game", "public")
+	ed := r.edition(book)
+	r.edition(r.item("book", "public"))
+
+	var body struct {
+		Data []struct {
+			ID string `json:"id"`
+		} `json:"data"`
+	}
+	web.GetJSON("/items/" + book + "/editions").AssertOK().JSON(&body)
+	if len(body.Data) != 1 || body.Data[0].ID != ed {
+		t.Fatalf("editions = %+v; want only %s", body.Data, ed)
+	}
+
+	web.GetJSON("/items/" + game + "/editions").AssertNotFound()
+	web.GetJSON("/items/" + r.item("book", "hidden") + "/editions").AssertNotFound()
+	web.GetJSON("/items/not-a-uuid/editions").AssertNotFound()
+	r.app.Client(t).GetJSON("/items/" + book + "/editions").AssertUnauthorized()
+}
+
 func TestEditionNotOfWork(t *testing.T) {
 	r := newListRig(t)
 	u, api := r.user("ed@example.com", "catalog:read", "status:write")
