@@ -39,7 +39,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-028 | 2026-10-28 | low | open |
 | VF-029 | 2026-10-28 | low | open |
 | VF-030 | 2026-10-28 | medium | merged in main (PR #20), unreleased |
-| VF-031 | 2026-10-28 | medium | in_progress (framework) |
+| VF-031 | 2026-10-28 | medium | merged in main (PR #24), unreleased |
 | VF-032 | 2026-10-28 | medium | open |
 | VF-033 | 2026-10-28 | low | open |
 | VF-034 | 2026-10-28 | low | open |
@@ -320,7 +320,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-031: No re-encryption command after `APP_KEY` rotation
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR <https://github.com/AlexGalhardo/vukem/pull/24>), unreleased. Native API: `orm.Reseal[T]` and `vukem.ResealCommand(orm.Reseal[...])` (`./app crypt:reseal`); the old key stays in `APP_PREVIOUS_KEYS` during the run, so no `--from/--to` flags.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/encryption`, `https://vukem.dev/docs/configuration`.
 - **Context**: encrypted columns (2FA secrets, OAuth tokens) are keyed by `APP_KEY`; the encryption page describes key rotation for cookies/values but no CLI to re-encrypt stored columns under the new key, so a rotation leaves rows readable only with the previous key.
 - **Workaround**: keep the previous key configured as a secondary decrypt key and run a one-off app job that reads and rewrites every encrypted column.
