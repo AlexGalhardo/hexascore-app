@@ -16,8 +16,8 @@ Conventions:
 
 | Field | Value |
 | --- | --- |
-| Current phase | P0 (framework spike) |
-| Next microtask | P0.F.1.3, P0.F.2.1, P0.F.3.1 (Opus), P0.F.5.1, P0.F.8.1 (Sonnet) |
+| Current phase | P1 (foundation and parity) |
+| Next microtask | P1.A.2.1, P1.A.4.3 (senior); P1.A.3.1, P1.A.4.1 (after vukem v0.33.0) |
 | Updated | 2026-10-29 |
 
 ## Phase map
@@ -264,7 +264,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
 
 #### P0.F.11 Spike report and closure
 
-- [ ] **P0.F.11.1** Consolidate the spike into `docs/spike-report.md` and update every exercised `vukem-feedback.md` entry.
+- [x] **P0.F.11.1** Consolidate the spike into `docs/spike-report.md` and update every exercised `vukem-feedback.md` entry.
   - Files/modules: `docs/spike-report.md`, `vukem-feedback.md`, `docs/PROGRESS.md` (Phase 0 entry), `ROADMAP.md` status table
   - Refs: ROADMAP phase map (P0 exit criteria); VF-002, VF-005, VF-006, VF-009, VF-014 to VF-018, VF-021, VF-024, VF-026 to VF-029
   - Depends on: P0.F.1.3, P0.F.2.2, P0.F.2.3, P0.F.3.1, P0.F.4.1, P0.F.5.2, P0.F.6.1, P0.F.7.2, P0.F.8.1, P0.F.9.1, P0.F.10.1
