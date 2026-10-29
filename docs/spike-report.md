@@ -15,9 +15,9 @@ Commands run:
 
 Tables and columns:
 
-- `users`: id, name, email (unique), password, email_verified_at (null), timestamps (a line between email_verified_at and timestamps was not inspected: [NÃO VERIFICADO]); `add_two_factor_columns` adds two_factor_secret (text, orm.Encrypted), two_factor_recovery_codes (text, encrypted SHA-256 hashes), two_factor_confirmed_at.
+- `users`: id, name, email (unique), password, email_verified_at (null), session_version (bigint, default 0, bumped to revoke all sessions), timestamps; `add_two_factor_columns` adds two_factor_secret (text, orm.Encrypted), two_factor_recovery_codes (text, encrypted SHA-256 hashes), two_factor_confirmed_at.
 - `remember_tokens`: id (unique), user_id (index), hash, expires_at.
-- `access_tokens`: id (unique), user_id (index), name, hash, abilities (text), last_used_at, expires_at, [column at line 28 not inspected], revoked_at, created_at.
+- `access_tokens`: id (unique), user_id (index), name, hash, abilities (text), last_used_at, expires_at, revoked_at, created_at.
 - `password_resets`: email (unique), hash, created_at.
 - `social_accounts`: id, user_id (FK users, cascade), provider, provider_id (unique together), timestamps.
 - There is no sessions table in the scaffold (`SESSION_DRIVER` default is not `database`).
@@ -26,6 +26,6 @@ Pages: React `.tsx` (TypeScript) under `resources/js/pages/Auth/`: Login, Regist
 
 Routes: GET/POST `/login`, `/register`, GET `/register/check-email`, POST `/logout`, GET `/forgot-password`, POST `/forgot-password`, GET `/reset-password/{token}`, POST `/reset-password`, GET `/email/verify`, `/email/verify/{id}`, POST `/email/verification-notification`, GET `/dashboard`, GET `/auth/{provider}/redirect`, GET/POST `/auth/{provider}/callback`, GET `/user/two-factor`, POST `/user/two-factor`, `/user/two-factor/confirm`, `/user/two-factor/recovery-codes`, `/user/two-factor/disable`, GET/POST `/two-factor-challenge`. Google needs `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` (dummy in spike `.env`).
 
-Session env names (open issue 03-7): `SESSION_LIFETIME` (absolute), `SESSION_IDLE_TIMEOUT`, plus `SESSION_DRIVER`, `SESSION_COOKIE`, `SESSION_SECURE`, `SESSION_RECORD_CLIENT` (found in framework source `session/`; value formats [NÃO VERIFICADO]).
+Session env names (open issue 03-7): `SESSION_LIFETIME` (absolute), `SESSION_IDLE_TIMEOUT`, plus `SESSION_DRIVER`, `SESSION_COOKIE`, `SESSION_SECURE`, `SESSION_RECORD_CLIENT` (found in framework source `session/`; durations are time.Duration fields, string format [NÃO VERIFICADO]).
 
 Verdict: works, with one workaround: generate `en,pt-BR` and hand-translate `es` catalogs (VF-032).
