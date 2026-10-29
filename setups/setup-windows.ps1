@@ -25,6 +25,27 @@ if (-not (Select-String -Path '.env' -Pattern '^APP_KEY=.' -Quiet)) {
 	Invoke-Checked 'vukem' @('key:generate')
 }
 
+# Pinned to the version in .github/workflows/ci.yml (GOLANGCI_LINT_VERSION). Install docs: https://golangci-lint.run/docs/welcome/install/
+$golangciLintVersion = '2.15.0'
+
+function Get-GolangciLintVersion {
+	if (-not (Get-Command golangci-lint -ErrorAction SilentlyContinue)) {
+		return $null
+	}
+	$out = & golangci-lint version
+	if ($out -match 'version (\d+\.\d+\.\d+)') {
+		return $Matches[1]
+	}
+	return $null
+}
+
+if ((Get-GolangciLintVersion) -ne $golangciLintVersion) {
+	Invoke-Checked 'go' @('install', "github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v$golangciLintVersion")
+}
+if ((Get-GolangciLintVersion) -ne $golangciLintVersion) {
+	throw "setup: golangci-lint is not $golangciLintVersion; make sure $(go env GOPATH)\bin is on PATH"
+}
+
 Invoke-Checked 'docker' @('compose', 'up', '-d', '--wait')
 Invoke-Checked 'bun' @('install', '--frozen-lockfile')
 Invoke-Checked 'vukem' @('migrate')
