@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/AlexGalhardo/vukem/auth/hash"
 	"github.com/AlexGalhardo/vukem/database"
@@ -13,6 +14,7 @@ import (
 	"github.com/AlexGalhardo/vukem/uuid"
 
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
+	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 	"github.com/AlexGalhardo/hexascore-app/database/factories"
 )
 
@@ -21,6 +23,7 @@ const (
 	demoSeed        = 42
 	demoItemsPerTyp = 75
 	demoUsers       = 50
+	demoRatings     = 2000
 	// DemoPassword signs in the demo admin and every demo user.
 	DemoPassword = "Demo-password-1"
 	// DemoAdminEmail is the demo administrator.
@@ -94,7 +97,56 @@ VALUES ('hexascore', 'HexaScore demo data', 'proprietary', 'https://hexascore.ap
 		}
 	}
 
+	if err := seedDemoRatings(ctx, tx); err != nil {
+		return fmt.Errorf("seed ratings: %w", err)
+	}
+
 	return nil
+}
+
+// seedDemoRatings adds demoRatings distinct (user, item) ratings and
+// recomputes every item with the provisional m_t and the default prior.
+func seedDemoRatings(ctx context.Context, tx *database.Tx) error {
+	// setseed makes random() repeatable inside this transaction.
+	if _, err := tx.ExecContext(ctx, `SELECT setseed(0.42)`); err != nil {
+		return err
+	}
+
+	if _, err := tx.ExecContext(ctx, `INSERT INTO ratings (user_id, item_id, c1, c2, c3, c4, c5, c6)
+SELECT u.id, i.id, 5 * (1 + floor(random() * 20)), 5 * (1 + floor(random() * 20)), 5 * (1 + floor(random() * 20)),
+  5 * (1 + floor(random() * 20)), 5 * (1 + floor(random() * 20)), 5 * (1 + floor(random() * 20))
+FROM (SELECT id FROM users WHERE role = 'user') u CROSS JOIN (SELECT id FROM items) i
+ORDER BY random() LIMIT $1`, demoRatings); err != nil {
+		return err
+	}
+
+	rows, err := tx.QueryContext(ctx, `SELECT id, type FROM items`)
+	if err != nil {
+		return err
+	}
+
+	type item struct{ id, typ string }
+	var items []item
+	for rows.Next() {
+		var it item
+		if err := rows.Scan(&it.id, &it.typ); err != nil {
+			return errors.Join(err, rows.Close())
+		}
+		items = append(items, it)
+	}
+	if err := rows.Close(); err != nil {
+		return err
+	}
+
+	m := map[string]float64{"game": 10, "movie": 10, "series": 8, "book": 8}
+	for _, it := range items {
+		p := scoring.Params{M: m[it.typ], Prior: [scoring.Categories]float64{60, 60, 60, 60, 60, 60}}
+		if err := scoring.Recompute(ctx, tx, it.id, time.Now().UTC(), p); err != nil {
+			return err
+		}
+	}
+
+	return rows.Err()
 }
 
 func seedDemoUsers(ctx context.Context, tx *database.Tx) error {
