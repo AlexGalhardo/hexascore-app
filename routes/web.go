@@ -6,6 +6,7 @@ import (
 	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
+	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/i18n"
 	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/middleware"
@@ -16,6 +17,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
+	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 	"github.com/AlexGalhardo/hexascore-app/app/seo"
 	"github.com/AlexGalhardo/hexascore-app/internal/search"
 	"github.com/AlexGalhardo/hexascore-app/resources"
@@ -127,6 +129,16 @@ func Web(r *router.Router, app *vukem.App) error {
 		// fast one client can mint searches and clicks to skew analytics.
 		clicks := ratelimit.Middleware(limiters("search.events", 30, time.Minute), ratelimit.ByIP)
 		r.Post("/search/events", sc.Event).Use(clicks).Name("search.events")
+
+		items := controllers.NewItem(app, &scoring.Writer{DB: acc.DB, Events: app.Events, Now: app.Now}, acc.Web.User)
+		for section, typ := range map[string]string{"games": "game", "movies": "movie", "series": "series", "books": "book"} {
+			r.Get("/"+section+"/{slug}", items.Show(typ)).Name("item." + typ)
+		}
+		r.Get("/books/{slug}/editions/{id}", items.Edition).Name("item.edition")
+		byUser := ratelimit.Middleware(limiters("item.report", 10, time.Minute), ratelimit.ByUser(acc.Web.Name()))
+		r.Post("/items/{id}/report", items.Report).
+			Name("item.report").
+			Use(auth.Required(acc.Web), auth.Verified(acc.Web), byUser)
 		r.Get("/api/search/suggest", controllers.LegacySuggest).Name("search.suggest.legacy")
 	}
 

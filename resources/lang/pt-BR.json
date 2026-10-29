@@ -768,6 +768,35 @@
       "hltb_complete": "HLTB 100%",
       "openlibrary": "Open Library"
     },
+    "editions": {
+      "title": "Edições",
+      "edition": "Edição",
+      "backToWork": "Voltar ao livro"
+    },
+    "roles": {
+      "director": "Direção",
+      "writer": "Roteiro",
+      "creator": "Criação",
+      "author": "Autor",
+      "developer": "Desenvolvedora",
+      "publisher": "Editora",
+      "network": "Emissora",
+      "production_company": "Produção",
+      "genre": "Gêneros",
+      "platform": "Plataformas",
+      "game_mode": "Modos de jogo",
+      "franchise": "Franquia",
+      "series": "Série",
+      "cast": "Elenco"
+    },
+    "editionFields": {
+      "isbn": "ISBN-13",
+      "language": "Idioma",
+      "publisher": "Editora",
+      "year": "Ano",
+      "format": "Formato"
+    },
+    "attribution": "Atribuição: dados do TMDB e do IGDB onde exibidos.",
     "timeToBeat": {
       "title": "Tempo para zerar",
       "styles": {
