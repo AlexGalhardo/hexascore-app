@@ -1,5 +1,5 @@
 {{/* layout: none */}}<!doctype html>
-<html lang="{{or locale "en"}}">
+<html lang="{{or locale "en"}}"{{with .Page.Props.theme}} data-theme="{{.}}"{{end}}>
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
