@@ -145,3 +145,20 @@ Decisive output:
 - Note: the items seeder returns early on non-Postgres dialects so the scaffold's SQLite seeder test keeps passing.
 
 Verdict: works (workaround: app-owned HMAC cursor and hand-written problem body, VF-039; VF-005).
+
+## P0.F.5.2 Migration advisory lock and concurrent index script
+
+Spike branch `agent/senior/P0.F.5.2` (376aeb1). Files: `app/commands/migrate_locked.go` (+ `_test.go`), `bootstrap/commands.go` (registers `migrate:locked`), `scripts/concurrent-index.sh`, `database/concurrent/items_title_trgm.sql`. The runner exposes no lock hook, so the command wraps `Migrator().Up` in a session-level `pg_advisory_lock(hashtext('hexascore:migrate'))` taken on a dedicated connection (`db.SQL().Conn`), released on return (VF-NEW-P0.F.5.2, VF-026). The index is `items_title_trgm` on `items.slug` because the spike `items` table has no title column.
+
+Env: `go test ./app/commands/` needs `TEST_DATABASE_URL` (postgres admin URL, `pgtest.Database`). The CLI run needs `DATABASE_URL`. The script needs `DATABASE_URL` with `psql` on PATH, or `PSQL` (for example `PSQL='docker exec -i hexascore-spike-postgres-1 psql -U app -d spike_lock'`); optional `WATCH_LOCKS=1`.
+
+Decisive output (fresh database `spike_lock`, two `migrate:locked` processes started together while a psql session held the same advisory lock for 6 s, so both visibly waited):
+
+- `select count(*) from pg_locks where locktype='advisory' and not granted` printed `2` while both waited; after release: `exit1=0`, `exit2=0`; one process printed only `Nothing to migrate.`, the other printed the eight `Migrated:` lines (posts, users, auth tables, social accounts, two-factor, items, ratings, billing).
+- `go test ./app/commands/ -v`: `TestMigrationLockSerializesRunners` (second runner does not enter for 500 ms while the first holds the lock, then does) and `TestMigrationLockReleasedOnError` PASS.
+- With 400,000 extra rows in `items`: `WATCH_LOCKS=1 scripts/concurrent-index.sh items_title_trgm` printed `lock samples=5853 AccessExclusiveLock_samples=0 modes_seen={ShareUpdateExclusiveLock}` and `index items_title_trgm indisvalid=t`, exit 0. A server-side sampler (DO block, 20 ms interval) was needed because a `docker exec` per sample missed the build.
+- INVALID leftover: after `update pg_index set indisvalid=false`, a rerun printed `dropping INVALID leftover items_title_trgm` and ended `indisvalid=t`. `go test ./...` `ok`.
+
+Limits: the lock protects only runs through `migrate:locked`; plain `migrate` still races (the pre-deploy step must call the locked command); `migrate:status` does not list the concurrent index; the script was run through `docker exec`, not a local `psql` (not installed here); `shellcheck` was not available.
+
+Verdict: workaround (lock and index script are app code; VF-NEW-P0.F.5.2, VF-026, VF-017).
