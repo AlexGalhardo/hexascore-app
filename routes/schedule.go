@@ -17,6 +17,7 @@ import (
 //	s.Command("reports:send").DailyAt("08:00").WithoutOverlapping()
 //	s.Job(jobs.PruneSessions{}).Hourly()
 func Schedule(s *schedule.Schedule, _ *vukem.App) {
+	s.Command("search:purge").DailyAt("03:30").WithoutOverlapping()
 	s.Job(jobs.RefreshEntityStats{}).Hourly().WithoutOverlapping()
 	s.Job(jobs.SyncSearchSuggest{}).EveryMinute().WithoutOverlapping()
 	s.Job(jobs.DeletionPurge{}).DailyAt("03:00").WithoutOverlapping()
