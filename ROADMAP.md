@@ -433,7 +433,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.B.2 Read models
 
-- [ ] **P1.B.2.1** Build the read-model assembler with audience filtering (`site`/`api`) driven by `CATALOG_API_SOURCES` and per-field provenance.
+- [x] **P1.B.2.1** Build the read-model assembler with audience filtering (`site`/`api`) driven by `CATALOG_API_SOURCES` and per-field provenance.
   - Files/modules: `app/catalog/readmodel.go`, `app/catalog/audience.go`, `app/catalog/audience_test.go`, `config/catalog.go`
   - Refs: SDD 01 §6.1, §6.3, §7.3, §9; ADR 0006; D-03; A-07; open-issues 01-2, 07-7
   - Depends on: P1.B.1.2, P1.B.1.3
