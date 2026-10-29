@@ -36,6 +36,16 @@ func Web(r *router.Router, app *vukem.App) error {
 		Query:    localeQuery,
 		Cookie:   "locale",
 	}))
+
+	db, err := app.DB()
+	if err != nil {
+		return err
+	}
+
+	// catalog_redirects exists only on Postgres (VF-033); SQLite scaffold tests skip it.
+	if db.Dialect().Name() == "postgres" {
+		r.UseServer(appmiddleware.CatalogRedirect(db, app.Log))
+	}
 	// Only the app catalogue namespaces reach the browser, never framework
 	// messages or future server-only keys (SDD 09 §6.1).
 	r.Use(
