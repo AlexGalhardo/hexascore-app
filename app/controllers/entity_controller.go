@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"errors"
+	"net/http"
+	"path"
 	"slices"
 	"strconv"
 
@@ -53,6 +55,14 @@ func (h *Entity) Show(kind, param string) web.HandlerFunc {
 		}
 		if err != nil {
 			return err
+		}
+
+		if code := page.Entity.Code; code != "" && code != c.Param(param) {
+			u := *c.Request().URL
+			u.Path = path.Join(path.Dir(u.Path), code)
+			http.Redirect(c.Writer(), c.Request(), u.String(), http.StatusMovedPermanently)
+
+			return nil
 		}
 
 		if !page.Indexable {

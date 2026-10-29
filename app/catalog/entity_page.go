@@ -58,9 +58,10 @@ type EntityPage struct {
 // ErrItemNotFound when there is no such entity.
 func LoadEntityPage(ctx context.Context, db Querier, kind, key, locale, typ string, offset int) (EntityPage, error) {
 	page := EntityPage{Counts: map[string]int{}, AvgScore: map[string]float64{}}
-	col := "slug"
+	// Codes match case-insensitively so the controller can 301 /countries/br to the canonical /countries/BR.
+	match := "e.slug = $2"
 	if kind == "country" || kind == "language" {
-		col = "code"
+		match = "lower(e.code) = lower($2)"
 	}
 
 	var (
@@ -68,7 +69,7 @@ func LoadEntityPage(ctx context.Context, db Querier, kind, key, locale, typ stri
 		born, died                            sql.NullTime
 		founded                               sql.NullInt64
 	)
-	// col is one of two constants, never input.
+	// match is one of two constants, never input.
 	err := db.QueryRowContext(ctx, `SELECT e.id::text, e.slug, e.code, e.wikidata_qid,
   coalesce(t.name, te.name, e.default_name),
   CASE WHEN t.description IS NOT NULL THEN t.description ELSE te.description END,
@@ -78,7 +79,7 @@ func LoadEntityPage(ctx context.Context, db Querier, kind, key, locale, typ stri
 FROM entities e
 LEFT JOIN entity_translations t ON t.entity_id = e.id AND t.locale = $3
 LEFT JOIN entity_translations te ON te.entity_id = e.id AND te.locale = 'en'
-WHERE e.kind = $1 AND e.`+col+` = $2`, kind, key, locale).Scan(
+WHERE e.kind = $1 AND `+match+``, kind, key, locale).Scan(
 		&page.Entity.ID, &page.Entity.Slug, &code, &qid, &page.Entity.Name,
 		&descText, &descLic, &descURL, &born, &died, &founded)
 	if errors.Is(err, sql.ErrNoRows) {
