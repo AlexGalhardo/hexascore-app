@@ -338,7 +338,7 @@ Review in `docs/incidents/YYYY-MM-DD-<slug>.md` within 5 working days: UTC timel
 
 1. Export conflict: SDD 03 has a sync JSON export (1/h); SDD 14 has a ZIP (7 days). SDD 13 adopts SDD 14. Owner: architect. Closes when SDD 03 points to SDD 14.
 2. CSRF token fallback: SDD 03 says on, SDD 09 §7.8 says off. SDD 13 picks on. Owner: architect. Closes when SDD 09 is edited.
-3. Lint tool: SDD 09 says Biome, SDD 11's `lint` job says ESLint. Owner: architect. Closes when SDD 11 says Biome.
+3. Lint tool: SDD 09 says Biome, SDD 11's `lint` job says ESLint. Owner: architect. **Closed 2026-10-29:** SDD 11 §6.6 says Biome.
 4. The brief asked for consent for personalisation, but D-29 binds legitimate interest + opt-out. Owner: owner. Closes with the D-21 legal review.
 5. LGPD articles and the ANPD incident deadline were not fetched (planalto.gov.br reset the connection). Owner: owner/legal. Closes when they are cited verbatim.
 6. Encarregado (DPO) identity, contact and small-agent exemption. Owner: owner. Closes when the policy names them.
