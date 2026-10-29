@@ -10,13 +10,14 @@ import (
 	vukem "github.com/AlexGalhardo/vukem"
 
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
+	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 )
 
 // ErrCatalogCheckFailed is returned when an error-level data-quality assert
 // has violations, so the process exits non-zero (SDD 01 §7.6).
 var ErrCatalogCheckFailed = errors.New("catalog:check found error-level violations")
 
-// CatalogCheck is `catalog:check [--json]`: runs the DQ-01..DQ-14 asserts,
+// CatalogCheck is `catalog:check [--json]`: runs the DQ-01..DQ-14 and SC-01..SC-03 asserts,
 // prints counts (or the JSON report) and fails on any error-level violation.
 func CatalogCheck() vukem.Command {
 	var asJSON *bool
@@ -30,7 +31,7 @@ func CatalogCheck() vukem.Command {
 			if err != nil {
 				return err
 			}
-			report, err := catalog.RunDQ(ctx, db)
+			report, err := catalog.RunDQ(ctx, db, scoring.DQAsserts()...)
 			if err != nil {
 				return fmt.Errorf("catalog:check: %w", err)
 			}

@@ -246,7 +246,7 @@ func (w *Writer) RestoreFlag(ctx context.Context, actor, userID int64, itemID st
 	})
 }
 
-// finishAction recomputes the item and writes the score_actions audit row.
+// finishAction recomputes the item and writes the score_actions audit row; actor 0 is the system (NULL).
 func finishAction(
 	ctx context.Context, tx *database.Tx, kind string, actor int64, itemID string, userID, burstID int64,
 	before, typ string, now time.Time,
@@ -260,7 +260,7 @@ func finishAction(
 	}
 
 	_, err = tx.ExecContext(ctx, `INSERT INTO score_actions (at, actor, kind, item_id, user_id, burst_id, before, after)
-VALUES ($1, $2, $3, $4, NULLIF($5::bigint, 0), NULLIF($6::bigint, 0), $7::jsonb, $8::jsonb)`,
+VALUES ($1, NULLIF($2::bigint, 0), $3, $4, NULLIF($5::bigint, 0), NULLIF($6::bigint, 0), $7::jsonb, $8::jsonb)`,
 		now, actor, kind, itemID, userID, burstID, before, after)
 
 	return err
