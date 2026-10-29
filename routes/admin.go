@@ -95,5 +95,10 @@ func Admin(r *router.Router, app *vukem.App) error {
 		Name("admin.scoring.flags.restore").
 		Use(moderator...)
 
+	reportH := admin.ReportHandlers{Accounts: acc, Reports: ReportService(app, acc), Authorize: bans.Authorize}
+	r.Post("/admin/reports/{id}/resolve", reportH.Resolve).
+		Name("admin.reports.resolve").
+		Use(moderator...)
+
 	return nil
 }

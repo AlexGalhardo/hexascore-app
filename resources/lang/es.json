@@ -178,6 +178,23 @@
       }
     }
   },
+  "contact": {
+    "metaTitle": "Contacto",
+    "title": "Contáctanos",
+    "body": "Envíanos una pregunta, comentario o reporte de error. Respondemos por correo.",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "subject": "Asunto",
+    "topics": {
+      "question": "Pregunta",
+      "feedback": "Comentario",
+      "bug": "Reporte de error"
+    },
+    "message": "Mensaje",
+    "hint": "Entre 32 y 512 caracteres.",
+    "submit": "Enviar mensaje",
+    "sent": "Gracias, tu mensaje fue enviado."
+  },
   "auth": {
     "fields": {
       "identifier": "Correo o nickname",

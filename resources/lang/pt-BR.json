@@ -178,6 +178,23 @@
       }
     }
   },
+  "contact": {
+    "metaTitle": "Contato",
+    "title": "Fale conosco",
+    "body": "Envie uma dúvida, sugestão ou relato de bug. Respondemos por e-mail.",
+    "name": "Nome",
+    "email": "E-mail",
+    "subject": "Assunto",
+    "topics": {
+      "question": "Dúvida",
+      "feedback": "Sugestão",
+      "bug": "Relato de bug"
+    },
+    "message": "Mensagem",
+    "hint": "Entre 32 e 512 caracteres.",
+    "submit": "Enviar mensagem",
+    "sent": "Obrigado, sua mensagem foi enviada."
+  },
   "auth": {
     "fields": {
       "identifier": "E-mail ou nickname",

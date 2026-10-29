@@ -42,5 +42,7 @@ func All() []schema.Migration {
 		m20261029140009CreateListsTable(),
 		m20261029140010CreateListItemsTable(),
 		m20261029140011CreateUserNotificationsTable(),
+		m20261029140012CreateReportsTable(),
+		m20261029140013CreateContactMessagesTable(),
 	}
 }

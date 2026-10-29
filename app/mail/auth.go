@@ -156,3 +156,16 @@ func (m TwoFactorChanged) Envelope() mail.Envelope {
 
 // Content implements mail.Mailable.
 func (m TwoFactorChanged) Content() mail.Content { return mail.View("mail/two_factor_changed", m) }
+
+// ContactMessage forwards a contact form message to the inbox; replying answers the sender.
+type ContactMessage struct {
+	Inbox, Name, Email, Subject, Message string
+}
+
+// Envelope implements mail.Mailable.
+func (m ContactMessage) Envelope() mail.Envelope {
+	return mail.Envelope{To: []string{m.Inbox}, ReplyTo: []string{m.Email}, Subject: "HexaScore contact: " + m.Subject}
+}
+
+// Content implements mail.Mailable.
+func (m ContactMessage) Content() mail.Content { return mail.View("mail/contact_message", m) }
