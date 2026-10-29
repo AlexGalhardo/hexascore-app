@@ -1,10 +1,12 @@
 package routes
 
 import (
+	"context"
 	"net/http"
 	"time"
 
 	"github.com/AlexGalhardo/vukem"
+	vapi "github.com/AlexGalhardo/vukem/api"
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/middleware"
 	"github.com/AlexGalhardo/vukem/ratelimit"
@@ -13,12 +15,15 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/api"
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
+	"github.com/AlexGalhardo/hexascore-app/app/controllers/publicapi"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/config"
 )
 
 // APIV1 mounts the /api/v1 group with the SDD 05 §6.1 stack: IP limit 120/min, key guard (401/503), ban (403),
-// per-plan throttle (429) and the quota meter (402). Endpoints join the group in P1.H.2.1. The meter flushes
+// per-plan throttle (429) and the quota meter (402). Read endpoints are typed routes (P1.H.2.1). The meter flushes
 // every minute and on shutdown as an app runner, so it lives in the serving process (ADR 0003). The tables
 // exist only on PostgreSQL (VF-033).
 func APIV1(r *router.Router, app *vukem.App) error {
@@ -41,6 +46,25 @@ func APIV1(r *router.Router, app *vukem.App) error {
 	app.AddRunner("api-usage", meter)
 
 	plans := api.PlanResolver(api.FreeForAll)
+
+	key, err := app.DeriveKey("catalog.cursor", 32)
+	if err != nil {
+		return err
+	}
+	codec, err := catalog.NewCursorCodec(key)
+	if err != nil {
+		return err
+	}
+	items := &publicapi.Controller{
+		DB:     acc.DB,
+		Policy: catalog.NewPolicy(catalog.AudienceAPI, config.LoadCatalog(app.Source.Get).APISources),
+		Codec:  codec,
+		Meter:  meter,
+		Plans:  plans,
+		Redirects: func(ctx context.Context, typ, id string) (catalog.Target, bool, error) {
+			return catalog.ResolveID(ctx, acc.DB, catalog.ScopeItem, typ, id)
+		},
+	}
 	throttles := map[string]func(http.Handler) http.Handler{}
 
 	for _, id := range []string{api.PlanFree, api.PlanPro, api.PlanBusiness} {
@@ -84,6 +108,15 @@ func APIV1(r *router.Router, app *vukem.App) error {
 			throttle,
 			api.Quota(meter, plans, acc.ProblemBase),
 		)
+
+		read := func(name string) vapi.Op {
+			return vapi.Op{Name: name, Tags: []string{"catalog"}, Security: []string{"bearer"}, ValidateResponse: true}
+		}
+		vapi.Register(g, "GET /me/usage", read("getUsage"), items.GetUsage)
+		vapi.Register(g, "GET /books/{id}/editions", read("listEditions"), items.ListEditions)
+		vapi.Register(g, "GET /{type}/genres", read("listGenres"), items.ListGenres)
+		vapi.Register(g, "GET /{type}/{id}", read("getItem"), items.GetItem)
+		vapi.Register(g, "GET /{type}", read("listItems"), items.ListItems)
 	})
 
 	return nil
