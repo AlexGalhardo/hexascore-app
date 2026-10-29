@@ -24,3 +24,30 @@ describe("catalogue parity", () => {
 		});
 	}
 });
+
+// JSON.parse keeps the last of two equal keys, so a duplicated block silently drops the first one's keys.
+function duplicateKeys(text: string): string[] {
+	const path: string[] = [];
+	const seen = new Set<string>();
+	const dups: string[] = [];
+	for (const line of text.split("\n")) {
+		const m = /^( *)"([^"]+)":/.exec(line);
+		if (!m) continue;
+		path.length = m[1].length / 2 - 1;
+		const key = [...path, m[2]].join(".");
+		if (seen.has(key)) dups.push(key);
+		seen.add(key);
+		path.push(m[2]);
+	}
+	return dups;
+}
+
+describe("catalogue keys", () => {
+	for (const locale of LOCALES) {
+		test(`${locale} has no duplicate keys`, () => {
+			expect(duplicateKeys(readFileSync(`resources/lang/${locale}.json`, "utf8"))).toEqual(
+				[],
+			);
+		});
+	}
+});
