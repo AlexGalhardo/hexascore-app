@@ -25,10 +25,11 @@ var (
 	cpfPattern   = regexp.MustCompile(`\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b`)
 	// Seven or more digits, optionally separated by spaces, dots, dashes or parentheses.
 	phonePattern = regexp.MustCompile(`\+?\(?\d[\d\s().-]{5,}\d`)
-	// Seven or more digits (any script) split by any non-letter characters:
-	// catches phone and document numbers written with unusual separators
-	// that hs_norm would later collapse (security review, P1.E.3.1).
-	digitRunPattern = regexp.MustCompile(`\p{Nd}(?:[^\p{L}\p{Nd}]*\p{Nd}){6,}`)
+	// Seven or more numerals of any kind (fullwidth, superscript, circled:
+	// NFKC in hs_norm turns them into ASCII digits) split by any non-letter
+	// characters, so no spelling of a phone or document number survives
+	// normalisation (security review, P1.E.3.1).
+	digitRunPattern = regexp.MustCompile(`\p{N}(?:[^\p{L}\p{N}]*\p{N}){6,}`)
 )
 
 // Redact hides personal data a visitor typed into the search box before the

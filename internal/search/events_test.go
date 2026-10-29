@@ -10,6 +10,7 @@ func TestRedact(t *testing.T) {
 	t.Parallel()
 
 	tests := map[string]string{
+		"call ①②③④⑤⑥⑦":                          "call [redacted]",
 		"zelda":                                 "zelda",
 		"mail me ana@example.com please":        "mail me [redacted] please",
 		"123.456.789-09":                        "[redacted]",
@@ -22,6 +23,7 @@ func TestRedact(t *testing.T) {
 		"phone 11_9123_4567":                    "phone [redacted]",
 		"cpf 123/456/789/09":                    "cpf [redacted]",
 		"１１９１２３４５６７":                            "[redacted]",
+		"call ①②③④⑤⑥⑦":                          "call [redacted]",
 		"top 100 games of 2024":                 "top 100 games of 2024",
 	}
 
