@@ -131,8 +131,8 @@ func New(app *vukem.App) (*Accounts, error) {
 	users := auth.NewORMProvider[models.User](db)
 	tokens := auth.NewTokens(db)
 	// A recognizable prefix lets secret scanners catch leaked tokens; make
-	// it specific to this app. Tokens issued before it stay valid.
-	tokens.Prefix = "vk_"
+	// it specific to this app (SDD 03 §6.2).
+	tokens.Prefix = "hx_app_"
 	tokens.Now = app.Now // a fake app clock also drives token expiry
 	tokens.Log = app.Log
 
