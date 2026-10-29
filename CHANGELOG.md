@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- `backup:run --kind daily|monthly`: streamed `pg_dump -Fc -Z 6 --no-owner`, client-side 4 MiB frame encryption with `BACKUP_KEY` (reorder and truncation detected), SHA-256 and multipart upload to `backups/postgres/<kind>/YYYY/MM/DD/` via vukem `drivers/s3` v0.3.1, recorded in the new `backup_runs` table (P2.E.2.1).
 - Privacy-preserving request log (SDD 12 §6.1, FR-12-1, FR-12-8): `app/logging` redacts passwords, tokens, API keys, emails and search text, truncates `ip`/`peer` to /24 or /48, adds `route`, `user_hash` and `duration_ms`, and samples fast successes on `/up`, `/build/*` and `/search/suggest|events` 1 in 100; `scripts/ops/check-logs.sh` checks a log stream (P2.C.1.1).
 - `@redocly/cli` 2.72.1 (dev), `redocly.yaml` (recommended ruleset) and `bun run openapi:lint` in the CI `lint` job; unfixable vukem gaps are scoped overrides, see VF-053 (P1.H.4.1b).
 - `hexascore:predeploy`: drops `INVALID` index leftovers of failed concurrent builds, then runs `migrate` under vukem's runner lock; concurrent indexes are `NoTransaction` migrations (vukem v0.33.0); SDD 11 §7.2, SDD 07 §5 and the migrations runbook updated (P2.E.1.1).
