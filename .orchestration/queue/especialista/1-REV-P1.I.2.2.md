@@ -1,0 +1,2 @@
+Task P1.I.2.2, repo app, branch agent/senior/P1.I.2.2, report .orchestration/reports/P1.I.2.2.md, rodada: 0
+Re-run: docker compose --profile app up -d --build --wait app; bunx playwright test -c qa/e2e/playwright.config.ts qa/e2e/specs/catalog.spec.ts qa/e2e/specs/item.spec.ts qa/e2e/specs/search.spec.ts qa/e2e/specs/ratings.spec.ts qa/e2e/specs/time-to-beat.spec.ts --reporter=line (fresh DB or clear ratings_limited_until first); bun run lint && bun run typecheck && bun run test
