@@ -1,0 +1,92 @@
+name: CI
+
+# Adapted from AlexGalhardo/vukem-marketplace-reactjs. Owner rule (2026-10-29):
+# work merges straight into main and nobody waits for this run, so it reports
+# regressions after the fact; Railway deploys main on its own.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GOLANGCI_LINT_VERSION: v2.15.0
+  GOVULNCHECK_VERSION: v1.9.0
+  MARKDOWNLINT_VERSION: 0.24.0
+
+jobs:
+  go:
+    name: Go (lint, vet, test -race on Postgres, govulncheck)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18.6-alpine3.24
+        env:
+          POSTGRES_USER: hexascore
+          POSTGRES_PASSWORD: hexascore
+          POSTGRES_DB: hexascore
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U hexascore" --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      TEST_DATABASE_URL: postgres://hexascore:hexascore@localhost:5432/postgres?sslmode=disable
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-go@v7.0.0
+        with:
+          go-version-file: go.mod
+      - uses: oven-sh/setup-bun@v2.2.0
+        with:
+          bun-version-file: package.json
+      - uses: golangci/golangci-lint-action@v9.3.0
+        with:
+          version: ${{ env.GOLANGCI_LINT_VERSION }}
+      - run: go vet ./...
+      # bun is on PATH so TestPluralGolden compares Go and TypeScript output.
+      - run: go test -race -count=1 ./...
+      - run: go run golang.org/x/vuln/cmd/govulncheck@${{ env.GOVULNCHECK_VERSION }} ./...
+
+  web:
+    name: Web (tsc, tests, build, SSR build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: oven-sh/setup-bun@v2.2.0
+        with:
+          bun-version-file: package.json
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - run: bun run typecheck
+      - run: bun test packages
+      - run: bun run build
+      - run: bun run build:ssr
+
+  docs:
+    name: Markdown lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: oven-sh/setup-bun@v2.2.0
+        with:
+          bun-version-file: package.json
+      - run: bunx markdownlint-cli2@${{ env.MARKDOWNLINT_VERSION }}
+
+  image:
+    name: Docker image (build and /up smoke test)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - run: docker build -t hexascore:ci .
+      - name: Smoke test
+        run: |
+          docker run -d --name app -p 3000:3000 -e APP_KEY="base64:$(openssl rand -base64 32)" -e APP_URL=http://localhost:3000 hexascore:ci
+          for i in $(seq 1 30); do curl -fsS localhost:3000/up && break; sleep 1; done
+          curl -fsS 'localhost:3000/up?checks=1' | grep -q '"ssr":"ok"'
+      - name: Container logs
+        if: failure()
+        run: docker logs app

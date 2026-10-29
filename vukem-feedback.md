@@ -65,7 +65,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-002: Inertia SSR falls back to client rendering silently by default
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #7, https://github.com/AlexGalhardo/vukem/pull/7), unreleased. Native API: `inertia.SSRConfig{Strict: true}` (503 + `Retry-After`, auto `inertia-ssr` readiness check) or per-request `inertia.RequireSSR(ctx)`.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #7, <https://github.com/AlexGalhardo/vukem/pull/7>), unreleased. Native API: `inertia.SSRConfig{Strict: true}` (503 + `Retry-After`, auto `inertia-ssr` readiness check) or per-request `inertia.RequireSSR(ctx)`.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` "Inertia v3 (BETA)" [heading not on page 2026-10-29] → SSR row: "falls back to client-side rendering on any failure (reported to `OnFailure`, default a warning log)".
 - **Context**: for a catalogue that depends on search indexing (ADR 0004), a silent fallback hides an SEO incident. HexaScore needs per-route policy: public routes must fail readiness or page an alert when SSR fails; logged-in routes may fall back.
 - **Reproduction**: stop the SSR process; request a public page; observe a 200 with client-rendered shell and only a warning log.
@@ -92,7 +92,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-005: No keyset (cursor) pagination helper in the ORM
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #11, https://github.com/AlexGalhardo/vukem/pull/11), unreleased. Native API: `orm.QueryOf[T](db).OrderBy("score", orm.Desc).CursorPaginate(ctx, cursor, n, orm.Desc)` pages by `(score DESC, id DESC)`; cursor values typed per column, unsigned by design (bound parameters, validated columns).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #11, <https://github.com/AlexGalhardo/vukem/pull/11>), unreleased. Native API: `orm.QueryOf[T](db).OrderBy("score", orm.Desc).CursorPaginate(ctx, cursor, n, orm.Desc)` pages by `(score DESC, id DESC)`; cursor values typed per column, unsigned by design (bound parameters, validated columns).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` "Querying"; `https://vukem.dev/docs/rest-apis/pagination` "Query conventions"; `https://vukem.dev/docs/frontend/inertia` Inertia `ScrollCursor(orm.CursorPage, name)`.
 - **Context**: `ScrollCursor` accepts an `orm.CursorPage`, but the documented query builder shows no way to build a keyset page over a composite order (`score DESC, id DESC`) with an opaque signed cursor. HexaScore lists (SDD 01, 05, 07) need this for every listing and for the paid API.
 - **Reproduction**: search `https://vukem.dev/docs/database/overview` for `Cursor`: only the Inertia prop is documented.
@@ -224,7 +224,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-021: No buffered counter primitive and no documented `HourlyAt` schedule helper
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: withdrawn (2026-10-29: https://vukem.dev/docs/digging-deeper/scheduler "Frequencies" now lists `HourlyAt(7)`; verified during P0.F.6.1).
+- **Date**: 2026-10-28. **Severity**: low. **Status**: withdrawn (2026-10-29: <https://vukem.dev/docs/digging-deeper/scheduler> "Frequencies" now lists `HourlyAt(7)`; verified during P0.F.6.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/scheduler` "Cache", "Scheduler" [heading not on page 2026-10-29], "Events".
 - **Context**: trending primitives (SDD 08) and API quota metering (SDD 05) need an in-process counter that aggregates increments and flushes to Postgres once per minute (ADR 0003, no Redis). The scheduler docs show cron expressions; a typed `HourlyAt(minute)` helper used in the SDD sketch is not documented.
 - **Workaround**: app-level `sync.Map` counter with a ticker flush; cron expressions for schedules.
@@ -248,7 +248,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-024: `i18n.Middleware` has no URL-prefix locale source
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #10, https://github.com/AlexGalhardo/vukem/pull/10), unreleased. Native API: `i18n.MiddlewareConfig{PathPrefixes: map[string]string{"pt-br": "pt-BR"}}` + `i18n.SourcePath`; `StripPathPrefix` installed by `DefaultMiddlewareWith`; `i18n.PathPrefix(ctx)`, `i18n.LocalizePath(ctx, path)`.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #10, <https://github.com/AlexGalhardo/vukem/pull/10>), unreleased. Native API: `i18n.MiddlewareConfig{PathPrefixes: map[string]string{"pt-br": "pt-BR"}}` + `i18n.SourcePath`; `StripPathPrefix` installed by `DefaultMiddlewareWith`; `i18n.PathPrefix(ctx)`, `i18n.LocalizePath(ctx, path)`.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/localization`, `https://vukem.dev/docs/frontend/inertia-i18n`.
 - **Context**: HexaScore keeps the legacy URL scheme (`/`, `/pt-br/...`, `/es/...`, brainstorming D-17). The documented locale sources are query, cookie and `Accept-Language`; a path-prefix source with prefix stripping and URL generation that re-adds the prefix is not documented.
 - **Workaround**: app middleware that reads the first path segment, sets the locale in the context and rewrites the path; `route` helpers wrapped to add the prefix.
@@ -272,7 +272,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-027: `serve` and `build` gaps for the SSR sidecar and release metadata
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #9, https://github.com/AlexGalhardo/vukem/pull/9), unreleased. Native API: `bin/app serve -with-ssr` (supervised SSR runner), `vukem build -ssr` and `-ldflags`, `vukem.WithVersion(v)` (`version` in `/up`).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #9, <https://github.com/AlexGalhardo/vukem/pull/9>), unreleased. Native API: `bin/app serve -with-ssr` (supervised SSR runner), `vukem build -ssr` and `-ldflags`, `vukem.WithVersion(v)` (`version` in `/up`).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/cli/reference-runtime`, `https://vukem.dev/docs/frontend/inertia`, `https://vukem.dev/docs/deployment/single-binary`.
 - **Context**: HexaScore runs the Node SSR process inside the same container as the Go app (D-08). The docs show `vukem ssr:start` as a separate command and `vukem build` without the SSR bundle; there is no documented way to have `serve` supervise the SSR process in production, to expose the build version at `/up`, or to pass extra `-ldflags` through `vukem build`.
 - **Workaround**: a `build:ssr` step (`vite build --ssr`) in the pipeline; the app starts and restarts the Node process itself; version injected by a plain `go build -ldflags` step and reported by a custom health field.
@@ -332,7 +332,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 - **Date**: 2026-10-28. **Severity**: low. **Status**: open.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/openapi`, `https://vukem.dev/docs/cli/reference-runtime`, `https://vukem.dev/docs/digging-deeper/billing` ("Routes", `r.UseServer`).
 - **Context**: `api.<host>/v1/*` is served from the `/api/v1` group through an app `r.UseServer` rewrite (VF-015). `openapi.Info.Servers` can list `https://api.<host>/v1`, but the document keeps router paths (`/api/v1/ping`), so the full URL becomes `/v1/api/v1/ping`. `Servers` is a static option (no config key; only the `APP_URL` default), so it needs a process env read in `bootstrap.New`.
-- **Repro**: spike `agent/senior/P0.F.4.1`: `API_URL=http://api.localhost:3001/v1 vukem openapi:export -prefix /api/v1 | jq -r '.servers[0].url, (.paths|keys[])'` gives `http://api.localhost:3001/v1` and `/api/v1/ping`.
+- **Repro**: spike `agent/senior/P0.F.4.1`: `API_URL=<http://api.localhost:3001/v1> vukem openapi:export -prefix /api/v1 | jq -r '.servers[0].url, (.paths|keys[])'` gives `http://api.localhost:3001/v1` and `/api/v1/ping`.
 - **Workaround**: post-process the export: `jq '.paths |= with_entries(.key |= sub("^/api/v1";""))'` gives paths `/ping`, matching the server URL.
 - **Request**: `openapi.Info.StripPrefix` (or `PathPrefix` stripping) and an `OPENAPI_SERVERS` config key. Also note: in Git Bash `-prefix //api/v1` was passed through literally and failed (`path prefix matches no route "//api/v1"`); `MSYS_NO_PATHCONV=1 ... -prefix /api/v1` works.
 
