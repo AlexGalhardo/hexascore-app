@@ -1,37 +1,32 @@
 # Orchestration board
 
-Readable mirror of `.orchestration/` (not versioned). Updated by the orchestrator each cycle.
+Readable mirror of `.orchestration/`. Updated by the orchestrator each cycle.
 
-Updated: 2026-10-29 (phase 1 in progress)
+Updated: 2026-10-29 (phase 1 in progress, app at `v0.5.0`, vukem `v0.32.0`)
 
 ## Workers
 
-| Role | Model | Worktree | Current task |
+| Role | Model | Worktree | Current |
 | --- | --- | --- | --- |
-| estagiario | Haiku 5.5 | `wt/estagiario` | E-011 (relaunched after handoff) |
-| senior | Sonnet 5.5 | `wt/senior`, `wt/spike-senior` | P0.F.4.1, then P0.F.5.1, P0.F.8.1 |
-| especialista | Opus 5.5 | — | not running: launch denied twice by the auto-mode classifier; the orchestrator covers reviews |
-| framework | Opus 5.5 | `wt/framework` (vukem) | VF-002 (PR #7); urgent FW-CI-MONGO queued |
-| orchestrator | Opus 5.5 | `hexascore-vukem` (`dev`) | integration, reviews, Opus microtasks |
+| estagiario | Haiku 5.5 | `wt/estagiario` | idle (suite runs on request) |
+| senior | Sonnet 5.5 | `wt/senior` | P1.F.4.1 follow-ups, then P1.F.2.1, P1.H.3.1, P1.G.2.4, P2.D.5.1; reserve P1.H.2.1b/c |
+| especialista | Opus 5.5 | `wt/especialista` | reviews (P1.E.3.2, P1.G.4.2, P1.H.1.1, P1.H.1.2), then P1.H.2.1a |
+| framework | Opus 5.5 | `wt/framework` (vukem) | stopped: PRs #29 to #34 green but merging is denied to agents (FR-002) |
+| orchestrator | Opus 5.5 | `hexascore-vukem` (`main`) | integration, releases, own Opus tasks |
 
-## Phase 0 microtasks
+## Phase 1 status
 
-| ID | State | Owner |
-| --- | --- | --- |
-| P0.F.1.1 | integrated (works; VF-032, VF-033) | senior |
-| P0.F.1.2 | integrated (works) | orchestrator |
-| P0.F.1.3 | blocked: Q-001 (owner yes for `golang.org/x/crypto`) | — |
-| P0.F.4.1 | in progress | senior |
-| P0.F.5.1, P0.F.8.1 | queued | senior |
-| P0.F.2.1, P0.F.3.1 | ready (Opus) | orchestrator |
-| P0.F.2.2, P0.F.2.3, P0.F.5.2, P0.F.6.1, P0.F.7.x, P0.F.9.1, P0.F.10.1 | waiting on dependencies | — |
-| P0.F.11.1 | waiting: all P0.F | orchestrator |
+| Group | State |
+| --- | --- |
+| P1.A, P1.B, P1.C, P1.D | done (`v0.4.0` closes P1.D) |
+| P1.E Search | done (`v0.5.0`) |
+| P1.F User library | P1.F.2.1 queued, then release `v0.6.0` |
+| P1.G Web parity | P1.G.2.4, P1.G.3.2 left, then `v0.7.0` |
+| P1.H API parity | P1.H.1.x done; P1.H.2.1 split into a/b/c; P1.H.3.1 waits on Q-H31 (Stripe variables on Railway) |
+| P1.I QA gate | waits on P1.H.5.1 |
 
-## Integrated in `dev`
+## Blockers needing the owner
 
-E-004, E-009, E-010 (docs lint and citations), P0.F.1.1, P0.F.1.2.
-
-## Blockers
-
-- vukem CI job "Mongo driver (integration)" fails on every PR (floating `mongo:8` service); blocks PR #6 and framework merges. Task FW-CI-MONGO.
-- Q-001 and FQ-001 in `QUESTIONS.md`.
+- FR-002: agents cannot merge vukem PRs, so no vukem release (`v0.33.0`) and no workaround removal.
+- Q-H31: Stripe test variables on Railway before billing can reach `main` (auto-deploys to production).
+- Phase 2 from P2.A.1.2 on: Railway plan, buckets, DNS, secrets and spend are owner gates.
