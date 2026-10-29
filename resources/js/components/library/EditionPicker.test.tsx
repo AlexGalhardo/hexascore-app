@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, expect, test, vi } from "vitest";
 
@@ -8,7 +8,10 @@ const put = vi.fn();
 vi.mock("../../lib/useT", () => ({ useT: () => (key: string) => key }));
 vi.mock("@inertiajs/react", () => ({ router: { put: (...a: unknown[]) => put(...a) } }));
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+	cleanup();
+	vi.unstubAllGlobals();
+});
 
 const stub = (res: Partial<Response>) => vi.stubGlobal("fetch", vi.fn().mockResolvedValue(res));
 
@@ -39,4 +42,17 @@ test("shows an error when the list fails to load", async () => {
 	render(<EditionPicker itemId="i1" />);
 	await userEvent.setup().click(screen.getByRole("button", { name: "library.chooseEdition" }));
 	expect((await screen.findByRole("alert")).textContent).toBe("library.editionsError");
+});
+
+test("a second click while a page loads does not fetch it twice", async () => {
+	let resolve: (r: Partial<Response>) => void = () => {};
+	const fetchMock = vi.fn(() => new Promise<Partial<Response>>((r) => (resolve = r)));
+	vi.stubGlobal("fetch", fetchMock);
+	render(<EditionPicker itemId="i1" />);
+	const button = screen.getByRole("button", { name: "library.chooseEdition" });
+	fireEvent.click(button);
+	fireEvent.click(button);
+	resolve({ ok: true, json: async () => ({ data: [], next: -1 }) });
+	await screen.findByText("library.noEditions");
+	expect(fetchMock).toHaveBeenCalledTimes(1);
 });
