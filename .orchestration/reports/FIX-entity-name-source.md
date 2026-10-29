@@ -4,3 +4,4 @@ Change: EntityRefIn.NameSource (translation name_source / entities.provenance de
 Tests: fixture allowed relation + IGDB-sourced name + unsourced name -> absent on /api/v1, present in site read model (TestAPILicenceFilter).
 Acceptance: go test -tags integration ./tests -run 'TestAPILicenceFilter|TestAPIItems|TestAPIEntities|TestAPIContract' -> ok; golangci-lint run --build-tags integration ./... -> 0 issues; go test -tags integration ./... -> all ok; bun run test -> 53 passed.
 Risks: new omittedFields token `entities.name` (API consumers); OpenAPI schema is derived from Go types (name now optional).
+REV: APROVADO. PRONTO_PARA_MERGE agent/senior/FIX-entity-name-source (already merged)
