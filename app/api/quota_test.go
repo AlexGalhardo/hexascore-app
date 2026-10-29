@@ -303,3 +303,43 @@ func TestQuotaMonthRollover(t *testing.T) {
 		t.Fatalf("counters %v", st.used)
 	}
 }
+
+// slowStore holds Save until release is closed.
+type slowStore struct {
+	*memStore
+	started, release chan struct{}
+}
+
+func (s slowStore) Save(ctx context.Context, batch []UserDelta) error {
+	close(s.started)
+	<-s.release
+
+	return s.memStore.Save(ctx, batch)
+}
+
+func TestQuotaNoOverAdmissionDuringFlush(t *testing.T) {
+	t.Parallel()
+
+	st := slowStore{memStore: newMemStore(), started: make(chan struct{}), release: make(chan struct{})}
+	m := &Meter{Store: st, Now: (&clock{time.Now()}).now}
+
+	for range 100 {
+		if _, err := m.Admit(t.Context(), 7, "", free(t)); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	done := make(chan error)
+	go func() { done <- m.Flush(t.Context()) }()
+	<-st.started
+
+	if u, _ := m.Admit(t.Context(), 7, "", free(t)); !u.Exhausted {
+		t.Fatalf("request 101 admitted while the flush was in flight: %+v", u)
+	}
+
+	close(st.release)
+
+	if err := <-done; err != nil {
+		t.Fatal(err)
+	}
+}
