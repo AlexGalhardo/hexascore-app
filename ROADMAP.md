@@ -295,7 +295,7 @@ Parity baseline (checked by P1.I.6.1):
 - Routes: `legacy/apps/web/app/[locale]/` (home, `[section]`, `[section]/[slug]`, `search`, `u/[nickname]`, `u/[nickname]/lists/[id]`, `pricing`, `contact`, `policy`, `terms`, `login`, `signup`, `verify-email`, `recover-password`, `reset-password`, `onboarding`, `profile`, `profile/api`, `profile/api/checkout`, `admin` with `contact`, `reports`, `items`, `items/[id]`, `ingestion`, `docs` with `authentication`, `errors`, `pagination`, `rate-limits`, `changelog`, `reference`, `[...rest]`).
 - The 33 Server Actions in `legacy/apps/web/actions/*.ts`: `account.ts` (`updateName`, `setNickname`, `setPassword`, `setProfilePrivate`, `scheduleDeletion`, `cancelDeletion`); `admin.ts` (`setContactHandled`, `setReportStatus`, `setListHidden`, `banUser`, `saveAffiliateLink`, `deleteAffiliateLink`, `mergeItems`); `api-keys.ts` (`createApiKeyAction`, `revokeApiKeyAction`); `billing.ts` (`startStripeCheckout`, `openBillingPortal`, `createPixCharge`, `simulatePixPaymentAction`); `contact.ts` (`sendContactMessage`); `follows.ts` (`toggleFollow`); `item-status.ts` (`saveItemStatus`); `lists.ts` (`createList`, `updateList`, `deleteList`, `addToList`, `removeFromList`, `moveInList`); `ratings.ts` (`saveRating`, `deleteRating`); `reports.ts` (`report`); `time-to-beat.ts` (`saveTimeToBeat`, `deleteTimeToBeat`). `docs/PROGRESS.md` gives the count; the names come from the files.
 - The 16 specs in `legacy/qa/e2e/specs/`: `admin`, `api-keys`, `auth`, `catalog`, `contact`, `docs`, `headers`, `item`, `not-found`, `pricing`, `profile`, `public-pages`, `ratings`, `search`, `social`, `time-to-beat`.
-- Deferred by D-06 (out of Phase 1): `createPixCharge`, `simulatePixPaymentAction`, `toggleFollow`, `/feed`, the follow/feed tests of `social.spec.ts`, passkeys, credit packs, per-locale OpenAPI documents. Critic scores are dropped (D-09). Each microtask below names the legacy actions and routes it replaces.
+- Deferred by D-06 (out of Phase 1): `createPixCharge`, `simulatePixPaymentAction`, `toggleFollow`, `/feed`, the follow/feed tests of `social.spec.ts`, credit packs, per-locale OpenAPI documents. Critic scores are dropped (D-09). Each microtask below names the legacy actions and routes it replaces.
 
 Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. Staging is provisioned by P2.A; until it exists the release microtask tags, publishes the GitHub release and smoke-tests the built image locally, and the staging deploy of that tag is done once P2.A lands. Procedure used by every release microtask (SDD 11 §7.1): `main` green; `git-cliff --config .config/cliff.toml --unreleased --tag vX.Y.Z` preview; `task release -- vX.Y.Z` (writes the changelog section, commits `chore(release): vX.Y.Z`, tags); `git push origin main`; `git push origin vX.Y.Z` (one tag per push); `gh run list --workflow release.yml`; release body not empty. Commit, tag and push only when the owner asks in that session (AGENTS.md).
 
@@ -642,6 +642,29 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test ./tests/... -run 'TestSecurity_A0[147]_'` → pass
     - `gh release view v0.3.0` → non-empty body
   - Notes: the Better Auth importer (`database/legacyimport`, SDD 03 §9) is P2.F.
+
+#### P1.C.7 Passkeys (D-06 amended 2026-10-29, ADR 0017)
+
+- [ ] **P1.C.7.1** Adopt the vukem release with VF-001 and wire passkey registration, sign-in and removal on the server.
+  - Files/modules: `go.mod` (vukem version with VF-001), `database/migrations/*_create_passkeys_table.go` (or the scaffold's), `routes/auth.go`, `app/accounts/passkeys.go`, `app/http/middleware/security_headers.go` (`publickey-credentials-get=(self), publickey-credentials-create=(self)`), `app/jobs/deletion_purge.go`, `tests/passkeys_test.go`
+  - Refs: SDD 03 FR-03-20 to FR-03-24, §5, §7.8; SDD 13 (Permissions-Policy row); ADR 0017; VF-001; <https://vukem.dev/docs/security/two-factor> (passkey section once published)
+  - Depends on: vukem release with VF-001 (owner releases it), P1.C.2.2
+  - Model: Opus
+  - Acceptance:
+    - `go test ./tests -run 'TestSecurity_A07_Passkey|TestSecurity_A01_PasskeyRemoveOnlyOwn'` → PASS: foreign credential refused, replayed or expired challenge refused, counter regression refused, another user's passkey cannot be removed
+    - `go test ./tests -run 'TestPasskeyRegisterLimit|TestPasskeyLoginSkipsTOTP|TestPasskeyChangeAuditedAndMailed'` → PASS: 11th passkey 409 `passkey-limit`, passkey login with TOTP enabled lands signed in, `account_events` rows and one `passkey_changed` mail per change
+    - `curl -sI http://127.0.0.1:3000/ | grep -i permissions-policy` → contains `publickey-credentials-create=(self)`
+  - Notes: no app-local WebAuthn verifier or app-level dependency (ADR 0017); if the vukem API differs from SDD 03 §7.8, amend the SDD first. RP ID `hexascore.app` in production so imported legacy credentials verify. Independent especialista review before merge (auth).
+
+- [ ] **P1.C.7.2** Build the passkey UI: profile section and login button in three locales, plus the `passkey_changed` mail.
+  - Files/modules: `resources/js/pages/Profile/Index.tsx` (section `passkeys`), `resources/js/pages/Auth/Login.tsx`, `resources/js/lib/webauthn.ts`, `lang/{en,pt-BR,es}.json`, `resources/views/mail/passkey_changed.html`
+  - Refs: SDD 03 FR-03-20 to FR-03-24, §6.1, §6.5, §7.8; SDD 09; legacy `app/[locale]/profile/passkeys-section.tsx`, `app/[locale]/login/login-form.tsx`, `messages/*/account.json` `profile.passkeys`, `messages/*/auth.json` (`passkey`, `errors.passkeyFailed`)
+  - Depends on: P1.C.7.1
+  - Model: Sonnet
+  - Acceptance:
+    - `bun run lint && bun run typecheck && bun run test` → pass; Vitest covers a cancelled browser prompt showing the "cancelled or failed" message
+    - `go test ./tests -run TestPasskeyProfileProps` → `Profile/Index` carries the user's passkeys (id, name, createdAt, lastUsedAt) and never public keys or credential ids
+  - Notes: legacy copy reused through the `text-editor` subagent; the remove button keeps the legacy accessible label "Remove passkey {name}".
 
 ### P1.D Scoring
 
@@ -1140,14 +1163,15 @@ The gate runs against the built container (`docker compose --profile app up`, se
 #### P1.I.2 Ported and new specs
 
 - [ ] **P1.I.2.1** Port `auth`, `profile`, `api-keys` and `pricing` specs.
-  - Files/modules: `qa/e2e/specs/{auth,profile,api-keys,pricing}.spec.ts`
-  - Refs: SDD 03 §9; SDD 05 §10 (E2E); SDD 09 §10; legacy `qa/e2e/specs/{auth,profile,api-keys,pricing}.spec.ts`
+  - Files/modules: `qa/e2e/specs/{auth,profile,api-keys,pricing,passkeys}.spec.ts`
+  - Refs: SDD 03 §7.8, §9; SDD 05 §10 (E2E); SDD 09 §10; ADR 0017; legacy `qa/e2e/specs/{auth,profile,api-keys,pricing}.spec.ts`
   - Depends on: P1.I.1.1
   - Model: Sonnet
   - Acceptance:
     - `bunx playwright test qa/e2e/specs/auth.spec.ts qa/e2e/specs/profile.spec.ts` → signup, verify, TOTP login, reset, delete and cancel; axe clean in three locales.
     - `bunx playwright test qa/e2e/specs/api-keys.spec.ts qa/e2e/specs/pricing.spec.ts` → key shown once, checkout redirect (fake Stripe), axe 0 serious
-  - Notes: passkey tests in the legacy specs are dropped (D-06); list each dropped test in `docs/parity-checklist.md` (P1.I.7.1).
+    - `bunx playwright test qa/e2e/specs/passkeys.spec.ts` (after P1.C.7.2) → with a CDP virtual authenticator (`WebAuthn.enable`, `WebAuthn.addVirtualAuthenticator`, ctap2, internal, resident keys, user verification): add a passkey in the profile, sign out, sign in with it, remove it; axe 0 serious
+  - Notes: passkeys are back in scope (D-06 amended 2026-10-29, ADR 0017). The legacy suite has no passkey spec (checked 2026-10-29: no `passkey`/`webauthn` in `legacy/qa/e2e/specs`), so `passkeys.spec.ts` is new, not a port; it lands with or after P1.C.7.2 and does not block the other four specs.
 
 - [ ] **P1.I.2.2** Port `catalog`, `item`, `ratings`, `time-to-beat` and `search` specs.
   - Files/modules: `qa/e2e/specs/{catalog,item,ratings,time-to-beat,search}.spec.ts`
@@ -1861,14 +1885,15 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
   - Notes: stages `users`, `twofactor`, `catalog`, `entities`, `social`, `library`, `billing`, `finalise` (P2.F.2.2–P2.F.4.1). Batches inside transactions, last key recorded per stage. The fixture holds no real data.
 
 - [ ] **P2.F.2.2** Implement the `users` stage with Better Auth credential and Google mapping, and prove legacy scrypt logins on the imported copy.
-  - Files/modules: `database/legacyimport/users.go`, `database/legacyimport/users_test.go`, `docs/migration/passkey-notice.md` (selection query, never addresses)
-  - Refs: SDD 03 §5 (mapping table), §7.2, §7.7, FR-03-18, §9; ADR 0008; D-25, D-37; P1.C.1.2
+  - Files/modules: `database/legacyimport/users.go`, `database/legacyimport/users_test.go`, `database/legacyimport/passkeys.go` (Better Auth `passkey` rows → `passkeys`), `docs/migration/passkey-notice.md` (fallback only: selection query, never addresses)
+  - Refs: SDD 03 §5 (mapping table), §7.2, §7.7, §7.8, FR-03-18, §9; ADR 0008, ADR 0017; D-25, D-37; P1.C.1.2
   - Depends on: P2.F.2.1
   - Model: Opus
   - Acceptance:
     - `go test -tags=integration ./database/legacyimport -run TestUsersStage` → PASS: email lowercased, `email_verified` → `email_verified_at`, `role` containing `admin` → `admin`, expired bans dropped, credential hash copied verbatim, Google → `social_accounts(provider='google', provider_id=account_id)`, no credential → random argon2id with `password_set_at` NULL, deletion grace preserved
     - `go test ./app/accounts -run TestSecurity_A07_LegacyScryptVerifiesAndRehashes` → PASS; on staging a fixture account imported with a Better Auth 1.7.7 hash logs in and its stored hash then starts `$argon2id$`
-  - Notes: `session`, `verification`, `rate_limit` and `passkey` are not imported. Passkey-only users are counted and mailed the `passkeys_retired` reset notice 14 days before the window (P2.G.1.2). OAuth tokens dropped. Never log hashes.
+    - `go test -tags=integration ./database/legacyimport -run TestPasskeysStage` → PASS: a Better Auth `passkey` fixture row (credential id, public key, counter, transports, AAGUID, backup flags, name, created_at) imports into `passkeys` and a signed assertion from the fixture authenticator verifies after import
+  - Notes: `session`, `verification` and `rate_limit` are not imported. Legacy `passkey` rows are imported (ADR 0017, depends on P1.C.7.1); the Better Auth storage encoding (base64 vs base64url, COSE key layout) is [NOT VERIFIED] until proven on a Neon copy. Only if it proves incompatible: passkey-only users are counted and mailed the `passkeys_retired` reset notice 14 days before the window (P2.G.1.2). OAuth tokens dropped. Never log hashes or key material.
 
 - [ ] **P2.F.2.3** Export the 2FA secrets with a Bun script using Better Auth's own helpers and import them over stdin.
   - Files/modules: `scripts/legacy/twofactor-export.ts` (run from a temp copy of `legacy/apps/web` with its `node_modules`), `database/legacyimport/twofactor.go`, `database/legacyimport/twofactor_test.go`
@@ -2002,7 +2027,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
   - Model: Opus
   - Acceptance:
     - `bunx markdownlint-cli2 docs/runbooks/cutover*.md` → 0 errors; every window step has a command, an expected output, a time budget and an abort action
-    - the Google Cloud console lists the new callback URI beside the legacy one (SDD 03 §7.7); passkey-only users mailed ≥ 14 days before the window
+    - the Google Cloud console lists the new callback URI beside the legacy one (SDD 03 §7.7); passkey-only users mailed ≥ 14 days before the window only if the passkey import fell back (ADR 0017)
   - Notes: HUMAN GATE (external consoles, user mail): the owner adds the Google callback and approves the notice. The legacy banner (T-24 h) needs a change to the legacy deployment while branch `legacy` is immutable; the mechanism is [NOT VERIFIED] and the owner decides (for example a setting the legacy app already reads, or a status-page notice only).
 
 #### P2.G.2 Rehearsal and go/no-go
