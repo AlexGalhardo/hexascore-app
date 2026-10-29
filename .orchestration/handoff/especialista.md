@@ -1,15 +1,9 @@
-# Handoff especialista (2026-10-29, session 6)
-STATUS: IDLE (queue + reserve empty). Worktree C:\dev\hexascore-app\wt\especialista on agent/especialista/P1.G.3.2d-fix, clean.
+# Handoff especialista (2026-10-29, session 7)
+STATUS: IDLE (queue + reserve empty). Worktree C:\dev\hexascore-app\wt\especialista on agent/especialista/P1.I.1.1-fix, clean.
 Done this session:
-- REV-FIX-entity-name-source -> APROVADO (merged).
-- REV-P1.G.2.4 -> CORRIGIDO_E_APROVADO, agent/especialista/P1.G.2.4-fix (item page linked countries/languages by slug; route matches code -> 404).
-- REV-P1.G.3.2c -> APROVADO (merged); follow-up 2-P1.G.3.2d created, then reviewed below.
-- REV-FIX-highlight-score-scale -> CORRIGIDO_E_APROVADO, agent/especialista/FIX-highlight-score-scale-fix (score.outOf label "out of 100" -> "out of 10").
-- REV-P1.H.4.1 -> APROVADO (merged).
-- REV-P2.D.5.1 -> CORRIGIDO_E_APROVADO, agent/especialista/P2.D.5.1-fix (sdks/ts/bun.lock in osv + dependabot); created queue/senior/2-P2.D.5.2 (js-yaml 4.2.0 high advisories via @hey-api 0.99.0; deps job red until fixed).
-- REV-P1.G.3.2d -> CORRIGIDO_E_APROVADO, agent/especialista/P1.G.3.2d-fix (double-click duplicate page guard).
+- REV-FIX-sdk-jsyaml (redirect part) -> CORRIGIDO_E_APROVADO, agent/especialista/FIX-sdk-jsyaml-fix (untrack committed playwright-report/index.html + qa/e2e/test-results/.last-run.json).
+- REV-P1.I.1.1 -> CORRIGIDO_E_APROVADO, agent/especialista/P1.I.1.1-fix (qa/e2e in biome/lint/tsconfig + process shim; seed `|| true` removed; same artifact untrack).
 Pitfalls (new):
-- G.2.4-fix and score-scale-fix both add CHANGELOG [Unreleased] ### Fixed: trivial conflict.
-- Creating/editing any .env is denied by a deny rule -> `vukem serve` curl acceptance not feasible; running downloaded binaries (osv-scanner) denied by auto mode.
-- `git show ref:.github/...` on Git Bash needs MSYS_NO_PATHCONV=1.
-- EditionPicker.test.tsx needs explicit RTL cleanup (no vitest globals).
+- Integration tests: TEST_DATABASE_URL=postgres://hexascore:hexascore@localhost:5433/postgres?sslmode=disable.
+- e2e: export APP_KEY=base64:$(openssl rand -base64 32) in shell (no .env allowed); compose container names are shared across worktrees, other workers' `compose up` restarts hexascore-app-1 -> retry e2e once.
+- Both -fix branches delete the same artifacts: clean merge. CHANGELOG [Unreleased] ### Fixed touched again (trivial conflict risk).
