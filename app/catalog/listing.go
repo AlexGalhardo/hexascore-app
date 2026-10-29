@@ -70,18 +70,19 @@ func ParseSort(sort string) (field string, desc bool, err error) {
 
 // ListParams are the listing inputs; scores are stars (0-10).
 type ListParams struct {
-	Type        string             // game|movie|series|book ("" only with EntityID)
-	EntityID    string             // items related to this entity id (API entity items)
-	Role        string             // item_entities role, with EntityID
-	Genre       string             // genre entity slug
-	Platform    string             // platform entity slug
-	Year        int                // 0 = any
-	MinScore    *float64           // stars
-	MaxScore    *float64           // stars
-	MinCategory map[string]float64 // category key -> min stars
-	Sort        string             // "[-]popularity|score|release_date|rating_count"
-	Limit       int
-	Cursor      string
+	Type            string             // game|movie|series|book ("" only with EntityID)
+	EntityID        string             // items related to this entity id (API entity items)
+	Role            string             // item_entities role, with EntityID
+	RelationSources []string           // non-nil: relation filters match only item_entities rows from these sources (API)
+	Genre           string             // genre entity slug
+	Platform        string             // platform entity slug
+	Year            int                // 0 = any
+	MinScore        *float64           // stars
+	MaxScore        *float64           // stars
+	MinCategory     map[string]float64 // category key -> min stars
+	Sort            string             // "[-]popularity|score|release_date|rating_count"
+	Limit           int
+	Cursor          string
 }
 
 // ListedItem is one listing row; summaries join translations elsewhere.
@@ -126,10 +127,16 @@ func (p ListParams) filters() (*queryBuilder, error) {
 	if p.Type != "" {
 		b.add("i.type = ?", p.Type)
 	}
+	var srcCond string
+	var srcArgs []any
+	if p.RelationSources != nil {
+		srcCond, srcArgs = " AND ie.source = ANY(?::text[])", []any{"{" + strings.Join(p.RelationSources, ",") + "}"}
+	}
 	if p.EntityID != "" {
-		cond, args := "EXISTS (SELECT 1 FROM item_entities ie WHERE ie.item_id = i.id AND ie.entity_id = ?::uuid", []any{
-			p.EntityID,
-		}
+		cond, args := "EXISTS (SELECT 1 FROM item_entities ie WHERE ie.item_id = i.id AND ie.entity_id = ?::uuid"+srcCond,
+			append(
+				[]any{p.EntityID},
+				srcArgs...)
 		if p.Role != "" {
 			cond, args = cond+" AND ie.role = ?", append(args, p.Role)
 		}
@@ -138,7 +145,7 @@ func (p ListParams) filters() (*queryBuilder, error) {
 	b.add("i.visibility = 'public'") // FR-01-14
 	entity := func(kind, slug string) {
 		b.add(`EXISTS (SELECT 1 FROM item_entities ie JOIN entities e ON e.id = ie.entity_id
-WHERE ie.item_id = i.id AND ie.role = ? AND e.kind = ? AND e.slug = ?)`, kind, kind, slug)
+WHERE ie.item_id = i.id AND ie.role = ? AND e.kind = ? AND e.slug = ?`+srcCond+")", append([]any{kind, kind, slug}, srcArgs...)...)
 	}
 	if p.Genre != "" {
 		entity("genre", p.Genre)
