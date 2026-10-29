@@ -38,6 +38,7 @@ type EntityLink struct {
 	ID        string  `json:"id"`
 	Kind      string  `json:"kind"`
 	Slug      string  `json:"slug"`
+	Code      *string `json:"code,omitempty"` // keys the country and language routes instead of the slug
 	Name      string  `json:"name"`
 	Character *string `json:"character,omitempty"`
 }
@@ -193,7 +194,7 @@ func scoreFields(
 }
 
 func loadEntities(ctx context.Context, db Querier, itemID, locale string) (map[string][]EntityLink, error) {
-	rows, err := db.QueryContext(ctx, `SELECT ie.role, e.id::text, e.kind, e.slug,
+	rows, err := db.QueryContext(ctx, `SELECT ie.role, e.id::text, e.kind, e.slug, e.code,
   coalesce(t.name, te.name, e.default_name), ie.character_name
 FROM item_entities ie
 JOIN entities e ON e.id = ie.entity_id
@@ -213,7 +214,7 @@ ORDER BY ie.role, ie.position, e.slug`, itemID, locale)
 			e    EntityLink
 			char sql.NullString
 		)
-		if err := rows.Scan(&role, &e.ID, &e.Kind, &e.Slug, &e.Name, &char); err != nil {
+		if err := rows.Scan(&role, &e.ID, &e.Kind, &e.Slug, &e.Code, &e.Name, &char); err != nil {
 			return nil, fmt.Errorf("scan entity: %w", err)
 		}
 		if char.Valid {

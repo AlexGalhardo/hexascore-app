@@ -106,6 +106,10 @@ func TestInertiaPages_Entity_Show(t *testing.T) {
 
 	client.Inertia("").Get("/countries/BR").AssertOK().AssertInertia("Entity/Show").
 		PropEquals("entity.code", "BR")
+	// The item page links countries and languages by code, the key their entity route matches.
+	item("movie", "public", 10, 0, nil, country, "country")
+	client.Inertia("").Get("/movies/movie-10-"+country[:4]).AssertOK().AssertInertia("Catalog/Show").
+		PropEquals("entities.country.0.code", "BR")
 	client.Inertia("").Get("/people/missing").AssertStatus(404)
 	client.Inertia("").Get("/genres/ridley-scott").AssertStatus(404)
 }

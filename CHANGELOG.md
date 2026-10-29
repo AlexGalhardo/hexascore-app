@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Item page links countries and languages by code (`/countries/BR`), the key their entity route matches; they linked by slug and returned 404 (P1.G.2.4 review).
+
 ## [0.7.0] - 2026-10-29
 
 ### Added
