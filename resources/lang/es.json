@@ -351,8 +351,7 @@
       "notConfigured": "Los pagos en línea aún no están disponibles. Los planes de pago abrirán pronto.",
       "coverageTitle": "Cobertura de datos",
       "coverageBody": "La API solo devuelve campos que podemos republicar, así que algunos son irregulares y otros siempre se omiten (portadas, tráilers). Los porcentajes de cobertura aún no se han publicado.",
-      "coverageLink": "Ver los detalles de la cobertura",
-      "ctaManage": "Gestionar plan"
+      "coverageLink": "Ver los detalles de la cobertura"
     },
     "checkout": {
       "metaTitle": "Plan y facturación",

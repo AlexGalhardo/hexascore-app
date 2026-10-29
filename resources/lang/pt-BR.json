@@ -351,8 +351,7 @@
       "notConfigured": "Pagamentos online ainda não estão disponíveis. Os planos pagos abrem em breve.",
       "coverageTitle": "Cobertura de dados",
       "coverageBody": "A API só retorna campos que podemos republicar, então alguns são irregulares e outros sempre ficam de fora (capas, trailers). As porcentagens de cobertura ainda não foram publicadas.",
-      "coverageLink": "Ver os detalhes da cobertura",
-      "ctaManage": "Gerenciar plano"
+      "coverageLink": "Ver os detalhes da cobertura"
     },
     "checkout": {
       "metaTitle": "Plano e cobrança",
