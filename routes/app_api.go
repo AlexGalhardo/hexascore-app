@@ -51,6 +51,11 @@ func AppAPI(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
+	pow, err := newChallenger(app, acc.ProblemBase)
+	if err != nil {
+		return err
+	}
+
 	h := appapi.NewTokens(acc, googleVerifiers(app.Source.Get), limiters("app.2fa", 5, 15*time.Minute))
 	issueLimit := ratelimit.Middleware(limiters("app.tokens", 10, time.Minute), ratelimit.ByIP)
 	// Per identifier across IPs: someone holding a password cannot rotate
@@ -69,8 +74,8 @@ func AppAPI(r *router.Router, app *vukem.App) error {
 	r.Group("/app/v1", func(g *router.Group) {
 		g.Use(middleware.JSONOnly())
 
-		g.Post("/tokens", h.Create).Name("tokens.create").Use(issueLimit, accountLimit)
-		g.Post("/tokens/google", h.Google).Name("tokens.google").Use(issueLimit)
+		g.Post("/tokens", h.Create).Name("tokens.create").Use(issueLimit, accountLimit, pow.Require("token"))
+		g.Post("/tokens/google", h.Google).Name("tokens.google").Use(issueLimit, pow.Require("token"))
 		g.Post("/tokens/rotate", h.Rotate).Name("tokens.rotate").Use(bearer...)
 		g.Get("/tokens", h.List).Name("tokens.index").Use(append(bearer, auth.Ability(acc.API, "catalog:read"))...)
 		g.Delete("/tokens/current", h.RevokeCurrent).Name("tokens.revoke_current").Use(bearer...)

@@ -10,6 +10,7 @@ func All() []func(r *router.Router, app *vukem.App) error {
 	return []func(r *router.Router, app *vukem.App) error{
 		Web,
 		Auth,
+		Challenge,
 		Social,
 		TwoFactor,
 		Profile,
