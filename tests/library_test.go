@@ -196,16 +196,16 @@ func TestPublicProfilePrivacy(t *testing.T) {
 	anon := r.app.Client(t).Inertia("")
 	anon.Get("/u/secretone").AssertOK().AssertHeader("X-Robots-Tag", "noindex").AssertInertia("User/Profile").
 		PropEquals("profile.nickname", "SecretOne").PropEquals("profile.isPrivate", true).
-		PropEquals("seo.indexable", false).MissingProp("stats").MissingProp("ratings").MissingProp("lists")
+		PropEquals("indexable", false).MissingProp("stats").MissingProp("ratings").MissingProp("lists")
 
 	anon.Get("/u/openone").AssertOK().AssertHeaderMissing("X-Robots-Tag").AssertInertia("User/Profile").
-		PropEquals("seo.indexable", true).HasProp("stats.statusByType.game.want")
+		PropEquals("indexable", true).HasProp("stats.statusByType.game.want")
 
 	anon.Get("/u/nobody").AssertNotFound()
 
 	r.exec(`UPDATE users SET banned_at = now() WHERE id = $1`, pub.ID)
 	anon.Get("/u/openone").AssertOK().AssertHeader("X-Robots-Tag", "noindex").AssertInertia("User/Profile").
-		PropEquals("seo.indexable", false).HasProp("stats")
+		PropEquals("indexable", false).HasProp("stats")
 	r.exec(`UPDATE users SET banned_at = NULL WHERE id = $1`, pub.ID)
 
 	var body struct {
