@@ -73,3 +73,15 @@ func (a *Accounts) sendTwoFactorChanged(ctx context.Context, userID int64, event
 		Strings: a.mailStrings(ctx, u, "two_factor_"+event, noticeFields),
 	}, userID, "two_factor_"+event)
 }
+
+// SendExportReady queues the mail with the signed export link, in the user's saved locale (SDD 14 §7.4).
+func (a *Accounts) SendExportReady(ctx context.Context, userID int64, link, expires string) error {
+	u, err := orm.QueryOf[models.User](a.DB).Where("id", userID).First(ctx)
+	if err != nil {
+		return err
+	}
+
+	return a.Mailer.SendLater(ctx, mail.ExportReady{
+		User: u, Link: link, Strings: a.mailStrings(ctx, u, "export_ready", noticeFields, "expires", expires),
+	})
+}
