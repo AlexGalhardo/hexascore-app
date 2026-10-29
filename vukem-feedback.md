@@ -62,6 +62,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-051 | 2026-10-29 | medium | in_progress (framework), PR #36 green, merge pending (owner) |
 | VF-052 | 2026-10-29 | high | open |
 | VF-053 | 2026-10-29 | low | open |
+| VF-054 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -523,3 +524,12 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Repro**: `bun run openapi:lint` with the three rules enabled.
 - **Workaround**: `redocly.yaml` disables `info-license` (both documents) and the other three rules for `app@v1` only.
 - **Request**: `openapi.Info.License` (name, identifier/url); let plain routes declare `Security` (or a document-level default) and a 4XX response via `.Doc(...)`; emit `Problem`/`ValidationError` components only when referenced.
+
+## VF-054: `NoTransaction` + `IF NOT EXISTS` silently accepts an `INVALID` index after a failed concurrent build
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.33.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` "Migrations outside a transaction" `[NOT IN VUKEM DOCS]`: what happens when a `CREATE INDEX CONCURRENTLY` migration fails half-way.
+- **Context**: PostgreSQL leaves an `INVALID` index when `CREATE INDEX CONCURRENTLY` fails (unique violation, timeout, cancel). The migration is not recorded, and the documented retry (`IF NOT EXISTS`) then skips the existing invalid index and records the migration, so the index is never usable and nothing reports it.
+- **Repro**: a `NoTransaction` migration `CREATE UNIQUE INDEX CONCURRENTLY IF NOT EXISTS t_k_uq ON t (k)` over duplicate rows fails; remove the duplicates; `migrate` reports the migration as ran while `pg_index.indisvalid` stays false (`tests/predeploy_test.go` `TestIndexConcurrently_DropsInvalid` shows the drop that avoids it).
+- **Workaround**: `hexascore:predeploy` (`app/console/predeploy.go`) drops `INVALID` indexes of the current schema that no backend is building before `migrate`.
+- **Request**: document the leftover in "Migrations outside a transaction", and either drop an `INVALID` index named by a failing `NoTransaction` migration or fail `migrate` when a `NoTransaction` migration finishes with an `INVALID` index on PostgreSQL.
