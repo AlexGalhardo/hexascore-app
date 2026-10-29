@@ -19,6 +19,7 @@
   },
   "include": [
     "resources/js/**/*",
+    "qa/e2e/**/*",
     "vitest.config.ts"
   ]
 }
