@@ -78,7 +78,7 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 				"minScore": params.MinScore, "sort": params.Sort,
 			},
 			"facets": inertia.Optional(func(ctx context.Context) (any, error) {
-				genres, platforms, err := catalog.Facets(ctx, db, typ)
+				genres, platforms, err := catalog.Facets(ctx, db, typ, nil)
 
 				return map[string]any{"genres": genres, "platforms": platforms}, err
 			}),
