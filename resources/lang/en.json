@@ -513,7 +513,8 @@
     "menu": "Menu",
     "skip": "Skip to content",
     "dismiss": "Dismiss",
-    "home": "Home"
+    "home": "Home",
+    "notifications": "Notifications"
   },
   "home": {
     "title": "Every game, movie, series and book — scored by people, category by category.",
@@ -1229,5 +1230,20 @@
   "rating": {
     "valuetext": "{value} of 10 stars",
     "unset": "Not rated"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "You have no notifications.",
+    "markAllRead": "Mark all as read",
+    "markRead": "Mark as read",
+    "kind": {
+      "suggestion_decided": "Your suggestion was reviewed.",
+      "suggestion_reverted": "A change you suggested was reverted.",
+      "suggestion_expired": "Your suggestion expired.",
+      "report_resolved": "Your report was reviewed. Thank you.",
+      "rating_flagged": "One of your ratings was flagged for review.",
+      "list_hidden": "One of your lists was hidden by a moderator.",
+      "system": "Notice from the team."
+    }
   }
 }
