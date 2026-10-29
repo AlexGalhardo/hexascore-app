@@ -355,3 +355,60 @@ func TestAdminEditsBanReason(t *testing.T) {
 		t.Fatalf("edit not applied cleanly: %+v", got)
 	}
 }
+
+// The panel form's "banned" checkbox bans and unbans in the save's transaction
+// (VF-046): same sessions, account event and dispatch as the ban routes.
+func TestAdminFormBansAndUnbans(t *testing.T) {
+	t.Parallel()
+
+	fake := events.NewFake()
+	app := newAdminApp(t, fake)
+	admin := makeUser(t, app, adminEmail, "admin", true)
+	target := makeUser(t, app, "target@example.com", "user", true)
+	id := itoa(target.ID)
+	c := browserFor(t, app, admin)
+
+	// Reason and expiry without a ban are refused and not stored.
+	c.PostForm("/admin/users/"+id, url.Values{"banReason": {"spam"}})
+
+	if reload(t, app, target.ID).BanReason != nil {
+		t.Fatal("ban reason stored on a user who is not banned")
+	}
+
+	c.PostForm("/admin/users/"+id, url.Values{"banned": {"false", "true"}, "banReason": {"spam"}})
+
+	got := reload(t, app, target.ID)
+	if !got.BannedAt.Valid || got.BanReason == nil || *got.BanReason != "spam" {
+		t.Fatalf("ban not stored: %+v", got)
+	}
+
+	if n := len(events.Dispatched[accounts.UserBanned](fake)); n != 1 {
+		t.Fatalf("user.banned dispatched %d times, want 1", n)
+	}
+
+	assertEvent(t, app, target.ID, "banned", admin.ID)
+
+	// An edit that omits the checkbox keeps the ban.
+	c.PostForm("/admin/users/"+id, url.Values{"banReason": {"second"}})
+
+	if got := reload(t, app, target.ID); !got.BannedAt.Valid || *got.BanReason != "second" {
+		t.Fatalf("reason edit changed the ban: %+v", got)
+	}
+
+	c.PostForm("/admin/users/"+id, url.Values{"banned": {"false"}})
+
+	if got := reload(t, app, target.ID); got.BannedAt.Valid || got.BanReason != nil {
+		t.Fatalf("unban not stored: %+v", got)
+	}
+
+	if n := len(events.Dispatched[accounts.UserUnbanned](fake)); n != 1 {
+		t.Fatalf("user.unbanned dispatched %d times, want 1", n)
+	}
+
+	// Banning yourself or another admin rolls the whole save back.
+	c.PostForm("/admin/users/"+itoa(admin.ID), url.Values{"banned": {"false", "true"}, "banReason": {"x"}})
+
+	if got := reload(t, app, admin.ID); got.BannedAt.Valid || got.BanReason != nil {
+		t.Fatalf("admin banned themselves: %+v", got)
+	}
+}

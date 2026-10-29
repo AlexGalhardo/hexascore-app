@@ -101,7 +101,9 @@ func mapBanErr(err error) error {
 	switch {
 	case errors.Is(err, accounts.ErrBanSelf), errors.Is(err, accounts.ErrBanAdmin):
 		return errs.New(http.StatusForbidden, err.Error())
-	case errors.Is(err, accounts.ErrReasonTooLong):
+	case errors.Is(err, accounts.ErrAlreadyBanned), errors.Is(err, accounts.ErrNotBanned):
+		return errs.New(http.StatusConflict, err.Error())
+	case errors.Is(err, accounts.ErrReasonTooLong), errors.Is(err, accounts.ErrExpiryPast):
 		return errs.New(http.StatusUnprocessableEntity, err.Error())
 	}
 
