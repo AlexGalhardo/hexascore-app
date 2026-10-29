@@ -17,5 +17,6 @@ func Commands() []vukem.Command {
 		console.UserReset2FA(),
 		console.SearchPurge(),
 		console.BackupRun(),
+		console.ImportLegacy(),
 	}
 }
