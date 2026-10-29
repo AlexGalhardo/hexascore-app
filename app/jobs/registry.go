@@ -12,7 +12,11 @@ import (
 func All(app *vukem.App) []queue.Registration {
 	return []queue.Registration{
 		handleRefreshEntityStats(app),
-		handleMerged(),
+		handleMerged(app),
+		handleRecomputeScores(app),
+		handleRecomputeItemScore(app),
+		handleReleaseBursts(app),
+		handlePruneRatingEvents(app),
 		handleSyncSearchSuggest(app),
 		handleDeletionPurge(app),
 	}

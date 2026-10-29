@@ -158,10 +158,11 @@ AND b.relation = a.relation WHERE a.relation = 'based_on' AND a.from_item_id < a
 	}
 }
 
-// RunDQ executes every assert and reports counts and a sample of violating ids.
-func RunDQ(ctx context.Context, db DQQuerier) (DQReport, error) {
+// RunDQ executes the catalogue asserts, plus any extra ones (the scoring asserts), and reports counts and a
+// sample of violating ids.
+func RunDQ(ctx context.Context, db DQQuerier, extra ...DQAssert) (DQReport, error) {
 	report := DQReport{Checks: []DQResult{}}
-	for _, a := range DQAsserts() {
+	for _, a := range append(DQAsserts(), extra...) {
 		q := `WITH v(id) AS (` + a.Query + `) SELECT (SELECT count(*) FROM v),
 coalesce((SELECT string_agg(id, ',') FROM (SELECT id FROM v ORDER BY id LIMIT ` +
 			strconv.Itoa(dqSampleSize) + `) s), '')`

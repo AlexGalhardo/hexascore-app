@@ -9,19 +9,23 @@ import (
 
 // refreshEntityStatsSQL recounts public items per entity and item type in one
 // statement: upsert the fresh rows, delete the ones whose entity no longer has
-// a public item of that type. avg_score and scored_count stay 0/null until
-// SDD 02 scores exist (P1.D.3.2).
+// a public item of that type. scored_count and avg_score cover items with a visible score (N >= 5, SDD 02 §7.1);
 //
 // shortcut: one statement over the whole table instead of the 10k-entity
 // batches of SDD 01 §7.4, upgrade when the catalogue passes ~1M item_entities rows.
 const refreshEntityStatsSQL = `WITH fresh AS (
-  SELECT ie.entity_id, i.type, count(DISTINCT ie.item_id)::int AS item_count
-  FROM item_entities ie JOIN items i ON i.id = ie.item_id
-  WHERE i.visibility = 'public'
-  GROUP BY ie.entity_id, i.type
+  SELECT d.entity_id, d.type, count(*)::int AS item_count,
+    count(*) FILTER (WHERE d.rating_count >= 5 AND d.score IS NOT NULL)::int AS scored_count,
+    avg(d.score) FILTER (WHERE d.rating_count >= 5)::real AS avg_score
+  FROM (
+    SELECT DISTINCT ie.entity_id, i.id, i.type, i.rating_count, i.score
+    FROM item_entities ie JOIN items i ON i.id = ie.item_id
+    WHERE i.visibility = 'public'
+  ) d
+  GROUP BY d.entity_id, d.type
 ), upserted AS (
   INSERT INTO entity_stats (entity_id, type, item_count, scored_count, avg_score, refreshed_at)
-  SELECT entity_id, type, item_count, 0, NULL, now() FROM fresh
+  SELECT entity_id, type, item_count, scored_count, avg_score, now() FROM fresh
   ON CONFLICT (entity_id, type) DO UPDATE
   SET item_count = EXCLUDED.item_count, scored_count = EXCLUDED.scored_count,
       avg_score = EXCLUDED.avg_score, refreshed_at = EXCLUDED.refreshed_at

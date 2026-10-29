@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **scoring:** `RecomputeScores` (daily 04:00, rebuilds `score_priors` first), `ReleaseBursts` (hourly, auto-resolves bursts unreviewed for 14 days), `PruneRatingEvents` (daily 04:30, 180-day retention), queued `RecomputeItemScore`, ban/unban listeners (batches of 500 item ids), post-merge recompute, scoring DQ asserts SC-01..SC-03 in `catalog:check`; `entity_stats` now carries real `avg_score`/`scored_count`; `SCHEDULE_TIMEZONE=America/Sao_Paulo` in `.env.example` (set it on Railway too).
 - **ui:** App shell: skip link, navigation with locale and theme switchers, footer, flash toasts, SEO head (canonical, hreflang, robots, Open Graph, JSON-LD), Base UI `Dialog` (`@base-ui/react` 1.9.0) and `CoverThumb`; unmatched pages render the `Error` page with `noindex`.
 - **search:** `/search`, `/search/suggest` and `POST /search/events` with a 120 s/300 s result cache, ETag/304 on JSON, the legacy `/api/search/suggest` 308 redirect, `search_events` (redacted queries) and the daily `search:purge` (30 days).
 

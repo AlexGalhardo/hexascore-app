@@ -21,4 +21,7 @@ func Schedule(s *schedule.Schedule, _ *vukem.App) {
 	s.Job(jobs.RefreshEntityStats{}).Hourly().WithoutOverlapping()
 	s.Job(jobs.SyncSearchSuggest{}).EveryMinute().WithoutOverlapping()
 	s.Job(jobs.DeletionPurge{}).DailyAt("03:00").WithoutOverlapping()
+	s.Job(jobs.RecomputeScores{}).DailyAt("04:00").WithoutOverlapping()
+	s.Job(jobs.ReleaseBursts{}).Hourly().WithoutOverlapping()
+	s.Job(jobs.PruneRatingEvents{}).DailyAt("04:30").WithoutOverlapping()
 }
