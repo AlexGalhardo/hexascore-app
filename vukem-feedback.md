@@ -67,6 +67,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-056 | 2026-10-29 | medium | open |
 | VF-057 | 2026-10-29 | medium | open |
 | VF-058 | 2026-10-29 | low | open |
+| VF-NEW-P2.F.2.3 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -588,3 +589,12 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Repro**: mount the panel with `MaxSessionAge`, register `r.Post("/admin/x", h)` beside it, call it from an IP outside `AllowCIDRs`: it runs.
 - **Workaround**: router-wide app middleware `AdminGuard` (`app/http/middleware/admin_guard.go`) with its own session clock keys.
 - **Request**: document the options on the site; add `IdleTimeout`; expose the guard as a middleware (`panel.Guard()`) so apps can put it on their own admin routes.
+
+## VF-NEW-P2.F.2.3: `auth/totp` cannot hash recovery codes that it did not generate
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.33.0. **Docs consulted**: `https://vukem.dev/docs/security/two-factor` `[NOT IN VUKEM DOCS]`: the stored recovery code format is not documented; the package godoc exports only `RecoveryCodes(n)` (generate and hash) and `UseRecoveryCode(code, hashes)`.
+- **Context**: importing users from another auth system (here Better Auth backup codes, SDD 03 §7.6) needs to store their existing unused codes so they keep working. `totp.hashCode` (`sha256("totp-recovery:" + upper(trim(code)))`, hex) is unexported.
+- **Repro**: try to build the `[]string` of hashes for a known list of codes with the public API: impossible without copying the private format.
+- **Workaround**: `database/legacyimport/twofactor.go` `recoveryHashes` copies the format; `TestTwoFactorUsersPassChallenge` signs in with an imported code through `UseRecoveryCode`, so a format change fails the test.
+- **Request**: export `totp.HashRecoveryCode(code string) string` (or `RecoveryHashes(codes []string) []string`) and document the stored format on the two-factor page.

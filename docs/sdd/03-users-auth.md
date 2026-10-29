@@ -243,6 +243,8 @@ Schedule: set `deletion_scheduled_at`, bump `session_version`, delete sessions a
 
 Better Auth encrypts the TOTP secret and backup codes with `BETTER_AUTH_SECRET` [NOT VERIFIED: format]. A one-off Bun script in `legacy/` decrypts with Better Auth's own helpers and pipes NDJSON `{userId, secret, backupCodes[]}` into the Go importer's stdin (never on disk). The importer seals the secret (`orm.Encrypted`), SHA-256-hashes unused codes, sets `two_factor_confirmed_at` for verified rows; lockout counters are dropped.
 
+Implementation (P2.F.2.3, verified against the `better-auth` 1.7.7 source): the plugin keys TOTP with the UTF-8 bytes of a 32-character secret and shows it base32 encoded in the `otpauth` URI, so the importer stores `base32(secret)` (vukem `totp` format); `symmetricDecrypt` is called with the plain `BETTER_AUTH_SECRET` string (no `secrets` rotation array in the legacy config); backup codes default to `storeBackupCodes: "encrypted"`, a JSON array of the unused codes, hashed the way vukem `totp.UseRecoveryCode` checks them (workaround for VF-NEW-P2.F.2.3); a row with `verified = false` is imported pending (no `two_factor_confirmed_at`). The export is sorted by user id (`COLLATE "C"`), so a resumed import skips lines up to its checkpoint. `scripts/legacy/twofactor-export.ts` holds the run instructions.
+
 ### 7.7 Cutover
 
 In the read-only window (D-21) sessions are not copied, so everyone signs in again; Google links survive via `(provider, provider_id)`; the Google client gets the new callback URI before DNS switches.
