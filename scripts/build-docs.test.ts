@@ -10,11 +10,12 @@ const docsDir = join(dirname(fileURLToPath(import.meta.url)), "..", "resources",
 describe("renderMarkdown", () => {
 	it("escapes raw HTML and refuses unsafe link targets", () => {
 		const { body } = renderMarkdown(
-			"# T\n\n<script>alert(1)</script> [x](javascript:alert(1)) [ok](/docs/errors#a) `<b>`",
+			"# T\n\n<script>alert(1)</script> [x](javascript:alert(1)) [ok](/docs/errors#a) `<b>` [r](/\\evil.example) [p](//evil.example)",
 		);
 		expect(body).not.toContain("<script>");
 		expect(body).toContain("&lt;script&gt;");
 		expect(body).not.toContain('href="javascript:');
+		expect(body).not.toContain('evil.example"');
 		expect(body).toContain('<a href="/docs/errors#a">ok</a>');
 		expect(body).toContain("<code>&lt;b&gt;</code>");
 	});
