@@ -3,6 +3,7 @@ import { Link, usePage } from "@inertiajs/react";
 import { LOCALE_PREFIXES, localized, unlocalized } from "../lib/route";
 import { useT } from "../lib/useT";
 import type { SharedProps } from "../types";
+import SuggestBox from "./search/SuggestBox";
 
 const LOCALE_LABELS: Record<string, string> = { en: "EN", "pt-BR": "PT", es: "ES" };
 const SECTIONS = [
@@ -53,6 +54,7 @@ export default function Nav() {
 					))}
 				</nav>
 				<div className="ml-auto flex flex-wrap items-center gap-1">
+					<SuggestBox />
 					<ul aria-label={t("nav.language")} className="flex items-center">
 						{Object.keys(LOCALE_PREFIXES).map((code) => (
 							<li key={code}>
