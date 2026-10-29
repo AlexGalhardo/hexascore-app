@@ -1,5 +1,5 @@
-# senior handoff (2026-10-29, tenth session)
-Delivered: P1.D.4.2 (agent/senior/P1.D.4.2, report + 1-REV queued). Earlier: P1.D.2.2, P1.F.1.1, P1.F.1.2 awaiting/merged.
-Queue: 2-P1.G.2.2 (depends on G.2.1, which senior-b holds in active/senior-b), 3-P1.C.2.2 (returned to queue unstarted; large: Profile/Index page, controllers app/controllers/profile, routes/profile.go, details/password/privacy/sessions-revoke endpoints, A07 google-only-2FA test; accounts has no ChangePassword yet, see app/accounts/users.go updatePassword + revokeAccess), 3-P1.C.5.2, 3-P1.E.3.2, 3-P1.F.2.1.
-Worktree wt/senior is on branch agent/senior/P1.C.2.2 (no commits, == origin/main); next: git fetch && git switch -c agent/senior/<ID> origin/main.
-Pitfalls: bash heredocs with many quotes fail (use Write tool); python on Windows needs encoding utf-8; biome-ignore for noArrayIndexKey must sit directly above the key prop; vitest needs explicit cleanup (no globals); i18n prefixes are whitelisted in routes/web.go inertia.I18n (added "rating.").
+# senior handoff (2026-10-29, eleventh session)
+Delivered: P1.G.2.3 (agent/senior/P1.G.2.3 pushed, report + 1-REV queued). senior-b holds P1.C.2.2 (do not take).
+Queue left: 2-P1.G.2.2, 2-P1.G.3.1, 2-P1.F.3.1, 2-P1.F.3.2 (will replace stub POST /items/{id}/report in controllers/item_controller.go), 3-P1.H.1.1 (load golang-security), 3-P1.C.5.2, 3-P1.E.3.2, 3-P1.F.2.1.
+Worktree wt/senior on agent/senior/P1.G.2.3; next: git fetch && git switch -c agent/senior/<ID> origin/main.
+Pitfalls: bash heredocs with many quotes fail (use Write tool); biome check --write fixes formatting; vukemtest page has MissingProp (not HasNoProp); editions need an identifier (openlibrary_id) in tests; lint needs golangci-lint fmt (golines).

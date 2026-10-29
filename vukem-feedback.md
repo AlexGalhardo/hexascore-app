@@ -45,11 +45,11 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-034 | 2026-10-28 | low | open |
 | VF-035 | 2026-10-29 | medium | merged in main (PR #25), unreleased |
 | VF-036 | 2026-10-29 | low | open |
-| VF-037 | 2026-10-29 | medium | in_progress (framework) |
+| VF-037 | 2026-10-29 | medium | merged in main (PR #26), unreleased |
 | VF-038 | 2026-10-29 | medium | merged in main (PR #17), unreleased |
 | VF-039 | 2026-10-29 | low | open |
 | VF-040 | 2026-10-29 | medium | merged in main (PR #13), unreleased |
-| VF-041 | 2026-10-29 | low | open |
+| VF-041 | 2026-10-29 | low | in_progress (framework) |
 | VF-042 | 2026-10-29 | low | open |
 | VF-043 | 2026-10-29 | low | open |
 | VF-044 | 2026-10-29 | low | open |
@@ -374,7 +374,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-037: `install:billing` has no per-currency prices and its plan names are fixed in code
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: in_progress (framework).
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: merged in main (PR #26, <https://github.com/AlexGalhardo/vukem/pull/26>), unreleased. Native: `vukem install:billing -plans pro,business` writes `plans()`, the `STRIPE_PRICE_<PLAN>` lines and tests for those names; `STRIPE_CURRENCIES=brl,usd,eur` lets the checkout form post an optional `currency` (passed to the Checkout Session, so one price per plan with `currency_options` serves all; unlisted currency is 422 before Stripe); `currency_options` pattern documented on the billing page. Live sandbox acceptance still [NOT VERIFIED].
 - **vukem version**: v0.32.0 (`contrib/stripe` v0.4.1). **Docs consulted**: `https://vukem.dev/docs/cli/reference-install` ("`vukem install:billing`"), `https://vukem.dev/docs/digging-deeper/billing` ("Configuration", "Testing").
 - **Context**: the scaffold writes plans `basic` and `pro` in `config/billing.go` (`plans()`), one `STRIPE_PRICE_<NAME>` id per plan and a `Checkout(ctx, user, plan)` without a currency. HexaScore sells `pro` and `business` in BRL, USD and EUR (SDD 05 §6.3, ADR 0015) using one Stripe price per plan with `currency_options`.
 - **Workaround** (spike `agent/senior/P0.F.8.1`): rename the plans in `plans()` and in the tests; add `Plan.Amounts` (display only) and a `config.Currency` allowlist; pass `"currency"` in the `stripe.Params` of `CreateCheckoutSession` (`Params` is a free-form map, so no dependency change); the controller reads the `currency` form field and an unsupported value returns 422 before any Stripe call. Whether Stripe accepts `currency` with a `currency_options` price in a live sandbox is [NOT VERIFIED] here (only the fake-Stripe tests ran; test keys only).
@@ -408,7 +408,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-041: Custom view functions are not request-bound; the page URL is the stripped URL under a path-prefix rewrite
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` (root view), `https://vukem.dev/docs/frontend/inertia-i18n`. The two behaviours below were confirmed in the v0.32.0 source (`view/funcs.go`, `inertia/inertia.go`), not found in the docs: `[NOT IN VUKEM DOCS]`.
 - **Context**: refines VF-024 and VF-028 after proving them under SSR. (1) `WithViewFuncs` functions take no `context.Context`, so a view function cannot read a cookie (VF-028 workaround as written is impossible). (2) Inertia builds `Page.URL` from `r.URL.RequestURI()`, so a path-prefix middleware that strips `/pt-br` before routing (VF-024 workaround) makes every page object report `/` and breaks client history.
 - **Workaround** (spike `agent/senior/P0.F.2.3`): the theme cookie is validated and shared as an Inertia prop `theme`, read by the root view as `.Page.Props.theme`; a route-level `RestoreURL` middleware puts the original prefixed URL back on the request after routing, before the Inertia middleware.

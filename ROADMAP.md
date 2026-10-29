@@ -553,7 +553,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test ./tests -run TestOnboardingNickname` → taken nickname → 422 `nickname-taken`; unverified user → redirect to `/verify-email`
   - Notes: `/two-factor-challenge` and `/user/two-factor*` keep the scaffold paths (SDD 03 §6.1). Google buttons use `/auth/google/redirect`.
 
-- [ ] **P1.C.2.2** Build the `/profile` sections (details, password, 2FA, sessions, privacy) replacing `updateName`, `setPassword` and `setProfilePrivate`.
+- [x] **P1.C.2.2** Build the `/profile` sections (details, password, 2FA, sessions, privacy) replacing `updateName`, `setPassword` and `setProfilePrivate`.
   - Files/modules: `resources/js/pages/Profile/Index.tsx`, `app/http/controllers/profile/*.go`, `routes/profile.go`, `tests/profile_test.go`
   - Refs: SDD 03 §6.1, §9; D-25; legacy `app/[locale]/profile/page.tsx`, `actions/account.ts`
   - Depends on: P1.C.2.1
