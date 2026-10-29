@@ -4,18 +4,25 @@ package bootstrap
 
 import (
 	"cmp"
+	"context"
 	"os"
+	"strconv"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/drivers/postgres"
 	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/openapi"
 	"github.com/AlexGalhardo/vukem/router"
+	"github.com/AlexGalhardo/vukem/schedule"
+	"github.com/AlexGalhardo/vukem/storage"
 
 	"github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/i18nhash"
 	"github.com/AlexGalhardo/hexascore-app/app/jobs"
+	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/listeners"
+	"github.com/AlexGalhardo/hexascore-app/app/scheduler"
 	"github.com/AlexGalhardo/hexascore-app/app/ssr"
 	"github.com/AlexGalhardo/hexascore-app/config"
 	"github.com/AlexGalhardo/hexascore-app/database/migrations"
@@ -23,6 +30,10 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/resources"
 	"github.com/AlexGalhardo/hexascore-app/routes"
 )
+
+// ReadyCheckTimeout bounds each /up?checks=1 check (SDD 12 §7.1), so the
+// probe answers within Railway's healthcheck window even with a hung dependency.
+const ReadyCheckTimeout = 2 * time.Second
 
 // New builds the application; cmd/app and the tests call it.
 func New(opts ...vukem.Option) (*vukem.App, error) {
@@ -47,6 +58,8 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 		return built.Vite.Version() + "." + langHash
 	}
 
+	heartbeat := scheduler.NewHeartbeat(time.Now)
+
 	base := []vukem.Option{
 		vukem.WithProviders(Providers()...),
 		vukem.WithDatabaseDrivers(postgres.Driver()),
@@ -54,7 +67,10 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 		vukem.WithSeeders(seeders.All()...),
 		vukem.WithListeners(listeners.All()...),
 		vukem.WithJobsFunc(jobs.All),
-		vukem.WithSchedule(routes.Schedule),
+		vukem.WithSchedule(func(s *schedule.Schedule, app *vukem.App) {
+			routes.Schedule(s, app)
+			s.Func("heartbeat", heartbeat.Beat).EveryMinute()
+		}),
 		vukem.WithViews(resources.Views()),
 		vukem.WithVite(resources.Public()),
 		vukem.WithTranslations(resources.Lang()),
@@ -72,7 +88,9 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 	}
 
 	base = append(base, vukem.WithRoutes(func(r *router.Router, app *vukem.App) error {
-		app.AddHealthCheck("ssr", app.Inertia.SSRHealthy)
+		if err := addReadyChecks(app, heartbeat); err != nil {
+			return err
+		}
 		edge, err := middleware.APIEdge(config.APIHost(app.Source.Get),
 			cmp.Or(app.Source.Get("APP_PROBLEM_BASE_URL"), "https://hexascore.app/problems/"))
 		if err != nil {
@@ -96,4 +114,39 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 	app.AddCommand(Commands()...)
 
 	return app, nil
+}
+
+// addReadyChecks registers the four readiness checks of SDD 12 §7.1, each
+// bounded by ReadyCheckTimeout. db replaces the framework's 3 s default.
+func addReadyChecks(app *vukem.App, heartbeat *scheduler.Heartbeat) error {
+	db, err := app.DB()
+	if err != nil {
+		return err
+	}
+
+	app.AddHealthCheckTimeout("db", ReadyCheckTimeout, db.Ping)
+	app.AddHealthCheckTimeout("ssr", ReadyCheckTimeout, app.Inertia.SSRHealthy)
+
+	// shortcut: probes the local exports disk until the bucket lands (P2.A.2.1), then check that disk instead.
+	disk, err := storage.NewLocal(library.ExportsDir(app.Source.Get), "")
+	if err != nil {
+		return err
+	}
+
+	app.OnShutdown(func(context.Context) error { return disk.Close() })
+	app.AddHealthCheckTimeout("storage", ReadyCheckTimeout, func(ctx context.Context) error {
+		return storage.Check(ctx, disk)
+	})
+
+	// The heartbeat is in memory: a serve that does not run the schedule would always fail it.
+	inServe, err := strconv.ParseBool(cmp.Or(app.Source.Get("SCHEDULE_IN_SERVE"), "true"))
+	if err != nil {
+		return err
+	}
+
+	if inServe {
+		app.AddHealthCheckTimeout("scheduler", ReadyCheckTimeout, heartbeat.Check)
+	}
+
+	return nil
 }

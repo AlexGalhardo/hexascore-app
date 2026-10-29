@@ -1316,7 +1316,7 @@ Phase-specific conventions:
     - `scripts/infra/check-image.sh hx` → compressed size ≤ 400 MB, `pg_dump --version` 18.x and `cwebp -version` run as `app`, `/app/storage` and `/tmp` the only writable paths
   - Notes: the starter uses `oven/bun:1.4.3-alpine` for the assets stage with `--pm bun`; SDD 11 §6.3 specifies `node:24.22.0-alpine3.24` plus a pinned Bun binary. Pick one, record it in §6.3, keep `bun install --frozen-lockfile`. `build:ssr` is a permanent step (VF-027, 09-7). `postgresql18-client` and `libwebp-tools` availability on Alpine 3.24 is [NOT VERIFIED]: if a pinned apk version is missing, record the alternative in §6.3 instead of unpinning. Extra `-X` flags go through plain `go build`, not `vukem build` ([NOT IN VUKEM DOCS]).
 
-- [ ] **P2.A.3.2** Harden `serve` for production: signal forwarding to the SSR child, shutdown budget, memory limits and the four readiness checks.
+- [x] **P2.A.3.2** Harden `serve` for production: signal forwarding to the SSR child, shutdown budget, memory limits and the four readiness checks.
   - Files/modules: `app/ssr/supervisor.go`, `bootstrap/app.go` (health checks), `app/scheduler/heartbeat.go`, `tests/ready_test.go`, `.env.example` (`SHUTDOWN_TIMEOUT=30s`, `GOMEMLIMIT=900MiB`, `NODE_OPTIONS=--max-old-space-size=384`, `QUEUE_NAMES=default,ingest`, `QUEUE_CONCURRENCY=3`, `SCHEDULE_IN_SERVE=true`)
   - Refs: SDD 11 §6.3 (Process, Health, Shutdown), §6.4; SDD 12 FR-12-5, §7.1; VF-002, VF-018, VF-027; <https://vukem.dev/docs/deployment/single-binary> "Health checks"; <https://vukem.dev/docs/cli/reference-runtime> "`vukem ssr:start` and `vukem ssr:check`"
   - Depends on: P2.A.3.1, P2.A.2.1
