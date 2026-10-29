@@ -48,5 +48,6 @@ func All() []schema.Migration {
 		m20261029150002CreateAPIQuotaTables(),
 		m20261029150500CreateDataExportsTable(),
 		m20261029160000CreateUserItemEditionsTable(),
+		m20261029170000AddBillingTables(),
 	}
 }

@@ -149,7 +149,7 @@ func TestQuotaFreeKeyStopsAt100(t *testing.T) {
 	t.Parallel()
 
 	m := &Meter{Store: newMemStore(), Now: (&clock{time.Now()}).now}
-	h := metered(m, FreeForAll, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+	h := metered(m, freeForAll, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	}))
 
@@ -185,7 +185,7 @@ func TestQuotaRefundsBadRequestsAndServerErrors(t *testing.T) {
 	status := http.StatusOK
 	h := metered(
 		m,
-		FreeForAll,
+		freeForAll,
 		http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) { w.WriteHeader(status) }),
 	)
 
@@ -273,7 +273,7 @@ func TestQuotaFlushFailureKeepsDeltas(t *testing.T) {
 		t.Fatalf("stale meter: err = %v", err)
 	}
 
-	h := metered(m, FreeForAll, http.HandlerFunc(func(http.ResponseWriter, *http.Request) {}))
+	h := metered(m, freeForAll, http.HandlerFunc(func(http.ResponseWriter, *http.Request) {}))
 	if rec := get(h); rec.Code != http.StatusServiceUnavailable || rec.Header().Get("Retry-After") != "30" {
 		t.Fatalf(
 			"stale meter answered %d (Retry-After %q), want 503 with Retry-After: 30",
@@ -346,4 +346,9 @@ func TestQuotaNoOverAdmissionDuringFlush(t *testing.T) {
 	if err := <-done; err != nil {
 		t.Fatal(err)
 	}
+}
+
+func freeForAll(context.Context, int64) (Plan, error) {
+	p, _ := PlanByID(PlanFree)
+	return p, nil
 }

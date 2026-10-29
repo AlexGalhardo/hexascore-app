@@ -23,6 +23,7 @@ import (
 	"github.com/AlexGalhardo/vukem/session"
 	"github.com/AlexGalhardo/vukem/signed"
 
+	"github.com/AlexGalhardo/hexascore-app/app/billing"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
 
@@ -145,8 +146,13 @@ func New(app *vukem.App) (*Accounts, error) {
 	web.IdentifierField = "identifier"
 	web.InsecureCookies = !app.Config.IsProduction() && !strings.HasPrefix(app.Config.URL, "https://")
 
+	canceller, err := billing.NewCanceller(app, db)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Accounts{
-		Subscriptions: noSubscriptions{},
+		Subscriptions: canceller,
 		DB:            db, Mailer: mailer, Users: users, Web: web, Tokens: tokens, Hasher: hasher,
 		API: auth.NewTokenGuard("api", users, tokens),
 		// Links signed before an APP_KEY rotation verify until the old key leaves APP_PREVIOUS_KEYS.
