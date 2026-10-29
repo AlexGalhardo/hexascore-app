@@ -6,14 +6,15 @@ import (
 	vadmin "github.com/AlexGalhardo/vukem/admin"
 	"github.com/AlexGalhardo/vukem/authz"
 
+	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
 
 // Resources lists the panel's resources; vukem make:admin-resource appends
 // here. The scoring tables exist only on PostgreSQL (VF-033), so the SQLite
 // scaffold tests get the users resource alone.
-func Resources(postgres bool) []vadmin.AnyResource {
-	out := []vadmin.AnyResource{UsersResource()}
+func Resources(acc *accounts.Accounts, postgres bool) []vadmin.AnyResource {
+	out := []vadmin.AnyResource{UsersResource(acc)}
 	if postgres {
 		out = append(out, ScoreBurstsResource(), RatingFlagsResource(), ScoreActionsResource(),
 			ScoreFormulaVersionsResource(),
