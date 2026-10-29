@@ -3,6 +3,8 @@ package routes
 import (
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/schedule"
+
+	"github.com/AlexGalhardo/hexascore-app/app/jobs"
 )
 
 // Schedule declares the scheduled tasks. "vukem serve" runs them in process;
@@ -14,4 +16,6 @@ import (
 //
 //	s.Command("reports:send").DailyAt("08:00").WithoutOverlapping()
 //	s.Job(jobs.PruneSessions{}).Hourly()
-func Schedule(_ *schedule.Schedule, _ *vukem.App) {}
+func Schedule(s *schedule.Schedule, _ *vukem.App) {
+	s.Job(jobs.RefreshEntityStats{}).Hourly().WithoutOverlapping()
+}
