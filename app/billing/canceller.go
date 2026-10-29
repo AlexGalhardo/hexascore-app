@@ -32,13 +32,16 @@ func NewCanceller(app *vukem.App, db *database.DB) (*Canceller, error) {
 	return &Canceller{DB: db, Stripe: c}, nil
 }
 
-// CancelLive cancels every Stripe subscription of the user that can still
-// bill (active or past_due). A Stripe failure is returned so the deletion
+// CancelLive cancels every Stripe subscription of the user that Stripe may
+// still bill (any status but canceled or incomplete_expired). A Stripe failure is returned so the deletion
 // stays scheduled and retries; a subscription Stripe no longer knows counts as
 // cancelled.
 func (c *Canceller) CancelLive(ctx context.Context, userID int64) error {
 	subs, err := orm.QueryOf[models.Subscription](c.DB).Where("user_id", userID).
-		Where("provider", "stripe").WhereIn("state", []any{StateActive, StatePastDue}).Get(ctx)
+		Where("provider", "stripe").
+		// Filter on Stripe's status, not the local state: a row retired by a newer subscription
+		// (state canceled) can still bill in Stripe.
+		Where("status", "!=", "canceled").Where("status", "!=", "incomplete_expired").Get(ctx)
 	if err != nil || len(subs) == 0 {
 		return err
 	}
