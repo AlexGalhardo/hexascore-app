@@ -34,7 +34,7 @@ type GenreListJSON struct {
 }
 
 // ListGenres is listGenres for one type: GET /api/v1/{games,movies,series,books}/genres. Genre slugs are HexaScore
-// identifiers; names stay out because their source is not tracked per relation. The type is part of the path
+// identifiers; names stay out because default_name carries no source here. The type is part of the path
 // literal because "/{type}/genres" overlaps "/entities/{id}" in the ServeMux.
 func (h *Controller) ListGenres(section string) func(*web.Ctx, struct{}) (GenreListJSON, error) {
 	return func(c *web.Ctx, _ struct{}) (GenreListJSON, error) { return h.genres(c, typeOf[section]) }
@@ -45,7 +45,7 @@ func (h *Controller) genres(c *web.Ctx, typ string) (GenreListJSON, error) {
 		return GenreListJSON{}, err
 	}
 
-	genres, _, err := catalog.Facets(c.Context(), h.DB, typ)
+	genres, _, err := catalog.Facets(c.Context(), h.DB, typ, h.Policy.RelationSources())
 	if err != nil {
 		return GenreListJSON{}, err
 	}

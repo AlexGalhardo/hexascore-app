@@ -44,3 +44,14 @@ func (p Policy) AllowsContent(source string) bool {
 	}
 	return p.Allows(source)
 }
+
+// RelationSources is the item_entities sources a relation filter may match: nil (all) for the site, the
+// allowlist for the API, so filtering or counting by a relation never reveals a restricted-source row
+// (SDD 01 §6.1 "entity relations").
+func (p Policy) RelationSources() []string {
+	if p.audience == AudienceSite {
+		return nil
+	}
+
+	return append([]string{}, p.allowed...)
+}

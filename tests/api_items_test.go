@@ -129,7 +129,8 @@ func TestAPIContract(t *testing.T) {
 		AssertJSONPath("data.0.isbn13", "9780441013593").
 		AssertJSONPath("data.0.title", "Dune").
 		AssertJSONPath("data.0.meta.omittedFields", []string{"format", "pageCount", "publicationYear", "publisher", "subtitle"})
-	r.client.GetJSON("/api/v1/games/genres").AssertOK().AssertJSONPath("data.0.slug", "metroidvania")
+	// The only genre relation is IGDB-sourced, so the API counts none (SDD 01 §6.1 "entity relations").
+	r.client.GetJSON("/api/v1/games/genres").AssertOK().AssertJSONPath("data", []string{})
 }
 
 func TestAPIItems(t *testing.T) {

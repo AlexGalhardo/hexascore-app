@@ -47,8 +47,9 @@ VALUES ($1, 'person', 'ari-gibson', 'Ari Gibson', '1980-01-02', 1999, '{"tmdb":"
 			AssertJSONPath("meta.omittedFields", []string{"bornOn", "description", "externalIds"})
 
 		r.client.GetJSON("/api/v1/entities/" + person).AssertOK().AssertMatchesOpenAPI()
+		// default_name without a provenance source is hidden (fail closed, ADR 0006).
 		r.client.GetJSON("/api/v1/organizations/"+studio).AssertOK().AssertMatchesOpenAPI().
-			AssertJSONPath("name", "Team Cherry")
+			AssertJSONPath("meta.omittedFields", []string{"name"})
 		for _, path := range []string{
 			"/api/v1/organizations/" + person, "/api/v1/people/" + studio, "/api/v1/franchises/" + studio,
 			"/api/v1/platforms/" + genre, "/api/v1/people/not-a-uuid", "/api/v1/entities/" + uuid.NewV7().String(),
@@ -73,6 +74,9 @@ VALUES ($1, 'person', 'ari-gibson', 'Ari Gibson', '1980-01-02', 1999, '{"tmdb":"
 			AssertJSONPath("data.0.id", r.game)
 		r.client.GetJSON(base+"?type=movies").AssertOK().AssertJSONPath("data", []string{})
 		r.client.GetJSON(base+"?role=director").AssertOK().AssertJSONPath("data", []string{})
+		// The game-genre relation is IGDB-sourced: filtering by it must not reveal it (SDD 01 §6.1).
+		r.client.GetJSON("/api/v1/entities/"+genre+"/items").AssertOK().AssertJSONPath("data", []string{})
+		r.client.GetJSON("/api/v1/games?genre=metroidvania").AssertOK().AssertJSONPath("data", []string{})
 		for _, q := range []string{"?type=films", "?role=bogus", "?bogus=1", "?limit=11"} {
 			r.client.GetJSON(base + q).AssertStatus(http.StatusBadRequest)
 		}
