@@ -102,6 +102,9 @@ func (h *TwoFactorHandlers) Confirm(c *web.Ctx) error {
 		web.SecurityEvent(c.Request(), "session.refresh_failed", "user_id", u.AuthID(), "err", err.Error())
 	}
 
+	// Privilege change: a new session id against fixation (SDD 13 §7.5).
+	c.Session().Regenerate()
+
 	return c.Redirect("/user/two-factor")
 }
 
