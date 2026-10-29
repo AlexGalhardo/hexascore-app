@@ -365,7 +365,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test ./app/http/middleware/... -run TestLocalePrefix` → PASS (`/pt-br`, `/es`, no prefix = `en`, unknown prefix = 404)
   - Notes: `en` has no prefix; a request without a locale cookie is never redirected.
 
-- [ ] **P1.A.4.2** Wire SSR supervision, the `ssr` health check, the fallback counter and the `build:ssr` step into the real app and its Dockerfile.
+- [x] **P1.A.4.2** Wire SSR supervision, the `ssr` health check, the fallback counter and the `build:ssr` step into the real app and its Dockerfile.
   - Files/modules: `app/ssr/supervisor.go`, `app/ssr/supervisor_test.go`, `bootstrap/app.go` (`SSRConfig` with `Except`), `Dockerfile`, `package.json` `build:ssr`
   - Refs: SDD 09 §6.1, §9; SDD 11 §6.3; ADR 0004; VF-002, VF-027
   - Depends on: P1.A.1.1
