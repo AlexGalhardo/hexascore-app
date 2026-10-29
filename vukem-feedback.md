@@ -9,61 +9,62 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 | id | date | severity | status |
 | --- | --- | --- | --- |
-| VF-001 | 2026-10-28 | high | wontfix (post-1.0, FQ-001) |
-| VF-002 | 2026-10-28 | medium | merged in main (PR #7), unreleased |
-| VF-003 | 2026-10-28 | medium | merged in main (PR #21), unreleased |
+| VF-001 | 2026-10-28 | high | in_progress (framework) |
+| VF-002 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#7](https://github.com/AlexGalhardo/vukem/pull/7)) |
+| VF-003 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#21](https://github.com/AlexGalhardo/vukem/pull/21)) |
 | VF-004 | 2026-10-28 | low | open |
-| VF-005 | 2026-10-28 | medium | merged in main (PR #11), unreleased |
-| VF-006 | 2026-10-28 | low | open |
+| VF-005 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#11](https://github.com/AlexGalhardo/vukem/pull/11)) |
+| VF-006 | 2026-10-28 | low | in_progress (framework), PR #38 green, merge pending (owner) |
 | VF-007 | 2026-10-28 | low | open |
-| VF-008 | 2026-10-28 | medium | merged in main (PR #22), unreleased |
-| VF-009 | 2026-10-28 | low | open |
-| VF-010 | 2026-10-28 | low | open |
+| VF-008 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#22](https://github.com/AlexGalhardo/vukem/pull/22)) |
+| VF-009 | 2026-10-28 | low | in_progress (framework), PR #37 green, merge pending (owner) |
+| VF-010 | 2026-10-28 | low | fixed in v0.33.0 (PR [#27](https://github.com/AlexGalhardo/vukem/pull/27), via VF-046: `AfterSave` receives `admin.Saved[T].Before`, a copy of the record before the form was applied) |
 | VF-011 | 2026-10-28 | low | open |
 | VF-012 | 2026-10-28 | low | open |
-| VF-013 | 2026-10-28 | low | open |
+| VF-013 | 2026-10-28 | low | in_progress (framework), PR #41 (docs) |
 | VF-014 | 2026-10-28 | low | open |
-| VF-015 | 2026-10-28 | medium | merged in main (PR #12), unreleased |
-| VF-016 | 2026-10-28 | low | in_progress (framework), PR #33 |
-| VF-017 | 2026-10-28 | medium | merged in main (PR #13), unreleased |
-| VF-018 | 2026-10-28 | medium | merged in main (PR #14), unreleased |
-| VF-019 | 2026-10-28 | medium | merged in main (PR #15), unreleased |
+| VF-015 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#12](https://github.com/AlexGalhardo/vukem/pull/12)) |
+| VF-016 | 2026-10-28 | low | fixed in v0.33.0 (PR [#33](https://github.com/AlexGalhardo/vukem/pull/33)) |
+| VF-017 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#13](https://github.com/AlexGalhardo/vukem/pull/13)) |
+| VF-018 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#14](https://github.com/AlexGalhardo/vukem/pull/14)) |
+| VF-019 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#15](https://github.com/AlexGalhardo/vukem/pull/15)) |
 | VF-020 | 2026-10-28 | low | open |
 | VF-021 | 2026-10-28 | low | withdrawn (2026-10-29: `HourlyAt` documented) |
 | VF-022 | 2026-10-28 | low | open |
 | VF-023 | 2026-10-28 | low | open |
-| VF-024 | 2026-10-28 | medium | merged in main (PR #10), unreleased |
-| VF-025 | 2026-10-28 | medium | merged in main (PR #16), unreleased |
-| VF-026 | 2026-10-28 | medium | merged in main (PR #13), unreleased |
-| VF-027 | 2026-10-28 | medium | merged in main (PR #9), unreleased |
-| VF-028 | 2026-10-28 | low | merged in main (PR #28, via VF-041 `inertia.Config.ViewData`), unreleased |
-| VF-029 | 2026-10-28 | low | in_progress (framework), PR #32 |
-| VF-030 | 2026-10-28 | medium | merged in main (PR #20), unreleased |
-| VF-031 | 2026-10-28 | medium | merged in main (PR #24), unreleased |
-| VF-032 | 2026-10-28 | medium | in_progress (framework), PR #31 |
+| VF-024 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#10](https://github.com/AlexGalhardo/vukem/pull/10)) |
+| VF-025 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#16](https://github.com/AlexGalhardo/vukem/pull/16)) |
+| VF-026 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#13](https://github.com/AlexGalhardo/vukem/pull/13)) |
+| VF-027 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#9](https://github.com/AlexGalhardo/vukem/pull/9)) |
+| VF-028 | 2026-10-28 | low | fixed in v0.33.0 (PR [#28](https://github.com/AlexGalhardo/vukem/pull/28), via VF-041 `inertia.Config.ViewData`) |
+| VF-029 | 2026-10-28 | low | fixed in v0.33.0 (PR [#32](https://github.com/AlexGalhardo/vukem/pull/32)) |
+| VF-030 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#20](https://github.com/AlexGalhardo/vukem/pull/20)) |
+| VF-031 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#24](https://github.com/AlexGalhardo/vukem/pull/24)) |
+| VF-032 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#31](https://github.com/AlexGalhardo/vukem/pull/31)) |
 | VF-033 | 2026-10-28 | low | open |
 | VF-034 | 2026-10-28 | low | open |
-| VF-035 | 2026-10-29 | medium | merged in main (PR #25), unreleased |
-| VF-036 | 2026-10-29 | low | in_progress (framework), PR #34 (documented; rename rule change is breaking) |
-| VF-037 | 2026-10-29 | medium | merged in main (PR #26), unreleased |
-| VF-038 | 2026-10-29 | medium | merged in main (PR #17), unreleased |
+| VF-035 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#25](https://github.com/AlexGalhardo/vukem/pull/25)) |
+| VF-036 | 2026-10-29 | low | fixed in v0.33.0 (PR [#34](https://github.com/AlexGalhardo/vukem/pull/34)) |
+| VF-037 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#26](https://github.com/AlexGalhardo/vukem/pull/26)) |
+| VF-038 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#17](https://github.com/AlexGalhardo/vukem/pull/17)) |
 | VF-039 | 2026-10-29 | low | open |
-| VF-040 | 2026-10-29 | medium | merged in main (PR #13), unreleased |
-| VF-041 | 2026-10-29 | low | merged in main (PR #28), unreleased |
+| VF-040 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#13](https://github.com/AlexGalhardo/vukem/pull/13)) |
+| VF-041 | 2026-10-29 | low | fixed in v0.33.0 (PR [#28](https://github.com/AlexGalhardo/vukem/pull/28)) |
 | VF-042 | 2026-10-29 | low | open |
-| VF-043 | 2026-10-29 | low | in_progress (framework), PR #30 |
+| VF-043 | 2026-10-29 | low | fixed in v0.33.0 (PR [#30](https://github.com/AlexGalhardo/vukem/pull/30)) |
 | VF-044 | 2026-10-29 | low | open |
-| VF-045 | 2026-10-29 | low | PR #29 green, merge blocked (FR-002) |
-| VF-046 | 2026-10-29 | medium | merged in main (PR #27), unreleased |
-| VF-047 | 2026-10-29 | low | open |
-| VF-048 | 2026-10-29 | low | in_progress (framework), PR #33 (via VF-016 `WithExtension`) |
+| VF-045 | 2026-10-29 | low | fixed in v0.33.0 (PR [#29](https://github.com/AlexGalhardo/vukem/pull/29)) |
+| VF-046 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#27](https://github.com/AlexGalhardo/vukem/pull/27)) |
+| VF-047 | 2026-10-29 | low | in_progress (framework), PR #40 (nullable filters/search; composite keys open) |
+| VF-048 | 2026-10-29 | low | fixed in v0.33.0 (PR [#33](https://github.com/AlexGalhardo/vukem/pull/33)) |
 | VF-049 | 2026-10-29 | low | open |
 | VF-050 | 2026-10-29 | low | open |
-| VF-051 | 2026-10-29 | medium | open |
+| VF-051 | 2026-10-29 | medium | in_progress (framework), PR #36 green, merge pending (owner) |
+| VF-052 | 2026-10-29 | high | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
-- **Date**: 2026-10-28. **Severity**: high. **Status**: wontfix (post-1.0, FQ-001): vukem keeps passkeys/WebAuthn on its post-1.0 list (docs/security.md); owner chose option (a) on 2026-10-29.
+- **Date**: 2026-10-28. **Severity**: high. **Status**: in_progress (framework) (reopened 2026-10-29: the owner authorized the framework work in chat, superseding the FQ-001 post-1.0 deferral).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/two-factor` (Concepts, Guards, Hashing [heading not on page 2026-10-29], `install:auth`, Two-factor, Social login).
 - **Context**: HexaScore's legacy app (Better Auth 1.7.7) offers passkeys. The rewrite drops them at launch (brainstorming D-06) because the framework has no WebAuthn registration/assertion flow, credential storage or recovery path.
 - **Reproduction**: search `docs/` and `auth/` for `webauthn`, `passkey`, `FIDO`: no matches.
@@ -72,7 +73,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-002: Inertia SSR falls back to client rendering silently by default
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #7, <https://github.com/AlexGalhardo/vukem/pull/7>), unreleased. Native API: `inertia.SSRConfig{Strict: true}` (503 + `Retry-After`, auto `inertia-ssr` readiness check) or per-request `inertia.RequireSSR(ctx)`.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: fixed in v0.33.0 (PR #7, <https://github.com/AlexGalhardo/vukem/pull/7>). Native API: `inertia.SSRConfig{Strict: true}` (503 + `Retry-After`, auto `inertia-ssr` readiness check) or per-request `inertia.RequireSSR(ctx)`.
 - **Spike (2026-10-29)**: P0.F.2.1: workaround proven, an `OnFailure` counter plus the `ssr` readiness check (spike report P0.F.2.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` "Inertia v3 (BETA)" [heading not on page 2026-10-29] → SSR row: "falls back to client-side rendering on any failure (reported to `OnFailure`, default a warning log)".
 - **Context**: for a catalogue that depends on search indexing (ADR 0004), a silent fallback hides an SEO incident. HexaScore needs per-route policy: public routes must fail readiness or page an alert when SSR fails; logged-in routes may fall back.
@@ -82,7 +83,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-003: No built-in bot/abuse challenge for auth and form routes
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR <https://github.com/AlexGalhardo/vukem/pull/21>), unreleased. Native API: package `challenge` (`Middleware(verifier, when)`, `Turnstile`, `HCaptcha`, `SiteVerify`, `Verifier`); the stdlib proof-of-work option is not built (fits `Verifier`, follow-up if wanted).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: fixed in v0.33.0 (PR <https://github.com/AlexGalhardo/vukem/pull/21>). Native API: package `challenge` (`Middleware(verifier, when)`, `Turnstile`, `HCaptcha`, `SiteVerify`, `Verifier`); the stdlib proof-of-work option is not built (fits `Verifier`, follow-up if wanted).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/rate-limiting` "Rate limiting", `https://vukem.dev/docs/security/rate-limiting` "Rate limiting", `https://vukem.dev/docs/security/overview`.
 - **Context**: the legacy app used Vercel BotID on signup, login and contact. vukem offers GCRA rate limiting by IP/token and login throttling, but no challenge mechanism (proof-of-work, CAPTCHA adapter) when thresholds trip.
 - **Reproduction**: n/a (feature gap).
@@ -100,7 +101,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-005: No keyset (cursor) pagination helper in the ORM
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #11, <https://github.com/AlexGalhardo/vukem/pull/11>), unreleased. Native API: `orm.QueryOf[T](db).OrderBy("score", orm.Desc).CursorPaginate(ctx, cursor, n, orm.Desc)` pages by `(score DESC, id DESC)`; cursor values typed per column, unsigned by design (bound parameters, validated columns).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: fixed in v0.33.0 (PR #11, <https://github.com/AlexGalhardo/vukem/pull/11>). Native API: `orm.QueryOf[T](db).OrderBy("score", orm.Desc).CursorPaginate(ctx, cursor, n, orm.Desc)` pages by `(score DESC, id DESC)`; cursor values typed per column, unsigned by design (bound parameters, validated columns).
 - **Spike (2026-10-29)**: P0.F.3.1: workaround proven, an app-signed HMAC keyset cursor over `(sort value, id)` with `WhereRaw` (P0.F.3.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` "Querying"; `https://vukem.dev/docs/rest-apis/pagination` "Query conventions"; `https://vukem.dev/docs/frontend/inertia` Inertia `ScrollCursor(orm.CursorPage, name)`.
 - **Context**: `ScrollCursor` accepts an `orm.CursorPage`, but the documented query builder shows no way to build a keyset page over a composite order (`score DESC, id DESC`) with an opaque signed cursor. HexaScore lists (SDD 01, 05, 07) need this for every listing and for the paid API.
@@ -110,7 +111,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-006: Postgres mapping of `t.JSON` and `t.Enum` undocumented
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: in_progress (framework).
 - **Spike (2026-10-29)**: P0.F.5.1: on PostgreSQL `t.JSON` is `jsonb` and `t.Enum` is `text` plus CHECK; documentation gap confirmed (P0.F.5.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` "Migrations".
 - **Context**: SDD 01 needs `jsonb` columns with GIN indexes and enum-like columns. The migration builder's column types for these on Postgres are not documented, so the DDL sketches use `s.Raw`.
@@ -128,7 +129,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-008: Admin panel has no custom row actions, bulk actions, assignment or diff view
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR <https://github.com/AlexGalhardo/vukem/pull/22>), unreleased. Native API: `Resource.Actions(admin.Action[T]{Name, Label, Reason, Bulk, Run})`, JSON-key diff in the audit page; assignment stays a column (`assignee_id`) edited by form or set by an action.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: fixed in v0.33.0 (PR <https://github.com/AlexGalhardo/vukem/pull/22>). Native API: `Resource.Actions(admin.Action[T]{Name, Label, Reason, Bulk, Run})`, JSON-key diff in the audit page; assignment stays a column (`assignee_id`) edited by form or set by an action.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin`.
 - **Context**: moderation of community suggestions (SDD 04) and anti-abuse review (SDD 02) need per-row actions ("approve", "reject with reason", "revert"), bulk actions, assignment to a moderator and a before/after diff. The documented admin panel generates CRUD from models and `z` schemas with an audit log.
 - **Workaround**: a custom admin page in the app at `/admin/moderation` using the admin layout and auth.
@@ -136,7 +137,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-009: Generated columns and the ORM on insert/update
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: in_progress (framework).
 - **Spike (2026-10-29)**: P0.F.5.1: generated column works with raw DDL; the ORM must not map it (SQLSTATE 428C9) (P0.F.5.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` "Defining models", "Querying".
 - **Context**: `ratings.overall` is a Postgres generated column (SDD 02). It is unclear whether `orm.Create`/`Save` omit generated columns from INSERT/UPDATE.
@@ -146,7 +147,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-010: Admin `BeforeSave` hook does not expose previous values
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: fixed in v0.33.0 (PR [#27](https://github.com/AlexGalhardo/vukem/pull/27), via VF-046: `AfterSave` receives `admin.Saved[T].Before`, a copy of the record before the form was applied). Docs: `https://vukem.dev/docs/digging-deeper/admin` (`AfterSave`, `s.Before`).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin`.
 - **Context**: the catalogue audit log (SDD 04) needs before/after values for every admin edit; the hook as documented receives only the new values.
 - **Workaround**: the hook re-reads the row before saving.
@@ -170,7 +171,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-013: Locale for mail sent from queued jobs
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: in_progress (framework), PR #41 (docs only: `i18n.WithLocale`/`WithBundle` already exist and the mail envelope and view read them).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/queue` "Mail", "i18n", "Queue".
 - **Context**: transactional mail (verification, reset, suggestion decisions) is often sent from a job without a request context; the docs describe locale resolution through the locale middleware and request context only.
 - **Workaround**: the job payload carries the user's locale and the mailer is called with an explicit locale value.
@@ -187,7 +188,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-015: No host-based routing helper
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #12, <https://github.com/AlexGalhardo/vukem/pull/12>), unreleased. Native API: `r.Host("api.hexascore.app", func(g *router.Group) {...})` (ServeMux host patterns, port ignored); `r.URL` returns `//host/path` for host routes; `RouteInfo.Host`.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: fixed in v0.33.0 (PR #12, <https://github.com/AlexGalhardo/vukem/pull/12>). Native API: `r.Host("api.hexascore.app", func(g *router.Group) {...})` (ServeMux host patterns, port ignored); `r.URL` returns `//host/path` for host routes; `RouteInfo.Host`.
 - **Spike (2026-10-29)**: P0.F.4.1: workaround proven, an app host-rewrite middleware installed with `UseServer` (P0.F.4.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/routing` "Routing", `https://vukem.dev/docs/rest-apis/overview` "Routing", "Versioning".
 - **Context**: the paid API is served at `api.hexascore.app/v1/...` while the app also serves `hexascore.app`. The router documents path groups only. The app needs a `Host`-matched group (or a middleware that rewrites `/v1/*` to `/api/v1/*` when the host matches) plus per-host CORS and security headers.
@@ -196,7 +197,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-016: Problem+json extension members undocumented
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: in_progress (framework), PR #33 (`errs.HTTPError.WithExtension`; OpenAPI schema for extensions not added, documented).
+- **Date**: 2026-10-28. **Severity**: low. **Status**: fixed in v0.33.0 (PR [#33](https://github.com/AlexGalhardo/vukem/pull/33)) (`errs.HTTPError.WithExtension`; OpenAPI schema for extensions not added, documented).
 - **Spike (2026-10-29)**: P0.F.7.1: workaround proven, a router-wide `Services.Errors` wrapper that adds the kebab-case `code` member (P0.F.7.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/overview` "Errors", `https://vukem.dev/docs/basics/error-handling` errors section.
 - **Context**: RFC 9457 allows extension members; HexaScore's API uses `code`, `plan`, `limit`, `retryAfter` on quota and plan problems (legacy `lib/api/problem.ts`). The docs do not show how to add members to `errs.HTTPError` output or to the problem catalogue entries used by OpenAPI.
@@ -205,7 +206,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-017: No non-transactional migrations (`CREATE INDEX CONCURRENTLY`)
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #13, <https://github.com/AlexGalhardo/vukem/pull/13>), unreleased. Native API: `schema.Migration{NoTransaction: true}` (Up/Down outside a transaction, recorded after Up).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: fixed in v0.33.0 (PR #13, <https://github.com/AlexGalhardo/vukem/pull/13>). Native API: `schema.Migration{NoTransaction: true}` (Up/Down outside a transaction, recorded after Up).
 - **Spike (2026-10-29)**: P0.F.5.2: workaround proven, a `scripts/concurrent-index.sh` run outside a transaction; no AccessExclusiveLock observed (P0.F.5.2).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` "Migrations", "Managing them with migrate".
 - **Context**: Postgres refuses `CREATE INDEX CONCURRENTLY` inside a transaction. HexaScore's search indexes (SDD 07) and later index additions on the 100k-row `items` table and larger `ratings` table must be built without locking writes in production. The docs do not show a per-migration "no transaction" flag.
@@ -214,7 +215,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-018: Queue priority and per-queue concurrency with the database driver inside `serve`
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #14, <https://github.com/AlexGalhardo/vukem/pull/14>), unreleased. Native: `QUEUE_LIMITS=ingest=2` (or `queue.WorkOptions.Limits`) caps a queue's running jobs per process in `serve` and `queue:work`; priority order and concurrency documented as driver-independent; pause = drop the queue from `QUEUE_NAMES` and restart (no runtime switch).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: fixed in v0.33.0 (PR #14, <https://github.com/AlexGalhardo/vukem/pull/14>). Native: `QUEUE_LIMITS=ingest=2` (or `queue.WorkOptions.Limits`) caps a queue's running jobs per process in `serve` and `queue:work`; priority order and concurrency documented as driver-independent; pause = drop the queue from `QUEUE_NAMES` and restart (no runtime switch).
 - **Spike (2026-10-29)**: P0.F.6.1: workaround proven, an in-process per-family semaphore; the heavy family stayed at 2 under concurrency 8 (P0.F.6.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/scheduler` "Queue", "Scheduler" [heading not on page 2026-10-29]; `https://vukem.dev/docs/cli/reference-runtime` `serve`.
 - **Context**: HexaScore runs HTTP, scheduler and queue workers in one process under a US$30/month budget (brainstorming D-08). Ingestion jobs (SDD 06) must run at low concurrency (1–2) and lower priority than user-facing jobs (mail, recompute). The docs do not state whether named queues, priorities and per-queue worker counts apply to the database driver when workers run inside `serve`, nor how to cap CPU use of workers.
@@ -224,7 +225,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-019: No documented API for app-level OpenTelemetry metrics
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #15, <https://github.com/AlexGalhardo/vukem/pull/15>), unreleased. Docs gap closed, no new API: `otel.Provider.MeterProvider().Meter(name)` taken inside `WithRoutes`/`WithJobsFunc` (after Register; before it the provider is a no-op) exports through the framework reader and resource; Prometheus via `Config.MetricReader` with the app-owned exporter. A built-in `/metrics` endpoint was not added (new third-party dependency, owner decision).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: fixed in v0.33.0 (PR #15, <https://github.com/AlexGalhardo/vukem/pull/15>). Docs gap closed, no new API: `otel.Provider.MeterProvider().Meter(name)` taken inside `WithRoutes`/`WithJobsFunc` (after Register; before it the provider is a no-op) exports through the framework reader and resource; Prometheus via `Config.MetricReader` with the app-owned exporter. A built-in `/metrics` endpoint was not added (new third-party dependency, owner decision).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/opentelemetry` "OpenTelemetry", "Logging & observability" [heading not on page 2026-10-29]; `drivers/otel` description in `https://vukem.dev/docs/architecture/lifecycle`.
 - **Context**: HexaScore needs custom counters and histograms (ingestion items/s, SSR fallbacks, suggestion queue age, quota flushes) exported with the framework's traces. The docs cover tracing setup and built-in instrumentation only.
 - **Workaround**: the app wires `go.opentelemetry.io/otel/metric` itself and shares the exporter configuration.
@@ -264,7 +265,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-024: `i18n.Middleware` has no URL-prefix locale source
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #10, <https://github.com/AlexGalhardo/vukem/pull/10>), unreleased. Native API: `i18n.MiddlewareConfig{PathPrefixes: map[string]string{"pt-br": "pt-BR"}}` + `i18n.SourcePath`; `StripPathPrefix` installed by `DefaultMiddlewareWith`; `i18n.PathPrefix(ctx)`, `i18n.LocalizePath(ctx, path)`.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: fixed in v0.33.0 (PR #10, <https://github.com/AlexGalhardo/vukem/pull/10>). Native API: `i18n.MiddlewareConfig{PathPrefixes: map[string]string{"pt-br": "pt-BR"}}` + `i18n.SourcePath`; `StripPathPrefix` installed by `DefaultMiddlewareWith`; `i18n.PathPrefix(ctx)`, `i18n.LocalizePath(ctx, path)`.
 - **Spike (2026-10-29)**: P0.F.2.3: workaround proven, a path-prefix middleware before `i18n.Middleware` plus `RestoreURL`; refined in VF-041 (P0.F.2.3).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/localization`, `https://vukem.dev/docs/frontend/inertia-i18n`.
 - **Context**: HexaScore keeps the legacy URL scheme (`/`, `/pt-br/...`, `/es/...`, brainstorming D-17). The documented locale sources are query, cookie and `Accept-Language`; a path-prefix source with prefix stripping and URL generation that re-adds the prefix is not documented.
@@ -273,7 +274,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-025: No cache hook for Inertia SSR output
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #16, <https://github.com/AlexGalhardo/vukem/pull/16>), unreleased. Native: `inertia.SSRConfig{Cache: cache.NewMemory(n), CacheTTL: 5 * time.Minute, CacheWhen: func(c *web.Ctx, p *inertia.Page) bool {...}}`; key = SHA-256 of the page object (component, all props, URL, asset version), nonce-safe because the root view adds the nonce; failures and the Vite dev server are never cached.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: fixed in v0.33.0 (PR #16, <https://github.com/AlexGalhardo/vukem/pull/16>). Native: `inertia.SSRConfig{Cache: cache.NewMemory(n), CacheTTL: 5 * time.Minute, CacheWhen: func(c *web.Ctx, p *inertia.Page) bool {...}}`; key = SHA-256 of the page object (component, all props, URL, asset version), nonce-safe because the root view adds the nonce; failures and the Vite dev server are never cached.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` (SSR).
 - **Context**: public catalogue pages are rendered for anonymous users thousands of times with identical props; the SSR call (Node, 3 s timeout) runs on every request. A documented hook to cache the rendered `head`/`body` by a key (component + props hash + locale) for a short TTL would cut CPU in the single container (D-08).
 - **Workaround**: an app middleware caching the whole HTML response for anonymous requests, which must also handle the per-request CSP nonce (re-inject the nonce into cached markup).
@@ -281,7 +282,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-026: Migration runner has no documented lock for concurrent starts
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #13, <https://github.com/AlexGalhardo/vukem/pull/13>), unreleased. Native: `Migrator.Up/Rollback/Reset/Fresh` hold `pg_advisory_lock` (MySQL `GET_LOCK`) for the whole run; documented per dialect (SQLite: none).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: fixed in v0.33.0 (PR #13, <https://github.com/AlexGalhardo/vukem/pull/13>). Native: `Migrator.Up/Rollback/Reset/Fresh` hold `pg_advisory_lock` (MySQL `GET_LOCK`) for the whole run; documented per dialect (SQLite: none).
 - **Spike (2026-10-29)**: P0.F.5.2: workaround proven, a `migrate:locked` command holding a Postgres advisory lock (P0.F.5.2).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations`, `https://vukem.dev/docs/deployment/docker-and-railway`.
 - **Context**: zero-downtime deploys can start a new container while the old one still runs; if migrations run at boot, two runners can race. The docs do not mention a Postgres advisory lock or a `migrations` table row lock.
@@ -290,7 +291,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-027: `serve` and `build` gaps for the SSR sidecar and release metadata
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #9, <https://github.com/AlexGalhardo/vukem/pull/9>), unreleased. Native API: `bin/app serve -with-ssr` (supervised SSR runner), `vukem build -ssr` and `-ldflags`, `vukem.WithVersion(v)` (`version` in `/up`).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: fixed in v0.33.0 (PR #9, <https://github.com/AlexGalhardo/vukem/pull/9>). Native API: `bin/app serve -with-ssr` (supervised SSR runner), `vukem build -ssr` and `-ldflags`, `vukem.WithVersion(v)` (`version` in `/up`).
 - **Spike (2026-10-29)**: P0.F.2.2: workaround proven, the SSR bundle built by hand (`build:ssr`) and Node supervised by the Go process (P0.F.2.2).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/cli/reference-runtime`, `https://vukem.dev/docs/frontend/inertia`, `https://vukem.dev/docs/deployment/single-binary`.
 - **Context**: HexaScore runs the Node SSR process inside the same container as the Go app (D-08). The docs show `vukem ssr:start` as a separate command and `vukem build` without the SSR bundle; there is no documented way to have `serve` supervise the SSR process in production, to expose the build version at `/up`, or to pass extra `-ldflags` through `vukem build`.
@@ -299,7 +300,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-028: Root view data has no theme hook
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: merged in main (PR #28, via VF-041: `inertia.Config.ViewData func(*http.Request) map[string]any`, read as `RootData.Data` in the root view), unreleased.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: fixed in v0.33.0 (PR [#28](https://github.com/AlexGalhardo/vukem/pull/28), via VF-041: `inertia.Config.ViewData func(*http.Request) map[string]any`, read as `RootData.Data` in the root view).
 - **Spike (2026-10-29)**: P0.F.2.3: workaround proven, the theme passed as a shared prop and read in the view (P0.F.2.3).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` (root view, `inertia.RootData`).
 - **Context**: dark mode without a flash of the wrong theme needs `data-theme` on `<html>` from a cookie at render time; the root view receives only `inertia.RootData` plus view functions.
@@ -308,7 +309,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-029: Export helpers only target `http.ResponseWriter`
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: in_progress (framework), PR #32 (`export.EncodeCSV(w io.Writer, ...)`).
+- **Date**: 2026-10-28. **Severity**: low. **Status**: fixed in v0.33.0 (PR [#32](https://github.com/AlexGalhardo/vukem/pull/32)) (`export.EncodeCSV(w io.Writer, ...)`).
 - **Spike (2026-10-29)**: P0.F.9.1: workaround proven, `encoding/csv` plus `export.SafeCell` writing into the ZIP; byte-equal to `export.CSV` via `ResponseRecorder` (P0.F.9.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/exports`.
 - **Context**: the LGPD data export (SDD 14) builds a ZIP of CSV/JSON files in a background job and uploads it to storage behind a signed URL; the documented streaming CSV/JSON/NDJSON helpers (with the CSV formula guard) write to a response, not to an `io.Writer`.
@@ -317,7 +318,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-030: No admin hardening options (mandatory 2FA, shorter sessions, IP allowlist)
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR <https://github.com/AlexGalhardo/vukem/pull/20>), unreleased. Native API: `admin.Config{TwoFactor, MaxSessionAge, AllowCIDRs}` and `session.CreatedAt`.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: fixed in v0.33.0 (PR <https://github.com/AlexGalhardo/vukem/pull/20>). Native API: `admin.Config{TwoFactor, MaxSessionAge, AllowCIDRs}` and `session.CreatedAt`.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin`, `https://vukem.dev/docs/security/two-factor`, `https://vukem.dev/docs/basics/sessions`.
 - **Context**: SDD 13 requires admins to have 2FA enabled, a shorter absolute session lifetime than regular users, and an optional IP allowlist for `/admin`. The admin panel documents role gating and an audit log, but none of these three controls.
 - **Workaround**: app middleware on the `/admin` group (checks `two_factor_enabled`, applies a separate session timeout, compares the client IP with a configured CIDR list).
@@ -325,7 +326,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-031: No re-encryption command after `APP_KEY` rotation
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR <https://github.com/AlexGalhardo/vukem/pull/24>), unreleased. Native API: `orm.Reseal[T]` and `vukem.ResealCommand(orm.Reseal[...])` (`./app crypt:reseal`); the old key stays in `APP_PREVIOUS_KEYS` during the run, so no `--from/--to` flags.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: fixed in v0.33.0 (PR <https://github.com/AlexGalhardo/vukem/pull/24>). Native API: `orm.Reseal[T]` and `vukem.ResealCommand(orm.Reseal[...])` (`./app crypt:reseal`); the old key stays in `APP_PREVIOUS_KEYS` during the run, so no `--from/--to` flags.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/encryption`, `https://vukem.dev/docs/configuration`.
 - **Context**: encrypted columns (2FA secrets, OAuth tokens) are keyed by `APP_KEY`; the encryption page describes key rotation for cookies/values but no CLI to re-encrypt stored columns under the new key, so a rotation leaves rows readable only with the previous key.
 - **Workaround**: keep the previous key configured as a secondary decrypt key and run a one-off app job that reads and rewrites every encrypted column.
@@ -333,7 +334,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-032: `install:auth --locales` rejects `es`
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework), PR #31 (es catalogs for install:auth and the built-in framework messages).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: fixed in v0.33.0 (PR [#31](https://github.com/AlexGalhardo/vukem/pull/31)) (es catalogs for install:auth and the built-in framework messages).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/cli/reference-install` ("`vukem install:auth`"), `https://vukem.dev/docs/digging-deeper/localization`.
 - **Context**: `vukem install:auth -social google -2fa -locales en,pt-BR,es` fails with `usage error: no auth message catalog for locale "es" (one of en, pt-BR); translate the generated catalog instead`. HexaScore needs `en`, `pt-BR`, `es` (D-xx i18n).
 - **Repro**: run the command above in a fresh `vukem new --inertia react` app; exit code 2 and nothing is generated. With `-locales en,pt-BR` it succeeds.
@@ -359,7 +360,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-035: Migration builder lacks uuid/composite primary keys, smallint and generated columns; ORM has a single-column key
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: merged in main (PR #25, <https://github.com/AlexGalhardo/vukem/pull/25>), unreleased. Native: `t.SmallInteger`, `t.Primary(cols...)` / `Column.Primary()` (UUID and composite keys), `Column.StoredAs(expr)` (stored generated column); ORM `orm.CompositeKeyer` (`PrimaryKeys() []string`) makes `Update`/`Delete`/`ForceDelete`/`Restore` filter on every key column, and a single-model write matching more than one row returns `orm.ErrKeyNotUnique` (rolled back inside `db.Tx`). Generated columns still need `db:"-"` in the model (VF-009).
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: fixed in v0.33.0 (PR #25, <https://github.com/AlexGalhardo/vukem/pull/25>). Native: `t.SmallInteger`, `t.Primary(cols...)` / `Column.Primary()` (UUID and composite keys), `Column.StoredAs(expr)` (stored generated column); ORM `orm.CompositeKeyer` (`PrimaryKeys() []string`) makes `Update`/`Delete`/`ForceDelete`/`Restore` filter on every key column, and a single-model write matching more than one row returns `orm.ErrKeyNotUnique` (rolled back inside `db.Tx`). Generated columns still need `db:"-"` in the model (VF-009).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` ("Creating migrations"), `https://vukem.dev/docs/database/orm` ("Defining models").
 - **Context**: SDD 01 `items` (uuid primary key) and SDD 02 `ratings` (composite key `(user_id, item_id)`, `smallint` scores, stored generated `overall`) cannot be expressed with `schema.Table`: no `smallint`, no primary key on a `t.UUID` column, no composite primary key, no generated column. `t.JSON` is `jsonb` and `t.Enum` is `text` + CHECK on PostgreSQL (verified, spike `TestGeneratedOverallColumn`), which closes the doubt in VF-006 for those two types. The ORM filters `Update`/`Delete` by one key column (`Keyer.PrimaryKey`), so on a composite-key table `orm.Update`/`orm.Delete` would match every row of the first key.
 - **Workaround**: `s.Raw` for whole `CREATE TABLE` statements (guard with `s.Dialect() == "postgres"`); ORM model `Rating` with `PrimaryKey() = "user_id"` used only for `orm.Create` and `orm.QueryOf[Rating](db).Where("user_id", u).Where("item_id", i).Update(...)`; never `orm.Update`/`orm.Delete` on it.
@@ -367,7 +368,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-036: ORM column naming splits acronyms (`ExternalIDs` becomes `external_i_ds`)
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: in_progress (framework), PR #34 (rule documented with the `db` tag; changing `naming.Snake` would rename existing columns, a BREAKING CHANGE not requested).
+- **Date**: 2026-10-29. **Severity**: low. **Status**: fixed in v0.33.0 (PR [#34](https://github.com/AlexGalhardo/vukem/pull/34)) (rule documented with the `db` tag; changing `naming.Snake` would rename existing columns, a BREAKING CHANGE not requested).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` ("Defining models").
 - **Context**: `naming.Snake("ExternalIDs")` yields `external_i_ds`; `orm.Create` failed with `column "external_i_ds" of relation "items" does not exist`.
 - **Workaround**: explicit `db:"external_ids"` tag on fields ending in an acronym (`ID`, `URL`, `IDs`).
@@ -377,7 +378,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-037: `install:billing` has no per-currency prices and its plan names are fixed in code
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: merged in main (PR #26, <https://github.com/AlexGalhardo/vukem/pull/26>), unreleased. Native: `vukem install:billing -plans pro,business` writes `plans()`, the `STRIPE_PRICE_<PLAN>` lines and tests for those names; `STRIPE_CURRENCIES=brl,usd,eur` lets the checkout form post an optional `currency` (passed to the Checkout Session, so one price per plan with `currency_options` serves all; unlisted currency is 422 before Stripe); `currency_options` pattern documented on the billing page. Live sandbox acceptance still [NOT VERIFIED].
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: fixed in v0.33.0 (PR #26, <https://github.com/AlexGalhardo/vukem/pull/26>). Native: `vukem install:billing -plans pro,business` writes `plans()`, the `STRIPE_PRICE_<PLAN>` lines and tests for those names; `STRIPE_CURRENCIES=brl,usd,eur` lets the checkout form post an optional `currency` (passed to the Checkout Session, so one price per plan with `currency_options` serves all; unlisted currency is 422 before Stripe); `currency_options` pattern documented on the billing page. Live sandbox acceptance still [NOT VERIFIED].
 - **vukem version**: v0.32.0 (`contrib/stripe` v0.4.1). **Docs consulted**: `https://vukem.dev/docs/cli/reference-install` ("`vukem install:billing`"), `https://vukem.dev/docs/digging-deeper/billing` ("Configuration", "Testing").
 - **Context**: the scaffold writes plans `basic` and `pro` in `config/billing.go` (`plans()`), one `STRIPE_PRICE_<NAME>` id per plan and a `Checkout(ctx, user, plan)` without a currency. HexaScore sells `pro` and `business` in BRL, USD and EUR (SDD 05 §6.3, ADR 0015) using one Stripe price per plan with `currency_options`.
 - **Workaround** (spike `agent/senior/P0.F.8.1`): rename the plans in `plans()` and in the tests; add `Plan.Amounts` (display only) and a `config.Currency` allowlist; pass `"currency"` in the `stripe.Params` of `CreateCheckoutSession` (`Params` is a free-form map, so no dependency change); the controller reads the `currency` form field and an unsupported value returns 422 before any Stripe call. Whether Stripe accepts `currency` with a `currency_options` price in a live sandbox is [NOT VERIFIED] here (only the fake-Stripe tests ran; test keys only).
@@ -386,7 +387,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-038: Starter Vite plugin breaks `vite build --ssr`; SSR entry pattern undocumented; `ssr:start` exits silently
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: merged in main (PR #17, <https://github.com/AlexGalhardo/vukem/pull/17>), unreleased. Native: the starter Vite plugin sends `vite build --ssr` to `bootstrap/ssr` (self-contained, client build untouched); Inertia starters ship `resources/js/ssr.ts(x)` with a top-level `createInertiaApp(...)` and a `build:ssr` script; `vukem build -ssr` builds it; `ssr:start` fails with an entry-shape hint when the bundle exits within 2 s; entry shape documented on the Inertia page.
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: fixed in v0.33.0 (PR #17, <https://github.com/AlexGalhardo/vukem/pull/17>). Native: the starter Vite plugin sends `vite build --ssr` to `bootstrap/ssr` (self-contained, client build untouched); Inertia starters ship `resources/js/ssr.ts(x)` with a top-level `createInertiaApp(...)` and a `build:ssr` script; `vukem build -ssr` builds it; `ssr:start` fails with an entry-shape hint when the bundle exits within 2 s; entry shape documented on the Inertia page.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` "Server-side rendering"; `https://vukem.dev/docs/cli/reference-runtime` "`vukem ssr:start` and `vukem ssr:check`"; `https://vukem.dev/docs/frontend/vite`.
 - **Context**: ROADMAP P0.F.2.1, SDD 09 §6.1, ADR 0004.
 - **Reproduction**: in an app from `vukem new -inertia react`, run `vite build --ssr resources/js/ssr.tsx`. The starter plugin `resources/vite/vukem.js` sets `build.outDir = resources/public/build` and `emptyOutDir: true` for every build, so the server bundle becomes publicly served and the client build is deleted. With an `export default createInertiaApp(...)` entry, `@inertiajs/vite` 3.9.1 does not inject `createServer`; `vukem ssr:start` then runs a bundle that exits at once and itself exits 0 with no output.
@@ -403,7 +404,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-040: Migration runner has no lock hook and no non-transactional migrations (custom command needed)
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: merged in main (PR #13, <https://github.com/AlexGalhardo/vukem/pull/13>), unreleased (same fix as VF-017 and VF-026). `Migrator.Up/Rollback/Reset/Fresh` take the lock themselves (Postgres advisory, MySQL `GET_LOCK`) and `schema.Migration{NoTransaction: true}` is recorded like any migration, so the `migrate:locked` wrapper and `scripts/concurrent-index.sh` can go; the requested output helper is no longer needed because the built-in `migrate` command now locks.
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: fixed in v0.33.0 (PR #13, <https://github.com/AlexGalhardo/vukem/pull/13>) (same fix as VF-017 and VF-026). `Migrator.Up/Rollback/Reset/Fresh` take the lock themselves (Postgres advisory, MySQL `GET_LOCK`) and `schema.Migration{NoTransaction: true}` is recorded like any migration, so the `migrate:locked` wrapper and `scripts/concurrent-index.sh` can go; the requested output helper is no longer needed because the built-in `migrate` command now locks.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` ("Managing them with migrate"), `https://vukem.dev/docs/deployment/docker-and-railway`, `https://vukem.dev/docs/cli/reference-runtime`.
 - **Context**: confirms VF-026 and VF-017 on a real run. `app.Migrator().Up` takes no lock, so two `migrate` processes can race; `schema.Migration` has no hook for a lock and no non-transactional mode.
 - **Workaround** (spike `agent/senior/P0.F.5.2`): custom command `migrate:locked` (`vukem.CommandFunc`) holding `pg_advisory_lock(hashtext('hexascore:migrate'))` on a dedicated `*sql.Conn` from `db.SQL()` around `Migrator().Up`, duplicating the output of `migrate` (`Migrated:` lines, `Nothing to migrate.`); and `scripts/concurrent-index.sh` running `database/concurrent/<name>.sql` through psql outside a transaction after dropping an INVALID leftover. Concurrent indexes are not recorded by `migrate:status`.
@@ -411,7 +412,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-041: Custom view functions are not request-bound; the page URL is the stripped URL under a path-prefix rewrite
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: merged in main (PR #28, <https://github.com/AlexGalhardo/vukem/pull/28>), unreleased. Native: `inertia.Config.ViewData func(*http.Request) map[string]any` -> `RootData.Data` in the root view (full page visits, not in the page object); `Page.URL` and the version-conflict `X-Inertia-Location` restore the prefix removed by `i18n.StripPathPrefix`.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: fixed in v0.33.0 (PR #28, <https://github.com/AlexGalhardo/vukem/pull/28>). Native: `inertia.Config.ViewData func(*http.Request) map[string]any` -> `RootData.Data` in the root view (full page visits, not in the page object); `Page.URL` and the version-conflict `X-Inertia-Location` restore the prefix removed by `i18n.StripPathPrefix`.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` (root view), `https://vukem.dev/docs/frontend/inertia-i18n`. The two behaviours below were confirmed in the v0.32.0 source (`view/funcs.go`, `inertia/inertia.go`), not found in the docs: `[NOT IN VUKEM DOCS]`.
 - **Context**: refines VF-024 and VF-028 after proving them under SSR. (1) `WithViewFuncs` functions take no `context.Context`, so a view function cannot read a cookie (VF-028 workaround as written is impossible). (2) Inertia builds `Page.URL` from `r.URL.RequestURI()`, so a path-prefix middleware that strips `/pt-br` before routing (VF-024 workaround) makes every page object report `/` and breaks client history.
 - **Workaround** (spike `agent/senior/P0.F.2.3`): the theme cookie is validated and shared as an Inertia prop `theme`, read by the root view as `.Page.Props.theme`; a route-level `RestoreURL` middleware puts the original prefixed URL back on the request after routing, before the Inertia middleware.
@@ -427,7 +428,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-043: Static assets and SSR HTML are not compressed unless the app adds `middleware.Gzip()`
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: in_progress (framework), PR #30 (gzip in starters; Brotli declined: no stdlib encoder).
+- **Date**: 2026-10-29. **Severity**: low. **Status**: fixed in v0.33.0 (PR [#30](https://github.com/AlexGalhardo/vukem/pull/30)) (gzip in starters; Brotli declined: no stdlib encoder).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/middleware`, `https://vukem.dev/docs/frontend/vite` (production build). `[NOT IN VUKEM DOCS]`: no page says that the starter serves `/build/assets/*` and Inertia HTML uncompressed (confirmed by Lighthouse: script transfer 568 kB uncompressed vs 116 kB gzip).
 - **Context**: the performance budgets (NFR-09-5, LCP) are measured on transfer size. The scaffold ships no compression, so a container behind a proxy that does not compress fails the JS budget (354 kB raw `app-*.js`).
 - **Workaround** (spike `agent/senior/P0.F.10.1`): `r.UseServer(middleware.Gzip())` before `StaticFS` in `routes.Web`. Brotli is not offered by `middleware.Gzip` (`HEAD` and `Range` are passed through).
@@ -443,7 +444,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-045: `storage.Handler` sets no Cache-Control or ETag, and S3 objects get no Last-Modified
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: PR #29 green, merge blocked (FR-002).
+- **Date**: 2026-10-29. **Severity**: low. **Status**: fixed in v0.33.0 (PR [#29](https://github.com/AlexGalhardo/vukem/pull/29)).
 - **vukem version**: v0.32.0 (`drivers/s3` v0.3.1). **Docs consulted**: `https://vukem.dev/docs/digging-deeper/storage` (Serving files; the page documents `X-Content-Type-Options`, the sandbox CSP and `Last-Modified` for seekable disks only), `https://vukem.dev/docs/digging-deeper/exports` (VF-029 confirmed: `export.CSV` needs an `http.ResponseWriter`; `export.SafeCell` is exported and is the smaller workaround).
 - **Context**: covers are content-addressed (`covers/<id>-<hash16>.webp`) and must answer `Cache-Control: public, max-age=31536000, immutable`. `storage.Handler` over an S3 disk sends no `Cache-Control`, no `ETag` and (the S3 reader is not an `io.ReadSeeker`) no `Last-Modified`, so conditional requests never get a 304 [NOT IN VUKEM DOCS].
 - **Workaround**: `app/covers/serve.go` validates the key with a regexp, delegates to `storage.Handler` and adds `Cache-Control` on 200 responses only (spike branch `agent/senior/P0.F.9.1`).
@@ -451,7 +452,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-046: admin `Resource.BeforeSave` has no transaction handle or after-commit hook, and schema keys must map to a column
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: merged in main (PR #27, <https://github.com/AlexGalhardo/vukem/pull/27>), unreleased. Native: `Resource.AfterSave(func(ctx, admin.Saved[T]) error)` runs inside the panel transaction before the audit entry with `Saved{Tx, Action, Record, Before, Virtual}` (`Tx.AfterCommit` for events; an error rolls everything back); `Resource.Virtual(key, value)` declares schema keys without a column (validated, never written, value in `Saved.Virtual`, edit-form state from `value`).
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: fixed in v0.33.0 (PR #27, <https://github.com/AlexGalhardo/vukem/pull/27>). Native: `Resource.AfterSave(func(ctx, admin.Saved[T]) error)` runs inside the panel transaction before the audit entry with `Saved{Tx, Action, Record, Before, Virtual}` (`Tx.AfterCommit` for events; an error rolls everything back); `Resource.Virtual(key, value)` declares schema keys without a column (validated, never written, value in `Saved.Virtual`, edit-form state from `value`).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin` ("Resources"). `[NOT IN VUKEM DOCS]`: what `BeforeSave` may do with side effects (read from `admin/handlers.go` `Resource.save` in the module).
 - **Context**: SDD 03 section 6.3 wanted ban and unban as panel form fields mapped in `BeforeSave`, with `account_events`, token revocation and an after-commit `user.banned` event in the same transaction. `BeforeSave(ctx, rec)` runs inside `DB.Tx` but receives only the context: no `*database.Tx`, no `AfterCommit`, no previous values (VF-010). Any write through the app's `*database.DB` inside it deadlocks on the single SQLite writer used by tests and is outside the panel transaction on Postgres. A schema key also has to match a model column, so a virtual `banned` checkbox cannot exist.
 - **Workaround**: ban and unban are `accounts.Ban`/`accounts.Unban` (own transaction, `tx.AfterCommit` dispatch) behind `POST /admin/users/{id}/ban|unban` (admin gate, CSRF). The panel form edits only `banReason` and `banExpiresAt`, and `BeforeSave` rejects them for users who are not banned.
@@ -459,7 +460,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-047: admin resources cannot address composite-key rows, and filters reject nullable string columns
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: in_progress (framework), PR #40 (`Filter`/`Search` accept `sql.Null*` and `sql.Null[T]`; composite-key resources still open).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin` ("Resources"). `[NOT IN VUKEM DOCS]`: composite primary keys and which column types `Filter` and `Search` accept (errors read from `NewResource` boot checks).
 - **Context**: `rating_flags` is keyed by `(user_id, item_id)`; the ORM and the panel take one `PrimaryKey()` column, so a detail URL resolves by `user_id` alone and could show another row of the same user. `Filter` on a `sql.NullString` column and `Search` on `sql.NullString` fail at boot (`cannot be filtered`, `is not a string`), so nullable enums (`resolution`) and `note` cannot be filtered or searched.
 - **Workaround**: `rating_flags` exposes the list only (`View` denied by policy); `resolution` and `note` stay unfiltered (`app/admin/scoring_resources.go`).
@@ -467,7 +468,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-048: `errs.HTTPError` has no way to add a stable problem `code` extension member
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: in_progress (framework), PR #33 (covered by VF-016: `errs.HTTPError.WithExtension("code", ...)`).
+- **Date**: 2026-10-29. **Severity**: low. **Status**: fixed in v0.33.0 (PR [#33](https://github.com/AlexGalhardo/vukem/pull/33)) (covered by VF-016: `errs.HTTPError.WithExtension("code", ...)`).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/validation` ("Errors"). `[NOT IN VUKEM DOCS]`: extension members on a problem+json response.
 - **Context**: SDD 02 section 6 lists stable codes (`status-not-completed`, `not-a-game`, `rating-not-released`, ...) for clients. `errs.NewKey(status, key, message, params)` only takes translation params; the last argument is not rendered, so the response carries `title` and `detail` but no `code` (observed on `PUT /app/v1/items/{id}/time-to-beat` 409).
 - **Workaround**: the codes stay in the `params` map (as the rating write path already does) and clients branch on status plus `detail`; the codes are exported as `scoring.Code*` constants.
@@ -491,9 +492,24 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-051: `contrib/stripe` lacks subscription and Checkout Session list calls and `Subscription.Created`
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0, `contrib/stripe` v0.4.1. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/billing`. `[NOT IN VUKEM DOCS]`: listing a customer's subscriptions, listing/expiring Checkout Sessions, the subscription `created` time.
 - **Context**: the `install:billing` sync keeps one live row per user but a second Checkout tab creates a second Stripe subscription; deleting an account must cancel every subscription Stripe may still bill. Both need `GET /v1/subscriptions?customer=&status=all`, `GET /v1/checkout/sessions?customer=&status=open`, `POST /v1/checkout/sessions/{id}/expire` and `created` to pick the newest subscription. `stripe.Subscription` has a custom `UnmarshalJSON`, so a struct embedding it cannot add `created` (the method is promoted and drops the extra field).
 - **Repro**: decode a subscription JSON into a struct that embeds `stripe.Subscription` and adds `Created int64` with tag `json:"created"`: `Created` stays zero.
 - **Workaround**: `app/billing/stripe_calls.go` uses `Client.Call` and decodes the raw JSON twice (`workaround(vukem): VF-051`).
 - **Request**: `ListSubscriptions(ctx, Params)`, `ListCheckoutSessions`, `ExpireCheckoutSession`, a `Created int64` on `Subscription`, and an `install:billing` scaffold that cancels superseded subscriptions and expires open sessions before creating a new one.
+
+## VF-052: No native Cloudflare integration (real client IP, edge security, CDN, bot checks)
+
+- **Date**: 2026-10-29. **Severity**: high. **Status**: open (requested by the owner 2026-10-29).
+- **vukem version**: v0.33.0. **Docs consulted**: <https://vukem.dev/docs> search for `cloudflare`, `turnstile`, `CF-Connecting-IP`, `trusted proxies`: no page `[NOT IN VUKEM DOCS]`.
+- **Context**: HexaScore serves `hexascore.app` behind Cloudflare (ROADMAP P2.A.2.2, SDD 11, SDD 13). Today the app would hand-roll client-IP resolution, bot protection and cache control around Cloudflare, and every rate limit, audit log and LGPD IP truncation depends on getting the client IP right.
+- **Reproduction**: no `cloudflare` package or middleware in the framework; `CF-Connecting-IP` is not trusted anywhere, so behind Cloudflare the remote address is a Cloudflare edge IP.
+- **Workaround**: app-level middleware that trusts `CF-Connecting-IP` only from Cloudflare ranges, a hand-written Turnstile verifier and manual purge calls.
+- **Request**: a `contrib/cloudflare` module (keeps core stdlib-only), each piece opt-in and fail closed:
+  - Real client IP: trust `CF-Connecting-IP` / `True-Client-IP` only when the TCP peer is in the published Cloudflare IPv4/IPv6 ranges (embedded list plus an optional scheduled refresh from `https://www.cloudflare.com/ips-v4` and `/ips-v6`); integrates with the core trusted-proxy / client-IP API so rate limits, logs and sessions see the real IP.
+  - Origin lock: middleware rejecting direct-to-origin requests (peer not in Cloudflare ranges), optional Authenticated Origin Pulls (mTLS client cert check) helper.
+  - Bot checks: Turnstile server-side verification (`siteverify`, idempotency key, hostname and action checks, timeout, fail-closed default) as a form/route guard compatible with the existing challenge middleware; helpers exposing `cf-ipcountry`, `cf-ray`, verified-bot and bot-score headers (Bot Management, when the plan sends them) as request context values, never trusted unless the origin lock is on.
+  - CDN: `Cache-Control` / `CDN-Cache-Control` / `Cloudflare-CDN-Cache-Control` helpers and cache-tag headers for HTML and assets; a purge client (by URL, tag, prefix, everything) using an API token with zone-scoped permissions, usable from jobs.
+  - Security: helpers for WAF-friendly headers, a CSP report endpoint compatible with Cloudflare Page Shield reports, and Cloudflare Access JWT validation (`Cf-Access-Jwt-Assertion`) for admin routes.
+  - `TestSecurity_*` coverage: spoofed `CF-Connecting-IP` from a non-Cloudflare peer ignored, Turnstile replay/hostname mismatch rejected, Turnstile outage fails closed, Access JWT with wrong audience/expired rejected.
