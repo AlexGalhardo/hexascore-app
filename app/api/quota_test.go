@@ -274,8 +274,12 @@ func TestQuotaFlushFailureKeepsDeltas(t *testing.T) {
 	}
 
 	h := metered(m, FreeForAll, http.HandlerFunc(func(http.ResponseWriter, *http.Request) {}))
-	if rec := get(h); rec.Code != http.StatusServiceUnavailable {
-		t.Fatalf("stale meter answered %d, want 503", rec.Code)
+	if rec := get(h); rec.Code != http.StatusServiceUnavailable || rec.Header().Get("Retry-After") != "30" {
+		t.Fatalf(
+			"stale meter answered %d (Retry-After %q), want 503 with Retry-After: 30",
+			rec.Code,
+			rec.Header().Get("Retry-After"),
+		)
 	}
 }
 

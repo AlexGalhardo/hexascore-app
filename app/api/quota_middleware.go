@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/AlexGalhardo/vukem/auth"
-	"github.com/AlexGalhardo/vukem/errs"
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/models"
@@ -69,7 +68,7 @@ func Quota(m *Meter, plans PlanResolver, problemBase string) func(http.Handler) 
 				web.SecurityEvent(r, "api.quota_stale")
 			}
 
-			c.HandleError(errs.Wrap(http.StatusServiceUnavailable, err))
+			c.HandleError(Unavailable(err))
 		})
 	}
 }
