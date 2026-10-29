@@ -33,7 +33,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-022 | 2026-10-28 | low | open |
 | VF-023 | 2026-10-28 | low | open |
 | VF-024 | 2026-10-28 | medium | merged in main (PR #10), unreleased |
-| VF-025 | 2026-10-28 | medium | open |
+| VF-025 | 2026-10-28 | medium | merged in main (PR #16), unreleased |
 | VF-026 | 2026-10-28 | medium | merged in main (PR #13), unreleased |
 | VF-027 | 2026-10-28 | medium | merged in main (PR #9), unreleased |
 | VF-028 | 2026-10-28 | low | open |
@@ -48,7 +48,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-037 | 2026-10-29 | medium | open |
 | VF-038 | 2026-10-29 | medium | in_progress (framework) |
 | VF-039 | 2026-10-29 | low | open |
-| VF-040 | 2026-10-29 | medium | open |
+| VF-040 | 2026-10-29 | medium | merged in main (PR #13), unreleased |
 | VF-041 | 2026-10-29 | low | open |
 | VF-042 | 2026-10-29 | low | open |
 | VF-043 | 2026-10-29 | low | open |
@@ -267,7 +267,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-025: No cache hook for Inertia SSR output
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #16, <https://github.com/AlexGalhardo/vukem/pull/16>), unreleased. Native: `inertia.SSRConfig{Cache: cache.NewMemory(n), CacheTTL: 5 * time.Minute, CacheWhen: func(c *web.Ctx, p *inertia.Page) bool {...}}`; key = SHA-256 of the page object (component, all props, URL, asset version), nonce-safe because the root view adds the nonce; failures and the Vite dev server are never cached.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` (SSR).
 - **Context**: public catalogue pages are rendered for anonymous users thousands of times with identical props; the SSR call (Node, 3 s timeout) runs on every request. A documented hook to cache the rendered `head`/`body` by a key (component + props hash + locale) for a short TTL would cut CPU in the single container (D-08).
 - **Workaround**: an app middleware caching the whole HTML response for anonymous requests, which must also handle the per-request CSP nonce (re-inject the nonce into cached markup).
@@ -397,7 +397,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-040: Migration runner has no lock hook and no non-transactional migrations (custom command needed)
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: merged in main (PR #13, <https://github.com/AlexGalhardo/vukem/pull/13>), unreleased (same fix as VF-017 and VF-026). `Migrator.Up/Rollback/Reset/Fresh` take the lock themselves (Postgres advisory, MySQL `GET_LOCK`) and `schema.Migration{NoTransaction: true}` is recorded like any migration, so the `migrate:locked` wrapper and `scripts/concurrent-index.sh` can go; the requested output helper is no longer needed because the built-in `migrate` command now locks.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` ("Managing them with migrate"), `https://vukem.dev/docs/deployment/docker-and-railway`, `https://vukem.dev/docs/cli/reference-runtime`.
 - **Context**: confirms VF-026 and VF-017 on a real run. `app.Migrator().Up` takes no lock, so two `migrate` processes can race; `schema.Migration` has no hook for a lock and no non-transactional mode.
 - **Workaround** (spike `agent/senior/P0.F.5.2`): custom command `migrate:locked` (`vukem.CommandFunc`) holding `pg_advisory_lock(hashtext('hexascore:migrate'))` on a dedicated `*sql.Conn` from `db.SQL()` around `Migrator().Up`, duplicating the output of `migrate` (`Migrated:` lines, `Nothing to migrate.`); and `scripts/concurrent-index.sh` running `database/concurrent/<name>.sql` through psql outside a transaction after dropping an INVALID leftover. Concurrent indexes are not recorded by `migrate:status`.
