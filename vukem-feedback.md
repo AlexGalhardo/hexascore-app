@@ -9,7 +9,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 | id | date | severity | status |
 | --- | --- | --- | --- |
-| VF-001 | 2026-10-28 | high | open |
+| VF-001 | 2026-10-28 | high | wontfix (post-1.0, FQ-001) |
 | VF-002 | 2026-10-28 | medium | in_progress (framework, vukem PR #7) |
 | VF-003 | 2026-10-28 | medium | open |
 | VF-004 | 2026-10-28 | low | open |
@@ -43,7 +43,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
-- **Date**: 2026-10-28. **Severity**: high. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: high. **Status**: wontfix (post-1.0, FQ-001): vukem keeps passkeys/WebAuthn on its post-1.0 list (docs/security.md); owner chose option (a) on 2026-10-29.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/two-factor` (Concepts, Guards, Hashing [heading not on page 2026-10-29], `install:auth`, Two-factor, Social login).
 - **Context**: HexaScore's legacy app (Better Auth 1.7.7) offers passkeys. The rewrite drops them at launch (brainstorming D-06) because the framework has no WebAuthn registration/assertion flow, credential storage or recovery path.
 - **Reproduction**: search `docs/` and `auth/` for `webauthn`, `passkey`, `FIDO`: no matches.
