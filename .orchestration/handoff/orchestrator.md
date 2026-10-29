@@ -17,7 +17,7 @@
 
 ## Next
 
-1. Finish vukem #33, #34, release v0.33.0, adoption task.
+1. vukem PRs #29 to #34 are ALL merged (2026-10-29). Release v0.33.0, then the adoption task.
 2. P1.H.3.2 (Pricing + API docs pages), P1.H.5.1 release v0.8.0, P1.I group, P1.I.7.1 v0.9.0.
 3. Phase 2 from P2.A.1.2 on needs owner gates (Railway plan/buckets/DNS/secrets/spend).
 
