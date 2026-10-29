@@ -1,0 +1,6 @@
+{
+  // Rules live in .markdownlint.jsonc; this file only scopes the run.
+  "globs": ["**/*.md"],
+  // Vendored third-party skill text is linted upstream, not here.
+  "ignores": ["node_modules/**", ".claude/skills/**", ".orchestration/**"]
+}

@@ -1,0 +1,42 @@
+name: DAST
+
+# Weekly passive scans of the built image (SDD 13): OWASP ZAP baseline and
+# nuclei. Findings are reports, not a gate. Adapted from
+# AlexGalhardo/vukem-marketplace-reactjs.
+on:
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Build and start the app
+        run: |
+          docker build -t hexascore:dast .
+          docker run -d --name app -p 3000:3000 -e APP_KEY="base64:$(openssl rand -base64 32)" -e APP_URL=http://localhost:3000 hexascore:dast
+          for i in $(seq 1 30); do curl -fsS localhost:3000/up && break; sleep 1; done
+      - name: ZAP baseline
+        uses: zaproxy/action-baseline@v0.15.0
+        with:
+          target: http://localhost:3000
+          allow_issue_writing: false
+          fail_action: false
+      - name: nuclei
+        uses: projectdiscovery/nuclei-action@v3.1.0
+        with:
+          args: -u http://localhost:3000 -severity medium,high,critical -o nuclei.txt
+      - uses: actions/upload-artifact@v7.0.2
+        if: always()
+        with:
+          name: dast-reports
+          path: |
+            report_html.html
+            report_json.json
+            nuclei.txt
+          retention-days: 14
