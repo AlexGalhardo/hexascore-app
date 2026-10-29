@@ -8,7 +8,8 @@
       "name": "Nome",
       "email": "E-mail",
       "nickname": "Nickname",
-      "save": "Salvar nome"
+      "save": "Salvar nome",
+      "locale": "Idioma"
     },
     "password": {
       "setTitle": "Definir senha",
@@ -37,12 +38,16 @@
       "copied": "Copiado.",
       "done": "Já guardei meus códigos",
       "disabled": "Autenticação em dois fatores desativada.",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "needPassword": "Defina uma senha acima antes de ativar a autenticação em duas etapas.",
+      "manage": "Gerenciar autenticação em duas etapas"
     },
     "privacy": {
       "title": "Privacidade",
       "label": "Perfil privado",
-      "help": "Suas notas continuam nas médias da comunidade, mas seu perfil e suas listas ficam ocultos para outros usuários."
+      "help": "Suas notas continuam nas médias da comunidade, mas seu perfil e suas listas ficam ocultos para outros usuários.",
+      "personalization": "Desativar recomendações personalizadas",
+      "personalizationHelp": "Paramos de usar suas avaliações para sugerir itens a você."
     },
     "delete": {
       "title": "Excluir conta",
@@ -57,6 +62,14 @@
     "banner": {
       "text": "Sua conta está agendada para exclusão em {date}.",
       "cancel": "Cancelar exclusão"
+    },
+    "sessions": {
+      "title": "Sessões ativas",
+      "current": "Este dispositivo",
+      "revoke": "Sair",
+      "revokeAll": "Sair de todos os outros dispositivos",
+      "empty": "Nenhuma outra sessão para mostrar.",
+      "lastSeen": "Última atividade"
     }
   },
   "actions": {
