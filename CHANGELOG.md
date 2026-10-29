@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Fixed
 
 - Public lists of a banned owner are `noindex` (header and `seo.indexable`); the library filters and "next page" link keep the locale prefix; list reordering keeps keyboard focus on the moved row; the list-edit items heading no longer reads "Add to list".
+- `/api/v1` relation filters and counts (`listEntityItems`, `listItems` `genre`/`platform`, `listGenres`) match only relations from allowlisted sources, so they no longer reveal TMDB/IGDB-sourced relations; an entity `name` from `default_name` without a provenance source is omitted (fail closed).
 
 ## [0.6.0] - 2026-10-29
 

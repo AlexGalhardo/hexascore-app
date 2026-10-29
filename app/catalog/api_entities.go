@@ -42,7 +42,7 @@ func LoadAPIEntity(ctx context.Context, db Querier, id, kind, locale string, p P
 	err := db.QueryRowContext(ctx, `SELECT e.id::text, e.kind, e.slug, e.wikidata_qid, e.code,
   coalesce(t.name, te.name, e.default_name),
   CASE WHEN t.name IS NOT NULL THEN t.name_source WHEN te.name IS NOT NULL THEN te.name_source
-    ELSE coalesce(e.provenance->>'default_name', 'hexascore') END,
+    ELSE e.provenance->>'default_name' END,
   CASE WHEN t.description IS NOT NULL THEN t.description ELSE te.description END,
   CASE WHEN t.description IS NOT NULL THEN t.description_source ELSE te.description_source END,
   CASE WHEN t.description IS NOT NULL THEN t.description_licence ELSE te.description_licence END,

@@ -38,17 +38,22 @@ type Facet struct {
 	Count int    `json:"count"`
 }
 
-// Facets lists the genres and platforms used by public items of typ, most used first.
-func Facets(ctx context.Context, db Querier, typ string) (genres, platforms []Facet, err error) {
+// Facets lists the genres and platforms used by public items of typ, most used first; non-nil sources keeps
+// only relations from those sources (API).
+func Facets(ctx context.Context, db Querier, typ string, sources []string) (genres, platforms []Facet, err error) {
+	var srcArray any // NULL = every source (site)
+	if sources != nil {
+		srcArray = "{" + strings.Join(sources, ",") + "}"
+	}
 	load := func(kind string) ([]Facet, error) {
 		rows, err := db.QueryContext(ctx, `SELECT e.slug, e.default_name, count(*)
 FROM entities e
-JOIN item_entities ie ON ie.entity_id = e.id AND ie.role = e.kind
+JOIN item_entities ie ON ie.entity_id = e.id AND ie.role = e.kind AND ($3::text[] IS NULL OR ie.source = ANY($3))
 JOIN items i ON i.id = ie.item_id AND i.type = $1 AND i.visibility = 'public'
 WHERE e.kind = $2
 GROUP BY e.slug, e.default_name
 ORDER BY count(*) DESC, e.default_name
-LIMIT 200`, typ, kind)
+LIMIT 200`, typ, kind, srcArray)
 		if err != nil {
 			return nil, fmt.Errorf("facets %s: %w", kind, err)
 		}
