@@ -70,6 +70,7 @@ func Web(r *router.Router, app *vukem.App) error {
 			"meta.",
 			"nav.",
 			"home.",
+			"help.",
 			"footer.",
 			"cookies.",
 			"sandbox.",

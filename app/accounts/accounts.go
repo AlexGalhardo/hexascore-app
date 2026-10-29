@@ -40,6 +40,8 @@ type Accounts struct {
 	Events *events.Bus
 	// ProblemBase prefixes problem type URLs (APP_PROBLEM_BASE_URL).
 	ProblemBase string
+	// Subscriptions cancels live paid subscriptions before a purge (P1.H.3.1 replaces the default).
+	Subscriptions SubscriptionCanceller
 	// Messages holds the auth messages of lang/ (see T).
 	Messages *i18n.Bundle
 	// URL is the public base URL used in emails (APP_URL).
@@ -144,7 +146,8 @@ func New(app *vukem.App) (*Accounts, error) {
 	web.InsecureCookies = !app.Config.IsProduction() && !strings.HasPrefix(app.Config.URL, "https://")
 
 	return &Accounts{
-		DB: db, Mailer: mailer, Users: users, Web: web, Tokens: tokens, Hasher: hasher,
+		Subscriptions: noSubscriptions{},
+		DB:            db, Mailer: mailer, Users: users, Web: web, Tokens: tokens, Hasher: hasher,
 		API: auth.NewTokenGuard("api", users, tokens),
 		// Links signed before an APP_KEY rotation verify until the old key leaves APP_PREVIOUS_KEYS.
 		Signer: signed.New(signingKey).

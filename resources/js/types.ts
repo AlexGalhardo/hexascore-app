@@ -5,6 +5,7 @@ export interface User {
 	name: string;
 	email: string;
 	email_verified_at: string | null;
+	deletion_scheduled_at?: string | null;
 }
 
 export interface SharedProps {

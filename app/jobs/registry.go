@@ -11,4 +11,5 @@ import (
 // parameter "app" with the first handler that needs it.
 func All(app *vukem.App) []queue.Registration {
 	return []queue.Registration{handleRefreshEntityStats(app), handleMerged(), handleSyncSearchSuggest(app)}
+	return []queue.Registration{handleRefreshEntityStats(app), handleMerged(), handleDeletionPurge(app)}
 }

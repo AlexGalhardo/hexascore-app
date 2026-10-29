@@ -22,6 +22,9 @@ type User struct {
 	BannedAt     orm.NullTime `json:"banned_at"`
 	BanReason    *string      `json:"ban_reason"`
 	BanExpiresAt orm.NullTime `json:"ban_expires_at"`
+	// DeletionScheduledAt starts the 30-day grace period; AnonymizedAt marks a purged account.
+	DeletionScheduledAt orm.NullTime `json:"deletion_scheduled_at"`
+	AnonymizedAt        orm.NullTime `json:"-"`
 }
 
 // RoleAdmin is the Role of administrators.

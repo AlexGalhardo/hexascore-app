@@ -1137,5 +1137,22 @@
       "body": "Seu nickname é seu nome público em perfis, listas e nas notas da comunidade.",
       "submit": "Salvar nickname"
     }
+  },
+  "help": {
+    "deleteAccount": {
+      "metaTitle": "Excluir sua conta",
+      "title": "Como excluir sua conta do HexaScore",
+      "intro": "Você mesmo pode excluir sua conta, no app ou no site. Não é preciso pedir ao suporte.",
+      "steps": {
+        "0": "Entre e abra seu perfil.",
+        "1": "Escolha \"Excluir minha conta\" e confirme após a contagem de 10 segundos.",
+        "2": "Você é desconectado em todos os dispositivos."
+      },
+      "grace": "A exclusão vale após 30 dias. Até lá você pode entrar e cancelar.",
+      "erased": "Quando valer, seu nome, e-mail, apelido, foto, senha, logins vinculados e chaves de API são apagados, e qualquer assinatura no cartão é cancelada.",
+      "kept": "Suas notas permanecem nas pontuações da comunidade sem qualquer vínculo com você, como \"Usuário excluído\".",
+      "cta": "Ir para meu perfil",
+      "login": "Entrar"
+    }
   }
 }
