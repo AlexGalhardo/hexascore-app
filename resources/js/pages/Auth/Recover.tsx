@@ -2,15 +2,16 @@ import { Head, useForm } from "@inertiajs/react";
 import type { FormEvent } from "react";
 
 import Field from "../../components/Field";
+import { challengeHeaders } from "../../lib/challenge";
 import { useT } from "../../lib/useT";
 
 export default function Recover() {
 	const t = useT();
 	const form = useForm({ email: "" });
 
-	const submit = (e: FormEvent) => {
+	const submit = async (e: FormEvent) => {
 		e.preventDefault();
-		form.post("/recover-password");
+		form.post("/recover-password", { headers: await challengeHeaders("reset") });
 	};
 
 	return (

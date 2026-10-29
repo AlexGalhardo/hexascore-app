@@ -28,6 +28,11 @@ func Auth(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
+	pow, err := newChallenger(app, acc.ProblemBase)
+	if err != nil {
+		return err
+	}
+
 	h := account.New(acc)
 	guest := auth.Guest(acc.Web)
 	required := auth.Required(acc.Web)
@@ -49,14 +54,14 @@ func Auth(r *router.Router, app *vukem.App) error {
 	signupEmail := ratelimit.Middleware(limiters("register.email", 5, time.Hour), account.RegisterThrottleKey)
 
 	r.Get("/login", h.ShowLogin).Name("login").Use(guest)
-	r.Post("/login", h.Login).Use(guest, anyIdentifier, throttle, perAccount)
+	r.Post("/login", h.Login).Use(guest, anyIdentifier, throttle, perAccount, pow.Require("login"))
 	r.Get("/signup", h.ShowRegister).Name("register").Use(guest)
-	r.Post("/signup", h.Register).Use(guest, signupIP, signupEmail)
+	r.Post("/signup", h.Register).Use(guest, signupIP, signupEmail, pow.Require("signup"))
 	r.Get("/signup/check-email", h.CheckEmail).Name("register.check").Use(guest)
 	r.Post("/logout", h.Logout).Name("logout").Use(required)
 
 	r.Get("/recover-password", h.ShowForgot).Name("password.request").Use(guest)
-	r.Post("/recover-password", h.SendResetLink).Name("password.email").Use(guest, mails)
+	r.Post("/recover-password", h.SendResetLink).Name("password.email").Use(guest, mails, pow.Require("reset"))
 	r.Get("/reset-password/{token}", h.ShowReset).Name("password.reset").Use(guest)
 	r.Post("/reset-password", h.Reset).Name("password.update").Use(guest)
 
