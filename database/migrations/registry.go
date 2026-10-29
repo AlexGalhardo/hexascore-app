@@ -10,5 +10,11 @@ func All() []schema.Migration {
 		m20261029100001CreateItemsTable(),
 		m20261029100002CreateItemTranslationsTable(),
 		m20261029100003CreateItemAltTitlesTable(),
+		m20261029100004CreateEntitiesTable(),
+		m20261029100005CreateEntityTranslationsTable(),
+		m20261029100006CreateItemEntitiesTable(),
+		m20261029100007CreateEntityLinksTable(),
+		m20261029100008CreateItemLinksTable(),
+		m20261029100009CreateEntityStatsTable(),
 	}
 }
