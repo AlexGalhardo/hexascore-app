@@ -26,6 +26,6 @@ Deploy on Railway: one project, environments `production` and `staging`, service
 
 ## Region measurement (P2.A.1.1, 2026-10-29, partial)
 
-- Probe: one host (Brazil, Windows, `curl` via `scripts/infra/region-latency.sh`, 50 samples, 0 failures) against the existing public service <https://app-production-785f.up.railway.app/up>. Its Railway region is `[NÃO VERIFICADO]`: the scratch services needed to measure `us-east4-eqdc4a`, `us-west2` and `europe-west4-drams3a` (names from <https://docs.railway.com/reference/deployment-regions>, read 2026-10-29) are a human gate (owner's account).
+- Probe: one host (Brazil, Windows, `curl` via `scripts/infra/region-latency.sh`, 50 samples, 0 failures) against the existing public service <https://app-production-785f.up.railway.app/up>. Its Railway region is [NOT VERIFIED]: the scratch services needed to measure `us-east4-eqdc4a`, `us-west2` and `europe-west4-drams3a` (names from <https://docs.railway.com/reference/deployment-regions>, read 2026-10-29) are a human gate (owner's account).
 - Result for that endpoint: connect p50 0.035 s, p95 0.115 s; time to first byte p50 0.214 s, p95 0.373 s.
 - Region choice: still open. The 3 Brazilian probes and the per-region comparison are pending the owner's approval of the scratch project; until then the ADR's default (US East if no South American region exists) stands.

@@ -19,8 +19,8 @@ for url in "$@"; do
 	tmp="$(mktemp)"
 	fails=0
 	for _ in $(seq "$samples"); do
-		# A failed request is counted, never recorded as a fast sample.
-		if ! line="$(curl -s -o /dev/null -w '%{time_connect} %{time_starttransfer}' --max-time 10 "$url")"; then
+		# A failed request (network error or HTTP status >= 400) is counted, never recorded as a fast sample.
+		if ! line="$(curl -fsS -o /dev/null -w '%{time_connect} %{time_starttransfer}' --max-time 10 "$url")"; then
 			fails=$((fails + 1))
 			continue
 		fi
