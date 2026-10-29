@@ -1,3 +1,5 @@
+//go:build integration
+
 package console_test
 
 import (
