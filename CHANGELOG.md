@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Profile, public list, library, lists-management and list-edit pages (`User/Profile`, `User/List`, `Library/Index`, `Lists/Index`, `Lists/Edit`) with GET `/lists`, `/lists/{id}/edit` and `/u/{nickname}/lists/{id}`; reorder uses move up/down buttons.
 
+### Fixed
+
+- Public lists of a banned owner are `noindex` (header and `seo.indexable`); the library filters and "next page" link keep the locale prefix; list reordering keeps keyboard focus on the moved row; the list-edit items heading no longer reads "Add to list".
+
 ## [0.6.0] - 2026-10-29
 
 ### Added
