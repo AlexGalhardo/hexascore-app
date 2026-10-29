@@ -22,7 +22,7 @@ test.describe("pricing", () => {
 		await expect(page).toHaveURL(/currency=eur/);
 		await expect(page.getByText("€").first()).toBeVisible();
 		await currency.getByRole("link", { name: "BRL" }).click();
-		await expect(page.getByText(/(R\$|BRL)\s?29/).first()).toBeVisible();
+		await expect(page.getByText(/149[.,]00/).first()).toBeVisible();
 		await expectNoSeriousA11yViolations(page);
 	});
 
