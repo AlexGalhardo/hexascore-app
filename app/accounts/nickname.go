@@ -2,15 +2,11 @@ package accounts
 
 import (
 	"context"
-	"crypto/sha256"
 	"database/sql"
-	"encoding/hex"
 	"errors"
-	"net/http"
 	"strings"
 
 	"github.com/AlexGalhardo/vukem/auth"
-	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/models"
@@ -68,40 +64,4 @@ func (a *Accounts) EmailForIdentifier(ctx context.Context, identifier string) (s
 	}
 
 	return email, nil
-}
-
-// LoginThrottleKeys are auth.ThrottleKeys keyed by the resolved account: an
-// email and the nickname of the same user share one budget, so alternating
-// identifiers cannot double the guesses. Unknown nicknames keep their own
-// lowercased key; non-POST requests are not counted.
-func (a *Accounts) LoginThrottleKeys(field string) (perIP, perAccount ratelimit.KeyFunc) {
-	baseIP, baseAccount := auth.ThrottleKeys(field)
-	account := func(r *http.Request) (string, bool) {
-		if r.Method != http.MethodPost {
-			return "", false
-		}
-		id := auth.RequestEmail(r, field)
-		if id == "" {
-			return "", false
-		}
-		email, err := a.EmailForIdentifier(r.Context(), id)
-		if err != nil || email == "unknown-nickname" {
-			email = "nick:" + id
-		}
-		sum := sha256.Sum256([]byte(email))
-		return hex.EncodeToString(sum[:16]), true
-	}
-	perIP = func(r *http.Request) string {
-		if key, ok := account(r); ok {
-			return "login:" + key + ":" + ratelimit.ByIP(r)
-		}
-		return baseIP(r)
-	}
-	perAccount = func(r *http.Request) string {
-		if key, ok := account(r); ok {
-			return "login.account:" + key
-		}
-		return baseAccount(r)
-	}
-	return perIP, perAccount
 }

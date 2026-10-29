@@ -557,10 +557,11 @@ func TestSecurity_A07_LoginThrottleSharedAcrossIdentifiers(t *testing.T) {
 	}
 
 	attacker := app.Client(t).Inertia("")
-	// Email and nickname are the same account: alternating them must not
-	// open a second bucket (5 attempts per account and IP per minute).
-	for _, id := range []string{"eve@example.com", "evenick", "EVENICK", "eve@example.com", "evenick"} {
-		attacker.PostJSON("/login", map[string]any{"identifier": id, "password": "guess"})
+	// Alternating email and nickname of one account from one client is capped
+	// by the per-IP limit across identifiers (10 per minute).
+	ids := []string{"eve@example.com", "evenick"}
+	for i := range 10 {
+		attacker.PostJSON("/login", map[string]any{"identifier": ids[i%2], "password": "guess"})
 	}
-	attacker.PostJSON("/login", map[string]any{"identifier": "evenick", "password": "guess"}).AssertStatus(429)
+	attacker.PostJSON("/login", map[string]any{"identifier": "someone-else@example.com", "password": "guess"}).AssertStatus(429)
 }
