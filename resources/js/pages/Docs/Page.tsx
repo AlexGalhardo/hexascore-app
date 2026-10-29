@@ -37,6 +37,15 @@ export default function Page({ slug, body, toc, pages }: Props) {
 								</Link>
 							</li>
 						))}
+						<li>
+							{/* Scalar is a standalone page outside Inertia, so this is a full navigation. */}
+							<a
+								href="/docs/reference"
+								className="inline-flex min-h-11 items-center hover:underline"
+							>
+								{t("docs.nav.reference")}
+							</a>
+						</li>
 					</ul>
 					{toc.length > 0 && (
 						<>
