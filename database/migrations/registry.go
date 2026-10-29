@@ -30,5 +30,12 @@ func All() []schema.Migration {
 		m20261029120001SeedScoreFormulaV1(),
 		m20261029130000CreateAdminAuditLogsTable(),
 		m20261029130100CreateCatalogMergeAuditTable(),
+		m20261029140000CreateSearchExtensions(),
+		m20261029140001CreateHsNormFunction(),
+		m20261029140002CreateTextSearchConfigurations(),
+		m20261029140003AddSearchColumnsToItemTranslationsTable(),
+		m20261029140004AddNormColumnsToSearchTables(),
+		m20261029140005CreateSearchIndexes(),
+		m20261029140006CreateSearchDirtyTable(),
 	}
 }
