@@ -178,6 +178,23 @@
       }
     }
   },
+  "contact": {
+    "metaTitle": "Contact",
+    "title": "Contact us",
+    "body": "Send us a question, feedback or a bug report. We reply by email.",
+    "name": "Name",
+    "email": "Email",
+    "subject": "Topic",
+    "topics": {
+      "question": "Question",
+      "feedback": "Feedback",
+      "bug": "Bug report"
+    },
+    "message": "Message",
+    "hint": "Between 32 and 512 characters.",
+    "submit": "Send message",
+    "sent": "Thanks, your message was sent."
+  },
   "auth": {
     "fields": {
       "identifier": "Email or nickname",
