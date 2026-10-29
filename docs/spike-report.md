@@ -145,3 +145,20 @@ Decisive output:
 - Note: the items seeder returns early on non-Postgres dialects so the scaffold's SQLite seeder test keeps passing.
 
 Verdict: works (workaround: app-owned HMAC cursor and hand-written problem body, VF-039; VF-005).
+
+## P0.F.2.2 Go and Node SSR in one container
+
+Verdict: works (Go supervisor in the app; no extra init system).
+
+Spike branch `agent/orchestrator/P0.F.2.2`.
+
+- `app/ssr/supervisor.go`: `Supervise(ctx, delay, "node", "bootstrap/ssr/ssr.js")` restarts Node one second after every exit and stops on SIGTERM/SIGINT; `cmd/app/main.go` starts it only for the server process (`len(os.Args) == 1`) when `SSR_SUPERVISE=true`, so `migrate` and other commands never spawn Node. `TestSuperviseRestartsUntilCancelled` passes. A small supervisor was chosen over `ssr:start` as a child because `ssr:start` exits 0 silently when the bundle does not listen (VF-038) and would add a second restart loop.
+- SSR bundle made self-contained (`ssr.noExternal: true` in the starter plugin's SSR branch): it imports only Node built-ins, so the runtime needs no `node_modules`. Page components stay code-split under `bootstrap/ssr/assets/`; the whole `bootstrap/ssr` directory must be copied (copying only `ssr.js` produced `component-resolution` fallbacks, caught by the P0.F.2.1 counter).
+- `Dockerfile`: assets stage runs `bun run build && bun run build:ssr`; runtime base `node:26.13.0-alpine3.24` (exact tag, latest LTS on 2026-10-29 per E-002) instead of `alpine:3.24.2`; `NODE_ENV=production SSR_SUPERVISE=true`; non-root user kept.
+
+Acceptance (2026-10-29):
+
+- `docker build -t hexascore-spike .` → exit 0; image size 298 MB (Node runtime is most of it).
+- `docker run -p 3010:3000 ... hexascore-spike`, then `GET /up?checks=1` → `200 {"status":"ok","checks":{"db":"ok","ssr":"ok"}}`; `GET /` → server-rendered `#app` markup.
+- `docker exec <id> pkill node` → `ssr: ok` again after 1.3 s (≤ 5 s), fallback counter 0.
+- Boot needs the billing variables (`STRIPE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO`, `STRIPE_PRICE_BUSINESS`) because the P0.F.8.1 routes validate them at startup; test-mode values were used.

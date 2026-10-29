@@ -10,10 +10,10 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | id | date | severity | status |
 | --- | --- | --- | --- |
 | VF-001 | 2026-10-28 | high | wontfix (post-1.0, FQ-001) |
-| VF-002 | 2026-10-28 | medium | in_progress (framework, vukem PR #7) |
+| VF-002 | 2026-10-28 | medium | merged in main (PR #7), unreleased |
 | VF-003 | 2026-10-28 | medium | open |
 | VF-004 | 2026-10-28 | low | open |
-| VF-005 | 2026-10-28 | medium | open |
+| VF-005 | 2026-10-28 | medium | in_progress (framework, vukem PR #11) |
 | VF-006 | 2026-10-28 | low | open |
 | VF-007 | 2026-10-28 | low | open |
 | VF-008 | 2026-10-28 | medium | open |
@@ -60,7 +60,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-002: Inertia SSR falls back to client rendering silently by default
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #7, https://github.com/AlexGalhardo/vukem/pull/7), unreleased. Native API: `inertia.SSRConfig{Strict: true}` (503 + `Retry-After`, auto `inertia-ssr` readiness check) or per-request `inertia.RequireSSR(ctx)`.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` "Inertia v3 (BETA)" [heading not on page 2026-10-29] → SSR row: "falls back to client-side rendering on any failure (reported to `OnFailure`, default a warning log)".
 - **Context**: for a catalogue that depends on search indexing (ADR 0004), a silent fallback hides an SEO incident. HexaScore needs per-route policy: public routes must fail readiness or page an alert when SSR fails; logged-in routes may fall back.
 - **Reproduction**: stop the SSR process; request a public page; observe a 200 with client-rendered shell and only a warning log.
@@ -87,7 +87,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-005: No keyset (cursor) pagination helper in the ORM
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` "Querying"; `https://vukem.dev/docs/rest-apis/pagination` "Query conventions"; `https://vukem.dev/docs/frontend/inertia` Inertia `ScrollCursor(orm.CursorPage, name)`.
 - **Context**: `ScrollCursor` accepts an `orm.CursorPage`, but the documented query builder shows no way to build a keyset page over a composite order (`score DESC, id DESC`) with an opaque signed cursor. HexaScore lists (SDD 01, 05, 07) need this for every listing and for the paid API.
 - **Reproduction**: search `https://vukem.dev/docs/database/overview` for `Cursor`: only the Inertia prop is documented.
