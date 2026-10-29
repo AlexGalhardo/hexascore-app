@@ -1,5 +1,5 @@
-# senior handoff (2026-10-29, fourth session)
-Done, all in especialista queue (1-REV-*): P1.A.2.2 (branch agent/senior/P1.A.2.2, 42dcca0), P1.A.3.1 (agent/senior/P1.A.3.1, 82dbd72), P1.B.1.2 (agent/senior/P1.B.1.2, 4792f5d), P1.B.1.3 (agent/senior/P1.B.1.3, stacked on P1.B.1.2: merge it first).
+# senior handoff (2026-10-29, fifth session)
+Done, all in especialista queue (1-REV-*): P1.A.4.1 (agent/senior/P1.A.4.1), P1.C.1.2 (agent/senior/P1.C.1.2; direct deps x/crypto v0.58.0, x/text v0.43.0; password min 8 max 128 + classes in app/requests/password.go), P1.B.3.1 (agent/senior/P1.B.3.1), P1.B.4.3 (agent/senior/P1.B.4.3, stacked on P1.B.3.1: merge it first).
 Queue left: check queue/senior and reserve/senior (empty when this was written).
-Pitfalls: worktree wt/senior; Postgres 5433 hexascore/hexascore (TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable); psql not installed; `golangci-lint fmt ./...` fixes golines; python text-mode writes on Windows produce CRLF (use newline=''); biome excludes generated packages/tokens/tokens.{css,ts}.
-Open: git-cliff not installed by setup scripts; entity stats job needs a queue worker/driver check on Railway [NÃO VERIFICADO]; `vukem schedule:list` not run (needs APP_KEY).
+Pitfalls: worktree wt/senior; Postgres 5433 hexascore/hexascore (TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable); bash heredocs with apostrophes in Go code failed: use the Write tool; python text-mode on Windows mangles non-ASCII (use encoding='utf-8', newline=''); golangci-lint fmt ./... fixes golines; LocalePrefix puts _locale in the stripped request query (use originalURLKey for the visitor query); validation failure on POST answers 303 redirect back, not 422; rate limit 429 on repeated signup in one app (new app per case).
+Open: API id redirect /api/v1/{type}/{id} (FR-01-8) not implemented; vukem db:seed DemoCatalog CLI not run; git-cliff not installed.
