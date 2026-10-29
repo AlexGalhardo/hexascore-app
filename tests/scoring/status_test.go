@@ -131,3 +131,34 @@ VALUES ('E', 'ev@example.com', 'x', now(), now()) RETURNING id`).Scan(&uid); err
 		}
 	}
 }
+
+// TestSecurity_A04_StatusWritesRespectVisibilityAndBurst: hidden items are
+// not writable, and a status change during a burst limit leaves the score
+// untouched until the burst is released.
+func TestSecurity_A04_StatusWritesRespectVisibilityAndBurst(t *testing.T) {
+	r := newRig(t)
+	c := r.token(1, "status:write", "ratings:write")
+
+	hidden := r.item("game", "2020-01-01", "day", "released")
+	limited := r.item("game", "2020-01-01", "day", "released")
+
+	db, err := r.app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.SQL().
+		ExecContext(t.Context(), `UPDATE items SET visibility = 'hidden' WHERE id = $1`, hidden); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.SQL().ExecContext(t.Context(),
+		`UPDATE items SET ratings_limited_until = now() + interval '1 day' WHERE id = $1`, limited); err != nil {
+		t.Fatal(err)
+	}
+
+	c.PutJSON("/app/v1/items/"+hidden+"/status", map[string]any{"status": "completed"}).AssertNotFound()
+	c.PutJSON("/app/v1/items/"+limited+"/status", map[string]any{"status": "completed"}).AssertOK()
+
+	if n := r.countOf(`SELECT count(*) FROM items WHERE id = $1 AND score_computed_at IS NOT NULL`, limited); n != 0 {
+		t.Errorf("score recomputed during the burst limit")
+	}
+}
