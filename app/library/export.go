@@ -59,6 +59,11 @@ type Exports struct {
 	Ready func(ctx context.Context, userID int64, link, expires string) error
 }
 
+// ExportsDir is EXPORTS_DIR, default storage/exports; get is app.Source.Get.
+func ExportsDir(get func(string) string) string {
+	return cmp.Or(get("EXPORTS_DIR"), "storage/exports")
+}
+
 // NewExports wires the service: a private local disk under EXPORTS_DIR (default storage/exports) served only
 // through links signed with a key derived from APP_KEY.
 func NewExports(app *vukem.App, acc *accounts.Accounts) (*Exports, error) {
@@ -67,7 +72,7 @@ func NewExports(app *vukem.App, acc *accounts.Accounts) (*Exports, error) {
 		return nil, err
 	}
 
-	disk, err := storage.NewLocal(cmp.Or(app.Source.Get("EXPORTS_DIR"), "storage/exports"), "")
+	disk, err := storage.NewLocal(ExportsDir(app.Source.Get), "")
 	if err != nil {
 		return nil, err
 	}
