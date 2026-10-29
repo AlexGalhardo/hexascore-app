@@ -1688,7 +1688,7 @@ Phase-specific conventions:
 
 #### P2.D.3 Admin hardening
 
-- [ ] **P2.D.3.1** Add the admin middleware: mandatory confirmed 2FA, idle 30 min and absolute 12 h sessions, optional IP allowlist.
+- [x] **P2.D.3.1** Add the admin middleware: mandatory confirmed 2FA, idle 30 min and absolute 12 h sessions, optional IP allowlist.
   - Files/modules: `app/http/middleware/admin_guard.go`, `app/http/middleware/admin_guard_test.go`, `routes/admin.go`, `.env.example` (`ADMIN_IP_ALLOWLIST`), `vukem-feedback.md` (new entry: role-scoped 2FA, session lifetime, IP allowlist)
   - Refs: SDD 13 FR-13-5, §7.5 (Admin), §9 last item, §11 issue 7; SDD 03 §7.1; <https://vukem.dev/docs/security/rate-limiting> (`c.IP()` behind `TRUSTED_PROXIES`)
   - Depends on: P2.D.2.2, P1.C.3.1
