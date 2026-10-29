@@ -99,7 +99,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
     - `jq length testdata/betterauth_hashes.json` → ≥ 3 (ASCII password, accented password to exercise NFKC, 32-character password)
   - Notes: open-issues 03-1 is a `roadmap` row: this is that task. Never use real user hashes; generate fixtures from throwaway passwords. 2FA secrets (03-2, decided) are exported later by a Bun script over stdin; here only record which Better Auth function decrypts them.
 
-- [ ] **P0.F.1.3** Prove a compatibility hasher that verifies Better Auth scrypt hashes and rehashes to argon2id on login.
+- [x] **P0.F.1.3** Prove a compatibility hasher that verifies Better Auth scrypt hashes and rehashes to argon2id on login.
   - Files/modules: spike `app/accounts/compat_hasher.go`, `app/accounts/compat_hasher_test.go`, user model wiring for `NeedsRehash` and `PasswordUpdater`
   - Refs: SDD 03 §7.2, §9; ADR 0008; <https://vukem.dev/docs/security/authentication> "The idea" (hasher, optional interfaces)
   - Depends on: P0.F.1.1, P0.F.1.2

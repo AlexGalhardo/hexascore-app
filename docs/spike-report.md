@@ -179,3 +179,19 @@ Decisive output (fresh database `spike_lock`, two `migrate:locked` processes sta
 Limits: the lock protects only runs through `migrate:locked`; plain `migrate` still races (the pre-deploy step must call the locked command); `migrate:status` does not list the concurrent index; the script was run through `docker exec`, not a local `psql` (not installed here); `shellcheck` was not available.
 
 Verdict: workaround (lock and index script are app code; VF-040, VF-026, VF-017).
+
+## P0.F.1.3 Better Auth compatibility hasher
+
+Verdict: works (no framework change needed).
+
+Spike branch `agent/orchestrator/P0.F.1.3`. vukem's `auth.NewSessionGuard` takes any `hash.Hasher` (`Make`, `Verify`, `NeedsRehash`), and the guard stores a fresh hash through the provider's `PasswordUpdater` when `NeedsRehash` is true after a successful login (https://vukem.dev/docs/security/authentication "Password hashing"). So no VF is needed.
+
+- `app/accounts/compat_hasher.go`: `CompatHasher` wraps the scaffold's hasher (`hash.Default()`, or `hash.Fake()` in tests). Values matching `^[0-9a-f]{32}:[0-9a-f]{128}$` are verified with scrypt N=16384, r=16, p=1, dkLen=64 over `norm.NFKC` of the password, with the hex salt text as the salt and `subtle.ConstantTimeCompare`; `NeedsRehash` is always true for them. Everything else is delegated, and `Make` always produces argon2id.
+- `app/accounts/accounts.go`: `hasher = NewCompatHasher(hasher)`.
+- Dependencies: `golang.org/x/crypto v0.58.0` is now a direct dependency (Q-001, approved 2026-10-29). `golang.org/x/text v0.43.0` was already in the module graph.
+
+Acceptance (2026-10-29):
+
+- `go test ./app/accounts -run TestSecurity_A07_LegacyScryptVerifiesAndRehashes` → PASS. The test runs real HTTP sign-up and login. A wrong password redirects back to `/login` and leaves the stored Better Auth hash untouched. The fixture password logs in, and the stored value then starts with `$argon2id$`.
+- `TestCompatHasherBetterAuthFixtures` → 3/3 fixtures verify (including the NFKC-equivalent input), and a wrong password or a malformed value fails.
+- `go test ./...` on the spike → all packages `ok`.
