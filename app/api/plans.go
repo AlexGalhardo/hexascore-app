@@ -60,10 +60,3 @@ func (p Plan) ResetIn(now time.Time) int {
 
 // PlanResolver returns a user's effective plan (SDD 05 §7.5).
 type PlanResolver func(ctx context.Context, userID int64) (Plan, error)
-
-// FreeForAll is the resolver until billing exists: every user is on the free plan.
-// shortcut: no subscriptions yet, replace with the subscriptions lookup in P1.H.3.1.
-func FreeForAll(context.Context, int64) (Plan, error) {
-	p, _ := PlanByID(PlanFree)
-	return p, nil
-}

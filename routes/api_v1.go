@@ -13,6 +13,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/api"
+	"github.com/AlexGalhardo/hexascore-app/app/billing"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
@@ -40,7 +41,7 @@ func APIV1(r *router.Router, app *vukem.App) error {
 	meter := &api.Meter{Store: api.PGQuotaStore{DB: acc.DB}, Now: app.Now, Log: app.Log}
 	app.AddRunner("api-usage", meter)
 
-	plans := api.PlanResolver(api.FreeForAll)
+	plans := billing.PlanResolver(acc.DB, app.Now)
 	throttles := map[string]func(http.Handler) http.Handler{}
 
 	for _, id := range []string{api.PlanFree, api.PlanPro, api.PlanBusiness} {
