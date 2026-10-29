@@ -66,3 +66,18 @@ Acceptance:
 
 - `rg -n "scrypt|NFKC" <copy>/node_modules/better-auth/dist <copy>/node_modules/@better-auth` → `@better-auth/utils/dist/password.node.mjs:1` (`import { randomBytes, scrypt } from 'node:crypto'`), `:12` (`password.normalize("NFKC")`); constants quoted above with lines.
 - `jq '.cases | length' docs/spike/testdata/betterauth_hashes.json` → `3`.
+
+## P0.F.4.1 Host routing for api.<host>/v1
+
+Spike branch `agent/senior/P0.F.4.1` (commit 6570235). Files: `app/http/middleware/api_host.go` (+ `_test.go`), `routes/api.go` (`/api/v1/ping` group and `r.UseServer(middleware.APIHost(API_HOST))`), `routes/registry.go`, `bootstrap/app.go` (`vukem.WithOpenAPI(openapi.Info{Servers: ...})` from `API_URL`), `tests/api_host_test.go`. The server middleware runs before the mux (`router.build`: `r.server` wraps `dispatch`), so it rewrites `/v1/` to `/api/v1/` before route matching; on the API host any other path (`/`, `/login`, `/api/v1/*`, `/v10/*`) is 404.
+
+Env vars the tests need: none for `go test ./app/http/middleware/` and `go test ./tests/ -run APIHost` (in-memory SQLite, `API_HOST` is set through `vukemtest.Options.Env`). The full `go test ./...` also needs `TEST_DATABASE_URL` (postgres admin URL) for `TestRegisterOnPostgres`. Runtime env: `API_HOST=api.localhost`, `API_URL=http://api.localhost:3001/v1` (process env, for OpenAPI servers), `PORT=3001`.
+
+Decisive output (server on port 3001, spike Postgres):
+
+- `curl -s localhost:3001/api/v1/ping` and `curl -s -H 'Host: api.localhost' localhost:3001/v1/ping` both return `{"pong":"ok"}`.
+- `curl -s -o /dev/null -w '%{http_code}' -H 'Host: api.localhost' localhost:3001/` returns `404`.
+- `MSYS_NO_PATHCONV=1 vukem openapi:export -prefix /api/v1 | jq -r '.servers[0].url'` with `API_URL` set returns `http://api.localhost:3001/v1` (without it: `http://localhost:3000`, the `APP_URL` default). Paths stay `/api/v1/ping`, so the post-processing step `jq '.paths |= with_entries(.key |= sub("^/api/v1";""))'` is needed (VF-034). `//api/v1` in Git Bash failed (see VF-034).
+- `go test ./app/http/middleware/` `ok`; `go test ./tests/ -run APIHost` `ok`; full `go test ./...` `ok hexascore-spike/tests`.
+
+Verdict: works (workaround: OpenAPI servers via `bootstrap` process env, paths post-processed, VF-034; host routing itself is app middleware, VF-015).
