@@ -1,0 +1,3 @@
+Task: P1.H.2.2. Branch: agent/senior/P1.H.2.2. Repo: app. Report: .orchestration/reports/P1.H.2.2.md. rodada: 0
+Re-run: go test -count=1 -tags integration ./tests -run 'TestAPIEdge|TestProblemCatalog|TestAPIContract'; go test ./...; golangci-lint run --build-tags integration ./...
+Check: problemWriter buffering in api_edge.go (streaming/Flush unaffected for non-problem responses), SDD 05 6.1 servers divergence.
