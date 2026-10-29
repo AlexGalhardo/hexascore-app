@@ -123,10 +123,12 @@ Gauges read from tables owned by other SDDs:
 - Handler chain: dedup, then JSON to stdout plus `telegram.NewHandler`, passed with `WithLogger`. The "used as given" rule and `logging.NewDedup` are documented only in [L-sub]. The site documents a 1m `LOG_DEDUP_WINDOW` [V-conf].
 - Output goes to stdout because Railway maps stderr to `level.error` [R-logs].
 - `user_hash` = hex(HMAC-SHA256(`app.DeriveKey("log", 32)`, user_id))[:16] [V-conf]. Two changes are [NOT IN VUKEM DOCS] (issue 2): hashing vukem's own user-id attribute and truncating `ip` to /24 or /48.
+- Implementation (P2.C.1.1, VF-022 workaround): `app/logging` wraps `app.Log` before `routes.Web` installs vukem's default stack, so vukem's `Logger` writes through it while `LOG_FORMAT`, dedup and `otel.LogHandler` stay vukem's. On the `request` line it truncates `ip` and `peer`, replaces `duration` with `duration_ms`, and adds `route` (the matched `ServeMux` pattern, `unmatched` otherwise; router middleware `RequestRoute`) and `user_hash` (recorded by `NotBanned`, which resolves the user on every authenticated group) through a per-request holder installed by the server middleware `RequestLog`. `scripts/ops/check-logs.sh` checks a log stream.
 - Sampling: 2xx/3xx on `/up`, `/build/*`, `/search/suggest` and `/search/events` is kept at 1 in 100. Every 4xx, every 5xx and anything over 1 s is always kept. The sampling handler is app code [NOT IN VUKEM DOCS].
 - Redaction:
   - `Authorization` and `Cookie` are never logged, and security events go out at WARN with stable names [V-sec].
   - Password and token redaction is documented only in [L-sec] (`TestSecurity_A09_LoggerNeverLogsCredentials`).
+  - App layer (`app/logging`, `TestSecurity_A09_HexaLogsRedacted`): values of keys such as `password`, `token`, `authorization`, `cookie`, `api_key`, `email`, `q`, `query` become `[REDACTED]`; emails, `Bearer`/`Basic` credentials, `hx_live_`/`hx_app_`/Stripe/Resend keys and sensitive query parameters are scrubbed from messages, strings and errors.
 
 ### 6.2 Metrics catalogue
 
