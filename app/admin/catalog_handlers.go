@@ -223,10 +223,14 @@ func (h CatalogHandlers) SaveAffiliateLink(c *web.Ctx) error {
 	}
 
 	err = h.Accounts.DB.Tx(c.Context(), func(tx *database.Tx) error {
-		var oldURL sql.NullString
+		var (
+			oldURL    sql.NullString
+			oldActive sql.NullBool
+		)
 
 		err := tx.QueryRowContext(c.Context(),
-			`SELECT url FROM affiliate_links WHERE item_id = $1 AND store = $2 FOR UPDATE`, id, store).Scan(&oldURL)
+			`SELECT url, active FROM affiliate_links WHERE item_id = $1 AND store = $2 FOR UPDATE`, id, store).
+			Scan(&oldURL, &oldActive)
 		if err != nil && !errors.Is(err, sql.ErrNoRows) {
 			return err
 		}
@@ -246,16 +250,16 @@ ON CONFLICT (item_id, store) DO UPDATE SET url = EXCLUDED.url, active = EXCLUDED
 
 		action := vadmin.ActionUpdate
 
-		var before any
+		var before, beforeActive any
 		if oldURL.Valid {
-			before = oldURL.String
+			before, beforeActive = oldURL.String, oldActive.Bool
 		} else {
 			action = vadmin.ActionCreate
 		}
 
 		return audit(c.Context(), tx, actor, id+"/"+store, action, map[string]vadmin.Change{
 			"url":    {Before: before, After: link},
-			"active": {After: active},
+			"active": {Before: beforeActive, After: active},
 		})
 	})
 	if err != nil {
