@@ -15,6 +15,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/admin"
+	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 )
@@ -27,6 +28,26 @@ func Admin(r *router.Router, app *vukem.App) error {
 	if err != nil {
 		return err
 	}
+
+	allowlist, err := appmiddleware.ParseAllowlist(app.Source.Get("ADMIN_IP_ALLOWLIST"))
+	if err != nil {
+		return err
+	}
+
+	// Router-wide: the 2FA gate and allowlist act on /admin, the session limits
+	// on every request of an admin (SDD 13 §7.5).
+	r.Use(appmiddleware.AdminGuard(appmiddleware.AdminGuardConfig{
+		User: acc.Web.User,
+		TwoFactorEnabled: func(ctx context.Context, id int64) (bool, error) {
+			tf, err := acc.TwoFactor(ctx, id)
+			return tf.Enabled(), err
+		},
+		Logout:    acc.Web.Logout,
+		Allowlist: allowlist,
+		Now:       app.Now,
+		SetupPath: "/user/two-factor",
+		LoginPath: "/login",
+	}))
 
 	// The panel has its own gate, so its policies never mix with the app's.
 	gate := authz.New(func(ctx context.Context) (*models.User, error) {

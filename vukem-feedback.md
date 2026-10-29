@@ -63,6 +63,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-052 | 2026-10-29 | high | in_progress (framework), PRs #46 (client IP + origin lock), #47 (Turnstile action), #48 (visitor headers), #49 (edge cache + purge), #50 (Access JWT); merges pending |
 | VF-053 | 2026-10-29 | low | in_progress (framework), PR #52 |
 | VF-054 | 2026-10-29 | low | in_progress (framework), PR #51 |
+| VF-NEW-P2.D.3.1 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -534,3 +535,12 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Repro**: a `NoTransaction` migration `CREATE UNIQUE INDEX CONCURRENTLY IF NOT EXISTS t_k_uq ON t (k)` over duplicate rows fails; remove the duplicates; `migrate` reports the migration as ran while `pg_index.indisvalid` stays false (`tests/predeploy_test.go` `TestIndexConcurrently_DropsInvalid` shows the drop that avoids it).
 - **Workaround**: `hexascore:predeploy` (`app/console/predeploy.go`) drops `INVALID` indexes of the current schema that no backend is building before `migrate`.
 - **Request**: document the leftover in "Migrations outside a transaction", and either drop an `INVALID` index named by a failing `NoTransaction` migration or fail `migrate` when a `NoTransaction` migration finishes with an `INVALID` index on PostgreSQL.
+
+## VF-NEW-P2.D.3.1: Admin hardening covers only the panel's routes and has no idle timeout
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.33.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin` `[NOT IN VUKEM DOCS]`: `admin.Config{TwoFactor, MaxSessionAge, AllowCIDRs}` (VF-030 fix) is in the package godoc, not on the site page.
+- **Context**: SDD 13 §7.5 wants admin sessions to end after 30 min idle and 12 h absolute, mandatory TOTP and an optional allowlist on every admin route. The native options apply only to the routes `Panel.Mount` registers, so custom moderation routes next to the panel (`/admin/users/{id}/ban`, `/admin/reports/{id}/resolve`, ...) stay unguarded; there is no idle timeout (only `MaxSessionAge` from `session.CreatedAt`), and the limits apply only while the admin is on the panel.
+- **Repro**: mount the panel with `MaxSessionAge`, register `r.Post("/admin/x", h)` beside it, call it from an IP outside `AllowCIDRs`: it runs.
+- **Workaround**: router-wide app middleware `AdminGuard` (`app/http/middleware/admin_guard.go`) with its own session clock keys.
+- **Request**: document the options on the site; add `IdleTimeout`; expose the guard as a middleware (`panel.Guard()`) so apps can put it on their own admin routes.

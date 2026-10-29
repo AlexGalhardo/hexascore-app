@@ -199,6 +199,18 @@ func (a *Accounts) SetRole(ctx context.Context, email, role string) (bool, error
 
 		changed = true
 
+		// A role change is a privilege change: the CLI cannot Regenerate the
+		// user's sessions, so it ends them (SDD 13 §7.5) and the next login
+		// starts a fresh one.
+		if err := a.bumpSessionVersion(ctx, tx, u.ID); err != nil {
+			return err
+		}
+
+		del := "DELETE FROM remember_tokens WHERE user_id = " + tx.Dialect().Placeholder(1)
+		if _, err := tx.ExecContext(ctx, del, u.AuthID()); err != nil {
+			return err
+		}
+
 		return recordEvent(ctx, tx, u.ID, nil, kind, map[string]any{"cli": true, "role": role}, now)
 	})
 

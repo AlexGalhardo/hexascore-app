@@ -45,6 +45,23 @@ func makeUser(t *testing.T, app *vukemtest.App, email, role string, verified boo
 		t.Fatal(err)
 	}
 
+	// Admins need confirmed 2FA to reach /admin (SDD 13 FR-13-5, AdminGuard).
+	if role == models.RoleAdmin {
+		ph := db.Dialect().Placeholder
+		if _, err := db.ExecContext(
+			t.Context(),
+			"UPDATE users SET two_factor_confirmed_at = "+ph(
+				1,
+			)+" WHERE id = "+ph(
+				2,
+			),
+			time.Now().UTC(),
+			u.ID,
+		); err != nil {
+			t.Fatal(err)
+		}
+	}
+
 	return u
 }
 
@@ -265,8 +282,27 @@ func TestAdminCLI(t *testing.T) {
 		t.Fatal("second grant reported a change")
 	}
 
-	if reload(t, app, u.ID).Role != "admin" {
+	granted := reload(t, app, u.ID)
+	if granted.Role != "admin" {
 		t.Fatal("role not stored")
+	}
+
+	// A role change ends the user's sessions (no Regenerate from the CLI).
+	if granted.SessionVersion <= u.SessionVersion {
+		t.Fatalf("session version %d not bumped from %d", granted.SessionVersion, u.SessionVersion)
+	}
+
+	// A fresh admin has no 2FA yet: the panel sends them to the setup first.
+	browserFor(t, app, granted).Get("/admin").AssertRedirect("/user/two-factor")
+
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := db.ExecContext(t.Context(),
+		"UPDATE users SET two_factor_confirmed_at = ? WHERE id = ?", time.Now().UTC(), u.ID); err != nil {
+		t.Fatal(err)
 	}
 
 	browserFor(t, app, reload(t, app, u.ID)).Get("/admin").AssertOK()
@@ -276,11 +312,6 @@ func TestAdminCLI(t *testing.T) {
 	}
 
 	browserFor(t, app, reload(t, app, u.ID)).Get("/admin").AssertNotFound()
-
-	db, err := app.DB()
-	if err != nil {
-		t.Fatal(err)
-	}
 
 	var n int
 	if err := db.QueryRowContext(t.Context(),
