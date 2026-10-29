@@ -17,6 +17,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.4",
+    "@commitlint/cli": "21.2.4",
+    "@commitlint/config-conventional": "21.2.4",
     "@inertiajs/vite": "3.9.1",
     "@tailwindcss/vite": "4.3.3",
     "@testing-library/dom": "10.4.2",
