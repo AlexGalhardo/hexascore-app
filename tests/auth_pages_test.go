@@ -19,6 +19,18 @@ func TestInertiaPages(t *testing.T) {
 	}
 
 	for _, l := range locales {
+		t.Run("Home/"+l.locale, func(t *testing.T) {
+			app := vukemtest.New(t, bootstrap.New)
+			guest := app.Client(t).Inertia("")
+			guest.Get(l.prefix+"/").AssertOK().AssertInertia("Home/Index").PropEquals("locale", l.locale).
+				HasProp("sections", 4)
+
+			signed := app.Client(t).Inertia("")
+			signed.PostJSON("/signup", signUpForm("Bia Souza", "bia@example.com", testPassword))
+			signed.PostJSON("/login", map[string]any{"identifier": "bia@example.com", "password": testPassword})
+			signed.Get(l.prefix+"/").AssertOK().AssertInertia("Home/Index").HasProp("sections", 4)
+		})
+
 		t.Run("Auth/"+l.locale, func(t *testing.T) {
 			app := vukemtest.New(t, bootstrap.New)
 			guest := app.Client(t).Inertia("")
