@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/drivers/postgres/pgtest"
 	"github.com/AlexGalhardo/vukem/errs"
@@ -31,8 +32,17 @@ type keyRig struct {
 func newKeyRig(t *testing.T) *keyRig {
 	t.Helper()
 
+	return newKeyRigWith(t)
+}
+
+// newKeyRigWith is newKeyRig with extra app options.
+func newKeyRigWith(t *testing.T, opts ...vukem.Option) *keyRig {
+	t.Helper()
+
 	app := vukemtest.New(t, bootstrap.New,
-		vukemtest.Options{Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")}})
+		vukemtest.Options{Env: map[string]string{
+			"DATABASE_URL": pgtest.Database(t, ""), "OPENAPI_PREFIX": "/api/v1",
+		}, AppOptions: opts})
 
 	acc, err := accounts.New(app.App)
 	if err != nil {

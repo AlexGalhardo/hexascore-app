@@ -51,6 +51,13 @@ type EntityRef struct {
 	Name string `json:"name"`
 }
 
+// FieldSource is the provenance of one exposed field (SDD 05 §6.2); the
+// licence is filled from data_sources by the loader.
+type FieldSource struct {
+	Source  string `json:"source"`
+	Licence string `json:"licence,omitempty"`
+}
+
 // Meta lists what the audience did not get, so buyers see partial coverage.
 type Meta struct {
 	OmittedFields []string `json:"omittedFields,omitempty"`
@@ -73,7 +80,9 @@ type ItemDetail struct {
 	ExternalIDs      map[string]string `json:"externalIds,omitempty"`
 	Entities         []EntityRef       `json:"entities,omitempty"`
 	AffiliateLinks   []string          `json:"affiliateLinks,omitempty"`
-	Meta             *Meta             `json:"meta,omitempty"`
+	// Provenance is set for the api audience only, keyed by exposed field.
+	Provenance map[string]FieldSource `json:"provenance,omitempty"`
+	Meta       *Meta                  `json:"meta,omitempty"`
 }
 
 // identifierKeys are external ids always exposed alongside allowed sources.
@@ -84,15 +93,26 @@ func Assemble(src ItemSource, p Policy) ItemDetail {
 	d := ItemDetail{ID: src.ID, Type: src.Type, Slug: src.Slug, WikidataQID: src.WikidataQID}
 	var omitted []string
 	omit := func(field string) { omitted = append(omitted, field) }
+	keep := func(field, source string) {
+		if p.audience != AudienceAPI {
+			return
+		}
+		if d.Provenance == nil {
+			d.Provenance = map[string]FieldSource{}
+		}
+		d.Provenance[field] = FieldSource{Source: source}
+	}
 
 	if p.Allows(src.Title.Source) {
 		d.Title = src.Title.Value
+		keep("title", src.Title.Source)
 	} else {
 		omit("title")
 	}
 	if s := src.Synopsis; s != nil {
 		if p.AllowsContent(s.Source) {
 			d.Synopsis = &Synopsis{Text: s.Text, Licence: s.Licence, SourceURL: s.SourceURL}
+			keep("synopsis", s.Source)
 		} else {
 			omit("synopsis")
 		}
@@ -100,6 +120,7 @@ func Assemble(src ItemSource, p Policy) ItemDetail {
 	if r := src.ReleaseDate; r != nil {
 		if p.AllowsContent(r.Source) {
 			d.ReleaseDate, d.ReleasePrecision = r.Value.Format(time.DateOnly), src.ReleasePrecision
+			keep("releaseDate", r.Source)
 		} else {
 			omit("releaseDate")
 		}
@@ -107,6 +128,7 @@ func Assemble(src ItemSource, p Policy) ItemDetail {
 	if r := src.RuntimeMinutes; r != nil {
 		if p.AllowsContent(r.Source) {
 			d.RuntimeMinutes = &r.Value
+			keep("runtimeMinutes", r.Source)
 		} else {
 			omit("runtimeMinutes")
 		}
@@ -114,6 +136,7 @@ func Assemble(src ItemSource, p Policy) ItemDetail {
 	if r := src.PageCount; r != nil {
 		if p.AllowsContent(r.Source) {
 			d.PageCount = &r.Value
+			keep("pageCount", r.Source)
 		} else {
 			omit("pageCount")
 		}
@@ -121,6 +144,7 @@ func Assemble(src ItemSource, p Policy) ItemDetail {
 	if c := src.Cover; c != nil {
 		if p.AllowsContent(c.Source) {
 			d.Cover = c.Value
+			keep("cover", c.Source)
 		} else {
 			omit("cover")
 		}
