@@ -49,6 +49,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-038 | 2026-10-29 | medium | open |
 | VF-039 | 2026-10-29 | low | open |
 | VF-040 | 2026-10-29 | medium | open |
+| VF-NEW-P0.F.10.1 | 2026-10-29 | low | open |
 | VF-041 | 2026-10-29 | low | open |
 | VF-042 | 2026-10-29 | low | open |
 
@@ -401,3 +402,11 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Context**: (1) `web.Problem` has fixed members (`request_id` snake_case, no `code`, no extensions) and the OpenAPI `Problem` schema is derived from it, so a `code` member is invisible to generated clients (VF-014, VF-016 confirmed). (2) Errors returned by handlers reach only the router-wide `Services.Errors`; `auth.ProblemJSON`-style group middleware that swaps services does not see them, so per-group problem formatting is impossible. (3) `api.Op{Status: 202}` with an `Out` of `struct{}` writes the body `{}` while the OpenAPI document says "no body", so `AssertMatchesOpenAPI` fails.
 - **Workaround** (spike `agent/senior/P0.F.7.1`): `problems.Install(router, prefixes...)` wraps `Services.Errors`, runs vukem's default handler into a buffer and adds `code` plus extension members to its JSON; `problems.Error` carries the code. The 202 route returns a one-field `Accepted` struct.
 - **Request**: `errs.HTTPError` code and extension members rendered by `DefaultErrorHandler` and declared in the OpenAPI `Problem` schema; a documented per-group error handler; `Out = struct{}` with an explicit 2xx status writes no body.
+
+## VF-NEW-P0.F.10.1: Static assets and SSR HTML are not compressed unless the app adds `middleware.Gzip()`
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/middleware`, `https://vukem.dev/docs/frontend/vite` (production build). `[NOT IN VUKEM DOCS]`: no page says that the starter serves `/build/assets/*` and Inertia HTML uncompressed (confirmed by Lighthouse: script transfer 568 kB uncompressed vs 116 kB gzip).
+- **Context**: the performance budgets (NFR-09-5, LCP) are measured on transfer size. The scaffold ships no compression, so a container behind a proxy that does not compress fails the JS budget (354 kB raw `app-*.js`).
+- **Workaround** (spike `agent/senior/P0.F.10.1`): `r.UseServer(middleware.Gzip())` before `StaticFS` in `routes.Web`. Brotli is not offered by `middleware.Gzip` (`HEAD` and `Range` are passed through).
+- **Request**: starter template enables gzip (or documents it as a required deploy step), and a Brotli option for static assets.
