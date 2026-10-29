@@ -461,6 +461,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Context**: `rating_flags` is keyed by `(user_id, item_id)`; the ORM and the panel take one `PrimaryKey()` column, so a detail URL resolves by `user_id` alone and could show another row of the same user. `Filter` on a `sql.NullString` column and `Search` on `sql.NullString` fail at boot (`cannot be filtered`, `is not a string`), so nullable enums (`resolution`) and `note` cannot be filtered or searched.
 - **Workaround**: `rating_flags` exposes the list only (`View` denied by policy); `resolution` and `note` stay unfiltered (`app/admin/scoring_resources.go`).
 - **Request**: support composite keys in resources (`{a}-{b}` ids) and accept `sql.Null*` string types in `Filter` and `Search`.
+
 ## VF-048: `errs.HTTPError` has no way to add a stable problem `code` extension member
 
 - **Date**: 2026-10-29. **Severity**: low. **Status**: open.
