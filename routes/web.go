@@ -104,7 +104,7 @@ func Web(r *router.Router, app *vukem.App) error {
 		appmiddleware.NotBanned(acc.Web.User, acc.ProblemBase, app.Now),
 	)
 
-	r.Get("/", controllers.Home).Name("home")
+	r.Get("/", controllers.Home(app)).Name("home")
 	// Least specific pattern: unmatched GET pages render the Error page with
 	// the shell, since vukem's own hook only covers Inertia visits.
 	r.Get("/{path...}", controllers.NotFound).Name("not-found")

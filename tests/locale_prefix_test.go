@@ -13,9 +13,9 @@ func TestLocalePrefix_Routing(t *testing.T) {
 
 	app := vukemtest.New(t, bootstrap.New)
 
-	app.Client(t).Get("/pt-br/").AssertOK().AssertInertia("Home")
-	app.Client(t).Get("/es").AssertOK().AssertInertia("Home")
-	app.Client(t).Get("/").AssertOK().AssertInertia("Home")
+	app.Client(t).Get("/pt-br/").AssertOK().AssertInertia("Home/Index")
+	app.Client(t).Get("/es").AssertOK().AssertInertia("Home/Index")
+	app.Client(t).Get("/").AssertOK().AssertInertia("Home/Index")
 	app.Client(t).Get("/xx/").AssertStatus(404)
 
 	// No cookie: never redirected. Cookie naming a prefixed locale: 307.
