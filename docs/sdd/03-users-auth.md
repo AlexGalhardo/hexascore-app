@@ -142,6 +142,8 @@ Migration mapping from `legacy/apps/web/lib/db/schema/auth.ts` (A-04; the 10k sy
 
 Pre-flight asserts (abort on non-zero): `SELECT lower(email) FROM "user" GROUP BY 1 HAVING count(*) > 1`; users with `two_factor_enabled` and no `two_factor` row; users with neither credential nor Google nor email (passkey-only accounts are counted and sent the reset notice).
 
+Implementation (P2.F.2.2, `database/legacyimport/users.go`): batches keyed by the legacy user id upsert on `legacy_id`; `email_verified_at` takes the legacy `updated_at`, or `created_at` when that is NULL; `username` is lowercased on the way in; every user without a credential hash (Google-only and passkey-only) gets its own random argon2id; Google links are inserted with `ON CONFLICT (provider, provider_id) DO NOTHING`. The `passkey` import waits for the `passkeys` table (P1.C.7.1).
+
 ## 6. Contracts
 
 ### 6.1 Web routes (Inertia pages; localised under `/pt-br`, `/es` per D-17; legacy paths kept, scaffold paths renamed in the user-owned `routes/auth.go`)
