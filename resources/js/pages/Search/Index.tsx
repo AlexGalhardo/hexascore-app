@@ -118,12 +118,13 @@ export default function Index({
 					offset={(query.page - 1) * PER_PAGE}
 				/>
 			)}
+			{/* searchId reloads with results: the server accepts clicks only for refs of that search. */}
 			{results.length > 0 && pages > 1 && (
 				<nav aria-label={t("search.pagination")} className="mt-4 flex gap-4">
 					{query.page > 1 && (
 						<Link
 							href={href(query.type, query.page - 1)}
-							only={["query", "results", "total"]}
+							only={["query", "results", "total", "searchId"]}
 							preserveScroll
 							rel="prev"
 							className="inline-flex min-h-11 items-center hover:underline"
@@ -134,7 +135,7 @@ export default function Index({
 					{query.page < pages && (
 						<Link
 							href={href(query.type, query.page + 1)}
-							only={["query", "results", "total"]}
+							only={["query", "results", "total", "searchId"]}
 							preserveScroll
 							rel="next"
 							className="inline-flex min-h-11 items-center hover:underline"
