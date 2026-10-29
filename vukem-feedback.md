@@ -39,7 +39,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-028 | 2026-10-28 | low | open |
 | VF-029 | 2026-10-28 | low | open |
 | VF-030 | 2026-10-28 | medium | merged in main (PR #20), unreleased |
-| VF-031 | 2026-10-28 | medium | open |
+| VF-031 | 2026-10-28 | medium | in_progress (framework) |
 | VF-032 | 2026-10-28 | medium | open |
 | VF-033 | 2026-10-28 | low | open |
 | VF-034 | 2026-10-28 | low | open |
@@ -320,7 +320,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-031: No re-encryption command after `APP_KEY` rotation
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/encryption`, `https://vukem.dev/docs/configuration`.
 - **Context**: encrypted columns (2FA secrets, OAuth tokens) are keyed by `APP_KEY`; the encryption page describes key rotation for cookies/values but no CLI to re-encrypt stored columns under the new key, so a rotation leaves rows readable only with the previous key.
 - **Workaround**: keep the previous key configured as a secondary decrypt key and run a one-off app job that reads and rewrites every encrypted column.
