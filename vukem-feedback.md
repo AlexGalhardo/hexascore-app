@@ -487,4 +487,3 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Context**: the API is served at `/api/v1/*` and, on `api.hexascore.app`, also as `/v1/*` (app `APIEdge` rewrite, VF-015). `openapi.Info` has `Servers` and `PathPrefix` (filter only), so the document cannot say "server `https://api.hexascore.app/v1`, paths without `/api/v1`" as SDD 05 §6.1 wants. Typed-route and router-raised problems also cannot carry `code` (VF-016): `APIEdge` rewrites problem bodies and takes an optional `X-Problem-Code` header from handlers.
 - **Workaround**: `Servers` lists `https://api.hexascore.app` only; paths keep `/api/v1` (valid on both hosts). SDD 05 §6.1 should say so.
 - **Request**: `openapi.Info.PathStrip` (or per-server path base) and `errs.HTTPError.WithExtension` rendered by the default handler (VF-016).
-
