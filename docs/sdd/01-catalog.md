@@ -262,12 +262,12 @@ Genres are shared across types (genre page has type tabs). The Wikidata property
 | `items.popularity`; `score*`, `rating_count` | `popularity_prior`; SDD 02 columns | rename; SDD 02 |
 | `meta.genres, platforms, creators, countries` | `entities` + `item_entities` | resolve via QIDs in `source_records` payloads; unresolved strings become native entities (DQ-09); roleless `creators` get `creator`/`author`/`developer` by type until re-ingested |
 | `meta.runtimeMinutes, pages, seasons, episodes, trailers` | typed columns, `trailers` | 1:1 |
-| `meta.coverUrl, coverThumbUrl, coverAttribution` | `cover_key`, `cover_thumb_key`, `cover_source`, `cover_attribution` | Blob objects copied to the S3 bucket (SDD 11) under the legacy key `covers/<id>-<hash16>.webp` (06-4: no rewrite of ~80k objects; new covers use the same format, SDD 06) |
+| `meta.coverUrl, coverThumbUrl, coverAttribution` | `cover_key`, `cover_thumb_key`, `cover_source`, `cover_attribution` | Blob objects copied to the S3 bucket (SDD 11) under the legacy key `covers/<id>-<hash16>.webp` (06-4: no rewrite of ~80k objects; new covers use the same format, SDD 06); the key is the Blob URL pathname, a cover URL outside the Blob (stored by `covers.py` without a token) gets no key and is re-fetched by the cover job; `cover_attribution` is copied, `cover_source` stays null until re-ingested |
 | book items | work + one edition per `external_ids.isbn13` | edition language/publisher from Open Library edition data when present, else `language` = `und`, publisher null, flagged by DQ-10; never blocks the migration (01-1) |
-| `item_translations` | same + `title_source`, `synopsis_source` | 1:1; `synopsis_license` → `synopsis_licence`; source inferred from URL host |
+| `item_translations` | same + `title_source`, `synopsis_source` | 1:1; `synopsis_license` → `synopsis_licence`; `title_source` = `wikidata` (legacy titles are Wikidata labels); `synopsis_source` inferred from URL host (`*.wikipedia.org` → `wikipedia`; no URL → `hexascore`, own rewritten text, licence `proprietary`; any other host fails the import on the `data_sources` key); the import seeds `data_sources` rows `wikidata`, `wikipedia`, `hexascore` |
 | `external_scores` | dropped (D-09) | not copied; kept only in the final legacy `pg_dump` |
 | `affiliate_links` | kept, optional | rows copied if any (PROGRESS.md notes `affiliate_store` values never written) |
-| `source_records` | SDD 06 | — |
+| `source_records` | SDD 06 | 1:1 in the legacy shape, including records no item points at (P6.A adds `checked_at`, `last_run_id`) |
 
 ## 6. Contracts
 

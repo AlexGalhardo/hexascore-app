@@ -1908,7 +1908,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
     - `go test -tags=integration ./database/legacyimport -run TestTwoFactorUsersPassChallenge` → PASS: a migrated user passes TOTP with a code from the fixture secret
   - Notes: HUMAN GATE (secrets): `BETTER_AUTH_SECRET` is provided by the owner as an environment variable for the run only. NDJSON `{userId, secret, backupCodes[]}` never touches disk or logs. The encryption format is [NOT VERIFIED]: the script calls the library's decrypt, never a reimplementation. Lockout counters are dropped.
 
-- [ ] **P2.F.2.4** Implement the `catalog` stage: `source_records`, `items`, `item_translations`, external ids, affiliate links, cover keys.
+- [x] **P2.F.2.4** Implement the `catalog` stage: `source_records`, `items`, `item_translations`, external ids, affiliate links, cover keys.
   - Files/modules: `database/legacyimport/catalog.go`, `database/legacyimport/catalog_test.go`
   - Refs: SDD 01 §5.3, §5.4 (mapping rows); SDD 06 §7.9; SDD 02 §5 (score columns filled by recompute); D-09; A-04
   - Depends on: P2.F.2.1
