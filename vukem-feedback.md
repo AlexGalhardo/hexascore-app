@@ -44,7 +44,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-001: No passkey / WebAuthn support in `auth`
 
 - **Date**: 2026-10-28. **Severity**: high. **Status**: open.
-- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/two-factor` (Concepts, Guards, Hashing, `install:auth`, Two-factor, Social login).
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/two-factor` (Concepts, Guards, Hashing [heading not on page 2026-10-29], `install:auth`, Two-factor, Social login).
 - **Context**: HexaScore's legacy app (Better Auth 1.7.7) offers passkeys. The rewrite drops them at launch (brainstorming D-06) because the framework has no WebAuthn registration/assertion flow, credential storage or recovery path.
 - **Reproduction**: search `docs/` and `auth/` for `webauthn`, `passkey`, `FIDO`: no matches.
 - **Workaround**: none in-framework; a third-party Go WebAuthn library would be a new dependency and a parallel credential model. Deferred feature.
@@ -53,7 +53,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-002: Inertia SSR falls back to client rendering silently by default
 
 - **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
-- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` "Inertia v3 (BETA)" → SSR row: "falls back to client-side rendering on any failure (reported to `OnFailure`, default a warning log)".
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` "Inertia v3 (BETA)" [heading not on page 2026-10-29] → SSR row: "falls back to client-side rendering on any failure (reported to `OnFailure`, default a warning log)".
 - **Context**: for a catalogue that depends on search indexing (ADR 0004), a silent fallback hides an SEO incident. HexaScore needs per-route policy: public routes must fail readiness or page an alert when SSR fails; logged-in routes may fall back.
 - **Reproduction**: stop the SSR process; request a public page; observe a 200 with client-rendered shell and only a warning log.
 - **Workaround**: implement `OnFailure` to increment a metric and alert; add the SSR process to `AddHealthCheck` so `/up?checks=1` reports it.
@@ -80,7 +80,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-005: No keyset (cursor) pagination helper in the ORM
 
 - **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
-- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` "Query builder"; `https://vukem.dev/docs/rest-apis/pagination` "Query conventions"; `https://vukem.dev/docs/frontend/inertia` Inertia `ScrollCursor(orm.CursorPage, name)`.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` "Querying"; `https://vukem.dev/docs/rest-apis/pagination` "Query conventions"; `https://vukem.dev/docs/frontend/inertia` Inertia `ScrollCursor(orm.CursorPage, name)`.
 - **Context**: `ScrollCursor` accepts an `orm.CursorPage`, but the documented query builder shows no way to build a keyset page over a composite order (`score DESC, id DESC`) with an opaque signed cursor. HexaScore lists (SDD 01, 05, 07) need this for every listing and for the paid API.
 - **Reproduction**: search `https://vukem.dev/docs/database/overview` for `Cursor`: only the Inertia prop is documented.
 - **Workaround**: the app builds the predicate with `WhereRaw` and signs/encodes the cursor itself.
@@ -114,7 +114,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-009: Generated columns and the ORM on insert/update
 
 - **Date**: 2026-10-28. **Severity**: low. **Status**: open.
-- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` "Models", "Query builder".
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` "Defining models", "Querying".
 - **Context**: `ratings.overall` is a Postgres generated column (SDD 02). It is unclear whether `orm.Create`/`Save` omit generated columns from INSERT/UPDATE.
 - **Reproduction**: pending at implementation (test: create a model with a generated column on Postgres and call `orm.Create`).
 - **Workaround**: raw SQL for inserts on that table.
@@ -131,7 +131,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-011: No persistent in-app notifications
 
 - **Date**: 2026-10-28. **Severity**: low. **Status**: open.
-- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/mail` (Mail, Events, Broadcasting).
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/mail` (Mail, Events, Broadcasting [heading not on page 2026-10-29]).
 - **Context**: suggestion decisions (SDD 04) and moderation outcomes need a per-user inbox with read state; vukem has mail and real-time broadcasting but no stored notification model.
 - **Workaround**: app-owned `user_notifications` table and page.
 - **Request**: a `notify` package (database channel, mail channel, mark-as-read, unread count) like Laravel notifications.
@@ -155,7 +155,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-014: Envelope and problem key casing is fixed to snake_case
 
 - **Date**: 2026-10-28. **Severity**: low. **Status**: open.
-- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/overview` "Envelopes", "Errors".
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/overview` "Envelopes" [heading not on page 2026-10-29], "Errors".
 - **Context**: HexaScore payload fields are camelCase (legacy API contract and SDKs); the documented envelope keys (`next_cursor`, `request_id`) are snake_case and no option to change them is documented, so responses mix conventions.
 - **Workaround**: accept the mix and document it; or bypass the envelope helper and write the envelope by hand.
 - **Request**: an envelope/problem key naming option (`api.KeyCase(api.CamelCase)`) or documented custom envelope types.
@@ -187,7 +187,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-018: Queue priority and per-queue concurrency with the database driver inside `serve`
 
 - **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
-- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/scheduler` "Queue", "Scheduler"; `https://vukem.dev/docs/cli/reference-runtime` `serve`.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/scheduler` "Queue", "Scheduler" [heading not on page 2026-10-29]; `https://vukem.dev/docs/cli/reference-runtime` `serve`.
 - **Context**: HexaScore runs HTTP, scheduler and queue workers in one process under a US$30/month budget (brainstorming D-08). Ingestion jobs (SDD 06) must run at low concurrency (1–2) and lower priority than user-facing jobs (mail, recompute). The docs do not state whether named queues, priorities and per-queue worker counts apply to the database driver when workers run inside `serve`, nor how to cap CPU use of workers.
 - **Reproduction**: n/a (docs gap).
 - **Workaround**: a single worker pool with app-level semaphores per job family and a scheduler window at night.
@@ -196,7 +196,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-019: No documented API for app-level OpenTelemetry metrics
 
 - **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
-- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/opentelemetry` "OpenTelemetry", "Logging & observability"; `drivers/otel` description in `https://vukem.dev/docs/architecture/lifecycle`.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/opentelemetry` "OpenTelemetry", "Logging & observability" [heading not on page 2026-10-29]; `drivers/otel` description in `https://vukem.dev/docs/architecture/lifecycle`.
 - **Context**: HexaScore needs custom counters and histograms (ingestion items/s, SSR fallbacks, suggestion queue age, quota flushes) exported with the framework's traces. The docs cover tracing setup and built-in instrumentation only.
 - **Workaround**: the app wires `go.opentelemetry.io/otel/metric` itself and shares the exporter configuration.
 - **Request**: `otel.Meter()` accessor and a documented pattern for app metrics, plus a Prometheus-compatible `/metrics` option for hosts without an OTLP collector.
@@ -212,7 +212,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-021: No buffered counter primitive and no documented `HourlyAt` schedule helper
 
 - **Date**: 2026-10-28. **Severity**: low. **Status**: open.
-- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/scheduler` "Cache", "Scheduler", "Events".
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/scheduler` "Cache", "Scheduler" [heading not on page 2026-10-29], "Events".
 - **Context**: trending primitives (SDD 08) and API quota metering (SDD 05) need an in-process counter that aggregates increments and flushes to Postgres once per minute (ADR 0003, no Redis). The scheduler docs show cron expressions; a typed `HourlyAt(minute)` helper used in the SDD sketch is not documented.
 - **Workaround**: app-level `sync.Map` counter with a ticker flush; cron expressions for schedules.
 - **Request**: `cache.Counter` with `Incr`/`FlushEvery(d, fn)` semantics, and typed schedule helpers (`EveryMinute`, `HourlyAt`, `DailyAt`) in the scheduler docs.
