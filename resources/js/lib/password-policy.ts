@@ -1,12 +1,12 @@
 // The server's password policy, mirrored for live feedback in the browser.
 //
-// SOURCE OF TRUTH: app/requests/auth.go. RegisterSchema and ResetPasswordSchema
-// both validate the password with `z.String().Min(12).Max(256)` and compare it
-// with `password_confirmation` in their `Refine`. The constants and the checks
+// SOURCE OF TRUTH: app/requests/password.go. RegisterSchema and ResetPasswordSchema
+// both validate the password with PasswordSchema (8 to 128 runes, upper, lower,
+// digit, non-alphanumeric) and compare it with `password_confirmation` in their `Refine`. The constants and the checks
 // below are that policy and nothing else: a form that promises rules the server
 // does not enforce (or hides rules it does) is worse than no hint at all.
 //
-// When you change the policy, change it in app/requests/auth.go and here in the
+// When you change the policy, change it in app/requests/password.go and here in the
 // same commit. Suggestions that are not rules (mixing character classes, say)
 // belong in `passwordAdvice`, never in `checkPassword`.
 //
@@ -17,11 +17,11 @@
 // the inputs carry no `minLength` attribute: the browser would count UTF-16
 // units and disagree with both this file and the server.
 
-/** Minimum password length in runes: `z.String().Min(12)` in app/requests/auth.go. */
-export const PASSWORD_MIN_LENGTH = 12;
+/** Minimum password length in runes: `PasswordMin` in app/requests/password.go. */
+export const PASSWORD_MIN_LENGTH = 8;
 
-/** Maximum password length in runes: `z.String().Max(256)` in app/requests/auth.go. */
-export const PASSWORD_MAX_LENGTH = 256;
+/** Maximum password length in runes: `PasswordMax` in app/requests/password.go. */
+export const PASSWORD_MAX_LENGTH = 128;
 
 // PasswordCheck is one rule of the server policy and whether the value meets it.
 export interface PasswordCheck {
@@ -61,6 +61,10 @@ export function checkPassword(value: string): readonly PasswordCheck[] {
 			label: `At most ${PASSWORD_MAX_LENGTH} characters`,
 			met: length <= PASSWORD_MAX_LENGTH,
 		},
+		{ id: "upper", label: "An uppercase letter", met: /\p{Lu}/u.test(value) },
+		{ id: "lower", label: "A lowercase letter", met: /\p{Ll}/u.test(value) },
+		{ id: "digit", label: "A digit", met: /\p{Nd}/u.test(value) },
+		{ id: "special", label: "A symbol or space", met: /[^A-Za-z0-9]/.test(value) },
 	];
 }
 

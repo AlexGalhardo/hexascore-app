@@ -1,0 +1,25 @@
+{
+	"generator": "better-auth 1.7.7 / @better-auth/utils 0.4.2 hashPassword (node:crypto scrypt)",
+	"generated_at": "2026-10-29T00:59:03.270Z",
+	"cases": [
+		{
+			"label": "ascii",
+			"password": "correct horse battery staple",
+			"hash": "f784aeba634fcc3813d2fed8886d1f4f:beaf7dbabd716f288bf679caddface38ac825862263cef82ed40e0c93f9949269bf3d57e5986a080b8005361fb11dde09950ec22d09924efbf33bf3b5cdf7a16",
+			"length": 28
+		},
+		{
+			"label": "accented-decomposed-nfkc",
+			"password": "Sénha-Ação-ﬁx9",
+			"nfkc_equivalent": "Sénha-Ação-fix9",
+			"hash": "10c0322505fd14e04748f2b150d1dd13:7853fe45f22757c61d4605a2a5808209e18fbd07c3e637703f4a4145ec57afe47e04d5615054e1a5de4979216d0a71cedfeccedf0f3b18705f57d6e235ef016a",
+			"length": 17
+		},
+		{
+			"label": "32-chars",
+			"password": "Aa1!Bb2@Cc3#Dd4$Ee5%Ff6^Gg7&Hh8*",
+			"hash": "02e75b20a98b3d6d437591c9e2668d6f:0c24d26fdf2b107c3df5ced32fc2beec60d73db01e3ad9b2fb53dd51d12541b1d388925edf79adc398640dc673b6856b895862aa40d5667a58fcd9e5401b6c26",
+			"length": 32
+		}
+	]
+}
