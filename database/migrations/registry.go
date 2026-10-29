@@ -39,5 +39,7 @@ func All() []schema.Migration {
 		m20261029140006CreateSearchDirtyTable(),
 		m20261029140007CreateSearchSuggestTable(),
 		m20261029140008CreateSearchEventsTable(),
+		m20261029140009CreateListsTable(),
+		m20261029140010CreateListItemsTable(),
 	}
 }

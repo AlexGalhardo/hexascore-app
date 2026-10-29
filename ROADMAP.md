@@ -818,7 +818,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.F.1 Lists
 
-- [ ] **P1.F.1.1** Migrate `lists` and `list_items`, add `ListPolicy` and the list limits, and implement create, update and delete on web and `/app/v1` (replaces `createList`, `updateList`, `deleteList`).
+- [x] **P1.F.1.1** Migrate `lists` and `list_items`, add `ListPolicy` and the list limits, and implement create, update and delete on web and `/app/v1` (replaces `createList`, `updateList`, `deleteList`).
   - Files/modules: `database/migrations/*_create_lists_table.go`, `*_create_list_items_table.go`, `app/policies/list_policy.go` (`vukem make:policy List`), `app/library/lists.go`, `app/http/controllers/lists_controller.go`, `routes/web.go`, `routes/app_api.go`
   - Refs: SDD 14 §5, §6.1, §6.3, §7.1, §9; open-issues 08-2; legacy `actions/lists.ts`, `lib/db/schema/social.ts`; <https://vukem.dev/docs/security/authorization>
   - Depends on: P1.D.5.1
