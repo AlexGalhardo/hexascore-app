@@ -104,12 +104,12 @@ func (p *PoW) Verify(ctx context.Context, route, c, n string, minBits int) error
 		return ErrInvalid
 	}
 
-	payload, err := base64.RawURLEncoding.DecodeString(body)
+	payload, err := base64.RawURLEncoding.Strict().DecodeString(body)
 	if err != nil || len(payload) != 25 {
 		return ErrInvalid
 	}
 
-	got, err := base64.RawURLEncoding.DecodeString(sig)
+	got, err := base64.RawURLEncoding.Strict().DecodeString(sig)
 	if err != nil || !hmac.Equal(got, p.mac(payload, route)) {
 		return ErrInvalid
 	}
