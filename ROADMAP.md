@@ -486,7 +486,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `vukem catalog:check --json` on the seeded database → `{"errors":0}`
   - Notes: the run on the migrated staging copy belongs to P2.F.
 
-- [ ] **P1.B.4.2** Stream the sitemap index and per-type child sitemaps with locale alternates.
+- [x] **P1.B.4.2** Stream the sitemap index and per-type child sitemaps with locale alternates.
   - Files/modules: `app/http/controllers/sitemap_controller.go`, `app/catalog/sitemap.go`, `routes/web.go`, tests
   - Refs: SDD 01 §9; SDD 09 §7.7, §9; open-issues 01-8, 09-8; VF-007
   - Depends on: P1.B.2.2
