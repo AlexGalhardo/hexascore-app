@@ -971,7 +971,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test ./app/http/... -run 'TestInertiaPages/Search'` → grouped results without `type`, `Scroll` results with `type`
   - Notes: partial reload `only: ['results']` when a type is set (SDD 07 §6). Click events go to `POST /search/events`.
 
-- [ ] **P1.G.3.2** Build the profile, list, library, lists-management and notifications pages.
+- [x] **P1.G.3.2** Build the profile, list, library, lists-management and notifications pages.
   - Files/modules: `resources/js/pages/User/{Profile,List}.tsx`, `resources/js/pages/Library/Index.tsx`, `resources/js/pages/Lists/{Index,Edit}.tsx`, `resources/js/pages/Account/Notifications.tsx`
   - Refs: SDD 14 §6.2; SDD 09 §6.2; legacy `app/[locale]/u/`
   - Depends on: P1.G.1.1, P1.F.2.1, P1.F.3.1
