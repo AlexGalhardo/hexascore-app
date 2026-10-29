@@ -60,3 +60,11 @@ func TestErrorPage_FullLoad(t *testing.T) {
 	app.Client(t).Get("/api/no-such").AssertStatus(404)
 	app.Client(t).Get("/pt-br/no-such-page").AssertStatus(404).AssertInertia("Error")
 }
+
+func TestHelpScorePage(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+
+	app.Client(t).Get("/help/score").AssertOK().AssertInertia("Help/Score").HasProp("categoryKeys")
+}

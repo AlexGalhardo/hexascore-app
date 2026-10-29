@@ -92,6 +92,7 @@ func Web(r *router.Router, app *vukem.App) error {
 			"policy.",
 			"terms.",
 			"lists.",
+			"rating.",
 			"ratings.",
 			"search.",
 			"social.",
@@ -105,6 +106,7 @@ func Web(r *router.Router, app *vukem.App) error {
 	)
 
 	r.Get("/", controllers.Home).Name("home")
+	r.Get("/help/score", controllers.HelpScore).Name("help.score")
 	// Least specific pattern: unmatched GET pages render the Error page with
 	// the shell, since vukem's own hook only covers Inertia visits.
 	r.Get("/{path...}", controllers.NotFound).Name("not-found")

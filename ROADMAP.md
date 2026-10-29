@@ -711,7 +711,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test -tags=integration ./tests/scoring -run 'TestStatus|TestTimeToBeat'` → 0.5 h steps within 0.5–10,000 h; 409 `status-not-completed`; 422 `not-a-game`; `StatusChanged` and `TimeToBeatReported` events dispatched after commit
   - Notes: `GET /app/v1/items/{id}/me` returns `{rating, status, timeToBeat}` (SDD 02 §6).
 
-- [ ] **P1.D.4.2** Build the keyboard-operable half-star widget component and the localised `/help/score` page with category keys.
+- [x] **P1.D.4.2** Build the keyboard-operable half-star widget component and the localised `/help/score` page with category keys.
   - Files/modules: `resources/js/components/rating/StarRating.tsx`, `resources/js/components/rating/StarRating.test.tsx`, `resources/js/pages/Help/Score.tsx`, `lang/*.json` (`categories.<type>.<key>`, `rating.valuetext`), `tests/i18n/category_keys_test.go`
   - Refs: SDD 02 §10 (help outline, i18n); SDD 09 §7.4, §9; D-00; A-06; `legacy/apps/web/lib/categories.ts`
   - Depends on: P1.D.1.2, P1.A.3.2
