@@ -45,4 +45,3 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Fixed
 
 - **i18n:** Drop copy for features removed by D-06 ([3aacf1a](https://github.com/AlexGalhardo/hexascore-app/commit/3aacf1a5ee7bc50e2e1c72e0bfd3b0e103a4ded8))
-
