@@ -41,9 +41,9 @@ export async function open(page: Page, url: string): Promise<void> {
 	});
 }
 
-type Translate = (key: string) => string;
+type Translate = (key: string) => string | RegExp;
 
-export const en: Translate = translator("en");
+export const en = translator("en");
 
 export async function fillSignup(
 	page: Page,

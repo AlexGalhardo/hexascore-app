@@ -15,8 +15,8 @@ test.describe("profile", () => {
 			"needs docker access to the app container logs (E2E_APP_CONTAINER)",
 		);
 
-		test("change password, then log in with the new one", async ({ page, prefix, t }) => {
-			const account = await createVerifiedAccount(page, prefix, t);
+		test("change password, then log in with the new one", async ({ page, prefix, t, any }) => {
+			const account = await createVerifiedAccount(page, prefix, any);
 			await open(page, `${prefix}/profile`);
 			await expectNoSeriousA11yViolations(page);
 
@@ -30,10 +30,10 @@ test.describe("profile", () => {
 				.getByRole("button", { name: t("account.password.change"), exact: true })
 				.click();
 			expect((await saved).status()).toBeLessThan(400);
-			await expect(page.getByLabel(t("auth.fields.currentPassword"))).toHaveValue("");
+			await expect(page.getByLabel(any("auth.fields.currentPassword"))).toHaveValue("");
 
 			await signOut(page);
-			await logIn(page, prefix, t, account.email, next);
+			await logIn(page, prefix, any, account.email, next);
 			await page.goto(`${prefix}/profile`);
 			await expect(page).toHaveURL(/\/profile$/);
 		});
@@ -42,9 +42,10 @@ test.describe("profile", () => {
 			page,
 			prefix,
 			t,
+			any,
 		}) => {
 			test.setTimeout(120_000);
-			const account = await createVerifiedAccount(page, prefix, t);
+			const account = await createVerifiedAccount(page, prefix, any);
 			await open(page, `${prefix}/profile`);
 
 			await page.getByRole("button", { name: t("account.delete.button") }).click();
@@ -63,8 +64,8 @@ test.describe("profile", () => {
 			await ready.click();
 			await page.waitForURL(/\/login/);
 
-			await logIn(page, prefix, t, account.email, account.password);
-			const banner = page.getByRole("button", { name: t("account.banner.cancel") });
+			await logIn(page, prefix, any, account.email, account.password);
+			const banner = page.getByRole("button", { name: any("account.banner.cancel") });
 			await expect(banner).toBeVisible();
 			await banner.click();
 			await expect(banner).toBeHidden();
