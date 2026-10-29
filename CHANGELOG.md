@@ -6,22 +6,54 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-29
+
 ### Added
 
-- **ui:** Keyboard-operable half-star `StarRating` slider (arrows, Page Up/Down, Home, End, Delete, pointer halves, +/- buttons) and the localised `/help/score` page; `rating.valuetext`/`rating.unset` and `help.score.*` keys in en, pt-BR, es; `TestCategoryKeys` checks every category key per locale.
-- **scoring:** `RecomputeScores` (daily 04:00, rebuilds `score_priors` first), `ReleaseBursts` (hourly, auto-resolves bursts unreviewed for 14 days), `PruneRatingEvents` (daily 04:30, 180-day retention), queued `RecomputeItemScore`, ban/unban listeners (batches of 500 item ids), post-merge recompute, scoring DQ asserts SC-01..SC-03 in `catalog:check`; `entity_stats` now carries real `avg_score`/`scored_count`; `SCHEDULE_TIMEZONE=America/Sao_Paulo` in `.env.example` (set it on Railway too).
-- **auth:** Localised account mails (en, pt-BR, es) rendered from the locale saved on the user instead of the request, so queued mail outside a request keeps the user's language (VF-013 workaround); new `password_changed` and `two_factor_changed` notices sent on password reset and on 2FA enable, disable and recovery-code use; `es` auth message catalogue.
-- **catalog:** `Home/Index` (replaces the scaffold `Home`) with per-type `sections` (public count plus top rated, newest and most rated lists, scores only from 5 counted ratings) rendered by `SectionHighlights`; covers are omitted until the cover URL pipeline exists.
-- **auth:** `/profile` (`Profile/Index`) with details, password, two-factor, sessions and privacy sections: `PATCH /profile/details`, `PUT /profile/password` (current password only when `password_set_at` is set; ends other sessions, records `password_changed`, mails the notice), `PATCH /profile/privacy`, `DELETE /profile/sessions/{handle}` and `POST /profile/sessions/revoke-all`; password sign-up and reset now set `password_set_at`, and the two-factor settings routes answer 403 until it is set (Google-only accounts). `SESSION_DRIVER=database` in `.env.example` (set it on Railway: cookie sessions cannot be listed).
-- **notifications:** `user_notifications` inbox (SDD 14 §5, `users.id` as bigint) written only by `notifications.Send` (dedupe on `(user_id, dedupe_key)`, so a retried job inserts once); `GET /me/notifications` (`Account/Notifications`, infinite scroll of 20), `POST /me/notifications/{id}/read`, `POST /me/notifications/read-all`, `/app/v1/me/notifications` and `/app/v1/me/notifications/read`; another user's id answers 404; `unreadNotifications` shared prop and a count in the nav. The daily purge (NFR-14-6) is not scheduled yet.
-- **security:** Proof-of-work bot challenge (ADR 0016, SDD 03 section 7.3): `app/security` issues HMAC-signed, route-bound, single-use SHA-256 challenges (18 bits, 21 when sign-up is over 30 per hour globally); `GET /challenge?route=` hands one out; `POST /login`, `/signup`, `/recover-password` and `/app/v1/tokens*` answer 428 `challenge-required` past 5 attempts per 10 minutes (login, tokens) or 3 per hour (sign-up, reset) per IP, and need a solution in the `X-Challenge: <c>:<n>` header (solved in a Web Worker, `resources/js/lib/pow-worker.ts`); sign-up form honeypot `website`. A broken counter store lets requests through (rate limits still apply), a broken solution store answers 503.
-- **ui:** App shell: skip link, navigation with locale and theme switchers, footer, flash toasts, SEO head (canonical, hreflang, robots, Open Graph, JSON-LD), Base UI `Dialog` (`@base-ui/react` 1.9.0) and `CoverThumb`; unmatched pages render the `Error` page with `noindex`.
-- **search:** `/search`, `/search/suggest` and `POST /search/events` with a 120 s/300 s result cache, ETag/304 on JSON, the legacy `/api/search/suggest` 308 redirect, `search_events` (redacted queries) and the daily `search:purge` (30 days).
+- **auth:** Add admin panel, users resource with ban and admin CLI ([9a8f000](https://github.com/AlexGalhardo/hexascore-app/commit/9a8f000db06c5f6125416a5dd4ff168166079ccd))
+- **auth:** Localise Auth pages and add nickname onboarding ([6c596e0](https://github.com/AlexGalhardo/hexascore-app/commit/6c596e0316e9e48005ff283598bb14b6502d6f1a))
+- **infra:** Expose the release version on every response ([57557c1](https://github.com/AlexGalhardo/hexascore-app/commit/57557c177953dba8c39a80672a68d780ea935145))
+- **search:** Add search extensions, hs_norm, text search configs, tsv trigger, trigram indexes and search_dirty ([0f7471b](https://github.com/AlexGalhardo/hexascore-app/commit/0f7471b8651f9e60b2d6dc045363bc4304966a36))
+- **ratings:** Add rating write path on web and /app/v1 ([959bbed](https://github.com/AlexGalhardo/hexascore-app/commit/959bbedddd7555442d5ee1130a182b52b40cddaa))
+- **search:** Add search_suggest table and incremental sync runner ([05743cb](https://github.com/AlexGalhardo/hexascore-app/commit/05743cb2da5599f22a9d915c32404d56da53af00))
+- **auth:** Login by email or nickname, onboarding redirects and nickname gate ([dd18399](https://github.com/AlexGalhardo/hexascore-app/commit/dd18399b249a609c494fffa901d9a16681b0f5ec))
+- **ratings:** Add burst detector, daily caps, item limiter and moderation routes ([ea1216f](https://github.com/AlexGalhardo/hexascore-app/commit/ea1216f4322a154868ef4692685c81a53f3c978b))
+- **auth:** Schedule, cancel and purge account deletion with public help page ([4cfb52b](https://github.com/AlexGalhardo/hexascore-app/commit/4cfb52b3fdc97183f4f5e6e27af83203c02dd302))
+- **search:** Add Searcher with tiered ranking, query parsing and audiences ([dfbda09](https://github.com/AlexGalhardo/hexascore-app/commit/dfbda09de9951ae916ac1476c985f570d7d0070d))
+- **ui:** Add app shell, SEO head and Base UI dialog ([761e0a1](https://github.com/AlexGalhardo/hexascore-app/commit/761e0a169ec45eac7a3eba64e2d19805f5b308f3))
+- **search:** Add search routes, suggest, click events and purge ([015a052](https://github.com/AlexGalhardo/hexascore-app/commit/015a0527639021ced3bc64f5e640a6cc41fbe29b))
+- **ui:** Add nonce CSP with strict-dynamic and security header set ([c1fff38](https://github.com/AlexGalhardo/hexascore-app/commit/c1fff38d76a51c5c887fae69c6bc7cdb88be3fd2))
+- **auth:** Add /app/v1 token endpoints for password and Google ID token ([b649986](https://github.com/AlexGalhardo/hexascore-app/commit/b649986025c3f3261b37ea13a5e23683aeeac95f))
+- **admin:** Add read-only scoring resources ([a5b6dc2](https://github.com/AlexGalhardo/hexascore-app/commit/a5b6dc25a88ebaf183d414a516f78c89e855a441))
+- **ratings:** Add item status and time-to-beat writes and GET /me ([9fc7f5e](https://github.com/AlexGalhardo/hexascore-app/commit/9fc7f5e31a5ed4b852da308567bdd040901a71b6))
+- **ratings:** Schedule score recompute, burst release and event prune, add ban/merge listeners and scoring DQ ([48ef5f5](https://github.com/AlexGalhardo/hexascore-app/commit/48ef5f52372feebbc5e602501d64bb6cd6f52c4e))
+- **lists:** Add lists tables, ListPolicy and list create, update, delete ([cff31b8](https://github.com/AlexGalhardo/hexascore-app/commit/cff31b8927f716e7f1c5a2ec3a41029204ab6c0c))
+- **auth:** Localise account mails from the user's saved locale and add password and 2FA notices ([58174a7](https://github.com/AlexGalhardo/hexascore-app/commit/58174a75e877e8d4e53e0efc76a15cc8158fdff3))
+- **lists:** Add list items, versioned reorder and merge move ([a5cbf2c](https://github.com/AlexGalhardo/hexascore-app/commit/a5cbf2c6acca9e08829e85af6764d0c6501a8335))
+- **ui:** Add half-star rating widget and /help/score page ([5c2b5ff](https://github.com/AlexGalhardo/hexascore-app/commit/5c2b5ff85e0790208f9e7dfdaad114c9464b97b2))
+- **web:** Home/Index with per-type section highlights ([5006a66](https://github.com/AlexGalhardo/hexascore-app/commit/5006a66bf5470bc38287e2b38717810ac4921fa5))
+- **auth:** Profile sections for details, password, sessions and privacy ([2c9822f](https://github.com/AlexGalhardo/hexascore-app/commit/2c9822fbf1efbe765d604b48fc209ce683b4bb96))
+- **catalog:** Add item and edition pages with rating, status and time to beat ([1388476](https://github.com/AlexGalhardo/hexascore-app/commit/13884760ace5e9761534508b47b09573337b66e3))
+- **notifications:** User_notifications inbox with deduped Send, read routes and unread prop ([8d54b46](https://github.com/AlexGalhardo/hexascore-app/commit/8d54b4639648ae925af3be6f24897f1b9c3b46b2))
+- **security:** Proof-of-work challenge and signup honeypot for auth routes ([3106a5e](https://github.com/AlexGalhardo/hexascore-app/commit/3106a5ed06a023b63ed1594ddda2ae72bf489006))
 
-### Changed
+### Fixed
 
-- **ci:** Pin every workflow action by full commit SHA; add `lint` (format diff, Biome, tsc, markdownlint, commitlint on PR commits and PR title), `test` (Go unit and integration on Postgres 18.6, TypeScript tests), weekly `vuln` (`go tool govulncheck`), `setup-windows` and `build` (`scripts/infra/check-image.sh`, `image` artifact) jobs.
-- **build:** Add `commitlint` and `@commitlint/config-conventional` 21.2.4 (D-37) with `commitlint.config.ts`.
+- **admin:** Register all console commands; number VF-046; tick P1.C.3.1 ([9705a3b](https://github.com/AlexGalhardo/hexascore-app/commit/9705a3ba97a7fa842096dd46651ea2ffe6f861f2))
+- **auth:** Key login throttles by the resolved account ([806bd1b](https://github.com/AlexGalhardo/hexascore-app/commit/806bd1bb46e05ba8c11e61e12d27f4f76fca726a))
+- **auth:** Cap login attempts per IP across identifiers instead of resolving accounts ([83e9551](https://github.com/AlexGalhardo/hexascore-app/commit/83e955174a76fae29119a3a186d589dbfada0b71))
+- **accounts:** Register every job, defer rows.Close in the purge, align deletion test with identifier login ([c6082f4](https://github.com/AlexGalhardo/hexascore-app/commit/c6082f4867efe94d5225028707a5a2ca1296625c))
+- **search:** Accept clicks only on returned results, widen PII redaction, key page cache by locale prefix ([7aaeb18](https://github.com/AlexGalhardo/hexascore-app/commit/7aaeb18fa79b99edb35b4c9562eebe2ddb5adeb0))
+- **search:** Redact any numeral run and rate-limit click events per IP ([6bdf6cd](https://github.com/AlexGalhardo/hexascore-app/commit/6bdf6cd153dd7124746af7e209e16b7202c7ee74))
+- **auth:** Make app token rotation single-use and cap token issue per identifier ([e21aa08](https://github.com/AlexGalhardo/hexascore-app/commit/e21aa0870e1e4a02081465b46c9cd70b3811512e))
+- **auth:** Cap app second-factor attempts per user and keep abilities on rotation ([13d8ea0](https://github.com/AlexGalhardo/hexascore-app/commit/13d8ea060d50dafe4c124d8923a1675a65770b7e))
+- **ui:** Keep frame-src and worker-src free of nonce and strict-dynamic ([3f62209](https://github.com/AlexGalhardo/hexascore-app/commit/3f62209823e1063fbd2e0c965412d938b63f278d))
+- **ratings:** Keep status writes to public items and freeze the score during a burst limit ([c651c7b](https://github.com/AlexGalhardo/hexascore-app/commit/c651c7ba782a0a45b4242c3c76a2d36de2168292))
+- **ratings:** Auto-release a burst only after its limit expired ([ac8899b](https://github.com/AlexGalhardo/hexascore-app/commit/ac8899b3ca9d8fc272566faf0811f8c23a7a015d))
+- **repo:** Register the lists and status routes once after merge ([bcfc02d](https://github.com/AlexGalhardo/hexascore-app/commit/bcfc02d29c8853c720bb6077bac41af2543ebf5b))
+- **repo:** Keep the highlights home route after merge ([b87731f](https://github.com/AlexGalhardo/hexascore-app/commit/b87731f3c533176370aeacd0f8262e01c0b28b54))
+- **auth:** Require the current password unless the account is social-only, drop remember tokens on session revoke ([9d6e02b](https://github.com/AlexGalhardo/hexascore-app/commit/9d6e02bb8b4ca9574f9f34a7f81ceee0214831e9))
+- **auth:** Decode PoW challenges strictly so one challenge has one replay key ([b31aa9c](https://github.com/AlexGalhardo/hexascore-app/commit/b31aa9c166fcad90838c6df0011123331bb74dd6))
 
 ## [0.2.0] - 2026-10-29
 
