@@ -6,21 +6,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-10-29
+
 ### Added
 
-- Library edition picker: session route `GET /items/{id}/editions` (public books only, 404 otherwise) and a picker in `Library/Index` that saves through `PUT /items/{id}/edition` (en, pt-BR, es).
-- `Entity/Show` for people, companies, franchises, platforms, genres, game modes, countries and languages (`/people/{slug}`, `/countries/{code}`, ...): roles, items grouped by type with paging, counts, average score from `entity_stats`; below 3 linked public items it renders `noindex,follow`.
+- **ui:** Add profile, library and lists pages ([53e0dd3](https://github.com/AlexGalhardo/hexascore-app/commit/53e0dd31e74916dec54b5f26284fe625244890c2))
+- **api:** Serve licence-filtered item reads on /api/v1 ([4c69869](https://github.com/AlexGalhardo/hexascore-app/commit/4c69869e84d5581eba25d46c3570ffa423287221))
+- **api:** Serve entity read endpoints on /api/v1 ([f5820c8](https://github.com/AlexGalhardo/hexascore-app/commit/f5820c893d4920f7099ef32dfc2f4ae1ffbc739b))
+- **api:** Serve search and lookup endpoints on /api/v1 ([3b212c1](https://github.com/AlexGalhardo/hexascore-app/commit/3b212c1b9563f57288bceb0e181eb90ecb5d034a))
+- **library:** Filter counts, see-all links and clear-edition action ([b25d195](https://github.com/AlexGalhardo/hexascore-app/commit/b25d195998a8d5276429a655bb33e6cad3587f53))
+- **api:** Host routing, CORS, coded problems and problem catalogue ([f1ee935](https://github.com/AlexGalhardo/hexascore-app/commit/f1ee9355ca912ce5b8d783911c3eba321ddf4c87))
+- **library:** Add edition picker and session editions route ([82c3756](https://github.com/AlexGalhardo/hexascore-app/commit/82c37566663840f456e158dd1ab1fa7fdd0e5c09))
+- **catalog:** Add Entity/Show pages for catalogue entities ([e71f426](https://github.com/AlexGalhardo/hexascore-app/commit/e71f4265116f80548640174928edcd4d526450be))
 
-- Public API edge: `api.hexascore.app/v1/*` host routing (`API_HOST`), CORS `*` without credentials, a `code` and catalogue `type` on every `/api/v1` problem, `/problems/{code}` redirects to `/docs/errors#<code>`, OpenAPI `servers` entry.
-- Profile, public list, library, lists-management and list-edit pages (`User/Profile`, `User/List`, `Library/Index`, `Lists/Index`, `Lists/Edit`) with GET `/lists`, `/lists/{id}/edit` and `/u/{nickname}/lists/{id}`; reorder uses move up/down buttons.
+### Changed
+
+- **catalog:** Share score fields and listing query parsing ([a485ae8](https://github.com/AlexGalhardo/hexascore-app/commit/a485ae8c1aada65ed5986ec53b751e7e40244a10))
 
 ### Fixed
 
-- `/api/v1` item entity relations filter the entity name by its own source (`entities.default_name` provenance / translation `name_source`), not the relation source; a disallowed or unknown name is omitted and listed as `entities.name` in `meta.omittedFields`.
-
-- Public lists of a banned owner are `noindex` (header and `seo.indexable`); the library filters and "next page" link keep the locale prefix; list reordering keeps keyboard focus on the moved row; the list-edit items heading no longer reads "Add to list".
-- `/api/v1` relation filters and counts (`listEntityItems`, `listItems` `genre`/`platform`, `listGenres`) match only relations from allowlisted sources, so they no longer reveal TMDB/IGDB-sourced relations; an entity `name` from `default_name` without a provenance source is omitted (fail closed).
-- `GET /api/v1/lookup` resolves only public items (a hidden item with the same third-party id no longer shadows the public one) and uses one indexable query per source instead of a full scan.
+- **lists:** Noindex banned owners' profiles and test edition moves on merge ([30665f2](https://github.com/AlexGalhardo/hexascore-app/commit/30665f255397061b6816d60180724a728d168cf4))
+- **lists:** Noindex banned owners' lists and fix library and list-edit page issues ([c7d57d5](https://github.com/AlexGalhardo/hexascore-app/commit/c7d57d51046b28ceb201f5e50501fde8d85b8841))
+- **api:** Keep restricted-source relations out of api filters and counts ([b6a02ac](https://github.com/AlexGalhardo/hexascore-app/commit/b6a02ac0928fb0763631f2d6b4e7625dac07fb5b))
+- **api:** Resolve lookup ids to public items with indexable queries ([8369936](https://github.com/AlexGalhardo/hexascore-app/commit/8369936a7d5b5961b498377e40ae60da81e502c2))
+- **docs:** Regenerate docs.json for the changes-window-exceeded section ([8e23e70](https://github.com/AlexGalhardo/hexascore-app/commit/8e23e7018dd55e00b021460425aeb0481e6a543e))
+- **catalog:** Filter api entity names by their own source ([e3643ae](https://github.com/AlexGalhardo/hexascore-app/commit/e3643ae30a796a35d2d004051ab200fbad4d8932))
 
 ## [0.6.0] - 2026-10-29
 
