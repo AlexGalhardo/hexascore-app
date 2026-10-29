@@ -1,0 +1,14 @@
+#!/bin/sh
+# Conventional Commits 1.0 header check (.claude/rules/commits.md). Enabled by `git config core.hooksPath .githooks`.
+header=$(head -n 1 "$1")
+
+case "$header" in
+	"Merge "* | "Revert \""* | "fixup! "* | "squash! "*) exit 0 ;;
+esac
+
+pattern='^(feat|fix|perf|refactor|docs|test|build|ci|chore|style|revert)(\([a-z0-9-]+\))?!?: [^ ].*[^.]$'
+if ! printf '%s\n' "$header" | grep -Eq "$pattern" || [ "${#header}" -gt 100 ]; then
+	echo "commit-msg: header must be 'type(scope): description' (lowercase scope, no trailing period, max 100 chars)" >&2
+	echo "types: feat fix perf refactor docs test build ci chore style revert" >&2
+	exit 1
+fi
