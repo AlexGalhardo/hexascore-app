@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"net/http"
-	"strconv"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/errs"
@@ -47,7 +46,8 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 			return err
 		}
 
-		params, err := listParams(c, typ)
+		params, err := catalog.ParseListQuery(c.Query, typ)
+		params.Limit = CatalogPageSize
 		if err != nil {
 			return badListing(err)
 		}
@@ -89,55 +89,6 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 
 		return inertia.Render(c, "Catalog/Index", props)
 	}
-}
-
-func listParams(c *web.Ctx, typ string) (catalog.ListParams, error) {
-	p := catalog.ListParams{
-		Type: typ, Genre: c.Query("genre"), Platform: c.Query("platform"),
-		Sort: c.Query("sort"), Cursor: c.Query("cursor"), Limit: CatalogPageSize,
-	}
-
-	if v := c.Query("year"); v != "" {
-		year, err := strconv.Atoi(v)
-		if err != nil {
-			return p, catalog.ErrInvalidQuery
-		}
-		p.Year = year
-	}
-	stars := func(name string) (*float64, error) {
-		v := c.Query(name)
-		if v == "" {
-			return nil, nil
-		}
-		f, err := strconv.ParseFloat(v, 64)
-		if err != nil {
-			return nil, catalog.ErrInvalidQuery
-		}
-
-		return &f, nil
-	}
-
-	var err error
-	if p.MinScore, err = stars("min_score"); err != nil {
-		return p, err
-	}
-	if p.MaxScore, err = stars("max_score"); err != nil {
-		return p, err
-	}
-	for _, key := range catalog.CategoryKeys[typ] {
-		v, err := stars("min_" + key)
-		if err != nil {
-			return p, err
-		}
-		if v != nil {
-			if p.MinCategory == nil {
-				p.MinCategory = map[string]float64{}
-			}
-			p.MinCategory[key] = *v
-		}
-	}
-
-	return p, nil
 }
 
 // badListing maps bad filters and forged cursors to 400.

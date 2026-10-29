@@ -139,27 +139,10 @@ WHERE i.type = $1 AND i.slug = $2 AND i.visibility = 'public'`, typ, slug, local
 	}
 	page.Item = Assemble(src, NewPolicy(AudienceSite, nil))
 
-	stars := func(v float64) float64 { return math.Round(v) / 10 }
+	page.RatingSummary = scoreFields(typ, sum.RatingCount, score, cats, conf, version)
 	sum.UnusualActivity = unusual.Valid && unusual.Time.After(now)
 	if limited.Valid && limited.Time.After(now) {
 		sum.RatingsLimitedUntil = &limited.Time
-	}
-	sum.ScoreByCategory = map[string]float64{}
-	if sum.RatingCount >= 5 && score.Valid {
-		s := stars(score.Float64)
-		sum.Score = &s
-		for i, k := range CategoryKeys[typ] {
-			if cats[i].Valid {
-				sum.ScoreByCategory[k] = stars(cats[i].Float64)
-			}
-		}
-		if conf.Valid {
-			sum.Confidence = &conf.String
-		}
-		if version.Valid {
-			v := int(version.Int64)
-			sum.FormulaVersion = &v
-		}
 	}
 
 	if page.Entities, err = loadEntities(ctx, db, src.ID, locale); err != nil {
@@ -178,6 +161,33 @@ WHERE i.type = $1 AND i.slug = $2 AND i.visibility = 'public'`, typ, slug, local
 	}
 
 	return page, nil
+}
+
+// scoreFields builds the SDD 02 §6 score fields: 0-10 stars with one decimal,
+// null below the 5-rating read gate.
+func scoreFields(
+	typ string, count int, score sql.NullFloat64, cats [6]sql.NullFloat64, conf sql.NullString, version sql.NullInt64,
+) RatingSummary {
+	stars := func(v float64) float64 { return math.Round(v) / 10 }
+	sum := RatingSummary{RatingCount: count, ScoreByCategory: map[string]float64{}}
+	if count < 5 || !score.Valid {
+		return sum
+	}
+	s := stars(score.Float64)
+	sum.Score = &s
+	for i, k := range CategoryKeys[typ] {
+		if cats[i].Valid {
+			sum.ScoreByCategory[k] = stars(cats[i].Float64)
+		}
+	}
+	if conf.Valid {
+		sum.Confidence = &conf.String
+	}
+	if version.Valid {
+		v := int(version.Int64)
+		sum.FormulaVersion = &v
+	}
+	return sum
 }
 
 func loadEntities(ctx context.Context, db Querier, itemID, locale string) (map[string][]EntityLink, error) {
