@@ -213,3 +213,21 @@ Acceptance (2026-10-29, in the Linux container so `docker stop` delivers SIGTERM
 - 200 jobs (100 heavy, 100 light). `docker stop` after 4 s gave `shutting down cause="terminated signal received"`, with 46 effects applied and 154 jobs left. After restart: `jobs_left=0 failed=0 effects=200 distinct_keys=200 heavy=100 light=100 heavy_peak=2`.
 - Hard kill: 40 more jobs with 3 s heavy work; `docker kill` (SIGKILL) after 5 s left 2 effects and 38 jobs. After restart, the expired reservations were redelivered in about 105 s, ending with `jobs_left=0 failed=0 r2_effects=40`. Every key was applied once. The stats row read `heavy_peak=4` because the two jobs killed mid-run never decremented `active`. That is a measurement artifact: the cap is enforced in process, and the graceful run plus `TestSemaphoreCapsConcurrency` show it holds at 2. The real app records concurrency as a metric (SDD 12), not as a row.
 - `go test ./app/jobs/... -run TestBufferedCounterFlush` → PASS (with `-race`). `go test ./...` on spike `main` → all `ok`.
+
+## P0.F.7.1 Two OpenAPI documents with RFC 9457 problem codes
+
+Verdict: workaround (VF-014 and VF-016 confirmed; VF-NEW-P0.F.7.1).
+
+Spike branch `agent/senior/P0.F.7.1`. Typed handlers via `api.Register`: `routes/api.go` (`getItem`, plus the existing `ping`) and `routes/app_api.go` (`getAppItem`, `reportClientError` with 202). `app/http/problems/problem.go` adds `code` and extension members; `app/catalog/api.go` holds the item lookup (unknown type or malformed id is a 404 `not-found`).
+
+- VF-014: payload fields are camelCase through `json` tags (`createdAt`), but the problem document keeps `request_id` and the envelope keys snake_case: `web.Problem` is fixed and has no naming option. Accepted as documented in the SDD README; no custom envelope written.
+- VF-016: extension members are not supported by `web.Problem`/`DefaultErrorHandler`. `problems.Install` wraps the router-wide `Services.Errors` (group middleware cannot: handler errors do not pass through services swapped by middleware). The OpenAPI `Problem` schema does not list `code`, so generated clients will not see it until the framework adds extensions.
+- Each document contains only its own prefix: `-prefix` keeps page routes out (no duplicate `operationId`).
+
+Acceptance (2026-10-29):
+
+- `app openapi:export -prefix /api/v1 > openapi/api-v1.json` and `-prefix /app/v1 > openapi/app-v1.json` → exit 0 / exit 0; both `openapi: 3.1.0`, operations `ping, getItem` and `reportClientError, getAppItem`.
+- `curl -si -H 'Host: api.localhost' localhost:3011/v1/items/missing` → `404`, `Content-Type: application/problem+json`, body `{"code":"not-found",...,"request_id":"KKAZPBGJH6CHN62WIHAFU6SRYF",...}`.
+- `go test ./tests -run TestAPIContract` → `ok` (both prefixes: 200, 404 `not-found`, 422 `validation-failed` with field errors, 202; every response passes `AssertMatchesOpenAPI()`); `go test ./app/http/problems/` ok (extension member, reserved-member guard, 5xx detail hidden, other paths untouched); `go test ./...` all `ok` with `TEST_DATABASE_URL` set.
+
+Limits: the exported documents are checked in from the spike only as samples (no CI diff yet); `servers` shows `http://localhost:3000` because `API_URL` was unset; auth, quota and rate-limit headers are not wired (other tasks); `listItems` and the rest of SDD 05 section 6.2 are not implemented; unmatched routes (router 404) are not under the problem handler when the path is outside the installed prefixes.
