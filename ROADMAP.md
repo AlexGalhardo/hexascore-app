@@ -132,7 +132,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
     - `docker exec <id> pkill node` then within 5 s `curl -s localhost:3000/up?checks=1` → `ssr: ok` again (restarted)
   - Notes: `vukem build` does not cover the SSR bundle (VF-027): the Dockerfile runs `vite build --ssr` itself. Pin the Node image tag exactly. Use `vukem ssr:start -restart-delay` as a child process if that is enough, otherwise a small supervisor; record which and why.
 
-- [ ] **P0.F.2.3** Prove URL-prefix locales, the i18n `Once` prop and the theme cookie under SSR.
+- [x] **P0.F.2.3** Prove URL-prefix locales, the i18n `Once` prop and the theme cookie under SSR.
   - Files/modules: spike `app/http/middleware/locale_prefix.go`, `resources/views/app.html` (theme view function), `lang/en.json`, `lang/pt-BR.json`
   - Refs: SDD 09 §6.1, §7.1; open-issues 09-1, 09-5, 09-6; VF-024, VF-028; <https://vukem.dev/docs/frontend/inertia-i18n> "Testing"
   - Depends on: P0.F.2.1
