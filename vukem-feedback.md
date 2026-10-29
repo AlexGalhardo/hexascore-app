@@ -13,7 +13,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-002 | 2026-10-28 | medium | merged in main (PR #7), unreleased |
 | VF-003 | 2026-10-28 | medium | open |
 | VF-004 | 2026-10-28 | low | open |
-| VF-005 | 2026-10-28 | medium | in_progress (framework, vukem PR #11) |
+| VF-005 | 2026-10-28 | medium | merged in main (PR #11), unreleased |
 | VF-006 | 2026-10-28 | low | open |
 | VF-007 | 2026-10-28 | low | open |
 | VF-008 | 2026-10-28 | medium | open |
@@ -90,7 +90,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-005: No keyset (cursor) pagination helper in the ORM
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #11, https://github.com/AlexGalhardo/vukem/pull/11), unreleased. Native API: `orm.QueryOf[T](db).OrderBy("score", orm.Desc).CursorPaginate(ctx, cursor, n, orm.Desc)` pages by `(score DESC, id DESC)`; cursor values typed per column, unsigned by design (bound parameters, validated columns).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` "Querying"; `https://vukem.dev/docs/rest-apis/pagination` "Query conventions"; `https://vukem.dev/docs/frontend/inertia` Inertia `ScrollCursor(orm.CursorPage, name)`.
 - **Context**: `ScrollCursor` accepts an `orm.CursorPage`, but the documented query builder shows no way to build a keyset page over a composite order (`score DESC, id DESC`) with an opaque signed cursor. HexaScore lists (SDD 01, 05, 07) need this for every listing and for the paid API.
 - **Reproduction**: search `https://vukem.dev/docs/database/overview` for `Cursor`: only the Inertia prop is documented.
