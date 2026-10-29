@@ -42,7 +42,7 @@ Out: facet counts (ADR 0011 "Negative"); vector search; personalised ranking (A-
 
 ## 5. Data model
 
-Requires Postgres ≥ 15 (`^@` on SP-GiST, `starts_with`); vukem's suite runs `postgres:17` (https://vukem.dev/docs/database/migrations "PostgreSQL"); Railway's version is [NOT VERIFIED]. All DDL is `s.Raw` (https://vukem.dev/docs/database/migrations "Migrations"). Each migration runs in its own transaction, so `CREATE INDEX CONCURRENTLY` cannot run in one; non-transactional migrations are [NOT IN VUKEM DOCS] (`vukem-feedback.md` candidate). At launch size a plain `CREATE INDEX` locks for seconds, accepted in the cutover window (SDD 11). Extensions exist in legacy (`legacy/apps/web/lib/db/migrations/0000_extensions.sql`); `unaccent` was installed but unused.
+Requires Postgres ≥ 15 (`^@` on SP-GiST, `starts_with`); vukem's suite runs `postgres:17` (<https://vukem.dev/docs/database/migrations> "PostgreSQL"); Railway's version is [NOT VERIFIED]. All DDL is `s.Raw` (<https://vukem.dev/docs/database/migrations> "Migrations"). Each migration runs in its own transaction, so `CREATE INDEX CONCURRENTLY` cannot run in one; non-transactional migrations are [NOT IN VUKEM DOCS] (`vukem-feedback.md` candidate). At launch size a plain `CREATE INDEX` locks for seconds, accepted in the cutover window (SDD 11). Extensions exist in legacy (`legacy/apps/web/lib/db/migrations/0000_extensions.sql`); `unaccent` was installed but unused.
 
 ```sql
 create extension if not exists pg_trgm;
@@ -152,7 +152,7 @@ type Query struct {
 }
 ```
 
-Input is parsed with `web.Parse(c, schema)`; schema failures on JSON routes are `422 application/problem+json` (https://vukem.dev/docs/basics/validation "Validation"; legacy answered 400). Page beyond 200 results is 400 `invalid-query` (RFC 9457).
+Input is parsed with `web.Parse(c, schema)`; schema failures on JSON routes are `422 application/problem+json` (<https://vukem.dev/docs/basics/validation> "Validation"; legacy answered 400). Page beyond 200 results is 400 `invalid-query` (RFC 9457).
 
 | Op ID | Route | Auth | Output |
 | --- | --- | --- | --- |
@@ -163,7 +163,7 @@ Input is parsed with `web.Parse(c, schema)`; schema failures on JSON routes are 
 | `searchItems` | GET `/api/v1/search?q=&type=&locale=&limit=&page=` | API key | `{data: ItemSummary[], meta}` |
 | `searchEntities` | GET `/api/v1/search/entities?q=&kind=&locale=&limit=&page=` | API key | `{data: EntitySummary[], meta}` |
 
-`Search/Index` props: `query {q, type, locale, page}`, `groups [{type, items: SearchHit[], total, moreHref}]` (no type), `results` as `inertia.Scroll(v, meta)` with partial reload `only: ['results']` (type set; https://vukem.dev/docs/frontend/inertia "Inertia v3 (BETA)", Props and Requests rows), `entities EntityHit[]`, `didYouMean`, `searchId`, `tooShort`. The `Scroll` meta for offset pages not built by `orm` is [NOT VERIFIED]. `SearchHit` = SDD 01 `ItemSummary` + `matchedTitle` (other-locale or alternative title), `matchedEdition {id, title, isbn13}`, optional `highlight`.
+`Search/Index` props: `query {q, type, locale, page}`, `groups [{type, items: SearchHit[], total, moreHref}]` (no type), `results` as `inertia.Scroll(v, meta)` with partial reload `only: ['results']` (type set; <https://vukem.dev/docs/frontend/inertia> "Inertia v3 (BETA)", Props and Requests rows), `entities EntityHit[]`, `didYouMean`, `searchId`, `tooShort`. The `Scroll` meta for offset pages not built by `orm` is [NOT VERIFIED]. `SearchHit` = SDD 01 `ItemSummary` + `matchedTitle` (other-locale or alternative title), `matchedEdition {id, title, isbn13}`, optional `highlight`.
 
 `Suggestion` = legacy shape (`legacy/apps/web/app/api/search/suggest/route.ts`) `{id, type, title, year, coverThumbUrl, path}` + `kind`; `score` dropped (SDD 02 owns live scores).
 
@@ -220,7 +220,7 @@ select i.id, 10 * e::int + 5 * p::int + case when sim >= 0.2 then 2 + sim else 0
  limit $4 offset $5;
 ```
 
-Grouped mode adds `row_number() over (partition by i.type …) <= 8` and `count(*) over (partition by i.type)` for `total`. SQL is written with `?` and `database.Rebind`, run via `db.QueryContext` (https://vukem.dev/docs/database/orm "Query builder"). Trigram branches are skipped when the normalised query is under 3 characters.
+Grouped mode adds `row_number() over (partition by i.type …) <= 8` and `count(*) over (partition by i.type)` for `total`. SQL is written with `?` and `database.Rebind`, run via `db.QueryContext` (<https://vukem.dev/docs/database/orm> "Query builder"). Trigram branches are skipped when the normalised query is under 3 characters.
 
 ### 7.4 Entities
 
@@ -228,11 +228,11 @@ Same E/P/S tiers (no FTS) over `entity_translations.name_norm` and `entities.nam
 
 ### 7.5 Suggest
 
-Query 1: `label_norm ^@ hs_norm($1) and locale in ($ui, '*')`, `order by popularity desc limit 24`. Under 8 distinct refs: query 2 with `label_norm % hs_norm($1)` (similarity threshold 0.3), `order by similarity desc, popularity desc limit 24`. Go dedupes by `ref_id` (UI-locale label preferred), caps 6 items + 2 entities. Job `search:suggest-sync` (`EveryMinute`, `WithoutOverlapping`, https://vukem.dev/docs/digging-deeper/scheduler "Scheduler") drains ≤ 5,000 `search_dirty` rows with `FOR UPDATE SKIP LOCKED` (https://vukem.dev/docs/database/orm "Lock" row), upserts/deletes suggest rows and the dirty rows in one transaction; idempotent. `search:rebuild` builds `search_suggest_new` and swaps by rename; weekly and after backfills (SDD 06).
+Query 1: `label_norm ^@ hs_norm($1) and locale in ($ui, '*')`, `order by popularity desc limit 24`. Under 8 distinct refs: query 2 with `label_norm % hs_norm($1)` (similarity threshold 0.3), `order by similarity desc, popularity desc limit 24`. Go dedupes by `ref_id` (UI-locale label preferred), caps 6 items + 2 entities. Job `search:suggest-sync` (`EveryMinute`, `WithoutOverlapping`, <https://vukem.dev/docs/digging-deeper/scheduler> "Scheduler") drains ≤ 5,000 `search_dirty` rows with `FOR UPDATE SKIP LOCKED` (<https://vukem.dev/docs/database/orm> "Lock" row), upserts/deletes suggest rows and the dirty rows in one transaction; idempotent. `search:rebuild` builds `search_suggest_new` and swaps by rename; weekly and after backfills (SDD 06).
 
 ### 7.6 Caching
 
-Anonymous requests only (no session, no API key). `cache.NewMemory(10000)` with `cache.Remember` (https://vukem.dev/docs/digging-deeper/cache "Cache", singleflight on misses); memory is loss-tolerant (ADR 0003). Key `search:v1:{epoch}:{sha256(text|locale|types|page|perPage|audience)}`; `epoch` is bumped when the suggest sync applies changes. TTL 120 s search, 300 s suggest. `ETag` via `web.ETagOf(v)` and `c.NotModified` (https://vukem.dev/docs/rest-apis/overview "Cross-cutting", Caching row), `Cache-Control: public, max-age=60` (legacy suggest header); logged-in requests get `private, no-store`.
+Anonymous requests only (no session, no API key). `cache.NewMemory(10000)` with `cache.Remember` (<https://vukem.dev/docs/digging-deeper/cache> "Cache", singleflight on misses); memory is loss-tolerant (ADR 0003). Key `search:v1:{epoch}:{sha256(text|locale|types|page|perPage|audience)}`; `epoch` is bumped when the suggest sync applies changes. TTL 120 s search, 300 s suggest. `ETag` via `web.ETagOf(v)` and `c.NotModified` (<https://vukem.dev/docs/rest-apis/overview> "Cross-cutting", Caching row), `Cache-Control: public, max-age=60` (legacy suggest header); logged-in requests get `private, no-store`.
 
 ### 7.7 Highlighting and zero results
 
@@ -240,7 +240,7 @@ Titles are highlighted client-side. `ts_headline` snippets only with `highlight=
 
 ### 7.8 Analytics and privacy
 
-Events `search.performed` and `search.clicked` (position 1-based within its group). After the click is stored, the in-process event `SearchResultClicked{ItemID uuid, QueryHash string /* sha256(query_norm|locale), hex */, Position int /* 1-based */, Locale string, At time.Time}` is dispatched (https://vukem.dev/docs/digging-deeper/events); SDD 08 consumes it by this name (open issue 08-5). It never carries the query text or a user id. Web clicks via `navigator.sendBeacon` to POST `/search/events`. Events buffer in memory and flush every 10 s with `orm.CreateMany`; a crash loses ≤ 10 s. Paid-API queries are counted (SDD 05), never logged with text. E-mail, phone and CPF patterns are stored as `[redacted]`. Daily job: aggregate into `search_query_daily` (rows with `searches ≥ 5`, kept 13 months), delete `search_events` older than 30 days. Consumers: SDD 08 (clicks), SDD 12 (zero-result rate).
+Events `search.performed` and `search.clicked` (position 1-based within its group). After the click is stored, the in-process event `SearchResultClicked{ItemID uuid, QueryHash string /* sha256(query_norm|locale), hex */, Position int /* 1-based */, Locale string, At time.Time}` is dispatched (<https://vukem.dev/docs/digging-deeper/events>); SDD 08 consumes it by this name (open issue 08-5). It never carries the query text or a user id. Web clicks via `navigator.sendBeacon` to POST `/search/events`. Events buffer in memory and flush every 10 s with `orm.CreateMany`; a crash loses ≤ 10 s. Paid-API queries are counted (SDD 05), never logged with text. E-mail, phone and CPF patterns are stored as `[redacted]`. Daily job: aggregate into `search_query_daily` (rows with `searches ≥ 5`, kept 13 months), delete `search_events` older than 30 days. Consumers: SDD 08 (clicks), SDD 12 (zero-result rate).
 
 ### 7.9 Accents, pt-BR, transliteration
 

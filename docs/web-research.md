@@ -73,24 +73,24 @@ Citation numbers in this section refer to the "Sources (IMDb)" list at its end.
 
 ### Sources (IMDb)
 
-1. https://data.imdb.com/non-commercial-datasets/ (via developer.imdb.com redirect), accessed 2026-10-28
-2. https://help.imdb.com/article/imdb/track-movies-tv/ratings-faq/G67Y87TFYYP6TWAV, accessed 2026-10-28
-3. https://m.imdb.com/conditions (search mirror; live page not fetched), accessed 2026-10-28
-4. https://data.imdb.com/documentation/api-documentation/getting-access/, accessed 2026-10-28
-5. https://aws.amazon.com/marketplace/pp/IMDb-MovieTVOTT-Data/prodview-yeuyizioqmfsy, accessed 2026-10-28
-7. https://help.imdb.com/article/contribution/contribution-information/when-will-my-update-be-added/GEKS9SBHDEHBAVC7, accessed 2026-10-28
-8. https://contribute.imdb.com/charter, accessed 2026-10-28
-9. https://help.imdb.com/article/contribution/contribution-information/adding-data/G6BXD2JFDCCETUF4 (search summary), accessed 2026-10-28
-10. https://en.wikipedia.org/wiki/IMDb, accessed 2026-10-28
-11. https://help.imdb.com/article/imdb/discover-watch/using-the-advanced-search-feature/GLUEUYWPQNPTEVPU (search summary), accessed 2026-10-28
-12. https://help.imdb.com/article/imdb/track-movies-tv/check-ins-faq/GG59ELYW45FMC7J3 (search summary), accessed 2026-10-28
-13. https://help.imdb.com/article/imdb/general-information/why-should-i-register-on-imdb/GHB62T7USTMYMCDC (search summary), accessed 2026-10-28
-14. https://fortune.com/2023/05/30/imdb-revamps-rating-system-the-little-mermaid, accessed 2026-10-28
-15. https://thegrio.com/2023/06/01/imdb-updates-rating-system-the-little-mermaid-negative-review-bombing/ (search summary), accessed 2026-10-28
-16. https://help.imdb.com/article/imdbpro/industry-research/faq-for-starmeter-moviemeter-and-companymeter/GSPB7HDNPKVT5VHC (search summary), accessed 2026-10-28
-17. https://developer.imdb.com/documentation/bulk-data-documentation/data-dictionary/meters/ (search summary), accessed 2026-10-28
-18. https://help.imdb.com/article/contribution/contribution-information/user-review-guidelines/GABTWSNLDNFLPRRH (search summary), accessed 2026-10-28
-19. https://api.market/blog/sleeyax/entertainment/best-movie-apis (third-party, unverified), accessed 2026-10-28
+1. <https://data.imdb.com/non-commercial-datasets/> (via developer.imdb.com redirect), accessed 2026-10-28
+2. <https://help.imdb.com/article/imdb/track-movies-tv/ratings-faq/G67Y87TFYYP6TWAV>, accessed 2026-10-28
+3. <https://m.imdb.com/conditions> (search mirror; live page not fetched), accessed 2026-10-28
+4. <https://data.imdb.com/documentation/api-documentation/getting-access/>, accessed 2026-10-28
+5. <https://aws.amazon.com/marketplace/pp/IMDb-MovieTVOTT-Data/prodview-yeuyizioqmfsy>, accessed 2026-10-28
+7. <https://help.imdb.com/article/contribution/contribution-information/when-will-my-update-be-added/GEKS9SBHDEHBAVC7>, accessed 2026-10-28
+8. <https://contribute.imdb.com/charter>, accessed 2026-10-28
+9. <https://help.imdb.com/article/contribution/contribution-information/adding-data/G6BXD2JFDCCETUF4> (search summary), accessed 2026-10-28
+10. <https://en.wikipedia.org/wiki/IMDb>, accessed 2026-10-28
+11. <https://help.imdb.com/article/imdb/discover-watch/using-the-advanced-search-feature/GLUEUYWPQNPTEVPU> (search summary), accessed 2026-10-28
+12. <https://help.imdb.com/article/imdb/track-movies-tv/check-ins-faq/GG59ELYW45FMC7J3> (search summary), accessed 2026-10-28
+13. <https://help.imdb.com/article/imdb/general-information/why-should-i-register-on-imdb/GHB62T7USTMYMCDC> (search summary), accessed 2026-10-28
+14. <https://fortune.com/2023/05/30/imdb-revamps-rating-system-the-little-mermaid>, accessed 2026-10-28
+15. <https://thegrio.com/2023/06/01/imdb-updates-rating-system-the-little-mermaid-negative-review-bombing/> (search summary), accessed 2026-10-28
+16. <https://help.imdb.com/article/imdbpro/industry-research/faq-for-starmeter-moviemeter-and-companymeter/GSPB7HDNPKVT5VHC> (search summary), accessed 2026-10-28
+17. <https://developer.imdb.com/documentation/bulk-data-documentation/data-dictionary/meters/> (search summary), accessed 2026-10-28
+18. <https://help.imdb.com/article/contribution/contribution-information/user-review-guidelines/GABTWSNLDNFLPRRH> (search summary), accessed 2026-10-28
+19. <https://api.market/blog/sleeyax/entertainment/best-movie-apis> (third-party, unverified), accessed 2026-10-28
 
 (Number 6 intentionally unused; source 2 also covers the demographic-breakdown removal.)
 
@@ -116,7 +116,7 @@ Citation numbers refer to "Sources (TMDB)". Caveat from the research agent: quot
 - **Developer experience**: OpenAPI-based reference with per-endpoint pages. The FAQ states no SLA, only "every reasonable attempt" [8].
 - **Pricing and commercial terms**:
   - Non-commercial use is free "as long as you attribute TMDB as the source of the data and/or images". A project is commercial if "the primary purpose is to create revenue" [8].
-  - Commercial access: email sales@themoviedb.org with subject "Commercial API Use" plus country; the API-for-business page shows no prices [10].
+  - Commercial access: email <sales@themoviedb.org> with subject "Commercial API Use" plus country; the API-for-business page shows no prices [10].
   - API Terms of Use (last updated 2023-10-20) [1]: the licence "does not permit any commercial use of TMDB, the TMDB APIs, or TMDB Content"; commercial use "is only permitted under a separate written agreement".
   - Attribution: "You must use the TMDB logo"; a not-endorsed notice is required [1].
   - Caching: you may not "Cache, for longer than 6 months, any information obtained through or from TMDB"; delete on termination [1].
@@ -154,18 +154,18 @@ Citation numbers refer to "Sources (TMDB)". Caveat from the research agent: quot
 
 ### Sources (TMDB)
 
-1. https://www.themoviedb.org/api-terms-of-use (last updated 2023-10-20), accessed 2026-10-28
-2. https://developer.themoviedb.org/docs/rate-limiting, accessed 2026-10-28
-3. https://developer.themoviedb.org/docs/daily-id-exports, accessed 2026-10-28
-4. https://developer.themoviedb.org/reference/discover-movie, accessed 2026-10-28
-5. https://developer.themoviedb.org/docs/authentication-application, accessed 2026-10-28
-6. https://developer.themoviedb.org/docs/popularity-and-trending, accessed 2026-10-28
-7. https://developer.themoviedb.org/docs/image-basics, accessed 2026-10-28
-8. https://developer.themoviedb.org/docs/faq (page metadata 2025-10-07), accessed 2026-10-28
-9. https://developer.themoviedb.org/reference/movie-changes, accessed 2026-10-28
-10. https://www.themoviedb.org/api-for-business, accessed 2026-10-28
-11. https://www.themoviedb.org/bible/new_content, accessed 2026-10-28
-12. https://www.themoviedb.org/terms-of-use (last updated 2024-05-10), accessed 2026-10-28
+1. <https://www.themoviedb.org/api-terms-of-use> (last updated 2023-10-20), accessed 2026-10-28
+2. <https://developer.themoviedb.org/docs/rate-limiting>, accessed 2026-10-28
+3. <https://developer.themoviedb.org/docs/daily-id-exports>, accessed 2026-10-28
+4. <https://developer.themoviedb.org/reference/discover-movie>, accessed 2026-10-28
+5. <https://developer.themoviedb.org/docs/authentication-application>, accessed 2026-10-28
+6. <https://developer.themoviedb.org/docs/popularity-and-trending>, accessed 2026-10-28
+7. <https://developer.themoviedb.org/docs/image-basics>, accessed 2026-10-28
+8. <https://developer.themoviedb.org/docs/faq> (page metadata 2025-10-07), accessed 2026-10-28
+9. <https://developer.themoviedb.org/reference/movie-changes>, accessed 2026-10-28
+10. <https://www.themoviedb.org/api-for-business>, accessed 2026-10-28
+11. <https://www.themoviedb.org/bible/new_content>, accessed 2026-10-28
+12. <https://www.themoviedb.org/terms-of-use> (last updated 2024-05-10), accessed 2026-10-28
 
 ## 3. IGDB
 
@@ -184,7 +184,7 @@ Citation numbers refer to "Sources (IGDB)". Research status: the research agent'
 - **Auth**: `POST https://id.twitch.tv/oauth2/token?client_id=…&client_secret=…&grant_type=client_credentials`; the response carries `access_token`, `token_type: bearer` and `expires_in` in seconds (example value 5,587,808 s, about 64 days); the token "must be refreshed" when it expires. Requests send `Client-ID` and `Authorization: Bearer` headers [3].
 - **Request format**: `POST https://api.igdb.com/v4/{endpoint}` with an APICalypse body (`fields`, `where`, `sort`, `search`, `limit`/`l`, `offset`/`o`, expanders such as `fields screenshots.*`) [3].
 - **Pagination**: default `limit` 10, maximum 500; `offset` for paging [3].
-- **Rate limits**: "There is a rate limit of **4 requests per second**"; over it, `429 Too Many Requests`; "You are able to have up to 8 _open_ requests at any moment in time" [3].
+- **Rate limits**: "There is a rate limit of **4 requests per second**"; over it, `429 Too Many Requests`; "You are able to have up to 8 *open* requests at any moment in time" [3].
 - **Images**: `https://images.igdb.com/igdb/image/upload/t_{size}/{hash}.jpg`; the API returns `t_thumb` URLs by default and the client builds other sizes from `image_id`; documented sizes include `cover_small` 90×128, `cover_big` 264×374, `logo_med` 284×160, `screenshot_med` 569×320, `screenshot_big` 889×500, `screenshot_huge` 1280×720; `_2x` suffix for retina [3].
 - **Protocol Buffers**: append `.pb` to any request (`/v4/games.pb`); the proto3 schema of the whole API is published at `https://api.igdb.com/v4/igdbapi.proto` [3].
 - **Webhooks**: `POST /v4/{endpoint}/webhooks` with form fields `url`, `method` (`create`, `update`, `delete`) and `secret`; every delivery carries `X-Secret`, `X-Endpoint`, `X-Operation` and `User-Agent: IGDB-Webhook-Bot`; deliveries do not come from a static IP, so verify by secret, not by allowlist; `DELETE /v4/webhooks/{id}` removes one [3].
@@ -193,7 +193,7 @@ Citation numbers refer to "Sources (IGDB)". Research status: the research agent'
 - **Wrappers**: the docs list community wrappers plus a third-party OpenAPI document and Postman collection [3].
 - **Licence and price** (official FAQ, quoted) [3]:
   - "The IGDB.com API is free for **non-commercial** usage under the terms of the Twitch Developer Service Agreement."
-  - Business FAQ 1: "Yes, we offer commercial partnerships for users looking to integrate the API in monetized products. From our side, as part of the partnership, we ask for user facing attribution to IGDB.com from products integrating the IGDB API." Contact: partner@igdb.com.
+  - Business FAQ 1: "Yes, we offer commercial partnerships for users looking to integrate the API in monetized products. From our side, as part of the partnership, we ask for user facing attribution to IGDB.com from products integrating the IGDB API." Contact: <partner@igdb.com>.
   - Business FAQ 2: "The API is free for both non-commercial and commercial projects."
   - Business FAQ 3 (storing data): "Yes. In fact, we prefer if you store and serve the data to your end users."
   - Business FAQ 4 (attribution): "We expect fair attribution, i.e. attribution that is visible to your users and located in a static location (e.g. not in a change log)."
@@ -224,23 +224,23 @@ Citation numbers refer to "Sources (IGDB)". Research status: the research agent'
 
 - **Weaknesses**: auth and account tied to Twitch developer accounts (2FA, confidential app); 4 rps / 8 in-flight is low for bulk sync without partner dumps; commercial partnership is informal (email) and the governing legal text is hard to read; rating formula undocumented; community size numbers stale; no movies or books.
 - **Opportunities**: own rating signal (weighted, anti-manipulation documented) instead of mirroring IGDB's; cover movies and books; publish own rate-limit and licence statement; use IGDB webhooks plus `updated_at` for incremental sync instead of full re-pulls; build HexaScore's "trending" from own primitives, as IGDB's docs recommend for theirs.
-- **Legal constraints if reusing IGDB commercially (not legal advice)**: the official FAQ allows commercial use and local storage and asks for visible static attribution plus a partnership arranged through partner@igdb.com; the Twitch Developer Services Agreement is the binding document and was not read. Action before launch: email partner@igdb.com describing HexaScore (including the paid API that re-serves IGDB-derived fields) and keep the written answer; read the agreement verbatim. Until then IGDB-derived fields are display-only on the site and excluded from the paid API, as `legacy/PLAN.md` §2 intended.
+- **Legal constraints if reusing IGDB commercially (not legal advice)**: the official FAQ allows commercial use and local storage and asks for visible static attribution plus a partnership arranged through <partner@igdb.com>; the Twitch Developer Services Agreement is the binding document and was not read. Action before launch: email <partner@igdb.com> describing HexaScore (including the paid API that re-serves IGDB-derived fields) and keep the written answer; read the agreement verbatim. Until then IGDB-derived fields are display-only on the site and excluded from the paid API, as `legacy/PLAN.md` §2 intended.
 
 ### Sources (IGDB)
 
-1. https://en.wikipedia.org/wiki/IGDB (fetched), accessed 2026-10-28
-2. https://discuss.dev.twitch.com/t/commercial-use-of-igdb-api/23567 (fetched; 2020-01-06 staff reply), accessed 2026-10-28
-3. https://api-docs.igdb.com/ (official API documentation: Getting Started, Rate Limits, Pagination, Images, Protocol Buffers, Webhooks, Partnership/Data Dumps, PopScore, Game and Game Time To Beat endpoints, FAQ, License), fetched and indexed by the architect, accessed 2026-10-28
-4. https://backloggd.medium.com/developer-update-may-2025-db5c66ffa6cc (search snippet), accessed 2026-10-28
-5. https://discuss.dev.twitch.com/t/response-headers-oauth-access-tokens-getting-rate-limited/46963 (fetched; 2023-08-17 replies), accessed 2026-10-28
-6. https://apis.io/rules/igdb/igdb-rules/ (unofficial ruleset, last modified 2026-04-28), accessed 2026-10-28
-7. https://www.igdb.com/api (HTTP 403 on both fetchers), accessed 2026-10-28
-8. https://discuss.dev.twitch.com/t/legacy-endpoints-returning-0-for-giantbomb-id-following-igdb-migration/29125 (search snippet), accessed 2026-10-28
-9. https://blog.twitch.tv/en/2016/08/24/new-developer-agreement-and-terms-of-service-5227c1ebf0fa/ (search snippet), accessed 2026-10-28
-10. https://legal.twitch.com/en/legal/developer-agreement/ (fetched twice, no body text), accessed 2026-10-28
-11. https://en.wikipedia.org/wiki/OpenCritic (search snippet), accessed 2026-10-28
-12. https://www.gamedeveloper.com/business/full-sail-study-attempts-to-shed-light-on-metacritic-s-weighting-system (search snippet), accessed 2026-10-28
-13. https://www.igdb.com/terms_of_service (HTTP 403), accessed 2026-10-28
+1. <https://en.wikipedia.org/wiki/IGDB> (fetched), accessed 2026-10-28
+2. <https://discuss.dev.twitch.com/t/commercial-use-of-igdb-api/23567> (fetched; 2020-01-06 staff reply), accessed 2026-10-28
+3. <https://api-docs.igdb.com/> (official API documentation: Getting Started, Rate Limits, Pagination, Images, Protocol Buffers, Webhooks, Partnership/Data Dumps, PopScore, Game and Game Time To Beat endpoints, FAQ, License), fetched and indexed by the architect, accessed 2026-10-28
+4. <https://backloggd.medium.com/developer-update-may-2025-db5c66ffa6cc> (search snippet), accessed 2026-10-28
+5. <https://discuss.dev.twitch.com/t/response-headers-oauth-access-tokens-getting-rate-limited/46963> (fetched; 2023-08-17 replies), accessed 2026-10-28
+6. <https://apis.io/rules/igdb/igdb-rules/> (unofficial ruleset, last modified 2026-04-28), accessed 2026-10-28
+7. <https://www.igdb.com/api> (HTTP 403 on both fetchers), accessed 2026-10-28
+8. <https://discuss.dev.twitch.com/t/legacy-endpoints-returning-0-for-giantbomb-id-following-igdb-migration/29125> (search snippet), accessed 2026-10-28
+9. <https://blog.twitch.tv/en/2016/08/24/new-developer-agreement-and-terms-of-service-5227c1ebf0fa/> (search snippet), accessed 2026-10-28
+10. <https://legal.twitch.com/en/legal/developer-agreement/> (fetched twice, no body text), accessed 2026-10-28
+11. <https://en.wikipedia.org/wiki/OpenCritic> (search snippet), accessed 2026-10-28
+12. <https://www.gamedeveloper.com/business/full-sail-study-attempts-to-shed-light-on-metacritic-s-weighting-system> (search snippet), accessed 2026-10-28
+13. <https://www.igdb.com/terms_of_service> (HTTP 403), accessed 2026-10-28
 
 ## 4. Metacritic
 
@@ -292,23 +292,23 @@ Citation numbers refer to "Sources (Metacritic)". Several official pages were bl
 
 ### Sources (Metacritic)
 
-1. https://www.metacritic.com/about-metascores (fetched), accessed 2026-10-28
-2. https://legacy.prod.metacritic.com/about-metascores (search snippet; fetch refused), accessed 2026-10-28
-3. https://gamedeveloper.com/business/metacritic-101-for-indie-studios (fetched; 2017-04-21), accessed 2026-10-28
-4. https://www.gamedeveloper.com/business/full-sail-study-attempts-to-shed-light-on-metacritic-s-weighting-system (fetched; 2013-03-27), accessed 2026-10-28
-5. https://en.wikipedia.org/wiki/Metacritic (fetched; secondary), accessed 2026-10-28
-6. https://www.hollywoodreporter.com/business/digital/tv-guide-metacritic-gamespot-acquisition-fandom-1235231819/ (cited via Wikipedia), accessed 2026-10-28
-7. https://www.aap.com.au/aapreleases/cision20221003ae90371 (Fandom release, 2022-10-03), accessed 2026-10-28
-8. https://www.ggrecon.com/articles/metacritic-changes-review-process-after-horizon-dlc-scandal/ (fetched; 2023-04-26), accessed 2026-10-28
-9. https://www.fabricdata.com/developer/metacritic-tos (fetched; licensing terms), accessed 2026-10-28
-10. https://www.fabricdata.com/ (search result), accessed 2026-10-28
-11. https://www.fandom.com/terms and https://www.fandom.com/terms-of-use (HTTP 402), accessed 2026-10-28
-12. https://knowyourmeme.com/news/metacritic-tweaks-user-review-system (search snippet; July 2020), accessed 2026-10-28
-13. https://videogameschronicle.com/news/metacritic-pledges-stricter-moderation-after-abusive-horizon-forbidden-west-dlc-review-bombing (HTTP 403), accessed 2026-10-28
-14. https://www.gamespot.com/articles/metacritic-will-delay-user-reviews-for-games/1100-6479886/ (HTTP 403), accessed 2026-10-28
-15. https://www.theverge.com/2020/7/17/21327946/metacritic-user-review-delay-36-hours-the-last-of-us-part-ii (fetch refused; cited via Wikipedia), accessed 2026-10-28
-16. https://apify.com/fetch_cat/metacritic-reviews-scores-scraper (third-party, unverified), accessed 2026-10-28
-17. https://tech-insider.org/?p=21079 (unverified 20-rating claim), accessed 2026-10-28
+1. <https://www.metacritic.com/about-metascores> (fetched), accessed 2026-10-28
+2. <https://legacy.prod.metacritic.com/about-metascores> (search snippet; fetch refused), accessed 2026-10-28
+3. <https://gamedeveloper.com/business/metacritic-101-for-indie-studios> (fetched; 2017-04-21), accessed 2026-10-28
+4. <https://www.gamedeveloper.com/business/full-sail-study-attempts-to-shed-light-on-metacritic-s-weighting-system> (fetched; 2013-03-27), accessed 2026-10-28
+5. <https://en.wikipedia.org/wiki/Metacritic> (fetched; secondary), accessed 2026-10-28
+6. <https://www.hollywoodreporter.com/business/digital/tv-guide-metacritic-gamespot-acquisition-fandom-1235231819/> (cited via Wikipedia), accessed 2026-10-28
+7. <https://www.aap.com.au/aapreleases/cision20221003ae90371> (Fandom release, 2022-10-03), accessed 2026-10-28
+8. <https://www.ggrecon.com/articles/metacritic-changes-review-process-after-horizon-dlc-scandal/> (fetched; 2023-04-26), accessed 2026-10-28
+9. <https://www.fabricdata.com/developer/metacritic-tos> (fetched; licensing terms), accessed 2026-10-28
+10. <https://www.fabricdata.com/> (search result), accessed 2026-10-28
+11. <https://www.fandom.com/terms> and <https://www.fandom.com/terms-of-use> (HTTP 402), accessed 2026-10-28
+12. <https://knowyourmeme.com/news/metacritic-tweaks-user-review-system> (search snippet; July 2020), accessed 2026-10-28
+13. <https://videogameschronicle.com/news/metacritic-pledges-stricter-moderation-after-abusive-horizon-forbidden-west-dlc-review-bombing> (HTTP 403), accessed 2026-10-28
+14. <https://www.gamespot.com/articles/metacritic-will-delay-user-reviews-for-games/1100-6479886/> (HTTP 403), accessed 2026-10-28
+15. <https://www.theverge.com/2020/7/17/21327946/metacritic-user-review-delay-36-hours-the-last-of-us-part-ii> (fetch refused; cited via Wikipedia), accessed 2026-10-28
+16. <https://apify.com/fetch_cat/metacritic-reviews-scores-scraper> (third-party, unverified), accessed 2026-10-28
+17. <https://tech-insider.org/?p=21079> (unverified 20-rating claim), accessed 2026-10-28
 
 ## 5. Rotten Tomatoes
 
@@ -358,22 +358,22 @@ Citation numbers refer to "Sources (Rotten Tomatoes)". Most facts come from Rott
 
 ### Sources (Rotten Tomatoes)
 
-1. https://www.rottentomatoes.com/help_desk (fetched), accessed 2026-10-28
-2. https://www.rottentomatoes.com/faq (fetched), accessed 2026-10-28
-3. https://www.rottentomatoes.com/critics/criteria (fetched), accessed 2026-10-28
-4. https://www.rottentomatoes.com/about (fetched), accessed 2026-10-28
-5. https://pressroom.versantmedia.com/rotten-tomatoes/press-releases/rotten-tomatoes-unveils-new-rotten-tomatoes-verified-hot-audience (2024-08-21), accessed 2026-10-28
-6. https://en.wikipedia.org/wiki/Rotten_Tomatoes, accessed 2026-10-28
-7. https://www.nbcuniversal.com/article/rotten-tomatoes-unveils-new-rotten-tomatoes-verified-hot-audience-badge (search snippet), accessed 2026-10-28
-8. https://editorial.rottentomatoes.com/article/rotten-tomatoes-score-update (date conflict; not cited as fact), accessed 2026-10-28
-9. https://www.rottentomatoes.com/help_desk/licensing (fetched), accessed 2026-10-28
-10. https://editorial.rottentomatoes.com/article/audience-score-update/ (date conflict; content matches the 2024 release in part), accessed 2026-10-28
-11. https://developer.fandango.com (unreachable, DNS error), accessed 2026-10-28
-12. https://www.justwatch.com (search only), accessed 2026-10-28
-13. https://theplaylist.net/rotten-tomatoes-verified-audience-ratings-20190523/ (search snippet), accessed 2026-10-28
-14. https://www.hollywoodreporter.com/business/business-news/new-rotten-tomatoes-score-badge-verified-hot-1235974680/ (search snippet; secondary), accessed 2026-10-28
-15. https://www.engadget.com/2019-02-26-rotten-tomatoes-trolls-audience-scores.html (search snippet), accessed 2026-10-28
-16. https://www.joblo.com/rotten-tomatoes-paying-for-reviews/ (secondary; Vulture original not reachable), accessed 2026-10-28
+1. <https://www.rottentomatoes.com/help_desk> (fetched), accessed 2026-10-28
+2. <https://www.rottentomatoes.com/faq> (fetched), accessed 2026-10-28
+3. <https://www.rottentomatoes.com/critics/criteria> (fetched), accessed 2026-10-28
+4. <https://www.rottentomatoes.com/about> (fetched), accessed 2026-10-28
+5. <https://pressroom.versantmedia.com/rotten-tomatoes/press-releases/rotten-tomatoes-unveils-new-rotten-tomatoes-verified-hot-audience> (2024-08-21), accessed 2026-10-28
+6. <https://en.wikipedia.org/wiki/Rotten_Tomatoes>, accessed 2026-10-28
+7. <https://www.nbcuniversal.com/article/rotten-tomatoes-unveils-new-rotten-tomatoes-verified-hot-audience-badge> (search snippet), accessed 2026-10-28
+8. <https://editorial.rottentomatoes.com/article/rotten-tomatoes-score-update> (date conflict; not cited as fact), accessed 2026-10-28
+9. <https://www.rottentomatoes.com/help_desk/licensing> (fetched), accessed 2026-10-28
+10. <https://editorial.rottentomatoes.com/article/audience-score-update/> (date conflict; content matches the 2024 release in part), accessed 2026-10-28
+11. <https://developer.fandango.com> (unreachable, DNS error), accessed 2026-10-28
+12. <https://www.justwatch.com> (search only), accessed 2026-10-28
+13. <https://theplaylist.net/rotten-tomatoes-verified-audience-ratings-20190523/> (search snippet), accessed 2026-10-28
+14. <https://www.hollywoodreporter.com/business/business-news/new-rotten-tomatoes-score-badge-verified-hot-1235974680/> (search snippet; secondary), accessed 2026-10-28
+15. <https://www.engadget.com/2019-02-26-rotten-tomatoes-trolls-audience-scores.html> (search snippet), accessed 2026-10-28
+16. <https://www.joblo.com/rotten-tomatoes-paying-for-reviews/> (secondary; Vulture original not reachable), accessed 2026-10-28
 
 ## 6. Goodreads
 
@@ -421,25 +421,25 @@ Citation numbers refer to "Sources (Goodreads)". Coverage is partial: help.goodr
 
 ### Sources (Goodreads)
 
-1. https://www.goodreads.com/api (banner via search snippet; fetch returned the homepage), accessed 2026-10-28
-2. https://stephanieawilkinson.com/2020/12/10/yonderbook-and-goodreads/ (quotes the December 2020 notice), accessed 2026-10-28
-3. https://www.goodreads.com/choiceawards (fetched), accessed 2026-10-28
-4. https://bookriot.com/goodreads-releases-statement-on-review-bombing/ (fetched; 2023-11-02), accessed 2026-10-28
-5. https://www.npr.org/2023/12/17/1219599404/goodreads-review-bombing-cait-corrain (snippet; fetch timed out), accessed 2026-10-28
-6. https://www.thereviewgeek.com/caitcorrain-crownofstarlight-reviewbombing/ (HTTP 403), accessed 2026-10-28
-7. https://uxdesign.cc/a-look-at-the-new-book-page-design-on-goodreads-c7b248520b64 (November 2022), accessed 2026-10-28
-8. https://www.androidauthority.com/goodreads-android-revamped-design-598048/, accessed 2026-10-28
-9. https://pickupreader.com/blog/how-to-export-goodreads-library-2026 (third party), accessed 2026-10-28
-10. https://github.com/JohnSmithDev/GRAnalysis, accessed 2026-10-28
-11. https://affiliate-program.amazon.com/help/node/topic/GM6Z4B6SQMSG7D8U, accessed 2026-10-28
-12. https://www.goodreads.com/group/show/220 (Librarians group), accessed 2026-10-28
-13. https://www.goodreads.com/topic/show/19185342-average-rating-only-for-single-authored-books, accessed 2026-10-28
-14. https://www.goodreads.com/topic/show/17945919-recent-reviews-giving-integer-values-for-average-rating?page=1, accessed 2026-10-28
-15. https://bookriot.com/goodreads-pre-publication-reviews/, accessed 2026-10-28
-16. https://diarium.usal.es/pmgallardo/2021/04/01/how-to-become-a-goodreads-librarian/ (2021), accessed 2026-10-28
-17. https://goodreads.com/author/program (snippet), accessed 2026-10-28
-18. https://www.publishersweekly.com/pw/by-topic/industrynews/publisher-news/article/93651-goodreads-asks-users-to-help-combat-review-bombing.html (snippet), accessed 2026-10-28
-19. https://help.goodreads.com/s/topic/0TO1H000000gjH3WAI/librarian-manual (not accessible), accessed 2026-10-28
+1. <https://www.goodreads.com/api> (banner via search snippet; fetch returned the homepage), accessed 2026-10-28
+2. <https://stephanieawilkinson.com/2020/12/10/yonderbook-and-goodreads/> (quotes the December 2020 notice), accessed 2026-10-28
+3. <https://www.goodreads.com/choiceawards> (fetched), accessed 2026-10-28
+4. <https://bookriot.com/goodreads-releases-statement-on-review-bombing/> (fetched; 2023-11-02), accessed 2026-10-28
+5. <https://www.npr.org/2023/12/17/1219599404/goodreads-review-bombing-cait-corrain> (snippet; fetch timed out), accessed 2026-10-28
+6. <https://www.thereviewgeek.com/caitcorrain-crownofstarlight-reviewbombing/> (HTTP 403), accessed 2026-10-28
+7. <https://uxdesign.cc/a-look-at-the-new-book-page-design-on-goodreads-c7b248520b64> (November 2022), accessed 2026-10-28
+8. <https://www.androidauthority.com/goodreads-android-revamped-design-598048/>, accessed 2026-10-28
+9. <https://pickupreader.com/blog/how-to-export-goodreads-library-2026> (third party), accessed 2026-10-28
+10. <https://github.com/JohnSmithDev/GRAnalysis>, accessed 2026-10-28
+11. <https://affiliate-program.amazon.com/help/node/topic/GM6Z4B6SQMSG7D8U>, accessed 2026-10-28
+12. <https://www.goodreads.com/group/show/220> (Librarians group), accessed 2026-10-28
+13. <https://www.goodreads.com/topic/show/19185342-average-rating-only-for-single-authored-books>, accessed 2026-10-28
+14. <https://www.goodreads.com/topic/show/17945919-recent-reviews-giving-integer-values-for-average-rating?page=1>, accessed 2026-10-28
+15. <https://bookriot.com/goodreads-pre-publication-reviews/>, accessed 2026-10-28
+16. <https://diarium.usal.es/pmgallardo/2021/04/01/how-to-become-a-goodreads-librarian/> (2021), accessed 2026-10-28
+17. <https://goodreads.com/author/program> (snippet), accessed 2026-10-28
+18. <https://www.publishersweekly.com/pw/by-topic/industrynews/publisher-news/article/93651-goodreads-asks-users-to-help-combat-review-bombing.html> (snippet), accessed 2026-10-28
+19. <https://help.goodreads.com/s/topic/0TO1H000000gjH3WAI/librarian-manual> (not accessible), accessed 2026-10-28
 
 ## 7. Skoob
 
@@ -491,22 +491,22 @@ Citation numbers refer to "Sources (Skoob)". Correction to the research brief: S
 
 ### Sources (Skoob)
 
-1. https://www.skoob.com.br/privacy-policies (fetched), accessed 2026-10-28
-2. https://www.skoob.com.br/book/49704 (fetched), accessed 2026-10-28
-3. https://www.skoob.com.br/book/109868/groups (fetched), accessed 2026-10-28
-4. https://mercadoeconsumo.com.br/19/08/2024/noticias-varejo/skeelo-ecossistema-de-livros-anuncia-compra-do-skoob-da-americanas/, accessed 2026-10-28
-5. https://www.meioemensagem.com.br/midia/americanas-vende-rede-social-literaria-para-skeelo, accessed 2026-10-28
-6. https://www.mobiletime.com.br/noticias/20/05/2025/skeelo-skoob-moderniza/, accessed 2026-10-28
-7. https://www.publishnews.com.br/materias/2025/05/23/apanhadao-da-semana-skeelo-segue-com-o-processo-de-modernizacao-do-skoob, accessed 2026-10-28
-8. https://mercadoeconsumo.com.br/2021/09/15/americanas-s-a-adquire-a-skoob-maior-plataforma-digital-literaria-do-pais/ (search snippet), accessed 2026-10-28
-9. https://www.baguete.com.br/noticias/16/09/2021/americanas-compra-skoob (search snippet), accessed 2026-10-28
-10. https://tecnoblog.net/499637/como-usar-o-skoob-rede-social-para-leitores/ (HTTP 403), accessed 2026-10-28
-11. https://tecnoblog.net/noticias/2021/09/16/americanas-compra-skoob-a-maior-rede-social-de-livros-do-brasil/ (HTTP 403), accessed 2026-10-28
-12. https://www.redalyc.org/journal/147/14775278006/14775278006.pdf (unreadable), accessed 2026-10-28
-13. https://seer.uniacademia.edu.br/index.php/verboDeMinas/article/download/3336/2340 (search snippet), accessed 2026-10-28
-14. https://www.skoob.com.br/ajuda, /cortesias, /quem-somos, /sobre (login walls), accessed 2026-10-28
-15. https://apps.apple.com/BR/app/id904670263 (search result), accessed 2026-10-28
-16. https://static.poder360.com.br/2023/01/americanas-fato-relevante-recuperacao-20jan32023.pdf (search result), accessed 2026-10-28
+1. <https://www.skoob.com.br/privacy-policies> (fetched), accessed 2026-10-28
+2. <https://www.skoob.com.br/book/49704> (fetched), accessed 2026-10-28
+3. <https://www.skoob.com.br/book/109868/groups> (fetched), accessed 2026-10-28
+4. <https://mercadoeconsumo.com.br/19/08/2024/noticias-varejo/skeelo-ecossistema-de-livros-anuncia-compra-do-skoob-da-americanas/>, accessed 2026-10-28
+5. <https://www.meioemensagem.com.br/midia/americanas-vende-rede-social-literaria-para-skeelo>, accessed 2026-10-28
+6. <https://www.mobiletime.com.br/noticias/20/05/2025/skeelo-skoob-moderniza/>, accessed 2026-10-28
+7. <https://www.publishnews.com.br/materias/2025/05/23/apanhadao-da-semana-skeelo-segue-com-o-processo-de-modernizacao-do-skoob>, accessed 2026-10-28
+8. <https://mercadoeconsumo.com.br/2021/09/15/americanas-s-a-adquire-a-skoob-maior-plataforma-digital-literaria-do-pais/> (search snippet), accessed 2026-10-28
+9. <https://www.baguete.com.br/noticias/16/09/2021/americanas-compra-skoob> (search snippet), accessed 2026-10-28
+10. <https://tecnoblog.net/499637/como-usar-o-skoob-rede-social-para-leitores/> (HTTP 403), accessed 2026-10-28
+11. <https://tecnoblog.net/noticias/2021/09/16/americanas-compra-skoob-a-maior-rede-social-de-livros-do-brasil/> (HTTP 403), accessed 2026-10-28
+12. <https://www.redalyc.org/journal/147/14775278006/14775278006.pdf> (unreadable), accessed 2026-10-28
+13. <https://seer.uniacademia.edu.br/index.php/verboDeMinas/article/download/3336/2340> (search snippet), accessed 2026-10-28
+14. <https://www.skoob.com.br/ajuda>, /cortesias, /quem-somos, /sobre (login walls), accessed 2026-10-28
+15. <https://apps.apple.com/BR/app/id904670263> (search result), accessed 2026-10-28
+16. <https://static.poder360.com.br/2023/01/americanas-fato-relevante-recuperacao-20jan32023.pdf> (search result), accessed 2026-10-28
 
 ## 8. Comparative matrix
 
@@ -537,7 +537,7 @@ Opinions of the architect, grounded in sections 1–8. Each item names the phase
 ### 9.1 Licensing is the first gate, not a detail (Phase 2 decision, Phase 3 ADR)
 
 - **TMDB**: the API terms bar commercial use without a written agreement, cap caching at 6 months and bar resale (2.2). HexaScore ingests TMDB into a paid API today (`legacy/PLAN.md` 2026-10-10 decision). Options: (a) sign a commercial agreement with TMDB before launch; (b) keep TMDB-derived fields out of the paid API and out of long-term storage, which with a 6-month cap is operationally hostile to a catalogue; (c) drop TMDB and rely on Wikidata/Wikipedia for film/TV. Recommendation: pursue (a) in parallel and design the data model so every field carries its source, so (b) or (c) can be executed by configuration if (a) fails.
-- **IGDB**: the FAQ allows commercial use with a partnership and visible attribution and encourages local storage (3.2). Email partner@igdb.com now; keep the answer in the repo (`docs/legal/`). Read the Twitch Developer Services Agreement verbatim before relying on the FAQ.
+- **IGDB**: the FAQ allows commercial use with a partnership and visible attribution and encourages local storage (3.2). Email <partner@igdb.com> now; keep the answer in the repo (`docs/legal/`). Read the Twitch Developer Services Agreement verbatim before relying on the FAQ.
 - **IMDb**: the datasets are non-commercial only; do not ingest them. Ratings from IMDb cannot be shown without a licence.
 - **Metacritic and Rotten Tomatoes**: scores are licensed products (4.2, 5.2). The legacy `external_scores` table is front-end only, which is the right instinct, but even display needs a licence unless the value is obtained from a CC0 source (Wikidata review-score statements) and attributed as such. Decide per source in Phase 2; the safe default is to drop them from the UI at launch and add critic data later under licence.
 - **Wikidata (CC0) and Wikipedia (CC BY-SA)** remain the spine. Open Library's data licence was not researched here and must be checked before Phase 3.

@@ -128,7 +128,7 @@ Method note: the prompt asked for the `grill-me` skill; it is not installed (it 
 
 - **Question**: Which posture do you want for TMDB, IGDB and critic scores (Metacritic, Rotten Tomatoes) before launch?
 - **Options**:
-  - (a) Pursue written agreements now (TMDB sales@themoviedb.org "Commercial API Use"; IGDB partner@igdb.com) and keep the fields; if an answer is negative or absent by launch, fall back to (b) by configuration.
+  - (a) Pursue written agreements now (TMDB <sales@themoviedb.org> "Commercial API Use"; IGDB <partner@igdb.com>) and keep the fields; if an answer is negative or absent by launch, fall back to (b) by configuration.
   - (b) Wikidata + Wikipedia + Open Library only in the paid API; TMDB/IGDB fields displayed on the site but excluded from the API and refreshed within TMDB's 6-month cache window.
   - (c) Drop TMDB/IGDB entirely; Wikidata/Wikipedia for everything.
   - Critic scores: keep display-only values that come from Wikidata review-score statements (CC0) with attribution, or drop them at launch.
