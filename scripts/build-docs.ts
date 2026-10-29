@@ -1,7 +1,8 @@
 // Renders resources/docs/*.md to resources/docs/docs.json (embedded by the Go
 // binary). Every character of the source is HTML-escaped before any tag is
 // emitted and only the tags below are ever produced, so the output needs no
-// separate sanitiser; link targets are restricted to "/" paths and https.
+// separate sanitiser; link targets are restricted to "/" paths and https
+// ("//host" and "/\host" are other hosts to a browser, so they are refused).
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -38,7 +39,7 @@ function inline(src: string): string {
 	});
 	out = out.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
 	out = out.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, text: string, href: string) =>
-		/^(\/(?!\/)|https:\/\/)/.test(href) ? `<a href="${href}">${text}</a>` : m,
+		/^(\/(?![/\\])|https:\/\/)/.test(href) ? `<a href="${href}">${text}</a>` : m,
 	);
 	// biome-ignore lint/suspicious/noControlCharactersInRegex: placeholder delimiter
 	return out.replace(/\u0000(\d+)\u0000/g, (_, i: string) => codes[Number(i)] ?? "");
