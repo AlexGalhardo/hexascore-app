@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Home highlights, listings, entity pages and lists show the score on the 0-10 scale like the item page (they showed the stored 0-100 value), and the card label reads "out of 10".
+
 ## [0.7.0] - 2026-10-29
 
 ### Added
