@@ -587,7 +587,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.C.4 Access tokens
 
-- [ ] **P1.C.4.1** Implement `/app/v1/tokens` (password and Google ID token), rotation, listing and revocation with the six abilities.
+- [x] **P1.C.4.1** Implement `/app/v1/tokens` (password and Google ID token), rotation, listing and revocation with the six abilities.
   - Files/modules: `app/http/controllers/appapi/tokens_controller.go`, `app/accounts/app_tokens.go`, `routes/app_api.go`, `tests/app_tokens_test.go`
   - Refs: SDD 03 §6.2, §7.4, §9; SDD 05 §6.4; SDD README "Access-token abilities"; A-01; ADR 0009; <https://vukem.dev/docs/security/api-tokens>
   - Depends on: P1.C.3.1
