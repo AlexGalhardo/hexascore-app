@@ -11,6 +11,7 @@ import (
 	"slices"
 	"time"
 
+	"github.com/AlexGalhardo/vukem/auth/hash"
 	"github.com/AlexGalhardo/vukem/database"
 )
 
@@ -44,7 +45,7 @@ type Stage struct {
 // and social, finalise last.
 func Stages() []Stage {
 	return []Stage{
-		{Name: "users", Tables: []string{"user", "account"}},
+		{Name: "users", Tables: []string{"user", "account"}, Batch: usersBatch(hash.Default(), time.Now)},
 		{Name: "twofactor", Tables: []string{"two_factor"}},
 		{Name: "catalog", Tables: []string{"items", "item_translations", "source_records", "affiliate_links"}},
 		{Name: "entities", Tables: []string{"items"}},
