@@ -42,6 +42,7 @@ Source keys, all accessed 2026-10-28. vukem facts cite <https://vukem.dev/docs>.
 | V-db | <https://vukem.dev/docs/database/overview> |
 | V-queue | <https://vukem.dev/docs/digging-deeper/queue> |
 | V-sched | <https://vukem.dev/docs/digging-deeper/scheduler> |
+| V-storage | <https://vukem.dev/docs/digging-deeper/storage> |
 | V-dev | <https://vukem.dev/docs/digging-deeper/devtools> ("How it collects") |
 | V-route | <https://vukem.dev/docs/basics/routing> ("Mounting plain handlers") |
 | V-rt | <https://vukem.dev/docs/cli/reference-runtime> |
@@ -205,8 +206,8 @@ Checks are registered with `app.AddHealthCheckTimeout` [L-sub], each with a 2 s 
 
 - `db`: added by `app.DB()`, "reported by `/up?checks=1`" [V-db].
 - `ssr`: `GET 127.0.0.1:13714/health`, the same probe as `vukem ssr:check` [V-rt].
-- `storage`: `HEAD health/sentinel.txt` on the bucket.
-- `scheduler`: heartbeat age under 180 s. The heartbeat is written by `s.Func("heartbeat").EveryMinute()` [V-sched].
+- `storage`: `storage.Check` (write, read back, delete) [V-storage], the vukem-recommended probe; an existence `HEAD` passes with credentials that cannot write. Local exports disk until the bucket of P2.A.2.1 exists.
+- `scheduler`: heartbeat age under 180 s. The heartbeat is written by `s.Func("heartbeat").EveryMinute()` [V-sched], kept in memory and seeded at boot; the check exists only with `SCHEDULE_IN_SERVE=true`.
 
 Railway polls the Healthcheck Path only on deploys and switches traffic after a 200 [R-roll]. vukem's guide uses `/up` from host `healthcheck.railway.app` [V-rail]. HexaScore uses `/up?checks=1`, so a deploy with broken SSR or DB never takes traffic. If query strings are rejected [NOT VERIFIED], mount `app.ReadyHandler()` at `/ready` [L-sub]. Runtime health comes from §7.4.
 
