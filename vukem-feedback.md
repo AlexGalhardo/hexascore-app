@@ -26,8 +26,8 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-015 | 2026-10-28 | medium | merged in main (PR #12), unreleased |
 | VF-016 | 2026-10-28 | low | open |
 | VF-017 | 2026-10-28 | medium | merged in main (PR #13), unreleased |
-| VF-018 | 2026-10-28 | medium | open |
-| VF-019 | 2026-10-28 | medium | open |
+| VF-018 | 2026-10-28 | medium | in_progress (framework) |
+| VF-019 | 2026-10-28 | medium | in_progress (framework) |
 | VF-020 | 2026-10-28 | low | open |
 | VF-021 | 2026-10-28 | low | withdrawn (2026-10-29: `HourlyAt` documented) |
 | VF-022 | 2026-10-28 | low | open |
@@ -208,7 +208,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-018: Queue priority and per-queue concurrency with the database driver inside `serve`
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
 - **Spike (2026-10-29)**: P0.F.6.1: workaround proven, an in-process per-family semaphore; the heavy family stayed at 2 under concurrency 8 (P0.F.6.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/scheduler` "Queue", "Scheduler" [heading not on page 2026-10-29]; `https://vukem.dev/docs/cli/reference-runtime` `serve`.
 - **Context**: HexaScore runs HTTP, scheduler and queue workers in one process under a US$30/month budget (brainstorming D-08). Ingestion jobs (SDD 06) must run at low concurrency (1–2) and lower priority than user-facing jobs (mail, recompute). The docs do not state whether named queues, priorities and per-queue worker counts apply to the database driver when workers run inside `serve`, nor how to cap CPU use of workers.
@@ -218,7 +218,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-019: No documented API for app-level OpenTelemetry metrics
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/opentelemetry` "OpenTelemetry", "Logging & observability" [heading not on page 2026-10-29]; `drivers/otel` description in `https://vukem.dev/docs/architecture/lifecycle`.
 - **Context**: HexaScore needs custom counters and histograms (ingestion items/s, SSR fallbacks, suggestion queue age, quota flushes) exported with the framework's traces. The docs cover tracing setup and built-in instrumentation only.
 - **Workaround**: the app wires `go.opentelemetry.io/otel/metric` itself and shares the exporter configuration.
