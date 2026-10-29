@@ -633,7 +633,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.D.1 Schema and formula
 
-- [ ] **P1.D.1.1** Migrate ratings, events, flags, bursts, actions, priors, formula versions, `item_status`, `time_to_beat` and the item score columns.
+- [x] **P1.D.1.1** Migrate ratings, events, flags, bursts, actions, priors, formula versions, `item_status`, `time_to_beat` and the item score columns.
   - Files/modules: `database/migrations/*_create_ratings_table.go` and siblings for `rating_events`, `rating_flags`, `score_bursts`, `score_actions`, `score_priors`, `score_formula_versions`, `rating_migration_audit`, `item_status`, `time_to_beat`; `*_add_score_columns_to_items_table.go`; `app/models/rating.go`
   - Refs: SDD 02 §5; D-00, D-13; ADR 0005; open-issues 02-5; VF-009
   - Depends on: P1.B.5.1, P1.C.6.1
