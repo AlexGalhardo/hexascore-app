@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Admin: items resource, item manage page (audited affiliate links, irreversible merge via `catalog.Merge`), report resolve form and `/admin/ingestion` status page.
+
+### Removed
+
+- `ReportButton` stub on the item page (items are not a report target).
+
 ## [0.4.0] - 2026-10-29
 
 ### Added

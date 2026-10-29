@@ -10,6 +10,7 @@ import (
 	"github.com/AlexGalhardo/vukem/authz"
 	"github.com/AlexGalhardo/vukem/csrf"
 	"github.com/AlexGalhardo/vukem/router"
+	"github.com/AlexGalhardo/vukem/view"
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
@@ -48,12 +49,18 @@ func Admin(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
+	views, err := admin.ViewsFS()
+	if err != nil {
+		return err
+	}
+
 	panel, err := vadmin.New(vadmin.Config{
 		DB:         acc.DB,
 		Guard:      acc.Web,
 		Authorizer: gate,
 		Title:      app.Config.Name + " admin",
 		Flags:      ff,
+		Views:      views,
 	})
 	if err != nil {
 		return err
@@ -99,6 +106,25 @@ func Admin(r *router.Router, app *vukem.App) error {
 	r.Post("/admin/reports/{id}/resolve", reportH.Resolve).
 		Name("admin.reports.resolve").
 		Use(moderator...)
+
+	q, err := app.Queue()
+	if err != nil {
+		return err
+	}
+
+	engine, err := view.New(view.Config{FS: views, DefaultLayout: "admin"})
+	if err != nil {
+		return err
+	}
+
+	catalogH := admin.CatalogHandlers{Accounts: acc, Queue: q, Views: engine, Authorize: bans.Authorize}
+	r.Get("/admin/items/{id}/manage", catalogH.Manage).Name("admin.items.manage").Use(auth.Required(acc.Web), csrfMW)
+	r.Post("/admin/items/{id}/affiliate-links", catalogH.SaveAffiliateLink).
+		Name("admin.items.affiliate.save").Use(moderator...)
+	r.Post("/admin/items/{id}/affiliate-links/{store}/delete", catalogH.DeleteAffiliateLink).
+		Name("admin.items.affiliate.delete").Use(moderator...)
+	r.Post("/admin/items/{id}/merge", catalogH.Merge).Name("admin.items.merge").Use(moderator...)
+	r.Get("/admin/ingestion", catalogH.Ingestion).Name("admin.ingestion").Use(auth.Required(acc.Web), csrfMW)
 
 	return nil
 }
