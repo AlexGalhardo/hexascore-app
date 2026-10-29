@@ -9,7 +9,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/search"
 )
 
-// SyncSearchSuggest drains search_dirty into search_suggest; scheduled every minute in routes/schedule.go.
+// SyncSearchSuggest drains the suggest dirty queue into the suggest table; scheduled every minute in routes/schedule.go.
 type SyncSearchSuggest struct{}
 
 // Kind names the job on the queue.
