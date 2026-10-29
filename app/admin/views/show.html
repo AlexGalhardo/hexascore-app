@@ -1,0 +1,33 @@
+{{define "content"}}
+<div class="toolbar">
+	<h1>{{.Title}}</h1>
+	<div class="buttons">
+		{{with .Record.EditURL}}<a class="button" href="{{.}}">Edit</a>{{end}}
+		{{with .Record.DelURL}}<a class="button danger" href="{{.}}">Delete</a>{{end}}
+		{{if eq .Resource.URL "/admin/items"}}<a class="button" href="/admin/items/{{.Record.ID}}/manage">Merge and affiliate links</a>{{end}}
+	</div>
+</div>
+<dl class="record">
+	{{range .Record.Fields}}
+	<dt>{{.Label}}</dt>
+	<dd>{{if .Value}}{{.Value}}{{else}}<span class="muted">—</span>{{end}}</dd>
+	{{end}}
+</dl>
+{{if eq .Resource.URL "/admin/reports"}}
+<form method="post" action="/admin/reports/{{.Record.ID}}/resolve" class="stack">
+	{{csrfField}}
+	<h2>Resolve</h2>
+	<label>Outcome
+		<select name="outcome">
+			<option value="no_action">No action</option>
+			<option value="dismissed">Dismissed</option>
+			<option value="list_hidden">Hide the list</option>
+			<option value="user_banned">Ban the user</option>
+		</select>
+	</label>
+	<label>Note <textarea name="adminNote" maxlength="1000"></textarea></label>
+	<button type="submit" class="button">Resolve</button>
+</form>
+{{end}}
+<p><a href="{{.Resource.URL}}">Back to {{.Resource.Plural}}</a></p>
+{{end}}

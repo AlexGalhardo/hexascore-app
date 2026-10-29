@@ -3,7 +3,6 @@ import { Link, usePage } from "@inertiajs/react";
 import AddToList, { type ListChoice } from "../../components/item/AddToList";
 import Editions from "../../components/item/Editions";
 import RatingPanel from "../../components/item/RatingPanel";
-import ReportButton from "../../components/item/ReportButton";
 import StatusPicker from "../../components/item/StatusPicker";
 import TimeToBeat, { type Medians } from "../../components/item/TimeToBeat";
 import type { EditionRow, ItemType, Me, RatingSummary } from "../../components/item/types";
@@ -221,7 +220,6 @@ export default function Show({
 				{editions && <Editions slug={item.slug} editions={editions} total={editionCount} />}
 
 				{loggedIn && myLists && <AddToList itemId={item.id} lists={myLists} />}
-				{loggedIn && <ReportButton itemId={item.id} />}
 
 				<p className="text-sm text-muted">{t("item.attribution")}</p>
 			</article>
