@@ -1447,7 +1447,7 @@ Phase-specific conventions:
     - `git-cliff --config .config/cliff.toml --unreleased --tag v0.11.0` → preview grouped by type; `task release -- v0.11.0 --dry-run` (or the task's documented preview) writes nothing
   - Notes: HUMAN GATE (production deploy): the GitHub `production` environment has the owner as required reviewer. The project token secret name and `railway up` flags beyond `--detach` are [NOT VERIFIED]: check `railway up --help`. Never move a pushed tag; one tag per push.
 
-- [ ] **P2.B.2.3** Inject the release version into the binary and expose it on every response, in `about` and on `/up`.
+- [x] **P2.B.2.3** Inject the release version into the binary and expose it on every response, in `about` and on `/up`.
   - Files/modules: `cmd/app/main.go` (`version`, `commit`), `app/http/middleware/version.go`, `app/http/middleware/version_test.go`, `Dockerfile` (`VERSION`, `COMMIT` build args)
   - Refs: SDD 11 §6.6 (Version), §7.1 step 5, §9 item 8; SDD 12 §7.8; VF-027; <https://vukem.dev/docs/deployment/single-binary>
   - Depends on: P2.B.1.3
