@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **search:** `qa/k6/search.js` (search 20 rps, suggest 50 rps at 2-character prefixes) and `SEARCH_CACHE=off` to bypass the anonymous result cache; measured p95 recorded in SDD 07 (open issue 07-8 closed).
+
 - **api:** `api_keys` table (sha256 hex at rest, legacy format), `hx_live_` key guard for `/api/v1` (fail closed: unknown, malformed or revoked key 401, store outage 503; app tokens refused) and the `/profile/api` key page (`Developer/ApiKeys`: create with a one-time `newKey` flash, revoke, at most 10 live keys).
 
 ## [0.4.0] - 2026-10-29

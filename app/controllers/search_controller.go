@@ -7,6 +7,7 @@ import (
 	"errors"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -120,6 +121,9 @@ func (h *Search) signedIn(c *web.Ctx) (models.User, bool) {
 	return u, err == nil
 }
 
+// cacheOff skips the anonymous result cache so k6 measures the database path (SDD 07 NFR-07-1, NFR-07-2).
+func cacheOff() bool { return os.Getenv("SEARCH_CACHE") == "off" }
+
 func cacheKey(kind string, parts ...any) string {
 	var b strings.Builder
 	for _, p := range parts {
@@ -174,7 +178,7 @@ func (h *Search) Index(c *web.Ctx) error {
 		err error
 	)
 
-	if signed {
+	if signed || cacheOff() {
 		out, err = compute(c.Context())
 	} else {
 		store, cerr := h.app.Cache()
@@ -374,7 +378,7 @@ func (h *Search) Suggest(c *web.Ctx) error {
 		err   error
 	)
 
-	if _, signed := h.signedIn(c); signed {
+	if _, signed := h.signedIn(c); signed || cacheOff() {
 		c.SetHeader("Cache-Control", "private, no-store")
 		items, err = compute(c.Context())
 	} else {
