@@ -9,7 +9,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 | id | date | severity | status |
 | --- | --- | --- | --- |
-| VF-001 | 2026-10-28 | high | open (reopened 2026-10-29 by the owner) |
+| VF-001 | 2026-10-28 | high | in_progress (framework) |
 | VF-002 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#7](https://github.com/AlexGalhardo/vukem/pull/7)) |
 | VF-003 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#21](https://github.com/AlexGalhardo/vukem/pull/21)) |
 | VF-004 | 2026-10-28 | low | open |
@@ -60,10 +60,11 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-049 | 2026-10-29 | low | open |
 | VF-050 | 2026-10-29 | low | open |
 | VF-051 | 2026-10-29 | medium | in_progress (framework), PR #36 green, merge pending (owner) |
+| VF-052 | 2026-10-29 | high | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
-- **Date**: 2026-10-28. **Severity**: high. **Status**: open (reopened 2026-10-29: the owner authorized the framework work in chat, superseding the FQ-001 post-1.0 deferral).
+- **Date**: 2026-10-28. **Severity**: high. **Status**: in_progress (framework) (reopened 2026-10-29: the owner authorized the framework work in chat, superseding the FQ-001 post-1.0 deferral).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/two-factor` (Concepts, Guards, Hashing [heading not on page 2026-10-29], `install:auth`, Two-factor, Social login).
 - **Context**: HexaScore's legacy app (Better Auth 1.7.7) offers passkeys. The rewrite drops them at launch (brainstorming D-06) because the framework has no WebAuthn registration/assertion flow, credential storage or recovery path.
 - **Reproduction**: search `docs/` and `auth/` for `webauthn`, `passkey`, `FIDO`: no matches.
@@ -497,3 +498,18 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Repro**: decode a subscription JSON into a struct that embeds `stripe.Subscription` and adds `Created int64` with tag `json:"created"`: `Created` stays zero.
 - **Workaround**: `app/billing/stripe_calls.go` uses `Client.Call` and decodes the raw JSON twice (`workaround(vukem): VF-051`).
 - **Request**: `ListSubscriptions(ctx, Params)`, `ListCheckoutSessions`, `ExpireCheckoutSession`, a `Created int64` on `Subscription`, and an `install:billing` scaffold that cancels superseded subscriptions and expires open sessions before creating a new one.
+
+## VF-052: No native Cloudflare integration (real client IP, edge security, CDN, bot checks)
+
+- **Date**: 2026-10-29. **Severity**: high. **Status**: open (requested by the owner 2026-10-29).
+- **vukem version**: v0.33.0. **Docs consulted**: <https://vukem.dev/docs> search for `cloudflare`, `turnstile`, `CF-Connecting-IP`, `trusted proxies`: no page `[NOT IN VUKEM DOCS]`.
+- **Context**: HexaScore serves `hexascore.app` behind Cloudflare (ROADMAP P2.A.2.2, SDD 11, SDD 13). Today the app would hand-roll client-IP resolution, bot protection and cache control around Cloudflare, and every rate limit, audit log and LGPD IP truncation depends on getting the client IP right.
+- **Reproduction**: no `cloudflare` package or middleware in the framework; `CF-Connecting-IP` is not trusted anywhere, so behind Cloudflare the remote address is a Cloudflare edge IP.
+- **Workaround**: app-level middleware that trusts `CF-Connecting-IP` only from Cloudflare ranges, a hand-written Turnstile verifier and manual purge calls.
+- **Request**: a `contrib/cloudflare` module (keeps core stdlib-only), each piece opt-in and fail closed:
+  - Real client IP: trust `CF-Connecting-IP` / `True-Client-IP` only when the TCP peer is in the published Cloudflare IPv4/IPv6 ranges (embedded list plus an optional scheduled refresh from `https://www.cloudflare.com/ips-v4` and `/ips-v6`); integrates with the core trusted-proxy / client-IP API so rate limits, logs and sessions see the real IP.
+  - Origin lock: middleware rejecting direct-to-origin requests (peer not in Cloudflare ranges), optional Authenticated Origin Pulls (mTLS client cert check) helper.
+  - Bot checks: Turnstile server-side verification (`siteverify`, idempotency key, hostname and action checks, timeout, fail-closed default) as a form/route guard compatible with the existing challenge middleware; helpers exposing `cf-ipcountry`, `cf-ray`, verified-bot and bot-score headers (Bot Management, when the plan sends them) as request context values, never trusted unless the origin lock is on.
+  - CDN: `Cache-Control` / `CDN-Cache-Control` / `Cloudflare-CDN-Cache-Control` helpers and cache-tag headers for HTML and assets; a purge client (by URL, tag, prefix, everything) using an API token with zone-scoped permissions, usable from jobs.
+  - Security: helpers for WAF-friendly headers, a CSP report endpoint compatible with Cloudflare Page Shield reports, and Cloudflare Access JWT validation (`Cf-Access-Jwt-Assertion`) for admin routes.
+  - `TestSecurity_*` coverage: spoofed `CF-Connecting-IP` from a non-Cloudflare peer ignored, Turnstile replay/hostname mismatch rejected, Turnstile outage fails closed, Access JWT with wrong audience/expired rejected.
