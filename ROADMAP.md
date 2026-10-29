@@ -1511,7 +1511,7 @@ Phase-specific conventions:
 
 #### P2.C.1 Logs and Telegram
 
-- [ ] **P2.C.1.1** Replace the built-in request logger with the privacy-preserving JSON logger: hashed user id, truncated IP, trace id, sampling, redaction.
+- [x] **P2.C.1.1** Replace the built-in request logger with the privacy-preserving JSON logger: hashed user id, truncated IP, trace id, sampling, redaction.
   - Files/modules: `app/http/middleware/request_log.go`, `app/http/middleware/request_log_test.go`, `app/logging/redact.go`, `bootstrap/app.go` (`WithLogger`), `docs/sdd/12-observability.md` §6.1
   - Refs: SDD 12 FR-12-1, FR-12-8, §6.1, §11 issue 2; SDD 13 NFR-13-4; VF-022; <https://vukem.dev/docs/digging-deeper/opentelemetry> (`otel.LogHandler`); <https://vukem.dev/docs/configuration> (`LOG_FORMAT`, `LOG_DEDUP_WINDOW`)
   - Depends on: P2.A.5.1
