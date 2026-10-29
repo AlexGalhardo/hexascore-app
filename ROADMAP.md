@@ -334,7 +334,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.A.3 Shared packages
 
-- [ ] **P1.A.3.1** Create `packages/tokens` with design tokens emitted as CSS variables and a TypeScript module, light and dark.
+- [x] **P1.A.3.1** Create `packages/tokens` with design tokens emitted as CSS variables and a TypeScript module, light and dark.
   - Files/modules: `packages/tokens/tokens.json`, `packages/tokens/build.ts`, `resources/css/app.css`, `packages/tokens/tokens.test.ts`
   - Refs: SDD 09 §7.5; ADR 0009; SDD 10 (consumer)
   - Depends on: P1.A.2.1
