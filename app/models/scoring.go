@@ -22,8 +22,9 @@ type ScoreBurst struct {
 }
 
 // RatingFlag is a shadow weight on one (user, item) rating (SDD 02 §5).
-// The real key is (user_id, item_id), so never call orm.Update or
-// orm.Delete on it (VF-035); the admin panel only lists it.
+// The real key is (user_id, item_id), but vadmin.NewResource panics on composite
+// models and the admin panel only lists it, so it keeps a single-column
+// PrimaryKey: never call orm.Update or orm.Delete on it (VF-035).
 type RatingFlag struct {
 	UserID       int64
 	ItemID       string
