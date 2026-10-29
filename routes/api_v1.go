@@ -65,7 +65,7 @@ func APIV1(r *router.Router, app *vukem.App) error {
 
 			p, err := plans(req.Context(), u.ID)
 			if err != nil {
-				c.HandleError(err)
+				c.HandleError(api.Unavailable(err))
 				return
 			}
 
