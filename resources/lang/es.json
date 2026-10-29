@@ -1,0 +1,1129 @@
+{
+  "account": {
+    "metaTitle": "Perfil",
+    "title": "Tu perfil",
+    "saved": "Guardado.",
+    "details": {
+      "title": "Datos de la cuenta",
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "nickname": "Nickname",
+      "save": "Guardar nombre"
+    },
+    "password": {
+      "setTitle": "Definir contraseña",
+      "setBody": "Tu cuenta se creó con Google o una passkey. Define una contraseña para entrar también con correo y contraseña.",
+      "changeTitle": "Cambiar contraseña",
+      "set": "Definir contraseña",
+      "change": "Cambiar contraseña",
+      "done": "Contraseña actualizada.",
+      "revokeOthers": "Cerrar sesión en otros dispositivos"
+    },
+    "twoFactor": {
+      "title": "Autenticación en dos pasos",
+      "on": "La autenticación en dos pasos está activada.",
+      "off": "Añade un segundo paso al inicio de sesión con una app de autenticación (TOTP).",
+      "enable": "Activar 2FA",
+      "disable": "Desactivar 2FA",
+      "confirmPassword": "Confirma con tu contraseña",
+      "scan": "Escanea este código QR con tu app de autenticación e introduce el código de 6 dígitos.",
+      "qrAlt": "Código QR para añadir esta cuenta a una app de autenticación",
+      "manual": "¿No puedes escanearlo? Introduce esta clave manualmente:",
+      "code": "Código de 6 dígitos",
+      "verify": "Verificar y activar",
+      "backupTitle": "Códigos de respaldo",
+      "backupBody": "Guarda estos códigos en un lugar seguro. Cada uno funciona una vez si pierdes el móvil. No se volverán a mostrar.",
+      "copy": "Copiar códigos",
+      "copied": "Copiado.",
+      "done": "Ya guardé mis códigos",
+      "disabled": "Autenticación en dos pasos desactivada.",
+      "cancel": "Cancelar"
+    },
+    "privacy": {
+      "title": "Privacidad",
+      "label": "Perfil privado",
+      "help": "Tus puntuaciones siguen en las medias de la comunidad, pero tu perfil y tus listas quedan ocultos para otros usuarios."
+    },
+    "delete": {
+      "title": "Eliminar cuenta",
+      "body": "Tu cuenta se elimina 30 días después de confirmar. Hasta entonces puedes entrar y cancelar.",
+      "button": "Eliminar mi cuenta",
+      "dialogTitle": "¿Eliminar tu cuenta?",
+      "dialogBody": "Se cerrará tu sesión ahora. Si no entras y cancelas en 30 días, tus datos personales se borrarán definitivamente. Tus puntuaciones permanecen en las medias de la comunidad como usuario anónimo.",
+      "wait": "Confirmar ({seconds})",
+      "confirm": "Sí, eliminar mi cuenta",
+      "cancel": "Conservar mi cuenta"
+    },
+    "banner": {
+      "text": "Tu cuenta está programada para eliminarse el {date}.",
+      "cancel": "Cancelar eliminación"
+    }
+  },
+  "actions": {
+    "unauthorized": "Tu sesión caducó. Vuelve a entrar.",
+    "invalid": "Revisa los campos marcados.",
+    "rateLimited": "Demasiados intentos. Inténtalo más tarde.",
+    "bot": "Tu solicitud fue bloqueada. Recarga la página y vuelve a intentarlo.",
+    "passwordAlreadySet": "Esta cuenta ya tiene contraseña.",
+    "weakPassword": "La contraseña no cumple los requisitos.",
+    "notScheduled": "Esta cuenta no está programada para eliminarse.",
+    "emailNotVerified": "Primero confirma tu correo.",
+    "nicknameRequired": "Primero elige un nickname.",
+    "nicknameTaken": "Este nickname ya está en uso.",
+    "forbidden": "No puedes hacer eso.",
+    "notFound": "No encontrado. Puede que se haya eliminado.",
+    "typeMismatch": "Esta lista solo acepta elementos de su misma categoría.",
+    "limit": "Alcanzaste el límite para esto.",
+    "server": "Algo salió mal de nuestro lado. Vuelve a intentarlo."
+  },
+  "api": {
+    "docs": {
+      "metaTitle": "Documentación de la API",
+      "metaDescription": "API REST de solo lectura con las puntuaciones de la comunidad para juegos, películas, series y libros.",
+      "navLabel": "Documentación",
+      "nav": {
+        "quickstart": "Primeros pasos",
+        "authentication": "Autenticación",
+        "errors": "Errores",
+        "pagination": "Paginación",
+        "limits": "Límites y cuotas",
+        "changelog": "Changelog y versionado",
+        "reference": "Referencia de la API"
+      },
+      "languageNote": "Los nombres de campos y parámetros se mantienen en inglés.",
+      "getKey": "Crear una clave de API",
+      "loading": "Cargando la referencia de la API…"
+    },
+    "profile": {
+      "metaTitle": "Claves y uso de la API",
+      "title": "API",
+      "intro": "Crea claves, sigue tu uso y prueba cada endpoint con tu propia clave.",
+      "docsLink": "Leer la documentación",
+      "plan": {
+        "title": "Plan actual",
+        "quota": "{used} de {limit} solicitudes usadas",
+        "lifetime": "La cuota del plan Free nunca se renueva.",
+        "resets": "Se renueva el {date}.",
+        "rate": {
+          "one": "{count} solicitud por segundo",
+          "other": "{count} solicitudes por segundo"
+        },
+        "pageSize": "Hasta {count} resultados por página",
+        "upgrade": "Ver planes",
+        "checkout": "Mejorar el plan o comprar créditos"
+      },
+      "usage": {
+        "title": "Uso",
+        "today": "Hoy",
+        "last30": "Últimos 30 días",
+        "chartLabel": "Solicitudes por día en los últimos 30 días, {total} en total",
+        "bar": "{day}: {count} solicitudes",
+        "note": "Los días anteriores se consolidan una vez al día; hoy es en tiempo real."
+      },
+      "keys": {
+        "title": "Claves de API",
+        "empty": "Aún no tienes claves. Crea una para hacer tu primera solicitud.",
+        "name": "Nombre",
+        "prefix": "Clave",
+        "created": "Creada",
+        "lastUsed": "Último uso",
+        "status": "Estado",
+        "never": "Nunca",
+        "active": "Activa",
+        "revoked": "Revocada",
+        "actions": "Acciones",
+        "newName": "Nombre de la clave",
+        "newNamePlaceholder": "p. ej. servidor de producción",
+        "create": "Crear clave",
+        "creating": "Creando…",
+        "createdTitle": "Tu nueva clave de API",
+        "createdWarning": "Cópiala ahora. Por seguridad solo se guarda su hash y no se volverá a mostrar.",
+        "copy": "Copiar",
+        "copied": "Copiada",
+        "dismiss": "Ya la guardé",
+        "revoke": "Revocar",
+        "revoking": "Revocando…",
+        "confirmTitle": "¿Revocar “{name}”?",
+        "confirmBody": "Las solicitudes con esta clave fallarán con 401 de inmediato. No se puede deshacer.",
+        "cancel": "Cancelar",
+        "errors": {
+          "unauthenticated": "Tu sesión expiró. Inicia sesión de nuevo.",
+          "unverified": "Verifica tu correo antes de crear claves de API.",
+          "disabled": "La creación de nuevas claves de API está desactivada temporalmente. Las claves existentes siguen funcionando.",
+          "invalid": "Ponle a la clave un nombre de hasta 40 caracteres.",
+          "limit": "Puedes tener como máximo 5 claves activas. Revoca una primero.",
+          "not_found": "Esta clave ya no existe.",
+          "server": "Algo salió mal. Inténtalo de nuevo."
+        }
+      },
+      "tryIt": {
+        "title": "Probar",
+        "description": "Las solicitudes salen de tu navegador hacia este despliegue y cuentan en tu cuota. La clave solo vive en esta página: nunca se guarda ni se registra.",
+        "keyLabel": "Clave de API para “Probar”",
+        "apply": "Usar clave",
+        "keyHint": "Pega una clave completa (hx_live_…) y pulsa “Usar clave” para abrir la referencia interactiva. Una clave recién creada ya viene rellenada."
+      }
+    }
+  },
+  "auth": {
+    "fields": {
+      "identifier": "Correo o nickname",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "newPassword": "Nueva contraseña",
+      "currentPassword": "Contraseña actual",
+      "nickname": "Nickname",
+      "name": "Nombre",
+      "show": "Mostrar contraseña",
+      "hide": "Ocultar contraseña"
+    },
+    "rules": {
+      "title": "Tu contraseña debe tener:",
+      "length": "De 8 a 32 caracteres",
+      "uppercase": "Una letra mayúscula",
+      "lowercase": "Una letra minúscula",
+      "number": "Un número",
+      "special": "Un carácter especial"
+    },
+    "or": "o",
+    "google": "Continuar con Google",
+    "errors": {
+      "invalidCredentials": "Correo/nickname o contraseña incorrectos.",
+      "emailNotVerified": "Confirma tu correo antes de entrar.",
+      "rateLimited": "Demasiados intentos. Espera un minuto y vuelve a intentarlo.",
+      "network": "No se pudo conectar con el servidor. Revisa tu conexión y vuelve a intentarlo.",
+      "generic": "Algo salió mal. Vuelve a intentarlo.",
+      "emailTaken": "Este correo ya está registrado.",
+      "usernameTaken": "Este nickname ya está en uso. Prueba otro.",
+      "invalidCode": "Código no válido. Vuelve a intentarlo.",
+      "locked": "Demasiados códigos incorrectos. Inténtalo más tarde.",
+      "weakPassword": "La contraseña no cumple los requisitos.",
+      "bot": "Tu solicitud fue bloqueada. Recarga la página y vuelve a intentarlo.",
+      "invalidNickname": "4–16 caracteres: letras, números y guion bajo.",
+      "invalidEmail": "Introduce un correo válido.",
+      "invalidName": "Introduce tu nombre.",
+      "invalidToken": "Este enlace no es válido o ha caducado."
+    },
+    "login": {
+      "metaTitle": "Entrar",
+      "title": "Entrar",
+      "submit": "Entrar",
+      "forgot": "¿Olvidaste tu contraseña?",
+      "noAccount": "¿Todavía no tienes cuenta?",
+      "createAccount": "Crear cuenta",
+      "resend": "Reenviar correo de confirmación",
+      "resent": "Si la cuenta existe, un nuevo correo de confirmación está en camino.",
+      "twoFactorTitle": "Autenticación en dos pasos",
+      "twoFactorHelp": "Introduce el código de 6 dígitos de tu app de autenticación.",
+      "backupHelp": "Introduce uno de tus códigos de respaldo. Cada código funciona una vez.",
+      "code": "Código",
+      "useBackup": "Usar un código de respaldo",
+      "useTotp": "Usar la app de autenticación",
+      "trustDevice": "Confiar en este dispositivo durante 30 días",
+      "verify": "Verificar"
+    },
+    "signup": {
+      "metaTitle": "Crear cuenta",
+      "title": "Crear cuenta",
+      "submit": "Crear cuenta",
+      "haveAccount": "¿Ya tienes cuenta?",
+      "logIn": "Entrar",
+      "nicknameHint": "4–16 letras minúsculas, sin números, espacios ni símbolos. Es tu nombre público, único y no se puede cambiar después.",
+      "checkTitle": "Revisa tu correo",
+      "checkBody": "Enviamos un enlace de confirmación a {email}. Ábrelo para activar tu cuenta.",
+      "agree": "Al crear la cuenta aceptas los <terms>Términos</terms> y la <privacy>Política de privacidad</privacy>."
+    },
+    "verify": {
+      "metaTitle": "Verificar correo",
+      "title": "Verifica tu correo",
+      "success": "Correo confirmado",
+      "successBody": "Tu cuenta está activa. Ya puedes puntuar obras y crear claves de API.",
+      "continue": "Continuar",
+      "invalid": "Este enlace de confirmación no es válido o ha caducado. Pide uno nuevo abajo.",
+      "pending": "Abre el enlace que enviamos a tu bandeja de entrada. ¿No lo recibiste? Pide uno nuevo.",
+      "resend": "Enviar un enlace nuevo",
+      "resent": "Si la cuenta existe y aún no está verificada, un enlace nuevo está en camino."
+    },
+    "recover": {
+      "metaTitle": "Recuperar contraseña",
+      "title": "Recuperar contraseña",
+      "body": "Introduce el correo de tu cuenta y te enviaremos un enlace para elegir una nueva contraseña.",
+      "submit": "Enviar enlace",
+      "sent": "Si existe una cuenta con este correo, un enlace para restablecerla está en camino. Caduca en 1 hora.",
+      "back": "Volver a entrar"
+    },
+    "reset": {
+      "metaTitle": "Elige una nueva contraseña",
+      "title": "Elige una nueva contraseña",
+      "submit": "Guardar contraseña",
+      "done": "Contraseña cambiada. Ya puedes entrar.",
+      "invalid": "Este enlace para restablecer no es válido o ha caducado.",
+      "requestNew": "Pedir un enlace nuevo"
+    },
+    "emails": {
+      "verify": {
+        "subject": "confirma tu correo",
+        "heading": "Confirma tu correo",
+        "body": "Confirma tu dirección de correo para valorar elementos y crear claves de API.",
+        "action": "Confirmar correo"
+      },
+      "reset": {
+        "subject": "restablece tu contraseña",
+        "heading": "Restablece tu contraseña",
+        "body": "Alguien pidió restablecer la contraseña de esta cuenta. Si no fuiste tú, ignora este correo.",
+        "action": "Restablecer contraseña"
+      }
+    }
+  },
+  "billing": {
+    "plans": {
+      "free": "Free",
+      "pro": "Pro",
+      "business": "Business"
+    },
+    "pricing": {
+      "metaTitle": "Precios de la API",
+      "title": "Precios de la API",
+      "subtitle": "Empieza gratis y mejora cuando necesites más. El importe lo calcula el servidor en la moneda que elijas.",
+      "currency": "Moneda",
+      "perMonth": "/mes",
+      "requestsLifetime": "{count} solicitudes en total",
+      "requestsMonthly": "{count} solicitudes al mes",
+      "maxItems": "Hasta {count} elementos por solicitud",
+      "rate": "{count} solicitudes por segundo",
+      "quotaLabel": "Cuota",
+      "pageSizeLabel": "Elementos por solicitud",
+      "rateLabel": "Límite de solicitudes",
+      "ctaFree": "Crear cuenta gratis",
+      "ctaFreeLogged": "Obtener una clave de API",
+      "ctaPaid": "Elegir {plan}",
+      "ctaSignup": "Regístrate para suscribirte",
+      "notConfigured": "Los pagos en línea aún no están disponibles. Los planes de pago abrirán pronto."
+    },
+    "checkout": {
+      "metaTitle": "Plan y facturación",
+      "title": "Plan y facturación",
+      "current": "Plan actual",
+      "status": {
+        "active": "Activo",
+        "past_due": "Pago pendiente",
+        "canceled": "Cancelado",
+        "expired": "Caducado"
+      },
+      "via": {
+        "stripe": "tarjeta"
+      },
+      "renews": "Se renueva el {date}",
+      "ends": "Termina el {date}",
+      "manage": "Gestionar suscripción",
+      "success": "Pago recibido. Tu plan se actualiza en cuanto el proveedor lo confirme (normalmente en segundos).",
+      "canceled": "Pago cancelado. No se cobró nada.",
+      "notConfigured": "Los pagos no están configurados en este servidor.",
+      "buy": "Suscribirse o comprar créditos",
+      "product": "¿Qué quieres?",
+      "method": "Método de pago",
+      "card": "Tarjeta (Stripe)",
+      "period": "Periodo",
+      "oneMonth": "1 mes",
+      "twelveMonths": "12 meses (paga 10)",
+      "currency": "Moneda",
+      "total": "Total",
+      "recurring": "Se cobra cada mes hasta que canceles.",
+      "oneTime": "Pago único, sin renovación automática.",
+      "pay": "Continuar al pago",
+      "working": "Espera…",
+      "copy": "Copiar código",
+      "copied": "Copiado",
+      "expires": "Caduca a las {time}",
+      "newCode": "Código nuevo",
+      "close": "Cerrar",
+      "closeIn": {
+        "one": "Podrás cerrar en {count} segundo",
+        "other": "Podrás cerrar en {count} segundos"
+      },
+      "sandboxWait": "Espera {seconds}s",
+      "sandboxNote": "Modo sandbox: simula el pago, no se mueve dinero.",
+      "errors": {
+        "unauthenticated": "Inicia sesión de nuevo para continuar.",
+        "unverified": "Confirma tu correo antes de pagar.",
+        "not_configured": "Este método de pago no está configurado.",
+        "invalid": "Selección no válida.",
+        "already_subscribed": "Ya tienes una suscripción con tarjeta. Usa “Gestionar suscripción” para cambiar de plan.",
+        "stripe_active": "Tienes una suscripción activa con tarjeta. Gestiónala en el portal de facturación.",
+        "no_customer": "Aún no tienes una cuenta de facturación con tarjeta.",
+        "server": "Algo salió mal. Inténtalo de nuevo en un minuto."
+      }
+    }
+  },
+  "catalog": {
+    "title": {
+      "game": "Juegos",
+      "movie": "Películas",
+      "series": "Series",
+      "book": "Libros"
+    },
+    "intro": {
+      "game": "Todos los juegos, valorados por jugadores en jugabilidad, diversión, sonido, calidad técnica, visual y narrativa.",
+      "movie": "Todas las películas, valoradas en guion, actuación, dirección, fotografía, sonido y entretenimiento.",
+      "series": "Todas las series, valoradas completas: guion, actuación, personajes, ritmo, producción y entretenimiento.",
+      "book": "Todos los libros, valorados en trama, personajes, escritura, ritmo, originalidad e impacto."
+    },
+    "filters": "Filtros",
+    "genre": "Género",
+    "anyGenre": "Cualquier género",
+    "platform": "Plataforma",
+    "anyPlatform": "Cualquier plataforma",
+    "year": "Año",
+    "minScore": "Nota mín.",
+    "minCategories": "Nota Mínima Por Categoría",
+    "resultCount": {
+      "zero": "Ningún elemento encontrado",
+      "one": "{count} elemento encontrado",
+      "other": "{count} elementos encontrados"
+    },
+    "sort": "Ordenar por",
+    "apply": "Aplicar",
+    "reset": "Limpiar",
+    "sorts": {
+      "popularity_desc": "Más populares",
+      "popularity_asc": "Menos populares",
+      "score_desc": "Nota más alta",
+      "score_asc": "Nota más baja",
+      "release_date_desc": "Más recientes",
+      "release_date_asc": "Más antiguos",
+      "rating_count_desc": "Más valorados",
+      "rating_count_asc": "Menos valorados"
+    },
+    "columns": {
+      "title": "Título",
+      "year": "Año",
+      "score": "Nota",
+      "ratings": "Valoraciones"
+    },
+    "ratingCount": {
+      "zero": "sin valoraciones",
+      "one": "{count} valoración",
+      "other": "{count} valoraciones"
+    },
+    "empty": "Ningún elemento coincide con estos filtros.",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "pagination": "Páginas",
+    "landing": {
+      "topRated": "Mejor valorados",
+      "newest": "Estrenos",
+      "mostRated": "Más valorados",
+      "seeAll": "Ver todo en {section}",
+      "empty": "Aún no hay nada aquí."
+    }
+  },
+  "categories": {
+    "game": {
+      "gameplay": "Jugabilidad",
+      "fun": "Diversión",
+      "sound": "Sonido",
+      "technical": "Calidad técnica",
+      "visual": "Calidad visual",
+      "storytelling": "Narrativa"
+    },
+    "movie": {
+      "screenplay": "Guion",
+      "acting": "Actuación",
+      "direction": "Dirección",
+      "cinematography": "Fotografía",
+      "soundtrack": "Banda sonora",
+      "entertainment": "Entretenimiento"
+    },
+    "series": {
+      "screenplay": "Guion",
+      "acting": "Actuación",
+      "characters": "Personajes",
+      "pacing": "Ritmo",
+      "production": "Producción",
+      "entertainment": "Entretenimiento"
+    },
+    "book": {
+      "plot": "Trama",
+      "characters": "Personajes",
+      "writing": "Escritura",
+      "pacing": "Ritmo",
+      "originality": "Originalidad",
+      "impact": "Impacto"
+    }
+  },
+  "itemTypes": {
+    "game": "Juego",
+    "movie": "Película",
+    "series": "Serie",
+    "book": "Libro"
+  },
+  "score": {
+    "outOf": "Nota {score} de 100",
+    "none": "Valoraciones insuficientes",
+    "radar": "Promedios por categoría — {summary}",
+    "radarEmpty": "Aún sin promedios por categoría"
+  },
+  "meta": {
+    "description": "Puntuaciones de la comunidad para juegos, películas, series y libros — valorados en 6 categorías de 0 a 100."
+  },
+  "nav": {
+    "games": "Juegos",
+    "movies": "Películas",
+    "series": "Series",
+    "books": "Libros",
+    "search": "Buscar juegos, películas, series, libros…",
+    "login": "Entrar",
+    "theme": "Cambiar tema",
+    "profile": "Perfil",
+    "logout": "Cerrar sesión",
+    "admin": "Admin",
+    "account": "Menú de la cuenta",
+    "api": "API",
+    "apiDocs": "API Docs",
+    "publicProfile": "Mi página",
+    "sections": "Secciones",
+    "pricing": "Precios",
+    "language": "Idioma",
+    "openSearch": "Abrir búsqueda",
+    "menu": "Menú"
+  },
+  "home": {
+    "title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
+    "explore": "Explorar"
+  },
+  "footer": {
+    "terms": "Términos",
+    "privacy": "Privacidad",
+    "contact": "Contacto"
+  },
+  "cookies": {
+    "text": "Solo usamos cookies esenciales (sesión y preferencias). Los videos de YouTube solo se cargan si lo permites.",
+    "accept": "Permitir videos",
+    "decline": "Solo esenciales"
+  },
+  "sandbox": {
+    "banner": "Entorno sandbox — los usuarios, las valoraciones y las listas son ficticios (datos de prueba)."
+  },
+  "contact": {
+    "metaTitle": "Contacto",
+    "title": "Contáctanos",
+    "intro": "¿Dudas, ideas o algo roto? Escríbenos: leemos todos los mensajes.",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "loggedIn": "Enviado desde tu cuenta. El nombre y el correo vienen de tu perfil.",
+    "subject": "Asunto",
+    "subjects": {
+      "question": "Dudas",
+      "feedback": "Sugerencias y comentarios",
+      "bug": "Errores y problemas técnicos"
+    },
+    "message": "Mensaje",
+    "minHint": "Al menos {min} caracteres.",
+    "submit": "Enviar mensaje",
+    "sent": "Mensaje enviado. ¡Gracias! Solemos responder en pocos días."
+  },
+  "docs": {
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "quickstart": {
+      "lead": "Puntuaciones de la comunidad para juegos, películas, series y libros — de 0 a 100, en seis categorías por elemento — a través de una API JSON de solo lectura.",
+      "keyHeading": "1. Crea una clave de API",
+      "keyBody": "<dashboard>Abre el panel de la API</dashboard> y crea una clave. Empieza por <code>hx_live_</code> y se muestra una sola vez — guárdala en una variable de entorno, nunca en código del lado del cliente:",
+      "freePlan": "El plan Free incluye {quota} solicitudes en total — suficiente para desarrollar y probar una integración.",
+      "requestHeading": "2. Haz tu primera solicitud",
+      "requestBody": "La URL base es <code>{baseUrl}</code>. Todos los endpoints son <code>GET</code>. Estos son los cinco juegos mejor valorados:",
+      "hostNote": "La misma API también responde en el dominio del sitio: <code>{siteUrl}</code>. Las rutas, los parámetros y las respuestas son idénticos.",
+      "responseHeading": "3. Lee la respuesta",
+      "responseBody": "Las listas devuelven <code>data</code> y un <code>next_cursor</code> para la página siguiente. Los nombres de campo usan snake_case y las fechas siguen ISO 8601. <code>score</code> y <code>categories</code> son <code>null</code> hasta que el elemento tiene 5 valoraciones.",
+      "nextHeading": "Próximos pasos",
+      "nextDetail": "Obtén un elemento con <code>{path}</code> para ver ids externos, tráileres y la sinopsis con licencia.",
+      "nextLookup": "Convierte los ids que ya tienes con <code>{path}</code> (también <code>steam</code>, <code>igdb</code>, <code>tmdb</code>, <code>isbn13</code>, <code>openlibrary</code>, <code>wikidata</code>).",
+      "nextGuides": "Gestiona los <errors>errores</errors> y los <limits>límites de solicitudes</limits> y luego explora la <reference>referencia de la API</reference>.",
+      "sdkHeading": "SDK",
+      "sdkBody": "Los clientes tipados se generan a partir del <openapi>documento OpenAPI</openapi>: TypeScript (<code>{tsPackage}</code>) y Python (<code>{pyPackage}</code>). Todavía no están en npm/PyPI — hasta la primera versión, genéralos desde <code>sdks/</code> en el repositorio.",
+      "sdkTitle": "SDK de TypeScript"
+    },
+    "authentication": {
+      "lead": "Cada solicitud se autentica con una clave de API secreta enviada como token Bearer.",
+      "bearerHeading": "Token Bearer",
+      "bearerBody": "Envía la clave en la cabecera <code>Authorization</code>. Las claves tienen la forma <code>hx_live_</code> seguida de 32 letras y dígitos. No se aceptan claves en la query string, para que nunca acaben en los registros de acceso ni en el historial del navegador.",
+      "unauthorized": "Una clave ausente, mal formada, desconocida o revocada devuelve <code>401</code> con <link>{problemCode}</link> y la cabecera <code>WWW-Authenticate: Bearer</code>.",
+      "managingHeading": "Gestión de claves",
+      "manageCreate": "Crea y revoca claves en <link>/profile/api</link> (requiere correo verificado, hasta 5 claves activas).",
+      "manageOnce": "La clave completa se muestra una sola vez. Solo guardamos un hash SHA-256, así que no podemos recuperarla por ti.",
+      "manageRevoke": "La revocación es inmediata. Para rotar, crea una clave nueva, despliégala y después revoca la anterior.",
+      "manageShared": "Todas las claves de una cuenta comparten el mismo plan, la misma cuota y el mismo límite de solicitudes por segundo.",
+      "securityHeading": "Mantén las claves en secreto",
+      "securityNote": "Llama a la API desde tu servidor. Una clave incrustada en una página web o en una app móvil puede extraerse y agotar tu cuota. Si una clave se filtra, revócala de inmediato."
+    },
+    "errors": {
+      "lead": "Los errores usan problem details de la RFC 9457 con un código estable y legible por máquinas.",
+      "formatHeading": "Formato",
+      "formatBody": "Todos los errores tienen <code>Content-Type: application/problem+json</code>. Decide según <code>code</code> (estable) y no según <code>title</code> o <code>detail</code> (texto para personas que puede cambiar). <code>type</code> enlaza con la sección correspondiente más abajo, y <code>request_id</code> coincide con la cabecera <code>X-Request-Id</code> — inclúyelo cuando contactes con soporte.",
+      "exampleTitle": "Ejemplo",
+      "codesHeading": "Códigos",
+      "when": "Cuándo",
+      "fix": "Qué hacer",
+      "codes": {
+        "bad_request": {
+          "title": "Solicitud no válida",
+          "when": "Un parámetro de consulta es desconocido o está fuera de rango, el <code>cursor</code> fue manipulado o pertenece a otra consulta, o <code>limit</code> supera el tamaño de página de tu plan (10 en Free). <code>errors</code> enumera cada problema con su <code>path</code>.",
+          "fix": "Corrige los parámetros indicados. No cuenta en tu cuota cuando los parámetros no superan la validación."
+        },
+        "unauthorized": {
+          "title": "Clave de API ausente o no válida",
+          "when": "Falta la cabecera <code>Authorization: Bearer</code>, la clave está mal formada o es una clave que no existe o fue revocada.",
+          "fix": "Revisa la cabecera y la clave en <link>/profile/api</link>. Nunca se reintenta automáticamente."
+        },
+        "payment_required": {
+          "title": "Cuota agotada",
+          "when": "La cuota se ha agotado: las 100 solicitudes de por vida del plan Free, o la cuota mensual más los créditos prepagados en los planes de pago. El cuerpo incluye <code>plan</code> y <code>limit</code>.",
+          "fix": "Mejora tu plan o compra créditos en <link>/pricing</link>. Las cuotas de pago se renuevan el día 1 de cada mes (UTC)."
+        },
+        "forbidden": {
+          "title": "Acceso prohibido",
+          "when": "La cuenta propietaria de la clave está suspendida.",
+          "fix": "Escríbenos a través de <link>/contact</link> indicando el <code>request_id</code>."
+        },
+        "not_found": {
+          "title": "No encontrado",
+          "when": "Id de elemento desconocido, un id de otro tipo (por ejemplo, un id de juego en <code>/movies</code>), una ruta de tipo desconocida o ningún resultado en <code>/lookup</code>.",
+          "fix": "Revisa el id y el tipo. Las búsquedas por id requieren un id exacto (por ejemplo, tt0111161)."
+        },
+        "rate_limited": {
+          "title": "Demasiadas solicitudes",
+          "when": "Más solicitudes por segundo de las que permite tu plan. La cabecera <code>Retry-After</code> indica cuántos segundos esperar. No cuenta en tu cuota.",
+          "fix": "Espera los segundos de Retry-After y vuelve a intentarlo; reparte las ráfagas o mejora tu plan para un límite mayor."
+        },
+        "internal_error": {
+          "title": "Error interno",
+          "when": "Algo falló de nuestro lado. La solicitud se devuelve a tu cuota.",
+          "fix": "Reintenta con backoff exponencial. Si persiste, envíanos el <code>request_id</code>."
+        },
+        "service_unavailable": {
+          "title": "Servicio no disponible",
+          "when": "Una dependencia no está disponible temporalmente. Viene acompañado de <code>Retry-After</code>.",
+          "fix": "Vuelve a intentarlo tras el intervalo indicado."
+        }
+      },
+      "retriesHeading": "Reintentos",
+      "retriesBody": "Reintenta solo <code>429</code>, <code>500</code> y <code>503</code>, respetando <code>Retry-After</code> cuando esté presente y con backoff exponencial en los demás casos. Todos los endpoints son <code>GET</code> de solo lectura, así que reintentar siempre es seguro."
+    },
+    "pagination": {
+      "lead": "Los endpoints de listado usan cursores opacos: estables ante inserciones y rápidos a cualquier profundidad.",
+      "howHeading": "Cómo funciona",
+      "howBody": "<code>GET /games</code>, <code>/movies</code>, <code>/series</code> y <code>/books</code> devuelven <code>{shape}</code>. Para obtener la página siguiente, repite la misma solicitud con <code>{param}</code>. Cuando <code>next_cursor</code> es <code>null</code>, has llegado al final.",
+      "sameParams": "Mantén idénticos todos los demás parámetros. Un cursor de otro <code>sort</code> devuelve <code>400</code>.",
+      "opaque": "Los cursores son opacos: no los analices ni los construyas, su formato puede cambiar.",
+      "stable": "El orden es estable: los empates se resuelven por el id del elemento, y los elementos sin puntuación o sin fecha siempre van al final.",
+      "limitHeading": "Tamaño de página",
+      "limitBody": "<code>limit</code> vale 10 por defecto. El máximo depende de tu plan: {free} en Free, {paid} en Pro y Business. Un valor mayor devuelve <code>400 bad_request</code> — la API nunca trunca en silencio. Cada página cuenta como una solicitud.",
+      "exampleHeading": "Ejemplo: recorrer todas las páginas",
+      "searchHeading": "Búsqueda",
+      "searchBody": "<code>GET /search</code> no está paginado: devuelve las mejores coincidencias (hasta 50) para una consulta, de la más a la menos relevante."
+    },
+    "limits": {
+      "lead": "Cada plan tiene una cuota de solicitudes, un límite de solicitudes por segundo y un tamaño máximo de página.",
+      "plansHeading": "Planes",
+      "colPlan": "Plan",
+      "colQuota": "Cuota",
+      "colRate": "Solicitudes / segundo",
+      "colPageSize": "Tamaño máx. de página",
+      "lifetimeQuota": "{quota} en total",
+      "monthlyQuota": "{quota} / mes",
+      "pricing": "Precios y mejoras de plan: <link>/pricing</link>. Los créditos son solicitudes prepagadas que solo se gastan cuando se agota la cuota mensual; no caducan con el cambio de mes.",
+      "countingHeading": "Qué cuenta",
+      "countEvery": "Cada solicitud autenticada que llega a un endpoint cuenta como una, incluidas las que devuelven 404.",
+      "countNot": "No cuentan: <code>401</code>, <code>400</code> por parámetros no válidos, <code>429</code> y cualquier <code>5xx</code> (se devuelve).",
+      "countUsage": "<code>GET /me/usage</code> también cuenta — cuando puedas, lee las cabeceras de respuesta de tus llamadas habituales.",
+      "countReset": "Las cuotas de pago se renuevan a las 00:00 UTC del día 1 de cada mes. La cuota Free nunca se renueva.",
+      "headersHeading": "Cabeceras de respuesta",
+      "headersBody": "Las respuestas correctas te indican tu situación (campos de cabecera RateLimit del IETF):",
+      "headersTitle": "Cabeceras",
+      "colHeader": "Cabecera",
+      "colMeaning": "Significado",
+      "headerLimit": "Solicitudes del período actual (la cuota de tu plan).",
+      "headerRemaining": "Solicitudes restantes antes del 402 (sin contar los créditos).",
+      "headerReset": "Segundos hasta que se renueve la cuota; 0 para la cuota de por vida del plan Free.",
+      "headerQuota": "Igual que RateLimit-Remaining.",
+      "headerRetry": "En 429 y 503: segundos que esperar antes de reintentar.",
+      "exceedingHeading": "Cuando alcanzas un límite",
+      "exceedingNote": "Demasiadas solicitudes por segundo → <rateLimited>429 rate_limited</rateLimited>: espera <code>Retry-After</code> segundos. Cuota (y créditos) agotada → <paymentRequired>402 payment_required</paymentRequired>: mejora tu plan o compra créditos; reintentar no servirá hasta la renovación."
+    },
+    "changelog": {
+      "lead": "La versión forma parte de la ruta. La v1 solo cambia de forma retrocompatible.",
+      "policyHeading": "Política de versiones",
+      "policyAdditive": "Dentro de <code>/v1</code> solo hacemos cambios aditivos: nuevos endpoints, nuevos parámetros opcionales, nuevos campos de respuesta, nuevos valores de enum en las claves de <code>categories</code> para nuevos tipos y nuevos textos de <code>detail</code> en los errores. Ignora los campos desconocidos y no dependas del orden de los campos.",
+      "policyBreaking": "Los cambios incompatibles — eliminar o renombrar un campo, cambiar un tipo, hacer obligatorio un parámetro — se publican en una ruta nueva (<code>/v2</code>). Los valores de <code>code</code> de los errores, las claves de categoría y los nombres de ordenación forman parte del contrato.",
+      "deprecationHeading": "Obsolescencia y retirada",
+      "deprecationWindow": "Una versión obsoleta sigue funcionando al menos 6 meses después de que se publique su sucesora.",
+      "deprecationHeaders": "Sus respuestas incluyen las cabeceras <code>Deprecation</code> (RFC 9745) y <code>Sunset</code> (RFC 8594) con la fecha en que deja de funcionar, además de un <code>Link</code> a esta página.",
+      "deprecationEmail": "Los titulares de cuentas con tráfico reciente en la versión antigua reciben un correo al declararse obsoleta y 30 días antes de la retirada.",
+      "deprecationTitle": "Cabeceras en una versión obsoleta",
+      "changesHeading": "Cambios",
+      "timeToBeatTitle": "v1 — tiempo para completar (aditivo)",
+      "timeToBeatBody": "<code>ItemDetail.time_to_beat</code>: mediana de horas y número de informes de la comunidad para <code>main</code>, <code>extras</code> y <code>completionist</code> en juegos (<code>median_hours</code> es <code>null</code> con menos de 3 informes); <code>null</code> para películas, series y libros.",
+      "firstTitle": "v1 — primera versión",
+      "firstLists": "Listados, detalles y géneros para <code>games</code>, <code>movies</code>, <code>series</code> y <code>books</code>.",
+      "firstEndpoints": "<code>/search</code>, <code>/lookup</code> por id externo y <code>/me/usage</code>."
+    },
+    "reference": {
+      "lead": "Todos los endpoints, parámetros y esquemas de respuesta de la API pública, generados a partir del documento OpenAPI."
+    }
+  },
+  "errors": {
+    "notFoundTitle": "Página no encontrada",
+    "notFoundBody": "La página que buscas no existe o fue movida.",
+    "serverTitle": "Algo salió mal",
+    "serverBody": "Ocurrió un error inesperado de nuestro lado. Inténtalo de nuevo en un momento.",
+    "retry": "Intentar de nuevo",
+    "home": "Volver al inicio",
+    "reference": "Referencia del error"
+  },
+  "item": {
+    "metaDescription": "{title} ({type}) — nota de la comunidad y promedios en 6 categorías.",
+    "communityScore": "Nota de la comunidad",
+    "coverAlt": "Portada de {title}",
+    "notEnough": "Valoraciones insuficientes",
+    "notEnoughHint": "La nota aparece a partir de {min} valoraciones.",
+    "categoryScores": "Promedios por categoría",
+    "seeUserScores": "Ver notas de usuarios",
+    "userScores": "Notas de usuarios",
+    "userScoresHint": "Solo se muestran perfiles públicos.",
+    "close": "Cerrar",
+    "ratingsPages": "Páginas de puntuaciones",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "pageOf": "Página {page} de {count}",
+    "goToPage": "Ir a la página {page}",
+    "retry": "Reintentar",
+    "loading": "Cargando…",
+    "loadError": "No se pudieron cargar las valoraciones. Inténtalo de nuevo.",
+    "noPublicRatings": "Aún no hay valoraciones públicas.",
+    "user": "Usuario",
+    "overall": "General",
+    "rate": "Tu valoración",
+    "loginToRate": "Inicia sesión para valorar",
+    "externalScores": "En otros sitios",
+    "externalNotice": "Las notas de otros sitios les pertenecen; cada enlace abre la fuente.",
+    "trailers": "Tráileres",
+    "trailerConsent": "Los tráileres vienen de YouTube (youtube-nocookie.com) y solo se cargan cuando lo pides.",
+    "loadTrailer": "Cargar tráiler",
+    "trailerTitle": "Tráiler {n}",
+    "details": "Detalles",
+    "fields": {
+      "type": "Tipo",
+      "releaseDate": "Estreno",
+      "genres": "Géneros",
+      "platforms": "Plataformas",
+      "creators": "Creado por",
+      "runtime": "Duración",
+      "pages": "Páginas",
+      "seasons": "Temporadas",
+      "episodes": "Episodios",
+      "countries": "Países"
+    },
+    "runtimeValue": "{minutes} min",
+    "moreCount": "+{count} más",
+    "whereToBuy": "Dónde comprar",
+    "affiliateNotice": "Enlaces de afiliado: podemos recibir una comisión, sin coste extra para ti.",
+    "stores": {
+      "amazon": "Amazon",
+      "mercadolivre": "Mercado Libre",
+      "steam": "Steam",
+      "gog": "GOG"
+    },
+    "synopsis": "Sinopsis",
+    "noSynopsis": "Aún sin sinopsis.",
+    "license": "Licencia del texto: {license}",
+    "source": "Fuente",
+    "coverCredit": "Portada: {credit}",
+    "fallbackNotice": "Aún no disponible en español — se muestra la versión en inglés.",
+    "sources": {
+      "metacritic": "Metacritic",
+      "metacritic_user": "Usuarios de Metacritic",
+      "rottentomatoes": "Rotten Tomatoes",
+      "rottentomatoes_audience": "Público RT",
+      "imdb": "IMDb",
+      "steam": "Steam",
+      "goodreads": "Goodreads",
+      "hltb": "HowLongToBeat",
+      "hltb_main": "HLTB historia principal",
+      "hltb_complete": "HLTB 100%",
+      "openlibrary": "Open Library"
+    },
+    "timeToBeat": {
+      "title": "Tiempo para terminar",
+      "styles": {
+        "main": "Historia principal",
+        "extras": "Principal + extras",
+        "completionist": "Completista"
+      },
+      "hours": "{hours} h",
+      "reports": {
+        "zero": "ningún reporte",
+        "one": "{count} reporte",
+        "other": "{count} reportes"
+      },
+      "notEnough": "Aún no hay suficientes reportes (mínimo {min})",
+      "hint": "Mediana de las horas que informaron quienes completaron el juego.",
+      "yours": "Tu tiempo para terminar",
+      "yoursHint": "Opcional. Horas, de 0,5 en 0,5; deja vacío el estilo que no jugaste.",
+      "hoursPlaceholder": "Horas",
+      "save": "Guardar tiempos",
+      "delete": "Borrar tiempos",
+      "saved": "Tiempos guardados.",
+      "deleted": "Tiempos borrados."
+    }
+  },
+  "updatedLabel": "Última actualización",
+  "policy": {
+    "title": "Política de privacidad",
+    "description": "Qué datos personales recopilamos, por qué, durante cuánto tiempo y cómo ejercer tus derechos.",
+    "intro": "Esta política explica cómo {appName} trata los datos personales cuando navegas por el sitio, creas una cuenta, valoras elementos, nos contactas o usas la API de pago. Está redactada para cumplir la Ley General de Protección de Datos de Brasil (LGPD, Ley 13.709/2018) y el Reglamento General de Protección de Datos de la UE (RGPD).",
+    "sections": {
+      "0": {
+        "heading": "1. Responsable",
+        "body": {
+          "0": "El operador del servicio es el responsable del tratamiento de los datos descritos aquí. Para cualquier duda o solicitud sobre privacidad, usa el formulario de contacto (elige \"Dudas\"). Respondemos en un plazo de 15 días."
+        }
+      },
+      "1": {
+        "heading": "2. Datos que recopilamos",
+        "body": {
+          "0": "Cuenta: nombre, correo, nickname, contraseña (guardada solo como hash irreversible), método de acceso (correo y contraseña, Google, passkeys), configuración de dos pasos y la fecha en que programaste la eliminación, si la hay.",
+          "1": "Actividad: tus puntuaciones (seis categorías, 0–100), estado de las obras, listas, a quién sigues y la elección de perfil privado.",
+          "2": "Datos técnicos: dirección IP y user agent del navegador vinculados a las sesiones activas, y contadores de corta duración para bloquear abusos (límite de solicitudes y protección contra bots).",
+          "3": "Mensajes de contacto: nombre, correo, asunto y texto que nos envías.",
+          "4": "API y facturación: metadatos de las claves de API (guardamos solo un hash de la clave), número de solicitudes, plan, créditos y facturas. Los datos de tarjeta y PIX los tratan Stripe y AbacatePay; nunca vemos ni guardamos el número completo de la tarjeta."
+        }
+      },
+      "2": {
+        "heading": "3. Para qué los usamos (bases jurídicas)",
+        "body": {
+          "0": "Para prestar el servicio que pediste: cuenta, puntuaciones, acceso a la API y facturación (ejecución de un contrato).",
+          "1": "Para mantener el servicio seguro, prevenir fraude, spam y bots, y calcular las puntuaciones de la comunidad (interés legítimo).",
+          "2": "Para cargar vídeos incrustados de terceros, solo después de que lo permitas (consentimiento, que puedes retirar en cualquier momento).",
+          "3": "Para conservar los registros de facturación exigidos por la ley fiscal (obligación legal)."
+        }
+      },
+      "3": {
+        "heading": "4. Cookies",
+        "body": {
+          "0": "Solo usamos cookies esenciales: la cookie de sesión que te mantiene conectado, cookies temporales de dos pasos y de dispositivo de confianza, y cookies de preferencias para tema, idioma y tu elección sobre cookies. No usamos cookies publicitarias ni de seguimiento entre sitios.",
+          "1": "Las estadísticas de tráfico se recopilan sin cookies (Vercel Web Analytics), de forma agregada. Los tráileres se sirven desde youtube-nocookie.com y solo se cargan después de que permitas los vídeos en el banner de cookies.",
+          "2": "Al seguir un enlace de afiliado a Amazon o Mercado Libre sales de nuestro sitio; esas tiendas usan sus propias cookies según sus propias políticas."
+        }
+      },
+      "4": {
+        "heading": "5. Con quién compartimos datos",
+        "body": {
+          "0": "No vendemos datos personales. Solo los compartimos con encargados que los tratan en nuestro nombre: Vercel (alojamiento, protección contra bots, estadísticas), Neon (base de datos), Upstash (límite de solicitudes), Resend (correos transaccionales), Stripe y AbacatePay (pagos) y Google (solo si eliges \"Continuar con Google\").",
+          "1": "Algunos de estos encargados están fuera de tu país, incluso en Estados Unidos. Las transferencias se basan en las garantías previstas por la LGPD y el RGPD, como las cláusulas contractuales tipo."
+        }
+      },
+      "5": {
+        "heading": "6. Cuánto tiempo los conservamos",
+        "body": {
+          "0": "Los datos de la cuenta se conservan mientras exista la cuenta. Cuando la eliminas, entra en un periodo de gracia de 30 días en el que puedes entrar y cancelar. Después, se borran tu nombre, correo, nickname, sesiones, métodos de acceso y datos de dos pasos, y la cuenta queda anonimizada.",
+          "1": "Tus puntuaciones se conservan tras la eliminación sin ningún vínculo con tu identidad, como \"Usuario eliminado\", para no distorsionar las puntuaciones de la comunidad.",
+          "2": "Los mensajes de contacto se conservan hasta 2 años; los registros de facturación durante el plazo que exige la ley fiscal (hoy, 5 años en Brasil); los registros de seguridad hasta 30 días."
+        }
+      },
+      "6": {
+        "heading": "7. Tus derechos",
+        "body": {
+          "0": "Según la LGPD (art. 18) y el RGPD puedes: confirmar si tratamos tus datos; acceder a ellos; rectificarlos; pedir su anonimización, bloqueo o supresión; recibirlos en un formato portable; saber con quién los compartimos; oponerte al tratamiento basado en interés legítimo; y retirar tu consentimiento.",
+          "1": "Puedes cambiar tu nombre, contraseña, dos pasos, passkeys y la privacidad del perfil, y eliminar tu cuenta, directamente en tu perfil. Para cualquier otra solicitud, usa el formulario de contacto. También puedes reclamar ante la autoridad brasileña de protección de datos (ANPD) o ante la autoridad de control de tu país."
+        }
+      },
+      "7": {
+        "heading": "8. Seguridad",
+        "body": {
+          "0": "Las contraseñas se guardan como hash, todo el tráfico usa HTTPS, las sesiones usan cookies HttpOnly y puedes proteger tu cuenta con autenticación en dos pasos y passkeys. Ningún sistema es totalmente seguro; si sabemos de un incidente que te afecte, te avisaremos a ti y a las autoridades como exige la ley."
+        }
+      },
+      "8": {
+        "heading": "9. Menores",
+        "body": {
+          "0": "El servicio no está dirigido a menores. Debes tener al menos 13 años —o la edad mínima de consentimiento digital de tu país, si es mayor— para crear una cuenta."
+        }
+      },
+      "9": {
+        "heading": "10. Cambios",
+        "body": {
+          "0": "Actualizaremos esta página cuando cambien nuestras prácticas y cambiaremos la fecha de arriba. Los cambios importantes se anuncian en el sitio o por correo antes de entrar en vigor."
+        }
+      }
+    }
+  },
+  "terms": {
+    "title": "Términos de uso y cookies",
+    "description": "Las reglas para usar el sitio, tu cuenta, las puntuaciones, la API de pago y los enlaces de afiliado.",
+    "intro": "Al usar {appName} — el sitio o la API — aceptas estos términos. Si no estás de acuerdo, no uses el servicio.",
+    "sections": {
+      "0": {
+        "heading": "1. El servicio",
+        "body": {
+          "0": "Mantenemos una base de datos de juegos, películas, series y libros en la que los usuarios registrados puntúan cada obra en seis categorías de 0 a 100. Las puntuaciones de la comunidad son medias de las puntuaciones de los usuarios y solo se muestran cuando la obra tiene al menos 5 puntuaciones.",
+          "1": "Los metadatos de los elementos provienen de fuentes abiertas y de datos públicos de tiendas: Wikidata (CC0), Wikipedia, Open Library, Steam y GOG. Las sinopsis de Wikipedia tienen licencia CC BY-SA 4.0 y se muestran con su licencia y un enlace al artículo original. Las portadas provienen de Open Library, Steam, GOG o Wikimedia Commons; cuando la licencia lo exige, la página del elemento acredita la fuente, el autor y la licencia. Los enlaces a notas externas (como IMDb o Metacritic) son de referencia; esas notas, las portadas y todas las marcas pertenecen a sus dueños."
+        }
+      },
+      "1": {
+        "heading": "2. Tu cuenta",
+        "body": {
+          "0": "Proporciona información veraz, mantén una cuenta por persona y guarda tus credenciales en secreto. Recomendamos activar la autenticación en dos pasos. Los nicknames no pueden suplantar a otras personas ni ser ofensivos.",
+          "1": "Podemos suspender o cerrar cuentas que incumplan estos términos, manipulen puntuaciones o abusen del servicio."
+        }
+      },
+      "2": {
+        "heading": "3. Puntuaciones",
+        "body": {
+          "0": "Puedes puntuar cada obra una vez y editar tu puntuación cuando quieras. Las puntuaciones deben reflejar tu opinión sincera: está prohibido usar varias cuentas, bots o puntuaciones pagadas para manipularlas.",
+          "1": "Nos concedes una licencia no exclusiva, mundial, gratuita y perpetua para guardar tus puntuaciones y usarlas para calcular y publicar puntuaciones agregadas, incluso después de eliminar tu cuenta, de forma anonimizada."
+        }
+      },
+      "3": {
+        "heading": "4. Uso aceptable",
+        "body": {
+          "0": "No hagas scraping del sitio: usa la API pública. No intentes eludir los límites de solicitudes, la protección contra bots o los controles de acceso, interferir con el servicio ni usarlo con fines ilegales."
+        }
+      },
+      "4": {
+        "heading": "5. API pública",
+        "body": {
+          "0": "Las claves de API son personales y secretas; eres responsable de las solicitudes hechas con ellas. Cada plan tiene una cuota de solicitudes, un tamaño máximo de página y un límite de solicitudes por segundo, indicados en la página de precios. El plan gratuito incluye 100 solicitudes por cuenta en total y exige un correo verificado; los planes de pago tienen una cuota mensual. Las solicitudes que fallan por un error nuestro no se cuentan. Al alcanzar la cuota o el límite de solicitudes, las solicitudes se rechazan hasta que la cuota se renueve o compres créditos.",
+          "1": "La API devuelve solo nuestros propios datos (puntuaciones y estadísticas de la comunidad), metadatos abiertos e identificadores externos. No puedes usarla para redistribuir datos de terceros que solo enlazamos. Podemos cambiar o retirar versiones de la API con un aviso razonable."
+        }
+      },
+      "5": {
+        "heading": "6. Pagos, renovación y cancelación",
+        "body": {
+          "0": "Los planes de pago se cobran por adelantado. Con tarjeta, a través de Stripe, los planes son suscripciones mensuales que se renuevan automáticamente hasta que las canceles; puedes cancelar o cambiar la tarjeta en el portal de facturación. Con PIX, a través de AbacatePay (solo en reales brasileños), compras 1 mes o 12 meses (12 meses al precio de 10); los periodos PIX no se renuevan automáticamente y te avisamos por correo 7 días y 1 día antes de que terminen. Los precios, la moneda y los impuestos se muestran antes de pagar.",
+          "1": "Los créditos extra solo se pueden comprar con un plan Pro o Business activo; no caducan y se usan después de la cuota mensual.",
+          "2": "Puedes cancelar en cualquier momento y mantienes el acceso hasta el final del periodo pagado. Cuando la ley te concede un derecho de desistimiento (por ejemplo, 7 días según el art. 49 del Código de Defensa del Consumidor de Brasil), puedes ejercerlo mediante el formulario de contacto y recibir el reembolso que establezca la ley. Si se te cobra dos veces por el mismo periodo (por ejemplo, un pago PIX con una suscripción con tarjeta activa), devolvemos el pago duplicado."
+        }
+      },
+      "6": {
+        "heading": "7. Enlaces de afiliado",
+        "body": {
+          "0": "Algunas páginas de libros y juegos incluyen enlaces a Amazon y Mercado Libre. Son enlaces de afiliado: podemos recibir una comisión por compras que cumplan los requisitos, sin coste extra para ti. Los enlaces de afiliado están señalados en la página y nunca influyen en las notas. Los precios, la disponibilidad, las compras y las devoluciones son responsabilidad de cada tienda."
+        }
+      },
+      "7": {
+        "heading": "8. Cookies",
+        "body": {
+          "0": "Solo usamos cookies esenciales (sesión, seguridad y preferencias) y solo cargamos vídeos incrustados con tu consentimiento. Los detalles están en la Política de privacidad."
+        }
+      },
+      "8": {
+        "heading": "9. Eliminación de la cuenta",
+        "body": {
+          "0": "Puedes eliminar tu cuenta en tu perfil. La eliminación se hace efectiva tras un periodo de gracia de 30 días en el que puedes entrar y cancelarla. Tus valoraciones siguen en las notas de la comunidad de forma anónima. Cuando la eliminación se hace efectiva, tus claves de API se revocan y una suscripción activa con tarjeta se cancela, sin nuevos cobros."
+        }
+      },
+      "9": {
+        "heading": "10. Exenciones y responsabilidad",
+        "body": {
+          "0": "El servicio y la API se ofrecen \"tal cual\". Trabajamos para mantener los datos correctos y el servicio disponible, pero no garantizamos que la información sea completa o esté libre de errores, ni que el servicio funcione sin interrupciones. En la medida en que lo permita la ley, nuestra responsabilidad se limita al importe que nos pagaste en los 12 meses anteriores a la reclamación. Nada en estos términos limita derechos que la normativa de consumo no permite limitar."
+        }
+      },
+      "10": {
+        "heading": "11. Cambios y ley aplicable",
+        "body": {
+          "0": "Podemos actualizar estos términos; los cambios importantes se anuncian con antelación y el uso continuado implica su aceptación. Estos términos se rigen por las leyes de Brasil, sin perjuicio de las protecciones obligatorias al consumidor del país donde vives."
+        }
+      },
+      "11": {
+        "heading": "12. Contacto",
+        "body": {
+          "0": "Las dudas sobre estos términos, las solicitudes de desistimiento o reembolso y las solicitudes de privacidad pueden enviarse mediante el formulario de contacto."
+        }
+      }
+    }
+  },
+  "lists": {
+    "addToList": "Añadir a una lista",
+    "noLists": "Aún no tienes listas.",
+    "fieldType": "Categoría",
+    "quota": {
+      "game": "Listas de juegos: {count}/{limit}",
+      "movie": "Listas de películas: {count}/{limit}",
+      "series": "Listas de series: {count}/{limit}",
+      "other": "Listas de libros: {count}/{limit}"
+    },
+    "limitReached": {
+      "game": "Ya tienes {limit} listas de juegos. Elimina una para crear otra.",
+      "movie": "Ya tienes {limit} listas de películas. Elimina una para crear otra.",
+      "series": "Ya tienes {limit} listas de series. Elimina una para crear otra.",
+      "other": "Ya tienes {limit} listas de libros. Elimina una para crear otra."
+    },
+    "noListsOfType": {
+      "game": "Aún no tienes listas de juegos.",
+      "movie": "Aún no tienes listas de películas.",
+      "series": "Aún no tienes listas de series.",
+      "other": "Aún no tienes listas de libros."
+    },
+    "noPublicLists": "Aún no hay listas públicas.",
+    "newWithItem": "Nueva lista con este ítem",
+    "new": "Nueva lista",
+    "fieldTitle": "Título",
+    "fieldDescription": "Descripción",
+    "publicLabel": "Pública (cualquiera puede verla)",
+    "create": "Crear lista",
+    "created": "Lista creada.",
+    "save": "Guardar cambios",
+    "saved": "Lista guardada.",
+    "edit": "Editar lista",
+    "delete": "Eliminar lista",
+    "deleteConfirm": "¿Eliminar esta lista? No se puede deshacer.",
+    "remove": "Quitar",
+    "removeLabel": "Quitar {title} de la lista",
+    "moveUpLabel": "Subir {title}",
+    "moveDownLabel": "Bajar {title}",
+    "itemCount": {
+      "one": "{count} ítem",
+      "other": "{count} ítems"
+    },
+    "public": "Pública",
+    "private": "Privada",
+    "hidden": "Oculta por moderación",
+    "hiddenNotice": "Un moderador ocultó esta lista. Solo tú puedes verla.",
+    "by": "Lista de {nickname}",
+    "empty": "Esta lista está vacía.",
+    "emptyOwner": "Esta lista está vacía. Añade ítems desde la página de cualquier ítem.",
+    "errors": {
+      "title": "1–80 caracteres.",
+      "description": "Hasta 500 caracteres."
+    }
+  },
+  "ratings": {
+    "title": "Tu valoración",
+    "yourOverall": "Tu nota general",
+    "overallHint": "La media de las seis categorías, redondeada.",
+    "save": "Guardar valoración",
+    "update": "Actualizar valoración",
+    "delete": "Eliminar valoración",
+    "saving": "Guardando…",
+    "saved": "Valoración guardada.",
+    "deleted": "Valoración eliminada.",
+    "loginToRate": "Inicia sesión para valorar",
+    "chooseNickname": "Elige un nickname para valorar",
+    "verifyToRate": "Confirma tu correo para valorar.",
+    "verifyLink": "Reenviar el correo de confirmación"
+  },
+  "search": {
+    "title": "Búsqueda",
+    "label": "Buscar",
+    "submit": "Buscar",
+    "resultsFor": "Resultados para “{q}”",
+    "prompt": "Busca juegos, películas, series y libros por título.",
+    "tooShort": "Escribe al menos 2 caracteres.",
+    "noResults": "No se encontró nada para “{q}”. Revisa la ortografía o prueba otro título.",
+    "all": "Todos",
+    "suggestions": "Sugerencias",
+    "noSuggestions": "Sin resultados",
+    "searching": "Buscando…"
+  },
+  "social": {
+    "profile": {
+      "private": "Este perfil es privado.",
+      "privateOwner": "Perfil privado (solo tú ves esta página)",
+      "memberSince": "Miembro desde {date}",
+      "counts": {
+        "game": {
+          "one": "{count} juego",
+          "other": "{count} juegos"
+        },
+        "movie": {
+          "one": "{count} película",
+          "other": "{count} películas"
+        },
+        "series": {
+          "one": "{count} serie",
+          "other": "{count} series"
+        },
+        "book": {
+          "one": "{count} libro",
+          "other": "{count} libros"
+        }
+      },
+      "averageGiven": "Nota media dada",
+      "sections": "Secciones del perfil",
+      "tabs": {
+        "ratings": "Valoraciones",
+        "status": "Estado",
+        "lists": "Listas"
+      },
+      "byCategory": "Valoraciones por categoría",
+      "allTypes": "Todas",
+      "seeAll": "Ver todas ({count})",
+      "sortBy": "Ordenar:",
+      "sorts": {
+        "recent": "Más recientes",
+        "best": "Notas más altas",
+        "worst": "Notas más bajas"
+      },
+      "noRatings": "Aún no hay valoraciones.",
+      "emptyShelf": "Nada por aquí todavía.",
+      "previous": "Anterior",
+      "next": "Siguiente"
+    },
+    "status": {
+      "label": "Estado",
+      "none": "Sin estado",
+      "game": {
+        "want": "Quiero jugar",
+        "in_progress": "Jugando",
+        "completed": "Jugado",
+        "dropped": "Abandonado"
+      },
+      "movie": {
+        "want": "Quiero ver",
+        "in_progress": "Viendo",
+        "completed": "Vista",
+        "dropped": "Abandonada"
+      },
+      "series": {
+        "want": "Quiero ver",
+        "in_progress": "Viendo",
+        "completed": "Vista",
+        "dropped": "Abandonada"
+      },
+      "book": {
+        "want": "Quiero leer",
+        "in_progress": "Leyendo",
+        "completed": "Leído",
+        "dropped": "Abandonado"
+      },
+      "shelves": {
+        "want": "Pendientes",
+        "in_progress": "En curso",
+        "completed": "Terminados",
+        "dropped": "Abandonados"
+      }
+    },
+    "report": {
+      "reportList": "Denunciar lista",
+      "reportUser": "Denunciar usuario",
+      "title": "Denunciar",
+      "sent": "Gracias. Un moderador lo revisará.",
+      "reason": "Motivo",
+      "reasons": {
+        "spam": "Spam",
+        "offensive": "Contenido ofensivo",
+        "harassment": "Acoso",
+        "impersonation": "Suplantación de identidad",
+        "other": "Otro"
+      },
+      "details": "Detalles (opcional)",
+      "submit": "Enviar denuncia",
+      "close": "Cerrar"
+    },
+    "onboarding": {
+      "title": "Elige tu nickname",
+      "body": "Tu nickname es tu nombre público en perfiles, listas y en las notas de la comunidad.",
+      "submit": "Guardar nickname"
+    }
+  }
+}
