@@ -148,21 +148,20 @@ func (a *Accounts) PurgeDue(ctx context.Context) ([]int64, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer func() { _ = rows.Close() }()
 
 	var due []int64
 
 	for rows.Next() {
 		var id int64
 		if err := rows.Scan(&id); err != nil {
-			_ = rows.Close()
-
 			return nil, err
 		}
 
 		due = append(due, id)
 	}
 
-	if err := errors.Join(rows.Err(), rows.Close()); err != nil {
+	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 
