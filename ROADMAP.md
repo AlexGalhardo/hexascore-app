@@ -860,7 +860,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test -tags=integration ./tests -run 'TestNotificationDedupeOnRetry|TestSecurity_A01_NotificationsOwnerOnly'` → a retried job writes one row; another user's id → 404
   - Notes: `notifications.Send` is the only writer of `user_notifications` (SDD 14 §6.5). No push in v1.
 
-- [ ] **P1.F.3.2** Implement reports and the contact form, their admin resources and resolve routes (replaces `report`, `sendContactMessage`, `setReportStatus`, `setContactHandled`, `setListHidden`).
+- [x] **P1.F.3.2** Implement reports and the contact form, their admin resources and resolve routes (replaces `report`, `sendContactMessage`, `setReportStatus`, `setContactHandled`, `setListHidden`).
   - Files/modules: `database/migrations/*_create_reports_table.go`, `*_create_contact_messages_table.go`, `app/library/reports.go`, `app/library/contact.go`, `app/admin/{report,contact_message}_resource.go` (`vukem make:admin-resource`), `app/http/controllers/admin/reports_controller.go`, `routes/admin.go`
   - Refs: SDD 14 §5, §6.3, §6.4, §7.3, §9; SDD 03 §7.3 (honeypot); VF-008; legacy `actions/reports.ts`, `actions/contact.ts`, `actions/admin.ts`, `lib/contact.ts`, `app/[locale]/admin/{reports,contact}/`
   - Depends on: P1.F.3.1, P1.C.5.2

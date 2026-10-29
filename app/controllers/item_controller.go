@@ -94,10 +94,3 @@ func (h *Item) Edition(c *web.Ctx) error {
 		"edition": ed,
 	})
 }
-
-// Report is the item report entry point.
-//
-// shortcut: accepts and discards the report; P1.F.3.2 replaces it with the persisted, deduplicated report.
-func (h *Item) Report(c *web.Ctx) error {
-	return c.Back("/")
-}
