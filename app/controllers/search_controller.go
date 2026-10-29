@@ -91,7 +91,6 @@ type searchPage struct {
 }
 
 var (
-	localePrefix  = map[string]string{"pt-BR": "/pt-br", "es": "/es"}
 	itemSection   = map[string]string{"game": "games", "movie": "movies", "series": "series", "book": "books"}
 	entitySection = map[string]string{"person": "people", "organization": "companies", "franchise": "franchises"}
 )
@@ -158,7 +157,7 @@ func toHit(prefix string, h search.Hit) SearchHit {
 func (h *Search) Index(c *web.Ctx) error {
 	text, locale, types := searchParams(c)
 	page := max(1, c.QueryInt("page", 1))
-	prefix := localePrefix[i18n.Locale(c.Context())]
+	prefix := i18n.PathPrefix(c.Context())
 
 	user, signed := h.signedIn(c)
 	query := search.Query{
@@ -342,7 +341,7 @@ type SuggestItem struct {
 // cached for 300 s and carry an ETag.
 func (h *Search) Suggest(c *web.Ctx) error {
 	text, locale, types := searchParams(c)
-	prefix := localePrefix[i18n.Locale(c.Context())]
+	prefix := i18n.PathPrefix(c.Context())
 
 	compute := func(ctx context.Context) ([]SuggestItem, error) {
 		rows, err := h.searcher.Suggest(ctx, search.SuggestQuery{Text: text, Locale: locale, Kinds: types})

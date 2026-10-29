@@ -32,7 +32,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-021 | 2026-10-28 | low | withdrawn (2026-10-29: `HourlyAt` documented) |
 | VF-022 | 2026-10-28 | low | open |
 | VF-023 | 2026-10-28 | low | open |
-| VF-024 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#10](https://github.com/AlexGalhardo/vukem/pull/10)) |
+| VF-024 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#10](https://github.com/AlexGalhardo/vukem/pull/10)), adopted (ADOPT-VF-024) |
 | VF-025 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#16](https://github.com/AlexGalhardo/vukem/pull/16)) |
 | VF-026 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#13](https://github.com/AlexGalhardo/vukem/pull/13)) |
 | VF-027 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#9](https://github.com/AlexGalhardo/vukem/pull/9)) |
