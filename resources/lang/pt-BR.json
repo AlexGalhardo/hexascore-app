@@ -1286,6 +1286,27 @@
     "seeAll": "Ver todos",
     "score": "Sua nota: {stars}"
   },
+  "entity": {
+    "kinds": {
+      "person": "Pessoa",
+      "organization": "Empresa",
+      "franchise": "Franquia",
+      "platform": "Plataforma",
+      "genre": "Gênero",
+      "game_mode": "Modo de jogo",
+      "country": "País",
+      "language": "Idioma"
+    },
+    "born": "Nascimento",
+    "died": "Morte",
+    "founded": "Fundação",
+    "descriptionSource": "Licença da descrição: {licence}",
+    "empty": "Nenhum item público ainda.",
+    "showing": "{count} de {total}",
+    "avgScore": "Nota média: {score}",
+    "seeAll": "Ver todos",
+    "next": "Próxima"
+  },
   "userLists": {
     "items": "Itens",
     "title": "Suas listas",

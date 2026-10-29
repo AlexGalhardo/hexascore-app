@@ -89,6 +89,7 @@ func Web(r *router.Router, app *vukem.App) error {
 			"sandbox.",
 			"contact.",
 			"docs.",
+			"entity.",
 			"errors.",
 			"item.",
 			"updatedLabel.",
@@ -165,6 +166,19 @@ func Web(r *router.Router, app *vukem.App) error {
 			r.Get("/"+section+"/{slug}", items.Show(typ)).Name("item." + typ)
 		}
 		r.Get("/books/{slug}/editions/{id}", items.Edition).Name("item.edition")
+		entities := controllers.NewEntity(app)
+		for _, e := range []struct{ path, kind, param string }{
+			{"people", "person", "slug"},
+			{"companies", "organization", "slug"},
+			{"franchises", "franchise", "slug"},
+			{"platforms", "platform", "slug"},
+			{"genres", "genre", "slug"},
+			{"game-modes", "game_mode", "slug"},
+			{"countries", "country", "code"},
+			{"languages", "language", "code"},
+		} {
+			r.Get("/"+e.path+"/{"+e.param+"}", entities.Show(e.kind, e.param)).Name("entity." + e.kind)
+		}
 		r.Get("/api/search/suggest", controllers.LegacySuggest).Name("search.suggest.legacy")
 	}
 
