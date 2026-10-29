@@ -2,8 +2,10 @@ import { Head, useForm } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
 
 import Field from "../../components/Field";
+import { useT } from "../../lib/useT";
 
 export default function TwoFactorChallenge() {
+	const t = useT();
 	const [recovery, setRecovery] = useState(false);
 	const form = useForm({ code: "", recovery_code: "" });
 
@@ -14,17 +16,15 @@ export default function TwoFactorChallenge() {
 
 	return (
 		<>
-			<Head title="Two-factor authentication" />
-			<h1 className="mb-4 text-2xl font-semibold">Two-factor authentication</h1>
+			<Head title={t("auth.login.twoFactorTitle")} />
+			<h1 className="mb-4 text-2xl font-semibold">{t("auth.login.twoFactorTitle")}</h1>
 			<p className="mb-4">
-				{recovery
-					? "Enter one of your recovery codes."
-					: "Enter the code from your authenticator app."}
+				{recovery ? t("auth.login.backupHelp") : t("auth.login.twoFactorHelp")}
 			</p>
 			<form onSubmit={submit} className="space-y-4">
 				{recovery ? (
 					<Field
-						label="Recovery code"
+						label={t("auth.login.backupCode")}
 						autoComplete="off"
 						required
 						value={form.data.recovery_code}
@@ -33,7 +33,7 @@ export default function TwoFactorChallenge() {
 					/>
 				) : (
 					<Field
-						label="Code"
+						label={t("auth.login.code")}
 						inputMode="numeric"
 						autoComplete="one-time-code"
 						autoFocus
@@ -48,7 +48,7 @@ export default function TwoFactorChallenge() {
 					disabled={form.processing}
 					className="rounded-md bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
 				>
-					Log in
+					{t("auth.login.verify")}
 				</button>
 			</form>
 			<p className="mt-6 text-sm">
@@ -62,9 +62,7 @@ export default function TwoFactorChallenge() {
 					}}
 					className="text-indigo-600 hover:underline dark:text-indigo-400"
 				>
-					{recovery
-						? "Use a code from your authenticator app"
-						: "Lost your device? Use a recovery code"}
+					{recovery ? t("auth.login.useTotp") : t("auth.login.useBackup")}
 				</button>
 			</p>
 		</>

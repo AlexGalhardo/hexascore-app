@@ -8,7 +8,7 @@ import (
 )
 
 // ShowForgot renders the reset link request page.
-func (*Handlers) ShowForgot(c *web.Ctx) error { return inertia.Render(c, "Auth/ForgotPassword", nil) }
+func (*Handlers) ShowForgot(c *web.Ctx) error { return inertia.Render(c, "Auth/Recover", nil) }
 
 // SendResetLink emails a reset link; the answer is the same whether or not
 // the email has an account.
@@ -29,7 +29,7 @@ func (h *Handlers) SendResetLink(c *web.Ctx) error {
 
 // ShowReset renders the new password page.
 func (*Handlers) ShowReset(c *web.Ctx) error {
-	return inertia.Render(c, "Auth/ResetPassword", inertia.Props{"token": c.Param("token"), "email": c.Query("email")})
+	return inertia.Render(c, "Auth/Reset", inertia.Props{"token": c.Param("token"), "email": c.Query("email")})
 }
 
 // Reset sets the new password.
