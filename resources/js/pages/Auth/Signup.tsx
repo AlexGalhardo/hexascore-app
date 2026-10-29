@@ -4,8 +4,10 @@ import type { FormEvent } from "react";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
 import { checkConfirmation, checkPassword, passwordAdvice } from "../../lib/password-policy";
+import { useT } from "../../lib/useT";
 
-export default function Register() {
+export default function Signup() {
+	const t = useT();
 	const form = useForm({ name: "", email: "", password: "", password_confirmation: "" });
 
 	const submit = (e: FormEvent) => {
@@ -15,11 +17,11 @@ export default function Register() {
 
 	return (
 		<>
-			<Head title="Create an account" />
-			<h1 className="mb-4 text-2xl font-semibold">Create an account</h1>
+			<Head title={t("auth.signup.metaTitle")} />
+			<h1 className="mb-4 text-2xl font-semibold">{t("auth.signup.title")}</h1>
 			<form onSubmit={submit} className="space-y-4">
 				<Field
-					label="Name"
+					label={t("auth.fields.name")}
 					autoComplete="name"
 					required
 					value={form.data.name}
@@ -27,7 +29,7 @@ export default function Register() {
 					error={form.errors.name}
 				/>
 				<Field
-					label="Email"
+					label={t("auth.fields.email")}
 					type="email"
 					autoComplete="email"
 					required
@@ -36,7 +38,7 @@ export default function Register() {
 					error={form.errors.email}
 				/>
 				<PasswordField
-					label="Password"
+					label={t("auth.fields.password")}
 					name="password"
 					autoComplete="new-password"
 					value={form.data.password}
@@ -46,7 +48,7 @@ export default function Register() {
 					advice={passwordAdvice(form.data.password)}
 				/>
 				<PasswordField
-					label="Confirm password"
+					label={t("auth.fields.confirmPassword")}
 					name="password_confirmation"
 					autoComplete="new-password"
 					value={form.data.password_confirmation}
@@ -59,7 +61,7 @@ export default function Register() {
 					disabled={form.processing}
 					className="rounded-md bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
 				>
-					Create account
+					{t("auth.signup.submit")}
 				</button>
 			</form>
 			<p className="mt-6 text-sm">
@@ -67,7 +69,7 @@ export default function Register() {
 					href="/login"
 					className="text-indigo-600 hover:underline dark:text-indigo-400"
 				>
-					Already registered?
+					{t("auth.signup.haveAccount")} {t("auth.signup.logIn")}
 				</Link>
 			</p>
 		</>

@@ -26,7 +26,7 @@ func (*Handlers) Notice(c *web.Ctx) error {
 		return c.Redirect("/dashboard")
 	}
 
-	return inertia.Render(c, "Auth/VerifyEmail", nil)
+	return inertia.Render(c, "Auth/VerifyNotice", nil)
 }
 
 // Verify handles the signed link from the verification email. The route

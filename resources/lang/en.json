@@ -175,11 +175,12 @@
       "nickname": "Nickname",
       "name": "Name",
       "show": "Show password",
-      "hide": "Hide password"
+      "hide": "Hide password",
+      "confirmPassword": "Confirm password"
     },
     "rules": {
       "title": "Your password must have:",
-      "length": "8 to 32 characters",
+      "length": "8 to 128 characters",
       "uppercase": "One uppercase letter",
       "lowercase": "One lowercase letter",
       "number": "One number",
@@ -199,7 +200,7 @@
       "locked": "Too many wrong codes. Try again later.",
       "weakPassword": "The password does not meet the requirements.",
       "bot": "Your request was blocked. Reload the page and try again.",
-      "invalidNickname": "4–16 characters: letters, numbers and underscore.",
+      "invalidNickname": "4 to 16 lowercase letters, no numbers or symbols.",
       "invalidEmail": "Enter a valid email.",
       "invalidName": "Enter your name.",
       "invalidToken": "This link is invalid or expired."
@@ -220,7 +221,9 @@
       "useBackup": "Use a backup code",
       "useTotp": "Use the authenticator app",
       "trustDevice": "Trust this device for 30 days",
-      "verify": "Verify"
+      "verify": "Verify",
+      "rememberMe": "Remember me",
+      "backupCode": "Backup code"
     },
     "signup": {
       "metaTitle": "Create account",
@@ -231,7 +234,9 @@
       "nicknameHint": "4–16 lowercase letters, no numbers, spaces or symbols. It is your public handle, unique and cannot be changed later.",
       "checkTitle": "Check your email",
       "checkBody": "We sent a confirmation link to {email}. Open it to activate your account.",
-      "agree": "By creating an account you agree to the <terms>Terms</terms> and the <privacy>Privacy policy</privacy>."
+      "agree": "By creating an account you agree to the <terms>Terms</terms> and the <privacy>Privacy policy</privacy>.",
+      "checkNotice": "If the address can be used, we sent it a link to verify it. If it already has an account, we sent a link to sign in or reset the password instead.",
+      "goLogin": "Go to the login page"
     },
     "verify": {
       "metaTitle": "Verify email",
@@ -242,7 +247,8 @@
       "invalid": "This confirmation link is invalid or expired. Request a new one below.",
       "pending": "Open the link we sent to your inbox. Did not get it? Request a new one.",
       "resend": "Send a new link",
-      "resent": "If the account exists and is not verified yet, a new link is on its way."
+      "resent": "If the account exists and is not verified yet, a new link is on its way.",
+      "sentTo": "We sent a link to {email}. Open it to verify your address."
     },
     "recover": {
       "metaTitle": "Recover password",
@@ -273,6 +279,12 @@
         "body": "Someone asked to reset the password of this account. If it was not you, ignore this email.",
         "action": "Reset password"
       }
+    },
+    "onboarding": {
+      "metaTitle": "Choose your nickname",
+      "title": "Choose your nickname",
+      "body": "Your nickname is your public handle on HexaScore. It is unique and cannot be changed later.",
+      "submit": "Save nickname"
     }
   },
   "billing": {
