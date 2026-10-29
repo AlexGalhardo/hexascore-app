@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- **api:** `api_keys` table (sha256 hex at rest, legacy format), `hx_live_` key guard for `/api/v1` (fail closed: unknown, malformed or revoked key 401, store outage 503; app tokens refused) and the `/profile/api` key page (`Developer/ApiKeys`: create with a one-time `newKey` flash, revoke, at most 10 live keys).
+
 ## [0.4.0] - 2026-10-29
 
 ### Added
