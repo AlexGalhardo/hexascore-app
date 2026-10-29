@@ -1759,7 +1759,7 @@ Phase-specific conventions:
 
 #### P2.E.1 Migrations
 
-- [ ] **P2.E.1.1** Build `hexascore:predeploy`: advisory lock around the migration runner, then the concurrent index step, as the Railway pre-deploy command.
+- [x] **P2.E.1.1** Build `hexascore:predeploy`: advisory lock around the migration runner, then the concurrent index step, as the Railway pre-deploy command.
   - Files/modules: `app/console/predeploy.go`, `app/console/index_concurrently.go` (`db:index-concurrently`), `database/concurrent/` (`NNN_name.sql`), `tests/predeploy_test.go`, `docs/runbooks/migrations.md`
   - Refs: SDD 11 §7.2, FR-11-4, §8 (long index build), §11 issues 3–4; SDD 07 §5; ADR 0014; VF-017, VF-026; <https://vukem.dev/docs/database/migrations> "Running migrations"; <https://docs.railway.com/guides/pre-deploy-command>
   - Depends on: P2.D.6.1, P1.A.4.3
