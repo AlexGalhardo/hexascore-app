@@ -81,8 +81,8 @@ func TestDeletionScheduleAndCancel(t *testing.T) {
 	}
 
 	// The grace period lets the user back in to cancel.
-	c.PostJSON("/login", map[string]any{"email": "ana@example.com", "password": testPassword}).
-		AssertRedirect("/dashboard")
+	c.PostJSON("/login", map[string]any{"identifier": "ana@example.com", "password": testPassword}).
+		AssertRedirect("/onboarding") // verified, no nickname yet (P1.C.2.1b)
 	c.Get("/dashboard").AssertOK()
 	c.Delete("/profile/deletion").AssertRedirect("/dashboard")
 	c.Delete("/profile/deletion").AssertStatus(409)
@@ -224,6 +224,6 @@ AND anonymized_at IS NULL AND email = 'stripe@example.com'`
 		t.Fatalf("third run purged %v", done)
 	}
 
-	app.Client(t).PostJSON("/login", map[string]any{"email": "gone@example.com", "password": testPassword}).
+	app.Client(t).PostJSON("/login", map[string]any{"identifier": "gone@example.com", "password": testPassword}).
 		AssertStatus(422)
 }
