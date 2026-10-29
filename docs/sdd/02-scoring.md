@@ -31,7 +31,7 @@ Out of scope: written reviews, critic scores (D-09), feed/follows (D-06), collab
 
 ## 4. Non-functional requirements
 
-- NFR-02-1: Rating write p95 ≤ 60 ms server time on an item with 10,000 ratings. Verified: k6 on staging. [NOT VERIFIED] feasibility.
+- NFR-02-1: Rating write p95 ≤ 60 ms server time on an item with 10,000 ratings. Verified: k6 on staging (`qa/k6/rating-hot-item.js`). Feasibility measured in P1.D.2.2: the recompute statement alone is p95 28.6 ms on 5,000 ratings and 48.4 ms on 10,000 (local Postgres 18.6, `TestRecomputeLatencyHotItem`), so no covering index was added; the end-to-end write figure from staging is still to be recorded.
 - NFR-02-2: Read path uses denormalised columns only. Verified: query-count test per request.
 - NFR-02-3: Nightly recompute of 100,000 rated items ≤ 20 min, batches of 500 items, 100 ms pause (D-08 single process). Verified: timed staging run.
 - NFR-02-4: No lost updates with 50 concurrent writers on one item; no deadlocks across rating, status and nightly paths. Verified: Postgres test, 100 runs.
