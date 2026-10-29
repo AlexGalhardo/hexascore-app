@@ -226,7 +226,7 @@ func (h *Handler) keep(path string, status int64, dur time.Duration) bool {
 }
 
 func noisy(path string) bool {
-	for _, l := range []string{"/pt-BR/", "/es/", "/en/"} {
+	for _, l := range []string{"/pt-br/", "/es/"} {
 		if rest, ok := strings.CutPrefix(path, l); ok {
 			path = "/" + rest
 			break
