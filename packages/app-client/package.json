@@ -1,0 +1,8 @@
+{
+  "name": "@hexascore/app-client",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "cd ../.. && vukem codegen:client -prefix /app/v1 -o packages/app-client/src/api.ts"
+  }
+}

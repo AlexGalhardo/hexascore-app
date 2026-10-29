@@ -9,7 +9,10 @@
     "build:ssr": "vite build --ssr resources/js/ssr.tsx",
     "build:docs": "bun scripts/build-docs.ts",
     "lint": "biome ci resources/js packages",
-    "test": "vitest run"
+    "test": "vitest run",
+    "openapi:check": "bash scripts/openapi-check.sh",
+    "sdk:generate": "cd sdks/ts && bun run sdk:generate",
+    "sdk:generate:python": "uvx --from openapi-python-client==0.29.1 openapi-python-client generate --path openapi/api-v1.json --config sdks/python/config.yml --output-path sdks/python/hexascore --meta none --overwrite && bun -e \"await Bun.write('sdks/python/hexascore/py.typed', '')\""
   },
   "dependencies": {
     "@base-ui/react": "1.9.0",
