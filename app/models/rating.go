@@ -19,10 +19,9 @@ type Rating struct {
 	UpdatedAt time.Time
 }
 
-// PrimaryKey names user_id only to satisfy the ORM's single-column key; the
-// real key is (user_id, item_id), so never call orm.Update or orm.Delete on
-// Rating: write through QueryOf(...).Where(...) instead (VF-035).
-func (Rating) PrimaryKey() string { return "user_id" }
+// PrimaryKeys declares the composite key, so orm.Update and orm.Delete filter on
+// both columns and refuse a write matching several rows (VF-035).
+func (Rating) PrimaryKeys() []string { return []string{"user_id", "item_id"} }
 
 // RatingRead adds the generated overall for reads only.
 type RatingRead struct {
@@ -33,6 +32,3 @@ type RatingRead struct {
 
 // Table reads from ratings.
 func (RatingRead) Table() string { return "ratings" }
-
-// PrimaryKey mirrors Rating.
-func (RatingRead) PrimaryKey() string { return "user_id" }
