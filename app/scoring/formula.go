@@ -30,8 +30,10 @@ func (r Rating) Overall() float64 {
 
 // Params are the per-type formula inputs: m_t and the priors C_{t,k}.
 type Params struct {
-	M     float64
-	Prior [Categories]float64
+	// Version is the score_formula_versions row these inputs come from.
+	Version int
+	M       float64
+	Prior   [Categories]float64
 }
 
 // Confidence levels (SDD 02 §7.1); empty means fewer than 5 ratings.
