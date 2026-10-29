@@ -770,7 +770,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test ./internal/search/... -run 'TestParse|TestAudience'` → control chars stripped, length limits, ISBN detection, exclusion-only queries handled; `api` audience ranks only allowlisted-source text
   - Notes: engine swap stays behind this interface (D-16). Page beyond 200 results → 400 `invalid-query`.
 
-- [ ] **P1.E.2.2** Build the 60-query golden relevance set and make it pass, deciding the `unaccent` question with evidence.
+- [x] **P1.E.2.2** Build the 60-query golden relevance set and make it pass, deciding the `unaccent` question with evidence.
   - Files/modules: `internal/search/testdata/golden.yaml`, `internal/search/testdata/fixture.sql` (3k items), `internal/search/golden_test.go`, `docs/sdd/07-search.md` (decision on 07-2)
   - Refs: SDD 07 §9, §10; open-issues 07-2
   - Depends on: P1.E.2.1
@@ -781,7 +781,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.E.3 Search routes and load
 
-- [ ] **P1.E.3.1** Expose `/search`, `/search/suggest` and `POST /search/events` with caching, ETag/304, the legacy suggest redirect and 30-day event purge.
+- [x] **P1.E.3.1** Expose `/search`, `/search/suggest` and `POST /search/events` with caching, ETag/304, the legacy suggest redirect and 30-day event purge.
   - Files/modules: `app/http/controllers/search_controller.go`, `routes/web.go`, `internal/search/events.go`, `app/console/search_purge.go`, `tests/search_routes_test.go`
   - Refs: SDD 07 §6, §7.6, §7.8, §9; SDD 09 §6.2 (`Search/Index` SSR `noindex, follow`); open-issues 08-5; legacy `app/api/search/suggest/route.ts`
   - Depends on: P1.E.2.1, P1.A.4.1
