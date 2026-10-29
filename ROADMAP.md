@@ -312,7 +312,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.A.2 Tooling and conventions
 
-- [ ] **P1.A.2.1** Add Biome, Vitest, Testing Library, strict TypeScript, `.editorconfig` and `golangci-lint` with pinned versions.
+- [x] **P1.A.2.1** Add Biome, Vitest, Testing Library, strict TypeScript, `.editorconfig` and `golangci-lint` with pinned versions.
   - Files/modules: `biome.json`, `vitest.config.ts`, `tsconfig.json` (`strict`), `.editorconfig` (tabs, width 4; YAML with spaces), `.golangci.yml`, `package.json` scripts `lint`, `typecheck`, `test`
   - Refs: SDD 09 §7.10, §9; D-22; AGENTS.md "Rules"
   - Depends on: P1.A.1.1
@@ -375,7 +375,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `docker build -t hexascore:dev . && docker run --rm -p 3000:3000 hexascore:dev` → `curl -s localhost:3000/up` 200
   - Notes: `SSRConfig.Except`: `/admin`, `/profile`, `/me`, `/billing`, `/suggest`, `/suggestions` (SDD 09 §6.1). The OTLP exporter is P2.C; here the counter only needs to be observable in tests.
 
-- [ ] **P1.A.4.3** Add the advisory-locked migration command and the concurrent index script to the real app.
+- [x] **P1.A.4.3** Add the advisory-locked migration command and the concurrent index script to the real app.
   - Files/modules: `app/console/migrate_locked.go`, `app/console/migrate_locked_test.go`, `scripts/concurrent-index.sh`, `docs/runbooks/migrations.md`
   - Refs: SDD 11 §7.2; SDD 07 §7.10; ADR 0014; VF-017, VF-026
   - Depends on: P1.A.1.2
