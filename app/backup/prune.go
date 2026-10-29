@@ -45,6 +45,9 @@ func (r *Runner) Prune(ctx context.Context) (int, error) {
 				return deleted, fmt.Errorf("backup: prune %s: %w", k, err)
 			}
 
+			// Monthly copies and dumps older than the manifests have none; deleting a missing object is harmless.
+			_ = r.Disk.Delete(ctx, ManifestKey(k))
+
 			deleted++
 		}
 	}

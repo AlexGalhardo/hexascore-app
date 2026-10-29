@@ -346,5 +346,5 @@ Review in `docs/incidents/YYYY-MM-DD-<slug>.md` within 5 working days: UTC timel
 8. No documented re-seal command after key rotation `[NOT IN VUKEM DOCS]`; VF candidate. Owner: vukem. Closes when documented or the app job's test passes.
 9. No antivirus for uploads (D-08); accepted with §7.3 controls. Owner: owner. Revisit if uploads go beyond moderated images.
 10. HSTS `preload` deferred. Owner: owner. Revisit 2027-06.
-11. The restore runbook must re-apply deletions made after the dump. Owner: architect (SDD 11). Closes when the monthly drill covers it.
+11. The restore runbook must re-apply deletions made after the dump. Owner: architect (SDD 11). Closes when the monthly drill covers it. Status 2026-10-29: `backup:restore` replays deletions, schedules and cancellations from the running database (`TestRestoreReappliesDeletions`, P2.E.3.1, runbook `docs/runbooks/restore.md`); stays open until the first staging drill.
 12. Turnstile in production needs an ADR 0016 update and a policy line. Owner: owner. Closes on the ADR edit.
