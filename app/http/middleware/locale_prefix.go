@@ -33,7 +33,7 @@ func LocaleCookieRedirect(cfg LocalePrefixConfig) func(http.Handler) http.Handle
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if i18n.PathPrefix(r.Context()) != "" {
-				next.ServeHTTP(&localizedRedirects{ResponseWriter: w, r: r}, r)
+				next.ServeHTTP(&localizedRedirects{ResponseWriter: w, r: r, prefixes: cfg.Prefixes}, r)
 
 				return
 			}
@@ -78,13 +78,17 @@ func redirectPrefix(r *http.Request, cfg LocalePrefixConfig, byLocale map[string
 // in-site page path when the request came under a locale prefix.
 type localizedRedirects struct {
 	http.ResponseWriter
-	r *http.Request
+	r        *http.Request
+	prefixes map[string]string
 }
 
 func (l *localizedRedirects) WriteHeader(code int) {
 	if code >= 300 && code < 400 {
 		h := l.Header()
-		if loc := h.Get("Location"); strings.HasPrefix(loc, "/") && !strings.HasPrefix(loc, "//") && localizable(loc) {
+		if loc := h.Get(
+			"Location",
+		); strings.HasPrefix(loc, "/") && !strings.HasPrefix(loc, "//") &&
+			l.localizable(loc) {
 			h.Set("Location", i18n.LocalizePath(l.r.Context(), loc))
 		}
 	}
@@ -94,6 +98,15 @@ func (l *localizedRedirects) WriteHeader(code int) {
 
 func (l *localizedRedirects) Unwrap() http.ResponseWriter { return l.ResponseWriter }
 
-func localizable(loc string) bool {
+// localizable skips targets that already carry a locale prefix: web.Ctx.Back
+// returns the prefixed Referer path, and a locale switch targets another prefix.
+func (l *localizedRedirects) localizable(loc string) bool {
+	seg, _, _ := strings.Cut(strings.TrimPrefix(loc, "/"), "/")
+	seg, _, _ = strings.Cut(seg, "?")
+
+	if _, prefixed := l.prefixes[seg]; prefixed {
+		return false
+	}
+
 	return loc != "/up" && !strings.HasPrefix(loc, "/api/") && !strings.HasPrefix(loc, "/build/")
 }
