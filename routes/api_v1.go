@@ -114,7 +114,19 @@ func APIV1(r *router.Router, app *vukem.App) error {
 		}
 		vapi.Register(g, "GET /me/usage", read("getUsage"), items.GetUsage)
 		vapi.Register(g, "GET /books/{id}/editions", read("listEditions"), items.ListEditions)
-		vapi.Register(g, "GET /{type}/genres", read("listGenres"), items.ListGenres)
+		vapi.Register(g, "GET /entities/{id}/items", read("listEntityItems"), items.ListEntityItems)
+		vapi.Register(g, "GET /entities/{id}", read("getEntity"), items.GetEntity)
+		vapi.Register(g, "GET /people/{id}", read("getPerson"), items.GetPerson)
+		vapi.Register(g, "GET /organizations/{id}", read("getOrganization"), items.GetOrganization)
+		vapi.Register(g, "GET /franchises/{id}", read("getFranchise"), items.GetFranchise)
+		vapi.Register(g, "GET /platforms/{id}", read("getPlatform"), items.GetPlatform)
+		// Literal sections: "/{type}/genres" overlaps "/entities/{id}" and the ServeMux rejects the pair.
+		for section, op := range map[string]string{
+			"games": "listGameGenres", "movies": "listMovieGenres",
+			"series": "listSeriesGenres", "books": "listBookGenres",
+		} {
+			vapi.Register(g, "GET /"+section+"/genres", read(op), items.ListGenres(section))
+		}
 		vapi.Register(g, "GET /{type}/{id}", read("getItem"), items.GetItem)
 		vapi.Register(g, "GET /{type}", read("listItems"), items.ListItems)
 	})
