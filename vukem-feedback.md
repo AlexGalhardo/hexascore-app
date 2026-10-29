@@ -26,7 +26,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-015 | 2026-10-28 | medium | merged in main (PR #12), unreleased |
 | VF-016 | 2026-10-28 | low | open |
 | VF-017 | 2026-10-28 | medium | merged in main (PR #13), unreleased |
-| VF-018 | 2026-10-28 | medium | in_progress (framework) |
+| VF-018 | 2026-10-28 | medium | merged in main (PR #14), unreleased |
 | VF-019 | 2026-10-28 | medium | in_progress (framework) |
 | VF-020 | 2026-10-28 | low | open |
 | VF-021 | 2026-10-28 | low | withdrawn (2026-10-29: `HourlyAt` documented) |
@@ -208,7 +208,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-018: Queue priority and per-queue concurrency with the database driver inside `serve`
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #14, <https://github.com/AlexGalhardo/vukem/pull/14>), unreleased. Native: `QUEUE_LIMITS=ingest=2` (or `queue.WorkOptions.Limits`) caps a queue's running jobs per process in `serve` and `queue:work`; priority order and concurrency documented as driver-independent; pause = drop the queue from `QUEUE_NAMES` and restart (no runtime switch).
 - **Spike (2026-10-29)**: P0.F.6.1: workaround proven, an in-process per-family semaphore; the heavy family stayed at 2 under concurrency 8 (P0.F.6.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/scheduler` "Queue", "Scheduler" [heading not on page 2026-10-29]; `https://vukem.dev/docs/cli/reference-runtime` `serve`.
 - **Context**: HexaScore runs HTTP, scheduler and queue workers in one process under a US$30/month budget (brainstorming D-08). Ingestion jobs (SDD 06) must run at low concurrency (1–2) and lower priority than user-facing jobs (mail, recompute). The docs do not state whether named queues, priorities and per-queue worker counts apply to the database driver when workers run inside `serve`, nor how to cap CPU use of workers.
