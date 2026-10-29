@@ -60,3 +60,22 @@ func (m AccountExists) Envelope() mail.Envelope {
 
 // Content implements mail.Mailable.
 func (m AccountExists) Content() mail.Content { return mail.View("mail/account_exists", m) }
+
+// TwoFactorReset tells a user that an administrator cleared their
+// two-factor authentication after a manual identity check.
+type TwoFactorReset struct {
+	User      models.User
+	ResetLink string
+	Subject   string
+}
+
+// Envelope implements mail.Mailable.
+func (m TwoFactorReset) Envelope() mail.Envelope {
+	return mail.Envelope{
+		To:      []string{m.User.Email},
+		Subject: cmp.Or(m.Subject, "Two-factor authentication was reset"),
+	}
+}
+
+// Content implements mail.Mailable.
+func (m TwoFactorReset) Content() mail.Content { return mail.View("mail/two_factor_reset", m) }
