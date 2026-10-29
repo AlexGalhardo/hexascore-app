@@ -827,7 +827,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test -tags=integration ./tests -run 'TestSecurity_A01_ListOwnerOnly|TestListLimits|TestListTypeMismatch'` → pass; non-owner PATCH → 404.
   - Notes: one item type per list (legacy). `View` denies as not-found for private or hidden lists (SDD 14 §6.1). Writes accept `Idempotency-Key` on `/app/v1`.
 
-- [ ] **P1.F.1.2** Implement list items add, remove and versioned reorder, the list events and the merge subscriber (replaces `addToList`, `removeFromList`, `moveInList`).
+- [x] **P1.F.1.2** Implement list items add, remove and versioned reorder, the list events and the merge subscriber (replaces `addToList`, `removeFromList`, `moveInList`).
   - Files/modules: `app/library/list_items.go`, `app/library/reorder.go`, `app/library/reorder_test.go`, `app/library/listeners.go`, controllers and routes for `PUT|DELETE /lists/{id}/items/{itemId}`, `PUT /lists/{id}/order`
   - Refs: SDD 14 §6.2, §6.3, §6.5, §7.1, §9, §10; SDD 01 §7.5
   - Depends on: P1.F.1.1, P1.B.3.2
