@@ -98,6 +98,13 @@ func (h *Handlers) Register(c *web.Ctx) error {
 		return err
 	}
 
+	// A filled honeypot gets the normal answer and nothing is stored.
+	if in.Website != "" {
+		web.SecurityEvent(c.Request(), "signup.honeypot")
+
+		return c.Redirect("/signup/check-email")
+	}
+
 	if _, err := h.a.Register(c.Context(), in); err != nil {
 		return err
 	}

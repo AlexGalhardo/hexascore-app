@@ -161,7 +161,8 @@ func TestSecurity_A07_SignupIsEnumerationSafe(t *testing.T) {
 		before := mailJobs()
 
 		c := app.Client(t).Inertia("").WithHeader("Referer", "/signup")
-		c.PostJSON("/signup", signUpForm("Mallory", tc.email, otherPassword)).
+		c.WithHeader(middlewareHeader, solved(t, c, "signup")).
+			PostJSON("/signup", signUpForm("Mallory", tc.email, otherPassword)).
 			AssertRedirect("/signup/check-email")
 		c.Get("/signup/check-email").AssertInertia("Auth/CheckEmail").PropEquals("auth.user", nil)
 
@@ -211,7 +212,8 @@ func TestSecurity_A04_SignupThrottle(t *testing.T) {
 		c := app.Client(t).Inertia("")
 
 		for i := range 30 {
-			res := c.PostJSON("/signup", signUpForm("Mallory", email(i), otherPassword))
+			res := c.WithHeader(middlewareHeader, solved(t, c, "signup")).
+				PostJSON("/signup", signUpForm("Mallory", email(i), otherPassword))
 			if res.Status() == http.StatusTooManyRequests {
 				return i
 			}
