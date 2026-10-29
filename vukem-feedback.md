@@ -9,7 +9,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 | id | date | severity | status |
 | --- | --- | --- | --- |
-| VF-001 | 2026-10-28 | high | in_progress (framework) |
+| VF-001 | 2026-10-28 | high | in_progress (framework), PR #43 core `auth/webauthn` (merge pending); scaffold next |
 | VF-002 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#7](https://github.com/AlexGalhardo/vukem/pull/7)) |
 | VF-003 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#21](https://github.com/AlexGalhardo/vukem/pull/21)) |
 | VF-004 | 2026-10-28 | low | open |

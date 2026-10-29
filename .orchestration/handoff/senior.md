@@ -1,4 +1,5 @@
-# senior handoff (twenty-fifth session)
-Delivered (pushed, reports + 1-REV queued): FIX-highlight-score-scale, P2.D.5.1, P1.H.4.1.
-Pitfalls: TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable; Git Bash mangles /api/v1 args (set MSYS_NO_PATHCONV=1); python writes CRLF on Windows (use sed -i 's/\r$//'); openapi:export needs APP_KEY + DATABASE_URL env; heredocs with apostrophes break Bash; run `bunx biome check --write resources/js` before bun run lint.
-Open: P1.H.4.1 Python tests not in CI; osv-scanner/CI jobs never run live.
+# senior handoff (session 26)
+Delivered: ADOPT-vukem-v0.33.0 (agent/senior/ADOPT-vukem-v0.33.0, pushed; report + 1-REV queued). Deferred adoptions queued: 3-ADOPT-VF-024/035/040/046.
+Worktree wt/senior is on that branch, clean. P1.I.2.1 WIP (docker-compose.yml STRIPE_* placeholders for e2e) is in `git stash@{0}` (branch agent/senior/P1.I.2.1 / draft PR #54); resume: switch to that branch, `git stash pop`.
+Next in queue: 2-P1.H.4.1b, then 3-P1.I.2.1.
+Pitfalls: do not run two golangci-lint at once ("parallel golangci-lint is running"); full integration suite takes ~5 min, run it in background with run_in_background and wait on its output file with an until-loop; sqlclosecheck/rowserrcheck dislike rows captured in closures (use a helper taking rows). Errors with code: errs.NewKey(...).WithExtension("code", X); APIEdge sets problem type from code.

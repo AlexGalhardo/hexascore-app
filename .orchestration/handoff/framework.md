@@ -1,41 +1,28 @@
-# Framework engineer handoff (2026-10-29, session 5)
+# Framework engineer handoff (2026-10-29, session 7)
 
-Reason: HANDOFF after 7 VFs (brief "Limits", context budget).
+Reason: HANDOFF after VF-001 part 1 (large feature, context budget).
 
 ## Environment
 
-- Worktree `C:\dev\hexascore-app\wt\framework` (leave detached at origin/main when idle). `task` v3.54.0.
-- Gate by hand (parallel golangci-lint runs from other agents break `task ci`): `golangci-lint run --allow-parallel-runners ./... && npx --yes markdownlint-cli2 <changed md> && task vet && task mod:check && task snippets:check && task test && task api:check`, redirected to a log in a background Bash call, `echo "exit=$?"`.
-- Windows flake: `task test` sometimes fails `internal/testutil [build failed]` with "Acesso negado" on the test binary; re-run `task test` (not a real failure).
+- Worktree `C:\dev\hexascore-app\wt\framework` (currently on `feat/vf-001-webauthn`; switch to a new branch from `origin/main` for the next work). `task` v3.54.0.
+- Gate by hand: `golangci-lint run --allow-parallel-runners ./... && task vet && task mod:check && task test && task api:check`, plus `go run ./internal/tools/snippetcheck` and `npx --yes markdownlint-cli2 <changed md>` for docs. Output to a scratchpad log, `echo "exit=$?"`.
 - Site MDX check: PowerShell junction `site\node_modules` -> `C:\dev\hexascore-app\vukem\site\node_modules`, `node scripts/check-mdx.ts <files>`, then `(Get-Item node_modules).Delete()`.
-- Scaffold changes: also `go test ./internal/cli -count=1` (full, ~80s, includes end-to-end projects).
-- `web.Problem` must not get a `MarshalJSON` method: the OpenAPI generator documents it from its struct fields (goldens break).
-- Python edit scripts: write them with the Write tool and run `python <file>`; heredocs mangle `\n` and backticks.
+- Windows flake: `task test` may fail `internal/testutil [build failed]` ("Acesso negado"); re-run.
+- Cookie sessions are JSON: a `[]byte` put in a session comes back as a base64 string. That is why `webauthn.NewChallenge()` returns a string.
+- Python edit scripts: write with the Write tool, run `python <file>`; a failing replace in a multi-file script leaves earlier files already written.
 
-## BLOCKER: merges and releases (FR-002 in `docs/orchestration/QUESTIONS.md`)
+## Merges (FR-003)
 
-`gh pr merge <n> --squash` is denied by the auto-mode classifier ("Merge Without Review"), and the release tool was denied before (FR-001, "Create Public Surface"). Nothing merged or released this session; no workaround attempted. v0.33.0 stays unreleased until the owner adds permissions or merges/releases by hand. Do not retry these commands without an `Answer:` under FR-002.
+Owner answered "merge your own green PRs" in chat, but `gh pr merge 39 --squash` was still denied by the auto-mode classifier this session; noted under FR-003, not retried. Queue for an owner merge, in order: #39, #36, #37, #38, #40, #41, #42, #43. No release or tag until the orchestrator relays an owner request.
 
-## Open PRs (all mine, waiting for merge)
+## This session
 
-| VF | PR | Branch | CI |
-| --- | --- | --- | --- |
-| VF-045 storage `HandlerWith` cache headers | #29 | feat/vf-045-storage-cache-headers | green |
-| VF-043 gzip in browser starters | #30 | feat/vf-043-scaffold-gzip | green |
-| VF-032 `es` auth + built-in catalogs | #31 | feat/vf-032-auth-es-catalog | green |
-| VF-029 `export.EncodeCSV(io.Writer, ...)` | #32 | feat/vf-029-export-writer | green |
-| VF-016 + VF-048 `errs.HTTPError.WithExtension` | #33 | feat/vf-016-problem-extensions | green |
-| VF-036 plural-acronym naming documented | #34 | docs/vf-036-orm-acronym-naming | green |
+- PR #42 `fix(vukem): stop reporting a finished health check as busy`: `runHealthCheck` sent the result before clearing `running`, so a back-to-back probe got a false 503. Caused the macOS `TestWithHealthCheck` failure on #38 (failed job re-run). Regression test `TestCheckHealthBackToBackNeverBusy`.
+- VF-001 part 1, PR #43: stdlib-only `auth/webauthn` (see `$ORCH/reports/VF-001.md` for the app-facing API). Docs: `docs/authentication.md` "Passkeys", `docs/security.md` row (post-1.0 line removed), site `security/passkeys.mdx`, nav, fuzz.yml targets.
 
-After each merge the next PR goes BEHIND: `gh pr update-branch <n>` and wait for CI. Then set each VF to `merged in main (PR #n), unreleased`.
+## Next
 
-## Release plan once unblocked
-
-v0.33.0 (minor, non-breaking): everything since v0.32.0 (VF-002/003/005/008/015/017/018/019/024/025/026/027/030/031/035/037/038/040/041/046 already on main, plus the PRs above). Then write `$ORCH/queue/senior/1-ADOPT-vukem-v0.33.0.md` targeting `C:\dev\hexascore-app\hexascore-spike` (Phase 0). Adoption items per VF are in `$ORCH/reports/VF-*.md` ("Adoption" lines) and the previous handoff list (VF-035, VF-037, VF-046, VF-041).
-
-## Next VFs
-
-- Remaining open (all low): VF-004, 006, 007, 009, 010, 011, 012, 013, 014, 020, 022, 023, 033, 034, 039 (partial: `signed.Token`, keyset cursor), 042 (partial: OpenAPI Problem extensions, per-group error handler, bodyless 202), 044, 047.
-- VF-011 (notifications package) and VF-014 (envelope key casing option) are API-design work: propose a design in QUESTIONS.md before coding.
-- VF-047: composite-key rows in admin still open; VF-009 `generated` ORM tag still open.
-- Do not touch vukem PR #6 (owner's).
+1. VF-001 part 2 (task `$ORCH/active/framework/1-VF-001.md` stays claimed): `install:auth --passkeys` scaffold. Model it on the `--2fa` scaffold in `internal/cli` (look for the 2FA templates and `TestSecurity_A07_TwoFactorScaffoldDefaults`): `passkey_credentials` table (id bytes unique, user_id, public_key, algorithm, sign_count, user_handle, backup flags, transports, name, created_at, last_used_at) and a `users.passkey_handle` column; routes for register options/verify, login options/verify, list and delete (delete needs the current password); challenge in the session, pulled before verifying; throttle like login; a passkey can only be added when the account has a password (recovery path); generated tests for replayed challenge and cross-user credential. Run `go test ./internal/cli -count=1` (~80 s) and the end-to-end project tests. Then set VF-001 `merged in main` when merged.
+2. Then the queued task `$ORCH/queue/framework/2-VF-052.md` (Cloudflare `contrib/cloudflare`, high). New deps allowed there only with an exact pinned stable version recorded in the PR and docs.
+3. VF-022 triage note: trace/log correlation already exists (`otel.LogHandler` puts `trace_id` on the request log line, `TestProvider_CorrelatesRequestLogs`); the request logger does not log a user id. Remaining real gap: an option to truncate `ip` (/24, /48) in `middleware.Logger`. Answer VF-022 with that and implement only IP truncation.
+4. FD-011 / FD-014 still have no owner answer: do not code them.

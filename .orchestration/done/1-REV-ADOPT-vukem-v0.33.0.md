@@ -1,0 +1,2 @@
+Task ADOPT-vukem-v0.33.0, branch agent/senior/ADOPT-vukem-v0.33.0, repo app, report reports/ADOPT-vukem-v0.33.0.md, rodada: 0.
+Re-run: go build ./...; golangci-lint run --build-tags integration ./...; TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable go test -tags integration ./...; go mod verify. Check problem type/code for 409/422/429 API errors (tests/ ratings, lists) and export ZIP CSV.
