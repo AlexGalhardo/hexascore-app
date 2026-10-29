@@ -1278,6 +1278,11 @@
     "showing": "{count} of {total}",
     "edition": "Edition: {title}",
     "clearEdition": "Clear edition",
+    "chooseEdition": "Choose edition",
+    "pickEdition": "Edition",
+    "saveEdition": "Save edition",
+    "editionsError": "Could not load editions.",
+    "noEditions": "No editions available.",
     "seeAll": "See all",
     "score": "Your score: {stars}"
   },

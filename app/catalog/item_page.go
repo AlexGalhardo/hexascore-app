@@ -8,6 +8,8 @@ import (
 	"math"
 	"strconv"
 	"time"
+
+	"github.com/AlexGalhardo/vukem/uuid"
 )
 
 // EditionPageSize is how many editions the item page lists inline.
@@ -284,6 +286,28 @@ ORDER BY e.is_brazilian DESC, e.publication_year DESC NULLS LAST, e.id LIMIT `+s
 	}
 
 	return out, count, rows.Err()
+}
+
+// LoadBookEditions lists the editions of the public book workID for the edition picker (site audience);
+// ErrItemNotFound when the work is not a public book.
+func LoadBookEditions(ctx context.Context, db Querier, workID string) ([]Edition, error) {
+	if _, err := uuid.Parse(workID); err != nil {
+		return nil, ErrItemNotFound
+	}
+
+	var exists bool
+	if err := db.QueryRowContext(ctx,
+		`SELECT EXISTS (SELECT 1 FROM items WHERE id = $1 AND type = 'book' AND visibility = 'public')`, workID).
+		Scan(&exists); err != nil {
+		return nil, fmt.Errorf("check book: %w", err)
+	}
+	if !exists {
+		return nil, ErrItemNotFound
+	}
+
+	out, _, err := loadEditions(ctx, db, workID)
+
+	return out, err
 }
 
 // LoadEdition reads one edition of the book work; ErrItemNotFound when the

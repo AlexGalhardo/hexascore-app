@@ -1,6 +1,7 @@
 import { Link, router, usePage } from "@inertiajs/react";
 import type { FormEvent } from "react";
 
+import EditionPicker from "../../components/library/EditionPicker";
 import ItemLink, { type ItemRef } from "../../components/library/ItemLink";
 import Seo from "../../components/Seo";
 import { localized } from "../../lib/route";
@@ -148,6 +149,9 @@ export default function Index({ counts, groups, filters }: Props) {
 										<span className="text-sm">
 											{t("library.score", { stars: item.stars })}
 										</span>
+									)}
+									{item.type === "book" && !item.edition && (
+										<EditionPicker itemId={item.id} />
 									)}
 									{item.edition && (
 										<span className="text-sm text-muted">
