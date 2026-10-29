@@ -2,7 +2,7 @@
 
 Long-term log of bugs, problems, DX improvements and feedback found while building HexaScore on vukem (`github.com/AlexGalhardo/vukem`). One entry per finding; never delete, only update `status`. Entries are written for the vukem maintainers: reproducible, with the vukem version and the doc or file that was consulted.
 
-Documentation reference (owner rule, 2026-10-28): every entry cites the public docs site https://vukem.dev/docs (page URL + heading). The local checkout `vukem/docs/*.md` is cited only when the site has no page for the fact, tagged `[SITE PAGE MISSING]`.
+Documentation reference (owner rule, 2026-10-28): every entry cites the public docs site <https://vukem.dev/docs> (page URL + heading). The local checkout `vukem/docs/*.md` is cited only when the site has no page for the fact, tagged `[SITE PAGE MISSING]`.
 
 Severity: `critical` (blocks a roadmap task), `high` (workaround costs more than a day), `medium` (workaround under a day), `low` (DX or docs).
 Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdrawn`.
@@ -228,7 +228,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-023: Site documentation gaps found while writing the observability spec
 
 - **Date**: 2026-10-28. **Severity**: low. **Status**: open.
-- **vukem version**: v0.32.0. **Docs consulted**: https://vukem.dev/docs (full page map) versus local `vukem/docs/*.md`.
+- **vukem version**: v0.32.0. **Docs consulted**: <https://vukem.dev/docs> (full page map) versus local `vukem/docs/*.md`.
 - **Context**: facts that exist only in the repository docs, tagged `[SITE PAGE MISSING]` in the HexaScore SDDs: health-check API (`AddHealthCheckTimeout`, `ReadyHandler`, `ok`/`fail` output format), route name and user id fields in request logs, `logging.NewDedup` and `WithLogger` behaviour with a custom logger, the `TestSecurity_A09_*`/`A10_*` test names, tooling/release process, stability policy, performance baselines, and a metric hook for scheduled tasks.
 - **Workaround**: cite the local file.
 - **Request**: publish those sections on vukem.dev (an "Operations" page for health checks and logging; "Releases and stability" page).

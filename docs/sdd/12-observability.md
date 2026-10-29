@@ -29,33 +29,33 @@ Out of scope:
 - an automated status page;
 - log shipping, since Railway "does not have a log drain setting" [R-logs].
 
-Source keys, all accessed 2026-10-28. vukem facts cite https://vukem.dev/docs. A fact found only in `C:\dev\hexascore-app\vukem\docs\` is tagged [SITE PAGE MISSING].
+Source keys, all accessed 2026-10-28. vukem facts cite <https://vukem.dev/docs>. A fact found only in `C:\dev\hexascore-app\vukem\docs\` is tagged [SITE PAGE MISSING].
 
 | Key | URL |
 | --- | --- |
-| V-otel | https://vukem.dev/docs/digging-deeper/opentelemetry |
-| V-tg | https://vukem.dev/docs/digging-deeper/telegram-logging |
-| V-mw | https://vukem.dev/docs/basics/middleware ("Built-in middleware") |
-| V-conf | https://vukem.dev/docs/configuration ("Core settings", "APP_KEY") |
-| V-sec | https://vukem.dev/docs/security/overview |
-| V-enc | https://vukem.dev/docs/security/encryption ("Key rotation", "After a leak") |
-| V-db | https://vukem.dev/docs/database/overview |
-| V-queue | https://vukem.dev/docs/digging-deeper/queue |
-| V-sched | https://vukem.dev/docs/digging-deeper/scheduler |
-| V-dev | https://vukem.dev/docs/digging-deeper/devtools ("How it collects") |
-| V-route | https://vukem.dev/docs/basics/routing ("Mounting plain handlers") |
-| V-rt | https://vukem.dev/docs/cli/reference-runtime |
-| V-inertia | https://vukem.dev/docs/frontend/inertia ("Server-side rendering") |
-| V-rail | https://vukem.dev/docs/deployment/docker-and-railway |
+| V-otel | <https://vukem.dev/docs/digging-deeper/opentelemetry> |
+| V-tg | <https://vukem.dev/docs/digging-deeper/telegram-logging> |
+| V-mw | <https://vukem.dev/docs/basics/middleware> ("Built-in middleware") |
+| V-conf | <https://vukem.dev/docs/configuration> ("Core settings", "APP_KEY") |
+| V-sec | <https://vukem.dev/docs/security/overview> |
+| V-enc | <https://vukem.dev/docs/security/encryption> ("Key rotation", "After a leak") |
+| V-db | <https://vukem.dev/docs/database/overview> |
+| V-queue | <https://vukem.dev/docs/digging-deeper/queue> |
+| V-sched | <https://vukem.dev/docs/digging-deeper/scheduler> |
+| V-dev | <https://vukem.dev/docs/digging-deeper/devtools> ("How it collects") |
+| V-route | <https://vukem.dev/docs/basics/routing> ("Mounting plain handlers") |
+| V-rt | <https://vukem.dev/docs/cli/reference-runtime> |
+| V-inertia | <https://vukem.dev/docs/frontend/inertia> ("Server-side rendering") |
+| V-rail | <https://vukem.dev/docs/deployment/docker-and-railway> |
 | L-sub | `vukem/docs/subsystems.md` "Logging & observability" [SITE PAGE MISSING] |
 | L-sec | `vukem/docs/security.md` A09/A10 [SITE PAGE MISSING] |
-| R-logs | https://docs.railway.com/observability/logs |
-| R-trace | https://docs.railway.com/observability/tracing |
-| R-alerts | https://docs.railway.com/guides/alerts-crashes-failed-deploys |
-| R-cost | https://docs.railway.com/pricing/cost-control |
-| R-roll | https://docs.railway.com/guides/roll-back-bad-deploy |
-| R-inc | https://docs.railway.com/guides/debug-production-incident |
-| G-price | https://grafana.com/pricing/ |
+| R-logs | <https://docs.railway.com/observability/logs> |
+| R-trace | <https://docs.railway.com/observability/tracing> |
+| R-alerts | <https://docs.railway.com/guides/alerts-crashes-failed-deploys> |
+| R-cost | <https://docs.railway.com/pricing/cost-control> |
+| R-roll | <https://docs.railway.com/guides/roll-back-bad-deploy> |
+| R-inc | <https://docs.railway.com/guides/debug-production-incident> |
+| G-price | <https://grafana.com/pricing/> |
 
 ## 3. Functional requirements
 
