@@ -17,6 +17,7 @@ func All() []func(r *router.Router, app *vukem.App) error {
 		Ratings,
 		Status,
 		Lists,
+		Notifications,
 		AppAPI,
 	}
 }

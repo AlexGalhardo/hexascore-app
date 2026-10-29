@@ -2,6 +2,7 @@ package routes
 
 import (
 	"cmp"
+	"context"
 	"strings"
 	"time"
 
@@ -18,6 +19,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
+	"github.com/AlexGalhardo/hexascore-app/app/notifications"
 	"github.com/AlexGalhardo/hexascore-app/app/seo"
 	"github.com/AlexGalhardo/hexascore-app/internal/search"
 	"github.com/AlexGalhardo/hexascore-app/resources"
@@ -98,6 +100,7 @@ func Web(r *router.Router, app *vukem.App) error {
 			"ratings.",
 			"search.",
 			"social.",
+			"notifications.",
 		),
 		appmiddleware.ShareProps(appmiddleware.ShareConfig{
 			AppName: app.Config.Name,
@@ -106,6 +109,12 @@ func Web(r *router.Router, app *vukem.App) error {
 		}),
 		appmiddleware.NotBanned(acc.Web.User, acc.ProblemBase, app.Now),
 	)
+	// user_notifications exists only on Postgres (VF-033).
+	if db.Dialect().Name() == "postgres" {
+		r.Use(appmiddleware.UnreadNotifications(acc.Web.User, func(ctx context.Context, id int64) (int, error) {
+			return notifications.Unread(ctx, db, id)
+		}))
+	}
 
 	r.Get("/help/score", controllers.HelpScore).Name("help.score")
 	r.Get("/", controllers.Home(app)).Name("home")
