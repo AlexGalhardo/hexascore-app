@@ -24,11 +24,39 @@ func TestErrorPage(t *testing.T) {
 
 	app := vukemtest.New(t, bootstrap.New)
 
-	// Errors on Inertia visits render resources/js/pages/Error; full page
-	// loads keep the HTML status page.
+	// Full page loads render it too (catch-all route).
 	app.Client(t).Inertia("").Get("/no-such-page").AssertStatus(404).
 		AssertInertia("Error").
 		PropEquals("status", 404).
 		PropEquals("message", "Not Found")
-	app.Client(t).Get("/no-such-page").AssertStatus(404).AssertHeader("X-Inertia", "")
+}
+
+func TestShell_SEO(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(
+		t,
+		bootstrap.New,
+		vukemtest.Options{Env: map[string]string{"APP_URL": "https://example.test/"}},
+	)
+
+	app.Client(t).Get("/pt-br/").AssertOK().AssertInertia("Home").
+		PropEquals("seo.canonical", "https://example.test/pt-br/").
+		PropEquals("seo.alternates.en", "https://example.test/").
+		PropEquals("seo.alternates.es", "https://example.test/es/").
+		PropEquals("seo.alternates.x-default", "https://example.test/").
+		PropEquals("seo.robots", "index,follow")
+	app.Client(t).Get("/login").AssertOK().AssertInertia("Auth/Login").PropEquals("seo.robots", "noindex,nofollow")
+}
+
+func TestErrorPage_FullLoad(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+
+	app.Client(t).Get("/no-such-page").AssertStatus(404).AssertInertia("Error").
+		PropEquals("status", 404).
+		HasProp("seo")
+	app.Client(t).Get("/api/no-such").AssertStatus(404)
+	app.Client(t).Get("/pt-br/no-such-page").AssertStatus(404).AssertInertia("Error")
 }

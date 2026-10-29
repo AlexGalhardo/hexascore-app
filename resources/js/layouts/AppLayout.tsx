@@ -1,56 +1,50 @@
-import { Link, usePage } from "@inertiajs/react";
-import type { ReactNode } from "react";
-import { demoInstalled, demoLink } from "../demo";
+import { Link, router, usePage } from "@inertiajs/react";
+import { type ReactNode, useEffect, useState } from "react";
+import Flash from "../components/Flash";
+import Footer from "../components/Footer";
+import Nav from "../components/Nav";
 import { useT } from "../lib/useT";
 import type { SharedProps } from "../types";
 
-const link = "text-indigo-600 hover:underline dark:text-indigo-400";
+const link = "text-accent-game hover:underline";
 
 export default function AppLayout({ children }: { children: ReactNode }) {
 	const t = useT();
 	const page = usePage<SharedProps>();
 	const { auth } = page.props;
+	const [announcement, setAnnouncement] = useState("");
+
+	// After a visit (not a partial reload) focus moves to the new <h1> and the
+	// title is announced politely (SDD 09 §7.6).
+	useEffect(
+		() =>
+			router.on("navigate", () => {
+				const h1 = document.querySelector<HTMLElement>("h1");
+				h1?.setAttribute("tabindex", "-1");
+				h1?.focus();
+				setAnnouncement(document.title);
+			}),
+		[],
+	);
+
 	const scheduled = auth?.user?.deletion_scheduled_at;
 	const deletionDate = scheduled
 		? new Date(new Date(scheduled).getTime() + 30 * 86_400_000).toLocaleDateString(
-				page.props.locale as string,
+				page.props.locale,
 			)
 		: null;
-	const message = page.flash?.success ?? page.flash?.status;
+	const flash = page.flash as { status?: string; success?: string; error?: string } | undefined;
+	const success = flash?.success ?? flash?.status;
 
 	return (
 		<>
-			<header className="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
-				<Link href="/" className="font-bold">
-					{page.props.appName}
-				</Link>
-				<nav className="flex items-center gap-4">
-					{demoInstalled && (
-						<Link href={demoLink.href} className={link}>
-							{demoLink.label}
-						</Link>
-					)}
-					{auth?.user ? (
-						<>
-							<Link href="/dashboard" className={link}>
-								{auth.user.name}
-							</Link>
-							<Link href="/logout" method="post" as="button" className={link}>
-								Log out
-							</Link>
-						</>
-					) : auth ? (
-						<>
-							<Link href="/login" className={link}>
-								Log in
-							</Link>
-							<Link href="/signup" className={link}>
-								Register
-							</Link>
-						</>
-					) : null}
-				</nav>
-			</header>
+			<a
+				href="#main"
+				className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[80] focus:rounded-md focus:bg-bg focus:px-4 focus:py-2"
+			>
+				{t("nav.skip")}
+			</a>
+			<Nav />
 			{deletionDate && (
 				<div
 					role="alert"
@@ -62,17 +56,15 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 					</Link>
 				</div>
 			)}
-			<main className="mx-auto max-w-2xl p-4">
-				{typeof message === "string" && (
-					<p
-						role="status"
-						className="mb-4 rounded-md bg-indigo-50 px-4 py-3 text-indigo-900 dark:bg-indigo-950 dark:text-indigo-100"
-					>
-						{message}
-					</p>
-				)}
+			<main id="main" className="mx-auto max-w-6xl p-4">
 				{children}
 			</main>
+			<Footer />
+			{typeof success === "string" && <Flash message={success} kind="status" />}
+			{typeof flash?.error === "string" && <Flash message={flash.error} kind="error" />}
+			<div aria-live="polite" role="status" className="sr-only">
+				{announcement}
+			</div>
 		</>
 	);
 }
