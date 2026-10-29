@@ -4,13 +4,11 @@ Owner documents: SDD 11 §7.2, SDD 07 §7.10, ADR 0014. Migrations are forward-o
 
 ## Run migrations
 
-`migrate:locked` is `migrate` under a session-level Postgres advisory lock (`pg_advisory_lock(hashtext('hexascore:migrate'))`). vukem's runner takes no lock itself (VF-026), so two overlapping runners would race; with the lock the second waits, then prints `Nothing to migrate.`. Both exit 0.
+`migrate` takes a session-level advisory lock (vukem v0.33.0, VF-017/VF-026/VF-040), so two overlapping runners serialise: the second waits, then prints `Nothing to migrate.`. PostgreSQL, MySQL and SQLite are covered by the runner; a crashed runner releases the lock with its connection.
 
 ```sh
-./bin/app migrate:locked
+./bin/app migrate
 ```
-
-The lock lives on a dedicated connection that is closed after the run, so a crashed runner never leaves the lock held. PostgreSQL only; any other dialect is an error.
 
 ## Pre-deploy
 
