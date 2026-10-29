@@ -1230,6 +1230,8 @@ Goal: Railway production and staging, CI/CD, observability, security hardening, 
 
 Releases (ADR 0013, one minor per task group that ships to staging; Phase 1 ends at `v0.9.0`): P2.A `v0.10.0`, P2.B `v0.11.0`, P2.C `v0.12.0`, P2.D `v0.13.0`, P2.E `v0.14.0`, P2.F `v0.15.0`, P2.G closes with `v1.0.0` after the cutover. The ROADMAP phase map still shows one `v1.0.0` for the whole phase: keep it, it is the closing tag. Every release microtask uses the procedure in the Phase 1 header (SDD 11 §7.1); from P2.B on the tag also deploys production through `release.yml`.
 
+Owner rules of 2026-10-29 that override this phase's text: there is no staging environment for now (Railway project `hexascore` has only `production`, deployed from `main` on every push); where a microtask says staging, run it against production or locally, and treat the production cutover (P2.G), real data (P2.F), Stripe live and Play Store as owner-gated (`questions-to-dev.md`).
+
 Phase-specific conventions:
 
 - Dependencies on Phase 1 name microtask IDs from `docs/roadmap/phase-0-1.md`. P2.A needs only the bootstrap (P1.A); P2.F and P2.G need the parity gate (P1.I).
