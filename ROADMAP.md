@@ -657,7 +657,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.D.2 Write paths
 
-- [ ] **P1.D.2.1** Implement the rating write path on web and `/app/v1` with row locking, the release gate and the 5-rating threshold (replaces `saveRating`, `deleteRating`).
+- [x] **P1.D.2.1** Implement the rating write path on web and `/app/v1` with row locking, the release gate and the 5-rating threshold (replaces `saveRating`, `deleteRating`).
   - Files/modules: `app/scoring/write.go`, `app/http/controllers/ratings_controller.go`, `routes/web.go`, `routes/app_api.go`, `tests/scoring/*_test.go`, `database/seeders/demo_catalog.go` (2,000 ratings)
   - Refs: SDD 02 §6, §7.2, §7.3, §7.4, §9; SDD 09 §6.2 (web mutation routes); A-01; legacy `actions/ratings.ts`, `lib/ratings.ts`
   - Depends on: P1.D.1.2
