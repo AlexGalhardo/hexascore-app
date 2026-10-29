@@ -14,7 +14,9 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/database/migrations"
 )
 
-const searchMigrations = 9
+// firstSearchMigration is the oldest search migration; the rollback undoes it
+// and every later one, so new migrations appended after it keep the test valid.
+const firstSearchMigration = "20261029140000"
 
 func scalar(t *testing.T, db *database.DB, query string) string {
 	t.Helper()
@@ -59,8 +61,15 @@ func TestMigrationsUpDown(t *testing.T) {
 			break
 		}
 
-		rolled, err := m.Rollback(ctx, searchMigrations)
-		if err != nil || len(rolled) != searchMigrations {
+		steps := 0
+		for _, mig := range migrations.All() {
+			if mig.ID >= firstSearchMigration {
+				steps++
+			}
+		}
+
+		rolled, err := m.Rollback(ctx, steps)
+		if err != nil || len(rolled) != steps {
 			t.Fatalf("rollback: %v, %v", rolled, err)
 		}
 
