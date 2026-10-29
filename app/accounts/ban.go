@@ -47,9 +47,22 @@ func (a *Accounts) Clock() time.Time { return a.now() }
 // Ban bans userID on behalf of actorID: it stamps the ban, ends sessions and
 // tokens, writes the account event and, after commit, dispatches UserBanned.
 // reason may be empty; expires nil means permanent. The row is re-read under
-// lock inside the transaction because the panel's BeforeSave has no previous
-// values (VF-010).
+// lock inside the transaction.
 func (a *Accounts) Ban(ctx context.Context, actorID, userID int64, reason string, expires *time.Time) error {
+	return a.DB.Tx(ctx, func(tx *database.Tx) error {
+		return a.BanTx(ctx, tx, actorID, userID, reason, expires)
+	})
+}
+
+// BanTx is Ban inside the caller's transaction (the admin panel's AfterSave
+// hook); the post-commit work runs when that transaction commits.
+func (a *Accounts) BanTx(
+	ctx context.Context,
+	tx *database.Tx,
+	actorID, userID int64,
+	reason string,
+	expires *time.Time,
+) error {
 	reason = strings.TrimSpace(reason)
 	now := a.now().UTC()
 
@@ -62,82 +75,85 @@ func (a *Accounts) Ban(ctx context.Context, actorID, userID int64, reason string
 		return ErrExpiryPast
 	}
 
-	return a.DB.Tx(ctx, func(tx *database.Tx) error {
-		u, err := orm.QueryOf[models.User](tx).Where("id", userID).LockForUpdate().First(ctx)
-		if err != nil {
-			return err
-		}
+	u, err := orm.QueryOf[models.User](tx).Where("id", userID).LockForUpdate().First(ctx)
+	if err != nil {
+		return err
+	}
 
-		switch {
-		case u.IsBanned(now):
-			return ErrAlreadyBanned
-		case u.Role == models.RoleAdmin:
-			return ErrBanAdmin
-		}
+	switch {
+	case u.IsBanned(now):
+		return ErrAlreadyBanned
+	case u.Role == models.RoleAdmin:
+		return ErrBanAdmin
+	}
 
-		set := orm.Set{"banned_at": now, "ban_reason": nil, "ban_expires_at": nil}
-		if reason != "" {
-			set["ban_reason"] = reason
-		}
+	set := orm.Set{"banned_at": now, "ban_reason": nil, "ban_expires_at": nil}
+	if reason != "" {
+		set["ban_reason"] = reason
+	}
 
-		if expires != nil {
-			set["ban_expires_at"] = expires.UTC()
-		}
+	if expires != nil {
+		set["ban_expires_at"] = expires.UTC()
+	}
 
-		if _, err := orm.QueryOf[models.User](tx).Where("id", userID).Update(ctx, set); err != nil {
-			return err
-		}
+	if _, err := orm.QueryOf[models.User](tx).Where("id", userID).Update(ctx, set); err != nil {
+		return err
+	}
 
-		if err := a.revokeAccess(ctx, tx, userID); err != nil {
-			return err
-		}
+	if err := a.revokeAccess(ctx, tx, userID); err != nil {
+		return err
+	}
 
-		data := map[string]any{"reason": reason}
-		if expires != nil {
-			data["expiresAt"] = expires.UTC().Format(time.RFC3339)
-		}
+	data := map[string]any{"reason": reason}
+	if expires != nil {
+		data["expiresAt"] = expires.UTC().Format(time.RFC3339)
+	}
 
-		if err := recordEvent(ctx, tx, userID, &actorID, "banned", data, now); err != nil {
-			return err
-		}
+	if err := recordEvent(ctx, tx, userID, &actorID, "banned", data, now); err != nil {
+		return err
+	}
 
-		tx.AfterCommit(func(ctx context.Context) {
-			a.afterBanChange(ctx, userID, true, now)
-		})
-
-		return nil
+	tx.AfterCommit(func(ctx context.Context) {
+		a.afterBanChange(ctx, userID, true, now)
 	})
+
+	return nil
 }
 
 // Unban lifts an active ban and dispatches UserUnbanned after commit.
 func (a *Accounts) Unban(ctx context.Context, actorID, userID int64) error {
+	return a.DB.Tx(ctx, func(tx *database.Tx) error {
+		return a.UnbanTx(ctx, tx, actorID, userID)
+	})
+}
+
+// UnbanTx is Unban inside the caller's transaction.
+func (a *Accounts) UnbanTx(ctx context.Context, tx *database.Tx, actorID, userID int64) error {
 	now := a.now().UTC()
 
-	return a.DB.Tx(ctx, func(tx *database.Tx) error {
-		u, err := orm.QueryOf[models.User](tx).Where("id", userID).LockForUpdate().First(ctx)
-		if err != nil {
-			return err
-		}
+	u, err := orm.QueryOf[models.User](tx).Where("id", userID).LockForUpdate().First(ctx)
+	if err != nil {
+		return err
+	}
 
-		if !u.BannedAt.Valid {
-			return ErrNotBanned
-		}
+	if !u.BannedAt.Valid {
+		return ErrNotBanned
+	}
 
-		set := orm.Set{"banned_at": nil, "ban_reason": nil, "ban_expires_at": nil}
-		if _, err := orm.QueryOf[models.User](tx).Where("id", userID).Update(ctx, set); err != nil {
-			return err
-		}
+	set := orm.Set{"banned_at": nil, "ban_reason": nil, "ban_expires_at": nil}
+	if _, err := orm.QueryOf[models.User](tx).Where("id", userID).Update(ctx, set); err != nil {
+		return err
+	}
 
-		if err := recordEvent(ctx, tx, userID, &actorID, "unbanned", map[string]any{}, now); err != nil {
-			return err
-		}
+	if err := recordEvent(ctx, tx, userID, &actorID, "unbanned", map[string]any{}, now); err != nil {
+		return err
+	}
 
-		tx.AfterCommit(func(ctx context.Context) {
-			a.afterBanChange(ctx, userID, false, now)
-		})
-
-		return nil
+	tx.AfterCommit(func(ctx context.Context) {
+		a.afterBanChange(ctx, userID, false, now)
 	})
+
+	return nil
 }
 
 // afterBanChange runs once the transaction committed: server-side sessions
