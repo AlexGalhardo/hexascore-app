@@ -351,8 +351,7 @@
       "notConfigured": "Online payments are not available yet. Paid plans will open soon.",
       "coverageTitle": "Data coverage",
       "coverageBody": "The API only returns fields we may republish, so some are patchy and some are always omitted (covers, trailers). Coverage percentages are not published yet.",
-      "coverageLink": "Read the coverage details",
-      "ctaManage": "Manage plan"
+      "coverageLink": "Read the coverage details"
     },
     "checkout": {
       "metaTitle": "Plan and billing",
