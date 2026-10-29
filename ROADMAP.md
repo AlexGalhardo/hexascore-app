@@ -216,7 +216,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
     - `go test ./tests -run TestAPIContract` → every response passes `AssertMatchesOpenAPI()`
   - Notes: record whether envelope keys can be camelCase (VF-014) and how extension members are emitted (VF-016). Page routes stay out of the documents through `-prefix` (duplicate `operationId` error in reference-runtime).
 
-- [ ] **P0.F.7.2** Generate the first-party TypeScript client and typed routes, and run the legacy SDK generators against the new document.
+- [x] **P0.F.7.2** Generate the first-party TypeScript client and typed routes, and run the legacy SDK generators against the new document.
   - Files/modules: spike `packages/app-client/src/api.ts`, `resources/js/routes.ts`, temporary copies of `legacy/sdks/ts` and `legacy/sdks/python`
   - Refs: SDD 05 §6.5; SDD 09 §6.1; ADR 0009; <https://vukem.dev/docs/cli/reference-runtime> "`vukem codegen:client`", "`vukem codegen:routes`"; <https://vukem.dev/docs/rest-apis/client-generation>
   - Depends on: P0.F.7.1
