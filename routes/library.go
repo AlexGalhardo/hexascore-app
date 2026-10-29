@@ -36,6 +36,7 @@ func Library(r *router.Router, app *vukem.App) error {
 	required, verified := auth.Required(acc.Web), auth.Verified(acc.Web)
 	byUser := ratelimit.Middleware(limit, ratelimit.ByUser(acc.Web.Name()))
 	r.Get("/library", web.Index).Name("library").Use(required, verified)
+	r.Get("/items/{id}/editions", web.Editions).Name("edition.list").Use(required, verified)
 	r.Put("/items/{id}/edition", web.PutEdition).Name("edition.put").Use(required, verified, byUser)
 	r.Delete("/items/{id}/edition", web.DeleteEdition).Name("edition.delete").Use(required, verified, byUser)
 

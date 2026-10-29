@@ -1278,6 +1278,11 @@
     "showing": "{count} de {total}",
     "edition": "Edição: {title}",
     "clearEdition": "Remover edição",
+    "chooseEdition": "Escolher edição",
+    "pickEdition": "Edição",
+    "saveEdition": "Salvar edição",
+    "editionsError": "Não foi possível carregar as edições.",
+    "noEditions": "Nenhuma edição disponível.",
     "seeAll": "Ver todos",
     "score": "Sua nota: {stars}"
   },

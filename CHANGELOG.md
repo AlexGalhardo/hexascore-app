@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Library edition picker: session route `GET /items/{id}/editions` (public books only, 404 otherwise) and a picker in `Library/Index` that saves through `PUT /items/{id}/edition` (en, pt-BR, es).
+
 - Public API edge: `api.hexascore.app/v1/*` host routing (`API_HOST`), CORS `*` without credentials, a `code` and catalogue `type` on every `/api/v1` problem, `/problems/{code}` redirects to `/docs/errors#<code>`, OpenAPI `servers` entry.
 - Profile, public list, library, lists-management and list-edit pages (`User/Profile`, `User/List`, `Library/Index`, `Lists/Index`, `Lists/Edit`) with GET `/lists`, `/lists/{id}/edit` and `/u/{nickname}/lists/{id}`; reorder uses move up/down buttons.
 
