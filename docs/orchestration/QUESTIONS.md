@@ -12,3 +12,5 @@ Open questions raised by the orchestrator and workers. Answer inline (`Answer:` 
 Release requests and approvals for vukem (the framework engineer never tags without an approved line here).
 
 - Owner rule (2026-10-28): the framework engineer may merge PRs with green CI; tags and releases only when the owner asks.
+- FQ-001 (2026-10-28, VF-001 passkeys/WebAuthn, high): vukem `docs/security.md` lists "Post-1.0: passkeys/WebAuthn". Implementing it now is a roadmap change and either a new dependency (`github.com/go-webauthn/webauthn`) or a stdlib-only WebAuthn verifier (CBOR/COSE parsing, `none` attestation, ES256/RS256/EdDSA) maintained in-framework. Options: (a) keep post-1.0, HexaScore stays without passkeys at launch (D-06); (b) stdlib implementation in `auth` now; (c) go-webauthn dependency in a `contrib/webauthn` module. The framework engineer skips VF-001 until answered.
+  - Answer:
