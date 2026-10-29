@@ -52,5 +52,6 @@ func All() []schema.Migration {
 		m20261029180000CreateBackupRunsTable(),
 		m20261029190000CreateLegacyImportRunsTable(),
 		m20261029200000CreateLegacyBillingTables(),
+		m20261029210000QualifyHsNormFunction(),
 	}
 }
