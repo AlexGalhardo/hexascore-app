@@ -194,6 +194,8 @@ Rollback: `gh workflow run release.yml -f version=vPREV` (schema stays compatibl
 6. Off-site copy (D-32): on day 1 the app mails the owner a signed link (`storage.TemporaryURL`, 7 days, <https://vukem.dev/docs/security/signed-urls>) to the encrypted monthly dump; the job records `backup_runs(kind='offsite')` when the link is mailed and the owner downloads it to personal storage. Daily dumps stay on Railway. Replaced by an external bucket when the budget allows.
 7. Missed or failed run → SDD 12 alert within 2 h.
 
+Implementation (P2.E.2.2): `backup:run` uploads, then verifies (`app/backup/verify.go`: the median is over `verified` rows of the same kind from the previous 7 days, none means no size check; `pg_restore --list` runs with an empty environment and must list `TABLE public items|users|ratings`), copies the dump on UTC day 1 to `ObjectKey("monthly", ...)` by decrypting and sealing it again for the new key (frames are bound to their object key, so a byte copy would not decrypt), then prunes by count: the newest 30 daily and 12 monthly objects under each prefix stay (`app/backup/prune.go`). The `backup.*` gauges are registered with the other platform metrics (P2.C.2.2) once the OTel meter exists.
+
 ### 7.4 Restore drill (staging, first Sunday 07:00)
 
 `backup:drill`: latest production daily via `BACKUP_SOURCE_S3_*` → decrypt → `createdb hexascore_drill` → `pg_restore -j 2` → `dq:asserts` (SDD 06 §7.7) → row counts vs dump manifest → drop → `backup_runs(kind='drill')`. Pass: < 60 min, 0 assert errors, counts equal.

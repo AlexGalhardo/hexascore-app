@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"time"
+
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/schedule"
 
@@ -25,4 +27,16 @@ func Schedule(s *schedule.Schedule, _ *vukem.App) {
 	s.Job(jobs.ReleaseBursts{}).Hourly().WithoutOverlapping()
 	s.Job(jobs.PruneRatingEvents{}).DailyAt("04:30").WithoutOverlapping()
 	s.Job(jobs.ExpireExports{}).Hourly().WithoutOverlapping()
+	// backup.daily (SDD 11 §7.3 step 1): moves after the SDD 06 asserts once they exist (P6).
+	s.Command("backup:run", "--kind", "daily").DailyAt("06:00").In(saoPaulo).WithoutOverlapping()
 }
+
+// saoPaulo is the operator's zone; Brazil has had no DST since 2019, so the
+// fixed fallback is exact when the image lacks tzdata.
+var saoPaulo = func() *time.Location {
+	if loc, err := time.LoadLocation("America/Sao_Paulo"); err == nil {
+		return loc
+	}
+
+	return time.FixedZone("BRT", -3*60*60)
+}()
