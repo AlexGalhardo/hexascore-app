@@ -50,5 +50,6 @@ func All() []schema.Migration {
 		m20261029160000CreateUserItemEditionsTable(),
 		m20261029170000AddBillingTables(),
 		m20261029180000CreateBackupRunsTable(),
+		m20261029190000CreateLegacyImportRunsTable(),
 	}
 }
