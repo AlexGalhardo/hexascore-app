@@ -1,0 +1,6 @@
+# REV-P1.I.2.1 (rodada 0)
+STATUS: APROVADO
+Branch: agent/senior/P1.I.2.1 (no changes).
+Re-run (isolated: COMPOSE_PROJECT_NAME=hx-especialista, app on 127.0.0.1:3010 via override with postgres/rustfs ports reset, E2E_APP_CONTAINER=hx-especialista-app-1, throwaway APP_KEY): `docker compose --profile app up -d --build --wait app` ok; `bunx playwright test ... auth profile api-keys --reporter=line` -> 76 passed, 2 failed (3.9m); both failures in the signup step (URL stayed on /signup, mobile-en profile change-password and mobile-es TOTP); `--last-failed` re-run -> 2 passed. `bun run lint && typecheck && test` -> 59 passed.
+Checked: compose additions (LOG_LEVEL debug for mail bodies, TRUSTED_PROXIES 172.16.0.0/12, inert STRIPE_* placeholders) are local app-profile only, not used by the Dockerfile/Railway; ApiKeys table now a scrollable focusable region; DeleteAccount component has a unit test.
+Risks / follow-ups (task created: senior/2-E2E-HARDEN-P1.I.2.1): (1) signup flake ~2/78 under the full run; (2) `any`-locale asserts after form posts can become `t` once ADOPT-VF-024-fix is merged (my fix keeps the prefix on Back redirects); (3) `bypassCSP: true` globally in playwright.config hides CSP violations in non-CSP specs; better: no upgrade-insecure-requests when APP_URL is http, then drop bypassCSP.
