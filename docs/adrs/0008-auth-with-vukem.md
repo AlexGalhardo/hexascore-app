@@ -1,6 +1,6 @@
 # ADR 0008: Authentication with vukem `auth` + `social`; passkeys deferred
 
-Status: accepted (2026-10-28). Decisions: brainstorming D-05, D-06, A-01, A-04.
+Status: accepted (2026-10-28). Decisions: brainstorming D-05, D-06, A-01, A-04. Amended 2026-10-29: the passkey deferral and the "passkey credentials are not migrated" rule are superseded by [ADR 0017](0017-passkeys.md); the rest stands.
 
 ## Context
 

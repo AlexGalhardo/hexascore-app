@@ -20,3 +20,4 @@ Format: [MADR](https://adr.github.io/madr/) (title, status, context, decision, a
 | [0014](0014-backups-rpo-rto.md) | Backups with RPO 24 h and RTO 1 h | accepted |
 | [0015](0015-monetisation-v1.md) | Monetisation: paid read API via Stripe in v1, PIX in the second release | accepted |
 | [0016](0016-bot-protection.md) | Bot and abuse protection without Vercel BotID | accepted |
+| [0017](0017-passkeys.md) | Passkeys return through vukem `auth` (VF-001) | accepted |
