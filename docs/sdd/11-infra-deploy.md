@@ -152,7 +152,7 @@ GitHub Actions is available for `hexascore-app` (D-26; legacy had disabled them 
 
 | Job | Trigger | Content | Required |
 | --- | --- | --- | --- |
-| `lint` | PR | golangci-lint v2 run + fmt diff, `go vet`, Biome (`biome ci`, D-22) + `tsc --noEmit`, markdownlint, commit header check (`.githooks/commit-msg` rules), PR title | yes |
+| `lint` | PR | golangci-lint v2 run + fmt diff, `go vet`, Biome (`biome ci`, D-22) + `tsc --noEmit`, markdownlint, commitlint on PR commits and PR title (D-37; the local `.githooks/commit-msg` stays as the offline check) | yes |
 | `test` | PR | `go test ./...` and `-tags=integration` with `postgres:18.6-alpine3.24` service | yes |
 | `vuln` | PR, weekly | `govulncheck ./...` pinned | yes |
 | `openapi` | PR | `openapi:export` diff vs committed spec; Schemathesis vs built container | yes |

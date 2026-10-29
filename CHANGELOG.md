@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- **ci:** Pin every workflow action by full commit SHA; add `lint` (format diff, Biome, tsc, markdownlint, commitlint on PR commits and PR title), `test` (Go unit and integration on Postgres 18.6, TypeScript tests), weekly `vuln` (`go tool govulncheck`), `setup-windows` and `build` (`scripts/infra/check-image.sh`, `image` artifact) jobs.
+- **build:** Add `commitlint` and `@commitlint/config-conventional` 21.2.4 (D-37) with `commitlint.config.ts`.
+
 ## [0.2.0] - 2026-10-29
 
 ### Added
