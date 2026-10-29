@@ -549,7 +549,10 @@ func TestSecurity_A07_LoginThrottleSharedAcrossIdentifiers(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := db.ExecContext(t.Context(), `UPDATE users SET username = 'evenick' WHERE email = 'eve@example.com'`); err != nil {
+	if _, err := db.ExecContext(
+		t.Context(),
+		`UPDATE users SET username = 'evenick' WHERE email = 'eve@example.com'`,
+	); err != nil {
 		t.Fatal(err)
 	}
 
