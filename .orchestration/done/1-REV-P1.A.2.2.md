@@ -1,0 +1,2 @@
+Task: P1.A.2.2 | repo: app | branch: agent/senior/P1.A.2.2 | report: C:\dev\hexascore-app\hexascore-vukem\.orchestration\reports\P1.A.2.2.md | rodada: 0
+Re-run: `git-cliff --config .config/cliff.toml --unreleased --tag v0.1.0`; `printf 'update stuff\n' > m; .githooks/commit-msg m` (rejects) and `printf 'feat(catalog): add slugs\n' > m; .githooks/commit-msg m` (accepts); markdownlint-cli2@0.24.0 on touched md.
