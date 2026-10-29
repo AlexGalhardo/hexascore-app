@@ -387,7 +387,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.A.5 Release
 
-- [ ] **P1.A.5.1** Release `v0.1.0` (bootstrap) with the vukem-style process.
+- [x] **P1.A.5.1** Release `v0.1.0` (bootstrap) with the vukem-style process.
   - Files/modules: `CHANGELOG.md`, tag `v0.1.0`, GitHub release
   - Refs: ADR 0013; SDD 11 §7.1; D-20
   - Depends on: P1.A.1.2, P1.A.2.2, P1.A.3.1, P1.A.3.2, P1.A.4.1, P1.A.4.2, P1.A.4.3
