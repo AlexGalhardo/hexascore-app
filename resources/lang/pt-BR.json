@@ -508,7 +508,7 @@
     "book": "Livro"
   },
   "score": {
-    "outOf": "Nota {score} de 100",
+    "outOf": "Nota {score} de 10",
     "none": "Avaliações insuficientes",
     "radar": "Médias por categoria — {summary}",
     "radarEmpty": "Ainda sem médias por categoria"

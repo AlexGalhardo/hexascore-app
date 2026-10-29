@@ -508,7 +508,7 @@
     "book": "Book"
   },
   "score": {
-    "outOf": "Score {score} out of 100",
+    "outOf": "Score {score} out of 10",
     "none": "Not enough ratings yet",
     "radar": "Category averages — {summary}",
     "radarEmpty": "No category averages yet"
