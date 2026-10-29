@@ -16,7 +16,14 @@ export default function vukem({ input, publicDir = "resources/public", buildDir 
 
   return {
     name: "vukem",
-    config(_, { command }) {
+    config(_, { command, isSsrBuild }) {
+      // The SSR bundle is server code: keep it out of the public build dir
+      // and never empty the client build (ssr:start reads bootstrap/ssr/ssr.js).
+      if (isSsrBuild) {
+        // noExternal makes the bundle self-contained, so the runtime image needs
+        // only node, not node_modules.
+        return { publicDir: false, ssr: { noExternal: true }, build: { outDir: "bootstrap/ssr", emptyOutDir: true } };
+      }
       return {
         base: command === "build" ? `/${buildDir}/` : "",
         publicDir: false,
