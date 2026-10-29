@@ -138,7 +138,7 @@ Rendered with `inertia.Render`; the unread count is a shared prop set by middlew
 | `Lists/Index` | GET `/lists` | session | `lists[{id,type,title,isPublic,hidden,itemCount,coverThumbs[≤4]}]`, `limits` |
 | `User/List` | GET `/u/{nickname}/lists/{id}` | public | `list`, `items[{position,note,addedAt,item}]`, `canEdit`, `seo{indexable}` |
 | `Lists/Edit` | GET `/lists/{id}/edit` | owner | `list`, `items`, `version` |
-| `User/Profile` | GET `/u/{nickname}?tab=ratings|status|lists&type=` | public | `profile{nickname,initial,isPrivate,isOwner}`, `stats{ratingsByType,statusByType}`, `ratings` (`Scroll`), `lists` |
+| `User/Profile` | GET `/u/{nickname}?tab=ratings\|status\|lists&type=` | public | `profile{nickname,initial,isPrivate,isOwner}`, `stats{ratingsByType,statusByType}`, `ratings` (`Scroll`), `lists` |
 | `Account/Notifications` | GET `/me/notifications` | session | `notifications` (`Scroll`, 20) |
 | `Contact/Index` | GET/POST `/contact` | public | `topics`, form token |
 

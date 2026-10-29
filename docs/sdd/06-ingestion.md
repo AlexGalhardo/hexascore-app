@@ -140,7 +140,7 @@ Admin: read-only panel resources for `job_runs`, `ingest_failures`, `dq_results`
 | POST | `/admin/ingest/runs` | `runIngestion` + CSRF | `{job, source?, mode, since?, limit?, qids?[≤500], allow_count_drop?, reason?}` | 303; 409 `run-active`; 423 `source-disabled`; 422 |
 | POST | `/admin/ingest/runs/{id}/cancel` | `runIngestion` | — | 303 |
 | POST | `/admin/ingest/runs/{id}/rollback` | `rollbackIngestion` | `{reason}` | 303; 409 `history-expired` |
-| GET/POST | `/admin/ingest/reviews[/{id}]` | `runIngestion` | `{action: link|create|dismiss, entity_id?}` | match queue |
+| GET/POST | `/admin/ingest/reviews[/{id}]` | `runIngestion` | `{action: link\|create\|dismiss, entity_id?}` | match queue |
 
 Kill switches (<https://vukem.dev/docs/digging-deeper/feature-flags> "Feature flags"): `ingest_enabled`, `ingest_<source>` (plus `covers`, `youtube`), code default `false` (fail closed), on in production via `FLAG_INGEST_<SOURCE>=true`; a stored `false` at `/admin/_flags` wins within the 30 s cache TTL.
 

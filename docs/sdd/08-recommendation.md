@@ -125,7 +125,7 @@ Errors follow RFC 9457 (vukem `https://vukem.dev/docs/basics/error-handling` "Er
 | GET `/api/v1/{type}/{id}/activity?from=&to=` (`getItemActivity`) | business plan (SDD 05 FR-05-17); counts as 1 request | raw daily counts, ≤ 90 days within the last 365 | 403 `plan-required`, 404, 422 |
 | GET `/app/v1/{type}/trending` | token `catalog:read` (A-01) | same + display fields | 400 |
 | GET `/app/v1/items/{id}/related` | token `catalog:read` | `{similar, crossMedia}` | 404 |
-| GET `/app/v1/me/for-you?type=` | token `catalog:read` | `{basis:"profile"|"onboarding", data:[{item, reason}]}` | 400 |
+| GET `/app/v1/me/for-you?type=` | token `catalog:read` | `{basis:"profile"\|"onboarding", data:[{item, reason}]}` | 400 |
 
 Trending responses send `web.ETagOf(payload)` and `c.NotModified(etag, computedAt)` (vukem `https://vukem.dev/docs/rest-apis/overview` "Cross-cutting"), plus `Cache-Control: public, max-age=300`.
 
