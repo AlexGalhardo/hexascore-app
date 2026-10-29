@@ -19,5 +19,7 @@ func All(app *vukem.App) []queue.Registration {
 		handlePruneRatingEvents(app),
 		handleSyncSearchSuggest(app),
 		handleDeletionPurge(app),
+		handleLibraryExport(app),
+		handleExpireExports(app),
 	}
 }

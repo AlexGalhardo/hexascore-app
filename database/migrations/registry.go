@@ -46,5 +46,6 @@ func All() []schema.Migration {
 		m20261029140013CreateContactMessagesTable(),
 		m20261029150001CreateAPIKeysTable(),
 		m20261029150002CreateAPIQuotaTables(),
+		m20261029150500CreateDataExportsTable(),
 	}
 }
