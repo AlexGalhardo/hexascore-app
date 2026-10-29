@@ -19,17 +19,19 @@ export default function EditionPicker({ itemId }: { itemId: string }) {
 	const [editions, setEditions] = useState<Edition[] | null>(null);
 	const [failed, setFailed] = useState(false);
 	const [choice, setChoice] = useState("");
+	const [next, setNext] = useState(-1);
 
-	const open = async () => {
+	const load = async (cursor: number) => {
 		setFailed(false);
 		try {
-			const res = await fetch(`/items/${itemId}/editions`, {
+			const res = await fetch(`/items/${itemId}/editions?cursor=${cursor}`, {
 				headers: { Accept: "application/json" },
 			});
 			if (!res.ok) throw new Error(String(res.status));
-			const body = (await res.json()) as { data: Edition[] };
-			setEditions(body.data);
-			setChoice(body.data[0]?.id ?? "");
+			const body = (await res.json()) as { data: Edition[]; next: number };
+			setEditions((prev) => [...(prev ?? []), ...body.data]);
+			if (cursor === 0) setChoice(body.data[0]?.id ?? "");
+			setNext(body.next);
 		} catch {
 			setFailed(true);
 		}
@@ -38,7 +40,7 @@ export default function EditionPicker({ itemId }: { itemId: string }) {
 	if (editions === null) {
 		return (
 			<span className="text-sm">
-				<button type="button" className="underline" onClick={open}>
+				<button type="button" className="underline" onClick={() => load(0)}>
 					{t("library.chooseEdition")}
 				</button>
 				{failed && (
@@ -68,6 +70,16 @@ export default function EditionPicker({ itemId }: { itemId: string }) {
 					</option>
 				))}
 			</select>
+			{next >= 0 && (
+				<button type="button" className="underline" onClick={() => load(next)}>
+					{t("library.moreEditions")}
+				</button>
+			)}
+			{failed && (
+				<span role="alert" className="text-danger">
+					{t("library.editionsError")}
+				</span>
+			)}
 			<button
 				type="button"
 				className="underline"
