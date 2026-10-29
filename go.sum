@@ -1,5 +1,7 @@
 github.com/AlexGalhardo/vukem v0.32.0 h1:b/zv1pqumX+/zAVduqeW2y3Yek95Aoz9fQ4/vXVcTsM=
 github.com/AlexGalhardo/vukem v0.32.0/go.mod h1:v9Ael5aO/4a5s32Ji/Q7sdZDl/HaA1UpohD5EGsTmk8=
+github.com/AlexGalhardo/vukem/contrib/stripe v0.4.1 h1:mTG+KL08nASbZ6tld4Srp8Oo28K+5I9J2hoUSUVe4D8=
+github.com/AlexGalhardo/vukem/contrib/stripe v0.4.1/go.mod h1:i4wlZLk9UZY6LYCOl1lTTiJyJnEpYaB3nUnOgPfbilE=
 github.com/AlexGalhardo/vukem/drivers/postgres v0.5.1 h1:EyASdTjEQR3culTcKQc6IRHJNlyznlVTG2Pde9s1DOg=
 github.com/AlexGalhardo/vukem/drivers/postgres v0.5.1/go.mod h1:sZoYAkqI6C8qrSy7/TsCH7N9jHe3uHzHSFloq2F5oMs=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

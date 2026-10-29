@@ -37,6 +37,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **api:** Resolve lookup ids to public items with indexable queries ([8369936](https://github.com/AlexGalhardo/hexascore-app/commit/8369936a7d5b5961b498377e40ae60da81e502c2))
 - **docs:** Regenerate docs.json for the changes-window-exceeded section ([8e23e70](https://github.com/AlexGalhardo/hexascore-app/commit/8e23e7018dd55e00b021460425aeb0481e6a543e))
 - **catalog:** Filter api entity names by their own source ([e3643ae](https://github.com/AlexGalhardo/hexascore-app/commit/e3643ae30a796a35d2d004051ab200fbad4d8932))
+- Billing (`vukem install:billing`, `contrib/stripe` v0.4.1): pro/business plans in BRL/USD/EUR, `/billing` page, Stripe webhook sync with the plan state machine (`subscriptions.plan/provider/state`, one live row per user), the subscriptions-backed API plan resolver (replaces `api.FreeForAll`), the Stripe cancel hook on account deletion and the `/profile/api/checkout` redirect. Production boot needs `STRIPE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO`, `STRIPE_PRICE_BUSINESS`. A second live subscription (two Checkout tabs) is cancelled at Stripe (newest wins), a new Checkout expires other open subscription sessions, and account deletion cancels every subscription Stripe may still bill.
+- Profile, public list, library, lists-management and list-edit pages (`User/Profile`, `User/List`, `Library/Index`, `Lists/Index`, `Lists/Edit`) with GET `/lists`, `/lists/{id}/edit` and `/u/{nickname}/lists/{id}`; reorder uses move up/down buttons.
 
 ## [0.6.0] - 2026-10-29
 

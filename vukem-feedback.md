@@ -59,6 +59,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-048 | 2026-10-29 | low | in_progress (framework), PR #33 (via VF-016 `WithExtension`) |
 | VF-049 | 2026-10-29 | low | open |
 | VF-050 | 2026-10-29 | low | open |
+| VF-051 | 2026-10-29 | medium | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -487,3 +488,12 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Context**: the API is served at `/api/v1/*` and, on `api.hexascore.app`, also as `/v1/*` (app `APIEdge` rewrite, VF-015). `openapi.Info` has `Servers` and `PathPrefix` (filter only), so the document cannot say "server `https://api.hexascore.app/v1`, paths without `/api/v1`" as SDD 05 §6.1 wants. Typed-route and router-raised problems also cannot carry `code` (VF-016): `APIEdge` rewrites problem bodies and takes an optional `X-Problem-Code` header from handlers.
 - **Workaround**: `Servers` lists `https://api.hexascore.app` only; paths keep `/api/v1` (valid on both hosts). SDD 05 §6.1 should say so.
 - **Request**: `openapi.Info.PathStrip` (or per-server path base) and `errs.HTTPError.WithExtension` rendered by the default handler (VF-016).
+
+## VF-051: `contrib/stripe` lacks subscription and Checkout Session list calls and `Subscription.Created`
+
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.32.0, `contrib/stripe` v0.4.1. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/billing`. `[NOT IN VUKEM DOCS]`: listing a customer's subscriptions, listing/expiring Checkout Sessions, the subscription `created` time.
+- **Context**: the `install:billing` sync keeps one live row per user but a second Checkout tab creates a second Stripe subscription; deleting an account must cancel every subscription Stripe may still bill. Both need `GET /v1/subscriptions?customer=&status=all`, `GET /v1/checkout/sessions?customer=&status=open`, `POST /v1/checkout/sessions/{id}/expire` and `created` to pick the newest subscription. `stripe.Subscription` has a custom `UnmarshalJSON`, so a struct embedding it cannot add `created` (the method is promoted and drops the extra field).
+- **Repro**: decode a subscription JSON into a struct that embeds `stripe.Subscription` and adds `Created int64` with tag `json:"created"`: `Created` stays zero.
+- **Workaround**: `app/billing/stripe_calls.go` uses `Client.Call` and decodes the raw JSON twice (`workaround(vukem): VF-051`).
+- **Request**: `ListSubscriptions(ctx, Params)`, `ListCheckoutSessions`, `ExpireCheckoutSession`, a `Created int64` on `Subscription`, and an `install:billing` scaffold that cancels superseded subscriptions and expires open sessions before creating a new one.

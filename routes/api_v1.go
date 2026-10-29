@@ -15,6 +15,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/api"
+	"github.com/AlexGalhardo/hexascore-app/app/billing"
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers/publicapi"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
@@ -46,7 +47,7 @@ func APIV1(r *router.Router, app *vukem.App) error {
 	meter := &api.Meter{Store: api.PGQuotaStore{DB: acc.DB}, Now: app.Now, Log: app.Log}
 	app.AddRunner("api-usage", meter)
 
-	plans := api.PlanResolver(api.FreeForAll)
+	plans := billing.PlanResolver(acc.DB, app.Now)
 
 	key, err := app.DeriveKey("catalog.cursor", 32)
 	if err != nil {
