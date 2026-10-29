@@ -497,7 +497,10 @@
     "pricing": "Pricing",
     "language": "Language",
     "openSearch": "Open search",
-    "menu": "Menu"
+    "menu": "Menu",
+    "skip": "Skip to content",
+    "dismiss": "Dismiss",
+    "home": "Home"
   },
   "home": {
     "title": "Every game, movie, series and book — scored by people, category by category.",
@@ -506,7 +509,8 @@
   "footer": {
     "terms": "Terms",
     "privacy": "Privacy",
-    "contact": "Contact"
+    "contact": "Contact",
+    "rights": "All rights reserved."
   },
   "cookies": {
     "text": "We only use essential cookies (session and preferences). Video embeds from YouTube load only if you allow them.",

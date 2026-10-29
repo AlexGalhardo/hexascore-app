@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- **ui:** App shell: skip link, navigation with locale and theme switchers, footer, flash toasts, SEO head (canonical, hreflang, robots, Open Graph, JSON-LD), Base UI `Dialog` (`@base-ui/react` 1.9.0) and `CoverThumb`; unmatched pages render the `Error` page with `noindex`.
+
 ### Changed
 
 - **ci:** Pin every workflow action by full commit SHA; add `lint` (format diff, Biome, tsc, markdownlint, commitlint on PR commits and PR title), `test` (Go unit and integration on Postgres 18.6, TypeScript tests), weekly `vuln` (`go tool govulncheck`), `setup-windows` and `build` (`scripts/infra/check-image.sh`, `image` artifact) jobs.

@@ -1,11 +1,12 @@
-import { Head, Link } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
 
+import Seo from "../components/Seo";
 import { demoInstalled, demoLink } from "../demo";
 
 export default function Home() {
 	return (
 		<>
-			<Head title="Welcome" />
+			<Seo />
 			<section className="py-12 text-center">
 				<h1 className="text-3xl font-semibold tracking-tight">Your Vukem app is running</h1>
 				<p className="mt-3 text-zinc-600 dark:text-zinc-400">
