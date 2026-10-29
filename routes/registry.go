@@ -14,6 +14,7 @@ func All() []func(r *router.Router, app *vukem.App) error {
 		TwoFactor,
 		Admin,
 		Ratings,
+		Lists,
 		AppAPI,
 	}
 }
