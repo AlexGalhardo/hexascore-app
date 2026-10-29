@@ -43,7 +43,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-032 | 2026-10-28 | medium | open |
 | VF-033 | 2026-10-28 | low | open |
 | VF-034 | 2026-10-28 | low | open |
-| VF-035 | 2026-10-29 | medium | in_progress (framework) |
+| VF-035 | 2026-10-29 | medium | merged in main (PR #25), unreleased |
 | VF-036 | 2026-10-29 | low | open |
 | VF-037 | 2026-10-29 | medium | in_progress (framework) |
 | VF-038 | 2026-10-29 | medium | merged in main (PR #17), unreleased |
@@ -54,7 +54,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-043 | 2026-10-29 | low | open |
 | VF-044 | 2026-10-29 | low | open |
 | VF-045 | 2026-10-29 | low | open |
-| VF-046 | 2026-10-29 | medium | open |
+| VF-046 | 2026-10-29 | medium | in_progress (framework) |
 | VF-047 | 2026-10-29 | low | open |
 | VF-048 | 2026-10-29 | low | open |
 
@@ -356,7 +356,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-035: Migration builder lacks uuid/composite primary keys, smallint and generated columns; ORM has a single-column key
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: in_progress (framework).
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: merged in main (PR #25, <https://github.com/AlexGalhardo/vukem/pull/25>), unreleased. Native: `t.SmallInteger`, `t.Primary(cols...)` / `Column.Primary()` (UUID and composite keys), `Column.StoredAs(expr)` (stored generated column); ORM `orm.CompositeKeyer` (`PrimaryKeys() []string`) makes `Update`/`Delete`/`ForceDelete`/`Restore` filter on every key column, and a single-model write matching more than one row returns `orm.ErrKeyNotUnique` (rolled back inside `db.Tx`). Generated columns still need `db:"-"` in the model (VF-009).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` ("Creating migrations"), `https://vukem.dev/docs/database/orm` ("Defining models").
 - **Context**: SDD 01 `items` (uuid primary key) and SDD 02 `ratings` (composite key `(user_id, item_id)`, `smallint` scores, stored generated `overall`) cannot be expressed with `schema.Table`: no `smallint`, no primary key on a `t.UUID` column, no composite primary key, no generated column. `t.JSON` is `jsonb` and `t.Enum` is `text` + CHECK on PostgreSQL (verified, spike `TestGeneratedOverallColumn`), which closes the doubt in VF-006 for those two types. The ORM filters `Update`/`Delete` by one key column (`Keyer.PrimaryKey`), so on a composite-key table `orm.Update`/`orm.Delete` would match every row of the first key.
 - **Workaround**: `s.Raw` for whole `CREATE TABLE` statements (guard with `s.Dialect() == "postgres"`); ORM model `Rating` with `PrimaryKey() = "user_id"` used only for `orm.Create` and `orm.QueryOf[Rating](db).Where("user_id", u).Where("item_id", i).Update(...)`; never `orm.Update`/`orm.Delete` on it.
@@ -448,7 +448,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-046: admin `Resource.BeforeSave` has no transaction handle or after-commit hook, and schema keys must map to a column
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin` ("Resources"). `[NOT IN VUKEM DOCS]`: what `BeforeSave` may do with side effects (read from `admin/handlers.go` `Resource.save` in the module).
 - **Context**: SDD 03 section 6.3 wanted ban and unban as panel form fields mapped in `BeforeSave`, with `account_events`, token revocation and an after-commit `user.banned` event in the same transaction. `BeforeSave(ctx, rec)` runs inside `DB.Tx` but receives only the context: no `*database.Tx`, no `AfterCommit`, no previous values (VF-010). Any write through the app's `*database.DB` inside it deadlocks on the single SQLite writer used by tests and is outside the panel transaction on Postgres. A schema key also has to match a model column, so a virtual `banned` checkbox cannot exist.
 - **Workaround**: ban and unban are `accounts.Ban`/`accounts.Unban` (own transaction, `tx.AfterCommit` dispatch) behind `POST /admin/users/{id}/ban|unban` (admin gate, CSRF). The panel form edits only `banReason` and `banExpiresAt`, and `BeforeSave` rejects them for users who are not banned.
