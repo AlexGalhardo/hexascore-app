@@ -17,7 +17,7 @@ Conventions:
 | Field | Value |
 | --- | --- |
 | Current phase | P0 (framework spike) |
-| Next microtask | P0.F.1.3 (blocked on Q-001), P0.F.4.1, P0.F.5.1, P0.F.8.1 |
+| Next microtask | P0.F.1.3, P0.F.2.1, P0.F.3.1 (Opus), P0.F.5.1, P0.F.8.1 (Sonnet) |
 | Updated | 2026-10-29 |
 
 ## Phase map
@@ -157,7 +157,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
 
 #### P0.F.4 Host routing
 
-- [ ] **P0.F.4.1** Serve `api.<host>/v1/*` from the `/api/v1` route group with a host-matching middleware and set the OpenAPI `servers` entry.
+- [x] **P0.F.4.1** Serve `api.<host>/v1/*` from the `/api/v1` route group with a host-matching middleware and set the OpenAPI `servers` entry.
   - Files/modules: spike `app/http/middleware/api_host.go`, `api_host_test.go`, `routes/api.go`
   - Refs: SDD 05 §6.1; open-issues 05-1; VF-015; <https://vukem.dev/docs/digging-deeper/billing> "Receiving webhooks yourself" (`r.UseServer` example)
   - Depends on: P0.F.1.1
