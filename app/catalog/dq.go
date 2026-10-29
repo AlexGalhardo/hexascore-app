@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -163,7 +164,7 @@ func RunDQ(ctx context.Context, db DQQuerier) (DQReport, error) {
 	for _, a := range DQAsserts() {
 		q := `WITH v(id) AS (` + a.Query + `) SELECT (SELECT count(*) FROM v),
 coalesce((SELECT string_agg(id, ',') FROM (SELECT id FROM v ORDER BY id LIMIT ` +
-			fmt.Sprint(dqSampleSize) + `) s), '')`
+			strconv.Itoa(dqSampleSize) + `) s), '')`
 		var sample string
 		res := DQResult{ID: a.ID, Level: a.Level, Description: a.Description}
 		if err := db.QueryRowContext(ctx, q).Scan(&res.Count, &sample); err != nil {
