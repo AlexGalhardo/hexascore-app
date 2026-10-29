@@ -31,7 +31,13 @@ type Tree = { [k: string]: string | Tree };
 export const renamed = new Set<string>();
 
 const PLURAL_CATEGORY: Record<string, string> = {
-	"=0": "zero", zero: "zero", one: "one", two: "two", few: "few", many: "many", other: "other",
+	"=0": "zero",
+	zero: "zero",
+	one: "one",
+	two: "two",
+	few: "few",
+	many: "many",
+	other: "other",
 };
 
 // Finds the first "{name, kind, ...}" ICU block and returns its parts.
@@ -42,7 +48,12 @@ function findBlock(s: string, kind: "plural" | "select") {
 	for (let i = m.index; i < s.length; i++) {
 		if (s[i] === "{") depth++;
 		else if (s[i] === "}" && --depth === 0) {
-			return { name: m[1], prefix: s.slice(0, m.index), body: s.slice(m.index + m[0].length, i), suffix: s.slice(i + 1) };
+			return {
+				name: m[1],
+				prefix: s.slice(0, m.index),
+				body: s.slice(m.index + m[0].length, i),
+				suffix: s.slice(i + 1),
+			};
 		}
 	}
 	throw new Error(`unbalanced ICU braces: ${s}`);
@@ -52,8 +63,7 @@ function findBlock(s: string, kind: "plural" | "select") {
 function options(body: string): [string, string][] {
 	const out: [string, string][] = [];
 	const re = /\s*([=\w]+)\s*\{/g;
-	let m: RegExpExecArray | null;
-	while ((m = re.exec(body))) {
+	for (let m = re.exec(body); m; m = re.exec(body)) {
 		let depth = 1;
 		let i = re.lastIndex;
 		for (; i < body.length && depth > 0; i++) {
@@ -70,14 +80,16 @@ export function convert(value: string, key: string): string | Tree {
 	const sel = findBlock(value, "select");
 	if (sel) {
 		const tree: Tree = {};
-		for (const [opt, text] of options(sel.body)) tree[opt] = convert(sel.prefix + text + sel.suffix, key) as string;
+		for (const [opt, text] of options(sel.body))
+			tree[opt] = convert(sel.prefix + text + sel.suffix, key) as string;
 		return tree;
 	}
 	const pl = findBlock(value, "plural");
 	if (pl) {
 		// vukem picks the plural form from the "count" param, so another ICU
 		// variable is renamed to count everywhere in the message.
-		const rename = (t: string) => (pl.name === "count" ? t : t.replaceAll(`{${pl.name}}`, "{count}"));
+		const rename = (t: string) =>
+			pl.name === "count" ? t : t.replaceAll(`{${pl.name}}`, "{count}");
 		if (pl.name !== "count") renamed.add(`${key} (${pl.name} -> count)`);
 		const tree: Record<string, string> = {};
 		for (const [opt, text] of options(pl.body)) {
@@ -110,7 +122,9 @@ function walk(node: Tree, path: string, out: Tree, dropped: string[]) {
 export function buildLocale(dir: string): { tree: Tree; dropped: string[] } {
 	const tree: Tree = {};
 	const dropped: string[] = [];
-	for (const file of readdirSync(dir).filter((f) => f.endsWith(".json") && !DROPPED_FILES.has(f)).sort()) {
+	for (const file of readdirSync(dir)
+		.filter((f) => f.endsWith(".json") && !DROPPED_FILES.has(f))
+		.sort()) {
 		walk(JSON.parse(readFileSync(join(dir, file), "utf8")), "", tree, dropped);
 	}
 	return { tree, dropped };

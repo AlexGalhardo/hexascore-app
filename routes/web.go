@@ -21,7 +21,38 @@ func Web(r *router.Router, app *vukem.App) error {
 	r.UseServer(middleware.StaticFS(resources.Public(), middleware.StaticConfig{Prefix: "/"}))
 	// Only the app catalogue namespaces reach the browser, never framework
 	// messages or future server-only keys (SDD 09 §6.1).
-	r.Use(app.Inertia.Middleware, inertia.I18n("account.", "actions.", "api.", "auth.", "billing.", "catalog.", "categories.", "itemTypes.", "score.", "meta.", "nav.", "home.", "footer.", "cookies.", "sandbox.", "contact.", "docs.", "errors.", "item.", "updatedLabel.", "policy.", "terms.", "lists.", "ratings.", "search.", "social."), shareProps(app))
+	r.Use(
+		app.Inertia.Middleware,
+		inertia.I18n(
+			"account.",
+			"actions.",
+			"api.",
+			"auth.",
+			"billing.",
+			"catalog.",
+			"categories.",
+			"itemTypes.",
+			"score.",
+			"meta.",
+			"nav.",
+			"home.",
+			"footer.",
+			"cookies.",
+			"sandbox.",
+			"contact.",
+			"docs.",
+			"errors.",
+			"item.",
+			"updatedLabel.",
+			"policy.",
+			"terms.",
+			"lists.",
+			"ratings.",
+			"search.",
+			"social.",
+		),
+		shareProps(app),
+	)
 
 	r.Get("/", controllers.Home).Name("home")
 
