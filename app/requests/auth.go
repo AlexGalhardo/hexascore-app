@@ -28,7 +28,7 @@ type Register struct {
 var RegisterSchema = z.Struct[Register](z.Shape{
 	"name":                  z.String().Trim().Min(2).Max(100),
 	"email":                 z.String().Trim().Email().Max(254),
-	"password":              z.String().Min(12).Max(256),
+	"password":              PasswordSchema,
 	"password_confirmation": z.String(),
 }).Refine(func(r Register) error {
 	if r.Password != r.PasswordConfirmation {
@@ -58,7 +58,7 @@ type ResetPassword struct {
 var ResetPasswordSchema = z.Struct[ResetPassword](z.Shape{
 	"token":                 z.String().Min(1),
 	"email":                 z.String().Trim().Email(),
-	"password":              z.String().Min(12).Max(256),
+	"password":              PasswordSchema,
 	"password_confirmation": z.String(),
 }).Refine(func(r ResetPassword) error {
 	if r.Password != r.PasswordConfirmation {
