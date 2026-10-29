@@ -1099,7 +1099,11 @@
     "all": "Todos",
     "suggestions": "Sugerencias",
     "noSuggestions": "Sin resultados",
-    "searching": "Buscando…"
+    "searching": "Buscando…",
+    "filter": "Filtrar por tipo",
+    "pagination": "Páginas",
+    "previous": "Anterior",
+    "next": "Siguiente"
   },
   "social": {
     "profile": {
