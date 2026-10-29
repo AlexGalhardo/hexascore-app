@@ -1121,7 +1121,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
   - Acceptance:
     - `bun run e2e -- --list` → projects `desktop` and `mobile` × locales `en`, `pt-BR`, `es`
     - a smoke spec opening `/` in each project → pass with axe 0 serious/critical
-  - Notes: test users are created through the app (signup + mail log) or the seeder, never by writing hashes by hand.
+  - Notes: test users are created through the app (signup + mail log) or the seeder, never by writing hashes by hand. 2026-10-29: pulled forward before P1.H.5.1 (billing waits on owner question Q-H31); billing and pricing pages excluded until then.
 
 #### P1.I.2 Ported and new specs
 
