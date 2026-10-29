@@ -1791,7 +1791,7 @@ Phase-specific conventions:
     - `vukem backup:run --kind daily` against the compose Postgres and RustFS → object under `backups/postgres/daily/YYYY/MM/DD/`, `backup_runs.status='uploaded'`, `sha256` matches the object
   - Notes: `pg_dump -Fc -Z 6 --no-owner` through `contrib/engine` `RunStream` ([SITE PAGE MISSING], `vukem/docs/subsystems.md`); the child environment is not inherited, so `PG*` values are passed explicitly. The plaintext dump never touches disk. Each frame's additional data carries its index and the last frame is marked, so frames cannot be swapped, dropped or truncated unnoticed.
 
-- [ ] **P2.E.2.2** Verify each dump, schedule the daily run, prune by retention, and copy the monthly snapshot.
+- [x] **P2.E.2.2** Verify each dump, schedule the daily run, prune by retention, and copy the monthly snapshot.
   - Files/modules: `app/backup/verify.go`, `app/backup/prune.go`, `app/backup/prune_test.go`, `routes/schedule.go` (`backup.daily` 06:00 America/Sao_Paulo, `WithoutOverlapping()`), `app/metrics/backup.go`
   - Refs: SDD 11 §7.3 steps 1, 4, 5, 7, §9 item 6; SDD 12 §6.2 (`backup.*`), §7.5 A8; ADR 0014; <https://vukem.dev/docs/digging-deeper/scheduler>
   - Depends on: P2.E.2.1
@@ -1801,6 +1801,7 @@ Phase-specific conventions:
     - on staging, `railway ssh` then `/app/hexascore backup:run --kind daily` → `status='verified'` after decrypt → `pg_restore --list` contains `items`, `users`, `ratings`
     - `backup.last_success_age_seconds` visible in Grafana; the A8 fixture in `ops/alerts/tests.yaml` still passes
   - Notes: buckets have no lifecycle rules: pruning is app code. The task will run after the SDD 06 asserts once they exist (P6); until then 06:00 alone.
+  - Status (2026-10-29): verify, monthly copy, prune and the 06:00 schedule delivered; `app/metrics/backup.go` moves to P2.C.2.2 (no meter provider before P2.C.2.1); staging and Grafana checks deferred (owner gate).
 
 - [ ] **P2.E.2.3** Mail the owner a 7-day signed link to the encrypted monthly dump (off-site copy).
   - Files/modules: `app/backup/offsite.go`, `resources/views/mail/backup_offsite.*`, `tests/backup_offsite_test.go`, `docs/runbooks/restore.md` (section "Off-site copy")

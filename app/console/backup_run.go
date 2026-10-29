@@ -17,7 +17,8 @@ import (
 )
 
 // BackupRun is `backup:run --kind daily|monthly`: one encrypted pg_dump in
-// the bucket, recorded in backup_runs (SDD 11 §7.3). BACKUP_KEY (32 bytes,
+// the bucket, recorded in backup_runs, verified, copied to monthly on day 1
+// and followed by the retention prune (SDD 11 §7.3). BACKUP_KEY (32 bytes,
 // base64) is separate from APP_KEY so a leaked app key does not open dumps.
 func BackupRun() vukem.Command {
 	var kind *string
@@ -53,7 +54,7 @@ func BackupRun() vukem.Command {
 
 			r := &backup.Runner{
 				DB: db, Disk: disk, Enc: enc, DatabaseURL: app.Source.Get("DATABASE_URL"),
-				PgDump: "pg_dump", Env: string(app.Config.Env), Now: app.Now,
+				PgDump: "pg_dump", PgRestore: "pg_restore", Env: string(app.Config.Env), Now: app.Now,
 			}
 
 			res, err := r.Run(ctx, *kind)
@@ -62,6 +63,29 @@ func BackupRun() vukem.Command {
 			}
 
 			_, _ = fmt.Fprintf(app.Stdout(), "Uploaded %s (%d bytes, sha256 %s)\n", res.Key, res.Bytes, res.SHA256)
+
+			if err := r.Verify(ctx, *kind, res); err != nil {
+				return err
+			}
+
+			_, _ = fmt.Fprintln(app.Stdout(), "Verified")
+
+			// Day 1 (UTC; the 06:00 America/Sao_Paulo run is 09:00 UTC, same date): keep a monthly copy.
+			if *kind == "daily" && r.Now().UTC().Day() == 1 {
+				m, err := r.CopyMonthly(ctx, res)
+				if err != nil {
+					return err
+				}
+
+				_, _ = fmt.Fprintf(app.Stdout(), "Copied to %s\n", m.Key)
+			}
+
+			n, err := r.Prune(ctx)
+			if err != nil {
+				return err
+			}
+
+			_, _ = fmt.Fprintf(app.Stdout(), "Pruned %d old dumps\n", n)
 
 			return nil
 		},

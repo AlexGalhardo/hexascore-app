@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- `backup:run` now verifies each dump (size above half the 7-day median, decrypt and `pg_restore --list` with `items`, `users`, `ratings`, status `verified`), keeps a re-encrypted monthly copy on day 1, prunes to 30 daily and 12 monthly dumps, and runs daily at 06:00 America/Sao_Paulo (P2.E.2.2).
 - Legacy import `users` stage: Better Auth users upserted on `legacy_id` (email lowercased, verification date, admin role, live bans only, deletion grace kept), credential hashes copied verbatim, Google accounts linked in `social_accounts`, random argon2id for accounts without a password (P2.F.2.2).
 - Admin hardening (SDD 13 FR-13-5, §7.5): `AdminGuard` requires confirmed 2FA on `/admin`, ends admin sessions after 30 min idle or 12 h, and applies the optional `ADMIN_IP_ALLOWLIST` (404 outside it); 2FA confirmation regenerates the session id and `admin:grant`/`admin:revoke` end the user's sessions (P2.D.3.1).
 - `hexascore:import-legacy --stage all|<names> [--dry-run] [--batch N]`: legacy import runner over schema `legacy_import` with the SDD 03 §5 pre-flight asserts (abort with counts), stage order, per-stage checkpoints in the new `legacy_import_runs` table (committed with each batch, resumable) and a dry run that prints planned counts and writes nothing; stages are filled in by P2.F.2.2 to P2.F.4.1 (P2.F.2.1).
