@@ -80,7 +80,7 @@ func (a *Accounts) notifyExisting(ctx context.Context, u models.User) error {
 
 	return a.Mailer.SendLater(ctx, mail.AccountExists{
 		User: u, LoginLink: a.URL + "/login", ResetLink: a.URL + "/recover-password",
-		Subject: a.T(ctx, "auth.mail.account_exists_subject"),
+		Strings: a.mailStrings(ctx, u, "account_exists", nil),
 	})
 }
 
@@ -103,7 +103,7 @@ func (a *Accounts) SendVerification(ctx context.Context, u models.User) error {
 		return err
 	}
 
-	return a.Mailer.SendLater(ctx, mail.VerifyEmail{User: u, Link: link, Subject: a.T(ctx, "auth.mail.verify_subject")})
+	return a.Mailer.SendLater(ctx, mail.VerifyEmail{User: u, Link: link, Strings: a.mailStrings(ctx, u, "verify", nil)})
 }
 
 // VerifyEmail marks u verified from the signed link and ends every way into

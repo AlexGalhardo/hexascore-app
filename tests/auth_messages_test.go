@@ -15,7 +15,7 @@ import (
 // wantLocales are the locales install:auth wrote catalogs for
 // (vukem install:auth --locales). Change it whenever you add or remove a
 // catalog in app/accounts/lang: it is the only place that lists them.
-var wantLocales = []string{"en", "pt-BR"}
+var wantLocales = []string{"en", "es", "pt-BR"}
 
 // fallbackLocale is the locale accounts.loadMessages falls back to; every
 // message must exist in it.
