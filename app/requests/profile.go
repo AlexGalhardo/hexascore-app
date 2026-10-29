@@ -1,0 +1,40 @@
+package requests
+
+import "github.com/AlexGalhardo/vukem/z"
+
+// ProfileDetails is the details section of /profile (SDD 03 section 6.1).
+type ProfileDetails struct {
+	Name   string `json:"name"   form:"name"`
+	Locale string `json:"locale" form:"locale"`
+}
+
+// ProfileDetailsSchema validates ProfileDetails.
+var ProfileDetailsSchema = z.Struct[ProfileDetails](z.Shape{
+	"name":   z.String().Trim().Min(1).Max(100),
+	"locale": z.Enum("en", "pt-BR", "es"),
+})
+
+// ProfilePassword changes or sets the password; CurrentPassword is checked
+// only when the user already has a password.
+type ProfilePassword struct {
+	CurrentPassword string `json:"currentPassword" form:"currentPassword"`
+	NewPassword     string `json:"newPassword"     form:"newPassword"`
+}
+
+// ProfilePasswordSchema validates ProfilePassword.
+var ProfilePasswordSchema = z.Struct[ProfilePassword](z.Shape{
+	"currentPassword": z.String().Max(256).Default(""),
+	"newPassword":     PasswordSchema,
+})
+
+// ProfilePrivacy is the privacy section.
+type ProfilePrivacy struct {
+	ProfilePrivate        bool `json:"profilePrivate"        form:"profilePrivate"`
+	PersonalizationOptOut bool `json:"personalizationOptOut" form:"personalizationOptOut"`
+}
+
+// ProfilePrivacySchema validates ProfilePrivacy.
+var ProfilePrivacySchema = z.Struct[ProfilePrivacy](z.Shape{
+	"profilePrivate":        z.Bool().Default(false),
+	"personalizationOptOut": z.Bool().Default(false),
+})

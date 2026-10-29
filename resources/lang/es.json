@@ -8,7 +8,8 @@
       "name": "Nombre",
       "email": "Correo electrónico",
       "nickname": "Nickname",
-      "save": "Guardar nombre"
+      "save": "Guardar nombre",
+      "locale": "Idioma"
     },
     "password": {
       "setTitle": "Definir contraseña",
@@ -37,12 +38,16 @@
       "copied": "Copiado.",
       "done": "Ya guardé mis códigos",
       "disabled": "Autenticación en dos pasos desactivada.",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "needPassword": "Define una contraseña arriba antes de activar la autenticación en dos pasos.",
+      "manage": "Gestionar la autenticación en dos pasos"
     },
     "privacy": {
       "title": "Privacidad",
       "label": "Perfil privado",
-      "help": "Tus puntuaciones siguen en las medias de la comunidad, pero tu perfil y tus listas quedan ocultos para otros usuarios."
+      "help": "Tus puntuaciones siguen en las medias de la comunidad, pero tu perfil y tus listas quedan ocultos para otros usuarios.",
+      "personalization": "Desactivar recomendaciones personalizadas",
+      "personalizationHelp": "Dejamos de usar tus valoraciones para sugerirte elementos."
     },
     "delete": {
       "title": "Eliminar cuenta",
@@ -57,6 +62,14 @@
     "banner": {
       "text": "Tu cuenta está programada para eliminarse el {date}.",
       "cancel": "Cancelar eliminación"
+    },
+    "sessions": {
+      "title": "Sesiones activas",
+      "current": "Este dispositivo",
+      "revoke": "Cerrar sesión",
+      "revokeAll": "Cerrar sesión en todos los demás dispositivos",
+      "empty": "No hay otras sesiones que mostrar.",
+      "lastSeen": "Última actividad"
     }
   },
   "actions": {
