@@ -27,7 +27,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-016 | 2026-10-28 | low | open |
 | VF-017 | 2026-10-28 | medium | merged in main (PR #13), unreleased |
 | VF-018 | 2026-10-28 | medium | merged in main (PR #14), unreleased |
-| VF-019 | 2026-10-28 | medium | in_progress (framework) |
+| VF-019 | 2026-10-28 | medium | merged in main (PR #15), unreleased |
 | VF-020 | 2026-10-28 | low | open |
 | VF-021 | 2026-10-28 | low | withdrawn (2026-10-29: `HourlyAt` documented) |
 | VF-022 | 2026-10-28 | low | open |
@@ -218,7 +218,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-019: No documented API for app-level OpenTelemetry metrics
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #15, <https://github.com/AlexGalhardo/vukem/pull/15>), unreleased. Docs gap closed, no new API: `otel.Provider.MeterProvider().Meter(name)` taken inside `WithRoutes`/`WithJobsFunc` (after Register; before it the provider is a no-op) exports through the framework reader and resource; Prometheus via `Config.MetricReader` with the app-owned exporter. A built-in `/metrics` endpoint was not added (new third-party dependency, owner decision).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/opentelemetry` "OpenTelemetry", "Logging & observability" [heading not on page 2026-10-29]; `drivers/otel` description in `https://vukem.dev/docs/architecture/lifecycle`.
 - **Context**: HexaScore needs custom counters and histograms (ingestion items/s, SSR fallbacks, suggestion queue age, quota flushes) exported with the framework's traces. The docs cover tracing setup and built-in instrumentation only.
 - **Workaround**: the app wires `go.opentelemetry.io/otel/metric` itself and shares the exporter configuration.

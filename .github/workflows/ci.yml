@@ -88,7 +88,8 @@ jobs:
         run: |
           docker run -d --name app -p 3000:3000 -e APP_KEY="base64:$(openssl rand -base64 32)" -e APP_URL=http://localhost:3000 hexascore:ci
           for i in $(seq 1 30); do curl -fsS localhost:3000/up && break; sleep 1; done
-          curl -fsS 'localhost:3000/up?checks=1' | grep -q '"ssr":"ok"'
+          # No database in this job, so readiness is 503 on "db"; only the ssr check matters here.
+          curl -sS 'localhost:3000/up?checks=1' | grep -q '"ssr":"ok"'
       - name: Container logs
         if: failure()
         run: docker logs app
