@@ -33,7 +33,7 @@ Every SDD ends with an "Open issues" section. This file is the architect's triag
 | 03 | 2 | Better Auth 2FA secret encryption format unverified | decided | Export with a Bun script in `legacy/` that decrypts via Better Auth's own code and pipes plaintext secrets into the Go importer over stdin; never written to disk. |
 | 03 | 3 | Google-only accounts must set a password before managing 2FA | decided (owner) | Answered 2026-10-28, see brainstorming.md D-22 to D-36. Original note: asked in the Phase 3 question round; default: keep vukem's rule (set a password first) and show the explanation in the UI. |
 | 03 | 4 | Bot protection not in vukem | decided | ADR 0016; VF-003. |
-| 03 | 5 | Passkeys deferred | vukem | VF-001. |
+| 03 | 5 | Passkeys back in scope (ADR 0017), wait for the vukem release with VF-001 | vukem | VF-001. |
 | 03 | 6 | Impersonation not in vukem, not in v1 | vukem + decided | VF-012 to be filed; admins use read-only "view as" in the admin panel until then. |
 | 03 | 7 | vukem session timeout env names unverified | roadmap | Verified when `install:auth` is run; recorded in the configuration table of SDD 11. |
 | 03 | 8 | Locale for queued mail outside a request | vukem | VF-013 to be filed; workaround: the job payload carries the locale and the mailer is called with it explicitly. |

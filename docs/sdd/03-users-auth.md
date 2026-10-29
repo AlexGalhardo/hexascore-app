@@ -1,6 +1,6 @@
 # SDD 03: Users and authentication
 
-Status: reviewed (2026-10-28 consistency pass). Decisions: D-05, D-06, D-12, D-15, A-01, A-04. ADRs: 0008. Related SDDs: 05, 09, 10, 11, 13.
+Status: reviewed (2026-10-28 consistency pass). Decisions: D-05, D-06 (amended 2026-10-29), D-12, D-15, A-01, A-04. ADRs: 0008, 0017. Related SDDs: 05, 09, 10, 11, 13.
 
 ## 1. Objective
 
@@ -10,7 +10,9 @@ One account for web (session cookie) and Android (access token): email or Google
 
 In scope (v1): account model, email verification, password rules, reset, TOTP + recovery codes, Google, sessions, mobile access tokens (A-01, D-12), roles and bans (admins only, D-15), deletion with 30-day grace, LGPD export, transactional mail in en/pt-BR/es, bot protection, migration from Better Auth (A-04).
 
-Out of scope: passkeys (D-06, ADR 0008), admin impersonation (not in v1, VF-012; no legacy UI used it; only the `session.impersonated_by` column exists, `legacy/apps/web/lib/db/schema/auth.ts`; admins use a read-only "view as" in the admin panel meanwhile), email change (not offered by legacy), sign-up inside the mobile app (D-12 lists login only; the app opens `/signup` in the browser), paid API keys (SDD 05).
+In scope since 2026-10-29 (D-06 amended, ADR 0017): passkeys on the web, built on the vukem `auth` passkey API of VF-001 (§7.8); not in the Android app in v1.
+
+Out of scope: admin impersonation (not in v1, VF-012; no legacy UI used it; only the `session.impersonated_by` column exists, `legacy/apps/web/lib/db/schema/auth.ts`; admins use a read-only "view as" in the admin panel meanwhile), email change (not offered by legacy), sign-up inside the mobile app (D-12 lists login only; the app opens `/signup` in the browser), paid API keys (SDD 05).
 
 ## 3. Functional requirements
 
@@ -35,6 +37,11 @@ Each line names its test (Go unless stated).
 - FR-03-19: `users.personalization_opt_out` is exposed in the profile privacy section; personalised recommendations are on by default and the toggle opts out (D-29, open issue 08-4); SDD 08 reads it. Integration test on `PATCH /profile/privacy`.
 - FR-03-17: Mail queued and rendered in the user's locale (en, pt-BR, es). `TestMailTranslatedAllLocales`.
 - FR-03-18: Legacy scrypt passwords log in and are rehashed to argon2id. `TestSecurity_A07_LegacyScryptVerifiesAndRehashes`.
+- FR-03-20: A verified user adds a passkey from the profile (`/profile` section `passkeys`) after confirming the current password (accounts with `password_set_at` NULL confirm with a fresh Google sign-in [NOT VERIFIED: vukem confirm flow for passwordless accounts]); user verification required; name ≤ 64 chars (default from the authenticator's AAGUID or "Passkey"); at most 10 per user (409 `passkey-limit`). `TestPasskeyRegisterLimit`.
+- FR-03-21: Sign in with a passkey from `/login` (discoverable credential, "Sign in with a passkey" button); the same ban and deletion checks as a password login; a passkey login satisfies 2FA (possession + user verification), as Better Auth did. `TestPasskeyLoginSkipsTOTP`.
+- FR-03-22: A user lists and removes only their own passkeys; removal needs a verified session. `TestSecurity_A01_PasskeyRemoveOnlyOwn`.
+- FR-03-23: Ceremonies refuse a credential of another user, a replayed or expired challenge (single use, 5 min, bound to the session), a wrong origin or RP ID, and a signature counter that goes backwards (unless both are 0). `TestSecurity_A07_PasskeyForeignCredential`, `TestSecurity_A07_PasskeyChallengeReplay`, `TestSecurity_A07_PasskeyCounterRegression`.
+- FR-03-24: Adding or removing a passkey writes `account_events` (`passkey.added`, `passkey.removed`, credential id hash only) and mails `passkey_changed`; recovery for a lost passkey is password (+ TOTP) or e-mail reset, never a passkey-specific bypass. `TestPasskeyChangeAuditedAndMailed`.
 
 ## 4. Non-functional requirements
 
@@ -131,7 +138,7 @@ Migration mapping from `legacy/apps/web/lib/db/schema/auth.ts` (A-04; the 10k sy
 | No credential row | `password` = random argon2id, `password_set_at` NULL | |
 | `two_factor` | `two_factor_*` | §7.6 |
 | `session`, `verification`, `rate_limit` | dropped | cutover signs everyone out |
-| `passkey` | dropped | ADR 0008; affected users mailed 14 days before cutover |
+| `passkey` | `passkeys` (§7.8) | imported when the Better Auth format maps onto the vukem credential table: `credential_id`, `public_key`, `counter`, `transports`, `aaguid`, `device_type`/`backed_up` → backup flags, `name`, `created_at` [NOT VERIFIED until proven on a Neon copy, ADR 0017]; if not compatible, ADR 0008's fallback: passkey-only users mailed a reset link 14 days before cutover |
 
 Pre-flight asserts (abort on non-zero): `SELECT lower(email) FROM "user" GROUP BY 1 HAVING count(*) > 1`; users with `two_factor_enabled` and no `two_factor` row; users with neither credential nor Google nor email (passkey-only accounts are counted and sent the reset notice).
 
@@ -156,6 +163,7 @@ Pre-flight asserts (abort on non-zero): `SELECT lower(email) FROM "user" GROUP B
 | PATCH | `/profile/details` | verified | `{name, locale}` |
 | PUT | `/profile/password` | verified | `{currentPassword?, newPassword}` (current required when `password_set_at` not NULL) |
 | GET, POST | `/user/two-factor`, `/user/two-factor/confirm`, `/user/two-factor/recovery-codes`, `/user/two-factor/disable` | verified | vukem `--2fa` routes unchanged |
+| POST, DELETE | passkey registration options/verify, sign-in options/verify, `/profile/passkeys/{id}` removal (FR-03-20 to FR-03-22) | verified (sign-in: guest) | paths follow the VF-001 scaffold [NOT IN VUKEM DOCS until the release]; `Profile/Index` gains section `passkeys` |
 | PATCH | `/profile/privacy` | verified | `{profilePrivate, personalizationOptOut}` |
 | DELETE | `/profile/sessions/{handle}`; POST `/profile/sessions/revoke-all` | session | |
 | POST | `/profile/export` | verified | creates an export job (SDD 14 §6, §7.4); ZIP link mailed, 24 h |
@@ -191,7 +199,7 @@ Content of the export (personal records): `profile{id,email,name,username,locale
 
 ### 6.5 Mail (vukem `https://vukem.dev/docs/digging-deeper/mail` "Mail": `mail.View` with `html/template`, subject via `EnvelopeContext` + `i18n.T`, `SendLater` on `QUEUE_CONNECTION=database`)
 
-Templates in `resources/views/mail/`: `verify_email`, `reset_password`, `account_exists` (scaffold), plus `password_changed`, `two_factor_changed` (enabled, disabled, recovery code used, reset by admin; carries "not you? reset your password"), `deletion_scheduled` (date + cancel link to `/login`), `account_anonymized`, `passkeys_retired` (cutover notice). Catalogs: scaffold `en`, `pt-BR` plus app `resources/lang/es.json` (an app catalog key wins and can add a locale, `https://vukem.dev/docs/security/authentication` scaffold section). Locale = `users.locale`; jobs without a request build the context locale from that column [NOT VERIFIED: API to set the i18n locale on a non-request context].
+Templates in `resources/views/mail/`: `verify_email`, `reset_password`, `account_exists` (scaffold), plus `password_changed`, `two_factor_changed` (enabled, disabled, recovery code used, reset by admin; carries "not you? reset your password"), `passkey_changed` (added, removed; same "not you?" line; FR-03-24), `deletion_scheduled` (date + cancel link to `/login`), `account_anonymized`, `passkeys_retired` (cutover notice). Catalogs: scaffold `en`, `pt-BR` plus app `resources/lang/es.json` (an app catalog key wins and can add a locale, `https://vukem.dev/docs/security/authentication` scaffold section). Locale = `users.locale`; jobs without a request build the context locale from that column [NOT VERIFIED: API to set the i18n locale on a non-request context].
 
 ## 7. Behaviour and algorithms
 
@@ -237,6 +245,10 @@ Better Auth encrypts the TOTP secret and backup codes with `BETTER_AUTH_SECRET` 
 
 In the read-only window (D-21) sessions are not copied, so everyone signs in again; Google links survive via `(provider, provider_id)`; the Google client gets the new callback URI before DNS switches.
 
+### 7.8 Passkeys
+
+Built on the vukem `auth` passkey API from VF-001 (`install:auth --passkeys` or its documented equivalent [NOT IN VUKEM DOCS until the release]); no app-local WebAuthn code. Relying party: ID `hexascore.app` (the legacy host, so imported credentials keep working; staging uses its own host and cannot use production credentials), name `APP_NAME`, origin `APP_URL`. Registration: options from the server (excluding the user's existing credentials, resident key preferred, user verification required, attestation `none`), browser ceremony, server verification, row stored. Sign-in: options without `allowCredentials` (discoverable), assertion verified against the stored public key and counter, then the §7.1 checks after the credential matched (ban, deletion), then `Login` with session regeneration. Table `passkeys` follows the framework's credential table (id, `user_id` FK cascade, `credential_id` unique, `public_key`, `sign_count`, `transports`, `aaguid`, backup flags, `name`, `created_at`, `last_used_at`); deletion purge removes the rows (§7.5). `Permissions-Policy` allows `publickey-credentials-get=(self)` and `publickey-credentials-create=(self)` (SDD 13). Legacy reference: `legacy/apps/web/lib/auth.ts` (`passkey({ rpName })`), `app/[locale]/profile/passkeys-section.tsx` (list, add, remove with label "Remove passkey {name}", "Added {date}"), `app/[locale]/login/login-form.tsx` (`signIn.passkey()`, cancelled prompt → "Passkey sign-in was cancelled or failed."), copy in `messages/*/account.json` `profile.passkeys` and `auth.json`; the legacy e2e suite has no passkey spec.
+
 ## 8. Edge cases
 
 - Unverified login: allowed; writes and tokens 403 `email-not-verified`; web goes to `/verify-email`.
@@ -246,7 +258,8 @@ In the read-only window (D-21) sessions are not copied, so everyone signs in aga
 - Google-only user enabling 2FA: must set a password first (vukem needs it to disable; legacy had `allowPasswordless: true`; D-25); the 2FA section shows the explanation and a "set password" link.
 - 2FA lockout (device and codes lost): no self-service bypass; owner verifies identity out of band, runs `user:reset-2fa`; user gets `two_factor_changed`.
 - Nickname race at onboarding: unique violation → 422 `nickname-taken`.
-- Passkey-only legacy user: mailed `passkeys_retired` with a reset link before cutover.
+- Passkey-only legacy user: keeps signing in with the imported passkey; only if the import proves incompatible (ADR 0017) is the user mailed `passkeys_retired` with a reset link before cutover.
+- Last passkey removed by a passkey-only user: allowed; the profile warns first and the account recovers through e-mail reset (FR-03-24).
 
 ## 9. Acceptance criteria
 
@@ -272,7 +285,7 @@ In the read-only window (D-21) sessions are not copied, so everyone signs in aga
 2. Better Auth 2FA encryption format [NOT VERIFIED]. Decided (03-2): a Bun script in `legacy/` decrypts with Better Auth's own code and pipes plaintext secrets into the Go importer over stdin, never to disk (§7.6). Closes when the import test passes on a staging copy.
 3. Google-only accounts need a password to manage 2FA. Decided: D-25 (set a password first, UI explains; FR-03-8).
 4. Bot protection [NOT IN VUKEM DOCS]; ADR 0016 (PoW vs Turnstile) pending. Owner: architect. Feedback entry: "built-in PoW challenge middleware for auth routes".
-5. Passkeys deferred (D-06). `vukem-feedback.md` entry: "Feature request: WebAuthn/passkeys in `auth` (registration, login, `install:auth --passkeys`, credential table with counter and transports, RP ID config). HexaScore dropped legacy passkeys at migration." Owner: vukem.
+5. Passkeys: no longer deferred (D-06 amended 2026-10-29, ADR 0017); waits for the vukem release with VF-001. Original note: `vukem-feedback.md` entry: "Feature request: WebAuthn/passkeys in `auth` (registration, login, `install:auth --passkeys`, credential table with counter and transports, RP ID config). HexaScore dropped legacy passkeys at migration." Owner: vukem.
 6. Impersonation [NOT IN VUKEM DOCS], not in v1. Minimal design: `POST /admin/_users/{id}/impersonate` storing `impersonator_id` in the session, 30-min cap, writes blocked, banner, `account_events`. Feedback entry: "`SessionGuard.Impersonate`/`StopImpersonating` with audit event" (VF-012). Owner: vukem. Not in v1 (open issue 03-6).
 7. Session timeout env names and defaults [NOT VERIFIED]. Owner: architect. Closes when read in Phase 4.
 8. Locale for queued mail outside a request [NOT VERIFIED]. Owner: vukem. Closes with a documented API.

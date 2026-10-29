@@ -8,7 +8,7 @@ hexascore.app (D-19) as one Inertia v3 + React 19 + TypeScript app served by Go:
 
 ## 2. Scope
 
-In (v1): shell, SSR, routing/i18n, §6.2 pages, components, tokens, budgets, accessibility, SEO, CSP, notifications UI, build, tests. Out: feed, follows, passkeys, PIX (D-06); RTL; PWA; visual regression as a gate. Admin CRUD is vukem's admin panel (<https://vukem.dev/docs/digging-deeper/admin>).
+In (v1): shell, SSR, routing/i18n, §6.2 pages, components, tokens, budgets, accessibility, SEO, CSP, notifications UI, build, tests. Out: feed, follows, PIX (D-06; passkeys are back in scope, ADR 0017); RTL; PWA; visual regression as a gate. Admin CRUD is vukem's admin panel (<https://vukem.dev/docs/digging-deeper/admin>).
 
 ## 3. Functional requirements
 
