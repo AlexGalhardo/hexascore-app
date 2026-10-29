@@ -71,7 +71,7 @@ func ParseAllowlist(s string) ([]netip.Prefix, error) {
 }
 
 // AdminGuard is the router middleware of SDD 13 FR-13-5 (workaround(vukem):
-// VF-NEW-P2.D.3.1, role-scoped 2FA, session lifetime and IP allowlist):
+// VF-058, role-scoped 2FA, session lifetime and IP allowlist):
 //   - /admin from an address outside a non-empty allowlist: 404, like a
 //     non-admin, so the panel's existence is not revealed;
 //   - any request of a signed-in admin: idle 30 min and absolute 12 h, then
