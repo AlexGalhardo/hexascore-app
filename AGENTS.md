@@ -35,7 +35,7 @@ This file is the single source of truth for agent behaviour. `CLAUDE.md` only po
 - Test first. A microtask is done only when its acceptance commands in `ROADMAP.md` pass. Prefer the specific test, lint and typecheck over the whole suite; the full gate runs before a PR.
 - Security defaults are never weakened; every security behaviour has a `TestSecurity_<Axx>_<Behaviour>` test (vukem convention).
 - Surgical changes: touch only what the task needs; no speculative abstractions; comment only the why.
-- Git: Conventional Commits; feature branches `agent/<role>/<task-id>` and PRs into `dev` (integration branch, deploys staging); `dev` → `main` by PR when a task group closes; tags `vX.Y.Z` on `main` deploy production; never rewrite history or force-push; branch `legacy` is immutable. Commit and push only when the owner asks.
+- Git: Conventional Commits; feature branches `agent/<role>/<task-id>` merged straight into `main` by the orchestrator after review (owner rule 2026-10-29: no `dev`/staging step, do not wait for CI to merge or start the next task); tags `vX.Y.Z` on `main`; never rewrite history or force-push; branch `legacy` is immutable. Commit and push only when the owner asks.
 - Releases follow the vukem pattern (`vX.Y.Z` tags one at a time, generated changelog, GitHub release); versions start at `v0.1.0`; `v1.0.0` = parity with the legacy app and successful cutover.
 - Documentation: update the SDD, `CHANGELOG.md` and this file in the same change when behaviour, commands or conventions change. Never claim a file was updated without editing it.
 - Parallel agents and worktrees only with the owner's explicit yes in the session; sequential research or review subagents are fine.

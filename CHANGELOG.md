@@ -9,3 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - Architecture programme documents for the vukem rewrite: `docs/PROGRESS.md`, `docs/web-research.md`, `docs/brainstorming.md`, 14 SDDs in `docs/sdd/`, 16 ADRs in `docs/adrs/`, `ROADMAP.md` (316 microtasks), `architect-feedback-and-roadmap.md`, `vukem-feedback.md` (VF-001 to VF-031), `AGENTS.md`, `CLAUDE.md`, `.editorconfig`, `.markdownlint.jsonc`.
+- Phase 0 spike report `docs/spike-report.md` (P0.F.1.1 auth scaffold, P0.F.1.2 Better Auth hash format with fixtures, P0.F.4.1 API host routing) and VF-032 to VF-034.
+- Orchestration files: `docs/orchestration/BOARD.md`, `docs/orchestration/QUESTIONS.md`, `questions-to-dev.md`.
+
+### Changed
+
+- Git flow: branches merge straight into `main` (no `dev`/staging step), per owner rule of 2026-10-29 (AGENTS.md).
+- Documentation lint and vukem.dev heading citations aligned (E-004, E-009, E-010, E-011).
