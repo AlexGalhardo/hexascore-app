@@ -30,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Stripe webhook dedup is documented as vukem `contrib/stripe`'s cache-backed event-id idempotency (production `CACHE_STORE=database`, handlers idempotent by Stripe object id) instead of a `processed_events` table, which is not imported; SDD 05, SDD 11 §7.6, SDD 13 A08 and ROADMAP P2.F.2.7 amended, proof `TestSecurity_A08_StripeReplayIgnored` (DOC-processed-events).
 - Locale URL prefixes now use vukem `i18n.MiddlewareConfig.PathPrefixes` (`SourcePath`, `StripPathPrefix`, `LocalizePath`); the app keeps only the cookie-driven 307 and prefixes same-site redirect targets of prefixed requests. Removes the VF-024 workaround (`LocalePrefix`, `RestoreURL`, `_locale` query). The prefix match is now case-sensitive and lower-case (`/PT-BR/...` is a 404) (ADOPT-VF-024).
 - `models.Rating` declares the composite key with `PrimaryKeys()` (vukem `orm.CompositeKeyer`), replacing the single-column `PrimaryKey()` hack; released `items`/`ratings` migrations stay raw DDL (forward-only) (ADOPT-VF-035).
 - Migrations rely on vukem v0.33.0's built-in advisory lock and `NoTransaction` support; `migrate:locked` (`app/console/migrate_locked.go`) and `scripts/concurrent-index.sh` are removed, runbook updated (ADOPT-VF-040).
