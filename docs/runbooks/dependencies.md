@@ -27,3 +27,7 @@ Low severity is fixed with the regular weekly Dependabot PRs. If no fixed versio
 ```sh
 gh api repos/AlexGalhardo/hexascore-app/dependabot/alerts --jq '.[] | [.security_advisory.severity, .dependency.package.name] | @tsv'
 ```
+
+## Overrides
+
+- `sdks/ts`: `js-yaml` forced to 4.3.2 (GHSA-52cp-r559-cp3m, GHSA-5p4m-2wfm-xmqj, GHSA-2883-xcg3-v3hh). `@hey-api/json-schema-ref-parser` 1.4.4 pins 4.2.0; remove the override once a release depends on a patched version.
