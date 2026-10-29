@@ -15,27 +15,36 @@ const K = new Uint32Array([
 
 const rotr = (x: number, n: number): number => (x >>> n) | (x << (32 - n));
 
-export function sha256(data: Uint8Array): Uint32Array {
-	const h = new Uint32Array([
-		0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab,
-		0x5be0cd19,
-	]);
-	const padded = new Uint8Array(((data.length + 9 + 63) >> 6) << 6);
-	padded.set(data);
-	padded[data.length] = 0x80;
-	new DataView(padded.buffer).setUint32(padded.length - 4, data.length * 8, false);
-	// Messages here are far below 2^29 bytes, so the high length word stays 0.
+const IV = [
+	0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
+];
 
-	const w = new Uint32Array(64);
-	const view = new DataView(padded.buffer);
-	for (let off = 0; off < padded.length; off += 64) {
-		for (let i = 0; i < 16; i++) w[i] = view.getUint32(off + i * 4, false);
+// Scratch space shared by every call: the solver hashes millions of messages, so the hot path allocates nothing.
+const w = new Uint32Array(64);
+
+// Hashes the already padded message `p` (a multiple of 64 bytes) into `h`.
+function compress(p: Uint8Array, h: Uint32Array): void {
+	h.set(IV);
+	for (let off = 0; off < p.length; off += 64) {
+		for (let i = 0; i < 16; i++) {
+			const o = off + i * 4;
+			w[i] = (p[o] << 24) | (p[o + 1] << 16) | (p[o + 2] << 8) | p[o + 3];
+		}
 		for (let i = 16; i < 64; i++) {
-			const s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ (w[i - 15] >>> 3);
-			const s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);
+			const x = w[i - 15];
+			const y = w[i - 2];
+			const s0 = rotr(x, 7) ^ rotr(x, 18) ^ (x >>> 3);
+			const s1 = rotr(y, 17) ^ rotr(y, 19) ^ (y >>> 10);
 			w[i] = (w[i - 16] + s0 + w[i - 7] + s1) | 0;
 		}
-		let [a, b, c, d, e, f, g, hh] = h;
+		let a = h[0];
+		let b = h[1];
+		let c = h[2];
+		let d = h[3];
+		let e = h[4];
+		let f = h[5];
+		let g = h[6];
+		let hh = h[7];
 		for (let i = 0; i < 64; i++) {
 			const t1 =
 				(hh +
@@ -64,6 +73,22 @@ export function sha256(data: Uint8Array): Uint32Array {
 		h[6] += g;
 		h[7] += hh;
 	}
+}
+
+// A zeroed buffer holding `len` message bytes plus the SHA-256 padding; the caller fills bytes [0, len).
+function padded(len: number): Uint8Array {
+	const p = new Uint8Array(((len + 9 + 63) >> 6) << 6);
+	p[len] = 0x80;
+	// Messages here are far below 2^29 bytes, so the high length word stays 0.
+	new DataView(p.buffer).setUint32(p.length - 4, len * 8, false);
+	return p;
+}
+
+export function sha256(data: Uint8Array): Uint32Array {
+	const p = padded(data.length);
+	p.set(data);
+	const h = new Uint32Array(8);
+	compress(p, h);
 	return h;
 }
 
@@ -81,12 +106,20 @@ export function leadingZeroBits(digest: Uint32Array): number {
 
 export function solve(c: string, bits: number): string {
 	const prefix = new TextEncoder().encode(c);
+	const h = new Uint32Array(8);
+	let digits = 0;
+	let buf = padded(0);
 	for (let n = 0; ; n++) {
-		const suffix = new TextEncoder().encode(String(n));
-		const msg = new Uint8Array(prefix.length + suffix.length);
-		msg.set(prefix);
-		msg.set(suffix, prefix.length);
-		if (leadingZeroBits(sha256(msg)) >= bits) return String(n);
+		if (n === 0 || String(n).length !== digits) {
+			digits = String(n).length;
+			buf = padded(prefix.length + digits);
+			buf.set(prefix);
+		}
+		for (let i = digits - 1, v = n; i >= 0; i--, v = (v / 10) | 0) {
+			buf[prefix.length + i] = 48 + (v % 10);
+		}
+		compress(buf, h);
+		if (leadingZeroBits(h) >= bits) return String(n);
 	}
 }
 
