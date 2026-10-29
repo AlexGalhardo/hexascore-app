@@ -2,6 +2,23 @@
 
 Findings from the throwaway spike app (`C:\dev\hexascore-app\hexascore-spike`, local git, never pushed). Each microtask appends a section; P0.F.11.1 consolidates them. Verdict values: works, workaround, blocked.
 
+## Summary (P0.F.11.1, 2026-10-29)
+
+Every Phase 0 capability was proven on the spike (`C:\dev\hexascore-app\hexascore-spike`, vukem v0.32.0). No capability is blocked; the workarounds are app code that adopts native vukem support as releases land (vukem `main` already merged VF-002, VF-005, VF-015, VF-024 and VF-027, unreleased because the v0.33.0 release is waiting on the owner, `questions-to-dev.md` Q-D-006).
+
+| Capability | Verdict | Decisive command | Decisive output | VFs |
+| --- | --- | --- | --- | --- |
+| P0.F.1 auth scaffold, Better Auth hashes, compat hasher | works (es catalogues by hand) | `go test ./app/accounts -run TestSecurity_A07_LegacyScryptVerifiesAndRehashes` | PASS; stored hash becomes `$argon2id$` | VF-032, VF-033 |
+| P0.F.2 Inertia SSR, single container, locale prefix | workaround | `docker exec <id> pkill node` then `GET /up?checks=1` | `ssr: ok` again after 1.3 s | VF-002, VF-024, VF-027, VF-028, VF-038, VF-041 |
+| P0.F.3 signed keyset cursor with `Scroll` | workaround | `go test ./app/catalog/... -run TestCursor` | PASS; 13 pages, 300 unique rows | VF-005, VF-039 |
+| P0.F.4 host routing for `api.<host>/v1` | workaround | `curl -H 'Host: api.localhost' /v1/ping` | same body as `/api/v1/ping` | VF-015, VF-034 |
+| P0.F.5 migrations, jsonb, CHECK, lock, concurrent index | workaround | two parallel `migrate:locked` | one migrates, one prints `Nothing to migrate.` | VF-006, VF-009, VF-017, VF-026, VF-035, VF-036, VF-040 |
+| P0.F.6 queue and scheduler inside `serve` | workaround | 200 jobs, SIGTERM and SIGKILL mid-run | `effects=200 distinct_keys=200`, `r2_effects=40`, `failed=0` | VF-018, VF-021 (withdrawn) |
+| P0.F.7 OpenAPI documents, problems, clients | workaround | `go test ./tests -run TestAPIContract` | ok on `/api/v1` and `/app/v1` | VF-014, VF-016, VF-042, VF-044 |
+| P0.F.8 Stripe billing scaffold | workaround | `go test ./... -run 'TestBilling'` | 10 tests PASS | VF-037 |
+| P0.F.9 S3 storage, covers, export ZIP | works | `go test ./tests -run 'TestCoversServe\|TestPresignExpires\|TestExportJob\|TestZipCSV'` | 4 PASS | VF-029, VF-045 |
+| P0.F.10 Lighthouse CI budgets | works (after gzip) | `bunx lhci autorun` | LCP 1.37 s, CLS 0, TBT ≤ 11 ms, JS 115 kB | VF-043 |
+
 ## P0.F.1.1 Auth scaffold
 
 Environment: vukem CLI and framework v0.32.0 (CLI installed with `go install github.com/AlexGalhardo/vukem/cmd/vukem@v0.32.0`), Go 1.27.3, Bun 1.4.4, Postgres `postgres:18.6-alpine3.24` (tag exists, pulled). Spike branch `agent/senior/P0.F.1.1` (commits 0674406, 185d098). go.mod requires the tag `v0.32.0` with no `replace` and `-framework` was not needed.

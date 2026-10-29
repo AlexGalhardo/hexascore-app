@@ -67,6 +67,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-002: Inertia SSR falls back to client rendering silently by default
 
 - **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #7, <https://github.com/AlexGalhardo/vukem/pull/7>), unreleased. Native API: `inertia.SSRConfig{Strict: true}` (503 + `Retry-After`, auto `inertia-ssr` readiness check) or per-request `inertia.RequireSSR(ctx)`.
+- **Spike (2026-10-29)**: P0.F.2.1: workaround proven, an `OnFailure` counter plus the `ssr` readiness check (spike report P0.F.2.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` "Inertia v3 (BETA)" [heading not on page 2026-10-29] → SSR row: "falls back to client-side rendering on any failure (reported to `OnFailure`, default a warning log)".
 - **Context**: for a catalogue that depends on search indexing (ADR 0004), a silent fallback hides an SEO incident. HexaScore needs per-route policy: public routes must fail readiness or page an alert when SSR fails; logged-in routes may fall back.
 - **Reproduction**: stop the SSR process; request a public page; observe a 200 with client-rendered shell and only a warning log.
@@ -94,6 +95,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-005: No keyset (cursor) pagination helper in the ORM
 
 - **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #11, <https://github.com/AlexGalhardo/vukem/pull/11>), unreleased. Native API: `orm.QueryOf[T](db).OrderBy("score", orm.Desc).CursorPaginate(ctx, cursor, n, orm.Desc)` pages by `(score DESC, id DESC)`; cursor values typed per column, unsigned by design (bound parameters, validated columns).
+- **Spike (2026-10-29)**: P0.F.3.1: workaround proven, an app-signed HMAC keyset cursor over `(sort value, id)` with `WhereRaw` (P0.F.3.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` "Querying"; `https://vukem.dev/docs/rest-apis/pagination` "Query conventions"; `https://vukem.dev/docs/frontend/inertia` Inertia `ScrollCursor(orm.CursorPage, name)`.
 - **Context**: `ScrollCursor` accepts an `orm.CursorPage`, but the documented query builder shows no way to build a keyset page over a composite order (`score DESC, id DESC`) with an opaque signed cursor. HexaScore lists (SDD 01, 05, 07) need this for every listing and for the paid API.
 - **Reproduction**: search `https://vukem.dev/docs/database/overview` for `Cursor`: only the Inertia prop is documented.
@@ -103,6 +105,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-006: Postgres mapping of `t.JSON` and `t.Enum` undocumented
 
 - **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Spike (2026-10-29)**: P0.F.5.1: on PostgreSQL `t.JSON` is `jsonb` and `t.Enum` is `text` plus CHECK; documentation gap confirmed (P0.F.5.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` "Migrations".
 - **Context**: SDD 01 needs `jsonb` columns with GIN indexes and enum-like columns. The migration builder's column types for these on Postgres are not documented, so the DDL sketches use `s.Raw`.
 - **Reproduction**: n/a (docs gap).
@@ -128,6 +131,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-009: Generated columns and the ORM on insert/update
 
 - **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Spike (2026-10-29)**: P0.F.5.1: generated column works with raw DDL; the ORM must not map it (SQLSTATE 428C9) (P0.F.5.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` "Defining models", "Querying".
 - **Context**: `ratings.overall` is a Postgres generated column (SDD 02). It is unclear whether `orm.Create`/`Save` omit generated columns from INSERT/UPDATE.
 - **Reproduction**: pending at implementation (test: create a model with a generated column on Postgres and call `orm.Create`).
@@ -169,6 +173,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-014: Envelope and problem key casing is fixed to snake_case
 
 - **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Spike (2026-10-29)**: P0.F.7.1: camelCase payload fields work through `json` tags; envelope and problem keys stay snake_case (P0.F.7.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/overview` "Envelopes" [heading not on page 2026-10-29], "Errors".
 - **Context**: HexaScore payload fields are camelCase (legacy API contract and SDKs); the documented envelope keys (`next_cursor`, `request_id`) are snake_case and no option to change them is documented, so responses mix conventions.
 - **Workaround**: accept the mix and document it; or bypass the envelope helper and write the envelope by hand.
@@ -177,6 +182,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-015: No host-based routing helper
 
 - **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #12, <https://github.com/AlexGalhardo/vukem/pull/12>), unreleased. Native API: `r.Host("api.hexascore.app", func(g *router.Group) {...})` (ServeMux host patterns, port ignored); `r.URL` returns `//host/path` for host routes; `RouteInfo.Host`.
+- **Spike (2026-10-29)**: P0.F.4.1: workaround proven, an app host-rewrite middleware installed with `UseServer` (P0.F.4.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/routing` "Routing", `https://vukem.dev/docs/rest-apis/overview` "Routing", "Versioning".
 - **Context**: the paid API is served at `api.hexascore.app/v1/...` while the app also serves `hexascore.app`. The router documents path groups only. The app needs a `Host`-matched group (or a middleware that rewrites `/v1/*` to `/api/v1/*` when the host matches) plus per-host CORS and security headers.
 - **Workaround**: app middleware inspecting `r.Host` and rewriting `r.URL.Path`, registered before the router; OpenAPI `servers` entry set by hand.
@@ -185,6 +191,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-016: Problem+json extension members undocumented
 
 - **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Spike (2026-10-29)**: P0.F.7.1: workaround proven, a router-wide `Services.Errors` wrapper that adds the kebab-case `code` member (P0.F.7.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/overview` "Errors", `https://vukem.dev/docs/basics/error-handling` errors section.
 - **Context**: RFC 9457 allows extension members; HexaScore's API uses `code`, `plan`, `limit`, `retryAfter` on quota and plan problems (legacy `lib/api/problem.ts`). The docs do not show how to add members to `errs.HTTPError` output or to the problem catalogue entries used by OpenAPI.
 - **Workaround**: a custom error type implementing the problem interface, if one exists, or a hand-written handler for API routes.
@@ -193,6 +200,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-017: No non-transactional migrations (`CREATE INDEX CONCURRENTLY`)
 
 - **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
+- **Spike (2026-10-29)**: P0.F.5.2: workaround proven, a `scripts/concurrent-index.sh` run outside a transaction; no AccessExclusiveLock observed (P0.F.5.2).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` "Migrations", "Managing them with migrate".
 - **Context**: Postgres refuses `CREATE INDEX CONCURRENTLY` inside a transaction. HexaScore's search indexes (SDD 07) and later index additions on the 100k-row `items` table and larger `ratings` table must be built without locking writes in production. The docs do not show a per-migration "no transaction" flag.
 - **Workaround**: a one-off script run by hand, or building indexes before the table receives traffic.
@@ -201,6 +209,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-018: Queue priority and per-queue concurrency with the database driver inside `serve`
 
 - **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Spike (2026-10-29)**: P0.F.6.1: workaround proven, an in-process per-family semaphore; the heavy family stayed at 2 under concurrency 8 (P0.F.6.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/scheduler` "Queue", "Scheduler" [heading not on page 2026-10-29]; `https://vukem.dev/docs/cli/reference-runtime` `serve`.
 - **Context**: HexaScore runs HTTP, scheduler and queue workers in one process under a US$30/month budget (brainstorming D-08). Ingestion jobs (SDD 06) must run at low concurrency (1–2) and lower priority than user-facing jobs (mail, recompute). The docs do not state whether named queues, priorities and per-queue worker counts apply to the database driver when workers run inside `serve`, nor how to cap CPU use of workers.
 - **Reproduction**: n/a (docs gap).
@@ -250,6 +259,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-024: `i18n.Middleware` has no URL-prefix locale source
 
 - **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #10, <https://github.com/AlexGalhardo/vukem/pull/10>), unreleased. Native API: `i18n.MiddlewareConfig{PathPrefixes: map[string]string{"pt-br": "pt-BR"}}` + `i18n.SourcePath`; `StripPathPrefix` installed by `DefaultMiddlewareWith`; `i18n.PathPrefix(ctx)`, `i18n.LocalizePath(ctx, path)`.
+- **Spike (2026-10-29)**: P0.F.2.3: workaround proven, a path-prefix middleware before `i18n.Middleware` plus `RestoreURL`; refined in VF-041 (P0.F.2.3).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/localization`, `https://vukem.dev/docs/frontend/inertia-i18n`.
 - **Context**: HexaScore keeps the legacy URL scheme (`/`, `/pt-br/...`, `/es/...`, brainstorming D-17). The documented locale sources are query, cookie and `Accept-Language`; a path-prefix source with prefix stripping and URL generation that re-adds the prefix is not documented.
 - **Workaround**: app middleware that reads the first path segment, sets the locale in the context and rewrites the path; `route` helpers wrapped to add the prefix.
@@ -266,6 +276,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-026: Migration runner has no documented lock for concurrent starts
 
 - **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework).
+- **Spike (2026-10-29)**: P0.F.5.2: workaround proven, a `migrate:locked` command holding a Postgres advisory lock (P0.F.5.2).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations`, `https://vukem.dev/docs/deployment/docker-and-railway`.
 - **Context**: zero-downtime deploys can start a new container while the old one still runs; if migrations run at boot, two runners can race. The docs do not mention a Postgres advisory lock or a `migrations` table row lock.
 - **Workaround**: the app takes `pg_advisory_lock` before calling the runner, or migrations run as a separate pre-deploy command.
@@ -274,6 +285,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-027: `serve` and `build` gaps for the SSR sidecar and release metadata
 
 - **Date**: 2026-10-28. **Severity**: medium. **Status**: merged in main (PR #9, <https://github.com/AlexGalhardo/vukem/pull/9>), unreleased. Native API: `bin/app serve -with-ssr` (supervised SSR runner), `vukem build -ssr` and `-ldflags`, `vukem.WithVersion(v)` (`version` in `/up`).
+- **Spike (2026-10-29)**: P0.F.2.2: workaround proven, the SSR bundle built by hand (`build:ssr`) and Node supervised by the Go process (P0.F.2.2).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/cli/reference-runtime`, `https://vukem.dev/docs/frontend/inertia`, `https://vukem.dev/docs/deployment/single-binary`.
 - **Context**: HexaScore runs the Node SSR process inside the same container as the Go app (D-08). The docs show `vukem ssr:start` as a separate command and `vukem build` without the SSR bundle; there is no documented way to have `serve` supervise the SSR process in production, to expose the build version at `/up`, or to pass extra `-ldflags` through `vukem build`.
 - **Workaround**: a `build:ssr` step (`vite build --ssr`) in the pipeline; the app starts and restarts the Node process itself; version injected by a plain `go build -ldflags` step and reported by a custom health field.
@@ -282,6 +294,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-028: Root view data has no theme hook
 
 - **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Spike (2026-10-29)**: P0.F.2.3: workaround proven, the theme passed as a shared prop and read in the view (P0.F.2.3).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/frontend/inertia` (root view, `inertia.RootData`).
 - **Context**: dark mode without a flash of the wrong theme needs `data-theme` on `<html>` from a cookie at render time; the root view receives only `inertia.RootData` plus view functions.
 - **Workaround**: a custom view function reading the theme cookie.
@@ -290,6 +303,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 ## VF-029: Export helpers only target `http.ResponseWriter`
 
 - **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Spike (2026-10-29)**: P0.F.9.1: workaround proven, `encoding/csv` plus `export.SafeCell` writing into the ZIP; byte-equal to `export.CSV` via `ResponseRecorder` (P0.F.9.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/exports`.
 - **Context**: the LGPD data export (SDD 14) builds a ZIP of CSV/JSON files in a background job and uploads it to storage behind a signed URL; the documented streaming CSV/JSON/NDJSON helpers (with the CSV formula guard) write to a response, not to an `io.Writer`.
 - **Workaround**: re-implement the formula guard and encoders for the job, or call the helpers with an in-memory `ResponseRecorder`.
