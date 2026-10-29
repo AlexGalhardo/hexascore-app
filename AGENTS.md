@@ -51,6 +51,7 @@ This file is the single source of truth for agent behaviour. `CLAUDE.md` only po
 | `golangci-lint run` | Go lint and format check |
 | `golangci-lint run --build-tags integration ./...` | Go lint incl. integration tests (CI pins v2.15.0) |
 | `bunx commitlint --from <base-sha> --to <head-sha>` | Conventional Commits check on a commit range (CI `lint`; PR title via stdin) |
+| `bun run build:docs` | re-render `resources/docs/*.md` into the committed `resources/docs/docs.json` (a vitest test fails when stale) |
 | `bun run lint` / `bun run typecheck` / `bun run test` | TypeScript lint, types, unit tests |
 | `vukem openapi:export` | regenerate the OpenAPI documents (diff checked in CI) |
 | `bun run e2e` | Playwright + axe against a built container |

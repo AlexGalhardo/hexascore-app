@@ -19,7 +19,7 @@ export default function Footer() {
 					<Link href={localized("/terms", locale)} className={link}>
 						{t("footer.terms")}
 					</Link>
-					<Link href={localized("/privacy", locale)} className={link}>
+					<Link href={localized("/policy", locale)} className={link}>
 						{t("footer.privacy")}
 					</Link>
 					<Link href={localized("/contact", locale)} className={link}>
