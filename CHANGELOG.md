@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-29
+
+### Added
+
+- **auth:** Add Better Auth compatibility hasher and password rules ([95cacf3](https://github.com/AlexGalhardo/hexascore-app/commit/95cacf31d786cbe79ec41f7deb247db18f37ae12))
+- **ratings:** Migrate the scoring tables and item score columns ([aeca1a5](https://github.com/AlexGalhardo/hexascore-app/commit/aeca1a54e5c6832f2b49f720c8e2efbacd980643))
+- **catalog:** Add slug generation, catalog redirects and 301 middleware ([2f206fb](https://github.com/AlexGalhardo/hexascore-app/commit/2f206fb9b7c9d54f732f96db3a22f9ccaf471fd4))
+- **catalog:** Add listing queries over a signed keyset cursor ([39b43e6](https://github.com/AlexGalhardo/hexascore-app/commit/39b43e63e9bfb9bc7c244b5d531402660c535b01))
+- **catalog:** Add DemoCatalog seeder and factories ([cee1ec6](https://github.com/AlexGalhardo/hexascore-app/commit/cee1ec6e0cb4ead62e7725ba293902a6d0422f4b))
+- **catalog:** Add catalog:check command with DQ-01..DQ-14 asserts ([6c21c06](https://github.com/AlexGalhardo/hexascore-app/commit/6c21c06b14427b9113ec48462dcd213407783c3d))
+- **ratings:** Implement formula v1 in Go and the equivalent SQL recompute ([84d0ed9](https://github.com/AlexGalhardo/hexascore-app/commit/84d0ed90ba8ff02bcca09783a2916671f1a69cfa))
+- **catalog:** Add item merge service and catalog:merge command ([039651f](https://github.com/AlexGalhardo/hexascore-app/commit/039651f641be1cc0a134fe0c20443d1368f135f1))
+- **catalog:** Serve sitemap index and chunked child sitemaps ([3977f90](https://github.com/AlexGalhardo/hexascore-app/commit/3977f9095048a54e20a4d6b085232e3462c1623b))
+
+### Fixed
+
+- **catalog:** Use the vukem faker instead of math/rand in the demo seeder ([f57b3fd](https://github.com/AlexGalhardo/hexascore-app/commit/f57b3fd7ec5f85efa6255aa2186c5443444bf888))
+- **catalog:** Keep user data out of merge snapshots and carry anti-abuse state ([605f721](https://github.com/AlexGalhardo/hexascore-app/commit/605f721e4d5de14c0ecfe62e03fbc2e28c9d70e5))
+
 ## [0.1.0] - 2026-10-29
 
 ### Added
