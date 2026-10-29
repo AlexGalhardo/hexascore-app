@@ -43,9 +43,9 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-032 | 2026-10-28 | medium | open |
 | VF-033 | 2026-10-28 | low | open |
 | VF-034 | 2026-10-28 | low | open |
-| VF-035 | 2026-10-29 | medium | open |
+| VF-035 | 2026-10-29 | medium | in_progress (framework) |
 | VF-036 | 2026-10-29 | low | open |
-| VF-037 | 2026-10-29 | medium | open |
+| VF-037 | 2026-10-29 | medium | in_progress (framework) |
 | VF-038 | 2026-10-29 | medium | merged in main (PR #17), unreleased |
 | VF-039 | 2026-10-29 | low | open |
 | VF-040 | 2026-10-29 | medium | merged in main (PR #13), unreleased |
@@ -356,7 +356,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-035: Migration builder lacks uuid/composite primary keys, smallint and generated columns; ORM has a single-column key
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` ("Creating migrations"), `https://vukem.dev/docs/database/orm` ("Defining models").
 - **Context**: SDD 01 `items` (uuid primary key) and SDD 02 `ratings` (composite key `(user_id, item_id)`, `smallint` scores, stored generated `overall`) cannot be expressed with `schema.Table`: no `smallint`, no primary key on a `t.UUID` column, no composite primary key, no generated column. `t.JSON` is `jsonb` and `t.Enum` is `text` + CHECK on PostgreSQL (verified, spike `TestGeneratedOverallColumn`), which closes the doubt in VF-006 for those two types. The ORM filters `Update`/`Delete` by one key column (`Keyer.PrimaryKey`), so on a composite-key table `orm.Update`/`orm.Delete` would match every row of the first key.
 - **Workaround**: `s.Raw` for whole `CREATE TABLE` statements (guard with `s.Dialect() == "postgres"`); ORM model `Rating` with `PrimaryKey() = "user_id"` used only for `orm.Create` and `orm.QueryOf[Rating](db).Where("user_id", u).Where("item_id", i).Update(...)`; never `orm.Update`/`orm.Delete` on it.
@@ -374,7 +374,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-037: `install:billing` has no per-currency prices and its plan names are fixed in code
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0 (`contrib/stripe` v0.4.1). **Docs consulted**: `https://vukem.dev/docs/cli/reference-install` ("`vukem install:billing`"), `https://vukem.dev/docs/digging-deeper/billing` ("Configuration", "Testing").
 - **Context**: the scaffold writes plans `basic` and `pro` in `config/billing.go` (`plans()`), one `STRIPE_PRICE_<NAME>` id per plan and a `Checkout(ctx, user, plan)` without a currency. HexaScore sells `pro` and `business` in BRL, USD and EUR (SDD 05 §6.3, ADR 0015) using one Stripe price per plan with `currency_options`.
 - **Workaround** (spike `agent/senior/P0.F.8.1`): rename the plans in `plans()` and in the tests; add `Plan.Amounts` (display only) and a `config.Currency` allowlist; pass `"currency"` in the `stripe.Params` of `CreateCheckoutSession` (`Params` is a free-form map, so no dependency change); the controller reads the `currency` form field and an unsupported value returns 422 before any Stripe call. Whether Stripe accepts `currency` with a `currency_options` price in a live sandbox is [NOT VERIFIED] here (only the fake-Stripe tests ran; test keys only).
