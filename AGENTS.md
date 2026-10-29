@@ -57,6 +57,7 @@ This file is the single source of truth for agent behaviour. `CLAUDE.md` only po
 | `setups/setup-windows.ps1` | idempotent Windows setup: tools, `core.hooksPath .githooks` (commit-msg Conventional Commits check), `.env`, `APP_KEY`, compose stack, `bun install`, `vukem migrate` |
 | push to `main` | Railway service `app` (source `AlexGalhardo/hexascore-app`, branch `main`) builds and deploys automatically; `.github/workflows/ci.yml` reports regressions after the fact |
 | `railway up --service app --detach` | manual deploy of the working tree to Railway project `hexascore`, environment `production` (<https://app-production-785f.up.railway.app>; healthcheck `/up`, pre-deploy `/app/app migrate`) |
+| `./app admin:grant <email>` / `admin:revoke <email>` / `user:reset-2fa <email> --reason "<text>"` | role changes and manual 2FA reset (account_events with actor NULL, `data.cli=true`); admins are users with `role = admin`, not `ADMIN_EMAILS` |
 | `scripts/release.sh vX.Y.Z` | changelog section via git-cliff (`.config/cliff.toml`), `chore(release)` commit and tag; needs git-cliff installed (`scoop install git-cliff` / `brew install git-cliff`) |
 | `setups/setup-unix.sh` | same setup for Linux and macOS |
 
