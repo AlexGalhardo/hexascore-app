@@ -107,10 +107,13 @@ func New(app *vukem.App) (*Accounts, error) {
 		return nil, err
 	}
 
-	hasher := hash.Default()
+	inner := hash.Default()
 	if app.Kind == vukem.KindTest {
-		hasher = hash.Fake() // fast hashing keeps tests quick
+		inner = hash.Fake() // fast hashing keeps tests quick
 	}
+
+	// Better Auth scrypt hashes verify and are rehashed to argon2id on login (ADR 0008).
+	hasher := NewCompatHasher(inner)
 
 	messages, err := loadMessages()
 	if err != nil {
