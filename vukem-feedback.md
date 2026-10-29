@@ -50,6 +50,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-039 | 2026-10-29 | low | open |
 | VF-040 | 2026-10-29 | medium | open |
 | VF-041 | 2026-10-29 | low | open |
+| VF-042 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -392,3 +393,11 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Context**: refines VF-024 and VF-028 after proving them under SSR. (1) `WithViewFuncs` functions take no `context.Context`, so a view function cannot read a cookie (VF-028 workaround as written is impossible). (2) Inertia builds `Page.URL` from `r.URL.RequestURI()`, so a path-prefix middleware that strips `/pt-br` before routing (VF-024 workaround) makes every page object report `/` and breaks client history.
 - **Workaround** (spike `agent/senior/P0.F.2.3`): the theme cookie is validated and shared as an Inertia prop `theme`, read by the root view as `.Page.Props.theme`; a route-level `RestoreURL` middleware puts the original prefixed URL back on the request after routing, before the Inertia middleware.
 - **Request**: `inertia.Config.RootData func(*http.Request) map[string]any` (as in VF-028), and a first-class path-prefix locale source (VF-024) that keeps the original URL for `Page.URL` and `URLFor`.
+
+## VF-042: Problem extension members, group-level error handling and bodyless 202 (confirms VF-014, VF-016)
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/openapi`, `https://vukem.dev/docs/cli/reference-runtime` ("`vukem openapi:export`"), `https://vukem.dev/docs/rest-apis/overview` ("Errors"). The three behaviours below were confirmed by running them and reading the v0.32.0 source (`web/errors.go`, `auth/middleware.go`, `api/typed.go`): `[NOT IN VUKEM DOCS]`.
+- **Context**: (1) `web.Problem` has fixed members (`request_id` snake_case, no `code`, no extensions) and the OpenAPI `Problem` schema is derived from it, so a `code` member is invisible to generated clients (VF-014, VF-016 confirmed). (2) Errors returned by handlers reach only the router-wide `Services.Errors`; `auth.ProblemJSON`-style group middleware that swaps services does not see them, so per-group problem formatting is impossible. (3) `api.Op{Status: 202}` with an `Out` of `struct{}` writes the body `{}` while the OpenAPI document says "no body", so `AssertMatchesOpenAPI` fails.
+- **Workaround** (spike `agent/senior/P0.F.7.1`): `problems.Install(router, prefixes...)` wraps `Services.Errors`, runs vukem's default handler into a buffer and adds `code` plus extension members to its JSON; `problems.Error` carries the code. The 202 route returns a one-field `Accepted` struct.
+- **Request**: `errs.HTTPError` code and extension members rendered by `DefaultErrorHandler` and declared in the OpenAPI `Problem` schema; a documented per-group error handler; `Out = struct{}` with an explicit 2xx status writes no body.

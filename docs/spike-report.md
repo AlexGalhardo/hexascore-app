@@ -235,3 +235,21 @@ Acceptance (spike built with `bun run build && bun run build:ssr`, `app serve` p
 - `go test ./app/http/middleware/` ok (16 cases incl. open-redirect and client `_locale` spoof); `go test ./tests/ -run TestLocalePrefix` 4 tests PASS (prefix, cookie redirect, Once omission, theme incl. attribute-injection cookie). `go test ./...`: only the Postgres tests fail locally (no `TEST_DATABASE_URL` exported in this shell).
 
 Limits: in-app links and `router.visit` must add the prefix themselves (no prefix-aware `route()`/URLFor, VF-024); `es` is not enabled (no app catalog yet); locale switching must set the `locale` cookie and navigate (not built); the 307 is per request, so a CDN must `Vary: Cookie` (set on the redirect only).
+
+## P0.F.7.1 Two OpenAPI documents with RFC 9457 problem codes
+
+Verdict: workaround (VF-014 and VF-016 confirmed; VF-042).
+
+Spike branch `agent/senior/P0.F.7.1`. Typed handlers via `api.Register`: `routes/api.go` (`getItem`, plus the existing `ping`) and `routes/app_api.go` (`getAppItem`, `reportClientError` with 202). `app/http/problems/problem.go` adds `code` and extension members; `app/catalog/api.go` holds the item lookup (unknown type or malformed id is a 404 `not-found`).
+
+- VF-014: payload fields are camelCase through `json` tags (`createdAt`), but the problem document keeps `request_id` and the envelope keys snake_case: `web.Problem` is fixed and has no naming option. Accepted as documented in the SDD README; no custom envelope written.
+- VF-016: extension members are not supported by `web.Problem`/`DefaultErrorHandler`. `problems.Install` wraps the router-wide `Services.Errors` (group middleware cannot: handler errors do not pass through services swapped by middleware). The OpenAPI `Problem` schema does not list `code`, so generated clients will not see it until the framework adds extensions.
+- Each document contains only its own prefix: `-prefix` keeps page routes out (no duplicate `operationId`).
+
+Acceptance (2026-10-29):
+
+- `app openapi:export -prefix /api/v1 > openapi/api-v1.json` and `-prefix /app/v1 > openapi/app-v1.json` → exit 0 / exit 0; both `openapi: 3.1.0`, operations `ping, getItem` and `reportClientError, getAppItem`.
+- `curl -si -H 'Host: api.localhost' localhost:3011/v1/items/missing` → `404`, `Content-Type: application/problem+json`, body `{"code":"not-found",...,"request_id":"KKAZPBGJH6CHN62WIHAFU6SRYF",...}`.
+- `go test ./tests -run TestAPIContract` → `ok` (both prefixes: 200, 404 `not-found`, 422 `validation-failed` with field errors, 202; every response passes `AssertMatchesOpenAPI()`); `go test ./app/http/problems/` ok (extension member, reserved-member guard, 5xx detail hidden, other paths untouched); `go test ./...` all `ok` with `TEST_DATABASE_URL` set.
+
+Limits: the exported documents are checked in from the spike only as samples (no CI diff yet); `servers` shows `http://localhost:3000` because `API_URL` was unset; auth, quota and rate-limit headers are not wired (other tasks); `listItems` and the rest of SDD 05 section 6.2 are not implemented; unmatched routes (router 404) are not under the problem handler when the path is outside the installed prefixes.
