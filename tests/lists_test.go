@@ -141,7 +141,9 @@ func TestListLimits(t *testing.T) {
 	for i := range library.MaxListsPerType {
 		c.PostJSON("/app/v1/lists", listBody("game", fmt.Sprintf("L%d", i))).AssertStatus(201)
 	}
-	c.PostJSON("/app/v1/lists", listBody("game", "one too many")).AssertStatus(409)
+	c.PostJSON("/app/v1/lists", listBody("game", "one too many")).AssertStatus(409).
+		AssertJSONPath("code", library.CodeListLimit).
+		AssertJSONPath("type", "https://hexascore.app/problems/"+library.CodeListLimit)
 	c.PostJSON("/app/v1/lists", listBody("movie", "other type")).AssertStatus(201)
 	other.PostJSON("/app/v1/lists", listBody("game", "other user")).AssertStatus(201)
 
