@@ -2,6 +2,7 @@ package tests
 
 import (
 	"testing"
+	"time"
 
 	"github.com/AlexGalhardo/vukem/vukemtest"
 
@@ -83,11 +84,45 @@ func TestProfilePassword_SetFirstTime(t *testing.T) {
 
 	app, c := profileUser(t, "google@example.com")
 	clearPasswordSet(t, app, "google@example.com")
+	linkGoogle(t, app, "google@example.com")
 
 	c.Get("/profile").AssertInertia("Profile/Index").PropEquals("passwordSet", false)
 	// No current password is asked when none was ever chosen.
 	c.PutJSON("/profile/password", map[string]any{"newPassword": next}).AssertRedirect("/profile")
 	c.Get("/profile").AssertInertia("Profile/Index").PropEquals("passwordSet", true)
+}
+
+// TestSecurity_A07_PasswordChangeNeedsCurrentUnlessSocialOnly: an account
+// without password_set_at but also without a linked social account (legacy or
+// imported) must still prove the current password.
+func TestSecurity_A07_PasswordChangeNeedsCurrentUnlessSocialOnly(t *testing.T) {
+	t.Parallel()
+
+	app, c := profileUser(t, "legacy@example.com")
+	clearPasswordSet(t, app, "legacy@example.com")
+
+	c.Get("/profile").AssertInertia("Profile/Index").PropEquals("passwordSet", true)
+	c.WithHeader("Referer", "/profile").
+		PutJSON("/profile/password", map[string]any{"newPassword": "Another horse 7 staple!"}).
+		AssertRedirect("/profile")
+	c.Get("/profile").AssertInertia("Profile/Index").HasProp("errors.currentPassword")
+}
+
+func linkGoogle(t *testing.T, app *vukemtest.App, email string) {
+	t.Helper()
+
+	acc, err := accounts.New(app.App)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p := acc.DB.Dialect().Placeholder
+	if _, err := acc.DB.ExecContext(t.Context(),
+		"INSERT INTO social_accounts (user_id, provider, provider_id, created_at, updated_at) SELECT id, 'google', "+
+			p(1)+", "+p(2)+", "+p(3)+" FROM users WHERE email = "+p(4),
+		"g-"+email, time.Now().UTC(), time.Now().UTC(), email); err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestProfilePrivacy(t *testing.T) {
@@ -168,12 +203,15 @@ func TestSecurity_A07_GoogleOnlyMustSetPasswordBefore2FA(t *testing.T) {
 
 	app, c := profileUser(t, "google@example.com")
 	clearPasswordSet(t, app, "google@example.com")
+	linkGoogle(t, app, "google@example.com")
 
 	c.Get("/user/two-factor").AssertStatus(403)
 	c.PostJSON("/user/two-factor", nil).AssertStatus(403)
 	c.PostJSON("/user/two-factor/disable", map[string]any{"password": "x"}).AssertStatus(403)
 
-	c.PutJSON("/profile/password", map[string]any{"newPassword": "Another horse 7 staple!"}).AssertRedirect("/profile")
+	c.WithHeader("Referer", "/profile").
+		PutJSON("/profile/password", map[string]any{"newPassword": "Another horse 7 staple!"}).
+		AssertRedirect("/profile")
 	c.Get("/user/two-factor").AssertOK().AssertInertia("Auth/TwoFactor")
 
 	// The explanation exists in every locale.
