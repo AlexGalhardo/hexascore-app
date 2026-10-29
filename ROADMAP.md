@@ -464,7 +464,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `curl -sI $WEB/pt-br/games/$OLD_SLUG` → `301`, `Location: /pt-br/games/$NEW_SLUG`.
   - Notes: slugs identical across locales (D-17); redirect chains collapse to one hop.
 
-- [ ] **P1.B.3.2** Implement the item merge service with a jsonb snapshot of both items in the audit log and a `catalog:merge` console command (service half of `mergeItems`).
+- [x] **P1.B.3.2** Implement the item merge service with a jsonb snapshot of both items in the audit log and a `catalog:merge` console command (service half of `mergeItems`).
   - Files/modules: `app/catalog/merge.go`, `app/catalog/merge_test.go`, `app/console/catalog_merge.go`
   - Refs: SDD 01 §7.5, §9; open-issues 04-9; legacy `actions/admin.ts` (`mergeItems`)
   - Depends on: P1.B.3.1
