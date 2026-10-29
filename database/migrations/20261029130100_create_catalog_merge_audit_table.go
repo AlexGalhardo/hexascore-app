@@ -16,7 +16,7 @@ func m20261029130100CreateCatalogMergeAuditTable() schema.Migration {
 			return s.Raw(`CREATE TABLE catalog_merge_audit (
   id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   occurred_at timestamptz NOT NULL DEFAULT now(),
-  actor_id bigint REFERENCES users(id) ON DELETE SET NULL,
+  actor_id bigint, -- plain data: a FK with ON DELETE SET NULL would hit the append-only trigger and block account erasure
   item_type text NOT NULL CHECK (item_type IN ('game','movie','series','book')),
   source_item_id uuid NOT NULL,
   target_item_id uuid NOT NULL,

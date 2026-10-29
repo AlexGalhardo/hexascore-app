@@ -41,9 +41,11 @@ const snapshotSQL = `SELECT jsonb_build_object(
     WHERE x.from_item_id = i.id OR x.to_item_id = i.id),
   'editions', (SELECT coalesce(jsonb_agg(to_jsonb(x)), '[]') FROM editions x WHERE x.work_id = i.id),
   'affiliate_links', (SELECT coalesce(jsonb_agg(to_jsonb(x)), '[]') FROM affiliate_links x WHERE x.item_id = i.id),
-  'ratings', (SELECT coalesce(jsonb_agg(to_jsonb(x)), '[]') FROM ratings x WHERE x.item_id = i.id),
-  'item_status', (SELECT coalesce(jsonb_agg(to_jsonb(x)), '[]') FROM item_status x WHERE x.item_id = i.id),
-  'time_to_beat', (SELECT coalesce(jsonb_agg(to_jsonb(x)), '[]') FROM time_to_beat x WHERE x.item_id = i.id)
+  -- user-owned rows are counted, never copied: the audit is append-only and
+  -- must not outlive account erasure (LGPD, SDD 03 §5)
+  'ratings_count', (SELECT count(*) FROM ratings x WHERE x.item_id = i.id),
+  'item_status_count', (SELECT count(*) FROM item_status x WHERE x.item_id = i.id),
+  'time_to_beat_count', (SELECT count(*) FROM time_to_beat x WHERE x.item_id = i.id)
 ) FROM items i WHERE i.id = $1`
 
 // moveByKey moves rows of table from the source item to the target, skipping
@@ -224,8 +226,8 @@ WHERE (from_item_id = $1 AND to_item_id = $2) OR (from_item_id = $2 AND to_item_
 }
 
 // moveUserData moves ratings, statuses, time-to-beat reports and rating flags.
-// On a (user, item) conflict the newer row wins for the first three; flags
-// keep the target's. Scores are recomputed by the `catalog.merged` subscribers.
+// On a (user, item) conflict the newer row wins for the first three; for flags
+// the stricter one wins. Scores are recomputed by the `catalog.merged` subscribers.
 func moveUserData(ctx context.Context, ex database.Executor, from, into string) error {
 	stmts := []string{
 		`UPDATE ratings r SET c1 = s.c1, c2 = s.c2, c3 = s.c3, c4 = s.c4, c5 = s.c5, c6 = s.c6,
@@ -240,6 +242,25 @@ WHERE s.item_id = $1 AND r.item_id = $2 AND r.user_id = s.user_id AND s.updated_
 	for _, q := range stmts {
 		if _, err := ex.ExecContext(ctx, q, from, into); err != nil {
 			return fmt.Errorf("resolve user data conflicts: %w", err)
+		}
+	}
+
+	// Anti-abuse state must survive a merge: on a (user, item) conflict the
+	// stricter flag (lower shadow weight) wins, limiters keep the later end
+	// and open bursts follow the item (SDD 02 §7.5).
+	guards := []string{
+		`UPDATE rating_flags r SET shadow_weight = s.shadow_weight, reason = s.reason, burst_id = s.burst_id
+FROM rating_flags s
+WHERE s.item_id = $1 AND r.item_id = $2 AND r.user_id = s.user_id AND s.shadow_weight < r.shadow_weight`,
+		`UPDATE items t SET
+ratings_limited_until = GREATEST(t.ratings_limited_until, f.ratings_limited_until),
+unusual_activity_until = GREATEST(t.unusual_activity_until, f.unusual_activity_until)
+FROM items f WHERE f.id = $1 AND t.id = $2`,
+		`UPDATE score_bursts SET item_id = $2 WHERE item_id = $1`,
+	}
+	for _, q := range guards {
+		if _, err := ex.ExecContext(ctx, q, from, into); err != nil {
+			return fmt.Errorf("carry anti-abuse state: %w", err)
 		}
 	}
 

@@ -85,6 +85,10 @@ func TestMerge(t *testing.T) {
 	mustExec(t, db, rate, 1, winner, 50, "2026-01-01") // loser's is newer: wins
 	mustExec(t, db, rate, 2, loser, 20, "2026-01-01")
 	mustExec(t, db, rate, 2, winner, 80, "2026-02-01") // winner's is newer: stays
+	flag := `INSERT INTO rating_flags (user_id, item_id, shadow_weight, reason) VALUES ($1, $2, $3, 'admin_downweight')`
+	mustExec(t, db, flag, 2, loser, 0)    // excluded on the duplicate
+	mustExec(t, db, flag, 2, winner, 0.5) // milder on the target: the stricter flag must win
+	mustExec(t, db, `UPDATE items SET ratings_limited_until = now() + interval '1 day' WHERE id = $1`, loser)
 
 	if err := catalog.Merge(ctx, db, q, loser, winner, 0); err != nil {
 		t.Fatal(err)
@@ -133,6 +137,21 @@ WHERE source_item_id = $1 AND target_item_id = $2
 AND snapshot #>> '{source,item,slug}' = 'portal-dup' AND jsonb_array_length(snapshot #> '{source,translations}') = 2
 AND snapshot #>> '{target,item,slug}' = 'portal'`, loser, winner); n != 1 {
 		t.Fatal("snapshot row missing or incomplete")
+	}
+	if n := count(t, db, `SELECT count(*) FROM catalog_merge_audit
+WHERE snapshot #> '{source}' ? 'ratings' OR (snapshot #>> '{source,ratings_count}')::int <> 2`); n != 0 {
+		t.Fatal("snapshot must count user ratings, not copy them (LGPD)")
+	}
+	if n := count(
+		t,
+		db,
+		`SELECT (shadow_weight * 100)::int FROM rating_flags WHERE user_id = 2 AND item_id = $1`,
+		winner,
+	); n != 0 {
+		t.Fatalf("flag shadow weight = %d%%, want the stricter 0%%", n)
+	}
+	if n := count(t, db, `SELECT count(*) FROM items WHERE id = $1 AND ratings_limited_until > now()`, winner); n != 1 {
+		t.Fatal("burst limiter must carry over to the target")
 	}
 	if _, err := db.ExecContext(ctx, `DELETE FROM catalog_merge_audit`); err == nil {
 		t.Fatal("audit table must be append-only")
