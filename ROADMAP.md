@@ -159,7 +159,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
 
 - [ ] **P0.F.4.1** Serve `api.<host>/v1/*` from the `/api/v1` route group with a host-matching middleware and set the OpenAPI `servers` entry.
   - Files/modules: spike `app/http/middleware/api_host.go`, `api_host_test.go`, `routes/api.go`
-  - Refs: SDD 05 §6.1; open-issues 05-1; VF-015; <https://vukem.dev/docs/digging-deeper/billing> "Routes" (`r.UseServer` example)
+  - Refs: SDD 05 §6.1; open-issues 05-1; VF-015; <https://vukem.dev/docs/digging-deeper/billing> "Receiving webhooks yourself" (`r.UseServer` example)
   - Depends on: P0.F.1.1
   - Model: Sonnet
   - Acceptance:
@@ -3528,7 +3528,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 - [ ] **P6.D.1.2** Build `ComputeSimilar` (`DailyAt("02:00")`, `WithoutOverlapping()`): candidates sharing a feature with `n_f ≤ 5 %·N_t`, the keep rule, ordering by `round(sim,2)`, list `cooccur`, popularity and id, ≤ 20 neighbours, `Chunk(ctx, 500, …)` with a 50 ms pause, skipping unchanged `feature_hash`, and the site and API variants.
   - Files/modules: `app/jobs/compute_similar.go`, `app/recommend/similar/job.go`, `app/recommend/similar/job_test.go`, `app/recommend/similar/bench_test.go`
-  - Refs: SDD 08 §7.4, FR-08-8, NFR-08-2, NFR-08-3; open issues 08-9, 08-11; <https://vukem.dev/docs/database/orm> "Query builder"; <https://vukem.dev/docs/digging-deeper/scheduler>
+  - Refs: SDD 08 §7.4, FR-08-8, NFR-08-2, NFR-08-3; open issues 08-9, 08-11; <https://vukem.dev/docs/database/orm> "Querying"; <https://vukem.dev/docs/digging-deeper/scheduler>
   - Depends on: P6.D.1.1
   - Model: Opus
   - Acceptance:
