@@ -88,7 +88,7 @@ Answered through the interactive checklist in chat (the owner prefers clicking o
 
 Asked through the interactive checklist after the SDD drafts; they close every `owner` row in [sdd/open-issues.md](sdd/open-issues.md).
 
-- **D-22 Dev and UI dependencies approved**: Biome, Vitest, Testing Library, Playwright, axe-core, Lighthouse CI, Base UI (web); Expo SQLite for the persisted query cache (mobile). Exact versions pinned at implementation (no `^`, no pre-releases).
+- **D-22 Dev and UI dependencies approved**: Biome, Vitest, Testing Library, Playwright, axe-core, Lighthouse CI, Base UI (web), Redocly CLI (OpenAPI lint, dev only; owner yes 2026-10-29, Q-REDOCLY); Expo SQLite for the persisted query cache (mobile). Exact versions pinned at implementation (no `^`, no pre-releases).
 - **D-23 Legacy credit balances** are honoured as extra quota consumed before the plan quota; no refund flow; new credit packs only with PIX in the second release.
 - **D-24 Password maximum 128 characters** (minimum as legacy).
 - **D-25 Google-only accounts set a password before managing 2FA** (vukem rule kept; UI explains).
