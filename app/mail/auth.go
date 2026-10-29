@@ -2,6 +2,7 @@ package mail
 
 import (
 	"cmp"
+	"time"
 
 	"github.com/AlexGalhardo/vukem/mail"
 
@@ -79,3 +80,37 @@ func (m TwoFactorReset) Envelope() mail.Envelope {
 
 // Content implements mail.Mailable.
 func (m TwoFactorReset) Content() mail.Content { return mail.View("mail/two_factor_reset", m) }
+
+// DeletionScheduled confirms a scheduled deletion and says how to cancel it.
+type DeletionScheduled struct {
+	User       models.User
+	Date       time.Time
+	CancelLink string
+	Subject    string
+}
+
+// Envelope implements mail.Mailable.
+func (m DeletionScheduled) Envelope() mail.Envelope {
+	return mail.Envelope{
+		To:      []string{m.User.Email},
+		Subject: cmp.Or(m.Subject, "Your account is scheduled for deletion"),
+	}
+}
+
+// Content implements mail.Mailable.
+func (m DeletionScheduled) Content() mail.Content { return mail.View("mail/deletion_scheduled", m) }
+
+// AccountAnonymized tells the former owner that the deletion took effect;
+// User still holds the address and name from before the purge.
+type AccountAnonymized struct {
+	User    models.User
+	Subject string
+}
+
+// Envelope implements mail.Mailable.
+func (m AccountAnonymized) Envelope() mail.Envelope {
+	return mail.Envelope{To: []string{m.User.Email}, Subject: cmp.Or(m.Subject, "Your account was deleted")}
+}
+
+// Content implements mail.Mailable.
+func (m AccountAnonymized) Content() mail.Content { return mail.View("mail/account_anonymized", m) }
