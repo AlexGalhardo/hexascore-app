@@ -6,10 +6,10 @@ import (
 	"cmp"
 	"context"
 	"database/sql"
-	"encoding/csv"
 	"errors"
 	"fmt"
 	"io/fs"
+	"iter"
 	"strconv"
 	"time"
 
@@ -423,18 +423,12 @@ func zipFile(zw *zip.Writer, name string, data []byte) error {
 	return err
 }
 
-// zipCSV writes a CSV file. workaround(vukem): VF-029: export.CSV only writes to an http.ResponseWriter, so
-// encoding/csv plus export.SafeCell applies the same formula guard per cell (P0.F.9.1).
+// zipCSV writes a CSV file; export.EncodeCSV applies the formula guard per cell.
 func zipCSV(ctx context.Context, tx *database.Tx, zw *zip.Writer, name string, header []string, query string,
 	args ...any,
 ) error {
 	w, err := zw.Create(name)
 	if err != nil {
-		return err
-	}
-
-	cw := csv.NewWriter(w)
-	if err := cw.Write(header); err != nil {
 		return err
 	}
 
@@ -451,28 +445,33 @@ func zipCSV(ctx context.Context, tx *database.Tx, zw *zip.Writer, name string, h
 		ptrs[i] = &cells[i]
 	}
 
-	for rows.Next() {
-		if err := rows.Scan(ptrs...); err != nil {
-			return err
-		}
-
-		safe := make([]string, len(cells))
-		for i, c := range cells {
-			safe[i] = export.SafeCell(c)
-		}
-
-		if err := cw.Write(safe); err != nil {
-			return err
-		}
-	}
-
-	if err := rows.Err(); err != nil {
+	if err := export.EncodeCSV(
+		w,
+		header,
+		scanRows(rows, cells, ptrs),
+		func(r []string) []string { return r },
+	); err != nil {
 		return err
 	}
 
-	cw.Flush()
+	return rows.Err()
+}
 
-	return cw.Error()
+// scanRows yields cells after each Scan; the slice is reused between rows.
+func scanRows(rows *sql.Rows, cells []string, ptrs []any) iter.Seq2[[]string, error] {
+	return func(yield func([]string, error) bool) {
+		for rows.Next() {
+			if err := rows.Scan(ptrs...); err != nil {
+				yield(nil, err)
+
+				return
+			}
+
+			if !yield(cells, nil) {
+				return
+			}
+		}
+	}
 }
 
 const exportReadme = `# HexaScore data export

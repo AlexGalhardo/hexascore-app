@@ -78,7 +78,8 @@ func (h *APIKeys) Revoke(c *web.Ctx) error {
 
 	err = h.Keys.Revoke(c.Context(), u.ID, c.Param("id"))
 	if errors.Is(err, api.ErrKeyNotFound) {
-		return errs.NewKey(http.StatusNotFound, "api.keys.not_found", "Not found.", map[string]any{"code": "not-found"})
+		return errs.NewKey(http.StatusNotFound, "api.keys.not_found", "Not found.", nil).
+			WithExtension("code", "not-found")
 	}
 
 	if err != nil {

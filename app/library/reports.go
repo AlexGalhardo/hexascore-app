@@ -61,7 +61,7 @@ type ReportInput struct {
 }
 
 func problem(status int, key, code, msg string) error {
-	return errs.NewKey(status, key, msg, map[string]any{"code": code})
+	return errs.NewKey(status, key, msg, nil).WithExtension("code", code)
 }
 
 // Create files a report by reporterID. A repeat of an open report succeeds without a new row (created is

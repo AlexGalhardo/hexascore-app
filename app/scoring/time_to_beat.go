@@ -43,7 +43,7 @@ func (w *Writer) SaveTimeToBeat(ctx context.Context, userID int64, itemID string
 		func(ctx context.Context, tx *database.Tx, typ string, now time.Time) ([]any, error) {
 			if typ != "game" {
 				return nil, errs.NewKey(http.StatusUnprocessableEntity, "time_to_beat.not_a_game",
-					"Time to beat is only available for games.", map[string]any{"code": CodeNotAGame})
+					"Time to beat is only available for games.", nil).WithExtension("code", CodeNotAGame)
 			}
 
 			var status string
@@ -58,8 +58,8 @@ func (w *Writer) SaveTimeToBeat(ctx context.Context, userID int64, itemID string
 					http.StatusConflict,
 					"time_to_beat.status_not_completed",
 					"Mark the game as completed before reporting a time.",
-					map[string]any{"code": CodeStatusNotCompleted},
-				)
+					nil,
+				).WithExtension("code", CodeStatusNotCompleted)
 			}
 
 			if _, err := tx.ExecContext(
