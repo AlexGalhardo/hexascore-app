@@ -27,3 +27,7 @@ Load skills `karpathy-guidelines` and `caveman`. Read `$FW/AGENTS.md`, `$FW/docs
 ## Limits
 
 Never break compatibility without `BREAKING CHANGE` and a guide in `$FW/docs/upgrade/` (and a BREAKING CHANGE needs the owner's yes in QUESTIONS.md first). Never force-push, never rewrite history, never move tags. Security never loosens (fail closed). No new third-party dependency in the framework without the owner's yes. Never commit secrets. After ~8 VFs or heavy context: write handoff and end with `STATUS: HANDOFF`.
+
+## Standby rule (owner, 2026-10-29)
+
+Same as `briefs/common-app.md` "Standby rule": never end with `STATUS: HANDOFF` to save context; after each VF or task, report and end with `STATUS: IDLE`; the orchestrator sends the next work by message. Keep `handoff/framework.md` current. The orchestrator merges your PRs; do not run `gh pr merge`.

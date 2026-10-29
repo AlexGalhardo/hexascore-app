@@ -61,3 +61,7 @@ Never pick a VF number yourself (two workers collided on VF-038). Title new entr
 ## Compose isolation (2026-10-29)
 
 Every worktree shares container names. For the `app` profile and e2e runs set `COMPOSE_PROJECT_NAME=hx-<role>` and a free host port (`APP_PORT`, if the compose file exposes one) so you never restart another worker's containers. The shared Postgres on 5433 stays the default project; do not `docker compose down` it while others run.
+
+## Standby rule (owner, 2026-10-29)
+
+Workers are never closed or replaced to save context. Do not end with `STATUS: HANDOFF` after N tasks. After each task (or when your queue is empty) report to the orchestrator and end your turn with `STATUS: IDLE` plus a short summary; the orchestrator sends the next task by message to the same session and you continue with your context intact. Keep your own context lean instead: redirect long command output to files and print only exit codes, failures and decisive lines. Still keep `$ORCH/handoff/<role>.md` current after each task, in case the session dies.
