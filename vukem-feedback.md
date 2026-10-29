@@ -49,7 +49,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-038 | 2026-10-29 | medium | open |
 | VF-039 | 2026-10-29 | low | open |
 | VF-040 | 2026-10-29 | medium | open |
-| VF-NEW-P0.F.10.1 | 2026-10-29 | low | open |
+| VF-043 | 2026-10-29 | low | open |
 | VF-041 | 2026-10-29 | low | open |
 | VF-042 | 2026-10-29 | low | open |
 
@@ -403,7 +403,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Workaround** (spike `agent/senior/P0.F.7.1`): `problems.Install(router, prefixes...)` wraps `Services.Errors`, runs vukem's default handler into a buffer and adds `code` plus extension members to its JSON; `problems.Error` carries the code. The 202 route returns a one-field `Accepted` struct.
 - **Request**: `errs.HTTPError` code and extension members rendered by `DefaultErrorHandler` and declared in the OpenAPI `Problem` schema; a documented per-group error handler; `Out = struct{}` with an explicit 2xx status writes no body.
 
-## VF-NEW-P0.F.10.1: Static assets and SSR HTML are not compressed unless the app adds `middleware.Gzip()`
+## VF-043: Static assets and SSR HTML are not compressed unless the app adds `middleware.Gzip()`
 
 - **Date**: 2026-10-29. **Severity**: low. **Status**: open.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/middleware`, `https://vukem.dev/docs/frontend/vite` (production build). `[NOT IN VUKEM DOCS]`: no page says that the starter serves `/build/assets/*` and Inertia HTML uncompressed (confirmed by Lighthouse: script transfer 568 kB uncompressed vs 116 kB gzip).

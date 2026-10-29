@@ -253,7 +253,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
 
 #### P0.F.10 Lighthouse CI sample
 
-- [ ] **P0.F.10.1** Run Lighthouse CI against one SSR page of the spike container with the SDD 09 budgets as assertions.
+- [x] **P0.F.10.1** Run Lighthouse CI against one SSR page of the spike container with the SDD 09 budgets as assertions.
   - Files/modules: spike `lighthouserc.json`, `package.json` (`@lhci/cli` exact version)
   - Refs: SDD 09 §4, §9; ADR 0004 (budgets); D-22
   - Depends on: P0.F.2.2
