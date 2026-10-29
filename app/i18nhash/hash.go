@@ -23,7 +23,7 @@ func Catalogs(fsys fs.FS) (string, error) {
 		if err != nil {
 			return "", fmt.Errorf("i18n hash: %s: %w", name, err)
 		}
-		fmt.Fprintf(h, "%s\x00%d\x00", name, len(b))
+		_, _ = fmt.Fprintf(h, "%s\x00%d\x00", name, len(b))
 		h.Write(b)
 	}
 
