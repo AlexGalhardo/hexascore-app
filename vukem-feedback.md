@@ -51,9 +51,9 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-040 | 2026-10-29 | medium | merged in main (PR #13), unreleased |
 | VF-041 | 2026-10-29 | low | merged in main (PR #28), unreleased |
 | VF-042 | 2026-10-29 | low | open |
-| VF-043 | 2026-10-29 | low | open |
+| VF-043 | 2026-10-29 | low | in_progress (framework) |
 | VF-044 | 2026-10-29 | low | open |
-| VF-045 | 2026-10-29 | low | in_progress (framework), PR #29 |
+| VF-045 | 2026-10-29 | low | PR #29 green, merge blocked (FR-002) |
 | VF-046 | 2026-10-29 | medium | merged in main (PR #27), unreleased |
 | VF-047 | 2026-10-29 | low | open |
 | VF-048 | 2026-10-29 | low | open |
@@ -424,7 +424,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-043: Static assets and SSR HTML are not compressed unless the app adds `middleware.Gzip()`
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: in_progress (framework).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/middleware`, `https://vukem.dev/docs/frontend/vite` (production build). `[NOT IN VUKEM DOCS]`: no page says that the starter serves `/build/assets/*` and Inertia HTML uncompressed (confirmed by Lighthouse: script transfer 568 kB uncompressed vs 116 kB gzip).
 - **Context**: the performance budgets (NFR-09-5, LCP) are measured on transfer size. The scaffold ships no compression, so a container behind a proxy that does not compress fails the JS budget (354 kB raw `app-*.js`).
 - **Workaround** (spike `agent/senior/P0.F.10.1`): `r.UseServer(middleware.Gzip())` before `StaticFS` in `routes.Web`. Brotli is not offered by `middleware.Gzip` (`HEAD` and `Range` are passed through).
@@ -440,7 +440,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-045: `storage.Handler` sets no Cache-Control or ETag, and S3 objects get no Last-Modified
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: PR #29 green, merge blocked (FR-002).
 - **vukem version**: v0.32.0 (`drivers/s3` v0.3.1). **Docs consulted**: `https://vukem.dev/docs/digging-deeper/storage` (Serving files; the page documents `X-Content-Type-Options`, the sandbox CSP and `Last-Modified` for seekable disks only), `https://vukem.dev/docs/digging-deeper/exports` (VF-029 confirmed: `export.CSV` needs an `http.ResponseWriter`; `export.SafeCell` is exported and is the smaller workaround).
 - **Context**: covers are content-addressed (`covers/<id>-<hash16>.webp`) and must answer `Cache-Control: public, max-age=31536000, immutable`. `storage.Handler` over an S3 disk sends no `Cache-Control`, no `ETag` and (the S3 reader is not an `io.ReadSeeker`) no `Last-Modified`, so conditional requests never get a 304 [NOT IN VUKEM DOCS].
 - **Workaround**: `app/covers/serve.go` validates the key with a regexp, delegates to `storage.Handler` and adds `Cache-Control` on 200 responses only (spike branch `agent/senior/P0.F.9.1`).
