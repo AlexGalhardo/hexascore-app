@@ -56,3 +56,6 @@ Owner answered "merge your own green PRs" in chat, but `gh pr merge 39 --squash`
 - Next: VF-056 jsonrpc (claimed), then VF-057, VF-011 (notify), VF-014.
 - Gate flake: `TestKeyRotateWarnsOnLongPreviousList` Windows TempDir cleanup ("A pasta não está vazia"), passes on re-run.
 - Scratch React Email install for real-export checks: scratchpad `re/` (react-email 6.11.6; `npx email export --dir <d> --outDir <o> -s`).
+- VF-056 part 1 (server): PR #59 (`feat/vf-056-jsonrpc`). Part 2 = OpenRPC doc + Go client, stacked on #59. TS client generation: optional, likely skip (note in report).
+- New queue item from orchestrator: 3-VF-059 (Betterleaks v1.9.0) after VF-057, before 4-VF-011.
+- VF-056 done: #59 + #60 (stacked). Next VF-057 (claimed).
