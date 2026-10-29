@@ -24,7 +24,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-013 | 2026-10-28 | low | open |
 | VF-014 | 2026-10-28 | low | open |
 | VF-015 | 2026-10-28 | medium | merged in main (PR #12), unreleased |
-| VF-016 | 2026-10-28 | low | open |
+| VF-016 | 2026-10-28 | low | in_progress (framework), PR #33 |
 | VF-017 | 2026-10-28 | medium | merged in main (PR #13), unreleased |
 | VF-018 | 2026-10-28 | medium | merged in main (PR #14), unreleased |
 | VF-019 | 2026-10-28 | medium | merged in main (PR #15), unreleased |
@@ -37,26 +37,26 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-026 | 2026-10-28 | medium | merged in main (PR #13), unreleased |
 | VF-027 | 2026-10-28 | medium | merged in main (PR #9), unreleased |
 | VF-028 | 2026-10-28 | low | merged in main (PR #28, via VF-041 `inertia.Config.ViewData`), unreleased |
-| VF-029 | 2026-10-28 | low | open |
+| VF-029 | 2026-10-28 | low | in_progress (framework), PR #32 |
 | VF-030 | 2026-10-28 | medium | merged in main (PR #20), unreleased |
 | VF-031 | 2026-10-28 | medium | merged in main (PR #24), unreleased |
-| VF-032 | 2026-10-28 | medium | open |
+| VF-032 | 2026-10-28 | medium | in_progress (framework), PR #31 |
 | VF-033 | 2026-10-28 | low | open |
 | VF-034 | 2026-10-28 | low | open |
 | VF-035 | 2026-10-29 | medium | merged in main (PR #25), unreleased |
-| VF-036 | 2026-10-29 | low | open |
+| VF-036 | 2026-10-29 | low | in_progress (framework), PR #34 (documented; rename rule change is breaking) |
 | VF-037 | 2026-10-29 | medium | merged in main (PR #26), unreleased |
 | VF-038 | 2026-10-29 | medium | merged in main (PR #17), unreleased |
 | VF-039 | 2026-10-29 | low | open |
 | VF-040 | 2026-10-29 | medium | merged in main (PR #13), unreleased |
 | VF-041 | 2026-10-29 | low | merged in main (PR #28), unreleased |
 | VF-042 | 2026-10-29 | low | open |
-| VF-043 | 2026-10-29 | low | in_progress (framework) |
+| VF-043 | 2026-10-29 | low | in_progress (framework), PR #30 |
 | VF-044 | 2026-10-29 | low | open |
 | VF-045 | 2026-10-29 | low | PR #29 green, merge blocked (FR-002) |
 | VF-046 | 2026-10-29 | medium | merged in main (PR #27), unreleased |
 | VF-047 | 2026-10-29 | low | open |
-| VF-048 | 2026-10-29 | low | open |
+| VF-048 | 2026-10-29 | low | in_progress (framework), PR #33 (via VF-016 `WithExtension`) |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -193,7 +193,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-016: Problem+json extension members undocumented
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: in_progress (framework), PR #33 (`errs.HTTPError.WithExtension`; OpenAPI schema for extensions not added, documented).
 - **Spike (2026-10-29)**: P0.F.7.1: workaround proven, a router-wide `Services.Errors` wrapper that adds the kebab-case `code` member (P0.F.7.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/overview` "Errors", `https://vukem.dev/docs/basics/error-handling` errors section.
 - **Context**: RFC 9457 allows extension members; HexaScore's API uses `code`, `plan`, `limit`, `retryAfter` on quota and plan problems (legacy `lib/api/problem.ts`). The docs do not show how to add members to `errs.HTTPError` output or to the problem catalogue entries used by OpenAPI.
@@ -305,7 +305,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-029: Export helpers only target `http.ResponseWriter`
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: in_progress (framework), PR #32 (`export.EncodeCSV(w io.Writer, ...)`).
 - **Spike (2026-10-29)**: P0.F.9.1: workaround proven, `encoding/csv` plus `export.SafeCell` writing into the ZIP; byte-equal to `export.CSV` via `ResponseRecorder` (P0.F.9.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/exports`.
 - **Context**: the LGPD data export (SDD 14) builds a ZIP of CSV/JSON files in a background job and uploads it to storage behind a signed URL; the documented streaming CSV/JSON/NDJSON helpers (with the CSV formula guard) write to a response, not to an `io.Writer`.
@@ -330,7 +330,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-032: `install:auth --locales` rejects `es`
 
-- **Date**: 2026-10-28. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: medium. **Status**: in_progress (framework), PR #31 (es catalogs for install:auth and the built-in framework messages).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/cli/reference-install` ("`vukem install:auth`"), `https://vukem.dev/docs/digging-deeper/localization`.
 - **Context**: `vukem install:auth -social google -2fa -locales en,pt-BR,es` fails with `usage error: no auth message catalog for locale "es" (one of en, pt-BR); translate the generated catalog instead`. HexaScore needs `en`, `pt-BR`, `es` (D-xx i18n).
 - **Repro**: run the command above in a fresh `vukem new --inertia react` app; exit code 2 and nothing is generated. With `-locales en,pt-BR` it succeeds.
@@ -364,7 +364,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-036: ORM column naming splits acronyms (`ExternalIDs` becomes `external_i_ds`)
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: in_progress (framework), PR #34 (rule documented with the `db` tag; changing `naming.Snake` would rename existing columns, a BREAKING CHANGE not requested).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` ("Defining models").
 - **Context**: `naming.Snake("ExternalIDs")` yields `external_i_ds`; `orm.Create` failed with `column "external_i_ds" of relation "items" does not exist`.
 - **Workaround**: explicit `db:"external_ids"` tag on fields ending in an acronym (`ID`, `URL`, `IDs`).
@@ -424,7 +424,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-043: Static assets and SSR HTML are not compressed unless the app adds `middleware.Gzip()`
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: in_progress (framework).
+- **Date**: 2026-10-29. **Severity**: low. **Status**: in_progress (framework), PR #30 (gzip in starters; Brotli declined: no stdlib encoder).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/middleware`, `https://vukem.dev/docs/frontend/vite` (production build). `[NOT IN VUKEM DOCS]`: no page says that the starter serves `/build/assets/*` and Inertia HTML uncompressed (confirmed by Lighthouse: script transfer 568 kB uncompressed vs 116 kB gzip).
 - **Context**: the performance budgets (NFR-09-5, LCP) are measured on transfer size. The scaffold ships no compression, so a container behind a proxy that does not compress fails the JS budget (354 kB raw `app-*.js`).
 - **Workaround** (spike `agent/senior/P0.F.10.1`): `r.UseServer(middleware.Gzip())` before `StaticFS` in `routes.Web`. Brotli is not offered by `middleware.Gzip` (`HEAD` and `Range` are passed through).
@@ -464,7 +464,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-048: `errs.HTTPError` has no way to add a stable problem `code` extension member
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: in_progress (framework), PR #33 (covered by VF-016: `errs.HTTPError.WithExtension("code", ...)`).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/validation` ("Errors"). `[NOT IN VUKEM DOCS]`: extension members on a problem+json response.
 - **Context**: SDD 02 section 6 lists stable codes (`status-not-completed`, `not-a-game`, `rating-not-released`, ...) for clients. `errs.NewKey(status, key, message, params)` only takes translation params; the last argument is not rendered, so the response carries `title` and `detail` but no `code` (observed on `PUT /app/v1/items/{id}/time-to-beat` 409).
 - **Workaround**: the codes stay in the `params` map (as the rating write path already does) and clients branch on status plus `detail`; the codes are exported as `scoring.Code*` constants.

@@ -24,8 +24,8 @@ Reason: HANDOFF after 7 VFs (brief "Limits", context budget).
 | VF-043 gzip in browser starters | #30 | feat/vf-043-scaffold-gzip | green |
 | VF-032 `es` auth + built-in catalogs | #31 | feat/vf-032-auth-es-catalog | green |
 | VF-029 `export.EncodeCSV(io.Writer, ...)` | #32 | feat/vf-029-export-writer | green |
-| VF-016 + VF-048 `errs.HTTPError.WithExtension` | #33 | feat/vf-016-problem-extensions | see final report |
-| VF-036 plural-acronym naming documented | #34 | docs/vf-036-orm-acronym-naming | see final report |
+| VF-016 + VF-048 `errs.HTTPError.WithExtension` | #33 | feat/vf-016-problem-extensions | green |
+| VF-036 plural-acronym naming documented | #34 | docs/vf-036-orm-acronym-naming | green |
 
 After each merge the next PR goes BEHIND: `gh pr update-branch <n>` and wait for CI. Then set each VF to `merged in main (PR #n), unreleased`.
 
