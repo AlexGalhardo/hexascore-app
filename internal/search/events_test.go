@@ -19,6 +19,10 @@ func TestRedact(t *testing.T) {
 		"fahrenheit 451":                        "fahrenheit 451",
 		"ISBN 9780306406157":                    "ISBN [redacted]",
 		"ana@example.com and 555-123-4567 here": "[redacted] and [redacted] here",
+		"phone 11_9123_4567":                    "phone [redacted]",
+		"cpf 123/456/789/09":                    "cpf [redacted]",
+		"１１９１２３４５６７":                            "[redacted]",
+		"top 100 games of 2024":                 "top 100 games of 2024",
 	}
 
 	for in, want := range tests {

@@ -182,7 +182,13 @@ func (h *Search) Index(c *web.Ctx) error {
 			return cerr
 		}
 
-		out, err = cache.Remember(c.Context(), store, cacheKey("page", text, locale, types, page), searchTTL, compute)
+		out, err = cache.Remember(
+			c.Context(),
+			store,
+			cacheKey("page", text, locale, prefix, types, page),
+			searchTTL,
+			compute,
+		)
 	}
 
 	if err != nil {
@@ -298,6 +304,14 @@ func (h *Search) recordPerformed(
 	e := search.Performed{
 		SearchID: id, Surface: "web", Text: q.Text, Locale: q.Locale, Types: q.Types,
 		ResultCount: out.Total, Latency: took, Page: q.Page,
+	}
+	for _, hit := range out.Results {
+		e.ResultRefs = append(e.ResultRefs, hit.ID)
+	}
+	for _, g := range out.Groups {
+		for _, hit := range g.Items {
+			e.ResultRefs = append(e.ResultRefs, hit.ID)
+		}
 	}
 	if signed {
 		e.UserID = &u.ID
