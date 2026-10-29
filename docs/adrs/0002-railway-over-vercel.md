@@ -23,3 +23,9 @@ Deploy on Railway: one project, environments `production` and `staging`, service
 - Positive: one container, predictable cost, Postgres on the private network, no serverless cold starts, cron and workers inside the app.
 - Negative: no global edge CDN for HTML by default; static assets must be cached with long `Cache-Control` and content hashes (Vite manifest) and optionally fronted by a CDN later; single region means higher latency for users far from it; a single app instance means deploys cause a short restart unless Railway's zero-downtime deploy is configured (verify in `11-infra-deploy.md`).
 - Obligations: Vercel Analytics and Speed Insights are replaced by self-hosted metrics (SDD 12); BotID is replaced (SDD 03/13); Vercel Blob is replaced by a Railway bucket or S3-compatible store with a migration of existing cover files.
+
+## Region measurement (P2.A.1.1, 2026-10-29, partial)
+
+- Probe: one host (Brazil, Windows, `curl` via `scripts/infra/region-latency.sh`, 50 samples, 0 failures) against the existing public service <https://app-production-785f.up.railway.app/up>. Its Railway region is `[NÃO VERIFICADO]`: the scratch services needed to measure `us-east4-eqdc4a`, `us-west2` and `europe-west4-drams3a` (names from <https://docs.railway.com/reference/deployment-regions>, read 2026-10-29) are a human gate (owner's account).
+- Result for that endpoint: connect p50 0.035 s, p95 0.115 s; time to first byte p50 0.214 s, p95 0.373 s.
+- Region choice: still open. The 3 Brazilian probes and the per-region comparison are pending the owner's approval of the scratch project; until then the ADR's default (US East if no South American region exists) stands.
