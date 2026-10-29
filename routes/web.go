@@ -100,6 +100,8 @@ func Web(r *router.Router, app *vukem.App) error {
 			"search.",
 			"social.",
 			"notifications.",
+			"library.",
+			"userLists.",
 		),
 		appmiddleware.ShareProps(appmiddleware.ShareConfig{
 			AppName: app.Config.Name,

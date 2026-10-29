@@ -1260,5 +1260,54 @@
       "list_hidden": "One of your lists was hidden by a moderator.",
       "system": "Notice from the team."
     }
+  },
+  "library": {
+    "title": "Your library",
+    "empty": "Your library is empty. Set a status on an item to see it here.",
+    "allStatuses": "All statuses",
+    "status": "Status",
+    "type": "Type",
+    "allTypes": "All types",
+    "sort": "Sort",
+    "sorts": {
+      "updated": "Recently updated",
+      "title": "Title",
+      "score": "Score"
+    },
+    "apply": "Apply",
+    "showing": "{count} of {total}",
+    "edition": "Edition: {title}",
+    "score": "Your score: {stars}"
+  },
+  "userLists": {
+    "title": "Your lists",
+    "new": "New list",
+    "titleField": "Title",
+    "description": "Description",
+    "public": "Public",
+    "private": "Private",
+    "hiddenByMod": "Hidden by a moderator",
+    "create": "Create list",
+    "itemCount": {
+      "one": "{count} item",
+      "other": "{count} items"
+    },
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Delete this list? This cannot be undone.",
+    "save": "Save",
+    "back": "Back to lists",
+    "viewPublic": "View public page",
+    "empty": "This list is empty.",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "remove": "Remove",
+    "reorderHelp": "Use the move buttons to change the order, then save the order.",
+    "saveOrder": "Save order",
+    "position": "Position {position}",
+    "note": "Note",
+    "by": "List by {nickname}",
+    "edited": "Edit list",
+    "limit": "Up to {limit} lists per type."
   }
 }

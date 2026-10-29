@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Profile, public list, library, lists-management and list-edit pages (`User/Profile`, `User/List`, `Library/Index`, `Lists/Index`, `Lists/Edit`) with GET `/lists`, `/lists/{id}/edit` and `/u/{nickname}/lists/{id}`; reorder uses move up/down buttons.
+
 ## [0.6.0] - 2026-10-29
 
 ### Added
