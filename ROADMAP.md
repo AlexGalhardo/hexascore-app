@@ -748,7 +748,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `go test -tags=integration ./internal/search/... -run TestMigrationsUpDown` → PASS
   - Notes: trigger, not a generated column (07-1). On the empty table indexes are created inside the migration; the concurrent script (P1.A.4.3) is for later rebuilds (VF-017 workaround). Minimum Postgres 16.
 
-- [ ] **P1.E.1.2** Add the `search_suggest` table, its prefix and trigram indexes and the incremental sync runner driven by `search_dirty`.
+- [x] **P1.E.1.2** Add the `search_suggest` table, its prefix and trigram indexes and the incremental sync runner driven by `search_dirty`.
   - Files/modules: `database/migrations/*_create_search_suggest_table.go`, `internal/search/suggest_sync.go`, `app/jobs/sync_search_suggest.go`, `routes/schedule.go`
   - Refs: SDD 07 §5, §7.5, §7.10, §10
   - Depends on: P1.E.1.1
