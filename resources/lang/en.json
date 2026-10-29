@@ -8,7 +8,8 @@
       "name": "Name",
       "email": "Email",
       "nickname": "Nickname",
-      "save": "Save name"
+      "save": "Save name",
+      "locale": "Language"
     },
     "password": {
       "setTitle": "Set a password",
@@ -37,12 +38,16 @@
       "copied": "Copied.",
       "done": "I saved my codes",
       "disabled": "Two-factor authentication disabled.",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "needPassword": "Set a password above before turning on two-factor authentication.",
+      "manage": "Manage two-factor authentication"
     },
     "privacy": {
       "title": "Privacy",
       "label": "Private profile",
-      "help": "Your ratings stay in the community scores, but your profile and lists are hidden from other users."
+      "help": "Your ratings stay in the community scores, but your profile and lists are hidden from other users.",
+      "personalization": "Turn off personalised recommendations",
+      "personalizationHelp": "We stop using your ratings to suggest items to you."
     },
     "delete": {
       "title": "Delete account",
@@ -57,6 +62,14 @@
     "banner": {
       "text": "Your account is scheduled for deletion on {date}.",
       "cancel": "Cancel deletion"
+    },
+    "sessions": {
+      "title": "Active sessions",
+      "current": "This device",
+      "revoke": "Log out",
+      "revokeAll": "Log out all other devices",
+      "empty": "No other sessions to show.",
+      "lastSeen": "Last active"
     }
   },
   "actions": {

@@ -53,6 +53,10 @@ func (a *Accounts) Register(ctx context.Context, in requests.Register) (bool, er
 		return false, err
 	}
 
+	if err := a.markPasswordSet(ctx, a.DB, u.ID); err != nil {
+		return true, err
+	}
+
 	return true, a.SendVerification(ctx, u)
 }
 
@@ -184,6 +188,18 @@ func (a *Accounts) updatePassword(ctx context.Context, tx database.Executor, id 
 	}
 
 	_, err = orm.QueryOf[models.User](tx).Where("id", id).Update(ctx, orm.Set{"password": h})
+	if err != nil {
+		return err
+	}
+
+	return a.markPasswordSet(ctx, tx, id)
+}
+
+// markPasswordSet records that the user chose a password, which unlocks
+// two-factor setup for accounts created through Google (SDD 03 A07).
+func (a *Accounts) markPasswordSet(ctx context.Context, ex database.Executor, id int64) error {
+	p := ex.Dialect().Placeholder
+	_, err := ex.ExecContext(ctx, "UPDATE users SET password_set_at = "+p(1)+" WHERE id = "+p(2), a.now().UTC(), id)
 
 	return err
 }
