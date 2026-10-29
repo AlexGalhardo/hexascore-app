@@ -9,6 +9,8 @@ export interface SeoProps {
 	image?: string;
 	type?: string;
 	noindex?: boolean;
+	// robots overrides the shared value, e.g. "noindex,follow" for thin entity pages.
+	robots?: string;
 	jsonLd?: object[];
 }
 
@@ -23,14 +25,22 @@ export function jsonLdText(data: object[]): string {
 
 // Seo sets the document head from the shared `seo` prop (canonical, hreflang,
 // robots) and the page's own title, description, image and JSON-LD (SDD 09 §7.7).
-export default function Seo({ title, description, image, type, noindex, jsonLd }: SeoProps) {
+export default function Seo({
+	title,
+	description,
+	image,
+	type,
+	noindex,
+	robots: robotsOverride,
+	jsonLd,
+}: SeoProps) {
 	const t = useT();
 	const { appName, seo } = usePage<SharedProps>().props;
 
 	const pageTitle = truncate(title ?? (seo?.title || appName), 60);
 	const text = truncate(description ?? (seo?.description || t("meta.description")), 160);
 	const cover = image ?? seo?.og.image;
-	const robots = noindex ? "noindex" : seo?.robots;
+	const robots = robotsOverride ?? (noindex ? "noindex" : seo?.robots);
 	const blocks = jsonLd ?? seo?.jsonLd;
 
 	return (
