@@ -36,9 +36,14 @@ func Auth(r *router.Router, app *vukem.App) error {
 	// Signed-in pages also need a verified email; unverified users are sent
 	// to the verification notice.
 	verified := auth.Verified(acc.Web)
-	loginIP, loginAccount := acc.LoginThrottleKeys("identifier")
+	loginIP, loginAccount := auth.ThrottleKeys("identifier")
 	throttle := ratelimit.Middleware(limiters("login", 5, time.Minute), loginIP)
 	perAccount := ratelimit.Middleware(limiters("login.account", 20, 10*time.Minute), loginAccount)
+	// Caps one client across every identifier (email, nickname, case variants)
+	// without resolving accounts before authentication: a resolved key would
+	// leak which nickname belongs to which email and let a public nickname
+	// lock out the email login (security review, P1.C.2.1).
+	anyIdentifier := ratelimit.Middleware(limiters("login.ip", 10, time.Minute), ratelimit.ByIP)
 	mails := ratelimit.Middleware(limiters("mails", 3, time.Minute), ratelimit.ByIP)
 	// Sign-up queues a mail: limit it per IP and per address. The limits count
 	// requests, not accounts, so they answer alike for new and existing emails.
@@ -48,7 +53,7 @@ func Auth(r *router.Router, app *vukem.App) error {
 	r.Use(shareAuth(acc))
 
 	r.Get("/login", h.ShowLogin).Name("login").Use(guest)
-	r.Post("/login", h.Login).Use(guest, throttle, perAccount)
+	r.Post("/login", h.Login).Use(guest, anyIdentifier, throttle, perAccount)
 	r.Get("/signup", h.ShowRegister).Name("register").Use(guest)
 	r.Post("/signup", h.Register).Use(guest, signupIP, signupEmail)
 	r.Get("/signup/check-email", h.CheckEmail).Name("register.check").Use(guest)
