@@ -175,11 +175,12 @@
       "nickname": "Nickname",
       "name": "Nome",
       "show": "Mostrar senha",
-      "hide": "Ocultar senha"
+      "hide": "Ocultar senha",
+      "confirmPassword": "Confirmar senha"
     },
     "rules": {
       "title": "Sua senha precisa ter:",
-      "length": "De 8 a 32 caracteres",
+      "length": "De 8 a 128 caracteres",
       "uppercase": "Uma letra maiúscula",
       "lowercase": "Uma letra minúscula",
       "number": "Um número",
@@ -199,7 +200,7 @@
       "locked": "Muitos códigos errados. Tente mais tarde.",
       "weakPassword": "A senha não atende aos requisitos.",
       "bot": "Sua requisição foi bloqueada. Recarregue a página e tente de novo.",
-      "invalidNickname": "4–16 caracteres: letras, números e underline.",
+      "invalidNickname": "De 4 a 16 letras minúsculas, sem números nem símbolos.",
       "invalidEmail": "Informe um e-mail válido.",
       "invalidName": "Informe seu nome.",
       "invalidToken": "Este link é inválido ou expirou."
@@ -220,7 +221,9 @@
       "useBackup": "Usar um código de backup",
       "useTotp": "Usar o app autenticador",
       "trustDevice": "Confiar neste dispositivo por 30 dias",
-      "verify": "Verificar"
+      "verify": "Verificar",
+      "rememberMe": "Lembrar de mim",
+      "backupCode": "Código de backup"
     },
     "signup": {
       "metaTitle": "Criar conta",
@@ -231,7 +234,9 @@
       "nicknameHint": "4–16 letras minúsculas, sem números, espaços ou símbolos. É o seu nome público, único e não pode ser alterado depois.",
       "checkTitle": "Confira seu e-mail",
       "checkBody": "Enviamos um link de confirmação para {email}. Abra-o para ativar sua conta.",
-      "agree": "Ao criar a conta você concorda com os <terms>Termos</terms> e a <privacy>Política de privacidade</privacy>."
+      "agree": "Ao criar a conta você concorda com os <terms>Termos</terms> e a <privacy>Política de privacidade</privacy>.",
+      "checkNotice": "Se o endereço puder ser usado, enviamos um link para verificá-lo. Se já existir uma conta, enviamos um link para entrar ou redefinir a senha.",
+      "goLogin": "Ir para a página de login"
     },
     "verify": {
       "metaTitle": "Verificar e-mail",
@@ -242,7 +247,8 @@
       "invalid": "Este link de confirmação é inválido ou expirou. Peça um novo abaixo.",
       "pending": "Abra o link que enviamos para sua caixa de entrada. Não recebeu? Peça um novo.",
       "resend": "Enviar novo link",
-      "resent": "Se a conta existir e ainda não estiver verificada, um novo link está a caminho."
+      "resent": "Se a conta existir e ainda não estiver verificada, um novo link está a caminho.",
+      "sentTo": "Enviamos um link para {email}. Abra-o para verificar seu endereço."
     },
     "recover": {
       "metaTitle": "Recuperar senha",
@@ -273,6 +279,12 @@
         "body": "Alguém pediu para redefinir a senha desta conta. Se não foi você, ignore este e-mail.",
         "action": "Redefinir senha"
       }
+    },
+    "onboarding": {
+      "metaTitle": "Escolha seu nickname",
+      "title": "Escolha seu nickname",
+      "body": "Seu nickname é seu nome público no HexaScore. É único e não pode ser alterado depois.",
+      "submit": "Salvar nickname"
     }
   },
   "billing": {

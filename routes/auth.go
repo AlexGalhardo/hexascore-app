@@ -67,6 +67,9 @@ func Auth(r *router.Router, app *vukem.App) error {
 	r.Get("/verify-email/confirm/{id}", h.Verify).Name("verification.verify").Use(required)
 	r.Post("/verify-email/resend", h.Resend).Name("verification.send").Use(required, mails)
 
+	r.Get("/onboarding", h.ShowOnboarding).Name("onboarding").Use(required, verified)
+	r.Post("/onboarding", h.Onboarding).Use(required, verified)
+
 	r.Get("/dashboard", h.Dashboard).Name("dashboard").Use(required, verified)
 
 	return nil
