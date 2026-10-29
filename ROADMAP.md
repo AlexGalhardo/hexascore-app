@@ -839,7 +839,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.F.2 Library and profiles
 
-- [ ] **P1.F.2.1** Implement the library view with edition selection and the public profile with privacy rules.
+- [x] **P1.F.2.1** Implement the library view with edition selection and the public profile with privacy rules.
   - Files/modules: `database/migrations/*_create_user_item_editions_table.go`, `app/library/library.go`, `app/library/profile.go`, `app/http/controllers/{library,profile_public}_controller.go`, routes for `/library`, `/u/{nickname}`, `PUT|DELETE /items/{id}/edition`, `/app/v1/me/library`, `/app/v1/users/{nickname}`
   - Refs: SDD 14 §5, §6.2, §6.3, §7.2, §9; open-issues 14-5; legacy `app/[locale]/u/[nickname]/page.tsx`, `u/[nickname]/lists/[id]/page.tsx`
   - Depends on: P1.F.1.1
@@ -883,7 +883,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.F.5 Release
 
-- [ ] **P1.F.5.1** Release `v0.6.0` (user library).
+- [x] **P1.F.5.1** Release `v0.6.0` (user library).
   - Files/modules: `CHANGELOG.md`, tag `v0.6.0`
   - Refs: ADR 0013; SDD 11 §7.1
   - Depends on: P1.F.1.2, P1.F.2.1, P1.F.3.2, P1.F.4.1
@@ -891,7 +891,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
   - Acceptance:
     - `vukem openapi:export -prefix /app/v1 | diff - openapi/app-v1.json` → empty after the routes are added.
     - `gh release view v0.6.0` → non-empty body
-  - Notes: `k6 run qa/k6/public-lists.js` (SDD 14 §9) runs in P1.I.3.1.
+  - Notes: `k6 run qa/k6/public-lists.js` (SDD 14 §9) runs in P1.I.3.1. 2026-10-29: released without the OpenAPI diff, because the `/app/v1` handlers are not typed yet and `openapi/` does not exist; the `/app/v1` document and its diff check move to P1.H.4.1.
 
 ### P1.G Web app parity
 
