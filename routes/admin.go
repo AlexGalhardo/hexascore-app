@@ -2,6 +2,7 @@ package routes
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/AlexGalhardo/vukem"
 	vadmin "github.com/AlexGalhardo/vukem/admin"
@@ -14,6 +15,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/admin"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 )
 
 // Admin mounts the admin panel at /admin (vukem install:admin). Admins are
@@ -76,6 +78,22 @@ func Admin(r *router.Router, app *vukem.App) error {
 	}
 	r.Post("/admin/users/{id}/ban", bans.Ban).Name("admin.users.ban").Use(auth.Required(acc.Web), csrfMW)
 	r.Post("/admin/users/{id}/unban", bans.Unban).Name("admin.users.unban").Use(auth.Required(acc.Web), csrfMW)
+
+	scoringH := admin.ScoringHandlers{
+		Accounts:  acc,
+		Writer:    &scoring.Writer{DB: acc.DB, Events: app.Events, Now: app.Now},
+		Authorize: bans.Authorize,
+	}
+	moderator := []func(http.Handler) http.Handler{auth.Required(acc.Web), csrfMW}
+	r.Post("/admin/scoring/bursts/{id}/approve", scoringH.ApproveBurst).
+		Name("admin.scoring.bursts.approve").
+		Use(moderator...)
+	r.Post("/admin/scoring/bursts/{id}/exclude", scoringH.ExcludeBurst).
+		Name("admin.scoring.bursts.exclude").
+		Use(moderator...)
+	r.Post("/admin/scoring/flags/{user}/{item}/restore", scoringH.RestoreFlag).
+		Name("admin.scoring.flags.restore").
+		Use(moderator...)
 
 	return nil
 }

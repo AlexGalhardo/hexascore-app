@@ -38,6 +38,11 @@ func newRig(t *testing.T) *rig {
 
 // token creates a user and a token with the given abilities.
 func (r *rig) token(n int, abilities ...string) *vukemtest.Client {
+	return r.tokenAged(n, 200, abilities...)
+}
+
+// tokenAged is token for an account created ageDays days ago.
+func (r *rig) tokenAged(n, ageDays int, abilities ...string) *vukemtest.Client {
 	r.t.Helper()
 	db, err := r.app.DB()
 	if err != nil {
@@ -45,7 +50,7 @@ func (r *rig) token(n int, abilities ...string) *vukemtest.Client {
 	}
 	var id int64
 	if err := db.SQL().QueryRowContext(r.t.Context(), `INSERT INTO users (name, email, password, created_at, updated_at)
-VALUES ('U', $1, 'x', now() - interval '200 days', now()) RETURNING id`, fmt.Sprintf("u%d@example.com", n)).Scan(&id); err != nil {
+VALUES ('U', $1, 'x', now() - $2 * interval '1 day', now()) RETURNING id`, fmt.Sprintf("u%d@example.com", n), ageDays).Scan(&id); err != nil {
 		r.t.Fatal(err)
 	}
 	plain, _, err := r.acc.Tokens.Create(r.t.Context(), strconv.FormatInt(id, 10), "t", abilities, time.Hour)
