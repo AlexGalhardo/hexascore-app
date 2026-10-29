@@ -5,6 +5,8 @@ package seo
 import (
 	"net/http"
 	"strings"
+
+	"github.com/AlexGalhardo/vukem/i18n"
 )
 
 // Locale pairs a locale code with its URL prefix ("" for the default).
@@ -61,10 +63,10 @@ func (c Config) Split(path string) (Locale, string) {
 	return c.Locales[0], path
 }
 
-// For returns the default Meta for the request, whose URL still carries the
-// locale prefix (see middleware.RestoreURL).
+// For returns the default Meta for the request, whose path had the
+// locale prefix stripped before routing (restored with i18n.LocalizePath).
 func (c Config) For(r *http.Request) Meta {
-	loc, path := c.Split(r.URL.Path)
+	loc, path := c.Split(i18n.LocalizePath(r.Context(), r.URL.Path))
 	base := strings.TrimRight(c.BaseURL, "/")
 
 	alternates := make(map[string]string, len(c.Locales)+1)
