@@ -20,6 +20,7 @@ import (
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/config"
+	"github.com/AlexGalhardo/hexascore-app/internal/search"
 )
 
 // APIV1 mounts the /api/v1 group with the SDD 05 §6.1 stack: IP limit 120/min, key guard (401/503), ban (403),
@@ -61,6 +62,7 @@ func APIV1(r *router.Router, app *vukem.App) error {
 		Codec:  codec,
 		Meter:  meter,
 		Plans:  plans,
+		Search: search.New(acc.DB, config.LoadCatalog(app.Source.Get).APISources),
 		Redirects: func(ctx context.Context, typ, id string) (catalog.Target, bool, error) {
 			return catalog.ResolveID(ctx, acc.DB, catalog.ScopeItem, typ, id)
 		},
@@ -127,6 +129,9 @@ func APIV1(r *router.Router, app *vukem.App) error {
 		} {
 			vapi.Register(g, "GET /"+section+"/genres", read(op), items.ListGenres(section))
 		}
+		vapi.Register(g, "GET /search/entities", read("searchEntities"), items.SearchEntities)
+		vapi.Register(g, "GET /search", read("searchItems"), items.SearchItems)
+		vapi.Register(g, "GET /lookup", read("lookupItem"), items.LookupItem)
 		vapi.Register(g, "GET /{type}/{id}", read("getItem"), items.GetItem)
 		vapi.Register(g, "GET /{type}", read("listItems"), items.ListItems)
 	})
