@@ -40,3 +40,11 @@ Owner answered "merge your own green PRs" in chat, but `gh pr merge 39 --squash`
 - After squash merges: rebase stacked work onto main as NEW branches + replacement PRs when the orchestrator says a base landed.
 - Remaining open VFs (all low): 004, 007, 012, 020, 023, 033, 034, 042, 044, 049, 050 (skip 011, 014: owner).
 - A throwaway container `vukem-pg-test` (postgres:17, 127.0.0.1:55432) may still run: `docker rm -f vukem-pg-test`.
+
+## Session 8, end (2026-10-29): context limit reached
+
+- All open PRs from this session (orchestrator merges): #44 (VF-001 scaffold, stacked on #43: rebase onto main as a NEW branch once #43 lands), #45 (Scorecard vulns; close issue #5 after), #46 -> #48 -> #49 -> #50 (VF-052 chain, rebase each onto main as NEW branches after its base squash-merges), #47 (Turnstile action), #51 (VF-054), #52 (VF-053, changes OpenAPI output: plain routes get 4XX), #53 (VF-022), #54 (VF-039), #55 (VF-042 part 3), #56 (VF-007 sitemap).
+- Not started, next in order (owner priority): queue/framework 3-VF-055 (React Email), 3-VF-056 (jsonrpc), 3-VF-057 (HTTP/2 over TLS via http.Protocols; HTTP/3 opt-in contrib/http3), 4-VF-011 (notify per FD-011, approved), 4-VF-014 (FD-014 (a) docs + (b) generic PageOf/CursorOf[E]).
+- Then remaining low VFs: 044 (output `required` needs a design: components are shared by input and output types), 049, 050, 004, 012, 020, 023, 033, 034; VF-042 part (2) per-group error handler.
+- Gate notes: Windows `internal/testutil` "Acesso negado" is an AV exe lock, not code. Postgres integration: `docker run -d --rm --name vukem-pg-test -e POSTGRES_USER=vukem -e POSTGRES_PASSWORD=vukem -e POSTGRES_DB=vukem_test -p 127.0.0.1:55432:5432 postgres:17`, then `go test -tags integration ./...` in drivers/postgres; remove the container after.
+- Python edit scripts: write with Write tool into the scratchpad and run them (heredoc python through bash mangles backslash escapes).
