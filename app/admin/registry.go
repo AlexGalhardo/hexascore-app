@@ -10,13 +10,26 @@ import (
 )
 
 // Resources lists the panel's resources; vukem make:admin-resource appends
-// here.
-func Resources() []vadmin.AnyResource {
-	return []vadmin.AnyResource{UsersResource()}
+// here. The scoring tables exist only on PostgreSQL (VF-033), so the SQLite
+// scaffold tests get the users resource alone.
+func Resources(postgres bool) []vadmin.AnyResource {
+	out := []vadmin.AnyResource{UsersResource()}
+	if postgres {
+		out = append(out, ScoreBurstsResource(), RatingFlagsResource(), ScoreActionsResource(),
+			ScoreFormulaVersionsResource())
+	}
+
+	return out
 }
 
 // Policies lists what admins may do per model; vukem make:admin-resource
 // appends here. A resource without a policy denies every action.
 func Policies(now func() time.Time) []authz.Policy {
-	return []authz.Policy{authz.For[*models.User](UserPolicy{now: now})}
+	return []authz.Policy{
+		authz.For[*models.User](UserPolicy{now: now}),
+		authz.For[*models.ScoreBurst](readOnlyPolicy[models.ScoreBurst]{now: now, detail: true}),
+		authz.For[*models.RatingFlag](readOnlyPolicy[models.RatingFlag]{now: now}),
+		authz.For[*models.ScoreAction](readOnlyPolicy[models.ScoreAction]{now: now, detail: true}),
+		authz.For[*models.ScoreFormulaVersion](readOnlyPolicy[models.ScoreFormulaVersion]{now: now, detail: true}),
+	}
 }

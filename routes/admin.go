@@ -59,7 +59,7 @@ func Admin(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	if err := panel.Register(admin.Resources()...); err != nil {
+	if err := panel.Register(admin.Resources(acc.DB.Dialect().Name() == "postgres")...); err != nil {
 		return err
 	}
 
