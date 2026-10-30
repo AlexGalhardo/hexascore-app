@@ -38,6 +38,10 @@ type Stage struct {
 	Tables []string
 	// Batch is nil until the stage is implemented (P2.F.2.2 to P2.F.4.1).
 	Batch BatchFunc
+	// Run replaces Batch for a stage that is not a keyed copy (finalise): it
+	// runs once, outside a batch transaction, must be idempotent and returns
+	// the rows it touched.
+	Run func(ctx context.Context, db *database.DB, now time.Time) (int64, error)
 }
 
 // Stages lists the stages in their mandatory order (SDD 11 §7.6 step 5):
@@ -62,7 +66,7 @@ func Stages() []Stage {
 		{Name: "billing", Tables: []string{
 			"api_keys", "api_usage_daily", "subscriptions", "stripe_customers", "credit_ledger", "pix_charges",
 		}, Batch: billingBatch(time.Now)},
-		{Name: "finalise"},
+		{Name: "finalise", Run: finalise},
 	}
 }
 
@@ -153,7 +157,7 @@ func (r *Runner) runStage(ctx context.Context, s Stage) error {
 		return nil
 	}
 
-	if s.Batch == nil {
+	if s.Batch == nil && s.Run == nil {
 		return fmt.Errorf("%w: %s", ErrNotImplemented, s.Name)
 	}
 
@@ -170,7 +174,24 @@ VALUES ($1, 'running', $2, $2) ON CONFLICT (stage) DO UPDATE SET status = 'runni
 
 	after, total := cp.lastKey, cp.rows
 
-	for {
+	if s.Run != nil {
+		n, err := s.Run(ctx, r.DB, now)
+		if err != nil {
+			return fmt.Errorf("legacyimport: %s: %w", s.Name, err)
+		}
+
+		total = n
+		if _, err := r.DB.ExecContext(
+			ctx,
+			`UPDATE legacy_import_runs SET rows = $2 WHERE stage = $1`,
+			s.Name,
+			n,
+		); err != nil {
+			return fmt.Errorf("legacyimport: checkpoint %s: %w", s.Name, err)
+		}
+	}
+
+	for s.Run == nil {
 		var n int
 
 		err := r.DB.Tx(ctx, func(tx *database.Tx) error {

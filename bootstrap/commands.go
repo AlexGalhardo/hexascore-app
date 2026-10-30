@@ -10,6 +10,7 @@ import (
 func Commands() []vukem.Command {
 	return []vukem.Command{
 		console.Predeploy(),
+		console.CutoverVerify(),
 		console.CatalogCheck(),
 		console.CatalogMerge(),
 		console.AdminGrant(),
