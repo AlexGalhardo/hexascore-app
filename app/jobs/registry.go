@@ -23,5 +23,8 @@ func All(app *vukem.App) []queue.Registration {
 		handleExpireExports(app),
 		handleRetainPersonalData(app),
 		handlePruneAPIChanges(app),
+		handleFanoutWebhooks(app),
+		handleWebhookDeliver(app),
+		handlePruneWebhookDeliveries(app),
 	}
 }

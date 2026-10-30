@@ -37,12 +37,22 @@ func (w *statusWriter) Write(b []byte) (int, error) {
 
 func (w *statusWriter) Unwrap() http.ResponseWriter { return w.ResponseWriter }
 
+// skipsQuota is SDD 05 §6.2: webhook management is not a metered catalogue read.
+func skipsQuota(path string) bool {
+	return path == "/api/v1/webhooks" || strings.HasPrefix(path, "/api/v1/webhooks/")
+}
+
 // Quota meters /api/v1 requests after Guard (SDD 05 §7.4): it sets X-Quota-Limit, X-Quota-Remaining and
 // X-Quota-Reset, answers 402 quota-exhausted when nothing is left, and refunds a 400 or 5xx answer (FR-05-4).
-// The plan's own resolver error or a stale meter answers 503: fail closed.
+// The plan's own resolver error or a stale meter answers 503: fail closed. Webhook routes skip the meter.
 func Quota(m *Meter, plans PlanResolver, problemBase string) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if skipsQuota(r.URL.Path) {
+				next.ServeHTTP(w, r)
+				return
+			}
+
 			c := web.NewCtx(w, r, web.ServicesFrom(r.Context()))
 
 			u, err := auth.User[models.User](c, GuardName)

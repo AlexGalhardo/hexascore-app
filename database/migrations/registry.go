@@ -1,7 +1,10 @@
 // Package migrations holds the schema migrations.
 package migrations
 
-import "github.com/AlexGalhardo/vukem/schema"
+import (
+	"github.com/AlexGalhardo/vukem/schema"
+	"github.com/AlexGalhardo/vukem/webhook"
+)
 
 // All lists the migrations in order; vukem make:migration appends here.
 func All() []schema.Migration {
@@ -56,5 +59,8 @@ func All() []schema.Migration {
 		m20261029220000CreateSourceRecordsTable(),
 		m20261030120000CreateAPIChanges(),
 		m20261030130000CreateCommunityTables(),
+		m20261030140000CreateWebhookEndpoints(),
+		m20261030150000AddWebhookFailureStreak(),
+		webhook.Migrations("")[0],
 	}
 }
