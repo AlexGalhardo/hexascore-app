@@ -9,6 +9,8 @@ import (
 
 	"github.com/AlexGalhardo/vukem/database"
 	"github.com/AlexGalhardo/vukem/queue"
+
+	"github.com/AlexGalhardo/hexascore-app/app/api/changes"
 )
 
 // Merge errors; the admin route (P1.G.5.1) maps them to 409/404.
@@ -187,6 +189,12 @@ updated_at = now() WHERE id = $1 AND type = $2`,
 
 	if _, err := tx.ExecContext(ctx, `DELETE FROM items WHERE id = $1`, from); err != nil {
 		return fmt.Errorf("delete source: %w", err)
+	}
+
+	if err := changes.Record(ctx, tx, changes.Change{
+		ItemID: from, ItemType: src.typ, Action: "deleted", Fields: []string{"slug"}, MergedInto: into,
+	}); err != nil {
+		return err
 	}
 
 	return q.DispatchTx(ctx, tx, Merged{Type: src.typ, FromID: from, IntoID: into})
