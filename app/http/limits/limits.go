@@ -48,6 +48,9 @@ var (
 	Suggest      = Rule{"search.suggest", 300, time.Minute}
 	SearchEvents = Rule{"search.events", 30, time.Minute}
 	APIIP        = Rule{"api-ip", 120, time.Minute}
+	AppIP        = Rule{"app-ip", 120, time.Minute}   // /app/v1, in front of the token budget
+	AppRead      = Rule{"app-read", 120, time.Minute} // per token, GET and HEAD
+	AppWrite     = Rule{"app-write", 30, time.Minute} // per token, other methods
 	AppTokens    = Rule{"app.tokens", 10, time.Minute}
 	AppTokensAcc = Rule{"app.tokens.account", 20, 10 * time.Minute}
 	AppTokensUsr = Rule{"app.tokens.user", 60, time.Minute}
@@ -65,7 +68,8 @@ func All() []Rule {
 	return []Rule{
 		Login, LoginIP, LoginAccount, Signup, SignupEmail, Forgot, ForgotEmail, Mails, TwoFactor, TwoFactorSet,
 		Deletion, Contact, Ratings, Status, TimeToBeat, Lists, Editions, Notify, Reports, Search, Suggest,
-		SearchEvents, APIIP, AppTokens, AppTokensAcc, AppTokensUsr, App2FA, Challenge, Exports, CSPReports,
+		SearchEvents, APIIP, AppIP, AppRead, AppWrite, AppTokens, AppTokensAcc, AppTokensUsr, App2FA,
+		Challenge, Exports, CSPReports,
 	}
 }
 

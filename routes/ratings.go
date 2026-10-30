@@ -3,7 +3,6 @@ package routes
 import (
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
-	"github.com/AlexGalhardo/vukem/middleware"
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/router"
 
@@ -41,9 +40,15 @@ func Ratings(r *router.Router, app *vukem.App) error {
 		Use(required, verified, byUser)
 
 	api := controllers.NewRatings(w, acc.API.Name(), true)
+	stack, err := AppWriteStack(app, acc, limiters,
+		auth.Ability(acc.API, "ratings:write"),
+		ratelimit.Middleware(rating, ratelimit.ByUser(acc.API.Name())),
+	)
+	if err != nil {
+		return err
+	}
 	r.Group("/app/v1", func(g *router.Group) {
-		g.Use(middleware.JSONOnly(), auth.Required(acc.API), auth.Ability(acc.API, "ratings:write"),
-			ratelimit.Middleware(rating, ratelimit.ByUser(acc.API.Name())))
+		g.Use(stack...)
 		g.Put("/items/{id}/rating", api.Put).Name("ratings.put")
 		g.Delete("/items/{id}/rating", api.Delete).Name("ratings.delete")
 	}).Name("app.v1.")

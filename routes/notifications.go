@@ -3,11 +3,11 @@ package routes
 import (
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
-	"github.com/AlexGalhardo/vukem/middleware"
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/router"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/appapi"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 )
@@ -39,13 +39,18 @@ func Notifications(r *router.Router, app *vukem.App) error {
 	r.Post("/me/notifications/{id}/read", web.Read).Name("notifications.read").Use(required, verified, byUser)
 
 	h := controllers.NewNotifications(acc.DB, acc.API.Name(), true)
+	guard := AppAuthStack(app, acc, limiters, ratelimit.Middleware(limit, ratelimit.ByUser(acc.API.Name())))
+	store, err := app.Cache()
+	if err != nil {
+		return err
+	}
+	idem := appapi.Idempotency(store.Store())
 	r.Group("/app/v1", func(g *router.Group) {
-		g.Use(middleware.JSONOnly(), auth.Required(acc.API), auth.Verified(acc.API),
-			ratelimit.Middleware(limit, ratelimit.ByUser(acc.API.Name())))
+		g.Use(guard...)
 		g.Get("/me/notifications", h.Index).Name("notifications.index").Use(auth.Ability(acc.API, "catalog:read"))
 		g.Post("/me/notifications/read", h.ReadMany).
 			Name("notifications.read").
-			Use(auth.Ability(acc.API, "profile:write"))
+			Use(auth.Ability(acc.API, "profile:write"), idem)
 	}).Name("app.v1.me.")
 
 	return nil
