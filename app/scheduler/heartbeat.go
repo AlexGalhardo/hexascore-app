@@ -36,6 +36,11 @@ func (h *Heartbeat) Beat(context.Context) error {
 	return nil
 }
 
+// Age is how long ago Beat last ran.
+func (h *Heartbeat) Age() time.Duration {
+	return h.now().Sub(time.Unix(0, h.last.Load()))
+}
+
 // Check fails when the last beat is MaxAge old or older.
 func (h *Heartbeat) Check(context.Context) error {
 	if age := h.now().Sub(time.Unix(0, h.last.Load())); age >= MaxAge {

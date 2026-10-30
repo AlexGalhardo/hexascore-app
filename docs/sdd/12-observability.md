@@ -134,7 +134,7 @@ Gauges read from tables owned by other SDDs:
 
 Export uses `drivers/otel` OTLP/HTTP push. Built-ins: `http.server.request.duration`, `http.client.request.duration`, `db.client.operation.duration`, `messaging.process.duration` and `vukem.queue.job.failures` [V-otel "Metrics"].
 
-App metrics work around VF-019. `Config.Global` "installs the providers ... as OpenTelemetry globals" [V-otel "Configuration"]. The app then calls `otel.GetMeterProvider().Meter("hexascore")` on the upstream API that `drivers/otel` already pulls in; vukem has no accessor of its own.
+App metrics use meter `hexascore` (`go.opentelemetry.io/otel` v1.47.0). The adopted module `github.com/AlexGalhardo/vukem` v0.33.0 does not include `drivers/otel`, so `http.server.request.duration` is recorded by `app/metrics` until P2.C.2.1 adopts a tag that registers `otel.New` first. `Config.Global` remains the VF-019 workaround once that provider exists. Search and `/api/v1` exist only on Postgres (VF-033); the latency test probes those patterns on the sqlite test app.
 
 Route groups are derived from the `http.route` prefix at query time, with no extra label: `web.public`, `web.app`, `admin`, `api.v1`, `app.v1`, `search`, `health`.
 

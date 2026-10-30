@@ -1542,7 +1542,7 @@ Phase-specific conventions:
     - Grafana shows `http.server.request.duration` from staging within 5 min of a deploy
   - Notes: HUMAN GATE (account, secrets): the owner creates the free stack and sets `OTEL_EXPORTER_OTLP_ENDPOINT` and `OTEL_EXPORTER_OTLP_HEADERS` (`config.Secret`). Once metrics go to Grafana, `OTEL_METRICS_EXPORTER=none` is removed; keep it whenever the endpoint is Railway's receiver (any value other than `otlp` or `none` stops the boot). Sampler `parentbased_traceidratio`, 0.1 production, 1.0 staging. No `/metrics` endpoint (D-35).
 
-- [ ] **P2.C.2.2** Register the platform metrics of the SDD 12 catalogue through the global meter provider, with label caps.
+- [x] **P2.C.2.2** Register the platform metrics of the SDD 12 catalogue through the global meter provider, with label caps.
   - Files/modules: `app/metrics/metrics.go`, `app/metrics/labels.go` (caps → `other`), `app/metrics/sql_gauges.go`, `app/scheduler/instrument.go` (`hexa.schedule.runs` wrapper), `tests/metrics_test.go`
   - Refs: SDD 12 FR-12-2, FR-12-3, §6.2, NFR-12-2, §11 issues 1, 7, 10; SDD 02, 05, 07 metric rows (verify registered); VF-019, VF-021; <https://vukem.dev/docs/digging-deeper/opentelemetry> "Metrics", "Configuration"
   - Depends on: P2.C.2.1
