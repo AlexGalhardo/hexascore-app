@@ -137,13 +137,17 @@ func APIV1(r *router.Router, app *vukem.App) error {
 		vapi.Register(g, "GET /lookup", read("lookupItem"), items.LookupItem)
 		vapi.Register(g, "GET /changes", read("listChanges"), items.ListChanges)
 		// Literal /webhooks before /{type}, same reason as /{type}/genres.
-		hooks := &apiv1.Webhooks{DB: acc.DB, Crypt: app.Crypt, Plans: plans}
+		hooks := &apiv1.Webhooks{App: app, DB: acc.DB, Crypt: app.Crypt, Plans: plans}
 		hook := func(name string) vapi.Op {
 			return vapi.Op{Name: name, Tags: []string{"webhooks"}, Security: []string{"bearer"}, ValidateResponse: true}
 		}
 		vapi.Register(g, "GET /webhooks", hook("listWebhooks"), hooks.List)
 		vapi.Register(g, "POST /webhooks", hook("createWebhook"), hooks.Create)
 		vapi.Register(g, "DELETE /webhooks/{id}", hook("deleteWebhook"), hooks.Delete)
+		// A test ping does not create a resource. POST otherwise defaults to 201.
+		testHook := hook("testWebhook")
+		testHook.Status = http.StatusOK
+		vapi.Register(g, "POST /webhooks/{id}/test", testHook, hooks.Test)
 		vapi.Register(g, "GET /{type}/{id}", read("getItem"), items.GetItem)
 		vapi.Register(g, "GET /{type}", read("listItems"), items.ListItems)
 	})
