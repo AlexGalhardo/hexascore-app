@@ -1,12 +1,17 @@
 package middleware_test
 
 import (
+	"bytes"
 	"compress/gzip"
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
+
+	vmw "github.com/AlexGalhardo/vukem/middleware"
 
 	"github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 )
@@ -83,6 +88,61 @@ func TestGzipStatic_HTMLUncompressedAndBuildJSCompressed(t *testing.T) {
 	trapEnc, _ := getGzip(t, srv.URL+"/build/trap.js")
 	if trapEnc != "" {
 		t.Fatalf("text/html disguised as JS Content-Encoding = %q, want empty", trapEnc)
+	}
+}
+
+func TestGzipStatic_OutsideStaticFS(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.Mkdir(filepath.Join(dir, "build"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+
+	body := bytes.Repeat([]byte("a"), 4000)
+	if err := os.WriteFile(filepath.Join(dir, "build", "app.css"), body, 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	// Same nesting as routes/web.go: Gzip wraps StaticFS (first UseServer is outermost).
+	next := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.NotFound(w, r)
+	})
+	h := middleware.GzipStatic()(vmw.StaticFS(os.DirFS(dir), vmw.StaticConfig{Prefix: "/"})(next))
+	req := httptest.NewRequest(http.MethodGet, "/build/app.css", nil)
+	req.Header.Set("Accept-Encoding", "gzip")
+	rec := httptest.NewRecorder()
+	h.ServeHTTP(rec, req)
+
+	if got := rec.Header().Get("Content-Encoding"); got != "gzip" {
+		t.Fatalf("Content-Encoding = %q, status %d, bytes %d", got, rec.Code, rec.Body.Len())
+	}
+}
+
+func TestGzipStatic_ServeFileCompressesCSS(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.Mkdir(filepath.Join(dir, "build"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+
+	body := bytes.Repeat([]byte("a"), 4000)
+	path := filepath.Join(dir, "build", "app.css")
+	if err := os.WriteFile(path, body, 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	h := middleware.GzipStatic()(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, path)
+	}))
+	req := httptest.NewRequest(http.MethodGet, "/build/app.css", nil)
+	req.Header.Set("Accept-Encoding", "gzip")
+	rec := httptest.NewRecorder()
+	h.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Fatalf("status %d", rec.Code)
+	}
+
+	if got := rec.Header().Get("Content-Encoding"); got != "gzip" {
+		t.Fatalf("Content-Encoding = %q, body %d", got, rec.Body.Len())
 	}
 }
 

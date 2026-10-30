@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Lighthouse CI config (`lighthouserc.json`, `qa/lighthouse/urls.txt`, `qa/lighthouse/run.sh`) for the SDD 09 §4 budgets on five reference pages (P1.I.5.1). `@lhci/cli` is invoked with `bunx` at 0.15.1 and is not a package.json dependency until the owner approves it.
 - Platform metrics from SDD 12 §6.2 (`hexa.*`, `biz.*`, backup placeholders) on the `hexascore` meter, including the `hexa.errors` label cap and SQL gauges (P2.C.2.2). `http.server.request.duration` is recorded in-app until `drivers/otel` ships in an adopted vukem tag (P2.C.2.1).
+- Catalog facets ship in the first listing response, so the filter row does not change after paint (P1.I.5.1).
 - Incident response procedure, review template and user notice templates in en, pt-BR and es (P2.D.5.3).
 - Trend score, eligibility and prior fill as pure functions (P6.C.2.1).
 - CI guard for expand/contract migration text, plus a Postgres 18.6 migrate / rollback / migrate round trip (P2.E.1.2).
@@ -19,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Fixed
 
 - Gzip is limited to `/build` JS, CSS, SVG, fonts and source maps. HTML and `Set-Cookie` responses stay uncompressed (P1.I.5.1).
+- The compressor now wraps the static file server. The first server middleware is the outermost, so it previously sat inside the file server and `/build` assets were sent uncompressed (P1.I.5.1).
 - The e2e compose stack sets `CHALLENGE_GLOBAL_LIMIT` so a parallel suite does not trip the 21-bit signup attack difficulty. Production leaves it unset; a value that is not a positive integer refuses to boot (FIX-e2e-signup-load).
 
 ## [0.8.0] - 2026-10-30
