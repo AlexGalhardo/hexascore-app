@@ -1768,7 +1768,7 @@ Phase-specific conventions:
     - staging deploy of a branch adding one `database/concurrent/` file → pre-deploy log shows `migrate` then `CREATE INDEX CONCURRENTLY IF NOT EXISTS`; `migrate:status --json` records the matching `CREATE INDEX IF NOT EXISTS` migration
   - Notes: reuses P1.A.4.3's `migrate:locked`; this task only adds the concurrent step and the single entry point. Concurrent statements run outside a transaction on a connection that holds no other lock. Big indexes ship alone (pre-deploy timeout, SDD 11 §8). Retire `database/concurrent/` when VF-017 is fixed.
 
-- [ ] **P2.E.1.2** Add the CI expand/contract policy check and a down-migration round trip.
+- [x] **P2.E.1.2** Add the CI expand/contract policy check and a down-migration round trip.
   - Files/modules: `scripts/ci/migration-policy.ts`, `scripts/ci/migration-policy.test.ts`, `.github/workflows/ci.yml` (`migrations` job), `docs/runbooks/migrations.md` (policy, contract marker)
   - Refs: SDD 11 §7.2 (forward-only; expand → migrate → contract two releases later; `down` tested, never run in production); ADR 0014; SDD 06 §7.8 (backfill job); <https://vukem.dev/docs/database/migrations> "Running migrations"
   - Depends on: P2.E.1.1
