@@ -1441,7 +1441,7 @@ Phase-specific conventions:
     - the Vite build (`bun x vite build`) and `bun run build:ssr` run inside the image build, never on the runner
   - Notes: use the Docker layer cache of the Actions cache backend only if it needs no new action outside the pinned set; otherwise accept slower builds.
 
-- [ ] **P2.B.1.4** Add the `openapi` job: export diff, Redocly lint, and Schemathesis against the built container.
+- [x] **P2.B.1.4** Add the `openapi` job: export diff, Redocly lint, and Schemathesis against the built container.
   - Files/modules: `.github/workflows/ci.yml` (`openapi`), `redocly.yaml`, `qa/schemathesis/run.sh` (from P1.I.4.1)
   - Refs: SDD 11 §6.6 (`openapi`); SDD 05 §6.5, §10; D-37; <https://vukem.dev/docs/cli/reference-runtime> (`openapi:export`)
   - Depends on: P2.B.1.3

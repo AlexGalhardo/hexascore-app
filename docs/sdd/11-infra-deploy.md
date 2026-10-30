@@ -156,6 +156,8 @@ GitHub Actions is available for `hexascore-app` (D-26; legacy had disabled them 
 | `test` | PR | `go test ./...` and `-tags=integration` with `postgres:18.6-alpine3.24` service | yes |
 | `vuln` | PR, weekly | `govulncheck ./...` pinned | yes |
 | `openapi` | PR | `openapi:export` diff vs committed spec; Schemathesis vs built container | yes |
+
+The `openapi` job downloads `image.tar` from `build` and does not run `docker build`. `scripts/openapi-check.sh --image hexascore:ci` exports from that image; a handler change that is not regenerated fails `git diff --exit-code`. `qa/schemathesis/ci.sh` migrates the job's Postgres, inserts one business key and one app token, and runs Schemathesis 4.29.0 (`qa/schemathesis/run.sh`) against the same image.
 | `build` | PR | image build, ≤ 400 MB, no unpinned `FROM` | yes |
 | `e2e` | PR | Playwright + axe vs built container | yes |
 | `lighthouse` | PR | ADR 0004 budgets | yes |
