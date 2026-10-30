@@ -6,6 +6,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-10-30
+
+### Added
+
+- Add the community suggestion tables ([349418a](https://github.com/AlexGalhardo/hexascore-app/commit/349418ac504a451de9c54dbf4d549c244c4fdbae))
+- Validate community suggestion fields ([e94dae1](https://github.com/AlexGalhardo/hexascore-app/commit/e94dae1ba94698485b5b59fb3ded00f2920cbad1))
+- Add the community suggestion state machine ([990880f](https://github.com/AlexGalhardo/hexascore-app/commit/990880f4eff562a5d8aeb5fc81ed80060997ab18))
+- Add webhook endpoint management ([cef9dea](https://github.com/AlexGalhardo/hexascore-app/commit/cef9dea577a8f133dd1a1fdafe77fe58cb230878))
+- Fan out item changes to webhooks ([8b89125](https://github.com/AlexGalhardo/hexascore-app/commit/8b89125ddacd33716f87e3e6dcdfe7641a3199a1))
+- Reject API sunsets shorter than 183 days ([b942bb7](https://github.com/AlexGalhardo/hexascore-app/commit/b942bb7f80322abb7f1607ea163adfb924b0930e))
+- Test webhooks, prune deliveries, and count outcomes ([77c512c](https://github.com/AlexGalhardo/hexascore-app/commit/77c512c2d3a9329cf1b350c350fe884f417d0215))
+
+### Fixed
+
+- Return the stored webhook created_at ([4f6ddf0](https://github.com/AlexGalhardo/hexascore-app/commit/4f6ddf0650ee7a8929c2342a6ac747c3e5b3caf6))
+- Read the webhook attempt that was just sent ([291d41b](https://github.com/AlexGalhardo/hexascore-app/commit/291d41b92672c12eac9d444e09bc3ee90363d3a5))
+
+### merge
+
+- P4.A.1.1 community tables onto local main ([ef32d76](https://github.com/AlexGalhardo/hexascore-app/commit/ef32d76f68b6795bf939256e8f0d65a88b52197e))
+- P4.A.1.2 suggestion validators onto local main ([a2647fc](https://github.com/AlexGalhardo/hexascore-app/commit/a2647fcb0521c2a32ccc636d681ef822d6d414e6))
+- P4.A.1.3 suggestion state machine onto local main ([0d83f89](https://github.com/AlexGalhardo/hexascore-app/commit/0d83f89b6c2472cb948dd68735cd71eed4677502))
+- P3.A.5.1 webhook endpoints onto local main ([eb21264](https://github.com/AlexGalhardo/hexascore-app/commit/eb212646da86374e7325cfebee44f85bc5f891ae))
+- P3.A.5.2 webhook fan-out onto local main ([f769c8e](https://github.com/AlexGalhardo/hexascore-app/commit/f769c8ed567d602efd570e579911576ef2f85767))
+- P3.A.5.3 webhook test, prune, and delivery metric onto local main ([54c99d5](https://github.com/AlexGalhardo/hexascore-app/commit/54c99d543355a997508b324e3b4d771c5b18b56b))
+- Local main into P3.A.6.1 before review ([968098a](https://github.com/AlexGalhardo/hexascore-app/commit/968098af9f3dba3ead9abed8f0e7e6a09118e970))
+- P3.A.6.1 API deprecation window onto local main ([88fb90a](https://github.com/AlexGalhardo/hexascore-app/commit/88fb90a5ab4e6ae8d28900f4da9f6eacac45082d))
+
 ## [0.9.0] - 2026-10-30
 
 ### Added
