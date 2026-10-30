@@ -2,7 +2,7 @@
 # Railway, Fly, Render and plain Docker build it as is:
 # https://vukem.dev/docs/deployment/docker-and-railway
 
-FROM oven/bun:1.4.3-alpine@sha256:629e17411f1f129dbec3af78d5af9c9f2a937435c80349437206c6b0b7422373 AS assets
+FROM oven/bun:1.4.4-alpine@sha256:4cf82f5686b196504fe119db3fcd9185b191f82ece82c40680e597228ec6070a AS assets
 WORKDIR /src
 COPY package.json bun.lock* ./
 # The lockfile is a required build input: the image installs exactly the
