@@ -2444,7 +2444,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run TestAppMe` → `nickname-taken` 422; second export within 7 days → 429 `export-cooldown` with `Retry-After`
   - Notes: SDD 10 §6.1 still says `GET /me/export`; fix SDD 10 to POST in the same change.
 
-- [ ] **P3.C.3.2** Serve the lists routes and the edition choice: `/me/lists`, `/lists/{id}`, POST `/lists`, PATCH/DELETE `/lists/{id}`, PUT/DELETE `/lists/{id}/items/{itemId}`, PUT `/lists/{id}/order`, PUT/DELETE `/items/{id}/edition`.
+- [x] **P3.C.3.2** Serve the lists routes and the edition choice: `/me/lists`, `/lists/{id}`, POST `/lists`, PATCH/DELETE `/lists/{id}`, PUT/DELETE `/lists/{id}/items/{itemId}`, PUT `/lists/{id}/order`, PUT/DELETE `/items/{id}/edition`.
   - Files/modules: `app/appapi/lists.go`, `tests/app_lists_test.go`
   - Refs: SDD 14 §6.1, §6.3, §6.5; SDD 05 §6.4
   - Depends on: P3.C.3.1
