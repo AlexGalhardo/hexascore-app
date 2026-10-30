@@ -186,3 +186,10 @@ Orchestrator (Opus 5.5) with four background workers kept in standby (owner rule
 - Owner decisions: passkeys return (D-06 amended, ADR 0017); vukem work on VF-001 (passkeys), VF-052 (Cloudflare), VF-055 (React Email), VF-056 (JSON-RPC), VF-057 (HTTP/2 over TLS, HTTP/3), VF-059 (Betterleaks), VF-011 (`notify`), VF-014, VF-044; FQ-004 WebP stays out of the framework; `processed_events` dropped from the import (dedup in `contrib/stripe`, persistent cache store in production); `drivers/s3` accepted for backups.
 - vukem: about 45 PRs merged (passkeys core and scaffold, React Email, jsonrpc + OpenRPC, HTTPS/HTTP/2, Cloudflare IP/Turnstile/visitor, notify, envelopes, sitemap, httpclient resilience, impersonation, group error handlers, OpenAPI prefix options, CI flake root causes); issues #19 and #5 closed; no release yet (owner decides). Docs site audit done; "Last updated" rule and CI check in PR #88.
 - Environment: Windows Defender disabled by the owner (removed local test flakes); Railway CLI linked, variable reads allowed, `Bash(railway variables:*)` in the owner's allow list.
+
+## Execution: resume 2026-10-29
+
+- Resume gate on `origin/main` at `c1edff7` exited 0 (`go build`, golangci-lint 0 issues, `bun install`/`lint`/`typecheck`/`test`, integration tests). Log: session scratch `resume-gate.log`. Postgres and RustFS were already healthy. `main` was not pushed.
+- vukem PR #63 (Betterleaks) squash-merged. Release `v0.34.0` is asked in QUESTIONS.md as FR-004 and was not tagged. P1.C.7 stays blocked until an adopted tag contains VF-001.
+- Local branch `agent/senior/P1.I.5.1-r2`: gzip limited to `/build` assets (`TestGzipStatic_HTMLUncompressedAndBuildJSCompressed`), `CHALLENGE_GLOBAL_LIMIT` with boot refusal (`TestSecurity_A07_PowGlobalLimitOverride`, `TestSecurity_A07_PowGlobalLimitRefusedAtBoot`). Lighthouse budgets are not green yet, so P1.I.5.1 stays open.
+- P2.D.5.3: incident procedure, review template and notices in en, pt-BR and es. markdownlint-cli2 exit 0.
