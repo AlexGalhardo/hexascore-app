@@ -131,6 +131,7 @@ func Web(r *router.Router, app *vukem.App) error {
 	r.Get("/robots.txt", controllers.Robots(app)).Name("robots")
 	r.Get("/terms", controllers.Legal("terms")).Name("terms")
 	r.Get("/policy", controllers.Legal("policy")).Name("policy")
+	r.Get("/pricing", controllers.Pricing).Name("pricing")
 	r.Get("/docs", docs).Name("docs")
 	r.Get("/docs/{slug}", docs).Name("docs.page")
 	r.Get("/", controllers.Home(app)).Name("home")

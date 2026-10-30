@@ -348,7 +348,10 @@
       "ctaFreeLogged": "Get an API key",
       "ctaPaid": "Choose {plan}",
       "ctaSignup": "Sign up to subscribe",
-      "notConfigured": "Online payments are not available yet. Paid plans will open soon."
+      "notConfigured": "Online payments are not available yet. Paid plans will open soon.",
+      "coverageTitle": "Data coverage",
+      "coverageBody": "The API only returns fields we may republish, so some are patchy and some are always omitted (covers, trailers). Coverage percentages are not published yet.",
+      "coverageLink": "Read the coverage details"
     },
     "checkout": {
       "metaTitle": "Plan and billing",
@@ -564,7 +567,7 @@
     "copied": "Copied",
     "title": "API documentation",
     "navLabel": "Documentation",
-    "nav": { "index": "Quickstart", "authentication": "Authentication", "pagination": "Pagination", "rate-limits": "Rate limits", "errors": "Errors", "changelog": "Changelog" },
+    "nav": { "index": "Quickstart", "authentication": "Authentication", "pagination": "Pagination", "rate-limits": "Rate limits", "errors": "Errors", "coverage": "Coverage", "changelog": "Changelog", "reference": "API reference" },
     "tocLabel": "On this page",
     "quickstart": {
       "lead": "Community scores for games, movies, TV series and books — 0 to 100, in six categories per item — over a read-only JSON API.",
