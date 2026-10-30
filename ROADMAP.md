@@ -2130,7 +2130,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.A.1 Entity, editions and trending endpoints
 
-- [ ] **P3.A.1.1** Serve `getEntity` and the kind-specific `getPerson`, `getOrganization`, `getFranchise`, `getPlatform` on `/api/v1` with audience `api`.
+- [x] **P3.A.1.1** Serve `getEntity` and the kind-specific `getPerson`, `getOrganization`, `getFranchise`, `getPlatform` on `/api/v1` with audience `api`.
   - Files/modules: `app/api/v1/entities.go`, `app/catalog/readmodel/entity.go`, `routes/api.go`, `tests/api_entities_test.go`
   - Refs: SDD 05 §6.2, §7.4, FR-05-6, FR-05-8; SDD 01 §6.1, §6.2; ADR 0006
   - Depends on: P2.G

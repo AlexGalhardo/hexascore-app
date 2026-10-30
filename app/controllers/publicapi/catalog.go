@@ -2,6 +2,7 @@ package publicapi
 
 import (
 	"errors"
+	"net/http"
 	"time"
 
 	"github.com/AlexGalhardo/vukem/api"
@@ -110,7 +111,7 @@ func (h *Controller) ListEditions(c *web.Ctx, in ListEditionsInput) (EditionPage
 
 	editions, more, err := catalog.LoadAPIEditions(c.Context(), h.DB, in.ID, after, limit, h.Policy)
 	if errors.Is(err, catalog.ErrItemNotFound) {
-		return EditionPageJSON{}, errs.ErrNotFound
+		return EditionPageJSON{}, h.mergedEditions(c, in)
 	}
 	if err != nil {
 		return EditionPageJSON{}, err
@@ -139,6 +140,23 @@ func (h *Controller) ListEditions(c *web.Ctx, in ListEditionsInput) (EditionPage
 	}
 
 	return out, notModified(c, out)
+}
+
+// mergedEditions sends a merged-away book id to the surviving work's edition list (SDD 01).
+func (h *Controller) mergedEditions(c *web.Ctx, in ListEditionsInput) error {
+	target, ok, err := h.Redirects(c.Context(), "book", in.ID)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return errs.ErrNotFound
+	}
+	loc := "/api/v1/books/" + target.ID + "/editions"
+	if q := c.Request().URL.RawQuery; q != "" {
+		loc += "?" + q
+	}
+
+	return errs.New(http.StatusMovedPermanently, "item merged").WithHeader("Location", loc)
 }
 
 // UsageQuota is the quota block of getUsage (legacy lib/api/schemas.ts usageSchema, snake_case kept).
