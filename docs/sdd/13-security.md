@@ -168,13 +168,14 @@ Keys: IPv6 is bucketed by /64 [RL]. `c.IP()` trusts forwarding headers only from
 
 ### 7.2 Challenge and form integrity (ADR 0016)
 
-- Trigger (SDD 03 §7.3), per IP: > 3 sign-ups/h, > 5 failed logins/10 min, > 3 resets/h. Global: > 30 sign-ups/h. A tripped flag holds 1 h.
+- Trigger (SDD 03 §7.3), per IP: > 3 sign-ups/h, > 5 failed logins/10 min, > 3 resets/h. Global: > 30 sign-ups/h. A tripped flag holds 1 h (`challenge:<route>:<ip|all>:trip`, `TripHold`).
+- Code: `app/challenge` (issue, verify, solve), `app/http/middleware/challenge.go` (thresholds, trip flags, fallback), `resources/js/challenge/worker.ts` (solver), `app/forms` (signed form render time). Tests: `TestSecurity_A07_Pow*`, `TestSecurity_A10_HexaPowStoreDown503`, `TestSecurity_A07_HexaHoneypotAndFillTime`; load: `qa/k6/login-pow.js`.
 - `GET /challenge?route=signup` → `{c, bits, exp}`:
   - `c` = HMAC-SHA256 with `app.DeriveKey("pow", 32)` over 16 random bytes, the expiry and the route; TTL 120 s.
   - The client finds `n` such that `SHA-256(c‖n)` has `bits` leading zero bits (18; 21 under a global trip). It runs in a Web Worker (`worker-src 'self'`).
 - Server check order: HMAC, expiry, route, zero bits, then single use via cache `Add("pow:"+c)`. A replay gets 428; a store error gets 503.
-- Accessibility: no puzzle and no image. An `aria-live` region says "Checking your browser…". After 10 s the client may ask once for `bits-2` (1/h per IP). Without JS, a localised notice offers "Continue with Google", which is never challenged.
-- Honeypot `website` field, plus a minimum fill time of 3 s taken from the render time in the signed form token. A violation gets the normal success answer, stores nothing and logs `security.honeypot`. Suggestions get a 422 instead (SDD 04).
+- Accessibility: no puzzle and no image. An `aria-live` region says "Checking your browser…". After 10 s the client may ask once for `bits-2` (1/h per IP): `GET /challenge?route=…&fallback=1`; the gate accepts solutions down to `bits-2`, since only that endpoint hands them out. Without JS, a localised notice offers "Continue with Google", which is never challenged.
+- Honeypot `website` field, plus a minimum fill time of 3 s taken from the render time in the signed form token (`form_token`, `app/forms`; a missing or forged token counts as a violation). A violation gets the normal success answer, stores nothing and logs `security.honeypot`. Suggestions get a 422 instead (SDD 04).
 - Turnstile: app setting `BOT_CHALLENGE=pow|turnstile` (HexaScore config, not vukem). It adds `https://challenges.cloudflare.com` to `script-src`/`frame-src` on challenged pages only. Using it in production needs an ADR 0016 update (issue 12). The framework hook is requested in VF-003.
 
 ### 7.3 Input handling

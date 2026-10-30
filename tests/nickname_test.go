@@ -63,7 +63,7 @@ func TestVerifiedLoginWithoutNicknameGoesToOnboarding(t *testing.T) {
 	)
 
 	c := app.Client(t)
-	c.PostJSON("/signup", signUpForm("Bia Souza", "bia@example.com", testPassword))
+	c.PostJSON("/signup", signUpForm(app, "Bia Souza", "bia@example.com", testPassword))
 	// Unverified users are not sent to onboarding: they still need the mail.
 	c.PostJSON("/login", map[string]any{"identifier": "bia@example.com", "password": testPassword}).
 		AssertRedirect("/dashboard")

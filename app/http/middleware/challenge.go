@@ -13,7 +13,7 @@ import (
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/web"
 
-	"github.com/AlexGalhardo/hexascore-app/app/security"
+	"github.com/AlexGalhardo/hexascore-app/app/challenge"
 )
 
 // HeaderChallenge carries "<c>:<n>": the challenge and the nonce that solves it.
@@ -42,7 +42,7 @@ var ChallengeRules = map[string]ChallengeRule{
 
 // Challenger enforces ChallengeRules.
 type Challenger struct {
-	PoW         *security.PoW
+	PoW         *challenge.PoW
 	Cache       func() (*cache.Cache, error)
 	ProblemBase string
 }
@@ -50,6 +50,14 @@ type Challenger struct {
 func (ch *Challenger) key(rule ChallengeRule, ip string) string {
 	return "challenge:" + rule.Name + ":" + ip
 }
+
+// TripHold is how long a tripped flag (one IP or the whole route) keeps the challenge on after the
+// counter window ends (SDD 13 §7.2).
+const TripHold = time.Hour
+
+// FallbackDrop is how many bits a slow client may drop, once per TripHold per IP, by asking
+// /challenge again with fallback=1 after 10 s (SDD 13 §7.2).
+const FallbackDrop = 2
 
 // state reads the counters (and adds one when count is set) and reports
 // whether the caller needs a challenge and how hard.
@@ -64,38 +72,57 @@ func (ch *Challenger) state(
 		return false, 0, err
 	}
 
-	// A read-only probe reports the answer for the attempt it announces, so it counts that attempt
-	// too; otherwise the client is told "not required" and the post that crosses the limit gets a 428.
-	read := func(key string) (int64, error) {
-		if count {
-			return c.Increment(ctx, key, 1, rule.Window)
-		}
-
-		n, _, err := cache.Get[int64](ctx, c, key)
-
-		return n + 1, err
-	}
-
-	n, err := read(ch.key(rule, ip))
+	required, err = tripped(ctx, c, ch.key(rule, ip), rule.Limit, rule.Window, count)
 	if err != nil {
 		return false, 0, err
 	}
 
-	bits = security.DefaultBits
-	required = n > int64(rule.Limit)
+	bits = challenge.DefaultBits
 
 	if rule.GlobalLimit > 0 {
-		g, err := read(ch.key(rule, "all"))
+		global, err := tripped(ctx, c, ch.key(rule, "all"), rule.GlobalLimit, rule.Window, count)
 		if err != nil {
 			return false, 0, err
 		}
 
-		if g > int64(rule.GlobalLimit) {
-			required, bits = true, security.AttackBits
+		if global {
+			required, bits = true, challenge.AttackBits
 		}
 	}
 
 	return required, bits, nil
+}
+
+// tripped counts one attempt on key (or only peeks when count is false) and reports whether the
+// attempts passed limit within window or a flag set by an earlier trip still holds.
+func tripped(
+	ctx context.Context,
+	c *cache.Cache,
+	key string,
+	limit int,
+	window time.Duration,
+	count bool,
+) (bool, error) {
+	held, _, err := cache.Get[bool](ctx, c, key+":trip")
+	if err != nil || held {
+		return held, err
+	}
+
+	// A read-only probe reports the answer for the attempt it announces, so it counts that attempt
+	// too; otherwise the client is told "not required" and the post that crosses the limit gets a 428.
+	var n int64
+	if count {
+		n, err = c.Increment(ctx, key, 1, window)
+	} else {
+		n, _, err = cache.Get[int64](ctx, c, key)
+		n++
+	}
+
+	if err != nil || n <= int64(limit) || !count {
+		return err == nil && n > int64(limit), err
+	}
+
+	return true, c.Put(ctx, key+":trip", true, TripHold)
 }
 
 // Require returns the middleware for rule: below the thresholds requests pass;
@@ -124,10 +151,11 @@ func (ch *Challenger) Require(name string) func(http.Handler) http.Handler {
 
 			c, n, _ := strings.Cut(r.Header.Get(HeaderChallenge), ":")
 
-			switch err := ch.PoW.Verify(r.Context(), rule.Name, c, n, bits); {
+			// Accepts a fallback challenge; Issue hands those out at most once per hour per IP.
+			switch err := ch.PoW.Verify(r.Context(), rule.Name, c, n, bits-FallbackDrop); {
 			case err == nil:
 				next.ServeHTTP(w, r)
-			case errors.Is(err, security.ErrStore):
+			case errors.Is(err, challenge.ErrStore):
 				web.Fail(w, r, errs.Wrap(http.StatusServiceUnavailable, err))
 			default:
 				if c != "" {
@@ -162,8 +190,8 @@ func (ch *Challenger) problem(w http.ResponseWriter, rule ChallengeRule, bits in
 	_, _ = w.Write(body)
 }
 
-// Issue serves GET /challenge?route=<name>: a challenge for the route and
-// whether this client needs one now. The counters are only read, so asking
+// Issue serves GET /challenge?route=<name>[&fallback=1]: a challenge for the route and
+// whether this client needs one now; fallback asks for FallbackDrop fewer bits, granted once per hour. The counters are only read, so asking
 // does not count as an attempt.
 func (ch *Challenger) Issue(c *web.Ctx) error {
 	rule, ok := ChallengeRules[c.Query("route")]
@@ -171,9 +199,27 @@ func (ch *Challenger) Issue(c *web.Ctx) error {
 		return errs.New(http.StatusUnprocessableEntity, "Unknown route.")
 	}
 
-	required, bits, err := ch.state(c.Context(), rule, ratelimit.ByIP(c.Request()), false)
+	ip := ratelimit.ByIP(c.Request())
+
+	required, bits, err := ch.state(c.Context(), rule, ip, false)
 	if err != nil {
 		return errs.Wrap(http.StatusServiceUnavailable, err)
+	}
+
+	if required && c.Query("fallback") == "1" {
+		store, err := ch.Cache()
+		if err != nil {
+			return errs.Wrap(http.StatusServiceUnavailable, err)
+		}
+
+		first, err := cache.Add(c.Context(), store, "challenge:fallback:"+ip, true, TripHold)
+		if err != nil {
+			return errs.Wrap(http.StatusServiceUnavailable, err)
+		}
+
+		if first {
+			bits -= FallbackDrop
+		}
 	}
 
 	fresh, err := ch.PoW.Issue(rule.Name, bits)

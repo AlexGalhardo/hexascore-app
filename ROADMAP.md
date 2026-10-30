@@ -1676,7 +1676,7 @@ Phase-specific conventions:
     - `go test ./tests -run 'TestSecurity_A01_HexaRouteStackInventory|TestSecurity_A06_HexaBodyLimits'` → PASS; adding an unclassified route makes the inventory test fail
   - Notes: limits exactly as §7.3 (forms 64 KiB, Stripe webhook 512 KiB, `client-errors` 16 KiB, `client-metrics` 4 KiB, other 1 MiB). Cover upload and suggestion limits ship with P4.A routes.
 
-- [ ] **P2.D.2.3** Complete the proof-of-work challenge and form integrity: global trip, bit fallback, store-down behaviour, minimum fill time, load check.
+- [x] **P2.D.2.3** Complete the proof-of-work challenge and form integrity: global trip, bit fallback, store-down behaviour, minimum fill time, load check.
   - Files/modules: `app/challenge/pow.go`, `app/challenge/pow_test.go`, `app/forms/token.go` (render time in the signed form token), `resources/js/challenge/worker.ts`, `qa/k6/login-pow.js`
   - Refs: SDD 13 FR-13-3, §7.2, §10 (k6 50 VUs); SDD 03 §7.3; ADR 0016; VF-003; P1.C.5.2
   - Depends on: P2.D.2.1
