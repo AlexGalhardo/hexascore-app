@@ -12,16 +12,22 @@ const permissionsPolicy = "accelerometer=(), autoplay=(), camera=(), display-cap
 	"gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), browsing-topics=(), " +
 	"publickey-credentials-get=()"
 
+// UpgradeInsecure reports whether the CSP should carry upgrade-insecure-requests: only in production and when
+// the public URL is https, so the built container reached over plain HTTP (local QA gate) keeps working.
+func UpgradeInsecure(production bool, appURL string) bool {
+	return production && strings.HasPrefix(appURL, "https://")
+}
+
 // SecureHeaders returns the adjustment passed as MiddlewareOptions.SecureHeaders (SDD 09 §7.8, SDD 13 §6.2).
 // vukem's default policy keeps its per-request nonce on scripts and styles; this adds strict-dynamic, the
-// YouTube, Stripe and Google origins, and, in production only, upgrade-insecure-requests (a plain-HTTP dev
+// YouTube, Stripe and Google origins, and, when upgrade is requested, upgrade-insecure-requests (a plain-HTTP dev
 // server must keep working). extraImgHosts lists additional image origins such as a cover CDN.
-func SecureHeaders(production bool, extraImgHosts ...string) func(*vukemmw.SecureHeadersConfig) {
+func SecureHeaders(upgradeInsecure bool, extraImgHosts ...string) func(*vukemmw.SecureHeadersConfig) {
 	return func(cfg *vukemmw.SecureHeadersConfig) {
 		// frame-src and worker-src are written out: through CSPSources they would start from script-src and
 		// inherit its nonce and 'strict-dynamic'.
 		cfg.CSP = vukemmw.DefaultCSP + "; frame-src https://www.youtube-nocookie.com; worker-src 'self'"
-		if production {
+		if upgradeInsecure {
 			cfg.CSP += "; upgrade-insecure-requests"
 		}
 
