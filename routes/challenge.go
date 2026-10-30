@@ -2,6 +2,7 @@ package routes
 
 import (
 	"cmp"
+	"strconv"
 
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/ratelimit"
@@ -20,10 +21,13 @@ func newChallenger(app *vukem.App, problemBase string) (*appmiddleware.Challenge
 		return nil, err
 	}
 
+	globalLimit, _ := strconv.Atoi(app.Source.Get("CHALLENGE_GLOBAL_LIMIT"))
+
 	return &appmiddleware.Challenger{
 		PoW:         security.New(key, app.Cache, app.Now),
 		Cache:       app.Cache,
 		ProblemBase: problemBase,
+		GlobalLimit: globalLimit,
 	}, nil
 }
 

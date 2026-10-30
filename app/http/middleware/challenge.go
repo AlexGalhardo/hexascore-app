@@ -45,6 +45,9 @@ type Challenger struct {
 	PoW         *security.PoW
 	Cache       func() (*cache.Cache, error)
 	ProblemBase string
+	// GlobalLimit, when positive, replaces the global threshold of rules that have one. Only the e2e
+	// stack sets it, so a parallel suite does not trip the 21-bit attack difficulty.
+	GlobalLimit int
 }
 
 func (ch *Challenger) key(rule ChallengeRule, ip string) string {
@@ -84,13 +87,18 @@ func (ch *Challenger) state(
 	bits = security.DefaultBits
 	required = n > int64(rule.Limit)
 
-	if rule.GlobalLimit > 0 {
+	globalLimit := rule.GlobalLimit
+	if globalLimit > 0 && ch.GlobalLimit > 0 {
+		globalLimit = ch.GlobalLimit
+	}
+
+	if globalLimit > 0 {
 		g, err := read(ch.key(rule, "all"))
 		if err != nil {
 			return false, 0, err
 		}
 
-		if g > int64(rule.GlobalLimit) {
+		if g > int64(globalLimit) {
 			required, bits = true, security.AttackBits
 		}
 	}

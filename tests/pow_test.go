@@ -118,3 +118,22 @@ func TestSecurity_A07_SignupHoneypot(t *testing.T) {
 }
 
 const middlewareHeader = "X-Challenge"
+
+// CHALLENGE_GLOBAL_LIMIT replaces the global threshold, so the e2e stack can lift it
+// (and a low value proves the override is what the rule reads).
+func TestSecurity_A07_PowGlobalLimitOverride(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{"CHALLENGE_GLOBAL_LIMIT": "2"}})
+	c := app.Client(t).Inertia("")
+
+	for i := range 2 {
+		signupAs(c, i).AssertRedirect("/signup/check-email")
+	}
+
+	var ch powChallenge
+	c.GetJSON("/challenge?route=signup").AssertOK().JSON(&ch)
+	if !ch.Required || ch.Bits != security.AttackBits {
+		t.Fatalf("challenge = %+v, want attack difficulty", ch)
+	}
+}

@@ -41,6 +41,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **auth:** Make the proof-of-work solver allocation free ([da648cb](https://github.com/AlexGalhardo/hexascore-app/commit/da648cb39988ac252eae8da6aff993e9581b22a0))
 - **infra:** Name the secure headers flag after what it controls ([2b035b1](https://github.com/AlexGalhardo/hexascore-app/commit/2b035b1bc7d33a1a74abdd58ce54978318de3171))
 
+- The e2e compose stack sets `CHALLENGE_GLOBAL_LIMIT` so a fully parallel suite no longer trips the 21-bit signup attack difficulty and times out; production leaves it unset (FIX-e2e-signup-load).
 ### Fixed
 
 - **catalog:** Show highlight and listing scores on the 0-10 scale ([595490b](https://github.com/AlexGalhardo/hexascore-app/commit/595490b1b2c655137c1bf1b26d609591ba7568ff))
