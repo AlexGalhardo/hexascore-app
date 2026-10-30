@@ -240,6 +240,10 @@ web   GET    /docs/reference/scalar.js
 web   GET    /docs/reference/page.js
 web   POST   /profile/export
 app   POST   /app/v1/me/export
+app   GET    /app/v1/me
+app   PATCH  /app/v1/me
+app   POST   /app/v1/me/deletion
+app   DELETE /app/v1/me/deletion
 web   GET    /exports/
 app   POST   /app/v1/tokens
 app   POST   /app/v1/tokens/google
