@@ -31,3 +31,5 @@ storage/*
 qa/e2e/test-results/
 playwright-report/
 .lighthouseci/
+.schemathesis/
+qa/reports/
