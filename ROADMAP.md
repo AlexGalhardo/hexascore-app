@@ -2533,7 +2533,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P4.A.2 Quotas and anti-abuse
 
-- [ ] **P4.A.2.1** Implement submit: eligibility (verified, ≥ 7 days, not banned or blocked), `contributor_stats` row lock, 3 per UTC day counting withdrawn/expired, `Retry-After` to 00:00 UTC.
+- [x] **P4.A.2.1** Implement submit: eligibility (verified, ≥ 7 days, not banned or blocked), `contributor_stats` row lock, 3 per UTC day counting withdrawn/expired, `Retry-After` to 00:00 UTC.
   - Files/modules: `app/community/submit.go`, `app/community/quota.go`, `tests/community_quota_test.go`
   - Refs: SDD 04 FR-04-1, FR-04-3, §7.3, §8 (concurrent 3rd/4th, 23:59:59.900); D-31; open issue 04-7
   - Depends on: P4.A.1.3
