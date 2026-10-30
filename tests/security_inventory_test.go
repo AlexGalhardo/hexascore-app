@@ -96,7 +96,10 @@ func stackViolation(stack, method, path string, mw []string) string {
 			return "app route outside /app/v1"
 		}
 
-		if !has("auth.Required") && !has("middleware.(*Challenger).Require") {
+		// Search is optional (SDD 10). Every other /app/v1 route still needs a bearer.
+		optionalSearch := path == "/app/v1/search" || strings.HasPrefix(path, "/app/v1/search/")
+		if !has("auth.Required") && !has("middleware.(*Challenger).Require") &&
+			!(optionalSearch && has("auth.Optional")) {
 			return "app route without a bearer token or a challenge"
 		}
 	case "web":
@@ -158,6 +161,10 @@ func TestSecurity_A01_HexaRouteStackInventory_Rules(t *testing.T) {
 	t.Parallel()
 
 	ok := []string{"limits.Body", "csrf.Middleware"}
+	if v := stackViolation("app", "GET", "/app/v1/search", []string{"limits.Body", "auth.Optional"}); v != "" {
+		t.Errorf("optional search: %s", v)
+	}
+
 	for _, c := range []struct{ stack, method, path string }{
 		{"admin", "POST", "/admin/users"},
 		{"web", "POST", "/login"},
@@ -175,6 +182,7 @@ func TestSecurity_A01_HexaRouteStackInventory_Rules(t *testing.T) {
 		{"web", "GET", "/admin/x", ok},
 		{"web", "POST", "/login", []string{"limits.Body"}},
 		{"app", "GET", "/app/v1/me", ok},
+		{"app", "GET", "/app/v1/me", []string{"limits.Body", "auth.Optional"}},
 		{"api", "GET", "/api/v1/search", ok},
 		{"web", "GET", "/", nil},
 		{"webhook", "POST", "/x", ok},

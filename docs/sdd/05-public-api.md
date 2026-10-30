@@ -205,7 +205,8 @@ Stack: `auth.Required(appTokenGuard)` (`hx_app_`, SDD 03), `NotBanned`, `auth.Ve
 | Ability | Routes |
 | --- | --- |
 | none | `POST /app/v1/tokens`, `/tokens/google` (SDD 03 §6.2) |
-| `catalog:read` | GET `/{type}`, `/{type}/{id}`, `/{type}/trending`, `/items/{id}/related`, `/me/for-you` (SDD 08), `/entities/{id}`, `/search`, `/items/{id}/me`, `/me`, `/me/library`, `/me/lists`, `/lists/{id}`, `/users/{nickname}`, `/me/notifications`, `/tokens` (SDD 14 §6.3 for library, profile and notifications) |
+| `catalog:read` | GET `/{type}`, `/{type}/{id}`, `/{type}/trending`, `/items/{id}/related`, `/me/for-you` (SDD 08), `/entities/{id}`, `/items/{id}/me`, `/me`, `/me/library`, `/me/lists`, `/lists/{id}`, `/users/{nickname}`, `/me/notifications`, `/tokens` (SDD 14 §6.3 for library, profile and notifications) |
+| optional token, or none | GET `/search`, GET `/search/suggest`, POST `/search/events` (SDD 10 §6.1, SDD 07 §6). `q` longer than 100 characters is 400. Audience `site`. |
 | `ratings:write` | PUT/DELETE `/items/{id}/rating` (SDD 02) |
 | `status:write` | PUT/DELETE `/items/{id}/status`, `/items/{id}/time-to-beat` (SDD 02), `/items/{id}/edition` (SDD 14 §6.3) |
 | `lists:write` | POST `/lists`, PATCH/DELETE `/lists/{id}`, PUT/DELETE `/lists/{id}/items/{itemId}`, PUT `/lists/{id}/order` |
