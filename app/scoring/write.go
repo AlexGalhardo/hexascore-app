@@ -13,6 +13,8 @@ import (
 	"github.com/AlexGalhardo/vukem/errs"
 	"github.com/AlexGalhardo/vukem/events"
 	"github.com/AlexGalhardo/vukem/uuid"
+
+	"github.com/AlexGalhardo/hexascore-app/app/api/changes"
 )
 
 // CategoryKeys are the stable category keys per item type, in column order
@@ -415,5 +417,22 @@ func recomputeItem(ctx context.Context, tx *database.Tx, itemID, typ string, now
 		return 0, err
 	}
 
-	return version, Recompute(ctx, tx, itemID, now, p)
+	before, err := changes.LoadScore(ctx, tx, itemID)
+	if err != nil {
+		return 0, err
+	}
+	if err := Recompute(ctx, tx, itemID, now, p); err != nil {
+		return 0, err
+	}
+	after, err := changes.LoadScore(ctx, tx, itemID)
+	if err != nil {
+		return 0, err
+	}
+	if err := changes.Record(ctx, tx, changes.Change{
+		ItemID: itemID, ItemType: typ, Action: "updated", Fields: changes.ScoreFieldNames(before, after),
+	}); err != nil {
+		return 0, err
+	}
+
+	return version, nil
 }
