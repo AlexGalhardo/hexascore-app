@@ -2013,7 +2013,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
 
 #### P2.G.1 Preparation
 
-- [ ] **P2.G.1.1** Implement `hexascore:export-since` and the replay into legacy for rollback R3.
+- [x] **P2.G.1.1** Implement `hexascore:export-since` and the replay into legacy for rollback R3.
   - Files/modules: `app/console/export_since.go`, `scripts/legacy/replay.sh`, `tests/export_since_test.go`, `docs/runbooks/cutover-rollback.md`
   - Refs: SDD 11 §7.6 (Rollback R1–R3), §10 ("export-since replay"); ADR 0013; D-21
   - Depends on: P2.F.6.1

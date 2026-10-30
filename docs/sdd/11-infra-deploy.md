@@ -232,7 +232,7 @@ Window (target 45 min, max 60):
 7. DNS switch (apex, `www`, `api`); Stripe live webhook to the new route and secret.
 8. Watch 2 h, then daily for 7 days: 5xx < 0.5 %, SSR fallback 0, login success ≥ 95 % of legacy, Stripe events processed, job failures.
 
-Rollback (until T+7 d, then forward-fix): R1 DNS back to Vercel (`docs/runbooks/dns-legacy.txt`); R2 Neon read-only off; R3 `hexascore:export-since <cutover>` replayed into legacy — ratings, statuses, TTB, lists (upsert by natural key), new API keys; new accounts replayed with a reset link (argon2id unreadable by Better Auth). Accepted lost: sessions, suggestions/moderation (no legacy table), flag changes. Stripe re-syncs once the legacy webhook is back.
+Rollback (until T+7 d, then forward-fix): R1 DNS back to Vercel (`docs/runbooks/dns-legacy.txt`); R2 Neon read-only off; R3 `hexascore:export-since <cutover>` replayed into legacy — ratings, statuses, TTB, lists (upsert by natural key), new API keys; new accounts replayed with a reset link (argon2id unreadable by Better Auth). Accepted lost: sessions, suggestions/moderation (no legacy table), flag changes. Stripe re-syncs once the legacy webhook is back. The command prints one upsert per line (`database/legacyexport`); `scripts/legacy/replay.sh` applies it. A user with no `legacy_id` is inserted as `hs:<id>` with a `verification` row `reset-password:<email>` / `required`. Ratings are copied as stored. Runbook: `docs/runbooks/cutover-rollback.md`.
 
 T+30 d: final Neon dump to `backups/legacy/` (12 months); delete Vercel project (incl. `dev.hexascore.app`), Neon, Upstash, Blob store, legacy webhooks, old Google callback, `BETTER_AUTH_SECRET`; drop `legacy_import`.
 
