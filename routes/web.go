@@ -51,6 +51,8 @@ func Web(r *router.Router, app *vukem.App) error {
 	r.Use(limits.Body)
 
 	r.UseServer(appmiddleware.CrossOriginResourcePolicy("same-site"))
+	// VF-043: the starter serves assets and SSR HTML uncompressed; the transfer-size budgets (NFR-09-5, NFR-09-6) need gzip.
+	r.UseServer(middleware.Gzip())
 	r.UseServer(middleware.StaticFS(resources.Public(), middleware.StaticConfig{Prefix: "/"}))
 	r.UseServer(appmiddleware.LocaleCookieRedirect(appmiddleware.LocalePrefixConfig{
 		Prefixes: localePrefixes,
