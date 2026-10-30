@@ -2244,7 +2244,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run 'TestAPIWebhooks|TestSecurity_A10_WebhookSSRF|TestSecurity_A02_WebhookSecretEncrypted'` → `ok`: pro third endpoint → 422; URL resolving to a private IP → 422; secret column never equals the plaintext; webhook calls not counted in quota
   - Notes: secret from `webhook.NewSecret()` (`whsec_…`), encrypted with `app.Crypt`, returned once in the 201 body. `https://` only (DB check). Validation-time SSRF check is a convenience; delivery-time `httpclient.Safe` is the real guard.
 
-- [ ] **P3.A.5.2** Add the per-minute fan-out job: read ≤ 10,000 `api_changes` after `webhook_cursor`, coalesce per item, send `item.batch` (≤ 100 events) through `webhook.Sender` with `webhook.SQLDeliveryLog`.
+- [x] **P3.A.5.2** Add the per-minute fan-out job: read ≤ 10,000 `api_changes` after `webhook_cursor`, coalesce per item, send `item.batch` (≤ 100 events) through `webhook.Sender` with `webhook.SQLDeliveryLog`.
   - Files/modules: `app/webhooks/fanout.go`, `app/webhooks/sender.go`, `routes/schedule.go`, `tests/webhook_delivery_test.go`
   - Refs: SDD 05 §6.2 "Webhook batch", §7.3, FR-05-11; <https://vukem.dev/docs/digging-deeper/webhooks> "The delivery log"; SDD 12 §6 (`api.webhook.deliveries`)
   - Depends on: P3.A.5.1
