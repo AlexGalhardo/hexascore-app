@@ -190,6 +190,99 @@ func TestAppTokensRefusals(t *testing.T) {
 	}
 }
 
+func TestAppTokensTwoFactor(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+	browser := app.Client(t).Inertia("")
+	enableTwoFactor(t, app, browser, "tfa-accept@example.com")
+
+	res := app.Client(t).PostJSON("/app/v1/tokens", map[string]any{
+		"identifier": "tfa-accept@example.com", "password": testPassword, "deviceName": "Pixel",
+	}).AssertUnprocessable()
+	if got := codeOf(res); got != "two-factor-required" {
+		t.Fatalf("code = %q, want two-factor-required", got)
+	}
+}
+
+func TestAppTokensChallenge(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+	api := app.Client(t)
+	body := map[string]any{"identifier": "nobody-accept@example.com", "password": "x", "deviceName": "t"}
+
+	for range 5 {
+		api.PostJSON("/app/v1/tokens", body).AssertStatus(422)
+	}
+
+	res := api.PostJSON("/app/v1/tokens", body).AssertStatus(428)
+	if got := codeOf(res); got != "challenge-required" {
+		t.Fatalf("code = %q, want challenge-required", got)
+	}
+}
+
+func TestAppTokensBanned(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+	signedUp(t, app, "banned-accept@example.com")
+
+	acc, err := accounts.New(app.App)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	u, err := acc.Users.ByCredentials(t.Context(), map[string]string{"email": "banned-accept@example.com"})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	admin := makeUser(t, app, "admin-accept@example.com", "admin", true)
+	until := time.Now().Add(48 * time.Hour).UTC()
+	if err := acc.Ban(t.Context(), admin.ID, u.ID, "spam", &until); err != nil {
+		t.Fatal(err)
+	}
+
+	res := app.Client(t).PostJSON("/app/v1/tokens", map[string]any{
+		"identifier": "banned-accept@example.com", "password": testPassword, "deviceName": "x",
+	}).AssertForbidden()
+
+	var body struct {
+		Code      string `json:"code"`
+		Reason    string `json:"reason"`
+		ExpiresAt string `json:"expiresAt"`
+	}
+	res.JSON(&body)
+	if body.Code != "account-banned" || body.Reason != "spam" {
+		t.Fatalf("problem = %+v", body)
+	}
+
+	if _, err := time.Parse(time.RFC3339, body.ExpiresAt); err != nil {
+		t.Fatalf("expiresAt = %q: %v", body.ExpiresAt, err)
+	}
+}
+
+func TestAppTokensRotateLimit(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+	c := signedUp(t, app, "spin@example.com")
+	plain := issue(t, c, "spin@example.com", "Phone").Token
+
+	for range 10 {
+		var next issued
+
+		app.Client(t).WithToken(plain).PostJSON("/app/v1/tokens/rotate", nil).AssertCreated().JSON(&next)
+		plain = next.Token
+	}
+
+	status := app.Client(t).WithToken(plain).PostJSON("/app/v1/tokens/rotate", nil).Status()
+	if status != http.StatusTooManyRequests {
+		t.Fatalf("11th rotate status = %d, want 429", status)
+	}
+}
+
 func TestSecurity_A01_TokenAbilities(t *testing.T) {
 	t.Parallel()
 
