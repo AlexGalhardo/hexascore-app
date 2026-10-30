@@ -2140,7 +2140,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `curl -si -H "Authorization: Bearer $K" -H "If-None-Match: $ETAG" http://localhost:3000/api/v1/entities/$ID` → `304`, `X-Quota-Remaining` down by 1 (FR-05-4)
   - Notes: typed routes via `api.Register` with `Op.ValidateResponse: true` and `Op.Name` in the `api.v1.` group (<https://vukem.dev/docs/rest-apis/openapi> "OpenAPI"). Entity ids are UUID v7 (README convention). Relations are emitted only for rows whose `source` is allowed (SDD 01 §6.1). Do not add `/app/v1` twins here (P3.C.2.1).
 
-- [ ] **P3.A.1.2** Serve `listEntityItems` (`/v1/entities/{id}/items?type=&role=`) with the signed keyset cursor.
+- [x] **P3.A.1.2** Serve `listEntityItems` (`/v1/entities/{id}/items?type=&role=`) with the signed keyset cursor.
   - Files/modules: `app/api/v1/entities.go`, `app/api/cursor/cursor.go` (reuse the P1.H cursor), `tests/api_entities_test.go`
   - Refs: SDD 05 §6.2 "Cursors"; SDD 01 §6.2; VF-005; VF-014
   - Depends on: P3.A.1.1
