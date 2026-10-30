@@ -2521,7 +2521,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./app/community/... -run 'TestValidate'` → table tests for every row of §7.2: ISBN-13 checksum, Wikidata `Q\d+`, synopsis 50–2,000, release date 1870 to now + 10 y, ≤ 20 relation ops, ≤ 3 URLs, hexascore.app and shortener URLs refused, empty effective change → 422
   - Notes: validation with vukem `z` schemas (shared with the client as JSON Schema per ADR 0009). Text is NFC-normalised before comparison.
 
-- [ ] **P4.A.1.3** Implement the state machine service: allowed transitions, one `suggestion_events` row per transition, `version` optimistic lock.
+- [x] **P4.A.1.3** Implement the state machine service: allowed transitions, one `suggestion_events` row per transition, `version` optimistic lock.
   - Files/modules: `app/community/state.go`, `app/community/state_test.go`
   - Refs: SDD 04 §7.1, FR-04-4, FR-04-5; ADR 0010
   - Depends on: P4.A.1.2
