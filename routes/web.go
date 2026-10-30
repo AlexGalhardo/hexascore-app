@@ -29,8 +29,9 @@ var localePrefixes = map[string]string{"pt-br": "pt-BR", "es": "es"}
 
 // Web registers the browser routes. vukem route:list shows them.
 func Web(r *router.Router, app *vukem.App) error {
-	// Server level too: vukem's MethodOverride parses urlencoded forms before routing and keeps a limit
-	// set earlier, else it reads up to 10 MiB.
+	// Server level too: MethodOverride parses urlencoded forms before routing. A limit set
+	// only on the router is too late, and vukem would read up to 10 MiB. v0.34.0 then
+	// answers 413 from that earlier MaxBytesError (VF-061).
 	r.UseServer(limits.Body)
 
 	// The URL prefix is the only locale source; the locale cookie only drives the redirect (SDD 09 §7.1).
