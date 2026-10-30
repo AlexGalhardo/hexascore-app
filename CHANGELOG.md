@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- `GET /api/v1/changes` serves the 14-day feed (`since`, `type`, signed cursor, `limit` ≤ 1000). A merged item is `deleted` with `mergedInto`. Rows older than 30 days are pruned daily at 04:50 (P3.A.3.2).
 - `hexascore:export-since` prints legacy upserts for ratings, statuses, time-to-beat, lists and new API keys. New accounts are emitted as `hs:<id>` with a reset-link verification row, and the argon2id hash stays behind (P2.G.1.1).
 - `/api/v1` entity reads count a 304 against the quota, `listEntityItems` rejects a tampered cursor and a limit above the plan cap, and `listEditions` answers 301 to the surviving book (P3.A.1.1, P3.A.1.2, P3.A.1.3).
 - `api_changes` records a merge as `deleted` and a score update only when the one-decimal score, confidence or rating count changes. A hidden-only update writes no row (P3.A.3.1).
