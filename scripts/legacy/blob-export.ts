@@ -66,21 +66,33 @@ export async function exportCovers(urls: string[], deps: Deps): Promise<Counts> 
 	}
 
 	const copy = async ({ url, key }: { url: string; key: string }): Promise<void> => {
-		try {
-			if (deps.done.has(key) && (await deps.store.exists(key))) {
-				counts.skipped++;
+		const attempts = 5;
+		for (let attempt = 1; attempt <= attempts; attempt++) {
+			try {
+				if (deps.done.has(key) && (await deps.store.exists(key))) {
+					counts.skipped++;
+					return;
+				}
+				const res = await deps.fetch(url);
+				if (!res.ok) throw new Error(`HTTP ${res.status}`);
+				const body = new Uint8Array(await res.arrayBuffer());
+				await deps.store.write(key, body);
+				deps.record({ legacyUrl: url, key, sha256: createHash("sha256").update(body).digest("hex") });
+				deps.done.add(key);
+				counts.copied++;
+				return;
+			} catch (err) {
+				const msg = err instanceof Error ? err.message : String(err);
+				// 404 is permanent. DNS blips and the bucket's request cap are not.
+				const transient = !/^HTTP 4(?!29)\d\d$/.test(msg) && /ENOTFOUND|EAI_AGAIN|ECONNRESET|ETIMEDOUT|ECONNREFUSED|HTTP 429|HTTP 5|fetch failed|request rate|unexpected error/i.test(msg);
+				if (transient && attempt < attempts) {
+					await new Promise((resolve) => setTimeout(resolve, 400 * attempt));
+					continue;
+				}
+				counts.failed++;
+				deps.warn(`${key}: ${msg}`);
 				return;
 			}
-			const res = await deps.fetch(url);
-			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-			const body = new Uint8Array(await res.arrayBuffer());
-			await deps.store.write(key, body);
-			deps.record({ legacyUrl: url, key, sha256: createHash("sha256").update(body).digest("hex") });
-			deps.done.add(key);
-			counts.copied++;
-		} catch (err) {
-			counts.failed++;
-			deps.warn(`${key}: ${err instanceof Error ? err.message : String(err)}`);
 		}
 	};
 
@@ -112,8 +124,10 @@ async function main(args: string[]): Promise<number> {
 	const bucket = flag(args, "--bucket");
 	const manifest = flag(args, "--manifest");
 	const since = flag(args, "--since");
-	if (!db || !bucket || !manifest || (args.includes("--delta") && !since)) {
-		console.error("usage: blob-export.ts --db <url> --bucket <name> --manifest <file> [--delta --since <ISO time>]");
+	const concurrencyFlag = flag(args, "--concurrency");
+	const concurrency = concurrencyFlag === undefined ? 8 : Number(concurrencyFlag);
+	if (!db || !bucket || !manifest || (args.includes("--delta") && !since) || !Number.isInteger(concurrency) || concurrency < 1) {
+		console.error("usage: blob-export.ts --db <url> --bucket <name> --manifest <file> [--concurrency <n>] [--delta --since <ISO time>]");
 		return 2;
 	}
 	if (since && Number.isNaN(Date.parse(since))) {
@@ -152,6 +166,7 @@ async function main(args: string[]): Promise<number> {
 			done: readManifest(manifest),
 			record: (line) => appendFileSync(manifest, `${JSON.stringify(line)}\n`),
 			warn: (msg) => console.error(`blob-export: ${msg}`),
+			concurrency,
 		},
 	);
 
