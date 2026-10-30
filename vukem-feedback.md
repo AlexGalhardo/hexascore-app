@@ -52,7 +52,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-041 | 2026-10-29 | low | fixed in v0.33.0 (PR [#28](https://github.com/AlexGalhardo/vukem/pull/28)) |
 | VF-042 | 2026-10-29 | low | in review (framework): #55 merged (struct{} + status = no body), extensions in v0.33.0, per-group error handler vukem PR #78 (`Group.ErrorHandler`) |
 | VF-043 | 2026-10-29 | low | fixed in v0.33.0 (PR [#30](https://github.com/AlexGalhardo/vukem/pull/30), adopted 4a2d8ec) |
-| VF-044 | 2026-10-29 | low | in_progress (framework) |
+| VF-044 | 2026-10-29 | low | PR #82 open (framework), unreleased |
 | VF-045 | 2026-10-29 | low | fixed in v0.33.0 (PR [#29](https://github.com/AlexGalhardo/vukem/pull/29)) |
 | VF-046 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#27](https://github.com/AlexGalhardo/vukem/pull/27)), adopted (ADOPT-VF-046) |
 | VF-047 | 2026-10-29 | low | in_progress (framework), PR #40 (nullable filters/search; composite keys open) |
@@ -445,7 +445,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-044: Generated types mark every response property optional; untyped routes appear as `*/*` in the document
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: in_progress (framework), per the FD-044 answer.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: PR [#82](https://github.com/AlexGalhardo/vukem/pull/82) open (framework), unreleased: opt-in `openapi.Info.RequiredOutputs` / `OPENAPI_REQUIRED_OUTPUTS` and `Info.TypedOnly` / `OPENAPI_TYPED_ONLY`.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/client-generation`, `https://vukem.dev/docs/cli/reference-runtime` ("`vukem codegen:client`", "`vukem codegen:routes`"). `[NOT IN VUKEM DOCS]`: nothing on `required` in output schemas or on plain handlers.
 - **Context**: (1) the OpenAPI schemas generated from `Out` types have no `required` list, so `codegen:client` emits `Item = { id?: string; slug?: string; ... }` and the SDKs force null checks on fields the server always sends (inputs keep `required` from `validate` tags). (2) A route registered with a plain handler (`g.Get("/ping", ...)`) is documented with a `*/*` response and an empty schema; `openapi-python-client` 0.29.1 warns and omits the response.
 - **Workaround**: register every public route through `api.Register` with typed output; accept optional properties in the first-party client.
