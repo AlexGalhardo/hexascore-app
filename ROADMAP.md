@@ -2475,7 +2475,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.C.5 Generated client and release
 
-- [ ] **P3.C.5.1** Export `openapi/app-v1.json`, generate the private `@hexascore/app-client` package, and gate it in CI with Schemathesis and k6.
+- [x] **P3.C.5.1** Export `openapi/app-v1.json`, generate the private `@hexascore/app-client` package, and gate it in CI with Schemathesis and k6.
   - Files/modules: `openapi/app-v1.json`, `packages/app-client/package.json`, `packages/app-client/src/api.ts` (generated), `packages/app-client/src/index.test.ts`, `qa/k6/app-v1.js`, `.github/workflows/ci.yml`
   - Refs: SDD 05 §6.5, FR-05-15, §9; ADR 0009 decision 1; <https://vukem.dev/docs/rest-apis/client-generation> "The command"
   - Depends on: P3.C.4.1, P3.C.3.3, P3.C.2.3
