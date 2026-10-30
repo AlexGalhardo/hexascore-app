@@ -2235,7 +2235,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.A.5 Webhooks
 
-- [ ] **P3.A.5.1** Add `webhook_endpoints`/`webhook_cursor` and serve `listWebhooks`, `createWebhook` (secret shown once), `deleteWebhook` with plan caps.
+- [x] **P3.A.5.1** Add `webhook_endpoints`/`webhook_cursor` and serve `listWebhooks`, `createWebhook` (secret shown once), `deleteWebhook` with plan caps.
   - Files/modules: `database/migrations/<ts>_create_webhook_endpoints.go`, `app/api/v1/webhooks.go`, `app/webhooks/endpoints.go`, `tests/api_webhooks_test.go`, `tests/security_webhooks_test.go`
   - Refs: SDD 05 FR-05-11, §5, §6.2, §8, NFR-05-4; <https://vukem.dev/docs/digging-deeper/webhooks> "Sending webhooks"; <https://vukem.dev/docs/security/building-blocks> "Outgoing webhooks"
   - Depends on: P3.A.3.2
@@ -2244,7 +2244,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run 'TestAPIWebhooks|TestSecurity_A10_WebhookSSRF|TestSecurity_A02_WebhookSecretEncrypted'` → `ok`: pro third endpoint → 422; URL resolving to a private IP → 422; secret column never equals the plaintext; webhook calls not counted in quota
   - Notes: secret from `webhook.NewSecret()` (`whsec_…`), encrypted with `app.Crypt`, returned once in the 201 body. `https://` only (DB check). Validation-time SSRF check is a convenience; delivery-time `httpclient.Safe` is the real guard.
 
-- [ ] **P3.A.5.2** Add the per-minute fan-out job: read ≤ 10,000 `api_changes` after `webhook_cursor`, coalesce per item, send `item.batch` (≤ 100 events) through `webhook.Sender` with `webhook.SQLDeliveryLog`.
+- [x] **P3.A.5.2** Add the per-minute fan-out job: read ≤ 10,000 `api_changes` after `webhook_cursor`, coalesce per item, send `item.batch` (≤ 100 events) through `webhook.Sender` with `webhook.SQLDeliveryLog`.
   - Files/modules: `app/webhooks/fanout.go`, `app/webhooks/sender.go`, `routes/schedule.go`, `tests/webhook_delivery_test.go`
   - Refs: SDD 05 §6.2 "Webhook batch", §7.3, FR-05-11; <https://vukem.dev/docs/digging-deeper/webhooks> "The delivery log"; SDD 12 §6 (`api.webhook.deliveries`)
   - Depends on: P3.A.5.1
@@ -2254,7 +2254,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `psql "$DATABASE_URL" -c "\d webhook_deliveries"` → table with index on `(endpoint, attempted_at)`
   - Notes: retries per SDD 05 (8 from 30 s) are a sender option; if `SenderOptions` lacks that knob, write `[NOT IN VUKEM DOCS]` and add a `vukem-feedback.md` entry instead of a custom retry loop. Cursor advances in the same transaction that enqueues the jobs. Payload carries ids and field names only.
 
-- [ ] **P3.A.5.3** Serve `testWebhook`, prune `webhook_deliveries` older than 30 days, and emit `api.webhook.deliveries{outcome}`.
+- [x] **P3.A.5.3** Serve `testWebhook`, prune `webhook_deliveries` older than 30 days, and emit `api.webhook.deliveries{outcome}`.
   - Files/modules: `app/api/v1/webhooks.go`, `app/jobs/prune_webhook_deliveries.go`, `app/observability/metrics.go`, `tests/api_webhooks_test.go`
   - Refs: SDD 05 §6.2; SDD 12 §6 metrics table, §7.6 "API customers"; <https://vukem.dev/docs/digging-deeper/webhooks> "The delivery log" (table grows forever)
   - Depends on: P3.A.5.2
@@ -2265,7 +2265,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.A.6 Deprecation and contract gate
 
-- [ ] **P3.A.6.1** Wire `api.Deprecate` for deprecated operations and document the policy (≥ 6 months before `Sunset`, changelog entry, mail to key owners).
+- [x] **P3.A.6.1** Wire `api.Deprecate` for deprecated operations and document the policy (≥ 6 months before `Sunset`, changelog entry, mail to key owners).
   - Files/modules: `app/api/v1/deprecation.go`, `tests/api_deprecation_test.go`, `docs/runbooks/api-deprecation.md`
   - Refs: SDD 05 §6.1 headers, §6.5 "Versioning"; <https://vukem.dev/docs/rest-apis/overview> "Versioning" (`Deprecation: @<unix>`, `Sunset`, `Link`)
   - Depends on: P3.A.5.3

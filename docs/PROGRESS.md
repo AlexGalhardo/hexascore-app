@@ -204,4 +204,4 @@ Orchestrator (Opus 5.5) with four background workers kept in standby (owner rule
 ## Execution: 2026-10-30 Android shell (P5.A.1.1)
 
 - Worktree `wt/hexascore-p5a`, branch `agent/implementer/P5.A.1.1`. Expo SDK 58.0.21 (`targetSdk` 36). NativeWind 4.2.7. Report: [`.orchestration/reports/P5.A.1.1.md`](../.orchestration/reports/P5.A.1.1.md).
-- Not merged. Merge waits on P3.C.5.2. ROADMAP boxes for P5.A.1.1, P5.A.1.2 and P5.A.2.1 stay open. No API client and no store build.
+- Code is on local main by owner request, to keep the shell. ROADMAP boxes for P5.A.1.1, P5.A.1.2 and P5.A.2.1 stay open until P3.C.5.2. No API client and no store build.
