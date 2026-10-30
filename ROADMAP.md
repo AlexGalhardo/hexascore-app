@@ -1908,7 +1908,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
     - `go test -tags=integration ./database/legacyimport -run TestTwoFactorUsersPassChallenge` → PASS: a migrated user passes TOTP with a code from the fixture secret
   - Notes: HUMAN GATE (secrets): `BETTER_AUTH_SECRET` is provided by the owner as an environment variable for the run only. NDJSON `{userId, secret, backupCodes[]}` never touches disk or logs. The encryption format is [NOT VERIFIED]: the script calls the library's decrypt, never a reimplementation. Lockout counters are dropped.
 
-- [ ] **P2.F.2.4** Implement the `catalog` stage: `source_records`, `items`, `item_translations`, external ids, affiliate links, cover keys.
+- [x] **P2.F.2.4** Implement the `catalog` stage: `source_records`, `items`, `item_translations`, external ids, affiliate links, cover keys.
   - Files/modules: `database/legacyimport/catalog.go`, `database/legacyimport/catalog_test.go`
   - Refs: SDD 01 §5.3, §5.4 (mapping rows); SDD 06 §7.9; SDD 02 §5 (score columns filled by recompute); D-09; A-04
   - Depends on: P2.F.2.1
@@ -1918,7 +1918,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
     - `external_scores` in the new schema → none (dropped, D-09; kept only in the legacy dump)
   - Notes: typed columns (`runtimeMinutes`, `pages`, `seasons`, `episodes`, `trailers`) copied 1:1; `affiliate_links` copied if any. Entities and editions are the next stage.
 
-- [ ] **P2.F.2.5** Implement the `entities` stage: genres, platforms, creators and countries from `meta`, and book editions from `isbn13`.
+- [x] **P2.F.2.5** Implement the `entities` stage: genres, platforms, creators and countries from `meta`, and book editions from `isbn13`.
   - Files/modules: `database/legacyimport/entities.go`, `database/legacyimport/entities_test.go`, `docs/migration/entity-resolution.md` (counts: resolved by QID, native, roleless)
   - Refs: SDD 01 §5.4 (`meta.*` and book rows), §7.6 (DQ-09, DQ-10), §11 issue 1; SDD 06 §7.4, §7.9; ADR 0012
   - Depends on: P2.F.2.4
@@ -1928,7 +1928,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
     - a book without edition data never fails the stage (01-1)
   - Notes: this is the minimal mapping of SDD 01 §5.4. The full Go normaliser over all records named in SDD 06 §7.9 belongs to P6.A and re-runs later; do not build it here.
 
-- [ ] **P2.F.2.6** Implement the `social` and `library` stages: ratings with the legacy rounding, statuses, time-to-beat, lists, list items, reports, contact messages.
+- [x] **P2.F.2.6** Implement the `social` and `library` stages: ratings with the legacy rounding, statuses, time-to-beat, lists, list items, reports, contact messages.
   - Files/modules: `database/legacyimport/social.go`, `database/legacyimport/library.go`, `tests/migration/legacy_rounding_test.go`, `database/legacyimport/social_test.go`
   - Refs: SDD 02 FR-02-13, §5 (`rating_migration_audit`, `score_actions` `legacy_rounding`), §9; SDD 14 §5 ("Migration" paragraph, invariants); A-04; D-06
   - Depends on: P2.F.2.2, P2.F.2.4
@@ -1951,7 +1951,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
 
 #### P2.F.3 Covers
 
-- [ ] **P2.F.3.1** Copy covers referenced by the database from Vercel Blob to the bucket with a manifest, skipping orphans, with a delta mode for the window.
+- [x] **P2.F.3.1** Copy covers referenced by the database from Vercel Blob to the bucket with a manifest, skipping orphans, with a delta mode for the window.
   - Files/modules: `scripts/legacy/blob-export.ts` (Bun, `fetch` + `Bun.s3`, no new dependency), `docs/migration/covers.md` (counts: referenced, copied, orphans skipped, failures)
   - Refs: SDD 11 §7.6 (T-7 d, window step 5 covers delta); SDD 01 §5.4 (cover row); SDD 06 §7.5 (keys); `legacy/docs/backup-local.md`
   - Depends on: P2.F.2.4

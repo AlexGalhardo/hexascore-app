@@ -118,7 +118,7 @@ CREATE INDEX data_exports_user_idx ON data_exports (user_id, requested_at DESC);
 
 Invariants: `item_count` = row count (DQ assert nightly); positions are dense `1..n` after every reorder, gaps allowed after removals; `list_items.item.type = lists.type` for new rows (legacy mixed lists keep their rows, `legacy/docs/data-model.md` migration `0005_list_type`).
 
-Migration: lists, list_items (`added_at` := `lists.created_at`, SDD 08 §5), reports (`reason` copied; legacy target ids already text), contact_messages copied 1:1; `follows` rows archived in the cutover backup (SDD 11), not imported.
+Migration: lists, list_items (`added_at` := `lists.created_at`, SDD 08 §5), reports (`reason` copied; legacy target ids already text; a `user` target becomes the imported user's numeric id, and reports whose target user or list was not imported are dropped), contact_messages copied 1:1; `list_items.position` renumbered dense `1..n` in legacy order; lists and their rows of users not imported (purged) are skipped; `follows` rows archived in the cutover backup (SDD 11), not imported.
 
 Deferred shape (no table now): `follows(follower_id text, followee_id text, created_at, PK(follower_id, followee_id), CHECK follower <> followee)`, as legacy. A feed reads `ratings.updated_at`, `item_status.updated_at` and `list_items.added_at`; no new columns needed.
 

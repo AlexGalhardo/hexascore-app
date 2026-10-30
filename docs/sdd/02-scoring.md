@@ -156,7 +156,7 @@ ALTER TABLE items
 
 Invariants: like legacy, stored values are the raw aggregate for any count; the `ratingCount < 5` gate applies on read (`legacy/apps/web/lib/categories.ts` `MIN_RATINGS_FOR_SCORE`). Deleted accounts are anonymised, not deleted (legacy `lib/account-purge.ts`), so their ratings keep counting.
 
-Legacy migration (A-04): copy `ratings` after the synthetic users are purged; `new = LEAST(100, GREATEST(5, 5 * round(c / 5.0)))`. Integer inputs never tie (c/5 is never x.5), so no tie rule is needed; 0–2 become 5 (0.5 star). Every row with any changed category gets a `rating_migration_audit` row; one `score_actions` row `legacy_rounding` stores totals (rows read, rows changed, per-category histogram of deltas). `item_status` and `time_to_beat` copy unchanged. After the copy the nightly job runs once before cutover (D-21).
+Legacy migration (A-04): copy `ratings` after the synthetic users are purged; `new = LEAST(100, GREATEST(5, 5 * round(c / 5.0)))`. Integer inputs never tie (c/5 is never x.5), so no tie rule is needed; 0–2 become 5 (0.5 star). Every row with any changed category gets a `rating_migration_audit` row; one `score_actions` row `legacy_rounding` stores totals in `after` (`rows_read`, `rows_changed`, `delta_histogram` as `{c1: {delta: count}}`), written once at the end of the `social` import stage. `item_status` and `time_to_beat` copy unchanged. After the copy the nightly job runs once before cutover (D-21).
 
 ## 6. Contracts
 
