@@ -1,6 +1,6 @@
 # HexaScore roadmap (vukem rewrite)
 
-Execution plan for agents (Claude Opus 5.5 / Sonnet 5.5) that do not have the planning conversation. Read [AGENTS.md](AGENTS.md) first, then [docs/PROGRESS.md](docs/PROGRESS.md). Every microtask is sized for one agent session, names its SDD/ADR, its dependencies, its acceptance commands and a suggested model. Tick boxes as work lands; update `docs/PROGRESS.md` at the end of each session.
+Execution plan for any coding agent. Read [AGENTS.md](AGENTS.md) first, then [docs/PROGRESS.md](docs/PROGRESS.md). Three agents share `.orchestration/`: `framework` (vukem), `implementer` (app code), `reviewer` (review and local `main`). A model name on a microtask is an effort hint, not a required runtime. Tick boxes as work lands; update `docs/PROGRESS.md` at the end of each session.
 
 Ordering principle (owner requirement): (1) foundation and parity with the Next.js app, (2) data migration and infra, (3) public API, (4) community edits, (5) mobile, (6) continuous ingestion and recommendations. Phase 0 is a short framework spike that de-risks everything after it.
 
@@ -1161,7 +1161,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
 
 #### P1.I.2 Ported and new specs
 
-- [ ] **P1.I.2.1** Port `auth`, `profile`, `api-keys` and `pricing` specs.
+- [x] **P1.I.2.1** Port `auth`, `profile`, `api-keys` and `pricing` specs.
   - Files/modules: `qa/e2e/specs/{auth,profile,api-keys,pricing,passkeys}.spec.ts`
   - Refs: SDD 03 §7.8, §9; SDD 05 §10 (E2E); SDD 09 §10; ADR 0017; legacy `qa/e2e/specs/{auth,profile,api-keys,pricing}.spec.ts`
   - Depends on: P1.I.1.1
@@ -1172,7 +1172,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
     - `bunx playwright test qa/e2e/specs/passkeys.spec.ts` (after P1.C.7.2) → with a CDP virtual authenticator (`WebAuthn.enable`, `WebAuthn.addVirtualAuthenticator`, ctap2, internal, resident keys, user verification): add a passkey in the profile, sign out, sign in with it, remove it; axe 0 serious
   - Notes: passkeys are back in scope (D-06 amended 2026-10-29, ADR 0017). The legacy suite has no passkey spec (checked 2026-10-29: no `passkey`/`webauthn` in `legacy/qa/e2e/specs`), so `passkeys.spec.ts` is new, not a port; it lands with or after P1.C.7.2 and does not block the other four specs.
 
-- [ ] **P1.I.2.2** Port `catalog`, `item`, `ratings`, `time-to-beat` and `search` specs.
+- [x] **P1.I.2.2** Port `catalog`, `item`, `ratings`, `time-to-beat` and `search` specs.
   - Files/modules: `qa/e2e/specs/{catalog,item,ratings,time-to-beat,search}.spec.ts`
   - Refs: SDD 02 §10; SDD 07 §10; SDD 09 §10; SDD 14 §10 ("status shelves", "curated list"); legacy specs of the same names
   - Depends on: P1.I.1.1
@@ -1181,7 +1181,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
     - `bunx playwright test qa/e2e/specs/{catalog,item,ratings,time-to-beat,search}.spec.ts` → pass in three locales; axe 0 serious/critical
   - Notes: legacy ratings used a 0–100 slider; the port drives the star widget by keyboard (D-00). Critic-score assertions are dropped (D-09).
 
-- [ ] **P1.I.2.3** Port `social`, `contact`, `admin`, `docs`, `public-pages`, `headers` and `not-found` specs.
+- [x] **P1.I.2.3** Port `social`, `contact`, `admin`, `docs`, `public-pages`, `headers` and `not-found` specs.
   - Files/modules: `qa/e2e/specs/{social,contact,admin,docs,public-pages,headers,not-found}.spec.ts`
   - Refs: SDD 14 §9, §10; SDD 09 §10; legacy specs of the same names
   - Depends on: P1.I.1.1
@@ -1202,7 +1202,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
 
 #### P1.I.3 Load
 
-- [ ] **P1.I.3.1** Port and extend the k6 scenarios (API, search, public lists, rating hot item, page TTFB) and record results.
+- [x] **P1.I.3.1** Port and extend the k6 scenarios (API, search, public lists, rating hot item, page TTFB) and record results.
   - Files/modules: `qa/k6/{api-v1,search,public-lists,rating-hot-item,pages-ttfb}.js`, `docs/qa/k6-baseline.md`
   - Refs: SDD 05 §9; SDD 07 §9; SDD 14 §9; SDD 09 §4 (TTFB p75 ≤ 400 ms); open-issues 09-3; VF-025; legacy `qa/k6/`
   - Depends on: P1.I.1.1
@@ -1215,7 +1215,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
 
 #### P1.I.4 Contract and security scans
 
-- [ ] **P1.I.4.1** Run Schemathesis on both OpenAPI documents and the OWASP ZAP baseline scan, with zero failures and zero High alerts.
+- [x] **P1.I.4.1** Run Schemathesis on both OpenAPI documents and the OWASP ZAP baseline scan, with zero failures and zero High alerts.
   - Files/modules: `qa/schemathesis/run.sh`, `qa/zap/baseline.sh`, `qa/zap/rules.tsv`, `docs/qa/scans.md`
   - Refs: SDD 05 §9, §10; SDD 01 §9; SDD 03 §10; SDD 14 §10; SDD 12; legacy `qa/schemathesis/`, `qa/zap/`
   - Depends on: P1.I.1.1
@@ -1228,7 +1228,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
 
 #### P1.I.5 Lighthouse
 
-- [ ] **P1.I.5.1** Run Lighthouse CI with the SDD 09 budgets on the five reference pages.
+- [x] **P1.I.5.1** Run Lighthouse CI with the SDD 09 budgets on the five reference pages.
   - Files/modules: `lighthouserc.json`, `qa/lighthouse/urls.txt`
   - Refs: SDD 09 §4, §9; ADR 0004; D-22; P0.F.10.1 findings
   - Depends on: P1.I.1.1
@@ -1441,7 +1441,7 @@ Phase-specific conventions:
     - the Vite build (`bun x vite build`) and `bun run build:ssr` run inside the image build, never on the runner
   - Notes: use the Docker layer cache of the Actions cache backend only if it needs no new action outside the pinned set; otherwise accept slower builds.
 
-- [ ] **P2.B.1.4** Add the `openapi` job: export diff, Redocly lint, and Schemathesis against the built container.
+- [x] **P2.B.1.4** Add the `openapi` job: export diff, Redocly lint, and Schemathesis against the built container.
   - Files/modules: `.github/workflows/ci.yml` (`openapi`), `redocly.yaml`, `qa/schemathesis/run.sh` (from P1.I.4.1)
   - Refs: SDD 11 §6.6 (`openapi`); SDD 05 §6.5, §10; D-37; <https://vukem.dev/docs/cli/reference-runtime> (`openapi:export`)
   - Depends on: P2.B.1.3
@@ -1451,7 +1451,7 @@ Phase-specific conventions:
     - CI: `bunx redocly lint openapi/api-v1.json openapi/app-v1.json` → 0 errors; Schemathesis `--checks all` against the job's container → 0 failures
   - Notes: reuse the image artifact from `build`; never rebuild inside this job. Schemathesis keeps the version pinned in legacy QA.
 
-- [ ] **P2.B.1.5** Add the `e2e` and `lighthouse` jobs against the built container.
+- [x] **P2.B.1.5** Add the `e2e` and `lighthouse` jobs against the built container.
   - Files/modules: `.github/workflows/ci.yml` (`e2e`, `lighthouse`), `docker-compose.yml` profile `app`, `qa/e2e/playwright.config.ts`, `lighthouserc.json`
   - Refs: SDD 11 §6.6 (`e2e`, `lighthouse`); SDD 09 §4, §9; ADR 0004; P1.I.1.1, P1.I.5.1
   - Depends on: P2.B.1.3
@@ -1542,7 +1542,7 @@ Phase-specific conventions:
     - Grafana shows `http.server.request.duration` from staging within 5 min of a deploy
   - Notes: HUMAN GATE (account, secrets): the owner creates the free stack and sets `OTEL_EXPORTER_OTLP_ENDPOINT` and `OTEL_EXPORTER_OTLP_HEADERS` (`config.Secret`). Once metrics go to Grafana, `OTEL_METRICS_EXPORTER=none` is removed; keep it whenever the endpoint is Railway's receiver (any value other than `otlp` or `none` stops the boot). Sampler `parentbased_traceidratio`, 0.1 production, 1.0 staging. No `/metrics` endpoint (D-35).
 
-- [ ] **P2.C.2.2** Register the platform metrics of the SDD 12 catalogue through the global meter provider, with label caps.
+- [x] **P2.C.2.2** Register the platform metrics of the SDD 12 catalogue through the global meter provider, with label caps.
   - Files/modules: `app/metrics/metrics.go`, `app/metrics/labels.go` (caps → `other`), `app/metrics/sql_gauges.go`, `app/scheduler/instrument.go` (`hexa.schedule.runs` wrapper), `tests/metrics_test.go`
   - Refs: SDD 12 FR-12-2, FR-12-3, §6.2, NFR-12-2, §11 issues 1, 7, 10; SDD 02, 05, 07 metric rows (verify registered); VF-019, VF-021; <https://vukem.dev/docs/digging-deeper/opentelemetry> "Metrics", "Configuration"
   - Depends on: P2.C.2.1
@@ -1642,7 +1642,7 @@ Phase-specific conventions:
 
 #### P2.D.1 Headers and CSP
 
-- [ ] **P2.D.1.1** Configure the web and API header sets of SDD 13 §6.2 and the CSP violation endpoint, with tests and staging checks.
+- [x] **P2.D.1.1** Configure the web and API header sets of SDD 13 §6.2 and the CSP violation endpoint, with tests and staging checks.
   - Files/modules: `bootstrap/app.go` (`MiddlewareOptions.SecureHeaders`, `APIMiddlewareOptions.SecureHeaders`), `app/http/csp_reports.go`, `tests/security_headers_test.go`, `qa/e2e/specs/{headers,csp}.spec.ts`
   - Refs: SDD 13 §6.1, §6.2, §7.1 (`/csp-reports` 30/min, 16 KiB), §9 items 1–2; SDD 09 §7.8; <https://vukem.dev/docs/security/security-headers> "Configuration", "What CSPSources refuses", "Collecting violation reports", "Common mistakes"
   - Depends on: P2.C.5.1, P1.G.1.2
@@ -1699,7 +1699,7 @@ Phase-specific conventions:
 
 #### P2.D.4 LGPD
 
-- [ ] **P2.D.4.1** Verify the data-subject rights end to end, add the retention jobs, and update the privacy policy.
+- [x] **P2.D.4.1** Verify the data-subject rights end to end, add the retention jobs, and update the privacy policy.
   - Files/modules: `app/privacy/retention.go` (session IP ≤ 30 days, `client_reports` 7 days, export ZIPs 24 h), `tests/lgpd_test.go`, `lang/{en,pt-BR,es}.json` (`legal.privacy`), `resources/js/pages/Legal/Page.tsx` content source, `docs/legal/privacy-review.md`
   - Refs: SDD 13 FR-13-6, §5 (inventory), §7.6; SDD 14 FR-14-12; SDD 03 FR-03-15; D-29; P1.F.4.1, P1.C.3.2
   - Depends on: P2.D.3.1
@@ -1732,7 +1732,7 @@ Phase-specific conventions:
     - `zap.yml` weekly → opens a GitHub issue on failure (tested once with a deliberately weakened header on a throwaway branch deployed to a local container, never staging)
   - Notes: the active scan writes data: run it with a dedicated staging test account and the seed catalogue; never against production. Medium findings are triaged in `docs/qa/scans.md`.
 
-- [ ] **P2.D.5.3** Write the incident response procedure, the review template and the user notification templates.
+- [x] **P2.D.5.3** Write the incident response procedure, the review template and the user notification templates.
   - Files/modules: `docs/runbooks/incident-response.md`, `docs/incidents/TEMPLATE.md`, `lang/{en,pt-BR,es}.json` (`mail.incident_notice`) or `docs/runbooks/incident-notice.{en,pt-BR,es}.md`
   - Refs: SDD 13 FR-13-7, NFR-13-6, §7.9; SDD 12 §7.8 R9
   - Depends on: P2.C.4.2
@@ -1768,7 +1768,7 @@ Phase-specific conventions:
     - staging deploy of a branch adding one `database/concurrent/` file → pre-deploy log shows `migrate` then `CREATE INDEX CONCURRENTLY IF NOT EXISTS`; `migrate:status --json` records the matching `CREATE INDEX IF NOT EXISTS` migration
   - Notes: reuses P1.A.4.3's `migrate:locked`; this task only adds the concurrent step and the single entry point. Concurrent statements run outside a transaction on a connection that holds no other lock. Big indexes ship alone (pre-deploy timeout, SDD 11 §8). Retire `database/concurrent/` when VF-017 is fixed.
 
-- [ ] **P2.E.1.2** Add the CI expand/contract policy check and a down-migration round trip.
+- [x] **P2.E.1.2** Add the CI expand/contract policy check and a down-migration round trip.
   - Files/modules: `scripts/ci/migration-policy.ts`, `scripts/ci/migration-policy.test.ts`, `.github/workflows/ci.yml` (`migrations` job), `docs/runbooks/migrations.md` (policy, contract marker)
   - Refs: SDD 11 §7.2 (forward-only; expand → migrate → contract two releases later; `down` tested, never run in production); ADR 0014; SDD 06 §7.8 (backfill job); <https://vukem.dev/docs/database/migrations> "Running migrations"
   - Depends on: P2.E.1.1
@@ -3503,7 +3503,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.C.2 Score and snapshots
 
-- [ ] **P6.C.2.1** Implement the trend score, eligibility and the prior fill as pure functions: `D(a) = 2^(−a/7)`, `Q_d`, `U_d`, `T_i`, `A_i`, eligibility `A ≥ 5 ∧ T ≥ 30 ∧ released ∧ public`, and `F_i`.
+- [x] **P6.C.2.1** Implement the trend score, eligibility and the prior fill as pure functions: `D(a) = 2^(−a/7)`, `Q_d`, `U_d`, `T_i`, `A_i`, eligibility `A ≥ 5 ∧ T ≥ 30 ∧ released ∧ public`, and `F_i`.
   - Files/modules: `app/recommend/trending/score.go`, `app/recommend/trending/score_test.go`
   - Refs: SDD 08 §7.2, §7.3 step 3, FR-08-3, §10 "Unit"
   - Depends on: P6.C.1.3

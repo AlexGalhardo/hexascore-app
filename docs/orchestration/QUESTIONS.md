@@ -45,3 +45,24 @@ Release requests and approvals for vukem (the framework engineer never tags with
 - Owner request (2026-10-29, in chat): HTTP/2 and HTTP/3 support in vukem (VF-057). Orchestrator check: main server has only h2c (`HTTP_H2C`), TLS h2 only in `contrib/grpc`, no HTTP/3. A pinned stable third-party QUIC module is allowed for the opt-in `contrib/http3` if the stdlib has none.
 - Owner request (2026-10-29, in chat): native Betterleaks secret scanning in vukem and generated projects (VF-059). Pinned latest stable release (v1.9.0 at queue time); v2 RCs excluded.
 - Orchestrator decision (2026-10-29, P2.F.2.7): `processed_events` is dropped from the legacy import. Stripe webhook dedup lives in vukem `contrib/stripe` (cache store), not in an app table. Conditions: production uses a shared, persistent cache store (database driver) so dedup survives restarts during the cutover window, and every billing webhook handler stays idempotent by Stripe object id. Doc fixes queued as `queue/especialista/2-DOC-processed-events.md` (SDD 05, SDD 11 §7.6, SDD 13 A08, ROADMAP P2.F.2.7). Owner: say so if you want the table kept.
+
+- FR-004 (2026-10-29, release ask, not executed): open vukem PRs since v0.33.0 include passkeys (VF-001), React Email, JSON-RPC, HTTP/2+3, Cloudflare, notify, Betterleaks, sitemap, httpclient, impersonation and OpenAPI options. Please say whether to tag `v0.34.0` after those PRs are squash-merged. This session does not tag vukem. P1.C.7 (app passkeys) and the legacy passkey import stay blocked until an adopted tag contains VF-001.
+  - Answer:
+
+- Q-LHCI (2026-10-29): P1.I.5.1 runs `bunx @lhci/cli@0.15.1`. It is not in package.json because AGENTS.md requires your yes before a new npm dependency. Approve pinning `@lhci/cli` 0.15.1 as a devDependency, or leave the `bunx` pin.
+  - Answer:
+
+## Blocked by a human gate
+
+These stay unchecked. None of them is in a worker queue. Say the word here and name the ID to release one.
+
+- Passkeys until an adopted vukem tag contains VF-001: P1.C.7.1, P1.C.7.2, and the legacy passkey import (P2.F.2.2b).
+- New spend or a new Railway project: P2.A.1.2, P2.A.2.1, P2.C.2.1, P2.C.3.1, P2.C.3.2, P2.C.3.5.
+- DNS, cutover, or a production deploy: P2.A.2.2, P2.A.4.3, P2.A.4.4, P2.A.5.1, P2.B.3.1, P2.C.4.1, P2.C.5.1, P2.D.6.1, P2.E.4.1, P2.F.6.1, P2.G.2.1, P2.G.2.2, P2.G.3.1, P2.G.3.2, P2.G.3.3, P2.G.4.1, P2.G.4.2 (`v1.0.0`), P2.G.4.3, P3.A.7.1, P3.B.3.3, P3.C.5.2, P4.A.4.1, P4.B.5.2, P4.B.5.3, P5.B.6.1, P6.A.4.2, P6.B.5.1, P6.C.4.1.
+- Creating or rotating a third-party secret: P2.A.4.2, P2.C.1.2, P2.E.2.3, P3.B.2.1, P3.B.2.2, P5.A.5.1, P5.C.1.1, P5.C.1.2, P5.C.1.3.
+- Telegram page (P2.C.1.2 unmet): P2.C.3.3. Its acceptance pages Telegram after `pkill node` on staging. No local stand-in.
+- Production data: P2.F.1.1, P2.F.1.2, P2.F.5.1, P2.F.5.2, P2.E.3.2, P2.G.1.2.
+- Store time that has not passed: P5.C.3.1, P5.C.3.2, P5.C.3.3, and the 30-day job clocks inside P6.A.4.2 and P6.B.5.1.
+- Legal quotes still missing in `docs/legal/`: P6.A.1.1 (Open Library, A-05), P6.A.2.4, P6.B.1.2 (IGDB, D-36), P6.B.1.3 (Steam/GOG images).
+- ZAP against a live staging host: P2.D.5.2.
+- `gh workflow run projected-spend.yml` (P2.C.3.4): this session does not push, Railway usage has no verified API, and Telegram is P2.C.1.2. The formula test passed locally. The checkbox stays open until that workflow run exists.

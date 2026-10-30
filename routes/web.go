@@ -38,6 +38,9 @@ func Web(r *router.Router, app *vukem.App) error {
 		SecureHeaders: appmiddleware.SecureHeaders(
 			appmiddleware.UpgradeInsecure(app.Config.IsProduction(), app.Config.URL),
 		),
+		// The browser posts violation reports with no session and no CSRF token.
+		SessionBypass: []string{"POST /csp-reports"},
+		CSRFBypass:    []string{"POST /csp-reports", "POST /stripe/webhook"},
 		I18n: &i18n.MiddlewareConfig{
 			Order:        []i18n.Source{i18n.SourcePath},
 			Locales:      []string{"en", "pt-BR", "es"},
@@ -51,11 +54,19 @@ func Web(r *router.Router, app *vukem.App) error {
 	r.Use(limits.Body)
 
 	r.UseServer(appmiddleware.CrossOriginResourcePolicy("same-site"))
+	// First UseServer is outermost. MovePageScript rewrites the finished HTML:
+	// LCP text before the page JSON, and the module graph after first paint.
+	// Gzip has to wrap StaticFS, or the file server answers /build and the
+	// compressor never sees the body.
+	r.UseServer(appmiddleware.MovePageScript)
+	r.UseServer(appmiddleware.GzipStatic())
 	r.UseServer(middleware.StaticFS(resources.Public(), middleware.StaticConfig{Prefix: "/"}))
 	r.UseServer(appmiddleware.LocaleCookieRedirect(appmiddleware.LocalePrefixConfig{
 		Prefixes: localePrefixes,
 		Cookie:   "locale",
 	}))
+	// Innermost server middleware: overwrites the web header set on /api/v1.
+	r.UseServer(appmiddleware.APIHeaders)
 
 	acc, err := accounts.New(app)
 	if err != nil {
@@ -144,6 +155,15 @@ func Web(r *router.Router, app *vukem.App) error {
 	// Least specific pattern: unmatched GET pages render the Error page with
 	// the shell, since vukem's own hook only covers Inertia visits.
 	r.Get("/{path...}", controllers.NotFound).Name("not-found")
+
+	cspLimiters, err := limits.Factory(app)
+	if err != nil {
+		return err
+	}
+
+	r.Post("/csp-reports", appmiddleware.CSPReport).
+		Use(ratelimit.Middleware(limits.CSPReports.From(cspLimiters), ratelimit.ByIP)).
+		Name("csp-reports")
 
 	// catalog_* tables exist only on Postgres (VF-033).
 	if db.Dialect().Name() == "postgres" {

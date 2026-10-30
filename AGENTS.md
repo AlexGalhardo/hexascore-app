@@ -2,13 +2,13 @@
 
 HexaScore (hexascore.app) is a catalogue, rating and recommendation platform for games, movies, series and books, with a paid read-only public API and an Android app. This repository is the Go rewrite on the [vukem](https://vukem.dev) framework; it replaces the Next.js app kept on branch `legacy` of `github.com/AlexGalhardo/hexascore-app`.
 
-This file is the single source of truth for agent behaviour. `CLAUDE.md` only points here.
+This file is the single source of truth for every coding agent. `CLAUDE.md` only points here.
 
 ## Session start (mandatory)
 
-1. Load these skills before any work, in this order: `karpathy-guidelines`, `graphify`, `caveman`. Availability check on 2026-10-28: `karpathy-guidelines` and `caveman` exist as skills; `graphify` exists only as a CLI (`graphify update .` / `graphify query "<question>"`), its skill folder has no `SKILL.md`. If the skill cannot be loaded, run the CLI instead and note it in the session; never silently skip.
-2. Read [docs/PROGRESS.md](docs/PROGRESS.md) (state, decisions, pending items) and [ROADMAP.md](ROADMAP.md) (next task).
-3. Pick the first unchecked microtask of the current roadmap phase unless the owner names another.
+1. Read this file, [docs/PROGRESS.md](docs/PROGRESS.md), and [ROADMAP.md](ROADMAP.md).
+2. If you are one of the three orchestration agents, read `.orchestration/README.md` and `.orchestration/briefs/<role>.md`. Otherwise pick the first unchecked microtask of the current phase unless the owner names another.
+3. `graphify` is a CLI (`graphify query "<question>"`) when `graphify-out/graph.json` exists. It is not required to start.
 
 ## Where things live
 
@@ -25,7 +25,10 @@ This file is the single source of truth for agent behaviour. `CLAUDE.md` only po
 | `CHANGELOG.md` | Keep a Changelog; generated per release, `[Unreleased]` edited by hand only before release |
 | `legacy/` (sibling folder, not in this repo) | read-only Next.js reference; history on branch `legacy` |
 | `vukem/` (sibling folder, own git) | framework checkout for local `go.work`/`replace` only, never committed |
-| `.claude/` | project skills and rules for Claude Code (adapted from vukem-marketplace-reactjs) |
+| `.grok/agents/` | three agents any runtime can launch: `framework`, `implementer`, `reviewer` |
+| `.grok/rules/` | language rules, loaded without a vendor compatibility mode |
+| `.claude/` | the same rules and skills, kept so Claude-compatible tools still see them |
+| `.orchestration/` | queues, briefs, and reports for the three agents |
 
 ## Rules
 
@@ -39,7 +42,7 @@ This file is the single source of truth for agent behaviour. `CLAUDE.md` only po
 - Git: Conventional Commits; feature branches `agent/<role>/<task-id>` merged straight into `main` by the orchestrator after review (owner rule 2026-10-29: no `dev`/staging step, do not wait for CI to merge or start the next task); tags `vX.Y.Z` on `main`; never rewrite history or force-push; branch `legacy` is immutable. Commit and push only when the owner asks.
 - Releases follow the vukem pattern (`vX.Y.Z` tags one at a time, generated changelog, GitHub release); versions start at `v0.1.0`; `v1.0.0` = parity with the legacy app and successful cutover.
 - Documentation: update the SDD, `CHANGELOG.md` and this file in the same change when behaviour, commands or conventions change. Never claim a file was updated without editing it.
-- Parallel agents and worktrees only with the owner's explicit yes in the session; sequential research or review subagents are fine.
+- Three agents run in parallel (owner, 2026-10-29): `framework` (vukem PRs, CI, issues), `implementer` (app code), `reviewer` (review, fixes, merge to local `main`). Other parallel work still needs an explicit yes. Do not `git push origin main`: that deploys Railway production.
 
 ## Commands (fill in as the codebase appears; keep in sync with ROADMAP tasks)
 
@@ -53,10 +56,12 @@ This file is the single source of truth for agent behaviour. `CLAUDE.md` only po
 | `bunx commitlint --from <base-sha> --to <head-sha>` | Conventional Commits check on a commit range (CI `lint`; PR title via stdin) |
 | `bun run build:docs` | re-render `resources/docs/*.md` into the committed `resources/docs/docs.json` (a vitest test fails when stale) |
 | `bun run lint` / `bun run typecheck` / `bun run test` | TypeScript lint, types, unit tests |
-| `vukem openapi:export -prefix /api/v1` (or `/app/v1`) | export an OpenAPI document; `scripts/openapi-check.sh` diffs both against the goldens in `openapi/` (CI `lint`), `--write` refreshes them |
+| `vukem openapi:export -prefix /api/v1` (or `/app/v1`) | export an OpenAPI document; `scripts/openapi-check.sh` diffs both against the goldens (`--image` exports from a built image; CI `openapi`), `--write` refreshes them |
+| `qa/schemathesis/ci.sh [image]` | migrate the CI Postgres, insert a business key and an app token, run Schemathesis 4.29.0 against that image (Linux `--network host`) |
 | `bun run openapi:lint` | Redocly lint of both goldens (`redocly.yaml`; CI `lint`) |
 | `bun run sdk:generate` / `bun run sdk:generate:python` | regenerate `sdks/ts/src/gen` and `sdks/python/hexascore` from `openapi/api-v1.json` (TS tests: `cd sdks/ts && bun test`; Python needs `uv`: `cd sdks/python && uv run pytest -q`) |
-| `bun run e2e` | Playwright + axe against a built container |
+| `bun run e2e` | Playwright + axe against a built container (CI `e2e`: `scripts/ci/qa-up.sh` loads `image.tar`, seeds DemoCatalog, uploads traces on failure) |
+| `bunx --bun @lhci/cli@0.15.1 autorun` | Lighthouse budgets in `lighthouserc.json` on the five DemoCatalog URLs (CI `lighthouse`; `@lhci/cli` is not a package.json dependency) |
 | `docker compose up -d --wait` | local Postgres 18.6 (127.0.0.1:5433) and RustFS (127.0.0.1:9000/9001), both healthy |
 | `setups/setup-windows.ps1 [-NoServices]` | idempotent Windows setup: tools, `core.hooksPath .githooks` (commit-msg Conventional Commits check), `.env`, `APP_KEY`, compose stack, `bun install`, `vukem migrate`; `-NoServices` skips compose and migrate (CI Windows job) |
 | push to `main` | Railway service `app` (source `AlexGalhardo/hexascore-app`, branch `main`) builds and deploys automatically; `.github/workflows/ci.yml` reports regressions after the fact |
@@ -69,7 +74,7 @@ This file is the single source of truth for agent behaviour. `CLAUDE.md` only po
 | `scripts/release.sh vX.Y.Z` | changelog section via git-cliff (`.config/cliff.toml`), `chore(release)` commit and tag; needs git-cliff installed (`scoop install git-cliff` / `brew install git-cliff`) |
 | `setups/setup-unix.sh` | same setup for Linux and macOS |
 
-## Models
+## Agents
 
-- Development in the main session with the model the owner chose; roadmap tasks state a suggested model (Opus 5.5 for architectural or risky work, Sonnet 5.5 for well-bounded work).
-- External documentation research: `researcher` subagent. Text and i18n edits: `text-editor` subagent.
+- `framework`, `implementer`, and `reviewer` are defined in `.grok/agents/` and `.orchestration/briefs/`. The names are not tied to a vendor or a model.
+- Roadmap lines that say Opus or Sonnet are effort hints, not a required runtime.

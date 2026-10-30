@@ -220,6 +220,7 @@ func TestSecurity_A06_HexaBodyLimits(t *testing.T) {
 		limit int64
 	}{
 		{"/login", limits.FormBody},
+		{"/csp-reports", limits.CSPReportsBody},
 		{"/pt-br/lists", limits.FormBody},
 		{"/admin/users", limits.FormBody},
 		{"/api/v1/search", limits.DefaultBody},

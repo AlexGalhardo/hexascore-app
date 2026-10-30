@@ -136,7 +136,7 @@ Web mutation routes (session guard, same handlers as `/app/v1`, SDD 02 §6): `PU
 - Public page props are cached with `cache.Remember` (<https://vukem.dev/docs/digging-deeper/cache#remember-compute-once-read-many-times>, stampede-safe) in `cache.NewMemory(5000)`, key `page:v1:{locale}:{component}:{path}?{sorted allowed query}`, TTL 60 s (home 300 s); `catalog.ItemsChanged` (SDD 06) and `ItemScoreChanged` (SDD 02) delete the item's and its entities' keys in 3 locales. Logged-in requests reuse them and add `me`, `notifications`.
 - No documented hook caches SSR output [NOT IN VUKEM DOCS]; every first load runs SSR.
 - Anonymous Inertia JSON visits: `web.ETagOf(pageObject)` + `c.NotModified` (<https://vukem.dev/docs/basics/responses#conditional-requests>), `private, no-cache`, `Vary: X-Inertia`. Full HTML loads: `private, no-cache`, never an ETag (a 304 would pair cached HTML's old nonce with a new CSP; decided 09-2). ETag only on JSON (Inertia visits, APIs) and assets; the TTFB budget is met by the props render cache plus SSR, not by 304s. Logged in: `private, no-store`.
-- `/build/*` immutable (<https://vukem.dev/docs/frontend/vite#asset-caching>); covers 1 year immutable (SDD 06); sitemaps and robots `public, max-age=3600` + ETag.
+- `/build/*` immutable (<https://vukem.dev/docs/frontend/vite#asset-caching>); covers 1 year immutable (SDD 06); sitemaps and robots `public, max-age=3600` + ETag. Only those `/build` JS, CSS, SVG, font and source-map responses are gzip-encoded (`app/http/middleware.GzipStatic`). HTML and any response that sets a cookie stay uncompressed (BREACH).
 
 ### 7.3 Listings and pagination
 

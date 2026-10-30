@@ -15,6 +15,7 @@ const (
 	CoverBody         int64 = 5 << 20
 	StripeWebhookBody int64 = 512 << 10
 	ClientErrorsBody  int64 = 16 << 10
+	CSPReportsBody    int64 = 16 << 10
 	ClientMetricsBody int64 = 4 << 10
 	DefaultBody       int64 = 1 << 20
 )
@@ -28,6 +29,10 @@ const stripeWebhookPath = "/stripe/webhook"
 func BodyFor(path string) int64 {
 	if path == stripeWebhookPath {
 		return StripeWebhookBody
+	}
+
+	if path == "/csp-reports" {
+		return CSPReportsBody
 	}
 
 	if strings.HasPrefix(path, "/api/v1/") || strings.HasPrefix(path, "/app/v1/") {

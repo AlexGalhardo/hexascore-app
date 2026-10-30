@@ -143,7 +143,7 @@ Actors: anonymous abusers, score manipulators, scrapers, malicious contributors,
 
 Store: `RATE_LIMIT_STORE=cache` on `CACHE_STORE=database` (SDD 03 NFR-03-3), which counts in fixed windows with an atomic `Increment` ([RL] "RATE_LIMIT_STORE"). Budgets survive deploys and crashes. The `memory` store (per-process GCRA) is for tests only: in production every restart would hand attackers a fresh budget.
 
-The table lives in `app/http/limits` (one named rule per row; routes never build their own limiter, `TestSecurity_A06_HexaLimits` checks both). In production the app refuses to boot unless `RATE_LIMIT_STORE=cache` (the image defaults it with `CACHE_STORE=database`). Not wired yet: suggestions (P4.A routes), `client-errors`/`client-metrics` and `/csp-reports` (no routes yet), the `/app/v1` read/write split (one 60/min user budget today) and `/stripe/webhook` (mounted with `UseServer` by vukem billing, signature checked first).
+The table lives in `app/http/limits` (one named rule per row; routes never build their own limiter, `TestSecurity_A06_HexaLimits` checks both). In production the app refuses to boot unless `RATE_LIMIT_STORE=cache` (the image defaults it with `CACHE_STORE=database`). Not wired yet: suggestions (P4.A routes), `client-errors`/`client-metrics`, the `/app/v1` read/write split (one 60/min user budget today) and `/stripe/webhook` (mounted with `UseServer` by vukem billing, signature checked first). `POST /csp-reports` is wired: 30/min by IP, body ≤ 16 KiB, `CSRFBypass` and `SessionBypass`, report discarded after a log line.
 
 Keys: IPv6 is bucketed by /64 [RL]. `c.IP()` trusts forwarding headers only from `TRUSTED_PROXIES` ([OV] A01). A 429 carries `Retry-After` and `RateLimit-Limit/Remaining/Reset` [RL].
 
@@ -168,7 +168,7 @@ Keys: IPv6 is bucketed by /64 [RL]. `c.IP()` trusts forwarding headers only from
 
 ### 7.2 Challenge and form integrity (ADR 0016)
 
-- Trigger (SDD 03 §7.3), per IP: > 3 sign-ups/h, > 5 failed logins/10 min, > 3 resets/h. Global: > 30 sign-ups/h. A tripped flag holds 1 h (`challenge:<route>:<ip|all>:trip`, `TripHold`).
+- Trigger (SDD 03 §7.3), per IP: > 3 sign-ups/h, > 5 failed logins/10 min, > 3 resets/h. Global: > 30 sign-ups/h. A tripped flag holds 1 h (`challenge:<route>:<ip|all>:trip`, `TripHold`). `CHALLENGE_GLOBAL_LIMIT`, when set to a positive integer, replaces that global threshold (the e2e stack sets it). Empty keeps 30. Any other value refuses to boot.
 - Code: `app/challenge` (issue, verify, solve), `app/http/middleware/challenge.go` (thresholds, trip flags, fallback), `resources/js/challenge/worker.ts` (solver), `app/forms` (signed form render time). Tests: `TestSecurity_A07_Pow*`, `TestSecurity_A10_HexaPowStoreDown503`, `TestSecurity_A07_HexaHoneypotAndFillTime`; load: `qa/k6/login-pow.js`.
 - `GET /challenge?route=signup` → `{c, bits, exp}`:
   - `c` = HMAC-SHA256 with `app.DeriveKey("pow", 32)` over 16 random bytes, the expiry and the route; TTL 120 s.
@@ -261,6 +261,8 @@ The privacy policy must list:
 
 Legacy text is `legacy/apps/web/messages/en/legal.json`; drop its Vercel, Neon, Upstash, passkey and AbacatePay mentions.
 
+`privacy.retain` (daily 03:15, `app/privacy/retention.go`) clears `_client.ip` and `_client.ua` on database sessions whose `_created` is 30 days old or whose start time cannot be read, deletes `client_reports` older than 7 days when that table exists, and calls the export ZIP expiry (24 h). The hourly `library.expire_exports` job remains the fast path for ZIPs. `SESSION_RECORD_CLIENT=true` is what writes the session IP in the first place.
+
 ### 7.7 Payments and supply chain
 
 - Payments: Stripe Checkout and Portal by redirect, so no card field exists on HexaScore pages (PCI DSS SAQ-A).
@@ -303,7 +305,7 @@ The owner (sole operator) decides severity and notification. Steps:
 
 User template (en/pt-BR/es): what happened, when, which data, what we did, what to do (reset password, revoke tokens), contact.
 
-Review in `docs/incidents/YYYY-MM-DD-<slug>.md` within 5 working days: UTC timeline, impact, root cause, detection gap, actions with owners, SDD changes.
+Review in `docs/incidents/YYYY-MM-DD-<slug>.md` within 5 working days: UTC timeline, impact, root cause, detection gap, actions with owners, SDD changes. The operator copy is `docs/runbooks/incident-response.md`; the empty review is `docs/incidents/TEMPLATE.md`; user text is `docs/runbooks/incident-notice.{en,pt-BR,es}.md`.
 
 ## 8. Edge cases
 
