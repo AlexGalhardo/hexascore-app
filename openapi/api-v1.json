@@ -103,6 +103,75 @@
         ]
       }
     },
+    "/api/v1/changes": {
+      "get": {
+        "operationId": "listChanges",
+        "summary": "listChanges",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "description": "RFC 3339, at most 14 days ago",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "games, movies, series or books",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "description": "opaque next_cursor of the previous page",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "1 to 1000, default 100",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangePageJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/api/v1/entities/{id}": {
       "get": {
         "operationId": "getEntity",
@@ -986,6 +1055,78 @@
   },
   "components": {
     "schemas": {
+      "ChangeJSON": {
+        "properties": {
+          "action": {
+            "enum": [
+              "created",
+              "updated",
+              "deleted"
+            ],
+            "minLength": 1,
+            "type": "string"
+          },
+          "changedAt": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "fields": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "itemId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "itemType": {
+            "enum": [
+              "games",
+              "movies",
+              "series",
+              "books"
+            ],
+            "minLength": 1,
+            "type": "string"
+          },
+          "mergedInto": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "action",
+          "itemType",
+          "itemId",
+          "changedAt"
+        ],
+        "type": "object"
+      },
+      "ChangePageJSON": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ChangeJSON"
+            },
+            "type": "array"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "type": "object"
+      },
       "EditionJSON": {
         "properties": {
           "format": {

@@ -22,5 +22,6 @@ func All(app *vukem.App) []queue.Registration {
 		handleLibraryExport(app),
 		handleExpireExports(app),
 		handleRetainPersonalData(app),
+		handlePruneAPIChanges(app),
 	}
 }
