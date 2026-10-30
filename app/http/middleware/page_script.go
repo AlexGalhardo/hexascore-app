@@ -184,7 +184,9 @@ func loaderScript(mods []modScript) []byte {
 	b.WriteString(`;for(var i=0;i<mods.length;i++){var m=mods[i];`)
 	b.WriteString(`var s=document.createElement("script");s.type="module";s.src=m.src;`)
 	b.WriteString(`if(m.integrity){s.integrity=m.integrity;s.crossOrigin="anonymous"}`)
-	b.WriteString(`if(m.nonce)s.nonce=m.nonce;document.head.appendChild(s)})})})</script>`)
+	// Closers: appendChild, for, animation callback, requestAnimationFrame, load listener, addEventListener.
+	// `})})})` is a SyntaxError, so the module never loads and forms never hydrate.
+	b.WriteString(`if(m.nonce)s.nonce=m.nonce;document.head.appendChild(s)}})})</script>`)
 
 	return []byte(b.String())
 }

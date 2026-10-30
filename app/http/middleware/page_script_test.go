@@ -56,6 +56,10 @@ func TestMovePageScript(t *testing.T) {
 		t.Fatalf("loader missing: %s", body)
 	}
 
+	if !strings.Contains(body, `document.head.appendChild(s)}})})</script>`) {
+		t.Fatalf("loader is not valid JavaScript: %s", body)
+	}
+
 	if !strings.Contains(body, `nonce="n"`) {
 		t.Fatalf("loader lost the nonce: %s", body)
 	}
