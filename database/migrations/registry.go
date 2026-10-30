@@ -55,5 +55,6 @@ func All() []schema.Migration {
 		m20261029210000QualifyHsNormFunction(),
 		m20261029220000CreateSourceRecordsTable(),
 		m20261030120000CreateAPIChanges(),
+		m20261030130000CreateCommunityTables(),
 	}
 }
