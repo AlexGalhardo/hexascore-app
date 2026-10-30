@@ -1,0 +1,6 @@
+# REV E2E-HARDEN-P1.I.2.1 (rodada 0)
+Verdict: CORRIGIDO_E_APROVADO. Final branch: agent/especialista/E2E-HARDEN-P1.I.2.1-fix (senior branch + 1 commit).
+Re-run (own isolated stack hx-especialista, port 3200, fresh build of the branch): playwright auth profile api-keys run1 78 passed (3.0m), run2 78 passed (3.7m). bun lint/typecheck/test 60 passed; go build ok; golangci-lint --build-tags integration 0 issues; go test ./app/http/... ./tests -run 'Pow|A05' ok.
+Checked: challenge probe n+1 consistent with Increment on post (same threshold for IP and global key; cache.Get miss returns 0,nil); pow-worker solver equivalent (fixed-size buffer per digit count, nonce digits rewritten in place; boundary test past 4 digits); UpgradeInsecure only gates upgrade-insecure-requests (only caller); bypassCSP removed; mail [REDACTED] restore only in test helper.
+Fix: SecureHeaders parameter renamed production -> upgradeInsecure (it now receives UpgradeInsecure's result).
+Notes: production with an http APP_URL silently drops upgrade-insecure-requests (HSTS still applies); unprefixed redirects after /profile/* remain an app gap (senior item 2) - not filed as task here, low priority i18n follow-up suggested to orchestrator.

@@ -93,3 +93,12 @@ Owner answered "merge your own green PRs" in chat, but `gh pr merge 39 --squash`
 - Later in session 11: VF-012 PR #75 (`SessionGuard.Impersonate`), VF-020 PR #76 (`httpclient.Throttle/Retry/Breaker`), VF-023 PR #77 (site `deployment/logging`, `deployment/releases-and-stability`), VF-042 part 2 PR #78 (`Group.ErrorHandler`). VF-033 wontfix (already on site testing/overview). VF-044: design FD-044 in QUESTIONS.md (owner). VF-004 WebP encode: FQ-004 (owner).
 - #61 had merge conflicts with main (so CI did not run): merged origin/main into it (app.go, options_runtime.go, navigation.ts), then #61 into #62 (Taskfile.yml MODULES, go.work). No force-push.
 - Low-VF queue now empty except owner-gated FD-044, FQ-004, FD-011/FD-014 done earlier.
+- FW-CI-WINDOWS-FLAKES (claimed, active/framework/): PR #79 fixes the pipe-hang root cause (internal/cli timeout, Chrome WaitDelay). Remaining findings and next steps in reports/FW-CI-WINDOWS-FLAKES.md. Then queue 3-VF-044 (owner approved FD-044: opt-in output `required`, `<Name>Input` split, `Info.TypedOnly`, defaults unchanged). FQ-004 answered: VF-004 encoding wontfix (docs-only #73).
+- Stopped at context limit (session 11).
+
+## Session 12 (2026-10-29)
+
+- FW-CI-WINDOWS-FLAKES done: #79 (pipe hang), #80 (SSR supervisor tests), #81 (Windows AMX runtime crash = golang/go#81238; CPU log step + docs/maintenance.md "Known CI issues"; drop when a Go release ships CL 828724). Other flakes already fixed on main; details in reports/FW-CI-WINDOWS-FLAKES.md.
+- Gate notes: Windows Defender is now disabled by the owner; `internal/testutil` "Acesso negado" and `TestKeyRotate*` TempDir errors are resolved (environment). `task test` runs fully locally.
+- Local CPU is AMD Ryzen (non-AMX): golang/go#81238 cannot reproduce here.
+- Next: 3-VF-044 (queue/framework), then replacement PRs for #62 (after #61) and #66/#67 (after #65) when the orchestrator says so.

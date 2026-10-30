@@ -6,3 +6,6 @@ Acceptance: two consecutive runs of auth+profile+api-keys on isolated stack (COM
 3. bypassCSP removed; UpgradeInsecure(production, APP_URL) sends upgrade-insecure-requests only for production + https (Go test both cases).
 Also: mail helper restores email query param that the privacy log redacts ([REDACTED]) in reset links; mailed-link flows use the English translator (links carry no prefix).
 Risks: build overwrites shared image tag hexascore-app:e2e. Skipped: nothing.
+
+REV: CORRIGIDO_E_APROVADO (especialista)
+PRONTO_PARA_MERGE agent/especialista/E2E-HARDEN-P1.I.2.1-fix

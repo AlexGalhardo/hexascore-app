@@ -1,0 +1,5 @@
+# Task FIX-locale-redirects (priority 2, rodada 0, model: Sonnet)
+Found in REV-E2E-HARDEN-P1.I.2.1 (senior report item 2). Redirects issued from /profile/*, /profile/api, account deletion and /two-factor-challenge drop the locale prefix (pt-BR/es users land on English pages). Login, signup, check-email and reset already keep it.
+Objective: every server redirect in those flows keeps the request's locale prefix (SDD 09 §7.1: the URL prefix is the only locale source). Reuse the helper the login/signup redirects use; do not add a new mechanism.
+Acceptance: Go test per flow asserting a /pt-br/... request redirects to /pt-br/...; then in qa/e2e specs profile, api-keys and the TOTP challenge replace `anyLocale`/`any` label matching with the locale translator `t`; isolated stack (COMPOSE_PROJECT_NAME=hx-senior) `playwright test auth profile api-keys` twice -> all passed; go build, golangci-lint --build-tags integration 0 issues, bun lint/typecheck/test.
+App work: branch agent/senior/FIX-locale-redirects from origin/main. CHANGELOG line.
