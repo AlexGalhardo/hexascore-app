@@ -2,10 +2,14 @@ package controllers
 
 import (
 	"errors"
+	"net/http"
+	"strconv"
 
 	vukem "github.com/AlexGalhardo/vukem"
+	"github.com/AlexGalhardo/vukem/errs"
 	"github.com/AlexGalhardo/vukem/i18n"
 	"github.com/AlexGalhardo/vukem/inertia"
+	"github.com/AlexGalhardo/vukem/uuid"
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
@@ -48,6 +52,7 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 			"editions":      page.Editions,
 			"editionCount":  page.EditionCount,
 			"timeToBeat":    page.TimeToBeat,
+			"trailers":      page.Trailers,
 		}
 
 		if u, err := h.user(c); err == nil {
@@ -93,4 +98,41 @@ func (h *Item) Edition(c *web.Ctx) error {
 		"work":    map[string]string{"id": page.Item.ID, "slug": page.Item.Slug, "title": page.Item.Title},
 		"edition": ed,
 	})
+}
+
+// Ratings serves the public users' scores page used by the item dialog.
+func (h *Item) Ratings(c *web.Ctx) error {
+	id := c.Param("id")
+	if _, err := uuid.Parse(id); err != nil {
+		return errs.New(http.StatusNotFound, "Unknown item.")
+	}
+	page, err := publicRatingsPage(c)
+	if err != nil {
+		return err
+	}
+	db, err := h.app.DB()
+	if err != nil {
+		return err
+	}
+	out, err := catalog.PublicItemRatings(c.Context(), db, id, page)
+	if errors.Is(err, catalog.ErrItemNotFound) {
+		return errs.New(http.StatusNotFound, "Unknown item.")
+	}
+	if err != nil {
+		return err
+	}
+	c.SetHeader("Cache-Control", "public, max-age=60")
+	return c.JSON(http.StatusOK, out)
+}
+
+func publicRatingsPage(c *web.Ctx) (int, error) {
+	raw := c.Request().URL.Query().Get("page")
+	if raw == "" {
+		return 1, nil
+	}
+	n, err := strconv.Atoi(raw)
+	if err != nil || n < 1 || n > catalog.RatingsMaxPages {
+		return 0, errs.New(http.StatusBadRequest, "page must be an integer between 1 and 100.")
+	}
+	return n, nil
 }

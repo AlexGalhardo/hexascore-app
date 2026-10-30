@@ -1,5 +1,6 @@
 import { Link, router, usePage } from "@inertiajs/react";
 import { type ReactNode, useEffect, useState } from "react";
+import CookieBanner from "../components/CookieBanner";
 import Flash from "../components/Flash";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
@@ -70,6 +71,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 			<div aria-live="polite" role="status" className="sr-only">
 				{announcement}
 			</div>
+			<CookieBanner />
 		</>
 	);
 }

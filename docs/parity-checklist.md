@@ -16,7 +16,7 @@ scripts/parity-inventory.sh | wc -l
 rg -c '\| (done|deferred D-0[69]) \|' docs/parity-checklist.md
 ```
 
-Test names are Go tests under `tests/` (or `tests/scoring/`) unless marked otherwise. Playwright specs in `qa/e2e/specs/` now cover the ported flows. A `done` row names a Go test or that spec's title. Four legacy checks have no replacement and are not D-06 or D-09: the users' scores modal (E24), trailer consent (E25, E26) and the cookie banner (E39). They stay open in `docs/orchestration/QUESTIONS.md`.
+Test names are Go tests under `tests/` (or `tests/scoring/`) unless marked otherwise. Playwright specs in `qa/e2e/specs/` cover the ported flows. A `done` row names a Go test or that spec's title.
 
 ## Routes
 
@@ -122,9 +122,9 @@ Test names are Go tests under `tests/` (or `tests/scoring/`) unless marked other
 | E21 | headers: `pages get a per-request nonce CSP that every script carries` | CSP middleware | TestSecurity_A02_HexaHeadersWeb | done |
 | E22 | headers: `API responses are JSON-only and cannot be framed` | `/api/v1` headers | TestSecurity_A02_HexaHeadersAPI | done |
 | E23 | headers: `Scalar allowances are scoped to the reference pages` | same CSP as the rest of the site | TestSecurity_A02_HexaCSPHasStrictDynamic | done |
-| E24 | item: `shows score, categories and a centered, paginated users' scores modal` | no users' scores modal | none | open (not D-06 or D-09) |
-| E25 | item: `trailers load only after consent, from youtube-nocookie` | no trailer player | none | open (not D-06 or D-09) |
-| E26 | item: `trailers load immediately` | no trailer player | none | open (not D-06 or D-09) |
+| E24 | item: `shows score, categories and a centered, paginated users' scores modal` | `GET /api/items/{id}/ratings` and the scores dialog | e2e item `shows score, categories and a centered, paginated users' scores modal` | done |
+| E25 | item: `trailers load only after consent, from youtube-nocookie` | click-to-load trailers | e2e item `trailers load only after consent, from youtube-nocookie` | done |
+| E26 | item: `trailers load immediately` | trailers when `consent=all` | e2e item `trailers load immediately` | done |
 | E27 | item: `renders with license attribution in ${code}` | item page attribution | e2e item `shows the community score with category averages and attribution` | done |
 | E28 | not-found: `${prefix}${path} answers 404 with the localized page` | `GET /{path...}` with locales | e2e not-found `answers 404 with the localized page` | done |
 | E29 | not-found: `API 404s are RFC 9457 problems` | `/api/v1` problem responses | e2e not-found `API 404s are RFC 9457 problems` | done |
@@ -137,7 +137,7 @@ Test names are Go tests under `tests/` (or `tests/scoring/`) unless marked other
 | E36 | profile: `account deletion: 10 s countdown, cancel, confirm, banner and undo` | `POST`/`DELETE /profile/deletion` | e2e profile `account deletion: 10 s countdown, cancel, confirm, banner and undo` | done |
 | E37 | public-pages: `${prefix}${path} renders, is themed and accessible` | public pages | e2e public-pages `renders in the project locale and is accessible` | done |
 | E38 | public-pages: `theme toggle persists across reloads` | theme cookie | e2e public-pages `theme toggle persists across reloads` | done |
-| E39 | public-pages: `asks once and remembers the choice` | no cookie banner | none | open (not D-06 or D-09) |
+| E39 | public-pages: `asks once and remembers the choice` | cookie banner | e2e public-pages `asks once and remembers the choice` | done |
 | E40 | public-pages: `locale prefixes render translated navigation` | locale prefixes | e2e public-pages `the locale prefixes render translated navigation` | done |
 | E41 | ratings: `rate in 6 categories, edit, community score appears at the 5th rating` | `PUT /items/{id}/rating` | TestRatingWriteValidationEditDelete | done |
 | E42 | ratings: `item status cycles through the four values and shows on the profile shelves` | `PUT /items/{id}/status` | TestStatus | done |
@@ -156,4 +156,4 @@ Test names are Go tests under `tests/` (or `tests/scoring/`) unless marked other
 - Guests hitting `/admin` are redirected to `/login`. Legacy answered 404. The orchestrator accepted that on 2026-10-29. Members still get 404 (`TestSecurity_A01_AdminPagesNotFoundForMembers`).
 - Q-H31 still blocks live Stripe keys on Railway. The local billing rows use `TestBillingCheckout`, `TestBillingPortal` and `TestPricingPage`.
 - D-09 dropped critic scores. No inventory row is only a critic-score check.
-- E24, E25, E26 and E39 have no replacement and are not D-06 or D-09. They block the 100% count until the owner defers them or the UI exists.
+- E24, E25, E26 and E39 are the users' scores dialog, the trailer player and the cookie banner. `TestPublicItemRatings` covers the JSON page; the Playwright titles cover the UI.

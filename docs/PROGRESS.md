@@ -193,3 +193,9 @@ Orchestrator (Opus 5.5) with four background workers kept in standby (owner rule
 - vukem PR #63 (Betterleaks) squash-merged. Release `v0.34.0` is asked in QUESTIONS.md as FR-004 and was not tagged. P1.C.7 stays blocked until an adopted tag contains VF-001.
 - Local branch `agent/senior/P1.I.5.1-r2`: gzip limited to `/build` assets (`TestGzipStatic_HTMLUncompressedAndBuildJSCompressed`), `CHALLENGE_GLOBAL_LIMIT` with boot refusal (`TestSecurity_A07_PowGlobalLimitOverride`, `TestSecurity_A07_PowGlobalLimitRefusedAtBoot`). Lighthouse budgets are not green yet, so P1.I.5.1 stays open.
 - P2.D.5.3: incident procedure, review template and notices in en, pt-BR and es. markdownlint-cli2 exit 0.
+
+## Execution: 2026-10-30 parity
+
+- P1.I.6.1: `docs/parity-checklist.md` is 118/118 (`done` or `deferred D-06`/`D-09`). Public `GET /api/items/{id}/ratings`, youtube-nocookie trailers after consent, cookie banner. Playwright on `127.0.0.1:3400`: `24 passed (15.4s)`. P1.I.7.1 stays open until a full `qa/e2e` run and `gh release view v0.9.0`.
+- P3.A.2.1 re-run: `ok github.com/AlexGalhardo/hexascore-app/tests 1.767s` (`TestAPILicenceFilter`, `TestAPILookupNoRestrictedEcho`, `-tags integration`).
+- P1.I.3.1, P1.I.4.1 and P1.I.5.1 stay `[x]`. The container at `127.0.0.1:3300` (`hexascore-app:e2e-277adfd`) finished `636 passed`. That suite does not include the new item and cookie specs and does not close P1.I.7.1.

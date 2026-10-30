@@ -16,7 +16,17 @@ export const test = base.extend<{
 	any: typeof anyLocale;
 	prefix: string;
 	locale: string;
+	consent: "essential" | "all" | null;
 }>({
+	consent: ["essential", { option: true }],
+	context: async ({ context, consent, baseURL }, use) => {
+		if (consent && baseURL) {
+			await context.addCookies([
+				{ name: "consent", value: consent, url: baseURL, sameSite: "Lax" },
+			]);
+		}
+		await use(context);
+	},
 	// biome-ignore lint/correctness/noEmptyPattern: Playwright requires destructuring the first fixture argument
 	extraHTTPHeaders: async ({}, use) => use({ "X-Forwarded-For": fakeIp() }),
 	// biome-ignore lint/correctness/noEmptyPattern: Playwright requires destructuring the first fixture argument

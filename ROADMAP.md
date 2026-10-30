@@ -16,10 +16,10 @@ Conventions:
 
 | Field | Value |
 | --- | --- |
-| Current phase | P1 (foundation and parity): P1.A to P1.H done (`v0.8.0`), P1.I in progress; code-only P2 items running ahead of the owner gates |
+| Current phase | P1 (foundation and parity): P1.A to P1.H done (`v0.8.0`), P1.I.6.1 done; P1.I.7.1 (`v0.9.0`) still needs a full Playwright run |
 | Last release | app `v0.8.0` (2026-10-30, API parity); vukem `v0.33.0` in `go.mod` (more merged on vukem `main`, unreleased) |
-| Next microtask | resume per `.orchestration/handoff/orchestrator.md`: merge open vukem PRs, finish P1.I (I.3.1 review, I.5.1, I.4.1, I.7.1 `v0.9.0`), then P2 code tasks in the worker queues |
-| Updated | 2026-10-30 (session paused by the owner) |
+| Next microtask | P1.I.7.1 after a full `qa/e2e` run that includes the new item and cookie specs, then the local P4 tasks |
+| Updated | 2026-10-30 |
 
 ## Resuming work (read first in a new session)
 
@@ -1239,7 +1239,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
 
 #### P1.I.6 Parity checklist
 
-- [ ] **P1.I.6.1** Write `docs/parity-checklist.md` mapping every legacy route, Server Action and e2e test to its replacement, test and status.
+- [x] **P1.I.6.1** Write `docs/parity-checklist.md` mapping every legacy route, Server Action and e2e test to its replacement, test and status.
   - Files/modules: `docs/parity-checklist.md`, `scripts/parity-inventory.sh` (lists legacy routes, actions and test titles)
   - Refs: ROADMAP phase map (P1 exit criteria); D-06, D-09, D-21; `docs/PROGRESS.md` (33 Server Actions); legacy `apps/web/app/[locale]/`, `apps/web/actions/`, `qa/e2e/specs/`
   - Depends on: P1.I.2.4, P1.I.3.1, P1.I.4.1, P1.I.5.1
@@ -2170,7 +2170,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.A.2 Provenance metadata and coverage
 
-- [ ] **P3.A.2.1** Make the audience `api` serialiser emit `provenance` per field and `meta.omittedFields` on every `/api/v1` payload, and keep `lookupItem` from echoing restricted ids.
+- [x] **P3.A.2.1** Make the audience `api` serialiser emit `provenance` per field and `meta.omittedFields` on every `/api/v1` payload, and keep `lookupItem` from echoing restricted ids.
   - Files/modules: `app/catalog/readmodel/audience.go`, `app/api/v1/serialize.go`, `tests/api_licence_test.go`, fixtures `tests/fixtures/tmdb_igdb_item.json`
   - Refs: SDD 05 FR-05-6, FR-05-16, §6.2 example; SDD 01 §6.1; ADR 0006 decisions 1–2; open issues 05-3
   - Depends on: P3.A.1.3

@@ -196,6 +196,7 @@ func Web(r *router.Router, app *vukem.App) error {
 			r.Get("/"+section+"/{slug}", items.Show(typ)).Name("item." + typ)
 		}
 		r.Get("/books/{slug}/editions/{id}", items.Edition).Name("item.edition")
+		r.Get("/api/items/{id}/ratings", items.Ratings).Name("item.ratings")
 		entities := controllers.NewEntity(app)
 		for _, e := range []struct{ path, kind, param string }{
 			{"people", "person", "slug"},
