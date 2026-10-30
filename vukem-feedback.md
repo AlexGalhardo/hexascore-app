@@ -7,7 +7,7 @@ Documentation reference (owner rule, 2026-10-28): every entry cites the public d
 Severity: `critical` (blocks a roadmap task), `high` (workaround costs more than a day), `medium` (workaround under a day), `low` (DX or docs).
 Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdrawn`.
 
-Checked 2026-10-30 against vukem tag `v0.34.0` (`f3080367`, 2026-10-30T14:15:00Z). No open issues. Open pull request: [#101](https://github.com/AlexGalhardo/vukem/pull/101) (nested modules still require `v0.33.0`; the Cloudflare module check failed, the other checks passed). HexaScore `go.mod` is still `v0.33.0`, so v0.34.0 is not adopted. Passkeys (VF-001) stay out of the app until the owner says `adotar VF-001`.
+Checked 2026-10-30 against vukem tag `v0.34.0` (`f3080367`, 2026-10-30T14:15:00Z). No open issues. Open pull request: [#101](https://github.com/AlexGalhardo/vukem/pull/101) (nested modules still require `v0.33.0`; the Cloudflare module check failed, the other checks passed). HexaScore `go.mod` requires `v0.34.0` from app `v0.9.0`. Each VF row stays `not adopted` until the app code uses that API. Passkeys (VF-001) stay out of the app until the owner says `adotar VF-001`.
 
 | id | date | severity | status |
 | --- | --- | --- | --- |

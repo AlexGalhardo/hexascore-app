@@ -256,23 +256,20 @@ func TestSecurity_A06_HexaBodyLimits(t *testing.T) {
 		t.Errorf("JSON form over %d bytes: status %d, want 413", limits.FormBody, rec.Code)
 	}
 
-	// workaround(vukem): VF-061. MethodOverride parses urlencoded bodies first and drops the
-	// MaxBytesError, so an oversized form answers 422 with every field missing instead of 413; the
-	// limit still holds because nothing past it is parsed.
-	emailMissing := func(rec *httptest.ResponseRecorder) bool {
-		var p struct{ Errors map[string]any }
-		_ = json.Unmarshal(rec.Body.Bytes(), &p)
-
-		_, missing := p.Errors["email"]
-
-		return missing
+	// vukem v0.34.0 (VF-061) keeps the MaxBytesError from MethodOverride, so an oversized
+	// urlencoded form is 413. The server-level limit in routes/web.go is still required:
+	// MethodOverride parses the body before the router middleware runs.
+	if rec := post("application/x-www-form-urlencoded", "email=a%40b.co&pad="+pad); rec.Code != http.StatusRequestEntityTooLarge {
+		t.Errorf("urlencoded form over %d bytes: status %d, want 413", limits.FormBody, rec.Code)
 	}
 
-	if !emailMissing(post("application/x-www-form-urlencoded", "email=a%40b.co&pad="+pad)) {
-		t.Errorf("urlencoded form over %d bytes was parsed", limits.FormBody)
+	small := post("application/x-www-form-urlencoded", "email=a%40b.co&pad=a")
+	if small.Code == http.StatusRequestEntityTooLarge {
+		t.Fatal("small urlencoded form was rejected as too large")
 	}
-
-	if emailMissing(post("application/x-www-form-urlencoded", "email=a%40b.co&pad=a")) {
+	var parsed struct{ Errors map[string]any }
+	_ = json.Unmarshal(small.Body.Bytes(), &parsed)
+	if _, missing := parsed.Errors["email"]; missing {
 		t.Error("small urlencoded form was not parsed")
 	}
 

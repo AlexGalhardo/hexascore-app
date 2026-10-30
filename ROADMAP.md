@@ -17,7 +17,7 @@ Conventions:
 | Field | Value |
 | --- | --- |
 | Current phase | P1 (foundation and parity): P1.A to P1.H done (`v0.8.0`), P1.I.6.1 done; P1.I.7.1 (`v0.9.0`) still needs a full Playwright run |
-| Last release | app `v0.8.0` (2026-10-30, API parity); vukem `v0.33.0` in `go.mod` (more merged on vukem `main`, unreleased) |
+| Last release | app `v0.9.0` (2026-10-30, vukem `v0.34.0`); passkeys stay off until `adotar VF-001` |
 | Next microtask | P1.I.7.1 after a full `qa/e2e` run that includes the new item and cookie specs, then the local P4 tasks |
 | Updated | 2026-10-30 |
 

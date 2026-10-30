@@ -199,3 +199,4 @@ Orchestrator (Opus 5.5) with four background workers kept in standby (owner rule
 - P1.I.6.1: `docs/parity-checklist.md` is 118/118 (`done` or `deferred D-06`/`D-09`). Public `GET /api/items/{id}/ratings`, youtube-nocookie trailers after consent, cookie banner. Playwright on `127.0.0.1:3400`: `24 passed (15.4s)`. P1.I.7.1 stays open until a full `qa/e2e` run and `gh release view v0.9.0`.
 - P3.A.2.1 re-run: `ok github.com/AlexGalhardo/hexascore-app/tests 1.767s` (`TestAPILicenceFilter`, `TestAPILookupNoRestrictedEcho`, `-tags integration`).
 - P1.I.3.1, P1.I.4.1 and P1.I.5.1 stay `[x]`. The container at `127.0.0.1:3300` (`hexascore-app:e2e-277adfd`) finished `636 passed`. That suite does not include the new item and cookie specs and does not close P1.I.7.1.
+- App `go.mod` requires vukem `v0.34.0`. Nested modules stay on their published tags (`contrib/stripe` `v0.4.1`, `drivers/postgres` `v0.5.1`, `drivers/s3` `v0.3.1`). Passkeys are not installed.
