@@ -4,7 +4,6 @@ import (
 	"cmp"
 	"context"
 	"strings"
-	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/i18n"
@@ -16,6 +15,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
+	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/notifications"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
@@ -145,15 +145,19 @@ func Web(r *router.Router, app *vukem.App) error {
 		r.Get("/sitemaps/{file}", controllers.Sitemap(app)).Name("sitemap.child")
 
 		sc := controllers.NewSearch(app, search.New(db, nil), acc.Web.User)
-		r.Get("/search", sc.Index).Name("search")
-		r.Get("/search/suggest", sc.Suggest).Name("search.suggest")
-		limiters, err := app.RateLimiters()
+		limiters, err := limits.Factory(app)
 		if err != nil {
 			return err
 		}
+
+		suggest := ratelimit.Middleware(limits.Suggest.From(limiters), ratelimit.ByIP)
+		r.Get("/search", sc.Index).
+			Name("search").
+			Use(ratelimit.Middleware(limits.Search.From(limiters), ratelimit.ByIP))
+		r.Get("/search/suggest", sc.Suggest).Name("search.suggest").Use(suggest)
 		// Each click needs a search that returned the ref; this caps how
 		// fast one client can mint searches and clicks to skew analytics.
-		clicks := ratelimit.Middleware(limiters("search.events", 30, time.Minute), ratelimit.ByIP)
+		clicks := ratelimit.Middleware(limits.SearchEvents.From(limiters), ratelimit.ByIP)
 		r.Post("/search/events", sc.Event).Use(clicks).Name("search.events")
 
 		listings, err := controllers.NewCatalog(app)
@@ -179,7 +183,7 @@ func Web(r *router.Router, app *vukem.App) error {
 		} {
 			r.Get("/"+e.path+"/{"+e.param+"}", entities.Show(e.kind, e.param)).Name("entity." + e.kind)
 		}
-		r.Get("/api/search/suggest", controllers.LegacySuggest).Name("search.suggest.legacy")
+		r.Get("/api/search/suggest", controllers.LegacySuggest).Name("search.suggest.legacy").Use(suggest)
 	}
 
 	return nil

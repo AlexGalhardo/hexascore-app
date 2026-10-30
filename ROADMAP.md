@@ -1656,7 +1656,7 @@ Phase-specific conventions:
 
 #### P2.D.2 Limits, inventory and challenge
 
-- [ ] **P2.D.2.1** Implement the full rate-limit table on the shared cache store with fail-closed wiring.
+- [x] **P2.D.2.1** Implement the full rate-limit table on the shared cache store with fail-closed wiring.
   - Files/modules: `app/http/limits/limits.go` (one named limiter per row of §7.1), `routes/*.go`, `tests/security_limits_test.go`
   - Refs: SDD 13 FR-13-2, NFR-13-2, §7.1, §9 item 4; SDD 03 NFR-03-3; ADR 0016; <https://vukem.dev/docs/security/rate-limiting> "Failure behaviour", "Common mistakes"
   - Depends on: P2.D.1.1

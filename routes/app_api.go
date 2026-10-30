@@ -2,7 +2,6 @@ package routes
 
 import (
 	"cmp"
-	"time"
 
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
@@ -13,6 +12,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers/appapi"
+	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 )
 
@@ -46,7 +46,7 @@ func AppAPI(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	limiters, err := app.RateLimiters()
+	limiters, err := limits.Factory(app)
 	if err != nil {
 		return err
 	}
@@ -56,13 +56,13 @@ func AppAPI(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	h := appapi.NewTokens(acc, googleVerifiers(app.Source.Get), limiters("app.2fa", 5, 15*time.Minute))
-	issueLimit := ratelimit.Middleware(limiters("app.tokens", 10, time.Minute), ratelimit.ByIP)
+	h := appapi.NewTokens(acc, googleVerifiers(app.Source.Get), limits.App2FA.From(limiters))
+	issueLimit := ratelimit.Middleware(limits.AppTokens.From(limiters), ratelimit.ByIP)
 	// Per identifier across IPs: someone holding a password cannot rotate
 	// IPs to brute-force the 6-digit TOTP (security review, P1.C.4.1).
 	_, byIdentifier := auth.ThrottleKeys("identifier")
-	accountLimit := ratelimit.Middleware(limiters("app.tokens.account", 20, 10*time.Minute), byIdentifier)
-	userLimit := ratelimit.Middleware(limiters("app.tokens.user", 60, time.Minute), ratelimit.ByUser(acc.API.Name()))
+	accountLimit := ratelimit.Middleware(limits.AppTokensAcc.From(limiters), byIdentifier)
+	userLimit := ratelimit.Middleware(limits.AppTokensUsr.From(limiters), ratelimit.ByUser(acc.API.Name()))
 
 	bearer := []router.Middleware{
 		auth.Required(acc.API),
