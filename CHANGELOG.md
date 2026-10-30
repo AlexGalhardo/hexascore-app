@@ -35,18 +35,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Locale URL prefixes now use vukem `i18n.MiddlewareConfig.PathPrefixes` (`SourcePath`, `StripPathPrefix`, `LocalizePath`); the app keeps only the cookie-driven 307 and prefixes same-site redirect targets of prefixed requests. Removes the VF-024 workaround (`LocalePrefix`, `RestoreURL`, `_locale` query). The prefix match is now case-sensitive and lower-case (`/PT-BR/...` is a 404) (ADOPT-VF-024).
 - `models.Rating` declares the composite key with `PrimaryKeys()` (vukem `orm.CompositeKeyer`), replacing the single-column `PrimaryKey()` hack; released `items`/`ratings` migrations stay raw DDL (forward-only) (ADOPT-VF-035).
 - Migrations rely on vukem v0.33.0's built-in advisory lock and `NoTransaction` support; `migrate:locked` (`app/console/migrate_locked.go`) and `scripts/concurrent-index.sh` are removed, runbook updated (ADOPT-VF-040).
+- Proof-of-work solver hashes without per-attempt allocations (about 3x faster), so signup, login and reset no longer stall for a minute on a loaded browser at the attack difficulty (E2E-HARDEN-P1.I.2.1).
 - Admin user form: the virtual `banned` checkbox bans and unbans in the panel transaction via new `accounts.BanTx`/`UnbanTx` (ADOPT-VF-046); the form no longer needs the separate ban routes, which stay for the moderation pages.
 - The supervised SSR child now stops only after the HTTP server drained, with SIGTERM and a 5 s grace before SIGKILL; it was killed on the first SIGTERM, while requests could still render (P2.A.3.2).
 - Adopt vukem v0.33.0: problem codes are raised with `errs.HTTPError.WithExtension("code", ...)` (VF-016, VF-048) and `APIEdge` sets the problem `type` from it on `/api/v1` and `/app/v1` (CORS stays on `/api/v1` only), replacing the `CodedProblem` route wrapper; the LGPD ZIP export uses `export.EncodeCSV` (VF-029).
 
 ### Fixed
 
+- `/challenge` probe counts the attempt it announces, so a client right below the proof-of-work limit solves before posting instead of receiving a raw 428; e2e signup flake root cause (E2E-HARDEN-P1.I.2.1).
+- CSP `upgrade-insecure-requests` is sent only when production and `APP_URL` is https (the plain-HTTP e2e container works without `bypassCSP`); e2e specs assert copy with the locale-prefixed `t` and read mailed-link emails restored from the log redaction (E2E-HARDEN-P1.I.2.1).
 - Backup child processes (`pg_dump`, `pg_restore` for restore and `--list` verify) are covered by tests for their minimal environment (`PG*` plus `PATH`, never the app environment) (FIX-backup-child-path).
 - Public profile and list pages no longer crash on the client: their page-level `seo` prop replaced the shared one (breaking `Seo`'s hreflang list); it is now a top-level `indexable` prop (found by the social e2e spec, P1.I.2.3).
 - Rendered docs code blocks are keyboard focusable (`tabindex="0"` on `<pre>`), fixing axe `scrollable-region-focusable` on the docs pages (P1.I.2.3).
 - Dumps could not be restored: `hs_norm` called `hs_unaccent` unqualified and `pg_restore` runs with an empty `search_path`; migration `20261029210000_qualify_hs_norm_function` qualifies it. Backup child processes now get `PATH`, without which `pg_restore` cannot locate itself (P2.E.3.1).
 - Catalogue listings answer 400 instead of 500 for a NUL byte or invalid UTF-8 in `genre`, `platform`, `sort` or `cursor` (found by the catalog e2e spec, P1.I.2.2).
-
 - API keys table scrolls inside its own focusable region instead of overflowing a 360 px viewport, which hid the Revoke button behind the Status cell (P1.I.2.1).
 
 - The Playwright suite under `qa/e2e` is now covered by `bun run lint` and `bun run typecheck`, and the e2e compose seed step no longer hides seeder failures.

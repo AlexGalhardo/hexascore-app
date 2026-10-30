@@ -18,3 +18,10 @@ test("solve returns a nonce with the requested leading zero bits", () => {
 	const digest = sha256(new TextEncoder().encode(`challenge.sig${n}`));
 	expect(leadingZeroBits(digest)).toBeGreaterThanOrEqual(10);
 });
+
+test("solve stays correct as the nonce grows past several digit counts", () => {
+	const n = solve("boundary.sig", 16);
+	expect(Number(n)).toBeGreaterThan(9999);
+	const digest = sha256(new TextEncoder().encode(`boundary.sig${n}`));
+	expect(leadingZeroBits(digest)).toBeGreaterThanOrEqual(16);
+});

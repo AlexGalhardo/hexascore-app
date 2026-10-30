@@ -27,10 +27,6 @@ export default defineConfig({
 		: [["list"], ["html", { open: "never" }]],
 	use: {
 		baseURL,
-		// The production CSP carries upgrade-insecure-requests, which Chrome applies to the redirect hop of
-		// an Inertia form post even on 127.0.0.1 (ERR_SSL_PROTOCOL_ERROR over plain HTTP). Specs that assert
-		// the CSP itself opt back in with test.use({ bypassCSP: false }) and read the header instead.
-		bypassCSP: true,
 		trace: "retain-on-failure",
 		screenshot: "only-on-failure",
 	},
