@@ -53,8 +53,10 @@ USER app
 # mailer stops every command at boot, serve and `about` alike, as soon as a
 # route needs one. "log" writes each message to the JSON log, so nothing is
 # lost silently; set smtp, resend or mailtrap on the deploy to send for real.
+# Rate-limit budgets live in the database cache, shared by restarts and
+# replicas (SDD 13 §7.1); the app refuses to boot in production without it.
 ENV APP_ENV=production HOST=0.0.0.0 PORT=3000 LOG_FORMAT=json MAIL_MAILER=log \
-	NODE_ENV=production SSR_SUPERVISE=true
+	NODE_ENV=production SSR_SUPERVISE=true RATE_LIMIT_STORE=cache CACHE_STORE=database
 # A platform start command (Railway, Fly) replaces this entrypoint, so it has
 # to name the binary: "/app/app queue:work", never "queue:work".
 EXPOSE 3000

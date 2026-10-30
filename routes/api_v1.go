@@ -3,7 +3,6 @@ package routes
 import (
 	"context"
 	"net/http"
-	"time"
 
 	"github.com/AlexGalhardo/vukem"
 	vapi "github.com/AlexGalhardo/vukem/api"
@@ -18,6 +17,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/billing"
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers/publicapi"
+	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/config"
@@ -38,7 +38,7 @@ func APIV1(r *router.Router, app *vukem.App) error {
 		return nil
 	}
 
-	limiters, err := app.RateLimiters()
+	limiters, err := limits.Factory(app)
 	if err != nil {
 		return err
 	}
@@ -72,7 +72,7 @@ func APIV1(r *router.Router, app *vukem.App) error {
 
 	for _, id := range []string{api.PlanFree, api.PlanPro, api.PlanBusiness} {
 		p, _ := api.PlanByID(id)
-		throttles[id] = ratelimit.Middleware(limiters("api-"+id, p.RPS, time.Second), ratelimit.ByUser(api.GuardName))
+		throttles[id] = ratelimit.Middleware(limits.APIPlan(id, p.RPS).From(limiters), ratelimit.ByUser(api.GuardName))
 	}
 
 	throttle := func(next http.Handler) http.Handler {
@@ -103,7 +103,7 @@ func APIV1(r *router.Router, app *vukem.App) error {
 	r.Group("/api/v1", func(g *router.Group) {
 		g.Use(
 			middleware.JSONOnly(),
-			ratelimit.Middleware(limiters("api-ip", 120, time.Minute), ratelimit.ByIP),
+			ratelimit.Middleware(limits.APIIP.From(limiters), ratelimit.ByIP),
 			auth.Required(guard),
 			appmiddleware.NotBanned(func(c *web.Ctx) (models.User, error) {
 				return auth.User[models.User](c, api.GuardName)

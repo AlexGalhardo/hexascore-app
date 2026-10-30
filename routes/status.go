@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"time"
-
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/middleware"
@@ -11,6 +9,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
+	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 )
 
@@ -22,12 +21,12 @@ func Status(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	limiters, err := app.RateLimiters()
+	limiters, err := limits.Factory(app)
 	if err != nil {
 		return err
 	}
 
-	statusLimit, ttbLimit := limiters("status", 60, time.Minute), limiters("time-to-beat", 30, time.Minute)
+	statusLimit, ttbLimit := limits.Status.From(limiters), limits.TimeToBeat.From(limiters)
 	w := &scoring.Writer{DB: acc.DB, Events: app.Events, Now: app.Now}
 
 	web := controllers.NewStatus(w, acc.Web.Name(), false)
