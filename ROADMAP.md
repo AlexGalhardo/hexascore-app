@@ -1732,7 +1732,7 @@ Phase-specific conventions:
     - `zap.yml` weekly → opens a GitHub issue on failure (tested once with a deliberately weakened header on a throwaway branch deployed to a local container, never staging)
   - Notes: the active scan writes data: run it with a dedicated staging test account and the seed catalogue; never against production. Medium findings are triaged in `docs/qa/scans.md`.
 
-- [ ] **P2.D.5.3** Write the incident response procedure, the review template and the user notification templates.
+- [x] **P2.D.5.3** Write the incident response procedure, the review template and the user notification templates.
   - Files/modules: `docs/runbooks/incident-response.md`, `docs/incidents/TEMPLATE.md`, `lang/{en,pt-BR,es}.json` (`mail.incident_notice`) or `docs/runbooks/incident-notice.{en,pt-BR,es}.md`
   - Refs: SDD 13 FR-13-7, NFR-13-6, §7.9; SDD 12 §7.8 R9
   - Depends on: P2.C.4.2

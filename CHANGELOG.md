@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - Lighthouse CI config (`lighthouserc.json`, `qa/lighthouse/urls.txt`, `qa/lighthouse/run.sh`) for the SDD 09 §4 budgets on five reference pages (P1.I.5.1). `@lhci/cli` is invoked with `bunx` at 0.15.1 and is not a package.json dependency until the owner approves it.
+- Incident response procedure, review template and user notice templates in en, pt-BR and es (P2.D.5.3).
 - Legacy import `finalise` stage (score priors and recompute, search suggest rebuild) and `hexascore:cutover-verify` (`--counts-only`, `--sample-pct`): per-table counts, id-sample md5, cover keys on the bucket, orphan foreign keys, SQL vs Go scores (P2.F.4.1).
 
 ### Fixed
