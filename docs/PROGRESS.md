@@ -200,3 +200,8 @@ Orchestrator (Opus 5.5) with four background workers kept in standby (owner rule
 - P3.A.2.1 re-run: `ok github.com/AlexGalhardo/hexascore-app/tests 1.767s` (`TestAPILicenceFilter`, `TestAPILookupNoRestrictedEcho`, `-tags integration`).
 - P1.I.3.1, P1.I.4.1 and P1.I.5.1 stay `[x]`. The container at `127.0.0.1:3300` (`hexascore-app:e2e-277adfd`) finished `636 passed`. That suite does not include the new item and cookie specs and does not close P1.I.7.1.
 - App `go.mod` requires vukem `v0.34.0`. Nested modules stay on their published tags (`contrib/stripe` `v0.4.1`, `drivers/postgres` `v0.5.1`, `drivers/s3` `v0.3.1`). Passkeys are not installed.
+
+## Execution: 2026-10-30 Android shell (P5.A.1.1)
+
+- Worktree `wt/hexascore-p5a`, branch `agent/implementer/P5.A.1.1`. Expo SDK 58.0.21 (`targetSdk` 36). NativeWind 4.2.7. Report: [`.orchestration/reports/P5.A.1.1.md`](../.orchestration/reports/P5.A.1.1.md).
+- Not merged. Merge waits on P3.C.5.2. ROADMAP boxes for P5.A.1.1, P5.A.1.2 and P5.A.2.1 stay open. No API client and no store build.

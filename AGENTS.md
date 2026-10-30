@@ -32,6 +32,7 @@ Railway rules that override the skill's deploy-from-cwd shortcut: do not run `ra
 | `.grok/rules/` | language rules, loaded without a vendor compatibility mode |
 | `.claude/` | the same rules and skills, kept so Claude-compatible tools still see them |
 | `.orchestration/` | queues, briefs, and reports for the three agents |
+| `apps/mobile` | Android Expo app (SDK 58, NativeWind). Do not commit `android/` or `ios/` |
 
 ## Rules
 
@@ -59,6 +60,7 @@ Railway rules that override the skill's deploy-from-cwd shortcut: do not run `ra
 | `bunx commitlint --from <base-sha> --to <head-sha>` | Conventional Commits check on a commit range (CI `lint`; PR title via stdin) |
 | `bun run build:docs` | re-render `resources/docs/*.md` into the committed `resources/docs/docs.json` (a vitest test fails when stale) |
 | `bun run lint` / `bun run typecheck` / `bun run test` | TypeScript lint, types, unit tests |
+| `bun run --cwd apps/mobile lint` / `typecheck` / `test` | Android app (Biome, `tsc`, Jest). `catalogues` recopies the bundled i18n namespaces |
 | `vukem openapi:export -prefix /api/v1` (or `/app/v1`) | export an OpenAPI document; `scripts/openapi-check.sh` diffs both against the goldens (`--image` exports from a built image; CI `openapi`), `--write` refreshes them |
 | `qa/schemathesis/ci.sh [image]` | migrate the CI Postgres, insert a business key and an app token, run Schemathesis 4.29.0 against that image (Linux `--network host`) |
 | `bun run openapi:lint` | Redocly lint of both goldens (`redocly.yaml`; CI `lint`) |
