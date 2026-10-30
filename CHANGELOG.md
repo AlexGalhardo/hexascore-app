@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Playwright specs `i18n`, `seo`, `csp`, `keyboard`, `ssr-nojs`, `lists` and `notifications` (3 locales, desktop and mobile); the notifications spec seeds rows through the compose Postgres container (`E2E_DB_CONTAINER` overrides it).
 - `backup:restore <key> --target-url <url>` (streamed decrypt into `pg_restore`, then replays account deletions, schedules and cancellations newer than the dump from `DATABASE_URL` or `--replay-from`; `--no-replay` when that database is lost) and `backup:drill` (latest daily into a scratch `hexascore_drill`, row counts vs the dump manifest, `catalog:check` asserts, drop, `backup_runs(kind='drill')`; scheduled first Sunday 07:00 where `BACKUP_SOURCE_S3_BUCKET` is set); `backup:run` now writes a sealed per-table row-count manifest counted in the snapshot `pg_dump --snapshot` reuses; runbook `docs/runbooks/restore.md` (P2.E.3.1).
 - Legacy import `billing` stage: API keys with their sha256 hash unchanged, paid subscriptions, Stripe customer ids, daily usage, D-23 credit balances (`greatest(sum(delta), 0)`), and verbatim copies of `credit_ledger` and `pix_charges` in new legacy-shaped tables (P2.F.2.7).
 - Legacy import `twofactor` stage: `scripts/legacy/twofactor-export.ts` decrypts the Better Auth 2FA rows with Better Auth's own `symmetricDecrypt` and pipes NDJSON into `hexascore:import-legacy --stage twofactor --stdin`, which seals the secret, hashes the unused backup codes as recovery codes and confirms verified rows (P2.F.2.3).
@@ -41,6 +42,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- Item JSON-LD `aggregateRating` now carries `worstRating: 0.5` (SDD 09 §7.7); client-side visits update `<html lang>` to the page locale; list and add-to-list requests post under the locale prefix.
 - Auth, profile, API key, account deletion and two-factor forms now post under the page locale prefix (`useLocalized`), so their redirects keep `/pt-br` and `/es`; the e2e specs for profile, API keys and the TOTP challenge assert in the project locale. `docker-compose.yml` takes `E2E_IMAGE_TAG` so each worker builds its own e2e image.
 - Backup child processes (`pg_dump`, `pg_restore` for restore and `--list` verify) are covered by tests for their minimal environment (`PG*` plus `PATH`, never the app environment) (FIX-backup-child-path).
 - Public profile and list pages no longer crash on the client: their page-level `seo` prop replaced the shared one (breaking `Seo`'s hreflang list); it is now a top-level `indexable` prop (found by the social e2e spec, P1.I.2.3).
