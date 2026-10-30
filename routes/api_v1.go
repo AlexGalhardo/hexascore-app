@@ -14,6 +14,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/api"
+	apiv1 "github.com/AlexGalhardo/hexascore-app/app/api/v1"
 	"github.com/AlexGalhardo/hexascore-app/app/billing"
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers/publicapi"
@@ -135,6 +136,14 @@ func APIV1(r *router.Router, app *vukem.App) error {
 		vapi.Register(g, "GET /search", read("searchItems"), items.SearchItems)
 		vapi.Register(g, "GET /lookup", read("lookupItem"), items.LookupItem)
 		vapi.Register(g, "GET /changes", read("listChanges"), items.ListChanges)
+		// Literal /webhooks before /{type}, same reason as /{type}/genres.
+		hooks := &apiv1.Webhooks{DB: acc.DB, Crypt: app.Crypt, Plans: plans}
+		hook := func(name string) vapi.Op {
+			return vapi.Op{Name: name, Tags: []string{"webhooks"}, Security: []string{"bearer"}, ValidateResponse: true}
+		}
+		vapi.Register(g, "GET /webhooks", hook("listWebhooks"), hooks.List)
+		vapi.Register(g, "POST /webhooks", hook("createWebhook"), hooks.Create)
+		vapi.Register(g, "DELETE /webhooks/{id}", hook("deleteWebhook"), hooks.Delete)
 		vapi.Register(g, "GET /{type}/{id}", read("getItem"), items.GetItem)
 		vapi.Register(g, "GET /{type}", read("listItems"), items.ListItems)
 	})
