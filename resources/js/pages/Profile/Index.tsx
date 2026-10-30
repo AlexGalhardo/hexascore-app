@@ -1,5 +1,5 @@
 import { Head, Link, router, useForm } from "@inertiajs/react";
-import type { FormEvent } from "react";
+import { type FormEvent, useState } from "react";
 
 import DataExport from "../../components/DataExport";
 import DeleteAccount from "../../components/DeleteAccount";
@@ -8,6 +8,7 @@ import PasswordField from "../../components/PasswordField";
 import { checkPassword, passwordAdvice } from "../../lib/password-policy";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
+import { createPasskey } from "../../lib/webauthn";
 
 interface SessionRow {
 	handle: string;
@@ -16,10 +17,18 @@ interface SessionRow {
 	userAgent: string;
 }
 
+interface PasskeyRow {
+	id: number;
+	name: string;
+	createdAt: string;
+	lastUsedAt: string | null;
+}
+
 interface Props {
 	details: { name: string; email: string; locale: string };
 	passwordSet: boolean;
 	twoFactor: { enabled: boolean };
+	passkeys?: PasskeyRow[];
 	sessions: SessionRow[];
 	privacy: { profilePrivate: boolean; personalizationOptOut: boolean };
 }
@@ -52,7 +61,108 @@ function Section({
 	);
 }
 
-export default function Index({ details, passwordSet, twoFactor, sessions, privacy }: Props) {
+function Passkeys({ passwordSet, passkeys }: { passwordSet: boolean; passkeys: PasskeyRow[] }) {
+	const t = useT();
+	const l = useLocalized();
+	const [password, setPassword] = useState("");
+	const [failed, setFailed] = useState(false);
+
+	const add = async (): Promise<void> => {
+		setFailed(false);
+
+		try {
+			const options = await fetch(l("/user/passkeys/options"), {
+				method: "POST",
+				credentials: "same-origin",
+				headers: { Accept: "application/json", "Content-Type": "application/json" },
+				body: JSON.stringify({ password }),
+			});
+			if (!options.ok) {
+				setFailed(true);
+				return;
+			}
+
+			const credential = await createPasskey(await options.json());
+			const saved = await fetch(l("/user/passkeys"), {
+				method: "POST",
+				credentials: "same-origin",
+				headers: { Accept: "application/json", "Content-Type": "application/json" },
+				body: JSON.stringify(credential),
+			});
+			if (!saved.ok) {
+				setFailed(true);
+				return;
+			}
+
+			window.location.assign(saved.url);
+		} catch {
+			setFailed(true);
+		}
+	};
+
+	return (
+		<Section id="passkeys" title={t("account.passkeys.title")}>
+			<p>{t("account.passkeys.body")}</p>
+			{passkeys.length === 0 ? (
+				<p>{t("account.passkeys.empty")}</p>
+			) : (
+				<ul className="divide-y divide-border">
+					{passkeys.map((row) => (
+						<li key={row.id} className="flex flex-wrap items-center gap-3 py-2">
+							<span className="min-w-0 flex-1">
+								{row.name || t("account.passkeys.unnamed")}
+								<span className="ml-2 text-sm text-muted">
+									{t("account.passkeys.added", {
+										date: new Date(row.createdAt).toLocaleString(),
+									})}
+								</span>
+							</span>
+							<button
+								type="button"
+								className="font-medium underline"
+								aria-label={t("account.passkeys.removeLabel", { name: row.name })}
+								onClick={() => router.delete(l(`/profile/passkeys/${row.id}`))}
+							>
+								{t("account.passkeys.remove")}
+							</button>
+						</li>
+					))}
+				</ul>
+			)}
+			{passkeys.length === 1 && <p role="note">{t("account.passkeys.lastWarning")}</p>}
+			{passwordSet ? (
+				<PasswordField
+					label={t("account.passkeys.password")}
+					name="password"
+					autoComplete="current-password"
+					value={password}
+					onChange={setPassword}
+				/>
+			) : (
+				<Link href={l("/auth/google/confirm")} className="font-medium underline">
+					{t("account.passkeys.confirmGoogle")}
+				</Link>
+			)}
+			<button type="button" className={button} onClick={() => void add()}>
+				{t("account.passkeys.add")}
+			</button>
+			{failed && (
+				<p role="alert" className="mt-1 text-sm text-red-600">
+					{t("account.passkeys.failed")}
+				</p>
+			)}
+		</Section>
+	);
+}
+
+export default function Index({
+	details,
+	passwordSet,
+	twoFactor,
+	passkeys = [],
+	sessions,
+	privacy,
+}: Props) {
 	const t = useT();
 	const l = useLocalized();
 	const detailsForm = useForm({ name: details.name, locale: details.locale });
@@ -156,6 +266,8 @@ export default function Index({ details, passwordSet, twoFactor, sessions, priva
 					<p role="note">{t("account.twoFactor.needPassword")}</p>
 				)}
 			</Section>
+
+			<Passkeys passwordSet={passwordSet} passkeys={passkeys} />
 
 			<Section id="sessions" title={t("account.sessions.title")}>
 				{sessions.length === 0 ? (
