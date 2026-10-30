@@ -59,7 +59,12 @@ test.describe("lists", () => {
 			await page
 				.getByRole("button", { name: `${t("userLists.moveUp")}: ${added[1]}` })
 				.click();
+			// Reload only after the save landed, or the page can show the old order.
+			const saved = page.waitForResponse(
+				(r) => r.url().endsWith("/order") && r.request().method() === "PUT",
+			);
 			await page.getByRole("button", { name: t("userLists.saveOrder") }).click();
+			await saved;
 			await page.reload();
 			const names = await page.locator("main li a[href*='/games/']").allInnerTexts();
 			const first = names.findIndex((n) => n.includes(added[1]));
