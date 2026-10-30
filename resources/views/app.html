@@ -3,6 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	{{/* A missing /favicon.ico is the full HTML 404. That body is large enough to miss the LCP budget when it finishes first. */}}
+	<link rel="icon" href="/favicon.ico" sizes="16x16" type="image/x-icon">
 	<meta property="csp-nonce" nonce="{{cspNonce}}">
 	{{viteReactRefresh}}
 	{{/* CSS first: modulepreloads from the script entry must not queue ahead of the render-blocking sheet (LCP). */}}

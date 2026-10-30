@@ -51,8 +51,11 @@ func Web(r *router.Router, app *vukem.App) error {
 	r.Use(limits.Body)
 
 	r.UseServer(appmiddleware.CrossOriginResourcePolicy("same-site"))
-	// First UseServer is outermost. Gzip has to wrap StaticFS, or the file
-	// server answers /build and the compressor never sees the body.
+	// First UseServer is outermost. MovePageScript rewrites the finished HTML:
+	// LCP text before the page JSON, and the module graph after first paint.
+	// Gzip has to wrap StaticFS, or the file server answers /build and the
+	// compressor never sees the body.
+	r.UseServer(appmiddleware.MovePageScript)
 	r.UseServer(appmiddleware.GzipStatic())
 	r.UseServer(middleware.StaticFS(resources.Public(), middleware.StaticConfig{Prefix: "/"}))
 	r.UseServer(appmiddleware.LocaleCookieRedirect(appmiddleware.LocalePrefixConfig{
