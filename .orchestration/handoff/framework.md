@@ -104,3 +104,14 @@ Owner answered "merge your own green PRs" in chat, but `gh pr merge 39 --squash`
 - Next: 3-VF-044 (queue/framework), then replacement PRs for #62 (after #61) and #66/#67 (after #65) when the orchestrator says so.
 - VF-044: PR #82 (`feat/vf-044-output-required`), report reports/VF-044.md. VF status in vukem-feedback.md: PR open, unreleased.
 - Open from session 12: #80, #81, #82 (plus #79). Pending on orchestrator: replacement PRs for #62 (after #61) and #66/#67 (after #65).
+- Later in session 12: #77 updated by merging origin/main (nav conflict: kept http2-and-http3 + logging + releases-and-stability). #62 replaced by #87 (`feat/vf-057-contrib-http3-main`, three-dot diff of #62 vs #61 head applied on main; docs/architecture.md conflict resolved; contrib/http3 tests + mod:check ok); #62 closed. #66/#67 still wait for #65.
+- DOCS-SITE-REFRESH (active/framework, priority 1): PR #88 = rules + CI check. NEXT: content audit per area (task file list), one PR per area, each running `npm run last-updated` (full history) since the new check requires it; finish with a full refresh. Site checks: junction `site\node_modules` -> `C:\dev\hexascore-app\vukem\site\node_modules`, then check-mdx / eslint / tsc, remove the junction.
+- Stopped at context limit (session 12).
+
+## Session 13 (2026-10-30)
+
+- DOCS-SITE-REFRESH item 1 done: #89 (security), #90 (REST), #91 (routing). Report reports/DOCS-SITE-REFRESH.md.
+- Item 2 pending: after #88-#91 merge, `git switch -c docs/last-updated-full origin/main`, `cd site && npm run last-updated` (worktree is a full clone), commit, PR.
+- Site build via junction: Turbopack cannot resolve `next` through the node_modules junction; use `npx next build --webpack`.
+- Touched-only refresh helper: scratchpad lu-touched.mjs (keeps main's json except the branch's changed pages; preserves key order).
+- Still waiting: recreate #66/#67 on main after #65 lands.

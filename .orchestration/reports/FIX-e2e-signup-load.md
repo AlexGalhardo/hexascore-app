@@ -5,3 +5,6 @@ Fix: optional env CHALLENGE_GLOBAL_LIMIT (Challenger.GlobalLimit) overrides the 
 Files: app/http/middleware/challenge.go, routes/challenge.go, docker-compose.yml, tests/pow_test.go (TestSecurity_A07_PowGlobalLimitOverride), CHANGELOG.
 Acceptance: go test -tags integration -run TestSecurity_A07_Pow: 3 PASS; full playwright on hx-senior (3 workers): 444 passed, 0 failed, 0 flaky (3.3m).
 Risk: none for prod; the compose file is e2e-only.
+
+REV (especialista): APROVADO
+PRONTO_PARA_MERGE agent/senior/FIX-e2e-signup-load
