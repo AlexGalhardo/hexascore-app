@@ -2,9 +2,11 @@ package controllers
 
 import (
 	"errors"
+	"net/http"
 
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/database"
+	"github.com/AlexGalhardo/vukem/errs"
 	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/web"
 	"github.com/AlexGalhardo/vukem/z"
@@ -35,7 +37,8 @@ type MarkReadForm struct {
 
 // MarkReadSchema validates MarkReadForm.
 var MarkReadSchema = z.Struct[MarkReadForm](z.Shape{
-	"ids": z.Slice(z.String().Max(64)).Max(notifications.MaxReadIDs).Default([]string{}),
+	// Above MaxReadIDs the handler answers 400. This cap only stops an absurd array.
+	"ids": z.Slice(z.String().Max(64)).Max(1000).Default([]string{}),
 	"all": z.Bool().Default(false),
 }).Refine(func(f MarkReadForm) error {
 	if !f.All && len(f.IDs) == 0 {
@@ -117,6 +120,12 @@ func (h *Notifications) ReadMany(c *web.Ctx) error {
 	in, err := web.Parse(c, MarkReadSchema)
 	if err != nil {
 		return err
+	}
+
+	// SDD 14 §6.3 caps one request at 100 ids. That is 400, not the 422 used
+	// for a malformed body, so a client can tell a cap from a bad field.
+	if len(in.IDs) > notifications.MaxReadIDs {
+		return errs.New(http.StatusBadRequest, "At most 100 notification ids.")
 	}
 
 	if in.All {
