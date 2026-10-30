@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - Lighthouse CI config (`lighthouserc.json`, `qa/lighthouse/urls.txt`, `qa/lighthouse/run.sh`) for the SDD 09 §4 budgets on five reference pages (P1.I.5.1). `@lhci/cli` is invoked with `bunx` at 0.15.1 and is not a package.json dependency until the owner approves it.
+- Platform metrics from SDD 12 §6.2 (`hexa.*`, `biz.*`, backup placeholders) on the `hexascore` meter, including the `hexa.errors` label cap and SQL gauges (P2.C.2.2). `http.server.request.duration` is recorded in-app until `drivers/otel` ships in an adopted vukem tag (P2.C.2.1).
 - Incident response procedure, review template and user notice templates in en, pt-BR and es (P2.D.5.3).
 - Trend score, eligibility and prior fill as pure functions (P6.C.2.1).
 - CI guard for expand/contract migration text, plus a Postgres 18.6 migrate / rollback / migrate round trip (P2.E.1.2).
