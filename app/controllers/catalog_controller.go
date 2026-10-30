@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"context"
 	"errors"
 	"net/http"
 
@@ -38,7 +37,7 @@ func NewCatalog(app *vukem.App) (*Catalog, error) {
 }
 
 // Index renders Catalog/Index for the item type typ. `items` is a Scroll prop
-// whose next page is an opaque signed cursor; `facets` loads on demand.
+// whose next page is an opaque signed cursor. Facets are in the first paint.
 func (h *Catalog) Index(typ string) web.HandlerFunc {
 	return func(c *web.Ctx) error {
 		db, err := h.app.DB()
@@ -70,6 +69,13 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 			meta.NextPage = page.NextCursor
 		}
 
+		// Facets ride the first response. A follow-up reload used to widen the
+		// selects after paint and shift the list (CLS on /games).
+		genres, platforms, err := catalog.Facets(c.Context(), db, typ, nil)
+		if err != nil {
+			return err
+		}
+
 		props := inertia.Props{
 			"type":  typ,
 			"items": inertia.Scroll(map[string]any{"data": cards}, meta),
@@ -77,11 +83,7 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 				"genre": params.Genre, "platform": params.Platform, "year": params.Year,
 				"minScore": params.MinScore, "sort": params.Sort,
 			},
-			"facets": inertia.Optional(func(ctx context.Context) (any, error) {
-				genres, platforms, err := catalog.Facets(ctx, db, typ, nil)
-
-				return map[string]any{"genres": genres, "platforms": platforms}, err
-			}),
+			"facets": map[string]any{"genres": genres, "platforms": platforms},
 		}
 		if page.Total != nil {
 			props["total"] = *page.Total

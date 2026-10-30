@@ -1,5 +1,4 @@
-import { InfiniteScroll, router, usePage } from "@inertiajs/react";
-import { useEffect } from "react";
+import { InfiniteScroll, usePage } from "@inertiajs/react";
 import Filters, { type ActiveFilters, type Facet } from "../../components/catalog/Filters";
 import ItemCard from "../../components/catalog/ItemCard";
 import {
@@ -16,7 +15,7 @@ interface Props {
 	type: Section["type"];
 	items: { data: Highlight[] };
 	filters: ActiveFilters;
-	facets?: { genres: Facet[]; platforms: Facet[] };
+	facets: { genres: Facet[]; platforms: Facet[] };
 	total?: number;
 }
 
@@ -25,11 +24,6 @@ export default function Index({ type, items, filters, facets, total }: Props) {
 	const { locale } = usePage<SharedProps>().props;
 	const path = localized(`/${SECTION_PATHS[type]}`, locale);
 	const title = t(`catalog.title.${type}`);
-
-	// Facets are not needed for the first paint: fetch them once for the selects.
-	useEffect(() => {
-		if (!facets) router.reload({ only: ["facets"] });
-	}, [facets]);
 
 	return (
 		<>
@@ -41,8 +35,8 @@ export default function Index({ type, items, filters, facets, total }: Props) {
 					action={path}
 					type={type}
 					filters={filters}
-					genres={facets?.genres ?? []}
-					platforms={facets?.platforms ?? []}
+					genres={facets.genres}
+					platforms={facets.platforms}
 				/>
 			</div>
 			{total !== undefined && (
