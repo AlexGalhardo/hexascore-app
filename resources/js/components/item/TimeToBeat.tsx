@@ -1,6 +1,7 @@
 import { router } from "@inertiajs/react";
 import { useState } from "react";
 
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 import type { Hours } from "./types";
 
@@ -24,6 +25,7 @@ interface Props {
 
 export default function TimeToBeat({ itemId, medians, mine, canReport }: Props) {
 	const t = useT();
+	const l = useLocalized();
 	const [draft, setDraft] = useState<Record<string, string>>(
 		Object.fromEntries(STYLES.map(([, k]) => [k, mine?.[k] != null ? String(mine[k]) : ""])),
 	);
@@ -35,7 +37,7 @@ export default function TimeToBeat({ itemId, medians, mine, canReport }: Props) 
 			STYLES.map(([, k]) => [k, draft[k] === "" ? null : Number(draft[k])]),
 		);
 		setBusy(true);
-		router.put(`/items/${itemId}/time-to-beat`, body, {
+		router.put(l(`/items/${itemId}/time-to-beat`), body, {
 			preserveScroll: true,
 			onFinish: () => setBusy(false),
 		});
@@ -100,7 +102,7 @@ export default function TimeToBeat({ itemId, medians, mine, canReport }: Props) 
 								className="min-h-11 rounded border px-4"
 								disabled={busy}
 								onClick={() =>
-									router.delete(`/items/${itemId}/time-to-beat`, {
+									router.delete(l(`/items/${itemId}/time-to-beat`), {
 										preserveScroll: true,
 									})
 								}

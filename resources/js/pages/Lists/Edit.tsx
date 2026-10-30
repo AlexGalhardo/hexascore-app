@@ -36,7 +36,7 @@ export default function Edit({ list, items, version }: Props) {
 		description: list.description ?? "",
 		isPublic: list.isPublic,
 	});
-	const base = `/lists/${list.id}`;
+	const base = localized(`/lists/${list.id}`, locale);
 	const dirty = order.some((e, i) => e.item.id !== items[i]?.item.id);
 
 	// Reordering moves the row's DOM node, which drops keyboard focus; put it back on the same row's button

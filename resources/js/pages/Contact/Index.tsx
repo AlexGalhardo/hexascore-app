@@ -2,6 +2,7 @@ import { Head, useForm } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
 
 import Field from "../../components/Field";
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 interface Props {
@@ -12,6 +13,7 @@ interface Props {
 // Contact is the public contact form. `website` is the honeypot: it is hidden from people and assistive tech.
 export default function Index({ topics, formToken }: Props) {
 	const t = useT();
+	const l = useLocalized();
 	const [sent, setSent] = useState(false);
 	const form = useForm({
 		name: "",
@@ -24,7 +26,7 @@ export default function Index({ topics, formToken }: Props) {
 
 	const submit = (e: FormEvent) => {
 		e.preventDefault();
-		form.post("/contact", {
+		form.post(l("/contact"), {
 			onSuccess: () => {
 				setSent(true);
 				form.reset("message");
