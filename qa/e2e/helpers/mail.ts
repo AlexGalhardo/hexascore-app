@@ -1,4 +1,5 @@
 import { spawnSync } from "node:child_process";
+import { dbContainer } from "./db";
 import { escapeRegExp } from "./t";
 
 // The container logs mail bodies at debug level (docker-compose.yml, LOG_LEVEL). Against an environment
@@ -46,4 +47,28 @@ export async function mailLink(
 		await new Promise((resolve) => setTimeout(resolve, 500));
 	}
 	throw new Error(`no mail with a ${fragment} link for ${email} in ${container} logs`);
+}
+
+// Inserts a user_notifications row for the account with this email (see helpers/db.ts).
+export function seedNotification(email: string, kind: string, dedupeKey: string): void {
+	const sql = `INSERT INTO user_notifications (id, user_id, kind, payload, dedupe_key)
+		SELECT gen_random_uuid(), id, '${kind}', '{}', '${dedupeKey}' FROM users WHERE email = '${email}'`;
+	const out = spawnSync(
+		"docker",
+		[
+			"exec",
+			dbContainer(),
+			"psql",
+			"-U",
+			"hexascore",
+			"-d",
+			"hexascore",
+			"-v",
+			"ON_ERROR_STOP=1",
+			"-c",
+			sql,
+		],
+		{ encoding: "utf8" },
+	);
+	if (out.status !== 0) throw new Error(`seedNotification failed: ${out.stderr}`);
 }

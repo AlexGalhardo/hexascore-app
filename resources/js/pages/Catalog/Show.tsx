@@ -103,6 +103,7 @@ export default function Show({
 				"@type": "AggregateRating",
 				ratingValue: ratingSummary.score,
 				bestRating: 10,
+				worstRating: 0.5,
 				ratingCount: ratingSummary.ratingCount,
 			},
 		}),
