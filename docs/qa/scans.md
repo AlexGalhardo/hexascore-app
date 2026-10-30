@@ -22,4 +22,15 @@ schemathesis --config-file qa/schemathesis/schemathesis.toml run openapi/api-v1.
 
 ## ZAP baseline
 
-Not run yet. `docker pull ghcr.io/zaproxy/zaproxy:2.17.0` died with `short read: expected 625874126 bytes but got 69429568`. The baseline script is ready. Medium rows in `qa/zap/rules.tsv` are added only after an alert is read. A High alert is never `IGNORE`.
+ZAP 2.17.0, 2026-10-30, target `http://127.0.0.1:3000`. `docker pull` of `ghcr.io/zaproxy/zaproxy@sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238` still dies with `short read` on the 625874126-byte layer. The run below is the official `zap-baseline.py` from tag `v2.17.0` (the script inside that image) with the official `ZAP_2.17.0_Crossplatform.zip` from the same release. Flags match `qa/zap/baseline.sh`: `-I -c qa/zap/rules.tsv -J zap-report.json -r zap-report.html -m 5`. `rules.tsv` is still only the comment header.
+
+Result: 1836 URLs, 55 pass, 6 warn, 0 fail, exit 0. The JSON report has no `riskcode` 2 (Medium) or 3 (High).
+
+| Rule | Risk in the report | What it is |
+| --- | --- | --- |
+| 10096 Timestamp Disclosure | Low | Evidence `1793346180` is 2026-10-30 04:43:00, the scan clock, on `/contact`. |
+| 10024 Sensitive information in URL | Informational | The spider requested `GET /login` and `GET /signup` with `?password=ZAP`. The Inertia submit calls `preventDefault` and `form.post`. |
+| 10027 Suspicious comments | Informational | Minified `/build` bundles matched `\bADMIN\b` and `\bQUERY\b` inside path and query helpers. |
+| 10031 HTML attribute (potential XSS) | Informational | Allowlisted `sort` values (`-score`, `-release_date`) are the `<option value>`. An unknown sort returns 400 `invalid-query` with the value HTML-escaped. |
+| 10109 Modern web application | Informational | 404 pages ship the module script and no crawlable links. ZAP says no change is required. |
+| 10112 Session management response | Informational | `/library` and `/profile` redirect with cookie `__Host-vukem_session`. ZAP says this is not a vulnerability. |

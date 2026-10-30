@@ -1215,7 +1215,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
 
 #### P1.I.4 Contract and security scans
 
-- [ ] **P1.I.4.1** Run Schemathesis on both OpenAPI documents and the OWASP ZAP baseline scan, with zero failures and zero High alerts.
+- [x] **P1.I.4.1** Run Schemathesis on both OpenAPI documents and the OWASP ZAP baseline scan, with zero failures and zero High alerts.
   - Files/modules: `qa/schemathesis/run.sh`, `qa/zap/baseline.sh`, `qa/zap/rules.tsv`, `docs/qa/scans.md`
   - Refs: SDD 05 §9, §10; SDD 01 §9; SDD 03 §10; SDD 14 §10; SDD 12; legacy `qa/schemathesis/`, `qa/zap/`
   - Depends on: P1.I.1.1
