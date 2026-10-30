@@ -1181,7 +1181,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
     - `bunx playwright test qa/e2e/specs/{catalog,item,ratings,time-to-beat,search}.spec.ts` → pass in three locales; axe 0 serious/critical
   - Notes: legacy ratings used a 0–100 slider; the port drives the star widget by keyboard (D-00). Critic-score assertions are dropped (D-09).
 
-- [ ] **P1.I.2.3** Port `social`, `contact`, `admin`, `docs`, `public-pages`, `headers` and `not-found` specs.
+- [x] **P1.I.2.3** Port `social`, `contact`, `admin`, `docs`, `public-pages`, `headers` and `not-found` specs.
   - Files/modules: `qa/e2e/specs/{social,contact,admin,docs,public-pages,headers,not-found}.spec.ts`
   - Refs: SDD 14 §9, §10; SDD 09 §10; legacy specs of the same names
   - Depends on: P1.I.1.1
