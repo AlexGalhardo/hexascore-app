@@ -2464,7 +2464,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.C.4 Client telemetry intake
 
-- [ ] **P3.C.4.1** Serve `POST /app/v1/client-errors` and `POST /app/v1/client-metrics` (anonymous, opt-in, CSRF-exempt), stored 7 days.
+- [x] **P3.C.4.1** Serve `POST /app/v1/client-errors` and `POST /app/v1/client-metrics` (anonymous, opt-in, CSRF-exempt), stored 7 days.
   - Files/modules: `database/migrations/<ts>_create_client_reports.go`, `app/appapi/telemetry.go`, `app/jobs/prune_client_reports.go`, `tests/app_telemetry_test.go`
   - Refs: SDD 05 FR-05-18, §6.4 "Client telemetry intake"; SDD 12 FR-12-7, §6.4; open issues 10-2, 09-11
   - Depends on: P3.C.1.1
