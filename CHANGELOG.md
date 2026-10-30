@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Schemathesis 4.29.0 harness (`qa/schemathesis/run.sh`) and the ZAP 2.17.0 baseline script pinned by image digest (`qa/zap/baseline.sh`, `qa/zap/rules.tsv`). Notes in `docs/qa/scans.md` (P1.I.4.1).
 - Lighthouse CI config (`lighthouserc.json`, `qa/lighthouse/urls.txt`, `qa/lighthouse/run.sh`) for the SDD 09 §4 budgets on five reference pages (P1.I.5.1). `@lhci/cli` is invoked with `bunx` at 0.15.1 and is not a package.json dependency until the owner approves it.
 - Platform metrics from SDD 12 §6.2 (`hexa.*`, `biz.*`, backup placeholders) on the `hexascore` meter, including the `hexa.errors` label cap and SQL gauges (P2.C.2.2). `http.server.request.duration` is recorded in-app until `drivers/otel` ships in an adopted vukem tag (P2.C.2.1).
 - Catalog facets ship in the first listing response, so the filter row does not change after paint (P1.I.5.1).
