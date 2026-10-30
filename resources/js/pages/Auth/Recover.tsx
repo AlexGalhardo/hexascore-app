@@ -1,6 +1,7 @@
 import { Head, useForm } from "@inertiajs/react";
-import type { FormEvent } from "react";
+import { type FormEvent, useState } from "react";
 
+import ChallengeStatus from "../../components/ChallengeStatus";
 import Field from "../../components/Field";
 import { challengeHeaders } from "../../lib/challenge";
 import { useLocalized } from "../../lib/useLocalized";
@@ -10,10 +11,13 @@ export default function Recover() {
 	const t = useT();
 	const l = useLocalized();
 	const form = useForm({ email: "" });
+	const [checking, setChecking] = useState(false);
 
 	const submit = async (e: FormEvent) => {
 		e.preventDefault();
-		form.post(l("/recover-password"), { headers: await challengeHeaders("reset") });
+		form.post(l("/recover-password"), {
+			headers: await challengeHeaders("reset", setChecking),
+		});
 	};
 
 	return (
@@ -38,6 +42,7 @@ export default function Recover() {
 				>
 					{t("auth.recover.submit")}
 				</button>
+				<ChallengeStatus checking={checking} />
 			</form>
 		</>
 	);

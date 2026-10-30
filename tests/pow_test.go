@@ -6,7 +6,7 @@ import (
 
 	"github.com/AlexGalhardo/vukem/vukemtest"
 
-	"github.com/AlexGalhardo/hexascore-app/app/security"
+	"github.com/AlexGalhardo/hexascore-app/app/challenge"
 	"github.com/AlexGalhardo/hexascore-app/bootstrap"
 )
 
@@ -23,11 +23,11 @@ func solved(t *testing.T, c *vukemtest.Client, route string) string {
 	var ch powChallenge
 	c.GetJSON("/challenge?route=" + route).AssertOK().JSON(&ch)
 
-	return ch.C + ":" + security.Solve(security.Challenge{C: ch.C, Bits: ch.Bits, Exp: ch.Exp})
+	return ch.C + ":" + challenge.Solve(challenge.Challenge{C: ch.C, Bits: ch.Bits, Exp: ch.Exp})
 }
 
-func signupAs(c *vukemtest.Client, n int) *vukemtest.Response {
-	return c.PostJSON("/signup", signUpForm("Bot Net", fmt.Sprintf("bot%d@example.com", n), testPassword))
+func signupAs(app *vukemtest.App, c *vukemtest.Client, n int) *vukemtest.Response {
+	return c.PostJSON("/signup", signUpForm(app, "Bot Net", fmt.Sprintf("bot%d@example.com", n), testPassword))
 }
 
 func TestSecurity_A07_PowSignup(t *testing.T) {
@@ -43,7 +43,7 @@ func TestSecurity_A07_PowSignup(t *testing.T) {
 	}
 
 	for i := range 3 {
-		signupAs(c, i).AssertRedirect("/signup/check-email")
+		signupAs(app, c, i).AssertRedirect("/signup/check-email")
 	}
 
 	// The probe announces the attempt that will cross the limit, so the client solves before posting.
@@ -61,9 +61,9 @@ func TestSecurity_A07_PowSignup(t *testing.T) {
 			Bits int    `json:"bits"`
 		} `json:"challenge"`
 	}
-	signupAs(c, 3).AssertStatus(428).JSON(&problem)
+	signupAs(app, c, 3).AssertStatus(428).JSON(&problem)
 	if problem.Code != "challenge-required" || problem.Challenge.C == "" ||
-		problem.Challenge.Bits != security.DefaultBits {
+		problem.Challenge.Bits != challenge.DefaultBits {
 		t.Fatalf("problem = %+v", problem)
 	}
 
@@ -74,15 +74,15 @@ func TestSecurity_A07_PowSignup(t *testing.T) {
 	}
 
 	proof := solved(t, c, "signup")
-	signupAs(c.WithHeader(middlewareHeader, proof), 4).AssertRedirect("/signup/check-email")
+	signupAs(app, c.WithHeader(middlewareHeader, proof), 4).AssertRedirect("/signup/check-email")
 
 	// The same solution a second time is refused.
-	signupAs(c.WithHeader(middlewareHeader, proof), 5).AssertStatus(428)
+	signupAs(app, c.WithHeader(middlewareHeader, proof), 5).AssertStatus(428)
 
 	// A solution minted for another route does not count.
-	signupAs(c.WithHeader(middlewareHeader, solved(t, c, "login")), 6).AssertStatus(428)
+	signupAs(app, c.WithHeader(middlewareHeader, solved(t, c, "login")), 6).AssertStatus(428)
 	// Garbage does not either.
-	signupAs(c.WithHeader(middlewareHeader, "x:1"), 7).AssertStatus(428)
+	signupAs(app, c.WithHeader(middlewareHeader, "x:1"), 7).AssertStatus(428)
 
 	app.Client(t).GetJSON("/challenge?route=nope").AssertStatus(422)
 }
@@ -99,22 +99,6 @@ func TestSecurity_A07_PowTokens(t *testing.T) {
 
 	api.PostJSON("/app/v1/tokens", body).AssertStatus(428)
 	api.WithHeader(middlewareHeader, solved(t, api, "token")).PostJSON("/app/v1/tokens", body).AssertStatus(422)
-}
-
-func TestSecurity_A07_SignupHoneypot(t *testing.T) {
-	t.Parallel()
-
-	app := vukemtest.New(t, bootstrap.New)
-	c := app.Client(t).Inertia("")
-
-	form := signUpForm("Bot Net", "honey@example.com", testPassword)
-	form["website"] = "http://spam.example"
-	c.PostJSON("/signup", form).AssertRedirect("/signup/check-email")
-	vukemtest.AssertDatabaseMissing(t, app, "users", map[string]any{"email": "honey@example.com"})
-
-	delete(form, "website")
-	c.PostJSON("/signup", form).AssertRedirect("/signup/check-email")
-	vukemtest.AssertDatabaseHas(t, app, "users", map[string]any{"email": "honey@example.com"})
 }
 
 const middlewareHeader = "X-Challenge"

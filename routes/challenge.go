@@ -7,9 +7,9 @@ import (
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/router"
 
+	"github.com/AlexGalhardo/hexascore-app/app/challenge"
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
-	"github.com/AlexGalhardo/hexascore-app/app/security"
 )
 
 // newChallenger builds the proof-of-work gate shared by the auth routes
@@ -21,7 +21,7 @@ func newChallenger(app *vukem.App, problemBase string) (*appmiddleware.Challenge
 	}
 
 	return &appmiddleware.Challenger{
-		PoW:         security.New(key, app.Cache, app.Now),
+		PoW:         challenge.New(key, app.Cache, app.Now),
 		Cache:       app.Cache,
 		ProblemBase: problemBase,
 	}, nil

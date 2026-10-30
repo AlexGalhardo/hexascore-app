@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 
-import { leadingZeroBits, sha256, solve } from "./pow-worker";
+import { leadingZeroBits, sha256, solve } from "./worker";
 
 const hex = (d: Uint32Array) => Array.from(d, (w) => w.toString(16).padStart(8, "0")).join("");
 

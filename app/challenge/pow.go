@@ -1,6 +1,6 @@
-// Package security holds the bot-protection building blocks of ADR 0016: a
+// Package challenge holds the bot-protection building blocks of ADR 0016: a
 // stateless proof-of-work challenge and the honeypot check.
-package security
+package challenge
 
 import (
 	"context"

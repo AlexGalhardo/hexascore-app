@@ -26,7 +26,7 @@ func TestInertiaPages(t *testing.T) {
 				HasProp("sections", 4)
 
 			signed := app.Client(t).Inertia("")
-			signed.PostJSON("/signup", signUpForm("Bia Souza", "bia@example.com", testPassword))
+			signed.PostJSON("/signup", signUpForm(app, "Bia Souza", "bia@example.com", testPassword))
 			signed.PostJSON("/login", map[string]any{"identifier": "bia@example.com", "password": testPassword})
 			signed.Get(l.prefix+"/").AssertOK().AssertInertia("Home/Index").HasProp("sections", 4)
 		})
@@ -47,7 +47,7 @@ func TestInertiaPages(t *testing.T) {
 			}
 
 			signed := app.Client(t).Inertia("")
-			signed.PostJSON("/signup", signUpForm("Ana Silva", "ana@example.com", testPassword))
+			signed.PostJSON("/signup", signUpForm(app, "Ana Silva", "ana@example.com", testPassword))
 			signed.PostJSON("/login", map[string]any{"identifier": "ana@example.com", "password": testPassword})
 			signed.Get(l.prefix+"/verify-email").AssertOK().AssertInertia("Auth/VerifyNotice").
 				PropEquals("locale", l.locale)

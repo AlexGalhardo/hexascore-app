@@ -18,6 +18,7 @@ import (
 	"github.com/AlexGalhardo/vukem/vukemtest"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/forms"
 	"github.com/AlexGalhardo/hexascore-app/bootstrap"
 )
 
@@ -52,8 +53,22 @@ func link(t *testing.T, app *vukemtest.App, email string) string {
 	return parsed.RequestURI()
 }
 
-func signUpForm(name, email, password string) map[string]any {
-	return map[string]any{"name": name, "email": email, "password": password, "password_confirmation": password}
+// signUpForm is a sign-up body whose form token says the page was rendered long enough ago.
+func signUpForm(app *vukemtest.App, name, email, password string) map[string]any {
+	return map[string]any{
+		"name": name, "email": email, "password": password, "password_confirmation": password,
+		"form_token": signupToken(app),
+	}
+}
+
+// signupToken is a sign-up form token rendered MinFill ago.
+func signupToken(app *vukemtest.App) string {
+	key, err := app.DeriveKey("signup.form", 32)
+	if err != nil {
+		panic(err)
+	}
+
+	return forms.Token{Key: key, Now: app.Now}.IssueAt("signup", app.Now().Add(-forms.MinFill))
 }
 
 // register signs email up, verifies it and logs c in: sign-up itself
@@ -61,7 +76,7 @@ func signUpForm(name, email, password string) map[string]any {
 func register(t *testing.T, app *vukemtest.App, c *vukemtest.Client, email string) {
 	t.Helper()
 
-	c.PostJSON("/signup", signUpForm("Ana Silva", email, testPassword)).
+	c.PostJSON("/signup", signUpForm(app, "Ana Silva", email, testPassword)).
 		AssertRedirect("/signup/check-email")
 	verifyEmail(t, app, email)
 	c.PostJSON("/login", map[string]any{"identifier": email, "password": testPassword}).
@@ -96,7 +111,7 @@ func TestRegisterAndVerifyEmail(t *testing.T) {
 	c.Get("/dashboard").AssertRedirect("/login")
 	c.Get("/login").AssertInertia("Auth/Login").PropEquals("auth.user", nil)
 
-	c.PostJSON("/signup", signUpForm("Ana Silva", "ana@example.com", testPassword)).
+	c.PostJSON("/signup", signUpForm(app, "Ana Silva", "ana@example.com", testPassword)).
 		AssertRedirect("/signup/check-email")
 	c.Get("/signup/check-email").AssertInertia("Auth/CheckEmail").PropEquals("auth.user", nil)
 	c.Get("/dashboard").AssertRedirect("/login") // sign-up does not log in
@@ -162,7 +177,7 @@ func TestSecurity_A07_SignupIsEnumerationSafe(t *testing.T) {
 
 		c := app.Client(t).Inertia("").WithHeader("Referer", "/signup")
 		c.WithHeader(middlewareHeader, solved(t, c, "signup")).
-			PostJSON("/signup", signUpForm("Mallory", tc.email, otherPassword)).
+			PostJSON("/signup", signUpForm(app, "Mallory", tc.email, otherPassword)).
 			AssertRedirect("/signup/check-email")
 		c.Get("/signup/check-email").AssertInertia("Auth/CheckEmail").PropEquals("auth.user", nil)
 
@@ -187,7 +202,7 @@ func TestUnverifiedUsersSeeTheNotice(t *testing.T) {
 	app := vukemtest.New(t, bootstrap.New)
 	c := app.Client(t).Inertia("")
 
-	c.PostJSON("/signup", signUpForm("Uma", "uma@example.com", testPassword)).
+	c.PostJSON("/signup", signUpForm(app, "Uma", "uma@example.com", testPassword)).
 		AssertRedirect("/signup/check-email")
 	c.PostJSON("/login", map[string]any{"identifier": "uma@example.com", "password": testPassword}).
 		AssertRedirect("/dashboard")
@@ -213,7 +228,7 @@ func TestSecurity_A04_SignupThrottle(t *testing.T) {
 
 		for i := range 30 {
 			res := c.WithHeader(middlewareHeader, solved(t, c, "signup")).
-				PostJSON("/signup", signUpForm("Mallory", email(i), otherPassword))
+				PostJSON("/signup", signUpForm(app, "Mallory", email(i), otherPassword))
 			if res.Status() == http.StatusTooManyRequests {
 				return i
 			}
@@ -272,7 +287,7 @@ func TestRegisterSurvivesCacheOutage(t *testing.T) {
 	} {
 		before := len(fake.Messages())
 
-		app.Client(t).Inertia("").PostJSON("/signup", signUpForm("Mallory", tc.email, otherPassword)).
+		app.Client(t).Inertia("").PostJSON("/signup", signUpForm(app, "Mallory", tc.email, otherPassword)).
 			AssertRedirect("/signup/check-email")
 
 		if got := len(fake.Messages()) - before; got != tc.jobs {
@@ -295,7 +310,7 @@ func TestSecurity_A07_ProvingTheEmailEndsSquatterAccess(t *testing.T) {
 	app := vukemtest.New(t, bootstrap.New)
 
 	squatter := app.Client(t).Inertia("")
-	squatter.PostJSON("/signup", signUpForm("Mallory", "vic@example.com", testPassword)).
+	squatter.PostJSON("/signup", signUpForm(app, "Mallory", "vic@example.com", testPassword)).
 		AssertRedirect("/signup/check-email")
 	squatter.PostJSON("/login", map[string]any{"identifier": "vic@example.com", "password": testPassword, "remember": true}).
 		AssertRedirect("/dashboard")
@@ -335,7 +350,7 @@ func TestExpiredVerificationLinkOffersANewOne(t *testing.T) {
 	app := vukemtest.New(t, bootstrap.New)
 	c := app.Client(t).Inertia("")
 
-	c.PostJSON("/signup", signUpForm("Ana Silva", "exp@example.com", testPassword)).
+	c.PostJSON("/signup", signUpForm(app, "Ana Silva", "exp@example.com", testPassword)).
 		AssertRedirect("/signup/check-email")
 
 	acc, err := accounts.New(app.App)
@@ -406,7 +421,7 @@ func TestSecurity_A01_VerificationLinkBoundToEmail(t *testing.T) {
 	app := vukemtest.New(t, bootstrap.New)
 	c := app.Client(t).Inertia("")
 
-	c.PostJSON("/signup", signUpForm("Ana Silva", "old@example.com", testPassword)).
+	c.PostJSON("/signup", signUpForm(app, "Ana Silva", "old@example.com", testPassword)).
 		AssertRedirect("/signup/check-email")
 
 	verify := link(t, app, "old@example.com")
@@ -537,7 +552,7 @@ func TestSignUpRejectsWeakPassword(t *testing.T) {
 
 			app := vukemtest.New(t, bootstrap.New)
 			c := app.Client(t).Inertia("").WithHeader("Referer", "/signup")
-			c.PostJSON("/signup", signUpForm("Ana Silva", "weak@example.com", weak)).AssertRedirect("/signup")
+			c.PostJSON("/signup", signUpForm(app, "Ana Silva", "weak@example.com", weak)).AssertRedirect("/signup")
 		})
 	}
 }

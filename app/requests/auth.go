@@ -24,6 +24,8 @@ type Register struct {
 	PasswordConfirmation string `json:"password_confirmation" form:"password_confirmation"`
 	// Website is the honeypot: hidden from people, filled by bots (SDD 03 section 7.3).
 	Website string `json:"website" form:"website"`
+	// FormToken is the signed render time of the sign-up page (minimum fill time, SDD 13 §7.2).
+	FormToken string `json:"form_token" form:"form_token"`
 }
 
 // RegisterSchema validates Register (password rules live here).
@@ -33,6 +35,7 @@ var RegisterSchema = z.Struct[Register](z.Shape{
 	"password":              PasswordSchema,
 	"password_confirmation": z.String(),
 	"website":               z.String().Max(256).Default(""),
+	"form_token":            z.String().Max(256).Default(""),
 }).Refine(func(r Register) error {
 	if r.Password != r.PasswordConfirmation {
 		return z.FieldError("password_confirmation", "The password confirmation does not match.")

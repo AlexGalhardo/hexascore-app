@@ -2,13 +2,9 @@ package library
 
 import (
 	"context"
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/base64"
 	"log/slog"
 	"net/http"
 	"net/mail"
-	"strconv"
 	"strings"
 	"time"
 
@@ -17,14 +13,14 @@ import (
 	vmail "github.com/AlexGalhardo/vukem/mail"
 	"github.com/AlexGalhardo/vukem/uuid"
 
+	"github.com/AlexGalhardo/hexascore-app/app/forms"
 	hmail "github.com/AlexGalhardo/hexascore-app/app/mail"
 )
 
 // Contact form bounds (ADR 0016 layer 2).
 const (
-	ContactMinFill  = 3 * time.Second
-	contactTokenTTL = 2 * time.Hour
-	CodeBotCheck    = "bot-check-failed"
+	ContactMinFill = forms.MinFill
+	CodeBotCheck   = "bot-check-failed"
 )
 
 // ContactTopics are the subjects of the form (legacy lib/contact.ts).
@@ -50,35 +46,12 @@ type ContactInput struct {
 }
 
 // Token returns the signed form token: the render time, so Submit can enforce the minimum fill time.
-func (c *Contact) Token() string {
-	ts := strconv.FormatInt(c.Now().Unix(), 10)
+func (c *Contact) Token() string { return c.forms().Issue("contact") }
 
-	return ts + "." + c.mac(ts)
-}
-
-func (c *Contact) mac(ts string) string {
-	m := hmac.New(sha256.New, c.Key)
-	m.Write([]byte("contact:" + ts))
-
-	return base64.RawURLEncoding.EncodeToString(m.Sum(nil))
-}
+func (c *Contact) forms() forms.Token { return forms.Token{Key: c.Key, Now: c.Now} }
 
 // tokenOK checks the signature, the minimum fill time and the expiry.
-func (c *Contact) tokenOK(token string) bool {
-	ts, sig, ok := strings.Cut(token, ".")
-	if !ok || !hmac.Equal([]byte(sig), []byte(c.mac(ts))) {
-		return false
-	}
-
-	sec, err := strconv.ParseInt(ts, 10, 64)
-	if err != nil {
-		return false
-	}
-
-	age := c.Now().Sub(time.Unix(sec, 0))
-
-	return age >= ContactMinFill && age <= contactTokenTTL
-}
+func (c *Contact) tokenOK(token string) bool { return c.forms().Valid("contact", token) }
 
 // Submit stores the message and queues the mail. A filled honeypot answers success and stores nothing, so a
 // bot learns nothing; a bad or too-fast token answers 422 bot-check-failed.

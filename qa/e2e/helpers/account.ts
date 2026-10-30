@@ -65,6 +65,8 @@ export async function fillSignup(
 			await expect(input).toHaveValue(value, { timeout: 1_000 });
 		}).toPass();
 	}
+	// The server treats a sign-up sent under 3 s after render as a bot (SDD 13 §7.2): fill like a person.
+	await page.waitForTimeout(3_000);
 }
 
 // Waits for the post to settle (unless a failure is expected) so a following navigation cannot cancel it mid-request.
