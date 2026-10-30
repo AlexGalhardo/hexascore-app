@@ -58,6 +58,10 @@ ON CONFLICT (provider, provider_id) DO NOTHING`,
 			return "", 0, fmt.Errorf("google accounts: %w", err)
 		}
 
+		if err := importPasskeys(ctx, tx, after, last, at); err != nil {
+			return "", 0, err
+		}
+
 		return last, len(users), nil
 	}
 }
