@@ -17,7 +17,7 @@ Conventions:
 | Field | Value |
 | --- | --- |
 | Current phase | P1 (foundation and parity): P1.A to P1.G done, P1.H mostly done, P1.I started |
-| Last release | app `v0.7.0` (more merged on `main` since); vukem `v0.32.0` in `go.mod` |
+| Last release | app `v0.8.0` (2026-10-30, API parity); vukem `v0.33.0` in `go.mod` (more merged on vukem `main`, unreleased) |
 | Next microtask | finish vukem v0.33.0 (below), then P1.H.4.1b, P1.H.3.2, P1.H.5.1, P1.I.2.x |
 | Updated | 2026-10-29 (session paused by the owner) |
 
@@ -1134,7 +1134,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.H.5 Release
 
-- [ ] **P1.H.5.1** Release `v0.8.0` (API parity).
+- [x] **P1.H.5.1** Release `v0.8.0` (API parity).
   - Files/modules: `CHANGELOG.md`, tag `v0.8.0`
   - Refs: ADR 0013; SDD 11 §7.1
   - Depends on: P1.H.3.2, P1.H.4.1
