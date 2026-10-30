@@ -2435,7 +2435,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.C.3 Library, profile and notifications
 
-- [ ] **P3.C.3.1** Serve `GET/PATCH /me`, `POST /me/export` (202), `POST/DELETE /me/deletion`.
+- [x] **P3.C.3.1** Serve `GET/PATCH /me`, `POST /me/export` (202), `POST/DELETE /me/deletion`.
   - Files/modules: `app/appapi/me.go`, `tests/app_me_test.go`
   - Refs: SDD 03 §6.2; SDD 14 §6.3; SDD 05 §6.4; open issue 14-2 (export is POST)
   - Depends on: P3.C.1.2
