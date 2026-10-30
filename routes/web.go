@@ -29,6 +29,10 @@ var localePrefixes = map[string]string{"pt-br": "pt-BR", "es": "es"}
 
 // Web registers the browser routes. vukem route:list shows them.
 func Web(r *router.Router, app *vukem.App) error {
+	// Server level too: vukem's MethodOverride parses urlencoded forms before routing and keeps a limit
+	// set earlier, else it reads up to 10 MiB.
+	r.UseServer(limits.Body)
+
 	// The URL prefix is the only locale source; the locale cookie only drives the redirect (SDD 09 §7.1).
 	err := vukem.DefaultMiddlewareWith(app, r, vukem.MiddlewareOptions{
 		SecureHeaders: appmiddleware.SecureHeaders(
@@ -43,6 +47,8 @@ func Web(r *router.Router, app *vukem.App) error {
 	if err != nil {
 		return err
 	}
+	// Router level: replaces vukem's 10 MiB router default, which replaced the server-level limit.
+	r.Use(limits.Body)
 
 	r.UseServer(appmiddleware.CrossOriginResourcePolicy("same-site"))
 	r.UseServer(middleware.StaticFS(resources.Public(), middleware.StaticConfig{Prefix: "/"}))
