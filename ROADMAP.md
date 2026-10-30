@@ -1951,7 +1951,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
 
 #### P2.F.3 Covers
 
-- [ ] **P2.F.3.1** Copy covers referenced by the database from Vercel Blob to the bucket with a manifest, skipping orphans, with a delta mode for the window.
+- [x] **P2.F.3.1** Copy covers referenced by the database from Vercel Blob to the bucket with a manifest, skipping orphans, with a delta mode for the window.
   - Files/modules: `scripts/legacy/blob-export.ts` (Bun, `fetch` + `Bun.s3`, no new dependency), `docs/migration/covers.md` (counts: referenced, copied, orphans skipped, failures)
   - Refs: SDD 11 §7.6 (T-7 d, window step 5 covers delta); SDD 01 §5.4 (cover row); SDD 06 §7.5 (keys); `legacy/docs/backup-local.md`
   - Depends on: P2.F.2.4

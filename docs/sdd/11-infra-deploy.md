@@ -214,7 +214,7 @@ Consistency note (SDD 13 open issue 11, 2026-10-28): after a restore, re-apply a
 ### 7.6 Legacy cutover (A-04, D-21, ADR 0013)
 
 - T-14 d: timed staging rehearsal of steps 2–7 on a fresh Neon copy; Google callback added (SDD 03 §7.7).
-- T-7 d: `legacy/scripts/blob-export.ts` (Bun) reads cover URLs **referenced by the DB** (orphans are never copied), uploads to the production bucket under SDD 06 keys, writes `manifest.ndjson {legacyUrl,key,sha256}`; ~79k objects (`legacy/docs/backup-local.md`).
+- T-7 d: `scripts/legacy/blob-export.ts` in this repository (Bun; `legacy/` is read-only, runbook `docs/migration/covers.md`) reads cover URLs **referenced by the DB** (orphans are never copied), uploads to the production bucket under SDD 06 keys, writes `manifest.ndjson {legacyUrl,key,sha256}`; ~79k objects (`legacy/docs/backup-local.md`).
 - T-24 h: DNS TTL 60 s; banner on legacy.
 
 Window (target 45 min, max 60):
