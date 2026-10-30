@@ -18,7 +18,9 @@ test.describe("catalog", () => {
 			await expect(page).toHaveURL(/min_score=1/);
 			// A 1-star floor hides items whose stored score is under 10. Either result is a real list.
 			await expect(
-				itemLinks(page, prefix, section).first().or(page.getByText(t("catalog.empty"))),
+				itemLinks(page, prefix, section)
+					.first()
+					.or(page.getByText(t("catalog.empty"))),
 			).toBeVisible();
 
 			await page.getByRole("link", { name: t("catalog.reset") }).click();
