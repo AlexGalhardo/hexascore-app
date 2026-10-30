@@ -2274,7 +2274,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run TestAPIDeprecationHeaders` → fixture route answers `Deprecation`, `Sunset`, `Link`; a helper call with `sunset - since < 183 days` fails the test
   - Notes: no route is deprecated in v1; the test uses a test-only route. The owner mail is a runbook step, not an automatic job.
 
-- [ ] **P3.A.6.2** Run the contract gate on the extended document: export diff, Redocly, Schemathesis, k6 with the new routes, ZAP baseline.
+- [x] **P3.A.6.2** Run the contract gate on the extended document: export diff, Redocly, Schemathesis, k6 with the new routes, ZAP baseline.
   - Files/modules: `openapi/api-v1.json`, `qa/k6/api-v1.js`, `.github/workflows/ci.yml`
   - Refs: SDD 05 §9, §10, FR-05-15, NFR-05-1
   - Depends on: P3.A.6.1
