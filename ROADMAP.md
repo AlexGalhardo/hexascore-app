@@ -2235,7 +2235,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.A.5 Webhooks
 
-- [ ] **P3.A.5.1** Add `webhook_endpoints`/`webhook_cursor` and serve `listWebhooks`, `createWebhook` (secret shown once), `deleteWebhook` with plan caps.
+- [x] **P3.A.5.1** Add `webhook_endpoints`/`webhook_cursor` and serve `listWebhooks`, `createWebhook` (secret shown once), `deleteWebhook` with plan caps.
   - Files/modules: `database/migrations/<ts>_create_webhook_endpoints.go`, `app/api/v1/webhooks.go`, `app/webhooks/endpoints.go`, `tests/api_webhooks_test.go`, `tests/security_webhooks_test.go`
   - Refs: SDD 05 FR-05-11, §5, §6.2, §8, NFR-05-4; <https://vukem.dev/docs/digging-deeper/webhooks> "Sending webhooks"; <https://vukem.dev/docs/security/building-blocks> "Outgoing webhooks"
   - Depends on: P3.A.3.2
