@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Lighthouse CI config (`lighthouserc.json`, `qa/lighthouse/urls.txt`, `qa/lighthouse/run.sh`) for the SDD 09 §4 budgets on five reference pages (P1.I.5.1). `@lhci/cli` is invoked with `bunx` at 0.15.1 and is not a package.json dependency until the owner approves it.
 - Incident response procedure, review template and user notice templates in en, pt-BR and es (P2.D.5.3).
 - Trend score, eligibility and prior fill as pure functions (P6.C.2.1).
-- CI guard for expand/contract migration text (P2.E.1.2, policy test only).
+- CI guard for expand/contract migration text, plus a Postgres 18.6 migrate / rollback / migrate round trip (P2.E.1.2).
 - Legacy import `finalise` stage (score priors and recompute, search suggest rebuild) and `hexascore:cutover-verify` (`--counts-only`, `--sample-pct`): per-table counts, id-sample md5, cover keys on the bucket, orphan foreign keys, SQL vs Go scores (P2.F.4.1).
 
 ### Fixed
