@@ -2501,7 +2501,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P4.A.1 Tables, fields and state machine
 
-- [ ] **P4.A.1.1** Create the SDD 04 schema: enums, `suggestions`, `suggestion_events`, `catalog_audit` (append-only trigger, INSERT/SELECT-only grant), `contributor_stats`, `catalog_locks`.
+- [x] **P4.A.1.1** Create the SDD 04 schema: enums, `suggestions`, `suggestion_events`, `catalog_audit` (append-only trigger, INSERT/SELECT-only grant), `contributor_stats`, `catalog_locks`.
   - Files/modules: `database/migrations/<ts>_create_community_*.go`, `app/models/suggestion.go`, `app/models/catalog_audit.go`, `tests/community_schema_test.go`
   - Refs: SDD 04 §5, FR-04-10, NFR-04-3; SDD 11 (app role grants); SDD 14 §5 (`user_notifications`, not created here); ADR 0010
   - Depends on: P2.G
