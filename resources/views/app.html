@@ -5,7 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta property="csp-nonce" nonce="{{cspNonce}}">
 	{{viteReactRefresh}}
-	{{vite "resources/css/app.css" "resources/js/app.tsx"}}
+	{{/* CSS first: modulepreloads from the script entry must not queue ahead of the render-blocking sheet (LCP). */}}
+	{{vite "resources/css/app.css"}}
+	{{vite "resources/js/app.tsx"}}
 	{{.Head}}
 </head>
 <body class="bg-bg text-fg antialiased">

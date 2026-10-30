@@ -45,3 +45,9 @@ Release requests and approvals for vukem (the framework engineer never tags with
 - Owner request (2026-10-29, in chat): HTTP/2 and HTTP/3 support in vukem (VF-057). Orchestrator check: main server has only h2c (`HTTP_H2C`), TLS h2 only in `contrib/grpc`, no HTTP/3. A pinned stable third-party QUIC module is allowed for the opt-in `contrib/http3` if the stdlib has none.
 - Owner request (2026-10-29, in chat): native Betterleaks secret scanning in vukem and generated projects (VF-059). Pinned latest stable release (v1.9.0 at queue time); v2 RCs excluded.
 - Orchestrator decision (2026-10-29, P2.F.2.7): `processed_events` is dropped from the legacy import. Stripe webhook dedup lives in vukem `contrib/stripe` (cache store), not in an app table. Conditions: production uses a shared, persistent cache store (database driver) so dedup survives restarts during the cutover window, and every billing webhook handler stays idempotent by Stripe object id. Doc fixes queued as `queue/especialista/2-DOC-processed-events.md` (SDD 05, SDD 11 §7.6, SDD 13 A08, ROADMAP P2.F.2.7). Owner: say so if you want the table kept.
+
+- FR-004 (2026-10-29, release ask, not executed): open vukem PRs since v0.33.0 include passkeys (VF-001), React Email, JSON-RPC, HTTP/2+3, Cloudflare, notify, Betterleaks, sitemap, httpclient, impersonation and OpenAPI options. Please say whether to tag `v0.34.0` after those PRs are squash-merged. This session does not tag vukem. P1.C.7 (app passkeys) and the legacy passkey import stay blocked until an adopted tag contains VF-001.
+  - Answer:
+
+- Q-LHCI (2026-10-29): P1.I.5.1 runs `bunx @lhci/cli@0.15.1`. It is not in package.json because AGENTS.md requires your yes before a new npm dependency. Approve pinning `@lhci/cli` 0.15.1 as a devDependency, or leave the `bunx` pin.
+  - Answer:
