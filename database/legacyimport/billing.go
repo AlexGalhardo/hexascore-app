@@ -12,10 +12,7 @@ import (
 // §7.6 step 5). Each statement takes $1 < legacy user id <= $2 (and the import
 // time as $3 when it has one), maps the owner through users.legacy_id and is
 // idempotent.
-var billingSQL = []struct {
-	name, query string
-	stamped     bool
-}{
+var billingSQL = []userSQL{
 	{"stripe_customers", `UPDATE users n SET stripe_customer_id = c.customer_id, updated_at = $3
 FROM legacy_import.stripe_customers c WHERE n.legacy_id = c.user_id AND c.user_id > $1 AND c.user_id <= $2`, true},
 	// Keys stay sha256(full key), so existing keys keep authenticating.
@@ -62,34 +59,72 @@ WHERE p.user_id > $1 AND p.user_id <= $2
 ON CONFLICT (id) DO NOTHING`, false},
 }
 
-// billingBatch imports the billing rows of the next n legacy users. The rows
-// counted are users, so the checkpoint key is the last legacy user id.
+// billingBatch imports the billing rows of the next n legacy users.
 func billingBatch(now func() time.Time) BatchFunc {
-	return func(ctx context.Context, tx *database.Tx, after string, n int) (string, int, error) {
-		var (
-			last  string
-			users int
-		)
+	return userBatches("billing", billingSQL, nil, nil, now)
+}
 
-		err := tx.QueryRowContext(ctx, `SELECT coalesce(max(id), ''), count(*) FROM (SELECT id FROM legacy_import."user"
-WHERE id > $1 ORDER BY id LIMIT $2) b`, after, n).Scan(&last, &users)
-		if err != nil || users == 0 {
-			return "", 0, err
-		}
+// userSQL is one statement of a stage keyed by legacy user id: it takes $1 < legacy user id <= $2, and
+// the import time as $3 when stamped. Statements run once (first batch or end) take only that time, as $1.
+type userSQL struct {
+	name, query string
+	stamped     bool
+}
 
-		at := now().UTC()
-
-		for _, s := range billingSQL {
-			args := []any{after, last}
+// userBatches imports the rows of the next n legacy users with stmts; the rows counted are users, so
+// the checkpoint key is the last legacy user id. first runs with the first batch, last after the final
+// one (in the empty batch that ends the stage); both must be idempotent like stmts.
+func userBatches(stage string, stmts, first, last []userSQL, now func() time.Time) BatchFunc {
+	once := func(ctx context.Context, tx *database.Tx, list []userSQL, at time.Time) error {
+		for _, s := range list {
+			var args []any
 			if s.stamped {
 				args = append(args, at)
 			}
 
 			if _, err := tx.ExecContext(ctx, s.query, args...); err != nil {
-				return "", 0, fmt.Errorf("billing %s: %w", s.name, err)
+				return fmt.Errorf("%s %s: %w", stage, s.name, err)
 			}
 		}
 
-		return last, users, nil
+		return nil
+	}
+
+	return func(ctx context.Context, tx *database.Tx, after string, n int) (string, int, error) {
+		var (
+			lastKey string
+			users   int
+		)
+
+		err := tx.QueryRowContext(ctx, `SELECT coalesce(max(id), ''), count(*) FROM (SELECT id FROM legacy_import."user"
+WHERE id > $1 ORDER BY id LIMIT $2) b`, after, n).Scan(&lastKey, &users)
+		if err != nil {
+			return "", 0, err
+		}
+
+		at := now().UTC()
+
+		if after == "" {
+			if err := once(ctx, tx, first, at); err != nil {
+				return "", 0, err
+			}
+		}
+
+		if users == 0 {
+			return "", 0, once(ctx, tx, last, at)
+		}
+
+		for _, s := range stmts {
+			args := []any{after, lastKey}
+			if s.stamped {
+				args = append(args, at)
+			}
+
+			if _, err := tx.ExecContext(ctx, s.query, args...); err != nil {
+				return "", 0, fmt.Errorf("%s %s: %w", stage, s.name, err)
+			}
+		}
+
+		return lastKey, users, nil
 	}
 }

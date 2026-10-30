@@ -47,10 +47,18 @@ func Stages() []Stage {
 	return []Stage{
 		{Name: "users", Tables: []string{"user", "account"}, Batch: usersBatch(hash.Default(), time.Now)},
 		{Name: "twofactor", Tables: []string{"two_factor"}},
-		{Name: "catalog", Tables: []string{"items", "item_translations", "source_records", "affiliate_links"}},
-		{Name: "entities", Tables: []string{"items"}},
-		{Name: "social", Tables: []string{"ratings", "lists", "list_items", "reports", "contact_messages"}},
-		{Name: "library", Tables: []string{"item_status", "time_to_beat"}},
+		{
+			Name:   "catalog",
+			Tables: []string{"items", "item_translations", "source_records", "affiliate_links"},
+			Batch:  catalogBatch(time.Now),
+		},
+		{Name: "entities", Tables: []string{"items"}, Batch: entitiesBatch()},
+		{
+			Name:   "social",
+			Tables: []string{"ratings", "lists", "list_items", "reports", "contact_messages"},
+			Batch:  socialBatch(time.Now),
+		},
+		{Name: "library", Tables: []string{"item_status", "time_to_beat"}, Batch: libraryBatch(time.Now)},
 		{Name: "billing", Tables: []string{
 			"api_keys", "api_usage_daily", "subscriptions", "stripe_customers", "credit_ledger", "pix_charges",
 		}, Batch: billingBatch(time.Now)},

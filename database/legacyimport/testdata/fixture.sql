@@ -51,17 +51,81 @@ CREATE TABLE legacy_import.passkey (
   user_id text NOT NULL REFERENCES legacy_import."user"(id) ON DELETE CASCADE
 );
 
-CREATE TABLE legacy_import.items (id text PRIMARY KEY);
-CREATE TABLE legacy_import.item_translations (item_id text NOT NULL, locale text NOT NULL, PRIMARY KEY (item_id, locale));
-CREATE TABLE legacy_import.source_records (id text PRIMARY KEY);
-CREATE TABLE legacy_import.affiliate_links (id text PRIMARY KEY);
-CREATE TABLE legacy_import.ratings (id text PRIMARY KEY);
-CREATE TABLE legacy_import.lists (id text PRIMARY KEY);
-CREATE TABLE legacy_import.list_items (id text PRIMARY KEY);
-CREATE TABLE legacy_import.reports (id text PRIMARY KEY);
-CREATE TABLE legacy_import.contact_messages (id text PRIMARY KEY);
-CREATE TABLE legacy_import.item_status (id text PRIMARY KEY);
-CREATE TABLE legacy_import.time_to_beat (id text PRIMARY KEY);
+-- Catalogue tables keep the legacy shape (legacy apps/web/lib/db/schema/catalog.ts); enums are text here.
+CREATE TABLE legacy_import.items (
+  id uuid PRIMARY KEY,
+  type text NOT NULL,
+  slug text NOT NULL,
+  wikidata_qid text NOT NULL UNIQUE,
+  release_date date,
+  external_ids jsonb NOT NULL DEFAULT '{}',
+  meta jsonb NOT NULL DEFAULT '{}',
+  popularity real NOT NULL DEFAULT 0,
+  rating_count integer NOT NULL DEFAULT 0,
+  score smallint,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE TABLE legacy_import.item_translations (
+  item_id uuid NOT NULL REFERENCES legacy_import.items(id),
+  locale text NOT NULL,
+  title text NOT NULL,
+  synopsis text,
+  synopsis_license text,
+  synopsis_source_url text,
+  PRIMARY KEY (item_id, locale)
+);
+CREATE TABLE legacy_import.external_scores (item_id uuid NOT NULL, source text NOT NULL, score smallint, PRIMARY KEY (item_id, source));
+CREATE TABLE legacy_import.affiliate_links (
+  item_id uuid NOT NULL REFERENCES legacy_import.items(id),
+  store text NOT NULL,
+  url text NOT NULL,
+  active boolean NOT NULL DEFAULT true,
+  PRIMARY KEY (item_id, store)
+);
+CREATE TABLE legacy_import.source_records (
+  source text NOT NULL,
+  external_id text NOT NULL,
+  payload jsonb NOT NULL,
+  hash text NOT NULL,
+  fetched_at timestamptz NOT NULL DEFAULT now(),
+  normalized_at timestamptz,
+  item_id uuid REFERENCES legacy_import.items(id),
+  PRIMARY KEY (source, external_id)
+);
+-- Social tables keep the legacy shape (legacy apps/web/lib/db/schema/social.ts); enums are text here.
+CREATE TABLE legacy_import.ratings (
+  user_id text NOT NULL, item_id uuid NOT NULL,
+  c1 smallint NOT NULL, c2 smallint NOT NULL, c3 smallint NOT NULL, c4 smallint NOT NULL, c5 smallint NOT NULL, c6 smallint NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (user_id, item_id)
+);
+CREATE TABLE legacy_import.item_status (
+  user_id text NOT NULL, item_id uuid NOT NULL, status text NOT NULL, updated_at timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (user_id, item_id)
+);
+CREATE TABLE legacy_import.time_to_beat (
+  user_id text NOT NULL, item_id uuid NOT NULL, main_minutes integer, extras_minutes integer, completionist_minutes integer,
+  created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (user_id, item_id)
+);
+CREATE TABLE legacy_import.follows (follower_id text NOT NULL, followee_id text NOT NULL, created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE legacy_import.lists (
+  id uuid PRIMARY KEY, user_id text NOT NULL, type text NOT NULL, title text NOT NULL, description text,
+  is_public boolean NOT NULL DEFAULT true, hidden boolean NOT NULL DEFAULT false,
+  created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE TABLE legacy_import.list_items (
+  list_id uuid NOT NULL, item_id uuid NOT NULL, position integer NOT NULL, note text, PRIMARY KEY (list_id, item_id)
+);
+CREATE TABLE legacy_import.reports (
+  id uuid PRIMARY KEY, reporter_id text NOT NULL, target_type text NOT NULL, target_id text NOT NULL, reason text NOT NULL,
+  details text, status text NOT NULL DEFAULT 'open', created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE TABLE legacy_import.contact_messages (
+  id uuid PRIMARY KEY, user_id text, name text NOT NULL, email text NOT NULL, subject text NOT NULL, message text NOT NULL,
+  handled boolean NOT NULL DEFAULT false, created_at timestamptz NOT NULL DEFAULT now()
+);
 -- Billing tables keep the legacy shape (apps/web/lib/db/schema/billing.ts); the enums are text here.
 CREATE TABLE legacy_import.api_keys (
   id uuid PRIMARY KEY,
@@ -148,17 +212,58 @@ INSERT INTO legacy_import.two_factor (id, secret, backup_codes, user_id, verifie
 -- u07 signs in with a passkey only: counted by the pre-flight, not an abort.
 INSERT INTO legacy_import.passkey (id, user_id) VALUES ('p07', 'u07');
 
-INSERT INTO legacy_import.items SELECT 'i' || lpad(g::text, 3, '0') FROM generate_series(1, 12) g;
-INSERT INTO legacy_import.item_translations SELECT 'i' || lpad(g::text, 3, '0'), l FROM generate_series(1, 12) g, unnest(ARRAY['en', 'pt-BR']) l;
-INSERT INTO legacy_import.source_records SELECT 's' || g FROM generate_series(1, 12) g;
-INSERT INTO legacy_import.affiliate_links VALUES ('al1'), ('al2');
-INSERT INTO legacy_import.ratings SELECT 'r' || g FROM generate_series(1, 20) g;
-INSERT INTO legacy_import.lists VALUES ('l1'), ('l2');
-INSERT INTO legacy_import.list_items SELECT 'li' || g FROM generate_series(1, 5) g;
-INSERT INTO legacy_import.reports VALUES ('rp1');
-INSERT INTO legacy_import.contact_messages VALUES ('cm1');
-INSERT INTO legacy_import.item_status SELECT 'st' || g FROM generate_series(1, 8) g;
-INSERT INTO legacy_import.time_to_beat SELECT 'ttb' || g FROM generate_series(1, 3) g;
+-- i1 game with Blob covers and Wikidata-resolvable genre and developer, i2 announced movie whose cover never reached the Blob, i3 book without
+-- a date, i4 series, i5 game without meta. Ids end in the item number.
+INSERT INTO legacy_import.items (id, type, slug, wikidata_qid, release_date, external_ids, meta, popularity, rating_count, score, created_at, updated_at) VALUES
+  ('01900000-0000-7000-8000-000000000001', 'game', 'half-life', 'Q279744', '1998-11-19', '{"steam": "70"}',
+   '{"genres": ["shooter"], "platforms": ["Windows"], "creators": ["Valve"], "countries": ["United States"], "trailers": [{"youtubeId": "abc123"}], "coverUrl": "https://store1.public.blob.vercel-storage.com/covers/01900000-0000-7000-8000-000000000001-0123456789abcdef.webp", "coverThumbUrl": "https://store1.public.blob.vercel-storage.com/covers/01900000-0000-7000-8000-000000000001-0123456789abcdef-t.webp", "coverAttribution": {"source": "IGDB", "url": "https://www.igdb.com/games/half-life"}}',
+   12.5, 40, 91, '2025-01-01 00:00+00', '2025-02-01 00:00+00'),
+  ('01900000-0000-7000-8000-000000000002', 'movie', 'future-film', 'Q2', '2099-01-01', '{"imdb": "tt0000002"}',
+   '{"runtimeMinutes": 136, "coverUrl": "https://image.tmdb.org/t/p/w500/poster.jpg"}', 3, 0, NULL, '2025-01-01 00:00+00', '2025-01-01 00:00+00'),
+  ('01900000-0000-7000-8000-000000000003', 'book', 'some-book', 'Q3', NULL, '{"isbn13": "978-0-00-000000-2"}', '{"pages": 300, "creators": ["Ana Writer"], "genres": ["shooter"]}', 1, 0, NULL, '2025-01-01 00:00+00', '2025-01-01 00:00+00'),
+  ('01900000-0000-7000-8000-000000000004', 'series', 'some-series', 'Q4', '2010-05-05', '{}', '{"seasons": 2, "episodes": 20, "creators": ["宮崎駿"]}', 0, 0, NULL, '2025-01-01 00:00+00', '2025-01-01 00:00+00'),
+  ('01900000-0000-7000-8000-000000000005', 'game', 'bare-game', 'Q5', '2001-01-01', '{}', '{}', 0, 0, NULL, '2025-01-01 00:00+00', '2025-01-01 00:00+00');
+-- i1 en from Wikipedia, i1 pt-BR own rewritten text (no licence, no URL), the rest titles only.
+INSERT INTO legacy_import.item_translations (item_id, locale, title, synopsis, synopsis_license, synopsis_source_url) VALUES
+  ('01900000-0000-7000-8000-000000000001', 'en', 'Half-Life', 'A shooter.', 'CC BY-SA 4.0', 'https://en.wikipedia.org/wiki/Half-Life_(video_game)'),
+  ('01900000-0000-7000-8000-000000000001', 'pt-BR', 'Half-Life', 'Um jogo de tiro.', NULL, NULL),
+  ('01900000-0000-7000-8000-000000000002', 'en', 'Future Film', NULL, NULL, NULL),
+  ('01900000-0000-7000-8000-000000000003', 'es', 'Un libro', NULL, NULL, NULL),
+  ('01900000-0000-7000-8000-000000000004', 'en', 'Some Series', NULL, NULL, NULL),
+  ('01900000-0000-7000-8000-000000000005', 'en', 'Bare Game', NULL, NULL, NULL);
+INSERT INTO legacy_import.external_scores VALUES ('01900000-0000-7000-8000-000000000001', 'metacritic', 96);
+INSERT INTO legacy_import.affiliate_links (item_id, store, url) VALUES
+  ('01900000-0000-7000-8000-000000000001', 'steam', 'https://store.steampowered.com/app/70');
+-- Q999 was fetched but never normalised into an item.
+INSERT INTO legacy_import.source_records (source, external_id, payload, hash, fetched_at, normalized_at, item_id) VALUES
+  ('wikidata', 'Q279744', '{"labels": {"en": "Half-Life"}, "claims": {"P136": [{"value": "Q185029", "rank": "normal"}], "P178": [{"value": "Q193559", "rank": "preferred"}]}, "refs": {"Q185029": "shooter", "Q193559": "Valve"}}', repeat('a', 64), '2025-01-01 00:00+00', '2025-01-02 00:00+00', '01900000-0000-7000-8000-000000000001'),
+  ('steam', 'Q279744', '{"header_image": "https://example.test/h.jpg"}', repeat('b', 64), '2025-01-01 00:00+00', NULL, '01900000-0000-7000-8000-000000000001'),
+  ('wikidata', 'Q999', '{}', repeat('c', 64), '2025-01-01 00:00+00', NULL, NULL);
+-- Legacy 0-100 categories; u01 and u02 change under the rounding to multiples of 5, u05 does not.
+INSERT INTO legacy_import.ratings (user_id, item_id, c1, c2, c3, c4, c5, c6, created_at) VALUES
+  ('u01', '01900000-0000-7000-8000-000000000001', 0, 1, 2, 3, 12, 13, '2025-03-01 00:00+00'),
+  ('u02', '01900000-0000-7000-8000-000000000001', 97, 98, 100, 50, 55, 60, '2025-03-01 00:00+00'),
+  ('u05', '01900000-0000-7000-8000-000000000002', 50, 50, 50, 50, 50, 50, '2025-03-01 00:00+00');
+INSERT INTO legacy_import.item_status (user_id, item_id, status) VALUES
+  ('u01', '01900000-0000-7000-8000-000000000001', 'completed'), ('u02', '01900000-0000-7000-8000-000000000002', 'want');
+INSERT INTO legacy_import.time_to_beat (user_id, item_id, main_minutes) VALUES ('u01', '01900000-0000-7000-8000-000000000001', 600);
+INSERT INTO legacy_import.follows (follower_id, followee_id) VALUES ('u01', 'u02');
+-- l1 is a game list with gaps in its positions and a movie from before lists had one type.
+INSERT INTO legacy_import.lists (id, user_id, type, title, is_public, created_at) VALUES
+  ('01910000-0000-7000-8000-000000000001', 'u01', 'game', 'Favourites', true, '2025-01-05 00:00+00'),
+  ('01910000-0000-7000-8000-000000000002', 'u02', 'book', 'Private', false, '2025-01-06 00:00+00');
+INSERT INTO legacy_import.list_items (list_id, item_id, position, note) VALUES
+  ('01910000-0000-7000-8000-000000000001', '01900000-0000-7000-8000-000000000005', 3, NULL),
+  ('01910000-0000-7000-8000-000000000001', '01900000-0000-7000-8000-000000000001', 7, 'classic'),
+  ('01910000-0000-7000-8000-000000000001', '01900000-0000-7000-8000-000000000002', 10, NULL);
+-- rp3 targets a user that is not in the dump.
+INSERT INTO legacy_import.reports (id, reporter_id, target_type, target_id, reason, status) VALUES
+  ('01920000-0000-7000-8000-0000000000e1', 'u02', 'list', '01910000-0000-7000-8000-000000000001', 'spam', 'open'),
+  ('01920000-0000-7000-8000-0000000000e2', 'u01', 'user', 'u04', 'harassment', 'resolved'),
+  ('01920000-0000-7000-8000-0000000000e3', 'u01', 'user', 'u99', 'other', 'open');
+INSERT INTO legacy_import.contact_messages (id, user_id, name, email, subject, message) VALUES
+  ('01920000-0000-7000-8000-0000000000f1', 'u01', 'Ana', 'ana@example.test', 'bug', 'The rating slider skips a half star on mobile.'),
+  ('01920000-0000-7000-8000-0000000000f2', NULL, 'Visitor', 'visitor@example.test', 'question', 'Do you plan to add board games to the catalogue?');
 -- Legacy keys are sha256(full key) in hex; this one is a test key, never issued.
 INSERT INTO legacy_import.api_keys (id, user_id, name, prefix, hash, created_at) VALUES
   ('01920000-0000-7000-8000-000000000001', 'u01', 'ci', 'hx_live_Ab3d',
