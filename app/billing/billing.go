@@ -29,6 +29,7 @@ import (
 	"github.com/AlexGalhardo/vukem/orm"
 	"github.com/AlexGalhardo/vukem/web"
 
+	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/config"
 )
@@ -104,6 +105,7 @@ func New(app *vukem.App) (*Billing, error) {
 		// (CACHE_STORE=database or Redis) when several instances run.
 		b.webhook, err = stripe.WebhookHandler(stripe.WebhookConfig{
 			Secret: cfg.WebhookSecret.Reveal(), Store: c.Store(), Bus: app.Events, Log: app.Log,
+			MaxBody: limits.StripeWebhookBody,
 		})
 		if err != nil {
 			return nil, err

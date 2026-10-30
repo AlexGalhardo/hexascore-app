@@ -69,6 +69,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-058 | 2026-10-29 | low | open |
 | VF-059 | 2026-10-29 | medium | in review (framework): vukem PR #63 (repo), #64 (scaffold, doctor, site page) |
 | VF-060 | 2026-10-29 | low | in review (framework): vukem PR #70 (`totp.HashRecoveryCode`) |
+| VF-NEW-P2.D.2.2 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
@@ -613,3 +614,12 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 - **Repro**: try to build the `[]string` of hashes for a known list of codes with the public API: impossible without copying the private format.
 - **Workaround**: `database/legacyimport/twofactor.go` `recoveryHashes` copies the format; `TestTwoFactorUsersPassChallenge` signs in with an imported code through `UseRecoveryCode`, so a format change fails the test.
 - **Request**: export `totp.HashRecoveryCode(code string) string` (or `RecoveryHashes(codes []string) []string`) and document the stored format on the two-factor page.
+
+## VF-NEW-P2.D.2.2: `MethodOverride` swallows a body-limit error, so an oversized form answers 422 instead of 413
+
+- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **vukem version**: v0.33.0. **Docs consulted**: `https://vukem.dev/docs/security/overview` (A06: body cap, `BodyLimit`) `[NOT IN VUKEM DOCS]`: neither that page nor the HTTP middleware page says that `MethodOverride` parses urlencoded bodies before routing, so a route-level `BodyLimit` comes too late for them.
+- **Context**: SDD 13 §7.3 caps forms at 64 KiB. `MethodOverride` (server middleware installed by `DefaultMiddlewareWith`) calls `r.PostFormValue("_method")` on every urlencoded POST, which runs `ParseForm` under the limit already set (or `DefaultMaxBody`) and discards its error. `net/http` then treats the form as parsed, so the handler's `web.Parse` sees an empty form and answers 422 "field required" instead of the 413 that `bodyError` maps `*http.MaxBytesError` to. A route `BodyLimit` (router middleware) never applies to urlencoded bodies at all.
+- **Repro**: POST a 70 KB `application/x-www-form-urlencoded` body with a valid `email` to a route whose handler uses `web.Parse`: 422 with `email` missing; the same body as JSON: 413.
+- **Workaround**: `routes/web.go` installs `limits.Body` also as server middleware before `DefaultMiddlewareWith`, so `MethodOverride` keeps that limit; `TestSecurity_A06_HexaBodyLimits` asserts nothing past the limit is parsed (marked `workaround(vukem): VF-NEW-P2.D.2.2`).
+- **Request**: have `MethodOverride` remember a `*http.MaxBytesError` from `ParseForm` (e.g. store it on the request context) so `web.Parse`/`Input` answer 413, and document on the HTTP middleware page that per-route body limits for urlencoded forms must be set at server level.
