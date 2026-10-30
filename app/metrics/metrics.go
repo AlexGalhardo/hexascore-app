@@ -68,6 +68,7 @@ var (
 	verified   metric.Int64Counter
 	ssrFall    metric.Int64Counter
 	slow       metric.Int64Counter
+	deliveries metric.Int64Counter
 	backupSet  atomic.Bool
 	backupAt   atomic.Int64
 	backupSize atomic.Int64
@@ -118,8 +119,15 @@ func Install(app *vukem.App, age func() time.Duration) error {
 		return err
 	}
 
+	deliveryC, err := m.Int64Counter("api.webhook.deliveries",
+		metric.WithDescription("Outgoing webhook deliveries by outcome."))
+	if err != nil {
+		return err
+	}
+
 	instMu.Lock()
 	errs, runs, signups, verified, ssrFall, slow = counter, scheduleRuns, signupC, verifiedC, fallbacks, slowC
+	deliveries = deliveryC
 	instMu.Unlock()
 
 	if err := registerHistograms(m); err != nil {
@@ -278,6 +286,20 @@ func RecordError(ctx context.Context, errorType string) {
 	if e != nil {
 		e.add(ctx, errorType)
 	}
+}
+
+// RecordWebhookDelivery counts api.webhook.deliveries. outcome is success,
+// failure, gone or disabled.
+func RecordWebhookDelivery(ctx context.Context, outcome string) {
+	instMu.Lock()
+	c := deliveries
+	instMu.Unlock()
+
+	if c == nil || outcome == "" {
+		return
+	}
+
+	c.Add(ctx, 1, metric.WithAttributes(attribute.String("outcome", outcome)))
 }
 
 // RecordSchedule counts one hexa.schedule.runs sample.
