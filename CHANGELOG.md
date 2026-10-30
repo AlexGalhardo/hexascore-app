@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- Lighthouse median LCP on the five reference pages is at or under 1503 ms. The page JSON sits after the markup, modules start after `window` `load`, and `/favicon.ico` is a 16x16 icon instead of the HTML 404 (P1.I.5.1).
 - Gzip is limited to `/build` JS, CSS, SVG, fonts and source maps. HTML and `Set-Cookie` responses stay uncompressed (P1.I.5.1).
 - The compressor now wraps the static file server. The first server middleware is the outermost, so it previously sat inside the file server and `/build` assets were sent uncompressed (P1.I.5.1).
 - The e2e compose stack sets `CHALLENGE_GLOBAL_LIMIT` so a parallel suite does not trip the 21-bit signup attack difficulty. Production leaves it unset; a value that is not a positive integer refuses to boot (FIX-e2e-signup-load).

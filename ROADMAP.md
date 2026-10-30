@@ -1228,7 +1228,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
 
 #### P1.I.5 Lighthouse
 
-- [ ] **P1.I.5.1** Run Lighthouse CI with the SDD 09 budgets on the five reference pages.
+- [x] **P1.I.5.1** Run Lighthouse CI with the SDD 09 budgets on the five reference pages.
   - Files/modules: `lighthouserc.json`, `qa/lighthouse/urls.txt`
   - Refs: SDD 09 §4, §9; ADR 0004; D-22; P0.F.10.1 findings
   - Depends on: P1.I.1.1
