@@ -57,7 +57,7 @@ Each line names its test (Go unless stated).
 | Forgot password | 5/h per address hash; 10/10 min per IP | HexaScore value; vukem only states "throttled by default" |
 | 2FA challenge/confirm/disable/codes | 5/min per user + IP | vukem `--2fa` |
 | Export, deletion schedule | export: 1 per 7 days (SDD 14 cooldown); deletion: 5/h per user | HexaScore value |
-| Token rotate | 10/h per token | HexaScore value |
+| Token rotate | 10/h per user | HexaScore value. A per-token bucket resets when rotate replaces the bearer, so the cap is the user. |
 
 - NFR-03-4 Cookies: session cookie `__Host-` prefix, `HttpOnly`, `Secure`, `SameSite=Lax` (vukem A07 `TestSecurity_A07_SessionCookieFlags`); `SESSION_DRIVER=database` (needed for `RevokeOthers`; cookie sessions return `ErrRevokeUnsupported`); idle timeout 7 days, absolute 30 days, remember-me 30 days (`RememberFor` default). Env names for idle/absolute timeouts are [NOT VERIFIED] (vukem `https://vukem.dev/docs/basics/sessions` "Sessions" names the feature, not the variables).
 - NFR-03-5 CSRF: `http.CrossOriginProtection` on all unsafe methods (vukem `https://vukem.dev/docs/basics/csrf` A01), token fallback enabled for old browsers; `/app/v1/*` is bearer-only, so the guard never accepts cookies there.

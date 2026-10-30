@@ -12,6 +12,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Android Expo shell in `apps/mobile` (SDK 58, NativeWind, SDD 10 routes, shared tokens and bundled catalogues). The P5 checkboxes stay open until P3.C.5.2.
 - ADR 0018 and the Expo skills under `.claude/skills/`.
 
+### Changed
+
+- App token rotation is limited to 10 per hour per user.
+
 ### Fixed
 
 - `POST /api/v1/webhooks/{id}/test` returns 404 for a non-UUID id instead of a database 500, and webhook create bounds DNS to 2s.
