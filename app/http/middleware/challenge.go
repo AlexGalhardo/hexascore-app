@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -45,6 +47,26 @@ type Challenger struct {
 	PoW         *challenge.PoW
 	Cache       func() (*cache.Cache, error)
 	ProblemBase string
+	// GlobalLimit, when positive, replaces the global threshold of rules that have one.
+	// Production leaves it zero. The e2e stack sets CHALLENGE_GLOBAL_LIMIT so a parallel
+	// suite does not trip the 21-bit attack difficulty.
+	GlobalLimit int
+}
+
+// GlobalLimitOverride parses CHALLENGE_GLOBAL_LIMIT. Empty keeps the production default.
+// Any other value that is not a positive integer is refused so a typo cannot boot.
+func GlobalLimitOverride(raw string) (int, error) {
+	raw = strings.TrimSpace(raw)
+	if raw == "" {
+		return 0, nil
+	}
+
+	n, err := strconv.Atoi(raw)
+	if err != nil || n < 1 {
+		return 0, fmt.Errorf("CHALLENGE_GLOBAL_LIMIT must be a positive integer, got %q", raw)
+	}
+
+	return n, nil
 }
 
 func (ch *Challenger) key(rule ChallengeRule, ip string) string {
@@ -79,8 +101,13 @@ func (ch *Challenger) state(
 
 	bits = challenge.DefaultBits
 
-	if rule.GlobalLimit > 0 {
-		global, err := tripped(ctx, c, ch.key(rule, "all"), rule.GlobalLimit, rule.Window, count)
+	globalLimit := rule.GlobalLimit
+	if globalLimit > 0 && ch.GlobalLimit > 0 {
+		globalLimit = ch.GlobalLimit
+	}
+
+	if globalLimit > 0 {
+		global, err := tripped(ctx, c, ch.key(rule, "all"), globalLimit, rule.Window, count)
 		if err != nil {
 			return false, 0, err
 		}

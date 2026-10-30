@@ -30,3 +30,4 @@ storage/*
 # Playwright
 qa/e2e/test-results/
 playwright-report/
+.lighthouseci/

@@ -168,7 +168,7 @@ Keys: IPv6 is bucketed by /64 [RL]. `c.IP()` trusts forwarding headers only from
 
 ### 7.2 Challenge and form integrity (ADR 0016)
 
-- Trigger (SDD 03 §7.3), per IP: > 3 sign-ups/h, > 5 failed logins/10 min, > 3 resets/h. Global: > 30 sign-ups/h. A tripped flag holds 1 h (`challenge:<route>:<ip|all>:trip`, `TripHold`).
+- Trigger (SDD 03 §7.3), per IP: > 3 sign-ups/h, > 5 failed logins/10 min, > 3 resets/h. Global: > 30 sign-ups/h. A tripped flag holds 1 h (`challenge:<route>:<ip|all>:trip`, `TripHold`). `CHALLENGE_GLOBAL_LIMIT`, when set to a positive integer, replaces that global threshold (the e2e stack sets it). Empty keeps 30. Any other value refuses to boot.
 - Code: `app/challenge` (issue, verify, solve), `app/http/middleware/challenge.go` (thresholds, trip flags, fallback), `resources/js/challenge/worker.ts` (solver), `app/forms` (signed form render time). Tests: `TestSecurity_A07_Pow*`, `TestSecurity_A10_HexaPowStoreDown503`, `TestSecurity_A07_HexaHoneypotAndFillTime`; load: `qa/k6/login-pow.js`.
 - `GET /challenge?route=signup` → `{c, bits, exp}`:
   - `c` = HMAC-SHA256 with `app.DeriveKey("pow", 32)` over 16 random bytes, the expiry and the route; TTL 120 s.
