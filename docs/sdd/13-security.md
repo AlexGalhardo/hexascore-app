@@ -261,6 +261,8 @@ The privacy policy must list:
 
 Legacy text is `legacy/apps/web/messages/en/legal.json`; drop its Vercel, Neon, Upstash, passkey and AbacatePay mentions.
 
+`privacy.retain` (daily 03:15, `app/privacy/retention.go`) clears `_client.ip` and `_client.ua` on database sessions whose `_created` is 30 days old or whose start time cannot be read, deletes `client_reports` older than 7 days when that table exists, and calls the export ZIP expiry (24 h). The hourly `library.expire_exports` job remains the fast path for ZIPs. `SESSION_RECORD_CLIENT=true` is what writes the session IP in the first place.
+
 ### 7.7 Payments and supply chain
 
 - Payments: Stripe Checkout and Portal by redirect, so no card field exists on HexaScore pages (PCI DSS SAQ-A).
