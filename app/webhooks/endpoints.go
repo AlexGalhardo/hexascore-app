@@ -117,7 +117,12 @@ func Create(ctx context.Context, db *database.DB, enc *crypt.Encrypter, userID i
 		return Endpoint{}, err
 	}
 
-	if err := PublicURL(ctx, in.URL, nil); err != nil {
+	storedURL, err := httpsURL(in.URL)
+	if err != nil {
+		return Endpoint{}, err
+	}
+
+	if err := PublicURL(ctx, storedURL, nil); err != nil {
 		return Endpoint{}, err
 	}
 
@@ -132,7 +137,7 @@ func Create(ctx context.Context, db *database.DB, enc *crypt.Encrypter, userID i
 
 	row := Endpoint{
 		ID:        uuid.NewV7().String(),
-		URL:       in.URL,
+		URL:       storedURL,
 		Events:    events,
 		ItemTypes: types,
 		Secret:    secret,
@@ -154,11 +159,15 @@ func Create(ctx context.Context, db *database.DB, enc *crypt.Encrypter, userID i
 			return ErrLimit
 		}
 
-		_, err = tx.ExecContext(ctx, `INSERT INTO webhook_endpoints (id, user_id, url, events, item_types, secret_enc)
-VALUES ($1, $2, $3, $4::text[], $5::text[], $6)`,
-			row.ID, userID, row.URL, models.TextArray(events), models.TextArray(types), enc.Seal([]byte(secret), SecretAD))
+		if err := tx.QueryRowContext(ctx, `INSERT INTO webhook_endpoints (id, user_id, url, events, item_types, secret_enc)
+VALUES ($1, $2, $3, $4::text[], $5::text[], $6)
+RETURNING created_at`,
+			row.ID, userID, row.URL, models.TextArray(events), models.TextArray(types), enc.Seal([]byte(secret), SecretAD),
+		).Scan(&row.CreatedAt); err != nil {
+			return err
+		}
 
-		return err
+		return nil
 	})
 	if err != nil {
 		return Endpoint{}, err
@@ -213,6 +222,22 @@ func Delete(ctx context.Context, db *database.DB, userID int64, id string) error
 	}
 
 	return nil
+}
+
+// httpsURL folds a case-variant scheme to https://. The column CHECK is
+// LIKE 'https://%', which is case-sensitive, while url.Parse accepts any case.
+// Storing the raw scheme would fail the insert as an unhandled 500.
+func httpsURL(raw string) (string, error) {
+	const prefix = "https://"
+	if strings.HasPrefix(raw, prefix) {
+		return raw, nil
+	}
+
+	if len(raw) >= len(prefix) && strings.EqualFold(raw[:len(prefix)], prefix) {
+		return prefix + raw[len(prefix):], nil
+	}
+
+	return "", ErrURL
 }
 
 func planCap(plan string) (int, bool) {
