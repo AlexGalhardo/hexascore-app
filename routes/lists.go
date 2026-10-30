@@ -10,6 +10,7 @@ import (
 	"github.com/AlexGalhardo/vukem/router"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/appapi"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	"github.com/AlexGalhardo/hexascore-app/app/library"
@@ -76,6 +77,15 @@ func Lists(r *router.Router, app *vukem.App) error {
 		g.Put("/lists/{id}/items/{itemId}", h.AddItem).Name("lists.items.put")
 		g.Delete("/lists/{id}/items/{itemId}", h.RemoveItem).Name("lists.items.delete")
 		g.Put("/lists/{id}/order", h.Reorder).Name("lists.order")
+	}).Name("app.v1.")
+
+	// Reads use catalog:read, not the write group that requires lists:write (SDD 14 §6.3).
+	reads := appapi.NewLists(svc, gate, acc.API.Name())
+	read := AppAuthStack(app, acc, limiters, auth.Ability(acc.API, "catalog:read"))
+	r.Group("/app/v1", func(g *router.Group) {
+		g.Use(read...)
+		g.Get("/me/lists", reads.Index).Name("lists.index")
+		g.Get("/lists/{id}", reads.Show).Name("lists.show")
 	}).Name("app.v1.")
 
 	return nil

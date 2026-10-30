@@ -181,6 +181,8 @@ web   DELETE /lists/{id}
 web   PUT    /lists/{id}/items/{itemId}
 web   DELETE /lists/{id}/items/{itemId}
 web   PUT    /lists/{id}/order
+app   GET    /app/v1/me/lists
+app   GET    /app/v1/lists/{id}
 app   POST   /app/v1/lists
 app   PATCH  /app/v1/lists/{id}
 app   DELETE /app/v1/lists/{id}

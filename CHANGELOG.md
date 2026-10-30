@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `/app/v1` catalogue reads (`/{type}`, `/{type}/{id}`, genres, entities, book editions) use the site audience, so attributed TMDB/IGDB fields are included. `/{type}/trending` stays unmounted until P3.A.1.4.
 - `/app/v1/search`, `/search/suggest` and `POST /search/events` accept an optional app token. A query longer than 100 characters is 400.
 - `GET/PATCH /app/v1/me` and `POST/DELETE /app/v1/me/deletion`. A nickname someone else holds is 422 `nickname-taken`. Export stays `POST /app/v1/me/export`.
+- `GET /app/v1/me/lists` and `GET /app/v1/lists/{id}` (`catalog:read`). Another user's private list is 404. Edition choice stays on `status:write`.
 - `/app/v1` stack: `hx_app_` guard, ban and verified checks, per-token read/write limits, `Idempotency-Key` on writes, and `426` below `APP_MIN_SUPPORTED_VERSION` (`DELETE /tokens/current` stays open).
 - Android Expo shell in `apps/mobile` (SDK 58, NativeWind, SDD 10 routes, shared tokens and bundled catalogues). The P5 checkboxes stay open until P3.C.5.2.
 - ADR 0018 and the Expo skills under `.claude/skills/`.
