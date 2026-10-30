@@ -1667,7 +1667,7 @@ Phase-specific conventions:
     - sixth `POST /login` in 1 min from one IP on staging → 429 with `Retry-After` and `RateLimit-Remaining: 0`
   - Notes: `RATE_LIMIT_STORE=cache` over `CACHE_STORE=database`; `memory` only in tests. Each limit has its own name (shared names share buckets). Keys use `ratelimit.ByIP`, never `RemoteAddr`.
 
-- [ ] **P2.D.2.2** Add the route stack inventory and the per-route body limits.
+- [x] **P2.D.2.2** Add the route stack inventory and the per-route body limits.
   - Files/modules: `tests/security_inventory_test.go`, `app/http/limits/body.go`, `routes/*.go`
   - Refs: SDD 13 FR-13-1, FR-13-4, §6.1, §7.3 (body limits table), §7.0.1; <https://vukem.dev/docs/security/overview>
   - Depends on: P2.D.2.1
