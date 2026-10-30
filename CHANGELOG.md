@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - `/api/v1` entity reads count a 304 against the quota, `listEntityItems` rejects a tampered cursor and a limit above the plan cap, and `listEditions` answers 301 to the surviving book (P3.A.1.1, P3.A.1.2, P3.A.1.3).
+- `api_changes` records a merge as `deleted` and a score update only when the one-decimal score, confidence or rating count changes. A hidden-only update writes no row (P3.A.3.1).
 - Daily `privacy.retain` clears session IP and user agent after 30 days, deletes `client_reports` older than 7 days when that table exists, and expires export ZIPs (P2.D.4.1). `SESSION_RECORD_CLIENT=true` in `.env.example` and the compose app env.
 - A17 projected-spend formula and `projected-spend.yml`. Without a Railway usage API the workflow logs the day-20 reminder and posts to Telegram only when that secret exists (P2.C.3.4, checkbox still open).
 - Schemathesis 4.29.0 harness (`qa/schemathesis/run.sh`) and the ZAP 2.17.0 baseline script pinned by image digest (`qa/zap/baseline.sh`, `qa/zap/rules.tsv`). Notes in `docs/qa/scans.md` (P1.I.4.1).
