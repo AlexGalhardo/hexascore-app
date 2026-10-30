@@ -2406,7 +2406,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.C.2 Catalogue and scoring routes
 
-- [ ] **P3.C.2.1** Mount the catalogue reads on `/app/v1` with audience `site`: `/{type}`, `/{type}/{id}`, `/{type}/genres`, `/{type}/trending`, `/entities/{id}`, `/entities/{id}/items`, `/books/{id}/editions`.
+- [x] **P3.C.2.1** Mount the catalogue reads on `/app/v1` with audience `site`: `/{type}`, `/{type}/{id}`, `/{type}/genres`, `/{type}/trending`, `/entities/{id}`, `/entities/{id}/items`, `/books/{id}/editions`.
   - Files/modules: `app/appapi/catalog.go`, `tests/app_catalog_test.go`
   - Refs: SDD 05 §6.4; SDD 01 §6.1 (`site` audience), §6.2; SDD 10 §6.1
   - Depends on: P3.C.1.2, P3.A.1.3 (trending route only after P3.A.1.4)
