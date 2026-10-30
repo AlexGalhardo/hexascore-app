@@ -2415,7 +2415,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run 'TestAPILicenceFilter|TestAppCatalog'` → TMDB/IGDB attributed fields present on `/app/v1`
   - Notes: share handlers with P3.A, switching only the audience; operation names in the `app.v1.` group. `/items/{id}/related` and `/me/for-you` arrive with P6.D, not here.
 
-- [ ] **P3.C.2.2** Serve `/search`, `/search/suggest` and `POST /search/events` on `/app/v1`.
+- [x] **P3.C.2.2** Serve `/search`, `/search/suggest` and `POST /search/events` on `/app/v1`.
   - Files/modules: `app/appapi/search.go`, `tests/app_search_test.go`
   - Refs: SDD 10 §6.1 (Search row, auth optional); SDD 07 §6; SDD 05 §6.4
   - Depends on: P3.C.2.1
