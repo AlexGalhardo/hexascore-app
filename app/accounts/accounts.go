@@ -47,6 +47,8 @@ type Accounts struct {
 	Messages *i18n.Bundle
 	// URL is the public base URL used in emails (APP_URL).
 	URL string
+	// Name is the relying party name shown by an authenticator (APP_NAME).
+	Name string
 	// ResetTTL is how long password reset links work.
 	ResetTTL time.Duration
 	// VerifyTTL is how long email verification links work.
@@ -163,6 +165,7 @@ func New(app *vukem.App) (*Accounts, error) {
 		ProblemBase: cmp.Or(app.Source.Get("APP_PROBLEM_BASE_URL"), "https://hexascore.app/problems/"),
 		Messages:    messages,
 		URL:         strings.TrimSuffix(app.Config.URL, "/"),
+		Name:        cmp.Or(app.Config.Name, "HexaScore"),
 		ResetTTL:    time.Hour,
 		VerifyTTL:   time.Hour,
 		now:         time.Now,
