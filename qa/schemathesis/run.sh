@@ -34,9 +34,11 @@ exec docker run --rm -e HOME=/tmp \
 	--config-file /work/qa/schemathesis/schemathesis.toml \
 	run "/work/$doc" --url "$url" \
 	-H "Authorization: Bearer $HX_TEST_KEY" \
-	--checks all \
 	--exclude-checks allow_header_conformance,unsupported_method \
 	"$@"
-# Those two checks stay off. --checks all would turn the toml flags back on.
-# GET /{path...} is the HTML 404, so an undeclared GET under /app/v1 is 404
-# rather than 405, and the 405 Allow list advertises that GET.
+# Do not pass --checks all. It turns the toml flags back on, including the
+# per-route response_schema_conformance disables for empty 204 responses.
+# Every other check stays on (Schemathesis default). allow_header_conformance
+# and unsupported_method stay off: GET /{path...} is the HTML 404, so an
+# undeclared GET under /app/v1 is 404 rather than 405, and the 405 Allow list
+# advertises that GET.

@@ -200,6 +200,8 @@ jobs:
     name: OpenAPI (export diff, Redocly, Schemathesis)
     needs: build
     runs-on: ubuntu-24.04
+    env:
+      DATABASE_URL: postgres://hexascore:hexascore@127.0.0.1:5432/hexascore?sslmode=disable
     services:
       postgres:
         image: postgres:18.6-alpine3.24@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5
@@ -225,6 +227,23 @@ jobs:
       - run: bun install --frozen-lockfile --ignore-scripts
       - name: Redocly
         run: bunx redocly lint openapi/api-v1.json openapi/app-v1.json
+      - name: App client matches codegen
+        run: |
+          set -euo pipefail
+          export APP_KEY="base64:$(openssl rand -base64 32)"
+          out=$(mktemp)
+          docker run --rm --network host \
+            -e APP_ENV=development \
+            -e APP_KEY \
+            -e DATABASE_URL \
+            -e API_HOST- \
+            hexascore:ci codegen:client -prefix /app/v1 -o - >"$out"
+          if ! git diff --no-index --exit-code packages/app-client/src/api.ts "$out"; then
+            rm -f "$out"
+            exit 1
+          fi
+          rm -f "$out"
+          bun run --filter @hexascore/app-client typecheck test
       - name: Schemathesis against the loaded image
         run: bash qa/schemathesis/ci.sh hexascore:ci
 
