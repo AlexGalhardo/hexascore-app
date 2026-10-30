@@ -23,6 +23,10 @@ var SecretAD = []byte("webhook_endpoints.secret_enc")
 
 const maxURLLen = 2048
 
+// lookupTimeout bounds DNS at create time. A slow resolver must fail closed
+// as ErrURL. An unbounded lookup holds the request until the OS gives up.
+const lookupTimeout = 2 * time.Second
+
 // Sentinel errors the HTTP layer maps to problem responses.
 var (
 	ErrPlanRequired = errors.New("webhooks: plan required")
@@ -85,7 +89,10 @@ func PublicURL(ctx context.Context, raw string, resolve Resolver) error {
 		}
 	}
 
-	ips, err := resolve(ctx, "ip", host)
+	lookupCtx, cancel := context.WithTimeout(ctx, lookupTimeout)
+	defer cancel()
+
+	ips, err := resolve(lookupCtx, "ip", host)
 	if err != nil || len(ips) == 0 {
 		return ErrURL
 	}
