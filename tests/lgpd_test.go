@@ -154,14 +154,9 @@ func TestRetentionJobs(t *testing.T) {
 
 	clock.Advance(24 * time.Hour)
 
-	if _, err := db.ExecContext(t.Context(), `CREATE TABLE client_reports (
-		id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-		received_at timestamptz NOT NULL)`); err != nil {
-		t.Fatal(err)
-	}
-
 	if _, err := db.ExecContext(t.Context(),
-		`INSERT INTO client_reports (received_at) VALUES ($1), ($2)`,
+		`INSERT INTO client_reports (kind, platform, received_at) VALUES
+		('error', 'android', $1), ('error', 'android', $2)`,
 		clock.Now().Add(-8*24*time.Hour), clock.Now().Add(-time.Hour)); err != nil {
 		t.Fatal(err)
 	}

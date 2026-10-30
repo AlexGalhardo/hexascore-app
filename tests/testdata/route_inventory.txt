@@ -196,6 +196,8 @@ app   GET    /app/v1/me/notifications
 app   POST   /app/v1/me/notifications/read
 web   POST   /reports
 app   POST   /app/v1/reports
+app   POST   /app/v1/client-errors
+app   POST   /app/v1/client-metrics
 web   GET    /contact
 web   POST   /contact
 web   GET    /profile/api

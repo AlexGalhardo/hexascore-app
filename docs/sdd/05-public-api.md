@@ -220,8 +220,8 @@ Client telemetry intake (open issues 10-2, 09-11; processing and dashboards in S
 
 | Route | Input | Rules |
 | --- | --- | --- |
-| `POST /app/v1/client-errors` (`reportClientError`) | `{appVersion, versionCode, androidApi, screen, message, stack ≤ 8 KB}` (SDD 10 §7.7) | sent only after the user opts in (mobile settings, default off); no user id, token, e-mail or free-text user input; 10/min per IP; body > 16 KB → 413; 202; kept 7 days |
-| `POST /app/v1/client-metrics` (`reportClientMetrics`) | `{name: LCP\|INP\|CLS\|TTFB, value, page (route pattern, not URL), locale}` (web-vitals beacon, SDD 09) | anonymous, opt-in via the cookie banner; 60/min per IP; body > 4 KB → 413; 202; kept 7 days |
+| `POST /app/v1/client-errors` (`reportClientError`) | `{appVersion, versionCode, androidApi, screen, message, stack ≤ 8 KB}` (SDD 10 §7.7) | sent only after the user opts in (mobile settings, default off); no user id, token, e-mail or free-text user input; 10/min per IP; body > 16 KB → 413; 204; kept 7 days |
+| `POST /app/v1/client-metrics` (`reportClientMetrics`) | `{name: LCP\|INP\|CLS\|TTFB, value, page (route pattern, not URL), locale}` (web-vitals beacon, SDD 09) | anonymous, opt-in via the cookie banner; 60/min per IP; body > 4 KB → 413; 204; kept 7 days |
 
 Both accept unauthenticated calls (crashes can happen before login) behind the IP limit, CSRF-exempt because they carry no session effect; unknown fields → 400.
 
