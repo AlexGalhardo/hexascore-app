@@ -14,12 +14,14 @@
 - App: `main` released as `v0.8.0` (P1.H.5.1, GitHub release published, local container smoke test green). Merged after the tag: nothing but orchestration files.
 - Gate commands (all green at the last merge): `go build ./...`; `golangci-lint run --allow-parallel-runners --build-tags integration ./...`; `TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable go test -tags integration ./...`; `bun run lint && bun run typecheck && bun run test`; `bun run openapi:lint`; markdownlint with an explicit file list. Tests booting with `APP_ENV=production` need `RATE_LIMIT_STORE=cache` and `CACHE_STORE=database`.
 - Merge helper: `/tmp/union.py` (union-resolves `.md` conflicts); code conflicts are resolved by hand. VF-NEW ids are renumbered at merge (next free: VF-062).
+- Merged at pause: P2.F.4.1 (`hexascore:cutover-verify`, `finalise` stage; gate green).
+- Senior at stop: P1.I.3.1 delivered (k6, REV queued), FIX-locale-posts-rest delivered (REV queued; stacked on the merged FIX-locale-redirects-fix), P1.I.5.1 partial: requeued as `queue/senior/0-P1.I.5.1-r2.md` with a BREACH finding (global gzip must be limited to static assets before merge).
 - Not merged: `agent/senior/FIX-e2e-signup-load` (approved, but conflicts with P2.D.2.3 in `app/http/middleware/challenge.go`); requeued as `queue/senior/0-FIX-e2e-signup-load-r2.md`.
 
 ## Workers at pause
 
-- senior: active `4-P1.I.5.1` (Lighthouse); delivered P1.I.3.1 (review queued). Queue: 0-FIX-e2e-signup-load-r2, 5-P1.I.4.1, 6-P2.B.1.4, 6-P2.B.1.5, 7-P2.C.1.2, 7-P2.C.2.2, 8-P2.D.5.3.
-- especialista: active `4-P2.F.4.1` (cutover-verify + finalise). Queue: 1-REV-P1.I.3.1, 5-P2.G.1.1, 6-P2.E.1.2, 7-P2.C.3.3; blocked 9-APP-PASSKEYS-b (needs a vukem release with VF-001), 9-P2.F.2.2b (needs P1.C.7.1 passkeys table).
+- senior: stopped. Queue: 0-P1.I.5.1-r2, 0-FIX-e2e-signup-load-r2, 5-P1.I.4.1, 6-P2.B.1.4, 6-P2.B.1.5, 7-P2.C.1.2, 7-P2.C.2.2, 8-P2.D.5.3.
+- especialista: stopped after P2.F.4.1 (merged) and the FIX-e2e-signup-load review (approved; the branch still needs the r2 rebase). Queue: 1-REV-P1.I.3.1, 1-REV-FIX-locale-posts-rest, 5-P2.G.1.1, 6-P2.E.1.2, 7-P2.C.3.3; blocked 9-APP-PASSKEYS-b (needs a vukem release with VF-001), 9-P2.F.2.2b (needs P1.C.7.1 passkeys table).
 - framework: idle. Active (PRs open): DOCS-SITE-REFRESH (item 2, the full `last-updated.json` refresh, waits until #88-#91 merge), FW-CI-WINDOWS-FLAKES (#80, #81), VF-052 (#66/#67 to recreate on main now that #65 merged), VF-044 (#82), VF-057 (#87), VF-059 (#63).
 - estagiario: idle since P2.A.1.1.
 
