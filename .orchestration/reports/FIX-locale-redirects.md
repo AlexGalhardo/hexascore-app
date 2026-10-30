@@ -5,3 +5,6 @@ Acceptance: go test -tags integration ./tests -run TestLocalePrefix_AccountRedir
 E2E (hx-senior, image hexascore-app:e2e-senior): playwright auth profile api-keys run twice -> 78 passed, exit=0, both runs.
 Notes: base lacked the mail.ts [REDACTED] fix from E2E-HARDEN (unmerged), so I included the identical 1-line change (merge-compatible). Post-mail-link steps in createVerifiedAccount use anyLocale (mailed links are unprefixed English).
 Not covered: posts in items/lists/contact/notifications/library (same pattern, out of scope; follow-up candidate), OAuth callback redirect (no locale info).
+
+REVIEW (especialista): CORRIGIDO_E_APROVADO, see reports/REV-FIX-locale-redirects.md
+PRONTO_PARA_MERGE agent/especialista/FIX-locale-redirects-fix
