@@ -1,6 +1,13 @@
 {
 	"ci": {
 		"collect": {
+			"url": [
+				"http://127.0.0.1:3000/",
+				"http://127.0.0.1:3000/games",
+				"http://127.0.0.1:3000/games/adipiscing-consectetur",
+				"http://127.0.0.1:3000/books/consectetur-2004",
+				"http://127.0.0.1:3000/people/ana-oliveira"
+			],
 			"numberOfRuns": 3,
 			"settings": {
 				"formFactor": "mobile",

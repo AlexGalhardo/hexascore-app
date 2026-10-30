@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Schemathesis 4.29.0 harness (`qa/schemathesis/run.sh`) and the ZAP 2.17.0 baseline script pinned by image digest (`qa/zap/baseline.sh`, `qa/zap/rules.tsv`). Notes in `docs/qa/scans.md` (P1.I.4.1).
 - CI `openapi` job loads `image.tar` from `build`, diffs `openapi:export` from that image, runs Redocly, and fuzzes the same image with Schemathesis 4.29.0 (`qa/schemathesis/ci.sh`, P2.B.1.4).
+- CI `e2e` and `lighthouse` jobs load the same artifact, seed DemoCatalog, run `bun run e2e` (traces uploaded on failure) and `bunx --bun @lhci/cli@0.15.1 autorun` on the five reference URLs (P2.B.1.5).
 - ZAP 2.17.0 baseline on the local app: 1836 URLs, 0 High, exit 0. Six Low or Informational warnings are triaged in `docs/qa/scans.md` (P1.I.4.1).
 - Lighthouse CI config (`lighthouserc.json`, `qa/lighthouse/urls.txt`, `qa/lighthouse/run.sh`) for the SDD 09 §4 budgets on five reference pages (P1.I.5.1). `@lhci/cli` is invoked with `bunx` at 0.15.1 and is not a package.json dependency until the owner approves it.
 - Platform metrics from SDD 12 §6.2 (`hexa.*`, `biz.*`, backup placeholders) on the `hexascore` meter, including the `hexa.errors` label cap and SQL gauges (P2.C.2.2). `http.server.request.duration` is recorded in-app until `drivers/otel` ships in an adopted vukem tag (P2.C.2.1).

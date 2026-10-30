@@ -227,3 +227,58 @@ jobs:
         run: bunx redocly lint openapi/api-v1.json openapi/app-v1.json
       - name: Schemathesis against the loaded image
         run: bash qa/schemathesis/ci.sh hexascore:ci
+
+  e2e:
+    name: Playwright (3 locales, desktop and mobile)
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: image
+      - name: Load the build artifact
+        run: docker load -i image.tar
+      - name: App from the artifact, seeded with DemoCatalog
+        run: |
+          export APP_KEY="base64:$(openssl rand -base64 32)"
+          bash scripts/ci/qa-up.sh hexascore:ci
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - run: bunx playwright install --with-deps chromium
+      - name: e2e
+        run: bun run e2e
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: failure()
+        with:
+          name: playwright-traces
+          path: |
+            qa/e2e/test-results/
+            playwright-report/
+          if-no-files-found: ignore
+
+  lighthouse:
+    name: Lighthouse (SDD 09 budgets)
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: image
+      - name: Load the build artifact
+        run: docker load -i image.tar
+      - name: App from the artifact, seeded with DemoCatalog
+        run: |
+          export APP_KEY="base64:$(openssl rand -base64 32)"
+          bash scripts/ci/qa-up.sh hexascore:ci
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - name: Lighthouse
+        run: bunx --bun @lhci/cli@0.15.1 autorun
+        env:
+          CHROME_PATH: /usr/bin/google-chrome

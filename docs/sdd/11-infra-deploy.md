@@ -156,14 +156,14 @@ GitHub Actions is available for `hexascore-app` (D-26; legacy had disabled them 
 | `test` | PR | `go test ./...` and `-tags=integration` with `postgres:18.6-alpine3.24` service | yes |
 | `vuln` | PR, weekly | `govulncheck ./...` pinned | yes |
 | `openapi` | PR | `openapi:export` diff vs committed spec; Schemathesis vs built container | yes |
-
-The `openapi` job downloads `image.tar` from `build` and does not run `docker build`. `scripts/openapi-check.sh --image hexascore:ci` exports from that image; a handler change that is not regenerated fails `git diff --exit-code`. `qa/schemathesis/ci.sh` migrates the job's Postgres, inserts one business key and one app token, and runs Schemathesis 4.29.0 (`qa/schemathesis/run.sh`) against the same image.
 | `build` | PR | image build, ≤ 400 MB, no unpinned `FROM` | yes |
 | `e2e` | PR | Playwright + axe vs built container | yes |
 | `lighthouse` | PR | ADR 0004 budgets | yes |
 | `smoke` | staging deploy | k6 smoke `p(95)<500`, 0 errors | gates release |
 | `zap` | weekly | ZAP baseline vs staging | issue on failure |
 | `release` | tag `v*`, `workflow_dispatch(version)` | notes from `CHANGELOG.md`, production deploy | — |
+
+`openapi`, `e2e` and `lighthouse` download `image.tar` from `build` and do not run `docker build`. `openapi` exports from that image (`scripts/openapi-check.sh --image`) and fuzzes it (`qa/schemathesis/ci.sh`). `e2e` and `lighthouse` start it with `scripts/ci/qa-up.sh`: compose profile `app`, `--no-build`, DemoCatalog seed. Playwright runs `bun run e2e` (3 locales, desktop and mobile, axe in the specs) and uploads traces on failure. Lighthouse runs `bunx --bun @lhci/cli@0.15.1 autorun` against the five URLs in `lighthouserc.json`. Neither job calls staging.
 
 Actions pinned by SHA. Staging: Railway GitHub autodeploy of `main` [vk-deploy]. Production: `release.yml` checks out the tag and runs `railway up --detach` [cli] with a project token (flags [NOT VERIFIED]). Version: `VERSION=$GITHUB_REF_NAME` build arg → `X-Hexascore-Version` header and `about` (inside `/up` [NOT IN VUKEM DOCS]).
 
