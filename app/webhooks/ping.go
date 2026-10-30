@@ -59,7 +59,7 @@ WHERE id = $1 AND user_id = $2`, endpointID, userID).Scan(&disabled)
 
 	_ = svc.deliver(ctx, vwebhook.Delivery{ID: id, Endpoint: endpointID, Payload: body})
 
-	status := svc.latestStatus(ctx, endpointID)
+	status := svc.attemptStatus(ctx, endpointID, id)
 
 	return PingResult{Delivered: status >= 200 && status < 300, Status: status}, nil
 }

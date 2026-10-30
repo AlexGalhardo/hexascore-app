@@ -135,7 +135,7 @@ func DeliveryRegistration(app *vukem.App) queue.Registration {
 
 func (s *Service) deliver(ctx context.Context, d vwebhook.Delivery) error {
 	err := s.sender.Deliver(ctx, d)
-	metrics.RecordWebhookDelivery(ctx, s.deliveryOutcome(ctx, d.Endpoint, err))
+	metrics.RecordWebhookDelivery(ctx, s.deliveryOutcome(ctx, d.Endpoint, d.ID, err))
 	if err == nil {
 		if resetErr := resetStreak(ctx, s.db, d.Endpoint); resetErr != nil {
 			s.log.ErrorContext(ctx, "webhook streak reset", "endpoint", d.Endpoint, "err", resetErr)
@@ -155,8 +155,9 @@ func (s *Service) deliver(ctx context.Context, d vwebhook.Delivery) error {
 
 // deliveryOutcome is the api.webhook.deliveries label. A non-nil error is a
 // failure. A nil error is success, 410 or a disabled endpoint, which the
-// delivery log distinguishes.
-func (s *Service) deliveryOutcome(ctx context.Context, endpoint string, deliverErr error) string {
+// delivery log distinguishes. The row is this attempt: the endpoint's newest
+// row can belong to a concurrent fan-out.
+func (s *Service) deliveryOutcome(ctx context.Context, endpoint, eventID string, deliverErr error) string {
 	if deliverErr != nil {
 		return "failure"
 	}
@@ -164,7 +165,7 @@ func (s *Service) deliveryOutcome(ctx context.Context, endpoint string, deliverE
 	var status int
 	var attemptErr string
 	err := s.db.QueryRowContext(ctx, `SELECT status, error FROM webhook_deliveries
-WHERE endpoint = $1 ORDER BY id DESC LIMIT 1`, endpoint).Scan(&status, &attemptErr)
+WHERE endpoint = $1 AND event_id = $2 ORDER BY id DESC LIMIT 1`, endpoint, eventID).Scan(&status, &attemptErr)
 	if err != nil {
 		return "success"
 	}
@@ -181,10 +182,10 @@ WHERE endpoint = $1 ORDER BY id DESC LIMIT 1`, endpoint).Scan(&status, &attemptE
 	}
 }
 
-func (s *Service) latestStatus(ctx context.Context, endpoint string) int {
+func (s *Service) attemptStatus(ctx context.Context, endpoint, eventID string) int {
 	var status int
 	err := s.db.QueryRowContext(ctx, `SELECT status FROM webhook_deliveries
-WHERE endpoint = $1 ORDER BY id DESC LIMIT 1`, endpoint).Scan(&status)
+WHERE endpoint = $1 AND event_id = $2 ORDER BY id DESC LIMIT 1`, endpoint, eventID).Scan(&status)
 	if err != nil {
 		return 0
 	}
