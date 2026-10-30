@@ -2149,7 +2149,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run 'TestAPIEntityItems|TestAPICursorTamper'` → `ok`; tampered cursor → 400 `invalid-cursor`; `limit` above plan cap → 400 naming the cap
   - Notes: VF-005 workaround: predicate built with `WhereRaw` over `(sort column, id)` and an HMAC-signed opaque cursor; envelope `{data, meta:{next_cursor}, links:{next}}` exactly as vukem emits it (<https://vukem.dev/docs/rest-apis/pagination> "Envelopes"; VF-014 casing accepted). Never pass `sort` to `req.CursorPaginate` (it rejects it, "Query conventions").
 
-- [ ] **P3.A.1.3** Serve `listEditions` (`/v1/books/{id}/editions`) for book works.
+- [x] **P3.A.1.3** Serve `listEditions` (`/v1/books/{id}/editions`) for book works.
   - Files/modules: `app/api/v1/editions.go`, `app/catalog/readmodel/edition.go`, `tests/api_editions_test.go`
   - Refs: SDD 05 §6.2; SDD 01 §6.2, §6.3; ADR 0012; D-10
   - Depends on: P3.A.1.2

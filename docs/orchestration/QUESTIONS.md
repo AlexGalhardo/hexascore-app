@@ -67,5 +67,10 @@ These stay unchecked. None of them is in a worker queue. Say the word here and n
 - ZAP against a live staging host: P2.D.5.2.
 - `gh workflow run projected-spend.yml` (P2.C.3.4): Railway usage has no verified API, and Telegram is P2.C.1.2. The formula test passed locally. The checkbox stays open until that workflow run exists.
 - P1.I.6.1 stays short of 100% until the owner defers or builds: users' scores modal (E24), trailer consent (E25, E26), cookie banner (E39). They are not D-06 or D-09.
+- P1.I.7.1 stays open: it depends on P1.I.6.1 at 100% and on `gh release view v0.9.0`. No local tag or push.
+- P2.A.1.1 stays open: the latency script needs throwaway Railway services (new spend). No scratch project was created.
+- P2.A.4.1 stays open: `railway config apply` mutates the linked production project. The file is not applied from this session.
+- P2.C.4.2 stays open: R7 is a Railway rollback on staging. Runbooks can land later; the rehearsal cannot.
+- P2.F.2.2 stays open: `TestPasskeysStage` needs the `passkeys` table from an adopted vukem tag with VF-001 (P1.C.7.1). The users stage and the scrypt proof are already on main.
 - GitHub branch protection and the production environment reviewer: P2.B.2.1, P2.B.2.2.
 - Play Console policy and store listing: P5.C.2.1, P5.C.2.2. Staging Maestro: P5.B.5.2. Staging API coverage numbers: P3.A.2.2. Thirty green days: P6.D.4.1.
