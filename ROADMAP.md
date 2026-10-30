@@ -2385,7 +2385,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.C.1 Route group and tokens
 
-- [ ] **P3.C.1.1** Build the `/app/v1` stack: `hx_app_` token guard, `NotBanned`, `auth.Verified`, `auth.Ability`, per-token limits, `Idempotency-Key` on writes, `X-App-Version`/426.
+- [x] **P3.C.1.1** Build the `/app/v1` stack: `hx_app_` token guard, `NotBanned`, `auth.Verified`, `auth.Ability`, per-token limits, `Idempotency-Key` on writes, `X-App-Version`/426.
   - Files/modules: `routes/app_v1.go`, `app/appapi/middleware.go`, `app/appapi/version.go`, `tests/app_stack_test.go`, `tests/security_app_test.go`
   - Refs: SDD 05 §6.4, FR-05-13, FR-05-14; SDD 03 §6.2; README abilities convention; <https://vukem.dev/docs/security/api-tokens> "Routing"; <https://vukem.dev/docs/rest-apis/idempotency>
   - Depends on: P2.G
