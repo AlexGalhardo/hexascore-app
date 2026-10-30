@@ -1172,7 +1172,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
     - `bunx playwright test qa/e2e/specs/passkeys.spec.ts` (after P1.C.7.2) → with a CDP virtual authenticator (`WebAuthn.enable`, `WebAuthn.addVirtualAuthenticator`, ctap2, internal, resident keys, user verification): add a passkey in the profile, sign out, sign in with it, remove it; axe 0 serious
   - Notes: passkeys are back in scope (D-06 amended 2026-10-29, ADR 0017). The legacy suite has no passkey spec (checked 2026-10-29: no `passkey`/`webauthn` in `legacy/qa/e2e/specs`), so `passkeys.spec.ts` is new, not a port; it lands with or after P1.C.7.2 and does not block the other four specs.
 
-- [ ] **P1.I.2.2** Port `catalog`, `item`, `ratings`, `time-to-beat` and `search` specs.
+- [x] **P1.I.2.2** Port `catalog`, `item`, `ratings`, `time-to-beat` and `search` specs.
   - Files/modules: `qa/e2e/specs/{catalog,item,ratings,time-to-beat,search}.spec.ts`
   - Refs: SDD 02 §10; SDD 07 §10; SDD 09 §10; SDD 14 §10 ("status shelves", "curated list"); legacy specs of the same names
   - Depends on: P1.I.1.1
