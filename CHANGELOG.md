@@ -28,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Privacy policy in en, pt-BR and es names Railway, Grafana Cloud, Resend, Stripe, Google and Telegram, cookies, retention and age 13, and the encarregado at privacy@hexascore.app. Vercel, Neon, Upstash, passkeys and AbacatePay are gone from that page (P2.D.4.1).
 - Playwright auth, profile, api-keys and pricing specs pass on the seeded container in three locales (P1.I.2.1). `passkeys.spec.ts` still waits on P1.C.7.2.
 - Catalog filter spec accepts an empty list when a 1-star floor matches nothing. Catalog, item, ratings, time-to-beat and search specs pass in three locales (P1.I.2.2).
+- Social, lists, contact, notifications, admin, docs, public pages, headers and not-found specs pass in three locales (P1.I.2.3).
 - Web CSP reports violations to `POST /csp-reports` (30/min, 16 KiB, no session). `/api/v1` responses use the JSON CSP, `no-referrer`, `Cross-Origin-Resource-Policy: cross-origin` and `Access-Control-Allow-Origin: *` (P2.D.1.1).
 
 ### Fixed
