@@ -255,7 +255,7 @@ func TestSecurity_A06_HexaBodyLimits(t *testing.T) {
 		t.Errorf("JSON form over %d bytes: status %d, want 413", limits.FormBody, rec.Code)
 	}
 
-	// workaround(vukem): VF-NEW-P2.D.2.2. MethodOverride parses urlencoded bodies first and drops the
+	// workaround(vukem): VF-061. MethodOverride parses urlencoded bodies first and drops the
 	// MaxBytesError, so an oversized form answers 422 with every field missing instead of 413; the
 	// limit still holds because nothing past it is parsed.
 	emailMissing := func(rec *httptest.ResponseRecorder) bool {

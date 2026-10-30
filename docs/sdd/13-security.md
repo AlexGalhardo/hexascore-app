@@ -184,7 +184,7 @@ Keys: IPv6 is bucketed by /64 [RL]. `c.IP()` trusts forwarding headers only from
   - Webhooks: verify the signature first, then validate only the fields read.
   - Ingestion: validate before upsert (SDD 06).
   - jsonb: decode into typed structs, because rows written by older schema versions must not crash or inject.
-- Body limits via `BodyLimit` ([OV] A06), implemented by `limits.Body` (`app/http/limits/body.go`) at server level (vukem's `MethodOverride` parses urlencoded forms before routing, VF-NEW-P2.D.2.2) and at router level (replacing vukem's 10 MiB default); the Stripe webhook passes its limit to `stripe.WebhookConfig.MaxBody`. "Forms" means every web and admin route; "Other routes" means the `api` and `app` stacks. Verify: `TestSecurity_A06_HexaBodyLimits`.
+- Body limits via `BodyLimit` ([OV] A06), implemented by `limits.Body` (`app/http/limits/body.go`) at server level (vukem's `MethodOverride` parses urlencoded forms before routing, VF-061) and at router level (replacing vukem's 10 MiB default); the Stripe webhook passes its limit to `stripe.WebhookConfig.MaxBody`. "Forms" means every web and admin route; "Other routes" means the `api` and `app` stacks. Verify: `TestSecurity_A06_HexaBodyLimits`.
 
 | Route | Limit |
 | --- | --- |
