@@ -5,6 +5,11 @@
 FROM oven/bun:1.4.4-alpine@sha256:4cf82f5686b196504fe119db3fcd9185b191f82ece82c40680e597228ec6070a AS assets
 WORKDIR /src
 COPY package.json bun.lock* ./
+# Workspace manifests have to exist before install. The lockfile names them,
+# and the rest of the source is copied only after the frozen install.
+COPY apps/mobile/package.json apps/mobile/package.json
+COPY packages/tokens/package.json packages/tokens/package.json
+COPY packages/app-client/package.json packages/app-client/package.json
 # The lockfile is a required build input: the image installs exactly the
 # versions the repository tracks. Without one npm and pnpm refuse, while bun
 # and yarn resolve fresh versions and say nothing, so the requirement is
