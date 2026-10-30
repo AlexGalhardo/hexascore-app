@@ -1,0 +1,4 @@
+`$fn($args)` where {
+	$fn <: `fetch`,
+	register_diagnostic(span=$fn, message="fetch( is only allowed in src/api/. Screens call the server through @hexascore/app-client (FR-10-1).")
+}
