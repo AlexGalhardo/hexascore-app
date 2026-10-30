@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- `hexascore:export-since` prints legacy upserts for ratings, statuses, time-to-beat, lists and new API keys. New accounts are emitted as `hs:<id>` with a reset-link verification row, and the argon2id hash stays behind (P2.G.1.1).
 - `/api/v1` entity reads count a 304 against the quota, `listEntityItems` rejects a tampered cursor and a limit above the plan cap, and `listEditions` answers 301 to the surviving book (P3.A.1.1, P3.A.1.2, P3.A.1.3).
 - `api_changes` records a merge as `deleted` and a score update only when the one-decimal score, confidence or rating count changes. A hidden-only update writes no row (P3.A.3.1).
 - Daily `privacy.retain` clears session IP and user agent after 30 days, deletes `client_reports` older than 7 days when that table exists, and expires export ZIPs (P2.D.4.1). `SESSION_RECORD_CLIENT=true` in `.env.example` and the compose app env.
