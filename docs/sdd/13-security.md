@@ -303,7 +303,7 @@ The owner (sole operator) decides severity and notification. Steps:
 
 User template (en/pt-BR/es): what happened, when, which data, what we did, what to do (reset password, revoke tokens), contact.
 
-Review in `docs/incidents/YYYY-MM-DD-<slug>.md` within 5 working days: UTC timeline, impact, root cause, detection gap, actions with owners, SDD changes.
+Review in `docs/incidents/YYYY-MM-DD-<slug>.md` within 5 working days: UTC timeline, impact, root cause, detection gap, actions with owners, SDD changes. The operator copy is `docs/runbooks/incident-response.md`; the empty review is `docs/incidents/TEMPLATE.md`; user text is `docs/runbooks/incident-notice.{en,pt-BR,es}.md`.
 
 ## 8. Edge cases
 
