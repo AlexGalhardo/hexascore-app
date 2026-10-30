@@ -2512,7 +2512,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/community/... -run TestAuditAppendOnly` → SQLSTATE `P0001`
   - Notes: SDD 04 §9 says "six tables"; §5 defines five plus `user_notifications`, which SDD 14 owns (open issue 14-1). Do not create a second notifications table. `author_id` and friends are `bigint` here while SDD 14 uses a UUID user id: check `users.id` type from P1.C and align the FK types before writing the migration (VF-006: jsonb and enums as raw DDL).
 
-- [ ] **P4.A.1.2** Implement the per-target field allowlist and validators for `changes`, note, locale and source URLs.
+- [x] **P4.A.1.2** Implement the per-target field allowlist and validators for `changes`, note, locale and source URLs.
   - Files/modules: `app/community/fields.go`, `app/community/validate.go`, `app/community/validate_test.go`
   - Refs: SDD 04 §7.2 (field table, source URL rules), FR-04-2; SDD 01 (allowlist per target)
   - Depends on: P4.A.1.1
