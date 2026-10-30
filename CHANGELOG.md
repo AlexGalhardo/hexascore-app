@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Playwright auth, profile, api-keys and pricing specs pass on the seeded container in three locales (P1.I.2.1). `passkeys.spec.ts` still waits on P1.C.7.2.
 - Catalog filter spec accepts an empty list when a 1-star floor matches nothing. Catalog, item, ratings, time-to-beat and search specs pass in three locales (P1.I.2.2).
 - Social, lists, contact, notifications, admin, docs, public pages, headers and not-found specs pass in three locales (P1.I.2.3).
+- The full Playwright suite (i18n, seo, csp, keyboard, ssr-nojs, lists, notifications and the rest) passes in three locales (P1.I.2.4). One mobile admin navigation hit Windows `ERR_NO_BUFFER_SPACE` and passed on retry.
 - Web CSP reports violations to `POST /csp-reports` (30/min, 16 KiB, no session). `/api/v1` responses use the JSON CSP, `no-referrer`, `Cross-Origin-Resource-Policy: cross-origin` and `Access-Control-Allow-Origin: *` (P2.D.1.1).
 
 ### Fixed

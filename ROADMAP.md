@@ -1191,7 +1191,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
     - `bunx playwright test qa/e2e/specs/{admin,docs,public-pages,headers,not-found}.spec.ts` → pass
   - Notes: `social.spec.ts` keeps "public profile lists ratings; a private one hides them from everyone but the owner" and drops "follow a member and see their ratings in /feed" and "/feed requires login" (D-06). `admin.spec.ts` keeps "/admin answers 404 to visitors and regular members" and "a member reports a user; an admin resolves it in /admin/reports".
 
-- [ ] **P1.I.2.4** Write the new specs `i18n`, `seo`, `csp`, `keyboard`, `ssr-nojs`, `lists` and `notifications`.
+- [x] **P1.I.2.4** Write the new specs `i18n`, `seo`, `csp`, `keyboard`, `ssr-nojs`, `lists` and `notifications`.
   - Files/modules: `qa/e2e/specs/{i18n,seo,csp,keyboard,ssr-nojs,lists,notifications}.spec.ts`
   - Refs: SDD 09 §9, §10; SDD 14 §9
   - Depends on: P1.I.2.3
