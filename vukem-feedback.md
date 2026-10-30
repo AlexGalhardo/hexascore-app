@@ -7,31 +7,33 @@ Documentation reference (owner rule, 2026-10-28): every entry cites the public d
 Severity: `critical` (blocks a roadmap task), `high` (workaround costs more than a day), `medium` (workaround under a day), `low` (DX or docs).
 Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdrawn`.
 
+Checked 2026-10-30 against vukem `main` `0645a5f` (no open pull requests, no open issues). The latest release tag is still `v0.33.0` (2026-10-29T19:31:56Z), so every merge after that tag stays unreleased. HexaScore is still pinned to `v0.33.0`, so none of those merges are adopted here.
+
 | id | date | severity | status |
 | --- | --- | --- | --- |
-| VF-001 | 2026-10-28 | high | in_progress (framework), PR #43 core `auth/webauthn` + PR #44 `install:auth --passkeys` scaffold (stacked on #43), merges pending |
+| VF-001 | 2026-10-28 | high | merged in main (PR #43 core, scaffold #57; #44 closed as superseded), unreleased |
 | VF-002 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#7](https://github.com/AlexGalhardo/vukem/pull/7)) |
 | VF-003 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#21](https://github.com/AlexGalhardo/vukem/pull/21)) |
-| VF-004 | 2026-10-28 | low | wontfix for WebP encoding (FQ-004: cwebp in the app); docs in PR #73 |
+| VF-004 | 2026-10-28 | low | wontfix for WebP encoding (FQ-004: cwebp in the app); docs merged in main (PR #73), unreleased |
 | VF-005 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#11](https://github.com/AlexGalhardo/vukem/pull/11)) |
-| VF-006 | 2026-10-28 | low | in_progress (framework), PR #38 green, merge pending (owner) |
-| VF-007 | 2026-10-28 | low | in_progress (framework), PR #56 |
+| VF-006 | 2026-10-28 | low | merged in main (PR #38), unreleased |
+| VF-007 | 2026-10-28 | low | merged in main (PR #56), unreleased |
 | VF-008 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#22](https://github.com/AlexGalhardo/vukem/pull/22)) |
-| VF-009 | 2026-10-28 | low | in_progress (framework), PR #37 green, merge pending (owner) |
+| VF-009 | 2026-10-28 | low | merged in main (PR #37), unreleased |
 | VF-010 | 2026-10-28 | low | fixed in v0.33.0 (PR [#27](https://github.com/AlexGalhardo/vukem/pull/27), via VF-046: `AfterSave` receives `admin.Saved[T].Before`, a copy of the record before the form was applied) |
-| VF-011 | 2026-10-28 | low | in review (framework): vukem PR #68 (`notify`) |
-| VF-012 | 2026-10-28 | low | in review (framework): vukem PR #75 (`SessionGuard.Impersonate` / `StopImpersonating` / `Impersonator`) |
-| VF-013 | 2026-10-28 | low | in_progress (framework), PR #41 (docs) |
-| VF-014 | 2026-10-28 | low | in review (framework): vukem PR #69 (`api.CollectionOf/PageOf/CursorOf`, docs) |
+| VF-011 | 2026-10-28 | low | merged in main (PR #68), unreleased |
+| VF-012 | 2026-10-28 | low | merged in main (PR #75), unreleased |
+| VF-013 | 2026-10-28 | low | merged in main (PR #41), unreleased |
+| VF-014 | 2026-10-28 | low | merged in main (PR #69), unreleased |
 | VF-015 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#12](https://github.com/AlexGalhardo/vukem/pull/12)) |
 | VF-016 | 2026-10-28 | low | fixed in v0.33.0 (PR [#33](https://github.com/AlexGalhardo/vukem/pull/33), adopted 4a2d8ec) |
 | VF-017 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#13](https://github.com/AlexGalhardo/vukem/pull/13)), adopted (ADOPT-VF-040) |
 | VF-018 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#14](https://github.com/AlexGalhardo/vukem/pull/14)) |
 | VF-019 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#15](https://github.com/AlexGalhardo/vukem/pull/15)) |
-| VF-020 | 2026-10-28 | low | in review (framework): vukem PR #76 (`httpclient.Throttle` / `Retry` / `Breaker`) |
+| VF-020 | 2026-10-28 | low | merged in main (PR #76), unreleased |
 | VF-021 | 2026-10-28 | low | withdrawn (2026-10-29: `HourlyAt` documented) |
-| VF-022 | 2026-10-28 | low | in_progress (framework), PR #53 (IP truncation; trace id already correlated, no user id logged) |
-| VF-023 | 2026-10-28 | low | in review (framework): vukem PR #77 (site pages `deployment/logging`, `deployment/releases-and-stability`) |
+| VF-022 | 2026-10-28 | low | merged in main (PR #53), unreleased |
+| VF-023 | 2026-10-28 | low | merged in main (PR #77), unreleased |
 | VF-024 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#10](https://github.com/AlexGalhardo/vukem/pull/10)), adopted (ADOPT-VF-024) |
 | VF-025 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#16](https://github.com/AlexGalhardo/vukem/pull/16)) |
 | VF-026 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#13](https://github.com/AlexGalhardo/vukem/pull/13)), adopted (ADOPT-VF-040) |
@@ -42,38 +44,38 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 | VF-031 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#24](https://github.com/AlexGalhardo/vukem/pull/24)) |
 | VF-032 | 2026-10-28 | medium | fixed in v0.33.0 (PR [#31](https://github.com/AlexGalhardo/vukem/pull/31)) |
 | VF-033 | 2026-10-28 | low | wontfix (framework): already documented, testing/overview "Testing against PostgreSQL" |
-| VF-034 | 2026-10-28 | low | in review (framework): vukem PR #72 (`openapi.Info.StripPrefix`, `OPENAPI_SERVERS`, `OPENAPI_STRIP_PREFIX`) |
+| VF-034 | 2026-10-28 | low | merged in main (PR #72), unreleased |
 | VF-035 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#25](https://github.com/AlexGalhardo/vukem/pull/25)), adopted in models only (ADOPT-VF-035) |
 | VF-036 | 2026-10-29 | low | fixed in v0.33.0 (PR [#34](https://github.com/AlexGalhardo/vukem/pull/34), adopted 4a2d8ec) |
 | VF-037 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#26](https://github.com/AlexGalhardo/vukem/pull/26)) |
 | VF-038 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#17](https://github.com/AlexGalhardo/vukem/pull/17)) |
-| VF-039 | 2026-10-29 | low | in_progress (framework), PR #54 (signed.Token; extensions and keyset cursor already in v0.33.0) |
+| VF-039 | 2026-10-29 | low | merged in main (PR #54), unreleased |
 | VF-040 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#13](https://github.com/AlexGalhardo/vukem/pull/13)), adopted (ADOPT-VF-040) |
 | VF-041 | 2026-10-29 | low | fixed in v0.33.0 (PR [#28](https://github.com/AlexGalhardo/vukem/pull/28)) |
-| VF-042 | 2026-10-29 | low | in review (framework): #55 merged (struct{} + status = no body), extensions in v0.33.0, per-group error handler vukem PR #78 (`Group.ErrorHandler`) |
+| VF-042 | 2026-10-29 | low | merged in main (PR #55, PR #78), unreleased |
 | VF-043 | 2026-10-29 | low | fixed in v0.33.0 (PR [#30](https://github.com/AlexGalhardo/vukem/pull/30), adopted 4a2d8ec) |
-| VF-044 | 2026-10-29 | low | PR #82 open (framework), unreleased |
+| VF-044 | 2026-10-29 | low | merged in main (PR #82), unreleased |
 | VF-045 | 2026-10-29 | low | fixed in v0.33.0 (PR [#29](https://github.com/AlexGalhardo/vukem/pull/29)) |
 | VF-046 | 2026-10-29 | medium | fixed in v0.33.0 (PR [#27](https://github.com/AlexGalhardo/vukem/pull/27)), adopted (ADOPT-VF-046) |
-| VF-047 | 2026-10-29 | low | in_progress (framework), PR #40 (nullable filters/search; composite keys open) |
+| VF-047 | 2026-10-29 | low | partial: nullable filters merged in main (PR #40), composite keys still open |
 | VF-048 | 2026-10-29 | low | fixed in v0.33.0 (PR [#33](https://github.com/AlexGalhardo/vukem/pull/33), adopted 4a2d8ec) |
-| VF-049 | 2026-10-29 | low | in review (framework): vukem PR #71 (typed handler finishes response; OPENAPI_PREFIX hint) |
-| VF-050 | 2026-10-29 | low | in review (framework): vukem PR #72 (`openapi.Info.StripPrefix`; extensions already in `errs.HTTPError.WithExtension`) |
-| VF-051 | 2026-10-29 | medium | in_progress (framework), PR #36 green, merge pending (owner) |
-| VF-052 | 2026-10-29 | high | in_progress (framework), PRs #46 (client IP + origin lock), #47 (Turnstile action), #48 (visitor headers), #49 (edge cache + purge), #50 (Access JWT); merges pending |
-| VF-053 | 2026-10-29 | low | in_progress (framework), PR #52 |
-| VF-054 | 2026-10-29 | low | in_progress (framework), PR #51 |
-| VF-055 | 2026-10-29 | medium | in review (vukem PR #58) |
-| VF-056 | 2026-10-29 | medium | in review (vukem PRs #59, #60) |
-| VF-057 | 2026-10-29 | medium | in review (vukem PRs #61, #62) |
+| VF-049 | 2026-10-29 | low | merged in main (PR #71), unreleased |
+| VF-050 | 2026-10-29 | low | merged in main (PR #72), unreleased |
+| VF-051 | 2026-10-29 | medium | merged in main (PR #36), unreleased |
+| VF-052 | 2026-10-29 | high | partial: on main #46, #47, #65; cache purge #66 and Access JWT #67 are not on main |
+| VF-053 | 2026-10-29 | low | merged in main (PR #52), unreleased |
+| VF-054 | 2026-10-29 | low | merged in main (PR #51), unreleased |
+| VF-055 | 2026-10-29 | medium | merged in main (PR #58), unreleased |
+| VF-056 | 2026-10-29 | medium | merged in main (PRs #59, #74; #60 closed, rebased), unreleased |
+| VF-057 | 2026-10-29 | medium | merged in main (PRs #61, #87; #62 closed, rebased), unreleased |
 | VF-058 | 2026-10-29 | low | open |
-| VF-059 | 2026-10-29 | medium | in review (framework): vukem PR #63 (repo), #64 (scaffold, doctor, site page) |
-| VF-060 | 2026-10-29 | low | in review (framework): vukem PR #70 (`totp.HashRecoveryCode`) |
+| VF-059 | 2026-10-29 | medium | merged in main (PRs #63, #64), unreleased |
+| VF-060 | 2026-10-29 | low | merged in main (PR #70), unreleased |
 | VF-061 | 2026-10-29 | low | open |
 
 ## VF-001: No passkey / WebAuthn support in `auth`
 
-- **Date**: 2026-10-28. **Severity**: high. **Status**: in_progress (framework): PR #43 core + PR #44 scaffold open, merges pending (reopened 2026-10-29: the owner authorized the framework work in chat, superseding the FQ-001 post-1.0 deferral).
+- **Date**: 2026-10-28. **Severity**: high. **Status**: merged in main (PR #43 core, scaffold #57; #44 closed as superseded), unreleased. No release tag (owner rule). The owner authorized the framework work on 2026-10-29, superseding the FQ-001 post-1.0 deferral.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/two-factor` (Concepts, Guards, Hashing [heading not on page 2026-10-29], `install:auth`, Two-factor, Social login).
 - **Context**: HexaScore's legacy app (Better Auth 1.7.7) offers passkeys. The rewrite drops them at launch (brainstorming D-06) because the framework has no WebAuthn registration/assertion flow, credential storage or recovery path.
 - **Reproduction**: search `docs/` and `auth/` for `webauthn`, `passkey`, `FIDO`: no matches.
@@ -101,7 +103,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-004: `contrib/imaging` flagged as needing work in the framework's own review
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: in review (framework): vukem PR #73 (docs + determinism test); WebP encoding waits for FQ-004 in docs/orchestration/QUESTIONS.md.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: docs merged in main (PR #73, supported formats and a determinism test), unreleased. WebP encoding stays out of the framework (FQ-004: cwebp in the app).
 - **vukem version**: v0.32.0. **Docs consulted**: `vukem/vukem-feedback.md` (framework's own review, item FUN-08 / FB-10 on `contrib/imaging`).
 - **Context**: HexaScore's cover pipeline (ADR 0007) needs WebP encode at 600 px and 96×144 thumbnails with deterministic output matching the legacy Python pipeline. The framework review marks imaging as confirmed-needs-work with large effort.
 - **Reproduction**: pending; SDD 06 defines a fixture set and expected hashes to test against.
@@ -120,7 +122,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-006: Postgres mapping of `t.JSON` and `t.Enum` undocumented
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: in_progress (framework).
+- **Date**: 2026-10-28. **Severity**: low. **Status**: merged in main (PR #38), unreleased.
 - **Spike (2026-10-29)**: P0.F.5.1: on PostgreSQL `t.JSON` is `jsonb` and `t.Enum` is `text` plus CHECK; documentation gap confirmed (P0.F.5.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` "Migrations".
 - **Context**: SDD 01 needs `jsonb` columns with GIN indexes and enum-like columns. The migration builder's column types for these on Postgres are not documented, so the DDL sketches use `s.Raw`.
@@ -130,7 +132,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-007: No sitemap helper
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: merged in main (PR #56), unreleased.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/basics/routing`, `https://vukem.dev/docs/digging-deeper/queue`, `https://vukem.dev/docs/rest-apis/overview`.
 - **Context**: a catalogue with hundreds of thousands of URLs needs a sitemap index with gzip chunks of 50,000 URLs, `lastmod`, and `hreflang` alternates.
 - **Workaround**: app handler streaming XML (SDD 01/09).
@@ -146,7 +148,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-009: Generated columns and the ORM on insert/update
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: in_progress (framework).
+- **Date**: 2026-10-28. **Severity**: low. **Status**: merged in main (PR #37), unreleased.
 - **Spike (2026-10-29)**: P0.F.5.1: generated column works with raw DDL; the ORM must not map it (SQLSTATE 428C9) (P0.F.5.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/database/orm` "Defining models", "Querying".
 - **Context**: `ratings.overall` is a Postgres generated column (SDD 02). It is unclear whether `orm.Create`/`Save` omit generated columns from INSERT/UPDATE.
@@ -164,7 +166,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-011: No persistent in-app notifications
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: in review (framework): new `notify` package per FD-011 in vukem PR #68.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: merged in main (PR #68), unreleased.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/mail` (Mail, Events, Broadcasting [heading not on page 2026-10-29]).
 - **Context**: suggestion decisions (SDD 04) and moderation outcomes need a per-user inbox with read state; vukem has mail and real-time broadcasting but no stored notification model.
 - **Workaround**: app-owned `user_notifications` table and page.
@@ -172,7 +174,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-012: No admin impersonation ("login as user")
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: in review (framework): vukem PR #75.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: merged in main (PR #75), unreleased.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/security/authentication`, `https://vukem.dev/docs/digging-deeper/admin`.
 - **Context**: the legacy app (Better Auth admin plugin) let admins impersonate a user to reproduce support issues, with `session.impersonated_by` recorded. vukem documents no equivalent. HexaScore v1 ships without it (SDD 03); admins use read-only views.
 - **Workaround**: none safe in-app; read-only "view as" pages.
@@ -180,7 +182,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-013: Locale for mail sent from queued jobs
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: in_progress (framework), PR #41 (docs only: `i18n.WithLocale`/`WithBundle` already exist and the mail envelope and view read them).
+- **Date**: 2026-10-28. **Severity**: low. **Status**: merged in main (PR #41), unreleased. Docs only: `i18n.WithLocale`/`WithBundle` already exist and the mail envelope and view read them.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/queue` "Mail", "i18n", "Queue".
 - **Context**: transactional mail (verification, reset, suggestion decisions) is often sent from a job without a request context; the docs describe locale resolution through the locale middleware and request context only.
 - **Workaround**: the job payload carries the user's locale and the mailer is called with an explicit locale value.
@@ -188,7 +190,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-014: Envelope and problem key casing is fixed to snake_case
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: in review (framework): per FD-014 (a) snake_case documented by design and (b) `api.CollectionOf/PageOf/CursorOf[E]` with an app envelope builder, documented by OpenAPI, in vukem PR #69.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: merged in main (PR #69), unreleased. FD-014 (a) snake_case documented by design and (b) `api.CollectionOf/PageOf/CursorOf[E]` with an app envelope builder, documented by OpenAPI.
 - **Spike (2026-10-29)**: P0.F.7.1: camelCase payload fields work through `json` tags; envelope and problem keys stay snake_case (P0.F.7.1).
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/overview` "Envelopes" [heading not on page 2026-10-29], "Errors".
 - **Context**: HexaScore payload fields are camelCase (legacy API contract and SDKs); the documented envelope keys (`next_cursor`, `request_id`) are snake_case and no option to change them is documented, so responses mix conventions.
@@ -242,7 +244,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-020: `httpclient` lacks per-host throttling and circuit breaking
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: in review (framework): vukem PR #76.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: merged in main (PR #76), unreleased.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/architecture/lifecycle` (`httpclient/` SSRF protection), `https://vukem.dev/docs/digging-deeper/queue`.
 - **Context**: ingestion (SDD 06) must respect per-host rate limits (IGDB 4 rps / 8 in flight; TMDB 429 handling; Wikimedia etiquette) and stop hammering a failing host. The SSRF-safe client has no documented rate limiter, retry/backoff policy or circuit breaker.
 - **Workaround**: app-level wrapper with `ratelimit.NewMemory` per host, exponential backoff on 429/5xx honouring `Retry-After`, and a simple breaker.
@@ -258,7 +260,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-022: Request logger lacks privacy options (hashed user id, truncated IP, request id = trace id)
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: merged in main (PR #53), unreleased.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/opentelemetry`, `https://vukem.dev/docs/basics/middleware` (Logger, RequestID); local `vukem/docs/subsystems.md` "Logging & observability" `[SITE PAGE MISSING]` for the request-log fields.
 - **Context**: LGPD-minded logging (SDD 12/13) needs the user id hashed, the client IP truncated (/24, /48) and the request id equal to the trace id so logs and traces join. None of these are documented options of the request logger.
 - **Workaround**: a custom logging middleware replacing the built-in one.
@@ -267,7 +269,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-023: Site documentation gaps found while writing the observability spec
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: in review (framework): vukem PR #77. Health checks already on `deployment/single-binary`; the request log has no route name or user id (repo doc was wrong); no scheduler metrics hook exists (page shows a wrapper).
+- **Date**: 2026-10-28. **Severity**: low. **Status**: merged in main (PR #77), unreleased. Health checks already on `deployment/single-binary`; the request log has no route name or user id (repo doc was wrong); no scheduler metrics hook exists (page shows a wrapper).
 - **vukem version**: v0.32.0. **Docs consulted**: <https://vukem.dev/docs> (full page map) versus local `vukem/docs/*.md`.
 - **Context**: facts that exist only in the repository docs, tagged `[SITE PAGE MISSING]` in the HexaScore SDDs: health-check API (`AddHealthCheckTimeout`, `ReadyHandler`, `ok`/`fail` output format), route name and user id fields in request logs, `logging.NewDedup` and `WithLogger` behaviour with a custom logger, the `TestSecurity_A09_*`/`A10_*` test names, tooling/release process, stability policy, performance baselines, and a metric hook for scheduled tasks.
 - **Workaround**: cite the local file.
@@ -361,7 +363,7 @@ Status: `open`, `reported` (issue link), `fixed in vX.Y.Z`, `wontfix`, `withdraw
 
 ## VF-034: OpenAPI cannot map a host-rewritten public path (`/v1`) to the `/api/v1` router group
 
-- **Date**: 2026-10-28. **Severity**: low. **Status**: in review (framework): vukem PR #72.
+- **Date**: 2026-10-28. **Severity**: low. **Status**: merged in main (PR #72), unreleased.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/openapi`, `https://vukem.dev/docs/cli/reference-runtime`, `https://vukem.dev/docs/digging-deeper/billing` ("Routes", `r.UseServer`).
 - **Context**: `api.<host>/v1/*` is served from the `/api/v1` group through an app `r.UseServer` rewrite (VF-015). `openapi.Info.Servers` can list `https://api.<host>/v1`, but the document keeps router paths (`/api/v1/ping`), so the full URL becomes `/v1/api/v1/ping`. `Servers` is a static option (no config key; only the `APP_URL` default), so it needs a process env read in `bootstrap.New`.
 - **Repro**: spike `agent/senior/P0.F.4.1`: `API_URL=<http://api.localhost:3001/v1> vukem openapi:export -prefix /api/v1 | jq -r '.servers[0].url, (.paths|keys[])'` gives `http://api.localhost:3001/v1` and `/api/v1/ping`.
@@ -406,7 +408,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-039: No signed opaque-token helper and no problem+json extension members
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: merged in main (PR #54), unreleased.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/pagination` ("Query conventions", "Envelopes"), `https://vukem.dev/docs/frontend/inertia` (Scroll), `https://vukem.dev/docs/digging-deeper/storage` (signed URLs).
 - **Context**: SDD 01 §7.2 assumed `signed.Signer` can sign a cursor payload; it only signs URLs (`Sign(rawURL, ttl)`, `Verify(*http.Request)`), so the spike uses `crypto/hmac` with a key from `App.DeriveKey("catalog-cursor", 32)`. `web.Problem` (RFC 9457) has no extension members, so the SDD 05 problem code `invalid-cursor` needs a hand-written `application/problem+json` body. `orm.CursorPaginate` rejects `sort`, hence the app-owned keyset (VF-005).
 - **Workaround**: `app/catalog/cursor.go` (HMAC-SHA256, constant-time compare, sort key and direction inside the signed payload) and `invalidCursor` in `app/controllers/items.go`.
@@ -430,7 +432,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-042: Problem extension members, group-level error handling and bodyless 202 (confirms VF-014, VF-016)
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: in review (framework): (1) extensions in v0.33.0 (`errs.HTTPError.WithExtension`); (3) merged in main (PR #55), unreleased; (2) vukem PR #78 `Group.ErrorHandler`.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: merged in main (PR #55, PR #78), unreleased. (1) extensions in v0.33.0 (`errs.HTTPError.WithExtension`); (3) PR #55; (2) `Group.ErrorHandler` in PR #78.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/openapi`, `https://vukem.dev/docs/cli/reference-runtime` ("`vukem openapi:export`"), `https://vukem.dev/docs/rest-apis/overview` ("Errors"). The three behaviours below were confirmed by running them and reading the v0.32.0 source (`web/errors.go`, `auth/middleware.go`, `api/typed.go`): `[NOT IN VUKEM DOCS]`.
 - **Context**: (1) `web.Problem` has fixed members (`request_id` snake_case, no `code`, no extensions) and the OpenAPI `Problem` schema is derived from it, so a `code` member is invisible to generated clients (VF-014, VF-016 confirmed). (2) Errors returned by handlers reach only the router-wide `Services.Errors`; `auth.ProblemJSON`-style group middleware that swaps services does not see them, so per-group problem formatting is impossible. (3) `api.Op{Status: 202}` with an `Out` of `struct{}` writes the body `{}` while the OpenAPI document says "no body", so `AssertMatchesOpenAPI` fails.
 - **Workaround** (spike `agent/senior/P0.F.7.1`): `problems.Install(router, prefixes...)` wraps `Services.Errors`, runs vukem's default handler into a buffer and adds `code` plus extension members to its JSON; `problems.Error` carries the code. The 202 route returns a one-field `Accepted` struct.
@@ -446,7 +448,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-044: Generated types mark every response property optional; untyped routes appear as `*/*` in the document
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: PR [#82](https://github.com/AlexGalhardo/vukem/pull/82) open (framework), unreleased: opt-in `openapi.Info.RequiredOutputs` / `OPENAPI_REQUIRED_OUTPUTS` and `Info.TypedOnly` / `OPENAPI_TYPED_ONLY`.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: merged in main (PR [#82](https://github.com/AlexGalhardo/vukem/pull/82), 2026-10-30), unreleased. Opt-in `openapi.Info.RequiredOutputs` / `OPENAPI_REQUIRED_OUTPUTS` and `Info.TypedOnly` / `OPENAPI_TYPED_ONLY` are on `main`. Off by default, so existing documents stay unchanged until the flag is set. Not adopted: HexaScore is pinned to v0.33.0.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/client-generation`, `https://vukem.dev/docs/cli/reference-runtime` ("`vukem codegen:client`", "`vukem codegen:routes`"). `[NOT IN VUKEM DOCS]`: nothing on `required` in output schemas or on plain handlers.
 - **Context**: (1) the OpenAPI schemas generated from `Out` types have no `required` list, so `codegen:client` emits `Item = { id?: string; slug?: string; ... }` and the SDKs force null checks on fields the server always sends (inputs keep `required` from `validate` tags). (2) A route registered with a plain handler (`g.Get("/ping", ...)`) is documented with a `*/*` response and an empty schema; `openapi-python-client` 0.29.1 warns and omits the response.
 - **Workaround**: register every public route through `api.Register` with typed output; accept optional properties in the first-party client.
@@ -470,7 +472,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-047: admin resources cannot address composite-key rows, and filters reject nullable string columns
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: in_progress (framework), PR #40 (`Filter`/`Search` accept `sql.Null*` and `sql.Null[T]`; composite-key resources still open).
+- **Date**: 2026-10-29. **Severity**: low. **Status**: partial: nullable filters merged in main (PR #40), composite-key resources still open.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/admin` ("Resources"). `[NOT IN VUKEM DOCS]`: composite primary keys and which column types `Filter` and `Search` accept (errors read from `NewResource` boot checks).
 - **Context**: `rating_flags` is keyed by `(user_id, item_id)`; the ORM and the panel take one `PrimaryKey()` column, so a detail URL resolves by `user_id` alone and could show another row of the same user. `Filter` on a `sql.NullString` column and `Search` on `sql.NullString` fail at boot (`cannot be filtered`, `is not a string`), so nullable enums (`resolution`) and `note` cannot be filtered or searched.
 - **Workaround**: `rating_flags` exposes the list only (`View` denied by policy); `resolution` and `note` stay unfiltered (`app/admin/scoring_resources.go`).
@@ -486,7 +488,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-049: typed handlers cannot answer 304 or 301, and OpenAPI needs a prefix when route names repeat across groups
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: in review (framework): vukem PR #71.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: merged in main (PR #71), unreleased.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/typed-handlers` ("Registering a route", "Checking responses"), `https://vukem.dev/docs/rest-apis/openapi` ("OpenAPI"). `[NOT IN VUKEM DOCS]`: conditional requests (`c.NotModified`) and redirects inside an `api.Register` handler; how `OPENAPI_PREFIX` interacts with `AssertMatchesOpenAPI` (read from `api/typed.go`, `web/conditional.go`, `http.go` in the module).
 - **Context**: SDD 05 FR-05-8 wants a strong `ETag` and `304` on every `/api/v1` read, and `getItem` answers `301` for merged ids. A typed handler returns `(Out, error)` and `api.Register` always writes `Out` as JSON afterwards, so `c.NotModified` (which writes the 304) is followed by a body write and, with `ValidateResponse`, a check of the zero value. Separately, `AssertMatchesOpenAPI()` builds the document from the whole router; the app's web routes `dashboard` and `admin.dashboard` collide on operationId, so every assertion fails until `OPENAPI_PREFIX=/api/v1` is set.
 - **Workaround**: the handler calls `c.NotModified` and returns `errs.New(304, ...)`: `DefaultErrorHandler` sees the response written and only logs it at debug. Merged ids return `errs.New(301, ...).WithHeader("Location", ...)`, rendered as a problem body with the redirect status. `OPENAPI_PREFIX=/api/v1` in `.env.example` and the API test rig (`app/controllers/publicapi/items.go`, `tests/api_keys_test.go`).
@@ -494,7 +496,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-050: OpenAPI paths cannot be rebased under a server prefix (host alias `/v1`)
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: in review (framework): vukem PR #72.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: merged in main (PR #72), unreleased.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/rest-apis/overview` "Versioning", "Errors" [no server-prefix or extension-member option on the page 2026-10-29].
 - **Context**: the API is served at `/api/v1/*` and, on `api.hexascore.app`, also as `/v1/*` (app `APIEdge` rewrite, VF-015). `openapi.Info` has `Servers` and `PathPrefix` (filter only), so the document cannot say "server `https://api.hexascore.app/v1`, paths without `/api/v1`" as SDD 05 §6.1 wants. Typed-route and router-raised problems also cannot carry `code` (VF-016): `APIEdge` rewrites problem bodies and takes an optional `X-Problem-Code` header from handlers.
 - **Workaround**: `Servers` lists `https://api.hexascore.app` only; paths keep `/api/v1` (valid on both hosts). SDD 05 §6.1 should say so.
@@ -502,7 +504,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-051: `contrib/stripe` lacks subscription and Checkout Session list calls and `Subscription.Created`
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: in_progress (framework).
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: merged in main (PR #36), unreleased.
 - **vukem version**: v0.32.0, `contrib/stripe` v0.4.1. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/billing`. `[NOT IN VUKEM DOCS]`: listing a customer's subscriptions, listing/expiring Checkout Sessions, the subscription `created` time.
 - **Context**: the `install:billing` sync keeps one live row per user but a second Checkout tab creates a second Stripe subscription; deleting an account must cancel every subscription Stripe may still bill. Both need `GET /v1/subscriptions?customer=&status=all`, `GET /v1/checkout/sessions?customer=&status=open`, `POST /v1/checkout/sessions/{id}/expire` and `created` to pick the newest subscription. `stripe.Subscription` has a custom `UnmarshalJSON`, so a struct embedding it cannot add `created` (the method is promoted and drops the extra field).
 - **Repro**: decode a subscription JSON into a struct that embeds `stripe.Subscription` and adds `Created int64` with tag `json:"created"`: `Created` stays zero.
@@ -511,7 +513,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-052: No native Cloudflare integration (real client IP, edge security, CDN, bot checks)
 
-- **Date**: 2026-10-29. **Severity**: high. **Status**: open (requested by the owner 2026-10-29).
+- **Date**: 2026-10-29. **Severity**: high. **Status**: partial, unreleased. On `main`: real client IP and origin lock (PR #46), Turnstile action check (PR #47), visitor country / ray / bot headers (PR #65). Not on `main`: cache helpers and the purge client (PR #66 merged only into `feat/vf-052-cloudflare-visitor-main`) and Access JWT validation (PR #67 merged only into `feat/vf-052-cloudflare-cache-main`). Those two landed after PR #65 had already merged the visitor branch into `main`, and no later PR brought them across. #48–#50 stay closed. `contrib/cloudflare` on `main` (`0645a5f`) is `cloudflare.go` plus `visitor.go` only. Requested by the owner 2026-10-29.
 - **vukem version**: v0.33.0. **Docs consulted**: <https://vukem.dev/docs> search for `cloudflare`, `turnstile`, `CF-Connecting-IP`, `trusted proxies`: no page `[NOT IN VUKEM DOCS]`.
 - **Context**: HexaScore serves `hexascore.app` behind Cloudflare (ROADMAP P2.A.2.2, SDD 11, SDD 13). Today the app would hand-roll client-IP resolution, bot protection and cache control around Cloudflare, and every rate limit, audit log and LGPD IP truncation depends on getting the client IP right.
 - **Reproduction**: no `cloudflare` package or middleware in the framework; `CF-Connecting-IP` is not trusted anywhere, so behind Cloudflare the remote address is a Cloudflare edge IP.
@@ -526,7 +528,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-053: OpenAPI export cannot carry a license, and plain routes carry no security, 4XX response or used Problem components
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: merged in main (PR #52), unreleased.
 - **vukem version**: v0.32.0. **Docs consulted**: `https://vukem.dev/docs/digging-deeper/openapi` `[NOT IN VUKEM DOCS]`: `openapi.Info` fields beyond title, version, description, servers, `SecuritySchemes`.
 - **Context**: `redocly lint` (recommended ruleset) on the exported documents reports `info-license` on both, and on `app-v1` (session-cookie web routes registered without `api.Register`) 27 `security-defined` errors, 27 `operation-4xx-response` warnings and 2 `no-unused-components` warnings (`Problem`, `ValidationError`).
 - **Repro**: `bun run openapi:lint` with the three rules enabled.
@@ -535,7 +537,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-054: `NoTransaction` + `IF NOT EXISTS` silently accepts an `INVALID` index after a failed concurrent build
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: merged in main (PR #51), unreleased.
 - **vukem version**: v0.33.0. **Docs consulted**: `https://vukem.dev/docs/database/migrations` "Migrations outside a transaction" `[NOT IN VUKEM DOCS]`: what happens when a `CREATE INDEX CONCURRENTLY` migration fails half-way.
 - **Context**: PostgreSQL leaves an `INVALID` index when `CREATE INDEX CONCURRENTLY` fails (unique violation, timeout, cancel). The migration is not recorded, and the documented retry (`IF NOT EXISTS`) then skips the existing invalid index and records the migration, so the index is never usable and nothing reports it.
 - **Repro**: a `NoTransaction` migration `CREATE UNIQUE INDEX CONCURRENTLY IF NOT EXISTS t_k_uq ON t (k)` over duplicate rows fails; remove the duplicates; `migrate` reports the migration as ran while `pg_index.indisvalid` stays false (`tests/predeploy_test.go` `TestIndexConcurrently_DropsInvalid` shows the drop that avoids it).
@@ -544,7 +546,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-055: No native React Email support for mail templates
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: in review (vukem PR #58, `mail.React` + `WithReactEmails` + `make:mail --react`), unreleased.
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: merged in main (PR #58, `mail.React` + `WithReactEmails` + `make:mail --react`), unreleased.
 - **vukem version**: v0.33.0. **Docs consulted**: <https://vukem.dev/docs> mail pages and search for `react-email`, `jsx`: no page `[NOT IN VUKEM DOCS]`. External: <https://react.email> (`@react-email/components`, `@react-email/render`).
 - **Context**: HexaScore already ships React + TypeScript for Inertia pages and runs Node for SSR (ADR 0004). Mail templates are written separately as Go templates, so the design tokens, components and i18n of the web app are not reused in e-mails, and previewing them needs custom tooling.
 - **Reproduction**: no way to author a `mail.Message` body as a React Email component; `install:mail`/scaffolds only offer Go `html/template` bodies.
@@ -559,7 +561,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-056: No native JSON-RPC 2.0 support
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: in review: server in vukem PR #59, OpenRPC document + Go client in PR #60 (stacked); TypeScript client: use OpenRPC tooling on the document (not generated by vukem). Unreleased.
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: merged in main (server PR #59, OpenRPC document + Go client PR #74; #60 closed and rebased), unreleased. TypeScript client: use OpenRPC tooling on the document (not generated by vukem).
 - **vukem version**: v0.33.0. **Docs consulted**: <https://vukem.dev/docs> REST/API pages and search for `json-rpc`, `rpc`: no page `[NOT IN VUKEM DOCS]`. Spec: <https://www.jsonrpc.org/specification>.
 - **Context**: vukem offers REST (`api.Register`, OpenAPI) but no RPC style endpoint. Some clients (mobile, internal tools, agent/MCP-style integrations) prefer one JSON-RPC endpoint with typed methods.
 - **Reproduction**: no `jsonrpc` package; a hand-written handler has to re-implement batching, notifications, error codes and validation.
@@ -573,7 +575,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-057: HTTP/2 only as h2c on the main server; no TLS serving and no HTTP/3
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: in review: HTTPS + HTTP/2 on the main server in vukem PR #61, opt-in `contrib/http3` (quic-go v0.64.1) in PR #62 (stacked). Unreleased.
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: merged in main (HTTPS + HTTP/2 in PR #61, opt-in `contrib/http3` in PR #87; #62 closed and rebased), unreleased.
 - **vukem version**: v0.33.0 (main at the time of writing). **Docs consulted**: <https://vukem.dev/docs> search for `http2`, `http3`, `quic`, `tls`; the local `docs/api.md` "HTTP/2" bullet `[SITE PAGE MISSING]`.
 - **Context**: the app server speaks HTTP/1.1 and, with `HTTP_H2C` (always on outside production), HTTP/2 cleartext with prior knowledge (`app.go` `H2C`). HTTP/2 over TLS (ALPN `h2`) exists only in `contrib/grpc` on its own port (`grpc.ServerOptions{TLS: ...}`). The main server has no TLS serving at all, so self-hosted deployments without a TLS-terminating proxy cannot offer HTTP/2, and there is no HTTP/3 (QUIC) support anywhere. Behind Railway/Cloudflare the edge terminates TLS and HTTP/3, so this matters for self-hosting, direct origin connections and gRPC on the main port.
 - **Reproduction**: `git grep -n -E "http3|quic|ListenAndServeTLS|TLSConfig"` on vukem `main`: only `contrib/grpc`.
@@ -594,7 +596,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-059: No native secret scanning (Betterleaks) in vukem's own repo or in generated projects
 
-- **Date**: 2026-10-29. **Severity**: medium. **Status**: in review (framework): vukem repo CI + task + config in vukem PR #63; scaffold (config, pre-commit, secrets:scan, CI job), `vukem doctor` and site page in vukem PR #64.
+- **Date**: 2026-10-29. **Severity**: medium. **Status**: merged in main (repo CI PR #63; scaffold, `vukem doctor` and site page PR #64), unreleased.
 - **vukem version**: v0.33.0. **Docs consulted**: <https://vukem.dev/docs> search for `secret`, `gitleaks`, `betterleaks`: no page `[NOT IN VUKEM DOCS]`; vukem `docs/maintenance.md` only lists GitHub secret scanning and push protection `[SITE PAGE MISSING]`. External: <https://github.com/betterleaks/betterleaks> (MIT, Go; maintained by the Gitleaks authors; latest stable `v1.9.0` released 2026-09-29, `v2.0.0-rc.*` are pre-releases and are excluded until a stable v2 exists; read 2026-10-29).
 - **Context**: apps generated by vukem hold `APP_KEY`, database URLs, Stripe, Resend and OAuth secrets in `.env` files. Nothing in vukem's CI or in the scaffolded CI, git hooks or `task` targets scans commits or history for leaked secrets; GitHub's server-side scanning only covers public patterns and only after a push.
 - **Reproduction**: `git grep -i -E "gitleaks|betterleaks"` on vukem `main`: no match in `.github/`, `Taskfile.yml` or the starter templates.
@@ -608,7 +610,7 @@ Update to VF-009 (2026-10-29, P0.F.5.1): the ORM writes every mapped column, so 
 
 ## VF-060: `auth/totp` cannot hash recovery codes that it did not generate
 
-- **Date**: 2026-10-29. **Severity**: low. **Status**: in review (framework): `totp.HashRecoveryCode(code)` in vukem PR #70.
+- **Date**: 2026-10-29. **Severity**: low. **Status**: merged in main (PR #70, `totp.HashRecoveryCode`), unreleased.
 - **vukem version**: v0.33.0. **Docs consulted**: `https://vukem.dev/docs/security/two-factor` `[NOT IN VUKEM DOCS]`: the stored recovery code format is not documented; the package godoc exports only `RecoveryCodes(n)` (generate and hash) and `UseRecoveryCode(code, hashes)`.
 - **Context**: importing users from another auth system (here Better Auth backup codes, SDD 03 §7.6) needs to store their existing unused codes so they keep working. `totp.hashCode` (`sha256("totp-recovery:" + upper(trim(code)))`, hex) is unexported.
 - **Repro**: try to build the `[]string` of hashes for a known list of codes with the public API: impossible without copying the private format.
