@@ -16,6 +16,7 @@ func TestAPIReference_PublicInProduction(t *testing.T) {
 
 	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{
 		"DATABASE_URL": pgtest.Database(t, ""), "APP_ENV": "production", "APP_URL": "https://example.test/",
+		"RATE_LIMIT_STORE": "cache", "CACHE_STORE": "database",
 		"STRIPE_KEY": stripeKey, "STRIPE_WEBHOOK_SECRET": webhookSecret,
 		"STRIPE_PRICE_PRO": "price_pro", "STRIPE_PRICE_BUSINESS": "price_business",
 	}})
