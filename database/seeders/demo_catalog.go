@@ -146,7 +146,23 @@ ORDER BY random() LIMIT $1`, demoRatings); err != nil {
 		}
 	}
 
-	return rows.Err()
+	if err := rows.Err(); err != nil {
+		return err
+	}
+
+	// The item page opens the highest rating_count row. Put one valid trailer
+	// there after recompute, or the e2e looks at an item that never had one.
+	_, err = tx.ExecContext(ctx, `WITH top AS (
+  SELECT DISTINCT ON (type) id
+  FROM items
+  WHERE visibility = 'public' AND type IN ('movie', 'game', 'series')
+  ORDER BY type, rating_count DESC, slug
+)
+UPDATE items i
+SET trailers = '[{"youtubeId":"aaaaaaaaaaa","title":"Demo trailer"}]'::jsonb
+FROM top
+WHERE i.id = top.id`)
+	return err
 }
 
 func seedDemoUsers(ctx context.Context, tx *database.Tx) error {

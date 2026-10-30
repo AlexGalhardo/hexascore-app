@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 import StarRating from "../rating/StarRating";
+import RatingsDialog from "./RatingsDialog";
 import { CATEGORY_KEYS, type ItemType, type RatingSummary } from "./types";
 
 interface Props {
@@ -67,6 +68,10 @@ export default function RatingPanel({ itemId, type, summary, mine, canWrite }: P
 					</dl>
 				</>
 			)}
+			<RatingsDialog
+				itemId={itemId}
+				categoryLabels={keys.map((k) => t(`categories.${type}.${k}`))}
+			/>
 			<h3 className="font-semibold">{t("ratings.title")}</h3>
 			{canWrite ? (
 				<>

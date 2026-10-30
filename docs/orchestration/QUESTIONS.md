@@ -50,7 +50,10 @@ Release requests and approvals for vukem (the framework engineer never tags with
   - Answer:
 
 - Q-LHCI (2026-10-29): P1.I.5.1 runs `bunx @lhci/cli@0.15.1`. It is not in package.json because AGENTS.md requires your yes before a new npm dependency. Approve pinning `@lhci/cli` 0.15.1 as a devDependency, or leave the `bunx` pin.
-  - Answer:
+  - Answer: leave `bunx @lhci/cli@0.15.1`. Do not add the package. Lighthouse already passed with node and the system Chrome.
+
+- P3.A.1.4 (2026-10-30): the owner approved the recommended path. Trending stays the SDD 08 shape (top 10 per type, 30-day window, no `window=`) and lands with P6.C. Do not ship `window=day|week` top 100, and do not return a fabricated or empty list before that. The ROADMAP box stays open.
+  - Answer: SDD 08, wait for P6.C.
 
 ## Blocked by a human gate
 
@@ -66,7 +69,7 @@ These stay unchecked. None of them is in a worker queue. Say the word here and n
 - Legal quotes still missing in `docs/legal/`: P6.A.1.1 (Open Library, A-05), P6.A.2.4, P6.B.1.2 (IGDB, D-36), P6.B.1.3 (Steam/GOG images).
 - ZAP against a live staging host: P2.D.5.2.
 - `gh workflow run projected-spend.yml` (P2.C.3.4): Railway usage has no verified API, and Telegram is P2.C.1.2. The formula test passed locally. The checkbox stays open until that workflow run exists.
-- P1.I.6.1 stays short of 100% until the owner defers or builds: users' scores modal (E24), trailer consent (E25, E26), cookie banner (E39). They are not D-06 or D-09.
+- P1.I.6.1: the owner chose to build E24, E25, E26 and E39 (2026-10-30). The rows are `done` once the parity count matches.
 - P1.I.7.1 stays open: it depends on P1.I.6.1 at 100% and on `gh release view v0.9.0`. No local tag or push.
 - P2.A.1.1 stays open: the latency script needs throwaway Railway services (new spend). No scratch project was created.
 - P2.A.4.1 stays open: `railway config apply` mutates the linked production project. The file is not applied from this session.

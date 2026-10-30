@@ -5,6 +5,7 @@ import Editions from "../../components/item/Editions";
 import RatingPanel from "../../components/item/RatingPanel";
 import StatusPicker from "../../components/item/StatusPicker";
 import TimeToBeat, { type Medians } from "../../components/item/TimeToBeat";
+import Trailers from "../../components/item/Trailers";
 import type { EditionRow, ItemType, Me, RatingSummary } from "../../components/item/types";
 import Seo, { truncate } from "../../components/Seo";
 import { localized } from "../../lib/route";
@@ -40,6 +41,7 @@ interface Props {
 	timeToBeat: Medians | null;
 	me?: Me;
 	myLists?: ListChoice[];
+	trailers?: { youtubeId: string; title?: string }[];
 }
 
 const LD_TYPE: Record<ItemType, string> = {
@@ -86,6 +88,7 @@ export default function Show({
 	timeToBeat,
 	me,
 	myLists,
+	trailers = [],
 }: Props) {
 	const t = useT();
 	const { locale, auth } = usePage<SharedProps>().props;
@@ -205,6 +208,15 @@ export default function Show({
 					mine={me?.rating}
 					canWrite={loggedIn}
 				/>
+
+				{trailers.length > 0 && (
+					<section aria-labelledby="trailers-heading" className="grid gap-3">
+						<h2 id="trailers-heading" className="text-xl font-bold">
+							{t("item.trailers")}
+						</h2>
+						<Trailers trailers={trailers.slice(0, 3)} />
+					</section>
+				)}
 
 				{loggedIn && (
 					<StatusPicker itemId={item.id} type={item.type} status={me?.status ?? null} />
