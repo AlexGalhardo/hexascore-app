@@ -2,16 +2,18 @@ import { Head, useForm } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
 
 import Field from "../../components/Field";
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 export default function TwoFactorChallenge() {
 	const t = useT();
+	const l = useLocalized();
 	const [recovery, setRecovery] = useState(false);
 	const form = useForm({ code: "", recovery_code: "" });
 
 	const submit = (e: FormEvent) => {
 		e.preventDefault();
-		form.post("/two-factor-challenge", { onFinish: () => form.reset() });
+		form.post(l("/two-factor-challenge"), { onFinish: () => form.reset() });
 	};
 
 	return (

@@ -41,6 +41,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- Auth, profile, API key, account deletion and two-factor forms now post under the page locale prefix (`useLocalized`), so their redirects keep `/pt-br` and `/es`; the e2e specs for profile, API keys and the TOTP challenge assert in the project locale. `docker-compose.yml` takes `E2E_IMAGE_TAG` so each worker builds its own e2e image.
 - Backup child processes (`pg_dump`, `pg_restore` for restore and `--list` verify) are covered by tests for their minimal environment (`PG*` plus `PATH`, never the app environment) (FIX-backup-child-path).
 - Public profile and list pages no longer crash on the client: their page-level `seo` prop replaced the shared one (breaking `Seo`'s hreflang list); it is now a top-level `indexable` prop (found by the social e2e spec, P1.I.2.3).
 - Rendered docs code blocks are keyboard focusable (`tabindex="0"` on `<pre>`), fixing axe `scrollable-region-focusable` on the docs pages (P1.I.2.3).

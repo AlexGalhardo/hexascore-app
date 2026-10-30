@@ -4,15 +4,17 @@ import type { FormEvent } from "react";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
 import { checkConfirmation, checkPassword, passwordAdvice } from "../../lib/password-policy";
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 export default function Reset({ token, email }: { token: string; email: string }) {
 	const t = useT();
+	const l = useLocalized();
 	const form = useForm({ token, email, password: "", password_confirmation: "" });
 
 	const submit = (e: FormEvent) => {
 		e.preventDefault();
-		form.post("/reset-password", {
+		form.post(l("/reset-password"), {
 			onFinish: () => form.reset("password", "password_confirmation"),
 		});
 	};
