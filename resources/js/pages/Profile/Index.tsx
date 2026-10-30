@@ -6,6 +6,7 @@ import DeleteAccount from "../../components/DeleteAccount";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
 import { checkPassword, passwordAdvice } from "../../lib/password-policy";
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 interface SessionRow {
@@ -53,21 +54,22 @@ function Section({
 
 export default function Index({ details, passwordSet, twoFactor, sessions, privacy }: Props) {
 	const t = useT();
+	const l = useLocalized();
 	const detailsForm = useForm({ name: details.name, locale: details.locale });
 	const passwordForm = useForm({ currentPassword: "", newPassword: "" });
 	const privacyForm = useForm(privacy);
 
 	const saveDetails = (e: FormEvent) => {
 		e.preventDefault();
-		detailsForm.patch("/profile/details");
+		detailsForm.patch(l("/profile/details"));
 	};
 	const savePassword = (e: FormEvent) => {
 		e.preventDefault();
-		passwordForm.put("/profile/password", { onSuccess: () => passwordForm.reset() });
+		passwordForm.put(l("/profile/password"), { onSuccess: () => passwordForm.reset() });
 	};
 	const savePrivacy = (e: FormEvent) => {
 		e.preventDefault();
-		privacyForm.patch("/profile/privacy");
+		privacyForm.patch(l("/profile/privacy"));
 	};
 
 	return (
@@ -176,7 +178,7 @@ export default function Index({ details, passwordSet, twoFactor, sessions, priva
 										type="button"
 										className="font-medium underline"
 										onClick={() =>
-											router.delete(`/profile/sessions/${s.handle}`)
+											router.delete(l(`/profile/sessions/${s.handle}`))
 										}
 									>
 										{t("account.sessions.revoke")}
@@ -189,7 +191,7 @@ export default function Index({ details, passwordSet, twoFactor, sessions, priva
 				<button
 					type="button"
 					className={button}
-					onClick={() => router.post("/profile/sessions/revoke-all")}
+					onClick={() => router.post(l("/profile/sessions/revoke-all"))}
 				>
 					{t("account.sessions.revokeAll")}
 				</button>

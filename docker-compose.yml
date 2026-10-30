@@ -40,7 +40,7 @@ services:
   app-init:
     profiles: ["app"]
     build: .
-    image: hexascore-app:e2e
+    image: hexascore-app:${E2E_IMAGE_TAG:-e2e}
     depends_on:
       postgres: { condition: service_healthy }
     environment: &app-env
@@ -62,7 +62,7 @@ services:
 
   app:
     profiles: ["app"]
-    image: hexascore-app:e2e
+    image: hexascore-app:${E2E_IMAGE_TAG:-e2e}
     depends_on:
       app-init: { condition: service_completed_successfully }
     environment: *app-env

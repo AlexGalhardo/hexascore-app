@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
+import { useLocalized } from "../../lib/useLocalized";
 
 interface Props {
 	enabled: boolean;
@@ -24,25 +25,26 @@ export default function TwoFactor({
 	recoveryCodes,
 	recoveryCodesLeft,
 }: Props) {
+	const l = useLocalized();
 	const confirm = useForm({ code: "" });
 	const regenerate = useForm({ password: "" });
 	const disable = useForm({ password: "" });
 
 	const submitConfirm = (e: FormEvent) => {
 		e.preventDefault();
-		confirm.post("/user/two-factor/confirm", { onFinish: () => confirm.reset("code") });
+		confirm.post(l("/user/two-factor/confirm"), { onFinish: () => confirm.reset("code") });
 	};
 
 	const submitRegenerate = (e: FormEvent) => {
 		e.preventDefault();
-		regenerate.post("/user/two-factor/recovery-codes", {
+		regenerate.post(l("/user/two-factor/recovery-codes"), {
 			onFinish: () => regenerate.reset("password"),
 		});
 	};
 
 	const submitDisable = (e: FormEvent) => {
 		e.preventDefault();
-		disable.post("/user/two-factor/disable", { onFinish: () => disable.reset("password") });
+		disable.post(l("/user/two-factor/disable"), { onFinish: () => disable.reset("password") });
 	};
 
 	return (

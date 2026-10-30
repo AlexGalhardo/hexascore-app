@@ -2,6 +2,7 @@ import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
 
 import Field from "../../components/Field";
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 interface ApiKey {
@@ -26,6 +27,7 @@ const NAME_ERRORS = new Set(["limit"]);
 
 export default function ApiKeys({ keys, maxKeys }: Props) {
 	const t = useT();
+	const l = useLocalized();
 	const flash = usePage().flash as { newKey?: string } | undefined;
 	const form = useForm({ name: "" });
 	const [copied, setCopied] = useState(false);
@@ -38,7 +40,7 @@ export default function ApiKeys({ keys, maxKeys }: Props) {
 	const create = (e: FormEvent) => {
 		e.preventDefault();
 		setCopied(false);
-		form.post("/profile/api/keys", { onSuccess: () => form.reset() });
+		form.post(l("/profile/api/keys"), { onSuccess: () => form.reset() });
 	};
 
 	const copy = async (value: string) => {
@@ -174,7 +176,7 @@ export default function ApiKeys({ keys, maxKeys }: Props) {
 															className="mr-3 font-medium text-red-700 underline dark:text-red-400"
 															onClick={() =>
 																router.delete(
-																	`/profile/api/keys/${k.id}`,
+																	l(`/profile/api/keys/${k.id}`),
 																	{
 																		onFinish: () =>
 																			setConfirming(null),

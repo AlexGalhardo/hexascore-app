@@ -4,16 +4,18 @@ import type { FormEvent } from "react";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
 import { challengeHeaders } from "../../lib/challenge";
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 export default function Login() {
 	const t = useT();
+	const l = useLocalized();
 	const form = useForm({ identifier: "", password: "", remember: false });
 
 	const submit = async (e: FormEvent) => {
 		e.preventDefault();
 		const headers = await challengeHeaders("login");
-		form.post("/login", { headers, onFinish: () => form.reset("password") });
+		form.post(l("/login"), { headers, onFinish: () => form.reset("password") });
 	};
 
 	return (

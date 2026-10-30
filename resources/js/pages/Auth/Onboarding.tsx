@@ -2,15 +2,17 @@ import { Head, useForm } from "@inertiajs/react";
 import type { FormEvent } from "react";
 
 import Field from "../../components/Field";
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 export default function Onboarding() {
 	const t = useT();
+	const l = useLocalized();
 	const form = useForm({ nickname: "" });
 
 	const submit = (e: FormEvent) => {
 		e.preventDefault();
-		form.post("/onboarding");
+		form.post(l("/onboarding"));
 	};
 
 	const codes: Record<string, string> = {

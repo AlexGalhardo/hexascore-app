@@ -37,7 +37,8 @@ export async function mailLink(
 					new RegExp(`https?://[^\\s)]*${escapeRegExp(fragment)}[^\\s)]*`),
 				);
 				if (match) {
-					const url = new URL(match[0]);
+					// The log transport redacts the email query parameter; the recipient is known, so restore it.
+					const url = new URL(match[0].replace("[REDACTED]", encodeURIComponent(email)));
 					return `${url.pathname}${url.search}`;
 				}
 			}
