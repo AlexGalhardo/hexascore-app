@@ -7,6 +7,66 @@ import PasswordField from "../../components/PasswordField";
 import { challengeHeaders } from "../../lib/challenge";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
+import { getPasskey, PasskeyCancelled } from "../../lib/webauthn";
+
+export function PasskeySignIn(): React.ReactElement {
+	const t = useT();
+	const l = useLocalized();
+	const [failed, setFailed] = useState(false);
+
+	const signIn = async (): Promise<void> => {
+		setFailed(false);
+
+		try {
+			const options = await fetch(l("/login/passkey/options"), {
+				method: "POST",
+				credentials: "same-origin",
+				headers: { Accept: "application/json", "Content-Type": "application/json" },
+				body: "{}",
+			});
+			if (!options.ok) {
+				throw new PasskeyCancelled();
+			}
+
+			const credential = await getPasskey(await options.json());
+			const res = await fetch(l("/login/passkey"), {
+				method: "POST",
+				credentials: "same-origin",
+				headers: { Accept: "application/json", "Content-Type": "application/json" },
+				body: JSON.stringify(credential),
+			});
+			if (!res.ok) {
+				throw new PasskeyCancelled();
+			}
+
+			window.location.assign(res.url);
+		} catch (err) {
+			if (err instanceof PasskeyCancelled) {
+				setFailed(true);
+				return;
+			}
+
+			setFailed(true);
+		}
+	};
+
+	return (
+		<div className="mt-4">
+			<button
+				type="button"
+				onClick={() => void signIn()}
+				className="rounded-md border border-zinc-300 px-4 py-2 font-medium hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
+			>
+				{t("auth.passkey")}
+			</button>
+			{failed && (
+				<p role="alert" className="mt-2 text-sm text-red-600">
+					{t("auth.errors.passkeyFailed")}
+				</p>
+			)}
+		</div>
+	);
+}
 
 export default function Login() {
 	const t = useT();
@@ -74,6 +134,7 @@ export default function Login() {
 					{t("auth.login.createAccount")}
 				</Link>
 			</p>
+			<PasskeySignIn />
 		</>
 	);
 }
