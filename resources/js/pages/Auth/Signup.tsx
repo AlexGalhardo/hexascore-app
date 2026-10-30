@@ -1,13 +1,14 @@
 import { Head, Link, useForm } from "@inertiajs/react";
-import type { FormEvent } from "react";
+import { type FormEvent, useState } from "react";
 
+import ChallengeStatus from "../../components/ChallengeStatus";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
 import { challengeHeaders } from "../../lib/challenge";
 import { checkConfirmation, checkPassword, passwordAdvice } from "../../lib/password-policy";
 import { useT } from "../../lib/useT";
 
-export default function Signup() {
+export default function Signup({ formToken }: { formToken: string }) {
 	const t = useT();
 	const form = useForm({
 		name: "",
@@ -15,11 +16,13 @@ export default function Signup() {
 		password: "",
 		password_confirmation: "",
 		website: "",
+		form_token: formToken,
 	});
+	const [checking, setChecking] = useState(false);
 
 	const submit = async (e: FormEvent) => {
 		e.preventDefault();
-		const headers = await challengeHeaders("signup");
+		const headers = await challengeHeaders("signup", setChecking);
 		form.post("/signup", {
 			headers,
 			onFinish: () => form.reset("password", "password_confirmation"),
@@ -85,6 +88,7 @@ export default function Signup() {
 				>
 					{t("auth.signup.submit")}
 				</button>
+				<ChallengeStatus checking={checking} />
 			</form>
 			<p className="mt-6 text-sm">
 				<Link

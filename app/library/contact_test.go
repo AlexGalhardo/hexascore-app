@@ -1,6 +1,7 @@
 package library
 
 import (
+	"strings"
 	"testing"
 	"time"
 )
@@ -28,7 +29,7 @@ func TestContactTokenMinimumFill(t *testing.T) {
 		"expired":   {3 * time.Hour, tok, false},
 		"tampered":  {time.Minute, "1.abc", false},
 		"empty":     {time.Minute, "", false},
-		"forged ts": {time.Minute, "1700000000." + c.mac("1800000000"), false},
+		"forged ts": {time.Minute, "1700000000." + strings.SplitN(tok, ".", 2)[1], false},
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
