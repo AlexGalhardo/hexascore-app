@@ -2,6 +2,7 @@ package legacyimport
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -81,4 +82,21 @@ func Preflight(ctx context.Context, db *database.DB) (PreflightResult, error) {
 	}
 
 	return res, nil
+}
+
+// IgnoreNoLogin drops only the no_login_method assert. Duplicate emails and a
+// two-factor flag without a row still abort. Preflight itself never skips a
+// check; the import command calls this only after an explicit opt-in.
+func IgnoreNoLogin(res PreflightResult, err error) (PreflightResult, error) {
+	var pe *PreflightError
+	if !errors.As(err, &pe) {
+		return res, err
+	}
+
+	delete(res.Failures, "no_login_method")
+	if len(res.Failures) == 0 {
+		return res, nil
+	}
+
+	return res, &PreflightError{Failures: res.Failures}
 }
