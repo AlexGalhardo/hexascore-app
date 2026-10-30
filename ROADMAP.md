@@ -2254,7 +2254,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `psql "$DATABASE_URL" -c "\d webhook_deliveries"` → table with index on `(endpoint, attempted_at)`
   - Notes: retries per SDD 05 (8 from 30 s) are a sender option; if `SenderOptions` lacks that knob, write `[NOT IN VUKEM DOCS]` and add a `vukem-feedback.md` entry instead of a custom retry loop. Cursor advances in the same transaction that enqueues the jobs. Payload carries ids and field names only.
 
-- [ ] **P3.A.5.3** Serve `testWebhook`, prune `webhook_deliveries` older than 30 days, and emit `api.webhook.deliveries{outcome}`.
+- [x] **P3.A.5.3** Serve `testWebhook`, prune `webhook_deliveries` older than 30 days, and emit `api.webhook.deliveries{outcome}`.
   - Files/modules: `app/api/v1/webhooks.go`, `app/jobs/prune_webhook_deliveries.go`, `app/observability/metrics.go`, `tests/api_webhooks_test.go`
   - Refs: SDD 05 §6.2; SDD 12 §6 metrics table, §7.6 "API customers"; <https://vukem.dev/docs/digging-deeper/webhooks> "The delivery log" (table grows forever)
   - Depends on: P3.A.5.2
