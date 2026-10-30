@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- `GET /api/items/{id}/ratings` lists public profiles, 10 per page, over the newest 1000 ratings. The item page shows that dialog, click-to-load YouTube trailers, and the cookie banner (P1.I.6.1).
 - `GET /api/v1/changes` serves the 14-day feed (`since`, `type`, signed cursor, `limit` ≤ 1000). A merged item is `deleted` with `mergedInto`. Rows older than 30 days are pruned daily at 04:50 (P3.A.3.2).
 - `hexascore:export-since` prints legacy upserts for ratings, statuses, time-to-beat, lists and new API keys. New accounts are emitted as `hs:<id>` with a reset-link verification row, and the argon2id hash stays behind (P2.G.1.1).
 - `/api/v1` entity reads count a 304 against the quota, `listEntityItems` rejects a tampered cursor and a limit above the plan cap, and `listEditions` answers 301 to the surviving book (P3.A.1.1, P3.A.1.2, P3.A.1.3).
@@ -34,7 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Catalog filter spec accepts an empty list when a 1-star floor matches nothing. Catalog, item, ratings, time-to-beat and search specs pass in three locales (P1.I.2.2).
 - Social, lists, contact, notifications, admin, docs, public pages, headers and not-found specs pass in three locales (P1.I.2.3).
 - The full Playwright suite (i18n, seo, csp, keyboard, ssr-nojs, lists, notifications and the rest) passes in three locales (P1.I.2.4). One mobile admin navigation hit Windows `ERR_NO_BUFFER_SPACE` and passed on retry.
-- Admins can mark a contact message handled from the panel (`TestAdminMarksContactHandled`). The parity checklist now names a test for 114 of 118 legacy rows. The users' scores modal, trailers and the cookie banner stay open (P1.I.6.1).
+- Admins can mark a contact message handled from the panel (`TestAdminMarksContactHandled`). The parity checklist names a test for every legacy row that is `done` or `deferred` (P1.I.6.1).
 - Web CSP reports violations to `POST /csp-reports` (30/min, 16 KiB, no session). `/api/v1` responses use the JSON CSP, `no-referrer`, `Cross-Origin-Resource-Policy: cross-origin` and `Access-Control-Allow-Origin: *` (P2.D.1.1).
 
 ### Fixed

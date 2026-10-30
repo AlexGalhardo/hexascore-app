@@ -2,7 +2,7 @@ import { open } from "../helpers/account";
 import { expectNoSeriousA11yViolations } from "../helpers/axe";
 import { expect, test } from "../helpers/fixtures";
 
-// Not ported: the cookie banner (no consent UI in the vukem app yet) and /pricing (billing waits on Q-H31).
+// /pricing stays a public page; live Stripe keys still wait on Q-H31.
 const PAGES = [
 	"/",
 	"/games",
@@ -57,5 +57,22 @@ test.describe("public pages", () => {
 		await expect.poll(() => html.evaluate((el) => el.classList.contains("dark"))).toBe(!before);
 		await page.reload();
 		await expect.poll(() => html.evaluate((el) => el.classList.contains("dark"))).toBe(!before);
+	});
+});
+
+test.describe("cookie banner", () => {
+	test.use({ consent: null });
+
+	test("asks once and remembers the choice", async ({ page, context, prefix, t }) => {
+		await open(page, `${prefix}/`);
+		const banner = page.getByRole("region", { name: "Cookies" });
+		await expect(banner).toBeVisible();
+		await expectNoSeriousA11yViolations(page);
+		await banner.getByRole("button", { name: t("cookies.decline") }).click();
+		await expect(banner).toBeHidden();
+		const cookies = await context.cookies();
+		expect(cookies.find((c) => c.name === "consent")?.value).toBe("essential");
+		await page.reload();
+		await expect(page.getByRole("region", { name: "Cookies" })).toBeHidden();
 	});
 });

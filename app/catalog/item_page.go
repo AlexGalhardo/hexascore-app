@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"github.com/AlexGalhardo/vukem/uuid"
+
+	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
 
 // EditionPageSize is how many editions the item page lists inline.
@@ -73,30 +75,32 @@ type ItemPage struct {
 	Editions      []Edition               `json:"editions,omitempty"`
 	EditionCount  int                     `json:"editionCount,omitempty"`
 	TimeToBeat    *TimeToBeat             `json:"timeToBeat,omitempty"`
+	Trailers      []models.Trailer        `json:"trailers"`
 }
 
 // LoadItemPage reads the public item of typ and slug in locale, falling back
 // to English then to the original title.
 func LoadItemPage(ctx context.Context, db Querier, typ, slug, locale string) (ItemPage, error) {
 	var (
-		page    ItemPage
-		src     = ItemSource{Type: typ, Slug: slug, ExternalIDs: map[string]string{}}
-		title   sql.NullString
-		tsrc    sql.NullString
-		syn     sql.NullString
-		synSrc  sql.NullString
-		synLic  sql.NullString
-		synURL  sql.NullString
-		release sql.NullTime
-		runtime sql.NullInt64
-		pages   sql.NullInt64
-		limited sql.NullTime
-		unusual sql.NullTime
-		sum     = &page.RatingSummary
-		score   sql.NullFloat64
-		cats    [6]sql.NullFloat64
-		conf    sql.NullString
-		version sql.NullInt64
+		page     ItemPage
+		src      = ItemSource{Type: typ, Slug: slug, ExternalIDs: map[string]string{}}
+		title    sql.NullString
+		tsrc     sql.NullString
+		syn      sql.NullString
+		synSrc   sql.NullString
+		synLic   sql.NullString
+		synURL   sql.NullString
+		release  sql.NullTime
+		runtime  sql.NullInt64
+		pages    sql.NullInt64
+		limited  sql.NullTime
+		unusual  sql.NullTime
+		sum      = &page.RatingSummary
+		score    sql.NullFloat64
+		cats     [6]sql.NullFloat64
+		conf     sql.NullString
+		version  sql.NullInt64
+		trailers string
 	)
 
 	err := db.QueryRowContext(ctx, `SELECT i.id::text, i.wikidata_qid, i.release_date, i.release_precision, i.runtime_minutes, i.page_count,
@@ -104,7 +108,8 @@ func LoadItemPage(ctx context.Context, db Querier, typ, slug, locale string) (It
   coalesce(t.synopsis, te.synopsis), coalesce(t.synopsis_source, te.synopsis_source),
   coalesce(t.synopsis_licence, te.synopsis_licence), coalesce(t.synopsis_source_url, te.synopsis_source_url),
   i.rating_count, i.score, i.score_c1, i.score_c2, i.score_c3, i.score_c4, i.score_c5, i.score_c6,
-  i.score_confidence, i.score_formula_version, i.ratings_limited_until, i.unusual_activity_until
+  i.score_confidence, i.score_formula_version, i.ratings_limited_until, i.unusual_activity_until,
+  i.trailers::text
 FROM items i
 LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $3
 LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
@@ -113,12 +118,15 @@ WHERE i.type = $1 AND i.slug = $2 AND i.visibility = 'public'`, typ, slug, local
 			&src.ID, &src.WikidataQID, &release, &src.ReleasePrecision, &runtime, &pages,
 			&title, &tsrc, &syn, &synSrc, &synLic, &synURL,
 			&sum.RatingCount, &score, &cats[0], &cats[1], &cats[2], &cats[3], &cats[4], &cats[5],
-			&conf, &version, &limited, &unusual)
+			&conf, &version, &limited, &unusual, &trailers)
 	if errors.Is(err, sql.ErrNoRows) {
 		return page, ErrItemNotFound
 	}
 	if err != nil {
 		return page, fmt.Errorf("load item: %w", err)
+	}
+	if page.Trailers, err = assignTrailers([]byte(trailers)); err != nil {
+		return page, err
 	}
 
 	now := time.Now()
