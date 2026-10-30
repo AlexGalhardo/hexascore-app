@@ -6,60 +6,59 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-10-30
+
 ### Added
 
-- `/pricing` (`Pricing/Index`: free, pro and business limits from `api.PlanByID`, display amounts per currency with a server-validated `?currency=`, data coverage statement), `/docs/coverage`, the public Scalar reference at `/docs/reference` and the v1 OpenAPI document at `/api/v1/openapi.json` (also in production), `qa/sql/api_coverage.sql` for the staging coverage measurement; document title is now `HexaScore API` (P1.H.3.2).
-- Rate-limit table `app/http/limits` (SDD 13 §7.1): every route limiter comes from one named rule; new limits on `/recover-password` (10/10 min per IP, 5/h per address), `/search` (60/min) and search suggestions (300/min); production refuses to boot without `RATE_LIMIT_STORE=cache`, which the image now defaults together with `CACHE_STORE=database` (P2.D.2.1).
-- `scripts/legacy/blob-export.ts`: copies the Vercel Blob covers the legacy database references to the S3 bucket under their legacy keys with an NDJSON manifest, skips keys already copied, never copies orphans or non-Blob URLs, and `--delta --since <time>` limits the copy to items updated in the window; runbook `docs/migration/covers.md` (P2.F.3.1).
-- Legacy import `social` and `library` stages: ratings rounded to multiples of 5 (FR-02-13) with `rating_migration_audit` rows and one `legacy_rounding` summary, lists and list items (dense positions, `added_at` = list creation, mixed-type rows kept), reports (user targets mapped to new ids), contact messages, statuses and time-to-beat; `follows` not imported (P2.F.2.6).
-- Legacy import `entities` stage: `meta` genres, platforms, creators and countries resolved to Wikidata entities through the item's `wikidata` record, other strings as native entities (source `legacy`, DQ-09), roleless creators as `creator`/`author`/`developer` by type, one `und` edition per valid book `isbn13` (DQ-10); `docs/migration/entity-resolution.md` (P2.F.2.5).
-- Legacy import `catalog` stage: items with their ids (`popularity` → `popularity_prior`, release precision/status, typed `meta` columns, trailers, Blob cover keys), translations (`synopsis_licence`, sources from the URL host), affiliate links and `source_records` 1:1 into a new legacy-shaped `source_records` table; `data_sources` seeded with `wikidata`, `wikipedia`, `hexascore`; `external_scores` dropped (D-09) (P2.F.2.4).
-- `backup:restore <key> --target-url <url>` (streamed decrypt into `pg_restore`, then replays account deletions, schedules and cancellations newer than the dump from `DATABASE_URL` or `--replay-from`; `--no-replay` when that database is lost) and `backup:drill` (latest daily into a scratch `hexascore_drill`, row counts vs the dump manifest, `catalog:check` asserts, drop, `backup_runs(kind='drill')`; scheduled first Sunday 07:00 where `BACKUP_SOURCE_S3_BUCKET` is set); `backup:run` now writes a sealed per-table row-count manifest counted in the snapshot `pg_dump --snapshot` reuses; runbook `docs/runbooks/restore.md` (P2.E.3.1).
-- Legacy import `billing` stage: API keys with their sha256 hash unchanged, paid subscriptions, Stripe customer ids, daily usage, D-23 credit balances (`greatest(sum(delta), 0)`), and verbatim copies of `credit_ledger` and `pix_charges` in new legacy-shaped tables (P2.F.2.7).
-- Legacy import `twofactor` stage: `scripts/legacy/twofactor-export.ts` decrypts the Better Auth 2FA rows with Better Auth's own `symmetricDecrypt` and pipes NDJSON into `hexascore:import-legacy --stage twofactor --stdin`, which seals the secret, hashes the unused backup codes as recovery codes and confirms verified rows (P2.F.2.3).
-- `backup:run` now verifies each dump (size above half the 7-day median, decrypt and `pg_restore --list` with `items`, `users`, `ratings`, status `verified`), keeps a re-encrypted monthly copy on day 1, prunes to 30 daily and 12 monthly dumps, and runs daily at 06:00 America/Sao_Paulo (P2.E.2.2).
-- Legacy import `users` stage: Better Auth users upserted on `legacy_id` (email lowercased, verification date, admin role, live bans only, deletion grace kept), credential hashes copied verbatim, Google accounts linked in `social_accounts`, random argon2id for accounts without a password (P2.F.2.2).
-- Admin hardening (SDD 13 FR-13-5, §7.5): `AdminGuard` requires confirmed 2FA on `/admin`, ends admin sessions after 30 min idle or 12 h, and applies the optional `ADMIN_IP_ALLOWLIST` (404 outside it); 2FA confirmation regenerates the session id and `admin:grant`/`admin:revoke` end the user's sessions (P2.D.3.1).
-- `hexascore:import-legacy --stage all|<names> [--dry-run] [--batch N]`: legacy import runner over schema `legacy_import` with the SDD 03 §5 pre-flight asserts (abort with counts), stage order, per-stage checkpoints in the new `legacy_import_runs` table (committed with each batch, resumable) and a dry run that prints planned counts and writes nothing; stages are filled in by P2.F.2.2 to P2.F.4.1 (P2.F.2.1).
-- Playwright specs `social`, `contact`, `admin`, `docs`, `public-pages`, `headers` and `not-found` (P1.I.2.3); not ported: follow/feed (D-06), report-a-user dialog, cookie banner, Scalar reference and `/openapi*.json` (no counterpart in the vukem app yet), pricing (Q-H31).
-- Playwright specs `catalog`, `item`, `search`, `ratings` and `time-to-beat` in three locales and two viewports (keyboard-driven half-star slider, status picker, search autocomplete); the users' scores modal and trailer consent of the legacy item page are not ported because the new item page has neither yet (P1.I.2.2).
-
-- `backup:run --kind daily|monthly`: streamed `pg_dump -Fc -Z 6 --no-owner`, client-side 4 MiB frame encryption with `BACKUP_KEY` (reorder and truncation detected), SHA-256 and multipart upload to `backups/postgres/<kind>/YYYY/MM/DD/` via vukem `drivers/s3` v0.3.1, recorded in the new `backup_runs` table (P2.E.2.1).
-- Privacy-preserving request log (SDD 12 §6.1, FR-12-1, FR-12-8): `app/logging` redacts passwords, tokens, API keys, emails and search text, truncates `ip`/`peer` to /24 or /48, adds `route`, `user_hash` and `duration_ms`, and samples fast successes on `/up`, `/build/*` and `/search/suggest|events` 1 in 100; `scripts/ops/check-logs.sh` checks a log stream (P2.C.1.1).
-- `@redocly/cli` 2.72.1 (dev), `redocly.yaml` (recommended ruleset) and `bun run openapi:lint` in the CI `lint` job; unfixable vukem gaps are scoped overrides, see VF-053 (P1.H.4.1b).
-- `hexascore:predeploy`: drops `INVALID` index leftovers of failed concurrent builds, then runs `migrate` under vukem's runner lock; concurrent indexes are `NoTransaction` migrations (vukem v0.33.0); SDD 11 §7.2, SDD 07 §5 and the migrations runbook updated (P2.E.1.1).
-- Playwright specs `auth`, `profile` and `api-keys` (signup, mailed verification, TOTP login, password reset and change, account deletion countdown, API key shown once; axe in three locales and two viewports) with `mail`, `totp`, `t` helpers; `pricing` skipped until billing (Q-H31) (P1.I.2.1).
-
-- `docs/parity-checklist.md` maps every legacy route, Server Action and e2e test to its replacement, test and status (118 rows, generated by `scripts/parity-inventory.sh`; P1.I.6.1).
-- ADR 0017: passkeys are back in scope (D-06 amended 2026-10-29) on the vukem `auth` passkey API (VF-001); SDD 03 FR-03-20 to FR-03-24 and §7.8, ROADMAP P1.C.7, a passkey e2e spec in P1.I.2.1 and legacy credential import in P2.F.2.2 (APP-PASSKEYS).
-- `/up?checks=1` reports `db`, `ssr`, `storage` and `scheduler` (in-memory heartbeat task, age < 180 s), each bounded by 2 s; `.env.example` sets `SHUTDOWN_TIMEOUT`, `GOMEMLIMIT`, `NODE_OPTIONS`, `QUEUE_NAMES`, `QUEUE_CONCURRENCY` and `SCHEDULE_IN_SERVE` (P2.A.3.2).
-- `scripts/infra/region-latency.sh` measures p50/p95 of TCP connect and time to first byte per URL (50 samples by default; P2.A.1.1). ADR 0002 has a partial region measurement addendum.
+- **api:** Commit OpenAPI goldens with drift check and regenerate SDKs ([6c59b2b](https://github.com/AlexGalhardo/hexascore-app/commit/6c59b2b8b30ea3ec32283814246bab4019155ea5))
+- **library:** Page the edition picker list ([071faa0](https://github.com/AlexGalhardo/hexascore-app/commit/071faa0d7ee80edbfb8af2bc5c72d4163c5eda28))
+- **billing:** Install billing with plan state machine and subscription-backed API plans ([bd88dbb](https://github.com/AlexGalhardo/hexascore-app/commit/bd88dbbf4dee98477e832a6512c7e6338416226b))
+- **infra:** Harden serve shutdown and add the four readiness checks ([15cb7a1](https://github.com/AlexGalhardo/hexascore-app/commit/15cb7a13c5a33fe9bcf5f5972614524ac239fbb4))
+- **infra:** Add region latency script and partial ADR 0002 measurement ([2919706](https://github.com/AlexGalhardo/hexascore-app/commit/29197060dfd72517e21d863145e32f94c9463250))
+- **openapi:** Lint exported documents with Redocly ([20797a8](https://github.com/AlexGalhardo/hexascore-app/commit/20797a855ebaf387e5cba2fe192f24723eae007b))
+- **infra:** Add hexascore:predeploy with INVALID index cleanup ([e0c63fb](https://github.com/AlexGalhardo/hexascore-app/commit/e0c63fb32549ea4e288522800fcff4000368844c))
+- **infra:** Add privacy-preserving request log handler ([8d54999](https://github.com/AlexGalhardo/hexascore-app/commit/8d54999be0400c8076c250fedbd97722c3c52f87))
+- **infra:** Add backup:run with framed client-side encryption ([54df340](https://github.com/AlexGalhardo/hexascore-app/commit/54df3406e76954c64d126e3992c8ff024d0d2785))
+- **admin:** Ban and unban from the user form ([eda1e72](https://github.com/AlexGalhardo/hexascore-app/commit/eda1e72b28f795aef6ecf52e788af4fe7517fe07))
+- **admin:** Require 2fa, cap admin sessions and add ip allowlist ([247dafc](https://github.com/AlexGalhardo/hexascore-app/commit/247dafcab1af9255e5f2e379db3fc1915b1bdc9d))
+- **infra:** Add hexascore:import-legacy runner with checkpoints and pre-flight ([1eda308](https://github.com/AlexGalhardo/hexascore-app/commit/1eda30893a1fe9b8d933102f839f0b0b7a81e511))
+- **auth:** Import legacy users with credential and google mapping ([05ceab4](https://github.com/AlexGalhardo/hexascore-app/commit/05ceab4971431e016781e5e0454089d22ff1d082))
+- **auth:** Import legacy 2fa secrets over stdin ([6094ef3](https://github.com/AlexGalhardo/hexascore-app/commit/6094ef32d82602b2ee062323fdbb0bf0bddcf656))
+- **billing:** Import legacy api keys, subscriptions and credits ([e6a1222](https://github.com/AlexGalhardo/hexascore-app/commit/e6a122260a5729748e8010018a0f76dfa6d59ca4))
+- **infra:** Verify, copy and prune database backups daily ([e0ceb29](https://github.com/AlexGalhardo/hexascore-app/commit/e0ceb29ddb0cea42a876f72772e489eb21943160))
+- **infra:** Add backup:restore with deletion replay and backup:drill ([4404113](https://github.com/AlexGalhardo/hexascore-app/commit/44041135a6d5408d697fc3869eb4c6f0a61995ac))
+- **web:** Add pricing page, coverage docs and public Scalar API reference ([85846fe](https://github.com/AlexGalhardo/hexascore-app/commit/85846fe820a79e8bccf3a33fd5be39fd6585b843))
+- **security:** Centralise the rate-limit table ([6bfc973](https://github.com/AlexGalhardo/hexascore-app/commit/6bfc97347a5069ab33b4db5521424676352dec1c))
+- **catalog:** Import legacy catalog stage ([c054ccf](https://github.com/AlexGalhardo/hexascore-app/commit/c054ccfd6b06bd62a9aab57583eb1685110cc718))
+- **catalog:** Import legacy entities and editions ([3761963](https://github.com/AlexGalhardo/hexascore-app/commit/37619636b22803786a54ec064902bc6effeca561))
+- **ratings:** Import legacy social and library rows ([360286f](https://github.com/AlexGalhardo/hexascore-app/commit/360286f8891eabe3439b6c7523bf917988dbc680))
+- **infra:** Add the legacy cover export script ([f650a34](https://github.com/AlexGalhardo/hexascore-app/commit/f650a34522c8e43923d2150992cf49ac7f555cb1))
 
 ### Changed
 
-- Stripe webhook dedup is documented as vukem `contrib/stripe`'s cache-backed event-id idempotency (production `CACHE_STORE=database`, handlers idempotent by Stripe object id) instead of a `processed_events` table, which is not imported; SDD 05, SDD 11 §7.6, SDD 13 A08 and ROADMAP P2.F.2.7 amended, proof `TestSecurity_A08_StripeReplayIgnored` (DOC-processed-events).
-- Locale URL prefixes now use vukem `i18n.MiddlewareConfig.PathPrefixes` (`SourcePath`, `StripPathPrefix`, `LocalizePath`); the app keeps only the cookie-driven 307 and prefixes same-site redirect targets of prefixed requests. Removes the VF-024 workaround (`LocalePrefix`, `RestoreURL`, `_locale` query). The prefix match is now case-sensitive and lower-case (`/PT-BR/...` is a 404) (ADOPT-VF-024).
-- `models.Rating` declares the composite key with `PrimaryKeys()` (vukem `orm.CompositeKeyer`), replacing the single-column `PrimaryKey()` hack; released `items`/`ratings` migrations stay raw DDL (forward-only) (ADOPT-VF-035).
-- Migrations rely on vukem v0.33.0's built-in advisory lock and `NoTransaction` support; `migrate:locked` (`app/console/migrate_locked.go`) and `scripts/concurrent-index.sh` are removed, runbook updated (ADOPT-VF-040).
-- Proof-of-work solver hashes without per-attempt allocations (about 3x faster), so signup, login and reset no longer stall for a minute on a loaded browser at the attack difficulty (E2E-HARDEN-P1.I.2.1).
-- Admin user form: the virtual `banned` checkbox bans and unbans in the panel transaction via new `accounts.BanTx`/`UnbanTx` (ADOPT-VF-046); the form no longer needs the separate ban routes, which stay for the moderation pages.
-- The supervised SSR child now stops only after the HTTP server drained, with SIGTERM and a 5 s grace before SIGKILL; it was killed on the first SIGTERM, while requests could still render (P2.A.3.2).
-- Adopt vukem v0.33.0: problem codes are raised with `errs.HTTPError.WithExtension("code", ...)` (VF-016, VF-048) and `APIEdge` sets the problem `type` from it on `/api/v1` and `/app/v1` (CORS stays on `/api/v1` only), replacing the `CodedProblem` route wrapper; the LGPD ZIP export uses `export.EncodeCSV` (VF-029).
+- **i18n:** Adopt vukem locale path prefixes ([3f49cfc](https://github.com/AlexGalhardo/hexascore-app/commit/3f49cfc55ca964a6d214842ff5c4f7ada97cbfcb))
+- **models:** Declare Rating composite key with PrimaryKeys ([94719d0](https://github.com/AlexGalhardo/hexascore-app/commit/94719d06a205456b2d88639206523ba8b79fcd0a))
+- **auth:** Make the proof-of-work solver allocation free ([da648cb](https://github.com/AlexGalhardo/hexascore-app/commit/da648cb39988ac252eae8da6aff993e9581b22a0))
+- **infra:** Name the secure headers flag after what it controls ([2b035b1](https://github.com/AlexGalhardo/hexascore-app/commit/2b035b1bc7d33a1a74abdd58ce54978318de3171))
 
 ### Fixed
 
-- `/challenge` probe counts the attempt it announces, so a client right below the proof-of-work limit solves before posting instead of receiving a raw 428; e2e signup flake root cause (E2E-HARDEN-P1.I.2.1).
-- CSP `upgrade-insecure-requests` is sent only when production and `APP_URL` is https (the plain-HTTP e2e container works without `bypassCSP`); e2e specs assert copy with the locale-prefixed `t` and read mailed-link emails restored from the log redaction (E2E-HARDEN-P1.I.2.1).
-- Backup child processes (`pg_dump`, `pg_restore` for restore and `--list` verify) are covered by tests for their minimal environment (`PG*` plus `PATH`, never the app environment) (FIX-backup-child-path).
-- Public profile and list pages no longer crash on the client: their page-level `seo` prop replaced the shared one (breaking `Seo`'s hreflang list); it is now a top-level `indexable` prop (found by the social e2e spec, P1.I.2.3).
-- Rendered docs code blocks are keyboard focusable (`tabindex="0"` on `<pre>`), fixing axe `scrollable-region-focusable` on the docs pages (P1.I.2.3).
-- Dumps could not be restored: `hs_norm` called `hs_unaccent` unqualified and `pg_restore` runs with an empty `search_path`; migration `20261029210000_qualify_hs_norm_function` qualifies it. Backup child processes now get `PATH`, without which `pg_restore` cannot locate itself (P2.E.3.1).
-- Catalogue listings answer 400 instead of 500 for a NUL byte or invalid UTF-8 in `genre`, `platform`, `sort` or `cursor` (found by the catalog e2e spec, P1.I.2.2).
-- API keys table scrolls inside its own focusable region instead of overflowing a 360 px viewport, which hid the Revoke button behind the Status cell (P1.I.2.1).
-
-- The Playwright suite under `qa/e2e` is now covered by `bun run lint` and `bun run typecheck`, and the e2e compose seed step no longer hides seeder failures.
-- Item page links countries and languages by code (`/countries/BR`), the key their entity route matches; they linked by slug and returned 404 (P1.G.2.4 review).
-- Home highlights, listings, entity pages and lists show the score on the 0-10 scale like the item page (they showed the stored 0-100 value), and the card label reads "out of 10".
+- **catalog:** Show highlight and listing scores on the 0-10 scale ([595490b](https://github.com/AlexGalhardo/hexascore-app/commit/595490b1b2c655137c1bf1b26d609591ba7568ff))
+- **catalog:** Link countries and languages by code on the item page ([55bb6b0](https://github.com/AlexGalhardo/hexascore-app/commit/55bb6b087abb3823d52c7d9ccbf4cea0b64414ce))
+- **ui:** Label card scores out of 10 after the score scale fix ([e7c69f6](https://github.com/AlexGalhardo/hexascore-app/commit/e7c69f669a13c32e7ce850c14fd7bb38db9f2dcf))
+- **ui:** Load each edition page once on repeated clicks ([1fe4b5c](https://github.com/AlexGalhardo/hexascore-app/commit/1fe4b5c554079d0773d13f08a612fc00515fbb01))
+- **catalog:** Redirect lowercase country and language codes to canonical ([e41c470](https://github.com/AlexGalhardo/hexascore-app/commit/e41c470043cf87b53ebf1d584d2060d4288498f2))
+- **deps:** Override js-yaml to 4.3.2 in the TypeScript SDK ([66476ce](https://github.com/AlexGalhardo/hexascore-app/commit/66476ce92f681efc124368615caf6243e3a4fc31))
+- **qa:** Lint and typecheck the e2e suite, stop hiding seed failures ([7629e9a](https://github.com/AlexGalhardo/hexascore-app/commit/7629e9a50296f324c6d00959d0929c66faff389b))
+- **billing:** Cancel every Stripe-live subscription on account deletion ([d7d182e](https://github.com/AlexGalhardo/hexascore-app/commit/d7d182e3fd5d9b146c89e72cd1a6a4d32c8cc2f6))
+- **billing:** Cancel superseded subscriptions at Stripe and expire open checkouts ([b51b5f1](https://github.com/AlexGalhardo/hexascore-app/commit/b51b5f1d7113915e19333001f0149febc5e6d7a6))
+- **repo:** Make parity inventory runnable from the main checkout ([da6c407](https://github.com/AlexGalhardo/hexascore-app/commit/da6c407198cae41d7f9fd7eed670acaba9f37136))
+- **api:** Keep CORS off /app/v1 while coding its problems ([517c663](https://github.com/AlexGalhardo/hexascore-app/commit/517c663384a7c2512f4a97840e42489fbddc017e))
+- **infra:** Make region-latency executable and count HTTP errors as failures ([c5bbbe2](https://github.com/AlexGalhardo/hexascore-app/commit/c5bbbe2f7c1f97dd9e8aab4641d3e424c4d347c6))
+- **ui:** Keep already prefixed redirect targets as they are ([0048d3b](https://github.com/AlexGalhardo/hexascore-app/commit/0048d3b75e3b092b8d5a3a937cac566045f1a3a4))
+- **infra:** Sample suggest and events lines under the real locale prefixes ([12b62e1](https://github.com/AlexGalhardo/hexascore-app/commit/12b62e188bf44dc59b1166d1057f90a72bb614bb))
+- **search:** Qualify hs_unaccent in hs_norm so dumps restore ([a05b8a4](https://github.com/AlexGalhardo/hexascore-app/commit/a05b8a40dfda39a1057089166ea844a7076d8b0f))
+- **auth:** Count the announced attempt in the challenge probe and drop bypassCSP from e2e ([9c49d66](https://github.com/AlexGalhardo/hexascore-app/commit/9c49d66572ee40dde1f2d450afd8b13da430be0f))
 
 ## [0.7.0] - 2026-10-29
 
