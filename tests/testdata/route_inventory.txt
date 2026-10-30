@@ -222,6 +222,15 @@ api   DELETE /api/v1/webhooks/{id}
 api   POST   /api/v1/webhooks/{id}/test
 api   GET    /api/v1/{type}/{id}
 api   GET    /api/v1/{type}
+app   GET    /app/v1/books/{id}/editions
+app   GET    /app/v1/entities/{id}/items
+app   GET    /app/v1/entities/{id}
+app   GET    /app/v1/games/genres
+app   GET    /app/v1/movies/genres
+app   GET    /app/v1/series/genres
+app   GET    /app/v1/books/genres
+app   GET    /app/v1/{type}/{id}
+app   GET    /app/v1/{type}
 api   GET    /api/v1/openapi.json
 web   GET    /docs/reference
 web   GET    /docs/reference/scalar.js

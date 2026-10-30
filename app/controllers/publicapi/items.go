@@ -1,6 +1,7 @@
-// Package publicapi serves the paid read API /api/v1 (SDD 05 §6.2) with typed handlers, so the OpenAPI
-// document describes every route (https://vukem.dev/docs/rest-apis/typed-handlers). Every item field goes
-// through the catalog "api" audience policy (ADR 0006, SDD 01 §6.1).
+// Package publicapi serves catalogue reads with typed handlers, so the OpenAPI
+// document describes every route (https://vukem.dev/docs/rest-apis/typed-handlers).
+// /api/v1 uses the "api" audience (ADR 0006, SDD 01 §6.1). /app/v1 reuses these
+// handlers with the "site" audience (SDD 05 §6.4).
 package publicapi
 
 import (
@@ -45,7 +46,7 @@ var (
 // workaround(vukem): VF-049, typed handlers have no documented way to answer 304.
 var errNotModified = errs.New(http.StatusNotModified, "not modified")
 
-// Controller holds the /api/v1 read handlers.
+// Controller holds the catalogue read handlers shared by /api/v1 and /app/v1.
 type Controller struct {
 	DB     catalog.Querier
 	Policy catalog.Policy
@@ -57,6 +58,12 @@ type Controller struct {
 	Redirects func(ctx context.Context, typ, id string) (catalog.Target, bool, error)
 	// Now is the clock for the changes window. Nil means time.Now.
 	Now func() time.Time
+	// Mount is this audience's URL prefix. Empty stays /api/v1 so a merged id
+	// on the paid API does not start pointing at the app.
+	Mount string
+	// PageCap, when set, replaces the caller's API plan page size. The
+	// first-party app is not plan-metered (SDD 05 §6.4).
+	PageCap int
 }
 
 // ItemMeta lists the fields the licence filter removed (SDD 05 FR-05-6).
@@ -223,7 +230,22 @@ func (h *Controller) merged(c *web.Ctx, typ string, in GetItemInput) error {
 	if !ok {
 		return errs.ErrNotFound
 	}
-	loc := "/api/v1/" + in.Type + "/" + t.ID
+
+	return h.movedTo(c, "/"+in.Type+"/"+t.ID)
+}
+
+// publicPrefix is Mount, or /api/v1 when the paid API left it empty.
+func (h *Controller) publicPrefix() string {
+	if h.Mount != "" {
+		return h.Mount
+	}
+
+	return "/api/v1"
+}
+
+// movedTo answers 301 to path under this controller's prefix, keeping the query.
+func (h *Controller) movedTo(c *web.Ctx, path string) error {
+	loc := h.publicPrefix() + path
 	if q := c.Request().URL.RawQuery; q != "" {
 		loc += "?" + q
 	}
@@ -284,6 +306,13 @@ func (h *Controller) limit(c *web.Ctx, raw string) (int, error) {
 	n, err := strconv.Atoi(raw)
 	if err != nil || n < 1 {
 		return 0, invalid("limit must be a positive integer")
+	}
+	if h.PageCap > 0 {
+		if n > h.PageCap {
+			return 0, invalid("limit exceeds the page size " + strconv.Itoa(h.PageCap))
+		}
+
+		return n, nil
 	}
 	plan, err := h.plan(c)
 	if err != nil {
