@@ -1,5 +1,6 @@
 import { router } from "@inertiajs/react";
 
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 export interface ListChoice {
@@ -10,6 +11,7 @@ export interface ListChoice {
 
 export default function AddToList({ itemId, lists }: { itemId: string; lists: ListChoice[] }) {
 	const t = useT();
+	const loc = useLocalized();
 
 	return (
 		<section aria-labelledby="addlist-heading" className="grid gap-2">
@@ -27,7 +29,7 @@ export default function AddToList({ itemId, lists }: { itemId: string; lists: Li
 								type="button"
 								className="min-h-11 rounded border px-3"
 								onClick={() => {
-									const url = `/lists/${l.id}/items/${itemId}`;
+									const url = loc(`/lists/${l.id}/items/${itemId}`);
 									if (l.hasItem) router.delete(url, { preserveScroll: true });
 									else router.put(url, {}, { preserveScroll: true });
 								}}

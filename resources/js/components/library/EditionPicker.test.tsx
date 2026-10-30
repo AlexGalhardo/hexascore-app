@@ -5,6 +5,7 @@ import { afterEach, expect, test, vi } from "vitest";
 import EditionPicker from "./EditionPicker";
 
 const put = vi.fn();
+vi.mock("../../lib/useLocalized", () => ({ useLocalized: () => (path: string) => path }));
 vi.mock("../../lib/useT", () => ({ useT: () => (key: string) => key }));
 vi.mock("@inertiajs/react", () => ({ router: { put: (...a: unknown[]) => put(...a) } }));
 

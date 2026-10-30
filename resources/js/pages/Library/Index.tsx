@@ -55,7 +55,7 @@ export default function Index({ counts, groups, filters }: Props) {
 		`${path}?${new URLSearchParams({ ...(filters.status && { status: filters.status }), type, ...(filters.sort && { sort: filters.sort }), ...(cursor !== undefined && { cursor: String(cursor) }) })}`;
 
 	const clearEdition = (id: string) =>
-		router.delete(`/items/${id}/edition`, { preserveScroll: true });
+		router.delete(localized(`/items/${id}/edition`, locale), { preserveScroll: true });
 
 	const apply = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
