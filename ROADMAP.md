@@ -1202,7 +1202,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
 
 #### P1.I.3 Load
 
-- [ ] **P1.I.3.1** Port and extend the k6 scenarios (API, search, public lists, rating hot item, page TTFB) and record results.
+- [x] **P1.I.3.1** Port and extend the k6 scenarios (API, search, public lists, rating hot item, page TTFB) and record results.
   - Files/modules: `qa/k6/{api-v1,search,public-lists,rating-hot-item,pages-ttfb}.js`, `docs/qa/k6-baseline.md`
   - Refs: SDD 05 §9; SDD 07 §9; SDD 14 §9; SDD 09 §4 (TTFB p75 ≤ 400 ms); open-issues 09-3; VF-025; legacy `qa/k6/`
   - Depends on: P1.I.1.1
