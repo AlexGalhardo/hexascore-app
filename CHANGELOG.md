@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Trend score, eligibility and prior fill as pure functions (P6.C.2.1).
 - CI guard for expand/contract migration text, plus a Postgres 18.6 migrate / rollback / migrate round trip (P2.E.1.2).
 - Legacy import `finalise` stage (score priors and recompute, search suggest rebuild) and `hexascore:cutover-verify` (`--counts-only`, `--sample-pct`): per-table counts, id-sample md5, cover keys on the bucket, orphan foreign keys, SQL vs Go scores (P2.F.4.1).
+- k6 scenarios `qa/k6/api-v1.js`, `public-lists.js` and `pages-ttfb.js`, the `qa/k6/seed.sh` load-data seeder and the baseline `docs/qa/k6-baseline.md` (P1.I.3.1).
 
 ### Fixed
 
@@ -22,7 +23,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.8.0] - 2026-10-30
 
 ### Added
-
 - **api:** Commit OpenAPI goldens with drift check and regenerate SDKs ([6c59b2b](https://github.com/AlexGalhardo/hexascore-app/commit/6c59b2b8b30ea3ec32283814246bab4019155ea5))
 - **library:** Page the edition picker list ([071faa0](https://github.com/AlexGalhardo/hexascore-app/commit/071faa0d7ee80edbfb8af2bc5c72d4163c5eda28))
 - **billing:** Install billing with plan state machine and subscription-backed API plans ([bd88dbb](https://github.com/AlexGalhardo/hexascore-app/commit/bd88dbbf4dee98477e832a6512c7e6338416226b))
@@ -119,7 +119,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.7.0] - 2026-10-29
 
 ### Added
-
 - **ui:** Add profile, library and lists pages ([53e0dd3](https://github.com/AlexGalhardo/hexascore-app/commit/53e0dd31e74916dec54b5f26284fe625244890c2))
 - **api:** Serve licence-filtered item reads on /api/v1 ([4c69869](https://github.com/AlexGalhardo/hexascore-app/commit/4c69869e84d5581eba25d46c3570ffa423287221))
 - **api:** Serve entity read endpoints on /api/v1 ([f5820c8](https://github.com/AlexGalhardo/hexascore-app/commit/f5820c893d4920f7099ef32dfc2f4ae1ffbc739b))
@@ -147,7 +146,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.6.0] - 2026-10-29
 
 ### Added
-
 - **profile:** Data export button and purge of export files on account deletion ([5c86d73](https://github.com/AlexGalhardo/hexascore-app/commit/5c86d73ea0ef8e7c06cb20b184250da6288d65a9))
 - **lists:** Add library view, edition choice and public profile ([5f48e74](https://github.com/AlexGalhardo/hexascore-app/commit/5f48e7437a3ea4497aee0db3e0d9b281b64bbfef))
 
@@ -163,7 +161,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.5.0] - 2026-10-29
 
 ### Added
-
 - **api:** Add hx_live_ api keys, fail-closed key guard and key management page ([5c0cb60](https://github.com/AlexGalhardo/hexascore-app/commit/5c0cb60784ec817fc4931a4d0e82720182bc7291))
 - **web:** Add docs, legal pages and robots.txt ([b837a88](https://github.com/AlexGalhardo/hexascore-app/commit/b837a88648e2ca5fbad8ab2e0769031c3b78537b))
 - **api:** Add plans, /api/v1 stack and quota metering in postgres ([99bf4f6](https://github.com/AlexGalhardo/hexascore-app/commit/99bf4f6f9063c8cbd3189ef3e451701ab418e4be))
@@ -185,7 +182,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.4.0] - 2026-10-29
 
 ### Added
-
 - **reports:** Add reports, contact form and admin resolve route ([54a802d](https://github.com/AlexGalhardo/hexascore-app/commit/54a802d44a2501230f5222c0f6b27319613c38c3))
 - **catalog:** Add Catalog/Index listings with filters, facets and infinite scroll ([5526d6e](https://github.com/AlexGalhardo/hexascore-app/commit/5526d6e58f1d29868da1b208e619397b29f1327c))
 - **search:** Add Search/Index page and header suggest combobox ([df04924](https://github.com/AlexGalhardo/hexascore-app/commit/df0492473b73d9c64edfa135609b617a9eb68336))
@@ -193,7 +189,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.3.0] - 2026-10-29
 
 ### Added
-
 - **auth:** Add admin panel, users resource with ban and admin CLI ([9a8f000](https://github.com/AlexGalhardo/hexascore-app/commit/9a8f000db06c5f6125416a5dd4ff168166079ccd))
 - **auth:** Localise Auth pages and add nickname onboarding ([6c596e0](https://github.com/AlexGalhardo/hexascore-app/commit/6c596e0316e9e48005ff283598bb14b6502d6f1a))
 - **infra:** Expose the release version on every response ([57557c1](https://github.com/AlexGalhardo/hexascore-app/commit/57557c177953dba8c39a80672a68d780ea935145))
@@ -251,7 +246,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.2.0] - 2026-10-29
 
 ### Added
-
 - **auth:** Add Better Auth compatibility hasher and password rules ([95cacf3](https://github.com/AlexGalhardo/hexascore-app/commit/95cacf31d786cbe79ec41f7deb247db18f37ae12))
 - **ratings:** Migrate the scoring tables and item score columns ([aeca1a5](https://github.com/AlexGalhardo/hexascore-app/commit/aeca1a54e5c6832f2b49f720c8e2efbacd980643))
 - **catalog:** Add slug generation, catalog redirects and 301 middleware ([2f206fb](https://github.com/AlexGalhardo/hexascore-app/commit/2f206fb9b7c9d54f732f96db3a22f9ccaf471fd4))
@@ -270,7 +264,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.1.0] - 2026-10-29
 
 ### Added
-
 - Scaffold the vukem Inertia React app on Postgres ([82352b6](https://github.com/AlexGalhardo/hexascore-app/commit/82352b61dc1fa6efc8a179ed91e0b590293eb6f0))
 - **ssr:** Enable Inertia SSR with Go-supervised Node, ssr health check and fallback counter ([91ce5b5](https://github.com/AlexGalhardo/hexascore-app/commit/91ce5b5b914ee38652aa3903f5498e0c6f1e194a))
 - **infra:** Add local compose stack and setup scripts ([7fb1c52](https://github.com/AlexGalhardo/hexascore-app/commit/7fb1c528bc4403ea757288c61173fc98e333eaba))
