@@ -92,7 +92,8 @@ func (h *Lists) Delete(c *web.Ctx) error {
 	}
 
 	if !h.api {
-		return c.Back("/lists")
+		// Back would return to the edit page of the list that no longer exists.
+		return c.Redirect("/lists")
 	}
 
 	return c.NoContent()

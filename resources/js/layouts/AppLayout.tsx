@@ -14,6 +14,11 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 	const { auth } = page.props;
 	const [announcement, setAnnouncement] = useState("");
 
+	// Client-side visits keep the server-rendered <html>, so follow the locale of the page (SDD 09 §7.6).
+	useEffect(() => {
+		document.documentElement.lang = page.props.locale;
+	}, [page.props.locale]);
+
 	// After a visit (not a partial reload) focus moves to the new <h1> and the
 	// title is announced politely (SDD 09 §7.6).
 	useEffect(
