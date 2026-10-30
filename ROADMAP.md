@@ -2265,7 +2265,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.A.6 Deprecation and contract gate
 
-- [ ] **P3.A.6.1** Wire `api.Deprecate` for deprecated operations and document the policy (≥ 6 months before `Sunset`, changelog entry, mail to key owners).
+- [x] **P3.A.6.1** Wire `api.Deprecate` for deprecated operations and document the policy (≥ 6 months before `Sunset`, changelog entry, mail to key owners).
   - Files/modules: `app/api/v1/deprecation.go`, `tests/api_deprecation_test.go`, `docs/runbooks/api-deprecation.md`
   - Refs: SDD 05 §6.1 headers, §6.5 "Versioning"; <https://vukem.dev/docs/rest-apis/overview> "Versioning" (`Deprecation: @<unix>`, `Sunset`, `Link`)
   - Depends on: P3.A.5.3
