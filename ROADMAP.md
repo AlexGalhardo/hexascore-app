@@ -2192,7 +2192,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.A.3 Changes feed
 
-- [ ] **P3.A.3.1** Add `api_changes` and a single writer called inside the cause's transaction (merge, ingestion upsert, `ItemScoreChanged`, and later SDD 04 apply/revert).
+- [x] **P3.A.3.1** Add `api_changes` and a single writer called inside the cause's transaction (merge, ingestion upsert, `ItemScoreChanged`, and later SDD 04 apply/revert).
   - Files/modules: `database/migrations/<ts>_create_api_changes.go`, `app/api/changes/record.go`, call sites in `app/catalog/merge.go`, `app/scoring/aggregate.go`, `tests/api_changes_record_test.go`
   - Refs: SDD 05 §5 (`api_changes`), §7.3; SDD 02 §6 (score fields); SDD 01 merge
   - Depends on: P3.A.2.1
