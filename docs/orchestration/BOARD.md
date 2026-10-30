@@ -6,13 +6,11 @@ Updated: 2026-10-29 (resume in progress; app at `v0.8.0` on origin/main; local b
 
 ## Workers
 
-| Role | Model | Worktree | Current |
-| --- | --- | --- | --- |
-| senior | Sonnet 5.5 | `wt/senior` | P1.I.5.1 (Lighthouse) in progress on `agent/senior/P1.I.5.1-r2`; queue: FIX-e2e-signup-load-r2, P1.I.4.1, P2.B.1.4, P2.B.1.5, P2.C.1.2, P2.C.2.2 |
-| especialista | Opus 5.5 | `wt/especialista` | P2.F.4.1 in progress; queue: REV-P1.I.3.1, P2.G.1.1, P2.E.1.2, P2.C.3.3; blocked: APP-PASSKEYS-b, P2.F.2.2b |
-| framework | Opus 5.5 | `wt/framework` (vukem) | idle; open PRs #63, #71, #77, #80-#82, #87-#91; recreate #66/#67 on main |
-| estagiario | Haiku 5.5 | `wt/estagiario` | idle |
-| orchestrator | Opus 5.5 | `hexascore-vukem` (`main`) | integration, vukem PR merges, releases |
+| Role | Worktree | Current |
+| --- | --- | --- |
+| implementer | `wt/implementer` | queue moved from `senior`: e2e signup, P1.I.5.1, P1.I.4.1, P2.B.1.4, P2.B.1.5, P2.C.1.2, P2.C.2.2 |
+| reviewer | `wt/reviewer` | queue moved from `especialista`: REV-P1.I.3.1, P2.G.1.1, P2.E.1.2, P2.C.3.3; blocked: APP-PASSKEYS-b, P2.F.2.2b |
+| framework | `wt/framework` (vukem) | open PRs after #63: #71, #77, #80–#82, #87–#91, Dependabot, #66, #67 |
 
 ## Phase status
 
