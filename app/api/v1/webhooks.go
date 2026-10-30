@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/crypt"
 	"github.com/AlexGalhardo/vukem/database"
@@ -17,8 +18,9 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/webhooks"
 )
 
-// Webhooks is listWebhooks, createWebhook and deleteWebhook.
+// Webhooks is listWebhooks, createWebhook, deleteWebhook and testWebhook.
 type Webhooks struct {
+	App   *vukem.App
 	DB    *database.DB
 	Crypt *crypt.Encrypter
 	Plans api.PlanResolver
@@ -55,6 +57,13 @@ type WebhookCreated struct {
 // WebhookList is listWebhooks.
 type WebhookList struct {
 	Data []WebhookJSON `json:"data"`
+}
+
+// WebhookTestResult is testWebhook. Delivered is true only when the receiver
+// answered 2xx. Status is that HTTP status, or 0 when there was none.
+type WebhookTestResult struct {
+	Delivered bool `json:"delivered"`
+	Status    int  `json:"status"`
 }
 
 // WebhookID is the deleteWebhook path.
@@ -121,6 +130,30 @@ func (h *Webhooks) Delete(c *web.Ctx, in WebhookID) (struct{}, error) {
 	}
 
 	return struct{}{}, nil
+}
+
+// Test is POST /webhooks/{id}/test. It sends one signed sample batch.
+func (h *Webhooks) Test(c *web.Ctx, in WebhookID) (WebhookTestResult, error) {
+	id, err := h.userID(c)
+	if err != nil {
+		return WebhookTestResult{}, err
+	}
+
+	plan, err := h.Plans(c.Context(), id)
+	if err != nil {
+		return WebhookTestResult{}, api.Unavailable(err)
+	}
+
+	if plan.ID != api.PlanPro && plan.ID != api.PlanBusiness {
+		return WebhookTestResult{}, errs.New(http.StatusForbidden, "plan required").WithExtension("code", "plan-required")
+	}
+
+	got, err := webhooks.Ping(c.Context(), h.App, id, in.ID)
+	if err != nil {
+		return WebhookTestResult{}, asProblem(err)
+	}
+
+	return WebhookTestResult{Delivered: got.Delivered, Status: got.Status}, nil
 }
 
 func (h *Webhooks) userID(c *web.Ctx) (int64, error) {

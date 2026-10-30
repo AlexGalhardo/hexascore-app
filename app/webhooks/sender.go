@@ -17,6 +17,8 @@ import (
 	"github.com/AlexGalhardo/vukem/mail"
 	"github.com/AlexGalhardo/vukem/queue"
 	vwebhook "github.com/AlexGalhardo/vukem/webhook"
+
+	"github.com/AlexGalhardo/hexascore-app/app/metrics"
 )
 
 // DeliveryRetries is how many times a failed delivery is retried (SDD 05 §7.3:
@@ -133,6 +135,7 @@ func DeliveryRegistration(app *vukem.App) queue.Registration {
 
 func (s *Service) deliver(ctx context.Context, d vwebhook.Delivery) error {
 	err := s.sender.Deliver(ctx, d)
+	metrics.RecordWebhookDelivery(ctx, s.deliveryOutcome(ctx, d.Endpoint, err))
 	if err == nil {
 		if resetErr := resetStreak(ctx, s.db, d.Endpoint); resetErr != nil {
 			s.log.ErrorContext(ctx, "webhook streak reset", "endpoint", d.Endpoint, "err", resetErr)
@@ -148,6 +151,45 @@ func (s *Service) deliver(ctx context.Context, d vwebhook.Delivery) error {
 	}
 
 	return err
+}
+
+// deliveryOutcome is the api.webhook.deliveries label. A non-nil error is a
+// failure. A nil error is success, 410 or a disabled endpoint, which the
+// delivery log distinguishes.
+func (s *Service) deliveryOutcome(ctx context.Context, endpoint string, deliverErr error) string {
+	if deliverErr != nil {
+		return "failure"
+	}
+
+	var status int
+	var attemptErr string
+	err := s.db.QueryRowContext(ctx, `SELECT status, error FROM webhook_deliveries
+WHERE endpoint = $1 ORDER BY id DESC LIMIT 1`, endpoint).Scan(&status, &attemptErr)
+	if err != nil {
+		return "success"
+	}
+
+	switch {
+	case status >= 200 && status < 300:
+		return "success"
+	case status == 410:
+		return "gone"
+	case attemptErr == vwebhook.AttemptDisabled:
+		return "disabled"
+	default:
+		return "failure"
+	}
+}
+
+func (s *Service) latestStatus(ctx context.Context, endpoint string) int {
+	var status int
+	err := s.db.QueryRowContext(ctx, `SELECT status FROM webhook_deliveries
+WHERE endpoint = $1 ORDER BY id DESC LIMIT 1`, endpoint).Scan(&status)
+	if err != nil {
+		return 0
+	}
+
+	return status
 }
 
 func lookupEndpoint(ctx context.Context, db *database.DB, enc *crypt.Encrypter, id string) (vwebhook.Endpoint, error) {
