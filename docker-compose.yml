@@ -47,6 +47,7 @@ services:
       APP_KEY: ${APP_KEY:?run setups/setup-unix.sh or vukem key:generate}
       DATABASE_URL: postgres://hexascore:hexascore@postgres:5432/hexascore?sslmode=disable
       SESSION_DRIVER: database
+      SESSION_RECORD_CLIENT: "true"
       # Debug level makes the log mail transport print message bodies, which is how the e2e suite reads verification and reset links.
       LOG_LEVEL: debug
       # The suite sends a distinct X-Forwarded-For per test so the strict auth rate limits (5 logins/min per IP) do not couple specs.

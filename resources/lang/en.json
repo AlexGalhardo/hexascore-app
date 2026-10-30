@@ -862,17 +862,17 @@
       "0": {
         "heading": "1. Who is responsible",
         "body": {
-          "0": "The service operator is the data controller for the data described here. For any privacy question or request, use the contact form (choose \"Questions\"). We answer requests within 15 days."
+          "0": "The service operator is the controller for the data described here and is the encarregado. Privacy requests go to privacy@hexascore.app or the contact form (choose \"Questions\"). We answer within 15 days."
         }
       },
       "1": {
         "heading": "2. Data we collect",
         "body": {
-          "0": "Account: name, email, nickname, password (stored only as a one-way hash), sign-in method (email/password, Google, passkeys), two-factor settings and the date you scheduled a deletion, if any.",
+          "0": "Account: name, email, nickname, password (stored only as a one-way hash), sign-in method (email and password, or Google), two-factor settings and the date you scheduled a deletion, if any.",
           "1": "Activity: your ratings (six categories, 0–100), item status, lists, follows and profile privacy choice.",
           "2": "Technical: IP address and browser user agent attached to active sessions, and short-lived counters used to block abuse (rate limiting and bot protection).",
           "3": "Contact messages: the name, email, subject and text you send us.",
-          "4": "API and billing: API key metadata (we store only a hash of the key), request counts, plan, credits and invoices. Card and PIX payment data are handled by Stripe and AbacatePay; we never see or store full card numbers."
+          "4": "API and billing: API key metadata (we store only a hash of the key), request counts, plan, credits and invoices. Card payments are handled by Stripe; we never see or store full card numbers."
         }
       },
       "2": {
@@ -887,16 +887,17 @@
       "3": {
         "heading": "4. Cookies",
         "body": {
-          "0": "We only use essential cookies: the session cookie that keeps you logged in, short-lived two-factor and trusted-device cookies, and preference cookies for theme, language and your cookie choice. We use no advertising or cross-site tracking cookies.",
-          "1": "Traffic statistics are collected without cookies (Vercel Web Analytics), in aggregate. Trailers are served from youtube-nocookie.com and only load after you allow embeds in the cookie banner.",
+          "0": "We only use essential cookies: the session cookie that keeps you logged in, short-lived two-factor cookies, and the locale, theme and consent cookies. We use no advertising or cross-site tracking cookies.",
+          "1": "Optional analytics load only after you allow them. Trailers are served from youtube-nocookie.com and only load after you allow embeds in the cookie banner.",
           "2": "When you follow an affiliate link to Amazon or Mercado Livre you leave our site; those stores set their own cookies under their own policies."
         }
       },
       "4": {
         "heading": "5. Who we share data with",
         "body": {
-          "0": "We do not sell personal data. We share it only with providers that process it on our behalf: Vercel (hosting, bot protection, analytics), Neon (database), Upstash (rate limiting), Resend (transactional email), Stripe and AbacatePay (payments) and Google (only if you choose \"Continue with Google\").",
-          "1": "Some of these providers are located outside your country, including in the United States. Transfers rely on the safeguards allowed by the LGPD and GDPR, such as standard contractual clauses."
+          "0": "We do not sell personal data. We share it only with providers that process it on our behalf: Railway (hosting and database), Grafana Cloud (metrics and logs), Resend (transactional email), Stripe (payments), Google (only if you choose \"Continue with Google\") and Telegram (operator alerts).",
+          "1": "Some of these providers are located outside your country, including in the United States. Transfers use the safeguards those laws allow.",
+          "2": "Catalogue metadata from IGDB and TMDB is shown with the attribution those sources require. Community catalogue contributions stay under the A-07 licence."
         }
       },
       "5": {
@@ -904,20 +905,20 @@
         "body": {
           "0": "Account data is kept while your account exists. When you delete your account, it enters a 30-day grace period during which you can log in and cancel. After that, your name, email, nickname, sessions, sign-in methods and two-factor data are erased and the account is anonymized.",
           "1": "Your ratings are kept after deletion without any link to your identity, as \"Deleted user\", so community scores are not distorted.",
-          "2": "Contact messages are kept for up to 2 years; billing records for as long as tax law requires (currently 5 years in Brazil); security logs for up to 30 days."
+          "2": "Contact messages are kept for up to 2 years; billing records for as long as tax law requires (currently 5 years in Brazil); security logs, the session IP address and the user agent for up to 30 days. Opt-in client reports are kept for 7 days. Export files are kept for 24 hours."
         }
       },
       "6": {
         "heading": "7. Your rights",
         "body": {
-          "0": "Under the LGPD (art. 18) and the GDPR you can: confirm whether we process your data; access it; correct it; request anonymization, blocking or deletion; receive it in a portable format; know who we share it with; object to processing based on legitimate interest; and withdraw consent.",
-          "1": "You can edit your name, password, two-factor settings, passkeys and profile privacy, and delete your account, directly in your profile. For anything else, use the contact form. You may also complain to the Brazilian data protection authority (ANPD) or to your local supervisory authority."
+          "0": "Under the LGPD and the GDPR you can confirm whether we process your data, access it, correct it, ask for anonymisation or deletion, receive a portable copy, know who we share it with, object to processing based on legitimate interest, and withdraw consent.",
+          "1": "You can edit your name, password, two-factor settings and profile privacy, turn off personalised recommendations, and delete your account, in your profile. For anything else, use the contact form or privacy@hexascore.app. You may also complain to the Brazilian data protection authority (ANPD) or to your local supervisory authority."
         }
       },
       "7": {
         "heading": "8. Security",
         "body": {
-          "0": "Passwords are hashed, all traffic uses HTTPS, sessions use HttpOnly cookies, and you can protect your account with two-factor authentication and passkeys. No system is perfectly secure; if we learn of an incident that affects you, we will notify you and the authorities as the law requires."
+          "0": "Passwords are hashed, all traffic uses HTTPS, sessions use HttpOnly cookies, and you can protect your account with two-factor authentication. No system is perfectly secure; if we learn of an incident that affects you, we will notify you and the authorities as the law requires."
         }
       },
       "8": {

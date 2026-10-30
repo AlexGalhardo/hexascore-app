@@ -21,5 +21,6 @@ func All(app *vukem.App) []queue.Registration {
 		handleDeletionPurge(app),
 		handleLibraryExport(app),
 		handleExpireExports(app),
+		handleRetainPersonalData(app),
 	}
 }

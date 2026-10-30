@@ -862,17 +862,17 @@
       "0": {
         "heading": "1. Responsable",
         "body": {
-          "0": "El operador del servicio es el responsable del tratamiento de los datos descritos aquí. Para cualquier duda o solicitud sobre privacidad, usa el formulario de contacto (elige \"Dudas\"). Respondemos en un plazo de 15 días."
+          "0": "El operador del servicio es el responsable del tratamiento de los datos descritos aquí y el encarregado. Las solicitudes de privacidad van a privacy@hexascore.app o al formulario de contacto (elige \"Dudas\"). Respondemos en un plazo de 15 días."
         }
       },
       "1": {
         "heading": "2. Datos que recopilamos",
         "body": {
-          "0": "Cuenta: nombre, correo, nickname, contraseña (guardada solo como hash irreversible), método de acceso (correo y contraseña, Google, passkeys), configuración de dos pasos y la fecha en que programaste la eliminación, si la hay.",
+          "0": "Cuenta: nombre, correo, nickname, contraseña (guardada solo como hash irreversible), método de acceso (correo y contraseña o Google), configuración de dos pasos y la fecha en que programaste la eliminación, si la hay.",
           "1": "Actividad: tus puntuaciones (seis categorías, 0–100), estado de las obras, listas, a quién sigues y la elección de perfil privado.",
           "2": "Datos técnicos: dirección IP y user agent del navegador vinculados a las sesiones activas, y contadores de corta duración para bloquear abusos (límite de solicitudes y protección contra bots).",
           "3": "Mensajes de contacto: nombre, correo, asunto y texto que nos envías.",
-          "4": "API y facturación: metadatos de las claves de API (guardamos solo un hash de la clave), número de solicitudes, plan, créditos y facturas. Los datos de tarjeta y PIX los tratan Stripe y AbacatePay; nunca vemos ni guardamos el número completo de la tarjeta."
+          "4": "API y facturación: metadatos de las claves de API (guardamos solo un hash de la clave), número de solicitudes, plan, créditos y facturas. Los pagos con tarjeta los trata Stripe; nunca vemos ni guardamos el número completo de la tarjeta."
         }
       },
       "2": {
@@ -887,16 +887,17 @@
       "3": {
         "heading": "4. Cookies",
         "body": {
-          "0": "Solo usamos cookies esenciales: la cookie de sesión que te mantiene conectado, cookies temporales de dos pasos y de dispositivo de confianza, y cookies de preferencias para tema, idioma y tu elección sobre cookies. No usamos cookies publicitarias ni de seguimiento entre sitios.",
-          "1": "Las estadísticas de tráfico se recopilan sin cookies (Vercel Web Analytics), de forma agregada. Los tráileres se sirven desde youtube-nocookie.com y solo se cargan después de que permitas los vídeos en el banner de cookies.",
+          "0": "Solo usamos cookies esenciales: la cookie de sesión que te mantiene conectado, cookies temporales de dos pasos, y las cookies locale, theme y consent. No usamos cookies publicitarias ni de seguimiento entre sitios.",
+          "1": "Las estadísticas opcionales solo se cargan después de que las permitas. Los tráileres se sirven desde youtube-nocookie.com y solo se cargan después de que permitas los vídeos en el banner de cookies.",
           "2": "Al seguir un enlace de afiliado a Amazon o Mercado Libre sales de nuestro sitio; esas tiendas usan sus propias cookies según sus propias políticas."
         }
       },
       "4": {
         "heading": "5. Con quién compartimos datos",
         "body": {
-          "0": "No vendemos datos personales. Solo los compartimos con encargados que los tratan en nuestro nombre: Vercel (alojamiento, protección contra bots, estadísticas), Neon (base de datos), Upstash (límite de solicitudes), Resend (correos transaccionales), Stripe y AbacatePay (pagos) y Google (solo si eliges \"Continuar con Google\").",
-          "1": "Algunos de estos encargados están fuera de tu país, incluso en Estados Unidos. Las transferencias se basan en las garantías previstas por la LGPD y el RGPD, como las cláusulas contractuales tipo."
+          "0": "No vendemos datos personales. Solo los compartimos con operadores que los tratan en nuestro nombre: Railway (alojamiento y base de datos), Grafana Cloud (métricas y registros), Resend (correos transaccionales), Stripe (pagos), Google (solo si eliges \"Continuar con Google\") y Telegram (alertas del operador).",
+          "1": "Algunos de estos operadores están fuera de tu país, incluso en Estados Unidos. Las transferencias usan las salvaguardas que esas leyes permiten.",
+          "2": "Los metadatos de catálogo de IGDB y TMDB se muestran con la atribución que esas fuentes exigen. Las contribuciones de la comunidad al catálogo quedan bajo la licencia A-07."
         }
       },
       "5": {
@@ -904,20 +905,20 @@
         "body": {
           "0": "Los datos de la cuenta se conservan mientras exista la cuenta. Cuando la eliminas, entra en un periodo de gracia de 30 días en el que puedes entrar y cancelar. Después, se borran tu nombre, correo, nickname, sesiones, métodos de acceso y datos de dos pasos, y la cuenta queda anonimizada.",
           "1": "Tus puntuaciones se conservan tras la eliminación sin ningún vínculo con tu identidad, como \"Usuario eliminado\", para no distorsionar las puntuaciones de la comunidad.",
-          "2": "Los mensajes de contacto se conservan hasta 2 años; los registros de facturación durante el plazo que exige la ley fiscal (hoy, 5 años en Brasil); los registros de seguridad hasta 30 días."
+          "2": "Los mensajes de contacto se conservan hasta 2 años; los registros de facturación durante el plazo que exige la ley fiscal (hoy, 5 años en Brasil); los registros de seguridad, la IP de la sesión y el user agent hasta 30 días. Los informes opcionales del cliente se conservan 7 días. Los archivos de exportación se conservan 24 horas."
         }
       },
       "6": {
         "heading": "7. Tus derechos",
         "body": {
-          "0": "Según la LGPD (art. 18) y el RGPD puedes: confirmar si tratamos tus datos; acceder a ellos; rectificarlos; pedir su anonimización, bloqueo o supresión; recibirlos en un formato portable; saber con quién los compartimos; oponerte al tratamiento basado en interés legítimo; y retirar tu consentimiento.",
-          "1": "Puedes cambiar tu nombre, contraseña, dos pasos, passkeys y la privacidad del perfil, y eliminar tu cuenta, directamente en tu perfil. Para cualquier otra solicitud, usa el formulario de contacto. También puedes reclamar ante la autoridad brasileña de protección de datos (ANPD) o ante la autoridad de control de tu país."
+          "0": "Según la LGPD y el RGPD puedes confirmar si tratamos tus datos, acceder a ellos, rectificarlos, pedir su anonimización o supresión, recibir una copia portable, saber con quién los compartimos, oponerte al tratamiento basado en interés legítimo y retirar tu consentimiento.",
+          "1": "Puedes cambiar tu nombre, contraseña, dos pasos y la privacidad del perfil, desactivar las recomendaciones personalizadas y eliminar tu cuenta, directamente en tu perfil. Para cualquier otra solicitud, usa el formulario de contacto o privacy@hexascore.app. También puedes reclamar ante la autoridad brasileña de protección de datos (ANPD) o ante la autoridad de control de tu país."
         }
       },
       "7": {
         "heading": "8. Seguridad",
         "body": {
-          "0": "Las contraseñas se guardan como hash, todo el tráfico usa HTTPS, las sesiones usan cookies HttpOnly y puedes proteger tu cuenta con autenticación en dos pasos y passkeys. Ningún sistema es totalmente seguro; si sabemos de un incidente que te afecte, te avisaremos a ti y a las autoridades como exige la ley."
+          "0": "Las contraseñas se guardan como hash, todo el tráfico usa HTTPS, las sesiones usan cookies HttpOnly y puedes proteger tu cuenta con autenticación en dos pasos. Ningún sistema es totalmente seguro; si sabemos de un incidente que te afecte, te avisaremos a ti y a las autoridades como exige la ley."
         }
       },
       "8": {

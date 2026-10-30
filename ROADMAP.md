@@ -1699,7 +1699,7 @@ Phase-specific conventions:
 
 #### P2.D.4 LGPD
 
-- [ ] **P2.D.4.1** Verify the data-subject rights end to end, add the retention jobs, and update the privacy policy.
+- [x] **P2.D.4.1** Verify the data-subject rights end to end, add the retention jobs, and update the privacy policy.
   - Files/modules: `app/privacy/retention.go` (session IP ≤ 30 days, `client_reports` 7 days, export ZIPs 24 h), `tests/lgpd_test.go`, `lang/{en,pt-BR,es}.json` (`legal.privacy`), `resources/js/pages/Legal/Page.tsx` content source, `docs/legal/privacy-review.md`
   - Refs: SDD 13 FR-13-6, §5 (inventory), §7.6; SDD 14 FR-14-12; SDD 03 FR-03-15; D-29; P1.F.4.1, P1.C.3.2
   - Depends on: P2.D.3.1
