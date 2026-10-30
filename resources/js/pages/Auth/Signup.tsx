@@ -5,10 +5,12 @@ import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
 import { challengeHeaders } from "../../lib/challenge";
 import { checkConfirmation, checkPassword, passwordAdvice } from "../../lib/password-policy";
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 export default function Signup() {
 	const t = useT();
+	const l = useLocalized();
 	const form = useForm({
 		name: "",
 		email: "",
@@ -20,7 +22,7 @@ export default function Signup() {
 	const submit = async (e: FormEvent) => {
 		e.preventDefault();
 		const headers = await challengeHeaders("signup");
-		form.post("/signup", {
+		form.post(l("/signup"), {
 			headers,
 			onFinish: () => form.reset("password", "password_confirmation"),
 		});

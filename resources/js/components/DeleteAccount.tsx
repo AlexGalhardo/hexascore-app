@@ -1,6 +1,7 @@
 import { router } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 
+import { useLocalized } from "../lib/useLocalized";
 import { useT } from "../lib/useT";
 import Dialog from "./Dialog";
 
@@ -9,6 +10,7 @@ const COUNTDOWN_SECONDS = 10;
 // The confirm button stays disabled for 10 s so a stray click cannot start the grace period (SDD 03 FR-03-15).
 export default function DeleteAccount({ className }: { className?: string }) {
 	const t = useT();
+	const l = useLocalized();
 	const [open, setOpen] = useState(false);
 	const [seconds, setSeconds] = useState(COUNTDOWN_SECONDS);
 
@@ -38,7 +40,7 @@ export default function DeleteAccount({ className }: { className?: string }) {
 						type="button"
 						className={className}
 						disabled={seconds > 0}
-						onClick={() => router.post("/profile/deletion", { confirm: true })}
+						onClick={() => router.post(l("/profile/deletion"), { confirm: true })}
 					>
 						{seconds > 0
 							? t("account.delete.wait", { seconds })

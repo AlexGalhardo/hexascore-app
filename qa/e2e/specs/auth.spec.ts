@@ -73,12 +73,7 @@ test.describe("auth", () => {
 			await expect(page).toHaveURL(/verify-email/);
 		});
 
-		test("TOTP two-factor: enable, then log in with a code", async ({
-			page,
-			prefix,
-			t,
-			any,
-		}) => {
+		test("TOTP two-factor: enable, then log in with a code", async ({ page, prefix, t }) => {
 			test.setTimeout(240_000);
 			const account = await createVerifiedAccount(page, prefix, t);
 
@@ -98,12 +93,12 @@ test.describe("auth", () => {
 			await expect(page).toHaveURL(/two-factor-challenge/, { timeout: POW_TIMEOUT });
 			await expectNoSeriousA11yViolations(page);
 			await page.locator("input[autocomplete=one-time-code]").fill("000000");
-			await page.getByRole("button", { name: any("auth.login.verify") }).click();
+			await page.getByRole("button", { name: t("auth.login.verify") }).click();
 			await expect(page.locator("main p.text-red-600")).toBeVisible({ timeout: POW_TIMEOUT });
 			await page
 				.locator("input[autocomplete=one-time-code]")
 				.fill(await codeAfter(secret, step));
-			await page.getByRole("button", { name: any("auth.login.verify") }).click();
+			await page.getByRole("button", { name: t("auth.login.verify") }).click();
 			await page.waitForURL((url) => !url.pathname.includes("two-factor-challenge"));
 			await expectSignedIn(page, prefix);
 		});

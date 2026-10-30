@@ -59,6 +59,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **infra:** Sample suggest and events lines under the real locale prefixes ([12b62e1](https://github.com/AlexGalhardo/hexascore-app/commit/12b62e188bf44dc59b1166d1057f90a72bb614bb))
 - **search:** Qualify hs_unaccent in hs_norm so dumps restore ([a05b8a4](https://github.com/AlexGalhardo/hexascore-app/commit/a05b8a40dfda39a1057089166ea844a7076d8b0f))
 - **auth:** Count the announced attempt in the challenge probe and drop bypassCSP from e2e ([9c49d66](https://github.com/AlexGalhardo/hexascore-app/commit/9c49d66572ee40dde1f2d450afd8b13da430be0f))
+- Auth, profile, API key, account deletion and two-factor forms now post under the page locale prefix (`useLocalized`), so their redirects keep `/pt-br` and `/es`; the e2e specs for profile, API keys and the TOTP challenge assert in the project locale. `docker-compose.yml` takes `E2E_IMAGE_TAG` so each worker builds its own e2e image.
+- Backup child processes (`pg_dump`, `pg_restore` for restore and `--list` verify) are covered by tests for their minimal environment (`PG*` plus `PATH`, never the app environment) (FIX-backup-child-path).
+- Public profile and list pages no longer crash on the client: their page-level `seo` prop replaced the shared one (breaking `Seo`'s hreflang list); it is now a top-level `indexable` prop (found by the social e2e spec, P1.I.2.3).
+- Rendered docs code blocks are keyboard focusable (`tabindex="0"` on `<pre>`), fixing axe `scrollable-region-focusable` on the docs pages (P1.I.2.3).
+- Dumps could not be restored: `hs_norm` called `hs_unaccent` unqualified and `pg_restore` runs with an empty `search_path`; migration `20261029210000_qualify_hs_norm_function` qualifies it. Backup child processes now get `PATH`, without which `pg_restore` cannot locate itself (P2.E.3.1).
+- Catalogue listings answer 400 instead of 500 for a NUL byte or invalid UTF-8 in `genre`, `platform`, `sort` or `cursor` (found by the catalog e2e spec, P1.I.2.2).
+
+- API keys table scrolls inside its own focusable region instead of overflowing a 360 px viewport, which hid the Revoke button behind the Status cell (P1.I.2.1).
+
+- The Playwright suite under `qa/e2e` is now covered by `bun run lint` and `bun run typecheck`, and the e2e compose seed step no longer hides seeder failures.
+- Item page links countries and languages by code (`/countries/BR`), the key their entity route matches; they linked by slug and returned 404 (P1.G.2.4 review).
+- Home highlights, listings, entity pages and lists show the score on the 0-10 scale like the item page (they showed the stored 0-100 value), and the card label reads "out of 10".
 
 ## [0.7.0] - 2026-10-29
 

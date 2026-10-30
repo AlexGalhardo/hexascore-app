@@ -7,6 +7,7 @@ import DeleteAccount from "./DeleteAccount";
 const post = vi.fn();
 
 vi.mock("@inertiajs/react", () => ({ router: { post: (...args: unknown[]) => post(...args) } }));
+vi.mock("../lib/useLocalized", () => ({ useLocalized: () => (path: string) => path }));
 vi.mock("../lib/useT", () => ({
 	useT: () => (key: string, params?: Record<string, number>) =>
 		params ? `${key} ${params.seconds}` : key,
