@@ -44,7 +44,7 @@ Out of scope (v1): trusted moderators (modelled, flag off, D-15); suggestion obj
 
 ## 5. Data model
 
-User references use the type of `users.id` (`text`, SDD 03 §5: legacy Better Auth ids kept, new-row id format per SDD 03); they were `bigint` in the first draft. Row ids of the tables below stay as written.
+User references use the type of `users.id`. In this app that column is `bigint` (`t.ID()` in `20261029022752_create_users_table`, same as `ratings.user_id`). Row ids of the tables below stay as written.
 
 ```sql
 create type suggestion_kind   as enum ('edit','create','merge');
@@ -57,7 +57,7 @@ create type actor_role as enum ('author','admin','moderator','system');
 
 create table suggestions (
   id            uuid primary key,                      -- UUIDv7
-  author_id     text references users(id) on delete set null,
+  author_id     bigint references users(id) on delete set null,
   kind          suggestion_kind   not null,
   target_type   suggestion_target not null,
   target_id     uuid,                                  -- null only for 'create'
@@ -67,9 +67,9 @@ create table suggestions (
   note          text check (char_length(note) <= 1000),
   source_urls   text[] not null default '{}' check (cardinality(source_urls) <= 3),
   status        suggestion_status not null default 'draft',
-  assigned_to   text references users(id) on delete set null,
+  assigned_to   bigint references users(id) on delete set null,
   claimed_at    timestamptz,
-  decided_by    text references users(id) on delete set null,
+  decided_by    bigint references users(id) on delete set null,
   decided_at    timestamptz,
   reject_reason reject_reason,
   decision_note text check (char_length(decision_note) <= 1000),
@@ -92,7 +92,7 @@ create table suggestion_events (
   suggestion_id uuid not null references suggestions(id),
   from_status   suggestion_status,
   to_status     suggestion_status not null,
-  actor_id      text references users(id) on delete set null,
+  actor_id      bigint references users(id) on delete set null,
   actor_role    actor_role not null,
   reason        text,
   meta          jsonb not null default '{}',           -- bulk batch id, request id
@@ -105,7 +105,7 @@ create type audit_source as enum ('community','admin','revert','merge','create')
 create table catalog_audit (
   id               bigint generated always as identity primary key,
   occurred_at      timestamptz not null default now(),
-  actor_id         text references users(id) on delete set null,
+  actor_id         bigint references users(id) on delete set null,
   actor_role       actor_role not null,
   source           audit_source not null,
   suggestion_id    uuid references suggestions(id),
@@ -124,13 +124,14 @@ create index catalog_audit_field_idx  on catalog_audit (target_type, target_id, 
 create index catalog_audit_actor_idx  on catalog_audit (actor_id, occurred_at desc);
 create unique index catalog_audit_one_revert on catalog_audit (reverts_audit_id)
   where reverts_audit_id is not null;
--- trigger: BEFORE UPDATE OR DELETE → RAISE EXCEPTION 'catalog_audit is append-only' (P0001);
+-- trigger: BEFORE UPDATE OR DELETE FOR EACH STATEMENT → RAISE EXCEPTION 'catalog_audit is append-only' (P0001);
+-- statement level so the write is refused even when zero rows match (the acceptance updates id 1 on an empty table).
 -- app role has only INSERT/SELECT on it (SDD 11).
 
 create type contributor_tier as enum ('new','standard','low','blocked');
 
 create table contributor_stats (
-  user_id          text primary key references users(id) on delete cascade,
+  user_id          bigint primary key references users(id) on delete cascade,
   submitted_total  integer not null default 0,
   approved_total   integer not null default 0,          -- reached 'applied'
   rejected_total   integer not null default 0,          -- excludes duplicate/stale/target_gone
@@ -148,7 +149,7 @@ create table contributor_stats (
 create table catalog_locks (
   id uuid primary key, target_type suggestion_target not null, target_id uuid not null,
   field text not null default '*', reason text not null,
-  locked_by text references users(id) on delete set null,
+  locked_by bigint references users(id) on delete set null,
   expires_at timestamptz, created_at timestamptz not null default now(),
   unique (target_type, target_id, field)
 );
