@@ -1,0 +1,40 @@
+name: projected-spend
+
+# A17 (SDD 12). Usage API is not verified, so a run without USAGE_USD only
+# logs the day-20 reminder. Telegram is posted only when the secret exists
+# and the formula alerts or the reminder is due. P2.C.1.2 owns that secret.
+on:
+  schedule:
+    - cron: "20 12 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  spend:
+    name: Projected spend
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - run: bun test scripts/ops/projected-spend.test.ts
+      - id: spend
+        run: bun scripts/ops/projected-spend.ts
+        env:
+          USAGE_USD: ${{ vars.RAILWAY_USAGE_USD }}
+      - name: Telegram
+        if: steps.spend.outputs.alert == 'true' || steps.spend.outputs.reminder == 'true'
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
+            echo "telegram unset; the reminder stays in this log"
+            exit 0
+          fi
+          curl -fsS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=HexaScore A17: check Railway usage. Alert when the day-20 projection exceeds US\$27."

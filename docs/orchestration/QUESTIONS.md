@@ -65,3 +65,4 @@ These stay unchecked. None of them is in a worker queue. Say the word here and n
 - Store time that has not passed: P5.C.3.1, P5.C.3.2, P5.C.3.3, and the 30-day job clocks inside P6.A.4.2 and P6.B.5.1.
 - Legal quotes still missing in `docs/legal/`: P6.A.1.1 (Open Library, A-05), P6.A.2.4, P6.B.1.2 (IGDB, D-36), P6.B.1.3 (Steam/GOG images).
 - ZAP against a live staging host: P2.D.5.2.
+- `gh workflow run projected-spend.yml` (P2.C.3.4): this session does not push, Railway usage has no verified API, and Telegram is P2.C.1.2. The formula test passed locally. The checkbox stays open until that workflow run exists.
