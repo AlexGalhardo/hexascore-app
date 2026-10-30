@@ -14,7 +14,7 @@ In (v1): web (including passkeys, ADR 0017), `/api/v1`, `/app/v1`, admin, webhoo
 
 ## 3. Functional requirements
 
-- FR-13-1: Every route belongs to one §6.1 stack. Verify: `TestSecurity_A01_HexaRouteStackInventory` walks the router and fails on an unclassified route.
+- FR-13-1: Every route belongs to one §6.1 stack, listed in `tests/testdata/route_inventory.txt`. Verify: `TestSecurity_A01_HexaRouteStackInventory` walks the router and fails on an unclassified route, on a route whose prefix or middleware contradicts its stack, and (with `TEST_DATABASE_URL`) on a stale line.
 - FR-13-2: Every unsafe unauthenticated route has a §7.1 limit and answers 429 with `Retry-After`. Verify: table-driven `TestSecurity_A06_HexaLimits`.
 - FR-13-3: The proof-of-work challenge (§7.2) triggers on the ADR 0016 thresholds and refuses a reused solution. Verify: `TestSecurity_A07_Pow*` (SDD 03).
 - FR-13-4: Every body, query, path, webhook field and stored jsonb value passes a `z` schema before use. Verify: lint flags `c.FormValue` and `map[string]any` decoding in `app/`; fuzz test per boundary.
@@ -183,7 +183,7 @@ Keys: IPv6 is bucketed by /64 [RL]. `c.IP()` trusts forwarding headers only from
   - Webhooks: verify the signature first, then validate only the fields read.
   - Ingestion: validate before upsert (SDD 06).
   - jsonb: decode into typed structs, because rows written by older schema versions must not crash or inject.
-- Body limits via `BodyLimit` ([OV] A06):
+- Body limits via `BodyLimit` ([OV] A06), implemented by `limits.Body` (`app/http/limits/body.go`) at server level (vukem's `MethodOverride` parses urlencoded forms before routing, VF-NEW-P2.D.2.2) and at router level (replacing vukem's 10 MiB default); the Stripe webhook passes its limit to `stripe.WebhookConfig.MaxBody`. "Forms" means every web and admin route; "Other routes" means the `api` and `app` stacks. Verify: `TestSecurity_A06_HexaBodyLimits`.
 
 | Route | Limit |
 | --- | --- |
