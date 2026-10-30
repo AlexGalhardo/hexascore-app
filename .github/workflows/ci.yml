@@ -91,6 +91,8 @@ jobs:
       # bun is on PATH so TestPluralGolden compares Go and TypeScript output.
       - run: go test -race -count=1 -tags integration ./...
       - run: bun run test
+      - name: Migration policy
+        run: bun test scripts/ci/migration-policy.test.ts
       - name: TypeScript SDK
         working-directory: sdks/ts
         run: bun install --frozen-lockfile --ignore-scripts && bun run typecheck && bun test

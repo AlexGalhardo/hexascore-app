@@ -20,6 +20,10 @@ Owner documents: SDD 11 §7.2, SDD 07 §7.10, ADR 0014. Migrations are forward-o
 
 Since vukem v0.33.0 `migrate` itself holds an advisory lock for the whole run (VF-026): two overlapping pre-deploys serialise and the second prints `Nothing to migrate.`. The Railway pre-deploy command is still `/app/app migrate`; switching it to `/app/app hexascore:predeploy` is a deploy configuration change for the owner.
 
+## Expand / contract policy
+
+`scripts/ci/migration-policy.ts` reads migration source. It rejects, in the `Up` text only, `DROP COLUMN`, `DROP TABLE`, `RENAME`, `SET NOT NULL`, and a non-concurrent `CREATE INDEX` on `items`, `ratings`, or `item_translations`. `CREATE INDEX CONCURRENTLY` is allowed. A `contract: vX.Y.Z` marker waives the guard when that release is at least two minors older than the current app release (`v0.8.0` accepts `contract: v0.6.0`, not `v0.7.0`). `Down` is never checked: production does not run down migrations. CI runs `bun test scripts/ci/migration-policy.test.ts`. A PR that adds a migration also runs `vukem migrate`, `vukem migrate:rollback --step 1`, and `vukem migrate` on Postgres 18.6.
+
 ## Concurrent indexes
 
 `CREATE INDEX CONCURRENTLY` cannot run inside a transaction. Since vukem v0.33.0 (VF-017) it is a regular migration with `NoTransaction: true`, one statement per migration, written to be re-run:
