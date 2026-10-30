@@ -3503,7 +3503,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.C.2 Score and snapshots
 
-- [ ] **P6.C.2.1** Implement the trend score, eligibility and the prior fill as pure functions: `D(a) = 2^(−a/7)`, `Q_d`, `U_d`, `T_i`, `A_i`, eligibility `A ≥ 5 ∧ T ≥ 30 ∧ released ∧ public`, and `F_i`.
+- [x] **P6.C.2.1** Implement the trend score, eligibility and the prior fill as pure functions: `D(a) = 2^(−a/7)`, `Q_d`, `U_d`, `T_i`, `A_i`, eligibility `A ≥ 5 ∧ T ≥ 30 ∧ released ∧ public`, and `F_i`.
   - Files/modules: `app/recommend/trending/score.go`, `app/recommend/trending/score_test.go`
   - Refs: SDD 08 §7.2, §7.3 step 3, FR-08-3, §10 "Unit"
   - Depends on: P6.C.1.3
