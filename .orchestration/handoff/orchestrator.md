@@ -1,26 +1,34 @@
-# orchestrator handoff (2026-10-29, session paused by the owner)
+# orchestrator handoff (2026-10-30, session paused by the owner)
 
-`.orchestration/STOP` exists: workers finish their current task and stop. Remove it when resuming.
+`.orchestration/STOP` exists: workers finish their current step and stop. Delete it when resuming.
 
-## State
+## How this session ran
 
-- App `main` at v0.7.0 tag plus later work: P1.A to P1.G done; P1.H.1.x, H.2.1 (a/b/c), H.2.2, H.3.1 (billing, merged with placeholder Stripe vars on Railway), H.4.1 done; P1.I.1.1 done; P2.D.5.1 done.
-- Railway `app` (production) has placeholder `STRIPE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO`, `STRIPE_PRICE_BUSINESS` (`*_FAKE_replace_me`); the owner replaces them. Deploy after f9b3779 not verified yet.
-- vukem: PRs #29 to #32 merged into `main`; #33 (VF-016/048) and #34 (VF-036) still open (update-branch + wait CI + squash merge; `--admin` is denied by the classifier). Then release v0.33.0 per `vukem/docs/maintenance.md` "Releasing through a pull request" (owner approved it), then queue `queue/senior/1-ADOPT-vukem-v0.33.0.md`. Helper script used: sequential update/wait/merge loop (`gh pr update-branch`, `gh pr checks --json bucket`, `gh pr merge --squash`).
-- Redocly approved (D-22); task `queue/senior/2-P1.H.4.1b.md` queued.
+- Owner rules for the session (also in memory and briefs): workers stay alive in standby and get tasks by message (`briefs/common-app.md` "Standby rule"); relaunch a worker only when its session hits the context limit (it ends with `STATUS: IDLE "context limit"` after updating its handoff). Parallel workers and pushes to `main` were approved for this goal; ask again in a new session (global CLAUDE.md rule).
+- Owner gates still apply: Railway plan/buckets/DNS/secrets, Stripe live values (Q-H31), Google Play, cutover. Recorded decisions are in `docs/orchestration/QUESTIONS.md` (FR-003 answer, FD-011/FD-014/FD-044/FQ-004 answers, owner requests for VF-001, VF-052, VF-055, VF-056, VF-057, VF-059, processed_events decision, drivers/s3 decision).
+- The orchestrator (main session) merges vukem PRs with `gh pr merge <n> --squash` (owner authorized; workers must not). Releases of vukem only on owner request.
+- Railway: CLI linked in `hexascore-vukem` to project `hexascore` / `production` / `app`. Reading variables works; `Bash(railway variables:*)` is now in the owner's allow list. A harmless test variable `ORCHESTRATOR_ACCESS_CHECK=2026-10-30` exists on `app` (remove it when convenient). Store variables are correct: `RATE_LIMIT_STORE=cache`, `CACHE_STORE=database`, `SESSION_DRIVER=database`.
 
-## Queues at pause
+## State at pause
 
-- senior: active `3-P1.I.2.1` (may finish or stop); queued P1.H.4.1b, P1.I.2.2, P1.I.2.3, P1.I.2.4, P1.I.3.1, P1.I.5.1, P1.I.4.1.
-- especialista: idle; REVs arrive from senior deliveries.
-- framework: stopped since FR-002; restart after v0.33.0 for the next VFs.
+- App: `main` released as `v0.8.0` (P1.H.5.1, GitHub release published, local container smoke test green). Merged after the tag: nothing but orchestration files.
+- Gate commands (all green at the last merge): `go build ./...`; `golangci-lint run --allow-parallel-runners --build-tags integration ./...`; `TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable go test -tags integration ./...`; `bun run lint && bun run typecheck && bun run test`; `bun run openapi:lint`; markdownlint with an explicit file list. Tests booting with `APP_ENV=production` need `RATE_LIMIT_STORE=cache` and `CACHE_STORE=database`.
+- Merge helper: `/tmp/union.py` (union-resolves `.md` conflicts); code conflicts are resolved by hand. VF-NEW ids are renumbered at merge (next free: VF-062).
+- Not merged: `agent/senior/FIX-e2e-signup-load` (approved, but conflicts with P2.D.2.3 in `app/http/middleware/challenge.go`); requeued as `queue/senior/0-FIX-e2e-signup-load-r2.md`.
+
+## Workers at pause
+
+- senior: active `4-P1.I.5.1` (Lighthouse); delivered P1.I.3.1 (review queued). Queue: 0-FIX-e2e-signup-load-r2, 5-P1.I.4.1, 6-P2.B.1.4, 6-P2.B.1.5, 7-P2.C.1.2, 7-P2.C.2.2, 8-P2.D.5.3.
+- especialista: active `4-P2.F.4.1` (cutover-verify + finalise). Queue: 1-REV-P1.I.3.1, 5-P2.G.1.1, 6-P2.E.1.2, 7-P2.C.3.3; blocked 9-APP-PASSKEYS-b (needs a vukem release with VF-001), 9-P2.F.2.2b (needs P1.C.7.1 passkeys table).
+- framework: idle. Active (PRs open): DOCS-SITE-REFRESH (item 2, the full `last-updated.json` refresh, waits until #88-#91 merge), FW-CI-WINDOWS-FLAKES (#80, #81), VF-052 (#66/#67 to recreate on main now that #65 merged), VF-044 (#82), VF-057 (#87), VF-059 (#63).
+- estagiario: idle since P2.A.1.1.
+
+## vukem PRs open (merge in this order, `gh pr update-branch` when BEHIND, rerun a failed job once before treating it as real)
+
+#63, #71, #77, #80, #81, #82, #87, #88, then #89, #90, #91 (docs; after them ask the framework for the full last-updated refresh), dependabot #83-#86, then the recreated #66/#67 replacements. Merged this session: #36-#43, #45-#47, #51-#59, #61, #64, #65, #68-#70, #72-#76, #78, #79. Issues #19 and #5 closed.
 
 ## Next
 
-1. vukem PRs #29 to #34 are ALL merged (2026-10-29). Release v0.33.0, then the adoption task.
-2. P1.H.3.2 (Pricing + API docs pages), P1.H.5.1 release v0.8.0, P1.I group, P1.I.7.1 v0.9.0.
-3. Phase 2 from P2.A.1.2 on needs owner gates (Railway plan/buckets/DNS/secrets/spend).
-
-## P1.I.2.1 paused
-
-WIP committed on `agent/senior/P1.I.2.1` (03be2de), draft PR https://github.com/AlexGalhardo/hexascore-app/pull/54; task back in `queue/senior/1-P1.I.2.1.md`. Specs not yet green end to end.
+1. Resume: delete STOP, `git pull`, `docker compose up -d --wait`, run the gate, relaunch the four workers from their handoffs.
+2. Merge the vukem PRs above; ask the owner whether to release vukem (v0.34.0: passkeys, React Email, jsonrpc, HTTP/2+3, Cloudflare, notify, Betterleaks, sitemap, httpclient, impersonation, OpenAPI options); after the release queue `ADOPT-vukem-v0.34.0` (incl. `notify`, `PageOf`, `HashRecoveryCode`, passkeys P1.C.7.x, Cloudflare `TRUSTED_PROXIES` notes, regenerate OpenAPI goldens if #52 changes them).
+3. Finish P1.I (I.3.1 review, I.5.1, I.4.1, I.6.1 rows, I.7.1 release v0.9.0), then the code-only P2 items; owner gates stay listed in QUESTIONS.md.

@@ -2,31 +2,27 @@
 
 Readable mirror of `.orchestration/`. Updated by the orchestrator each cycle.
 
-Updated: 2026-10-29 (phase 1 in progress, app at `v0.5.0`, vukem `v0.32.0`)
+Updated: 2026-10-30 (session paused by the owner; app at `v0.8.0`, vukem `v0.33.0` in `go.mod`, more merged on vukem `main`)
 
 ## Workers
 
 | Role | Model | Worktree | Current |
 | --- | --- | --- | --- |
-| estagiario | Haiku 5.5 | `wt/estagiario` | idle (suite runs on request) |
-| senior | Sonnet 5.5 | `wt/senior` | P1.F.4.1 follow-ups, then P1.F.2.1, P1.H.3.1, P1.G.2.4, P2.D.5.1; reserve P1.H.2.1b/c |
-| especialista | Opus 5.5 | `wt/especialista` | reviews (P1.E.3.2, P1.G.4.2, P1.H.1.1, P1.H.1.2), then P1.H.2.1a |
-| framework | Opus 5.5 | `wt/framework` (vukem) | stopped: PRs #29 to #34 green but merging is denied to agents (FR-002) |
-| orchestrator | Opus 5.5 | `hexascore-vukem` (`main`) | integration, releases, own Opus tasks |
+| senior | Sonnet 5.5 | `wt/senior` | P1.I.5.1 (Lighthouse) in progress; queue: FIX-e2e-signup-load-r2, P1.I.4.1, P2.B.1.4, P2.B.1.5, P2.C.1.2, P2.C.2.2, P2.D.5.3 |
+| especialista | Opus 5.5 | `wt/especialista` | P2.F.4.1 in progress; queue: REV-P1.I.3.1, P2.G.1.1, P2.E.1.2, P2.C.3.3; blocked: APP-PASSKEYS-b, P2.F.2.2b |
+| framework | Opus 5.5 | `wt/framework` (vukem) | idle; open PRs #63, #71, #77, #80-#82, #87-#91; recreate #66/#67 on main |
+| estagiario | Haiku 5.5 | `wt/estagiario` | idle |
+| orchestrator | Opus 5.5 | `hexascore-vukem` (`main`) | integration, vukem PR merges, releases |
 
-## Phase 1 status
+## Phase status
 
 | Group | State |
 | --- | --- |
-| P1.A, P1.B, P1.C, P1.D | done (`v0.4.0` closes P1.D) |
-| P1.E Search | done (`v0.5.0`) |
-| P1.F User library | P1.F.2.1 queued, then release `v0.6.0` |
-| P1.G Web parity | P1.G.2.4, P1.G.3.2 left, then `v0.7.0` |
-| P1.H API parity | P1.H.1.x done; P1.H.2.1 split into a/b/c; P1.H.3.1 waits on Q-H31 (Stripe variables on Railway) |
-| P1.I QA gate | waits on P1.H.5.1 |
+| P1.A to P1.G | done (`v0.1.0` to `v0.7.0`) |
+| P1.H API parity | done (`v0.8.0`); billing wiring of the pricing page waits on Q-H31 |
+| P1.I QA parity gate | I.1.1, I.2.1 to I.2.4 merged (I.2.x boxes stay open for passkeys and pricing specs); I.3.1 in review; I.5.1 in progress; I.4.1, I.6.1 rows, I.7.1 (`v0.9.0`) left |
+| P2 | code-only items merged ahead of the owner gates: A.3.2, C.1.1, D.2.1 to D.2.3, D.3.1, D.5.1, E.1.1, E.2.1, E.2.2, E.3.1, F.2.1 to F.2.7, F.3.1; staging verification deferred |
 
-## Blockers needing the owner
+## Owner gates
 
-- FR-002: agents cannot merge vukem PRs, so no vukem release (`v0.33.0`) and no workaround removal.
-- Q-H31: Stripe test variables on Railway before billing can reach `main` (auto-deploys to production).
-- Phase 2 from P2.A.1.2 on: Railway plan, buckets, DNS, secrets and spend are owner gates.
+See [QUESTIONS.md](QUESTIONS.md): Stripe live values (Q-H31), Railway staging/buckets/DNS/secrets, Grafana and Telegram accounts, the vukem release for the features merged since v0.33.0.
