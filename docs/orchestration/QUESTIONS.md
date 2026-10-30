@@ -60,6 +60,7 @@ These stay unchecked. None of them is in a worker queue. Say the word here and n
 - New spend or a new Railway project: P2.A.1.2, P2.A.2.1, P2.C.2.1, P2.C.3.1, P2.C.3.2, P2.C.3.5.
 - DNS, cutover, or a production deploy: P2.A.2.2, P2.A.4.3, P2.A.4.4, P2.A.5.1, P2.B.3.1, P2.C.4.1, P2.C.5.1, P2.D.6.1, P2.E.4.1, P2.F.6.1, P2.G.2.1, P2.G.2.2, P2.G.3.1, P2.G.3.2, P2.G.3.3, P2.G.4.1, P2.G.4.2 (`v1.0.0`), P2.G.4.3, P3.A.7.1, P3.B.3.3, P3.C.5.2, P4.A.4.1, P4.B.5.2, P4.B.5.3, P5.B.6.1, P6.A.4.2, P6.B.5.1, P6.C.4.1.
 - Creating or rotating a third-party secret: P2.A.4.2, P2.C.1.2, P2.E.2.3, P3.B.2.1, P3.B.2.2, P5.A.5.1, P5.C.1.1, P5.C.1.2, P5.C.1.3.
+- Telegram page (P2.C.1.2 unmet): P2.C.3.3. Its acceptance pages Telegram after `pkill node` on staging. No local stand-in.
 - Production data: P2.F.1.1, P2.F.1.2, P2.F.5.1, P2.F.5.2, P2.E.3.2, P2.G.1.2.
 - Store time that has not passed: P5.C.3.1, P5.C.3.2, P5.C.3.3, and the 30-day job clocks inside P6.A.4.2 and P6.B.5.1.
 - Legal quotes still missing in `docs/legal/`: P6.A.1.1 (Open Library, A-05), P6.A.2.4, P6.B.1.2 (IGDB, D-36), P6.B.1.3 (Steam/GOG images).

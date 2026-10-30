@@ -1642,7 +1642,7 @@ Phase-specific conventions:
 
 #### P2.D.1 Headers and CSP
 
-- [ ] **P2.D.1.1** Configure the web and API header sets of SDD 13 §6.2 and the CSP violation endpoint, with tests and staging checks.
+- [x] **P2.D.1.1** Configure the web and API header sets of SDD 13 §6.2 and the CSP violation endpoint, with tests and staging checks.
   - Files/modules: `bootstrap/app.go` (`MiddlewareOptions.SecureHeaders`, `APIMiddlewareOptions.SecureHeaders`), `app/http/csp_reports.go`, `tests/security_headers_test.go`, `qa/e2e/specs/{headers,csp}.spec.ts`
   - Refs: SDD 13 §6.1, §6.2, §7.1 (`/csp-reports` 30/min, 16 KiB), §9 items 1–2; SDD 09 §7.8; <https://vukem.dev/docs/security/security-headers> "Configuration", "What CSPSources refuses", "Collecting violation reports", "Common mistakes"
   - Depends on: P2.C.5.1, P1.G.1.2

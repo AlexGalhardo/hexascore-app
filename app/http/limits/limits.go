@@ -54,6 +54,7 @@ var (
 	App2FA       = Rule{"app.2fa", 5, 15 * time.Minute}
 	Challenge    = Rule{"challenge", 30, time.Minute}
 	Exports      = Rule{"exports", 10, time.Hour}
+	CSPReports   = Rule{"csp-reports", 30, time.Minute}
 )
 
 // APIPlan is the per-key rate of a public API plan (SDD 05): rps requests per second.
@@ -64,7 +65,7 @@ func All() []Rule {
 	return []Rule{
 		Login, LoginIP, LoginAccount, Signup, SignupEmail, Forgot, ForgotEmail, Mails, TwoFactor, TwoFactorSet,
 		Deletion, Contact, Ratings, Status, TimeToBeat, Lists, Editions, Notify, Reports, Search, Suggest,
-		SearchEvents, APIIP, AppTokens, AppTokensAcc, AppTokensUsr, App2FA, Challenge, Exports,
+		SearchEvents, APIIP, AppTokens, AppTokensAcc, AppTokensUsr, App2FA, Challenge, Exports, CSPReports,
 	}
 }
 

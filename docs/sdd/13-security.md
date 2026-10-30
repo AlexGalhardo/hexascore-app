@@ -143,7 +143,7 @@ Actors: anonymous abusers, score manipulators, scrapers, malicious contributors,
 
 Store: `RATE_LIMIT_STORE=cache` on `CACHE_STORE=database` (SDD 03 NFR-03-3), which counts in fixed windows with an atomic `Increment` ([RL] "RATE_LIMIT_STORE"). Budgets survive deploys and crashes. The `memory` store (per-process GCRA) is for tests only: in production every restart would hand attackers a fresh budget.
 
-The table lives in `app/http/limits` (one named rule per row; routes never build their own limiter, `TestSecurity_A06_HexaLimits` checks both). In production the app refuses to boot unless `RATE_LIMIT_STORE=cache` (the image defaults it with `CACHE_STORE=database`). Not wired yet: suggestions (P4.A routes), `client-errors`/`client-metrics` and `/csp-reports` (no routes yet), the `/app/v1` read/write split (one 60/min user budget today) and `/stripe/webhook` (mounted with `UseServer` by vukem billing, signature checked first).
+The table lives in `app/http/limits` (one named rule per row; routes never build their own limiter, `TestSecurity_A06_HexaLimits` checks both). In production the app refuses to boot unless `RATE_LIMIT_STORE=cache` (the image defaults it with `CACHE_STORE=database`). Not wired yet: suggestions (P4.A routes), `client-errors`/`client-metrics`, the `/app/v1` read/write split (one 60/min user budget today) and `/stripe/webhook` (mounted with `UseServer` by vukem billing, signature checked first). `POST /csp-reports` is wired: 30/min by IP, body ≤ 16 KiB, `CSRFBypass` and `SessionBypass`, report discarded after a log line.
 
 Keys: IPv6 is bucketed by /64 [RL]. `c.IP()` trusts forwarding headers only from `TRUSTED_PROXIES` ([OV] A01). A 429 carries `Retry-After` and `RateLimit-Limit/Remaining/Reset` [RL].
 

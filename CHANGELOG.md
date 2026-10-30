@@ -21,6 +21,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Legacy import `finalise` stage (score priors and recompute, search suggest rebuild) and `hexascore:cutover-verify` (`--counts-only`, `--sample-pct`): per-table counts, id-sample md5, cover keys on the bucket, orphan foreign keys, SQL vs Go scores (P2.F.4.1).
 - k6 scenarios `qa/k6/api-v1.js`, `public-lists.js` and `pages-ttfb.js`, the `qa/k6/seed.sh` load-data seeder and the baseline `docs/qa/k6-baseline.md` (P1.I.3.1).
 
+### Changed
+
+- Web CSP reports violations to `POST /csp-reports` (30/min, 16 KiB, no session). `/api/v1` responses use the JSON CSP, `no-referrer`, `Cross-Origin-Resource-Policy: cross-origin` and `Access-Control-Allow-Origin: *` (P2.D.1.1).
+
 ### Fixed
 
 - Lighthouse median LCP on the five reference pages is at or under 1503 ms. The page JSON sits after the markup, modules start after `window` `load`, and `/favicon.ico` is a 16x16 icon instead of the HTML 404 (P1.I.5.1).
