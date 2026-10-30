@@ -84,7 +84,7 @@ export async function exportCovers(urls: string[], deps: Deps): Promise<Counts> 
 			} catch (err) {
 				const msg = err instanceof Error ? err.message : String(err);
 				// 404 is permanent. DNS blips and the bucket's request cap are not.
-				const transient = !/^HTTP 4(?!29)\d\d$/.test(msg) && /ENOTFOUND|EAI_AGAIN|ECONNRESET|ETIMEDOUT|ECONNREFUSED|HTTP 429|HTTP 5|fetch failed|request rate|unexpected error/i.test(msg);
+				const transient = !/^HTTP 4(?!29)\d\d$/.test(msg) && /ENOTFOUND|EAI_AGAIN|ECONNRESET|ETIMEDOUT|ECONNREFUSED|HTTP 429|HTTP 5|fetch failed|request rate|unexpected error|not seekable/i.test(msg);
 				if (transient && attempt < attempts) {
 					await new Promise((resolve) => setTimeout(resolve, 400 * attempt));
 					continue;
