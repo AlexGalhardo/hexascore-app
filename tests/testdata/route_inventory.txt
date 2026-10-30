@@ -216,6 +216,10 @@ api   GET    /api/v1/search/entities
 api   GET    /api/v1/search
 api   GET    /api/v1/lookup
 api   GET    /api/v1/changes
+api   GET    /api/v1/webhooks
+api   POST   /api/v1/webhooks
+api   DELETE /api/v1/webhooks/{id}
+api   POST   /api/v1/webhooks/{id}/test
 api   GET    /api/v1/{type}/{id}
 api   GET    /api/v1/{type}
 api   GET    /api/v1/openapi.json
