@@ -52,6 +52,8 @@ func Web(r *router.Router, app *vukem.App) error {
 
 	r.UseServer(appmiddleware.CrossOriginResourcePolicy("same-site"))
 	r.UseServer(middleware.StaticFS(resources.Public(), middleware.StaticConfig{Prefix: "/"}))
+	// After StaticFS so this wrapper sees asset bodies. HTML and Set-Cookie stay plain (BREACH).
+	r.UseServer(appmiddleware.GzipStatic())
 	r.UseServer(appmiddleware.LocaleCookieRedirect(appmiddleware.LocalePrefixConfig{
 		Prefixes: localePrefixes,
 		Cookie:   "locale",

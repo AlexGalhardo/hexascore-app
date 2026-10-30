@@ -20,10 +20,16 @@ func newChallenger(app *vukem.App, problemBase string) (*appmiddleware.Challenge
 		return nil, err
 	}
 
+	globalLimit, err := appmiddleware.GlobalLimitOverride(app.Source.Get("CHALLENGE_GLOBAL_LIMIT"))
+	if err != nil {
+		return nil, err
+	}
+
 	return &appmiddleware.Challenger{
 		PoW:         challenge.New(key, app.Cache, app.Now),
 		Cache:       app.Cache,
 		ProblemBase: problemBase,
+		GlobalLimit: globalLimit,
 	}, nil
 }
 

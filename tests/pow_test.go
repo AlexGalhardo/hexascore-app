@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/AlexGalhardo/vukem/vukemtest"
@@ -102,3 +103,33 @@ func TestSecurity_A07_PowTokens(t *testing.T) {
 }
 
 const middlewareHeader = "X-Challenge"
+
+// CHALLENGE_GLOBAL_LIMIT replaces the signup global threshold. The e2e stack lifts it;
+// a low value proves the override is what the rule reads.
+func TestSecurity_A07_PowGlobalLimitOverride(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{"CHALLENGE_GLOBAL_LIMIT": "2"}})
+	c := app.Client(t).Inertia("")
+
+	for i := range 2 {
+		signupAs(app, c, i).AssertRedirect("/signup/check-email")
+	}
+
+	var ch powChallenge
+	c.GetJSON("/challenge?route=signup").AssertOK().JSON(&ch)
+	if !ch.Required || ch.Bits != challenge.AttackBits {
+		t.Fatalf("challenge = %+v, want attack difficulty", ch)
+	}
+}
+
+func TestSecurity_A07_PowGlobalLimitRefusedAtBoot(t *testing.T) {
+	t.Parallel()
+
+	_, err := vukemtest.Build(t, bootstrap.New, vukemtest.Options{
+		Env: map[string]string{"CHALLENGE_GLOBAL_LIMIT": "nope"},
+	})
+	if err == nil || !strings.Contains(err.Error(), "CHALLENGE_GLOBAL_LIMIT") {
+		t.Fatalf("boot err = %v, want a refusal", err)
+	}
+}

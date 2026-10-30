@@ -31,7 +31,9 @@ export default function Filters({
 	platforms: Facet[];
 }) {
 	const t = useT();
-	const field = "min-h-11 rounded-md border border-border bg-surface px-2";
+	// Fixed widths: a select sizes to its longest option, so facet options arriving
+	// after the first paint used to wrap this row and shift the list (CLS on /games).
+	const field = "min-h-11 w-40 rounded-md border border-border bg-surface px-2";
 
 	return (
 		<form method="get" action={action} className="flex flex-wrap items-end gap-3">
