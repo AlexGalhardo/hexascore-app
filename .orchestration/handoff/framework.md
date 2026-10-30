@@ -102,3 +102,5 @@ Owner answered "merge your own green PRs" in chat, but `gh pr merge 39 --squash`
 - Gate notes: Windows Defender is now disabled by the owner; `internal/testutil` "Acesso negado" and `TestKeyRotate*` TempDir errors are resolved (environment). `task test` runs fully locally.
 - Local CPU is AMD Ryzen (non-AMX): golang/go#81238 cannot reproduce here.
 - Next: 3-VF-044 (queue/framework), then replacement PRs for #62 (after #61) and #66/#67 (after #65) when the orchestrator says so.
+- VF-044: PR #82 (`feat/vf-044-output-required`), report reports/VF-044.md. VF status in vukem-feedback.md: PR open, unreleased.
+- Open from session 12: #80, #81, #82 (plus #79). Pending on orchestrator: replacement PRs for #62 (after #61) and #66/#67 (after #65).
