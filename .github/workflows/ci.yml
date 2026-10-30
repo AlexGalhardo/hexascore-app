@@ -91,9 +91,42 @@ jobs:
       # bun is on PATH so TestPluralGolden compares Go and TypeScript output.
       - run: go test -race -count=1 -tags integration ./...
       - run: bun run test
+      - name: Migration policy
+        run: bun test scripts/ci/migration-policy.test.ts
       - name: TypeScript SDK
         working-directory: sdks/ts
         run: bun install --frozen-lockfile --ignore-scripts && bun run typecheck && bun test
+
+  migrations:
+    name: Migrations (Postgres 18.6 round trip)
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:18.6-alpine3.24@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5
+        env:
+          POSTGRES_USER: hexascore
+          POSTGRES_PASSWORD: hexascore
+          POSTGRES_DB: hexascore
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U hexascore" --health-interval 5s --health-timeout 3s --health-retries 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+      - name: migrate, roll back one step, migrate
+        env:
+          APP_ENV: development
+          DATABASE_URL: postgres://hexascore:hexascore@localhost:5432/hexascore?sslmode=disable
+          SESSION_DRIVER: cookie
+          MAIL_MAILER: log
+        run: |
+          set -euo pipefail
+          export APP_KEY="base64:$(openssl rand -base64 32)"
+          go run ./cmd/app migrate
+          go run ./cmd/app migrate:rollback --step 1
+          go run ./cmd/app migrate
 
   vuln:
     name: Vulnerability scan (govulncheck, weekly)
@@ -162,3 +195,90 @@ jobs:
         with:
           name: image
           path: image.tar
+
+  openapi:
+    name: OpenAPI (export diff, Redocly, Schemathesis)
+    needs: build
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:18.6-alpine3.24@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5
+        env:
+          POSTGRES_USER: hexascore
+          POSTGRES_PASSWORD: hexascore
+          POSTGRES_DB: hexascore
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U hexascore" --health-interval 5s --health-timeout 3s --health-retries 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: image
+      - name: Load the build artifact
+        run: docker load -i image.tar
+      - name: Export matches the committed documents
+        run: bash scripts/openapi-check.sh --image hexascore:ci
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - name: Redocly
+        run: bunx redocly lint openapi/api-v1.json openapi/app-v1.json
+      - name: Schemathesis against the loaded image
+        run: bash qa/schemathesis/ci.sh hexascore:ci
+
+  e2e:
+    name: Playwright (3 locales, desktop and mobile)
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: image
+      - name: Load the build artifact
+        run: docker load -i image.tar
+      - name: App from the artifact, seeded with DemoCatalog
+        run: |
+          export APP_KEY="base64:$(openssl rand -base64 32)"
+          bash scripts/ci/qa-up.sh hexascore:ci
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - run: bunx playwright install --with-deps chromium
+      - name: e2e
+        run: bun run e2e
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: failure()
+        with:
+          name: playwright-traces
+          path: |
+            qa/e2e/test-results/
+            playwright-report/
+          if-no-files-found: ignore
+
+  lighthouse:
+    name: Lighthouse (SDD 09 budgets)
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: image
+      - name: Load the build artifact
+        run: docker load -i image.tar
+      - name: App from the artifact, seeded with DemoCatalog
+        run: |
+          export APP_KEY="base64:$(openssl rand -base64 32)"
+          bash scripts/ci/qa-up.sh hexascore:ci
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - name: Lighthouse
+        run: bunx --bun @lhci/cli@0.15.1 autorun
+        env:
+          CHROME_PATH: /usr/bin/google-chrome

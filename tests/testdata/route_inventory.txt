@@ -1,6 +1,7 @@
 # Route stack inventory (SDD 13 §6.1, FR-13-1): one "stack METHOD path" line per compiled route.
 # TestSecurity_A01_HexaRouteStackInventory fails on a route missing here. The webhook stack
 # (POST /stripe/webhook) is served ahead of the router and checked by TestSecurity_A06_HexaBodyLimits.
+web   POST   /csp-reports
 web   GET    /up
 web   GET    /help/score
 web   GET    /robots.txt

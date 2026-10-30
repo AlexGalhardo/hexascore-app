@@ -8,8 +8,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Daily `privacy.retain` clears session IP and user agent after 30 days, deletes `client_reports` older than 7 days when that table exists, and expires export ZIPs (P2.D.4.1). `SESSION_RECORD_CLIENT=true` in `.env.example` and the compose app env.
+- A17 projected-spend formula and `projected-spend.yml`. Without a Railway usage API the workflow logs the day-20 reminder and posts to Telegram only when that secret exists (P2.C.3.4, checkbox still open).
+- Schemathesis 4.29.0 harness (`qa/schemathesis/run.sh`) and the ZAP 2.17.0 baseline script pinned by image digest (`qa/zap/baseline.sh`, `qa/zap/rules.tsv`). Notes in `docs/qa/scans.md` (P1.I.4.1).
+- CI `openapi` job loads `image.tar` from `build`, diffs `openapi:export` from that image, runs Redocly, and fuzzes the same image with Schemathesis 4.29.0 (`qa/schemathesis/ci.sh`, P2.B.1.4).
+- CI `e2e` and `lighthouse` jobs load the same artifact, seed DemoCatalog, run `bun run e2e` (traces uploaded on failure) and `bunx --bun @lhci/cli@0.15.1 autorun` on the five reference URLs (P2.B.1.5).
+- ZAP 2.17.0 baseline on the local app: 1836 URLs, 0 High, exit 0. Six Low or Informational warnings are triaged in `docs/qa/scans.md` (P1.I.4.1).
+- Lighthouse CI config (`lighthouserc.json`, `qa/lighthouse/urls.txt`, `qa/lighthouse/run.sh`) for the SDD 09 §4 budgets on five reference pages (P1.I.5.1). `@lhci/cli` is invoked with `bunx` at 0.15.1 and is not a package.json dependency until the owner approves it.
+- Platform metrics from SDD 12 §6.2 (`hexa.*`, `biz.*`, backup placeholders) on the `hexascore` meter, including the `hexa.errors` label cap and SQL gauges (P2.C.2.2). `http.server.request.duration` is recorded in-app until `drivers/otel` ships in an adopted vukem tag (P2.C.2.1).
+- Catalog facets ship in the first listing response, so the filter row does not change after paint (P1.I.5.1).
+- Incident response procedure, review template and user notice templates in en, pt-BR and es (P2.D.5.3).
+- Trend score, eligibility and prior fill as pure functions (P6.C.2.1).
+- CI guard for expand/contract migration text, plus a Postgres 18.6 migrate / rollback / migrate round trip (P2.E.1.2).
 - Legacy import `finalise` stage (score priors and recompute, search suggest rebuild) and `hexascore:cutover-verify` (`--counts-only`, `--sample-pct`): per-table counts, id-sample md5, cover keys on the bucket, orphan foreign keys, SQL vs Go scores (P2.F.4.1).
 - k6 scenarios `qa/k6/api-v1.js`, `public-lists.js` and `pages-ttfb.js`, the `qa/k6/seed.sh` load-data seeder and the baseline `docs/qa/k6-baseline.md` (P1.I.3.1).
+
+### Changed
+
+- Privacy policy in en, pt-BR and es names Railway, Grafana Cloud, Resend, Stripe, Google and Telegram, cookies, retention and age 13, and the encarregado at privacy@hexascore.app. Vercel, Neon, Upstash, passkeys and AbacatePay are gone from that page (P2.D.4.1).
+- Playwright auth, profile, api-keys and pricing specs pass on the seeded container in three locales (P1.I.2.1). `passkeys.spec.ts` still waits on P1.C.7.2.
+- Catalog filter spec accepts an empty list when a 1-star floor matches nothing. Catalog, item, ratings, time-to-beat and search specs pass in three locales (P1.I.2.2).
+- Social, lists, contact, notifications, admin, docs, public pages, headers and not-found specs pass in three locales (P1.I.2.3).
+- Web CSP reports violations to `POST /csp-reports` (30/min, 16 KiB, no session). `/api/v1` responses use the JSON CSP, `no-referrer`, `Cross-Origin-Resource-Policy: cross-origin` and `Access-Control-Allow-Origin: *` (P2.D.1.1).
+
+### Fixed
+
+- Lighthouse median LCP on the five reference pages is at or under 1503 ms. The page JSON sits after the markup, modules start after `window` `load`, and `/favicon.ico` is a 16x16 icon instead of the HTML 404 (P1.I.5.1).
+- Gzip is limited to `/build` JS, CSS, SVG, fonts and source maps. HTML and `Set-Cookie` responses stay uncompressed (P1.I.5.1).
+- The compressor now wraps the static file server. The first server middleware is the outermost, so it previously sat inside the file server and `/build` assets were sent uncompressed (P1.I.5.1).
+- The e2e compose stack sets `CHALLENGE_GLOBAL_LIMIT` so a parallel suite does not trip the 21-bit signup attack difficulty. Production leaves it unset; a value that is not a positive integer refuses to boot (FIX-e2e-signup-load).
 
 ## [0.8.0] - 2026-10-30
 

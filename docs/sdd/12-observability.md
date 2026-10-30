@@ -134,7 +134,7 @@ Gauges read from tables owned by other SDDs:
 
 Export uses `drivers/otel` OTLP/HTTP push. Built-ins: `http.server.request.duration`, `http.client.request.duration`, `db.client.operation.duration`, `messaging.process.duration` and `vukem.queue.job.failures` [V-otel "Metrics"].
 
-App metrics work around VF-019. `Config.Global` "installs the providers ... as OpenTelemetry globals" [V-otel "Configuration"]. The app then calls `otel.GetMeterProvider().Meter("hexascore")` on the upstream API that `drivers/otel` already pulls in; vukem has no accessor of its own.
+App metrics use meter `hexascore` (`go.opentelemetry.io/otel` v1.47.0). The adopted module `github.com/AlexGalhardo/vukem` v0.33.0 does not include `drivers/otel`, so `http.server.request.duration` is recorded by `app/metrics` until P2.C.2.1 adopts a tag that registers `otel.New` first. `Config.Global` remains the VF-019 workaround once that provider exists. Search and `/api/v1` exist only on Postgres (VF-033); the latency test probes those patterns on the sqlite test app.
 
 Route groups are derived from the `http.route` prefix at query time, with no extra label: `web.public`, `web.app`, `admin`, `api.v1`, `app.v1`, `search`, `health`.
 
@@ -276,6 +276,8 @@ On-call is the owner. Quiet hours run 23:00–08:00 America/Sao_Paulo: only `pag
 | A15 | Cost | Railway usage ≥ US$24 (80 % of US$30), set as "Custom email alert" [R-cost]; hard limit US$30 (D-27) | cycle | warn | Railway |
 | A16 | Telemetry gone | no HTTP metric data | 10 min | warn | Grafana |
 | A17 | Projected spend | on day 20 of the billing cycle (and daily after), month-to-date usage × days in cycle / elapsed days > US$27 (D-27: hard limit US$30) | daily | warn | GitHub Actions cron reading Railway usage [R-cost] (programmatic access [NOT VERIFIED]; fallback: calendar reminder to the owner on day 20) |
+
+Checked 2026-10-30: no documented Railway usage API was found in the repo, so `projected-spend.yml` takes the fallback. It logs a day-20 reminder and, when `USAGE_USD` is set, evaluates the formula. It posts to Telegram only when that step's secret is present and the formula alerts or the reminder is due. The formula fixture is `bun test scripts/ops/projected-spend.test.ts`.
 
 ### 7.6 Dashboards
 

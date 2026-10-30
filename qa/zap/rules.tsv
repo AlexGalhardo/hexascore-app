@@ -1,0 +1,2 @@
+# ZAP baseline rule overrides. Columns: rule id, action (IGNORE|WARN|FAIL), reason.
+# A High alert is never IGNORE. Rows are added only after the alert is read.

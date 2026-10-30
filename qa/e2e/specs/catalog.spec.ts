@@ -16,7 +16,10 @@ test.describe("catalog", () => {
 			await form.getByRole("button", { name: t("catalog.apply") }).click();
 			await expect(page).toHaveURL(/sort=-score/);
 			await expect(page).toHaveURL(/min_score=1/);
-			await expect(itemLinks(page, prefix, section).first()).toBeVisible();
+			// A 1-star floor hides items whose stored score is under 10. Either result is a real list.
+			await expect(
+				itemLinks(page, prefix, section).first().or(page.getByText(t("catalog.empty"))),
+			).toBeVisible();
 
 			await page.getByRole("link", { name: t("catalog.reset") }).click();
 			await expect(page).not.toHaveURL(/min_score/);

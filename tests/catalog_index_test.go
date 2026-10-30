@@ -58,6 +58,14 @@ VALUES ($1, 'movie', $2, $3, 6, 80)`, id, fmt.Sprintf("movie-%02d", i), fmt.Spri
 
 	first := c.Get("/movies").AssertOK().AssertInertia("Catalog/Index").
 		HasProp("items.data", 24).PropEquals("total", 30)
+	slug, ok := first.Prop("facets.genres.0.slug")
+	if !ok || slug != "rpg" {
+		t.Fatalf("first paint facets slug = %#v", slug)
+	}
+	count, ok := first.Prop("facets.genres.0.count")
+	if !ok || fmt.Sprint(count) != "3" {
+		t.Fatalf("first paint facet count = %#v", count)
+	}
 	scroll, _ := first.Page()["scrollProps"].(map[string]any)["items"].(map[string]any)
 	cursor, _ := scroll["nextPage"].(string)
 	if cursor == "" {
