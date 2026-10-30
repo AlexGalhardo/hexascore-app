@@ -29,8 +29,10 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	s.Job(jobs.PruneRatingEvents{}).DailyAt("04:30").WithoutOverlapping()
 	// api_changes is kept 30 days (SDD 05 §5). 04:50 stays clear of the 04:40 webhook-delivery prune.
 	s.Job(jobs.PruneAPIChanges{}).DailyAt("04:50").WithoutOverlapping()
-	// Fan-out reads api_changes after webhook_cursor (SDD 05 §7.3). Delivery prune is P3.A.5.3.
+	// Fan-out reads api_changes after webhook_cursor (SDD 05 §7.3).
 	s.Job(jobs.FanoutWebhooks{}).EveryMinute().WithoutOverlapping()
+	// webhook_deliveries is kept 30 days (SDD 05 §5). 04:40 stays clear of the 04:50 api_changes prune.
+	s.Job(jobs.PruneWebhookDeliveries{}).DailyAt("04:40").WithoutOverlapping()
 	s.Job(jobs.ExpireExports{}).Hourly().WithoutOverlapping()
 	// backup.daily (SDD 11 §7.3 step 1): moves after the SDD 06 asserts once they exist (P6).
 	s.Command("backup:run", "--kind", "daily").DailyAt("06:00").In(saoPaulo).WithoutOverlapping()
