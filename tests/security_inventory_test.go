@@ -96,9 +96,15 @@ func stackViolation(stack, method, path string, mw []string) string {
 			return "app route outside /app/v1"
 		}
 
-		// Search is optional (SDD 10). Every other /app/v1 route still needs a bearer.
+		// Search is optional (SDD 10). Crash and web-vital intake is anonymous.
+		// Every other /app/v1 route still needs a bearer.
 		optionalSearch := path == "/app/v1/search" || strings.HasPrefix(path, "/app/v1/search/")
-		if !has("auth.Required") && !has("middleware.(*Challenger).Require") &&
+		telemetry := path == "/app/v1/client-errors" || path == "/app/v1/client-metrics"
+		if telemetry {
+			if has("auth.Required") || has("auth.Optional") || has("middleware.(*Challenger).Require") {
+				return "telemetry route must stay anonymous"
+			}
+		} else if !has("auth.Required") && !has("middleware.(*Challenger).Require") &&
 			!(optionalSearch && has("auth.Optional")) {
 			return "app route without a bearer token or a challenge"
 		}
@@ -165,6 +171,14 @@ func TestSecurity_A01_HexaRouteStackInventory_Rules(t *testing.T) {
 		t.Errorf("optional search: %s", v)
 	}
 
+	if v := stackViolation("app", "POST", "/app/v1/client-errors", []string{"limits.Body"}); v != "" {
+		t.Errorf("anonymous client-errors: %s", v)
+	}
+
+	if v := stackViolation("app", "POST", "/app/v1/client-metrics", []string{"limits.Body"}); v != "" {
+		t.Errorf("anonymous client-metrics: %s", v)
+	}
+
 	for _, c := range []struct{ stack, method, path string }{
 		{"admin", "POST", "/admin/users"},
 		{"web", "POST", "/login"},
@@ -183,6 +197,8 @@ func TestSecurity_A01_HexaRouteStackInventory_Rules(t *testing.T) {
 		{"web", "POST", "/login", []string{"limits.Body"}},
 		{"app", "GET", "/app/v1/me", ok},
 		{"app", "GET", "/app/v1/me", []string{"limits.Body", "auth.Optional"}},
+		{"app", "POST", "/app/v1/client-errors", []string{"limits.Body", "auth.Optional"}},
+		{"app", "POST", "/app/v1/client-other", []string{"limits.Body"}},
 		{"api", "GET", "/api/v1/search", ok},
 		{"web", "GET", "/", nil},
 		{"webhook", "POST", "/x", ok},
@@ -229,6 +245,8 @@ func TestSecurity_A06_HexaBodyLimits(t *testing.T) {
 	}{
 		{"/login", limits.FormBody},
 		{"/csp-reports", limits.CSPReportsBody},
+		{"/app/v1/client-errors", limits.ClientErrorsBody},
+		{"/app/v1/client-metrics", limits.ClientMetricsBody},
 		{"/pt-br/lists", limits.FormBody},
 		{"/admin/users", limits.FormBody},
 		{"/api/v1/search", limits.DefaultBody},

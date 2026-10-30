@@ -30,6 +30,7 @@ func All() []func(r *router.Router, app *vukem.App) error {
 		AppCatalog,
 		AppSearch,
 		AppMe,
+		AppTelemetry,
 		Billing,
 	}
 }

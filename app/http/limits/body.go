@@ -8,7 +8,9 @@ import (
 )
 
 // Body limits of SDD 13 §7.3. Suggestion JSON and cover uploads ship with their P4.A routes; the
-// client-errors and client-metrics constants are for the P2.C report endpoints.
+// ClientErrorsBody and ClientMetricsBody cap POST /app/v1/client-errors and
+// POST /app/v1/client-metrics. BodyFor special-cases those paths because the
+// server-level limit runs before routing.
 const (
 	FormBody          int64 = 64 << 10
 	SuggestionBody    int64 = 256 << 10
@@ -33,6 +35,14 @@ func BodyFor(path string) int64 {
 
 	if path == "/csp-reports" {
 		return CSPReportsBody
+	}
+
+	if path == "/app/v1/client-errors" {
+		return ClientErrorsBody
+	}
+
+	if path == "/app/v1/client-metrics" {
+		return ClientMetricsBody
 	}
 
 	if strings.HasPrefix(path, "/api/v1/") || strings.HasPrefix(path, "/app/v1/") {
