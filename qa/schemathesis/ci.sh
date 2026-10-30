@@ -49,11 +49,11 @@ docker run --rm --network host "${app_env[@]}" "$image" migrate
 
 docker run -i --rm --network host -e PGPASSWORD=hexascore "$pg_image" \
 	psql -h 127.0.0.1 -U hexascore -d hexascore -v ON_ERROR_STOP=1 <<SQL
-INSERT INTO users (name, email, password, email_verified_at)
-VALUES ('CI Scan', 'schemathesis-ci@hexascore.test', 'not-a-login', now())
+INSERT INTO users (name, email, password, email_verified_at, created_at, updated_at)
+VALUES ('CI Scan', 'schemathesis-ci@hexascore.test', 'not-a-login', now(), now(), now())
 RETURNING id \gset
-INSERT INTO subscriptions (user_id, stripe_subscription_id, status, price_id, plan, provider, state, current_period_end)
-VALUES (:id, 'sub_ci_openapi', 'active', 'price_business', 'business', 'stripe', 'active', now() + interval '365 days');
+INSERT INTO subscriptions (user_id, stripe_subscription_id, status, price_id, plan, provider, state, current_period_end, created_at, updated_at)
+VALUES (:id, 'sub_ci_openapi', 'active', 'price_business', 'business', 'stripe', 'active', now() + interval '365 days', now(), now());
 INSERT INTO api_keys (id, user_id, name, prefix, hash)
 VALUES (gen_random_uuid(), :id, 'ci', '${prefix}', '${key_hash}');
 INSERT INTO access_tokens (id, user_id, name, hash, abilities, created_at)
