@@ -208,3 +208,28 @@ func TestSuggestPrefixUsesSPGiST(t *testing.T) {
 		t.Fatalf("plan does not use search_suggest_prefix:\n%s", plan.String())
 	}
 }
+
+// Rebuild restores suggest rows lost outside the triggers (a bulk load with triggers off, a truncate).
+func TestSuggestRebuildRefillsEverything(t *testing.T) {
+	db := migratedDB(t)
+	seedItems(t, db, 3)
+
+	if err := search.DrainSuggest(t.Context(), db); err != nil {
+		t.Fatal(err)
+	}
+
+	want := count(t, db, `SELECT count(*) FROM search_suggest`)
+	exec(t, db, `TRUNCATE search_suggest`)
+
+	if err := search.Rebuild(t.Context(), db); err != nil {
+		t.Fatal(err)
+	}
+
+	if got := count(t, db, `SELECT count(*) FROM search_suggest`); got != want || want == 0 {
+		t.Fatalf("suggest rows after rebuild = %d, want %d (> 0)", got, want)
+	}
+
+	if got := count(t, db, `SELECT count(*) FROM search_dirty`); got != 0 {
+		t.Fatalf("dirty rows after rebuild = %d, want 0", got)
+	}
+}

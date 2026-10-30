@@ -130,3 +130,15 @@ JOIN (
 ) l ON l.entity_id = e.id
 WHERE e.id = ANY($1::uuid[]) AND e.kind IN ('person','organization','franchise') AND hs_norm(l.label) <> ''
 ON CONFLICT (ref_id, locale, label_norm) DO NOTHING`
+
+// Rebuild queues every item and entity and drains the queue: the full suggest rebuild after a bulk load such as
+// the legacy import (SDD 11 §7.6 step 5). The tsvectors are trigger-maintained, so only the suggest rows need it.
+func Rebuild(ctx context.Context, db *database.DB) error {
+	if _, err := db.ExecContext(ctx, `INSERT INTO search_dirty (ref_id, kind)
+SELECT id, 'item' FROM items UNION ALL SELECT id, 'entity' FROM entities
+ON CONFLICT (ref_id) DO NOTHING`); err != nil {
+		return fmt.Errorf("queue search rebuild: %w", err)
+	}
+
+	return DrainSuggest(ctx, db)
+}

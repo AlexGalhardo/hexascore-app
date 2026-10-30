@@ -1963,7 +1963,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
 
 #### P2.F.4 Verification
 
-- [ ] **P2.F.4.1** Implement `hexascore:cutover-verify` and the `finalise` stage (search rebuild, score recompute).
+- [x] **P2.F.4.1** Implement `hexascore:cutover-verify` and the `finalise` stage (search rebuild, score recompute).
   - Files/modules: `app/console/cutover_verify.go`, `database/legacyimport/finalise.go`, `tests/cutover_verify_test.go`
   - Refs: SDD 11 §7.6 steps 5–6, §9 item 7, §10; SDD 02 §5, FR-02-13; SDD 07 (`search:rebuild`); ADR 0013
   - Depends on: P2.F.2.3, P2.F.2.5, P2.F.2.6, P2.F.2.7, P2.F.3.1
