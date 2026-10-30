@@ -6,46 +6,51 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-30
+
 ### Added
 
-- `GET /api/items/{id}/ratings` lists public profiles, 10 per page, over the newest 1000 ratings. The item page shows that dialog, click-to-load YouTube trailers, and the cookie banner (P1.I.6.1).
-- `GET /api/v1/changes` serves the 14-day feed (`since`, `type`, signed cursor, `limit` ≤ 1000). A merged item is `deleted` with `mergedInto`. Rows older than 30 days are pruned daily at 04:50 (P3.A.3.2).
-- `hexascore:export-since` prints legacy upserts for ratings, statuses, time-to-beat, lists and new API keys. New accounts are emitted as `hs:<id>` with a reset-link verification row, and the argon2id hash stays behind (P2.G.1.1).
-- `/api/v1` entity reads count a 304 against the quota, `listEntityItems` rejects a tampered cursor and a limit above the plan cap, and `listEditions` answers 301 to the surviving book (P3.A.1.1, P3.A.1.2, P3.A.1.3).
-- `api_changes` records a merge as `deleted` and a score update only when the one-decimal score, confidence or rating count changes. A hidden-only update writes no row (P3.A.3.1).
-- Daily `privacy.retain` clears session IP and user agent after 30 days, deletes `client_reports` older than 7 days when that table exists, and expires export ZIPs (P2.D.4.1). `SESSION_RECORD_CLIENT=true` in `.env.example` and the compose app env.
-- A17 projected-spend formula and `projected-spend.yml`. Without a Railway usage API the workflow logs the day-20 reminder and posts to Telegram only when that secret exists (P2.C.3.4, checkbox still open).
-- Schemathesis 4.29.0 harness (`qa/schemathesis/run.sh`) and the ZAP 2.17.0 baseline script pinned by image digest (`qa/zap/baseline.sh`, `qa/zap/rules.tsv`). Notes in `docs/qa/scans.md` (P1.I.4.1).
-- CI `openapi` job loads `image.tar` from `build`, diffs `openapi:export` from that image, runs Redocly, and fuzzes the same image with Schemathesis 4.29.0 (`qa/schemathesis/ci.sh`, P2.B.1.4).
-- CI `e2e` and `lighthouse` jobs load the same artifact, seed DemoCatalog, run `bun run e2e` (traces uploaded on failure) and `bunx --bun @lhci/cli@0.15.1 autorun` on the five reference URLs (P2.B.1.5).
-- ZAP 2.17.0 baseline on the local app: 1836 URLs, 0 High, exit 0. Six Low or Informational warnings are triaged in `docs/qa/scans.md` (P1.I.4.1).
-- Lighthouse CI config (`lighthouserc.json`, `qa/lighthouse/urls.txt`, `qa/lighthouse/run.sh`) for the SDD 09 §4 budgets on five reference pages (P1.I.5.1). `@lhci/cli` is invoked with `bunx` at 0.15.1 and is not a package.json dependency until the owner approves it.
-- Platform metrics from SDD 12 §6.2 (`hexa.*`, `biz.*`, backup placeholders) on the `hexascore` meter, including the `hexa.errors` label cap and SQL gauges (P2.C.2.2). `http.server.request.duration` is recorded in-app until `drivers/otel` ships in an adopted vukem tag (P2.C.2.1).
-- Catalog facets ship in the first listing response, so the filter row does not change after paint (P1.I.5.1).
-- Incident response procedure, review template and user notice templates in en, pt-BR and es (P2.D.5.3).
-- Trend score, eligibility and prior fill as pure functions (P6.C.2.1).
-- CI guard for expand/contract migration text, plus a Postgres 18.6 migrate / rollback / migrate round trip (P2.E.1.2).
-- Legacy import `finalise` stage (score priors and recompute, search suggest rebuild) and `hexascore:cutover-verify` (`--counts-only`, `--sample-pct`): per-table counts, id-sample md5, cover keys on the bucket, orphan foreign keys, SQL vs Go scores (P2.F.4.1).
-- k6 scenarios `qa/k6/api-v1.js`, `public-lists.js` and `pages-ttfb.js`, the `qa/k6/seed.sh` load-data seeder and the baseline `docs/qa/k6-baseline.md` (P1.I.3.1).
+- **security:** Add route stack inventory and per-route body limits ([b93f621](https://github.com/AlexGalhardo/hexascore-app/commit/b93f621f33cbf3a788f31e81954b5049210f9ecf))
+- **security:** Complete proof-of-work rules and sign-up fill time ([3beab17](https://github.com/AlexGalhardo/hexascore-app/commit/3beab179071ad9c46cbeac93997553fb94aa41d7))
+- **infra:** Add legacy finalise stage and hexascore:cutover-verify ([f8ba6d2](https://github.com/AlexGalhardo/hexascore-app/commit/f8ba6d220086608699d5788c2b2a469a4cb70a91))
+- **recommend:** Add the trending score functions ([8345316](https://github.com/AlexGalhardo/hexascore-app/commit/83453165e6819fa371e327ced6b0a297e8e9a0b5))
+- **metrics:** Register the platform meter catalogue ([ea00724](https://github.com/AlexGalhardo/hexascore-app/commit/ea007249b38802908dac593b554aa7449c71e326))
+- **http:** Send the API CSP and accept CSP reports ([54e52f5](https://github.com/AlexGalhardo/hexascore-app/commit/54e52f560dd8f887c112c615f3221e7dee59c0a5))
+- **privacy:** Retain session client data and refresh the policy ([17e3207](https://github.com/AlexGalhardo/hexascore-app/commit/17e3207a15fa8add33aca52a98d9faa310e1e5fe))
+- **ops:** Add the day-20 spend projection ([3b0f231](https://github.com/AlexGalhardo/hexascore-app/commit/3b0f231d5fa99909924cdfe3dcffa27b2c7fd21d))
+- Prove entity, item-cursor and edition API reads ([7f8fe35](https://github.com/AlexGalhardo/hexascore-app/commit/7f8fe356b0e3ae9641ddffe4f468f718315e1f32))
+- Record public catalogue changes inside the cause transaction ([db0667c](https://github.com/AlexGalhardo/hexascore-app/commit/db0667cada905164687ae97b5f26587fceb1d50f))
+- Replay post-cutover writes into the legacy shape ([045035d](https://github.com/AlexGalhardo/hexascore-app/commit/045035d5ef483bd32676a50addc09faaf0f854d4))
+- Serve the 14-day API changes feed ([f7aef96](https://github.com/AlexGalhardo/hexascore-app/commit/f7aef96a02b9e24a66b00bd2c2724e8b156ecdc8))
+- Show public ratings, trailers and the cookie banner ([c8ed612](https://github.com/AlexGalhardo/hexascore-app/commit/c8ed612197d0294dcc73cc475f6d34449498be90))
+- Build HexaScore on vukem v0.34.0 ([fd75474](https://github.com/AlexGalhardo/hexascore-app/commit/fd75474c501dc10413720623330734797524bf2b))
 
 ### Changed
 
-- Privacy policy in en, pt-BR and es names Railway, Grafana Cloud, Resend, Stripe, Google and Telegram, cookies, retention and age 13, and the encarregado at privacy@hexascore.app. Vercel, Neon, Upstash, passkeys and AbacatePay are gone from that page (P2.D.4.1).
-- Playwright auth, profile, api-keys and pricing specs pass on the seeded container in three locales (P1.I.2.1). `passkeys.spec.ts` still waits on P1.C.7.2.
-- Catalog filter spec accepts an empty list when a 1-star floor matches nothing. Catalog, item, ratings, time-to-beat and search specs pass in three locales (P1.I.2.2).
-- Social, lists, contact, notifications, admin, docs, public pages, headers and not-found specs pass in three locales (P1.I.2.3).
-- The full Playwright suite (i18n, seo, csp, keyboard, ssr-nojs, lists, notifications and the rest) passes in three locales (P1.I.2.4). One mobile admin navigation hit Windows `ERR_NO_BUFFER_SPACE` and passed on retry.
-- Admins can mark a contact message handled from the panel (`TestAdminMarksContactHandled`). The parity checklist names a test for every legacy row that is `done` or `deferred` (P1.I.6.1).
-- Web CSP reports violations to `POST /csp-reports` (30/min, 16 KiB, no session). `/api/v1` responses use the JSON CSP, `no-referrer`, `Cross-Origin-Resource-Policy: cross-origin` and `Access-Control-Allow-Origin: *` (P2.D.1.1).
+- **http:** Keep the Lighthouse LCP median under 2000ms ([5954124](https://github.com/AlexGalhardo/hexascore-app/commit/59541245655839dcb084929ac48cfc2a4b8166fc))
 
 ### Fixed
 
-- The deferred page script now parses. The previous closer was a SyntaxError, so the client module never loaded and forms never hydrated (P1.I.7.1).
-- Schemathesis sends a distinct `X-Forwarded-For` per call so the 120/min IP budget does not turn a missing `Authorization` into `429` (P1.I.4.1).
-- Lighthouse median LCP on the five reference pages is at or under 1503 ms. The page JSON sits after the markup, modules start after `window` `load`, and `/favicon.ico` is a 16x16 icon instead of the HTML 404 (P1.I.5.1).
-- Gzip is limited to `/build` JS, CSS, SVG, fonts and source maps. HTML and `Set-Cookie` responses stay uncompressed (P1.I.5.1).
-- The compressor now wraps the static file server. The first server middleware is the outermost, so it previously sat inside the file server and `/build` assets were sent uncompressed (P1.I.5.1).
-- The e2e compose stack sets `CHALLENGE_GLOBAL_LIMIT` so a parallel suite does not trip the 21-bit signup attack difficulty. Production leaves it unset; a value that is not a positive integer refuses to boot (FIX-e2e-signup-load).
+- **ui:** Keep the locale prefix on account form posts ([1f5ec54](https://github.com/AlexGalhardo/hexascore-app/commit/1f5ec54c9457ae01762ecf62bf80ef3ff70b0f1f))
+- **ui:** Keep the locale prefix on item, list, contact and notification posts ([fb3d95d](https://github.com/AlexGalhardo/hexascore-app/commit/fb3d95daa2ec99f8b11596b28fd350738e3aadd1))
+- **security:** Compress only build assets and gate the challenge limit ([80f291d](https://github.com/AlexGalhardo/hexascore-app/commit/80f291de1c6f8a242b1338f3628f4d3aa3cc8081))
+- **http:** Compress build assets and paint listing facets once ([50e1c02](https://github.com/AlexGalhardo/hexascore-app/commit/50e1c0238920676e7e774440a1fa0083f553d6b4))
+- Give each Schemathesis call its own client IP ([b6938a9](https://github.com/AlexGalhardo/hexascore-app/commit/b6938a9c2ad0abebd69bb7a42e47d9ae3ac61a14))
+- Close the deferred page script so forms hydrate ([c1d9a5d](https://github.com/AlexGalhardo/hexascore-app/commit/c1d9a5dea36577f25bb6539c0a79ae23a6799c81))
+
+### merge
+
+- Bring the session work from dev onto main ([4c42a15](https://github.com/AlexGalhardo/hexascore-app/commit/4c42a1532732c0ff353632cf75ffd93d48c689f8))
+- P3.A.1.1 entity API reads onto local main ([53c8321](https://github.com/AlexGalhardo/hexascore-app/commit/53c83212f676bb0e92ddbd5e40ad8800d2fc0f20))
+- P3.A.1.2 entity item cursor onto local main ([cf66540](https://github.com/AlexGalhardo/hexascore-app/commit/cf665403f6f6bc586a30ec14683c97cd945594d2))
+- P3.A.1.3 edition redirect onto local main ([adeb7d5](https://github.com/AlexGalhardo/hexascore-app/commit/adeb7d59aca8a5656d78e623943a35a39a12332b))
+- P3.A.3.1 public catalogue changes onto local main ([9a53016](https://github.com/AlexGalhardo/hexascore-app/commit/9a53016e99951a53aee5d2d892d44e3156438318))
+- P2.G.1.1 export-since replay onto local main ([16096fe](https://github.com/AlexGalhardo/hexascore-app/commit/16096fe17adc31171d3d62115bcf84e8026ccc08))
+- P1.I.4.1 schemathesis client IP onto local main ([475697e](https://github.com/AlexGalhardo/hexascore-app/commit/475697e67c08df4bc7ff9e988e17887e0d0213e5))
+- Main into agent/implementer/P3.A.3.2 ([859f3b3](https://github.com/AlexGalhardo/hexascore-app/commit/859f3b3f5c779c37a926aa555d8eef3d118596c6))
+- P3.A.3.2 API changes feed onto local main ([9e6ef59](https://github.com/AlexGalhardo/hexascore-app/commit/9e6ef59fe98bb847805f5924b816b6d4aa9ec0f8))
+- Page script loader fix onto local main ([277adfd](https://github.com/AlexGalhardo/hexascore-app/commit/277adfde030a5ef6b79c23aaeb561cd9a6e8ea97))
+- P1.I.6.1 parity rows onto local main ([2119ad6](https://github.com/AlexGalhardo/hexascore-app/commit/2119ad610006ccd28af65f5a7a2abf03292d5e7f))
 
 ## [0.8.0] - 2026-10-30
 
