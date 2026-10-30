@@ -49,8 +49,9 @@ func (r *rig) tokenAged(n, ageDays int, abilities ...string) *vukemtest.Client {
 		r.t.Fatal(err)
 	}
 	var id int64
-	if err := db.SQL().QueryRowContext(r.t.Context(), `INSERT INTO users (name, email, password, created_at, updated_at)
-VALUES ('U', $1, 'x', now() - $2 * interval '1 day', now()) RETURNING id`, fmt.Sprintf("u%d@example.com", n), ageDays).Scan(&id); err != nil {
+	// email_verified_at is required by the /app/v1 guard (auth.Verified). Account age stays created_at.
+	if err := db.SQL().QueryRowContext(r.t.Context(), `INSERT INTO users (name, email, password, email_verified_at, created_at, updated_at)
+VALUES ('U', $1, 'x', now(), now() - $2 * interval '1 day', now()) RETURNING id`, fmt.Sprintf("u%d@example.com", n), ageDays).Scan(&id); err != nil {
 		r.t.Fatal(err)
 	}
 	plain, _, err := r.acc.Tokens.Create(r.t.Context(), strconv.FormatInt(id, 10), "t", abilities, time.Hour)

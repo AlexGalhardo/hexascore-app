@@ -116,6 +116,7 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 		}
 		r.UseServer(edge)
 		r.UseServer(middleware.Version(middleware.ResolveVersion(app.Source.Get)))
+		routes.InstallAppMinVersion(r, app)
 		return nil
 	}))
 

@@ -224,7 +224,7 @@ Client telemetry intake (open issues 10-2, 09-11; processing and dashboards in S
 
 Both accept unauthenticated calls (crashes can happen before login) behind the IP limit, CSRF-exempt because they carry no session effect; unknown fields → 400.
 
-Versioning: the app sends `X-App-Version`; responses carry `X-App-Min-Version`; below `APP_MIN_SUPPORTED_VERSION` → 426 (logout exempt). Changes are additive; removal only once the minimum version excludes every build using the field and ≥ 90 days after the replacing build shipped; otherwise `/app/v2` side by side.
+Versioning: the app sends `X-App-Version`; responses carry `X-App-Min-Version`; below `APP_MIN_SUPPORTED_VERSION` (default `0.0.0`) → 426 `app-upgrade-required` (logout exempt: `DELETE /app/v1/tokens/current`). The guard lives in `app/appapi` and is installed by `routes.InstallAppMinVersion`. Changes are additive; removal only once the minimum version excludes every build using the field and ≥ 90 days after the replacing build shipped; otherwise `/app/v2` side by side.
 
 ### 6.5 OpenAPI, reference, SDKs
 

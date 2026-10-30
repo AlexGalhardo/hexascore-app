@@ -6,7 +6,6 @@ import (
 
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
-	"github.com/AlexGalhardo/vukem/middleware"
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/router"
 	"github.com/AlexGalhardo/vukem/web"
@@ -58,14 +57,15 @@ func Reports(r *router.Router, app *vukem.App) error {
 		Use(auth.Required(acc.Web), auth.Verified(acc.Web), ratelimit.Middleware(limit, ratelimit.ByUser(acc.Web.Name())))
 
 	api := controllers.NewReports(svc, acc.API.Name(), true)
+	stack, err := AppWriteStack(app, acc, limiters,
+		auth.Ability(acc.API, "profile:write"),
+		ratelimit.Middleware(limit, ratelimit.ByUser(acc.API.Name())),
+	)
+	if err != nil {
+		return err
+	}
 	r.Group("/app/v1", func(g *router.Group) {
-		g.Use(
-			middleware.JSONOnly(),
-			auth.Required(acc.API),
-			auth.Verified(acc.API),
-			auth.Ability(acc.API, "profile:write"),
-			ratelimit.Middleware(limit, ratelimit.ByUser(acc.API.Name())),
-		)
+		g.Use(stack...)
 		g.Post("/reports", api.Create).Name("reports.create")
 	}).Name("app.v1.")
 
