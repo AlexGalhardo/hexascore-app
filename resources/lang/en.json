@@ -226,6 +226,10 @@
     },
     "or": "or",
     "google": "Continue with Google",
+    "challenge": {
+      "checking": "Checking your browser…",
+      "noscript": "This form needs JavaScript. Without it you can"
+    },
     "errors": {
       "invalidCredentials": "Wrong email/nickname or password.",
       "emailNotVerified": "Confirm your email before logging in.",

@@ -58,7 +58,7 @@ func TestSecurity_A07_SocialLinkEndsSquatterAccess(t *testing.T) {
 	squatter := app.Client(t)
 	squatter.PostForm("/signup", url.Values{
 		"name": {"Mallory"}, "email": {"vic@example.com"},
-		"password": {testPassword}, "password_confirmation": {testPassword},
+		"password": {testPassword}, "password_confirmation": {testPassword}, "form_token": {signupToken(app)},
 	}).AssertRedirect("/signup/check-email")
 	squatter.PostForm("/login", url.Values{
 		"identifier": {"vic@example.com"}, "password": {testPassword}, "remember": {"true"},
@@ -88,7 +88,7 @@ func TestSecurity_A07_SocialDoesNotTakeOverUnverifiedEmails(t *testing.T) {
 
 	app.Client(t).PostForm("/signup", url.Values{
 		"name": {"Owner"}, "email": {"owner@example.com"},
-		"password": {testPassword}, "password_confirmation": {testPassword},
+		"password": {testPassword}, "password_confirmation": {testPassword}, "form_token": {signupToken(app)},
 	})
 
 	signIn(t, app.Client(t)).AssertStatus(409)

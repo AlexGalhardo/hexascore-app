@@ -11,6 +11,7 @@ import (
 	"github.com/AlexGalhardo/vukem/vukemtest"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/forms"
 	"github.com/AlexGalhardo/hexascore-app/bootstrap"
 )
 
@@ -73,7 +74,7 @@ func TestSecurity_A07_LegacyScryptVerifiesAndRehashes(t *testing.T) {
 
 	c.PostJSON("/signup", map[string]any{
 		"name": "Legacy User", "email": email, "password": "Temporary pass 1!",
-		"password_confirmation": "Temporary pass 1!",
+		"password_confirmation": "Temporary pass 1!", "form_token": signupToken(t, app),
 	})
 
 	db, err := app.DB()
@@ -109,4 +110,16 @@ func TestSecurity_A07_LegacyScryptVerifiesAndRehashes(t *testing.T) {
 	if got := read(); !strings.HasPrefix(got, "$argon2id$") {
 		t.Fatalf("stored hash after login = %.12q..., want $argon2id$ prefix", got)
 	}
+}
+
+// signupToken is a sign-up form token rendered forms.MinFill ago.
+func signupToken(t *testing.T, app *vukemtest.App) string {
+	t.Helper()
+
+	key, err := app.DeriveKey("signup.form", 32)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	return forms.Token{Key: key, Now: app.Now}.IssueAt("signup", app.Now().Add(-forms.MinFill))
 }

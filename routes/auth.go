@@ -10,6 +10,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers/account"
+	"github.com/AlexGalhardo/hexascore-app/app/forms"
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
@@ -33,7 +34,12 @@ func Auth(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	h := account.New(acc)
+	formKey, err := app.DeriveKey("signup.form", 32)
+	if err != nil {
+		return err
+	}
+
+	h := account.New(acc, forms.Token{Key: formKey, Now: app.Now})
 	guest := auth.Guest(acc.Web)
 	required := auth.Required(acc.Web)
 	// Signed-in pages also need a verified email; unverified users are sent

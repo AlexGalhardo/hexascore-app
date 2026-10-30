@@ -14,17 +14,19 @@ import (
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/forms"
 	"github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
 )
 
 // Handlers serves the account pages.
 type Handlers struct {
-	a *accounts.Accounts
+	a    *accounts.Accounts
+	form forms.Token
 }
 
-// New returns the handlers.
-func New(a *accounts.Accounts) *Handlers { return &Handlers{a: a} }
+// New returns the handlers; form signs the sign-up page's render time.
+func New(a *accounts.Accounts, form forms.Token) *Handlers { return &Handlers{a: a, form: form} }
 
 // RegisterThrottleKey limits sign-ups per address. It keys on a hash of
 // the normalized email, so the limiter store holds no addresses.
@@ -87,7 +89,9 @@ func (h *Handlers) Login(c *web.Ctx) error {
 }
 
 // ShowRegister renders the registration page.
-func (*Handlers) ShowRegister(c *web.Ctx) error { return inertia.Render(c, "Auth/Signup", nil) }
+func (h *Handlers) ShowRegister(c *web.Ctx) error {
+	return inertia.Render(c, "Auth/Signup", inertia.Props{"formToken": h.form.Issue("signup")})
+}
 
 // Register answers the same for new and existing emails (no account
 // enumeration) and does not log in: the user is asked to check the inbox,
@@ -98,9 +102,10 @@ func (h *Handlers) Register(c *web.Ctx) error {
 		return err
 	}
 
-	// A filled honeypot gets the normal answer and nothing is stored.
-	if in.Website != "" {
-		web.SecurityEvent(c.Request(), "signup.honeypot")
+	// A filled honeypot or a form sent faster than people fill it (or without the signed render time)
+	// gets the normal answer and nothing is stored (SDD 13 §7.2).
+	if in.Website != "" || !h.form.Valid("signup", in.FormToken) {
+		web.SecurityEvent(c.Request(), "security.honeypot", "form", "signup")
 
 		return c.Redirect("/signup/check-email")
 	}

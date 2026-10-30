@@ -1,6 +1,7 @@
 import { Head, Link, useForm } from "@inertiajs/react";
-import type { FormEvent } from "react";
+import { type FormEvent, useState } from "react";
 
+import ChallengeStatus from "../../components/ChallengeStatus";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
 import { challengeHeaders } from "../../lib/challenge";
@@ -11,10 +12,11 @@ export default function Login() {
 	const t = useT();
 	const l = useLocalized();
 	const form = useForm({ identifier: "", password: "", remember: false });
+	const [checking, setChecking] = useState(false);
 
 	const submit = async (e: FormEvent) => {
 		e.preventDefault();
-		const headers = await challengeHeaders("login");
+		const headers = await challengeHeaders("login", setChecking);
 		form.post(l("/login"), { headers, onFinish: () => form.reset("password") });
 	};
 
@@ -56,6 +58,7 @@ export default function Login() {
 				>
 					{t("auth.login.submit")}
 				</button>
+				<ChallengeStatus checking={checking} />
 			</form>
 			<p className="mt-6 flex gap-4 text-sm">
 				<Link
