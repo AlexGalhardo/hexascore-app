@@ -215,6 +215,7 @@ api   GET    /api/v1/books/genres
 api   GET    /api/v1/search/entities
 api   GET    /api/v1/search
 api   GET    /api/v1/lookup
+api   GET    /api/v1/changes
 api   GET    /api/v1/{type}/{id}
 api   GET    /api/v1/{type}
 api   GET    /api/v1/openapi.json

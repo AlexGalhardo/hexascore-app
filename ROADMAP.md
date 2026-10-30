@@ -2202,7 +2202,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./app/api/changes/... -run 'TestRecord|TestHiddenOnlyChangeWritesNothing|TestScoreChangeOnlyOnDecimal'` → `ok`
   - Notes: SDD 05 §5 types `item_id` as `bigint`, but the README convention says UUID v7 primary keys; use `uuid` and fix SDD 05 §5 (and `merged_into`) in the same change. `fields` holds api-visible names only (serialiser allowlist), so a TMDB-only refresh writes nothing. Score rows only when the one-decimal score, confidence or `ratingCount` changes.
 
-- [ ] **P3.A.3.2** Serve `listChanges` (`/v1/changes?since=&type=&cursor=&limit≤1000`) and prune rows older than 30 days daily.
+- [x] **P3.A.3.2** Serve `listChanges` (`/v1/changes?since=&type=&cursor=&limit≤1000`) and prune rows older than 30 days daily.
   - Files/modules: `app/api/v1/changes.go`, `app/jobs/prune_api_changes.go`, `routes/schedule.go`, `tests/api_changes_test.go`
   - Refs: SDD 05 FR-05-9, §6.2, §8 (future `since`, exactly 14 days)
   - Depends on: P3.A.3.1
