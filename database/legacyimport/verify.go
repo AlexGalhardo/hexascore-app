@@ -33,8 +33,9 @@ type VerifyOptions struct {
 // countCheck pairs a legacy count with the imported one. The legacy query
 // applies the documented exclusions (SDD 11 §7.6 step 6), the same filters
 // the stages apply. Not compared: session, verification, rate_limit,
-// passkey, external_scores, follows, processed_events (never imported), and
-// credential accounts (folded into users.password).
+// external_scores, follows, processed_events (never imported), credential
+// accounts (folded into users.password), and passkey (imported by the users
+// stage; incomplete rows are skipped, so it is not a count pair).
 type countCheck struct{ name, legacy, imported string }
 
 var countChecks = []countCheck{

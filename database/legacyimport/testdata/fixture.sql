@@ -48,7 +48,16 @@ CREATE TABLE legacy_import.two_factor (
 
 CREATE TABLE legacy_import.passkey (
   id text PRIMARY KEY,
-  user_id text NOT NULL REFERENCES legacy_import."user"(id) ON DELETE CASCADE
+  user_id text NOT NULL REFERENCES legacy_import."user"(id) ON DELETE CASCADE,
+  name text,
+  public_key text,
+  credential_id text,
+  counter integer,
+  device_type text,
+  backed_up boolean,
+  transports text,
+  created_at timestamp,
+  aaguid text
 );
 
 -- Catalogue tables keep the legacy shape (legacy apps/web/lib/db/schema/catalog.ts); enums are text here.
