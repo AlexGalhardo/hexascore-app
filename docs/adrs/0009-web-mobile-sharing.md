@@ -1,6 +1,6 @@
 # ADR 0009: Web and mobile share an OpenAPI contract, generated clients and design tokens, not code
 
-Status: accepted (2026-10-28). Decisions: owner requirement 3; brainstorming D-04, D-12, A-01.
+Status: accepted (2026-10-28). Mobile styling is amended by ADR 0018 (NativeWind); the sharing rules below are unchanged. Decisions: owner requirement 3; brainstorming D-04, D-12, A-01.
 
 ## Context
 

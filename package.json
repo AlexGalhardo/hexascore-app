@@ -2,6 +2,7 @@
   "packageManager": "bun@1.4.3",
   "private": true,
   "type": "module",
+  "workspaces": ["apps/*", "packages/tokens", "packages/app-client"],
   "scripts": {
     "dev": "vite",
     "build": "vite build",

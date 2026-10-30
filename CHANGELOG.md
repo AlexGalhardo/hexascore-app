@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Android Expo shell in `apps/mobile` (SDK 58, NativeWind, SDD 10 routes, shared tokens and bundled catalogues). The P5 checkboxes stay open until P3.C.5.2.
+- ADR 0018 and the Expo skills under `.claude/skills/`.
+
 ## [0.10.0] - 2026-10-30
 
 ### Added

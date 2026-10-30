@@ -21,3 +21,4 @@ Format: [MADR](https://adr.github.io/madr/) (title, status, context, decision, a
 | [0015](0015-monetisation-v1.md) | Monetisation: paid read API via Stripe in v1, PIX in the second release | accepted |
 | [0016](0016-bot-protection.md) | Bot and abuse protection without Vercel BotID | accepted |
 | [0017](0017-passkeys.md) | Passkeys return through vukem `auth` (VF-001) | accepted |
+| [0018](0018-nativewind.md) | NativeWind styles the Android app; tokens stay shared, components do not | accepted |
