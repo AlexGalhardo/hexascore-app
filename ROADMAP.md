@@ -2395,7 +2395,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run TestAppIdempotency` → replay on same key, 409 in flight, 422 for a different body
   - Notes: `api.Idempotency` goes after authentication (keys scoped to the caller, vukem idempotency page) on the database cache store. Limits: `ratelimit.ByToken` 120/min reads, 30/min writes, behind the IP limit. Not plan-metered.
 
-- [ ] **P3.C.1.2** Serve the token routes: `createAppToken`, `createAppTokenFromGoogle`, `rotateAppToken` (≤ 10/h), `listAppTokens`, `DELETE /tokens/current`, `DELETE /tokens/{id}`.
+- [x] **P3.C.1.2** Serve the token routes: `createAppToken`, `createAppTokenFromGoogle`, `rotateAppToken` (≤ 10/h), `listAppTokens`, `DELETE /tokens/current`, `DELETE /tokens/{id}`.
   - Files/modules: `app/appapi/tokens.go`, `tests/app_tokens_test.go`
   - Refs: SDD 03 §6.2, §7.4; SDD 10 §6.2; ADR 0016 (challenge)
   - Depends on: P3.C.1.1, P1.C
