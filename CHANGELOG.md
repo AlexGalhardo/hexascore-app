@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - Daily `privacy.retain` clears session IP and user agent after 30 days, deletes `client_reports` older than 7 days when that table exists, and expires export ZIPs (P2.D.4.1). `SESSION_RECORD_CLIENT=true` in `.env.example` and the compose app env.
+- A17 projected-spend formula and `projected-spend.yml`. Without a Railway usage API the workflow logs the day-20 reminder and posts to Telegram only when that secret exists (P2.C.3.4, checkbox still open).
 - Schemathesis 4.29.0 harness (`qa/schemathesis/run.sh`) and the ZAP 2.17.0 baseline script pinned by image digest (`qa/zap/baseline.sh`, `qa/zap/rules.tsv`). Notes in `docs/qa/scans.md` (P1.I.4.1).
 - CI `openapi` job loads `image.tar` from `build`, diffs `openapi:export` from that image, runs Redocly, and fuzzes the same image with Schemathesis 4.29.0 (`qa/schemathesis/ci.sh`, P2.B.1.4).
 - CI `e2e` and `lighthouse` jobs load the same artifact, seed DemoCatalog, run `bun run e2e` (traces uploaded on failure) and `bunx --bun @lhci/cli@0.15.1 autorun` on the five reference URLs (P2.B.1.5).

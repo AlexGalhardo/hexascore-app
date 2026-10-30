@@ -277,6 +277,8 @@ On-call is the owner. Quiet hours run 23:00–08:00 America/Sao_Paulo: only `pag
 | A16 | Telemetry gone | no HTTP metric data | 10 min | warn | Grafana |
 | A17 | Projected spend | on day 20 of the billing cycle (and daily after), month-to-date usage × days in cycle / elapsed days > US$27 (D-27: hard limit US$30) | daily | warn | GitHub Actions cron reading Railway usage [R-cost] (programmatic access [NOT VERIFIED]; fallback: calendar reminder to the owner on day 20) |
 
+Checked 2026-10-30: no documented Railway usage API was found in the repo, so `projected-spend.yml` takes the fallback. It logs a day-20 reminder and, when `USAGE_USD` is set, evaluates the formula. It posts to Telegram only when that step's secret is present and the formula alerts or the reminder is due. The formula fixture is `bun test scripts/ops/projected-spend.test.ts`.
+
 ### 7.6 Dashboards
 
 Dashboards live in Grafana Cloud; their JSON is in `ops/grafana/dashboards/`.
