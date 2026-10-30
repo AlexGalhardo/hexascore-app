@@ -14,17 +14,19 @@ Command, both documents, `http://127.0.0.1:3000`, `--checks all`, config `qa/sch
 schemathesis --config-file qa/schemathesis/schemathesis.toml run openapi/api-v1.json --url http://127.0.0.1:3000 -H "Authorization: Bearer $HX_TEST_KEY" --checks all
 ```
 
-`openapi/api-v1.json` (2026-10-30): 17/17 operations, 1187 passed, 10 skipped, exit 0. `listItems`, `getItem`, `getEntity`, `listEntityItems` and `listEditions` are in that document and were part of the run. Warnings only: three operations mostly 404 (no fixture id), and generated strings are often 400 because the document types them as plain strings.
+`openapi/api-v1.json` (2026-10-30, re-run with the IP hook): 17/17 operations, 1184 passed, 10 skipped, exit 0. `listItems`, `getItem`, `getEntity`, `listEntityItems` and `listEditions` are in that document and were part of the run. Warnings only: some operations mostly 404 (no fixture id), and generated strings are often 400 because the document types them as plain strings. A run without the hook failed one coverage case: missing `Authorization` answered 429 after the shared IP passed 120 requests in a minute.
 
-`openapi/app-v1.json`: 27/27 operations, 1743 passed, 1 skipped, exit 0, with `--exclude-checks allow_header_conformance,unsupported_method`. `--checks all` turns those toml flags back on. They fail because `GET /{path...}` is the HTML 404: an undeclared GET under `/app/v1` answers 404, and a 405 `Allow` list includes that GET. The credential is one `hx_app_` token; `DELETE /app/v1/tokens/current` revokes it, so later cases are 401. That is a warning, not a failure.
+`openapi/app-v1.json` (same re-run): 27/27 operations, 1748 passed, exit 0, with `--exclude-checks allow_header_conformance,unsupported_method`. `--checks all` turns those toml flags back on. They fail because `GET /{path...}` is the HTML 404: an undeclared GET under `/app/v1` answers 404, and a 405 `Allow` list includes that GET. The credential is one `hx_app_` token; `DELETE /app/v1/tokens/current` revokes it, so later cases are 401. That is a warning, not a failure.
 
 400 and 428 are accepted on positive cases. A bad cursor, an unknown type and the signup challenge (`428`) are the documented answers, not server errors.
+
+`qa/schemathesis/ip_hook.py` sets a distinct `X-Forwarded-For` on every call. The IP budget is 120/min, and one scan is larger than that. Without the hook, the missing-`Authorization` check observes `429` instead of `401`. The compose app trusts `172.16.0.0/12`, which is the same reason the k6 scripts send their own client address.
 
 ## ZAP baseline
 
 ZAP 2.17.0, 2026-10-30, target `http://127.0.0.1:3000`. `docker pull` of `ghcr.io/zaproxy/zaproxy@sha256:030d3df57735dacbb83464854758e674dd9ad01d79d12a129a8e58b1fd384238` still dies with `short read` on the 625874126-byte layer. The run below is the official `zap-baseline.py` from tag `v2.17.0` (the script inside that image) with the official `ZAP_2.17.0_Crossplatform.zip` from the same release. Flags match `qa/zap/baseline.sh`: `-I -c qa/zap/rules.tsv -J zap-report.json -r zap-report.html -m 5`. `rules.tsv` is still only the comment header.
 
-Result: 1836 URLs, 55 pass, 6 warn, 0 fail, exit 0. The JSON report has no `riskcode` 2 (Medium) or 3 (High).
+Result on the pinned image (2026-10-30 re-run, `qa/zap/baseline.sh`, exit 0): 1741 URLs, 60 pass, 8 warn, 0 fail. The JSON report has no `riskcode` 2 (Medium) or 3 (High). `riskcode` 1 is Low. The new Low rows are CSP notices (the CSP header check itself passed) and missing COEP/CORP on HTML documents, which are not cross-origin isolated. Non-storable HTML is Informational.
 
 | Rule | Risk in the report | What it is |
 | --- | --- | --- |

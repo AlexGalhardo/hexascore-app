@@ -24,7 +24,10 @@ http://127.0.0.1:*|http://localhost:*)
 	;;
 esac
 
+# Distinct X-Forwarded-For per call, or the 120/min IP budget turns a missing
+# Authorization into 429. The hook file is on the /work mount.
 exec docker run --rm -e HOME=/tmp \
+	-e SCHEMATHESIS_HOOKS=/work/qa/schemathesis/ip_hook.py \
 	--add-host=host.docker.internal:host-gateway \
 	-v "$root:/work" -w /work/qa/reports/schemathesis \
 	schemathesis/schemathesis:4.29.0 \
