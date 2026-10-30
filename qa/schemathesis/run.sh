@@ -25,6 +25,7 @@ http://127.0.0.1:*|http://localhost:*)
 esac
 
 exec docker run --rm -e HOME=/tmp \
+	--add-host=host.docker.internal:host-gateway \
 	-v "$root:/work" -w /work/qa/reports/schemathesis \
 	schemathesis/schemathesis:4.29.0 \
 	--config-file /work/qa/schemathesis/schemathesis.toml \
