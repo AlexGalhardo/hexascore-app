@@ -20,7 +20,8 @@ unsupported_method.enabled = false
 # (unknown type, bad cursor, bad year) is 400 invalid-query, which is not a 5xx.
 [[operations]]
 include-path-regex = "^/(api|app)/v1/"
-checks.positive_data_acceptance.expected-statuses = ["2xx", "400", "401", "403", "404", "409", "422", "428", "429", "5xx"]
+# 415: JSONOnly and the telemetry decoder reject a body that is not JSON.
+checks.positive_data_acceptance.expected-statuses = ["2xx", "400", "401", "403", "404", "409", "415", "422", "428", "429", "5xx"]
 
 # GET /{path...} is the HTML 404, so a method probe on /app/v1 advertises GET.
 [[operations]]
@@ -31,5 +32,12 @@ checks.allow_header_conformance.enabled = false
 # generated schema is */* , which the checker tries to parse as JSON.
 [[operations]]
 include-path-regex = "^/app/v1/tokens/current$"
+checks.response_schema_conformance.enabled = false
+checks.content_type_conformance.enabled = false
+
+# POST /app/v1/client-errors and /client-metrics answer 204 with an empty body.
+# The untyped route schema is */* , same gap as tokens/current.
+[[operations]]
+include-path-regex = "^/app/v1/client-(errors|metrics)$"
 checks.response_schema_conformance.enabled = false
 checks.content_type_conformance.enabled = false

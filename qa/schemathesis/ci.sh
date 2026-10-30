@@ -72,3 +72,9 @@ curl -fsS "http://127.0.0.1:${port}/up" >/dev/null
 
 HX_TEST_KEY="$key" QA_BASE_URL="http://127.0.0.1:${port}" qa/schemathesis/run.sh openapi/api-v1.json
 HX_TEST_KEY="$app_token" QA_BASE_URL="http://127.0.0.1:${port}" qa/schemathesis/run.sh openapi/app-v1.json
+
+# Anonymous search, 1 rps, under the 60/min IP limit. Host network reaches the app on 127.0.0.1.
+docker run --rm --network host \
+	-e BASE_URL="http://127.0.0.1:${port}" \
+	-v "$root/qa:/qa" \
+	grafana/k6:2.3.0 run /qa/k6/app-v1.js
