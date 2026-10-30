@@ -2424,7 +2424,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run TestAppSearch` → `ok` with and without a token; `q` > 100 chars → 400
   - Notes: SDD 05 §6.4 lists only `/search`; add `/search/suggest` and `/search/events` to that table in the same change (SDD 10 needs them).
 
-- [ ] **P3.C.2.3** Serve `/items/{id}/me` and PUT/DELETE `/items/{id}/rating`, `/items/{id}/status`, `/items/{id}/time-to-beat`.
+- [x] **P3.C.2.3** Serve `/items/{id}/me` and PUT/DELETE `/items/{id}/rating`, `/items/{id}/status`, `/items/{id}/time-to-beat`.
   - Files/modules: `app/appapi/scoring.go`, `tests/app_scoring_test.go`
   - Refs: SDD 05 §6.4; SDD 02 §6 (problems, e.g. `rating-before-release`); SDD 10 §6.1
   - Depends on: P3.C.2.1
