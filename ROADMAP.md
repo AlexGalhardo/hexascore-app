@@ -1,6 +1,6 @@
 # HexaScore roadmap (vukem rewrite)
 
-Execution plan for agents (Claude Opus 5.5 / Sonnet 5.5) that do not have the planning conversation. Read [AGENTS.md](AGENTS.md) first, then [docs/PROGRESS.md](docs/PROGRESS.md). Every microtask is sized for one agent session, names its SDD/ADR, its dependencies, its acceptance commands and a suggested model. Tick boxes as work lands; update `docs/PROGRESS.md` at the end of each session.
+Execution plan for any coding agent. Read [AGENTS.md](AGENTS.md) first, then [docs/PROGRESS.md](docs/PROGRESS.md). Three agents share `.orchestration/`: `framework` (vukem), `implementer` (app code), `reviewer` (review and local `main`). A model name on a microtask is an effort hint, not a required runtime. Tick boxes as work lands; update `docs/PROGRESS.md` at the end of each session.
 
 Ordering principle (owner requirement): (1) foundation and parity with the Next.js app, (2) data migration and infra, (3) public API, (4) community edits, (5) mobile, (6) continuous ingestion and recommendations. Phase 0 is a short framework spike that de-risks everything after it.
 
