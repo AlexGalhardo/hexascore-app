@@ -2453,7 +2453,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run TestAppLists` → `list-version-conflict` 409, `order-mismatch` 422, `edition-not-of-work` 422; another user's private list → 404 (`DenyAsNotFound`)
   - Notes: ability conflict: SDD 14 §6.3 puts `/items/{id}/edition` under `status:write`, SDD 05 §6.4 under `lists:write`. Owner/architect input; default to SDD 05 (API owner) and align SDD 14. Events dispatched with `q.DispatchTx`.
 
-- [ ] **P3.C.3.3** Serve `/me/library`, `/users/{nickname}`, `/me/notifications`, `POST /me/notifications/read` and `POST /reports`.
+- [x] **P3.C.3.3** Serve `/me/library`, `/users/{nickname}`, `/me/notifications`, `POST /me/notifications/read` and `POST /reports`.
   - Files/modules: `app/appapi/library.go`, `app/appapi/notifications.go`, `app/appapi/reports.go`, `tests/app_library_test.go`
   - Refs: SDD 14 §6.3, §6.5; SDD 10 §6.1; open issue 10-1
   - Depends on: P3.C.3.2
