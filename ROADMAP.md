@@ -1161,7 +1161,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
 
 #### P1.I.2 Ported and new specs
 
-- [ ] **P1.I.2.1** Port `auth`, `profile`, `api-keys` and `pricing` specs.
+- [x] **P1.I.2.1** Port `auth`, `profile`, `api-keys` and `pricing` specs.
   - Files/modules: `qa/e2e/specs/{auth,profile,api-keys,pricing,passkeys}.spec.ts`
   - Refs: SDD 03 §7.8, §9; SDD 05 §10 (E2E); SDD 09 §10; ADR 0017; legacy `qa/e2e/specs/{auth,profile,api-keys,pricing}.spec.ts`
   - Depends on: P1.I.1.1
