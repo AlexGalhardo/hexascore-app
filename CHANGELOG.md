@@ -59,6 +59,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **infra:** Sample suggest and events lines under the real locale prefixes ([12b62e1](https://github.com/AlexGalhardo/hexascore-app/commit/12b62e188bf44dc59b1166d1057f90a72bb614bb))
 - **search:** Qualify hs_unaccent in hs_norm so dumps restore ([a05b8a4](https://github.com/AlexGalhardo/hexascore-app/commit/a05b8a40dfda39a1057089166ea844a7076d8b0f))
 - **auth:** Count the announced attempt in the challenge probe and drop bypassCSP from e2e ([9c49d66](https://github.com/AlexGalhardo/hexascore-app/commit/9c49d66572ee40dde1f2d450afd8b13da430be0f))
+- Item rating, status, time-to-beat, edition, list, contact and notification form posts now keep the `/pt-br` or `/es` prefix on their redirects (FIX-locale-posts-rest).
 - Auth, profile, API key, account deletion and two-factor forms now post under the page locale prefix (`useLocalized`), so their redirects keep `/pt-br` and `/es`; the e2e specs for profile, API keys and the TOTP challenge assert in the project locale. `docker-compose.yml` takes `E2E_IMAGE_TAG` so each worker builds its own e2e image.
 - Backup child processes (`pg_dump`, `pg_restore` for restore and `--list` verify) are covered by tests for their minimal environment (`PG*` plus `PATH`, never the app environment) (FIX-backup-child-path).
 - Public profile and list pages no longer crash on the client: their page-level `seo` prop replaced the shared one (breaking `Seo`'s hreflang list); it is now a top-level `indexable` prop (found by the social e2e spec, P1.I.2.3).

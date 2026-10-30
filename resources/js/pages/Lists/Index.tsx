@@ -30,7 +30,7 @@ export default function Index({ lists, limits }: Props) {
 
 	const submit = (e: FormEvent) => {
 		e.preventDefault();
-		form.post("/lists", { onSuccess: () => form.reset("title") });
+		form.post(localized("/lists", locale), { onSuccess: () => form.reset("title") });
 	};
 
 	return (

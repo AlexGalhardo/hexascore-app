@@ -1,6 +1,7 @@
 import { router } from "@inertiajs/react";
 import { useRef, useState } from "react";
 
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 interface Edition {
@@ -16,6 +17,7 @@ const label = (e: Edition): string =>
 
 export default function EditionPicker({ itemId }: { itemId: string }) {
 	const t = useT();
+	const l = useLocalized();
 	const [editions, setEditions] = useState<Edition[] | null>(null);
 	const [failed, setFailed] = useState(false);
 	const [choice, setChoice] = useState("");
@@ -91,7 +93,7 @@ export default function EditionPicker({ itemId }: { itemId: string }) {
 				className="underline"
 				onClick={() =>
 					router.put(
-						`/items/${itemId}/edition`,
+						l(`/items/${itemId}/edition`),
 						{ editionId: choice },
 						{ preserveScroll: true },
 					)
