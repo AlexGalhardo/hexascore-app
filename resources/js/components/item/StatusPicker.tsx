@@ -1,6 +1,7 @@
 import { router } from "@inertiajs/react";
 import { useState } from "react";
 
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 import type { ItemType } from "./types";
 
@@ -16,6 +17,7 @@ export default function StatusPicker({
 	status: string | null;
 }) {
 	const t = useT();
+	const l = useLocalized();
 	const [value, setValue] = useState(status ?? "");
 	const [busy, setBusy] = useState(false);
 
@@ -28,8 +30,8 @@ export default function StatusPicker({
 			onError: () => setValue(previous),
 			onFinish: () => setBusy(false),
 		};
-		if (next === "") router.delete(`/items/${itemId}/status`, opts);
-		else router.put(`/items/${itemId}/status`, { status: next }, opts);
+		if (next === "") router.delete(l(`/items/${itemId}/status`), opts);
+		else router.put(l(`/items/${itemId}/status`), { status: next }, opts);
 	};
 
 	return (

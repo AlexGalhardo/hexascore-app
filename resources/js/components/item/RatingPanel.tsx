@@ -1,6 +1,7 @@
 import { router } from "@inertiajs/react";
 import { useState } from "react";
 
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 import StarRating from "../rating/StarRating";
 import { CATEGORY_KEYS, type ItemType, type RatingSummary } from "./types";
@@ -17,6 +18,7 @@ interface Props {
 // are optimistic; the aggregate always comes from the server reload.
 export default function RatingPanel({ itemId, type, summary, mine, canWrite }: Props) {
 	const t = useT();
+	const l = useLocalized();
 	const keys = CATEGORY_KEYS[type];
 	const [values, setValues] = useState<Record<string, number | null>>(
 		Object.fromEntries(keys.map((k) => [k, mine?.[k] ?? null])),
@@ -27,12 +29,12 @@ export default function RatingPanel({ itemId, type, summary, mine, canWrite }: P
 	const visit = { preserveScroll: true, onFinish: () => setBusy(false) };
 	const save = () => {
 		setBusy(true);
-		router.put(`/items/${itemId}/rating`, { scores: values }, visit);
+		router.put(l(`/items/${itemId}/rating`), { scores: values }, visit);
 	};
 	const remove = () => {
 		setBusy(true);
 		setValues(Object.fromEntries(keys.map((k) => [k, null])));
-		router.delete(`/items/${itemId}/rating`, visit);
+		router.delete(l(`/items/${itemId}/rating`), visit);
 	};
 
 	return (

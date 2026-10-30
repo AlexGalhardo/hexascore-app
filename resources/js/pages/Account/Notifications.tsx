@@ -1,5 +1,6 @@
 import { Head, InfiniteScroll, router } from "@inertiajs/react";
 
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 interface Notification {
@@ -16,6 +17,7 @@ export default function Notifications({
 	notifications: { data: Notification[] };
 }) {
 	const t = useT();
+	const l = useLocalized();
 	const rows = notifications.data;
 
 	return (
@@ -27,7 +29,7 @@ export default function Notifications({
 					<button
 						type="button"
 						className="font-medium underline"
-						onClick={() => router.post("/me/notifications/read-all")}
+						onClick={() => router.post(l("/me/notifications/read-all"))}
 					>
 						{t("notifications.markAllRead")}
 					</button>
@@ -51,7 +53,7 @@ export default function Notifications({
 								<button
 									type="button"
 									className="text-sm underline"
-									onClick={() => router.post(`/me/notifications/${n.id}/read`)}
+									onClick={() => router.post(l(`/me/notifications/${n.id}/read`))}
 								>
 									{t("notifications.markRead")}
 								</button>
