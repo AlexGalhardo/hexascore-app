@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"time"
-
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/middleware"
@@ -11,6 +9,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
+	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 )
 
 // Notifications registers the inbox pages and /app/v1/me/notifications (SDD 14 §6.2, §6.3).
@@ -25,12 +24,12 @@ func Notifications(r *router.Router, app *vukem.App) error {
 		return nil
 	}
 
-	limiters, err := app.RateLimiters()
+	limiters, err := limits.Factory(app)
 	if err != nil {
 		return err
 	}
 
-	limit := limiters("notifications", 120, time.Minute)
+	limit := limits.Notify.From(limiters)
 
 	web := controllers.NewNotifications(acc.DB, acc.Web.Name(), false)
 	required, verified := auth.Required(acc.Web), auth.Verified(acc.Web)

@@ -2,12 +2,12 @@ package routes
 
 import (
 	"cmp"
-	"time"
 
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/router"
 
+	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/security"
 )
@@ -29,7 +29,7 @@ func newChallenger(app *vukem.App, problemBase string) (*appmiddleware.Challenge
 
 // Challenge registers GET /challenge, which hands out a challenge for a protected route.
 func Challenge(r *router.Router, app *vukem.App) error {
-	limiters, err := app.RateLimiters()
+	limiters, err := limits.Factory(app)
 	if err != nil {
 		return err
 	}
@@ -40,7 +40,7 @@ func Challenge(r *router.Router, app *vukem.App) error {
 	}
 
 	r.Get("/challenge", ch.Issue).Name("challenge").
-		Use(ratelimit.Middleware(limiters("challenge", 30, time.Minute), ratelimit.ByIP))
+		Use(ratelimit.Middleware(limits.Challenge.From(limiters), ratelimit.ByIP))
 
 	return nil
 }

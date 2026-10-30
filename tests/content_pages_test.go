@@ -59,9 +59,14 @@ func TestRobots_Production(t *testing.T) {
 	t.Parallel()
 
 	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{
-		"APP_ENV": "production", "APP_URL": "https://example.test/",
-		"STRIPE_KEY": stripeKey, "STRIPE_WEBHOOK_SECRET": webhookSecret,
-		"STRIPE_PRICE_PRO": "price_pro", "STRIPE_PRICE_BUSINESS": "price_business",
+		"APP_ENV":               "production",
+		"APP_URL":               "https://example.test/",
+		"RATE_LIMIT_STORE":      "cache",
+		"CACHE_STORE":           "database",
+		"STRIPE_KEY":            stripeKey,
+		"STRIPE_WEBHOOK_SECRET": webhookSecret,
+		"STRIPE_PRICE_PRO":      "price_pro",
+		"STRIPE_PRICE_BUSINESS": "price_business",
 	}})
 	app.Client(t).Get("/robots.txt").AssertOK().
 		AssertSee("Allow: /" + nl).

@@ -3,7 +3,6 @@ package routes
 import (
 	"context"
 	"errors"
-	"time"
 
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
@@ -14,6 +13,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
+	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
@@ -45,13 +45,13 @@ func Reports(r *router.Router, app *vukem.App) error {
 		return nil
 	}
 
-	limiters, err := app.RateLimiters()
+	limiters, err := limits.Factory(app)
 	if err != nil {
 		return err
 	}
 
 	svc := ReportService(app, acc)
-	limit := limiters("reports", 10, time.Hour)
+	limit := limits.Reports.From(limiters)
 
 	h := controllers.NewReports(svc, acc.Web.Name(), false)
 	r.Post("/reports", h.Create).Name("reports.create").
@@ -77,7 +77,7 @@ func Reports(r *router.Router, app *vukem.App) error {
 	contact := controllers.NewContact(&library.Contact{
 		DB: acc.DB, Mailer: acc.Mailer, Inbox: app.Source.Get("CONTACT_INBOX"), Key: key, Now: app.Now, Log: app.Log,
 	}, func(c *web.Ctx) (models.User, error) { return acc.Web.User(c) })
-	byIP := ratelimit.Middleware(limiters("contact", 5, time.Hour), ratelimit.ByIP)
+	byIP := ratelimit.Middleware(limits.Contact.From(limiters), ratelimit.ByIP)
 	r.Get("/contact", contact.Index).Name("contact")
 	r.Post("/contact", contact.Send).Name("contact.send").Use(byIP)
 
