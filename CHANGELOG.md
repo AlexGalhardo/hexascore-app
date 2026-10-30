@@ -30,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Catalog filter spec accepts an empty list when a 1-star floor matches nothing. Catalog, item, ratings, time-to-beat and search specs pass in three locales (P1.I.2.2).
 - Social, lists, contact, notifications, admin, docs, public pages, headers and not-found specs pass in three locales (P1.I.2.3).
 - The full Playwright suite (i18n, seo, csp, keyboard, ssr-nojs, lists, notifications and the rest) passes in three locales (P1.I.2.4). One mobile admin navigation hit Windows `ERR_NO_BUFFER_SPACE` and passed on retry.
+- Admins can mark a contact message handled from the panel (`TestAdminMarksContactHandled`). The parity checklist now names a test for 114 of 118 legacy rows. The users' scores modal, trailers and the cookie banner stay open (P1.I.6.1).
 - Web CSP reports violations to `POST /csp-reports` (30/min, 16 KiB, no session). `/api/v1` responses use the JSON CSP, `no-referrer`, `Cross-Origin-Resource-Policy: cross-origin` and `Access-Control-Allow-Origin: *` (P2.D.1.1).
 
 ### Fixed

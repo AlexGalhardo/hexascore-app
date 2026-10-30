@@ -6,7 +6,12 @@ import (
 	"net/url"
 	"testing"
 
+	"github.com/AlexGalhardo/vukem/drivers/postgres/pgtest"
+	"github.com/AlexGalhardo/vukem/uuid"
+	"github.com/AlexGalhardo/vukem/vukemtest"
+
 	"github.com/AlexGalhardo/hexascore-app/app/notifications"
+	"github.com/AlexGalhardo/hexascore-app/bootstrap"
 )
 
 func (r *listRig) count(q string, args ...any) int {
@@ -144,6 +149,36 @@ func TestReportResolveBansUser(t *testing.T) {
 
 	if !reload(t, r.app, bad.ID).BannedAt.Valid {
 		t.Fatal("user not banned")
+	}
+}
+
+func TestAdminMarksContactHandled(t *testing.T) {
+	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{
+		Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")},
+	})
+	admin := makeUser(t, app, "contact-admin@example.com", "admin", true)
+	member := makeUser(t, app, "contact-member@example.com", "user", true)
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	id := uuid.NewV7().String()
+	if _, err := db.ExecContext(t.Context(), `INSERT INTO contact_messages (id, name, email, subject, message)
+VALUES ($1, 'Ana', 'ana@example.com', 'bug', 'this is a message with more than thirty-two characters')`, id); err != nil {
+		t.Fatal(err)
+	}
+
+	browserFor(t, app, member).Get("/admin/contact-messages").AssertNotFound()
+	browserFor(t, app, admin).Get("/admin/contact-messages").AssertOK()
+	browserFor(t, app, admin).PostForm("/admin/contact-messages/"+id, url.Values{"handled": {"false", "true"}})
+
+	var handled bool
+	if err := db.QueryRowContext(t.Context(), `SELECT handled FROM contact_messages WHERE id = $1`, id).Scan(&handled); err != nil {
+		t.Fatal(err)
+	}
+	if !handled {
+		t.Fatal("handled was not saved")
 	}
 }
 
