@@ -62,9 +62,13 @@ VALUES ($1, 'person', 'ari-gibson', 'Ari Gibson', '1980-01-02', 1999, '{"tmdb":"
 
 	t.Run("etag 304", func(t *testing.T) {
 		path := "/api/v1/entities/" + person
-		etag := r.client.GetJSON(path).AssertOK().Header("ETag")
-		r.app.Client(t).WithToken(r.key).WithHeader("If-None-Match", etag).GetJSON(path).
+		first := r.client.GetJSON(path).AssertOK()
+		etag := first.Header("ETag")
+		again := r.app.Client(t).WithToken(r.key).WithHeader("If-None-Match", etag).GetJSON(path).
 			AssertStatus(http.StatusNotModified)
+		if got, want := remaining(t, again), remaining(t, first)-1; got != want {
+			t.Fatalf("X-Quota-Remaining after 304 = %d, want %d", got, want)
+		}
 	})
 
 	t.Run("entity items", func(*testing.T) {
