@@ -67,6 +67,7 @@ func APIV1(r *router.Router, app *vukem.App) error {
 		Redirects: func(ctx context.Context, typ, id string) (catalog.Target, bool, error) {
 			return catalog.ResolveID(ctx, acc.DB, catalog.ScopeItem, typ, id)
 		},
+		Now: app.Now,
 	}
 	throttles := map[string]func(http.Handler) http.Handler{}
 
@@ -133,6 +134,7 @@ func APIV1(r *router.Router, app *vukem.App) error {
 		vapi.Register(g, "GET /search/entities", read("searchEntities"), items.SearchEntities)
 		vapi.Register(g, "GET /search", read("searchItems"), items.SearchItems)
 		vapi.Register(g, "GET /lookup", read("lookupItem"), items.LookupItem)
+		vapi.Register(g, "GET /changes", read("listChanges"), items.ListChanges)
 		vapi.Register(g, "GET /{type}/{id}", read("getItem"), items.GetItem)
 		vapi.Register(g, "GET /{type}", read("listItems"), items.ListItems)
 	})

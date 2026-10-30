@@ -55,6 +55,8 @@ type Controller struct {
 	Search search.Searcher
 	// Redirects resolves merged item ids (catalog.ResolveID needs a database.Executor).
 	Redirects func(ctx context.Context, typ, id string) (catalog.Target, bool, error)
+	// Now is the clock for the changes window. Nil means time.Now.
+	Now func() time.Time
 }
 
 // ItemMeta lists the fields the licence filter removed (SDD 05 FR-05-6).
