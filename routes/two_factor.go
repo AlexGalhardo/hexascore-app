@@ -2,7 +2,6 @@ package routes
 
 import (
 	"context"
-	"time"
 
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
@@ -12,6 +11,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers/account"
+	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	"github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
@@ -25,7 +25,7 @@ func TwoFactor(r *router.Router, app *vukem.App) error {
 	}
 
 	// RATE_LIMIT_STORE=cache shares the limits between servers (CACHE_STORE=database or Redis).
-	limiters, err := app.RateLimiters()
+	limiters, err := limits.Factory(app)
 	if err != nil {
 		return err
 	}
@@ -42,8 +42,8 @@ func TwoFactor(r *router.Router, app *vukem.App) error {
 	// 5 codes per minute per user and IP: 6-digit codes cannot be guessed.
 	// The password checks of the settings page (disable, new recovery
 	// codes) share the confirm bucket.
-	challenge := ratelimit.Middleware(limiters("two-factor.challenge", 5, time.Minute), account.TwoFactorThrottleKey)
-	confirm := ratelimit.Middleware(limiters("two-factor.confirm", 5, time.Minute), account.TwoFactorThrottleKey)
+	challenge := ratelimit.Middleware(limits.TwoFactor.From(limiters), account.TwoFactorThrottleKey)
+	confirm := ratelimit.Middleware(limits.TwoFactorSet.From(limiters), account.TwoFactorThrottleKey)
 
 	r.Get("/user/two-factor", h.Show).Name("two-factor.show").Use(required, verified, hasPassword)
 	r.Post("/user/two-factor", h.Enable).Name("two-factor.enable").Use(required, verified, hasPassword)

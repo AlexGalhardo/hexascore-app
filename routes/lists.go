@@ -2,7 +2,6 @@ package routes
 
 import (
 	"context"
-	"time"
 
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/api"
@@ -14,6 +13,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
+	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/policies"
@@ -27,7 +27,7 @@ func Lists(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	limiters, err := app.RateLimiters()
+	limiters, err := limits.Factory(app)
 	if err != nil {
 		return err
 	}
@@ -52,7 +52,7 @@ func Lists(r *router.Router, app *vukem.App) error {
 	}
 
 	svc := &library.Lists{DB: acc.DB, Events: app.Events, Now: app.Now}
-	limit := limiters("lists", 60, time.Minute)
+	limit := limits.Lists.From(limiters)
 
 	web := controllers.NewLists(svc, gate, acc.Web.Name(), false)
 	required, verified := auth.Required(acc.Web), auth.Verified(acc.Web)

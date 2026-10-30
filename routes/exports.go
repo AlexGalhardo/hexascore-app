@@ -2,7 +2,6 @@ package routes
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
@@ -13,6 +12,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
+	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 )
 
@@ -34,13 +34,13 @@ func Exports(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	limiters, err := app.RateLimiters()
+	limiters, err := limits.Factory(app)
 	if err != nil {
 		return err
 	}
 
 	// The 7-day cooldown is the real limit; this only stops request floods hitting the cooldown query.
-	limit := limiters("exports", 10, time.Hour)
+	limit := limits.Exports.From(limiters)
 
 	web := controllers.NewExports(svc, acc.Web.Name(), false, acc.ProblemBase)
 	r.Post("/profile/export", web.Create).Name("profile.export").

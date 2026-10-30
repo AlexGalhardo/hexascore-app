@@ -2,7 +2,6 @@ package routes
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers/account"
+	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
 
@@ -23,7 +23,7 @@ func Auth(r *router.Router, app *vukem.App) error {
 	}
 
 	// RATE_LIMIT_STORE=cache shares the limits between servers (CACHE_STORE=database or Redis).
-	limiters, err := app.RateLimiters()
+	limiters, err := limits.Factory(app)
 	if err != nil {
 		return err
 	}
@@ -40,18 +40,18 @@ func Auth(r *router.Router, app *vukem.App) error {
 	// to the verification notice.
 	verified := auth.Verified(acc.Web)
 	loginIP, loginAccount := auth.ThrottleKeys("identifier")
-	throttle := ratelimit.Middleware(limiters("login", 5, time.Minute), loginIP)
-	perAccount := ratelimit.Middleware(limiters("login.account", 20, 10*time.Minute), loginAccount)
+	throttle := ratelimit.Middleware(limits.Login.From(limiters), loginIP)
+	perAccount := ratelimit.Middleware(limits.LoginAccount.From(limiters), loginAccount)
 	// Caps one client across every identifier (email, nickname, case variants)
 	// without resolving accounts before authentication: a resolved key would
 	// leak which nickname belongs to which email and let a public nickname
 	// lock out the email login (security review, P1.C.2.1).
-	anyIdentifier := ratelimit.Middleware(limiters("login.ip", 10, time.Minute), ratelimit.ByIP)
-	mails := ratelimit.Middleware(limiters("mails", 3, time.Minute), ratelimit.ByIP)
+	anyIdentifier := ratelimit.Middleware(limits.LoginIP.From(limiters), ratelimit.ByIP)
+	mails := ratelimit.Middleware(limits.Mails.From(limiters), ratelimit.ByIP)
 	// Sign-up queues a mail: limit it per IP and per address. The limits count
 	// requests, not accounts, so they answer alike for new and existing emails.
-	signupIP := ratelimit.Middleware(limiters("register", 10, 10*time.Minute), ratelimit.ByIP)
-	signupEmail := ratelimit.Middleware(limiters("register.email", 5, time.Hour), account.RegisterThrottleKey)
+	signupIP := ratelimit.Middleware(limits.Signup.From(limiters), ratelimit.ByIP)
+	signupEmail := ratelimit.Middleware(limits.SignupEmail.From(limiters), account.RegisterThrottleKey)
 
 	r.Get("/login", h.ShowLogin).Name("login").Use(guest)
 	r.Post("/login", h.Login).Use(guest, anyIdentifier, throttle, perAccount, pow.Require("login"))
@@ -61,7 +61,11 @@ func Auth(r *router.Router, app *vukem.App) error {
 	r.Post("/logout", h.Logout).Name("logout").Use(required)
 
 	r.Get("/recover-password", h.ShowForgot).Name("password.request").Use(guest)
-	r.Post("/recover-password", h.SendResetLink).Name("password.email").Use(guest, mails, pow.Require("reset"))
+	// RegisterThrottleKey hashes the posted email, which is also the reset form's field.
+	forgotIP := ratelimit.Middleware(limits.Forgot.From(limiters), ratelimit.ByIP)
+	forgotEmail := ratelimit.Middleware(limits.ForgotEmail.From(limiters), account.RegisterThrottleKey)
+	r.Post("/recover-password", h.SendResetLink).Name("password.email").
+		Use(guest, forgotIP, forgotEmail, pow.Require("reset"))
 	r.Get("/reset-password/{token}", h.ShowReset).Name("password.reset").Use(guest)
 	r.Post("/reset-password", h.Reset).Name("password.update").Use(guest)
 
@@ -86,7 +90,7 @@ func Auth(r *router.Router, app *vukem.App) error {
 		return "deletion:" + u.AuthID()
 	}
 	r.Post("/profile/deletion", h.ScheduleDeletion).Name("deletion.schedule").
-		Use(required, ratelimit.Middleware(limiters("deletion", 5, time.Hour), deleteKey))
+		Use(required, ratelimit.Middleware(limits.Deletion.From(limiters), deleteKey))
 	r.Delete("/profile/deletion", h.CancelDeletion).Name("deletion.cancel").Use(required)
 	r.Get("/help/delete-account", h.HelpDeleteAccount).Name("help.delete-account")
 

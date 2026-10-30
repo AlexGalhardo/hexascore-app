@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"time"
-
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/middleware"
@@ -11,6 +9,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
+	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 )
 
 // Library registers the library, the edition choice and the public profile on the web and on /app/v1
@@ -25,12 +24,12 @@ func Library(r *router.Router, app *vukem.App) error {
 		return nil
 	}
 
-	limiters, err := app.RateLimiters()
+	limiters, err := limits.Factory(app)
 	if err != nil {
 		return err
 	}
 
-	limit := limiters("edition", 60, time.Minute)
+	limit := limits.Editions.From(limiters)
 
 	web := controllers.NewLibrary(acc.DB, app.Now, acc.Web.Name(), false)
 	required, verified := auth.Required(acc.Web), auth.Verified(acc.Web)
