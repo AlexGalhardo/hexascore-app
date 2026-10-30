@@ -7,8 +7,11 @@ This file is the single source of truth for every coding agent. `CLAUDE.md` only
 ## Session start (mandatory)
 
 1. Read this file, [docs/PROGRESS.md](docs/PROGRESS.md), and [ROADMAP.md](ROADMAP.md).
-2. If you are one of the three orchestration agents, read `.orchestration/README.md` and `.orchestration/briefs/<role>.md`. Otherwise pick the first unchecked microtask of the current phase unless the owner names another.
-3. `graphify` is a CLI (`graphify query "<question>"`) when `graphify-out/graph.json` exists. It is not required to start.
+2. Read [.claude/skills/use-railway/SKILL.md](.claude/skills/use-railway/SKILL.md) and follow it for every Railway command. The skill is vendored from [railwayapp/railway-skills](https://github.com/railwayapp/railway-skills) commit `526e95524e964ed326689cbac4464d97a58ab81c` (`use-railway` 1.7.0). Also read [Grok Build + Railway](https://railway.com/agents/grok): Railway MCP is `https://mcp.railway.com`, and a deploy is a plan the owner approves before `railway up`.
+3. If you are one of the three orchestration agents, read `.orchestration/README.md` and `.orchestration/briefs/<role>.md`. Otherwise pick the first unchecked microtask of the current phase unless the owner names another.
+4. `graphify` is a CLI (`graphify query "<question>"`) when `graphify-out/graph.json` exists. It is not required to start.
+
+Railway rules that override the skill's deploy-from-cwd shortcut: do not run `railway up`, `railway up -y`, or `railway up --new` unless the owner explicitly asks to deploy. Do not `git push origin main` (that push deploys production). Run the CLI from this repo, pass the linked project, environment, and service explicitly, and never print variable values. Do not create a staging environment, an extra region, or resize a volume without an explicit yes.
 
 ## Where things live
 

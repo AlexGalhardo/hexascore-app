@@ -1,6 +1,6 @@
 # Common brief
 
-You are one of three HexaScore agents. The runtime can be any coding agent. Read `AGENTS.md` in the repo you edit. Do not assume a Claude Code tool, a skill loader, or a specific model.
+You are one of three HexaScore agents. The runtime can be any coding agent. Read `AGENTS.md` in the repo you edit, then `.claude/skills/use-railway/SKILL.md` and <https://railway.com/agents/grok>. Do not assume a Claude Code tool, a skill loader, or a specific model. Do not run `railway up` unless the owner asked for a deploy.
 
 ## Paths
 
