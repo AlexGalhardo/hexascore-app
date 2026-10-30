@@ -10,3 +10,4 @@ Commands:
 - playwright twice, E2E_BASE_URL=http://127.0.0.1:3200, E2E_APP_CONTAINER=hx-implementer-app-1, image hexascore-app:e2e-implementer → 636 passed (5.8m), 636 passed (5.7m), exit 0 both, 0 signup failures
 Risk: compose sets CHALLENGE_GLOBAL_LIMIT only on the local e2e app. P1.I.5.1 stays open (Lighthouse not run).
 PRONTO_PARA_MERGE. Third playwright on the same image: 636 passed (5.9m), 0 signup failures. Review: .orchestration/reports/REV-FIX-e2e-signup-load-r2.md
+Queue closed 2026-10-30: knob already on local main (challenge.go, pow_test.go, docker-compose.yml). Branch 4747815 was not merged again.
