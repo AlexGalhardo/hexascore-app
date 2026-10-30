@@ -1451,7 +1451,7 @@ Phase-specific conventions:
     - CI: `bunx redocly lint openapi/api-v1.json openapi/app-v1.json` → 0 errors; Schemathesis `--checks all` against the job's container → 0 failures
   - Notes: reuse the image artifact from `build`; never rebuild inside this job. Schemathesis keeps the version pinned in legacy QA.
 
-- [ ] **P2.B.1.5** Add the `e2e` and `lighthouse` jobs against the built container.
+- [x] **P2.B.1.5** Add the `e2e` and `lighthouse` jobs against the built container.
   - Files/modules: `.github/workflows/ci.yml` (`e2e`, `lighthouse`), `docker-compose.yml` profile `app`, `qa/e2e/playwright.config.ts`, `lighthouserc.json`
   - Refs: SDD 11 §6.6 (`e2e`, `lighthouse`); SDD 09 §4, §9; ADR 0004; P1.I.1.1, P1.I.5.1
   - Depends on: P2.B.1.3

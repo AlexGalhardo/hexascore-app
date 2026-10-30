@@ -60,7 +60,8 @@ This file is the single source of truth for every coding agent. `CLAUDE.md` only
 | `qa/schemathesis/ci.sh [image]` | migrate the CI Postgres, insert a business key and an app token, run Schemathesis 4.29.0 against that image (Linux `--network host`) |
 | `bun run openapi:lint` | Redocly lint of both goldens (`redocly.yaml`; CI `lint`) |
 | `bun run sdk:generate` / `bun run sdk:generate:python` | regenerate `sdks/ts/src/gen` and `sdks/python/hexascore` from `openapi/api-v1.json` (TS tests: `cd sdks/ts && bun test`; Python needs `uv`: `cd sdks/python && uv run pytest -q`) |
-| `bun run e2e` | Playwright + axe against a built container |
+| `bun run e2e` | Playwright + axe against a built container (CI `e2e`: `scripts/ci/qa-up.sh` loads `image.tar`, seeds DemoCatalog, uploads traces on failure) |
+| `bunx --bun @lhci/cli@0.15.1 autorun` | Lighthouse budgets in `lighthouserc.json` on the five DemoCatalog URLs (CI `lighthouse`; `@lhci/cli` is not a package.json dependency) |
 | `docker compose up -d --wait` | local Postgres 18.6 (127.0.0.1:5433) and RustFS (127.0.0.1:9000/9001), both healthy |
 | `setups/setup-windows.ps1 [-NoServices]` | idempotent Windows setup: tools, `core.hooksPath .githooks` (commit-msg Conventional Commits check), `.env`, `APP_KEY`, compose stack, `bun install`, `vukem migrate`; `-NoServices` skips compose and migrate (CI Windows job) |
 | push to `main` | Railway service `app` (source `AlexGalhardo/hexascore-app`, branch `main`) builds and deploys automatically; `.github/workflows/ci.yml` reports regressions after the fact |
