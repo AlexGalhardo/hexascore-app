@@ -34,3 +34,4 @@ playwright-report/
 .schemathesis/
 qa/reports/
 .orchestration/heartbeat/
+__pycache__/
