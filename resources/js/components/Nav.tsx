@@ -259,7 +259,7 @@ export default function Nav() {
 							<div className="flex items-center gap-1 lg:gap-4">
 								<Link
 									href={localized("/login", locale)}
-									className={`${item} px-1 text-[15px] font-semibold text-primary hover:underline`}
+									className={`${item} whitespace-nowrap px-1 text-[15px] font-semibold text-primary hover:underline`}
 								>
 									{t("nav.login")}
 								</Link>
