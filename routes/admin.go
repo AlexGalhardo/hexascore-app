@@ -18,6 +18,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/community"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/app/moderation"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 )
 
@@ -157,9 +158,13 @@ func Admin(r *router.Router, app *vukem.App) error {
 	r.Post("/admin/items/{id}/merge", catalogH.Merge).Name("admin.items.merge").Use(moderator...)
 	moderationH := admin.ModerationHandlers{
 		Pages:     catalogH,
+		Queue:     moderation.Queue{DB: acc.DB, Now: app.Now},
 		Authorize: func(c *web.Ctx) error { return gate.Authorize(c.Context(), admin.AbilityModerate, nil) },
 	}
 	r.Get("/admin/moderation", moderationH.Index).Name("admin.moderation").Use(auth.Required(acc.Web), csrfMW)
+	modMW := []func(http.Handler) http.Handler{auth.Required(acc.Web), csrfMW}
+	r.Post("/admin/moderation/{id}/claim", moderationH.Claim).Name("admin.moderation.claim").Use(modMW...)
+	r.Post("/admin/moderation/{id}/release", moderationH.Release).Name("admin.moderation.release").Use(modMW...)
 	r.Get("/admin/ingestion", catalogH.Ingestion).Name("admin.ingestion").Use(auth.Required(acc.Web), csrfMW)
 
 	return nil

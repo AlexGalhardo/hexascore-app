@@ -158,6 +158,8 @@ admin POST   /admin/items/{id}/affiliate-links
 admin POST   /admin/items/{id}/affiliate-links/{store}/delete
 admin POST   /admin/items/{id}/merge
 admin GET    /admin/moderation
+admin POST   /admin/moderation/{id}/claim
+admin POST   /admin/moderation/{id}/release
 admin GET    /admin/ingestion
 web   PUT    /items/{id}/rating
 web   DELETE /items/{id}/rating
