@@ -68,7 +68,8 @@ func TestRobots_Production(t *testing.T) {
 		"STRIPE_PRICE_PRO":      "price_pro",
 		"STRIPE_PRICE_BUSINESS": "price_business",
 	}})
-	app.Client(t).Get("/robots.txt").AssertOK().
+	// Production redirects any host but APP_URL's, and vukemtest requests default to example.com.
+	app.Client(t).Get("https://example.test/robots.txt").AssertOK().
 		AssertSee("Allow: /" + nl).
 		AssertSee("Disallow: /admin" + nl).
 		AssertSee("Disallow: /profile" + nl).
@@ -77,3 +78,26 @@ func TestRobots_Production(t *testing.T) {
 }
 
 const nl = "\n"
+
+func TestCanonicalHost_Production(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{
+		"APP_ENV":               "production",
+		"APP_URL":               "https://example.test/",
+		"RATE_LIMIT_STORE":      "cache",
+		"CACHE_STORE":           "database",
+		"STRIPE_KEY":            stripeKey,
+		"STRIPE_WEBHOOK_SECRET": webhookSecret,
+		"STRIPE_PRICE_PRO":      "price_pro",
+		"STRIPE_PRICE_BUSINESS": "price_business",
+	}})
+	c := app.Client(t)
+
+	c.Get("http://www.example.test/robots.txt?a=1").AssertStatus(301).
+		AssertHeader("Location", "https://example.test/robots.txt?a=1")
+	c.Get("http://app-production-785f.up.railway.app/robots.txt").AssertStatus(301)
+	c.Get("http://www.example.test/up").AssertOK()
+	// SQLite has no catalogue routes: 404 proves the API host was not redirected.
+	c.Get("http://api.hexascore.app/v1/games").AssertStatus(404)
+}
