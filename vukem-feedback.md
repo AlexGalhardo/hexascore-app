@@ -21,6 +21,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | VF-NEW-FIX-gate-timeouts | 2026-10-31 | medium | open |
 | VF-NEW-P4.A.3.1b | 2026-10-31 | low | open |
 | VF-NEW-P2.H.3.5 | 2026-10-31 | medium | open |
+| VF-NEW-FIX-covers-route | 2026-10-31 | low | open |
 
 ## VF-062: A typed POST that returns a body defaults to 201, including commands that do not create a resource
 
@@ -118,3 +119,12 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 - **Context**: every anonymous first load runs SSR, so the page TTFB budget (k6 p75 ≤ 400 ms, SDD 09 §4) failed under load (470 to 1850 ms). Caching the rendered document in the app is unsafe by default because the body carries the per-request CSP nonce; the first draft replayed the cached CSP header and broke `TestSecurity_A05_NonceIsPerRequestAndInPage`.
 - **Workaround**: app middleware `RenderCache` (P2.H.3.5): anonymous GETs cached in process for 60 s, key = path + query + theme/consent/locale cookies, the cached body's nonce swapped for the current request's nonce, CSP never replayed; p75 157 to 296 ms. `// workaround(vukem): VF-NEW-P2.H.3.5`.
 - **Request**: an opt-in SSR output cache (TTL, vary keys, bypass on session cookie) that injects the request nonce at serve time, or a documented hook to cache the SSR HTML before nonce injection.
+
+## VF-NEW-FIX-covers-route: S3 disk exposes no ETag, so `storage.HandlerWith` cannot answer 304
+
+- **Date**: 2026-10-31. **Severity**: low. **Status**: open.
+- **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/digging-deeper/file-storage> [NOT VERIFIED whether the page documents conditional GET on the S3 driver].
+- **Context**: the app serves covers from a private bucket through `storage.HandlerWith` with `Cache-Control: public, max-age=31536000, immutable` (FIX-covers-route). Against RustFS the response carries no `ETag` and `If-None-Match` never yields 304; the memory disk path was the only one tested by the author.
+- **Workaround**: none needed while keys are content-hashed and immutable; browsers rely on the long max-age.
+- **Request**: have the S3 driver surface the object ETag (and `Last-Modified`) through the disk stat so `HandlerWith` answers conditional requests with 304.
+
