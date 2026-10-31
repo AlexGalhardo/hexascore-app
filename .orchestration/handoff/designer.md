@@ -17,6 +17,10 @@ Date 2026-10-31. Worktree `C:\dev\hexascore-app\wt\designer-round-1`, branch `ag
 
 Read `.claude/skills/openpencil-design/SKILL.md` first: it lists the render pitfalls (spacer height, gradient transform, glyphs, replace order, export activation).
 
+## Owner directive (2026-10-31, after the round-1 handoff)
+
+"Create ALL screens, one by one, pixel perfect, web and mobile, nothing missing for review." After v3, the scope is every page of `docs/design-system.md` section 6 and every screen in `apps/mobile/app/` (tabs `index`, `[type]`, `search`, `lists`, `profile`; `[type]/[slug]`, `entities/[id]`, `lists/[id]`, `(auth)/login`, `update-required`), at 1440 and 390 plus Android 390x844, with their empty, loading, error and logged-in states, and `12 Web dark`. Plan it as one board row per page group and per version (or for the chosen version only, once the owner picks one) so that no single session runs out of context. Follow the pixel-perfect rules in the brief: 4 px grid, auto-layout, instances only, tokens for every value.
+
 ## Open points
 
 - Cover images: `set_image_fill` needs base64 in the tool call; a script calling the local MCP HTTP server was blocked by the permission classifier, and hand-typed base64 corrupts. The owner can allow a scripted fill (token read from `mcp.json`, never printed) or accept average-colour placeholders.
