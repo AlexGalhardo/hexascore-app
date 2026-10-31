@@ -1,13 +1,13 @@
 # DESIGN-round-1
 
-Worker: designer. Branch `agent/designer/round-1`. Status: partial (v1 and v2 done, v3 handed off).
+Worker: designer. Branch `agent/designer/round-1`. Status: done (v1, v2 and v3 delivered, 19 frames each).
 
 ## Delivered
 
 - `docs/openpencil/v1-editorial/`: `hexascore-v1-editorial.fig`, 19 PNGs in `frames/`, `README.md`.
 - `docs/openpencil/v2-noir/`: `hexascore-v2-noir.fig`, 19 PNGs in `frames/`, `README.md`.
-- `docs/openpencil/v3-paper/README.md` (palette and type only; frames pending).
-- `docs/openpencil/ROUND-1.md`: side-by-side table, one paragraph per version, pt-BR owner checklist.
+- `docs/openpencil/v3-paper/`: `hexascore-v3-paper.fig`, 19 PNGs in `frames/`, `README.md` (palette corrected for AA).
+- `docs/openpencil/ROUND-1.md`: side-by-side table, one paragraph per version, WCAG contrast table for v1, v2 and v3, OpenPencil gaps, pt-BR owner checklist.
 - `.claude/skills/openpencil-design/SKILL.md`, `.claude/rules/design.md`, `.grok/rules/design.md`, brief line in `.orchestration/briefs/designer.md` (owner request: adapt openpencil-skill, frontend-design, impeccable and figma-use to this project).
 
 Frames per version: cover, foundations, components; home, catalog-index, item, search, library, login, pricing at 1440 and 390; Android home and item at 390x844.
@@ -23,6 +23,7 @@ Frames per version: cover, foundations, components; home, catalog-index, item, s
 - `set_image_fill` only takes base64 in the call. After the owner's yes, `scripts/openpencil/set_image_fills.py` applied all 23 real covers over the local MCP HTTP endpoint and `scripts/openpencil/export_frames.py` re-exported every frame (export only sees the active page).
 - `linearGradient` with `transform` breaks `export_image`; 8-digit hex, `fillOpacity` and `rgba` are ignored in SVG paths; Unicode glyphs (◐ ▾ ★) render as missing; `<Frame grow={1} />` defaults to 100 px tall; `node_replace_with` appends instead of replacing in place; large renders hit a 20 s RPC timeout (node still created).
 - Playfair Display renders old-style figures (uneven score digits).
+- v3 session: deleting main components before their instances corrupts the document; `open_file` on an open path merges stale nodes; text rendered while a Google font loads is stored with wrong glyphs; `set_font` needs `Extra Bold`; `get_jsx` does not round-trip; the MCP HTTP endpoint answers 503 after a few script sessions; `render` runs one expression only (helpers inside an IIFE) and clips with `overflow="hidden"` (`clip` ignored). All are in the skill's "Known gaps".
 
 ## Checks
 
@@ -31,6 +32,7 @@ Frames per version: cover, foundations, components; home, catalog-index, item, s
 
 ## Not verified
 
-- WCAG contrast of every pair was not measured with a tool (`analyze_colors` not run); palette pairs come from the concept doc and the current tokens.
+- WCAG contrast was computed with the relative-luminance formula from each README palette (table in `ROUND-1.md`), not measured on rendered pixels; `analyze_colors` was not run. v2 fails on the "none" score colour (4.40 light, 4.09 dark): fix before tokens are cut.
+- v3 frames were checked with `export_image` previews; the pricing subtitle on desktop is left-aligned in a centred block (cosmetic, round 2).
 - Production `/search` returns HTTP 500, so search counts in the frames are plausible values, not real ones.
 - Production has no ratings: all score numbers are illustrative.
