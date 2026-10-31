@@ -18,7 +18,7 @@ In (v1): web (including passkeys, ADR 0017), `/api/v1`, `/app/v1`, admin, webhoo
 - FR-13-2: Every unsafe unauthenticated route has a §7.1 limit and answers 429 with `Retry-After`. Verify: table-driven `TestSecurity_A06_HexaLimits`.
 - FR-13-3: The proof-of-work challenge (§7.2) triggers on the ADR 0016 thresholds and refuses a reused solution. Verify: `TestSecurity_A07_Pow*` (SDD 03).
 - FR-13-4: Every body, query, path, webhook field and stored jsonb value passes a `z` schema before use. Verify: lint flags `c.FormValue` and `map[string]any` decoding in `app/`; fuzz test per boundary.
-- FR-13-5: Admin routes need the `admin` role, confirmed 2FA and a session within §7.5 limits. Verify: `TestSecurity_A01_HexaAdminNeeds2FA`.
+- FR-13-5: Admin routes need the `admin` role (the moderation pages also admit `moderator`), confirmed 2FA and a session within §7.5 limits; both roles get the 2FA redirect and the session limits. Verify: `TestSecurity_A01_HexaAdminNeeds2FA`, `TestSecurity_A07_ModeratorRequires2FA`.
 - FR-13-6: Data-subject rights work end to end (§7.6). Verify: SDD 03/14 integration tests.
 - FR-13-7: Every incident follows §7.9 and gets a review within 5 working days. Verify: manual checklist.
 
