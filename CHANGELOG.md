@@ -6,29 +6,54 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-10-31
+
 ### Added
 
-- `/app/v1` catalogue reads (`/{type}`, `/{type}/{id}`, genres, entities, book editions) use the site audience, so attributed TMDB/IGDB fields are included. `/{type}/trending` stays unmounted until P3.A.1.4.
-- `/app/v1/search`, `/search/suggest` and `POST /search/events` accept an optional app token. A query longer than 100 characters is 400.
-- `GET/PATCH /app/v1/me` and `POST/DELETE /app/v1/me/deletion`. A nickname someone else holds is 422 `nickname-taken`. Export stays `POST /app/v1/me/export`.
-- `GET /app/v1/me/lists` and `GET /app/v1/lists/{id}` (`catalog:read`). Another user's private list is 404. Edition choice stays on `status:write`.
-- `/app/v1` library, public profile, notifications and reports stay on the routes already mounted. A private profile returns the nickname only. More than 100 notification ids is 400. Reporting yourself is 403 `report-self`.
-- `POST /app/v1/client-errors` and `POST /app/v1/client-metrics` accept anonymous, CSRF-exempt reports and answer 204. An unknown field is 400. Bodies over 16 KiB or 4 KiB are 413. Rows stay 7 days and never store a user id, token id or e-mail.
-- Private `@hexascore/app-client` is generated from `openapi/app-v1.json`. CI checks that file is fresh, typechecks the package, and runs the app k6 gate.
-- Community submit allows a verified account at least 7 days old to send 3 suggestions per UTC day. The next one is 429 `suggestion-quota` until 00:00 UTC. Withdrawn submissions still count.
-- Community submit rejects a duplicate field (`suggestion-duplicate`), a live catalogue lock (`field-locked`), and a scalar `before` that is no longer current (`stale-before`). A different `after` from another author is kept and marked competing.
-- Community tiers and cooldowns: Laplace accuracy stays on `contributor_stats`. `blocked` starts at 20 decisions with accuracy under 0.20 and lasts 30 days. Three qualifying rejections in 24 h cool down for 48 h, and `spam` cools down for 7 days (`suggestion-cooldown`). The hourly job expires drafts idle for 14 days, deletes their uploaded covers, refreshes tiers and releases claims idle for 2 h. `community:stats:rebuild` rewrites the same counters.
-- `/app/v1` stack: `hx_app_` guard, ban and verified checks, per-token read/write limits, `Idempotency-Key` on writes, and `426` below `APP_MIN_SUPPORTED_VERSION` (`DELETE /tokens/current` stays open).
-- Android Expo shell in `apps/mobile` (SDK 58, NativeWind, SDD 10 routes, shared tokens and bundled catalogues). The P5 checkboxes stay open until P3.C.5.2.
-- ADR 0018 and the Expo skills under `.claude/skills/`.
-
-### Changed
-
-- App token rotation is limited to 10 per hour per user.
+- Scaffold the Android Expo app ([5d0c287](https://github.com/AlexGalhardo/hexascore-app/commit/5d0c287222e6e2964043fc35b33a9c9e8828de3c))
+- Add the SDD 10 Expo Router tree ([3d1439f](https://github.com/AlexGalhardo/hexascore-app/commit/3d1439fcf4dc363275437e3826f8815a4f8a5866))
+- Map shared tokens and catalogues into the Android app ([873677b](https://github.com/AlexGalhardo/hexascore-app/commit/873677b96fb2f3dcd115496b0c7fddd67958f7b4))
+- Guard /app/v1 with the shared app stack ([040b782](https://github.com/AlexGalhardo/hexascore-app/commit/040b7825f98fe53a82b93b47d44a47c8f5e8c91e))
+- Cap app token rotation at 10 per hour per user ([87ed0f6](https://github.com/AlexGalhardo/hexascore-app/commit/87ed0f653f4166e3db315bdcd7f58fe6375036c0))
+- Serve site catalogue reads on /app/v1 ([25a34c8](https://github.com/AlexGalhardo/hexascore-app/commit/25a34c8b88490fe712f189b34e0e4e42ae55dfd5))
+- Serve optional app search on /app/v1 ([c7e3073](https://github.com/AlexGalhardo/hexascore-app/commit/c7e307381c8fd6085784f5dba938f7d9b5b34ac6))
+- Serve app profile and account deletion ([bad5250](https://github.com/AlexGalhardo/hexascore-app/commit/bad525073bdf470761f618d57e449fe84eb0bfa6))
+- Serve app list reads ([b73f596](https://github.com/AlexGalhardo/hexascore-app/commit/b73f5966bb011d3dbb567b46f9c47a916af4aa18))
+- Accept anonymous client telemetry ([0fc2cd3](https://github.com/AlexGalhardo/hexascore-app/commit/0fc2cd3dc44f0990dbbb3aa9d862ea5bbeff8a98))
+- Generate the private app client and gate it ([b1a1759](https://github.com/AlexGalhardo/hexascore-app/commit/b1a1759cf388429789db97d33ff606f7298e8b49))
+- Limit community submits to three per UTC day ([88f0a21](https://github.com/AlexGalhardo/hexascore-app/commit/88f0a21dcf98695d3e47e39074cf39cb83fa03dc))
+- Reject duplicate, locked, and stale submits ([52dcbe2](https://github.com/AlexGalhardo/hexascore-app/commit/52dcbe2d95db7ded4030b99dcf8acbc2fa9f0d9a))
+- Add community tiers, cooldowns, and stats rebuild ([1b2e152](https://github.com/AlexGalhardo/hexascore-app/commit/1b2e152d77264e9e08fad89b18eb56ea0f1d524d))
 
 ### Fixed
 
-- `POST /api/v1/webhooks/{id}/test` returns 404 for a non-UUID id instead of a database 500, and webhook create bounds DNS to 2s.
+- Copy workspace manifests before the image install ([60cbfc0](https://github.com/AlexGalhardo/hexascore-app/commit/60cbfc0db90875a4976b8a9f769b6df665bde4ed))
+- Reject a bad webhook test id before SQL ([c40f198](https://github.com/AlexGalhardo/hexascore-app/commit/c40f19812e31ac6d967a08f09a9577d2b93e1b9b))
+- Reject more than 100 notification ids with 400 ([7558022](https://github.com/AlexGalhardo/hexascore-app/commit/7558022ce25fc2d0acf998df543463ef0d1503bf))
+- Generate the app client against Postgres ([f1d6340](https://github.com/AlexGalhardo/hexascore-app/commit/f1d6340bf6a472d5bfab008fb98064196b1d568d))
+- Compare stale before to the catalogue value ([1fbe60b](https://github.com/AlexGalhardo/hexascore-app/commit/1fbe60be4fd042403956459d97e4288c6a5b8809))
+- Pass CI lint and boot the image without Stripe ([e171b34](https://github.com/AlexGalhardo/hexascore-app/commit/e171b344f6b862d5c5da5205a0fbf12272dededb))
+- Clear the golangci-lint findings on the saved main ([554b3b3](https://github.com/AlexGalhardo/hexascore-app/commit/554b3b3ff5b3fd723a92739297b922b96acba32a))
+
+### merge
+
+- VF-062 open feedback queue onto local main ([985155d](https://github.com/AlexGalhardo/hexascore-app/commit/985155d67eead363ab8723169bd5e7371c265651))
+- Local main into the Android shell ([5faae87](https://github.com/AlexGalhardo/hexascore-app/commit/5faae87c764f49c27a45e6fe0380c08dab9b1f0e))
+- Android shell onto local main ([3a4882b](https://github.com/AlexGalhardo/hexascore-app/commit/3a4882bf614fbe09c88b29c8d54c7d791f12b82f))
+- P3.C.1.1 app stack onto local main ([2e04d06](https://github.com/AlexGalhardo/hexascore-app/commit/2e04d067fe9ca34291d343db55ed78d6e0232804))
+- P3.A.6.2 contract gate onto local main ([8c3b0c4](https://github.com/AlexGalhardo/hexascore-app/commit/8c3b0c4ce8379f20963f2986f59d1b24c9a0f525))
+- P3.C.1.2 token rotate limit onto local main ([772db19](https://github.com/AlexGalhardo/hexascore-app/commit/772db198e121590becc9fe7f26bb63fa8a498631))
+- P3.C.2.1 site catalogue reads onto local main ([5c7db08](https://github.com/AlexGalhardo/hexascore-app/commit/5c7db08d3147f6e8e66d36b8eccc2fc62eb5bd0c))
+- P3.C.2.2 app search onto local main ([2bdcee0](https://github.com/AlexGalhardo/hexascore-app/commit/2bdcee0908f5493f3c88fe818e06e78c90df6945))
+- P3.C.2.3 app scoring proof onto local main ([e32e5dd](https://github.com/AlexGalhardo/hexascore-app/commit/e32e5ddc8ddfc5765f0f1118ad2e51de3930f157))
+- P3.C.3.1 app profile onto local main ([5a0a155](https://github.com/AlexGalhardo/hexascore-app/commit/5a0a155e2c56749967c72f113c08350006720cc2))
+- P3.C.3.2 app lists onto local main ([1ce4a35](https://github.com/AlexGalhardo/hexascore-app/commit/1ce4a35f898a6c6b83b48210860d1ab4263d3155))
+- P3.C.3.3 app library onto local main ([5f147f7](https://github.com/AlexGalhardo/hexascore-app/commit/5f147f795c7e7d2e7de7dd7f6b1a224b673083ca))
+- P3.C.4.1 app telemetry onto local main ([df76c20](https://github.com/AlexGalhardo/hexascore-app/commit/df76c208f3810e522c51c92ee64176df752a39ca))
+- P3.C.5.1 app client onto local main ([b31c6e0](https://github.com/AlexGalhardo/hexascore-app/commit/b31c6e0db91d12a56c3a356a223dcab0c22d1340))
+- P4.A.2.1 community submit quota onto local main ([d650a58](https://github.com/AlexGalhardo/hexascore-app/commit/d650a58cf0c87d98874b6632c65f5083e8e7b464))
+- P4.A.2.2 duplicate and lock checks onto local main ([3fb3ad9](https://github.com/AlexGalhardo/hexascore-app/commit/3fb3ad91d4b71be720a2ff88cdbbdcab596f38b3))
+- P4.A.2.3 community tiers and cooldowns onto local main ([e08e17e](https://github.com/AlexGalhardo/hexascore-app/commit/e08e17e5d002dc69a5c6a6683af27bbc44e4b945))
 
 ## [0.10.0] - 2026-10-30
 
