@@ -13,6 +13,8 @@ import (
 
 	"github.com/AlexGalhardo/vukem/database"
 	"github.com/AlexGalhardo/vukem/queue"
+
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 )
 
 const applyItem = "00000000-0000-0000-0000-0000000000aa"
@@ -29,7 +31,8 @@ func newApplier(t *testing.T, db *database.DB) (*Applier, *queue.Fake) {
 	q := queue.New(fake, slog.Default())
 	noop := func(context.Context, CatalogChanged) error { return nil }
 	notify := func(context.Context, Notify) error { return nil }
-	if err := q.Register(queue.Handle(noop), queue.Handle(notify)); err != nil {
+	merged := func(context.Context, catalog.Merged) error { return nil }
+	if err := q.Register(queue.Handle(noop), queue.Handle(notify), queue.Handle(merged)); err != nil {
 		t.Fatal(err)
 	}
 
@@ -112,7 +115,7 @@ func TestApplyAtomic(t *testing.T) {
 		}
 		return nil
 	}
-	if err := a.Approve(context.Background(), id, 1, false, adminActor); err == nil {
+	if err := a.Approve(context.Background(), id, 1, ApproveOptions{}, adminActor); err == nil {
 		t.Fatal("injected failure did not surface")
 	}
 
@@ -143,7 +146,7 @@ func TestApplyProvenance(t *testing.T) {
 "genres":{"add":[{"ID":"00000000-0000-0000-0000-0000000000e2"}],"remove":[{"ID":"00000000-0000-0000-0000-0000000000e1"}]}}`)
 
 	a, fake := newApplier(t, db)
-	if err := a.Approve(context.Background(), id, 1, false, adminActor); err != nil {
+	if err := a.Approve(context.Background(), id, 1, ApproveOptions{}, adminActor); err != nil {
 		t.Fatal(err)
 	}
 
@@ -202,7 +205,7 @@ func TestApplyWritesChanges(t *testing.T) {
 	seedApplySuggestion(t, db, rival, 0, "submitted", `{"title":{"before":"Old","after":"Other"}}`)
 
 	a, _ := newApplier(t, db)
-	if err := a.Approve(context.Background(), id, 1, false, adminActor); err != nil {
+	if err := a.Approve(context.Background(), id, 1, ApproveOptions{}, adminActor); err != nil {
 		t.Fatal(err)
 	}
 
@@ -222,12 +225,12 @@ FROM suggestions WHERE id = $1`, rival).Scan(&stale); err != nil || !stale {
 	}
 
 	// The rival's before no longer matches: 409 without confirm_stale, applied with it.
-	err := a.Approve(context.Background(), rival, 1, false, adminActor)
+	err := a.Approve(context.Background(), rival, 1, ApproveOptions{}, adminActor)
 	var te *TransitionError
 	if !errors.As(err, &te) || te.Code != "stale-before" || te.Field != "title" {
 		t.Fatalf("rival err = %#v", err)
 	}
-	if err := a.Approve(context.Background(), rival, 1, true, adminActor); err != nil {
+	if err := a.Approve(context.Background(), rival, 1, ApproveOptions{ConfirmStale: true}, adminActor); err != nil {
 		t.Fatal(err)
 	}
 	var before string
@@ -253,13 +256,13 @@ VALUES ('00000000-0000-7000-8000-00000000c001', 'item', $1, 'title', 'edit war')
 	}
 
 	a, fake := newApplier(t, db)
-	err := a.Approve(context.Background(), locked, 1, false, adminActor)
+	err := a.Approve(context.Background(), locked, 1, ApproveOptions{}, adminActor)
 	var p *Problem
 	if !errors.As(err, &p) || p.Status != 423 {
 		t.Fatalf("locked err = %#v", err)
 	}
 
-	if err := a.Approve(context.Background(), cover, 1, false, adminActor); err != nil {
+	if err := a.Approve(context.Background(), cover, 1, ApproveOptions{}, adminActor); err != nil {
 		t.Fatal(err)
 	}
 	assertStatus(t, db, cover, "approved", 2)
@@ -297,7 +300,7 @@ func TestApplyDeadlockRetry(t *testing.T) {
 		}
 		return nil
 	}
-	if err := a.Approve(context.Background(), once, 1, false, adminActor); err != nil {
+	if err := a.Approve(context.Background(), once, 1, ApproveOptions{}, adminActor); err != nil {
 		t.Fatal(err)
 	}
 	if attempts != 2 || auditCount(t, db) != 1 || len(queue.Dispatched[CatalogChanged](fake)) != 1 {
@@ -310,7 +313,16 @@ func TestApplyDeadlockRetry(t *testing.T) {
 		}
 		return nil
 	}
-	if err := a.Approve(context.Background(), twice, 1, false, adminActor); !errors.Is(err, ErrApplyDeadlock) {
+	if err := a.Approve(
+		context.Background(),
+		twice,
+		1,
+		ApproveOptions{},
+		adminActor,
+	); !errors.Is(
+		err,
+		ErrApplyDeadlock,
+	) {
 		t.Fatalf("second deadlock err = %v", err)
 	}
 	assertStatus(t, db, twice, "submitted", 1)
@@ -327,7 +339,7 @@ func TestApplyConcurrentCompeting(t *testing.T) {
 	errs := make([]error, 2)
 	var wg sync.WaitGroup
 	for i := range ids {
-		wg.Go(func() { errs[i] = a.Approve(context.Background(), ids[i], 1, false, adminActor) })
+		wg.Go(func() { errs[i] = a.Approve(context.Background(), ids[i], 1, ApproveOptions{}, adminActor) })
 	}
 	wg.Wait()
 
@@ -356,11 +368,11 @@ func TestApplyStatusChecks(t *testing.T) {
 
 	a, _ := newApplier(t, db)
 	var te *TransitionError
-	if err := a.Approve(context.Background(), rejected, 1, false, adminActor); !errors.As(err, &te) ||
+	if err := a.Approve(context.Background(), rejected, 1, ApproveOptions{}, adminActor); !errors.As(err, &te) ||
 		te.Code != "invalid-transition" {
 		t.Fatalf("rejected err = %#v", err)
 	}
-	if err := a.Approve(context.Background(), rejected, 7, false, adminActor); !errors.As(err, &te) ||
+	if err := a.Approve(context.Background(), rejected, 7, ApproveOptions{}, adminActor); !errors.As(err, &te) ||
 		te.Code != "stale-before" || te.Field != "version" {
 		t.Fatalf("version err = %#v", err)
 	}
@@ -368,7 +380,7 @@ func TestApplyStatusChecks(t *testing.T) {
 		context.Background(),
 		"00000000-0000-7000-8000-0000000fffff",
 		1,
-		false,
+		ApproveOptions{},
 		adminActor,
 	); !errors.Is(
 		err,

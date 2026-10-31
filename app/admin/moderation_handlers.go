@@ -144,7 +144,9 @@ func (h ModerationHandlers) Release(c *web.Ctx) error {
 // Approve handles POST /admin/moderation/{id}/approve.
 func (h ModerationHandlers) Approve(c *web.Ctx) error {
 	return h.move(c, func(ctx context.Context, id string, version int, a community.Actor) error {
-		return h.Queue.Approve(ctx, id, version, c.FormValue("confirm_stale") == "1", a)
+		return h.Queue.Approve(ctx, id, version, community.ApproveOptions{
+			ConfirmStale: c.FormValue("confirm_stale") == "1", ConfirmTitle: c.FormValue("confirm_title"),
+		}, a)
 	})
 }
 
@@ -185,6 +187,7 @@ func mapError(err error) error {
 	var (
 		te *community.TransitionError
 		pe *community.Problem
+		ve *community.ValidationError
 		ie *moderation.InvalidError
 	)
 
@@ -209,6 +212,8 @@ func mapError(err error) error {
 		return errs.New(http.StatusServiceUnavailable, "The catalogue was busy. Try the approval again.")
 	case errors.As(err, &pe):
 		return errs.New(pe.Status, pe.Code)
+	case errors.As(err, &ve):
+		return errs.NewValidation().Add(ve.Field, ve.Msg)
 	case errors.As(err, &te):
 		return errs.New(te.Status, te.Code)
 	default:
