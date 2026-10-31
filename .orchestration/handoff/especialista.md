@@ -1,50 +1,53 @@
-# Handoff: especialista (2026-10-31, session 7)
+# Handoff: especialista (2026-10-31, session 8)
 
-Reason: the merge queue is done, six reviews are done, and context is heavy. STATUS: HANDOFF.
+Reason: twelve reviews and the worktree cleanup are done, and context is heavy. STATUS: HANDOFF.
 
 ## Done this session
 
-Merge queue (reviewed earlier, merged now; touched gate after each):
+vukem (squash merges, every PR 33/33 green; no tag, no release):
 
-| Row | Merge |
-| --- | --- |
-| P4.A.3.1c (ticks P4.A.3.1) | 34efea6 |
-| FIX-nojs-auth-post | dc99c4d |
-| DOC-sdd-flag-names | d21e0db |
-| FIX-scoring-burst-clock (own fix, report written) | b500e2c |
-| P5.A.1.1 (catalogues auto-merged, regeneration gave no diff) | 25a7ee5 |
-| P5.A.1.2 + FIX-mobile-nav-test-timeout; P5.A.2.1 has the same head 395bd7c | 1e3c970 |
-| P5.A.3.1 | 774b3a8 |
-| DOC-roadmap-p7-refs patch, items 1-10 | e3b8f0d |
-| QA-e2e-speed | `blocked`: nothing delivered (no report, no REV row, 0 commits; uncommitted work in wt/senior-QA-e2e-speed) |
+| Row | Verdict | PR | Squash |
+| --- | --- | --- | --- |
+| REV-VF-NEW-AUDIT-3 | CORRIGIDO_E_APROVADO (shell moved into `renderRoot` after #107; docs section moved out of the SSR bullet list) | #109 | 11761d20 |
+| REV-VF-NEW-AUDIT-5 | CORRIGIDO_E_APROVADO (guard test renamed `TestSecurity_A01_...`) | #110 | 7fb2cec4 |
+| REV-VF-NEW-P2.H.3.5 | APROVADO, VF withdrawn (`SSRConfig.Cache` exists) | #111 | 29d90fa0 |
+| REV-FW-docs-font-size | APROVADO (no overflow at 390 and 1440 px, measured with Playwright) | #112 | 17a3f955 |
+| REV-VF-NEW-OWNER-schemathesis | CORRIGIDO_E_APROVADO (digest pin, 0755/0644 mounts for the non-root image user, auth integration test; real Docker run ok) | #113 | 7ddace87 |
+| REV-FW-last-updated-check | APROVADO | #114 | 66234fb4 |
 
-Full gate on main e3b8f0d: build, golangci (integration tags) 0 issues, biome, tsc, vitest 79, `go test -tags integration ./...` all ok.
+App (local `main`, targeted checks only per section 8.2):
 
-Reviews:
-
-| Row | Verdict | Result |
+| Row | Verdict | Merge |
 | --- | --- | --- |
-| REV-P2.H.1.4 | APROVADO | merged c83174d |
-| REV-P2.H.1.5 | APROVADO | merged b2c50c6 |
-| REV-P2.H.3.5 | CORRIGIDO_E_APROVADO (Accept-Language in the render cache key on unprefixed pages, c731fc6) | merged 1915f77 |
-| REV-VF-NEW-AUDIT-6 | APROVADO | vukem PR #105, squash 6b69a323 (33/33) |
-| REV-VF-NEW-FIX-gate-timeouts | APROVADO | vukem PR #106, squash cb6a6f4a (33/33) |
-| REV-VF-NEW-AUDIT-1 | APROVADO | vukem PR #107, squash 8fbe0f2a (33/33) |
+| REV-DOC-design-system | post-merge APROVADO, facts sampled, no fixes | f9aef56 (orchestrator) |
+| REV-FIX-community-problem-codes | APROVADO | afc0d43 |
+| REV-P4.A.3.2 | APROVADO; ROADMAP box waits QA-community-e2e | 639005a |
+| REV-P4.A.3.3 | APROVADO; ROADMAP box waits QA-community-e2e | 3314f11 |
+| REV-QA-ci-local-script | CORRIGIDO_E_APROVADO (committed `.pyc` removed, `__pycache__/` ignored); AGENTS.md Commands row and Release gate pointer | 43dd3b5 |
 
-`vukem-feedback.md` status for all three: `fixed on main, unreleased (PR #n)`. No vukem tag or release.
+Worktree cleanup (owner request):
+
+| Worktree | Action | Ref |
+| --- | --- | --- |
+| estagiario-FIX-i18n-untranslated | net zero; rows `merged`; branch deleted | tag checkpoint/FIX-i18n-untranslated-2026-10-31 |
+| especialista-ADOPT-VF-001 | HEAD is a main-into-branch merge; `git merge-tree main HEAD` = main tree; removed | tag checkpoint/ADOPT-VF-001-2026-10-31 |
+| especialista-P2.H.1.2 | same, removed | tag checkpoint/P2.H.1.2-2026-10-31 |
+| especialista-P2.H.1.3 | same, removed | tag checkpoint/P2.H.1.3-2026-10-31 |
+| especialista-P2.H.2.2 | same, removed | tag checkpoint/P2.H.2.2-2026-10-31 |
+| senior-P4.A.3.2, senior-P4.A.3.3, senior-QA-ci-local-script, senior-FIX-community-problem-codes | merged; worktrees and branches removed | see merges |
+| esp-fw-* (6 review worktrees) | PRs merged; removed | see PRs |
 
 ## Open
 
-1. NEXT: REV-VF-NEW-AUDIT-3 (fix/vf-inertia-csr-shell, bf0036c7): the diff reads fine, but it conflicts with AUDIT-1's `renderRoot` extraction in `inertia/inertia.go`. AUDIT-1 is merged (#107), so merge origin/main into the branch and move the shell into `renderRoot` (error pages with ErrorFullPages then also get the shell, which is fine).
-2. Then any new senior or `fw:` REV rows.
-3. Proposed rows for the orchestrator:
-   - vukem (prio 2): `check:last-updated` fails on `main` after every squash merge that touches docs: the squash commit is newer than the dates the branch wrote. Every docs PR has to merge origin/main and rerun `node scripts/last-updated.ts` (done on #105). Fix it in the checker (accept the entry when the page content equals the branch commit) or regenerate on main after the merge.
-   - From session 6, still open: a search timeout answers 500 (FIX-search-timeout-500 exists); the S3 disk has no ETag (VF-NEW-FIX-covers-route exists).
+1. NEXT: vukem PRs #115-#120 (REV rows 161-173 of TASKS.md): AUDIT-2 #115, AUDIT-4 #116, P2.H.3.1 #117, P5.A.3.1 #118, P4.A.3.1b #119 (one Windows job rerunning, failure `TestToolEnvDoesNotWaitForGrandchildren` is unrelated per senior-fw), FIX-covers-route #120. With #114 merged, a stale "Last updated" entry from a squash is tolerated; still, `main` requires the branch up to date (strict), so after each squash the next PR shows BEHIND: merge origin/main into it, push, wait for CI.
+2. #120 reconciliation is written in `reports/VF-NEW-FIX-covers-route.md`: the app pins the separate module `vukem/drivers/s3` at v0.3.1, and no `drivers/s3/*` tag contains #29 (the ETag in `Open`). No app FIX row: the fix needs a `drivers/s3` release (owner) and then an ADOPT bump. Write that in `vukem-feedback.md` when #120 merges.
+3. Full gate on main 6a0502c: build, golangci (integration), biome, tsc, vitest 26/91 green; `go test -tags integration ./...` failed only on `TestSecurity_A01_HexaRouteStackInventory` (five community routes from P4.A.3.2/3.3 missing from `tests/testdata/route_inventory.txt`). Fixed in b8195a6, merged 8942287; rerun of `./tests/...` on main is in the last section of `reports/P4.A.3.3.md`. Lesson: a targeted `-run Community` misses the route inventory; add `TestSecurity_A01_HexaRouteStackInventory` to the targeted set whenever routes change.
+4. Follow-ups from QA-ci-local-script for the orchestrator: osv-scanner GO-2026-5932 (golang.org/x/crypto 0.58.0) turns CI `deps` red; `app/ssr` TestSuperviseRestartsUntilCancelled flakes under load.
 
 ## Pitfalls
 
-- golangci-lint has a global lock. Another worker's lint makes vukem `task ci` exit 201 ("parallel golangci-lint is running"). Scratchpad `fwci.sh <wt dirs...>` retries on that error; for app lint, pass `--allow-parallel-runners`.
-- Someone left `tsconfig.json` modified and `resources/js/vite-env.d.ts` untracked in the main checkout. That is not mine and I did not touch it. Run the gate in wt/especialista-gate, never in the main checkout.
-- Other agents commit to main between my merges (vukem-feedback). Always `git add` named files.
-- Worktrees especialista-{P2.H.3.5,P4.A.3.1c,FIX-nojs-auth-post,FIX-scoring-burst-clock} are unregistered, but their folders remain (Permission denied, a file lock). wt/especialista-P5.A and wt/fw-VF-NEW-AUDIT-6 were not removed. Delete them when nothing holds them.
-- Stack esp is not running. DB hexascore_qa_esp still exists.
+- Owner rule 8.2: do not run vukem `task ci` locally. Review the diff, run the targeted tests, and rely on GitHub CI.
+- The golangci-lint lock is global even with a private TMP. Two of my own runs blocked each other.
+- A killed `fwci` bash leaves `task.exe` orphans that keep writing the same log. Do not trust a log that a killed run shared.
+- Leftover worktree folders: use `cmd /c rmdir /s /q`, which does not follow links. PowerShell 5.1 `Remove-Item -Recurse` can follow junctions such as bun's `node_modules`.
+- I did not touch the main checkout's uncommitted `tsconfig.json` or `resources/js/vite-env.d.ts`. `.orchestration/handoff/senior-*.md` are also modified there by other workers; commit named files only.

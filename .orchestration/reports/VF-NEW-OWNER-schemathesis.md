@@ -17,3 +17,4 @@ checked: `--report junit,vcr` and `--report-dir` against `schemathesis run --hel
 fixes: 1. image pinned by digest: default `schemathesis/schemathesis:4.29.0@sha256:5586e94460479271714d47613175b3620c44b38b3e1babc936636108f1672a9e` (RepoDigests after pull), docs tables and CI example updated 2. work dir 0755 and files 0644: with 0700/0600 the non-root image user cannot read the bind mount on Linux (Docker Desktop hides this); the files hold no secret 3. new `TestFuzzRealSchemathesisSendsAuthHeader` (tag fuzzintegration) 4. merged origin/main, last-updated refreshed
 not verified: a Linux host run (the permission fix is reasoned, not observed)
 PR: AlexGalhardo/vukem#113
+PR: merged, squash 7ddace87 (33/33)
