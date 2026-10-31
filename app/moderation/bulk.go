@@ -2,7 +2,11 @@ package moderation
 
 import (
 	"context"
+	"database/sql"
 	"errors"
+	"fmt"
+
+	"github.com/AlexGalhardo/vukem/uuid"
 
 	"github.com/AlexGalhardo/hexascore-app/app/community"
 )
@@ -84,9 +88,17 @@ func (q Queue) Bulk(
 func (q Queue) version(ctx context.Context, id string) (int, error) {
 	var v int
 
-	if err := q.DB.QueryRowContext(ctx, `SELECT version FROM suggestions WHERE id::text = $1`, id).
-		Scan(&v); err != nil {
+	if _, err := uuid.Parse(id); err != nil {
 		return 0, ErrNotFound
+	}
+
+	err := q.DB.QueryRowContext(ctx, `SELECT version FROM suggestions WHERE id = $1::uuid`, id).Scan(&v)
+	if errors.Is(err, sql.ErrNoRows) {
+		return 0, ErrNotFound
+	}
+
+	if err != nil {
+		return 0, fmt.Errorf("moderation: load version: %w", err)
 	}
 
 	return v, nil

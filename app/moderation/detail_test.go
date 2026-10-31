@@ -115,7 +115,7 @@ func TestBulk(t *testing.T) {
 	res, err = q.Bulk(
 		ctx,
 		BulkReject,
-		[]string{c, "00000000-0000-7000-8000-00000000ffff"},
+		[]string{c, "00000000-0000-7000-8000-00000000ffff", "not-a-uuid"},
 		"spam",
 		"",
 		false,
@@ -124,7 +124,7 @@ func TestBulk(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !res[0].OK || res[1].OK || res[1].Code != "not-found" {
+	if !res[0].OK || res[1].OK || res[1].Code != "not-found" || res[2].Code != "not-found" {
 		t.Fatalf("bulk reject: %+v", res)
 	}
 	if _, err := q.Bulk(ctx, BulkReject, []string{a}, "", "", false, adminActor); err == nil {
