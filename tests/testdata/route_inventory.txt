@@ -201,6 +201,7 @@ app   PUT    /app/v1/items/{id}/status
 app   DELETE /app/v1/items/{id}/status
 app   PUT    /app/v1/items/{id}/time-to-beat
 app   DELETE /app/v1/items/{id}/time-to-beat
+web   GET    /for-you
 web   GET    /library
 web   GET    /items/{id}/editions
 web   PUT    /items/{id}/edition
@@ -291,6 +292,7 @@ web   GET    /docs/reference/scalar.js
 web   GET    /docs/reference/page.js
 web   POST   /profile/export
 app   POST   /app/v1/me/export
+app   GET    /app/v1/me/for-you
 app   GET    /app/v1/me
 app   PATCH  /app/v1/me
 app   POST   /app/v1/me/deletion
