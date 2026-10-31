@@ -2,6 +2,8 @@ package jobs
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -12,6 +14,7 @@ import (
 	"github.com/AlexGalhardo/vukem/queue"
 
 	"github.com/AlexGalhardo/hexascore-app/app/community"
+	"github.com/AlexGalhardo/hexascore-app/internal/search"
 )
 
 func handleCatalogChanged(app *vukem.App) queue.Registration {
@@ -29,7 +32,7 @@ func handleCatalogChanged(app *vukem.App) queue.Registration {
 
 // RunCatalogChanged runs the side effects of one `catalog.changed` job (SDD 04 section 6 "Jobs") and reports whether
 // any audit id was new. In one transaction it marks the audit ids done, queues the search reindex of the owning item
-// or entity (SDD 07 search_dirty) and moves its updated_at, the sitemap lastmod. A replay of the same ids does nothing.
+// or entity (SDD 07 suggest resync queue) and moves its updated_at, the sitemap lastmod. A replay of the same ids does nothing.
 // The api_changes row was written by the apply transaction (SDD 05 section 7.3). Page caches are query-keyed with
 // TTLs of a minute or less (render cache, search, home strip), so there is no per-item entry to purge.
 func RunCatalogChanged(ctx context.Context, db *database.DB, j community.CatalogChanged, now time.Time) (bool, error) {
@@ -54,23 +57,30 @@ func RunCatalogChanged(ctx context.Context, db *database.DB, j community.Catalog
 
 		ran = true
 
-		var q string
+		q, kind := `UPDATE items SET updated_at = $2 WHERE id = $1 RETURNING id::text`, "item"
 
 		switch j.TargetType {
 		case "item":
-			q = `WITH t AS (UPDATE items SET updated_at = $2 WHERE id = $1 RETURNING id)
-INSERT INTO search_dirty (ref_id, kind) SELECT id, 'item' FROM t ON CONFLICT (ref_id) DO UPDATE SET queued_at = now()`
 		case "edition":
-			q = `WITH t AS (UPDATE items SET updated_at = $2 WHERE id = (SELECT work_id FROM editions WHERE id = $1) RETURNING id)
-INSERT INTO search_dirty (ref_id, kind) SELECT id, 'item' FROM t ON CONFLICT (ref_id) DO UPDATE SET queued_at = now()`
+			q = `UPDATE items SET updated_at = $2 WHERE id = (SELECT work_id FROM editions WHERE id = $1) RETURNING id::text`
 		case "entity":
-			q = `WITH t AS (UPDATE entities SET updated_at = $2 WHERE id = $1 RETURNING id)
-INSERT INTO search_dirty (ref_id, kind) SELECT id, 'entity' FROM t ON CONFLICT (ref_id) DO UPDATE SET queued_at = now()`
+			q, kind = `UPDATE entities SET updated_at = $2 WHERE id = $1 RETURNING id::text`, "entity"
 		default:
 			return fmt.Errorf("catalog.changed: target type %q", j.TargetType)
 		}
 
-		if _, err := tx.ExecContext(ctx, q, j.TargetID, now); err != nil {
+		var ref string
+
+		err := tx.QueryRowContext(ctx, q, j.TargetID, now).Scan(&ref)
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil // the target was deleted since; nothing left to reindex
+		}
+
+		if err != nil {
+			return fmt.Errorf("catalog.changed: lastmod %s: %w", j.TargetID, err)
+		}
+
+		if err := search.MarkDirty(ctx, tx, kind, ref); err != nil {
 			return fmt.Errorf("catalog.changed: reindex %s: %w", j.TargetID, err)
 		}
 

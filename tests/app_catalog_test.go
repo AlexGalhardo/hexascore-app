@@ -82,7 +82,7 @@ func TestAppCatalog(t *testing.T) {
 	r.app.Client(t).GetJSON(item).AssertUnauthorized()
 	r.client.GetJSON(item).AssertUnauthorized()
 	appCatalogClient(t, r, "ratings:write").GetJSON(item).AssertStatus(http.StatusForbidden)
-	client.GetJSON("/app/v1/games/trending").AssertNotFound()
+	client.GetJSON("/app/v1/games/trending").AssertOK().AssertJSONCount("data", 0)
 
 	gone := uuid.NewV7().String()
 	if err := catalog.RecordMerge(t.Context(), r.acc.DB, catalog.ScopeItem, "game",
