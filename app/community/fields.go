@@ -71,6 +71,11 @@ var (
 	digitsSchema      = z.String().Regex(regexp.MustCompile(`^\d+$`))
 	openLibrarySchema = z.String().Regex(regexp.MustCompile(`^OL\d+[WMA]$`))
 	idSchema          = z.String().Min(1).Max(64)
+	// entityKindSchema is the entity kinds a contributor may create; countries, languages and game modes are
+	// fixed vocabularies seeded by the catalogue.
+	entityKindSchema = z.String().Regex(regexp.MustCompile(`^(person|organization|franchise|platform|genre)$`))
+	languageSchema   = z.String().Regex(regexp.MustCompile(`^[a-z]{2,3}(-[A-Z]{2})?$`))
+	uuidSchema       = z.String().Regex(uuidRe)
 )
 
 // shortenerHosts is the SDD 04 §7.2 denylist. The SDD requires the refusal

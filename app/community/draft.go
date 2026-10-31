@@ -7,6 +7,8 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"slices"
+	"strings"
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
@@ -52,6 +54,12 @@ func SaveDraft(
 
 	if err := checkTarget(target, in.Kind); err != nil {
 		return "", 0, err
+	}
+
+	if in.Kind == "create" {
+		if err := checkCreate(target, in); err != nil {
+			return "", 0, err
+		}
 	}
 
 	changes := make(map[string]storedChange, len(in.Changes))
@@ -165,6 +173,41 @@ func checkTarget(t Target, kind string) error {
 
 	if !uuidRe.MatchString(t.ID) {
 		return invalid("target_id", "invalid")
+	}
+
+	return nil
+}
+
+// createOnly are the fields that shape a new entity or edition at insert; they are never edited afterwards.
+var createOnly = map[string][]string{"entity": {"entity_kind"}, "edition": {"work_id", "language"}}
+
+// checkCreate refuses a create whose fields do not fit its target kind, so the apply never meets a field the
+// catalogue cannot store (SDD 04 section 7.6): an entity needs its kind, an edition its book and language and one
+// external id (the editions CHECK).
+func checkCreate(t Target, in SuggestionInput) error {
+	if t.Kind == "edition" && in.TargetType != "book" {
+		return invalid("target_type", "editions belong to books")
+	}
+
+	allowed := append(EditableFields(t.Kind, in.TargetType), createOnly[t.Kind]...)
+	for field := range in.Changes {
+		if !slices.Contains(allowed, field) {
+			return invalid(field, "unknown")
+		}
+	}
+
+	for _, field := range createOnly[t.Kind] {
+		if _, ok := in.Changes[field]; !ok {
+			return invalid(field, "required")
+		}
+	}
+
+	if t.Kind == "edition" && !slices.ContainsFunc(EditableFields("edition", ""), func(f string) bool {
+		_, ok := in.Changes[f]
+
+		return ok && strings.HasPrefix(f, "external_ids.")
+	}) {
+		return invalid("external_ids", "required")
 	}
 
 	return nil

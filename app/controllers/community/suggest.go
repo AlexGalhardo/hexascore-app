@@ -216,14 +216,20 @@ func (h *Suggest) mergeOther(c *web.Ctx, changes map[string]community.FieldChang
 }
 
 // target is the request's target on create and the stored one on update (the body's target fields are ignored).
-// A create request has no target; its domain is the body's.
+// A create request has no target id; its kind (item by default) and domain are the body's.
 func (h *Suggest) target(c *web.Ctx, authorID int64, id, kind string, f draftForm) (community.Target, string, error) {
 	if id != "" {
 		return community.DraftTarget(c.Context(), h.db, authorID, id)
 	}
 
 	if kind == "create" {
-		return community.Target{Kind: "item"}, f.Domain, nil
+		// targetKind picks an entity or edition create; checkTarget refuses any other value.
+		k := f.TargetKind
+		if k == "" {
+			k = "item"
+		}
+
+		return community.Target{Kind: k}, f.Domain, nil
 	}
 
 	t := community.Target{Kind: f.TargetKind, ID: f.TargetID}
