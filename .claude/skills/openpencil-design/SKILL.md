@@ -29,6 +29,8 @@ Pages `00 Cover`, `01 Foundations`, `02 Components`, `10 Web desktop 1440`, `11 
 - Shared parts are `Component`s on `99 Assets` and are placed with `<Instance of="header/desktop" />` (by name, also resized with `w`/`h`). No detached copies.
 - To swap a node in place, use `render` with `replace_id` (or `parent_id` + `insert_index`). `node_replace_with` appends the new node at the end of the parent.
 - Icons: inline `<svg viewBox="0 0 24 24" size={20}><path d=… stroke=… fill="none" /></svg>`. Do not rely on Unicode glyphs (◐, ▾, ★, ⯪) — they render as missing glyphs.
+- A spacer `<Frame grow={1} />` without `h` defaults to 100 px tall and stretches its row; write `<Frame grow={1} h={1} />`. A wrapper frame without `w`/`h` defaults to 100x100 and crops its child.
+- `linearGradient(…, { transform })` renders but breaks `export_image` ("Cannot read properties of null"); use `set_fill` with `gradient="top-bottom"` instead.
 - Colours: 6-digit hex only. `fillOpacity`, 8-digit hex and `rgba()` in SVG paths are ignored; pre-blend translucent fills against the background.
 - 4 px grid for every size and gap; 44 px minimum touch targets; cover boxes 2:3.
 
@@ -39,7 +41,7 @@ Pages `00 Cover`, `01 Foundations`, `02 Components`, `10 Web desktop 1440`, `11 
 ## Saving and exporting
 
 - `save_file` and `export_image(path=…)` only write inside the MCP root (`C:\Users\aleex`). Save to `C:\Users\aleex\openpencil-hexascore\<version>\` and copy into `docs/openpencil/<version>/` of the worktree.
-- `export_image` works only on the document that is active in the app: call `activate_document` first, then export with `document_id`, `page_id` and `ids`. Use `maxEdge` 900 to 1200 for a visual check and `scale` 1 (`maxEdge` 4096) for the delivered PNG.
+- `export_image` works only on the document that is active in the app ("No visible nodes to export" otherwise, also after the app loses focus): call `activate_document` first, retry once after re-activating, then export with `document_id`, `page_id` and `ids`. Use `maxEdge` 900 to 1200 for a visual check and `scale` 1 (`maxEdge` 4096) for the delivered PNG.
 
 ## Verify
 
