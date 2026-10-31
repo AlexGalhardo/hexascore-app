@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - CSR pages (profile, API keys, billing, notifications, library, lists) ship a server-rendered title and a busy skeleton, so the document is never blank before hydration.
 - `community.SaveDraft` creates and updates suggestion drafts with validation, ownership and version checks.
+- Suggest page (`/suggest/{target_type}/{id}`) and draft save routes (`POST /suggestions`, `PATCH /suggestions/{id}`) behind the `community_submissions` flag (default off), with the `feature_flags` table and the `/admin/_flags` panel; a draft update keeps the stored target.
 - Daily `exports.ids` job (07:00 UTC) writing gzip NDJSON ID files per item type to the bucket and pruning files older than 90 days; not served until P3.A.4.2.
 - Login and signup submit buttons show a pending spinner while the page has not hydrated or a submit is in flight; both forms declare `method=post` and their action.
 - Report dialog on public profiles and public lists (`POST /reports`, reasons from SDD 14).
@@ -37,6 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- e2e account flows wait for hydration after onboarding and reloads and match the login button exactly, removing the `waitForURL` timeouts.
 - Python SDK regenerated from the current OpenAPI contract: webhooks, the changes feed and the `type` enums.
 - E2E login helpers match the submit button exactly, so pt-BR and es runs no longer hit the passkey button.
 - The Android app's bundled i18n catalogues carry the passkey and privacy keys again (keys test green).
@@ -84,6 +86,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- e2e account flows wait for hydration after onboarding and reloads and match the login button exactly, removing the `waitForURL` timeouts.
 - Copy workspace manifests before the image install ([60cbfc0](https://github.com/AlexGalhardo/hexascore-app/commit/60cbfc0db90875a4976b8a9f769b6df665bde4ed))
 - Reject a bad webhook test id before SQL ([c40f198](https://github.com/AlexGalhardo/hexascore-app/commit/c40f19812e31ac6d967a08f09a9577d2b93e1b9b))
 - Reject more than 100 notification ids with 400 ([7558022](https://github.com/AlexGalhardo/hexascore-app/commit/7558022ce25fc2d0acf998df543463ef0d1503bf))
@@ -126,6 +129,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- e2e account flows wait for hydration after onboarding and reloads and match the login button exactly, removing the `waitForURL` timeouts.
 - Return the stored webhook created_at ([4f6ddf0](https://github.com/AlexGalhardo/hexascore-app/commit/4f6ddf0650ee7a8929c2342a6ac747c3e5b3caf6))
 - Read the webhook attempt that was just sent ([291d41b](https://github.com/AlexGalhardo/hexascore-app/commit/291d41b92672c12eac9d444e09bc3ee90363d3a5))
 
@@ -165,6 +169,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- e2e account flows wait for hydration after onboarding and reloads and match the login button exactly, removing the `waitForURL` timeouts.
 - **ui:** Keep the locale prefix on account form posts ([1f5ec54](https://github.com/AlexGalhardo/hexascore-app/commit/1f5ec54c9457ae01762ecf62bf80ef3ff70b0f1f))
 - **ui:** Keep the locale prefix on item, list, contact and notification posts ([fb3d95d](https://github.com/AlexGalhardo/hexascore-app/commit/fb3d95daa2ec99f8b11596b28fd350738e3aadd1))
 - **security:** Compress only build assets and gate the challenge limit ([80f291d](https://github.com/AlexGalhardo/hexascore-app/commit/80f291de1c6f8a242b1338f3628f4d3aa3cc8081))
@@ -252,6 +257,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- e2e account flows wait for hydration after onboarding and reloads and match the login button exactly, removing the `waitForURL` timeouts.
 - **catalog:** Show highlight and listing scores on the 0-10 scale ([595490b](https://github.com/AlexGalhardo/hexascore-app/commit/595490b1b2c655137c1bf1b26d609591ba7568ff))
 - **catalog:** Link countries and languages by code on the item page ([55bb6b0](https://github.com/AlexGalhardo/hexascore-app/commit/55bb6b087abb3823d52c7d9ccbf4cea0b64414ce))
 - **ui:** Label card scores out of 10 after the score scale fix ([e7c69f6](https://github.com/AlexGalhardo/hexascore-app/commit/e7c69f669a13c32e7ce850c14fd7bb38db9f2dcf))
@@ -302,6 +308,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- e2e account flows wait for hydration after onboarding and reloads and match the login button exactly, removing the `waitForURL` timeouts.
 - **lists:** Noindex banned owners' profiles and test edition moves on merge ([30665f2](https://github.com/AlexGalhardo/hexascore-app/commit/30665f255397061b6816d60180724a728d168cf4))
 - **lists:** Noindex banned owners' lists and fix library and list-edit page issues ([c7d57d5](https://github.com/AlexGalhardo/hexascore-app/commit/c7d57d51046b28ceb201f5e50501fde8d85b8841))
 - **api:** Keep restricted-source relations out of api filters and counts ([b6a02ac](https://github.com/AlexGalhardo/hexascore-app/commit/b6a02ac0928fb0763631f2d6b4e7625dac07fb5b))
@@ -320,6 +327,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- e2e account flows wait for hydration after onboarding and reloads and match the login button exactly, removing the `waitForURL` timeouts.
 - **api:** Render service error codes as problem+json code members ([e665b22](https://github.com/AlexGalhardo/hexascore-app/commit/e665b22578102d817cb31c706aed2e34b6f98f33))
 - Close export purge retention gaps ([5e0cf29](https://github.com/AlexGalhardo/hexascore-app/commit/5e0cf299b245faa30487615ded87f9cb484068aa))
 - **admin:** Answer 409 on merge conflicts as SDD 01 §7.5 requires ([b180cb4](https://github.com/AlexGalhardo/hexascore-app/commit/b180cb44804374add4539905674316a9fd44c91f))
@@ -343,6 +351,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- e2e account flows wait for hydration after onboarding and reloads and match the login button exactly, removing the `waitForURL` timeouts.
 - **api:** Keep flushing quota deltas visible to admission ([d5a4710](https://github.com/AlexGalhardo/hexascore-app/commit/d5a4710a1a33ea12f87262d834f13e280296ecad))
 - **repo:** Keep resources/public tracked so the all:public embed builds on a clean checkout ([c13deac](https://github.com/AlexGalhardo/hexascore-app/commit/c13deac7c061847ca3fe20ffa8fae125a9b62cbe))
 - **web:** Refuse /\host doc links that browsers resolve to another host ([02030cb](https://github.com/AlexGalhardo/hexascore-app/commit/02030cba74574c532a7e5abc089946a7de094f95))
@@ -399,6 +408,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- e2e account flows wait for hydration after onboarding and reloads and match the login button exactly, removing the `waitForURL` timeouts.
 - **admin:** Register all console commands; number VF-046; tick P1.C.3.1 ([9705a3b](https://github.com/AlexGalhardo/hexascore-app/commit/9705a3ba97a7fa842096dd46651ea2ffe6f861f2))
 - **auth:** Key login throttles by the resolved account ([806bd1b](https://github.com/AlexGalhardo/hexascore-app/commit/806bd1bb46e05ba8c11e61e12d27f4f76fca726a))
 - **auth:** Cap login attempts per IP across identifiers instead of resolving accounts ([83e9551](https://github.com/AlexGalhardo/hexascore-app/commit/83e955174a76fae29119a3a186d589dbfada0b71))
@@ -431,6 +441,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- e2e account flows wait for hydration after onboarding and reloads and match the login button exactly, removing the `waitForURL` timeouts.
 - **catalog:** Use the vukem faker instead of math/rand in the demo seeder ([f57b3fd](https://github.com/AlexGalhardo/hexascore-app/commit/f57b3fd7ec5f85efa6255aa2186c5443444bf888))
 - **catalog:** Keep user data out of merge snapshots and carry anti-abuse state ([605f721](https://github.com/AlexGalhardo/hexascore-app/commit/605f721e4d5de14c0ecfe62e03fbc2e28c9d70e5))
 
@@ -453,4 +464,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- e2e account flows wait for hydration after onboarding and reloads and match the login button exactly, removing the `waitForURL` timeouts.
 - **i18n:** Drop copy for features removed by D-06 ([3aacf1a](https://github.com/AlexGalhardo/hexascore-app/commit/3aacf1a5ee7bc50e2e1c72e0bfd3b0e103a4ded8))

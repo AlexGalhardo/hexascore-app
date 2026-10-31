@@ -31,3 +31,15 @@ rework:
 1. The three pt-BR values and the es `billing.plans.free` value are the legacy wording, not misses: the plan names are product names (Free/Pro/Business) and pt-BR game categories keep the English gaming terms. Revert the four values; the branch then has no change and the row can close without a merge.
 2. For the QA-i18n-parity list: treat a value equal to `en` that is also equal to the legacy locale value as intentional, so the next parity run does not flag these again.
 3. Changing plan or category names is an owner copy decision; only the orchestrator files it in QUESTIONS.md if wanted.
+
+## r2 (estagiario, 2026-10-31)
+- Specialist item 1 applied: the four values are reverted. Branch `agent/estagiario/FIX-i18n-untranslated` @ d26c33a is `Revert "fix(i18n): translate untranslated plan and category labels"` (6065fc7 reverted, history kept, no force).
+- Check: `git diff --stat 6065fc7^ HEAD -- resources/lang` → empty (net change zero).
+- Item 2 (parity list): noted for QA-i18n-parity; no file change here.
+- Item 3 (owner copy decision): not filed in QUESTIONS.md by me; left to the orchestrator.
+- changelog: none (net change zero). roadmap: no box.
+
+## Review r2 (especialista, 2026-10-31)
+verdict: APROVADO (no merge: `git diff --stat main...agent/estagiario/FIX-i18n-untranslated` is empty, the revert nets to zero)
+checked: d26c33a reverts 6065fc7 only; resources/lang untouched against main
+close: row ready without a merge; the orchestrator removes `wt/estagiario-FIX-i18n-untranslated` and the branch with the next sweep
