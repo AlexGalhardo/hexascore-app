@@ -31,6 +31,14 @@ func TestSecurity_A01_ModeratorCannotApply(t *testing.T) {
 	}
 	mod.PostForm("/admin/moderation/bulk", url.Values{"action": {"release"}, "ids": {id}}).AssertOK()
 
+	// The catalogue tools outside the queue (item merge, affiliate links) are panel-admin only: the panel's 404.
+	const item = "00000000-0000-0000-0000-0000000000aa"
+	mod.PostForm("/admin/items/"+item+"/merge",
+		url.Values{"into": {"00000000-0000-0000-0000-0000000000bb"}, "confirm": {"merge"}}).AssertNotFound()
+	mod.PostForm("/admin/items/"+item+"/affiliate-links",
+		url.Values{"store": {"gog"}, "url": {"https://x.example/a"}}).AssertNotFound()
+	mod.PostForm("/admin/items/"+item+"/affiliate-links/gog/delete", url.Values{}).AssertNotFound()
+
 	if got := itemTitle(t, app); got != "a" {
 		t.Fatalf("moderator wrote the catalogue: %q", got)
 	}
