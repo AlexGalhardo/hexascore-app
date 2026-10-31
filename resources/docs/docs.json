@@ -105,7 +105,7 @@
 	{
 		"slug": "errors",
 		"title": "Errors",
-		"body": "<h1 id=\"errors\">Errors</h1>\n<p>Errors use RFC 9457 problem details with a stable machine-readable code.</p>\n<h2 id=\"format\">Format</h2>\n<p>Every error has <code>Content-Type: application/problem+json</code>. Branch on <code>code</code> (stable) rather than on <code>title</code> or <code>detail</code> (human text that may change). <code>type</code> links to the matching section below, and <code>request_id</code> equals the <code>X-Request-Id</code> header: include it when you contact support.</p>\n<pre tabindex=\"0\"><code class=\"language-json\">{\n  &quot;type&quot;: &quot;https://hexascore.app/problems/quota-exhausted&quot;,\n  &quot;title&quot;: &quot;Quota exhausted&quot;,\n  &quot;status&quot;: 402,\n  &quot;detail&quot;: &quot;Monthly quota is exhausted. Upgrade at https://hexascore.app/pricing.&quot;,\n  &quot;instance&quot;: &quot;/api/v1/games&quot;,\n  &quot;request_id&quot;: &quot;01JB7Q4V0Q8M3K2Y7T9H5N6C1D&quot;,\n  &quot;code&quot;: &quot;quota-exhausted&quot;,\n  &quot;plan&quot;: &quot;pro&quot;,\n  &quot;limit&quot;: 50000\n}</code></pre>\n<h2 id=\"codes\">Codes</h2>\n<h3 id=\"invalid-query\">invalid-query</h3>\n<p>HTTP 400. A query parameter is unknown or out of range, or <code>limit</code> is above your plan's page size (10 on Free). <code>errors</code> lists each problem with its <code>path</code>. Fix the listed parameters. Not counted against your quota.</p>\n<h3 id=\"invalid-cursor\">invalid-cursor</h3>\n<p>HTTP 400. The <code>cursor</code> was tampered with or belongs to another query. Restart from the first page.</p>\n<h3 id=\"changes-window-exceeded\">changes-window-exceeded</h3>\n<p>HTTP 400. The <code>since</code> window of <code>/v1/changes</code> is larger than the endpoint allows. Request a more recent <code>since</code>.</p>\n<h3 id=\"unauthorized\">unauthorized</h3>\n<p>HTTP 401. No <code>Authorization: Bearer</code> header, a malformed key, or a key that does not exist or was revoked. Check the header and the key at <a href=\"/profile/api\">/profile/api</a>. Never retried automatically.</p>\n<h3 id=\"quota-exhausted\">quota-exhausted</h3>\n<p>HTTP 402. The 100 lifetime requests on Free, or the monthly quota on paid plans. The body includes <code>plan</code> and <code>limit</code>. Upgrade your plan at <a href=\"/pricing\">/pricing</a>. Paid quotas reset on the 1st of each month (UTC).</p>\n<h3 id=\"plan-required\">plan-required</h3>\n<p>HTTP 403. The endpoint needs a higher plan. Upgrade at <a href=\"/pricing\">/pricing</a>.</p>\n<h3 id=\"account-banned\">account-banned</h3>\n<p>HTTP 403. The account that owns the key is suspended. Contact us through <a href=\"/contact\">/contact</a> with the <code>request_id</code>.</p>\n<h3 id=\"not-found\">not-found</h3>\n<p>HTTP 404. Unknown item id, an id that belongs to another type (for example a game id under <code>/movies</code>), an unknown type path, or no match for <code>/lookup</code>. Lookups require an exact id.</p>\n<h3 id=\"rate-limited\">rate-limited</h3>\n<p>HTTP 429. More requests per second than your plan allows. The <code>Retry-After</code> header says how many seconds to wait. Not counted against your quota. Space out bursts or upgrade for a higher rate.</p>\n<h3 id=\"internal-error\">internal-error</h3>\n<p>HTTP 500. Something failed on our side. The request is refunded to your quota. Retry with exponential backoff; if it persists, send us the <code>request_id</code>.</p>\n<h3 id=\"service-unavailable\">service-unavailable</h3>\n<p>HTTP 503. A dependency is temporarily down. Comes with <code>Retry-After</code>. Retry after the indicated delay.</p>\n<h2 id=\"retries\">Retries</h2>\n<p>Retry only <code>429</code>, <code>500</code> and <code>503</code>, honouring <code>Retry-After</code> when present and backing off exponentially otherwise. Every endpoint is a read-only <code>GET</code>, so retries are always safe.</p>",
+		"body": "<h1 id=\"errors\">Errors</h1>\n<p>Errors use RFC 9457 problem details with a stable machine-readable code.</p>\n<h2 id=\"format\">Format</h2>\n<p>Every error has <code>Content-Type: application/problem+json</code>. Branch on <code>code</code> (stable) rather than on <code>title</code> or <code>detail</code> (human text that may change). <code>type</code> links to the matching section below, and <code>request_id</code> equals the <code>X-Request-Id</code> header: include it when you contact support.</p>\n<pre tabindex=\"0\"><code class=\"language-json\">{\n  &quot;type&quot;: &quot;https://hexascore.app/problems/quota-exhausted&quot;,\n  &quot;title&quot;: &quot;Quota exhausted&quot;,\n  &quot;status&quot;: 402,\n  &quot;detail&quot;: &quot;Monthly quota is exhausted. Upgrade at https://hexascore.app/pricing.&quot;,\n  &quot;instance&quot;: &quot;/api/v1/games&quot;,\n  &quot;request_id&quot;: &quot;01JB7Q4V0Q8M3K2Y7T9H5N6C1D&quot;,\n  &quot;code&quot;: &quot;quota-exhausted&quot;,\n  &quot;plan&quot;: &quot;pro&quot;,\n  &quot;limit&quot;: 50000\n}</code></pre>\n<h2 id=\"codes\">Codes</h2>\n<h3 id=\"invalid-query\">invalid-query</h3>\n<p>HTTP 400. A query parameter is unknown or out of range, or <code>limit</code> is above your plan's page size (10 on Free). <code>errors</code> lists each problem with its <code>path</code>. Fix the listed parameters. Not counted against your quota.</p>\n<h3 id=\"invalid-cursor\">invalid-cursor</h3>\n<p>HTTP 400. The <code>cursor</code> was tampered with or belongs to another query. Restart from the first page.</p>\n<h3 id=\"changes-window-exceeded\">changes-window-exceeded</h3>\n<p>HTTP 400. The <code>since</code> window of <code>/v1/changes</code> is larger than the endpoint allows. Request a more recent <code>since</code>.</p>\n<h3 id=\"unauthorized\">unauthorized</h3>\n<p>HTTP 401. No <code>Authorization: Bearer</code> header, a malformed key, or a key that does not exist or was revoked. Check the header and the key at <a href=\"/profile/api\">/profile/api</a>. Never retried automatically.</p>\n<h3 id=\"quota-exhausted\">quota-exhausted</h3>\n<p>HTTP 402. The 100 lifetime requests on Free, or the monthly quota on paid plans. The body includes <code>plan</code> and <code>limit</code>. Upgrade your plan at <a href=\"/pricing\">/pricing</a>. Paid quotas reset on the 1st of each month (UTC).</p>\n<h3 id=\"plan-required\">plan-required</h3>\n<p>HTTP 403. The endpoint needs a higher plan. Upgrade at <a href=\"/pricing\">/pricing</a>.</p>\n<h3 id=\"account-banned\">account-banned</h3>\n<p>HTTP 403. The account that owns the key is suspended. Contact us through <a href=\"/contact\">/contact</a> with the <code>request_id</code>.</p>\n<h3 id=\"not-found\">not-found</h3>\n<p>HTTP 404. Unknown item id, an id that belongs to another type (for example a game id under <code>/movies</code>), an unknown type path, or no match for <code>/lookup</code>. Lookups require an exact id.</p>\n<h3 id=\"rate-limited\">rate-limited</h3>\n<p>HTTP 429. More requests per second than your plan allows. The <code>Retry-After</code> header says how many seconds to wait. Not counted against your quota. Space out bursts or upgrade for a higher rate.</p>\n<h3 id=\"internal-error\">internal-error</h3>\n<p>HTTP 500. Something failed on our side. The request is refunded to your quota. Retry with exponential backoff; if it persists, send us the <code>request_id</code>.</p>\n<h3 id=\"community-submissions-closed\">community-submissions-closed</h3>\n<p>HTTP 403. Community suggestions are switched off right now. Try again later.</p>\n<h3 id=\"suggestion-not-eligible\">suggestion-not-eligible</h3>\n<p>HTTP 403. Your account cannot submit suggestions (unverified email, too new, banned from submissions, or the suggestion is not yours).</p>\n<h3 id=\"suggestion-duplicate\">suggestion-duplicate</h3>\n<p>HTTP 409. An open suggestion for the same item and fields already exists. Edit or withdraw it instead.</p>\n<h3 id=\"stale-before\">stale-before</h3>\n<p>HTTP 409. The field changed since you loaded it. Reload and re-apply your edit.</p>\n<h3 id=\"invalid-transition\">invalid-transition</h3>\n<p>HTTP 409. The suggestion cannot move from its current status to the requested one.</p>\n<h3 id=\"field-locked\">field-locked</h3>\n<p>HTTP 423. A moderator locked this field; community edits to it are not accepted.</p>\n<h3 id=\"suggestion-quota\">suggestion-quota</h3>\n<p>HTTP 429. You reached your daily suggestion quota. Try again after the reset.</p>\n<h3 id=\"suggestion-cooldown\">suggestion-cooldown</h3>\n<p>HTTP 429. Wait for the cooldown to pass; the <code>Retry-After</code> header gives the seconds.</p>\n<h3 id=\"validation\">validation</h3>\n<p>HTTP 422. The submission failed validation.</p>\n<h3 id=\"service-unavailable\">service-unavailable</h3>\n<p>HTTP 503. A dependency is temporarily down. Comes with <code>Retry-After</code>. Retry after the indicated delay.</p>\n<h2 id=\"retries\">Retries</h2>\n<p>Retry only <code>429</code>, <code>500</code> and <code>503</code>, honouring <code>Retry-After</code> when present and backing off exponentially otherwise. Every endpoint is a read-only <code>GET</code>, so retries are always safe.</p>",
 		"toc": [
 			{
 				"id": "format",
@@ -165,6 +165,51 @@
 			{
 				"id": "internal-error",
 				"text": "internal-error",
+				"level": 3
+			},
+			{
+				"id": "community-submissions-closed",
+				"text": "community-submissions-closed",
+				"level": 3
+			},
+			{
+				"id": "suggestion-not-eligible",
+				"text": "suggestion-not-eligible",
+				"level": 3
+			},
+			{
+				"id": "suggestion-duplicate",
+				"text": "suggestion-duplicate",
+				"level": 3
+			},
+			{
+				"id": "stale-before",
+				"text": "stale-before",
+				"level": 3
+			},
+			{
+				"id": "invalid-transition",
+				"text": "invalid-transition",
+				"level": 3
+			},
+			{
+				"id": "field-locked",
+				"text": "field-locked",
+				"level": 3
+			},
+			{
+				"id": "suggestion-quota",
+				"text": "suggestion-quota",
+				"level": 3
+			},
+			{
+				"id": "suggestion-cooldown",
+				"text": "suggestion-cooldown",
+				"level": 3
+			},
+			{
+				"id": "validation",
+				"text": "validation",
 				"level": 3
 			},
 			{
