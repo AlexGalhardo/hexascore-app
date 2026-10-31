@@ -19,7 +19,7 @@ The owner chose **v1 Editorial** (2026-10-31). v2 Noir and v3 Paper are frozen. 
 | 2c | Primary action | signal red `#C8321E` | brand purple `#5B3FC4` (dark `#A796FF`); red is now `danger` only |
 | 3 | Dark theme | Foundations only | page `12 Web dark`: a dark copy of every web frame from the same sources (palette below) |
 | 4 | Mobile footer | links in a wrapping row | links stacked and centred, each a 44 px row; copyright centred below |
-| 5 | Navbar search | none | `search-suggest` frames, desktop and mobile: `results` (first 8 of N, 2:3 cover, title and year, type, final score or "–", active row), `loading` (skeleton rows, "Searching…"), `empty` (no match, hint), `see-all` (focus on "See all results"); combobox and listbox notes on the frame |
+| 5 | Navbar search | none | first drawn as a dropdown under the navbar field (8 rows: 2:3 cover, title and year, type, final score or "–"); **replaced by item 16**, its result rows reused inside the palette |
 | 6 | Rating widget | slider per category | ten yellow stars per category, half stars (0.5 steps), value printed beside them ("8.5 / 10"), radio group of 20 per category, arrow keys ±0.5, Home/End, 44 px rows; `rating-widget/states` sheet (not rated, hover preview, keyboard focus, half, full, minimum, hit areas, keyboard table, colour) |
 | 7 | Mobile categories | fixed 22 px gaps | `justify-content: space-between` across the full width |
 | 8 | Theme toggle | half-circle icon | moon in light, sun in dark |
@@ -30,6 +30,7 @@ The owner chose **v1 Editorial** (2026-10-31). v2 Noir and v3 Paper are frozen. 
 | 13 | Listing pagination | "Load more" | numbered pagination above and below the results (previous, numbers with ellipses, next; current page filled), filters at the top; frames `catalog-index/default` (page 1), `page-622`, `last-page`; mobile shows previous / "Page N of M" / next |
 | 14 | Language and navbar | EN PT ES links in the footer | language dropdown button in the navbar only (`header/desktop-language-open` shows the menu with the current language checked); footer has no language links; the navbar is fixed, `header/*-scrolled` adds a soft shadow under the rule |
 | 15 | Google sign-in | none | "Sign in with Google" on login and "Sign up with Google" on the new signup frame, above the email form with an "or" divider; official G mark, Google light/dark button colours, pt-BR and es wording on the button sheet; same depth and states as item 12; noted as the one third-party mark in the v1 README |
+| 16 | Search as a command palette | dropdown from item 5 | navbar trigger (icon, "Search…", "Ctrl K" hint; icon only on mobile) opens a centred modal over a dimmed backdrop (full-screen sheet on mobile) with the input focused; the item 5 rows, first 8; ↑/↓ highlight, Enter opens, Esc closes; focus trapped and returned to the trigger; frames `search-palette/empty` (recent searches and trending), `results` (with "See all results" to `/search`), `loading`, `no-results`, desktop and mobile, light and dark; the `header/*-search` components are gone |
 
 ## Dark palette and contrast (WCAG 2.2, computed)
 

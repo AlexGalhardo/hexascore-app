@@ -2,7 +2,7 @@
 # render: op.py render <doc> <prelude.js> <file.jsx>...   file header line: //@ page=0:7 x=0 y=4000 [replace=0:12]
 #         "/*H*/" in the JSX is replaced by the prelude (shared helpers).
 # export: op.py export <doc> <out-dir> <page> <name-substring>...   (every top-level <platform>/<page>/<state> frame matching)
-import json, sys, urllib.request, re
+import json, sys, urllib.request, re, time
 cfg = json.load(open(r'C:\Users\aleex\AppData\Local\OpenPencil\mcp.json'))
 URL = f"http://127.0.0.1:{cfg['httpPort']}/mcp"
 H = {"Content-Type": "application/json", "Accept": "application/json, text/event-stream", "Authorization": "Bearer " + cfg['authToken']}
@@ -34,7 +34,11 @@ if cmd == "render":
         args = {"document_id": doc, "page_id": meta["page"], "jsx": body.replace("/*H*/", prelude)}
         call("activate_document", {"document_id": doc, "page_id": meta["page"]})
         name = re.search(r'name="([^"]+)"', body).group(1)
-        tree = json.loads(call("get_page_tree", {"document_id": doc, "page_id": meta["page"], "depth": 1}))
+        for _ in range(24):  # the app stays busy for a while after an RPC timeout
+            tree = call("get_page_tree", {"document_id": doc, "page_id": meta["page"], "depth": 1})
+            if tree.startswith("{") and '"children"' in tree: break
+            time.sleep(5)
+        tree = json.loads(tree)
         hit = [c["id"] for c in tree["children"] if c["name"] == name]
         if hit: args["replace_id"] = hit[0]  # re-render in place, keeps position
         else: args["x"], args["y"] = float(meta.get("x", 0)), float(meta.get("y", 0))
