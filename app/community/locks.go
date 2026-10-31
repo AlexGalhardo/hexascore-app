@@ -13,7 +13,11 @@ import (
 	"github.com/AlexGalhardo/vukem/database"
 )
 
-var translationTitle = regexp.MustCompile(`^translations\.([A-Za-z-]+)\.title$`)
+var (
+	translationTitle = regexp.MustCompile(`^translations\.([A-Za-z-]+)\.title$`)
+	synopsisField    = regexp.MustCompile(`^synopsis\.([A-Za-z-]+)$`)
+	externalField    = regexp.MustCompile(`^external_ids\.([A-Za-z0-9]+)$`)
+)
 
 func fieldLocked(ctx context.Context, tx *database.Tx, targetType, targetID string, fields []string, now time.Time) error {
 	rows, err := tx.QueryContext(ctx, `
@@ -63,15 +67,12 @@ func containsField(fields []string, field string) bool {
 }
 
 func staleBefore(ctx context.Context, tx *database.Tx, targetType, targetID string, changes map[string]json.RawMessage) error {
-	if targetType != "item" {
-		return nil
-	}
 	for field, raw := range changes {
 		before, ok := objectField(raw, "before")
 		if !ok {
 			continue
 		}
-		current, err := scalarCurrent(ctx, tx, targetID, field)
+		current, err := scalarCurrent(ctx, tx, targetType, targetID, field)
 		if err != nil {
 			return err
 		}
@@ -90,39 +91,104 @@ func staleBefore(ctx context.Context, tx *database.Tx, targetType, targetID stri
 	return nil
 }
 
-func scalarCurrent(ctx context.Context, tx *database.Tx, itemID, field string) (json.RawMessage, error) {
-	if m := translationTitle.FindStringSubmatch(field); m != nil {
-		var title string
-		err := tx.QueryRowContext(ctx, `SELECT title FROM item_translations WHERE item_id = $1 AND locale = $2`, itemID, m[1]).Scan(&title)
-		if errors.Is(err, sql.ErrNoRows) {
-			return json.RawMessage("null"), nil
-		}
-		if err != nil {
-			return nil, fmt.Errorf("community: read current title: %w", err)
-		}
-		encoded, err := json.Marshal(title)
-		if err != nil {
-			return nil, fmt.Errorf("community: encode current title: %w", err)
-		}
-
-		return encoded, nil
+func scalarCurrent(ctx context.Context, tx *database.Tx, targetType, targetID, field string) (json.RawMessage, error) {
+	switch targetType {
+	case "item":
+		return itemCurrent(ctx, tx, targetID, field)
+	case "edition":
+		return editionCurrent(ctx, tx, targetID, field)
+	case "entity":
+		return entityCurrent(ctx, tx, targetID, field)
+	default:
+		return json.RawMessage("null"), nil
 	}
-	if field == "release_date" {
-		var day sql.NullTime
-		err := tx.QueryRowContext(ctx, `SELECT release_date FROM items WHERE id = $1`, itemID).Scan(&day)
-		if errors.Is(err, sql.ErrNoRows) || !day.Valid {
-			return json.RawMessage("null"), nil
-		}
-		if err != nil {
-			return nil, fmt.Errorf("community: read current release date: %w", err)
-		}
-		encoded, err := json.Marshal(day.Time.UTC().Format("2006-01-02"))
-		if err != nil {
-			return nil, fmt.Errorf("community: encode current release date: %w", err)
-		}
+}
 
-		return encoded, nil
+func itemCurrent(ctx context.Context, tx *database.Tx, itemID, field string) (json.RawMessage, error) {
+	if m := translationTitle.FindStringSubmatch(field); m != nil {
+		return nullableText(ctx, tx, `SELECT title FROM item_translations WHERE item_id = $1 AND locale = $2`, itemID, m[1])
+	}
+	if m := synopsisField.FindStringSubmatch(field); m != nil {
+		return nullableText(ctx, tx, `SELECT synopsis FROM item_translations WHERE item_id = $1 AND locale = $2`, itemID, m[1])
+	}
+	if field == "title" {
+		return nullableText(ctx, tx, `SELECT original_title FROM items WHERE id = $1`, itemID)
+	}
+	if field == "cover" {
+		return nullableText(ctx, tx, `SELECT cover_key FROM items WHERE id = $1`, itemID)
+	}
+	if m := externalField.FindStringSubmatch(field); m != nil {
+		return nullableText(ctx, tx, `SELECT external_ids ->> $2 FROM items WHERE id = $1`, itemID, m[1])
+	}
+	if field != "release_date" {
+		return json.RawMessage("null"), nil
+	}
+	var day sql.NullTime
+	var precision string
+	err := tx.QueryRowContext(ctx, `SELECT release_date, release_precision FROM items WHERE id = $1`, itemID).Scan(&day, &precision)
+	if errors.Is(err, sql.ErrNoRows) || !day.Valid {
+		return json.RawMessage("null"), nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("community: read current release date: %w", err)
+	}
+	encoded, err := json.Marshal(struct {
+		Value     string `json:"value"`
+		Precision string `json:"precision"`
+	}{day.Time.UTC().Format("2006-01-02"), precision})
+	if err != nil {
+		return nil, fmt.Errorf("community: encode current release date: %w", err)
+	}
+
+	return encoded, nil
+}
+
+func editionCurrent(ctx context.Context, tx *database.Tx, editionID, field string) (json.RawMessage, error) {
+	switch field {
+	case "title":
+		return nullableText(ctx, tx, `SELECT title FROM editions WHERE id = $1`, editionID)
+	case "cover":
+		return nullableText(ctx, tx, `SELECT cover_key FROM editions WHERE id = $1`, editionID)
+	}
+	provider := externalField.FindStringSubmatch(field)
+	if provider == nil {
+		return json.RawMessage("null"), nil
+	}
+	column := map[string]string{"isbn13": "btrim(isbn13)", "wikidata": "wikidata_qid", "openlibrary": "openlibrary_id"}[provider[1]]
+	if column == "" {
+		return json.RawMessage("null"), nil
+	}
+
+	return nullableText(ctx, tx, `SELECT `+column+` FROM editions WHERE id = $1`, editionID)
+}
+
+func entityCurrent(ctx context.Context, tx *database.Tx, entityID, field string) (json.RawMessage, error) {
+	switch field {
+	case "title":
+		return nullableText(ctx, tx, `SELECT default_name FROM entities WHERE id = $1`, entityID)
+	case "cover":
+		return nullableText(ctx, tx, `SELECT image_key FROM entities WHERE id = $1`, entityID)
+	}
+	if m := externalField.FindStringSubmatch(field); m != nil {
+		return nullableText(ctx, tx, `SELECT external_ids ->> $2 FROM entities WHERE id = $1`, entityID, m[1])
 	}
 
 	return json.RawMessage("null"), nil
+}
+
+func nullableText(ctx context.Context, tx *database.Tx, query string, args ...any) (json.RawMessage, error) {
+	var value sql.NullString
+	err := tx.QueryRowContext(ctx, query, args...).Scan(&value)
+	if errors.Is(err, sql.ErrNoRows) || !value.Valid {
+		return json.RawMessage("null"), nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("community: read current field: %w", err)
+	}
+	encoded, err := json.Marshal(value.String)
+	if err != nil {
+		return nil, fmt.Errorf("community: encode current field: %w", err)
+	}
+
+	return encoded, nil
 }
