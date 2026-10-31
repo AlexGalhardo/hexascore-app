@@ -70,6 +70,11 @@ JOIN users u ON u.id = s.author_id
 LEFT JOIN rating_flags f ON f.user_id = s.author_id AND f.item_id = s.target_id
 WHERE ev.to_status = 'submitted' AND ev.created_at >= $1 AND ev.created_at < $2`
 
+// onlyItems restricts a statement to the comma-separated ids in the parameter; empty means every item.
+func onlyItems(col, param string) string {
+	return "(" + param + " = '' OR " + col + "::text = ANY(string_to_array(" + param + ", ',')))"
+}
+
 // rollupSQL builds the replace statements. A user counts once per (item, day, primitive) at their maximum weight.
 func rollupSQL() (reset, replace string) {
 	var zero, cols, vals, sets []string
@@ -83,12 +88,13 @@ func rollupSQL() (reset, replace string) {
 		sets = append(sets, p.count+" = EXCLUDED."+p.count, p.weight+" = EXCLUDED."+p.weight)
 	}
 
-	reset = `UPDATE item_activity_daily SET ` + strings.Join(zero, ", ") + ` WHERE day = ($1 AT TIME ZONE 'UTC')::date`
+	reset = `UPDATE item_activity_daily SET ` + strings.Join(zero, ", ") +
+		` WHERE day = ($1 AT TIME ZONE 'UTC')::date AND ` + onlyItems("item_id", "$2")
 	replace = `WITH c AS (` + contributions + `),
 best AS (SELECT item_id, user_id, prim, max(w) AS w FROM c GROUP BY 1, 2, 3 HAVING max(w) > 0)
 INSERT INTO item_activity_daily (item_id, day, item_type, ` + strings.Join(cols, ", ") + `)
 SELECT b.item_id, ($1 AT TIME ZONE 'UTC')::date, i.type, ` + strings.Join(vals, ", ") + `
-FROM best b JOIN items i ON i.id = b.item_id GROUP BY b.item_id, i.type
+FROM best b JOIN items i ON i.id = b.item_id WHERE ` + onlyItems("b.item_id", "$3") + ` GROUP BY b.item_id, i.type
 ON CONFLICT (item_id, day) DO UPDATE SET ` + strings.Join(sets, ", ")
 
 	return reset, replace
@@ -98,16 +104,25 @@ ON CONFLICT (item_id, day) DO UPDATE SET ` + strings.Join(sets, ", ")
 // transaction (SDD 08 §7.1). Views and search clicks are left alone. It is idempotent: running it twice yields
 // identical rows, and a day that lost a contribution (rating deleted, user banned) is zeroed first.
 func Rollup(ctx context.Context, db *database.DB, now time.Time) error {
+	return RollupDays(ctx, db, now, 2, nil)
+}
+
+// RollupDays replaces the last days UTC days ending at now's day. A non-empty itemIDs limits it to those items,
+// which is how a ban rewrites the days its user's activity reached (trending_rebuild).
+func RollupDays(ctx context.Context, db *database.DB, now time.Time, days int, itemIDs []string) error {
 	reset, replace := rollupSQL()
 	today := now.UTC().Truncate(24 * time.Hour)
+	only := strings.Join(itemIDs, ",")
 
 	return db.Tx(ctx, func(tx *database.Tx) error {
-		for _, lo := range []time.Time{today.AddDate(0, 0, -1), today} {
-			if _, err := tx.ExecContext(ctx, reset, lo); err != nil {
+		for back := days - 1; back >= 0; back-- {
+			lo := today.AddDate(0, 0, -back)
+
+			if _, err := tx.ExecContext(ctx, reset, lo, only); err != nil {
 				return fmt.Errorf("trending rollup reset: %w", err)
 			}
 
-			if _, err := tx.ExecContext(ctx, replace, lo, lo.AddDate(0, 0, 1)); err != nil {
+			if _, err := tx.ExecContext(ctx, replace, lo, lo.AddDate(0, 0, 1), only); err != nil {
 				return fmt.Errorf("trending rollup %s: %w", lo.Format(time.DateOnly), err)
 			}
 		}

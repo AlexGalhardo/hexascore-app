@@ -24,6 +24,9 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	// A crash loses at most this minute of views and clicks (SDD 08 NFR-08-4); app shutdown flushes too.
 	// workaround(vukem): VF-021, no buffered counter in the framework.
 	s.Func("trending:flush", primitives.For(app).Flush).EveryMinute()
+	s.Job(jobs.ComputeTrending{}).Cron("5 * * * *").WithoutOverlapping()
+	// 04:45 stays clear of the 04:40 and 04:50 prunes.
+	s.Job(jobs.PruneTrending{}).DailyAt("04:45").WithoutOverlapping()
 	s.Job(jobs.RefreshEntityStats{}).Hourly().WithoutOverlapping()
 	s.Job(jobs.SyncSearchSuggest{}).EveryMinute().WithoutOverlapping()
 	s.Job(jobs.DeletionPurge{}).DailyAt("03:00").WithoutOverlapping()
