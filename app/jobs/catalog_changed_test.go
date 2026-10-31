@@ -14,6 +14,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/community"
 	"github.com/AlexGalhardo/hexascore-app/database/migrations"
+	"github.com/AlexGalhardo/hexascore-app/internal/search"
 )
 
 const changedItem = "00000000-0000-0000-0000-0000000000aa"
@@ -45,13 +46,23 @@ func exec(t *testing.T, db *database.DB, q string, args ...any) {
 
 func dirtyCount(t *testing.T, db *database.DB) int {
 	t.Helper()
-	var n int
-	if err := db.QueryRowContext(context.Background(), `SELECT count(*) FROM search_dirty WHERE ref_id = $1`,
-		changedItem).Scan(&n); err != nil {
+	dirty, err := search.IsDirty(context.Background(), db, changedItem)
+	if err != nil {
 		t.Fatal(err)
 	}
+	if dirty {
+		return 1
+	}
 
-	return n
+	return 0
+}
+
+// drainDirty empties the resync queue the way the minute sync job does.
+func drainDirty(t *testing.T, db *database.DB) {
+	t.Helper()
+	if err := search.DrainSuggest(context.Background(), db); err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestCatalogChangedIdempotent(t *testing.T) {
@@ -62,7 +73,7 @@ VALUES ($1, 'movie', 'm', 'Q1', '2020-01-01T00:00:00Z')`, changedItem)
 		exec(t, db, `INSERT INTO catalog_audit (actor_role, source, target_type, target_id, field, before, after)
 VALUES ('admin', 'community', 'item', $1, 'title', '"a"', '"b"')`, changedItem)
 	}
-	exec(t, db, `DELETE FROM search_dirty`)
+	drainDirty(t, db)
 
 	now := time.Date(2026, 10, 31, 12, 0, 0, 0, time.UTC)
 	job := community.CatalogChanged{
@@ -86,7 +97,7 @@ VALUES ('admin', 'community', 'item', $1, 'title', '"a"', '"b"')`, changedItem)
 	}
 
 	// The search sync drained the row; a replay of the same audit ids does nothing.
-	exec(t, db, `DELETE FROM search_dirty`)
+	drainDirty(t, db)
 	ran, err = RunCatalogChanged(context.Background(), db, job, now.Add(time.Hour))
 	if err != nil || ran {
 		t.Fatalf("replay ran=%v err=%v", ran, err)
@@ -113,7 +124,7 @@ func TestCatalogChangedEditionReindexesWork(t *testing.T) {
 VALUES ('00000000-0000-0000-0000-0000000000ed', $1, '9780306406157', 'E', 'en', 'wikidata')`, changedItem)
 	exec(t, db, `INSERT INTO catalog_audit (actor_role, source, target_type, target_id, field, before, after)
 VALUES ('admin', 'community', 'edition', '00000000-0000-0000-0000-0000000000ed', 'title', '"E"', '"F"')`)
-	exec(t, db, `DELETE FROM search_dirty`)
+	drainDirty(t, db)
 
 	job := community.CatalogChanged{
 		TargetType: "edition", TargetID: "00000000-0000-0000-0000-0000000000ed", Fields: []string{"title"},
