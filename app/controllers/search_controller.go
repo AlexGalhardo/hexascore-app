@@ -37,13 +37,18 @@ const (
 type Search struct {
 	app      *vukem.App
 	searcher search.Searcher
+	// coversBase makes the JSON cover URLs absolute (COVERS_BASE_URL).
+	coversBase string
 	// user returns the signed-in user, or an error for anonymous requests.
 	user func(c *web.Ctx) (models.User, error)
 }
 
 // NewSearch builds the handlers.
 func NewSearch(app *vukem.App, searcher search.Searcher, user func(c *web.Ctx) (models.User, error)) *Search {
-	return &Search{app: app, searcher: searcher, user: user}
+	return &Search{
+		app: app, searcher: searcher, user: user,
+		coversBase: catalog.CoversBase(app.Source.Get("COVERS_BASE_URL")),
+	}
 }
 
 // SearchHit is one result row; the catalogue read model adds score and cover later.
@@ -265,6 +270,10 @@ func (h *Search) AppIndex(c *web.Ctx) error {
 		}
 	}
 
+	for i := range hits {
+		hits[i].Cover = hits[i].Cover.WithBase(h.coversBase)
+	}
+
 	return c.JSON(http.StatusOK, map[string]any{
 		"searchId": searchID, "data": hits, "total": out.Total, "tooShort": out.TooShort,
 	})
@@ -398,7 +407,7 @@ func (h *Search) Suggest(c *web.Ctx) error {
 			}
 
 			if r.ThumbKey != "" {
-				it.CoverThumbURL = catalog.CoverURL(r.ThumbKey)
+				it.CoverThumbURL = catalog.Absolute(h.coversBase, catalog.CoverURL(r.ThumbKey))
 			}
 
 			if section, ok := itemSection[r.Kind]; ok {

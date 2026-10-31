@@ -26,6 +26,30 @@ func CoverURL(key string) string {
 	return "/" + key
 }
 
+// CoversBase normalises the COVERS_BASE_URL value: trimmed, no trailing slash.
+func CoversBase(raw string) string {
+	return strings.TrimRight(strings.TrimSpace(raw), "/")
+}
+
+// Absolute prefixes an app-relative cover path with base. JSON clients (the Android app) cannot resolve
+// "/covers/..." against the API host when covers live in a bucket, so the JSON handlers send absolute URLs.
+func Absolute(base, path string) string {
+	if path == "" {
+		return ""
+	}
+
+	return base + path
+}
+
+// WithBase returns a copy of c whose renditions are absolute; nil stays nil and c is never mutated.
+func (c *Cover) WithBase(base string) *Cover {
+	if c == nil || base == "" {
+		return c
+	}
+
+	return &Cover{Thumb: Absolute(base, c.Thumb), Full: Absolute(base, c.Full)}
+}
+
 // NewCover builds the renditions from the nullable key columns; nil means "show the placeholder".
 func NewCover(fullKey, thumbKey sql.NullString) *Cover {
 	thumb, full := CoverURL(thumbKey.String), CoverURL(fullKey.String)

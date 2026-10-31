@@ -19,11 +19,13 @@ type Lists struct {
 	svc   *library.Lists
 	gate  *authz.Gate[*models.User]
 	guard string
+	// coversBase makes the item covers absolute (COVERS_BASE_URL).
+	coversBase string
 }
 
 // NewLists builds the read handlers. gate must already register ListPolicy.
-func NewLists(svc *library.Lists, gate *authz.Gate[*models.User], guard string) *Lists {
-	return &Lists{svc: svc, gate: gate, guard: guard}
+func NewLists(svc *library.Lists, gate *authz.Gate[*models.User], guard, coversBase string) *Lists {
+	return &Lists{svc: svc, gate: gate, guard: guard, coversBase: coversBase}
 }
 
 // Index is GET /app/v1/me/lists. Summaries already returns every list the owner
@@ -74,6 +76,10 @@ func (h *Lists) Show(c *web.Ctx) error {
 	items, err := h.svc.Entries(ctx, row.ID, i18n.Locale(ctx))
 	if err != nil {
 		return err
+	}
+
+	for i := range items {
+		items[i].Item.Cover = items[i].Item.Cover.WithBase(h.coversBase)
 	}
 
 	return c.JSON(http.StatusOK, map[string]any{
