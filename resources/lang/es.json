@@ -1,4 +1,20 @@
 {
+  "flash": {
+    "ratingSaved": "Calificación guardada.",
+    "ratingRemoved": "Calificación eliminada.",
+    "statusSaved": "Estado guardado.",
+    "statusRemoved": "Estado eliminado.",
+    "timeToBeatSaved": "Tiempos guardados.",
+    "timeToBeatRemoved": "Tiempos eliminados.",
+    "listCreated": "Lista creada.",
+    "listUpdated": "Lista actualizada.",
+    "listDeleted": "Lista eliminada.",
+    "listItemAdded": "Añadido a la lista.",
+    "listItemRemoved": "Quitado de la lista.",
+    "editionSaved": "Edición guardada.",
+    "editionRemoved": "Edición olvidada.",
+    "adminTwoFactorRequired": "La autenticación en dos pasos es obligatoria para abrir el área de administración. Configúrala aquí."
+  },
   "account": {
     "metaTitle": "Perfil",
     "title": "Tu perfil",

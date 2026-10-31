@@ -1,4 +1,20 @@
 {
+  "flash": {
+    "ratingSaved": "Nota salva.",
+    "ratingRemoved": "Nota removida.",
+    "statusSaved": "Status salvo.",
+    "statusRemoved": "Status removido.",
+    "timeToBeatSaved": "Tempos salvos.",
+    "timeToBeatRemoved": "Tempos removidos.",
+    "listCreated": "Lista criada.",
+    "listUpdated": "Lista atualizada.",
+    "listDeleted": "Lista excluída.",
+    "listItemAdded": "Adicionado à lista.",
+    "listItemRemoved": "Removido da lista.",
+    "editionSaved": "Edição salva.",
+    "editionRemoved": "Edição esquecida.",
+    "adminTwoFactorRequired": "A autenticação em dois fatores é obrigatória para abrir a área de administração. Configure-a aqui."
+  },
   "account": {
     "metaTitle": "Perfil",
     "title": "Seu perfil",

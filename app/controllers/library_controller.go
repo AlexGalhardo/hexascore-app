@@ -13,6 +13,7 @@ import (
 	"github.com/AlexGalhardo/vukem/z"
 
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
+	"github.com/AlexGalhardo/hexascore-app/app/flash"
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
@@ -88,6 +89,8 @@ func (h *Library) PutEdition(c *web.Ctx) error {
 	}
 
 	if !h.api {
+		flash.Status(c, "flash.editionSaved")
+
 		return c.Back("/library")
 	}
 
@@ -119,6 +122,8 @@ func (h *Library) DeleteEdition(c *web.Ctx) error {
 	}
 
 	if !h.api {
+		flash.Status(c, "flash.editionRemoved")
+
 		return c.Back("/library")
 	}
 
