@@ -313,7 +313,7 @@ func computeChunk(ctx context.Context, db *database.DB, typ string, ids []string
 		return 0, nil
 	}
 
-	byFeature, err := holders(ctx, db, typ, roles, ents, opt)
+	byFeature, err := holders(ctx, db, roles, ents, opt)
 	if err != nil {
 		return 0, err
 	}
@@ -414,7 +414,8 @@ func computeChunk(ctx context.Context, db *database.DB, typ string, ids []string
 	}
 
 	err = db.Tx(ctx, func(tx *database.Tx) error {
-		_, err := tx.ExecContext(ctx, `INSERT INTO item_similar (item_id, similar_ids, scores, cooccur, feature_hash, computed_at)
+		_, err := tx.ExecContext(ctx, `
+INSERT INTO item_similar (item_id, similar_ids, scores, cooccur, feature_hash, computed_at)
 VALUES `+sb.String()+`
 ON CONFLICT (item_id) DO UPDATE SET similar_ids = EXCLUDED.similar_ids, scores = EXCLUDED.scores,
   cooccur = EXCLUDED.cooccur, feature_hash = EXCLUDED.feature_hash, computed_at = EXCLUDED.computed_at`, args...)
@@ -428,7 +429,6 @@ ON CONFLICT (item_id) DO UPDATE SET similar_ids = EXCLUDED.similar_ids, scores =
 func holders(
 	ctx context.Context,
 	db *database.DB,
-	typ string,
 	roles, ents []string,
 	opt Options,
 ) (map[Feature][]string, error) {
