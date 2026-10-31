@@ -116,6 +116,15 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 		if err != nil {
 			return err
 		}
+		// Production only: dev and tests are reached by localhost, 127.0.0.1 and test hosts.
+		if app.Config.IsProduction() {
+			canon, err := middleware.CanonicalHost(cmp.Or(app.Source.Get("APP_URL"), "https://hexascore.app"),
+				config.APIHost(app.Source.Get))
+			if err != nil {
+				return err
+			}
+			r.UseServer(canon)
+		}
 		r.UseServer(edge)
 		r.UseServer(middleware.Version(middleware.ResolveVersion(app.Source.Get)))
 		routes.InstallAppMinVersion(r, app)
