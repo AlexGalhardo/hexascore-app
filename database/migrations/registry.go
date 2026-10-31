@@ -75,7 +75,6 @@ func All() []schema.Migration {
 		m20261031190200AddItemStatusUpdatedAtIndex(),
 		m20261031190300AddListItemsAddedAtIndex(),
 		m20261031190400AddSuggestionEventsCreatedAtIndex(),
-		m20261031203100AddCommunityMailOptOut(),
-		m20261031203200CreateSimilarTables(),
+		m20261101120000CreateIngestionTables(),
 	}
 }
