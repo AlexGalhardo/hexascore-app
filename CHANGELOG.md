@@ -8,12 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **mobile:** Android API client wrapper with auth, version and locale headers, idempotency keys, problem-code mapping and minimum-version detection (P5.A.3.1)
 - **community:** `Community/SuggestEdit` page with draft save and restore, quota, locked-field reasons, "Suggest an edit" links on item, edition and entity pages, and `community.*` strings in en, pt-BR and es (P4.A.3.1c)
 
 ### Fixed
 
 - **auth:** Login and signup forms post their named fields, the signed form token and `remember` without JavaScript (FIX-nojs-auth-post)
 - **mobile:** The catalogue copy script emits Biome-formatted JSON; committed copies refreshed (P5.A.1.1)
+- **mobile:** The navigation test renders each route in its own test and no longer hits the Jest timeout under load (FIX-mobile-nav-test-timeout)
 - **tests:** `TestReleaseBursts` no longer fails when the Postgres container clock runs ahead of the host (FIX-scoring-burst-clock)
 
 ## [0.12.0] - 2026-10-31

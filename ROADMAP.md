@@ -2949,7 +2949,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test` → green, including the test that asserts `global.HermesInternal` is defined
   - Notes: pick the latest stable Expo SDK at implementation time that targets Android API 36 (Play rule since 2026-08-31, [E14]). Write the SDK version and the reason in the PR. `android.package = app.hexascore`. Vitest on React Native is [NOT VERIFIED] (SDD 10 §10), so keep Jest. Use no Expo template that adds analytics or other extra packages.
 
-- [ ] **P5.A.1.2** Lay out the Expo Router tree from SDD 10 §6.1 with typed routes, the tab layout, placeholder screens and the `src/platform/` boundary (network state, store link).
+- [x] **P5.A.1.2** Lay out the Expo Router tree from SDD 10 §6.1 with typed routes, the tab layout, placeholder screens and the `src/platform/` boundary (network state, store link).
   - Files/modules: `apps/mobile/app/_layout.tsx`, `app/(auth)/login.tsx`, `app/(tabs)/_layout.tsx`, `app/(tabs)/index.tsx`, `app/(tabs)/[type].tsx`, `app/(tabs)/search.tsx`, `app/(tabs)/lists.tsx`, `app/(tabs)/profile.tsx`, `app/[type]/[slug].tsx`, `app/entities/[id].tsx`, `app/lists/[id].tsx`, `app/update-required.tsx`, `src/platform/network.ts`, `src/platform/store.ts`, `src/navigation.test.tsx`
   - Refs: SDD 10 §6.1, §7.1 (Expo Router, paths mirror the web, D-17), §2 (Android-only APIs only behind `src/platform/`); [E5]
   - Depends on: P5.A.1.1
@@ -2961,7 +2961,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 #### P5.A.2 Shared tokens and i18n
 
-- [ ] **P5.A.2.1** Consume `packages/tokens` in a theme module (light/dark colours, spacing, type scale, category accents, score bands) and `packages/i18n` catalogues (build-time copy of the bundled namespaces, locale matcher, ICU formatting), with an in-app override persisted locally.
+- [x] **P5.A.2.1** Consume `packages/tokens` in a theme module (light/dark colours, spacing, type scale, category accents, score bands) and `packages/i18n` catalogues (build-time copy of the bundled namespaces, locale matcher, ICU formatting), with an in-app override persisted locally.
   - Files/modules: `apps/mobile/src/theme/index.ts`, `src/theme/scoreBand.ts`, `src/theme/scoreBand.test.ts`, `apps/mobile/scripts/copy-catalogues.ts`, `src/i18n/index.ts`, `src/i18n/locale.ts`, `src/i18n/locale.test.ts`, `src/i18n/keys.test.ts`
   - Refs: SDD 10 §7.2, FR-10-6, §8 (locale cases), §4 (AA contrast); ADR 0009; SDD 09 §7.1; open issues 09-5, 10-4; [E10]
   - Depends on: P5.A.1.2
@@ -2973,7 +2973,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 #### P5.A.3 API client and authentication
 
-- [ ] **P5.A.3.1** Wrap `@hexascore/app-client` in `src/api/`: base URL from `EXPO_PUBLIC_API_BASE_URL`, headers (`Authorization`, `X-App-Version`, `Accept-Language`, UUID v7 `Idempotency-Key` on writes), mapping of RFC 9457 `code` to `errors.<code>`, and detection of `X-App-Min-Version` and 426.
+- [x] **P5.A.3.1** Wrap `@hexascore/app-client` in `src/api/`: base URL from `EXPO_PUBLIC_API_BASE_URL`, headers (`Authorization`, `X-App-Version`, `Accept-Language`, UUID v7 `Idempotency-Key` on writes), mapping of RFC 9457 `code` to `errors.<code>`, and detection of `X-App-Min-Version` and 426.
   - Files/modules: `apps/mobile/src/api/client.ts`, `src/api/problems.ts`, `src/api/version.ts`, `src/api/client.test.ts`
   - Refs: SDD 10 §6.1 "Headers", §7.4, FR-10-1, FR-10-5; SDD 05 §6.4; <https://vukem.dev/docs/rest-apis/client-generation> "The command"; <https://vukem.dev/docs/rest-apis/idempotency>
   - Depends on: P5.A.2.1
