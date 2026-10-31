@@ -66,6 +66,15 @@ export default function Show({
 			/>
 			<p className="text-sm text-muted">{t(`entity.kinds.${entity.kind}`)}</p>
 			<h1 className="text-2xl font-bold">{entity.name}</h1>
+			<Link
+				href={localized(
+					`/suggest/entity/${entity.id}?domain=${items.data[0]?.type ?? "game"}`,
+					locale,
+				)}
+				className="text-sm underline"
+			>
+				{t("community.suggest.link")}
+			</Link>
 			<dl className="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted">
 				{entity.bornOn && (
 					<div>

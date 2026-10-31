@@ -1410,5 +1410,29 @@
     "apiHelp": "Chaves, uso e a documentação para desenvolvedores.",
     "verify": "Verifique seu e-mail para avaliar e manter listas.",
     "twoFactor": "Autenticação em dois fatores"
+  },
+  "community": {
+    "suggest": {
+      "title": "Sugerir uma edição",
+      "link": "Sugerir uma edição"
+    },
+    "closed": {
+      "title": "As sugestões chegam em breve",
+      "body": "As edições da comunidade ainda não estão abertas. Volte mais tarde."
+    },
+    "quota": "{left} de {limit} envios restantes hoje",
+    "draftRestored": "Seu rascunho salvo foi restaurado.",
+    "locked": "Bloqueado:",
+    "locale": "Idioma da sua edição",
+    "sources": "URLs das fontes (uma por linha)",
+    "note": "Nota para o revisor",
+    "saveDraft": "Salvar rascunho",
+    "fields": {
+      "title": "Título",
+      "cover": "Capa",
+      "translationTitle": "Título ({locale})",
+      "synopsis": "Sinopse ({locale})",
+      "externalId": "ID {provider}"
+    }
   }
 }

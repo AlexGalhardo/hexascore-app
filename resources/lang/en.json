@@ -1410,5 +1410,29 @@
     "apiHelp": "Keys, usage and the developer docs.",
     "verify": "Verify your email to rate and keep lists.",
     "twoFactor": "Two-factor authentication"
+  },
+  "community": {
+    "suggest": {
+      "title": "Suggest an edit",
+      "link": "Suggest an edit"
+    },
+    "closed": {
+      "title": "Suggestions are coming soon",
+      "body": "Community edits are not open yet. Please check back later."
+    },
+    "quota": "{left} of {limit} submissions left today",
+    "draftRestored": "Your saved draft was restored.",
+    "locked": "Locked:",
+    "locale": "Language of your edit",
+    "sources": "Source URLs (one per line)",
+    "note": "Note for the reviewer",
+    "saveDraft": "Save draft",
+    "fields": {
+      "title": "Title",
+      "cover": "Cover",
+      "translationTitle": "Title ({locale})",
+      "synopsis": "Synopsis ({locale})",
+      "externalId": "{provider} ID"
+    }
   }
 }

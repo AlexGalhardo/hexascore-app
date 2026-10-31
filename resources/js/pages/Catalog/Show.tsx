@@ -130,6 +130,12 @@ export default function Show({
 					<CoverThumb cover={cover} alt={title} size="lg" priority />
 					<div className="grid min-w-0 gap-2">
 						<h1 className="text-3xl font-bold">{title}</h1>
+						<Link
+							href={localized(`/suggest/item/${item.id}`, locale)}
+							className="text-sm underline"
+						>
+							{t("community.suggest.link")}
+						</Link>
 						<p className="text-muted">
 							{t(`itemTypes.${item.type}`)}
 							{item.releaseDate && ` · ${item.releaseDate.slice(0, 4)}`}
