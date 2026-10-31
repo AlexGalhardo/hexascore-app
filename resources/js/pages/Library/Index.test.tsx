@@ -59,3 +59,9 @@ test("clear edition deletes the item edition", async () => {
 		.click(screen.getAllByRole("button", { name: "library.clearEdition" })[0]);
 	expect(del).toHaveBeenCalledWith("/items/i1/edition", { preserveScroll: true });
 });
+
+test("groups cards under a heading per status", () => {
+	const { container } = render(<Index {...props} filters={{ status: "", type: "", sort: "" }} />);
+	expect(container.querySelector("#status-want")?.textContent).toContain("(3)");
+	expect(container.querySelector("#status-completed")).toBeNull();
+});
