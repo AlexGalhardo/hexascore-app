@@ -294,10 +294,12 @@ Apply (`db.Tx`, vukem `https://vukem.dev/docs/database/orm` "Query builder"):
 
 1. Lock suggestion `FOR UPDATE`; check status and `version`.
 2. Lock target rows `FOR UPDATE` (ordered by id, as legacy `mergeItems`).
-3. Per field: if current ≠ `before` and no `confirm_stale` → 409; write `after`; set provenance `{source: community, source_ref: suggestion_id}`.
+3. Per field: if current ≠ `before` and no `confirm_stale` → 409; write `after`; set provenance to `community` (the SDD 01 `provenance[field]` / `*_source` shape; the `data_sources` row is inserted on first apply). The suggestion id is the audit row's `suggestion_id`, not part of the provenance value. Edition fields keep the row-level `source`.
 4. Insert one audit row per field with the actual previous value and provenance.
 5. Update suggestion, events, `contributor_stats`.
 6. `DispatchTx` `catalog.changed` and `community.notify`.
+
+Applies on one target serialise on the submit advisory lock (`pg_advisory_xact_lock` on the target) taken before step 1, so flagging rivals stale (`meta.stale`) cannot deadlock against a concurrent apply. Step 5 sets `meta.stale` on the other open suggestions of the target that touch an applied field. A cover change or an unapplied `depends_on` stops at `approved` with no catalogue write.
 
 Admin-panel catalogue edits also write `catalog_audit` (`source=admin`) in the panel transaction via `BeforeSave` (`https://vukem.dev/docs/digging-deeper/admin` "Resources"; open issue 4). `admin.AuditLog` keeps logging panel CRUD; only `catalog_audit` feeds Recent changes and revert.
 

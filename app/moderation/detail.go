@@ -22,7 +22,7 @@ var RejectReasons = []string{
 
 const maxNote = 1000
 
-// ErrApplyUnavailable means no Applier is wired yet (P4.B.2.1 provides it).
+// ErrApplyUnavailable means no Applier is wired (routes/admin.go sets community.Applier).
 var ErrApplyUnavailable = errors.New("moderation: apply service not available")
 
 // ErrNoAuthor is a clone of a suggestion whose author was deleted.
@@ -111,13 +111,18 @@ FROM suggestions WHERE id = $1`, id).Scan(&d.ID, &d.Kind, &d.TargetType, &target
 	return d, nil
 }
 
-// Approve hands the decision to the Applier (stubbed until P4.B.2.1).
+// Approve hands the decision to the Applier (community.Applier in production).
 func (q Queue) Approve(ctx context.Context, id string, version int, confirmStale bool, actor community.Actor) error {
 	if q.Applier == nil {
 		return ErrApplyUnavailable
 	}
 
-	return q.Applier.Approve(ctx, id, version, confirmStale, actor)
+	err := q.Applier.Approve(ctx, id, version, confirmStale, actor)
+	if errors.Is(err, community.ErrNotFound) {
+		return ErrNotFound
+	}
+
+	return err
 }
 
 // Reject records reason and note and moves the suggestion to rejected, all in one transaction.

@@ -61,7 +61,8 @@ func TestModerationDetailActions(t *testing.T) {
 	// Browser forms are redirected back with a flash; JSON clients see the 422.
 	admin.WithHeader("Accept", "application/json").
 		PostForm("/admin/moderation/"+id+"/reject", url.Values{"version": {"1"}}).AssertStatus(422)
-	admin.PostForm("/admin/moderation/"+id+"/approve", url.Values{"version": {"1"}}).AssertStatus(503)
+	// The seeded target item does not exist, so the apply transaction refuses it.
+	admin.PostForm("/admin/moderation/"+id+"/approve", url.Values{"version": {"1"}}).AssertStatus(409)
 	admin.PostForm("/admin/moderation/"+id+"/reject", url.Values{"version": {"1"}, "reason": {"spam"}}).
 		AssertRedirect("/admin/moderation")
 
@@ -88,5 +89,78 @@ func TestModerationBulkLimit(t *testing.T) {
 	res := admin.PostForm("/admin/moderation/bulk", url.Values{"action": {"claim"}, "ids": ids[:2]}).AssertOK().Body()
 	if strings.Count(res, "not-found") != 2 {
 		t.Fatalf("per-id results missing: %s", res)
+	}
+}
+
+func seedModerationItem(t *testing.T, app *vukemtest.App) {
+	t.Helper()
+
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := db.ExecContext(t.Context(), `INSERT INTO data_sources (code, name, licence, url)
+VALUES ('wikidata','Wikidata','CC0-1.0','https://www.wikidata.org') ON CONFLICT DO NOTHING;
+INSERT INTO items (id, type, slug, wikidata_qid, original_title, provenance)
+VALUES ('00000000-0000-0000-0000-0000000000aa','movie','old','Q1','a','{"original_title":"wikidata"}')`); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func itemTitle(t *testing.T, app *vukemtest.App) string {
+	t.Helper()
+
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var title string
+	if err := db.QueryRowContext(t.Context(),
+		`SELECT original_title FROM items WHERE id = '00000000-0000-0000-0000-0000000000aa'`).Scan(&title); err != nil {
+		t.Fatal(err)
+	}
+
+	return title
+}
+
+func TestModerationApproveApplies(t *testing.T) {
+	t.Parallel()
+
+	app := moderationApp(t, false)
+	seedModerationItem(t, app)
+	const id = "00000000-0000-7000-8000-0000000000b4"
+	seedSuggestion(t, app, id, "submitted", `{"title":{"before":"a","after":"b"}}`)
+
+	admin := browserFor(t, app, makeUser(t, app, "d4-admin@example.com", models.RoleAdmin, true))
+	admin.PostForm("/admin/moderation/"+id+"/approve", url.Values{"version": {"1"}}).AssertRedirect("/admin/moderation")
+
+	if got := itemTitle(t, app); got != "b" {
+		t.Fatalf("title after approve = %q", got)
+	}
+
+	// A second approve with the old version is stale.
+	admin.PostForm("/admin/moderation/"+id+"/approve", url.Values{"version": {"1"}}).AssertStatus(409)
+}
+
+func TestSecurity_Community_A01_ApproveNeedsModerate(t *testing.T) {
+	t.Parallel()
+
+	app := moderationApp(t, false)
+	seedModerationItem(t, app)
+	const id = "00000000-0000-7000-8000-0000000000b5"
+	seedSuggestion(t, app, id, "submitted", `{"title":{"before":"a","after":"b"}}`)
+
+	for _, role := range []string{"user", models.RoleModerator} {
+		c := browserFor(t, app, makeUser(t, app, "d5-"+role+"@example.com", role, true))
+		c.PostForm("/admin/moderation/"+id+"/approve", url.Values{"version": {"1"}}).AssertForbidden()
+		c.PostForm("/admin/moderation/bulk", url.Values{"action": {"approve"}, "ids": {id}}).AssertForbidden()
+	}
+
+	app.Client(t).PostForm("/admin/moderation/"+id+"/approve", url.Values{"version": {"1"}}).AssertRedirect("/login")
+
+	if got := itemTitle(t, app); got != "a" {
+		t.Fatalf("unauthorised approve wrote the catalogue: %q", got)
 	}
 }
