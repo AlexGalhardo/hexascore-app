@@ -174,7 +174,8 @@ VALUES ($1, 'Ana', 'ana@example.com', 'bug', 'this is a message with more than t
 	browserFor(t, app, admin).PostForm("/admin/contact-messages/"+id, url.Values{"handled": {"false", "true"}})
 
 	var handled bool
-	if err := db.QueryRowContext(t.Context(), `SELECT handled FROM contact_messages WHERE id = $1`, id).Scan(&handled); err != nil {
+	if err := db.QueryRowContext(t.Context(), `SELECT handled FROM contact_messages WHERE id = $1`, id).
+		Scan(&handled); err != nil {
 		t.Fatal(err)
 	}
 	if !handled {

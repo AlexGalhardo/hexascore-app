@@ -3,11 +3,11 @@ package routes
 import (
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
-	"github.com/AlexGalhardo/vukem/middleware"
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/router"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/appapi"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
@@ -47,11 +47,17 @@ func Status(r *router.Router, app *vukem.App) error {
 	byAPIUser := func(l ratelimit.Limiter) router.Middleware {
 		return ratelimit.Middleware(l, ratelimit.ByUser(acc.API.Name()))
 	}
+	guard := AppAuthStack(app, acc, limiters)
+	store, err := app.Cache()
+	if err != nil {
+		return err
+	}
+	idem := appapi.Idempotency(store.Store())
 	r.Group("/app/v1", func(g *router.Group) {
-		g.Use(middleware.JSONOnly(), auth.Required(acc.API))
+		g.Use(guard...)
 		g.Get("/items/{id}/me", api.Me).Name("me")
 		g.Group("", func(s *router.Group) {
-			s.Use(auth.Ability(acc.API, "status:write"))
+			s.Use(auth.Ability(acc.API, "status:write"), idem)
 			s.Put("/items/{id}/status", api.PutStatus).Name("status.put").Use(byAPIUser(statusLimit))
 			s.Delete("/items/{id}/status", api.DeleteStatus).Name("status.delete").Use(byAPIUser(statusLimit))
 			s.Put("/items/{id}/time-to-beat", api.PutTimeToBeat).Name("time-to-beat.put").Use(byAPIUser(ttbLimit))

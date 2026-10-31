@@ -1,8 +1,8 @@
 name: CI
 
-# Adapted from AlexGalhardo/vukem-marketplace-reactjs. Owner rule (2026-10-29):
-# work merges straight into main and nobody waits for this run, so it reports
-# regressions after the fact; Railway deploys main on its own.
+# Adapted from AlexGalhardo/vukem. main accepts a change only through a pull
+# request whose required checks are green (ruleset protect-main). Railway
+# deploys main on its own after that merge.
 on:
   push:
     branches: [main]
@@ -28,8 +28,22 @@ jobs:
   lint:
     name: Lint (golangci-lint, format, vet, Biome, tsc, markdownlint, commit messages)
     runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:18.6-alpine3.24@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5
+        env:
+          POSTGRES_USER: hexascore
+          POSTGRES_PASSWORD: hexascore
+          POSTGRES_DB: hexascore
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U hexascore" --health-interval 5s --health-timeout 3s --health-retries 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # commitlint compares the PR base to the head. Depth 1 only has the
+          # merge commit, so that range is an invalid revision.
+          fetch-depth: 0
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: go.mod
@@ -45,6 +59,8 @@ jobs:
         run: go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@${{ env.GOLANGCI_LINT_VERSION }} fmt --diff
       - run: go vet ./...
       - name: OpenAPI goldens
+        env:
+          DATABASE_URL: postgres://hexascore:hexascore@127.0.0.1:5432/hexascore?sslmode=disable
         run: bash scripts/openapi-check.sh
       - name: OpenAPI lint
         run: bun run openapi:lint
@@ -88,6 +104,23 @@ jobs:
           bun-version-file: package.json
       - run: bun install --frozen-lockfile --ignore-scripts
       - run: go test -race -count=1 ./...
+      # The runner's client is Postgres 16. pg_dump refuses a 18.6 server, so the
+      # integration backup drill uses the same image as the service, on PATH.
+      - name: Postgres 18 client
+        run: |
+          img='postgres:18.6-alpine3.24@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5'
+          write_client() {
+            sudo tee "/usr/local/bin/$1" >/dev/null <<EOF
+          #!/bin/sh
+          set -eu
+          ssl=
+          if [ -n "\${PGSSLMODE:-}" ]; then ssl="-e PGSSLMODE"; fi
+          exec docker run --rm -i --network host -e PGHOST -e PGPORT -e PGUSER -e PGPASSWORD -e PGDATABASE \$ssl "$img" "$1" "\$@"
+          EOF
+            sudo chmod +x "/usr/local/bin/$1"
+          }
+          write_client pg_dump
+          write_client pg_restore
       # bun is on PATH so TestPluralGolden compares Go and TypeScript output.
       - run: go test -race -count=1 -tags integration ./...
       - run: bun run test
@@ -151,9 +184,10 @@ jobs:
           curl -fsSLo osv-scanner "https://github.com/google/osv-scanner/releases/download/${OSV_SCANNER_VERSION}/osv-scanner_linux_amd64"
           echo "${OSV_SCANNER_SHA256}  osv-scanner" | sha256sum -c -
           chmod +x osv-scanner
-      - run: ./osv-scanner scan source -L go.mod -L bun.lock -L sdks/ts/bun.lock
+      - run: ./osv-scanner scan source --config=osv-scanner.toml -L go.mod -L bun.lock -L sdks/ts/bun.lock
       - run: bun install --frozen-lockfile --ignore-scripts
-      - run: bun audit --audit-level=high
+      # Same four advisories as osv-scanner.toml. No compatible patched release.
+      - run: bun audit --audit-level=high --ignore GHSA-mrhx-c7xc-m3w5 --ignore GHSA-gcqx-w48m-w2h4 --ignore GHSA-3g3m-2fjr-6pw4 --ignore GHSA-g3hv-75wg-m249
 
   setup-windows:
     name: Windows setup script and unit tests
@@ -182,7 +216,14 @@ jobs:
         run: scripts/infra/check-image.sh hexascore:ci
       - name: Smoke test
         run: |
-          docker run -d --name app -p 3000:3000 -e APP_KEY="base64:$(openssl rand -base64 32)" -e APP_URL=http://localhost:3000 hexascore:ci
+          docker run -d --name app -p 3000:3000 \
+            -e APP_KEY="base64:$(openssl rand -base64 32)" \
+            -e APP_URL=http://localhost:3000 \
+            -e STRIPE_KEY=sk_test_placeholder_ci \
+            -e STRIPE_WEBHOOK_SECRET=whsec_placeholder_ci \
+            -e STRIPE_PRICE_PRO=price_placeholder_pro \
+            -e STRIPE_PRICE_BUSINESS=price_placeholder_business \
+            hexascore:ci
           for i in $(seq 1 30); do curl -fsS localhost:3000/up && break; sleep 1; done
           # No database in this job, so readiness is 503 on "db"; only the ssr check matters here.
           curl -sS 'localhost:3000/up?checks=1' | grep -q '"ssr":"ok"'
@@ -200,6 +241,8 @@ jobs:
     name: OpenAPI (export diff, Redocly, Schemathesis)
     needs: build
     runs-on: ubuntu-24.04
+    env:
+      DATABASE_URL: postgres://hexascore:hexascore@127.0.0.1:5432/hexascore?sslmode=disable
     services:
       postgres:
         image: postgres:18.6-alpine3.24@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5
@@ -225,6 +268,23 @@ jobs:
       - run: bun install --frozen-lockfile --ignore-scripts
       - name: Redocly
         run: bunx redocly lint openapi/api-v1.json openapi/app-v1.json
+      - name: App client matches codegen
+        run: |
+          set -euo pipefail
+          export APP_KEY="base64:$(openssl rand -base64 32)"
+          out=$(mktemp)
+          docker run --rm --network host \
+            -e APP_ENV=development \
+            -e APP_KEY \
+            -e DATABASE_URL \
+            -e API_HOST- \
+            hexascore:ci codegen:client -prefix /app/v1 -o - >"$out"
+          if ! git diff --no-index --exit-code packages/app-client/src/api.ts "$out"; then
+            rm -f "$out"
+            exit 1
+          fi
+          rm -f "$out"
+          bun run --filter @hexascore/app-client typecheck test
       - name: Schemathesis against the loaded image
         run: bash qa/schemathesis/ci.sh hexascore:ci
 

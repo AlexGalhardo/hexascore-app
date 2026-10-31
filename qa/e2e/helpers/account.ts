@@ -31,13 +31,18 @@ export function newAccount(): Account {
 	};
 }
 
-// Server-rendered forms submit natively (a GET that reloads the page) when clicked before React hydrates,
-// so wait until the first form carries React props. Pages without a form only need the load event.
+// Server-rendered forms submit natively when used before React hydrates. The header
+// search is controlled: a fill before hydration is wiped, and Enter then stays put.
+// Wait until each of those forms carries React props. A page with neither just needs load.
 export async function open(page: Page, url: string): Promise<void> {
 	await page.goto(url);
 	await page.waitForFunction(() => {
-		const form = document.querySelector("main form");
-		return !form || Object.keys(form).some((key) => key.startsWith("__reactProps$"));
+		const ready = (form: Element | null) =>
+			!form || Object.keys(form).some((key) => key.startsWith("__reactProps$"));
+		return (
+			ready(document.querySelector("main form")) &&
+			ready(document.querySelector("header form"))
+		);
 	});
 }
 

@@ -4,14 +4,13 @@ import (
 	"context"
 
 	"github.com/AlexGalhardo/vukem"
-	"github.com/AlexGalhardo/vukem/api"
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/authz"
-	"github.com/AlexGalhardo/vukem/middleware"
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/router"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/appapi"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	"github.com/AlexGalhardo/hexascore-app/app/library"
@@ -28,11 +27,6 @@ func Lists(r *router.Router, app *vukem.App) error {
 	}
 
 	limiters, err := limits.Factory(app)
-	if err != nil {
-		return err
-	}
-
-	c, err := app.Cache()
 	if err != nil {
 		return err
 	}
@@ -68,16 +62,30 @@ func Lists(r *router.Router, app *vukem.App) error {
 	r.Put("/lists/{id}/order", web.Reorder).Name("lists.order").Use(required, verified, byUser)
 
 	h := controllers.NewLists(svc, gate, acc.API.Name(), true)
-	idem := api.Idempotency(c.Store(), api.IdempotencyOptions{Methods: []string{"POST", "PATCH", "PUT", "DELETE"}})
+	stack, err := AppWriteStack(app, acc, limiters,
+		auth.Ability(acc.API, "lists:write"),
+		ratelimit.Middleware(limit, ratelimit.ByUser(acc.API.Name())),
+	)
+	if err != nil {
+		return err
+	}
 	r.Group("/app/v1", func(g *router.Group) {
-		g.Use(middleware.JSONOnly(), auth.Required(acc.API), auth.Ability(acc.API, "lists:write"),
-			ratelimit.Middleware(limit, ratelimit.ByUser(acc.API.Name())), idem)
+		g.Use(stack...)
 		g.Post("/lists", h.Create).Name("lists.create")
 		g.Patch("/lists/{id}", h.Update).Name("lists.update")
 		g.Delete("/lists/{id}", h.Delete).Name("lists.delete")
 		g.Put("/lists/{id}/items/{itemId}", h.AddItem).Name("lists.items.put")
 		g.Delete("/lists/{id}/items/{itemId}", h.RemoveItem).Name("lists.items.delete")
 		g.Put("/lists/{id}/order", h.Reorder).Name("lists.order")
+	}).Name("app.v1.")
+
+	// Reads use catalog:read, not the write group that requires lists:write (SDD 14 §6.3).
+	reads := appapi.NewLists(svc, gate, acc.API.Name())
+	read := AppAuthStack(app, acc, limiters, auth.Ability(acc.API, "catalog:read"))
+	r.Group("/app/v1", func(g *router.Group) {
+		g.Use(read...)
+		g.Get("/me/lists", reads.Index).Name("lists.index")
+		g.Get("/lists/{id}", reads.Show).Name("lists.show")
 	}).Name("app.v1.")
 
 	return nil

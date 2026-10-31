@@ -197,8 +197,8 @@ No `/metrics` endpoint at launch (D-35): metrics go to Grafana Cloud over OTLP o
 | --- | --- | --- | --- |
 | GET | `/up` | none | liveness; `vukem.health` [V-route] |
 | GET | `/up?checks=1` | none | readiness; returns `ok`/`fail` per check, never error text [L-sec] |
-| POST | `/app/v1/client-errors` | none (opt-in in the app) | body `{appVersion, versionCode, androidApi, screen, message, stack≤8KB}` → 202; over 16 KB → 413; 10/min per IP; no PII; 7 days |
-| POST | `/app/v1/client-metrics` | none (opt-in cookie banner) | body `{name, value, page, locale}` → 202; over 4 KB → 413; 60/min per IP; no PII; 7 days |
+| POST | `/app/v1/client-errors` | none (opt-in in the app) | body `{appVersion, versionCode, androidApi, screen, message, stack≤8KB}` → 204; over 16 KB → 413; 10/min per IP; no PII; 7 days |
+| POST | `/app/v1/client-metrics` | none (opt-in cookie banner) | body `{name, value, page, locale}` → 204; over 4 KB → 413; 60/min per IP; no PII; 7 days |
 
 ## 7. Behaviour and algorithms
 

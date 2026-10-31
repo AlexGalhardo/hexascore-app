@@ -1,11 +1,15 @@
 import { router } from "@inertiajs/react";
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 import StarRating from "../rating/StarRating";
-import RatingsDialog from "./RatingsDialog";
 import { CATEGORY_KEYS, type ItemType, type RatingSummary } from "./types";
+
+const RatingsDialog = lazy(() => import("./RatingsDialog"));
+
+const seeScoresButton =
+	"inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-surface";
 
 interface Props {
 	itemId: string;
@@ -25,6 +29,7 @@ export default function RatingPanel({ itemId, type, summary, mine, canWrite }: P
 		Object.fromEntries(keys.map((k) => [k, mine?.[k] ?? null])),
 	);
 	const [busy, setBusy] = useState(false);
+	const [scoresOpen, setScoresOpen] = useState(false);
 	const complete = keys.every((k) => values[k] !== null);
 
 	const visit = { preserveScroll: true, onFinish: () => setBusy(false) };
@@ -68,10 +73,29 @@ export default function RatingPanel({ itemId, type, summary, mine, canWrite }: P
 					</dl>
 				</>
 			)}
-			<RatingsDialog
-				itemId={itemId}
-				categoryLabels={keys.map((k) => t(`categories.${type}.${k}`))}
-			/>
+			{scoresOpen ? (
+				<Suspense
+					fallback={
+						<button type="button" className={seeScoresButton} disabled>
+							{t("item.seeUserScores")}
+						</button>
+					}
+				>
+					<RatingsDialog
+						itemId={itemId}
+						categoryLabels={keys.map((k) => t(`categories.${type}.${k}`))}
+						initialOpen
+					/>
+				</Suspense>
+			) : (
+				<button
+					type="button"
+					className={seeScoresButton}
+					onClick={() => setScoresOpen(true)}
+				>
+					{t("item.seeUserScores")}
+				</button>
+			)}
 			<h3 className="font-semibold">{t("ratings.title")}</h3>
 			{canWrite ? (
 				<>

@@ -40,8 +40,17 @@ func Web(r *router.Router, app *vukem.App) error {
 			appmiddleware.UpgradeInsecure(app.Config.IsProduction(), app.Config.URL),
 		),
 		// The browser posts violation reports with no session and no CSRF token.
-		SessionBypass: []string{"POST /csp-reports"},
-		CSRFBypass:    []string{"POST /csp-reports", "POST /stripe/webhook"},
+		SessionBypass: []string{
+			"POST /csp-reports",
+			"POST /app/v1/client-errors",
+			"POST /app/v1/client-metrics",
+		},
+		CSRFBypass: []string{
+			"POST /csp-reports",
+			"POST /stripe/webhook",
+			"POST /app/v1/client-errors",
+			"POST /app/v1/client-metrics",
+		},
 		I18n: &i18n.MiddlewareConfig{
 			Order:        []i18n.Source{i18n.SourcePath},
 			Locales:      []string{"en", "pt-BR", "es"},

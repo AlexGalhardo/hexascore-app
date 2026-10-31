@@ -43,16 +43,31 @@ func TestCommunitySchema(t *testing.T) {
 	}
 
 	var urls models.TextArray
-	if err := db.QueryRowContext(ctx, `SELECT $1::text[]`, models.TextArray{"https://a.example/a,b", "https://b.example"}).Scan(&urls); err != nil {
+	if err := db.QueryRowContext(ctx, `SELECT $1::text[]`, models.TextArray{"https://a.example/a,b", "https://b.example"}).
+		Scan(&urls); err != nil {
 		t.Fatal(err)
 	}
 	if len(urls) != 2 || urls[0] != "https://a.example/a,b" || urls[1] != "https://b.example" {
 		t.Fatalf("source urls = %#v", urls)
 	}
 
-	rolled, err := m.Rollback(ctx, 1)
-	if err != nil || len(rolled) != 1 || rolled[0] != "20261030130000_create_community_tables" {
-		t.Fatalf("rollback: %v %v", rolled, err)
+	// Later migrations sit after the community tables, so one step is no longer
+	// that migration. Walk until the community migration itself is reverted.
+	const community = "20261030130000_create_community_tables"
+	var rolled []string
+	for range 16 {
+		step, err := m.Rollback(ctx, 1)
+		if err != nil || len(step) != 1 {
+			t.Fatalf("rollback: %v %v", step, err)
+		}
+
+		rolled = append(rolled, step[0])
+		if step[0] == community {
+			break
+		}
+	}
+	if len(rolled) == 0 || rolled[len(rolled)-1] != community {
+		t.Fatalf("rollback: %v, want %s", rolled, community)
 	}
 	var gone *string
 	if err := db.QueryRowContext(ctx, `SELECT to_regclass('public.suggestions')`).Scan(&gone); err != nil {

@@ -36,7 +36,9 @@ func TestAPIWebhooks(t *testing.T) {
 	}
 
 	second := client.PostJSON("/api/v1/webhooks", map[string]any{
-		"url": "https://1.0.0.1/hook", "events": []string{"item.created", "item.deleted"}, "itemTypes": []string{"movies"},
+		"url":       "https://1.0.0.1/hook",
+		"events":    []string{"item.created", "item.deleted"},
+		"itemTypes": []string{"movies"},
 	}).AssertCreated()
 	var two struct {
 		ID string `json:"id"`
@@ -97,7 +99,8 @@ func TestSecurity_A02_WebhookSecretEncrypted(t *testing.T) {
 	res.JSON(&body)
 
 	var stored string
-	if err := r.acc.DB.QueryRowContext(t.Context(), `SELECT secret_enc FROM webhook_endpoints WHERE id = $1`, body.ID).Scan(&stored); err != nil {
+	if err := r.acc.DB.QueryRowContext(t.Context(), `SELECT secret_enc FROM webhook_endpoints WHERE id = $1`, body.ID).
+		Scan(&stored); err != nil {
 		t.Fatal(err)
 	}
 
@@ -109,7 +112,7 @@ func TestSecurity_A02_WebhookSecretEncrypted(t *testing.T) {
 		t.Fatal("secret column starts with whsec_")
 	}
 
-	plain, err := r.app.App.Crypt.Open(stored, webhooks.SecretAD)
+	plain, err := r.app.Crypt.Open(stored, webhooks.SecretAD)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -139,7 +142,8 @@ func setPlan(t *testing.T, r *keyRig, email, plan string) {
 	t.Helper()
 
 	var id int64
-	if err := r.acc.DB.QueryRowContext(t.Context(), `SELECT id FROM users WHERE email = $1`, email).Scan(&id); err != nil {
+	if err := r.acc.DB.QueryRowContext(t.Context(), `SELECT id FROM users WHERE email = $1`, email).
+		Scan(&id); err != nil {
 		t.Fatal(err)
 	}
 

@@ -47,6 +47,9 @@ func queryInts(t *testing.T, r *listRig, q string, args ...any) []int {
 		}
 		out = append(out, n)
 	}
+	if err := rows.Err(); err != nil {
+		t.Fatal(err)
+	}
 
 	return out
 }

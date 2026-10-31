@@ -14,8 +14,8 @@ import (
 const (
 	// SessionClientMaxAge is how long a session may keep the recorded IP and user agent.
 	SessionClientMaxAge = 30 * 24 * time.Hour
-	// ClientReportMaxAge is how long a client_reports row may live (SDD 12). The table is created later;
-	// until then the prune is a no-op.
+	// ClientReportMaxAge is how long a client_reports row may live (SDD 12).
+	// pruneClientReports no-ops until the table exists.
 	ClientReportMaxAge = 7 * 24 * time.Hour
 )
 

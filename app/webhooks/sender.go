@@ -68,7 +68,14 @@ func OpenApp(app *vukem.App) (*Service, error) {
 
 // Open builds a service. enc opens secret_enc. mailer may be nil in a test
 // that does not exhaust an endpoint. log may be nil.
-func Open(db *database.DB, enc *crypt.Encrypter, mailer *mail.Mailer, now func() time.Time, log *slog.Logger, opt Options) (*Service, error) {
+func Open(
+	db *database.DB,
+	enc *crypt.Encrypter,
+	mailer *mail.Mailer,
+	now func() time.Time,
+	log *slog.Logger,
+	opt Options,
+) (*Service, error) {
 	if now == nil {
 		now = time.Now
 	}
@@ -215,13 +222,21 @@ func lookupEndpoint(ctx context.Context, db *database.DB, enc *crypt.Encrypter, 
 }
 
 func disableEndpoint(ctx context.Context, db *database.DB, id string) error {
-	_, err := db.ExecContext(ctx, `UPDATE webhook_endpoints SET disabled_at = now() WHERE id = $1 AND disabled_at IS NULL`, id)
+	_, err := db.ExecContext(
+		ctx,
+		`UPDATE webhook_endpoints SET disabled_at = now() WHERE id = $1 AND disabled_at IS NULL`,
+		id,
+	)
 
 	return err
 }
 
 func resetStreak(ctx context.Context, db *database.DB, id string) error {
-	_, err := db.ExecContext(ctx, `UPDATE webhook_endpoints SET failure_streak = 0 WHERE id = $1 AND failure_streak <> 0`, id)
+	_, err := db.ExecContext(
+		ctx,
+		`UPDATE webhook_endpoints SET failure_streak = 0 WHERE id = $1 AND failure_streak <> 0`,
+		id,
+	)
 
 	return err
 }
@@ -246,7 +261,11 @@ RETURNING failure_streak`, id).Scan(&streak)
 		return nil
 	}
 
-	if _, err := s.db.ExecContext(ctx, `UPDATE webhook_endpoints SET disabled_at = now() WHERE id = $1 AND disabled_at IS NULL`, id); err != nil {
+	if _, err := s.db.ExecContext(
+		ctx,
+		`UPDATE webhook_endpoints SET disabled_at = now() WHERE id = $1 AND disabled_at IS NULL`,
+		id,
+	); err != nil {
 		return err
 	}
 
@@ -255,7 +274,8 @@ RETURNING failure_streak`, id).Scan(&streak)
 	}
 
 	var email string
-	err = s.db.QueryRowContext(ctx, `SELECT u.email FROM webhook_endpoints e JOIN users u ON u.id = e.user_id WHERE e.id = $1`, id).Scan(&email)
+	err = s.db.QueryRowContext(ctx, `SELECT u.email FROM webhook_endpoints e JOIN users u ON u.id = e.user_id WHERE e.id = $1`, id).
+		Scan(&email)
 	if err != nil || email == "" {
 		return err
 	}

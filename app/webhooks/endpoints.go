@@ -1,3 +1,4 @@
+// Package webhooks stores endpoints and delivers item-change events.
 package webhooks
 
 import (
@@ -22,6 +23,10 @@ import (
 var SecretAD = []byte("webhook_endpoints.secret_enc")
 
 const maxURLLen = 2048
+
+// lookupTimeout bounds DNS at create time. A slow resolver must fail closed
+// as ErrURL. An unbounded lookup holds the request until the OS gives up.
+const lookupTimeout = 2 * time.Second
 
 // Sentinel errors the HTTP layer maps to problem responses.
 var (
@@ -85,7 +90,10 @@ func PublicURL(ctx context.Context, raw string, resolve Resolver) error {
 		}
 	}
 
-	ips, err := resolve(ctx, "ip", host)
+	lookupCtx, cancel := context.WithTimeout(ctx, lookupTimeout)
+	defer cancel()
+
+	ips, err := resolve(lookupCtx, "ip", host)
 	if err != nil || len(ips) == 0 {
 		return ErrURL
 	}
@@ -101,8 +109,15 @@ func PublicURL(ctx context.Context, raw string, resolve Resolver) error {
 
 // Create stores one endpoint for a pro or business user. The plaintext secret
 // is returned once and only the app.Crypt ciphertext is written.
-func Create(ctx context.Context, db *database.DB, enc *crypt.Encrypter, userID int64, plan string, in Draft) (Endpoint, error) {
-	cap, ok := planCap(plan)
+func Create(
+	ctx context.Context,
+	db *database.DB,
+	enc *crypt.Encrypter,
+	userID int64,
+	plan string,
+	in Draft,
+) (Endpoint, error) {
+	limit, ok := planCap(plan)
 	if !ok {
 		return Endpoint{}, ErrPlanRequired
 	}
@@ -151,11 +166,12 @@ func Create(ctx context.Context, db *database.DB, enc *crypt.Encrypter, userID i
 		}
 
 		var n int
-		if err := tx.QueryRowContext(ctx, `SELECT count(*) FROM webhook_endpoints WHERE user_id = $1`, userID).Scan(&n); err != nil {
+		if err := tx.QueryRowContext(ctx, `SELECT count(*) FROM webhook_endpoints WHERE user_id = $1`, userID).
+			Scan(&n); err != nil {
 			return err
 		}
 
-		if n >= cap {
+		if n >= limit {
 			return ErrLimit
 		}
 
@@ -163,7 +179,8 @@ func Create(ctx context.Context, db *database.DB, enc *crypt.Encrypter, userID i
 VALUES ($1, $2, $3, $4::text[], $5::text[], $6)
 RETURNING created_at`,
 			row.ID, userID, row.URL, models.TextArray(events), models.TextArray(types), enc.Seal([]byte(secret), SecretAD),
-		).Scan(&row.CreatedAt); err != nil {
+		).
+			Scan(&row.CreatedAt); err != nil {
 			return err
 		}
 
@@ -261,8 +278,8 @@ var allowedTypes = map[string]struct{}{
 	"games": {}, "movies": {}, "series": {}, "books": {},
 }
 
-func oneOf(values []string, allowed map[string]struct{}, max int) ([]string, error) {
-	if len(values) == 0 || len(values) > max {
+func oneOf(values []string, allowed map[string]struct{}, bound int) ([]string, error) {
+	if len(values) == 0 || len(values) > bound {
 		return nil, ErrInvalid
 	}
 

@@ -38,6 +38,10 @@ app_env=(
 	-e STRIPE_PRICE_PRO=price_placeholder_pro
 	-e STRIPE_PRICE_BUSINESS=price_placeholder_business
 	-e MAIL_MAILER=log
+	# Host network sees the scan container on the docker bridge. Without this,
+	# X-Forwarded-For is ignored and every call shares the 120/min IP bucket,
+	# so the missing-Authorization check gets 429 instead of 401.
+	-e TRUSTED_PROXIES=172.16.0.0/12
 )
 
 cleanup() {
@@ -49,11 +53,11 @@ docker run --rm --network host "${app_env[@]}" "$image" migrate
 
 docker run -i --rm --network host -e PGPASSWORD=hexascore "$pg_image" \
 	psql -h 127.0.0.1 -U hexascore -d hexascore -v ON_ERROR_STOP=1 <<SQL
-INSERT INTO users (name, email, password, email_verified_at)
-VALUES ('CI Scan', 'schemathesis-ci@hexascore.test', 'not-a-login', now())
+INSERT INTO users (name, email, password, email_verified_at, created_at, updated_at)
+VALUES ('CI Scan', 'schemathesis-ci@hexascore.test', 'not-a-login', now(), now(), now())
 RETURNING id \gset
-INSERT INTO subscriptions (user_id, stripe_subscription_id, status, price_id, plan, provider, state, current_period_end)
-VALUES (:id, 'sub_ci_openapi', 'active', 'price_business', 'business', 'stripe', 'active', now() + interval '365 days');
+INSERT INTO subscriptions (user_id, stripe_subscription_id, status, price_id, plan, provider, state, current_period_end, created_at, updated_at)
+VALUES (:id, 'sub_ci_openapi', 'active', 'price_business', 'business', 'stripe', 'active', now() + interval '365 days', now(), now());
 INSERT INTO api_keys (id, user_id, name, prefix, hash)
 VALUES (gen_random_uuid(), :id, 'ci', '${prefix}', '${key_hash}');
 INSERT INTO access_tokens (id, user_id, name, hash, abilities, created_at)
@@ -70,5 +74,11 @@ for _ in $(seq 1 40); do
 done
 curl -fsS "http://127.0.0.1:${port}/up" >/dev/null
 
-HX_TEST_KEY="$key" QA_BASE_URL="http://127.0.0.1:${port}" qa/schemathesis/run.sh openapi/api-v1.json
-HX_TEST_KEY="$app_token" QA_BASE_URL="http://127.0.0.1:${port}" qa/schemathesis/run.sh openapi/app-v1.json
+HX_TEST_KEY="$key" QA_BASE_URL="http://127.0.0.1:${port}" bash qa/schemathesis/run.sh openapi/api-v1.json
+HX_TEST_KEY="$app_token" QA_BASE_URL="http://127.0.0.1:${port}" bash qa/schemathesis/run.sh openapi/app-v1.json
+
+# Anonymous search, 1 rps, under the 60/min IP limit. Host network reaches the app on 127.0.0.1.
+docker run --rm --network host \
+	-e BASE_URL="http://127.0.0.1:${port}" \
+	-v "$root/qa:/qa" \
+	grafana/k6:2.3.0 run /qa/k6/app-v1.js

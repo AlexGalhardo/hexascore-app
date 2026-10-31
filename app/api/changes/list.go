@@ -85,7 +85,15 @@ LIMIT $5`, f.Since.UTC(), f.ItemType, afterAt, afterID, f.Limit+1)
 	for rows.Next() {
 		var row Row
 		var fields string
-		if err := rows.Scan(&row.ID, &row.ItemID, &row.ItemType, &row.Action, &fields, &row.MergedInto, &row.ChangedAt); err != nil {
+		if err := rows.Scan(
+			&row.ID,
+			&row.ItemID,
+			&row.ItemType,
+			&row.Action,
+			&fields,
+			&row.MergedInto,
+			&row.ChangedAt,
+		); err != nil {
 			return nil, false, fmt.Errorf("api changes: scan: %w", err)
 		}
 		row.Fields = splitFields(fields)

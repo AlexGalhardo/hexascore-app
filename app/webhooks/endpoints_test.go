@@ -2,8 +2,10 @@ package webhooks
 
 import (
 	"context"
+	"errors"
 	"net/netip"
 	"testing"
+	"time"
 )
 
 func TestPublicURL(t *testing.T) {
@@ -44,6 +46,23 @@ func TestPublicURL(t *testing.T) {
 	}
 }
 
+func TestPublicURLLookupTimeout(t *testing.T) {
+	resolve := func(ctx context.Context, _, _ string) ([]netip.Addr, error) {
+		<-ctx.Done()
+		return nil, ctx.Err()
+	}
+
+	start := time.Now()
+	err := PublicURL(context.Background(), "https://hooks.example/hook", resolve)
+	if !errorsIsURL(err) {
+		t.Fatalf("PublicURL = %v, want ErrURL", err)
+	}
+
+	if elapsed := time.Since(start); elapsed > 3*time.Second {
+		t.Fatalf("lookup took %s, want it bounded by lookupTimeout", elapsed)
+	}
+}
+
 func errorsIsURL(err error) bool {
-	return err == ErrURL
+	return errors.Is(err, ErrURL)
 }

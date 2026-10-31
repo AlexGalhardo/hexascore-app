@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"strings"
 )
@@ -64,7 +65,7 @@ func quoteArrayElem(v string) string {
 	if v == "" || strings.EqualFold(v, "NULL") || strings.ContainsAny(v, "{},\"\\ \t\n\r") {
 		var b strings.Builder
 		b.WriteByte('"')
-		for i := 0; i < len(v); i++ {
+		for i := range len(v) {
 			if v[i] == '"' || v[i] == '\\' {
 				b.WriteByte('\\')
 			}
@@ -94,7 +95,7 @@ func parseTextArray(s string) (TextArray, error) {
 				c := body[i]
 				if c == '\\' {
 					if i+1 >= len(body) {
-						return nil, fmt.Errorf("models: truncated text[] escape")
+						return nil, errors.New("models: truncated text[] escape")
 					}
 					elem.WriteByte(body[i+1])
 					i += 2
@@ -109,7 +110,7 @@ func parseTextArray(s string) (TextArray, error) {
 				i++
 			}
 			if !closed {
-				return nil, fmt.Errorf("models: unterminated text[] quote")
+				return nil, errors.New("models: unterminated text[] quote")
 			}
 			out = append(out, elem.String())
 		} else {
@@ -119,7 +120,7 @@ func parseTextArray(s string) (TextArray, error) {
 			}
 			raw := body[i:j]
 			if raw == "NULL" {
-				return nil, fmt.Errorf("models: null element in text[]")
+				return nil, errors.New("models: null element in text[]")
 			}
 			out = append(out, raw)
 			i = j
@@ -130,7 +131,7 @@ func parseTextArray(s string) (TextArray, error) {
 			}
 			i++
 			if i == len(body) {
-				return nil, fmt.Errorf("models: trailing comma in text[]")
+				return nil, errors.New("models: trailing comma in text[]")
 			}
 		}
 	}
