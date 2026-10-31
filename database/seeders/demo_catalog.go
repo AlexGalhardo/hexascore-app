@@ -97,6 +97,10 @@ VALUES ('hexascore', 'HexaScore demo data', 'proprietary', 'https://hexascore.ap
 		}
 	}
 
+	if err := seedDemoCovers(ctx, tx); err != nil {
+		return fmt.Errorf("seed covers: %w", err)
+	}
+
 	if err := seedDemoRatings(ctx, tx); err != nil {
 		return fmt.Errorf("seed ratings: %w", err)
 	}
@@ -387,4 +391,15 @@ VALUES ($1, $2, $3, $4, $5, $6, $7, 2000 + $8::int, 'paperback', 'hexascore')`,
 	}
 
 	return nil
+}
+
+// seedDemoCovers gives every demo item one of six placeholder SVGs per type, shipped in resources/public/covers,
+// so screenshots and e2e see real images without a bucket.
+func seedDemoCovers(ctx context.Context, tx *database.Tx) error {
+	_, err := tx.ExecContext(ctx, `UPDATE items SET
+  cover_key = 'covers/demo-' || type || '-' || (abs(hashtext(id::text)) % 6) || '.svg',
+  cover_thumb_key = 'covers/demo-' || type || '-' || (abs(hashtext(id::text)) % 6) || '-t.svg'
+WHERE provenance @> '{"demo":"true"}'`)
+
+	return err
 }

@@ -20,6 +20,7 @@ import (
 	"github.com/AlexGalhardo/vukem/uuid"
 	"github.com/AlexGalhardo/vukem/web"
 
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
 	"github.com/AlexGalhardo/hexascore-app/internal/search"
@@ -54,6 +55,7 @@ type SearchHit struct {
 	Path           string               `json:"path"`
 	MatchedTitle   string               `json:"matchedTitle,omitempty"`
 	MatchedEdition *search.EditionMatch `json:"matchedEdition,omitempty"`
+	Cover          *catalog.Cover       `json:"cover"`
 }
 
 // SearchGroup is one type's block of the grouped page.
@@ -305,6 +307,10 @@ func (h *Search) run(ctx context.Context, q search.Query, prefix string) (search
 		out.Groups = append(out.Groups, sg)
 	}
 
+	if err := h.attachCovers(ctx, &out); err != nil {
+		return searchPage{}, err
+	}
+
 	if q.Page == 1 && len(q.Types) == 0 && !res.TooShort {
 		ents, err := h.searcher.SearchEntities(ctx, search.EntityQuery{
 			Text: q.Text, Locale: q.Locale, PerPage: entityLimit, Audience: search.AudienceSite,
@@ -392,7 +398,7 @@ func (h *Search) Suggest(c *web.Ctx) error {
 			}
 
 			if r.ThumbKey != "" {
-				it.CoverThumbURL = "/covers/" + strings.TrimPrefix(r.ThumbKey, "covers/")
+				it.CoverThumbURL = catalog.CoverURL(r.ThumbKey)
 			}
 
 			if section, ok := itemSection[r.Kind]; ok {
@@ -489,6 +495,42 @@ func LegacySuggest(c *web.Ctx) error {
 	}
 
 	http.Redirect(c.Writer(), c.Request(), target, http.StatusPermanentRedirect)
+
+	return nil
+}
+
+// attachCovers fills Cover on every hit of the page with one query.
+func (h *Search) attachCovers(ctx context.Context, out *searchPage) error {
+	var hits []*SearchHit
+	for i := range out.Results {
+		hits = append(hits, &out.Results[i])
+	}
+	for g := range out.Groups {
+		for i := range out.Groups[g].Items {
+			hits = append(hits, &out.Groups[g].Items[i])
+		}
+	}
+	if len(hits) == 0 {
+		return nil
+	}
+
+	ids := make([]string, len(hits))
+	for i, hit := range hits {
+		ids[i] = hit.ID
+	}
+
+	db, err := h.app.DB()
+	if err != nil {
+		return err
+	}
+
+	covers, err := catalog.CoversFor(ctx, db, ids)
+	if err != nil {
+		return err
+	}
+	for _, hit := range hits {
+		hit.Cover = covers[hit.ID]
+	}
 
 	return nil
 }

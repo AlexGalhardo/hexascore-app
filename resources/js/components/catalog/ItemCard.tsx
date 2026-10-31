@@ -1,13 +1,14 @@
 import { Link } from "@inertiajs/react";
 import { useT } from "../../lib/useT";
+import CoverThumb from "../CoverThumb";
 import type { Highlight } from "./SectionHighlights";
 
-// Covers wait for the cover URL builder; the card is text only until then.
 export default function ItemCard({ item, href }: { item: Highlight; href: string }) {
 	const t = useT();
 
 	return (
-		<li className="flex items-baseline gap-3 py-2">
+		<li className="flex items-center gap-3 py-2">
+			<CoverThumb cover={item.cover} alt="" size="md" />
 			<Link href={href} className="min-w-0 flex-1 truncate font-medium">
 				{item.title}
 			</Link>
