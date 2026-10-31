@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **community:** `/suggest/new/{domain}` page to propose a new record or report a duplicate (merge request), drafts only (P4.A.3.2)
 - **community:** Suggestion status page, My suggestions list, and submit and withdraw actions for the author; admins can view, others get 404 (P4.A.3.3)
 - **repo:** `scripts/ci/local.sh` runs every `ci.yml` job except e2e locally, in parallel, on a clean checkout of HEAD with isolated databases, ports and compose project; `qa/schemathesis/ci.sh` reads `DATABASE_URL` and works on Docker Desktop (QA-ci-local-script)
+- **community:** SuggestEdit edits the release date (with precision) and relation fields (genres, creators, organizations, franchise, platforms) as typed changes, with translated precision and role names (P4.A.3.1d)
 
 ### Changed
 
@@ -22,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **search:** A search backend timeout degrades to an empty results page with a notice (HTML) or a 503 problem with `Retry-After` (JSON) instead of HTTP 500 (FIX-search-timeout-500)
 - **api:** Community problem codes (`suggestion-*`, `field-locked`, `stale-before`, `invalid-transition`, `community-submissions-closed`, `validation`) resolve at `/problems/{code}` and are documented in the errors page (FIX-community-problem-codes)
 - **auth:** Login and signup forms post their named fields, the signed form token and `remember` without JavaScript (FIX-nojs-auth-post)
 - **mobile:** The catalogue copy script emits Biome-formatted JSON; committed copies refreshed (P5.A.1.1)
