@@ -1434,6 +1434,14 @@
       "translationTitle": "Title ({locale})",
       "synopsis": "Synopsis ({locale})",
       "externalId": "{provider} ID"
+    },
+    "create": {
+      "title": "Suggest a new record",
+      "newRecord": "New record",
+      "reportDuplicate": "Report a duplicate",
+      "mergeHelp": "Name the duplicate and the {domain} record to keep. Both must be the same type. A moderator decides.",
+      "mergeSource": "ID of the duplicate record",
+      "mergeDest": "ID of the record to keep"
     }
   }
 }

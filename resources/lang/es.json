@@ -1434,6 +1434,14 @@
       "translationTitle": "Título ({locale})",
       "synopsis": "Sinopsis ({locale})",
       "externalId": "ID de {provider}"
+    },
+    "create": {
+      "title": "Sugerir un nuevo registro",
+      "newRecord": "Nuevo registro",
+      "reportDuplicate": "Informar un duplicado",
+      "mergeHelp": "Indica el duplicado y el registro ({domain}) que debe quedar. Ambos deben ser del mismo tipo. Un moderador decide.",
+      "mergeSource": "ID del registro duplicado",
+      "mergeDest": "ID del registro que se conserva"
     }
   }
 }

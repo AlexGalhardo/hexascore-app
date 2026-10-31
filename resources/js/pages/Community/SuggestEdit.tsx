@@ -1,6 +1,7 @@
 import { router, usePage } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
 import FieldEditor from "../../components/community/FieldEditor";
+import { asText, editable, fieldLabel as label } from "../../components/community/fields";
 import Seo from "../../components/Seo";
 import { useT } from "../../lib/useT";
 
@@ -26,28 +27,6 @@ interface Props {
 	quota?: { limit: number; used: number; left: number };
 	draft?: Draft | null;
 }
-
-type Translate = (key: string, params?: Record<string, string | number>) => string;
-
-// Relation and date fields need their own editors; the scalar text ones are editable here.
-const editable = (f: string) =>
-	f === "title" ||
-	f === "cover" ||
-	f.startsWith("translations.") ||
-	f.startsWith("synopsis.") ||
-	f.startsWith("external_ids.");
-
-function label(t: Translate, f: string): string {
-	if (f.startsWith("translations."))
-		return t("community.fields.translationTitle", { locale: f.split(".")[1] });
-	if (f.startsWith("synopsis."))
-		return t("community.fields.synopsis", { locale: f.split(".")[1] });
-	if (f.startsWith("external_ids."))
-		return t("community.fields.externalId", { provider: f.split(".")[1] });
-	return t(`community.fields.${f}`);
-}
-
-const asText = (v: unknown): string => (typeof v === "string" ? v : "");
 
 export default function SuggestEdit({
 	open,
