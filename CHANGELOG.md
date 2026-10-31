@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- `GET /covers/{key}` streams imported covers from the private bucket with `Cache-Control: public, max-age=31536000, immutable`; static demo SVGs still win.
+- Cover placeholder and half-star no longer emit inline `style` attributes (CSP `style-src-attr` violation, Lighthouse best-practices).
+- Passkey e2e uses a `localhost` origin whose port matches the QA stack (`APP_URL` follows `QA_PORT` in `docker-compose.yml`).
+- App client regenerated for the item `type` enum.
+- e2e specs aligned with the redesigned header; Biome `innerText` warnings removed.
+
 ## [0.12.0] - 2026-10-31
 
 ### Added
