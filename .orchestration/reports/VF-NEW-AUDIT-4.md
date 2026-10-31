@@ -18,3 +18,4 @@ re-run: `go test -count=1 -run TestInertia ./internal/cli/` ok
 checked: all three starters (react, vue, svelte) set and clear the attribute; removal in `.finally` so a failed mount does not leave the page styled as pending; CSS-only hook keeps the CSP strict; docs section
 fixes: branch merged origin/main, last-updated.json regenerated; no code change
 PR: #116
+PR: #116 squash c7b5efe4 (33/33)

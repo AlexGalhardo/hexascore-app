@@ -11,9 +11,9 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | --- | --- | --- | --- |
 | VF-062 | 2026-10-30 | low | open |
 | VF-NEW-AUDIT-1 | 2026-10-31 | medium | fixed on main, unreleased (PR #107) |
-| VF-NEW-AUDIT-2 | 2026-10-31 | low | open |
+| VF-NEW-AUDIT-2 | 2026-10-31 | low | fixed on main, unreleased (PR #115, `vukem.WithName`, starter default) |
 | VF-NEW-AUDIT-3 | 2026-10-31 | medium | fixed on main, unreleased (PR #109) |
-| VF-NEW-AUDIT-4 | 2026-10-31 | low | open |
+| VF-NEW-AUDIT-4 | 2026-10-31 | low | fixed on main, unreleased (PR #116, `data-hydrating` hook in the Inertia scaffolds) |
 | VF-NEW-AUDIT-5 | 2026-10-31 | medium | fixed on main, unreleased (PR #110) |
 | VF-NEW-AUDIT-6 | 2026-10-31 | medium | fixed on main, unreleased (PR #105) |
 | VF-NEW-P2.H.3.1 | 2026-10-31 | low | open |

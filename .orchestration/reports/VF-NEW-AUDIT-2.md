@@ -18,3 +18,4 @@ re-run: `go test -count=1 -run 'TestWithNameIsTheDefaultOfAppName|TestWriteStart
 checked: APP_NAME still wins (test), option only fills the unset variable after config.Load, starter name charset cannot break the Go string literal, docs (new reference, configuration)
 fixes: branch merged origin/main (app.go options conflict: kept both `name` and `fuzzAuth`), last-updated.json regenerated; no code change
 PR: #115
+PR: #115 squash 01ca804a (33/33)
