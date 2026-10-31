@@ -56,7 +56,7 @@ func SaveDraft(
 
 	changes := make(map[string]storedChange, len(in.Changes))
 	for field, c := range in.Changes {
-		changes[field] = storedChange{Before: c.Before, After: c.After, Add: c.Add, Remove: c.Remove}
+		changes[field] = storedChange(c)
 	}
 
 	raw, err := json.Marshal(changes)
