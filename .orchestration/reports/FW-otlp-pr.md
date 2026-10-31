@@ -19,3 +19,5 @@ fixes: 1. `site/content/last-updated.json` refreshed with `node scripts/last-upd
 checked: metrics stay off on Railway only when `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` is empty, behaviour off Railway is unchanged (test case 4), traces untouched, no new API or dependency, docs consistent across site, subsystems.md and upgrade/1.0.md
 pushed: `origin/fix/railway-otlp-traces` @ 3e2095d2 (from detached wt/especialista-FW-otlp; the local branch is held by wt/senior-FW-railway-obs at e3eca299)
 PR: https://github.com/AlexGalhardo/vukem/pull/104 (title `fix(otel): keep Railway OTLP export to traces only`)
+merged: https://github.com/AlexGalhardo/vukem/pull/104 squash daf6d302 (33/33 checks green); no tag, no release
+PRONTO_PARA_MERGE fw:fix/railway-otlp-traces

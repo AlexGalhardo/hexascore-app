@@ -4,7 +4,7 @@ Reason: six reviews done (five v0.12.0 release blockers plus one vukem PR) and t
 
 ## Freeze
 
-App feature merges into local `main` stay FROZEN until the orchestrator says the v0.12.0 tag is pushed. The orchestrator builds `release/v0.12.0-r2` as one squashed `chore(release): v0.12.0` commit off `origin/main`; commitlint on that shape passes.
+Lifted. v0.12.0 is released: PR #60 squash 219c873, tag pushed. Local `main` carries `origin/main` (merge b994c7b). E2E no longer gates anything; run only the specs a change touches.
 
 ## Done this session
 
@@ -27,9 +27,18 @@ e2e scored 695/696 with one search timeout under load; it is no longer part of t
 
 ## Open
 
-1. vukem PR <https://github.com/AlexGalhardo/vukem/pull/104>. VUKEM_PR_STATE. When all checks are green: `gh pr merge 104 --repo AlexGalhardo/vukem --squash`, append the merge link to `reports/FW-otlp-pr.md`, and set REV-FW-otlp-pr `ready`. Then remove `wt/especialista-FW-otlp`, a detached worktree of `$FW`.
-2. Merge queue at unfreeze: unchanged from the session-5 list: P4.A.3.1c, FIX-nojs-auth-post, DOC-sdd-flag-names, FIX-scoring-burst-clock, P5.A.1.1/1.2/3.1 with the catalogue recipe, and the DOC-roadmap-p7-refs patch. Then run the gate.
-3. Next rows: REV-VF-NEW-FIX-gate-timeouts, REV-VF-NEW-AUDIT-6 and REV-VF-NEW-AUDIT-1 (vukem PRs, same flow as #104), then REV-P2.H.1.4/1.5 and REV-P2.H.3.5. The pre-read notes for P2.H.3.5 are in the session-5 handoff and still apply.
+1. Done: vukem PR #104 squash-merged as daf6d302 (33/33 green), REV-FW-otlp-pr `ready`, worktree removed.
+2. NEXT: the merge queue, in the orchestrator's order:
+   1. P4.A.3.1c
+   2. FIX-nojs-auth-post
+   3. DOC-sdd-flag-names
+   4. FIX-scoring-burst-clock
+   5. P5.A.1.1, then 1.2, then 3.1 (catalogue recipe in the session-5 handoff, see git history of this file)
+   6. the DOC-roadmap-p7-refs patch
+   7. QA-e2e-speed, if delivered
+
+   Then run the gate (scratchpad `gate.sh <sha>`), tick ROADMAP, write the CHANGELOG lines under `[Unreleased]`, and set the rows `ready`.
+3. Then the vukem rows REV-VF-NEW-AUDIT-6, REV-VF-NEW-FIX-gate-timeouts (d88f52b2; already pre-read: env var `PGTEST_DROP_TIMEOUT`, no API change) and REV-VF-NEW-AUDIT-1 (vukem PRs, same flow as #104), then REV-P2.H.1.4/1.5 and REV-P2.H.3.5. The pre-read notes for P2.H.3.5 are in the session-5 handoff and still apply.
 4. Proposed rows for the orchestrator:
    - prio 2: a search timeout returns 500. It should degrade, for example to empty results or a 503 with Retry-After.
    - vukem: the S3 disk exposes no ETag, so `storage.HandlerWith` cannot answer 304.
