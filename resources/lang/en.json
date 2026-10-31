@@ -1442,6 +1442,12 @@
       "franchise": "Franchise",
       "platforms": "Platforms"
     },
+    "precision": {
+      "label": "Precision",
+      "day": "Day",
+      "month": "Month",
+      "year": "Year"
+    },
     "relation": {
       "add": "Add (entity IDs, one per line)",
       "remove": "Remove (entity IDs, one per line)",

@@ -15,6 +15,7 @@ interface Props {
 	addLabel: string;
 	removeLabel: string;
 	roleLabel: string;
+	roleName: (r: string) => string;
 	onChange: (value: RelationDraft) => void;
 }
 
@@ -31,6 +32,7 @@ export default function RelationEditor({
 	addLabel,
 	removeLabel,
 	roleLabel,
+	roleName,
 	onChange,
 }: Props) {
 	const reasonId = useId();
@@ -53,7 +55,7 @@ export default function RelationEditor({
 				>
 					{roles.map((r) => (
 						<option key={r} value={r}>
-							{r}
+							{roleName(r)}
 						</option>
 					))}
 				</select>

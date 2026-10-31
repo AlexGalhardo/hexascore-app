@@ -1442,6 +1442,12 @@
       "franchise": "Franquia",
       "platforms": "Plataformas"
     },
+    "precision": {
+      "label": "Precisão",
+      "day": "Dia",
+      "month": "Mês",
+      "year": "Ano"
+    },
     "relation": {
       "add": "Adicionar (IDs de entidade, um por linha)",
       "remove": "Remover (IDs de entidade, um por linha)",

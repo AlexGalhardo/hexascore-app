@@ -183,6 +183,8 @@ export default function SuggestEdit({
 						}
 						lockReason={lockFor(f)}
 						lockedLabel={t("community.locked")}
+						precisionLabel={t("community.precision.label")}
+						precisionName={(p) => t(`community.precision.${p}`)}
 						onChange={(v) => setDates((prev) => ({ ...prev, [f]: v }))}
 					/>
 				))}
@@ -197,6 +199,7 @@ export default function SuggestEdit({
 						addLabel={`${t("community.relation.add")} ${label(t, f)}`}
 						removeLabel={`${t("community.relation.remove")} ${label(t, f)}`}
 						roleLabel={`${t("community.relation.role")} ${label(t, f)}`}
+						roleName={(r) => t(`item.roles.${r}`)}
 						onChange={(v) => setRels((prev) => ({ ...prev, [f]: v }))}
 					/>
 				))}

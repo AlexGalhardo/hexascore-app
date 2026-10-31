@@ -7,6 +7,8 @@ interface Props {
 	value: DateValue;
 	lockReason?: string;
 	lockedLabel: string;
+	precisionLabel: string;
+	precisionName: (p: string) => string;
 	onChange: (value: DateValue) => void;
 }
 
@@ -20,6 +22,8 @@ export default function DateEditor({
 	value,
 	lockReason,
 	lockedLabel,
+	precisionLabel,
+	precisionName,
 	onChange,
 }: Props) {
 	const reasonId = useId();
@@ -43,7 +47,7 @@ export default function DateEditor({
 					className={inputClass}
 				/>
 				<select
-					aria-label={`${label} (precision)`}
+					aria-label={`${precisionLabel} ${label}`}
 					value={value.precision}
 					disabled={disabled}
 					aria-describedby={describedBy}
@@ -52,7 +56,7 @@ export default function DateEditor({
 				>
 					{["day", "month", "year"].map((p) => (
 						<option key={p} value={p}>
-							{p}
+							{precisionName(p)}
 						</option>
 					))}
 				</select>
