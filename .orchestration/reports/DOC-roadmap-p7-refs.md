@@ -23,3 +23,9 @@ Proposed patch (old → new, in `ROADMAP.md`):
 10. L3854 P7.C.1.1 Refs: `SDD 08 §6; SDD 14 §8` → `SDD 08 §6; SDD 14 §12`
 
 Notes from the check (not in AUDIT-social-sdd): `docs/sdd/04-community-edits.md` §6 is "Contracts", not notifications; notification rules are SDD 14 §6.5 and §7.5 (SDD 04 §5 line 157 already cites them). SDD 14 §5 "Deferred shape" (line 123) matches the audit's defect 4.
+
+## Review (especialista, 2026-10-31)
+verdict: APROVADO (patch to apply at unfreeze; main frozen for v0.12.0)
+re-run: `grep -n "SDD 14 §8\|web-research §4" ROADMAP.md` -> 3786, 3788, 3796, 3805, 3821, 3830, 3854 (+ L86 "SDD 14 (new §8)"); SDD 14 §8 is "Edge cases" (l.210), §7.5 "Notifications" (l.206); SDD 08 §7.1 "Primitives" (l.179); SDD 13 table A03 supply chain, A05 bound parameters/escaping, A06 limits
+checked: all 10 items match the files; item 6 (P7.A.1.3 depends on P6.C.1.1) follows from the primitives ref
+apply: the specialist applies items 1-10 to ROADMAP.md in the first orchestration commit after the freeze lifts; items 3 and 7 keep "DOC-research-letterboxd report" until web-research §11 exists
