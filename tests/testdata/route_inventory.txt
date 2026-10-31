@@ -266,3 +266,8 @@ web   GET    /billing
 web   POST   /billing/checkout/{plan}
 web   POST   /billing/portal
 web   GET    /profile/api/checkout
+admin GET    /admin/_flags
+admin POST   /admin/_flags/{name}
+web   GET    /suggest/{target_type}/{id}
+web   POST   /suggestions
+web   PATCH  /suggestions/{id}
