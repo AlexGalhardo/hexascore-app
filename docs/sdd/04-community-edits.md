@@ -316,7 +316,7 @@ Apply (`db.Tx`, vukem `https://vukem.dev/docs/database/orm` "Query builder"):
 
 Applies on one target serialise on the submit advisory lock (`pg_advisory_xact_lock` on the target) taken before step 1, so flagging rivals stale (`meta.stale`) cannot deadlock against a concurrent apply. Step 5 sets `meta.stale` on the other open suggestions of the target that touch an applied field. A cover change or an unapplied `depends_on` stops at `approved` with no catalogue write.
 
-Admin-panel catalogue edits also write `catalog_audit` (`source=admin`) in the panel transaction via `BeforeSave` (`https://vukem.dev/docs/digging-deeper/admin` "Resources"; open issue 4). `admin.AuditLog` keeps logging panel CRUD; only `catalog_audit` feeds Recent changes and revert.
+Admin-panel catalogue edits also write `catalog_audit` (`source=admin`, `actor_role=admin`) in the same transaction as the write. They go through `POST /admin/catalog/{type}/{id}/fields` (admin-only, `applySuggestion`), which takes the per-target advisory lock and the target row lock, reads each field's `before` under that lock, writes through the apply path (provenance `hexascore`, `api_changes`, `catalog.changed`) and skips unchanged fields. The panel resources stay read-only: a resource `BeforeSave`/`AfterSave` hook (`https://vukem.dev/docs/digging-deeper/admin` "Resources") runs around `orm.Update`, which rewrites every column and would clobber a concurrent apply's provenance (open issue 4, VF-010). `admin.AuditLog` keeps logging panel CRUD; only `catalog_audit` feeds Recent changes and revert.
 
 ### 7.5 Revert
 
