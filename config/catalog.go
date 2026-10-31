@@ -4,8 +4,9 @@ package config
 import "strings"
 
 // DefaultCatalogAPISources are the sources whose fields reach paid API
-// customers (SDD 01 §6.1, ADR 0006): open licences plus HexaScore's own data.
-var DefaultCatalogAPISources = []string{"wikidata", "wikipedia", "openlibrary", "hexascore"}
+// customers (SDD 01 §6.1, ADR 0006): open licences plus HexaScore's own data,
+// which includes approved community edits (A-07, SDD 05 §5).
+var DefaultCatalogAPISources = []string{"wikidata", "wikipedia", "openlibrary", "hexascore", "community"}
 
 // Catalog configures the catalogue read models.
 type Catalog struct {

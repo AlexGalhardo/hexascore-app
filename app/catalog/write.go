@@ -25,7 +25,7 @@ var ErrTargetGone = errors.New("catalog: target row not found")
 // *_source column must exist there (DQ-11, foreign keys).
 func EnsureSource(ctx context.Context, ex database.Executor, code string) error {
 	_, err := ex.ExecContext(ctx, `INSERT INTO data_sources (code, name, licence, url)
-VALUES ($1, 'HexaScore community', 'proprietary', 'https://hexascore.app') ON CONFLICT (code) DO NOTHING`, code)
+VALUES ($1, 'HexaScore community', 'HEXASCORE-API-TERMS', 'https://hexascore.app') ON CONFLICT (code) DO NOTHING`, code)
 	if err != nil {
 		return fmt.Errorf("catalog: ensure source %s: %w", code, err)
 	}

@@ -273,7 +273,7 @@ Genres are shared across types (genre page has type tabs). The Wikidata property
 
 ### 6.1 Audiences and field visibility
 
-Audience `site` = web Inertia props and first-party app API (`/app/v1`, A-01). Audience `api` = paid read API (SDD 05). `CATALOG_API_SOURCES` (default `wikidata,wikipedia,openlibrary,hexascore`) is loaded with vukem `config.Load` (pattern shown in <https://vukem.dev/docs/digging-deeper/storage> "S3"). Open Library's licence is pending A-05 [NOT VERIFIED]: until `docs/legal/open-library.md` exists, `openlibrary` is allowed in the API for identifiers and titles only (01-2), and it leaves the default if A-05 fails.
+Audience `site` = web Inertia props and first-party app API (`/app/v1`, A-01). Audience `api` = paid read API (SDD 05). `CATALOG_API_SOURCES` (default `wikidata,wikipedia,openlibrary,hexascore,community`; `community` per A-07 below, with the `data_sources` licence `HEXASCORE-API-TERMS`) is loaded with vukem `config.Load` (pattern shown in <https://vukem.dev/docs/digging-deeper/storage> "S3"). Open Library's licence is pending A-05 [NOT VERIFIED]: until `docs/legal/open-library.md` exists, `openlibrary` is allowed in the API for identifiers and titles only (01-2), and it leaves the default if A-05 fails.
 
 HexaScore-sourced fields (`hexascore` and `community` sources: scores, counts, trending, community edits, HexaScore ids and slugs) reach API customers under the API terms (A-07): use inside the customer's product, attribution "Data by HexaScore" with a link, no bulk redistribution, no model training without written permission; no open-data licence at launch. The provenance columns let a field be opened later without a migration.
 
