@@ -43,6 +43,8 @@ type Pick struct {
 	ID     string
 	Score  float64
 	Reason string
+	// ReasonID is the item of the user that caused the pick.
+	ReasonID string
 }
 
 // Result is a computed list. Items is empty when Basis is BasisOnboarding.
@@ -106,12 +108,12 @@ func Recommend(ints []Interaction, cands []Candidate, now time.Time, weight func
 			continue
 		}
 
-		reason, ok := explain(ints, c, p.Mu, now, weight)
+		reason, reasonID, ok := explain(ints, c, p.Mu, now, weight)
 		if !ok {
 			continue
 		}
 
-		all = append(all, scored{c, Pick{ID: c.ID, Score: s, Reason: reason}})
+		all = append(all, scored{c, Pick{ID: c.ID, Score: s, Reason: reason, ReasonID: reasonID}})
 	}
 
 	slices.SortFunc(all, func(a, b scored) int {

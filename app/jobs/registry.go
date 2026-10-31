@@ -31,6 +31,7 @@ func All(app *vukem.App) []queue.Registration {
 		handleCoverFetch(app),
 		handleExportIDs(app),
 		handleComputeSimilar(app),
+		handleRecommendUser(app),
 		handleComputeTrending(app),
 		handleTrendingRebuild(app),
 		handlePruneTrending(app),

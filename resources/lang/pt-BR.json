@@ -1523,5 +1523,16 @@
         "user": "membro"
       }
     }
+  },
+  "forYou": {
+    "title": "Para você",
+    "home": "Para você",
+    "onboarding": "Avalie 3 itens de {type} para receber recomendações. Enquanto isso, veja o que está em alta.",
+    "empty": "Ainda não há recomendações.",
+    "optedOut": "As recomendações personalizadas estão desligadas. Você pode ligá-las nas configurações de privacidade.",
+    "rated": "Porque você avaliou {title} com {stars}/5",
+    "completed": "Porque você completou {title}",
+    "wanted": "Porque você quis {title}",
+    "loading": "Carregando..."
   }
 }

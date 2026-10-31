@@ -1523,5 +1523,16 @@
         "user": "member"
       }
     }
+  },
+  "forYou": {
+    "title": "For you",
+    "home": "For you",
+    "onboarding": "Rate 3 {type} to get recommendations. Meanwhile, here is what is trending.",
+    "empty": "No recommendations yet.",
+    "optedOut": "Personalised recommendations are off. You can turn them on in your privacy settings.",
+    "rated": "Because you rated {title} {stars}/5",
+    "completed": "Because you completed {title}",
+    "wanted": "Because you wanted {title}",
+    "loading": "Loading..."
   }
 }

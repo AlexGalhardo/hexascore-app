@@ -18,7 +18,7 @@ func explain(
 	mu float64,
 	now time.Time,
 	weight func(similar.Feature) float64,
-) (string, bool) {
+) (string, string, bool) {
 	var (
 		best      Interaction
 		bestScore float64
@@ -46,17 +46,23 @@ func explain(
 	}
 
 	if !found {
-		return "", false
+		return "", "", false
 	}
 
-	if best.Overall != nil {
-		stars := strconv.FormatFloat(*best.Overall/20, 'f', -1, 64)
+	reason, ok := Reason(best.Title, best.Overall, best.Status)
 
-		return fmt.Sprintf("Because you rated %s %s/5", best.Title, stars), true
+	return reason, best.ItemID, ok
+}
+
+// Reason renders the explanation of a recommendation from the interaction that caused it. ok is false for a status
+// with no wording (in_progress, dropped).
+func Reason(title string, overall *float64, status string) (string, bool) {
+	if overall != nil {
+		return fmt.Sprintf("Because you rated %s %s/5", title, strconv.FormatFloat(*overall/20, 'f', -1, 64)), true
 	}
 
-	if verb, ok := statusVerb[best.Status]; ok {
-		return fmt.Sprintf("Because you %s %s", verb, best.Title), true
+	if verb, ok := statusVerb[status]; ok {
+		return fmt.Sprintf("Because you %s %s", verb, title), true
 	}
 
 	return "", false

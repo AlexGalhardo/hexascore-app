@@ -64,11 +64,23 @@ func (a *Accounts) UpdateDetails(ctx context.Context, userID int64, name, locale
 // now and read by the recommendation work (SDD 08).
 func (a *Accounts) UpdatePrivacy(ctx context.Context, userID int64, private, optOut bool) error {
 	p := a.DB.Dialect().Placeholder
-	_, err := a.DB.ExecContext(ctx,
-		"UPDATE users SET profile_private = "+p(1)+", personalization_opt_out = "+p(2)+", updated_at = "+p(3)+
-			" WHERE id = "+p(4), private, optOut, a.now().UTC(), userID)
 
-	return err
+	return a.DB.Tx(ctx, func(tx *database.Tx) error {
+		if _, err := tx.ExecContext(ctx,
+			"UPDATE users SET profile_private = "+p(1)+", personalization_opt_out = "+p(2)+", updated_at = "+p(3)+
+				" WHERE id = "+p(4), private, optOut, a.now().UTC(), userID); err != nil {
+			return err
+		}
+
+		// Opting out removes the stored "For you" rows (SDD 08 FR-08-10, D-29); the table exists on Postgres only.
+		if optOut && a.DB.Dialect().Name() == "postgres" {
+			_, err := tx.ExecContext(ctx, "DELETE FROM user_recommendations WHERE user_id = "+p(1), userID)
+
+			return err
+		}
+
+		return nil
+	})
 }
 
 // ChangePassword sets a new password for u. The current password is

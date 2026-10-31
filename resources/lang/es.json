@@ -1523,5 +1523,16 @@
         "user": "miembro"
       }
     }
+  },
+  "forYou": {
+    "title": "Para ti",
+    "home": "Para ti",
+    "onboarding": "Valora 3 títulos de {type} para recibir recomendaciones. Mientras tanto, mira lo que es tendencia.",
+    "empty": "Aún no hay recomendaciones.",
+    "optedOut": "Las recomendaciones personalizadas están desactivadas. Puedes activarlas en la configuración de privacidad.",
+    "rated": "Porque valoraste {title} con {stars}/5",
+    "completed": "Porque completaste {title}",
+    "wanted": "Porque querías {title}",
+    "loading": "Cargando..."
   }
 }
