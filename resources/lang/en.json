@@ -1442,6 +1442,38 @@
       "mergeHelp": "Name the duplicate and the {domain} record to keep. Both must be the same type. A moderator decides.",
       "mergeSource": "ID of the duplicate record",
       "mergeDest": "ID of the record to keep"
+    },
+    "status": {
+      "title": "Your suggestion",
+      "current": "Status",
+      "reason": "Reason",
+      "quotaReached": "Daily limit reached. You can submit again after {time}.",
+      "changes": "Proposed changes",
+      "removed": "Removed",
+      "added": "Added",
+      "timeline": "Timeline",
+      "submit": "Submit for review",
+      "withdraw": "Withdraw",
+      "states": {
+        "draft": "Draft",
+        "submitted": "Submitted",
+        "in_review": "In review",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "applied": "Applied",
+        "withdrawn": "Withdrawn",
+        "expired": "Expired",
+        "reverted": "Reverted"
+      }
+    },
+    "mine": {
+      "title": "My suggestions",
+      "empty": "You have not made any suggestions yet.",
+      "kinds": {
+        "edit": "Edit",
+        "create": "New record",
+        "merge": "Duplicate report"
+      }
     }
   }
 }

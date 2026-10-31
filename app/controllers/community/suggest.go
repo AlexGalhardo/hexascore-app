@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/AlexGalhardo/vukem/auth"
+	"github.com/AlexGalhardo/vukem/authz"
 	"github.com/AlexGalhardo/vukem/database"
 	"github.com/AlexGalhardo/vukem/errs"
 	"github.com/AlexGalhardo/vukem/flags"
@@ -25,13 +26,20 @@ const maxBody = 256 << 10
 type Suggest struct {
 	db    *database.DB
 	flags *flags.Flags
+	gate  *authz.Gate[*models.User]
 	guard string
 	now   func() time.Time
 }
 
 // NewSuggest builds the handlers.
-func NewSuggest(db *database.DB, ff *flags.Flags, guard string, now func() time.Time) *Suggest {
-	return &Suggest{db: db, flags: ff, guard: guard, now: now}
+func NewSuggest(
+	db *database.DB,
+	ff *flags.Flags,
+	gate *authz.Gate[*models.User],
+	guard string,
+	now func() time.Time,
+) *Suggest {
+	return &Suggest{db: db, flags: ff, gate: gate, guard: guard, now: now}
 }
 
 type changeForm struct {

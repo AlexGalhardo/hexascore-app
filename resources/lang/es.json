@@ -1442,6 +1442,38 @@
       "mergeHelp": "Indica el duplicado y el registro ({domain}) que debe quedar. Ambos deben ser del mismo tipo. Un moderador decide.",
       "mergeSource": "ID del registro duplicado",
       "mergeDest": "ID del registro que se conserva"
+    },
+    "status": {
+      "title": "Tu sugerencia",
+      "current": "Estado",
+      "reason": "Motivo",
+      "quotaReached": "Límite diario alcanzado. Puedes enviar de nuevo después de {time}.",
+      "changes": "Cambios propuestos",
+      "removed": "Eliminado",
+      "added": "Añadido",
+      "timeline": "Cronología",
+      "submit": "Enviar a revisión",
+      "withdraw": "Retirar",
+      "states": {
+        "draft": "Borrador",
+        "submitted": "Enviada",
+        "in_review": "En revisión",
+        "approved": "Aprobada",
+        "rejected": "Rechazada",
+        "applied": "Aplicada",
+        "withdrawn": "Retirada",
+        "expired": "Caducada",
+        "reverted": "Revertida"
+      }
+    },
+    "mine": {
+      "title": "Mis sugerencias",
+      "empty": "Aún no has hecho ninguna sugerencia.",
+      "kinds": {
+        "edit": "Edición",
+        "create": "Nuevo registro",
+        "merge": "Informe de duplicado"
+      }
     }
   }
 }
