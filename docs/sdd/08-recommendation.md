@@ -6,7 +6,8 @@ Status: reviewed (2026-10-28 consistency pass). Decisions: D-01, D-02, D-07, D-1
 
 This domain drives discovery from HexaScore's own data. It produces three things:
 
-- a "Top 10 trending (30 days)" list per master category (D-02);
+- a "Top 10 trending (30 days)" list per master category (D-02), served by the API and the snapshot;
+- a "Top 3 trending (7 days)" strip per master category on the home page (owner decision 2026-10-31, §7.2 "Home window");
 - "You may also like" and cross-media blocks on item pages;
 - an explainable "For you" list for logged-in users (A-02).
 
@@ -139,9 +140,9 @@ Trending responses send `web.ETagOf(payload)` and `c.NotModified(etag, computedA
 Inertia props (vukem `https://vukem.dev/docs/frontend/inertia` "Inertia v3 (BETA)"):
 
 - Home:
-  - `trending` is eager and SSR-rendered (D-07: public SEO content is eager; `Defer` only for personalised or below-the-fold non-SEO props, open issue 08-8), shaped `{game|movie|series|book: {computedAt, items:[{rank, basis, id, slug, title, coverThumbUrl, score, ratingCount}]}}`.
+  - `trending` is eager and SSR-rendered (D-07: public SEO content is eager; `Defer` only for personalised or below-the-fold non-SEO props, open issue 08-8), shaped `{game|movie|series|book: {computedAt, items:[{rank, basis, id, slug, title, coverThumbUrl, score, ratingCount}]}}` with at most 3 items per type over the last 7 days (not the snapshot, §7.2 "Home window").
   - `forYou` is `inertia.Defer(fn).Group("personal")`, logged-in only.
-  - The section title is "Top 10 trending (30 days)" and prior entries show a "Popular" chip. If every entry is prior, the title becomes "Popular {type}".
+  - The home section title is "Trending this week" and prior entries show a "Popular" chip. If every entry is prior, the title becomes "Popular {type}". The `/app/v1` and `/api/v1` trending lists keep the 30-day window and 10 ranks.
 - Item page: `similar` (8, each with `reason` such as `{"kind":"franchise","entity":"Zelda"}`) and `crossMedia`, both eager.
 - `ForYou/Index`: one `Defer` section per type.
 
@@ -212,6 +213,8 @@ Golden example, item X:
 | 14 | views 200, `ratings_new_w` 5 | 53.03 | 30 | ×0.25 = 20.76 |
 
 Result: `T = 118.97`, `A = 16`, eligible.
+
+Home window (owner decision 2026-10-31): the home shows the trending of the last 7 days, 3 entries per type. It reuses the formula above with `a ∈ {0..6}` and the same eligibility and prior-fill rules (§7.3), computed on demand from `item_activity_daily` and held 5 minutes in the cache (`home:trending7:v1:{locale}`); nothing is stored in `trending_snapshots`, whose rows stay the 30-day top 10 served by the APIs. A quiet week therefore falls back to `prior` entries, labelled "Popular".
 
 Burst example, item Y on day 0: 300 views and 60 ratings from accounts younger than 7 days with no status. Each rating weighs 0.175 × 0.25 (burst shadow), so `ratings_new_w = 2.625`. That gives `T = 57.07 + 15.75 = 72.8` and `A = 2.625`: not eligible. Unweighted, the same activity would score `T = 417.1`.
 

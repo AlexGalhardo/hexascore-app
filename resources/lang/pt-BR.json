@@ -591,11 +591,9 @@
     "explore": "Explorar",
     "recent": "Avaliados recentemente pelos membros",
     "ratedBy": "por {name}",
-    "trending": {
-      "title": "Top 10 em alta: {type} (30 dias)",
-      "popular": "Popular",
-      "popularType": "{type} populares"
-    }
+    "trendingWeek": "Em alta esta semana",
+    "popularType": "Populares: {type}",
+    "popular": "Popular"
   },
   "footer": {
     "terms": "Termos",
@@ -1205,13 +1203,7 @@
       "emptyShelf": "Nada aqui ainda.",
       "previous": "Anterior",
       "next": "Próxima",
-      "summary": "{ratings} avaliações · {lists} listas",
-      "contributions": {
-        "title": "Contribuições",
-        "summary": "{submitted} sugeridas · {approved} aprovadas · {rejected} rejeitadas",
-        "rate": "Taxa de aprovação {rate}",
-        "tier": "Nível: {tier} · precisão {accuracy}"
-      }
+      "summary": "{ratings} avaliações · {lists} listas"
     },
     "status": {
       "label": "Status",
@@ -1506,21 +1498,6 @@
         "edit": "Edição",
         "create": "Novo registro",
         "merge": "Relato de duplicata"
-      }
-    },
-    "recent": {
-      "title": "Alterações recentes: {title}",
-      "back": "Voltar para a página",
-      "empty": "Nenhuma alteração ainda.",
-      "merged": "uniu um duplicado a este registro",
-      "changedTo": "alterado para",
-      "pages": "Páginas de alterações recentes",
-      "link": "Alterações recentes",
-      "actors": {
-        "team": "Equipe HexaScore",
-        "deleted": "usuário excluído",
-        "system": "HexaScore",
-        "user": "membro"
       }
     }
   },
