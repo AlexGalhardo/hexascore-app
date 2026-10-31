@@ -133,8 +133,8 @@ gl() {
 	local out rc n=0
 	out=$(mktemp)
 	while :; do
-		"${GL[@]}" "$@" >"$out" 2>&1
-		rc=$?
+		# && / || keeps set -e from leaving the function before the retry check.
+		"${GL[@]}" "$@" >"$out" 2>&1 && rc=0 || rc=$?
 		cat "$out"
 		if [ "$rc" -eq 3 ] && grep -qi 'parallel golangci-lint' "$out" && [ "$n" -lt 90 ]; then
 			n=$((n + 1))
@@ -220,7 +220,7 @@ job_deps() {
 	bin="$cache/osv-scanner-$OSV_SCANNER_VERSION"
 	if ! echo "$OSV_SCANNER_SHA256  $bin" | sha256sum -c - >/dev/null 2>&1; then
 		step "download osv-scanner $OSV_SCANNER_VERSION"
-		curl -fsSLo "$bin" "https://github.com/google/osv-scanner/releases/download/${OSV_SCANNER_VERSION}/osv-scanner_linux_amd64"
+		curl -fsSL --retry 3 -o "$(W "$bin")" "https://github.com/google/osv-scanner/releases/download/${OSV_SCANNER_VERSION}/osv-scanner_linux_amd64"
 		echo "$OSV_SCANNER_SHA256  $bin" | sha256sum -c -
 		chmod +x "$bin"
 	fi
@@ -270,7 +270,7 @@ job_openapi() {
 	step Redocly; bunx redocly lint openapi/api-v1.json openapi/app-v1.json
 	step "app client matches codegen"
 	local out
-	out=$(mktemp)
+	out=$(W "$(mktemp)")
 	docker run --rm --network host -e APP_ENV=development -e "APP_KEY=$(app_key)" -e DATABASE_URL -e API_HOST- \
 		"$IMG" codegen:client -prefix /app/v1 -o - >"$out"
 	git diff --no-index --exit-code packages/app-client/src/api.ts "$out" || { rm -f "$out"; return 1; }
@@ -305,7 +305,7 @@ job_lighthouse() {
 	"${c[@]}" run --rm --no-deps app-init
 	"${c[@]}" up -d --wait --no-deps --no-build app
 	step Lighthouse
-	E2E_BASE_URL="http://127.0.0.1:$port" CHROME_PATH="$chrome" bunx --bun @lhci/cli@0.15.1 autorun
+	E2E_BASE_URL="http://127.0.0.1:$port" CHROME_PATH="$chrome" bunx @lhci/cli@0.15.1 autorun
 }
 job_mobile() {
 	cd "$TREE"
@@ -320,15 +320,25 @@ step_prep() { (cd "$TREE" && bun install --frozen-lockfile --ignore-scripts); }
 step_prep >"$LOGS/prepare.log" 2>&1 || { log "bun install failed, see $LOGS/prepare.log"; exit 1; }
 
 started=()
-for j in "${JOBS[@]}"; do
-	selected "$j" || continue
-	started+=("$j")
-	(
-		t0=$(date +%s)
-		( set -eo pipefail; "job_${j//-/_}" ) >"$LOGS/$j.log" 2>&1
-		echo "$? $(($(date +%s) - t0))" >"$RUN/$j.rc"
-	) &
+launch() {
+	local j
+	for j in "$@"; do
+		selected "$j" || continue
+		started+=("$j")
+		(
+			t0=$(date +%s)
+			( set -eo pipefail; "job_${j//-/_}" ) >"$LOGS/$j.log" 2>&1
+			echo "$? $(($(date +%s) - t0))" >"$RUN/$j.rc"
+		) &
+	done
+}
+# Two waves: the JS test runners (vitest forks, jest 5 s timeouts) fail under the CPU load of
+# go -race and golangci-lint, so the Go-heavy jobs start once they are done. build keeps running.
+launch test-ts mobile vuln deps migrations build
+for j in test-ts mobile; do
+	selected "$j" && while [ ! -f "$RUN/$j.rc" ]; do sleep 2; done
 done
+launch lint test-go test-go-integration setup-windows openapi lighthouse
 log "running ${started[*]} (e2e excluded: owner, 2026-10-31)"
 wait
 
