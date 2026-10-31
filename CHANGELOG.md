@@ -17,8 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Fetch the full git history in the lint job so commitlint can see the pull request range.
 - Answer an unknown `/app/v1` collection with problem+json when the client sends no Accept header.
 - Start the page modules after the LCP entry so the home and games listings stay inside the Lighthouse budget.
-- Keep the document inert until that module has run, so a submit during the wait is not lost.
-- Ignore four transitive Expo and Jest advisories that have no compatible patched release, and pass that file to `osv-scanner scan source`.
+- Ignore four transitive Expo and Jest advisories that have no compatible patched release.
 - Let the pull request title `Release x.y.z` pass commitlint. The commit subjects stay conventional.
 
 ## [0.11.0] - 2026-10-31
