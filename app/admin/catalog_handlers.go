@@ -24,6 +24,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
+	"github.com/AlexGalhardo/hexascore-app/app/community"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/moderation"
 )
@@ -51,6 +52,10 @@ type CatalogHandlers struct {
 	Authorize func(c *web.Ctx) error
 	// FlagsURL is the vukem feature-flags page; empty when no flag is registered.
 	FlagsURL string
+	// AuthorizeApply is the admin-only applySuggestion check every catalogue field edit needs (owner Q-A15).
+	AuthorizeApply func(c *web.Ctx) error
+	// Editor writes panel field edits with their catalog_audit rows.
+	Editor *community.Applier
 }
 
 type navLink struct {

@@ -15,6 +15,9 @@ import (
 // SourceCommunity is the data_sources code of community-edited fields (SDD 01 licensing, SDD 04 section 7.3).
 const SourceCommunity = "community"
 
+// SourceHexaScore is the data_sources code of fields the HexaScore team edits in the admin panel (SDD 01 licensing).
+const SourceHexaScore = "hexascore"
+
 // ErrUnsupportedField is a field the community write path cannot store on that target.
 var ErrUnsupportedField = errors.New("catalog: field not writable on this target")
 
@@ -24,8 +27,13 @@ var ErrTargetGone = errors.New("catalog: target row not found")
 // EnsureSource inserts the data_sources row a write path labels its fields with. Every provenance value and
 // *_source column must exist there (DQ-11, foreign keys).
 func EnsureSource(ctx context.Context, ex database.Executor, code string) error {
+	name := "HexaScore community"
+	if code == SourceHexaScore {
+		name = "HexaScore"
+	}
+
 	_, err := ex.ExecContext(ctx, `INSERT INTO data_sources (code, name, licence, url)
-VALUES ($1, 'HexaScore community', 'HEXASCORE-API-TERMS', 'https://hexascore.app') ON CONFLICT (code) DO NOTHING`, code)
+VALUES ($1, $2, 'HEXASCORE-API-TERMS', 'https://hexascore.app') ON CONFLICT (code) DO NOTHING`, code, name)
 	if err != nil {
 		return fmt.Errorf("catalog: ensure source %s: %w", code, err)
 	}
