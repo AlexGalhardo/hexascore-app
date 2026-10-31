@@ -5,3 +5,8 @@
    the "dark" class on <html> (set before paint in app.html), so a theme
    toggle can override the system preference. */
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* The server-rendered placeholder of CSR pages (views/app.html) disappears once React fills #app. */
+#app:not(:empty) ~ #csr-skeleton {
+	display: none;
+}
