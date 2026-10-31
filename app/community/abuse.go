@@ -190,17 +190,13 @@ func CheckSources(ctx context.Context, db *database.DB, suggestionID string) err
 		return fmt.Errorf("community: encode source status: %w", err)
 	}
 
-	res, err := db.ExecContext(
+	if _, err := db.ExecContext(
 		ctx,
 		`UPDATE suggestions SET meta = meta || $2::jsonb, updated_at = now() WHERE id = $1`,
 		suggestionID,
 		body,
-	)
-	if err != nil {
+	); err != nil {
 		return fmt.Errorf("community: store source status: %w", err)
-	}
-	if n, _ := res.RowsAffected(); n == 0 {
-		return nil
 	}
 
 	return nil
