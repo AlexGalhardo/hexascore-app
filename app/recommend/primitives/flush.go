@@ -18,9 +18,12 @@ type dbFunc func() (*database.DB, error)
 
 // upsert adds one counter row to item_activity_daily. The item is resolved here, so a page view needs no lookup: ref
 // is a slug or an id, and an empty type (search clicks) matches any. A key that is not a public item inserts nothing.
+// The id branch casts only a UUID-shaped ref, so both branches stay index lookups; `id::text = ref` scanned every item.
 const upsert = `INSERT INTO item_activity_daily (item_id, day, item_type, views, search_clicks)
 SELECT i.id, $3::date, i.type, $4::int, $5::int FROM items i
-WHERE ($1::text = '' OR i.type = $1::text) AND (i.slug = $2::text OR i.id::text = $2::text) AND i.visibility = 'public'
+WHERE i.visibility = 'public' AND ($1::text = '' OR i.type = $1::text)
+AND ((i.type = $1::text AND i.slug = $2::text)
+	OR i.id = CASE WHEN $2::text ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' THEN $2::uuid END)
 LIMIT 1
 ON CONFLICT (item_id, day) DO UPDATE SET
 	views = item_activity_daily.views + EXCLUDED.views,
