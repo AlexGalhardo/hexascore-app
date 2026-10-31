@@ -10,6 +10,12 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | id | date | severity | status |
 | --- | --- | --- | --- |
 | VF-062 | 2026-10-30 | low | open |
+| VF-NEW-AUDIT-1 | 2026-10-31 | medium | open |
+| VF-NEW-AUDIT-2 | 2026-10-31 | low | open |
+| VF-NEW-AUDIT-3 | 2026-10-31 | medium | open |
+| VF-NEW-AUDIT-4 | 2026-10-31 | low | open |
+| VF-NEW-AUDIT-5 | 2026-10-31 | medium | open |
+| VF-NEW-AUDIT-6 | 2026-10-31 | medium | open |
 
 ## VF-062: A typed POST that returns a body defaults to 201, including commands that do not create a resource
 
@@ -19,3 +25,51 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 - **Repro**: register `POST /widgets/{id}/ping` with `api.Op{Name: "widgets.ping"}` and a non-empty output struct, and leave `Op.Status` at 0. The response is `201` and `openapi:export` lists `"201"` as the success response. Set `Op.Status` to `200` and both become `200`.
 - **Workaround**: set `Op.Status` on every POST that is a command, not a create. HexaScore does this for `testWebhook` in `routes/api_v1.go`.
 - **Request**: do not change the default. Existing create routes rely on `201`. On <https://vukem.dev/docs/rest-apis/typed-handlers> "The output", add a command-POST example (`POST /webhooks/{id}/test`) that sets `Op.Status: http.StatusOK`, and state that `openapi` uses the same default, so a forgotten status is written into the golden document and not only into one response.
+
+## VF-NEW-AUDIT-1: A 404 raised by a service renders the bare framework page in an Inertia app
+
+- **Date**: 2026-10-31. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/frontend/inertia> "Rendering pages" (`inertia.RenderStatus`) and <https://vukem.dev/docs/basics/errors>. The error hook that renders the Inertia `Error` page covers Inertia visits; a plain `GET` that ends in `errs.New(404, ...)` from a service answers the framework HTML page without the application shell.
+- **Context**: `/u/{nickname}` and `/u/{nickname}/lists/{id}` with an unknown nickname showed "404 Not Found" with no header, footer or locale, while the catch-all route rendered the shell. Found by the architecture audit of 2026-10-31.
+- **Workaround**: `app/controllers/not_found.go` `pageError` maps `errs.Status(err) == 404` to `inertia.RenderStatus(c, 404, "Error", ...)` in every page controller that calls a service.
+- **Request**: an `inertia.Config` option (for example `ErrorPage: "Error"`) so that any error reaching the error handler on an HTML request renders that component with `status`, `title` and `message` props, Inertia visit or not.
+
+## VF-NEW-AUDIT-2: The default app name "Vukem" leaks into the brand, title and admin of a scaffolded app
+
+- **Date**: 2026-10-31. **Severity**: low. **Status**: open.
+- **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/configuration> "APP_NAME" [NOT VERIFIED: page name assumed]. `app.Config.Name` is "Vukem" when `APP_NAME` is unset.
+- **Context**: the QA compose stack, CI and the e2e suite ran without `APP_NAME`; every page title, the header, the footer and the admin ("Vukem admin") said Vukem for weeks and no test noticed.
+- **Workaround**: `routes/web.go` shares `cmp.Or(app.Source.Get("APP_NAME"), "HexaScore")`; `docker-compose.yml` sets `APP_NAME`.
+- **Request**: `vukem new <name>` writes the project name as the default of `Config.Name` (generated constant or `.env.example` plus a fallback to the module name), and the admin title reads `Config.Name`.
+
+## VF-NEW-AUDIT-3: DisableSSR pages ship an empty root element
+
+- **Date**: 2026-10-31. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/frontend/inertia> "Server-side rendering" (`DisableSSR`).
+- **Context**: `/profile`, `/library`, `/lists`, `/me/notifications` are CSR by design (private data). The HTML has an empty `#app` and no `<title>` until hydration, so the first paint is a blank page (screenshots in the 2026-10-31 audit).
+- **Workaround**: none yet; ROADMAP P2.H.2.1 adds an app-side skeleton.
+- **Request**: let `DisableSSR` render the shell: a configurable placeholder template (or the `Error`-style component through SSR with a `loading` prop) plus the page `title` from props, so a CSR page is never blank.
+
+## VF-NEW-AUDIT-4: The inert-until-hydrated loader gives no styling hook for the gap
+
+- **Date**: 2026-10-31. **Severity**: low. **Status**: open.
+- **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/frontend/inertia> "The HTML loader" [NOT VERIFIED: heading assumed].
+- **Context**: HexaScore sets `<html inert>` until `createInertiaApp` settles (its own fix for double submits). A click in that window does nothing and nothing tells the user; the audit reproduced a silent login click ~2 s after load.
+- **Workaround**: none; P2.H.2.2 adds a pending state in the app.
+- **Request**: the page loader toggles a `data-hydrating` attribute on `<html>` (set before the script, removed when the app mounts) so apps can style disabled buttons and show a pending hint with CSS only; document the pattern with the inert approach.
+
+## VF-NEW-AUDIT-5: Custom admin pages do not inherit the admin navigation
+
+- **Date**: 2026-10-31. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/digging-deeper/admin>.
+- **Context**: `/admin/ingestion` is a hand-made page inside the admin layout; its navigation lists 7 entries while the resource pages list 11, and the title reads "HexaScore admin" against "Vukem admin" elsewhere.
+- **Workaround**: none; P2.H.3.3 duplicates the nav in the app.
+- **Request**: an `admin.Page` (or `Panel.AddPage`) registration that renders a custom handler inside the admin layout with the same navigation, title and guard as the resources.
+
+## VF-NEW-AUDIT-6: Rate limiter has no burst allowance
+
+- **Date**: 2026-10-31. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/security/rate-limiting> "Keys" [NOT VERIFIED whether a burst option exists; checked only the app usage in `app/http/limits`].
+- **Context**: the public API free plan is 1 request/second; the first request leaves `ratelimit-remaining: 0` and the second within the same second is 429. Every sequential client script fails on its second call (audit 2026-10-31).
+- **Workaround**: none; P2.H.3.1 proposes a burst in the app layer if the framework has none.
+- **Request**: a token-bucket mode (`Limit{Rate: 1, Burst: 5}`) in `ratelimit`, with `RateLimit-Policy` headers reflecting it, or a documented way to compose two limits (per second and per minute) on one route.
