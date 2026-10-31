@@ -12,6 +12,7 @@ import (
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/drivers/postgres"
+	"github.com/AlexGalhardo/vukem/flags"
 	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/openapi"
 	"github.com/AlexGalhardo/vukem/router"
@@ -30,6 +31,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/config"
 	"github.com/AlexGalhardo/hexascore-app/database/migrations"
 	"github.com/AlexGalhardo/hexascore-app/database/seeders"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 	"github.com/AlexGalhardo/hexascore-app/resources"
 	"github.com/AlexGalhardo/hexascore-app/routes"
 )
@@ -74,7 +76,8 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 			routes.Schedule(s, app)
 			s.Func("heartbeat", heartbeat.Beat).EveryMinute()
 		}),
-		vukem.WithFlags(community.SubmissionsFlag, community.TrustedModeratorsFlag),
+		vukem.WithFlags(
+			append([]flags.AnyFlag{community.SubmissionsFlag, community.TrustedModeratorsFlag}, run.All()...)...),
 		vukem.WithViews(resources.Views()),
 		vukem.WithVite(resources.Public()),
 		vukem.WithTranslations(resources.Lang()),
