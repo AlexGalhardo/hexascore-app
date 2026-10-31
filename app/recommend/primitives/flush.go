@@ -11,7 +11,6 @@ import (
 	"github.com/AlexGalhardo/vukem/cache"
 	"github.com/AlexGalhardo/vukem/database"
 	"github.com/AlexGalhardo/vukem/ratelimit"
-	"go.opentelemetry.io/otel"
 )
 
 type dbFunc func() (*database.DB, error)
@@ -120,8 +119,6 @@ func For(app *vukem.App) *Recorder {
 		}
 	}
 
-	dropped, _ := otel.Meter("hexascore").Int64Counter("trending.counter.dropped")
-
 	var (
 		mu      sync.Mutex
 		saltDay string
@@ -149,9 +146,7 @@ func For(app *vukem.App) *Recorder {
 		},
 		visited: map[string]int{},
 		counter: NewCounter(MaxKeys, func(n int) {
-			if dropped != nil {
-				dropped.Add(context.Background(), int64(n))
-			}
+			app.Log.Warn("trending counter dropped keys", "alert", "trending_counter_dropped", "dropped", n)
 		}),
 	}
 

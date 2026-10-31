@@ -965,7 +965,7 @@
       "4": {
         "heading": "5. Who we share data with",
         "body": {
-          "0": "We do not sell personal data. We share it only with providers that process it on our behalf: Railway (hosting and database), Grafana Cloud (metrics and logs), Resend (transactional email), Stripe (payments), Google (only if you choose \"Continue with Google\") and Telegram (operator alerts).",
+          "0": "We do not sell personal data. We share it only with providers that process it on our behalf: Railway (hosting, database, metrics and logs), Resend (transactional email), Stripe (payments), Google (only if you choose \"Continue with Google\") and Telegram (operator alerts).",
           "1": "Some of these providers are located outside your country, including in the United States. Transfers use the safeguards those laws allow.",
           "2": "Catalogue metadata from IGDB and TMDB is shown with the attribution those sources require. Community catalogue contributions stay under the A-07 licence."
         }

@@ -22,7 +22,11 @@ import (
 func TestCFTriggerCheck(t *testing.T) {
 	t.Parallel()
 
-	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")}})
+	app := vukemtest.New(
+		t,
+		bootstrap.New,
+		vukemtest.Options{Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")}},
+	)
 	acc, err := accounts.New(app.App)
 	if err != nil {
 		t.Fatal(err)
@@ -36,7 +40,9 @@ func TestCFTriggerCheck(t *testing.T) {
 		}
 	}
 
-	exec(`INSERT INTO data_sources (code, name, licence, url) VALUES ('wikidata', 'W', 'CC0-1.0', 'https://www.wikidata.org')`)
+	exec(
+		`INSERT INTO data_sources (code, name, licence, url) VALUES ('wikidata', 'W', 'CC0-1.0', 'https://www.wikidata.org')`,
+	)
 
 	for i := range 10 {
 		exec(`INSERT INTO items (id, type, slug, wikidata_qid) VALUES (gen_random_uuid(), 'game', $1, $2)`,

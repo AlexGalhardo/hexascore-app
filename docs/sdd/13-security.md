@@ -254,7 +254,7 @@ The privacy policy must list:
 - the §5 inventory with bases and retention;
 - cookies: session, 2FA, `locale`, `theme`, consent;
 - opt-in analytics (SDD 12) and YouTube embeds after consent;
-- processors: Railway, Grafana Cloud, Resend, Stripe, Google, Telegram; international transfers;
+- processors: Railway, Resend, Stripe, Google, Telegram; international transfers;
 - IGDB/TMDB attribution and the A-07 licence;
 - minimum age 13;
 - the encarregado contact (issue 6).

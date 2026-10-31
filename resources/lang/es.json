@@ -965,7 +965,7 @@
       "4": {
         "heading": "5. Con quién compartimos datos",
         "body": {
-          "0": "No vendemos datos personales. Solo los compartimos con operadores que los tratan en nuestro nombre: Railway (alojamiento y base de datos), Grafana Cloud (métricas y registros), Resend (correos transaccionales), Stripe (pagos), Google (solo si eliges \"Continuar con Google\") y Telegram (alertas del operador).",
+          "0": "No vendemos datos personales. Solo los compartimos con operadores que los tratan en nuestro nombre: Railway (alojamiento, base de datos, métricas y registros), Resend (correos transaccionales), Stripe (pagos), Google (solo si eliges \"Continuar con Google\") y Telegram (alertas del operador).",
           "1": "Algunos de estos operadores están fuera de tu país, incluso en Estados Unidos. Las transferencias usan las salvaguardas que esas leyes permiten.",
           "2": "Los metadatos de catálogo de IGDB y TMDB se muestran con la atribución que esas fuentes exigen. Las contribuciones de la comunidad al catálogo quedan bajo la licencia A-07."
         }

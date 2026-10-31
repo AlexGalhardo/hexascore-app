@@ -95,12 +95,12 @@ Every SDD ends with an "Open issues" section. This file is the architect's triag
 | 10 | 10 | Source of the device model for `deviceName` | roadmap | Resolved at implementation with the Expo Device API; not a design question. |
 | 12 | 1 | No app-level meter accessor | vukem | VF-019 narrowed: `Config.Global` + upstream OTel API works; request an accessor. |
 | 12 | 2 | Request-logger policy (hashed user id, truncated IP, request id = trace id) | vukem | VF-022. |
-| 12 | 3 | `/metrics` endpoint needs the OTel Prometheus exporter dependency | decided (owner) | Answered 2026-10-28, see brainstorming.md D-22 to D-36. Original note: asked in the Phase 3 question round; architect default: not at launch (Grafana Cloud OTLP is enough). |
+| 12 | 3 | `/metrics` endpoint needs the OTel Prometheus exporter dependency | decided (owner) | Answered 2026-10-28, see brainstorming.md D-22 to D-36. Original note: asked in the Phase 3 question round; architect default: not at launch (Railway traces only; amended 2026-10-31: no app metrics at all). |
 | 12 | 4 | Railway plan decides log retention and monitors | roadmap | SDD 11 records the plan; alerts use app metrics regardless. |
 | 12 | 5 | Where to host the static status page | decided | GitHub Pages on a `status` repo or `status.hexascore.app` served by the same app as a static page; choose GitHub Pages so it survives an outage of the app. |
 | 12 | 6 | Metric name alignment between SDD 08 and SDD 12 | decided | SDD 12 names win; SDD 08 updated in the review pass. |
 | 12 | 7 | Metric views for high-cardinality attributes | vukem | VF-019 (same entry); trigger: > 6,000 series on staging. |
-| 12 | 8 | Grafana Telegram contact point, OTLP URL, certificate checks unverified | roadmap | Verified when the Grafana Cloud account is created. |
+| 12 | 8 | Railway monitor options and webhook delivery unverified | roadmap | Verified when the Pro plan is on (D-35 amended 2026-10-31: Railway native only). |
 | 12 | 9 | Railway hard usage limit value | decided (owner) | Answered 2026-10-28, see brainstorming.md D-22 to D-36. Original note: asked in the Phase 3 question round; architect default: hard limit US$45 (1.5 × ceiling), email alert at US$24. |
 | 12 | 10 | vukem.dev documentation gaps (health-check API, logger options, scheduler metric hook) | vukem | VF-023. |
 | 09 | 1 | URL-prefix locale source missing in `i18n.Middleware` | vukem + decided | VF-024. App middleware resolves the locale from the path prefix before vukem's middleware. |
