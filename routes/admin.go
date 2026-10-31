@@ -15,6 +15,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/admin"
+	"github.com/AlexGalhardo/hexascore-app/app/community"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
@@ -58,6 +59,12 @@ func Admin(r *router.Router, app *vukem.App) error {
 	gate.DefineResult(vadmin.AbilityAdmin, isAdmin)
 	gate.DefineResult(vadmin.AbilityAudit, isAdmin)
 	gate.DefineResult(vadmin.AbilityFlags, isAdmin)
+
+	admin.DefineModeration(gate, app.Now, func(ctx context.Context) bool {
+		ff, err := app.Flags()
+
+		return err == nil && ff.Enabled(ctx, community.TrustedModeratorsFlag)
+	})
 
 	if err := gate.Register(admin.Policies(app.Now)...); err != nil {
 		return err
@@ -148,6 +155,11 @@ func Admin(r *router.Router, app *vukem.App) error {
 	r.Post("/admin/items/{id}/affiliate-links/{store}/delete", catalogH.DeleteAffiliateLink).
 		Name("admin.items.affiliate.delete").Use(moderator...)
 	r.Post("/admin/items/{id}/merge", catalogH.Merge).Name("admin.items.merge").Use(moderator...)
+	moderationH := admin.ModerationHandlers{
+		Pages:     catalogH,
+		Authorize: func(c *web.Ctx) error { return gate.Authorize(c.Context(), admin.AbilityModerate, nil) },
+	}
+	r.Get("/admin/moderation", moderationH.Index).Name("admin.moderation").Use(auth.Required(acc.Web), csrfMW)
 	r.Get("/admin/ingestion", catalogH.Ingestion).Name("admin.ingestion").Use(auth.Required(acc.Web), csrfMW)
 
 	return nil

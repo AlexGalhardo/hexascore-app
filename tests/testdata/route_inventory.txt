@@ -157,6 +157,7 @@ admin GET    /admin/items/{id}/manage
 admin POST   /admin/items/{id}/affiliate-links
 admin POST   /admin/items/{id}/affiliate-links/{store}/delete
 admin POST   /admin/items/{id}/merge
+admin GET    /admin/moderation
 admin GET    /admin/ingestion
 web   PUT    /items/{id}/rating
 web   DELETE /items/{id}/rating

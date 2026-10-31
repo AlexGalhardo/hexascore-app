@@ -17,7 +17,7 @@ type User struct {
 	Password        string       `json:"-"`
 	EmailVerifiedAt orm.NullTime `json:"email_verified_at"`
 	SessionVersion  int64        `json:"-"`
-	// Role is "user" or "admin"; it is never writable from a form.
+	// Role is "user", "moderator" or "admin"; it is never writable from a form.
 	Role         string       `json:"role"`
 	BannedAt     orm.NullTime `json:"banned_at"`
 	BanReason    *string      `json:"ban_reason"`
@@ -29,6 +29,9 @@ type User struct {
 
 // RoleAdmin is the Role of administrators.
 const RoleAdmin = "admin"
+
+// RoleModerator may moderate community suggestions while the community_trusted_moderators flag is on.
+const RoleModerator = "moderator"
 
 // BeforeCreate gives new accounts the default role (the column has a CHECK).
 func (u *User) BeforeCreate(context.Context) error {
