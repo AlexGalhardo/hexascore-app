@@ -186,7 +186,7 @@ Locale prefixes per D-17. User routes: `web` guard + `auth.Verified` (vukem `htt
 | POST | `/suggestions/{id}/withdraw` | author | → 303 |
 | POST | `/suggestions/uploads/cover` | draft owner | multipart, 1 file → `{key,width,height}` |
 | GET | `/suggestions/{id}`, `/me/suggestions` | author/admin, else 404 | `Community/SuggestionStatus`, `Community/MySuggestions` |
-| GET | `/{type}/{slug}/changes`, `/entities/{kind}/{slug}/changes` | public | `Catalog/RecentChanges`, SSR (D-07) |
+| GET | `/{section}/{slug}/changes`, `/books/{slug}/editions/{id}/changes`, `/{entity section}/{slug or code}/changes` | public | `Catalog/RecentChanges`, SSR (D-07), `?page=` (20 per page, OFFSET capped at 500 pages) |
 | GET | `/admin/moderation`, `/admin/moderation/{id}`, `/admin/moderation/metrics` | `moderate` | queue, detail with diff and recommendations, FR-04-16 |
 | POST | `/admin/moderation/{id}/{claim,release}` | `moderate` | `version` |
 | POST | `/admin/moderation/{id}/recommend` | `moderate` | `version`, `recommendation` = approve, reject; `note?` (FR-04-17) |

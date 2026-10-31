@@ -32,9 +32,24 @@ interface Props {
 	ratings?: { data: Rating[] };
 	lists?: ProfileList[];
 	indexable: boolean;
+	contributions?: {
+		submitted: number;
+		approved: number;
+		rejected: number;
+		approvalRate: number;
+		tier?: string;
+		accuracy?: number;
+	};
 }
 
-export default function Profile({ profile, stats, ratings, lists, indexable }: Props) {
+export default function Profile({
+	profile,
+	stats,
+	ratings,
+	lists,
+	indexable,
+	contributions,
+}: Props) {
 	const t = useT();
 	const page = usePage<SharedProps>();
 	const viewer = page.props.auth?.user;
@@ -54,6 +69,36 @@ export default function Profile({ profile, stats, ratings, lists, indexable }: P
 				</span>
 				<div className="min-w-0 flex-1">
 					<h1 className="text-2xl font-semibold">{profile.nickname}</h1>
+					{contributions && (
+						<section
+							aria-label={t("social.profile.contributions.title")}
+							className="text-sm text-muted"
+						>
+							<p>
+								{t("social.profile.contributions.summary", {
+									submitted: contributions.submitted,
+									approved: contributions.approved,
+									rejected: contributions.rejected,
+								})}
+								{" · "}
+								{t("social.profile.contributions.rate", {
+									rate: new Intl.NumberFormat(page.props.locale, {
+										style: "percent",
+									}).format(contributions.approvalRate),
+								})}
+							</p>
+							{contributions.tier && (
+								<p>
+									{t("social.profile.contributions.tier", {
+										tier: contributions.tier,
+										accuracy: new Intl.NumberFormat(page.props.locale, {
+											style: "percent",
+										}).format(contributions.accuracy ?? 0),
+									})}
+								</p>
+							)}
+						</section>
+					)}
 					{stats && (
 						<p className="text-sm text-muted">
 							{t("social.profile.summary", {
