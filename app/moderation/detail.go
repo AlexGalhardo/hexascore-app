@@ -167,6 +167,14 @@ decided_by = $4, decided_at = $5, assigned_to = NULL, claimed_at = NULL WHERE id
 			return fmt.Errorf("moderation: record rejection: %w", err)
 		}
 
+		if q.Jobs == nil {
+			return nil
+		}
+
+		if err := q.Jobs.DispatchTx(ctx, tx, community.Notify{SuggestionID: id, State: "rejected"}); err != nil {
+			return fmt.Errorf("moderation: dispatch notify: %w", err)
+		}
+
 		return nil
 	})
 }
