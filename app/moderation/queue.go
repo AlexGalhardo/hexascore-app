@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
+	"github.com/AlexGalhardo/vukem/uuid"
 
 	"github.com/AlexGalhardo/hexascore-app/app/community"
 )
@@ -233,7 +234,7 @@ func parseCursor(s string) (time.Time, string, error) {
 	}
 
 	n, err := strconv.ParseInt(micro, 10, 64)
-	if err != nil || len(id) != 36 {
+	if _, uerr := uuid.Parse(id); err != nil || uerr != nil {
 		return time.Time{}, "", ErrBadCursor
 	}
 

@@ -152,6 +152,10 @@ decided_by = $4, decided_at = $5, assigned_to = NULL, claimed_at = NULL WHERE id
 
 // CloneAsDraft copies a terminal suggestion into a new draft owned by its author, without using quota (SDD 04 7.1).
 func (q Queue) CloneAsDraft(ctx context.Context, id string, actor community.Actor) (string, error) {
+	if _, err := uuid.Parse(id); err != nil {
+		return "", ErrNotFound
+	}
+
 	newID := uuid.NewV7().String()
 
 	err := q.DB.Tx(ctx, func(tx *database.Tx) error {

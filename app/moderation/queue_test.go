@@ -7,6 +7,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"strings"
 	"testing"
 	"time"
 
@@ -208,6 +209,16 @@ func TestQueueKeysetPagination(t *testing.T) {
 	}
 	if _, err := q.List(context.Background(), Filter{After: "garbage"}); !errors.Is(err, ErrBadCursor) {
 		t.Fatalf("bad cursor: %v", err)
+	}
+	// 36 characters but not a UUID: a 404, never a SQL cast error.
+	if _, err := q.List(
+		context.Background(),
+		Filter{After: "1_" + strings.Repeat("z", 36)},
+	); !errors.Is(
+		err,
+		ErrBadCursor,
+	) {
+		t.Fatalf("non-uuid cursor: %v", err)
 	}
 }
 
