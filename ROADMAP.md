@@ -45,7 +45,7 @@ Open owner items: real Stripe values on Railway service `app` (Q-H31); the 39 ow
 | P4 Community edits | Suggestions, moderation queue, audit, revert, notifications | SLA dashboard live; first 100 suggestions processed in staging rehearsal | `v1.4.0` (P4.A), `v1.5.0` (P4.B) |
 | P5 Mobile | Android app on Google Play internal → production track | Store listing approved; crash-free sessions ≥ 99 % in internal testing | `v1.6.0`–`v1.8.0`; app `mobile-v1.0.0` |
 | P6 Ingestion and recommendations | Ingestion in Go with asserts; trending, similar items, personal recommendations | Daily jobs green for 30 days; trending and similar live | `v1.9.0`–`v1.12.0` |
-| P7 Social layer (post-1.0, needs the D-06 amendment) | Follows, activity feed, reviews with comments and reactions, richer profiles and shelves (Skoob, Goodreads, Letterboxd references) | Feed p95 ≤ 300 ms at 30 rps; moderation queue covers reviews and comments; Playwright + axe green | `v1.13.0`–`v1.15.0` |
+| P7 Social layer (post-1.0; D-06 amended 2026-10-31) | Follows, activity feed, reviews with comments and reactions, richer profiles and shelves (Skoob, Goodreads, Letterboxd references) | Feed p95 ≤ 300 ms at 30 rps; moderation queue covers reviews and comments; Playwright + axe green | `v1.13.0`–`v1.15.0` |
 
 ## Task groups (summary)
 
@@ -3777,7 +3777,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 ## Phase 7: social layer (post-1.0)
 
-Goal: turn the library into a social network for games, movies, series and books, with Skoob, Goodreads and Letterboxd as references. D-06 defers "feed and follows" and keeps reviews and comments out of v1; this phase starts only after the owner amends D-06 in `docs/brainstorming.md` (question Q-A1 in `docs/orchestration/QUESTIONS.md`) and after the cutover (`v1.0.0`). SDD 14 §1 already reserves the room: "the model leaves room for follows and feed (D-06) without tables for them".
+Goal: turn the library into a social network for games, movies, series and books, with Skoob, Goodreads and Letterboxd as references. D-06 was amended on 2026-10-31 (owner, Q-A1 in `docs/orchestration/QUESTIONS.md`): feed, follows, reviews, comments and reactions enter right after the cutover (`v1.0.0`); this phase starts then. SDD 14 §1 already reserves the room: "the model leaves room for follows and feed (D-06) without tables for them".
 
 Design principles for the whole phase: every social write is moderated by the P4.B queue (reports, hide, ban); private profiles never leak through the feed, counts or reactions; LGPD basis is consent for the feed (opt-in at onboarding, off by default for existing users) and legitimate interest for aggregates (D-29); nothing social enters the public API before a licence decision (A-07).
 
