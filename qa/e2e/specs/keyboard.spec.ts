@@ -26,6 +26,12 @@ test.describe("keyboard", () => {
 		prefix,
 	}) => {
 		await page.goto(`${prefix}/`);
+		// The loader keeps the document inert until hydration, so Tab hits nothing before React.
+		await page.waitForFunction(() =>
+			Object.keys(document.querySelector("header a") ?? {}).some((key) =>
+				key.startsWith("__reactProps$"),
+			),
+		);
 		const seen = new Set<string>();
 		for (let i = 0; i < 25; i++) {
 			await page.keyboard.press("Tab");

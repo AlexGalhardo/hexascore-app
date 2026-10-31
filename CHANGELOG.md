@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Fixed
 
 - Keep the document inert until Inertia finishes hydrating, so a click cannot submit the server form first.
+- Wait for that hydration before the admin sign-in and the header keyboard check.
 - Pass the osv-scanner config flag after the `scan source` subcommand.
 - Answer unknown `/app/v1` catalogue segments with 404 before auth, and point the CI OpenAPI export and `pg_dump` at Postgres 18.
 - Paint the cookie banner in the first HTML when consent is unset, and load the ratings dialog only after it is opened.
