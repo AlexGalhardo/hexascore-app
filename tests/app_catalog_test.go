@@ -72,6 +72,13 @@ func TestAppCatalog(t *testing.T) {
 	client.GetJSON("/app/v1/entities/"+genre+"/items?type=games&role=genre").AssertOK().
 		AssertJSONPath("data.0.id", r.game)
 
+	// Schemathesis sends no Accept. An unknown collection is still problem+json.
+	r.app.Client(t).Get("/app/v1/0").AssertStatus(http.StatusNotFound).
+		AssertHeaderContains("Content-Type", "application/problem+json").
+		AssertJSONPath("code", "not-found")
+	r.app.Client(t).Get("/app/v1/0/0").AssertStatus(http.StatusNotFound).
+		AssertHeaderContains("Content-Type", "application/problem+json")
+
 	r.app.Client(t).GetJSON(item).AssertUnauthorized()
 	r.client.GetJSON(item).AssertUnauthorized()
 	appCatalogClient(t, r, "ratings:write").GetJSON(item).AssertStatus(http.StatusForbidden)

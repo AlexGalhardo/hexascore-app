@@ -1,0 +1,23 @@
+# Transitive dev tools only. Latest Expo SDK 58 and Jest 30 still require the
+# vulnerable ranges, and the patched majors are not compatible with them.
+# deepmerge has no patched release. Drop an entry when upstream moves.
+
+[[IgnoredVulns]]
+id = "GHSA-mrhx-c7xc-m3w5"
+ignoreUntil = 2027-02-01
+reason = "@expo/cli 58.1.17 (current latest) depends on zod ^3.25.76. There is no patched 3.x; zod 4 changes the package root and breaks that CLI. It is not on the production request path."
+
+[[IgnoredVulns]]
+id = "GHSA-gcqx-w48m-w2h4"
+ignoreUntil = 2027-02-01
+reason = "deepmerge 4.3.1 is the latest release and the advisory marks it affected. It is pulled in by @expo/config and jest-config, not by the server."
+
+[[IgnoredVulns]]
+id = "GHSA-3g3m-2fjr-6pw4"
+ignoreUntil = 2027-02-01
+reason = "glob is fixed in 14.0.2. @expo/config and jest-config depend on glob 13, and test-exclude depends on glob 10. Dev tooling only."
+
+[[IgnoredVulns]]
+id = "GHSA-g3hv-75wg-m249"
+ignoreUntil = 2027-02-01
+reason = "minimatch is fixed in 11.0.1. The lockfile copies are 3.x, 9.x, and 10.x from glob and the React Native Jest preset. Dev tooling only."

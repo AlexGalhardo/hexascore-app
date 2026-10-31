@@ -48,7 +48,12 @@ func KnownType(next http.Handler) http.Handler {
 		case "games", "movies", "series", "books", "entities":
 			next.ServeHTTP(w, r)
 		default:
-			web.Fail(w, r, errs.ErrNotFound)
+			// web.Fail renders the HTML status page when Accept is empty.
+			// Schemathesis omits Accept, and these 404s are documented as
+			// application/problem+json.
+			nr := r.Clone(r.Context())
+			nr.Header.Set("Accept", "application/problem+json")
+			web.Fail(w, nr, errs.ErrNotFound)
 		}
 	})
 }

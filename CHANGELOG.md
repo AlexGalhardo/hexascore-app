@@ -13,6 +13,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Trust the docker bridge in the OpenAPI scan so each Schemathesis call has its own rate-limit bucket, and keep the bun:test files out of vitest.
 - Stop commitlint from rejecting commit bodies that already exceed 100 characters.
 - Fetch the full git history in the lint job so commitlint can see the pull request range.
+- Answer an unknown `/app/v1` collection with problem+json when the client sends no Accept header.
+- Start the page modules after the LCP entry so the home and games listings stay inside the Lighthouse budget.
+- Ignore four transitive Expo and Jest advisories that have no compatible patched release.
+- Let the pull request title `Release x.y.z` pass commitlint. The commit subjects stay conventional.
 
 ## [0.11.0] - 2026-10-31
 

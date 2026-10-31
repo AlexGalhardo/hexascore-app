@@ -179,14 +179,23 @@ func loaderScript(mods []modScript) []byte {
 		b.WriteString(html.EscapeString(mods[0].Nonce))
 		b.WriteString(`"`)
 	}
-	b.WriteString(`>addEventListener("load",function(){requestAnimationFrame(function(){var mods=`)
+	// One frame after load still starts the module before Lighthouse records
+	// LCP on / and /games. Lantern then treats that file as render-blocking.
+	// Wait for an LCP entry, then two frames. The timeout covers a browser
+	// that never emits LCP. `})})})` is a SyntaxError and the app never hydrates.
+	b.WriteString(
+		`>addEventListener("load",function(){var started=0;function go(){if(started)return;started=1;var mods=`,
+	)
 	b.Write(payload)
 	b.WriteString(`;for(var i=0;i<mods.length;i++){var m=mods[i];`)
 	b.WriteString(`var s=document.createElement("script");s.type="module";s.src=m.src;`)
 	b.WriteString(`if(m.integrity){s.integrity=m.integrity;s.crossOrigin="anonymous"}`)
-	// Closers: appendChild, for, animation callback, requestAnimationFrame, load listener, addEventListener.
-	// `})})})` is a SyntaxError, so the module never loads and forms never hydrate.
-	b.WriteString(`if(m.nonce)s.nonce=m.nonce;document.head.appendChild(s)}})})</script>`)
+	b.WriteString(`if(m.nonce)s.nonce=m.nonce;document.head.appendChild(s)}}`)
+	b.WriteString(
+		`try{var o=new PerformanceObserver(function(){o.disconnect();requestAnimationFrame(function(){requestAnimationFrame(go)})});`,
+	)
+	b.WriteString(`o.observe({type:"largest-contentful-paint",buffered:true})}catch(e){setTimeout(go,0)}`)
+	b.WriteString(`setTimeout(go,2000)})</script>`)
 
 	return []byte(b.String())
 }

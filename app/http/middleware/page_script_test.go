@@ -51,12 +51,15 @@ func TestMovePageScript(t *testing.T) {
 		t.Fatalf("stylesheet dropped: %s", body)
 	}
 
-	if !strings.Contains(body, `addEventListener("load",function(){requestAnimationFrame(function(){var mods=`) ||
+	if !strings.Contains(
+		body,
+		`addEventListener("load",function(){var started=0;function go(){if(started)return;started=1;var mods=`,
+	) ||
 		!strings.Contains(body, `/build/assets/app.js`) {
 		t.Fatalf("loader missing: %s", body)
 	}
 
-	if !strings.Contains(body, `document.head.appendChild(s)}})})</script>`) {
+	if !strings.Contains(body, `setTimeout(go,2000)})</script>`) {
 		t.Fatalf("loader is not valid JavaScript: %s", body)
 	}
 

@@ -4,7 +4,11 @@ const config: UserConfig = {
 	extends: ["@commitlint/config-conventional"],
 	// Orchestration lands each microtask with `merge: <id> ...`. That prefix is
 	// not a Conventional Commit type; the commits stay in history.
-	ignores: [(commit) => commit.startsWith("merge:")],
+	ignores: [
+		(commit) => commit.startsWith("merge:"),
+		// The 0.11.0 pull request title is the release name, not a commit subject.
+		(commit) => /^Release \d+\.\d+\.\d+\s*$/.test(commit),
+	],
 	rules: {
 		"scope-case": [2, "always", "lower-case"],
 		"header-max-length": [2, "always", 100],
