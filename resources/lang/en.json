@@ -587,7 +587,9 @@
   },
   "home": {
     "title": "Every game, movie, series and book — scored by people, category by category.",
-    "explore": "Explore"
+    "explore": "Explore",
+    "recent": "Recently rated by members",
+    "ratedBy": "by {name}"
   },
   "footer": {
     "terms": "Terms",
