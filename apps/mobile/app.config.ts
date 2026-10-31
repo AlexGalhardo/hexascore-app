@@ -11,7 +11,7 @@ const config: ExpoConfig = {
 	android: {
 		package: "app.hexascore",
 	},
-	plugins: ["expo-router"],
+	plugins: ["expo-router", "expo-secure-store", "expo-sqlite", "expo-image"],
 	experiments: {
 		typedRoutes: true,
 	},
