@@ -252,3 +252,22 @@ func assertNoExternalIDs(t *testing.T, body string) {
 		t.Errorf("api body leaks a TMDB/IGDB id (%s): %s", m, body)
 	}
 }
+
+// A field an approved community edit wrote (provenance `community`) is served on /api/v1 under the
+// default CATALOG_API_SOURCES (SDD 01 §6.1, SDD 05 §5, A-07).
+func TestAPICommunityProvenance(t *testing.T) {
+	r := newAPICatalog(t)
+	// The same two writes the apply transaction does: the source row on first apply, then the field.
+	if err := catalog.EnsureSource(t.Context(), r.acc.DB, catalog.SourceCommunity); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := r.acc.DB.ExecContext(t.Context(), `UPDATE items SET runtime_minutes = 45,
+  provenance = provenance || '{"runtime_minutes":"community"}' WHERE id = $1`, r.game); err != nil {
+		t.Fatal(err)
+	}
+
+	r.client.GetJSON("/api/v1/games/"+r.game).AssertOK().AssertMatchesOpenAPI().
+		AssertJSONPath("runtimeMinutes", 45).
+		AssertJSONPath("provenance.runtimeMinutes.source", "community").
+		AssertJSONPath("provenance.runtimeMinutes.licence", "HEXASCORE-API-TERMS")
+}
