@@ -1,4 +1,20 @@
 {
+  "flash": {
+    "ratingSaved": "Rating saved.",
+    "ratingRemoved": "Rating removed.",
+    "statusSaved": "Status saved.",
+    "statusRemoved": "Status removed.",
+    "timeToBeatSaved": "Times saved.",
+    "timeToBeatRemoved": "Times removed.",
+    "listCreated": "List created.",
+    "listUpdated": "List updated.",
+    "listDeleted": "List deleted.",
+    "listItemAdded": "Added to the list.",
+    "listItemRemoved": "Removed from the list.",
+    "editionSaved": "Edition saved.",
+    "editionRemoved": "Edition forgotten.",
+    "adminTwoFactorRequired": "Two-factor authentication is required to open the admin area. Set it up here."
+  },
   "account": {
     "metaTitle": "Profile",
     "title": "Your profile",
@@ -41,6 +57,21 @@
       "cancel": "Cancel",
       "needPassword": "Set a password above before turning on two-factor authentication.",
       "manage": "Manage two-factor authentication"
+    },
+    "passkeys": {
+      "title": "Passkeys",
+      "body": "Log in with your fingerprint, face or device PIN instead of a password.",
+      "empty": "No passkeys yet.",
+      "add": "Add passkey",
+      "remove": "Remove",
+      "removeLabel": "Remove passkey {name}",
+      "unnamed": "Passkey",
+      "added": "Added {date}",
+      "failed": "The passkey was not saved. Try again.",
+      "lastWarning": "If you remove your last passkey, you can still recover the account with email reset.",
+      "confirmGoogle": "Confirm with Google",
+      "limit": "You can save at most 10 passkeys.",
+      "password": "Password"
     },
     "privacy": {
       "title": "Privacy",
@@ -227,6 +258,7 @@
     },
     "or": "or",
     "google": "Continue with Google",
+    "passkey": "Sign in with a passkey",
     "challenge": {
       "checking": "Checking your browser…",
       "noscript": "This form needs JavaScript. Without it you can"
@@ -246,7 +278,8 @@
       "invalidNickname": "4 to 16 lowercase letters, no numbers or symbols.",
       "invalidEmail": "Enter a valid email.",
       "invalidName": "Enter your name.",
-      "invalidToken": "This link is invalid or expired."
+      "invalidToken": "This link is invalid or expired.",
+      "passkeyFailed": "Passkey sign-in was cancelled or failed."
     },
     "login": {
       "metaTitle": "Log in",
@@ -554,7 +587,9 @@
   },
   "home": {
     "title": "Every game, movie, series and book — scored by people, category by category.",
-    "explore": "Explore"
+    "explore": "Explore",
+    "recent": "Recently rated by members",
+    "ratedBy": "by {name}"
   },
   "footer": {
     "terms": "Terms",

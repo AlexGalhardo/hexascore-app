@@ -10,7 +10,7 @@ import (
 // permissionsPolicy is the legacy HexaScore list (SDD 13 §6.2), wider than vukem's three-feature default.
 const permissionsPolicy = "accelerometer=(), autoplay=(), camera=(), display-capture=(), geolocation=(), " +
 	"gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), browsing-topics=(), " +
-	"publickey-credentials-get=()"
+	"publickey-credentials-get=(self), publickey-credentials-create=(self)"
 
 // UpgradeInsecure reports whether the CSP should carry upgrade-insecure-requests: only in production and when
 // the public URL is https, so the built container reached over plain HTTP (local QA gate) keeps working.

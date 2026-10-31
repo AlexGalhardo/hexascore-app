@@ -11,6 +11,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Report dialog on public profiles and public lists (`POST /reports`, reasons from SDD 14).
 - Dashboard page with links to the library, lists, public page and API keys, in the three locales.
 - Mobile header: brand, search and icon buttons on one row, sections on a scrollable row, account and language entries in a menu.
+- Item covers in every listing: home highlights, section listings, search results, library, lists and public profiles; `COVERS_BASE_URL` (same-origin `/covers` by default, a bucket or CDN https origin joins CSP `img-src`), a sized placeholder when an item has no cover, and placeholder covers for the demo catalogue.
+- Toast feedback after rating, status, time-to-beat, list and edition changes, and an explanation on `/user/two-factor` when the admin area redirected there (en, pt-BR, es).
+- `type` enum (`games`, `movies`, `series`, `books`) in the OpenAPI documents and the TypeScript SDK.
+- `hexascore:import-legacy --allow-no-login` opts in to users with no password, Google link or passkey; duplicate emails and a two-factor flag without a row still abort.
+- Passkeys (vukem v0.34.0): add, sign in with and remove a passkey from the profile and the login page in en/pt-BR/es, a `passkey_changed` mail, the legacy passkey import in the users stage, and passkey rows deleted when an account is anonymised.
+- Home page hero with the Explore call to action and a "recently rated by members" strip (12 public ratings, cached 60 s).
+- Community honeypot (third hit in seven days blocks for 30 days), burst limits, cover upload rules and source URL / cover fetch jobs through the safe HTTP client.
 
 ### Changed
 
@@ -19,9 +26,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - The app name falls back to "HexaScore" when `APP_NAME` is unset; the QA compose stack sets it.
 - The public API `unknown type` problem names the accepted segments (games, movies, series, books).
 - Demo seeder: ratings spread over the whole 0.5–10 range (the previous `ORDER BY random()` reused the draw and every demo score was 1/10).
+- The free API plan accepts a burst of 5 requests (1 request/second sustained).
 
 ### Fixed
 
+- Legacy cover copy retries DNS, rate-limit and non-rewindable-body errors and accepts `--concurrency`; HTTP 404 stays one failure.
 - A verified user without a nickname is sent to the onboarding after a late e-mail verification instead of the dashboard.
 - Public lists with fewer than three items are `noindex` (SDD 14 FR-14-6).
 - Unknown profiles and lists render the 404 page with the shell instead of the bare framework page.
@@ -36,6 +45,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Fetch the full git history in the lint job so commitlint can see the pull request range.
 - Answer an unknown `/app/v1` collection with problem+json when the client sends no Accept header.
 - Start the page modules after the LCP entry so the home and games listings stay inside the Lighthouse budget.
+- The admin ingestion and item-manage pages show the same sidebar as the admin panel.
+- Gate reliability on loaded hosts: vitest worker cap and Postgres `fsync` off in the dev compose.
+- Account purge deletes private lists and notifications, clears public list free text and closes reports about the user (SDD 14 section 8).
+- The legacy catalogue import stores a runtime or page count only when it fits the items check; out-of-range values become empty instead of aborting the batch.
 - Ignore four transitive Expo and Jest advisories that have no compatible patched release.
 - Let the pull request title `Release x.y.z` pass commitlint. The commit subjects stay conventional.
 - Freeze the clock in `TestSecurity_A07_HexaHoneypotAndFillTime`, so a slow proof-of-work solve under `-race` no longer ages the "too fast" form token past the minimum fill time.

@@ -19,10 +19,11 @@ import (
 // the stages in order, resuming each from its checkpoint.
 func ImportLegacy() vukem.Command {
 	var (
-		stage  *string
-		dryRun *bool
-		batch  *int
-		stdin  *bool
+		stage        *string
+		dryRun       *bool
+		batch        *int
+		stdin        *bool
+		allowNoLogin *bool
 	)
 
 	return vukem.CommandFunc{
@@ -37,6 +38,8 @@ func ImportLegacy() vukem.Command {
 			dryRun = fs.Bool("dry-run", false, "print pre-flight and planned counts, write nothing")
 			batch = fs.Int("batch", legacyimport.DefaultBatch, "rows per transaction")
 			stdin = fs.Bool("stdin", false, "read the twofactor export (NDJSON) from stdin")
+			allowNoLogin = fs.Bool("allow-no-login", false,
+				"opt in to importing users who have no password, Google link, or passkey")
 		},
 		Fn: func(ctx context.Context, app *vukem.App, _ []string) error {
 			stages, err := legacyimport.Select(legacyimport.Stages(), strings.Split(*stage, ","))
@@ -68,6 +71,10 @@ func ImportLegacy() vukem.Command {
 				pre.Failures["no_login_method"],
 				pre.PasskeyOnly,
 			)
+
+			if *allowNoLogin {
+				pre, preErr = legacyimport.IgnoreNoLogin(pre, preErr)
+			}
 
 			if *dryRun {
 				plan, err := legacyimport.Plan(ctx, db, stages)

@@ -11,6 +11,7 @@ import (
 
 	"github.com/AlexGalhardo/vukem/web"
 
+	"github.com/AlexGalhardo/hexascore-app/app/flash"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
 
@@ -119,6 +120,7 @@ func AdminGuard(cfg AdminGuardConfig) func(http.Handler) http.Handler {
 				}
 
 				if !on {
+					flash.Status(c, "flash.adminTwoFactorRequired")
 					http.Redirect(w, r, cfg.SetupPath, http.StatusSeeOther)
 					return
 				}

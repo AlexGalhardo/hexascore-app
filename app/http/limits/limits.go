@@ -63,10 +63,21 @@ var (
 	CSPReports     = Rule{"csp-reports", 30, time.Minute}
 	ClientErrors   = Rule{"client-errors", 10, time.Minute}
 	ClientMetrics  = Rule{"client-metrics", 60, time.Minute}
+	// Community bursts (SDD 04 §7.3). The IP rule sits in front of the user
+	// rule. Production still requires RATE_LIMIT_STORE=cache.
+	CommunityDraft    = Rule{"community.drafts", 30, time.Hour}
+	CommunityDraftIP  = Rule{"community.drafts.ip", 30, time.Hour}
+	CommunitySubmit   = Rule{"community.submit", 10, time.Minute}
+	CommunitySubmitIP = Rule{"community.submit.ip", 10, time.Minute}
+	CommunityUpload   = Rule{"community.uploads", 10, time.Hour}
+	CommunityUploadIP = Rule{"community.uploads.ip", 10, time.Hour}
 )
 
-// APIPlan is the per-key rate of a public API plan (SDD 05): rps requests per second.
-func APIPlan(plan string, rps int) Rule { return Rule{"api-" + plan, rps, time.Second} }
+// APIPlan is the per-key rate of a public API plan (SDD 05 §6.2): up to burst requests at once, rps sustained.
+// The limiter is a token bucket (GCRA), so burst requests per burst/rps seconds gives both.
+func APIPlan(plan string, rps, burst int) Rule {
+	return Rule{"api-" + plan, burst, time.Duration(burst) * time.Second / time.Duration(rps)}
+}
 
 // All lists the fixed rules, for the table test.
 func All() []Rule {
@@ -75,6 +86,7 @@ func All() []Rule {
 		Deletion, Contact, Ratings, Status, TimeToBeat, Lists, Editions, Notify, Reports, Search, Suggest,
 		SearchEvents, APIIP, AppIP, AppRead, AppWrite, AppTokens, AppTokensAcc, AppTokensUsr, AppTokenRotate, App2FA,
 		Challenge, Exports, CSPReports, ClientErrors, ClientMetrics,
+		CommunityDraft, CommunityDraftIP, CommunitySubmit, CommunitySubmitIP, CommunityUpload, CommunityUploadIP,
 	}
 }
 
