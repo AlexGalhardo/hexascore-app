@@ -134,6 +134,13 @@ func APIV1(r *router.Router, app *vukem.App) error {
 		} {
 			vapi.Register(g, "GET /"+section+"/genres", read(op), items.ListGenres(section))
 		}
+		for section, op := range map[string]string{
+			"games": "listGameTrending", "movies": "listMovieTrending",
+			"series": "listSeriesTrending", "books": "listBookTrending",
+		} {
+			vapi.Register(g, "GET /"+section+"/trending", read(op), items.ListTrending(section))
+		}
+		vapi.Register(g, "GET /{type}/{id}/activity", read("getItemActivity"), items.GetItemActivity)
 		vapi.Register(g, "GET /search/entities", read("searchEntities"), items.SearchEntities)
 		vapi.Register(g, "GET /search", read("searchItems"), items.SearchItems)
 		vapi.Register(g, "GET /lookup", read("lookupItem"), items.LookupItem)

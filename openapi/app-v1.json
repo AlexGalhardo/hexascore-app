@@ -42,6 +42,51 @@
         ]
       }
     },
+    "/app/v1/books/trending": {
+      "get": {
+        "operationId": "listBookTrending",
+        "summary": "listBookTrending",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/app/v1/books/{id}/editions": {
       "get": {
         "operationId": "listEditions",
@@ -323,6 +368,51 @@
           },
           "401": {
             "$ref": "#/components/responses/Problem"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/app/v1/games/trending": {
+      "get": {
+        "operationId": "listGameTrending",
+        "summary": "listGameTrending",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
           },
           "default": {
             "$ref": "#/components/responses/Problem"
@@ -1086,6 +1176,51 @@
         ]
       }
     },
+    "/app/v1/movies/trending": {
+      "get": {
+        "operationId": "listMovieTrending",
+        "summary": "listMovieTrending",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/app/v1/reports": {
       "post": {
         "operationId": "reports.create",
@@ -1198,6 +1333,51 @@
           },
           "401": {
             "$ref": "#/components/responses/Problem"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/app/v1/series/trending": {
+      "get": {
+        "operationId": "listSeriesTrending",
+        "summary": "listSeriesTrending",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
           },
           "default": {
             "$ref": "#/components/responses/Problem"
@@ -2009,6 +2189,50 @@
           },
           "text": {
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TrendingEntryJSON": {
+        "properties": {
+          "basis": {
+            "enum": [
+              "trend",
+              "prior"
+            ],
+            "minLength": 1,
+            "type": "string"
+          },
+          "item": {
+            "$ref": "#/components/schemas/ItemJSON"
+          },
+          "rank": {
+            "type": "integer"
+          },
+          "trendScore": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "rank",
+          "basis"
+        ],
+        "type": "object"
+      },
+      "TrendingJSON": {
+        "properties": {
+          "computedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/TrendingEntryJSON"
+            },
+            "type": "array"
           }
         },
         "type": "object"
