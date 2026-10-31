@@ -73,6 +73,11 @@ func SaveDraft(
 		return createDraft(ctx, db, authorID, target, in, raw, urls)
 	}
 
+	// A malformed id would be a uuid cast error (500) in the query; it is simply not a draft of this author.
+	if !uuidRe.MatchString(id) {
+		return "", 0, ErrDraftNotFound
+	}
+
 	var next int
 
 	err = db.Tx(ctx, func(tx *database.Tx) error {
