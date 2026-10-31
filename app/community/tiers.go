@@ -41,7 +41,8 @@ func cooldownExceeded(until, now time.Time) *Problem {
 // rejectCooldown is the submit check. A future cooldown_until refuses the submit and consumes nothing.
 func rejectCooldown(ctx context.Context, tx *database.Tx, userID int64, now time.Time) error {
 	var until sql.NullTime
-	if err := tx.QueryRowContext(ctx, `SELECT cooldown_until FROM contributor_stats WHERE user_id = $1`, userID).Scan(&until); err != nil {
+	if err := tx.QueryRowContext(ctx, `SELECT cooldown_until FROM contributor_stats WHERE user_id = $1`, userID).
+		Scan(&until); err != nil {
 		return fmt.Errorf("community: load cooldown: %w", err)
 	}
 	if until.Valid && until.Time.After(now) {
@@ -149,7 +150,11 @@ WHERE status = 'in_review' AND claimed_at IS NOT NULL AND claimed_at <= $1 FOR U
 			if err := TransitionTx(ctx, tx, c.id, c.version, "submitted", actor); err != nil {
 				return err
 			}
-			if _, err := tx.ExecContext(ctx, `UPDATE suggestions SET assigned_to = NULL, claimed_at = NULL WHERE id = $1`, c.id); err != nil {
+			if _, err := tx.ExecContext(
+				ctx,
+				`UPDATE suggestions SET assigned_to = NULL, claimed_at = NULL WHERE id = $1`,
+				c.id,
+			); err != nil {
 				return fmt.Errorf("community: release claim: %w", err)
 			}
 		}

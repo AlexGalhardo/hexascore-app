@@ -92,7 +92,13 @@ func TestTier(t *testing.T) {
 			t.Fatal(err)
 		}
 		until := now.Add(10 * 24 * time.Hour)
-		if _, err := db.ExecContext(ctx, `UPDATE contributor_stats SET tier = 'blocked', blocked_until = $2, updated_at = $3 WHERE user_id = $1`, userID, until, now.Add(-time.Hour)); err != nil {
+		if _, err := db.ExecContext(
+			ctx,
+			`UPDATE contributor_stats SET tier = 'blocked', blocked_until = $2, updated_at = $3 WHERE user_id = $1`,
+			userID,
+			until,
+			now.Add(-time.Hour),
+		); err != nil {
 			t.Fatal(err)
 		}
 		if err := RebuildStats(ctx, db, now); err != nil {
@@ -137,8 +143,24 @@ func TestTier(t *testing.T) {
 		if err := storage.PutBytes(ctx, disk, "keep.txt", []byte("x")); err != nil {
 			t.Fatal(err)
 		}
-		oldDraft := insertTierDraft(t, db, userID, 1, "draft", fmt.Sprintf(`{"cover":{"after":%q}}`, oldCover), now.Add(-15*24*time.Hour))
-		youngDraft := insertTierDraft(t, db, userID, 2, "draft", `{"cover":{"after":"https://cdn.example/a.jpg"}}`, now.Add(-13*24*time.Hour))
+		oldDraft := insertTierDraft(
+			t,
+			db,
+			userID,
+			1,
+			"draft",
+			fmt.Sprintf(`{"cover":{"after":%q}}`, oldCover),
+			now.Add(-15*24*time.Hour),
+		)
+		youngDraft := insertTierDraft(
+			t,
+			db,
+			userID,
+			2,
+			"draft",
+			`{"cover":{"after":"https://cdn.example/a.jpg"}}`,
+			now.Add(-13*24*time.Hour),
+		)
 		idle := insertClaim(t, db, userID, 3, now.Add(-3*time.Hour))
 		fresh := insertClaim(t, db, userID, 4, now.Add(-30*time.Minute))
 		if err := Hourly(ctx, db, now, disk); err != nil {
@@ -203,7 +225,10 @@ func TestCooldown(t *testing.T) {
 		draft := insertTierDraft(t, db, userID, 1, "draft", `{}`, now)
 		status, err := Submit(ctx, db, draft, userID, 1, now)
 		var problem *Problem
-		if status != http.StatusTooManyRequests || !errors.As(err, &problem) || problem.Code != "suggestion-cooldown" || problem.RetryAfter <= 0 || problem.CooldownUntil == nil || !problem.CooldownUntil.Equal(want) {
+		if status != http.StatusTooManyRequests || !errors.As(err, &problem) || problem.Code != "suggestion-cooldown" ||
+			problem.RetryAfter <= 0 ||
+			problem.CooldownUntil == nil ||
+			!problem.CooldownUntil.Equal(want) {
 			t.Fatalf("submit status %d err %#v", status, err)
 		}
 		assertTierStatus(t, db, draft, "draft")
@@ -277,9 +302,16 @@ VALUES ('Author', $1, 'x', $2, $2, $2) RETURNING id`, email, created).Scan(&id)
 
 func setTotals(t *testing.T, db *database.DB, userID int64, approved, rejected, reverted int) {
 	t.Helper()
-	_, err := db.ExecContext(context.Background(), `INSERT INTO contributor_stats (user_id, approved_total, rejected_total, reverted_total)
+	_, err := db.ExecContext(
+		context.Background(),
+		`INSERT INTO contributor_stats (user_id, approved_total, rejected_total, reverted_total)
 VALUES ($1, $2, $3, $4)
-ON CONFLICT (user_id) DO UPDATE SET approved_total = $2, rejected_total = $3, reverted_total = $4`, userID, approved, rejected, reverted)
+ON CONFLICT (user_id) DO UPDATE SET approved_total = $2, rejected_total = $3, reverted_total = $4`,
+		userID,
+		approved,
+		rejected,
+		reverted,
+	)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -288,7 +320,8 @@ ON CONFLICT (user_id) DO UPDATE SET approved_total = $2, rejected_total = $3, re
 func assertAccuracy(t *testing.T, db *database.DB, userID int64, want string) {
 	t.Helper()
 	var got string
-	if err := db.QueryRowContext(context.Background(), `SELECT accuracy::text FROM contributor_stats WHERE user_id = $1`, userID).Scan(&got); err != nil {
+	if err := db.QueryRowContext(context.Background(), `SELECT accuracy::text FROM contributor_stats WHERE user_id = $1`, userID).
+		Scan(&got); err != nil {
 		t.Fatal(err)
 	}
 	if got != want {
@@ -317,7 +350,14 @@ VALUES ($1, $2, 'edit', 'item', '00000000-0000-0000-0000-0000000000aa', 'movie',
 	}
 }
 
-func insertTierDraft(t *testing.T, db *database.DB, userID int64, n int, status, changes string, updated time.Time) string {
+func insertTierDraft(
+	t *testing.T,
+	db *database.DB,
+	userID int64,
+	n int,
+	status, changes string,
+	updated time.Time,
+) string {
 	t.Helper()
 	id := fmt.Sprintf("00000000-0000-7000-8100-%012d", n+int(userID))
 	_, err := db.ExecContext(context.Background(), `INSERT INTO suggestions
@@ -359,7 +399,8 @@ func readTier(t *testing.T, db *database.DB, userID int64) tierRow {
 	var row tierRow
 	var blocked, cool sql.NullTime
 	err := db.QueryRowContext(context.Background(), `SELECT tier::text, accuracy::text, trusted_eligible, blocked_until, cooldown_until, updated_at
-FROM contributor_stats WHERE user_id = $1`, userID).Scan(&row.tier, &row.accuracy, &row.trusted, &blocked, &cool, &row.updatedAt)
+FROM contributor_stats WHERE user_id = $1`, userID).
+		Scan(&row.tier, &row.accuracy, &row.trusted, &blocked, &cool, &row.updatedAt)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -377,7 +418,8 @@ FROM contributor_stats WHERE user_id = $1`, userID).Scan(&row.tier, &row.accurac
 func assertTierStatus(t *testing.T, db *database.DB, id, status string) {
 	t.Helper()
 	var got string
-	if err := db.QueryRowContext(context.Background(), `SELECT status::text FROM suggestions WHERE id = $1`, id).Scan(&got); err != nil {
+	if err := db.QueryRowContext(context.Background(), `SELECT status::text FROM suggestions WHERE id = $1`, id).
+		Scan(&got); err != nil {
 		t.Fatal(err)
 	}
 	if got != status {
@@ -389,7 +431,8 @@ func claimCleared(t *testing.T, db *database.DB, id string) bool {
 	t.Helper()
 	var assigned sql.NullInt64
 	var claimed sql.NullTime
-	if err := db.QueryRowContext(context.Background(), `SELECT assigned_to, claimed_at FROM suggestions WHERE id = $1`, id).Scan(&assigned, &claimed); err != nil {
+	if err := db.QueryRowContext(context.Background(), `SELECT assigned_to, claimed_at FROM suggestions WHERE id = $1`, id).
+		Scan(&assigned, &claimed); err != nil {
 		t.Fatal(err)
 	}
 
