@@ -21,24 +21,24 @@ import (
 var now = time.Date(2026, 10, 31, 12, 0, 0, 0, time.UTC)
 
 type rig struct {
-	t   *testing.T
+	t   testing.TB
 	db  *database.DB
 	ctx context.Context
 	n   int
 }
 
-func newRig(t *testing.T) *rig {
-	t.Helper()
+func newRig(tb testing.TB) *rig {
+	tb.Helper()
 
-	url := pgtest.Database(t, "")
-	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{"DATABASE_URL": url}})
+	url := pgtest.Database(tb, "")
+	app := vukemtest.New(tb, bootstrap.New, vukemtest.Options{Env: map[string]string{"DATABASE_URL": url}})
 
 	db, err := app.DB()
 	if err != nil {
-		t.Fatal(err)
+		tb.Fatal(err)
 	}
 
-	return &rig{t: t, db: db, ctx: context.Background()}
+	return &rig{t: tb, db: db, ctx: context.Background()}
 }
 
 func (r *rig) exec(q string, args ...any) {
