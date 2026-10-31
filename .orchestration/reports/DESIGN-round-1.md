@@ -36,3 +36,9 @@ Frames per version: cover, foundations, components; home, catalog-index, item, s
 - v3 frames were checked with `export_image` previews; the pricing subtitle on desktop is left-aligned in a centred block (cosmetic, round 2).
 - Production `/search` returns HTTP 500, so search counts in the frames are plausible values, not real ones.
 - Production has no ratings: all score numbers are illustrative.
+
+## Review (especialista, 2026-10-31)
+
+APROVADO at 0fb8e59. Scope: `docs/openpencil/` (three `.fig` files, 57 PNG frames, READMEs, `ROUND-1.md`), `.claude/skills/openpencil-design/`, `.claude/rules/design.md`, `.grok/rules/design.md`, designer brief and handoff, and two local helper scripts in `scripts/openpencil/` (read the MCP token from the user's OpenPencil config, never print it). No app code, migrations or lockfiles changed. `bunx markdownlint-cli2@0.24.0` on the new Markdown: clean (only the pre-existing `vukem-feedback.md` error on the branch base, already fixed on main). The production `/search` 500 is covered by FIX-search-timeout-500 and FIX-search-prod-slow, both on local main and waiting for a deploy.
+
+PRONTO_PARA_MERGE agent/designer/round-1
