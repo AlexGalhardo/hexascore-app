@@ -6,23 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-### Added
-
-- **ui:** Anonymous catalogue HTML (home, listings, items, entities) is cached in process for 60 s, keyed by path, query, display cookies and, on unprefixed pages, `Accept-Language`, and sent with `Cache-Control: public, max-age=60, stale-while-revalidate=300`; the CSP nonce stays per request and session requests stay `private, no-store` (P2.H.3.5)
-- **lists:** List owners add items from the list edit page with a suggest box limited to the list type (P2.H.1.5)
-- **mobile:** Android API client wrapper with auth, version and locale headers, idempotency keys, problem-code mapping and minimum-version detection (P5.A.3.1)
-- **community:** `Community/SuggestEdit` page with draft save and restore, quota, locked-field reasons, "Suggest an edit" links on item, edition and entity pages, and `community.*` strings in en, pt-BR and es (P4.A.3.1c)
-
-### Changed
-
-- **ui:** The library, public lists and profile ratings render shared shelf cards (cover, status, score); the library groups by status with counts (P2.H.1.4)
+## [0.12.1] - 2026-10-31
 
 ### Fixed
 
-- **auth:** Login and signup forms post their named fields, the signed form token and `remember` without JavaScript (FIX-nojs-auth-post)
-- **mobile:** The catalogue copy script emits Biome-formatted JSON; committed copies refreshed (P5.A.1.1)
-- **mobile:** The navigation test renders each route in its own test and no longer hits the Jest timeout under load (FIX-mobile-nav-test-timeout)
-- **tests:** `TestReleaseBursts` no longer fails when the Postgres container clock runs ahead of the host (FIX-scoring-burst-clock)
+- **catalog:** Pass the cover to the item page ([9a8850f](https://github.com/AlexGalhardo/hexascore-app/commit/9a8850f4f349bd7f6e94f4e39c48efdec8ec9b11))
 
 ## [0.12.0] - 2026-10-31
 
