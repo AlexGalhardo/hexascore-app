@@ -74,7 +74,8 @@ func APIV1(r *router.Router, app *vukem.App) error {
 
 	for _, id := range []string{api.PlanFree, api.PlanPro, api.PlanBusiness} {
 		p, _ := api.PlanByID(id)
-		throttles[id] = ratelimit.Middleware(limits.APIPlan(id, p.RPS).From(limiters), ratelimit.ByUser(api.GuardName))
+		rule := limits.APIPlan(id, p.RPS, p.Burst).From(limiters)
+		throttles[id] = ratelimit.Middleware(rule, ratelimit.ByUser(api.GuardName))
 	}
 
 	throttle := func(next http.Handler) http.Handler {
@@ -112,6 +113,7 @@ func APIV1(r *router.Router, app *vukem.App) error {
 			}, acc.ProblemBase, app.Now),
 			throttle,
 			api.Quota(meter, plans, acc.ProblemBase),
+			publicapi.TypeGuard,
 		)
 
 		read := func(name string) vapi.Op {
