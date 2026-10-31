@@ -1,0 +1,244 @@
+{
+ "note": "Synthetic trimmed wikidata payloads (QIDs are fictitious, not Wikidata entities). Q900001 anime is based_on manga Q900002 via P144; Q900004 film is based_on novel Q900005 via P144. Real recorded entities do not carry P144 yet (fetched before P6.A.2.2).",
+ "items": {
+  "Q900001": {
+   "type": "series",
+   "id": "Q900001",
+   "labels": {
+    "en": "Example Anime"
+   },
+   "aliases": {
+    "en": [
+     "Example Anime",
+     "Anime Example"
+    ],
+    "ja-latn": [
+     "Shingeki Example"
+    ],
+    "mul": [
+     "EX"
+    ],
+    "fr": [
+     "Ignored"
+    ]
+   },
+   "sitelinks": {},
+   "sitelinks_count": 1,
+   "claims": {
+    "P144": [
+     {
+      "rank": "normal",
+      "value": "Q900002"
+     },
+     {
+      "rank": "normal",
+      "value": "Q900002"
+     },
+     {
+      "rank": "normal",
+      "value": "Q900008"
+     },
+     {
+      "rank": "deprecated",
+      "value": "Q900009"
+     }
+    ],
+    "P161": [
+     {
+      "rank": "normal",
+      "value": "Q910000"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910001"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910002"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910003"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910004"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910005"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910006"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910007"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910008"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910009"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910010"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910011"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910012"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910013"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910014"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910015"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910016"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910017"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910018"
+     },
+     {
+      "rank": "normal",
+      "value": "Q910019"
+     }
+    ],
+    "P449": [
+     {
+      "rank": "normal",
+      "value": "Q920001"
+     }
+    ],
+    "P50": [
+     {
+      "rank": "normal",
+      "value": "Q930001"
+     }
+    ]
+   },
+   "refs": {
+    "Q910000": "Actor 0",
+    "Q910001": "Actor 1",
+    "Q910002": "Actor 2",
+    "Q910003": "Actor 3",
+    "Q910004": "Actor 4",
+    "Q910005": "Actor 5",
+    "Q910006": "Actor 6",
+    "Q910007": "Actor 7",
+    "Q910008": "Actor 8",
+    "Q910009": "Actor 9",
+    "Q910010": "Actor 10",
+    "Q910011": "Actor 11",
+    "Q910012": "Actor 12",
+    "Q910013": "Actor 13",
+    "Q910014": "Actor 14",
+    "Q910015": "Actor 15",
+    "Q910016": "Actor 16",
+    "Q910017": "Actor 17",
+    "Q910018": "Actor 18",
+    "Q910019": "Actor 19",
+    "Q900002": "Example Manga",
+    "Q900005": "Example Novel",
+    "Q920001": "Example Network"
+   }
+  },
+  "Q900004": {
+   "type": "movie",
+   "id": "Q900004",
+   "labels": {
+    "en": "Example Film"
+   },
+   "aliases": {},
+   "sitelinks": {},
+   "sitelinks_count": 1,
+   "claims": {
+    "P144": [
+     {
+      "rank": "normal",
+      "value": "Q900005"
+     },
+     {
+      "rank": "normal",
+      "value": "Q900006"
+     }
+    ],
+    "P57": [
+     {
+      "rank": "normal",
+      "value": "Q940001"
+     }
+    ]
+   },
+   "refs": {
+    "Q940001": "A Director"
+   }
+  },
+  "Q900007": {
+   "type": "movie",
+   "id": "Q900007",
+   "labels": {
+    "en": "Many Aliases"
+   },
+   "aliases": {
+    "en": [
+     "Alias 0",
+     "Alias 1",
+     "Alias 2",
+     "Alias 3",
+     "Alias 4",
+     "Alias 5",
+     "Alias 6",
+     "Alias 7",
+     "Alias 8",
+     "Alias 9",
+     "Alias 10",
+     "Alias 11",
+     "Alias 12",
+     "Alias 13",
+     "Alias 14",
+     "Alias 15",
+     "Alias 16",
+     "Alias 17",
+     "Alias 18",
+     "Alias 19",
+     "Alias 20",
+     "Alias 21",
+     "Alias 22",
+     "Alias 23",
+     "Alias 24",
+     "Alias 25",
+     "Alias 26",
+     "Alias 27",
+     "Alias 28",
+     "Alias 29"
+    ]
+   },
+   "sitelinks": {},
+   "sitelinks_count": 1,
+   "claims": {},
+   "refs": {}
+  }
+ }
+}
