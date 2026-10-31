@@ -27,6 +27,10 @@ type Problem struct {
 	Limit      int
 	Used       int
 	ResetAt    time.Time
+	ExistingID string
+	Field      string
+	Current    string
+	LockReason string
 }
 
 // Error implements error.

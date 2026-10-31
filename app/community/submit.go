@@ -45,6 +45,9 @@ func submitTx(ctx context.Context, tx *database.Tx, id string, authorID int64, v
 	if used >= dailyLimit {
 		return quotaExceeded(now, used)
 	}
+	if err := guardTarget(ctx, tx, id, now); err != nil {
+		return err
+	}
 	var owner sql.NullInt64
 	err = tx.QueryRowContext(ctx, `SELECT author_id FROM suggestions WHERE id = $1 FOR UPDATE`, id).Scan(&owner)
 	if errors.Is(err, sql.ErrNoRows) {
