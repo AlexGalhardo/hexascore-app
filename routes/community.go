@@ -33,6 +33,7 @@ func Community(r *router.Router, app *vukem.App) error {
 	required, verified := auth.Required(acc.Web), auth.Verified(acc.Web)
 	burst := community.DraftBurst(limiters, acc.Web.Name())
 
+	r.Get("/suggest/new/{domain}", h.New).Name("community.suggest.new").Use(required, verified)
 	r.Get("/suggest/{target_type}/{id}", h.Edit).Name("community.suggest").Use(required, verified)
 	r.Post("/suggestions", h.Create).Name("community.suggestions.create").Use(required, verified, burst)
 	r.Patch("/suggestions/{id}", h.Update).Name("community.suggestions.update").Use(required, verified, burst)
