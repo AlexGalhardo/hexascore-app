@@ -75,6 +75,9 @@ func Web(r *router.Router, app *vukem.App) error {
 	r.Use(limits.Body)
 
 	r.UseServer(appmiddleware.CrossOriginResourcePolicy("same-site"))
+	// Outside MovePageScript so the cache keeps the rewritten document. vukem's default
+	// session cookie name; the app does not override it (production adds a __Host- prefix).
+	r.UseServer(appmiddleware.RenderCache("vukem_session", localePrefixes))
 	// First UseServer is outermost. MovePageScript rewrites the finished HTML:
 	// LCP text before the page JSON, and the module graph after first paint.
 	// Gzip has to wrap StaticFS, or the file server answers /build and the
