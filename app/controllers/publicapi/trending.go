@@ -1,6 +1,8 @@
 package publicapi
 
 import (
+	"database/sql"
+	"errors"
 	"net/http"
 	"time"
 
@@ -164,8 +166,10 @@ func (h *Controller) GetItemActivity(c *web.Ctx, in ActivityInput) (ActivityJSON
 	var public bool
 	if err := h.DB.QueryRowContext(c.Context(),
 		`SELECT true FROM items WHERE id = $1 AND type = $2 AND visibility = 'public'`, in.ID, typ).
-		Scan(&public); err != nil {
+		Scan(&public); errors.Is(err, sql.ErrNoRows) {
 		return ActivityJSON{}, errs.ErrNotFound
+	} else if err != nil {
+		return ActivityJSON{}, err
 	}
 
 	days, err := trending.Activity(c.Context(), h.DB, in.ID, from, to)
