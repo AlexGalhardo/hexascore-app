@@ -65,8 +65,11 @@ var (
 	ClientMetrics  = Rule{"client-metrics", 60, time.Minute}
 )
 
-// APIPlan is the per-key rate of a public API plan (SDD 05): rps requests per second.
-func APIPlan(plan string, rps int) Rule { return Rule{"api-" + plan, rps, time.Second} }
+// APIPlan is the per-key rate of a public API plan (SDD 05 §6.2): up to burst requests at once, rps sustained.
+// The limiter is a token bucket (GCRA), so burst requests per burst/rps seconds gives both.
+func APIPlan(plan string, rps, burst int) Rule {
+	return Rule{"api-" + plan, burst, time.Duration(burst) * time.Second / time.Duration(rps)}
+}
 
 // All lists the fixed rules, for the table test.
 func All() []Rule {
