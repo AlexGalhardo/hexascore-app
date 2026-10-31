@@ -1,5 +1,7 @@
 import { colors, fontSize, radius, spacing, touchTarget } from "../../../../packages/tokens/tokens";
 
+export type { ThemePreference } from "./mode";
+export { applyThemePreference, readThemePreference, restoreThemePreference } from "./mode";
 export { colors, fontSize, radius, spacing, touchTarget };
 
 export type ThemeName = keyof typeof colors;

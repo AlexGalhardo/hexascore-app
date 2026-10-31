@@ -7,7 +7,7 @@ const dark = tokens.palette("dark");
 module.exports = {
 	content: ["./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
 	presets: [require("nativewind/preset")],
-	darkMode: "media",
+	darkMode: "class",
 	theme: {
 		extend: {
 			colors: Object.fromEntries(
