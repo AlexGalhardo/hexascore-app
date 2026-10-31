@@ -89,8 +89,8 @@ func remaining(t *testing.T, res *vukemtest.Response) int {
 	return n
 }
 
-// TMDB/IGDB-sourced fields and ids never reach /api/v1, while the site read model still has them
-// (SDD 05 FR-05-6, FR-05-16; ADR 0006). /app/v1 read endpoints are P3.C, so the site side is the read model.
+// TMDB/IGDB-sourced fields and ids never reach /api/v1, and the same fixture
+// shows them on /app/v1 (SDD 05 FR-05-6, FR-05-16; ADR 0006; SDD 05 §9).
 func TestAPILicenceFilter(t *testing.T) {
 	r := newAPICatalog(t)
 
@@ -125,6 +125,13 @@ func TestAPILicenceFilter(t *testing.T) {
 	if site.Item.Synopsis == nil || site.Item.RuntimeMinutes == nil || len(site.Entities["genre"]) != 1 ||
 		!siteHasName(site, "IGDB Published") {
 		t.Fatalf("site read model lost licensed fields: %+v", site.Item)
+	}
+
+	appBody := appCatalogClient(t, r, "catalog:read").GetJSON("/app/v1/games/" + r.game).AssertOK().Body()
+	for _, want := range []string{"TMDB overview", "Metroidvania", "IGDB Published", "tmdb", "igdb"} {
+		if !strings.Contains(appBody, want) {
+			t.Errorf("/app/v1 body missing %q: %s", want, appBody)
+		}
 	}
 }
 

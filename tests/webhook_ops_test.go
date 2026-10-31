@@ -78,7 +78,11 @@ func TestAPIWebhookTest(t *testing.T) {
 	_, other := webhookClient(t, "hooks-ping-other@example.com", "pro")
 	other.PostJSON("/api/v1/webhooks/"+one.ID+"/test", map[string]any{}).AssertNotFound()
 
-	if _, err := r.acc.DB.ExecContext(t.Context(), `UPDATE webhook_endpoints SET disabled_at = now() WHERE id = $1`, one.ID); err != nil {
+	if _, err := r.acc.DB.ExecContext(
+		t.Context(),
+		`UPDATE webhook_endpoints SET disabled_at = now() WHERE id = $1`,
+		one.ID,
+	); err != nil {
 		t.Fatal(err)
 	}
 
@@ -88,7 +92,9 @@ func TestAPIWebhookTest(t *testing.T) {
 	}
 
 	_, free := webhookClient(t, "hooks-ping-free@example.com", "")
-	free.PostJSON("/api/v1/webhooks/"+one.ID+"/test", map[string]any{}).AssertForbidden().AssertJSONPath("code", "plan-required")
+	free.PostJSON("/api/v1/webhooks/"+one.ID+"/test", map[string]any{}).
+		AssertForbidden().
+		AssertJSONPath("code", "plan-required")
 }
 
 func TestPruneDeliveries(t *testing.T) {
@@ -105,7 +111,13 @@ func TestPruneDeliveries(t *testing.T) {
 	}
 
 	if n != 1 || deliveryCount(t, r, old) != 0 || deliveryCount(t, r, kept) != 1 || deliveryCount(t, r, fresh) != 1 {
-		t.Fatalf("deleted=%d old=%d kept=%d fresh=%d", n, deliveryCount(t, r, old), deliveryCount(t, r, kept), deliveryCount(t, r, fresh))
+		t.Fatalf(
+			"deleted=%d old=%d kept=%d fresh=%d",
+			n,
+			deliveryCount(t, r, old),
+			deliveryCount(t, r, kept),
+			deliveryCount(t, r, fresh),
+		)
 	}
 
 	sched, err := r.app.Schedule()
@@ -188,7 +200,8 @@ func deliveryCount(t *testing.T, r *keyRig, id int64) int {
 	t.Helper()
 
 	var n int
-	if err := r.acc.DB.QueryRowContext(t.Context(), `SELECT count(*) FROM webhook_deliveries WHERE id = $1`, id).Scan(&n); err != nil {
+	if err := r.acc.DB.QueryRowContext(t.Context(), `SELECT count(*) FROM webhook_deliveries WHERE id = $1`, id).
+		Scan(&n); err != nil {
 		t.Fatal(err)
 	}
 

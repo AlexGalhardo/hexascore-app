@@ -224,8 +224,13 @@ func TestValidate(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name:    "create without title",
-			in:      SuggestionInput{Kind: "create", TargetType: "movie", Locale: "en", Changes: map[string]FieldChange{}},
+			name: "create without title",
+			in: SuggestionInput{
+				Kind:       "create",
+				TargetType: "movie",
+				Locale:     "en",
+				Changes:    map[string]FieldChange{},
+			},
 			wantErr: true,
 		},
 		{

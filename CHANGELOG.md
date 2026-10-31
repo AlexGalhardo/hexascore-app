@@ -6,10 +6,69 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Keep the document inert until Inertia finishes hydrating, so a click cannot submit the server form first.
+- Wait for that hydration before the admin sign-in, the header keyboard check, and the header search.
+- Pass the osv-scanner config flag after the `scan source` subcommand.
+- Answer unknown `/app/v1` catalogue segments with 404 before auth, and point the CI OpenAPI export and `pg_dump` at Postgres 18.
+- Paint the cookie banner in the first HTML when consent is unset, and load the ratings dialog only after it is opened.
+- Trust the docker bridge in the OpenAPI scan so each Schemathesis call has its own rate-limit bucket, and keep the bun:test files out of vitest.
+- Stop commitlint from rejecting commit bodies that already exceed 100 characters.
+- Fetch the full git history in the lint job so commitlint can see the pull request range.
+- Answer an unknown `/app/v1` collection with problem+json when the client sends no Accept header.
+- Start the page modules after the LCP entry so the home and games listings stay inside the Lighthouse budget.
+- Ignore four transitive Expo and Jest advisories that have no compatible patched release.
+- Let the pull request title `Release x.y.z` pass commitlint. The commit subjects stay conventional.
+
+## [0.11.0] - 2026-10-31
+
 ### Added
 
-- Android Expo shell in `apps/mobile` (SDK 58, NativeWind, SDD 10 routes, shared tokens and bundled catalogues). The P5 checkboxes stay open until P3.C.5.2.
-- ADR 0018 and the Expo skills under `.claude/skills/`.
+- Scaffold the Android Expo app ([5d0c287](https://github.com/AlexGalhardo/hexascore-app/commit/5d0c287222e6e2964043fc35b33a9c9e8828de3c))
+- Add the SDD 10 Expo Router tree ([3d1439f](https://github.com/AlexGalhardo/hexascore-app/commit/3d1439fcf4dc363275437e3826f8815a4f8a5866))
+- Map shared tokens and catalogues into the Android app ([873677b](https://github.com/AlexGalhardo/hexascore-app/commit/873677b96fb2f3dcd115496b0c7fddd67958f7b4))
+- Guard /app/v1 with the shared app stack ([040b782](https://github.com/AlexGalhardo/hexascore-app/commit/040b7825f98fe53a82b93b47d44a47c8f5e8c91e))
+- Cap app token rotation at 10 per hour per user ([87ed0f6](https://github.com/AlexGalhardo/hexascore-app/commit/87ed0f653f4166e3db315bdcd7f58fe6375036c0))
+- Serve site catalogue reads on /app/v1 ([25a34c8](https://github.com/AlexGalhardo/hexascore-app/commit/25a34c8b88490fe712f189b34e0e4e42ae55dfd5))
+- Serve optional app search on /app/v1 ([c7e3073](https://github.com/AlexGalhardo/hexascore-app/commit/c7e307381c8fd6085784f5dba938f7d9b5b34ac6))
+- Serve app profile and account deletion ([bad5250](https://github.com/AlexGalhardo/hexascore-app/commit/bad525073bdf470761f618d57e449fe84eb0bfa6))
+- Serve app list reads ([b73f596](https://github.com/AlexGalhardo/hexascore-app/commit/b73f5966bb011d3dbb567b46f9c47a916af4aa18))
+- Accept anonymous client telemetry ([0fc2cd3](https://github.com/AlexGalhardo/hexascore-app/commit/0fc2cd3dc44f0990dbbb3aa9d862ea5bbeff8a98))
+- Generate the private app client and gate it ([b1a1759](https://github.com/AlexGalhardo/hexascore-app/commit/b1a1759cf388429789db97d33ff606f7298e8b49))
+- Limit community submits to three per UTC day ([88f0a21](https://github.com/AlexGalhardo/hexascore-app/commit/88f0a21dcf98695d3e47e39074cf39cb83fa03dc))
+- Reject duplicate, locked, and stale submits ([52dcbe2](https://github.com/AlexGalhardo/hexascore-app/commit/52dcbe2d95db7ded4030b99dcf8acbc2fa9f0d9a))
+- Add community tiers, cooldowns, and stats rebuild ([1b2e152](https://github.com/AlexGalhardo/hexascore-app/commit/1b2e152d77264e9e08fad89b18eb56ea0f1d524d))
+
+### Fixed
+
+- Copy workspace manifests before the image install ([60cbfc0](https://github.com/AlexGalhardo/hexascore-app/commit/60cbfc0db90875a4976b8a9f769b6df665bde4ed))
+- Reject a bad webhook test id before SQL ([c40f198](https://github.com/AlexGalhardo/hexascore-app/commit/c40f19812e31ac6d967a08f09a9577d2b93e1b9b))
+- Reject more than 100 notification ids with 400 ([7558022](https://github.com/AlexGalhardo/hexascore-app/commit/7558022ce25fc2d0acf998df543463ef0d1503bf))
+- Generate the app client against Postgres ([f1d6340](https://github.com/AlexGalhardo/hexascore-app/commit/f1d6340bf6a472d5bfab008fb98064196b1d568d))
+- Compare stale before to the catalogue value ([1fbe60b](https://github.com/AlexGalhardo/hexascore-app/commit/1fbe60be4fd042403956459d97e4288c6a5b8809))
+- Pass CI lint and boot the image without Stripe ([e171b34](https://github.com/AlexGalhardo/hexascore-app/commit/e171b344f6b862d5c5da5205a0fbf12272dededb))
+- Clear the golangci-lint findings on the saved main ([554b3b3](https://github.com/AlexGalhardo/hexascore-app/commit/554b3b3ff5b3fd723a92739297b922b96acba32a))
+
+### merge
+
+- VF-062 open feedback queue onto local main ([985155d](https://github.com/AlexGalhardo/hexascore-app/commit/985155d67eead363ab8723169bd5e7371c265651))
+- Local main into the Android shell ([5faae87](https://github.com/AlexGalhardo/hexascore-app/commit/5faae87c764f49c27a45e6fe0380c08dab9b1f0e))
+- Android shell onto local main ([3a4882b](https://github.com/AlexGalhardo/hexascore-app/commit/3a4882bf614fbe09c88b29c8d54c7d791f12b82f))
+- P3.C.1.1 app stack onto local main ([2e04d06](https://github.com/AlexGalhardo/hexascore-app/commit/2e04d067fe9ca34291d343db55ed78d6e0232804))
+- P3.A.6.2 contract gate onto local main ([8c3b0c4](https://github.com/AlexGalhardo/hexascore-app/commit/8c3b0c4ce8379f20963f2986f59d1b24c9a0f525))
+- P3.C.1.2 token rotate limit onto local main ([772db19](https://github.com/AlexGalhardo/hexascore-app/commit/772db198e121590becc9fe7f26bb63fa8a498631))
+- P3.C.2.1 site catalogue reads onto local main ([5c7db08](https://github.com/AlexGalhardo/hexascore-app/commit/5c7db08d3147f6e8e66d36b8eccc2fc62eb5bd0c))
+- P3.C.2.2 app search onto local main ([2bdcee0](https://github.com/AlexGalhardo/hexascore-app/commit/2bdcee0908f5493f3c88fe818e06e78c90df6945))
+- P3.C.2.3 app scoring proof onto local main ([e32e5dd](https://github.com/AlexGalhardo/hexascore-app/commit/e32e5ddc8ddfc5765f0f1118ad2e51de3930f157))
+- P3.C.3.1 app profile onto local main ([5a0a155](https://github.com/AlexGalhardo/hexascore-app/commit/5a0a155e2c56749967c72f113c08350006720cc2))
+- P3.C.3.2 app lists onto local main ([1ce4a35](https://github.com/AlexGalhardo/hexascore-app/commit/1ce4a35f898a6c6b83b48210860d1ab4263d3155))
+- P3.C.3.3 app library onto local main ([5f147f7](https://github.com/AlexGalhardo/hexascore-app/commit/5f147f795c7e7d2e7de7dd7f6b1a224b673083ca))
+- P3.C.4.1 app telemetry onto local main ([df76c20](https://github.com/AlexGalhardo/hexascore-app/commit/df76c208f3810e522c51c92ee64176df752a39ca))
+- P3.C.5.1 app client onto local main ([b31c6e0](https://github.com/AlexGalhardo/hexascore-app/commit/b31c6e0db91d12a56c3a356a223dcab0c22d1340))
+- P4.A.2.1 community submit quota onto local main ([d650a58](https://github.com/AlexGalhardo/hexascore-app/commit/d650a58cf0c87d98874b6632c65f5083e8e7b464))
+- P4.A.2.2 duplicate and lock checks onto local main ([3fb3ad9](https://github.com/AlexGalhardo/hexascore-app/commit/3fb3ad91d4b71be720a2ff88cdbbdcab596f38b3))
+- P4.A.2.3 community tiers and cooldowns onto local main ([e08e17e](https://github.com/AlexGalhardo/hexascore-app/commit/e08e17e5d002dc69a5c6a6683af27bbc44e4b945))
 
 ## [0.10.0] - 2026-10-30
 
@@ -88,6 +147,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.8.0] - 2026-10-30
 
 ### Added
+
 - **api:** Commit OpenAPI goldens with drift check and regenerate SDKs ([6c59b2b](https://github.com/AlexGalhardo/hexascore-app/commit/6c59b2b8b30ea3ec32283814246bab4019155ea5))
 - **library:** Page the edition picker list ([071faa0](https://github.com/AlexGalhardo/hexascore-app/commit/071faa0d7ee80edbfb8af2bc5c72d4163c5eda28))
 - **billing:** Install billing with plan state machine and subscription-backed API plans ([bd88dbb](https://github.com/AlexGalhardo/hexascore-app/commit/bd88dbbf4dee98477e832a6512c7e6338416226b))
@@ -184,6 +244,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.7.0] - 2026-10-29
 
 ### Added
+
 - **ui:** Add profile, library and lists pages ([53e0dd3](https://github.com/AlexGalhardo/hexascore-app/commit/53e0dd31e74916dec54b5f26284fe625244890c2))
 - **api:** Serve licence-filtered item reads on /api/v1 ([4c69869](https://github.com/AlexGalhardo/hexascore-app/commit/4c69869e84d5581eba25d46c3570ffa423287221))
 - **api:** Serve entity read endpoints on /api/v1 ([f5820c8](https://github.com/AlexGalhardo/hexascore-app/commit/f5820c893d4920f7099ef32dfc2f4ae1ffbc739b))
@@ -211,6 +272,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.6.0] - 2026-10-29
 
 ### Added
+
 - **profile:** Data export button and purge of export files on account deletion ([5c86d73](https://github.com/AlexGalhardo/hexascore-app/commit/5c86d73ea0ef8e7c06cb20b184250da6288d65a9))
 - **lists:** Add library view, edition choice and public profile ([5f48e74](https://github.com/AlexGalhardo/hexascore-app/commit/5f48e7437a3ea4497aee0db3e0d9b281b64bbfef))
 
@@ -226,6 +288,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.5.0] - 2026-10-29
 
 ### Added
+
 - **api:** Add hx_live_ api keys, fail-closed key guard and key management page ([5c0cb60](https://github.com/AlexGalhardo/hexascore-app/commit/5c0cb60784ec817fc4931a4d0e82720182bc7291))
 - **web:** Add docs, legal pages and robots.txt ([b837a88](https://github.com/AlexGalhardo/hexascore-app/commit/b837a88648e2ca5fbad8ab2e0769031c3b78537b))
 - **api:** Add plans, /api/v1 stack and quota metering in postgres ([99bf4f6](https://github.com/AlexGalhardo/hexascore-app/commit/99bf4f6f9063c8cbd3189ef3e451701ab418e4be))
@@ -247,6 +310,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.4.0] - 2026-10-29
 
 ### Added
+
 - **reports:** Add reports, contact form and admin resolve route ([54a802d](https://github.com/AlexGalhardo/hexascore-app/commit/54a802d44a2501230f5222c0f6b27319613c38c3))
 - **catalog:** Add Catalog/Index listings with filters, facets and infinite scroll ([5526d6e](https://github.com/AlexGalhardo/hexascore-app/commit/5526d6e58f1d29868da1b208e619397b29f1327c))
 - **search:** Add Search/Index page and header suggest combobox ([df04924](https://github.com/AlexGalhardo/hexascore-app/commit/df0492473b73d9c64edfa135609b617a9eb68336))
@@ -254,6 +318,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.3.0] - 2026-10-29
 
 ### Added
+
 - **auth:** Add admin panel, users resource with ban and admin CLI ([9a8f000](https://github.com/AlexGalhardo/hexascore-app/commit/9a8f000db06c5f6125416a5dd4ff168166079ccd))
 - **auth:** Localise Auth pages and add nickname onboarding ([6c596e0](https://github.com/AlexGalhardo/hexascore-app/commit/6c596e0316e9e48005ff283598bb14b6502d6f1a))
 - **infra:** Expose the release version on every response ([57557c1](https://github.com/AlexGalhardo/hexascore-app/commit/57557c177953dba8c39a80672a68d780ea935145))
@@ -311,6 +376,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.2.0] - 2026-10-29
 
 ### Added
+
 - **auth:** Add Better Auth compatibility hasher and password rules ([95cacf3](https://github.com/AlexGalhardo/hexascore-app/commit/95cacf31d786cbe79ec41f7deb247db18f37ae12))
 - **ratings:** Migrate the scoring tables and item score columns ([aeca1a5](https://github.com/AlexGalhardo/hexascore-app/commit/aeca1a54e5c6832f2b49f720c8e2efbacd980643))
 - **catalog:** Add slug generation, catalog redirects and 301 middleware ([2f206fb](https://github.com/AlexGalhardo/hexascore-app/commit/2f206fb9b7c9d54f732f96db3a22f9ccaf471fd4))
@@ -329,6 +395,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [0.1.0] - 2026-10-29
 
 ### Added
+
 - Scaffold the vukem Inertia React app on Postgres ([82352b6](https://github.com/AlexGalhardo/hexascore-app/commit/82352b61dc1fa6efc8a179ed91e0b590293eb6f0))
 - **ssr:** Enable Inertia SSR with Go-supervised Node, ssr health check and fallback counter ([91ce5b5](https://github.com/AlexGalhardo/hexascore-app/commit/91ce5b5b914ee38652aa3903f5498e0c6f1e194a))
 - **infra:** Add local compose stack and setup scripts ([7fb1c52](https://github.com/AlexGalhardo/hexascore-app/commit/7fb1c528bc4403ea757288c61173fc98e333eaba))

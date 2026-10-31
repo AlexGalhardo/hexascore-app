@@ -173,7 +173,7 @@ The Go app serves `GET /.well-known/assetlinks.json` [E12] via `r.Get` ([V1] "De
 - **No certificate pinning at launch:** Railway rotates certificates (cadence [NOT VERIFIED], SDD 11) and a stale pin bricks installed builds; tokens are already scoped, expiring and revocable. SDD 13 revisits if tokens gain billing powers.
 - Screenshots allowed (public data); biometrics later behind `src/platform/`.
 - **No third-party analytics:** metrics from `/app/v1` traffic tagged by `X-App-Version` (SDD 12); client events only SDD 07 `search.performed`/`search.clicked`; views counted server-side (SDD 08 FR-08-1, issue 5).
-- **Crash reports:** opt-in at first launch (LGPD, default off, revocable). JS handler + error boundary POST `{appVersion, versionCode, androidApi, screen, message, stack ≤ 8 KB}`, no user id or token, to `POST /app/v1/client-errors` (SDD 05 §6.4, SDD 12 §6.4; 202, kept 7 days). Native capture (Sentry or similar) needs an ADR.
+- **Crash reports:** opt-in at first launch (LGPD, default off, revocable). JS handler + error boundary POST `{appVersion, versionCode, androidApi, screen, message, stack ≤ 8 KB}`, no user id or token, to `POST /app/v1/client-errors` (SDD 05 §6.4, SDD 12 §6.4; 204, kept 7 days). Native capture (Sentry or similar) needs an ADR.
 
 ### 7.8 Release engineering
 

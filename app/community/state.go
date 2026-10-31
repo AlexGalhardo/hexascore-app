@@ -148,7 +148,8 @@ func approveTx(ctx context.Context, q rowQuery, id string, version int, deferred
 func lockSuggestion(ctx context.Context, q rowQuery, id string) (string, int, error) {
 	var status string
 	var version int
-	err := q.QueryRowContext(ctx, `SELECT status, version FROM suggestions WHERE id = $1 FOR UPDATE`, id).Scan(&status, &version)
+	err := q.QueryRowContext(ctx, `SELECT status, version FROM suggestions WHERE id = $1 FOR UPDATE`, id).
+		Scan(&status, &version)
 	if errors.Is(err, sql.ErrNoRows) {
 		return "", 0, fmt.Errorf("community: suggestion %s not found", id)
 	}
@@ -160,7 +161,12 @@ func lockSuggestion(ctx context.Context, q rowQuery, id string) (string, int, er
 }
 
 func writeStep(ctx context.Context, q rowQuery, id, from, to string, actor Actor) error {
-	res, err := q.ExecContext(ctx, `UPDATE suggestions SET status = $1, version = version + 1, updated_at = now() WHERE id = $2`, to, id)
+	res, err := q.ExecContext(
+		ctx,
+		`UPDATE suggestions SET status = $1, version = version + 1, updated_at = now() WHERE id = $2`,
+		to,
+		id,
+	)
 	if err != nil {
 		return fmt.Errorf("community: update suggestion: %w", err)
 	}
@@ -171,8 +177,16 @@ func writeStep(ctx context.Context, q rowQuery, id, from, to string, actor Actor
 	if n != 1 {
 		return fmt.Errorf("community: suggestion %s not updated", id)
 	}
-	_, err = q.ExecContext(ctx, `INSERT INTO suggestion_events (suggestion_id, from_status, to_status, actor_id, actor_role)
-VALUES ($1, $2, $3, $4, $5)`, id, from, to, actor.ID, actor.Role)
+	_, err = q.ExecContext(
+		ctx,
+		`INSERT INTO suggestion_events (suggestion_id, from_status, to_status, actor_id, actor_role)
+VALUES ($1, $2, $3, $4, $5)`,
+		id,
+		from,
+		to,
+		actor.ID,
+		actor.Role,
+	)
 	if err != nil {
 		return fmt.Errorf("community: insert suggestion event: %w", err)
 	}

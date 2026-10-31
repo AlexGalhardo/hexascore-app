@@ -13,7 +13,6 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers/appapi"
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
-	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 )
 
 const (
@@ -63,12 +62,16 @@ func AppAPI(r *router.Router, app *vukem.App) error {
 	_, byIdentifier := auth.ThrottleKeys("identifier")
 	accountLimit := ratelimit.Middleware(limits.AppTokensAcc.From(limiters), byIdentifier)
 	userLimit := ratelimit.Middleware(limits.AppTokensUsr.From(limiters), ratelimit.ByUser(acc.API.Name()))
+	rotateLimit := ratelimit.Middleware(limits.AppTokenRotate.From(limiters), ratelimit.ByUser(acc.API.Name()))
 
-	bearer := []router.Middleware{
-		auth.Required(acc.API),
-		appmiddleware.NotBanned(acc.API.User, acc.ProblemBase, app.Now),
-		auth.Verified(acc.API),
-		userLimit,
+	bearer, err := AppWriteStack(app, acc, limiters, userLimit)
+	if err != nil {
+		return err
+	}
+
+	rotateStack, err := AppWriteStack(app, acc, limiters, userLimit, rotateLimit)
+	if err != nil {
+		return err
 	}
 
 	r.Group("/app/v1", func(g *router.Group) {
@@ -76,7 +79,7 @@ func AppAPI(r *router.Router, app *vukem.App) error {
 
 		g.Post("/tokens", h.Create).Name("tokens.create").Use(issueLimit, accountLimit, pow.Require("token"))
 		g.Post("/tokens/google", h.Google).Name("tokens.google").Use(issueLimit, pow.Require("token"))
-		g.Post("/tokens/rotate", h.Rotate).Name("tokens.rotate").Use(bearer...)
+		g.Post("/tokens/rotate", h.Rotate).Name("tokens.rotate").Use(rotateStack...)
 		g.Get("/tokens", h.List).Name("tokens.index").Use(append(bearer, auth.Ability(acc.API, "catalog:read"))...)
 		g.Delete("/tokens/current", h.RevokeCurrent).Name("tokens.revoke_current").Use(bearer...)
 		g.Delete("/tokens/{id}", h.Revoke).Name("tokens.revoke").Use(bearer...)

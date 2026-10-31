@@ -145,7 +145,8 @@ func (h *Webhooks) Test(c *web.Ctx, in WebhookID) (WebhookTestResult, error) {
 	}
 
 	if plan.ID != api.PlanPro && plan.ID != api.PlanBusiness {
-		return WebhookTestResult{}, errs.New(http.StatusForbidden, "plan required").WithExtension("code", "plan-required")
+		return WebhookTestResult{}, errs.New(http.StatusForbidden, "plan required").
+			WithExtension("code", "plan-required")
 	}
 
 	got, err := webhooks.Ping(c.Context(), h.App, id, in.ID)
@@ -187,11 +188,13 @@ func asProblem(err error) error {
 	case errors.Is(err, webhooks.ErrPlanRequired):
 		return errs.New(http.StatusForbidden, "plan required").WithExtension("code", "plan-required")
 	case errors.Is(err, webhooks.ErrLimit):
-		return errs.New(http.StatusUnprocessableEntity, "webhook endpoint limit reached").WithExtension("code", "webhook-limit")
+		return errs.New(http.StatusUnprocessableEntity, "webhook endpoint limit reached").
+			WithExtension("code", "webhook-limit")
 	case errors.Is(err, webhooks.ErrURL):
 		return errs.New(http.StatusUnprocessableEntity, "webhook url refused").WithExtension("code", "webhook-url")
 	case errors.Is(err, webhooks.ErrInvalid):
-		return errs.New(http.StatusUnprocessableEntity, "webhook fields refused").WithExtension("code", "webhook-invalid")
+		return errs.New(http.StatusUnprocessableEntity, "webhook fields refused").
+			WithExtension("code", "webhook-invalid")
 	case errors.Is(err, webhooks.ErrNotFound):
 		return errs.ErrNotFound
 	case errors.Is(err, crypt.ErrNoKey):

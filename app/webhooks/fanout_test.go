@@ -9,9 +9,23 @@ func TestCoalesceKeepsOneEventPerItem(t *testing.T) {
 	at := time.Date(2026, 10, 30, 15, 0, 0, 0, time.UTC)
 	got := coalesce([]changeRow{
 		{id: 1, itemID: "game-1", itemType: "game", action: "updated", fields: []string{"score"}, at: at},
-		{id: 2, itemID: "game-1", itemType: "game", action: "updated", fields: []string{"ratingCount", "score"}, at: at.Add(time.Second)},
+		{
+			id:       2,
+			itemID:   "game-1",
+			itemType: "game",
+			action:   "updated",
+			fields:   []string{"ratingCount", "score"},
+			at:       at.Add(time.Second),
+		},
 		{id: 3, itemID: "movie-1", itemType: "movie", action: "created", fields: []string{"title"}, at: at},
-		{id: 4, itemID: "movie-1", itemType: "movie", action: "deleted", merged: "movie-2", at: at.Add(2 * time.Second)},
+		{
+			id:       4,
+			itemID:   "movie-1",
+			itemType: "movie",
+			action:   "deleted",
+			merged:   "movie-2",
+			at:       at.Add(2 * time.Second),
+		},
 		{id: 5, itemID: "skip", itemType: "person", action: "updated", fields: []string{"name"}, at: at},
 	})
 
@@ -29,7 +43,8 @@ func TestCoalesceKeepsOneEventPerItem(t *testing.T) {
 	}
 
 	movie := got[1]
-	if movie.Type != "item.deleted" || movie.ItemType != "movies" || movie.MergedInto != "movie-2" || movie.Fields != nil {
+	if movie.Type != "item.deleted" || movie.ItemType != "movies" || movie.MergedInto != "movie-2" ||
+		movie.Fields != nil {
 		t.Fatalf("movie event = %+v", movie)
 	}
 

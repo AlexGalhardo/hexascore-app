@@ -10,6 +10,7 @@ import (
 
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/crypt"
+	"github.com/AlexGalhardo/vukem/uuid"
 	vwebhook "github.com/AlexGalhardo/vukem/webhook"
 )
 
@@ -24,6 +25,12 @@ type PingResult struct {
 // endpoint is ErrNotFound and is not called. KindTest may reach an httptest
 // server on 127.0.0.1; production stays on OpenApp (https, no private allow).
 func Ping(ctx context.Context, app *vukem.App, userID int64, endpointID string) (PingResult, error) {
+	// A non-uuid is not a row. Sending it to Postgres is a 22P02, which the
+	// guard turns into a 500. Delete already maps that shape to not-found.
+	if _, err := uuid.Parse(endpointID); err != nil {
+		return PingResult{}, ErrNotFound
+	}
+
 	svc, err := openPing(app)
 	if err != nil {
 		return PingResult{}, err

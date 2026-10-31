@@ -2,7 +2,6 @@ package publicapi
 
 import (
 	"errors"
-	"net/http"
 	"time"
 
 	"github.com/AlexGalhardo/vukem/api"
@@ -151,12 +150,8 @@ func (h *Controller) mergedEditions(c *web.Ctx, in ListEditionsInput) error {
 	if !ok {
 		return errs.ErrNotFound
 	}
-	loc := "/api/v1/books/" + target.ID + "/editions"
-	if q := c.Request().URL.RawQuery; q != "" {
-		loc += "?" + q
-	}
 
-	return errs.New(http.StatusMovedPermanently, "item merged").WithHeader("Location", loc)
+	return h.movedTo(c, "/books/"+target.ID+"/editions")
 }
 
 // UsageQuota is the quota block of getUsage (legacy lib/api/schemas.ts usageSchema, snake_case kept).

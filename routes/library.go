@@ -3,11 +3,11 @@ package routes
 import (
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
-	"github.com/AlexGalhardo/vukem/middleware"
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/router"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/appapi"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 )
@@ -44,18 +44,22 @@ func Library(r *router.Router, app *vukem.App) error {
 
 	h := controllers.NewLibrary(acc.DB, app.Now, acc.API.Name(), true)
 	pub := controllers.NewPublicProfile(acc.DB, true, acc.API.Name())
+	guard := AppAuthStack(app, acc, limiters)
+	store, err := app.Cache()
+	if err != nil {
+		return err
+	}
+	idem := appapi.Idempotency(store.Store())
+	byAPI := ratelimit.Middleware(limit, ratelimit.ByUser(acc.API.Name()))
 	r.Group("/app/v1", func(g *router.Group) {
-		g.Use(
-			middleware.JSONOnly(),
-			auth.Required(acc.API),
-			ratelimit.Middleware(limit, ratelimit.ByUser(acc.API.Name())),
-		)
+		g.Use(guard...)
 		g.Get("/me/library", h.Index).Name("library").Use(auth.Ability(acc.API, "catalog:read"))
 		g.Get("/users/{nickname}", pub.Show).Name("users.show").Use(auth.Ability(acc.API, "catalog:read"))
-		g.Put("/items/{id}/edition", h.PutEdition).Name("edition.put").Use(auth.Ability(acc.API, "status:write"))
+		g.Put("/items/{id}/edition", h.PutEdition).Name("edition.put").
+			Use(auth.Ability(acc.API, "status:write"), byAPI, idem)
 		g.Delete("/items/{id}/edition", h.DeleteEdition).
 			Name("edition.delete").
-			Use(auth.Ability(acc.API, "status:write"))
+			Use(auth.Ability(acc.API, "status:write"), byAPI, idem)
 	}).Name("app.v1.")
 
 	return nil

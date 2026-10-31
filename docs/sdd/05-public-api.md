@@ -205,7 +205,8 @@ Stack: `auth.Required(appTokenGuard)` (`hx_app_`, SDD 03), `NotBanned`, `auth.Ve
 | Ability | Routes |
 | --- | --- |
 | none | `POST /app/v1/tokens`, `/tokens/google` (SDD 03 §6.2) |
-| `catalog:read` | GET `/{type}`, `/{type}/{id}`, `/{type}/trending`, `/items/{id}/related`, `/me/for-you` (SDD 08), `/entities/{id}`, `/search`, `/items/{id}/me`, `/me`, `/me/library`, `/me/lists`, `/lists/{id}`, `/users/{nickname}`, `/me/notifications`, `/tokens` (SDD 14 §6.3 for library, profile and notifications) |
+| `catalog:read` | GET `/{type}`, `/{type}/{id}`, `/{type}/trending`, `/items/{id}/related`, `/me/for-you` (SDD 08), `/entities/{id}`, `/items/{id}/me`, `/me`, `/me/library`, `/me/lists`, `/lists/{id}`, `/users/{nickname}`, `/me/notifications`, `/tokens` (SDD 14 §6.3 for library, profile and notifications) |
+| optional token, or none | GET `/search`, GET `/search/suggest`, POST `/search/events` (SDD 10 §6.1, SDD 07 §6). `q` longer than 100 characters is 400. Audience `site`. |
 | `ratings:write` | PUT/DELETE `/items/{id}/rating` (SDD 02) |
 | `status:write` | PUT/DELETE `/items/{id}/status`, `/items/{id}/time-to-beat` (SDD 02), `/items/{id}/edition` (SDD 14 §6.3) |
 | `lists:write` | POST `/lists`, PATCH/DELETE `/lists/{id}`, PUT/DELETE `/lists/{id}/items/{itemId}`, PUT `/lists/{id}/order` |
@@ -219,12 +220,12 @@ Client telemetry intake (open issues 10-2, 09-11; processing and dashboards in S
 
 | Route | Input | Rules |
 | --- | --- | --- |
-| `POST /app/v1/client-errors` (`reportClientError`) | `{appVersion, versionCode, androidApi, screen, message, stack ≤ 8 KB}` (SDD 10 §7.7) | sent only after the user opts in (mobile settings, default off); no user id, token, e-mail or free-text user input; 10/min per IP; body > 16 KB → 413; 202; kept 7 days |
-| `POST /app/v1/client-metrics` (`reportClientMetrics`) | `{name: LCP\|INP\|CLS\|TTFB, value, page (route pattern, not URL), locale}` (web-vitals beacon, SDD 09) | anonymous, opt-in via the cookie banner; 60/min per IP; body > 4 KB → 413; 202; kept 7 days |
+| `POST /app/v1/client-errors` (`reportClientError`) | `{appVersion, versionCode, androidApi, screen, message, stack ≤ 8 KB}` (SDD 10 §7.7) | sent only after the user opts in (mobile settings, default off); no user id, token, e-mail or free-text user input; 10/min per IP; body > 16 KB → 413; 204; kept 7 days |
+| `POST /app/v1/client-metrics` (`reportClientMetrics`) | `{name: LCP\|INP\|CLS\|TTFB, value, page (route pattern, not URL), locale}` (web-vitals beacon, SDD 09) | anonymous, opt-in via the cookie banner; 60/min per IP; body > 4 KB → 413; 204; kept 7 days |
 
 Both accept unauthenticated calls (crashes can happen before login) behind the IP limit, CSRF-exempt because they carry no session effect; unknown fields → 400.
 
-Versioning: the app sends `X-App-Version`; responses carry `X-App-Min-Version`; below `APP_MIN_SUPPORTED_VERSION` → 426 (logout exempt). Changes are additive; removal only once the minimum version excludes every build using the field and ≥ 90 days after the replacing build shipped; otherwise `/app/v2` side by side.
+Versioning: the app sends `X-App-Version`; responses carry `X-App-Min-Version`; below `APP_MIN_SUPPORTED_VERSION` (default `0.0.0`) → 426 `app-upgrade-required` (logout exempt: `DELETE /app/v1/tokens/current`). The guard lives in `app/appapi` and is installed by `routes.InstallAppMinVersion`. Changes are additive; removal only once the minimum version excludes every build using the field and ≥ 90 days after the replacing build shipped; otherwise `/app/v2` side by side.
 
 ### 6.5 OpenAPI, reference, SDKs
 

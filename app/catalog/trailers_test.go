@@ -16,7 +16,9 @@ func TestValidYoutubeID(t *testing.T) {
 
 func TestAssignTrailersDropsInvalidIDs(t *testing.T) {
 	t.Parallel()
-	got, err := assignTrailers([]byte(`[{"youtubeId":"aaaaaaaaaaa","title":"Demo trailer"},{"youtubeId":"bad","title":"no"}]`))
+	got, err := assignTrailers(
+		[]byte(`[{"youtubeId":"aaaaaaaaaaa","title":"Demo trailer"},{"youtubeId":"bad","title":"no"}]`),
+	)
 	if err != nil {
 		t.Fatal(err)
 	}

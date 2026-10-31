@@ -5,6 +5,7 @@ package changes_test
 import (
 	"context"
 	"database/sql"
+	"strings"
 	"testing"
 
 	"github.com/AlexGalhardo/vukem/database"
@@ -72,10 +73,14 @@ func TestScoreChangeOnlyOnDecimal(t *testing.T) {
 	}
 
 	moved := changes.ScoreFieldNames(
-		changes.ScoreSnap{Score: sql.NullFloat64{Float64: 87.4, Valid: true}, RatingCount: 12,
-			Confidence: sql.NullString{String: "low", Valid: true}},
-		changes.ScoreSnap{Score: sql.NullFloat64{Float64: 87.6, Valid: true}, RatingCount: 13,
-			Confidence: sql.NullString{String: "low", Valid: true}},
+		changes.ScoreSnap{
+			Score: sql.NullFloat64{Float64: 87.4, Valid: true}, RatingCount: 12,
+			Confidence: sql.NullString{String: "low", Valid: true},
+		},
+		changes.ScoreSnap{
+			Score: sql.NullFloat64{Float64: 87.6, Valid: true}, RatingCount: 13,
+			Confidence: sql.NullString{String: "low", Valid: true},
+		},
 	)
 	if got := join(moved); got != "score,ratingCount" {
 		t.Fatalf("fields = %q, want score,ratingCount", got)
@@ -105,12 +110,5 @@ func insertItem(t *testing.T, db *database.DB, typ, slug, qid string) string {
 }
 
 func join(fields []string) string {
-	out := ""
-	for i, f := range fields {
-		if i > 0 {
-			out += ","
-		}
-		out += f
-	}
-	return out
+	return strings.Join(fields, ",")
 }

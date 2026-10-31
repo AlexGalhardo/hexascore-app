@@ -96,7 +96,16 @@ func stackViolation(stack, method, path string, mw []string) string {
 			return "app route outside /app/v1"
 		}
 
-		if !has("auth.Required") && !has("middleware.(*Challenger).Require") {
+		// Search is optional (SDD 10). Crash and web-vital intake is anonymous.
+		// Every other /app/v1 route still needs a bearer.
+		optionalSearch := path == "/app/v1/search" || strings.HasPrefix(path, "/app/v1/search/")
+		telemetry := path == "/app/v1/client-errors" || path == "/app/v1/client-metrics"
+		if telemetry {
+			if has("auth.Required") || has("auth.Optional") || has("middleware.(*Challenger).Require") {
+				return "telemetry route must stay anonymous"
+			}
+		} else if !has("auth.Required") && !has("middleware.(*Challenger).Require") &&
+			(!optionalSearch || !has("auth.Optional")) {
 			return "app route without a bearer token or a challenge"
 		}
 	case "web":
@@ -158,6 +167,18 @@ func TestSecurity_A01_HexaRouteStackInventory_Rules(t *testing.T) {
 	t.Parallel()
 
 	ok := []string{"limits.Body", "csrf.Middleware"}
+	if v := stackViolation("app", "GET", "/app/v1/search", []string{"limits.Body", "auth.Optional"}); v != "" {
+		t.Errorf("optional search: %s", v)
+	}
+
+	if v := stackViolation("app", "POST", "/app/v1/client-errors", []string{"limits.Body"}); v != "" {
+		t.Errorf("anonymous client-errors: %s", v)
+	}
+
+	if v := stackViolation("app", "POST", "/app/v1/client-metrics", []string{"limits.Body"}); v != "" {
+		t.Errorf("anonymous client-metrics: %s", v)
+	}
+
 	for _, c := range []struct{ stack, method, path string }{
 		{"admin", "POST", "/admin/users"},
 		{"web", "POST", "/login"},
@@ -175,6 +196,9 @@ func TestSecurity_A01_HexaRouteStackInventory_Rules(t *testing.T) {
 		{"web", "GET", "/admin/x", ok},
 		{"web", "POST", "/login", []string{"limits.Body"}},
 		{"app", "GET", "/app/v1/me", ok},
+		{"app", "GET", "/app/v1/me", []string{"limits.Body", "auth.Optional"}},
+		{"app", "POST", "/app/v1/client-errors", []string{"limits.Body", "auth.Optional"}},
+		{"app", "POST", "/app/v1/client-other", []string{"limits.Body"}},
 		{"api", "GET", "/api/v1/search", ok},
 		{"web", "GET", "/", nil},
 		{"webhook", "POST", "/x", ok},
@@ -221,6 +245,8 @@ func TestSecurity_A06_HexaBodyLimits(t *testing.T) {
 	}{
 		{"/login", limits.FormBody},
 		{"/csp-reports", limits.CSPReportsBody},
+		{"/app/v1/client-errors", limits.ClientErrorsBody},
+		{"/app/v1/client-metrics", limits.ClientMetricsBody},
 		{"/pt-br/lists", limits.FormBody},
 		{"/admin/users", limits.FormBody},
 		{"/api/v1/search", limits.DefaultBody},
@@ -259,7 +285,10 @@ func TestSecurity_A06_HexaBodyLimits(t *testing.T) {
 	// vukem v0.34.0 (VF-061) keeps the MaxBytesError from MethodOverride, so an oversized
 	// urlencoded form is 413. The server-level limit in routes/web.go is still required:
 	// MethodOverride parses the body before the router middleware runs.
-	if rec := post("application/x-www-form-urlencoded", "email=a%40b.co&pad="+pad); rec.Code != http.StatusRequestEntityTooLarge {
+	if rec := post(
+		"application/x-www-form-urlencoded",
+		"email=a%40b.co&pad="+pad,
+	); rec.Code != http.StatusRequestEntityTooLarge {
 		t.Errorf("urlencoded form over %d bytes: status %d, want 413", limits.FormBody, rec.Code)
 	}
 

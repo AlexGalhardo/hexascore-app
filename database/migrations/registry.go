@@ -61,6 +61,7 @@ func All() []schema.Migration {
 		m20261030130000CreateCommunityTables(),
 		m20261030140000CreateWebhookEndpoints(),
 		m20261030150000AddWebhookFailureStreak(),
+		m20261030160000CreateClientReportsTable(),
 		webhook.Migrations("")[0],
 	}
 }

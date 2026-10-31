@@ -71,7 +71,8 @@ func TestWebhookDelivery(t *testing.T) {
 		}
 
 		ev := body.Events[0]
-		if ev.ID != "chg_"+strconv.FormatInt(latest, 10) || ev.Type != "item.updated" || ev.ItemType != "games" || ev.ItemID != item {
+		if ev.ID != "chg_"+strconv.FormatInt(latest, 10) || ev.Type != "item.updated" || ev.ItemType != "games" ||
+			ev.ItemID != item {
 			t.Fatalf("event = %+v, latest %d", ev, latest)
 		}
 
@@ -193,7 +194,8 @@ func insertHTTPEndpointAt(t *testing.T, r *keyRig, email, rawURL string) (string
 	dropHTTPSCheck(t, r)
 
 	var userID int64
-	if err := r.acc.DB.QueryRowContext(t.Context(), `SELECT id FROM users WHERE email = $1`, email).Scan(&userID); err != nil {
+	if err := r.acc.DB.QueryRowContext(t.Context(), `SELECT id FROM users WHERE email = $1`, email).
+		Scan(&userID); err != nil {
 		t.Fatal(err)
 	}
 
@@ -251,7 +253,10 @@ WHERE rel.relname = 'webhook_endpoints' AND con.contype = 'c'
 	}
 
 	quoted := `"` + strings.ReplaceAll(name, `"`, `""`) + `"`
-	if _, err := r.acc.DB.ExecContext(t.Context(), `ALTER TABLE webhook_endpoints DROP CONSTRAINT `+quoted); err != nil {
+	if _, err := r.acc.DB.ExecContext(
+		t.Context(),
+		`ALTER TABLE webhook_endpoints DROP CONSTRAINT `+quoted,
+	); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -286,7 +291,8 @@ func cursor(t *testing.T, r *keyRig) int64 {
 	t.Helper()
 
 	var id int64
-	if err := r.acc.DB.QueryRowContext(t.Context(), `SELECT last_change_id FROM webhook_cursor WHERE id = 1`).Scan(&id); err != nil {
+	if err := r.acc.DB.QueryRowContext(t.Context(), `SELECT last_change_id FROM webhook_cursor WHERE id = 1`).
+		Scan(&id); err != nil {
 		t.Fatal(err)
 	}
 
@@ -297,7 +303,8 @@ func endpointDisabled(t *testing.T, r *keyRig, id string) bool {
 	t.Helper()
 
 	var disabled sql.NullTime
-	if err := r.acc.DB.QueryRowContext(t.Context(), `SELECT disabled_at FROM webhook_endpoints WHERE id = $1`, id).Scan(&disabled); err != nil {
+	if err := r.acc.DB.QueryRowContext(t.Context(), `SELECT disabled_at FROM webhook_endpoints WHERE id = $1`, id).
+		Scan(&disabled); err != nil {
 		t.Fatal(err)
 	}
 

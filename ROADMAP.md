@@ -2274,7 +2274,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run TestAPIDeprecationHeaders` → fixture route answers `Deprecation`, `Sunset`, `Link`; a helper call with `sunset - since < 183 days` fails the test
   - Notes: no route is deprecated in v1; the test uses a test-only route. The owner mail is a runbook step, not an automatic job.
 
-- [ ] **P3.A.6.2** Run the contract gate on the extended document: export diff, Redocly, Schemathesis, k6 with the new routes, ZAP baseline.
+- [x] **P3.A.6.2** Run the contract gate on the extended document: export diff, Redocly, Schemathesis, k6 with the new routes, ZAP baseline.
   - Files/modules: `openapi/api-v1.json`, `qa/k6/api-v1.js`, `.github/workflows/ci.yml`
   - Refs: SDD 05 §9, §10, FR-05-15, NFR-05-1
   - Depends on: P3.A.6.1
@@ -2385,7 +2385,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.C.1 Route group and tokens
 
-- [ ] **P3.C.1.1** Build the `/app/v1` stack: `hx_app_` token guard, `NotBanned`, `auth.Verified`, `auth.Ability`, per-token limits, `Idempotency-Key` on writes, `X-App-Version`/426.
+- [x] **P3.C.1.1** Build the `/app/v1` stack: `hx_app_` token guard, `NotBanned`, `auth.Verified`, `auth.Ability`, per-token limits, `Idempotency-Key` on writes, `X-App-Version`/426.
   - Files/modules: `routes/app_v1.go`, `app/appapi/middleware.go`, `app/appapi/version.go`, `tests/app_stack_test.go`, `tests/security_app_test.go`
   - Refs: SDD 05 §6.4, FR-05-13, FR-05-14; SDD 03 §6.2; README abilities convention; <https://vukem.dev/docs/security/api-tokens> "Routing"; <https://vukem.dev/docs/rest-apis/idempotency>
   - Depends on: P2.G
@@ -2395,7 +2395,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run TestAppIdempotency` → replay on same key, 409 in flight, 422 for a different body
   - Notes: `api.Idempotency` goes after authentication (keys scoped to the caller, vukem idempotency page) on the database cache store. Limits: `ratelimit.ByToken` 120/min reads, 30/min writes, behind the IP limit. Not plan-metered.
 
-- [ ] **P3.C.1.2** Serve the token routes: `createAppToken`, `createAppTokenFromGoogle`, `rotateAppToken` (≤ 10/h), `listAppTokens`, `DELETE /tokens/current`, `DELETE /tokens/{id}`.
+- [x] **P3.C.1.2** Serve the token routes: `createAppToken`, `createAppTokenFromGoogle`, `rotateAppToken` (≤ 10/h), `listAppTokens`, `DELETE /tokens/current`, `DELETE /tokens/{id}`.
   - Files/modules: `app/appapi/tokens.go`, `tests/app_tokens_test.go`
   - Refs: SDD 03 §6.2, §7.4; SDD 10 §6.2; ADR 0016 (challenge)
   - Depends on: P3.C.1.1, P1.C
@@ -2406,7 +2406,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.C.2 Catalogue and scoring routes
 
-- [ ] **P3.C.2.1** Mount the catalogue reads on `/app/v1` with audience `site`: `/{type}`, `/{type}/{id}`, `/{type}/genres`, `/{type}/trending`, `/entities/{id}`, `/entities/{id}/items`, `/books/{id}/editions`.
+- [x] **P3.C.2.1** Mount the catalogue reads on `/app/v1` with audience `site`: `/{type}`, `/{type}/{id}`, `/{type}/genres`, `/{type}/trending`, `/entities/{id}`, `/entities/{id}/items`, `/books/{id}/editions`.
   - Files/modules: `app/appapi/catalog.go`, `tests/app_catalog_test.go`
   - Refs: SDD 05 §6.4; SDD 01 §6.1 (`site` audience), §6.2; SDD 10 §6.1
   - Depends on: P3.C.1.2, P3.A.1.3 (trending route only after P3.A.1.4)
@@ -2415,7 +2415,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run 'TestAPILicenceFilter|TestAppCatalog'` → TMDB/IGDB attributed fields present on `/app/v1`
   - Notes: share handlers with P3.A, switching only the audience; operation names in the `app.v1.` group. `/items/{id}/related` and `/me/for-you` arrive with P6.D, not here.
 
-- [ ] **P3.C.2.2** Serve `/search`, `/search/suggest` and `POST /search/events` on `/app/v1`.
+- [x] **P3.C.2.2** Serve `/search`, `/search/suggest` and `POST /search/events` on `/app/v1`.
   - Files/modules: `app/appapi/search.go`, `tests/app_search_test.go`
   - Refs: SDD 10 §6.1 (Search row, auth optional); SDD 07 §6; SDD 05 §6.4
   - Depends on: P3.C.2.1
@@ -2424,7 +2424,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run TestAppSearch` → `ok` with and without a token; `q` > 100 chars → 400
   - Notes: SDD 05 §6.4 lists only `/search`; add `/search/suggest` and `/search/events` to that table in the same change (SDD 10 needs them).
 
-- [ ] **P3.C.2.3** Serve `/items/{id}/me` and PUT/DELETE `/items/{id}/rating`, `/items/{id}/status`, `/items/{id}/time-to-beat`.
+- [x] **P3.C.2.3** Serve `/items/{id}/me` and PUT/DELETE `/items/{id}/rating`, `/items/{id}/status`, `/items/{id}/time-to-beat`.
   - Files/modules: `app/appapi/scoring.go`, `tests/app_scoring_test.go`
   - Refs: SDD 05 §6.4; SDD 02 §6 (problems, e.g. `rating-before-release`); SDD 10 §6.1
   - Depends on: P3.C.2.1
@@ -2435,7 +2435,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.C.3 Library, profile and notifications
 
-- [ ] **P3.C.3.1** Serve `GET/PATCH /me`, `POST /me/export` (202), `POST/DELETE /me/deletion`.
+- [x] **P3.C.3.1** Serve `GET/PATCH /me`, `POST /me/export` (202), `POST/DELETE /me/deletion`.
   - Files/modules: `app/appapi/me.go`, `tests/app_me_test.go`
   - Refs: SDD 03 §6.2; SDD 14 §6.3; SDD 05 §6.4; open issue 14-2 (export is POST)
   - Depends on: P3.C.1.2
@@ -2444,7 +2444,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run TestAppMe` → `nickname-taken` 422; second export within 7 days → 429 `export-cooldown` with `Retry-After`
   - Notes: SDD 10 §6.1 still says `GET /me/export`; fix SDD 10 to POST in the same change.
 
-- [ ] **P3.C.3.2** Serve the lists routes and the edition choice: `/me/lists`, `/lists/{id}`, POST `/lists`, PATCH/DELETE `/lists/{id}`, PUT/DELETE `/lists/{id}/items/{itemId}`, PUT `/lists/{id}/order`, PUT/DELETE `/items/{id}/edition`.
+- [x] **P3.C.3.2** Serve the lists routes and the edition choice: `/me/lists`, `/lists/{id}`, POST `/lists`, PATCH/DELETE `/lists/{id}`, PUT/DELETE `/lists/{id}/items/{itemId}`, PUT `/lists/{id}/order`, PUT/DELETE `/items/{id}/edition`.
   - Files/modules: `app/appapi/lists.go`, `tests/app_lists_test.go`
   - Refs: SDD 14 §6.1, §6.3, §6.5; SDD 05 §6.4
   - Depends on: P3.C.3.1
@@ -2453,7 +2453,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run TestAppLists` → `list-version-conflict` 409, `order-mismatch` 422, `edition-not-of-work` 422; another user's private list → 404 (`DenyAsNotFound`)
   - Notes: ability conflict: SDD 14 §6.3 puts `/items/{id}/edition` under `status:write`, SDD 05 §6.4 under `lists:write`. Owner/architect input; default to SDD 05 (API owner) and align SDD 14. Events dispatched with `q.DispatchTx`.
 
-- [ ] **P3.C.3.3** Serve `/me/library`, `/users/{nickname}`, `/me/notifications`, `POST /me/notifications/read` and `POST /reports`.
+- [x] **P3.C.3.3** Serve `/me/library`, `/users/{nickname}`, `/me/notifications`, `POST /me/notifications/read` and `POST /reports`.
   - Files/modules: `app/appapi/library.go`, `app/appapi/notifications.go`, `app/appapi/reports.go`, `tests/app_library_test.go`
   - Refs: SDD 14 §6.3, §6.5; SDD 10 §6.1; open issue 10-1
   - Depends on: P3.C.3.2
@@ -2464,7 +2464,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.C.4 Client telemetry intake
 
-- [ ] **P3.C.4.1** Serve `POST /app/v1/client-errors` and `POST /app/v1/client-metrics` (anonymous, opt-in, CSRF-exempt), stored 7 days.
+- [x] **P3.C.4.1** Serve `POST /app/v1/client-errors` and `POST /app/v1/client-metrics` (anonymous, opt-in, CSRF-exempt), stored 7 days.
   - Files/modules: `database/migrations/<ts>_create_client_reports.go`, `app/appapi/telemetry.go`, `app/jobs/prune_client_reports.go`, `tests/app_telemetry_test.go`
   - Refs: SDD 05 FR-05-18, §6.4 "Client telemetry intake"; SDD 12 FR-12-7, §6.4; open issues 10-2, 09-11
   - Depends on: P3.C.1.1
@@ -2475,7 +2475,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.C.5 Generated client and release
 
-- [ ] **P3.C.5.1** Export `openapi/app-v1.json`, generate the private `@hexascore/app-client` package, and gate it in CI with Schemathesis and k6.
+- [x] **P3.C.5.1** Export `openapi/app-v1.json`, generate the private `@hexascore/app-client` package, and gate it in CI with Schemathesis and k6.
   - Files/modules: `openapi/app-v1.json`, `packages/app-client/package.json`, `packages/app-client/src/api.ts` (generated), `packages/app-client/src/index.test.ts`, `qa/k6/app-v1.js`, `.github/workflows/ci.yml`
   - Refs: SDD 05 §6.5, FR-05-15, §9; ADR 0009 decision 1; <https://vukem.dev/docs/rest-apis/client-generation> "The command"
   - Depends on: P3.C.4.1, P3.C.3.3, P3.C.2.3
@@ -2533,7 +2533,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P4.A.2 Quotas and anti-abuse
 
-- [ ] **P4.A.2.1** Implement submit: eligibility (verified, ≥ 7 days, not banned or blocked), `contributor_stats` row lock, 3 per UTC day counting withdrawn/expired, `Retry-After` to 00:00 UTC.
+- [x] **P4.A.2.1** Implement submit: eligibility (verified, ≥ 7 days, not banned or blocked), `contributor_stats` row lock, 3 per UTC day counting withdrawn/expired, `Retry-After` to 00:00 UTC.
   - Files/modules: `app/community/submit.go`, `app/community/quota.go`, `tests/community_quota_test.go`
   - Refs: SDD 04 FR-04-1, FR-04-3, §7.3, §8 (concurrent 3rd/4th, 23:59:59.900); D-31; open issue 04-7
   - Depends on: P4.A.1.3
@@ -2544,7 +2544,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `-run 'TestEligibility|TestConcurrentSubmit'` → 403 `suggestion-not-eligible` with `eligibleAt`; 20 concurrent submits admit exactly 3
   - Notes: the quota is a DB count, not the vukem limiter (calendar alignment undocumented, open issue 04-7). Refused submits consume nothing.
 
-- [ ] **P4.A.2.2** Add duplicate detection under `pg_advisory_xact_lock`, competing flags, field/record locks (423) and the `stale-before` check at submit.
+- [x] **P4.A.2.2** Add duplicate detection under `pg_advisory_xact_lock`, competing flags, field/record locks (423) and the `stale-before` check at submit.
   - Files/modules: `app/community/duplicates.go`, `app/community/locks.go`, `tests/community_duplicates_test.go`
   - Refs: SDD 04 FR-04-6, FR-04-7, §7.2 (stale `before`), §7.3 "Duplicates", "Locks"
   - Depends on: P4.A.2.1
@@ -2553,7 +2553,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/community/... -run 'TestDuplicate|TestFieldLock|TestStaleBeforeAtSubmit'` → 409 `suggestion-duplicate` (with `existingId` only for the author's own), 423 `field-locked` with `lockReason`, 409 `stale-before` with `field`, `current`
   - Notes: expired lock rows are ignored, not deleted. Different `after` values from different authors are allowed and flagged `competing` in `meta`.
 
-- [ ] **P4.A.2.3** Implement tiers, cooldowns and the hourly maintenance job (expire drafts at 14 days, refresh tiers, release claims idle > 2 h), plus `community:stats:rebuild`.
+- [x] **P4.A.2.3** Implement tiers, cooldowns and the hourly maintenance job (expire drafts at 14 days, refresh tiers, release claims idle > 2 h), plus `community:stats:rebuild`.
   - Files/modules: `app/community/tiers.go`, `app/jobs/community_hourly.go`, `app/commands/community_stats_rebuild.go`, `routes/schedule.go`, `tests/community_tiers_test.go`
   - Refs: SDD 04 §7.3 tier table and cooldown rules, §5 invariants (stats rebuildable); D-15; D-31
   - Depends on: P4.A.2.2

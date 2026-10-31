@@ -75,6 +75,7 @@ WHERE k IS NOT NULL`,
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		var k string
@@ -86,8 +87,9 @@ WHERE k IS NOT NULL`,
 			t.Fatal(err)
 		}
 	}
-
-	_ = rows.Close()
+	if err := rows.Err(); err != nil {
+		t.Fatal(err)
+	}
 
 	return app, db, disk, &out
 }

@@ -18,8 +18,19 @@ try {
 // The nonce lets the progress bar styles through the CSP.
 // It mounts on #app, the default inertia.Config.RootID; when you change
 // RootID, pass the same value here as `id`.
-createInertiaApp({
-	layout: () => AppLayout,
-	nonce: document.querySelector<HTMLMetaElement>('meta[property="csp-nonce"]')?.nonce,
-	progress: { color: "#4f46e5" },
-});
+// The HTML loader sets <html inert> until this promise settles. Script onload
+// is too early: createInertiaApp hydrates asynchronously, and a click in that
+// gap submits the server form.
+try {
+	void Promise.resolve(
+		createInertiaApp({
+			layout: () => AppLayout,
+			nonce: document.querySelector<HTMLMetaElement>('meta[property="csp-nonce"]')?.nonce,
+			progress: { color: "#4f46e5" },
+		}),
+	).finally(() => {
+		document.documentElement.inert = false;
+	});
+} catch {
+	document.documentElement.inert = false;
+}

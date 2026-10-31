@@ -228,10 +228,44 @@ func (h *Search) Index(c *web.Ctx) error {
 	}
 
 	if text != "" && !out.TooShort {
-		h.recordPerformed(c, searchID, query, user, signed, out, time.Since(start))
+		h.recordPerformed(c, searchID, query, user, signed, out, time.Since(start), "web")
 	}
 
 	return inertia.Render(c, "Search/Index", props)
+}
+
+// AppIndex is GET /app/v1/search. Auth is optional (SDD 10). The audience is
+// site, and the stored surface is app so web analytics stay separate.
+func (h *Search) AppIndex(c *web.Ctx) error {
+	text, locale, types := searchParams(c)
+	page := max(1, c.QueryInt("page", 1))
+	query := search.Query{
+		Text: text, Locale: locale, Types: types, Page: page, PerPage: searchPerPage,
+		Audience: search.AudienceSite,
+	}
+	user, signed := h.signedIn(c)
+	start := time.Now()
+
+	out, err := h.run(c.Context(), query, "")
+	if err != nil {
+		return badQuery(err)
+	}
+
+	searchID := uuid.NewV4().String()
+	if text != "" && !out.TooShort {
+		h.recordPerformed(c, searchID, query, user, signed, out, time.Since(start), "app")
+	}
+
+	hits := out.Results
+	if len(hits) == 0 {
+		for _, g := range out.Groups {
+			hits = append(hits, g.Items...)
+		}
+	}
+
+	return c.JSON(http.StatusOK, map[string]any{
+		"searchId": searchID, "data": hits, "total": out.Total, "tooShort": out.TooShort,
+	})
 }
 
 // badQuery maps the searcher's validation failures to 400 (SDD 07 §6).
@@ -298,6 +332,7 @@ func (h *Search) recordPerformed(
 	signed bool,
 	out searchPage,
 	took time.Duration,
+	surface string,
 ) {
 	db, err := h.app.DB()
 	if err != nil {
@@ -305,7 +340,7 @@ func (h *Search) recordPerformed(
 	}
 
 	e := search.Performed{
-		SearchID: id, Surface: "web", Text: q.Text, Locale: q.Locale, Types: q.Types,
+		SearchID: id, Surface: surface, Text: q.Text, Locale: q.Locale, Types: q.Types,
 		ResultCount: out.Total, Latency: took, Page: q.Page,
 	}
 	for _, hit := range out.Results {

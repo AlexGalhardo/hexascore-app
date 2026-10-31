@@ -1,26 +1,13 @@
 package account
 
 import (
-	"regexp"
-	"strings"
-
 	"github.com/AlexGalhardo/vukem/auth"
-	"github.com/AlexGalhardo/vukem/errs"
 	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
 )
-
-// Nickname error codes, returned as the `nickname` field error; the page maps
-// them to catalogue keys.
-const (
-	errNicknameTaken   = "nickname-taken"
-	errNicknameInvalid = "invalid-nickname"
-)
-
-var nicknameRe = regexp.MustCompile(`^[a-z]{4,16}$`)
 
 // ShowOnboarding asks a signed-in, verified user without a nickname for one;
 // users who have it go to the dashboard.
@@ -55,22 +42,9 @@ func (h *Handlers) Onboarding(c *web.Ctx) error {
 		return err
 	}
 
-	nick := strings.ToLower(in.Nickname)
-	if !nicknameRe.MatchString(nick) {
-		return errs.NewValidation().Add("nickname", errNicknameInvalid)
-	}
-
-	_, err = h.a.DB.ExecContext(c.Context(),
-		`UPDATE users SET username = $1, display_username = $1, updated_at = now() WHERE id = $2 AND username IS NULL`,
-		nick, u.ID)
-	if err != nil {
-		if strings.Contains(err.Error(), "users_username_uq") {
-			return errs.NewValidation().Add("nickname", errNicknameTaken)
-		}
-
+	if err := h.a.SetNickname(c.Context(), u.ID, in.Nickname, "nickname"); err != nil {
 		return err
 	}
 
-	// Zero rows: the user already had a nickname, which never changes.
 	return c.Redirect("/dashboard")
 }
