@@ -165,9 +165,9 @@ Implementation (P2.F.2.2, `database/legacyimport/users.go`): batches keyed by th
 | PATCH | `/profile/details` | verified | `{name, locale}` |
 | PUT | `/profile/password` | verified | `{currentPassword?, newPassword}` (current required when `password_set_at` not NULL) |
 | GET, POST | `/user/two-factor`, `/user/two-factor/confirm`, `/user/two-factor/recovery-codes`, `/user/two-factor/disable` | verified | vukem `--2fa` routes unchanged |
-| POST | `/login/passkey/options`, `/login/passkey` | guest | discoverable sign-in; satisfies 2FA | 
-| POST | `/user/passkeys/options`, `/user/passkeys` | verified | registration options and verify | 
-| DELETE | `/profile/passkeys/{id}` | verified | remove one of the caller's passkeys | 
+| POST | `/login/passkey/options`, `/login/passkey` | guest | discoverable sign-in; satisfies 2FA |
+| POST | `/user/passkeys/options`, `/user/passkeys` | verified | registration options and verify |
+| DELETE | `/profile/passkeys/{id}` | verified | remove one of the caller's passkeys |
 | GET | `/auth/google/confirm` | verified | fresh Google sign-in when `password_set_at` is NULL |
 | PATCH | `/profile/privacy` | verified | `{profilePrivate, personalizationOptOut}` |
 | DELETE | `/profile/sessions/{handle}`; POST `/profile/sessions/revoke-all` | session | |
