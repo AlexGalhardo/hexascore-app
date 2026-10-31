@@ -30,3 +30,4 @@ follow-ups (not blocking):
 3. Commit headers of the three senior commits have no scope (`feat: ...`); the merge commit carries `feat(auth)`
 gate on main after merge: see below
 PRONTO_PARA_MERGE agent/especialista/ADOPT-VF-001-fix (merged 75aa17b)
+gate on main @ 57497a9 (contains this merge): go build ok, golangci-lint --build-tags integration 0 issues, bun lint 0 errors / typecheck ok / vitest 70 passed, go test -tags integration -parallel 4 ./... ok. Earlier run @ 6181cb4: internal/search TestGolden failed once under load (QA build + e2e in parallel), passed alone and @ 57497a9; @ 75aa17b TestSecurity_A01_HexaRouteStackInventory failed on the 6 unclassified passkey routes, fixed in 6f25b4e.
