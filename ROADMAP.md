@@ -2801,7 +2801,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `-run 'TestApplyProvenance|TestApplyWritesChanges|TestApplyDeadlockRetry'` → `ok`
   - Notes: lock target rows ordered by id (legacy `mergeItems`). Audit stores the real previous value and provenance, not the suggestion's `before`. Cover changes go to `approved` and finish when the SDD 06 cover pipeline runs.
 
-- [ ] **P4.B.2.2** Implement the `catalog.changed` handler: cache purge, search reindex, sitemap `lastmod`, idempotent by `audit_ids`.
+- [x] **P4.B.2.2** Implement the `catalog.changed` handler: cache purge, search reindex, sitemap `lastmod`, idempotent by `audit_ids`.
   - Files/modules: `app/jobs/catalog_changed.go`, `tests/catalog_changed_test.go`
   - Refs: SDD 04 §6 jobs; SDD 01 (cache), SDD 07 (reindex), SDD 05 §7.3
   - Depends on: P4.B.2.1
