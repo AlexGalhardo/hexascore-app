@@ -140,7 +140,7 @@ Protocol: `PROMPT-WORKERS.md` section 3. Claim by writing your name in `owner` a
 | 1 | REV-FW-otlp-pr | especialista | doing | especialista | fw:fix/railway-otlp-traces | `$FW` `drivers/otel/`, site docs | review reports/FW-otlp-pr.md; refresh site/content/last-updated.json, push, PR, merge when GitHub CI green; PR #104 open, waiting for GitHub CI |
 | 1 | VF-NEW-AUDIT-1 | senior | review | senior-fw | fw: | `$FW` (locate) | vukem-feedback.md: service-raised 404 renders the bare framework page in an Inertia app (medium) |
 | 1 | REV-VF-NEW-AUDIT-1 | especialista | todo | | fw:fix/vf-inertia-html-error-page | `$FW` `inertia` | review reports/VF-NEW-AUDIT-1.md; run task api:check; push, PR, merge when GitHub CI green |
-| 1 | VF-NEW-AUDIT-3 | senior | todo | | fw: | `$FW` (locate) | vukem-feedback.md: DisableSSR pages ship an empty root element (medium) |
+| 1 | VF-NEW-AUDIT-3 | senior | doing | senior-fw | fw: | `$FW` (locate) | vukem-feedback.md: DisableSSR pages ship an empty root element (medium) |
 | 1 | VF-NEW-AUDIT-5 | senior | todo | | fw: | `$FW` (locate) | vukem-feedback.md: custom admin pages do not inherit the admin navigation (medium) |
 | 1 | VF-NEW-AUDIT-6 | senior | review | senior-fw | fw: | `$FW` `ratelimit` | vukem-feedback.md: rate limiter has no burst allowance (medium) |
 | 1 | REV-VF-NEW-AUDIT-6 | especialista | todo | | fw:fix/vf-ratelimit-burst | `$FW` `ratelimit` | review reports/VF-NEW-AUDIT-6.md; push, PR, merge when GitHub CI green |
