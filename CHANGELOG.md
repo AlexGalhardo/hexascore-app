@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.12.3] - 2026-10-31
+
+### Fixed
+
+- **admin:** Make catalog_audit append-only guard row-level ([78b1e7b](https://github.com/AlexGalhardo/hexascore-app/commit/78b1e7bf654bd5899aa7f2f0a2e3d9205f7f12eb))
+
 ## [0.12.2] - 2026-10-31
 
 ### Fixed
