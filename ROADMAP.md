@@ -2134,7 +2134,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
 
 #### P2.H.1 Visual catalogue
 
-- [ ] **P2.H.1.1** Serve item covers in every listing: home highlights, section listings, search results, library, lists and public profiles.
+- [x] **P2.H.1.1** Serve item covers in every listing: home highlights, section listings, search results, library, lists and public profiles.
   - Files/modules: `app/catalog/listing_view.go`, `app/catalog/item_page.go` (cover URL builder on the `S3_*` bucket, placeholder when absent), `resources/js/components/CoverThumb.tsx`, `resources/js/components/catalog/ItemCard.tsx`, `resources/js/components/catalog/SectionHighlights.tsx`, `resources/js/components/library/ItemLink.tsx`
   - Refs: SDD 09 §7.5 (`CoverThumb` 32×48 / 44×64, `srcSet` 96w/600w, lazy; item cover eager with `fetchpriority="high"`); SDD 06 covers pipeline (P6.B.2); ADR 0004 budgets
   - Depends on: —
