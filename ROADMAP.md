@@ -2183,7 +2183,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
 
 #### P2.H.2 Interaction states
 
-- [ ] **P2.H.2.1** Render a server-side skeleton for the CSR pages (`/profile`, `/library`, `/lists`, `/me/notifications`, `/profile/api`, `/billing`) so the document is never blank before hydration; set the `<title>` server-side for them.
+- [x] **P2.H.2.1** Render a server-side skeleton for the CSR pages (`/profile`, `/library`, `/lists`, `/me/notifications`, `/profile/api`, `/billing`) so the document is never blank before hydration; set the `<title>` server-side for them.
   - Files/modules: `resources/js/components/Skeleton.tsx`, the six pages, `app/controllers/*` (`inertia.Props` title), SSR of a shell-only render
   - Refs: SDD 09 §6.2 (CSR pages), §7.5 ("every Defer group has a skeleton"); audit A4
   - Depends on: —
