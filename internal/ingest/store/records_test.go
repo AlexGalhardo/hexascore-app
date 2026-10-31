@@ -19,7 +19,8 @@ import (
 func newDB(t *testing.T) *database.DB {
 	t.Helper()
 
-	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")}})
+	env := map[string]string{"DATABASE_URL": pgtest.Database(t, "")}
+	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: env})
 
 	db, err := app.DB()
 	if err != nil {
@@ -81,7 +82,8 @@ func TestStoreRecordsCountsInsertsAndChanges(t *testing.T) {
 		t.Fatalf("first = %d seen, %d changed, %v; want 2, 2", seen, changed, err)
 	}
 
-	seen, changed, err = store.Store(ctx, db, 2, []store.Record{rec("Q1", `{"v":1}`), rec("Q2", `{"v":2}`), rec("Q3", `{"v":1}`)})
+	second := []store.Record{rec("Q1", `{"v":1}`), rec("Q2", `{"v":2}`), rec("Q3", `{"v":1}`)}
+	seen, changed, err = store.Store(ctx, db, 2, second)
 	if err != nil || seen != 3 || changed != 2 {
 		t.Fatalf("second = %d seen, %d changed, %v; want 3, 2 (Q2 changed, Q3 new)", seen, changed, err)
 	}
