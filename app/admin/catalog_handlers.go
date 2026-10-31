@@ -104,6 +104,7 @@ type pageData struct {
 	CanRevert     bool
 	RevertReasons []string
 	Locks         []moderation.Lock
+	Metrics       moderation.Metrics
 	LockTargets   []string
 }
 

@@ -182,6 +182,7 @@ func Admin(r *router.Router, app *vukem.App) error {
 	}
 	r.Get("/admin/moderation", moderationH.Index).Name("admin.moderation").Use(auth.Required(acc.Web), csrfMW)
 	modMW := []func(http.Handler) http.Handler{auth.Required(acc.Web), csrfMW}
+	r.Get("/admin/moderation/metrics", moderationH.Metrics).Name("admin.moderation.metrics").Use(modMW...)
 	r.Post("/admin/moderation/{id}/claim", moderationH.Claim).Name("admin.moderation.claim").Use(modMW...)
 	r.Post("/admin/moderation/{id}/release", moderationH.Release).Name("admin.moderation.release").Use(modMW...)
 	r.Get("/admin/moderation/{id}", moderationH.Detail).Name("admin.moderation.detail").Use(modMW...)

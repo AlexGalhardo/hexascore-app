@@ -172,6 +172,7 @@ admin POST   /admin/items/{id}/affiliate-links/{store}/delete
 admin POST   /admin/items/{id}/merge
 admin POST   /admin/catalog/{type}/{id}/fields
 admin GET    /admin/moderation
+admin GET    /admin/moderation/metrics
 admin POST   /admin/moderation/{id}/claim
 admin POST   /admin/moderation/{id}/release
 admin GET    /admin/moderation/{id}

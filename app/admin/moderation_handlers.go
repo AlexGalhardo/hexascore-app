@@ -136,6 +136,23 @@ func (h ModerationHandlers) Index(c *web.Ctx) error {
 	return h.Pages.render(c, "moderation", d)
 }
 
+// Metrics renders GET /admin/moderation/metrics (moderate ability, FR-04-16; runbook R5 starts here).
+func (h ModerationHandlers) Metrics(c *web.Ctx) error {
+	if _, err := h.actor(c); err != nil {
+		return err
+	}
+
+	m, err := h.Queue.Metrics(c.Context())
+	if err != nil {
+		return err
+	}
+
+	d := h.Pages.newPage("Moderation metrics")
+	d.Metrics = m
+
+	return h.Pages.render(c, "moderation_metrics", d)
+}
+
 func (h ModerationHandlers) actor(c *web.Ctx) (models.User, error) {
 	if err := h.Authorize(c); err != nil {
 		return models.User{}, err
