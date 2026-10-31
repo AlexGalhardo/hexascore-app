@@ -201,3 +201,49 @@ func TestSecurity_A05_RenderCacheKeepsNoncePerRequest(t *testing.T) {
 		t.Fatalf("nonce must follow the request: %q %q", b1, b2)
 	}
 }
+
+// An unprefixed page redirects by Accept-Language downstream (SDD 09 FR-09-3); a cached en render must not
+// answer a pt-BR visitor, while prefixed pages share one entry whatever the header.
+func TestRenderCacheKeysUnprefixedByAcceptLanguage(t *testing.T) {
+	var renders atomic.Int32
+	h := RenderCache("vukem_session", map[string]string{"pt-br": "pt-BR"})(
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			renders.Add(1)
+			if r.URL.Path == "/games" && strings.HasPrefix(r.Header.Get("Accept-Language"), "pt") {
+				http.Redirect(w, r, "/pt-br/games", http.StatusTemporaryRedirect)
+
+				return
+			}
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			_, _ = w.Write([]byte("page"))
+		}),
+	)
+	get := func(path, al string) *httptest.ResponseRecorder {
+		req := httptest.NewRequest(http.MethodGet, path, nil)
+		req.Header.Set("Accept-Language", al)
+		rec := httptest.NewRecorder()
+		h.ServeHTTP(rec, req)
+
+		return rec
+	}
+
+	get("/games", "en-US,en;q=0.9")
+	if rec := get("/games", "pt-BR,pt;q=0.9"); rec.Code != http.StatusTemporaryRedirect {
+		t.Fatalf("pt-BR visitor on /games = %d, want the 307 from the locale redirect", rec.Code)
+	}
+
+	get("/pt-br/games", "en-US")
+	before := renders.Load()
+	if rec := get("/pt-br/games", "es"); rec.Header().Get("X-Render-Cache") != "HIT" || renders.Load() != before {
+		t.Fatalf("prefixed page not shared across Accept-Language: renders %d -> %d", before, renders.Load())
+	}
+
+	if rec := get(
+		"/games",
+		strings.Repeat("a", renderCacheMaxAcceptLanguage+1),
+	); rec.Header().
+		Get("X-Render-Cache") ==
+		"HIT" {
+		t.Fatal("oversized Accept-Language served from the cache")
+	}
+}

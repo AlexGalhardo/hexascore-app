@@ -18,6 +18,8 @@ const (
 	renderCacheMaxBody = 512 << 10
 	// Cookie values that vary the page are short enums; a longer one is not ours and skips the cache.
 	renderCacheMaxCookie = 16
+	// Browsers send a short Accept-Language; a longer one skips the cache instead of filling it.
+	renderCacheMaxAcceptLanguage = 64
 )
 
 var nonceRe = regexp.MustCompile(`'nonce-([^']+)'`)
@@ -74,7 +76,7 @@ func newRenderCache(
 			}
 
 			anonymous := !hasSession(r, sessionCookie)
-			key, ok := pageKey(r)
+			key, ok := pageKey(r, localePrefixes)
 			if !anonymous || !ok || r.Method != http.MethodGet {
 				next.ServeHTTP(&cacheWriter{ResponseWriter: w, anonymous: anonymous}, r)
 
@@ -107,12 +109,25 @@ func newRenderCache(
 }
 
 // pageKey is the path, the raw query and the cookies that change the markup
-// (theme, consent) or the redirect decision (locale).
-func pageKey(r *http.Request) (string, bool) {
+// (theme, consent) or the redirect decision (locale). On an unprefixed path
+// Accept-Language also picks the redirect (SDD 09 FR-09-3), so it is part of
+// the key there; this middleware runs before that redirect.
+func pageKey(r *http.Request, localePrefixes map[string]string) (string, bool) {
 	var b strings.Builder
 	b.WriteString(r.URL.Path)
 	b.WriteByte('?')
 	b.WriteString(r.URL.RawQuery)
+
+	first, _, _ := strings.Cut(strings.TrimPrefix(r.URL.Path, "/"), "/")
+	if _, prefixed := localePrefixes[first]; !prefixed {
+		al := r.Header.Get("Accept-Language")
+		if len(al) > renderCacheMaxAcceptLanguage {
+			return "", false
+		}
+
+		b.WriteString("|al=")
+		b.WriteString(al)
+	}
 
 	for _, name := range []string{"theme", "consent", "locale"} {
 		b.WriteByte('|')
