@@ -27,7 +27,7 @@ Conventions:
 The work runs through [PROMPT-WORKERS.md](PROMPT-WORKERS.md) (system prompt of the team) and [`.orchestration/`](.orchestration/) (queue, reports, handoffs; versioned in git). Parallel workers need the owner's explicit yes in each new session (global CLAUDE.md rule).
 
 1. Read [`.orchestration/handoff/orchestrator.md`](.orchestration/handoff/orchestrator.md) (state at pause), then [docs/orchestration/QUESTIONS.md](docs/orchestration/QUESTIONS.md) (owner gates and answers) and `C:\dev\hexascore-app\developer-manual-todos.md` (owner checklist, outside the repo).
-2. `git pull`, `docker compose up -d --wait`, and run the gate once: `go build ./...`, `golangci-lint run --allow-parallel-runners --build-tags integration ./...`, `bun install && bun run lint && bun run typecheck && bun run test`, `TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable go test -tags integration -parallel 4 -timeout 30m ./...`.
+2. `git pull`, `docker compose up -d --wait`, and run the gate once: `go build ./...`, `golangci-lint run --allow-parallel-runners --build-tags integration ./...`, `bun install && bun run lint && bun run typecheck && bun run test`, `TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable go test -tags integration ./...`.
 3. Fill `.orchestration/queue/TASKS.md` from the first unchecked microtasks that have no open owner gate (P2.H first), then launch the four workers with the briefs in `.orchestration/briefs/`. Workers stay alive and take the next task from the queue; relaunch only after a context-limit stop.
 4. Orchestrator loop: when the specialist marks a task `PRONTO_PARA_MERGE`, merge the branch with `git merge --no-ff`, run the gate, tick the microtask, renumber `VF-NEW-*` entries (next free: VF-063). `main` is pushed only when the owner asks (the push deploys Railway production).
 5. Releases: `scripts/release.sh vX.Y.Z` on a clean tree (git-cliff), local container smoke test (`hexascore:predeploy` on a fresh database, then `/up?checks=1`), `git push origin main && git push origin vX.Y.Z`; the Release workflow publishes the GitHub release.
@@ -45,7 +45,7 @@ Open owner items: real Stripe values on Railway service `app` (Q-H31); the 39 ow
 | P4 Community edits | Suggestions, moderation queue, audit, revert, notifications | SLA dashboard live; first 100 suggestions processed in staging rehearsal | `v1.4.0` (P4.A), `v1.5.0` (P4.B) |
 | P5 Mobile | Android app on Google Play internal → production track | Store listing approved; crash-free sessions ≥ 99 % in internal testing | `v1.6.0`–`v1.8.0`; app `mobile-v1.0.0` |
 | P6 Ingestion and recommendations | Ingestion in Go with asserts; trending, similar items, personal recommendations | Daily jobs green for 30 days; trending and similar live | `v1.9.0`–`v1.12.0` |
-| P7 Social layer (post-1.0; D-06 amended 2026-10-31) | Follows, activity feed, reviews with comments and reactions, richer profiles and shelves (Skoob, Goodreads, Letterboxd references) | Feed p95 ≤ 300 ms at 30 rps; moderation queue covers reviews and comments; Playwright + axe green | `v1.13.0`–`v1.15.0` |
+| P7 Social layer (post-1.0, needs the D-06 amendment) | Follows, activity feed, reviews with comments and reactions, richer profiles and shelves (Skoob, Goodreads, Letterboxd references) | Feed p95 ≤ 300 ms at 30 rps; moderation queue covers reviews and comments; Playwright + axe green | `v1.13.0`–`v1.15.0` |
 
 ## Task groups (summary)
 
@@ -650,7 +650,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.C.7 Passkeys (D-06 amended 2026-10-29, ADR 0017)
 
-- [x] **P1.C.7.1** Adopt the vukem release with VF-001 and wire passkey registration, sign-in and removal on the server.
+- [ ] **P1.C.7.1** Adopt the vukem release with VF-001 and wire passkey registration, sign-in and removal on the server.
   - Files/modules: `go.mod` (vukem version with VF-001), `database/migrations/*_create_passkeys_table.go` (or the scaffold's), `routes/auth.go`, `app/accounts/passkeys.go`, `app/http/middleware/security_headers.go` (`publickey-credentials-get=(self), publickey-credentials-create=(self)`), `app/jobs/deletion_purge.go`, `tests/passkeys_test.go`
   - Refs: SDD 03 FR-03-20 to FR-03-24, §5, §7.8; SDD 13 (Permissions-Policy row); ADR 0017; VF-001; <https://vukem.dev/docs/security/two-factor> (passkey section once published)
   - Depends on: vukem release with VF-001 (owner releases it), P1.C.2.2
@@ -661,7 +661,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `curl -sI http://127.0.0.1:3000/ | grep -i permissions-policy` → contains `publickey-credentials-create=(self)`
   - Notes: no app-local WebAuthn verifier or app-level dependency (ADR 0017); if the vukem API differs from SDD 03 §7.8, amend the SDD first. RP ID `hexascore.app` in production so imported legacy credentials verify. Independent especialista review before merge (auth).
 
-- [x] **P1.C.7.2** Build the passkey UI: profile section and login button in three locales, plus the `passkey_changed` mail.
+- [ ] **P1.C.7.2** Build the passkey UI: profile section and login button in three locales, plus the `passkey_changed` mail.
   - Files/modules: `resources/js/pages/Profile/Index.tsx` (section `passkeys`), `resources/js/pages/Auth/Login.tsx`, `resources/js/lib/webauthn.ts`, `lang/{en,pt-BR,es}.json`, `resources/views/mail/passkey_changed.html`
   - Refs: SDD 03 FR-03-20 to FR-03-24, §6.1, §6.5, §7.8; SDD 09; legacy `app/[locale]/profile/passkeys-section.tsx`, `app/[locale]/login/login-form.tsx`, `messages/*/account.json` `profile.passkeys`, `messages/*/auth.json` (`passkey`, `errors.passkeyFailed`)
   - Depends on: P1.C.7.1
@@ -2134,7 +2134,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
 
 #### P2.H.1 Visual catalogue
 
-- [x] **P2.H.1.1** Serve item covers in every listing: home highlights, section listings, search results, library, lists and public profiles.
+- [ ] **P2.H.1.1** Serve item covers in every listing: home highlights, section listings, search results, library, lists and public profiles.
   - Files/modules: `app/catalog/listing_view.go`, `app/catalog/item_page.go` (cover URL builder on the `S3_*` bucket, placeholder when absent), `resources/js/components/CoverThumb.tsx`, `resources/js/components/catalog/ItemCard.tsx`, `resources/js/components/catalog/SectionHighlights.tsx`, `resources/js/components/library/ItemLink.tsx`
   - Refs: SDD 09 §7.5 (`CoverThumb` 32×48 / 44×64, `srcSet` 96w/600w, lazy; item cover eager with `fetchpriority="high"`); SDD 06 covers pipeline (P6.B.2); ADR 0004 budgets
   - Depends on: —
@@ -2145,7 +2145,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - `bunx --bun @lhci/cli@0.15.1 autorun` → LCP ≤ 2.0 s and CLS ≤ 0.05 still green with covers on `/games`
   - Notes: covers come from the legacy copy (P2.F.3) or the demo seeder (add 300 placeholder keys to DemoCatalog so screenshots and e2e see real images).
 
-- [x] **P2.H.1.2** Rebuild the item page layout: cover and score badge in the header, details next to the synopsis, rating widget as the primary action above the fold on mobile, trailers and editions below.
+- [ ] **P2.H.1.2** Rebuild the item page layout: cover and score badge in the header, details next to the synopsis, rating widget as the primary action above the fold on mobile, trailers and editions below.
   - Files/modules: `resources/js/pages/Catalog/Show.tsx`, `resources/js/components/item/RatingPanel.tsx`, `resources/js/components/rating/StarRating.tsx` (SVG stars, 44 px targets)
   - Refs: SDD 09 §6.2, §7.4, §7.5; audit A2, A19
   - Depends on: P2.H.1.1
@@ -2155,7 +2155,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - a saved rating shows a success toast (`Flash`) and the community score re-renders without a full page load
   - Notes: keep the six-category input; a star widget drawn with inline SVG replaces the text glyphs so half stars render the same on every platform.
 
-- [x] **P2.H.1.3** Give the home page a first impression: hero with the value proposition, the four sections with covers, a "recently rated by members" strip, and the `Explore` call to action.
+- [ ] **P2.H.1.3** Give the home page a first impression: hero with the value proposition, the four sections with covers, a "recently rated by members" strip, and the `Explore` call to action.
   - Files/modules: `resources/js/pages/Home/Index.tsx`, `app/controllers/home.go` (recent public ratings, 12 rows, cached 60 s)
   - Refs: SDD 09 §6.2 (`Home/Index`), SDD 08 §6 (trending arrives with P6.C; until then the strip is "recently rated"); `home.title`, `home.explore` catalogue keys
   - Depends on: P2.H.1.1
@@ -2183,7 +2183,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
 
 #### P2.H.2 Interaction states
 
-- [x] **P2.H.2.1** Render a server-side skeleton for the CSR pages (`/profile`, `/library`, `/lists`, `/me/notifications`, `/profile/api`, `/billing`) so the document is never blank before hydration; set the `<title>` server-side for them.
+- [ ] **P2.H.2.1** Render a server-side skeleton for the CSR pages (`/profile`, `/library`, `/lists`, `/me/notifications`, `/profile/api`, `/billing`) so the document is never blank before hydration; set the `<title>` server-side for them.
   - Files/modules: `resources/js/components/Skeleton.tsx`, the six pages, `app/controllers/*` (`inertia.Props` title), SSR of a shell-only render
   - Refs: SDD 09 §6.2 (CSR pages), §7.5 ("every Defer group has a skeleton"); audit A4
   - Depends on: —
@@ -2201,7 +2201,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - `go test -tags integration ./tests -run TestSecurity_A07` → green (no weakening)
     - Playwright: a click on "Log in" 100 ms after `DOMContentLoaded` either submits or shows the pending state; never a silent no-op
 
-- [x] **P2.H.2.3** Success feedback after rating, status, time-to-beat and list changes (toast via `Flash`), and a message on `/user/two-factor` when the admin area redirected there.
+- [ ] **P2.H.2.3** Success feedback after rating, status, time-to-beat and list changes (toast via `Flash`), and a message on `/user/two-factor` when the admin area redirected there.
   - Files/modules: `app/controllers/ratings_controller.go`, `app/controllers/library_controller.go`, `routes/admin.go` (flash before the redirect), `resources/js/components/Flash.tsx`
   - Refs: SDD 09 §7.9; audit A16, A19
   - Depends on: —
@@ -2212,7 +2212,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
 
 #### P2.H.3 API DX and quality debt
 
-- [x] **P2.H.3.1** Declare `type` as an enum (`games`, `movies`, `series`, `books`) in the OpenAPI documents and regenerate the SDKs; allow a burst on the free plan (`rate_limit.burst = 5`) while keeping 1 request/second sustained.
+- [ ] **P2.H.3.1** Declare `type` as an enum (`games`, `movies`, `series`, `books`) in the OpenAPI documents and regenerate the SDKs; allow a burst on the free plan (`rate_limit.burst = 5`) while keeping 1 request/second sustained.
   - Files/modules: `app/controllers/publicapi/items.go` (`doc:"..."` enum), `openapi/api-v1.json`, `openapi/app-v1.json`, `config/billing.go`, `app/api/quota_middleware.go`, `sdks/ts`, `sdks/python`, `resources/docs/rate-limits.md`
   - Refs: SDD 05 §6.2, §6.5; D-33 (limits reviewed 90 days after cutover: this is the first review); audit A10, A11
   - Depends on: —
@@ -2221,7 +2221,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - `bash scripts/openapi-check.sh --write && bun run openapi:lint && bun run sdk:generate` → green; `jq '.paths["/api/v1/{type}"].get.parameters[0].schema.enum' openapi/api-v1.json` → the four values
     - `go test -tags integration ./tests -run TestAPIRateLimit` → 5 immediate requests pass, the 6th within the same second is 429 with `Retry-After`
 
-- [x] **P2.H.3.2** Fix the flaky `TestSecurity_A07_HexaHoneypotAndFillTime` under `-race` (CI run 41169281164 failed, passes locally): isolate the challenge counters per test or stop sharing the limiter store between parallel tests.
+- [ ] **P2.H.3.2** Fix the flaky `TestSecurity_A07_HexaHoneypotAndFillTime` under `-race` (CI run 41169281164 failed, passes locally): isolate the challenge counters per test or stop sharing the limiter store between parallel tests.
   - Files/modules: `tests/pow_hardening_test.go`, `app/http/middleware/challenge.go`, `app/challenge/*`
   - Refs: audit A21; CI job "Tests (Go unit and integration on Postgres, TypeScript)"
   - Depends on: —
@@ -2229,7 +2229,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
   - Acceptance:
     - `go test -race -count=20 -tags integration ./tests -run TestSecurity_A07_HexaHoneypotAndFillTime` → 20/20 green
 
-- [x] **P2.H.3.3** One admin layout: the custom `admin/ingestion` page uses the vukem admin navigation (same 11 entries) or is registered as a vukem admin page.
+- [ ] **P2.H.3.3** One admin layout: the custom `admin/ingestion` page uses the vukem admin navigation (same 11 entries) or is registered as a vukem admin page.
   - Files/modules: `app/admin/*`, `resources/views/admin/ingestion.html` (or the vukem admin registration)
   - Refs: <https://vukem.dev/docs/digging-deeper/admin>; audit A17
   - Depends on: —
@@ -2355,7 +2355,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.A.4 Daily ID exports
 
-- [x] **P3.A.4.1** Add the `jobs.ExportIDs` daily job (07:00 UTC) writing gzip NDJSON per type to the bucket and deleting objects older than 90 days.
+- [ ] **P3.A.4.1** Add the `jobs.ExportIDs` daily job (07:00 UTC) writing gzip NDJSON per type to the bucket and deleting objects older than 90 days.
   - Files/modules: `app/jobs/export_ids.go`, `routes/schedule.go`, `tests/export_ids_test.go`
   - Refs: SDD 05 FR-05-10, §7.3, NFR-05-6; VF-029; <https://vukem.dev/docs/digging-deeper/storage> "Reading and writing"
   - Depends on: P3.A.3.2
@@ -2704,7 +2704,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `./app community:stats:rebuild` on a seeded DB → no diff against live `contributor_stats`
   - Notes: command scaffolded with `vukem make:command`. `trusted_eligible` is computed but read by nothing in v1. Expired draft deletes its uploaded cover (§8).
 
-- [x] **P4.A.2.4** Add the honeypot, burst limits, `POST /suggestions/uploads/cover`, and the `community.check_sources` / `community.cover_fetch` jobs over `httpclient.Safe`.
+- [ ] **P4.A.2.4** Add the honeypot, burst limits, `POST /suggestions/uploads/cover`, and the `community.check_sources` / `community.cover_fetch` jobs over `httpclient.Safe`.
   - Files/modules: `app/community/abuse.go`, `app/community/uploads.go`, `app/jobs/check_sources.go`, `app/jobs/cover_fetch.go`, `tests/security_community_test.go`
   - Refs: SDD 04 §6 jobs, §7.2 covers, §7.3 honeypot and burst, NFR-04-4, §10 security tests; <https://vukem.dev/docs/digging-deeper/uploads>; <https://vukem.dev/docs/security/rate-limiting>
   - Depends on: P4.A.2.3
@@ -3777,7 +3777,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 ## Phase 7: social layer (post-1.0)
 
-Goal: turn the library into a social network for games, movies, series and books, with Skoob, Goodreads and Letterboxd as references. D-06 was amended on 2026-10-31 (owner, Q-A1 in `docs/orchestration/QUESTIONS.md`): feed, follows, reviews, comments and reactions enter right after the cutover (`v1.0.0`); this phase starts then. SDD 14 §1 already reserves the room: "the model leaves room for follows and feed (D-06) without tables for them".
+Goal: turn the library into a social network for games, movies, series and books, with Skoob, Goodreads and Letterboxd as references. D-06 defers "feed and follows" and keeps reviews and comments out of v1; this phase starts only after the owner amends D-06 in `docs/brainstorming.md` (question Q-A1 in `docs/orchestration/QUESTIONS.md`) and after the cutover (`v1.0.0`). SDD 14 §1 already reserves the room: "the model leaves room for follows and feed (D-06) without tables for them".
 
 Design principles for the whole phase: every social write is moderated by the P4.B queue (reports, hide, ban); private profiles never leak through the feed, counts or reactions; LGPD basis is consent for the feed (opt-in at onboarding, off by default for existing users) and legitimate interest for aggregates (D-29); nothing social enters the public API before a licence decision (A-07).
 
