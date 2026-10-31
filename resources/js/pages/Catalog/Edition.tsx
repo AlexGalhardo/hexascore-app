@@ -28,6 +28,12 @@ export default function Edition({ work, edition }: Props) {
 			<Seo title={`${edition.title} - ${work.title}`} />
 			<article className="grid gap-4">
 				<h1 className="text-3xl font-bold">{edition.title}</h1>
+				<Link
+					href={localized(`/suggest/edition/${edition.id}`, locale)}
+					className="text-sm underline"
+				>
+					{t("community.suggest.link")}
+				</Link>
 				{edition.subtitle && <p className="text-muted">{edition.subtitle}</p>}
 				<dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1">
 					{rows

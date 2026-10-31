@@ -141,6 +141,7 @@ func Web(r *router.Router, app *vukem.App) error {
 			"notifications.",
 			"library.",
 			"userLists.",
+			"community.",
 		),
 		appmiddleware.ShareProps(appmiddleware.ShareConfig{
 			AppName:    cmp.Or(app.Source.Get("APP_NAME"), "HexaScore"),

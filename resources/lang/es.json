@@ -1410,5 +1410,29 @@
     "apiHelp": "Claves, uso y la documentación para desarrolladores.",
     "verify": "Verifica tu correo para puntuar y mantener listas.",
     "twoFactor": "Autenticación en dos pasos"
+  },
+  "community": {
+    "suggest": {
+      "title": "Sugerir una edición",
+      "link": "Sugerir una edición"
+    },
+    "closed": {
+      "title": "Las sugerencias llegarán pronto",
+      "body": "Las ediciones de la comunidad aún no están abiertas. Vuelve más tarde."
+    },
+    "quota": "Te quedan {left} de {limit} envíos hoy",
+    "draftRestored": "Se restauró tu borrador guardado.",
+    "locked": "Bloqueado:",
+    "locale": "Idioma de tu edición",
+    "sources": "URLs de las fuentes (una por línea)",
+    "note": "Nota para el revisor",
+    "saveDraft": "Guardar borrador",
+    "fields": {
+      "title": "Título",
+      "cover": "Portada",
+      "translationTitle": "Título ({locale})",
+      "synopsis": "Sinopsis ({locale})",
+      "externalId": "ID de {provider}"
+    }
   }
 }
