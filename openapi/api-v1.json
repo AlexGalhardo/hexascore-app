@@ -6,11 +6,11 @@
   },
   "servers": [
     {
-      "url": "https://api.hexascore.app"
+      "url": "https://api.hexascore.app/v1"
     }
   ],
   "paths": {
-    "/api/v1/books/genres": {
+    "/books/genres": {
       "get": {
         "operationId": "listBookGenres",
         "summary": "listBookGenres",
@@ -42,7 +42,7 @@
         ]
       }
     },
-    "/api/v1/books/trending": {
+    "/books/trending": {
       "get": {
         "operationId": "listBookTrending",
         "summary": "listBookTrending",
@@ -87,7 +87,7 @@
         ]
       }
     },
-    "/api/v1/books/{id}/editions": {
+    "/books/{id}/editions": {
       "get": {
         "operationId": "listEditions",
         "summary": "listEditions",
@@ -148,7 +148,7 @@
         ]
       }
     },
-    "/api/v1/changes": {
+    "/changes": {
       "get": {
         "operationId": "listChanges",
         "summary": "listChanges",
@@ -217,7 +217,7 @@
         ]
       }
     },
-    "/api/v1/entities/{id}": {
+    "/entities/{id}": {
       "get": {
         "operationId": "getEntity",
         "summary": "getEntity",
@@ -270,7 +270,7 @@
         ]
       }
     },
-    "/api/v1/entities/{id}/items": {
+    "/entities/{id}/items": {
       "get": {
         "operationId": "listEntityItems",
         "summary": "listEntityItems",
@@ -363,7 +363,7 @@
         ]
       }
     },
-    "/api/v1/franchises/{id}": {
+    "/franchises/{id}": {
       "get": {
         "operationId": "getFranchise",
         "summary": "getFranchise",
@@ -416,7 +416,7 @@
         ]
       }
     },
-    "/api/v1/games/genres": {
+    "/games/genres": {
       "get": {
         "operationId": "listGameGenres",
         "summary": "listGameGenres",
@@ -448,7 +448,7 @@
         ]
       }
     },
-    "/api/v1/games/trending": {
+    "/games/trending": {
       "get": {
         "operationId": "listGameTrending",
         "summary": "listGameTrending",
@@ -493,7 +493,7 @@
         ]
       }
     },
-    "/api/v1/lookup": {
+    "/lookup": {
       "get": {
         "operationId": "lookupItem",
         "summary": "lookupItem",
@@ -554,7 +554,7 @@
         ]
       }
     },
-    "/api/v1/me/usage": {
+    "/me/usage": {
       "get": {
         "operationId": "getUsage",
         "summary": "getUsage",
@@ -586,7 +586,7 @@
         ]
       }
     },
-    "/api/v1/movies/genres": {
+    "/movies/genres": {
       "get": {
         "operationId": "listMovieGenres",
         "summary": "listMovieGenres",
@@ -618,7 +618,7 @@
         ]
       }
     },
-    "/api/v1/movies/trending": {
+    "/movies/trending": {
       "get": {
         "operationId": "listMovieTrending",
         "summary": "listMovieTrending",
@@ -663,7 +663,7 @@
         ]
       }
     },
-    "/api/v1/organizations/{id}": {
+    "/organizations/{id}": {
       "get": {
         "operationId": "getOrganization",
         "summary": "getOrganization",
@@ -716,7 +716,7 @@
         ]
       }
     },
-    "/api/v1/people/{id}": {
+    "/people/{id}": {
       "get": {
         "operationId": "getPerson",
         "summary": "getPerson",
@@ -769,7 +769,7 @@
         ]
       }
     },
-    "/api/v1/platforms/{id}": {
+    "/platforms/{id}": {
       "get": {
         "operationId": "getPlatform",
         "summary": "getPlatform",
@@ -822,7 +822,7 @@
         ]
       }
     },
-    "/api/v1/search": {
+    "/search": {
       "get": {
         "operationId": "searchItems",
         "summary": "searchItems",
@@ -899,7 +899,7 @@
         ]
       }
     },
-    "/api/v1/search/entities": {
+    "/search/entities": {
       "get": {
         "operationId": "searchEntities",
         "summary": "searchEntities",
@@ -976,7 +976,7 @@
         ]
       }
     },
-    "/api/v1/series/genres": {
+    "/series/genres": {
       "get": {
         "operationId": "listSeriesGenres",
         "summary": "listSeriesGenres",
@@ -1008,7 +1008,7 @@
         ]
       }
     },
-    "/api/v1/series/trending": {
+    "/series/trending": {
       "get": {
         "operationId": "listSeriesTrending",
         "summary": "listSeriesTrending",
@@ -1053,7 +1053,7 @@
         ]
       }
     },
-    "/api/v1/webhooks": {
+    "/webhooks": {
       "get": {
         "operationId": "listWebhooks",
         "summary": "listWebhooks",
@@ -1151,7 +1151,7 @@
         ]
       }
     },
-    "/api/v1/webhooks/{id}": {
+    "/webhooks/{id}": {
       "delete": {
         "operationId": "deleteWebhook",
         "summary": "deleteWebhook",
@@ -1190,7 +1190,7 @@
         ]
       }
     },
-    "/api/v1/webhooks/{id}/test": {
+    "/webhooks/{id}/test": {
       "post": {
         "operationId": "testWebhook",
         "summary": "testWebhook",
@@ -1247,7 +1247,7 @@
         ]
       }
     },
-    "/api/v1/{type}": {
+    "/{type}": {
       "get": {
         "operationId": "listItems",
         "summary": "listItems",
@@ -1371,7 +1371,7 @@
         ]
       }
     },
-    "/api/v1/{type}/{id}": {
+    "/{type}/{id}": {
       "get": {
         "operationId": "getItem",
         "summary": "getItem",
@@ -1439,7 +1439,7 @@
         ]
       }
     },
-    "/api/v1/{type}/{id}/activity": {
+    "/{type}/{id}/activity": {
       "get": {
         "operationId": "getItemActivity",
         "summary": "getItemActivity",

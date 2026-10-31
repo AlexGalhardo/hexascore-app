@@ -20,7 +20,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": "/api/v1/webhooks/{id}/test".format(
+        "url": "/webhooks/{id}/test".format(
             id=quote(str(id), safe=""),
         ),
     }
