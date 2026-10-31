@@ -8,6 +8,8 @@ import (
 	"strconv"
 
 	"github.com/AlexGalhardo/vukem/errs"
+	"github.com/AlexGalhardo/vukem/export"
+	"github.com/AlexGalhardo/vukem/uuid"
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/community"
@@ -38,14 +40,7 @@ func (h ModerationHandlers) Audit(c *web.Ctx) error {
 		return err
 	}
 
-	before, _ := strconv.ParseInt(c.Query("before"), 10, 64)
-	f := moderation.AuditFilter{
-		TargetType: oneOf(c.Query("target"), auditTargets),
-		TargetID:   c.Query("target_id"),
-		Field:      c.Query("field"),
-		Source:     oneOf(c.Query("source"), auditSources),
-		Before:     before,
-	}
+	f := auditFilter(c)
 
 	page, err := h.Queue.Audit(c.Context(), f)
 	if err := mapError(err); err != nil {
@@ -65,6 +60,46 @@ func (h ModerationHandlers) Audit(c *web.Ctx) error {
 	d.RevertReasons = community.RevertReasons
 
 	return h.Pages.render(c, "catalog_audit", d)
+}
+
+// auditFilter reads the list filters shared by the page and the exports.
+func auditFilter(c *web.Ctx) moderation.AuditFilter {
+	before, _ := strconv.ParseInt(c.Query("before"), 10, 64)
+
+	return moderation.AuditFilter{
+		TargetType: oneOf(c.Query("target"), auditTargets),
+		TargetID:   c.Query("target_id"),
+		Field:      c.Query("field"),
+		Source:     oneOf(c.Query("source"), auditSources),
+		Before:     before,
+	}
+}
+
+// AuditExport serves GET /admin/catalog-audit/export.csv and export.ndjson (viewCatalogAudit, FR-04-15): every row
+// matching the page filters, streamed in the request (vukem export; the CSV formula guard stays on).
+func (h ModerationHandlers) AuditExport(format string) web.HandlerFunc {
+	return func(c *web.Ctx) error {
+		if err := authorizeOr403(h.AuthorizeAudit, c); err != nil {
+			return err
+		}
+
+		f := auditFilter(c)
+		if f.TargetID != "" {
+			if _, err := uuid.Parse(f.TargetID); err != nil {
+				return errs.NewValidation().Add("target_id", "The target id must be a uuid.")
+			}
+		}
+
+		rows := h.Queue.AuditRows(c.Context(), f)
+		w, r := c.Writer(), c.Request()
+
+		if format == "csv" {
+			return export.CSV(w, r, "catalog-audit.csv", moderation.AuditExportHeader, rows, moderation.AuditRecord,
+				export.FlushEvery(1000))
+		}
+
+		return export.NDJSON(w, r, "catalog-audit.ndjson", rows, export.FlushEvery(1000))
+	}
 }
 
 // Revert handles POST /admin/catalog-audit/{id}/revert (revertCatalog, admins only).

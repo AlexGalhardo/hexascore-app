@@ -194,7 +194,7 @@ Locale prefixes per D-17. User routes: `web` guard + `auth.Verified` (vukem `htt
 | POST | `/admin/moderation/bulk` | `moderate`; `applySuggestion` for approve and reject | `ids[]` ≤ 50, action → per-id results |
 | GET | `/admin/catalog-audit`, `/admin/catalog-audit/export.{csv,ndjson}` | `viewCatalogAudit` | filters; export via vukem `export` (`https://vukem.dev/docs/digging-deeper/exports` "Exports") |
 | POST | `/admin/catalog-audit/{id}/revert` | `revertCatalog` | `reason`, `mode` = single, cascade, force |
-| POST / DELETE | `/admin/locks`, `/admin/locks/{id}` | `lockCatalog` | target, field, reason, expiry |
+| GET / POST | `/admin/locks`, `/admin/locks/{id}/delete` | `lockCatalog` | target, field (`*` = whole record), reason, expiry in days; unlock is a POST because HTML forms cannot send DELETE |
 
 Moderation pages (`/admin/moderation*`, `/admin/catalog-audit*`, `/admin/locks`) are server-rendered `html/template` views inside the vukem admin layout (<https://vukem.dev/docs/digging-deeper/admin>, <https://vukem.dev/docs/basics/views>), not Inertia pages, so `/admin` stays one UI (open issue 09-12); forms post with CSRF tokens and answer 303. The ban outcome calls SDD 03 `POST /admin/users/{id}/ban`.
 

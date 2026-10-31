@@ -103,6 +103,8 @@ type pageData struct {
 	// CanRevert shows the revert form on /admin/catalog-audit.
 	CanRevert     bool
 	RevertReasons []string
+	Locks         []moderation.Lock
+	LockTargets   []string
 }
 
 // panelNav mirrors the sidebar vukem builds from admin.Resources (same order, same plural labels);

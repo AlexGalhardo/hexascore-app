@@ -172,6 +172,9 @@ func Admin(r *router.Router, app *vukem.App) error {
 		AuthorizeRevert: func(c *web.Ctx) error {
 			return gate.Authorize(c.Context(), admin.AbilityRevertCatalog, nil)
 		},
+		AuthorizeLock: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityLockCatalog, nil)
+		},
 		Authorize: func(c *web.Ctx) error { return gate.Authorize(c.Context(), admin.AbilityModerate, nil) },
 		AuthorizeApply: func(c *web.Ctx) error {
 			return gate.Authorize(c.Context(), admin.AbilityApplySuggestion, nil)
@@ -190,6 +193,13 @@ func Admin(r *router.Router, app *vukem.App) error {
 	r.Post("/admin/moderation/bulk", moderationH.Bulk).Name("admin.moderation.bulk").Use(modMW...)
 	r.Get("/admin/catalog-audit", moderationH.Audit).Name("admin.catalog_audit").Use(modMW...)
 	r.Post("/admin/catalog-audit/{id}/revert", moderationH.Revert).Name("admin.catalog_audit.revert").Use(modMW...)
+	r.Get("/admin/catalog-audit/export.csv", moderationH.AuditExport("csv")).
+		Name("admin.catalog_audit.export_csv").Use(modMW...)
+	r.Get("/admin/catalog-audit/export.ndjson", moderationH.AuditExport("ndjson")).
+		Name("admin.catalog_audit.export_ndjson").Use(modMW...)
+	r.Get("/admin/locks", moderationH.Locks).Name("admin.locks").Use(modMW...)
+	r.Post("/admin/locks", moderationH.CreateLock).Name("admin.locks.create").Use(modMW...)
+	r.Post("/admin/locks/{id}/delete", moderationH.DeleteLock).Name("admin.locks.delete").Use(modMW...)
 	r.Get("/admin/ingestion", catalogH.Ingestion).Name("admin.ingestion").Use(auth.Required(acc.Web), csrfMW)
 
 	return nil
