@@ -48,8 +48,10 @@ export default function Signup({ formToken }: { formToken: string }) {
 					value={form.data.website}
 					onChange={(e) => form.setData("website", e.target.value)}
 				/>
+				<input type="hidden" name="form_token" value={form.data.form_token} />
 				<Field
 					label={t("auth.fields.name")}
+					name="name"
 					autoComplete="name"
 					required
 					value={form.data.name}
@@ -58,6 +60,7 @@ export default function Signup({ formToken }: { formToken: string }) {
 				/>
 				<Field
 					label={t("auth.fields.email")}
+					name="email"
 					type="email"
 					autoComplete="email"
 					required
