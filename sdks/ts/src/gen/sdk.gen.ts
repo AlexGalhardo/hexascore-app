@@ -2,7 +2,7 @@
 
 import { client } from './client.gen.ts';
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client/index.ts';
-import type { CreateWebhookData, CreateWebhookErrors, CreateWebhookResponses, DeleteWebhookData, DeleteWebhookErrors, DeleteWebhookResponses, GetEntityData, GetEntityErrors, GetEntityResponses, GetFranchiseData, GetFranchiseErrors, GetFranchiseResponses, GetItemData, GetItemErrors, GetItemResponses, GetOrganizationData, GetOrganizationErrors, GetOrganizationResponses, GetPersonData, GetPersonErrors, GetPersonResponses, GetPlatformData, GetPlatformErrors, GetPlatformResponses, GetUsageData, GetUsageErrors, GetUsageResponses, ListBookGenresData, ListBookGenresErrors, ListBookGenresResponses, ListChangesData, ListChangesErrors, ListChangesResponses, ListEditionsData, ListEditionsErrors, ListEditionsResponses, ListEntityItemsData, ListEntityItemsErrors, ListEntityItemsResponses, ListGameGenresData, ListGameGenresErrors, ListGameGenresResponses, ListItemsData, ListItemsErrors, ListItemsResponses, ListMovieGenresData, ListMovieGenresErrors, ListMovieGenresResponses, ListSeriesGenresData, ListSeriesGenresErrors, ListSeriesGenresResponses, ListWebhooksData, ListWebhooksErrors, ListWebhooksResponses, LookupItemData, LookupItemErrors, LookupItemResponses, SearchEntitiesData, SearchEntitiesErrors, SearchEntitiesResponses, SearchItemsData, SearchItemsErrors, SearchItemsResponses, TestWebhookData, TestWebhookErrors, TestWebhookResponses } from './types.gen.ts';
+import type { CreateWebhookData, CreateWebhookErrors, CreateWebhookResponses, DeleteWebhookData, DeleteWebhookErrors, DeleteWebhookResponses, GetEntityData, GetEntityErrors, GetEntityResponses, GetFranchiseData, GetFranchiseErrors, GetFranchiseResponses, GetItemActivityData, GetItemActivityErrors, GetItemActivityResponses, GetItemData, GetItemErrors, GetItemResponses, GetOrganizationData, GetOrganizationErrors, GetOrganizationResponses, GetPersonData, GetPersonErrors, GetPersonResponses, GetPlatformData, GetPlatformErrors, GetPlatformResponses, GetUsageData, GetUsageErrors, GetUsageResponses, ListBookGenresData, ListBookGenresErrors, ListBookGenresResponses, ListBookTrendingData, ListBookTrendingErrors, ListBookTrendingResponses, ListChangesData, ListChangesErrors, ListChangesResponses, ListEditionsData, ListEditionsErrors, ListEditionsResponses, ListEntityItemsData, ListEntityItemsErrors, ListEntityItemsResponses, ListGameGenresData, ListGameGenresErrors, ListGameGenresResponses, ListGameTrendingData, ListGameTrendingErrors, ListGameTrendingResponses, ListItemsData, ListItemsErrors, ListItemsResponses, ListMovieGenresData, ListMovieGenresErrors, ListMovieGenresResponses, ListMovieTrendingData, ListMovieTrendingErrors, ListMovieTrendingResponses, ListSeriesGenresData, ListSeriesGenresErrors, ListSeriesGenresResponses, ListSeriesTrendingData, ListSeriesTrendingErrors, ListSeriesTrendingResponses, ListWebhooksData, ListWebhooksErrors, ListWebhooksResponses, LookupItemData, LookupItemErrors, LookupItemResponses, SearchEntitiesData, SearchEntitiesErrors, SearchEntitiesResponses, SearchItemsData, SearchItemsErrors, SearchItemsResponses, TestWebhookData, TestWebhookErrors, TestWebhookResponses } from './types.gen.ts';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -24,6 +24,15 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 export const listBookGenres = <ThrowOnError extends boolean = false>(options?: Options<ListBookGenresData, ThrowOnError>): RequestResult<ListBookGenresResponses, ListBookGenresErrors, ThrowOnError> => (options?.client ?? client).get<ListBookGenresResponses, ListBookGenresErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/books/genres',
+    ...options
+});
+
+/**
+ * listBookTrending
+ */
+export const listBookTrending = <ThrowOnError extends boolean = false>(options?: Options<ListBookTrendingData, ThrowOnError>): RequestResult<ListBookTrendingResponses, ListBookTrendingErrors, ThrowOnError> => (options?.client ?? client).get<ListBookTrendingResponses, ListBookTrendingErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/books/trending',
     ...options
 });
 
@@ -82,6 +91,15 @@ export const listGameGenres = <ThrowOnError extends boolean = false>(options?: O
 });
 
 /**
+ * listGameTrending
+ */
+export const listGameTrending = <ThrowOnError extends boolean = false>(options?: Options<ListGameTrendingData, ThrowOnError>): RequestResult<ListGameTrendingResponses, ListGameTrendingErrors, ThrowOnError> => (options?.client ?? client).get<ListGameTrendingResponses, ListGameTrendingErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/games/trending',
+    ...options
+});
+
+/**
  * lookupItem
  */
 export const lookupItem = <ThrowOnError extends boolean = false>(options?: Options<LookupItemData, ThrowOnError>): RequestResult<LookupItemResponses, LookupItemErrors, ThrowOnError> => (options?.client ?? client).get<LookupItemResponses, LookupItemErrors, ThrowOnError>({
@@ -105,6 +123,15 @@ export const getUsage = <ThrowOnError extends boolean = false>(options?: Options
 export const listMovieGenres = <ThrowOnError extends boolean = false>(options?: Options<ListMovieGenresData, ThrowOnError>): RequestResult<ListMovieGenresResponses, ListMovieGenresErrors, ThrowOnError> => (options?.client ?? client).get<ListMovieGenresResponses, ListMovieGenresErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/movies/genres',
+    ...options
+});
+
+/**
+ * listMovieTrending
+ */
+export const listMovieTrending = <ThrowOnError extends boolean = false>(options?: Options<ListMovieTrendingData, ThrowOnError>): RequestResult<ListMovieTrendingResponses, ListMovieTrendingErrors, ThrowOnError> => (options?.client ?? client).get<ListMovieTrendingResponses, ListMovieTrendingErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/movies/trending',
     ...options
 });
 
@@ -159,6 +186,15 @@ export const searchEntities = <ThrowOnError extends boolean = false>(options?: O
 export const listSeriesGenres = <ThrowOnError extends boolean = false>(options?: Options<ListSeriesGenresData, ThrowOnError>): RequestResult<ListSeriesGenresResponses, ListSeriesGenresErrors, ThrowOnError> => (options?.client ?? client).get<ListSeriesGenresResponses, ListSeriesGenresErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/series/genres',
+    ...options
+});
+
+/**
+ * listSeriesTrending
+ */
+export const listSeriesTrending = <ThrowOnError extends boolean = false>(options?: Options<ListSeriesTrendingData, ThrowOnError>): RequestResult<ListSeriesTrendingResponses, ListSeriesTrendingErrors, ThrowOnError> => (options?.client ?? client).get<ListSeriesTrendingResponses, ListSeriesTrendingErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/series/trending',
     ...options
 });
 
@@ -221,5 +257,14 @@ export const listItems = <ThrowOnError extends boolean = false>(options: Options
 export const getItem = <ThrowOnError extends boolean = false>(options: Options<GetItemData, ThrowOnError>): RequestResult<GetItemResponses, GetItemErrors, ThrowOnError> => (options.client ?? client).get<GetItemResponses, GetItemErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/api/v1/{type}/{id}',
+    ...options
+});
+
+/**
+ * getItemActivity
+ */
+export const getItemActivity = <ThrowOnError extends boolean = false>(options: Options<GetItemActivityData, ThrowOnError>): RequestResult<GetItemActivityResponses, GetItemActivityErrors, ThrowOnError> => (options.client ?? client).get<GetItemActivityResponses, GetItemActivityErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/api/v1/{type}/{id}/activity',
     ...options
 });

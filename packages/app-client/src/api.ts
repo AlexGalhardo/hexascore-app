@@ -120,6 +120,18 @@ export type Synopsis = {
   text?: string;
 };
 
+export type TrendingEntryJSON = {
+  basis: "trend" | "prior";
+  item?: ItemJSON;
+  rank: number;
+  trendScore?: number;
+};
+
+export type TrendingJSON = {
+  computedAt?: string | null;
+  data?: TrendingEntryJSON[];
+};
+
 export type ClientErrorsBody = unknown;
 
 export type ClientMetricsBody = unknown;
@@ -139,6 +151,12 @@ export type GetItemQuery = {
 export type GetItemResponse = ItemJSON;
 
 export type ListBookGenresResponse = GenreListJSON;
+
+export type ListBookTrendingQuery = {
+  locale?: string;
+};
+
+export type ListBookTrendingResponse = TrendingJSON;
 
 export type ListEditionsQuery = {
   cursor?: string;
@@ -160,6 +178,12 @@ export type ListEntityItemsResponse = ItemPageJSON;
 
 export type ListGameGenresResponse = GenreListJSON;
 
+export type ListGameTrendingQuery = {
+  locale?: string;
+};
+
+export type ListGameTrendingResponse = TrendingJSON;
+
 export type ListItemsQuery = {
   cursor?: string;
   genre?: string;
@@ -176,7 +200,19 @@ export type ListItemsResponse = ItemPageJSON;
 
 export type ListMovieGenresResponse = GenreListJSON;
 
+export type ListMovieTrendingQuery = {
+  locale?: string;
+};
+
+export type ListMovieTrendingResponse = TrendingJSON;
+
 export type ListSeriesGenresResponse = GenreListJSON;
+
+export type ListSeriesTrendingQuery = {
+  locale?: string;
+};
+
+export type ListSeriesTrendingResponse = TrendingJSON;
 
 export type ListsCreateBody = unknown;
 
@@ -459,6 +495,11 @@ export interface Client {
   listBookGenres(): Promise<ListBookGenresResponse>;
 
   /**
+   * GET /app/v1/books/trending
+   */
+  listBookTrending(args?: { query?: ListBookTrendingQuery }): Promise<ListBookTrendingResponse>;
+
+  /**
    * GET /app/v1/books/{id}/editions
    */
   listEditions(args: { params: ListEditionsParams; query?: ListEditionsQuery }): Promise<ListEditionsResponse>;
@@ -474,6 +515,11 @@ export interface Client {
   listGameGenres(): Promise<ListGameGenresResponse>;
 
   /**
+   * GET /app/v1/games/trending
+   */
+  listGameTrending(args?: { query?: ListGameTrendingQuery }): Promise<ListGameTrendingResponse>;
+
+  /**
    * GET /app/v1/{type}
    */
   listItems(args: { params: ListItemsParams; query?: ListItemsQuery }): Promise<ListItemsResponse>;
@@ -484,9 +530,19 @@ export interface Client {
   listMovieGenres(): Promise<ListMovieGenresResponse>;
 
   /**
+   * GET /app/v1/movies/trending
+   */
+  listMovieTrending(args?: { query?: ListMovieTrendingQuery }): Promise<ListMovieTrendingResponse>;
+
+  /**
    * GET /app/v1/series/genres
    */
   listSeriesGenres(): Promise<ListSeriesGenresResponse>;
+
+  /**
+   * GET /app/v1/series/trending
+   */
+  listSeriesTrending(args?: { query?: ListSeriesTrendingQuery }): Promise<ListSeriesTrendingResponse>;
 
   /**
    * POST /app/v1/lists
@@ -667,12 +723,16 @@ export function createClient(options: ClientOptions = {}): Client {
     getItem: (args) => request<GetItemResponse>("GET", "/app/v1/{type}/{id}", args),
     library: () => request<unknown>("GET", "/app/v1/me/library"),
     listBookGenres: () => request<ListBookGenresResponse>("GET", "/app/v1/books/genres"),
+    listBookTrending: (args) => request<ListBookTrendingResponse>("GET", "/app/v1/books/trending", args),
     listEditions: (args) => request<ListEditionsResponse>("GET", "/app/v1/books/{id}/editions", args),
     listEntityItems: (args) => request<ListEntityItemsResponse>("GET", "/app/v1/entities/{id}/items", args),
     listGameGenres: () => request<ListGameGenresResponse>("GET", "/app/v1/games/genres"),
+    listGameTrending: (args) => request<ListGameTrendingResponse>("GET", "/app/v1/games/trending", args),
     listItems: (args) => request<ListItemsResponse>("GET", "/app/v1/{type}", args),
     listMovieGenres: () => request<ListMovieGenresResponse>("GET", "/app/v1/movies/genres"),
+    listMovieTrending: (args) => request<ListMovieTrendingResponse>("GET", "/app/v1/movies/trending", args),
     listSeriesGenres: () => request<ListSeriesGenresResponse>("GET", "/app/v1/series/genres"),
+    listSeriesTrending: (args) => request<ListSeriesTrendingResponse>("GET", "/app/v1/series/trending", args),
     listsCreate: (args) => request<unknown>("POST", "/app/v1/lists", args),
     listsDelete: (args) => request<unknown>("DELETE", "/app/v1/lists/{id}", args),
     listsIndex: () => request<unknown>("GET", "/app/v1/me/lists"),
