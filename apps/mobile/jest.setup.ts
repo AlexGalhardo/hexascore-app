@@ -8,3 +8,21 @@ if (runtime.HermesInternal === undefined) runtime.HermesInternal = {};
 // (6.5 s on a cold Jest cache). Touch them here, which no test timer covers.
 const { Text, View } = require("react-native") as typeof import("react-native");
 void [Text, View];
+
+// Jest has no native SQLite; screens that import the runtime get an in-memory kv-store.
+jest.mock("expo-sqlite/kv-store", () => {
+	const data = new Map<string, string>();
+	return {
+		__esModule: true,
+		default: {
+			getItem: async (key: string) => data.get(key) ?? null,
+			getItemSync: (key: string) => data.get(key) ?? null,
+			setItem: async (key: string, value: string) => {
+				data.set(key, value);
+			},
+			removeItem: async (key: string) => {
+				data.delete(key);
+			},
+		},
+	};
+});
