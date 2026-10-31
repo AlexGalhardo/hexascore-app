@@ -15,7 +15,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | VF-NEW-AUDIT-3 | 2026-10-31 | medium | open |
 | VF-NEW-AUDIT-4 | 2026-10-31 | low | open |
 | VF-NEW-AUDIT-5 | 2026-10-31 | medium | open |
-| VF-NEW-AUDIT-6 | 2026-10-31 | medium | open |
+| VF-NEW-AUDIT-6 | 2026-10-31 | medium | fixed on main, unreleased (PR #105) |
 | VF-NEW-P2.H.3.1 | 2026-10-31 | low | open |
 | VF-NEW-P5.A.3.1 | 2026-10-31 | low | open |
 | VF-NEW-FIX-gate-timeouts | 2026-10-31 | medium | open |
@@ -75,7 +75,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 
 ## VF-NEW-AUDIT-6: Rate limiter has no burst allowance
 
-- **Date**: 2026-10-31. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-31. **Severity**: medium. **Status**: fixed on main, unreleased (PR #105).
 - **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/security/rate-limiting> "Keys" [NOT VERIFIED whether a burst option exists; checked only the app usage in `app/http/limits`].
 - **Context**: the public API free plan is 1 request/second; the first request leaves `ratelimit-remaining: 0` and the second within the same second is 429. Every sequential client script fails on its second call (audit 2026-10-31).
 - **Workaround**: none; P2.H.3.1 proposes a burst in the app layer if the framework has none.
