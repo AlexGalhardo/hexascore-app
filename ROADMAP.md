@@ -2810,7 +2810,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/jobs/... -run TestCatalogChangedIdempotent` → running the job twice purges and reindexes once per audit id
   - Notes: `api_changes` is written in the apply transaction (P4.B.2.1), not here, so a failed job never loses a feed row.
 
-- [ ] **P4.B.2.3** Apply `create` and `merge` suggestions: insert with `source=create` audit rows and unblock `depends_on`; merge through the SDD 01 service with a `*merge*` audit row holding both snapshots.
+- [x] **P4.B.2.3** Apply `create` and `merge` suggestions: insert with `source=create` audit rows and unblock `depends_on`; merge through the SDD 01 service with a `*merge*` audit row holding both snapshots.
   - Files/modules: `app/community/apply_create.go`, `app/community/apply_merge.go`, `tests/community_create_merge_test.go`
   - Refs: SDD 04 §7.6, §8 (target merged → open suggestions `expired`); open issue 04-9 (snapshot jsonb); SDD 01 merge
   - Depends on: P4.B.2.2
