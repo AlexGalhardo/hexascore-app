@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **community:** `Community/SuggestEdit` page with draft save and restore, quota, locked-field reasons, "Suggest an edit" links on item, edition and entity pages, and `community.*` strings in en, pt-BR and es (P4.A.3.1c)
 - **community:** `/suggest/new/{domain}` page to propose a new record or report a duplicate (merge request), drafts only (P4.A.3.2)
 - **community:** Suggestion status page, My suggestions list, and submit and withdraw actions for the author; admins can view, others get 404 (P4.A.3.3)
+- **repo:** `scripts/ci/local.sh` runs every `ci.yml` job except e2e locally, in parallel, on a clean checkout of HEAD with isolated databases, ports and compose project; `qa/schemathesis/ci.sh` reads `DATABASE_URL` and works on Docker Desktop (QA-ci-local-script)
 
 ### Changed
 
