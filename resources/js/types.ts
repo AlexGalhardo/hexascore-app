@@ -24,6 +24,7 @@ export interface SeoMeta {
 
 export interface SharedProps {
 	appName: string;
+	coversBase: string;
 	locale: Locale;
 	locales: Locale[];
 	errors: Record<string, string>;

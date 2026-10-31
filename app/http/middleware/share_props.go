@@ -13,7 +13,9 @@ import (
 // ShareConfig configures ShareProps.
 type ShareConfig struct {
 	AppName string
-	SEO     seo.Config
+	// CoversBase is the origin cover keys are served from (COVERS_BASE_URL); empty means the app origin.
+	CoversBase string
+	SEO        seo.Config
 	// User resolves the signed-in user (nil when signed out); it runs only
 	// when a page is rendered.
 	User func(c *web.Ctx) (any, error)
@@ -29,6 +31,7 @@ func ShareProps(cfg ShareConfig) func(http.Handler) http.Handler {
 			c := web.NewCtx(w, r, web.ServicesFrom(ctx))
 
 			inertia.Share(ctx, "appName", cfg.AppName)
+			inertia.Share(ctx, "coversBase", cfg.CoversBase)
 			inertia.Share(ctx, "seo", cfg.SEO.For(r))
 			inertia.Share(ctx, "auth", func(context.Context) (any, error) {
 				u, err := cfg.User(c)

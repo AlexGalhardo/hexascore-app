@@ -1,3 +1,6 @@
+import { usePage } from "@inertiajs/react";
+import type { SharedProps } from "../types";
+
 export type CoverSize = "sm" | "md";
 
 export interface Cover {
@@ -25,6 +28,7 @@ export default function CoverThumb({
 	priority?: boolean;
 }) {
 	const { width, height } = DIMENSIONS[size];
+	const { coversBase } = usePage<SharedProps>().props;
 
 	if (!cover) {
 		return (
@@ -39,8 +43,8 @@ export default function CoverThumb({
 
 	return (
 		<img
-			src={cover.thumb}
-			srcSet={`${cover.thumb} 96w, ${cover.full} 600w`}
+			src={`${coversBase}${cover.thumb}`}
+			srcSet={`${coversBase}${cover.thumb} 96w, ${coversBase}${cover.full} 600w`}
 			sizes={`${width}px`}
 			width={width}
 			height={height}
