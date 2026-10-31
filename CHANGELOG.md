@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Login and signup submit buttons show a pending spinner while the page has not hydrated or a submit is in flight; both forms declare `method=post` and their action.
 - Report dialog on public profiles and public lists (`POST /reports`, reasons from SDD 14).
 - Dashboard page with links to the library, lists, public page and API keys, in the three locales.
 - Mobile header: brand, search and icon buttons on one row, sections on a scrollable row, account and language entries in a menu.
@@ -31,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- E2E login helpers match the submit button exactly, so pt-BR and es runs no longer hit the passkey button.
 - The Android app's bundled i18n catalogues carry the passkey and privacy keys again (keys test green).
 - Legacy cover copy retries DNS, rate-limit and non-rewindable-body errors and accepts `--concurrency`; HTTP 404 stays one failure.
 - A verified user without a nickname is sent to the onboarding after a late e-mail verification instead of the dashboard.
