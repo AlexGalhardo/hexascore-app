@@ -29,5 +29,6 @@ func All(app *vukem.App) []queue.Registration {
 		handleCommunityHourly(app),
 		handleCheckSources(app),
 		handleCoverFetch(app),
+		handleExportIDs(app),
 	}
 }
