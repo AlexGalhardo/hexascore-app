@@ -92,6 +92,8 @@ type pageData struct {
 	Detail        moderation.Detail
 	BulkResults   []moderation.BulkResult
 	RejectReasons []string
+	// CanApply shows the admin-only approve and reject controls (owner Q-A15).
+	CanApply bool
 }
 
 // panelNav mirrors the sidebar vukem builds from admin.Resources (same order, same plural labels);

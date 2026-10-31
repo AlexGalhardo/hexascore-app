@@ -162,12 +162,17 @@ func Admin(r *router.Router, app *vukem.App) error {
 			DB: acc.DB, Now: app.Now, Applier: community.Applier{DB: acc.DB, Queue: q, Now: app.Now},
 		},
 		Authorize: func(c *web.Ctx) error { return gate.Authorize(c.Context(), admin.AbilityModerate, nil) },
+		AuthorizeApply: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityApplySuggestion, nil)
+		},
 	}
 	r.Get("/admin/moderation", moderationH.Index).Name("admin.moderation").Use(auth.Required(acc.Web), csrfMW)
 	modMW := []func(http.Handler) http.Handler{auth.Required(acc.Web), csrfMW}
 	r.Post("/admin/moderation/{id}/claim", moderationH.Claim).Name("admin.moderation.claim").Use(modMW...)
 	r.Post("/admin/moderation/{id}/release", moderationH.Release).Name("admin.moderation.release").Use(modMW...)
 	r.Get("/admin/moderation/{id}", moderationH.Detail).Name("admin.moderation.detail").Use(modMW...)
+	r.Post("/admin/moderation/{id}/recommend", moderationH.Recommend).
+		Name("admin.moderation.recommend").Use(modMW...)
 	r.Post("/admin/moderation/{id}/approve", moderationH.Approve).Name("admin.moderation.approve").Use(modMW...)
 	r.Post("/admin/moderation/{id}/reject", moderationH.Reject).Name("admin.moderation.reject").Use(modMW...)
 	r.Post("/admin/moderation/{id}/clone", moderationH.Clone).Name("admin.moderation.clone").Use(modMW...)

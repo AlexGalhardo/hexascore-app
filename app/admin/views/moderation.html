@@ -22,7 +22,7 @@
 <p class="muted">No suggestions match.</p>
 {{else}}
 <table>
-	<thead><tr><th><span class="visually-hidden">Select</span></th><th>Age</th><th>Kind</th><th>Target</th><th>Fields</th><th>Author</th><th>Badges</th><th>Assignee</th><th>Action</th></tr></thead>
+	<thead><tr><th><span class="visually-hidden">Select</span></th><th>Age</th><th>Kind</th><th>Target</th><th>Fields</th><th>Author</th><th>Badges</th><th>Recommendations</th><th>Assignee</th><th>Action</th></tr></thead>
 	<tbody>
 	{{range .Queue.Rows}}
 	<tr>
@@ -33,6 +33,7 @@
 		<td>{{range $i, $f := .Fields}}{{if $i}}, {{end}}{{$f}}{{end}}</td>
 		<td>{{if .AuthorID}}#{{.AuthorID}} {{.AuthorTier}} {{printf "%.2f" .AuthorAccuracy}}{{else}}-{{end}}</td>
 		<td>{{if .Competing}}<span class="badge">competing</span> {{end}}{{if .Stale}}<span class="badge">stale</span> {{end}}{{if .Unreachable}}<span class="badge">unreachable</span>{{end}}</td>
+		<td>{{if or .RecApprove .RecReject}}approve {{.RecApprove}} · reject {{.RecReject}}{{else}}-{{end}}</td>
 		<td>{{if .AssignedTo}}#{{.AssignedTo}}{{else}}-{{end}}</td>
 		<td>
 			<form method="post" action="/admin/moderation/{{.ID}}/{{if eq .Status "in_review"}}release{{else}}claim{{end}}">
@@ -47,8 +48,8 @@
 </table>
 <form id="bulk" method="post" action="/admin/moderation/bulk">
 	{{csrfField}}
-	<label>Action <select name="action"><option value="claim">Claim</option><option value="release">Release</option><option value="approve">Approve</option><option value="reject">Reject</option></select></label>
-	<label>Reject reason <select name="reason"><option value="">-</option>{{range .RejectReasons}}<option value="{{.}}">{{.}}</option>{{end}}</select></label>
+	<label>Action <select name="action"><option value="claim">Claim</option><option value="release">Release</option>{{if .CanApply}}<option value="approve">Approve</option><option value="reject">Reject</option>{{end}}</select></label>
+	{{if .CanApply}}<label>Reject reason <select name="reason"><option value="">-</option>{{range .RejectReasons}}<option value="{{.}}">{{.}}</option>{{end}}</select></label>{{end}}
 	<button type="submit">Apply to selected (max 50)</button>
 </form>
 {{with .Queue.NextURL}}<p><a href="{{.}}" rel="next">Next page</a></p>{{end}}

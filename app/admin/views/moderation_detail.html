@@ -29,7 +29,22 @@
 	{{end}}
 </section>
 {{end}}
+<h2>Recommendations</h2>
+{{if .Reviews}}
+<ul>{{range .Reviews}}<li>#{{.ReviewerID}} recommends <strong>{{.Recommendation}}</strong> (v{{.Version}}, {{.At.UTC.Format "2006-01-02 15:04"}} UTC){{if .Note}}: {{.Note}}{{end}}</li>{{end}}</ul>
+{{else}}<p class="muted">No recommendations yet.</p>{{end}}
 {{if or (eq .Status "submitted") (eq .Status "in_review")}}
+<form method="post" action="/admin/moderation/{{.ID}}/recommend">
+	{{csrfField}}
+	<input type="hidden" name="version" value="{{.Version}}">
+	<fieldset><legend>Your recommendation</legend>
+		<label><input type="radio" name="recommendation" value="approve" required> Approve</label>
+		<label><input type="radio" name="recommendation" value="reject"> Reject</label>
+	</fieldset>
+	<label>Note <textarea name="note" maxlength="1000"></textarea></label>
+	<button type="submit">Record recommendation</button>
+</form>
+{{if $.CanApply}}
 <form method="post" action="/admin/moderation/{{.ID}}/approve">
 	{{csrfField}}
 	<input type="hidden" name="version" value="{{.Version}}">
@@ -44,6 +59,7 @@
 	<label>Note <textarea name="note" maxlength="1000"></textarea></label>
 	<button type="submit">Reject</button>
 </form>
+{{end}}
 {{else}}
 <form method="post" action="/admin/moderation/{{.ID}}/clone">
 	{{csrfField}}

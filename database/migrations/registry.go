@@ -70,5 +70,6 @@ func All() []schema.Migration {
 		m20261031150000CreateTrendingTables(),
 		m20261031160000AllowModeratorRole(),
 		m20261031173100CreateCatalogChangedDone(),
+		m20261031190000CreateSuggestionReviews(),
 	}
 }

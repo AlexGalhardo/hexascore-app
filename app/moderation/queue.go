@@ -68,6 +68,8 @@ type Row struct {
 	SubmittedAt                                            time.Time
 	Age                                                    string
 	Competing, Stale, Unreachable                          bool
+	// RecApprove and RecReject count the moderator recommendations (FR-04-17).
+	RecApprove, RecReject int
 }
 
 // Page is one keyset page; Next is empty on the last one.
@@ -180,7 +182,9 @@ SELECT s.id::text, s.kind::text, s.target_type::text, COALESCE(s.target_id::text
   COALESCE(s.author_id, 0), COALESCE(s.assigned_to, 0), COALESCE(cs.tier::text, ''), COALESCE(cs.accuracy, 0),
   s.version, s.submitted_at,
   COALESCE((s.meta ->> 'competing')::boolean, false), COALESCE((s.meta ->> 'stale')::boolean, false),
-  COALESCE(s.meta ->> 'source_status' = 'unreachable', false)
+  COALESCE(s.meta ->> 'source_status' = 'unreachable', false),
+  (SELECT count(*) FILTER (WHERE recommendation = 'approve') FROM suggestion_reviews r WHERE r.suggestion_id = s.id),
+  (SELECT count(*) FILTER (WHERE recommendation = 'reject') FROM suggestion_reviews r WHERE r.suggestion_id = s.id)
 FROM suggestions s
 LEFT JOIN contributor_stats cs ON cs.user_id = s.author_id
 WHERE `+strings.Join(where, " AND ")+`
@@ -202,7 +206,7 @@ LIMIT `+strconv.Itoa(size+1), args...)
 
 		if err := rows.Scan(&r.ID, &r.Kind, &r.TargetType, &r.TargetID, &r.Domain, &r.Locale, &r.Status, &fields,
 			&r.AuthorID, &r.AssignedTo, &r.AuthorTier, &r.AuthorAccuracy, &r.Version, &r.SubmittedAt,
-			&r.Competing, &r.Stale, &r.Unreachable); err != nil {
+			&r.Competing, &r.Stale, &r.Unreachable, &r.RecApprove, &r.RecReject); err != nil {
 			return Page{}, fmt.Errorf("moderation: scan queue: %w", err)
 		}
 
