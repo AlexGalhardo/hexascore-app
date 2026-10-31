@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Item page: cover and score badge in the header, details beside the synopsis, the rating panel first on mobile and in a sticky side column on desktop; stars are inline SVG so half stars look the same everywhere.
 - Star rating rows show their category label and larger stars; an unset value renders as a dash.
 - The cookie banner reserves space at the bottom of the page instead of covering the last controls.
 - The app name falls back to "HexaScore" when `APP_NAME` is unset; the QA compose stack sets it.
@@ -30,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- The Android app's bundled i18n catalogues carry the passkey and privacy keys again (keys test green).
 - Legacy cover copy retries DNS, rate-limit and non-rewindable-body errors and accepts `--concurrency`; HTTP 404 stays one failure.
 - A verified user without a nickname is sent to the onboarding after a late e-mail verification instead of the dashboard.
 - Public lists with fewer than three items are `noindex` (SDD 14 FR-14-6).
