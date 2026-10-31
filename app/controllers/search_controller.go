@@ -20,6 +20,7 @@ import (
 	"github.com/AlexGalhardo/vukem/uuid"
 	"github.com/AlexGalhardo/vukem/web"
 
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
 	"github.com/AlexGalhardo/hexascore-app/internal/search"
@@ -36,13 +37,18 @@ const (
 type Search struct {
 	app      *vukem.App
 	searcher search.Searcher
+	// coversBase makes the JSON cover URLs absolute (COVERS_BASE_URL).
+	coversBase string
 	// user returns the signed-in user, or an error for anonymous requests.
 	user func(c *web.Ctx) (models.User, error)
 }
 
 // NewSearch builds the handlers.
 func NewSearch(app *vukem.App, searcher search.Searcher, user func(c *web.Ctx) (models.User, error)) *Search {
-	return &Search{app: app, searcher: searcher, user: user}
+	return &Search{
+		app: app, searcher: searcher, user: user,
+		coversBase: catalog.CoversBase(app.Source.Get("COVERS_BASE_URL")),
+	}
 }
 
 // SearchHit is one result row; the catalogue read model adds score and cover later.
@@ -54,6 +60,7 @@ type SearchHit struct {
 	Path           string               `json:"path"`
 	MatchedTitle   string               `json:"matchedTitle,omitempty"`
 	MatchedEdition *search.EditionMatch `json:"matchedEdition,omitempty"`
+	Cover          *catalog.Cover       `json:"cover"`
 }
 
 // SearchGroup is one type's block of the grouped page.
@@ -263,6 +270,10 @@ func (h *Search) AppIndex(c *web.Ctx) error {
 		}
 	}
 
+	for i := range hits {
+		hits[i].Cover = hits[i].Cover.WithBase(h.coversBase)
+	}
+
 	return c.JSON(http.StatusOK, map[string]any{
 		"searchId": searchID, "data": hits, "total": out.Total, "tooShort": out.TooShort,
 	})
@@ -303,6 +314,10 @@ func (h *Search) run(ctx context.Context, q search.Query, prefix string) (search
 		}
 
 		out.Groups = append(out.Groups, sg)
+	}
+
+	if err := h.attachCovers(ctx, &out); err != nil {
+		return searchPage{}, err
 	}
 
 	if q.Page == 1 && len(q.Types) == 0 && !res.TooShort {
@@ -392,7 +407,7 @@ func (h *Search) Suggest(c *web.Ctx) error {
 			}
 
 			if r.ThumbKey != "" {
-				it.CoverThumbURL = "/covers/" + strings.TrimPrefix(r.ThumbKey, "covers/")
+				it.CoverThumbURL = catalog.Absolute(h.coversBase, catalog.CoverURL(r.ThumbKey))
 			}
 
 			if section, ok := itemSection[r.Kind]; ok {
@@ -489,6 +504,42 @@ func LegacySuggest(c *web.Ctx) error {
 	}
 
 	http.Redirect(c.Writer(), c.Request(), target, http.StatusPermanentRedirect)
+
+	return nil
+}
+
+// attachCovers fills Cover on every hit of the page with one query.
+func (h *Search) attachCovers(ctx context.Context, out *searchPage) error {
+	var hits []*SearchHit
+	for i := range out.Results {
+		hits = append(hits, &out.Results[i])
+	}
+	for g := range out.Groups {
+		for i := range out.Groups[g].Items {
+			hits = append(hits, &out.Groups[g].Items[i])
+		}
+	}
+	if len(hits) == 0 {
+		return nil
+	}
+
+	ids := make([]string, len(hits))
+	for i, hit := range hits {
+		ids[i] = hit.ID
+	}
+
+	db, err := h.app.DB()
+	if err != nil {
+		return err
+	}
+
+	covers, err := catalog.CoversFor(ctx, db, ids)
+	if err != nil {
+		return err
+	}
+	for _, hit := range hits {
+		hit.Cover = covers[hit.ID]
+	}
 
 	return nil
 }

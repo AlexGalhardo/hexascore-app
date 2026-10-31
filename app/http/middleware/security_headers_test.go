@@ -81,7 +81,10 @@ func TestSecurity_A05_HeadersOnHTMLAndJSON(t *testing.T) {
 		}
 
 		pp := h("Permissions-Policy")
-		for _, f := range []string{"camera=()", "microphone=()", "geolocation=()", "payment=()", "browsing-topics=()"} {
+		for _, f := range []string{
+			"camera=()", "microphone=()", "geolocation=()", "payment=()", "browsing-topics=()",
+			"publickey-credentials-get=(self)", "publickey-credentials-create=(self)",
+		} {
 			if !strings.Contains(pp, f) {
 				t.Errorf("%s: Permissions-Policy %q lacks %s", path, pp, f)
 			}

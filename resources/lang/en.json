@@ -1,4 +1,20 @@
 {
+  "flash": {
+    "ratingSaved": "Rating saved.",
+    "ratingRemoved": "Rating removed.",
+    "statusSaved": "Status saved.",
+    "statusRemoved": "Status removed.",
+    "timeToBeatSaved": "Times saved.",
+    "timeToBeatRemoved": "Times removed.",
+    "listCreated": "List created.",
+    "listUpdated": "List updated.",
+    "listDeleted": "List deleted.",
+    "listItemAdded": "Added to the list.",
+    "listItemRemoved": "Removed from the list.",
+    "editionSaved": "Edition saved.",
+    "editionRemoved": "Edition forgotten.",
+    "adminTwoFactorRequired": "Two-factor authentication is required to open the admin area. Set it up here."
+  },
   "account": {
     "metaTitle": "Profile",
     "title": "Your profile",
@@ -42,12 +58,28 @@
       "needPassword": "Set a password above before turning on two-factor authentication.",
       "manage": "Manage two-factor authentication"
     },
+    "passkeys": {
+      "title": "Passkeys",
+      "body": "Log in with your fingerprint, face or device PIN instead of a password.",
+      "empty": "No passkeys yet.",
+      "add": "Add passkey",
+      "remove": "Remove",
+      "removeLabel": "Remove passkey {name}",
+      "unnamed": "Passkey",
+      "added": "Added {date}",
+      "failed": "The passkey was not saved. Try again.",
+      "lastWarning": "If you remove your last passkey, you can still recover the account with email reset.",
+      "confirmGoogle": "Confirm with Google",
+      "limit": "You can save at most 10 passkeys.",
+      "password": "Password"
+    },
     "privacy": {
       "title": "Privacy",
       "label": "Private profile",
       "help": "Your ratings stay in the community scores, but your profile and lists are hidden from other users.",
       "personalization": "Turn off personalised recommendations",
-      "personalizationHelp": "We stop using your ratings to suggest items to you."
+      "personalizationHelp": "We stop using your ratings to suggest items to you.",
+      "save": "Save privacy"
     },
     "delete": {
       "title": "Delete account",
@@ -226,6 +258,7 @@
     },
     "or": "or",
     "google": "Continue with Google",
+    "passkey": "Sign in with a passkey",
     "challenge": {
       "checking": "Checking your browser…",
       "noscript": "This form needs JavaScript. Without it you can"
@@ -245,7 +278,8 @@
       "invalidNickname": "4 to 16 lowercase letters, no numbers or symbols.",
       "invalidEmail": "Enter a valid email.",
       "invalidName": "Enter your name.",
-      "invalidToken": "This link is invalid or expired."
+      "invalidToken": "This link is invalid or expired.",
+      "passkeyFailed": "Passkey sign-in was cancelled or failed."
     },
     "login": {
       "metaTitle": "Log in",
@@ -546,11 +580,16 @@
     "skip": "Skip to content",
     "dismiss": "Dismiss",
     "home": "Home",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "library": "My library",
+    "lists": "My lists",
+    "more": "More"
   },
   "home": {
     "title": "Every game, movie, series and book — scored by people, category by category.",
-    "explore": "Explore"
+    "explore": "Explore",
+    "recent": "Recently rated by members",
+    "ratedBy": "by {name}"
   },
   "footer": {
     "terms": "Terms",
@@ -571,7 +610,16 @@
     "copied": "Copied",
     "title": "API documentation",
     "navLabel": "Documentation",
-    "nav": { "index": "Quickstart", "authentication": "Authentication", "pagination": "Pagination", "rate-limits": "Rate limits", "errors": "Errors", "coverage": "Coverage", "changelog": "Changelog", "reference": "API reference" },
+    "nav": {
+      "index": "Quickstart",
+      "authentication": "Authentication",
+      "pagination": "Pagination",
+      "rate-limits": "Rate limits",
+      "errors": "Errors",
+      "coverage": "Coverage",
+      "changelog": "Changelog",
+      "reference": "API reference"
+    },
     "tocLabel": "On this page",
     "quickstart": {
       "lead": "Community scores for games, movies, TV series and books — 0 to 100, in six categories per item — over a read-only JSON API.",
@@ -1149,7 +1197,8 @@
       "noRatings": "No ratings yet.",
       "emptyShelf": "Nothing here yet.",
       "previous": "Previous",
-      "next": "Next"
+      "next": "Next",
+      "summary": "{ratings} ratings · {lists} lists"
     },
     "status": {
       "label": "Status",
@@ -1347,5 +1396,19 @@
     "by": "List by {nickname}",
     "edited": "Edit list",
     "limit": "Up to {limit} lists per type."
+  },
+  "dashboard": {
+    "title": "Welcome back, {name}",
+    "lead": "Pick up where you left off.",
+    "library": "Your library",
+    "libraryHelp": "Everything you marked as want, playing, completed or dropped.",
+    "lists": "Your lists",
+    "listsHelp": "Ordered lists you can share.",
+    "page": "My page",
+    "pageHelp": "What other people see.",
+    "api": "API keys",
+    "apiHelp": "Keys, usage and the developer docs.",
+    "verify": "Verify your email to rate and keep lists.",
+    "twoFactor": "Two-factor authentication"
   }
 }

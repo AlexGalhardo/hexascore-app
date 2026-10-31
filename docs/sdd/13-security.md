@@ -82,7 +82,7 @@ Marketing: none.
 | `Referrer-Policy` | `strict-origin-when-cross-origin` | `no-referrer` |
 | `Cross-Origin-Opener-Policy` | `same-origin` | same |
 | `Cross-Origin-Resource-Policy` | `same-site` | `cross-origin` |
-| `Permissions-Policy` | `accelerometer=(), autoplay=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), browsing-topics=(), publickey-credentials-get=()` | same; becomes `publickey-credentials-get=(self), publickey-credentials-create=(self)` when passkeys ship (ADR 0017) |
+| `Permissions-Policy` | `accelerometer=(), autoplay=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), browsing-topics=(), publickey-credentials-get=(self), publickey-credentials-create=(self)` | same (passkeys shipped, ADR 0017) |
 | CORS | none | `*`, no credentials (SDD 05) |
 
 Notes:

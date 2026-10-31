@@ -132,7 +132,7 @@ func TestRegisterAndVerifyEmail(t *testing.T) {
 	c.PostJSON("/login", map[string]any{"identifier": "ana@example.com", "password": testPassword}).
 		AssertRedirect(verify)
 	c.Get(verify + "x").AssertForbidden() // tampered signature
-	c.Get(verify).AssertRedirect("/dashboard")
+	c.Get(verify).AssertRedirect("/onboarding")
 	c.Get("/dashboard").AssertOK().
 		AssertInertia("Dashboard").
 		PropEquals("auth.user.name", "Ana Silva").
@@ -209,7 +209,7 @@ func TestUnverifiedUsersSeeTheNotice(t *testing.T) {
 	c.Get("/dashboard").AssertRedirect("/verify-email")
 	c.Get("/verify-email").AssertInertia("Auth/VerifyNotice").PropEquals("auth.user.email", "uma@example.com")
 
-	c.Get(link(t, app, "uma@example.com")).AssertRedirect("/dashboard")
+	c.Get(link(t, app, "uma@example.com")).AssertRedirect("/onboarding")
 	c.Get("/dashboard").AssertInertia("Dashboard").PropEquals("auth.user.name", "Uma")
 }
 
@@ -331,7 +331,7 @@ func TestSecurity_A07_ProvingTheEmailEndsSquatterAccess(t *testing.T) {
 	device.Get(verify).AssertRedirect("/login")
 	device.PostJSON("/login", map[string]any{"identifier": "vic@example.com", "password": testPassword}).
 		AssertRedirect(verify)
-	device.Get(verify).AssertRedirect("/dashboard")
+	device.Get(verify).AssertRedirect("/onboarding")
 	device.Get("/dashboard").AssertOK()
 
 	squatter.Get("/verify-email").AssertRedirect("/login")

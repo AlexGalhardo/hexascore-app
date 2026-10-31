@@ -6,12 +6,13 @@ import httpx
 
 from ...client import AuthenticatedClient, Client
 from ...models.item_page_json import ItemPageJSON
+from ...models.list_items_type import ListItemsType
 from ...models.problem import Problem
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
-    type_: str,
+    type_: ListItemsType,
     *,
     genre: str | Unset = UNSET,
     platform: str | Unset = UNSET,
@@ -90,7 +91,7 @@ def _build_response(
 
 
 def sync_detailed(
-    type_: str,
+    type_: ListItemsType,
     *,
     client: AuthenticatedClient,
     genre: str | Unset = UNSET,
@@ -106,7 +107,7 @@ def sync_detailed(
     """listItems
 
     Args:
-        type_ (str):
+        type_ (ListItemsType):
         genre (str | Unset):
         platform (str | Unset):
         year (str | Unset):
@@ -146,7 +147,7 @@ def sync_detailed(
 
 
 def sync(
-    type_: str,
+    type_: ListItemsType,
     *,
     client: AuthenticatedClient,
     genre: str | Unset = UNSET,
@@ -162,7 +163,7 @@ def sync(
     """listItems
 
     Args:
-        type_ (str):
+        type_ (ListItemsType):
         genre (str | Unset):
         platform (str | Unset):
         year (str | Unset):
@@ -197,7 +198,7 @@ def sync(
 
 
 async def asyncio_detailed(
-    type_: str,
+    type_: ListItemsType,
     *,
     client: AuthenticatedClient,
     genre: str | Unset = UNSET,
@@ -213,7 +214,7 @@ async def asyncio_detailed(
     """listItems
 
     Args:
-        type_ (str):
+        type_ (ListItemsType):
         genre (str | Unset):
         platform (str | Unset):
         year (str | Unset):
@@ -251,7 +252,7 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    type_: str,
+    type_: ListItemsType,
     *,
     client: AuthenticatedClient,
     genre: str | Unset = UNSET,
@@ -267,7 +268,7 @@ async def asyncio(
     """listItems
 
     Args:
-        type_ (str):
+        type_ (ListItemsType):
         genre (str | Unset):
         platform (str | Unset):
         year (str | Unset):

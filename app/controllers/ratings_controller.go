@@ -4,6 +4,7 @@ import (
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/web"
 
+	"github.com/AlexGalhardo/hexascore-app/app/flash"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
@@ -40,6 +41,8 @@ func (h *Ratings) Put(c *web.Ctx) error {
 	}
 
 	if !h.api {
+		flash.Status(c, "flash.ratingSaved")
+
 		return c.Back("/")
 	}
 
@@ -58,6 +61,8 @@ func (h *Ratings) Delete(c *web.Ctx) error {
 	}
 
 	if !h.api {
+		flash.Status(c, "flash.ratingRemoved")
+
 		return c.Back("/")
 	}
 

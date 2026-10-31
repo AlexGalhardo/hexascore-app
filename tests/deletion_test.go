@@ -135,6 +135,16 @@ VALUES ($1, $3, 50, 50, 50, 50, 50, 50), ($2, $3, 60, 60, 60, 60, 60, 60)`, gone
 		t.Fatal(err)
 	}
 
+	if _, err := db.ExecContext(
+		ctx,
+		`INSERT INTO passkeys (user_id, credential_id, public_key, algorithm, name, created_at)
+VALUES ($1, 'cred-gone', 'pk', -7, 'Passkey', now()), ($2, 'cred-blocked', 'pk', -7, 'Passkey', now())`,
+		gone,
+		blocked,
+	); err != nil {
+		t.Fatal(err)
+	}
+
 	goneID := strconv.FormatInt(gone, 10)
 	if _, _, err := acc.Tokens.Create(ctx, goneID, "cli", nil, time.Hour); err != nil {
 		t.Fatal(err)
@@ -194,6 +204,15 @@ AND profile_private AND deletion_scheduled_at IS NULL AND email_verified_at IS N
 		t.Fatalf("live tokens left: %d", n)
 	}
 
+	// The user row survives anonymisation, so ON DELETE CASCADE never removes its passkeys.
+	if n := count(t, db, `SELECT count(*) FROM passkeys WHERE user_id = $1`, gone); n != 0 {
+		t.Fatalf("passkeys left after purge: %d", n)
+	}
+
+	if n := count(t, db, `SELECT count(*) FROM passkeys WHERE user_id = $1`, blocked); n != 1 {
+		t.Fatal("blocked user's passkey was touched")
+	}
+
 	// A Stripe failure keeps the user scheduled and intact.
 	intact := `SELECT count(*) FROM users WHERE id = $1 AND deletion_scheduled_at IS NOT NULL
 AND anonymized_at IS NULL AND email = 'stripe@example.com'`
@@ -226,4 +245,86 @@ AND anonymized_at IS NULL AND email = 'stripe@example.com'`
 
 	app.Client(t).PostJSON("/login", map[string]any{"identifier": "gone@example.com", "password": testPassword}).
 		AssertStatus(422)
+}
+
+// SDD 14 section 8 / SDD 03 section 7.5: the purge deletes private lists and
+// notifications, clears free text on public lists and closes reports about the user.
+func TestSecurity_A01_PurgeDeletesPrivateLists(t *testing.T) {
+	app, acc, db := deletionApp(t)
+	ctx := t.Context()
+
+	ids := map[string]int64{"gone@example.com": 0, "other@example.com": 0}
+	for e := range ids {
+		register(t, app, app.Client(t), e)
+
+		var id int64
+		if err := db.QueryRowContext(ctx, `SELECT id FROM users WHERE email = $1`, e).Scan(&id); err != nil {
+			t.Fatal(err)
+		}
+
+		ids[e] = id
+	}
+
+	gone, other := ids["gone@example.com"], ids["other@example.com"]
+
+	exec := func(q string, args ...any) {
+		t.Helper()
+
+		if _, err := db.ExecContext(ctx, q, args...); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	exec(
+		`INSERT INTO data_sources (code, name, licence, url) VALUES ('wikidata','Wikidata','CC0-1.0','https://wikidata.org')`,
+	)
+	exec(`INSERT INTO items (id, type, slug, wikidata_qid) VALUES (gen_random_uuid(), 'game', 'g', 'Q1')`)
+	exec(`INSERT INTO lists (id, user_id, type, title, description, is_public) VALUES
+('00000000-0000-7000-8000-000000000001', $1, 'game', 'private', 'secret', false),
+('00000000-0000-7000-8000-000000000002', $1, 'game', 'public', 'call me at 555', true),
+('00000000-0000-7000-8000-000000000003', $2, 'game', 'theirs', 'keep', true)`, gone, other)
+	exec(`INSERT INTO list_items (list_id, item_id, position, note)
+SELECT l.id, i.id, 1, 'my note' FROM lists l, items i`)
+	exec(`INSERT INTO user_notifications (id, user_id, kind, payload, dedupe_key) VALUES
+(gen_random_uuid(), $1, 'system', '{}', 'a'), (gen_random_uuid(), $2, 'system', '{}', 'a')`, gone, other)
+	exec(`INSERT INTO reports (id, reporter_id, target_type, target_id, reason) VALUES
+(gen_random_uuid(), $2::bigint, 'user', $1::bigint::text, 'spam'), (gen_random_uuid(), $1::bigint, 'user', $2::bigint::text, 'spam')`, gone, other)
+	exec(`UPDATE users SET deletion_scheduled_at = $1 WHERE id = $2`, time.Now().UTC().AddDate(0, 0, -31), gone)
+
+	if done, err := acc.PurgeDue(ctx); err != nil || len(done) != 1 {
+		t.Fatalf("purged %v, %v", done, err)
+	}
+
+	checks := map[string]int{
+		`SELECT count(*) FROM lists WHERE user_id = $1 AND NOT is_public`:                                                                                                        0,
+		`SELECT count(*) FROM lists WHERE user_id = $1 AND is_public AND title = 'public' AND description IS NULL`:                                                               1,
+		`SELECT count(*) FROM list_items li JOIN lists l ON l.id = li.list_id WHERE l.user_id = $1 AND li.note IS NOT NULL`:                                                      0,
+		`SELECT count(*) FROM list_items li JOIN lists l ON l.id = li.list_id WHERE l.user_id = $1`:                                                                              1,
+		`SELECT count(*) FROM user_notifications WHERE user_id = $1`:                                                                                                             0,
+		`SELECT count(*) FROM reports WHERE target_type = 'user' AND target_id = $1::bigint::text AND status = 'resolved' AND outcome = 'no_action' AND resolved_at IS NOT NULL`: 1,
+		`SELECT count(*) FROM reports WHERE reporter_id = $1`:                                                                                                                    0,
+	}
+	for q, want := range checks {
+		if n := count(t, db, q, gone); n != want {
+			t.Errorf("%s = %d, want %d", q, n, want)
+		}
+	}
+
+	// Another user's data is untouched.
+	if n := count(t, db, `SELECT count(*) FROM lists WHERE user_id = $1 AND description = 'keep'`, other); n != 1 {
+		t.Error("other user's list touched")
+	}
+
+	if n := count(t, db, `SELECT count(*) FROM user_notifications WHERE user_id = $1`, other); n != 1 {
+		t.Error("other user's notification deleted")
+	}
+
+	if n := count(
+		t,
+		db,
+		`SELECT count(*) FROM reports WHERE target_id = $1::bigint::text AND status = 'open'`,
+		other,
+	); n != 1 {
+		t.Error("report about another user was closed")
+	}
 }

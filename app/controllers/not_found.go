@@ -23,3 +23,13 @@ func NotFound(c *web.Ctx) error {
 		"message": http.StatusText(http.StatusNotFound),
 	})
 }
+
+// pageError turns a 404 from a service into the Error page with the shell;
+// any other error passes through unchanged.
+func pageError(c *web.Ctx, err error) error {
+	if errs.Status(err) == http.StatusNotFound {
+		return NotFound(c)
+	}
+
+	return err
+}

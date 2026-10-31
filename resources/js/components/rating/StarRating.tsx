@@ -7,6 +7,32 @@ const STEP = 0.5;
 
 const clamp = (v: number): number => Math.min(MAX, Math.max(STEP, v));
 
+const STAR_PATH = "M12 2.5l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.6 5.9 21.1l1.4-6.8L2.2 9.6l6.9-.8z";
+
+type StarFill = "full" | "half" | "empty";
+
+// Inline SVG, so half stars render the same on every platform (the text glyph for a half star
+// does not). The amber layer is clipped to half of the box for "half".
+function Star({ fill }: { fill: StarFill }) {
+	const svg = (cls: string) => (
+		<svg viewBox="0 0 24 24" className={`size-6 shrink-0 ${cls}`} aria-hidden="true">
+			<path d={STAR_PATH} fill="currentColor" />
+		</svg>
+	);
+	return (
+		<span aria-hidden="true" data-fill={fill} className="relative inline-flex size-6 shrink-0">
+			{svg("text-gray-300")}
+			{fill !== "empty" && (
+				<span
+					className={`absolute inset-y-0 left-0 overflow-hidden ${fill === "half" ? "w-1/2" : "w-full"}`}
+				>
+					{svg("text-amber-500")}
+				</span>
+			)}
+		</span>
+	);
+}
+
 export interface StarRatingProps {
 	label: string;
 	value: number | null;
@@ -53,7 +79,8 @@ export default function StarRating({ label, value, onChange, disabled = false }:
 	const valueText = value === null ? t("rating.unset") : t("rating.valuetext", { value });
 
 	return (
-		<div className="flex items-center gap-2">
+		<div className="flex flex-wrap items-center gap-2">
+			<span className="w-full text-sm font-medium sm:w-28 sm:shrink-0">{label}</span>
 			<button
 				type="button"
 				className="size-11 rounded border"
@@ -80,20 +107,11 @@ export default function StarRating({ label, value, onChange, disabled = false }:
 				onClick={(e) => set(fromPointer(e as unknown as PointerEvent<HTMLElement>))}
 			>
 				{Array.from({ length: MAX }, (_, i) => (
-					<span
+					<Star
 						// biome-ignore lint/suspicious/noArrayIndexKey: fixed list of 10 positions
 						key={i}
-						aria-hidden="true"
-						className={
-							shown >= i + 1
-								? "text-amber-500"
-								: shown >= i + 0.5
-									? "text-amber-300"
-									: "text-gray-300"
-						}
-					>
-						{shown >= i + 1 ? "★" : shown >= i + 0.5 ? "⯪" : "☆"}
-					</span>
+						fill={shown >= i + 1 ? "full" : shown >= i + 0.5 ? "half" : "empty"}
+					/>
 				))}
 			</div>
 			<button
@@ -106,7 +124,9 @@ export default function StarRating({ label, value, onChange, disabled = false }:
 			>
 				+
 			</button>
-			<output className="w-10 tabular-nums">{value === null ? "-" : value.toFixed(1)}</output>
+			<output className="w-10 text-right tabular-nums">
+				{value === null ? <span className="text-muted">–</span> : value.toFixed(1)}
+			</output>
 		</div>
 	);
 }

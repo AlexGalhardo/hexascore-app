@@ -1471,6 +1471,12 @@
             "required": true,
             "description": "games, movies, series or books",
             "schema": {
+              "enum": [
+                "games",
+                "movies",
+                "series",
+                "books"
+              ],
               "type": "string"
             }
           }
@@ -1523,7 +1529,14 @@
             "name": "type",
             "in": "path",
             "required": true,
+            "description": "games, movies, series or books",
             "schema": {
+              "enum": [
+                "games",
+                "movies",
+                "series",
+                "books"
+              ],
               "type": "string"
             }
           },

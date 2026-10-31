@@ -44,6 +44,13 @@ func TestInertiaPages_UserLibraryLists(t *testing.T) {
 		own.Get("/u/pageowner/lists/"+pub).AssertOK().AssertInertia("User/List").
 			PropEquals("canEdit", true).HasProp("items", 1)
 		oth.Get("/u/pageowner/lists/"+pub).AssertOK().AssertInertia("User/List").PropEquals("canEdit", false)
+		// One item is not indexable (SDD 14 FR-14-6 needs three); two more make it so.
+		anon.Get("/u/pageowner/lists/"+pub).AssertOK().AssertInertia("User/List").
+			PropEquals("canEdit", false).PropEquals("indexable", false)
+		for range 2 {
+			more := r.item("game", "public")
+			api.PutJSON(fmt.Sprintf("/app/v1/lists/%s/items/%s", pub, more), map[string]any{}).AssertOK()
+		}
 		anon.Get("/u/pageowner/lists/"+pub).AssertOK().AssertInertia("User/List").
 			PropEquals("canEdit", false).PropEquals("indexable", true)
 		own.Get("/u/pageowner/lists/"+priv).AssertOK().AssertInertia("User/List").PropEquals("indexable", false)
@@ -70,7 +77,7 @@ func TestInertiaPages_UserLibraryLists(t *testing.T) {
 
 	t.Run("Lists/Edit", func(*testing.T) {
 		own.Get("/lists/"+pub+"/edit").AssertOK().AssertInertia("Lists/Edit").
-			HasProp("items", 1).PropEquals("version", 1)
+			HasProp("items", 3).PropEquals("version", 3)
 		oth.Get("/lists/" + pub + "/edit").AssertNotFound()
 		anon.Get("/lists/" + pub + "/edit").AssertRedirect("/login")
 	})

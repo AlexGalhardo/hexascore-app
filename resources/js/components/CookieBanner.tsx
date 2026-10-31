@@ -17,29 +17,33 @@ export default function CookieBanner() {
 	if (!open) return null;
 
 	return (
-		<section
-			aria-label="Cookies"
-			className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-surface p-4 shadow-lg"
-		>
-			<div className="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-				<p className="text-sm">{t("cookies.text")}</p>
-				<div className="flex shrink-0 gap-2">
-					<button
-						type="button"
-						onClick={() => choose("essential")}
-						className="min-h-11 rounded-md border border-border px-4 text-sm"
-					>
-						{t("cookies.decline")}
-					</button>
-					<button
-						type="button"
-						onClick={() => choose("all")}
-						className="min-h-11 rounded-md bg-fg px-4 text-sm text-bg"
-					>
-						{t("cookies.accept")}
-					</button>
+		<>
+			{/* Keeps the last controls of the page reachable while the fixed banner is shown. */}
+			<div aria-hidden="true" className="h-36 sm:h-20" />
+			<section
+				aria-label="Cookies"
+				className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-surface p-4 shadow-lg"
+			>
+				<div className="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+					<p className="text-sm">{t("cookies.text")}</p>
+					<div className="flex shrink-0 gap-2">
+						<button
+							type="button"
+							onClick={() => choose("essential")}
+							className="min-h-11 rounded-md border border-border px-4 text-sm"
+						>
+							{t("cookies.decline")}
+						</button>
+						<button
+							type="button"
+							onClick={() => choose("all")}
+							className="min-h-11 rounded-md bg-fg px-4 text-sm text-bg"
+						>
+							{t("cookies.accept")}
+						</button>
+					</div>
 				</div>
-			</div>
-		</section>
+			</section>
+		</>
 	);
 }

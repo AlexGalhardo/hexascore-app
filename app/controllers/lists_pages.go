@@ -54,11 +54,11 @@ func (h *Lists) Show(c *web.Ctx) error {
 
 	l, err := h.svc.Get(ctx, c.Param("id"))
 	if err != nil {
-		return err
+		return pageError(c, err)
 	}
 
 	if err := h.gate.Authorize(ctx, "view", &l); err != nil {
-		return err
+		return pageError(c, err)
 	}
 
 	nick, banned, err := h.svc.OwnerNickname(ctx, l.UserID)
@@ -67,7 +67,7 @@ func (h *Lists) Show(c *web.Ctx) error {
 	}
 
 	if nick == "" || !strings.EqualFold(nick, c.Param("nickname")) {
-		return library.ErrNotFound()
+		return NotFound(c)
 	}
 
 	items, err := h.svc.Entries(ctx, l.ID, i18n.Locale(ctx))
@@ -78,7 +78,8 @@ func (h *Lists) Show(c *web.Ctx) error {
 	viewer, err := auth.UserFrom[models.User](ctx, h.guard)
 	canEdit := err == nil && viewer.ID == l.UserID
 
-	indexable := l.IsPublic && !l.Hidden && !l.OwnerPrivate && !banned
+	// SDD 14 FR-14-6: a list needs at least three displayable items to be indexed.
+	indexable := l.IsPublic && !l.Hidden && !l.OwnerPrivate && !banned && len(items) >= 3
 	if !indexable {
 		c.Writer().Header().Set("X-Robots-Tag", "noindex")
 	}
