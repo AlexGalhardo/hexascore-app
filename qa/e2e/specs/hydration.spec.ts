@@ -26,6 +26,6 @@ test.describe("hydration feedback", () => {
 	test("login form posts to the login URL, never as a GET", async ({ page, prefix }) => {
 		await page.goto(`${prefix}/login`);
 		const form = page.locator("form[method='post']");
-		await expect(form).toHaveAttribute("action", new RegExp("/login$"));
+		await expect(form).toHaveAttribute("action", /\/login$/);
 	});
 });
