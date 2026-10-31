@@ -44,8 +44,13 @@ export async function rotateIfDue(deps: RotateDeps): Promise<"skipped" | "rotate
 
 /** Runs `rotateIfDue` whenever the app returns to the foreground; returns the unsubscribe. */
 export function startForegroundRotation(deps: RotateDeps): () => void {
+	// A second foreground while a rotate is in flight would send the old, now revoked token and sign the user out.
+	let inFlight: Promise<unknown> | null = null;
 	const subscription = AppState.addEventListener("change", (state) => {
-		if (state === "active") void rotateIfDue(deps);
+		if (state !== "active" || inFlight) return;
+		inFlight = rotateIfDue(deps).finally(() => {
+			inFlight = null;
+		});
 	});
 	return () => subscription.remove();
 }
