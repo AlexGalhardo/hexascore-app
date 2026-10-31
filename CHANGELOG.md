@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **ui:** Anonymous catalogue HTML (home, listings, items, entities) is cached in process for 60 s, keyed by path, query, display cookies and, on unprefixed pages, `Accept-Language`, and sent with `Cache-Control: public, max-age=60, stale-while-revalidate=300`; the CSP nonce stays per request and session requests stay `private, no-store` (P2.H.3.5)
 - **lists:** List owners add items from the list edit page with a suggest box limited to the list type (P2.H.1.5)
 - **mobile:** Android API client wrapper with auth, version and locale headers, idempotency keys, problem-code mapping and minimum-version detection (P5.A.3.1)
 - **community:** `Community/SuggestEdit` page with draft save and restore, quota, locked-field reasons, "Suggest an edit" links on item, edition and entity pages, and `community.*` strings in en, pt-BR and es (P4.A.3.1c)

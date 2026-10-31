@@ -2245,7 +2245,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
   - Acceptance:
     - `grep -rn "indigo-" resources/js | wc -l` → 0; `bun run test -- tokens` → round-trip test green; `bun run --cwd apps/mobile typecheck` → green
 
-- [ ] **P2.H.3.5** Cache anonymous HTML for the public catalogue pages (SDD 09 §7.2) and prove it with the k6 TTFB scenario.
+- [x] **P2.H.3.5** Cache anonymous HTML for the public catalogue pages (SDD 09 §7.2) and prove it with the k6 TTFB scenario.
   - Files/modules: `app/http/middleware/render_cache.go`, `routes/web.go`, `qa/k6/page-ttfb.js`
   - Refs: SDD 09 §7.2; VF-025; audit A22
   - Depends on: —
