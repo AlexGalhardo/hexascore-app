@@ -30,7 +30,7 @@ Browse production read-only for real content (titles, covers, scores). Never log
 ## OpenPencil
 
 - Before designing, list the OpenPencil MCP tools available to you and note in your report which ones you use (create page/frame, shapes and text, auto-layout, components and variants, styles/variables, JSX rendering, export). Never assume a tool exists; if something is missing, say so and use the closest supported path (for example the JSX renderer for complex layouts).
-- One OpenPencil document per version: `hexascore-v1-editorial.op`, `hexascore-v2-noir.op`, `hexascore-v3-paper.op` (use the app's native extension if it differs), saved under `C:\dev\hexascore-app\design\openpencil\` (outside git; ask before adding binaries to the repo).
+- One OpenPencil document per version, each in its own folder (owner decision 2026-10-31): `docs/openpencil/v1-editorial/`, `docs/openpencil/v2-noir/`, `docs/openpencil/v3-paper/`. Each folder holds the document (`hexascore-<version>.<native extension>`), a `frames/` folder with PNG exports named `<platform>__<page-id>__<state>.png`, and a `README.md` (intent, palette, type, list of frames, open questions).
 - Inside each document, the same page structure so versions compare 1:1:
   1. `00 Cover` — version name, principles, palette, type pairing, sample of every score band.
   2. `01 Foundations` — colour variables (light and dark), type scale, spacing (4 px base), radii, shadows, motion notes, iconography, breakpoints (360, 390, 768, 1024, 1440).
@@ -54,9 +54,9 @@ Browse production read-only for real content (titles, covers, scores). Never log
 
 ## Owner feedback loop
 
-1. Deliver round 1: for each version, export PNGs of `00 Cover`, `02 Components` and these frames at desktop and mobile: home, section listing (`/games`), item page (`/games/diablo-v`), search, library, login, pricing, Android home and item. Save them to `docs/design-concepts/openpencil/<version>/<frame>.png` and write `docs/design-concepts/openpencil/ROUND-1.md` with a side-by-side table and one paragraph per version (intent, strengths, risks).
+1. Deliver round 1: for each version, export PNGs of `00 Cover`, `02 Components` and these frames at desktop and mobile: home, section listing (`/games`), item page (`/games/diablo-v`), search, library, login, pricing, Android home and item. Save them to `docs/openpencil/<version>/frames/` and write `docs/openpencil/ROUND-1.md` with a side-by-side table and one paragraph per version (intent, strengths, risks).
 2. Ask the owner in pt-BR which version (or mix) to pursue, with a short checklist of decisions (version, palette tweaks, type, density).
-3. Each next round: apply feedback only to the chosen version, keep a `ROUND-<n>.md` changelog of what changed and why, re-export the touched frames.
+3. Each next round: apply feedback only to the chosen version, keep a `docs/openpencil/ROUND-<n>.md` changelog of what changed and why, re-export the touched frames.
 4. Pixel-perfect pass on the chosen version: every frame aligned to the 4 px grid, auto-layout everywhere, components instanced (no detached copies), tokens used for every colour/size, light and dark complete, all pages and Android screens done.
 5. Handoff spec: `docs/design-handoff.md` — final token table (name, light, dark, CSS variable, Tailwind name, NativeWind name), component specs (sizes, spacing, states, ARIA notes), page-by-page mapping frame → Inertia page / Expo route, assets list, fonts (licence and files), and a diff against the current `packages/tokens/` and components listing what changes.
 
