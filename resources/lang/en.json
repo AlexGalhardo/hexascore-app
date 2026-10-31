@@ -1434,7 +1434,18 @@
       "cover": "Cover",
       "translationTitle": "Title ({locale})",
       "synopsis": "Synopsis ({locale})",
-      "externalId": "{provider} ID"
+      "externalId": "{provider} ID",
+      "release_date": "Release date",
+      "genres": "Genres",
+      "creators": "Creators",
+      "organizations": "Organizations",
+      "franchise": "Franchise",
+      "platforms": "Platforms"
+    },
+    "relation": {
+      "add": "Add (entity IDs, one per line)",
+      "remove": "Remove (entity IDs, one per line)",
+      "role": "Role for"
     },
     "create": {
       "title": "Suggest a new record",
