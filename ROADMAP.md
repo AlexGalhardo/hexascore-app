@@ -2221,7 +2221,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - `bash scripts/openapi-check.sh --write && bun run openapi:lint && bun run sdk:generate` → green; `jq '.paths["/api/v1/{type}"].get.parameters[0].schema.enum' openapi/api-v1.json` → the four values
     - `go test -tags integration ./tests -run TestAPIRateLimit` → 5 immediate requests pass, the 6th within the same second is 429 with `Retry-After`
 
-- [ ] **P2.H.3.2** Fix the flaky `TestSecurity_A07_HexaHoneypotAndFillTime` under `-race` (CI run 41169281164 failed, passes locally): isolate the challenge counters per test or stop sharing the limiter store between parallel tests.
+- [x] **P2.H.3.2** Fix the flaky `TestSecurity_A07_HexaHoneypotAndFillTime` under `-race` (CI run 41169281164 failed, passes locally): isolate the challenge counters per test or stop sharing the limiter store between parallel tests.
   - Files/modules: `tests/pow_hardening_test.go`, `app/http/middleware/challenge.go`, `app/challenge/*`
   - Refs: audit A21; CI job "Tests (Go unit and integration on Postgres, TypeScript)"
   - Depends on: —
