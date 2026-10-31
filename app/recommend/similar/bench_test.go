@@ -22,14 +22,18 @@ func BenchmarkComputeSimilar(b *testing.B) {
 	r.exec(`INSERT INTO entities (id, kind, slug, default_name)
 SELECT gen_random_uuid(), 'person', 'p-' || g, 'p' FROM generate_series(1, $1::int / 5) g`, n)
 	r.exec(`CREATE TEMP TABLE pool AS SELECT id, row_number() OVER () AS k FROM entities`)
+	r.exec(`ANALYZE entities`)
 	r.exec(`INSERT INTO items (id, type, slug, wikidata_qid)
 SELECT gen_random_uuid(), 'game', 'b-' || g, 'Q' || (1000000 + g) FROM generate_series(1, $1::int) g`, n)
+	r.exec(`ANALYZE items`)
 	r.exec(`INSERT INTO item_entities (item_id, entity_id, role, position, source)
 SELECT i.id, p.id, CASE WHEN c = 0 THEN 'developer' ELSE 'cast' END, c, 'hexascore'
 FROM (SELECT id, row_number() OVER () AS k FROM items WHERE slug LIKE 'b-%') i
 CROSS JOIN generate_series(0, 3) c
 JOIN pool p ON p.k = 1 + ((i.k * (c + 7)) % (SELECT count(*) FROM pool))
 ON CONFLICT DO NOTHING`)
+	// Autovacuum would have analysed these tables long before the nightly run; without it the first plans are quadratic.
+	r.exec(`ANALYZE`)
 
 	for b.Loop() {
 		r.exec(`DELETE FROM item_similar`)
