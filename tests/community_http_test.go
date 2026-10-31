@@ -104,6 +104,25 @@ func TestCommunityDraftFlow(t *testing.T) {
 	bad := draftBody(item, "Fourth", 2)
 	bad["locale"] = "xx"
 	c.PatchJSON("/suggestions/"+id, bad).AssertUnprocessable()
+
+	// The target is fixed at create: an update naming another target still saves onto the stored one.
+	other := communityItem(t, app, "public")
+	c.PatchJSON("/suggestions/"+id, draftBody(other, "Moved", 2)).AssertRedirect("/suggest/item/" + item)
+
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var target string
+	if err := db.QueryRowContext(t.Context(), `SELECT target_id::text FROM suggestions WHERE id = $1`, id).
+		Scan(&target); err != nil {
+		t.Fatal(err)
+	}
+
+	if target != item {
+		t.Fatalf("target_id = %s, want %s", target, item)
+	}
 }
 
 func draftID(t *testing.T, app *vukemtest.App, authorID int64) string {
