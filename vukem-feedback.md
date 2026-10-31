@@ -22,6 +22,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | VF-NEW-P4.A.3.1b | 2026-10-31 | low | open |
 | VF-NEW-P2.H.3.5 | 2026-10-31 | medium | open |
 | VF-NEW-FIX-covers-route | 2026-10-31 | low | open |
+| VF-NEW-OWNER-schemathesis | 2026-10-31 | medium | open |
 
 ## VF-062: A typed POST that returns a body defaults to 201, including commands that do not create a resource
 
@@ -127,3 +128,17 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 - **Context**: the app serves covers from a private bucket through `storage.HandlerWith` with `Cache-Control: public, max-age=31536000, immutable` (FIX-covers-route). Against RustFS the response carries no `ETag` and `If-None-Match` never yields 304; the memory disk path was the only one tested by the author.
 - **Workaround**: none needed while keys are content-hashed and immutable; browsers rely on the long max-age.
 - **Request**: have the S3 driver surface the object ETag (and `Last-Modified`) through the disk stat so `HandlerWith` answers conditional requests with 304.
+
+## VF-NEW-OWNER-schemathesis: Native Schemathesis support for property-based API testing
+
+- **Date**: 2026-10-31. **Severity**: medium (feature request from the owner). **Status**: open.
+- **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/rest-apis/openapi> [NOT IN VUKEM DOCS: any contract or fuzz testing of the exported document]. Tool: <https://schemathesis.io/> (Schemathesis 4.29.0, run as a pinned Docker image).
+- **Context**: HexaScore wires Schemathesis by hand in `qa/schemathesis/` (about 200 lines): `ci.sh` migrates a throwaway Postgres, inserts a business API key and an app token with raw SQL, starts the image and runs `run.sh` once per document (`/api/v1`, `/app/v1`); `run.sh` rewrites `127.0.0.1` to `host.docker.internal` for Docker; `schemathesis.toml` disables checks that a read-only API cannot satisfy and explains each; `ip_hook.py` rotates `X-Forwarded-For` so the per-IP rate limit does not turn the missing-auth check into 429s. Every vukem app with a typed REST API would repeat this.
+- **Workaround**: the scripts above, run in CI (`OpenAPI` job) and locally.
+- **Request**: a first-class integration, without a new Go dependency (Schemathesis stays an external pinned image):
+  1. `vukem api:fuzz -prefix /api/v1` (name to be decided) that exports the document in-process, starts or targets the app, and runs Schemathesis with a pinned image tag/digest, the Docker host rewrite and a JUnit/JSON report directory.
+  2. A test-credentials hook: a documented way to mint a scoped API key or token for the scan (for example a `fuzz` seeder callback or `--auth-header` from a command), instead of raw SQL.
+  3. Sensible default config generated from the API metadata: read-only APIs skip stateful checks, `TRACE` handling documented, rate limits bypassed for the scan (trusted header or a test-only limiter key), max-examples and workers configurable.
+  4. A `Taskfile`/CI snippet and a docs page under rest-apis, plus an example app wiring.
+  5. HexaScore then replaces `qa/schemathesis/` with the native command (an `ADOPT-vukem-<version>` row).
+
