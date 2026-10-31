@@ -1,5 +1,6 @@
 import { Link } from "@inertiajs/react";
 import type { ReactNode } from "react";
+import CoverThumb, { type Cover } from "../CoverThumb";
 
 export interface Hit {
 	id: string;
@@ -7,6 +8,7 @@ export interface Hit {
 	title: string;
 	path: string;
 	matchedTitle?: string;
+	cover?: Cover | null;
 }
 
 // Reports a click without delaying the navigation (SDD 07 §7.8). Only hits the
@@ -45,7 +47,8 @@ export default function ResultGroup({ hits, searchId, group, q, offset = 0 }: Pr
 	return (
 		<ol className="mt-2 space-y-1">
 			{hits.map((hit, i) => (
-				<li key={hit.id}>
+				<li key={hit.id} className="flex items-center gap-3">
+					<CoverThumb cover={hit.cover} alt="" />
 					<Link
 						href={hit.path}
 						onClick={() => reportClick(searchId, hit, offset + i + 1, group)}

@@ -13,6 +13,8 @@ import (
 	"github.com/AlexGalhardo/vukem/database"
 	"github.com/AlexGalhardo/vukem/errs"
 	"github.com/AlexGalhardo/vukem/uuid"
+
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 )
 
 // LibraryPageSize is the rows per type in a library page (SDD 14 §6.2 `Scroll`, 30 per type).
@@ -47,17 +49,18 @@ type EditionRef struct {
 
 // Item is one row of a library group. Stars are 0.5–10 and TimeToBeat is the main story in minutes.
 type Item struct {
-	ID            string      `json:"id"`
-	Type          string      `json:"type"`
-	Slug          string      `json:"slug"`
-	Title         string      `json:"title"`
-	Year          *int        `json:"year"`
-	CoverThumbKey *string     `json:"coverThumbKey"`
-	Status        string      `json:"status"`
-	Stars         *float64    `json:"stars"`
-	TimeToBeat    *int        `json:"timeToBeat"`
-	Edition       *EditionRef `json:"edition"`
-	UpdatedAt     time.Time   `json:"updatedAt"`
+	ID            string         `json:"id"`
+	Type          string         `json:"type"`
+	Slug          string         `json:"slug"`
+	Title         string         `json:"title"`
+	Year          *int           `json:"year"`
+	CoverThumbKey *string        `json:"coverThumbKey"`
+	Cover         *catalog.Cover `json:"cover"`
+	Status        string         `json:"status"`
+	Stars         *float64       `json:"stars"`
+	TimeToBeat    *int           `json:"timeToBeat"`
+	Edition       *EditionRef    `json:"edition"`
+	UpdatedAt     time.Time      `json:"updatedAt"`
 }
 
 // Group is the items of one type; Next is the offset of the following page (-1 on the last).
@@ -202,6 +205,8 @@ ORDER BY `+libraryOrderBy[sortKey]+` LIMIT $5 OFFSET $6`,
 			&it.Stars, &it.TimeToBeat, &it.UpdatedAt, &edID, &edTitle, &edISBN, &edLang); err != nil {
 			return nil, err
 		}
+
+		it.Cover = catalog.CoverFromThumbKey(it.CoverThumbKey)
 
 		if edID.Valid {
 			it.Edition = &EditionRef{

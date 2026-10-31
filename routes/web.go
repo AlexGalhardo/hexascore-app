@@ -3,6 +3,7 @@ package routes
 import (
 	"cmp"
 	"context"
+	"net/url"
 	"strings"
 
 	vukem "github.com/AlexGalhardo/vukem"
@@ -14,6 +15,7 @@ import (
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
@@ -29,6 +31,15 @@ var localePrefixes = map[string]string{"pt-br": "pt-BR", "es": "es"}
 
 // Web registers the browser routes. vukem route:list shows them.
 func Web(r *router.Router, app *vukem.App) error {
+	// Covers come from the bucket origin when COVERS_BASE_URL is set; that origin joins img-src.
+	coversBase := app.Source.Get("COVERS_BASE_URL")
+	catalog.SetCoversBase(coversBase)
+
+	var imgHosts []string
+	if u, err := url.Parse(coversBase); err == nil && u.Scheme == "https" && u.Host != "" {
+		imgHosts = append(imgHosts, u.Scheme+"://"+u.Host)
+	}
+
 	// Server level too: MethodOverride parses urlencoded forms before routing. A limit set
 	// only on the router is too late, and vukem would read up to 10 MiB. v0.34.0 then
 	// answers 413 from that earlier MaxBytesError (VF-061).
@@ -38,6 +49,7 @@ func Web(r *router.Router, app *vukem.App) error {
 	err := vukem.DefaultMiddlewareWith(app, r, vukem.MiddlewareOptions{
 		SecureHeaders: appmiddleware.SecureHeaders(
 			appmiddleware.UpgradeInsecure(app.Config.IsProduction(), app.Config.URL),
+			imgHosts...,
 		),
 		// The browser posts violation reports with no session and no CSRF token.
 		SessionBypass: []string{

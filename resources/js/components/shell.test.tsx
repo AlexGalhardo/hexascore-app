@@ -29,17 +29,25 @@ test("jsonLdText never contains a literal '<'", () => {
 	expect(JSON.parse(text).name).toBe("</script><script>alert(1)</script>");
 });
 
+const COVER = { thumb: "/a-96.jpg", full: "/a-600.jpg" };
+
+test("CoverThumb renders a sized placeholder without a cover", () => {
+	const r = render(<CoverThumb cover={null} alt="Cover" size="md" />);
+	expect(r.queryByAltText("Cover")).toBeNull();
+	const box = r.getByTestId("cover-placeholder");
+	expect(box.style.width).toBe("44px");
+	expect(box.style.height).toBe("64px");
+});
+
 test("CoverThumb is lazy by default and eager with priority", () => {
-	const lazy = render(<CoverThumb src96="/a-96.jpg" src600="/a-600.jpg" alt="Cover" />);
+	const lazy = render(<CoverThumb cover={COVER} alt="Cover" />);
 	const img = lazy.getByAltText("Cover");
 	expect(img.getAttribute("loading")).toBe("lazy");
 	expect(img.getAttribute("srcset")).toBe("/a-96.jpg 96w, /a-600.jpg 600w");
 	expect(img.getAttribute("width")).toBe("32");
 	lazy.unmount();
 
-	const eager = render(
-		<CoverThumb src96="/a-96.jpg" src600="/a-600.jpg" alt="Cover" size="md" priority />,
-	);
+	const eager = render(<CoverThumb cover={COVER} alt="Cover" size="md" priority />);
 	const big = eager.getByAltText("Cover");
 	expect(big.getAttribute("loading")).toBe("eager");
 	expect(big.getAttribute("fetchpriority")).toBe("high");
