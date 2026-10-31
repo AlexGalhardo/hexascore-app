@@ -2939,7 +2939,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 #### P5.A.1 Expo project and navigation
 
-- [ ] **P5.A.1.1** Scaffold `apps/mobile` as an Expo managed app in the Bun workspace: TypeScript strict, Hermes, Biome lint with a rule that bans `fetch(` outside `src/api/`, Jest with the `jest-expo` preset and React Native Testing Library.
+- [x] **P5.A.1.1** Scaffold `apps/mobile` as an Expo managed app in the Bun workspace: TypeScript strict, Hermes, Biome lint with a rule that bans `fetch(` outside `src/api/`, Jest with the `jest-expo` preset and React Native Testing Library.
   - Files/modules: `apps/mobile/package.json`, `apps/mobile/app.config.ts`, `apps/mobile/tsconfig.json`, `apps/mobile/biome.json` (extends the root config), `apps/mobile/jest.config.ts`, `apps/mobile/src/hermes.test.ts`, root `package.json` workspaces, `.github/workflows/ci.yml` (mobile job: lint, typecheck, test)
   - Refs: SDD 10 §7.1, §10, FR-10-1, NFR-10-4; ADR 0009; D-12; [E3], [E4]
   - Depends on: P3.C.5.2, P1.A
