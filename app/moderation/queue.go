@@ -43,6 +43,8 @@ type Queue struct {
 	DB       *database.DB
 	Now      func() time.Time
 	PageSize int
+	// Applier performs approvals; nil until P4.B.2.1 lands.
+	Applier Applier
 }
 
 // Filter narrows the queue. Zero values mean "any"; the default status is submitted plus in_review.

@@ -1,0 +1,53 @@
+{{define "content"}}
+{{with .Detail}}
+<div class="toolbar"><h1>{{$.Title}}</h1><a href="/admin/moderation">Back to queue</a></div>
+<dl>
+	<dt>Status</dt><dd>{{.Status}}{{if .Age}} <span class="badge badge-{{.Age}}">{{.Age}}</span>{{end}}</dd>
+	<dt>Kind</dt><dd>{{.Kind}}</dd>
+	<dt>Target</dt><dd>{{.TargetType}} {{.TargetID}} · {{.Domain}} · {{.Locale}}</dd>
+	<dt>Author</dt><dd>{{if .AuthorID}}#{{.AuthorID}}{{else}}-{{end}}</dd>
+	{{if .Note}}<dt>Author note</dt><dd>{{.Note}}</dd>{{end}}
+	{{if .SourceURLs}}<dt>Sources</dt><dd>{{range .SourceURLs}}<span>{{.}}</span> {{end}}</dd>{{end}}
+	{{if .RejectReason}}<dt>Rejected</dt><dd>{{.RejectReason}}{{if .DecisionNote}}: {{.DecisionNote}}{{end}}</dd>{{end}}
+</dl>
+{{if .Competing}}<p class="badge">competing</p>{{end}}{{if .Stale}} <p class="badge">stale</p>{{end}}{{if .Unreachable}} <p class="badge">unreachable source</p>{{end}}
+<h2>Changes</h2>
+{{range .Diffs}}
+<section class="diff" aria-label="{{.Field}}">
+	<h3>{{.Field}}</h3>
+	{{if eq .Kind "relation"}}
+		<p>{{range .Add}}<span class="chip chip-add">+ {{.}}</span> {{end}}{{range .Remove}}<span class="chip chip-remove">- {{.}}</span> {{end}}</p>
+	{{else if eq .Kind "cover"}}
+		<table><tr><th>Current</th><th>Before</th><th>Proposed</th></tr>
+		<tr><td>{{.Current}}</td><td>{{.Before}}</td><td>{{.After}}</td></tr></table>
+	{{else}}
+		<table>
+			<tr><th>Current</th><td>{{.Current}}</td></tr>
+			<tr><th>Before</th><td>{{.Before}}</td></tr>
+			<tr><th>After</th><td>{{range .Words}}{{if eq .Op "del"}}<del>{{.Text}}</del> {{else if eq .Op "add"}}<ins>{{.Text}}</ins> {{else}}{{.Text}} {{end}}{{end}}</td></tr>
+		</table>
+	{{end}}
+</section>
+{{end}}
+{{if or (eq .Status "submitted") (eq .Status "in_review")}}
+<form method="post" action="/admin/moderation/{{.ID}}/approve">
+	{{csrfField}}
+	<input type="hidden" name="version" value="{{.Version}}">
+	<label><input type="checkbox" name="confirm_stale" value="1"> Confirm: the live value changed since the suggestion was made</label>
+	<button type="submit">Approve</button>
+</form>
+<form method="post" action="/admin/moderation/{{.ID}}/reject">
+	{{csrfField}}
+	<input type="hidden" name="version" value="{{.Version}}">
+	<label>Reason <select name="reason" required><option value="">Choose</option>{{range $.RejectReasons}}<option value="{{.}}">{{.}}</option>{{end}}</select></label>
+	<label>Note <textarea name="note" maxlength="1000"></textarea></label>
+	<button type="submit">Reject</button>
+</form>
+{{else}}
+<form method="post" action="/admin/moderation/{{.ID}}/clone">
+	{{csrfField}}
+	<button type="submit">Clone as new draft</button>
+</form>
+{{end}}
+{{end}}
+{{end}}

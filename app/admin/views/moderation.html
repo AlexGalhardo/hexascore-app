@@ -22,13 +22,14 @@
 <p class="muted">No suggestions match.</p>
 {{else}}
 <table>
-	<thead><tr><th>Age</th><th>Kind</th><th>Target</th><th>Fields</th><th>Author</th><th>Badges</th><th>Assignee</th><th>Action</th></tr></thead>
+	<thead><tr><th><span class="visually-hidden">Select</span></th><th>Age</th><th>Kind</th><th>Target</th><th>Fields</th><th>Author</th><th>Badges</th><th>Assignee</th><th>Action</th></tr></thead>
 	<tbody>
 	{{range .Queue.Rows}}
 	<tr>
+		<td><input type="checkbox" name="ids" value="{{.ID}}" form="bulk" aria-label="Select {{.ID}}"></td>
 		<td><span class="badge badge-{{.Age}}">{{.Age}}</span></td>
 		<td>{{.Kind}}</td>
-		<td>{{.TargetType}} · {{.Domain}} · {{.Locale}}</td>
+		<td><a href="/admin/moderation/{{.ID}}">{{.TargetType}} · {{.Domain}} · {{.Locale}}</a></td>
 		<td>{{range $i, $f := .Fields}}{{if $i}}, {{end}}{{$f}}{{end}}</td>
 		<td>{{if .AuthorID}}#{{.AuthorID}} {{.AuthorTier}} {{printf "%.2f" .AuthorAccuracy}}{{else}}-{{end}}</td>
 		<td>{{if .Competing}}<span class="badge">competing</span> {{end}}{{if .Stale}}<span class="badge">stale</span> {{end}}{{if .Unreachable}}<span class="badge">unreachable</span>{{end}}</td>
@@ -44,6 +45,12 @@
 	{{end}}
 	</tbody>
 </table>
+<form id="bulk" method="post" action="/admin/moderation/bulk">
+	{{csrfField}}
+	<label>Action <select name="action"><option value="claim">Claim</option><option value="release">Release</option><option value="approve">Approve</option><option value="reject">Reject</option></select></label>
+	<label>Reject reason <select name="reason"><option value="">-</option>{{range .RejectReasons}}<option value="{{.}}">{{.}}</option>{{end}}</select></label>
+	<button type="submit">Apply to selected (max 50)</button>
+</form>
 {{with .Queue.NextURL}}<p><a href="{{.}}" rel="next">Next page</a></p>{{end}}
 {{end}}
 {{end}}
