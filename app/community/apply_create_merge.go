@@ -39,18 +39,8 @@ func (a Applier) applyCreate(
 		return invalid("external_ids.wikidata", "required")
 	}
 
-	var existing string
-
-	err = tx.QueryRowContext(ctx, `SELECT id::text FROM items WHERE wikidata_qid = $1`, qid).Scan(&existing)
-	if err == nil {
-		return &Problem{
-			Status: http.StatusConflict, Code: "suggestion-duplicate", Type: problemBase + "suggestion-duplicate",
-			ExistingID: existing,
-		}
-	}
-
-	if !errors.Is(err, sql.ErrNoRows) {
-		return fmt.Errorf("community: create lookup: %w", err)
+	if err := duplicateQID(ctx, tx, qid); err != nil {
+		return err
 	}
 
 	slug, err := catalog.UniqueSlug(ctx, tx, catalog.ScopeItem, s.domain, title, 0)
@@ -59,9 +49,22 @@ func (a Applier) applyCreate(
 	}
 
 	newID := uuid.NewV7().String()
-	if _, err := tx.ExecContext(ctx, `INSERT INTO items (id, type, slug, wikidata_qid) VALUES ($1, $2, $3, $4)`,
-		newID, s.domain, slug, qid); err != nil {
+
+	// ON CONFLICT: a concurrent create or ingest of the same Q-id committed after the lookup; answer 409, not 500.
+	res, err := tx.ExecContext(ctx, `INSERT INTO items (id, type, slug, wikidata_qid) VALUES ($1, $2, $3, $4)
+ON CONFLICT (wikidata_qid) DO NOTHING`, newID, s.domain, slug, qid)
+	if err != nil {
 		return fmt.Errorf("community: insert item: %w", err)
+	}
+
+	if n, err := res.RowsAffected(); err != nil {
+		return fmt.Errorf("community: insert item: %w", err)
+	} else if n == 0 {
+		if err := duplicateQID(ctx, tx, qid); err != nil {
+			return err
+		}
+
+		return fmt.Errorf("community: insert item: %s conflicted but no item holds it", qid)
 	}
 
 	if err := catalog.EnsureSource(ctx, tx, catalog.SourceCommunity); err != nil {
@@ -94,6 +97,25 @@ WHERE id = $1`, id, newID); err != nil {
 	return a.finish(ctx, tx, s, id, actor, attempt, CatalogChanged{
 		TargetType: "item", TargetID: newID, Fields: fields, AuditIDs: auditIDs,
 	})
+}
+
+// duplicateQID answers 409 suggestion-duplicate with the existing id when an item already holds qid.
+func duplicateQID(ctx context.Context, tx *database.Tx, qid string) error {
+	var existing string
+
+	err := tx.QueryRowContext(ctx, `SELECT id::text FROM items WHERE wikidata_qid = $1`, qid).Scan(&existing)
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil
+	}
+
+	if err != nil {
+		return fmt.Errorf("community: create lookup: %w", err)
+	}
+
+	return &Problem{
+		Status: http.StatusConflict, Code: "suggestion-duplicate", Type: problemBase + "suggestion-duplicate",
+		ExistingID: existing,
+	}
 }
 
 // applyMerge folds the suggestion's target into `*merge*.after` through the SDD 01 merge service, writes one
