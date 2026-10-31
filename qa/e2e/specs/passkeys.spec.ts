@@ -4,8 +4,13 @@ import { expect, test } from "../helpers/fixtures";
 import { canReadMail } from "../helpers/mail";
 
 test.describe("passkeys", () => {
-	// WebAuthn refuses an IP address as RP ID; the QA app's APP_URL host is localhost.
-	test.use({ baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3000" });
+	// WebAuthn refuses an IP address as RP ID; the QA app's APP_URL host is localhost (same port).
+	test.use({
+		baseURL: (process.env.E2E_BASE_URL ?? "http://localhost:3000").replace(
+			"//127.0.0.1",
+			"//localhost",
+		),
+	});
 	test.skip(!canReadMail(), "needs docker access to the app container logs (E2E_APP_CONTAINER)");
 
 	test("add a passkey and sign in with it", async ({ page, prefix, t }) => {

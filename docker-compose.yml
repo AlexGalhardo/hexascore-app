@@ -49,6 +49,8 @@ services:
       postgres: { condition: service_healthy }
     environment: &app-env
       APP_NAME: HexaScore
+      # The passkey RP origin is APP_URL (scheme, host and port), so it has to match the port the browser reaches.
+      APP_URL: http://localhost:${QA_PORT:-3000}
       APP_KEY: ${APP_KEY:?run setups/setup-unix.sh or vukem key:generate}
       DATABASE_URL: ${QA_DATABASE_URL:-postgres://hexascore:hexascore@postgres:5432/hexascore?sslmode=disable}
       SESSION_DRIVER: database
