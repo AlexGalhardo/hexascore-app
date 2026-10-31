@@ -4,6 +4,7 @@ import { type FormEvent, useState } from "react";
 import ChallengeStatus from "../../components/ChallengeStatus";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
+import SubmitButton from "../../components/SubmitButton";
 import { challengeHeaders } from "../../lib/challenge";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
@@ -24,7 +25,7 @@ export default function Login() {
 		<>
 			<Head title={t("auth.login.metaTitle")} />
 			<h1 className="mb-4 text-2xl font-semibold">{t("auth.login.title")}</h1>
-			<form onSubmit={submit} className="space-y-4">
+			<form method="post" action={l("/login")} onSubmit={submit} className="space-y-4">
 				<Field
 					label={t("auth.fields.identifier")}
 					autoComplete="username"
@@ -51,13 +52,9 @@ export default function Login() {
 					/>
 					{t("auth.login.rememberMe")}
 				</label>
-				<button
-					type="submit"
-					disabled={form.processing}
-					className="rounded-md bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
-				>
+				<SubmitButton pending={form.processing || checking}>
 					{t("auth.login.submit")}
-				</button>
+				</SubmitButton>
 				<ChallengeStatus checking={checking} />
 			</form>
 			<p className="mt-6 flex gap-4 text-sm">
