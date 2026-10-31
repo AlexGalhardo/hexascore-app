@@ -25,6 +25,13 @@ func inBatch(col string) string {
 	return col + ` > ` + afterKey + ` AND ` + col + ` <= $2::uuid`
 }
 
+// boundedNumber copies a JSON number only when the rounded value fits the column.
+// A 0 or a 100-hour runtime fails items_runtime_minutes_check and would abort the batch.
+func boundedNumber(jsonExpr, lo, hi, cast string) string {
+	return `CASE WHEN (` + jsonExpr + `) ~ '^-?[0-9]+(\.[0-9]+)?$' AND round((` + jsonExpr + `)::numeric) BETWEEN ` + lo + ` AND ` + hi +
+		` THEN round((` + jsonExpr + `)::numeric)::` + cast + ` END`
+}
+
 // coverKey keeps the legacy Blob pathname as the bucket key (SDD 01 §5.4, 06-4); a cover that never
 // went through the Blob (covers.py without a token stores the source URL) gets no key and is
 // re-fetched by the cover job (SDD 06).
@@ -47,8 +54,10 @@ SELECT i.id, i.type::text, i.slug, i.wikidata_qid, i.release_date,
   CASE WHEN i.release_date IS NULL THEN 'unknown' ELSE 'day' END,
   CASE WHEN i.release_date <= $3::date THEN 'released' ELSE 'announced' END,
   'public',
-  round((i.meta->>'runtimeMinutes')::numeric)::int, round((i.meta->>'seasons')::numeric)::smallint,
-  round((i.meta->>'episodes')::numeric)::int, round((i.meta->>'pages')::numeric)::int,
+  ` + boundedNumber(`i.meta->>'runtimeMinutes'`, "1", "6000", "int") + `,
+  ` + boundedNumber(`i.meta->>'seasons'`, "-32768", "32767", "smallint") + `,
+  ` + boundedNumber(`i.meta->>'episodes'`, "-2147483648", "2147483647", "int") + `,
+  ` + boundedNumber(`i.meta->>'pages'`, "1", "20000", "int") + `,
   coalesce(i.meta->'trailers', '[]'), i.external_ids, ` + coverKey("coverUrl", "") + `, ` +
 		coverKey("coverThumbUrl", "-t") + `, i.meta->'coverAttribution', i.popularity, i.created_at, i.updated_at
 FROM legacy_import.items i WHERE ` + inBatch("i.id") + `
