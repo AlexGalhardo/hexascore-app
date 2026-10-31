@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **catalog:** Item page views and `/app/v1` item reads (deduplicated per visitor and UTC day, at most 50 items per visitor, prefetch, partial reloads and bots excluded) and search clicks are counted in memory and flushed every minute and on shutdown into `item_activity_daily` (P6.C.1.2)
 - **mobile:** Login screen with two-factor (TOTP or backup code) and bot-challenge branches; device name from `expo-device`, editable (P5.A.3.3)
 - **mobile:** Google sign-in token flow (silent cancel, 2FA retry, `auth.errors.emailUnverifiedAtProvider` in en, pt-BR and es); the account picker waits on the Android OAuth client id (P5.A.3.4)
 - **mobile:** Token rotation on foreground (under 15 days left, at most once per 24 h, never two in flight), logout that always wipes locally, and the update-required screen with logout (P5.A.3.5)
