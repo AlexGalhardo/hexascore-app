@@ -1,4 +1,15 @@
-{{/* layout: none */}}<!doctype html>
+{{/* layout: none */}}{{- /* CSR pages (SSR skipped) get a title and a busy placeholder in the HTML so the document is never blank before hydration (SDD 09 §6.2). */ -}}
+{{- $csr := "" -}}
+{{- if not .Head -}}
+{{- if eq .Page.Component "Profile/Index" -}}{{- $csr = "account.metaTitle" -}}
+{{- else if eq .Page.Component "Developer/ApiKeys" -}}{{- $csr = "api.profile.metaTitle" -}}
+{{- else if eq .Page.Component "Billing/Index" -}}{{- $csr = "billing.checkout.metaTitle" -}}
+{{- else if eq .Page.Component "Account/Notifications" -}}{{- $csr = "notifications.title" -}}
+{{- else if eq .Page.Component "Library/Index" -}}{{- $csr = "library.title" -}}
+{{- else if eq .Page.Component "Lists/Index" -}}{{- $csr = "userLists.title" -}}
+{{- end -}}
+{{- end -}}
+<!doctype html>
 <html lang="{{or locale "en"}}"{{with .Page.Props.theme}} data-theme="{{.}}"{{end}}>
 <head>
 	<meta charset="utf-8">
@@ -11,8 +22,15 @@
 	{{vite "resources/css/app.css"}}
 	{{vite "resources/js/app.tsx"}}
 	{{.Head}}
+	{{if $csr}}<title>{{t $csr}}</title>{{end}}
 </head>
 <body class="bg-bg text-fg antialiased">
 	{{.Inertia}}
+	{{/* Sits after #app: hidden by CSS as soon as React fills #app (app.css). */}}
+	{{if $csr}}<div id="csr-skeleton" role="status" aria-busy="true" aria-label="{{t $csr}}" class="mx-auto max-w-5xl animate-pulse space-y-4 p-6">
+		<div class="h-8 w-1/3 rounded bg-surface"></div>
+		<div class="h-24 rounded bg-surface"></div>
+		<div class="h-24 rounded bg-surface"></div>
+	</div>{{end}}
 </body>
 </html>
