@@ -25,12 +25,10 @@ export function challengeUrl(baseUrl: string): string {
 	return new URL("/login", baseUrl).toString();
 }
 
-export async function login(
-	client: Pick<Client, "tokensCreate">,
-	input: LoginInput,
-): Promise<LoginOutcome> {
+/** Shared by the password and Google token routes: both answer with the same 201 and the same errors. */
+export async function issueToken(call: () => Promise<unknown>): Promise<LoginOutcome> {
 	try {
-		const body: unknown = await client.tokensCreate({ body: input });
+		const body: unknown = await call();
 		if (!isStoredToken(body))
 			return { kind: "error", key: "errors.unexpected", requestId: undefined };
 		// abilities and any other member are dropped on purpose: only these three fields persist.
@@ -42,15 +40,22 @@ export async function login(
 		if (!(error instanceof ApiError)) {
 			return { kind: "error", key: "auth.errors.network", requestId: undefined };
 		}
+		const requestId = error.problem?.request_id;
 		if (error.status === 422 && code(error) === "two-factor-required") return { kind: "twoFactor" };
 		if (error.status === 428) return { kind: "challenge" };
 		if (code(error) === "invalid-credentials") {
-			return {
-				kind: "error",
-				key: "auth.errors.invalidCredentials",
-				requestId: error.problem?.request_id,
-			};
+			return { kind: "error", key: "auth.errors.invalidCredentials", requestId };
+		}
+		if (error.status === 409 && code(error) === "email-unverified-at-provider") {
+			return { kind: "error", key: "auth.errors.emailUnverifiedAtProvider", requestId };
 		}
 		return { kind: "error", ...describeError(error) };
 	}
+}
+
+export function login(
+	client: Pick<Client, "tokensCreate">,
+	input: LoginInput,
+): Promise<LoginOutcome> {
+	return issueToken(() => client.tokensCreate({ body: input }));
 }

@@ -265,6 +265,7 @@
     },
     "errors": {
       "invalidCredentials": "E-mail/nickname ou senha incorretos.",
+      "emailUnverifiedAtProvider": "O Google não verificou este e-mail. Verifique-o no Google ou entre com sua senha.",
       "emailNotVerified": "Confirme seu e-mail antes de entrar.",
       "rateLimited": "Muitas tentativas. Aguarde um minuto e tente de novo.",
       "network": "Não foi possível falar com o servidor. Verifique sua conexão e tente de novo.",
