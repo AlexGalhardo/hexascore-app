@@ -156,10 +156,16 @@ func Admin(r *router.Router, app *vukem.App) error {
 	r.Post("/admin/items/{id}/affiliate-links/{store}/delete", catalogH.DeleteAffiliateLink).
 		Name("admin.items.affiliate.delete").Use(moderator...)
 	r.Post("/admin/items/{id}/merge", catalogH.Merge).Name("admin.items.merge").Use(moderator...)
+	applier := community.Applier{DB: acc.DB, Queue: q, Now: app.Now}
 	moderationH := admin.ModerationHandlers{
-		Pages: catalogH,
-		Queue: moderation.Queue{
-			DB: acc.DB, Now: app.Now, Applier: community.Applier{DB: acc.DB, Queue: q, Now: app.Now},
+		Pages:    catalogH,
+		Queue:    moderation.Queue{DB: acc.DB, Now: app.Now, Applier: applier},
+		Reverter: applier,
+		AuthorizeAudit: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityViewCatalogAudit, nil)
+		},
+		AuthorizeRevert: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityRevertCatalog, nil)
 		},
 		Authorize: func(c *web.Ctx) error { return gate.Authorize(c.Context(), admin.AbilityModerate, nil) },
 		AuthorizeApply: func(c *web.Ctx) error {
@@ -177,6 +183,8 @@ func Admin(r *router.Router, app *vukem.App) error {
 	r.Post("/admin/moderation/{id}/reject", moderationH.Reject).Name("admin.moderation.reject").Use(modMW...)
 	r.Post("/admin/moderation/{id}/clone", moderationH.Clone).Name("admin.moderation.clone").Use(modMW...)
 	r.Post("/admin/moderation/bulk", moderationH.Bulk).Name("admin.moderation.bulk").Use(modMW...)
+	r.Get("/admin/catalog-audit", moderationH.Audit).Name("admin.catalog_audit").Use(modMW...)
+	r.Post("/admin/catalog-audit/{id}/revert", moderationH.Revert).Name("admin.catalog_audit.revert").Use(modMW...)
 	r.Get("/admin/ingestion", catalogH.Ingestion).Name("admin.ingestion").Use(auth.Required(acc.Web), csrfMW)
 
 	return nil

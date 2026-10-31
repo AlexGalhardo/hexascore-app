@@ -94,6 +94,10 @@ type pageData struct {
 	RejectReasons []string
 	// CanApply shows the admin-only approve and reject controls (owner Q-A15).
 	CanApply bool
+	Audit    auditView
+	// CanRevert shows the revert form on /admin/catalog-audit.
+	CanRevert     bool
+	RevertReasons []string
 }
 
 // panelNav mirrors the sidebar vukem builds from admin.Resources (same order, same plural labels);

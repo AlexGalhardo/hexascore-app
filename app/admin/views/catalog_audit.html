@@ -1,0 +1,46 @@
+{{define "content"}}
+<div class="toolbar"><h1>{{.Title}}</h1></div>
+<form method="get" action="/admin/catalog-audit" class="filters" aria-label="Audit filters">
+	<label>Target
+		<select name="target"><option value="">any</option>{{range .Audit.Targets}}<option value="{{.}}"{{if eq . $.Audit.Filter.TargetType}} selected{{end}}>{{.}}</option>{{end}}</select>
+	</label>
+	<label>Target id <input type="text" name="target_id" value="{{.Audit.Filter.TargetID}}"></label>
+	<label>Field <input type="text" name="field" value="{{.Audit.Filter.Field}}"></label>
+	<label>Source
+		<select name="source"><option value="">any</option>{{range .Audit.Sources}}<option value="{{.}}"{{if eq . $.Audit.Filter.Source}} selected{{end}}>{{.}}</option>{{end}}</select>
+	</label>
+	<button type="submit">Filter</button>
+</form>
+{{if not .Audit.Page.Rows}}
+<p class="muted">No audit entries match.</p>
+{{else}}
+<table>
+	<thead><tr><th>Id</th><th>When</th><th>Actor</th><th>Source</th><th>Target</th><th>Field</th><th>Before</th><th>After</th><th>Revert</th></tr></thead>
+	<tbody>
+	{{range .Audit.Page.Rows}}
+	<tr>
+		<td>{{.ID}}</td>
+		<td>{{.OccurredAt.UTC.Format "2006-01-02 15:04"}}</td>
+		<td>{{.ActorRole}}{{if .ActorID}} #{{.ActorID}}{{end}}</td>
+		<td>{{.Source}}{{if .RevertsAuditID}} of #{{.RevertsAuditID}}{{end}}{{if .Reason}} ({{.Reason}}){{end}}</td>
+		<td>{{.TargetType}} {{.TargetID}}{{if .SuggestionID}} · <a href="/admin/moderation/{{.SuggestionID}}">suggestion</a>{{end}}</td>
+		<td>{{.Field}}</td>
+		<td><code>{{.Before}}</code></td>
+		<td><code>{{.After}}</code></td>
+		<td>
+		{{if .Reverted}}reverted{{else if and $.CanRevert .Revertible}}
+			<form method="post" action="/admin/catalog-audit/{{.ID}}/revert">
+				{{csrfField}}
+				<label>Mode <select name="mode"><option value="single">single</option><option value="cascade">cascade</option><option value="force">force</option></select></label>
+				<label>Reason <select name="reason" required><option value="">Choose</option>{{range $.RevertReasons}}<option value="{{.}}">{{.}}</option>{{end}}</select></label>
+				<button type="submit">Revert</button>
+			</form>
+		{{else}}-{{end}}
+		</td>
+	</tr>
+	{{end}}
+	</tbody>
+</table>
+{{with .Audit.NextURL}}<p><a href="{{.}}" rel="next">Older entries</a></p>{{end}}
+{{end}}
+{{end}}

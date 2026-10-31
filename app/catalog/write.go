@@ -54,6 +54,21 @@ func WriteField(
 	return nil, ErrUnsupportedField
 }
 
+// RestoreField writes value back with the exact provenance prev (a JSON string, or null to drop the provenance key):
+// the revert path of SDD 04 section 7.5. It returns the provenance it replaced, like WriteField.
+func RestoreField(
+	ctx context.Context, ex database.Executor, targetType, targetID, field string, value, prev json.RawMessage,
+) (json.RawMessage, error) {
+	source := ""
+	if len(prev) > 0 && string(prev) != "null" {
+		if err := json.Unmarshal(prev, &source); err != nil {
+			return nil, fmt.Errorf("catalog: previous provenance: %w", err)
+		}
+	}
+
+	return WriteField(ctx, ex, targetType, targetID, field, value, source)
+}
+
 func writeItem(
 	ctx context.Context, ex database.Executor, id, field string, after json.RawMessage, source string,
 ) (json.RawMessage, error) {
@@ -179,7 +194,7 @@ updated_at = now() WHERE id = $1`
 }
 
 // provWrite runs the value update and then records source under key in table.provenance (removing the key when the
-// value was cleared). table is a constant.
+// value was cleared or source is empty, which a restore of an unlabelled value passes). table is a constant.
 func provWrite(
 	ctx context.Context, ex database.Executor, table, id, key, source string, cleared bool, update string, args ...any,
 ) (json.RawMessage, error) {
@@ -200,7 +215,7 @@ func provWrite(
 	q := `UPDATE ` + table + ` SET provenance = provenance || jsonb_build_object($2::text, $3::text) WHERE id = $1`
 	pArgs := []any{id, key, source}
 
-	if cleared {
+	if cleared || source == "" {
 		q = `UPDATE ` + table + ` SET provenance = provenance - $2::text WHERE id = $1`
 		pArgs = pArgs[:2]
 	}
@@ -220,8 +235,9 @@ func writeItemTitle(
 		return nil, err
 	}
 
-	if null {
-		// title is NOT NULL and the row also holds the synopsis: clearing a translated title is not a field write.
+	if null || source == "" {
+		// title and title_source are NOT NULL and the row also holds the synopsis: clearing a translated title (or
+		// its source) is not a field write.
 		return nil, ErrUnsupportedField
 	}
 
@@ -269,7 +285,8 @@ synopsis_licence = NULL, synopsis_source_url = NULL WHERE item_id = $1 AND local
 	// with its own provenance (community when it has none).
 	if err := execOne(ctx, ex, `INSERT INTO item_translations
 (item_id, locale, title, title_source, synopsis, synopsis_source, synopsis_licence)
-SELECT id, $2, COALESCE(original_title, slug), COALESCE(provenance ->> 'original_title', $4), $3, $4, 'proprietary'
+SELECT id, $2, COALESCE(original_title, slug), COALESCE(provenance ->> 'original_title', NULLIF($4, ''), 'hexascore'),
+  $3, NULLIF($4, ''), COALESCE((SELECT licence FROM data_sources WHERE code = $4), 'proprietary')
 FROM items WHERE id = $1
 ON CONFLICT (item_id, locale) DO UPDATE SET synopsis = EXCLUDED.synopsis, synopsis_source = EXCLUDED.synopsis_source,
   synopsis_licence = EXCLUDED.synopsis_licence, synopsis_source_url = NULL`, id, locale, text, source); err != nil {
@@ -279,10 +296,12 @@ ON CONFLICT (item_id, locale) DO UPDATE SET synopsis = EXCLUDED.synopsis, synops
 	return prev, nil
 }
 
-// RelationRef is one entity on an item relation.
+// RelationRef is one entity on an item relation. Source is the row's provenance, recorded in audit snapshots so a
+// revert re-adds a removed relation with its own source; empty on suggestion ops.
 type RelationRef struct {
-	ID   string `json:"ID"`
-	Role string `json:"Role"`
+	ID     string `json:"ID"`
+	Role   string `json:"Role"`
+	Source string `json:"Source,omitempty"`
 }
 
 // relationRoles maps a suggestion relation field to the item_entities roles it covers; a single-role field also
@@ -345,8 +364,13 @@ func WriteRelation(
 			return nil, nil, err
 		}
 
+		src := source
+		if r.Source != "" {
+			src = r.Source
+		}
+
 		if _, err := ex.ExecContext(ctx, `INSERT INTO item_entities (item_id, entity_id, role, source)
-VALUES ($1, $2, $3, $4) ON CONFLICT (item_id, role, entity_id) DO NOTHING`, itemID, r.ID, rl, source); err != nil {
+VALUES ($1, $2, $3, $4) ON CONFLICT (item_id, role, entity_id) DO NOTHING`, itemID, r.ID, rl, src); err != nil {
 			return nil, nil, fmt.Errorf("catalog: add relation: %w", err)
 		}
 	}
@@ -359,12 +383,59 @@ VALUES ($1, $2, $3, $4) ON CONFLICT (item_id, role, entity_id) DO NOTHING`, item
 	return before, after, nil
 }
 
+// RestoreRelation sets an item relation field back to target, a snapshot from relationList: rows missing from it
+// are removed, rows missing from the item are re-added with their recorded source (fallback when the snapshot
+// predates sources). It returns the list before and after.
+func RestoreRelation(
+	ctx context.Context, ex database.Executor, itemID, field string, target json.RawMessage, fallback string,
+) (json.RawMessage, json.RawMessage, error) {
+	roles, ok := relationRoles[field]
+	if !ok {
+		return nil, nil, ErrUnsupportedField
+	}
+
+	current, err := relationList(ctx, ex, itemID, roles)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var have, want []RelationRef
+	if err := json.Unmarshal(current, &have); err != nil {
+		return nil, nil, fmt.Errorf("catalog: decode relations: %w", err)
+	}
+
+	if err := json.Unmarshal(target, &want); err != nil {
+		return nil, nil, fmt.Errorf("catalog: decode relation snapshot: %w", err)
+	}
+
+	key := func(r RelationRef) string { return r.Role + "/" + r.ID }
+	in := func(list []RelationRef, r RelationRef) bool {
+		return slices.ContainsFunc(list, func(x RelationRef) bool { return key(x) == key(r) })
+	}
+
+	var add, remove []RelationRef
+	for _, r := range have {
+		if !in(want, r) {
+			remove = append(remove, r)
+		}
+	}
+
+	for _, r := range want {
+		if !in(have, r) {
+			add = append(add, r)
+		}
+	}
+
+	return WriteRelation(ctx, ex, itemID, field, add, remove, fallback)
+}
+
 func relationList(ctx context.Context, ex database.Executor, itemID string, roles []string) (json.RawMessage, error) {
 	var out []byte
 
-	err := ex.QueryRowContext(ctx, `SELECT COALESCE(jsonb_agg(jsonb_build_object('ID', entity_id::text, 'Role', role)
+	err := ex.QueryRowContext(ctx, `SELECT COALESCE(jsonb_agg(jsonb_build_object('ID', entity_id::text, 'Role', role, 'Source', source)
 ORDER BY role, entity_id), '[]') FROM item_entities WHERE item_id = $1 AND role = ANY($2::text[])`,
-		itemID, "{"+strings.Join(roles, ",")+"}").Scan(&out)
+		itemID, "{"+strings.Join(roles, ",")+"}").
+		Scan(&out)
 	if err != nil {
 		return nil, fmt.Errorf("catalog: read relations: %w", err)
 	}
