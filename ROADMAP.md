@@ -2544,7 +2544,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `-run 'TestEligibility|TestConcurrentSubmit'` → 403 `suggestion-not-eligible` with `eligibleAt`; 20 concurrent submits admit exactly 3
   - Notes: the quota is a DB count, not the vukem limiter (calendar alignment undocumented, open issue 04-7). Refused submits consume nothing.
 
-- [ ] **P4.A.2.2** Add duplicate detection under `pg_advisory_xact_lock`, competing flags, field/record locks (423) and the `stale-before` check at submit.
+- [x] **P4.A.2.2** Add duplicate detection under `pg_advisory_xact_lock`, competing flags, field/record locks (423) and the `stale-before` check at submit.
   - Files/modules: `app/community/duplicates.go`, `app/community/locks.go`, `tests/community_duplicates_test.go`
   - Refs: SDD 04 FR-04-6, FR-04-7, §7.2 (stale `before`), §7.3 "Duplicates", "Locks"
   - Depends on: P4.A.2.1
