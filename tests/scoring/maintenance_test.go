@@ -176,8 +176,10 @@ func TestReleaseBursts(t *testing.T) {
 	r.rateAs(1, item, 8)
 	var old, fresh int64
 	db, _ := r.app.DB()
+	// limited_until is a minute in the past: ReleaseBursts compares it with the host clock, and the Postgres
+	// container's now() may run ahead of it.
 	ins := `INSERT INTO score_bursts (item_id, started_at, limited_until, trigger, stats)
-VALUES ($1, now() - $2 * interval '1 day', now(), 'volume', '{}') RETURNING id`
+VALUES ($1, now() - $2 * interval '1 day', now() - interval '1 minute', 'volume', '{}') RETURNING id`
 	if err := db.SQL().QueryRowContext(t.Context(), ins, item, 15).Scan(&old); err != nil {
 		t.Fatal(err)
 	}
