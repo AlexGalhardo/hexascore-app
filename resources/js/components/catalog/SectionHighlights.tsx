@@ -2,6 +2,7 @@ import { Link, usePage } from "@inertiajs/react";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
+import CoverThumb, { type Cover } from "../CoverThumb";
 
 export interface Highlight {
 	id: string;
@@ -11,6 +12,7 @@ export interface Highlight {
 	year: number | null;
 	score: number | null;
 	ratingCount: number;
+	cover: Cover | null;
 }
 
 export interface Section {
@@ -71,6 +73,7 @@ export default function SectionHighlights({ section }: { section: Section }) {
 											<span className="w-5 shrink-0 font-mono text-xs text-muted tabular-nums">
 												{rank + 1}
 											</span>
+											<CoverThumb cover={item.cover} alt="" />
 											<Link
 												href={`${path}/${item.slug}`}
 												className="min-w-0 flex-1 truncate text-sm"
