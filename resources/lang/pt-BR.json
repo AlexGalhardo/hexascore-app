@@ -1496,7 +1496,7 @@
       "missing": "Não encontrou?",
       "targets": {
         "label": "O que adicionar",
-        "item": "Título",
+        "item": "Jogo, filme, série ou livro",
         "entity": "Pessoa, empresa ou tag",
         "edition": "Edição de livro"
       },

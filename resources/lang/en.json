@@ -1496,7 +1496,7 @@
       "missing": "Cannot find it?",
       "targets": {
         "label": "What to add",
-        "item": "Title",
+        "item": "Game, movie, series or book",
         "entity": "Person, company or tag",
         "edition": "Book edition"
       },
