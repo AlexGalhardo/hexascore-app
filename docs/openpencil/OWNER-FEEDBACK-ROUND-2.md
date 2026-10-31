@@ -15,3 +15,4 @@ The owner chose **v1 Editorial**. v2 Noir and v3 Paper are frozen: no more work 
 6. Rating widget for the signed-in user: 10 yellow stars per category, half stars allowed (each half star = 0.5, so 10 stars = 10.0). The numeric value always prints next to the stars; keyboard operable (radio group, arrow keys); targets at least 44 px (the half-star hit areas may sit inside a 44 px row).
 7. Mobile navbar: the four main categories (Games, Movies, TV Series, Books) spread with `justify-content: space-between` across the full width.
 8. Theme toggle icon: moon in light mode, sun in dark mode.
+9. Desktop alignment: every desktop frame uses the same content container as the navbar (same max width and side gutters). Breadcrumbs, hero, sections, side panels and footer all start and end on the navbar edges; nothing runs wider or sits offset. Check every 1440 frame, light and dark.
