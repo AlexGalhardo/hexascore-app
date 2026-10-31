@@ -88,8 +88,7 @@ func Preflight(ctx context.Context, db *database.DB) (PreflightResult, error) {
 // two-factor flag without a row still abort. Preflight itself never skips a
 // check; the import command calls this only after an explicit opt-in.
 func IgnoreNoLogin(res PreflightResult, err error) (PreflightResult, error) {
-	var pe *PreflightError
-	if !errors.As(err, &pe) {
+	if _, ok := errors.AsType[*PreflightError](err); !ok {
 		return res, err
 	}
 
