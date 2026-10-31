@@ -14,12 +14,8 @@ No workers are running. The previous three-role orchestration (`framework`, `imp
 
 `developer-manual-todos.md` (39 P2 gates), `docs/orchestration/QUESTIONS.md` Q-H31, Q-A1 (social layer / D-06), Q-A2 (API burst), Q-A3 (Docker cleanup), Q-A4 (unmerged branches to decide), `adotar VF-001`.
 
-## Owner decisions of 2026-10-31 (second message)
-
-Q-A1 social layer after the cutover (D-06 amended); Q-A2 burst 5; Q-A3 Docker cleanup done (`hexascore-spike-*` containers and volumes still there: removal blocked by the agent permission classifier, remove by hand); Q-A4 branches triaged (archive tags `archive/*`, board rows REBASE-P4.A.2.4, ADOPT-VF-001, FIX-legacy-import-no-login, FIX-legacy-cover-retry, FIX-export-purge-zip, FW-triage-branches). The owner launches the four workers in the next session, not in the audit session.
-
 ## Next
 
-1. Launch the four workers with `briefs/common.md` + `briefs/<role>.md` (owner yes given on 2026-10-31 for the next session; confirm once more at session start per the global rule).
+1. Ask the owner for the yes to launch the four workers (global rule), then launch them with `briefs/common.md` + `briefs/<role>.md`.
 2. First merges expected: P2.H.3.2 (CI green), P2.H.1.1 (covers), then the rest of P2.H.
 3. When the owner answers Q-A1, add P7.A.1.1 to the board.
