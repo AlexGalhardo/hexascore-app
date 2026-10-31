@@ -14,11 +14,11 @@ Approachable and warm: a product for casual raters as much as for list-makers. R
 | `surface` | `#FFFFFF` card | `#252433` | cards |
 | `fg` | `#2B2A3A` ink | `#F4F1FA` | text |
 | `muted` | `#6E6B80` | `#B4B0C6` | secondary text |
-| `primary` | `#7A5CFA` violet | `#A894FF` | buttons, links |
+| `primary` | `#6B4CE6` violet (5.5:1 with white; `#7A5CFA` failed at 4.4:1) | `#A894FF` | buttons, links |
 | `danger` | `#E5484D` coral (text `#C2282D`) | `#FF8A8E` | errors, destructive |
 | tints game / movie / series / book | `#DDD3FF` lilac / `#FFD9C2` peach / `#CFE8FF` sky / `#CDEFE0` mint | 20 % of the dark accents | section backdrops |
-| accent text game / movie / series / book | `#5B3FC4` / `#B5481A` / `#1F5F9E` / `#1D6B45` | `#C3B6FF` / `#FFB48F` / `#93C9FF` / `#8ED9B5` | text on tints |
-| `score-high` / `mid` / `low` / `none` | chip `#CDEFE0` + `#1D6B45` / `#FFE7A8` + `#7A5200` / `#FFD6D6` + `#A3262A` / `#ECEAF2` + `#6E6B80` | same hues at 25 % on dark | sticker chips, always with the number |
+| accent text game / movie / series / book | `#5B3FC4` / `#9A3B12` / `#1F5F9E` / `#1D6B45` | `#C3B6FF` / `#FFB48F` / `#93C9FF` / `#8ED9B5` | text on tints |
+| `score-high` / `mid` / `low` / `none` | chip `#CDEFE0` + `#1D6B45` / `#FFE7A8` + `#7A5200` / `#FFD6D6` + `#A3262A` / `#ECEAF2` + `#5C5970` | same hues at 25 % on dark | sticker chips, always with the number |
 
 ## Type
 
