@@ -1,5 +1,6 @@
 import { Head, Link, usePage } from "@inertiajs/react";
 
+import SuggestNewLink from "../../components/community/SuggestNewLink";
 import ResultGroup, { type Hit } from "../../components/search/ResultGroup";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
@@ -87,6 +88,13 @@ export default function Index({
 				</p>
 			)}
 			{empty && <p className="mt-4">{t("search.noResults", { q: query.q })}</p>}
+			{empty && (
+				<p className="mt-2 flex flex-wrap gap-x-4">
+					{TYPES.map((type) => (
+						<SuggestNewLink key={type} domain={type} />
+					))}
+				</p>
+			)}
 			{empty && didYouMean && (
 				<p className="mt-2">
 					<Link href={`/search?q=${encodeURIComponent(didYouMean)}`}>{didYouMean}</Link>

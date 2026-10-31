@@ -6,6 +6,7 @@ import {
 	SECTION_PATHS,
 	type Section,
 } from "../../components/catalog/SectionHighlights";
+import SuggestNewLink from "../../components/community/SuggestNewLink";
 import Seo from "../../components/Seo";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
@@ -53,6 +54,9 @@ export default function Index({ type, items, filters, facets, total }: Props) {
 					))}
 				</InfiniteScroll>
 			)}
+			<p className="mt-6 text-sm">
+				{t("community.create.missing")} <SuggestNewLink domain={type} />
+			</p>
 		</>
 	);
 }

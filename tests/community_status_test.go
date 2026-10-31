@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/AlexGalhardo/vukem/uuid"
 	"github.com/AlexGalhardo/vukem/vukemtest"
 
 	"github.com/AlexGalhardo/hexascore-app/app/models"
@@ -154,4 +155,33 @@ VALUES ($1, $2, 'edit', 'item', $3, 'movie', 'en', '{"title":{"after":"x"}}')`, 
 	if got := suggestionStatus(t, app, id); got != "withdrawn" {
 		t.Fatalf("status = %s, want withdrawn", got)
 	}
+}
+
+func TestCommunityStatusNamesRelationEntities(t *testing.T) {
+	t.Parallel()
+
+	app := communityApp(t, true)
+	u := makeUser(t, app, "names@example.com", "user", true)
+	item := communityItem(t, app, "public")
+	genre := uuid.NewV7().String()
+
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := db.ExecContext(t.Context(),
+		`INSERT INTO entities (id, kind, slug, default_name) VALUES ($1, 'genre', $2, 'Metroidvania')`,
+		genre, "g-"+genre); err != nil {
+		t.Fatal(err)
+	}
+
+	body := draftBody(item, "Named", 0)
+	body["changes"] = map[string]any{"genres": map[string]any{"add": []map[string]any{{"id": genre}}}}
+
+	c := app.Client(t).ActingAs("web", u)
+	c.PostJSON("/suggestions", body).AssertStatus(http.StatusSeeOther)
+
+	c.Get("/suggestions/"+draftID(t, app, u.ID)).AssertInertia("Community/SuggestionStatus").
+		PropEquals("suggestion.names."+genre, "Metroidvania")
 }
