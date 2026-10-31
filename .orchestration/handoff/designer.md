@@ -23,6 +23,6 @@ Read `.claude/skills/openpencil-design/SKILL.md` first: it lists the render pitf
 
 ## Open points
 
-- Cover images: `set_image_fill` needs base64 in the tool call; a script calling the local MCP HTTP server was blocked by the permission classifier, and hand-typed base64 corrupts. The owner can allow a scripted fill (token read from `mcp.json`, never printed) or accept average-colour placeholders.
+- Cover images: owner approved the scripted fill (2026-10-31). All 23 covers are real in v1 and v2; the v3 base `.fig` was refreshed from v1, so its `cover/<slug>` components already carry the real images. Base64 files and the map are rebuilt with `ffmpeg` as in the skill; scripts in `scripts/openpencil/`.
 - Production `/search` returns HTTP 500 (`q=diablo`, `q=witcher`, 2026-10-31): needs a `FIX-` row.
 - Score scale: brief and legacy notes say 0 to 100; production and `docs/design-system.md` use out of 10. Frames follow production.

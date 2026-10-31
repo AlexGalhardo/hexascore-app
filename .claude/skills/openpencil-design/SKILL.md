@@ -36,12 +36,12 @@ Pages `00 Cover`, `01 Foundations`, `02 Components`, `10 Web desktop 1440`, `11 
 
 ## Images
 
-`set_image_fill` takes base64 in the tool call. Keep images small (downscale covers with `ffmpeg` to 96x144 JPEG) and set them once on `cover/<slug>` components, then instance them. Never retype base64 by hand; a mistyped payload still reports success and renders garbage. When a fill cannot be applied, use a gradient of the cover's average colour (`set_fill` with `gradient`) and say so in the version README.
+`set_image_fill` takes base64 in the tool call. Keep images small (downscale covers with `ffmpeg` to 96x144 JPEG) and set them once on `cover/<slug>` components, then instance them. Never retype base64 by hand; a mistyped payload still reports success and renders garbage. Use `scripts/openpencil/set_image_fills.py <doc-id> <map-file>` (lines `<nodeId> <path-to-.b64>`), which calls the local MCP HTTP server with the token from `%LOCALAPPDATA%\OpenPencil\mcp.json` without printing it (owner approved 2026-10-31). `scripts/openpencil/export_frames.py <doc-id> <out-dir> <pageId>…` exports every `<platform>/<page-id>/<state>` frame of those pages.
 
 ## Saving and exporting
 
 - `save_file` and `export_image(path=…)` only write inside the MCP root (`C:\Users\aleex`). Save to `C:\Users\aleex\openpencil-hexascore\<version>\` and copy into `docs/openpencil/<version>/` of the worktree.
-- `export_image` works only on the document that is active in the app ("No visible nodes to export" otherwise, also after the app loses focus): call `activate_document` first, retry once after re-activating, then export with `document_id`, `page_id` and `ids`. Use `maxEdge` 900 to 1200 for a visual check and `scale` 1 (`maxEdge` 4096) for the delivered PNG.
+- `export_image` works only on the document that is active in the app ("No visible nodes to export" otherwise, also after the app loses focus): call `activate_document` with the frame's `page_id` before exporting from each page (export only sees the active page), then export with `document_id`, `page_id` and `ids`. Use `maxEdge` 900 to 1200 for a visual check and `scale` 1 (`maxEdge` 4096) for the delivered PNG.
 
 ## Verify
 

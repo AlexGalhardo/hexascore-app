@@ -20,7 +20,7 @@ Frames per version: cover, foundations, components; home, catalog-index, item, s
 
 - Save and export paths must be inside the MCP root `C:\Users\aleex`; files are saved there and copied into the worktree.
 - `export_image` fails with "No visible nodes to export" unless the target document is active, and again after the app loses focus.
-- `set_image_fill` only takes base64 in the call: 6 of 23 covers applied; the rest are average-colour gradients. Scripted fills over the local MCP HTTP endpoint were blocked by the permission classifier.
+- `set_image_fill` only takes base64 in the call. After the owner's yes, `scripts/openpencil/set_image_fills.py` applied all 23 real covers over the local MCP HTTP endpoint and `scripts/openpencil/export_frames.py` re-exported every frame (export only sees the active page).
 - `linearGradient` with `transform` breaks `export_image`; 8-digit hex, `fillOpacity` and `rgba` are ignored in SVG paths; Unicode glyphs (◐ ▾ ★) render as missing; `<Frame grow={1} />` defaults to 100 px tall; `node_replace_with` appends instead of replacing in place; large renders hit a 20 s RPC timeout (node still created).
 - Playfair Display renders old-style figures (uneven score digits).
 
