@@ -26,5 +26,6 @@ func All(app *vukem.App) []queue.Registration {
 		handleFanoutWebhooks(app),
 		handleWebhookDeliver(app),
 		handlePruneWebhookDeliveries(app),
+		handleCommunityHourly(app),
 	}
 }

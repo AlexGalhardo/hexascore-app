@@ -34,6 +34,7 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	// webhook_deliveries is kept 30 days (SDD 05 §5). 04:40 stays clear of the 04:50 api_changes prune.
 	s.Job(jobs.PruneWebhookDeliveries{}).DailyAt("04:40").WithoutOverlapping()
 	s.Job(jobs.ExpireExports{}).Hourly().WithoutOverlapping()
+	s.Job(jobs.CommunityHourly{}).Hourly().WithoutOverlapping()
 	// backup.daily (SDD 11 §7.3 step 1): moves after the SDD 06 asserts once they exist (P6).
 	s.Command("backup:run", "--kind", "daily").DailyAt("06:00").In(saoPaulo).WithoutOverlapping()
 

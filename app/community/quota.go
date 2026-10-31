@@ -19,18 +19,19 @@ const (
 // Problem is a community refusal the caller maps onto HTTP.
 // Type is the RFC 9457 type URL. EligibleAt is set when a wait has an end.
 type Problem struct {
-	Status     int
-	Code       string
-	Type       string
-	EligibleAt *time.Time
-	RetryAfter int
-	Limit      int
-	Used       int
-	ResetAt    time.Time
-	ExistingID string
-	Field      string
-	Current    string
-	LockReason string
+	Status        int
+	Code          string
+	Type          string
+	EligibleAt    *time.Time
+	RetryAfter    int
+	Limit         int
+	Used          int
+	ResetAt       time.Time
+	ExistingID    string
+	Field         string
+	Current       string
+	LockReason    string
+	CooldownUntil *time.Time
 }
 
 // Error implements error.

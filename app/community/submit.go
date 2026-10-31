@@ -38,6 +38,9 @@ func submitTx(ctx context.Context, tx *database.Tx, id string, authorID int64, v
 	if err := checkEligibility(ctx, tx, authorID, tier, blockedUntil, now); err != nil {
 		return err
 	}
+	if err := rejectCooldown(ctx, tx, authorID, now); err != nil {
+		return err
+	}
 	used, err := submittedToday(ctx, tx, authorID, now)
 	if err != nil {
 		return err

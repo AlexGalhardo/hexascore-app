@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Private `@hexascore/app-client` is generated from `openapi/app-v1.json`. CI checks that file is fresh, typechecks the package, and runs the app k6 gate.
 - Community submit allows a verified account at least 7 days old to send 3 suggestions per UTC day. The next one is 429 `suggestion-quota` until 00:00 UTC. Withdrawn submissions still count.
 - Community submit rejects a duplicate field (`suggestion-duplicate`), a live catalogue lock (`field-locked`), and a scalar `before` that is no longer current (`stale-before`). A different `after` from another author is kept and marked competing.
+- Community tiers and cooldowns: Laplace accuracy stays on `contributor_stats`. `blocked` starts at 20 decisions with accuracy under 0.20 and lasts 30 days. Three qualifying rejections in 24 h cool down for 48 h, and `spam` cools down for 7 days (`suggestion-cooldown`). The hourly job expires drafts idle for 14 days, deletes their uploaded covers, refreshes tiers and releases claims idle for 2 h. `community:stats:rebuild` rewrites the same counters.
 - `/app/v1` stack: `hx_app_` guard, ban and verified checks, per-token read/write limits, `Idempotency-Key` on writes, and `426` below `APP_MIN_SUPPORTED_VERSION` (`DELETE /tokens/current` stays open).
 - Android Expo shell in `apps/mobile` (SDK 58, NativeWind, SDD 10 routes, shared tokens and bundled catalogues). The P5 checkboxes stay open until P3.C.5.2.
 - ADR 0018 and the Expo skills under `.claude/skills/`.
