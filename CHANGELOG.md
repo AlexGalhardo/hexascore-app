@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **catalog:** Hourly `ComputeTrending` job (rollup, top 10 per type over 30 days with prior fill, cache invalidation), 90-day snapshot prune, item rebuild on user ban and unban, trending metrics and Grafana alert A14 for a snapshot older than 3 h (P6.C.2.2)
 - **catalog:** Trending rollup that recomputes the weighted per-user daily activity (ratings, statuses, list adds, suggestions) for today and yesterday, idempotently, leaving views and search clicks alone (P6.C.1.3)
 - **docs:** Design round 1 in `docs/openpencil/`: three visual directions (v1 editorial, v2 noir, v3 paper), 19 frames each, `ROUND-1.md` with the comparison and WCAG contrast table, the `openpencil-design` skill and the design rule (DESIGN-round-1)
 - **admin:** Moderation queue at `/admin/moderation`, oldest first with keyset pages, filters (status, kind, domain, locale, field, author, assignee, age), ageing, competing, stale and unreachable badges, and claim/release (P4.B.1.2)
