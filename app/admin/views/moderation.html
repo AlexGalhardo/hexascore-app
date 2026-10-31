@@ -1,5 +1,5 @@
 {{define "content"}}
-<div class="toolbar"><h1>{{.Title}}</h1></div>
+<div class="toolbar"><h1>{{.Title}}</h1><a class="button" href="/admin/moderation/metrics">Metrics</a></div>
 <form method="get" action="/admin/moderation" class="filters" aria-label="Queue filters">
 	<label>Status
 		<select name="status"><option value="">open</option>{{range .Queue.Statuses}}<option value="{{.}}"{{if eq . $.Queue.Filter.Status}} selected{{end}}>{{.}}</option>{{end}}</select>
