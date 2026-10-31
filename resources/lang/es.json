@@ -110,6 +110,9 @@
       "requested": "Exportación solicitada. Pronto recibirás un correo con el enlace.",
       "cooldown": "Puedes pedir una exportación cada 7 días. Inténtalo más tarde.",
       "failed": "No se pudo pedir la exportación. Inténtalo de nuevo."
+    },
+    "updateRequired": {
+      "title": "Actualización necesaria"
     }
   },
   "actions": {
@@ -246,7 +249,8 @@
       "name": "Nombre",
       "show": "Mostrar contraseña",
       "hide": "Ocultar contraseña",
-      "confirmPassword": "Confirmar contraseña"
+      "confirmPassword": "Confirmar contraseña",
+      "deviceName": "Nombre del dispositivo"
     },
     "rules": {
       "title": "Tu contraseña debe tener:",

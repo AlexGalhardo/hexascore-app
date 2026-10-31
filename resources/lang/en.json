@@ -110,6 +110,9 @@
       "requested": "Export requested. You will get an email with the link soon.",
       "cooldown": "You can request one export every 7 days. Try again later.",
       "failed": "Could not request the export. Try again."
+    },
+    "updateRequired": {
+      "title": "Update required"
     }
   },
   "actions": {
@@ -246,7 +249,8 @@
       "name": "Name",
       "show": "Show password",
       "hide": "Hide password",
-      "confirmPassword": "Confirm password"
+      "confirmPassword": "Confirm password",
+      "deviceName": "Device name"
     },
     "rules": {
       "title": "Your password must have:",
