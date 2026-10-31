@@ -39,7 +39,7 @@ Intent: approachable and warm, rounded cards with pastel section tints and stick
 ## Notes for every version
 
 - Real content from production (read-only, 2026-10-31): titles, years, counts, covers, plans and prices. Production has no ratings yet, so every score number is an illustrative sample on the real 0.5 to 10 scale; the "–" state is real. Library and the "rated by" names are illustrative.
-- Covers: 6 real cover images (Diablo V, Tomb Raider: Catalyst, The Witcher IV, The Wolf Among Us 2, Frozen 3, Shrek 5); the other titles use a gradient of their real cover's average colour because the image-fill path could not be automated (see the round report).
+- Covers: all 23 titles use their real catalogue cover (96x144 JPEG downscales of the production thumbnails), applied by `scripts/openpencil/set_image_fills.py`.
 - Scores use the production scale (out of 10, bands below 5.0, 5.0 to 7.4, 7.5 and above), not the 0 to 100 scale in the legacy notes and the designer brief.
 - Production `/search` returned HTTP 500 for `q=diablo` and `q=witcher` while collecting content; the search frames use plausible counts.
 
