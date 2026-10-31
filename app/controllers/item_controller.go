@@ -53,6 +53,7 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 			"editionCount":  page.EditionCount,
 			"timeToBeat":    page.TimeToBeat,
 			"trailers":      page.Trailers,
+			"cover":         page.Cover,
 		}
 
 		if u, err := h.user(c); err == nil {
