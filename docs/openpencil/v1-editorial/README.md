@@ -34,6 +34,18 @@ Pages `00 Cover`, `01 Foundations`, `02 Components`, `10 Web desktop 1440`, `11 
 - `web-desktop__<page>__default.png` and `web-mobile__<page>__default.png` for `home`, `catalog-index`, `item`, `search`, `library`, `login`, `pricing`
 - `android__home__default.png`, `android__item__default.png`
 
+## Frames (DESIGN-v1-editorial-web-catalog)
+
+Public catalogue group, desktop 1440 (`10 Web desktop 1440`) and mobile 390 (`11 Web mobile 390`), 37 new frames plus the reworked home default:
+
+- `item`: `logged-out` (World of Warcraft, every block: score, radar, synopsis with licence, details, time to beat, trailers behind consent), `logged-in` (six ScoreInputs with three set, overall score, status picker, add to list, your time to beat), `no-score` (The Witcher IV, "Not enough ratings" on badge and panel, empty radar), `no-cover` (Iliad, book categories, cover placeholder), `no-synopsis` (Diablo V, as in production). `item/default` from round 1 stays the logged-out Diablo V reference.
+- `home`: `default` now matches production (no "Recently rated" block); `recent` shows the block.
+- `edition/default`, `entity/default` and `entity/empty`, `search/empty-query`, `search/too-short`, `search/no-results` (with "did you mean"), `catalog-index/empty` (desktop and mobile) and `catalog-index/filters-open` (mobile), `recent-changes/default`, `docs/default` (Authentication page), `legal/default` (terms), `error/404` and `error/500`.
+
+Sources: `src/v1-prelude.js` (tokens and primitives), `src/v1-item.js` (item page), `src/v1-pages.js` (other pages) and one `src/frames/*.jsx` per frame. Render with `python scripts/openpencil/op.py render <doc> <prelude> <files…>` after concatenating the three `.js` files; a frame is replaced in place when a top-level frame with the same name exists.
+
+Content notes: Recent changes is specified (SDD 09 §6.2, SDD 04 FR-04-13) but not built, so its entries are illustrative; the Neuromancer edition is a sample (production has no editions yet); the "did you mean" line has no catalogue key yet; the empty entity uses the Ouya platform as a sample.
+
 ## Content
 
 Titles, years, counts (24873 games), cover images, plans and prices come from production (read-only, 2026-10-31). Production has no ratings yet (every score is `null`), so the score numbers in these frames are illustrative samples on the real 0.5 to 10 scale; the "–" state is shown where the real data has no score. Library content is illustrative (logged-in page; production was not logged in to).
