@@ -33,6 +33,16 @@ type ProfilePrivacy struct {
 	PersonalizationOptOut bool `json:"personalizationOptOut" form:"personalizationOptOut"`
 }
 
+// ProfileNotifications is the email notices section.
+type ProfileNotifications struct {
+	CommunityMailOptOut bool `json:"communityMailOptOut" form:"communityMailOptOut"`
+}
+
+// ProfileNotificationsSchema validates ProfileNotifications.
+var ProfileNotificationsSchema = z.Struct[ProfileNotifications](z.Shape{
+	"communityMailOptOut": z.Bool().Default(false),
+})
+
 // ProfilePrivacySchema validates ProfilePrivacy.
 var ProfilePrivacySchema = z.Struct[ProfilePrivacy](z.Shape{
 	"profilePrivate":        z.Bool().Default(false),

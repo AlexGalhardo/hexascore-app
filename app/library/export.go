@@ -281,6 +281,7 @@ LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'`
 var exportJSON = []struct{ name, query string }{
 	{"profile", `SELECT json_build_object('id', id, 'email', email, 'name', name, 'username', username,
   'locale', locale, 'profilePrivate', profile_private, 'personalizationOptOut', personalization_opt_out,
+  'communityMailOptOut', community_mail_opt_out,
   'createdAt', created_at)
 FROM users WHERE id = $1::bigint AND $2::text IS NOT NULL`},
 	{

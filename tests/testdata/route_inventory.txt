@@ -90,6 +90,7 @@ web   GET    /profile
 web   PATCH  /profile/details
 web   PUT    /profile/password
 web   PATCH  /profile/privacy
+web   PATCH  /profile/notifications
 web   DELETE /profile/sessions/{handle}
 web   POST   /profile/sessions/revoke-all
 admin GET    /admin/_assets/admin.css

@@ -63,6 +63,7 @@ func (h *Handlers) Show(c *web.Ctx) error {
 		"privacy": inertia.Props{
 			"profilePrivate": p.ProfilePrivate, "personalizationOptOut": p.PersonalizationOptOut,
 		},
+		"notifications":       inertia.Props{"communityMailOptOut": p.CommunityMailOptOut},
 		"deletionScheduledAt": u.DeletionScheduledAt,
 	})
 }
@@ -132,6 +133,27 @@ func (h *Handlers) UpdatePrivacy(c *web.Ctx) error {
 	}
 
 	inertia.Flash(c, "status", h.a.T(c.Context(), "auth.profile.privacy_saved"))
+
+	return c.Redirect("/profile")
+}
+
+// UpdateNotifications saves the email notice switches.
+func (h *Handlers) UpdateNotifications(c *web.Ctx) error {
+	u, err := h.user(c)
+	if err != nil {
+		return err
+	}
+
+	in, err := web.Parse(c, requests.ProfileNotificationsSchema)
+	if err != nil {
+		return err
+	}
+
+	if err := h.a.UpdateCommunityMail(c.Context(), u.ID, in.CommunityMailOptOut); err != nil {
+		return err
+	}
+
+	inertia.Flash(c, "status", h.a.T(c.Context(), "auth.profile.notifications_saved"))
 
 	return c.Redirect("/profile")
 }

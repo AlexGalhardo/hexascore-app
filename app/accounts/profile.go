@@ -20,6 +20,7 @@ type Profile struct {
 	PasswordSet           bool
 	ProfilePrivate        bool
 	PersonalizationOptOut bool
+	CommunityMailOptOut   bool
 }
 
 // Profile loads the profile columns of userID.
@@ -34,10 +35,11 @@ func (a *Accounts) Profile(ctx context.Context, userID int64) (Profile, error) {
 	err := a.DB.QueryRowContext(ctx,
 		`SELECT locale, password_set_at IS NOT NULL
   OR NOT EXISTS (SELECT 1 FROM social_accounts s WHERE s.user_id = users.id),
-  profile_private, personalization_opt_out FROM users WHERE id = `+
+  profile_private, personalization_opt_out, community_mail_opt_out FROM users WHERE id = `+
 			a.DB.Dialect().
 				Placeholder(1),
-		userID).Scan(&p.Locale, &p.PasswordSet, &p.ProfilePrivate, &p.PersonalizationOptOut)
+		userID).Scan(&p.Locale, &p.PasswordSet, &p.ProfilePrivate, &p.PersonalizationOptOut,
+		&p.CommunityMailOptOut)
 
 	return p, err
 }
@@ -81,6 +83,16 @@ func (a *Accounts) UpdatePrivacy(ctx context.Context, userID int64, private, opt
 
 		return nil
 	})
+}
+
+// UpdateCommunityMail saves the community notice email switch (SDD 04 FR-04-14); the in-app notice stays.
+func (a *Accounts) UpdateCommunityMail(ctx context.Context, userID int64, optOut bool) error {
+	p := a.DB.Dialect().Placeholder
+	_, err := a.DB.ExecContext(ctx,
+		"UPDATE users SET community_mail_opt_out = "+p(1)+", updated_at = "+p(2)+" WHERE id = "+p(3),
+		optOut, a.now().UTC(), userID)
+
+	return err
 }
 
 // ChangePassword sets a new password for u. The current password is
