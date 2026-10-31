@@ -2164,7 +2164,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - `curl -s localhost:3000/ | grep -c '<img'` ≥ 12
     - Lighthouse `/` mobile: performance ≥ 0.9, LCP ≤ 2.0 s (hero text or first cover)
 
-- [ ] **P2.H.1.4** Library and lists as shelves: cards with cover, status and own score, grouped by status, with counts in the filters; public profile tabs reuse the same cards.
+- [x] **P2.H.1.4** Library and lists as shelves: cards with cover, status and own score, grouped by status, with counts in the filters; public profile tabs reuse the same cards.
   - Files/modules: `resources/js/pages/Library/Index.tsx`, `resources/js/pages/Lists/Index.tsx`, `resources/js/pages/Lists/Edit.tsx`, `resources/js/pages/User/Profile.tsx`, `resources/js/pages/User/List.tsx`, `resources/js/components/library/ShelfCard.tsx`
   - Refs: SDD 14 FR-14-7 (library grouping), FR-14-6; legacy `docs/frontend.md` "Padrão de listagens"
   - Depends on: P2.H.1.1
@@ -2173,7 +2173,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - `bun run e2e -- library.spec.ts lists.spec.ts social.spec.ts` → green in the three locales, desktop and mobile
     - `bun run test -- ShelfCard` → cover, status label and score render; missing score renders the dash
 
-- [ ] **P2.H.1.5** Let a list owner add items from the list page: search box with suggest inside `Lists/Edit`, then `PUT /lists/{id}/items/{itemId}`.
+- [x] **P2.H.1.5** Let a list owner add items from the list page: search box with suggest inside `Lists/Edit`, then `PUT /lists/{id}/items/{itemId}`.
   - Files/modules: `resources/js/pages/Lists/Edit.tsx`, `resources/js/components/search/SuggestBox.tsx` (reusable `onPick`), `app/controllers/lists_controller.go`
   - Refs: SDD 14 §6.2; audit (list edit page has no way to add items)
   - Depends on: —
