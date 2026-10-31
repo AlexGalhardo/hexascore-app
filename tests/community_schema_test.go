@@ -55,7 +55,7 @@ func TestCommunitySchema(t *testing.T) {
 	// that migration. Walk until the community migration itself is reverted.
 	const community = "20261030130000_create_community_tables"
 	var rolled []string
-	for range 16 {
+	for range 100 { // upper bound only: every newer migration is rolled back first
 		step, err := m.Rollback(ctx, 1)
 		if err != nil || len(step) != 1 {
 			t.Fatalf("rollback: %v %v", step, err)
