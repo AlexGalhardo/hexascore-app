@@ -21,6 +21,7 @@
 	"auth.challenge.checking": "Checking your browser…",
 	"auth.challenge.noscript": "This form needs JavaScript. Without it you can",
 	"auth.errors.invalidCredentials": "Wrong email/nickname or password.",
+	"auth.errors.emailUnverifiedAtProvider": "Google has not verified this email address. Verify it with Google or log in with your password.",
 	"auth.errors.emailNotVerified": "Confirm your email before logging in.",
 	"auth.errors.rateLimited": "Too many attempts. Wait a minute and try again.",
 	"auth.errors.network": "Could not reach the server. Check your connection and try again.",

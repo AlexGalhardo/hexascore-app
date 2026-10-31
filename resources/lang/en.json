@@ -265,6 +265,7 @@
     },
     "errors": {
       "invalidCredentials": "Wrong email/nickname or password.",
+      "emailUnverifiedAtProvider": "Google has not verified this email address. Verify it with Google or log in with your password.",
       "emailNotVerified": "Confirm your email before logging in.",
       "rateLimited": "Too many attempts. Wait a minute and try again.",
       "network": "Could not reach the server. Check your connection and try again.",
