@@ -28,7 +28,8 @@ func TestMergeSumsActivity(t *testing.T) {
 		item, day string
 		views, w  int
 	}{
-		{from, "2026-10-30", 5, 2}, {from, "2026-10-31", 7, 1},
+		{from, "2026-10-30", 5, 2},
+		{from, "2026-10-31", 7, 1},
 		{into, "2026-10-30", 3, 4},
 	} {
 		if _, err := db.ExecContext(t.Context(), `INSERT INTO item_activity_daily
@@ -61,6 +62,10 @@ func TestMergeSumsActivity(t *testing.T) {
 		}
 
 		got[day] = v
+	}
+
+	if err := rows.Err(); err != nil {
+		t.Fatal(err)
 	}
 
 	if want := (map[string][3]float64{"2026-10-30": {8, 8, 6}, "2026-10-31": {7, 7, 1}}); len(got) != 2 ||
