@@ -141,4 +141,3 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
   3. Sensible default config generated from the API metadata: read-only APIs skip stateful checks, `TRACE` handling documented, rate limits bypassed for the scan (trusted header or a test-only limiter key), max-examples and workers configurable.
   4. A `Taskfile`/CI snippet and a docs page under rest-apis, plus an example app wiring.
   5. HexaScore then replaces `qa/schemathesis/` with the native command (an `ADOPT-vukem-<version>` row).
-
