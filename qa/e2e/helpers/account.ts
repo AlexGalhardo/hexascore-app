@@ -36,6 +36,17 @@ export function newAccount(): Account {
 // Wait until each of those forms carries React props. A page with neither just needs load.
 export async function open(page: Page, url: string): Promise<void> {
 	await page.goto(url);
+	await hydrated(page);
+}
+
+// reload() resolves on the server-rendered HTML: a key or a select change sent before hydration is dropped, and
+// the page keeps showing the old value. Use this when the next step interacts with the page.
+export async function reload(page: Page): Promise<void> {
+	await page.reload();
+	await hydrated(page);
+}
+
+async function hydrated(page: Page): Promise<void> {
 	await page.waitForFunction(() => {
 		const ready = (form: Element | null) =>
 			!form || Object.keys(form).some((key) => key.startsWith("__reactProps$"));
@@ -126,7 +137,8 @@ export async function completeOnboarding(
 		timeout: POW_TIMEOUT,
 	});
 	// Login lands on the dashboard; the nickname form is only shown when asked for.
-	await page.goto("/onboarding");
+	// open(), not goto(): a nickname filled before React hydrates is wiped and the submit then goes out empty.
+	await open(page, "/onboarding");
 	const nickname = page.getByLabel(t("auth.fields.nickname"));
 	if (
 		await nickname.waitFor({ timeout: 5_000 }).then(
@@ -135,6 +147,7 @@ export async function completeOnboarding(
 		)
 	) {
 		await nickname.fill(account.nickname);
+		await expect(nickname).toHaveValue(account.nickname);
 		await page.getByRole("button", { name: t("auth.onboarding.submit") }).click();
 		await page.waitForURL((url) => !url.pathname.includes("onboarding"));
 	}
