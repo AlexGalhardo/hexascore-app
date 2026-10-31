@@ -5,6 +5,7 @@ import (
 	"github.com/AlexGalhardo/vukem/authz"
 	"github.com/AlexGalhardo/vukem/web"
 
+	"github.com/AlexGalhardo/hexascore-app/app/flash"
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
@@ -47,6 +48,8 @@ func (h *Lists) Create(c *web.Ctx) error {
 	}
 
 	if !h.api {
+		flash.Status(c, "flash.listCreated")
+
 		return c.Back("/lists")
 	}
 
@@ -75,6 +78,8 @@ func (h *Lists) Update(c *web.Ctx) error {
 	}
 
 	if !h.api {
+		flash.Status(c, "flash.listUpdated")
+
 		return c.Back("/lists")
 	}
 
@@ -93,6 +98,8 @@ func (h *Lists) Delete(c *web.Ctx) error {
 
 	if !h.api {
 		// Back would return to the edit page of the list that no longer exists.
+		flash.Status(c, "flash.listDeleted")
+
 		return c.Redirect("/lists")
 	}
 
@@ -145,6 +152,8 @@ func (h *Lists) AddItem(c *web.Ctx) error {
 	}
 
 	if !h.api {
+		flash.Status(c, "flash.listItemAdded")
+
 		return c.Back("/lists")
 	}
 
@@ -162,6 +171,8 @@ func (h *Lists) RemoveItem(c *web.Ctx) error {
 	}
 
 	if !h.api {
+		flash.Status(c, "flash.listItemRemoved")
+
 		return c.Back("/lists")
 	}
 
