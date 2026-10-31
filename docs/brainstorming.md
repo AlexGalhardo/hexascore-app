@@ -101,7 +101,7 @@ Asked through the interactive checklist after the SDD drafts; they close every `
 - **D-32 Off-site backups**: monthly dump downloaded by the owner through a signed link until an external bucket fits the budget; daily dumps stay on Railway.
 - **D-33 API prices and limits**: legacy table kept at launch; review 90 days after cutover; pricing page states the API data coverage.
 - **D-34 Android builds**: EAS Build on the free tier while it lasts; a Gradle pipeline on GitHub Actions is prepared as the fallback.
-- **D-35 No Prometheus `/metrics` endpoint at launch**; metrics go to Grafana Cloud over OTLP.
+- **D-35 No Prometheus `/metrics` endpoint at launch**; observability uses only Railway native tools (service metrics, logs, OTLP traces to Railway, deploy and usage alerts). No Grafana, Grafana Cloud or promtool in this project (owner, amended 2026-10-31).
 - **D-37 Tooling approved** (dev/CI only, never in the binary): git-cliff, commitlint, Task (Taskfile), markdownlint-cli2, Redocly CLI, and `golang.org/x/crypto/scrypt` for Better Auth hash verification at first login. Exact versions pinned at implementation.
 - **D-38 Lists of deleted accounts**: public lists are anonymised (author shown as "deleted user") and stay reachable; private lists are deleted (SDD 14).
 - **D-39 Data protection officer**: the owner is the LGPD "encarregado"; public contact `privacy@hexascore.app` (mailbox created on the domain); named in the privacy policy (SDD 13).
