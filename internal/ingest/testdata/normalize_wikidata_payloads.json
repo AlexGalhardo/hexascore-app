@@ -1,0 +1,672 @@
+{
+  "Q1079": {
+    "aliases": {},
+    "claims": {
+      "P1113": [
+        {
+          "rank": "normal",
+          "value": {
+            "amount": "+62",
+            "unit": "1"
+          }
+        }
+      ],
+      "P1258": [
+        {
+          "rank": "normal",
+          "value": "tv/breaking_bad"
+        }
+      ],
+      "P136": [
+        {
+          "rank": "normal",
+          "value": "Q9335577"
+        },
+        {
+          "rank": "normal",
+          "value": "Q1366112"
+        },
+        {
+          "rank": "normal",
+          "value": "Q67175872"
+        },
+        {
+          "rank": "normal",
+          "value": "Q20652466"
+        },
+        {
+          "rank": "normal",
+          "value": "Q78528852"
+        }
+      ],
+      "P170": [
+        {
+          "rank": "normal",
+          "value": "Q4500"
+        }
+      ],
+      "P1712": [
+        {
+          "rank": "normal",
+          "value": "tv/breaking-bad"
+        }
+      ],
+      "P2437": [
+        {
+          "rank": "normal",
+          "value": {
+            "amount": "+5",
+            "unit": "1"
+          }
+        }
+      ],
+      "P345": [
+        {
+          "rank": "normal",
+          "value": "tt0903747"
+        }
+      ],
+      "P495": [
+        {
+          "rank": "normal",
+          "value": "Q30"
+        }
+      ],
+      "P4983": [
+        {
+          "rank": "normal",
+          "value": "1396"
+        }
+      ],
+      "P57": [
+        {
+          "rank": "normal",
+          "value": "Q4500"
+        },
+        {
+          "rank": "normal",
+          "value": "Q3440795"
+        },
+        {
+          "rank": "normal",
+          "value": "Q6196851"
+        },
+        {
+          "rank": "normal",
+          "value": "Q7841104"
+        },
+        {
+          "rank": "normal",
+          "value": "Q4974114"
+        },
+        {
+          "rank": "normal",
+          "value": "Q548834"
+        },
+        {
+          "rank": "normal",
+          "value": "Q23547"
+        },
+        {
+          "rank": "normal",
+          "value": "Q1279422"
+        },
+        {
+          "rank": "normal",
+          "value": "Q7704779"
+        },
+        {
+          "rank": "normal",
+          "value": "Q1699742"
+        },
+        {
+          "rank": "normal",
+          "value": "Q1373742"
+        },
+        {
+          "rank": "normal",
+          "value": "Q724100"
+        },
+        {
+          "rank": "normal",
+          "value": "Q462727"
+        },
+        {
+          "rank": "normal",
+          "value": "Q127800"
+        },
+        {
+          "rank": "normal",
+          "value": "Q7181639"
+        },
+        {
+          "rank": "normal",
+          "value": "Q5144932"
+        },
+        {
+          "rank": "normal",
+          "value": "Q3952882"
+        },
+        {
+          "rank": "normal",
+          "value": "Q10307893"
+        },
+        {
+          "rank": "normal",
+          "value": "Q6834453"
+        },
+        {
+          "rank": "normal",
+          "value": "Q621818"
+        },
+        {
+          "rank": "normal",
+          "value": "Q371455"
+        },
+        {
+          "rank": "normal",
+          "value": "Q7174311"
+        },
+        {
+          "rank": "normal",
+          "value": "Q5542223"
+        },
+        {
+          "rank": "normal",
+          "value": "Q15042700"
+        },
+        {
+          "rank": "normal",
+          "value": "Q7407299"
+        }
+      ],
+      "P580": [
+        {
+          "rank": "normal",
+          "value": {
+            "precision": 11,
+            "time": "+2008-01-20T00:00:00Z"
+          }
+        }
+      ]
+    },
+    "id": "Q1079",
+    "labels": {
+      "en": "Breaking Bad",
+      "es": "Breaking Bad",
+      "pt": "Breaking Bad",
+      "pt-br": "Breaking Bad"
+    },
+    "refs": {
+      "Q10307893": "John Shiban",
+      "Q127800": "Michelle MacLaren",
+      "Q1279422": "Charles Haid",
+      "Q1366112": "drama television series",
+      "Q1373742": "Johan Renck",
+      "Q15042700": "Thomas Schnauz",
+      "Q1699742": "John Dahl",
+      "Q20652466": "black comedy television series",
+      "Q23547": "Bryan Cranston",
+      "Q30": "United States",
+      "Q3440795": "Adam Bernstein",
+      "Q371455": "David Slade",
+      "Q3952882": "Scott Winant",
+      "Q4500": "Vince Gilligan",
+      "Q462727": "Félix Enríquez Alcalá",
+      "Q4974114": "Bronwen Hughes",
+      "Q5144932": "Colin Bucksey",
+      "Q548834": "Tim Hunter",
+      "Q5542223": "George Mastras",
+      "Q6196851": "Jim McKay",
+      "Q621818": "Rian Johnson",
+      "Q67175872": "thriller television series",
+      "Q6834453": "Michael Slovis",
+      "Q7174311": "Peter Gould",
+      "Q7181639": "Phil Abraham",
+      "Q724100": "Peter Medak",
+      "Q7407299": "Sam Catlin",
+      "Q7704779": "Terry McDonough",
+      "Q7841104": "Tricia Brock",
+      "Q78528852": "contemporary Western film",
+      "Q9335577": "crime television series"
+    },
+    "sitelinks": {
+      "enwiki": "Breaking Bad",
+      "eswiki": "Breaking Bad",
+      "ptwiki": "Breaking Bad"
+    },
+    "sitelinks_count": 103,
+    "type": "series"
+  },
+  "Q208460": {
+    "aliases": {},
+    "claims": {
+      "P136": [
+        {
+          "rank": "normal",
+          "value": "Q944250"
+        },
+        {
+          "rank": "normal",
+          "value": "Q2254211"
+        },
+        {
+          "rank": "normal",
+          "value": "Q24925"
+        },
+        {
+          "rank": "normal",
+          "value": "Q15062348"
+        }
+      ],
+      "P1651": [
+        {
+          "rank": "normal",
+          "value": "iesAEtjA9wo"
+        },
+        {
+          "rank": "normal",
+          "value": "2QLy4_2spkk"
+        }
+      ],
+      "P18": [
+        {
+          "rank": "normal",
+          "value": "1984 first edition cover.jpg"
+        }
+      ],
+      "P495": [
+        {
+          "rank": "normal",
+          "value": "Q145"
+        }
+      ],
+      "P50": [
+        {
+          "rank": "normal",
+          "value": "Q3335"
+        }
+      ],
+      "P571": [
+        {
+          "rank": "normal",
+          "value": {
+            "precision": 9,
+            "time": "+1948-00-00T00:00:00Z"
+          }
+        }
+      ],
+      "P577": [
+        {
+          "rank": "normal",
+          "value": {
+            "precision": 9,
+            "time": "+1949-00-00T00:00:00Z"
+          }
+        }
+      ],
+      "P648": [
+        {
+          "rank": "normal",
+          "value": "OL1168083W"
+        }
+      ],
+      "P8383": [
+        {
+          "rank": "normal",
+          "value": "153313"
+        }
+      ]
+    },
+    "id": "Q208460",
+    "labels": {
+      "en": "Nineteen Eighty-Four",
+      "es": "1984",
+      "mul": "1984",
+      "pt": "1984",
+      "pt-br": "1984"
+    },
+    "refs": {
+      "Q145": "United Kingdom",
+      "Q15062348": "dystopian fiction",
+      "Q2254211": "political fiction",
+      "Q24925": "science fiction",
+      "Q3335": "George Orwell",
+      "Q944250": "social science fiction"
+    },
+    "sitelinks": {
+      "enwiki": "Nineteen Eighty-Four",
+      "eswiki": "1984 (novela)",
+      "ptwiki": "1984 (livro)"
+    },
+    "sitelinks_count": 138,
+    "type": "book"
+  },
+  "Q4267401": {
+    "aliases": {},
+    "claims": {
+      "P136": [
+        {
+          "rank": "normal",
+          "value": "Q1422746"
+        },
+        {
+          "rank": "normal",
+          "value": "Q42409239"
+        }
+      ],
+      "P1733": [
+        {
+          "rank": "normal",
+          "value": "292030"
+        }
+      ],
+      "P178": [
+        {
+          "rank": "normal",
+          "value": "Q1172164"
+        }
+      ],
+      "P18": [
+        {
+          "rank": "normal",
+          "value": "The Witcher 3 - Standard Edition Unboxing (Official Trailer) cover.jpg"
+        }
+      ],
+      "P2725": [
+        {
+          "rank": "normal",
+          "value": "game/the_witcher_3_wild_hunt"
+        },
+        {
+          "rank": "normal",
+          "value": "game/the_witcher_3_wild_hunt_expansion_pass"
+        }
+      ],
+      "P2816": [
+        {
+          "rank": "normal",
+          "value": "10270"
+        }
+      ],
+      "P345": [
+        {
+          "rank": "normal",
+          "value": "tt2993508"
+        }
+      ],
+      "P400": [
+        {
+          "rank": "normal",
+          "value": "Q1406"
+        },
+        {
+          "rank": "normal",
+          "value": "Q13361286"
+        },
+        {
+          "rank": "normal",
+          "value": "Q5014725"
+        },
+        {
+          "rank": "normal",
+          "value": "Q19610114"
+        },
+        {
+          "rank": "normal",
+          "value": "Q63184502"
+        },
+        {
+          "rank": "normal",
+          "value": "Q98973368"
+        }
+      ],
+      "P495": [
+        {
+          "rank": "normal",
+          "value": "Q36"
+        }
+      ],
+      "P577": [
+        {
+          "rank": "normal",
+          "value": {
+            "precision": 11,
+            "time": "+2015-05-19T00:00:00Z"
+          }
+        },
+        {
+          "rank": "normal",
+          "value": {
+            "precision": 11,
+            "time": "+2015-10-15T00:00:00Z"
+          }
+        },
+        {
+          "rank": "normal",
+          "value": {
+            "precision": 9,
+            "time": "+2021-00-00T00:00:00Z"
+          }
+        },
+        {
+          "rank": "normal",
+          "value": {
+            "precision": 11,
+            "time": "+2021-01-28T00:00:00Z"
+          }
+        }
+      ],
+      "P5794": [
+        {
+          "rank": "normal",
+          "value": "the-witcher-3-wild-hunt"
+        }
+      ],
+      "P6278": [
+        {
+          "rank": "normal",
+          "value": "the-witcher-3-wild-hunt"
+        }
+      ]
+    },
+    "id": "Q4267401",
+    "labels": {
+      "en": "The Witcher 3: Wild Hunt",
+      "es": "The Witcher 3: Wild Hunt",
+      "mul": "The Witcher 3: Wild Hunt",
+      "pt": "The Witcher 3: Wild Hunt"
+    },
+    "refs": {
+      "Q1172164": "CD Projekt RED",
+      "Q13361286": "Xbox One",
+      "Q1406": "Microsoft Windows",
+      "Q1422746": "action role-playing game",
+      "Q19610114": "Nintendo Switch",
+      "Q36": "Poland",
+      "Q42409239": "fantasy video game",
+      "Q5014725": "PlayStation 4",
+      "Q63184502": "PlayStation 5",
+      "Q98973368": "Xbox Series X and Series S"
+    },
+    "sitelinks": {
+      "enwiki": "The Witcher 3: Wild Hunt",
+      "eswiki": "The Witcher 3: Wild Hunt",
+      "ptwiki": "The Witcher 3: Wild Hunt"
+    },
+    "sitelinks_count": 54,
+    "type": "game"
+  },
+  "Q83495": {
+    "aliases": {},
+    "claims": {
+      "P1258": [
+        {
+          "rank": "normal",
+          "value": "m/matrix"
+        }
+      ],
+      "P136": [
+        {
+          "rank": "normal",
+          "value": "Q2484376"
+        },
+        {
+          "rank": "normal",
+          "value": "Q20443008"
+        },
+        {
+          "rank": "normal",
+          "value": "Q174526"
+        },
+        {
+          "rank": "normal",
+          "value": "Q3990883"
+        },
+        {
+          "rank": "normal",
+          "value": "Q1341051"
+        },
+        {
+          "rank": "normal",
+          "value": "Q471839"
+        },
+        {
+          "rank": "normal",
+          "value": "Q188473"
+        },
+        {
+          "rank": "normal",
+          "value": "Q185867"
+        },
+        {
+          "rank": "normal",
+          "value": "Q1535153"
+        }
+      ],
+      "P1651": [
+        {
+          "rank": "normal",
+          "value": "_XrKhqC5rQQ"
+        },
+        {
+          "rank": "normal",
+          "value": "8VOG1nI-27Q"
+        },
+        {
+          "rank": "normal",
+          "value": "dGnqHj6w5Z4"
+        }
+      ],
+      "P1712": [
+        {
+          "rank": "normal",
+          "value": "movie/the-matrix"
+        }
+      ],
+      "P18": [
+        {
+          "rank": "preferred",
+          "value": "The.Matrix.glmatrix.1.png"
+        },
+        {
+          "rank": "normal",
+          "value": "Red and blue pill.jpg"
+        }
+      ],
+      "P2047": [
+        {
+          "rank": "normal",
+          "value": {
+            "amount": "+136",
+            "unit": "Q7727"
+          }
+        }
+      ],
+      "P345": [
+        {
+          "rank": "normal",
+          "value": "tt0133093"
+        }
+      ],
+      "P4947": [
+        {
+          "rank": "normal",
+          "value": "603"
+        }
+      ],
+      "P495": [
+        {
+          "rank": "normal",
+          "value": "Q30"
+        },
+        {
+          "rank": "normal",
+          "value": "Q408"
+        }
+      ],
+      "P57": [
+        {
+          "rank": "normal",
+          "value": "Q9545711"
+        },
+        {
+          "rank": "normal",
+          "value": "Q9544977"
+        }
+      ],
+      "P577": [
+        {
+          "rank": "normal",
+          "value": {
+            "precision": 11,
+            "time": "+1999-03-31T00:00:00Z"
+          }
+        },
+        {
+          "rank": "normal",
+          "value": {
+            "precision": 11,
+            "time": "+1999-07-14T00:00:00Z"
+          }
+        },
+        {
+          "rank": "normal",
+          "value": {
+            "precision": 11,
+            "time": "+1999-06-17T00:00:00Z"
+          }
+        }
+      ]
+    },
+    "id": "Q83495",
+    "labels": {
+      "en": "The Matrix",
+      "es": "The Matrix",
+      "pt": "Matrix",
+      "pt-br": "Matrix"
+    },
+    "refs": {
+      "Q1341051": "post-apocalyptic film",
+      "Q1535153": "superhero film",
+      "Q174526": "cyberpunk",
+      "Q185867": "film noir",
+      "Q188473": "action film",
+      "Q20443008": "dystopian film",
+      "Q2484376": "thriller film",
+      "Q30": "United States",
+      "Q3990883": "action thriller",
+      "Q408": "Australia",
+      "Q471839": "science fiction film",
+      "Q9544977": "Lilly Wachowski",
+      "Q9545711": "Lana Wachowski"
+    },
+    "sitelinks": {
+      "enwiki": "The Matrix",
+      "eswiki": "The Matrix",
+      "ptwiki": "Matrix"
+    },
+    "sitelinks_count": 114,
+    "type": "movie"
+  }
+}
