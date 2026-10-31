@@ -139,18 +139,19 @@ func changeNames(ctx context.Context, db *database.DB, raw json.RawMessage) (map
 	for id, ok := range seen {
 		if ok {
 			ids = append(ids, id)
-			marks = append(marks, fmt.Sprintf("$%d", len(ids)))
+			marks = append(marks, fmt.Sprintf("$%d::uuid", len(ids)))
 		}
 	}
 	if len(ids) == 0 {
 		return names, nil
 	}
 
+	// Compare the uuid column (not id::text) so the primary key index serves the lookup.
 	in := strings.Join(marks, ",")
 	rows, err := db.QueryContext(ctx, `
-SELECT id::text, default_name FROM entities WHERE id::text IN (`+in+`)
+SELECT id::text, default_name FROM entities WHERE id IN (`+in+`)
 UNION ALL
-SELECT id::text, original_title FROM items WHERE original_title IS NOT NULL AND id::text IN (`+in+`)`, ids...)
+SELECT id::text, original_title FROM items WHERE original_title IS NOT NULL AND id IN (`+in+`)`, ids...)
 	if err != nil {
 		return nil, fmt.Errorf("community: load change names: %w", err)
 	}
