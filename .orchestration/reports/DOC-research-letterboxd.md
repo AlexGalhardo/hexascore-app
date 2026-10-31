@@ -13,3 +13,8 @@ validation: links were opened by the researcher, not by me; no claim here is fro
 changelog: none (report only)
 roadmap: no box
 risks / follow-ups: the Phase 7 SDD cannot rely on this report for follows, feed, reviews or blocking. Needs a second pass by browser (claude-in-chrome or agent-browser) on `support.letterboxd.com` articles, or a human reading them. Until then, `docs/web-research.md` §11 stays missing and P7.A.1.1 / P7.B.1.1 refs to Letterboxd remain open (DOC-roadmap-p7-refs patch item 3 and 7).
+
+## Review (especialista, 2026-10-31)
+verdict: APROVADO as parcial (report only)
+checked: the three verified facts are quoted with their page and access date; unverified items are listed as such, nothing is asserted beyond the sources; 403s are a site block, not a method error
+follow-up: the core Phase 7 items (follow model, feed, reviews, blocking, export) stay open under owner question Q-A9; a browser pass or a human read is needed before SDD 14 §12 cites Letterboxd
