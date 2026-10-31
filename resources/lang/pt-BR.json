@@ -120,6 +120,13 @@
       "body": "Se o app travar, envie à HexaScore a versão do app, a versão do Android, a tela e os detalhes do erro. Nenhuma conta, e-mail ou token é incluído. Você pode desativar isso nas Configurações.",
       "allow": "Enviar relatórios",
       "deny": "Não enviar"
+    },
+    "blocked": {
+      "title": "Sua conta está suspensa",
+      "reason": "Motivo: {reason}",
+      "until": "Até {date}",
+      "permanent": "Sem data de término",
+      "back": "Voltar ao login"
     }
   },
   "actions": {

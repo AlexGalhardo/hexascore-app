@@ -61,6 +61,12 @@ export default function RootLayout(): ReactElement | null {
 					<Stack.Protected guard={guards.update}>
 						<Stack.Screen name="update-required" />
 					</Stack.Protected>
+					<Stack.Protected guard={guards.banned}>
+						<Stack.Screen name="banned" />
+					</Stack.Protected>
+					<Stack.Protected guard={guards.deletion}>
+						<Stack.Screen name="deletion-scheduled" />
+					</Stack.Protected>
 					<Stack.Protected guard={guards.auth}>
 						<Stack.Screen name="(auth)/login" />
 					</Stack.Protected>
