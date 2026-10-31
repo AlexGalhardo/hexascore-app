@@ -4,8 +4,10 @@ import type { ReactElement } from "react";
 import { appLocale, rootDeps } from "../src/auth/runtime";
 import { LocaleProvider, routeGuards, useRoot } from "../src/providers/root";
 
-export default function RootLayout(): ReactElement {
+export default function RootLayout(): ReactElement | null {
 	const { state, upgrade } = useRoot(rootDeps);
+	// Every guard is false until the vault is read; render nothing instead of an unmatched route.
+	if (state.kind === "loading" && !upgrade) return null;
 	const guards = routeGuards(state, upgrade);
 	return (
 		<LocaleProvider locale={appLocale}>
