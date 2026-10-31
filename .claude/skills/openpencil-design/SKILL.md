@@ -57,3 +57,11 @@ After each screen: one `export_image` at a small `maxEdge` and look for clipped 
 - The local MCP HTTP endpoint answers 503 to new sessions after a few script runs in the same app session, so `scripts/openpencil/*.py` may fail until OpenPencil restarts; use the MCP tools directly.
 - `render` takes one JSX expression: a `const` before the root never runs ("x is not defined"). Put helpers inside the root, `<Frame …>{(() => { const T = …; return [ … ]; })()}</Frame>`, and avoid spread arguments and destructured parameters (parse error).
 - Clipping is `overflow="hidden"` on a frame; `clip` is ignored with a warning. Without it, a horizontal scroller widens the exported frame.
+- `render` drops children nested more than two array levels deep; flatten lists (`kids.flat(4)`).
+- A wrapper `<Frame w={…}>` without `h` defaults to 100 px tall; frames whose children are hidden keep a fixed height (set `sizing_vertical: HUG`).
+- Text that shows stale (one line, clipped) after render or reopen: `batch_update` `{"sizing_horizontal":"FILL","auto_resize":"HEIGHT"}`.
+- `fontFeatures` / `fontVariantNumeric` on `<Text>` are ignored, so tabular figures cannot be drawn: put numbers in fixed-width, right-aligned text boxes and specify `tabular-nums` in the handoff.
+- `shadow="0 2px 0 #RRGGBB"` (CSS syntax) becomes a drop shadow effect; `shadows={[…]}` is ignored. `justify="between"` gives space-between.
+- Render errors report a line and column that do not map to the source. Syntax-check the expanded JSX first: `docs/openpencil/v1-editorial/src/build.sh <frame.jsx…>` wraps it as a module and runs `bun build --no-bundle`.
+- Long frames often return "RPC timeout (20s)" although the node is created (and a `replace_id` swap completes); check names with `get_page_tree` instead of re-rendering.
+- Replacing a frame that holds component main nodes deletes them; delete the frames that use those components first, then re-render the sheet and call `node_to_component` again. To swap components without breaking old instances, rename the old mains (`old/…`) and render new ones under the original names.
