@@ -5,6 +5,7 @@ package tests
 import (
 	"encoding/xml"
 	"fmt"
+	"regexp"
 	"strings"
 	"testing"
 
@@ -81,6 +82,12 @@ func TestSitemaps(t *testing.T) {
 		AssertSee(`hreflang="es" href="https://example.test/es/games/game-0"`).
 		AssertSee(`hreflang="x-default" href="https://example.test/games/game-0"`).
 		AssertDontSee("game-3").AssertDontSee("game-4")
+
+	// lastmod comes from items.updated_at, which catalog.changed moves on every applied edit (SDD 04 section 6).
+	if !regexp.MustCompile(`<loc>https://example.test/games/game-0</loc><lastmod>\d{4}-\d{2}-\d{2}</lastmod>`).
+		MatchString(items.Body()) {
+		t.Fatalf("item url without lastmod: %s", items.Body())
+	}
 
 	// Entities need 3 public linked items: hidden and takedown links do not count.
 	ent := app.Client(t).Get("/sitemaps/entities-organization-1.xml").AssertOK()

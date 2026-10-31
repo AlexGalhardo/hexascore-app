@@ -9,6 +9,7 @@ import (
 	"io"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
 )
@@ -54,10 +55,10 @@ func (s sitemapSource) name(n int) string { return fmt.Sprintf("%s-%s-%d.xml", s
 // query selects the URL keys of one source; column is a constant, never input.
 func (s sitemapSource) query() string {
 	if s.family == "items" {
-		return `SELECT slug FROM items WHERE type = $1 AND visibility = 'public' ORDER BY id OFFSET $2 LIMIT $3`
+		return `SELECT slug, updated_at FROM items WHERE type = $1 AND visibility = 'public' ORDER BY id OFFSET $2 LIMIT $3`
 	}
 
-	return fmt.Sprintf(`SELECT e.%[1]s FROM entities e
+	return fmt.Sprintf(`SELECT e.%[1]s, e.updated_at FROM entities e
 JOIN item_entities ie ON ie.entity_id = e.id
 JOIN items i ON i.id = ie.item_id AND i.visibility = 'public'
 WHERE e.kind = $1 AND e.%[1]s IS NOT NULL
@@ -82,8 +83,8 @@ func esc(s string) string {
 	return b.String()
 }
 
-// writeURL writes one <url> with the locale alternates of path; x-default is English.
-func writeURL(w io.Writer, base, path string) error {
+// writeURL writes one <url> with the locale alternates of path; x-default is English. A zero lastmod is omitted.
+func writeURL(w io.Writer, base, path string, lastmod time.Time) error {
 	loc := func(prefix string) string {
 		if path == "/" && prefix != "" {
 			return base + prefix
@@ -92,12 +93,17 @@ func writeURL(w io.Writer, base, path string) error {
 		return base + prefix + path
 	}
 
-	_, err := fmt.Fprintf(w, `<url><loc>%[1]s</loc>`+
+	mod := ""
+	if !lastmod.IsZero() {
+		mod = "<lastmod>" + lastmod.UTC().Format(time.DateOnly) + "</lastmod>"
+	}
+
+	_, err := fmt.Fprintf(w, `<url><loc>%[1]s</loc>%[4]s`+
 		`<xhtml:link rel="alternate" hreflang="en" href="%[1]s"/>`+
 		`<xhtml:link rel="alternate" hreflang="pt-br" href="%[2]s"/>`+
 		`<xhtml:link rel="alternate" hreflang="es" href="%[3]s"/>`+
 		`<xhtml:link rel="alternate" hreflang="x-default" href="%[1]s"/></url>`+"\n",
-		esc(loc("")), esc(loc("/pt-br")), esc(loc("/es")))
+		esc(loc("")), esc(loc("/pt-br")), esc(loc("/es")), mod)
 
 	return err
 }
@@ -138,7 +144,7 @@ func WriteSitemap(ctx context.Context, ex database.Executor, w io.Writer, base, 
 		_, _ = io.WriteString(bw, urlsetOpen)
 
 		for _, p := range staticPaths {
-			if err := writeURL(bw, base, p); err != nil {
+			if err := writeURL(bw, base, p, time.Time{}); err != nil {
 				return err
 			}
 		}
@@ -173,8 +179,11 @@ func writeChunk(ctx context.Context, ex database.Executor, w io.Writer, base str
 	written := 0
 
 	for rows.Next() {
-		var key string
-		if err := rows.Scan(&key); err != nil {
+		var (
+			key string
+			mod time.Time
+		)
+		if err := rows.Scan(&key, &mod); err != nil {
 			return err
 		}
 
@@ -184,7 +193,7 @@ func writeChunk(ctx context.Context, ex database.Executor, w io.Writer, base str
 
 		written++
 
-		if err := writeURL(bw, base, "/"+s.path+"/"+key); err != nil {
+		if err := writeURL(bw, base, "/"+s.path+"/"+key, mod); err != nil {
 			return err
 		}
 	}
