@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **lists:** List owners add items from the list edit page with a suggest box limited to the list type (P2.H.1.5)
 - **mobile:** Android API client wrapper with auth, version and locale headers, idempotency keys, problem-code mapping and minimum-version detection (P5.A.3.1)
 - **community:** `Community/SuggestEdit` page with draft save and restore, quota, locked-field reasons, "Suggest an edit" links on item, edition and entity pages, and `community.*` strings in en, pt-BR and es (P4.A.3.1c)
+- **community:** `/suggest/new/{domain}` page to propose a new record or report a duplicate (merge request), drafts only (P4.A.3.2)
+- **community:** Suggestion status page, My suggestions list, and submit and withdraw actions for the author; admins can view, others get 404 (P4.A.3.3)
 
 ### Changed
 

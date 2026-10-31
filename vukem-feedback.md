@@ -20,7 +20,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | VF-NEW-P5.A.3.1 | 2026-10-31 | low | open |
 | VF-NEW-FIX-gate-timeouts | 2026-10-31 | medium | fixed on main, unreleased (PR #106) |
 | VF-NEW-P4.A.3.1b | 2026-10-31 | low | open |
-| VF-NEW-P2.H.3.5 | 2026-10-31 | medium | withdrawn: already provided by inertia.SSRConfig.Cache (v0.33.0); docs clarified |
+| VF-NEW-P2.H.3.5 | 2026-10-31 | medium | withdrawn: already provided by inertia.SSRConfig.Cache (v0.33.0); docs clarified (PR #111) |
 | VF-NEW-FIX-covers-route | 2026-10-31 | low | open |
 | VF-NEW-OWNER-schemathesis | 2026-10-31 | medium | open |
 
