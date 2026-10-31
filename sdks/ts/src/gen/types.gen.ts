@@ -4,6 +4,24 @@ export type ClientOptions = {
     baseUrl: 'https://api.hexascore.app' | (string & {});
 };
 
+export type ActivityDayJson = {
+    day: string;
+    listAdds?: number;
+    ratingsNew?: number;
+    ratingsUpdated?: number;
+    searchClicks?: number;
+    statusCompleted?: number;
+    statusDropped?: number;
+    statusInProgress?: number;
+    statusWant?: number;
+    suggestions?: number;
+    views?: number;
+};
+
+export type ActivityJson = {
+    data?: Array<ActivityDayJson>;
+};
+
 export type ChangeJson = {
     action: 'created' | 'updated' | 'deleted';
     changedAt: string;
@@ -165,6 +183,18 @@ export type Synopsis = {
     text?: string;
 };
 
+export type TrendingEntryJson = {
+    basis: 'trend' | 'prior';
+    item?: ItemJson;
+    rank: number;
+    trendScore?: number;
+};
+
+export type TrendingJson = {
+    computedAt?: string | null;
+    data?: Array<TrendingEntryJson>;
+};
+
 export type UsageJson = {
     plan: string;
     quota?: UsageQuota;
@@ -239,6 +269,44 @@ export type ListBookGenresResponses = {
 };
 
 export type ListBookGenresResponse = ListBookGenresResponses[keyof ListBookGenresResponses];
+
+export type ListBookTrendingData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * en, pt-BR or es
+         */
+        locale?: string;
+    };
+    url: '/api/v1/books/trending';
+};
+
+export type ListBookTrendingErrors = {
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    401: Problem;
+    /**
+     * Validation failed; errors maps each field to its messages
+     */
+    422: Problem;
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    default: Problem;
+};
+
+export type ListBookTrendingError = ListBookTrendingErrors[keyof ListBookTrendingErrors];
+
+export type ListBookTrendingResponses = {
+    /**
+     * OK
+     */
+    200: TrendingJson;
+};
+
+export type ListBookTrendingResponse = ListBookTrendingResponses[keyof ListBookTrendingResponses];
 
 export type ListEditionsData = {
     body?: never;
@@ -503,6 +571,44 @@ export type ListGameGenresResponses = {
 
 export type ListGameGenresResponse = ListGameGenresResponses[keyof ListGameGenresResponses];
 
+export type ListGameTrendingData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * en, pt-BR or es
+         */
+        locale?: string;
+    };
+    url: '/api/v1/games/trending';
+};
+
+export type ListGameTrendingErrors = {
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    401: Problem;
+    /**
+     * Validation failed; errors maps each field to its messages
+     */
+    422: Problem;
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    default: Problem;
+};
+
+export type ListGameTrendingError = ListGameTrendingErrors[keyof ListGameTrendingErrors];
+
+export type ListGameTrendingResponses = {
+    /**
+     * OK
+     */
+    200: TrendingJson;
+};
+
+export type ListGameTrendingResponse = ListGameTrendingResponses[keyof ListGameTrendingResponses];
+
 export type LookupItemData = {
     body?: never;
     path?: never;
@@ -606,6 +712,44 @@ export type ListMovieGenresResponses = {
 };
 
 export type ListMovieGenresResponse = ListMovieGenresResponses[keyof ListMovieGenresResponses];
+
+export type ListMovieTrendingData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * en, pt-BR or es
+         */
+        locale?: string;
+    };
+    url: '/api/v1/movies/trending';
+};
+
+export type ListMovieTrendingErrors = {
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    401: Problem;
+    /**
+     * Validation failed; errors maps each field to its messages
+     */
+    422: Problem;
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    default: Problem;
+};
+
+export type ListMovieTrendingError = ListMovieTrendingErrors[keyof ListMovieTrendingErrors];
+
+export type ListMovieTrendingResponses = {
+    /**
+     * OK
+     */
+    200: TrendingJson;
+};
+
+export type ListMovieTrendingResponse = ListMovieTrendingResponses[keyof ListMovieTrendingResponses];
 
 export type GetOrganizationData = {
     body?: never;
@@ -864,6 +1008,44 @@ export type ListSeriesGenresResponses = {
 
 export type ListSeriesGenresResponse = ListSeriesGenresResponses[keyof ListSeriesGenresResponses];
 
+export type ListSeriesTrendingData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * en, pt-BR or es
+         */
+        locale?: string;
+    };
+    url: '/api/v1/series/trending';
+};
+
+export type ListSeriesTrendingErrors = {
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    401: Problem;
+    /**
+     * Validation failed; errors maps each field to its messages
+     */
+    422: Problem;
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    default: Problem;
+};
+
+export type ListSeriesTrendingError = ListSeriesTrendingErrors[keyof ListSeriesTrendingErrors];
+
+export type ListSeriesTrendingResponses = {
+    /**
+     * OK
+     */
+    200: TrendingJson;
+};
+
+export type ListSeriesTrendingResponse = ListSeriesTrendingResponses[keyof ListSeriesTrendingResponses];
+
 export type ListWebhooksData = {
     body?: never;
     path?: never;
@@ -1120,3 +1302,51 @@ export type GetItemResponses = {
 };
 
 export type GetItemResponse = GetItemResponses[keyof GetItemResponses];
+
+export type GetItemActivityData = {
+    body?: never;
+    path: {
+        /**
+         * games, movies, series or books
+         */
+        type: 'games' | 'movies' | 'series' | 'books';
+        id: string;
+    };
+    query?: {
+        /**
+         * first UTC day, YYYY-MM-DD; default 30 days before to
+         */
+        from?: string;
+        /**
+         * last UTC day, YYYY-MM-DD; default today
+         */
+        to?: string;
+    };
+    url: '/api/v1/{type}/{id}/activity';
+};
+
+export type GetItemActivityErrors = {
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    401: Problem;
+    /**
+     * Validation failed; errors maps each field to its messages
+     */
+    422: Problem;
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    default: Problem;
+};
+
+export type GetItemActivityError = GetItemActivityErrors[keyof GetItemActivityErrors];
+
+export type GetItemActivityResponses = {
+    /**
+     * OK
+     */
+    200: ActivityJson;
+};
+
+export type GetItemActivityResponse = GetItemActivityResponses[keyof GetItemActivityResponses];
