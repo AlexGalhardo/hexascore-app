@@ -48,7 +48,11 @@ func (h *PublicProfile) Show(c *web.Ctx) error {
 
 	p, err := library.LoadProfile(ctx, h.db, c.Param("nickname"), h.viewerID(ctx), i18n.Locale(ctx), offset)
 	if err != nil {
-		return err
+		if h.api {
+			return err
+		}
+
+		return pageError(c, err)
 	}
 
 	hidden := p.IsPrivate && !p.IsOwner
