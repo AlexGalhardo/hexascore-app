@@ -10,6 +10,12 @@ Protocol: `PROMPT-WORKERS.md` section 3. Claim by writing your name in `owner` a
 | 1 | P2.H.1.1 | senior | todo | | | `app/catalog/listing_view.go`, `app/catalog/item_page.go`, `app/catalog/covers.go`, `resources/js/components/CoverThumb.tsx`, `resources/js/components/catalog/`, `resources/js/components/library/ItemLink.tsx`, `database/seeders/demo_catalog.go` | ROADMAP; first visual task, the others depend on it |
 | 1 | P2.H.2.1 | senior | todo | | | `resources/js/components/Skeleton.tsx`, `resources/js/pages/Profile/`, `resources/js/pages/Library/`, `resources/js/pages/Lists/`, `resources/js/pages/Account/`, `resources/js/pages/Developer/`, `resources/js/pages/Billing/`, `app/controllers/profile/`, `app/controllers/library_controller.go`, `app/controllers/lists_pages.go`, `app/controllers/notifications_controller.go` | ROADMAP |
 | 1 | P2.H.3.1 | senior | todo | | | `app/controllers/publicapi/items.go`, `openapi/`, `config/billing.go`, `app/api/quota_middleware.go`, `sdks/`, `resources/docs/rate-limits.md` | ROADMAP; burst number waits for Q-A2, enum part can start |
+| 1 | REBASE-P4.A.2.4 | senior | todo | | | `app/community/`, `app/http/limits/`, `app/jobs/`, `database/migrations/`, `tests/community*` | cherry-pick `86a031e` (community covers and source URL guard) from `agent/implementer/P4.A.2.4` onto a fresh `agent/senior/P4.A.2.4` branch; never merge the old branch (pre-squash base); acceptance of ROADMAP P4.A.2.4; then REV |
+| 1 | ADOPT-VF-001 | senior | todo | | | `app/accounts/`, `app/controllers/account/`, `app/controllers/profile/`, `app/mail/`, `app/requests/`, `database/legacyimport/`, `database/migrations/`, `resources/js/pages/Auth/`, `resources/js/pages/Profile/`, `resources/lang/`, `resources/views/mail/`, `routes/auth.go`, `tests/passkeys*` | owner said `adotar VF-001` (2026-10-31); vukem v0.34.0 ships the passkey API; cherry-pick `1921bbb`, `2efc7ae`, `b438941` from `agent/implementer/P1.C.7.1` onto `agent/senior/P1.C.7.1`, resolve against `main`, acceptance of ROADMAP P1.C.7.1, P1.C.7.2 and P2.F.2.2b; then REV |
+| 1 | FIX-legacy-import-no-login | senior | todo | | | `app/console/`, `cmd/activity/`, `cmd/dbcounts/`, `database/legacyimport/` | cherry-pick `661114b`, `6f99082` from `agent/implementer/import-allow-no-login` (opt-in import of legacy users without login); decide whether `263a3a7` (`cmd/activity`, `cmd/dbcounts` wip tools) stays, moves to `scripts/`, or is dropped; then REV |
+| 2 | FIX-legacy-cover-retry | senior | todo | | | `scripts/legacy/` | cherry-pick `656f426`, `0a35a00` from `agent/implementer/P2.F-data-migration` (retry of legacy cover uploads); then REV |
+| 2 | FIX-export-purge-zip | senior | todo | | | `app/library/export*`, `tests/export*` | cherry-pick `4750ae7` from `agent/especialista/P1.F.4.1-followup-ui-purge-fix` (delete an export zip built after the account purge); then REV |
+| 2 | FW-triage-branches | senior | todo | | | `$FW` branches only | triage vukem `agent/implementer/railway-observability` (1 commit, no PR) and `backup/specialist-feedback-a`: open a PR or delete with a one-line report |
 | 1 | DOC-board-mirror | estagiario | todo | | | `docs/orchestration/BOARD.md` | refresh BOARD.md from this table every day; format in the file |
 | 1 | QA-gate-2026-11-01 | estagiario | todo | | | `.orchestration/reports/QA-gate-2026-11-01.md` | run the four gate commands of ROADMAP "Resuming work" step 2 on `main`, plus `bun run e2e` against the QA container; report failures with the decisive lines |
 | 2 | P2.H.1.2 | senior | todo | | | `resources/js/pages/Catalog/Show.tsx`, `resources/js/components/item/`, `resources/js/components/rating/` | ROADMAP; after P2.H.1.1 |
@@ -32,9 +38,9 @@ Protocol: `PROMPT-WORKERS.md` section 3. Claim by writing your name in `owner` a
 
 | id | why |
 | --- | --- |
-| P1.C.7.1, P1.C.7.2, P2.F.2.2b | `adotar VF-001` not given; draft on branch `agent/implementer/P1.C.7.1` |
+| CI-release-environment (`agent/implementer/manual-access`, commit `e5cfbfd`) | needs the GitHub `Production` environment with a reviewer (P2.B.2.2, owner) before `release.yml` can require it |
 | P2.A.*, P2.B.2.*, P2.C.*, P2.D.5.2, P2.D.6.1, P2.E.2.3, P2.E.3.2, P2.E.4.1, P2.F.1.*, P2.F.5.*, P2.F.6.1, P2.G.* | Railway, DNS, Stripe live, real data, cutover, spend, secrets |
-| P7.* | D-06 amendment (Q-A1) and `v1.0.0` |
+| P7.* | `v1.0.0` (D-06 amended 2026-10-31, Q-A1 answered) |
 
 ## Done
 
