@@ -26,7 +26,10 @@ import (
 func TestSecurity_A07_HexaHoneypotAndFillTime(t *testing.T) {
 	t.Parallel()
 
-	app := vukemtest.New(t, bootstrap.New)
+	// A frozen clock: the fill time must not depend on how long the PoW solves below take
+	// (under -race a solve outlasted MinFill and a 1 s old token turned valid).
+	clock := vukemtest.NewFakeClock(time.Date(2026, 10, 31, 12, 0, 0, 0, time.UTC))
+	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Clock: clock.Now})
 	c := app.Client(t).Inertia("")
 
 	c.Get("/signup").AssertOK().AssertInertia("Auth/Signup").HasProp("formToken")
