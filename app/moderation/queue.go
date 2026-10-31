@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
-	"github.com/AlexGalhardo/vukem/uuid"
+	"github.com/AlexGalhardo/vukem/queue"
 
 	"github.com/AlexGalhardo/hexascore-app/app/community"
 )
@@ -46,6 +46,8 @@ type Queue struct {
 	PageSize int
 	// Applier performs approvals; nil answers ErrApplyUnavailable.
 	Applier Applier
+	// Jobs carries the author notice of a rejection (community.notify); nil sends none.
+	Jobs *queue.Queue
 }
 
 // Filter narrows the queue. Zero values mean "any"; the default status is submitted plus in_review.
@@ -238,7 +240,7 @@ func parseCursor(s string) (time.Time, string, error) {
 	}
 
 	n, err := strconv.ParseInt(micro, 10, 64)
-	if _, uerr := uuid.Parse(id); err != nil || uerr != nil {
+	if err != nil || len(id) != 36 {
 		return time.Time{}, "", ErrBadCursor
 	}
 

@@ -164,7 +164,7 @@ func Admin(r *router.Router, app *vukem.App) error {
 	r.Post("/admin/catalog/{type}/{id}/fields", catalogH.EditFields).Name("admin.catalog.fields").Use(moderator...)
 	moderationH := admin.ModerationHandlers{
 		Pages:    catalogH,
-		Queue:    moderation.Queue{DB: acc.DB, Now: app.Now, Applier: applier},
+		Queue:    moderation.Queue{DB: acc.DB, Now: app.Now, Applier: applier, Jobs: q},
 		Reverter: applier,
 		AuthorizeAudit: func(c *web.Ctx) error {
 			return gate.Authorize(c.Context(), admin.AbilityViewCatalogAudit, nil)

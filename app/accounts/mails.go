@@ -3,6 +3,7 @@ package accounts
 import (
 	"context"
 
+	"github.com/AlexGalhardo/vukem/database"
 	vmail "github.com/AlexGalhardo/vukem/mail"
 	"github.com/AlexGalhardo/vukem/orm"
 
@@ -96,5 +97,21 @@ func (a *Accounts) SendExportReady(ctx context.Context, userID int64, link, expi
 
 	return a.Mailer.SendLater(ctx, mail.ExportReady{
 		User: u, Link: link, Strings: a.mailStrings(ctx, u, "export_ready", noticeFields, "expires", expires),
+	})
+}
+
+// SendSuggestionNoticeTx queues the community notice for state (approved, applied, rejected, reverted, expired) of
+// suggestion id inside ex, in the author's saved locale (SDD 04 FR-04-14).
+func (a *Accounts) SendSuggestionNoticeTx(
+	ctx context.Context, ex database.Executor, userID int64, id, state string,
+) error {
+	u, err := orm.QueryOf[models.User](ex).Where("id", userID).First(ctx)
+	if err != nil {
+		return err
+	}
+
+	return a.Mailer.SendLaterTx(ctx, ex, mail.SuggestionNotice{
+		User: u, Link: a.URL + "/suggestions/" + id,
+		Strings: a.mailStrings(ctx, u, "suggestion_"+state, []string{"greeting", "body", "action"}),
 	})
 }
