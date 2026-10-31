@@ -53,6 +53,20 @@ test("writes carry the caller's Idempotency-Key", async () => {
 	expect(calls[0]?.headers.get("Idempotency-Key")).toBe(key);
 });
 
+test("a failed write carries Retry-After on the ApiError", async () => {
+	const { fetch: f } = stub(
+		429,
+		{ status: 429, code: "item-ratings-limited" },
+		{ "Retry-After": "120", "Content-Type": "application/problem+json" },
+	);
+	const api = createAppClient({ ...base, fetch: f });
+	const error: unknown = await api
+		.write(api.newIdempotencyKey(), (c) => c.ratingsPut({ params: { id: "1" }, body: {} }))
+		.catch((e: unknown) => e);
+	expect(error).toBeInstanceOf(ApiError);
+	expect((error as { retryAfter?: unknown }).retryAfter).toBe(120);
+});
+
 test("a write without an idempotency key does not type-check", () => {
 	const api = createAppClient({ ...base, fetch: stub(200, {}).fetch });
 	// Compile-time only: the function is never called.
