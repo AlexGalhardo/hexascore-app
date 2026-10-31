@@ -180,7 +180,7 @@ Locale prefixes per D-17. User routes: `web` guard + `auth.Verified` (vukem `htt
 
 | Method | Path | Auth | Notes |
 | --- | --- | --- | --- |
-| GET | `/suggest/{target_type}/{id}`, `/suggest/new/{domain}` | verified | Inertia `Community/SuggestEdit` / `SuggestCreate` (target snapshot, editable fields, locks, quota left) |
+| GET | `/suggest/{target_type}/{id}`, `/suggest/new/{domain}` | verified | Inertia `Community/SuggestEdit` / `SuggestCreate` (target snapshot, editable fields, locks, quota left); `?target=entity` or, for books, `?target=edition` switches the create to that kind with its create-only fields (`entity_kind`; `work_id`, `language`) |
 | POST / PATCH | `/suggestions`, `/suggestions/{id}` | author, `draft` | save draft → 303 |
 | POST | `/suggestions/{id}/submit` | author | 303 to status page, or 403/409/422/423/429 |
 | POST | `/suggestions/{id}/withdraw` | author | → 303 |

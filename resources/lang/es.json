@@ -1468,7 +1468,10 @@
       "creators": "Creadores",
       "organizations": "Organizaciones",
       "franchise": "Franquicia",
-      "platforms": "Plataformas"
+      "platforms": "Plataformas",
+      "entity_kind": "Tipo",
+      "work_id": "Libro",
+      "language": "Idioma (código, p. ej. en, pt-BR)"
     },
     "precision": {
       "label": "Precisión",
@@ -1490,7 +1493,14 @@
       "mergeDest": "Registro que se conserva",
       "change": "Cambiar",
       "link": "Sugerir nuevo/a {type}",
-      "missing": "¿No lo encuentras?"
+      "missing": "¿No lo encuentras?",
+      "targets": {
+        "label": "Qué añadir",
+        "item": "Título",
+        "entity": "Persona, empresa o etiqueta",
+        "edition": "Edición de libro"
+      },
+      "choose": "Elige…"
     },
     "status": {
       "title": "Tu sugerencia",
@@ -1538,6 +1548,13 @@
         "system": "HexaScore",
         "user": "miembro"
       }
+    },
+    "entityKinds": {
+      "person": "Persona",
+      "organization": "Organización",
+      "franchise": "Franquicia",
+      "platform": "Plataforma",
+      "genre": "Género"
     }
   },
   "forYou": {

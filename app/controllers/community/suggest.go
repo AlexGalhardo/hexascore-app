@@ -113,7 +113,12 @@ func (h *Suggest) New(c *web.Ctx) error {
 		return inertia.Render(c, "Community/SuggestCreate", inertia.Props{"open": false})
 	}
 
-	page, err := community.LoadCreatePage(c.Context(), h.db, u.ID, c.Param("domain"), kind, h.now())
+	target := c.Query("target")
+	if target == "" {
+		target = "item"
+	}
+
+	page, err := community.LoadCreatePage(c.Context(), h.db, u.ID, c.Param("domain"), kind, target, h.now())
 	if errors.Is(err, community.ErrTargetNotFound) {
 		return errs.ErrNotFound
 	}
@@ -125,6 +130,7 @@ func (h *Suggest) New(c *web.Ctx) error {
 		"open":   true,
 		"domain": page.Domain,
 		"kind":   page.Kind,
+		"target": page.Target,
 		"fields": page.Fields,
 		"quota":  page.Quota,
 		"draft":  page.Draft,
@@ -196,7 +202,12 @@ func (h *Suggest) save(c *web.Ctx, id string) error {
 		return c.Back("/suggest/" + t.Kind + "/" + t.ID)
 	}
 
-	return c.Back("/suggest/new/" + domain + "?kind=" + kind)
+	back := "/suggest/new/" + domain + "?kind=" + kind
+	if kind == "create" && t.Kind != "item" {
+		back += "&target=" + t.Kind
+	}
+
+	return c.Back(back)
 }
 
 // mergeOther is the item type of the merge destination named in the *merge* change; a missing, non-public or

@@ -266,25 +266,36 @@ ORDER BY updated_at DESC LIMIT 1`, authorID, kind, targetType, targetID, domain)
 type CreatePage struct {
 	Domain string     `json:"domain"`
 	Kind   string     `json:"kind"`
+	Target string     `json:"target"`
 	Fields []string   `json:"fields"`
 	Quota  Quota      `json:"quota"`
 	Draft  *DraftView `json:"draft"`
 }
 
-// LoadCreatePage reads the quota and latest draft of kind ("create" or "merge") for domain. An unknown domain or
-// kind is ErrTargetNotFound.
+// LoadCreatePage reads the quota and latest draft of kind ("create" or "merge") and target ("item", "entity" or,
+// for books, "edition") for domain, with the target's fields and its create-only ones. An unknown domain, kind or
+// target, an edition outside books and a merge of anything but items are ErrTargetNotFound.
 func LoadCreatePage(
 	ctx context.Context,
 	db *database.DB,
 	authorID int64,
-	domain, kind string,
+	domain, kind, target string,
 	now time.Time,
 ) (CreatePage, error) {
 	if _, err := targetSchema.Parse(domain); err != nil || (kind != "create" && kind != "merge") {
 		return CreatePage{}, ErrTargetNotFound
 	}
 
-	page := CreatePage{Domain: domain, Kind: kind, Fields: EditableFields("item", domain)}
+	switch {
+	case target == "item":
+	case kind == "merge", target == "edition" && domain != "book", target != "entity" && target != "edition":
+		return CreatePage{}, ErrTargetNotFound
+	}
+
+	page := CreatePage{
+		Domain: domain, Kind: kind, Target: target,
+		Fields: append(EditableFields(target, domain), createOnly[target]...),
+	}
 
 	err := db.Tx(ctx, func(tx *database.Tx) error {
 		used, err := submittedToday(ctx, tx, authorID, now)
@@ -295,7 +306,7 @@ func LoadCreatePage(
 			Limit: dailyLimit, Used: used, Left: max(dailyLimit-used, 0), ResetAt: nextUTCMidnight(now),
 		}
 
-		page.Draft, err = latestDraftOf(ctx, tx, authorID, kind, "item", "", domain)
+		page.Draft, err = latestDraftOf(ctx, tx, authorID, kind, target, "", domain)
 
 		return err
 	})
