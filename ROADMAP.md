@@ -27,7 +27,7 @@ Conventions:
 The work runs through [PROMPT-WORKERS.md](PROMPT-WORKERS.md) (system prompt of the team) and [`.orchestration/`](.orchestration/) (queue, reports, handoffs; versioned in git). Parallel workers need the owner's explicit yes in each new session (global CLAUDE.md rule).
 
 1. Read [`.orchestration/handoff/orchestrator.md`](.orchestration/handoff/orchestrator.md) (state at pause), then [docs/orchestration/QUESTIONS.md](docs/orchestration/QUESTIONS.md) (owner gates and answers) and `C:\dev\hexascore-app\developer-manual-todos.md` (owner checklist, outside the repo).
-2. `git pull`, `docker compose up -d --wait`, and run the gate once: `go build ./...`, `golangci-lint run --allow-parallel-runners --build-tags integration ./...`, `bun install && bun run lint && bun run typecheck && bun run test`, `TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable go test -tags integration ./...`.
+2. `git pull`, `docker compose up -d --wait`, and run the gate once: `go build ./...`, `golangci-lint run --allow-parallel-runners --build-tags integration ./...`, `bun install && bun run lint && bun run typecheck && bun run test`, `TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable go test -tags integration -parallel 4 -timeout 30m ./...`.
 3. Fill `.orchestration/queue/TASKS.md` from the first unchecked microtasks that have no open owner gate (P2.H first), then launch the four workers with the briefs in `.orchestration/briefs/`. Workers stay alive and take the next task from the queue; relaunch only after a context-limit stop.
 4. Orchestrator loop: when the specialist marks a task `PRONTO_PARA_MERGE`, merge the branch with `git merge --no-ff`, run the gate, tick the microtask, renumber `VF-NEW-*` entries (next free: VF-063). `main` is pushed only when the owner asks (the push deploys Railway production).
 5. Releases: `scripts/release.sh vX.Y.Z` on a clean tree (git-cliff), local container smoke test (`hexascore:predeploy` on a fresh database, then `/up?checks=1`), `git push origin main && git push origin vX.Y.Z`; the Release workflow publishes the GitHub release.
@@ -2201,7 +2201,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - `go test -tags integration ./tests -run TestSecurity_A07` → green (no weakening)
     - Playwright: a click on "Log in" 100 ms after `DOMContentLoaded` either submits or shows the pending state; never a silent no-op
 
-- [ ] **P2.H.2.3** Success feedback after rating, status, time-to-beat and list changes (toast via `Flash`), and a message on `/user/two-factor` when the admin area redirected there.
+- [x] **P2.H.2.3** Success feedback after rating, status, time-to-beat and list changes (toast via `Flash`), and a message on `/user/two-factor` when the admin area redirected there.
   - Files/modules: `app/controllers/ratings_controller.go`, `app/controllers/library_controller.go`, `routes/admin.go` (flash before the redirect), `resources/js/components/Flash.tsx`
   - Refs: SDD 09 §7.9; audit A16, A19
   - Depends on: —
@@ -2229,7 +2229,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
   - Acceptance:
     - `go test -race -count=20 -tags integration ./tests -run TestSecurity_A07_HexaHoneypotAndFillTime` → 20/20 green
 
-- [ ] **P2.H.3.3** One admin layout: the custom `admin/ingestion` page uses the vukem admin navigation (same 11 entries) or is registered as a vukem admin page.
+- [x] **P2.H.3.3** One admin layout: the custom `admin/ingestion` page uses the vukem admin navigation (same 11 entries) or is registered as a vukem admin page.
   - Files/modules: `app/admin/*`, `resources/views/admin/ingestion.html` (or the vukem admin registration)
   - Refs: <https://vukem.dev/docs/digging-deeper/admin>; audit A17
   - Depends on: —
