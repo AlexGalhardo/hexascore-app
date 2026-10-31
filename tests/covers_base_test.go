@@ -15,7 +15,8 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/search"
 )
 
-// TestCoversBaseJSONAbsolute: with COVERS_BASE_URL set, the /app/v1 JSON (list items, search hits) and the
+// TestCoversBaseJSONAbsolute: with COVERS_BASE_URL set, the /app/v1 JSON (list items, search hits, library,
+// public profile ratings) and the
 // suggest JSON carry absolute cover URLs, while the Inertia props keep app paths and share the trimmed base.
 func TestCoversBaseJSONAbsolute(t *testing.T) {
 	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{
@@ -51,7 +52,11 @@ VALUES ($1, 'game', 'game-0', 'Q5000', 10, 'covers/a-1.webp', 'covers/a-1-t.webp
 	}
 
 	r := &listRig{t: t, app: app, acc: acc}
-	_, owner := r.user("covers-base@example.com", "lists:write", "catalog:read")
+	u, owner := r.user("covers-base@example.com", "lists:write", "catalog:read")
+	r.setNickname(u, "CoverFan", false)
+	r.status(u.ID, itemID, "want")
+	exec(`INSERT INTO ratings (user_id, item_id, c1, c2, c3, c4, c5, c6) VALUES ($1, $2, 50, 50, 50, 50, 50, 50)`,
+		u.ID, itemID)
 	id, _ := owner.PostJSON("/app/v1/lists", listBody("game", "Covers")).AssertStatus(201).JSONPath("id")
 	path := fmt.Sprintf("/app/v1/lists/%v", id)
 	owner.PutJSON(path+"/items/"+itemID, map[string]any{}).AssertOK()
@@ -64,6 +69,10 @@ VALUES ($1, 'game', 'game-0', 'Q5000', 10, 'covers/a-1.webp', 'covers/a-1-t.webp
 	owner.GetJSON("/app/v1/search?q=zelda").AssertOK().
 		AssertJSONPath("data.0.cover.thumb", thumb).
 		AssertJSONPath("data.0.cover.full", full)
+	owner.GetJSON("/app/v1/me/library").AssertOK().
+		AssertJSONPath("groups.0.items.0.cover.thumb", thumb)
+	owner.GetJSON("/app/v1/users/coverfan").AssertOK().
+		AssertJSONPath("ratings.0.cover.thumb", thumb)
 	app.Client(t).Get("/search/suggest?q=zel").AssertOK().AssertJSONPath("data.0.coverThumbUrl", thumb)
 	app.Client(t).Get("/app/v1/search/suggest?q=zel").AssertOK().AssertJSONPath("data.0.coverThumbUrl", thumb)
 
