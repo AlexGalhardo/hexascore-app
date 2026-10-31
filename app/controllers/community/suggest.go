@@ -113,9 +113,8 @@ func (h *Suggest) save(c *web.Ctx, id string) error {
 		return problemError(err)
 	}
 
-	t := community.Target{Kind: f.TargetKind, ID: f.TargetID}
-	domain, err := community.TargetDomain(c.Context(), h.db, t, f.Domain)
-	if errors.Is(err, community.ErrTargetNotFound) {
+	t, domain, err := h.target(c, u.ID, id, f)
+	if errors.Is(err, community.ErrTargetNotFound) || errors.Is(err, community.ErrDraftNotFound) {
 		return errs.ErrNotFound
 	}
 	if err != nil {
@@ -139,6 +138,18 @@ func (h *Suggest) save(c *web.Ctx, id string) error {
 	}
 
 	return c.Back("/suggest/" + t.Kind + "/" + t.ID)
+}
+
+// target is the request's target on create and the stored one on update (the body's target fields are ignored).
+func (h *Suggest) target(c *web.Ctx, authorID int64, id string, f draftForm) (community.Target, string, error) {
+	if id != "" {
+		return community.DraftTarget(c.Context(), h.db, authorID, id)
+	}
+
+	t := community.Target{Kind: f.TargetKind, ID: f.TargetID}
+	domain, err := community.TargetDomain(c.Context(), h.db, t, f.Domain)
+
+	return t, domain, err
 }
 
 // problemError maps community errors onto the SDD 04 §6 problem table; unknown errors pass through.
