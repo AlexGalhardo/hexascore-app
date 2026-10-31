@@ -28,10 +28,11 @@ App (local `main`):
 | REV-P5.A.3.2 | APROVADO incl. late commit 7cc7586 (Q-B1 deps, ADR 0019); ticked | 2600b4a |
 | REV-FIX-mobile-login-test-timeout | APROVADO | 6d5708a |
 | REV-FIX-ssr-supervise-flake | APROVADO | b6c3fe8 |
+| REV-FIX-search-prod-slow (prio 0) | CORRIGIDO_E_APROVADO (SDD 07 documents the 500-row trigram cap, lower-bound totals and the transaction-local `enable_seqscan = off`; golines); p95 345 ms on the 160k seed, above NFR-07-1 | 1c95323 |
 | (own) FIX-mobile-catalogues-sync | mobile catalogue copies regenerated after the web string changes | 0237ecc |
 | (own) FIX-gate-lint | 5 golangci issues in the new tests (golines, gci, gofumpt, rowserrcheck) | b344207 |
 
-Gates on main: batch 1 (f9bcb8f) all green. Batch 2 (311e39b): build, bun, vitest 27/96 and `go test -tags integration ./...` green, golangci 5 issues fixed in FIX-gate-lint; re-check after b344207 + 7ebbc1a: golangci 0 issues, bun lint/typecheck/test green, `./tests -run 'Community|RouteStackInventory'` and `tests/i18n` ok.
+Gates on main: batch 1 (f9bcb8f) all green. Batch 2 (311e39b): build, bun, vitest 27/96 and `go test -tags integration ./...` green, golangci 5 issues fixed in FIX-gate-lint; re-check after b344207 + 7ebbc1a, then full gate on 1c95323 all green: golangci 0 issues, bun lint/typecheck/test green, `./tests -run 'Community|RouteStackInventory'` and `tests/i18n` ok.
 
 ## Open
 
