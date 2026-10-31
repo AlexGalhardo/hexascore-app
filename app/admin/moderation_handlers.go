@@ -184,6 +184,7 @@ func (h ModerationHandlers) move(
 func mapError(err error) error {
 	var (
 		te *community.TransitionError
+		pe *community.Problem
 		ie *moderation.InvalidError
 	)
 
@@ -204,6 +205,10 @@ func mapError(err error) error {
 		return errs.NewValidation().Add("action", "Unknown bulk action.")
 	case errors.As(err, &ie):
 		return errs.NewValidation().Add(ie.Field, ie.Msg)
+	case errors.Is(err, community.ErrApplyDeadlock):
+		return errs.New(http.StatusServiceUnavailable, "The catalogue was busy. Try the approval again.")
+	case errors.As(err, &pe):
+		return errs.New(pe.Status, pe.Code)
 	case errors.As(err, &te):
 		return errs.New(te.Status, te.Code)
 	default:

@@ -107,12 +107,17 @@ func (q Queue) version(ctx context.Context, id string) (int, error) {
 func code(err error) string {
 	var (
 		te *community.TransitionError
+		pe *community.Problem
 		ie *InvalidError
 	)
 
 	switch {
 	case err == nil:
 		return ""
+	case errors.Is(err, community.ErrApplyDeadlock):
+		return "apply-deadlock"
+	case errors.As(err, &pe):
+		return pe.Code
 	case errors.Is(err, ErrNotFound):
 		return "not-found"
 	case errors.Is(err, ErrNotAssignee):

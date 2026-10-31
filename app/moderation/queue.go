@@ -44,7 +44,7 @@ type Queue struct {
 	DB       *database.DB
 	Now      func() time.Time
 	PageSize int
-	// Applier performs approvals; nil until P4.B.2.1 lands.
+	// Applier performs approvals; nil answers ErrApplyUnavailable.
 	Applier Applier
 }
 

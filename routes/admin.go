@@ -157,8 +157,10 @@ func Admin(r *router.Router, app *vukem.App) error {
 		Name("admin.items.affiliate.delete").Use(moderator...)
 	r.Post("/admin/items/{id}/merge", catalogH.Merge).Name("admin.items.merge").Use(moderator...)
 	moderationH := admin.ModerationHandlers{
-		Pages:     catalogH,
-		Queue:     moderation.Queue{DB: acc.DB, Now: app.Now},
+		Pages: catalogH,
+		Queue: moderation.Queue{
+			DB: acc.DB, Now: app.Now, Applier: community.Applier{DB: acc.DB, Queue: q, Now: app.Now},
+		},
 		Authorize: func(c *web.Ctx) error { return gate.Authorize(c.Context(), admin.AbilityModerate, nil) },
 	}
 	r.Get("/admin/moderation", moderationH.Index).Name("admin.moderation").Use(auth.Required(acc.Web), csrfMW)
