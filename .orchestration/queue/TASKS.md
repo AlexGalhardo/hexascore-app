@@ -56,9 +56,9 @@ Protocol: `PROMPT-WORKERS.md` section 3. Claim by writing your name in `owner` a
 | 3 | P4.A.3.1 | senior | merged | senior-a | agent/senior/P4.A.3.1 | `resources/js/pages/Community/`, `app/controllers/community/`, `routes/community.go` | part 1 of 3 (SaveDraft service) delivered, report reports/P4.A.3.1.md @ 296a3db; parts 2-3 proposed as rows below |
 | 1 | REV-P4.A.3.1 | especialista | merged | especialista | agent/senior/P4.A.3.1 | `.orchestration/reports/P4.A.3.1.md` | review of P4.A.3.1 part 1 (296a3db); CORRIGIDO_E_APROVADO, merged 7bf0b7d; 3.1b next |
 | 1 | REV-P4.A.3.1b | especialista | ready | especialista | agent/senior/P4.A.3.1b | `.orchestration/reports/P4.A.3.1b.md` | review of P4.A.3.1b (2923481); after REV-P4.A.3.1; CORRIGIDO_E_APROVADO (stored target fix 4251fe3), merged f78ad42 |
-| 1 | REV-P4.A.3.1c | especialista | doing | especialista | agent/senior/P4.A.3.1c | `.orchestration/reports/P4.A.3.1c.md` | review of P4.A.3.1c (4d346a9); after REV-P4.A.3.1b; APROVADO, merge queued (freeze v0.12.0); e2e community+auth 54/54 |
+| 1 | REV-P4.A.3.1c | especialista | ready | especialista | agent/senior/P4.A.3.1c | `.orchestration/reports/P4.A.3.1c.md` | review of P4.A.3.1c (4d346a9); after REV-P4.A.3.1b; APROVADO, merge queued (freeze v0.12.0); e2e community+auth 54/54; merged 34efea6 |
 | 3 | P4.A.3.1b | senior | ready | senior-a | agent/senior/P4.A.3.1b | `app/controllers/community/`, `routes/community.go`, `app/community/` | report reports/P4.A.3.1b.md @ 2923481; branched from agent/senior/P4.A.3.1, merge in order; merged f78ad42 |
-| 3 | P4.A.3.1c | senior | review | senior-a | agent/senior/P4.A.3.1c | `resources/js/pages/Community/`, `resources/js/components/community/`, `resources/lang/`, `resources/js/pages/Catalog/Show.tsx`, `qa/e2e/specs/community-draft.spec.ts` | report reports/P4.A.3.1c.md @ 4d346a9; chain 3.1 -> 1b -> 1c, merge in order |
+| 3 | P4.A.3.1c | senior | ready | senior-a | agent/senior/P4.A.3.1c | `resources/js/pages/Community/`, `resources/js/components/community/`, `resources/lang/`, `resources/js/pages/Catalog/Show.tsx`, `qa/e2e/specs/community-draft.spec.ts` | report reports/P4.A.3.1c.md @ 4d346a9; chain 3.1 -> 1b -> 1c, merge in order; merged 34efea6 |
 | 3 | P2.H.3.6 | senior | todo | | | `CHANGELOG.md`, `docs/PROGRESS.md`, `ROADMAP.md` | release `v0.16.0`; the owner pushes the tag; after every P2.H row |
 | 3 | QA-mobile-proto-review | estagiario | review | estagiario | | `.orchestration/reports/QA-mobile-proto-review.md` |
 | 3 | REV-QA-mobile-proto-review | especialista | ready | especialista | | `.orchestration/reports/QA-mobile-proto-review.md` | review of QA-mobile-proto-review (report only); APROVADO |
@@ -140,13 +140,14 @@ Protocol: `PROMPT-WORKERS.md` section 3. Claim by writing your name in `owner` a
 | 1 | REV-FW-otlp-pr | especialista | ready | especialista | fw:fix/railway-otlp-traces | `$FW` `drivers/otel/`, site docs | review reports/FW-otlp-pr.md; refresh site/content/last-updated.json, push, PR, merge when GitHub CI green; PR #104 open, waiting for GitHub CI; PR #104 merged daf6d302 |
 | 1 | VF-NEW-AUDIT-1 | senior | review | senior-fw | fw: | `$FW` (locate) | vukem-feedback.md: service-raised 404 renders the bare framework page in an Inertia app (medium) |
 | 1 | REV-VF-NEW-AUDIT-1 | especialista | todo | | fw:fix/vf-inertia-html-error-page | `$FW` `inertia` | review reports/VF-NEW-AUDIT-1.md; run task api:check; push, PR, merge when GitHub CI green |
-| 1 | VF-NEW-AUDIT-3 | senior | doing | senior-fw | fw: | `$FW` (locate) | vukem-feedback.md: DisableSSR pages ship an empty root element (medium) |
+| 1 | VF-NEW-AUDIT-3 | senior | review | senior-fw | fw: | `$FW` (locate) | vukem-feedback.md: DisableSSR pages ship an empty root element (medium) |
+| 1 | REV-VF-NEW-AUDIT-3 | especialista | todo | | fw:fix/vf-inertia-csr-shell | `$FW` `inertia` | review reports/VF-NEW-AUDIT-3.md; run task api:check; push, PR, merge when GitHub CI green |
 | 1 | VF-NEW-AUDIT-5 | senior | doing | senior-fw | fw: | `$FW` (locate) | vukem-feedback.md: custom admin pages do not inherit the admin navigation (medium) |
 | 1 | VF-NEW-AUDIT-6 | senior | review | senior-fw | fw: | `$FW` `ratelimit` | vukem-feedback.md: rate limiter has no burst allowance (medium) |
 | 1 | REV-VF-NEW-AUDIT-6 | especialista | todo | | fw:fix/vf-ratelimit-burst | `$FW` `ratelimit` | review reports/VF-NEW-AUDIT-6.md; push, PR, merge when GitHub CI green |
 | 1 | VF-NEW-FIX-gate-timeouts | senior | review | senior-fw | fw: | `$FW` `pgtest` | vukem-feedback.md: pgtest drop timeout fixed at 30 s (medium) |
 | 1 | REV-VF-NEW-FIX-gate-timeouts | especialista | todo | | fw:fix/vf-pgtest-drop-timeout | `$FW` `drivers/postgres/pgtest` | review reports/VF-NEW-FIX-gate-timeouts.md; push, PR, merge when GitHub CI green |
-| 1 | VF-NEW-P2.H.3.5 | senior | todo | | fw: | `$FW` (SSR) | vukem-feedback.md: no page output cache keeping the CSP nonce per request (medium; design first, may need owner yes if API is large) |
+| 1 | VF-NEW-P2.H.3.5 | senior | doing | senior-fw | fw: | `$FW` (SSR) | vukem-feedback.md: no page output cache keeping the CSP nonce per request (medium; design first, may need owner yes if API is large) |
 | 2 | VF-NEW-AUDIT-2 | senior | todo | | fw: | `$FW` (scaffold) | vukem-feedback.md: default app name "Vukem" leaks into a scaffolded app (low) |
 | 2 | VF-NEW-AUDIT-4 | senior | todo | | fw: | `$FW` (inertia loader) | vukem-feedback.md: inert-until-hydrated loader has no styling hook (low) |
 | 2 | VF-NEW-P2.H.3.1 | senior | todo | | fw: | `$FW` (typed handlers/openapi) | vukem-feedback.md: doc-only enum on path params (low) |
