@@ -211,7 +211,7 @@ func searchErr(err error) error {
 	case errors.Is(err, search.ErrInvalidQuery):
 		return errs.New(http.StatusBadRequest, err.Error())
 	case errors.Is(err, search.ErrTimeout):
-		return errs.New(http.StatusServiceUnavailable, "search timeout")
+		return errs.New(http.StatusServiceUnavailable, "search timeout").WithHeader("Retry-After", "5")
 	}
 
 	return err

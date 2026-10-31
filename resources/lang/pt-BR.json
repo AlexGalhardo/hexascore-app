@@ -1145,6 +1145,7 @@
     "resultsFor": "Resultados para “{q}”",
     "prompt": "Busque jogos, filmes, séries e livros pelo título.",
     "tooShort": "Digite pelo menos 2 caracteres.",
+    "unavailable": "A busca está ocupada agora. Tente novamente em alguns segundos.",
     "noResults": "Nada encontrado para “{q}”. Confira a grafia ou tente outro título.",
     "all": "Todos",
     "suggestions": "Sugestões",

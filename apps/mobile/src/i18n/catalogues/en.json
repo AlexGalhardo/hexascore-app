@@ -421,6 +421,7 @@
 	"search.resultsFor": "Results for “{q}”",
 	"search.prompt": "Search games, movies, TV series and books by title.",
 	"search.tooShort": "Type at least 2 characters.",
+	"search.unavailable": "Search is busy right now. Please try again in a few seconds.",
 	"search.noResults": "Nothing found for “{q}”. Check the spelling or try another title.",
 	"search.all": "All",
 	"search.suggestions": "Suggestions",
