@@ -16,11 +16,6 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | VF-NEW-AUDIT-4 | 2026-10-31 | low | open |
 | VF-NEW-AUDIT-5 | 2026-10-31 | medium | open |
 | VF-NEW-AUDIT-6 | 2026-10-31 | medium | open |
-| VF-NEW-P2.H.3.1 | 2026-10-31 | low | open |
-| VF-NEW-P5.A.3.1 | 2026-10-31 | low | open |
-| VF-NEW-FIX-gate-timeouts | 2026-10-31 | medium | open |
-| VF-NEW-P4.A.3.1b | 2026-10-31 | low | open |
-| VF-NEW-P2.H.3.5 | 2026-10-31 | medium | open |
 
 ## VF-062: A typed POST that returns a body defaults to 201, including commands that do not create a resource
 
@@ -78,43 +73,3 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 - **Context**: the public API free plan is 1 request/second; the first request leaves `ratelimit-remaining: 0` and the second within the same second is 429. Every sequential client script fails on its second call (audit 2026-10-31).
 - **Workaround**: none; P2.H.3.1 proposes a burst in the app layer if the framework has none.
 - **Request**: a token-bucket mode (`Limit{Rate: 1, Burst: 5}`) in `ratelimit`, with `RateLimit-Policy` headers reflecting it, or a documented way to compose two limits (per second and per minute) on one route.
-
-## VF-NEW-P2.H.3.1: No way to document an enum on a typed-handler path parameter without enforcing it as a 422
-
-- **Date**: 2026-10-31. **Severity**: low. **Status**: open.
-- **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/rest-apis/typed-handlers> "The input". The only tag that puts `enum` in the OpenAPI schema is `validate:"oneof=..."`, which also rejects the request with a 422 before the handler runs [NOT IN VUKEM DOCS: a doc-only enum].
-- **Context**: `GET /api/v1/{type}` and `/{type}/{id}` must document `games|movies|series|books` for SDK users, but the API contract answers an unknown type with 400 `invalid-query` that the quota refunds (SDD 05 FR-05-4).
-- **Workaround**: `validate:"oneof=..."` on `ListItemsInput.Type` and `GetItemInput.Type`, plus `publicapi.TypeGuard` (last middleware of the `/api/v1` group) that answers the 400 first. `// workaround(vukem): VF-NEW-P2.H.3.1`.
-- **Request**: a documentation-only tag (for example `enum:"a,b"`) or an `api.Op` option to map validation errors to a chosen status.
-
-## VF-NEW-P5.A.3.1: Generated ApiProblem type has no `code` field although problem responses carry one
-
-- **Date**: 2026-10-31. **Severity**: low. **Status**: open.
-- **vukem version**: v0.34.0 (per the P2.H.3.1 entry). **Docs consulted**: <https://vukem.dev/docs/rest-apis/overview> "Responses and errors": the page documents RFC 9457 problem details (`type`, `title`, `status`, `detail`, `instance`, `errors`) and no `code` member; the page has no section on the generated client, `codegen:client` or an `ApiProblem` type [NOT IN VUKEM DOCS: client codegen output shape].
-- **Context**: `packages/app-client/src/api.ts` (generated, P5.A.3.1 branch) declares `ApiProblem` with `type`, `title`, `status`, `detail`, `instance`, `request_id`, `errors`, and no `code`. The HexaScore SDD 05 problem codes travel in that field, so `apps/mobile/src/api/problems.ts` reads `code` through an `unknown` cast.
-- **Workaround**: `(error.problem as { code?: unknown } | undefined)?.code` in `apps/mobile/src/api/problems.ts`; the mobile tests cover unknown codes. `// workaround(vukem): VF-NEW-P5.A.3.1` to be added with the mobile task.
-- **Request**: codegen types a `code` member on problem responses, or the framework documents the problem extension members it writes.
-
-## VF-NEW-FIX-gate-timeouts: pgtest drop timeout is fixed at 30 s and fails parallel suites on slow disks
-
-- **Date**: 2026-10-31. **Severity**: medium. **Status**: open.
-- **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/testing/database> [NOT VERIFIED whether the page documents the cleanup timeout; checked the behaviour from the error only].
-- **Context**: `pgtest` drops each per-test database with `DROP DATABASE ... WITH (FORCE)` under a 30 s context. The drop forces a checkpoint; with about 130 parallel integration tests on Docker Desktop for Windows the fsync-bound checkpoint exceeds 30 s and the run fails with `pgtest: drop database ...: context deadline exceeded` although every assertion passed (`go test -tags integration -parallel 4 ./tests/`: FAIL after 717 s, three times).
-- **Workaround**: dev/test Postgres in `docker-compose.yml` runs with `fsync=off`, `full_page_writes=off`, `synchronous_commit=off` (FIX-gate-timeouts, 717 s FAIL to 245 s ok). Production is untouched.
-- **Request**: make the drop timeout configurable (`pgtest.Options{DropTimeout}` or an env var), or drop asynchronously after the test reports, so cleanup cannot fail a green test.
-
-## VF-NEW-P4.A.3.1b: Flag name rules are undocumented and registering a flag silently mounts `/admin/_flags`
-
-- **Date**: 2026-10-31. **Severity**: low. **Status**: open.
-- **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/digging-deeper/feature-flags> [NOT IN VUKEM DOCS: the allowed name characters and the admin panel side effect].
-- **Context**: the SDD named flags `community.submissions` and `community.trusted_moderators`; vukem's flag name check (`nameRe`) accepts only `[a-z0-9_]`, found only by reading the source. Registering the first flag with `WithFlags` also mounts the `/admin/_flags` panel, which surfaced as new admin routes in the route-inventory security test.
-- **Workaround**: flags renamed to `community_submissions` / `community_trusted_moderators` (env `FLAG_COMMUNITY_SUBMISSIONS`), SDD 04 §6 amended, route inventory updated.
-- **Request**: document the name pattern and the env mapping on the feature-flags page, and either document the automatic `/admin/_flags` mount or make it opt-in.
-
-## VF-NEW-P2.H.3.5: No page output cache that keeps the CSP nonce per request
-
-- **Date**: 2026-10-31. **Severity**: medium. **Status**: open.
-- **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/frontend/ssr> [NOT IN VUKEM DOCS: an SSR output cache or a cache hook].
-- **Context**: every anonymous first load runs SSR, so the page TTFB budget (k6 p75 ≤ 400 ms, SDD 09 §4) failed under load (470 to 1850 ms). Caching the rendered document in the app is unsafe by default because the body carries the per-request CSP nonce; the first draft replayed the cached CSP header and broke `TestSecurity_A05_NonceIsPerRequestAndInPage`.
-- **Workaround**: app middleware `RenderCache` (P2.H.3.5): anonymous GETs cached in process for 60 s, key = path + query + theme/consent/locale cookies, the cached body's nonce swapped for the current request's nonce, CSP never replayed; p75 157 to 296 ms. `// workaround(vukem): VF-NEW-P2.H.3.5`.
-- **Request**: an opt-in SSR output cache (TTL, vary keys, bypass on session cookie) that injects the request nonce at serve time, or a documented hook to cache the SSR HTML before nonce injection.
