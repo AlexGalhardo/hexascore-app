@@ -1,36 +1,21 @@
-# orchestrator handoff (2026-10-30, session paused by the owner)
+# orchestrator handoff (2026-10-31, after the architecture audit)
 
-`.orchestration/STOP` exists: workers finish their current step and stop. Delete it when resuming.
+No workers are running. The previous three-role orchestration (`framework`, `implementer`, `reviewer`) was closed; the five-role team of `PROMPT-WORKERS.md` starts from this state.
 
-## How this session ran
+## State
 
-- Owner rules for the session (also in memory and briefs): workers stay alive in standby and get tasks by message (`briefs/common-app.md` "Standby rule"); relaunch a worker only when its session hits the context limit (it ends with `STATUS: IDLE "context limit"` after updating its handoff). Parallel workers and pushes to `main` were approved for this goal; ask again in a new session (global CLAUDE.md rule).
-- Owner gates still apply: Railway plan/buckets/DNS/secrets, Stripe live values (Q-H31), Google Play, cutover. Recorded decisions are in `docs/orchestration/QUESTIONS.md` (FR-003 answer, FD-011/FD-014/FD-044/FQ-004 answers, owner requests for VF-001, VF-052, VF-055, VF-056, VF-057, VF-059, processed_events decision, drivers/s3 decision).
-- The orchestrator (main session) merges vukem PRs with `gh pr merge <n> --squash` (owner authorized; workers must not). Releases of vukem only on owner request.
-- Railway: CLI linked in `hexascore-vukem` to project `hexascore` / `production` / `app`. Reading variables works; `Bash(railway variables:*)` is now in the owner's allow list. A harmless test variable `ORCHESTRATOR_ACCESS_CHECK=2026-10-30` exists on `app` (remove it when convenient). Store variables are correct: `RATE_LIMIT_STORE=cache`, `CACHE_STORE=database`, `SESSION_DRIVER=database`.
+- App `main` = `origin/main` = `v0.11.0` (`d5cd4c9`) plus the audit commits of 2026-10-31 (not pushed). Safety tags/branches: `checkpoint/pre-audit-main-2026-10-31` (old local tip), `checkpoint/audit-worktree-2026-10-31` (dirty tree before the cleanup).
+- vukem checkout on `main` (`ee8477a4`, after v0.34.0); no open PRs or issues; VF-062 fixed on `main`, unreleased.
+- Gate on `main`: `go build`, `golangci-lint` (touched packages), `bun run lint/typecheck/test`, seeder and lists/profile/auth/API integration tests green. CI on `origin/main` is red because of the flaky `TestSecurity_A07_HexaHoneypotAndFillTime` (row P2.H.3.2, prio 0).
+- QA container: `E2E_IMAGE_TAG=audit` stack on `127.0.0.1:3000` (stop it with `E2E_IMAGE_TAG=audit docker compose --profile app down` when done).
+- Board seeded: `queue/TASKS.md` (P2.H rows, intern QA and docs rows, specialist SDD draft).
 
-## State at pause
+## Owner items open
 
-- App: `main` released as `v0.8.0` (P1.H.5.1, GitHub release published, local container smoke test green). Merged after the tag: nothing but orchestration files.
-- Gate commands (all green at the last merge): `go build ./...`; `golangci-lint run --allow-parallel-runners --build-tags integration ./...`; `TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable go test -tags integration ./...`; `bun run lint && bun run typecheck && bun run test`; `bun run openapi:lint`; markdownlint with an explicit file list. Tests booting with `APP_ENV=production` need `RATE_LIMIT_STORE=cache` and `CACHE_STORE=database`.
-- Merge helper: `/tmp/union.py` (union-resolves `.md` conflicts); code conflicts are resolved by hand. VF-NEW ids are renumbered at merge (next free: VF-062).
-- Merged at pause: P2.F.4.1 (`hexascore:cutover-verify`, `finalise` stage; gate green).
-- Senior at stop: P1.I.3.1 delivered (k6, REV queued), FIX-locale-posts-rest delivered (REV queued; stacked on the merged FIX-locale-redirects-fix), P1.I.5.1 partial: requeued as `queue/senior/0-P1.I.5.1-r2.md` with a BREACH finding (global gzip must be limited to static assets before merge).
-- Not merged: `agent/senior/FIX-e2e-signup-load` (approved, but conflicts with P2.D.2.3 in `app/http/middleware/challenge.go`); requeued as `queue/senior/0-FIX-e2e-signup-load-r2.md`.
-
-## Workers at pause
-
-- senior: stopped. Queue: 0-P1.I.5.1-r2, 0-FIX-e2e-signup-load-r2, 5-P1.I.4.1, 6-P2.B.1.4, 6-P2.B.1.5, 7-P2.C.1.2, 7-P2.C.2.2, 8-P2.D.5.3.
-- especialista: stopped after P2.F.4.1 (merged) and the FIX-e2e-signup-load review (approved; the branch still needs the r2 rebase). Queue: 1-REV-P1.I.3.1, 1-REV-FIX-locale-posts-rest, 5-P2.G.1.1, 6-P2.E.1.2, 7-P2.C.3.3; blocked 9-APP-PASSKEYS-b (needs a vukem release with VF-001), 9-P2.F.2.2b (needs P1.C.7.1 passkeys table).
-- framework: idle. Active (PRs open): DOCS-SITE-REFRESH (item 2, the full `last-updated.json` refresh, waits until #88-#91 merge), FW-CI-WINDOWS-FLAKES (#80, #81), VF-052 (#66/#67 to recreate on main now that #65 merged), VF-044 (#82), VF-057 (#87), VF-059 (#63).
-- estagiario: idle since P2.A.1.1.
-
-## vukem PRs open (merge in this order, `gh pr update-branch` when BEHIND, rerun a failed job once before treating it as real)
-
-#63, #71, #77, #80, #81, #82, #87, #88, then #89, #90, #91 (docs; after them ask the framework for the full last-updated refresh), dependabot #83-#86, then the recreated #66/#67 replacements. Merged this session: #36-#43, #45-#47, #51-#59, #61, #64, #65, #68-#70, #72-#76, #78, #79. Issues #19 and #5 closed.
+`developer-manual-todos.md` (39 P2 gates), `docs/orchestration/QUESTIONS.md` Q-H31, Q-A1 (social layer / D-06), Q-A2 (API burst), Q-A3 (Docker cleanup), Q-A4 (unmerged branches to decide), `adotar VF-001`.
 
 ## Next
 
-1. Resume: delete STOP, `git pull`, `docker compose up -d --wait`, run the gate, relaunch the four workers from their handoffs.
-2. Merge the vukem PRs above; ask the owner whether to release vukem (v0.34.0: passkeys, React Email, jsonrpc, HTTP/2+3, Cloudflare, notify, Betterleaks, sitemap, httpclient, impersonation, OpenAPI options); after the release queue `ADOPT-vukem-v0.34.0` (incl. `notify`, `PageOf`, `HashRecoveryCode`, passkeys P1.C.7.x, Cloudflare `TRUSTED_PROXIES` notes, regenerate OpenAPI goldens if #52 changes them).
-3. Finish P1.I (I.3.1 review, I.5.1, I.4.1, I.6.1 rows, I.7.1 release v0.9.0), then the code-only P2 items; owner gates stay listed in QUESTIONS.md.
+1. Ask the owner for the yes to launch the four workers (global rule), then launch them with `briefs/common.md` + `briefs/<role>.md`.
+2. First merges expected: P2.H.3.2 (CI green), P2.H.1.1 (covers), then the rest of P2.H.
+3. When the owner answers Q-A1, add P7.A.1.1 to the board.
