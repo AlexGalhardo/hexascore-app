@@ -57,7 +57,7 @@ Protocol: `PROMPT-WORKERS.md` section 3. Claim by writing your name in `owner` a
 | 1 | REV-P4.A.3.1 | especialista | merged | especialista | agent/senior/P4.A.3.1 | `.orchestration/reports/P4.A.3.1.md` | review of P4.A.3.1 part 1 (296a3db); CORRIGIDO_E_APROVADO, merged 7bf0b7d; 3.1b next |
 | 1 | REV-P4.A.3.1b | especialista | ready | especialista | agent/senior/P4.A.3.1b | `.orchestration/reports/P4.A.3.1b.md` | review of P4.A.3.1b (2923481); after REV-P4.A.3.1; CORRIGIDO_E_APROVADO (stored target fix 4251fe3), merged f78ad42 |
 | 1 | REV-P4.A.3.1c | especialista | ready | especialista | agent/senior/P4.A.3.1c | `.orchestration/reports/P4.A.3.1c.md` | review of P4.A.3.1c (4d346a9); after REV-P4.A.3.1b; APROVADO, merge queued (freeze v0.12.0); e2e community+auth 54/54; merged 34efea6 |
-| 1 | REV-FIX-community-problem-codes | especialista | todo | | agent/senior/FIX-community-problem-codes | `.orchestration/reports/FIX-community-problem-codes.md` | review of a812b16 |
+| 1 | REV-FIX-community-problem-codes | especialista | ready | especialista | agent/senior/FIX-community-problem-codes | `.orchestration/reports/FIX-community-problem-codes.md` | review of a812b16; APROVADO, merged afc0d43 |
 | 1 | REV-P4.A.3.2 | especialista | todo | | agent/senior/P4.A.3.2 | `.orchestration/reports/P4.A.3.2.md` | review of 5b75cc0 |
 | 1 | REV-P4.A.3.3 | especialista | todo | | agent/senior/P4.A.3.3 | `.orchestration/reports/P4.A.3.3.md` | review of 8b841c0, stacked on P4.A.3.2 |
 | 3 | P4.A.3.1b | senior | ready | senior-a | agent/senior/P4.A.3.1b | `app/controllers/community/`, `routes/community.go`, `app/community/` | report reports/P4.A.3.1b.md @ 2923481; branched from agent/senior/P4.A.3.1, merge in order; merged f78ad42 |

@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **api:** Community problem codes (`suggestion-*`, `field-locked`, `stale-before`, `invalid-transition`, `community-submissions-closed`, `validation`) resolve at `/problems/{code}` and are documented in the errors page (FIX-community-problem-codes)
 - **auth:** Login and signup forms post their named fields, the signed form token and `remember` without JavaScript (FIX-nojs-auth-post)
 - **mobile:** The catalogue copy script emits Biome-formatted JSON; committed copies refreshed (P5.A.1.1)
 - **mobile:** The navigation test renders each route in its own test and no longer hits the Jest timeout under load (FIX-mobile-nav-test-timeout)
