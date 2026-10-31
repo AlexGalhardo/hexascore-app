@@ -18,6 +18,7 @@ import (
 	"github.com/AlexGalhardo/vukem/schedule"
 	"github.com/AlexGalhardo/vukem/storage"
 
+	"github.com/AlexGalhardo/hexascore-app/app/community"
 	"github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/i18nhash"
 	"github.com/AlexGalhardo/hexascore-app/app/jobs"
@@ -74,6 +75,7 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 			routes.Schedule(s, app)
 			s.Func("heartbeat", scheduler.Counted("heartbeat", heartbeat.Beat)).EveryMinute()
 		}),
+		vukem.WithFlags(community.SubmissionsFlag),
 		vukem.WithViews(resources.Views()),
 		vukem.WithVite(resources.Public()),
 		vukem.WithTranslations(resources.Lang()),
