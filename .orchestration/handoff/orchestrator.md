@@ -33,4 +33,4 @@ Q-A5 (Phase 7 feed LGPD basis, legacy follows), Q-A7 (resolved by the specialist
 - Never idle: at least three implementers in parallel plus the specialist.
 - Release gate: all CI jobs except e2e locally before a release PR; squashed release commit; the owner runs the production merge.
 - Isolated QA stacks per worker; never `down` project `hexascore`; never copy `.env`.
-- vukem: senior-fw commits locally, the specialist pushes, opens and merges PRs.
+- Implement first, long checks at the end (section 8.2): no waiting on CI or long suites per task; vukem senior-fw pushes its batch and opens the PRs, fixes GitHub CI; the specialist reviews and squash-merges.
