@@ -2,7 +2,8 @@
 
 /api/v1 allows 120 requests a minute per IP (SDD 13). A scan sends more than
 that from the Docker gateway, and the missing-Authorization check then sees
-429 instead of 401. The compose app trusts 172.16.0.0/12, same as qa/k6.
+429 instead of 401. The compose app and qa/schemathesis/ci.sh trust
+172.16.0.0/12, so this header is the bucket key. Same range as qa/k6.
 """
 
 import schemathesis

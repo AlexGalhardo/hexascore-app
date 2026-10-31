@@ -11,6 +11,9 @@ base=${QA_BASE_URL:-http://127.0.0.1:3000}
 
 root=$(cd "$(dirname "$0")/../.." && (pwd -W 2>/dev/null || pwd))
 mkdir -p "$root/qa/reports/schemathesis"
+# The image runs as a non-root user. The crash cache is created in the workdir,
+# and a 755 directory owned by the runner makes that mkdir fail after a real failure.
+chmod 777 "$root/qa/reports/schemathesis"
 export MSYS_NO_PATHCONV=1
 
 # Paths already include /api/v1 and /app/v1. Docker Desktop has no host network,

@@ -38,6 +38,10 @@ app_env=(
 	-e STRIPE_PRICE_PRO=price_placeholder_pro
 	-e STRIPE_PRICE_BUSINESS=price_placeholder_business
 	-e MAIL_MAILER=log
+	# Host network sees the scan container on the docker bridge. Without this,
+	# X-Forwarded-For is ignored and every call shares the 120/min IP bucket,
+	# so the missing-Authorization check gets 429 instead of 401.
+	-e TRUSTED_PROXIES=172.16.0.0/12
 )
 
 cleanup() {
