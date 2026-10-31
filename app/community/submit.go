@@ -19,8 +19,7 @@ func Submit(ctx context.Context, db *database.DB, id string, authorID int64, ver
 		return submitTx(ctx, tx, id, authorID, version, now)
 	})
 	if err != nil {
-		var problem *Problem
-		if errors.As(err, &problem) {
+		if problem, ok := errors.AsType[*Problem](err); ok {
 			return problem.Status, problem
 		}
 

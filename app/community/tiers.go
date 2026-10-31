@@ -1,3 +1,4 @@
+// Package community is the suggestion quota, the contributor tiers, and the hourly maintenance job.
 package community
 
 import (
@@ -24,10 +25,7 @@ const (
 // cooldownExceeded is 429 suggestion-cooldown. RetryAfter is the whole seconds until until.
 func cooldownExceeded(until, now time.Time) *Problem {
 	utc := until.UTC()
-	retry := int(math.Ceil(utc.Sub(now.UTC()).Seconds()))
-	if retry < 1 {
-		retry = 1
-	}
+	retry := max(int(math.Ceil(utc.Sub(now.UTC()).Seconds())), 1)
 
 	return &Problem{
 		Status:        http.StatusTooManyRequests,
@@ -81,18 +79,17 @@ FROM suggestions WHERE status = 'draft' AND updated_at <= $1 FOR UPDATE`, now.UT
 		for rows.Next() {
 			var d draft
 			if err := rows.Scan(&d.id, &d.version, &d.changes); err != nil {
-				rows.Close()
+				if closeErr := finishRows(rows); closeErr != nil {
+					err = errors.Join(err, closeErr)
+				}
 
 				return fmt.Errorf("community: list expired drafts: %w", err)
 			}
 			drafts = append(drafts, d)
 		}
-		if err := rows.Err(); err != nil {
-			rows.Close()
-
+		if err := finishRows(rows); err != nil {
 			return fmt.Errorf("community: list expired drafts: %w", err)
 		}
-		rows.Close()
 
 		var keys []string
 		actor := Actor{Role: "system"}
@@ -106,7 +103,7 @@ FROM suggestions WHERE status = 'draft' AND updated_at <= $1 FOR UPDATE`, now.UT
 		}
 		for _, key := range keys {
 			if disk == nil {
-				return fmt.Errorf("community: cover disk is not configured")
+				return errors.New("community: cover disk is not configured")
 			}
 			if err := disk.Delete(ctx, key); err != nil && !errors.Is(err, storage.ErrNotFound) {
 				return fmt.Errorf("community: delete cover: %w", err)
@@ -132,18 +129,17 @@ WHERE status = 'in_review' AND claimed_at IS NOT NULL AND claimed_at <= $1 FOR U
 		for rows.Next() {
 			var c claim
 			if err := rows.Scan(&c.id, &c.version); err != nil {
-				rows.Close()
+				if closeErr := finishRows(rows); closeErr != nil {
+					err = errors.Join(err, closeErr)
+				}
 
 				return fmt.Errorf("community: list idle claims: %w", err)
 			}
 			claims = append(claims, c)
 		}
-		if err := rows.Err(); err != nil {
-			rows.Close()
-
+		if err := finishRows(rows); err != nil {
 			return fmt.Errorf("community: list idle claims: %w", err)
 		}
-		rows.Close()
 
 		actor := Actor{Role: "system"}
 		for _, c := range claims {

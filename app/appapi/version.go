@@ -23,7 +23,7 @@ const (
 // APP_MIN_SUPPORTED_VERSION (default 0.0.0). DELETE /app/v1/tokens/current
 // stays open so an old build can still log out. Other paths are unchanged.
 func MinVersion(get func(string) string) func(http.Handler) http.Handler {
-	min := cmp.Or(strings.TrimSpace(get("APP_MIN_SUPPORTED_VERSION")), "0.0.0")
+	supported := cmp.Or(strings.TrimSpace(get("APP_MIN_SUPPORTED_VERSION")), "0.0.0")
 
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -32,16 +32,16 @@ func MinVersion(get func(string) string) func(http.Handler) http.Handler {
 				return
 			}
 
-			w.Header().Set(MinVersionHeader, min)
+			w.Header().Set(MinVersionHeader, supported)
 
-			if logoutExempt(r) || !versionBelow(r.Header.Get(ClientVersionHeader), min) {
+			if logoutExempt(r) || !versionBelow(r.Header.Get(ClientVersionHeader), supported) {
 				next.ServeHTTP(w, r)
 				return
 			}
 
 			web.Fail(w, r, errs.New(http.StatusUpgradeRequired, "This app build is no longer supported.").
 				WithExtension("code", UpgradeCode).
-				WithHeader(MinVersionHeader, min))
+				WithHeader(MinVersionHeader, supported))
 		})
 	}
 }
@@ -53,8 +53,8 @@ func logoutExempt(r *http.Request) bool {
 // versionBelow reports whether client is older than min. A missing or
 // unparsable client version counts as 0.0.0. An unparsable minimum rejects
 // every build, so a bad APP_MIN_SUPPORTED_VERSION fails closed.
-func versionBelow(client, min string) bool {
-	floor, ok := versionParts(min)
+func versionBelow(client, lowest string) bool {
+	floor, ok := versionParts(lowest)
 	if !ok {
 		return true
 	}

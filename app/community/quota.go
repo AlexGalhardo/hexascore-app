@@ -59,10 +59,7 @@ func notEligible(at time.Time, known bool) *Problem {
 
 func quotaExceeded(now time.Time, used int) *Problem {
 	reset := nextUTCMidnight(now)
-	retry := int(math.Ceil(reset.Sub(now.UTC()).Seconds()))
-	if retry < 1 {
-		retry = 1
-	}
+	retry := max(int(math.Ceil(reset.Sub(now.UTC()).Seconds())), 1)
 
 	return &Problem{
 		Status:     http.StatusTooManyRequests,

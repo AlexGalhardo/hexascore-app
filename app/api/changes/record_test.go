@@ -5,6 +5,7 @@ package changes_test
 import (
 	"context"
 	"database/sql"
+	"strings"
 	"testing"
 
 	"github.com/AlexGalhardo/vukem/database"
@@ -109,12 +110,5 @@ func insertItem(t *testing.T, db *database.DB, typ, slug, qid string) string {
 }
 
 func join(fields []string) string {
-	out := ""
-	for i, f := range fields {
-		if i > 0 {
-			out += ","
-		}
-		out += f
-	}
-	return out
+	return strings.Join(fields, ",")
 }

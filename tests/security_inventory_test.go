@@ -105,7 +105,7 @@ func stackViolation(stack, method, path string, mw []string) string {
 				return "telemetry route must stay anonymous"
 			}
 		} else if !has("auth.Required") && !has("middleware.(*Challenger).Require") &&
-			!(optionalSearch && has("auth.Optional")) {
+			(!optionalSearch || !has("auth.Optional")) {
 			return "app route without a bearer token or a challenge"
 		}
 	case "web":

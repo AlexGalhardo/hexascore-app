@@ -85,7 +85,7 @@ WHERE target_type = $1 AND target_id = $2
 			var otherAuthor sql.NullInt64
 			var other []byte
 			if err := rows.Scan(&otherID, &otherAuthor, &other); err != nil {
-				if closeErr := rows.Close(); closeErr != nil {
+				if closeErr := finishRows(rows); closeErr != nil {
 					err = errors.Join(err, closeErr)
 				}
 
@@ -103,11 +103,7 @@ WHERE target_type = $1 AND target_id = $2
 			}
 			fieldRivals = append(fieldRivals, otherID)
 		}
-		scanErr := rows.Err()
-		if closeErr := rows.Close(); closeErr != nil {
-			scanErr = errors.Join(scanErr, closeErr)
-		}
-		if scanErr != nil {
+		if scanErr := finishRows(rows); scanErr != nil {
 			return fmt.Errorf("community: scan duplicate suggestions: %w", scanErr)
 		}
 		if ownID != "" {
@@ -181,4 +177,15 @@ func jsonEqual(a, b json.RawMessage) bool {
 	}
 
 	return string(leftEncoded) == string(rightEncoded)
+}
+
+// finishRows closes rows before the next statement on this transaction.
+// A defer would keep the portal open, and the following UPDATE would fail.
+func finishRows(rows *sql.Rows) error {
+	err := rows.Err()
+	if closeErr := rows.Close(); closeErr != nil {
+		err = errors.Join(err, closeErr)
+	}
+
+	return err
 }

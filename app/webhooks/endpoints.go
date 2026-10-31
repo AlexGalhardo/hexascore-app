@@ -1,3 +1,4 @@
+// Package webhooks stores endpoints and delivers item-change events.
 package webhooks
 
 import (
@@ -116,7 +117,7 @@ func Create(
 	plan string,
 	in Draft,
 ) (Endpoint, error) {
-	cap, ok := planCap(plan)
+	limit, ok := planCap(plan)
 	if !ok {
 		return Endpoint{}, ErrPlanRequired
 	}
@@ -170,7 +171,7 @@ func Create(
 			return err
 		}
 
-		if n >= cap {
+		if n >= limit {
 			return ErrLimit
 		}
 
@@ -277,8 +278,8 @@ var allowedTypes = map[string]struct{}{
 	"games": {}, "movies": {}, "series": {}, "books": {},
 }
 
-func oneOf(values []string, allowed map[string]struct{}, max int) ([]string, error) {
-	if len(values) == 0 || len(values) > max {
+func oneOf(values []string, allowed map[string]struct{}, bound int) ([]string, error) {
+	if len(values) == 0 || len(values) > bound {
 		return nil, ErrInvalid
 	}
 

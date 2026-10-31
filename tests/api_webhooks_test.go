@@ -112,7 +112,7 @@ func TestSecurity_A02_WebhookSecretEncrypted(t *testing.T) {
 		t.Fatal("secret column starts with whsec_")
 	}
 
-	plain, err := r.app.App.Crypt.Open(stored, webhooks.SecretAD)
+	plain, err := r.app.Crypt.Open(stored, webhooks.SecretAD)
 	if err != nil {
 		t.Fatal(err)
 	}

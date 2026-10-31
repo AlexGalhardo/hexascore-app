@@ -1,3 +1,4 @@
+// Package appapi is the /app/v1 HTTP surface.
 package appapi
 
 import (

@@ -260,7 +260,7 @@ VALUES ('leg-a', $1, 10, 10, 10, 10, 10, 10, $2, $2),
 		t.Fatal(err)
 	}
 
-	replay(t, ctx, conn, out.String())
+	replay(ctx, t, conn, out.String())
 
 	var c1, c2, c3, c4, c5, c6 int
 
@@ -350,10 +350,10 @@ WHERE u.id = $1`, freshID).Scan(&freshName, &resetValue); err != nil {
 	}
 }
 
-func replay(t *testing.T, ctx context.Context, conn *sql.Conn, script string) {
+func replay(ctx context.Context, t *testing.T, conn *sql.Conn, script string) {
 	t.Helper()
 
-	for _, stmt := range strings.Split(script, "\n") {
+	for stmt := range strings.SplitSeq(script, "\n") {
 		stmt = strings.TrimSpace(stmt)
 		if stmt == "" || strings.HasPrefix(stmt, "--") {
 			continue
