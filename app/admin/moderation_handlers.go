@@ -28,6 +28,10 @@ type ModerationHandlers struct {
 	Authorize func(c *web.Ctx) error
 	// AuthorizeApply checks the admin-only applySuggestion ability (approve, reject; owner Q-A15).
 	AuthorizeApply func(c *web.Ctx) error
+	// AuthorizeAudit and AuthorizeRevert check viewCatalogAudit and revertCatalog (admin-only).
+	AuthorizeAudit, AuthorizeRevert func(c *web.Ctx) error
+	// Reverter runs SDD 04 section 7.5.
+	Reverter Reverter
 }
 
 // canApply is false when AuthorizeApply is unwired: fail closed.
