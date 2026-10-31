@@ -2299,7 +2299,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run 'TestAPIEditions|TestAPIContract'` → `ok`; a non-book id → 404; merged work id → 301 to the target (SDD 01)
   - Notes: edition covers only when `cover_source` is allowed (Open Library pending A-05, SDD 01 issue 2: identifiers and titles only until `docs/legal/open-library.md` exists).
 
-- [ ] **P3.A.1.4** Serve `listTrending` (`/v1/{type}/trending?window=day|week`, top 100) and the business-only `getItemActivity`.
+- [x] **P3.A.1.4** Serve `listTrending` (`/v1/{type}/trending?window=day|week`, top 100) and the business-only `getItemActivity`.
   - Files/modules: `app/api/v1/trending.go`, `app/recommend/trending/read.go`, `tests/api_trending_test.go`
   - Refs: SDD 05 §6.2, FR-05-17; SDD 08 §6 (`trending_snapshots`, `item_activity_daily`), §9
   - Depends on: P6.C (snapshot job and tables; see Notes)
@@ -3675,7 +3675,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `k6 run qa/k6/home.js` → `p(95) < 200ms` at 50 rps with a warm cache (SDD 08 §9)
   - Notes: this replaces the legacy `SectionHighlights` on the home page. `forYou` arrives in P6.D.2.2.
 
-- [ ] **P6.C.3.2** Close P3.A.1.4 and the trending part of P3.C.2.1: serve `listTrending` and the business-only `getItemActivity` on `/api/v1`, and `/app/v1/{type}/trending`, with `web.ETagOf`, `c.NotModified` and `Cache-Control: public, max-age=300`.
+- [x] **P6.C.3.2** Close P3.A.1.4 and the trending part of P3.C.2.1: serve `listTrending` and the business-only `getItemActivity` on `/api/v1`, and `/app/v1/{type}/trending`, with `web.ETagOf`, `c.NotModified` and `Cache-Control: public, max-age=300`.
   - Files/modules: `app/api/v1/trending.go`, `app/appapi/catalog.go`, `app/recommend/trending/read.go`, `tests/api_trending_test.go`, `openapi/api-v1.json`, `openapi/app-v1.json`
   - Refs: SDD 08 §6 (contracts table), §9; SDD 05 §6.2, FR-05-17; P3.A.1.4; <https://vukem.dev/docs/rest-apis/overview> "Cross-cutting"
   - Depends on: P6.C.2.2, P3.A.1.3, P3.C.2.1
