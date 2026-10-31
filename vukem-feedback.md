@@ -17,6 +17,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | VF-NEW-AUDIT-5 | 2026-10-31 | medium | open |
 | VF-NEW-AUDIT-6 | 2026-10-31 | medium | open |
 | VF-NEW-P2.H.3.1 | 2026-10-31 | low | open |
+| VF-NEW-P5.A.3.1 | 2026-10-31 | low | open |
 
 ## VF-062: A typed POST that returns a body defaults to 201, including commands that do not create a resource
 
@@ -82,3 +83,11 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 - **Context**: `GET /api/v1/{type}` and `/{type}/{id}` must document `games|movies|series|books` for SDK users, but the API contract answers an unknown type with 400 `invalid-query` that the quota refunds (SDD 05 FR-05-4).
 - **Workaround**: `validate:"oneof=..."` on `ListItemsInput.Type` and `GetItemInput.Type`, plus `publicapi.TypeGuard` (last middleware of the `/api/v1` group) that answers the 400 first. `// workaround(vukem): VF-NEW-P2.H.3.1`.
 - **Request**: a documentation-only tag (for example `enum:"a,b"`) or an `api.Op` option to map validation errors to a chosen status.
+
+## VF-NEW-P5.A.3.1: Generated ApiProblem type has no `code` field although problem responses carry one
+
+- **Date**: 2026-10-31. **Severity**: low. **Status**: open.
+- **vukem version**: v0.34.0 (per the P2.H.3.1 entry). **Docs consulted**: <https://vukem.dev/docs/rest-apis/overview> "Responses and errors": the page documents RFC 9457 problem details (`type`, `title`, `status`, `detail`, `instance`, `errors`) and no `code` member; the page has no section on the generated client, `codegen:client` or an `ApiProblem` type [NOT IN VUKEM DOCS: client codegen output shape].
+- **Context**: `packages/app-client/src/api.ts` (generated, P5.A.3.1 branch) declares `ApiProblem` with `type`, `title`, `status`, `detail`, `instance`, `request_id`, `errors`, and no `code`. The HexaScore SDD 05 problem codes travel in that field, so `apps/mobile/src/api/problems.ts` reads `code` through an `unknown` cast.
+- **Workaround**: `(error.problem as { code?: unknown } | undefined)?.code` in `apps/mobile/src/api/problems.ts`; the mobile tests cover unknown codes. `// workaround(vukem): VF-NEW-P5.A.3.1` to be added with the mobile task.
+- **Request**: codegen types a `code` member on problem responses, or the framework documents the problem extension members it writes.
