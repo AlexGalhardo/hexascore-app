@@ -113,6 +113,13 @@
     },
     "updateRequired": {
       "title": "Atualização necessária"
+    },
+    "offline": "Você está offline. As alterações serão sincronizadas quando a conexão voltar.",
+    "crashReports": {
+      "title": "Enviar relatórios de erro?",
+      "body": "Se o app travar, envie à HexaScore a versão do app, a versão do Android, a tela e os detalhes do erro. Nenhuma conta, e-mail ou token é incluído. Você pode desativar isso nas Configurações.",
+      "allow": "Enviar relatórios",
+      "deny": "Não enviar"
     }
   },
   "actions": {

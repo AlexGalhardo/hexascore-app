@@ -40,6 +40,7 @@ jest.mock("expo-router", () => {
 	return {
 		Stack,
 		Tabs,
+		useSegments: () => [],
 		useLocalSearchParams: () =>
 			(globalThis as { __routeParams?: Record<string, string> }).__routeParams ?? {},
 	};
