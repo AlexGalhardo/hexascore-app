@@ -1,5 +1,6 @@
 import { Link, router } from "@inertiajs/react";
 import Seo from "../../components/Seo";
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 interface Change {
@@ -64,6 +65,7 @@ const post = (id: string, action: "submit" | "withdraw", version: number) =>
 
 export default function SuggestionStatus({ suggestion: s, canAct, quota, open }: Props) {
 	const t = useT();
+	const l = useLocalized();
 	const fmt = (iso: string) => new Date(iso).toLocaleString();
 	const canSubmit = canAct && open && s.status === "draft" && quota.left > 0;
 	const canWithdraw = canAct && ["draft", "submitted", "in_review"].includes(s.status);
@@ -145,7 +147,7 @@ export default function SuggestionStatus({ suggestion: s, canAct, quota, open }:
 						{t("community.status.withdraw")}
 					</button>
 				)}
-				<Link href="/me/suggestions" className="px-3 py-1 text-sm underline">
+				<Link href={l("/me/suggestions")} className="px-3 py-1 text-sm underline">
 					{t("community.mine.title")}
 				</Link>
 			</div>

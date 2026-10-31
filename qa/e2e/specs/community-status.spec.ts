@@ -19,13 +19,13 @@ test.describe("community status and my suggestions", () => {
 	}) => {
 		test.setTimeout(240_000);
 		await createVerifiedAccount(page, prefix, t);
-		await page.goto("/suggest/new/movie");
+		await page.goto(`${prefix}/suggest/new/movie`);
 		await page.getByLabel(`${t("community.fields.title")} *`).fill("E2E status film");
 		await page.getByLabel(t("community.sources")).fill("https://www.wikidata.org/wiki/Q127367");
 		await page.getByRole("button", { name: t("community.saveDraft") }).click();
 		await expect(page.getByText(t("community.draftRestored"))).toBeVisible();
 
-		await page.goto("/me/suggestions");
+		await page.goto(`${prefix}/me/suggestions`);
 		await page.getByRole("link", { name: "E2E status film" }).click();
 		await expect(page.getByText("E2E status film")).toBeVisible();
 		await expect(page.getByText(t("community.status.timeline"))).toBeVisible();

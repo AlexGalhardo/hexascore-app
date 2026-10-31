@@ -18,6 +18,7 @@ vi.mock("@inertiajs/react", () => ({
 		<a href={href}>{children}</a>
 	),
 	router: { post: (...a: unknown[]) => post(...a) },
+	usePage: () => ({ props: { locale: "en" } }),
 }));
 
 const base = {

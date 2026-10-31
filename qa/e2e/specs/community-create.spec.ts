@@ -16,7 +16,7 @@ test.describe("community create and merge request", () => {
 	}) => {
 		test.setTimeout(240_000);
 		await createVerifiedAccount(page, prefix, t);
-		await page.goto("/suggest/new/movie");
+		await page.goto(`${prefix}/suggest/new/movie`);
 		if (!flagOn) {
 			await expect(page.getByText(t("community.closed.title"))).toBeVisible();
 			await expectNoSeriousA11yViolations(page);
