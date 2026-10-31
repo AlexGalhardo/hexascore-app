@@ -39,7 +39,7 @@ func TestLGPD_ExportDeleteOptOut(t *testing.T) {
 
 	for _, prefix := range []string{"", "/pt-br", "/es"} {
 		page := app.Client(t).Get(prefix + "/policy").AssertOK()
-		page.AssertSee("Railway").AssertSee("Grafana Cloud").AssertSee("privacy@hexascore.app")
+		page.AssertSee("Railway").AssertSee("privacy@hexascore.app")
 		page.AssertInertia("Legal/Page").PropEquals("slug", "policy")
 	}
 
@@ -191,17 +191,17 @@ func assertPolicyCatalogues(t *testing.T) {
 
 	need := map[string][]string{
 		"en.json": {
-			"Railway", "Grafana Cloud", "Resend", "Stripe", "Google", "Telegram",
+			"Railway", "Resend", "Stripe", "Google", "Telegram",
 			"privacy@hexascore.app", "encarregado", "locale", "theme", "consent",
 			"13 years", "30 days", "7 days", "24 hours", "IGDB", "TMDB", "youtube-nocookie",
 		},
 		"pt-BR.json": {
-			"Railway", "Grafana Cloud", "Resend", "Stripe", "Google", "Telegram",
+			"Railway", "Resend", "Stripe", "Google", "Telegram",
 			"privacy@hexascore.app", "encarregado", "locale", "theme", "consent",
 			"13 anos", "30 dias", "7 dias", "24 horas", "IGDB", "TMDB", "youtube-nocookie",
 		},
 		"es.json": {
-			"Railway", "Grafana Cloud", "Resend", "Stripe", "Google", "Telegram",
+			"Railway", "Resend", "Stripe", "Google", "Telegram",
 			"privacy@hexascore.app", "encarregado", "locale", "theme", "consent",
 			"13 años", "30 días", "7 días", "24 horas", "IGDB", "TMDB", "youtube-nocookie",
 		},

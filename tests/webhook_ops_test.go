@@ -3,7 +3,6 @@
 package tests
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -11,15 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/AlexGalhardo/vukem"
-	"github.com/AlexGalhardo/vukem/ratelimit"
-	"github.com/AlexGalhardo/vukem/router"
 	vwebhook "github.com/AlexGalhardo/vukem/webhook"
-	"go.opentelemetry.io/otel/sdk/metric"
-	"go.opentelemetry.io/otel/sdk/metric/metricdata"
 
 	"github.com/AlexGalhardo/hexascore-app/app/jobs"
-	"github.com/AlexGalhardo/hexascore-app/app/metrics"
 	"github.com/AlexGalhardo/hexascore-app/app/webhooks"
 )
 
@@ -135,52 +128,6 @@ func TestPruneDeliveries(t *testing.T) {
 	t.Fatalf("schedule missing %s at 04:40", want)
 }
 
-func TestMetrics_WebhookOutcome(t *testing.T) {
-	reader := metric.NewManualReader()
-	mp := metric.NewMeterProvider(metric.WithReader(reader))
-	r := newKeyRigWith(t,
-		vukem.WithRateLimiters(func(_ string, _ int, window time.Duration) ratelimit.Limiter {
-			return ratelimit.NewMemory(1000, window)
-		}),
-		vukem.WithRoutes(func(_ *router.Router, built *vukem.App) error {
-			metrics.Bind(built, mp)
-
-			return nil
-		}),
-	)
-	token := r.create(r.signIn("hooks-metric@example.com"), "ci")
-	setPlan(t, r, "hooks-metric@example.com", "pro")
-	client := r.app.Client(t).WithToken(token)
-	created := client.PostJSON("/api/v1/webhooks", map[string]any{
-		"url": "https://1.1.1.1/hook", "events": []string{"item.updated"}, "itemTypes": []string{"games"},
-	}).AssertCreated()
-	var one struct {
-		ID     string `json:"id"`
-		Secret string `json:"secret"`
-	}
-	created.JSON(&one)
-	dropHTTPSCheck(t, r)
-
-	okSrv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	}))
-	t.Cleanup(okSrv.Close)
-	failSrv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		w.WriteHeader(http.StatusInternalServerError)
-	}))
-	t.Cleanup(failSrv.Close)
-
-	pointEndpoint(t, r, one.ID, okSrv.URL+"/ok")
-	client.PostJSON("/api/v1/webhooks/"+one.ID+"/test", map[string]any{}).AssertOK()
-	pointEndpoint(t, r, one.ID, failSrv.URL+"/fail")
-	client.PostJSON("/api/v1/webhooks/"+one.ID+"/test", map[string]any{}).AssertOK()
-
-	got := webhookOutcomes(t, reader)
-	if got["success"] != 1 || got["failure"] != 1 {
-		t.Fatalf("outcomes = %v", got)
-	}
-}
-
 func insertDelivery(t *testing.T, r *keyRig, at int64) int64 {
 	t.Helper()
 
@@ -206,38 +153,4 @@ func deliveryCount(t *testing.T, r *keyRig, id int64) int {
 	}
 
 	return n
-}
-
-func webhookOutcomes(t *testing.T, reader *metric.ManualReader) map[string]int {
-	t.Helper()
-
-	var rm metricdata.ResourceMetrics
-	if err := reader.Collect(context.Background(), &rm); err != nil {
-		t.Fatal(err)
-	}
-
-	got := map[string]int{}
-
-	for _, sm := range rm.ScopeMetrics {
-		for _, m := range sm.Metrics {
-			if m.Name != "api.webhook.deliveries" {
-				continue
-			}
-
-			sum, ok := m.Data.(metricdata.Sum[int64])
-			if !ok {
-				t.Fatalf("deliveries data %T", m.Data)
-			}
-
-			for _, dp := range sum.DataPoints {
-				for _, attr := range dp.Attributes.ToSlice() {
-					if string(attr.Key) == "outcome" {
-						got[attr.Value.AsString()] += int(dp.Value)
-					}
-				}
-			}
-		}
-	}
-
-	return got
 }

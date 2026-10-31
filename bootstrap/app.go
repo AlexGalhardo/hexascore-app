@@ -26,7 +26,6 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/listeners"
 	"github.com/AlexGalhardo/hexascore-app/app/logging"
-	"github.com/AlexGalhardo/hexascore-app/app/metrics"
 	"github.com/AlexGalhardo/hexascore-app/app/scheduler"
 	"github.com/AlexGalhardo/hexascore-app/app/ssr"
 	"github.com/AlexGalhardo/hexascore-app/config"
@@ -46,7 +45,7 @@ func New(opts ...vukem.Option) (*vukem.App, error) {
 }
 
 // NewWithSSRFailures is New with the fallback counter supplied, so tests can
-// read it (the OTLP exporter for inertia_ssr_fallback_total comes in P2.C).
+// read it.
 func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem.App, error) {
 	langHash, err := i18nhash.Catalogs(resources.Lang())
 	if err != nil {
@@ -74,7 +73,7 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 		vukem.WithJobsFunc(jobs.All),
 		vukem.WithSchedule(func(s *schedule.Schedule, app *vukem.App) {
 			routes.Schedule(s, app)
-			s.Func("heartbeat", scheduler.Counted("heartbeat", heartbeat.Beat)).EveryMinute()
+			s.Func("heartbeat", heartbeat.Beat).EveryMinute()
 		}),
 		vukem.WithFlags(community.SubmissionsFlag, community.TrustedModeratorsFlag),
 		vukem.WithViews(resources.Views()),
@@ -87,7 +86,6 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 				Bundle: "bootstrap/ssr/ssr.js",
 				OnFailure: func(ctx context.Context, err inertia.SSRError) {
 					ssrFailures.Observe(ctx, err)
-					metrics.RecordSSRFallback(ctx, err.URL, metrics.PublicPage(err.URL))
 				},
 				// Private pages skip SSR: no SEO value, user data stays out of the Node process (SDD 09 §6.1).
 				Except: []string{"/admin", "/profile", "/me", "/billing", "/suggest", "/suggestions"},
@@ -135,10 +133,6 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 
 	app, err := vukem.New(append(base, opts...)...)
 	if err != nil {
-		return nil, err
-	}
-
-	if err := metrics.Install(app, heartbeat.Age); err != nil {
 		return nil, err
 	}
 

@@ -5,13 +5,11 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log/slog"
 	"slices"
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/metric"
 )
 
 // Types are the catalogue types that each get a top list.
@@ -168,14 +166,8 @@ func Window(ctx context.Context, q Querier, typ string, now time.Time, windowDay
 // Snapshot writes the top lists for the hour of now, one transaction for the four types, so readers see either the
 // previous snapshot or the whole new one (SDD 08 §7.3). Running it again within the hour yields identical rows.
 func Snapshot(ctx context.Context, db *database.DB, now time.Time) error {
-	started := time.Now()
 	at := now.UTC().Truncate(time.Hour)
 	today := at.Truncate(24 * time.Hour)
-	meter := otel.Meter("hexascore")
-	eligibleG, _ := meter.Int64Gauge("trending.eligible_items")
-	priorG, _ := meter.Int64Gauge("trending.prior_slots")
-	churnG, _ := meter.Float64Gauge("trending.churn")
-	duration, _ := meter.Float64Histogram("trending.compute.duration", metric.WithUnit("s"))
 
 	err := db.Tx(ctx, func(tx *database.Tx) error {
 		for _, typ := range Types {
@@ -199,10 +191,8 @@ func Snapshot(ctx context.Context, db *database.DB, now time.Time) error {
 				}
 			}
 
-			attr := metric.WithAttributes(attribute.String("type", typ))
-			eligibleG.Record(ctx, int64(eligible), attr)
-			priorG.Record(ctx, int64(prior), attr)
-			churnG.Record(ctx, float64(fresh)/ListSize, attr)
+			slog.InfoContext(ctx, "trending snapshot written", "type", typ, "eligible", eligible, "prior", prior,
+				"churn", float64(fresh)/ListSize)
 		}
 
 		return nil
@@ -210,8 +200,6 @@ func Snapshot(ctx context.Context, db *database.DB, now time.Time) error {
 	if err != nil {
 		return fmt.Errorf("trending snapshot: %w", err)
 	}
-
-	duration.Record(ctx, time.Since(started).Seconds())
 
 	return nil
 }
@@ -241,7 +229,7 @@ WHERE s.computed_at = $1 AND s.item_type = $2
 	return fresh, err
 }
 
-// AgeSeconds is the age of the newest snapshot, for the trending.snapshot_age_seconds gauge and alert A14.
+// AgeSeconds is the age of the newest snapshot, read by the A14 in-app check (SDD 12 section 7.5).
 // It reports sql.ErrNoRows while no snapshot exists.
 func AgeSeconds(ctx context.Context, db *database.DB, now time.Time) (float64, error) {
 	var at sql.NullTime

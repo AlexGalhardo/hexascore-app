@@ -33,7 +33,11 @@ type foryouRig struct {
 func newForYouRig(t *testing.T) *foryouRig {
 	t.Helper()
 
-	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")}})
+	app := vukemtest.New(
+		t,
+		bootstrap.New,
+		vukemtest.Options{Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")}},
+	)
 	acc, err := accounts.New(app.App)
 	if err != nil {
 		t.Fatal(err)
@@ -46,7 +50,9 @@ func newForYouRig(t *testing.T) *foryouRig {
 		return nil
 	}}
 
-	r.exec(`INSERT INTO data_sources (code, name, licence, url) VALUES ('hexascore', 'x', 'proprietary', 'https://x'), ('wikidata', 'W', 'CC0-1.0', 'https://www.wikidata.org')`)
+	r.exec(
+		`INSERT INTO data_sources (code, name, licence, url) VALUES ('hexascore', 'x', 'proprietary', 'https://x'), ('wikidata', 'W', 'CC0-1.0', 'https://www.wikidata.org')`,
+	)
 
 	franchise := uuid.NewV7().String()
 	r.exec(`INSERT INTO entities (id, kind, slug, default_name) VALUES ($1, 'franchise', 'f', 'F')`, franchise)
@@ -57,15 +63,26 @@ func newForYouRig(t *testing.T) *foryouRig {
 
 	for range 3 {
 		id := r.item("public")
-		r.exec(`INSERT INTO item_entities (item_id, entity_id, role, source) VALUES ($1, $2, 'franchise', 'hexascore')`, id, franchise)
-		r.exec(`INSERT INTO ratings (user_id, item_id, c1, c2, c3, c4, c5, c6) VALUES ($1, $2, 100, 100, 100, 100, 100, 100)`,
-			r.user, id)
+		r.exec(
+			`INSERT INTO item_entities (item_id, entity_id, role, source) VALUES ($1, $2, 'franchise', 'hexascore')`,
+			id,
+			franchise,
+		)
+		r.exec(
+			`INSERT INTO ratings (user_id, item_id, c1, c2, c3, c4, c5, c6) VALUES ($1, $2, 100, 100, 100, 100, 100, 100)`,
+			r.user,
+			id,
+		)
 		r.liked = append(r.liked, id)
 	}
 
 	for range 2 {
 		id := r.item("public")
-		r.exec(`INSERT INTO item_entities (item_id, entity_id, role, source) VALUES ($1, $2, 'franchise', 'hexascore')`, id, franchise)
+		r.exec(
+			`INSERT INTO item_entities (item_id, entity_id, role, source) VALUES ($1, $2, 'franchise', 'hexascore')`,
+			id,
+			franchise,
+		)
 		r.cands = append(r.cands, id)
 	}
 
@@ -163,8 +180,11 @@ func TestForYouStaleWhileRefresh(t *testing.T) {
 	}
 
 	for range foryou.StaleEvents {
-		r.exec(`INSERT INTO rating_events (kind, user_id, item_id, item_type) VALUES ('rating_created', $1, $2, 'game')`,
-			r.user, r.liked[0])
+		r.exec(
+			`INSERT INTO rating_events (kind, user_id, item_id, item_type) VALUES ('rating_created', $1, $2, 'game')`,
+			r.user,
+			r.liked[0],
+		)
 	}
 
 	l, err := r.svc.Get(t.Context(), r.user, "game", "en")
