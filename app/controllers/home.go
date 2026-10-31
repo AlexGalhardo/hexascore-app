@@ -11,7 +11,61 @@ import (
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
+	"github.com/AlexGalhardo/hexascore-app/app/recommend/trending"
 )
+
+// trendingTTL is a backstop: the hourly ComputeTrending job forgets the entries after each snapshot.
+const trendingTTL = time.Hour
+
+// TrendingEntry is one rank of the home trending list.
+type TrendingEntry struct {
+	Rank  int    `json:"rank"`
+	Basis string `json:"basis"`
+	catalog.Highlight
+}
+
+// TrendingList is the home payload of one type; Items is empty before the first snapshot.
+type TrendingList struct {
+	ComputedAt *string         `json:"computedAt"`
+	Items      []TrendingEntry `json:"items"`
+}
+
+func homeTrending(ctx context.Context, db catalog.Querier, typ, locale string) (TrendingList, error) {
+	out := TrendingList{Items: []TrendingEntry{}}
+
+	at, rows, err := trending.Latest(ctx, db, typ)
+	if err != nil {
+		return out, err
+	}
+
+	ids := make([]string, len(rows))
+	for i, r := range rows {
+		ids[i] = r.ItemID
+	}
+
+	items, err := catalog.HighlightsByID(ctx, db, ids, locale)
+	if err != nil {
+		return out, err
+	}
+
+	byID := make(map[string]catalog.Highlight, len(items))
+	for _, it := range items {
+		byID[it.ID] = it
+	}
+
+	for _, r := range rows {
+		if it, ok := byID[r.ItemID]; ok {
+			out.Items = append(out.Items, TrendingEntry{Rank: r.Rank, Basis: r.Basis, Highlight: it})
+		}
+	}
+
+	if !at.IsZero() {
+		s := at.Format(time.RFC3339)
+		out.ComputedAt = &s
+	}
+
+	return out, nil
+}
 
 // recentTTL bounds how stale the "recently rated" strip may be.
 const recentTTL = 60 * time.Second
@@ -24,6 +78,7 @@ func Home(app *vukem.App) web.HandlerFunc {
 	return func(c *web.Ctx) error {
 		sections := make([]catalog.SectionHighlights, 0, len(homeTypes))
 		recent := []catalog.RecentRating{}
+		trendingProp := map[string]TrendingList{}
 
 		db, err := app.DB()
 		if err != nil {
@@ -64,6 +119,28 @@ func Home(app *vukem.App) web.HandlerFunc {
 			}
 		}
 
-		return inertia.Render(c, "Home/Index", inertia.Props{"sections": sections, "recent": recent})
+		if db.Dialect().Name() == "postgres" {
+			locale := i18n.Locale(c.Context())
+
+			store, err := app.Cache()
+			if err != nil {
+				return err
+			}
+
+			for _, typ := range homeTypes {
+				list, err := cache.Remember(c.Context(), store, trending.CacheKey(typ, locale), trendingTTL,
+					func(ctx context.Context) (TrendingList, error) {
+						return homeTrending(ctx, db.SQL(), typ, locale)
+					})
+				if err != nil {
+					return err
+				}
+
+				trendingProp[typ] = list
+			}
+		}
+
+		return inertia.Render(c, "Home/Index",
+			inertia.Props{"sections": sections, "recent": recent, "trending": trendingProp})
 	}
 }
