@@ -2,10 +2,10 @@ package migrations
 
 import "github.com/AlexGalhardo/vukem/schema"
 
-// m20261031190000CreateSimilarTables creates the nightly item neighbours and the 24 h "For you" cache (SDD 08 section 5).
+// m20261031203200CreateSimilarTables creates the nightly item neighbours and the 24 h "For you" cache (SDD 08 section 5).
 // users.id is bigint in the real schema (SDD 03 section 5 and SDD 08 say text; follows the table, flagged in the report).
-func m20261031190000CreateSimilarTables() schema.Migration {
-	return postgresMigration("20261031190000_create_similar_tables",
+func m20261031203200CreateSimilarTables() schema.Migration {
+	return postgresMigration("20261031203200_create_similar_tables",
 		[]string{
 			`CREATE TABLE item_similar (
   item_id uuid PRIMARY KEY REFERENCES items(id) ON DELETE CASCADE,

@@ -69,6 +69,6 @@ func All() []schema.Migration {
 		m20261031120000CreatePasskeysTable(),
 		m20261031150000CreateTrendingTables(),
 		m20261031160000AllowModeratorRole(),
-		m20261031190000CreateSimilarTables(),
+		m20261031203200CreateSimilarTables(),
 	}
 }
