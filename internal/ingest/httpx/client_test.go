@@ -95,7 +95,7 @@ func setup(steps ...step) (*Client, *script, *fakeClock) {
 	return c, sc, clk
 }
 
-func get(t *testing.T, c *Client, host string) (*http.Response, error) {
+func get(t *testing.T, c *Client, host string) (int, error) {
 	t.Helper()
 
 	req, err := http.NewRequestWithContext(t.Context(), http.MethodGet, "https://"+host+"/x", nil)
@@ -104,11 +104,13 @@ func get(t *testing.T, c *Client, host string) (*http.Response, error) {
 	}
 
 	resp, err := c.JSON.Do(req)
-	if resp != nil {
-		_ = resp.Body.Close()
+	if err != nil {
+		return 0, err
 	}
 
-	return resp, err
+	defer resp.Body.Close()
+
+	return resp.StatusCode, nil
 }
 
 func TestUserAgentIdentifiesBot(t *testing.T) {
@@ -154,9 +156,9 @@ func TestRetries429HonoringRetryAfterThenSucceeds(t *testing.T) {
 	)
 	start := clk.Now()
 
-	resp, err := get(t, c, "api.test")
-	if err != nil || resp.StatusCode != 200 {
-		t.Fatalf("resp = %v, err = %v", resp, err)
+	code, err := get(t, c, "api.test")
+	if err != nil || code != http.StatusOK {
+		t.Fatalf("code = %v, err = %v", code, err)
 	}
 
 	if sc.calls != 2 {
@@ -171,9 +173,9 @@ func TestRetries429HonoringRetryAfterThenSucceeds(t *testing.T) {
 func TestGivesUpAfterMaxAttempts(t *testing.T) {
 	c, sc, clk := setup(step{status: 503})
 
-	resp, err := get(t, c, "api.test")
-	if err != nil || resp.StatusCode != 503 {
-		t.Fatalf("resp = %v, err = %v", resp, err)
+	code, err := get(t, c, "api.test")
+	if err != nil || code != http.StatusServiceUnavailable {
+		t.Fatalf("code = %v, err = %v", code, err)
 	}
 
 	if sc.calls != 5 {
@@ -189,8 +191,8 @@ func TestGivesUpAfterMaxAttempts(t *testing.T) {
 func TestRetriesTransportErrors(t *testing.T) {
 	c, sc, _ := setup(step{err: errors.New("reset")}, step{status: 200})
 
-	if resp, err := get(t, c, "api.test"); err != nil || resp.StatusCode != 200 || sc.calls != 2 {
-		t.Fatalf("resp = %v, err = %v, calls = %d", resp, err, sc.calls)
+	if code, err := get(t, c, "api.test"); err != nil || code != http.StatusOK || sc.calls != 2 {
+		t.Fatalf("code = %v, err = %v, calls = %d", code, err, sc.calls)
 	}
 }
 
@@ -207,9 +209,9 @@ func TestDoesNotRetryClientErrors(t *testing.T) {
 func TestRetryAfterBeyondCapIsNotWaitedFor(t *testing.T) {
 	c, sc, _ := setup(step{status: 429, header: http.Header{"Retry-After": {"301"}}})
 
-	resp, _ := get(t, c, "api.test")
-	if resp.StatusCode != 429 || sc.calls != 1 {
-		t.Fatalf("status = %d, calls = %d", resp.StatusCode, sc.calls)
+	code, _ := get(t, c, "api.test")
+	if code != http.StatusTooManyRequests || sc.calls != 1 {
+		t.Fatalf("status = %d, calls = %d", code, sc.calls)
 	}
 }
 
@@ -307,8 +309,8 @@ func TestBreakerOpensAndProbes(t *testing.T) {
 	clk.now = clk.now.Add(5 * time.Minute)
 	sc.steps = []step{{status: 200}}
 
-	if resp, err := get(t, c, "api.test"); err != nil || resp.StatusCode != 200 {
-		t.Fatalf("probe: resp = %v, err = %v", resp, err)
+	if code, err := get(t, c, "api.test"); err != nil || code != http.StatusOK {
+		t.Fatalf("probe: code = %v, err = %v", code, err)
 	}
 
 	if _, err := get(t, c, "api.test"); err != nil {
