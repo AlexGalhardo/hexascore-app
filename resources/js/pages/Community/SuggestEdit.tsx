@@ -1,7 +1,22 @@
 import { router, usePage } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
+import DateEditor from "../../components/community/DateEditor";
 import FieldEditor from "../../components/community/FieldEditor";
-import { asText, editable, fieldLabel as label } from "../../components/community/fields";
+import {
+	asDate,
+	asOps,
+	asText,
+	type Change,
+	type DateValue,
+	editable,
+	idsText,
+	isDate,
+	isRelation,
+	fieldLabel as label,
+	parseIds,
+	relationRoles,
+} from "../../components/community/fields";
+import RelationEditor, { type RelationDraft } from "../../components/community/RelationEditor";
 import Seo from "../../components/Seo";
 import { useT } from "../../lib/useT";
 
@@ -16,7 +31,7 @@ interface Draft {
 	locale: string;
 	note: string;
 	sourceUrls: string[];
-	changes: Record<string, { after?: unknown }>;
+	changes: Record<string, { after?: unknown; add?: unknown; remove?: unknown }>;
 }
 
 interface Props {
@@ -43,6 +58,29 @@ export default function SuggestEdit({
 			Object.entries(draft?.changes ?? {}).map(([k, c]) => [k, asText(c.after)]),
 		),
 	);
+	const [dates, setDates] = useState<Record<string, DateValue>>(() => {
+		const after = asDate(draft?.changes.release_date?.after);
+		const init: Record<string, DateValue> = {};
+		if (after) init.release_date = after;
+		return init;
+	});
+	const [rels, setRels] = useState<Record<string, RelationDraft>>(() =>
+		Object.fromEntries(
+			Object.entries(draft?.changes ?? {})
+				.filter(([f]) => isRelation(f))
+				.map(([f, c]) => {
+					const add = asOps(c.add);
+					return [
+						f,
+						{
+							add: idsText(add),
+							remove: idsText(asOps(c.remove)),
+							role: add[0]?.role ?? "",
+						},
+					];
+				}),
+		),
+	);
 	const [locale, setLocale] = useState(draft?.locale ?? "en");
 	const [note, setNote] = useState(draft?.note ?? "");
 	const [urls, setUrls] = useState((draft?.sourceUrls ?? []).join("\n"));
@@ -61,11 +99,27 @@ export default function SuggestEdit({
 	const lockFor = (f: string) => locks.find((l) => l.field === f || l.field === "*")?.reason;
 	const submit = (e: FormEvent) => {
 		e.preventDefault();
-		const changes: Record<string, { before: string | null; after: string }> = {};
+		const changes: Record<string, Change> = {};
 		for (const [f, after] of Object.entries(edits)) {
 			if (after !== asText(target.values[f]) && !lockFor(f)) {
 				changes[f] = { before: asText(target.values[f]) || null, after };
 			}
+		}
+		for (const [f, after] of Object.entries(dates)) {
+			const before = asDate(target.values[f]);
+			if (
+				after.value !== "" &&
+				(after.value !== before?.value || after.precision !== before?.precision) &&
+				!lockFor(f)
+			) {
+				changes[f] = { before, after };
+			}
+		}
+		for (const [f, r] of Object.entries(rels)) {
+			const role = relationRoles[f]?.length ? r.role || relationRoles[f][0] : undefined;
+			const add = parseIds(r.add, role);
+			const remove = parseIds(r.remove, role);
+			if (add.length + remove.length > 0 && !lockFor(f)) changes[f] = { add, remove };
 		}
 		const body = {
 			targetKind: target.kind,
@@ -117,6 +171,33 @@ export default function SuggestEdit({
 						lockReason={lockFor(f)}
 						lockedLabel={t("community.locked")}
 						onChange={(v) => setEdits((prev) => ({ ...prev, [f]: v }))}
+					/>
+				))}
+				{fields.filter(isDate).map((f) => (
+					<DateEditor
+						key={f}
+						label={label(t, f)}
+						current={asDate(target.values[f])}
+						value={
+							dates[f] ?? asDate(target.values[f]) ?? { value: "", precision: "day" }
+						}
+						lockReason={lockFor(f)}
+						lockedLabel={t("community.locked")}
+						onChange={(v) => setDates((prev) => ({ ...prev, [f]: v }))}
+					/>
+				))}
+				{fields.filter(isRelation).map((f) => (
+					<RelationEditor
+						key={f}
+						label={label(t, f)}
+						roles={relationRoles[f]}
+						value={rels[f] ?? { add: "", remove: "", role: "" }}
+						lockReason={lockFor(f)}
+						lockedLabel={t("community.locked")}
+						addLabel={`${t("community.relation.add")} ${label(t, f)}`}
+						removeLabel={`${t("community.relation.remove")} ${label(t, f)}`}
+						roleLabel={`${t("community.relation.role")} ${label(t, f)}`}
+						onChange={(v) => setRels((prev) => ({ ...prev, [f]: v }))}
 					/>
 				))}
 				<label className="block">

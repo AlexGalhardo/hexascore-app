@@ -1434,7 +1434,18 @@
       "cover": "Capa",
       "translationTitle": "Título ({locale})",
       "synopsis": "Sinopse ({locale})",
-      "externalId": "ID {provider}"
+      "externalId": "ID {provider}",
+      "release_date": "Data de lançamento",
+      "genres": "Gêneros",
+      "creators": "Criadores",
+      "organizations": "Organizações",
+      "franchise": "Franquia",
+      "platforms": "Plataformas"
+    },
+    "relation": {
+      "add": "Adicionar (IDs de entidade, um por linha)",
+      "remove": "Remover (IDs de entidade, um por linha)",
+      "role": "Papel em"
     },
     "create": {
       "title": "Sugerir um novo registro",
