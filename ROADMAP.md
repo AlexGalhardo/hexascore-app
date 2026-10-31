@@ -2770,7 +2770,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run 'TestModerationGate|TestSecurity_Community_A01_PolicyFailsClosed'` → admin 200; user 403; moderator 403 with the flag off and 200 with it on; revert and locks admin-only either way
   - Notes: VF-008 workaround: the panel has no custom pages, so app routes under `/admin/moderation` use the same guard and gate and render templates that wrap the layout copied from `admin.Templates()` via `Config.Views`. Mounting these pages in the panel navigation is [NOT IN VUKEM DOCS]: add a hand-written link in the overridden layout. No inline `<script>` or `style` (strict CSP).
 
-- [ ] **P4.B.1.2** Build the queue view `/admin/moderation` with filters, ageing badges, competing/stale/unreachable badges and claim/release.
+- [x] **P4.B.1.2** Build the queue view `/admin/moderation` with filters, ageing badges, competing/stale/unreachable badges and claim/release.
   - Files/modules: `app/moderation/queue.go`, `resources/views/moderation/queue.html`, `tests/moderation_queue_test.go`
   - Refs: SDD 04 FR-04-8, §7.4 "Queue", NFR-04-1, NFR-04-2 (green < 12 h, amber 12–24 h, red > 24 h)
   - Depends on: P4.B.1.1
@@ -2779,7 +2779,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/moderation/... -run 'TestQueueFilters|TestClaimRelease'` → each filter narrows the result; two admins claiming → second gets 409 `stale-before`
   - Notes: oldest first, keyset pagination on `(submitted_at, id)` (VF-005 workaround). Forms post with CSRF tokens and answer 303.
 
-- [ ] **P4.B.1.3** Build the detail view `/admin/moderation/{id}` with the per-field diff, approve (`confirm_stale`), reject (reason, note), "clone as new draft", and bulk actions (≤ 50, per-id results).
+- [x] **P4.B.1.3** Build the detail view `/admin/moderation/{id}` with the per-field diff, approve (`confirm_stale`), reject (reason, note), "clone as new draft", and bulk actions (≤ 50, per-id results).
   - Files/modules: `app/moderation/detail.go`, `app/moderation/diff.go`, `app/moderation/bulk.go`, `resources/views/moderation/{detail,bulk_result}.html`, `tests/moderation_detail_test.go`
   - Refs: SDD 04 FR-04-8, §6 routes, §7.1 (clone), §7.4 (diff, bulk), §8 (bulk competing); VF-008
   - Depends on: P4.B.1.2
