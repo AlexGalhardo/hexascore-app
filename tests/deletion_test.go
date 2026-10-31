@@ -135,6 +135,16 @@ VALUES ($1, $3, 50, 50, 50, 50, 50, 50), ($2, $3, 60, 60, 60, 60, 60, 60)`, gone
 		t.Fatal(err)
 	}
 
+	if _, err := db.ExecContext(
+		ctx,
+		`INSERT INTO passkeys (user_id, credential_id, public_key, algorithm, name, created_at)
+VALUES ($1, 'cred-gone', 'pk', -7, 'Passkey', now()), ($2, 'cred-blocked', 'pk', -7, 'Passkey', now())`,
+		gone,
+		blocked,
+	); err != nil {
+		t.Fatal(err)
+	}
+
 	goneID := strconv.FormatInt(gone, 10)
 	if _, _, err := acc.Tokens.Create(ctx, goneID, "cli", nil, time.Hour); err != nil {
 		t.Fatal(err)
@@ -192,6 +202,15 @@ AND profile_private AND deletion_scheduled_at IS NULL AND email_verified_at IS N
 		goneID,
 	); n != 0 {
 		t.Fatalf("live tokens left: %d", n)
+	}
+
+	// The user row survives anonymisation, so ON DELETE CASCADE never removes its passkeys.
+	if n := count(t, db, `SELECT count(*) FROM passkeys WHERE user_id = $1`, gone); n != 0 {
+		t.Fatalf("passkeys left after purge: %d", n)
+	}
+
+	if n := count(t, db, `SELECT count(*) FROM passkeys WHERE user_id = $1`, blocked); n != 1 {
+		t.Fatal("blocked user's passkey was touched")
 	}
 
 	// A Stripe failure keeps the user scheduled and intact.

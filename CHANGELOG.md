@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Login and signup submit buttons show a pending spinner while the page has not hydrated or a submit is in flight; both forms declare `method=post` and their action.
 - Report dialog on public profiles and public lists (`POST /reports`, reasons from SDD 14).
 - Dashboard page with links to the library, lists, public page and API keys, in the three locales.
 - Mobile header: brand, search and icon buttons on one row, sections on a scrollable row, account and language entries in a menu.
@@ -15,9 +16,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Toast feedback after rating, status, time-to-beat, list and edition changes, and an explanation on `/user/two-factor` when the admin area redirected there (en, pt-BR, es).
 - `type` enum (`games`, `movies`, `series`, `books`) in the OpenAPI documents and the TypeScript SDK.
 - `hexascore:import-legacy --allow-no-login` opts in to users with no password, Google link or passkey; duplicate emails and a two-factor flag without a row still abort.
+- Passkeys (vukem v0.34.0): add, sign in with and remove a passkey from the profile and the login page in en/pt-BR/es, a `passkey_changed` mail, the legacy passkey import in the users stage, and passkey rows deleted when an account is anonymised.
+- Home page hero with the Explore call to action and a "recently rated by members" strip (12 public ratings, cached 60 s).
+- Community honeypot (third hit in seven days blocks for 30 days), burst limits, cover upload rules and source URL / cover fetch jobs through the safe HTTP client.
 
 ### Changed
 
+- Item page: cover and score badge in the header, details beside the synopsis, the rating panel first on mobile and in a sticky side column on desktop; stars are inline SVG so half stars look the same everywhere.
 - Star rating rows show their category label and larger stars; an unset value renders as a dash.
 - The cookie banner reserves space at the bottom of the page instead of covering the last controls.
 - The app name falls back to "HexaScore" when `APP_NAME` is unset; the QA compose stack sets it.
@@ -27,6 +32,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- E2E login helpers match the submit button exactly, so pt-BR and es runs no longer hit the passkey button.
+- The Android app's bundled i18n catalogues carry the passkey and privacy keys again (keys test green).
+- Legacy cover copy retries DNS, rate-limit and non-rewindable-body errors and accepts `--concurrency`; HTTP 404 stays one failure.
 - A verified user without a nickname is sent to the onboarding after a late e-mail verification instead of the dashboard.
 - Public lists with fewer than three items are `noindex` (SDD 14 FR-14-6).
 - Unknown profiles and lists render the 404 page with the shell instead of the bare framework page.

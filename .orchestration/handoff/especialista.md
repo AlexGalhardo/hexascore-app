@@ -1,34 +1,41 @@
-# Handoff: especialista (2026-10-31, session 2)
+# Handoff: especialista (2026-10-31, session 3)
 
-Reason: about 7 reviews done this session, so the context is heavy. STATUS: HANDOFF.
+Reason: eight reviews done this session; context is heavy. STATUS: HANDOFF.
 
 ## Done this session
 
 | Row | Verdict | Merge on local `main` |
 | --- | --- | --- |
-| handoff item 1 (gate `app/library` + `tests/...` on c9f03cc) | 5 packages ok | `reports/P2.H.1.1.md` line fixed |
-| REV-P2.H.3.1 | APROVADO | 1323892 (ROADMAP box left open: Python SDK, see FIX-sdk-python-regen) |
-| REV-P2.H.3.3 | APROVADO | c7f0abe |
-| REV-FIX-gate-timeouts | APROVADO | 8f9e98c (ROADMAP gate line now `-parallel 4 -timeout 30m`) |
-| REV-P2.H.2.3 | CORRIGIDO_E_APROVADO (lint fix b80929c) | 01e8dcf |
-| REV-FIX-account-purge-lists | APROVADO | 7317f44 |
-| (docs) ROADMAP ticks P2.H.2.3, P2.H.3.3 + CHANGELOG lines for the five above | n/a | eda3a96 |
-| REV-FIX-legacy-import-no-login | CORRIGIDO_E_APROVADO (test e077e54 on `agent/especialista/FIX-legacy-import-no-login-fix`) | fe00949 |
-| REV-DOC-link-check | APROVADO (report only) | none |
-| REV-FIX-covers-base-state | REJEITADO r1 (JSON cover URLs turn relative when `COVERS_BASE_URL` is set; Q-A6) | none; source row `rework`, REV row `blocked` |
+| REV-ADOPT-VF-001 | CORRIGIDO_E_APROVADO (purge test + e2e removal/localhost 053c426; route inventory 6f25b4e) | 75aa17b, 6f25b4e |
+| REV-REBASE-P4.A.2.4 | CORRIGIDO_E_APROVADO (inline migration SQL, dead branch c30b97c) | 2307881 |
+| REV-P2.H.1.3 | APROVADO (84 `<img>`, Lighthouse mobile perf 0.99, LCP 1.73 s) | 6181cb4 |
+| REV-FIX-legacy-cover-retry | CORRIGIDO_E_APROVADO (retry vitest case) | 0a4cf88 |
+| REV-P2.H.1.2 | APROVADO (item + ratings specs, 6 projects, 65 passed / 7 flaky in the onboarding helper) | 57497a9 |
+| REV-FIX-mobile-catalogues | CORRIGIDO_E_APROVADO (recopied with the passkey keys) | a3006bb |
+| REV-FIX-i18n-untranslated | REJEITADO r1 (the 4 values are the legacy wording) | none |
+| REV-P2.H.2.2 | APROVADO (box open until FIX-nojs-auth-post) | ad5287f |
+| (main regression) FIX-e2e-login-exact | exact login submit match in e2e helpers (pt-BR/es hit the passkey button) | merged before ad5287f |
+| REV-DOC-board-mirror-2 | APROVADO | merged |
+| REV-DOC-commands-check, REV-QA-gate-2026-11-01, REV-DOC-pin-inventory | APROVADO (report only, sampled) | none |
 
-Gate on `main` @ 1323892: build, golangci-lint, bun lint/typecheck, go test integration all green. Gate @ eda3a96: all green (29 packages). Gate @ fe00949: build, lint and `database/legacyimport` green.
+Gate on `main` @ 57497a9: build, golangci-lint (integration tags) 0 issues, bun lint/typecheck/vitest (70), go test integration all green. ROADMAP ticks: P1.C.7.1, P1.C.7.2, P2.H.1.2, P2.H.1.3, P4.A.2.4 (P2.F.2.2b has no own box). CHANGELOG lines added for all merges.
+
+New row: FIX-e2e-onboarding-hydration (senior): `completeOnboarding` loses the nickname fill before hydration, so the first attempt of many specs times out.
 
 ## Next rows (prio order)
 
-1. REV-P2.H.1.3 (home): run the acceptance `curl -s http://127.0.0.1:3000/ | grep -c '<img'` ≥ 12 and Lighthouse on a QA container (`E2E_IMAGE_TAG=P2.H.1.3`); port 3000 was held by `hexascore-app:main` (probably QA-e2e-main by the intern). Never `--profile app down`.
-2. REV-FIX-legacy-cover-retry, REV-FIX-mobile-catalogues, REV-FIX-i18n-untranslated (P2.H.2.3 is merged now: rebase-merge conflicts in `resources/lang/*.json` are expected, resolve by keeping both key sets), REV-P2.H.2.2.
-3. Report-only rows: REV-QA-*, REV-DOC-* (sampled fact check + markdownlint).
-4. P2.H.1.2 still needs `ratings.spec` and `item.spec` in all three locales (orchestrator note).
+1. Check the gate on `main` @ ad5287f (scratchpad `gate.sh` output); if red, fix first.
+2. Report-only rows left: REV-DOC-i18n-legal, REV-QA-mobile-proto-review, REV-QA-i18n-parity (sample facts, markdownlint).
+3. FW-triage-branches (sample the vukem branch facts).
+4. REV-FIX-covers-base-state stays blocked until the senior's rework.
 
 ## Pitfalls
 
-- `bunx markdownlint-cli2@0.24.0 <file>` also lints the repo globs in the config; filter its output by the file name. It prints old errors from `qa/e2e/test-results/`.
-- `python`/`python3` hangs on this host (Store stub); edit with Edit, not a Python script.
-- Worktrees left: `wt/especialista-*` for P2.H.3.1, P2.H.3.3, P2.H.2.3, FIX-account-purge-lists, FIX-legacy-import-no-login: remove them with `git worktree remove` after the orchestrator sets `merged`.
-- Source branches that I merged keep their names; delete them after `merged`.
+- Copying `.env` into a worktree is denied by the permission system; use `docker compose --env-file ../../hexascore-vukem/.env ...` from the worktree.
+- `bunx --bun @lhci/cli@0.15.1` fails to install on this Windows host (bunx git-clone bug); `bunx lighthouse@12.6.1 <url> --form-factor=mobile --output=json` works (first run may abort with NO_NAVSTART; rerun).
+- WebAuthn needs a host name: run passkey e2e on `localhost` (the spec now sets it).
+- `grep -c '<img'` counts lines; SSR HTML is one line. Use `grep -o '<img' | wc -l`.
+- Run the whole `./tests` package before merging route changes: `TestSecurity_A01_HexaRouteStackInventory` needs every new route in `tests/testdata/route_inventory.txt`.
+- Gate under load (docker build + e2e at once) times out golangci-lint and once failed `internal/search` TestGolden; pass `--timeout 15m` and rerun the package alone.
+- Gate worktree `wt/especialista-gate` (detached) and script in the scratchpad: `gate.sh <sha>`.
+- Worktrees to remove after `merged`: `wt/especialista-{ADOPT-VF-001,ADOPT-VF-001-fix,P4.A.2.4,P2.H.1.3,P2.H.1.2,FIX-legacy-cover-retry,FIX-mobile-catalogues,P2.H.2.2,gate}` plus the session-2 list. `wt/senior-ADOPT-VF-001` belongs to senior-a.
