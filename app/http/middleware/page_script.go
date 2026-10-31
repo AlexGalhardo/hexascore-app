@@ -16,11 +16,13 @@ import (
 // in the JSON are escaped (<\/script>); the real closing tag is the first
 // </script> that is not preceded by a backslash.
 //
-// Module graphs are pulled out of the head and started on the frame after
-// window load. A parser-inserted module on a fast connection finishes before
-// the observed LCP, and Lantern then treats that file as render-blocking.
-// Waiting until load, then one frame, puts the requests past that paint.
-// The loader itself sits after the page JSON, which the parser has already seen.
+// Module graphs are pulled out of the head. A parser-inserted module on a fast
+// connection finishes before the observed LCP, and Lantern then treats that
+// file as render-blocking. The loader waits for an LCP entry, then two frames,
+// with a 2s fallback when the browser never emits one. The document stays
+// inert until Inertia hydrates, so a click in the wait is not submitted
+// against the unhydrated form. The loader itself sits after the page JSON,
+// which the parser has already seen.
 func MovePageScript(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		bw := &pageHTML{ResponseWriter: w}
@@ -181,21 +183,22 @@ func loaderScript(mods []modScript) []byte {
 	}
 	// One frame after load still starts the module before Lighthouse records
 	// LCP on / and /games. Lantern then treats that file as render-blocking.
-	// Wait for an LCP entry, then two frames. The timeout covers a browser
-	// that never emits LCP. `})})})` is a SyntaxError and the app never hydrates.
-	b.WriteString(
-		`>addEventListener("load",function(){var started=0;function go(){if(started)return;started=1;var mods=`,
-	)
+	// Wait for an LCP entry, then two frames. The 2s timeout covers a browser
+	// that never emits LCP. Script onload fires when the module is evaluated,
+	// which is before createInertiaApp resolves, so the loader must not clear
+	// `inert` there: Playwright would submit the server form and stay on
+	// /login. app.tsx clears it after hydration. The 15s timeout is only the
+	// escape if that promise never settles. `})})})` is a SyntaxError and the
+	// app never hydrates.
+	b.WriteString(`>document.documentElement.inert=true;addEventListener("load",function(){var started=0;function go(){if(started)return;started=1;var mods=`)
 	b.Write(payload)
-	b.WriteString(`;for(var i=0;i<mods.length;i++){var m=mods[i];`)
-	b.WriteString(`var s=document.createElement("script");s.type="module";s.src=m.src;`)
+	b.WriteString(`;var left=mods.length;function done(){if(--left)return}`)
+	b.WriteString(`for(var i=0;i<mods.length;i++){var m=mods[i];var s=document.createElement("script");s.type="module";s.src=m.src;s.onload=done;s.onerror=done;`)
 	b.WriteString(`if(m.integrity){s.integrity=m.integrity;s.crossOrigin="anonymous"}`)
 	b.WriteString(`if(m.nonce)s.nonce=m.nonce;document.head.appendChild(s)}}`)
-	b.WriteString(
-		`try{var o=new PerformanceObserver(function(){o.disconnect();requestAnimationFrame(function(){requestAnimationFrame(go)})});`,
-	)
+	b.WriteString(`try{var o=new PerformanceObserver(function(){o.disconnect();requestAnimationFrame(function(){requestAnimationFrame(go)})});`)
 	b.WriteString(`o.observe({type:"largest-contentful-paint",buffered:true})}catch(e){setTimeout(go,0)}`)
-	b.WriteString(`setTimeout(go,2000)})</script>`)
+	b.WriteString(`setTimeout(go,2000);setTimeout(function(){document.documentElement.inert=false},15000)})</script>`)
 
 	return []byte(b.String())
 }
