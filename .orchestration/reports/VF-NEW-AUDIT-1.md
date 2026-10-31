@@ -18,3 +18,4 @@ checked: opt-in, default false (existing full-load test unchanged); JSON clients
 note: REV-VF-NEW-AUDIT-3 touches the same lines of `inertia/inertia.go`; merge it after this PR and move its shell into `renderRoot`
 fixes: branch merged origin/main and last-updated.json regenerated (432b5867), no code change
 PR: #107
+merged: PR #107 33/33 green, squash 8fbe0f2a

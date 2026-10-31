@@ -10,7 +10,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | id | date | severity | status |
 | --- | --- | --- | --- |
 | VF-062 | 2026-10-30 | low | open |
-| VF-NEW-AUDIT-1 | 2026-10-31 | medium | open |
+| VF-NEW-AUDIT-1 | 2026-10-31 | medium | fixed on main, unreleased (PR #107) |
 | VF-NEW-AUDIT-2 | 2026-10-31 | low | open |
 | VF-NEW-AUDIT-3 | 2026-10-31 | medium | open |
 | VF-NEW-AUDIT-4 | 2026-10-31 | low | open |
@@ -35,7 +35,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 
 ## VF-NEW-AUDIT-1: A 404 raised by a service renders the bare framework page in an Inertia app
 
-- **Date**: 2026-10-31. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-31. **Severity**: medium. **Status**: fixed on main, unreleased (PR #107).
 - **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/frontend/inertia> "Rendering pages" (`inertia.RenderStatus`) and <https://vukem.dev/docs/basics/errors>. The error hook that renders the Inertia `Error` page covers Inertia visits; a plain `GET` that ends in `errs.New(404, ...)` from a service answers the framework HTML page without the application shell.
 - **Context**: `/u/{nickname}` and `/u/{nickname}/lists/{id}` with an unknown nickname showed "404 Not Found" with no header, footer or locale, while the catch-all route rendered the shell. Found by the architecture audit of 2026-10-31.
 - **Workaround**: `app/controllers/not_found.go` `pageError` maps `errs.Status(err) == 404` to `inertia.RenderStatus(c, 404, "Error", ...)` in every page controller that calls a service.
