@@ -30,6 +30,8 @@ type ModerationHandlers struct {
 	AuthorizeApply func(c *web.Ctx) error
 	// AuthorizeAudit and AuthorizeRevert check viewCatalogAudit and revertCatalog (admin-only).
 	AuthorizeAudit, AuthorizeRevert func(c *web.Ctx) error
+	// AuthorizeLock checks lockCatalog (admin-only).
+	AuthorizeLock func(c *web.Ctx) error
 	// Reverter runs SDD 04 section 7.5.
 	Reverter Reverter
 }
@@ -247,8 +249,10 @@ func mapError(err error) error {
 	switch {
 	case err == nil:
 		return nil
-	case errors.Is(err, moderation.ErrNotFound):
+	case errors.Is(err, moderation.ErrNotFound), errors.Is(err, moderation.ErrTargetNotFound):
 		return errs.ErrNotFound
+	case errors.Is(err, moderation.ErrLockExists):
+		return errs.New(http.StatusConflict, "This target and field are already locked.")
 	case errors.Is(err, moderation.ErrAdminOnly):
 		return errs.New(http.StatusForbidden, "Only admins can apply or reject suggestions.")
 	case errors.Is(err, moderation.ErrNotAssignee):

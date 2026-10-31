@@ -50,8 +50,8 @@ type AuditPage struct {
 	Next int64
 }
 
-// Audit lists the catalogue audit log, newest first.
-func (q Queue) Audit(ctx context.Context, f AuditFilter) (AuditPage, error) {
+// auditWhere builds the WHERE clause of f with bound parameters (the cursor is left to the caller).
+func auditWhere(f AuditFilter) (string, []any, error) {
 	var (
 		where []string
 		args  []any
@@ -69,7 +69,7 @@ func (q Queue) Audit(ctx context.Context, f AuditFilter) (AuditPage, error) {
 
 	if f.TargetID != "" {
 		if _, err := uuid.Parse(f.TargetID); err != nil {
-			return AuditPage{}, &InvalidError{Field: "target_id", Msg: "The target id must be a uuid."}
+			return "", nil, &InvalidError{Field: "target_id", Msg: "The target id must be a uuid."}
 		}
 
 		where = append(where, "a.target_id = "+arg(f.TargetID)+"::uuid")
@@ -87,14 +87,23 @@ func (q Queue) Audit(ctx context.Context, f AuditFilter) (AuditPage, error) {
 		where = append(where, "a.id < "+arg(f.Before))
 	}
 
-	cond := ""
-	if len(where) > 0 {
-		cond = "WHERE " + strings.Join(where, " AND ")
+	if len(where) == 0 {
+		return "", args, nil
+	}
+
+	return "WHERE " + strings.Join(where, " AND "), args, nil
+}
+
+// Audit lists the catalogue audit log, newest first.
+func (q Queue) Audit(ctx context.Context, f AuditFilter) (AuditPage, error) {
+	cond, args, err := auditWhere(f)
+	if err != nil {
+		return AuditPage{}, err
 	}
 
 	var raw []byte
 
-	err := q.DB.QueryRowContext(ctx, `SELECT COALESCE(json_agg(row_to_json(t) ORDER BY t.id DESC), '[]') FROM (
+	err = q.DB.QueryRowContext(ctx, `SELECT COALESCE(json_agg(row_to_json(t) ORDER BY t.id DESC), '[]') FROM (
 SELECT a.id, a.occurred_at, COALESCE(a.actor_id, 0) AS actor_id, a.actor_role::text AS actor_role,
   a.source::text AS source, COALESCE(a.suggestion_id::text, '') AS suggestion_id, a.target_type::text AS target_type,
   a.target_id::text AS target_id, a.field, COALESCE(a.before::text, 'null') AS before,

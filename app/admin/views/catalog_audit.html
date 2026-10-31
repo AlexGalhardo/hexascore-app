@@ -11,6 +11,7 @@
 	</label>
 	<button type="submit">Filter</button>
 </form>
+<p><a href="/admin/catalog-audit/export.csv?target={{.Audit.Filter.TargetType}}&amp;target_id={{.Audit.Filter.TargetID}}&amp;field={{.Audit.Filter.Field}}&amp;source={{.Audit.Filter.Source}}">Export CSV</a> · <a href="/admin/catalog-audit/export.ndjson?target={{.Audit.Filter.TargetType}}&amp;target_id={{.Audit.Filter.TargetID}}&amp;field={{.Audit.Filter.Field}}&amp;source={{.Audit.Filter.Source}}">Export NDJSON</a> · <a href="/admin/locks">Locks</a></p>
 {{if not .Audit.Page.Rows}}
 <p class="muted">No audit entries match.</p>
 {{else}}

@@ -169,6 +169,11 @@ admin POST   /admin/moderation/{id}/clone
 admin POST   /admin/moderation/bulk
 admin GET    /admin/catalog-audit
 admin POST   /admin/catalog-audit/{id}/revert
+admin GET    /admin/catalog-audit/export.csv
+admin GET    /admin/catalog-audit/export.ndjson
+admin GET    /admin/locks
+admin POST   /admin/locks
+admin POST   /admin/locks/{id}/delete
 admin GET    /admin/ingestion
 web   PUT    /items/{id}/rating
 web   DELETE /items/{id}/rating
