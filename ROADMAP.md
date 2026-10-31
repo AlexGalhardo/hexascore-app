@@ -3314,7 +3314,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `rg "01 \| 2|06 \| 1" docs/sdd/open-issues.md` → both rows `decided`
   - Notes: apply the rule as written. CC0 or public domain → ingest, API-eligible. Attribution-only → API-eligible with `data_sources.attribution`. Silent, non-commercial or no-redistribution → do not ingest, purge, and drop it from `CATALOG_API_SOURCES`. Covers are API-eligible only with an explicit grant. Architect task; the owner confirms the file before P6.A.2.4 enables the connector.
 
-- [ ] **P6.A.1.2** Create the ingestion tables (`source_records` extensions, `source_record_history`, `job_runs`, `ingest_failures`, `entity_match_reviews`, `dq_results`, `catalog_counts`, `field_coverage`) and the record store: canonical SHA-256, upsert that writes history in the same CTE, and `checked_at`-only on an unchanged hash.
+- [x] **P6.A.1.2** Create the ingestion tables (`source_records` extensions, `source_record_history`, `job_runs`, `ingest_failures`, `entity_match_reviews`, `dq_results`, `catalog_counts`, `field_coverage`) and the record store: canonical SHA-256, upsert that writes history in the same CTE, and `checked_at`-only on an unchanged hash.
   - Files/modules: `database/migrations/<ts>_create_ingestion_tables.go`, `internal/ingest/store/hash.go`, `internal/ingest/store/records.go`, `internal/ingest/store/records_test.go`
   - Refs: SDD 06 §5, FR-06-1; <https://vukem.dev/docs/database/migrations> "Migrations" (`s.Raw`); VF-006; legacy `common/db.py` `canonical_hash`, `upsert_source_record`, `store_records`
   - Depends on: P2.F, P6.A.1.1
