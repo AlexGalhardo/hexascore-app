@@ -61,6 +61,19 @@ func (a *Accounts) sendPasswordChanged(ctx context.Context, userID int64) {
 	}, userID, "password_changed")
 }
 
+// sendPasskeyChanged reports a committed add or removal. event is "added" or "removed".
+func (a *Accounts) sendPasskeyChanged(ctx context.Context, userID int64, event string) {
+	u, err := orm.QueryOf[models.User](a.DB).Where("id", userID).First(ctx)
+	if err != nil {
+		a.log.ErrorContext(ctx, "load user for mail", "user", userID, "err", err)
+		return
+	}
+	a.notify(ctx, mail.PasskeyChanged{
+		User: u, ResetLink: a.URL + "/recover-password",
+		Strings: a.mailStrings(ctx, u, "passkey_"+event, noticeFields),
+	}, userID, "passkey_"+event)
+}
+
 // sendTwoFactorChanged reports event: enabled, disabled or recovery_used.
 func (a *Accounts) sendTwoFactorChanged(ctx context.Context, userID int64, event string) {
 	u, err := orm.QueryOf[models.User](a.DB).Where("id", userID).First(ctx)

@@ -33,3 +33,4 @@ playwright-report/
 .lighthouseci/
 .schemathesis/
 qa/reports/
+.orchestration/heartbeat/

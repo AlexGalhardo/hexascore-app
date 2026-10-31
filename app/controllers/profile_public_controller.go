@@ -19,11 +19,13 @@ type PublicProfile struct {
 	db     *database.DB
 	guards []string
 	api    bool
+	// coversBase makes the JSON cover URLs absolute (COVERS_BASE_URL); the Inertia page keeps paths.
+	coversBase string
 }
 
 // NewPublicProfile builds the handlers; guards are tried in order to find an optional viewer.
-func NewPublicProfile(db *database.DB, api bool, guards ...string) *PublicProfile {
-	return &PublicProfile{db: db, guards: guards, api: api}
+func NewPublicProfile(db *database.DB, api bool, coversBase string, guards ...string) *PublicProfile {
+	return &PublicProfile{db: db, guards: guards, api: api, coversBase: coversBase}
 }
 
 func (h *PublicProfile) viewerID(ctx context.Context) int64 {
@@ -48,7 +50,11 @@ func (h *PublicProfile) Show(c *web.Ctx) error {
 
 	p, err := library.LoadProfile(ctx, h.db, c.Param("nickname"), h.viewerID(ctx), i18n.Locale(ctx), offset)
 	if err != nil {
-		return err
+		if h.api {
+			return err
+		}
+
+		return pageError(c, err)
 	}
 
 	hidden := p.IsPrivate && !p.IsOwner
@@ -64,6 +70,10 @@ func (h *PublicProfile) Show(c *web.Ctx) error {
 	if h.api {
 		if hidden {
 			return c.JSON(200, map[string]any{"profile": head})
+		}
+
+		for i := range p.Ratings {
+			p.Ratings[i].Cover = p.Ratings[i].Cover.WithBase(h.coversBase)
 		}
 
 		return c.JSON(200, map[string]any{

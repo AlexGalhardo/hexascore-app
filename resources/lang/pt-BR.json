@@ -1,4 +1,20 @@
 {
+  "flash": {
+    "ratingSaved": "Nota salva.",
+    "ratingRemoved": "Nota removida.",
+    "statusSaved": "Status salvo.",
+    "statusRemoved": "Status removido.",
+    "timeToBeatSaved": "Tempos salvos.",
+    "timeToBeatRemoved": "Tempos removidos.",
+    "listCreated": "Lista criada.",
+    "listUpdated": "Lista atualizada.",
+    "listDeleted": "Lista excluída.",
+    "listItemAdded": "Adicionado à lista.",
+    "listItemRemoved": "Removido da lista.",
+    "editionSaved": "Edição salva.",
+    "editionRemoved": "Edição esquecida.",
+    "adminTwoFactorRequired": "A autenticação em dois fatores é obrigatória para abrir a área de administração. Configure-a aqui."
+  },
   "account": {
     "metaTitle": "Perfil",
     "title": "Seu perfil",
@@ -42,12 +58,28 @@
       "needPassword": "Defina uma senha acima antes de ativar a autenticação em duas etapas.",
       "manage": "Gerenciar autenticação em duas etapas"
     },
+    "passkeys": {
+      "title": "Passkeys",
+      "body": "Entre com digital, rosto ou PIN do dispositivo em vez da senha.",
+      "empty": "Nenhuma passkey ainda.",
+      "add": "Adicionar passkey",
+      "remove": "Remover",
+      "removeLabel": "Remover passkey {name}",
+      "unnamed": "Passkey",
+      "added": "Adicionada em {date}",
+      "failed": "A passkey não foi salva. Tente de novo.",
+      "lastWarning": "Se remover a última passkey, você ainda recupera a conta pelo e-mail de redefinição.",
+      "confirmGoogle": "Confirmar com o Google",
+      "limit": "Você pode salvar no máximo 10 passkeys.",
+      "password": "Senha"
+    },
     "privacy": {
       "title": "Privacidade",
       "label": "Perfil privado",
       "help": "Suas notas continuam nas médias da comunidade, mas seu perfil e suas listas ficam ocultos para outros usuários.",
       "personalization": "Desativar recomendações personalizadas",
-      "personalizationHelp": "Paramos de usar suas avaliações para sugerir itens a você."
+      "personalizationHelp": "Paramos de usar suas avaliações para sugerir itens a você.",
+      "save": "Salvar privacidade"
     },
     "delete": {
       "title": "Excluir conta",
@@ -226,6 +258,7 @@
     },
     "or": "ou",
     "google": "Continuar com Google",
+    "passkey": "Entrar com passkey",
     "challenge": {
       "checking": "Verificando seu navegador…",
       "noscript": "Este formulário precisa de JavaScript. Sem ele, você pode"
@@ -245,7 +278,8 @@
       "invalidNickname": "De 4 a 16 letras minúsculas, sem números nem símbolos.",
       "invalidEmail": "Informe um e-mail válido.",
       "invalidName": "Informe seu nome.",
-      "invalidToken": "Este link é inválido ou expirou."
+      "invalidToken": "Este link é inválido ou expirou.",
+      "passkeyFailed": "O login com passkey foi cancelado ou falhou."
     },
     "login": {
       "metaTitle": "Entrar",
@@ -546,11 +580,16 @@
     "skip": "Ir para o conteúdo",
     "dismiss": "Dispensar",
     "home": "Início",
-    "notifications": "Notificações"
+    "notifications": "Notificações",
+    "library": "Minha estante",
+    "lists": "Minhas listas",
+    "more": "Mais"
   },
   "home": {
     "title": "Todo jogo, filme, série e livro — avaliado pelas pessoas, categoria por categoria.",
-    "explore": "Explorar"
+    "explore": "Explorar",
+    "recent": "Avaliados recentemente pelos membros",
+    "ratedBy": "por {name}"
   },
   "footer": {
     "terms": "Termos",
@@ -571,7 +610,16 @@
     "copied": "Copiado",
     "title": "Documentação da API",
     "navLabel": "Documentação",
-    "nav": { "index": "Início rápido", "authentication": "Autenticação", "pagination": "Paginação", "rate-limits": "Limites de uso", "errors": "Erros", "coverage": "Cobertura", "changelog": "Histórico de mudanças", "reference": "Referência da API" },
+    "nav": {
+      "index": "Início rápido",
+      "authentication": "Autenticação",
+      "pagination": "Paginação",
+      "rate-limits": "Limites de uso",
+      "errors": "Erros",
+      "coverage": "Cobertura",
+      "changelog": "Histórico de mudanças",
+      "reference": "Referência da API"
+    },
     "tocLabel": "Nesta página",
     "quickstart": {
       "lead": "Notas da comunidade para jogos, filmes, séries e livros — de 0 a 100, em seis categorias por item — por meio de uma API JSON somente leitura.",
@@ -1149,7 +1197,8 @@
       "noRatings": "Nenhuma avaliação ainda.",
       "emptyShelf": "Nada aqui ainda.",
       "previous": "Anterior",
-      "next": "Próxima"
+      "next": "Próxima",
+      "summary": "{ratings} avaliações · {lists} listas"
     },
     "status": {
       "label": "Status",
@@ -1347,5 +1396,19 @@
     "by": "Lista de {nickname}",
     "edited": "Editar lista",
     "limit": "Até {limit} listas por tipo."
+  },
+  "dashboard": {
+    "title": "Bem-vindo de volta, {name}",
+    "lead": "Continue de onde parou.",
+    "library": "Sua estante",
+    "libraryHelp": "Tudo que você marcou como quero, jogando, concluído ou abandonado.",
+    "lists": "Suas listas",
+    "listsHelp": "Listas ordenadas para compartilhar.",
+    "page": "Minha página",
+    "pageHelp": "O que as outras pessoas veem.",
+    "api": "Chaves de API",
+    "apiHelp": "Chaves, uso e a documentação para desenvolvedores.",
+    "verify": "Verifique seu e-mail para avaliar e manter listas.",
+    "twoFactor": "Autenticação em dois fatores"
   }
 }

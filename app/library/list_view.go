@@ -7,6 +7,8 @@ import (
 	"errors"
 	"fmt"
 	"time"
+
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 )
 
 // ListSummary is a row of the lists-management page; CoverThumbs holds at most four thumb keys.
@@ -22,12 +24,13 @@ type ListSummary struct {
 
 // ListItemRef is the catalogue data shown next to a list position.
 type ListItemRef struct {
-	ID            string  `json:"id"`
-	Type          string  `json:"type"`
-	Slug          string  `json:"slug"`
-	Title         string  `json:"title"`
-	Year          *int    `json:"year"`
-	CoverThumbKey *string `json:"coverThumbKey"`
+	ID            string         `json:"id"`
+	Type          string         `json:"type"`
+	Slug          string         `json:"slug"`
+	Title         string         `json:"title"`
+	Year          *int           `json:"year"`
+	CoverThumbKey *string        `json:"coverThumbKey"`
+	Cover         *catalog.Cover `json:"cover"`
 }
 
 // ListEntry is one position of a list.
@@ -91,6 +94,7 @@ WHERE li.list_id = $1 ORDER BY li.position`, listID, locale)
 			return nil, err
 		}
 
+		e.Item.Cover = catalog.CoverFromThumbKey(e.Item.CoverThumbKey)
 		out = append(out, e)
 	}
 

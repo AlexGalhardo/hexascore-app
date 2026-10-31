@@ -31,7 +31,9 @@ test.describe("ssr without javascript", () => {
 			const response = await page.goto(`${prefix}${path}`);
 			expect(response?.status()).toBe(200);
 			await expect(page.locator("h1")).toHaveCount(1);
-			expect((await page.locator("main").innerText()).trim().length).toBeGreaterThan(20);
+			expect(
+				((await page.locator("main").textContent()) ?? "").trim().length,
+			).toBeGreaterThan(20);
 		});
 	}
 
@@ -45,7 +47,10 @@ test.describe("ssr without javascript", () => {
 			const response = await page.goto(href);
 			expect(response?.status(), href).toBe(200);
 			await expect(page.locator("h1")).toHaveCount(1);
-			expect((await page.locator("h1").innerText()).trim().length, href).toBeGreaterThan(0);
+			expect(
+				((await page.locator("h1").textContent()) ?? "").trim().length,
+				href,
+			).toBeGreaterThan(0);
 			await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(1);
 		}
 	});

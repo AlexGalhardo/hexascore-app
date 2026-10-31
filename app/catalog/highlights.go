@@ -20,6 +20,7 @@ type Highlight struct {
 	Year        *int     `json:"year"`
 	Score       *float64 `json:"score"`
 	RatingCount int      `json:"ratingCount"`
+	Cover       *Cover   `json:"cover"`
 }
 
 // SectionHighlights is one item type's landing section.
@@ -57,7 +58,7 @@ func Highlights(ctx context.Context, db Querier, typ, locale string) (SectionHig
   coalesce(t.title, te.title, i.original_title, i.slug),
   extract(year FROM i.release_date)::int,
   ` + starsScore + `,
-  i.rating_count
+  i.rating_count, i.cover_key, i.cover_thumb_key
 FROM items i
 LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $2
 LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
@@ -84,9 +85,12 @@ func scanHighlights(rows *sql.Rows) ([]Highlight, error) {
 	got := []Highlight{}
 	for rows.Next() {
 		var h Highlight
-		if err := rows.Scan(&h.ID, &h.Type, &h.Slug, &h.Title, &h.Year, &h.Score, &h.RatingCount); err != nil {
+		var full, thumb sql.NullString
+		err := rows.Scan(&h.ID, &h.Type, &h.Slug, &h.Title, &h.Year, &h.Score, &h.RatingCount, &full, &thumb)
+		if err != nil {
 			return nil, fmt.Errorf("scan highlight: %w", err)
 		}
+		h.Cover = NewCover(full, thumb)
 		got = append(got, h)
 	}
 

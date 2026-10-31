@@ -1,4 +1,20 @@
 {
+  "flash": {
+    "ratingSaved": "Calificación guardada.",
+    "ratingRemoved": "Calificación eliminada.",
+    "statusSaved": "Estado guardado.",
+    "statusRemoved": "Estado eliminado.",
+    "timeToBeatSaved": "Tiempos guardados.",
+    "timeToBeatRemoved": "Tiempos eliminados.",
+    "listCreated": "Lista creada.",
+    "listUpdated": "Lista actualizada.",
+    "listDeleted": "Lista eliminada.",
+    "listItemAdded": "Añadido a la lista.",
+    "listItemRemoved": "Quitado de la lista.",
+    "editionSaved": "Edición guardada.",
+    "editionRemoved": "Edición olvidada.",
+    "adminTwoFactorRequired": "La autenticación en dos pasos es obligatoria para abrir el área de administración. Configúrala aquí."
+  },
   "account": {
     "metaTitle": "Perfil",
     "title": "Tu perfil",
@@ -42,12 +58,28 @@
       "needPassword": "Define una contraseña arriba antes de activar la autenticación en dos pasos.",
       "manage": "Gestionar la autenticación en dos pasos"
     },
+    "passkeys": {
+      "title": "Passkeys",
+      "body": "Entra con tu huella, tu rostro o el PIN del dispositivo en lugar de la contraseña.",
+      "empty": "Aún no hay passkeys.",
+      "add": "Añadir passkey",
+      "remove": "Eliminar",
+      "removeLabel": "Eliminar passkey {name}",
+      "unnamed": "Passkey",
+      "added": "Añadida el {date}",
+      "failed": "La passkey no se guardó. Vuelve a intentarlo.",
+      "lastWarning": "Si eliminas la última passkey, aún puedes recuperar la cuenta con el correo de restablecimiento.",
+      "confirmGoogle": "Confirmar con Google",
+      "limit": "Puedes guardar como máximo 10 passkeys.",
+      "password": "Contraseña"
+    },
     "privacy": {
       "title": "Privacidad",
       "label": "Perfil privado",
       "help": "Tus puntuaciones siguen en las medias de la comunidad, pero tu perfil y tus listas quedan ocultos para otros usuarios.",
       "personalization": "Desactivar recomendaciones personalizadas",
-      "personalizationHelp": "Dejamos de usar tus valoraciones para sugerirte elementos."
+      "personalizationHelp": "Dejamos de usar tus valoraciones para sugerirte elementos.",
+      "save": "Guardar privacidad"
     },
     "delete": {
       "title": "Eliminar cuenta",
@@ -226,6 +258,7 @@
     },
     "or": "o",
     "google": "Continuar con Google",
+    "passkey": "Entrar con passkey",
     "challenge": {
       "checking": "Comprobando tu navegador…",
       "noscript": "Este formulario necesita JavaScript. Sin él, puedes"
@@ -245,7 +278,8 @@
       "invalidNickname": "De 4 a 16 letras minúsculas, sin números ni símbolos.",
       "invalidEmail": "Introduce un correo válido.",
       "invalidName": "Introduce tu nombre.",
-      "invalidToken": "Este enlace no es válido o ha caducado."
+      "invalidToken": "Este enlace no es válido o ha caducado.",
+      "passkeyFailed": "El acceso con passkey se canceló o falló."
     },
     "login": {
       "metaTitle": "Entrar",
@@ -546,11 +580,16 @@
     "skip": "Ir al contenido",
     "dismiss": "Descartar",
     "home": "Inicio",
-    "notifications": "Notificaciones"
+    "notifications": "Notificaciones",
+    "library": "Mi biblioteca",
+    "lists": "Mis listas",
+    "more": "Más"
   },
   "home": {
     "title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
-    "explore": "Explorar"
+    "explore": "Explorar",
+    "recent": "Valorados recientemente por los miembros",
+    "ratedBy": "por {name}"
   },
   "footer": {
     "terms": "Términos",
@@ -571,7 +610,16 @@
     "copied": "Copiado",
     "title": "Documentación de la API",
     "navLabel": "Documentación",
-    "nav": { "index": "Inicio rápido", "authentication": "Autenticación", "pagination": "Paginación", "rate-limits": "Límites de uso", "errors": "Errores", "coverage": "Cobertura", "changelog": "Historial de cambios", "reference": "Referencia de la API" },
+    "nav": {
+      "index": "Inicio rápido",
+      "authentication": "Autenticación",
+      "pagination": "Paginación",
+      "rate-limits": "Límites de uso",
+      "errors": "Errores",
+      "coverage": "Cobertura",
+      "changelog": "Historial de cambios",
+      "reference": "Referencia de la API"
+    },
     "tocLabel": "En esta página",
     "quickstart": {
       "lead": "Puntuaciones de la comunidad para juegos, películas, series y libros — de 0 a 100, en seis categorías por elemento — a través de una API JSON de solo lectura.",
@@ -1149,7 +1197,8 @@
       "noRatings": "Aún no hay valoraciones.",
       "emptyShelf": "Nada por aquí todavía.",
       "previous": "Anterior",
-      "next": "Siguiente"
+      "next": "Siguiente",
+      "summary": "{ratings} puntuaciones · {lists} listas"
     },
     "status": {
       "label": "Estado",
@@ -1347,5 +1396,19 @@
     "by": "Lista de {nickname}",
     "edited": "Editar lista",
     "limit": "Hasta {limit} listas por tipo."
+  },
+  "dashboard": {
+    "title": "Bienvenido de nuevo, {name}",
+    "lead": "Continúa donde lo dejaste.",
+    "library": "Tu biblioteca",
+    "libraryHelp": "Todo lo que marcaste como quiero, jugando, completado o abandonado.",
+    "lists": "Tus listas",
+    "listsHelp": "Listas ordenadas para compartir.",
+    "page": "Mi página",
+    "pageHelp": "Lo que ven las demás personas.",
+    "api": "Claves de API",
+    "apiHelp": "Claves, uso y la documentación para desarrolladores.",
+    "verify": "Verifica tu correo para puntuar y mantener listas.",
+    "twoFactor": "Autenticación en dos pasos"
   }
 }

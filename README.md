@@ -1,39 +1,46 @@
-# hexascore
+# HexaScore
 
-A [Vukem](https://vukem.dev) application.
+[hexascore.app](https://hexascore.app): community scores for games, movies, TV series and books, six categories per rating, a published formula, a read-only public API and an Android app. Go on the [vukem](https://vukem.dev) framework, Inertia + React with SSR, PostgreSQL, deployed on Railway.
 
-## Commands
+This repository is the rewrite of the Next.js app kept on branch `legacy`. `v1.0.0` is parity with that app plus the cutover of `hexascore.app`; the plan is in [ROADMAP.md](ROADMAP.md).
+
+## Run it locally
 
 ```sh
-vukem serve        # run with reload on http://localhost:3000
-vukem migrate      # apply migrations
-go test ./...      # run the tests
-go tool govulncheck ./...  # scan for known vulnerabilities (pinned in go.mod)
-vukem build        # production binary in bin/
-vukem list         # all commands
+setups/setup-windows.ps1   # or setups/setup-unix.sh: tools, .env, APP_KEY, compose stack, bun install, migrate
+vukem serve                # http://localhost:3000 with Vite HMR
 ```
 
-Run `go tool govulncheck ./...` in CI and on a schedule: new advisories
-appear after your code ships.
+Full container with the demo catalogue (what the QA suites and the owner test):
 
-## Documentation
+```sh
+E2E_IMAGE_TAG=local docker compose --profile app build app-init
+E2E_IMAGE_TAG=local docker compose --profile app up -d --wait   # http://127.0.0.1:3000
+```
 
-Every section of <https://vukem.dev/docs>, in the order a new project needs
-them:
+Demo admin: `admin@example.test` / `Demo-password-1` (seeder `DemoCatalog`).
 
-| Section | What it covers |
+## Checks
+
+```sh
+go build ./... && golangci-lint run --build-tags integration ./...
+bun run lint && bun run typecheck && bun run test
+TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable go test -tags integration ./...
+bun run e2e                 # Playwright + axe against the container
+```
+
+## Where to read next
+
+| Document | What |
 | --- | --- |
-| [Getting started](https://vukem.dev/docs/introduction) | installation, the starters, `.env` and configuration, the directory structure |
-| [Architecture](https://vukem.dev/docs/architecture/lifecycle) | the application lifecycle, from `cmd/app` to a response |
-| [The basics](https://vukem.dev/docs/basics/routing) | routing, middleware, controllers, requests, validation, errors, sessions, CSRF, views |
-| [APIs](https://vukem.dev/docs/rest-apis/overview) | JSON APIs, pagination, typed handlers, OpenAPI, client generation, idempotency |
-| [Database](https://vukem.dev/docs/database/overview) | the ORM, relations, migrations, factories and seeders, PostgreSQL, Redis, MongoDB |
-| [Security](https://vukem.dev/docs/security/overview) | authentication, API tokens, two-factor, authorization, rate limiting, headers, encryption |
-| [Digging deeper](https://vukem.dev/docs/digging-deeper/mail) | mail, cache, storage, uploads, events, queue, scheduler, broadcasting, billing, admin |
-| [Frontend](https://vukem.dev/docs/frontend/htmx) | HTMX, Vite, Inertia |
-| [Testing](https://vukem.dev/docs/testing/overview) | the fluent HTTP client, the test database, factories |
-| [CLI](https://vukem.dev/docs/cli/overview) | every `vukem` command and flag |
-| [Deployment](https://vukem.dev/docs/deployment/single-binary) | the single binary, Docker and Railway |
+| [AGENTS.md](AGENTS.md) | rules, commands and layout for every coding agent (humans too) |
+| [ROADMAP.md](ROADMAP.md) | phases, microtasks and acceptance criteria up to `v1.0.0` and beyond |
+| [PROMPT-WORKERS.md](PROMPT-WORKERS.md) | system prompt of the agent team that executes the roadmap |
+| [docs/sdd/](docs/sdd/README.md) | one design document per domain |
+| [docs/adrs/](docs/adrs/README.md) | architecture decisions |
+| [docs/PROGRESS.md](docs/PROGRESS.md) | programme log, newest at the bottom |
+| [CHANGELOG.md](CHANGELOG.md) | releases (git-cliff) |
+| [vukem-feedback.md](vukem-feedback.md) | framework bugs and requests found while building HexaScore |
 
 ## Project standards
 
@@ -41,3 +48,4 @@ them:
 | --- | --- |
 | `.editorconfig` | tabs of width 4, spaces where the format needs them (YAML, Markdown, JavaScript) |
 | `.gitattributes` | LF in the repository and in every working copy, Windows included |
+| `.githooks/commit-msg` | Conventional Commits check (`git config core.hooksPath .githooks`, done by the setup scripts) |
