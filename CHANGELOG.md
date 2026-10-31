@@ -6,64 +6,74 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-10-31
+
 ### Added
 
-- CSR pages (profile, API keys, billing, notifications, library, lists) ship a server-rendered title and a busy skeleton, so the document is never blank before hydration.
-- `community.SaveDraft` creates and updates suggestion drafts with validation, ownership and version checks.
-- Suggest page (`/suggest/{target_type}/{id}`) and draft save routes (`POST /suggestions`, `PATCH /suggestions/{id}`) behind the `community_submissions` flag (default off), with the `feature_flags` table and the `/admin/_flags` panel; a draft update keeps the stored target.
-- Daily `exports.ids` job (07:00 UTC) writing gzip NDJSON ID files per item type to the bucket and pruning files older than 90 days; not served until P3.A.4.2.
-- Login and signup submit buttons show a pending spinner while the page has not hydrated or a submit is in flight; both forms declare `method=post` and their action.
-- Report dialog on public profiles and public lists (`POST /reports`, reasons from SDD 14).
-- Dashboard page with links to the library, lists, public page and API keys, in the three locales.
-- Mobile header: brand, search and icon buttons on one row, sections on a scrollable row, account and language entries in a menu.
-- Item covers in every listing: home highlights, section listings, search results, library, lists and public profiles; `COVERS_BASE_URL` (same-origin `/covers` by default, a bucket or CDN https origin joins CSP `img-src`), a sized placeholder when an item has no cover, and placeholder covers for the demo catalogue.
-- Toast feedback after rating, status, time-to-beat, list and edition changes, and an explanation on `/user/two-factor` when the admin area redirected there (en, pt-BR, es).
-- `type` enum (`games`, `movies`, `series`, `books`) in the OpenAPI documents and the TypeScript SDK.
-- `hexascore:import-legacy --allow-no-login` opts in to users with no password, Google link or passkey; duplicate emails and a two-factor flag without a row still abort.
-- Passkeys (vukem v0.34.0): add, sign in with and remove a passkey from the profile and the login page in en/pt-BR/es, a `passkey_changed` mail, the legacy passkey import in the users stage, and passkey rows deleted when an account is anonymised.
-- Home page hero with the Explore call to action and a "recently rated by members" strip (12 public ratings, cached 60 s).
-- Community honeypot (third hit in seven days blocks for 30 days), burst limits, cover upload rules and source URL / cover fetch jobs through the safe HTTP client.
+- **ui:** Report dialog, dashboard links and the HexaScore name fallback ([dd7053c](https://github.com/AlexGalhardo/hexascore-app/commit/dd7053c4a9f57ea603b324bfab69a4b296613c24))
+- **catalog:** Serve item covers in listings, search, library, lists and profiles ([d98b5a6](https://github.com/AlexGalhardo/hexascore-app/commit/d98b5a6ad85a2f681bbe96252d4a3c41e52e07bd))
+- **catalog:** Merge item covers in listings, search, library, lists and profiles ([170f991](https://github.com/AlexGalhardo/hexascore-app/commit/170f991d934961317e5ceed7663acd62f162f828))
+- **api:** Document the type enum and allow a free-plan burst of 5 ([18d5d89](https://github.com/AlexGalhardo/hexascore-app/commit/18d5d89c4ef12f01a241cbced84db6b7527432b7))
+- **api:** Merge type enum and free-plan burst of 5 ([1323892](https://github.com/AlexGalhardo/hexascore-app/commit/1323892f4b4d1519f4adbfea4260a3a8f644c0c0))
+- **ux:** Flash a status toast after rating, status, time-to-beat, list and edition changes ([1487f66](https://github.com/AlexGalhardo/hexascore-app/commit/1487f66e4fc5d863f09a58d6c3fcb3b3a23ceb68))
+- **feedback:** Merge success toasts after mutations ([01e8dcf](https://github.com/AlexGalhardo/hexascore-app/commit/01e8dcfe8fa1c161ea847f8e0de4a746b5273f2e))
+- Opt in to legacy users with no login ([e6d3700](https://github.com/AlexGalhardo/hexascore-app/commit/e6d3700f7a1d76dadac69979f33318ee68500bcc))
+- **infra:** Merge opt-in import of legacy users without login ([fe00949](https://github.com/AlexGalhardo/hexascore-app/commit/fe0094989233e63af4735984401a3c2324350746))
+- Register and sign in with passkeys ([6ab4601](https://github.com/AlexGalhardo/hexascore-app/commit/6ab460185e583a9aa2d5c744bc1c1d8fa6203f59))
+- Add passkey profile and login UI ([74ef051](https://github.com/AlexGalhardo/hexascore-app/commit/74ef05172a6a95b7f1a859b1511394ea6e016e49))
+- Import legacy passkeys ([9986a87](https://github.com/AlexGalhardo/hexascore-app/commit/9986a876e6de777984fbc8fb7e2e6dcc0d1c3d9b))
+- **auth:** Merge passkey registration, sign-in and removal ([75aa17b](https://github.com/AlexGalhardo/hexascore-app/commit/75aa17bb0affc0045f17d7b5f2537f34fa549106))
+- **community:** Guard community covers and source URLs ([b09fe6b](https://github.com/AlexGalhardo/hexascore-app/commit/b09fe6bce323e6bda8f4effcd9cdfef6488d8458))
+- **community:** Merge honeypot, burst limits, cover upload and source URL guard ([2307881](https://github.com/AlexGalhardo/hexascore-app/commit/230788129ec1c35bacf4ec8cd0e628b96e95b0a2))
+- **ui:** Add home hero and recently rated strip ([65b0a80](https://github.com/AlexGalhardo/hexascore-app/commit/65b0a80e9be3cb719ac0a4223197e75eea6e3a84))
+- **ui:** Merge home hero and recently rated strip ([6181cb4](https://github.com/AlexGalhardo/hexascore-app/commit/6181cb406ceb9205fd3fc56bd62ebfb52c0279fd))
+- **ui:** Rebuild the item page layout with cover, score badge and SVG stars ([d38703d](https://github.com/AlexGalhardo/hexascore-app/commit/d38703d031054f2b2c59738e6475b3ab61ad355c))
+- **ui:** Merge item page layout with cover, score badge and SVG stars ([57497a9](https://github.com/AlexGalhardo/hexascore-app/commit/57497a9ec017735aa0e8654d764776e435d43cf4))
+- **ui:** Show a pending state on auth submit buttons until hydration ([a29f932](https://github.com/AlexGalhardo/hexascore-app/commit/a29f932c98cece34ff6812e36397b79526a1af1f))
+- **ui:** Merge pending state on auth submit buttons until hydration ([ad5287f](https://github.com/AlexGalhardo/hexascore-app/commit/ad5287f6865606e9d95ecbf680d5bc760e81733c))
+- **api:** Add daily ID exports job ([fce88fc](https://github.com/AlexGalhardo/hexascore-app/commit/fce88fc6da95270fdf9b52872387d5c036b85379))
+- **api:** Merge daily ID exports job ([e6fcc24](https://github.com/AlexGalhardo/hexascore-app/commit/e6fcc24ab8f167bd4e3f30f6af7020ffa7c7654d))
+- **ui:** Ship a title and busy skeleton in the HTML of CSR pages ([eb1c281](https://github.com/AlexGalhardo/hexascore-app/commit/eb1c2810b124f61390f7b6955f105e38d6ae1785))
+- **ui:** Merge server-side title and skeleton for CSR pages ([720ec99](https://github.com/AlexGalhardo/hexascore-app/commit/720ec99b7d2bcce73840a8fe7d7b541d697cb0f6))
+- **community:** Add draft save service ([247c758](https://github.com/AlexGalhardo/hexascore-app/commit/247c758bfd9a36812859b099a6b435df3fc792bf))
+- **community:** Merge draft save service (P4.A.3.1 part 1) ([7bf0b7d](https://github.com/AlexGalhardo/hexascore-app/commit/7bf0b7de7f1340c5a4246f5138cee7d87981e632))
+- **community:** Add suggest page and draft save routes ([2923481](https://github.com/AlexGalhardo/hexascore-app/commit/2923481c94e3fd7943cb7373c277dc1cceae7098))
+- **community:** Merge suggest page and draft save routes (P4.A.3.1 part 2) ([f78ad42](https://github.com/AlexGalhardo/hexascore-app/commit/f78ad420845ab4995a6d092be91942eb7563dc58))
 
 ### Changed
 
-- QA compose app stack takes `QA_PORT` and `QA_DATABASE_URL` so parallel stacks (own `-p` project) coexist; the Lighthouse base URL follows `E2E_BASE_URL` (`lighthouserc.cjs`).
-- Cover origin (`COVERS_BASE_URL`) reaches the web client as the shared `coversBase` prop; `app/catalog` holds no package state, and the JSON endpoints (`/app/v1` lists, library, users, search and suggest) keep absolute cover URLs.
-- Item page: cover and score badge in the header, details beside the synopsis, the rating panel first on mobile and in a sticky side column on desktop; stars are inline SVG so half stars look the same everywhere.
-- Star rating rows show their category label and larger stars; an unset value renders as a dash.
-- The cookie banner reserves space at the bottom of the page instead of covering the last controls.
-- The app name falls back to "HexaScore" when `APP_NAME` is unset; the QA compose stack sets it.
-- The public API `unknown type` problem names the accepted segments (games, movies, series, books).
-- Demo seeder: ratings spread over the whole 0.5–10 range (the previous `ORDER BY random()` reused the draw and every demo score was 1/10).
-- The free API plan accepts a burst of 5 requests (1 request/second sustained).
+- **community:** Inline honeypot migration sql and drop a dead branch ([c30b97c](https://github.com/AlexGalhardo/hexascore-app/commit/c30b97c469cc1e24ccabda74c8d440034fde716a))
+- **catalog:** Serve cover base through a shared prop instead of package state ([fe37067](https://github.com/AlexGalhardo/hexascore-app/commit/fe37067dea68bfe71f0ec999111f0b8a0eecdb6d))
+- **catalog:** Merge cover base without package state ([8bdfdf3](https://github.com/AlexGalhardo/hexascore-app/commit/8bdfdf36aa471e7c937252ec9903d9192ab4b6a9))
+- **community:** Convert field change instead of copying fields ([296a3db](https://github.com/AlexGalhardo/hexascore-app/commit/296a3dbb9b9fc6f595ff411b8d272dd61e4948ad))
 
 ### Fixed
 
-- e2e account flows wait for hydration after onboarding and reloads and match the login button exactly, removing the `waitForURL` timeouts.
-- Python SDK regenerated from the current OpenAPI contract: webhooks, the changes feed and the `type` enums.
-- E2E login helpers match the submit button exactly, so pt-BR and es runs no longer hit the passkey button.
-- The Android app's bundled i18n catalogues carry the passkey and privacy keys again (keys test green).
-- Legacy cover copy retries DNS, rate-limit and non-rewindable-body errors and accepts `--concurrency`; HTTP 404 stays one failure.
-- A verified user without a nickname is sent to the onboarding after a late e-mail verification instead of the dashboard.
-- Public lists with fewer than three items are `noindex` (SDD 14 FR-14-6).
-- Unknown profiles and lists render the 404 page with the shell instead of the bare framework page.
-- The privacy form button no longer says "Save name".
-- Keep the document inert until Inertia finishes hydrating, so a click cannot submit the server form first.
-- Wait for that hydration before the admin sign-in, the header keyboard check, and the header search.
-- Pass the osv-scanner config flag after the `scan source` subcommand.
-- Answer unknown `/app/v1` catalogue segments with 404 before auth, and point the CI OpenAPI export and `pg_dump` at Postgres 18.
-- Paint the cookie banner in the first HTML when consent is unset, and load the ratings dialog only after it is opened.
-- Trust the docker bridge in the OpenAPI scan so each Schemathesis call has its own rate-limit bucket, and keep the bun:test files out of vitest.
-- Stop commitlint from rejecting commit bodies that already exceed 100 characters.
-- Fetch the full git history in the lint job so commitlint can see the pull request range.
-- Answer an unknown `/app/v1` collection with problem+json when the client sends no Accept header.
-- Start the page modules after the LCP entry so the home and games listings stay inside the Lighthouse budget.
-- The admin ingestion and item-manage pages show the same sidebar as the admin panel.
-- Gate reliability on loaded hosts: vitest worker cap and Postgres `fsync` off in the dev compose.
-- Account purge deletes private lists and notifications, clears public list free text and closes reports about the user (SDD 14 section 8).
-- The legacy catalogue import stores a runtime or page count only when it fits the items check; out-of-range values become empty instead of aborting the batch.
-- Ignore four transitive Expo and Jest advisories that have no compatible patched release.
-- Let the pull request title `Release x.y.z` pass commitlint. The commit subjects stay conventional.
-- Freeze the clock in `TestSecurity_A07_HexaHoneypotAndFillTime`, so a slow proof-of-work solve under `-race` no longer ages the "too fast" form token past the minimum fill time.
+- **seeders:** Spread demo ratings over the whole star scale ([8f7995c](https://github.com/AlexGalhardo/hexascore-app/commit/8f7995c159feb4080d992be29f74472b6da0b7f3))
+- **auth:** Send a verified user without a nickname to the onboarding ([7d44927](https://github.com/AlexGalhardo/hexascore-app/commit/7d449273a496ca35313dd986b5106b8a9d240373))
+- **lists:** Noindex short lists and render unknown profiles with the shell ([469cf29](https://github.com/AlexGalhardo/hexascore-app/commit/469cf292424d1b3b84cbbd5cdfc13f8a1d5a7bb5))
+- **api:** Name the accepted types in the unknown type problem ([cd9fde5](https://github.com/AlexGalhardo/hexascore-app/commit/cd9fde563b41063ac74e4c41d27795f0a14cea2c))
+- **ui:** Compact mobile header, labelled star rows and a cookie banner spacer ([5945012](https://github.com/AlexGalhardo/hexascore-app/commit/59450124cc16d9d733f1e8a2bb45c87cf640cdd9))
+- **i18n:** Recopy mobile catalogues after account.privacy.save ([c1b7990](https://github.com/AlexGalhardo/hexascore-app/commit/c1b79903a75f08ba802ca0aeec9fabb6191b377b))
+- **admin:** Show the full panel navigation on the ingestion and item pages ([cd29c95](https://github.com/AlexGalhardo/hexascore-app/commit/cd29c95bd54ff316b13cde4f64b7b6df24c951c7))
+- **admin:** Merge one admin sidebar for ingestion and item pages ([c7f0abe](https://github.com/AlexGalhardo/hexascore-app/commit/c7f0abefa1c5b01cb667c2df667510b635fc98c8))
+- **repo:** Stop gate timeouts under load ([777f5ce](https://github.com/AlexGalhardo/hexascore-app/commit/777f5cea6697b32a190063cc375f01b2587a635f))
+- **repo:** Merge gate timeout fixes under load ([8f9e98c](https://github.com/AlexGalhardo/hexascore-app/commit/8f9e98ca633164dbce912d6666126c8462863b95))
+- **accounts:** Purge lists, notifications and reports on account deletion ([4f484ff](https://github.com/AlexGalhardo/hexascore-app/commit/4f484ff8d3aee2b30a57011c297224899a3067f2))
+- **accounts:** Merge purge of lists, notifications and reports ([7317f44](https://github.com/AlexGalhardo/hexascore-app/commit/7317f4417cdf493415dbc30b8ea309073fb14b22))
+- Skip legacy runtimes outside the catalog check ([b8a5cb2](https://github.com/AlexGalhardo/hexascore-app/commit/b8a5cb24d5413483d6284dad579c0dda0225b83e))
+- Retry transient legacy cover copies ([50bdc27](https://github.com/AlexGalhardo/hexascore-app/commit/50bdc270fa3f8934623df3c8325152e051bf8254))
+- **infra:** Retry legacy cover uploads the S3 client could not rewind ([1f17eca](https://github.com/AlexGalhardo/hexascore-app/commit/1f17eca2be6736836bac1e1f6dc11fb0d9ddc4ce))
+- **infra:** Merge legacy cover copy retries and --concurrency ([0a4cf88](https://github.com/AlexGalhardo/hexascore-app/commit/0a4cf886398e81765d33841cf43c0f301ec85e9e))
+- **i18n:** Recopy mobile catalogues with the passkey keys ([19b9453](https://github.com/AlexGalhardo/hexascore-app/commit/19b9453a5833e4d36a93e280ce544ed547299e23))
+- **i18n:** Merge recopied mobile catalogues ([a3006bb](https://github.com/AlexGalhardo/hexascore-app/commit/a3006bb81ea12b8072823b86d5b46a594ea6d8f0))
+- **catalog:** Keep cover URLs absolute in JSON handlers ([fb02136](https://github.com/AlexGalhardo/hexascore-app/commit/fb0213617b4fc5719af120737682b3b511e63b48))
+- **catalog:** Keep cover URLs absolute in library and profile JSON ([745feb6](https://github.com/AlexGalhardo/hexascore-app/commit/745feb6fd7e20e4cb8bae82f353a0ee87a018f07))
+- **api:** Regenerate the Python SDK from the current OpenAPI contract ([5b2ff0d](https://github.com/AlexGalhardo/hexascore-app/commit/5b2ff0d74fcbbeb95e867a298a82d8167d926e45))
+- **api:** Merge regenerated Python SDK ([0998e70](https://github.com/AlexGalhardo/hexascore-app/commit/0998e7081e3db28caf630f093e4799f57fa6bdc7))
+- **community:** Answer a malformed draft id as not found ([ad3b426](https://github.com/AlexGalhardo/hexascore-app/commit/ad3b4267b34eb457cf7926649d6555acf214ede9))
+- **e2e:** Wait for hydration after onboarding and reloads, match the login button exactly ([4ba9a2f](https://github.com/AlexGalhardo/hexascore-app/commit/4ba9a2fdd4f68fbf2e1adae64e7617fe2dd39319))
+- **community:** Take a draft update's target from the stored row ([4251fe3](https://github.com/AlexGalhardo/hexascore-app/commit/4251fe3c231b3476cd79288e5096691c1e51bdf5))
 
 ## [0.11.0] - 2026-10-31
 
