@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **catalog:** Ingestion tables and the canonical-hash record store (`internal/ingest/store`), hashes byte-compatible with the legacy Python `canonical_hash` (P6.A.1.2)
 - **admin:** Admins revert catalogue changes (single, cascade, force) from `/admin/catalog-audit`, restoring value and provenance (P4.B.2.4)
 - **admin:** Admins edit catalogue fields from the item manage page; each change writes a `catalog_audit` row (`source=admin`) and can be reverted (P4.B.2.5)
 - **admin:** Admins lock catalogue fields or records at `/admin/locks` and export the catalogue audit log as CSV or NDJSON (P4.B.2.6)
