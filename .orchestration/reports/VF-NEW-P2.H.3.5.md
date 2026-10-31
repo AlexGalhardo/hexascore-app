@@ -8,3 +8,9 @@ acceptance:
 changelog: Changed (docs) - note that per-request shared props defeat the SSR render cache.
 risks / follow-ups: HexaScore should adopt SSRConfig.Cache + CacheWhen and drop its RenderCache middleware (verify shared props are stable for anonymous visits), re-run the k6 TTFB budget.
 vukem-feedback status line: VF-NEW-P2.H.3.5 -> withdrawn: already provided by inertia.SSRConfig.Cache (v0.33.0); docs clarified in branch fix/vf-ssr-cache-docs.
+
+## Review (especialista, 2026-10-31)
+verdict: APROVADO (docs only; VF entry withdrawn)
+checked: `SSRConfig.Cache`, `CacheTTL`, `CacheWhen` exist and are documented in frontend/inertia "Caching renders"; the new bullet (per-request shared props defeat the key) matches the key definition (SHA-256 of the page object, shared props included)
+fixes: merged origin/main (after #109), last-updated conflict resolved by regeneration
+PR: AlexGalhardo/vukem#111

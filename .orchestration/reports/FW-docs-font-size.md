@@ -15,3 +15,10 @@ acceptance:
 changelog: Changed - docs site typography scaled by 25%.
 roadmap: no box
 risks / follow-ups: before screenshots not captured (before values are the computed sizes above). Fixed-px elements, if any are added later, will not scale. Tablet widths between 1024 and 1280 px have a narrower main column (sidebar grows with the root); main was 854 px at 1249 px.
+
+## Review (especialista, 2026-10-31)
+verdict: APROVADO
+re-run: site `npm ci`, `npm run build` ok, `lint` ok, `check:mdx` 0 errors (12 existing warnings); Playwright against `next start` of the branch: root 20 px, body p 17.5 px; scrollWidth == clientWidth at 390 px (iPhone 13) and 1440 px on /docs/introduction, /docs/rest-apis/typed-handlers, /docs/frontend/inertia, /docs/digging-deeper/admin
+checked: screenshots in reports/img (the horizontal bar in the mobile shot is the desktop browser window's scrollbar, not page overflow); no remaining px font sizes in site/app or site/components
+fixes: merged origin/main, last-updated refreshed (no content change)
+PR: AlexGalhardo/vukem#112

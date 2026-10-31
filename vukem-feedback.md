@@ -14,7 +14,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | VF-NEW-AUDIT-2 | 2026-10-31 | low | open |
 | VF-NEW-AUDIT-3 | 2026-10-31 | medium | fixed on main, unreleased (PR #109) |
 | VF-NEW-AUDIT-4 | 2026-10-31 | low | open |
-| VF-NEW-AUDIT-5 | 2026-10-31 | medium | open |
+| VF-NEW-AUDIT-5 | 2026-10-31 | medium | fixed on main, unreleased (PR #110) |
 | VF-NEW-AUDIT-6 | 2026-10-31 | medium | fixed on main, unreleased (PR #105) |
 | VF-NEW-P2.H.3.1 | 2026-10-31 | low | open |
 | VF-NEW-P5.A.3.1 | 2026-10-31 | low | open |
