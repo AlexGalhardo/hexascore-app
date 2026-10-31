@@ -65,21 +65,18 @@ test("a 426 seen before the root mounted is not lost", async () => {
 	expect(screen.getByText("signedOut:true")).toBeTruthy();
 });
 
-test("guards: update screen wins, then the session picks app or login", () => {
+test("guards: update screen wins, then the session picks exactly one screen group", () => {
+	const none = { app: false, auth: false, update: false, banned: false, deletion: false };
 	const active: SessionState = { kind: "active", emailNotVerified: false };
-	expect(routeGuards(active, true)).toEqual({ app: false, auth: false, update: true });
-	expect(routeGuards({ kind: "signedOut" }, true)).toEqual({
-		app: false,
-		auth: false,
-		update: true,
-	});
-	expect(routeGuards(active, false)).toEqual({ app: true, auth: false, update: false });
-	expect(routeGuards({ kind: "signedOut" }, false)).toEqual({
-		app: false,
-		auth: true,
-		update: false,
-	});
-	expect(routeGuards({ kind: "banned", reason: null, expiresAt: null }, false).auth).toBe(true);
+	const banned: SessionState = { kind: "banned", reason: "spam", expiresAt: null };
+	const deletion: SessionState = { kind: "deletionScheduled", scheduledAt: "2026-12-01T00:00:00Z" };
+	expect(routeGuards(active, true)).toEqual({ ...none, update: true });
+	expect(routeGuards(banned, true)).toEqual({ ...none, update: true });
+	expect(routeGuards(active, false)).toEqual({ ...none, app: true });
+	expect(routeGuards({ kind: "signedOut" }, false)).toEqual({ ...none, auth: true });
+	expect(routeGuards({ kind: "loading" }, false)).toEqual(none);
+	expect(routeGuards(banned, false)).toEqual({ ...none, banned: true });
+	expect(routeGuards(deletion, false)).toEqual({ ...none, deletion: true });
 });
 
 test("the locale provider feeds useLocale", async () => {

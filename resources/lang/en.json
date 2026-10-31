@@ -120,6 +120,13 @@
       "body": "If the app crashes, send the app version, Android version, screen and error details to HexaScore. No account, e-mail or token is included. You can turn this off in Settings.",
       "allow": "Send reports",
       "deny": "Don't send"
+    },
+    "blocked": {
+      "title": "Your account is suspended",
+      "reason": "Reason: {reason}",
+      "until": "Until {date}",
+      "permanent": "No end date",
+      "back": "Back to login"
     }
   },
   "actions": {

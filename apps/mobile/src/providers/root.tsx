@@ -17,13 +17,31 @@ export type RootDeps = {
 	onUpgradeRequired: (listener: () => void) => () => void;
 };
 
-export type RouteGuards = { app: boolean; auth: boolean; update: boolean };
+export type RouteGuards = {
+	app: boolean;
+	auth: boolean;
+	update: boolean;
+	banned: boolean;
+	deletion: boolean;
+};
 
 // Update required blocks everything else (FR-10-5); logout stays on that screen.
+// Banned and deletion-scheduled accounts see only their own screen (SDD 10 §6.2).
 export function routeGuards(state: SessionState, upgrade: boolean): RouteGuards {
-	if (upgrade) return { app: false, auth: false, update: true };
-	const signedIn = state.kind === "active" || state.kind === "deletionScheduled";
-	return { app: signedIn, auth: !signedIn && state.kind !== "loading", update: false };
+	const none = { app: false, auth: false, update: false, banned: false, deletion: false };
+	if (upgrade) return { ...none, update: true };
+	switch (state.kind) {
+		case "loading":
+			return none;
+		case "active":
+			return { ...none, app: true };
+		case "banned":
+			return { ...none, banned: true };
+		case "deletionScheduled":
+			return { ...none, deletion: true };
+		default:
+			return { ...none, auth: true };
+	}
 }
 
 export function useRoot(deps: RootDeps): { state: SessionState; upgrade: boolean } {
