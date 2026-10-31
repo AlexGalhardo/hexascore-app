@@ -95,6 +95,8 @@ type searchPage struct {
 	Entities   []SearchEntity `json:"entities"`
 	DidYouMean *string        `json:"didYouMean"`
 	TooShort   bool           `json:"tooShort"`
+	// Unavailable marks a degraded answer: the search backend timed out.
+	Unavailable bool `json:"unavailable"`
 }
 
 var (
@@ -201,24 +203,29 @@ func (h *Search) Index(c *web.Ctx) error {
 		)
 	}
 
-	if err != nil {
+	degraded := errors.Is(err, search.ErrTimeout)
+	if degraded {
+		out = searchPage{Groups: []SearchGroup{}, Results: []SearchHit{}, Entities: []SearchEntity{}, Unavailable: true}
+		c.SetHeader("Retry-After", searchRetryAfter)
+	} else if err != nil {
 		return badQuery(err)
 	}
 
 	searchID := uuid.NewV4().String()
 
 	props := inertia.Props{
-		"query":      searchQueryProp{Q: text, Type: strings.Join(types, ","), Locale: locale, Page: page},
-		"groups":     out.Groups,
-		"results":    out.Results,
-		"total":      out.Total,
-		"entities":   out.Entities,
-		"didYouMean": out.DidYouMean,
-		"searchId":   searchID,
-		"tooShort":   out.TooShort,
+		"query":       searchQueryProp{Q: text, Type: strings.Join(types, ","), Locale: locale, Page: page},
+		"groups":      out.Groups,
+		"results":     out.Results,
+		"total":       out.Total,
+		"entities":    out.Entities,
+		"didYouMean":  out.DidYouMean,
+		"searchId":    searchID,
+		"tooShort":    out.TooShort,
+		"unavailable": out.Unavailable,
 	}
 
-	if signed {
+	if signed || degraded {
 		c.SetHeader("Cache-Control", "private, no-store")
 	} else if inertia.IsInertia(c.Request()) {
 		// searchId differs per request and must not defeat the 304.
@@ -234,7 +241,7 @@ func (h *Search) Index(c *web.Ctx) error {
 		}
 	}
 
-	if text != "" && !out.TooShort {
+	if text != "" && !out.TooShort && !degraded {
 		h.recordPerformed(c, searchID, query, user, signed, out, time.Since(start), "web")
 	}
 
@@ -279,10 +286,17 @@ func (h *Search) AppIndex(c *web.Ctx) error {
 	})
 }
 
-// badQuery maps the searcher's validation failures to 400 (SDD 07 §6).
+// searchRetryAfter is the Retry-After (seconds) of a degraded search.
+const searchRetryAfter = "5"
+
+// badQuery maps the searcher's validation failures to 400 (SDD 07 §6) and a
+// backend timeout to a 503 problem with Retry-After.
 func badQuery(err error) error {
-	if errors.Is(err, search.ErrInvalidQuery) {
+	switch {
+	case errors.Is(err, search.ErrInvalidQuery):
 		return errs.New(http.StatusBadRequest, err.Error())
+	case errors.Is(err, search.ErrTimeout):
+		return errs.New(http.StatusServiceUnavailable, "search timeout").WithHeader("Retry-After", searchRetryAfter)
 	}
 
 	return err
