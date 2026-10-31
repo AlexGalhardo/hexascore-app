@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **admin:** Moderation queue at `/admin/moderation`, oldest first with keyset pages, filters (status, kind, domain, locale, field, author, assignee, age), ageing, competing, stale and unreachable badges, and claim/release (P4.B.1.2)
+- **admin:** Moderation detail page with the per-field diff, reject with reason and note, clone as new draft (admins) and bulk actions up to 50 ids with per-id results; approve answers 503 until the apply service lands (P4.B.1.3)
 - **catalog:** Item page views and `/app/v1` item reads (deduplicated per visitor and UTC day, at most 50 items per visitor, prefetch, partial reloads and bots excluded) and search clicks are counted in memory and flushed every minute and on shutdown into `item_activity_daily` (P6.C.1.2)
 - **mobile:** Login screen with two-factor (TOTP or backup code) and bot-challenge branches; device name from `expo-device`, editable (P5.A.3.3)
 - **mobile:** Google sign-in token flow (silent cancel, 2FA retry, `auth.errors.emailUnverifiedAtProvider` in en, pt-BR and es); the account picker waits on the Android OAuth client id (P5.A.3.4)
