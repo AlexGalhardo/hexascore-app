@@ -211,3 +211,16 @@ func nullableText(ctx context.Context, tx *database.Tx, query string, args ...an
 
 	return encoded, nil
 }
+
+// CurrentValue reads the live value of one suggestion field for the moderation diff.
+func CurrentValue(ctx context.Context, db *database.DB, targetType, targetID, field string) (json.RawMessage, error) {
+	var out json.RawMessage
+
+	err := db.Tx(ctx, func(tx *database.Tx) (err error) {
+		out, err = scalarCurrent(ctx, tx, targetType, targetID, field)
+
+		return err
+	})
+
+	return out, err
+}

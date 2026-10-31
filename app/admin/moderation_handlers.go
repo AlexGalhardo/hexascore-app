@@ -109,6 +109,7 @@ func (h ModerationHandlers) Index(c *web.Ctx) error {
 
 	d := h.Pages.newPage("Moderation")
 	d.Queue = q
+	d.RejectReasons = moderation.RejectReasons
 
 	return h.Pages.render(c, "moderation", d)
 }
@@ -121,6 +122,15 @@ func (h ModerationHandlers) actor(c *web.Ctx) (models.User, error) {
 	return auth.UserFrom[models.User](c.Context(), h.Pages.Accounts.Web.Name())
 }
 
+func actorOf(u models.User) community.Actor {
+	role := "admin"
+	if u.Role == models.RoleModerator {
+		role = "moderator"
+	}
+
+	return community.Actor{ID: sql.NullInt64{Int64: u.ID, Valid: true}, Role: role}
+}
+
 // Claim handles POST /admin/moderation/{id}/claim.
 func (h ModerationHandlers) Claim(c *web.Ctx) error {
 	return h.move(c, h.Queue.Claim)
@@ -129,6 +139,20 @@ func (h ModerationHandlers) Claim(c *web.Ctx) error {
 // Release handles POST /admin/moderation/{id}/release.
 func (h ModerationHandlers) Release(c *web.Ctx) error {
 	return h.move(c, h.Queue.Release)
+}
+
+// Approve handles POST /admin/moderation/{id}/approve.
+func (h ModerationHandlers) Approve(c *web.Ctx) error {
+	return h.move(c, func(ctx context.Context, id string, version int, a community.Actor) error {
+		return h.Queue.Approve(ctx, id, version, c.FormValue("confirm_stale") == "1", a)
+	})
+}
+
+// Reject handles POST /admin/moderation/{id}/reject.
+func (h ModerationHandlers) Reject(c *web.Ctx) error {
+	return h.move(c, func(ctx context.Context, id string, version int, a community.Actor) error {
+		return h.Queue.Reject(ctx, id, version, c.FormValue("reason"), c.FormValue("note"), a)
+	})
 }
 
 func (h ModerationHandlers) move(
@@ -150,27 +174,101 @@ func (h ModerationHandlers) move(
 		return errs.NewValidation().Add("version", "The version is required.")
 	}
 
-	role := "admin"
-	if u.Role == models.RoleModerator {
-		role = "moderator"
+	if err := mapError(fn(c.Context(), id, version, actorOf(u))); err != nil {
+		return err
 	}
 
-	err = fn(c.Context(), id, version, community.Actor{ID: sql.NullInt64{Int64: u.ID, Valid: true}, Role: role})
+	return c.Redirect(backTo(c))
+}
 
-	var te *community.TransitionError
+func mapError(err error) error {
+	var (
+		te *community.TransitionError
+		ie *moderation.InvalidError
+	)
 
 	switch {
 	case err == nil:
-		return c.Redirect(backTo(c))
+		return nil
 	case errors.Is(err, moderation.ErrNotFound):
 		return errs.ErrNotFound
 	case errors.Is(err, moderation.ErrNotAssignee):
 		return errs.New(http.StatusForbidden, "This claim belongs to another moderator.")
+	case errors.Is(err, moderation.ErrApplyUnavailable):
+		return errs.New(http.StatusServiceUnavailable, "Applying suggestions is not available yet.")
+	case errors.Is(err, moderation.ErrNoAuthor):
+		return errs.New(http.StatusConflict, "no-author")
+	case errors.Is(err, moderation.ErrBulkSize):
+		return errs.NewValidation().Add("ids", "Select between 1 and 50 suggestions.")
+	case errors.Is(err, moderation.ErrBulkAction):
+		return errs.NewValidation().Add("action", "Unknown bulk action.")
+	case errors.As(err, &ie):
+		return errs.NewValidation().Add(ie.Field, ie.Msg)
 	case errors.As(err, &te):
 		return errs.New(te.Status, te.Code)
 	default:
 		return err
 	}
+}
+
+// Detail renders GET /admin/moderation/{id}.
+func (h ModerationHandlers) Detail(c *web.Ctx) error {
+	if _, err := h.actor(c); err != nil {
+		return err
+	}
+
+	d, err := h.Queue.Detail(c.Context(), c.Param("id"))
+	if err := mapError(err); err != nil {
+		return err
+	}
+
+	p := h.Pages.newPage("Suggestion")
+	p.Detail = d
+	p.RejectReasons = moderation.RejectReasons
+
+	return h.Pages.render(c, "moderation_detail", p)
+}
+
+// Clone handles POST /admin/moderation/{id}/clone: admins only.
+func (h ModerationHandlers) Clone(c *web.Ctx) error {
+	u, err := h.actor(c)
+	if err != nil {
+		return err
+	}
+
+	if u.Role != models.RoleAdmin {
+		return errs.New(http.StatusForbidden, "Only admins can clone a suggestion.")
+	}
+
+	if _, err := h.Queue.CloneAsDraft(c.Context(), c.Param("id"), actorOf(u)); err != nil {
+		return mapError(err)
+	}
+
+	return c.Redirect("/admin/moderation")
+}
+
+// Bulk handles POST /admin/moderation/bulk and renders the per-id outcomes.
+func (h ModerationHandlers) Bulk(c *web.Ctx) error {
+	u, err := h.actor(c)
+	if err != nil {
+		return err
+	}
+
+	r := c.Request()
+	if err := r.ParseForm(); err != nil {
+		return errs.NewValidation().Add("ids", "Invalid form.")
+	}
+
+	res, err := h.Queue.Bulk(c.Context(), r.PostForm.Get("action"), r.PostForm["ids"], r.PostForm.Get("reason"),
+		r.PostForm.Get("note"), r.PostForm.Get("confirm_stale") == "1", actorOf(u))
+	if err := mapError(err); err != nil {
+		return err
+	}
+
+	p := h.Pages.newPage("Bulk result")
+	p.BulkResults = res
+
+	return h.Pages.render(c, "moderation_bulk", p)
 }
 
 // backTo returns the queue URL the form came from (a same-site path only), else the bare queue.

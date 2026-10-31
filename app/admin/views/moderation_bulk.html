@@ -1,0 +1,9 @@
+{{define "content"}}
+<div class="toolbar"><h1>{{.Title}}</h1><a href="/admin/moderation">Back to queue</a></div>
+<table>
+	<thead><tr><th>Suggestion</th><th>Outcome</th></tr></thead>
+	<tbody>
+	{{range .BulkResults}}<tr><td>{{.ID}}</td><td>{{if .OK}}done{{else}}{{.Code}}{{end}}</td></tr>{{end}}
+	</tbody>
+</table>
+{{end}}

@@ -160,6 +160,11 @@ admin POST   /admin/items/{id}/merge
 admin GET    /admin/moderation
 admin POST   /admin/moderation/{id}/claim
 admin POST   /admin/moderation/{id}/release
+admin GET    /admin/moderation/{id}
+admin POST   /admin/moderation/{id}/approve
+admin POST   /admin/moderation/{id}/reject
+admin POST   /admin/moderation/{id}/clone
+admin POST   /admin/moderation/bulk
 admin GET    /admin/ingestion
 web   PUT    /items/{id}/rating
 web   DELETE /items/{id}/rating

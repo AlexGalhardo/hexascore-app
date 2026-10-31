@@ -165,6 +165,11 @@ func Admin(r *router.Router, app *vukem.App) error {
 	modMW := []func(http.Handler) http.Handler{auth.Required(acc.Web), csrfMW}
 	r.Post("/admin/moderation/{id}/claim", moderationH.Claim).Name("admin.moderation.claim").Use(modMW...)
 	r.Post("/admin/moderation/{id}/release", moderationH.Release).Name("admin.moderation.release").Use(modMW...)
+	r.Get("/admin/moderation/{id}", moderationH.Detail).Name("admin.moderation.detail").Use(modMW...)
+	r.Post("/admin/moderation/{id}/approve", moderationH.Approve).Name("admin.moderation.approve").Use(modMW...)
+	r.Post("/admin/moderation/{id}/reject", moderationH.Reject).Name("admin.moderation.reject").Use(modMW...)
+	r.Post("/admin/moderation/{id}/clone", moderationH.Clone).Name("admin.moderation.clone").Use(modMW...)
+	r.Post("/admin/moderation/bulk", moderationH.Bulk).Name("admin.moderation.bulk").Use(modMW...)
 	r.Get("/admin/ingestion", catalogH.Ingestion).Name("admin.ingestion").Use(auth.Required(acc.Web), csrfMW)
 
 	return nil

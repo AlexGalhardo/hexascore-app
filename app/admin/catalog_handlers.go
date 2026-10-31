@@ -25,6 +25,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/app/moderation"
 )
 
 //go:embed views
@@ -80,14 +81,17 @@ type runRow struct {
 
 // pageData feeds the panel layout (same field names as vukem's admin page) and the pages below.
 type pageData struct {
-	Title      string
-	Panel      panelData
-	Item       models.Item
-	Affiliates []affiliateRow
-	Ready      bool
-	Sources    []sourceRow
-	Runs       []runRow
-	Queue      queueView
+	Title         string
+	Panel         panelData
+	Item          models.Item
+	Affiliates    []affiliateRow
+	Ready         bool
+	Sources       []sourceRow
+	Runs          []runRow
+	Queue         queueView
+	Detail        moderation.Detail
+	BulkResults   []moderation.BulkResult
+	RejectReasons []string
 }
 
 // panelNav mirrors the sidebar vukem builds from admin.Resources (same order, same plural labels);
