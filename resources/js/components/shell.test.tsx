@@ -38,8 +38,8 @@ test("CoverThumb renders a sized placeholder without a cover", () => {
 	const r = render(<CoverThumb cover={null} alt="Cover" size="md" />);
 	expect(r.queryByAltText("Cover")).toBeNull();
 	const box = r.getByTestId("cover-placeholder");
-	expect(box.style.width).toBe("44px");
-	expect(box.style.height).toBe("64px");
+	expect(box.className).toContain("w-11 h-16");
+	expect(box.hasAttribute("style")).toBe(false);
 });
 
 test("CoverThumb is lazy by default and eager with priority", () => {
