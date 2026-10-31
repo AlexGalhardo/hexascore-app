@@ -267,6 +267,11 @@ func (a *Accounts) anonymiseTx(
 		return old, false, err
 	}
 
+	// The user row is anonymised, not deleted, so ON DELETE CASCADE does not remove passkeys.
+	if _, err := tx.ExecContext(ctx, "DELETE FROM passkeys WHERE user_id = "+p(1), userID); err != nil {
+		return old, false, err
+	}
+
 	if _, err := tx.ExecContext(ctx, "DELETE FROM password_resets WHERE email = "+p(1), old.Email); err != nil {
 		return old, false, err
 	}
