@@ -29,13 +29,13 @@ test.describe("community draft", () => {
 
 		await expect(page.getByTestId("quota-left")).toBeVisible();
 		await expectNoSeriousA11yViolations(page);
-		const title = page.getByLabel(t("community.fields.title"));
+		const title = page.getByLabel(t("community.fields.title"), { exact: true });
 		await title.fill("E2E suggested title");
 		await page.getByLabel(t("community.sources")).fill("https://www.wikidata.org/wiki/Q127367");
 		await page.getByRole("button", { name: t("community.saveDraft") }).click();
 		await expect(page.getByText(t("community.draftRestored"))).toBeVisible();
 		await page.reload();
-		await expect(page.getByLabel(t("community.fields.title"))).toHaveValue(
+		await expect(page.getByLabel(t("community.fields.title"), { exact: true })).toHaveValue(
 			"E2E suggested title",
 		);
 	});
