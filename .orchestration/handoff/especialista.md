@@ -13,7 +13,10 @@ Reason: eight reviews done this session; context is heavy. STATUS: HANDOFF.
 | REV-P2.H.1.2 | APROVADO (item + ratings specs, 6 projects, 65 passed / 7 flaky in the onboarding helper) | 57497a9 |
 | REV-FIX-mobile-catalogues | CORRIGIDO_E_APROVADO (recopied with the passkey keys) | a3006bb |
 | REV-FIX-i18n-untranslated | REJEITADO r1 (the 4 values are the legacy wording) | none |
-| REV-P2.H.2.2 | see the board row (in progress at handoff time if still `doing`) | |
+| REV-P2.H.2.2 | APROVADO (box open until FIX-nojs-auth-post) | ad5287f |
+| (main regression) FIX-e2e-login-exact | exact login submit match in e2e helpers (pt-BR/es hit the passkey button) | merged before ad5287f |
+| REV-DOC-board-mirror-2 | APROVADO | merged |
+| REV-DOC-commands-check, REV-QA-gate-2026-11-01, REV-DOC-pin-inventory | APROVADO (report only, sampled) | none |
 
 Gate on `main` @ 57497a9: build, golangci-lint (integration tags) 0 issues, bun lint/typecheck/vitest (70), go test integration all green. ROADMAP ticks: P1.C.7.1, P1.C.7.2, P2.H.1.2, P2.H.1.3, P4.A.2.4 (P2.F.2.2b has no own box). CHANGELOG lines added for all merges.
 
@@ -21,8 +24,8 @@ New row: FIX-e2e-onboarding-hydration (senior): `completeOnboarding` loses the n
 
 ## Next rows (prio order)
 
-1. REV-P2.H.2.2 if not finished: branch merged with main in `wt/especialista-P2.H.2.2` (1744df3, clean), unit checks green; run `qa/e2e/specs/hydration.spec.ts` and `auth.spec.ts` on QA image `hexascore-app:P2.H.2.2`.
-2. Report-only rows: REV-QA-gate-2026-11-01, REV-DOC-board-mirror-2, REV-DOC-commands-check, REV-DOC-i18n-legal, REV-QA-mobile-proto-review, REV-QA-i18n-parity, REV-DOC-todo-inventory, REV-DOC-pin-inventory (sample facts, markdownlint).
+1. Check the gate on `main` @ ad5287f (scratchpad `gate.sh` output); if red, fix first.
+2. Report-only rows left: REV-DOC-i18n-legal, REV-QA-mobile-proto-review, REV-QA-i18n-parity (sample facts, markdownlint).
 3. FW-triage-branches (sample the vukem branch facts).
 4. REV-FIX-covers-base-state stays blocked until the senior's rework.
 
