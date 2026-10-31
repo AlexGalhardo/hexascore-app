@@ -17,6 +17,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/api/changes"
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
+	"github.com/AlexGalhardo/hexascore-app/app/metrics"
 )
 
 // ErrNotFound is a suggestion id that does not exist.
@@ -276,10 +277,17 @@ func (a Applier) fail(step string, attempt int) error {
 }
 
 func (a Applier) decided(ctx context.Context, tx *database.Tx, id string, actor Actor) error {
-	if _, err := tx.ExecContext(ctx, `UPDATE suggestions SET decided_by = $2, decided_at = $3, assigned_to = NULL,
-claimed_at = NULL WHERE id = $1`, id, actor.ID, a.now()); err != nil {
+	now := a.now()
+
+	var submitted sql.NullTime
+	if err := tx.QueryRowContext(ctx, `UPDATE suggestions SET decided_by = $2, decided_at = $3, assigned_to = NULL,
+claimed_at = NULL WHERE id = $1 RETURNING submitted_at`, id, actor.ID, now).Scan(&submitted); err != nil {
 		return fmt.Errorf("community: record decision: %w", err)
 	}
+
+	tx.AfterCommit(func(ctx context.Context) {
+		metrics.RecordSuggestionDecision(ctx, "approved", now.Sub(submitted.Time))
+	})
 
 	return nil
 }

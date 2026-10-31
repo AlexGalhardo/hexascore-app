@@ -207,8 +207,8 @@ func RebuildStats(ctx context.Context, db *database.DB, now time.Time) error {
 	})
 }
 
-func writeTotals(ctx context.Context, tx *database.Tx, now time.Time) error {
-	_, err := tx.ExecContext(ctx, `WITH agg AS (
+// statsAgg is the contributor totals as rebuilt from suggestions, shared by RebuildStats and StatsDrift.
+const statsAgg = `WITH agg AS (
   SELECT author_id AS user_id,
     count(*) FILTER (WHERE submitted_at IS NOT NULL)::int AS submitted_total,
     count(*) FILTER (WHERE status IN ('applied', 'reverted'))::int AS approved_total,
@@ -220,7 +220,27 @@ func writeTotals(ctx context.Context, tx *database.Tx, now time.Time) error {
   WHERE author_id IS NOT NULL
   GROUP BY author_id
 )
-INSERT INTO contributor_stats (user_id, submitted_total, approved_total, rejected_total, reverted_total, withdrawn_total, updated_at)
+`
+
+// StatsDrift counts the users whose contributor_stats totals differ from a rebuild (SDD 04 §10 nightly assert).
+func StatsDrift(ctx context.Context, db *database.DB) (int64, error) {
+	var n int64
+	err := db.QueryRowContext(ctx, statsAgg+`SELECT count(*) FROM agg FULL JOIN contributor_stats s USING (user_id)
+WHERE (COALESCE(agg.submitted_total, 0), COALESCE(agg.approved_total, 0), COALESCE(agg.rejected_total, 0),
+  COALESCE(agg.reverted_total, 0), COALESCE(agg.withdrawn_total, 0))
+  IS DISTINCT FROM (COALESCE(s.submitted_total, 0), COALESCE(s.approved_total, 0), COALESCE(s.rejected_total, 0),
+  COALESCE(s.reverted_total, 0), COALESCE(s.withdrawn_total, 0))`).Scan(&n)
+	if err != nil {
+		return 0, fmt.Errorf("community: stats drift: %w", err)
+	}
+
+	return n, nil
+}
+
+func writeTotals(ctx context.Context, tx *database.Tx, now time.Time) error {
+	_, err := tx.ExecContext(
+		ctx,
+		statsAgg+`INSERT INTO contributor_stats (user_id, submitted_total, approved_total, rejected_total, reverted_total, withdrawn_total, updated_at)
 SELECT user_id, submitted_total, approved_total, rejected_total, reverted_total, withdrawn_total, $1 FROM agg
 ON CONFLICT (user_id) DO UPDATE SET
   submitted_total = EXCLUDED.submitted_total,
@@ -233,7 +253,9 @@ WHERE contributor_stats.submitted_total IS DISTINCT FROM EXCLUDED.submitted_tota
   OR contributor_stats.approved_total IS DISTINCT FROM EXCLUDED.approved_total
   OR contributor_stats.rejected_total IS DISTINCT FROM EXCLUDED.rejected_total
   OR contributor_stats.reverted_total IS DISTINCT FROM EXCLUDED.reverted_total
-  OR contributor_stats.withdrawn_total IS DISTINCT FROM EXCLUDED.withdrawn_total`, now.UTC())
+  OR contributor_stats.withdrawn_total IS DISTINCT FROM EXCLUDED.withdrawn_total`,
+		now.UTC(),
+	)
 	if err != nil {
 		return fmt.Errorf("community: rebuild totals: %w", err)
 	}
