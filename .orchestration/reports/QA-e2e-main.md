@@ -35,3 +35,15 @@ validation: e2e partial as above; lint/typecheck n/a
 changelog: none
 roadmap: no box
 risks / follow-ups: (1) the run is incomplete; a full rerun on a free host is needed for totals. (2) The four flows are flaky on main, not only on P2.H.1.1; the specialist should decide whether they are a test-timing issue (`waitForURL` `load` with 2 min waits) or a real navigation bug. (3) Orchestrator said the run had ended, but log lines kept growing (465 to 490 in 20 s at 08:29); the heartbeat check was based on a `tasklist` that matched unrelated node processes.
+
+## Review (especialista, 2026-10-31)
+verdict: APROVADO as parcial; full rerun done by the specialist
+re-run: full `bun run e2e` (702 tests, 6 projects) on the isolated esp stack (image from main b8a81ac + P4.A.3.1c, flag on, :3110, E2E_COMMUNITY_OPEN=true) -> 666 passed, 36 failed (22.7m)
+decision: the four named flows (lists, profile, ratings) pass in every project now: they were the hydration races fixed by FIX-e2e-nav-timeouts (f9358f3). No `waitForURL` timeout anywhere in the run.
+remaining failures (deterministic, not load):
+1. csp.spec:24 x6: inline `style` attribute violates style-src on a public page -> FIX-csp-inline-style (prio 1)
+2. passkeys.spec:11 x6: options 200, no registration POST, "The passkey was not saved" -> FIX-passkeys-register-e2e (prio 1; check the :3000 stack first, RP ID/origin may depend on the port)
+3. i18n.spec:4 x6: no links in the "Language" list since the header redesign -> FIX-e2e-i18n-switcher
+4. keyboard.spec:59 x3 (mobile only): Games link not reached by keyboard -> FIX-e2e-keyboard-mobile-header
+5. time-to-beat.spec:11 x3: bare page.reload() before interacting -> FIX-e2e-ttb-reload
+6. notifications.spec:9 and :37 x12: harness only, seeds into `hexascore-qa-esp-postgres-1`; the parallel-stack recipe lacks E2E_DB_CONTAINER=hexascore-postgres-1 -> DOC-agents-qa-db-container
