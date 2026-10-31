@@ -2819,7 +2819,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/community/... -run 'TestApplyCreate|TestApplyMerge'` → merge expires open suggestions on the source with `target_gone`; merge row not revertible; typed-title confirmation required
   - Notes: never implement an automatic merge revert (out of scope v1). Merge emits `deleted` with `mergedInto` in `api_changes`.
 
-- [ ] **P4.B.2.4** Implement revert `single`, `cascade`, `force` and the `/admin/catalog-audit` list with the revert form.
+- [x] **P4.B.2.4** Implement revert `single`, `cascade`, `force` and the `/admin/catalog-audit` list with the revert form.
   - Files/modules: `app/community/revert.go`, `app/moderation/audit.go`, `resources/views/moderation/audit.html`, `tests/community_revert_test.go`
   - Refs: SDD 04 FR-04-11, §7.5, §6 (`POST /admin/catalog-audit/{id}/revert`)
   - Depends on: P4.B.2.3
@@ -2828,7 +2828,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/community/... -run TestRevert` → `single` with a later change → 409 `revert-conflict` with `laterAuditIds`; `cascade` reverts newest first in one transaction; `force` leaves later suggestions `applied`; reverting a revert → rejected by the unique index
   - Notes: only reason `incorrect` counts against the author. Revert goes through the same write path as apply (provenance restore, `api_changes`, `catalog.changed`).
 
-- [ ] **P4.B.2.5** Make admin-panel catalogue edits write `catalog_audit` (`source=admin`) inside the panel transaction.
+- [x] **P4.B.2.5** Make admin-panel catalogue edits write `catalog_audit` (`source=admin`) inside the panel transaction.
   - Files/modules: `app/admin/resources/items.go`, `app/admin/resources/entities.go`, `app/admin/resources/editions.go`, `tests/admin_catalog_audit_test.go`
   - Refs: SDD 04 §7.4 last paragraph, open issue 04-4; VF-010; <https://vukem.dev/docs/digging-deeper/admin> "Resources" (`BeforeSave`)
   - Depends on: P4.B.2.4
@@ -2837,7 +2837,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/admin/... -run TestAdminEditWritesAudit` → one audit row per changed field with the correct `before`
   - Notes: VF-010 workaround: `BeforeSave` re-reads the row `FOR UPDATE` in the same transaction to get previous values. `admin.AuditLog` keeps logging panel CRUD separately.
 
-- [ ] **P4.B.2.6** Add the locks pages (`POST/DELETE /admin/locks`) and the `catalog_audit` export (`export.csv`, `export.ndjson`).
+- [x] **P4.B.2.6** Add the locks pages (`POST/DELETE /admin/locks`) and the `catalog_audit` export (`export.csv`, `export.ndjson`).
   - Files/modules: `app/moderation/locks.go`, `app/moderation/audit_export.go`, `resources/views/moderation/locks.html`, `tests/moderation_locks_test.go`
   - Refs: SDD 04 FR-04-15 (export), §6 routes; <https://vukem.dev/docs/digging-deeper/exports> "Exports", "Streaming and failures"
   - Depends on: P4.B.2.5
@@ -2846,7 +2846,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/moderation/... -run 'TestLocks|TestAuditExportStreams'` → 100k-row export streams with flat memory; CSV formula guard on
   - Notes: export runs in the request (helpers need `w, r`), so VF-029 does not apply here.
 
-- [ ] **P4.B.2.7** Add the public SSR "Recent changes" tab (`Catalog/RecentChanges`, 20 per page) and contributor counts on profiles.
+- [x] **P4.B.2.7** Add the public SSR "Recent changes" tab (`Catalog/RecentChanges`, 20 per page) and contributor counts on profiles.
   - Files/modules: `resources/js/pages/Catalog/RecentChanges.tsx`, `app/web/recent_changes.go`, `resources/js/pages/User/Profile.tsx`, `tests/recent_changes_test.go`
   - Refs: SDD 04 FR-04-13, FR-04-15, §7.6, NFR-04-5; SDD 14 §6.2 (`User/Profile`)
   - Depends on: P4.B.2.4
@@ -2858,7 +2858,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P4.B.3 Notifications and system transitions
 
-- [ ] **P4.B.3.1** Implement `community.notify`: `notifications.Send` with dedupe key `suggestion:<id>:<state>` and a localized mail via `SendLaterTx` (opt-out respected).
+- [x] **P4.B.3.1** Implement `community.notify`: `notifications.Send` with dedupe key `suggestion:<id>:<state>` and a localized mail via `SendLaterTx` (opt-out respected).
   - Files/modules: `app/jobs/community_notify.go`, `resources/views/mail/suggestion_{decided,reverted,expired}.html`, `tests/community_notify_test.go`
   - Refs: SDD 04 FR-04-14, §6 jobs, open issue 04-6; SDD 14 §5, §6.5, §7.5; VF-011; <https://vukem.dev/docs/digging-deeper/mail>
   - Depends on: P4.B.2.1
@@ -2867,7 +2867,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/jobs/... -run TestCommunityNotify` (`MAIL_MAILER=array`) → one inbox row per state on retry; mail subject in the author's locale; opted-out user gets the inbox row only
   - Notes: VF-011 workaround is SDD 14's `user_notifications`; this job only calls `notifications.Send`. Locale on a non-request context is [NOT VERIFIED] (SDD 03 §6.5); build it from `users.locale`.
 
-- [ ] **P4.B.3.2** Add system transitions: withdraw open suggestions of banned or deleted authors, expire them when the target is deleted or merged, null actor ids on deletion.
+- [x] **P4.B.3.2** Add system transitions: withdraw open suggestions of banned or deleted authors, expire them when the target is deleted or merged, null actor ids on deletion.
   - Files/modules: `app/community/listeners.go`, `tests/community_system_test.go`
   - Refs: SDD 04 §7.1 (system rows), §8, NFR-04-5; SDD 03 (`user.banned`, deletion)
   - Depends on: P4.B.3.1
@@ -3701,7 +3701,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.D.1 Similar items
 
-- [ ] **P6.D.1.1** Create `item_similar` and `user_recommendations`, and implement feature extraction (`(role, entity)` pairs, cast `position < 5`, franchise parents at half weight), the `g_f` weights and weighted-Jaccard `sim` as pure functions.
+- [x] **P6.D.1.1** Create `item_similar` and `user_recommendations`, and implement feature extraction (`(role, entity)` pairs, cast `position < 5`, franchise parents at half weight), the `g_f` weights and weighted-Jaccard `sim` as pure functions.
   - Files/modules: `database/migrations/<ts>_create_similar_tables.go`, `app/recommend/similar/features.go`, `app/recommend/similar/sim.go`, `app/recommend/similar/sim_test.go`
   - Refs: SDD 08 §5, §7.4, §10 "Unit"; SDD 01 §5.2 (`item_entities`)
   - Depends on: P6.C.4.1, P6.B.3.2
@@ -3711,7 +3711,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./app/recommend/... -run TestSimilarity` → the Zelda example gives 0.70; `sim` is symmetric and in [0, 1]
   - Notes: `users.id` is text (SDD 03 §5); `user_recommendations.user_id` follows it.
 
-- [ ] **P6.D.1.2** Build `ComputeSimilar` (`DailyAt("02:00")`, `WithoutOverlapping()`): candidates sharing a feature with `n_f ≤ 5 %·N_t`, the keep rule, ordering by `round(sim,2)`, list `cooccur`, popularity and id, ≤ 20 neighbours, `Chunk(ctx, 500, …)` with a 50 ms pause, skipping unchanged `feature_hash`, and the site and API variants.
+- [x] **P6.D.1.2** Build `ComputeSimilar` (`DailyAt("02:00")`, `WithoutOverlapping()`): candidates sharing a feature with `n_f ≤ 5 %·N_t`, the keep rule, ordering by `round(sim,2)`, list `cooccur`, popularity and id, ≤ 20 neighbours, `Chunk(ctx, 500, …)` with a 50 ms pause, skipping unchanged `feature_hash`, and the site and API variants.
   - Files/modules: `app/jobs/compute_similar.go`, `app/recommend/similar/job.go`, `app/recommend/similar/job_test.go`, `app/recommend/similar/bench_test.go`
   - Refs: SDD 08 §7.4, FR-08-8, NFR-08-2, NFR-08-3; open issues 08-9, 08-11; <https://vukem.dev/docs/database/orm> "Querying"; <https://vukem.dev/docs/digging-deeper/scheduler>
   - Depends on: P6.D.1.1
@@ -3733,7 +3733,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.D.2 "For you"
 
-- [ ] **P6.D.2.1** Implement the user profile and scoring as pure functions: `μ_u`, `ρ_ui`, `τ_ui`, `p_u[f]`, `s(u,j)`, the two candidate sources, removal of rated, statused, unreleased or excluded items, the greedy re-ranker (≤ 20, ≤ 3 per franchise, ≤ 4 per primary genre), explanations, and the onboarding fallback below 3 positive items.
+- [x] **P6.D.2.1** Implement the user profile and scoring as pure functions: `μ_u`, `ρ_ui`, `τ_ui`, `p_u[f]`, `s(u,j)`, the two candidate sources, removal of rated, statused, unreleased or excluded items, the greedy re-ranker (≤ 20, ≤ 3 per franchise, ≤ 4 per primary genre), explanations, and the onboarding fallback below 3 positive items.
   - Files/modules: `app/recommend/foryou/profile.go`, `app/recommend/foryou/rank.go`, `app/recommend/foryou/explain.go`, `app/recommend/foryou/foryou_test.go`
   - Refs: SDD 08 §7.5, FR-08-9, §10 "Unit"; A-02
   - Depends on: P6.D.1.2
@@ -3741,7 +3741,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
   - Acceptance:
     - `go test ./app/recommend/... -run TestProfile` → `ρ` clamped to [−1, 1]; caps hold; each item has one explanation "Because you rated {title} {stars}"; < 3 positives → `basis:"onboarding"`
 
-- [ ] **P6.D.2.2** Serve "For you": the `recommend_user {UserID, Type}` queue job (`Retries(2)`, `Timeout(30s)`), stale-while-refresh (row > 24 h or ≥ 5 newer `rating_events`), a synchronous compute when there is no row, the opt-out (D-29) that deletes rows and stops jobs, `/app/v1/me/for-you`, the home `forYou` `Defer` group and the `ForYou/Index` page.
+- [x] **P6.D.2.2** Serve "For you": the `recommend_user {UserID, Type}` queue job (`Retries(2)`, `Timeout(30s)`), stale-while-refresh (row > 24 h or ≥ 5 newer `rating_events`), a synchronous compute when there is no row, the opt-out (D-29) that deletes rows and stops jobs, `/app/v1/me/for-you`, the home `forYou` `Defer` group and the `ForYou/Index` page.
   - Files/modules: `app/jobs/recommend_user.go`, `app/recommend/foryou/service.go`, `app/appapi/foryou.go`, `app/web/foryou.go`, `resources/js/Pages/ForYou/Index.tsx`, `tests/foryou_test.go`, `qa/k6/foryou.js`
   - Refs: SDD 08 §6 (contracts, jobs, privacy), §7.5, FR-08-10, NFR-08-6, §8 (opt-out while queued); SDD 03 FR-03-19; D-29; <https://vukem.dev/docs/frontend/inertia>; <https://vukem.dev/docs/digging-deeper/queue>
   - Depends on: P6.D.2.1
@@ -3753,7 +3753,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.D.3 Evaluation
 
-- [ ] **P6.D.3.1** Write the offline evaluation protocol: temporal hold-out of each user's latest 20 % of ratings (min 2), overall ≥ 70 as positives, precision@10 and nDCG@10 with a 95 % bootstrap CI and coverage, the monthly CF trigger check (≥ 5,000 users with ≥ 10 counted ratings), and the report file.
+- [x] **P6.D.3.1** Write the offline evaluation protocol: temporal hold-out of each user's latest 20 % of ratings (min 2), overall ≥ 70 as positives, precision@10 and nDCG@10 with a 95 % bootstrap CI and coverage, the monthly CF trigger check (≥ 5,000 users with ≥ 10 counted ratings), and the report file.
   - Files/modules: `app/recommend/eval/eval.go`, `app/recommend/eval/eval_test.go`, `app/jobs/reco_eval_monthly.go`, `docs/reco-eval/README.md`
   - Refs: SDD 08 §7.6, §11 issue 7 (90-day review); A-02; VF-029 (export helpers only write to `http.ResponseWriter`)
   - Depends on: P6.D.2.2

@@ -8,7 +8,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- **ui:** The home page shows a Top 10 trending (30 days) section per type from the hourly snapshot, with a Popular chip for prior entries (P6.C.3.1)
+- **admin:** Admins revert catalogue changes (single, cascade, force) from `/admin/catalog-audit`, restoring value and provenance (P4.B.2.4)
+- **admin:** Admins edit catalogue fields from the item manage page; each change writes a `catalog_audit` row (`source=admin`) and can be reverted (P4.B.2.5)
+- **admin:** Admins lock catalogue fields or records at `/admin/locks` and export the catalogue audit log as CSV or NDJSON (P4.B.2.6)
+- **community:** Public "Recent changes" tab on item, edition and entity pages; profiles show contribution counts and approval rate (P4.B.2.7)
+- **community:** Community suggestions can create entities (people, organizations, franchises, platforms, genres) and book editions; admins apply them like item creates (P4.B.2.3b)
+- **community:** Authors get an in-app notice and an email in their language when a suggestion is approved, applied, rejected, reverted or expires (email opt-out per account) (P4.B.3.1)
+- **catalog:** `item_similar` and `user_recommendations` tables and pure similarity functions (feature extraction, `g_f` weights, weighted Jaccard) (P6.D.1.1)
+- **catalog:** Nightly `ComputeSimilar` job (02:00) filling `item_similar` from shared catalogue features; chunked writes and co-occurrence, unchanged items skipped before candidate work (P6.D.1.2, PERF-compute-similar)
+- **catalog:** "For you" profile, scoring and greedy re-ranker as pure functions (P6.D.2.1)
+- **ui:** "For you": `recommend_user` job with stale-while-refresh, `/app/v1/me/for-you`, the `/for-you` page, the home strip and the opt-out purge (P6.D.2.2)
+- **catalog:** Offline recommendation evaluation (temporal hold-out, precision@10, nDCG@10 with bootstrap CI) and the monthly CF trigger check (P6.D.3.1)
 - **community:** Moderators can apply community create requests and merge reports; a merge asks for the deleted item's typed title and expires its open suggestions (P4.B.2.3)
 - **community:** `catalog.changed` reindexes the edited item or entity and refreshes its sitemap `lastmod` once per audit row; child sitemaps print `<lastmod>` (P4.B.2.2)
 - **community:** Approving a community edit applies it to the catalogue in one transaction: per-field audit rows, provenance `community`, API change feed rows, stale flags on competing suggestions and a per-target lock with one deadlock retry (P4.B.2.1)
@@ -37,6 +47,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **community:** Banning or deleting an account withdraws its open suggestions; merging an item expires the open suggestions on it; account deletion removes the user from community moderation records (P4.B.3.2)
+- **ui:** The home page shows the trending of the last 7 days, 3 per type; the 30-day API list is unchanged (FIX-trending-7d-home)
+- **api:** The public API base URL is `https://api.hexascore.app/v1`: the OpenAPI document, Scalar reference and SDKs use `/v1/...` paths on the API host; `/api/v1/...` keeps answering (FIX-openapi-api-host-paths)
 - **db:** Indexes on `rating_events.at`, `item_status.updated_at`, `list_items.added_at` and `suggestion_events.created_at` (concurrent builds) so the hourly trending rollup no longer scans whole tables (FIX-trending-rollup-indexes)
 - **community:** Moderation is two-step (owner Q-A15): moderators record approve or reject recommendations with a note, and only admins apply or reject suggestions (FIX-moderation-two-step)
 - **community:** The merge form picks both records with the search box instead of raw ids, and relation and merge diffs on the suggestion status page show names (FIX-community-create-ux)
@@ -44,6 +57,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **infra:** Requests to `www.hexascore.app` or the Railway domain answer 301 to the canonical host, keeping path and query (`/up` and the API host excluded) (FIX-www-redirect)
 - **deploy:** Two overlapping `hexascore:predeploy` runs no longer hang when a migration builds an index concurrently; `catalog.changed` queues its reindex through the search package (QA gate 2026-10-31)
 - **api:** Approved community edits are served on `/api/v1`: the default `CATALOG_API_SOURCES` includes `community`, whose `data_sources` licence is `HEXASCORE-API-TERMS` (FIX-community-api-source)
 - **admin:** Moderators need confirmed 2FA to open `/admin` and fall under the admin session limits, like admins (FIX-moderator-2fa)
