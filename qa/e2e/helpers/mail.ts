@@ -62,7 +62,7 @@ export function seedNotification(email: string, kind: string, dedupeKey: string)
 			"-U",
 			"hexascore",
 			"-d",
-			"hexascore",
+			process.env.E2E_DB_NAME ?? "hexascore",
 			"-v",
 			"ON_ERROR_STOP=1",
 			"-c",

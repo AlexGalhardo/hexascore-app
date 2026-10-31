@@ -41,7 +41,7 @@ test.describe("lists", () => {
 			const added: string[] = [];
 			for (const nth of [0, 1]) {
 				await openTopItem(page, prefix, "games", nth);
-				added.push((await page.locator("h1").innerText()).trim());
+				added.push(((await page.locator("h1").textContent()) ?? "").trim());
 				const row = page.locator("li", { hasText: title }).filter({
 					has: page.getByRole("button", { name: t("lists.addToList") }),
 				});

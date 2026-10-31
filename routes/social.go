@@ -35,10 +35,25 @@ func Social(r *router.Router, app *vukem.App) error {
 		return s.Redirect(c, c.Param("provider"))
 	}).Name("social.redirect").Use(auth.Guest(acc.Web))
 
+	// A signed-in user confirming a passkey cannot use the guest-only redirect.
+	r.Get("/auth/google/confirm", func(c *web.Ctx) error {
+		acc.MarkGoogleConfirm(c.Session())
+
+		return s.Redirect(c, "google")
+	}).Name("social.google.confirm").Use(auth.Required(acc.Web), auth.Verified(acc.Web))
+
 	callback := func(c *web.Ctx) error {
 		su, err := s.User(c, c.Param("provider"))
 		if err != nil {
 			return err
+		}
+
+		if handled, err := acc.FinishGoogleConfirm(c, su); handled || err != nil {
+			return err
+		}
+
+		if su.Provider == "google" {
+			acc.NoteFreshGoogle(c.Session())
 		}
 
 		u, err := acc.FindOrCreateFromSocial(c.Context(), su)

@@ -97,6 +97,10 @@ VALUES ('hexascore', 'HexaScore demo data', 'proprietary', 'https://hexascore.ap
 		}
 	}
 
+	if err := seedDemoCovers(ctx, tx); err != nil {
+		return fmt.Errorf("seed covers: %w", err)
+	}
+
 	if err := seedDemoRatings(ctx, tx); err != nil {
 		return fmt.Errorf("seed ratings: %w", err)
 	}
@@ -112,11 +116,14 @@ func seedDemoRatings(ctx context.Context, tx *database.Tx) error {
 		return err
 	}
 
+	// The pair is picked by a hash of the ids, not by random(): with ORDER BY
+	// random() the planner reused the ordering draw for the six columns, so every
+	// seeded rating was 0.5-1.5 stars and every demo score showed as 1/10.
 	if _, err := tx.ExecContext(ctx, `INSERT INTO ratings (user_id, item_id, c1, c2, c3, c4, c5, c6)
-SELECT u.id, i.id, 5 * (1 + floor(random() * 20)), 5 * (1 + floor(random() * 20)), 5 * (1 + floor(random() * 20)),
-  5 * (1 + floor(random() * 20)), 5 * (1 + floor(random() * 20)), 5 * (1 + floor(random() * 20))
+SELECT u.id, i.id, 5 * random(1, 20), 5 * random(1, 20), 5 * random(1, 20),
+  5 * random(1, 20), 5 * random(1, 20), 5 * random(1, 20)
 FROM (SELECT id FROM users WHERE role = 'user') u CROSS JOIN (SELECT id FROM items) i
-ORDER BY random() LIMIT $1`, demoRatings); err != nil {
+ORDER BY md5(u.id::text || ':' || i.id::text) LIMIT $1`, demoRatings); err != nil {
 		return err
 	}
 
@@ -384,4 +391,15 @@ VALUES ($1, $2, $3, $4, $5, $6, $7, 2000 + $8::int, 'paperback', 'hexascore')`,
 	}
 
 	return nil
+}
+
+// seedDemoCovers gives every demo item one of six placeholder SVGs per type, shipped in resources/public/covers,
+// so screenshots and e2e see real images without a bucket.
+func seedDemoCovers(ctx context.Context, tx *database.Tx) error {
+	_, err := tx.ExecContext(ctx, `UPDATE items SET
+  cover_key = 'covers/demo-' || type || '-' || (abs(hashtext(id::text)) % 6) || '.svg',
+  cover_thumb_key = 'covers/demo-' || type || '-' || (abs(hashtext(id::text)) % 6) || '-t.svg'
+WHERE provenance @> '{"demo":"true"}'`)
+
+	return err
 }

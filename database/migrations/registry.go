@@ -2,6 +2,7 @@
 package migrations
 
 import (
+	"github.com/AlexGalhardo/vukem/flags"
 	"github.com/AlexGalhardo/vukem/schema"
 	"github.com/AlexGalhardo/vukem/webhook"
 )
@@ -62,6 +63,9 @@ func All() []schema.Migration {
 		m20261030140000CreateWebhookEndpoints(),
 		m20261030150000AddWebhookFailureStreak(),
 		m20261030160000CreateClientReportsTable(),
+		m20261031130000CreateCommunityHoneypotHits(),
+		flags.Migration("20261031140000_create_feature_flags_table"),
 		webhook.Migrations("")[0],
+		m20261031120000CreatePasskeysTable(),
 	}
 }

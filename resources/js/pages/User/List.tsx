@@ -1,6 +1,7 @@
 import { Link, usePage } from "@inertiajs/react";
 
 import ItemLink, { type ItemRef } from "../../components/library/ItemLink";
+import ReportDialog from "../../components/ReportDialog";
 import Seo from "../../components/Seo";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
@@ -22,7 +23,7 @@ interface Props {
 
 export default function List({ list, owner, items, canEdit, indexable }: Props) {
 	const t = useT();
-	const { locale } = usePage<SharedProps>().props;
+	const { locale, auth } = usePage<SharedProps>().props;
 
 	return (
 		<>
@@ -51,6 +52,11 @@ export default function List({ list, owner, items, canEdit, indexable }: Props) 
 				>
 					{t("userLists.edit")}
 				</Link>
+			)}
+			{auth?.user && !canEdit && (
+				<div className="mt-2">
+					<ReportDialog targetType="list" targetId={list.id} />
+				</div>
 			)}
 			{items.length === 0 ? (
 				<p className="mt-4">{t("userLists.empty")}</p>

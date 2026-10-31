@@ -128,7 +128,7 @@ export default function SuggestBox() {
 					onKeyDown={onKeyDown}
 					onBlur={() => setOpen(false)}
 					onFocus={() => items.length > 0 && setOpen(true)}
-					className="min-h-11 w-48 rounded-md border border-border bg-bg px-3 text-fg sm:w-64"
+					className="min-h-11 w-full rounded-md border border-border bg-bg px-3 text-fg sm:w-64"
 				/>
 				<div
 					id={listId}

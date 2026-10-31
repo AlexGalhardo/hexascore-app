@@ -5,3 +5,38 @@
    the "dark" class on <html> (set before paint in app.html), so a theme
    toggle can override the system preference. */
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* The server-rendered placeholder of CSR pages (views/app.html) disappears once React fills #app. */
+#app:not(:empty) ~ #csr-skeleton {
+	display: none;
+}
+
+/* Submit buttons: spinner while a submit is pending or the page has not hydrated yet
+   (the loader keeps <html inert> until then). */
+.submit-spinner {
+	display: none;
+	width: 1em;
+	height: 1em;
+	border: 2px solid currentColor;
+	border-right-color: transparent;
+	border-radius: 9999px;
+	animation: submit-spin 0.8s linear infinite;
+}
+[data-submit][data-pending] .submit-spinner,
+html[inert] [data-submit] .submit-spinner {
+	display: inline-block;
+}
+html[inert] [data-submit] {
+	opacity: 0.5;
+	cursor: progress;
+}
+@keyframes submit-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.submit-spinner {
+		animation-duration: 3s;
+	}
+}

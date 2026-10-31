@@ -6,6 +6,8 @@ name: hexascore
 services:
   postgres:
     image: postgres:18.6-alpine3.24
+    # Dev and test only: skipping fsync keeps DROP DATABASE (forced checkpoint) under the 30 s pgtest deadline when tests run in parallel.
+    command: ["postgres", "-c", "fsync=off", "-c", "full_page_writes=off", "-c", "synchronous_commit=off"]
     environment:
       POSTGRES_USER: hexascore
       POSTGRES_PASSWORD: hexascore
@@ -37,6 +39,8 @@ services:
 
   # Built container for the QA gate (ROADMAP P1.I): docker compose --profile app up -d --wait
   # APP_KEY comes from .env (setup script) or the shell. Dev-only credentials, same as above.
+  # Parallel stacks: give each its own project, host port and database (see AGENTS.md "Local QA"):
+  # QA_PORT is the host port (default 3000), QA_DATABASE_URL points the app at a per-tag database.
   app-init:
     profiles: ["app"]
     build: .
@@ -44,8 +48,11 @@ services:
     depends_on:
       postgres: { condition: service_healthy }
     environment: &app-env
+      APP_NAME: HexaScore
+      # The passkey RP origin is APP_URL (scheme, host and port), so it has to match the port the browser reaches.
+      APP_URL: http://localhost:${QA_PORT:-3000}
       APP_KEY: ${APP_KEY:?run setups/setup-unix.sh or vukem key:generate}
-      DATABASE_URL: postgres://hexascore:hexascore@postgres:5432/hexascore?sslmode=disable
+      DATABASE_URL: ${QA_DATABASE_URL:-postgres://hexascore:hexascore@postgres:5432/hexascore?sslmode=disable}
       SESSION_DRIVER: database
       SESSION_RECORD_CLIENT: "true"
       # Debug level makes the log mail transport print message bodies, which is how the e2e suite reads verification and reset links.
@@ -59,8 +66,12 @@ services:
       STRIPE_WEBHOOK_SECRET: whsec_placeholder_e2e
       STRIPE_PRICE_PRO: price_placeholder_pro
       STRIPE_PRICE_BUSINESS: price_placeholder_business
+      # Community submissions flag (vukem feature flag, env FLAG_<NAME>); off unless the shell opens it.
+      FLAG_COMMUNITY_SUBMISSIONS: ${FLAG_COMMUNITY_SUBMISSIONS:-false}
     # Migrate, then seed DemoCatalog (1 admin, 50 users, 300 items); the seeder is idempotent, so a failure is real.
     entrypoint: ["/bin/sh", "-c", "/app/app migrate && /app/app db:seed --force DemoCatalog"]
+    # A stack in another compose project cannot resolve "postgres"; it reaches the published 5433 through the host.
+    extra_hosts: ["host.docker.internal:host-gateway"]
     restart: "no"
 
   app:
@@ -69,7 +80,8 @@ services:
     depends_on:
       app-init: { condition: service_completed_successfully }
     environment: *app-env
-    ports: ["127.0.0.1:3000:3000"]
+    ports: ["127.0.0.1:${QA_PORT:-3000}:3000"]
+    extra_hosts: ["host.docker.internal:host-gateway"]
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:3000/up"]
       interval: 3s

@@ -1,6 +1,7 @@
 import { InfiniteScroll, Link, usePage } from "@inertiajs/react";
 
 import ItemLink, { type ItemRef } from "../../components/library/ItemLink";
+import ReportDialog from "../../components/ReportDialog";
 import Seo from "../../components/Seo";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
@@ -35,6 +36,7 @@ interface Props {
 export default function Profile({ profile, stats, ratings, lists, indexable }: Props) {
 	const t = useT();
 	const page = usePage<SharedProps>();
+	const viewer = page.props.auth?.user;
 	const base = localized(`/u/${profile.nickname.toLowerCase()}`, page.props.locale);
 	const requested = new URLSearchParams(page.url.split("?")[1] ?? "").get("tab");
 	const tab: Tab = TABS.find((x) => x === requested) ?? "ratings";
@@ -42,14 +44,30 @@ export default function Profile({ profile, stats, ratings, lists, indexable }: P
 	return (
 		<>
 			<Seo title={profile.nickname} noindex={!indexable} />
-			<header className="flex items-center gap-3">
+			<header className="flex flex-wrap items-center gap-4">
 				<span
 					aria-hidden="true"
-					className="flex size-12 items-center justify-center rounded-full bg-surface text-xl font-semibold"
+					className="flex size-16 items-center justify-center rounded-full bg-accent-game text-2xl font-semibold text-white"
 				>
 					{profile.initial}
 				</span>
-				<h1 className="text-2xl font-semibold">{profile.nickname}</h1>
+				<div className="min-w-0 flex-1">
+					<h1 className="text-2xl font-semibold">{profile.nickname}</h1>
+					{stats && (
+						<p className="text-sm text-muted">
+							{t("social.profile.summary", {
+								ratings: Object.values(stats.ratingsByType).reduce(
+									(a, b) => a + b,
+									0,
+								),
+								lists: lists?.length ?? 0,
+							})}
+						</p>
+					)}
+				</div>
+				{viewer && !profile.isOwner && (
+					<ReportDialog targetType="user" targetId={profile.nickname} />
+				)}
 			</header>
 			{profile.isPrivate && !profile.isOwner && (
 				<p className="mt-4">{t("social.profile.private")}</p>
