@@ -88,6 +88,7 @@ export default function Login() {
 			<form method="post" action={l("/login")} onSubmit={submit} className="space-y-4">
 				<Field
 					label={t("auth.fields.identifier")}
+					name="identifier"
 					autoComplete="username"
 					required
 					value={form.data.identifier}
@@ -107,6 +108,8 @@ export default function Login() {
 				<label className="flex items-center gap-2">
 					<input
 						type="checkbox"
+						name="remember"
+						value="true"
 						checked={form.data.remember}
 						onChange={(e) => form.setData("remember", e.target.checked)}
 					/>
