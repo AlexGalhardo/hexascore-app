@@ -47,7 +47,8 @@
       "label": "Perfil privado",
       "help": "Tus puntuaciones siguen en las medias de la comunidad, pero tu perfil y tus listas quedan ocultos para otros usuarios.",
       "personalization": "Desactivar recomendaciones personalizadas",
-      "personalizationHelp": "Dejamos de usar tus valoraciones para sugerirte elementos."
+      "personalizationHelp": "Dejamos de usar tus valoraciones para sugerirte elementos.",
+      "save": "Guardar privacidad"
     },
     "delete": {
       "title": "Eliminar cuenta",
@@ -546,7 +547,10 @@
     "skip": "Ir al contenido",
     "dismiss": "Descartar",
     "home": "Inicio",
-    "notifications": "Notificaciones"
+    "notifications": "Notificaciones",
+    "library": "Mi biblioteca",
+    "lists": "Mis listas",
+    "more": "Más"
   },
   "home": {
     "title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
@@ -571,7 +575,16 @@
     "copied": "Copiado",
     "title": "Documentación de la API",
     "navLabel": "Documentación",
-    "nav": { "index": "Inicio rápido", "authentication": "Autenticación", "pagination": "Paginación", "rate-limits": "Límites de uso", "errors": "Errores", "coverage": "Cobertura", "changelog": "Historial de cambios", "reference": "Referencia de la API" },
+    "nav": {
+      "index": "Inicio rápido",
+      "authentication": "Autenticación",
+      "pagination": "Paginación",
+      "rate-limits": "Límites de uso",
+      "errors": "Errores",
+      "coverage": "Cobertura",
+      "changelog": "Historial de cambios",
+      "reference": "Referencia de la API"
+    },
     "tocLabel": "En esta página",
     "quickstart": {
       "lead": "Puntuaciones de la comunidad para juegos, películas, series y libros — de 0 a 100, en seis categorías por elemento — a través de una API JSON de solo lectura.",
@@ -1149,7 +1162,8 @@
       "noRatings": "Aún no hay valoraciones.",
       "emptyShelf": "Nada por aquí todavía.",
       "previous": "Anterior",
-      "next": "Siguiente"
+      "next": "Siguiente",
+      "summary": "{ratings} puntuaciones · {lists} listas"
     },
     "status": {
       "label": "Estado",
@@ -1347,5 +1361,19 @@
     "by": "Lista de {nickname}",
     "edited": "Editar lista",
     "limit": "Hasta {limit} listas por tipo."
+  },
+  "dashboard": {
+    "title": "Bienvenido de nuevo, {name}",
+    "lead": "Continúa donde lo dejaste.",
+    "library": "Tu biblioteca",
+    "libraryHelp": "Todo lo que marcaste como quiero, jugando, completado o abandonado.",
+    "lists": "Tus listas",
+    "listsHelp": "Listas ordenadas para compartir.",
+    "page": "Mi página",
+    "pageHelp": "Lo que ven las demás personas.",
+    "api": "Claves de API",
+    "apiHelp": "Claves, uso y la documentación para desarrolladores.",
+    "verify": "Verifica tu correo para puntuar y mantener listas.",
+    "twoFactor": "Autenticación en dos pasos"
   }
 }

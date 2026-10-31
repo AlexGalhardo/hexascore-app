@@ -53,7 +53,8 @@ export default function StarRating({ label, value, onChange, disabled = false }:
 	const valueText = value === null ? t("rating.unset") : t("rating.valuetext", { value });
 
 	return (
-		<div className="flex items-center gap-2">
+		<div className="flex flex-wrap items-center gap-2">
+			<span className="w-full text-sm font-medium sm:w-28 sm:shrink-0">{label}</span>
 			<button
 				type="button"
 				className="size-11 rounded border"
@@ -73,7 +74,7 @@ export default function StarRating({ label, value, onChange, disabled = false }:
 				aria-valuenow={value ?? 0}
 				aria-valuetext={valueText}
 				aria-disabled={disabled}
-				className="flex min-h-11 flex-1 cursor-pointer items-center outline-offset-2 focus-visible:outline-2"
+				className="flex min-h-11 flex-1 cursor-pointer items-center text-xl outline-offset-2 focus-visible:outline-2"
 				onKeyDown={onKeyDown}
 				onPointerMove={(e) => !disabled && setHover(fromPointer(e))}
 				onPointerLeave={() => setHover(null)}
@@ -106,7 +107,9 @@ export default function StarRating({ label, value, onChange, disabled = false }:
 			>
 				+
 			</button>
-			<output className="w-10 tabular-nums">{value === null ? "-" : value.toFixed(1)}</output>
+			<output className="w-10 text-right tabular-nums">
+				{value === null ? <span className="text-muted">–</span> : value.toFixed(1)}
+			</output>
 		</div>
 	);
 }

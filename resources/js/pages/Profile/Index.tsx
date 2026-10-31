@@ -232,7 +232,7 @@ export default function Index({ details, passwordSet, twoFactor, sessions, priva
 						</span>
 					</label>
 					<button type="submit" disabled={privacyForm.processing} className={button}>
-						{t("account.details.save")}
+						{t("account.privacy.save")}
 					</button>
 				</form>
 			</Section>

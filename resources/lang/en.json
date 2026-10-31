@@ -47,7 +47,8 @@
       "label": "Private profile",
       "help": "Your ratings stay in the community scores, but your profile and lists are hidden from other users.",
       "personalization": "Turn off personalised recommendations",
-      "personalizationHelp": "We stop using your ratings to suggest items to you."
+      "personalizationHelp": "We stop using your ratings to suggest items to you.",
+      "save": "Save privacy"
     },
     "delete": {
       "title": "Delete account",
@@ -546,7 +547,10 @@
     "skip": "Skip to content",
     "dismiss": "Dismiss",
     "home": "Home",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "library": "My library",
+    "lists": "My lists",
+    "more": "More"
   },
   "home": {
     "title": "Every game, movie, series and book — scored by people, category by category.",
@@ -571,7 +575,16 @@
     "copied": "Copied",
     "title": "API documentation",
     "navLabel": "Documentation",
-    "nav": { "index": "Quickstart", "authentication": "Authentication", "pagination": "Pagination", "rate-limits": "Rate limits", "errors": "Errors", "coverage": "Coverage", "changelog": "Changelog", "reference": "API reference" },
+    "nav": {
+      "index": "Quickstart",
+      "authentication": "Authentication",
+      "pagination": "Pagination",
+      "rate-limits": "Rate limits",
+      "errors": "Errors",
+      "coverage": "Coverage",
+      "changelog": "Changelog",
+      "reference": "API reference"
+    },
     "tocLabel": "On this page",
     "quickstart": {
       "lead": "Community scores for games, movies, TV series and books — 0 to 100, in six categories per item — over a read-only JSON API.",
@@ -1149,7 +1162,8 @@
       "noRatings": "No ratings yet.",
       "emptyShelf": "Nothing here yet.",
       "previous": "Previous",
-      "next": "Next"
+      "next": "Next",
+      "summary": "{ratings} ratings · {lists} lists"
     },
     "status": {
       "label": "Status",
@@ -1347,5 +1361,19 @@
     "by": "List by {nickname}",
     "edited": "Edit list",
     "limit": "Up to {limit} lists per type."
+  },
+  "dashboard": {
+    "title": "Welcome back, {name}",
+    "lead": "Pick up where you left off.",
+    "library": "Your library",
+    "libraryHelp": "Everything you marked as want, playing, completed or dropped.",
+    "lists": "Your lists",
+    "listsHelp": "Ordered lists you can share.",
+    "page": "My page",
+    "pageHelp": "What other people see.",
+    "api": "API keys",
+    "apiHelp": "Keys, usage and the developer docs.",
+    "verify": "Verify your email to rate and keep lists.",
+    "twoFactor": "Two-factor authentication"
   }
 }
