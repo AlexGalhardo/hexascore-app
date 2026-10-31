@@ -3,6 +3,7 @@
 package tests
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/AlexGalhardo/vukem/drivers/postgres/pgtest"
@@ -35,9 +36,10 @@ func TestAPIReference_PublicInProduction(t *testing.T) {
 		t.Errorf("openapi = %q, want 3.1.x", doc.OpenAPI)
 	}
 
+	// The server URL already ends in /v1 (api host form), so no path repeats /api/v1.
 	for path := range doc.Paths {
-		if len(path) < 7 || path[:7] != "/api/v1" {
-			t.Errorf("path %q is outside /api/v1", path)
+		if strings.HasPrefix(path, "/api/") || strings.HasPrefix(path, "/v1/") || !strings.HasPrefix(path, "/") {
+			t.Errorf("path %q is not relative to the /v1 server", path)
 		}
 	}
 

@@ -19,7 +19,7 @@ test("sends the Bearer key to the production base URL with the query serialized"
 	expect(error).toBeUndefined();
 	expect(data).toEqual({ data: [], next_cursor: null });
 	const url = new URL(calls[0]?.url ?? "");
-	expect(`${url.origin}${url.pathname}`).toBe(`${HEXASCORE_BASE_URL}/api/v1/games`);
+	expect(`${url.origin}${url.pathname}`).toBe(`${HEXASCORE_BASE_URL}/games`);
 	expect(Object.fromEntries(url.searchParams)).toEqual({ sort: "-score", limit: "5", min_score: "8" });
 	expect(calls[0]?.headers.get("authorization")).toBe("Bearer hx_live_test");
 });
@@ -34,7 +34,7 @@ test("returns the API problem instead of throwing, and honours a custom base URL
 	expect(data).toBeUndefined();
 	expect(error).toMatchObject({ code: "not_found", status: 404 });
 	expect(response?.status).toBe(404);
-	expect(calls[0]?.url).toBe("https://example.test/api/v1/games/019a0000-0000-7000-8000-000000000000");
+	expect(calls[0]?.url).toBe("https://example.test/games/019a0000-0000-7000-8000-000000000000");
 });
 
 test("refuses to build a client without a key", () => {
