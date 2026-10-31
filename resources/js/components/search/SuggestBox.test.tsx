@@ -79,3 +79,15 @@ test("Enter without an active option searches the typed text", async () => {
 	await user.keyboard("{Enter}");
 	expect(visit).toHaveBeenCalledWith("/search?q=zel");
 });
+
+test("onPick replaces navigation and the type narrows the query", async () => {
+	const onPick = vi.fn();
+	render(<SuggestBox onPick={onPick} type="game" label="Add" />);
+	const user = userEvent.setup();
+	await user.type(screen.getByRole("combobox", { name: "Add" }), "zel");
+	const [first] = await screen.findAllByRole("option");
+	await user.pointer({ keys: "[MouseLeft]", target: first });
+	expect(onPick).toHaveBeenCalledWith(data[0]);
+	expect(visit).not.toHaveBeenCalled();
+	expect(String(vi.mocked(fetch).mock.calls[0][0])).toContain("&type=game");
+});

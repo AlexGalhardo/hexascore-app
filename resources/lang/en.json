@@ -1366,6 +1366,7 @@
     "next": "Next"
   },
   "userLists": {
+    "addItem": "Add an item",
     "items": "Items",
     "title": "Your lists",
     "new": "New list",

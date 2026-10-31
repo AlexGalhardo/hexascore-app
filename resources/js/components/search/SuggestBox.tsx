@@ -17,8 +17,16 @@ export interface Suggestion {
 const MIN_CHARS = 2;
 const DEBOUNCE_MS = 150;
 
-// Header suggest combobox (ARIA 1.2 combobox with a listbox popup, focus stays in the input).
-export default function SuggestBox() {
+interface Props {
+	// Replaces the default navigation to the suggestion (and to /search on submit): the box becomes a picker.
+	onPick?: (s: Suggestion) => void;
+	// Restricts suggestions to one item type.
+	type?: string;
+	label?: string;
+}
+
+// Suggest combobox (ARIA 1.2 combobox with a listbox popup, focus stays in the input). Header search by default.
+export default function SuggestBox({ onPick, type, label }: Props = {}) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
 	const base = useId();
@@ -44,7 +52,7 @@ export default function SuggestBox() {
 		const timer = setTimeout(async () => {
 			try {
 				const res = await fetch(
-					`${localized("/search/suggest", locale)}?q=${encodeURIComponent(q)}`,
+					`${localized("/search/suggest", locale)}?q=${encodeURIComponent(q)}${type ? `&type=${encodeURIComponent(type)}` : ""}`,
 					{ signal: ctrl.signal, headers: { Accept: "application/json" } },
 				);
 				if (!res.ok) throw new Error(String(res.status));
@@ -64,7 +72,7 @@ export default function SuggestBox() {
 			clearTimeout(timer);
 			ctrl.abort();
 		};
-	}, [text, locale]);
+	}, [text, locale, type]);
 
 	const expanded = open && items.length > 0;
 	const optionId = (i: number) => `${base}-opt-${i}`;
@@ -72,6 +80,14 @@ export default function SuggestBox() {
 	function go(path: string) {
 		setOpen(false);
 		router.visit(path);
+	}
+
+	function pick(s: Suggestion) {
+		if (!onPick) return go(s.path);
+		setOpen(false);
+		setText("");
+		setItems([]);
+		onPick(s);
 	}
 
 	function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -88,7 +104,7 @@ export default function SuggestBox() {
 			case "Enter":
 				if (expanded && active >= 0 && items[active]) {
 					e.preventDefault();
-					go(items[active].path);
+					pick(items[active]);
 				}
 				break;
 			case "Escape":
@@ -109,20 +125,21 @@ export default function SuggestBox() {
 				onSubmit={(e) => {
 					e.preventDefault();
 					const q = text.trim();
-					if (q) go(`${localized("/search", locale)}?q=${encodeURIComponent(q)}`);
+					if (q && !onPick)
+						go(`${localized("/search", locale)}?q=${encodeURIComponent(q)}`);
 				}}
 			>
 				<input
 					type="search"
 					name="q"
 					role="combobox"
-					aria-label={t("nav.search")}
+					aria-label={label ?? t("nav.search")}
 					aria-autocomplete="list"
 					aria-expanded={expanded}
 					aria-controls={listId}
 					aria-activedescendant={expanded && active >= 0 ? optionId(active) : undefined}
 					autoComplete="off"
-					placeholder={t("nav.search")}
+					placeholder={label ?? t("nav.search")}
 					value={text}
 					onChange={(e) => setText(e.target.value)}
 					onKeyDown={onKeyDown}
@@ -147,7 +164,7 @@ export default function SuggestBox() {
 								// mousedown fires before the input blur closes the popup.
 								onMouseDown={(e) => {
 									e.preventDefault();
-									go(s.path);
+									pick(s);
 								}}
 								className={`flex min-h-11 cursor-pointer items-center gap-2 px-3 ${i === active ? "bg-bg" : ""}`}
 							>
