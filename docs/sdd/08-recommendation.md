@@ -101,7 +101,7 @@ create table item_similar (
 -- item_links (based_on, Wikidata P144) is owned by SDD 01 §5.2 and filled by SDD 06 FR-06-11 (08-1).
 
 create table user_recommendations (         -- 24 h cache
-  user_id text not null references users(id) on delete cascade, item_type text not null,  -- users.id is text (SDD 03 §5)
+  user_id bigint not null references users(id) on delete cascade, item_type text not null,  -- users.id is bigint (migration 20261031190000; SDD 03 §5 says text, wrong)
   item_ids uuid[] not null, reason_item_ids uuid[] not null,
   events_at_compute bigint not null, computed_at timestamptz not null,
   primary key (user_id, item_type));

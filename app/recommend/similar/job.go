@@ -273,22 +273,44 @@ func computeChunk(ctx context.Context, db *database.DB, typ string, ids []string
 		return 0, err
 	}
 
-	feats := make(map[string]map[Feature]float64, len(ids))
+	old, err := currentHashes(ctx, db, ids)
+	if err != nil {
+		return 0, err
+	}
 
-	var roles, ents []string
+	// Only items whose own feature hash changed pay for candidate generation (SDD 08 section 7.4).
+	feats := make(map[string]map[Feature]float64, len(ids))
+	hashes := make(map[string][]byte, len(ids))
+
+	var (
+		changed     []string
+		roles, ents []string
+	)
 
 	seen := map[Feature]bool{}
 
 	for _, id := range ids {
-		feats[id] = ExtractFeatures(entries[id], parents)
+		f := ExtractFeatures(entries[id], parents)
 
-		for f := range feats[id] {
-			if rare(f) && !seen[f] {
-				seen[f] = true
-				roles = append(roles, f.Role)
-				ents = append(ents, f.Entity)
+		h := featureHash(f)
+		if old[id] == hex.EncodeToString(h) {
+			continue
+		}
+
+		feats[id], hashes[id] = f, h
+		changed = append(changed, id)
+
+		for ft := range f {
+			if rare(ft) && !seen[ft] {
+				seen[ft] = true
+				roles = append(roles, ft.Role)
+				ents = append(ents, ft.Entity)
 			}
 		}
+	}
+
+	if len(changed) == 0 {
+		return 0, nil
 	}
 
 	byFeature, err := holders(ctx, db, typ, roles, ents, opt)
@@ -299,7 +321,7 @@ func computeChunk(ctx context.Context, db *database.DB, typ string, ids []string
 	cand := map[string][]string{}
 	need := map[string]bool{}
 
-	for _, id := range ids {
+	for _, id := range changed {
 		set := map[string]bool{}
 
 		for f := range feats[id] {
@@ -325,73 +347,79 @@ func computeChunk(ctx context.Context, db *database.DB, typ string, ids []string
 		return 0, err
 	}
 
-	old, err := currentHashes(ctx, db, ids)
-	if err != nil {
-		return 0, err
-	}
-
 	type row struct {
 		id   string
 		hash []byte
 		nb   []Scored
 	}
 
-	var rows []row
+	rows := make([]row, 0, len(changed))
+	candFeats := map[string]map[Feature]float64{}
 
-	for _, id := range ids {
-		h := featureHash(feats[id])
-		if old[id] == hex.EncodeToString(h) {
-			continue
-		}
-
+	for _, id := range changed {
 		cs := make([]Candidate, 0, len(cand[id]))
+
 		for _, o := range cand[id] {
-			cs = append(
-				cs,
-				Candidate{ID: o, Features: ExtractFeatures(candEntries[o], parents), Popularity: candPop[o]},
-			)
+			if _, public := candPop[o]; !public {
+				continue
+			}
+
+			f, ok := candFeats[o]
+			if !ok {
+				f = ExtractFeatures(candEntries[o], parents)
+				candFeats[o] = f
+			}
+
+			cs = append(cs, Candidate{ID: o, Features: f, Popularity: candPop[o]})
 		}
 
-		kept := Filter(feats[id], cs, weight)
-		if err := fillCooccur(ctx, db, id, kept); err != nil {
-			return 0, err
-		}
-
-		rows = append(rows, row{id: id, hash: h, nb: Order(kept)})
+		rows = append(rows, row{id: id, hash: hashes[id], nb: Filter(feats[id], cs, weight)})
 	}
 
-	if len(rows) == 0 {
-		return 0, nil
+	subjects := make([][]Scored, len(rows))
+	for i := range rows {
+		subjects[i] = rows[i].nb
+	}
+
+	if err := fillCooccur(ctx, db, changed, subjects); err != nil {
+		return 0, err
+	}
+
+	for i := range rows {
+		rows[i].nb = Order(rows[i].nb)
+	}
+
+	// One multi-row statement per chunk: a round trip per row dominated the run time.
+	var (
+		sb   strings.Builder
+		args = make([]any, 0, len(rows)*6)
+	)
+
+	for i, r := range rows {
+		var nbIDs, sim, co []string
+
+		for _, s := range r.nb {
+			nbIDs = append(nbIDs, s.ID)
+			sim = append(sim, fmt.Sprint(s.Sim))
+			co = append(co, strconv.Itoa(s.Cooccur))
+		}
+
+		if i > 0 {
+			sb.WriteString(",")
+		}
+
+		n := i * 6
+		fmt.Fprintf(&sb, "($%d, $%d::uuid[], $%d::real[], $%d::int[], $%d, $%d)", n+1, n+2, n+3, n+4, n+5, n+6)
+		args = append(args, r.id, pgArray(nbIDs), pgArray(sim), pgArray(co), r.hash, opt.Now)
 	}
 
 	err = db.Tx(ctx, func(tx *database.Tx) error {
-		for _, r := range rows {
-			var nbIDs, sim, co []string
-
-			for _, s := range r.nb {
-				nbIDs = append(nbIDs, s.ID)
-				sim = append(sim, fmt.Sprint(s.Sim))
-				co = append(co, strconv.Itoa(s.Cooccur))
-			}
-
-			if _, err := tx.ExecContext(
-				ctx,
-				`INSERT INTO item_similar (item_id, similar_ids, scores, cooccur, feature_hash, computed_at)
-VALUES ($1, $2::uuid[], $3::real[], $4::int[], $5, $6)
+		_, err := tx.ExecContext(ctx, `INSERT INTO item_similar (item_id, similar_ids, scores, cooccur, feature_hash, computed_at)
+VALUES `+sb.String()+`
 ON CONFLICT (item_id) DO UPDATE SET similar_ids = EXCLUDED.similar_ids, scores = EXCLUDED.scores,
-  cooccur = EXCLUDED.cooccur, feature_hash = EXCLUDED.feature_hash, computed_at = EXCLUDED.computed_at`,
-				r.id,
-				pgArray(nbIDs),
-				pgArray(sim),
-				pgArray(co),
-				r.hash,
-				opt.Now,
-			); err != nil {
-				return err
-			}
-		}
+  cooccur = EXCLUDED.cooccur, feature_hash = EXCLUDED.feature_hash, computed_at = EXCLUDED.computed_at`, args...)
 
-		return nil
+		return err
 	})
 
 	return len(rows), err
@@ -409,13 +437,15 @@ func holders(
 		return out, nil
 	}
 
-	filter, args := sourceFilter(opt, "ie", 4)
+	filter, args := sourceFilter(opt, "ie", 3)
 
+	// No join to items: with fresh bulk loads the planner has no statistics and picks a quadratic nested loop. Visibility
+	// and type are enforced when the candidates are loaded.
 	rows, err := db.QueryContext(ctx, `SELECT f.role, f.entity_id::text, ie.item_id::text
 FROM unnest($1::text[], $2::uuid[]) AS f(role, entity_id)
-JOIN item_entities ie ON ie.entity_id = f.entity_id AND ie.role = f.role
-JOIN items i ON i.id = ie.item_id AND i.type = $3 AND i.visibility = 'public'
-WHERE `+filter, append([]any{pgArray(roles), pgArray(ents), typ}, args...)...)
+CROSS JOIN LATERAL (SELECT ie.item_id FROM item_entities ie
+  WHERE ie.entity_id = f.entity_id AND ie.role = f.role AND `+filter+`) ie`,
+		append([]any{pgArray(roles), pgArray(ents)}, args...)...)
 	if err != nil {
 		return nil, err
 	}
@@ -458,47 +488,55 @@ WHERE item_id = ANY($1::uuid[])`, pgArray(ids))
 	return out, rows.Err()
 }
 
-// fillCooccur counts the distinct public lists of at most 100 items that contain both the subject and each neighbour.
-func fillCooccur(ctx context.Context, db *database.DB, id string, kept []Scored) error {
-	if len(kept) == 0 {
+// fillCooccur counts, in one query for the whole chunk, the distinct public lists of at most 100 items that contain
+// both a subject and each of its neighbours.
+func fillCooccur(ctx context.Context, db *database.DB, subjects []string, kept [][]Scored) error {
+	var as, bs []string
+
+	for i, id := range subjects {
+		for _, k := range kept[i] {
+			as = append(as, id)
+			bs = append(bs, k.ID)
+		}
+	}
+
+	if len(as) == 0 {
 		return nil
 	}
 
-	ids := make([]string, len(kept))
-	for i, k := range kept {
-		ids[i] = k.ID
-	}
-
-	rows, err := db.QueryContext(ctx, `SELECT b.item_id::text, count(DISTINCT a.list_id)
-FROM list_items a
-JOIN lists l ON l.id = a.list_id AND l.is_public AND NOT l.hidden AND l.item_count <= 100
-JOIN list_items b ON b.list_id = a.list_id AND b.item_id = ANY($2::uuid[])
-WHERE a.item_id = $1::uuid GROUP BY 1`, id, pgArray(ids))
+	rows, err := db.QueryContext(ctx, `SELECT p.a::text, p.b::text, count(DISTINCT x.list_id)
+FROM unnest($1::uuid[], $2::uuid[]) AS p(a, b)
+JOIN list_items x ON x.item_id = p.a
+JOIN lists l ON l.id = x.list_id AND l.is_public AND NOT l.hidden AND l.item_count <= 100
+JOIN list_items y ON y.list_id = x.list_id AND y.item_id = p.b
+GROUP BY 1, 2`, pgArray(as), pgArray(bs))
 	if err != nil {
 		return err
 	}
 	defer func() { _ = rows.Close() }()
 
-	counts := map[string]int{}
+	counts := map[[2]string]int{}
 
 	for rows.Next() {
 		var (
-			o string
-			n int
+			a, b string
+			n    int
 		)
-		if err := rows.Scan(&o, &n); err != nil {
+		if err := rows.Scan(&a, &b, &n); err != nil {
 			return err
 		}
 
-		counts[o] = n
+		counts[[2]string{a, b}] = n
 	}
 
 	if err := rows.Err(); err != nil {
 		return err
 	}
 
-	for i := range kept {
-		kept[i].Cooccur = counts[kept[i].ID]
+	for i, id := range subjects {
+		for j := range kept[i] {
+			kept[i][j].Cooccur = counts[[2]string{id, kept[i][j].ID}]
+		}
 	}
 
 	return nil
