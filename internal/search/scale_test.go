@@ -25,7 +25,11 @@ func TestSearchScaleP95(t *testing.T) {
 	}
 
 	db := migratedDB(t)
-	exec(t, db, `INSERT INTO data_sources (code, name, licence, url) VALUES ('hexascore', 'x', 'proprietary', 'https://x')`)
+	exec(
+		t,
+		db,
+		`INSERT INTO data_sources (code, name, licence, url) VALUES ('hexascore', 'x', 'proprietary', 'https://x')`,
+	)
 	exec(t, db, `INSERT INTO items (id, type, slug, wikidata_qid, popularity_prior)
 		SELECT gen_random_uuid(), (ARRAY['game','movie','series','book'])[1 + g % 4], 'item-' || g, 'Q' || (100000 + g),
 		  (random() ^ 4) * 200 FROM generate_series(1, $1) g`, n)
