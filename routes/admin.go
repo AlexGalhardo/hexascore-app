@@ -139,6 +139,9 @@ func Admin(r *router.Router, app *vukem.App) error {
 	}
 
 	catalogH := admin.CatalogHandlers{Accounts: acc, Queue: q, Views: engine, Authorize: bans.Authorize}
+	if len(ff.All()) > 0 {
+		catalogH.FlagsURL = "/admin/_flags"
+	}
 	r.Get("/admin/items/{id}/manage", catalogH.Manage).Name("admin.items.manage").Use(auth.Required(acc.Web), csrfMW)
 	r.Post("/admin/items/{id}/affiliate-links", catalogH.SaveAffiliateLink).
 		Name("admin.items.affiliate.save").Use(moderator...)
