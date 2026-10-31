@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-10-31
+
+### Fixed
+
+- **catalog:** Pass the cover to the item page ([9a8850f](https://github.com/AlexGalhardo/hexascore-app/commit/9a8850f4f349bd7f6e94f4e39c48efdec8ec9b11))
+
 ## [0.12.0] - 2026-10-31
 
 ### Added
