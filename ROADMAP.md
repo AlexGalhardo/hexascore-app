@@ -2791,7 +2791,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P4.B.2 Apply, revert and audit
 
-- [ ] **P4.B.2.1** Implement the apply transaction (§7.4 steps 1–6): locks, `confirm_stale`, catalogue write with provenance `community`, one audit row per field, `api_changes`, `DispatchTx` of `catalog.changed` and `community.notify`.
+- [x] **P4.B.2.1** Implement the apply transaction (§7.4 steps 1–6): locks, `confirm_stale`, catalogue write with provenance `community`, one audit row per field, `api_changes`, `DispatchTx` of `catalog.changed` and `community.notify`.
   - Files/modules: `app/community/apply.go`, `app/catalog/write.go`, `tests/community_apply_test.go`
   - Refs: SDD 04 FR-04-9, §7.4, §8 (deadlock retried once); SDD 05 §7.3; P3.A.3.1 writer; <https://vukem.dev/docs/digging-deeper/queue> "Jobs and transactions"
   - Depends on: P4.B.1.3, P3.A.3.1
