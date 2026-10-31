@@ -11,6 +11,7 @@ web   GET    /pricing
 web   GET    /docs
 web   GET    /docs/{slug}
 web   GET    /{$}
+web   GET    /covers/{key...}
 web   GET    /{path...}
 web   GET    /sitemap.xml
 web   GET    /sitemaps/{file}
