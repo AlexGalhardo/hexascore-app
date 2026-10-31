@@ -46,3 +46,14 @@ Pages `00 Cover`, `01 Foundations`, `02 Components`, `10 Web desktop 1440`, `11 
 ## Verify
 
 After each screen: one `export_image` at a small `maxEdge` and look for clipped or overflowing text, missing glyphs, wrong order after replacements, contrast, and placeholder copy. Then `describe` for naming issues and `get_font_status` for substitutions. Fix at the source and re-export only what changed. Record every tool gap in the round report.
+
+## Known gaps (OpenPencil 0.16.0, 2026-10-31)
+
+- Deletion order: delete frames that hold instances before their main components. Deleting `Shell components` first left orphans, and `save_file`, `get_page_tree` and `find_nodes` then failed with "Missing materialized component". Recovery: close without saving and redo the deletes in order.
+- `open_file` on a path that is already open reloads into the same tab and merges stale nodes. To open a second copy, copy the file to a new name first.
+- Font loading: text rendered while a Google font is still loading is stored with wrong glyphs (invisible in the first export, scrambled after save and reopen). Render a test text and export it before the real screens; re-render scrambled frames, or reshape a text with `batch_update` `{"auto_resize":"WIDTH_AND_HEIGHT"}` (keeps fill width).
+- `set_font` with `style:"ExtraBold"` silently falls back to Regular; the style name is `Extra Bold` (with a space).
+- `get_jsx` output does not round-trip through `render` ("Unterminated JSX contents"); rebuild from your own JSX instead.
+- The local MCP HTTP endpoint answers 503 to new sessions after a few script runs in the same app session, so `scripts/openpencil/*.py` may fail until OpenPencil restarts; use the MCP tools directly.
+- `render` takes one JSX expression: a `const` before the root never runs ("x is not defined"). Put helpers inside the root, `<Frame …>{(() => { const T = …; return [ … ]; })()}</Frame>`, and avoid spread arguments and destructured parameters (parse error).
+- Clipping is `overflow="hidden"` on a frame; `clip` is ignored with a warning. Without it, a horizontal scroller widens the exported frame.
