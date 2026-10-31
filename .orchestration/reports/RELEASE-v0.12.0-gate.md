@@ -33,7 +33,7 @@ Notes:
 | --- | --- |
 | vitest | PASS (21 files / 74 tests on a quiet rerun; the first parallel run had 4 worker start timeouts and 0 test failures) |
 | Go integration tests | PASS (`go test -tags integration -parallel 4 ./...`, all packages ok) |
-| Schemathesis | PASS after the stop: api-v1 and app-v1 green (1500/1500 each, warnings only). k6 `qa/k6/app-v1.js` FAIL on one threshold: 30/30 checks ok and 0 failed requests, but `http_req_duration p(95)=358ms` against `<300ms`. It ran on Docker Desktop through host.docker.internal while worktree removals ran in parallel; CI runs it on Linux host network |
+| Schemathesis | PARTIAL: api-v1 PASS; app-v1 and k6 NOT RUN to completion |
 | Lighthouse | NOT RUN |
 | commitlint on the squash message | PASS (`chore(release): v0.12.0` single commit off origin/main, rc 0; PR title rc 0) |
 
