@@ -16,6 +16,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | VF-NEW-AUDIT-4 | 2026-10-31 | low | open |
 | VF-NEW-AUDIT-5 | 2026-10-31 | medium | open |
 | VF-NEW-AUDIT-6 | 2026-10-31 | medium | open |
+| VF-NEW-P2.H.3.1 | 2026-10-31 | low | open |
 
 ## VF-062: A typed POST that returns a body defaults to 201, including commands that do not create a resource
 
@@ -73,3 +74,11 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 - **Context**: the public API free plan is 1 request/second; the first request leaves `ratelimit-remaining: 0` and the second within the same second is 429. Every sequential client script fails on its second call (audit 2026-10-31).
 - **Workaround**: none; P2.H.3.1 proposes a burst in the app layer if the framework has none.
 - **Request**: a token-bucket mode (`Limit{Rate: 1, Burst: 5}`) in `ratelimit`, with `RateLimit-Policy` headers reflecting it, or a documented way to compose two limits (per second and per minute) on one route.
+
+## VF-NEW-P2.H.3.1: No way to document an enum on a typed-handler path parameter without enforcing it as a 422
+
+- **Date**: 2026-10-31. **Severity**: low. **Status**: open.
+- **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/rest-apis/typed-handlers> "The input". The only tag that puts `enum` in the OpenAPI schema is `validate:"oneof=..."`, which also rejects the request with a 422 before the handler runs [NOT IN VUKEM DOCS: a doc-only enum].
+- **Context**: `GET /api/v1/{type}` and `/{type}/{id}` must document `games|movies|series|books` for SDK users, but the API contract answers an unknown type with 400 `invalid-query` that the quota refunds (SDD 05 FR-05-4).
+- **Workaround**: `validate:"oneof=..."` on `ListItemsInput.Type` and `GetItemInput.Type`, plus `publicapi.TypeGuard` (last middleware of the `/api/v1` group) that answers the 400 first. `// workaround(vukem): VF-NEW-P2.H.3.1`.
+- **Request**: a documentation-only tag (for example `enum:"a,b"`) or an `api.Op` option to map validation errors to a chosen status.
