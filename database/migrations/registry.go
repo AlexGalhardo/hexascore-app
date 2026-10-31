@@ -62,6 +62,7 @@ func All() []schema.Migration {
 		m20261030140000CreateWebhookEndpoints(),
 		m20261030150000AddWebhookFailureStreak(),
 		m20261030160000CreateClientReportsTable(),
+		m20261031130000CreateCommunityHoneypotHits(),
 		webhook.Migrations("")[0],
 		m20261031120000CreatePasskeysTable(),
 	}
