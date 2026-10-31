@@ -64,6 +64,8 @@ services:
       STRIPE_WEBHOOK_SECRET: whsec_placeholder_e2e
       STRIPE_PRICE_PRO: price_placeholder_pro
       STRIPE_PRICE_BUSINESS: price_placeholder_business
+      # Community submissions flag (vukem feature flag, env FLAG_<NAME>); off unless the shell opens it.
+      FLAG_COMMUNITY_SUBMISSIONS: ${FLAG_COMMUNITY_SUBMISSIONS:-false}
     # Migrate, then seed DemoCatalog (1 admin, 50 users, 300 items); the seeder is idempotent, so a failure is real.
     entrypoint: ["/bin/sh", "-c", "/app/app migrate && /app/app db:seed --force DemoCatalog"]
     # A stack in another compose project cannot resolve "postgres"; it reaches the published 5433 through the host.
