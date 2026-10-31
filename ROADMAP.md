@@ -3653,7 +3653,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./app/recommend/... -run 'TestTrendScore|TestFallback'` → golden `118.97` and `72.8` (±0.01), `D(0,7,14) = 1, 0.5, 0.25`, thresholds at 4.99/5.0, `F_i` 6.89 and 5.30 for the §7.3 examples
   - Notes: weights and thresholds are untuned (open issue 08-7). Keep them as named constants, not configuration.
 
-- [ ] **P6.C.2.2** Build `ComputeTrending` (`Cron("5 * * * *")`, `WithoutOverlapping()`): rollup, then the per-type snapshot in one transaction ordered `(T desc, popularity_prior desc, id)` with gapless ranks and prior fill, then `trending:v1:{type}` invalidation. Add `PruneTrending` at 04:45 (90 days), the queued `trending_rebuild` on `user.banned`, the `trending.*` metrics and alert A14.
+- [x] **P6.C.2.2** Build `ComputeTrending` (`Cron("5 * * * *")`, `WithoutOverlapping()`): rollup, then the per-type snapshot in one transaction ordered `(T desc, popularity_prior desc, id)` with gapless ranks and prior fill, then `trending:v1:{type}` invalidation. Add `PruneTrending` at 04:45 (90 days), the queued `trending_rebuild` on `user.banned`, the `trending.*` metrics and alert A14.
   - Files/modules: `app/jobs/compute_trending.go`, `app/jobs/prune_trending.go`, `app/recommend/trending/snapshot.go`, `app/recommend/trending/rebuild.go`, `routes/schedule.go`, `ops/grafana/alerts/a14.yaml`, `app/recommend/trending/snapshot_test.go`
   - Refs: SDD 08 §6 "Jobs", "Metrics", §7.3, FR-08-4, FR-08-6, FR-08-7, NFR-08-2, §9, §10; SDD 12 §6.2, §7.5 (A14); <https://vukem.dev/docs/digging-deeper/scheduler> "Overlapping runs"; <https://vukem.dev/docs/digging-deeper/queue>
   - Depends on: P6.C.2.1, P6.C.1.2
