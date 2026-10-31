@@ -12,8 +12,8 @@ import (
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
-	"github.com/AlexGalhardo/vukem/uuid"
 	"github.com/AlexGalhardo/vukem/queue"
+	"github.com/AlexGalhardo/vukem/uuid"
 
 	"github.com/AlexGalhardo/hexascore-app/app/community"
 )
