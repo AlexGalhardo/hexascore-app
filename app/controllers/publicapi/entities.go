@@ -122,7 +122,7 @@ func (h *Controller) ListEntityItems(c *web.Ctx, in ListEntityItemsInput) (ItemP
 	if in.Type != "" {
 		typ, ok := typeOf[in.Type]
 		if !ok {
-			return ItemPageJSON{}, invalid("unknown type")
+			return ItemPageJSON{}, invalid(unknownType)
 		}
 		params.Type = typ
 	}

@@ -117,6 +117,9 @@ type ListItemsInput struct {
 	Locale   string `json:"locale"    doc:"en, pt-BR or es"`
 }
 
+// unknownType names the accepted path segments, so a client can fix the request without reading the docs.
+const unknownType = "unknown type: use games, movies, series or books"
+
 // GetItemInput is the getItem path and query.
 type GetItemInput struct {
 	Type   string `json:"type"`
@@ -128,7 +131,7 @@ type GetItemInput struct {
 func (h *Controller) ListItems(c *web.Ctx, in ListItemsInput) (ItemPageJSON, error) {
 	typ, ok := typeOf[in.Type]
 	if !ok {
-		return ItemPageJSON{}, invalid("unknown type")
+		return ItemPageJSON{}, invalid(unknownType)
 	}
 	allowed := []string{"genre", "platform", "year", "min_score", "max_score", "sort", "limit", "cursor", "locale"}
 	for _, k := range catalog.CategoryKeys[typ] {
@@ -192,7 +195,7 @@ func (h *Controller) itemPage(c *web.Ctx, params catalog.ListParams, locale stri
 func (h *Controller) GetItem(c *web.Ctx, in GetItemInput) (ItemJSON, error) {
 	typ, ok := typeOf[in.Type]
 	if !ok {
-		return ItemJSON{}, invalid("unknown type")
+		return ItemJSON{}, invalid(unknownType)
 	}
 	if err := checkQuery(c, "locale"); err != nil {
 		return ItemJSON{}, err
