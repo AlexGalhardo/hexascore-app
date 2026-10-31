@@ -204,7 +204,7 @@ Burst 429s and upload 413/422 come from vukem `ratelimit` and `upload`.
 
 Jobs (vukem `https://vukem.dev/docs/digging-deeper/queue` "Queue", "Events", "Mail"):
 
-- `catalog.changed {target_type, target_id, fields, audit_ids}` via `q.DispatchTx` in the apply/revert transaction; handlers purge cache (SDD 01), reindex search (SDD 07), update sitemap `lastmod` and the changes feed (SDD 05); idempotent by `audit_ids`.
+- `catalog.changed {target_type, target_id, fields, audit_ids}` via `q.DispatchTx` in the apply/revert transaction; handlers purge cache (SDD 01), reindex search (SDD 07), update sitemap `lastmod` and the changes feed (SDD 05); idempotent by `audit_ids`. Implementation: one transaction inserts the ids into `catalog_changed_done` and stops when none is new, queues the owning item or entity in `search_dirty` (an edition queues its work) and sets its `updated_at`, which the sitemap prints as `<lastmod>`. The changes feed row is already written by the apply transaction, and the page caches are query-keyed with TTLs of 60 s or less, so there is no per-item cache entry to purge.
 - `community.notify`: calls SDD 14 `notifications.Send` (dedupe key `suggestion:<id>:<state>`), sends mail via `SendLaterTx` with `EnvelopeContext` in the author's locale.
 - `community.check_sources`: GET each URL through `httpclient.Safe` (5 s, 3 redirects, 256 KiB), stores status in `meta`; never blocks.
 - `community.cover_fetch`: downloads a URL cover via `httpclient.Safe`, then `upload.Save` with the cover rules.
