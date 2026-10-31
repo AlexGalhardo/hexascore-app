@@ -101,8 +101,8 @@ func SaveDraft(
 
 		next = current + 1
 		_, err = tx.ExecContext(ctx, `UPDATE suggestions
-SET locale = $2, changes = $3::jsonb, note = $4, source_urls = $5, target_domain = $6, version = $7, updated_at = $8
-WHERE id = $1`, id, in.Locale, raw, in.Note, urls, in.TargetType, next, now.UTC())
+SET locale = $2, changes = $3::jsonb, note = $4, source_urls = $5, version = $6, updated_at = $7
+WHERE id = $1`, id, in.Locale, raw, in.Note, urls, next, now.UTC())
 		if err != nil {
 			return fmt.Errorf("community: update draft: %w", err)
 		}
@@ -114,6 +114,33 @@ WHERE id = $1`, id, in.Locale, raw, in.Note, urls, in.TargetType, next, now.UTC(
 	}
 
 	return id, next, nil
+}
+
+// DraftTarget returns the target and domain stored on authorID's suggestion id. An update must use these, never
+// the request's: the target is fixed at create. A missing, malformed or foreign id is ErrDraftNotFound.
+func DraftTarget(ctx context.Context, db *database.DB, authorID int64, id string) (Target, string, error) {
+	if !uuidRe.MatchString(id) {
+		return Target{}, "", ErrDraftNotFound
+	}
+
+	var t Target
+	var targetID sql.NullString
+	var domain string
+
+	err := db.QueryRowContext(ctx,
+		`SELECT target_type::text, target_id::text, target_domain FROM suggestions WHERE id = $1 AND author_id = $2`,
+		id, authorID).Scan(&t.Kind, &targetID, &domain)
+	if errors.Is(err, sql.ErrNoRows) {
+		return Target{}, "", ErrDraftNotFound
+	}
+
+	if err != nil {
+		return Target{}, "", fmt.Errorf("community: draft target: %w", err)
+	}
+
+	t.ID = targetID.String
+
+	return t, domain, nil
 }
 
 func checkTarget(t Target, kind string) error {
