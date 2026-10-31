@@ -26,7 +26,7 @@ from hexascore import AuthenticatedClient
 from hexascore.api.catalog import get_item, list_items, lookup_item
 from hexascore.models import Problem
 
-client = AuthenticatedClient(base_url="https://api.hexascore.app", token=os.environ["HEXASCORE_API_KEY"])
+client = AuthenticatedClient(base_url="https://api.hexascore.app/v1", token=os.environ["HEXASCORE_API_KEY"])
 
 with client as c:
     page = list_items.sync("games", client=c, sort="-score", limit="10", min_score="8")
@@ -62,7 +62,7 @@ from hexascore.api.catalog import list_items
 
 
 async def main() -> None:
-    async with AuthenticatedClient(base_url="https://api.hexascore.app", token="hx_live_…") as client:
+    async with AuthenticatedClient(base_url="https://api.hexascore.app/v1", token="hx_live_…") as client:
         page = await list_items.asyncio("movies", client=client, limit="5")
         print(page)
 

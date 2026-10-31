@@ -6,7 +6,7 @@ from hexascore.api.catalog import get_item, list_items
 from hexascore import AuthenticatedClient
 from hexascore.models import ItemPageJSON, Problem
 
-BASE_URL = "https://api.hexascore.app"
+BASE_URL = "https://api.hexascore.app/v1"
 
 
 def client_with(handler) -> AuthenticatedClient:
@@ -33,7 +33,7 @@ def test_list_items_sends_auth_and_query_and_parses_the_page() -> None:
     assert isinstance(page, ItemPageJSON)
     assert page.data == []
     request = seen[0]
-    assert request.url.path == "/api/v1/games"
+    assert request.url.path == "/v1/games"
     assert dict(request.url.params) == {"sort": "-score", "limit": "5", "min_score": "8"}
     assert request.headers["authorization"] == "Bearer hx_live_test"
 

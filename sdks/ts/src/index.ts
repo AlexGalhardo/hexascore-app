@@ -4,12 +4,12 @@ export type { Client } from "./gen/client/index.ts";
 export * from "./gen/index.ts";
 
 /** Production base URL of the Hexascore API v1. */
-export const HEXASCORE_BASE_URL = "https://api.hexascore.app";
+export const HEXASCORE_BASE_URL = "https://api.hexascore.app/v1";
 
 export type HexascoreOptions = {
 	/** Secret key from https://hexascore.app/profile/api (`hx_live_…`). Keep it on the server. */
 	apiKey: string;
-	/** Defaults to {@link HEXASCORE_BASE_URL}. Another deployment: `https://<host>`. */
+	/** Defaults to {@link HEXASCORE_BASE_URL}. Another deployment: `https://<host>/v1`. */
 	baseUrl?: string;
 	/** Custom `fetch` (tests, proxies, runtimes without a global one). */
 	fetch?: typeof globalThis.fetch;

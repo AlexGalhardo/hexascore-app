@@ -89,7 +89,7 @@ Pass `throwOnError: true` to an operation to throw instead. Network failures alw
 ```ts
 createHexascoreClient({
 	apiKey: "hx_live_…",
-	baseUrl: "https://<host>", // another deployment; defaults to https://api.hexascore.app
+	baseUrl: "https://<host>/v1", // another deployment; defaults to https://api.hexascore.app/v1
 	fetch: myFetch, // custom fetch (tests, proxies)
 });
 ```
