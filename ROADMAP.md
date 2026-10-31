@@ -83,7 +83,7 @@ Microtasks for each group are in the phase sections below.
 | P6.B | Ingestion extras: TMDB/IGDB/Steam/GOG display-only enrichment with provenance and expiry, covers pipeline (`cwebp`), trailers, edition matching, entity resolution queue, data-quality asserts, admin status | SDD 06 | P6.A |
 | P6.C | Trending: activity primitives, flush, snapshots, home sections, API endpoint | SDD 08 | P2.G |
 | P6.D | Similar items and personal recommendations: nightly similarity, cross-media links, "For you" with opt-out, evaluation protocol | SDD 08 | P6.C, P6.A |
-| P7.A | Follows and activity feed: `follows` table, follower counts, activity events, `/feed` page, privacy rules | SDD 14 (new §8), SDD 08 | P2.G, D-06 amendment |
+| P7.A | Follows and activity feed: `follows` table, follower counts, activity events, `/feed` page, privacy rules | SDD 14 (new §12), SDD 08 | P2.G, D-06 amendment |
 | P7.B | Reviews, comments and reactions: text review per rating, threaded comments, reactions, reports and moderation for all three | SDD 14, SDD 04, SDD 13 | P7.A, P4.B |
 | P7.C | Social discovery: profile shelves with covers, "friends rated", list collaboration, share cards | SDD 09, SDD 08 | P7.A, P6.C |
 
@@ -3783,9 +3783,9 @@ Design principles for the whole phase: every social write is moderated by the P4
 
 ### P7.A Follows and activity feed
 
-- [ ] **P7.A.1.1** Amend D-06, write SDD 14 §8 "Follows and feed" (tables `follows`, `activity_events`, privacy matrix, retention 180 days) and ADR 0019 (feed built from the write path, no fan-out until 10k followers).
+- [ ] **P7.A.1.1** Amend D-06, write SDD 14 §12 "Social layer" (follows and feed subsection) (tables `follows`, `activity_events`, privacy matrix, retention 180 days) and ADR 0019 (feed built from the write path, no fan-out until 10k followers).
   - Files/modules: `docs/brainstorming.md`, `docs/sdd/14-user-library.md`, `docs/adrs/0019-social-feed.md`
-  - Refs: SDD 14 §1, §2; D-06; D-29; web-research §4 (Letterboxd, Goodreads, Skoob feeds)
+  - Refs: SDD 14 §1, §2; D-06; D-29; web-research §6 (Goodreads), §7 (Skoob); Letterboxd: DOC-research-letterboxd report
   - Depends on: P2.G.4.2
   - Model: Opus
   - Acceptance:
@@ -3793,7 +3793,7 @@ Design principles for the whole phase: every social write is moderated by the P4
 
 - [ ] **P7.A.1.2** Build `follows`: `PUT|DELETE /u/{nickname}/follow`, follower and following counts on the profile, `TestSecurity_A01_PrivateProfileFollowRequiresApproval`.
   - Files/modules: `database/migrations/<ts>_create_follows_table.go`, `app/social/follows.go`, `app/controllers/follows_controller.go`, `routes/social.go`, `resources/js/pages/User/Profile.tsx` (follow button, counts), `tests/follows_test.go`
-  - Refs: SDD 14 §8; SDD 13 A01, A04 (rate limit 60/h)
+  - Refs: SDD 14 §12; SDD 13 A01, A06 (rate limit 60/h)
   - Depends on: P7.A.1.1
   - Model: Sonnet
   - Acceptance:
@@ -3802,8 +3802,8 @@ Design principles for the whole phase: every social write is moderated by the P4
 
 - [ ] **P7.A.1.3** Emit activity events from the existing write paths (rating saved, status changed, list created or item added, review published) and build `/feed` (followed users, 20 per page, cursor) plus the "recent activity" tab on the public profile.
   - Files/modules: `app/social/activity.go` (listener on `scoring`, `library` events), `app/controllers/feed_controller.go`, `resources/js/pages/Feed/Index.tsx`, `resources/js/components/social/ActivityCard.tsx`
-  - Refs: SDD 14 §8; SDD 08 §6 (activity primitives shared with trending, P6.C.1); SDD 09 §7.3 (cursor)
-  - Depends on: P7.A.1.2
+  - Refs: SDD 14 §12; SDD 08 §7.1 (primitives shared with trending, P6.C.1); SDD 09 §7.3 (cursor)
+  - Depends on: P7.A.1.2, P6.C.1.1
   - Model: Opus
   - Acceptance:
     - `k6 run qa/k6/feed.js` → p95 ≤ 300 ms at 30 rps with 10k events
@@ -3818,16 +3818,16 @@ Design principles for the whole phase: every social write is moderated by the P4
 
 - [ ] **P7.B.1.1** Reviews: optional text (≤ 5,000 chars, Markdown subset, spoiler flag) attached to a rating; shown on the item page (sorted by helpfulness, then date) and on the profile.
   - Files/modules: `database/migrations/<ts>_create_reviews_table.go`, `app/social/reviews.go`, `app/controllers/reviews_controller.go`, `resources/js/components/item/Reviews.tsx`, `resources/js/components/item/ReviewForm.tsx`
-  - Refs: SDD 14 §8; SDD 13 A03 (sanitised Markdown, no raw HTML); A-07 (licence of contributions); web-research §4.2 (Letterboxd review model)
+  - Refs: SDD 14 §12; SDD 13 A05 (sanitised Markdown, no raw HTML); A-07 (licence of contributions); Letterboxd review model: DOC-research-letterboxd report
   - Depends on: P7.A.1.1
   - Model: Opus
   - Acceptance:
-    - `go test -tags integration ./tests -run 'TestReviews|TestSecurity_A03_ReviewMarkdown'` → green; a `<script>` in a review renders as text
+    - `go test -tags integration ./tests -run 'TestReviews|TestSecurity_A05_ReviewMarkdown'` → green; a `<script>` in a review renders as text
     - Playwright `reviews.spec.ts` → write, edit, delete, spoiler toggle; axe 0 serious
 
 - [ ] **P7.B.1.2** Comments on reviews and lists (one level of threading, 60/h per user) and reactions (`like`, `helpful`) on reviews, comments and lists, with counts updated in the same transaction.
   - Files/modules: `database/migrations/<ts>_create_comments_and_reactions.go`, `app/social/comments.go`, `app/social/reactions.go`, controllers and routes, `resources/js/components/social/CommentThread.tsx`, `ReactionBar.tsx`
-  - Refs: SDD 14 §8; SDD 13 A04; SDD 04 §6 (notifications: "someone commented")
+  - Refs: SDD 14 §12; SDD 13 A06 (rate limit); SDD 14 §7.5 (notifications: "someone commented")
   - Depends on: P7.B.1.1
   - Model: Sonnet
   - Acceptance:
@@ -3851,7 +3851,7 @@ Design principles for the whole phase: every social write is moderated by the P4
 
 - [ ] **P7.C.1.1** "Rated by people you follow" on the item page and the home, and the friends' average next to the community score.
   - Files/modules: `app/catalog/item_page.go`, `app/controllers/home.go`, `resources/js/components/item/FriendsScore.tsx`
-  - Refs: SDD 08 §6; SDD 14 §8
+  - Refs: SDD 08 §6; SDD 14 §12
   - Depends on: P7.A.1.3
   - Model: Sonnet
   - Acceptance:
