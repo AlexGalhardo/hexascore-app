@@ -72,10 +72,14 @@ func TestScoreChangeOnlyOnDecimal(t *testing.T) {
 	}
 
 	moved := changes.ScoreFieldNames(
-		changes.ScoreSnap{Score: sql.NullFloat64{Float64: 87.4, Valid: true}, RatingCount: 12,
-			Confidence: sql.NullString{String: "low", Valid: true}},
-		changes.ScoreSnap{Score: sql.NullFloat64{Float64: 87.6, Valid: true}, RatingCount: 13,
-			Confidence: sql.NullString{String: "low", Valid: true}},
+		changes.ScoreSnap{
+			Score: sql.NullFloat64{Float64: 87.4, Valid: true}, RatingCount: 12,
+			Confidence: sql.NullString{String: "low", Valid: true},
+		},
+		changes.ScoreSnap{
+			Score: sql.NullFloat64{Float64: 87.6, Valid: true}, RatingCount: 13,
+			Confidence: sql.NullString{String: "low", Valid: true},
+		},
 	)
 	if got := join(moved); got != "score,ratingCount" {
 		t.Fatalf("fields = %q, want score,ratingCount", got)

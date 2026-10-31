@@ -1,8 +1,8 @@
 name: CI
 
-# Adapted from AlexGalhardo/vukem-marketplace-reactjs. Owner rule (2026-10-29):
-# work merges straight into main and nobody waits for this run, so it reports
-# regressions after the fact; Railway deploys main on its own.
+# Adapted from AlexGalhardo/vukem. main accepts a change only through a pull
+# request whose required checks are green (ruleset protect-main). Railway
+# deploys main on its own after that merge.
 on:
   push:
     branches: [main]
@@ -182,7 +182,14 @@ jobs:
         run: scripts/infra/check-image.sh hexascore:ci
       - name: Smoke test
         run: |
-          docker run -d --name app -p 3000:3000 -e APP_KEY="base64:$(openssl rand -base64 32)" -e APP_URL=http://localhost:3000 hexascore:ci
+          docker run -d --name app -p 3000:3000 \
+            -e APP_KEY="base64:$(openssl rand -base64 32)" \
+            -e APP_URL=http://localhost:3000 \
+            -e STRIPE_KEY=sk_test_placeholder_ci \
+            -e STRIPE_WEBHOOK_SECRET=whsec_placeholder_ci \
+            -e STRIPE_PRICE_PRO=price_placeholder_pro \
+            -e STRIPE_PRICE_BUSINESS=price_placeholder_business \
+            hexascore:ci
           for i in $(seq 1 30); do curl -fsS localhost:3000/up && break; sleep 1; done
           # No database in this job, so readiness is 503 on "db"; only the ssr check matters here.
           curl -sS 'localhost:3000/up?checks=1' | grep -q '"ssr":"ok"'

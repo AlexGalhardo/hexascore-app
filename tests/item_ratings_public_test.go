@@ -63,7 +63,20 @@ VALUES ($1, 'game', 'rated-public', 'Q9100', $2::jsonb)`,
 VALUES ($1, 'en', 'Rated', 'hexascore')`, itemID)
 
 	base := time.Now().UTC()
-	names := []string{"alice", "bobby", "carol", "david", "erika", "frank", "grace", "henry", "irene", "james", "karen", "linda"}
+	names := []string{
+		"alice",
+		"bobby",
+		"carol",
+		"david",
+		"erika",
+		"frank",
+		"grace",
+		"henry",
+		"irene",
+		"james",
+		"karen",
+		"linda",
+	}
 	for i, name := range names {
 		id := insertUser(name, false, false, false)
 		exec(`INSERT INTO ratings (user_id, item_id, c1, c2, c3, c4, c5, c6, created_at)
@@ -106,7 +119,8 @@ VALUES ($1, 'game', 'rated-hidden', 'Q9101', 'hidden')`, hidden)
 	if page1.Page != 1 || page1.PageCount != 2 || len(page1.Data) != 10 {
 		t.Fatalf("page1 page=%d count=%d rows=%d", page1.Page, page1.PageCount, len(page1.Data))
 	}
-	if page1.Data[0].Nickname != "linda" || page1.Data[0].Overall != 8 || len(page1.Data[0].Categories) != 6 || page1.Data[0].Categories[0] != 8 {
+	if page1.Data[0].Nickname != "linda" || page1.Data[0].Overall != 8 || len(page1.Data[0].Categories) != 6 ||
+		page1.Data[0].Categories[0] != 8 {
 		t.Fatalf("newest row %+v", page1.Data[0])
 	}
 	if _, err := time.Parse(time.RFC3339, page1.Data[0].RatedAt); err != nil {
@@ -126,7 +140,9 @@ VALUES ($1, 'game', 'rated-hidden', 'Q9101', 'hidden')`, hidden)
 		Page int `json:"page"`
 	}
 	client.GetJSON("/api/items/" + itemID + "/ratings?page=2").AssertOK().JSON(&page2)
-	if page2.Page != 2 || len(page2.Data) != 3 || page2.Data[0].Nickname != "bobby" || page2.Data[1].Nickname != "alice" || page2.Data[2].Nickname != "tanya" {
+	if page2.Page != 2 || len(page2.Data) != 3 || page2.Data[0].Nickname != "bobby" ||
+		page2.Data[1].Nickname != "alice" ||
+		page2.Data[2].Nickname != "tanya" {
 		t.Fatalf("page2 %+v", page2)
 	}
 

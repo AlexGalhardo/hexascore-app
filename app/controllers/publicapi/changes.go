@@ -16,13 +16,13 @@ import (
 
 // ChangeJSON is one listChanges row. action is created, updated or deleted (SDD 05 §8).
 type ChangeJSON struct {
-	ID         string   `json:"id"                  validate:"required"`
-	Action     string   `json:"action"              validate:"required,oneof=created updated deleted"`
-	ItemType   string   `json:"itemType"            validate:"required,oneof=games movies series books"`
-	ItemID     string   `json:"itemId"              validate:"required"`
+	ID         string   `json:"id"                   validate:"required"`
+	Action     string   `json:"action"               validate:"required,oneof=created updated deleted"`
+	ItemType   string   `json:"itemType"             validate:"required,oneof=games movies series books"`
+	ItemID     string   `json:"itemId"               validate:"required"`
 	Fields     []string `json:"fields"`
 	MergedInto *string  `json:"mergedInto,omitempty"`
-	ChangedAt  string   `json:"changedAt"           validate:"required"`
+	ChangedAt  string   `json:"changedAt"            validate:"required"`
 }
 
 // ChangePageJSON is one keyset page of changes in the vukem envelope.

@@ -64,7 +64,7 @@ func quoteArrayElem(v string) string {
 	if v == "" || strings.EqualFold(v, "NULL") || strings.ContainsAny(v, "{},\"\\ \t\n\r") {
 		var b strings.Builder
 		b.WriteByte('"')
-		for i := 0; i < len(v); i++ {
+		for i := range len(v) {
 			if v[i] == '"' || v[i] == '\\' {
 				b.WriteByte('\\')
 			}

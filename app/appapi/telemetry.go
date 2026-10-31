@@ -35,7 +35,15 @@ func ClientError(db *database.DB, now func() time.Time) func(*web.Ctx) error {
 			return err
 		}
 
-		if err := rejectUnknown(raw, "appVersion", "versionCode", "androidApi", "screen", "message", "stack"); err != nil {
+		if err := rejectUnknown(
+			raw,
+			"appVersion",
+			"versionCode",
+			"androidApi",
+			"screen",
+			"message",
+			"stack",
+		); err != nil {
 			return err
 		}
 

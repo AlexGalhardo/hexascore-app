@@ -108,7 +108,14 @@ func PublicURL(ctx context.Context, raw string, resolve Resolver) error {
 
 // Create stores one endpoint for a pro or business user. The plaintext secret
 // is returned once and only the app.Crypt ciphertext is written.
-func Create(ctx context.Context, db *database.DB, enc *crypt.Encrypter, userID int64, plan string, in Draft) (Endpoint, error) {
+func Create(
+	ctx context.Context,
+	db *database.DB,
+	enc *crypt.Encrypter,
+	userID int64,
+	plan string,
+	in Draft,
+) (Endpoint, error) {
 	cap, ok := planCap(plan)
 	if !ok {
 		return Endpoint{}, ErrPlanRequired
@@ -158,7 +165,8 @@ func Create(ctx context.Context, db *database.DB, enc *crypt.Encrypter, userID i
 		}
 
 		var n int
-		if err := tx.QueryRowContext(ctx, `SELECT count(*) FROM webhook_endpoints WHERE user_id = $1`, userID).Scan(&n); err != nil {
+		if err := tx.QueryRowContext(ctx, `SELECT count(*) FROM webhook_endpoints WHERE user_id = $1`, userID).
+			Scan(&n); err != nil {
 			return err
 		}
 
@@ -170,7 +178,8 @@ func Create(ctx context.Context, db *database.DB, enc *crypt.Encrypter, userID i
 VALUES ($1, $2, $3, $4::text[], $5::text[], $6)
 RETURNING created_at`,
 			row.ID, userID, row.URL, models.TextArray(events), models.TextArray(types), enc.Seal([]byte(secret), SecretAD),
-		).Scan(&row.CreatedAt); err != nil {
+		).
+			Scan(&row.CreatedAt); err != nil {
 			return err
 		}
 

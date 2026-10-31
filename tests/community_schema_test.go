@@ -43,7 +43,8 @@ func TestCommunitySchema(t *testing.T) {
 	}
 
 	var urls models.TextArray
-	if err := db.QueryRowContext(ctx, `SELECT $1::text[]`, models.TextArray{"https://a.example/a,b", "https://b.example"}).Scan(&urls); err != nil {
+	if err := db.QueryRowContext(ctx, `SELECT $1::text[]`, models.TextArray{"https://a.example/a,b", "https://b.example"}).
+		Scan(&urls); err != nil {
 		t.Fatal(err)
 	}
 	if len(urls) != 2 || urls[0] != "https://a.example/a,b" || urls[1] != "https://b.example" {

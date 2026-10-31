@@ -148,7 +148,9 @@ func TestRetentionJobs(t *testing.T) {
 	}
 
 	var status string
-	if err := db.QueryRowContext(t.Context(), `SELECT status FROM data_exports WHERE id = $1`, id).Scan(&status); err != nil || status != "ready" {
+	if err := db.QueryRowContext(t.Context(), `SELECT status FROM data_exports WHERE id = $1`, id).
+		Scan(&status); err != nil ||
+		status != "ready" {
 		t.Fatalf("status before 24 h = %q, %v", status, err)
 	}
 
@@ -169,7 +171,9 @@ func TestRetentionJobs(t *testing.T) {
 		t.Fatalf("client_reports = %d, want 1", n)
 	}
 
-	if err := db.QueryRowContext(t.Context(), `SELECT status FROM data_exports WHERE id = $1`, id).Scan(&status); err != nil || status != "expired" {
+	if err := db.QueryRowContext(t.Context(), `SELECT status FROM data_exports WHERE id = $1`, id).
+		Scan(&status); err != nil ||
+		status != "expired" {
 		t.Fatalf("status at 24 h = %q, %v", status, err)
 	}
 

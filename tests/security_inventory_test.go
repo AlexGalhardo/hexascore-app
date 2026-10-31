@@ -285,7 +285,10 @@ func TestSecurity_A06_HexaBodyLimits(t *testing.T) {
 	// vukem v0.34.0 (VF-061) keeps the MaxBytesError from MethodOverride, so an oversized
 	// urlencoded form is 413. The server-level limit in routes/web.go is still required:
 	// MethodOverride parses the body before the router middleware runs.
-	if rec := post("application/x-www-form-urlencoded", "email=a%40b.co&pad="+pad); rec.Code != http.StatusRequestEntityTooLarge {
+	if rec := post(
+		"application/x-www-form-urlencoded",
+		"email=a%40b.co&pad="+pad,
+	); rec.Code != http.StatusRequestEntityTooLarge {
 		t.Errorf("urlencoded form over %d bytes: status %d, want 413", limits.FormBody, rec.Code)
 	}
 

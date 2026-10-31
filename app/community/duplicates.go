@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -29,7 +30,12 @@ func guardTarget(ctx context.Context, tx *database.Tx, id string, now time.Time)
 	if !targetID.Valid {
 		return nil
 	}
-	if _, err := tx.ExecContext(ctx, `SELECT pg_advisory_xact_lock(hashtext($1), hashtext($2))`, targetType, targetID.String); err != nil {
+	if _, err := tx.ExecContext(
+		ctx,
+		`SELECT pg_advisory_xact_lock(hashtext($1), hashtext($2))`,
+		targetType,
+		targetID.String,
+	); err != nil {
 		return fmt.Errorf("community: lock suggestion target: %w", err)
 	}
 	fields := make([]string, 0, len(changes))
@@ -46,7 +52,12 @@ func guardTarget(ctx context.Context, tx *database.Tx, id string, now time.Time)
 	return staleBefore(ctx, tx, targetType, targetID.String, changes)
 }
 
-func rejectDuplicate(ctx context.Context, tx *database.Tx, id, targetType, targetID string, changes map[string]json.RawMessage) error {
+func rejectDuplicate(
+	ctx context.Context,
+	tx *database.Tx,
+	id, targetType, targetID string,
+	changes map[string]json.RawMessage,
+) error {
 	if len(changes) == 0 {
 		return nil
 	}
@@ -74,7 +85,9 @@ WHERE target_type = $1 AND target_id = $2
 			var otherAuthor sql.NullInt64
 			var other []byte
 			if err := rows.Scan(&otherID, &otherAuthor, &other); err != nil {
-				rows.Close()
+				if closeErr := rows.Close(); closeErr != nil {
+					err = errors.Join(err, closeErr)
+				}
 
 				return fmt.Errorf("community: scan duplicate suggestions: %w", err)
 			}
@@ -91,7 +104,9 @@ WHERE target_type = $1 AND target_id = $2
 			fieldRivals = append(fieldRivals, otherID)
 		}
 		scanErr := rows.Err()
-		rows.Close()
+		if closeErr := rows.Close(); closeErr != nil {
+			scanErr = errors.Join(scanErr, closeErr)
+		}
 		if scanErr != nil {
 			return fmt.Errorf("community: scan duplicate suggestions: %w", scanErr)
 		}
@@ -104,11 +119,19 @@ WHERE target_type = $1 AND target_id = $2
 		rivals = append(rivals, fieldRivals...)
 	}
 	if len(rivals) > 0 {
-		if _, err := tx.ExecContext(ctx, `UPDATE suggestions SET meta = meta || '{"competing":true}'::jsonb WHERE id = $1`, id); err != nil {
+		if _, err := tx.ExecContext(
+			ctx,
+			`UPDATE suggestions SET meta = meta || '{"competing":true}'::jsonb WHERE id = $1`,
+			id,
+		); err != nil {
 			return fmt.Errorf("community: flag competing suggestion: %w", err)
 		}
 		for _, otherID := range rivals {
-			if _, err := tx.ExecContext(ctx, `UPDATE suggestions SET meta = meta || '{"competing":true}'::jsonb WHERE id = $1`, otherID); err != nil {
+			if _, err := tx.ExecContext(
+				ctx,
+				`UPDATE suggestions SET meta = meta || '{"competing":true}'::jsonb WHERE id = $1`,
+				otherID,
+			); err != nil {
 				return fmt.Errorf("community: flag competing suggestion: %w", err)
 			}
 		}

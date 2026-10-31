@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
+	"slices"
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
@@ -19,7 +20,13 @@ var (
 	externalField    = regexp.MustCompile(`^external_ids\.([A-Za-z0-9]+)$`)
 )
 
-func fieldLocked(ctx context.Context, tx *database.Tx, targetType, targetID string, fields []string, now time.Time) error {
+func fieldLocked(
+	ctx context.Context,
+	tx *database.Tx,
+	targetType, targetID string,
+	fields []string,
+	now time.Time,
+) error {
 	rows, err := tx.QueryContext(ctx, `
 SELECT field, reason FROM catalog_locks
 WHERE target_type = $1 AND target_id = $2
@@ -57,16 +64,15 @@ WHERE target_type = $1 AND target_id = $2
 }
 
 func containsField(fields []string, field string) bool {
-	for _, item := range fields {
-		if item == field {
-			return true
-		}
-	}
-
-	return false
+	return slices.Contains(fields, field)
 }
 
-func staleBefore(ctx context.Context, tx *database.Tx, targetType, targetID string, changes map[string]json.RawMessage) error {
+func staleBefore(
+	ctx context.Context,
+	tx *database.Tx,
+	targetType, targetID string,
+	changes map[string]json.RawMessage,
+) error {
 	for field, raw := range changes {
 		before, ok := objectField(raw, "before")
 		if !ok {
@@ -106,10 +112,22 @@ func scalarCurrent(ctx context.Context, tx *database.Tx, targetType, targetID, f
 
 func itemCurrent(ctx context.Context, tx *database.Tx, itemID, field string) (json.RawMessage, error) {
 	if m := translationTitle.FindStringSubmatch(field); m != nil {
-		return nullableText(ctx, tx, `SELECT title FROM item_translations WHERE item_id = $1 AND locale = $2`, itemID, m[1])
+		return nullableText(
+			ctx,
+			tx,
+			`SELECT title FROM item_translations WHERE item_id = $1 AND locale = $2`,
+			itemID,
+			m[1],
+		)
 	}
 	if m := synopsisField.FindStringSubmatch(field); m != nil {
-		return nullableText(ctx, tx, `SELECT synopsis FROM item_translations WHERE item_id = $1 AND locale = $2`, itemID, m[1])
+		return nullableText(
+			ctx,
+			tx,
+			`SELECT synopsis FROM item_translations WHERE item_id = $1 AND locale = $2`,
+			itemID,
+			m[1],
+		)
 	}
 	if field == "title" {
 		return nullableText(ctx, tx, `SELECT original_title FROM items WHERE id = $1`, itemID)
@@ -125,7 +143,8 @@ func itemCurrent(ctx context.Context, tx *database.Tx, itemID, field string) (js
 	}
 	var day sql.NullTime
 	var precision string
-	err := tx.QueryRowContext(ctx, `SELECT release_date, release_precision FROM items WHERE id = $1`, itemID).Scan(&day, &precision)
+	err := tx.QueryRowContext(ctx, `SELECT release_date, release_precision FROM items WHERE id = $1`, itemID).
+		Scan(&day, &precision)
 	if errors.Is(err, sql.ErrNoRows) || !day.Valid {
 		return json.RawMessage("null"), nil
 	}

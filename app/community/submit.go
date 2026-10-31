@@ -63,17 +63,34 @@ func submitTx(ctx context.Context, tx *database.Tx, id string, authorID int64, v
 	if err := TransitionTx(ctx, tx, id, version, "submitted", actor); err != nil {
 		return err
 	}
-	if _, err := tx.ExecContext(ctx, `UPDATE suggestions SET submitted_at = $1 WHERE id = $2`, now.UTC(), id); err != nil {
+	if _, err := tx.ExecContext(
+		ctx,
+		`UPDATE suggestions SET submitted_at = $1 WHERE id = $2`,
+		now.UTC(),
+		id,
+	); err != nil {
 		return fmt.Errorf("community: set submitted_at: %w", err)
 	}
-	if _, err := tx.ExecContext(ctx, `UPDATE contributor_stats SET submitted_total = submitted_total + 1, updated_at = $2 WHERE user_id = $1`, authorID, now.UTC()); err != nil {
+	if _, err := tx.ExecContext(
+		ctx,
+		`UPDATE contributor_stats SET submitted_total = submitted_total + 1, updated_at = $2 WHERE user_id = $1`,
+		authorID,
+		now.UTC(),
+	); err != nil {
 		return fmt.Errorf("community: increment submitted_total: %w", err)
 	}
 
 	return nil
 }
 
-func checkEligibility(ctx context.Context, tx *database.Tx, userID int64, tier string, blockedUntil sql.NullTime, now time.Time) error {
+func checkEligibility(
+	ctx context.Context,
+	tx *database.Tx,
+	userID int64,
+	tier string,
+	blockedUntil sql.NullTime,
+	now time.Time,
+) error {
 	var verified sql.NullTime
 	var created time.Time
 	var banned, banExpires sql.NullTime

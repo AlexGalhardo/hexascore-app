@@ -37,7 +37,13 @@ func TestAppMe(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	write, _, err := acc.Tokens.Create(t.Context(), user.AuthID(), "phone", []string{"catalog:read", "profile:write"}, time.Hour)
+	write, _, err := acc.Tokens.Create(
+		t.Context(),
+		user.AuthID(),
+		"phone",
+		[]string{"catalog:read", "profile:write"},
+		time.Hour,
+	)
 	if err != nil {
 		t.Fatal(err)
 	}

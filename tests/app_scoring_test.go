@@ -45,7 +45,8 @@ func TestAppScoring(t *testing.T) {
 		t.Fatal(err)
 	}
 	item := uuid.NewV7().String()
-	if _, err := db.SQL().ExecContext(t.Context(), `INSERT INTO items (id, type, slug, wikidata_qid, release_date, release_precision, release_status)
+	if _, err := db.SQL().
+		ExecContext(t.Context(), `INSERT INTO items (id, type, slug, wikidata_qid, release_date, release_precision, release_status)
 VALUES ($1, 'game', $2, $3, '2020-01-01', 'day', 'released')`, item, "s-"+item, "Q"+strconv.FormatInt(time.Now().UnixNano(), 10)); err != nil {
 		t.Fatal(err)
 	}
@@ -94,7 +95,9 @@ func ratingRows(t *testing.T, app *vukemtest.App, item string) int {
 		t.Fatal(err)
 	}
 	var n int
-	if err := db.SQL().QueryRowContext(t.Context(), `SELECT count(*) FROM ratings WHERE item_id = $1`, item).Scan(&n); err != nil {
+	if err := db.SQL().
+		QueryRowContext(t.Context(), `SELECT count(*) FROM ratings WHERE item_id = $1`, item).
+		Scan(&n); err != nil {
 		t.Fatal(err)
 	}
 	return n

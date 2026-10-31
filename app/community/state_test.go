@@ -62,7 +62,8 @@ func TestTransitions(t *testing.T) {
 				continue
 			}
 			var te *TransitionError
-			if !errors.As(err, &te) || te.Status != 409 || te.Code != "invalid-transition" || te.From != from || te.To != to {
+			if !errors.As(err, &te) || te.Status != 409 || te.Code != "invalid-transition" || te.From != from ||
+				te.To != to {
 				t.Fatalf("%s → %s: err = %#v, want 409 invalid-transition", from, to, err)
 			}
 			assertStatus(t, db, id, from, 1)
@@ -89,7 +90,8 @@ func TestTransitionWritesEvent(t *testing.T) {
 				t.Fatalf("events inside tx = %d, want 1", got)
 			}
 			var from, to string
-			if err := tx.QueryRowContext(ctx, `SELECT from_status, to_status FROM suggestion_events WHERE suggestion_id = $1`, id).Scan(&from, &to); err != nil {
+			if err := tx.QueryRowContext(ctx, `SELECT from_status, to_status FROM suggestion_events WHERE suggestion_id = $1`, id).
+				Scan(&from, &to); err != nil {
 				t.Fatal(err)
 			}
 			if from != "draft" || to != "submitted" {
@@ -112,7 +114,8 @@ func TestTransitionWritesEvent(t *testing.T) {
 		insertSuggestion(t, db, id, "draft")
 		err := Transition(ctx, db, id, 4, "submitted", actor)
 		var te *TransitionError
-		if !errors.As(err, &te) || te.Status != 409 || te.Code != "stale-before" || te.Field != "version" || te.Current != "1" {
+		if !errors.As(err, &te) || te.Status != 409 || te.Code != "stale-before" || te.Field != "version" ||
+			te.Current != "1" {
 			t.Fatalf("err = %#v, want 409 stale-before version=1", err)
 		}
 		assertStatus(t, db, id, "draft", 1)
@@ -131,7 +134,11 @@ func TestTransitionWritesEvent(t *testing.T) {
 		if got := eventCount(t, db, id); got != 2 {
 			t.Fatalf("events = %d, want 2", got)
 		}
-		rows, err := db.QueryContext(ctx, `SELECT from_status, to_status FROM suggestion_events WHERE suggestion_id = $1 ORDER BY id`, id)
+		rows, err := db.QueryContext(
+			ctx,
+			`SELECT from_status, to_status FROM suggestion_events WHERE suggestion_id = $1 ORDER BY id`,
+			id,
+		)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -190,7 +197,8 @@ func assertStatus(t *testing.T, db *database.DB, id, status string, version int)
 	t.Helper()
 	var gotStatus string
 	var gotVersion int
-	err := db.QueryRowContext(context.Background(), `SELECT status, version FROM suggestions WHERE id = $1`, id).Scan(&gotStatus, &gotVersion)
+	err := db.QueryRowContext(context.Background(), `SELECT status, version FROM suggestions WHERE id = $1`, id).
+		Scan(&gotStatus, &gotVersion)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -202,7 +210,8 @@ func assertStatus(t *testing.T, db *database.DB, id, status string, version int)
 func eventCount(t *testing.T, q rowQuery, id string) int {
 	t.Helper()
 	var n int
-	if err := q.QueryRowContext(context.Background(), `SELECT count(*) FROM suggestion_events WHERE suggestion_id = $1`, id).Scan(&n); err != nil {
+	if err := q.QueryRowContext(context.Background(), `SELECT count(*) FROM suggestion_events WHERE suggestion_id = $1`, id).
+		Scan(&n); err != nil {
 		t.Fatal(err)
 	}
 

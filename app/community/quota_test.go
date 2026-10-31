@@ -30,7 +30,9 @@ func TestQuota(t *testing.T) {
 	refused := insertDraft(t, db, userID, 104)
 	status, err := Submit(ctx, db, refused, userID, 1, now)
 	var problem *Problem
-	if status != http.StatusTooManyRequests || !errors.As(err, &problem) || problem.Type != problemBase+"suggestion-quota" || problem.RetryAfter <= 0 {
+	if status != http.StatusTooManyRequests || !errors.As(err, &problem) ||
+		problem.Type != problemBase+"suggestion-quota" ||
+		problem.RetryAfter <= 0 {
 		t.Fatalf("4th: status %d err %#v", status, err)
 	}
 	assertStatus(t, db, refused, "draft", 1)
@@ -97,7 +99,12 @@ func TestEligibility(t *testing.T) {
 	t.Run("blocked", func(t *testing.T) {
 		userID := insertAuthor(t, db, "blocked@example.test", now.Add(-30*24*time.Hour), true, false)
 		until := now.Add(30 * 24 * time.Hour)
-		if _, err := db.ExecContext(ctx, `INSERT INTO contributor_stats (user_id, tier, blocked_until) VALUES ($1, 'blocked', $2)`, userID, until); err != nil {
+		if _, err := db.ExecContext(
+			ctx,
+			`INSERT INTO contributor_stats (user_id, tier, blocked_until) VALUES ($1, 'blocked', $2)`,
+			userID,
+			until,
+		); err != nil {
 			t.Fatal(err)
 		}
 		assertNotEligible(t, db, userID, now, &until)
@@ -211,7 +218,8 @@ VALUES ($1, $2, 'edit', 'item', '00000000-0000-0000-0000-0000000000aa', 'movie',
 func submittedAt(t *testing.T, db *database.DB, id string) sql.NullTime {
 	t.Helper()
 	var at sql.NullTime
-	if err := db.QueryRowContext(context.Background(), `SELECT submitted_at FROM suggestions WHERE id = $1`, id).Scan(&at); err != nil {
+	if err := db.QueryRowContext(context.Background(), `SELECT submitted_at FROM suggestions WHERE id = $1`, id).
+		Scan(&at); err != nil {
 		t.Fatal(err)
 	}
 
@@ -221,7 +229,8 @@ func submittedAt(t *testing.T, db *database.DB, id string) sql.NullTime {
 func countStatus(t *testing.T, db *database.DB, authorID int64, status string) int {
 	t.Helper()
 	var n int
-	if err := db.QueryRowContext(context.Background(), `SELECT count(*) FROM suggestions WHERE author_id = $1 AND status = $2`, authorID, status).Scan(&n); err != nil {
+	if err := db.QueryRowContext(context.Background(), `SELECT count(*) FROM suggestions WHERE author_id = $1 AND status = $2`, authorID, status).
+		Scan(&n); err != nil {
 		t.Fatal(err)
 	}
 

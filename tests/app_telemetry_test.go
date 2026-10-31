@@ -164,7 +164,18 @@ func assertReportShape(t *testing.T, app *vukemtest.App, received time.Time) {
 		t.Fatal(err)
 	}
 
-	want := []string{"id", "kind", "platform", "app_version", "route", "name", "value", "message", "stack", "received_at"}
+	want := []string{
+		"id",
+		"kind",
+		"platform",
+		"app_version",
+		"route",
+		"name",
+		"value",
+		"message",
+		"stack",
+		"received_at",
+	}
 	if len(got) != len(want) {
 		t.Fatalf("columns = %v", got)
 	}

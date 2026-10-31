@@ -83,12 +83,17 @@ func nextUTCMidnight(now time.Time) time.Time {
 // lockStats inserts the stats row when missing, then locks it. Concurrent
 // submits of one user take this lock before any suggestion row.
 func lockStats(ctx context.Context, tx *database.Tx, userID int64) (string, sql.NullTime, error) {
-	if _, err := tx.ExecContext(ctx, `INSERT INTO contributor_stats (user_id) VALUES ($1) ON CONFLICT (user_id) DO NOTHING`, userID); err != nil {
+	if _, err := tx.ExecContext(
+		ctx,
+		`INSERT INTO contributor_stats (user_id) VALUES ($1) ON CONFLICT (user_id) DO NOTHING`,
+		userID,
+	); err != nil {
 		return "", sql.NullTime{}, fmt.Errorf("community: insert contributor stats: %w", err)
 	}
 	var tier string
 	var blocked sql.NullTime
-	err := tx.QueryRowContext(ctx, `SELECT tier::text, blocked_until FROM contributor_stats WHERE user_id = $1 FOR UPDATE`, userID).Scan(&tier, &blocked)
+	err := tx.QueryRowContext(ctx, `SELECT tier::text, blocked_until FROM contributor_stats WHERE user_id = $1 FOR UPDATE`, userID).
+		Scan(&tier, &blocked)
 	if err != nil {
 		return "", sql.NullTime{}, fmt.Errorf("community: lock contributor stats: %w", err)
 	}

@@ -35,6 +35,7 @@ web   GET    /game-modes/{slug}
 web   GET    /countries/{code}
 web   GET    /languages/{code}
 web   GET    /api/search/suggest
+web   GET    /api/items/{id}/ratings
 web   GET    /login
 web   POST   /login
 web   GET    /signup

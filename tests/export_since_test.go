@@ -73,15 +73,54 @@ RETURNING id`, after).Scan(&freshUser); err != nil {
 	insertRating := `INSERT INTO ratings (user_id, item_id, c1, c2, c3, c4, c5, c6, created_at, updated_at)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`
 
-	if _, err := sqlDB.ExecContext(ctx, insertRating, legacyUser, changed, 80, 85, 90, 95, 100, 75, before, after); err != nil {
+	if _, err := sqlDB.ExecContext(
+		ctx,
+		insertRating,
+		legacyUser,
+		changed,
+		80,
+		85,
+		90,
+		95,
+		100,
+		75,
+		before,
+		after,
+	); err != nil {
 		t.Fatal(err)
 	}
 
-	if _, err := sqlDB.ExecContext(ctx, insertRating, legacyUser, untouched, 20, 20, 20, 20, 20, 20, before, before); err != nil {
+	if _, err := sqlDB.ExecContext(
+		ctx,
+		insertRating,
+		legacyUser,
+		untouched,
+		20,
+		20,
+		20,
+		20,
+		20,
+		20,
+		before,
+		before,
+	); err != nil {
 		t.Fatal(err)
 	}
 
-	if _, err := sqlDB.ExecContext(ctx, insertRating, freshUser, freshItem, 70, 70, 70, 70, 70, 70, after, after); err != nil {
+	if _, err := sqlDB.ExecContext(
+		ctx,
+		insertRating,
+		freshUser,
+		freshItem,
+		70,
+		70,
+		70,
+		70,
+		70,
+		70,
+		after,
+		after,
+	); err != nil {
 		t.Fatal(err)
 	}
 
@@ -234,7 +273,8 @@ VALUES ('leg-a', $1, 10, 10, 10, 10, 10, 10, $2, $2),
 		t.Fatalf("replayed rating = %d %d %d %d %d %d", c1, c2, c3, c4, c5, c6)
 	}
 
-	if err := conn.QueryRowContext(ctx, `SELECT c1 FROM ratings WHERE user_id = 'leg-a' AND item_id = $1`, untouched).Scan(&c1); err != nil {
+	if err := conn.QueryRowContext(ctx, `SELECT c1 FROM ratings WHERE user_id = 'leg-a' AND item_id = $1`, untouched).
+		Scan(&c1); err != nil {
 		t.Fatal(err)
 	}
 
@@ -244,7 +284,8 @@ VALUES ('leg-a', $1, 10, 10, 10, 10, 10, 10, $2, $2),
 
 	var status string
 
-	if err := conn.QueryRowContext(ctx, `SELECT status::text FROM item_status WHERE user_id = 'leg-a' AND item_id = $1`, changed).Scan(&status); err != nil {
+	if err := conn.QueryRowContext(ctx, `SELECT status::text FROM item_status WHERE user_id = 'leg-a' AND item_id = $1`, changed).
+		Scan(&status); err != nil {
 		t.Fatal(err)
 	}
 
@@ -254,7 +295,8 @@ VALUES ('leg-a', $1, 10, 10, 10, 10, 10, 10, $2, $2),
 
 	var minutes int
 
-	if err := conn.QueryRowContext(ctx, `SELECT main_minutes FROM time_to_beat WHERE user_id = 'leg-a' AND item_id = $1`, changed).Scan(&minutes); err != nil {
+	if err := conn.QueryRowContext(ctx, `SELECT main_minutes FROM time_to_beat WHERE user_id = 'leg-a' AND item_id = $1`, changed).
+		Scan(&minutes); err != nil {
 		t.Fatal(err)
 	}
 
@@ -276,7 +318,8 @@ SELECT l.title, l.user_id FROM lists l JOIN list_items li ON li.list_id = l.id W
 
 	var keyUser string
 
-	if err := conn.QueryRowContext(ctx, `SELECT user_id FROM api_keys WHERE hash = $1`, hash).Scan(&keyUser); err != nil {
+	if err := conn.QueryRowContext(ctx, `SELECT user_id FROM api_keys WHERE hash = $1`, hash).
+		Scan(&keyUser); err != nil {
 		t.Fatal(err)
 	}
 
@@ -297,7 +340,8 @@ WHERE u.id = $1`, freshID).Scan(&freshName, &resetValue); err != nil {
 		t.Fatalf("new account %s reset %s", freshName, resetValue)
 	}
 
-	if err := conn.QueryRowContext(ctx, `SELECT c1 FROM ratings WHERE user_id = $1 AND item_id = $2`, freshID, freshItem).Scan(&c1); err != nil {
+	if err := conn.QueryRowContext(ctx, `SELECT c1 FROM ratings WHERE user_id = $1 AND item_id = $2`, freshID, freshItem).
+		Scan(&c1); err != nil {
 		t.Fatal(err)
 	}
 

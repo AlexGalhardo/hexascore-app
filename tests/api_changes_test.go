@@ -35,7 +35,16 @@ func TestAPIChanges(t *testing.T) {
 	insertChange(t, r, game, "game", "updated", "{title,score}", "", now.Add(-10*24*time.Hour))
 	insertChange(t, r, movie, "movie", "deleted", "{}", target, now)
 	kept := insertChange(t, r, uuid.NewV7().String(), "book", "created", "{}", "", now.Add(-changes.Retain))
-	gone := insertChange(t, r, uuid.NewV7().String(), "series", "updated", "{slug}", "", now.Add(-changes.Retain-time.Minute))
+	gone := insertChange(
+		t,
+		r,
+		uuid.NewV7().String(),
+		"series",
+		"updated",
+		"{slug}",
+		"",
+		now.Add(-changes.Retain-time.Minute),
+	)
 
 	base := "/api/v1/changes?" + url.Values{"since": {now.Add(-changes.Window).Format(time.RFC3339)}}.Encode()
 

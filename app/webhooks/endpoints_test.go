@@ -2,6 +2,7 @@ package webhooks
 
 import (
 	"context"
+	"errors"
 	"net/netip"
 	"testing"
 	"time"
@@ -63,5 +64,5 @@ func TestPublicURLLookupTimeout(t *testing.T) {
 }
 
 func errorsIsURL(err error) bool {
-	return err == ErrURL
+	return errors.Is(err, ErrURL)
 }

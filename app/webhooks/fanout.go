@@ -26,12 +26,18 @@ const (
 func (s *Service) Fanout(ctx context.Context, q *queue.Queue) error {
 	return s.db.Tx(ctx, func(tx *database.Tx) error {
 		var last int64
-		if err := tx.QueryRowContext(ctx, `SELECT last_change_id FROM webhook_cursor WHERE id = 1 FOR UPDATE`).Scan(&last); err != nil {
+		if err := tx.QueryRowContext(ctx, `SELECT last_change_id FROM webhook_cursor WHERE id = 1 FOR UPDATE`).
+			Scan(&last); err != nil {
 			return fmt.Errorf("webhook: lock cursor: %w", err)
 		}
 
-		rows, err := tx.QueryContext(ctx, `SELECT id, item_id::text, item_type, action, fields, merged_into::text, changed_at
-FROM api_changes WHERE id > $1 ORDER BY id LIMIT $2`, last, readLimit)
+		rows, err := tx.QueryContext(
+			ctx,
+			`SELECT id, item_id::text, item_type, action, fields, merged_into::text, changed_at
+FROM api_changes WHERE id > $1 ORDER BY id LIMIT $2`,
+			last,
+			readLimit,
+		)
 		if err != nil {
 			return fmt.Errorf("webhook: read changes: %w", err)
 		}
@@ -43,7 +49,15 @@ FROM api_changes WHERE id > $1 ORDER BY id LIMIT $2`, last, readLimit)
 			var row changeRow
 			var fields models.TextArray
 			var merged sql.NullString
-			if err := rows.Scan(&row.id, &row.itemID, &row.itemType, &row.action, &fields, &merged, &row.at); err != nil {
+			if err := rows.Scan(
+				&row.id,
+				&row.itemID,
+				&row.itemType,
+				&row.action,
+				&fields,
+				&merged,
+				&row.at,
+			); err != nil {
 				return err
 			}
 
@@ -92,7 +106,11 @@ FROM api_changes WHERE id > $1 ORDER BY id LIMIT $2`, last, readLimit)
 			}
 		}
 
-		if _, err := tx.ExecContext(ctx, `UPDATE webhook_cursor SET last_change_id = $1 WHERE id = 1`, maxID); err != nil {
+		if _, err := tx.ExecContext(
+			ctx,
+			`UPDATE webhook_cursor SET last_change_id = $1 WHERE id = 1`,
+			maxID,
+		); err != nil {
 			return fmt.Errorf("webhook: advance cursor: %w", err)
 		}
 
@@ -134,7 +152,10 @@ type batchEvent struct {
 }
 
 func loadEndpoints(ctx context.Context, tx *database.Tx) ([]endpointRow, error) {
-	rows, err := tx.QueryContext(ctx, `SELECT id::text, events, item_types FROM webhook_endpoints WHERE disabled_at IS NULL`)
+	rows, err := tx.QueryContext(
+		ctx,
+		`SELECT id::text, events, item_types FROM webhook_endpoints WHERE disabled_at IS NULL`,
+	)
 	if err != nil {
 		return nil, err
 	}

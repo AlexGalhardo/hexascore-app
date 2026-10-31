@@ -43,7 +43,10 @@ func TestAppMinVersion(t *testing.T) {
 	// An old build can still log out.
 	old.Delete("/app/v1/tokens/current").AssertNoContent()
 
-	if got := app.Client(t).WithHeader(appapi.ClientVersionHeader, "0.0.1").Get("/up").Status(); got == http.StatusUpgradeRequired {
+	if got := app.Client(t).
+		WithHeader(appapi.ClientVersionHeader, "0.0.1").
+		Get("/up").
+		Status(); got == http.StatusUpgradeRequired {
 		t.Fatal("/up answered 426")
 	}
 }
@@ -70,7 +73,10 @@ func TestAppIdempotency(t *testing.T) {
 	body := map[string]any{"n": 1}
 	send := func(key string, payload map[string]any) *vukemtest.Response {
 		t.Helper()
-		return app.Client(t).WithToken(tok.Token).WithHeader("Idempotency-Key", key).PostJSON("/app/v1/_idempotency/hold", payload)
+		return app.Client(t).
+			WithToken(tok.Token).
+			WithHeader("Idempotency-Key", key).
+			PostJSON("/app/v1/_idempotency/hold", payload)
 	}
 
 	done := make(chan int, 1)
