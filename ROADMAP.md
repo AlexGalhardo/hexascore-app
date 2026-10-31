@@ -2993,7 +2993,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/auth/session -t "401 wipes"` → token, cache and queue for that user are cleared
   - Notes: store only `token`, `tokenId` and `expiresAt` (≈ 100 B, below the ~2048 B SecureStore warning). Tokens must never reach logs, the cache or crash reports.
 
-- [ ] **P5.A.3.3** Build the login screen for email/password with the `two-factor-required` branch (TOTP or recovery code) and the 428 `challenge-required` branch, which opens the browser. Signup and recovery open the web pages. `deviceName` comes from the Expo Device API.
+- [x] **P5.A.3.3** Build the login screen for email/password with the `two-factor-required` branch (TOTP or recovery code) and the 428 `challenge-required` branch, which opens the browser. Signup and recovery open the web pages. `deviceName` comes from the Expo Device API.
   - Files/modules: `apps/mobile/app/(auth)/login.tsx`, `src/auth/login.ts`, `src/auth/deviceName.ts`, `src/auth/login.test.tsx`, `.maestro/smoke/login.yaml`
   - Refs: SDD 10 §2, §6.2 (Issue, Device name rows), FR-10-2; SDD 03 §2, §6.1; ADR 0016 (challenge); open issue 10-10
   - Depends on: P5.A.3.2, P3.C.1.2
