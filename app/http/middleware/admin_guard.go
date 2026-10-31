@@ -75,9 +75,9 @@ func ParseAllowlist(s string) ([]netip.Prefix, error) {
 // VF-058, role-scoped 2FA, session lifetime and IP allowlist):
 //   - /admin from an address outside a non-empty allowlist: 404, like a
 //     non-admin, so the panel's existence is not revealed;
-//   - any request of a signed-in admin: idle 30 min and absolute 12 h, then
+//   - any request of a signed-in admin or moderator: idle 30 min and absolute 12 h, then
 //     logout and a redirect to the login page;
-//   - /admin by an admin without confirmed TOTP: redirect to the 2FA setup.
+//   - /admin by an admin or moderator without confirmed TOTP: redirect to the 2FA setup.
 //
 // Role and ban checks stay with the panel gate (admin.Gate).
 func AdminGuard(cfg AdminGuardConfig) func(http.Handler) http.Handler {
@@ -94,7 +94,7 @@ func AdminGuard(cfg AdminGuardConfig) func(http.Handler) http.Handler {
 			}
 
 			u, err := cfg.User(c)
-			if err != nil || u.Role != models.RoleAdmin {
+			if err != nil || u.Role != models.RoleAdmin && u.Role != models.RoleModerator {
 				next.ServeHTTP(w, r)
 				return
 			}
