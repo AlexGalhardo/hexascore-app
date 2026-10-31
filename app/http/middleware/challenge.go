@@ -223,7 +223,8 @@ func challengePage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "no-store")
 	w.WriteHeader(http.StatusPreconditionRequired)
 
-	_, _ = fmt.Fprintf(w,
+	_, _ = fmt.Fprintf(
+		w,
 		`<!doctype html><html lang="%s"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>%s</title></head><body><main><h1>%s</h1><p>%s <a href="/auth/google/redirect">%s</a></p></main></body></html>`,
 		lang,
 		html.EscapeString(i18n.T(ctx, "auth.challenge.checking")),
