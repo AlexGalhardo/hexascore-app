@@ -20,7 +20,7 @@ func TestCanonicalHost(t *testing.T) {
 		wantStatus      int
 		wantLoc         string
 	}{
-		{"www to apex", "www.hexascore.app", "/pt-br/items?q=a&page=2", 301, "https://hexascore.app/pt-br/items?q=a&page=2"},
+		{"www to apex", "www.hexascore.app", "/es/i?q=a&p=2", 301, "https://hexascore.app/es/i?q=a&p=2"},
 		{"railway to apex", "app-production-785f.up.railway.app", "/x", 301, "https://hexascore.app/x"},
 		{"root keeps slash", "www.hexascore.app", "/", 301, "https://hexascore.app/"},
 		{"apex untouched", "hexascore.app", "/x", http.StatusTeapot, ""},
@@ -36,8 +36,9 @@ func TestCanonicalHost(t *testing.T) {
 		req.Host = c.host
 		rec := httptest.NewRecorder()
 		next.ServeHTTP(rec, req)
-		if rec.Code != c.wantStatus || rec.Header().Get("Location") != c.wantLoc {
-			t.Errorf("%s: got %d %q, want %d %q", c.name, rec.Code, rec.Header().Get("Location"), c.wantStatus, c.wantLoc)
+		loc := rec.Header().Get("Location")
+		if rec.Code != c.wantStatus || loc != c.wantLoc {
+			t.Errorf("%s: got %d %q, want %d %q", c.name, rec.Code, loc, c.wantStatus, c.wantLoc)
 		}
 	}
 }
