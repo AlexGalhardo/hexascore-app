@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Daily `exports.ids` job (07:00 UTC) writing gzip NDJSON ID files per item type to the bucket and pruning files older than 90 days; not served until P3.A.4.2.
 - Login and signup submit buttons show a pending spinner while the page has not hydrated or a submit is in flight; both forms declare `method=post` and their action.
 - Report dialog on public profiles and public lists (`POST /reports`, reasons from SDD 14).
 - Dashboard page with links to the library, lists, public page and API keys, in the three locales.
@@ -22,6 +23,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- QA compose app stack takes `QA_PORT` and `QA_DATABASE_URL` so parallel stacks (own `-p` project) coexist; the Lighthouse base URL follows `E2E_BASE_URL` (`lighthouserc.cjs`).
+- Cover origin (`COVERS_BASE_URL`) reaches the web client as the shared `coversBase` prop; `app/catalog` holds no package state, and the JSON endpoints (`/app/v1` lists, library, users, search and suggest) keep absolute cover URLs.
 - Item page: cover and score badge in the header, details beside the synopsis, the rating panel first on mobile and in a sticky side column on desktop; stars are inline SVG so half stars look the same everywhere.
 - Star rating rows show their category label and larger stars; an unset value renders as a dash.
 - The cookie banner reserves space at the bottom of the page instead of covering the last controls.
@@ -32,6 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- Python SDK regenerated from the current OpenAPI contract: webhooks, the changes feed and the `type` enums.
 - E2E login helpers match the submit button exactly, so pt-BR and es runs no longer hit the passkey button.
 - The Android app's bundled i18n catalogues carry the passkey and privacy keys again (keys test green).
 - Legacy cover copy retries DNS, rate-limit and non-rewindable-body errors and accepts `--concurrency`; HTTP 404 stays one failure.

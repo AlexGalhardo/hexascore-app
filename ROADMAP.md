@@ -2212,7 +2212,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
 
 #### P2.H.3 API DX and quality debt
 
-- [ ] **P2.H.3.1** Declare `type` as an enum (`games`, `movies`, `series`, `books`) in the OpenAPI documents and regenerate the SDKs; allow a burst on the free plan (`rate_limit.burst = 5`) while keeping 1 request/second sustained.
+- [x] **P2.H.3.1** Declare `type` as an enum (`games`, `movies`, `series`, `books`) in the OpenAPI documents and regenerate the SDKs; allow a burst on the free plan (`rate_limit.burst = 5`) while keeping 1 request/second sustained.
   - Files/modules: `app/controllers/publicapi/items.go` (`doc:"..."` enum), `openapi/api-v1.json`, `openapi/app-v1.json`, `config/billing.go`, `app/api/quota_middleware.go`, `sdks/ts`, `sdks/python`, `resources/docs/rate-limits.md`
   - Refs: SDD 05 §6.2, §6.5; D-33 (limits reviewed 90 days after cutover: this is the first review); audit A10, A11
   - Depends on: —
@@ -2355,7 +2355,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.A.4 Daily ID exports
 
-- [ ] **P3.A.4.1** Add the `jobs.ExportIDs` daily job (07:00 UTC) writing gzip NDJSON per type to the bucket and deleting objects older than 90 days.
+- [x] **P3.A.4.1** Add the `jobs.ExportIDs` daily job (07:00 UTC) writing gzip NDJSON per type to the bucket and deleting objects older than 90 days.
   - Files/modules: `app/jobs/export_ids.go`, `routes/schedule.go`, `tests/export_ids_test.go`
   - Refs: SDD 05 FR-05-10, §7.3, NFR-05-6; VF-029; <https://vukem.dev/docs/digging-deeper/storage> "Reading and writing"
   - Depends on: P3.A.3.2
