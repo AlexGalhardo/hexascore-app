@@ -14,8 +14,7 @@ import (
 )
 
 // Catalog registers the site-audience catalogue reads on an /app/v1 group.
-// Trending is not here: P3.A.1.4 waits on P6.C, and an empty list would look
-// like a real ranking (ROADMAP P3.C.2.1).
+// Trending is the same snapshot as /api/v1 (SDD 08 section 6); item activity is business-only and stays off this audience.
 func Catalog(g *router.Group, items *publicapi.Controller) {
 	read := func(name string) vapi.Op {
 		return vapi.Op{
@@ -32,6 +31,12 @@ func Catalog(g *router.Group, items *publicapi.Controller) {
 		"series": "listSeriesGenres", "books": "listBookGenres",
 	} {
 		vapi.Register(g, "GET /"+section+"/genres", read(op), items.ListGenres(section))
+	}
+	for section, op := range map[string]string{
+		"games": "listGameTrending", "movies": "listMovieTrending",
+		"series": "listSeriesTrending", "books": "listBookTrending",
+	} {
+		vapi.Register(g, "GET /"+section+"/trending", read(op), items.ListTrending(section))
 	}
 	vapi.Register(g, "GET /{type}/{id}", read("getItem"), items.GetItem)
 	vapi.Register(g, "GET /{type}", read("listItems"), items.ListItems)

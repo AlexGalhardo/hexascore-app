@@ -42,6 +42,51 @@
         ]
       }
     },
+    "/api/v1/books/trending": {
+      "get": {
+        "operationId": "listBookTrending",
+        "summary": "listBookTrending",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/api/v1/books/{id}/editions": {
       "get": {
         "operationId": "listEditions",
@@ -403,6 +448,51 @@
         ]
       }
     },
+    "/api/v1/games/trending": {
+      "get": {
+        "operationId": "listGameTrending",
+        "summary": "listGameTrending",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/api/v1/lookup": {
       "get": {
         "operationId": "lookupItem",
@@ -516,6 +606,51 @@
           },
           "401": {
             "$ref": "#/components/responses/Problem"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/movies/trending": {
+      "get": {
+        "operationId": "listMovieTrending",
+        "summary": "listMovieTrending",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
           },
           "default": {
             "$ref": "#/components/responses/Problem"
@@ -861,6 +996,51 @@
           },
           "401": {
             "$ref": "#/components/responses/Problem"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/series/trending": {
+      "get": {
+        "operationId": "listSeriesTrending",
+        "summary": "listSeriesTrending",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
           },
           "default": {
             "$ref": "#/components/responses/Problem"
@@ -1258,10 +1438,139 @@
           }
         ]
       }
+    },
+    "/api/v1/{type}/{id}/activity": {
+      "get": {
+        "operationId": "getItemActivity",
+        "summary": "getItemActivity",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "first UTC day, YYYY-MM-DD; default 30 days before to",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "last UTC day, YYYY-MM-DD; default today",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "description": "games, movies, series or books",
+            "schema": {
+              "enum": [
+                "games",
+                "movies",
+                "series",
+                "books"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
+      "ActivityDayJSON": {
+        "properties": {
+          "day": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "listAdds": {
+            "type": "integer"
+          },
+          "ratingsNew": {
+            "type": "integer"
+          },
+          "ratingsUpdated": {
+            "type": "integer"
+          },
+          "searchClicks": {
+            "type": "integer"
+          },
+          "statusCompleted": {
+            "type": "integer"
+          },
+          "statusDropped": {
+            "type": "integer"
+          },
+          "statusInProgress": {
+            "type": "integer"
+          },
+          "statusWant": {
+            "type": "integer"
+          },
+          "suggestions": {
+            "type": "integer"
+          },
+          "views": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "day"
+        ],
+        "type": "object"
+      },
+      "ActivityJSON": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ActivityDayJSON"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "ChangeJSON": {
         "properties": {
           "action": {
@@ -1805,6 +2114,50 @@
           },
           "text": {
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TrendingEntryJSON": {
+        "properties": {
+          "basis": {
+            "enum": [
+              "trend",
+              "prior"
+            ],
+            "minLength": 1,
+            "type": "string"
+          },
+          "item": {
+            "$ref": "#/components/schemas/ItemJSON"
+          },
+          "rank": {
+            "type": "integer"
+          },
+          "trendScore": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "rank",
+          "basis"
+        ],
+        "type": "object"
+      },
+      "TrendingJSON": {
+        "properties": {
+          "computedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/TrendingEntryJSON"
+            },
+            "type": "array"
           }
         },
         "type": "object"
