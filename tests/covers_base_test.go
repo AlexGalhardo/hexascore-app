@@ -40,7 +40,10 @@ func TestCoversBaseJSONAbsolute(t *testing.T) {
 	itemID := uuid.NewV7().String()
 	exec(`INSERT INTO items (id, type, slug, wikidata_qid, popularity_prior, cover_key, cover_thumb_key)
 VALUES ($1, 'game', 'game-0', 'Q5000', 10, 'covers/a-1.webp', 'covers/a-1-t.webp')`, itemID)
-	exec(`INSERT INTO item_translations (item_id, locale, title, title_source) VALUES ($1, 'en', 'Zelda', 'hexascore')`, itemID)
+	exec(
+		`INSERT INTO item_translations (item_id, locale, title, title_source) VALUES ($1, 'en', 'Zelda', 'hexascore')`,
+		itemID,
+	)
 
 	if err := search.DrainSuggest(t.Context(), db); err != nil {
 		t.Fatal(err)
