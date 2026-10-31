@@ -272,3 +272,8 @@ admin POST   /admin/_flags/{name}
 web   GET    /suggest/{target_type}/{id}
 web   POST   /suggestions
 web   PATCH  /suggestions/{id}
+web   GET    /suggest/new/{domain}
+web   GET    /suggestions/{id}
+web   GET    /me/suggestions
+web   POST   /suggestions/{id}/submit
+web   POST   /suggestions/{id}/withdraw
