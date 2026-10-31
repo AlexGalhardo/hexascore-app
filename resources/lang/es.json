@@ -554,7 +554,9 @@
   },
   "home": {
     "title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
-    "explore": "Explorar"
+    "explore": "Explorar",
+    "recent": "Valorados recientemente por los miembros",
+    "ratedBy": "por {name}"
   },
   "footer": {
     "terms": "Términos",
