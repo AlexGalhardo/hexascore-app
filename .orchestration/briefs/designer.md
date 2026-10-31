@@ -29,6 +29,7 @@ Browse production read-only for real content (titles, covers, scores). Never log
 
 ## OpenPencil
 
+- Load the skills `openpencil-design` (tool workflow and known gaps), `frontend-design` and `impeccable` before drawing; follow `.claude/rules/design.md`.
 - Before designing, list the OpenPencil MCP tools available to you and note in your report which ones you use (create page/frame, shapes and text, auto-layout, components and variants, styles/variables, JSX rendering, export). Never assume a tool exists; if something is missing, say so and use the closest supported path (for example the JSX renderer for complex layouts).
 - One OpenPencil document per version, each in its own folder (owner decision 2026-10-31): `docs/openpencil/v1-editorial/`, `docs/openpencil/v2-noir/`, `docs/openpencil/v3-paper/`. Each folder holds the document (`hexascore-<version>.<native extension>`), a `frames/` folder with PNG exports named `<platform>__<page-id>__<state>.png`, and a `README.md` (intent, palette, type, list of frames, open questions).
 - Inside each document, the same page structure so versions compare 1:1:
