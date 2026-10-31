@@ -113,6 +113,13 @@
     },
     "updateRequired": {
       "title": "Update required"
+    },
+    "offline": "You are offline. Changes sync when you reconnect.",
+    "crashReports": {
+      "title": "Send crash reports?",
+      "body": "If the app crashes, send the app version, Android version, screen and error details to HexaScore. No account, e-mail or token is included. You can turn this off in Settings.",
+      "allow": "Send reports",
+      "deny": "Don't send"
     }
   },
   "actions": {
