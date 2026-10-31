@@ -24,7 +24,7 @@ Railway rules that override the skill's deploy-from-cwd shortcut: do not run `ra
 | `docs/adrs/` | architecture decision records (MADR) |
 | `architect-feedback-and-roadmap.md` | architect's assessment and executive summary |
 | `ROADMAP.md` | phases, tasks, subtasks, microtasks with acceptance criteria |
-| `vukem-feedback.md` | framework bugs, gaps and DX feedback (VF-xxx); append, never delete |
+| `vukem-feedback.md` | open framework bugs, gaps and DX feedback (VF-xxx); remove an entry once it is resolved on vukem `main` (owner, 2026-10-31; git keeps history) |
 | `CHANGELOG.md` | Keep a Changelog; generated per release, `[Unreleased]` edited by hand only before release |
 | `legacy/` (sibling folder, not in this repo) | read-only Next.js reference; history on branch `legacy` |
 | `vukem/` (sibling folder, own git) | framework checkout for local `go.work`/`replace` only, never committed |
