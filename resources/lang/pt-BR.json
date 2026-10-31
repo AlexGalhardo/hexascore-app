@@ -626,7 +626,8 @@
     "notifications": "Notificações",
     "library": "Minha estante",
     "lists": "Minhas listas",
-    "more": "Mais"
+    "more": "Mais",
+    "searchShort": "Buscar…"
   },
   "home": {
     "title": "Todo jogo, filme, série e livro — avaliado pelas pessoas, categoria por categoria.",
@@ -641,7 +642,11 @@
     "terms": "Termos",
     "privacy": "Privacidade",
     "contact": "Contato",
-    "rights": "Todos os direitos reservados."
+    "rights": "Todos os direitos reservados.",
+    "label": "Rodapé",
+    "apiDocs": "Docs da API",
+    "pricing": "Preços",
+    "howScores": "Como as notas funcionam"
   },
   "cookies": {
     "text": "Usamos apenas cookies essenciais (sessão e preferências). Vídeos do YouTube só carregam se você permitir.",
