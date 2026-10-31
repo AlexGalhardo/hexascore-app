@@ -62,7 +62,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 					</Link>
 				</div>
 			)}
-			<main id="main" className="mx-auto max-w-6xl p-4">
+			<main id="main" className="shell py-4">
 				{children}
 			</main>
 			<Footer />

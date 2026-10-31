@@ -18,11 +18,11 @@ test.describe("i18n", () => {
 		expect(hreflangs).toEqual(["en", "es", "pt-BR", "x-default"]);
 
 		await page.goto(`${prefix}/login`);
-		// The switcher lives in the header menu, closed by default (its links are not in the a11y tree).
-		await page.getByLabel(t("nav.more"), { exact: true }).click();
+		// The switcher is the navbar language dropdown, closed by default (its links are not in the a11y tree).
+		await page.getByRole("button", { name: t("nav.language"), exact: true }).click();
 		const switcher = page.getByRole("list", { name: t("nav.language") });
 		await expect(switcher.getByRole("link")).toHaveCount(3);
-		await switcher.getByRole("link", { name: "ES" }).click();
+		await switcher.getByRole("link", { name: /Español/ }).click();
 		await expect(page).toHaveURL(/\/es\/login$/);
 		await expect(page.locator("html")).toHaveAttribute("lang", "es");
 	});

@@ -626,7 +626,8 @@
     "notifications": "Notificaciones",
     "library": "Mi biblioteca",
     "lists": "Mis listas",
-    "more": "Más"
+    "more": "Más",
+    "searchShort": "Buscar…"
   },
   "home": {
     "title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
@@ -641,7 +642,11 @@
     "terms": "Términos",
     "privacy": "Privacidad",
     "contact": "Contacto",
-    "rights": "Todos los derechos reservados."
+    "rights": "Todos los derechos reservados.",
+    "label": "Pie de página",
+    "apiDocs": "Docs de la API",
+    "pricing": "Precios",
+    "howScores": "Cómo funcionan las notas"
   },
   "cookies": {
     "text": "Solo usamos cookies esenciales (sesión y preferencias). Los videos de YouTube solo se cargan si lo permites.",
