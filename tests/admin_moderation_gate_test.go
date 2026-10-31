@@ -9,12 +9,12 @@ import (
 	"time"
 
 	"github.com/AlexGalhardo/vukem/authz"
+	"github.com/AlexGalhardo/vukem/drivers/postgres/pgtest"
 	"github.com/AlexGalhardo/vukem/vukemtest"
 
 	"github.com/AlexGalhardo/hexascore-app/app/admin"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/bootstrap"
-	"github.com/AlexGalhardo/vukem/drivers/postgres/pgtest"
 )
 
 func moderationApp(t *testing.T, trusted bool) *vukemtest.App {
@@ -54,7 +54,8 @@ func TestModerationGate(t *testing.T) {
 
 	body := browserFor(t, off, makeUser(t, off, "shell@example.com", "admin", true)).
 		Get("/admin/moderation").AssertOK().Body()
-	if want := `<nav class="sidebar"`; !strings.Contains(body, want) || !strings.Contains(body, `href="/admin/moderation"`) {
+	if want := `<nav class="sidebar"`; !strings.Contains(body, want) ||
+		!strings.Contains(body, `href="/admin/moderation"`) {
 		t.Fatalf("moderation page is not inside the admin layout with a sidebar link: %s", body)
 	}
 }
@@ -86,8 +87,12 @@ func TestSecurity_Community_A01_PolicyFailsClosed(t *testing.T) {
 			"unverified admin": with(func(u *models.User) { u.EmailVerifiedAt.Valid = false }),
 			"empty role":       with(func(u *models.User) { u.Role = "" }),
 			"unknown role":     with(func(u *models.User) { u.Role = "owner" }),
-			"unverified mod":   with(func(u *models.User) { u.Role, u.EmailVerifiedAt.Valid = models.RoleModerator, false }),
-			"banned moderator": with(func(u *models.User) { u.Role, u.BannedAt = models.RoleModerator, banned.BannedAt }),
+			"unverified mod": with(
+				func(u *models.User) { u.Role, u.EmailVerifiedAt.Valid = models.RoleModerator, false },
+			),
+			"banned moderator": with(
+				func(u *models.User) { u.Role, u.BannedAt = models.RoleModerator, banned.BannedAt },
+			),
 		}
 		for name, u := range cases {
 			user = u

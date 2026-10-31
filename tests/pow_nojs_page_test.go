@@ -42,7 +42,8 @@ func TestSecurity_A07_NoJS428Page(t *testing.T) {
 		t.Fatalf("content-type %q, want text/html", ct)
 	}
 
-	if body := html.Body.String(); !strings.Contains(body, `href="/auth/google/redirect"`) || strings.Contains(body, "<script") {
+	if body := html.Body.String(); !strings.Contains(body, `href="/auth/google/redirect"`) ||
+		strings.Contains(body, "<script") {
 		t.Fatalf("page must link Google sign-in and carry no script: %s", body)
 	}
 
@@ -61,8 +62,14 @@ func TestSecurity_A07_NoJS428Page(t *testing.T) {
 		},
 	} {
 		rec := past(mutate)
-		if rec.Code != http.StatusPreconditionRequired || !strings.HasPrefix(rec.Header().Get("Content-Type"), "application/problem+json") {
-			t.Errorf("%s: status %d content-type %q, want 428 problem+json", name, rec.Code, rec.Header().Get("Content-Type"))
+		if rec.Code != http.StatusPreconditionRequired ||
+			!strings.HasPrefix(rec.Header().Get("Content-Type"), "application/problem+json") {
+			t.Errorf(
+				"%s: status %d content-type %q, want 428 problem+json",
+				name,
+				rec.Code,
+				rec.Header().Get("Content-Type"),
+			)
 		}
 	}
 }
