@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { expect, test } from "vitest";
+import { expect, test, vi } from "vitest";
 
 import CoverThumb from "./CoverThumb";
 import { dialogPopup } from "./Dialog";
@@ -29,6 +29,9 @@ test("jsonLdText never contains a literal '<'", () => {
 	expect(JSON.parse(text).name).toBe("</script><script>alert(1)</script>");
 });
 
+const page = vi.hoisted(() => ({ coversBase: "" }));
+vi.mock("@inertiajs/react", () => ({ usePage: () => ({ props: page }) }));
+
 const COVER = { thumb: "/a-96.jpg", full: "/a-600.jpg" };
 
 test("CoverThumb renders a sized placeholder without a cover", () => {
@@ -52,4 +55,15 @@ test("CoverThumb is lazy by default and eager with priority", () => {
 	expect(big.getAttribute("loading")).toBe("eager");
 	expect(big.getAttribute("fetchpriority")).toBe("high");
 	expect(big.getAttribute("height")).toBe("64");
+});
+
+test("CoverThumb prefixes the shared coversBase on both renditions", () => {
+	page.coversBase = "https://bucket.example";
+	const r = render(<CoverThumb cover={COVER} alt="Prefixed" />);
+	const img = r.getByAltText("Prefixed");
+	expect(img.getAttribute("src")).toBe("https://bucket.example/a-96.jpg");
+	expect(img.getAttribute("srcset")).toBe(
+		"https://bucket.example/a-96.jpg 96w, https://bucket.example/a-600.jpg 600w",
+	);
+	page.coversBase = "";
 });
