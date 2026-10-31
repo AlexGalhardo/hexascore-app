@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **catalog:** `item_activity_daily` and `trending_snapshots` tables; merging items sums the source item's daily activity into the target (P6.C.1.1)
 - **mobile:** Token store in SecureStore (this device only) and session state machine (401 sign-out with data wipe, ban, unverified email, scheduled deletion); runtime dependencies approved in Q-B1 recorded in ADR 0019 (P5.A.3.2)
 - **admin:** Moderation gate abilities (`moderate`, `viewCatalogAudit`, `revertCatalog`, `lockCatalog`), the `community_trusted_moderators` flag (default off), the `moderator` role and the `/admin/moderation` page shell (P4.B.1.1)
-- **community:** "Suggest a new <type>" links on section listings and empty search results (FIX-community-create-ux)
+- **community:** "Suggest a new `<type>`" links on section listings and empty search results (FIX-community-create-ux)
 - **ui:** Anonymous catalogue HTML (home, listings, items, entities) is cached in process for 60 s, keyed by path, query, display cookies and, on unprefixed pages, `Accept-Language`, and sent with `Cache-Control: public, max-age=60, stale-while-revalidate=300`; the CSP nonce stays per request and session requests stay `private, no-store` (P2.H.3.5)
 - **lists:** List owners add items from the list edit page with a suggest box limited to the list type (P2.H.1.5)
 - **mobile:** Android API client wrapper with auth, version and locale headers, idempotency keys, problem-code mapping and minimum-version detection (P5.A.3.1)
@@ -28,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **search:** `/search` stays under its timeout on a production-size catalogue: trigram candidates capped at 500 per branch (totals of broad queries are lower bounds), GIN index forced inside the search transaction, display title looked up after paging (FIX-search-prod-slow)
 - **community:** In-page community links and suggestion form posts keep the visitor's locale prefix (FIX-community-create-ux, QA-community-e2e)
 - **auth:** A no-JS form post past the proof-of-work threshold gets an HTML 428 page offering Google sign-in instead of raw problem JSON (FIX-nojs-428-page)
 - **ssr:** The supervisor restart test no longer fails on a wall-clock deadline under load (FIX-ssr-supervise-flake)
