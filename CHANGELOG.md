@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **api:** `GET /api/v1/{type}/trending` and `GET /app/v1/{type}/trending` (top 10 over 30 days, ETag, 5-minute public cache) and the business-only `GET /api/v1/{type}/{id}/activity` with raw daily counts; app client and TypeScript and Python SDKs regenerated (P3.A.1.4, P6.C.3.2)
 - **catalog:** Hourly `ComputeTrending` job (rollup, top 10 per type over 30 days with prior fill, cache invalidation), 90-day snapshot prune, item rebuild on user ban and unban, trending metrics and Grafana alert A14 for a snapshot older than 3 h (P6.C.2.2)
 - **catalog:** Trending rollup that recomputes the weighted per-user daily activity (ratings, statuses, list adds, suggestions) for today and yesterday, idempotently, leaving views and search clicks alone (P6.C.1.3)
 - **docs:** Design round 1 in `docs/openpencil/`: three visual directions (v1 editorial, v2 noir, v3 paper), 19 frames each, `ROUND-1.md` with the comparison and WCAG contrast table, the `openpencil-design` skill and the design rule (DESIGN-round-1)
