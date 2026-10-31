@@ -88,8 +88,8 @@ export default function SuggestCreate({
 			changes,
 			website,
 		};
-		if (draft) router.patch(`/suggestions/${draft.id}`, body, { preserveScroll: true });
-		else router.post("/suggestions", body, { preserveScroll: true });
+		if (draft) router.patch(l(`/suggestions/${draft.id}`), body, { preserveScroll: true });
+		else router.post(l("/suggestions"), body, { preserveScroll: true });
 	};
 
 	const errorList = Object.entries(errors ?? {});

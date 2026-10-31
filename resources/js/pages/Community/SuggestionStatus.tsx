@@ -60,8 +60,8 @@ function diffLines(c: Change, names: Record<string, string>): { sign: "-" | "+";
 	return out;
 }
 
-const post = (id: string, action: "submit" | "withdraw", version: number) =>
-	router.post(`/suggestions/${id}/${action}`, { version }, { preserveScroll: true });
+const post = (url: string, version: number) =>
+	router.post(url, { version }, { preserveScroll: true });
 
 export default function SuggestionStatus({ suggestion: s, canAct, quota, open }: Props) {
 	const t = useT();
@@ -132,7 +132,7 @@ export default function SuggestionStatus({ suggestion: s, canAct, quota, open }:
 				{canSubmit && (
 					<button
 						type="button"
-						onClick={() => post(s.id, "submit", s.version)}
+						onClick={() => post(l(`/suggestions/${s.id}/submit`), s.version)}
 						className="rounded-md border border-border px-3 py-1 text-sm"
 					>
 						{t("community.status.submit")}
@@ -141,7 +141,7 @@ export default function SuggestionStatus({ suggestion: s, canAct, quota, open }:
 				{canWithdraw && (
 					<button
 						type="button"
-						onClick={() => post(s.id, "withdraw", s.version)}
+						onClick={() => post(l(`/suggestions/${s.id}/withdraw`), s.version)}
 						className="rounded-md border border-border px-3 py-1 text-sm"
 					>
 						{t("community.status.withdraw")}

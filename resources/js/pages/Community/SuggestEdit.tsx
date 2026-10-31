@@ -18,6 +18,7 @@ import {
 } from "../../components/community/fields";
 import RelationEditor, { type RelationDraft } from "../../components/community/RelationEditor";
 import Seo from "../../components/Seo";
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 interface Lock {
@@ -52,6 +53,7 @@ export default function SuggestEdit({
 	draft,
 }: Props) {
 	const t = useT();
+	const l = useLocalized();
 	const { errors } = usePage<{ errors?: Record<string, string> }>().props;
 	const [edits, setEdits] = useState<Record<string, string>>(() =>
 		Object.fromEntries(
@@ -135,8 +137,8 @@ export default function SuggestEdit({
 			changes,
 			website,
 		};
-		if (draft) router.patch(`/suggestions/${draft.id}`, body, { preserveScroll: true });
-		else router.post("/suggestions", body, { preserveScroll: true });
+		if (draft) router.patch(l(`/suggestions/${draft.id}`), body, { preserveScroll: true });
+		else router.post(l("/suggestions"), body, { preserveScroll: true });
 	};
 
 	const errorList = Object.entries(errors ?? {});
