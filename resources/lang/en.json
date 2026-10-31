@@ -1,4 +1,20 @@
 {
+  "flash": {
+    "ratingSaved": "Rating saved.",
+    "ratingRemoved": "Rating removed.",
+    "statusSaved": "Status saved.",
+    "statusRemoved": "Status removed.",
+    "timeToBeatSaved": "Times saved.",
+    "timeToBeatRemoved": "Times removed.",
+    "listCreated": "List created.",
+    "listUpdated": "List updated.",
+    "listDeleted": "List deleted.",
+    "listItemAdded": "Added to the list.",
+    "listItemRemoved": "Removed from the list.",
+    "editionSaved": "Edition saved.",
+    "editionRemoved": "Edition forgotten.",
+    "adminTwoFactorRequired": "Two-factor authentication is required to open the admin area. Set it up here."
+  },
   "account": {
     "metaTitle": "Profile",
     "title": "Your profile",
