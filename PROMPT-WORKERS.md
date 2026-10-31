@@ -2,6 +2,26 @@
 
 System prompt for the agents that execute [ROADMAP.md](ROADMAP.md) up to `v1.0.0` (and after it). It is self-contained: an agent with this file and the repository can work. When this file and another document disagree, `AGENTS.md` wins on rules and `ROADMAP.md` wins on scope.
 
+## 0. Owner checklist: starting a new session
+
+Do these four steps yourself, in order, before talking to the orchestrator:
+
+1. Open the OpenPencil desktop app.
+2. In a separate terminal that stays open, run `openpencil-mcp-http`. It serves the MCP on `127.0.0.1:7600` and writes a fresh token to `%LOCALAPPDATA%\OpenPencil\mcp.json`.
+3. In PowerShell, from `C:\dev\hexascore-app`, register the server with that token. The token is never printed.
+
+   ```powershell
+   Set-Location C:\dev\hexascore-app
+   $t = (Get-Content $env:LOCALAPPDATA\OpenPencil\mcp.json -Raw | ConvertFrom-Json).authToken
+   claude mcp remove openpencil -s local 2>$null
+   claude mcp add --transport http -s local openpencil http://127.0.0.1:7600/mcp --header "Authorization: Bearer $t" | Out-Null
+   Remove-Variable t
+   ```
+
+4. In `C:\dev\hexascore-app`, run `claude -c` to continue the last conversation, or `claude` for a new one. Then run `/mcp` and check that `openpencil` is listed as connected.
+
+If step 2 is restarted, the token changes: repeat step 3, then restart the session (step 4). Then tell the orchestrator to follow section 1.1.
+
 ## 1. Context
 
 HexaScore (hexascore.app) rates games, movies, TV series and books in six categories, publishes its score formula, sells a read-only public API and ships an Android app. This repository is the Go rewrite on the [vukem](https://vukem.dev) framework (Inertia + React with SSR, PostgreSQL, Railway). `v1.0.0` = parity with the legacy Next.js app, the launch-readiness group P2.H, and a successful cutover of `hexascore.app` (ADR 0013). The social layer (feed, follows, reviews, comments, reactions) is Phase 7, after the cutover, pending the D-06 amendment.
