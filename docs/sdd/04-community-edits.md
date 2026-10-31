@@ -184,9 +184,9 @@ Locale prefixes per D-17. User routes: `web` guard + `auth.Verified` (vukem `htt
 
 Moderation pages (`/admin/moderation*`, `/admin/catalog-audit*`, `/admin/locks`) are server-rendered `html/template` views inside the vukem admin layout (<https://vukem.dev/docs/digging-deeper/admin>, <https://vukem.dev/docs/basics/views>), not Inertia pages, so `/admin` stays one UI (open issue 09-12); forms post with CSRF tokens and answer 303. The ban outcome calls SDD 03 `POST /admin/users/{id}/ban`.
 
-Submission kill switch: feature flag `community.submissions` (<https://vukem.dev/docs/digging-deeper/feature-flags>), code default off, turned on in production only once moderation is staffed (an admin able to meet the 24 h decision target, D-15). While off, the suggest pages show a "coming soon" notice, `POST /suggestions*` and `/submit` answer 403 `community-submissions-closed`, and the moderation queue stays reachable for admins.
+Submission kill switch: feature flag `community_submissions` (<https://vukem.dev/docs/digging-deeper/feature-flags>, names allow only `a-z`, `0-9` and `_`; env `FLAG_COMMUNITY_SUBMISSIONS`), code default off, turned on in production only once moderation is staffed (an admin able to meet the 24 h decision target, D-15). While off, the suggest pages show a "coming soon" notice, `POST /suggestions*` and `/submit` answer 403 `community-submissions-closed`, and the moderation queue stays reachable for admins.
 
-Abilities are gate abilities defined like `admin`/`viewAuditLogs` in vukem `https://vukem.dev/docs/digging-deeper/admin` "Wiring". `moderate` also goes to role `moderator` only when flag `community.trusted_moderators` is on (default off, `/admin/_flags`, `https://vukem.dev/docs/digging-deeper/admin` "Feature flags"); revert and locks stay admin-only.
+Abilities are gate abilities defined like `admin`/`viewAuditLogs` in vukem `https://vukem.dev/docs/digging-deeper/admin` "Wiring". `moderate` also goes to role `moderator` only when flag `community_trusted_moderators` is on (default off, `/admin/_flags`, `https://vukem.dev/docs/digging-deeper/admin` "Feature flags"); revert and locks stay admin-only.
 
 | Status | Type | Extra members |
 | --- | --- | --- |
