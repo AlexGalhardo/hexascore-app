@@ -2553,7 +2553,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/community/... -run 'TestDuplicate|TestFieldLock|TestStaleBeforeAtSubmit'` → 409 `suggestion-duplicate` (with `existingId` only for the author's own), 423 `field-locked` with `lockReason`, 409 `stale-before` with `field`, `current`
   - Notes: expired lock rows are ignored, not deleted. Different `after` values from different authors are allowed and flagged `competing` in `meta`.
 
-- [ ] **P4.A.2.3** Implement tiers, cooldowns and the hourly maintenance job (expire drafts at 14 days, refresh tiers, release claims idle > 2 h), plus `community:stats:rebuild`.
+- [x] **P4.A.2.3** Implement tiers, cooldowns and the hourly maintenance job (expire drafts at 14 days, refresh tiers, release claims idle > 2 h), plus `community:stats:rebuild`.
   - Files/modules: `app/community/tiers.go`, `app/jobs/community_hourly.go`, `app/commands/community_stats_rebuild.go`, `routes/schedule.go`, `tests/community_tiers_test.go`
   - Refs: SDD 04 §7.3 tier table and cooldown rules, §5 invariants (stats rebuildable); D-15; D-31
   - Depends on: P4.A.2.2
