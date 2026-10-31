@@ -25,12 +25,24 @@ key_hash=$(printf '%s' "$key" | openssl dgst -sha256 | awk '{print $NF}')
 app_hash=$(printf '%s' "$app_secret" | openssl dgst -sha256 | awk '{print $NF}')
 prefix=${key:0:14}
 
+export MSYS_NO_PATHCONV=1
 export APP_KEY="${APP_KEY:-base64:$(openssl rand -base64 32)}"
+# Docker Desktop has no real host network: a container cannot be reached on the host loopback, so publish the port and reach the host as host.docker.internal.
+net=(--network host)
+app_db=$db
+k6_net=(--network host)
+k6_url="http://127.0.0.1:${port}"
+if [ "$(docker info --format "{{.OperatingSystem}}" 2>/dev/null)" = "Docker Desktop" ]; then
+	net=(-p "127.0.0.1:${port}:${port}")
+	app_db=${db//127.0.0.1/host.docker.internal}
+	k6_net=()
+	k6_url="http://host.docker.internal:${port}"
+fi
 app_env=(
 	-e APP_ENV=production
 	-e APP_KEY="$APP_KEY"
 	-e APP_URL="http://127.0.0.1:${port}"
-	-e DATABASE_URL="$db"
+	-e DATABASE_URL="$app_db"
 	-e RATE_LIMIT_STORE=cache
 	-e CACHE_STORE=database
 	-e STRIPE_KEY=sk_test_placeholder_ci
@@ -49,7 +61,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-docker run --rm --network host "${app_env[@]}" "$image" migrate
+docker run --rm "${net[@]}" "${app_env[@]}" "$image" migrate
 
 docker run -i --rm --network host "$pg_image" \
 	psql "$db" -v ON_ERROR_STOP=1 <<SQL
@@ -64,7 +76,7 @@ INSERT INTO access_tokens (id, user_id, name, hash, abilities, created_at)
 VALUES ('${app_id}', :id::text, 'ci', '${app_hash}', '["*"]', now());
 SQL
 
-docker run -d --name "$name" --network host -e "PORT=${port}" "${app_env[@]}" "$image"
+docker run -d --name "$name" "${net[@]}" -e "PORT=${port}" "${app_env[@]}" "$image"
 
 for _ in $(seq 1 40); do
 	if curl -fsS "http://127.0.0.1:${port}/up" >/dev/null; then
@@ -78,7 +90,7 @@ HX_TEST_KEY="$key" QA_BASE_URL="http://127.0.0.1:${port}" bash qa/schemathesis/r
 HX_TEST_KEY="$app_token" QA_BASE_URL="http://127.0.0.1:${port}" bash qa/schemathesis/run.sh openapi/app-v1.json
 
 # Anonymous search, 1 rps, under the 60/min IP limit. Host network reaches the app on 127.0.0.1.
-docker run --rm --network host \
-	-e BASE_URL="http://127.0.0.1:${port}" \
+docker run --rm "${k6_net[@]}" \
+	-e BASE_URL="$k6_url" \
 	-v "$root/qa:/qa" \
 	grafana/k6:2.3.0 run /qa/k6/app-v1.js
