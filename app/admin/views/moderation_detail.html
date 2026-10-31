@@ -34,6 +34,7 @@
 	{{csrfField}}
 	<input type="hidden" name="version" value="{{.Version}}">
 	<label><input type="checkbox" name="confirm_stale" value="1"> Confirm: the live value changed since the suggestion was made</label>
+	{{if eq .Kind "merge"}}<label>Merging cannot be undone. Type the title of the item being merged away <input name="confirm_title" required autocomplete="off"></label>{{end}}
 	<button type="submit">Approve</button>
 </form>
 <form method="post" action="/admin/moderation/{{.ID}}/reject">

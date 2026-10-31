@@ -164,3 +164,37 @@ func TestSecurity_Community_A01_ApproveNeedsModerate(t *testing.T) {
 		t.Fatalf("unauthorised approve wrote the catalogue: %q", got)
 	}
 }
+
+func TestModerationMergeNeedsTypedTitle(t *testing.T) {
+	t.Parallel()
+
+	app := moderationApp(t, false)
+	seedModerationItem(t, app)
+
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	const id = "00000000-0000-7000-8000-0000000000b6"
+	if _, err := db.ExecContext(t.Context(), `INSERT INTO items (id, type, slug, wikidata_qid, original_title)
+VALUES ('00000000-0000-0000-0000-0000000000bb','movie','keeper','Q2','Keeper');
+INSERT INTO suggestions (id, kind, target_type, target_id, target_domain, locale, changes, status, submitted_at)
+VALUES ('`+id+`','merge','item','00000000-0000-0000-0000-0000000000aa','movie','en',
+ '{"*merge*":{"before":"00000000-0000-0000-0000-0000000000aa","after":"00000000-0000-0000-0000-0000000000bb"}}',
+ 'submitted', now())`); err != nil {
+		t.Fatal(err)
+	}
+
+	admin := browserFor(t, app, makeUser(t, app, "d6-admin@example.com", models.RoleAdmin, true))
+	admin.Get("/admin/moderation/" + id).AssertOK().AssertSee(`name="confirm_title"`)
+	admin.WithHeader("Accept", "application/json").
+		PostForm("/admin/moderation/"+id+"/approve", url.Values{"version": {"1"}}).AssertStatus(422)
+	admin.PostForm("/admin/moderation/"+id+"/approve", url.Values{"version": {"1"}, "confirm_title": {"a"}}).
+		AssertRedirect("/admin/moderation")
+
+	var left int
+	if err := db.QueryRowContext(t.Context(), `SELECT count(*) FROM items`).Scan(&left); err != nil || left != 1 {
+		t.Fatalf("items after merge = %d %v", left, err)
+	}
+}

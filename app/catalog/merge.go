@@ -84,6 +84,16 @@ func Merge(ctx context.Context, db *database.DB, q *queue.Queue, from, into stri
 	})
 }
 
+// MergeTx is Merge inside a transaction the caller owns: the community apply (SDD 04 section 7.6) commits the merge
+// with its audit row and suggestion state.
+func MergeTx(ctx context.Context, tx *database.Tx, q *queue.Queue, from, into string, actorID int64) error {
+	if from == into {
+		return ErrMergeSelf
+	}
+
+	return merge(ctx, tx, q, from, into, actorID)
+}
+
 type mergeRow struct {
 	typ, slug string
 	primary   sql.NullString

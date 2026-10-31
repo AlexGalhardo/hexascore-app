@@ -64,19 +64,61 @@ func (a Applier) now() time.Time {
 	return time.Now().UTC()
 }
 
-// Approve applies suggestion id at version. A deadlock is rolled back and retried once.
-func (a Applier) Approve(ctx context.Context, id string, version int, confirmStale bool, actor Actor) error {
+// ApproveOptions are the moderator's confirmations on approve.
+type ApproveOptions struct {
+	// ConfirmStale applies over a live value that changed since the suggestion was made.
+	ConfirmStale bool
+	// ConfirmTitle is the typed title of the item a merge deletes (SDD 04 section 7.6).
+	ConfirmTitle string
+}
+
+// Approve applies suggestion id at version. A deadlock is rolled back and retried once. Approved suggestions that
+// waited on this one (depends_on) are applied next.
+func (a Applier) Approve(ctx context.Context, id string, version int, opts ApproveOptions, actor Actor) error {
 	var err error
 	for attempt := range 2 {
 		err = a.DB.Tx(ctx, func(tx *database.Tx) error {
-			return a.apply(ctx, tx, id, version, confirmStale, actor, attempt)
+			return a.apply(ctx, tx, id, version, opts, actor, attempt)
 		})
 		if !isDeadlock(err) {
-			return err
+			break
 		}
 	}
 
-	return fmt.Errorf("%w: %w", ErrApplyDeadlock, err)
+	if isDeadlock(err) {
+		return fmt.Errorf("%w: %w", ErrApplyDeadlock, err)
+	}
+
+	if err != nil {
+		return err
+	}
+
+	a.unblock(ctx, id, actor)
+
+	return nil
+}
+
+// unblock applies the approved suggestions that depended on id, each in its own transaction. The parent is already
+// committed: a dependent that fails (stale, locked, its own cover) stays approved in the queue for a moderator, so
+// its error is not the parent's.
+func (a Applier) unblock(ctx context.Context, id string, actor Actor) {
+	var raw []byte
+	if err := a.DB.QueryRowContext(ctx, `SELECT COALESCE(json_agg(json_build_object('id', id::text, 'version', version)
+ORDER BY id), '[]') FROM suggestions WHERE depends_on = $1 AND status = 'approved'`, id).Scan(&raw); err != nil {
+		return
+	}
+
+	var deps []struct {
+		ID      string `json:"id"`
+		Version int    `json:"version"`
+	}
+	if json.Unmarshal(raw, &deps) != nil {
+		return
+	}
+
+	for _, d := range deps {
+		_ = a.Approve(ctx, d.ID, d.Version, ApproveOptions{}, actor)
+	}
 }
 
 func isDeadlock(err error) bool {
@@ -86,15 +128,15 @@ func isDeadlock(err error) bool {
 }
 
 type applyRow struct {
-	kind, targetType, targetID, status string
-	version                            int
-	author                             sql.NullInt64
-	changes                            map[string]storedChange
-	pendingDep                         bool
+	kind, targetType, targetID, status, domain string
+	version                                    int
+	author                                     sql.NullInt64
+	changes                                    map[string]storedChange
+	pendingDep                                 bool
 }
 
 func (a Applier) apply(
-	ctx context.Context, tx *database.Tx, id string, version int, confirmStale bool, actor Actor, attempt int,
+	ctx context.Context, tx *database.Tx, id string, version int, opts ApproveOptions, actor Actor, attempt int,
 ) error {
 	// The per-target advisory lock (same key as submit) comes before any row lock: two applies on one target queue
 	// here instead of deadlocking when each flags the other's suggestion stale.
@@ -121,14 +163,11 @@ FROM suggestions WHERE id = $1 AND target_id IS NOT NULL`,
 		return &TransitionError{Status: http.StatusConflict, Code: "invalid-transition", From: s.status, To: "applied"}
 	}
 
-	if s.kind != "edit" {
-		// shortcut: create and merge suggestions apply in P4.B.2.3; until then the queue refuses them.
-		return &TransitionError{Status: http.StatusConflict, Code: "invalid-transition", From: s.status, To: "applied"}
-	}
-
 	fields := slices.Sorted(maps.Keys(s.changes))
-	if err := fieldLocked(ctx, tx, s.targetType, s.targetID, fields, a.now()); err != nil {
-		return err
+	if s.targetID != "" {
+		if err := fieldLocked(ctx, tx, s.targetType, s.targetID, fields, a.now()); err != nil {
+			return err
+		}
 	}
 
 	// Covers finish in the SDD 06 pipeline and dependencies apply first: approve now, write later.
@@ -148,6 +187,13 @@ FROM suggestions WHERE id = $1 AND target_id IS NOT NULL`,
 		return a.fail("end", attempt)
 	}
 
+	switch s.kind {
+	case "create":
+		return a.applyCreate(ctx, tx, s, id, fields, actor, attempt)
+	case "merge":
+		return a.applyMerge(ctx, tx, s, id, opts, actor, attempt)
+	}
+
 	// Step 2: target row lock (one row for an edit, so the id order of legacy mergeItems holds trivially).
 	itemType, err := lockTarget(ctx, tx, s.targetType, s.targetID)
 	if err != nil {
@@ -161,7 +207,7 @@ FROM suggestions WHERE id = $1 AND target_id IS NOT NULL`,
 	// Steps 3 and 4: per field, stale check, write, audit row with the real previous value.
 	auditIDs := make([]int64, 0, len(fields))
 	for _, field := range fields {
-		auditID, err := a.applyField(ctx, tx, s, id, field, confirmStale, actor)
+		auditID, err := a.applyField(ctx, tx, s, id, field, opts.ConfirmStale, actor, "community")
 		if err != nil {
 			return err
 		}
@@ -177,8 +223,24 @@ FROM suggestions WHERE id = $1 AND target_id IS NOT NULL`,
 		}
 	}
 
-	// Step 5: suggestion, events, contributor stats, rivals flagged stale.
-	if err := approveTx(ctx, tx, id, version, false, actor); err != nil {
+	// Step 5: rivals flagged stale, then suggestion, events and contributor stats in finish.
+	if _, err := tx.ExecContext(ctx, `UPDATE suggestions SET meta = meta || '{"stale": true}'
+WHERE target_type = $1 AND target_id = $2 AND id <> $3 AND status IN ('submitted','in_review','approved')
+  AND changes ?| $4::text[]`, s.targetType, s.targetID, id, "{"+strings.Join(fields, ",")+"}"); err != nil {
+		return fmt.Errorf("community: flag stale rivals: %w", err)
+	}
+
+	return a.finish(ctx, tx, s, id, actor, attempt, CatalogChanged{
+		TargetType: s.targetType, TargetID: s.targetID, Fields: fields, AuditIDs: auditIDs,
+	})
+}
+
+// finish is steps 5 and 6 shared by edit, create and merge: suggestion to applied with its events, the decision,
+// the author's approved count, and the jobs, which commit with the transaction or not at all.
+func (a Applier) finish(
+	ctx context.Context, tx *database.Tx, s applyRow, id string, actor Actor, attempt int, job CatalogChanged,
+) error {
+	if err := approveTx(ctx, tx, id, s.version, false, actor); err != nil {
 		return err
 	}
 
@@ -194,16 +256,7 @@ updated_at = EXCLUDED.updated_at`, s.author.Int64, a.now()); err != nil {
 		}
 	}
 
-	if _, err := tx.ExecContext(ctx, `UPDATE suggestions SET meta = meta || '{"stale": true}'
-WHERE target_type = $1 AND target_id = $2 AND id <> $3 AND status IN ('submitted','in_review','approved')
-  AND changes ?| $4::text[]`, s.targetType, s.targetID, id, "{"+strings.Join(fields, ",")+"}"); err != nil {
-		return fmt.Errorf("community: flag stale rivals: %w", err)
-	}
-
-	// Step 6: jobs commit with the transaction or not at all.
-	if err := a.Queue.DispatchTx(ctx, tx, CatalogChanged{
-		TargetType: s.targetType, TargetID: s.targetID, Fields: fields, AuditIDs: auditIDs,
-	}); err != nil {
+	if err := a.Queue.DispatchTx(ctx, tx, job); err != nil {
 		return fmt.Errorf("community: dispatch catalog.changed: %w", err)
 	}
 
@@ -232,7 +285,7 @@ claimed_at = NULL WHERE id = $1`, id, actor.ID, a.now()); err != nil {
 }
 
 func (a Applier) applyField(
-	ctx context.Context, tx *database.Tx, s applyRow, id, field string, confirmStale bool, actor Actor,
+	ctx context.Context, tx *database.Tx, s applyRow, id, field string, confirmStale bool, actor Actor, source string,
 ) (int64, error) {
 	ch := s.changes[field]
 
@@ -262,7 +315,7 @@ func (a Applier) applyField(
 			return 0, err
 		}
 
-		if ch.Before != nil && !jsonEqual(ch.Before, current) && !confirmStale {
+		if source != "create" && ch.Before != nil && !jsonEqual(ch.Before, current) && !confirmStale {
 			return 0, &TransitionError{
 				Status: http.StatusConflict, Code: "stale-before", Field: field, Current: string(current),
 			}
@@ -281,12 +334,16 @@ func (a Applier) applyField(
 		before = current
 	}
 
+	if source == "create" {
+		before = json.RawMessage("null")
+	}
+
 	var auditID int64
 	if err := tx.QueryRowContext(ctx, `INSERT INTO catalog_audit
 (actor_id, actor_role, source, suggestion_id, target_type, target_id, field, before, after, prev_provenance)
-VALUES ($1, $2, 'community', $3, $4, $5, $6, $7::jsonb, $8::jsonb, $9::jsonb) RETURNING id`,
-		actor.ID, actor.Role, id, s.targetType, s.targetID, field, string(before), string(after), string(prev)).
-		Scan(&auditID); err != nil {
+VALUES ($1, $2, $10, $3, $4, $5, $6, $7::jsonb, $8::jsonb, $9::jsonb) RETURNING id`,
+		actor.ID, actor.Role, id, s.targetType, s.targetID, field, string(before), string(after), string(prev),
+		source).Scan(&auditID); err != nil {
 		return 0, fmt.Errorf("community: audit %s: %w", field, err)
 	}
 
@@ -310,11 +367,11 @@ func lockForApply(ctx context.Context, tx *database.Tx, id string) (applyRow, er
 	)
 
 	err := tx.QueryRowContext(ctx, `SELECT s.kind::text, s.target_type::text, s.target_id::text, s.status::text,
-  s.version, s.author_id, s.changes,
+  s.target_domain, s.version, s.author_id, s.changes,
   COALESCE(d.status::text NOT IN ('applied'), false)
 FROM suggestions s LEFT JOIN suggestions d ON d.id = s.depends_on
 WHERE s.id = $1 FOR UPDATE OF s`, id).
-		Scan(&s.kind, &s.targetType, &target, &s.status, &s.version, &s.author, &raw, &s.pendingDep)
+		Scan(&s.kind, &s.targetType, &target, &s.status, &s.domain, &s.version, &s.author, &raw, &s.pendingDep)
 	if errors.Is(err, sql.ErrNoRows) {
 		return s, ErrNotFound
 	}

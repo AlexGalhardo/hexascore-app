@@ -37,7 +37,7 @@ func (e *InvalidError) Error() string { return e.Field + ": " + e.Msg }
 // Applier applies an approved suggestion to the catalogue (SDD 04 section 7.4 steps 1 to 6). The queue never writes
 // the catalogue itself.
 type Applier interface {
-	Approve(ctx context.Context, id string, version int, confirmStale bool, actor community.Actor) error
+	Approve(ctx context.Context, id string, version int, opts community.ApproveOptions, actor community.Actor) error
 }
 
 // Detail is the moderation page of one suggestion.
@@ -112,12 +112,14 @@ FROM suggestions WHERE id = $1`, id).Scan(&d.ID, &d.Kind, &d.TargetType, &target
 }
 
 // Approve hands the decision to the Applier (community.Applier in production).
-func (q Queue) Approve(ctx context.Context, id string, version int, confirmStale bool, actor community.Actor) error {
+func (q Queue) Approve(
+	ctx context.Context, id string, version int, opts community.ApproveOptions, actor community.Actor,
+) error {
 	if q.Applier == nil {
 		return ErrApplyUnavailable
 	}
 
-	err := q.Applier.Approve(ctx, id, version, confirmStale, actor)
+	err := q.Applier.Approve(ctx, id, version, opts, actor)
 	if errors.Is(err, community.ErrNotFound) {
 		return ErrNotFound
 	}

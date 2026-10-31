@@ -20,7 +20,9 @@ type fakeApplier struct {
 	applied map[string]bool
 }
 
-func (f *fakeApplier) Approve(ctx context.Context, id string, version int, _ bool, actor community.Actor) error {
+func (f *fakeApplier) Approve(
+	ctx context.Context, id string, version int, _ community.ApproveOptions, actor community.Actor,
+) error {
 	var target string
 	if err := f.q.DB.QueryRowContext(ctx, `SELECT target_id::text FROM suggestions WHERE id=$1`, id).
 		Scan(&target); err != nil {
@@ -82,7 +84,16 @@ func TestApproveWithoutApplier(t *testing.T) {
 	db := openDB(t)
 	q := Queue{DB: db}
 	id := insert(t, db, seed{})
-	if err := q.Approve(context.Background(), id, 1, false, adminActor); !errors.Is(err, ErrApplyUnavailable) {
+	if err := q.Approve(
+		context.Background(),
+		id,
+		1,
+		community.ApproveOptions{},
+		adminActor,
+	); !errors.Is(
+		err,
+		ErrApplyUnavailable,
+	) {
 		t.Fatalf("approve without applier: %v", err)
 	}
 }

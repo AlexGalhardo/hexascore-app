@@ -68,7 +68,7 @@ func (q Queue) Bulk(
 		if err == nil {
 			switch action {
 			case BulkApprove:
-				err = q.Approve(ctx, id, version, confirmStale, actor)
+				err = q.Approve(ctx, id, version, community.ApproveOptions{ConfirmStale: confirmStale}, actor)
 			case BulkReject:
 				err = q.Reject(ctx, id, version, reason, note, actor)
 			case BulkClaim:
@@ -108,6 +108,7 @@ func code(err error) string {
 	var (
 		te *community.TransitionError
 		pe *community.Problem
+		ve *community.ValidationError
 		ie *InvalidError
 	)
 
@@ -118,6 +119,8 @@ func code(err error) string {
 		return "apply-deadlock"
 	case errors.As(err, &pe):
 		return pe.Code
+	case errors.As(err, &ve):
+		return "invalid-" + ve.Field
 	case errors.Is(err, ErrNotFound):
 		return "not-found"
 	case errors.Is(err, ErrNotAssignee):
