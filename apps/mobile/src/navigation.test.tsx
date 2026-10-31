@@ -63,7 +63,7 @@ const routes: [string, Record<string, string>, () => ReactElement, string | null
 	],
 	["entities/[id]", { id: "42" }, () => <EntityScreen />, "Entity 42"],
 	["lists/[id]", { id: "7" }, () => <ListScreen />, "List 7"],
-	["update-required", {}, () => <UpdateRequired />, `Update required ${storeListingUrl()}`],
+	["update-required", {}, () => <UpdateRequired />, storeListingUrl()],
 	["_layout", {}, () => <RootLayout />, null],
 	["(tabs)/_layout", {}, () => <TabsLayout />, null],
 ];
