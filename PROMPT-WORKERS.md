@@ -178,7 +178,7 @@ PRONTO_PARA_MERGE <branch>   (only on approval)
 
 Per task (touched packages only): `go build ./...`, `golangci-lint run ./<pkg>/...`, `go test ./<pkg>/...` (`-tags integration` with `TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable` for `tests/`), `bun run lint && bun run typecheck && bun run test` when TypeScript changed, `bunx markdownlint-cli2@0.24.0 <files>` when Markdown changed. UI work is also checked in the browser on the QA container: `E2E_IMAGE_TAG=<ID> docker compose --profile app build app-init && E2E_IMAGE_TAG=<ID> docker compose --profile app up -d --wait` → `http://127.0.0.1:3000` (demo admin `admin@example.test` / `Demo-password-1`); stop it afterwards.
 
-Full gate (specialist on `main` after each merge; intern daily): the four commands in `ROADMAP.md` "Resuming work" step 2, plus, before any release PR, every job of `.github/workflows/ci.yml` run locally in parallel on the release commit, all green (`AGENTS.md` "Release gate").
+Full gate (specialist on `main` after each merge; intern daily): the four commands in `ROADMAP.md` "Resuming work" step 2, plus `bun run e2e` before a release.
 
 ## 9. Rules
 
