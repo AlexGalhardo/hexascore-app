@@ -17,3 +17,4 @@ verdict: APROVADO
 re-run: `go test -count=1 -run TestNewRejectsMisconfiguration ./flags/` ok
 checked: documented regex matches `flags.nameRe`; "/admin/_flags only with at least one flag" matches `Panel.hasFlags`; docs only plus three name cases
 PR: #119
+PR: #119 squash 073fc0f7 (33/33)

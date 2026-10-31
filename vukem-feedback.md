@@ -16,10 +16,10 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | VF-NEW-AUDIT-4 | 2026-10-31 | low | fixed on main, unreleased (PR #116, `data-hydrating` hook in the Inertia scaffolds) |
 | VF-NEW-AUDIT-5 | 2026-10-31 | medium | fixed on main, unreleased (PR #110) |
 | VF-NEW-AUDIT-6 | 2026-10-31 | medium | fixed on main, unreleased (PR #105) |
-| VF-NEW-P2.H.3.1 | 2026-10-31 | low | open |
-| VF-NEW-P5.A.3.1 | 2026-10-31 | low | open |
+| VF-NEW-P2.H.3.1 | 2026-10-31 | low | fixed on main, unreleased (PR #117, `enum` struct tag documents without validating) |
+| VF-NEW-P5.A.3.1 | 2026-10-31 | low | fixed on main, unreleased (PR #118, `ApiProblem.code` and typed extension members) |
 | VF-NEW-FIX-gate-timeouts | 2026-10-31 | medium | fixed on main, unreleased (PR #106) |
-| VF-NEW-P4.A.3.1b | 2026-10-31 | low | open |
+| VF-NEW-P4.A.3.1b | 2026-10-31 | low | fixed on main, unreleased (PR #119, flag name rules and the `/admin/_flags` mount documented) |
 | VF-NEW-P2.H.3.5 | 2026-10-31 | medium | withdrawn: already provided by inertia.SSRConfig.Cache (v0.33.0); docs clarified (PR #111) |
 | VF-NEW-FIX-covers-route | 2026-10-31 | low | open |
 | VF-NEW-OWNER-schemathesis | 2026-10-31 | medium | implemented on main, unreleased (PR #113: `vukem api:fuzz`, `WithFuzzAuth`); HexaScore adopts after release as ADOPT-vukem-<version> |

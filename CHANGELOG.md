@@ -28,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **community:** In-page community links and suggestion form posts keep the visitor's locale prefix (FIX-community-create-ux, QA-community-e2e)
 - **auth:** A no-JS form post past the proof-of-work threshold gets an HTML 428 page offering Google sign-in instead of raw problem JSON (FIX-nojs-428-page)
 - **ssr:** The supervisor restart test no longer fails on a wall-clock deadline under load (FIX-ssr-supervise-flake)
 - **mobile:** The login navigation test no longer hits the Jest timeout on a cold cache (FIX-mobile-login-test-timeout)

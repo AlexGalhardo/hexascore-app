@@ -27,3 +27,7 @@ PRONTO_PARA_MERGE agent/especialista/FIX-community-create-ux-fix (merged 7732fee
 - Fixes: (1) community-create/status specs navigated without the locale prefix (now `${prefix}/...`); (2) app bug: in-page links (merge tab, my-suggestions, status) and router.post/patch targets dropped the locale, so a pt-BR visitor fell back to English after a click or a withdraw; now prefixed through new lib/useLocalized.ts.
 - Result: `bun run e2e specs/community-create.spec.ts specs/community-status.spec.ts` -> 12 passed (1.4m) (desktop+mobile x en/pt-BR/es, axe included). vitest community 13 tests ok, tsc/biome clean. Stack stopped, database dropped.
 - ROADMAP boxes P4.A.3.2 and P4.A.3.3 can be ticked once this merges.
+
+### r2 (especialista, 2026-10-31)
+Commits 6e0467c and 68b17b6 (QA-community-e2e: in-page links and `router.post`/`patch` targets go through `useLocalized`, e2e specs use the locale prefix) reviewed after the first merge; merged 7ebbc1a. Orchestrator: QA-community-e2e 12/12 across 6 projects, so P4.A.3.2 and P4.A.3.3 are ticked.
+gate on main (batch 2, 311e39b): build ok, bun lint/typecheck ok, vitest 27 files / 96 tests, go test -tags integration ./... exit 0; golangci-lint found 5 issues in the new tests (golines x2, gci, gofumpt, rowserrcheck), fixed in agent/especialista/FIX-gate-lint (merged b344207)

@@ -2727,7 +2727,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - i18n CI check → no missing `community.*` key in any locale
   - Notes: Inertia validation errors come back as props (SDD 04 §6). Translations via the `text-editor` subagent. Hidden `website` honeypot field rendered off-screen, not `display:none` only.
 
-- [ ] **P4.A.3.2** Build `Community/SuggestCreate` for create and merge requests (`/suggest/new/{domain}`).
+- [x] **P4.A.3.2** Build `Community/SuggestCreate` for create and merge requests (`/suggest/new/{domain}`).
   - Files/modules: `resources/js/pages/Community/SuggestCreate.tsx`, `app/web/community.go`
   - Refs: SDD 04 §2 (create requests, merge reports), §7.2 last row, §7.6
   - Depends on: P4.A.3.1
@@ -2736,7 +2736,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `bun run e2e -- community-create.spec.ts` → create draft with required fields of the kind; merge request limited to same type and domain; axe clean
   - Notes: merge here only files a request; execution is P4.B.2.3.
 
-- [ ] **P4.A.3.3** Build `Community/SuggestionStatus` and `Community/MySuggestions` with submit and withdraw actions.
+- [x] **P4.A.3.3** Build `Community/SuggestionStatus` and `Community/MySuggestions` with submit and withdraw actions.
   - Files/modules: `resources/js/pages/Community/{SuggestionStatus,MySuggestions}.tsx`, `app/web/community.go`, `app/policies/suggestion.go`
   - Refs: SDD 04 FR-04-12, §6 (POST `/suggestions/{id}/submit`, `/withdraw`, GET `/suggestions/{id}`, `/me/suggestions`); <https://vukem.dev/docs/security/authorization> (`authz.DenyAsNotFound`)
   - Depends on: P4.A.3.2
