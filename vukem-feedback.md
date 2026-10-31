@@ -127,4 +127,3 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 - **Context**: the app serves covers from a private bucket through `storage.HandlerWith` with `Cache-Control: public, max-age=31536000, immutable` (FIX-covers-route). Against RustFS the response carries no `ETag` and `If-None-Match` never yields 304; the memory disk path was the only one tested by the author.
 - **Workaround**: none needed while keys are content-hashed and immutable; browsers rely on the long max-age.
 - **Request**: have the S3 driver surface the object ETag (and `Last-Modified`) through the disk stat so `HandlerWith` answers conditional requests with 304.
-
