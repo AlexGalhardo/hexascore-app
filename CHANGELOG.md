@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- **community:** `Community/SuggestEdit` page with draft save and restore, quota, locked-field reasons, "Suggest an edit" links on item, edition and entity pages, and `community.*` strings in en, pt-BR and es (P4.A.3.1c)
+
 ## [0.12.0] - 2026-10-31
 
 ### Added

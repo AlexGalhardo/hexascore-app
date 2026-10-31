@@ -2716,7 +2716,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P4.A.3 Submission UI
 
-- [ ] **P4.A.3.1** Build `Community/SuggestEdit` with draft save, the "Suggest an edit" entry points on item, edition and entity pages, and the `community.*` strings in three locales.
+- [x] **P4.A.3.1** Build `Community/SuggestEdit` with draft save, the "Suggest an edit" entry points on item, edition and entity pages, and the `community.*` strings in three locales.
   - Files/modules: `resources/js/pages/Community/SuggestEdit.tsx`, `resources/js/components/community/FieldEditor.tsx`, `app/web/community.go`, `resources/lang/{en,pt-BR,es}.json`
   - Refs: SDD 04 §6 route table (GET `/suggest/{target_type}/{id}`, POST/PATCH `/suggestions`), NFR-04-6, NFR-04-7; SDD 09 pages; D-17
   - Depends on: P4.A.2.4
