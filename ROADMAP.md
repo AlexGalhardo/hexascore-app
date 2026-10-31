@@ -3633,7 +3633,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests -run TestCounterDropsOldestAbove100k` → `trending.counter.dropped` incremented
   - Notes: VF-021 workaround (app `sync.Map` counter with a ticker-free flush on the scheduler). The scheduler page now documents `EveryMinute()` and `HourlyAt(m)`; append that finding to VF-021 in `vukem-feedback.md`, without deleting the entry. Hook shutdown with `app.OnShutdown` as SDD 08 §6 cites. Only `ItemID` from the click event is used.
 
-- [ ] **P6.C.1.3** Build the rollup that replaces the durable columns for UTC today and today−1 from `rating_events`, status/time-to-beat events, `suggestion_events` (`submitted`) and `list_items.added_at`, with one count per user per (item, day, primitive) at the maximum SDD 02 weight and the public-list rules.
+- [x] **P6.C.1.3** Build the rollup that replaces the durable columns for UTC today and today−1 from `rating_events`, status/time-to-beat events, `suggestion_events` (`submitted`) and `list_items.added_at`, with one count per user per (item, day, primitive) at the maximum SDD 02 weight and the public-list rules.
   - Files/modules: `app/recommend/trending/rollup.go`, `app/recommend/trending/rollup_test.go`
   - Refs: SDD 08 §7.1 (weights, lists), FR-08-2; SDD 02 §6 (events), §7.1, §7.5 (age tiers, shadow weight); SDD 14 §5 (`list_items.added_at`); SDD 04 (`suggestion_events`)
   - Depends on: P6.C.1.1, P4.A
