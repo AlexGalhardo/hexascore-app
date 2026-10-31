@@ -51,8 +51,8 @@ trap cleanup EXIT
 
 docker run --rm --network host "${app_env[@]}" "$image" migrate
 
-docker run -i --rm --network host -e PGPASSWORD=hexascore "$pg_image" \
-	psql -h 127.0.0.1 -U hexascore -d hexascore -v ON_ERROR_STOP=1 <<SQL
+docker run -i --rm --network host "$pg_image" \
+	psql "$db" -v ON_ERROR_STOP=1 <<SQL
 INSERT INTO users (name, email, password, email_verified_at, created_at, updated_at)
 VALUES ('CI Scan', 'schemathesis-ci@hexascore.test', 'not-a-login', now(), now(), now())
 RETURNING id \gset
