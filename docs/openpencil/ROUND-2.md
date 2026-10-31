@@ -49,7 +49,30 @@ Light `books` accent on surface is 4.28: the accent is used on the page backgrou
 
 ## Frames
 
-<!-- filled after export -->
+Every frame exists in light (`10 Web desktop 1440`, `11 Web mobile 390`) and dark (`12 Web dark`, platform `web-desktop-dark` / `web-mobile-dark`); PNGs `<platform>__<page>__<state>.png`.
+
+- `catalog-index`: `default`, `empty`, `filters-open` (mobile only), `last-page`, `page-622`
+- `docs`: `default`
+- `edition`: `default`
+- `entity`: `default`, `empty`
+- `error`: `404`, `500`
+- `home`: `default`, `recent`
+- `item`: `default`, `logged-in`, `logged-out`, `no-cover`, `no-score`, `no-synopsis`
+- `legal`: `default`
+- `library`: `default`
+- `login`: `default`
+- `pricing`: `default`
+- `rating-widget`: `states`
+- `recent-changes`: `default`
+- `search-palette`: `empty`, `loading`, `no-results`, `results`
+- `search`: `default`, `empty-query`, `no-results`, `too-short`
+- `signup`: `default`
+
+Home frames changed by item 10: `web-desktop/home/default`, `web-desktop/home/recent`, `web-mobile/home/default`, `web-mobile/home/recent` and their `-dark` copies.
+
+Item 9, frames corrected: the round-1 frames were hand-drawn copies with their own header and margins and are now rebuilt on the shared container: `home/default`, `home/recent`, `catalog-index/default`, `search/default`, `library/default`, `login/default`, `pricing/default`, `item/default` (desktop). `rating-widget/states` overflowed the right edge by 128 px during the round and was fixed. Every other 1440 frame already used the page wrapper; the check script now passes on all 33 light and 33 dark desktop frames.
+
+`99 Assets`: `Shell components (round 2)` and `Shell components dark (round 2)` (navbar rest, scrolled, signed in, language menu open; footer; mobile navbar rest, scrolled, signed in; mobile footer), `Buttons (round 2)` and `Buttons dark (round 2)` (primary, secondary, ghost × rest, hover, focus-visible, pressed, disabled; Google button states and locales).
 
 ## Tool gaps found this round
 
