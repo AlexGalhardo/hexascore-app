@@ -24,8 +24,7 @@ function Star({ fill }: { fill: StarFill }) {
 			{svg("text-gray-300")}
 			{fill !== "empty" && (
 				<span
-					className="absolute inset-y-0 left-0 overflow-hidden"
-					style={{ width: fill === "half" ? "50%" : "100%" }}
+					className={`absolute inset-y-0 left-0 overflow-hidden ${fill === "half" ? "w-1/2" : "w-full"}`}
 				>
 					{svg("text-amber-500")}
 				</span>

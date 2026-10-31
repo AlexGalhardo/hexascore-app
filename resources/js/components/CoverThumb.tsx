@@ -14,6 +14,9 @@ const DIMENSIONS: Record<CoverSize, { width: number; height: number }> = {
 	lg: { width: 144, height: 208 },
 };
 
+// Tailwind classes instead of a style prop: SSR would emit a style attribute, blocked by style-src.
+const BOX: Record<CoverSize, string> = { sm: "w-8 h-12", md: "w-11 h-16", lg: "w-36 h-52" };
+
 // CoverThumb is the list-row cover (32×48 or 44×64; "lg" 144×208 for the item page header), 96w/600w sources, lazy.
 // The item page cover passes priority for eager loading with high fetch priority.
 // Without a cover it keeps the same box so the row does not shift.
@@ -36,8 +39,7 @@ export default function CoverThumb({
 			<span
 				aria-hidden="true"
 				data-testid="cover-placeholder"
-				style={{ width, height }}
-				className="inline-block shrink-0 rounded-sm bg-surface"
+				className={`inline-block shrink-0 rounded-sm bg-surface ${BOX[size]}`}
 			/>
 		);
 	}
