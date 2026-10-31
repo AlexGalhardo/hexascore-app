@@ -22,7 +22,7 @@ export function memoryVault(): KeyValueVault {
 	};
 }
 
-function isStoredToken(value: unknown): value is StoredToken {
+export function isStoredToken(value: unknown): value is StoredToken {
 	if (typeof value !== "object" || value === null) return false;
 	const v = value as Record<string, unknown>;
 	return (

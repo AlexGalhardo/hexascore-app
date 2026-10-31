@@ -49,7 +49,7 @@ function params(next: Record<string, string>): void {
 // budget, and the cold first render (lazy nativewind runtime) ate most of it
 // when Jest workers competed for CPU.
 const routes: [string, Record<string, string>, () => ReactElement, string | null][] = [
-	["(auth)/login", {}, () => <Login />, "Login"],
+	["(auth)/login", {}, () => <Login />, null],
 	["(tabs)/index", {}, () => <Home />, "HexaScore"],
 	["(tabs)/[type]", { type: "games" }, () => <SectionScreen />, "Section games"],
 	["(tabs)/search", {}, () => <Search />, "Search"],
