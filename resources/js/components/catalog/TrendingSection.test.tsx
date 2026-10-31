@@ -38,6 +38,11 @@ test("renders nothing for a type without entries", () => {
 	expect(container.innerHTML).toBe("");
 });
 
+test("renders nothing when the trending prop is absent", () => {
+	const { container } = render(<TrendingSection type="game" />);
+	expect(container.innerHTML).toBe("");
+});
+
 test("links carry from=trending and prior entries get the Popular chip", () => {
 	render(
 		<TrendingSection
