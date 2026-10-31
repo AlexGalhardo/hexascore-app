@@ -97,7 +97,8 @@ func TestSecurity_Community_A01_PolicyFailsClosed(t *testing.T) {
 		for name, u := range cases {
 			user = u
 			for _, ab := range []string{
-				admin.AbilityModerate, admin.AbilityViewCatalogAudit, admin.AbilityRevertCatalog, admin.AbilityLockCatalog,
+				admin.AbilityModerate, admin.AbilityApplySuggestion, admin.AbilityViewCatalogAudit,
+				admin.AbilityRevertCatalog, admin.AbilityLockCatalog,
 			} {
 				if gate.Allows(t.Context(), u, ab, nil) {
 					t.Fatalf("flag=%v: %s allowed %s", flag, name, ab)
@@ -105,16 +106,21 @@ func TestSecurity_Community_A01_PolicyFailsClosed(t *testing.T) {
 			}
 		}
 
-		// Revert, lock and audit stay admin-only whatever the flag says.
+		// Apply, revert, lock and audit stay admin-only whatever the flag says (Q-A15).
 		mod := with(func(u *models.User) { u.Role = models.RoleModerator })
 		user = mod
-		for _, ab := range []string{admin.AbilityViewCatalogAudit, admin.AbilityRevertCatalog, admin.AbilityLockCatalog} {
+		for _, ab := range []string{
+			admin.AbilityApplySuggestion, admin.AbilityViewCatalogAudit, admin.AbilityRevertCatalog, admin.AbilityLockCatalog,
+		} {
 			if gate.Allows(t.Context(), mod, ab, nil) {
 				t.Fatalf("flag=%v: moderator allowed %s", flag, ab)
 			}
 		}
 		if got := gate.Allows(t.Context(), mod, admin.AbilityModerate, nil); got != flag {
 			t.Fatalf("moderator moderate = %v with flag %v", got, flag)
+		}
+		if !gate.Allows(t.Context(), &verified, admin.AbilityApplySuggestion, nil) {
+			t.Fatalf("flag=%v: admin refused applySuggestion", flag)
 		}
 	}
 }

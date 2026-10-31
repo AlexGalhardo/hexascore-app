@@ -26,6 +26,21 @@ type ModerationHandlers struct {
 	Queue moderation.Queue
 	// Authorize checks the moderate ability.
 	Authorize func(c *web.Ctx) error
+	// AuthorizeApply checks the admin-only applySuggestion ability (approve, reject; owner Q-A15).
+	AuthorizeApply func(c *web.Ctx) error
+}
+
+// canApply is false when AuthorizeApply is unwired: fail closed.
+func (h ModerationHandlers) canApply(c *web.Ctx) bool {
+	return h.AuthorizeApply != nil && h.AuthorizeApply(c) == nil
+}
+
+func (h ModerationHandlers) authorizeApply(c *web.Ctx) error {
+	if h.AuthorizeApply == nil {
+		return errs.New(http.StatusForbidden, "Only admins can apply or reject suggestions.")
+	}
+
+	return h.AuthorizeApply(c)
 }
 
 type queueView struct {
@@ -109,6 +124,7 @@ func (h ModerationHandlers) Index(c *web.Ctx) error {
 
 	d := h.Pages.newPage("Moderation")
 	d.Queue = q
+	d.CanApply = h.canApply(c)
 	d.RejectReasons = moderation.RejectReasons
 
 	return h.Pages.render(c, "moderation", d)
@@ -141,8 +157,12 @@ func (h ModerationHandlers) Release(c *web.Ctx) error {
 	return h.move(c, h.Queue.Release)
 }
 
-// Approve handles POST /admin/moderation/{id}/approve.
+// Approve handles POST /admin/moderation/{id}/approve: admins only.
 func (h ModerationHandlers) Approve(c *web.Ctx) error {
+	if err := h.authorizeApply(c); err != nil {
+		return err
+	}
+
 	return h.move(c, func(ctx context.Context, id string, version int, a community.Actor) error {
 		return h.Queue.Approve(ctx, id, version, community.ApproveOptions{
 			ConfirmStale: c.FormValue("confirm_stale") == "1", ConfirmTitle: c.FormValue("confirm_title"),
@@ -150,11 +170,40 @@ func (h ModerationHandlers) Approve(c *web.Ctx) error {
 	})
 }
 
-// Reject handles POST /admin/moderation/{id}/reject.
+// Reject handles POST /admin/moderation/{id}/reject: admins only.
 func (h ModerationHandlers) Reject(c *web.Ctx) error {
+	if err := h.authorizeApply(c); err != nil {
+		return err
+	}
+
 	return h.move(c, func(ctx context.Context, id string, version int, a community.Actor) error {
 		return h.Queue.Reject(ctx, id, version, c.FormValue("reason"), c.FormValue("note"), a)
 	})
+}
+
+// Recommend handles POST /admin/moderation/{id}/recommend: a reviewer's approve or reject recommendation.
+func (h ModerationHandlers) Recommend(c *web.Ctx) error {
+	u, err := h.actor(c)
+	if err != nil {
+		return err
+	}
+
+	id := c.Param("id")
+	if _, err := uuid.Parse(id); err != nil {
+		return errs.ErrNotFound
+	}
+
+	version, err := strconv.Atoi(c.FormValue("version"))
+	if err != nil {
+		return errs.NewValidation().Add("version", "The version is required.")
+	}
+
+	err = h.Queue.Recommend(c.Context(), id, version, c.FormValue("recommendation"), c.FormValue("note"), actorOf(u))
+	if err := mapError(err); err != nil {
+		return err
+	}
+
+	return c.Redirect("/admin/moderation/" + id)
 }
 
 func (h ModerationHandlers) move(
@@ -196,6 +245,8 @@ func mapError(err error) error {
 		return nil
 	case errors.Is(err, moderation.ErrNotFound):
 		return errs.ErrNotFound
+	case errors.Is(err, moderation.ErrAdminOnly):
+		return errs.New(http.StatusForbidden, "Only admins can apply or reject suggestions.")
 	case errors.Is(err, moderation.ErrNotAssignee):
 		return errs.New(http.StatusForbidden, "This claim belongs to another moderator.")
 	case errors.Is(err, moderation.ErrApplyUnavailable):
@@ -234,6 +285,7 @@ func (h ModerationHandlers) Detail(c *web.Ctx) error {
 
 	p := h.Pages.newPage("Suggestion")
 	p.Detail = d
+	p.CanApply = h.canApply(c)
 	p.RejectReasons = moderation.RejectReasons
 
 	return h.Pages.render(c, "moderation_detail", p)
@@ -267,6 +319,12 @@ func (h ModerationHandlers) Bulk(c *web.Ctx) error {
 	r := c.Request()
 	if err := r.ParseForm(); err != nil {
 		return errs.NewValidation().Add("ids", "Invalid form.")
+	}
+
+	if action := r.PostForm.Get("action"); action == moderation.BulkApprove || action == moderation.BulkReject {
+		if err := h.authorizeApply(c); err != nil {
+			return err
+		}
 	}
 
 	res, err := h.Queue.Bulk(c.Context(), r.PostForm.Get("action"), r.PostForm["ids"], r.PostForm.Get("reason"),

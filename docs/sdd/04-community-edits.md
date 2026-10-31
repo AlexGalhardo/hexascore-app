@@ -30,6 +30,7 @@ Out of scope (v1): trusted moderators (modelled, flag off, D-15); suggestion obj
 - FR-04-14: Decisions, reverts and expiries create an in-app notification and an email in the author's locale (email opt-out). Verify: integration test with `MAIL_MAILER=array`.
 - FR-04-15: Profiles show submitted/approved/rejected counts and approval rate after ≥ 1 decision; admins export `catalog_audit` as CSV/NDJSON. Verify: integration tests (export of 100k rows streams).
 - FR-04-16: The moderation dashboard shows queue size, oldest open age, p50/p95 time-to-decision and approval rate (7/30 days). Verify: integration test on the query.
+- FR-04-17: Moderation has two steps (owner Q-A15, 2026-10-31). A moderator only reviews: it records a recommendation (`approve` or `reject`, optional note ≤ 1,000 chars) on an open suggestion, stored per suggestion and reviewer with the time and the `version` reviewed, and shown in the queue and the detail view. Only an admin approves (applies to the catalogue), rejects for good, bulk-approves or bulk-rejects; merge suggestions apply through approve, so merge is admin-only too. Verify: `TestSecurity_A01_ModeratorCannotApply` and the recommendation integration tests.
 
 ## 4. Non-functional requirements
 
@@ -99,6 +100,17 @@ create table suggestion_events (
   created_at    timestamptz not null default now()
 );
 create index suggestion_events_sid_idx on suggestion_events (suggestion_id, id);
+
+create table suggestion_reviews (                     -- FR-04-17: a moderator's recommendation
+  suggestion_id      uuid not null references suggestions(id),
+  reviewer_id        bigint not null references users(id) on delete cascade,
+  recommendation     text not null check (recommendation in ('approve','reject')),
+  note               text check (char_length(note) <= 1000),
+  suggestion_version integer not null,                 -- the version the reviewer saw
+  created_at         timestamptz not null default now(),
+  updated_at         timestamptz not null default now(),
+  primary key (suggestion_id, reviewer_id)              -- a new recommendation replaces the reviewer's last one
+);
 
 create type audit_source as enum ('community','admin','revert','merge','create');
 
@@ -175,9 +187,11 @@ Locale prefixes per D-17. User routes: `web` guard + `auth.Verified` (vukem `htt
 | POST | `/suggestions/uploads/cover` | draft owner | multipart, 1 file → `{key,width,height}` |
 | GET | `/suggestions/{id}`, `/me/suggestions` | author/admin, else 404 | `Community/SuggestionStatus`, `Community/MySuggestions` |
 | GET | `/{type}/{slug}/changes`, `/entities/{kind}/{slug}/changes` | public | `Catalog/RecentChanges`, SSR (D-07) |
-| GET | `/admin/moderation`, `/admin/moderation/{id}`, `/admin/moderation/metrics` | `moderate` | queue, detail with diff, FR-04-16 |
-| POST | `/admin/moderation/{id}/{claim,release,approve,reject}` | `moderate` | `version`; approve `confirm_stale?`; reject `reason`, `note` |
-| POST | `/admin/moderation/bulk` | `moderate` | `ids[]` ≤ 50, action → per-id results |
+| GET | `/admin/moderation`, `/admin/moderation/{id}`, `/admin/moderation/metrics` | `moderate` | queue, detail with diff and recommendations, FR-04-16 |
+| POST | `/admin/moderation/{id}/{claim,release}` | `moderate` | `version` |
+| POST | `/admin/moderation/{id}/recommend` | `moderate` | `version`, `recommendation` = approve, reject; `note?` (FR-04-17) |
+| POST | `/admin/moderation/{id}/{approve,reject}` | `applySuggestion` | `version`; approve `confirm_stale?`, `confirm_title` on merge; reject `reason`, `note` |
+| POST | `/admin/moderation/bulk` | `moderate`; `applySuggestion` for approve and reject | `ids[]` ≤ 50, action → per-id results |
 | GET | `/admin/catalog-audit`, `/admin/catalog-audit/export.{csv,ndjson}` | `viewCatalogAudit` | filters; export via vukem `export` (`https://vukem.dev/docs/digging-deeper/exports` "Exports") |
 | POST | `/admin/catalog-audit/{id}/revert` | `revertCatalog` | `reason`, `mode` = single, cascade, force |
 | POST / DELETE | `/admin/locks`, `/admin/locks/{id}` | `lockCatalog` | target, field, reason, expiry |
@@ -186,7 +200,7 @@ Moderation pages (`/admin/moderation*`, `/admin/catalog-audit*`, `/admin/locks`)
 
 Submission kill switch: feature flag `community_submissions` (<https://vukem.dev/docs/digging-deeper/feature-flags>, names allow only `a-z`, `0-9` and `_`; env `FLAG_COMMUNITY_SUBMISSIONS`), code default off, turned on in production only once moderation is staffed (an admin able to meet the 24 h decision target, D-15). While off, the suggest pages show a "coming soon" notice, `POST /suggestions*` and `/submit` answer 403 `community-submissions-closed`, and the moderation queue stays reachable for admins.
 
-Abilities are gate abilities defined like `admin`/`viewAuditLogs` in vukem `https://vukem.dev/docs/digging-deeper/admin` "Wiring". `moderate` also goes to role `moderator` only when flag `community_trusted_moderators` is on (default off, `/admin/_flags`, `https://vukem.dev/docs/digging-deeper/admin` "Feature flags"); revert and locks stay admin-only.
+Abilities are gate abilities defined like `admin`/`viewAuditLogs` in vukem `https://vukem.dev/docs/digging-deeper/admin` "Wiring". `moderate` (queue, detail, claim, release, recommend) also goes to role `moderator` only when flag `community_trusted_moderators` is on (default off, `/admin/_flags`, `https://vukem.dev/docs/digging-deeper/admin` "Feature flags"). `applySuggestion` (approve, reject, merge apply), revert, locks and the audit log stay admin-only whatever the flag says (FR-04-17, owner Q-A15). Every role behind these abilities needs 2FA (SDD 13 FR-13-5).
 
 | Status | Type | Extra members |
 | --- | --- | --- |
@@ -223,6 +237,7 @@ No OpenAPI operation or SDK in v1; later the same handlers mount at `/app/v1/sug
 | draft | withdrawn | discard | author |
 | draft | expired | 14 days without edit | system |
 | submitted | in_review | claim | admin (moderator if flag on) |
+| submitted, in_review | (same) | recommend approve or reject, no transition and no `version` bump (`suggestion_reviews`) | moderator or admin |
 | in_review | submitted | release, or claim idle > 2 h | admin, system |
 | submitted, in_review | approved | approve with deferred work (cover processing, unapplied `depends_on`) | admin |
 | submitted, in_review, approved | applied | apply transaction commits | system |

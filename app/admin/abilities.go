@@ -12,14 +12,16 @@ import (
 // Moderation abilities (SDD 04 §6).
 const (
 	AbilityModerate         = "moderate"
+	AbilityApplySuggestion  = "applySuggestion"
 	AbilityViewCatalogAudit = "viewCatalogAudit"
 	AbilityRevertCatalog    = "revertCatalog"
 	AbilityLockCatalog      = "lockCatalog"
 )
 
 // DefineModeration registers the moderation abilities. Unlike the panel gate they answer 403, not 404: the pages
-// only exist behind the flag-gated role, and a refused member should know it. Revert, locks and the audit log stay
-// admin-only; moderate also goes to the moderator role while trustedModerators is on (D-15). Banned or unverified
+// only exist behind the flag-gated role, and a refused member should know it. Applying or rejecting a suggestion,
+// revert, locks and the audit log stay admin-only (owner Q-A15: moderators only review); moderate, which covers the
+// queue, claims and recommendations, also goes to the moderator role while trustedModerators is on (D-15). Banned or unverified
 // accounts, a missing user and unknown roles are always refused.
 func DefineModeration(
 	g *authz.Gate[*models.User],
@@ -33,6 +35,7 @@ func DefineModeration(
 
 		return authz.Deny()
 	}
+	g.DefineResult(AbilityApplySuggestion, adminOnly)
 	g.DefineResult(AbilityViewCatalogAudit, adminOnly)
 	g.DefineResult(AbilityRevertCatalog, adminOnly)
 	g.DefineResult(AbilityLockCatalog, adminOnly)

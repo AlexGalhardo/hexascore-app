@@ -51,6 +51,7 @@ type Detail struct {
 	Age                                                          string
 	Competing, Stale, Unreachable                                bool
 	Diffs                                                        []FieldDiff
+	Reviews                                                      []Review
 }
 
 // Detail loads one suggestion with its per-field diff against the live catalogue.
@@ -108,6 +109,11 @@ FROM suggestions WHERE id = $1`, id).Scan(&d.ID, &d.Kind, &d.TargetType, &target
 		return Detail{}, err
 	}
 
+	d.Reviews, err = q.reviews(ctx, d.ID)
+	if err != nil {
+		return Detail{}, err
+	}
+
 	return d, nil
 }
 
@@ -115,6 +121,10 @@ FROM suggestions WHERE id = $1`, id).Scan(&d.ID, &d.Kind, &d.TargetType, &target
 func (q Queue) Approve(
 	ctx context.Context, id string, version int, opts community.ApproveOptions, actor community.Actor,
 ) error {
+	if err := requireAdmin(actor); err != nil {
+		return err
+	}
+
 	if q.Applier == nil {
 		return ErrApplyUnavailable
 	}
@@ -129,6 +139,10 @@ func (q Queue) Approve(
 
 // Reject records reason and note and moves the suggestion to rejected, all in one transaction.
 func (q Queue) Reject(ctx context.Context, id string, version int, reason, note string, actor community.Actor) error {
+	if err := requireAdmin(actor); err != nil {
+		return err
+	}
+
 	if !slices.Contains(RejectReasons, reason) {
 		return &InvalidError{Field: "reason", Msg: "Choose a reject reason."}
 	}
