@@ -190,13 +190,19 @@ func loaderScript(mods []modScript) []byte {
 	// /login. app.tsx clears it after hydration. The 15s timeout is only the
 	// escape if that promise never settles. `})})})` is a SyntaxError and the
 	// app never hydrates.
-	b.WriteString(`>document.documentElement.inert=true;addEventListener("load",function(){var started=0;function go(){if(started)return;started=1;var mods=`)
+	b.WriteString(
+		`>document.documentElement.inert=true;addEventListener("load",function(){var started=0;function go(){if(started)return;started=1;var mods=`,
+	)
 	b.Write(payload)
 	b.WriteString(`;var left=mods.length;function done(){if(--left)return}`)
-	b.WriteString(`for(var i=0;i<mods.length;i++){var m=mods[i];var s=document.createElement("script");s.type="module";s.src=m.src;s.onload=done;s.onerror=done;`)
+	b.WriteString(
+		`for(var i=0;i<mods.length;i++){var m=mods[i];var s=document.createElement("script");s.type="module";s.src=m.src;s.onload=done;s.onerror=done;`,
+	)
 	b.WriteString(`if(m.integrity){s.integrity=m.integrity;s.crossOrigin="anonymous"}`)
 	b.WriteString(`if(m.nonce)s.nonce=m.nonce;document.head.appendChild(s)}}`)
-	b.WriteString(`try{var o=new PerformanceObserver(function(){o.disconnect();requestAnimationFrame(function(){requestAnimationFrame(go)})});`)
+	b.WriteString(
+		`try{var o=new PerformanceObserver(function(){o.disconnect();requestAnimationFrame(function(){requestAnimationFrame(go)})});`,
+	)
 	b.WriteString(`o.observe({type:"largest-contentful-paint",buffered:true})}catch(e){setTimeout(go,0)}`)
 	b.WriteString(`setTimeout(go,2000);setTimeout(function(){document.documentElement.inert=false},15000)})</script>`)
 
