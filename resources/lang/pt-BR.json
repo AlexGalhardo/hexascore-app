@@ -590,7 +590,12 @@
     "title": "Todo jogo, filme, série e livro — avaliado pelas pessoas, categoria por categoria.",
     "explore": "Explorar",
     "recent": "Avaliados recentemente pelos membros",
-    "ratedBy": "por {name}"
+    "ratedBy": "por {name}",
+    "trending": {
+      "title": "Top 10 em alta: {type} (30 dias)",
+      "popular": "Popular",
+      "popularType": "{type} populares"
+    }
   },
   "footer": {
     "terms": "Termos",

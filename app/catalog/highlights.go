@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 // HighlightRows is the row count of each landing block (legacy SectionHighlights).
@@ -95,4 +96,27 @@ func scanHighlights(rows *sql.Rows) ([]Highlight, error) {
 	}
 
 	return got, rows.Err()
+}
+
+// HighlightsByID loads the public items among ids, in the order of ids. Titles fall back like Highlights.
+func HighlightsByID(ctx context.Context, db Querier, ids []string, locale string) ([]Highlight, error) {
+	if len(ids) == 0 {
+		return []Highlight{}, nil
+	}
+
+	rows, err := db.QueryContext(ctx, `SELECT i.id, i.type, i.slug,
+  coalesce(t.title, te.title, i.original_title, i.slug),
+  extract(year FROM i.release_date)::int,
+  `+starsScore+`,
+  i.rating_count, i.cover_key, i.cover_thumb_key
+FROM unnest($1::uuid[]) WITH ORDINALITY AS w(id, n)
+JOIN items i ON i.id = w.id AND i.visibility = 'public'
+LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $2
+LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
+ORDER BY w.n`, "{"+strings.Join(ids, ",")+"}", locale)
+	if err != nil {
+		return nil, fmt.Errorf("highlights by id: %w", err)
+	}
+
+	return scanHighlights(rows)
 }

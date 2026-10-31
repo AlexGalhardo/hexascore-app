@@ -590,7 +590,12 @@
     "title": "Every game, movie, series and book — scored by people, category by category.",
     "explore": "Explore",
     "recent": "Recently rated by members",
-    "ratedBy": "by {name}"
+    "ratedBy": "by {name}",
+    "trending": {
+      "title": "Top 10 trending {type} (30 days)",
+      "popular": "Popular",
+      "popularType": "Popular {type}"
+    }
   },
   "footer": {
     "terms": "Terms",

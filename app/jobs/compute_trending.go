@@ -38,8 +38,10 @@ func handleComputeTrending(app *vukem.App) queue.Registration {
 		}
 
 		for _, typ := range trending.Types {
-			if err := store.Forget(ctx, "trending:v1:"+typ); err != nil {
-				return err
+			for _, locale := range trending.Locales {
+				if err := store.Forget(ctx, trending.CacheKey(typ, locale)); err != nil {
+					return err
+				}
 			}
 		}
 

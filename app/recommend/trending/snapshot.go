@@ -241,3 +241,9 @@ func AgeSeconds(ctx context.Context, db *database.DB, now time.Time) (float64, e
 
 	return now.Sub(at.Time).Seconds(), nil
 }
+
+// Locales are the UI locales whose home payload is cached per type.
+var Locales = []string{"en", "pt-BR", "es"}
+
+// CacheKey is the cache entry of the home trending payload of one type and locale; the hourly job forgets it.
+func CacheKey(typ, locale string) string { return "trending:v1:" + typ + ":" + locale }

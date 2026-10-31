@@ -590,7 +590,12 @@
     "title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
     "explore": "Explorar",
     "recent": "Valorados recientemente por los miembros",
-    "ratedBy": "por {name}"
+    "ratedBy": "por {name}",
+    "trending": {
+      "title": "Top 10 en tendencia: {type} (30 días)",
+      "popular": "Popular",
+      "popularType": "{type} populares"
+    }
   },
   "footer": {
     "terms": "Términos",

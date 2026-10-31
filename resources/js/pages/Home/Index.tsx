@@ -1,6 +1,7 @@
 import { Link, usePage } from "@inertiajs/react";
 import CoverThumb, { type Cover } from "../../components/CoverThumb";
 import SectionHighlights, { type Section } from "../../components/catalog/SectionHighlights";
+import TrendingSection, { type TrendingList } from "../../components/catalog/TrendingSection";
 import Seo from "../../components/Seo";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
@@ -26,9 +27,11 @@ const PATHS: Record<Section["type"], string> = {
 export default function Index({
 	sections,
 	recent,
+	trending,
 }: {
 	sections: Section[];
 	recent: RecentRating[];
+	trending: Record<Section["type"], TrendingList>;
 }) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
@@ -79,6 +82,13 @@ export default function Index({
 						</ul>
 					</section>
 				)}
+				{sections.map((section) => (
+					<TrendingSection
+						key={`t-${section.type}`}
+						type={section.type}
+						list={trending[section.type]}
+					/>
+				))}
 				{sections.map((section) => (
 					<SectionHighlights key={section.type} section={section} />
 				))}
