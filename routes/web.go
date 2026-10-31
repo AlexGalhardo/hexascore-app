@@ -15,6 +15,7 @@ import (
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
@@ -31,7 +32,7 @@ var localePrefixes = map[string]string{"pt-br": "pt-BR", "es": "es"}
 // Web registers the browser routes. vukem route:list shows them.
 func Web(r *router.Router, app *vukem.App) error {
 	// Covers come from the bucket origin when COVERS_BASE_URL is set; that origin joins img-src.
-	coversBase := strings.TrimRight(strings.TrimSpace(app.Source.Get("COVERS_BASE_URL")), "/")
+	coversBase := catalog.CoversBase(app.Source.Get("COVERS_BASE_URL"))
 
 	var imgHosts []string
 	if u, err := url.Parse(coversBase); err == nil && u.Scheme == "https" && u.Host != "" {
