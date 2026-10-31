@@ -38,6 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Start the page modules after the LCP entry so the home and games listings stay inside the Lighthouse budget.
 - Ignore four transitive Expo and Jest advisories that have no compatible patched release.
 - Let the pull request title `Release x.y.z` pass commitlint. The commit subjects stay conventional.
+- Freeze the clock in `TestSecurity_A07_HexaHoneypotAndFillTime`, so a slow proof-of-work solve under `-race` no longer ages the "too fast" form token past the minimum fill time.
 
 ## [0.11.0] - 2026-10-31
 
