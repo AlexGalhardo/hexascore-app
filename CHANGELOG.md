@@ -6,14 +6,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-### Fixed
-
-- `GET /covers/{key}` streams imported covers from the private bucket with `Cache-Control: public, max-age=31536000, immutable`; static demo SVGs still win.
-- Cover placeholder and half-star no longer emit inline `style` attributes (CSP `style-src-attr` violation, Lighthouse best-practices).
-- Passkey e2e uses a `localhost` origin whose port matches the QA stack (`APP_URL` follows `QA_PORT` in `docker-compose.yml`).
-- App client regenerated for the item `type` enum.
-- e2e specs aligned with the redesigned header; Biome `innerText` warnings removed.
-
 ## [0.12.0] - 2026-10-31
 
 ### Added
@@ -50,6 +42,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- CI skips the Playwright e2e job unless the repository variable `RUN_E2E` is `true`; e2e no longer gates releases (owner decision).
 - **community:** Inline honeypot migration sql and drop a dead branch ([c30b97c](https://github.com/AlexGalhardo/hexascore-app/commit/c30b97c469cc1e24ccabda74c8d440034fde716a))
 - **catalog:** Serve cover base through a shared prop instead of package state ([fe37067](https://github.com/AlexGalhardo/hexascore-app/commit/fe37067dea68bfe71f0ec999111f0b8a0eecdb6d))
 - **catalog:** Merge cover base without package state ([8bdfdf3](https://github.com/AlexGalhardo/hexascore-app/commit/8bdfdf36aa471e7c937252ec9903d9192ab4b6a9))
@@ -57,6 +50,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- `GET /covers/{key}` streams imported covers from the private bucket with `Cache-Control: public, max-age=31536000, immutable`; static demo SVGs still win.
+- Cover placeholder and half-star no longer emit inline `style` attributes (CSP `style-src-attr` violation, Lighthouse best-practices).
+- Passkey e2e uses a `localhost` origin whose port matches the QA stack (`APP_URL` follows `QA_PORT` in `docker-compose.yml`).
+- App client regenerated for the item `type` enum.
+- e2e specs aligned with the redesigned header; Biome `innerText` warnings removed.
 - **seeders:** Spread demo ratings over the whole star scale ([8f7995c](https://github.com/AlexGalhardo/hexascore-app/commit/8f7995c159feb4080d992be29f74472b6da0b7f3))
 - **auth:** Send a verified user without a nickname to the onboarding ([7d44927](https://github.com/AlexGalhardo/hexascore-app/commit/7d449273a496ca35313dd986b5106b8a9d240373))
 - **lists:** Noindex short lists and render unknown profiles with the shell ([469cf29](https://github.com/AlexGalhardo/hexascore-app/commit/469cf292424d1b3b84cbbd5cdfc13f8a1d5a7bb5))
