@@ -8,6 +8,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/AlexGalhardo/vukem/database"
 	"github.com/AlexGalhardo/vukem/queue"
 )
 
@@ -155,5 +156,44 @@ WHERE item_id = $1 AND action = 'deleted'`, applyItem).Scan(&deleted); err != ni
 	}
 	if n := len(queue.Dispatched[CatalogChanged](fake)); n != 1 {
 		t.Fatalf("catalog.changed jobs = %d", n)
+	}
+}
+
+func TestApplyCreateConcurrentQIDIsDuplicate(t *testing.T) {
+	db := openCommunityDB(t)
+	const id = "00000000-0000-7000-8000-00000000b009"
+	if _, err := db.ExecContext(
+		context.Background(),
+		`INSERT INTO suggestions
+(id, kind, target_type, target_domain, locale, changes, status, version, submitted_at)
+VALUES ($1, 'create', 'item', 'movie', 'en', $2::jsonb, 'in_review', 1, now())`,
+		id,
+		`{"title":{"before":null,"after":"Racing Film"},"external_ids.wikidata":{"before":null,"after":"Q4242"}}`,
+	); err != nil {
+		t.Fatal(err)
+	}
+
+	a, _ := newApplier(t, db)
+	done := make(chan error, 1)
+
+	// An ingest inserts the same Q-id and commits only after the apply has passed its lookup.
+	if err := db.Tx(context.Background(), func(tx *database.Tx) error {
+		if _, err := tx.ExecContext(context.Background(), `INSERT INTO items (id, type, slug, wikidata_qid)
+VALUES ('00000000-0000-7000-8000-00000000b0aa', 'movie', 'racing-film-ingest', 'Q4242')`); err != nil {
+			return err
+		}
+
+		go func() { done <- a.Approve(context.Background(), id, 1, ApproveOptions{}, adminActor) }()
+		time.Sleep(500 * time.Millisecond)
+
+		return nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	var p *Problem
+	if err := <-done; !errors.As(err, &p) || p.Code != "suggestion-duplicate" ||
+		p.ExistingID != "00000000-0000-7000-8000-00000000b0aa" {
+		t.Fatalf("approve err = %v, want 409 suggestion-duplicate with the ingested id", err)
 	}
 }
