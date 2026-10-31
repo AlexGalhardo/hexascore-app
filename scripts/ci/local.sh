@@ -305,7 +305,7 @@ job_lighthouse() {
 	"${c[@]}" run --rm --no-deps app-init
 	"${c[@]}" up -d --wait --no-deps --no-build app
 	step Lighthouse
-	E2E_BASE_URL="http://127.0.0.1:$port" CHROME_PATH="$chrome" bunx @lhci/cli@0.15.1 autorun
+	E2E_BASE_URL="http://127.0.0.1:$port" CHROME_PATH="$(W "$chrome")" bunx @lhci/cli@0.15.1 autorun
 }
 job_mobile() {
 	cd "$TREE"
@@ -333,12 +333,12 @@ launch() {
 	done
 }
 # Two waves: the JS test runners (vitest forks, jest 5 s timeouts) fail under the CPU load of
-# go -race and golangci-lint, so the Go-heavy jobs start once they are done. build keeps running.
-launch test-ts mobile vuln deps migrations build
+# go -race, golangci-lint and the Docker build, so those start once they are done.
+launch test-ts mobile vuln deps migrations
 for j in test-ts mobile; do
 	selected "$j" && while [ ! -f "$RUN/$j.rc" ]; do sleep 2; done
 done
-launch lint test-go test-go-integration setup-windows openapi lighthouse
+launch build lint test-go test-go-integration setup-windows openapi lighthouse
 log "running ${started[*]} (e2e excluded: owner, 2026-10-31)"
 wait
 
