@@ -16,3 +16,4 @@ The owner chose **v1 Editorial**. v2 Noir and v3 Paper are frozen: no more work 
 7. Mobile navbar: the four main categories (Games, Movies, TV Series, Books) spread with `justify-content: space-between` across the full width.
 8. Theme toggle icon: moon in light mode, sun in dark mode.
 9. Desktop alignment: every desktop frame uses the same content container as the navbar (same max width and side gutters). Breadcrumbs, hero, sections, side panels and footer all start and end on the navbar edges; nothing runs wider or sits offset. Check every 1440 frame, light and dark.
+10. Home (all breakpoints, light and dark): remove the intro hero text. The page starts directly with the Games section: 3 large cards with the trending games of the last 7 days, then a grid of other games below them. Movies, TV Series and Books follow in that order, each with the same pattern (3 trending cards, then other titles). Each section has a heading and a "see all" link to its listing.
