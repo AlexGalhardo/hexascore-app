@@ -63,6 +63,10 @@ func TestSaveDraft(t *testing.T) {
 		t.Fatalf("stale version: %v", err)
 	}
 
+	if _, _, err = SaveDraft(ctx, db, author, "not-a-uuid", 2, target, in, now); !errors.Is(err, ErrDraftNotFound) {
+		t.Fatalf("malformed id: %v, want ErrDraftNotFound", err)
+	}
+
 	if _, _, err = SaveDraft(ctx, db, other, id, 2, target, in, now); !errors.Is(err, ErrDraftNotFound) {
 		t.Fatalf("foreign draft: %v", err)
 	}
