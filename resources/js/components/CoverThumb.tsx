@@ -1,4 +1,7 @@
-export type CoverSize = "sm" | "md" | "lg";
+import { usePage } from "@inertiajs/react";
+import type { SharedProps } from "../types";
+
+export type CoverSize = "sm" | "md";
 
 export interface Cover {
 	thumb: string;
@@ -8,10 +11,9 @@ export interface Cover {
 const DIMENSIONS: Record<CoverSize, { width: number; height: number }> = {
 	sm: { width: 32, height: 48 },
 	md: { width: 44, height: 64 },
-	lg: { width: 144, height: 208 },
 };
 
-// CoverThumb is the list-row cover (32×48 or 44×64; "lg" 144×208 for the item page header), 96w/600w sources, lazy.
+// CoverThumb is the list-row cover: 32×48 or 44×64, 96w/600w sources, lazy.
 // The item page cover passes priority for eager loading with high fetch priority.
 // Without a cover it keeps the same box so the row does not shift.
 export default function CoverThumb({
@@ -26,6 +28,7 @@ export default function CoverThumb({
 	priority?: boolean;
 }) {
 	const { width, height } = DIMENSIONS[size];
+	const { coversBase } = usePage<SharedProps>().props;
 
 	if (!cover) {
 		return (
@@ -40,8 +43,8 @@ export default function CoverThumb({
 
 	return (
 		<img
-			src={size === "lg" ? cover.full : cover.thumb}
-			srcSet={`${cover.thumb} 96w, ${cover.full} 600w`}
+			src={`${coversBase}${cover.thumb}`}
+			srcSet={`${coversBase}${cover.thumb} 96w, ${coversBase}${cover.full} 600w`}
 			sizes={`${width}px`}
 			width={width}
 			height={height}

@@ -6,9 +6,6 @@ import (
 )
 
 func TestCoverURL(t *testing.T) {
-	SetCoversBase("")
-	t.Cleanup(func() { SetCoversBase("") })
-
 	if got := NewCover(sql.NullString{}, sql.NullString{}); got != nil {
 		t.Fatalf("no keys: got %+v, want nil placeholder", got)
 	}
@@ -21,11 +18,10 @@ func TestCoverURL(t *testing.T) {
 		t.Fatalf("same-origin key: got %q", got)
 	}
 
-	SetCoversBase("https://bucket.example/")
-	want := &Cover{Thumb: "https://bucket.example/covers/a-1-t.webp", Full: "https://bucket.example/covers/a-1.webp"}
+	want := &Cover{Thumb: "/covers/a-1-t.webp", Full: "/covers/a-1.webp"}
 	got := CoverFromThumbKey(new("covers/a-1-t.webp"))
 	if *got != *want {
-		t.Fatalf("bucket URL: got %+v, want %+v", got, want)
+		t.Fatalf("thumb-derived URLs: got %+v, want %+v", got, want)
 	}
 
 	only := NewCover(sql.NullString{}, sql.NullString{String: "covers/b-t.webp", Valid: true})
