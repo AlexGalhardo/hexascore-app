@@ -28,4 +28,5 @@ decisions:
 2. Trigram cap 500 per branch: `total` and the per-type counts of grouped mode (`(N)` next to each section heading, `total` in the JSON) become lower bounds only for broad queries. Pagination still reaches the 200-result ceiling. No copy promises an exact count today; the SDD now says totals are lower bounds. Follow-up if the owner wants it: show "N+" when a branch hits the cap.
 3. Residual risk: p95 345 ms (max 519 ms) on the synthetic 160k seed is above NFR-07-1 (300 ms at 20 rps); cold cache on Railway may add more. Re-measure with k6 on the real catalogue after the release.
 fixes: 1. SDD 07 records the cap, lower-bound totals, the transaction-local seqscan setting and the measured p95 (97d54e3) 2. golines on the scale test comment (1659419); branch agent/especialista/FIX-search-prod-slow-fix
-PRONTO_PARA_MERGE agent/especialista/FIX-search-prod-slow-fix
+gate on main after merge (1c95323): go build ok, golangci-lint (integration) 0 issues, bun lint/typecheck ok, vitest 27 files / 96 tests, go test -tags integration ./... exit 0
+PRONTO_PARA_MERGE agent/especialista/FIX-search-prod-slow-fix (merged 1c95323)
