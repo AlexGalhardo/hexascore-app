@@ -1,36 +1,43 @@
-# Handoff: especialista (2026-10-31, session 10)
+# Handoff: especialista (2026-10-31, session 11)
 
-Reason: ten reviews in this session (owner limit about 10). STATUS: HANDOFF.
+Reason: ten reviews plus the batch full gate (owner limit about 10). STATUS: HANDOFF.
 
 ## Done this session (local `main`, no push, no tag)
 
 | Row | Verdict | Merge |
 | --- | --- | --- |
-| REV-P5.A.3.3 | APROVADO (d5edc4e), P5.A.3.3 ticked (Maestro staging run pending) | 8faf53c |
-| REV-P5.A.3.4 | APROVADO (252dee7); box open until the Google picker runs on a device | 480ea87 |
-| REV-P5.A.3.5 | CORRIGIDO_E_APROVADO (in-flight rotate guard 5251e94); box open until FIX-mobile-root-wiring routes 426 | 9ed1f1d |
-| REV-P6.C.1.2 | CORRIGIDO_E_APROVADO (flush upsert sargable 69279ca, golines b14a8fd), ticked | daf9173 |
-| REV-FIX-moderator-2fa | CORRIGIDO_E_APROVADO (SDD 13 FR-13-5 names moderators) | 3e0cebb |
-| REV-P4.B.1.2 | APROVADO, ticked | 723955b |
-| REV-P4.B.1.3 | CORRIGIDO_E_APROVADO (uuid guards, bulk version by uuid c172a32), ticked | cf86ba3 |
-| REV-DESIGN-round-1 | APROVADO (0fb8e59, docs only) | 2b84e92 |
-| REV-P6.C.1.3 | APROVADO, ticked; new row FIX-trending-rollup-indexes (prio 2) | 8b84c6c |
-| REV-P6.C.2.2 | APROVADO, ticked; bench 10.2 s / 30 s; a14.yaml plausible, uid to confirm | 27e0ab7 |
+| REV-P3.A.1.4 (+P6.C.3.2) | CORRIGIDO_E_APROVADO (activity DB error no longer 404, 984e782); app client from a built image + sdks/ts + sdks/python (uv 0.9.30 container) regenerated 777b07a; inventory routes added later 4416ee1 | c9c0967 |
+| REV-P4.B.2.1 | APROVADO (registry.go conflict with trending jobs: both kept) | ea71ed5 |
+| REV-P4.B.2.2 | APROVADO | 057a96c |
+| REV-P4.B.2.3 | CORRIGIDO_E_APROVADO (create racing an ingest on the same Q-id: 409, not 500; test d36d45f) | f697974 |
+| REV-FIX-community-api-source | APROVADO | 88903ca~ |
+| REV-FIX-moderation-two-step (Q-A15) | CORRIGIDO_E_APROVADO (A01 also covers moderator 404 on item merge and affiliate routes, fe17eeb) | 2e89655 |
+| REV-DOC-sdd05-trending | APROVADO | see TASKS |
+| REV-FIX-lint-recommend-tests | APROVADO | see TASKS |
+| REV-P6.C.3.1 | CORRIGIDO_E_APROVADO (absent `trending` prop guard, ffddb58) | 3c87ec5 |
+| REV-FIX-trending-rollup-indexes | APROVADO (registry conflict resolved) | 08dd302 |
 
-Rows added or extended: FIX-trending-rollup-indexes (new), FIX-mobile-root-wiring (note: translate the "Device name" label and the "Update required" title).
+ROADMAP ticked: P3.A.1.4, P6.C.3.2, P4.B.2.1, P4.B.2.2, P4.B.2.3, P6.C.3.1.
 
-Gates on main after each merge (targeted): mobile lint/typecheck/test, `go test ./tests/i18n`, moderation and recommend integration tests, golangci with the integration tag on touched packages and `./tests/`: all green. No full gate this session: run one on main before the next release.
+## Full gate on main (batch, after the merges)
+
+- First run at 82c0091: golangci `./...` 0 issues; root `bun run lint && typecheck && test` ok; `apps/mobile` lint/typecheck/test ok; `go test -tags integration -parallel 4 -timeout 30m ./...` FAILED three ways, all fixed on `agent/especialista/FIX-gate-2026-10-31` (merged 499b911):
+  1. `TestPredeploy_ConcurrentRunsSerialise` hung (30 min timeout): vukem `Migrator.locked` waits in a blocking `pg_advisory_lock` statement whose snapshot the holder's `CREATE INDEX CONCURRENTLY` (new 190100..190400 migrations) waits on, on another pool connection, so no deadlock is detected. Production predeploy would hang on two overlapping deploys. App workaround: `app/console/predeploy.go` polls a try-lock first (`workaround(vukem): VF-NEW-migrator-lock-snapshot`); new row VF-NEW-migrator-lock-snapshot for senior-fw.
+  2. `TestSearchSQLConfined`: P4.B.2.2 wrote `search_dirty` in `app/jobs`; now `search.MarkDirty` / `search.IsDirty` in `internal/search/dirty.go`.
+  3. `TestAppCatalog` still expected 404 on `/app/v1/games/trending`.
+- Rerun at 499b911: `go test -tags integration -parallel 4 -timeout 30m ./...` → exit 0 (34 packages ok). Lint/bun/mobile not rerun (the fix is Go only; golangci on jobs, search, console, tests → 0 issues).
 
 ## Open
 
-1. NEXT: REV-P3.A.1.4 (+P6.C.3.2) at f70b11c, stacked on P6.C.2.2 (now merged). After the merge (orchestrator): regenerate `packages/app-client/src/api.ts` with `codegen:client` from a built image as `ci.yml` does, `sdks/ts` (`bun run sdk:generate`) and `sdks/python` (pinned uv container); the author's Windows codegen truncated the file and was reverted. OpenAPI goldens changed: run `scripts/openapi-check.sh` and `bun run openapi:lint`.
-2. Other REV rows in the queue: REV-P4.B.2.1 (6618eec) and anything new.
-3. The orchestrator is cutting the v0.12.2 search hotfix from `origin/main` in `wt/orch-hotfix-v0122`: do not touch `release/*`.
+1. REV-P6.D.1.1 (524cce3) and REV-P6.D.1.2 (6febd4f): MIGRATION ID COLLISION, both use `20261031190000`, already taken by `create_suggestion_reviews`; renumber (190500+) at merge. Report notes users.id bigint vs SDD text.
+2. REV-P4.B.2.4 (revert; check the route gates on `revertCatalog` and has a TestSecurity_A01), REV-P4.B.2.5 (deviates from BeforeSave), REV-P4.B.2.6: stacked, merge in order.
+3. Release: P4.B.2.x is releasable now that FIX-moderation-two-step is on main. Before the release PR run the ci.yml jobs locally (release gate). Owner: if Railway pins `CATALOG_API_SOURCES`, append `community`.
+4. ROADMAP P4.B rows that say "moderate" for approve should read `applySuggestion` (orchestrator).
 
 ## Pitfalls
 
-- Recheck `git log main..<branch>` against the reviewed SHA before every merge.
-- `golangci-lint` refuses to run while another worker's instance is running ("parallel golangci-lint is running"): retry in a loop with a 20 s sleep.
-- `git worktree remove` can fail with "Permission denied" on a locked folder: the worktree is unregistered anyway; delete the branch and `rm -rf` the folder later.
-- Senior worktrees are reused by the designer for new branches (`wt/designer-round-1` now holds `agent/designer/v1-editorial-web-catalog`): delete only the merged branch, not that worktree.
-- Main checkout has other workers' uncommitted files (`tsconfig.json`, `resources/js/vite-env.d.ts`, senior handoffs): stage only your own files.
+- Never trust the targeted run alone for route additions: run `-run Inventory` (P3.A.1.4 missed `route_inventory.txt`).
+- The orchestrator commits TASKS.md/CHANGELOG with whatever is in the working tree, mine included; TASKS.md is often dirty with their edits.
+- `wt/especialista-gate` is a reusable detached worktree with root node_modules (mobile installs there too); `git checkout --detach <sha>` before a gate.
+- `git worktree remove --force` on a worktree with node_modules takes minutes.
+- golangci "parallel golangci-lint is running": retry loop with 20 s sleeps, or `--allow-parallel-runners`.
