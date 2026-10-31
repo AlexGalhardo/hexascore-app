@@ -2145,7 +2145,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - `bunx --bun @lhci/cli@0.15.1 autorun` → LCP ≤ 2.0 s and CLS ≤ 0.05 still green with covers on `/games`
   - Notes: covers come from the legacy copy (P2.F.3) or the demo seeder (add 300 placeholder keys to DemoCatalog so screenshots and e2e see real images).
 
-- [ ] **P2.H.1.2** Rebuild the item page layout: cover and score badge in the header, details next to the synopsis, rating widget as the primary action above the fold on mobile, trailers and editions below.
+- [x] **P2.H.1.2** Rebuild the item page layout: cover and score badge in the header, details next to the synopsis, rating widget as the primary action above the fold on mobile, trailers and editions below.
   - Files/modules: `resources/js/pages/Catalog/Show.tsx`, `resources/js/components/item/RatingPanel.tsx`, `resources/js/components/rating/StarRating.tsx` (SVG stars, 44 px targets)
   - Refs: SDD 09 §6.2, §7.4, §7.5; audit A2, A19
   - Depends on: P2.H.1.1
