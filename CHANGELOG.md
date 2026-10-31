@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Report dialog on public profiles and public lists (`POST /reports`, reasons from SDD 14).
 - Dashboard page with links to the library, lists, public page and API keys, in the three locales.
 - Mobile header: brand, search and icon buttons on one row, sections on a scrollable row, account and language entries in a menu.
+- Item covers in every listing: home highlights, section listings, search results, library, lists and public profiles; `COVERS_BASE_URL` (same-origin `/covers` by default, a bucket or CDN https origin joins CSP `img-src`), a sized placeholder when an item has no cover, and placeholder covers for the demo catalogue.
 
 ### Changed
 
