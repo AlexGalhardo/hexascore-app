@@ -650,7 +650,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
 
 #### P1.C.7 Passkeys (D-06 amended 2026-10-29, ADR 0017)
 
-- [ ] **P1.C.7.1** Adopt the vukem release with VF-001 and wire passkey registration, sign-in and removal on the server.
+- [x] **P1.C.7.1** Adopt the vukem release with VF-001 and wire passkey registration, sign-in and removal on the server.
   - Files/modules: `go.mod` (vukem version with VF-001), `database/migrations/*_create_passkeys_table.go` (or the scaffold's), `routes/auth.go`, `app/accounts/passkeys.go`, `app/http/middleware/security_headers.go` (`publickey-credentials-get=(self), publickey-credentials-create=(self)`), `app/jobs/deletion_purge.go`, `tests/passkeys_test.go`
   - Refs: SDD 03 FR-03-20 to FR-03-24, §5, §7.8; SDD 13 (Permissions-Policy row); ADR 0017; VF-001; <https://vukem.dev/docs/security/two-factor> (passkey section once published)
   - Depends on: vukem release with VF-001 (owner releases it), P1.C.2.2
@@ -661,7 +661,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
     - `curl -sI http://127.0.0.1:3000/ | grep -i permissions-policy` → contains `publickey-credentials-create=(self)`
   - Notes: no app-local WebAuthn verifier or app-level dependency (ADR 0017); if the vukem API differs from SDD 03 §7.8, amend the SDD first. RP ID `hexascore.app` in production so imported legacy credentials verify. Independent especialista review before merge (auth).
 
-- [ ] **P1.C.7.2** Build the passkey UI: profile section and login button in three locales, plus the `passkey_changed` mail.
+- [x] **P1.C.7.2** Build the passkey UI: profile section and login button in three locales, plus the `passkey_changed` mail.
   - Files/modules: `resources/js/pages/Profile/Index.tsx` (section `passkeys`), `resources/js/pages/Auth/Login.tsx`, `resources/js/lib/webauthn.ts`, `lang/{en,pt-BR,es}.json`, `resources/views/mail/passkey_changed.html`
   - Refs: SDD 03 FR-03-20 to FR-03-24, §6.1, §6.5, §7.8; SDD 09; legacy `app/[locale]/profile/passkeys-section.tsx`, `app/[locale]/login/login-form.tsx`, `messages/*/account.json` `profile.passkeys`, `messages/*/auth.json` (`passkey`, `errors.passkeyFailed`)
   - Depends on: P1.C.7.1
@@ -2155,7 +2155,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - a saved rating shows a success toast (`Flash`) and the community score re-renders without a full page load
   - Notes: keep the six-category input; a star widget drawn with inline SVG replaces the text glyphs so half stars render the same on every platform.
 
-- [ ] **P2.H.1.3** Give the home page a first impression: hero with the value proposition, the four sections with covers, a "recently rated by members" strip, and the `Explore` call to action.
+- [x] **P2.H.1.3** Give the home page a first impression: hero with the value proposition, the four sections with covers, a "recently rated by members" strip, and the `Explore` call to action.
   - Files/modules: `resources/js/pages/Home/Index.tsx`, `app/controllers/home.go` (recent public ratings, 12 rows, cached 60 s)
   - Refs: SDD 09 §6.2 (`Home/Index`), SDD 08 §6 (trending arrives with P6.C; until then the strip is "recently rated"); `home.title`, `home.explore` catalogue keys
   - Depends on: P2.H.1.1
@@ -2704,7 +2704,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `./app community:stats:rebuild` on a seeded DB → no diff against live `contributor_stats`
   - Notes: command scaffolded with `vukem make:command`. `trusted_eligible` is computed but read by nothing in v1. Expired draft deletes its uploaded cover (§8).
 
-- [ ] **P4.A.2.4** Add the honeypot, burst limits, `POST /suggestions/uploads/cover`, and the `community.check_sources` / `community.cover_fetch` jobs over `httpclient.Safe`.
+- [x] **P4.A.2.4** Add the honeypot, burst limits, `POST /suggestions/uploads/cover`, and the `community.check_sources` / `community.cover_fetch` jobs over `httpclient.Safe`.
   - Files/modules: `app/community/abuse.go`, `app/community/uploads.go`, `app/jobs/check_sources.go`, `app/jobs/cover_fetch.go`, `tests/security_community_test.go`
   - Refs: SDD 04 §6 jobs, §7.2 covers, §7.3 honeypot and burst, NFR-04-4, §10 security tests; <https://vukem.dev/docs/digging-deeper/uploads>; <https://vukem.dev/docs/security/rate-limiting>
   - Depends on: P4.A.2.3
