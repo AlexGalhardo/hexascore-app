@@ -2,6 +2,7 @@ import { Link, router, usePage } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
 import FieldEditor from "../../components/community/FieldEditor";
 import { asText, editable, fieldLabel } from "../../components/community/fields";
+import ItemPicker from "../../components/community/ItemPicker";
 import Seo from "../../components/Seo";
 import { useT } from "../../lib/useT";
 
@@ -43,6 +44,8 @@ export default function SuggestCreate({
 	);
 	const [sourceId, setSourceId] = useState(asText(draft?.changes["*merge*"]?.before));
 	const [destId, setDestId] = useState(asText(draft?.changes["*merge*"]?.after));
+	const [sourceTitle, setSourceTitle] = useState("");
+	const [destTitle, setDestTitle] = useState("");
 	const [locale, setLocale] = useState(draft?.locale ?? "en");
 	const [note, setNote] = useState(draft?.note ?? "");
 	const [urls, setUrls] = useState((draft?.sourceUrls ?? []).join("\n"));
@@ -125,24 +128,28 @@ export default function SuggestCreate({
 				{kind === "merge" ? (
 					<>
 						<p className="text-sm">{t("community.create.mergeHelp", { domain })}</p>
-						<label className="block">
-							<span className="font-medium">{t("community.create.mergeSource")}</span>
-							<input
-								value={sourceId}
-								onChange={(e) => setSourceId(e.target.value)}
-								required
-								className={inputClass}
-							/>
-						</label>
-						<label className="block">
-							<span className="font-medium">{t("community.create.mergeDest")}</span>
-							<input
-								value={destId}
-								onChange={(e) => setDestId(e.target.value)}
-								required
-								className={inputClass}
-							/>
-						</label>
+						<ItemPicker
+							label={t("community.create.mergeSource")}
+							domain={domain}
+							id={sourceId}
+							title={sourceTitle}
+							changeLabel={t("community.create.change")}
+							onPick={(id, title) => {
+								setSourceId(id);
+								setSourceTitle(title);
+							}}
+						/>
+						<ItemPicker
+							label={t("community.create.mergeDest")}
+							domain={domain}
+							id={destId}
+							title={destTitle}
+							changeLabel={t("community.create.change")}
+							onPick={(id, title) => {
+								setDestId(id);
+								setDestTitle(title);
+							}}
+						/>
 					</>
 				) : (
 					fields
@@ -205,7 +212,11 @@ export default function SuggestCreate({
 						/>
 					</label>
 				</div>
-				<button type="submit" className="rounded-md border border-border px-3 py-1 text-sm">
+				<button
+					type="submit"
+					disabled={kind === "merge" && (sourceId === "" || destId === "")}
+					className="rounded-md border border-border px-3 py-1 text-sm disabled:opacity-60"
+				>
 					{t("community.saveDraft")}
 				</button>
 			</form>

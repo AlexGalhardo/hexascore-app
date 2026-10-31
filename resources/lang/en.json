@@ -1458,8 +1458,11 @@
       "newRecord": "New record",
       "reportDuplicate": "Report a duplicate",
       "mergeHelp": "Name the duplicate and the {domain} record to keep. Both must be the same type. A moderator decides.",
-      "mergeSource": "ID of the duplicate record",
-      "mergeDest": "ID of the record to keep"
+      "mergeSource": "Duplicate record",
+      "mergeDest": "Record to keep",
+      "change": "Change",
+      "link": "Suggest a new {type}",
+      "missing": "Cannot find it?"
     },
     "status": {
       "title": "Your suggestion",

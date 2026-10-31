@@ -100,3 +100,26 @@ test("my suggestions lists links and an empty state", () => {
 	render(<MySuggestions open suggestions={[]} />);
 	expect(screen.getByText("community.mine.empty")).toBeTruthy();
 });
+
+test("relation diff shows entity names, falling back to the id", () => {
+	render(
+		<SuggestionStatus
+			suggestion={{
+				...base,
+				changes: {
+					genres: {
+						add: [{ id: "g1" }, { id: "g2" }],
+						remove: [{ id: "g3", role: "cast" }],
+					},
+				},
+				names: { g1: "Metroidvania" },
+			}}
+			canAct
+			quota={quota}
+			open
+		/>,
+	);
+	expect(screen.getByText(/Metroidvania/)).toBeTruthy();
+	expect(screen.getByText("g2")).toBeTruthy();
+	expect(screen.getByText("g3 cast")).toBeTruthy();
+});

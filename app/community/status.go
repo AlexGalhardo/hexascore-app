@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
+	"strings"
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
@@ -14,23 +16,24 @@ import (
 // StatusView is everything Community/SuggestionStatus shows. Changes is the stored before/after (or add/remove)
 // per field; the page renders it as a text diff.
 type StatusView struct {
-	ID           string          `json:"id"`
-	AuthorID     sql.NullInt64   `json:"-"`
-	Kind         string          `json:"kind"`
-	TargetType   string          `json:"targetType"`
-	TargetID     *string         `json:"targetId"`
-	Domain       string          `json:"domain"`
-	Status       string          `json:"status"`
-	Version      int             `json:"version"`
-	Locale       string          `json:"locale"`
-	Note         string          `json:"note"`
-	SourceURLs   []string        `json:"sourceUrls"`
-	Changes      json.RawMessage `json:"changes"`
-	RejectReason *string         `json:"rejectReason"`
-	DecisionNote *string         `json:"decisionNote"`
-	SubmittedAt  *time.Time      `json:"submittedAt"`
-	CreatedAt    time.Time       `json:"createdAt"`
-	Events       []StatusEvent   `json:"events"`
+	ID           string            `json:"id"`
+	AuthorID     sql.NullInt64     `json:"-"`
+	Kind         string            `json:"kind"`
+	TargetType   string            `json:"targetType"`
+	TargetID     *string           `json:"targetId"`
+	Domain       string            `json:"domain"`
+	Status       string            `json:"status"`
+	Version      int               `json:"version"`
+	Locale       string            `json:"locale"`
+	Note         string            `json:"note"`
+	SourceURLs   []string          `json:"sourceUrls"`
+	Changes      json.RawMessage   `json:"changes"`
+	Names        map[string]string `json:"names"`
+	RejectReason *string           `json:"rejectReason"`
+	DecisionNote *string           `json:"decisionNote"`
+	SubmittedAt  *time.Time        `json:"submittedAt"`
+	CreatedAt    time.Time         `json:"createdAt"`
+	Events       []StatusEvent     `json:"events"`
 }
 
 // StatusEvent is one timeline entry.
@@ -49,7 +52,7 @@ func LoadStatus(ctx context.Context, db *database.DB, id string) (StatusView, er
 		return StatusView{}, ErrDraftNotFound
 	}
 
-	v := StatusView{Events: []StatusEvent{}}
+	v := StatusView{Events: []StatusEvent{}, Names: map[string]string{}}
 	var targetID, reject, decision, note sql.NullString
 	var submitted sql.NullTime
 	var urls []string
@@ -75,6 +78,10 @@ FROM suggestions WHERE id = $1`, id).Scan(&v.ID, &v.AuthorID, &v.Kind, &v.Target
 		v.SubmittedAt = &submitted.Time
 	}
 
+	if v.Names, err = changeNames(ctx, db, v.Changes); err != nil {
+		return StatusView{}, err
+	}
+
 	rows, err := db.QueryContext(ctx, `
 SELECT from_status::text, to_status::text, actor_role::text, reason, created_at
 FROM suggestion_events WHERE suggestion_id = $1 ORDER BY id`, id)
@@ -94,6 +101,70 @@ FROM suggestion_events WHERE suggestion_id = $1 ORDER BY id`, id)
 	}
 
 	return v, rows.Err()
+}
+
+// changeNames maps the entity and item ids a diff mentions (relation ops, merge pair) to display names, so the page
+// shows names instead of raw ids. Unknown ids are left out.
+func changeNames(ctx context.Context, db *database.DB, raw json.RawMessage) (map[string]string, error) {
+	var changes map[string]struct {
+		Before json.RawMessage `json:"before"`
+		After  json.RawMessage `json:"after"`
+		Add    []RelationOp    `json:"add"`
+		Remove []RelationOp    `json:"remove"`
+	}
+	names := map[string]string{}
+	if json.Unmarshal(raw, &changes) != nil {
+		return names, nil
+	}
+
+	seen := map[string]bool{}
+	for _, c := range changes {
+		cands := []string{}
+		for _, op := range append(slices.Clone(c.Add), c.Remove...) {
+			cands = append(cands, op.ID)
+		}
+		for _, r := range []json.RawMessage{c.Before, c.After} {
+			var id string
+			if json.Unmarshal(r, &id) == nil {
+				cands = append(cands, id)
+			}
+		}
+		for _, id := range cands {
+			seen[id] = uuidRe.MatchString(id)
+		}
+	}
+
+	ids := []any{}
+	marks := []string{}
+	for id, ok := range seen {
+		if ok {
+			ids = append(ids, id)
+			marks = append(marks, fmt.Sprintf("$%d", len(ids)))
+		}
+	}
+	if len(ids) == 0 {
+		return names, nil
+	}
+
+	in := strings.Join(marks, ",")
+	rows, err := db.QueryContext(ctx, `
+SELECT id::text, default_name FROM entities WHERE id::text IN (`+in+`)
+UNION ALL
+SELECT id::text, original_title FROM items WHERE original_title IS NOT NULL AND id::text IN (`+in+`)`, ids...)
+	if err != nil {
+		return nil, fmt.Errorf("community: load change names: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id, name string
+		if err := rows.Scan(&id, &name); err != nil {
+			return nil, fmt.Errorf("community: load change names: %w", err)
+		}
+		names[id] = name
+	}
+
+	return names, rows.Err()
 }
 
 func ptr(s sql.NullString) *string {

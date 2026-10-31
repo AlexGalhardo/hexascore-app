@@ -13,6 +13,19 @@ vi.mock("../../lib/useT", () => ({
 		p ? `${key} ${JSON.stringify(p)}` : key,
 }));
 vi.mock("../../components/Seo", () => ({ default: () => null }));
+vi.mock("../../components/search/SuggestBox", () => ({
+	default: ({
+		onPick,
+		label,
+	}: {
+		onPick: (s: { id: string; title: string }) => void;
+		label: string;
+	}) => (
+		<button type="button" onClick={() => onPick({ id: `pick-${label}`, title: `T ${label}` })}>
+			{label}
+		</button>
+	),
+}));
 vi.mock("@inertiajs/react", () => ({
 	Link: ({ href, children }: { href: string; children: ReactNode }) => (
 		<a href={href}>{children}</a>
@@ -65,7 +78,8 @@ test("merge posts the duplicate as target and the kept item as after; a draft pa
 			}}
 		/>,
 	);
-	expect((screen.getByDisplayValue("src-1") as HTMLInputElement).value).toBe("src-1");
+	expect(screen.getByText("src-1")).toBeTruthy();
+	expect(screen.getByText("dst-1")).toBeTruthy();
 	await userEvent.click(screen.getByRole("button", { name: "community.saveDraft" }));
 	expect(patch).toHaveBeenCalledWith(
 		"/suggestions/d1",
@@ -74,6 +88,30 @@ test("merge posts the duplicate as target and the kept item as after; a draft pa
 			targetId: "src-1",
 			version: 2,
 			changes: { "*merge*": { before: "src-1", after: "dst-1" } },
+		}),
+		expect.anything(),
+	);
+});
+
+test("merge picks both records with the search box and blocks submit until both are set", async () => {
+	render(<SuggestCreate open domain="movie" kind="merge" />);
+	const submit = screen.getByRole("button", { name: "community.saveDraft" }) as HTMLButtonElement;
+	expect(submit.disabled).toBe(true);
+	await userEvent.click(screen.getByRole("button", { name: "community.create.mergeSource" }));
+	await userEvent.click(screen.getByRole("button", { name: "community.create.mergeDest" }));
+	expect(screen.getByText("T community.create.mergeSource")).toBeTruthy();
+	expect(submit.disabled).toBe(false);
+	await userEvent.click(submit);
+	expect(post).toHaveBeenCalledWith(
+		"/suggestions",
+		expect.objectContaining({
+			targetId: "pick-community.create.mergeSource",
+			changes: {
+				"*merge*": {
+					before: "pick-community.create.mergeSource",
+					after: "pick-community.create.mergeDest",
+				},
+			},
 		}),
 		expect.anything(),
 	);

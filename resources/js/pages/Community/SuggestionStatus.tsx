@@ -20,6 +20,7 @@ interface Suggestion {
 	note: string;
 	sourceUrls: string[];
 	changes: Record<string, Change>;
+	names?: Record<string, string>;
 	rejectReason: string | null;
 	decisionNote: string | null;
 	events: {
@@ -44,15 +45,17 @@ const show = (v: unknown): string => {
 };
 
 // Text markers ("-" removed, "+" added) so the diff never relies on colour alone (NFR-04-6).
-function diffLines(c: Change): { sign: "-" | "+"; text: string }[] {
+function diffLines(c: Change, names: Record<string, string>): { sign: "-" | "+"; text: string }[] {
 	const out: { sign: "-" | "+"; text: string }[] = [];
+	const named = (v: unknown) =>
+		typeof v === "string" && names[v] ? `${names[v]} (${v})` : show(v);
 	if ("after" in c || "before" in c) {
-		out.push({ sign: "-", text: show(c.before) }, { sign: "+", text: show(c.after) });
+		out.push({ sign: "-", text: named(c.before) }, { sign: "+", text: named(c.after) });
 	}
-	for (const r of c.remove ?? [])
-		out.push({ sign: "-", text: [r.id, r.role].filter(Boolean).join(" ") });
-	for (const a of c.add ?? [])
-		out.push({ sign: "+", text: [a.id, a.role].filter(Boolean).join(" ") });
+	const label = (o: { id: string; role?: string }) =>
+		[names[o.id] ? `${names[o.id]} (${o.id})` : o.id, o.role].filter(Boolean).join(" ");
+	for (const r of c.remove ?? []) out.push({ sign: "-", text: label(r) });
+	for (const a of c.add ?? []) out.push({ sign: "+", text: label(a) });
 	return out;
 }
 
@@ -92,7 +95,7 @@ export default function SuggestionStatus({ suggestion: s, canAct, quota, open }:
 						<dt className="font-medium">{field}</dt>
 						<dd>
 							<ul className="font-mono text-sm">
-								{diffLines(c).map((l, i) => (
+								{diffLines(c, s.names ?? {}).map((l, i) => (
 									// biome-ignore lint/suspicious/noArrayIndexKey: static, ordered diff lines
 									<li key={i}>
 										<span aria-hidden="true">{l.sign} </span>

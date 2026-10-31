@@ -1458,8 +1458,11 @@
       "newRecord": "Nuevo registro",
       "reportDuplicate": "Informar un duplicado",
       "mergeHelp": "Indica el duplicado y el registro ({domain}) que debe quedar. Ambos deben ser del mismo tipo. Un moderador decide.",
-      "mergeSource": "ID del registro duplicado",
-      "mergeDest": "ID del registro que se conserva"
+      "mergeSource": "Registro duplicado",
+      "mergeDest": "Registro que se conserva",
+      "change": "Cambiar",
+      "link": "Sugerir nuevo/a {type}",
+      "missing": "¿No lo encuentras?"
     },
     "status": {
       "title": "Tu sugerencia",
