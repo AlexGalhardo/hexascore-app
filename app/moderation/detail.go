@@ -13,6 +13,7 @@ import (
 	"github.com/AlexGalhardo/vukem/uuid"
 
 	"github.com/AlexGalhardo/hexascore-app/app/community"
+	"github.com/AlexGalhardo/hexascore-app/app/metrics"
 )
 
 // RejectReasons are the reject_reason enum values (SDD 04 section 5).
@@ -160,12 +161,18 @@ func (q Queue) Reject(ctx context.Context, id string, version int, reason, note 
 			return err
 		}
 
-		_, err := tx.ExecContext(ctx, `UPDATE suggestions SET reject_reason = $2, decision_note = NULLIF($3, ''),
-decided_by = $4, decided_at = $5, assigned_to = NULL, claimed_at = NULL WHERE id = $1`,
-			id, reason, note, actor.ID, q.now())
-		if err != nil {
+		now := q.now()
+
+		var submitted sql.NullTime
+		if err := tx.QueryRowContext(ctx, `UPDATE suggestions SET reject_reason = $2, decision_note = NULLIF($3, ''),
+decided_by = $4, decided_at = $5, assigned_to = NULL, claimed_at = NULL WHERE id = $1 RETURNING submitted_at`,
+			id, reason, note, actor.ID, now).Scan(&submitted); err != nil {
 			return fmt.Errorf("moderation: record rejection: %w", err)
 		}
+
+		tx.AfterCommit(func(ctx context.Context) {
+			metrics.RecordSuggestionDecision(ctx, "rejected", now.Sub(submitted.Time))
+		})
 
 		if q.Jobs == nil {
 			return nil

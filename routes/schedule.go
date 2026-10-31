@@ -44,6 +44,8 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	s.Job(jobs.PruneWebhookDeliveries{}).DailyAt("04:40").WithoutOverlapping()
 	s.Job(jobs.ExpireExports{}).Hourly().WithoutOverlapping()
 	s.Job(jobs.CommunityHourly{}).Hourly().WithoutOverlapping()
+	// After the 04:00 score recompute, clear of the 04:30-04:50 prunes.
+	s.Job(jobs.CommunityAsserts{}).DailyAt("05:10").WithoutOverlapping()
 	s.Job(jobs.ExportIDs{}).DailyAt("07:00").WithoutOverlapping()
 	// backup.daily (SDD 11 §7.3 step 1): moves after the SDD 06 asserts once they exist (P6).
 	s.Command("backup:run", "--kind", "daily").DailyAt("06:00").In(saoPaulo).WithoutOverlapping()
