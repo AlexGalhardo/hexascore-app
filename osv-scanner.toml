@@ -21,3 +21,9 @@ reason = "glob is fixed in 14.0.2. @expo/config and jest-config depend on glob 1
 id = "GHSA-g3hv-75wg-m249"
 ignoreUntil = 2027-02-01
 reason = "minimatch is fixed in 11.0.1. The lockfile copies are 3.x, 9.x, and 10.x from glob and the React Native Jest preset. Dev tooling only."
+
+
+[[IgnoredVulns]]
+id = "GO-2026-5932"
+ignoreUntil = 2026-11-14
+reason = "golang.org/x/crypto 0.58.0 has no fixed release yet. govulncheck (2026-10-31) reports the vulnerable code is not called by this module (0 symbol results). Owner decision Q-A13: 14-day ignore, re-check and bump when upstream ships a fix."

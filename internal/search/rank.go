@@ -1,6 +1,7 @@
 package search
 
 import (
+	"strconv"
 	"strings"
 )
 
@@ -22,6 +23,14 @@ const itemGuard = `AND coalesce($1::text, '') IS NOT NULL AND coalesce($7::int, 
 var ftsConfigs = map[string]string{"en": "hs_en", "pt-BR": "hs_pt", "es": "hs_es"}
 
 var searchLocales = []string{"en", "pt-BR", "es"}
+
+// trigramCap bounds the rows one trigram branch contributes to the candidate set.
+const trigramCap = 500
+
+func trigramBranch(sel string) string {
+	return "(" + sel + `
+  ORDER BY word_similarity(hs_norm($2), title_norm) DESC LIMIT ` + strconv.Itoa(trigramCap) + ")"
+}
 
 const trigramGate = `length(hs_norm($2)) >= 3`
 
@@ -59,16 +68,19 @@ func itemCandidates(locale string, api, isbn bool) string {
 		)
 	}
 
+	// A short or common query matches tens of thousands of titles at the 0.2 threshold. Each trigram branch keeps
+	// only its trigramCap most similar rows, so the ranking below works on a bounded set. The totals of a query
+	// that hits the cap are therefore lower bounds, far above the 200 results a page can reach.
 	branches = append(branches,
-		`SELECT item_id, title_norm, title, 't', NULL::uuid, NULL::text, 0::real, false
+		trigramBranch(`SELECT item_id, title_norm, title, 't', NULL::uuid, NULL::text, 0::real, false
   FROM item_translations
-  WHERE `+trigramGate+` AND hs_norm($2) <% title_norm AND ($6::text[] IS NULL OR title_source = ANY($6))`,
-		`SELECT item_id, title_norm, title, 'a', NULL::uuid, NULL::text, 0::real, false
+  WHERE `+trigramGate+` AND hs_norm($2) <% title_norm AND ($6::text[] IS NULL OR title_source = ANY($6))`),
+		trigramBranch(`SELECT item_id, title_norm, title, 'a', NULL::uuid, NULL::text, 0::real, false
   FROM item_alt_titles
-  WHERE `+trigramGate+` AND hs_norm($2) <% title_norm AND ($6::text[] IS NULL OR source = ANY($6))`,
-		`SELECT work_id, title_norm, title, 'e', id, isbn13::text, 0::real, false
+  WHERE `+trigramGate+` AND hs_norm($2) <% title_norm AND ($6::text[] IS NULL OR source = ANY($6))`),
+		trigramBranch(`SELECT work_id, title_norm, title, 'e', id, isbn13::text, 0::real, false
   FROM editions
-  WHERE `+trigramGate+` AND hs_norm($2) <% title_norm AND ($6::text[] IS NULL OR source = ANY($6))`,
+  WHERE `+trigramGate+` AND hs_norm($2) <% title_norm AND ($6::text[] IS NULL OR source = ANY($6))`),
 	)
 
 	return strings.Join(branches, "\n  UNION ALL ")
@@ -105,33 +117,42 @@ func itemSQL(locale string, api, isbn, grouped, excluded bool) string {
     max(word_similarity(hs_norm($2), n)) AS sim, max(f) AS f
   FROM c GROUP BY item_id
 ), r AS (
-  SELECT i.id, i.type, i.slug, i.popularity_prior AS pop, i.release_date, dt.title,
+  SELECT i.id, i.type, i.slug, i.popularity_prior AS pop, i.release_date,
     b.t AS mt, b.k, b.eid, b.isbn, ` + itemRankSQL + ` AS rank
   FROM s
   JOIN b USING (item_id)
   JOIN items i ON i.id = s.item_id
-  JOIN LATERAL (
-    SELECT title FROM item_translations t
-    WHERE t.item_id = i.id AND ($6::text[] IS NULL OR t.title_source = ANY($6))
-    ORDER BY (t.locale = $5::text) DESC, (t.locale = 'en') DESC, t.locale
-    LIMIT 1
-  ) dt ON true
   WHERE i.visibility = 'public' AND ($3::text[] IS NULL OR i.type = ANY($3))
+   AND EXISTS (SELECT 1 FROM item_translations t
+     WHERE t.item_id = i.id AND ($6::text[] IS NULL OR t.title_source = ANY($6)))
    ` + exclusion + `
    ` + itemGuard + `
 )
 `
 
-	cols := `id::text, type, slug, title, mt, k, eid::text, isbn, rank`
+	// The display title is looked up after the page is cut: r can hold thousands of weak trigram candidates, and a
+	// per-candidate lookup there was the bulk of the cost at production size.
+	display := `JOIN LATERAL (
+  SELECT title FROM item_translations t
+  WHERE t.item_id = p.id AND ($6::text[] IS NULL OR t.title_source = ANY($6))
+  ORDER BY (t.locale = $5::text) DESC, (t.locale = 'en') DESC, t.locale
+  LIMIT 1
+) dt ON true`
+	cols := `p.id::text, p.type, p.slug, dt.title, p.mt, p.k, p.eid::text, p.isbn, p.rank`
+
 	if grouped {
-		return ranked + `SELECT ` + cols + `, total FROM (
-  SELECT r.*, row_number() OVER (PARTITION BY type ORDER BY ` + itemOrder + `) AS rn,
-    count(*) OVER (PARTITION BY type) AS total
-  FROM r
-) g WHERE rn <= 8 ORDER BY type, rn`
+		return ranked + `SELECT ` + cols + `, p.total FROM (
+  SELECT g.* FROM (
+    SELECT r.*, row_number() OVER (PARTITION BY type ORDER BY ` + itemOrder + `) AS rn,
+      count(*) OVER (PARTITION BY type) AS total
+    FROM r
+  ) g WHERE rn <= 8
+) p ` + display + ` ORDER BY p.type, p.rn`
 	}
 
-	return ranked + `SELECT ` + cols + `, count(*) OVER () AS total FROM r ORDER BY ` + itemOrder + ` LIMIT $7 OFFSET $8`
+	return ranked + `SELECT ` + cols + `, p.total FROM (
+  SELECT r.*, count(*) OVER () AS total FROM r ORDER BY ` + itemOrder + ` LIMIT $7 OFFSET $8
+) p ` + display + ` ORDER BY p.rank DESC, p.pop DESC, p.release_date DESC NULLS LAST, p.id`
 }
 
 // Entity placeholders: $1 match text, $2 kinds text[], $3 UI locale, $4 allowed sources (NULL = site), $5 limit,
