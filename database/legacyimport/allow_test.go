@@ -21,7 +21,8 @@ func TestIgnoreNoLoginDropsOnlyThatCheck(t *testing.T) {
 		"no_login_method": 1, "duplicate_emails": 2,
 	}}
 	_, err = legacyimport.IgnoreNoLogin(both, &legacyimport.PreflightError{Failures: both.Failures})
-	if err == nil || !strings.Contains(err.Error(), "duplicate_emails=2") || strings.Contains(err.Error(), "no_login_method") {
+	if err == nil || !strings.Contains(err.Error(), "duplicate_emails=2") ||
+		strings.Contains(err.Error(), "no_login_method") {
 		t.Fatalf("err = %v", err)
 	}
 
