@@ -89,6 +89,17 @@ func (h *Handlers) Verify(c *web.Ctx) error {
 
 	inertia.Flash(c, "status", h.a.T(c.Context(), "auth.email_verified"))
 
+	// A login before the verification skipped the nickname check in
+	// RedirectAfterLogin, so the onboarding has to be enforced here as well.
+	has, err := h.a.HasNickname(c.Context(), u.ID)
+	if err != nil {
+		return err
+	}
+
+	if !has {
+		return c.Redirect("/onboarding")
+	}
+
 	return c.Redirect("/dashboard")
 }
 
