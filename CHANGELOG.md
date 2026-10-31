@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Answer unknown `/app/v1` catalogue segments with 404 before auth, and point the CI OpenAPI export and `pg_dump` at Postgres 18.
 - Paint the cookie banner in the first HTML when consent is unset, and load the ratings dialog only after it is opened.
 - Trust the docker bridge in the OpenAPI scan so each Schemathesis call has its own rate-limit bucket, and keep the bun:test files out of vitest.
+- Stop commitlint from rejecting commit bodies that already exceed 100 characters.
 
 ## [0.11.0] - 2026-10-31
 
