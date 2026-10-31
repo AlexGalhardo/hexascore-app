@@ -4,6 +4,7 @@ import { type FormEvent, useState } from "react";
 import ChallengeStatus from "../../components/ChallengeStatus";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
+import SubmitButton from "../../components/SubmitButton";
 import { challengeHeaders } from "../../lib/challenge";
 import { checkConfirmation, checkPassword, passwordAdvice } from "../../lib/password-policy";
 import { useLocalized } from "../../lib/useLocalized";
@@ -35,7 +36,7 @@ export default function Signup({ formToken }: { formToken: string }) {
 		<>
 			<Head title={t("auth.signup.metaTitle")} />
 			<h1 className="mb-4 text-2xl font-semibold">{t("auth.signup.title")}</h1>
-			<form onSubmit={submit} className="space-y-4">
+			<form method="post" action={l("/signup")} onSubmit={submit} className="space-y-4">
 				{/* Honeypot: invisible to people and assistive tech, bots fill it. */}
 				<input
 					type="text"
@@ -83,13 +84,9 @@ export default function Signup({ formToken }: { formToken: string }) {
 					error={form.errors.password_confirmation}
 					checks={checkConfirmation(form.data.password, form.data.password_confirmation)}
 				/>
-				<button
-					type="submit"
-					disabled={form.processing}
-					className="rounded-md bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
-				>
+				<SubmitButton pending={form.processing || checking}>
 					{t("auth.signup.submit")}
-				</button>
+				</SubmitButton>
 				<ChallengeStatus checking={checking} />
 			</form>
 			<p className="mt-6 text-sm">
