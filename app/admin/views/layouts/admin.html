@@ -18,6 +18,7 @@
 			<a href="{{.Panel.Home}}">Dashboard</a>
 			{{range .Panel.Nav}}<a href="{{.URL}}"{{if .Active}} aria-current="page"{{end}}>{{.Label}}</a>{{end}}
 			{{with .Panel.FlagsURL}}<a href="{{.}}"{{if eq $.Title "Feature flags"}} aria-current="page"{{end}}>Feature flags</a>{{end}}
+			<a href="/admin/moderation"{{if eq $.Title "Moderation"}} aria-current="page"{{end}}>Moderation</a>
 			<a href="/admin/ingestion"{{if eq $.Title "Ingestion"}} aria-current="page"{{end}}>Ingestion</a>
 			{{with .Panel.AuditURL}}<a class="audit-link" href="{{.}}">Audit log</a>{{end}}
 		</nav>

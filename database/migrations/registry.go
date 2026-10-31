@@ -67,6 +67,6 @@ func All() []schema.Migration {
 		flags.Migration("20261031140000_create_feature_flags_table"),
 		webhook.Migrations("")[0],
 		m20261031120000CreatePasskeysTable(),
-		m20261031150000CreateTrendingTables(),
+		m20261031150000AllowModeratorRole(),
 	}
 }

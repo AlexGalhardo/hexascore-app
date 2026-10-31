@@ -17,6 +17,12 @@ import (
 var SubmissionsFlag = flags.Bool("community_submissions", false).
 	Describe("Accept community edit suggestions (SDD 04 §6); keep off until moderation is staffed")
 
+// TrustedModeratorsFlag lets the moderator role use the moderation queue (SDD 04 §6, D-15), default off. SDD 04 names
+// it community.trusted_moderators; the code name is community_trusted_moderators (env
+// FLAG_COMMUNITY_TRUSTED_MODERATORS).
+var TrustedModeratorsFlag = flags.Bool("community_trusted_moderators", false).
+	Describe("Let the moderator role use the moderation queue (SDD 04 §6); revert and locks stay admin-only")
+
 // ErrTargetNotFound is a suggest target that does not exist or is not public.
 var ErrTargetNotFound = errors.New("community: target not found")
 
