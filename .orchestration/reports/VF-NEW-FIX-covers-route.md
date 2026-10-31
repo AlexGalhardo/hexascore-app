@@ -22,3 +22,4 @@ checked: regression test runs S3 disk -> storage.HandlerWith -> If-None-Match 30
 fixes: 1. storage.mdx said "S3 disk (v0.33.0 and later)"; drivers/s3 is its own module and no `drivers/s3/*` tag contains #29, so the page now names `drivers/s3` releases after v0.3.1 (ca92aa48)
 app: no FIX row; the app needs a `drivers/s3` release (owner) and then an ADOPT bump; adoption waits Q-A14
 PR: #120
+PR: #120 squash 23cde35a (33/33)

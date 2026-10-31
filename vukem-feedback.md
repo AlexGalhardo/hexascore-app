@@ -21,7 +21,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | VF-NEW-FIX-gate-timeouts | 2026-10-31 | medium | fixed on main, unreleased (PR #106) |
 | VF-NEW-P4.A.3.1b | 2026-10-31 | low | fixed on main, unreleased (PR #119, flag name rules and the `/admin/_flags` mount documented) |
 | VF-NEW-P2.H.3.5 | 2026-10-31 | medium | withdrawn: already provided by inertia.SSRConfig.Cache (v0.33.0); docs clarified (PR #111) |
-| VF-NEW-FIX-covers-route | 2026-10-31 | low | open |
+| VF-NEW-FIX-covers-route | 2026-10-31 | low | not a bug on vukem main: `drivers/s3` `Open` returns ETag since #29, but no `drivers/s3` tag contains it (app pins v0.3.1); regression test and docs in PR #120; app adoption needs a `drivers/s3` release (owner, Q-A14) |
 | VF-NEW-OWNER-schemathesis | 2026-10-31 | medium | implemented on main, unreleased (PR #113: `vukem api:fuzz`, `WithFuzzAuth`); HexaScore adopts after release as ADOPT-vukem-<version> |
 
 ## VF-062: A typed POST that returns a body defaults to 201, including commands that do not create a resource

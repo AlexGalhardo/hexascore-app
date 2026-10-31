@@ -1,53 +1,48 @@
-# Handoff: especialista (2026-10-31, session 8)
+# Handoff: especialista (2026-10-31, session 9)
 
-Reason: twelve reviews and the worktree cleanup are done, and context is heavy. STATUS: HANDOFF.
+Reason: fifteen reviews in this session and the context is heavy. STATUS: HANDOFF.
 
 ## Done this session
 
-vukem (squash merges, every PR 33/33 green; no tag, no release):
+vukem (squash merges, 33/33 green each; no tag, no release):
 
 | Row | Verdict | PR | Squash |
 | --- | --- | --- | --- |
-| REV-VF-NEW-AUDIT-3 | CORRIGIDO_E_APROVADO (shell moved into `renderRoot` after #107; docs section moved out of the SSR bullet list) | #109 | 11761d20 |
-| REV-VF-NEW-AUDIT-5 | CORRIGIDO_E_APROVADO (guard test renamed `TestSecurity_A01_...`) | #110 | 7fb2cec4 |
-| REV-VF-NEW-P2.H.3.5 | APROVADO, VF withdrawn (`SSRConfig.Cache` exists) | #111 | 29d90fa0 |
-| REV-FW-docs-font-size | APROVADO (no overflow at 390 and 1440 px, measured with Playwright) | #112 | 17a3f955 |
-| REV-VF-NEW-OWNER-schemathesis | CORRIGIDO_E_APROVADO (digest pin, 0755/0644 mounts for the non-root image user, auth integration test; real Docker run ok) | #113 | 7ddace87 |
-| REV-FW-last-updated-check | APROVADO | #114 | 66234fb4 |
+| REV-VF-NEW-AUDIT-2 | APROVADO (app.go conflict with fuzzAuth resolved on the main merge) | #115 | 01ca804a |
+| REV-VF-NEW-AUDIT-4 | APROVADO | #116 | c7b5efe4 |
+| REV-VF-NEW-P2.H.3.1 | APROVADO | #117 | 7f9b9593 |
+| REV-VF-NEW-P5.A.3.1 | APROVADO | #118 | 01023abd |
+| REV-VF-NEW-P4.A.3.1b | APROVADO | #119 | 073fc0f7 |
+| REV-VF-NEW-FIX-covers-route | CORRIGIDO_E_APROVADO (storage.mdx named the root version v0.33.0; now `drivers/s3` releases after v0.3.1, ca92aa48) | #120 | 23cde35a |
 
-App (local `main`, targeted checks only per section 8.2):
+App (local `main`):
 
 | Row | Verdict | Merge |
 | --- | --- | --- |
-| REV-DOC-design-system | post-merge APROVADO, facts sampled, no fixes | f9aef56 (orchestrator) |
-| REV-FIX-community-problem-codes | APROVADO | afc0d43 |
-| REV-P4.A.3.2 | APROVADO; ROADMAP box waits QA-community-e2e | 639005a |
-| REV-P4.A.3.3 | APROVADO; ROADMAP box waits QA-community-e2e | 3314f11 |
-| REV-QA-ci-local-script | CORRIGIDO_E_APROVADO (committed `.pyc` removed, `__pycache__/` ignored); AGENTS.md Commands row and Release gate pointer | 43dd3b5 |
+| REV-FIX-search-timeout-500 | APROVADO | fe0f28d |
+| REV-P4.A.3.1d | CORRIGIDO_E_APROVADO (precision and role labels translated) | 9bda991 |
+| REV-FIX-nojs-428-page | CORRIGIDO_E_APROVADO (golines) | 4bf6057, 8772bf2 |
+| REV-P6.C.1.1 | APROVADO, ticked | d85897a |
+| REV-FIX-community-create-ux | CORRIGIDO_E_APROVADO (uuid lookup instead of `id::text IN`); r2 locale commits merged 7ebbc1a; P4.A.3.2 and P4.A.3.3 ticked (QA-community-e2e 12/12) | 7732fee, 7ebbc1a |
+| REV-P4.B.1.1 | CORRIGIDO_E_APROVADO (migration moved to 20261031160000, it collided with P6.C.1.1); views in app/admin/views accepted; ticked | 311e39b |
+| REV-P5.A.3.2 | APROVADO incl. late commit 7cc7586 (Q-B1 deps, ADR 0019); ticked | 2600b4a |
+| REV-FIX-mobile-login-test-timeout | APROVADO | 6d5708a |
+| REV-FIX-ssr-supervise-flake | APROVADO | b6c3fe8 |
+| (own) FIX-mobile-catalogues-sync | mobile catalogue copies regenerated after the web string changes | 0237ecc |
+| (own) FIX-gate-lint | 5 golangci issues in the new tests (golines, gci, gofumpt, rowserrcheck) | b344207 |
 
-Worktree cleanup (owner request):
-
-| Worktree | Action | Ref |
-| --- | --- | --- |
-| estagiario-FIX-i18n-untranslated | net zero; rows `merged`; branch deleted | tag checkpoint/FIX-i18n-untranslated-2026-10-31 |
-| especialista-ADOPT-VF-001 | HEAD is a main-into-branch merge; `git merge-tree main HEAD` = main tree; removed | tag checkpoint/ADOPT-VF-001-2026-10-31 |
-| especialista-P2.H.1.2 | same, removed | tag checkpoint/P2.H.1.2-2026-10-31 |
-| especialista-P2.H.1.3 | same, removed | tag checkpoint/P2.H.1.3-2026-10-31 |
-| especialista-P2.H.2.2 | same, removed | tag checkpoint/P2.H.2.2-2026-10-31 |
-| senior-P4.A.3.2, senior-P4.A.3.3, senior-QA-ci-local-script, senior-FIX-community-problem-codes | merged; worktrees and branches removed | see merges |
-| esp-fw-* (6 review worktrees) | PRs merged; removed | see PRs |
+Gates on main: batch 1 (f9bcb8f) all green. Batch 2 (311e39b): build, bun, vitest 27/96 and `go test -tags integration ./...` green, golangci 5 issues fixed in FIX-gate-lint; re-check after b344207 + 7ebbc1a: golangci 0 issues, bun lint/typecheck/test green, `./tests -run 'Community|RouteStackInventory'` and `tests/i18n` ok.
 
 ## Open
 
-1. NEXT: vukem PRs #115-#120 (REV rows 161-173 of TASKS.md): AUDIT-2 #115, AUDIT-4 #116, P2.H.3.1 #117, P5.A.3.1 #118, P4.A.3.1b #119 (one Windows job rerunning, failure `TestToolEnvDoesNotWaitForGrandchildren` is unrelated per senior-fw), FIX-covers-route #120. With #114 merged, a stale "Last updated" entry from a squash is tolerated; still, `main` requires the branch up to date (strict), so after each squash the next PR shows BEHIND: merge origin/main into it, push, wait for CI.
-2. #120 reconciliation is written in `reports/VF-NEW-FIX-covers-route.md`: the app pins the separate module `vukem/drivers/s3` at v0.3.1, and no `drivers/s3/*` tag contains #29 (the ETag in `Open`). No app FIX row: the fix needs a `drivers/s3` release (owner) and then an ADOPT bump. Write that in `vukem-feedback.md` when #120 merges.
-3. Full gate on main 6a0502c: build, golangci (integration), biome, tsc, vitest 26/91 green; `go test -tags integration ./...` failed only on `TestSecurity_A01_HexaRouteStackInventory` (five community routes from P4.A.3.2/3.3 missing from `tests/testdata/route_inventory.txt`). Fixed in b8195a6, merged 8942287; rerun of `./tests/...` on main is in the last section of `reports/P4.A.3.3.md`. Lesson: a targeted `-run Community` misses the route inventory; add `TestSecurity_A01_HexaRouteStackInventory` to the targeted set whenever routes change.
-4. Follow-ups from QA-ci-local-script for the orchestrator: osv-scanner GO-2026-5932 (golang.org/x/crypto 0.58.0) turns CI `deps` red; `app/ssr` TestSuperviseRestartsUntilCancelled flakes under load.
+1. NEXT: REV-P5.A.3.3, REV-P5.A.3.4, REV-P5.A.3.5 (senior), REV-DESIGN-round-1 (designer). All `todo`.
+2. P4.B.1.1 is on local main; no release before FIX-moderator-2fa (orchestrator row, senior-a). Its worktree `wt/senior-FIX-moderator-2fa` was cut from 49529f0 (old P4.B.1.1, migration 20261031150000): the author must merge `main` first, or the moderator migration comes back under the colliding timestamp.
+3. #120 adoption waits on Q-A14 (owner): the app pins `vukem/drivers/s3` v0.3.1 and the ETag fix needs a `drivers/s3` release, then an ADOPT bump. No app FIX row.
 
 ## Pitfalls
 
-- Owner rule 8.2: do not run vukem `task ci` locally. Review the diff, run the targeted tests, and rely on GitHub CI.
-- The golangci-lint lock is global even with a private TMP. Two of my own runs blocked each other.
-- A killed `fwci` bash leaves `task.exe` orphans that keep writing the same log. Do not trust a log that a killed run shared.
-- Leftover worktree folders: use `cmd /c rmdir /s /q`, which does not follow links. PowerShell 5.1 `Remove-Item -Recurse` can follow junctions such as bun's `node_modules`.
-- I did not touch the main checkout's uncommitted `tsconfig.json` or `resources/js/vite-env.d.ts`. `.orchestration/handoff/senior-*.md` are also modified there by other workers; commit named files only.
+- A REV branch can gain commits after the review (P5.A.3.2, FIX-community-create-ux). Before `git merge`, run `git log main..<branch>` and compare with the reviewed SHA.
+- Run golangci on `./tests/` (integration tag) for any row that adds tests; targeted package lint missed 5 issues.
+- Web string changes in `resources/lang` break `apps/mobile/src/i18n/keys.test.ts` until `bun run --cwd apps/mobile catalogues` is committed.
+- Leftover worktree folders after `git worktree remove` hold only bun junctions (no files). Delete the reparse points with `[System.IO.Directory]::Delete(path)` (does not follow), deepest first, then `rmdir /s /q`.
+- vukem: review worktrees are detached (`wt/esp-fw-<n>`) because senior-fw has the branches checked out; push with `HEAD:<branch>`. Helper scripts: scratchpad `upd.sh` (merge origin/main, regenerate last-updated, push) and `ci.sh` (wait for checks). Never commit while a merge is half-resolved: on #116 a conflicted `last-updated.json` reached the remote and needed a follow-up commit.
