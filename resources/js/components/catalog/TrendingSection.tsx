@@ -21,11 +21,12 @@ export default function TrendingSection({
 	list,
 }: {
 	type: Section["type"];
-	list: TrendingList;
+	list?: TrendingList;
 }) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
-	if (list.items.length === 0) return null;
+	// The prop is absent off Postgres (the home controller skips the snapshot read there).
+	if (!list || list.items.length === 0) return null;
 
 	const path = localized(`/${SECTION_PATHS[type]}`, locale);
 	const typeTitle = t(`catalog.title.${type}`);

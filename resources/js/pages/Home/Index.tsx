@@ -31,7 +31,7 @@ export default function Index({
 }: {
 	sections: Section[];
 	recent: RecentRating[];
-	trending: Record<Section["type"], TrendingList>;
+	trending: Partial<Record<Section["type"], TrendingList>>;
 }) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
