@@ -66,10 +66,9 @@ func (b *breakerState) record(now time.Time, failed bool) {
 }
 
 func (b *breakerState) open(now time.Time) {
-	switch {
-	case b.openFor == 0:
+	if b.openFor == 0 {
 		b.openFor = breakerBaseOpen
-	default:
+	} else {
 		b.openFor = min(b.openFor*2, breakerMaxOpen)
 	}
 
