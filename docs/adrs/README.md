@@ -22,3 +22,4 @@ Format: [MADR](https://adr.github.io/madr/) (title, status, context, decision, a
 | [0016](0016-bot-protection.md) | Bot and abuse protection without Vercel BotID | accepted |
 | [0017](0017-passkeys.md) | Passkeys return through vukem `auth` (VF-001) | accepted |
 | [0018](0018-nativewind.md) | NativeWind styles the Android app; tokens stay shared, components do not | accepted |
+| [0019](0019-mobile-runtime-dependencies.md) | Mobile runtime dependencies for auth, cache and media | accepted |
