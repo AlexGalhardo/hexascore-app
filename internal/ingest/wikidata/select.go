@@ -45,10 +45,16 @@ type Connector struct {
 	client *ingest.Client
 	// SparqlURL overrides SparqlURL; tests only.
 	SparqlURL string
+	// APIURL overrides APIURL; tests only.
+	APIURL string
+
+	refs *refs
 }
 
 // New returns a Connector for the public endpoint.
-func New(c *ingest.Client) *Connector { return &Connector{client: c, SparqlURL: SparqlURL} }
+func New(c *ingest.Client) *Connector {
+	return &Connector{client: c, SparqlURL: SparqlURL, APIURL: APIURL, refs: &refs{label: map[string]string{}}}
+}
 
 // Source names the connector in source_records.
 func (*Connector) Source() string { return "wikidata" }
