@@ -1468,7 +1468,10 @@
       "creators": "Creators",
       "organizations": "Organizations",
       "franchise": "Franchise",
-      "platforms": "Platforms"
+      "platforms": "Platforms",
+      "entity_kind": "Kind",
+      "work_id": "Book",
+      "language": "Language (code, e.g. en, pt-BR)"
     },
     "precision": {
       "label": "Precision",
@@ -1490,7 +1493,14 @@
       "mergeDest": "Record to keep",
       "change": "Change",
       "link": "Suggest a new {type}",
-      "missing": "Cannot find it?"
+      "missing": "Cannot find it?",
+      "targets": {
+        "label": "What to add",
+        "item": "Title",
+        "entity": "Person, company or tag",
+        "edition": "Book edition"
+      },
+      "choose": "Choose…"
     },
     "status": {
       "title": "Your suggestion",
@@ -1538,6 +1548,13 @@
         "system": "HexaScore",
         "user": "member"
       }
+    },
+    "entityKinds": {
+      "person": "Person",
+      "organization": "Organization",
+      "franchise": "Franchise",
+      "platform": "Platform",
+      "genre": "Genre"
     }
   },
   "forYou": {

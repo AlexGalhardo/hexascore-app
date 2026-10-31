@@ -20,10 +20,13 @@ interface Props {
 	open: boolean;
 	domain?: string;
 	kind?: "create" | "merge";
+	target?: "item" | "entity" | "edition";
 	fields?: string[];
 	quota?: { limit: number; used: number; left: number };
 	draft?: Draft | null;
 }
+
+const entityKinds = ["person", "organization", "franchise", "platform", "genre"];
 
 const inputClass =
 	"mt-1 block w-full rounded-md border border-zinc-300 bg-transparent px-3 py-2 dark:border-zinc-700";
@@ -32,6 +35,7 @@ export default function SuggestCreate({
 	open,
 	domain = "",
 	kind = "create",
+	target = "item",
 	fields = [],
 	quota,
 	draft,
@@ -48,6 +52,7 @@ export default function SuggestCreate({
 	const [destId, setDestId] = useState(asText(draft?.changes["*merge*"]?.after));
 	const [sourceTitle, setSourceTitle] = useState("");
 	const [destTitle, setDestTitle] = useState("");
+	const [workTitle, setWorkTitle] = useState("");
 	const [locale, setLocale] = useState(draft?.locale ?? "en");
 	const [note, setNote] = useState(draft?.note ?? "");
 	const [urls, setUrls] = useState((draft?.sourceUrls ?? []).join("\n"));
@@ -76,7 +81,7 @@ export default function SuggestCreate({
 		const body = {
 			kind,
 			domain,
-			targetKind: "item",
+			targetKind: kind === "merge" ? "item" : target,
 			targetId: kind === "merge" ? sourceId.trim() : "",
 			version: draft?.version ?? 0,
 			locale,
@@ -93,6 +98,15 @@ export default function SuggestCreate({
 	};
 
 	const errorList = Object.entries(errors ?? {});
+	const setEdit = (f: string, v: string) => setEdits((prev) => ({ ...prev, [f]: v }));
+	const has = (f: string) => fields.includes(f);
+	const missing =
+		kind === "merge"
+			? sourceId === "" || destId === ""
+			: ["entity_kind", "work_id", "language"].some(
+					(f) => has(f) && !(edits[f] ?? "").trim(),
+				);
+	const targets = domain === "book" ? ["item", "entity", "edition"] : ["item", "entity"];
 	const tab = (k: "create" | "merge", text: string) => (
 		<Link
 			href={l(`/suggest/new/${domain}?kind=${k}`)}
@@ -111,6 +125,20 @@ export default function SuggestCreate({
 				{tab("create", t("community.create.newRecord"))}
 				{tab("merge", t("community.create.reportDuplicate"))}
 			</nav>
+			{kind === "create" && (
+				<nav aria-label={t("community.create.targets.label")} className="mt-3 flex gap-2">
+					{targets.map((k) => (
+						<Link
+							key={k}
+							href={l(`/suggest/new/${domain}?kind=create&target=${k}`)}
+							aria-current={target === k ? "page" : undefined}
+							className={`rounded-md border px-3 py-1 text-sm ${target === k ? "border-text font-medium" : "border-border"}`}
+						>
+							{t(`community.create.targets.${k}`)}
+						</Link>
+					))}
+				</nav>
+			)}
 			{quota && (
 				<p data-testid="quota-left" className="mt-2 text-sm text-muted">
 					{t("community.quota", { left: quota.left, limit: quota.limit })}
@@ -154,9 +182,8 @@ export default function SuggestCreate({
 						/>
 					</>
 				) : (
-					fields
-						.filter(editable)
-						.map((f) => (
+					<>
+						{fields.filter(editable).map((f) => (
 							<FieldEditor
 								key={f}
 								label={f === "title" ? `${fieldLabel(t, f)} *` : fieldLabel(t, f)}
@@ -164,9 +191,53 @@ export default function SuggestCreate({
 								value={edits[f] ?? ""}
 								multiline={f.startsWith("synopsis.")}
 								lockedLabel={t("community.locked")}
-								onChange={(v) => setEdits((prev) => ({ ...prev, [f]: v }))}
+								onChange={(v) => setEdit(f, v)}
 							/>
-						))
+						))}
+						{has("entity_kind") && (
+							<label className="block">
+								<span className="font-medium">{`${fieldLabel(t, "entity_kind")} *`}</span>
+								<select
+									value={edits.entity_kind ?? ""}
+									onChange={(e) => setEdit("entity_kind", e.target.value)}
+									className={inputClass}
+								>
+									<option value="">{t("community.create.choose")}</option>
+									{entityKinds.map((k) => (
+										<option key={k} value={k}>
+											{t(`community.entityKinds.${k}`)}
+										</option>
+									))}
+								</select>
+							</label>
+						)}
+						{has("work_id") && (
+							<ItemPicker
+								label={`${fieldLabel(t, "work_id")} *`}
+								domain="book"
+								id={edits.work_id ?? ""}
+								title={workTitle}
+								changeLabel={t("community.create.change")}
+								onPick={(id, title) => {
+									setEdit("work_id", id);
+									setWorkTitle(title);
+								}}
+							/>
+						)}
+						{has("language") && (
+							<label className="block">
+								<span className="font-medium">{`${fieldLabel(t, "language")} *`}</span>
+								<input
+									value={edits.language ?? ""}
+									onChange={(e) => setEdit("language", e.target.value)}
+									placeholder="en, pt-BR"
+									pattern="[a-z]{2,3}(-[A-Z]{2})?"
+									maxLength={6}
+									className={inputClass}
+								/>
+							</label>
+						)}
+					</>
 				)}
 				<label className="block">
 					<span className="font-medium">{t("community.locale")}</span>
@@ -216,7 +287,7 @@ export default function SuggestCreate({
 				</div>
 				<button
 					type="submit"
-					disabled={kind === "merge" && (sourceId === "" || destId === "")}
+					disabled={missing}
 					className="rounded-md border border-border px-3 py-1 text-sm disabled:opacity-60"
 				>
 					{t("community.saveDraft")}

@@ -116,3 +116,72 @@ test("merge picks both records with the search box and blocks submit until both 
 		expect.anything(),
 	);
 });
+
+test("item creates offer entity and, for books, edition targets", () => {
+	const { unmount } = render(<SuggestCreate open domain="game" fields={["title"]} />);
+	expect(
+		screen.getByRole("link", { name: "community.create.targets.entity" }).getAttribute("href"),
+	).toBe("/suggest/new/game?kind=create&target=entity");
+	expect(screen.queryByRole("link", { name: "community.create.targets.edition" })).toBeNull();
+	unmount();
+	render(<SuggestCreate open domain="book" fields={["title"]} />);
+	expect(screen.getByRole("link", { name: "community.create.targets.edition" })).toBeTruthy();
+});
+
+test("entity create posts its kind and targetKind entity", async () => {
+	render(
+		<SuggestCreate
+			open
+			domain="game"
+			target="entity"
+			fields={["title", "cover", "entity_kind"]}
+		/>,
+	);
+	await userEvent.type(screen.getByLabelText(/community\.fields\.title \*/), "Douglas Adams");
+	await userEvent.selectOptions(
+		screen.getByLabelText(/community\.fields\.entity_kind/),
+		"person",
+	);
+	await userEvent.click(screen.getByRole("button", { name: "community.saveDraft" }));
+	expect(post).toHaveBeenCalledWith(
+		"/suggestions",
+		expect.objectContaining({
+			targetKind: "entity",
+			changes: {
+				title: { before: null, after: "Douglas Adams" },
+				entity_kind: { before: null, after: "person" },
+			},
+		}),
+		expect.anything(),
+	);
+});
+
+test("edition create picks its book and language and blocks submit until both are set", async () => {
+	render(
+		<SuggestCreate
+			open
+			domain="book"
+			target="edition"
+			fields={["title", "external_ids.isbn13", "work_id", "language"]}
+		/>,
+	);
+	const submit = screen.getByRole("button", { name: "community.saveDraft" }) as HTMLButtonElement;
+	expect(submit.disabled).toBe(true);
+	await userEvent.click(screen.getByRole("button", { name: "community.fields.work_id *" }));
+	await userEvent.type(screen.getByLabelText(/community\.fields\.language/), "pt-BR");
+	await userEvent.type(screen.getByLabelText(/community\.fields\.externalId/), "9780000000002");
+	expect(submit.disabled).toBe(false);
+	await userEvent.click(submit);
+	expect(post).toHaveBeenCalledWith(
+		"/suggestions",
+		expect.objectContaining({
+			targetKind: "edition",
+			changes: {
+				"external_ids.isbn13": { before: null, after: "9780000000002" },
+				work_id: { before: null, after: "pick-community.fields.work_id *" },
+				language: { before: null, after: "pt-BR" },
+			},
+		}),
+		expect.anything(),
+	);
+});
