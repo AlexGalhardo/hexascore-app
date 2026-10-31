@@ -107,7 +107,7 @@ export function LoginForm(props: LoginFormProps): ReactElement {
 				</>
 			) : null}
 			<TextInput
-				accessibilityLabel="Device name"
+				accessibilityLabel={t(locale, "auth.fields.deviceName")}
 				className={field}
 				maxLength={64}
 				onChangeText={setDeviceName}

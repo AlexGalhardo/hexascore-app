@@ -5,11 +5,13 @@ import { defaultDeviceName } from "../../src/auth/deviceName";
 import { LoginForm } from "../../src/auth/LoginForm";
 import { login } from "../../src/auth/login";
 import { apiBaseUrl, appClient, session } from "../../src/auth/runtime";
+import { useLocale } from "../../src/providers/root";
 
 export default function LoginScreen(): ReactElement {
+	const locale = useLocale();
 	return (
 		<LoginForm
-			locale="en"
+			locale={locale}
 			initialDeviceName={defaultDeviceName()}
 			submit={(input) =>
 				appClient.write(appClient.newIdempotencyKey(), (client) => login(client, input))

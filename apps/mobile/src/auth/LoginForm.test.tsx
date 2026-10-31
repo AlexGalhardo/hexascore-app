@@ -57,3 +57,16 @@ test("errors render as translated text", async () => {
 	await submitForm();
 	expect(await screen.findByText("Wrong email/nickname or password.")).toBeTruthy();
 });
+
+test("the device name field is labelled through the catalogues", async () => {
+	await render(
+		<LoginForm
+			locale="pt-BR"
+			initialDeviceName="HexaScore · Pixel"
+			submit={jest.fn()}
+			onSignedIn={jest.fn(async () => {})}
+			openWeb={jest.fn()}
+		/>,
+	);
+	expect(screen.getByLabelText("Nome do dispositivo")).toBeTruthy();
+});

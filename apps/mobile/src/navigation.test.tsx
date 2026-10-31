@@ -14,6 +14,7 @@ import ListScreen from "../app/lists/[id]";
 import UpdateRequired from "../app/update-required";
 import { getNetworkState, setNetworkState } from "./platform/network";
 import { storeListingUrl } from "./platform/store";
+import { LocaleProvider } from "./providers/root";
 
 jest.mock("expo-router", () => {
 	const React = require("react") as typeof import("react");
@@ -32,6 +33,9 @@ jest.mock("expo-router", () => {
 	}
 	Stack.Screen = function Screen(): null {
 		return null;
+	};
+	Stack.Protected = function Protected(props: { children?: ReactNode }): ReactNode {
+		return Frame(props);
 	};
 	return {
 		Stack,
@@ -97,4 +101,14 @@ test("platform boundary exposes network state and the Play listing", () => {
 	expect(getNetworkState()).toBe("offline");
 	setNetworkState("unknown");
 	expect(storeListingUrl()).toBe("market://details?id=app.hexascore");
+});
+
+test("update-required reads its title and logout label in the active locale", async () => {
+	await render(
+		<LocaleProvider locale="es">
+			<UpdateRequired />
+		</LocaleProvider>,
+	);
+	expect(screen.getByText("Actualización necesaria")).toBeTruthy();
+	expect(screen.getByText("Cerrar sesión")).toBeTruthy();
 });

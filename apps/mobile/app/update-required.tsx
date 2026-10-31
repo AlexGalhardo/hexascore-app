@@ -4,11 +4,15 @@ import { logout } from "../src/auth/logout";
 import { appClient, session } from "../src/auth/runtime";
 import { t } from "../src/i18n";
 import { storeListingUrl } from "../src/platform/store";
+import { useLocale } from "../src/providers/root";
 
 export default function UpdateRequiredScreen(): ReactElement {
+	const locale = useLocale();
 	return (
 		<View className="flex-1 items-center justify-center gap-4 bg-bg px-4 dark:bg-bg-dark">
-			<Text className="text-20 text-fg dark:text-fg-dark">Update required</Text>
+			<Text className="text-20 text-fg dark:text-fg-dark">
+				{t(locale, "account.updateRequired.title")}
+			</Text>
 			<Pressable accessibilityRole="link" onPress={() => void Linking.openURL(storeListingUrl())}>
 				<Text className="text-fg dark:text-fg-dark">{storeListingUrl()}</Text>
 			</Pressable>
@@ -20,7 +24,7 @@ export default function UpdateRequiredScreen(): ReactElement {
 					)
 				}
 			>
-				<Text className="text-fg dark:text-fg-dark">{t("en", "account.sessions.revoke")}</Text>
+				<Text className="text-fg dark:text-fg-dark">{t(locale, "account.sessions.revoke")}</Text>
 			</Pressable>
 		</View>
 	);

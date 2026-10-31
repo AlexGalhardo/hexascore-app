@@ -110,6 +110,9 @@
       "requested": "Exportação pedida. Você receberá um e-mail com o link em breve.",
       "cooldown": "Você pode pedir uma exportação a cada 7 dias. Tente de novo mais tarde.",
       "failed": "Não foi possível pedir a exportação. Tente de novo."
+    },
+    "updateRequired": {
+      "title": "Atualização necessária"
     }
   },
   "actions": {
@@ -246,7 +249,8 @@
       "name": "Nome",
       "show": "Mostrar senha",
       "hide": "Ocultar senha",
-      "confirmPassword": "Confirmar senha"
+      "confirmPassword": "Confirmar senha",
+      "deviceName": "Nome do dispositivo"
     },
     "rules": {
       "title": "Sua senha precisa ter:",
