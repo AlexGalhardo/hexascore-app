@@ -1,5 +1,3 @@
 # senior-a handoff
-Delivered this round (all in review): FIX-community-problem-codes, P4.A.3.2 (5b75cc0), P4.A.3.3 (8b841c0, stacked on 3.2).
-Next rows: P4.A.3.1d (SuggestEdit release_date and relation fields; reuse resources/js/components/community/fields.ts), then add and claim P4.B.1.1 and following code-only P4.B microtasks (check developer-manual-todos for owner gates).
-Not done: browser/QA-stack check and e2e runs for 3.2 and 3.3 (specs written: community-create, community-status; need E2E_COMMUNITY_OPEN=true and FLAG_COMMUNITY_SUBMISSIONS=true). Worktrees wt/senior-* remain until merge; worktree node_modules via bun install --frozen-lockfile.
-Pitfalls: bash heredocs with big mixed content sometimes fail to parse in the tool, use the Write tool; golangci-lint fmt/run refuse parallel runs and can exceed 120s (run in background); python text mode writes CRLF.
+Delivered (all in review, local commits only, worktrees wt/senior-<ID>): P4.A.3.1d (dcdd5e2), FIX-community-create-ux + QA-community-e2e (same branch, 12/12 e2e), P4.B.1.1 (report; includes users.role migration, specialist to confirm).
+Next: P4.B.1.2 (queue view) stacked on agent/senior/P4.B.1.1 (needs the moderate ability); add the board row first. Pitfalls: python open() defaults to cp1252 on Windows, pass encoding='utf-8' when inserting non-ASCII; vitest in worktrees takes 40-80 s; golangci-lint can exceed 120 s.

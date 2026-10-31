@@ -1,5 +1,5 @@
-# senior-b handoff (6th)
-- In review: FIX-mobile-login-test-timeout (agent/senior/FIX-mobile-login-test-timeout; jest.setup.ts preloads RN Text/View, cold first render 6.5 s -> 53 ms) and P5.A.3.2 part 1 (agent/senior/P5.A.3.2; SecureStore adapter pending Q-B1). REV rows added.
-- Blocked on owner: Q-B1 in docs/orchestration/QUESTIONS.md (expo-secure-store, expo-device, expo-auth-session, TanStack Query + persister + expo-sqlite, expo-image, expo-haptics). Almost every remaining P5.A.3.3..P5.B row needs one of them.
-- Next without new deps: P5.A.3.5 logic (rotate/logout against the Session port) if Q-B1 is still open; FIX-ssr-supervise-flake delivered.
-- Pitfalls: worktrees need bun install --frozen-lockfile; heredocs with backticks inside sed fail in this shell, use Write; cold Jest cache runs take 70 s.
+# senior-b handoff (7th)
+- Delivered, all in review with REV rows, one stacked chain: P5.A.3.2 (done; SecureStore vault + Q-B1 deps + ADR 0019) <- P5.A.3.3 (login) <- P5.A.3.4 (Google flow logic) <- P5.A.3.5 (rotate, logout, update screen). Merge in that order. Worktrees wt/senior-P5.A.3.{2,3,4,5}.
+- Next: P5.A.4.1 (TanStack Query + SQLite persister; deps are installed), then A.4.2, A.4.3, P5.B.x. Stack on agent/senior/P5.A.3.5.
+- Open follow-ups: root layout wiring (session.restore, startForegroundRotation, 426 redirect, auth gate); Google picker needs the owner's Android OAuth client id; Maestro/staging/real-device gates skipped.
+- Pitfalls: RNTL 14 render/fireEvent are async (await them); catalogues are generated from resources/lang (edit there, run `bun run catalogues`); worktrees need `bun install --frozen-lockfile`; Jest cold runs 30-70 s.

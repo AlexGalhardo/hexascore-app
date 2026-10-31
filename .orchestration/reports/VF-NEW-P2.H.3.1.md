@@ -18,3 +18,4 @@ re-run: `go test -count=1 -run 'TestEnumTag|TestFields|TestSchema' ./openapi/ ./
 checked: `enum` tag only feeds openapi.Fields (schema), runtime validation untouched (test: out-of-enum value answers 200); validate oneof wins; jsonrpc uses Fields only for names; docs
 fixes: branch merged origin/main, last-updated.json regenerated; no code change
 PR: #117
+PR: #117 squash 7f9b9593 (33/33)

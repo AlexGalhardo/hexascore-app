@@ -1,6 +1,6 @@
 # FIX-community-create-ux create/merge UX
 status: concluida
-branch: agent/senior/FIX-community-create-ux @ c186bcf
+branch: agent/senior/FIX-community-create-ux @ 68b17b6
 files: app/community/status.go, tests/community_status_test.go, resources/js/pages/Community/{SuggestCreate,SuggestionStatus}(.test).tsx, resources/js/pages/{Catalog,Search}/Index.tsx, resources/js/components/community/{ItemPicker,SuggestNewLink}(.test).tsx, resources/lang/{en,pt-BR,es}.json
 acceptance:
 - `go test -tags integration -run 'TestCommunityStatusNames|TestCommunitySubmitWithdrawFlow' ./tests/` -> ok (suggestion.names.<entity id> = default_name)
@@ -21,3 +21,9 @@ checked: ids validated by uuidRe and bound as parameters (no injection), names a
 fixes: 1. `changeNames` compared `id::text IN (...)`, which bypasses the primary key index on entities and items (sequential scan per status page view); now binds `$n::uuid` and compares `id` (6967690 on agent/especialista/FIX-community-create-ux-fix)
 follow-ups: pt-BR/es "Sugerir novo(a) {type}" reads awkwardly with a capitalised type mid-sentence (text pass); qa/e2e community-create.spec merge form inputs need the picker (QA-community-e2e)
 PRONTO_PARA_MERGE agent/especialista/FIX-community-create-ux-fix (merged 7732fee)
+
+## Round 2 (QA-community-e2e, same branch, head 68b17b6)
+- QA stack tag sa (port 3160), flags FLAG_COMMUNITY_SUBMISSIONS=true E2E_COMMUNITY_OPEN=true. First run: 4/12 pass (en only); pt-BR/es failed for real reasons found by the run.
+- Fixes: (1) community-create/status specs navigated without the locale prefix (now `${prefix}/...`); (2) app bug: in-page links (merge tab, my-suggestions, status) and router.post/patch targets dropped the locale, so a pt-BR visitor fell back to English after a click or a withdraw; now prefixed through new lib/useLocalized.ts.
+- Result: `bun run e2e specs/community-create.spec.ts specs/community-status.spec.ts` -> 12 passed (1.4m) (desktop+mobile x en/pt-BR/es, axe included). vitest community 13 tests ok, tsc/biome clean. Stack stopped, database dropped.
+- ROADMAP boxes P4.A.3.2 and P4.A.3.3 can be ticked once this merges.

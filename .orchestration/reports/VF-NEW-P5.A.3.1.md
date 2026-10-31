@@ -17,3 +17,4 @@ verdict: APROVADO
 re-run: `go test -count=1 -run 'Client|TS' ./openapi/` ok (golden clients updated)
 checked: `code?: string` plus `[extension: string]: unknown` index signature is compatible with every declared member; additive for consumers; docs table
 PR: #118
+PR: #118 squash 01023abd (33/33)
