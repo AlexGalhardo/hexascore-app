@@ -591,11 +591,9 @@
     "explore": "Explore",
     "recent": "Recently rated by members",
     "ratedBy": "by {name}",
-    "trending": {
-      "title": "Top 10 trending {type} (30 days)",
-      "popular": "Popular",
-      "popularType": "Popular {type}"
-    }
+    "trendingWeek": "Trending this week",
+    "popularType": "Popular {type}",
+    "popular": "Popular"
   },
   "footer": {
     "terms": "Terms",
@@ -1205,13 +1203,7 @@
       "emptyShelf": "Nothing here yet.",
       "previous": "Previous",
       "next": "Next",
-      "summary": "{ratings} ratings · {lists} lists",
-      "contributions": {
-        "title": "Contributions",
-        "summary": "{submitted} suggested · {approved} approved · {rejected} rejected",
-        "rate": "Approval rate {rate}",
-        "tier": "Tier: {tier} · accuracy {accuracy}"
-      }
+      "summary": "{ratings} ratings · {lists} lists"
     },
     "status": {
       "label": "Status",
@@ -1506,21 +1498,6 @@
         "edit": "Edit",
         "create": "New record",
         "merge": "Duplicate report"
-      }
-    },
-    "recent": {
-      "title": "Recent changes: {title}",
-      "back": "Back to the page",
-      "empty": "No changes yet.",
-      "merged": "merged a duplicate into this record",
-      "changedTo": "changed to",
-      "pages": "Recent changes pages",
-      "link": "Recent changes",
-      "actors": {
-        "team": "HexaScore team",
-        "deleted": "deleted user",
-        "system": "HexaScore",
-        "user": "member"
       }
     }
   },

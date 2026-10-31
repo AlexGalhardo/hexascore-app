@@ -98,8 +98,8 @@ WHERE i.type = $1 AND i.visibility = 'public' AND i.release_status = 'released'
       AND (release_date IS NULL OR release_date <= $2::date) ORDER BY popularity_prior DESC, id LIMIT $4))
 ORDER BY i.id, d`
 
-func candidates(ctx context.Context, tx *database.Tx, typ string, today time.Time) ([]Candidate, error) {
-	rows, err := tx.QueryContext(ctx, candidatesSQL, typ, today, WindowDays, ListSize)
+func candidates(ctx context.Context, q Querier, typ string, today time.Time, window int) ([]Candidate, error) {
+	rows, err := q.QueryContext(ctx, candidatesSQL, typ, today, window, ListSize)
 	if err != nil {
 		return nil, fmt.Errorf("trending candidates %s: %w", typ, err)
 	}
@@ -151,6 +151,20 @@ func candidates(ctx context.Context, tx *database.Tx, typ string, today time.Tim
 	return out, rows.Err()
 }
 
+// Window ranks the type over the last windowDays UTC days ending at the day of now and returns the first n entries
+// (trend ranks first, then the prior fill). Nothing is stored; the home page uses it with 7 days and 3 entries
+// (SDD 08 section 7.2 "Home window").
+func Window(ctx context.Context, q Querier, typ string, now time.Time, windowDays, n int) ([]Entry, error) {
+	cands, err := candidates(ctx, q, typ, now.UTC().Truncate(24*time.Hour), windowDays)
+	if err != nil {
+		return nil, err
+	}
+
+	entries, _ := Pick(cands)
+
+	return entries[:min(n, len(entries))], nil
+}
+
 // Snapshot writes the top lists for the hour of now, one transaction for the four types, so readers see either the
 // previous snapshot or the whole new one (SDD 08 §7.3). Running it again within the hour yields identical rows.
 func Snapshot(ctx context.Context, db *database.DB, now time.Time) error {
@@ -165,7 +179,7 @@ func Snapshot(ctx context.Context, db *database.DB, now time.Time) error {
 
 	err := db.Tx(ctx, func(tx *database.Tx) error {
 		for _, typ := range Types {
-			cands, err := candidates(ctx, tx, typ, today)
+			cands, err := candidates(ctx, tx, typ, today, WindowDays)
 			if err != nil {
 				return err
 			}

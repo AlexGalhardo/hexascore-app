@@ -147,3 +147,52 @@ func TestRebuildOnlyTouchesItsItems(t *testing.T) {
 	r.want(a, "2026-10-26", "ratings_new", 1, 1)
 	r.want(b, "2026-10-26", "ratings_new", 0, 0)
 }
+
+func TestWindowSevenDays(t *testing.T) {
+	r := newRig(t)
+
+	recent := make([]string, 4)
+	for i := range recent {
+		recent[i] = r.item()
+		r.activity(recent[i], today, 100, float64(6+i))
+	}
+
+	// Strong activity 20 days ago: inside the 30-day snapshot window, outside the 7-day one.
+	old := r.item()
+	r.activity(old, now.AddDate(0, 0, -20).Format(time.DateOnly), 5000, 40)
+
+	got, err := trending.Window(r.ctx, r.db, "game", now, 7, 3)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(got) != 3 {
+		t.Fatalf("got %d entries, want 3: %+v", len(got), got)
+	}
+
+	for i, e := range got {
+		if e.ID == old || e.Basis != "trend" || e.Rank != i+1 {
+			t.Fatalf("entry %d = %+v (old item %s must not rank, ranks are gapless)", i, e, old)
+		}
+	}
+
+	// The strongest recent item leads.
+	if got[0].ID != recent[3] {
+		t.Fatalf("first = %s, want %s", got[0].ID, recent[3])
+	}
+
+	// The 30-day window still sees the old activity.
+	wide, err := trending.Window(r.ctx, r.db, "game", now, 30, 10)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	found := false
+	for _, e := range wide {
+		found = found || (e.ID == old && e.Basis == "trend")
+	}
+
+	if !found {
+		t.Fatalf("30-day window lost the old item: %+v", wide)
+	}
+}

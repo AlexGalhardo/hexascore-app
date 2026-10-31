@@ -1,12 +1,21 @@
 import { Link, usePage } from "@inertiajs/react";
 import CoverThumb, { type Cover } from "../../components/CoverThumb";
 import ForYouListView, { type ForYouList } from "../../components/catalog/ForYouList";
-import SectionHighlights, { type Section } from "../../components/catalog/SectionHighlights";
-import TrendingSection, { type TrendingList } from "../../components/catalog/TrendingSection";
+import SectionHighlights, {
+	type Highlight,
+	type Section,
+} from "../../components/catalog/SectionHighlights";
 import Seo from "../../components/Seo";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
+
+interface TrendingEntry extends Highlight {
+	rank: number;
+	basis: "trend" | "prior";
+}
+
+type Trending = Partial<Record<Section["type"], { computedAt: string; items: TrendingEntry[] }>>;
 
 interface RecentRating {
 	id: string;
@@ -33,7 +42,7 @@ export default function Index({
 }: {
 	sections: Section[];
 	recent: RecentRating[];
-	trending: Partial<Record<Section["type"], TrendingList>>;
+	trending: Trending;
 	forYou?: Partial<Record<Section["type"], ForYouList>>;
 }) {
 	const t = useT();
@@ -85,6 +94,51 @@ export default function Index({
 						</ul>
 					</section>
 				)}
+				{(Object.keys(PATHS) as Section["type"][]).map((type) => {
+					const items = trending[type]?.items ?? [];
+					if (items.length === 0) return null;
+					const allPrior = items.every((i) => i.basis === "prior");
+					const label = t(`catalog.title.${type}`);
+					return (
+						<section
+							key={`trending-${type}`}
+							aria-labelledby={`home-trending-${type}`}
+							className="grid gap-3"
+						>
+							<h2 id={`home-trending-${type}`} className="text-2xl font-bold">
+								{allPrior
+									? t("home.popularType", { type: label })
+									: `${t("home.trendingWeek")}: ${label}`}
+							</h2>
+							<ol className="grid gap-3 sm:grid-cols-3">
+								{items.map((item) => (
+									<li key={item.id} className="flex items-center gap-3">
+										<span className="w-5 font-mono text-sm text-muted tabular-nums">
+											{item.rank}
+										</span>
+										<CoverThumb cover={item.cover} alt="" size="md" />
+										<div className="min-w-0 flex-1">
+											<Link
+												href={localized(
+													`/${PATHS[type]}/${item.slug}?from=trending`,
+													locale,
+												)}
+												className="block truncate font-medium"
+											>
+												{item.title}
+											</Link>
+											{item.basis === "prior" && !allPrior && (
+												<span className="text-xs text-muted">
+													{t("home.popular")}
+												</span>
+											)}
+										</div>
+									</li>
+								))}
+							</ol>
+						</section>
+					);
+				})}
 				{Object.entries(forYou ?? {}).map(([type, list]) => (
 					<section
 						key={`foryou-${type}`}
@@ -96,13 +150,6 @@ export default function Index({
 						</h2>
 						<ForYouListView type={type as Section["type"]} list={list} />
 					</section>
-				))}
-				{sections.map((section) => (
-					<TrendingSection
-						key={`t-${section.type}`}
-						type={section.type}
-						list={trending[section.type]}
-					/>
 				))}
 				{sections.map((section) => (
 					<SectionHighlights key={section.type} section={section} />
