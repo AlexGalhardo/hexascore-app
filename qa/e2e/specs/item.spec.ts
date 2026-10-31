@@ -29,6 +29,23 @@ test.describe("item page", () => {
 		});
 	}
 
+	test("header shows the cover and score badge; the rating panel is above the fold on mobile", async ({
+		page,
+		prefix,
+		t,
+	}, testInfo) => {
+		await openTopItem(page, prefix, "games");
+		const header = page.locator("article > header");
+		await expect(header.getByTestId("score-badge")).toBeVisible();
+		await expect(header.locator("img, [data-testid='cover-placeholder']")).toHaveCount(1);
+
+		if (testInfo.project.name.startsWith("mobile")) {
+			const heading = page.getByRole("heading", { name: t("item.communityScore") });
+			const box = await heading.boundingBox();
+			expect(box?.y ?? Infinity).toBeLessThan(page.viewportSize()?.height ?? 0);
+		}
+	});
+
 	test("a guest is asked to log in to rate", async ({ page, prefix, t }) => {
 		await openTopItem(page, prefix, "games");
 		await expect(page.getByText(t("item.loginToRate"))).toBeVisible();
