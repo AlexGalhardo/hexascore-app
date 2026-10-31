@@ -12,6 +12,7 @@ import (
 	"github.com/AlexGalhardo/vukem/errs"
 	"github.com/AlexGalhardo/vukem/orm"
 
+	"github.com/AlexGalhardo/hexascore-app/app/community"
 	"github.com/AlexGalhardo/hexascore-app/app/mail"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
@@ -282,6 +283,10 @@ func (a *Accounts) anonymiseTx(
 
 	if tx.Dialect().Name() == "postgres" {
 		if err := purgeUserData(ctx, tx, userID, now); err != nil {
+			return old, false, err
+		}
+
+		if err := community.ForgetUser(ctx, tx, userID); err != nil {
 			return old, false, err
 		}
 

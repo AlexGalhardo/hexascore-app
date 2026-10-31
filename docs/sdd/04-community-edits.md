@@ -338,8 +338,8 @@ Implementation: revert is admin-only (`revertCatalog`; the service also refuses 
 - Concurrent 3rd and 4th submit: the row lock admits one; the other gets 429.
 - Submit at 23:59:59.900 UTC counts for that day.
 - Admin edit while a suggestion is open: approve needs `confirm_stale`; audit stores the real `before`.
-- Target deleted or merged: open suggestions `expired` (`target_gone`), no stats impact.
-- Author banned or deleted: open suggestions withdrawn by system; audit stays.
+- Target deleted or merged: open suggestions `expired` (`target_gone`), no stats impact; the community merge does it in its transaction, admin and console merges in the `catalog.merged` job.
+- Author banned or deleted: open suggestions (draft, submitted, in_review) withdrawn by system with reason `author_banned` (listener on `accounts.UserBanned`) or `author_deleted` (inside the anonymisation transaction, which also nulls `author_id`, `assigned_to`, `decided_by`, `suggestion_events.actor_id`, `catalog_locks.locked_by` and deletes the user's `suggestion_reviews`); approved suggestions stay. `catalog_audit` is append-only, so its `actor_id` keeps pointing at the anonymized row, shown as "deleted user".
 - Lock added on open suggestions: approve 423 until unlocked.
 - Expired draft: its uploaded cover is deleted.
 - Mail down: the job retries; the in-app row is already committed.
