@@ -3665,7 +3665,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.C.3 Surfaces
 
-- [ ] **P6.C.3.1** Render the home trending sections: an eager SSR Inertia prop `trending` from `cache.NewMemory` (one query on a miss), the listing pattern, the "Popular" chip and title rule, and `?from=trending` links that the canonical URL drops.
+- [x] **P6.C.3.1** Render the home trending sections: an eager SSR Inertia prop `trending` from `cache.NewMemory` (one query on a miss), the listing pattern, the "Popular" chip and title rule, and `?from=trending` links that the canonical URL drops.
   - Files/modules: `app/web/home.go`, `resources/js/Pages/Home.tsx`, `resources/js/components/TrendingSection.tsx`, `tests/home_trending_test.go`, `qa/e2e/home.spec.ts`, `qa/k6/home.js`
   - Refs: SDD 08 §6 "Inertia props", FR-08-5, FR-08-6, FR-08-11, NFR-08-1; SDD 09; D-02; D-07; open issue 08-8; <https://vukem.dev/docs/digging-deeper/cache>
   - Depends on: P6.C.2.2

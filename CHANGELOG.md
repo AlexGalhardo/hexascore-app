@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **ui:** The home page shows a Top 10 trending (30 days) section per type from the hourly snapshot, with a Popular chip for prior entries (P6.C.3.1)
 - **community:** Moderators can apply community create requests and merge reports; a merge asks for the deleted item's typed title and expires its open suggestions (P4.B.2.3)
 - **community:** `catalog.changed` reindexes the edited item or entity and refreshes its sitemap `lastmod` once per audit row; child sitemaps print `<lastmod>` (P4.B.2.2)
 - **community:** Approving a community edit applies it to the catalogue in one transaction: per-field audit rows, provenance `community`, API change feed rows, stale flags on competing suggestions and a per-target lock with one deadlock retry (P4.B.2.1)
