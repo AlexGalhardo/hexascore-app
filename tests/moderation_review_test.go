@@ -137,3 +137,40 @@ FROM suggestion_reviews WHERE suggestion_id = $1 AND reviewer_id = $2`, id, modU
 	user.PostForm(path, url.Values{"version": {"1"}, "recommendation": {"approve"}}).AssertForbidden()
 	app.Client(t).PostForm(path, url.Values{"version": {"1"}, "recommendation": {"approve"}}).AssertRedirect("/login")
 }
+
+func TestSecurity_A01_ModeratorCannotApplyEntityCreate(t *testing.T) {
+	t.Parallel()
+
+	app := moderationApp(t, true)
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	const id = "00000000-0000-7000-8000-0000000000c9"
+	if _, err := db.ExecContext(t.Context(), `INSERT INTO suggestions
+(id, kind, target_type, target_domain, locale, changes, status, version, submitted_at)
+VALUES ($1, 'create', 'entity', 'movie', 'en', $2::jsonb, 'submitted', 1, now())`, id,
+		`{"title":{"before":null,"after":"Mod Made"},"entity_kind":{"before":null,"after":"person"}}`); err != nil {
+		t.Fatal(err)
+	}
+	entities := func() int {
+		var n int
+		if err := db.QueryRowContext(t.Context(), `SELECT count(*) FROM entities WHERE default_name = 'Mod Made'`).
+			Scan(&n); err != nil {
+			t.Fatal(err)
+		}
+		return n
+	}
+
+	mod := browserFor(t, app, makeUser(t, app, "r9-mod@example.com", models.RoleModerator, true))
+	mod.PostForm("/admin/moderation/"+id+"/approve", url.Values{"version": {"1"}}).AssertForbidden()
+	if n := entities(); n != 0 {
+		t.Fatalf("moderator created %d entities", n)
+	}
+
+	admin := browserFor(t, app, makeUser(t, app, "r9-admin@example.com", models.RoleAdmin, true))
+	admin.PostForm("/admin/moderation/"+id+"/approve", url.Values{"version": {"1"}}).AssertRedirect("/admin/moderation")
+	if n := entities(); n != 1 {
+		t.Fatalf("admin approve created %d entities", n)
+	}
+}

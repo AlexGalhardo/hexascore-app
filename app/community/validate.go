@@ -108,6 +108,15 @@ func validateField(in SuggestionInput, field string, change FieldChange, now tim
 	case "merge":
 		eff, err := textChange(field, change, idSchema)
 		return eff, false, err
+	case "create":
+		if in.Kind != "create" {
+			return false, false, invalid(field, "unknown")
+		}
+		schema := map[string]z.StringSchema{
+			"entity_kind": entityKindSchema, "work_id": uuidSchema, "language": languageSchema,
+		}[field]
+		eff, err := textChange(field, change, schema)
+		return eff, false, err
 	case "relation":
 		if err := validateRelation(field, change, in.TargetType); err != nil {
 			return false, false, err
@@ -130,6 +139,8 @@ func classify(field string) (string, string, string, error) {
 		return "cover", "", "", nil
 	case "*merge*":
 		return "merge", "", "", nil
+	case "entity_kind", "work_id", "language":
+		return "create", "", "", nil
 	case "genres", "creators", "organizations", "franchise", "platforms":
 		return "relation", "", "", nil
 	}
