@@ -2761,7 +2761,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P4.B.1 Admin moderation pages
 
-- [ ] **P4.B.1.1** Add the gate abilities `moderate`, `viewCatalogAudit`, `revertCatalog`, `lockCatalog`, the `community.trusted_moderators` flag, and an app-rendered page shell that reuses the vukem admin layout.
+- [x] **P4.B.1.1** Add the gate abilities `moderate`, `viewCatalogAudit`, `revertCatalog`, `lockCatalog`, the `community.trusted_moderators` flag, and an app-rendered page shell that reuses the vukem admin layout.
   - Files/modules: `app/admin/admin.go`, `app/admin/abilities.go`, `resources/views/admin/layouts/admin.html` (override), `resources/views/moderation/layout.html`, `routes/admin_moderation.go`, `tests/admin_moderation_gate_test.go`
   - Refs: SDD 04 §6 (pages as `html/template` views in the admin layout, abilities, flag); VF-008; open issue 04-5; <https://vukem.dev/docs/digging-deeper/admin> "Customizing the look", "Feature flags"; <https://vukem.dev/docs/basics/views>
   - Depends on: P4.A.4.1
@@ -2983,7 +2983,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile typecheck` → green against the generated `packages/app-client/src/api.ts` (no hand-written request types)
   - Notes: never edit the generated client by hand. Regenerate it with `vukem codegen:client -prefix /app/v1 -o packages/app-client/src/api.ts`, which runs in warmup mode. `EXPO_PUBLIC_*` holds only public values: the API base URL and the Google client id (SDD 10 §4).
 
-- [ ] **P5.A.3.2** Store the token in SecureStore and run the session state machine: 401 wipes the token and cache, 403 `account-banned` shows the reason and end date, 403 `email-not-verified` shows a banner, and `deletionScheduledAt` routes to the cancel screen.
+- [x] **P5.A.3.2** Store the token in SecureStore and run the session state machine: 401 wipes the token and cache, 403 `account-banned` shows the reason and end date, 403 `email-not-verified` shows a banner, and `deletionScheduledAt` routes to the cancel screen.
   - Files/modules: `apps/mobile/src/auth/tokenStore.ts`, `src/auth/session.ts`, `src/auth/session.test.ts`, `src/auth/noTokenInCache.test.ts`
   - Refs: SDD 10 §5 (SecureStore row), §6.2, §8 (token expired in background), FR-10-2; SDD 03 §7.4; [E1]
   - Depends on: P5.A.3.1
@@ -3613,7 +3613,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.C.1 Activity primitives
 
-- [ ] **P6.C.1.1** Create `item_activity_daily` and `trending_snapshots`, and extend the SDD 01 item merge to sum the source item's activity rows into the target.
+- [x] **P6.C.1.1** Create `item_activity_daily` and `trending_snapshots`, and extend the SDD 01 item merge to sum the source item's activity rows into the target.
   - Files/modules: `database/migrations/<ts>_create_trending_tables.go`, `app/catalog/merge.go`, `tests/recommend_merge_test.go`
   - Refs: SDD 08 §5, §8 (merged item); SDD 01 §7.5; open issue 08-3 (no exclusions table)
   - Depends on: P2.G

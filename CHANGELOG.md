@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **catalog:** `item_activity_daily` and `trending_snapshots` tables; merging items sums the source item's daily activity into the target (P6.C.1.1)
+- **mobile:** Token store in SecureStore (this device only) and session state machine (401 sign-out with data wipe, ban, unverified email, scheduled deletion); runtime dependencies approved in Q-B1 recorded in ADR 0019 (P5.A.3.2)
+- **admin:** Moderation gate abilities (`moderate`, `viewCatalogAudit`, `revertCatalog`, `lockCatalog`), the `community_trusted_moderators` flag (default off), the `moderator` role and the `/admin/moderation` page shell (P4.B.1.1)
+- **community:** "Suggest a new <type>" links on section listings and empty search results (FIX-community-create-ux)
 - **ui:** Anonymous catalogue HTML (home, listings, items, entities) is cached in process for 60 s, keyed by path, query, display cookies and, on unprefixed pages, `Accept-Language`, and sent with `Cache-Control: public, max-age=60, stale-while-revalidate=300`; the CSP nonce stays per request and session requests stay `private, no-store` (P2.H.3.5)
 - **lists:** List owners add items from the list edit page with a suggest box limited to the list type (P2.H.1.5)
 - **mobile:** Android API client wrapper with auth, version and locale headers, idempotency keys, problem-code mapping and minimum-version detection (P5.A.3.1)
@@ -19,10 +23,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **community:** The merge form picks both records with the search box instead of raw ids, and relation and merge diffs on the suggestion status page show names (FIX-community-create-ux)
 - **ui:** The library, public lists and profile ratings render shared shelf cards (cover, status, score); the library groups by status with counts (P2.H.1.4)
 
 ### Fixed
 
+- **auth:** A no-JS form post past the proof-of-work threshold gets an HTML 428 page offering Google sign-in instead of raw problem JSON (FIX-nojs-428-page)
+- **ssr:** The supervisor restart test no longer fails on a wall-clock deadline under load (FIX-ssr-supervise-flake)
+- **mobile:** The login navigation test no longer hits the Jest timeout on a cold cache (FIX-mobile-login-test-timeout)
 - **search:** A search backend timeout degrades to an empty results page with a notice (HTML) or a 503 problem with `Retry-After` (JSON) instead of HTTP 500 (FIX-search-timeout-500)
 - **api:** Community problem codes (`suggestion-*`, `field-locked`, `stale-before`, `invalid-transition`, `community-submissions-closed`, `validation`) resolve at `/problems/{code}` and are documented in the errors page (FIX-community-problem-codes)
 - **auth:** Login and signup forms post their named fields, the signed form token and `remember` without JavaScript (FIX-nojs-auth-post)

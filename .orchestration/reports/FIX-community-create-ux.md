@@ -13,3 +13,11 @@ risks / follow-ups:
 - qa/e2e/specs/community-create.spec.ts may fill the old id inputs of the merge form; QA-community-e2e row must adjust it.
 - Link shows on every listing even with the flag off (the page shows the closed notice); intentional, no flag in shared props.
 - Names come from entities.default_name / items.original_title, not localized.
+
+## Review (especialista, 2026-10-31)
+verdict: CORRIGIDO_E_APROVADO
+re-run: `go test -tags integration ./tests -run 'TestCommunityStatus|TestCommunitySubmitWithdrawFlow'` ok; `bunx vitest run resources/js/pages/Community resources/js/components/community resources/js/pages/Search` 4 files / 13 tests; tsc clean; biome clean; golangci-lint app/community 0 issues; `go test ./tests/i18n/...` ok
+checked: ids validated by uuidRe and bound as parameters (no injection), names are public catalogue data, merge picker limited to the domain, submit disabled until both records are set, i18n parity
+fixes: 1. `changeNames` compared `id::text IN (...)`, which bypasses the primary key index on entities and items (sequential scan per status page view); now binds `$n::uuid` and compares `id` (6967690 on agent/especialista/FIX-community-create-ux-fix)
+follow-ups: pt-BR/es "Sugerir novo(a) {type}" reads awkwardly with a capitalised type mid-sentence (text pass); qa/e2e community-create.spec merge form inputs need the picker (QA-community-e2e)
+PRONTO_PARA_MERGE agent/especialista/FIX-community-create-ux-fix (merged 7732fee)

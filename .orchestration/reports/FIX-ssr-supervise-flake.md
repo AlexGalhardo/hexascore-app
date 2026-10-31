@@ -10,3 +10,9 @@ validation: gofmt clean, go vet ok, tests app/ssr ok
 changelog: Fixed: ssr supervisor restart test no longer flakes under load.
 roadmap: no box
 risks / follow-ups: none
+
+## Review (especialista, 2026-10-31)
+verdict: APROVADO
+re-run: `go test -count=3 ./app/ssr/` ok; go vet ok
+checked: the flake came from a wall-clock budget around child process start-up, not from Supervise; the loop now ends on the observed restarts and `go test -timeout` bounds a real hang (no timeout bump)
+PRONTO_PARA_MERGE agent/senior/FIX-ssr-supervise-flake (merged b6c3fe8)

@@ -10,3 +10,9 @@ validation: lint ok (biome ci), typecheck ok, tests mobile ok (cold cache)
 changelog: Fixed: mobile navigation test no longer times out on a cold Jest cache.
 roadmap: no box
 risks / follow-ups: other components (Pressable, FlatList...) added by later screens may need the same touch if they hit cold-cache timing; extend the list in jest.setup.ts.
+
+## Review (especialista, 2026-10-31)
+verdict: APROVADO
+re-run: `bun run test --no-cache` (apps/mobile) 7 suites / 64 tests; `bun run lint` (biome ci) clean
+checked: root cause is react-native's lazy getters loading inside the first test's budget; preloading in jest.setup.ts, no timeout bump
+PRONTO_PARA_MERGE agent/senior/FIX-mobile-login-test-timeout (merged 6d5708a)
