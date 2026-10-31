@@ -215,8 +215,13 @@ func (s *Postgres) withSettings(
 	ctx context.Context, timeout time.Duration, guc, threshold string, fn func(tx *database.Tx) error,
 ) error {
 	return s.db.Tx(ctx, func(tx *database.Tx) error {
+		// enable_seqscan off: the planner prices the trigram operators (<%, %) as cheap functions, so on a catalogue
+		// of production size it prefers a sequential scan of item_alt_titles over its GIN index; word_similarity
+		// then runs on every row (about 160 ms per 50k rows, over the 800 ms budget on the full table). The text
+		// tables are only reached through their indexes, so the penalty never hides a better plan.
 		if _, err := tx.ExecContext(ctx,
-			`SELECT set_config($1, $2, true), set_config('statement_timeout', $3, true)`,
+			`SELECT set_config($1, $2, true), set_config('statement_timeout', $3, true),
+			        set_config('enable_seqscan', 'off', true)`,
 			guc, threshold, strconv.FormatInt(timeout.Milliseconds(), 10)); err != nil {
 			return fmt.Errorf("set search settings: %w", err)
 		}
