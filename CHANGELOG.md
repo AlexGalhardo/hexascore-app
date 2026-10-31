@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- CSR pages (profile, API keys, billing, notifications, library, lists) ship a server-rendered title and a busy skeleton, so the document is never blank before hydration.
+- `community.SaveDraft` creates and updates suggestion drafts with validation, ownership and version checks.
 - Daily `exports.ids` job (07:00 UTC) writing gzip NDJSON ID files per item type to the bucket and pruning files older than 90 days; not served until P3.A.4.2.
 - Login and signup submit buttons show a pending spinner while the page has not hydrated or a submit is in flight; both forms declare `method=post` and their action.
 - Report dialog on public profiles and public lists (`POST /reports`, reasons from SDD 14).
