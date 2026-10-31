@@ -100,7 +100,7 @@ export default function StarRating({ label, value, onChange, disabled = false }:
 				aria-valuenow={value ?? 0}
 				aria-valuetext={valueText}
 				aria-disabled={disabled}
-				className="flex min-h-11 flex-1 cursor-pointer items-center outline-offset-2 focus-visible:outline-2"
+				className="flex min-h-11 flex-1 cursor-pointer items-center text-xl outline-offset-2 focus-visible:outline-2"
 				onKeyDown={onKeyDown}
 				onPointerMove={(e) => !disabled && setHover(fromPointer(e))}
 				onPointerLeave={() => setHover(null)}
