@@ -49,7 +49,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/api/v1/{type_}".format(
+        "url": "/{type_}".format(
             type_=quote(str(type_), safe=""),
         ),
         "params": params,

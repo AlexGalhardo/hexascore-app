@@ -23,7 +23,7 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
  */
 export const listBookGenres = <ThrowOnError extends boolean = false>(options?: Options<ListBookGenresData, ThrowOnError>): RequestResult<ListBookGenresResponses, ListBookGenresErrors, ThrowOnError> => (options?.client ?? client).get<ListBookGenresResponses, ListBookGenresErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/books/genres',
+    url: '/books/genres',
     ...options
 });
 
@@ -32,7 +32,7 @@ export const listBookGenres = <ThrowOnError extends boolean = false>(options?: O
  */
 export const listBookTrending = <ThrowOnError extends boolean = false>(options?: Options<ListBookTrendingData, ThrowOnError>): RequestResult<ListBookTrendingResponses, ListBookTrendingErrors, ThrowOnError> => (options?.client ?? client).get<ListBookTrendingResponses, ListBookTrendingErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/books/trending',
+    url: '/books/trending',
     ...options
 });
 
@@ -41,7 +41,7 @@ export const listBookTrending = <ThrowOnError extends boolean = false>(options?:
  */
 export const listEditions = <ThrowOnError extends boolean = false>(options: Options<ListEditionsData, ThrowOnError>): RequestResult<ListEditionsResponses, ListEditionsErrors, ThrowOnError> => (options.client ?? client).get<ListEditionsResponses, ListEditionsErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/books/{id}/editions',
+    url: '/books/{id}/editions',
     ...options
 });
 
@@ -50,7 +50,7 @@ export const listEditions = <ThrowOnError extends boolean = false>(options: Opti
  */
 export const listChanges = <ThrowOnError extends boolean = false>(options?: Options<ListChangesData, ThrowOnError>): RequestResult<ListChangesResponses, ListChangesErrors, ThrowOnError> => (options?.client ?? client).get<ListChangesResponses, ListChangesErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/changes',
+    url: '/changes',
     ...options
 });
 
@@ -59,7 +59,7 @@ export const listChanges = <ThrowOnError extends boolean = false>(options?: Opti
  */
 export const getEntity = <ThrowOnError extends boolean = false>(options: Options<GetEntityData, ThrowOnError>): RequestResult<GetEntityResponses, GetEntityErrors, ThrowOnError> => (options.client ?? client).get<GetEntityResponses, GetEntityErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/entities/{id}',
+    url: '/entities/{id}',
     ...options
 });
 
@@ -68,7 +68,7 @@ export const getEntity = <ThrowOnError extends boolean = false>(options: Options
  */
 export const listEntityItems = <ThrowOnError extends boolean = false>(options: Options<ListEntityItemsData, ThrowOnError>): RequestResult<ListEntityItemsResponses, ListEntityItemsErrors, ThrowOnError> => (options.client ?? client).get<ListEntityItemsResponses, ListEntityItemsErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/entities/{id}/items',
+    url: '/entities/{id}/items',
     ...options
 });
 
@@ -77,7 +77,7 @@ export const listEntityItems = <ThrowOnError extends boolean = false>(options: O
  */
 export const getFranchise = <ThrowOnError extends boolean = false>(options: Options<GetFranchiseData, ThrowOnError>): RequestResult<GetFranchiseResponses, GetFranchiseErrors, ThrowOnError> => (options.client ?? client).get<GetFranchiseResponses, GetFranchiseErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/franchises/{id}',
+    url: '/franchises/{id}',
     ...options
 });
 
@@ -86,7 +86,7 @@ export const getFranchise = <ThrowOnError extends boolean = false>(options: Opti
  */
 export const listGameGenres = <ThrowOnError extends boolean = false>(options?: Options<ListGameGenresData, ThrowOnError>): RequestResult<ListGameGenresResponses, ListGameGenresErrors, ThrowOnError> => (options?.client ?? client).get<ListGameGenresResponses, ListGameGenresErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/games/genres',
+    url: '/games/genres',
     ...options
 });
 
@@ -95,7 +95,7 @@ export const listGameGenres = <ThrowOnError extends boolean = false>(options?: O
  */
 export const listGameTrending = <ThrowOnError extends boolean = false>(options?: Options<ListGameTrendingData, ThrowOnError>): RequestResult<ListGameTrendingResponses, ListGameTrendingErrors, ThrowOnError> => (options?.client ?? client).get<ListGameTrendingResponses, ListGameTrendingErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/games/trending',
+    url: '/games/trending',
     ...options
 });
 
@@ -104,7 +104,7 @@ export const listGameTrending = <ThrowOnError extends boolean = false>(options?:
  */
 export const lookupItem = <ThrowOnError extends boolean = false>(options?: Options<LookupItemData, ThrowOnError>): RequestResult<LookupItemResponses, LookupItemErrors, ThrowOnError> => (options?.client ?? client).get<LookupItemResponses, LookupItemErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/lookup',
+    url: '/lookup',
     ...options
 });
 
@@ -113,7 +113,7 @@ export const lookupItem = <ThrowOnError extends boolean = false>(options?: Optio
  */
 export const getUsage = <ThrowOnError extends boolean = false>(options?: Options<GetUsageData, ThrowOnError>): RequestResult<GetUsageResponses, GetUsageErrors, ThrowOnError> => (options?.client ?? client).get<GetUsageResponses, GetUsageErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/me/usage',
+    url: '/me/usage',
     ...options
 });
 
@@ -122,7 +122,7 @@ export const getUsage = <ThrowOnError extends boolean = false>(options?: Options
  */
 export const listMovieGenres = <ThrowOnError extends boolean = false>(options?: Options<ListMovieGenresData, ThrowOnError>): RequestResult<ListMovieGenresResponses, ListMovieGenresErrors, ThrowOnError> => (options?.client ?? client).get<ListMovieGenresResponses, ListMovieGenresErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/movies/genres',
+    url: '/movies/genres',
     ...options
 });
 
@@ -131,7 +131,7 @@ export const listMovieGenres = <ThrowOnError extends boolean = false>(options?: 
  */
 export const listMovieTrending = <ThrowOnError extends boolean = false>(options?: Options<ListMovieTrendingData, ThrowOnError>): RequestResult<ListMovieTrendingResponses, ListMovieTrendingErrors, ThrowOnError> => (options?.client ?? client).get<ListMovieTrendingResponses, ListMovieTrendingErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/movies/trending',
+    url: '/movies/trending',
     ...options
 });
 
@@ -140,7 +140,7 @@ export const listMovieTrending = <ThrowOnError extends boolean = false>(options?
  */
 export const getOrganization = <ThrowOnError extends boolean = false>(options: Options<GetOrganizationData, ThrowOnError>): RequestResult<GetOrganizationResponses, GetOrganizationErrors, ThrowOnError> => (options.client ?? client).get<GetOrganizationResponses, GetOrganizationErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/organizations/{id}',
+    url: '/organizations/{id}',
     ...options
 });
 
@@ -149,7 +149,7 @@ export const getOrganization = <ThrowOnError extends boolean = false>(options: O
  */
 export const getPerson = <ThrowOnError extends boolean = false>(options: Options<GetPersonData, ThrowOnError>): RequestResult<GetPersonResponses, GetPersonErrors, ThrowOnError> => (options.client ?? client).get<GetPersonResponses, GetPersonErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/people/{id}',
+    url: '/people/{id}',
     ...options
 });
 
@@ -158,7 +158,7 @@ export const getPerson = <ThrowOnError extends boolean = false>(options: Options
  */
 export const getPlatform = <ThrowOnError extends boolean = false>(options: Options<GetPlatformData, ThrowOnError>): RequestResult<GetPlatformResponses, GetPlatformErrors, ThrowOnError> => (options.client ?? client).get<GetPlatformResponses, GetPlatformErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/platforms/{id}',
+    url: '/platforms/{id}',
     ...options
 });
 
@@ -167,7 +167,7 @@ export const getPlatform = <ThrowOnError extends boolean = false>(options: Optio
  */
 export const searchItems = <ThrowOnError extends boolean = false>(options?: Options<SearchItemsData, ThrowOnError>): RequestResult<SearchItemsResponses, SearchItemsErrors, ThrowOnError> => (options?.client ?? client).get<SearchItemsResponses, SearchItemsErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/search',
+    url: '/search',
     ...options
 });
 
@@ -176,7 +176,7 @@ export const searchItems = <ThrowOnError extends boolean = false>(options?: Opti
  */
 export const searchEntities = <ThrowOnError extends boolean = false>(options?: Options<SearchEntitiesData, ThrowOnError>): RequestResult<SearchEntitiesResponses, SearchEntitiesErrors, ThrowOnError> => (options?.client ?? client).get<SearchEntitiesResponses, SearchEntitiesErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/search/entities',
+    url: '/search/entities',
     ...options
 });
 
@@ -185,7 +185,7 @@ export const searchEntities = <ThrowOnError extends boolean = false>(options?: O
  */
 export const listSeriesGenres = <ThrowOnError extends boolean = false>(options?: Options<ListSeriesGenresData, ThrowOnError>): RequestResult<ListSeriesGenresResponses, ListSeriesGenresErrors, ThrowOnError> => (options?.client ?? client).get<ListSeriesGenresResponses, ListSeriesGenresErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/series/genres',
+    url: '/series/genres',
     ...options
 });
 
@@ -194,7 +194,7 @@ export const listSeriesGenres = <ThrowOnError extends boolean = false>(options?:
  */
 export const listSeriesTrending = <ThrowOnError extends boolean = false>(options?: Options<ListSeriesTrendingData, ThrowOnError>): RequestResult<ListSeriesTrendingResponses, ListSeriesTrendingErrors, ThrowOnError> => (options?.client ?? client).get<ListSeriesTrendingResponses, ListSeriesTrendingErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/series/trending',
+    url: '/series/trending',
     ...options
 });
 
@@ -203,7 +203,7 @@ export const listSeriesTrending = <ThrowOnError extends boolean = false>(options
  */
 export const listWebhooks = <ThrowOnError extends boolean = false>(options?: Options<ListWebhooksData, ThrowOnError>): RequestResult<ListWebhooksResponses, ListWebhooksErrors, ThrowOnError> => (options?.client ?? client).get<ListWebhooksResponses, ListWebhooksErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/webhooks',
+    url: '/webhooks',
     ...options
 });
 
@@ -212,7 +212,7 @@ export const listWebhooks = <ThrowOnError extends boolean = false>(options?: Opt
  */
 export const createWebhook = <ThrowOnError extends boolean = false>(options: Options<CreateWebhookData, ThrowOnError>): RequestResult<CreateWebhookResponses, CreateWebhookErrors, ThrowOnError> => (options.client ?? client).post<CreateWebhookResponses, CreateWebhookErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/webhooks',
+    url: '/webhooks',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -225,7 +225,7 @@ export const createWebhook = <ThrowOnError extends boolean = false>(options: Opt
  */
 export const deleteWebhook = <ThrowOnError extends boolean = false>(options: Options<DeleteWebhookData, ThrowOnError>): RequestResult<DeleteWebhookResponses, DeleteWebhookErrors, ThrowOnError> => (options.client ?? client).delete<DeleteWebhookResponses, DeleteWebhookErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/webhooks/{id}',
+    url: '/webhooks/{id}',
     ...options
 });
 
@@ -234,7 +234,7 @@ export const deleteWebhook = <ThrowOnError extends boolean = false>(options: Opt
  */
 export const testWebhook = <ThrowOnError extends boolean = false>(options: Options<TestWebhookData, ThrowOnError>): RequestResult<TestWebhookResponses, TestWebhookErrors, ThrowOnError> => (options.client ?? client).post<TestWebhookResponses, TestWebhookErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/webhooks/{id}/test',
+    url: '/webhooks/{id}/test',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -247,7 +247,7 @@ export const testWebhook = <ThrowOnError extends boolean = false>(options: Optio
  */
 export const listItems = <ThrowOnError extends boolean = false>(options: Options<ListItemsData, ThrowOnError>): RequestResult<ListItemsResponses, ListItemsErrors, ThrowOnError> => (options.client ?? client).get<ListItemsResponses, ListItemsErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/{type}',
+    url: '/{type}',
     ...options
 });
 
@@ -256,7 +256,7 @@ export const listItems = <ThrowOnError extends boolean = false>(options: Options
  */
 export const getItem = <ThrowOnError extends boolean = false>(options: Options<GetItemData, ThrowOnError>): RequestResult<GetItemResponses, GetItemErrors, ThrowOnError> => (options.client ?? client).get<GetItemResponses, GetItemErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/{type}/{id}',
+    url: '/{type}/{id}',
     ...options
 });
 
@@ -265,6 +265,6 @@ export const getItem = <ThrowOnError extends boolean = false>(options: Options<G
  */
 export const getItemActivity = <ThrowOnError extends boolean = false>(options: Options<GetItemActivityData, ThrowOnError>): RequestResult<GetItemActivityResponses, GetItemActivityErrors, ThrowOnError> => (options.client ?? client).get<GetItemActivityResponses, GetItemActivityErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/api/v1/{type}/{id}/activity',
+    url: '/{type}/{id}/activity',
     ...options
 });

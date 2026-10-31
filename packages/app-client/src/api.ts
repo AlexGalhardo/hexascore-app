@@ -605,6 +605,11 @@ export interface Client {
   meExport(args?: { body?: MeExportBody }): Promise<unknown>;
 
   /**
+   * GET /app/v1/me/for-you
+   */
+  meForYou(): Promise<unknown>;
+
+  /**
    * GET /app/v1/me
    */
   meShow(): Promise<unknown>;
@@ -745,6 +750,7 @@ export function createClient(options: ClientOptions = {}): Client {
     meDeletionCancel: () => request<unknown>("DELETE", "/app/v1/me/deletion"),
     meDeletionSchedule: (args) => request<unknown>("POST", "/app/v1/me/deletion", args),
     meExport: (args) => request<unknown>("POST", "/app/v1/me/export", args),
+    meForYou: () => request<unknown>("GET", "/app/v1/me/for-you"),
     meShow: () => request<unknown>("GET", "/app/v1/me"),
     meUpdate: (args) => request<unknown>("PATCH", "/app/v1/me", args),
     notificationsIndex: () => request<unknown>("GET", "/app/v1/me/notifications"),

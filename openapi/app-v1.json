@@ -1060,6 +1060,25 @@
         }
       }
     },
+    "/app/v1/me/for-you": {
+      "get": {
+        "operationId": "me.for_you",
+        "summary": "me.for_you",
+        "responses": {
+          "4XX": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "default": {
+            "description": "Response",
+            "content": {
+              "*/*": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/app/v1/me/library": {
       "get": {
         "operationId": "library",
