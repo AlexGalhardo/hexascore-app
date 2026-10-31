@@ -42,7 +42,12 @@ const get = (path) =>
 	http.get(`${BASE}${path}`, {
 		headers: { "X-Forwarded-For": fakeIP(scenario.iterationInTest) },
 	});
-const ok = (res) => check(res, { "200": (r) => r.status === 200 });
+const ok = (res) =>
+	check(res, {
+		"200": (r) => r.status === 200,
+		// RenderCache (SDD 09 7.2): anonymous catalogue HTML is publicly cacheable.
+		"public cache": (r) => (r.headers["Cache-Control"] || "").startsWith("public, max-age=60"),
+	});
 
 export function home() {
 	ok(get("/"));
