@@ -1,5 +1,6 @@
 import { Link } from "@inertiajs/react";
 import Seo from "../../components/Seo";
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 interface Item {
@@ -13,6 +14,7 @@ interface Item {
 
 export default function MySuggestions({ suggestions }: { suggestions: Item[]; open: boolean }) {
 	const t = useT();
+	const l = useLocalized();
 
 	return (
 		<>
@@ -24,7 +26,7 @@ export default function MySuggestions({ suggestions }: { suggestions: Item[]; op
 				<ul className="mt-4 space-y-2">
 					{suggestions.map((s) => (
 						<li key={s.id}>
-							<Link href={`/suggestions/${s.id}`} className="underline">
+							<Link href={l(`/suggestions/${s.id}`)} className="underline">
 								{s.title ?? t(`community.mine.kinds.${s.kind}`)}
 							</Link>{" "}
 							<span className="text-sm text-muted">

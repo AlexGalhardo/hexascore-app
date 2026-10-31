@@ -12,11 +12,12 @@ vi.mock("@inertiajs/react", () => ({
 	Link: ({ href, children }: { href: string; children: ReactNode }) => (
 		<a href={href}>{children}</a>
 	),
+	usePage: () => ({ props: { locale: "pt-BR" } }),
 }));
 
 afterEach(cleanup);
 
 test("links to the create form of the domain", () => {
 	render(<SuggestNewLink domain="game" />);
-	expect(screen.getByRole("link").getAttribute("href")).toBe("/suggest/new/game");
+	expect(screen.getByRole("link").getAttribute("href")).toBe("/pt-br/suggest/new/game");
 });

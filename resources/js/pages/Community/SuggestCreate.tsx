@@ -4,6 +4,7 @@ import FieldEditor from "../../components/community/FieldEditor";
 import { asText, editable, fieldLabel } from "../../components/community/fields";
 import ItemPicker from "../../components/community/ItemPicker";
 import Seo from "../../components/Seo";
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 interface Draft {
@@ -36,6 +37,7 @@ export default function SuggestCreate({
 	draft,
 }: Props) {
 	const t = useT();
+	const l = useLocalized();
 	const { errors } = usePage<{ errors?: Record<string, string> }>().props;
 	const [edits, setEdits] = useState<Record<string, string>>(() =>
 		Object.fromEntries(
@@ -93,7 +95,7 @@ export default function SuggestCreate({
 	const errorList = Object.entries(errors ?? {});
 	const tab = (k: "create" | "merge", text: string) => (
 		<Link
-			href={`/suggest/new/${domain}?kind=${k}`}
+			href={l(`/suggest/new/${domain}?kind=${k}`)}
 			aria-current={kind === k ? "page" : undefined}
 			className={`rounded-md border px-3 py-1 text-sm ${kind === k ? "border-text font-medium" : "border-border"}`}
 		>
