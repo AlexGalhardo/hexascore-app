@@ -46,7 +46,7 @@ func makeUser(t *testing.T, app *vukemtest.App, email, role string, verified boo
 	}
 
 	// Admins need confirmed 2FA to reach /admin (SDD 13 FR-13-5, AdminGuard).
-	if role == models.RoleAdmin {
+	if role == models.RoleAdmin || role == models.RoleModerator {
 		ph := db.Dialect().Placeholder
 		if _, err := db.ExecContext(
 			t.Context(),
