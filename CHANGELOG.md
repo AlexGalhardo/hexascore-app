@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `POST /app/v1/client-errors` and `POST /app/v1/client-metrics` accept anonymous, CSRF-exempt reports and answer 204. An unknown field is 400. Bodies over 16 KiB or 4 KiB are 413. Rows stay 7 days and never store a user id, token id or e-mail.
 - Private `@hexascore/app-client` is generated from `openapi/app-v1.json`. CI checks that file is fresh, typechecks the package, and runs the app k6 gate.
 - Community submit allows a verified account at least 7 days old to send 3 suggestions per UTC day. The next one is 429 `suggestion-quota` until 00:00 UTC. Withdrawn submissions still count.
+- Community submit rejects a duplicate field (`suggestion-duplicate`), a live catalogue lock (`field-locked`), and a scalar `before` that is no longer current (`stale-before`). A different `after` from another author is kept and marked competing.
 - `/app/v1` stack: `hx_app_` guard, ban and verified checks, per-token read/write limits, `Idempotency-Key` on writes, and `426` below `APP_MIN_SUPPORTED_VERSION` (`DELETE /tokens/current` stays open).
 - Android Expo shell in `apps/mobile` (SDK 58, NativeWind, SDD 10 routes, shared tokens and bundled catalogues). The P5 checkboxes stay open until P3.C.5.2.
 - ADR 0018 and the Expo skills under `.claude/skills/`.
