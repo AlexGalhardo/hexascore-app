@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Item covers in every listing: home highlights, section listings, search results, library, lists and public profiles; `COVERS_BASE_URL` (same-origin `/covers` by default, a bucket or CDN https origin joins CSP `img-src`), a sized placeholder when an item has no cover, and placeholder covers for the demo catalogue.
 - Toast feedback after rating, status, time-to-beat, list and edition changes, and an explanation on `/user/two-factor` when the admin area redirected there (en, pt-BR, es).
 - `type` enum (`games`, `movies`, `series`, `books`) in the OpenAPI documents and the TypeScript SDK.
+- `hexascore:import-legacy --allow-no-login` opts in to users with no password, Google link or passkey; duplicate emails and a two-factor flag without a row still abort.
 
 ### Changed
 
@@ -43,6 +44,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - The admin ingestion and item-manage pages show the same sidebar as the admin panel.
 - Gate reliability on loaded hosts: vitest worker cap and Postgres `fsync` off in the dev compose.
 - Account purge deletes private lists and notifications, clears public list free text and closes reports about the user (SDD 14 section 8).
+- The legacy catalogue import stores a runtime or page count only when it fits the items check; out-of-range values become empty instead of aborting the batch.
 - Ignore four transitive Expo and Jest advisories that have no compatible patched release.
 - Let the pull request title `Release x.y.z` pass commitlint. The commit subjects stay conventional.
 - Freeze the clock in `TestSecurity_A07_HexaHoneypotAndFillTime`, so a slow proof-of-work solve under `-race` no longer ages the "too fast" form token past the minimum fill time.
