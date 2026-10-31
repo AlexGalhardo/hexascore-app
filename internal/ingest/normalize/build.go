@@ -90,35 +90,9 @@ type Item struct {
 // now only decides announced versus released. It returns ErrNoWikidata or
 // ErrNoEnglishTitle when the item must be skipped.
 func BuildItem(qid string, recs []store.Record, now time.Time) (*Item, error) {
-	bySource := map[string]json.RawMessage{}
-
-	for _, r := range recs {
-		if r.ExternalID == qid {
-			bySource[r.Source] = r.Payload
-		}
-	}
-
-	raw, ok := bySource["wikidata"]
-	if !ok {
-		return nil, ErrNoWikidata
-	}
-
-	var wd wikidata.Payload
-	if err := json.Unmarshal(raw, &wd); err != nil {
-		return nil, fmt.Errorf("decode wikidata payload of %s: %w", qid, err)
-	}
-
-	summaries := map[string]wikipedia.Payload{}
-
-	for _, l := range locales {
-		if r, ok := bySource["wikipedia:"+l.wiki]; ok {
-			var p wikipedia.Payload
-			if err := json.Unmarshal(r, &p); err != nil {
-				return nil, fmt.Errorf("decode wikipedia:%s payload of %s: %w", l.wiki, qid, err)
-			}
-
-			summaries[l.wiki] = p
-		}
+	wd, summaries, err := decode(qid, recs)
+	if err != nil {
+		return nil, err
 	}
 
 	titles := buildTitles(wd, summaries)
@@ -326,4 +300,41 @@ func buildMeta(wd wikidata.Payload) Meta {
 	}
 
 	return m
+}
+
+// decode picks the wikidata payload and the wikipedia summaries of qid out of
+// its records, in any order.
+func decode(qid string, recs []store.Record) (wikidata.Payload, map[string]wikipedia.Payload, error) {
+	bySource := map[string]json.RawMessage{}
+
+	for _, r := range recs {
+		if r.ExternalID == qid {
+			bySource[r.Source] = r.Payload
+		}
+	}
+
+	raw, ok := bySource["wikidata"]
+	if !ok {
+		return wikidata.Payload{}, nil, ErrNoWikidata
+	}
+
+	var wd wikidata.Payload
+	if err := json.Unmarshal(raw, &wd); err != nil {
+		return wikidata.Payload{}, nil, fmt.Errorf("decode wikidata payload of %s: %w", qid, err)
+	}
+
+	summaries := map[string]wikipedia.Payload{}
+
+	for _, l := range locales {
+		if r, ok := bySource["wikipedia:"+l.wiki]; ok {
+			var p wikipedia.Payload
+			if err := json.Unmarshal(r, &p); err != nil {
+				return wikidata.Payload{}, nil, fmt.Errorf("decode wikipedia:%s payload of %s: %w", l.wiki, qid, err)
+			}
+
+			summaries[l.wiki] = p
+		}
+	}
+
+	return wd, summaries, nil
 }
