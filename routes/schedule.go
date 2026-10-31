@@ -27,6 +27,7 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	s.Job(jobs.ComputeTrending{}).Cron("5 * * * *").WithoutOverlapping()
 	// 04:45 stays clear of the 04:40 and 04:50 prunes.
 	s.Job(jobs.PruneTrending{}).DailyAt("04:45").WithoutOverlapping()
+	s.Job(jobs.ComputeSimilar{}).DailyAt("02:00").WithoutOverlapping()
 	s.Job(jobs.RefreshEntityStats{}).Hourly().WithoutOverlapping()
 	s.Job(jobs.SyncSearchSuggest{}).EveryMinute().WithoutOverlapping()
 	s.Job(jobs.DeletionPurge{}).DailyAt("03:00").WithoutOverlapping()
