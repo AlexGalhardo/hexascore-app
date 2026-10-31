@@ -44,6 +44,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **deploy:** Two overlapping `hexascore:predeploy` runs no longer hang when a migration builds an index concurrently; `catalog.changed` queues its reindex through the search package (QA gate 2026-10-31)
 - **api:** Approved community edits are served on `/api/v1`: the default `CATALOG_API_SOURCES` includes `community`, whose `data_sources` licence is `HEXASCORE-API-TERMS` (FIX-community-api-source)
 - **admin:** Moderators need confirmed 2FA to open `/admin` and fall under the admin session limits, like admins (FIX-moderator-2fa)
 - **community:** In-page community links and suggestion form posts keep the visitor's locale prefix (FIX-community-create-ux, QA-community-e2e)
