@@ -222,11 +222,14 @@ func Web(r *router.Router, app *vukem.App) error {
 			return err
 		}
 		items := controllers.NewItem(app, &scoring.Writer{DB: acc.DB, Events: app.Events, Now: app.Now}, acc.Web.User)
+		changes := controllers.NewRecentChanges(app)
 		for section, typ := range map[string]string{"games": "game", "movies": "movie", "series": "series", "books": "book"} {
 			r.Get("/"+section, listings.Index(typ)).Name("catalog." + typ)
 			r.Get("/"+section+"/{slug}", items.Show(typ)).Name("item." + typ)
+			r.Get("/"+section+"/{slug}/changes", changes.Item(typ)).Name("item." + typ + ".changes")
 		}
 		r.Get("/books/{slug}/editions/{id}", items.Edition).Name("item.edition")
+		r.Get("/books/{slug}/editions/{id}/changes", changes.Edition()).Name("item.edition.changes")
 		r.Get("/api/items/{id}/ratings", items.Ratings).Name("item.ratings")
 		entities := controllers.NewEntity(app)
 		for _, e := range []struct{ path, kind, param string }{
@@ -240,6 +243,8 @@ func Web(r *router.Router, app *vukem.App) error {
 			{"languages", "language", "code"},
 		} {
 			r.Get("/"+e.path+"/{"+e.param+"}", entities.Show(e.kind, e.param)).Name("entity." + e.kind)
+			r.Get("/"+e.path+"/{"+e.param+"}/changes", changes.Entity(e.kind, e.param)).
+				Name("entity." + e.kind + ".changes")
 		}
 		r.Get("/api/search/suggest", controllers.LegacySuggest).Name("search.suggest.legacy").Use(suggest)
 	}

@@ -12,6 +12,13 @@ import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
 
+const SECTIONS: Record<ItemType, string> = {
+	game: "games",
+	movie: "movies",
+	series: "series",
+	book: "books",
+};
+
 interface Item {
 	id: string;
 	type: ItemType;
@@ -135,6 +142,12 @@ export default function Show({
 							className="text-sm underline"
 						>
 							{t("community.suggest.link")}
+						</Link>
+						<Link
+							href={localized(`/${SECTIONS[item.type]}/${item.slug}/changes`, locale)}
+							className="text-sm underline"
+						>
+							{t("community.recent.link")}
 						</Link>
 						<p className="text-muted">
 							{t(`itemTypes.${item.type}`)}

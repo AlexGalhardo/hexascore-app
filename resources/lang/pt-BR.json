@@ -1205,7 +1205,13 @@
       "emptyShelf": "Nada aqui ainda.",
       "previous": "Anterior",
       "next": "Próxima",
-      "summary": "{ratings} avaliações · {lists} listas"
+      "summary": "{ratings} avaliações · {lists} listas",
+      "contributions": {
+        "title": "Contribuições",
+        "summary": "{submitted} sugeridas · {approved} aprovadas · {rejected} rejeitadas",
+        "rate": "Taxa de aprovação {rate}",
+        "tier": "Nível: {tier} · precisão {accuracy}"
+      }
     },
     "status": {
       "label": "Status",
@@ -1500,6 +1506,21 @@
         "edit": "Edição",
         "create": "Novo registro",
         "merge": "Relato de duplicata"
+      }
+    },
+    "recent": {
+      "title": "Alterações recentes: {title}",
+      "back": "Voltar para a página",
+      "empty": "Nenhuma alteração ainda.",
+      "merged": "uniu um duplicado a este registro",
+      "changedTo": "alterado para",
+      "pages": "Páginas de alterações recentes",
+      "link": "Alterações recentes",
+      "actors": {
+        "team": "Equipe HexaScore",
+        "deleted": "usuário excluído",
+        "system": "HexaScore",
+        "user": "membro"
       }
     }
   }

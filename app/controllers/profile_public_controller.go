@@ -2,6 +2,9 @@ package controllers
 
 import (
 	"context"
+	"database/sql"
+	"errors"
+	"fmt"
 	"strconv"
 
 	"github.com/AlexGalhardo/vukem/auth"
@@ -28,14 +31,44 @@ func NewPublicProfile(db *database.DB, api bool, coversBase string, guards ...st
 	return &PublicProfile{db: db, guards: guards, api: api, coversBase: coversBase}
 }
 
-func (h *PublicProfile) viewerID(ctx context.Context) int64 {
+func (h *PublicProfile) viewer(ctx context.Context) models.User {
 	for _, g := range h.guards {
 		if u, err := auth.UserFrom[models.User](ctx, g); err == nil {
-			return u.ID
+			return u
 		}
 	}
 
-	return 0
+	return models.User{}
+}
+
+// contributions is the SDD 04 FR-04-15 profile block: counts and approval rate once the user has at least one
+// decision, plus tier and accuracy for the user and admins only. nil when there is nothing to show.
+func (h *PublicProfile) contributions(ctx context.Context, userID int64, private bool) (map[string]any, error) {
+	var (
+		submitted, approved, rejected int
+		accuracy                      float64
+		tier                          string
+	)
+
+	err := h.db.QueryRowContext(ctx, `SELECT submitted_total, approved_total, rejected_total, accuracy::float8,
+  tier::text FROM contributor_stats WHERE user_id = $1`, userID).Scan(&submitted, &approved, &rejected, &accuracy, &tier)
+	if errors.Is(err, sql.ErrNoRows) || (err == nil && approved+rejected == 0) {
+		return nil, nil
+	}
+
+	if err != nil {
+		return nil, fmt.Errorf("profile: contributions: %w", err)
+	}
+
+	out := map[string]any{
+		"submitted": submitted, "approved": approved, "rejected": rejected,
+		"approvalRate": float64(approved) / float64(approved+rejected),
+	}
+	if private {
+		out["tier"], out["accuracy"] = tier, accuracy
+	}
+
+	return out, nil
 }
 
 // Show answers the profile. A private profile that is not the viewer's own is 200 with the nickname only and
@@ -48,7 +81,8 @@ func (h *PublicProfile) Show(c *web.Ctx) error {
 		offset = library.ParseOffset(c.Query("cursor"))
 	}
 
-	p, err := library.LoadProfile(ctx, h.db, c.Param("nickname"), h.viewerID(ctx), i18n.Locale(ctx), offset)
+	viewer := h.viewer(ctx)
+	p, err := library.LoadProfile(ctx, h.db, c.Param("nickname"), viewer.ID, i18n.Locale(ctx), offset)
 	if err != nil {
 		if h.api {
 			return err
@@ -92,6 +126,14 @@ func (h *PublicProfile) Show(c *web.Ctx) error {
 		props["stats"] = p.Stats
 		props["ratings"] = inertia.Scroll(map[string]any{"data": p.Ratings}, meta)
 		props["lists"] = p.Lists
+
+		contrib, err := h.contributions(ctx, p.UserID, p.IsOwner || viewer.Role == models.RoleAdmin)
+		if err != nil {
+			return err
+		}
+		if contrib != nil {
+			props["contributions"] = contrib
+		}
 	}
 
 	return inertia.Render(c, "User/Profile", props)
