@@ -118,4 +118,3 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 - **Context**: every anonymous first load runs SSR, so the page TTFB budget (k6 p75 ≤ 400 ms, SDD 09 §4) failed under load (470 to 1850 ms). Caching the rendered document in the app is unsafe by default because the body carries the per-request CSP nonce; the first draft replayed the cached CSP header and broke `TestSecurity_A05_NonceIsPerRequestAndInPage`.
 - **Workaround**: app middleware `RenderCache` (P2.H.3.5): anonymous GETs cached in process for 60 s, key = path + query + theme/consent/locale cookies, the cached body's nonce swapped for the current request's nonce, CSP never replayed; p75 157 to 296 ms. `// workaround(vukem): VF-NEW-P2.H.3.5`.
 - **Request**: an opt-in SSR output cache (TTL, vary keys, bypass on session cookie) that injects the request nonce at serve time, or a documented hook to cache the SSR HTML before nonce injection.
-
