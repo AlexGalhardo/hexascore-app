@@ -3,6 +3,9 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { beforeEach, expect, test, vi } from "vitest";
 
+import en from "../../../lang/en.json";
+import es from "../../../lang/es.json";
+import ptBR from "../../../lang/pt-BR.json";
 import SuggestCreate from "./SuggestCreate";
 
 const patch = vi.fn();
@@ -184,4 +187,10 @@ test("edition create picks its book and language and blocks submit until both ar
 		}),
 		expect.anything(),
 	);
+});
+
+test("the item target names the four kinds in every locale", () => {
+	expect(en.community.create.targets.item).toBe("Game, movie, series or book");
+	expect(ptBR.community.create.targets.item).toBe("Jogo, filme, série ou livro");
+	expect(es.community.create.targets.item).toBe("Juego, película, serie o libro");
 });
