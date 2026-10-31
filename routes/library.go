@@ -8,6 +8,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/appapi"
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 )
@@ -31,7 +32,7 @@ func Library(r *router.Router, app *vukem.App) error {
 
 	limit := limits.Editions.From(limiters)
 
-	web := controllers.NewLibrary(acc.DB, app.Now, acc.Web.Name(), false)
+	web := controllers.NewLibrary(acc.DB, app.Now, acc.Web.Name(), false, "")
 	required, verified := auth.Required(acc.Web), auth.Verified(acc.Web)
 	byUser := ratelimit.Middleware(limit, ratelimit.ByUser(acc.Web.Name()))
 	r.Get("/library", web.Index).Name("library").Use(required, verified)
@@ -39,11 +40,12 @@ func Library(r *router.Router, app *vukem.App) error {
 	r.Put("/items/{id}/edition", web.PutEdition).Name("edition.put").Use(required, verified, byUser)
 	r.Delete("/items/{id}/edition", web.DeleteEdition).Name("edition.delete").Use(required, verified, byUser)
 
-	profile := controllers.NewPublicProfile(acc.DB, false, acc.Web.Name())
+	profile := controllers.NewPublicProfile(acc.DB, false, "", acc.Web.Name())
 	r.Get("/u/{nickname}", profile.Show).Name("profile.public").Use(auth.Optional(acc.Web))
 
-	h := controllers.NewLibrary(acc.DB, app.Now, acc.API.Name(), true)
-	pub := controllers.NewPublicProfile(acc.DB, true, acc.API.Name())
+	coversBase := catalog.CoversBase(app.Source.Get("COVERS_BASE_URL"))
+	h := controllers.NewLibrary(acc.DB, app.Now, acc.API.Name(), true, coversBase)
+	pub := controllers.NewPublicProfile(acc.DB, true, coversBase, acc.API.Name())
 	guard := AppAuthStack(app, acc, limiters)
 	store, err := app.Cache()
 	if err != nil {
