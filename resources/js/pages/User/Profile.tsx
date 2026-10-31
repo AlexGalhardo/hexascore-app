@@ -1,6 +1,7 @@
 import { InfiniteScroll, Link, usePage } from "@inertiajs/react";
 
-import ItemLink, { type ItemRef } from "../../components/library/ItemLink";
+import type { ItemRef } from "../../components/library/ItemLink";
+import ShelfCard from "../../components/library/ShelfCard";
 import ReportDialog from "../../components/ReportDialog";
 import Seo from "../../components/Seo";
 import { localized } from "../../lib/route";
@@ -104,12 +105,12 @@ export default function Profile({ profile, stats, ratings, lists, indexable }: P
 									className="divide-y divide-border"
 								>
 									{ratings?.data.map((r) => (
-										<li
-											key={r.id}
-											className="flex items-center justify-between gap-3 py-2"
-										>
-											<ItemLink item={r} />
-											<span className="font-semibold">{r.stars}</span>
+										<li key={r.id} className="py-2">
+											<ShelfCard
+												item={r}
+												stars={r.stars}
+												statusLabel={t(`itemTypes.${r.type}`)}
+											/>
 										</li>
 									))}
 								</InfiniteScroll>

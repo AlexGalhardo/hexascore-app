@@ -2,7 +2,8 @@ import { Link, router, usePage } from "@inertiajs/react";
 import type { FormEvent } from "react";
 
 import EditionPicker from "../../components/library/EditionPicker";
-import ItemLink, { type ItemRef } from "../../components/library/ItemLink";
+import type { ItemRef } from "../../components/library/ItemLink";
+import ShelfCard from "../../components/library/ShelfCard";
 import Seo from "../../components/Seo";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
@@ -127,59 +128,82 @@ export default function Index({ counts, groups, filters }: Props) {
 			{groups.data.length === 0 ? (
 				<p className="mt-6">{t("library.empty")}</p>
 			) : (
-				groups.data.map((g) => (
-					<section key={g.type} className="mt-6" aria-labelledby={`group-${g.type}`}>
-						<h2 id={`group-${g.type}`} className="text-lg font-semibold">
-							{t(`itemTypes.${g.type}`)}{" "}
-							<span className="text-sm font-normal text-muted">
-								{t("library.showing", { count: g.items.length, total: g.total })}
-							</span>
-						</h2>
-						<ul className="mt-2 divide-y divide-border">
-							{g.items.map((item) => (
-								<li
-									key={item.id}
-									className="flex flex-wrap items-center gap-x-4 gap-y-1 py-2"
-								>
-									<ItemLink item={item} />
-									<span className="text-sm text-muted">
-										{t(`social.status.${item.type}.${item.status}`)}
-									</span>
-									{item.stars !== null && (
-										<span className="text-sm">
-											{t("library.score", { stars: item.stars })}
-										</span>
-									)}
-									{item.type === "book" && !item.edition && (
-										<EditionPicker itemId={item.id} />
-									)}
-									{item.edition && (
-										<span className="text-sm text-muted">
-											{t("library.edition", { title: item.edition.title })}{" "}
-											<button
-												type="button"
-												className="underline"
-												onClick={() => clearEdition(item.id)}
-											>
-												{t("library.clearEdition")}
-											</button>
-										</span>
-									)}
-								</li>
-							))}
-						</ul>
-						{g.next >= 0 && (
-							<Link
-								className="mt-2 inline-block underline"
-								href={
-									filters.type ? pageHref(filters.type, g.next) : pageHref(g.type)
-								}
+				<>
+					{STATUSES.map((status) => {
+						const cards = groups.data.flatMap((g) =>
+							g.items.filter((i) => i.status === status),
+						);
+						if (cards.length === 0) return null;
+						return (
+							<section
+								key={status}
+								className="mt-6"
+								aria-labelledby={`status-${status}`}
 							>
-								{filters.type ? t("lists.next") : t("library.seeAll")}
-							</Link>
-						)}
-					</section>
-				))
+								<h2 id={`status-${status}`} className="text-lg font-semibold">
+									{t(`social.status.shelves.${status}`)}{" "}
+									<span className="text-sm font-normal text-muted">
+										({sum(counts, status, filters.type)})
+									</span>
+								</h2>
+								<ul className="mt-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+									{cards.map((item) => (
+										<li key={item.id}>
+											<ShelfCard
+												item={item}
+												stars={item.stars}
+												statusLabel={t(
+													`social.status.${item.type}.${item.status}`,
+												)}
+											>
+												{item.type === "book" && !item.edition && (
+													<EditionPicker itemId={item.id} />
+												)}
+												{item.edition && (
+													<span className="text-sm text-muted">
+														{t("library.edition", {
+															title: item.edition.title,
+														})}{" "}
+														<button
+															type="button"
+															className="underline"
+															onClick={() => clearEdition(item.id)}
+														>
+															{t("library.clearEdition")}
+														</button>
+													</span>
+												)}
+											</ShelfCard>
+										</li>
+									))}
+								</ul>
+							</section>
+						);
+					})}
+					{groups.data
+						.filter((g) => g.next >= 0)
+						.map((g) => (
+							<p key={g.type} className="mt-4 text-sm">
+								{t(`itemTypes.${g.type}`)}{" "}
+								<span className="text-muted">
+									{t("library.showing", {
+										count: g.items.length,
+										total: g.total,
+									})}
+								</span>{" "}
+								<Link
+									className="underline"
+									href={
+										filters.type
+											? pageHref(filters.type, g.next)
+											: pageHref(g.type)
+									}
+								>
+									{filters.type ? t("lists.next") : t("library.seeAll")}
+								</Link>
+							</p>
+						))}
+				</>
 			)}
 		</>
 	);

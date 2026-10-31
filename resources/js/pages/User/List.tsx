@@ -1,6 +1,7 @@
 import { Link, usePage } from "@inertiajs/react";
 
-import ItemLink, { type ItemRef } from "../../components/library/ItemLink";
+import type { ItemRef } from "../../components/library/ItemLink";
+import ShelfCard from "../../components/library/ShelfCard";
 import ReportDialog from "../../components/ReportDialog";
 import Seo from "../../components/Seo";
 import { localized } from "../../lib/route";
@@ -64,8 +65,9 @@ export default function List({ list, owner, items, canEdit, indexable }: Props) 
 				<ol className="mt-4 divide-y divide-border">
 					{items.map((e) => (
 						<li key={e.item.id} className="py-2">
-							<ItemLink item={e.item} />
-							{e.note && <p className="text-sm text-muted">{e.note}</p>}
+							<ShelfCard item={e.item}>
+								{e.note && <p className="text-sm text-muted">{e.note}</p>}
+							</ShelfCard>
 						</li>
 					))}
 				</ol>
