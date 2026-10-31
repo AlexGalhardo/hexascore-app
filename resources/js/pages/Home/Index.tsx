@@ -1,7 +1,7 @@
 import { Link, usePage } from "@inertiajs/react";
 import CoverThumb, { type Cover } from "../../components/CoverThumb";
+import ForYouListView, { type ForYouList } from "../../components/catalog/ForYouList";
 import SectionHighlights, { type Section } from "../../components/catalog/SectionHighlights";
-import TrendingSection, { type TrendingList } from "../../components/catalog/TrendingSection";
 import Seo from "../../components/Seo";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
@@ -27,11 +27,11 @@ const PATHS: Record<Section["type"], string> = {
 export default function Index({
 	sections,
 	recent,
-	trending,
+	forYou,
 }: {
 	sections: Section[];
 	recent: RecentRating[];
-	trending: Partial<Record<Section["type"], TrendingList>>;
+	forYou?: Partial<Record<Section["type"], ForYouList>>;
 }) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
@@ -82,12 +82,17 @@ export default function Index({
 						</ul>
 					</section>
 				)}
-				{sections.map((section) => (
-					<TrendingSection
-						key={`t-${section.type}`}
-						type={section.type}
-						list={trending[section.type]}
-					/>
+				{Object.entries(forYou ?? {}).map(([type, list]) => (
+					<section
+						key={`foryou-${type}`}
+						aria-labelledby={`home-foryou-${type}`}
+						className="grid gap-3"
+					>
+						<h2 id={`home-foryou-${type}`} className="text-2xl font-bold">
+							{t("forYou.home")}: {t(`catalog.title.${type}`)}
+						</h2>
+						<ForYouListView type={type as Section["type"]} list={list} />
+					</section>
 				))}
 				{sections.map((section) => (
 					<SectionHighlights key={section.type} section={section} />

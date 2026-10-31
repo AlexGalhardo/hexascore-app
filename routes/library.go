@@ -35,6 +35,11 @@ func Library(r *router.Router, app *vukem.App) error {
 	web := controllers.NewLibrary(acc.DB, app.Now, acc.Web.Name(), false, "")
 	required, verified := auth.Required(acc.Web), auth.Verified(acc.Web)
 	byUser := ratelimit.Middleware(limit, ratelimit.ByUser(acc.Web.Name()))
+	fySvc, err := ForYouService(app)
+	if err != nil {
+		return err
+	}
+	r.Get("/for-you", controllers.NewForYou(fySvc, acc.Web.Name()).Index).Name("for_you").Use(required, verified)
 	r.Get("/library", web.Index).Name("library").Use(required, verified)
 	r.Get("/items/{id}/editions", web.Editions).Name("edition.list").Use(required, verified)
 	r.Put("/items/{id}/edition", web.PutEdition).Name("edition.put").Use(required, verified, byUser)

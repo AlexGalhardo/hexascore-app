@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"context"
+
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/ratelimit"
@@ -9,6 +11,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/appapi"
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
+	"github.com/AlexGalhardo/hexascore-app/app/recommend/foryou"
 )
 
 // AppMe registers GET/PATCH /app/v1/me and POST/DELETE /app/v1/me/deletion.
@@ -40,7 +43,14 @@ func AppMe(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
+	svc, err := ForYouService(app)
+	if err != nil {
+		return err
+	}
+	fy := appapi.NewForYou(svc, acc.API.Name())
+
 	r.Group("/app/v1", func(g *router.Group) {
+		g.Get("/me/for-you", fy.Show).Name("me.for_you").Use(read...)
 		g.Get("/me", h.Show).Name("me.show").Use(read...)
 		g.Patch("/me", h.Update).Name("me.update").Use(write...)
 		g.Post("/me/deletion", h.Schedule).Name("me.deletion.schedule").Use(schedule...)
@@ -48,4 +58,21 @@ func AppMe(r *router.Router, app *vukem.App) error {
 	}).Name("app.v1.")
 
 	return nil
+}
+
+// ForYouService builds the "For you" service with the queue as the background refresher.
+func ForYouService(app *vukem.App) (*foryou.Service, error) {
+	db, err := app.DB()
+	if err != nil {
+		return nil, err
+	}
+
+	return &foryou.Service{DB: db, Now: app.Now, Enqueue: func(ctx context.Context, j foryou.RecommendUser) error {
+		q, err := app.Queue()
+		if err != nil {
+			return err
+		}
+
+		return q.Dispatch(ctx, j)
+	}}, nil
 }

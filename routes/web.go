@@ -146,6 +146,7 @@ func Web(r *router.Router, app *vukem.App) error {
 			"social.",
 			"notifications.",
 			"library.",
+			"forYou.",
 			"userLists.",
 			"community.",
 		),
