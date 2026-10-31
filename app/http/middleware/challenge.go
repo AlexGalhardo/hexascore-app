@@ -1,10 +1,12 @@
 package middleware
 
 import (
+	"cmp"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"html"
 	"net/http"
 	"strconv"
 	"strings"
@@ -12,6 +14,7 @@ import (
 
 	"github.com/AlexGalhardo/vukem/cache"
 	"github.com/AlexGalhardo/vukem/errs"
+	"github.com/AlexGalhardo/vukem/i18n"
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/web"
 
@@ -189,10 +192,45 @@ func (ch *Challenger) Require(name string) func(http.Handler) http.Handler {
 					web.SecurityEvent(r, "challenge.failed", "route", rule.Name)
 				}
 
+				if isPlainFormPost(r) {
+					challengePage(w, r)
+
+					return
+				}
+
 				ch.problem(w, rule, bits)
 			}
 		})
 	}
+}
+
+// isPlainFormPost reports a browser's own form submission: urlencoded or multipart body, HTML
+// accepted, no Inertia visit. Only such a client cannot read the JSON problem or solve the challenge.
+func isPlainFormPost(r *http.Request) bool {
+	ct := r.Header.Get("Content-Type")
+	form := strings.HasPrefix(ct, "application/x-www-form-urlencoded") || strings.HasPrefix(ct, "multipart/form-data")
+
+	return form && r.Header.Get("X-Inertia") == "" && strings.Contains(r.Header.Get("Accept"), "text/html")
+}
+
+// challengePage is the 428 for a no-JS form post: it stays fail closed and points to Google
+// sign-in, which needs no proof of work (SDD 13 section 7.2). No script, no inline style (CSP).
+func challengePage(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	lang := html.EscapeString(cmp.Or(i18n.Locale(ctx), "en"))
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Cache-Control", "no-store")
+	w.WriteHeader(http.StatusPreconditionRequired)
+
+	_, _ = fmt.Fprintf(w,
+		`<!doctype html><html lang="%s"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>%s</title></head><body><main><h1>%s</h1><p>%s <a href="/auth/google/redirect">%s</a></p></main></body></html>`,
+		lang,
+		html.EscapeString(i18n.T(ctx, "auth.challenge.checking")),
+		html.EscapeString(i18n.T(ctx, "auth.challenge.checking")),
+		html.EscapeString(i18n.T(ctx, "auth.challenge.noscript")),
+		html.EscapeString(i18n.T(ctx, "auth.google")),
+	)
 }
 
 // problem writes 428 challenge-required with a fresh challenge to solve.
