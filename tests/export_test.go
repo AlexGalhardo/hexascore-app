@@ -163,6 +163,11 @@ func TestExportZip(t *testing.T) {
 		}
 	}
 
+	if !strings.Contains(files["profile.json"], `"communityMailOptOut" : false`) &&
+		!strings.Contains(files["profile.json"], `"communityMailOptOut": false`) {
+		t.Errorf("profile.json = %s, want the community mail opt-out", files["profile.json"])
+	}
+
 	if !strings.Contains(files["account.json"], `"phone"`) {
 		t.Errorf("account.json = %s, want the token name", files["account.json"])
 	}

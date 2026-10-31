@@ -139,6 +139,22 @@ func TestProfilePrivacy(t *testing.T) {
 		PropEquals("privacy.profilePrivate", true).PropEquals("privacy.personalizationOptOut", true)
 }
 
+// The community mail switch (SDD 04 FR-04-14) has its own form, so saving the privacy switches, or the app's
+// PATCH /app/v1/me, never resets it.
+func TestProfileCommunityMailOptOut(t *testing.T) {
+	t.Parallel()
+
+	app, c := profileUser(t, "mail-optout@example.com")
+
+	c.Get("/profile").AssertInertia("Profile/Index").PropEquals("notifications.communityMailOptOut", false)
+	c.PatchJSON("/profile/notifications", map[string]any{"communityMailOptOut": true}).AssertRedirect("/profile")
+	c.PatchJSON("/profile/privacy", map[string]any{"profilePrivate": true}).AssertRedirect("/profile")
+	vukemtest.AssertDatabaseHas(t, app, "users", map[string]any{
+		"email": "mail-optout@example.com", "community_mail_opt_out": true, "profile_private": true,
+	})
+	c.Get("/profile").AssertInertia("Profile/Index").PropEquals("notifications.communityMailOptOut", true)
+}
+
 func TestSessionsRevoke(t *testing.T) {
 	t.Parallel()
 
