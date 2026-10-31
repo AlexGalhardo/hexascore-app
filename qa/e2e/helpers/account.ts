@@ -87,7 +87,7 @@ export async function logIn(
 		await open(page, `${prefix}/login`);
 	await page.getByLabel(t("auth.fields.identifier")).fill(identifier);
 	await page.locator("input[name=password]").fill(password);
-	await page.getByRole("button", { name: t("auth.login.submit") }).click();
+	await page.getByRole("button", { name: t("auth.login.submit"), exact: true }).click();
 	if (!expectFailure)
 		await page.waitForURL((url) => !/\/login$/.test(url.pathname), { timeout: POW_TIMEOUT });
 }
@@ -112,7 +112,7 @@ export async function createVerifiedAccount(
 	// Mailed links carry no locale prefix, so everything after the link renders in English.
 	await page.getByLabel(en("auth.fields.identifier")).fill(account.email);
 	await page.locator("input[name=password]").fill(account.password);
-	await page.getByRole("button", { name: en("auth.login.submit") }).click();
+	await page.getByRole("button", { name: en("auth.login.submit"), exact: true }).click();
 	await completeOnboarding(page, en, account);
 	return account;
 }
