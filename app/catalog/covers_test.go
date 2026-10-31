@@ -6,9 +6,6 @@ import (
 )
 
 func TestCoverURL(t *testing.T) {
-	SetCoversBase("")
-	t.Cleanup(func() { SetCoversBase("") })
-
 	if got := NewCover(sql.NullString{}, sql.NullString{}); got != nil {
 		t.Fatalf("no keys: got %+v, want nil placeholder", got)
 	}
@@ -21,15 +18,35 @@ func TestCoverURL(t *testing.T) {
 		t.Fatalf("same-origin key: got %q", got)
 	}
 
-	SetCoversBase("https://bucket.example/")
-	want := &Cover{Thumb: "https://bucket.example/covers/a-1-t.webp", Full: "https://bucket.example/covers/a-1.webp"}
+	want := &Cover{Thumb: "/covers/a-1-t.webp", Full: "/covers/a-1.webp"}
 	got := CoverFromThumbKey(new("covers/a-1-t.webp"))
 	if *got != *want {
-		t.Fatalf("bucket URL: got %+v, want %+v", got, want)
+		t.Fatalf("thumb-derived URLs: got %+v, want %+v", got, want)
 	}
 
 	only := NewCover(sql.NullString{}, sql.NullString{String: "covers/b-t.webp", Valid: true})
 	if only.Full != only.Thumb {
 		t.Fatalf("missing full key must fall back to the thumb: %+v", only)
+	}
+}
+
+func TestCoverAbsolute(t *testing.T) {
+	c := &Cover{Thumb: "/covers/a-t.webp", Full: "/covers/a.webp"}
+
+	got := c.WithBase("https://bucket.example")
+	if got.Thumb != "https://bucket.example/covers/a-t.webp" || got.Full != "https://bucket.example/covers/a.webp" {
+		t.Fatalf("absolute renditions: %+v", got)
+	}
+
+	if c.Thumb != "/covers/a-t.webp" {
+		t.Fatalf("WithBase mutated its receiver: %+v", c)
+	}
+
+	if c.WithBase("") != c || (*Cover)(nil).WithBase("https://x") != nil {
+		t.Fatal("empty base and nil cover must pass through")
+	}
+
+	if CoversBase(" https://bucket.example/ ") != "https://bucket.example" || Absolute("https://x", "") != "" {
+		t.Fatal("base trimming or empty path")
 	}
 }

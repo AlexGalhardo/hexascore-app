@@ -5,18 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
-	"sync/atomic"
 )
-
-// coversBase prefixes every cover key. Empty serves keys from the app origin ("/covers/<key>"); production
-// sets COVERS_BASE_URL to the public bucket or CDN origin (SDD 09 §7.8 allows that host in img-src).
-var coversBase atomic.Pointer[string]
-
-// SetCoversBase sets the origin that cover keys are served from; call it once at boot.
-func SetCoversBase(base string) {
-	base = strings.TrimRight(strings.TrimSpace(base), "/")
-	coversBase.Store(&base)
-}
 
 // Cover holds the two renditions the UI needs: the 96-wide thumbnail and the 600-wide image (SDD 06 §7.5).
 type Cover struct {
@@ -24,21 +13,41 @@ type Cover struct {
 	Full  string `json:"full"`
 }
 
-// CoverURL maps a bucket key such as "covers/<id>-<hash>.webp" to its public URL; "" when the key is empty or unsafe.
+// CoverURL maps a bucket key such as "covers/<id>-<hash>.webp" to its same-origin path; the client prepends the shared coversBase prop (COVERS_BASE_URL); "" when the key is empty or unsafe.
 func CoverURL(key string) string {
 	if key == "" || strings.HasPrefix(key, "/") || strings.Contains(key, "..") {
 		return ""
 	}
 
-	var base string
-	if p := coversBase.Load(); p != nil {
-		base = *p
-	}
 	if !strings.HasPrefix(key, "covers/") {
 		key = "covers/" + key
 	}
 
-	return base + "/" + key
+	return "/" + key
+}
+
+// CoversBase normalises the COVERS_BASE_URL value: trimmed, no trailing slash.
+func CoversBase(raw string) string {
+	return strings.TrimRight(strings.TrimSpace(raw), "/")
+}
+
+// Absolute prefixes an app-relative cover path with base. JSON clients (the Android app) cannot resolve
+// "/covers/..." against the API host when covers live in a bucket, so the JSON handlers send absolute URLs.
+func Absolute(base, path string) string {
+	if path == "" {
+		return ""
+	}
+
+	return base + path
+}
+
+// WithBase returns a copy of c whose renditions are absolute; nil stays nil and c is never mutated.
+func (c *Cover) WithBase(base string) *Cover {
+	if c == nil || base == "" {
+		return c
+	}
+
+	return &Cover{Thumb: Absolute(base, c.Thumb), Full: Absolute(base, c.Full)}
 }
 
 // NewCover builds the renditions from the nullable key columns; nil means "show the placeholder".
