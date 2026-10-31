@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Lighthouse CI against a running app (SDD 09 §4).
-# The five URLs live in lighthouserc.json (same list as urls.txt). Default host is
+# The five URLs live in lighthouserc.cjs (same list as urls.txt). Default host is
 # http://127.0.0.1:3000. Set BASE_URL to point the same paths at another origin.
 set -euo pipefail
 
