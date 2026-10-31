@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- Pass the osv-scanner config flag after the `scan source` subcommand.
 - Answer unknown `/app/v1` catalogue segments with 404 before auth, and point the CI OpenAPI export and `pg_dump` at Postgres 18.
 - Paint the cookie banner in the first HTML when consent is unset, and load the ratings dialog only after it is opened.
 - Trust the docker bridge in the OpenAPI scan so each Schemathesis call has its own rate-limit bucket, and keep the bun:test files out of vitest.
