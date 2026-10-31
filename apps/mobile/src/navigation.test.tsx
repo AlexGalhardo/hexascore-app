@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react-native";
-import type { ReactNode } from "react";
+import type { ReactElement, ReactNode } from "react";
 import RootLayout from "../app/_layout";
 import Login from "../app/(auth)/login";
 import TabsLayout from "../app/(tabs)/_layout";
@@ -45,43 +45,33 @@ function params(next: Record<string, string>): void {
 	(globalThis as { __routeParams?: Record<string, string> }).__routeParams = next;
 }
 
-test("each SDD 10 route renders its placeholder", async () => {
-	await render(<Login />);
-	expect(screen.getByText("Login")).toBeTruthy();
+// One test per route: a single test rendering all eleven screens shared one 5 s
+// budget, and the cold first render (lazy nativewind runtime) ate most of it
+// when Jest workers competed for CPU.
+const routes: [string, Record<string, string>, () => ReactElement, string | null][] = [
+	["(auth)/login", {}, () => <Login />, "Login"],
+	["(tabs)/index", {}, () => <Home />, "HexaScore"],
+	["(tabs)/[type]", { type: "games" }, () => <SectionScreen />, "Section games"],
+	["(tabs)/search", {}, () => <Search />, "Search"],
+	["(tabs)/lists", {}, () => <Lists />, "Lists"],
+	["(tabs)/profile", {}, () => <Profile />, "Profile"],
+	[
+		"[type]/[slug]",
+		{ type: "movies", slug: "arrival" },
+		() => <ItemScreen />,
+		"Item movies arrival",
+	],
+	["entities/[id]", { id: "42" }, () => <EntityScreen />, "Entity 42"],
+	["lists/[id]", { id: "7" }, () => <ListScreen />, "List 7"],
+	["update-required", {}, () => <UpdateRequired />, `Update required ${storeListingUrl()}`],
+	["_layout", {}, () => <RootLayout />, null],
+	["(tabs)/_layout", {}, () => <TabsLayout />, null],
+];
 
-	await render(<Home />);
-	expect(screen.getByText("HexaScore")).toBeTruthy();
-
-	params({ type: "games" });
-	await render(<SectionScreen />);
-	expect(screen.getByText("Section games")).toBeTruthy();
-
-	await render(<Search />);
-	expect(screen.getByText("Search")).toBeTruthy();
-
-	await render(<Lists />);
-	expect(screen.getByText("Lists")).toBeTruthy();
-
-	await render(<Profile />);
-	expect(screen.getByText("Profile")).toBeTruthy();
-
-	params({ type: "movies", slug: "arrival" });
-	await render(<ItemScreen />);
-	expect(screen.getByText("Item movies arrival")).toBeTruthy();
-
-	params({ id: "42" });
-	await render(<EntityScreen />);
-	expect(screen.getByText("Entity 42")).toBeTruthy();
-
-	params({ id: "7" });
-	await render(<ListScreen />);
-	expect(screen.getByText("List 7")).toBeTruthy();
-
-	await render(<UpdateRequired />);
-	expect(screen.getByText(`Update required ${storeListingUrl()}`)).toBeTruthy();
-
-	await render(<RootLayout />);
-	await render(<TabsLayout />);
+test.each(routes)("route %s renders its placeholder", async (_name, routeParams, element, text) => {
+	params(routeParams);
+	await render(element());
+	if (text !== null) expect(screen.getByText(text)).toBeTruthy();
 });
 
 test.each(["games", "movies", "series", "books"])("section and item accept %s", async (type) => {
