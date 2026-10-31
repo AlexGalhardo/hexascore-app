@@ -10,3 +10,11 @@ changelog: Added - inertia.Config.ErrorFullPages: renders ErrorComponent in the 
 roadmap: no box
 risks / follow-ups: opt-in, default false, so no behaviour change. JSON clients and htmx unchanged (handled earlier in the error handler). If the root view render fails after writing starts the fallback could double-write; same exposure as RenderStatus. `task api:check` not run (additive field, expected clean; specialist runs it). docs/frontend.md not edited. HexaScore adoption: set ErrorFullPages: true and drop pageError after the release.
 vukem-feedback status line: VF-NEW-AUDIT-1 -> fixed in vukem branch fix/vf-inertia-html-error-page (Config.ErrorFullPages), pending PR/release.
+
+## Review (especialista, 2026-10-31)
+verdict: APROVADO
+re-run: `task ci` exit 0, `task api:check` rc 0 (additive `Config.ErrorFullPages`); `go test ./inertia/` ok after merging origin/main
+checked: opt-in, default false (existing full-load test unchanged); JSON clients keep problem+json; `Cache-Control: no-store` on the rendered error; A10 test proves no internals leak; a render failure logs and falls back to the framework page; `renderRoot` is a pure extraction of RenderStatus
+note: REV-VF-NEW-AUDIT-3 touches the same lines of `inertia/inertia.go`; merge it after this PR and move its shell into `renderRoot`
+fixes: branch merged origin/main and last-updated.json regenerated (432b5867), no code change
+PR: #107

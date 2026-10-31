@@ -18,7 +18,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | VF-NEW-AUDIT-6 | 2026-10-31 | medium | fixed on main, unreleased (PR #105) |
 | VF-NEW-P2.H.3.1 | 2026-10-31 | low | open |
 | VF-NEW-P5.A.3.1 | 2026-10-31 | low | open |
-| VF-NEW-FIX-gate-timeouts | 2026-10-31 | medium | open |
+| VF-NEW-FIX-gate-timeouts | 2026-10-31 | medium | fixed on main, unreleased (PR #106) |
 | VF-NEW-P4.A.3.1b | 2026-10-31 | low | open |
 | VF-NEW-P2.H.3.5 | 2026-10-31 | medium | open |
 | VF-NEW-FIX-covers-route | 2026-10-31 | low | open |
@@ -99,7 +99,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 
 ## VF-NEW-FIX-gate-timeouts: pgtest drop timeout is fixed at 30 s and fails parallel suites on slow disks
 
-- **Date**: 2026-10-31. **Severity**: medium. **Status**: open.
+- **Date**: 2026-10-31. **Severity**: medium. **Status**: fixed on main, unreleased (PR #106).
 - **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/testing/database> [NOT VERIFIED whether the page documents the cleanup timeout; checked the behaviour from the error only].
 - **Context**: `pgtest` drops each per-test database with `DROP DATABASE ... WITH (FORCE)` under a 30 s context. The drop forces a checkpoint; with about 130 parallel integration tests on Docker Desktop for Windows the fsync-bound checkpoint exceeds 30 s and the run fails with `pgtest: drop database ...: context deadline exceeded` although every assertion passed (`go test -tags integration -parallel 4 ./tests/`: FAIL after 717 s, three times).
 - **Workaround**: dev/test Postgres in `docker-compose.yml` runs with `fsync=off`, `full_page_writes=off`, `synchronous_commit=off` (FIX-gate-timeouts, 717 s FAIL to 245 s ok). Production is untouched.
