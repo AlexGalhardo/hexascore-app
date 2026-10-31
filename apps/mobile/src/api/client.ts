@@ -1,4 +1,4 @@
-import { type Client, createClient } from "../../../../packages/app-client/src/api";
+import { ApiError, type Client, createClient } from "../../../../packages/app-client/src/api";
 import type { AppLocale } from "../i18n/locale";
 import { isBelowMinimum } from "./version";
 
@@ -87,25 +87,40 @@ export function createAppClient(options: AppClientOptions): AppClient {
 		return response;
 	};
 
-	const build = (extra: Record<string, string> = {}): Client =>
-		createClient({
-			baseUrl: options.baseUrl,
-			fetch: watching,
-			headers: () => {
-				const token = options.token?.();
-				return {
-					"X-App-Version": options.version,
-					"Accept-Language": options.locale,
-					...(token ? { Authorization: `Bearer ${token}` } : {}),
-					...extra,
-				};
-			},
-		});
+	const headers = (): Record<string, string> => {
+		const token = options.token?.();
+		return {
+			"X-App-Version": options.version,
+			"Accept-Language": options.locale,
+			...(token ? { Authorization: `Bearer ${token}` } : {}),
+		};
+	};
 
-	const reader = build();
+	const reader = createClient({ baseUrl: options.baseUrl, fetch: watching, headers });
 	return {
 		read: reader,
-		write: (key, call) => call(build({ "Idempotency-Key": key })),
+		async write(key, call) {
+			let retryAfter: number | null = null;
+			// ApiError keeps no headers; the offline queue needs Retry-After on 429 (SDD 10 §7.3).
+			const recording: typeof fetch = async (input, init) => {
+				const response = await watching(input, init);
+				const seconds = Number(response.headers.get("Retry-After") ?? Number.NaN);
+				retryAfter = Number.isFinite(seconds) ? seconds : null;
+				return response;
+			};
+			try {
+				return await call(
+					createClient({
+						baseUrl: options.baseUrl,
+						fetch: recording,
+						headers: () => ({ ...headers(), "Idempotency-Key": key }),
+					}),
+				);
+			} catch (error) {
+				if (error instanceof ApiError) throw Object.assign(error, { retryAfter });
+				throw error;
+			}
+		},
 		newIdempotencyKey: () => uuidv7() as IdempotencyKey,
 		upgradeRequired: () => upgrade,
 	};
