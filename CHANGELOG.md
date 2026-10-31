@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **mobile:** Login screen with two-factor (TOTP or backup code) and bot-challenge branches; device name from `expo-device`, editable (P5.A.3.3)
+- **mobile:** Google sign-in token flow (silent cancel, 2FA retry, `auth.errors.emailUnverifiedAtProvider` in en, pt-BR and es); the account picker waits on the Android OAuth client id (P5.A.3.4)
+- **mobile:** Token rotation on foreground (under 15 days left, at most once per 24 h, never two in flight), logout that always wipes locally, and the update-required screen with logout (P5.A.3.5)
 - **catalog:** `item_activity_daily` and `trending_snapshots` tables; merging items sums the source item's daily activity into the target (P6.C.1.1)
 - **mobile:** Token store in SecureStore (this device only) and session state machine (401 sign-out with data wipe, ban, unverified email, scheduled deletion); runtime dependencies approved in Q-B1 recorded in ADR 0019 (P5.A.3.2)
 - **admin:** Moderation gate abilities (`moderate`, `viewCatalogAudit`, `revertCatalog`, `lockCatalog`), the `community_trusted_moderators` flag (default off), the `moderator` role and the `/admin/moderation` page shell (P4.B.1.1)
