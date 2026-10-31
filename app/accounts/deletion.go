@@ -275,11 +275,11 @@ func (a *Accounts) anonymiseTx(
 		return old, false, err
 	}
 
-	if err := purgeUserLists(ctx, tx, userID); err != nil {
-		return old, false, err
-	}
-
 	if tx.Dialect().Name() == "postgres" {
+		if err := purgeUserData(ctx, tx, userID, now); err != nil {
+			return old, false, err
+		}
+
 		if _, err := tx.ExecContext(
 			ctx,
 			"DELETE FROM user_item_editions WHERE user_id = "+p(1),
@@ -292,8 +292,43 @@ func (a *Accounts) anonymiseTx(
 	return old, true, recordEvent(ctx, tx, userID, nil, "anonymized", map[string]any{}, now)
 }
 
-// purgeUserLists applies the architect default of open issue 14-7: public
-// lists of a deleted user are anonymised, private ones deleted. The lists
-// tables belong to SDD 14 and do not exist yet, so there is nothing to
-// rewrite; the owner's answer to 14-7 changes only this function.
-func purgeUserLists(context.Context, database.Executor, int64) error { return nil }
+// purgeUserData applies SDD 14 section 8 (user deletion purge): private lists
+// and notifications are deleted, public lists keep their title but lose the
+// free text that can identify the person, reports about the user are closed
+// no_action and reports by the user lose the reporter. The users row stays, so
+// the ON DELETE CASCADE rules never fire and each table is handled here.
+func purgeUserData(ctx context.Context, tx database.Executor, userID int64, now time.Time) error {
+	p := tx.Dialect().Placeholder
+
+	stmts := []struct {
+		sql  string
+		args []any
+	}{
+		{`DELETE FROM lists WHERE user_id = ` + p(1) + ` AND NOT is_public`, []any{userID}},
+		{
+			`UPDATE list_items SET note = NULL WHERE note IS NOT NULL AND list_id IN (SELECT id FROM lists WHERE user_id = ` + p(
+				1,
+			) + `)`,
+			[]any{userID},
+		},
+		{
+			`UPDATE lists SET description = NULL, updated_at = ` + p(
+				2,
+			) + ` WHERE user_id = ` + p(
+				1,
+			) + ` AND description IS NOT NULL`,
+			[]any{userID, now},
+		},
+		{`DELETE FROM user_notifications WHERE user_id = ` + p(1), []any{userID}},
+		{`UPDATE reports SET status = 'resolved', outcome = 'no_action', resolved_at = ` + p(2) +
+			` WHERE target_type = 'user' AND target_id = ` + p(1) + ` AND status = 'open'`, []any{strconv.FormatInt(userID, 10), now}},
+		{`UPDATE reports SET reporter_id = NULL WHERE reporter_id = ` + p(1), []any{userID}},
+	}
+	for _, st := range stmts {
+		if _, err := tx.ExecContext(ctx, st.sql, st.args...); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
