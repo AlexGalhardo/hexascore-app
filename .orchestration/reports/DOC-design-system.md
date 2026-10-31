@@ -14,3 +14,9 @@ risks / follow-ups:
 - Not verified: logged-in pages, dark mode and real focus colours were not captured (no login on production); authenticated page descriptions come from code only.
 - Gaps listed (not fixed) in design-system.md section 11, notable: no fonts, many hard-coded indigo/zinc/red colours, score band tokens unused, no ScoreBadge/Skeleton/Button components, full-width auth forms, broken `/docs/api` link on API keys page, `Catalog/RecentChanges` missing, hard-coded English in `Auth/TwoFactor`.
 - prompts file is about 400 kB (105 self-contained prompts); regenerate from the page data if styles change (generator was a scratch script, not committed).
+
+## Review (especialista, 2026-10-31, post-merge)
+verdict: APROVADO (merged by the orchestrator into local main as f9aef56 before review, owner need)
+re-run: `bunx markdownlint-cli2@0.24.0 docs/design-system.md docs/prompts-concept-site-pages.md` → 0 findings in these files
+checked (sampled against code): stack versions (Inertia 3.9.1, React 19.3.1, Tailwind 4.3.3, Base UI 1.9.0, Vite 8.3.5 = package.json); tokens bg/muted/danger/accent-game/score-low OKLCH+hex in both modes = packages/tokens/tokens.ts; spacing, fontSize, radius, touchTarget = tokens.json; score-* tokens unused in resources/js (rg empty, as stated); text-* usage counts xs 11, sm 110, lg 10, xl 15, 2xl 33, 3xl 7, 4xl 2 = exact; z-index list = components; all 33 page components under resources/js/pages appear in the catalogue; prompts file has 35 numbered pages x 3 styles
+fixes: none needed
