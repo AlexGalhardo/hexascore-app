@@ -38,6 +38,8 @@ web   GET    /api/search/suggest
 web   GET    /api/items/{id}/ratings
 web   GET    /login
 web   POST   /login
+web   POST   /login/passkey/options
+web   POST   /login/passkey
 web   GET    /signup
 web   POST   /signup
 web   GET    /signup/check-email
@@ -57,6 +59,7 @@ web   GET    /help/delete-account
 web   GET    /dashboard
 web   GET    /challenge
 web   GET    /auth/{provider}/redirect
+web   GET    /auth/google/confirm
 web   GET    /auth/{provider}/callback
 web   POST   /auth/{provider}/callback
 web   GET    /user/two-factor
@@ -64,6 +67,9 @@ web   POST   /user/two-factor
 web   POST   /user/two-factor/confirm
 web   POST   /user/two-factor/recovery-codes
 web   POST   /user/two-factor/disable
+web   POST   /user/passkeys/options
+web   POST   /user/passkeys
+web   DELETE /profile/passkeys/{id}
 web   GET    /two-factor-challenge
 web   POST   /two-factor-challenge
 web   GET    /profile
