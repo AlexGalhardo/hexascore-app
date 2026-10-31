@@ -1,5 +1,5 @@
 import { ApiError } from "../../../../packages/app-client/src/api";
-import { rotateIfDue } from "./rotate";
+import { rotateIfDue, startForegroundRotation } from "./rotate";
 import { createSession } from "./session";
 import { createTokenStore, memoryVault } from "./tokenStore";
 
@@ -67,4 +67,27 @@ test("a malformed rotate body never replaces the token", async () => {
 	const { run, session } = await setup(5, async () => ({ nope: true }));
 	expect(await run()).toBe("failed");
 	expect(session.token()).toBe("old");
+});
+
+test("a foreground while a rotation is in flight does not start a second one", async () => {
+	const { AppState } = jest.requireActual<typeof import("react-native")>("react-native");
+	let listener: (state: string) => void = () => {};
+	const spy = jest.spyOn(AppState, "addEventListener").mockImplementation(((
+		_: string,
+		fn: (state: string) => void,
+	) => {
+		listener = fn;
+		return { remove: () => {} };
+	}) as never);
+	let release: (value: unknown) => void = () => {};
+	const { vault, session, client } = await setup(5, () => new Promise((r) => (release = r)));
+	const stop = startForegroundRotation({ vault, client, session, now: () => NOW });
+	listener("active");
+	await new Promise((r) => setTimeout(r, 0));
+	listener("active");
+	release(fresh);
+	await new Promise((r) => setTimeout(r, 0));
+	expect(client.tokensRotate).toHaveBeenCalledTimes(1);
+	stop();
+	spy.mockRestore();
 });
