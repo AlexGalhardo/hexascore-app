@@ -27,7 +27,9 @@ func CanonicalHost(appURL, apiHost string) (func(http.Handler) http.Handler, err
 				return
 			}
 
-			http.Redirect(w, r, u.Scheme+"://"+u.Host+r.URL.RequestURI(), http.StatusMovedPermanently)
+			// The target host is the configured APP_URL; the request only supplies path and query.
+			target := u.Scheme + "://" + u.Host + r.URL.RequestURI()
+			http.Redirect(w, r, target, http.StatusMovedPermanently) //nolint:gosec // G710: host is config
 		})
 	}, nil
 }
