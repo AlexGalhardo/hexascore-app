@@ -1,25 +1,29 @@
-# orchestrator handoff (2026-10-31, after the architecture audit)
+# orchestrator handoff (2026-10-31, end of the first five-role session)
 
-No workers are running. The previous three-role orchestration (`framework`, `implementer`, `reviewer`) was closed; the five-role team of `PROMPT-WORKERS.md` starts from this state.
+Start the next session with `PROMPT-WORKERS.md` section 1.1 (model, parallel-workers yes, services, OpenPencil MCP registration, launch at least three implementers plus the specialist).
 
 ## State
 
-- App `main` = `origin/main` = `v0.11.0` (`d5cd4c9`) plus the audit commits of 2026-10-31 (not pushed). Safety tags/branches: `checkpoint/pre-audit-main-2026-10-31` (old local tip), `checkpoint/audit-worktree-2026-10-31` (dirty tree before the cleanup).
-- vukem checkout on `main` (`ee8477a4`, after v0.34.0); no open PRs or issues; VF-062 fixed on `main`, unreleased.
-- Gate on `main`: `go build`, `golangci-lint` (touched packages), `bun run lint/typecheck/test`, seeder and lists/profile/auth/API integration tests green. CI on `origin/main` is red because of the flaky `TestSecurity_A07_HexaHoneypotAndFillTime` (row P2.H.3.2, prio 0).
-- QA container: `E2E_IMAGE_TAG=audit` stack on `127.0.0.1:3000` (stop it with `E2E_IMAGE_TAG=audit docker compose --profile app down` when done).
-- Board seeded: `queue/TASKS.md` (P2.H rows, intern QA and docs rows, specialist SDD draft).
+- Releases: `v0.12.0` (PR #60, squash 219c873) and hotfix `v0.12.1` (PR #61, b6ddba4, cover prop on item pages) are on `origin/main` and deployed on Railway production. Local `main` contains both (merge e59c437) plus later merges; it is ahead of `origin/main` and must only reach GitHub through the release flow (`PROMPT-WORKERS.md` 8.1).
+- Production: bucket `hexascore-production` wired into the `app` service via `S3_*` (owner-approved 2026-10-31); covers return 200 on home, listings and item pages.
+- CI: the Playwright job is skipped unless the repo variable `RUN_E2E` is `true` (owner decision); e2e gates nothing.
+- vukem: PRs #104 (OTLP), #105 (rate-limit burst), #106 (pgtest drop timeout), #107 (Inertia HTML error page) merged; #109 (CSR shell) and others in review by the specialist. No vukem tag since v0.34.0; app `go.mod` still on v0.34.0 (adoption rows after the owner asks for a vukem release).
 
-## Owner items open
+## Workers at hand-off time (check heartbeats; relaunch with the role brief + handoff)
 
-`developer-manual-todos.md` (39 P2 gates), `docs/orchestration/QUESTIONS.md` Q-H31, Q-A1 (social layer / D-06), Q-A2 (API burst), Q-A3 (Docker cleanup), Q-A4 (unmerged branches to decide), `adotar VF-001`.
+- `especialista`: vukem REV rows (AUDIT-3 PR #109, AUDIT-5, docs font size, Schemathesis with a real Docker run), post-merge review of `docs/design-system.md`.
+- `senior-a`: community track (FIX-community-problem-codes, P4.A.3.2, P4.A.3.3, P4.A.3.1d, then P4.B).
+- `senior-b`: QA-ci-local-script (`scripts/ci/local.sh`), then Android P5.A.3.2+.
+- `senior-fw`: vukem `fw:` rows (FW-last-updated-check, AUDIT-2, AUDIT-4, P2.H.3.1 enum, P5.A.3.1 ApiProblem.code, P4.A.3.1b flags, covers ETag).
+- `designer`: not launched yet. Needs the OpenPencil MCP (section 1.1 step 4) or the OpenPencil-hosted agent; brief `.orchestration/briefs/designer.md`; outputs in `docs/openpencil/v1-editorial`, `v2-noir`, `v3-paper`; references `docs/design-system.md`, `docs/prompts-concept-site-pages.md`, `legacy/docs/design-system.md`.
 
-## Owner decisions of 2026-10-31 (second message)
+## Owner items open (`docs/orchestration/QUESTIONS.md`)
 
-Q-A1 social layer after the cutover (D-06 amended); Q-A2 burst 5; Q-A3 Docker cleanup done (`hexascore-spike-*` containers and volumes still there: removal blocked by the agent permission classifier, remove by hand); Q-A4 branches triaged (archive tags `archive/*`, board rows REBASE-P4.A.2.4, ADOPT-VF-001, FIX-legacy-import-no-login, FIX-legacy-cover-retry, FIX-export-purge-zip, FW-triage-branches). The owner launches the four workers in the next session, not in the audit session.
+Q-A5 (Phase 7 feed LGPD basis, legacy follows), Q-A7 (resolved by the specialist pushing vukem PRs), Q-A8 (second TypeScript version for the TS SDK generator), Q-A9 (Letterboxd human read, low), Q-A10 (workspace link for `packages/app-client`), Q-A11 (`popularity` in bulk ID exports, blocks P3.A.4.2), Q-A12 (keep legacy English labels in pt-BR/es, low). Owner-only cleanup: none pending for `.env` copies once their worktrees are removed.
 
-## Next
+## Rules added this session (also in `PROMPT-WORKERS.md` / `AGENTS.md` / memory)
 
-1. Launch the four workers with `briefs/common.md` + `briefs/<role>.md` (owner yes given on 2026-10-31 for the next session; confirm once more at session start per the global rule).
-2. First merges expected: P2.H.3.2 (CI green), P2.H.1.1 (covers), then the rest of P2.H.
-3. When the owner answers Q-A1, add P7.A.1.1 to the board.
+- Never idle: at least three implementers in parallel plus the specialist.
+- Release gate: all CI jobs except e2e locally before a release PR; squashed release commit; the owner runs the production merge.
+- Isolated QA stacks per worker; never `down` project `hexascore`; never copy `.env`.
+- vukem: senior-fw commits locally, the specialist pushes, opens and merges PRs.
