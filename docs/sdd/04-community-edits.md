@@ -38,7 +38,7 @@ Out of scope (v1): trusted moderators (modelled, flag off, D-15); suggestion obj
 - NFR-04-2: SLA: 95 % of submissions decided within 24 h; ageing badge green < 12 h, amber 12–24 h, red > 24 h; alert when the oldest open suggestion passes 20 h (SDD 12).
 - NFR-04-3: Audit retained forever, written in the same transaction as the change, covered by daily backups (D-18).
 - NFR-04-4: CSRF on forms, policies fail closed (vukem `https://vukem.dev/docs/security/authorization` "Authorization"), diffs rendered as text, user URLs fetched only via `httpclient.Safe` (vukem `https://vukem.dev/docs/basics/csrf` A01). Verify: `TestSecurity_*` (section 10), ZAP.
-- NFR-04-5: Public surfaces show nickname only; account deletion (SDD 03) nulls actor/author ids and shows "deleted user"; values stay.
+- NFR-04-5: Public surfaces show nickname only; account deletion (SDD 03) nulls the author/claim/decision ids on `suggestions` and shows "deleted user"; values stay. `catalog_audit.actor_id` is not nulled: the table is append-only (FR-04-10) and the id points at the anonymised user row (SDD 03 §7.5), which holds no email, name or nickname, so Recent changes renders it as "deleted user". Verify: `TestCommunitySystemTransitions` (integration).
 - NFR-04-6: WCAG 2.2 AA; axe zero serious/critical; diffs use text markers, not colour alone.
 - NFR-04-7: Strings under `community.*` via vukem i18n (`https://vukem.dev/docs/digging-deeper/localization` "i18n"); CI fails on a missing key in any locale.
 - NFR-04-8: No new service or store (D-08): Postgres plus the database queue.
