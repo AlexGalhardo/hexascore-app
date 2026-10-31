@@ -2,8 +2,13 @@
 package appapi
 
 import (
+	"net/http"
+	"strings"
+
 	vapi "github.com/AlexGalhardo/vukem/api"
+	"github.com/AlexGalhardo/vukem/errs"
 	"github.com/AlexGalhardo/vukem/router"
+	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/controllers/publicapi"
 )
@@ -30,4 +35,31 @@ func Catalog(g *router.Group, items *publicapi.Controller) {
 	}
 	vapi.Register(g, "GET /{type}/{id}", read("getItem"), items.GetItem)
 	vapi.Register(g, "GET /{type}", read("listItems"), items.ListItems)
+}
+
+// KnownType rejects a first segment that is not a catalogue collection.
+// GET /{type} would otherwise match /app/v1/nope and /app/v1/openapi.json and
+// the group auth would answer 401. Those paths are not the catalogue: they
+// are the same 404 the router uses for an unknown URL, before any credential
+// check. Install it ahead of the auth stack on this group only.
+func KnownType(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch catalogSegment(r.URL.Path) {
+		case "games", "movies", "series", "books", "entities":
+			next.ServeHTTP(w, r)
+		default:
+			web.Fail(w, r, errs.ErrNotFound)
+		}
+	})
+}
+
+func catalogSegment(path string) string {
+	rest, ok := strings.CutPrefix(path, "/app/v1/")
+	if !ok {
+		return ""
+	}
+
+	seg, _, _ := strings.Cut(rest, "/")
+
+	return seg
 }

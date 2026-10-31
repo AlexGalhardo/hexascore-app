@@ -30,13 +30,15 @@ const pageButton =
 export default function RatingsDialog({
 	itemId,
 	categoryLabels,
+	initialOpen = false,
 }: {
 	itemId: string;
 	categoryLabels: string[];
+	initialOpen?: boolean;
 }) {
 	const t = useT();
 	const l = useLocalized();
-	const [open, setOpen] = useState(false);
+	const [open, setOpen] = useState(initialOpen);
 	const [page, setPage] = useState(1);
 	const [rows, setRows] = useState<Row[]>([]);
 	const [pageCount, setPageCount] = useState(0);

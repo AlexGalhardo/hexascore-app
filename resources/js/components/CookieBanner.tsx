@@ -1,19 +1,13 @@
-import { useEffect, useState } from "react";
-import {
-	CONSENT_COOKIE,
-	type Consent,
-	readPreferenceCookie,
-	setPreferenceCookie,
-} from "../lib/preferences";
+import { usePage } from "@inertiajs/react";
+import { useState } from "react";
+import { CONSENT_COOKIE, type Consent, setPreferenceCookie } from "../lib/preferences";
 import { useT } from "../lib/useT";
+import type { SharedProps } from "../types";
 
 export default function CookieBanner() {
 	const t = useT();
-	const [open, setOpen] = useState(false);
-
-	useEffect(() => {
-		setOpen(!readPreferenceCookie(CONSENT_COOKIE));
-	}, []);
+	const consent = usePage<SharedProps>().props.consent;
+	const [open, setOpen] = useState(consent !== "all" && consent !== "essential");
 
 	function choose(value: Consent): void {
 		setPreferenceCookie(CONSENT_COOKIE, value);

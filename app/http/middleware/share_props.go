@@ -45,6 +45,12 @@ func ShareProps(cfg ShareConfig) func(http.Handler) http.Handler {
 				inertia.Share(ctx, "theme", ck.Value)
 			}
 
+			// The banner is part of the first HTML when this cookie is absent.
+			// A client-only open paints after hydration and becomes LCP.
+			if ck, err := r.Cookie("consent"); err == nil && (ck.Value == "all" || ck.Value == "essential") {
+				inertia.Share(ctx, "consent", ck.Value)
+			}
+
 			next.ServeHTTP(w, r)
 		})
 	}

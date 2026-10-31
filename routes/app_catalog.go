@@ -54,6 +54,7 @@ func AppCatalog(r *router.Router, app *vukem.App) error {
 
 	stack := AppAuthStack(app, acc, limiters, auth.Ability(acc.API, "catalog:read"))
 	r.Group("/app/v1", func(g *router.Group) {
+		g.Use(appapi.KnownType)
 		g.Use(stack...)
 		appapi.Catalog(g, items)
 	}).Name("app.v1.")

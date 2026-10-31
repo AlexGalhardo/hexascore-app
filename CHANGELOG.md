@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Answer unknown `/app/v1` catalogue segments with 404 before auth, and point the CI OpenAPI export and `pg_dump` at Postgres 18.
+- Paint the cookie banner in the first HTML when consent is unset, and load the ratings dialog only after it is opened.
+
 ## [0.11.0] - 2026-10-31
 
 ### Added
