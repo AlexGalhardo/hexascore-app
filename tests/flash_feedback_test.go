@@ -3,8 +3,9 @@
 package tests
 
 import (
-	"github.com/AlexGalhardo/vukem/vukemtest"
 	"testing"
+
+	"github.com/AlexGalhardo/vukem/vukemtest"
 )
 
 // TestMutationsFlashStatus: every web mutation of ratings, status, time to beat, lists and the book edition
@@ -23,17 +24,41 @@ func TestMutationsFlashStatus(t *testing.T) {
 		do         func() *vukemtest.Response
 	}{
 		{"rating put", "Rating saved.", func() *vukemtest.Response {
-			return web.PutJSON("/items/"+game+"/rating", map[string]any{"scores": map[string]float64{"gameplay": 7.5, "fun": 7.5, "sound": 7.5, "storytelling": 7.5, "technical": 7.5, "visual": 7.5}})
+			return web.PutJSON(
+				"/items/"+game+"/rating",
+				map[string]any{
+					"scores": map[string]float64{
+						"gameplay":     7.5,
+						"fun":          7.5,
+						"sound":        7.5,
+						"storytelling": 7.5,
+						"technical":    7.5,
+						"visual":       7.5,
+					},
+				},
+			)
 		}},
-		{"rating delete", "Rating removed.", func() *vukemtest.Response { return web.Delete("/items/" + game + "/rating") }},
+		{
+			"rating delete",
+			"Rating removed.",
+			func() *vukemtest.Response { return web.Delete("/items/" + game + "/rating") },
+		},
 		{"status put", "Status saved.", func() *vukemtest.Response {
 			return web.PutJSON("/items/"+game+"/status", map[string]any{"status": "completed"})
 		}},
 		{"time to beat put", "Times saved.", func() *vukemtest.Response {
 			return web.PutJSON("/items/"+game+"/time-to-beat", map[string]any{"mainHours": 10})
 		}},
-		{"time to beat delete", "Times removed.", func() *vukemtest.Response { return web.Delete("/items/" + game + "/time-to-beat") }},
-		{"status delete", "Status removed.", func() *vukemtest.Response { return web.Delete("/items/" + game + "/status") }},
+		{
+			"time to beat delete",
+			"Times removed.",
+			func() *vukemtest.Response { return web.Delete("/items/" + game + "/time-to-beat") },
+		},
+		{
+			"status delete",
+			"Status removed.",
+			func() *vukemtest.Response { return web.Delete("/items/" + game + "/status") },
+		},
 		{"list create", "List created.", func() *vukemtest.Response {
 			return web.PostJSON("/lists", map[string]any{"type": "game", "title": "T", "isPublic": true})
 		}},
@@ -47,7 +72,11 @@ func TestMutationsFlashStatus(t *testing.T) {
 			return web.Delete("/lists/" + list + "/items/" + game)
 		}},
 		{"list delete", "List deleted.", func() *vukemtest.Response { return web.Delete("/lists/" + list) }},
-		{"edition delete", "Edition forgotten.", func() *vukemtest.Response { return web.Delete("/items/" + book + "/edition") }},
+		{
+			"edition delete",
+			"Edition forgotten.",
+			func() *vukemtest.Response { return web.Delete("/items/" + book + "/edition") },
+		},
 	}
 
 	for _, s := range steps {
