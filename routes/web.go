@@ -104,6 +104,7 @@ func Web(r *router.Router, app *vukem.App) error {
 			"billing.",
 			"catalog.",
 			"categories.",
+			"dashboard.",
 			"itemTypes.",
 			"score.",
 			"meta.",
@@ -131,7 +132,7 @@ func Web(r *router.Router, app *vukem.App) error {
 			"userLists.",
 		),
 		appmiddleware.ShareProps(appmiddleware.ShareConfig{
-			AppName: app.Config.Name,
+			AppName: cmp.Or(app.Source.Get("APP_NAME"), "HexaScore"),
 			SEO:     seoConfig(app),
 			User:    func(c *web.Ctx) (any, error) { return acc.Web.User(c) },
 		}),
