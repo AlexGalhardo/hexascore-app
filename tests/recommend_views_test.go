@@ -170,8 +170,10 @@ func TestNoRawIPStored(t *testing.T) {
 	}
 
 	var hits int
-	if err := db.QueryRowContext(t.Context(),
-		`SELECT count(*) FROM item_activity_daily a WHERE row_to_json(a)::text LIKE '%127.0.0.1%'`).Scan(&hits); err != nil {
+	if err := db.QueryRowContext(
+		t.Context(),
+		`SELECT count(*) FROM item_activity_daily a WHERE row_to_json(a)::text LIKE '%127.0.0.1%'`,
+	).Scan(&hits); err != nil {
 		t.Fatal(err)
 	}
 
