@@ -6,8 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Report dialog on public profiles and public lists (`POST /reports`, reasons from SDD 14).
+- Dashboard page with links to the library, lists, public page and API keys, in the three locales.
+- Mobile header: brand, search and icon buttons on one row, sections on a scrollable row, account and language entries in a menu.
+
+### Changed
+
+- Star rating rows show their category label and larger stars; an unset value renders as a dash.
+- The cookie banner reserves space at the bottom of the page instead of covering the last controls.
+- The app name falls back to "HexaScore" when `APP_NAME` is unset; the QA compose stack sets it.
+- The public API `unknown type` problem names the accepted segments (games, movies, series, books).
+- Demo seeder: ratings spread over the whole 0.5–10 range (the previous `ORDER BY random()` reused the draw and every demo score was 1/10).
+
 ### Fixed
 
+- A verified user without a nickname is sent to the onboarding after a late e-mail verification instead of the dashboard.
+- Public lists with fewer than three items are `noindex` (SDD 14 FR-14-6).
+- Unknown profiles and lists render the 404 page with the shell instead of the bare framework page.
+- The privacy form button no longer says "Save name".
 - Keep the document inert until Inertia finishes hydrating, so a click cannot submit the server form first.
 - Wait for that hydration before the admin sign-in, the header keyboard check, and the header search.
 - Pass the osv-scanner config flag after the `scan source` subcommand.
