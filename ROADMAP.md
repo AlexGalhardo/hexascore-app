@@ -3623,7 +3623,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests -run TestMergeSumsActivity` → the target's counts equal the sum, the source rows are gone
   - Notes: exclusion is `items.visibility <> 'public'` (SDD 01), not a table.
 
-- [ ] **P6.C.1.2** Count views and search clicks in memory: middleware on 200 item-page GETs and `/app/v1` item reads, dedup by `cache.Add` with `HMAC-SHA256(daily_salt, visitor|item)` until 00:00 UTC, exclusions (prefetch, partial reloads, bots, > 50 items per visitor per day), the `SearchResultClicked` listener, and a buffered counter flushed by `s.Func("trending:flush", …).EveryMinute()` and on shutdown.
+- [x] **P6.C.1.2** Count views and search clicks in memory: middleware on 200 item-page GETs and `/app/v1` item reads, dedup by `cache.Add` with `HMAC-SHA256(daily_salt, visitor|item)` until 00:00 UTC, exclusions (prefetch, partial reloads, bots, > 50 items per visitor per day), the `SearchResultClicked` listener, and a buffered counter flushed by `s.Func("trending:flush", …).EveryMinute()` and on shutdown.
   - Files/modules: `app/recommend/primitives/views.go`, `app/recommend/primitives/counter.go`, `app/recommend/primitives/flush.go`, `routes/schedule.go`, `tests/recommend_views_test.go`
   - Refs: SDD 08 FR-08-1, NFR-08-4, NFR-08-5, §7.1, §8 (flush failure, 100k keys); <https://vukem.dev/docs/digging-deeper/cache>; <https://vukem.dev/docs/digging-deeper/scheduler> "Frequencies"; <https://vukem.dev/docs/digging-deeper/events>; VF-021; open issues 08-10, 10-5
   - Depends on: P6.C.1.1, P1.E
