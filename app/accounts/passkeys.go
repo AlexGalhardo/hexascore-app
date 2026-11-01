@@ -305,7 +305,7 @@ func (a *Accounts) FinishPasskeyLogin(ctx context.Context, s web.Session, body [
 	}
 
 	u, err := orm.QueryOf[models.User](a.DB).Where("id", row.userID).First(ctx)
-	if errors.Is(err, orm.ErrNotFound) || u.AnonymizedAt.Valid {
+	if errors.Is(err, orm.ErrNotFound) || u.AnonymizedAt.Valid || u.IsSeed {
 		return models.User{}, a.passkeyFailed(ctx)
 	}
 
