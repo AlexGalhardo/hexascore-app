@@ -110,7 +110,7 @@ export default function SearchPalette({ open, onOpenChange, returnFocus }: Props
 	return (
 		<BaseDialog.Root open={open} onOpenChange={onOpenChange}>
 			<BaseDialog.Portal>
-				<BaseDialog.Backdrop className="fixed inset-0 z-[55] bg-backdrop" />
+				<BaseDialog.Backdrop className="fixed inset-0 z-[55] bg-backdrop/50" />
 				<BaseDialog.Popup
 					initialFocus={input}
 					finalFocus={returnFocus}

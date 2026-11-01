@@ -32,11 +32,9 @@
 	--font-display: "Playfair Display", ui-serif, Georgia, serif;
 }
 
-/* Derived from the colour tokens (no new hues): button hover fill, dialog backdrop, button ledges
+/* Derived from the colour tokens (no new hues): button ledges
    (2 px at rest, 1 px pressed) and the soft shadow of the scrolled navbar. */
 @theme inline {
-	--color-hover: color-mix(in oklab, var(--color-surface) 96%, var(--color-fg));
-	--color-backdrop: color-mix(in oklab, var(--color-ledge-secondary) 50%, transparent);
 	--shadow-ledge-primary: 0 2px 0 var(--color-ledge-primary);
 	--shadow-ledge-primary-pressed: 0 1px 0 var(--color-ledge-primary);
 	--shadow-ledge-secondary: 0 2px 0 var(--color-ledge-secondary);
