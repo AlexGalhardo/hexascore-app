@@ -9,7 +9,7 @@ Scope today: **Android only** (SDD 10 §1, iOS is later). Every `--platform` bel
 | App config, `version` | `apps/mobile/app.config.ts` |
 | Build and submit profiles | `apps/mobile/eas.json` (`development`, `preview`, `e2e-test`, `production`) |
 | `versionCode` | EAS remote source, `autoIncrement` on `production` (SDD 10 [E8]); never edit it by hand |
-| CI | `.github/workflows/mobile-release.yml`, manual `workflow_dispatch` only |
+| CI | `.github/workflows/mobile-release.yml` (EAS build, owner-gated submit); `.github/workflows/mobile-gradle.yml` (Gradle fallback, manual) |
 | CLI | `eas-cli` pinned `27.2.0`, run as `bunx eas-cli@27.2.0` (no global install needed) |
 
 ## Hard rules
@@ -86,6 +86,30 @@ Once it is installed:
    ```
 
 3. Ask the owner before publishing to the `production` branch.
+
+## Gradle fallback on GitHub Actions (D-34)
+
+Used only when EAS Build is unavailable or stops being free (SDD 10 §7.8). `.github/workflows/mobile-gradle.yml` is `workflow_dispatch` only. It runs lint, typecheck, Jest and `bundle:check`, then `expo prebuild` and `./gradlew bundleRelease assembleRelease` on `ubuntu-24.04` with Temurin JDK 21, and uploads two artifacts kept for 7 days: `app-release.aab` (Play) and `app-release.apk` (sideload). It never submits to Play.
+
+```sh
+bunx eas-cli@27.2.0 build:version:get --platform android   # owner: last remote versionCode, use it + 1
+gh workflow run mobile-gradle.yml -f ref=main -f version_code=<N>
+gh run watch
+gh run download <run-id> -n app-release.aab
+unzip -l app-release.aab | rg BundleConfig.pb              # one match
+```
+
+- Signing: the upload key comes from four Actions secrets, `ANDROID_UPLOAD_KEYSTORE_BASE64`, `ANDROID_UPLOAD_KEYSTORE_PASSWORD`, `ANDROID_UPLOAD_KEY_ALIAS` and `ANDROID_UPLOAD_KEY_PASSWORD`. The job fails before checkout when any is empty, and fails after the build when the AAB or the APK is not signed with that key (SHA-256 compared with `keytool`/`apksigner`). The keystore is decoded to `$RUNNER_TEMP` and deleted at the end; only the steps that sign or verify see the secrets.
+- `versionCode`: EAS keeps it remotely, so the run takes it as the `version_code` input (exported as `ANDROID_VERSION_CODE`, read by `app.config.ts`). It must be higher than every build already sent to Play. After a fallback upload, set the EAS remote value to the same number (`eas build:version:set`) so the next EAS build does not collide.
+- The repository is public: artifacts can be downloaded by any signed-in GitHub user while they are kept. Treat a fallback AAB as published.
+- The generated `android/` folder and the keystore are never committed.
+- Windows-only workarounds from the local sideload build (ninja long paths, `NODE_PATH`) are not needed on Linux.
+
+### Owner setup for the fallback (one time)
+
+1. Download the EAS-managed upload keystore: `bunx eas-cli@27.2.0 credentials -p android` > production > Keystore > Download. Note the alias and both passwords it prints.
+2. Store it in GitHub secrets without echoing it: `base64 -w0 <keystore.jks> | gh secret set ANDROID_UPLOAD_KEYSTORE_BASE64`, then `gh secret set ANDROID_UPLOAD_KEYSTORE_PASSWORD`, `ANDROID_UPLOAD_KEY_ALIAS` and `ANDROID_UPLOAD_KEY_PASSWORD` (each prompts for the value).
+3. Delete the local keystore copy.
 
 ## Final report
 
