@@ -10,7 +10,7 @@
 		"typecheck": "tsc --noEmit",
 		"test": "bun scripts/run-jest.cjs",
 		"catalogues": "bun scripts/copy-catalogues.ts",
-		"bundle:check": "expo export:embed --platform android --dev false --entry-file node_modules/expo-router/entry.js --bundle-output .bundle-check/index.android.bundle --assets-dest .bundle-check"
+		"bundle:check": "rm -rf .bundle-check && expo export:embed --platform android --dev false --entry-file node_modules/expo-router/entry.js --bundle-output .bundle-check/index.android.bundle --assets-dest .bundle-check && bun scripts/check-bundle.cjs .bundle-check/index.android.bundle"
 	},
 	"dependencies": {
 		"@expo/metro-runtime": "58.0.15",
