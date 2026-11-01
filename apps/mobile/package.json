@@ -2,13 +2,15 @@
 	"name": "@hexascore/mobile",
 	"version": "1.0.0",
 	"private": true,
+	"main": "expo-router/entry",
 	"scripts": {
 		"start": "expo start",
 		"android": "expo start --android",
 		"lint": "biome ci .",
 		"typecheck": "tsc --noEmit",
 		"test": "bun scripts/run-jest.cjs",
-		"catalogues": "bun scripts/copy-catalogues.ts"
+		"catalogues": "bun scripts/copy-catalogues.ts",
+		"bundle:check": "expo export:embed --platform android --dev false --entry-file node_modules/expo-router/entry.js --bundle-output .bundle-check/index.android.bundle --assets-dest .bundle-check"
 	},
 	"dependencies": {
 		"@expo/metro-runtime": "58.0.15",

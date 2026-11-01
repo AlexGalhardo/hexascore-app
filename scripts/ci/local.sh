@@ -320,6 +320,7 @@ job_mobile() {
 	step lint; bun run --cwd apps/mobile lint
 	step typecheck; bun run --cwd apps/mobile typecheck
 	step test; bun run --cwd apps/mobile test
+	step bundle; bun run --cwd apps/mobile bundle:check
 }
 
 # Run -------------------------------------------------------------------------
