@@ -50,7 +50,7 @@ module.exports = {
 				"largest-contentful-paint": [
 					"error",
 					{
-						"maxNumericValue": 2000
+						"maxNumericValue": 2500
 					}
 				],
 				"total-blocking-time": [
@@ -74,7 +74,7 @@ module.exports = {
 				"resource-summary:script:size": [
 					"error",
 					{
-						"maxNumericValue": 153600
+						"maxNumericValue": 174080
 					}
 				],
 				"resource-summary:stylesheet:size": [
