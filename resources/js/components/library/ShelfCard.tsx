@@ -16,13 +16,23 @@ interface Props {
 	/** Community score; undefined until the page's props carry it (FIX-library-item-score). */
 	score?: number | null;
 	statusLabel?: string;
+	/** True only on the viewer's own pages; elsewhere stars are someone else's, labelled neutrally. */
+	own?: boolean;
 	children?: ReactNode;
 }
 
 // ShelfCard is the card shared by the library, list pages and the public profile tabs (design v1).
-export default function ShelfCard({ item, stars, score, statusLabel, children }: Props) {
+export default function ShelfCard({
+	item,
+	stars,
+	score,
+	statusLabel,
+	own = false,
+	children,
+}: Props) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
+	const showStars = stars !== undefined && (stars !== null || own);
 	const href = localized(`/${SECTION_PATHS[item.type]}/${item.slug}`, locale);
 
 	return (
@@ -40,15 +50,17 @@ export default function ShelfCard({ item, stars, score, statusLabel, children }:
 					{item.year ? ` · ${item.year}` : ""}
 					{statusLabel && ` · ${statusLabel}`}
 				</p>
-				{(score !== undefined || stars !== undefined) && (
+				{(score !== undefined || showStars) && (
 					<p className="mt-2 flex items-center gap-2 text-sm">
 						{score !== undefined && <ScoreBadge score={score} size="sm" />}
-						{stars !== undefined &&
+						{showStars &&
 							(stars === null ? (
 								<span className="text-muted">{t("library.notRated")}</span>
 							) : (
 								<span className="font-semibold">
-									{t("library.yourScore", { stars: formatScore(stars, locale) })}
+									{t(own ? "library.yourScore" : "library.ratedScore", {
+										stars: formatScore(stars, locale),
+									})}
 								</span>
 							))}
 					</p>

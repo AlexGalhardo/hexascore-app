@@ -1619,6 +1619,7 @@
     "seeAll": "See all",
     "score": "Your score: {stars}",
     "yourScore": "Your score {stars}",
+    "ratedScore": "Score {stars}",
     "notRated": "Not rated by you",
     "shelvesOf": "{name}’s shelves",
     "titleCount": {

@@ -1619,6 +1619,7 @@
     "seeAll": "Ver todos",
     "score": "Tu puntuación: {stars}",
     "yourScore": "Tu nota {stars}",
+    "ratedScore": "Nota {stars}",
     "notRated": "Sin nota tuya",
     "shelvesOf": "Estantes de {name}",
     "titleCount": {
