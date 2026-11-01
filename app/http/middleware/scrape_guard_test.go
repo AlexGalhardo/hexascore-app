@@ -60,7 +60,12 @@ func newScrapeGuard(store cache.Store) http.Handler {
 			limits.PageViewsUser.From(memLimiter),
 			limits.PageViewsUserHour.From(memLimiter),
 		},
-		SessionCookie:  "vukem_session",
+		// The real check peeks at the session store; here a "signed-in" cookie value stands for a login.
+		SignedIn: func(r *http.Request) bool {
+			c, err := r.Cookie("__Host-vukem_session")
+
+			return err == nil && c.Value == "signed-in"
+		},
 		LocalePrefixes: map[string]string{"pt-br": "pt-BR", "es": "es"},
 	}
 
@@ -207,11 +212,21 @@ func TestSecurity_A06_ScrapePageRateLimit(t *testing.T) {
 		t.Errorf("other IP: status %d, want 200", rec.Code)
 	}
 
-	session := func(r *http.Request) { r.AddCookie(&http.Cookie{Name: "__Host-vukem_session", Value: "x"}) }
+	session := func(r *http.Request) { r.AddCookie(&http.Cookie{Name: "__Host-vukem_session", Value: "signed-in"}) }
 	for i := range limits.PageViews.Limit + 1 {
 		if rec := get(h, "/games/zelda", browserUA, "198.51.100.12", session); rec.Code != http.StatusOK {
 			t.Fatalf("signed-in request %d: status %d", i+1, rec.Code)
 		}
+	}
+
+	// A session cookie without a login (kept from an anonymous visit, or made up) stays on the Anon budget.
+	forged := func(r *http.Request) { r.AddCookie(&http.Cookie{Name: "__Host-vukem_session", Value: "x"}) }
+	for range limits.PageViews.Limit {
+		get(h, "/games/zelda", browserUA, "198.51.100.14", forged)
+	}
+
+	if rec := get(h, "/games/zelda", browserUA, "198.51.100.14", forged); rec.Code != http.StatusTooManyRequests {
+		t.Errorf("forged session cookie: status %d, want 429", rec.Code)
 	}
 }
 
