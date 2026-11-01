@@ -35,12 +35,14 @@ type existing struct {
 
 // SeedDataSources inserts the data_sources rows every provenance value and
 // *_source column references (DQ-11). Stored rows win, so a licence the owner
-// corrected after legal review is never reverted.
+// corrected after legal review is never reverted; only a pre-review placeholder
+// licence is replaced.
 func SeedDataSources(ctx context.Context, ex database.Executor) error {
 	for _, s := range DataSources {
 		if _, err := ex.ExecContext(ctx, `INSERT INTO data_sources (code, name, licence, attribution, url)
-VALUES ($1, $2, $3, NULLIF($4, ''), $5) ON CONFLICT (code) DO NOTHING`,
-			s.Code, s.Name, s.Licence, s.Attribution, s.URL); err != nil {
+VALUES ($1, $2, $3, NULLIF($4, ''), $5) ON CONFLICT (code) DO UPDATE SET licence = excluded.licence
+WHERE data_sources.licence = ANY($6::text[]) AND data_sources.licence <> excluded.licence`,
+			s.Code, s.Name, s.Licence, s.Attribution, s.URL, licencePlaceholders); err != nil {
 			return fmt.Errorf("seed data_sources %s: %w", s.Code, err)
 		}
 	}

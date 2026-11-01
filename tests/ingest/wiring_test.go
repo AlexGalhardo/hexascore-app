@@ -91,6 +91,7 @@ func loadFake(t *testing.T) *fakeSources {
 	mux.HandleFunc("/wikidata", f.wbgetentities)
 	mux.HandleFunc("/wikipedia/", f.extracts)
 	mux.HandleFunc("/3/", f.tmdb)
+	mux.HandleFunc("/openlibrary/", f.openlibrary)
 
 	f.srv = httptest.NewServer(mux)
 	t.Cleanup(f.srv.Close)
@@ -166,11 +167,12 @@ func newIngestApp(t *testing.T, f *fakeSources, flagsOn ...string) *vukemtest.Ap
 	})
 
 	src := jobs.IngestSources{
-		Client:       client,
-		WikidataRDF:  f.srv.URL + "/sparql",
-		WikidataAPI:  f.srv.URL + "/wikidata",
-		WikipediaAPI: f.srv.URL + "/wikipedia/",
-		TMDBAPI:      f.srv.URL + "/3",
+		Client:         client,
+		WikidataRDF:    f.srv.URL + "/sparql",
+		WikidataAPI:    f.srv.URL + "/wikidata",
+		WikipediaAPI:   f.srv.URL + "/wikipedia/",
+		TMDBAPI:        f.srv.URL + "/3",
+		OpenLibraryAPI: f.srv.URL + "/openlibrary",
 	}
 
 	env := map[string]string{
@@ -326,23 +328,6 @@ func TestWikipediaChainRunsEveryEdition(t *testing.T) {
 
 	if n := appCount(t, app, `SELECT count(*) FROM source_records WHERE source = 'wikipedia:en'`); n != 4 {
 		t.Errorf("wikipedia:en records = %d, want 4", n)
-	}
-}
-
-func TestOpenLibraryStageAnswersSkippedWhileUnlicensed(t *testing.T) {
-	f := loadFake(t)
-	app := newIngestApp(t, f, "ENABLED", "WIKIDATA")
-
-	startChain(t, app, ingest.OpenLibraryWeekly)
-	runCommand(t, app, "queue:work", "-queue", "ingest,default", "-stop-when-empty")
-
-	got := jobStatus(t, app)
-	if got["fetch.openlibrary"] != "skipped" {
-		t.Errorf("fetch.openlibrary = %q, want skipped", got["fetch.openlibrary"])
-	}
-
-	if _, ok := got["normalize"]; ok {
-		t.Error("a skipped stage queued the normaliser")
 	}
 }
 

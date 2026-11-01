@@ -18,6 +18,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/fetch"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/httpx"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/normalize"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/openlibrary"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/rollback"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/tmdb"
@@ -35,6 +36,8 @@ type IngestSources struct {
 	// WikipediaAPI is a URL prefix; the edition code is appended.
 	WikipediaAPI string
 	TMDBAPI      string
+	// OpenLibraryAPI replaces https://openlibrary.org.
+	OpenLibraryAPI string
 	// Pressure holds ingestion chunks while the site is busy; bootstrap fills it and feeds it from the Inflight middleware.
 	Pressure *ingest.Pressure
 }
@@ -85,11 +88,10 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 	}
 
 	steps := map[string]run.Step{
-		"fetch.tmdb":     fetch.Step(tc, client, app.Now),
-		tmdb.JobName:     tmdb.ExpireStep(tc, client, app.Now),
-		"fetch.wikidata": fetch.Step(wd, client, app.Now),
-		"fetch.entities": fetch.Step(wd.Entities(), client, app.Now),
-		// The Open Library licence is unverified (A-05): the stage exists so the chain is complete, and the kill switch keeps it skipped.
+		"fetch.tmdb":         fetch.Step(tc, client, app.Now),
+		tmdb.JobName:         tmdb.ExpireStep(tc, client, app.Now),
+		"fetch.wikidata":     fetch.Step(wd, client, app.Now),
+		"fetch.entities":     fetch.Step(wd.Entities(), client, app.Now),
 		"fetch.youtube":      fetch.Step(&trailers.Connector{}, client, app.Now),
 		backfill.EditionsJob: backfill.Editions{}.Step,
 		// workaround: Stat (DQ-I-04) and Serialise (DQ-I-12) stay nil until the covers store (P6.B.2.2) and the API probe exist.
@@ -99,7 +101,7 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 			Suggest: community.IngestGate{DB: db}.OpenMissingField,
 			Now:     app.Now,
 		}.Step,
-		"fetch.openlibrary": fetch.Unavailable("openlibrary", "licence unverified, A-05"),
+		"fetch.openlibrary": fetch.Step(&openlibrary.Connector{BaseURL: src.OpenLibraryAPI}, client, app.Now),
 		"normalize": normalize.Normalizer{
 			Community: community.IngestGate{DB: db},
 			Now:       app.Now,
