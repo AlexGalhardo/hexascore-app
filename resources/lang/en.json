@@ -1266,7 +1266,12 @@
     "errors": {
       "title": "1–80 characters.",
       "description": "Up to 500 characters."
-    }
+    },
+    "offline": "Connect to the internet to create, rename, delete or reorder lists.",
+    "conflict": "This list changed somewhere else. Showing the latest version.",
+    "notSaved": "Your list change was not saved.",
+    "addedTo": "Added to {title}.",
+    "cancel": "Cancel"
   },
   "ratings": {
     "title": "Your rating",

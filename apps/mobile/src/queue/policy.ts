@@ -16,7 +16,11 @@ export type Decision =
 export const BACKOFF_MS = [2000, 10_000, 60_000] as const;
 export const MAX_SERVER_ATTEMPTS = 5;
 
-const CONFLICT_CODES = new Set(["rating-not-released", "status-not-completed"]);
+const CONFLICT_CODES = new Set([
+	"rating-not-released",
+	"status-not-completed",
+	"list-item-limit-reached",
+]);
 
 export function backoffFor(attempts: number): number {
 	return BACKOFF_MS[Math.min(Math.max(attempts, 1), BACKOFF_MS.length) - 1] ?? 60_000;
