@@ -84,6 +84,35 @@ func TestAppCatalog(t *testing.T) {
 	appCatalogClient(t, r, "ratings:write").GetJSON(item).AssertStatus(http.StatusForbidden)
 	client.GetJSON("/app/v1/games/trending").AssertOK().AssertJSONCount("data", 0)
 
+	// Covers reach the app audience only; the paid API omits them (SDD 05, licence).
+	// The app ETag covers the cover fields, so a new cover is never a 304.
+	etag := client.GetJSON(item).AssertOK().Header("ETag")
+	appCatalogClient(t, r, "catalog:read").WithHeader("If-None-Match", etag).GetJSON(item).
+		AssertStatus(http.StatusNotModified)
+	if _, err := r.acc.DB.ExecContext(t.Context(),
+		`UPDATE items SET cover_key = 'covers/hk.webp', cover_thumb_key = 'covers/hk-t.webp' WHERE id = $1`, r.game,
+	); err != nil {
+		t.Fatal(err)
+	}
+	client.GetJSON(item).AssertOK().
+		AssertJSONPath("coverThumbUrl", "/covers/hk-t.webp").
+		AssertJSONPath("coverUrl", "/covers/hk.webp")
+	appCatalogClient(t, r, "catalog:read").WithHeader("If-None-Match", etag).GetJSON(item).AssertOK().
+		AssertJSONPath("coverUrl", "/covers/hk.webp")
+	if _, err := r.acc.DB.ExecContext(t.Context(),
+		`INSERT INTO trending_snapshots (computed_at, item_type, rank, item_id, trend_score, basis)
+VALUES (date_trunc('hour', now()), 'game', 1, $1, 1, 'trend')`, r.game,
+	); err != nil {
+		t.Fatal(err)
+	}
+	client.GetJSON("/app/v1/games/trending").AssertOK().
+		AssertJSONPath("data.0.item.coverThumbUrl", "/covers/hk-t.webp")
+	r.client.GetJSON("/api/v1/games/trending").AssertOK().AssertDontSee("coverThumbUrl")
+	client.GetJSON("/app/v1/entities/"+genre+"/items?type=games&role=genre").AssertOK().
+		AssertJSONPath("data.0.coverThumbUrl", "/covers/hk-t.webp")
+	r.client.GetJSON("/api/v1/games/" + r.game).AssertOK().AssertDontSee("coverUrl").AssertDontSee("coverThumbUrl")
+	r.client.GetJSON("/api/v1/games").AssertOK().AssertDontSee("coverThumbUrl")
+
 	// Web App Links carry the slug (FR-10-7): the app reads it, the paid API stays id-only (SDD 05).
 	client.GetJSON("/app/v1/games/hollow-knight").AssertOK().AssertJSONPath("id", r.game)
 	client.GetJSON("/app/v1/books/hollow-knight").AssertNotFound()

@@ -41,6 +41,7 @@ jest.mock("expo-router", () => {
 	return {
 		Stack,
 		Tabs,
+		useRouter: () => ({ navigate: () => undefined }),
 		useSegments: () => [],
 		useLocalSearchParams: () =>
 			(globalThis as { __routeParams?: Record<string, string> }).__routeParams ?? {},
@@ -52,6 +53,11 @@ function offline(element: ReactElement): ReactElement {
 	const client = new QueryClient({ defaultOptions: { queries: { enabled: false } } });
 	return <QueryClientProvider client={client}>{element}</QueryClientProvider>;
 }
+
+// Expo Router provides the SafeAreaProvider at runtime; the router is mocked here.
+jest.mock("react-native-safe-area-context", () => ({
+	useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
+}));
 
 function params(next: Record<string, string>): void {
 	(globalThis as { __routeParams?: Record<string, string> }).__routeParams = next;
@@ -66,7 +72,7 @@ const routes: [string, Record<string, string>, () => ReactElement, string | null
 	["(tabs)/[type]", { type: "games" }, () => offline(<SectionScreen />), "Games"],
 	["(tabs)/search", {}, () => <Search />, "Search"],
 	["(tabs)/lists", {}, () => <Lists />, "Lists"],
-	["(tabs)/profile", {}, () => <Profile />, "Profile"],
+	["(tabs)/profile", {}, () => <Profile />, "Settings"],
 	["[type]/[slug]", { type: "movies", slug: "" }, () => <ItemScreen />, "Page not found"],
 	["entities/[id]", { id: "42" }, () => <EntityScreen />, "Entity 42"],
 	["lists/[id]", { id: "7" }, () => <ListScreen />, "List 7"],
