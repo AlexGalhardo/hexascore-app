@@ -37,7 +37,9 @@ func llmsDoc(site string, docsJSON []byte) (llmstxt.Doc, error) {
 		return llmstxt.Doc{}, fmt.Errorf("llms.txt: docs.json: %w", err)
 	}
 
-	docs := []llmstxt.Link{{Title: "API reference", URL: site + "/docs/reference", Notes: "every endpoint (OpenAPI 3.1)"}}
+	docs := []llmstxt.Link{
+		{Title: "API reference", URL: site + "/docs/reference", Notes: "every endpoint (OpenAPI 3.1)"},
+	}
 	for _, p := range pages {
 		docs = append(docs, llmstxt.Link{
 			Title: p.Title,

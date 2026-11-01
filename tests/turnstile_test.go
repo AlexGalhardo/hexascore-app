@@ -92,12 +92,16 @@ func TestTurnstileOnLoginPage(t *testing.T) {
 	csp := res.Header("Content-Security-Policy")
 
 	m := cspNonceRe.FindStringSubmatch(csp)
-	if m == nil || !strings.Contains(csp, "frame-src https://www.youtube-nocookie.com https://challenges.cloudflare.com") {
+	if m == nil ||
+		!strings.Contains(csp, "frame-src https://www.youtube-nocookie.com https://challenges.cloudflare.com") {
 		t.Fatalf("CSP: %s", csp)
 	}
 
 	body := res.Body()
-	if !strings.Contains(body, `src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce="`+m[1]+`"`) {
+	if !strings.Contains(
+		body,
+		`src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer nonce="`+m[1]+`"`,
+	) {
 		t.Error("login page lacks the nonce'd Turnstile script")
 	}
 

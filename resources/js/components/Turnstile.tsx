@@ -104,7 +104,11 @@ export function useTurnstile(action: string): Turnstile {
 					)}
 				</div>
 			) : null,
-		headers: () => (token ? { [CHALLENGE_TOKEN_HEADER]: token } : {}),
+		headers: (): Record<string, string> => {
+			const h: Record<string, string> = {};
+			if (token) h[CHALLENGE_TOKEN_HEADER] = token;
+			return h;
+		},
 		reset,
 	};
 }

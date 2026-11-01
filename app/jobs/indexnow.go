@@ -39,9 +39,15 @@ func handleIndexNowChanges(app *vukem.App) queue.Registration {
 			return err
 		}
 
-		return RunIndexNowChanges(ctx, db, app.Config.URL, app.Now().UTC(), func(ctx context.Context, urls []string) error {
-			return q.Dispatch(ctx, indexnow.Job{URLs: urls})
-		})
+		return RunIndexNowChanges(
+			ctx,
+			db,
+			app.Config.URL,
+			app.Now().UTC(),
+			func(ctx context.Context, urls []string) error {
+				return q.Dispatch(ctx, indexnow.Job{URLs: urls})
+			},
+		)
 	})
 }
 
