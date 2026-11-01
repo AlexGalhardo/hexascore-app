@@ -2,6 +2,8 @@ package ingest
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"log/slog"
 	"time"
 
@@ -29,11 +31,13 @@ WHERE source = 'tmdb' AND checked_at < $1::timestamptz`, 170 * 24 * time.Hour},
 
 // CheckA7 writes one alert=A7 line per condition that holds and returns how many did (SDD 12 §6.2: the app exports
 // no metrics, an in-app check logs a stable key). enabled is the master kill switch: with ingestion off nothing
-// runs, so nothing alerts. A check that cannot run logs state=unknown at ERROR.
+// runs, so nothing alerts. A check that cannot run logs state=unknown at ERROR and the rest still run; their errors are joined.
 func CheckA7(ctx context.Context, ex database.Executor, log *slog.Logger, now time.Time, enabled bool) (int, error) {
 	if !enabled {
 		return 0, nil
 	}
+
+	var errs []error
 
 	raised := 0
 
@@ -43,7 +47,9 @@ func CheckA7(ctx context.Context, ex database.Executor, log *slog.Logger, now ti
 			log.LogAttrs(ctx, slog.LevelError, "ingestion alert check failed",
 				slog.String("alert", "A7"), slog.String("check", c.name), slog.String("state", "unknown"))
 
-			return raised, err
+			errs = append(errs, fmt.Errorf("a7 check %s: %w", c.name, err))
+
+			continue
 		}
 
 		if n > 0 {
@@ -54,5 +60,5 @@ func CheckA7(ctx context.Context, ex database.Executor, log *slog.Logger, now ti
 		}
 	}
 
-	return raised, nil
+	return raised, errors.Join(errs...)
 }
