@@ -118,7 +118,9 @@ export default function RecentChanges({ target, entries, page, nextPage }: Props
 										{date.format(new Date(e.occurredAt))}
 									</time>
 								</td>
-								<td className="font-semibold max-md:order-1">{e.source === "merge" ? "" : label(e.field)}</td>
+								<td className="font-semibold max-md:order-1">
+									{e.source === "merge" ? "" : label(e.field)}
+								</td>
 								{e.source === "merge" ? (
 									<td colSpan={2} className="max-md:order-3 max-md:col-span-2">
 										{t("community.recent.merged")}
