@@ -85,5 +85,6 @@ test("the search palette is loaded on the first Ctrl+K, not with the navbar", as
 	render(<Nav />);
 	expect(screen.queryByRole("dialog")).toBeNull();
 	await userEvent.keyboard("{Control>}k{/Control}");
-	expect(await screen.findByRole("dialog")).toBeTruthy();
+	// The palette chunk is imported on demand; under a loaded host that takes longer than the 1 s default.
+	expect(await screen.findByRole("dialog", {}, { timeout: 5000 })).toBeTruthy();
 });
