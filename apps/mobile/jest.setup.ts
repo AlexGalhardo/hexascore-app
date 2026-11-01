@@ -6,9 +6,9 @@ if (runtime.HermesInternal === undefined) runtime.HermesInternal = {};
 // react-native exposes its components through lazy getters, so the first render
 // in a test file would transform and load them inside the 5 s test budget
 // (6.5 s on a cold Jest cache). Touch them here, which no test timer covers.
-const { FlatList, Pressable, Text, View } =
+const { FlatList, Pressable, ScrollView, Text, View } =
 	require("react-native") as typeof import("react-native");
-void [FlatList, Pressable, Text, View];
+void [FlatList, Pressable, ScrollView, Text, View];
 
 // Jest has no native SQLite; screens that import the runtime get an in-memory kv-store.
 jest.mock("expo-sqlite/kv-store", () => {

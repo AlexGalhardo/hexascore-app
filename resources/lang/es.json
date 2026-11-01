@@ -933,6 +933,12 @@
       "delete": "Borrar tiempos",
       "saved": "Tiempos guardados.",
       "deleted": "Tiempos borrados."
+    },
+    "confidence": "Confianza: {level}",
+    "confidenceLevel": {
+      "low": "baja",
+      "medium": "media",
+      "high": "alta"
     }
   },
   "updatedLabel": "Última actualización",
