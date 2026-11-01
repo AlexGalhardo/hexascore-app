@@ -1,8 +1,9 @@
 import { Head, useForm } from "@inertiajs/react";
 import type { FormEvent } from "react";
-
+import AuthFrame from "../../components/auth/AuthFrame";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
+import SubmitButton from "../../components/SubmitButton";
 import { checkConfirmation, checkPassword, passwordAdvice } from "../../lib/password-policy";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
@@ -20,10 +21,9 @@ export default function Reset({ token, email }: { token: string; email: string }
 	};
 
 	return (
-		<>
+		<AuthFrame heading={t("auth.recover.heading")} title={t("auth.reset.title")}>
 			<Head title={t("auth.reset.metaTitle")} />
-			<h1 className="mb-4 text-2xl font-semibold">{t("auth.reset.title")}</h1>
-			<form onSubmit={submit} className="space-y-4">
+			<form onSubmit={submit} className="space-y-5">
 				<Field
 					label={t("auth.fields.email")}
 					type="email"
@@ -52,14 +52,10 @@ export default function Reset({ token, email }: { token: string; email: string }
 					error={form.errors.password_confirmation}
 					checks={checkConfirmation(form.data.password, form.data.password_confirmation)}
 				/>
-				<button
-					type="submit"
-					disabled={form.processing}
-					className="rounded-md bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
-				>
+				<SubmitButton pending={form.processing} className="w-full">
 					{t("auth.reset.submit")}
-				</button>
+				</SubmitButton>
 			</form>
-		</>
+		</AuthFrame>
 	);
 }
