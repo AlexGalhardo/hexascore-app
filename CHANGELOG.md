@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **web:** a "Feed" link in the navbar for signed-in users while the `social` flag is on (`flags.social` shared through vukem `flags.Share`) (IMPL-web-feed-nav)
 - **social:** SDD 14 §12 social layer design and ADR 0021 (activity feed from the write path) (P7.A.1.1); follows with requests for private profiles, follower counts, and the `/feed` page with activity events and `users.feed_opt_in`, all behind the `social` flag (`FLAG_SOCIAL`, default off, Q-A5 open) (P7.A.1.2, P7.A.1.3 part 1)
 - **ingest:** ingestion pipeline (SDD 06): run framework with chunked continuation, dead letters and kill switches (off by default); outbound client with per-host throttle, retries and breaker; Wikidata and Wikipedia connectors; item core, enrichment with provenance and community locks, relations and the normalize job; legacy parity test (200 QIDs); chains, schedules and `ingest:bootstrap` (P6.A.1.3-P6.A.4.1)
 - **ingest:** TMDB connector and `tmdb.expire` job behind `ingest_tmdb` (P6.B.1.1), credit-to-entity resolution with a `hs_norm` name index (P6.B.3.2), edition ISBN rules, Wikidata edition extraction and `backfill.editions` (P6.B.3.1, partial)
@@ -87,6 +88,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **web:** below `lg` the navbar shows only the title, a search field and a hamburger that opens a sheet with sections, Feed, notifications, account, language and theme (FIX-nav-mobile-hamburger); the follow bar, follow requests, feed and activity cards use the editorial design, with "1 follower" plurals and a neutral "Score" on others' ratings (IMPL-web-social-v1)
 - **mobile:** v1 look for the status and time-to-beat sheets (IMPL-mobile-v1-status-ui), the account extras with an unread badge on the profile tab (IMPL-mobile-v1-account-ui), and translated search type labels, recent removal and empty trending text (IMPL-mobile-search-i18n)
 - **ui:** client-fetched web data (search suggestions, user-ratings dialog, edition picker, data export) uses TanStack Query 5.105.0 (ADR 0020); the Ctrl+K search palette loads on first open (ADOPT-tanstack-query-web, FIX-lighthouse-budgets-main)
 - **web:** anonymous public catalogue HTML is served gzip-compressed (session-bound, cookie-setting and non-200 responses stay plain; SDD 13 BREACH note); light book accent darkened to oklch 0.5 for AA contrast (PERF-web-lcp, FIX-lighthouse-budgets-main)
@@ -121,6 +123,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **web:** the desktop navbar no longer overflows at 1024–1440 px with the Feed link (Feed inline from `xl`, in the account menu below) (FIX-nav-lg-width)
 - **web:** shelf cards on the feed and other users' pages label the score neutrally ("Score 7.0") instead of "Your score" (FIX-shelf-score-label)
 - **ci:** the bun:test SDK workflow tests run with `bun test` instead of Vitest, so `bun run test` is green again (P3.B.1.3)
 - **ingest:** a redelivered run resumes from the locked cursor, only the breaker probe closes an open breaker, a resume whose QID left the selection restarts, and an outage no longer parks targets (P6.A review)
