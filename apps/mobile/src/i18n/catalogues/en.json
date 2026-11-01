@@ -21,6 +21,11 @@
 	"nav.themeDark": "Switch to dark theme",
 	"nav.themeLight": "Switch to light theme",
 	"nav.menu": "Menu",
+	"nav.menuUnread": {
+		"one": "Menu, {count} unread notification",
+		"other": "Menu, {count} unread notifications"
+	},
+	"nav.closeMenu": "Close menu",
 	"nav.skip": "Skip to content",
 	"nav.dismiss": "Dismiss",
 	"nav.home": "Home",

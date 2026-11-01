@@ -21,6 +21,11 @@
 	"nav.themeDark": "Cambiar al tema oscuro",
 	"nav.themeLight": "Cambiar al tema claro",
 	"nav.menu": "Menú",
+	"nav.menuUnread": {
+		"one": "Menú, {count} notificación sin leer",
+		"other": "Menú, {count} notificaciones sin leer"
+	},
+	"nav.closeMenu": "Cerrar menú",
 	"nav.skip": "Ir al contenido",
 	"nav.dismiss": "Descartar",
 	"nav.home": "Inicio",
