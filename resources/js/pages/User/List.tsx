@@ -33,8 +33,10 @@ export default function List({ list, owner, items, canEdit, indexable }: Props) 
 				description={list.description ?? undefined}
 				noindex={!indexable}
 			/>
-			<h1 className="text-2xl font-semibold">{list.title}</h1>
-			<p className="mt-1 text-muted">
+			<h1 className="mt-6 font-display text-4xl leading-none font-bold tracking-[-0.02em] md:mt-10 md:text-[56px]">
+				{list.title}
+			</h1>
+			<p className="mt-3 text-muted">
 				<Link
 					href={localized(`/u/${owner.nickname.toLowerCase()}`, locale)}
 					className="underline"
@@ -62,9 +64,9 @@ export default function List({ list, owner, items, canEdit, indexable }: Props) 
 			{items.length === 0 ? (
 				<p className="mt-4">{t("userLists.empty")}</p>
 			) : (
-				<ol className="mt-4 divide-y divide-border">
+				<ol className="mt-8 grid gap-4 border-t-2 border-fg pt-6 sm:grid-cols-2 lg:grid-cols-3">
 					{items.map((e) => (
-						<li key={e.item.id} className="py-2">
+						<li key={e.item.id}>
 							<ShelfCard item={e.item}>
 								{e.note && <p className="text-sm text-muted">{e.note}</p>}
 							</ShelfCard>

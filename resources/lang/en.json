@@ -1504,7 +1504,14 @@
     "editionsError": "Could not load editions.",
     "noEditions": "No editions available.",
     "seeAll": "See all",
-    "score": "Your score: {stars}"
+    "score": "Your score: {stars}",
+    "yourScore": "Your score {stars}",
+    "notRated": "Not rated by you",
+    "shelvesOf": "{name}’s shelves",
+    "titleCount": {
+      "one": "{count} title",
+      "other": "{count} titles"
+    }
   },
   "entity": {
     "kinds": {

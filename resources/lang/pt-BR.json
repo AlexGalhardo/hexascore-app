@@ -1504,7 +1504,14 @@
     "editionsError": "Não foi possível carregar as edições.",
     "noEditions": "Nenhuma edição disponível.",
     "seeAll": "Ver todos",
-    "score": "Sua nota: {stars}"
+    "score": "Sua nota: {stars}",
+    "yourScore": "Sua nota {stars}",
+    "notRated": "Sem nota sua",
+    "shelvesOf": "Estantes de {name}",
+    "titleCount": {
+      "one": "{count} título",
+      "other": "{count} títulos"
+    }
   },
   "entity": {
     "kinds": {
