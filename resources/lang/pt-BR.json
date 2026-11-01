@@ -691,7 +691,7 @@
   },
   "friendsScore": {
     "title": "Avaliado por quem você segue",
-    "summary": "Avaliado por {count} pessoas que você segue",
+    "summary": "{count} das pessoas que você segue avaliaram",
     "home": "Avaliados por quem você segue"
   },
   "home": {
