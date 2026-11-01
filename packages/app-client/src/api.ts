@@ -152,9 +152,11 @@ export type SearchHit = {
   matchedEdition?: EditionMatch | null;
   matchedTitle?: string;
   path?: string;
+  score?: number | null;
   slug?: string;
   title?: string;
   type?: string;
+  year?: number | null;
 };
 
 export type SuggestItem = {
