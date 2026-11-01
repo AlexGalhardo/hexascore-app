@@ -124,7 +124,8 @@ jobs:
   submit:
     name: Submit to Play internal track (draft)
     needs: build
-    if: github.ref_type == 'tag' || (inputs.submit && inputs.profile == 'production')
+    # event_name, not ref_type: a manual dispatch on a tag ref must still honour the submit and profile inputs.
+    if: github.event_name == 'push' || (inputs.submit && inputs.profile == 'production')
     runs-on: ubuntu-24.04
     environment: play-store
     permissions:
@@ -136,7 +137,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          n=$(gh api "repos/$GITHUB_REPOSITORY/environments/play-store"             --jq '[.protection_rules[]? | select(.type == "required_reviewers")] | length')
+          n=$(gh api "repos/$GITHUB_REPOSITORY/environments/play-store" --jq '[.protection_rules[]? | select(.type == "required_reviewers")] | length')
           [ "$n" -ge 1 ] || { echo "play-store environment has no required reviewer; not submitting" >&2; exit 1; }
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0

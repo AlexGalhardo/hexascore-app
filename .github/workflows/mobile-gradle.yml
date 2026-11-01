@@ -1,6 +1,6 @@
 name: Mobile Gradle fallback
 
-# D-34 fallback for EAS Build (SDD 10 section 7.8, docs/runbooks/mobile-build-fallback.md). Manual only.
+# D-34 fallback for EAS Build (SDD 10 section 7.8, docs/runbooks/mobile-release.md). Manual only.
 # Secrets reach only the steps that sign or check the signature, not bun install or the tests.
 # Builds the signed AAB (Play) and APK (sideload) from `expo prebuild` output with the upload key held in
 # Actions secrets. Fails closed when any signing secret is missing or the outputs are not signed with that key.
