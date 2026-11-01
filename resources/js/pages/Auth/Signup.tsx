@@ -12,7 +12,13 @@ import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 // Renders "...<terms>Terms</terms>...<privacy>Privacy policy</privacy>." with the two tags as links.
-export function Agreement({ text, l }: { text: string; l: (path: string) => string }): React.ReactElement {
+export function Agreement({
+	text,
+	l,
+}: {
+	text: string;
+	l: (path: string) => string;
+}): React.ReactElement {
 	const href = { terms: "/terms", privacy: "/policy" } as const;
 
 	return (
