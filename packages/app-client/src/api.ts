@@ -327,6 +327,10 @@ export type GetItemParams = {
   id: string;
 };
 
+export type ItemsRelatedParams = {
+  id: string;
+};
+
 export type ListEditionsParams = {
   id: string;
 };
@@ -549,6 +553,11 @@ export interface Client {
    * GET /app/v1/{type}/{id}
    */
   getItem(args: { params: GetItemParams; query?: GetItemQuery }): Promise<GetItemResponse>;
+
+  /**
+   * GET /app/v1/items/{id}/related
+   */
+  itemsRelated(args: { params: ItemsRelatedParams }): Promise<unknown>;
 
   /**
    * GET /app/v1/me/library
@@ -792,6 +801,7 @@ export function createClient(options: ClientOptions = {}): Client {
     editionPut: (args) => request<unknown>("PUT", "/app/v1/items/{id}/edition", args),
     getEntity: (args) => request<GetEntityResponse>("GET", "/app/v1/entities/{id}", args),
     getItem: (args) => request<GetItemResponse>("GET", "/app/v1/{type}/{id}", args),
+    itemsRelated: (args) => request<unknown>("GET", "/app/v1/items/{id}/related", args),
     library: () => request<unknown>("GET", "/app/v1/me/library"),
     listBookGenres: () => request<ListBookGenresResponse>("GET", "/app/v1/books/genres"),
     listBookTrending: (args) => request<ListBookTrendingResponse>("GET", "/app/v1/books/trending", args),

@@ -48,8 +48,10 @@ func AppMe(r *router.Router, app *vukem.App) error {
 		return err
 	}
 	fy := appapi.NewForYou(svc, acc.API.Name())
+	rel := appapi.NewRelated(acc.DB)
 
 	r.Group("/app/v1", func(g *router.Group) {
+		g.Get("/items/{id}/related", rel.Show).Name("items.related").Use(read...)
 		g.Get("/me/for-you", fy.Show).Name("me.for_you").Use(read...)
 		g.Get("/me", h.Show).Name("me.show").Use(read...)
 		g.Patch("/me", h.Update).Name("me.update").Use(write...)

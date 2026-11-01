@@ -20,6 +20,7 @@ import (
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/notifications"
 	"github.com/AlexGalhardo/hexascore-app/app/recommend/primitives"
+	"github.com/AlexGalhardo/hexascore-app/app/recommend/related"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 	"github.com/AlexGalhardo/hexascore-app/app/seo"
 	"github.com/AlexGalhardo/hexascore-app/internal/search"
@@ -213,7 +214,13 @@ func Web(r *router.Router, app *vukem.App) error {
 		if err != nil {
 			return err
 		}
-		items := controllers.NewItem(app, &scoring.Writer{DB: acc.DB, Events: app.Events, Now: app.Now}, acc.Web.User)
+		reco := related.NewMetrics()
+		items := controllers.NewItem(
+			app,
+			&scoring.Writer{DB: acc.DB, Events: app.Events, Now: app.Now},
+			acc.Web.User,
+			reco,
+		)
 		changes := controllers.NewRecentChanges(app)
 		for section, typ := range map[string]string{"games": "game", "movies": "movie", "series": "series", "books": "book"} {
 			r.Get("/"+section, listings.Index(typ)).Name("catalog." + typ)

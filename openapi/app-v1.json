@@ -582,6 +582,35 @@
         }
       }
     },
+    "/app/v1/items/{id}/related": {
+      "get": {
+        "operationId": "items.related",
+        "summary": "items.related",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "4XX": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "default": {
+            "description": "Response",
+            "content": {
+              "*/*": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/app/v1/items/{id}/status": {
       "delete": {
         "operationId": "status.delete",
