@@ -26,3 +26,14 @@ checked: POST /turnstile (vukem challenge.StepUp: no token = 403 interstitial an
 fixes: 1. `TestSecurity_A01_TurnstileStepUpPostIsHarmless` (forged cross-site post: no token → 403 no-store/noindex, no cookie; token for another action → 403; solved → 303 local-only redirect, HttpOnly clearance) (879e2bc3)
 follow-ups (not blocking): IndexNow cursor does not advance while INDEXNOW_KEY is unset, so setting the key long after this deploy submits the backlog still in api_changes (bounded by its prune, chunked/deduped by vukem); with Turnstile on, the no-JS login/sign-up fallback cannot pass (widget needs JS); migration id is dated 2026-11-02, later-today migrations would sort before it
 PRONTO_PARA_MERGE agent/especialista/ADOPT-vukem-0.36.0-fix
+
+### Full gate on main (especialista, 2026-11-01)
+
+Merge 3a285b80, board d6c825b0, test fix c7b1594b. `scripts/ci/local.sh` in halves, golangci with `--timeout 15m -j 2`:
+
+- lint: golangci 0 issues, fmt, vet, OpenAPI goldens, Redocly, Biome, tsc, markdownlint pass; commitlint over `v0.12.3..HEAD` (899 local commits) fails on old messages: process limit, the release PR carries one squashed commit (section 8.1)
+- test-go, test-ts, migrations, vuln, deps, build, mobile: PASS
+- test-go-integration: PASS on c7b1594b; first run failed `TestSecurity_A06_HexaLimits/search.suggest` (GCRA refilled one token while the loaded host sent 300 requests), fixed in c7b1594b
+- setup-windows: PASS (first run failed only on the reviewer's golangci wrapper on PATH)
+- openapi: export, Redocly and codegen pass; Schemathesis cannot reach the image (Docker Desktop, no `--network host`): host limit
+- lighthouse: host run fails LCP (Kaspersky) and script size; clean Linux run: LCP 1.1-1.7 s pass, script 174.7-178 KB over 153600 B on all URLs, same on the pre-merge image, so not from this merge: row FIX-lighthouse-script-size
