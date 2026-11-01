@@ -2,7 +2,7 @@ import { defineConfig, devices } from "@playwright/test";
 
 // Target: the built container (`docker compose --profile app up -d --wait`, seeded with DemoCatalog).
 // The same suite runs against staging by pointing E2E_BASE_URL at it (D-21).
-const baseURL = process.env.E2E_BASE_URL ?? "http://127.0.0.1:3000";
+const baseURL = process.env.E2E_BASE_URL ?? "http://localhost:3000";
 
 export const locales = ["en", "pt-BR", "es"] as const;
 
