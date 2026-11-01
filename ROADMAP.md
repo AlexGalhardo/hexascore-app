@@ -3869,7 +3869,7 @@ Design principles for the whole phase: every social write is moderated by the P4
 
 ### P7.C Social discovery
 
-- [ ] **P7.C.1.1** "Rated by people you follow" on the item page and the home, and the friends' average next to the community score.
+- [x] **P7.C.1.1** "Rated by people you follow" on the item page and the home, and the friends' average next to the community score.
   - Files/modules: `app/catalog/item_page.go`, `app/controllers/home.go`, `resources/js/components/item/FriendsScore.tsx`
   - Refs: SDD 08 §6; SDD 14 §12
   - Depends on: P7.A.1.3

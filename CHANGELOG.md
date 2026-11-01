@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **social:** the friends' average next to the community score on the item page and a "rated by people you follow" strip on the home, both deferred per viewer; an admin outcome that unhides a review or comment; reports on reviews and comments answer 404 while the `social` flag is off (P7.C.1.1, FIX-P7.B.1.3-followups)
 - **qa:** dev-only `CommunityLoad` seeder (`db:seed CommunityLoad --count N`, refused in production), a second demo admin (`admin2@example.test`), `qa/k6/moderation.js` and the Playwright community spec with the two-admin claim conflict (P4.B.5.1)
 - **api:** `listExports` and `getExport` (302 to a 5-minute presigned URL, `Cache-Control: no-store`) for Pro and Business; the daily id files leave out `popularity` until the owner confirms it (P3.A.4.2)
 - **social:** feed opt-in in settings and onboarding, a "recent activity" profile tab, 180-day activity retention and follows/activity files in the data export (P7.A.1.3 part 2); reviews on rated items with a Markdown subset and a spoiler flag (P7.B.1.1); comments with one level of replies and like/helpful reactions on reviews, comments and lists, with notifications (P7.B.1.2); members can report reviews and comments, and admins can hide or delete them or ban the author (P7.B.1.3); Open Graph share cards and a share button on items, lists and profiles (P7.C.1.2); all behind the `social` flag (default off)
