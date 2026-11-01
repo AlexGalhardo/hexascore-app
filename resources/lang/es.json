@@ -1292,7 +1292,22 @@
       "move": "mover",
       "open": "abrir",
       "esc": "cerrar"
-    }
+    },
+    "count": {
+      "one": "{n} resultado",
+      "other": "{n} resultados"
+    },
+    "allIn": {
+      "game": "Los {n} juegos para “{q}”",
+      "movie": "Las {n} películas para “{q}”",
+      "series": "Las {n} series para “{q}”",
+      "book": "Los {n} libros para “{q}”"
+    },
+    "nothingFound": "No encontramos nada para “{q}”.",
+    "checkSpelling": "Revisa la ortografía o prueba otro título.",
+    "didYouMean": "Quisiste decir:",
+    "orBrowse": "O explora una sección",
+    "people": "Personas y empresas"
   },
   "social": {
     "profile": {

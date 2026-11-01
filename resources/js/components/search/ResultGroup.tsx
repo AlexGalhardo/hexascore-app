@@ -1,6 +1,9 @@
 import { Link } from "@inertiajs/react";
 import type { ReactNode } from "react";
+
+import { useT } from "../../lib/useT";
 import CoverThumb, { type Cover } from "../CoverThumb";
+import ScoreBadge from "../ui/ScoreBadge";
 
 export interface Hit {
 	id: string;
@@ -9,6 +12,9 @@ export interface Hit {
 	path: string;
 	matchedTitle?: string;
 	cover?: Cover | null;
+	// Not sent by the search controller yet (FIX-search-hit-meta); the row shows them once it does.
+	year?: number | null;
+	score?: number | null;
 }
 
 // Reports a click without delaying the navigation (SDD 07 §7.8). Only hits the
@@ -44,21 +50,28 @@ interface Props {
 }
 
 export default function ResultGroup({ hits, searchId, group, q, offset = 0 }: Props) {
+	const t = useT();
+
 	return (
-		<ol className="mt-2 space-y-1">
+		<ol>
 			{hits.map((hit, i) => (
-				<li key={hit.id} className="flex items-center gap-3">
-					<CoverThumb cover={hit.cover} alt="" />
-					<Link
-						href={hit.path}
-						onClick={() => reportClick(searchId, hit, offset + i + 1, group)}
-						className="inline-flex min-h-11 items-center text-accent-game hover:underline"
-					>
-						{highlight(hit.title, q)}
-					</Link>
-					{hit.matchedTitle && (
-						<span className="ml-2 text-sm text-muted">{hit.matchedTitle}</span>
-					)}
+				<li key={hit.id} className="flex items-center gap-4 border-b border-border py-3">
+					<CoverThumb cover={hit.cover} alt="" size="md" />
+					<div className="min-w-0 flex-1">
+						<Link
+							href={hit.path}
+							onClick={() => reportClick(searchId, hit, offset + i + 1, group)}
+							className="font-display text-lg leading-snug font-bold hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
+						>
+							{highlight(hit.title, q)}
+						</Link>
+						<p className="text-sm text-muted">
+							{t(`itemTypes.${hit.type}`)}
+							{hit.year ? ` · ${hit.year}` : ""}
+							{hit.matchedTitle && ` · ${hit.matchedTitle}`}
+						</p>
+					</div>
+					{hit.score !== undefined && <ScoreBadge score={hit.score} size="sm" />}
 				</li>
 			))}
 		</ol>
