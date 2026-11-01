@@ -3821,6 +3821,7 @@ Design principles for the whole phase: every social write is moderated by the P4
   - Acceptance:
     - `k6 run qa/k6/feed.js` → p95 ≤ 300 ms at 30 rps with 10k events
     - `go test -tags integration ./tests -run TestFeedPrivacy` → private profiles and hidden lists never appear in another user's feed
+  - Status (2026-11-01): code done on main (parts 1 and 2, a9343e81): `TestFeedPrivacy`, `TestProfileActivityTab`, `TestActivityRetention` and `TestFeedPurgedOnAnonymise` PASS. Open: `k6 run qa/k6/feed.js` (written with `qa/k6/feed-seed.sql`, not run on this host; batch run). Flag `social` stays off while Q-A5 is open.
 
 - [ ] **P7.A.1.4** Release `v1.13.0` (follows and feed).
   - Depends on: P7.A.1.3
@@ -3837,8 +3838,9 @@ Design principles for the whole phase: every social write is moderated by the P4
   - Acceptance:
     - `go test -tags integration ./tests -run 'TestReviews|TestSecurity_A05_ReviewMarkdown'` → green; a `<script>` in a review renders as text
     - Playwright `reviews.spec.ts` → write, edit, delete, spoiler toggle; axe 0 serious
+  - Status (2026-11-01): code done on main (a9343e81): `TestReviews`, `TestReviewsDisabledByDefault` and `TestSecurity_A05_ReviewMarkdown` PASS. Open: Playwright `reviews.spec.ts` (written, not run; e2e is not a gate since 2026-10-31).
 
-- [ ] **P7.B.1.2** Comments on reviews and lists (one level of threading, 60/h per user) and reactions (`like`, `helpful`) on reviews, comments and lists, with counts updated in the same transaction.
+- [x] **P7.B.1.2** Comments on reviews and lists (one level of threading, 60/h per user) and reactions (`like`, `helpful`) on reviews, comments and lists, with counts updated in the same transaction.
   - Files/modules: `database/migrations/<ts>_create_comments_and_reactions.go`, `app/social/comments.go`, `app/social/reactions.go`, controllers and routes, `resources/js/components/social/CommentThread.tsx`, `ReactionBar.tsx`
   - Refs: SDD 14 §12; SDD 13 A06 (rate limit); SDD 14 §7.5 (notifications: "someone commented")
   - Depends on: P7.B.1.1
@@ -3846,14 +3848,16 @@ Design principles for the whole phase: every social write is moderated by the P4
   - Acceptance:
     - `go test -tags integration ./tests -run 'TestComments|TestReactions'` → green, including the unique (user, target) reaction and the rate limit
     - `/me/notifications` lists comment and reaction notifications
+  - Status (2026-11-01): done (a9343e81): `TestComments` and `TestReactions` PASS, including the unique reaction, the 60/h limit and the `/me/notifications` entries.
 
-- [ ] **P7.B.1.3** Moderation: `reports.target_type` gains `review` and `comment`; the admin queue hides, deletes or bans; the author is notified.
+- [x] **P7.B.1.3** Moderation: `reports.target_type` gains `review` and `comment`; the admin queue hides, deletes or bans; the author is notified.
   - Files/modules: `app/requests/report.go`, `app/library/reports.go`, admin resources, `resources/js/components/ReportDialog.tsx`
   - Refs: SDD 14 FR-14-9; SDD 04 (moderation SLA); P4.B
   - Depends on: P7.B.1.2, P4.B.1.1
   - Model: Sonnet
   - Acceptance:
     - `go test -tags integration ./tests -run TestReportsReviewComment` → green; a hidden review disappears from the item page and the feed
+  - Status (2026-11-01): done (a9343e81): `TestReportsReviewComment` and `TestReportsReviewBanAuthor` PASS. Hiding has no "unhide" outcome in the admin queue (follow-up).
 
 - [ ] **P7.B.1.4** Release `v1.14.0` (reviews, comments, reactions).
   - Depends on: P7.B.1.3
@@ -3870,13 +3874,14 @@ Design principles for the whole phase: every social write is moderated by the P4
   - Acceptance:
     - `go test -tags integration ./tests -run TestFriendsScore` → only followed, non-private users count; `Defer` group `personal` keeps the public HTML cacheable
 
-- [ ] **P7.C.1.2** Share cards: Open Graph image per item, list and profile (Go `image/draw`, cached on the bucket), and a "share" action on those pages.
+- [x] **P7.C.1.2** Share cards: Open Graph image per item, list and profile (Go `image/draw`, cached on the bucket), and a "share" action on those pages.
   - Files/modules: `app/seo/og_image.go`, `routes/web.go` (`/og/{kind}/{id}.png`), `resources/js/components/Seo.tsx`
   - Refs: SDD 09 §7.7; VF-004 (no WebP encoder: PNG)
   - Depends on: P2.H.1.1
   - Model: Sonnet
   - Acceptance:
     - `curl -sI localhost:3000/og/items/<id>.png` → `image/png`, `Cache-Control: public, max-age=86400`; the item page `<meta property="og:image">` points at it
+  - Status (2026-11-01): done (a9343e81): `TestOGImage` PASS (GET and HEAD 200 `image/png`, `Cache-Control: public, max-age=86400`, 1200x630; the page sets `ogImage` for the og:image meta). `dwebp` 1.6.0 ships in the runtime image's `libwebp-tools`; the WebP decode path is checked on the first deploy.
 
 - [ ] **P7.C.1.3** Release `v1.15.0` and close Phase 7 once the moderation SLA covers reviews and comments for 30 days.
   - Depends on: P7.C.1.2, P7.B.1.4
