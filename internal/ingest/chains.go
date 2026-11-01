@@ -10,6 +10,7 @@ import (
 
 	"github.com/AlexGalhardo/vukem/database"
 
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/dq"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 )
 
@@ -34,44 +35,50 @@ func fetch(source, mode string) Stage {
 	return Stage{Job: "fetch." + source, Source: source, Mode: mode}
 }
 
-// The chains of the open sources. Covers, trailers and asserts join them when their jobs exist
-// (P6.A.5, P6.A.6); the normalise stage stays last.
+// The chains of the open sources. Covers join them when their job exists (P6.B.2.2); the asserts stage is last.
 var (
 	// Bootstrap is run by hand: Wikidata top-N, referenced entities, then the normaliser.
 	Bootstrap = Chain{"bootstrap", []Stage{
 		fetch("wikidata", run.ModeBootstrap),
 		{Job: "fetch.entities", Source: "wikidata:entity", Mode: run.ModeBootstrap},
 		{Job: "normalize", Mode: run.ModeBootstrap},
+		{Job: dq.Job, Mode: run.ModeBootstrap},
 	}}
 	WikidataIncremental = Chain{"wikidata-incremental", []Stage{
 		fetch("wikidata", run.ModeIncremental),
 		{Job: "fetch.entities", Source: "wikidata:entity", Mode: run.ModeIncremental},
 		{Job: "normalize", Mode: run.ModeIncremental},
+		{Job: dq.Job, Mode: run.ModeIncremental},
 	}}
 	WikidataWeekly = Chain{"wikidata-weekly", []Stage{
 		fetch("wikidata", run.ModeFull),
 		{Job: "fetch.entities", Source: "wikidata:entity", Mode: run.ModeFull},
 		{Job: "normalize", Mode: run.ModeFull},
+		{Job: dq.Job, Mode: run.ModeFull},
 	}}
 	WikipediaWeekly = Chain{"wikipedia-weekly", []Stage{
 		fetch("wikipedia:en", run.ModeFull),
 		fetch("wikipedia:pt", run.ModeFull),
 		fetch("wikipedia:es", run.ModeFull),
 		{Job: "normalize", Mode: run.ModeFull},
+		{Job: dq.Job, Mode: run.ModeFull},
 	}}
 	OpenLibraryWeekly = Chain{"openlibrary-weekly", []Stage{
 		fetch("openlibrary", run.ModeFull),
 		{Job: "normalize", Mode: run.ModeFull},
+		{Job: dq.Job, Mode: run.ModeFull},
 	}}
 
 	TMDBWeekly = Chain{"tmdb-weekly", []Stage{
 		fetch("tmdb", run.ModeFull),
 		{Job: "normalize", Mode: run.ModeFull},
+		{Job: dq.Job, Mode: run.ModeFull},
 	}}
 	// TMDBExpire refreshes records past 150 days and deletes the ones past 180, then re-normalises their items.
 	TMDBExpire = Chain{"tmdb-expire", []Stage{
 		{Job: "tmdb.expire", Source: "tmdb", Mode: run.ModeFull},
 		{Job: "normalize", Mode: run.ModeFull},
+		{Job: dq.Job, Mode: run.ModeFull},
 	}}
 
 	// EditionsBackfill walks the books once and saves the editions their stored Wikidata records list (SDD 06 §7.8).
@@ -84,7 +91,11 @@ var (
 	TrailersWeekly = Chain{"trailers-weekly", []Stage{
 		fetch("youtube", run.ModeFull),
 		{Job: "normalize", Mode: run.ModeFull},
+		{Job: dq.Job, Mode: run.ModeFull},
 	}}
+
+	// DQDaily runs the data-quality asserts on their own (SDD 06 §7.7); every chain above ends with the same stage.
+	DQDaily = Chain{"dq-daily", []Stage{{Job: dq.Job, Mode: run.ModeIncremental}}}
 
 	// Chains lists every chain by name, which is how a run's params find the next stage.
 	Chains = []Chain{
@@ -97,6 +108,7 @@ var (
 		TMDBExpire,
 		EditionsBackfill,
 		TrailersWeekly,
+		DQDaily,
 	}
 )
 

@@ -14,6 +14,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/backfill"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/dq"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/fetch"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/httpx"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/normalize"
@@ -88,7 +89,9 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		// The Open Library licence is unverified (A-05): the stage exists so the chain is complete, and the kill switch keeps it skipped.
 		"fetch.youtube":      fetch.Step(&trailers.Connector{}, client, app.Now),
 		backfill.EditionsJob: backfill.Editions{}.Step,
-		"fetch.openlibrary":  fetch.Unavailable("openlibrary", "licence unverified, A-05"),
+		// workaround: Stat (DQ-I-04) and Serialise (DQ-I-12) stay nil until the covers store (P6.B.2.2) and the API probe exist.
+		dq.Job:              dq.Asserts{}.Step,
+		"fetch.openlibrary": fetch.Unavailable("openlibrary", "licence unverified, A-05"),
 		"normalize": normalize.Normalizer{
 			Community: community.IngestGate{DB: db},
 			Now:       app.Now,

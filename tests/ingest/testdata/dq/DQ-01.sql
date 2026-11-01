@@ -1,0 +1,1 @@
+DELETE FROM item_translations WHERE item_id = '0192f1c6-0000-7000-8000-0000000000d1'

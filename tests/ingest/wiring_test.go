@@ -365,8 +365,8 @@ func TestWeeklyWikidataRefreshesStoredEntities(t *testing.T) {
 	startChain(t, app, ingest.WikidataWeekly)
 	runCommand(t, app, "queue:work", "-queue", "ingest,default", "-stop-when-empty")
 
-	if n := appCount(t, app, `SELECT count(*) FROM job_runs WHERE status = 'succeeded'`); n != 6 {
-		t.Errorf("succeeded runs = %d, want 3 bootstrap + 3 weekly", n)
+	if n := appCount(t, app, `SELECT count(*) FROM job_runs WHERE status = 'succeeded'`); n != 8 {
+		t.Errorf("succeeded runs = %d, want 4 bootstrap + 4 weekly (fetch, entities, normalize, dq.asserts)", n)
 	}
 
 	if n := appCount(t, app, `SELECT count(*) FROM source_records WHERE source = 'wikidata:entity'`); n != entities {

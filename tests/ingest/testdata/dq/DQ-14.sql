@@ -1,0 +1,1 @@
+INSERT INTO item_links (from_item_id, to_item_id, relation, source) VALUES ('0192f1c6-0000-7000-8000-0000000000d1', '0192f1c6-0000-7000-8000-0000000000d2', 'based_on', 'wikidata'), ('0192f1c6-0000-7000-8000-0000000000d2', '0192f1c6-0000-7000-8000-0000000000d1', 'based_on', 'wikidata')
