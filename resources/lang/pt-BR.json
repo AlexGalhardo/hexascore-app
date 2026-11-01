@@ -1,4 +1,9 @@
 {
+  "coverage": {
+    "caption": "Parcela dos itens públicos cujo campo a API retorna, medida em {date}.",
+    "field": "Campo",
+    "notMeasured": "As porcentagens por campo ainda não foram publicadas. Elas são medidas numa cópia do catálogo de produção e vão aparecer aqui com a data da medição."
+  },
   "flash": {
     "ratingSaved": "Nota salva.",
     "ratingRemoved": "Nota removida.",
@@ -465,7 +470,7 @@
       "ctaSignup": "Crie sua conta para assinar",
       "notConfigured": "Pagamentos online ainda não estão disponíveis. Os planos pagos abrem em breve.",
       "coverageTitle": "Cobertura de dados",
-      "coverageBody": "A API só retorna campos que podemos republicar, então alguns são irregulares e outros sempre ficam de fora (capas, trailers). As porcentagens de cobertura ainda não foram publicadas.",
+      "coverageBody": "A API só retorna campos que podemos republicar, então alguns são irregulares. Capas de filmes, séries e jogos, e trailers, nunca estão na API.",
       "coverageLink": "Ver os detalhes da cobertura",
       "eyebrow": "API pública · somente leitura",
       "popular": "Mais escolhido",

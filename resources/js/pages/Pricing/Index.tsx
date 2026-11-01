@@ -1,5 +1,6 @@
 import { Link, usePage } from "@inertiajs/react";
 
+import CoverageTable, { type Coverage } from "../../components/docs/CoverageTable";
 import Seo from "../../components/Seo";
 import { btnClass } from "../../components/ui/Btn";
 import { localized } from "../../lib/route";
@@ -19,7 +20,7 @@ interface Props {
 	plans: Plan[];
 	currency: string;
 	currencies: string[];
-	coverage: { measured: boolean; docsPath: string };
+	coverage: Coverage & { docsPath: string };
 }
 
 const eyebrow = "text-xs font-bold tracking-[0.1em] uppercase";
@@ -171,6 +172,7 @@ export default function Index({ plans, currency, currencies, coverage }: Props) 
 					{t("billing.pricing.coverageTitle")}
 				</h2>
 				<p className="mt-2">{t("billing.pricing.coverageBody")}</p>
+				<CoverageTable coverage={coverage} />
 				<a
 					href={localized(coverage.docsPath, locale)}
 					className="mt-3 inline-flex min-h-11 items-center gap-1 font-semibold text-primary hover:underline"

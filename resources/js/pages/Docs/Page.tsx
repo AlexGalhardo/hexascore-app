@@ -1,5 +1,6 @@
 import { Link, usePage } from "@inertiajs/react";
 
+import CoverageTable, { type Coverage } from "../../components/docs/CoverageTable";
 import Seo from "../../components/Seo";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
@@ -13,6 +14,8 @@ interface Props {
 	body: string;
 	toc: { id: string; text: string; level: number }[];
 	pages: string[];
+	// Only on /docs/coverage: the measured percentages (resources/data/api_coverage.json).
+	coverage?: Coverage;
 }
 
 const eyebrow = "text-xs font-bold tracking-[0.1em] uppercase";
@@ -25,7 +28,7 @@ const pager =
 const prose =
 	"min-w-0 max-w-3xl [&_a]:text-primary [&_a]:underline-offset-2 [&_a:hover]:underline [&_blockquote]:my-5 [&_blockquote]:border-l-4 [&_blockquote]:border-primary [&_blockquote]:bg-surface [&_blockquote]:px-4 [&_blockquote]:py-3 [&_code]:font-mono [&_code]:text-[0.9em] [&_h1]:text-5xl [&_h1]:leading-none md:[&_h1]:text-6xl [&>h1+p]:mt-5 [&>h1+p]:text-xl [&>h1+p]:text-muted [&_h2]:mt-8 [&_h2]:border-t-2 [&_h2]:border-fg [&_h2]:pt-4 [&_h2]:text-3xl [&_h3]:mt-6 [&_h3]:font-semibold [&_li]:my-3 [&_li]:ml-5 [&_li]:list-[square] [&_li]:marker:text-fg [&_p]:my-4 [&_p]:leading-relaxed [&_pre]:my-5 [&_pre]:overflow-x-auto [&_pre]:bg-fg [&_pre]:p-5 [&_pre]:text-sm [&_pre]:text-bg [&_table]:my-5 [&_table]:w-full [&_table]:border-collapse [&_table]:text-sm [&_td]:border-b [&_td]:border-border [&_td]:py-2 [&_td]:pr-4 [&_th]:border-b-2 [&_th]:border-fg [&_th]:py-2 [&_th]:pr-4 [&_th]:text-left";
 
-export default function Page({ slug, body, toc, pages }: Props) {
+export default function Page({ slug, body, toc, pages, coverage }: Props) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
 	const path = (s: string) => localized(s === "index" ? "/docs" : `/docs/${s}`, locale);
@@ -89,6 +92,7 @@ export default function Page({ slug, body, toc, pages }: Props) {
 						// biome-ignore lint/security/noDangerouslySetInnerHtml: build-time escaped Markdown, see Props.body
 						dangerouslySetInnerHTML={{ __html: body }}
 					/>
+					{coverage && <CoverageTable coverage={coverage} />}
 					{(prev || next) && (
 						<div className="mt-10 flex max-w-3xl justify-between gap-4 border-t border-border pt-6">
 							{prev ? (
