@@ -31,6 +31,7 @@ type ListItemRef struct {
 	Year          *int           `json:"year"`
 	CoverThumbKey *string        `json:"coverThumbKey"`
 	Cover         *catalog.Cover `json:"cover"`
+	Score         *float64       `json:"score"`
 }
 
 // ListEntry is one position of a list.
@@ -75,7 +76,7 @@ FROM lists l WHERE l.user_id = $1 ORDER BY l.updated_at DESC, l.id DESC`, userID
 func (s *Lists) Entries(ctx context.Context, listID, locale string) ([]ListEntry, error) {
 	rows, err := s.DB.SQL().
 		QueryContext(ctx, `SELECT li.position, li.note, li.added_at, i.id, i.type, i.slug, `+libraryTitle+`,
-  extract(year FROM i.release_date)::int, i.cover_thumb_key
+  extract(year FROM i.release_date)::int, i.cover_thumb_key, `+catalog.StarsScore+`
 FROM list_items li
 JOIN items i ON i.id = li.item_id AND i.visibility = 'public'
 LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $2
@@ -90,7 +91,7 @@ WHERE li.list_id = $1 ORDER BY li.position`, listID, locale)
 	for rows.Next() {
 		var e ListEntry
 		if err := rows.Scan(&e.Position, &e.Note, &e.AddedAt, &e.Item.ID, &e.Item.Type, &e.Item.Slug, &e.Item.Title,
-			&e.Item.Year, &e.Item.CoverThumbKey); err != nil {
+			&e.Item.Year, &e.Item.CoverThumbKey, &e.Item.Score); err != nil {
 			return nil, err
 		}
 

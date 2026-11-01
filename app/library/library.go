@@ -58,6 +58,7 @@ type Item struct {
 	Cover         *catalog.Cover `json:"cover"`
 	Status        string         `json:"status"`
 	Stars         *float64       `json:"stars"`
+	Score         *float64       `json:"score"`
 	TimeToBeat    *int           `json:"timeToBeat"`
 	Edition       *EditionRef    `json:"edition"`
 	UpdatedAt     time.Time      `json:"updatedAt"`
@@ -179,7 +180,7 @@ func libraryItems(
 	}
 
 	rows, err := db.SQL().QueryContext(ctx, `SELECT i.id, i.type, i.slug, `+libraryTitle+`,
-  extract(year FROM i.release_date)::int, i.cover_thumb_key, s.status::text, round(r.overall / 10, 1)::float8,
+  extract(year FROM i.release_date)::int, i.cover_thumb_key, s.status::text, round(r.overall / 10, 1)::float8, `+catalog.StarsScore+`,
   b.main_minutes, s.updated_at, e.id, e.title, e.isbn13, e.language
 FROM item_status s
 JOIN items i ON i.id = s.item_id AND i.visibility = 'public'
@@ -202,7 +203,7 @@ ORDER BY `+libraryOrderBy[sortKey]+` LIMIT $5 OFFSET $6`,
 		var it Item
 		var edID, edTitle, edISBN, edLang sql.NullString
 		if err := rows.Scan(&it.ID, &it.Type, &it.Slug, &it.Title, &it.Year, &it.CoverThumbKey, &it.Status,
-			&it.Stars, &it.TimeToBeat, &it.UpdatedAt, &edID, &edTitle, &edISBN, &edLang); err != nil {
+			&it.Stars, &it.Score, &it.TimeToBeat, &it.UpdatedAt, &edID, &edTitle, &edISBN, &edLang); err != nil {
 			return nil, err
 		}
 
