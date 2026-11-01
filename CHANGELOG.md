@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- **api:** the API host serves only the API: `/v1/*`, `/api/v1/*`, `/up`, a JSON index at `/`, and a 404 problem+json for everything else; it no longer renders the web frontend (FIX-api-host-only-api)
+
 ### Added
 
 - **mobile:** v1 home sections component (three trending cards and a grid of six per type) (IMPL-mobile-v1-home-ui)
