@@ -10,6 +10,8 @@
 	--hs-on-primary: oklch(1 0 0);
 	--hs-ledge-primary: oklch(0.31 0.125 285.53);
 	--hs-ledge-secondary: oklch(0.189 0.009 75.06);
+	--hs-hover: oklch(0.914 0.017 87.72);
+	--hs-backdrop: oklch(0.189 0.009 75.06);
 	--hs-secondary: oklch(0.399 0.058 224.95);
 	--hs-field: oklch(0.609 0.024 83.24);
 	--hs-field-bg: oklch(1 0 0);
@@ -38,6 +40,8 @@
 	--hs-on-primary: oklch(0.183 0.007 78.14);
 	--hs-ledge-primary: oklch(0.496 0.162 286.15);
 	--hs-ledge-secondary: oklch(0 0 0);
+	--hs-hover: oklch(0.257 0.01 80.95);
+	--hs-backdrop: oklch(0 0 0);
 	--hs-secondary: oklch(0.736 0.06 220.21);
 	--hs-field: oklch(0.565 0.024 83.23);
 	--hs-field-bg: oklch(0.228 0.01 80.59);
@@ -66,6 +70,8 @@
 	--color-on-primary: var(--hs-on-primary);
 	--color-ledge-primary: var(--hs-ledge-primary);
 	--color-ledge-secondary: var(--hs-ledge-secondary);
+	--color-hover: var(--hs-hover);
+	--color-backdrop: var(--hs-backdrop);
 	--color-secondary: var(--hs-secondary);
 	--color-field: var(--hs-field);
 	--color-field-bg: var(--hs-field-bg);
