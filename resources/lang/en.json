@@ -1217,7 +1217,10 @@
     "palette": {
       "close": "Close",
       "recent": "Recent searches",
-      "seeAll": "See all results for “{q}”"
+      "seeAll": "See all results for “{q}”",
+      "move": "move",
+      "open": "open",
+      "esc": "close"
     }
   },
   "social": {

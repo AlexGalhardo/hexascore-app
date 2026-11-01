@@ -228,12 +228,43 @@ export default function SearchPalette({ open, onOpenChange, returnFocus }: Props
 										<span className="truncate">{row.q}</span>
 									)}
 									{row.kind === "all" && (
-										<span>{t("search.palette.seeAll", { q: row.q })}</span>
+										<>
+											<span className="flex-1">
+												{t("search.palette.seeAll", { q: row.q })}
+											</span>
+											<span aria-hidden="true">→</span>
+										</>
 									)}
 								</div>
 							))}
 						</div>
 					</div>
+					<p
+						aria-hidden="true"
+						className="hidden items-center gap-4 border-t border-border bg-surface px-4 py-2.5 text-[13px] text-muted sm:flex"
+					>
+						<span className="flex items-center gap-1.5">
+							<kbd className="inline-flex h-[22px] min-w-[22px] items-center justify-center rounded-sm border border-border bg-bg px-1.5 font-sans text-xs font-semibold text-fg">
+								↑
+							</kbd>
+							<kbd className="inline-flex h-[22px] min-w-[22px] items-center justify-center rounded-sm border border-border bg-bg px-1.5 font-sans text-xs font-semibold text-fg">
+								↓
+							</kbd>
+							{t("search.palette.move")}
+						</span>
+						<span className="flex items-center gap-1.5">
+							<kbd className="inline-flex h-[22px] min-w-[22px] items-center justify-center rounded-sm border border-border bg-bg px-1.5 font-sans text-xs font-semibold text-fg">
+								Enter
+							</kbd>
+							{t("search.palette.open")}
+						</span>
+						<span className="flex items-center gap-1.5">
+							<kbd className="inline-flex h-[22px] min-w-[22px] items-center justify-center rounded-sm border border-border bg-bg px-1.5 font-sans text-xs font-semibold text-fg">
+								Esc
+							</kbd>
+							{t("search.palette.esc")}
+						</span>
+					</p>
 					<span role="status" className="sr-only">
 						{loading
 							? t("search.searching")

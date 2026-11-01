@@ -50,7 +50,7 @@ test("focuses the input and shows the first 8 results plus see all", async () =>
 	await userEvent.type(box, "zel");
 	const options = await screen.findAllByRole("option");
 	expect(options).toHaveLength(9);
-	expect(options[8].textContent).toBe("search.palette.seeAll:zel");
+	expect(options[8].textContent).toContain("search.palette.seeAll:zel");
 	expect(options[0].getAttribute("aria-selected")).toBe("true");
 });
 
