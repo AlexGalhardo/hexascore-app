@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
@@ -29,6 +30,7 @@ type runParams struct {
 	Limit int       `json:"limit"`
 	Since time.Time `json:"since"`
 	Types []string  `json:"types"`
+	QIDs  []string  `json:"qids"`
 }
 
 type cursor struct {
@@ -57,8 +59,13 @@ func Step(c ingest.Connector, client *ingest.Client, now func() time.Time) run.S
 			p.Since = now().Add(-IncrementalWindow)
 		}
 
+		// A limit applies before the QID filter in the connectors' SQL, so it would hide requested QIDs.
+		if len(p.QIDs) > 0 {
+			p.Limit = 0
+		}
+
 		batch, exhausted, err := collect(ctx, tx, c, ingest.RunParams{
-			RunID: r.ID, Mode: r.Mode, Since: p.Since, Types: p.Types, Limit: p.Limit,
+			RunID: r.ID, Mode: r.Mode, Since: p.Since, Types: p.Types, Limit: p.Limit, QIDs: p.QIDs,
 		}, cur.After)
 		if err != nil {
 			return run.Result{}, err
@@ -121,6 +128,10 @@ func collect(
 	for t, err := range c.Targets(ctx, tx, p, after) {
 		if err != nil {
 			return page{}, false, err
+		}
+
+		if len(p.QIDs) > 0 && !slices.Contains(p.QIDs, t.ID) {
+			continue
 		}
 
 		raw = append(raw, t)

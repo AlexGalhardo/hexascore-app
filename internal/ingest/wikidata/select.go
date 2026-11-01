@@ -221,10 +221,14 @@ func (w *Connector) SelectQids(
 // selection is cached per run (one query per type); a restarted worker selects again.
 func (w *Connector) Targets(
 	ctx context.Context,
-	_ database.Executor,
+	db database.Executor,
 	p ingest.RunParams,
 	after string,
 ) iter.Seq2[ingest.Target, error] {
+	if len(p.QIDs) > 0 {
+		return qidTargets(ctx, db, p, after)
+	}
+
 	types := p.Types
 	if len(types) == 0 {
 		types = Types
@@ -280,6 +284,54 @@ func (w *Connector) Targets(
 					return
 				}
 			}
+		}
+	}
+}
+
+// qidTargets yields the requested QIDs after the cursor without the SPARQL selection. The item type Trim needs
+// comes from the stored record, then from the items table, then from a single requested type.
+func qidTargets(
+	ctx context.Context, db database.Executor, p ingest.RunParams, after string,
+) iter.Seq2[ingest.Target, error] {
+	return func(yield func(ingest.Target, error) bool) {
+		rows, err := db.QueryContext(ctx, `SELECT q.qid, coalesce(s.payload->>'type', i.type, '')
+FROM unnest($1::text[]) AS q(qid)
+LEFT JOIN source_records s ON s.source = 'wikidata' AND s.external_id = q.qid
+LEFT JOIN items i ON i.wikidata_qid = q.qid
+WHERE q.qid > $2 ORDER BY q.qid`, p.QIDs, after)
+		if err != nil {
+			yield(ingest.Target{}, fmt.Errorf("wikidata qid targets: %w", err))
+
+			return
+		}
+
+		defer func() { _ = rows.Close() }()
+
+		for rows.Next() {
+			var qid, itemType string
+			if err := rows.Scan(&qid, &itemType); err != nil {
+				yield(ingest.Target{}, fmt.Errorf("scan wikidata qid target: %w", err))
+
+				return
+			}
+
+			if itemType == "" && len(p.Types) == 1 {
+				itemType = p.Types[0]
+			}
+
+			if itemType == "" {
+				yield(ingest.Target{}, fmt.Errorf("wikidata: %s has no known item type, pass types", qid))
+
+				return
+			}
+
+			if !yield(ingest.Target{ID: qid, Type: itemType}, nil) {
+				return
+			}
+		}
+
+		if err := rows.Err(); err != nil {
+			yield(ingest.Target{}, fmt.Errorf("wikidata qid targets: %w", err))
 		}
 	}
 }
