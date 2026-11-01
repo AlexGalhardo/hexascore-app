@@ -2,10 +2,10 @@ package migrations
 
 import "github.com/AlexGalhardo/vukem/schema"
 
-// m20261101170000CreateReviewsTable adds reviews: one optional text per rating, shown while the rating exists
+// m20261101171000CreateReviewsTable adds reviews: one optional text per rating, shown while the rating exists
 // (SDD 14 §12.10). helpful_count is kept by the reactions of P7.B.1.2.
-func m20261101170000CreateReviewsTable() schema.Migration {
-	return postgresMigration("20261101170000_create_reviews_table",
+func m20261101171000CreateReviewsTable() schema.Migration {
+	return postgresMigration("20261101171000_create_reviews_table",
 		[]string{
 			`CREATE TABLE reviews (
   id uuid PRIMARY KEY,

@@ -109,7 +109,11 @@
       "button": "Request export",
       "requested": "Export requested. You will get an email with the link soon.",
       "cooldown": "You can request one export every 7 days. Try again later.",
-      "failed": "Could not request the export. Try again."
+      "failed": "Could not request the export. Try again.",
+      "retryIn": {
+        "one": "You can try again in {count} day.",
+        "other": "You can try again in {count} days."
+      }
     },
     "notifications": {
       "title": "Email notices",
@@ -142,6 +146,31 @@
       "themeLight": "Light",
       "themeDark": "Dark",
       "crashReports": "Send crash reports"
+    },
+    "inbox": {
+      "title": "Notifications",
+      "empty": "You have no notifications.",
+      "markAll": "Mark all as read",
+      "unread": "Unread",
+      "unreadCount": {
+        "one": "{count} unread",
+        "other": "{count} unread"
+      },
+      "kind": {
+        "suggestion_decided": "Your suggestion was reviewed.",
+        "suggestion_reverted": "A change you suggested was reverted.",
+        "suggestion_expired": "Your suggestion expired.",
+        "report_resolved": "Your report was reviewed. Thank you.",
+        "rating_flagged": "One of your ratings was flagged for review.",
+        "list_hidden": "One of your lists was hidden by a moderator.",
+        "system": "Notice from the team."
+      }
+    },
+    "about": {
+      "title": "About",
+      "version": "Version {version}",
+      "tmdb": "This product uses the TMDB API but is not endorsed or certified by TMDB.",
+      "igdb": "Game data is provided by IGDB.com."
     }
   },
   "actions": {
@@ -437,7 +466,10 @@
       "notConfigured": "Online payments are not available yet. Paid plans will open soon.",
       "coverageTitle": "Data coverage",
       "coverageBody": "The API only returns fields we may republish, so some are patchy and some are always omitted (covers, trailers). Coverage percentages are not published yet.",
-      "coverageLink": "Read the coverage details"
+      "coverageLink": "Read the coverage details",
+      "eyebrow": "Public API · read-only",
+      "popular": "Most chosen",
+      "lifetime": "lifetime"
     },
     "checkout": {
       "metaTitle": "Plan and billing",
@@ -643,6 +675,11 @@
     "themeDark": "Switch to dark theme",
     "themeLight": "Switch to light theme",
     "menu": "Menu",
+    "menuUnread": {
+      "one": "Menu, {count} unread notification",
+      "other": "Menu, {count} unread notifications"
+    },
+    "closeMenu": "Close menu",
     "skip": "Skip to content",
     "dismiss": "Dismiss",
     "home": "Home",
@@ -713,6 +750,9 @@
       "authentication": "Authentication",
       "pagination": "Pagination",
       "rate-limits": "Rate limits",
+      "changes": "Changes",
+      "exports": "Exports",
+      "webhooks": "Webhooks",
       "errors": "Errors",
       "coverage": "Coverage",
       "changelog": "Changelog",
@@ -872,7 +912,9 @@
     "serverBody": "An unexpected error happened on our side. Try again in a moment.",
     "retry": "Try again",
     "home": "Back to home",
-    "reference": "Error reference"
+    "reference": "Error reference",
+    "status-not-completed": "Mark the game as completed before adding your time to beat.",
+    "timeToBeatHours": "Use 0.5 to 10,000 hours, in steps of 0.5."
   },
   "item": {
     "metaDescription": "{title} ({type}) — community score and 6-category averages.",
@@ -996,7 +1038,8 @@
       "save": "Save times",
       "delete": "Delete times",
       "saved": "Times saved.",
-      "deleted": "Times deleted."
+      "deleted": "Times deleted.",
+      "notSaved": "Your times could not be saved. Try again."
     },
     "confidence": "Confidence: {level}",
     "confidenceLevel": {
@@ -1027,6 +1070,47 @@
       "overall": "Your overall score",
       "overallHint": "The average of the categories you rated ({rated} of {total}).",
       "completeHint": "Rate every category to save."
+    },
+    "moreLike": {
+      "game": "More games like this",
+      "movie": "More movies like this",
+      "series": "More series like this",
+      "book": "More books like this"
+    },
+    "similarReason": "Shares {entity}",
+    "crossMedia": "In other media",
+    "relation": {
+      "based_on": "Original work",
+      "adapted_as": "Adaptation"
+    },
+    "status": {
+      "title": "Status",
+      "none": "No status",
+      "game": {
+        "want": "Want to play",
+        "in_progress": "Playing",
+        "completed": "Played",
+        "dropped": "Dropped"
+      },
+      "movie": {
+        "want": "Want to watch",
+        "in_progress": "Watching",
+        "completed": "Watched",
+        "dropped": "Dropped"
+      },
+      "series": {
+        "want": "Want to watch",
+        "in_progress": "Watching",
+        "completed": "Watched",
+        "dropped": "Dropped"
+      },
+      "book": {
+        "want": "Want to read",
+        "in_progress": "Reading",
+        "completed": "Read",
+        "dropped": "Dropped"
+      },
+      "notSaved": "Your status could not be saved. Try again."
     }
   },
   "updatedLabel": "Last updated",
@@ -1109,7 +1193,10 @@
           "0": "We will update this page when our practices change and change the date above. Material changes are announced on the site or by email before they take effect."
         }
       }
-    }
+    },
+    "contents": "Contents",
+    "also": "Also",
+    "otherTitle": "Terms of use and cookies"
   },
   "terms": {
     "title": "Terms of use and cookies",
@@ -1194,7 +1281,10 @@
           "0": "Questions about these terms, withdrawal or refund requests and privacy requests can be sent through the contact form."
         }
       }
-    }
+    },
+    "contents": "Contents",
+    "also": "Also",
+    "otherTitle": "Privacy policy"
   },
   "lists": {
     "addToList": "Add to list",
@@ -1249,7 +1339,12 @@
     "errors": {
       "title": "1–80 characters.",
       "description": "Up to 500 characters."
-    }
+    },
+    "offline": "Connect to the internet to create, rename, delete or reorder lists.",
+    "conflict": "This list changed somewhere else. Showing the latest version.",
+    "notSaved": "Your list change was not saved.",
+    "addedTo": "Added to {title}.",
+    "cancel": "Cancel"
   },
   "ratings": {
     "title": "Your rating",
@@ -1291,7 +1386,9 @@
       "seeAll": "See all results for “{q}”",
       "move": "move",
       "open": "open",
-      "esc": "close"
+      "esc": "close",
+      "removeRecent": "Remove “{q}” from recent searches",
+      "trendingEmpty": "Nothing is trending this week yet."
     },
     "count": {
       "one": "{n} result",
@@ -1425,8 +1522,14 @@
       "submit": "Save nickname"
     },
     "follow": {
-      "followers": "{count} followers",
-      "following": "{count} following",
+      "followers": {
+        "one": "{count} follower",
+        "other": "{count} followers"
+      },
+      "following": {
+        "one": "{count} following",
+        "other": "{count} following"
+      },
       "follow": "Follow",
       "unfollow": "Unfollow",
       "requested": "Requested · cancel",
@@ -1440,7 +1543,8 @@
       "status_changed": "marked as {status}",
       "list_created": "created the list",
       "list_item_added": "added to",
-      "review_published": "reviewed"
+      "review_published": "reviewed",
+      "score": "Score {score}"
     },
     "optIn": {
       "label": "Share my activity with followers",
@@ -1553,6 +1657,7 @@
     "seeAll": "See all",
     "score": "Your score: {stars}",
     "yourScore": "Your score {stars}",
+    "ratedScore": "Score {stars}",
     "notRated": "Not rated by you",
     "shelvesOf": "{name}’s shelves",
     "titleCount": {
@@ -1579,7 +1684,10 @@
     "showing": "{count} of {total}",
     "avgScore": "Average score: {score}",
     "seeAll": "See all",
-    "next": "Next"
+    "next": "Next",
+    "emptyHint": "Items linked to this page will appear here once they are in the catalogue.",
+    "browse": "Browse the catalogue",
+    "source": "Source"
   },
   "userLists": {
     "addItem": "Add an item",
@@ -1734,6 +1842,15 @@
         "deleted": "deleted user",
         "system": "HexaScore",
         "user": "member"
+      },
+      "lede": "Every accepted edit to this page, newest first.",
+      "overview": "Overview",
+      "columns": {
+        "date": "Date",
+        "field": "Field",
+        "before": "Before",
+        "after": "After",
+        "by": "By"
       }
     },
     "entityKinds": {
