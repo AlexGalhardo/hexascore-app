@@ -194,3 +194,38 @@ test("signed in with the flag on, the hamburger shows unread and the sheet has f
 		props.unreadNotifications = 0;
 	}
 });
+
+// Base UI's focus guards refocus in a requestAnimationFrame, so a Tab that lands before the next
+// frame (a loaded main thread, or keys pressed right after opening) used to escape to the page.
+test("Tab and Shift+Tab right after opening never leave the sheet", async () => {
+	for (const keys of ["{Tab}", "{Shift>}{Tab}{/Shift}"]) {
+		const user = userEvent.setup({ delay: null });
+		render(<Nav />);
+		await user.click(screen.getByRole("button", { name: "nav.menu" }));
+		const sheet = screen.getByRole("dialog");
+		const outside: string[] = [];
+		for (let i = 0; i < 40; i++) {
+			await user.keyboard(keys);
+			const a = document.activeElement;
+			if (!sheet.contains(a))
+				outside.push(`${i}:${a?.tagName}:${a?.textContent?.slice(0, 20)}`);
+		}
+		expect(outside).toEqual([]);
+		cleanup();
+	}
+});
+
+test("the hamburger name follows the unread count when it changes", () => {
+	try {
+		props.auth.user = { name: "Ana", nickname: "ana" };
+		const { rerender } = render(<Nav />);
+		expect(screen.getByRole("button", { name: "nav.menu" })).toBeTruthy();
+		props.unreadNotifications = 2;
+		rerender(<Nav />);
+		const burger = screen.getByRole("button", { name: "nav.menuUnread" });
+		expect(burger.textContent).toContain("2");
+	} finally {
+		props.auth.user = null;
+		props.unreadNotifications = 0;
+	}
+});
