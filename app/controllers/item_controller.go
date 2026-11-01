@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"context"
 	"errors"
 	"net/http"
 	"strconv"
@@ -17,7 +16,6 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/recommend/related"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
-	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
 // Item serves the item pages Catalog/Show and Catalog/Edition (SDD 09 §6.2).
@@ -25,9 +23,7 @@ type Item struct {
 	app    *vukem.App
 	writer *scoring.Writer
 	user   func(c *web.Ctx) (models.User, error)
-	// Social adds the deferred `reviews` prop while the feature flag `social` is on (SDD 14 §12.10); nil on SQLite.
-	Social *social.Follows
-	reco   *related.Metrics
+	reco   related.Events
 }
 
 // NewItem builds the handlers; writer reads the viewer's own rating, status and time to beat.
@@ -35,7 +31,7 @@ func NewItem(
 	app *vukem.App,
 	writer *scoring.Writer,
 	user func(c *web.Ctx) (models.User, error),
-	reco *related.Metrics,
+	reco related.Events,
 ) *Item {
 	return &Item{app: app, writer: writer, user: user, reco: reco}
 }
@@ -74,18 +70,16 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 
 		props["similar"], props["crossMedia"] = rel.Similar, rel.CrossMedia
 		if len(rel.Similar) > 0 {
-			h.reco.Impression("similar", typ)
+			h.reco.Impression(c.Context(), "similar", typ, page.Item.ID)
 		}
 		if len(rel.CrossMedia) > 0 {
-			h.reco.Impression("crossmedia", typ)
+			h.reco.Impression(c.Context(), "crossmedia", typ, page.Item.ID)
 		}
 		if from := related.FromSurface(c.Query("from")); from != "" {
-			h.reco.Click(from, typ)
+			h.reco.Click(c.Context(), from, typ, page.Item.ID)
 		}
 
-		var viewerID int64
 		if u, err := h.user(c); err == nil {
-			viewerID = u.ID
 			me, err := h.writer.Me(c.Context(), u.ID, page.Item.ID)
 			if err != nil {
 				return err
@@ -95,16 +89,6 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 				return err
 			}
 			props["me"], props["myLists"] = me, lists
-		}
-
-		if h.Social.Enabled(c.Context()) {
-			props["ogImage"] = ogImage("items", page.Item.ID)
-			locale := i18n.Locale(c.Context())
-			props["reviews"] = inertia.Defer(func(ctx context.Context) (any, error) {
-				data, mine, err := h.Social.ItemReviews(ctx, viewerID, page.Item.ID, locale)
-
-				return map[string]any{"data": data, "mine": mine}, err
-			}).Group("reviews")
 		}
 
 		return inertia.Render(c, "Catalog/Show", props)
