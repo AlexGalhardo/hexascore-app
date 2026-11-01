@@ -14,7 +14,8 @@ export interface SettingsLabels {
 
 export interface SettingsPageProps {
 	title: string;
-	account: { name: string; email: string } | null;
+	/** Null when signed out; a field is null until `GET /me` has loaded. */
+	account: { name: string | null; email: string | null } | null;
 	theme: ThemePreference;
 	/** Crash-report consent switch, wired from src/telemetry. */
 	crashReport: ReactNode;
@@ -53,10 +54,16 @@ export function SettingsPage(props: SettingsPageProps): ReactElement {
 				) : (
 					<>
 						<View>
-							<Text className={`font-text text-16 font-semibold ${FG}`}>{props.account.name}</Text>
-							<Text className="font-text text-14 text-muted dark:text-muted-dark">
-								{props.account.email}
-							</Text>
+							{props.account.name ? (
+								<Text className={`font-text text-16 font-semibold ${FG}`}>
+									{props.account.name}
+								</Text>
+							) : null}
+							{props.account.email ? (
+								<Text className="font-text text-14 text-muted dark:text-muted-dark">
+									{props.account.email}
+								</Text>
+							) : null}
 						</View>
 						<Btn variant="secondary" label={labels.signOut} onPress={props.onSignOut} />
 					</>
