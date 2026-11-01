@@ -70,6 +70,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **community:** The merge form picks both records with the search box instead of raw ids, and relation and merge diffs on the suggestion status page show names (FIX-community-create-ux)
 - **ui:** The library, public lists and profile ratings render shared shelf cards (cover, status, score); the library groups by status with counts (P2.H.1.4)
 - **infra:** Observability is Railway-native only (D-35 amended): service metrics, log search, traces and `alert=` log lines; the policy page no longer lists Grafana Cloud (FIX-observability-railway-native)
+- **deps:** vukem v0.35.0 (drivers/postgres v0.6.0, drivers/s3 v0.4.0, contrib/stripe v0.5.0); the OpenAPI app document uses `Info.Docs` instead of reading the command line; covers from S3 answer 304 on a matching ETag (ADOPT-vukem-0.35.0)
 
 ### Fixed
 
