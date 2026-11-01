@@ -34,7 +34,7 @@ Manual run: `/app/app backup:drill` (without `--first-sunday` it runs any day). 
 
 ## Off-site copy
 
-On day 1 at 07:00 America/Sao_Paulo, an hour after `backup.daily` makes the monthly copy, `backup:offsite` mails `ADMIN_EMAILS` (from `noreply@`, Reply-To `support@`) a link to the encrypted monthly dump (SDD 11 §7.3 step 6, D-32). It records `backup_runs(kind='offsite')`: `uploaded` when mailed, `failed` with the reason otherwise. It mails once per monthly dump, so it is safe to run again: `/app/hexascore backup:offsite`.
+On day 1 at 07:00 America/Sao_Paulo, an hour after `backup.daily` makes the monthly copy, `backup:offsite` mails `ADMIN_EMAILS` (from `noreply@`, Reply-To `support@`) a link to the encrypted monthly dump (SDD 11 §7.3 step 6, D-32). It records `backup_runs(kind='offsite')`: `uploaded` when mailed, `failed` with the reason otherwise. It mails once per monthly dump, so it is safe to run again: `/app/app backup:offsite`.
 
 - The link is signed with a key derived from `APP_KEY` and expires after 7 days. The app serves it under `/backups/offsite/` (<https://vukem.dev/docs/security/signed-urls> "Temporary file downloads") and answers 404 for any path outside `backups/postgres/monthly/`.
 - Download the file to personal storage within the 7 days and check its SHA-256 against the mail. The file opens only with `BACKUP_KEY`, which you keep offline. The mail never contains the key.
