@@ -4,13 +4,54 @@ package ingest_test
 
 import (
 	"bytes"
+	"context"
+	"database/sql"
 	"log/slog"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/AlexGalhardo/vukem/database"
+
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest"
 )
+
+// failFirst makes the failed_run check error, as a broken query would.
+type failFirst struct{ database.Executor }
+
+func (f failFirst) QueryRowContext(ctx context.Context, q string, args ...any) *sql.Row {
+	if strings.Contains(q, "status = 'failed'") {
+		return f.Executor.QueryRowContext(ctx, `SELECT 1/0`)
+	}
+
+	return f.Executor.QueryRowContext(ctx, q, args...)
+}
+
+func TestAlertA7ContinuesPastAFailingCheck(t *testing.T) {
+	db := newDB(t)
+	ctx := t.Context()
+
+	if _, err := db.ExecContext(ctx, `INSERT INTO source_records (source, external_id, payload, hash, checked_at)
+VALUES ('tmdb', 'Q1', '{}', repeat('a', 64), now() - interval '171 days')`); err != nil {
+		t.Fatal(err)
+	}
+
+	var buf bytes.Buffer
+
+	n, err := ingest.CheckA7(ctx, failFirst{db}, slog.New(slog.NewTextHandler(&buf, nil)), time.Now(), true)
+	if err == nil {
+		t.Fatal("want the failing check's error")
+	}
+
+	out := buf.String()
+	if !strings.Contains(out, "check=failed_run") || !strings.Contains(out, "state=unknown") {
+		t.Errorf("the failing check must log state=unknown: %s", out)
+	}
+
+	if !strings.Contains(out, "check=tmdb_age") || n < 1 {
+		t.Errorf("the checks after the failing one must still run (raised %d): %s", n, out)
+	}
+}
 
 func TestAlertA7Lines(t *testing.T) {
 	db := newDB(t)
