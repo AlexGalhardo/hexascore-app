@@ -48,3 +48,11 @@ var ProfilePrivacySchema = z.Struct[ProfilePrivacy](z.Shape{
 	"profilePrivate":        z.Bool().Default(false),
 	"personalizationOptOut": z.Bool().Default(false),
 })
+
+// ProfileFeed is the feed opt-in switch (SDD 14 FR-14-18).
+type ProfileFeed struct {
+	FeedOptIn bool `json:"feedOptIn" form:"feedOptIn"`
+}
+
+// ProfileFeedSchema validates ProfileFeed.
+var ProfileFeedSchema = z.Struct[ProfileFeed](z.Shape{"feedOptIn": z.Bool().Default(false)})

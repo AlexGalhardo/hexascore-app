@@ -316,7 +316,7 @@ WHERE b.user_id = $1::bigint`,
 FROM user_item_editions ue JOIN items i ON i.id = ue.item_id JOIN editions e ON e.id = ue.edition_id
 WHERE ue.user_id = $1::bigint AND $2::text IS NOT NULL`,
 	},
-	// shortcut: edit suggestions (SDD 04) have no table yet; fill this when it lands so the ZIP keeps its 12 files.
+	// shortcut: edit suggestions (SDD 04) have no table yet; fill this when it lands so the ZIP keeps its 14 files.
 	{"suggestions", `SELECT '[]'::json WHERE $1::bigint IS NOT NULL AND $2::text IS NOT NULL`},
 	{"lists", `SELECT coalesce(json_agg(json_build_object('id', l.id, 'type', l.type, 'title', l.title,
   'description', l.description, 'isPublic', l.is_public, 'hidden', l.hidden,
@@ -368,6 +368,27 @@ WHERE r.user_id = $1::bigint ORDER BY r.created_at`,
   coalesce(li.note, ''), to_char(li.added_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')
 FROM lists l JOIN list_items li ON li.list_id = l.id JOIN items i ON i.id = li.item_id ` + exportTitleJn + `
 WHERE l.user_id = $1::bigint ORDER BY l.created_at, li.position`,
+	},
+	// SDD 14 §12.9: both follow directions by nickname, and the user's own activity events.
+	{
+		"follows",
+		[]string{"direction", "nickname", "state", "since"},
+		`SELECT d, nick, state, to_char(at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') FROM (
+  SELECT 'follower' AS d, coalesce(u.display_username, u.username, '') AS nick, f.state, f.created_at AS at
+  FROM follows f JOIN users u ON u.id = f.follower_id WHERE f.followee_id = $1::bigint
+  UNION ALL
+  SELECT 'following', coalesce(u.display_username, u.username, ''), f.state, f.created_at
+  FROM follows f JOIN users u ON u.id = f.followee_id WHERE f.follower_id = $1::bigint) x
+WHERE $2::text IS NOT NULL ORDER BY d, at`,
+	},
+	{
+		"activity",
+		[]string{"kind", "type", "title", "list", "createdAt"},
+		`SELECT e.kind, coalesce(i.type, ''), coalesce(` + exportTitle + `, ''), coalesce(l.title, ''),
+  to_char(e.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')
+FROM activity_events e LEFT JOIN items i ON i.id = e.item_id ` + exportTitleJn + `
+LEFT JOIN lists l ON l.id = e.list_id
+WHERE e.actor_id = $1::bigint ORDER BY e.id`,
 	},
 }
 
@@ -497,6 +518,8 @@ Your personal records on HexaScore, read at one instant. Dates are ISO 8601. Sco
   (name, abilities, dates; never the secret) and account events.
 - ratings.csv: type,title,year,externalIds,overall,c1..c6,ratedAt — for import into other services.
 - lists.csv: list,position,type,title,year,note,addedAt.
+- follows.csv: direction (follower or following),nickname,state,since — the people you follow and who follow you.
+- activity.csv: kind,type,title,list,createdAt — your activity events shown to followers (kept 180 days).
 
 CSV cells that start with =, +, -, @, tab or carriage return are prefixed with ' so spreadsheets do not run them.
 Passwords, two-factor secrets, token hashes and other people's data are never included.

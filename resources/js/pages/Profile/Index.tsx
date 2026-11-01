@@ -5,6 +5,7 @@ import DataExport from "../../components/DataExport";
 import DeleteAccount from "../../components/DeleteAccount";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
+import FeedOptIn from "../../components/social/FeedOptIn";
 import { checkPassword, passwordAdvice } from "../../lib/password-policy";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
@@ -32,6 +33,8 @@ interface Props {
 	sessions: SessionRow[];
 	privacy: { profilePrivate: boolean; personalizationOptOut: boolean };
 	notifications: { communityMailOptOut: boolean };
+	/** Present only while the feature flag `social` is on (SDD 14 FR-14-18). */
+	social?: { feedOptIn: boolean };
 }
 
 const LOCALES = [
@@ -164,6 +167,7 @@ export default function Index({
 	sessions,
 	privacy,
 	notifications,
+	social,
 }: Props) {
 	const t = useT();
 	const l = useLocalized();
@@ -354,6 +358,11 @@ export default function Index({
 						{t("account.privacy.save")}
 					</button>
 				</form>
+				{social && (
+					<div className="mt-6 border-t border-border pt-4">
+						<FeedOptIn on={social.feedOptIn} />
+					</div>
+				)}
 			</Section>
 
 			<Section id="notifications" title={t("account.notifications.title")}>

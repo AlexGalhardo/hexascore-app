@@ -325,7 +325,8 @@ Rules that apply to every cell: events on a list that is private or `hidden`, or
 | `GET /me/follow-requests` | session | Inertia `Social/Requests` |
 | `POST /me/follow-requests/{nickname}/accept` and `/decline` | session | 303 back; 404 when no pending row |
 | `GET /feed?cursor=` | session | Inertia `Feed/Index` with `events`, `nextCursor` |
-| `GET /u/{nickname}?tab=activity` | public | the profile page with `activity` deferred in group `personal` |
+| `GET /u/{nickname}?tab=activity` | public | the profile page with `activity` deferred in group `personal`; `activity: null` when the viewer may not see it (§12.5) |
+| `PATCH /profile/feed` | session | `{feedOptIn}`; 303 to `/profile`; 404 while the flag is off. Onboarding (`POST /onboarding`) takes the same optional `feedOptIn` |
 
 Following a banned user is 404, like a missing one; accept and decline match only the signed-in followee's own pending rows, so no policy object is needed. Follow writes run in one transaction with `notifications.Send`. Routes live in `routes/follows.go` (`routes/social.go` is the OAuth sign-in file). The public profile gets a `social` prop (`followers`, `following` unless hidden; `state` for a signed-in non-owner).
 
@@ -352,7 +353,7 @@ The visibility filters of §12.5 apply to the joined items and lists in the same
 
 ### 12.9 LGPD
 
-Basis: open issue 8 (Q-A5). The data export ZIP (§7.4) gains `follows.csv` (both directions, nicknames) and `activity.csv`. The purge (SDD 03 §7.5) covers both tables.
+Basis: open issue 8 (Q-A5). The data export ZIP (§7.4) gains `follows.csv` (`direction,nickname,state,since`, both directions) and `activity.csv` (`kind,type,title,list,createdAt`, the user's own events). The purge (SDD 03 §7.5) deletes both directions of `follows`, the user's `activity_events` and resets `feed_opt_in`. The daily job `social.prune_activity` (04:40) applies NFR-14-9 whatever the flag.
 
 ### 12.10 Tests
 

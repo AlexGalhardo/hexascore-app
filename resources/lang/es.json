@@ -109,11 +109,7 @@
       "button": "Pedir exportación",
       "requested": "Exportación solicitada. Pronto recibirás un correo con el enlace.",
       "cooldown": "Puedes pedir una exportación cada 7 días. Inténtalo más tarde.",
-      "failed": "No se pudo pedir la exportación. Inténtalo de nuevo.",
-      "retryIn": {
-        "one": "Puedes intentarlo de nuevo en {count} día.",
-        "other": "Puedes intentarlo de nuevo en {count} días."
-      }
+      "failed": "No se pudo pedir la exportación. Inténtalo de nuevo."
     },
     "notifications": {
       "title": "Avisos por correo",
@@ -146,31 +142,6 @@
       "themeLight": "Claro",
       "themeDark": "Oscuro",
       "crashReports": "Enviar informes de errores"
-    },
-    "inbox": {
-      "title": "Notificaciones",
-      "empty": "No tienes notificaciones.",
-      "markAll": "Marcar todo como leído",
-      "unread": "No leída",
-      "unreadCount": {
-        "one": "{count} no leída",
-        "other": "{count} no leídas"
-      },
-      "kind": {
-        "suggestion_decided": "Tu sugerencia fue revisada.",
-        "suggestion_reverted": "Un cambio que sugeriste fue revertido.",
-        "suggestion_expired": "Tu sugerencia caducó.",
-        "report_resolved": "Tu denuncia fue revisada. Gracias.",
-        "rating_flagged": "Una de tus valoraciones fue marcada para revisión.",
-        "list_hidden": "Un moderador ocultó una de tus listas.",
-        "system": "Aviso del equipo."
-      }
-    },
-    "about": {
-      "title": "Acerca de",
-      "version": "Versión {version}",
-      "tmdb": "Este producto usa la API de TMDB, pero TMDB no lo respalda ni lo certifica.",
-      "igdb": "Los datos de juegos los proporciona IGDB.com."
     }
   },
   "actions": {
@@ -466,10 +437,7 @@
       "notConfigured": "Los pagos en línea aún no están disponibles. Los planes de pago abrirán pronto.",
       "coverageTitle": "Cobertura de datos",
       "coverageBody": "La API solo devuelve campos que podemos republicar, así que algunos son irregulares y otros siempre se omiten (portadas, tráilers). Los porcentajes de cobertura aún no se han publicado.",
-      "coverageLink": "Ver los detalles de la cobertura",
-      "eyebrow": "API pública · solo lectura",
-      "popular": "El más elegido",
-      "lifetime": "de por vida"
+      "coverageLink": "Ver los detalles de la cobertura"
     },
     "checkout": {
       "metaTitle": "Plan y facturación",
@@ -675,11 +643,6 @@
     "themeDark": "Cambiar al tema oscuro",
     "themeLight": "Cambiar al tema claro",
     "menu": "Menú",
-    "menuUnread": {
-      "one": "Menú, {count} notificación sin leer",
-      "other": "Menú, {count} notificaciones sin leer"
-    },
-    "closeMenu": "Cerrar menú",
     "skip": "Ir al contenido",
     "dismiss": "Descartar",
     "home": "Inicio",
@@ -750,9 +713,6 @@
       "authentication": "Autenticación",
       "pagination": "Paginación",
       "rate-limits": "Límites de uso",
-      "changes": "Cambios",
-      "exports": "Exportaciones",
-      "webhooks": "Webhooks",
       "errors": "Errores",
       "coverage": "Cobertura",
       "changelog": "Historial de cambios",
@@ -912,9 +872,7 @@
     "serverBody": "Ocurrió un error inesperado de nuestro lado. Inténtalo de nuevo en un momento.",
     "retry": "Intentar de nuevo",
     "home": "Volver al inicio",
-    "reference": "Referencia del error",
-    "status-not-completed": "Marca el juego como completado antes de añadir tu tiempo para terminarlo.",
-    "timeToBeatHours": "Usa de 0,5 a 10.000 horas, de 0,5 en 0,5."
+    "reference": "Referencia del error"
   },
   "item": {
     "metaDescription": "{title} ({type}) — nota de la comunidad y promedios en 6 categorías.",
@@ -1038,8 +996,7 @@
       "save": "Guardar tiempos",
       "delete": "Borrar tiempos",
       "saved": "Tiempos guardados.",
-      "deleted": "Tiempos borrados.",
-      "notSaved": "No se pudieron guardar tus tiempos. Inténtalo de nuevo."
+      "deleted": "Tiempos borrados."
     },
     "confidence": "Confianza: {level}",
     "confidenceLevel": {
@@ -1070,47 +1027,6 @@
       "overall": "Tu puntuación general",
       "overallHint": "La media de las categorías que valoraste ({rated} de {total}).",
       "completeHint": "Valora todas las categorías para guardar."
-    },
-    "moreLike": {
-      "game": "Más juegos como este",
-      "movie": "Más películas como esta",
-      "series": "Más series como esta",
-      "book": "Más libros como este"
-    },
-    "similarReason": "En común: {entity}",
-    "crossMedia": "En otros medios",
-    "relation": {
-      "based_on": "Obra original",
-      "adapted_as": "Adaptación"
-    },
-    "status": {
-      "title": "Estado",
-      "none": "Sin estado",
-      "game": {
-        "want": "Quiero jugar",
-        "in_progress": "Jugando",
-        "completed": "Jugado",
-        "dropped": "Abandonado"
-      },
-      "movie": {
-        "want": "Quiero ver",
-        "in_progress": "Viendo",
-        "completed": "Vista",
-        "dropped": "Abandonada"
-      },
-      "series": {
-        "want": "Quiero ver",
-        "in_progress": "Viendo",
-        "completed": "Vista",
-        "dropped": "Abandonada"
-      },
-      "book": {
-        "want": "Quiero leer",
-        "in_progress": "Leyendo",
-        "completed": "Leído",
-        "dropped": "Abandonado"
-      },
-      "notSaved": "No se pudo guardar tu estado. Inténtalo de nuevo."
     }
   },
   "updatedLabel": "Última actualización",
@@ -1193,10 +1109,7 @@
           "0": "Actualizaremos esta página cuando cambien nuestras prácticas y cambiaremos la fecha de arriba. Los cambios importantes se anuncian en el sitio o por correo antes de entrar en vigor."
         }
       }
-    },
-    "contents": "Contenido",
-    "also": "Ver también",
-    "otherTitle": "Términos de uso y cookies"
+    }
   },
   "terms": {
     "title": "Términos de uso y cookies",
@@ -1281,10 +1194,7 @@
           "0": "Las dudas sobre estos términos, las solicitudes de desistimiento o reembolso y las solicitudes de privacidad pueden enviarse mediante el formulario de contacto."
         }
       }
-    },
-    "contents": "Contenido",
-    "also": "Ver también",
-    "otherTitle": "Política de privacidad"
+    }
   },
   "lists": {
     "addToList": "Añadir a una lista",
@@ -1339,12 +1249,7 @@
     "errors": {
       "title": "1–80 caracteres.",
       "description": "Hasta 500 caracteres."
-    },
-    "offline": "Conéctate a internet para crear, renombrar, eliminar o reordenar listas.",
-    "conflict": "Esta lista cambió en otro lugar. Mostrando la versión más reciente.",
-    "notSaved": "No se guardó el cambio en tu lista.",
-    "addedTo": "Añadido a {title}.",
-    "cancel": "Cancelar"
+    }
   },
   "ratings": {
     "title": "Tu valoración",
@@ -1386,9 +1291,7 @@
       "seeAll": "Ver todos los resultados de “{q}”",
       "move": "mover",
       "open": "abrir",
-      "esc": "cerrar",
-      "removeRecent": "Quitar “{q}” de las búsquedas recientes",
-      "trendingEmpty": "Nada en tendencia esta semana todavía."
+      "esc": "cerrar"
     },
     "count": {
       "one": "{n} resultado",
@@ -1434,7 +1337,8 @@
       "tabs": {
         "ratings": "Valoraciones",
         "status": "Estado",
-        "lists": "Listas"
+        "lists": "Listas",
+        "activity": "Actividad"
       },
       "byCategory": "Valoraciones por categoría",
       "allTypes": "Todas",
@@ -1455,7 +1359,10 @@
         "summary": "{submitted} sugeridas · {approved} aprobadas · {rejected} rechazadas",
         "rate": "Tasa de aprobación {rate}",
         "tier": "Nivel: {tier} · precisión {accuracy}"
-      }
+      },
+      "activityLoading": "Cargando actividad…",
+      "activityHidden": "Esta actividad no se comparte.",
+      "noActivity": "Sin actividad reciente."
     },
     "status": {
       "label": "Estado",
@@ -1514,14 +1421,8 @@
       "submit": "Guardar nickname"
     },
     "follow": {
-      "followers": {
-        "one": "{count} seguidor",
-        "other": "{count} seguidores"
-      },
-      "following": {
-        "one": "{count} seguido",
-        "other": "{count} seguidos"
-      },
+      "followers": "{count} seguidores",
+      "following": "{count} seguidos",
       "follow": "Seguir",
       "unfollow": "Dejar de seguir",
       "requested": "Solicitado · cancelar",
@@ -1534,8 +1435,12 @@
       "rating_saved": "puntuó",
       "status_changed": "marcó como {status}",
       "list_created": "creó la lista",
-      "list_item_added": "añadió a",
-      "score": "Puntuación {score}"
+      "list_item_added": "añadió a"
+    },
+    "optIn": {
+      "label": "Compartir mi actividad con seguidores",
+      "help": "Tus valoraciones, estados y listas públicas aparecen en el feed de quienes te siguen y en tu perfil. Desactivado por defecto; al desactivarlo, la actividad anterior se oculta al instante.",
+      "saved": "Compartir actividad guardado."
     }
   },
   "help": {
@@ -1631,7 +1536,6 @@
     "seeAll": "Ver todos",
     "score": "Tu puntuación: {stars}",
     "yourScore": "Tu nota {stars}",
-    "ratedScore": "Nota {stars}",
     "notRated": "Sin nota tuya",
     "shelvesOf": "Estantes de {name}",
     "titleCount": {
@@ -1658,10 +1562,7 @@
     "showing": "{count} de {total}",
     "avgScore": "Nota media: {score}",
     "seeAll": "Ver todos",
-    "next": "Siguiente",
-    "emptyHint": "Los elementos vinculados a esta página aparecerán aquí cuando estén en el catálogo.",
-    "browse": "Explorar el catálogo",
-    "source": "Fuente"
+    "next": "Siguiente"
   },
   "userLists": {
     "addItem": "Añadir un elemento",
@@ -1816,15 +1717,6 @@
         "deleted": "usuario eliminado",
         "system": "HexaScore",
         "user": "miembro"
-      },
-      "lede": "Todas las ediciones aceptadas de esta página, de la más reciente a la más antigua.",
-      "overview": "Resumen",
-      "columns": {
-        "date": "Fecha",
-        "field": "Campo",
-        "before": "Antes",
-        "after": "Después",
-        "by": "Por"
       }
     },
     "entityKinds": {

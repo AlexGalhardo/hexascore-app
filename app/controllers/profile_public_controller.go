@@ -128,6 +128,21 @@ func (h *PublicProfile) Show(c *web.Ctx) error {
 		if ok {
 			props["social"] = follow
 		}
+
+		if ok && c.Query("tab") == "activity" {
+			allowed, err := h.Follows.ActivityAllowed(ctx, viewer.ID, p.UserID)
+			if err != nil {
+				return err
+			}
+			// null tells the page "not shared" apart from "still loading" (undefined).
+			props["activity"] = nil
+			if allowed {
+				locale := i18n.Locale(ctx)
+				props["activity"] = inertia.Defer(func(ctx context.Context) (any, error) {
+					return h.Follows.Activity(ctx, p.UserID, locale)
+				}).Group("personal")
+			}
+		}
 	}
 
 	if !hidden {

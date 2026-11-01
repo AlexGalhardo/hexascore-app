@@ -40,6 +40,12 @@ func Auth(r *router.Router, app *vukem.App) error {
 	}
 
 	h := account.New(acc, forms.Token{Key: formKey, Now: app.Now})
+	if acc.DB.Dialect().Name() == "postgres" {
+		if h.Social, err = SocialService(app, acc); err != nil {
+			return err
+		}
+	}
+
 	guest := auth.Guest(acc.Web)
 	required := auth.Required(acc.Web)
 	// Signed-in pages also need a verified email; unverified users are sent

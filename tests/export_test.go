@@ -87,6 +87,13 @@ func TestExportZip(t *testing.T) {
 	)
 	exec(`INSERT INTO list_items (list_id, item_id, position, note) VALUES ($1, $2, 1, '+SUM(A1)')`, list, item)
 
+	// Social layer (SDD 14 §12.9): both follow directions by nickname, and the user's own activity.
+	exec(`UPDATE users SET username = 'otherguy', display_username = 'OtherGuy' WHERE id = $1`, other.ID)
+	exec(`INSERT INTO follows (follower_id, followee_id, state, accepted_at) VALUES ($1, $2, 'accepted', now()),
+  ($2, $1, 'pending', NULL)`, u.ID, other.ID)
+	exec(`INSERT INTO activity_events (id, actor_id, kind, item_id) VALUES ($1, $2, 'rating_saved', $3),
+  ($4, $5, 'rating_saved', $3)`, uuid.NewV7().String(), u.ID, item, uuid.NewV7().String(), other.ID)
+
 	c := app.Client(t).WithToken(plain)
 	c.PostJSON("/app/v1/me/export", map[string]any{}).AssertStatus(http.StatusAccepted).AssertSee(`"status":"queued"`)
 
@@ -124,8 +131,9 @@ func TestExportZip(t *testing.T) {
 	}
 
 	want := []string{
-		"README.md", "account.json", "editions.json", "lists.csv", "lists.json", "notifications.json",
-		"profile.json", "ratings.csv", "ratings.json", "statuses.json", "suggestions.json", "time_to_beat.json",
+		"README.md", "account.json", "activity.csv", "editions.json", "follows.csv", "lists.csv", "lists.json",
+		"notifications.json", "profile.json", "ratings.csv", "ratings.json", "statuses.json", "suggestions.json",
+		"time_to_beat.json",
 	}
 	got := make([]string, 0, len(files))
 	for name := range files {
@@ -153,6 +161,25 @@ func TestExportZip(t *testing.T) {
 
 	if len(lists) != 2 || lists[1][0] != "'@cmd list" || lists[1][5] != "'+SUM(A1)" {
 		t.Errorf("lists.csv = %q, want guarded list title and note", lists)
+	}
+
+	follows, err := csv.NewReader(strings.NewReader(files["follows.csv"])).ReadAll()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(follows) != 3 || follows[1][0] != "follower" || follows[1][1] != "OtherGuy" || follows[1][2] != "pending" ||
+		follows[2][0] != "following" || follows[2][1] != "OtherGuy" || follows[2][2] != "accepted" {
+		t.Errorf("follows.csv = %q, want one follower request and one accepted following", follows)
+	}
+
+	activity, err := csv.NewReader(strings.NewReader(files["activity.csv"])).ReadAll()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(activity) != 2 || activity[1][0] != "rating_saved" || activity[1][2] != `'=HYPERLINK("x")` {
+		t.Errorf("activity.csv = %q, want only the user's own guarded rating event", activity)
 	}
 
 	for _, secret := range []string{"unused", `"password"`, "hash", other.Email} {

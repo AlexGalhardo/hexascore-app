@@ -4,9 +4,12 @@ import (
 	"strings"
 
 	"github.com/AlexGalhardo/vukem/auth"
+	"github.com/AlexGalhardo/vukem/i18n"
+	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/app/requests"
 	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
@@ -79,4 +82,25 @@ func (h *Follows) answer(c *web.Ctx, accept bool) error {
 	}
 
 	return c.Back("/notifications")
+}
+
+// UpdateFeedOptIn saves the feed opt-in from the /profile privacy section (SDD 14 FR-14-18).
+func (h *Follows) UpdateFeedOptIn(c *web.Ctx) error {
+	u, err := h.user(c)
+	if err != nil {
+		return pageError(c, err)
+	}
+
+	in, err := web.Parse(c, requests.ProfileFeedSchema)
+	if err != nil {
+		return err
+	}
+
+	if err := h.svc.SetFeedOptIn(c.Context(), u.ID, in.FeedOptIn); err != nil {
+		return err
+	}
+
+	inertia.Flash(c, "status", i18n.T(c.Context(), "social.optIn.saved"))
+
+	return c.Redirect("/profile")
 }
