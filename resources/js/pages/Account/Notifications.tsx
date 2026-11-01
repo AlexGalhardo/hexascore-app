@@ -49,7 +49,9 @@ export default function Notifications({
 									...n.payload,
 									// The server stores the raw target type ("review", "comment"); show it translated.
 									...(typeof n.payload.targetType === "string" && {
-										targetType: t(`notifications.target.${n.payload.targetType}`),
+										targetType: t(
+											`notifications.target.${n.payload.targetType}`,
+										),
 									}),
 								})}
 								<span className="ml-2 text-sm text-muted">
