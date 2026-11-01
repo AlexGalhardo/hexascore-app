@@ -69,6 +69,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - App-side alerts A5 (SSR fallback on a public route), A6 (a job kind exhausted twice in a row) and A10 (five consecutive quota flush failures) as structured `alert=` log lines (P2.C.3.3, P2.C.alerts-a5-test).
 - Runbooks R1-R9 under `docs/runbooks/` with an alert-to-runbook map and the monthly cost checklist (P2.C.4.2).
 - `search:reindex` console command: rebuilds the search indexes concurrently, then the suggest table (P2.C.search-reindex).
+- Item page props `similar` (up to 8, with the shared feature) and `crossMedia`, and `GET /app/v1/items/{id}/related` (P6.D.1.3); the item page shows them as "More games/movies/series/books like this" and "In other media" strips (IMPL-web-v1-more-like-this).
 
 ### Changed
 
@@ -97,6 +98,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Page-only i18n namespaces (docs, terms, policy, help, billing, ...) are sent only on their pages, with a once-prop key per namespace set (PERF-i18n-page-namespaces).
 - The legacy `entities` import stage is set-based (about 12 statements per 1,000 items instead of about 5,900) and `hexascore:import-legacy` takes `--workers N` for the entities, social and library stages; the checkpoint only advances past contiguous committed batches (FIX-legacyimport-entities-setbased).
 - Search hits (web and `/app/v1`) carry the release `year` and the community `score` (null under 5 ratings); library items, profile ratings and list entries carry the community `score` (FIX-search-hit-meta, FIX-library-item-score).
+- The book edition, entity and recent changes pages follow design v1 (IMPL-web-v1-edition-entity, IMPL-web-v1-recent-changes).
+- API docs, terms and privacy, error and pricing pages follow design v1 (IMPL-web-v1-docs-legal-errors).
 
 ### Fixed
 
@@ -119,6 +122,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **api:** The app API documents the `/app/v1/search` and `/search/suggest` query parameters, so the generated client can send `q` (FIX-app-search-query-params)
 - **mobile:** The Android app opens web item links that carry only the slug; `GET /app/v1/{type}/{id}` also takes a slug and answers 301 for a renamed one (FIX-app-item-by-slug)
 - **mobile:** The rating input reports its accessibility value in integer half steps (6.5 is 13 of 20) (FIX-mobile-rating-a11y-now)
+- An entity with no linked titles showed a blank page (IMPL-web-v1-edition-entity).
+- The terms and privacy pages showed the raw `updatedLabel` key instead of "Last updated" (IMPL-web-v1-docs-legal-errors).
 
 ### Removed
 

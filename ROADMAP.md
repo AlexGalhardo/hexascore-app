@@ -3724,7 +3724,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./app/recommend/similar -bench BenchmarkComputeSimilar -benchtime 1x` on a 500k-item seed → ≤ 60 min on 1 core, recorded in SDD 08 §11 issue 11
   - Notes: if the benchmark exceeds 60 min, switch to incremental by `feature_hash` in a follow-up microtask (open issue 08-11). Do not tune weights here.
 
-- [ ] **P6.D.1.3** Serve `similar` (8, with `reason`) and `crossMedia` (≤ 6, `item_links` in either direction, hidden when empty) as eager props on the item page and on `/app/v1/items/{id}/related`, with `reco.impressions`/`reco.clicks` and `?from=similar|crossmedia`.
+- [x] **P6.D.1.3** Serve `similar` (8, with `reason`) and `crossMedia` (≤ 6, `item_links` in either direction, hidden when empty) as eager props on the item page and on `/app/v1/items/{id}/related`, with `reco.impressions`/`reco.clicks` and `?from=similar|crossmedia`.
   - Files/modules: `app/web/item.go`, `resources/js/Pages/Item/Show.tsx`, `resources/js/components/SimilarItems.tsx`, `app/appapi/related.go`, `tests/item_related_test.go`, `openapi/app-v1.json`
   - Refs: SDD 08 §6 (contracts, Inertia props, metrics), FR-08-8, FR-08-11; SDD 01 §5.2 (`item_links`); SDD 10 §6.1 (Item row `/items/{id}/related`); SDD 12 §6.2
   - Depends on: P6.D.1.2
