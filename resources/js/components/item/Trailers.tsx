@@ -21,45 +21,50 @@ export default function Trailers({ trailers }: { trailers: Trailer[] }) {
 	}, [trailers]);
 
 	return (
-		<div className="grid gap-3">
-			<p className="text-sm text-muted">{t("item.trailerConsent")}</p>
-			<ul className="grid gap-3 sm:grid-cols-2">
-				{trailers.map((trailer, i) => {
-					const title = trailer.title || t("item.trailerTitle", { n: i + 1 });
-					return (
-						<li
-							key={trailer.youtubeId}
-							className="aspect-video overflow-hidden rounded-md border border-border"
-						>
-							{loaded.has(trailer.youtubeId) ? (
-								<iframe
-									src={`https://www.youtube-nocookie.com/embed/${trailer.youtubeId}`}
-									title={title}
-									className="size-full"
-									loading="lazy"
-									referrerPolicy="strict-origin-when-cross-origin"
-									allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-									allowFullScreen
-								/>
-							) : (
+		<ul className="grid gap-3 sm:grid-cols-2">
+			{trailers.map((trailer, i) => {
+				const title = trailer.title || t("item.trailerTitle", { n: i + 1 });
+				return (
+					<li
+						key={trailer.youtubeId}
+						className="aspect-video overflow-hidden bg-fg text-bg"
+					>
+						{loaded.has(trailer.youtubeId) ? (
+							<iframe
+								src={`https://www.youtube-nocookie.com/embed/${trailer.youtubeId}`}
+								title={title}
+								className="size-full"
+								loading="lazy"
+								referrerPolicy="strict-origin-when-cross-origin"
+								allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+								allowFullScreen
+							/>
+						) : (
+							<div className="grid size-full place-content-center justify-items-center gap-3 p-4 text-center text-sm">
+								<svg
+									viewBox="0 0 24 24"
+									aria-hidden="true"
+									className="size-5 fill-none stroke-current stroke-2"
+								>
+									<rect x="5" y="11" width="14" height="10" rx="1" />
+									<path d="M8 11V7a4 4 0 0 1 8 0v4" />
+								</svg>
+								<p className="max-w-xs">{t("item.trailerConsent")}</p>
 								<button
 									type="button"
+									aria-label={`${t("item.loadTrailerN", { n: i + 1 })}: ${title}`}
 									onClick={() =>
 										setLoaded((prev) => new Set(prev).add(trailer.youtubeId))
 									}
-									className="grid size-full place-content-center gap-1 bg-surface text-sm hover:bg-border"
+									className="min-h-11 rounded-xs bg-bg px-4 font-semibold text-fg hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bg"
 								>
-									<span aria-hidden="true" className="text-3xl">
-										▶
-									</span>
-									<span className="font-medium">{t("item.loadTrailer")}</span>
-									<span className="text-xs text-muted">{title}</span>
+									{t("item.loadTrailerN", { n: i + 1 })}
 								</button>
-							)}
-						</li>
-					);
-				})}
-			</ul>
-		</div>
+							</div>
+						)}
+					</li>
+				);
+			})}
+		</ul>
 	);
 }
