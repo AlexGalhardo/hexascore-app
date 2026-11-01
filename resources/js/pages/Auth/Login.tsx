@@ -6,6 +6,7 @@ import ChallengeStatus from "../../components/ChallengeStatus";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
 import SubmitButton from "../../components/SubmitButton";
+import { useTurnstile } from "../../components/Turnstile";
 import { btnClass } from "../../components/ui/Btn";
 import { challengeHeaders } from "../../lib/challenge";
 import { useLocalized } from "../../lib/useLocalized";
@@ -76,11 +77,21 @@ export default function Login() {
 	const l = useLocalized();
 	const form = useForm({ identifier: "", password: "", remember: false });
 	const [checking, setChecking] = useState(false);
+	const turnstile = useTurnstile("login");
 
 	const submit = async (e: FormEvent) => {
 		e.preventDefault();
-		const headers = await challengeHeaders("login", setChecking);
-		form.post(l("/login"), { headers, onFinish: () => form.reset("password") });
+		const headers = {
+			...(await challengeHeaders("login", setChecking)),
+			...turnstile.headers(),
+		};
+		form.post(l("/login"), {
+			headers,
+			onFinish: () => {
+				form.reset("password");
+				turnstile.reset();
+			},
+		});
 	};
 
 	return (
@@ -128,6 +139,7 @@ export default function Login() {
 						{t("auth.login.forgot")}
 					</Link>
 				</div>
+				{turnstile.render((form.errors as Record<string, string | undefined>).challenge)}
 				<SubmitButton pending={form.processing || checking} className="w-full">
 					{t("auth.login.submit")}
 				</SubmitButton>

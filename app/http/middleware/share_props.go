@@ -19,6 +19,8 @@ type ShareConfig struct {
 	// User resolves the signed-in user (nil when signed out); it runs only
 	// when a page is rendered.
 	User func(c *web.Ctx) (any, error)
+	// TurnstileSiteKey is the public Turnstile key, empty while Turnstile is off.
+	TurnstileSiteKey string
 }
 
 // ShareProps adds the props every page receives (usePage().props): appName,
@@ -32,6 +34,7 @@ func ShareProps(cfg ShareConfig) func(http.Handler) http.Handler {
 
 			inertia.Share(ctx, "appName", cfg.AppName)
 			inertia.Share(ctx, "coversBase", cfg.CoversBase)
+			inertia.Share(ctx, "turnstileSiteKey", cfg.TurnstileSiteKey)
 			inertia.Share(ctx, "seo", cfg.SEO.For(r))
 			inertia.Share(ctx, "auth", func(context.Context) (any, error) {
 				u, err := cfg.User(c)

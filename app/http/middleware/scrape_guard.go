@@ -51,6 +51,19 @@ type ScrapeGuard struct {
 	// cookie must not count, or a scraper keeps one and gets the User budget. Nil treats everyone as Anon.
 	SignedIn       func(*http.Request) bool
 	LocalePrefixes map[string]string
+	// Soft is a per-IP page budget below Anon; past it an anonymous client goes through StepUp first.
+	Soft ratelimit.Limiter
+	// StepUp asks for a Turnstile solve (challenge.StepUp.Require): true lets the request go on, false means
+	// the interstitial was written. Nil, or Turnstile off, never challenges.
+	StepUp func(http.ResponseWriter, *http.Request) bool
+}
+
+// VerifiedCrawler reports whether the request comes from a verified search crawler (the StepUp skip); those are
+// never challenged. botverify caches the verdict.
+func (g *ScrapeGuard) VerifiedCrawler(c *web.Ctx) bool {
+	crawler, claims := botverify.Claimed(c.Request().UserAgent())
+
+	return claims && g.Bots.Verify(c.Context(), crawler, c.IP()) == botverify.Verified
 }
 
 // PageLimitScale parses PAGE_LIMIT_SCALE, the factor the QA stack applies to the page limits so one
@@ -147,6 +160,10 @@ func (g *ScrapeGuard) Middleware(next http.Handler) http.Handler {
 		case g.SignedIn != nil && g.SignedIn(r):
 			user.ServeHTTP(w, r)
 		default:
+			if g.softExceeded(r) && g.StepUp != nil && !g.StepUp(w, r) {
+				return
+			}
+
 			anon.ServeHTTP(w, r)
 		}
 	})
@@ -175,6 +192,18 @@ func guardedPage(r *http.Request, localePrefixes map[string]string) (string, boo
 	}
 
 	return p, true
+}
+
+// softExceeded counts the request against Soft. A store error does not challenge: the hard limits that follow
+// fail closed on the same store.
+func (g *ScrapeGuard) softExceeded(r *http.Request) bool {
+	if g.Soft == nil {
+		return false
+	}
+
+	res, err := g.Soft.Allow(r.Context(), ratelimit.ByIP(r))
+
+	return err == nil && !res.Allowed
 }
 
 func toolAgent(ua string) bool {

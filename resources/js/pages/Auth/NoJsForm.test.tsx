@@ -6,6 +6,7 @@ import Signup from "./Signup";
 
 vi.mock("@inertiajs/react", () => ({
 	Head: () => null,
+	usePage: () => ({ props: {} }),
 	Link: ({ children }: { children: React.ReactNode }) => <a href="/">{children}</a>,
 	useForm: <T extends object>(data: T) => ({
 		data,

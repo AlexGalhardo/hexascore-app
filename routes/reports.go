@@ -91,7 +91,12 @@ func Reports(r *router.Router, app *vukem.App) error {
 	}, func(c *web.Ctx) (models.User, error) { return acc.Web.User(c) })
 	byIP := ratelimit.Middleware(limits.Contact.From(limiters), ratelimit.ByIP)
 	r.Get("/contact", contact.Index).Name("contact")
-	r.Post("/contact", contact.Send).Name("contact.send").Use(byIP)
+	ts, err := LoadTurnstile(app)
+	if err != nil {
+		return err
+	}
+
+	r.Post("/contact", contact.Send).Name("contact.send").Use(byIP, ts.protect("contact"))
 
 	return nil
 }
