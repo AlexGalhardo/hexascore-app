@@ -25,7 +25,6 @@ import (
 
 	hxapi "github.com/AlexGalhardo/hexascore-app/app/api"
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
-	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/internal/search"
 )
@@ -409,7 +408,7 @@ func invalid(detail string) error {
 func badQuery(err error) error {
 	if errors.Is(err, catalog.ErrInvalidCursor) {
 		return errs.New(http.StatusBadRequest, err.Error()).
-			WithHeader(appmiddleware.ProblemCodeHeader, "invalid-cursor")
+			WithExtension("code", "invalid-cursor")
 	}
 
 	if errors.Is(err, catalog.ErrInvalidQuery) {

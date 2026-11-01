@@ -153,6 +153,8 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 			r.UseServer(canon)
 		}
 		r.UseServer(edge)
+		r.Services().ProblemDecorator = middleware.ProblemDecorator(config.APIHost(app.Source.Get),
+			cmp.Or(app.Source.Get("APP_PROBLEM_BASE_URL"), "https://hexascore.app/problems/"))
 		r.UseServer(middleware.Version(middleware.ResolveVersion(app.Source.Get)))
 		routes.InstallAppMinVersion(r, app)
 		return nil
