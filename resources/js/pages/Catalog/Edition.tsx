@@ -86,7 +86,10 @@ export default function Edition({ work, edition }: Props) {
 							</div>
 						))}
 				</dl>
-				<Link href={workHref} className={btnClass("ghost", "mt-6 -ml-5 justify-self-start")}>
+				<Link
+					href={workHref}
+					className={btnClass("ghost", "mt-6 -ml-5 justify-self-start")}
+				>
 					<span aria-hidden="true">‹</span>
 					{t("item.editions.backToWork")}
 				</Link>
