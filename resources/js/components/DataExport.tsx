@@ -1,11 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
+import { withQueryClient } from "../lib/queryClient";
 
 import { useT } from "../lib/useT";
 
 type State = "idle" | "sending" | "requested" | "cooldown" | "failed";
 
 // A fetch rather than an Inertia visit: the 429 export-cooldown answer is problem+json, which Inertia would show as an invalid-response modal.
-export default function DataExport({ className }: { className?: string }) {
+function DataExport({ className }: { className?: string }) {
 	const t = useT();
 	const exp = useMutation({
 		mutationFn: async (): Promise<number> => {
@@ -46,3 +47,5 @@ export default function DataExport({ className }: { className?: string }) {
 		</>
 	);
 }
+
+export default withQueryClient(DataExport);

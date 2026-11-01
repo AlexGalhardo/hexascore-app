@@ -1,6 +1,7 @@
 import { router } from "@inertiajs/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { withQueryClient } from "../../lib/queryClient";
 
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
@@ -16,7 +17,7 @@ interface Edition {
 const label = (e: Edition): string =>
 	[e.title, e.language, e.publisher, e.publicationYear].filter(Boolean).join(" · ");
 
-export default function EditionPicker({ itemId }: { itemId: string }) {
+function EditionPicker({ itemId }: { itemId: string }) {
 	const t = useT();
 	const l = useLocalized();
 	const [started, setStarted] = useState(false);
@@ -101,3 +102,5 @@ export default function EditionPicker({ itemId }: { itemId: string }) {
 		</span>
 	);
 }
+
+export default withQueryClient(EditionPicker);

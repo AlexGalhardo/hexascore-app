@@ -1,7 +1,6 @@
 import { createInertiaApp } from "@inertiajs/react";
 
 import AppLayout from "./layouts/AppLayout";
-import { withQueryClient } from "./lib/queryClient";
 
 // Dark mode follows the "dark" class on <html>: the saved choice
 // (localStorage.theme = "dark" | "light") or the system preference. A theme
@@ -26,7 +25,6 @@ try {
 	void Promise.resolve(
 		createInertiaApp({
 			layout: () => AppLayout,
-			withApp: withQueryClient,
 			nonce: document.querySelector<HTMLMetaElement>('meta[property="csp-nonce"]')?.nonce,
 			progress: { color: "#4f46e5" },
 		}),

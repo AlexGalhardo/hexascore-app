@@ -1,6 +1,7 @@
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import { router, usePage } from "@inertiajs/react";
 import { type RefObject, useEffect, useId, useRef, useState } from "react";
+import { withQueryClient } from "../../lib/queryClient";
 
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
@@ -43,7 +44,7 @@ interface Props {
 
 // Command palette (design v1, round 2 item 16): Base UI Dialog for the focus trap, Escape and focus
 // return; inside, an ARIA 1.2 combobox whose listbox holds the first 8 suggestions plus "See all".
-export default function SearchPalette({ open, onOpenChange, returnFocus }: Props) {
+function SearchPalette({ open, onOpenChange, returnFocus }: Props) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
 	const [text, setText] = useState("");
@@ -277,3 +278,5 @@ export default function SearchPalette({ open, onOpenChange, returnFocus }: Props
 		</BaseDialog.Root>
 	);
 }
+
+export default withQueryClient(SearchPalette);

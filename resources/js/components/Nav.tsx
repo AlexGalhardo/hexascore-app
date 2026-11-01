@@ -1,4 +1,3 @@
-import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import { Link, usePage } from "@inertiajs/react";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
@@ -9,6 +8,8 @@ import Dropdown from "./ui/Dropdown";
 
 // Loaded on first open: keeps the palette and the query hooks off the first-load script.
 const SearchPalette = lazy(() => import("./search/SearchPalette"));
+// Same for the mobile menu sheet: the Base UI dialog chunk is ~21 KB on the wire.
+const NavSheet = lazy(() => import("./NavSheet"));
 
 const LOCALE_LABELS: Record<string, string> = { en: "EN", "pt-BR": "PT", es: "ES" };
 // Endonyms: each language is named in itself, identical in every locale.
@@ -26,7 +27,7 @@ const SECTIONS = [
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
 const item = `inline-flex min-h-11 items-center rounded-xs hover:text-primary ${focus}`;
-const iconButton = `inline-flex size-11 shrink-0 items-center justify-center rounded-xs hover:bg-hover ${focus}`;
+export const iconButton = `inline-flex size-11 shrink-0 items-center justify-center rounded-xs hover:bg-hover ${focus}`;
 const menuItem = `flex min-h-11 w-full items-center gap-2.5 px-3 text-left text-[15px] hover:bg-hover ${focus}`;
 
 function setCookie(name: string, value: string) {
@@ -109,6 +110,9 @@ export default function Nav() {
 	if (paletteOpen && !paletteMounted) setPaletteMounted(true);
 	const searchTrigger = useRef<HTMLAnchorElement>(null);
 	const [menuOpen, setMenuOpen] = useState(false);
+	// Mounted on intent (pointerdown/focus on the hamburger) or on open, so the chunk is usually there by the click.
+	const [sheetMounted, setSheetMounted] = useState(false);
+	if (menuOpen && !sheetMounted) setSheetMounted(true);
 	const burger = useRef<HTMLButtonElement>(null);
 	const sheet = useRef<HTMLDivElement>(null);
 	const unreadBadge = unread > 0 && (
@@ -135,7 +139,13 @@ export default function Nav() {
 		if (!menuOpen) return;
 		const onKey = (e: KeyboardEvent) => {
 			const root = sheet.current;
-			if (e.key !== "Tab" || !root) return;
+			if (!root) {
+				// The sheet chunk is still loading: hold focus on the hamburger and let Escape cancel.
+				if (e.key === "Tab") e.preventDefault();
+				if (e.key === "Escape") setMenuOpen(false);
+				return;
+			}
+			if (e.key !== "Tab") return;
 			const items = [...root.querySelectorAll<HTMLElement>("a[href],button:not([disabled])")];
 			const active = document.activeElement;
 			if (!root.contains(active) || active === (e.shiftKey ? items[0] : items.at(-1))) {
@@ -389,36 +399,24 @@ export default function Nav() {
 						user && unread > 0 ? t("nav.menuUnread", { count: unread }) : t("nav.menu")
 					}
 					onClick={() => setMenuOpen(true)}
+					onPointerDown={() => setSheetMounted(true)}
+					onFocus={() => setSheetMounted(true)}
 					className={`${iconButton} relative lg:hidden`}
 				>
 					<Icon name="menu" />
 					{user && unreadBadge}
 				</button>
 			</div>
-			<BaseDialog.Root open={menuOpen} onOpenChange={setMenuOpen}>
-				<BaseDialog.Portal>
-					<BaseDialog.Backdrop className="fixed inset-0 z-[55] bg-backdrop/50 transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none lg:hidden" />
-					<BaseDialog.Popup
-						ref={sheet}
+			{sheetMounted && (
+				<Suspense fallback={null}>
+					<NavSheet
+						open={menuOpen}
+						onOpenChange={setMenuOpen}
+						sheetRef={sheet}
 						finalFocus={burger}
-						onClick={(e) => {
-							// Following a link closes the sheet; the theme toggle keeps it open to show the change.
-							const hit = (e.target as HTMLElement).closest("a,button");
-							if (hit && !hit.hasAttribute("data-theme-toggle")) setMenuOpen(false);
-						}}
-						className="fixed inset-y-0 right-0 z-[60] flex w-80 max-w-[calc(100%-3rem)] flex-col overflow-y-auto border-l border-fg bg-bg text-fg outline-none transition-transform duration-200 data-ending-style:translate-x-full data-starting-style:translate-x-full motion-reduce:transition-none lg:hidden"
+						title={t("nav.menu")}
+						closeLabel={t("nav.closeMenu")}
 					>
-						<div className="flex h-14 shrink-0 items-center justify-between border-b border-border pr-2 pl-4">
-							<BaseDialog.Title className="font-display text-xl font-bold">
-								{t("nav.menu")}
-							</BaseDialog.Title>
-							<BaseDialog.Close
-								aria-label={t("nav.closeMenu")}
-								className={iconButton}
-							>
-								<Icon name="close" />
-							</BaseDialog.Close>
-						</div>
 						{user && (
 							<div className="flex items-center gap-3 border-b border-border px-4 py-3">
 								{avatar}
@@ -492,9 +490,9 @@ export default function Nav() {
 								{t("nav.theme")}
 							</button>
 						</div>
-					</BaseDialog.Popup>
-				</BaseDialog.Portal>
-			</BaseDialog.Root>
+					</NavSheet>
+				</Suspense>
+			)}
 			{paletteMounted && (
 				<Suspense fallback={null}>
 					<SearchPalette
