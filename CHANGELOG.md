@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **mobile:** Android profile tab (name, nickname with inline nickname-taken, language override without restart, personalisation opt-out, devices with revoke, crash-report consent, theme, logout); `GET /app/v1/me` returns the account `email` (P5.B.4.2)
+- **mobile:** Android profile account actions (data export with cooldown, account deletion after a 10 s countdown), About screen with TMDB/IGDB attribution, and the notifications list with mark-as-read and an unread count (P5.B.4.3)
+- **mobile:** Android status sheet and games-only time-to-beat sheet, both queued offline with optimistic cache and rollback (P5.B.2.4)
+- **mobile:** Android entity screen (`entities/[id]`) with items grouped by type (P5.B.2.5)
+- **mobile:** Android lists tab, list detail (rename, delete, reorder online only; queued single remove) and add-to-list sheet (queued add, create-with-item online only) (P5.B.4.1)
+- **mobile:** `GET /.well-known/assetlinks.json` from `ANDROID_PACKAGE` and `ANDROID_CERT_SHA256`, and verified Android App Links for the catalogue, entity, list and locale-prefixed web URLs (P5.B.5.1)
 - **mobile:** v1 home sections component (three trending cards and a grid of six per type) (IMPL-mobile-v1-home-ui)
 - **mobile:** v1 full-screen search sheet component (autofocused input, recent and trending, first 8 results with see all) (IMPL-mobile-v1-search-ui)
 - **mobile:** v1 app header (serif wordmark, search, theme toggle) and tab bar theme (IMPL-mobile-v1-shell, part 1)

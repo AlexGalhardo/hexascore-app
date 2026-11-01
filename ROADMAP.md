@@ -3120,7 +3120,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
   - Notes: input is in stars (the server multiplies by 10). The category keys are the stable A-06 keys from the generated client; never hard-code labels.
   - Done 2026-10-31: the Maestro flow is not written; it waits for a staging environment (owner gate).
 
-- [ ] **P5.B.2.4** Build the status and time-to-beat sheet: PUT/DELETE status, and PUT/DELETE time-to-beat in 0.5 h steps for games only, both queued offline.
+- [x] **P5.B.2.4** Build the status and time-to-beat sheet: PUT/DELETE status, and PUT/DELETE time-to-beat in 0.5 h steps for games only, both queued offline.
   - Files/modules: `apps/mobile/src/status/StatusSheet.tsx`, `src/status/TimeToBeatSheet.tsx`, `src/status/status.test.tsx`
   - Refs: SDD 10 §6.1 (Status/time-to-beat row), §7.3; SDD 02 §6, §7.7 (409 `status-not-completed`, 422 `not-a-game`)
   - Depends on: P5.B.2.3
@@ -3129,7 +3129,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/status` → time-to-beat is hidden for non-games; values outside 0.5–10,000 h are rejected client-side; 409 `status-not-completed` rolls back
   - Notes: keep the validation messages from the `errors` catalogue. Do not duplicate server rules beyond input bounds.
 
-- [ ] **P5.B.2.5** Build the entity screen `entities/[id]` with items grouped by type and role (`/entities/{id}/items?type=&role=`, cursor).
+- [x] **P5.B.2.5** Build the entity screen `entities/[id]` with items grouped by type and role (`/entities/{id}/items?type=&role=`, cursor).
   - Files/modules: `apps/mobile/app/entities/[id].tsx`, `src/screens/entity.test.tsx`
   - Refs: SDD 10 §6.1 (Entity row), §8 (empty groups hidden), FR-10-10; SDD 01 §6.2
   - Depends on: P5.B.2.1
@@ -3159,7 +3159,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/lists` → offline create/rename/delete/reorder buttons are disabled; offline add is queued and drains on reconnect; 409 `list-version-conflict` refetches and shows a toast
     - `maestro test .maestro/smoke/add-to-list.yaml` (staging) → PASSED
 
-- [ ] **P5.B.4.2** Build the profile tab: `GET/PATCH /me` (nickname, locale override, `personalizationOptOut`), devices (`GET /tokens`, `DELETE /tokens/{id}`), crash-report consent toggle, theme, and logout.
+- [x] **P5.B.4.2** Build the profile tab: `GET/PATCH /me` (nickname, locale override, `personalizationOptOut`), devices (`GET /tokens`, `DELETE /tokens/{id}`), crash-report consent toggle, theme, and logout.
   - Files/modules: `apps/mobile/app/(tabs)/profile.tsx`, `src/profile/Settings.tsx`, `src/profile/Devices.tsx`, `src/profile/profile.test.tsx`
   - Refs: SDD 10 §6.1 (Profile row), §6.2 (Revoke a device), FR-10-6; SDD 03 §5 (`personalization_opt_out`), FR-03-19; SDD 08 FR-08-10; D-29
   - Depends on: P5.A.5.1, P3.C.3.1
