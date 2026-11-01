@@ -52,12 +52,6 @@ const ACCENT_BG: Record<ItemType, string> = {
 	series: "bg-accent-series dark:bg-accent-series-dark",
 	book: "bg-accent-book dark:bg-accent-book-dark",
 };
-const ACCENT_TEXT: Record<ItemType, string> = {
-	game: "text-accent-game dark:text-accent-game-dark",
-	movie: "text-accent-movie dark:text-accent-movie-dark",
-	series: "text-accent-series dark:text-accent-series-dark",
-	book: "text-accent-book dark:text-accent-book-dark",
-};
 const ACCENT_BORDER: Record<ItemType, string> = {
 	game: "border-t-accent-game dark:border-t-accent-game-dark",
 	movie: "border-t-accent-movie dark:border-t-accent-movie-dark",
@@ -94,7 +88,8 @@ function TrendingCard({
 		>
 			<Cover uri={item.coverUri} title={item.title} className="w-16" />
 			<View className="flex-1 gap-1">
-				<Text className={`font-text text-12 font-bold ${ACCENT_TEXT[section.type]}`}>
+				{/* fg, not the accent: accent-book on surface is 4.28:1 in light, below AA for 12 px text. */}
+				<Text className="font-text text-12 font-bold text-fg dark:text-fg-dark">
 					{labels.rank(position)}
 				</Text>
 				<Text className="font-display text-20 font-bold text-fg dark:text-fg-dark">
