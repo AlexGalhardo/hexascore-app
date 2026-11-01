@@ -1,5 +1,6 @@
 import { Link, usePage } from "@inertiajs/react";
 import { lazy, type ReactNode, Suspense, useState } from "react";
+import CategoryIcon from "../../components/CategoryIcon";
 import CoverThumb, { type Cover } from "../../components/CoverThumb";
 import {
 	ChartIcon,
@@ -205,8 +206,9 @@ export default function Show({
 					<li>
 						<Link
 							href={l(`/${SECTIONS[item.type]}`)}
-							className="hover:text-fg hover:underline"
+							className="inline-flex items-center gap-1.5 hover:text-fg hover:underline"
 						>
+							<CategoryIcon type={item.type} className="size-4" />
 							{t(`nav.${SECTIONS[item.type]}`)}
 						</Link>
 					</li>
