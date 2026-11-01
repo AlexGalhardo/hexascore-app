@@ -1,5 +1,5 @@
 import { Link, usePage } from "@inertiajs/react";
-
+import CategoryIcon from "../../components/CategoryIcon";
 import type { EditionRow } from "../../components/item/types";
 import Seo from "../../components/Seo";
 import { btnClass } from "../../components/ui/Btn";
@@ -43,8 +43,9 @@ export default function Edition({ work, edition }: Props) {
 					<li>
 						<Link
 							href={localized("/books", locale)}
-							className="hover:text-fg hover:underline"
+							className="inline-flex items-center gap-1.5 hover:text-fg hover:underline"
 						>
+							<CategoryIcon type="book" className="size-4" />
 							{t("nav.books")}
 						</Link>
 					</li>

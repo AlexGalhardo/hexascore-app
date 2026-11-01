@@ -1,4 +1,5 @@
 import { InfiniteScroll, usePage } from "@inertiajs/react";
+import CategoryIcon from "../../components/CategoryIcon";
 import Filters, { type ActiveFilters, type Facet } from "../../components/catalog/Filters";
 import ItemCard from "../../components/catalog/ItemCard";
 import {
@@ -7,6 +8,7 @@ import {
 	type Section,
 } from "../../components/catalog/SectionHighlights";
 import SuggestNewLink from "../../components/community/SuggestNewLink";
+import { ACCENT_TEXT } from "../../components/home/TypeSection";
 import Seo from "../../components/Seo";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
@@ -31,7 +33,11 @@ export default function Index({ type, items, filters, facets, total }: Props) {
 			<Seo title={title} description={t(`catalog.intro.${type}`)} />
 			{/* Title alone, the result count on the right (design v1, round 2 item 11). */}
 			<div className="flex items-end gap-6 pt-6 pb-6 md:pt-8">
-				<h1 className="font-display text-5xl leading-none font-bold tracking-[-0.02em] md:text-[88px]">
+				<h1 className="flex items-center gap-3 font-display text-5xl leading-none font-bold tracking-[-0.02em] md:gap-5 md:text-[88px]">
+					<CategoryIcon
+						type={type}
+						className={`size-10 md:size-16 ${ACCENT_TEXT[type]}`}
+					/>
 					{title}
 				</h1>
 				{total !== undefined && (

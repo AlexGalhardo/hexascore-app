@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { afterEach, expect, test, vi } from "vitest";
-import { cleanup, render, screen } from "../lib/testing";
+import { cleanup, render, screen, within } from "../lib/testing";
 
 import Footer from "./Footer";
 import Nav from "./Nav";
@@ -78,6 +78,19 @@ test("navbar has the search trigger, moon/sun toggle and four sections; footer h
 	expect(footer.querySelectorAll("a")).toHaveLength(6);
 	expect(screen.getByRole("button", { name: "footer.cookieSettings" })).toBeTruthy();
 	expect(footer.querySelector("[hreflang]")).toBeNull();
+});
+
+test("each section link starts with its category icon and keeps the name as text", () => {
+	render(<Nav />);
+	const sections = screen.getByRole("navigation", { name: "nav.sections" });
+	const links = within(sections).getAllByRole("link");
+	expect(links.map((l) => l.firstElementChild?.getAttribute("data-category-icon"))).toEqual([
+		"game",
+		"movie",
+		"series",
+		"book",
+	]);
+	expect(links[0].textContent).toBe("nav.games");
 });
 
 test("the Feed link shows only to signed-in users while the social flag is on", () => {

@@ -3,6 +3,7 @@ import { Link, usePage } from "@inertiajs/react";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
+import CategoryIcon from "../CategoryIcon";
 import CoverThumb from "../CoverThumb";
 import { type Highlight, SECTION_PATHS, type Section } from "../catalog/SectionHighlights";
 import ScoreBadge, { scoreBand } from "../ui/ScoreBadge";
@@ -15,12 +16,6 @@ export interface TrendingEntry extends Highlight {
 type ItemType = Section["type"];
 
 // Full class names so Tailwind keeps them: one accent per section (design v1).
-export const ACCENT_BG: Record<ItemType, string> = {
-	game: "bg-accent-game",
-	movie: "bg-accent-movie",
-	series: "bg-accent-series",
-	book: "bg-accent-book",
-};
 export const ACCENT_TEXT: Record<ItemType, string> = {
 	game: "text-accent-game",
 	movie: "text-accent-movie",
@@ -69,9 +64,9 @@ export default function TypeSection({
 		<section aria-labelledby={`home-${type}`} className="grid gap-5 border-t-2 border-fg pt-4">
 			<div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
 				<div className="flex items-baseline gap-3">
-					<span
-						aria-hidden="true"
-						className={`size-2.5 self-center ${ACCENT_BG[type]}`}
+					<CategoryIcon
+						type={type}
+						className={`size-7 self-center ${ACCENT_TEXT[type]}`}
 					/>
 					<h2 id={`home-${type}`} className="text-3xl">
 						<Link href={base}>{t(`catalog.title.${type}`)}</Link>

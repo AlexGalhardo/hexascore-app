@@ -73,6 +73,10 @@ test("three trending cards with rank, score explanation, then more titles and se
 			?.getAttribute("href"),
 	).toBe("/games");
 	expect(screen.getByText(/24,873/)).toBeTruthy();
+	const heading = screen.getByRole("heading", { level: 2 });
+	expect(
+		heading.parentElement?.querySelector('[data-category-icon="game"][aria-hidden="true"]'),
+	).toBeTruthy();
 });
 
 test("a type with nothing to show renders nothing", () => {

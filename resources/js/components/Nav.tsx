@@ -4,6 +4,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { LOCALE_PREFIXES, localized, unlocalized } from "../lib/route";
 import { useT } from "../lib/useT";
 import type { SharedProps } from "../types";
+import CategoryIcon from "./CategoryIcon";
 import Dropdown from "./ui/Dropdown";
 
 // Loaded on first open: keeps the palette and the query hooks off the first-load script.
@@ -19,10 +20,10 @@ const LOCALE_NAMES: Record<string, string> = {
 	es: "Español",
 };
 const SECTIONS = [
-	["games", "nav.games", "text-accent-game"],
-	["movies", "nav.movies", "text-accent-movie"],
-	["series", "nav.series", "text-accent-series"],
-	["books", "nav.books", "text-accent-book"],
+	["games", "nav.games", "text-accent-game", "game"],
+	["movies", "nav.movies", "text-accent-movie", "movie"],
+	["series", "nav.series", "text-accent-series", "series"],
+	["books", "nav.books", "text-accent-book", "book"],
 ] as const;
 
 // The owner picks one of resources/public/icons/hexascore-icon-{1,2,3}; app-icon.svg is a copy of the pick (see its README).
@@ -279,12 +280,13 @@ export default function Nav() {
 					aria-label={t("nav.sections")}
 					className="hidden items-center gap-7 whitespace-nowrap lg:flex"
 				>
-					{SECTIONS.map(([path, key]) => (
+					{SECTIONS.map(([path, key, , type]) => (
 						<Link
 							key={path}
 							href={localized(`/${path}`, locale)}
-							className={`${item} text-[15px] font-medium`}
+							className={`${item} gap-1.5 text-[15px] font-medium`}
 						>
+							<CategoryIcon type={type} className="size-[18px]" />
 							{t(key)}
 						</Link>
 					))}
@@ -435,12 +437,13 @@ export default function Nav() {
 							</div>
 						)}
 						<nav aria-label={t("nav.sections")} className="border-b border-border py-1">
-							{SECTIONS.map(([path, key, accent]) => (
+							{SECTIONS.map(([path, key, accent, type]) => (
 								<Link
 									key={path}
 									href={localized(`/${path}`, locale)}
 									className={`${menuItem} font-semibold ${accent}`}
 								>
+									<CategoryIcon type={type} />
 									{t(key)}
 								</Link>
 							))}
