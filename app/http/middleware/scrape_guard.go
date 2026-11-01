@@ -39,13 +39,16 @@ var toolAgents = []string{
 // ScrapeGuard protects the public HTML pages and Inertia visits from bulk harvesting (ADR 0022): verified
 // search crawlers pass, a crawler UA that fails verification and obvious tools get 403, a client that
 // followed the honeypot is denied for ScrapeBanTTL, and everyone else is rate limited per IP (Anon, or
-// User when a session cookie is present). It must wrap RenderCache, so cached pages are limited too.
+// User when SignedIn says the session holds a signed-in user). It must wrap RenderCache, so cached pages
+// are limited too.
 type ScrapeGuard struct {
-	Bots           *botverify.Verifier
-	Bans           *cache.Cache
-	Anon           []ratelimit.Limiter
-	User           []ratelimit.Limiter
-	SessionCookie  string
+	Bots *botverify.Verifier
+	Bans *cache.Cache
+	Anon []ratelimit.Limiter
+	User []ratelimit.Limiter
+	// SignedIn reports whether the request's session belongs to a signed-in user. A bare or forged session
+	// cookie must not count, or a scraper keeps one and gets the User budget. Nil treats everyone as Anon.
+	SignedIn       func(*http.Request) bool
 	LocalePrefixes map[string]string
 }
 
@@ -140,7 +143,7 @@ func (g *ScrapeGuard) Middleware(next http.Handler) http.Handler {
 			denyScraper(w, r)
 		case toolAgent(ua):
 			denyScraper(w, r)
-		case hasSession(r, g.SessionCookie):
+		case g.SignedIn != nil && g.SignedIn(r):
 			user.ServeHTTP(w, r)
 		default:
 			anon.ServeHTTP(w, r)

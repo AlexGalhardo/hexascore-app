@@ -4,6 +4,7 @@ import (
 	"cmp"
 	"context"
 	"net"
+	"net/http"
 	"net/url"
 	"strings"
 
@@ -311,6 +312,22 @@ func scrapeGuard(app *vukem.App) (*appmiddleware.ScrapeGuard, error) {
 		return nil, err
 	}
 
+	sessions, err := app.Sessions()
+	if err != nil {
+		return nil, err
+	}
+
+	// The guard runs before the session middleware, so it peeks at the session itself: only a session that
+	// holds a web-guard login earns the signed-in budget, never a cookie a client kept or made up.
+	// workaround(vukem): VF-065, "auth_web" is the SessionGuard key, not a documented API.
+	signedIn := func(r *http.Request) bool {
+		if len(r.Cookies()) == 0 {
+			return false
+		}
+
+		return sessions.Peek(r.Context(), r.Cookies())["auth_web"] != nil
+	}
+
 	scaled := func(rules ...limits.Rule) []ratelimit.Limiter {
 		out := make([]ratelimit.Limiter, 0, len(rules))
 		for _, rule := range rules {
@@ -330,7 +347,7 @@ func scrapeGuard(app *vukem.App) (*appmiddleware.ScrapeGuard, error) {
 		Bans:           store,
 		Anon:           scaled(limits.PageViews, limits.PageViewsHour),
 		User:           scaled(limits.PageViewsUser, limits.PageViewsUserHour),
-		SessionCookie:  "vukem_session",
+		SignedIn:       signedIn,
 		LocalePrefixes: localePrefixes,
 	}, nil
 }
