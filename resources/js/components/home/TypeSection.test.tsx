@@ -83,6 +83,21 @@ test("three trending cards with rank, score explanation, then more titles and se
 	).toBeTruthy();
 });
 
+// Owner round 2026-11-01 item 23: name left, larger count centred, "see all" right; stacked below sm.
+test("the section header is a 1fr auto 1fr grid with the locale-formatted count in the middle", () => {
+	render(<TypeSection section={section} trending={trending} />);
+	const header = document.querySelector("[data-section-header]") as HTMLElement;
+	expect(header.className).toContain("sm:grid-cols-[1fr_auto_1fr]");
+	expect(header.className).not.toMatch(/(^|\s)grid-cols-/);
+	const [left, middle, right] = [...header.children] as HTMLElement[];
+	expect(within(left).getByRole("heading", { level: 2 }).textContent).toBe("catalog.title.game");
+	expect(middle.textContent).toMatch(/home\.titles.*"n":"24,873"/);
+	expect(middle.className).toContain("text-xl");
+	expect(middle.className).toContain("sm:text-center");
+	expect(right.tagName).toBe("A");
+	expect(right.className).toContain("sm:justify-self-end");
+});
+
 test("a type with nothing to show renders nothing", () => {
 	const empty = { ...section, topRated: [], newest: [], mostRated: [] };
 	const { container } = render(<TypeSection section={empty} trending={[]} />);

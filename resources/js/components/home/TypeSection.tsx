@@ -65,22 +65,24 @@ export default function TypeSection({
 
 	return (
 		<section aria-labelledby={`home-${type}`} className="grid gap-5 border-t-2 border-fg pt-4">
-			<div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-				<div className="flex items-baseline gap-3">
-					<CategoryIcon
-						type={type}
-						className={`size-7 self-center ${ACCENT_TEXT[type]}`}
-					/>
+			{/* Three zones (owner round 2026-11-01 item 23): 1fr auto 1fr keeps the count centred whatever
+			    the name and link widths; below sm the zones stack. */}
+			<div
+				data-section-header=""
+				className="grid min-w-0 gap-y-1 sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:gap-x-4"
+			>
+				<div className="flex min-w-0 items-center gap-3">
+					<CategoryIcon type={type} className={`size-7 ${ACCENT_TEXT[type]}`} />
 					<h2 id={`home-${type}`} className="text-3xl">
 						<Link href={base}>{t(`catalog.title.${type}`)}</Link>
 					</h2>
-					<span className="text-xs text-muted tabular-nums">
-						{t("home.titles", { count: section.count, n: num.format(section.count) })}
-					</span>
 				</div>
+				<span className="text-xl font-semibold text-muted tabular-nums sm:text-center">
+					{t("home.titles", { count: section.count, n: num.format(section.count) })}
+				</span>
 				<Link
 					href={base}
-					className="text-sm font-semibold text-primary underline-offset-2 hover:underline"
+					className="text-sm font-semibold text-primary underline-offset-2 hover:underline sm:justify-self-end sm:text-right"
 				>
 					{t(`home.seeAll.${type}`)} <span aria-hidden="true">→</span>
 				</Link>
