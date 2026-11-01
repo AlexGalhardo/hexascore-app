@@ -1,0 +1,44 @@
+{
+  "item": {
+    "external_ids": {},
+    "meta": {
+      "countries": [
+        "Northern Song dynasty"
+      ],
+      "genres": [
+        "jizhuanti",
+        "dynastic history"
+      ]
+    },
+    "popularity": 24.0,
+    "qid": "Q386073",
+    "release_date": "1060-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The New Book of Tang, generally translated as the \"New History of the Tang\" or \"New Tang History\", is a work of official history covering the Tang dynasty in ten volumes and 225 chapters. The work was compiled by a team of scholars of the Song dynasty, led by Ouyang Xiu and Song Qi.\nIt was originally simply called the Tangshu (唐書, Book of Tang) until the 18th century.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/New_Book_of_Tang",
+        "title": "New Book of Tang"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "O Novo Livro de Tang, geralmente traduzido como Nova História de Tang ou Nova História Tang, é uma obra de história oficial que abrange a dinastia Tang em dez volumes e 225 capítulos. A obra foi compilada por uma equipe de estudiosos da dinastia Song, liderada por Ouyang Xiu e Song Qi.\nOriginalmente, era simplesmente chamado de Tangshu (Livro de Tang) até o século XVIII.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Novo_Livro_de_Tang",
+        "title": "Novo Livro de Tang"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Xīn Tángshū"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q386073",
+  "slug": "new-book-of-tang"
+}

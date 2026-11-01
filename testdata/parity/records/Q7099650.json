@@ -1,0 +1,286 @@
+{
+  "qid": "Q7099650",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q7099650",
+      "labels": {
+        "en": "Orange Is the New Black",
+        "es": "Orange is the new Black",
+        "pt": "Orange Is the New Black",
+        "pt-br": "Orange Is the New Black"
+      },
+      "aliases": {
+        "en": [
+          "OITNB"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Orange Is the New Black",
+        "eswiki": "Orange Is the New Black",
+        "ptwiki": "Orange Is the New Black"
+      },
+      "sitelinks_count": 47,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+91",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/orange_is_the_new_black",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q859369",
+            "rank": "normal"
+          },
+          {
+            "value": "Q85133165",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9335577",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q16999771",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Orange Is the New Black",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q269843",
+            "rank": "normal"
+          },
+          {
+            "value": "Q171567",
+            "rank": "normal"
+          },
+          {
+            "value": "Q14941915",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16727679",
+            "rank": "normal"
+          },
+          {
+            "value": "Q14918002",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16729989",
+            "rank": "normal"
+          },
+          {
+            "value": "Q234207",
+            "rank": "normal"
+          },
+          {
+            "value": "Q237669",
+            "rank": "normal"
+          },
+          {
+            "value": "Q230038",
+            "rank": "normal"
+          },
+          {
+            "value": "Q314421",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16752050",
+            "rank": "normal"
+          },
+          {
+            "value": "Q460786",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2658535",
+            "rank": "normal"
+          },
+          {
+            "value": "Q18619863",
+            "rank": "normal"
+          },
+          {
+            "value": "Q17182925",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16832285",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15637668",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6502596",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3339792",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3228613",
+            "rank": "normal"
+          },
+          {
+            "value": "Q20974012",
+            "rank": "normal"
+          },
+          {
+            "value": "Q56241796",
+            "rank": "normal"
+          },
+          {
+            "value": "Q29349327",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q846557",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "tv/orange-is-the-new-black",
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+7",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q3242008",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt2372162",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q7976",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q907311",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "1424",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2013-07-11T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q14918002": "Michael Harney",
+        "Q14941915": "Uzo Aduba",
+        "Q15637668": "Barbara Rosenblat",
+        "Q16727679": "Danielle Brooks",
+        "Q16729989": "Michelle Hurst",
+        "Q16752050": "Yael Stone",
+        "Q16832285": "Samira Wiley",
+        "Q16999771": "Orange Is the New Black: My Year in a Women's Prison",
+        "Q171567": "Laura Prepon",
+        "Q17182925": "Dascha Polanco",
+        "Q18619863": "Adrienne C. Moore",
+        "Q20974012": "Jackie Cruz",
+        "Q230038": "Kate Mulgrew",
+        "Q234207": "Natasha Lyonne",
+        "Q237669": "Taryn Manning",
+        "Q2658535": "Selenis Leyva",
+        "Q269843": "Taylor Schilling",
+        "Q29349327": "Asia Kate Dillon",
+        "Q30": "United States",
+        "Q314421": "Jason Biggs",
+        "Q3228613": "Lea DeLaria",
+        "Q3242008": "Lionsgate Television",
+        "Q3339792": "Nick Sandow",
+        "Q460786": "Lorraine Toussaint",
+        "Q56241796": "Sipiwe Moyo",
+        "Q6502596": "Laverne Cox",
+        "Q7976": "American English",
+        "Q846557": "Jenji Kohan",
+        "Q85133165": "LGBT-related television series",
+        "Q859369": "comedy drama",
+        "Q907311": "Netflix",
+        "Q9335577": "crime television series"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q7099650",
+      "lang": "en",
+      "title": "Orange Is the New Black",
+      "extract": "Orange Is the New Black (sometimes abbreviated to OITNB) is an American comedy-drama television series created by Jenji Kohan for Netflix. It is based on Piper Kerman's memoir Orange Is the New Black: My Year in a Women's Prison (2010), about her experiences at FCI Danbury, a minimum security federal prison. Produced by Tilted Productions in association with Lionsgate Television, the series premiered on Netflix on July 11, 2013, and ran for seven seasons until July 26, 2019.\nOrange Is the New Black received critical acclaim throughout its run and many accolades. Among other awards, it garnered 16 Emmy Award nominations and four wins in comedy and drama (the first series to score nominations in both genre categories), six Writers Guild of America Award nominations, six Golden Globe Award nominations, a Producers Guild of America Award, an American Film Institute Award, and a Peabody Award. As of 2016, Orange Is the New Black was Netflix's most-watched as well as its longest-running original series.",
+      "url": "https://en.wikipedia.org/wiki/Orange_Is_the_New_Black"
+    },
+    "wikipedia:es": {
+      "qid": "Q7099650",
+      "lang": "es",
+      "title": "Orange Is the New Black",
+      "extract": "Orange Is the New Black (abreviado como OITNB) es una serie estadounidense de comedia dramática​ creada por Jenji Leslie Kohan. La serie fue producida por Lionsgate Television y se emitió por primera vez en Netflix el 11 de julio de 2013.​ Se basa en el libro autobiográfico Orange Is the New Black: Crónica de mi año en una prisión federal de mujeres de Piper Kerman, que relata sus memorias sobre la vida en la cárcel.​\nLa protagonista principal de la serie es la actriz Taylor Schilling interpretando a Piper Chapman, una mujer que llega a prisión por transportar dinero proveniente del narcotráfico. También está protagonizada por Laura Prepon en el papel de Alex Vause, narcotraficante y examante de Piper, Michael Harney como Sam Healy, consejero de la prisión, Kate Mulgrew como la cocinera Red y Jason Biggs como Larry Bloom, el novio de Piper.\nEl 27 de junio de 2013 Netflix renueva Orange Is the New Black para una segunda temporada, cuyo estreno tuvo lugar el 6 de junio de 2014.​ El estreno de su tercera temporada fue el 12 de junio de 2015. El 15 de abril de 2015 la serie fue renovada para una cuarta temporada, programada para el 17 de junio de 2016. En febrero de 2016 Netflix renueva OITNB por tres temporadas más, es decir, hasta la séptima temporada en 2019.​\nNetflix publicó un vídeo de 15 segundos en el cual se dio a conocer que la quinta temporada de la serie sería estrenada el 9 de junio de 2017. El 30 de abril de 2017 fueron liberados ilegalmente 10 capítulos de la quinta temporada de la serie, que estaba prevista estrenarse el 9 de junio de 2017.​\nRecibió 12 nominaciones a los Premios Emmy, ganando 1 de ellos.",
+      "url": "https://es.wikipedia.org/wiki/Orange_Is_the_New_Black"
+    },
+    "wikipedia:pt": {
+      "qid": "Q7099650",
+      "lang": "pt",
+      "title": "Orange Is the New Black",
+      "extract": "Orange Is the New Black (às vezes, abreviado como OITNB) é uma série de televisão via streaming americana desenvolvida por Jenji Kohan, Sara Hess e Tara Herrmann para a Netflix, estrelada por Taylor Schilling. É baseada em Orange Is the New Black: My Year in a Women's Prison (2010), memória criada por Piper Kerman, sobre suas experiências na FCI Danbury, uma prisão federal de segurança mínima. A série foi oficializada no primeiro semestre de 2013, com ordem de 13 episódios para a primeira temporada, que foi lançada em 11 de julho de 2013. Em 5 de fevereiro de 2016, a Netflix renovou a série para uma quinta, sexta e sétima temporada. Em 17 de outubro de 2018, foi confirmado que a sétima temporada seria a última da série e foi lançada em 26 de julho de 2019.\nNo Brasil, está no catalogo do Netflix Brasil e também é exibido na TV fechada pelo Comedy Central Brasil e na TV aberta pela Band.",
+      "url": "https://pt.wikipedia.org/wiki/Orange_Is_the_New_Black"
+    }
+  },
+  "tier": "p580",
+  "type": "series"
+}

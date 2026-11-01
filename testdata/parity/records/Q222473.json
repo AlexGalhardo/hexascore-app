@@ -1,0 +1,180 @@
+{
+  "qid": "Q222473",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q222473",
+      "labels": {
+        "en": "Hearts of Iron III",
+        "es": "Hearts of Iron III",
+        "mul": "Hearts of Iron III",
+        "pt": "Hearts of Iron III",
+        "pt-br": "Hearts of Iron III"
+      },
+      "aliases": {
+        "en": [
+          "Hearts of Iron 3"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Hearts of Iron III",
+        "eswiki": "Hearts of Iron III",
+        "ptwiki": "Hearts of Iron III"
+      },
+      "sitelinks_count": 31,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q217493",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q3139142",
+            "rank": "normal"
+          },
+          {
+            "value": "Q208189",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2454898",
+            "rank": "normal"
+          },
+          {
+            "value": "Q11084095",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Hearts of Iron III",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "25890",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q3539040",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q18450821",
+            "rank": "normal"
+          }
+        ],
+        "P2725": [
+          {
+            "value": "game/hearts_of_iron_iii",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "4368",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt4429888",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q14116",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q34",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2009-06-29T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "hearts-of-iron-iii",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q11084095": "historical video game",
+        "Q1406": "Microsoft Windows",
+        "Q14116": "macOS",
+        "Q18450821": "Hearts of Iron",
+        "Q1860": "English",
+        "Q208189": "real-time strategy",
+        "Q208850": "single-player video game",
+        "Q217493": "Paradox Interactive",
+        "Q2454898": "computer wargame",
+        "Q3139142": "grand strategy wargame",
+        "Q34": "Sweden",
+        "Q3539040": "Development Studio",
+        "Q6895044": "multiplayer video game"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q222473",
+      "lang": "en",
+      "title": "Hearts of Iron III",
+      "extract": "Hearts of Iron III is a 2009 grand strategy video game developed by Paradox Development Studio and published by Paradox Interactive for Microsoft Windows. A Mac OS X version was released the same year. A grand strategy wargame that focuses on World War II, it is the sequel to 2005's Hearts of Iron II and the third main installment in the Hearts of Iron series.\nInitially, the game received a mixed reception, largely because of the large number of bugs present in the game at release. After several patches, the game's reception improved. In December 2009, it had an average score of 77 on Metacritic. A sequel, Hearts of Iron IV, was released on June 6, 2016.",
+      "url": "https://en.wikipedia.org/wiki/Hearts_of_Iron_III"
+    },
+    "wikipedia:es": {
+      "qid": "Q222473",
+      "lang": "es",
+      "title": "Hearts of Iron III",
+      "extract": "Hearts of Iron III es un videojuego de estrategia bélica compleja, desarrollado por Paradox Interactive para Microsoft Windows, OSX y Linux.​ Es la secuela de la serie Hearts of Iron, de la misma compañía. Fue anunciado el 20 de agosto de 2008 y salió al mercado el 7 de agosto de 2009.​",
+      "url": "https://es.wikipedia.org/wiki/Hearts_of_Iron_III"
+    },
+    "wikipedia:pt": {
+      "qid": "Q222473",
+      "lang": "pt",
+      "title": "Hearts of Iron III",
+      "extract": "Hearts of Iron III é um jogo eletrônico de estratégia com temática de guerra desenvolvido pela Paradox Development Studio e publicado pela Paradox Interactive.\nFoi lançado em 7 de agosto de 2009 para o sistema Windows. Uma versão para OS X foi disponibilizada em Virtual Programming em  7 de dezembro de 2009.",
+      "url": "https://pt.wikipedia.org/wiki/Hearts_of_Iron_III"
+    }
+  },
+  "tier": "mid",
+  "type": "game"
+}

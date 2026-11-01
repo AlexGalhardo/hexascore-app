@@ -17,12 +17,16 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/forms"
 	"github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
+	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
 // Handlers serves the account pages.
 type Handlers struct {
 	a    *accounts.Accounts
 	form forms.Token
+	// Social offers the feed opt-in at onboarding while the feature flag `social` is on (SDD 14 FR-14-18); nil on
+	// SQLite.
+	Social *social.Follows
 }
 
 // New returns the handlers; form signs the sign-up page's render time.

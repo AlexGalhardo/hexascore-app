@@ -1,0 +1,36 @@
+{
+  "item": {
+    "external_ids": {
+      "openlibrary": "OL23516980W"
+    },
+    "meta": {
+      "countries": [
+        "Germany"
+      ],
+      "creators": [
+        "James Krüss"
+      ],
+      "genres": [
+        "science fiction",
+        "fantasy",
+        "children's fiction"
+      ]
+    },
+    "popularity": 9.0,
+    "qid": "Q125628",
+    "release_date": "1962-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Timm Thaler oder Das verkaufte Lachen (roughly translated as Timm Thaler, or the Traded Laughter and best known as simply Timm Thaler) is a 1962 children's novel by German author James Krüss.\nRegarded by the Oxford Encyclopedia of Children's Literature as Krüss' best known children's book, Timm Thaler tells the story of a boy who trades his enchanting laughter to a wealthy mysterious Mephistopheles-like Baron in exchange for the ability to win any bet he makes. Regretting the exchange, he undertakes a four-year journey to win his laughter back.\nIn 1979, Krüss wrote a sequel novel, Timm Thalers Puppen oder Die verkaufte Menschenliebe (roughly translated as Timm Thaler's Puppets, or the Traded Love for Mankind).",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Timm_Thaler_(novel)",
+        "title": "Timm Thaler"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q125628",
+  "slug": "timm-thaler"
+}

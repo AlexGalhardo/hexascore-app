@@ -26,7 +26,7 @@ from hexascore import AuthenticatedClient
 from hexascore.api.catalog import get_item, list_items, lookup_item
 from hexascore.models import Problem
 
-client = AuthenticatedClient(base_url="https://api.hexascore.app", token=os.environ["HEXASCORE_API_KEY"])
+client = AuthenticatedClient(base_url="https://api.hexascore.app/v1", token=os.environ["HEXASCORE_API_KEY"])
 
 with client as c:
     page = list_items.sync("games", client=c, sort="-score", limit="10", min_score="8")
@@ -37,7 +37,7 @@ with client as c:
 
     detail = get_item.sync("games", client=c, id=page.data[0].id)
     found = lookup_item.sync_detailed(client=c, source="imdb", id="tt0111161")
-    print(found.status_code, found.headers.get("ratelimit-remaining"))
+    print(found.status_code, found.headers.get("x-quota-remaining"))
 ```
 
 ### Operations
@@ -47,7 +47,8 @@ the parsed body; the `_detailed` ones return a `Response` with `status_code`, `h
 
 | Package | Modules |
 | --- | --- |
-| `hexascore.api.catalog` | `list_items`, `get_item`, `list_editions`, `list_game_genres`, `list_movie_genres`, `list_series_genres`, `list_book_genres`, `get_entity`, `list_entity_items`, `get_franchise`, `get_organization`, `get_person`, `get_platform`, `search_items`, `search_entities`, `lookup_item`, `get_usage` |
+| `hexascore.api.catalog` | `list_items`, `get_item`, `list_editions`, `list_game_genres`, `list_movie_genres`, `list_series_genres`, `list_book_genres`, `get_entity`, `list_entity_items`, `get_franchise`, `get_organization`, `get_person`, `get_platform`, `search_items`, `search_entities`, `lookup_item`, `get_usage`, `list_changes` |
+| `hexascore.api.webhooks` | `list_webhooks`, `create_webhook`, `delete_webhook`, `test_webhook` |
 
 Models (`ItemSummary`, `ItemDetail`, `ItemList`, `Problem`, `Usage`, the `…Sort` and `…Locale` enums) are in
 `hexascore.models`.
@@ -62,7 +63,7 @@ from hexascore.api.catalog import list_items
 
 
 async def main() -> None:
-    async with AuthenticatedClient(base_url="https://api.hexascore.app", token="hx_live_…") as client:
+    async with AuthenticatedClient(base_url="https://api.hexascore.app/v1", token="hx_live_…") as client:
         page = await list_items.asyncio("movies", client=client, limit="5")
         print(page)
 
@@ -72,7 +73,7 @@ asyncio.run(main())
 
 ### Pagination
 
-List endpoints are cursor based: pass `next_cursor` of one page as `cursor` of the next until it is `None`.
+List endpoints are cursor based: pass `meta.next_cursor` of one page as `cursor` of the next until it is unset.
 
 ```python
 from hexascore.types import UNSET
@@ -84,9 +85,9 @@ while True:
         raise RuntimeError(page.detail)
     for game in page.data:
         print(game.title)
-    if page.next_cursor is None:
+    if page.meta is UNSET or page.meta.next_cursor is UNSET:
         break
-    cursor = page.next_cursor
+    cursor = page.meta.next_cursor
 ```
 
 ### Errors
@@ -124,7 +125,7 @@ uv build                      # dist/hexascore-<version>.tar.gz and .whl
 
 Regenerate whenever `openapi/api-v1.json` changes (`vukem openapi:export`). The generator is pinned
 (`openapi-python-client` 0.29.1, run through `uvx`) and formats its output with `ruff` 0.16.10. Publishing:
-`docs/sdk-publish-pypi.md` in the repository.
+`docs/runbooks/sdk-release.md` in the repository.
 
 ## License
 

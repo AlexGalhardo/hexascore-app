@@ -1,0 +1,55 @@
+{
+  "item": {
+    "external_ids": {
+      "hltb": "5037",
+      "igdb": "kingdom-hearts",
+      "imdb": "tt0322968"
+    },
+    "meta": {
+      "countries": [
+        "Japan"
+      ],
+      "creators": [
+        "Square"
+      ],
+      "genres": [
+        "action role-playing game",
+        "crossover fiction",
+        "role-playing video game"
+      ],
+      "platforms": [
+        "PlayStation 2"
+      ]
+    },
+    "popularity": 35.0,
+    "qid": "Q225912",
+    "release_date": "2002-03-28",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Kingdom Hearts is a 2002 action role-playing game developed and published by Square for the PlayStation 2. It is the first game in the Kingdom Hearts series and is the result of a collaboration between Square and The Walt Disney Company. An expanded re-release of the game featuring new and additional content, Kingdom Hearts Final Mix, was released exclusively in Japan in December 2002.  The Final Mix version of the game was later remastered in high definition and released globally as part of the Kingdom Hearts HD 1.5 Remix collection for the PlayStation 3. The game was later ported and released as part of the bundled Kingdom Hearts HD 1.5 + 2.5 Remix collection for PlayStation 4 in March 2017, Xbox One in February 2020, Windows in March 2021 and Nintendo Switch in February 2022.\nThe game combines characters and settings from Disney animated features with those from Square's Final Fantasy series, in addition to original characters and worlds created for the game. It follows the adventures of Sora, a cheerful teenager who fights against the forces of darkness alongside his allies, including Donald Duck, Goofy, and other Disney characters. The game was a departure from Square's standard role-playing games, introducing a substantial action and hack and slash element to the gameplay. The score was composed by Yoko Shimomura, with an all-star voice cast including many of the Disney characters' official voice actors. It was longtime Square character designer Tetsuya Nomura's first time in a directorial position.\nKingdom Hearts was a critical and commercial success and received praise for its unusual combination of action and role-playing elements, its unexpectedly harmonious mix of Square and Disney elements, and Shimomura's music. It is considered to be one of the greatest video games of all time, and was a large presence in the 2002 holiday season, receiving numerous year-end game awards, and went on to achieve Sony \"Greatest Hits\" status. The game's success spawned a franchise and numerous sequels, with the Kingdom Hearts series going on to ship over 36 million copies worldwide and becoming one of Square's most popular franchises. Kingdom Hearts is one of the best-selling PlayStation 2 games and the best-selling Disney video game.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Kingdom_Hearts_(video_game)",
+        "title": "Kingdom Hearts"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Kingdom Hearts é um jogo eletrônico de RPG de ação de 2002 desenvolvido e publicado pela Square para o PlayStation 2. É o primeiro jogo da série Kingdom Hearts e é o resultado de uma colaboração entre a Square e a The Walt Disney Company. Uma versão expandida do jogo, com conteúdo novo e adicional, Kingdom Hearts Final Mix, foi lançada exclusivamente no Japão em dezembro de 2002. A versão Final Mix do jogo foi posteriormente remasterizada em alta definição e lançada globalmente como parte da coletânea Kingdom Hearts HD 1.5 Remix para PlayStation 3. O jogo foi posteriormente portado e lançado como parte da coletânea Kingdom Hearts HD 1.5 + 2.5 Remix para PlayStation 4 em março de 2017, Xbox One em fevereiro de 2020, Windows em março de 2021 e Nintendo Switch em fevereiro de 2022.\nO jogo combina personagens e cenários de animações da Disney com os da série Final Fantasy da Square, além de personagens e mundos originais criados para o jogo. Ele acompanha as aventuras de Sora, um adolescente alegre que luta contra as forças das trevas ao lado de seus aliados, incluindo Pato Donald, Pateta e outros personagens da Disney. O jogo representou uma mudança em relação aos RPGs tradicionais da Square, introduzindo um elemento substancial de ação e hack and slash à jogabilidade. A trilha sonora foi composta por Yoko Shimomura, com um elenco de dubladores estelar, incluindo muitos dos dubladores oficiais dos personagens da Disney. Foi a primeira vez que Tetsuya Nomura, designer de personagens de longa data da Square, assumiu a direção de um jogo.\nKingdom Hearts foi um sucesso de crítica e público, recebendo elogios por sua combinação incomum de elementos de ação e RPG, sua mistura inesperadamente harmoniosa de elementos da Square e da Disney, e pela música de Shimomura. É considerado um dos melhores jogos eletrônicos de todos os tempos e teve grande presença no período de festas de fim de ano de 2002, recebendo inúmeros prêmios de jogos do ano e alcançando o status de \"Greatest Hits\" da Sony. O sucesso do jogo gerou uma franquia e inúmeras sequências, com a série Kingdom Hearts vendendo mais de 36 milhões de cópias em todo o mundo e se tornando uma das franquias mais populares da Square. Kingdom Hearts é um dos jogos mais vendidos para PlayStation 2 e o jogo eletrônico mais vendido da Disney.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Kingdom_Hearts_(jogo_eletr%C3%B4nico)",
+        "title": "Kingdom Hearts"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Kingdom Hearts (キングダムハーツ, Kingudamu Hātsu?) es un videojuego de rol de acción desarrollado y publicado por Squaresoft (actual Square Enix) en el 2002 para la consola Sony PlayStation 2.​ Kingdom Hearts es el resultado de una colaboración entre Square y The Walt Disney Company. El juego combina personajes y escenarios de los dibujos animados de Disney con los de la saga Final Fantasy, desarrollada por Square. La historia se centra en un joven llamado Sora, quien se adentra en una épica batalla en contra de la oscuridad. A él se le unen el Pato Donald y Goofy, personajes del universo de Mickey Mouse, quienes lo ayudan en su aventura.\nKingdom Hearts se alejó del los juegos de rol estándar de Square al introducir un importante elemento de acción/aventura. Además, el juego tuvo un elenco de voces \"all-star\" que incluía a varios de los actores de voz originales de Disney.​ Kingdom Hearts también fue el primer juego dirigido por el diseñador de Square, Tetsuya Nomura.​\nKingdom Hearts se ha ganado muchos elogios por su inusual combinación de acción con rol, al igual que por su inesperada mezcla armoniosa de Square y Disney.​ El juego recibió numerosos premios de fin de año a \"Mejor Videojuego\" y alcanzó el estatus de \"Sony Greatest Hits\".​ Desde su lanzamiento, Kingdom Hearts ha vendido más de 5.6 millones de copias a nivel mundial.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Kingdom_Hearts_(videojuego)",
+        "title": "Kingdom Hearts"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q225912",
+  "slug": "kingdom-hearts"
+}

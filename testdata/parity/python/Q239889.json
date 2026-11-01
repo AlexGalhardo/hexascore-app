@@ -1,0 +1,67 @@
+{
+  "item": {
+    "external_ids": {
+      "gog": "game/hitman_blood_money",
+      "hltb": "4477",
+      "igdb": "hitman-blood-money",
+      "imdb": "tt0433390",
+      "steam": "6860"
+    },
+    "meta": {
+      "countries": [
+        "Denmark"
+      ],
+      "creators": [
+        "IO Interactive",
+        "Feral Interactive"
+      ],
+      "genres": [
+        "action-adventure game",
+        "stealth game",
+        "Christmas video game"
+      ],
+      "platforms": [
+        "Xbox 360",
+        "Xbox",
+        "PlayStation 2",
+        "PlayStation 3",
+        "Microsoft Windows",
+        "PlayStation 4",
+        "Xbox One",
+        "Android",
+        "iOS",
+        "Nintendo Switch"
+      ]
+    },
+    "popularity": 32.0,
+    "qid": "Q239889",
+    "release_date": "2006-05-26",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Hitman: Blood Money is a 2006 stealth video game developed by IO Interactive and published by Eidos Interactive. It was released in May 2006 for Microsoft Windows, PlayStation 2, Xbox and Xbox 360. It is the fourth installment in the Hitman video game series, and the sequel to 2004's Hitman: Contracts. The story follows cloned assassin Agent 47's efforts to bring down the Franchise, a rival contract killing organization that is threatening his employers, the International Contract Agency (ICA), and seeking to obtain the same cloning technology that created 47. Meanwhile, a frame story presents 47's life and various contracts he carried out, as narrated by a former FBI director to a journalist.\nBlood Money received critical acclaim for its graphics, narrative, gameplay, voice acting and darker tone; it was also a commercial success, selling more than 2.1 million copies. It has gained a cult following and is considered one of the greatest video games ever made. High-definition ports of Blood Money and two of its predecessors, Hitman 2: Silent Assassin and Contracts, were released on PlayStation 3 and Xbox 360 in January 2013 as the Hitman HD Trilogy. A sequel, Hitman: Absolution, was released in 2012, and 4K remastered ports of both Blood Money and Absolution were released by Warner Bros. Interactive Entertainment in 2019 on the PlayStation 4 and Xbox One as part of the Hitman HD Enhanced Collection.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Hitman:_Blood_Money",
+        "title": "Hitman: Blood Money"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Hitman: Blood Money é um jogo de stealth desenvolvido pela IO Interactive, publicado pela Eidos Interactive e dirigido por Rasmus Højengaard. É o quarto jogo da série Hitman. Sua demo foi lançada em 22 de maio de 2006 e a versão completa do jogo foi lançada em 26 de maio de 2006 na Europa e no dia 30 do mesmo mês nos Estados Unidos.\nA história segue a vida do assassino de aluguel profissional, Agente 47, narrado em cinemáticas por um ex-diretor do FBI a um jornalista que o está entrevistando. O jogo foi um sucesso comercial e crítico para a Eidos, vendendo mais de 2,1 milhões de cópias. As conversões de alta definição de Blood Money e seus antecessores, Silent Assassin e Contracts, foram lançadas no PlayStation 3 e no Xbox 360 em janeiro de 2013 como a Hitman HD Trilogy. Versões remasterizadas de Blood Money e seu sucessor, Hitman: Absolution, foram lançadas para PlayStation 4 e Xbox One como parte da Hitman HD Enhanced Collection.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Hitman:_Blood_Money",
+        "title": "Hitman: Blood Money"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Hitman: Blood Money es el cuarto juego de la serie Hitman. La demo del juego fue lanzada el 22 de mayo de 2006. Oficialmente el juego fue lanzado a la venta el 26 de mayo de 2006 en Europa y el 30 de mayo en los Estados Unidos.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Hitman:_Blood_Money",
+        "title": "Hitman: Blood Money"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q239889",
+  "slug": "hitman-blood-money"
+}

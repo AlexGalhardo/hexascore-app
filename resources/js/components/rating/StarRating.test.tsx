@@ -7,117 +7,72 @@ import StarRating from "./StarRating";
 
 afterEach(cleanup);
 
+vi.mock("@inertiajs/react", () => ({ usePage: () => ({ props: { locale: "en" } }) }));
+
 vi.mock("../../lib/useT", () => ({
 	useT: () => (key: string, params?: Record<string, string | number>) =>
-		key === "rating.valuetext" ? `${params?.value} of 10 stars` : "Not rated",
+		({
+			"rating.valuetext": `${params?.value} of 10 stars`,
+			"rating.outOf": `${params?.value} / 10`,
+			"rating.preview": `Preview ${params?.value}`,
+			"rating.unset": "Not rated",
+		})[key] ?? key,
 }));
 
-function Harness({
-	initial = null,
-	disabled = false,
-}: {
-	initial?: number | null;
-	disabled?: boolean;
-}) {
+function Harness({ initial = null }: { initial?: number | null }) {
 	const [v, setV] = useState<number | null>(initial);
-	return <StarRating label="Gameplay" value={v} onChange={setV} disabled={disabled} />;
+	return <StarRating label="Gameplay" value={v} onChange={setV} />;
 }
 
-const slider = () => screen.getByRole("slider", { name: "Gameplay" });
+const group = () => screen.getByRole("radiogroup", { name: "Gameplay" });
+const radio = (v: number) => screen.getByRole("radio", { name: `${v} of 10 stars` });
+const printed = () => screen.getByTestId("rating-value").textContent;
 
-test("exposes slider ARIA with unset and valuetext", () => {
+test("one radio group of 20 half-star options with the value printed beside it", () => {
 	const { rerender } = render(<StarRating label="Gameplay" value={null} onChange={() => {}} />);
-	expect(slider().getAttribute("aria-valuenow")).toBe("0");
-	expect(slider().getAttribute("aria-valuetext")).toBe("Not rated");
+	expect(screen.getAllByRole("radio")).toHaveLength(20);
+	expect(printed()).toBe("Not rated");
 	rerender(<StarRating label="Gameplay" value={7.5} onChange={() => {}} />);
-	expect(slider().getAttribute("aria-valuenow")).toBe("7.5");
-	expect(slider().getAttribute("aria-valuetext")).toBe("7.5 of 10 stars");
-	expect(slider().getAttribute("aria-valuemax")).toBe("10");
+	expect((radio(7.5) as HTMLInputElement).checked).toBe(true);
+	expect(printed()).toBe("7.5 / 10");
+	expect(group().querySelectorAll('[data-fill="full"]')).toHaveLength(7);
+	expect(group().querySelectorAll('[data-fill="half"]')).toHaveLength(1);
 });
 
-test("arrow, page, Home, End and Delete keys", async () => {
-	render(<Harness />);
-	slider().focus();
+test("arrows move by 0.5 without wrapping; Home, End and Delete", async () => {
 	const user = userEvent.setup();
+	render(<Harness initial={9.5} />);
+	radio(9.5).focus();
 	await user.keyboard("{ArrowRight}");
-	expect(slider().getAttribute("aria-valuenow")).toBe("0.5");
-	await user.keyboard("{ArrowUp}{ArrowUp}");
-	expect(slider().getAttribute("aria-valuenow")).toBe("1.5");
-	await user.keyboard("{PageUp}");
-	expect(slider().getAttribute("aria-valuenow")).toBe("2.5");
-	await user.keyboard("{ArrowLeft}{PageDown}");
-	expect(slider().getAttribute("aria-valuenow")).toBe("1");
-	await user.keyboard("{End}");
-	expect(slider().getAttribute("aria-valuenow")).toBe("10");
-	await user.keyboard("{ArrowRight}");
-	expect(slider().getAttribute("aria-valuenow")).toBe("10");
+	expect(printed()).toBe("10.0 / 10");
+	expect(document.activeElement).toBe(radio(10));
+	await user.keyboard("{ArrowUp}");
+	expect(printed()).toBe("10.0 / 10");
 	await user.keyboard("{Home}");
-	expect(slider().getAttribute("aria-valuenow")).toBe("0.5");
+	expect(printed()).toBe("0.5 / 10");
 	await user.keyboard("{ArrowLeft}");
-	expect(slider().getAttribute("aria-valuenow")).toBe("0.5");
+	expect(printed()).toBe("0.5 / 10");
+	await user.keyboard("{End}{ArrowDown}");
+	expect(printed()).toBe("9.5 / 10");
 	await user.keyboard("{Delete}");
-	expect(slider().getAttribute("aria-valuenow")).toBe("0");
+	expect(printed()).toBe("Not rated");
 });
 
-test("pointer click sets a half-star value from the x position", () => {
+test("clicking a half star selects it; hover previews", async () => {
+	const user = userEvent.setup();
 	render(<Harness />);
-	const el = slider();
-	el.getBoundingClientRect = () => ({
-		left: 0,
-		width: 200,
-		top: 0,
-		height: 44,
-		right: 200,
-		bottom: 44,
-		x: 0,
-		y: 0,
-		toJSON() {},
-	});
-	fireEvent.click(el, { clientX: 85 });
-	expect(el.getAttribute("aria-valuenow")).toBe("4.5");
-	fireEvent.click(el, { clientX: 200 });
-	expect(el.getAttribute("aria-valuenow")).toBe("10");
+	await user.click(radio(3.5));
+	expect(printed()).toBe("3.5 / 10");
+	fireEvent.pointerEnter(radio(6.5).closest("label") as HTMLElement);
+	expect(printed()).toBe("Preview 6.5");
+	fireEvent.pointerLeave(group());
+	expect(printed()).toBe("3.5 / 10");
 });
 
-test("plus and minus buttons step by 0.5", async () => {
-	render(<Harness initial={5} />);
-	await userEvent.click(screen.getByRole("button", { name: "Gameplay +" }));
-	expect(slider().getAttribute("aria-valuenow")).toBe("5.5");
-	await userEvent.click(screen.getByRole("button", { name: "Gameplay -" }));
-	await userEvent.click(screen.getByRole("button", { name: "Gameplay -" }));
-	expect(slider().getAttribute("aria-valuenow")).toBe("4.5");
-});
-
-test("disabled widget ignores keys and is not focusable", async () => {
-	render(<Harness initial={5} disabled />);
-	const el = slider();
-	expect(el.getAttribute("aria-disabled")).toBe("true");
-	fireEvent.keyDown(el, { key: "ArrowRight" });
-	expect(el.getAttribute("aria-valuenow")).toBe("5");
-	expect(el.tabIndex).toBe(-1);
-});
-
-test("renders no inline style attribute (CSP style-src-attr)", () => {
-	const { container } = render(<StarRating label="Gameplay" value={2.5} onChange={() => {}} />);
-	expect(container.querySelector("[style]")).toBeNull();
-});
-
-test("draws ten SVG stars with full, half and empty fills", () => {
-	const { container } = render(<StarRating label="Gameplay" value={2.5} onChange={() => {}} />);
-	const fills = [...container.querySelectorAll("[data-fill]")].map((el) =>
-		el.getAttribute("data-fill"),
-	);
-	expect(fills).toEqual([
-		"full",
-		"full",
-		"half",
-		"empty",
-		"empty",
-		"empty",
-		"empty",
-		"empty",
-		"empty",
-		"empty",
-	]);
-	expect(slider().textContent).toBe("");
+test("disabled stars do not change", () => {
+	const onChange = vi.fn();
+	render(<StarRating label="Gameplay" value={null} onChange={onChange} disabled />);
+	fireEvent.keyDown(group(), { key: "End" });
+	expect(onChange).not.toHaveBeenCalled();
+	expect((radio(5) as HTMLInputElement).disabled).toBe(true);
 });

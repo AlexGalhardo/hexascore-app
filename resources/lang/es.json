@@ -109,7 +109,68 @@
       "button": "Pedir exportación",
       "requested": "Exportación solicitada. Pronto recibirás un correo con el enlace.",
       "cooldown": "Puedes pedir una exportación cada 7 días. Inténtalo más tarde.",
-      "failed": "No se pudo pedir la exportación. Inténtalo de nuevo."
+      "failed": "No se pudo pedir la exportación. Inténtalo de nuevo.",
+      "retryIn": {
+        "one": "Puedes intentarlo de nuevo en {count} día.",
+        "other": "Puedes intentarlo de nuevo en {count} días."
+      }
+    },
+    "notifications": {
+      "title": "Avisos por correo",
+      "community": "No enviarme correos sobre mis sugerencias a la comunidad",
+      "communityHelp": "Sigues viendo cada decisión sobre tus sugerencias en tus notificaciones.",
+      "save": "Guardar preferencias de correo"
+    },
+    "updateRequired": {
+      "title": "Actualización necesaria"
+    },
+    "offline": "Estás sin conexión. Los cambios se sincronizarán cuando vuelvas a conectarte.",
+    "crashReports": {
+      "title": "¿Enviar informes de errores?",
+      "body": "Si la app falla, envía a HexaScore la versión de la app, la versión de Android, la pantalla y los detalles del error. No se incluye ninguna cuenta, correo ni token. Puedes desactivarlo en Ajustes.",
+      "allow": "Enviar informes",
+      "deny": "No enviar"
+    },
+    "blocked": {
+      "title": "Tu cuenta está suspendida",
+      "reason": "Motivo: {reason}",
+      "until": "Hasta el {date}",
+      "permanent": "Sin fecha de finalización",
+      "back": "Volver al inicio de sesión"
+    },
+    "settings": {
+      "title": "Ajustes",
+      "account": "Cuenta",
+      "appearance": "Apariencia",
+      "themeSystem": "Sistema",
+      "themeLight": "Claro",
+      "themeDark": "Oscuro",
+      "crashReports": "Enviar informes de errores"
+    },
+    "inbox": {
+      "title": "Notificaciones",
+      "empty": "No tienes notificaciones.",
+      "markAll": "Marcar todo como leído",
+      "unread": "No leída",
+      "unreadCount": {
+        "one": "{count} no leída",
+        "other": "{count} no leídas"
+      },
+      "kind": {
+        "suggestion_decided": "Tu sugerencia fue revisada.",
+        "suggestion_reverted": "Un cambio que sugeriste fue revertido.",
+        "suggestion_expired": "Tu sugerencia caducó.",
+        "report_resolved": "Tu denuncia fue revisada. Gracias.",
+        "rating_flagged": "Una de tus valoraciones fue marcada para revisión.",
+        "list_hidden": "Un moderador ocultó una de tus listas.",
+        "system": "Aviso del equipo."
+      }
+    },
+    "about": {
+      "title": "Acerca de",
+      "version": "Versión {version}",
+      "tmdb": "Este producto usa la API de TMDB, pero TMDB no lo respalda ni lo certifica.",
+      "igdb": "Los datos de juegos los proporciona IGDB.com."
     }
   },
   "actions": {
@@ -221,7 +282,7 @@
   "contact": {
     "metaTitle": "Contacto",
     "title": "Contáctanos",
-    "body": "Envíanos una pregunta, comentario o reporte de error. Respondemos por correo.",
+    "body": "Envíanos una pregunta, comentario o reporte de error. Respondemos por correo. También puedes escribir a support@hexascore.app.",
     "name": "Nombre",
     "email": "Correo electrónico",
     "subject": "Asunto",
@@ -246,7 +307,10 @@
       "name": "Nombre",
       "show": "Mostrar contraseña",
       "hide": "Ocultar contraseña",
-      "confirmPassword": "Confirmar contraseña"
+      "confirmPassword": "Confirmar contraseña",
+      "deviceName": "Nombre del dispositivo",
+      "showShort": "Mostrar",
+      "hideShort": "Ocultar"
     },
     "rules": {
       "title": "Tu contraseña debe tener:",
@@ -265,6 +329,7 @@
     },
     "errors": {
       "invalidCredentials": "Correo/nickname o contraseña incorrectos.",
+      "emailUnverifiedAtProvider": "Google no ha verificado este correo. Verifícalo en Google o inicia sesión con tu contraseña.",
       "emailNotVerified": "Confirma tu correo antes de entrar.",
       "rateLimited": "Demasiados intentos. Espera un minuto y vuelve a intentarlo.",
       "network": "No se pudo conectar con el servidor. Revisa tu conexión y vuelve a intentarlo.",
@@ -299,7 +364,10 @@
       "trustDevice": "Confiar en este dispositivo durante 30 días",
       "verify": "Verificar",
       "rememberMe": "Recordarme",
-      "backupCode": "Código de respaldo"
+      "backupCode": "Código de respaldo",
+      "heading": "Entra para puntuar, organizar y crear listas.",
+      "lede": "Una cuenta para el sitio y la app de Android. Tus puntuaciones forman la nota de la comunidad cuando cinco miembros puntúan un título.",
+      "newHere": "¿Eres nuevo?"
     },
     "signup": {
       "metaTitle": "Crear cuenta",
@@ -312,7 +380,11 @@
       "checkBody": "Enviamos un enlace de confirmación a {email}. Ábrelo para activar tu cuenta.",
       "agree": "Al crear la cuenta aceptas los <terms>Términos</terms> y la <privacy>Política de privacidad</privacy>.",
       "checkNotice": "Si la dirección puede usarse, le enviamos un enlace para verificarla. Si ya tiene una cuenta, enviamos un enlace para iniciar sesión o restablecer la contraseña.",
-      "goLogin": "Ir a la página de inicio de sesión"
+      "goLogin": "Ir a la página de inicio de sesión",
+      "heading": "Únete y puntúa en seis categorías.",
+      "lede": "Cuenta gratuita. Confirma tu correo y tus puntuaciones empiezan a contar para la nota de la comunidad.",
+      "alreadyMember": "¿Ya eres miembro?",
+      "cardTitle": "Crea tu cuenta"
     },
     "verify": {
       "metaTitle": "Verificar correo",
@@ -332,7 +404,9 @@
       "body": "Introduce el correo de tu cuenta y te enviaremos un enlace para elegir una nueva contraseña.",
       "submit": "Enviar enlace",
       "sent": "Si existe una cuenta con este correo, un enlace para restablecerla está en camino. Caduca en 1 hora.",
-      "back": "Volver a entrar"
+      "back": "Volver a entrar",
+      "heading": "De vuelta en un minuto.",
+      "lede": "Enviamos un enlace válido por una hora al correo de tu cuenta; nada cambia hasta que lo abras."
     },
     "reset": {
       "metaTitle": "Elige una nueva contraseña",
@@ -361,7 +435,10 @@
       "title": "Elige tu nickname",
       "body": "Tu nickname es tu nombre público en HexaScore. Es único y no se puede cambiar después.",
       "submit": "Guardar nickname"
-    }
+    },
+    "members": "Miembros",
+    "googleSignIn": "Iniciar sesión con Google",
+    "googleSignUp": "Registrarse con Google"
   },
   "billing": {
     "plans": {
@@ -389,7 +466,10 @@
       "notConfigured": "Los pagos en línea aún no están disponibles. Los planes de pago abrirán pronto.",
       "coverageTitle": "Cobertura de datos",
       "coverageBody": "La API solo devuelve campos que podemos republicar, así que algunos son irregulares y otros siempre se omiten (portadas, tráilers). Los porcentajes de cobertura aún no se han publicado.",
-      "coverageLink": "Ver los detalles de la cobertura"
+      "coverageLink": "Ver los detalles de la cobertura",
+      "eyebrow": "API pública · solo lectura",
+      "popular": "El más elegido",
+      "lifetime": "de por vida"
     },
     "checkout": {
       "metaTitle": "Plan y facturación",
@@ -459,7 +539,11 @@
       "series": "Todas las series, valoradas completas: guion, actuación, personajes, ritmo, producción y entretenimiento.",
       "book": "Todos los libros, valorados en trama, personajes, escritura, ritmo, originalidad e impacto."
     },
-    "filters": "Filtros",
+    "filters": {
+      "zero": "Filtros",
+      "one": "Filtros · {count}",
+      "other": "Filtros · {count}"
+    },
     "genre": "Género",
     "anyGenre": "Cualquier género",
     "platform": "Plataforma",
@@ -500,12 +584,23 @@
     "next": "Siguiente",
     "previous": "Anterior",
     "pagination": "Páginas",
+    "page": "Página {page}",
     "landing": {
       "topRated": "Mejor valorados",
       "newest": "Estrenos",
       "mostRated": "Más valorados",
       "seeAll": "Ver todo en {section}",
       "empty": "Aún no hay nada aquí."
+    },
+    "trending": {
+      "title": "{type}: top 10 en tendencia (30 días)",
+      "allPrior": "{type} populares",
+      "popular": "Popular",
+      "empty": "Todavía no hay tendencias."
+    },
+    "itemsFoundLabel": {
+      "one": "elemento encontrado",
+      "other": "elementos encontrados"
     }
   },
   "categories": {
@@ -576,31 +671,78 @@
     "pricing": "Precios",
     "language": "Idioma",
     "openSearch": "Abrir búsqueda",
+    "searchTab": "Buscar",
+    "themeDark": "Cambiar al tema oscuro",
+    "themeLight": "Cambiar al tema claro",
     "menu": "Menú",
+    "menuUnread": {
+      "one": "Menú, {count} notificación sin leer",
+      "other": "Menú, {count} notificaciones sin leer"
+    },
+    "closeMenu": "Cerrar menú",
     "skip": "Ir al contenido",
     "dismiss": "Descartar",
     "home": "Inicio",
     "notifications": "Notificaciones",
     "library": "Mi biblioteca",
     "lists": "Mis listas",
-    "more": "Más"
+    "more": "Más",
+    "searchShort": "Buscar…"
+  },
+  "friendsScore": {
+    "title": "Valorado por quienes sigues",
+    "summary": "{count} de las personas que sigues lo valoraron",
+    "home": "Valorados por quienes sigues"
   },
   "home": {
     "title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
     "explore": "Explorar",
     "recent": "Valorados recientemente por los miembros",
-    "ratedBy": "por {name}"
+    "ratedBy": "por {name}",
+    "trendingWeek": "Tendencia esta semana",
+    "popularType": "Populares: {type}",
+    "popular": "Popular",
+    "trendingRank": "#{rank} en tendencia esta semana",
+    "popularRank": "#{rank} popular",
+    "titles": {
+      "one": "{n} título",
+      "other": "{n} títulos"
+    },
+    "seeAll": {
+      "game": "Ver todos los juegos",
+      "movie": "Ver todas las películas",
+      "series": "Ver todas las series",
+      "book": "Ver todos los libros"
+    },
+    "more": {
+      "game": "Más juegos",
+      "movie": "Más películas",
+      "series": "Más series",
+      "book": "Más libros"
+    },
+    "ratingsOfMin": "{count} de {min} valoraciones",
+    "trendingNote": "Tendencia = más valorados en los últimos 7 días.",
+    "fromRatings": {
+      "one": "de {n} valoración",
+      "other": "de {n} valoraciones"
+    }
   },
   "footer": {
     "terms": "Términos",
     "privacy": "Privacidad",
     "contact": "Contacto",
-    "rights": "Todos los derechos reservados."
+    "rights": "Todos los derechos reservados.",
+    "label": "Pie de página",
+    "apiDocs": "Docs de la API",
+    "pricing": "Precios",
+    "howScores": "Cómo funcionan las notas",
+    "cookieSettings": "Configuración de cookies"
   },
   "cookies": {
-    "text": "Solo usamos cookies esenciales (sesión y preferencias). Los videos de YouTube solo se cargan si lo permites.",
-    "accept": "Permitir videos",
-    "decline": "Solo esenciales"
+    "label": "Configuración de cookies",
+    "text": "Usamos cookies esenciales (sesión y preferencias). Si aceptas, también cargamos vídeos de YouTube y Google Analytics, que usa cookies. Umami cuenta las visitas sin cookies en cualquier caso.",
+    "accept": "Aceptar",
+    "decline": "Rechazar"
   },
   "sandbox": {
     "banner": "Entorno sandbox — los usuarios, las valoraciones y las listas son ficticios (datos de prueba)."
@@ -615,6 +757,9 @@
       "authentication": "Autenticación",
       "pagination": "Paginación",
       "rate-limits": "Límites de uso",
+      "changes": "Cambios",
+      "exports": "Exportaciones",
+      "webhooks": "Webhooks",
       "errors": "Errores",
       "coverage": "Cobertura",
       "changelog": "Historial de cambios",
@@ -774,7 +919,9 @@
     "serverBody": "Ocurrió un error inesperado de nuestro lado. Inténtalo de nuevo en un momento.",
     "retry": "Intentar de nuevo",
     "home": "Volver al inicio",
-    "reference": "Referencia del error"
+    "reference": "Referencia del error",
+    "status-not-completed": "Marca el juego como completado antes de añadir tu tiempo para terminarlo.",
+    "timeToBeatHours": "Usa de 0,5 a 10.000 horas, de 0,5 en 0,5."
   },
   "item": {
     "metaDescription": "{title} ({type}) — nota de la comunidad y promedios en 6 categorías.",
@@ -898,7 +1045,79 @@
       "save": "Guardar tiempos",
       "delete": "Borrar tiempos",
       "saved": "Tiempos guardados.",
-      "deleted": "Tiempos borrados."
+      "deleted": "Tiempos borrados.",
+      "notSaved": "No se pudieron guardar tus tiempos. Inténtalo de nuevo."
+    },
+    "confidence": "Confianza: {level}",
+    "confidenceLevel": {
+      "low": "baja",
+      "medium": "media",
+      "high": "alta"
+    },
+    "band": {
+      "high": "Puntuación alta",
+      "mid": "Puntuación media",
+      "low": "Puntuación baja"
+    },
+    "scoreFrom": {
+      "one": "de {n} valoración · seis categorías, una fórmula",
+      "other": "de {n} valoraciones · seis categorías, una fórmula"
+    },
+    "howScoreWorks": "Cómo funciona la puntuación",
+    "rateIt": "Valorar",
+    "goToRating": "Ir a tu valoración",
+    "breadcrumb": "Ruta de navegación",
+    "loadTrailerN": "Cargar tráiler {n}",
+    "panel": {
+      "title": "Valorar {title}",
+      "help": "Diez estrellas por categoría; cada media estrella vale 0,5. Las flechas mueven 0,5; Inicio y Fin saltan a 0,5 y 10.",
+      "helpGuest": "Diez estrellas por categoría, con medias estrellas (0,5 a 10). Tu puntuación cuenta cuando confirmes tu correo.",
+      "noAccount": "¿No tienes cuenta?",
+      "signupFree": "Regístrate gratis",
+      "overall": "Tu puntuación general",
+      "overallHint": "La media de las categorías que valoraste ({rated} de {total}).",
+      "completeHint": "Valora todas las categorías para guardar."
+    },
+    "moreLike": {
+      "game": "Más juegos como este",
+      "movie": "Más películas como esta",
+      "series": "Más series como esta",
+      "book": "Más libros como este"
+    },
+    "similarReason": "En común: {entity}",
+    "crossMedia": "En otros medios",
+    "relation": {
+      "based_on": "Obra original",
+      "adapted_as": "Adaptación"
+    },
+    "status": {
+      "title": "Estado",
+      "none": "Sin estado",
+      "game": {
+        "want": "Quiero jugar",
+        "in_progress": "Jugando",
+        "completed": "Jugado",
+        "dropped": "Abandonado"
+      },
+      "movie": {
+        "want": "Quiero ver",
+        "in_progress": "Viendo",
+        "completed": "Vista",
+        "dropped": "Abandonada"
+      },
+      "series": {
+        "want": "Quiero ver",
+        "in_progress": "Viendo",
+        "completed": "Vista",
+        "dropped": "Abandonada"
+      },
+      "book": {
+        "want": "Quiero leer",
+        "in_progress": "Leyendo",
+        "completed": "Leído",
+        "dropped": "Abandonado"
+      },
+      "notSaved": "No se pudo guardar tu estado. Inténtalo de nuevo."
     }
   },
   "updatedLabel": "Última actualización",
@@ -935,15 +1154,15 @@
       "3": {
         "heading": "4. Cookies",
         "body": {
-          "0": "Solo usamos cookies esenciales: la cookie de sesión que te mantiene conectado, cookies temporales de dos pasos, y las cookies locale, theme y consent. No usamos cookies publicitarias ni de seguimiento entre sitios.",
-          "1": "Las estadísticas opcionales solo se cargan después de que las permitas. Los tráileres se sirven desde youtube-nocookie.com y solo se cargan después de que permitas los vídeos en el banner de cookies.",
+          "0": "Cookies esenciales: la cookie de sesión que te mantiene conectado, cookies temporales de dos pasos, y las cookies locale, theme y consent. No usamos cookies publicitarias ni de seguimiento entre sitios.",
+          "1": "Las cookies opcionales solo se cargan después de que las aceptes en el banner de cookies: Google Analytics 4 (usa cookies _ga y mide las visitas; antes de que aceptes, Google no recibe nada) y los tráileres de youtube-nocookie.com. Puedes cambiar tu elección en cualquier momento con \"Configuración de cookies\" en el pie de página. También contamos las visitas con Umami, que no usa cookies ni guarda datos personales, por eso funciona sin consentimiento.",
           "2": "Al seguir un enlace de afiliado a Amazon o Mercado Libre sales de nuestro sitio; esas tiendas usan sus propias cookies según sus propias políticas."
         }
       },
       "4": {
         "heading": "5. Con quién compartimos datos",
         "body": {
-          "0": "No vendemos datos personales. Solo los compartimos con operadores que los tratan en nuestro nombre: Railway (alojamiento y base de datos), Grafana Cloud (métricas y registros), Resend (correos transaccionales), Stripe (pagos), Google (solo si eliges \"Continuar con Google\") y Telegram (alertas del operador).",
+          "0": "No vendemos datos personales. Solo los compartimos con operadores que los tratan en nuestro nombre: Railway (alojamiento, base de datos, métricas y registros), Resend (correos transaccionales), Stripe (pagos), Google (solo si eliges \"Continuar con Google\") y Telegram (alertas del operador).",
           "1": "Algunos de estos operadores están fuera de tu país, incluso en Estados Unidos. Las transferencias usan las salvaguardas que esas leyes permiten.",
           "2": "Los metadatos de catálogo de IGDB y TMDB se muestran con la atribución que esas fuentes exigen. Las contribuciones de la comunidad al catálogo quedan bajo la licencia A-07."
         }
@@ -981,7 +1200,10 @@
           "0": "Actualizaremos esta página cuando cambien nuestras prácticas y cambiaremos la fecha de arriba. Los cambios importantes se anuncian en el sitio o por correo antes de entrar en vigor."
         }
       }
-    }
+    },
+    "contents": "Contenido",
+    "also": "Ver también",
+    "otherTitle": "Términos de uso y cookies"
   },
   "terms": {
     "title": "Términos de uso y cookies",
@@ -1012,7 +1234,8 @@
       "3": {
         "heading": "4. Uso aceptable",
         "body": {
-          "0": "No hagas scraping del sitio: usa la API pública. No intentes eludir los límites de solicitudes, la protección contra bots o los controles de acceso, interferir con el servicio ni usarlo con fines ilegales."
+          "0": "No hagas scraping del sitio: usa la API pública. No intentes eludir los límites de solicitudes, la protección contra bots o los controles de acceso, interferir con el servicio ni usarlo con fines ilegales.",
+          "1": "No se permite la recopilación automatizada de datos del catálogo desde el sitio (scraping, crawling o descarga masiva mediante scripts, navegadores headless u otras herramientas), salvo por motores de búsqueda que indexan páginas públicas. Si necesitas datos en volumen, usa la API de pago de HexaScore (https://hexascore.app/docs, planes en https://hexascore.app/pricing). Podemos bloquear, limitar o vetar a los clientes que ignoren esta norma."
         }
       },
       "4": {
@@ -1039,7 +1262,7 @@
       "7": {
         "heading": "8. Cookies",
         "body": {
-          "0": "Solo usamos cookies esenciales (sesión, seguridad y preferencias) y solo cargamos vídeos incrustados con tu consentimiento. Los detalles están en la Política de privacidad."
+          "0": "Usamos cookies esenciales (sesión, seguridad y preferencias) y solo cargamos Google Analytics y vídeos incrustados con tu consentimiento; las estadísticas de Umami, sin cookies, se aplican a todos. Los detalles están en la Política de privacidad."
         }
       },
       "8": {
@@ -1066,7 +1289,10 @@
           "0": "Las dudas sobre estos términos, las solicitudes de desistimiento o reembolso y las solicitudes de privacidad pueden enviarse mediante el formulario de contacto."
         }
       }
-    }
+    },
+    "contents": "Contenido",
+    "also": "Ver también",
+    "otherTitle": "Política de privacidad"
   },
   "lists": {
     "addToList": "Añadir a una lista",
@@ -1121,7 +1347,12 @@
     "errors": {
       "title": "1–80 caracteres.",
       "description": "Hasta 500 caracteres."
-    }
+    },
+    "offline": "Conéctate a internet para crear, renombrar, eliminar o reordenar listas.",
+    "conflict": "Esta lista cambió en otro lugar. Mostrando la versión más reciente.",
+    "notSaved": "No se guardó el cambio en tu lista.",
+    "addedTo": "Añadido a {title}.",
+    "cancel": "Cancelar"
   },
   "ratings": {
     "title": "Tu valoración",
@@ -1136,7 +1367,9 @@
     "loginToRate": "Inicia sesión para valorar",
     "chooseNickname": "Elige un nickname para valorar",
     "verifyToRate": "Confirma tu correo para valorar.",
-    "verifyLink": "Reenviar el correo de confirmación"
+    "verifyLink": "Reenviar el correo de confirmación",
+    "notReleased": "La valoración se abre cuando el título se estrene.",
+    "notSaved": "No se pudo guardar tu valoración. Inténtalo de nuevo."
   },
   "search": {
     "title": "Búsqueda",
@@ -1154,7 +1387,32 @@
     "filter": "Filtrar por tipo",
     "pagination": "Páginas",
     "previous": "Anterior",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "palette": {
+      "close": "Cerrar",
+      "recent": "Búsquedas recientes",
+      "seeAll": "Ver todos los resultados de “{q}”",
+      "move": "mover",
+      "open": "abrir",
+      "esc": "cerrar",
+      "removeRecent": "Quitar “{q}” de las búsquedas recientes",
+      "trendingEmpty": "Nada en tendencia esta semana todavía."
+    },
+    "count": {
+      "one": "{n} resultado",
+      "other": "{n} resultados"
+    },
+    "allIn": {
+      "game": "Los {n} juegos para “{q}”",
+      "movie": "Las {n} películas para “{q}”",
+      "series": "Las {n} series para “{q}”",
+      "book": "Los {n} libros para “{q}”"
+    },
+    "nothingFound": "No encontramos nada para “{q}”.",
+    "checkSpelling": "Revisa la ortografía o prueba otro título.",
+    "didYouMean": "Quisiste decir:",
+    "orBrowse": "O explora una sección",
+    "people": "Personas y empresas"
   },
   "social": {
     "profile": {
@@ -1184,7 +1442,9 @@
       "tabs": {
         "ratings": "Valoraciones",
         "status": "Estado",
-        "lists": "Listas"
+        "lists": "Listas",
+        "activity": "Actividad",
+        "reviews": "Reseñas"
       },
       "byCategory": "Valoraciones por categoría",
       "allTypes": "Todas",
@@ -1199,7 +1459,17 @@
       "emptyShelf": "Nada por aquí todavía.",
       "previous": "Anterior",
       "next": "Siguiente",
-      "summary": "{ratings} puntuaciones · {lists} listas"
+      "summary": "{ratings} puntuaciones · {lists} listas",
+      "contributions": {
+        "title": "Contribuciones",
+        "summary": "{submitted} sugeridas · {approved} aprobadas · {rejected} rechazadas",
+        "rate": "Tasa de aprobación {rate}",
+        "tier": "Nivel: {tier} · precisión {accuracy}"
+      },
+      "activityLoading": "Cargando actividad…",
+      "activityHidden": "Esta actividad no se comparte.",
+      "noActivity": "Sin actividad reciente.",
+      "noReviews": "Aún no hay reseñas."
     },
     "status": {
       "label": "Estado",
@@ -1250,12 +1520,48 @@
       },
       "details": "Detalles (opcional)",
       "submit": "Enviar denuncia",
-      "close": "Cerrar"
+      "close": "Cerrar",
+      "reportReview": "Denunciar esta reseña",
+      "reportComment": "Denunciar este comentario"
     },
     "onboarding": {
       "title": "Elige tu nickname",
       "body": "Tu nickname es tu nombre público en perfiles, listas y en las notas de la comunidad.",
       "submit": "Guardar nickname"
+    },
+    "follow": {
+      "followers": {
+        "one": "{count} seguidor",
+        "other": "{count} seguidores"
+      },
+      "following": {
+        "one": "{count} seguido",
+        "other": "{count} seguidos"
+      },
+      "follow": "Seguir",
+      "unfollow": "Dejar de seguir",
+      "requested": "Solicitado · cancelar",
+      "label": "Seguidores"
+    },
+    "feed": {
+      "title": "Feed",
+      "empty": "Nada todavía. Sigue a personas para ver lo que puntúan y listan.",
+      "more": "Actividad anterior",
+      "rating_saved": "puntuó",
+      "status_changed": "marcó como {status}",
+      "list_created": "creó la lista",
+      "list_item_added": "añadió a",
+      "review_published": "reseñó",
+      "score": "Puntuación {score}"
+    },
+    "optIn": {
+      "label": "Compartir mi actividad con seguidores",
+      "help": "Tus valoraciones, estados y listas públicas aparecen en el feed de quienes te siguen y en tu perfil. Desactivado por defecto; al desactivarlo, la actividad anterior se oculta al instante.",
+      "saved": "Compartir actividad guardado."
+    },
+    "share": {
+      "action": "Compartir",
+      "copied": "Enlace copiado"
     }
   },
   "help": {
@@ -1302,7 +1608,9 @@
   },
   "rating": {
     "valuetext": "{value} de 10 estrellas",
-    "unset": "Sin valorar"
+    "unset": "Sin valorar",
+    "outOf": "{value} / 10",
+    "preview": "Vista previa {value}"
   },
   "notifications": {
     "title": "Notificaciones",
@@ -1316,7 +1624,19 @@
       "report_resolved": "Tu denuncia fue revisada. Gracias.",
       "rating_flagged": "Una de tus valoraciones fue marcada para revisión.",
       "list_hidden": "Un moderador ocultó una de tus listas.",
-      "system": "Aviso del equipo."
+      "system": "Aviso del equipo.",
+      "new_follower": "{nickname} empezó a seguirte.",
+      "follow_request": "{nickname} pidió seguirte.",
+      "new_comment": "{nickname} comentó tu publicación.",
+      "new_reaction": "{nickname} reaccionó a tu publicación.",
+      "content_hidden": "Un moderador ocultó tu contenido ({targetType}).",
+      "content_deleted": "Un moderador eliminó tu contenido ({targetType})."
+    },
+    "followAccept": "Aceptar",
+    "followDecline": "Rechazar",
+    "target": {
+      "review": "reseña",
+      "comment": "comentario"
     }
   },
   "library": {
@@ -1343,7 +1663,15 @@
     "editionsError": "No se pudieron cargar las ediciones.",
     "noEditions": "No hay ediciones disponibles.",
     "seeAll": "Ver todos",
-    "score": "Tu puntuación: {stars}"
+    "score": "Tu puntuación: {stars}",
+    "yourScore": "Tu nota {stars}",
+    "ratedScore": "Nota {stars}",
+    "notRated": "Sin nota tuya",
+    "shelvesOf": "Estantes de {name}",
+    "titleCount": {
+      "one": "{count} título",
+      "other": "{count} títulos"
+    }
   },
   "entity": {
     "kinds": {
@@ -1364,9 +1692,13 @@
     "showing": "{count} de {total}",
     "avgScore": "Nota media: {score}",
     "seeAll": "Ver todos",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "emptyHint": "Los elementos vinculados a esta página aparecerán aquí cuando estén en el catálogo.",
+    "browse": "Explorar el catálogo",
+    "source": "Fuente"
   },
   "userLists": {
+    "addItem": "Añadir un elemento",
     "items": "Elementos",
     "title": "Tus listas",
     "new": "Nueva lista",
@@ -1411,5 +1743,165 @@
     "apiHelp": "Claves, uso y la documentación para desarrolladores.",
     "verify": "Verifica tu correo para puntuar y mantener listas.",
     "twoFactor": "Autenticación en dos pasos"
+  },
+  "community": {
+    "suggest": {
+      "title": "Sugerir una edición",
+      "link": "Sugerir una edición"
+    },
+    "closed": {
+      "title": "Las sugerencias llegarán pronto",
+      "body": "Las ediciones de la comunidad aún no están abiertas. Vuelve más tarde."
+    },
+    "quota": "Te quedan {left} de {limit} envíos hoy",
+    "draftRestored": "Se restauró tu borrador guardado.",
+    "locked": "Bloqueado:",
+    "locale": "Idioma de tu edición",
+    "sources": "URLs de las fuentes (una por línea)",
+    "note": "Nota para el revisor",
+    "saveDraft": "Guardar borrador",
+    "fields": {
+      "title": "Título",
+      "cover": "Portada",
+      "translationTitle": "Título ({locale})",
+      "synopsis": "Sinopsis ({locale})",
+      "externalId": "ID de {provider}",
+      "release_date": "Fecha de lanzamiento",
+      "genres": "Géneros",
+      "creators": "Creadores",
+      "organizations": "Organizaciones",
+      "franchise": "Franquicia",
+      "platforms": "Plataformas",
+      "entity_kind": "Tipo",
+      "work_id": "Libro",
+      "language": "Idioma (código, p. ej. en, pt-BR)"
+    },
+    "precision": {
+      "label": "Precisión",
+      "day": "Día",
+      "month": "Mes",
+      "year": "Año"
+    },
+    "relation": {
+      "add": "Añadir (IDs de entidad, uno por línea)",
+      "remove": "Quitar (IDs de entidad, uno por línea)",
+      "role": "Rol en"
+    },
+    "create": {
+      "title": "Sugerir un nuevo registro",
+      "newRecord": "Nuevo registro",
+      "reportDuplicate": "Informar un duplicado",
+      "mergeHelp": "Indica el duplicado y el registro ({domain}) que debe quedar. Ambos deben ser del mismo tipo. Un moderador decide.",
+      "mergeSource": "Registro duplicado",
+      "mergeDest": "Registro que se conserva",
+      "change": "Cambiar",
+      "link": "Sugerir nuevo/a {type}",
+      "missing": "¿No lo encuentras?",
+      "targets": {
+        "label": "Qué añadir",
+        "item": "Juego, película, serie o libro",
+        "entity": "Persona, empresa o etiqueta",
+        "edition": "Edición de libro"
+      },
+      "choose": "Elige…"
+    },
+    "status": {
+      "title": "Tu sugerencia",
+      "current": "Estado",
+      "reason": "Motivo",
+      "quotaReached": "Límite diario alcanzado. Puedes enviar de nuevo después de {time}.",
+      "changes": "Cambios propuestos",
+      "removed": "Eliminado",
+      "added": "Añadido",
+      "timeline": "Cronología",
+      "submit": "Enviar a revisión",
+      "withdraw": "Retirar",
+      "states": {
+        "draft": "Borrador",
+        "submitted": "Enviada",
+        "in_review": "En revisión",
+        "approved": "Aprobada",
+        "rejected": "Rechazada",
+        "applied": "Aplicada",
+        "withdrawn": "Retirada",
+        "expired": "Caducada",
+        "reverted": "Revertida"
+      }
+    },
+    "mine": {
+      "title": "Mis sugerencias",
+      "empty": "Aún no has hecho ninguna sugerencia.",
+      "kinds": {
+        "edit": "Edición",
+        "create": "Nuevo registro",
+        "merge": "Informe de duplicado"
+      }
+    },
+    "recent": {
+      "title": "Cambios recientes: {title}",
+      "back": "Volver a la página",
+      "empty": "Todavía no hay cambios.",
+      "merged": "fusionó un duplicado en este registro",
+      "changedTo": "cambiado a",
+      "pages": "Páginas de cambios recientes",
+      "link": "Cambios recientes",
+      "actors": {
+        "team": "Equipo HexaScore",
+        "deleted": "usuario eliminado",
+        "system": "HexaScore",
+        "user": "miembro"
+      },
+      "lede": "Todas las ediciones aceptadas de esta página, de la más reciente a la más antigua.",
+      "overview": "Resumen",
+      "columns": {
+        "date": "Fecha",
+        "field": "Campo",
+        "before": "Antes",
+        "after": "Después",
+        "by": "Por"
+      }
+    },
+    "entityKinds": {
+      "person": "Persona",
+      "organization": "Organización",
+      "franchise": "Franquicia",
+      "platform": "Plataforma",
+      "genre": "Género"
+    }
+  },
+  "forYou": {
+    "title": "Para ti",
+    "home": "Para ti",
+    "onboarding": "Valora 3 títulos de {type} para recibir recomendaciones. Mientras tanto, mira lo que es tendencia.",
+    "empty": "Aún no hay recomendaciones.",
+    "optedOut": "Las recomendaciones personalizadas están desactivadas. Puedes activarlas en la configuración de privacidad.",
+    "rated": "Porque valoraste {title} con {stars}/5",
+    "completed": "Porque completaste {title}",
+    "wanted": "Porque querías {title}",
+    "loading": "Cargando..."
+  },
+  "reviews": {
+    "title": "Reseñas",
+    "body": "Tu reseña",
+    "help": "Hasta 5.000 caracteres. **negrita**, *cursiva*, `código`, [enlaces](https://…), listas y > citas.",
+    "spoiler": "Contiene spoilers",
+    "spoilerTag": "Spoiler",
+    "reveal": "Mostrar spoiler",
+    "save": "Guardar reseña",
+    "delete": "Eliminar reseña",
+    "empty": "Aún no hay reseñas.",
+    "rateFirst": "Valora este título para escribir una reseña."
+  },
+  "comments": {
+    "title": "Comentarios",
+    "label": "Escribe un comentario",
+    "replyLabel": "Escribe una respuesta",
+    "send": "Enviar",
+    "reply": "Responder",
+    "delete": "Eliminar"
+  },
+  "reactions": {
+    "like": "Me gusta ({count})",
+    "helpful": "Útil ({count})"
   }
 }

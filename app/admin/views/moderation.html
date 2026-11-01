@@ -1,0 +1,57 @@
+{{define "content"}}
+<div class="toolbar"><h1>{{.Title}}</h1><a class="button" href="/admin/moderation/metrics">Metrics</a></div>
+<form method="get" action="/admin/moderation" class="filters" aria-label="Queue filters">
+	<label>Status
+		<select name="status"><option value="">open</option>{{range .Queue.Statuses}}<option value="{{.}}"{{if eq . $.Queue.Filter.Status}} selected{{end}}>{{.}}</option>{{end}}</select>
+	</label>
+	<label>Kind
+		<select name="kind"><option value="">any</option>{{range .Queue.Kinds}}<option value="{{.}}"{{if eq . $.Queue.Filter.Kind}} selected{{end}}>{{.}}</option>{{end}}</select>
+	</label>
+	<label>Domain
+		<select name="domain"><option value="">any</option>{{range .Queue.Domains}}<option value="{{.}}"{{if eq . $.Queue.Filter.Domain}} selected{{end}}>{{.}}</option>{{end}}</select>
+	</label>
+	<label>Age
+		<select name="age"><option value="">any</option>{{range .Queue.AgeBuckets}}<option value="{{.}}"{{if eq . $.Queue.Filter.Age}} selected{{end}}>{{.}}</option>{{end}}</select>
+	</label>
+	<label>Field <input type="text" name="field" value="{{.Queue.Filter.Field}}"></label>
+	<label><input type="checkbox" name="competing" value="1"{{if .Queue.Filter.Competing}} checked{{end}}> Competing</label>
+	<label><input type="checkbox" name="stale" value="1"{{if .Queue.Filter.Stale}} checked{{end}}> Stale</label>
+	<button type="submit">Filter</button>
+</form>
+{{if not .Queue.Rows}}
+<p class="muted">No suggestions match.</p>
+{{else}}
+<table>
+	<thead><tr><th><span class="visually-hidden">Select</span></th><th>Age</th><th>Kind</th><th>Target</th><th>Fields</th><th>Author</th><th>Badges</th><th>Recommendations</th><th>Assignee</th><th>Action</th></tr></thead>
+	<tbody>
+	{{range .Queue.Rows}}
+	<tr>
+		<td><input type="checkbox" name="ids" value="{{.ID}}" form="bulk" aria-label="Select {{.ID}}"></td>
+		<td><span class="badge badge-{{.Age}}">{{.Age}}</span></td>
+		<td>{{.Kind}}</td>
+		<td><a href="/admin/moderation/{{.ID}}">{{.TargetType}} · {{.Domain}} · {{.Locale}}</a></td>
+		<td>{{range $i, $f := .Fields}}{{if $i}}, {{end}}{{$f}}{{end}}</td>
+		<td>{{if .AuthorID}}#{{.AuthorID}} {{.AuthorTier}} {{printf "%.2f" .AuthorAccuracy}}{{else}}-{{end}}</td>
+		<td>{{if .Competing}}<span class="badge">competing</span> {{end}}{{if .Stale}}<span class="badge">stale</span> {{end}}{{if .Unreachable}}<span class="badge">unreachable</span>{{end}}</td>
+		<td>{{if or .RecApprove .RecReject}}approve {{.RecApprove}} · reject {{.RecReject}}{{else}}-{{end}}</td>
+		<td>{{if .AssignedTo}}#{{.AssignedTo}}{{else}}-{{end}}</td>
+		<td>
+			<form method="post" action="/admin/moderation/{{.ID}}/{{if eq .Status "in_review"}}release{{else}}claim{{end}}">
+				{{csrfField}}
+				<input type="hidden" name="version" value="{{.Version}}">
+				<button type="submit">{{if eq .Status "in_review"}}Release{{else}}Claim{{end}}</button>
+			</form>
+		</td>
+	</tr>
+	{{end}}
+	</tbody>
+</table>
+<form id="bulk" method="post" action="/admin/moderation/bulk">
+	{{csrfField}}
+	<label>Action <select name="action"><option value="claim">Claim</option><option value="release">Release</option>{{if .CanApply}}<option value="approve">Approve</option><option value="reject">Reject</option>{{end}}</select></label>
+	{{if .CanApply}}<label>Reject reason <select name="reason"><option value="">-</option>{{range .RejectReasons}}<option value="{{.}}">{{.}}</option>{{end}}</select></label>{{end}}
+	<button type="submit">Apply to selected (max 50)</button>
+</form>
+{{with .Queue.NextURL}}<p><a href="{{.}}" rel="next">Next page</a></p>{{end}}
+{{end}}
+{{end}}

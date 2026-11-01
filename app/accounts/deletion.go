@@ -12,6 +12,7 @@ import (
 	"github.com/AlexGalhardo/vukem/errs"
 	"github.com/AlexGalhardo/vukem/orm"
 
+	"github.com/AlexGalhardo/hexascore-app/app/community"
 	"github.com/AlexGalhardo/hexascore-app/app/mail"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
@@ -285,6 +286,10 @@ func (a *Accounts) anonymiseTx(
 			return old, false, err
 		}
 
+		if err := community.ForgetUser(ctx, tx, userID); err != nil {
+			return old, false, err
+		}
+
 		if _, err := tx.ExecContext(
 			ctx,
 			"DELETE FROM user_item_editions WHERE user_id = "+p(1),
@@ -305,10 +310,12 @@ func (a *Accounts) anonymiseTx(
 func purgeUserData(ctx context.Context, tx database.Executor, userID int64, now time.Time) error {
 	p := tx.Dialect().Placeholder
 
-	stmts := []struct {
+	type stmt struct {
 		sql  string
 		args []any
-	}{
+	}
+
+	stmts := []stmt{
 		{`DELETE FROM lists WHERE user_id = ` + p(1) + ` AND NOT is_public`, []any{userID}},
 		{
 			`UPDATE list_items SET note = NULL WHERE note IS NOT NULL AND list_id IN (SELECT id FROM lists WHERE user_id = ` + p(
@@ -329,6 +336,20 @@ func purgeUserData(ctx context.Context, tx database.Executor, userID int64, now 
 			` WHERE target_type = 'user' AND target_id = ` + p(1) + ` AND status = 'open'`, []any{strconv.FormatInt(userID, 10), now}},
 		{`UPDATE reports SET reporter_id = NULL WHERE reporter_id = ` + p(1), []any{userID}},
 	}
+	// The social tables exist only on Postgres (VF-033); SDD 14 §12.9 puts both in the purge.
+	if tx.Dialect().Name() == "postgres" {
+		stmts = append(stmts,
+			stmt{`DELETE FROM follows WHERE follower_id = $1 OR followee_id = $1`, []any{userID}},
+			stmt{`DELETE FROM activity_events WHERE actor_id = $1`, []any{userID}},
+			// Review text can identify the person, like list descriptions.
+			stmt{`DELETE FROM reviews WHERE user_id = $1`, []any{userID}},
+			// Reactions first: their trigger takes the counters back down while the targets still exist.
+			stmt{`DELETE FROM reactions WHERE user_id = $1`, []any{userID}},
+			stmt{`DELETE FROM comments WHERE user_id = $1`, []any{userID}},
+			stmt{`UPDATE users SET feed_opt_in = false WHERE id = $1`, []any{userID}},
+		)
+	}
+
 	for _, st := range stmts {
 		if _, err := tx.ExecContext(ctx, st.sql, st.args...); err != nil {
 			return err

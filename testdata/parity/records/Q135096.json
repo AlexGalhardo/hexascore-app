@@ -1,0 +1,571 @@
+{
+  "qid": "Q135096",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q135096",
+      "labels": {
+        "en": "I, Claudius",
+        "es": "Yo, Claudio",
+        "pt": "I, Claudius (série)"
+      },
+      "aliases": {
+        "en": [
+          "Claudius I"
+        ],
+        "es": [
+          "Yo Claudio",
+          "Claudio Yo"
+        ],
+        "pt": [
+          "Claudius I"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "I, Claudius (TV series)",
+        "eswiki": "Yo, Claudio (miniserie)",
+        "ptwiki": "I, Claudius (série)"
+      },
+      "sitelinks_count": 25,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+12",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/i_claudius",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q7168625",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7210294",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q135215",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "I, Claudius",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q256164",
+            "rank": "normal"
+          },
+          {
+            "value": "Q237778",
+            "rank": "normal"
+          },
+          {
+            "value": "Q449118",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1506941",
+            "rank": "normal"
+          },
+          {
+            "value": "Q200405",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16296",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4805494",
+            "rank": "normal"
+          },
+          {
+            "value": "Q439778",
+            "rank": "normal"
+          },
+          {
+            "value": "Q462982",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6252164",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7493172",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1542058",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1647123",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2491464",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1189596",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5479006",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1343000",
+            "rank": "normal"
+          },
+          {
+            "value": "Q335376",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16455",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2784298",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2898054",
+            "rank": "normal"
+          },
+          {
+            "value": "Q517880",
+            "rank": "normal"
+          },
+          {
+            "value": "Q608022",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5593219",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6204398",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7407392",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5222725",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3181038",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6077601",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5294305",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1117915",
+            "rank": "normal"
+          },
+          {
+            "value": "Q609758",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4819183",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4978154",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16095191",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1508089",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6550236",
+            "rank": "normal"
+          },
+          {
+            "value": "Q472411",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6988479",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6376212",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5451126",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2966591",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4859422",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4897594",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7381646",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7493144",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16105709",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3269509",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6397559",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5496648",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1589331",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1242604",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7148227",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16239295",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16104382",
+            "rank": "normal"
+          },
+          {
+            "value": "Q543739",
+            "rank": "normal"
+          },
+          {
+            "value": "Q310515",
+            "rank": "normal"
+          },
+          {
+            "value": "Q552670",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6665904",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7024958",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7313575",
+            "rank": "normal"
+          },
+          {
+            "value": "Q17465856",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5079684",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3022586",
+            "rank": "normal"
+          },
+          {
+            "value": "Q609931",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1029022",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5343766",
+            "rank": "normal"
+          },
+          {
+            "value": "Q462314",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6271106",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5534668",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16970932",
+            "rank": "normal"
+          },
+          {
+            "value": "Q97356536",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1032023",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1881008",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5540785",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16201628",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q201732",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+50",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q9531",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1868978",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0074006",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q216108",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "5487",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q3133520",
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q3157292",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1976-09-20T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1029022": "Guy Siner",
+        "Q1032023": "Stuart Wilson",
+        "Q1117915": "John Truscott",
+        "Q1189596": "John Castle",
+        "Q1242604": "Norman Eshley",
+        "Q1343000": "James Faulkner",
+        "Q135215": "I, Claudius",
+        "Q145": "United Kingdom",
+        "Q1506941": "George Baker",
+        "Q1508089": "George Pravda",
+        "Q1542058": "Christopher Biggins",
+        "Q1589331": "Peter Bowles",
+        "Q16095191": "Sally Bazely",
+        "Q16104382": "Liane Aukin",
+        "Q16105709": "Angela Morant",
+        "Q16201628": "Pat Gorman",
+        "Q16239295": "Earl Rhodes",
+        "Q16296": "Patrick Stewart",
+        "Q16455": "John Rhys-Davies",
+        "Q1647123": "Ian Ogilvy",
+        "Q16970932": "Neal Arden",
+        "Q17465856": "Jennifer Croxton",
+        "Q1860": "English",
+        "Q1868978": "London Films",
+        "Q1881008": "George Innes",
+        "Q200405": "John Hurt",
+        "Q201732": "Robert Graves",
+        "Q216108": "BBC Two",
+        "Q237778": "Siân Phillips",
+        "Q2491464": "David Robb",
+        "Q256164": "Derek Jacobi",
+        "Q2784298": "Stratford Johns",
+        "Q2898054": "Bernard Hepton",
+        "Q2966591": "Christopher Guard",
+        "Q3022586": "Denis Carey",
+        "Q310515": "Bernard Hill",
+        "Q3133520": "Herbert Wise",
+        "Q3157292": "Jack Pulman",
+        "Q3181038": "John Bennett",
+        "Q3269509": "Lyndon Brook",
+        "Q335376": "Kevin McNally",
+        "Q439778": "Margaret Tyzack",
+        "Q449118": "Brian Blessed",
+        "Q462314": "Esmond Knight",
+        "Q462982": "Patricia Quinn",
+        "Q472411": "Tony Haygarth",
+        "Q4805494": "Ashley Knight",
+        "Q4819183": "Aubrey Richards",
+        "Q4859422": "Barbara Young",
+        "Q4897594": "Beth Morris",
+        "Q4978154": "Bruce Purchase",
+        "Q5079684": "Charles Kay",
+        "Q517880": "John Cater",
+        "Q5222725": "Darien Angadi",
+        "Q5294305": "Donald Eccles",
+        "Q5343766": "Edward Jewesbury",
+        "Q543739": "Moira Redmond",
+        "Q5451126": "Fiona Walker",
+        "Q5479006": "Frances White",
+        "Q5496648": "Freda Dowie",
+        "Q552670": "Norman Rossington",
+        "Q5534668": "Geoffrey Hinsliff",
+        "Q5540785": "George Howe",
+        "Q5593219": "Graham Seed",
+        "Q6077601": "Isabel Dean",
+        "Q608022": "Simon MacCorkindale",
+        "Q609758": "Carleton Hobbs",
+        "Q609931": "Norman Shelley",
+        "Q6204398": "Jo Rowbottom",
+        "Q6252164": "John Paul",
+        "Q6271106": "Jon Laurimore",
+        "Q6376212": "Katharine Levy",
+        "Q6397559": "Kevin Stoney",
+        "Q6550236": "Linal Haft",
+        "Q6665904": "Lockwood West",
+        "Q6988479": "Neil Dickson",
+        "Q7024958": "Nicholas Amer",
+        "Q7148227": "Patsy Byrne",
+        "Q7168625": "historical drama",
+        "Q7210294": "political drama",
+        "Q7313575": "Renu Setna",
+        "Q7381646": "Russell Lewis",
+        "Q7407392": "Sam Dastor",
+        "Q7493144": "Sheila Ruskin",
+        "Q7493172": "Sheila White",
+        "Q9531": "British Broadcasting Corporation",
+        "Q97356536": "Peter Williams"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q135096",
+      "lang": "en",
+      "title": "I, Claudius (TV series)",
+      "extract": "I, Claudius (stylised as I·CLAVDIVS) is a 1976 BBC Television adaptation of Robert Graves' 1934 novel I, Claudius and its 1935 sequel Claudius the God. Written by Jack Pulman, it stars Derek Jacobi as Claudius, with Siân Phillips, Brian Blessed, George Baker, Margaret Tyzack, John Hurt, Patricia Quinn, Ian Ogilvy, Kevin McNally, Patrick Stewart and John Rhys-Davies. The series covers the history of the early Roman Empire, told from the perspective of the elderly Emperor Claudius, who narrates the series.\nAmong many other productions and adaptations, Graves' Claudius novels have also been adapted for a BBC Radio 4 broadcast (2010) and for the stage (1972).",
+      "url": "https://en.wikipedia.org/wiki/I,_Claudius_(TV_series)"
+    },
+    "wikipedia:es": {
+      "qid": "Q135096",
+      "lang": "es",
+      "title": "Yo, Claudio (miniserie)",
+      "extract": "Yo, Claudio (en inglés I, Claudius)  es una miniserie británica de televisión producida y emitida por la BBC en 1976. Se trata de una adaptación de las novelas Yo, Claudio y Claudio, el dios, y su esposa Mesalina, de Robert Graves. Esta miniserie fue creada por Jack Pullman, quien escribió el guion de los trece episodios. Se muestra en ella la vida de la Dinastía Julio-Claudia desde el primer principado de Octavio Augusto hasta los últimos días de Claudio desde el punto de vista de este último, que ha escrito su autobiografía. Los personajes principales fueron interpretados por actores del teatro shakespeariano, y destacan las actuaciones de Derek Jacobi (Claudio), Siân Phillips (Livia), John Hurt (Calígula) y Brian Blessed (Augusto).\nLa miniserie fue rodada en vídeo, en una escenografía teatral y sin exteriores.​",
+      "url": "https://es.wikipedia.org/wiki/Yo,_Claudio_(miniserie)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q135096",
+      "lang": "pt",
+      "title": "I, Claudius (série)",
+      "extract": "I, Claudius (prt: Eu, Cláudio), estilizado como I·CLAVDIVS, é uma minissérie britânica da BBC2 de 1976, adaptada do romance homónimo, de Robert Graves, de 1934, e da sua sequência de 1935, Claudius the God. A série foi exibida em Portugal na RTP2, entre 17 de outubro e 9 de janeiro de 1979, às terças-feiras, às 22 horas e 30 minutos, a seguir ao \"Informação 2\".",
+      "url": "https://pt.wikipedia.org/wiki/I,_Claudius_(s%C3%A9rie)"
+    }
+  },
+  "tier": "mid",
+  "type": "series"
+}

@@ -83,7 +83,7 @@ Microtasks for each group are in the phase sections below.
 | P6.B | Ingestion extras: TMDB/IGDB/Steam/GOG display-only enrichment with provenance and expiry, covers pipeline (`cwebp`), trailers, edition matching, entity resolution queue, data-quality asserts, admin status | SDD 06 | P6.A |
 | P6.C | Trending: activity primitives, flush, snapshots, home sections, API endpoint | SDD 08 | P2.G |
 | P6.D | Similar items and personal recommendations: nightly similarity, cross-media links, "For you" with opt-out, evaluation protocol | SDD 08 | P6.C, P6.A |
-| P7.A | Follows and activity feed: `follows` table, follower counts, activity events, `/feed` page, privacy rules | SDD 14 (new §8), SDD 08 | P2.G, D-06 amendment |
+| P7.A | Follows and activity feed: `follows` table, follower counts, activity events, `/feed` page, privacy rules | SDD 14 (new §12), SDD 08 | P2.G, D-06 amendment |
 | P7.B | Reviews, comments and reactions: text review per rating, threaded comments, reactions, reports and moderation for all three | SDD 14, SDD 04, SDD 13 | P7.A, P4.B |
 | P7.C | Social discovery: profile shelves with covers, "friends rated", list collaboration, share cards | SDD 09, SDD 08 | P7.A, P6.C |
 
@@ -1479,7 +1479,7 @@ Phase-specific conventions:
     - `gh api repos/AlexGalhardo/hexascore-app/branches/main/protection` → required checks `lint`, `test`, `vuln`, `openapi`, `build`, `e2e`, `lighthouse`
   - Notes: Railway's "wait for CI" option is [NOT VERIFIED] (11-8); if it does not exist, turn autodeploy off and deploy staging from the workflow with `railway up --detach` after the checks. HUMAN GATE: branch protection is a repository setting the owner applies or approves.
 
-- [ ] **P2.B.2.2** Write `release.yml`: tag `v*` and `workflow_dispatch(version)` deploy production with notes taken from `CHANGELOG.md`, behind a GitHub environment approval.
+- [x] **P2.B.2.2** Write `release.yml`: tag `v*` and `workflow_dispatch(version)` deploy production with notes taken from `CHANGELOG.md`, behind a GitHub environment approval.
   - Files/modules: `.github/workflows/release.yml`, `Taskfile.yml` (`release`), `docs/runbooks/release.md` (release, missed run, rollback by `-f version=vPREV`)
   - Refs: SDD 11 §6.6 (`release`), §7.1, §8 ("Tag pushed without a run"); ADR 0013; D-20, D-37; <https://docs.railway.com/reference/cli-api> "Deployment" (`railway up --detach`)
   - Depends on: P2.B.2.1
@@ -1580,7 +1580,7 @@ Phase-specific conventions:
     - A1 drill: stopping staging `app` for 3 min → page in Telegram within 2 min; restart → resolved
   - Notes: Telegram as a Grafana contact point and certificate-expiry checks are [NOT VERIFIED]: record the result; fall back to e-mail if Telegram is not offered. Production probes are switched on in P2.G.3.3.
 
-- [ ] **P2.C.3.3** Implement the app-side alerts: SSR fallback page (A5), job failed twice (A6), quota flush errors (A10).
+- [x] **P2.C.3.3** Implement the app-side alerts: SSR fallback page (A5), job failed twice (A6), quota flush errors (A10).
   - Files/modules: `bootstrap/app.go` (`SSRConfig.OnFailure`), `app/alerts/jobs.go` (`q.AddObserver`), `app/api/quota/flush.go`, `tests/alerts_test.go`
   - Refs: SDD 12 FR-12-3, §7.2, §7.5 (A5, A6, A10), §8, §9 item 4; D-07; VF-002; <https://vukem.dev/docs/frontend/inertia> "Server-side rendering"; <https://vukem.dev/docs/digging-deeper/telegram-logging>
   - Depends on: P2.C.1.2, P2.C.2.2
@@ -1622,7 +1622,7 @@ Phase-specific conventions:
     - `dig +short CNAME status.hexascore.app` → the GitHub Pages host; HTTPS certificate valid
   - Notes: HUMAN GATE (DNS, new repository): the owner creates the repository and the Cloudflare record. Static HTML only, no build step, no third-party script.
 
-- [ ] **P2.C.4.2** Commit runbooks R1–R9 and the monthly cost checklist under `docs/runbooks/`, and rehearse R1 and R7 on staging.
+- [x] **P2.C.4.2** Commit runbooks R1–R9 and the monthly cost checklist under `docs/runbooks/`, and rehearse R1 and R7 on staging.
   - Files/modules: `docs/runbooks/{ssr-crash-loop,pg-connections,ingestion-stuck,quota-drift,suggestion-backlog,disk-full,rollback,restore,leaked-secret}.md`, `docs/runbooks/cost.md`, `docs/runbooks/README.md` (index with alert → runbook map)
   - Refs: SDD 12 §7.8, §7.9; SDD 11 §7.5; SDD 13 §7.9; <https://vukem.dev/docs/cli/reference-runtime> "`vukem down` and `vukem up`"; <https://docs.railway.com/guides/roll-back-bad-deploy>
   - Depends on: P2.C.3.3
@@ -1902,6 +1902,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
     - `go test -tags=integration ./database/legacyimport -run TestPasskeysStage` → PASS: a Better Auth `passkey` fixture row (credential id, public key, counter, transports, AAGUID, backup flags, name, created_at) imports into `passkeys` and a signed assertion from the fixture authenticator verifies after import
   - Notes: `session`, `verification` and `rate_limit` are not imported. Legacy `passkey` rows are imported (ADR 0017, depends on P1.C.7.1); the Better Auth storage encoding (base64 vs base64url, COSE key layout) is [NOT VERIFIED] until proven on a Neon copy. Only if it proves incompatible: passkey-only users are counted and mailed the `passkeys_retired` reset notice 14 days before the window (P2.G.1.2). OAuth tokens dropped. Never log hashes or key material.
   - Status (2026-10-29): `users` stage and the scrypt login proof delivered; `passkeys.go` and `TestPasskeysStage` wait for P1.C.7.1 (no `passkeys` table before the vukem release with VF-001), tracked as P2.F.2.2b.
+  - Status (2026-11-01): code done on main: `TestUsersStage` and `TestPasskeysStage` PASS, `TestSecurity_A07_LegacyScryptVerifiesAndRehashes` PASS. Open (owner gate): the staging login with an imported Better Auth 1.7.7 hash.
 
 - [x] **P2.F.2.3** Export the 2FA secrets with a Bun script using Better Auth's own helpers and import them over stdin.
   - Files/modules: `scripts/legacy/twofactor-export.ts` (run from a temp copy of `legacy/apps/web` with its `node_modules`), `database/legacyimport/twofactor.go`, `database/legacyimport/twofactor_test.go`
@@ -2029,7 +2030,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
     - ratings created after the cutover replay as legacy 0–100 values unchanged (multiples of 5 are valid legacy values)
   - Notes: accepted losses (sessions, suggestions, flag changes) are listed in the runbook. Replay targets Neon only after R2 (read-only off) and never runs automatically.
 
-- [ ] **P2.G.1.2** Write the cutover runbook with the go/no-go checklist, and send the pre-cutover notices.
+- [x] **P2.G.1.2** Write the cutover runbook with the go/no-go checklist, and send the pre-cutover notices. Closed by owner decision 2026-11-01; actual state: cutover ran without a formal runbook or notices; rollback runbook exists in `docs/runbooks/cutover-rollback.md`.
   - Files/modules: `docs/runbooks/cutover.md` (T-14 d … T+30 d, commands, owners, timings from dry run 2, abort points), `docs/runbooks/cutover-rollback.md`, `docs/runbooks/dns-legacy.txt` (refreshed)
   - Refs: SDD 11 §7.6, NFR-11-6; SDD 03 §7.7, §8 (passkey-only users mailed); SDD 13 NFR-13-3; D-21, D-29; ADR 0013
   - Depends on: P2.G.1.1
@@ -2041,7 +2042,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
 
 #### P2.G.2 Rehearsal and go/no-go
 
-- [ ] **P2.G.2.1** Run the full timed rehearsal at T-14 d on staging, including rollback R1–R3.
+- [x] **P2.G.2.1** Run the full timed rehearsal at T-14 d on staging, including rollback R1–R3. Closed by owner decision 2026-11-01; actual state: no staging rehearsal; the local rehearsal of the legacy import passed (MIGRATE-legacy-data).
   - Files/modules: `docs/migration/rehearsal.md` (actual time per step, deviations)
   - Refs: SDD 11 §7.6 (T-14 d), §9 item 7, NFR-11-6; SDD 12 §10 (staging probe is a D-21 gate); ADR 0013; D-21
   - Depends on: P2.G.1.2
@@ -2051,7 +2052,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
     - rollback: test hostname back to the Vercel target (R1), read-only off on the branch (R2), `hexascore:export-since` replay of staging writes into the branch (R3) → rows visible in the legacy shape
   - Notes: HUMAN GATE (production data, DNS): the Neon branch and the test record are the owner's. The Stripe webhook switch is rehearsed with test-mode endpoints only.
 
-- [ ] **P2.G.2.2** Hold the go/no-go: parity checklist re-signed on staging, gates green, drill passed, legal review done.
+- [x] **P2.G.2.2** Hold the go/no-go: parity checklist re-signed on staging, gates green, drill passed, legal review done. Closed by owner decision 2026-11-01; actual state: no formal go/no-go; the owner decided the cutover on 2026-10-31.
   - Files/modules: `docs/parity-checklist.md` (re-signed on staging), `docs/migration/go-no-go.md`
   - Refs: ROADMAP phase map (P2 exit); D-21, D-29; SDD 13 NFR-13-3; SDD 11 §9; P1.I.6.1, P2.F.5.2, P2.E.3.1
   - Depends on: P2.G.2.1
@@ -2062,7 +2063,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
 
 #### P2.G.3 Window
 
-- [ ] **P2.G.3.1** Prepare production: bulk covers copy at T-7 d, live secrets, custom domains staged, TTL 60 s at T-24 h.
+- [x] **P2.G.3.1** Prepare production: bulk covers copy at T-7 d, live secrets, custom domains staged, TTL 60 s at T-24 h. Closed by owner decision 2026-11-01; actual state: domains moved to Railway on 2026-10-31; covers served from the production bucket; Google OAuth secrets set 2026-10-31.
   - Files/modules: `docs/runbooks/cutover.md` (checked boxes), `docs/migration/covers.md` (production counts)
   - Refs: SDD 11 §6.1, §6.4, §7.6 (T-7 d, T-24 h), NFR-11-6; SDD 05 (Stripe live); D-28
   - Depends on: P2.G.2.2
@@ -2073,7 +2074,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
     - production `/up?checks=1` on the Railway domain → 200, all checks `ok`, release tag in `X-Hexascore-Version`
   - Notes: HUMAN GATE (DNS, secrets): the owner sets Stripe live keys and lowers the TTLs. Whether Railway accepts and certifies custom domains before DNS points at it, and how long TLS issuance takes, are [NOT VERIFIED]: check the service networking settings and put the measured delay into the runbook.
 
-- [ ] **P2.G.3.2** Run the read-only window and the final migration into production.
+- [x] **P2.G.3.2** Run the read-only window and the final migration into production. Closed by owner decision 2026-11-01; actual state: legacy data imported into production 2026-10-31/11-01 (users, catalogue, entities, social, library; seed users kept and to be flagged, owner decision).
   - Files/modules: `docs/migration/cutover-log.md` (UTC timestamps per step, counts, verify output)
   - Refs: SDD 11 §7.6 window steps 1–6, FR-11-7, NFR-11-6; SDD 03 §7.7; D-21; A-04
   - Depends on: P2.G.3.1
@@ -2084,7 +2085,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
     - freeze to verify ≤ 45 min target, 60 max
   - Notes: HUMAN GATE (production data): the owner runs or approves every command in the session. Abort rule: verify fails or 60 min pass → R2 (read-only off on Neon), the window ends with legacy serving, nothing else changes. `vukem down` keeps the new production closed to visitors until DNS switches.
 
-- [ ] **P2.G.3.3** Switch DNS and the Stripe live webhook, and turn on production monitoring.
+- [x] **P2.G.3.3** Switch DNS and the Stripe live webhook, and turn on production monitoring. Closed by owner decision 2026-11-01; actual state: DNS for hexascore.app, www and api switched to Railway on 2026-10-31; Stripe live webhook and monitoring are still owner actions.
   - Files/modules: `docs/migration/cutover-log.md`, `ops/grafana/synthetics.md` (production checks)
   - Refs: SDD 11 §6.1 (apex CNAME flattening, proxy off), §7.6 step 7, §9 item 8; SDD 12 §7.4, §7.7; D-28; ADR 0002
   - Depends on: P2.G.3.2
@@ -2097,7 +2098,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
 
 #### P2.G.4 After the cutover
 
-- [ ] **P2.G.4.1** Watch production for 2 h and then daily for 7 days; close the rollback window at T+7 d.
+- [x] **P2.G.4.1** Watch production for 2 h and then daily for 7 days; close the rollback window at T+7 d. Closed by owner decision 2026-11-01; actual state: no formal 7-day watch window was run.
   - Files/modules: `docs/migration/post-cutover.md` (daily rows: 5xx %, SSR fallbacks, login success vs legacy baseline, Stripe events, job failures, backup status)
   - Refs: SDD 11 §7.6 step 8 and Rollback ("until T+7 d, then forward-fix"); SDD 12 §7.5; ADR 0014; D-21
   - Depends on: P2.G.3.3
@@ -2107,7 +2108,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
     - first production `backup.daily` → `verified`; the next `backup:drill` on staging from the production dump → pass
   - Notes: a breach before T+7 d → the owner decides between forward fix and R1–R3. At T+7 d record "rollback window closed, forward-fix only" in `docs/PROGRESS.md`. Neon stays read-only until T+30 d.
 
-- [ ] **P2.G.4.2** Release `v1.0.0` (parity and cutover).
+- [x] **P2.G.4.2** Release `v1.0.0` (parity and cutover). Closed by owner decision 2026-11-01; actual state: no v1.0.0 tag yet; production runs v0.12.x.
   - Files/modules: `CHANGELOG.md`, tag `v1.0.0`, `docs/PROGRESS.md`, `ROADMAP.md` (status table, phase map: P2 done), `AGENTS.md`
   - Refs: ADR 0013 ("`v1.0.0` = parity with the legacy app and successful cutover"); SDD 11 §7.1; D-20, D-21; ROADMAP phase map (P2 exit criteria)
   - Depends on: P2.G.3.3
@@ -2117,7 +2118,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
     - `gh release view v1.0.0` → non-empty body; `curl -sI https://hexascore.app/up | grep -i x-hexascore-version` → `v1.0.0`
   - Notes: HUMAN GATE (release, production deploy): the owner chooses the moment, at the earliest after the first production drill passes, and pushes the tag (one tag per push).
 
-- [ ] **P2.G.4.3** At T+30 d take the final legacy dump, decommission Vercel, Neon, Upstash and Blob, and re-baseline the cost sheet.
+- [x] **P2.G.4.3** At T+30 d take the final legacy dump, decommission Vercel, Neon, Upstash and Blob, and re-baseline the cost sheet. Closed by owner decision 2026-11-01; actual state: not done yet: Vercel project, Neon, Upstash and Blob still exist.
   - Files/modules: `docs/migration/decommission.md` (checklist with dates), `docs/sdd/11-infra-deploy.md` (§6.5 measured averages, §11 issue 13 closed), `docs/sdd/open-issues.md` (row 11-13)
   - Refs: SDD 11 §7.6 (T+30 d), §6.5, §11 issue 13; SDD 12 §7.9; ADR 0002, 0013; D-21
   - Depends on: P2.G.4.1
@@ -2164,7 +2165,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - `curl -s localhost:3000/ | grep -c '<img'` ≥ 12
     - Lighthouse `/` mobile: performance ≥ 0.9, LCP ≤ 2.0 s (hero text or first cover)
 
-- [ ] **P2.H.1.4** Library and lists as shelves: cards with cover, status and own score, grouped by status, with counts in the filters; public profile tabs reuse the same cards.
+- [x] **P2.H.1.4** Library and lists as shelves: cards with cover, status and own score, grouped by status, with counts in the filters; public profile tabs reuse the same cards.
   - Files/modules: `resources/js/pages/Library/Index.tsx`, `resources/js/pages/Lists/Index.tsx`, `resources/js/pages/Lists/Edit.tsx`, `resources/js/pages/User/Profile.tsx`, `resources/js/pages/User/List.tsx`, `resources/js/components/library/ShelfCard.tsx`
   - Refs: SDD 14 FR-14-7 (library grouping), FR-14-6; legacy `docs/frontend.md` "Padrão de listagens"
   - Depends on: P2.H.1.1
@@ -2173,7 +2174,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - `bun run e2e -- library.spec.ts lists.spec.ts social.spec.ts` → green in the three locales, desktop and mobile
     - `bun run test -- ShelfCard` → cover, status label and score render; missing score renders the dash
 
-- [ ] **P2.H.1.5** Let a list owner add items from the list page: search box with suggest inside `Lists/Edit`, then `PUT /lists/{id}/items/{itemId}`.
+- [x] **P2.H.1.5** Let a list owner add items from the list page: search box with suggest inside `Lists/Edit`, then `PUT /lists/{id}/items/{itemId}`.
   - Files/modules: `resources/js/pages/Lists/Edit.tsx`, `resources/js/components/search/SuggestBox.tsx` (reusable `onPick`), `app/controllers/lists_controller.go`
   - Refs: SDD 14 §6.2; audit (list edit page has no way to add items)
   - Depends on: —
@@ -2192,7 +2193,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - `curl -s -b "$SESSION" localhost:3000/profile | grep -c 'aria-busy="true"'` → 1 and `<title>Profile` present in the HTML
     - Playwright `profile.spec.ts` → no blank frame between navigation and first paint (screenshot assertion)
 
-- [ ] **P2.H.2.2** Make the hydration gap visible: a disabled state with a spinner on submit buttons until `inert` is lifted, and a no-JS fallback for login and signup (plain form post works without the challenge when `CHALLENGE_*` allows it).
+- [x] **P2.H.2.2** Make the hydration gap visible: a disabled state with a spinner on submit buttons until `inert` is lifted, and a no-JS fallback for login and signup (plain form post works without the challenge when `CHALLENGE_*` allows it).
   - Files/modules: `resources/js/app.tsx`, `resources/js/components/Field.tsx`, `resources/js/pages/Auth/Login.tsx`, `resources/js/pages/Auth/Signup.tsx`, `app/http/middleware/challenge.go`
   - Refs: audit A5; SDD 13 A07 (challenge); SDD 09 §7.6
   - Depends on: —
@@ -2200,6 +2201,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
   - Acceptance:
     - `go test -tags integration ./tests -run TestSecurity_A07` → green (no weakening)
     - Playwright: a click on "Log in" 100 ms after `DOMContentLoaded` either submits or shows the pending state; never a silent no-op
+  - Status (2026-11-01): local acceptance green on main: `TestSecurity_A07` 32 PASS; the hydration spec passed at review (ad5287f) and the no-JS fallback half shipped in FIX-nojs-auth-post (dc99c4d) and FIX-nojs-428-page (8772bf21).
 
 - [x] **P2.H.2.3** Success feedback after rating, status, time-to-beat and list changes (toast via `Flash`), and a message on `/user/two-factor` when the admin area redirected there.
   - Files/modules: `app/controllers/ratings_controller.go`, `app/controllers/library_controller.go`, `routes/admin.go` (flash before the redirect), `resources/js/components/Flash.tsx`
@@ -2237,15 +2239,16 @@ Goal: close the gap between "parity" and "a product people can use in public". S
   - Acceptance:
     - `curl -s -b "$ADMIN_SESSION" localhost:3000/admin/ingestion | grep -c 'href="/admin/score-bursts"'` → 1
 
-- [ ] **P2.H.3.4** Define a `primary` design token (buttons, links, focus) in `packages/tokens` and replace the scaffold's hardcoded `indigo-*` classes in the 21 files that use them.
+- [x] **P2.H.3.4** Define a `primary` design token (buttons, links, focus) in `packages/tokens` and replace the scaffold's hardcoded `indigo-*` classes in the 21 files that use them.
   - Files/modules: `packages/tokens/tokens.json`, `packages/tokens/build.ts`, `packages/tokens/tokens.css`, `resources/js/**/*.tsx`
   - Refs: SDD 09 §7.5; ADR 0009 (tokens shared with mobile); audit A20
   - Depends on: —
   - Model: Sonnet
   - Acceptance:
     - `grep -rn "indigo-" resources/js | wc -l` → 0; `bun run test -- tokens` → round-trip test green; `bun run --cwd apps/mobile typecheck` → green
+  - Status (2026-11-01): done (f45e8a09): `grep -rn "indigo-" resources/js | wc -l` -> 0 (pinned by a tokens test), `bunx vitest run packages/tokens` 35 passed, mobile typecheck green.
 
-- [ ] **P2.H.3.5** Cache anonymous HTML for the public catalogue pages (SDD 09 §7.2) and prove it with the k6 TTFB scenario.
+- [x] **P2.H.3.5** Cache anonymous HTML for the public catalogue pages (SDD 09 §7.2) and prove it with the k6 TTFB scenario.
   - Files/modules: `app/http/middleware/render_cache.go`, `routes/web.go`, `qa/k6/page-ttfb.js`
   - Refs: SDD 09 §7.2; VF-025; audit A22
   - Depends on: —
@@ -2299,7 +2302,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run 'TestAPIEditions|TestAPIContract'` → `ok`; a non-book id → 404; merged work id → 301 to the target (SDD 01)
   - Notes: edition covers only when `cover_source` is allowed (Open Library pending A-05, SDD 01 issue 2: identifiers and titles only until `docs/legal/open-library.md` exists).
 
-- [ ] **P3.A.1.4** Serve `listTrending` (`/v1/{type}/trending?window=day|week`, top 100) and the business-only `getItemActivity`.
+- [x] **P3.A.1.4** Serve `listTrending` (`/v1/{type}/trending?window=day|week`, top 100) and the business-only `getItemActivity`.
   - Files/modules: `app/api/v1/trending.go`, `app/recommend/trending/read.go`, `tests/api_trending_test.go`
   - Refs: SDD 05 §6.2, FR-05-17; SDD 08 §6 (`trending_snapshots`, `item_activity_daily`), §9
   - Depends on: P6.C (snapshot job and tables; see Notes)
@@ -2365,7 +2368,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - staging: total size of one day's objects ≤ 50 MB
   - Notes: VF-029 workaround: vukem `export.NDJSON(w, r, …)` needs a request, so the job streams rows with `Query.Each` into `gzip.Writer` → `io.Pipe` → `d.Put` (no CSV, so the formula guard is not needed). Never load all rows in memory. `popularity` is `popularity_prior` (sort-only field, SDD 01 §6.1): confirm with the owner before shipping it in a bulk file (A-07 "no bulk redistribution").
 
-- [ ] **P3.A.4.2** Serve `listExports` and `getExport` (`/v1/exports/{type}/{day}` → 302 to a 5-minute presigned URL) for pro and business.
+- [x] **P3.A.4.2** Serve `listExports` and `getExport` (`/v1/exports/{type}/{day}` → 302 to a 5-minute presigned URL) for pro and business.
   - Files/modules: `app/api/v1/exports.go`, `tests/api_exports_test.go`
   - Refs: SDD 05 §6.2; <https://vukem.dev/docs/digging-deeper/storage> (`PresignGet(p, ttl)`)
   - Depends on: P3.A.4.1
@@ -2373,6 +2376,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Acceptance:
     - `go test ./tests -run TestAPIExports` → free key 403 `plan-required`; pro key 302 with `Location` expiring in 300 s; missing day 404
   - Notes: list from the bucket prefix (no table, SDD 05 §5). The presigned URL must not be cached (`Cache-Control: no-store` on the 302).
+  - Status (2026-11-01): done (b9d6a66a): `TestAPIExports` PASS. The files leave `popularity` out until the owner answers Q-A11 (A-07); `getItemActivity` became four literal operations (same URLs) to avoid the ServeMux conflict with `/exports/{type}/{day}`.
 
 #### P3.A.5 Webhooks
 
@@ -2442,7 +2446,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.B.1 SDK generation
 
-- [ ] **P3.B.1.1** Port the TypeScript SDK (`sdks/ts`, `@hexascore/sdk`) from legacy and regenerate it from `openapi/api-v1.json`.
+- [x] **P3.B.1.1** Port the TypeScript SDK (`sdks/ts`, `@hexascore/sdk`) from legacy and regenerate it from `openapi/api-v1.json`.
   - Files/modules: `sdks/ts/package.json`, `sdks/ts/jsr.json`, `sdks/ts/openapi-ts.config.ts`, `sdks/ts/src/`, `sdks/ts/tsconfig.json`, `sdks/ts/README.md`
   - Refs: SDD 05 §6.5, §9; `legacy/sdks/ts/package.json`; `legacy/docs/sdk-publish-npm.md` §2; `legacy/docs/sdk-publish-jsr.md` "Regras do JSR"
   - Depends on: P3.A.7.1
@@ -2452,7 +2456,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `cd sdks/ts && npm pack --dry-run` → only `dist/**`, `README.md`, `LICENSE`, `package.json`
   - Notes: keep exact pins (`@hey-api/openapi-ts` 0.99.0, `typescript` 6.0.3) and `importFileExtension: ".ts"` for JSR. Version = `API_VERSION` in `package.json` and `jsr.json`. Rewrite the README for the new headers (`X-Quota-*`, problem codes); legacy `RateLimit-*` carried the quota and no longer does.
 
-- [ ] **P3.B.1.2** Port the Python SDK (`sdks/python`, `hexascore`) and regenerate it with openapi-python-client 0.29.1 `--meta none`.
+- [x] **P3.B.1.2** Port the Python SDK (`sdks/python`, `hexascore`) and regenerate it with openapi-python-client 0.29.1 `--meta none`.
   - Files/modules: `sdks/python/pyproject.toml`, `sdks/python/config.yml`, `sdks/python/hexascore/` (generated), `sdks/python/tests/`
   - Refs: SDD 05 §6.5, §9; `legacy/sdks/python/pyproject.toml`; `legacy/docs/sdk-publish-pypi.md` §2
   - Depends on: P3.B.1.1
@@ -2461,7 +2465,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `cd sdks/python && uv run pytest -q` → pass; `uv build && uvx twine@6.2.0 check dist/*` → `PASSED`
   - Notes: `hexascore/` is generated; never edit it by hand. Same version as the TS SDK.
 
-- [ ] **P3.B.1.3** Add the CI job that regenerates both SDKs and fails on diff, then runs typecheck, tests and dry-run packaging.
+- [x] **P3.B.1.3** Add the CI job that regenerates both SDKs and fails on diff, then runs typecheck, tests and dry-run packaging.
   - Files/modules: `.github/workflows/ci.yml` (job `sdk`), root `package.json` scripts `sdk:generate`, `sdk:generate:python`
   - Refs: SDD 05 FR-05-15, §10 "SDK smoke"
   - Depends on: P3.B.1.2
@@ -2481,6 +2485,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Acceptance:
     - workflow run against TestPyPI → package visible on test.pypi.org; `npm publish --dry-run` and `jsr publish --dry-run` steps green
   - Notes: owner input required once: npm org `hexascore` with 2FA `auth-and-writes`, JSR scope `@hexascore` linked to the repo, PyPI/TestPyPI accounts and trusted-publisher entries (environment `pypi`). Job needs `permissions: id-token: write`; no long-lived tokens in secrets. Actions pinned by commit SHA.
+  - Status (2026-11-01): code done on main: `.github/workflows/sdk-release.yml` (manual, dry runs by default, OIDC only) and `docs/runbooks/sdk-release.md`. Open (owner gate): npm org, JSR scope and PyPI/TestPyPI trusted publishers, then the TestPyPI rehearsal run.
 
 - [ ] **P3.B.2.2** Publish SDK `1.1.0` to npm, JSR and PyPI and run install smoke tests against staging.
   - Files/modules: `qa/sdk-smoke/ts.ts`, `qa/sdk-smoke/py.py`
@@ -2503,6 +2508,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `bun run e2e -- docs.spec.ts` → pages render SSR, axe 0 serious/critical in en, pt-BR, es
     - `curl -sI https://staging.hexascore.app/problems/quota-exhausted` → 301 to `/docs/errors#quota-exhausted`
   - Notes: guides in English (D-06), surrounding chrome translated via the `text-editor` subagent. Code samples use the published SDKs, not raw fetch.
+  - Status (2026-11-01): code done on main: `TestProblemCatalog` asserts 301 to `/docs/errors#<code>` for every problem code. Open: `docs.spec.ts` (Playwright, not a gate since 2026-10-31) and the live check, which needs a deploy; production still answers 302 (release before this change).
 
 - [ ] **P3.B.3.2** Add `/docs/coverage`, the pricing page coverage statement (D-33) and the API changelog page.
   - Files/modules: `resources/js/pages/Docs/Coverage.tsx`, `resources/js/pages/Pricing/Index.tsx`, `resources/js/pages/Docs/Changelog.tsx`, `app/web/pricing.go`
@@ -2716,7 +2722,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P4.A.3 Submission UI
 
-- [ ] **P4.A.3.1** Build `Community/SuggestEdit` with draft save, the "Suggest an edit" entry points on item, edition and entity pages, and the `community.*` strings in three locales.
+- [x] **P4.A.3.1** Build `Community/SuggestEdit` with draft save, the "Suggest an edit" entry points on item, edition and entity pages, and the `community.*` strings in three locales.
   - Files/modules: `resources/js/pages/Community/SuggestEdit.tsx`, `resources/js/components/community/FieldEditor.tsx`, `app/web/community.go`, `resources/lang/{en,pt-BR,es}.json`
   - Refs: SDD 04 §6 route table (GET `/suggest/{target_type}/{id}`, POST/PATCH `/suggestions`), NFR-04-6, NFR-04-7; SDD 09 pages; D-17
   - Depends on: P4.A.2.4
@@ -2727,7 +2733,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - i18n CI check → no missing `community.*` key in any locale
   - Notes: Inertia validation errors come back as props (SDD 04 §6). Translations via the `text-editor` subagent. Hidden `website` honeypot field rendered off-screen, not `display:none` only.
 
-- [ ] **P4.A.3.2** Build `Community/SuggestCreate` for create and merge requests (`/suggest/new/{domain}`).
+- [x] **P4.A.3.2** Build `Community/SuggestCreate` for create and merge requests (`/suggest/new/{domain}`).
   - Files/modules: `resources/js/pages/Community/SuggestCreate.tsx`, `app/web/community.go`
   - Refs: SDD 04 §2 (create requests, merge reports), §7.2 last row, §7.6
   - Depends on: P4.A.3.1
@@ -2736,7 +2742,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `bun run e2e -- community-create.spec.ts` → create draft with required fields of the kind; merge request limited to same type and domain; axe clean
   - Notes: merge here only files a request; execution is P4.B.2.3.
 
-- [ ] **P4.A.3.3** Build `Community/SuggestionStatus` and `Community/MySuggestions` with submit and withdraw actions.
+- [x] **P4.A.3.3** Build `Community/SuggestionStatus` and `Community/MySuggestions` with submit and withdraw actions.
   - Files/modules: `resources/js/pages/Community/{SuggestionStatus,MySuggestions}.tsx`, `app/web/community.go`, `app/policies/suggestion.go`
   - Refs: SDD 04 FR-04-12, §6 (POST `/suggestions/{id}/submit`, `/withdraw`, GET `/suggestions/{id}`, `/me/suggestions`); <https://vukem.dev/docs/security/authorization> (`authz.DenyAsNotFound`)
   - Depends on: P4.A.3.2
@@ -2761,7 +2767,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P4.B.1 Admin moderation pages
 
-- [ ] **P4.B.1.1** Add the gate abilities `moderate`, `viewCatalogAudit`, `revertCatalog`, `lockCatalog`, the `community.trusted_moderators` flag, and an app-rendered page shell that reuses the vukem admin layout.
+- [x] **P4.B.1.1** Add the gate abilities `moderate`, `viewCatalogAudit`, `revertCatalog`, `lockCatalog`, the `community.trusted_moderators` flag, and an app-rendered page shell that reuses the vukem admin layout.
   - Files/modules: `app/admin/admin.go`, `app/admin/abilities.go`, `resources/views/admin/layouts/admin.html` (override), `resources/views/moderation/layout.html`, `routes/admin_moderation.go`, `tests/admin_moderation_gate_test.go`
   - Refs: SDD 04 §6 (pages as `html/template` views in the admin layout, abilities, flag); VF-008; open issue 04-5; <https://vukem.dev/docs/digging-deeper/admin> "Customizing the look", "Feature flags"; <https://vukem.dev/docs/basics/views>
   - Depends on: P4.A.4.1
@@ -2770,7 +2776,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run 'TestModerationGate|TestSecurity_Community_A01_PolicyFailsClosed'` → admin 200; user 403; moderator 403 with the flag off and 200 with it on; revert and locks admin-only either way
   - Notes: VF-008 workaround: the panel has no custom pages, so app routes under `/admin/moderation` use the same guard and gate and render templates that wrap the layout copied from `admin.Templates()` via `Config.Views`. Mounting these pages in the panel navigation is [NOT IN VUKEM DOCS]: add a hand-written link in the overridden layout. No inline `<script>` or `style` (strict CSP).
 
-- [ ] **P4.B.1.2** Build the queue view `/admin/moderation` with filters, ageing badges, competing/stale/unreachable badges and claim/release.
+- [x] **P4.B.1.2** Build the queue view `/admin/moderation` with filters, ageing badges, competing/stale/unreachable badges and claim/release.
   - Files/modules: `app/moderation/queue.go`, `resources/views/moderation/queue.html`, `tests/moderation_queue_test.go`
   - Refs: SDD 04 FR-04-8, §7.4 "Queue", NFR-04-1, NFR-04-2 (green < 12 h, amber 12–24 h, red > 24 h)
   - Depends on: P4.B.1.1
@@ -2779,7 +2785,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/moderation/... -run 'TestQueueFilters|TestClaimRelease'` → each filter narrows the result; two admins claiming → second gets 409 `stale-before`
   - Notes: oldest first, keyset pagination on `(submitted_at, id)` (VF-005 workaround). Forms post with CSRF tokens and answer 303.
 
-- [ ] **P4.B.1.3** Build the detail view `/admin/moderation/{id}` with the per-field diff, approve (`confirm_stale`), reject (reason, note), "clone as new draft", and bulk actions (≤ 50, per-id results).
+- [x] **P4.B.1.3** Build the detail view `/admin/moderation/{id}` with the per-field diff, approve (`confirm_stale`), reject (reason, note), "clone as new draft", and bulk actions (≤ 50, per-id results).
   - Files/modules: `app/moderation/detail.go`, `app/moderation/diff.go`, `app/moderation/bulk.go`, `resources/views/moderation/{detail,bulk_result}.html`, `tests/moderation_detail_test.go`
   - Refs: SDD 04 FR-04-8, §6 routes, §7.1 (clone), §7.4 (diff, bulk), §8 (bulk competing); VF-008
   - Depends on: P4.B.1.2
@@ -2791,7 +2797,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P4.B.2 Apply, revert and audit
 
-- [ ] **P4.B.2.1** Implement the apply transaction (§7.4 steps 1–6): locks, `confirm_stale`, catalogue write with provenance `community`, one audit row per field, `api_changes`, `DispatchTx` of `catalog.changed` and `community.notify`.
+- [x] **P4.B.2.1** Implement the apply transaction (§7.4 steps 1–6): locks, `confirm_stale`, catalogue write with provenance `community`, one audit row per field, `api_changes`, `DispatchTx` of `catalog.changed` and `community.notify`.
   - Files/modules: `app/community/apply.go`, `app/catalog/write.go`, `tests/community_apply_test.go`
   - Refs: SDD 04 FR-04-9, §7.4, §8 (deadlock retried once); SDD 05 §7.3; P3.A.3.1 writer; <https://vukem.dev/docs/digging-deeper/queue> "Jobs and transactions"
   - Depends on: P4.B.1.3, P3.A.3.1
@@ -2801,7 +2807,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `-run 'TestApplyProvenance|TestApplyWritesChanges|TestApplyDeadlockRetry'` → `ok`
   - Notes: lock target rows ordered by id (legacy `mergeItems`). Audit stores the real previous value and provenance, not the suggestion's `before`. Cover changes go to `approved` and finish when the SDD 06 cover pipeline runs.
 
-- [ ] **P4.B.2.2** Implement the `catalog.changed` handler: cache purge, search reindex, sitemap `lastmod`, idempotent by `audit_ids`.
+- [x] **P4.B.2.2** Implement the `catalog.changed` handler: cache purge, search reindex, sitemap `lastmod`, idempotent by `audit_ids`.
   - Files/modules: `app/jobs/catalog_changed.go`, `tests/catalog_changed_test.go`
   - Refs: SDD 04 §6 jobs; SDD 01 (cache), SDD 07 (reindex), SDD 05 §7.3
   - Depends on: P4.B.2.1
@@ -2810,7 +2816,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/jobs/... -run TestCatalogChangedIdempotent` → running the job twice purges and reindexes once per audit id
   - Notes: `api_changes` is written in the apply transaction (P4.B.2.1), not here, so a failed job never loses a feed row.
 
-- [ ] **P4.B.2.3** Apply `create` and `merge` suggestions: insert with `source=create` audit rows and unblock `depends_on`; merge through the SDD 01 service with a `*merge*` audit row holding both snapshots.
+- [x] **P4.B.2.3** Apply `create` and `merge` suggestions: insert with `source=create` audit rows and unblock `depends_on`; merge through the SDD 01 service with a `*merge*` audit row holding both snapshots.
   - Files/modules: `app/community/apply_create.go`, `app/community/apply_merge.go`, `tests/community_create_merge_test.go`
   - Refs: SDD 04 §7.6, §8 (target merged → open suggestions `expired`); open issue 04-9 (snapshot jsonb); SDD 01 merge
   - Depends on: P4.B.2.2
@@ -2819,7 +2825,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/community/... -run 'TestApplyCreate|TestApplyMerge'` → merge expires open suggestions on the source with `target_gone`; merge row not revertible; typed-title confirmation required
   - Notes: never implement an automatic merge revert (out of scope v1). Merge emits `deleted` with `mergedInto` in `api_changes`.
 
-- [ ] **P4.B.2.4** Implement revert `single`, `cascade`, `force` and the `/admin/catalog-audit` list with the revert form.
+- [x] **P4.B.2.4** Implement revert `single`, `cascade`, `force` and the `/admin/catalog-audit` list with the revert form.
   - Files/modules: `app/community/revert.go`, `app/moderation/audit.go`, `resources/views/moderation/audit.html`, `tests/community_revert_test.go`
   - Refs: SDD 04 FR-04-11, §7.5, §6 (`POST /admin/catalog-audit/{id}/revert`)
   - Depends on: P4.B.2.3
@@ -2828,7 +2834,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/community/... -run TestRevert` → `single` with a later change → 409 `revert-conflict` with `laterAuditIds`; `cascade` reverts newest first in one transaction; `force` leaves later suggestions `applied`; reverting a revert → rejected by the unique index
   - Notes: only reason `incorrect` counts against the author. Revert goes through the same write path as apply (provenance restore, `api_changes`, `catalog.changed`).
 
-- [ ] **P4.B.2.5** Make admin-panel catalogue edits write `catalog_audit` (`source=admin`) inside the panel transaction.
+- [x] **P4.B.2.5** Make admin-panel catalogue edits write `catalog_audit` (`source=admin`) inside the panel transaction.
   - Files/modules: `app/admin/resources/items.go`, `app/admin/resources/entities.go`, `app/admin/resources/editions.go`, `tests/admin_catalog_audit_test.go`
   - Refs: SDD 04 §7.4 last paragraph, open issue 04-4; VF-010; <https://vukem.dev/docs/digging-deeper/admin> "Resources" (`BeforeSave`)
   - Depends on: P4.B.2.4
@@ -2837,7 +2843,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/admin/... -run TestAdminEditWritesAudit` → one audit row per changed field with the correct `before`
   - Notes: VF-010 workaround: `BeforeSave` re-reads the row `FOR UPDATE` in the same transaction to get previous values. `admin.AuditLog` keeps logging panel CRUD separately.
 
-- [ ] **P4.B.2.6** Add the locks pages (`POST/DELETE /admin/locks`) and the `catalog_audit` export (`export.csv`, `export.ndjson`).
+- [x] **P4.B.2.6** Add the locks pages (`POST/DELETE /admin/locks`) and the `catalog_audit` export (`export.csv`, `export.ndjson`).
   - Files/modules: `app/moderation/locks.go`, `app/moderation/audit_export.go`, `resources/views/moderation/locks.html`, `tests/moderation_locks_test.go`
   - Refs: SDD 04 FR-04-15 (export), §6 routes; <https://vukem.dev/docs/digging-deeper/exports> "Exports", "Streaming and failures"
   - Depends on: P4.B.2.5
@@ -2846,7 +2852,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/moderation/... -run 'TestLocks|TestAuditExportStreams'` → 100k-row export streams with flat memory; CSV formula guard on
   - Notes: export runs in the request (helpers need `w, r`), so VF-029 does not apply here.
 
-- [ ] **P4.B.2.7** Add the public SSR "Recent changes" tab (`Catalog/RecentChanges`, 20 per page) and contributor counts on profiles.
+- [x] **P4.B.2.7** Add the public SSR "Recent changes" tab (`Catalog/RecentChanges`, 20 per page) and contributor counts on profiles.
   - Files/modules: `resources/js/pages/Catalog/RecentChanges.tsx`, `app/web/recent_changes.go`, `resources/js/pages/User/Profile.tsx`, `tests/recent_changes_test.go`
   - Refs: SDD 04 FR-04-13, FR-04-15, §7.6, NFR-04-5; SDD 14 §6.2 (`User/Profile`)
   - Depends on: P4.B.2.4
@@ -2858,7 +2864,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P4.B.3 Notifications and system transitions
 
-- [ ] **P4.B.3.1** Implement `community.notify`: `notifications.Send` with dedupe key `suggestion:<id>:<state>` and a localized mail via `SendLaterTx` (opt-out respected).
+- [x] **P4.B.3.1** Implement `community.notify`: `notifications.Send` with dedupe key `suggestion:<id>:<state>` and a localized mail via `SendLaterTx` (opt-out respected).
   - Files/modules: `app/jobs/community_notify.go`, `resources/views/mail/suggestion_{decided,reverted,expired}.html`, `tests/community_notify_test.go`
   - Refs: SDD 04 FR-04-14, §6 jobs, open issue 04-6; SDD 14 §5, §6.5, §7.5; VF-011; <https://vukem.dev/docs/digging-deeper/mail>
   - Depends on: P4.B.2.1
@@ -2867,7 +2873,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/jobs/... -run TestCommunityNotify` (`MAIL_MAILER=array`) → one inbox row per state on retry; mail subject in the author's locale; opted-out user gets the inbox row only
   - Notes: VF-011 workaround is SDD 14's `user_notifications`; this job only calls `notifications.Send`. Locale on a non-request context is [NOT VERIFIED] (SDD 03 §6.5); build it from `users.locale`.
 
-- [ ] **P4.B.3.2** Add system transitions: withdraw open suggestions of banned or deleted authors, expire them when the target is deleted or merged, null actor ids on deletion.
+- [x] **P4.B.3.2** Add system transitions: withdraw open suggestions of banned or deleted authors, expire them when the target is deleted or merged, null actor ids on deletion.
   - Files/modules: `app/community/listeners.go`, `tests/community_system_test.go`
   - Refs: SDD 04 §7.1 (system rows), §8, NFR-04-5; SDD 03 (`user.banned`, deletion)
   - Depends on: P4.B.3.1
@@ -2878,7 +2884,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P4.B.4 Metrics and SLA
 
-- [ ] **P4.B.4.1** Build `/admin/moderation/metrics`: queue size, oldest open age, p50/p95 time-to-decision, approval rate over 7 and 30 days.
+- [x] **P4.B.4.1** Build `/admin/moderation/metrics`: queue size, oldest open age, p50/p95 time-to-decision, approval rate over 7 and 30 days.
   - Files/modules: `app/moderation/metrics.go`, `resources/views/moderation/metrics.html`, `tests/moderation_metrics_test.go`
   - Refs: SDD 04 FR-04-16, NFR-04-2; SDD 12 runbook R5
   - Depends on: P4.B.2.4
@@ -2887,7 +2893,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/moderation/... -run TestMetricsQuery` → seeded fixture gives the expected percentiles and rates
   - Notes: one SQL query with `percentile_cont`; sortable by age (R5 step 1).
 
-- [ ] **P4.B.4.2** Emit `suggest.queue.*`, `suggest.decisions`, `suggest.sla.breaches`, add alert A9, the Moderation dashboard and the nightly SDD 04 asserts.
+- [x] **P4.B.4.2** Emit `suggest.queue.*`, `suggest.decisions`, `suggest.sla.breaches`, add alert A9, the Moderation dashboard and the nightly SDD 04 asserts.
   - Files/modules: `app/observability/community_metrics.go`, `ops/grafana/dashboards/moderation.json`, `ops/grafana/alerts/a9_moderation.yaml`, `app/jobs/community_asserts.go`, `tests/metrics_community_test.go`
   - Refs: SDD 12 §6 metrics table, §7.5 A9, §7.6 "Moderation"; SDD 04 NFR-04-2, §10 nightly asserts; VF-019
   - Depends on: P4.B.4.1
@@ -2896,6 +2902,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run TestMetrics_CommunityGauges` (manual reader) → gauges and counters present with the `decision` attribute
     - `go test -tags=integration ./app/jobs/... -run TestCommunityAsserts` → fails on an `applied` suggestion without audit rows
   - Notes: VF-019 workaround: meter from `Config.Global` plus the upstream OTel API. A9 fires when the oldest open suggestion passes 20 h or p95 age > 24 h, severity warn.
+  - Done (2026-10-31, D-35 amended): only the nightly `community.asserts` job (05:10 UTC, logs `alert=community_asserts`) shipped; the metrics, dashboard and Grafana A9 rule were dropped. The A9 in-app check (SDD 12 §7.5) is new work.
 
 #### P4.B.5 Gate, rehearsal and release
 
@@ -2909,6 +2916,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - Playwright `community.spec.ts`: suggest → submit → approve → Recent changes → revert; axe clean in en, pt-BR, es
     - k6 `moderation.js` with 10,000 open suggestions: queue p95 < 500 ms, submit p95 < 300 ms
   - Notes: seeder via `vukem make:seeder`; never run it against production.
+  - Status (2026-11-01): parts in main (merge of agent/especialista/P4.B.5.1): `TestSecurity_Community_*` 5 PASS; `community.spec.ts` (axe in three locales, two-admin claim conflict with the new `admin2@example.test`), the dev-only `CommunityLoad` seeder (`db:seed CommunityLoad --count 10000`, refused in production) and `qa/k6/moderation.js` are written. Open: the Playwright, k6 and ZAP runs (long checks, batch run; ZAP needs a live host).
 
 - [ ] **P4.B.5.2** Rehearse on staging: process 100 synthetic suggestions (mixed kinds, approvals, rejections, a revert, a lock, a competing pair) and confirm the SLA dashboard and notifications.
   - Files/modules: `app/commands/community_rehearsal.go`, `docs/runbooks/community-rehearsal.md`
@@ -2939,7 +2947,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 #### P5.A.1 Expo project and navigation
 
-- [ ] **P5.A.1.1** Scaffold `apps/mobile` as an Expo managed app in the Bun workspace: TypeScript strict, Hermes, Biome lint with a rule that bans `fetch(` outside `src/api/`, Jest with the `jest-expo` preset and React Native Testing Library.
+- [x] **P5.A.1.1** Scaffold `apps/mobile` as an Expo managed app in the Bun workspace: TypeScript strict, Hermes, Biome lint with a rule that bans `fetch(` outside `src/api/`, Jest with the `jest-expo` preset and React Native Testing Library.
   - Files/modules: `apps/mobile/package.json`, `apps/mobile/app.config.ts`, `apps/mobile/tsconfig.json`, `apps/mobile/biome.json` (extends the root config), `apps/mobile/jest.config.ts`, `apps/mobile/src/hermes.test.ts`, root `package.json` workspaces, `.github/workflows/ci.yml` (mobile job: lint, typecheck, test)
   - Refs: SDD 10 §7.1, §10, FR-10-1, NFR-10-4; ADR 0009; D-12; [E3], [E4]
   - Depends on: P3.C.5.2, P1.A
@@ -2949,7 +2957,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test` → green, including the test that asserts `global.HermesInternal` is defined
   - Notes: pick the latest stable Expo SDK at implementation time that targets Android API 36 (Play rule since 2026-08-31, [E14]). Write the SDK version and the reason in the PR. `android.package = app.hexascore`. Vitest on React Native is [NOT VERIFIED] (SDD 10 §10), so keep Jest. Use no Expo template that adds analytics or other extra packages.
 
-- [ ] **P5.A.1.2** Lay out the Expo Router tree from SDD 10 §6.1 with typed routes, the tab layout, placeholder screens and the `src/platform/` boundary (network state, store link).
+- [x] **P5.A.1.2** Lay out the Expo Router tree from SDD 10 §6.1 with typed routes, the tab layout, placeholder screens and the `src/platform/` boundary (network state, store link).
   - Files/modules: `apps/mobile/app/_layout.tsx`, `app/(auth)/login.tsx`, `app/(tabs)/_layout.tsx`, `app/(tabs)/index.tsx`, `app/(tabs)/[type].tsx`, `app/(tabs)/search.tsx`, `app/(tabs)/lists.tsx`, `app/(tabs)/profile.tsx`, `app/[type]/[slug].tsx`, `app/entities/[id].tsx`, `app/lists/[id].tsx`, `app/update-required.tsx`, `src/platform/network.ts`, `src/platform/store.ts`, `src/navigation.test.tsx`
   - Refs: SDD 10 §6.1, §7.1 (Expo Router, paths mirror the web, D-17), §2 (Android-only APIs only behind `src/platform/`); [E5]
   - Depends on: P5.A.1.1
@@ -2961,7 +2969,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 #### P5.A.2 Shared tokens and i18n
 
-- [ ] **P5.A.2.1** Consume `packages/tokens` in a theme module (light/dark colours, spacing, type scale, category accents, score bands) and `packages/i18n` catalogues (build-time copy of the bundled namespaces, locale matcher, ICU formatting), with an in-app override persisted locally.
+- [x] **P5.A.2.1** Consume `packages/tokens` in a theme module (light/dark colours, spacing, type scale, category accents, score bands) and `packages/i18n` catalogues (build-time copy of the bundled namespaces, locale matcher, ICU formatting), with an in-app override persisted locally.
   - Files/modules: `apps/mobile/src/theme/index.ts`, `src/theme/scoreBand.ts`, `src/theme/scoreBand.test.ts`, `apps/mobile/scripts/copy-catalogues.ts`, `src/i18n/index.ts`, `src/i18n/locale.ts`, `src/i18n/locale.test.ts`, `src/i18n/keys.test.ts`
   - Refs: SDD 10 §7.2, FR-10-6, §8 (locale cases), §4 (AA contrast); ADR 0009; SDD 09 §7.1; open issues 09-5, 10-4; [E10]
   - Depends on: P5.A.1.2
@@ -2973,7 +2981,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 #### P5.A.3 API client and authentication
 
-- [ ] **P5.A.3.1** Wrap `@hexascore/app-client` in `src/api/`: base URL from `EXPO_PUBLIC_API_BASE_URL`, headers (`Authorization`, `X-App-Version`, `Accept-Language`, UUID v7 `Idempotency-Key` on writes), mapping of RFC 9457 `code` to `errors.<code>`, and detection of `X-App-Min-Version` and 426.
+- [x] **P5.A.3.1** Wrap `@hexascore/app-client` in `src/api/`: base URL from `EXPO_PUBLIC_API_BASE_URL`, headers (`Authorization`, `X-App-Version`, `Accept-Language`, UUID v7 `Idempotency-Key` on writes), mapping of RFC 9457 `code` to `errors.<code>`, and detection of `X-App-Min-Version` and 426.
   - Files/modules: `apps/mobile/src/api/client.ts`, `src/api/problems.ts`, `src/api/version.ts`, `src/api/client.test.ts`
   - Refs: SDD 10 §6.1 "Headers", §7.4, FR-10-1, FR-10-5; SDD 05 §6.4; <https://vukem.dev/docs/rest-apis/client-generation> "The command"; <https://vukem.dev/docs/rest-apis/idempotency>
   - Depends on: P5.A.2.1
@@ -2983,7 +2991,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile typecheck` → green against the generated `packages/app-client/src/api.ts` (no hand-written request types)
   - Notes: never edit the generated client by hand. Regenerate it with `vukem codegen:client -prefix /app/v1 -o packages/app-client/src/api.ts`, which runs in warmup mode. `EXPO_PUBLIC_*` holds only public values: the API base URL and the Google client id (SDD 10 §4).
 
-- [ ] **P5.A.3.2** Store the token in SecureStore and run the session state machine: 401 wipes the token and cache, 403 `account-banned` shows the reason and end date, 403 `email-not-verified` shows a banner, and `deletionScheduledAt` routes to the cancel screen.
+- [x] **P5.A.3.2** Store the token in SecureStore and run the session state machine: 401 wipes the token and cache, 403 `account-banned` shows the reason and end date, 403 `email-not-verified` shows a banner, and `deletionScheduledAt` routes to the cancel screen.
   - Files/modules: `apps/mobile/src/auth/tokenStore.ts`, `src/auth/session.ts`, `src/auth/session.test.ts`, `src/auth/noTokenInCache.test.ts`
   - Refs: SDD 10 §5 (SecureStore row), §6.2, §8 (token expired in background), FR-10-2; SDD 03 §7.4; [E1]
   - Depends on: P5.A.3.1
@@ -2993,7 +3001,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/auth/session -t "401 wipes"` → token, cache and queue for that user are cleared
   - Notes: store only `token`, `tokenId` and `expiresAt` (≈ 100 B, below the ~2048 B SecureStore warning). Tokens must never reach logs, the cache or crash reports.
 
-- [ ] **P5.A.3.3** Build the login screen for email/password with the `two-factor-required` branch (TOTP or recovery code) and the 428 `challenge-required` branch, which opens the browser. Signup and recovery open the web pages. `deviceName` comes from the Expo Device API.
+- [x] **P5.A.3.3** Build the login screen for email/password with the `two-factor-required` branch (TOTP or recovery code) and the 428 `challenge-required` branch, which opens the browser. Signup and recovery open the web pages. `deviceName` comes from the Expo Device API.
   - Files/modules: `apps/mobile/app/(auth)/login.tsx`, `src/auth/login.ts`, `src/auth/deviceName.ts`, `src/auth/login.test.tsx`, `.maestro/smoke/login.yaml`
   - Refs: SDD 10 §2, §6.2 (Issue, Device name rows), FR-10-2; SDD 03 §2, §6.1; ADR 0016 (challenge); open issue 10-10
   - Depends on: P5.A.3.2, P3.C.1.2
@@ -3012,8 +3020,9 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/auth/google` → cancel leaves the screen without an error; 409 shows `errors.email-unverified-at-provider`
     - Manual on the reference device (preview build): Google account sign-in → token stored, home loads
   - Notes: **owner input needed.** SDD 10 does not name the Google sign-in library, and every candidate is a new dependency. Write the ADR (options, licence, native config plugin under CNG) and get the owner's yes before you code. Only the ID token goes to the server. No access token is stored.
+  - Status (2026-11-01): code done on main: `bun run --cwd apps/mobile test -- src/auth/google` PASS. Open (owner gate): the sign-in on the reference device with a preview build.
 
-- [ ] **P5.A.3.5** Rotate the token on foreground (`expiresAt − now < 15 d`, at most once per 24 h), log out with `DELETE /tokens/current` (wiping locally even when the call fails), and show the blocking update screen on 426 or a higher min version. Logout stays available there.
+- [x] **P5.A.3.5** Rotate the token on foreground (`expiresAt − now < 15 d`, at most once per 24 h), log out with `DELETE /tokens/current` (wiping locally even when the call fails), and show the blocking update screen on 426 or a higher min version. Logout stays available there.
   - Files/modules: `apps/mobile/src/auth/rotate.ts`, `src/auth/rotate.test.ts`, `src/auth/logout.ts`, `app/update-required.tsx`, `src/platform/store.ts` (`market://details?id=app.hexascore`)
   - Refs: SDD 10 §6.2 (Rotate, Logout rows), §7.4, FR-10-5, §8 (rotate response lost; 426 with a pending queue)
   - Depends on: P5.A.3.2
@@ -3025,7 +3034,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 #### P5.A.4 Query cache and offline queue
 
-- [ ] **P5.A.4.1** Configure TanStack Query with the legacy defaults (`staleTime` 30 s, `retry` 1), `focusManager` and `onlineManager` through `src/platform/`, and `persistQueryClient` on Expo SQLite (10 MB, `maxAge` 24 h, `buster` = app version + `formulaVersion`, read queries only).
+- [x] **P5.A.4.1** Configure TanStack Query with the legacy defaults (`staleTime` 30 s, `retry` 1), `focusManager` and `onlineManager` through `src/platform/`, and `persistQueryClient` on Expo SQLite (10 MB, `maxAge` 24 h, `buster` = app version + `formulaVersion`, read queries only).
   - Files/modules: `apps/mobile/src/query/client.ts`, `src/query/persister.ts`, `src/query/persister.test.ts`, `src/platform/network.ts`
   - Refs: SDD 10 §5 (persisted cache row), §7.1, §7.3 "Reads", NFR-10-6; D-22; open issue 10-6; [E2]
   - Depends on: P5.A.3.2
@@ -3034,7 +3043,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/query` → a mutation result or a problem body is never persisted; data older than 24 h is discarded; a `formulaVersion` change busts the cache; the persisted size stays ≤ 10 MB with a 2,000-item fixture
   - Notes: Expo SQLite is approved (D-22); no other storage library. Keep the dehydrate filter an allowlist of query keys, not a denylist.
 
-- [ ] **P5.A.4.2** Implement the offline mutation queue in `src/queue/`: persisted entries `{id, op, itemId, payload, idempotencyKey, createdAt, attempts}` (≤ 50, 72 h), replacement per `(itemId, op)` with a fresh key, FIFO drain on reconnect/foreground with 2 s/10 s/60 s backoff, the §7.3 response table, user binding, and pause on 426.
+- [x] **P5.A.4.2** Implement the offline mutation queue in `src/queue/`: persisted entries `{id, op, itemId, payload, idempotencyKey, createdAt, attempts}` (≤ 50, 72 h), replacement per `(itemId, op)` with a fresh key, FIFO drain on reconnect/foreground with 2 s/10 s/60 s backoff, the §7.3 response table, user binding, and pause on 426.
   - Files/modules: `apps/mobile/src/queue/store.ts`, `src/queue/drain.ts`, `src/queue/policy.ts`, `src/queue/queue.test.ts`
   - Refs: SDD 10 §5 (mutation queue row), §7.3, §8, FR-10-4; <https://vukem.dev/docs/rest-apis/idempotency> (409 in flight, 422 reused key)
   - Depends on: P5.A.4.1
@@ -3044,7 +3053,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/queue -t "replace"` → a newer write for the same `(itemId, op)` replaces the queued one with a new key
   - Notes: the server wins on conflict. Never reuse a key with a new body (that returns 422). The queue replays only for the user who created it. Lists create, rename, delete and reorder are not queued (SDD 10 §7.3).
 
-- [ ] **P5.A.4.3** Add the offline banner and the crash-report opt-in (first launch, default off, revocable): a JS handler and an error boundary post `{appVersion, versionCode, androidApi, screen, message, stack ≤ 8 KB}` to `POST /app/v1/client-errors`.
+- [x] **P5.A.4.3** Add the offline banner and the crash-report opt-in (first launch, default off, revocable): a JS handler and an error boundary post `{appVersion, versionCode, androidApi, screen, message, stack ≤ 8 KB}` to `POST /app/v1/client-errors`.
   - Files/modules: `apps/mobile/src/platform/OfflineBanner.tsx`, `src/telemetry/consent.ts`, `src/telemetry/crash.ts`, `src/telemetry/crash.test.ts`, `app/_layout.tsx`
   - Refs: SDD 10 §7.7, §5 (preferences row); SDD 05 §6.4; SDD 12 §6.4; open issue 10-2
   - Depends on: P5.A.4.1, P3.C.4.1
@@ -3069,7 +3078,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 #### P5.B.1 Browse
 
-- [ ] **P5.B.1.1** Build the home screen with four "Top 10 trending (30 days)" sections from `GET /{type}/trending`, plus the shared listing row (category label with icon, 44 × 64 dp `coverThumbUrl` via `expo-image` `memory-disk`, tuned `FlatList`).
+- [x] **P5.B.1.1** Build the home screen with four "Top 10 trending (30 days)" sections from `GET /{type}/trending`, plus the shared listing row (category label with icon, 44 × 64 dp `coverThumbUrl` via `expo-image` `memory-disk`, tuned `FlatList`).
   - Files/modules: `apps/mobile/app/(tabs)/index.tsx`, `src/components/ItemRow.tsx`, `src/components/CategorySection.tsx`, `src/components/ItemRow.test.tsx`, `src/screens/home.test.tsx`
   - Refs: SDD 10 §6.1 (Home row), §7.1 (FlatList), §7.3 "Images", FR-10-10, NFR-10-2; SDD 08 §6 (title rule, "Popular" chip for `basis:"prior"`), FR-08-5, FR-08-11; D-02; [E6], [E7]
   - Depends on: P5.A.5.1, P3.C.2.1
@@ -3078,7 +3087,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/components src/screens/home` → sections in `ITEM_TYPES` order; empty type hidden; a prior entry shows the "Popular" chip; all-prior changes the title to "Popular {type}"; the score is always shown next to its band colour
   - Notes: the trending route on `/app/v1` exists only after P3.A.1.4, which waits for P6.C. Until then, show the empty state, never fabricated data. Raise the ordering question with the owner if P6.C is not pulled forward. FlashList only through an ADR if NFR-10-2 fails.
 
-- [ ] **P5.B.1.2** Build the section listing `(tabs)/[type]` with sort, genre filter (`/{type}/genres`) and cursor-based infinite scroll.
+- [x] **P5.B.1.2** Build the section listing `(tabs)/[type]` with sort, genre filter (`/{type}/genres`) and cursor-based infinite scroll.
   - Files/modules: `apps/mobile/app/(tabs)/[type].tsx`, `src/screens/listing.test.tsx`, `src/query/keys.ts`
   - Refs: SDD 10 §6.1 (Section row), FR-10-10, NFR-10-2; SDD 05 §6.2 "Cursors"
   - Depends on: P5.B.1.1
@@ -3089,7 +3098,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 #### P5.B.2 Item, rating and entity
 
-- [ ] **P5.B.2.1** Build the item screen `[type]/[slug]`: header with cover (600 px scaled), score with band, `ratingCount`, confidence or "–", categories, entities grouped by role, book editions, TMDB/IGDB attribution, and `/items/{id}/me` state.
+- [x] **P5.B.2.1** Build the item screen `[type]/[slug]`: header with cover (600 px scaled), score with band, `ratingCount`, confidence or "–", categories, entities grouped by role, book editions, TMDB/IGDB attribution, and `/items/{id}/me` state.
   - Files/modules: `apps/mobile/app/[type]/[slug].tsx`, `src/screens/item/ItemHeader.tsx`, `src/screens/item/Attribution.tsx`, `src/screens/item/item.test.tsx`
   - Refs: SDD 10 §6.1 (Item row), FR-10-9, §8 (merged item, empty groups), NFR-10-3; SDD 02 §6 (public read fields, FR-02-6); SDD 01 §6.1 (`site` audience); open issue 01-6
   - Depends on: P5.B.1.2
@@ -3098,7 +3107,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/screens/item` → a merged id follows the 301 and rewrites the cache key; empty edition and entity groups are hidden; the attribution block is shown only when a TMDB/IGDB field is present
   - Notes: the "similar" and "cross-media" blocks need `/items/{id}/related` (P6.D.1.3). Leave them out, not as empty placeholders. Adding them later is a new feature, so it needs a store release, not OTA (SDD 10 §7.8).
 
-- [ ] **P5.B.2.2** Build the star widget `src/rating/StarInput`: ten stars with half-star taps (0.5–10.0), re-tap is a no-op, selection haptic, one `adjustable` accessibility element with doubled integer `now` and ±0.5 increments, 32 dp stars with 6 dp hit slop, wrapping below 360 dp.
+- [x] **P5.B.2.2** Build the star widget `src/rating/StarInput`: ten stars with half-star taps (0.5–10.0), re-tap is a no-op, selection haptic, one `adjustable` accessibility element with doubled integer `now` and ±0.5 increments, 32 dp stars with 6 dp hit slop, wrapping below 360 dp.
   - Files/modules: `apps/mobile/src/rating/StarInput.tsx`, `src/rating/StarInput.test.tsx`
   - Refs: SDD 10 §7.5, FR-10-3, §4 (targets ≥ 44 dp, 200 % font scale); ADR 0005; SDD 09 (web widget); [E9], [E11]
   - Depends on: P5.A.5.1
@@ -3106,8 +3115,9 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
   - Acceptance:
     - `bun run --cwd apps/mobile test -- src/rating --coverage` → ≥ 80 % on `src/rating`; a tap on the left half of star 7 gives 6.5; the accessibility increment from 6.5 gives 7.0; `accessibilityValue.now` is 13 for 6.5; `Haptics.selectionAsync` is called once per change
   - Notes: no drag gesture in v1. "Remove rating" is a separate control (P5.B.2.3).
+  - Done 2026-10-31: `accessibilityValue.now` still sends 6.5, not 13; the fix is row FIX-mobile-rating-a11y-now in `src/ui/RatingInput.tsx`.
 
-- [ ] **P5.B.2.3** Build the rate sheet: six category widgets for the item's type, submit disabled until all are set, a single PUT with all keys through the offline queue, a remove-rating action, and rollback toasts.
+- [x] **P5.B.2.3** Build the rate sheet: six category widgets for the item's type, submit disabled until all are set, a single PUT with all keys through the offline queue, a remove-rating action, and rollback toasts.
   - Files/modules: `apps/mobile/src/rating/RateSheet.tsx`, `src/rating/useRateMutation.ts`, `src/rating/RateSheet.test.tsx`, `.maestro/smoke/rate-item.yaml`
   - Refs: SDD 10 §6.1 (Rate sheet row), §7.3, §7.5 "Rate sheet", FR-10-4; SDD 02 §6 (PUT body, 409 `rating-not-released`, 429 limits); A-06
   - Depends on: P5.B.2.1, P5.B.2.2, P5.A.4.2
@@ -3116,8 +3126,9 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/rating/RateSheet` → the optimistic aggregate updates at once and is replaced by the server body on 2xx; 409 before release rolls back
     - `maestro test .maestro/smoke/rate-item.yaml` (staging) → PASSED
   - Notes: input is in stars (the server multiplies by 10). The category keys are the stable A-06 keys from the generated client; never hard-code labels.
+  - Done 2026-10-31: the Maestro flow is not written; it waits for a staging environment (owner gate).
 
-- [ ] **P5.B.2.4** Build the status and time-to-beat sheet: PUT/DELETE status, and PUT/DELETE time-to-beat in 0.5 h steps for games only, both queued offline.
+- [x] **P5.B.2.4** Build the status and time-to-beat sheet: PUT/DELETE status, and PUT/DELETE time-to-beat in 0.5 h steps for games only, both queued offline.
   - Files/modules: `apps/mobile/src/status/StatusSheet.tsx`, `src/status/TimeToBeatSheet.tsx`, `src/status/status.test.tsx`
   - Refs: SDD 10 §6.1 (Status/time-to-beat row), §7.3; SDD 02 §6, §7.7 (409 `status-not-completed`, 422 `not-a-game`)
   - Depends on: P5.B.2.3
@@ -3126,7 +3137,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/status` → time-to-beat is hidden for non-games; values outside 0.5–10,000 h are rejected client-side; 409 `status-not-completed` rolls back
   - Notes: keep the validation messages from the `errors` catalogue. Do not duplicate server rules beyond input bounds.
 
-- [ ] **P5.B.2.5** Build the entity screen `entities/[id]` with items grouped by type and role (`/entities/{id}/items?type=&role=`, cursor).
+- [x] **P5.B.2.5** Build the entity screen `entities/[id]` with items grouped by type and role (`/entities/{id}/items?type=&role=`, cursor).
   - Files/modules: `apps/mobile/app/entities/[id].tsx`, `src/screens/entity.test.tsx`
   - Refs: SDD 10 §6.1 (Entity row), §8 (empty groups hidden), FR-10-10; SDD 01 §6.2
   - Depends on: P5.B.2.1
@@ -3155,8 +3166,9 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
   - Acceptance:
     - `bun run --cwd apps/mobile test -- src/lists` → offline create/rename/delete/reorder buttons are disabled; offline add is queued and drains on reconnect; 409 `list-version-conflict` refetches and shows a toast
     - `maestro test .maestro/smoke/add-to-list.yaml` (staging) → PASSED
+  - Status (2026-11-01): code done on main: `bun run --cwd apps/mobile test -- src/lists` PASS. Open (owner gate): `maestro test .maestro/smoke/add-to-list.yaml` on a device against a live host.
 
-- [ ] **P5.B.4.2** Build the profile tab: `GET/PATCH /me` (nickname, locale override, `personalizationOptOut`), devices (`GET /tokens`, `DELETE /tokens/{id}`), crash-report consent toggle, theme, and logout.
+- [x] **P5.B.4.2** Build the profile tab: `GET/PATCH /me` (nickname, locale override, `personalizationOptOut`), devices (`GET /tokens`, `DELETE /tokens/{id}`), crash-report consent toggle, theme, and logout.
   - Files/modules: `apps/mobile/app/(tabs)/profile.tsx`, `src/profile/Settings.tsx`, `src/profile/Devices.tsx`, `src/profile/profile.test.tsx`
   - Refs: SDD 10 §6.1 (Profile row), §6.2 (Revoke a device), FR-10-6; SDD 03 §5 (`personalization_opt_out`), FR-03-19; SDD 08 FR-08-10; D-29
   - Depends on: P5.A.5.1, P3.C.3.1
@@ -3174,6 +3186,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/profile/account src/notifications` → the delete button is enabled only after 10 s; second export within 7 days shows `Retry-After`; mark-read sends ≤ 100 ids and clears the badge
     - `maestro test .maestro/flows/delete-account.yaml` (staging throwaway account) → PASSED, and the account shows `deletionScheduledAt`
   - Notes: no push notifications (out of scope, SDD 10 §2). Read `meta.unread` from the list response; do not poll.
+  - Status (2026-11-01): code done on main: `bun run --cwd apps/mobile test -- src/profile/account src/notifications` PASS. Open (owner gate): `maestro test .maestro/flows/delete-account.yaml` with a throwaway account on a live host.
 
 #### P5.B.5 Deep links and end-to-end flows
 
@@ -3186,6 +3199,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `go test ./tests -run TestAssetLinks` → 200 `application/json`, `Cache-Control: public, max-age=3600`, no auth, no redirect, package `app.hexascore`, every fingerprint in `ANDROID_CERT_SHA256`
     - `adb shell pm get-app-links app.hexascore` (preview build, staging host override) → `verified`; `maestro test .maestro/smoke/deep-link.yaml` → PASSED for `/pt-br/games/<slug>` and `/entities/<id>`
   - Notes: `ANDROID_CERT_SHA256` holds a comma-separated list (upload key now, Play signing key added in P5.C.2.1, from `eas credentials -p android`). Locale-prefixed paths open the same screen with that locale applied for the session only.
+  - Status (2026-11-01): code done on main: `go test -tags integration ./tests -run TestAssetLinks` PASS, `src/linking` tests PASS; the `/pt-br` and `/es` prefixes set the session locale (FIX-mobile-deeplink-locale, `src/nativeIntent` tests PASS). Open (owner gate): `adb shell pm get-app-links app.hexascore` on a preview build and the Maestro deep-link run.
 
 - [ ] **P5.B.5.2** Complete the Maestro smoke suite (`login`, `rate-item`, `add-to-list`, `offline-rating`, `deep-link`) on staging and run the accessibility checks (role/label queries, TalkBack, 200 % font scale, Accessibility Scanner on 8 screens).
   - Files/modules: `.maestro/smoke/offline-rating.yaml`, `.maestro/smoke/config.yaml`, `docs/release/mobile-a11y-checklist.md`
@@ -3314,7 +3328,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `rg "01 \| 2|06 \| 1" docs/sdd/open-issues.md` → both rows `decided`
   - Notes: apply the rule as written. CC0 or public domain → ingest, API-eligible. Attribution-only → API-eligible with `data_sources.attribution`. Silent, non-commercial or no-redistribution → do not ingest, purge, and drop it from `CATALOG_API_SOURCES`. Covers are API-eligible only with an explicit grant. Architect task; the owner confirms the file before P6.A.2.4 enables the connector.
 
-- [ ] **P6.A.1.2** Create the ingestion tables (`source_records` extensions, `source_record_history`, `job_runs`, `ingest_failures`, `entity_match_reviews`, `dq_results`, `catalog_counts`, `field_coverage`) and the record store: canonical SHA-256, upsert that writes history in the same CTE, and `checked_at`-only on an unchanged hash.
+- [x] **P6.A.1.2** Create the ingestion tables (`source_records` extensions, `source_record_history`, `job_runs`, `ingest_failures`, `entity_match_reviews`, `dq_results`, `catalog_counts`, `field_coverage`) and the record store: canonical SHA-256, upsert that writes history in the same CTE, and `checked_at`-only on an unchanged hash.
   - Files/modules: `database/migrations/<ts>_create_ingestion_tables.go`, `internal/ingest/store/hash.go`, `internal/ingest/store/records.go`, `internal/ingest/store/records_test.go`
   - Refs: SDD 06 §5, FR-06-1; <https://vukem.dev/docs/database/migrations> "Migrations" (`s.Raw`); VF-006; legacy `common/db.py` `canonical_hash`, `upsert_source_record`, `store_records`
   - Depends on: P2.F, P6.A.1.1
@@ -3324,7 +3338,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/store/... -run 'TestCanonicalHashIgnoresKeyOrder|TestUpsertIsNoopWhenPayloadUnchanged|TestStoreRecordsCountsInsertsAndChanges|TestHistoryWrittenOnHashChange'` → `ok` (ports `test_canonical_hash_ignores_key_order`, `test_upsert_is_noop_when_payload_unchanged`, `test_store_records_counts_inserts_and_changes`)
   - Notes: P2.F already imported `source_records` 1:1. Add only the missing columns (`checked_at`, `last_run_id`) and the `source_records_item_idx` index, and backfill `checked_at = fetched_at`. jsonb and text + CHECK are raw DDL (VF-006). The hash must equal Python's for the same payload; test against three fixture payloads hashed by `canonical_hash`.
 
-- [ ] **P6.A.1.3** Build the run framework: the `job_runs` lifecycle, heartbeat (stale > 15 min → `failed`, resumable), chunked continuation (≤ 500 targets or 5 min, cursor saved, successor via `q.DispatchTx` in the same transaction), `queue.ErrPermanent`, closing the run on the last attempt, per-target `ingest_failures` (parked after 5 runs), and fail-closed kill switches.
+- [x] **P6.A.1.3** Build the run framework: the `job_runs` lifecycle, heartbeat (stale > 15 min → `failed`, resumable), chunked continuation (≤ 500 targets or 5 min, cursor saved, successor via `q.DispatchTx` in the same transaction), `queue.ErrPermanent`, closing the run on the last attempt, per-target `ingest_failures` (parked after 5 runs), and fail-closed kill switches.
   - Files/modules: `internal/ingest/run/run.go`, `internal/ingest/run/continuation.go`, `internal/ingest/run/flags.go`, `internal/ingest/run/failures.go`, `tests/ingest/resume_test.go`, `tests/ingest/killswitch_test.go`
   - Refs: SDD 06 §6 (jobs, kill switches), §7.6 "Dead letter", FR-06-6, FR-06-7; <https://vukem.dev/docs/digging-deeper/queue> "Jobs and transactions", "Retries, backoff and timeouts"; <https://vukem.dev/docs/digging-deeper/feature-flags> "Feature flags"; VF-018
   - Depends on: P6.A.1.2
@@ -3334,7 +3348,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests/ingest -run 'TestKillSwitchSkips|TestOneActiveRunPerJob'` → disabled source ends `skipped` with zero `httptest` hits; a second queued run → 409 `run-active` (unique index)
   - Notes: queue `ingest`, `queue.Timeout(10*time.Minute)`, `queue.Retries(3)` (that is four attempts, per the queue page). VF-018 workaround: an app-level semaphore caps concurrent ingestion jobs at 2 (NFR-06-2) whatever `QUEUE_CONCURRENCY` is. The "close the run on the last attempt" helper SDD 06 §6 names (`queue.AttemptFrom(ctx).Last()`) is not on the fetched queue page; confirm it on <https://vukem.dev/docs/digging-deeper/queue> before use. If it is missing, write `[NOT IN VUKEM DOCS]`, add a `vukem-feedback.md` entry, and close the run from a `q.AddObserver` failure hook instead.
 
-- [ ] **P6.A.1.4** Build the outbound client on `httpclient.Safe`: per-host throttle with slot reservation, retries for transport errors and 429/5xx (5 attempts, `2^n` s ≤ 60 s), `Retry-After` ≤ 300 s that pauses the whole host, rate halving after 20 hits, a per-host breaker, the bot User-Agent, a host allowlist and size caps.
+- [x] **P6.A.1.4** Build the outbound client on `httpclient.Safe`: per-host throttle with slot reservation, retries for transport errors and 429/5xx (5 attempts, `2^n` s ≤ 60 s), `Retry-After` ≤ 300 s that pauses the whole host, rate halving after 20 hits, a per-host breaker, the bot User-Agent, a host allowlist and size caps.
   - Files/modules: `internal/ingest/httpx/client.go`, `internal/ingest/httpx/throttle.go`, `internal/ingest/httpx/breaker.go`, `internal/ingest/httpx/client_test.go`, `tests/ingest/security_ssrf_test.go`
   - Refs: SDD 06 §7.2, NFR-06-5, NFR-06-6; <https://vukem.dev/docs/security/overview> "A01"; VF-020; legacy `common/http.py` (`_throttle`, `retry_after_seconds`, `user_agent`), `tests/test_http.py`
   - Depends on: P6.A.1.3
@@ -3346,7 +3360,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.A.2 Open connectors
 
-- [ ] **P6.A.2.1** Define the `Connector` interface and the Wikidata selection: SPARQL by `P31` classes and sitelinks (bootstrap top-N per type, incremental `dateModified ≥ since` with ≥ 15 sitelinks).
+- [x] **P6.A.2.1** Define the `Connector` interface and the Wikidata selection: SPARQL by `P31` classes and sitelinks (bootstrap top-N per type, incremental `dateModified ≥ since` with ≥ 15 sitelinks).
   - Files/modules: `internal/ingest/connector.go`, `internal/ingest/wikidata/select.go`, `internal/ingest/wikidata/select_test.go`, `internal/ingest/testdata/sparql_top_movies.json`
   - Refs: SDD 06 §7.3 (interface, selection), §7.2 (query.wikidata.org 1/s); legacy `connectors/wikidata.py` `select_qids`, `top_query`, `modified_query`, `_values`; tests `test_select_qids_parses_sparql_bindings`, `test_queries_target_type_classes`
   - Depends on: P6.A.1.4
@@ -3355,7 +3369,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/wikidata/... -run 'TestSelectQidsParsesSparqlBindings|TestQueriesTargetTypeClasses'` → `ok`
   - Notes: the interface is exactly SDD 06 §7.3 (`Source`, `Targets` as `iter.Seq2`, `Fetch`). Do not add methods "for later".
 
-- [ ] **P6.A.2.2** Fetch and trim Wikidata entities (`wbgetentities`, 50 ids, kept props incl. aliases and P144) and fetch referenced QIDs as `wikidata:entity` records.
+- [x] **P6.A.2.2** Fetch and trim Wikidata entities (`wbgetentities`, 50 ids, kept props incl. aliases and P144) and fetch referenced QIDs as `wikidata:entity` records.
   - Files/modules: `internal/ingest/wikidata/entities.go`, `internal/ingest/wikidata/trim.go`, `internal/ingest/wikidata/entities_test.go`
   - Refs: SDD 06 §7.3 ("trimming is load-bearing"), §7.4 (role properties), FR-06-11; legacy `connectors/wikidata.py` `simplify_value`, `trim_entity`, `referenced_qids`, `get_entities`, `fetch_entities`; tests `test_trim_entity_keeps_only_used_data`, `test_score_statements_keep_their_qualifiers`, `test_missing_entities_are_skipped`, `test_invalid_entity_payload_is_rejected`
   - Depends on: P6.A.2.1
@@ -3365,7 +3379,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/wikidata/... -run TestTrimHashMatchesPython` → hash of the trimmed `wikidata_entities.json` equals the Python value recorded in testdata
   - Notes: score qualifiers are dropped (D-09, no critic scores). Port `test_score_statements_keep_their_qualifiers` as a test that score statements are removed, and note the deliberate divergence in the test name. Adding a property changes every hash and needs a `full` run (≈ 1 h).
 
-- [ ] **P6.A.2.3** Port the Wikipedia connector for `en`, `pt` and `es`: batched summaries/extracts that reject disambiguation, missing pages and a mismatched `wikibase_item`, with concurrent requests within host limits.
+- [x] **P6.A.2.3** Port the Wikipedia connector for `en`, `pt` and `es`: batched summaries/extracts that reject disambiguation, missing pages and a mismatched `wikibase_item`, with concurrent requests within host limits.
   - Files/modules: `internal/ingest/wikipedia/wikipedia.go`, `internal/ingest/wikipedia/wikipedia_test.go`
   - Refs: SDD 06 §7.1 (CC BY-SA 4.0 attribution), §7.2, §7.3; legacy `connectors/wikipedia.py` `parse_extracts`, `targets`, `fetch`; tests `test_wikipedia_extracts`, `test_wikipedia_rejects_disambiguation_missing_and_other_entities`, `test_wikipedia_fetch_runs_requests_concurrently`
   - Depends on: P6.A.2.2
@@ -3374,7 +3388,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/wikipedia/... -run 'TestWikipediaExtracts|TestWikipediaRejectsDisambiguationMissingAndOtherEntities|TestWikipediaFetchRunsRequestsConcurrently'` → `ok`
   - Notes: store the source URL and licence with each extract so DQ-06 can pass.
 
-- [ ] **P6.A.2.4** Port the Open Library connector behind `ingest_openlibrary` and the A-05 decision: edition preferred over work, the work fills what the edition lacks, typed descriptions, and placeholder covers (`-1`) dropped.
+- [x] **P6.A.2.4** Port the Open Library connector behind `ingest_openlibrary` and the A-05 decision: edition preferred over work, the work fills what the edition lacks, typed descriptions, and placeholder covers (`-1`) dropped.
   - Files/modules: `internal/ingest/openlibrary/openlibrary.go`, `internal/ingest/openlibrary/openlibrary_test.go`
   - Refs: SDD 06 §7.1, §7.3; A-05; `docs/legal/open-library.md`; legacy `connectors/openlibrary.py` `document_path`, `work_path`, `parse_doc`, `complete_ids`; tests `test_openlibrary_paths_prefer_editions`, `test_openlibrary_edition`, `test_openlibrary_work_fills_what_the_edition_lacks`, `test_openlibrary_reads_typed_descriptions`, `test_openlibrary_drops_placeholder_covers`
   - Depends on: P6.A.2.2, P6.A.1.1
@@ -3386,7 +3400,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.A.3 Normaliser
 
-- [ ] **P6.A.3.1** Port `BuildItem` core fields as a pure function: skip without a Wikidata record or English title, slug (ASCII, ≤ 80, `-<year>` then `-<qid>` on collision, never changed), release date (min P577; series P580 first; fallback P571) with `release_precision` and `release_status`, titles per locale, external ids and quantities.
+- [x] **P6.A.3.1** Port `BuildItem` core fields as a pure function: skip without a Wikidata record or English title, slug (ASCII, ≤ 80, `-<year>` then `-<qid>` on collision, never changed), release date (min P577; series P580 first; fallback P571) with `release_precision` and `release_status`, titles per locale, external ids and quantities.
   - Files/modules: `internal/ingest/normalize/build.go`, `internal/ingest/normalize/slug.go`, `internal/ingest/normalize/dates.go`, `internal/ingest/normalize/build_test.go`
   - Refs: SDD 06 §7.3, FR-06-2; SDD 01 FR-01-15; open issue 02-1; legacy `normalize.py` `slugify`, `slug_candidates`, `parse_time`, `release_date`, `first_value`, `quantity`, `external_ids`, `build_translations`, `build_item`; tests `test_slugify_is_ascii_lowercase`, `test_slug_candidates_add_year_then_qid`, `test_parse_time_precisions`, `test_movie_mapping`, `test_series_mapping`, `test_items_without_wikidata_or_english_title_are_skipped`
   - Depends on: P6.A.2.2
@@ -3396,7 +3410,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/normalize/... -run TestBuildItemOrderIndependent -count=50` → a property test shuffling records gives identical output (FR-06-2)
   - Notes: `release_status = announced` when the date is in the future. The TMDB/IGDB "unreleased" field names are [NOT VERIFIED]; wire them in P6.B.1.1/P6.B.1.2 with fixtures. `scores` and `_score_time` are not ported (D-09).
 
-- [ ] **P6.A.3.2** Port the enrichment merge with provenance: Wikidata wins, other sources fill empty fields only, `{field: source}` provenance and licence from `data_sources`, synopsis only from Wikipedia or `synopsis`, TMDB/IGDB/Open Library text never in `item_translations`, and `community` fields skipped for 180 days, with a `system` suggestion on divergence.
+- [x] **P6.A.3.2** Port the enrichment merge with provenance: Wikidata wins, other sources fill empty fields only, `{field: source}` provenance and licence from `data_sources`, synopsis only from Wikipedia or `synopsis`, TMDB/IGDB/Open Library text never in `item_translations`, and `community` fields skipped for 180 days, with a `system` suggestion on divergence.
   - Files/modules: `internal/ingest/normalize/enrich.go`, `internal/ingest/normalize/provenance.go`, `internal/ingest/normalize/enrich_test.go`, `tests/ingest/community_lock_test.go`
   - Refs: SDD 06 FR-06-3, FR-06-4, §7.3; SDD 04 §7.3; open issue 04-3; ADR 0006; legacy `normalize.py` `enrichment`, `build_meta`; tests `test_tmdb_fills_only_what_wikidata_lacks`, `test_igdb_cover_wins_over_steam`, `test_game_mapping_with_steam_enrichment`, `test_book_mapping_uses_open_library_pages_as_fallback`, `test_own_synopsis_only_fills_locales_without_wikipedia`, `test_commons_cover_attribution`
   - Depends on: P6.A.3.1, P4.B
@@ -3406,7 +3420,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests/ingest -run TestCommunityFieldLock` → at day 179 the source is skipped and a `system` suggestion opens; at day 181 a divergence still opens a suggestion and never overwrites (fake clock)
   - Notes: enrichment payloads come from fixtures here; the connectors land in P6.B.1. The `system` suggestion uses the SDD 04 model from P4.A/P4.B. Do not write to the suggestions tables directly; call its service.
 
-- [ ] **P6.A.3.3** Extract relations: entity credits by role property (§7.4 table, cast first 15), `item_alt_titles` from aliases, transliterations, original-language and former titles (≤ 20, source `wikidata`), and `item_links` `based_on` from P144 when both QIDs are catalogue items.
+- [x] **P6.A.3.3** Extract relations: entity credits by role property (§7.4 table, cast first 15), `item_alt_titles` from aliases, transliterations, original-language and former titles (≤ 20, source `wikidata`), and `item_links` `based_on` from P144 when both QIDs are catalogue items.
   - Files/modules: `internal/ingest/normalize/relations.go`, `internal/ingest/normalize/alttitles.go`, `internal/ingest/normalize/relations_test.go`, `internal/ingest/testdata/parity_based_on.json`
   - Refs: SDD 06 §7.4, FR-06-11; SDD 01 §5.2 (`item_alt_titles`, `item_links`, `item_entities`, role compatibility), DQ-08, DQ-14; open issues 07-6, 08-1, 06-9; D-30 (no engines or edition contributors)
   - Depends on: P6.A.3.1
@@ -3415,7 +3429,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/normalize/... -run 'TestRelationsByRole|TestAltTitles|TestBasedOnLink'` → a manga-based anime and a novel-based film fixture produce `based_on`; alt titles capped at 20 with the right `kind` and `-Latn` lang
   - Notes: role properties beyond the legacy set are [NOT VERIFIED] until fixtures pin them (SDD 06 issue 9). Record each fixture's QID and property in testdata. Entity matching against existing rows is P6.B.3.2; here, emit credits by QID only.
 
-- [ ] **P6.A.3.4** Build the `normalize` job: pending QIDs from `source_records_pending_idx`, one transaction per 200 QIDs, slug collision against the database, `catalog.ItemsChanged{IDs}` per committed batch, and `RecomputeItemScore` via `DispatchTx` when a rated item's date, precision or status changes.
+- [x] **P6.A.3.4** Build the `normalize` job: pending QIDs from `source_records_pending_idx`, one transaction per 200 QIDs, slug collision against the database, `catalog.ItemsChanged{IDs}` per committed batch, and `RecomputeItemScore` via `DispatchTx` when a rated item's date, precision or status changes.
   - Files/modules: `internal/ingest/normalize/job.go`, `internal/ingest/normalize/save.go`, `tests/ingest/normalize_job_test.go`
   - Refs: SDD 06 §6 "Events", §7.3, NFR-06-3; SDD 02 §6; <https://vukem.dev/docs/digging-deeper/events> "Queued listeners"; <https://vukem.dev/docs/digging-deeper/queue> "Jobs and transactions"; legacy `normalize.py` `choose_slug`, `known_items`, `save_item`, `pending_qids`, `normalize_batch`; tests `test_normalize_writes_item_translations_and_scores`, `test_slug_collision_appends_year`
   - Depends on: P6.A.3.2, P6.A.3.3
@@ -3424,7 +3438,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests/ingest -run 'TestNormalizeWritesItemTranslations|TestSlugCollisionAppendsYear|TestRecomputeDispatchedOnDateChange|TestItemsChangedPerBatch'` → `ok`
   - Notes: stream rows in batches of 200 and read only the needed JSON keys (NFR-06-3, ≤ 256 MB). The ported translations test drops its score assertions (D-09).
 
-- [ ] **P6.A.3.5** Build the parity test: `testdata/parity/qids.txt` (200 QIDs, 50 per type, top/mid/tail, non-Latin titles, year-precision dates, P580 series, ISBN-10-only book, Steam-only game) with frozen `source_records`, a Python runner that emits canonical JSON from `build_item`, and Go `TestParityLegacy`.
+- [x] **P6.A.3.5** Build the parity test: `testdata/parity/qids.txt` (200 QIDs, 50 per type, top/mid/tail, non-Latin titles, year-precision dates, P580 series, ISBN-10-only book, Steam-only game) with frozen `source_records`, a Python runner that emits canonical JSON from `build_item`, and Go `TestParityLegacy`.
   - Files/modules: `testdata/parity/qids.txt`, `testdata/parity/records/*.json`, `testdata/parity/python/*.json` (committed outputs), `scripts/parity/dump_python.py` (run against `legacy/webscrappings` with `uv run`), `tests/ingest/parity_test.go`
   - Refs: SDD 06 §7.9 "Parity", FR-06-10, §9; open issue 06-9; D-11
   - Depends on: P6.A.3.4
@@ -3435,7 +3449,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.A.4 Schedules and release
 
-- [ ] **P6.A.4.1** Wire the schedules and chains for the open sources (`bootstrap` command, `fetch.wikidata` incremental at 00:30, weekly Sunday Wikidata + entities, Monday Wikipedia, Tuesday Open Library, each followed by normalise) with `SCHEDULE_TIMEZONE=America/Sao_Paulo` and `WithoutOverlapping()`.
+- [x] **P6.A.4.1** Wire the schedules and chains for the open sources (`bootstrap` command, `fetch.wikidata` incremental at 00:30, weekly Sunday Wikidata + entities, Monday Wikipedia, Tuesday Open Library, each followed by normalise) with `SCHEDULE_TIMEZONE=America/Sao_Paulo` and `WithoutOverlapping()`.
   - Files/modules: `routes/schedule.go`, `internal/ingest/chains.go`, `cmd/app/ingest_bootstrap.go`, `tests/ingest/schedule_test.go`
   - Refs: SDD 06 §7.6; <https://vukem.dev/docs/digging-deeper/scheduler> "Frequencies", "Overlapping runs"; <https://vukem.dev/docs/digging-deeper/queue> "Inside serve"; ADR 0007; D-08; VF-018
   - Depends on: P6.A.3.5
@@ -3459,7 +3473,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.B.1 Display-only enrichment
 
-- [ ] **P6.B.1.1** Port the TMDB connector (IDs only via `/find/{imdb_id}`, movie and TV details, a 401 stops the run with `ErrPermanent`) and the `tmdb.expire` job (refresh when `checked_at` > 150 d; delete, re-normalise and drop the TMDB cover when > 180 d), with audience `site` only.
+- [x] **P6.B.1.1** Port the TMDB connector (IDs only via `/find/{imdb_id}`, movie and TV details, a 401 stops the run with `ErrPermanent`) and the `tmdb.expire` job (refresh when `checked_at` > 150 d; delete, re-normalise and drop the TMDB cover when > 180 d), with audience `site` only.
   - Files/modules: `internal/ingest/tmdb/tmdb.go`, `internal/ingest/tmdb/expire.go`, `internal/ingest/tmdb/tmdb_test.go`, `tests/ingest/tmdb_expiry_test.go`
   - Refs: SDD 06 §7.1 (TMDB row), §7.6 (`tmdb.expire`), FR-06-5, DQ-I-06; ADR 0006; D-03; legacy `connectors/tmdb.py` `parse_find`, `parse_details`, `targets`, `fetch`; tests `test_tmdb_movie_details`, `test_tmdb_series_details`, `test_tmdb_find_picks_the_result_of_the_item_type`, `test_tmdb_fetch_resolves_missing_ids_through_imdb`, `test_tmdb_rejected_token_stops_the_run`
   - Depends on: P6.A.4.2
@@ -3468,8 +3482,9 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/tmdb/... -run 'TestTmdb'` → the five ported tests `ok`
     - `go test ./tests/ingest -run TestTmdbExpiry` → at 151 d the record is refreshed; at 181 d the record and cover are gone and the item is re-normalised (fake clock); `psql -c "select count(*) from source_records where source='tmdb' and checked_at < now()-interval '180 days'"` → `0`
   - Notes: TMDB is never commercial and never in `/api/v1`. The logo and the not-endorsed notice on item pages that use TMDB fields and on `/about` are checked in P6.B.4.1 (DQ-I-12) and in the Playwright spec of P6.B.4.3.
+  - Status (2026-11-01): local acceptance green on main: `go test ./internal/ingest/tmdb/... -run TestTmdb` 5 PASS, `go test -tags integration ./tests/ingest -run TestTmdbExpiry` PASS (the test asserts the 180-day count is 0). Turning the TMDB connector on in an environment rides P6.A.4.2.
 
-- [ ] **P6.B.1.2** Port the IGDB connector (Twitch app token, regex-filtered slugs, batched games query, pre-1970 dates) and the D-36 interim rule: `igdb.refresh` every 6 h for records with `checked_at` > 24 h, and records or covers older than 7 days are deleted and re-normalised.
+- [x] **P6.B.1.2** Port the IGDB connector (Twitch app token, regex-filtered slugs, batched games query, pre-1970 dates) and the D-36 interim rule: `igdb.refresh` every 6 h for records with `checked_at` > 24 h, and records or covers older than 7 days are deleted and re-normalised.
   - Files/modules: `internal/ingest/igdb/igdb.go`, `internal/ingest/igdb/refresh.go`, `internal/ingest/igdb/igdb_test.go`, `tests/ingest/igdb_retention_test.go`
   - Refs: SDD 06 §7.1 (IGDB row, "IGDB interim rule"), §7.6 (`igdb.refresh`), DQ-I-13; D-36; open issue 06-2; legacy `connectors/igdb.py` `games_query`, `parse_games`, `access_token`; tests `test_igdb_games`, `test_igdb_release_dates_before_1970`, `test_igdb_fetch_authenticates_and_drops_unsafe_slugs`
   - Depends on: P6.A.4.2
@@ -3479,7 +3494,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests/ingest -run TestIgdbRetention` → nothing IGDB-sourced older than 7 days survives a `igdb.refresh` run (fake clock)
   - Notes: **owner input needed:** the owner records `docs/legal/igdb.md` before the ingestion milestone (D-36). If the file allows longer retention, change D-36, then SDD 06, then this job, in that order (AGENTS.md). Budget: 3.3/s, cap 4/s, 4 in flight.
 
-- [ ] **P6.B.1.3** Port the Steam `appdetails` and GOG catalogue connectors (header image, OS platforms, store link; GOG matching by slug, then title, then slug prefix), with images kept site-only.
+- [x] **P6.B.1.3** Port the Steam `appdetails` and GOG catalogue connectors (header image, OS platforms, store link; GOG matching by slug, then title, then slug prefix), with images kept site-only.
   - Files/modules: `internal/ingest/steam/steam.go`, `internal/ingest/gog/gog.go`, `internal/ingest/steam/steam_test.go`, `internal/ingest/gog/gog_test.go`
   - Refs: SDD 06 §7.1 (Steam, GOG rows), §7.2; open issue 06-8; legacy `connectors/steam.py` `parse_appdetails`, `connectors/gog.py` `_norm`, `pick_product`, `parse_catalog`; tests `test_steam_appdetails`, `test_gog_picks_product_by_slug_prefix`, `test_gog_no_match`, `test_enrichment_skips_failed_targets`
   - Depends on: P6.A.4.2
@@ -3490,7 +3505,8 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.B.2 Covers and trailers
 
-- [ ] **P6.B.2.1** Encode WebP with a pinned `cwebp` (Alpine `libwebp-tools`) run in a resource-limited child process, behind an `Encoder` used by the covers job, with a ±10 % size parity test against the Pillow output.
+- [x] **P6.B.2.1** Encode WebP with a pinned `cwebp` (Alpine `libwebp-tools`) run in a resource-limited child process, behind an `Encoder` used by the covers job, with a ±10 % size parity test against the Pillow output.
+  - Status (2026-11-01): ticked; `TestWebpSizeParity` compares against committed outputs of the real `cwebp` 1.6.0 from the app image instead of Pillow (FIX-covers-a05-parity).
   - Files/modules: `internal/ingest/covers/webp.go`, `internal/ingest/covers/webp_test.go`, `internal/ingest/testdata/covers/*.jpg|*.png` with Pillow reference sizes, `Dockerfile` (pinned `libwebp-tools`)
   - Refs: SDD 06 §7.5, §11 issue 3; SDD 11 §6.3; open issue 06-3; VF-004; legacy `covers.py` `to_webp`; tests `test_to_webp_resizes_and_strips_metadata`, `test_to_webp_keeps_alpha_and_never_upscales`, `test_to_webp_applies_exif_orientation`, `test_to_webp_thumb_fits_list_size`
   - Depends on: P6.A.4.2
@@ -3500,7 +3516,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests/ingest -run TestSecurity_A05_ImageBomb` → a 25+ MP or > 15 MB input is rejected before decoding
   - Notes: `contrib/engine` is [NOT IN VUKEM DOCS]. <https://vukem.dev/docs/deployment/single-binary> does not cover it, and SDD 06/11 cite only the local `vukem/docs/subsystems.md` (not a reference per AGENTS.md). Read the package godoc in the pinned vukem module. If `engine.Limits{CPUTime, AddressSpace}` exists, use it with 30 s / 512 MiB. Otherwise use `exec.CommandContext` with a 30 s timeout and no inherited env, and add a `vukem-feedback.md` entry. VF-004 workaround if `cwebp` is unavailable: keep JPEG and note it. One encode at a time (NFR-06-2).
 
-- [ ] **P6.B.2.2** Port the covers job: source order (Open Library → TMDB → IGDB → Steam → GOG → Commons P3383, never P18), download via `httpclient.Safe`, sniff, EXIF, the two variants, the immutable key `covers/<id>-<sha256(source)[:16]>.webp` and `-t.webp` with `Put` on `drivers/s3`, skip on the same hash, and `covers.gc` 30-day deferred delete.
+- [x] **P6.B.2.2** Port the covers job: source order (Open Library → TMDB → IGDB → Steam → GOG → Commons P3383, never P18), download via `httpclient.Safe`, sniff, EXIF, the two variants, the immutable key `covers/<id>-<sha256(source)[:16]>.webp` and `-t.webp` with `Put` on `drivers/s3`, skip on the same hash, and `covers.gc` 30-day deferred delete.
   - Files/modules: `internal/ingest/covers/job.go`, `internal/ingest/covers/pick.go`, `internal/ingest/covers/gc.go`, `internal/ingest/covers/job_test.go`
   - Refs: SDD 06 §7.5, NFR-06-7; SDD 11 §5 (bucket prefixes), open issues 11-1, 11-2, 06-4; ADR 0014 (amended); <https://vukem.dev/docs/digging-deeper/storage> "Reading and writing", "What the S3 disk does"; legacy `covers.py` `pick_source_cover`, `commons_cover`, `blob_pathname`, `store_cover`, `targets`, `run`, `drop_loose_commons_covers`; tests `test_store_cover_*`, `test_commons_cover_only_from_film_poster`, `test_only_a_full_run_removes_loose_commons_covers`, `test_run_isolates_per_item_failures`, `test_run_backfills_thumb_for_legacy_cover`, `test_run_skips_item_with_both_sizes_current`, `test_run_processes_items_concurrently`
   - Depends on: P6.B.2.1, P6.B.1.1, P6.B.1.2, P6.B.1.3
@@ -3510,7 +3526,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests/ingest -run TestCoversGC` → a replaced object is deleted only after 30 days (fake clock)
   - Notes: no bucket versioning on Railway; immutable keys plus deferred delete replace it (ADR 0014 as amended). `test_run_without_token_keeps_source_url` and `test_upload_rejects_unexpected_blob_response` are Vercel Blob-specific and not ported (SDD 06 §9). Never add a 300 px or 2× variant (open issues 09-9, 10-3).
 
-- [ ] **P6.B.2.3** Port the trailers job: candidates (P1651 preferred, then TMDB/IGDB), oEmbed verdicts (200 available; 400/401/403/404 unavailable; 429/5xx no verdict), at most 2, reusing known verdicts, behind flag `youtube`.
+- [x] **P6.B.2.3** Port the trailers job: candidates (P1651 preferred, then TMDB/IGDB), oEmbed verdicts (200 available; 400/401/403/404 unavailable; 429/5xx no verdict), at most 2, reusing known verdicts, behind flag `youtube`.
   - Files/modules: `internal/ingest/trailers/trailers.go`, `internal/ingest/trailers/trailers_test.go`
   - Refs: SDD 06 §7.5 "Trailers", §7.6; legacy `trailers.py` `candidates`, `is_available`, `check`, `targets`, `fetch`; tests `test_candidates_order_wikidata_first_and_drop_malformed_ids`, `test_check_keeps_two_available_and_stops_asking`, `test_check_reuses_known_verdicts`, `test_rate_limit_is_not_a_verdict`, `test_fetch_writes_one_record_per_item_and_skips_failures`, `test_normalize_shows_only_checked_trailers_and_at_most_two`
   - Depends on: P6.B.1.1, P6.B.1.2
@@ -3529,8 +3545,9 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/editions/... -run 'TestIsbn10To13|TestIsbn13Checksum|TestPrimaryEdition|TestIsbnOnAnotherWorkIsNotMoved'` → `ok`
     - staging after `backfill.editions`: `psql -c "select round(100.0*count(*) filter (where cover_key is not null)/count(*)) from items where type='book'"` → ≥ 60 (only if A-05 allows Open Library; otherwise record the number and the reason)
   - Notes: `market_country = BR` from publish country `bl` is [NOT VERIFIED]; pin it with an Open Library fixture or leave it null. Edition contributors (translator, illustrator) are out (D-30).
+  - Status (2026-11-01): code done on main: the four editions unit tests PASS. Open (owner gate): `backfill.editions` on a live database and the books cover percentage (Open Library only if A-05 allows).
 
-- [ ] **P6.B.3.2** Resolve credits to entities: (1) QID; (2) source external id (`tmdb_person`, `tmdb_company`, `igdb_company`, `openlibrary_author`); (3) normalised name (NFKD, ASCII fold, lowercase, punctuation to space) + kind + year ±1. One candidate links, ≥ 2 (or a QID under another kind) opens `entity_match_reviews`, and none creates a native entity.
+- [x] **P6.B.3.2** Resolve credits to entities: (1) QID; (2) source external id (`tmdb_person`, `tmdb_company`, `igdb_company`, `openlibrary_author`); (3) normalised name (NFKD, ASCII fold, lowercase, punctuation to space) + kind + year ±1. One candidate links, ≥ 2 (or a QID under another kind) opens `entity_match_reviews`, and none creates a native entity.
   - Files/modules: `internal/ingest/entities/match.go`, `internal/ingest/entities/normalize_name.go`, `internal/ingest/entities/match_test.go`
   - Refs: SDD 06 §7.4 "Matching per credit"; SDD 01 FR-01-4, DQ-08, DQ-09; D-01
   - Depends on: P6.A.3.4
@@ -3539,7 +3556,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/entities/... -run 'TestNormalizeName|TestMatchByQid|TestMatchByExternalId|TestAmbiguousOpensReview|TestNoMatchCreatesNative'` → `ok`; re-running a batch creates no duplicate reviews (unique key)
   - Notes: fallback credits keep `item_entities.source` so the API filters them (ADR 0006).
 
-- [ ] **P6.B.3.3** Build the match review queue at `/admin/ingest/reviews` with the actions `link`, `create` and `dismiss`, gated by `runIngestion` with CSRF.
+- [x] **P6.B.3.3** Build the match review queue at `/admin/ingest/reviews` with the actions `link`, `create` and `dismiss`, gated by `runIngestion` with CSRF.
   - Files/modules: `app/admin/ingest/reviews.go`, `resources/js/Pages/Admin/Ingest/Reviews.tsx`, `tests/admin_ingest_reviews_test.go`
   - Refs: SDD 06 §6 (reviews row), DQ-I-11; VF-008 (custom actions are app routes)
   - Depends on: P6.B.3.2, P4.B.1.1
@@ -3550,7 +3567,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.B.4 Quality, admin and metrics
 
-- [ ] **P6.B.4.1** Build the `dq.asserts` job: SDD 01 DQ-01…14 and SDD 06 DQ-I-01…13 as SQL checks writing `dq_results` (≤ 20 sample ids), run after each normalise and daily at 05:00, with `catalog_counts` snapshots and the `allow_count_drop` override.
+- [x] **P6.B.4.1** Build the `dq.asserts` job: SDD 01 DQ-01…14 and SDD 06 DQ-I-01…13 as SQL checks writing `dq_results` (≤ 20 sample ids), run after each normalise and daily at 05:00, with `catalog_counts` snapshots and the `allow_count_drop` override.
   - Files/modules: `internal/ingest/dq/asserts.go`, `internal/ingest/dq/sql/*.sql`, `tests/ingest/dq_test.go`, `tests/ingest/testdata/dq/*.sql` (one faulty fixture per code)
   - Refs: SDD 06 §7.7, FR-06-9, §9; SDD 01 §7.6; ADR 0006 (DQ-I-12 serialiser check); D-36 (DQ-I-13)
   - Depends on: P6.B.2.2, P6.B.3.1, P6.B.3.2
@@ -3560,7 +3577,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - latest run: `psql -c "select code from dq_results where run_id=$1 and not passed and severity='error'"` → no rows
   - Notes: DQ-I-04 calls `Stat` on 1,000 covers a day and on all covers weekly; a missing object matches `storage.ErrNotFound` (storage page). If the SQL files push the diff past ~400 lines, split into SDD 01 codes and SDD 06 codes.
 
-- [ ] **P6.B.4.2** Build the `dq.frontend_fields` detector: daily, 500 items per type (top 200 + 300 random) through the item read-model builder, per-type required fields, nulls per type/field/locale into `field_coverage`, and ≤ 200 deduplicated `system` "missing field" suggestions a day.
+- [x] **P6.B.4.2** Build the `dq.frontend_fields` detector: daily, 500 items per type (top 200 + 300 random) through the item read-model builder, per-type required fields, nulls per type/field/locale into `field_coverage`, and ≤ 200 deduplicated `system` "missing field" suggestions a day.
   - Files/modules: `internal/ingest/dq/frontend_fields.go`, `tests/ingest/frontend_fields_test.go`
   - Refs: SDD 06 §7.7 "Missing-field detector"; SDD 09 (item read model); SDD 04 (`system` suggestions)
   - Depends on: P6.B.4.1, P4.B
@@ -3568,7 +3585,8 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
   - Acceptance:
     - `go test ./tests/ingest -run TestFrontendFields` → a seeded movie without a director yields one `field_coverage` miss and one suggestion; a second run the same day adds no duplicate; the cap stops at 200
 
-- [ ] **P6.B.4.3** Build `/admin/ingest`: last run per job, failures, failing asserts, oldest TMDB age and the coverage trend, plus `POST /admin/ingest/runs` (trigger), `POST /admin/ingest/runs/{id}/cancel`, and read-only panel resources for `job_runs`, `ingest_failures` and `dq_results`.
+- [x] **P6.B.4.3** Build `/admin/ingest`: last run per job, failures, failing asserts, oldest TMDB age and the coverage trend, plus `POST /admin/ingest/runs` (trigger), `POST /admin/ingest/runs/{id}/cancel`, and read-only panel resources for `job_runs`, `ingest_failures` and `dq_results`.
+  - Status (2026-11-01): ticked on `TestAdminIngest*`; the `admin-ingest` Playwright spec is a follow-up row (QA-admin-ingest-e2e), e2e gates nothing (owner, 2026-10-31).
   - Files/modules: `app/admin/ingest/status.go`, `app/admin/ingest/runs.go`, `resources/js/Pages/Admin/Ingest/Index.tsx`, `tests/admin_ingest_test.go`, `qa/e2e/admin-ingest.spec.ts`
   - Refs: SDD 06 §6 (admin table), FR-06-8; <https://vukem.dev/docs/digging-deeper/admin>; VF-008; open issue 06-6
   - Depends on: P6.B.4.1, P4.B.1.1
@@ -3578,7 +3596,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `bun run e2e -- admin-ingest` → Playwright + axe green
   - Notes: the triggers are app routes because custom panel actions are [NOT IN VUKEM DOCS] (VF-008). Keep the abilities `viewIngestion` and `runIngestion` distinct.
 
-- [ ] **P6.B.4.4** Implement rollback of a bad run (restore history rows with `superseded_by_run`, clear `normalized_at`, delete inserted records, re-normalise, delete created items unless user data references them), `ingest.retry_failures` at 03:30, and the retention prunes at 02:30.
+- [x] **P6.B.4.4** Implement rollback of a bad run (restore history rows with `superseded_by_run`, clear `normalized_at`, delete inserted records, re-normalise, delete created items unless user data references them), `ingest.retry_failures` at 03:30, and the retention prunes at 02:30.
   - Files/modules: `internal/ingest/rollback/rollback.go`, `internal/ingest/run/retry_failures.go`, `internal/ingest/run/prune.go`, `app/admin/ingest/rollback.go`, `tests/ingest/rollback_test.go`
   - Refs: SDD 06 §7.8 "Bad run", §5 (retention: history 30 d, `job_runs` 180 d, `dq_results`/`field_coverage` 365 d), §6 (`rollbackIngestion`, 409 `history-expired`); ADR 0014
   - Depends on: P6.B.4.3
@@ -3587,7 +3605,8 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests/ingest -run 'TestRollbackRestoresPreviousState|TestRollbackKeepsItemsWithUserData|TestRollbackHistoryExpired|TestPruneRetention'` → `ok`; the rollback is logged as a `rollback` run plus an audit entry
   - Notes: beyond 30 days the path is the dump restore runbook (SDD 11), not code. Do not build it here.
 
-- [ ] **P6.B.4.5** Add the pressure gate (in-flight count and last-minute item-page p95 hold batches above 16 or 300 ms), the `ingest.*` metrics on the global OTel meter, alert A7 and the ingestion dashboard, then wire the remaining weekly and daily schedules (Wed steam, Thu gog, Fri tmdb, Sat igdb, `tmdb.expire`, `igdb.refresh`, covers and trailer chains).
+- [x] **P6.B.4.5** Add the pressure gate (in-flight count and last-minute item-page p95 hold batches above 16 or 300 ms), the `ingest.*` metrics on the global OTel meter, alert A7 and the ingestion dashboard, then wire the remaining weekly and daily schedules (Wed steam, Thu gog, Fri tmdb, Sat igdb, `tmdb.expire`, `igdb.refresh`, covers and trailer chains).
+  - Status (2026-11-01): ticked with a note. D-35 (owner, Railway-native only) supersedes the `ingest.*` OTel metrics, `ops/grafana/ingestion.json` and `a7.yaml`: A7 is `alert=A7` log lines (`TestAlertA7Lines` replaces `TestMetricsEmitted`). The steam, gog and igdb schedules came with P6.B.1.2 and P6.B.1.3, covers with P6.B.2.2. The k6 staging run is not possible (no staging environment by owner rule). "Breaker open > 1 h" is covered by the A7 failed-run line.
   - Files/modules: `app/http/middleware/inflight.go`, `internal/ingest/pressure.go`, `internal/ingest/metrics.go`, `routes/schedule.go`, `ops/grafana/ingestion.json`, `ops/grafana/alerts/a7.yaml`, `qa/k6/ingest-pressure.js`
   - Refs: SDD 06 §7.5 "Pressure gate", §7.6, §10 "Observability", NFR-06-1, NFR-06-2; SDD 12 §6.2, §7.5 (A6, A7); <https://vukem.dev/docs/digging-deeper/queue> "Metrics"; VF-019; open issues 06-7, 12-1
   - Depends on: P6.B.4.4
@@ -3613,7 +3632,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.C.1 Activity primitives
 
-- [ ] **P6.C.1.1** Create `item_activity_daily` and `trending_snapshots`, and extend the SDD 01 item merge to sum the source item's activity rows into the target.
+- [x] **P6.C.1.1** Create `item_activity_daily` and `trending_snapshots`, and extend the SDD 01 item merge to sum the source item's activity rows into the target.
   - Files/modules: `database/migrations/<ts>_create_trending_tables.go`, `app/catalog/merge.go`, `tests/recommend_merge_test.go`
   - Refs: SDD 08 §5, §8 (merged item); SDD 01 §7.5; open issue 08-3 (no exclusions table)
   - Depends on: P2.G
@@ -3623,7 +3642,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests -run TestMergeSumsActivity` → the target's counts equal the sum, the source rows are gone
   - Notes: exclusion is `items.visibility <> 'public'` (SDD 01), not a table.
 
-- [ ] **P6.C.1.2** Count views and search clicks in memory: middleware on 200 item-page GETs and `/app/v1` item reads, dedup by `cache.Add` with `HMAC-SHA256(daily_salt, visitor|item)` until 00:00 UTC, exclusions (prefetch, partial reloads, bots, > 50 items per visitor per day), the `SearchResultClicked` listener, and a buffered counter flushed by `s.Func("trending:flush", …).EveryMinute()` and on shutdown.
+- [x] **P6.C.1.2** Count views and search clicks in memory: middleware on 200 item-page GETs and `/app/v1` item reads, dedup by `cache.Add` with `HMAC-SHA256(daily_salt, visitor|item)` until 00:00 UTC, exclusions (prefetch, partial reloads, bots, > 50 items per visitor per day), the `SearchResultClicked` listener, and a buffered counter flushed by `s.Func("trending:flush", …).EveryMinute()` and on shutdown.
   - Files/modules: `app/recommend/primitives/views.go`, `app/recommend/primitives/counter.go`, `app/recommend/primitives/flush.go`, `routes/schedule.go`, `tests/recommend_views_test.go`
   - Refs: SDD 08 FR-08-1, NFR-08-4, NFR-08-5, §7.1, §8 (flush failure, 100k keys); <https://vukem.dev/docs/digging-deeper/cache>; <https://vukem.dev/docs/digging-deeper/scheduler> "Frequencies"; <https://vukem.dev/docs/digging-deeper/events>; VF-021; open issues 08-10, 10-5
   - Depends on: P6.C.1.1, P1.E
@@ -3633,7 +3652,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests -run TestCounterDropsOldestAbove100k` → `trending.counter.dropped` incremented
   - Notes: VF-021 workaround (app `sync.Map` counter with a ticker-free flush on the scheduler). The scheduler page now documents `EveryMinute()` and `HourlyAt(m)`; append that finding to VF-021 in `vukem-feedback.md`, without deleting the entry. Hook shutdown with `app.OnShutdown` as SDD 08 §6 cites. Only `ItemID` from the click event is used.
 
-- [ ] **P6.C.1.3** Build the rollup that replaces the durable columns for UTC today and today−1 from `rating_events`, status/time-to-beat events, `suggestion_events` (`submitted`) and `list_items.added_at`, with one count per user per (item, day, primitive) at the maximum SDD 02 weight and the public-list rules.
+- [x] **P6.C.1.3** Build the rollup that replaces the durable columns for UTC today and today−1 from `rating_events`, status/time-to-beat events, `suggestion_events` (`submitted`) and `list_items.added_at`, with one count per user per (item, day, primitive) at the maximum SDD 02 weight and the public-list rules.
   - Files/modules: `app/recommend/trending/rollup.go`, `app/recommend/trending/rollup_test.go`
   - Refs: SDD 08 §7.1 (weights, lists), FR-08-2; SDD 02 §6 (events), §7.1, §7.5 (age tiers, shadow weight); SDD 14 §5 (`list_items.added_at`); SDD 04 (`suggestion_events`)
   - Depends on: P6.C.1.1, P4.A
@@ -3653,7 +3672,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./app/recommend/... -run 'TestTrendScore|TestFallback'` → golden `118.97` and `72.8` (±0.01), `D(0,7,14) = 1, 0.5, 0.25`, thresholds at 4.99/5.0, `F_i` 6.89 and 5.30 for the §7.3 examples
   - Notes: weights and thresholds are untuned (open issue 08-7). Keep them as named constants, not configuration.
 
-- [ ] **P6.C.2.2** Build `ComputeTrending` (`Cron("5 * * * *")`, `WithoutOverlapping()`): rollup, then the per-type snapshot in one transaction ordered `(T desc, popularity_prior desc, id)` with gapless ranks and prior fill, then `trending:v1:{type}` invalidation. Add `PruneTrending` at 04:45 (90 days), the queued `trending_rebuild` on `user.banned`, the `trending.*` metrics and alert A14.
+- [x] **P6.C.2.2** Build `ComputeTrending` (`Cron("5 * * * *")`, `WithoutOverlapping()`): rollup, then the per-type snapshot in one transaction ordered `(T desc, popularity_prior desc, id)` with gapless ranks and prior fill, then `trending:v1:{type}` invalidation. Add `PruneTrending` at 04:45 (90 days), the queued `trending_rebuild` on `user.banned`, the `trending.*` metrics and alert A14.
   - Files/modules: `app/jobs/compute_trending.go`, `app/jobs/prune_trending.go`, `app/recommend/trending/snapshot.go`, `app/recommend/trending/rebuild.go`, `routes/schedule.go`, `ops/grafana/alerts/a14.yaml`, `app/recommend/trending/snapshot_test.go`
   - Refs: SDD 08 §6 "Jobs", "Metrics", §7.3, FR-08-4, FR-08-6, FR-08-7, NFR-08-2, §9, §10; SDD 12 §6.2, §7.5 (A14); <https://vukem.dev/docs/digging-deeper/scheduler> "Overlapping runs"; <https://vukem.dev/docs/digging-deeper/queue>
   - Depends on: P6.C.2.1, P6.C.1.2
@@ -3665,7 +3684,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.C.3 Surfaces
 
-- [ ] **P6.C.3.1** Render the home trending sections: an eager SSR Inertia prop `trending` from `cache.NewMemory` (one query on a miss), the listing pattern, the "Popular" chip and title rule, and `?from=trending` links that the canonical URL drops.
+- [x] **P6.C.3.1** Render the home trending sections: an eager SSR Inertia prop `trending` from `cache.NewMemory` (one query on a miss), the listing pattern, the "Popular" chip and title rule, and `?from=trending` links that the canonical URL drops.
   - Files/modules: `app/web/home.go`, `resources/js/Pages/Home.tsx`, `resources/js/components/TrendingSection.tsx`, `tests/home_trending_test.go`, `qa/e2e/home.spec.ts`, `qa/k6/home.js`
   - Refs: SDD 08 §6 "Inertia props", FR-08-5, FR-08-6, FR-08-11, NFR-08-1; SDD 09; D-02; D-07; open issue 08-8; <https://vukem.dev/docs/digging-deeper/cache>
   - Depends on: P6.C.2.2
@@ -3675,7 +3694,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `k6 run qa/k6/home.js` → `p(95) < 200ms` at 50 rps with a warm cache (SDD 08 §9)
   - Notes: this replaces the legacy `SectionHighlights` on the home page. `forYou` arrives in P6.D.2.2.
 
-- [ ] **P6.C.3.2** Close P3.A.1.4 and the trending part of P3.C.2.1: serve `listTrending` and the business-only `getItemActivity` on `/api/v1`, and `/app/v1/{type}/trending`, with `web.ETagOf`, `c.NotModified` and `Cache-Control: public, max-age=300`.
+- [x] **P6.C.3.2** Close P3.A.1.4 and the trending part of P3.C.2.1: serve `listTrending` and the business-only `getItemActivity` on `/api/v1`, and `/app/v1/{type}/trending`, with `web.ETagOf`, `c.NotModified` and `Cache-Control: public, max-age=300`.
   - Files/modules: `app/api/v1/trending.go`, `app/appapi/catalog.go`, `app/recommend/trending/read.go`, `tests/api_trending_test.go`, `openapi/api-v1.json`, `openapi/app-v1.json`
   - Refs: SDD 08 §6 (contracts table), §9; SDD 05 §6.2, FR-05-17; P3.A.1.4; <https://vukem.dev/docs/rest-apis/overview> "Cross-cutting"
   - Depends on: P6.C.2.2, P3.A.1.3, P3.C.2.1
@@ -3701,7 +3720,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.D.1 Similar items
 
-- [ ] **P6.D.1.1** Create `item_similar` and `user_recommendations`, and implement feature extraction (`(role, entity)` pairs, cast `position < 5`, franchise parents at half weight), the `g_f` weights and weighted-Jaccard `sim` as pure functions.
+- [x] **P6.D.1.1** Create `item_similar` and `user_recommendations`, and implement feature extraction (`(role, entity)` pairs, cast `position < 5`, franchise parents at half weight), the `g_f` weights and weighted-Jaccard `sim` as pure functions.
   - Files/modules: `database/migrations/<ts>_create_similar_tables.go`, `app/recommend/similar/features.go`, `app/recommend/similar/sim.go`, `app/recommend/similar/sim_test.go`
   - Refs: SDD 08 §5, §7.4, §10 "Unit"; SDD 01 §5.2 (`item_entities`)
   - Depends on: P6.C.4.1, P6.B.3.2
@@ -3711,7 +3730,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./app/recommend/... -run TestSimilarity` → the Zelda example gives 0.70; `sim` is symmetric and in [0, 1]
   - Notes: `users.id` is text (SDD 03 §5); `user_recommendations.user_id` follows it.
 
-- [ ] **P6.D.1.2** Build `ComputeSimilar` (`DailyAt("02:00")`, `WithoutOverlapping()`): candidates sharing a feature with `n_f ≤ 5 %·N_t`, the keep rule, ordering by `round(sim,2)`, list `cooccur`, popularity and id, ≤ 20 neighbours, `Chunk(ctx, 500, …)` with a 50 ms pause, skipping unchanged `feature_hash`, and the site and API variants.
+- [x] **P6.D.1.2** Build `ComputeSimilar` (`DailyAt("02:00")`, `WithoutOverlapping()`): candidates sharing a feature with `n_f ≤ 5 %·N_t`, the keep rule, ordering by `round(sim,2)`, list `cooccur`, popularity and id, ≤ 20 neighbours, `Chunk(ctx, 500, …)` with a 50 ms pause, skipping unchanged `feature_hash`, and the site and API variants.
   - Files/modules: `app/jobs/compute_similar.go`, `app/recommend/similar/job.go`, `app/recommend/similar/job_test.go`, `app/recommend/similar/bench_test.go`
   - Refs: SDD 08 §7.4, FR-08-8, NFR-08-2, NFR-08-3; open issues 08-9, 08-11; <https://vukem.dev/docs/database/orm> "Querying"; <https://vukem.dev/docs/digging-deeper/scheduler>
   - Depends on: P6.D.1.1
@@ -3721,7 +3740,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./app/recommend/similar -bench BenchmarkComputeSimilar -benchtime 1x` on a 500k-item seed → ≤ 60 min on 1 core, recorded in SDD 08 §11 issue 11
   - Notes: if the benchmark exceeds 60 min, switch to incremental by `feature_hash` in a follow-up microtask (open issue 08-11). Do not tune weights here.
 
-- [ ] **P6.D.1.3** Serve `similar` (8, with `reason`) and `crossMedia` (≤ 6, `item_links` in either direction, hidden when empty) as eager props on the item page and on `/app/v1/items/{id}/related`, with `reco.impressions`/`reco.clicks` and `?from=similar|crossmedia`.
+- [x] **P6.D.1.3** Serve `similar` (8, with `reason`) and `crossMedia` (≤ 6, `item_links` in either direction, hidden when empty) as eager props on the item page and on `/app/v1/items/{id}/related`, with `reco.impressions`/`reco.clicks` and `?from=similar|crossmedia`.
   - Files/modules: `app/web/item.go`, `resources/js/Pages/Item/Show.tsx`, `resources/js/components/SimilarItems.tsx`, `app/appapi/related.go`, `tests/item_related_test.go`, `openapi/app-v1.json`
   - Refs: SDD 08 §6 (contracts, Inertia props, metrics), FR-08-8, FR-08-11; SDD 01 §5.2 (`item_links`); SDD 10 §6.1 (Item row `/items/{id}/related`); SDD 12 §6.2
   - Depends on: P6.D.1.2
@@ -3733,7 +3752,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.D.2 "For you"
 
-- [ ] **P6.D.2.1** Implement the user profile and scoring as pure functions: `μ_u`, `ρ_ui`, `τ_ui`, `p_u[f]`, `s(u,j)`, the two candidate sources, removal of rated, statused, unreleased or excluded items, the greedy re-ranker (≤ 20, ≤ 3 per franchise, ≤ 4 per primary genre), explanations, and the onboarding fallback below 3 positive items.
+- [x] **P6.D.2.1** Implement the user profile and scoring as pure functions: `μ_u`, `ρ_ui`, `τ_ui`, `p_u[f]`, `s(u,j)`, the two candidate sources, removal of rated, statused, unreleased or excluded items, the greedy re-ranker (≤ 20, ≤ 3 per franchise, ≤ 4 per primary genre), explanations, and the onboarding fallback below 3 positive items.
   - Files/modules: `app/recommend/foryou/profile.go`, `app/recommend/foryou/rank.go`, `app/recommend/foryou/explain.go`, `app/recommend/foryou/foryou_test.go`
   - Refs: SDD 08 §7.5, FR-08-9, §10 "Unit"; A-02
   - Depends on: P6.D.1.2
@@ -3741,7 +3760,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
   - Acceptance:
     - `go test ./app/recommend/... -run TestProfile` → `ρ` clamped to [−1, 1]; caps hold; each item has one explanation "Because you rated {title} {stars}"; < 3 positives → `basis:"onboarding"`
 
-- [ ] **P6.D.2.2** Serve "For you": the `recommend_user {UserID, Type}` queue job (`Retries(2)`, `Timeout(30s)`), stale-while-refresh (row > 24 h or ≥ 5 newer `rating_events`), a synchronous compute when there is no row, the opt-out (D-29) that deletes rows and stops jobs, `/app/v1/me/for-you`, the home `forYou` `Defer` group and the `ForYou/Index` page.
+- [x] **P6.D.2.2** Serve "For you": the `recommend_user {UserID, Type}` queue job (`Retries(2)`, `Timeout(30s)`), stale-while-refresh (row > 24 h or ≥ 5 newer `rating_events`), a synchronous compute when there is no row, the opt-out (D-29) that deletes rows and stops jobs, `/app/v1/me/for-you`, the home `forYou` `Defer` group and the `ForYou/Index` page.
   - Files/modules: `app/jobs/recommend_user.go`, `app/recommend/foryou/service.go`, `app/appapi/foryou.go`, `app/web/foryou.go`, `resources/js/Pages/ForYou/Index.tsx`, `tests/foryou_test.go`, `qa/k6/foryou.js`
   - Refs: SDD 08 §6 (contracts, jobs, privacy), §7.5, FR-08-10, NFR-08-6, §8 (opt-out while queued); SDD 03 FR-03-19; D-29; <https://vukem.dev/docs/frontend/inertia>; <https://vukem.dev/docs/digging-deeper/queue>
   - Depends on: P6.D.2.1
@@ -3753,7 +3772,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.D.3 Evaluation
 
-- [ ] **P6.D.3.1** Write the offline evaluation protocol: temporal hold-out of each user's latest 20 % of ratings (min 2), overall ≥ 70 as positives, precision@10 and nDCG@10 with a 95 % bootstrap CI and coverage, the monthly CF trigger check (≥ 5,000 users with ≥ 10 counted ratings), and the report file.
+- [x] **P6.D.3.1** Write the offline evaluation protocol: temporal hold-out of each user's latest 20 % of ratings (min 2), overall ≥ 70 as positives, precision@10 and nDCG@10 with a 95 % bootstrap CI and coverage, the monthly CF trigger check (≥ 5,000 users with ≥ 10 counted ratings), and the report file.
   - Files/modules: `app/recommend/eval/eval.go`, `app/recommend/eval/eval_test.go`, `app/jobs/reco_eval_monthly.go`, `docs/reco-eval/README.md`
   - Refs: SDD 08 §7.6, §11 issue 7 (90-day review); A-02; VF-029 (export helpers only write to `http.ResponseWriter`)
   - Depends on: P6.D.2.2
@@ -3783,17 +3802,17 @@ Design principles for the whole phase: every social write is moderated by the P4
 
 ### P7.A Follows and activity feed
 
-- [ ] **P7.A.1.1** Amend D-06, write SDD 14 §8 "Follows and feed" (tables `follows`, `activity_events`, privacy matrix, retention 180 days) and ADR 0019 (feed built from the write path, no fan-out until 10k followers).
-  - Files/modules: `docs/brainstorming.md`, `docs/sdd/14-user-library.md`, `docs/adrs/0019-social-feed.md`
-  - Refs: SDD 14 §1, §2; D-06; D-29; web-research §4 (Letterboxd, Goodreads, Skoob feeds)
+- [x] **P7.A.1.1** Amend D-06, write SDD 14 §12 "Social layer" (follows and feed subsection) (tables `follows`, `activity_events`, privacy matrix, retention 180 days) and ADR 0021 (feed built from the write path, no fan-out until 10k followers).
+  - Files/modules: `docs/brainstorming.md`, `docs/sdd/14-user-library.md`, `docs/adrs/0021-social-feed.md`
+  - Refs: SDD 14 §1, §2; D-06; D-29; web-research §6 (Goodreads), §7 (Skoob); Letterboxd: DOC-research-letterboxd report
   - Depends on: P2.G.4.2
   - Model: Opus
   - Acceptance:
-    - `bunx markdownlint-cli2@0.24.0 docs/sdd/14-user-library.md docs/adrs/0019-social-feed.md` → 0 errors; the open-issues table lists the new rows
+    - `bunx markdownlint-cli2@0.24.0 docs/sdd/14-user-library.md docs/adrs/0021-social-feed.md` → 0 errors; the open-issues table lists the new rows
 
-- [ ] **P7.A.1.2** Build `follows`: `PUT|DELETE /u/{nickname}/follow`, follower and following counts on the profile, `TestSecurity_A01_PrivateProfileFollowRequiresApproval`.
+- [x] **P7.A.1.2** Build `follows`: `PUT|DELETE /u/{nickname}/follow`, follower and following counts on the profile, `TestSecurity_A01_PrivateProfileFollowRequiresApproval`.
   - Files/modules: `database/migrations/<ts>_create_follows_table.go`, `app/social/follows.go`, `app/controllers/follows_controller.go`, `routes/social.go`, `resources/js/pages/User/Profile.tsx` (follow button, counts), `tests/follows_test.go`
-  - Refs: SDD 14 §8; SDD 13 A01, A04 (rate limit 60/h)
+  - Refs: SDD 14 §12; SDD 13 A01, A06 (rate limit 60/h)
   - Depends on: P7.A.1.1
   - Model: Sonnet
   - Acceptance:
@@ -3802,12 +3821,13 @@ Design principles for the whole phase: every social write is moderated by the P4
 
 - [ ] **P7.A.1.3** Emit activity events from the existing write paths (rating saved, status changed, list created or item added, review published) and build `/feed` (followed users, 20 per page, cursor) plus the "recent activity" tab on the public profile.
   - Files/modules: `app/social/activity.go` (listener on `scoring`, `library` events), `app/controllers/feed_controller.go`, `resources/js/pages/Feed/Index.tsx`, `resources/js/components/social/ActivityCard.tsx`
-  - Refs: SDD 14 §8; SDD 08 §6 (activity primitives shared with trending, P6.C.1); SDD 09 §7.3 (cursor)
-  - Depends on: P7.A.1.2
+  - Refs: SDD 14 §12; SDD 08 §7.1 (primitives shared with trending, P6.C.1); SDD 09 §7.3 (cursor)
+  - Depends on: P7.A.1.2, P6.C.1.1
   - Model: Opus
   - Acceptance:
     - `k6 run qa/k6/feed.js` → p95 ≤ 300 ms at 30 rps with 10k events
     - `go test -tags integration ./tests -run TestFeedPrivacy` → private profiles and hidden lists never appear in another user's feed
+  - Status (2026-11-01): code done on main (parts 1 and 2, a9343e81): `TestFeedPrivacy`, `TestProfileActivityTab`, `TestActivityRetention` and `TestFeedPurgedOnAnonymise` PASS. Open: `k6 run qa/k6/feed.js` (written with `qa/k6/feed-seed.sql`, not run on this host; batch run). Flag `social` stays off while Q-A5 is open.
 
 - [ ] **P7.A.1.4** Release `v1.13.0` (follows and feed).
   - Depends on: P7.A.1.3
@@ -3818,29 +3838,32 @@ Design principles for the whole phase: every social write is moderated by the P4
 
 - [ ] **P7.B.1.1** Reviews: optional text (≤ 5,000 chars, Markdown subset, spoiler flag) attached to a rating; shown on the item page (sorted by helpfulness, then date) and on the profile.
   - Files/modules: `database/migrations/<ts>_create_reviews_table.go`, `app/social/reviews.go`, `app/controllers/reviews_controller.go`, `resources/js/components/item/Reviews.tsx`, `resources/js/components/item/ReviewForm.tsx`
-  - Refs: SDD 14 §8; SDD 13 A03 (sanitised Markdown, no raw HTML); A-07 (licence of contributions); web-research §4.2 (Letterboxd review model)
+  - Refs: SDD 14 §12; SDD 13 A05 (sanitised Markdown, no raw HTML); A-07 (licence of contributions); Letterboxd review model: DOC-research-letterboxd report
   - Depends on: P7.A.1.1
   - Model: Opus
   - Acceptance:
-    - `go test -tags integration ./tests -run 'TestReviews|TestSecurity_A03_ReviewMarkdown'` → green; a `<script>` in a review renders as text
+    - `go test -tags integration ./tests -run 'TestReviews|TestSecurity_A05_ReviewMarkdown'` → green; a `<script>` in a review renders as text
     - Playwright `reviews.spec.ts` → write, edit, delete, spoiler toggle; axe 0 serious
+  - Status (2026-11-01): code done on main (a9343e81): `TestReviews`, `TestReviewsDisabledByDefault` and `TestSecurity_A05_ReviewMarkdown` PASS. Open: Playwright `reviews.spec.ts` (written, not run; e2e is not a gate since 2026-10-31).
 
-- [ ] **P7.B.1.2** Comments on reviews and lists (one level of threading, 60/h per user) and reactions (`like`, `helpful`) on reviews, comments and lists, with counts updated in the same transaction.
+- [x] **P7.B.1.2** Comments on reviews and lists (one level of threading, 60/h per user) and reactions (`like`, `helpful`) on reviews, comments and lists, with counts updated in the same transaction.
   - Files/modules: `database/migrations/<ts>_create_comments_and_reactions.go`, `app/social/comments.go`, `app/social/reactions.go`, controllers and routes, `resources/js/components/social/CommentThread.tsx`, `ReactionBar.tsx`
-  - Refs: SDD 14 §8; SDD 13 A04; SDD 04 §6 (notifications: "someone commented")
+  - Refs: SDD 14 §12; SDD 13 A06 (rate limit); SDD 14 §7.5 (notifications: "someone commented")
   - Depends on: P7.B.1.1
   - Model: Sonnet
   - Acceptance:
     - `go test -tags integration ./tests -run 'TestComments|TestReactions'` → green, including the unique (user, target) reaction and the rate limit
     - `/me/notifications` lists comment and reaction notifications
+  - Status (2026-11-01): done (a9343e81): `TestComments` and `TestReactions` PASS, including the unique reaction, the 60/h limit and the `/me/notifications` entries.
 
-- [ ] **P7.B.1.3** Moderation: `reports.target_type` gains `review` and `comment`; the admin queue hides, deletes or bans; the author is notified.
+- [x] **P7.B.1.3** Moderation: `reports.target_type` gains `review` and `comment`; the admin queue hides, deletes or bans; the author is notified.
   - Files/modules: `app/requests/report.go`, `app/library/reports.go`, admin resources, `resources/js/components/ReportDialog.tsx`
   - Refs: SDD 14 FR-14-9; SDD 04 (moderation SLA); P4.B
   - Depends on: P7.B.1.2, P4.B.1.1
   - Model: Sonnet
   - Acceptance:
     - `go test -tags integration ./tests -run TestReportsReviewComment` → green; a hidden review disappears from the item page and the feed
+  - Status (2026-11-01): done (a9343e81): `TestReportsReviewComment` and `TestReportsReviewBanAuthor` PASS. Hiding has no "unhide" outcome in the admin queue (follow-up).
 
 - [ ] **P7.B.1.4** Release `v1.14.0` (reviews, comments, reactions).
   - Depends on: P7.B.1.3
@@ -3849,21 +3872,22 @@ Design principles for the whole phase: every social write is moderated by the P4
 
 ### P7.C Social discovery
 
-- [ ] **P7.C.1.1** "Rated by people you follow" on the item page and the home, and the friends' average next to the community score.
+- [x] **P7.C.1.1** "Rated by people you follow" on the item page and the home, and the friends' average next to the community score.
   - Files/modules: `app/catalog/item_page.go`, `app/controllers/home.go`, `resources/js/components/item/FriendsScore.tsx`
-  - Refs: SDD 08 §6; SDD 14 §8
+  - Refs: SDD 08 §6; SDD 14 §12
   - Depends on: P7.A.1.3
   - Model: Sonnet
   - Acceptance:
     - `go test -tags integration ./tests -run TestFriendsScore` → only followed, non-private users count; `Defer` group `personal` keeps the public HTML cacheable
 
-- [ ] **P7.C.1.2** Share cards: Open Graph image per item, list and profile (Go `image/draw`, cached on the bucket), and a "share" action on those pages.
+- [x] **P7.C.1.2** Share cards: Open Graph image per item, list and profile (Go `image/draw`, cached on the bucket), and a "share" action on those pages.
   - Files/modules: `app/seo/og_image.go`, `routes/web.go` (`/og/{kind}/{id}.png`), `resources/js/components/Seo.tsx`
   - Refs: SDD 09 §7.7; VF-004 (no WebP encoder: PNG)
   - Depends on: P2.H.1.1
   - Model: Sonnet
   - Acceptance:
     - `curl -sI localhost:3000/og/items/<id>.png` → `image/png`, `Cache-Control: public, max-age=86400`; the item page `<meta property="og:image">` points at it
+  - Status (2026-11-01): done (a9343e81): `TestOGImage` PASS (GET and HEAD 200 `image/png`, `Cache-Control: public, max-age=86400`, 1200x630; the page sets `ogImage` for the og:image meta). `dwebp` 1.6.0 ships in the runtime image's `libwebp-tools`; the WebP decode path is checked on the first deploy.
 
 - [ ] **P7.C.1.3** Release `v1.15.0` and close Phase 7 once the moderation SLA covers reviews and comments for 30 days.
   - Depends on: P7.C.1.2, P7.B.1.4

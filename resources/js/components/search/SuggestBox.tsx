@@ -1,70 +1,39 @@
 import { router, usePage } from "@inertiajs/react";
-import { Fragment, useEffect, useId, useRef, useState } from "react";
+import { Fragment, useEffect, useId, useState } from "react";
+import { withQueryClient } from "../../lib/queryClient";
 
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
+import { type Suggestion, useSuggest } from "./useSuggest";
 
-export interface Suggestion {
-	id: string;
-	type: string;
-	kind: string;
-	title: string;
-	year: number | null;
-	path: string;
+export type { Suggestion } from "./useSuggest";
+
+interface Props {
+	// Replaces the default navigation to the suggestion (and to /search on submit): the box becomes a picker.
+	onPick?: (s: Suggestion) => void;
+	// Restricts suggestions to one item type.
+	type?: string;
+	label?: string;
 }
 
-const MIN_CHARS = 2;
-const DEBOUNCE_MS = 150;
-
-// Header suggest combobox (ARIA 1.2 combobox with a listbox popup, focus stays in the input).
-export default function SuggestBox() {
+// Suggest combobox (ARIA 1.2 combobox with a listbox popup, focus stays in the input). Header search by default.
+function SuggestBox({ onPick, type, label }: Props) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
 	const base = useId();
 	const listId = `${base}-list`;
 	const [text, setText] = useState("");
-	const [items, setItems] = useState<Suggestion[]>([]);
+	const { items, pending, answered } = useSuggest(text, locale, type);
 	const [open, setOpen] = useState(false);
 	const [active, setActive] = useState(-1);
-	const [pending, setPending] = useState(false);
-	const seq = useRef(0);
 
+	// A fresh answer opens the popup with nothing highlighted; a short query closes it.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: a new answer for the same query must reopen the popup
 	useEffect(() => {
-		const q = text.trim();
-		if (q.length < MIN_CHARS) {
-			setItems([]);
-			setOpen(false);
-			setPending(false);
-			return;
-		}
-		const ctrl = new AbortController();
-		const mine = ++seq.current;
-		setPending(true);
-		const timer = setTimeout(async () => {
-			try {
-				const res = await fetch(
-					`${localized("/search/suggest", locale)}?q=${encodeURIComponent(q)}`,
-					{ signal: ctrl.signal, headers: { Accept: "application/json" } },
-				);
-				if (!res.ok) throw new Error(String(res.status));
-				const body = (await res.json()) as { data: Suggestion[] };
-				if (mine !== seq.current) return;
-				setItems(body.data);
-				setActive(-1);
-				setOpen(true);
-			} catch (err) {
-				if ((err as Error).name === "AbortError") return;
-				setItems([]);
-			} finally {
-				if (mine === seq.current) setPending(false);
-			}
-		}, DEBOUNCE_MS);
-		return () => {
-			clearTimeout(timer);
-			ctrl.abort();
-		};
-	}, [text, locale]);
+		setActive(-1);
+		setOpen(answered !== "");
+	}, [answered, items]);
 
 	const expanded = open && items.length > 0;
 	const optionId = (i: number) => `${base}-opt-${i}`;
@@ -72,6 +41,13 @@ export default function SuggestBox() {
 	function go(path: string) {
 		setOpen(false);
 		router.visit(path);
+	}
+
+	function pick(s: Suggestion) {
+		if (!onPick) return go(s.path);
+		setOpen(false);
+		setText("");
+		onPick(s);
 	}
 
 	function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -88,7 +64,7 @@ export default function SuggestBox() {
 			case "Enter":
 				if (expanded && active >= 0 && items[active]) {
 					e.preventDefault();
-					go(items[active].path);
+					pick(items[active]);
 				}
 				break;
 			case "Escape":
@@ -109,20 +85,21 @@ export default function SuggestBox() {
 				onSubmit={(e) => {
 					e.preventDefault();
 					const q = text.trim();
-					if (q) go(`${localized("/search", locale)}?q=${encodeURIComponent(q)}`);
+					if (q && !onPick)
+						go(`${localized("/search", locale)}?q=${encodeURIComponent(q)}`);
 				}}
 			>
 				<input
 					type="search"
 					name="q"
 					role="combobox"
-					aria-label={t("nav.search")}
+					aria-label={label ?? t("nav.search")}
 					aria-autocomplete="list"
 					aria-expanded={expanded}
 					aria-controls={listId}
 					aria-activedescendant={expanded && active >= 0 ? optionId(active) : undefined}
 					autoComplete="off"
-					placeholder={t("nav.search")}
+					placeholder={label ?? t("nav.search")}
 					value={text}
 					onChange={(e) => setText(e.target.value)}
 					onKeyDown={onKeyDown}
@@ -147,7 +124,7 @@ export default function SuggestBox() {
 								// mousedown fires before the input blur closes the popup.
 								onMouseDown={(e) => {
 									e.preventDefault();
-									go(s.path);
+									pick(s);
 								}}
 								className={`flex min-h-11 cursor-pointer items-center gap-2 px-3 ${i === active ? "bg-bg" : ""}`}
 							>
@@ -174,3 +151,5 @@ export default function SuggestBox() {
 		</search>
 	);
 }
+
+export default withQueryClient(SuggestBox);

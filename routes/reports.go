@@ -15,6 +15,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/config"
 )
 
 // ReportService builds the report service shared by the member routes and the admin resolve route.
@@ -50,13 +51,19 @@ func Reports(r *router.Router, app *vukem.App) error {
 	}
 
 	svc := ReportService(app, acc)
+
+	sc, err := SocialService(app, acc)
+	if err != nil {
+		return err
+	}
+
 	limit := limits.Reports.From(limiters)
 
-	h := controllers.NewReports(svc, acc.Web.Name(), false)
+	h := controllers.NewReports(svc, sc, acc.Web.Name(), false)
 	r.Post("/reports", h.Create).Name("reports.create").
 		Use(auth.Required(acc.Web), auth.Verified(acc.Web), ratelimit.Middleware(limit, ratelimit.ByUser(acc.Web.Name())))
 
-	api := controllers.NewReports(svc, acc.API.Name(), true)
+	api := controllers.NewReports(svc, sc, acc.API.Name(), true)
 	stack, err := AppWriteStack(app, acc, limiters,
 		auth.Ability(acc.API, "profile:write"),
 		ratelimit.Middleware(limit, ratelimit.ByUser(acc.API.Name())),
@@ -75,11 +82,21 @@ func Reports(r *router.Router, app *vukem.App) error {
 	}
 
 	contact := controllers.NewContact(&library.Contact{
-		DB: acc.DB, Mailer: acc.Mailer, Inbox: app.Source.Get("CONTACT_INBOX"), Key: key, Now: app.Now, Log: app.Log,
+		DB:     acc.DB,
+		Mailer: acc.Mailer,
+		Inbox:  config.ContactInbox(app.Source.Get),
+		Key:    key,
+		Now:    app.Now,
+		Log:    app.Log,
 	}, func(c *web.Ctx) (models.User, error) { return acc.Web.User(c) })
 	byIP := ratelimit.Middleware(limits.Contact.From(limiters), ratelimit.ByIP)
 	r.Get("/contact", contact.Index).Name("contact")
-	r.Post("/contact", contact.Send).Name("contact.send").Use(byIP)
+	ts, err := LoadTurnstile(app)
+	if err != nil {
+		return err
+	}
+
+	r.Post("/contact", contact.Send).Name("contact.send").Use(byIP, ts.protect("contact"))
 
 	return nil
 }

@@ -1,0 +1,263 @@
+{
+  "qid": "Q24911",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q24911",
+      "labels": {
+        "en": "The Last Winter",
+        "es": "Den sidste vinter"
+      },
+      "aliases": {
+        "en": [
+          "Last Winter"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "The Last Winter (1960 film)"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q369747",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Den sidste vinter",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q3531699",
+            "rank": "normal"
+          },
+          {
+            "value": "Q77869",
+            "rank": "normal"
+          },
+          {
+            "value": "Q12301717",
+            "rank": "normal"
+          },
+          {
+            "value": "Q12309612",
+            "rank": "normal"
+          },
+          {
+            "value": "Q12311560",
+            "rank": "normal"
+          },
+          {
+            "value": "Q12315202",
+            "rank": "normal"
+          },
+          {
+            "value": "Q12318973",
+            "rank": "normal"
+          },
+          {
+            "value": "Q12327453",
+            "rank": "normal"
+          },
+          {
+            "value": "Q326506",
+            "rank": "normal"
+          },
+          {
+            "value": "Q327088",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4352522",
+            "rank": "normal"
+          },
+          {
+            "value": "Q443688",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4974907",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5040389",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5619134",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6004376",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6026017",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6245458",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6321595",
+            "rank": "normal"
+          },
+          {
+            "value": "Q792378",
+            "rank": "normal"
+          },
+          {
+            "value": "Q35984211",
+            "rank": "normal"
+          },
+          {
+            "value": "Q12322110",
+            "rank": "normal"
+          },
+          {
+            "value": "Q35985595",
+            "rank": "normal"
+          },
+          {
+            "value": "Q35985616",
+            "rank": "normal"
+          },
+          {
+            "value": "Q38052436",
+            "rank": "normal"
+          },
+          {
+            "value": "Q55683034",
+            "rank": "normal"
+          },
+          {
+            "value": "Q47088267",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+93",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0056167",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q9035",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "114696",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q35",
+            "rank": "normal"
+          },
+          {
+            "value": "Q183",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q5486336",
+            "rank": "normal"
+          },
+          {
+            "value": "Q24907",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5341401",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1960-09-30T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q3183909",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5577029",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q12301717": "Anker Taasti",
+        "Q12309612": "Ejnar Hans Jensen",
+        "Q12311560": "Flemming Dyjak",
+        "Q12315202": "Hanne Winther-Jørgensen",
+        "Q12318973": "Jakob Nielsen",
+        "Q12322110": "Klaus Scharling Nielsen",
+        "Q12327453": "Mogens Hermansen",
+        "Q183": "Germany",
+        "Q24907": "Anker Sørensen",
+        "Q3183909": "Jørgen Roos",
+        "Q326506": "Kirsten Passer",
+        "Q327088": "Preben Kaas",
+        "Q35": "Denmark",
+        "Q3531699": "Tony Britton",
+        "Q35984211": "Georg Philipp",
+        "Q35985595": "Bent Bentzen",
+        "Q35985616": "Axel Houlgaard",
+        "Q369747": "war film",
+        "Q38052436": "Aase Due",
+        "Q4352522": "Hugo Herrestrup",
+        "Q443688": "Birgitte Federspiel",
+        "Q47088267": "Egon Mohr",
+        "Q4974907": "Lise Ringheim",
+        "Q5040389": "Carl Johan Hviid",
+        "Q5341401": "Edvin Tiemroth",
+        "Q5486336": "Frank Dunlop",
+        "Q55683034": "Stanley van Beers",
+        "Q5577029": "Karl Bjarnhof",
+        "Q5619134": "Gunnar Strømvad",
+        "Q6004376": "Preben Neergaard",
+        "Q6026017": "Ernst Bruun Olsen",
+        "Q6245458": "John Wittig",
+        "Q6321595": "Jørgen Weel",
+        "Q77869": "Dieter Eppler",
+        "Q792378": "Axel Strøbye",
+        "Q9035": "Danish"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q24911",
+      "lang": "en",
+      "title": "The Last Winter (1960 film)",
+      "extract": "The Last Winter (Danish: Den sidste vinter) is a 1960 Danish war film directed by Frank Dunlop, Anker Sørensen and Edvin Tiemroth. It was entered into the 2nd Moscow International Film Festival.",
+      "url": "https://en.wikipedia.org/wiki/The_Last_Winter_(1960_film)"
+    }
+  },
+  "tier": "tail",
+  "type": "movie"
+}

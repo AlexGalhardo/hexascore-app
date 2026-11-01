@@ -1,5 +1,7 @@
 """Contains all the data models used in inputs/outputs"""
 
+from .activity_day_json import ActivityDayJSON
+from .activity_json import ActivityJSON
 from .change_json import ChangeJSON
 from .change_json_action import ChangeJSONAction
 from .change_json_item_type import ChangeJSONItemType
@@ -13,9 +15,13 @@ from .entity_json_provenance import EntityJSONProvenance
 from .entity_page_json import EntityPageJSON
 from .entity_ref import EntityRef
 from .entity_summary_json import EntitySummaryJSON
+from .export_json import ExportJSON
+from .export_json_type import ExportJSONType
+from .export_list import ExportList
 from .field_source import FieldSource
 from .genre_json import GenreJSON
 from .genre_list_json import GenreListJSON
+from .get_export_type import GetExportType
 from .get_item_type import GetItemType
 from .item_json import ItemJSON
 from .item_json_external_ids import ItemJSONExternalIds
@@ -30,6 +36,9 @@ from .problem import Problem
 from .problem_errors import ProblemErrors
 from .synopsis import Synopsis
 from .test_webhook_body import TestWebhookBody
+from .trending_entry_json import TrendingEntryJSON
+from .trending_entry_json_basis import TrendingEntryJSONBasis
+from .trending_json import TrendingJSON
 from .usage_json import UsageJSON
 from .usage_quota import UsageQuota
 from .usage_quota_period import UsageQuotaPeriod
@@ -40,6 +49,8 @@ from .webhook_list import WebhookList
 from .webhook_test_result import WebhookTestResult
 
 __all__ = (
+    "ActivityDayJSON",
+    "ActivityJSON",
     "ChangeJSON",
     "ChangeJSONAction",
     "ChangeJSONItemType",
@@ -53,9 +64,13 @@ __all__ = (
     "EntityPageJSON",
     "EntityRef",
     "EntitySummaryJSON",
+    "ExportJSON",
+    "ExportJSONType",
+    "ExportList",
     "FieldSource",
     "GenreJSON",
     "GenreListJSON",
+    "GetExportType",
     "GetItemType",
     "ItemJSON",
     "ItemJSONExternalIds",
@@ -70,6 +85,9 @@ __all__ = (
     "ProblemErrors",
     "Synopsis",
     "TestWebhookBody",
+    "TrendingEntryJSON",
+    "TrendingEntryJSONBasis",
+    "TrendingJSON",
     "UsageJSON",
     "UsageQuota",
     "UsageQuotaPeriod",

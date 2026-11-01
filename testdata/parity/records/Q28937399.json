@@ -1,0 +1,281 @@
+{
+  "qid": "Q28937399",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q28937399",
+      "labels": {
+        "mul": "PUBG: Battlegrounds",
+        "pt": "PlayerUnknown's Battlegrounds",
+        "pt-br": "PlayerUnknown's Battlegrounds"
+      },
+      "aliases": {
+        "mul": [
+          "PlayerUnknown's Battlegrounds",
+          "PUBG"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "PUBG: Battlegrounds",
+        "eswiki": "PUBG: Battlegrounds",
+        "ptwiki": "PlayerUnknown's Battlegrounds"
+      },
+      "sitelinks_count": 75,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q4035237",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q30607131",
+            "rank": "normal"
+          },
+          {
+            "value": "Q380266",
+            "rank": "normal"
+          },
+          {
+            "value": "Q185029",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "578080",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q65124447",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "PUBGCorpABHC.png",
+            "rank": "normal"
+          }
+        ],
+        "P2561": [
+          {
+            "value": "ꠙꠣꠛꠎꠤ",
+            "rank": "normal"
+          },
+          {
+            "value": "PUBG: Battlegrounds",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "44704",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt7204362",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q13361286",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5014725",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q48493",
+            "rank": "normal"
+          },
+          {
+            "value": "Q94",
+            "rank": "normal"
+          },
+          {
+            "value": "Q98973368",
+            "rank": "normal"
+          },
+          {
+            "value": "Q63184502",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q7737",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9176",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7850",
+            "rank": "normal"
+          },
+          {
+            "value": "Q150",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13955",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5287",
+            "rank": "normal"
+          },
+          {
+            "value": "Q809",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5146",
+            "rank": "normal"
+          },
+          {
+            "value": "Q256",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9217",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7026",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9264",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q884",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2017-03-23T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2017-12-14T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "pubg-battlegrounds",
+            "rank": "normal"
+          }
+        ],
+        "P6278": [
+          {
+            "value": "pubg-59c1d9",
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q140390031",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1321": "Spanish",
+        "Q13361286": "Xbox One",
+        "Q13955": "Arabic",
+        "Q140390031": "PUBG",
+        "Q1406": "Microsoft Windows",
+        "Q150": "French",
+        "Q185029": "first-person shooter",
+        "Q1860": "English",
+        "Q188": "German",
+        "Q256": "Turkish",
+        "Q30607131": "battle royale game",
+        "Q380266": "third-person shooter",
+        "Q4035237": "Krafton",
+        "Q48493": "iOS",
+        "Q5014725": "PlayStation 4",
+        "Q5146": "Portuguese",
+        "Q5287": "Japanese",
+        "Q63184502": "PlayStation 5",
+        "Q65124447": "PUBG Studios",
+        "Q6895044": "multiplayer video game",
+        "Q7026": "Catalan",
+        "Q7737": "Russian",
+        "Q7850": "Chinese",
+        "Q809": "Polish",
+        "Q884": "South Korea",
+        "Q9176": "Korean",
+        "Q9217": "Thai",
+        "Q9264": "Uzbek",
+        "Q94": "Android",
+        "Q98973368": "Xbox Series X and Series S"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q28937399",
+      "lang": "en",
+      "title": "PUBG: Battlegrounds",
+      "extract": "PUBG: Battlegrounds, originally titled PlayerUnknown's Battlegrounds (PUBG), is a 2017 battle royale game published by Krafton and developed by Krafton's PUBG Studios. Inspired by the Japanese film Battle Royale (2000), the game is based on mods created by Brendan \"PlayerUnknown\" Greene and was developed under his creative direction. Played from a third-person or first-person perspective, up to one hundred players parachute onto an island where they search for weapons and equipment to fight against each other while trying to survive as the last one standing. The safe area of the game's map decreases over time, directing players into an ever-tightening space to force encounters.\nPlayerUnknown's Battlegrounds was first released for Windows via Steam's early access beta program in March 2017, with a full release in December 2017; the same month, Microsoft Studios released it for the Xbox One via the Xbox Game Preview program, with a full release in September 2018. Afterwards the game was ported to the PlayStation 4, Xbox Series X/S and PlayStation 5 consoles, and the Stadia streaming platform, and has also spawned a mobile version, PUBG Mobile, for Android and iOS. The game was renamed PUBG: Battlegrounds in 2021 and has been free-to-play for all platforms since January 2022. It is continuously developed under the games as a service model.\nThe game received positive reviews from critics, who found that despite technical flaws, it presented a new type of gameplay that could be easily approached by players of any skill level and was highly replayable. It was credited with popularizing the battle royale genre, with a number of unofficial Chinese clones being produced following its success. The game received several Game of the Year nominations and set seven Guinness World Records, among many other accolades. PUBG Corporation has run several small tournaments and introduced in-game tools to help with broadcasting the game to spectators, as they wish for it to become a popular esport title. It has sold over 75 million copies on personal computers and game consoles, becoming the second-best-selling game on PC and best-selling game on Xbox One, as well as the fifth best-selling video game overall. Until Q3 2022, the game has accumulated $13 billion in worldwide revenue, including from its more successful mobile version, making it one of the highest-grossing video games of all time.",
+      "url": "https://en.wikipedia.org/wiki/PUBG:_Battlegrounds"
+    },
+    "wikipedia:es": {
+      "qid": "Q28937399",
+      "lang": "es",
+      "title": "PUBG: Battlegrounds",
+      "extract": "PUBG: Battlegrounds (anteriormente PlayerUnknown's Battlegrounds) es un videojuego de batalla en línea multijugador masivo desarrollado por PUBG Corporation (actual PUBG Studios) y publicado por Bluehole (actual Krafton) para Microsoft Windows, Xbox One, PlayStation 4, Android e iOS, estos dos últimos con ayuda de Tencent Games.\nEn el juego, cien jugadores saltan en paracaídas desde un avión a una isla, donde tienen la libertad de moverse hacia un lugar determinado que ellos mismos elijan y buscan armas y equipamiento para matar a otros jugadores mientras evitan ser asesinados. El área segura disponible del mundo del juego disminuye en tamaño durante la partida, dirigiendo a los jugadores sobrevivientes a áreas más reducidas y forzando enfrentamientos. El último jugador o equipo en pie gana la partida.\nEl juego era una beta battle royale de ARMA 3 que salió en 2015. Se basa en el estilo Battle Royale de los mods previamente desarrollados por Brendan \"Playerunknown\" Greene para otros juegos, pero ampliado independientemente bajo la dirección creativa de él mismo.\nFue lanzado en Microsoft Windows mediante el programa de acceso anticipado de Steam en marzo de 2017. Mientras que en el acceso anticipado, el juego había vendido más de cuatro millones de copias en un período de tres meses. Krafton planeaba el lanzamiento en consolas después de la versión completa de la versión de Windows, con una versión de Xbox One prevista para ser una exclusiva programada para finales de 2017. Una versión para dispositivos móviles iOS y Android fue lanzada el 20 de marzo de 2018 en la App Store y la Play Store.​ El videojuego se lanzó en la consola Playstation 5 y 6 el 7 de diciembre de 2018.​ La distribuidora y desarrolladora de videojuegos Krafton lanzó una versión ligera de PUBG MOBILE y PUBG. Esta versión de Playerunknown's Battlegrounds se llamaba PUBG LITE, la cual estaba optimizada para computadoras de bajos y medianos recursos, pero fue cancelada. Lo mismo pasa con PUBG MOBILE: Tencent Games y Krafton estrenaron PUBG MOBILE LITE, la cual es una versión optimizada para las personas que no poseen dispositivos de gama media-alta. PUBG MOBILE LITE fue lanzado en la Play Store. El 28 de abril de 2020 se lanzó una versión de PUBG: Battlegrounds para Google Stadia.",
+      "url": "https://es.wikipedia.org/wiki/PUBG:_Battlegrounds"
+    },
+    "wikipedia:pt": {
+      "qid": "Q28937399",
+      "lang": "pt",
+      "title": "PlayerUnknown's Battlegrounds",
+      "extract": "PlayerUnknown's Battlegrounds (PUBG) é um jogo eletrônico, desenvolvido pela PUBG Studios, uma subsidiária da publicadora coreana Krafton, utilizando o motor de jogo Unreal Engine 4. O jogo foi desenvolvido sob a liderança criativa de Brendan \"PlayerUnknown\" Greene, que havia previamente desenvolvido diversos mods para outros jogos eletrônicos inspirados no filme Battle Royale, de 2000.\nO jogo consiste de até cem jogadores que caem de paraquedas em uma ilha em busca de armas e equipamento a fim de matar os outros jogadores, enquanto tentam sobreviver ao mesmo tempo. A área de jogo diminui progressivamente, confinando os sobreviventes a um espaço cada vez menor e forçando encontros. Ganha o último jogador ou time sobrevivente. O jogo permite tanto as perspectivas de primeira pessoa como em terceira pessoa.\nO jogo foi lançado em março de 2017 para Microsoft Windows na plataforma de acesso antecipado da Steam, vendendo mais de 18 milhões de cópias nos primeiros oito meses, e atingindo um pico de mais de 2 milhões de jogadores simultâneos no final de 2017, sendo o jogo mais jogado da plataforma até então. A PUBG Corp. lançou a versão 1.0 do jogo no dia 20 de dezembro de 2017, e a versão para Xbox foi lançada no dia 12 de dezembro através do programa de testes Xbox Game Preview.\nO jogo foi, de forma geral, bem recebido pela crítica, sendo nomeado para \"jogo do ano\" enquanto ainda estava em lançamento antecipado, mas recebendo comentários a respeito de bugs ainda presentes após a saída do acesso antecipado. Segundo os desenvolvedores, o jogo seria eventualmente voltado para eSports, mas, até o início de 2018, Greene considerava que o jogo \"ainda não estava lá\".",
+      "url": "https://pt.wikipedia.org/wiki/PlayerUnknown%27s_Battlegrounds"
+    }
+  },
+  "tier": "top",
+  "type": "game"
+}

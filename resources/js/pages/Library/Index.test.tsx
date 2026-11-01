@@ -1,12 +1,15 @@
-import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { expect, test, vi } from "vitest";
+import { render, screen } from "../../lib/testing";
 
 import Index from "./Index";
 
 const del = vi.fn();
-vi.mock("../../lib/useT", () => ({ useT: () => (key: string) => key }));
+vi.mock("../../lib/useT", () => ({
+	useT: () => (key: string, p?: { count?: number }) =>
+		p?.count === undefined ? key : `${key}:${p.count}`,
+}));
 vi.mock("../../components/Seo", () => ({ default: () => null }));
 vi.mock("../../components/library/ItemLink", () => ({ default: () => null }));
 vi.mock("@inertiajs/react", () => ({
@@ -58,4 +61,10 @@ test("clear edition deletes the item edition", async () => {
 		.setup()
 		.click(screen.getAllByRole("button", { name: "library.clearEdition" })[0]);
 	expect(del).toHaveBeenCalledWith("/items/i1/edition", { preserveScroll: true });
+});
+
+test("groups cards under a heading per status", () => {
+	const { container } = render(<Index {...props} filters={{ status: "", type: "", sort: "" }} />);
+	expect(container.querySelector("#status-want")?.textContent).toContain("library.titleCount:3");
+	expect(container.querySelector("#status-completed")).toBeNull();
 });

@@ -1,0 +1,221 @@
+{
+  "qid": "Q239889",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q239889",
+      "labels": {
+        "en": "Hitman: Blood Money",
+        "mul": "Hitman: Blood Money"
+      },
+      "aliases": {
+        "mul": [
+          "Hitman : Blood Money",
+          "Hitman Blood Money"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Hitman: Blood Money",
+        "eswiki": "Hitman: Blood Money",
+        "ptwiki": "Hitman: Blood Money"
+      },
+      "sitelinks_count": 32,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q679933",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q343568",
+            "rank": "normal"
+          },
+          {
+            "value": "Q858523",
+            "rank": "normal"
+          },
+          {
+            "value": "Q105702790",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "6860",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q746059",
+            "rank": "normal"
+          },
+          {
+            "value": "Q863618",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q19308",
+            "rank": "normal"
+          }
+        ],
+        "P2725": [
+          {
+            "value": "game/hitman_blood_money",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "4477",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0433390",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q48263",
+            "rank": "normal"
+          },
+          {
+            "value": "Q132020",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10680",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10683",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5014725",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13361286",
+            "rank": "normal"
+          },
+          {
+            "value": "Q94",
+            "rank": "normal"
+          },
+          {
+            "value": "Q48493",
+            "rank": "normal"
+          },
+          {
+            "value": "Q19610114",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q35",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q16215828",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2006-05-26T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2006-05-30T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "hitman-blood-money",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q105702790": "Christmas video game",
+        "Q10680": "PlayStation 2",
+        "Q10683": "PlayStation 3",
+        "Q132020": "Xbox",
+        "Q13361286": "Xbox One",
+        "Q1406": "Microsoft Windows",
+        "Q16215828": "Rasmus Højengaard",
+        "Q1860": "English",
+        "Q19308": "Hitman",
+        "Q19610114": "Nintendo Switch",
+        "Q208850": "single-player video game",
+        "Q343568": "action-adventure game",
+        "Q35": "Denmark",
+        "Q48263": "Xbox 360",
+        "Q48493": "iOS",
+        "Q5014725": "PlayStation 4",
+        "Q679933": "Eidos Interactive",
+        "Q746059": "IO Interactive",
+        "Q858523": "stealth game",
+        "Q863618": "Feral Interactive",
+        "Q94": "Android"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q239889",
+      "lang": "en",
+      "title": "Hitman: Blood Money",
+      "extract": "Hitman: Blood Money is a 2006 stealth video game developed by IO Interactive and published by Eidos Interactive. It was released in May 2006 for Microsoft Windows, PlayStation 2, Xbox and Xbox 360. It is the fourth installment in the Hitman video game series, and the sequel to 2004's Hitman: Contracts. The story follows cloned assassin Agent 47's efforts to bring down the Franchise, a rival contract killing organization that is threatening his employers, the International Contract Agency (ICA), and seeking to obtain the same cloning technology that created 47. Meanwhile, a frame story presents 47's life and various contracts he carried out, as narrated by a former FBI director to a journalist.\nBlood Money received critical acclaim for its graphics, narrative, gameplay, voice acting and darker tone; it was also a commercial success, selling more than 2.1 million copies. It has gained a cult following and is considered one of the greatest video games ever made. High-definition ports of Blood Money and two of its predecessors, Hitman 2: Silent Assassin and Contracts, were released on PlayStation 3 and Xbox 360 in January 2013 as the Hitman HD Trilogy. A sequel, Hitman: Absolution, was released in 2012, and 4K remastered ports of both Blood Money and Absolution were released by Warner Bros. Interactive Entertainment in 2019 on the PlayStation 4 and Xbox One as part of the Hitman HD Enhanced Collection.",
+      "url": "https://en.wikipedia.org/wiki/Hitman:_Blood_Money"
+    },
+    "wikipedia:es": {
+      "qid": "Q239889",
+      "lang": "es",
+      "title": "Hitman: Blood Money",
+      "extract": "Hitman: Blood Money es el cuarto juego de la serie Hitman. La demo del juego fue lanzada el 22 de mayo de 2006. Oficialmente el juego fue lanzado a la venta el 26 de mayo de 2006 en Europa y el 30 de mayo en los Estados Unidos.",
+      "url": "https://es.wikipedia.org/wiki/Hitman:_Blood_Money"
+    },
+    "wikipedia:pt": {
+      "qid": "Q239889",
+      "lang": "pt",
+      "title": "Hitman: Blood Money",
+      "extract": "Hitman: Blood Money é um jogo de stealth desenvolvido pela IO Interactive, publicado pela Eidos Interactive e dirigido por Rasmus Højengaard. É o quarto jogo da série Hitman. Sua demo foi lançada em 22 de maio de 2006 e a versão completa do jogo foi lançada em 26 de maio de 2006 na Europa e no dia 30 do mesmo mês nos Estados Unidos.\nA história segue a vida do assassino de aluguel profissional, Agente 47, narrado em cinemáticas por um ex-diretor do FBI a um jornalista que o está entrevistando. O jogo foi um sucesso comercial e crítico para a Eidos, vendendo mais de 2,1 milhões de cópias. As conversões de alta definição de Blood Money e seus antecessores, Silent Assassin e Contracts, foram lançadas no PlayStation 3 e no Xbox 360 em janeiro de 2013 como a Hitman HD Trilogy. Versões remasterizadas de Blood Money e seu sucessor, Hitman: Absolution, foram lançadas para PlayStation 4 e Xbox One como parte da Hitman HD Enhanced Collection.",
+      "url": "https://pt.wikipedia.org/wiki/Hitman:_Blood_Money"
+    }
+  },
+  "tier": "mid",
+  "type": "game"
+}

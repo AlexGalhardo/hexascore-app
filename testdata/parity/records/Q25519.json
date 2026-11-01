@@ -1,0 +1,203 @@
+{
+  "qid": "Q25519",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q25519",
+      "labels": {
+        "en": "Merry-Go-Round",
+        "es": "Merry-Go-Round"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Merry-Go-Round (1981 film)"
+      },
+      "sitelinks_count": 6,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/merry_go_round_1981",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q959790",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Merry-Go-Round",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q553454",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1295222",
+            "rank": "normal"
+          },
+          {
+            "value": "Q224071",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3015145",
+            "rank": "normal"
+          },
+          {
+            "value": "Q276369",
+            "rank": "normal"
+          },
+          {
+            "value": "Q257752",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2896144",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1684856",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3309012",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3367664",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16028184",
+            "rank": "normal"
+          },
+          {
+            "value": "Q321395",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+160",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0085934",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q150",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "162514",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q142",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q167475",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1980-02-14T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1981-10-09T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1983-04-06T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q167475",
+            "rank": "normal"
+          },
+          {
+            "value": "Q126144",
+            "rank": "normal"
+          },
+          {
+            "value": "Q458455",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q126144": "Eduardo de Gregorio",
+        "Q1295222": "Maurice Garrel",
+        "Q130232": "drama film",
+        "Q142": "France",
+        "Q150": "French",
+        "Q16028184": "Sylvie Matton",
+        "Q167475": "Jacques Rivette",
+        "Q1684856": "Jean-François Stévenin",
+        "Q1860": "English",
+        "Q224071": "Maria Schneider",
+        "Q257752": "Frédéric Mitterrand",
+        "Q276369": "Françoise Prévost",
+        "Q2896144": "Benjamin Legrand",
+        "Q3015145": "Danièle Gégauff",
+        "Q321395": "Humbert Balsan",
+        "Q3309012": "Michel Berto",
+        "Q3367664": "Pascale Dauman",
+        "Q458455": "Suzanne Schiffman",
+        "Q553454": "Joe Dallesandro",
+        "Q959790": "crime film"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q25519",
+      "lang": "en",
+      "title": "Merry-Go-Round (1981 film)",
+      "extract": "Merry-Go-Round is a 1981 French experimental mystery directed by Jacques Rivette, starring Maria Schneider and Joe Dallesandro. The film, which revolves around a kidnapping plot, follows a structure similar to that of a crime drama. The script was written by Rivette in collaboration with Eduardo de Gregorio and Suzanne Schiffman, with dialogue by de Gregorio. Filming took place in 1977, but the film remained unreleased until 1981.",
+      "url": "https://en.wikipedia.org/wiki/Merry-Go-Round_(1981_film)"
+    }
+  },
+  "tier": "tail",
+  "type": "movie"
+}

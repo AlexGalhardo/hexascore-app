@@ -229,7 +229,7 @@ The Go app serves `GET /.well-known/assetlinks.json` [E12] via `r.Get` ([V1] "De
 7. `/help/delete-account`. Decided (10-7): in SDD 09 §6.2 and SDD 03 FR-03-15.
 8. EAS cost. Decided (D-34): free tier, Gradle-on-Actions fallback (§7.8).
 9. SDD 03 abilities and codes. Fixed (10-9): README abilities, kebab-case codes.
-10. `deviceName` source. Roadmap (10-10): resolved at implementation with the Expo Device API (model name), cited then.
+10. `deviceName` source. Decided (P5.A.3.3): `Device.modelName` from `expo-device` (<https://docs.expo.dev/versions/latest/sdk/device/>, accessed 2026-10-31), falling back to `Android`.
 
 References (accessed 2026-10-28):
 

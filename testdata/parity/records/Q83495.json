@@ -1,0 +1,361 @@
+{
+  "qid": "Q83495",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q83495",
+      "labels": {
+        "en": "The Matrix",
+        "es": "The Matrix",
+        "pt": "Matrix",
+        "pt-br": "Matrix"
+      },
+      "aliases": {
+        "en": [
+          "Matrix I",
+          "The Matrix I"
+        ],
+        "es": [
+          "Matrix",
+          "Matrix I",
+          "The Matrix I"
+        ],
+        "pt": [
+          "The Matrix"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "The Matrix",
+        "eswiki": "The Matrix",
+        "ptwiki": "Matrix"
+      },
+      "sitelinks_count": 114,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/matrix",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q2484376",
+            "rank": "normal"
+          },
+          {
+            "value": "Q20443008",
+            "rank": "normal"
+          },
+          {
+            "value": "Q174526",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3990883",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1341051",
+            "rank": "normal"
+          },
+          {
+            "value": "Q471839",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188473",
+            "rank": "normal"
+          },
+          {
+            "value": "Q185867",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1535153",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "The Matrix",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q193048",
+            "rank": "normal"
+          },
+          {
+            "value": "Q206890",
+            "rank": "normal"
+          },
+          {
+            "value": "Q296883",
+            "rank": "normal"
+          },
+          {
+            "value": "Q42204",
+            "rank": "normal"
+          },
+          {
+            "value": "Q43416",
+            "rank": "normal"
+          },
+          {
+            "value": "Q455234",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6306950",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3324448",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1236595",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2424724",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4882899",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3391203",
+            "rank": "normal"
+          },
+          {
+            "value": "Q944529",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2616690",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2985403",
+            "rank": "normal"
+          },
+          {
+            "value": "Q21870719",
+            "rank": "normal"
+          },
+          {
+            "value": "Q18219789",
+            "rank": "normal"
+          },
+          {
+            "value": "Q258604",
+            "rank": "normal"
+          },
+          {
+            "value": "Q862673",
+            "rank": "normal"
+          }
+        ],
+        "P1651": [
+          {
+            "value": "_XrKhqC5rQQ",
+            "rank": "normal"
+          },
+          {
+            "value": "8VOG1nI-27Q",
+            "rank": "normal"
+          },
+          {
+            "value": "dGnqHj6w5Z4",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/the-matrix",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q1210827",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "The.Matrix.glmatrix.1.png",
+            "rank": "preferred"
+          },
+          {
+            "value": "Red and blue pill.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+136",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q622668",
+            "rank": "normal"
+          },
+          {
+            "value": "Q126399",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1188938",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0133093",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "603",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          },
+          {
+            "value": "Q408",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q9545711",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9544977",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1999-03-31T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1999-07-14T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1999-06-17T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q195719",
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q13014087",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1188938": "Silver Pictures",
+        "Q1210827": "The Matrix series",
+        "Q1236595": "Marcus Chong",
+        "Q126399": "Warner Bros. Entertainment",
+        "Q13014087": "The Matrix",
+        "Q1341051": "post-apocalyptic film",
+        "Q1535153": "superhero film",
+        "Q174526": "cyberpunk",
+        "Q18219789": "Jeremy Ball",
+        "Q185867": "film noir",
+        "Q1860": "English",
+        "Q188473": "action film",
+        "Q193048": "Laurence Fishburne",
+        "Q195719": "the Wachowskis",
+        "Q20443008": "dystopian film",
+        "Q206890": "Carrie-Anne Moss",
+        "Q21870719": "Rowan Witt",
+        "Q2424724": "Matt Doran",
+        "Q2484376": "thriller film",
+        "Q258604": "David Aston",
+        "Q2616690": "Ada Nicodemou",
+        "Q296883": "Joe Pantoliano",
+        "Q2985403": "Steve Dodd",
+        "Q30": "United States",
+        "Q3324448": "Anthony Ray Parker",
+        "Q3391203": "Paul Goddard",
+        "Q3990883": "action thriller",
+        "Q408": "Australia",
+        "Q42204": "Hugo Weaving",
+        "Q43416": "Keanu Reeves",
+        "Q455234": "Gloria Foster",
+        "Q471839": "science fiction film",
+        "Q4882899": "Belinda McClory",
+        "Q622668": "Village Roadshow Pictures",
+        "Q6306950": "Julian Arahanga",
+        "Q862673": "Bill Young",
+        "Q944529": "Robert Taylor",
+        "Q9544977": "Lilly Wachowski",
+        "Q9545711": "Lana Wachowski"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q83495",
+      "lang": "en",
+      "title": "The Matrix",
+      "extract": "The Matrix is a 1999 science fiction–action film written and directed by the Wachowskis. The first installment in the Matrix film series, it stars Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss, Hugo Weaving, and Joe Pantoliano. The film follows a disillusioned computer hacker Neo (Reeves) who discovers that the life he knows is an elaborate deception created by intelligent machines. He is recruited by underground insurgents Morpheus (Fishburne) and Trinity (Moss), to join the rebellion against the machines.\nFollowing the success of the Wachowskis' 1996 film Bound, Warner Bros. gave the directing duo the go-ahead to make The Matrix. The film's action scenes were influenced by anime and martial arts films, particularly fight choreography and wire fu techniques from Hong Kong action cinema. Other influences include Plato's cave, 1990's Telnet hacker communities, and William Gibson's cyberpunk novel Neuromancer. The Matrix popularized terms such as the red pill, as well as a novel visual effect known as \"bullet time\" in which a character's heightened perception is represented by allowing the action within a shot to progress in slow motion while the camera appears to move through the scene at normal speed.\nThe Matrix was released in theaters in the United States on March 31, 1999, to widespread critical acclaim. Critics praised its innovative visual effects, action sequences, cinematography, and entertainment value. The film was a box office success, grossing over $460 million on a $63 million budget. It became the highest-grossing Warner Bros. film of 1999 and the fourth-highest-grossing film of that year. The Matrix received Academy Awards for Best Visual Effects, Best Film Editing, Best Sound and Best Sound Effects Editing. It was also the recipient of numerous other accolades, including Best Sound and Best Special Visual Effects at the 53rd British Academy Film Awards. The Wachowskis were awarded Best Director and Best Science Fiction Film at the 26th Saturn Awards.\nThe Matrix is considered to be among the greatest science fiction films of all time. In 2012, the Library of Congress selected it for preservation in the United States National Film Registry for being \"culturally, historically, and aesthetically significant\". The film's success led to two sequels by the Wachowskis, The Matrix Reloaded and The Matrix Revolutions, both released in 2003. The Matrix franchise was further expanded through the production of comic books, video games, and an animated anthology film, The Animatrix. The franchise has also inspired books and theories expanding on some of the religious and philosophical ideas alluded to in the films. A fourth film, The Matrix Resurrections, was directed by Lana Wachowski and was released in 2021.",
+      "url": "https://en.wikipedia.org/wiki/The_Matrix"
+    },
+    "wikipedia:es": {
+      "qid": "Q83495",
+      "lang": "es",
+      "title": "The Matrix",
+      "extract": "The Matrix (conocida como Matrix) es una película de acción y ciencia ficción de 1999 escrita y dirigida por las hermanas Wachowski y protagonizada por Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss y Hugo Weaving. Representa un futuro distópico en el que la humanidad está atrapada sin saberlo dentro de una realidad simulada llamada Matrix, que las máquinas inteligentes han creado para distraer a los humanos mientras usan sus cuerpos como fuente de energía en campos de cultivo.​ Cuando el programador informático Thomas Anderson, bajo el alias de hacker \"Neo\", descubre la incómoda verdad, se une a una rebelión contra las máquinas junto con otras personas que han sido liberadas de Matrix. Siendo estrenada en los Estados Unidos el 31 de marzo de 1999, es la primera entrega de la franquicia Matrix, de la que derivan (dado su éxito) una serie de videojuegos, cortos animados y cómics, llegando a ser un claro ejemplo del subgénero cyberpunk.\nEn su argumento, se establecen paralelismos con algunos conceptos religiosos, filosóficos e ideológicos. Además, esta obra significa un antes y un después en los efectos visuales de la época, entre los cuales se destaca el «tiempo bala» (bullet time), técnica que consiste en aparentar que se congela la acción mientras la cámara sigue moviéndose alrededor de la escena, un efecto visual que se consigue utilizando múltiples cámaras que graban la acción desde distintas posiciones a una cantidad elevada de fotogramas por segundo, y que posteriormente intercalan los fotogramas de cada una de las cámaras. Aunque es un efecto muy revolucionario, no fue la primera vez que hizo su aparición en el cine (anteriormente fue usado en películas como Jumanji, entre otras), pero fue con este filme cuando surgió un gran interés por este efecto, y que posteriormente fue utilizado en otras películas. El enfoque de las escenas de acción de las Wachowski fue influenciado por el anime japonés, las películas de artes marciales y el uso de la película de coreógrafos de lucha y técnicas de wire fu del cine de acción de Hong Kong.\nLa película, reconocida con cuatro Premios Óscar (Mejor montaje, Mejor sonido, Mejor edición de sonido y Mejores efectos visuales), se ha vuelto una cinta de culto y fue incluida en el National Film Registry de la Biblioteca del Congreso de Estados Unidos en 2012.​ El éxito de la película llevó al lanzamiento de dos secuelas cinematográficas en 2003, The Matrix Reloaded y The Matrix Revolutions, que también fueron escritas y dirigidas por las Wachowski. Una cuarta película, The Matrix Resurrections, se estrenó el 22 de diciembre de 2021.",
+      "url": "https://es.wikipedia.org/wiki/The_Matrix"
+    },
+    "wikipedia:pt": {
+      "qid": "Q83495",
+      "lang": "pt",
+      "title": "Matrix",
+      "extract": "The Matrix (bra/prt: Matrix) é um filme australo-estadunidense de 1999, dos gêneros ação e ficção científica, dirigido e escrito por Lilly e Lana Wachowski. Estrelado por Keanu Reeves, Laurence Fishburne e Carrie-Anne Moss, o filme retrata um futuro ciberpunk distópico no qual a realidade, como percebida pela maioria dos humanos, é, na verdade, uma realidade simulada por computador chamada \"Matrix\", criada por máquinas sencientes (evolução da inteligência artifical) para subjugar a população humana na forma de hibernação, enquanto o calor e a atividade elétrica de seus corpos são usados ​​como fonte de energia;  na história, o cibercriminoso e programador de computador Neo descobre este fato e é atraído para uma rebelião contra as máquinas, que envolve outras pessoas que foram libertadas do \"mundo dos sonhos\".\nMatrix é um exemplo do subgênero cyberpunk da ficção científica. A abordagem que as Wachowski empregaram para as suas cenas de ação foi influenciada pela animação japonesa e pelos filmes de artes marciais; seu uso de coreógrafos de luta para as cenas de luta e técnicas de wire fu do Cinema de ação de Hong Kong no filme influenciou as produções subsequentes de filmes de ação de Hollywood. O filme popularizou termos como \"pílula vermelha\" e introduziu um efeito visual conhecido como \"bullet time\", no qual a percepção intensificada de certos personagens é representada ao permitir a ação dentro de um plano para progredir em câmera lenta enquanto a câmera parece se mover pela cena em velocidade normal, permitindo que os movimentos acelerados de certos personagens sejam percebidos normalmente.\nO filme estreou nos cinemas dos Estados Unidos em 31 de março de 1999, recebendo grande aclamação da crítica, que elogiou seus efeitos visuais inovadores, sequências de ação, cinematografia e valor de entretenimento, se tornando um grande sucesso de bilheteria, arrecadando mais de 460 milhões de dólares contra um orçamento estimado em 63 milhões (tornando-se o filme de maior receita da Warner Bros. de 1999 e a quarta maior bilheteria daquele ano). Durante a 72º cerimônia do Óscar, Matrix ganhou todas as quatro categorias para as quais foi indicado: Melhores Efeitos Visuais, Melhor Edição, Melhor Som e Melhor Edição de Som; o filme também recebeu vários outros prêmios, incluindo Melhor Som e Melhores Efeitos Visuais na 53º ceriômia do BAFTA, enquanto as Wachowski foram premiadas com o prêmio de Melhor Direção e Melhor Filme de Ficção Científica na 26ª edição do Prêmio Saturno. É frequentemente reconhecido como um dos maiores filmes de ficção científica de todos os tempos, sendo selecionado em 2012 para preservação no National Film Registry dos Estados Unidos pela Biblioteca do Congresso por ser \"culturalmente, historicamente e esteticamente significativo\".\nO sucesso do filme levou ao lançamento de duas sequências em longas-metragens em 2003, Matrix Reloaded e The Matrix Revolutions, que também foram escritas e dirigidas pelas Wachowski. A franquia Matrix foi expandida ainda mais por meio da produção de histórias em quadrinhos, videogames e um filme coletivo de animação, Animatrix, com o qual as Wachowski estiveram fortemente envolvidas; a franquia também originou livros e teorias expandindo algumas das ideias religiosas e filosóficas aludidas nos filmes. Um quarto filme, intitulado Matrix Resurrections, foi lançado em 22 de dezembro de 2021.",
+      "url": "https://pt.wikipedia.org/wiki/Matrix"
+    }
+  },
+  "tier": "top",
+  "type": "movie"
+}

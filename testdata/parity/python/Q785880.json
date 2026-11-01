@@ -1,0 +1,52 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0477928",
+      "rottentomatoes": "m/new_women_1934",
+      "tmdb": "150314"
+    },
+    "meta": {
+      "countries": [
+        "Republic of China"
+      ],
+      "creators": [
+        "Cai Chusheng"
+      ],
+      "genres": [
+        "drama film",
+        "silent film"
+      ],
+      "runtimeMinutes": 106
+    },
+    "popularity": 8.0,
+    "qid": "Q785880",
+    "release_date": "1935-02-02",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "New Women (Chinese: 新女性; pinyin: Xīn nǚxìng) is a 1935 Chinese silent drama film produced by the United Photoplay Service. It is sometimes translated as New Woman. The film starred Ruan Lingyu (in her penultimate film) and was directed by Cai Chusheng. This film became one of Ruan Lingyu's better-known works. Her suicide on International Women's Day (8 March 1935) drew attention to the controversial status of new women and made this film a sensation in modern China.\nNew Women was considered to be a \"problem film\" in inciting \"the woman question\" (妇女问题, fùnü wèntí). It offered criticism to the traditional gender ideology and offered China a change from \"old women\" to \"new women\" as an alternative social convention.\nNew Women was based upon the life of Chinese actress and writer, Ai Xia, who had committed suicide in 1934. Ai Xia's death following her role in A Modern Woman (1933) inspired Cai Chusheng to emulate the tragedy in this film.\nA print of New Women is currently maintained by the China Film Archive.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/New_Women",
+        "title": "New Women"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Nova Mulher"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Nuevas mujeres​ (en chino: 新女性 pinyin:  Xīn nǚxìng) es una película muda china estrenada en Shanghái por la Lianhua Film Company en 1935. Conocida también bajo el título internacional de New Women, la película fue protagonizada por Ruan Lingyu (en su penúltima película) y estuvo dirigida por Cai Chusheng.​\nNuevas mujeres se basa en la vida de otra actriz china, Ai Xia, quien se había suicidado en 1934.​ La película es uno de los papeles más conocidos de Ruan Lingyu, en buena medida debido a su suicidio poco después del estreno del film.\nUna copia de la película se conserva en la actualidad en el Archivo de Películas de China.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Nuevas_mujeres",
+        "title": "Nuevas mujeres"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q785880",
+  "slug": "new-women"
+}

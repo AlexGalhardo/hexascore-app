@@ -1,10 +1,13 @@
 import { Head, Link, useForm } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
 
+import AuthFrame, { authLink, GoogleButton, OrRule } from "../../components/auth/AuthFrame";
 import ChallengeStatus from "../../components/ChallengeStatus";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
 import SubmitButton from "../../components/SubmitButton";
+import { useTurnstile } from "../../components/Turnstile";
+import { btnClass } from "../../components/ui/Btn";
 import { challengeHeaders } from "../../lib/challenge";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
@@ -56,12 +59,12 @@ export function PasskeySignIn(): React.ReactElement {
 			<button
 				type="button"
 				onClick={() => void signIn()}
-				className="rounded-md border border-zinc-300 px-4 py-2 font-medium hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
+				className={btnClass("secondary", "w-full")}
 			>
 				{t("auth.passkey")}
 			</button>
 			{failed && (
-				<p role="alert" className="mt-2 text-sm text-red-600">
+				<p role="alert" className="mt-2 text-sm text-danger">
 					{t("auth.errors.passkeyFailed")}
 				</p>
 			)}
@@ -74,20 +77,36 @@ export default function Login() {
 	const l = useLocalized();
 	const form = useForm({ identifier: "", password: "", remember: false });
 	const [checking, setChecking] = useState(false);
+	const turnstile = useTurnstile("login");
 
 	const submit = async (e: FormEvent) => {
 		e.preventDefault();
-		const headers = await challengeHeaders("login", setChecking);
-		form.post(l("/login"), { headers, onFinish: () => form.reset("password") });
+		const headers = {
+			...(await challengeHeaders("login", setChecking)),
+			...turnstile.headers(),
+		};
+		form.post(l("/login"), {
+			headers,
+			onFinish: () => {
+				form.reset("password");
+				turnstile.reset();
+			},
+		});
 	};
 
 	return (
-		<>
+		<AuthFrame
+			heading={t("auth.login.heading")}
+			lede={t("auth.login.lede")}
+			title={t("auth.login.title")}
+		>
 			<Head title={t("auth.login.metaTitle")} />
-			<h1 className="mb-4 text-2xl font-semibold">{t("auth.login.title")}</h1>
-			<form method="post" action={l("/login")} onSubmit={submit} className="space-y-4">
+			<GoogleButton mode="signIn" />
+			<OrRule />
+			<form method="post" action={l("/login")} onSubmit={submit} className="space-y-5">
 				<Field
 					label={t("auth.fields.identifier")}
+					name="identifier"
 					autoComplete="username"
 					required
 					value={form.data.identifier}
@@ -104,34 +123,35 @@ export default function Login() {
 					onChange={(value) => form.setData("password", value)}
 					error={form.errors.password}
 				/>
-				<label className="flex items-center gap-2">
-					<input
-						type="checkbox"
-						checked={form.data.remember}
-						onChange={(e) => form.setData("remember", e.target.checked)}
-					/>
-					{t("auth.login.rememberMe")}
-				</label>
-				<SubmitButton pending={form.processing || checking}>
+				<div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-1">
+					<label className="flex min-h-11 items-center gap-2.5">
+						<input
+							type="checkbox"
+							name="remember"
+							value="true"
+							checked={form.data.remember}
+							onChange={(e) => form.setData("remember", e.target.checked)}
+							className="size-5 accent-fg"
+						/>
+						{t("auth.login.rememberMe")}
+					</label>
+					<Link href={l("/recover-password")} className={`${authLink} text-sm`}>
+						{t("auth.login.forgot")}
+					</Link>
+				</div>
+				{turnstile.render((form.errors as Record<string, string | undefined>).challenge)}
+				<SubmitButton pending={form.processing || checking} className="w-full">
 					{t("auth.login.submit")}
 				</SubmitButton>
 				<ChallengeStatus checking={checking} />
 			</form>
-			<p className="mt-6 flex gap-4 text-sm">
-				<Link
-					href="/recover-password"
-					className="text-indigo-600 hover:underline dark:text-indigo-400"
-				>
-					{t("auth.login.forgot")}
-				</Link>
-				<Link
-					href="/signup"
-					className="text-indigo-600 hover:underline dark:text-indigo-400"
-				>
+			<PasskeySignIn />
+			<p className="mt-8 text-muted">
+				{t("auth.login.newHere")}{" "}
+				<Link href={l("/signup")} className={authLink}>
 					{t("auth.login.createAccount")}
 				</Link>
 			</p>
-			<PasskeySignIn />
-		</>
+		</AuthFrame>
 	);
 }

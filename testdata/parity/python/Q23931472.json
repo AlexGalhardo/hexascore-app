@@ -1,0 +1,53 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt5776052",
+      "rottentomatoes": "tv/kamen_rider_amazons",
+      "tmdb": "100659"
+    },
+    "meta": {
+      "countries": [
+        "Japan"
+      ],
+      "creators": [
+        "Shōtarō Ishinomori"
+      ],
+      "episodes": 13,
+      "genres": [
+        "tokusatsu",
+        "biopunk"
+      ],
+      "seasons": 2
+    },
+    "popularity": 8.0,
+    "qid": "Q23931472",
+    "release_date": "2016-04-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Kamen Rider Amazons (仮面ライダーアマゾンズ, Kamen Raidā Amazonzu), known outside Japan as Amazon Riders,  is a 2016 Japanese superhero tokusatsu web drama. It is a darker and more mature reimagining of the 1974 television series Kamen Rider Amazon, and part of Toei's Super Hero Year, celebrating the 45th anniversary of the Kamen Rider Series (and the 40th series of Super Sentai). Amazon Riders was originally exclusively released through Amazon Video in Japan starting April 1, 2016. It was also broadcast on television on BS Asahi (TV Asahi's broadcast satellite channel) starting July 3, 2016, and Tokyo MX starting July 6, 2016. In a similar vein as the reboot films based on the Shōwa era series, Kamen Rider: The First & Kamen Rider: The Next, Kamen Rider Amazons takes place in an alternate universe separate from the main series timeline.\nThe second season was announced on May 31, 2016, that it will be released in spring 2017 on Amazon Prime. The second season is titled Kamen Rider Amazons Season 2 (仮面ライダーアマゾンズ Season 2, Kamen Raidā Amazonzu Shīzun Tsū) and was exclusively released through Amazon Video in Japan starting April 7, 2017.\nPlans to release season one in international markets such as the United States, the United Kingdom, and Germany were announced in 2016. An English subtitled version of the first season launched on Amazon Prime on April 19, 2018 with Season 2 launching on September 21, 2018.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Kamen_Rider_Amazons",
+        "title": "Kamen Rider Amazons"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Kamen Rider Amazons"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Kamen Rider Amazons (仮面ライダーアマゾンズ, Kamen Raidā Amazonzu?) es una serie web japonesa de género tokusatsu, inspirada libremente en la serie de televisión de 1974 Kamen Rider Amazon, que se produjo como celebración del Toei's Super Hero Year, que celebra el 45.º aniversario de la franquicia Kamen Rider y el 40.º de la franquicia Super Sentai Series. Originalmente, Kamen Rider Amazons se estrenó exclusivamente en Amazon Video en Japón el 1 de abril de 2016.​​ Después se emitió en televisión por BS Asahi, el canal de TV Asahi vía satélite, desde el 3 de julio de 2016; y en Tokyo MX desde el 6 de julio de 2016.​​\t\nDebido a su buena aceptación una segunda temporada se anunció el 31 de mayo de 2016, y se estrenó en primavera de 2017 en Amazon Prime.​ Hay planes de publicar en el futuro la primera temporada en mercados internacionales, como Estados Unidos, Reino Unido y Alemania.​\nUna película se estrenó el 19 de mayo de 2018, sirviendo como capítulo final de la historia.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Kamen_Rider_Amazons",
+        "title": "Kamen Rider Amazons"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q23931472",
+  "slug": "kamen-rider-amazons"
+}

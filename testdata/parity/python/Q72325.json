@@ -1,0 +1,51 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0095468",
+      "rottentomatoes": "m/a_short_film_about_killing",
+      "tmdb": "10754"
+    },
+    "meta": {
+      "countries": [
+        "Poland"
+      ],
+      "creators": [
+        "Krzysztof Kieślowski"
+      ],
+      "genres": [
+        "drama film"
+      ],
+      "runtimeMinutes": 84
+    },
+    "popularity": 35.0,
+    "qid": "Q72325",
+    "release_date": "1988-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "A Short Film About Killing (Polish: Krótki film o zabijaniu) is a 1988 psychological crime tragedy film directed by Krzysztof Kieślowski and starring Mirosław Baka, Krzysztof Globisz, and Jan Tesarz. Written by Krzysztof Kieślowski and Krzysztof Piesiewicz, the film was expanded from Dekalog: Five of the Polish television series Dekalog. Set in Warsaw, Poland, the film compares the senseless, violent murder of an individual to the cold, calculated execution by the state. A Short Film About Killing won both the Jury Prize and the FIPRESCI Prize at the 1988 Cannes Film Festival, as well as the European Film Award for Best Film.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/A_Short_Film_About_Killing",
+        "title": "A Short Film About Killing"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Krótki film o zabijaniu (bra: Não Matarás; prt: Breve Filme sobre o Acto de Matar) é um filme de drama polonês de 1988 dirigido por Krzysztof Kieślowski e escrito por Kieślowski e Krzysztof Piesiewicz. Estrelado por Mirosław Baka, Krzysztof Globisz e Jan Tesarz, completa a sequência Krótki film o miłości.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Kr%C3%B3tki_film_o_zabijaniu",
+        "title": "Krótki film o zabijaniu"
+      },
+      {
+        "locale": "es",
+        "synopsis": "No matarás (título original en polaco: Krótki film o zabijaniu, 'Un cortometraje sobre la matanza') es la versión fílmica ampliada del quinto episodio del drama psicológico para la televisión compuesto de diez episodios llamado Dekalog ('El decálogo'), del director polaco Krzysztof Kieślowski, de 1988.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/No_matar%C3%A1s_(pel%C3%ADcula_de_1988)",
+        "title": "No matarás"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q72325",
+  "slug": "a-short-film-about-killing"
+}

@@ -1,0 +1,298 @@
+import { Link, router, usePage } from "@inertiajs/react";
+import { type FormEvent, useState } from "react";
+import FieldEditor from "../../components/community/FieldEditor";
+import { asText, editable, fieldLabel } from "../../components/community/fields";
+import ItemPicker from "../../components/community/ItemPicker";
+import Seo from "../../components/Seo";
+import { useLocalized } from "../../lib/useLocalized";
+import { useT } from "../../lib/useT";
+
+interface Draft {
+	id: string;
+	version: number;
+	locale: string;
+	note: string;
+	sourceUrls: string[];
+	changes: Record<string, { before?: unknown; after?: unknown }>;
+}
+
+interface Props {
+	open: boolean;
+	domain?: string;
+	kind?: "create" | "merge";
+	target?: "item" | "entity" | "edition";
+	fields?: string[];
+	quota?: { limit: number; used: number; left: number };
+	draft?: Draft | null;
+}
+
+const entityKinds = ["person", "organization", "franchise", "platform", "genre"];
+
+const inputClass =
+	"mt-1 block w-full rounded-md border border-zinc-300 bg-transparent px-3 py-2 dark:border-zinc-700";
+
+export default function SuggestCreate({
+	open,
+	domain = "",
+	kind = "create",
+	target = "item",
+	fields = [],
+	quota,
+	draft,
+}: Props) {
+	const t = useT();
+	const l = useLocalized();
+	const { errors } = usePage<{ errors?: Record<string, string> }>().props;
+	const [edits, setEdits] = useState<Record<string, string>>(() =>
+		Object.fromEntries(
+			Object.entries(draft?.changes ?? {}).map(([k, c]) => [k, asText(c.after)]),
+		),
+	);
+	const [sourceId, setSourceId] = useState(asText(draft?.changes["*merge*"]?.before));
+	const [destId, setDestId] = useState(asText(draft?.changes["*merge*"]?.after));
+	const [sourceTitle, setSourceTitle] = useState("");
+	const [destTitle, setDestTitle] = useState("");
+	const [workTitle, setWorkTitle] = useState("");
+	const [locale, setLocale] = useState(draft?.locale ?? "en");
+	const [note, setNote] = useState(draft?.note ?? "");
+	const [urls, setUrls] = useState((draft?.sourceUrls ?? []).join("\n"));
+	const [website, setWebsite] = useState("");
+
+	if (!open) {
+		return (
+			<>
+				<Seo title={t("community.create.title")} noindex />
+				<h1 className="text-2xl font-semibold">{t("community.closed.title")}</h1>
+				<p className="mt-2">{t("community.closed.body")}</p>
+			</>
+		);
+	}
+
+	const submit = (e: FormEvent) => {
+		e.preventDefault();
+		const changes: Record<string, { before: string | null; after: string }> = {};
+		if (kind === "merge") {
+			changes["*merge*"] = { before: sourceId.trim(), after: destId.trim() };
+		} else {
+			for (const [f, after] of Object.entries(edits)) {
+				if (after.trim() !== "") changes[f] = { before: null, after };
+			}
+		}
+		const body = {
+			kind,
+			domain,
+			targetKind: kind === "merge" ? "item" : target,
+			targetId: kind === "merge" ? sourceId.trim() : "",
+			version: draft?.version ?? 0,
+			locale,
+			note,
+			sourceUrls: urls
+				.split("\n")
+				.map((u) => u.trim())
+				.filter(Boolean),
+			changes,
+			website,
+		};
+		if (draft) router.patch(l(`/suggestions/${draft.id}`), body, { preserveScroll: true });
+		else router.post(l("/suggestions"), body, { preserveScroll: true });
+	};
+
+	const errorList = Object.entries(errors ?? {});
+	const setEdit = (f: string, v: string) => setEdits((prev) => ({ ...prev, [f]: v }));
+	const has = (f: string) => fields.includes(f);
+	const missing =
+		kind === "merge"
+			? sourceId === "" || destId === ""
+			: ["entity_kind", "work_id", "language"].some(
+					(f) => has(f) && !(edits[f] ?? "").trim(),
+				);
+	const targets = domain === "book" ? ["item", "entity", "edition"] : ["item", "entity"];
+	const tab = (k: "create" | "merge", text: string) => (
+		<Link
+			href={l(`/suggest/new/${domain}?kind=${k}`)}
+			aria-current={kind === k ? "page" : undefined}
+			className={`rounded-md border px-3 py-1 text-sm ${kind === k ? "border-text font-medium" : "border-border"}`}
+		>
+			{text}
+		</Link>
+	);
+
+	return (
+		<>
+			<Seo title={t("community.create.title")} noindex />
+			<h1 className="text-2xl font-semibold">{t("community.create.title")}</h1>
+			<nav aria-label={t("community.create.title")} className="mt-3 flex gap-2">
+				{tab("create", t("community.create.newRecord"))}
+				{tab("merge", t("community.create.reportDuplicate"))}
+			</nav>
+			{kind === "create" && (
+				<nav aria-label={t("community.create.targets.label")} className="mt-3 flex gap-2">
+					{targets.map((k) => (
+						<Link
+							key={k}
+							href={l(`/suggest/new/${domain}?kind=create&target=${k}`)}
+							aria-current={target === k ? "page" : undefined}
+							className={`rounded-md border px-3 py-1 text-sm ${target === k ? "border-text font-medium" : "border-border"}`}
+						>
+							{t(`community.create.targets.${k}`)}
+						</Link>
+					))}
+				</nav>
+			)}
+			{quota && (
+				<p data-testid="quota-left" className="mt-2 text-sm text-muted">
+					{t("community.quota", { left: quota.left, limit: quota.limit })}
+				</p>
+			)}
+			{draft && <p className="mt-1 text-sm">{t("community.draftRestored")}</p>}
+			{errorList.length > 0 && (
+				<ul role="alert" className="mt-3 text-sm text-red-700 dark:text-red-400">
+					{errorList.map(([f, m]) => (
+						<li key={f}>
+							{f}: {m}
+						</li>
+					))}
+				</ul>
+			)}
+			<form onSubmit={submit} className="mt-4 max-w-xl space-y-4">
+				{kind === "merge" ? (
+					<>
+						<p className="text-sm">{t("community.create.mergeHelp", { domain })}</p>
+						<ItemPicker
+							label={t("community.create.mergeSource")}
+							domain={domain}
+							id={sourceId}
+							title={sourceTitle}
+							changeLabel={t("community.create.change")}
+							onPick={(id, title) => {
+								setSourceId(id);
+								setSourceTitle(title);
+							}}
+						/>
+						<ItemPicker
+							label={t("community.create.mergeDest")}
+							domain={domain}
+							id={destId}
+							title={destTitle}
+							changeLabel={t("community.create.change")}
+							onPick={(id, title) => {
+								setDestId(id);
+								setDestTitle(title);
+							}}
+						/>
+					</>
+				) : (
+					<>
+						{fields.filter(editable).map((f) => (
+							<FieldEditor
+								key={f}
+								label={f === "title" ? `${fieldLabel(t, f)} *` : fieldLabel(t, f)}
+								current=""
+								value={edits[f] ?? ""}
+								multiline={f.startsWith("synopsis.")}
+								lockedLabel={t("community.locked")}
+								onChange={(v) => setEdit(f, v)}
+							/>
+						))}
+						{has("entity_kind") && (
+							<label className="block">
+								<span className="font-medium">{`${fieldLabel(t, "entity_kind")} *`}</span>
+								<select
+									value={edits.entity_kind ?? ""}
+									onChange={(e) => setEdit("entity_kind", e.target.value)}
+									className={inputClass}
+								>
+									<option value="">{t("community.create.choose")}</option>
+									{entityKinds.map((k) => (
+										<option key={k} value={k}>
+											{t(`community.entityKinds.${k}`)}
+										</option>
+									))}
+								</select>
+							</label>
+						)}
+						{has("work_id") && (
+							<ItemPicker
+								label={`${fieldLabel(t, "work_id")} *`}
+								domain="book"
+								id={edits.work_id ?? ""}
+								title={workTitle}
+								changeLabel={t("community.create.change")}
+								onPick={(id, title) => {
+									setEdit("work_id", id);
+									setWorkTitle(title);
+								}}
+							/>
+						)}
+						{has("language") && (
+							<label className="block">
+								<span className="font-medium">{`${fieldLabel(t, "language")} *`}</span>
+								<input
+									value={edits.language ?? ""}
+									onChange={(e) => setEdit("language", e.target.value)}
+									placeholder="en, pt-BR"
+									pattern="[a-z]{2,3}(-[A-Z]{2})?"
+									maxLength={6}
+									className={inputClass}
+								/>
+							</label>
+						)}
+					</>
+				)}
+				<label className="block">
+					<span className="font-medium">{t("community.locale")}</span>
+					<select
+						value={locale}
+						onChange={(e) => setLocale(e.target.value)}
+						className="mt-1 block rounded-md border border-zinc-300 bg-transparent px-3 py-2 dark:border-zinc-700"
+					>
+						{["en", "pt-BR", "es"].map((l) => (
+							<option key={l} value={l}>
+								{l}
+							</option>
+						))}
+					</select>
+				</label>
+				<label className="block">
+					<span className="font-medium">{t("community.sources")}</span>
+					<textarea
+						value={urls}
+						onChange={(e) => setUrls(e.target.value)}
+						rows={3}
+						className={inputClass}
+					/>
+				</label>
+				<label className="block">
+					<span className="font-medium">{t("community.note")}</span>
+					<textarea
+						value={note}
+						onChange={(e) => setNote(e.target.value)}
+						rows={3}
+						maxLength={1000}
+						className={inputClass}
+					/>
+				</label>
+				<div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+					<label>
+						website
+						<input
+							type="text"
+							name="website"
+							tabIndex={-1}
+							autoComplete="off"
+							value={website}
+							onChange={(e) => setWebsite(e.target.value)}
+						/>
+					</label>
+				</div>
+				<button
+					type="submit"
+					disabled={missing}
+					className="rounded-md border border-border px-3 py-1 text-sm disabled:opacity-60"
+				>
+					{t("community.saveDraft")}
+				</button>
+			</form>
+		</>
+	);
+}

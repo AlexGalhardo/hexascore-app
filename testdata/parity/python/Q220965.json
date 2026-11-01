@@ -1,0 +1,59 @@
+{
+  "item": {
+    "external_ids": {
+      "gog": "game/heroes_of_might_and_magic_3_complete_edition",
+      "hltb": "4425",
+      "igdb": "heroes-of-might-and-magic-iii-complete",
+      "imdb": "tt0379311",
+      "steam": "4921760"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "New World Computing"
+      ],
+      "genres": [
+        "turn-based strategy video game"
+      ],
+      "platforms": [
+        "Linux",
+        "Microsoft Windows",
+        "Android",
+        "iOS",
+        "Classic Mac OS"
+      ]
+    },
+    "popularity": 34.0,
+    "qid": "Q220965",
+    "release_date": "1999-02-28",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Heroes of Might and Magic III: The Restoration of Erathia (commonly referred to as Heroes of Might and Magic 3, or Heroes 3, or abbreviated HoMM 3) is a turn-based strategy game, developed by Jon Van Caneghem through New World Computing and originally released for Microsoft Windows by The 3DO Company in 1999.\nAs the third installment of the Heroes of Might and Magic series, the game was released to universal acclaim and commercial success, becoming a defining classic of the turn-based strategy genre. It received two major official expansion packs, Armageddon's Blade and The Shadow of Death, which were packaged together in 2000 as Heroes of Might and Magic III Complete.\nIn 2026, Heroes of Might and Magic III Remake was announced, set to release in 2027 on PlayStation 5, Xbox Series X/S and Windows.\nHeroes III receives continued unofficial support through community modding projects, notably the 2011 Horn of the Abyss expansion.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Heroes_of_Might_and_Magic_III",
+        "title": "Heroes of Might and Magic III: The Restoration of Erathia"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Heroes of Might and Magic III"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Heroes of Might and Magic III: The Restoration of Erathia (también conocido como Heroes III y HoMM3) es un videojuego de estrategia por turnos desarrollado por New World Computing y publicado por the 3DO Company. Salió a la venta el 28 de febrero de 1999 para Microsoft Windows, el 20 de diciembre para Linux y el 21 para Macintosh. El videojuego contó con las expansiones Armageddon's Blade (1999) y The Shadow of Death (2000). Tras la adquisición de la propiedad intelectual por parte de Ubisoft, la empresa lanzó en 2015 la «versión HD» para Microsoft Windows, iOS y Android, con gráficos renovados y compatibilidad con pantalla ancha. No obstante, no incluyó las expansiones por la pérdida de su código fuente.\nEl jugador puede optar por jugar a través de siete campañas diferentes que cuentan la historia del videojuego, o jugar en un escenario contra personas o la inteligencia artificial. La jugabilidad es similar a la de sus predecesores, donde el jugador controla a un número de héroes que comandan un ejército de criaturas inspiradas en mitos y leyendas. El modo de juego está dividido en dos secciones, la exploración táctica por tierra y un sistema de combate por turnos. El jugador crea un ejército utilizando recursos y desarrolla ciudades en uno de los ocho tipos de facciones. El héroe también adquiere experiencia a medida que entra en combate con monstruos y héroes enemigos. Las condiciones de victoria varían dependiendo del mapa, incluyendo la conquista y captura de todas las facciones y enemigos, recolección de una cierta cantidad de recursos, o encontrar el artefacto grial.\nEl título se desarrolló bajo la dirección de David Mullich. El proyecto comenzó en septiembre de 1997 con un equipo de unas treinta personas y un plazo de catorce meses, reutilizando el motor de la entrega anterior. Mientras Jon Van Caneghem y Greg Fulton se enfocaron en el diseño y el equilibrio de las mecánicas, Mullich lideró una profunda renovación artística, impulsando una estética más oscura y refinada inspirada en la fantasía clásica. En paralelo, el equipo amplió el apartado técnico y añadió nuevas características jugables. La banda sonora, compuesta por Paul Romero junto a Rob King y Steve Baca, adoptó un lenguaje orquestal de inspiración romántica. La música se convirtió en uno de los elementos más reconocidos del juego y ha trascendido su lanzamiento a través de conciertos, reinterpretaciones sinfónicas y ediciones remasterizadas.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Heroes_of_Might_and_Magic_III",
+        "title": "Heroes of Might and Magic III"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q220965",
+  "slug": "heroes-of-might-and-magic-iii-the-restoration-of-erathia"
+}

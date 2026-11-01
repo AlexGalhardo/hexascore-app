@@ -1,11 +1,23 @@
 import { Link, usePage } from "@inertiajs/react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
 import { LOCALE_PREFIXES, localized, unlocalized } from "../lib/route";
 import { useT } from "../lib/useT";
 import type { SharedProps } from "../types";
-import SuggestBox from "./search/SuggestBox";
+import Dropdown from "./ui/Dropdown";
+
+// Loaded on first open: keeps the palette and the query hooks off the first-load script.
+const SearchPalette = lazy(() => import("./search/SearchPalette"));
+// Same for the mobile menu sheet: the Base UI dialog chunk is ~21 KB on the wire.
+const NavSheet = lazy(() => import("./NavSheet"));
 
 const LOCALE_LABELS: Record<string, string> = { en: "EN", "pt-BR": "PT", es: "ES" };
+// Endonyms: each language is named in itself, identical in every locale.
+const LOCALE_NAMES: Record<string, string> = {
+	en: "English",
+	"pt-BR": "Português (Brasil)",
+	es: "Español",
+};
 const SECTIONS = [
 	["games", "nav.games", "text-accent-game"],
 	["movies", "nav.movies", "text-accent-movie"],
@@ -13,14 +25,10 @@ const SECTIONS = [
 	["books", "nav.books", "text-accent-book"],
 ] as const;
 
-const item =
-	"inline-flex min-h-11 items-center rounded-md px-2 hover:text-accent-game focus-visible:outline-2 focus-visible:outline-offset-2";
-const iconButton =
-	"inline-flex size-11 items-center justify-center rounded-md hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2";
-const menuItem =
-	"flex min-h-11 w-full items-center gap-2 rounded-md px-3 text-left hover:bg-surface focus-visible:outline-2";
-const menuPanel =
-	"absolute right-0 z-40 mt-1 w-64 rounded-lg border border-border bg-bg p-2 shadow-lg";
+const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
+const item = `inline-flex min-h-11 items-center rounded-xs hover:text-primary ${focus}`;
+export const iconButton = `inline-flex size-11 shrink-0 items-center justify-center rounded-xs hover:bg-hover ${focus}`;
+const menuItem = `flex min-h-11 w-full items-center gap-2.5 px-3 text-left text-[15px] hover:bg-hover ${focus}`;
 
 function setCookie(name: string, value: string) {
 	// biome-ignore lint/suspicious/noDocumentCookie: a plain preference cookie, read server-side
@@ -39,19 +47,51 @@ export function toggleTheme() {
 	}
 }
 
-// Inline icons from the SDD 09 §7.5 set; the label lives in aria-label or next to the icon.
-function Icon({ name }: { name: "theme" | "bell" | "user" | "menu" }) {
-	const paths: Record<typeof name, string> = {
-		theme: "M12 3a9 9 0 1 0 0 18V3z",
-		bell: "M6 16V11a6 6 0 1 1 12 0v5l2 2H4l2-2zm4 4h4",
-		user: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm-7 8a7 7 0 0 1 14 0",
-		menu: "M4 7h16M4 12h16M4 17h16",
-	};
+const ICONS = {
+	search: "M11 4a7 7 0 1 0 0 14a7 7 0 1 0 0-14 M16 16 L21 21",
+	moon: "M20 14.5 A8.5 8.5 0 1 1 9.5 4 A7 7 0 0 0 20 14.5 Z",
+	sun: "M12 8 a4 4 0 1 0 0 8 a4 4 0 1 0 0-8 M12 2 V4.5 M12 19.5 V22 M2 12 H4.5 M19.5 12 H22 M4.9 4.9 L6.7 6.7 M17.3 17.3 L19.1 19.1 M4.9 19.1 L6.7 17.3 M17.3 6.7 L19.1 4.9",
+	bell: "M6 16 V11 a6 6 0 0 1 12 0 V16 L19.5 18 H4.5 Z M10 20.5 a2 2 0 0 0 4 0",
+	menu: "M4 7 H20 M4 12 H20 M4 17 H20",
+	down: "M6 9 L12 15 L18 9",
+	check: "M5 12 L10 17 L19 7",
+	close: "M6 6 L18 18 M18 6 L6 18",
+} as const;
+
+// Icons from the v1 set; the label lives in aria-label or next to the icon.
+export function Icon({
+	name,
+	className = "size-5",
+}: {
+	name: keyof typeof ICONS;
+	className?: string;
+}) {
 	return (
-		<svg aria-hidden="true" viewBox="0 0 24 24" className="size-5" fill="none">
-			<path d={paths[name]} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+		<svg aria-hidden="true" viewBox="0 0 24 24" className={className} fill="none">
+			<path d={ICONS[name]} stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
 		</svg>
 	);
+}
+
+/** True once the page has scrolled, for the shadow under the fixed navbar. */
+function useScrolled(): boolean {
+	const [scrolled, setScrolled] = useState(false);
+	useEffect(() => {
+		const onScroll = () => setScrolled(window.scrollY > 0);
+		onScroll();
+		window.addEventListener("scroll", onScroll, { passive: true });
+		return () => window.removeEventListener("scroll", onScroll);
+	}, []);
+	return scrolled;
+}
+
+/** "⌘K" on Apple platforms, "Ctrl K" elsewhere; the server always renders "Ctrl K". */
+function useShortcutHint(): string {
+	const [hint, setHint] = useState("Ctrl K");
+	useEffect(() => {
+		if (/Mac|iPhone|iPad/.test(navigator.platform)) setHint("⌘K");
+	}, []);
+	return hint;
 }
 
 export default function Nav() {
@@ -59,11 +99,66 @@ export default function Nav() {
 	const page = usePage<SharedProps>();
 	const { auth, locale, unreadNotifications: unread = 0 } = page.props;
 	const user = auth?.user;
+	const feedHref = user && page.props.flags?.social ? localized("/feed", locale) : null;
 	const here = unlocalized(page.url);
 	const unreadLabel = unread > 99 ? "99+" : String(unread);
+	const scrolled = useScrolled();
+	const hint = useShortcutHint();
+	const searchHref = localized("/search", locale);
+	const [paletteOpen, setPaletteOpen] = useState(false);
+	const [paletteMounted, setPaletteMounted] = useState(false);
+	if (paletteOpen && !paletteMounted) setPaletteMounted(true);
+	const searchTrigger = useRef<HTMLAnchorElement>(null);
+	const [menuOpen, setMenuOpen] = useState(false);
+	// Mounted on intent (pointerdown/focus on the hamburger) or on open, so the chunk is usually there by the click.
+	const [sheetMounted, setSheetMounted] = useState(false);
+	if (menuOpen && !sheetMounted) setSheetMounted(true);
+	const burger = useRef<HTMLButtonElement>(null);
+	const sheet = useRef<HTMLDivElement>(null);
+	const unreadBadge = unread > 0 && (
+		<span className="absolute top-1 right-0 min-w-5 rounded-full bg-primary px-1 text-center text-[10px] font-bold leading-[18px] text-on-primary tabular-nums">
+			{unreadLabel}
+		</span>
+	);
 
-	const localeLinks = (
-		<ul aria-label={t("nav.language")} className="flex items-center gap-1">
+	useEffect(() => {
+		const onKey = (e: KeyboardEvent) => {
+			if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+				e.preventDefault();
+				setPaletteOpen(true);
+			}
+		};
+		document.addEventListener("keydown", onKey);
+		return () => document.removeEventListener("keydown", onKey);
+	}, []);
+
+	// Base UI's focus guards and initial focus move focus in a requestAnimationFrame, so a Tab
+	// handled before the next frame (keys right after opening, a busy main thread) reached the
+	// page behind the sheet. Wrapping synchronously keeps focus inside on every keypress.
+	useEffect(() => {
+		if (!menuOpen) return;
+		const onKey = (e: KeyboardEvent) => {
+			const root = sheet.current;
+			if (!root) {
+				// The sheet chunk is still loading: hold focus on the hamburger and let Escape cancel.
+				if (e.key === "Tab") e.preventDefault();
+				if (e.key === "Escape") setMenuOpen(false);
+				return;
+			}
+			if (e.key !== "Tab") return;
+			const items = [...root.querySelectorAll<HTMLElement>("a[href],button:not([disabled])")];
+			const active = document.activeElement;
+			if (!root.contains(active) || active === (e.shiftKey ? items[0] : items.at(-1))) {
+				e.preventDefault();
+				(e.shiftKey ? items.at(-1) : items[0])?.focus();
+			}
+		};
+		document.addEventListener("keydown", onKey);
+		return () => document.removeEventListener("keydown", onKey);
+	}, [menuOpen]);
+
+	const languageList = (
+		<ul aria-label={t("nav.language")}>
 			{Object.keys(LOCALE_PREFIXES).map((code) => (
 				<li key={code}>
 					<Link
@@ -72,48 +167,165 @@ export default function Nav() {
 						lang={code}
 						aria-current={code === locale ? "true" : undefined}
 						onClick={() => setCookie("locale", code)}
-						className={`${item} text-sm ${code === locale ? "font-semibold underline" : "text-muted"}`}
+						className={`${menuItem} ${code === locale ? "bg-hover font-bold" : ""}`}
 					>
-						{LOCALE_LABELS[code]}
+						<span className="size-4 text-primary">
+							{code === locale && <Icon name="check" className="size-4" />}
+						</span>
+						<span className="flex-1">{LOCALE_NAMES[code]}</span>
+						<span className="text-xs text-muted">{LOCALE_LABELS[code]}</span>
 					</Link>
 				</li>
 			))}
 		</ul>
 	);
 
+	const accountLinks = user && (
+		<>
+			<Link href={localized("/library", locale)} className={menuItem}>
+				{t("nav.library")}
+			</Link>
+			<Link href={localized("/lists", locale)} className={menuItem}>
+				{t("nav.lists")}
+			</Link>
+			{user.nickname && (
+				<Link
+					href={localized(`/u/${user.nickname.toLowerCase()}`, locale)}
+					className={menuItem}
+				>
+					{t("nav.publicProfile")}
+				</Link>
+			)}
+			<Link href="/profile" className={menuItem}>
+				{t("nav.profile")}
+			</Link>
+			<Link href="/profile/api" className={menuItem}>
+				{t("nav.api")}
+			</Link>
+			{user.role === "admin" && (
+				<Link href="/admin" className={menuItem}>
+					{t("nav.admin")}
+				</Link>
+			)}
+			<div className="my-1 border-t border-border" />
+			<Link href="/logout" method="post" as="button" className={menuItem}>
+				{t("nav.logout")}
+			</Link>
+		</>
+	);
+
+	const guestLinks = (
+		<>
+			<Link href={localized("/signup", locale)} className={menuItem}>
+				{t("auth.signup.title")}
+			</Link>
+			<Link href={localized("/pricing", locale)} className={menuItem}>
+				{t("nav.pricing")}
+			</Link>
+			<Link href="/docs" className={menuItem}>
+				{t("nav.apiDocs")}
+			</Link>
+		</>
+	);
+
+	const avatar = user && (
+		<span
+			aria-hidden="true"
+			className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-fg font-bold text-bg"
+		>
+			{(user.name || "?").slice(0, 1).toUpperCase()}
+		</span>
+	);
+
+	const language = (
+		<Dropdown
+			label={t("nav.language")}
+			triggerClassName={`inline-flex min-h-11 items-center gap-1 rounded-xs px-2 text-sm font-bold hover:bg-hover aria-expanded:bg-hover ${focus}`}
+			trigger={
+				<>
+					{LOCALE_LABELS[locale] ?? "EN"}
+					<Icon name="down" className="size-3.5" />
+				</>
+			}
+		>
+			{languageList}
+		</Dropdown>
+	);
+
 	return (
-		<header className="border-b border-border bg-bg">
-			<div className="mx-auto max-w-6xl px-4">
-				<div className="flex min-h-14 items-center gap-2 sm:gap-3">
-					<Link
-						href={localized("/", locale)}
-						className={`${item} px-0 text-lg font-bold`}
-					>
-						{page.props.appName}
-					</Link>
-					<nav aria-label={t("nav.sections")} className="hidden items-center md:flex">
-						{SECTIONS.map(([path, key]) => (
-							<Link key={path} href={localized(`/${path}`, locale)} className={item}>
-								{t(key)}
-							</Link>
-						))}
-					</nav>
-					<div className="ml-auto flex min-w-0 flex-wrap items-center justify-end gap-1">
-						{/* On phones the search box takes its own full row below the icons. */}
-						<div className="order-last basis-full pb-2 sm:order-none sm:basis-auto sm:pb-0">
-							<SuggestBox />
-						</div>
-						<button
-							type="button"
-							onClick={toggleTheme}
-							className={iconButton}
-							aria-label={t("nav.theme")}
-							title={t("nav.theme")}
+		<header
+			data-scrolled={scrolled || undefined}
+			className="sticky top-0 z-50 border-b border-fg bg-bg transition-shadow motion-reduce:transition-none data-scrolled:shadow-nav dark:data-scrolled:shadow-nav-dark"
+		>
+			<div className="shell flex h-14 items-center gap-2 lg:h-[72px] lg:gap-7">
+				<Link
+					href={localized("/", locale)}
+					className={`${item} shrink-0 font-display text-2xl font-bold hover:text-fg lg:text-[28px]`}
+				>
+					{page.props.appName}
+				</Link>
+				<nav
+					aria-label={t("nav.sections")}
+					className="hidden items-center gap-7 whitespace-nowrap lg:flex"
+				>
+					{SECTIONS.map(([path, key]) => (
+						<Link
+							key={path}
+							href={localized(`/${path}`, locale)}
+							className={`${item} text-[15px] font-medium`}
 						>
-							<Icon name="theme" />
-						</button>
+							{t(key)}
+						</Link>
+					))}
+					{feedHref && (
+						<Link
+							href={feedHref}
+							aria-current={here === "/feed" ? "page" : undefined}
+							className={`hidden min-h-11 items-center rounded-xs border-l border-border pl-7 text-[15px] font-medium hover:text-primary aria-[current=page]:font-bold xl:inline-flex ${focus}`}
+						>
+							{t("social.feed.title")}
+						</Link>
+					)}
+				</nav>
+				<div className="flex min-w-0 flex-1 items-center gap-1 lg:ml-auto lg:flex-none lg:gap-7">
+					{/* A plain link to /search; the command palette takes over the click and Ctrl/⌘ K. */}
+					<a
+						ref={searchTrigger}
+						href={searchHref}
+						data-search-trigger=""
+						aria-haspopup="dialog"
+						onClick={(e) => {
+							// A modified click still opens /search in a new tab.
+							if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;
+							e.preventDefault();
+							setPaletteOpen(true);
+						}}
+						aria-label={t("nav.openSearch")}
+						aria-keyshortcuts="Control+K Meta+K"
+						className={`flex h-11 min-w-0 flex-1 items-center justify-start gap-2 rounded-xs border border-field bg-field-bg px-3 text-muted hover:bg-hover lg:w-56 lg:flex-none xl:w-[280px] ${focus}`}
+					>
+						<Icon name="search" className="size-[18px] shrink-0" />
+						<span className="truncate text-[15px]">{t("nav.searchShort")}</span>
+						<kbd className="ml-auto hidden h-[22px] items-center rounded-sm border border-border bg-surface px-1.5 font-sans text-xs font-semibold lg:inline-flex">
+							{hint}
+						</kbd>
+					</a>
+					<div data-desktop="" className="hidden items-center gap-7 lg:flex">
+						<div className="flex items-center gap-1">
+							{language}
+							<button
+								type="button"
+								onClick={toggleTheme}
+								className={iconButton}
+								aria-label={t("nav.theme")}
+								title={t("nav.theme")}
+							>
+								<Icon name="moon" className="size-5 dark:hidden" />
+								<Icon name="sun" className="hidden size-5 dark:block" />
+							</button>
+						</div>
 						{user ? (
-							<>
+							<div className="flex items-center gap-1">
 								<Link
 									href={localized("/me/notifications", locale)}
 									className={`${iconButton} relative`}
@@ -121,126 +333,175 @@ export default function Nav() {
 									title={t("nav.notifications")}
 								>
 									<Icon name="bell" />
-									{unread > 0 && (
-										<span className="absolute top-1 right-1 min-w-4 rounded-full bg-accent-movie px-1 text-center text-[10px] font-semibold leading-4 text-white">
-											{unreadLabel}
-										</span>
-									)}
+									{unreadBadge}
 								</Link>
-								<details className="group relative">
-									<summary
-										className={`${iconButton} list-none [&::-webkit-details-marker]:hidden`}
-										aria-label={t("nav.account")}
-										title={user.name}
-									>
-										<Icon name="user" />
-									</summary>
-									<div className={menuPanel}>
-										<p className="truncate px-3 py-2 text-sm font-semibold">
-											{user.name}
-										</p>
-										<Link
-											href={localized("/library", locale)}
-											className={menuItem}
-										>
-											{t("nav.library")}
-										</Link>
-										<Link
-											href={localized("/lists", locale)}
-											className={menuItem}
-										>
-											{t("nav.lists")}
-										</Link>
-										{user.nickname && (
-											<Link
-												href={localized(
-													`/u/${user.nickname.toLowerCase()}`,
-													locale,
-												)}
-												className={menuItem}
+								<Dropdown
+									label={t("nav.account")}
+									triggerClassName={`inline-flex min-h-11 items-center gap-2 rounded-xs pl-1 pr-1 hover:bg-hover ${focus}`}
+									panelClassName="w-64"
+									trigger={
+										<>
+											{avatar}
+											{/* with the inline Feed link the 1152 px bar has no room for the name; the menu still shows it */}
+											<span
+												className={`hidden max-w-32 truncate font-semibold ${feedHref ? "" : "xl:inline"}`}
 											>
-												{t("nav.publicProfile")}
-											</Link>
-										)}
-										<Link href="/profile" className={menuItem}>
-											{t("nav.profile")}
+												{user.nickname || user.name}
+											</span>
+										</>
+									}
+								>
+									<p className="truncate px-3 py-2 text-sm font-semibold">
+										{user.name}
+									</p>
+									{feedHref && (
+										<Link href={feedHref} className={`${menuItem} xl:hidden`}>
+											{t("social.feed.title")}
 										</Link>
-										<Link href="/profile/api" className={menuItem}>
-											{t("nav.api")}
-										</Link>
-										{user.role === "admin" && (
-											<Link href="/admin" className={menuItem}>
-												{t("nav.admin")}
-											</Link>
-										)}
-										<div className="my-1 border-t border-border" />
-										<div className="px-1">{localeLinks}</div>
-										<Link
-											href="/logout"
-											method="post"
-											as="button"
-											className={menuItem}
-										>
-											{t("nav.logout")}
-										</Link>
-									</div>
-								</details>
-							</>
+									)}
+									{accountLinks}
+								</Dropdown>
+							</div>
 						) : (
 							auth && (
-								<>
+								<div className="flex items-center gap-4">
 									<Link
 										href={localized("/login", locale)}
-										className={`${item} font-medium`}
+										className={`${item} whitespace-nowrap px-1 text-[15px] font-semibold text-primary hover:underline`}
 									>
 										{t("nav.login")}
 									</Link>
-									<details className="group relative">
-										<summary
-											className={`${iconButton} list-none [&::-webkit-details-marker]:hidden`}
-											aria-label={t("nav.more")}
-										>
-											<Icon name="menu" />
-										</summary>
-										<div className={menuPanel}>
-											<div className="px-1">{localeLinks}</div>
-											<Link
-												href={localized("/signup", locale)}
-												className={menuItem}
-											>
-												{t("auth.signup.title")}
-											</Link>
-											<Link
-												href={localized("/pricing", locale)}
-												className={menuItem}
-											>
-												{t("nav.pricing")}
-											</Link>
-											<Link href="/docs" className={menuItem}>
-												{t("nav.apiDocs")}
-											</Link>
-										</div>
-									</details>
-								</>
+									<Dropdown
+										label={t("nav.more")}
+										triggerClassName={`inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-xs px-2 hover:bg-hover ${focus}`}
+										trigger={
+											<>
+												<Icon name="menu" />
+												<span className="hidden font-semibold xl:inline">
+													{t("nav.more")}
+												</span>
+											</>
+										}
+									>
+										{guestLinks}
+									</Dropdown>
+								</div>
 							)
 						)}
 					</div>
 				</div>
-				<nav
-					aria-label={t("nav.sections")}
-					className="-mx-4 flex overflow-x-auto px-3 pb-1 md:hidden"
+				<button
+					ref={burger}
+					type="button"
+					aria-haspopup="dialog"
+					aria-expanded={menuOpen}
+					aria-label={
+						user && unread > 0 ? t("nav.menuUnread", { count: unread }) : t("nav.menu")
+					}
+					onClick={() => setMenuOpen(true)}
+					onPointerDown={() => setSheetMounted(true)}
+					onFocus={() => setSheetMounted(true)}
+					className={`${iconButton} relative lg:hidden`}
 				>
-					{SECTIONS.map(([path, key, accent]) => (
-						<Link
-							key={path}
-							href={localized(`/${path}`, locale)}
-							className={`${item} shrink-0 font-medium ${accent}`}
-						>
-							{t(key)}
-						</Link>
-					))}
-				</nav>
+					<Icon name="menu" />
+					{user && unreadBadge}
+				</button>
 			</div>
+			{sheetMounted && (
+				<Suspense fallback={null}>
+					<NavSheet
+						open={menuOpen}
+						onOpenChange={setMenuOpen}
+						sheetRef={sheet}
+						finalFocus={burger}
+						title={t("nav.menu")}
+						closeLabel={t("nav.closeMenu")}
+					>
+						{user && (
+							<div className="flex items-center gap-3 border-b border-border px-4 py-3">
+								{avatar}
+								<span className="min-w-0 truncate font-semibold">{user.name}</span>
+							</div>
+						)}
+						<nav aria-label={t("nav.sections")} className="border-b border-border py-1">
+							{SECTIONS.map(([path, key, accent]) => (
+								<Link
+									key={path}
+									href={localized(`/${path}`, locale)}
+									className={`${menuItem} font-semibold ${accent}`}
+								>
+									{t(key)}
+								</Link>
+							))}
+							{feedHref && (
+								<Link
+									href={feedHref}
+									aria-current={here === "/feed" ? "page" : undefined}
+									className={`${menuItem} font-semibold`}
+								>
+									{t("social.feed.title")}
+								</Link>
+							)}
+						</nav>
+						{user ? (
+							<div className="border-b border-border py-1">
+								<Link
+									href={localized("/me/notifications", locale)}
+									className={menuItem}
+								>
+									<Icon name="bell" />
+									<span className="flex-1">{t("nav.notifications")}</span>
+									{unread > 0 && (
+										<span className="min-w-5 rounded-full bg-primary px-1 text-center text-xs font-bold leading-5 text-on-primary tabular-nums">
+											{unreadLabel}
+										</span>
+									)}
+								</Link>
+								{accountLinks}
+							</div>
+						) : (
+							auth && (
+								<div className="border-b border-border py-1">
+									<Link
+										href={localized("/login", locale)}
+										className={`${menuItem} font-semibold text-primary`}
+									>
+										{t("nav.login")}
+									</Link>
+									{guestLinks}
+								</div>
+							)
+						)}
+						<div className="border-b border-border py-1">
+							<p className="px-3 pt-2 pb-1 text-xs font-bold text-muted uppercase">
+								{t("nav.language")}
+							</p>
+							{languageList}
+						</div>
+						<div className="py-1">
+							<button
+								type="button"
+								data-theme-toggle=""
+								onClick={toggleTheme}
+								className={menuItem}
+							>
+								<Icon name="moon" className="size-5 dark:hidden" />
+								<Icon name="sun" className="hidden size-5 dark:block" />
+								{t("nav.theme")}
+							</button>
+						</div>
+					</NavSheet>
+				</Suspense>
+			)}
+			{paletteMounted && (
+				<Suspense fallback={null}>
+					<SearchPalette
+						open={paletteOpen}
+						onOpenChange={setPaletteOpen}
+						returnFocus={searchTrigger}
+					/>
+				</Suspense>
+			)}
 		</header>
 	);
 }

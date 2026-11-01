@@ -1,0 +1,144 @@
+{
+  "qid": "Q5151401",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q5151401",
+      "labels": {
+        "en": "Comedians in Cars Getting Coffee",
+        "es": "Comedians in Cars Getting Coffee",
+        "pt": "Comedians in Cars Getting Coffee"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Comedians in Cars Getting Coffee",
+        "eswiki": "Comedians in Cars Getting Coffee",
+        "ptwiki": "Comedians in Cars Getting Coffee"
+      },
+      "sitelinks_count": 10,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+84",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/comedians_in_cars_getting_coffee",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q7696995",
+            "rank": "normal"
+          },
+          {
+            "value": "Q622812",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Comedians in Cars Getting Coffee",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q215506",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "tv/comedians-in-cars-getting-coffee",
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+11",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt2314952",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "59717",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2012-07-19T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1860": "English",
+        "Q215506": "Jerry Seinfeld",
+        "Q30": "United States",
+        "Q622812": "talk show",
+        "Q7696995": "comedy television program"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q5151401",
+      "lang": "en",
+      "title": "Comedians in Cars Getting Coffee",
+      "extract": "Comedians in Cars Getting Coffee is an American television talk show directed and hosted by comedian Jerry Seinfeld. The series premiered on digital network Crackle on July 19, 2012, and has since run on Netflix. As of May 2015, it had been streamed nearly 100 million times. The series moved to Netflix in 2018 for the debut of its tenth season. Its eleventh season premiered on July 19, 2019. Seinfeld has since indicated that he may be done working on the series.\nEpisodes feature Seinfeld introducing a vintage car selected for a guest comedian, followed by a drive to a café or restaurant where they drink coffee and often eat a meal. Episodes diverge from the format spontaneously, from making unplanned stops to interacting with members of the public.",
+      "url": "https://en.wikipedia.org/wiki/Comedians_in_Cars_Getting_Coffee"
+    },
+    "wikipedia:es": {
+      "qid": "Q5151401",
+      "lang": "es",
+      "title": "Comedians in Cars Getting Coffee",
+      "extract": "Comedians in Cars Getting Coffee (Comediantes en autos tomando café o Cómicos, coches y café) es una serie web cómica estadounidense creada, dirigida y conducida por Jerry Seinfeld. La serie comenzó su emisión el 19 de julio de 2012 en su sitio web oficial y en la plataforma Crackle. Desde el 6 de julio de 2018 todas las temporadas pasaron a la cadena Netflix.\nEl formato de los episodios consiste en que Jerry Seinfeld presenta un auto, generalmente antiguo y de lujo, con el que pasa a buscar al invitado que, casi siempre, es otro comediante amigo de Jerry y lo lleva a un bar o restaurante para tomar café. Tanto en el trayecto como en el establecimiento conversan de casi cualquier tema. \nAlgunos episodios se alejan del formato habitual como, por ejemplo, en el episodio 9 de la primera temporada, en el que, luego de tomar café con Carl Reiner, vuelven a casa de este y se les une Mel Brooks para cenar. O en el episodio 1 de la séptima temporada, cuando visita la Casa Blanca para tomar café con Barack Obama.​\nLa novena temporada del show se estrenó el 5 de enero de 2017. Ese mismo mes fue anunciado que el show migraría de Crackle a Netflix luego del final de esa temporada.​",
+      "url": "https://es.wikipedia.org/wiki/Comedians_in_Cars_Getting_Coffee"
+    },
+    "wikipedia:pt": {
+      "qid": "Q5151401",
+      "lang": "pt",
+      "title": "Comedians in Cars Getting Coffee",
+      "extract": "Comedians in Cars Getting Coffee é uma web série e talk show norte-americano, dirigido e apresentado pelo comediante Jerry Seinfeld, exibido em suas primeiras nove temporadas pela plataforma digital Crackle, mudando-se em seguida para a Netflix na décima temporada. A série estreou em 19 de julho de 2012.\nCada episódio mostra Seinfeld apresentando um carro antigo, com o apresentador buscando um comediante convidado de carona para levá-lo a uma cafeteria ou restaurante pré-selecionado, onde tomam café. Episódios podem divergir do formato espontaneamente, como quando Michael Richards implora a Seinfeld para tomar uma rua lateral, quando Seinfeld retorna depois do café com Carl Reiner para se juntar a ele para jantar com Mel Brooks—ou quando problemas com o carro ocorrem. Em maio de 2015, a série tinha sido transmitida quase 100 milhões de vezes.\nEm janeiro de 2017, foi anunciado que Comedians in Cars Getting Coffee iria migrar do Crackle para a Netflix a partir da décima temporada do programa. Em janeiro de 2018, a maioria dos episódios anteriores do programa tornaram-se disponíveis no Netflix (o episódio com Jason Alexander caracterizado como George Costanza não foi incluído). A  décima temporada do programa, com doze episódios, em 6 de julho de 2018.",
+      "url": "https://pt.wikipedia.org/wiki/Comedians_in_Cars_Getting_Coffee"
+    }
+  },
+  "tier": "p580",
+  "type": "series"
+}

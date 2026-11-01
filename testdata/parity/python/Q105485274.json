@@ -1,0 +1,27 @@
+{
+  "item": {
+    "external_ids": {},
+    "meta": {
+      "creators": [
+        "Victor Pelevin"
+      ],
+      "pages": 317
+    },
+    "popularity": 6.0,
+    "qid": "Q105485274",
+    "release_date": "1991-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Blue Lantern (Russian: Синий фонарь) is a short story collection by Victor Pelevin, published in 1991 in Russia. In 1994 it was published in English named Blue Lantern and Other Stories  by New Directions Publishing.  Named after the story \"Blue Lantern\" which was included in the collection.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Blue_Lantern_(short_story_collection)",
+        "title": "Blue Lantern"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q105485274",
+  "slug": "blue-lantern"
+}

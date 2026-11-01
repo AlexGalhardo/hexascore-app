@@ -1,0 +1,116 @@
+{
+  "qid": "Q55248",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q55248",
+      "labels": {
+        "en": "Star Wars Trilogy Arcade",
+        "es": "Star Wars Trilogy Arcade",
+        "mul": "Star Wars Trilogy Arcade"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Star Wars Trilogy Arcade",
+        "eswiki": "Star Wars Trilogy Arcade"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q122741",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q1044478",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Star Wars Trilogy Arcade",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q3082031",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "9094",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q192851",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q17",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1999-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "star-wars-trilogy-arcade",
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q462",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1044478": "shoot 'em up",
+        "Q122741": "Sega",
+        "Q17": "Japan",
+        "Q192851": "arcade video game machine",
+        "Q208850": "single-player video game",
+        "Q3082031": "Sega AM3",
+        "Q462": "Star Wars"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q55248",
+      "lang": "en",
+      "title": "Star Wars Trilogy Arcade",
+      "extract": "Star Wars Trilogy Arcade is a 1998 rail shooter video game developed by Sega AM Annex and published by Sega for arcades. It is based on the original trilogy of Star Wars films, and was released shortly after those films' special editions. Accompanied by the Star Wars Trilogy pinball game, it is the second in Sega's Star Wars Arcade series, preceded by 1993's Star Wars Arcade and followed by 2000's Star Wars Racer Arcade.",
+      "url": "https://en.wikipedia.org/wiki/Star_Wars_Trilogy_Arcade"
+    },
+    "wikipedia:es": {
+      "qid": "Q55248",
+      "lang": "es",
+      "title": "Star Wars Trilogy Arcade",
+      "extract": "Star Wars Trilogy Arcade es un juego de arcade lanzado en 1998. Es un juego de disparos en 3D basado en la trilogía original de las películas de Star Wars y fue lanzado junto con las ediciones especiales de estas películas. Acompañado por el juego de pinball Star Wars Trilogy, es el segundo en la serie Star Wars Arcade de Sega; está precedido por Star Wars Arcade de 1993 y seguido por Star Wars: Racer Arcade de 2000.",
+      "url": "https://es.wikipedia.org/wiki/Star_Wars_Trilogy_Arcade"
+    }
+  },
+  "tier": "tail",
+  "type": "game"
+}

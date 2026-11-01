@@ -1,0 +1,57 @@
+{
+  "item": {
+    "external_ids": {
+      "hltb": "30",
+      "igdb": "james-bond-007-licence-to-kill",
+      "imdb": "tt0490765"
+    },
+    "meta": {
+      "countries": [
+        "United Kingdom"
+      ],
+      "genres": [
+        "shoot 'em up"
+      ],
+      "platforms": [
+        "DOS",
+        "Atari ST",
+        "Amstrad CPC",
+        "BBC Micro",
+        "Commodore 64",
+        "MSX",
+        "ZX Spectrum",
+        "Commodore Amiga"
+      ]
+    },
+    "popularity": 9.0,
+    "qid": "Q55538",
+    "release_date": "1989-04-20",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Licence to Kill is a vertically scrolling shooter based on the James Bond film of the same name, developed by Quixel and published by Domark in 1989. It was released for Amiga, Amstrad CPC, Atari ST, BBC Micro, Commodore 64, MS-DOS, MSX, and ZX Spectrum. \nThe game closely follows the plot of the film, consisting of six scenes in which Bond chases drug czar Sanchez who has murdered his best friend Felix Leiter's bride. The scenes within the game vary in setting and include helicopter chases, underwater diving, water-skis and behind the wheel of an 18-wheel tanker truck.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Licence_to_Kill_(1989_video_game)",
+        "title": "007: Licence to Kill"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "007: Licence to Kill"
+      },
+      {
+        "locale": "es",
+        "synopsis": "007: Licence to kill es un videojuego de 1989 basado en la película de James Bond del mismo nombre, desarrollado por Quixel y publicado por Domark en 1989. Al principio fue lanzado para DOS y luego publicado para Amiga, Amstrad CPC, Atari ST, Commodore 64, MSX y ZX Spectrum.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Licencia_para_matar_(videojuego)",
+        "title": "Licencia para matar"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q55538",
+  "slug": "007-licence-to-kill"
+}

@@ -1,0 +1,59 @@
+{
+  "item": {
+    "external_ids": {
+      "hltb": "4314",
+      "igdb": "harry-potter-and-the-order-of-the-phoenix",
+      "imdb": "tt0944836"
+    },
+    "meta": {
+      "countries": [
+        "United Kingdom"
+      ],
+      "creators": [
+        "Electronic Arts"
+      ],
+      "genres": [
+        "action-adventure game"
+      ],
+      "platforms": [
+        "Wii",
+        "Xbox 360",
+        "PlayStation 2",
+        "PlayStation 3",
+        "PlayStation Portable",
+        "Microsoft Windows",
+        "macOS"
+      ]
+    },
+    "popularity": 29.0,
+    "qid": "Q254851",
+    "release_date": "2007-06-25",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Harry Potter and the Order of the Phoenix is a 2007 action-adventure game. It is based on the 2007 film of the same name. The game was released for mobile devices, Nintendo DS, PlayStation Portable, Microsoft Windows, PlayStation 2, PlayStation 3, Wii, Xbox 360, Game Boy Advance, and Mac OS X.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Harry_Potter_and_the_Order_of_the_Phoenix_(video_game)",
+        "title": "Harry Potter and the Order of the Phoenix"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Harry Potter e a Ordem da Fênix (Brasil) / Harry Potter e a Ordem da Fénix (Portugal) é um videojogo e computador baseado na adaptação cinematográfica do quinto livro da escritora J.K. Rowling, a ser lançado junto com o filme em Julho de 2007. As primeiras imagens do jogo foram mostradas numa conferência da Electronic Arts em 11\\2006, que declarou que o ponto marcante do jogo é explorar o castelo de Hogwarts como nunca antes, enfrentando missões baseadas no livro/filme com algumas adaptações para o jogo.Foi lançado para XBOX 360, PC, PS3, WII, DS, PS2, PSP, GameBoy Advanced e Mac.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Harry_Potter_and_the_Order_of_the_Phoenix_(jogo_eletr%C3%B4nico)",
+        "title": "Harry Potter and the Order of the Phoenix"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Harry Potter y la Orden del Fénix (título original en inglés: Harry Potter and the Order of the Phoenix) es un videojuego basado en la quinta entrega de Harry Potter, la popular saga de libros y películas de J. K. Rowling, para Microsoft Windows, PlayStation 2, PlayStation 3, Xbox 360, PSP, Nintendo DS, Wii,​ Game Boy Advance y Mac OS X.​ Para PlayStation 3, PlayStation Portable, PlayStation 2 y Windows fue lanzado el 25 de junio en Estados Unidos, el 28 de junio en Australia y el 29 de junio en el Reino Unido y Europa; y el 3 de julio para la mayoría de las otras plataformas.​ \nEl objetivo del juego es explorar Hogwarts y seguir la historia del libro y la película. EA fomentó la participación de los seguidores en el desarrollo del juego y trabajó con un equipo de fans. No obstante, al contrario de los anteriores títulos como el Cáliz de Fuego que está más orientado a la acción, esta vez la aventura se asemeja al estilo \"sandbox\" (como Bully o GTA): Hogwarts es totalmente explorable la mayor parte del tiempo, y hay \"puntos de descubrimientos\" que proveen recompensas a los jugadores, que pueden ser activadas completando misiones. Además, hay batallas entre grupos de estudiantes.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Harry_Potter_y_la_Orden_del_F%C3%A9nix_(videojuego)",
+        "title": "Harry Potter y la Orden del Fénix"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q254851",
+  "slug": "harry-potter-and-the-order-of-the-phoenix"
+}

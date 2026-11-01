@@ -18,9 +18,7 @@ test.describe("item page", () => {
 				new RegExp(`^${locale.split("-")[0]}`, "i"),
 			);
 			await expect(page.locator("h1")).toBeVisible();
-			await expect(
-				page.getByRole("heading", { name: t("item.communityScore") }),
-			).toBeVisible();
+			await expect(page.getByTestId("score-block")).toBeVisible();
 			await expect(
 				page.getByRole("heading", { name: t("item.categoryScores") }),
 			).toBeAttached();
@@ -32,15 +30,14 @@ test.describe("item page", () => {
 	test("header shows the cover and score badge; the rating panel is above the fold on mobile", async ({
 		page,
 		prefix,
-		t,
 	}, testInfo) => {
 		await openTopItem(page, prefix, "games");
 		const header = page.locator("article > header");
-		await expect(header.getByTestId("score-badge")).toBeVisible();
+		await expect(header.getByTestId("score-block")).toBeVisible();
 		await expect(header.locator("img, [data-testid='cover-placeholder']")).toHaveCount(1);
 
 		if (testInfo.project.name.startsWith("mobile")) {
-			const heading = page.getByRole("heading", { name: t("item.communityScore") });
+			const heading = page.locator("#rating-heading");
 			const box = await heading.boundingBox();
 			expect(box?.y ?? Infinity).toBeLessThan(page.viewportSize()?.height ?? 0);
 		}
@@ -48,8 +45,8 @@ test.describe("item page", () => {
 
 	test("a guest is asked to log in to rate", async ({ page, prefix, t }) => {
 		await openTopItem(page, prefix, "games");
-		await expect(page.getByText(t("item.loginToRate"))).toBeVisible();
-		await expect(page.getByRole("slider")).toHaveCount(0);
+		await expect(page.getByRole("link", { name: t("item.loginToRate") })).toBeVisible();
+		await expect(page.locator("input[type=radio]:enabled")).toHaveCount(0);
 	});
 
 	test("an unknown slug is a 404 page", async ({ page, prefix }) => {

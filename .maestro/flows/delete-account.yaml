@@ -1,0 +1,14 @@
+# P5.B.4.3 (staging, owner-gated): run signed in as a throwaway account only; it schedules that account's deletion.
+appId: app.hexascore
+---
+- launchApp
+- tapOn: "Profile"
+- scrollUntilVisible:
+    element: "Delete my account"
+- tapOn: "Delete my account"
+- assertVisible: "Confirm (10)"
+- extendedWaitUntil:
+    visible: "Yes, delete my account"
+    timeout: 12000
+- tapOn: "Yes, delete my account"
+- assertVisible: "Cancel deletion"

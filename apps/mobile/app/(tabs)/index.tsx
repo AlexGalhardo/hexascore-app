@@ -1,6 +1,21 @@
+import { router } from "expo-router";
 import type { ReactElement } from "react";
-import { Placeholder } from "../../src/ui/Placeholder";
+import type { AppItemJSON } from "../../../../packages/app-client/src/api";
+import { appClient } from "../../src/auth/runtime";
+import { type CatalogType, isCatalogType, itemHref } from "../../src/navigation/catalog";
+import { useLocale } from "../../src/providers/root";
+import { HomeBody } from "../../src/screens/Home";
+
+function openItem(item: AppItemJSON): void {
+	if (isCatalogType(item.type)) router.push(itemHref(item.type, item));
+}
+
+function openSection(type: CatalogType): void {
+	router.push(`/${type}`);
+}
 
 export default function HomeScreen(): ReactElement {
-	return <Placeholder title="HexaScore" />;
+	return (
+		<HomeBody read={appClient.read} locale={useLocale()} onOpen={openItem} onSeeAll={openSection} />
+	);
 }

@@ -3,6 +3,7 @@
 package tests
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/AlexGalhardo/vukem/drivers/postgres/pgtest"
@@ -21,26 +22,27 @@ func TestAPIReference_PublicInProduction(t *testing.T) {
 		"STRIPE_PRICE_PRO": "price_pro", "STRIPE_PRICE_BUSINESS": "price_business",
 	}})
 
-	app.Client(t).Get("/docs/reference").AssertOK()
-	app.Client(t).Get("/docs/reference/scalar.js").AssertOK()
+	app.Client(t).Get("https://example.test/docs/reference").AssertOK()
+	app.Client(t).Get("https://example.test/docs/reference/scalar.js").AssertOK()
 
 	var doc struct {
 		OpenAPI string            `json:"openapi"`
 		Paths   map[string]any    `json:"paths"`
 		Info    map[string]string `json:"info"`
 	}
-	app.Client(t).GetJSON("/api/v1/openapi.json").AssertOK().JSON(&doc)
+	app.Client(t).GetJSON("https://example.test/api/v1/openapi.json").AssertOK().JSON(&doc)
 
 	if len(doc.OpenAPI) < 3 || doc.OpenAPI[:3] != "3.1" {
 		t.Errorf("openapi = %q, want 3.1.x", doc.OpenAPI)
 	}
 
+	// The server URL already ends in /v1 (api host form), so no path repeats /api/v1.
 	for path := range doc.Paths {
-		if len(path) < 7 || path[:7] != "/api/v1" {
-			t.Errorf("path %q is outside /api/v1", path)
+		if strings.HasPrefix(path, "/api/") || strings.HasPrefix(path, "/v1/") || !strings.HasPrefix(path, "/") {
+			t.Errorf("path %q is not relative to the /v1 server", path)
 		}
 	}
 
 	// The app document stays private: it maps the token surface.
-	app.Client(t).GetJSON("/app/v1/openapi.json").AssertStatus(404)
+	app.Client(t).GetJSON("https://example.test/app/v1/openapi.json").AssertStatus(404)
 }

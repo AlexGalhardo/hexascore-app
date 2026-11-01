@@ -120,7 +120,7 @@ Invariants: `item_count` = row count (DQ assert nightly); positions are dense `1
 
 Migration: lists, list_items (`added_at` := `lists.created_at`, SDD 08 §5), reports (`reason` copied; legacy target ids already text; a `user` target becomes the imported user's numeric id, and reports whose target user or list was not imported are dropped), contact_messages copied 1:1; `list_items.position` renumbered dense `1..n` in legacy order; lists and their rows of users not imported (purged) are skipped; `follows` rows archived in the cutover backup (SDD 11), not imported.
 
-Deferred shape (no table now): `follows(follower_id text, followee_id text, created_at, PK(follower_id, followee_id), CHECK follower <> followee)`, as legacy. A feed reads `ratings.updated_at`, `item_status.updated_at` and `list_items.added_at`; no new columns needed.
+Social tables (`follows`, `activity_events`, the `users.feed_opt_in` column and the new notification kinds) are specified in §12 (Phase 7, after `v1.0.0`).
 
 ## 6. Contracts
 
@@ -244,3 +244,159 @@ List by `id DESC` (UUID v7 ≈ time) with cursor pagination (<https://vukem.dev/
 5. Private profile and pages. Decided (14-5): 200 nickname-only with `noindex`; SDD 09 §6.2 updated with `/library`, `/lists`, `/lists/{id}/edit`.
 6. Writer-only CSV/JSON helpers for jobs are [NOT IN VUKEM DOCS]. Owner: vukem. Closes with a `vukem-feedback.md` answer.
 7. Lists of a deleted user. Owner question (asked with the SDD 13 batch). Current rule until answered: anonymise public lists, delete private ones (§8). Closes with the owner's answer.
+8. Lawful basis for the feed (Q-A5 a). Owner question, with legal review (D-21). D-29 covers aggregates and personalisation, not showing a user's activity to followers. Current rule until answered: the whole social layer is off (feature flag `social` off, §12.3), and when it is on, a user's activity reaches followers only after an explicit opt-in (`users.feed_opt_in`, default `false` for every account). Closes with a D-xx in `docs/brainstorming.md`; if the answer is "public profile implies feed", the opt-in column becomes a default-on opt-out in a later migration.
+9. Legacy follows (Q-A5 b). Owner question. Current rule: Phase 7 starts with an empty graph; the legacy rows stay in the cutover archive (§5 migration note, SDD 11 §7.6). Closes with the owner's answer; a restore, if chosen, is a one-off command that inserts `accepted` rows only between users who still exist and are not banned.
+10. Markdown subset for reviews (P7.B.1.1). Decided (orchestrator decision 2026-11-01, owner may override): allowed are bold, italic, inline code, links (http and https only, rendered `rel="nofollow ugc noopener"`), unordered and ordered lists, blockquotes and line breaks; raw HTML, images, headings, tables and autolinked bare URLs stay plain text. No new dependency: a stdlib parser (`app/social/markdown.go`) turns the source into a node tree that React renders node by node (§12.10), so user text never reaches the page as an HTML string (frontend rule: no `dangerouslySetInnerHTML` with user content). `TestSecurity_A05_ReviewMarkdown` covers it.
+11. Letterboxd reference (Q-A9). The research report is partial; §12 does not depend on it. Closes with the owner's answer.
+12. Share-card text (P7.C.1.2). Decided (orchestrator decision 2026-11-01, owner may override): the Open Graph card at `/og/{items|lists|profiles}/{id}.png` (1200×630 PNG, `Cache-Control: public, max-age=86400`, cached on the bucket under `og/` keyed by a hash of the cover key) is the cover at its own size on a solid panel in token `color.primary` (light, `#5b3fc4`), with no text drawn: the title goes only in `og:title` and `og:description`. Drawing text needs a font rasteriser (`golang.org/x/image`), a new dependency that needs an ADR and the owner's yes. WebP covers are decoded by `dwebp` from `libwebp-tools`, already in the image for `cwebp`; a cover that cannot be decoded (the demo SVGs) gives the panel alone. Lists use their first public item's cover and profiles their latest rating's cover. The route and the page's `og:image` and "share" button exist only while the flag `social` is on, and only for targets an anonymous visitor may see (public item; public, unhidden list of a public, unbanned owner; public, unbanned profile). Closes with the owner's answer in `questions-to-dev.md` ("yes x/image" or "no text").
+
+## 12. Social layer
+
+Phase 7 (ROADMAP P7.A–P7.C, D-06 as amended 2026-10-31). This section covers follows and the activity feed (P7.A); reviews, comments and reactions (P7.B) add subsections here in their own microtasks. Outline: `.orchestration/reports/AUDIT-social-sdd.md`.
+
+### 12.1 Scope
+
+In: follow and unfollow, follow requests for private profiles, follower and following counts, the `/feed` page (followed users, newest first), the "recent activity" tab of the public profile. Out: DMs, groups, blocking (later row), push, social data in `/api/v1` (A-07), social routes in `/app/v1` (SDD 10 keeps namespace `social` out of the Android bundle until a mobile row adds it).
+
+### 12.2 Functional requirements
+
+- FR-14-13: `PUT /u/{nickname}/follow` creates a follow; repeating it is a no-op (200 with the current state). Following a public profile gives `accepted`; following a private profile gives `pending` and notifies the followee (`follow_request`). `DELETE /u/{nickname}/follow` removes the row in any state (unfollow or cancel a request). Following yourself is 422 `cannot-follow-self`.
+- FR-14-14: The followee accepts or declines a pending request from `/me/follow-requests`; accept sets `accepted` (no notice to the follower in v1); decline deletes the row. Only `accepted` rows count anywhere.
+- FR-14-15: The public profile shows follower and following counts and a follow button. A private profile keeps FR-14-8: no counts, only nickname and initial, and the follow button (which sends a request).
+- FR-14-16: `/feed` lists activity of users the viewer follows with `accepted` state, 20 per page, newest first, cursor pagination (SDD 09 §7.3). Event kinds: `rating_saved`, `status_changed`, `list_created`, `list_item_added`, `review_published` (P7.B).
+- FR-14-17: The public profile gains a "recent activity" tab with the same cards, restricted to the profile owner's events and the privacy matrix (§12.5).
+- FR-14-18: A user's events are recorded and shown to others only while `users.feed_opt_in` is true (open issue 8). The opt-in is offered at onboarding and in settings, off by default; turning it off hides past events at once (read-time filter) and stops recording new ones.
+
+### 12.3 Feature flag and non-functional requirements
+
+- Feature flag `social` (<https://vukem.dev/docs/digging-deeper/feature-flags>, env `FLAG_SOCIAL`, code default off, same pattern as SDD 04 `community_submissions`): when off, the social routes answer 404, no activity event is written, and the profile renders without counts or the follow button. It stays off in production until open issue 8 is answered and the privacy policy is updated (D-21).
+- NFR-14-7: `/feed` p95 ≤ 300 ms at 30 rps with 10k events (k6 `qa/k6/feed.js`, P7.A.1.3); at most 3 queries per page.
+- NFR-14-8: Rate limits (`app/http/limits`): `follows` 60/h per user (`ratelimit.ByUser`); 429 `rate-limited`.
+- NFR-14-9: Retention: `activity_events` older than 180 days deleted daily at 04:40 (the same scheduler as NFR-14-6).
+
+### 12.4 Data model
+
+```sql
+ALTER TABLE users ADD COLUMN feed_opt_in boolean NOT NULL DEFAULT false;
+
+CREATE TABLE follows (
+  follower_id bigint NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  followee_id bigint NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  state text NOT NULL CHECK (state IN ('accepted','pending')),
+  created_at timestamptz NOT NULL DEFAULT now(),
+  accepted_at timestamptz,
+  PRIMARY KEY (follower_id, followee_id),
+  CHECK (follower_id <> followee_id));
+CREATE INDEX follows_followee_idx ON follows (followee_id, state);
+
+CREATE TABLE activity_events (
+  id uuid PRIMARY KEY,                                   -- v7, the cursor
+  actor_id bigint NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  kind text NOT NULL CHECK (kind IN ('rating_saved','status_changed','list_created',
+       'list_item_added','review_published')),
+  item_id uuid REFERENCES items(id) ON DELETE CASCADE,
+  list_id uuid REFERENCES lists(id) ON DELETE CASCADE,
+  payload jsonb NOT NULL DEFAULT '{}',                   -- stars, status; ids only, never text
+  created_at timestamptz NOT NULL DEFAULT now());
+CREATE INDEX activity_events_actor_idx ON activity_events (actor_id, id DESC);
+CREATE INDEX activity_events_created_idx ON activity_events (created_at);
+```
+
+`user_notifications.kind` gains `new_follower` and `follow_request` (dedupe key `follow:<follower_id>`). Rapid repeats collapse: a rating changed twice within 10 minutes updates the actor's last `rating_saved` event for that item instead of inserting a second one (ADR 0021).
+
+### 12.5 Privacy matrix
+
+Who sees what (viewer in rows). "Activity" means feed entries and the profile activity tab; "counts" means follower and following counts.
+
+| Viewer \ target | Public, opted in | Public, not opted in | Private | Banned or anonymised |
+| --- | --- | --- | --- | --- |
+| Anonymous | counts, activity tab | counts | nickname only (FR-14-8) | nothing (404 profile per SDD 03) |
+| Member, not following | counts, activity tab, follow | counts, follow | nickname, request button | nothing |
+| Accepted follower | counts, activity tab, feed | counts | counts, activity tab, feed if opted in | nothing |
+| Owner | everything | everything | everything | n/a |
+
+Rules that apply to every cell: events on a list that is private or `hidden`, or on an item whose visibility is not `public` (SDD 01), are dropped at read time; counts never include private, banned or anonymised users on the other side of the edge; a profile turning private keeps its `accepted` followers (Instagram and Goodreads model) and new follows become requests.
+
+### 12.6 Contracts
+
+| Route | Auth | Response |
+| --- | --- | --- |
+| `PUT /u/{nickname}/follow` | session | 303 back; 404 unknown or banned target; 422 `cannot-follow-self`; 429 |
+| `DELETE /u/{nickname}/follow` | session | 303 back (also when no row existed); 404 unknown user |
+| `GET /me/follow-requests` | session | Inertia `Social/Requests` |
+| `POST /me/follow-requests/{nickname}/accept` and `/decline` | session | 303 back; 404 when no pending row |
+| `GET /feed?cursor=` | session | Inertia `Feed/Index` with `events`, `nextCursor` |
+| `GET /u/{nickname}?tab=activity` | public | the profile page with `activity` deferred in group `personal`; `activity: null` when the viewer may not see it (§12.5) |
+| `PATCH /profile/feed` | session | `{feedOptIn}`; 303 to `/profile`; 404 while the flag is off. Onboarding (`POST /onboarding`) takes the same optional `feedOptIn` |
+
+Following a banned user is 404, like a missing one; accept and decline match only the signed-in followee's own pending rows, so no policy object is needed. Follow writes run in one transaction with `notifications.Send`. Routes live in `routes/follows.go` (`routes/social.go` is the OAuth sign-in file). The public profile gets a `social` prop (`followers`, `following` unless hidden; `state` for a signed-in non-owner).
+
+### 12.7 Feed query
+
+ADR 0021: events are recorded by an after-commit listener on the write-path events (no fan-out); the feed reads `activity_events` of followed actors with a keyset cursor:
+
+```sql
+SELECT e.* FROM activity_events e
+JOIN follows f ON f.followee_id = e.actor_id AND f.follower_id = $viewer AND f.state = 'accepted'
+JOIN users u ON u.id = e.actor_id AND u.feed_opt_in AND u.banned_at IS NULL AND u.anonymized_at IS NULL
+WHERE ($cursor IS NULL OR e.id < $cursor)
+ORDER BY e.id DESC LIMIT 21;
+```
+
+The visibility filters of §12.5 apply to the joined items and lists in the same query.
+
+### 12.8 Edge cases
+
+- Item merge (SDD 01 §7.5): `activity_events.item_id` moves to the target.
+- User deletion: `ON DELETE CASCADE` removes follows and events; anonymisation (open issue 7) deletes them explicitly in the purge.
+- Ban: the banned user's edges stay but are filtered out of counts and feeds; unban restores them.
+- Opt-out after events were shown: read-time filter, no backfill delete; retention removes them within 180 days.
+
+### 12.9 LGPD
+
+Basis: open issue 8 (Q-A5). The data export ZIP (§7.4) gains `follows.csv` (`direction,nickname,state,since`, both directions) and `activity.csv` (`kind,type,title,list,createdAt`, the user's own events). The purge (SDD 03 §7.5) deletes both directions of `follows`, the user's `activity_events` and resets `feed_opt_in`. The daily job `social.prune_activity` (04:40) applies NFR-14-9 whatever the flag.
+
+### 12.10 Reviews
+
+P7.B.1.1, behind the flag `social`. A review is optional text attached to the author's rating of an item.
+
+```sql
+CREATE TABLE reviews (
+  id uuid PRIMARY KEY,
+  user_id bigint NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  item_id uuid NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+  body text NOT NULL CHECK (char_length(body) BETWEEN 1 AND 5000),  -- Markdown subset, open issue 10
+  spoiler boolean NOT NULL DEFAULT false,
+  helpful_count integer NOT NULL DEFAULT 0,                        -- kept by P7.B.1.2 reactions
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (user_id, item_id));
+CREATE INDEX reviews_item_idx ON reviews (item_id, helpful_count DESC, created_at DESC);
+```
+
+- `PUT /items/{id}/review` (session, `{body, spoiler}`) creates or edits; 422 `rating-required` without a rating; 303 back. `DELETE /items/{id}/review` removes it. Rate limit `reviews` 30/h per user. Both answer 404 while the flag is off.
+- A review is shown only while its rating exists. The item page defers `reviews` (group `reviews`): `{data, mine}`, sorted by `helpful_count` then newest, first 50, authors public, not banned, not anonymised (§12.5), plus the viewer's own review with its Markdown `source`. The profile defers `reviews` on `?tab=reviews` (group `personal`) unless the profile is hidden from the viewer.
+- The body is stored as Markdown and sent as a node tree (`p`, `br`, `strong`, `em`, `code`, `a`, `ul`, `ol`, `li`, `blockquote`, `text`); the page also refuses a non-http(s) `href`.
+- The first publication records `review_published` (§12.7); edits do not. The purge deletes the user's reviews; the export adds `reviews.json`.
+
+### 12.11 Comments and reactions
+
+P7.B.1.2, behind the flag `social`. Comments are plain text (1 to 2,000 characters, no Markdown) on a review or a list, with one level of replies. A reaction is `like` or `helpful`; a user has at most one reaction per review, comment or list, and a new kind replaces the old one.
+
+- Tables `comments` (`review_id` or `list_id`, `parent_id`, `body`, `like_count`, `helpful_count`) and `reactions` (`review_id`, `comment_id` or `list_id`, `kind`), with typed nullable foreign keys (`num_nonnulls(...) = 1`) so that deleting a target cascades, and partial unique indexes on `(user_id, <target>)`. `reviews.like_count`, `lists.like_count` and `lists.helpful_count` are new; the existing `reviews.helpful_count` is now live.
+- An `AFTER` trigger on `reactions` moves the counters in the same transaction, including cascades and account deletion.
+- `POST /comments/{review|list}/{id}` takes `{body, parentId}`. It answers 303 back, or 422 `reply-depth` for a reply to a reply, 404 for a target the author cannot see (§12.5) or a parent on another target, and 429. The rate limit `comments` is 60/h per user. `DELETE /comments/{id}` deletes the author's own comment and its replies; any other comment is 404.
+- `PUT /reactions/{review|comment|list}/{id}` takes `{kind}` and answers 303, 422 `cannot-react-to-self`, or 404. `DELETE` removes the reaction. The rate limit `reactions` is 300/h per user. Every route answers 404 while the flag is off.
+- Notifications: `new_comment` goes to the target's author, and for a reply to the parent comment's author too. `new_reaction` goes to the target's author once per reactor and target, so toggling a reaction does not send it again. Nobody is notified about their own actions.
+- Reads: each review card on the item page gains `likes`, `myReaction` and `comments`, where a top-level comment carries its `replies`. The list page defers `reactions` (`{likes, helpful, mine}`) and `comments` in group `social`. Comments by authors hidden from the viewer are left out, and so are the replies under them. Each load returns at most 500 comments (`// shortcut:`).
+- LGPD: the export gains `comments.json` and `reactions.json` (17 files). The purge deletes the user's reactions first, so the counters come back down, and then their comments.
+
+- Moderation (P7.B.1.3, FR-14-9): `reports.target_type` gains `review` and `comment` (the reporter's own content answers 403 `report-self`, and hidden or unknown content answers 404). The admin outcomes are `content_hidden`, which sets `hidden` on the review or comment so it leaves the item page, the threads, the feed's `review_published` entries and every reaction or comment target check; `content_deleted`, which deletes the row and cascades to its comments and reactions; and `content_unhidden`, which restores a hidden review or comment without notifying the author; and `user_banned`, which bans the author. `POST /reports` answers 404 for a review or comment target while the flag is off (other targets are unaffected). The author gets a `content_hidden` or `content_deleted` notification, and the reporters get `report_resolved` as before.
+
+### 12.11b Friends score (P7.C.1.1)
+
+While the flag is on, a signed-in viewer gets the deferred prop `friendsScore` (group `personal`) on the item page: `{count, average, friends[]}` over the ratings of members they follow with an accepted edge and who pass the section 12.5 visibility rule (public, not banned, not anonymised); it is `null` with no such rating. The home gets the deferred prop `friends` (group `personal`): the latest 12 ratings of public items by those members. Both are deferred so the public HTML stays identical for every visitor and cacheable.
+
+### 12.12 Tests
+
+`TestFollows`, `TestSecurity_A01_PrivateProfileFollowRequiresApproval`, `TestSecurity_A06_HexaLimits` (rule `follows`), `TestFeedPrivacy`, `TestSocialDisabledByDefault` (routes 404 and no events with the flag off), `TestReviews`, `TestSecurity_A05_ReviewMarkdown`, `TestComments`, `TestComments_RateLimit`, `TestReactions`, `TestCommentsDisabledByDefault`, `TestReportsReviewComment`, `TestReportsReviewBanAuthor`, k6 `qa/k6/feed.js`, Playwright `social.spec.ts` and `reviews.spec.ts`.

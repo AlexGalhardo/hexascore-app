@@ -1,0 +1,82 @@
+import { cleanup, render, screen, within } from "@testing-library/react";
+import type { ReactNode } from "react";
+import { afterEach, expect, test, vi } from "vitest";
+
+import type { Highlight, Section } from "../catalog/SectionHighlights";
+import TypeSection, { otherTitles, type TrendingEntry } from "./TypeSection";
+
+afterEach(cleanup);
+
+vi.mock("../../lib/useT", () => ({
+	useT: () => (key: string, p?: Record<string, string | number>) =>
+		p ? `${key} ${JSON.stringify(p)}` : key,
+}));
+vi.mock("@inertiajs/react", () => ({
+	Link: ({
+		href,
+		children,
+		className,
+	}: {
+		href: string;
+		children: ReactNode;
+		className?: string;
+	}) => (
+		<a href={href} className={className}>
+			{children}
+		</a>
+	),
+	usePage: () => ({ props: { locale: "en", coversBase: "/c/" } }),
+}));
+
+const h = (id: string, score: number | null = null): Highlight => ({
+	id,
+	type: "game",
+	slug: `slug-${id}`,
+	title: `Title ${id}`,
+	year: 2020,
+	score,
+	ratingCount: 3,
+	cover: null,
+});
+
+const section: Section = {
+	type: "game",
+	count: 24873,
+	topRated: [h("a"), h("b"), h("t1")],
+	newest: [h("c"), h("d"), h("e"), h("f"), h("g")],
+	mostRated: [h("t2"), h("b"), h("h")],
+};
+
+const trending: TrendingEntry[] = [
+	{ ...h("t1", 8.4), rank: 1, basis: "trend" },
+	{ ...h("t2"), rank: 2, basis: "trend" },
+	{ ...h("t3"), rank: 3, basis: "prior" },
+];
+
+test("other titles skip trending ones and duplicates, six at most", () => {
+	expect(otherTitles(section, trending).map((i) => i.id)).toEqual(["b", "h", "a", "c", "d", "e"]);
+});
+
+test("three trending cards with rank, score explanation, then more titles and see all", () => {
+	render(<TypeSection section={section} trending={trending} />);
+	const cards = screen.getAllByRole("listitem").slice(0, 3);
+	expect(within(cards[0]).getByText(/home.trendingRank.*"rank":1/)).toBeTruthy();
+	expect(within(cards[0]).getByText("item.band.high")).toBeTruthy();
+	expect(within(cards[1]).getByText(/home.ratingsOfMin.*"count":3,"min":5/)).toBeTruthy();
+	expect(within(cards[2]).getByText(/home.popularRank/)).toBeTruthy();
+	expect(cards[0].querySelector("a")?.getAttribute("href")).toBe("/games/slug-t1?from=trending");
+	expect(screen.getByText("home.more.game")).toBeTruthy();
+	expect(
+		screen
+			.getByText(/home.seeAll.game/)
+			.closest("a")
+			?.getAttribute("href"),
+	).toBe("/games");
+	expect(screen.getByText(/24,873/)).toBeTruthy();
+});
+
+test("a type with nothing to show renders nothing", () => {
+	const empty = { ...section, topRated: [], newest: [], mostRated: [] };
+	const { container } = render(<TypeSection section={empty} trending={[]} />);
+	expect(container.innerHTML).toBe("");
+});

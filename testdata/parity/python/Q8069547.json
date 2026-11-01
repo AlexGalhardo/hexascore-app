@@ -1,0 +1,33 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt2793136"
+    },
+    "meta": {
+      "countries": [
+        "Australia"
+      ],
+      "creators": [
+        "Yahtzee Croshaw"
+      ],
+      "episodes": 443,
+      "seasons": 1
+    },
+    "popularity": 7.0,
+    "qid": "Q8069547",
+    "release_date": "2007-07-24",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Zero Punctuation is a video game reviews web series created by the English comedy writer and video game journalist Ben \"Yahtzee\" Croshaw. From its inception in 2007, episodes were published weekly by internet magazine The Escapist. Episodes typically range from five to six minutes in length. Videos provide caustic humour, rapid-fire delivery, visual gags and critical insight into recently released video games, with occasional reviews of older games and retrospectives of the industry itself. In 2023, Zero Punctuation was discontinued following Croshaw's resignation from The Escapist and the formation of Second Wind, with new reviews being published by him in the same format under the rebranded series Fully Ramblomatic.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Zero_Punctuation",
+        "title": "Zero Punctuation"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q8069547",
+  "slug": "zero-punctuation"
+}

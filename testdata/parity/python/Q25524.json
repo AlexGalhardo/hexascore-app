@@ -1,0 +1,44 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0089312",
+      "rottentomatoes": "m/hurlevent",
+      "tmdb": "145745"
+    },
+    "meta": {
+      "countries": [
+        "France"
+      ],
+      "creators": [
+        "Jacques Rivette"
+      ],
+      "genres": [
+        "drama film"
+      ],
+      "runtimeMinutes": 130
+    },
+    "popularity": 9.0,
+    "qid": "Q25524",
+    "release_date": "1985-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Hurlevent ([yʁ.lə.vɑ̃], \"Howling wind\") is a 1985 French drama film directed and co-written by Jacques Rivette. It is an adaptation of Emily Brontë's 1847 novel Wuthering Heights. Based on the first part of the novel, set in 1930s southern France, it starred three unknown actors: Fabienne Babe as Catherine, Lucas Belvaux as Roch (Heathcliff), and Olivier Cruveiller as Catherine's brother.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Hurlevent",
+        "title": "Hurlevent"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Cumbres borrascosas"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q25524",
+  "slug": "hurlevent"
+}

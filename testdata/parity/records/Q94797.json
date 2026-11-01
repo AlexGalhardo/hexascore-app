@@ -1,0 +1,226 @@
+{
+  "qid": "Q94797",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q94797",
+      "labels": {
+        "en": "Grand Theft Auto IV",
+        "es": "Grand Theft Auto IV",
+        "mul": "Grand Theft Auto IV"
+      },
+      "aliases": {
+        "mul": [
+          "GTA IV",
+          "Grand Theft Auto 4",
+          "GTA 4",
+          "Grand Theft Auto Four",
+          "GTA4",
+          "GTA: 4",
+          "GTAIV"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Grand Theft Auto IV",
+        "eswiki": "Grand Theft Auto IV",
+        "ptwiki": "Grand Theft Auto IV"
+      },
+      "sitelinks_count": 79,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q94912",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q343568",
+            "rank": "normal"
+          },
+          {
+            "value": "Q85422949",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Grand Theft Auto IV",
+            "rank": "normal"
+          }
+        ],
+        "P1651": [
+          {
+            "value": "M80K51DosFo",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "12210",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q94893",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1989672",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q132730",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "4062",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0802999",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q48263",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10683",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13361286",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "preferred"
+          },
+          {
+            "value": "Q150",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188",
+            "rank": "normal"
+          },
+          {
+            "value": "Q652",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7737",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5287",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2008-04-29T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2009-01-04T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "grand-theft-auto-iv",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q10683": "PlayStation 3",
+        "Q1321": "Spanish",
+        "Q132730": "Grand Theft Auto",
+        "Q13361286": "Xbox One",
+        "Q1406": "Microsoft Windows",
+        "Q145": "United Kingdom",
+        "Q150": "French",
+        "Q1860": "English",
+        "Q188": "German",
+        "Q1989672": "Rockstar Toronto",
+        "Q208850": "single-player video game",
+        "Q343568": "action-adventure game",
+        "Q48263": "Xbox 360",
+        "Q5287": "Japanese",
+        "Q652": "Italian",
+        "Q6895044": "multiplayer video game",
+        "Q7737": "Russian",
+        "Q85422949": "video game with LGBT character",
+        "Q94893": "Rockstar North",
+        "Q94912": "Rockstar Games"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q94797",
+      "lang": "en",
+      "title": "Grand Theft Auto IV",
+      "extract": "Grand Theft Auto IV is a 2008 action-adventure game developed by Rockstar North and published by Rockstar Games. It is the sixth main entry in the Grand Theft Auto series, following 2004's Grand Theft Auto: San Andreas, and the eleventh entry overall. Set in the fictional Liberty City, based on New York City, the single-player story follows Eastern European war veteran Niko Bellic and his attempts to escape his past while under pressure from high-profile criminals. The open world design lets players freely roam Liberty City, consisting of four boroughs across three islands, and the neighbouring state of Alderney, which is based on New Jersey.\nThe game is played from a third-person perspective and its world is navigated on foot and by vehicle. Throughout the single-player mode, players control Niko Bellic. An online multiplayer mode is also included with the game, allowing up to 32 players to engage in both cooperative and competitive gameplay in a recreation of the single-player setting. Two expansion packs were later released for the game, The Lost and Damned and The Ballad of Gay Tony, which both feature new plots that are interconnected with the main Grand Theft Auto IV storyline, and follow new protagonists.\nDevelopment of Grand Theft Auto IV began soon after the release of San Andreas and was shared between many of Rockstar's studios worldwide. The game introduced a shift to a more realistic and detailed style and tone for the series. Unlike previous entries, Grand Theft Auto IV lacked a strong cinematic influence, as the team attempted an original approach to the story. As part of their research for the open world, the development team conducted extensive field research in New York, capturing over 100,000 photographs and several hours of video. The developers considered the world to be the most important element of the game; though not the largest map in the series, they considered it comparable in scope due to its verticality and level of detail. The budget climbed to over US$100 million, making it one of the most expensive video games to develop.\nGrand Theft Auto IV was released for the PlayStation 3 and Xbox 360 consoles in April 2008, and for Windows in December. It received critical acclaim, with praise directed at the narrative and open-world design. Grand Theft Auto IV broke industry sales records and became the fastest-selling entertainment product in history at the time, earning US$310 million in its first day and US$500 million in its first week. Considered one of the most significant titles of the seventh generation of video games, and by many critics as one of the greatest video games of all time, it won year-end accolades, including Game of the Year awards from several gaming publications. It is among the best-selling video games with over 25 million copies sold by 2013. The game generated controversy, with criticism directed at the game's depiction of violence and players' ability to drive drunk. Its successor, Grand Theft Auto V, was released in 2013.",
+      "url": "https://en.wikipedia.org/wiki/Grand_Theft_Auto_IV"
+    },
+    "wikipedia:es": {
+      "qid": "Q94797",
+      "lang": "es",
+      "title": "Grand Theft Auto IV",
+      "extract": "Grand Theft Auto IV (abreviado como GTA IV o GTA 4) es un videojuego de acción-aventura de mundo abierto de disparos en tercera persona desarrollado por Rockstar North y distribuido por Rockstar Games. Es la sexta entrada principal de la serie Grand Theft Auto, después de Grand Theft Auto: Vice City Stories de 2006, y la undécima entrega en general. Ambientada en la ficticia Liberty City, basada en la ciudad de Nueva York, la historia para un jugador sigue al veterano de guerra de Europa del Este Niko Bellic, y sus intentos de escapar de su pasado mientras se encuentra bajo la presión de criminales de alto perfil. El diseño de mundo abierto permite a los jugadores recorrer libremente Liberty City, que consta de tres islas principales, y el estado vecino de Alderney, inspirado en Nueva Jersey.\nEl juego se juega desde una perspectiva en tercera persona y se navega por su mundo a pie y en vehículo. A lo largo del modo para un jugador, los jugadores controlan a Niko Bellic. El juego también incluye un modo multijugador en línea, que permite que hasta 32 jugadores participen en juegos cooperativos y competitivos en una recreación del modo para un solo jugador. Más tarde se lanzaron dos paquetes de expansión para el juego, The Lost and Damned y The Ballad of Gay Tony, que presentan nuevas tramas que están interconectadas con la historia principal de Grand Theft Auto IV y siguen a nuevos protagonistas.\nEl desarrollo de Grand Theft Auto IV comenzó poco después del lanzamiento de San Andreas y fue compartido entre muchos de los estudios de Rockstar en todo el mundo. El juego introdujo un cambio hacia un estilo y tono más realista y detallado para la serie. A diferencia de entregas anteriores, Grand Theft Auto IV carecía de una fuerte influencia cinematográfica, ya que el equipo intentó un enfoque original de la historia. Como parte de su investigación para el mundo abierto, el equipo de desarrollo llevó a cabo una extensa investigación de campo en Nueva York, capturando más de 100.000 fotografías y varias horas de vídeo. Los desarrolladores consideraron que el mundo era el elemento más importante del juego; Aunque no es el mapa más grande de la serie, lo consideraron comparable en alcance debido a su verticalidad y nivel de detalle. El presupuesto ascendió a más de 100 millones de dólares, lo que lo convierte en uno de los videojuegos más caros de desarrollar.\nGrand Theft Auto IV se lanzó para las consolas PlayStation 3 y Xbox 360 en abril de 2008, y para Windows en diciembre. Tras su lanzamiento, el juego recibió elogios de la crítica, con elogios especialmente dirigidos a la narrativa y el diseño del mundo abierto. Grand Theft Auto IV rompió récords de ventas de la industria y se convirtió en el producto de entretenimiento más vendido de la historia en ese momento, ganando 310 millones de dólares en su primer día y 500 millones de dólares en su primera semana. Considerado uno de los títulos más importantes de la séptima generación de videojuegos y por muchos críticos como uno de los mejores videojuegos de todos los tiempos, ganó elogios de fin de año, incluidos los premios al Juego del Año de varias publicaciones de juegos. Se encuentra entre los videojuegos más vendidos con más de 25 millones de copias vendidas en 2013. El juego generó controversia, con críticas dirigidas a la descripción de la violencia y la capacidad de los jugadores para conducir bajo los efectos del alcohol. Su sucesor, Grand Theft Auto V, fue lanzado en septiembre de 2013.",
+      "url": "https://es.wikipedia.org/wiki/Grand_Theft_Auto_IV"
+    },
+    "wikipedia:pt": {
+      "qid": "Q94797",
+      "lang": "pt",
+      "title": "Grand Theft Auto IV",
+      "extract": "Grand Theft Auto IV é é um jogo eletrônico de ação-aventura de 2008 desenvolvido pela Rockstar North e publicado pela Rockstar Games. É o sexto título principal da série Grand Theft Auto, após Grand Theft Auto: San Andreas (2004), e o décimo primeiro no geral. Ambientado na fictícia Liberty City, inspirada em Nova Iorque, o modo história para um jogador acompanha o veterano de guerra do Leste Europeu, Niko Bellic, e suas tentativas de escapar do passado enquanto sofre pressão de criminosos de alto escalão. O mundo aberto permite que os jogadores explorem livremente Liberty City, composta por quatro distritos distribuídos em três ilhas, e o estado vizinho de Alderney, inspirado em Nova Jérsia.\nA jogabilidade é mostrada em uma perspectiva de terceira pessoa e seu mundo é explorado a pé e de veículo. Ao longo do modo para um jogador, os jogadores controlam Niko Bellic. Um modo multijogador online também está incluído no jogo, permitindo que até 32 jogadores participem de partidas cooperativas e competitivas em uma recriação do cenário do modo para um jogador. Dois pacotes de expansão foram lançados posteriormente para o jogo, The Lost and Damned e The Ballad of Gay Tony, ambos com novas tramas interligadas à história principal de Grand Theft Auto IV e com novos protagonistas.\nO desenvolvimento de Grand Theft Auto IV começou logo após o lançamento de San Andreas e foi compartilhado entre vários estúdios da Rockstar ao redor do mundo. O jogo introduziu uma mudança para um estilo e tom mais realistas e detalhados para a série. Ao contrário dos títulos anteriores, Grand Theft Auto IV não teve uma forte influência cinematográfica, já que a equipe buscou uma abordagem original para a história. Como parte da pesquisa para o mundo aberto, a equipe de desenvolvimento realizou uma extensa pesquisa de campo em Nova Iorque, capturando mais de 100.000 fotografias e várias horas de vídeo. Os desenvolvedores consideraram o mundo o elemento mais importante do jogo; embora não fosse o maior mapa da série, eles o consideraram comparável em escala devido à sua verticalidade e nível de detalhes. O orçamento ultrapassou os US$100 milhões, tornando-o um dos jogos mais caros já desenvolvidos.\nGrand Theft Auto IV foi lançado para PlayStation 3 e Xbox 360 em abril de 2008 e para Windows em dezembro. Recebeu aclamação da crítica, com elogios direcionados à narrativa e ao design de mundo aberto. Grand Theft Auto IV quebrou recordes de vendas na indústria e se tornou o produto de entretenimento mais vendido da história na época, arrecadando US$310 milhões no primeiro dia e US$500 milhões na primeira semana. Considerado um dos títulos mais importantes da sétima geração de consoles e por muitos críticos como um dos melhores jogos de todos os tempos, ganhou diversos prêmios de fim de ano, incluindo o de Jogo do Ano, concedido por várias publicações especializadas. Está entre os jogos mais vendidos de todos os tempos, com mais de 25 milhões de cópias vendidas até 2013. O jogo gerou controvérsia, com críticas direcionadas à representação da violência e à possibilidade de os jogadores dirigirem embriagados. Seu sucessor, Grand Theft Auto V, foi lançado em 2013.",
+      "url": "https://pt.wikipedia.org/wiki/Grand_Theft_Auto_IV"
+    }
+  },
+  "tier": "top",
+  "type": "game"
+}

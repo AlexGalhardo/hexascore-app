@@ -1,0 +1,50 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0085107",
+      "tmdb": "19086"
+    },
+    "meta": {
+      "countries": [
+        "United Kingdom"
+      ],
+      "episodes": 10,
+      "genres": [
+        "musical film",
+        "biographical film"
+      ],
+      "runtimeMinutes": 300,
+      "seasons": 1
+    },
+    "popularity": 10.0,
+    "qid": "Q2539222",
+    "release_date": "1983-12-13",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Wagner is a 1983 television miniseries on the life of Richard Wagner with Richard Burton in the title role. It was directed by Tony Palmer and written by Charles Wood. The film was later released on DVD as a ten-part miniseries.\nOther main roles were played by Vanessa Redgrave, Gemma Craven, Marthe Keller, Ronald Pickup, Miguel Herz-Kestranek and László Gálffi. Sir John Gielgud, Sir Ralph Richardson and Sir Laurence Olivier played ministers of Ludwig II of Bavaria.\nThe cast also includes the composer William Walton, and his wife Susan Walton, in the roles of the royal couple Frederick Augustus II of Saxony and Maria Anna of Bavaria.\nThe music of Wagner was specially recorded for the film, and conducted by Sir Georg Solti.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Wagner_(film)",
+        "title": "Wagner"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Wagner é uma minissérie que foi realizada em 1983, contando a vida do compositor alemão Richard Wagner, estrelada pelo ator galês Richard Burton.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Wagner_(miniss%C3%A9rie)",
+        "title": "Wagner (série)"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Wagner"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q2539222",
+  "slug": "wagner"
+}

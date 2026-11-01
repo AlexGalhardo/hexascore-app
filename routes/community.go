@@ -1,14 +1,19 @@
 package routes
 
 import (
+	"context"
+
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/auth"
+	"github.com/AlexGalhardo/vukem/authz"
 	"github.com/AlexGalhardo/vukem/router"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/community"
 	ctl "github.com/AlexGalhardo/hexascore-app/app/controllers/community"
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
+	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/app/policies"
 )
 
 // Community registers the suggest page and the draft save routes (SDD 04 §6). Submit, withdraw, uploads and the
@@ -29,13 +34,34 @@ func Community(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	h := ctl.NewSuggest(acc.DB, ff, acc.Web.Name(), app.Now)
+	gate := authz.New(func(ctx context.Context) (*models.User, error) {
+		if u, err := auth.UserFrom[models.User](ctx, acc.Web.Name()); err == nil {
+			return &u, nil
+		}
+
+		return nil, nil //nolint:nilnil // anonymous
+	})
+	if err := gate.Register(authz.For[*models.Suggestion](policies.SuggestionPolicy{})); err != nil {
+		return err
+	}
+
+	h := ctl.NewSuggest(acc.DB, ff, gate, acc.Web.Name(), app.Now)
 	required, verified := auth.Required(acc.Web), auth.Verified(acc.Web)
 	burst := community.DraftBurst(limiters, acc.Web.Name())
 
+	r.Get("/suggest/new/{domain}", h.New).Name("community.suggest.new").Use(required, verified)
 	r.Get("/suggest/{target_type}/{id}", h.Edit).Name("community.suggest").Use(required, verified)
 	r.Post("/suggestions", h.Create).Name("community.suggestions.create").Use(required, verified, burst)
 	r.Patch("/suggestions/{id}", h.Update).Name("community.suggestions.update").Use(required, verified, burst)
+
+	r.Get("/suggestions/{id}", h.Show).Name("community.suggestions.show").Use(required, verified)
+	r.Get("/me/suggestions", h.Mine).Name("community.suggestions.mine").Use(required, verified)
+	r.Post("/suggestions/{id}/submit", h.SubmitDraft).
+		Name("community.suggestions.submit").
+		Use(required, verified, burst)
+	r.Post("/suggestions/{id}/withdraw", h.Withdraw).
+		Name("community.suggestions.withdraw").
+		Use(required, verified, burst)
 
 	return nil
 }

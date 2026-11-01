@@ -1,0 +1,128 @@
+{
+  "qid": "Q35160",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q35160",
+      "labels": {
+        "en": "Odyssey",
+        "es": "Odisea",
+        "pt": "Odisseia"
+      },
+      "aliases": {
+        "en": [
+          "the Odyssey",
+          "Homer's Odyssey",
+          "Hom. Od."
+        ],
+        "es": [
+          "La odissea",
+          "La Odisea"
+        ],
+        "pt": [
+          "Bolsa dos ventos",
+          "Olisseia",
+          "A odisséia",
+          "Odisséia"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Odyssey",
+        "eswiki": "Odisea",
+        "ptwiki": "Odisseia"
+      },
+      "sitelinks_count": 158,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q37484",
+            "rank": "normal"
+          },
+          {
+            "value": "Q21802675",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Ὀδύσσεια",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q578605",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Fragment Odyssee 2245 2.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q990062",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q11772",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q6691",
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL61982W",
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "3356006",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q11772": "Ancient Greece",
+        "Q21802675": "adventure fiction",
+        "Q37484": "epic poem",
+        "Q578605": "Epic Cycle",
+        "Q6691": "Homer",
+        "Q990062": "Homeric Greek"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q35160",
+      "lang": "en",
+      "title": "Odyssey",
+      "extract": "The Odyssey (, ODD-iss-ee; Ancient Greek: Ὀδύσσεια, romanized: Odýsseia [odyˈsːeːˌja]) is one of two major epics of ancient Greek literature attributed to Homer. It is one of the oldest surviving works of literature and remains popular with modern audiences. Like the Iliad, the Odyssey is divided into 24 books. It follows the heroic king of Ithaca, Odysseus (also known by the Latin variant Ulysses), and his homecoming journey after the ten-year-long Trojan War. His journey from Troy to Ithaca lasts an additional ten years, during which time he encounters many perils and all of his crewmates are killed. In Odysseus's long absence, he is presumed dead, leaving his wife Penelope and son Telemachus to contend with a group of unruly suitors competing for Penelope's hand in marriage.\nThe Odyssey was first composed in Homeric Greek around the 8th or 7th century BC; by the mid-6th century BC, it had become part of the Greek literary canon. In antiquity, Homer's authorship was taken as true, but contemporary scholarship predominantly assumes that the Iliad and the Odyssey were composed independently, as part of long oral traditions. Given widespread illiteracy, the poem was performed for an audience by an aoidos or rhapsode.\nKey themes in the epic include the ideas of nostos (νόστος; 'return', homecoming), wandering, xenia (ξενία; 'guest-friendship'), testing, and omens. Scholars discuss the narrative prominence of certain groups within the poem, such as women and slaves, who have larger roles than in other works of ancient literature. This focus is especially remarkable when contrasted with the Iliad, which centers upon the exploits of soldiers and kings during the Trojan War.\nThe Odyssey is regarded as one of the most significant works of the Western canon. The first complete English translation of the Odyssey was in 1616. Adaptations and re-imaginings continue to be produced across a wide variety of media. In 2018, when BBC Culture polled experts around the world to find literature's most enduring narrative, the Odyssey topped the list.",
+      "url": "https://en.wikipedia.org/wiki/Odyssey"
+    },
+    "wikipedia:es": {
+      "qid": "Q35160",
+      "lang": "es",
+      "title": "Odisea",
+      "extract": "La Odisea (en griego antiguo: Ὀδύσσεια, [Odýsseia]; en griego moderno: Οδύσσεια; en latín: Odyssea) es un poema épico griego compuesto por 24 cantos o rapsodias,​ atribuido al poeta griego Homero. Se cree que fue compuesta en el siglo VIII a. C. en los asentamientos que tenía Grecia en la costa oeste del Asia Menor (actual Turquía asiática). Según otros autores, la Odisea se completa en el siglo VII a. C. a partir de poemas que solo describían partes de la obra actual. Fue originalmente un texto de tradición oral​ que más tarde fue escrito en lo que se ha llamado dialecto homérico.\nNarra la vuelta a casa del héroe griego Odiseo (al modo latino, Ulises: Ὀδυσσεύς en griego; Vlixes en latín), tras la guerra de Troya. Marca el paso de las epopeyas de hazañas bélicas al nostos, el viaje del retorno.​ Además de haber estado diez años fuera luchando, Odiseo tarda otros diez años en regresar a la isla de Ítaca, de la que era rey, período durante el cual su hijo Telémaco y su esposa Penélope han de tolerar en su palacio a los pretendientes que buscan desposarla (pues ya creían muerto a Odiseo), al mismo tiempo que consumen los bienes de la familia.\nLa mejor arma de Odiseo es su mētis ​ o astucia. Gracias a su inteligencia — además de la ayuda provista por Palas Atenea, hija de Zeus Crónida — es capaz de escapar de los continuos problemas a los que ha de enfrentarse por designio de los dioses. Para esto, planea diversas artimañas, bien sean físicas —como pueden ser disfraces— o con audaces y engañosos discursos de los que se vale para conseguir sus objetivos.\nEl poema es, junto a la Ilíada, uno de los primeros textos de la épica grecolatina y por tanto de la literatura occidental. En la antigüedad se consideraba que la autoría de Homero estaba más allá de toda duda. Sin embargo, la investigación actual asume de manera predominante que tanto la Ilíada como la Odisea fueron compuestas de manera independiente, como parte de largas tradiciones orales. Dado el amplio analfabetismo, se cree que el poema original fue transmitido por vía oral durante siglos por aedos que recitaban el poema de memoria, alterándolo consciente o inconscientemente. Era transmitido en dialectos de la Antigua Grecia. Ya en el siglo IX a. C., con la reciente aparición del alfabeto, tanto la Odisea como la Ilíada pudieron ser las primeras obras en ser transcritas, aunque la mayoría de la crítica se inclina por datarlas en el siglo VIII a. C. El texto homérico más antiguo que conocemos es la versión de Aristarco de Samotracia (siglo II a. C.). \nEl poema está escrito usando una métrica llamada hexámetro dactílico. Cada línea de la Odisea original estaba formada por seis unidades o pies, siendo cada pie dáctilo o espondeo. ​ Los primeros cinco pies eran dáctilos y el último podía ser un espondeo o bien un troqueo. Los distintos pies se separan por cesuras o pausas. \nTemas centrales en esta epopeya incluyen las ideas de nostos (en griego antiguo: νόστος, lit. 'regreso, vuelta a casa'), el errar, xenia (en griego antiguo: ξενία, lit. 'hospitalidad o amistad con el huésped'), la puesta a prueba y los augurios. Los académicos han discutido la prominencia narrativa de ciertos grupos dentro del poema, como las mujeres o los esclavos, que tienen roles más amplios que en otras obras de la literatura antigua. Este enfoque es particularmente notable cuando se le contrasta con la Ilíada, que se centra en las hazañas de soldados y reyes durante la guerra de Troya. \nDurante siglos, los poemas épicos homéricos hicieron parte del fundamento educativo del mundo griego a través de la era clásica y ayudaron a dar forma a una identidad cultural panhelénica más amplia. La Odisea se considera una de las obras más importantes del canon occidental.",
+      "url": "https://es.wikipedia.org/wiki/Odisea"
+    },
+    "wikipedia:pt": {
+      "qid": "Q35160",
+      "lang": "pt",
+      "title": "Odisseia",
+      "extract": "Odisseia (em grego clássico: Οδύσσεια; romaniz.: Odýsseia) é uma das duas principais epopeias da literatura grega antiga atribuídas a Homero. É uma das obras literárias mais antigas que sobreviveram e continua popular entre o público moderno. Como a Ilíada, a Odisseia é dividida em 24 livros. Ela segue o rei herói de Ítaca, Odisseu, também conhecido pela variante latina Ulisses, e sua jornada de retorno para casa após a Guerra de Troia, que durou dez anos. Sua viagem de Troia até Ítaca dura mais dez anos, durante os quais ele encontra muitos perigos e todos os seus companheiros de tripulação são mortos. Na longa ausência de Odisseu, ele é dado como morto, deixando sua esposa Penélope e seu filho Telêmaco para lidar com um grupo de pretendentes turbulentos que competem pela mão de Penélope em casamento.\nA Odisseia foi composta originalmente em grego homérico por volta do século VIII ou VII a.C.; em meados do século VI a.C., já fazia parte do cânon literário grego. Na Antiguidade, a autoria de Homero era tida como verdadeira, mas a erudição contemporânea predominantemente assume que a Ilíada e a Odisseia foram compostas de forma independente, como parte de longas tradições orais. Dado o analfabetismo generalizado, o poema era performado para um público por um aoidos ou rapsodo.\nOs temas principais da epopeia incluem as ideias de xenia (νόστος; 'retorno', regresso para casa), peregrinação, nostos (ξενία; 'hospitalidade'), prova e presságios. Os estudiosos discutem o destaque narrativo de certos grupos dentro do poema, como mulheres e escravos, que têm papéis maiores do que em outras obras da literatura antiga. Esse foco é especialmente notável quando contrastado com a Ilíada, que se centra nas façanhas de soldados e reis durante a Guerra de Troia.\nA Odisseia é considerada uma das obras mais significativas do cânone ocidental. A influência homérica é clara em obras como a Eneida, de Virgílio, Os Lusíadas, de Camões, ou Ulysses, de James Joyce, mas não se limita aos clássicos. As aventuras de Ulisses, a superação desesperada dos perigos, nas ameaças que lhe surgem na luta pela sobrevivência, são a matriz de grande parte das narrativas modernas, desde a literatura ao cinema. Adaptações e releituras continuam a ser produzidas em uma grande variedade de mídias. Em 2018, quando a BBC Culture consultou especialistas em todo o mundo para encontrar a narrativa mais duradoura da literatura, a Odisseia ficou em primeiro lugar na lista.",
+      "url": "https://pt.wikipedia.org/wiki/Odisseia"
+    }
+  },
+  "tier": "top",
+  "type": "book"
+}

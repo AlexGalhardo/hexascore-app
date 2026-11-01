@@ -17,12 +17,19 @@ func Profile(r *router.Router, app *vukem.App) error {
 	}
 
 	h := profile.New(acc)
+	if acc.DB.Dialect().Name() == "postgres" {
+		if h.Social, err = SocialService(app, acc); err != nil {
+			return err
+		}
+	}
+
 	required, verified := auth.Required(acc.Web), auth.Verified(acc.Web)
 
 	r.Get("/profile", h.Show).Name("profile").Use(required)
 	r.Patch("/profile/details", h.UpdateDetails).Name("profile.details").Use(required, verified)
 	r.Put("/profile/password", h.UpdatePassword).Name("profile.password").Use(required, verified)
 	r.Patch("/profile/privacy", h.UpdatePrivacy).Name("profile.privacy").Use(required, verified)
+	r.Patch("/profile/notifications", h.UpdateNotifications).Name("profile.notifications").Use(required, verified)
 	r.Delete("/profile/sessions/{handle}", h.RevokeSession).Name("profile.sessions.revoke").Use(required)
 	r.Post("/profile/sessions/revoke-all", h.RevokeAllSessions).Name("profile.sessions.revoke-all").Use(required)
 

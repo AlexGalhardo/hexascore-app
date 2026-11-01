@@ -24,7 +24,10 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
+	"github.com/AlexGalhardo/hexascore-app/app/community"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/app/moderation"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/entities"
 )
 
 //go:embed views
@@ -50,6 +53,10 @@ type CatalogHandlers struct {
 	Authorize func(c *web.Ctx) error
 	// FlagsURL is the vukem feature-flags page; empty when no flag is registered.
 	FlagsURL string
+	// AuthorizeApply is the admin-only applySuggestion check every catalogue field edit needs (owner Q-A15).
+	AuthorizeApply func(c *web.Ctx) error
+	// Editor writes panel field edits with their catalog_audit rows.
+	Editor *community.Applier
 }
 
 type navLink struct {
@@ -74,19 +81,36 @@ type sourceRow struct {
 }
 
 type runRow struct {
-	Job, Source, Status, Started, Finished string
-	Seen, Changed, Failed                  int
+	ID                                            int64
+	Job, Source, Status, Error, Started, Finished string
+	Seen, Changed, Failed                         int
+	Rollbackable                                  bool
 }
 
 // pageData feeds the panel layout (same field names as vukem's admin page) and the pages below.
 type pageData struct {
-	Title      string
-	Panel      panelData
-	Item       models.Item
-	Affiliates []affiliateRow
-	Ready      bool
-	Sources    []sourceRow
-	Runs       []runRow
+	Title         string
+	Panel         panelData
+	Item          models.Item
+	Affiliates    []affiliateRow
+	Ready         bool
+	Sources       []sourceRow
+	Runs          []runRow
+	Queue         queueView
+	Detail        moderation.Detail
+	BulkResults   []moderation.BulkResult
+	RejectReasons []string
+	// CanApply shows the admin-only approve and reject controls (owner Q-A15).
+	CanApply bool
+	Audit    auditView
+	// CanRevert shows the revert form on /admin/catalog-audit.
+	CanRevert     bool
+	RevertReasons []string
+	Locks         []moderation.Lock
+	Metrics       moderation.Metrics
+	LockTargets   []string
+	Reviews       []entities.OpenReviewRow
+	Ingest        IngestStatus
 }
 
 // panelNav mirrors the sidebar vukem builds from admin.Resources (same order, same plural labels);
@@ -100,6 +124,9 @@ var panelNav = []navLink{
 	{Label: "Reports", URL: "/admin/reports"},
 	{Label: "Contact messages", URL: "/admin/contact-messages"},
 	{Label: "Items", URL: "/admin/items"},
+	{Label: "Job runs", URL: "/admin/job-runs"},
+	{Label: "Ingest failures", URL: "/admin/ingest-failures"},
+	{Label: "Dq results", URL: "/admin/dq-results"},
 }
 
 func (h CatalogHandlers) newPage(title string) pageData {
@@ -430,9 +457,12 @@ FROM source_records GROUP BY source ORDER BY source`)
 }
 
 func loadRuns(ctx context.Context, db *sql.DB) ([]runRow, error) {
-	rows, err := db.QueryContext(ctx, `SELECT DISTINCT ON (job, coalesce(source, '')) job, coalesce(source, ''), status,
+	rows, err := db.QueryContext(
+		ctx,
+		`SELECT DISTINCT ON (job, coalesce(source, '')) id, job, coalesce(source, ''), status, coalesce(error, ''),
   seen, changed, failed, started_at, finished_at
-FROM job_runs ORDER BY job, coalesce(source, ''), created_at DESC`)
+FROM job_runs ORDER BY job, coalesce(source, ''), created_at DESC`,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -446,7 +476,18 @@ FROM job_runs ORDER BY job, coalesce(source, ''), created_at DESC`)
 			r       runRow
 			st, fin sql.NullTime
 		)
-		if err := rows.Scan(&r.Job, &r.Source, &r.Status, &r.Seen, &r.Changed, &r.Failed, &st, &fin); err != nil {
+		if err := rows.Scan(
+			&r.ID,
+			&r.Job,
+			&r.Source,
+			&r.Status,
+			&r.Error,
+			&r.Seen,
+			&r.Changed,
+			&r.Failed,
+			&st,
+			&fin,
+		); err != nil {
 			return nil, err
 		}
 

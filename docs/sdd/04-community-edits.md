@@ -29,7 +29,8 @@ Out of scope (v1): trusted moderators (modelled, flag off, D-15); suggestion obj
 - FR-04-13: Every item, edition and entity page has a public, SSR "Recent changes" tab, 20 entries per page. Verify: Playwright + axe.
 - FR-04-14: Decisions, reverts and expiries create an in-app notification and an email in the author's locale (email opt-out). Verify: integration test with `MAIL_MAILER=array`.
 - FR-04-15: Profiles show submitted/approved/rejected counts and approval rate after ≥ 1 decision; admins export `catalog_audit` as CSV/NDJSON. Verify: integration tests (export of 100k rows streams).
-- FR-04-16: The moderation dashboard shows queue size, oldest open age, p50/p95 time-to-decision and approval rate (7/30 days). Verify: integration test on the query.
+- FR-04-16: The moderation dashboard shows queue size, oldest open age, p50/p95 time-to-decision and approval rate (7/30 days). Verify: integration test on the query (`TestMetricsQuery`). A decision is a suggestion in `approved`, `applied`, `reverted` (approvals) or `rejected`, windowed by `decided_at`; time-to-decision is `decided_at - submitted_at`; withdrawn and expired are system transitions and do not count.
+- FR-04-17: Moderation has two steps (owner Q-A15, 2026-10-31). A moderator only reviews: it records a recommendation (`approve` or `reject`, optional note ≤ 1,000 chars) on an open suggestion, stored per suggestion and reviewer with the time and the `version` reviewed, and shown in the queue and the detail view. Only an admin approves (applies to the catalogue), rejects for good, bulk-approves or bulk-rejects; merge suggestions apply through approve, so merge is admin-only too. Verify: `TestSecurity_A01_ModeratorCannotApply` and the recommendation integration tests.
 
 ## 4. Non-functional requirements
 
@@ -37,7 +38,7 @@ Out of scope (v1): trusted moderators (modelled, flag off, D-15); suggestion obj
 - NFR-04-2: SLA: 95 % of submissions decided within 24 h; ageing badge green < 12 h, amber 12–24 h, red > 24 h; alert when the oldest open suggestion passes 20 h (SDD 12).
 - NFR-04-3: Audit retained forever, written in the same transaction as the change, covered by daily backups (D-18).
 - NFR-04-4: CSRF on forms, policies fail closed (vukem `https://vukem.dev/docs/security/authorization` "Authorization"), diffs rendered as text, user URLs fetched only via `httpclient.Safe` (vukem `https://vukem.dev/docs/basics/csrf` A01). Verify: `TestSecurity_*` (section 10), ZAP.
-- NFR-04-5: Public surfaces show nickname only; account deletion (SDD 03) nulls actor/author ids and shows "deleted user"; values stay.
+- NFR-04-5: Public surfaces show nickname only; account deletion (SDD 03) nulls the author/claim/decision ids on `suggestions` and shows "deleted user"; values stay. `catalog_audit.actor_id` is not nulled: the table is append-only (FR-04-10) and the id points at the anonymised user row (SDD 03 §7.5), which holds no email, name or nickname, so Recent changes renders it as "deleted user". Verify: `TestCommunitySystemTransitions` (integration).
 - NFR-04-6: WCAG 2.2 AA; axe zero serious/critical; diffs use text markers, not colour alone.
 - NFR-04-7: Strings under `community.*` via vukem i18n (`https://vukem.dev/docs/digging-deeper/localization` "i18n"); CI fails on a missing key in any locale.
 - NFR-04-8: No new service or store (D-08): Postgres plus the database queue.
@@ -99,6 +100,17 @@ create table suggestion_events (
   created_at    timestamptz not null default now()
 );
 create index suggestion_events_sid_idx on suggestion_events (suggestion_id, id);
+
+create table suggestion_reviews (                     -- FR-04-17: a moderator's recommendation
+  suggestion_id      uuid not null references suggestions(id),
+  reviewer_id        bigint not null references users(id) on delete cascade,
+  recommendation     text not null check (recommendation in ('approve','reject')),
+  note               text check (char_length(note) <= 1000),
+  suggestion_version integer not null,                 -- the version the reviewer saw
+  created_at         timestamptz not null default now(),
+  updated_at         timestamptz not null default now(),
+  primary key (suggestion_id, reviewer_id)              -- a new recommendation replaces the reviewer's last one
+);
 
 create type audit_source as enum ('community','admin','revert','merge','create');
 
@@ -168,25 +180,27 @@ Locale prefixes per D-17. User routes: `web` guard + `auth.Verified` (vukem `htt
 
 | Method | Path | Auth | Notes |
 | --- | --- | --- | --- |
-| GET | `/suggest/{target_type}/{id}`, `/suggest/new/{domain}` | verified | Inertia `Community/SuggestEdit` / `SuggestCreate` (target snapshot, editable fields, locks, quota left) |
+| GET | `/suggest/{target_type}/{id}`, `/suggest/new/{domain}` | verified | Inertia `Community/SuggestEdit` / `SuggestCreate` (target snapshot, editable fields, locks, quota left); `?target=entity` or, for books, `?target=edition` switches the create to that kind with its create-only fields (`entity_kind`; `work_id`, `language`) |
 | POST / PATCH | `/suggestions`, `/suggestions/{id}` | author, `draft` | save draft → 303 |
 | POST | `/suggestions/{id}/submit` | author | 303 to status page, or 403/409/422/423/429 |
 | POST | `/suggestions/{id}/withdraw` | author | → 303 |
 | POST | `/suggestions/uploads/cover` | draft owner | multipart, 1 file → `{key,width,height}` |
 | GET | `/suggestions/{id}`, `/me/suggestions` | author/admin, else 404 | `Community/SuggestionStatus`, `Community/MySuggestions` |
-| GET | `/{type}/{slug}/changes`, `/entities/{kind}/{slug}/changes` | public | `Catalog/RecentChanges`, SSR (D-07) |
-| GET | `/admin/moderation`, `/admin/moderation/{id}`, `/admin/moderation/metrics` | `moderate` | queue, detail with diff, FR-04-16 |
-| POST | `/admin/moderation/{id}/{claim,release,approve,reject}` | `moderate` | `version`; approve `confirm_stale?`; reject `reason`, `note` |
-| POST | `/admin/moderation/bulk` | `moderate` | `ids[]` ≤ 50, action → per-id results |
+| GET | `/{section}/{slug}/changes`, `/books/{slug}/editions/{id}/changes`, `/{entity section}/{slug or code}/changes` | public | `Catalog/RecentChanges`, SSR (D-07), `?page=` (20 per page, OFFSET capped at 500 pages) |
+| GET | `/admin/moderation`, `/admin/moderation/{id}`, `/admin/moderation/metrics` | `moderate` | queue, detail with diff and recommendations, FR-04-16 |
+| POST | `/admin/moderation/{id}/{claim,release}` | `moderate` | `version` |
+| POST | `/admin/moderation/{id}/recommend` | `moderate` | `version`, `recommendation` = approve, reject; `note?` (FR-04-17) |
+| POST | `/admin/moderation/{id}/{approve,reject}` | `applySuggestion` | `version`; approve `confirm_stale?`, `confirm_title` on merge; reject `reason`, `note` |
+| POST | `/admin/moderation/bulk` | `moderate`; `applySuggestion` for approve and reject | `ids[]` ≤ 50, action → per-id results |
 | GET | `/admin/catalog-audit`, `/admin/catalog-audit/export.{csv,ndjson}` | `viewCatalogAudit` | filters; export via vukem `export` (`https://vukem.dev/docs/digging-deeper/exports` "Exports") |
 | POST | `/admin/catalog-audit/{id}/revert` | `revertCatalog` | `reason`, `mode` = single, cascade, force |
-| POST / DELETE | `/admin/locks`, `/admin/locks/{id}` | `lockCatalog` | target, field, reason, expiry |
+| GET / POST | `/admin/locks`, `/admin/locks/{id}/delete` | `lockCatalog` | target, field (`*` = whole record), reason, expiry in days; unlock is a POST because HTML forms cannot send DELETE |
 
 Moderation pages (`/admin/moderation*`, `/admin/catalog-audit*`, `/admin/locks`) are server-rendered `html/template` views inside the vukem admin layout (<https://vukem.dev/docs/digging-deeper/admin>, <https://vukem.dev/docs/basics/views>), not Inertia pages, so `/admin` stays one UI (open issue 09-12); forms post with CSRF tokens and answer 303. The ban outcome calls SDD 03 `POST /admin/users/{id}/ban`.
 
-Submission kill switch: feature flag `community.submissions` (<https://vukem.dev/docs/digging-deeper/feature-flags>), code default off, turned on in production only once moderation is staffed (an admin able to meet the 24 h decision target, D-15). While off, the suggest pages show a "coming soon" notice, `POST /suggestions*` and `/submit` answer 403 `community-submissions-closed`, and the moderation queue stays reachable for admins.
+Submission kill switch: feature flag `community_submissions` (<https://vukem.dev/docs/digging-deeper/feature-flags>, names allow only `a-z`, `0-9` and `_`; env `FLAG_COMMUNITY_SUBMISSIONS`), code default off, turned on in production only once moderation is staffed (an admin able to meet the 24 h decision target, D-15). While off, the suggest pages show a "coming soon" notice, `POST /suggestions*` and `/submit` answer 403 `community-submissions-closed`, and the moderation queue stays reachable for admins.
 
-Abilities are gate abilities defined like `admin`/`viewAuditLogs` in vukem `https://vukem.dev/docs/digging-deeper/admin` "Wiring". `moderate` also goes to role `moderator` only when flag `community.trusted_moderators` is on (default off, `/admin/_flags`, `https://vukem.dev/docs/digging-deeper/admin` "Feature flags"); revert and locks stay admin-only.
+Abilities are gate abilities defined like `admin`/`viewAuditLogs` in vukem `https://vukem.dev/docs/digging-deeper/admin` "Wiring". `moderate` (queue, detail, claim, release, recommend) also goes to role `moderator` only when flag `community_trusted_moderators` is on (default off, `/admin/_flags`, `https://vukem.dev/docs/digging-deeper/admin` "Feature flags"). `applySuggestion` (approve, reject, merge apply), revert, locks and the audit log stay admin-only whatever the flag says (FR-04-17, owner Q-A15). Every role behind these abilities needs 2FA (SDD 13 FR-13-5).
 
 | Status | Type | Extra members |
 | --- | --- | --- |
@@ -204,8 +218,8 @@ Burst 429s and upload 413/422 come from vukem `ratelimit` and `upload`.
 
 Jobs (vukem `https://vukem.dev/docs/digging-deeper/queue` "Queue", "Events", "Mail"):
 
-- `catalog.changed {target_type, target_id, fields, audit_ids}` via `q.DispatchTx` in the apply/revert transaction; handlers purge cache (SDD 01), reindex search (SDD 07), update sitemap `lastmod` and the changes feed (SDD 05); idempotent by `audit_ids`.
-- `community.notify`: calls SDD 14 `notifications.Send` (dedupe key `suggestion:<id>:<state>`), sends mail via `SendLaterTx` with `EnvelopeContext` in the author's locale.
+- `catalog.changed {target_type, target_id, fields, audit_ids}` via `q.DispatchTx` in the apply/revert transaction; handlers purge cache (SDD 01), reindex search (SDD 07), update sitemap `lastmod` and the changes feed (SDD 05); idempotent by `audit_ids`. Implementation: one transaction inserts the ids into `catalog_changed_done` and stops when none is new, queues the owning item or entity in `search_dirty` (an edition queues its work) and sets its `updated_at`, which the sitemap prints as `<lastmod>`. The changes feed row is already written by the apply transaction, and the page caches are query-keyed with TTLs of 60 s or less, so there is no per-item cache entry to purge.
+- `community.notify`: calls SDD 14 `notifications.Send` (dedupe key `suggestion:<id>:<state>`), sends mail via `SendLaterTx` in the author's saved `users.locale` only when that inbox row is new (one mail per state across retries). States: `approved`, `applied`, `rejected` (`suggestion_decided`), `reverted`, `expired`. `users.community_mail_opt_out` drops the mail, never the inbox row; a deleted or anonymized author gets nothing. Admin reject dispatches it in the reject transaction.
 - `community.check_sources`: GET each URL through `httpclient.Safe` (5 s, 3 redirects, 256 KiB), stores status in `meta`; never blocks.
 - `community.cover_fetch`: downloads a URL cover via `httpclient.Safe`, then `upload.Save` with the cover rules.
 - Hourly: expire drafts, refresh tiers, release claims idle > 2 h; notification purge is SDD 14's job.
@@ -223,6 +237,7 @@ No OpenAPI operation or SDK in v1; later the same handlers mount at `/app/v1/sug
 | draft | withdrawn | discard | author |
 | draft | expired | 14 days without edit | system |
 | submitted | in_review | claim | admin (moderator if flag on) |
+| submitted, in_review | (same) | recommend approve or reject, no transition and no `version` bump (`suggestion_reviews`) | moderator or admin |
 | in_review | submitted | release, or claim idle > 2 h | admin, system |
 | submitted, in_review | approved | approve with deferred work (cover processing, unapplied `depends_on`) | admin |
 | submitted, in_review, approved | applied | apply transaction commits | system |
@@ -294,12 +309,14 @@ Apply (`db.Tx`, vukem `https://vukem.dev/docs/database/orm` "Query builder"):
 
 1. Lock suggestion `FOR UPDATE`; check status and `version`.
 2. Lock target rows `FOR UPDATE` (ordered by id, as legacy `mergeItems`).
-3. Per field: if current ≠ `before` and no `confirm_stale` → 409; write `after`; set provenance `{source: community, source_ref: suggestion_id}`.
+3. Per field: if current ≠ `before` and no `confirm_stale` → 409; write `after`; set provenance to `community` (the SDD 01 `provenance[field]` / `*_source` shape; the `data_sources` row is inserted on first apply). The suggestion id is the audit row's `suggestion_id`, not part of the provenance value. Edition fields keep the row-level `source`.
 4. Insert one audit row per field with the actual previous value and provenance.
 5. Update suggestion, events, `contributor_stats`.
 6. `DispatchTx` `catalog.changed` and `community.notify`.
 
-Admin-panel catalogue edits also write `catalog_audit` (`source=admin`) in the panel transaction via `BeforeSave` (`https://vukem.dev/docs/digging-deeper/admin` "Resources"; open issue 4). `admin.AuditLog` keeps logging panel CRUD; only `catalog_audit` feeds Recent changes and revert.
+Applies on one target serialise on the submit advisory lock (`pg_advisory_xact_lock` on the target) taken before step 1, so flagging rivals stale (`meta.stale`) cannot deadlock against a concurrent apply. Step 5 sets `meta.stale` on the other open suggestions of the target that touch an applied field. A cover change or an unapplied `depends_on` stops at `approved` with no catalogue write.
+
+Admin-panel catalogue edits also write `catalog_audit` (`source=admin`, `actor_role=admin`) in the same transaction as the write. They go through `POST /admin/catalog/{type}/{id}/fields` (admin-only, `applySuggestion`), which takes the per-target advisory lock and the target row lock, reads each field's `before` under that lock, writes through the apply path (provenance `hexascore`, `api_changes`, `catalog.changed`) and skips unchanged fields. The panel resources stay read-only: a resource `BeforeSave`/`AfterSave` hook (`https://vukem.dev/docs/digging-deeper/admin` "Resources") runs around `orm.Update`, which rewrites every column and would clobber a concurrent apply's provenance (open issue 4, VF-010). Since vukem v0.35.0 (#121) the panel save also locks the row and writes only the changed columns, so resource saves no longer lose updates; the dedicated route stays because it also takes the advisory lock and writes the audit row. `admin.AuditLog` keeps logging panel CRUD; only `catalog_audit` feeds Recent changes and revert.
 
 ### 7.5 Revert
 
@@ -310,17 +327,19 @@ On audit row A for field f:
 - `force`: set `A.before` regardless; R's `before` is the current value; later suggestions stay `applied`.
 - Reverting a suggestion reverts all its rows together. A revert cannot be reverted (unique index); restoring requires a new suggestion. Only reason `incorrect` counts against the author.
 
+Implementation: revert is admin-only (`revertCatalog`; the service also refuses a non-admin actor), takes the per-target advisory lock of apply, and writes through `catalog.RestoreField` (the value and the exact `prev_provenance`; a null provenance drops the key) or `catalog.RestoreRelation` (relation snapshots carry each row's `Source`, so a removed relation comes back with its own source). Rows with `source` `revert`, `merge` or `create` answer 409 `not-revertible`; a row already reverted answers 409 `already-reverted` (also on the unique-index race). `single` answers 409 `revert-conflict` with `laterAuditIds` (empty when the field changed outside the audit log); `cascade` reverts the later rows on the same field newest first and marks their suggestions `reverted`, without cascading into those suggestions' other fields. Revert reasons are the reject reasons minus `target_gone`. A reverted synopsis takes the licence of its restored source from `data_sources`; its source URL is not restored. A translated title that did not exist before the change is not revertible (the translation row is not deleted).
+
 ### 7.6 Create, merge, public views
 
-`create` inserts the record with audit rows `before=null` (`source=create`) and unblocks `depends_on` suggestions. `merge` calls the SDD 01 merge service (legacy parity: same type, row locks, conflicting ratings skipped), writes one row `field='*merge*'` with both ids and moved counts, expires open suggestions on the source, and is not revertible (typed-title confirmation). Recent changes shows field label, old → new and nickname ("HexaScore team" for admins, "deleted user"). Tier and accuracy are visible only to the user and admins.
+`create` inserts the record with audit rows `before=null` (`source=create`) and unblocks `depends_on` suggestions. `merge` calls the SDD 01 merge service (legacy parity: same type, row locks, conflicting ratings skipped), writes one row `field='*merge*'` with both ids and moved counts, expires open suggestions on the source, and is not revertible (typed-title confirmation). Implementation: a create needs `external_ids.wikidata` (the item identity), refuses a Wikidata id already in the catalogue with 409 `suggestion-duplicate`, stores the new id in `meta.created_id` (`target_id` stays null on a create), and then applies its approved dependents, each in its own transaction. An entity create (`targetKind=entity`) also needs `entity_kind` (person, organization, franchise, platform or genre) and refuses a known `external_ids.wikidata`; an edition create (`targetKind=edition`, book domain only) needs `work_id` (an existing book), `language` and at least one of ISBN-13, Wikidata or Open Library id, each refused with 409 `suggestion-duplicate` when another edition holds it. `entity_kind`, `work_id` and `language` shape the insert and get no audit row; every other field gets its `source=create` row. Fields outside the target kind's editable list are a 422 at draft time. The merge approve form asks for `confirm_title`, the deleted item's title (case-insensitive), and the `*merge*` audit row sits on the surviving item with `before` = both `catalog_merge_audit` snapshots. Recent changes shows field label, old → new and nickname ("HexaScore team" for admins, "deleted user"). Tier and accuracy are visible only to the user and admins.
 
 ## 8. Edge cases
 
 - Concurrent 3rd and 4th submit: the row lock admits one; the other gets 429.
 - Submit at 23:59:59.900 UTC counts for that day.
 - Admin edit while a suggestion is open: approve needs `confirm_stale`; audit stores the real `before`.
-- Target deleted or merged: open suggestions `expired` (`target_gone`), no stats impact.
-- Author banned or deleted: open suggestions withdrawn by system; audit stays.
+- Target deleted or merged: open suggestions `expired` (`target_gone`), no stats impact; the community merge does it in its transaction, admin and console merges in the `catalog.merged` job.
+- Author banned or deleted: open suggestions (draft, submitted, in_review) withdrawn by system with reason `author_banned` (listener on `accounts.UserBanned`) or `author_deleted` (inside the anonymisation transaction, which also nulls `author_id`, `assigned_to`, `decided_by`, `suggestion_events.actor_id`, `catalog_locks.locked_by` and deletes the user's `suggestion_reviews`); approved suggestions stay. `catalog_audit` is append-only, so its `actor_id` keeps pointing at the anonymized row, shown as "deleted user".
 - Lock added on open suggestions: approve 423 until unlocked.
 - Expired draft: its uploaded cover is deleted.
 - Mail down: the job retries; the in-app row is already committed.
@@ -346,7 +365,7 @@ On audit row A for field f:
 - Integration (Postgres 17): 20 concurrent submits by one user, duplicate lock, apply/revert, append-only trigger, stats rebuild, deletion nulling, `DispatchTx` rollback.
 - Security: `TestSecurity_Community_A01_PolicyFailsClosed`, `_A01_SourceURLSSRF`, `_A01_CSRF`, `_A03_DiffEscapesHTML`, `_A04_HoneypotLogged`; ZAP.
 - E2E: Playwright + axe, including a two-admin claim conflict.
-- Nightly asserts: every `applied` has audit rows; no open suggestion targets a missing record; stats equal rebuild.
+- Nightly asserts: every `applied` has audit rows; no open suggestion targets a missing record; stats equal rebuild. Implementation: job `community.asserts` daily at 05:10 UTC (`app/jobs/community_asserts.go`, `TestCommunityAsserts`); a failure logs `alert=community_asserts` at ERROR (SDD 12 §6.2) and fails the job, so alert A6 also reports it.
 
 ## 11. Open issues
 

@@ -1,0 +1,48 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt2474952",
+      "tmdb": "60877"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "episodes": 30,
+      "genres": [
+        "black comedy"
+      ],
+      "seasons": 3
+    },
+    "popularity": 11.0,
+    "qid": "Q4958418",
+    "release_date": "2012-11-08",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Bravest Warriors is an animated web series created by Pendleton Ward. Set in the year 3085 onwards, it follows four teenage heroes-for-hire as they warp through the universe to save adorable aliens and their worlds using the power of their emotions. The animated series began streaming on Frederator's Cartoon Hangover channel on YouTube on November 8, 2012. The series is based on a short produced for Frederator's Nicktoons animation incubator series Random! Cartoons that aired on January 10, 2009. A comic book adaptation published by Boom! Studios launched on October 24, 2012.\nOn October 20, 2016, a fourth season was announced. It was produced by Nelvana in Canada, in association with Frederator. It started airing on VRV in the United States on December 25, 2017, and Teletoon in Canada on September 3, 2018. A 21-minute documentary was released on December 11, 2017. As the voice acting for the television series was recorded between Los Angeles, California and Toronto, Ontario. While it is not the first show to be both a SAG-AFTRA and ACTRA production, it is the first North American animated production to credit both unions due to using more American voice actors over Canadian voice actors.\nThe show won the Shorty Award for Best Web Show in 2013 and was nominated in the Annecy International Animated Film Festival. It is also a 2015 Webby Award honoree. The fourth season was nominated for the 2019 Youth Media Alliance award for Best Digital First Content for all age groups. On December 3, 2019, it was announced that there would be a Catbug spin-off and Ward would be involved with it. However, as of September 2026, no updates have been announced.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Bravest_Warriors",
+        "title": "Bravest Warriors"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Bravest Warriors (em português: Bravos Guerreiros) é uma websérie de desenho animado estadunidense criada por Pendleton Ward, o mesmo criador de Hora de Aventura, e dirigido por Breehn Burns. A série é produzida pela Frederator Studios para o seu canal no Youtube de desenhos animados Hangover. Fred Seibert, Burns, e Will McRobb e Chris Viscardi são os produtores executivos da série.\nAssim como Hora de Aventura/Adventure Time, a série é baseada em um curta produzida para o Random! Cartoons, um programa de séries animadas da Nicktoons e da Frederator Studios. Uma revista em quadrinhos foi lançada em 2012 pela editora Boom! Studios.\n\nEm 20 de Outubro, de 2016, foi anunciado que Frederator Studios e Nelvana vão produzir uma série de televisão de Bravest Warriors, que também servirá como uma continuação da websérie.  A série irá ao ar no canal Teletoon no Outono de 2018.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Bravest_Warriors",
+        "title": "Bravest Warriors"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Bravest Warriors (en español Guerreros Valientes) es una serie web de animación de Estados Unidos, creada por Pendleton Ward, reconocido por ser también creador de Adventure Time. La serie está escrita y dirigida por Breehn Burns, y producida por Frederator Studios para su canal de YouTube, el cual es Cartoon Hangover.​​ Los productores ejecutivos de Frederator son Fred Seibert, Burns, y Will McRobb y Chris Viscardi.​ La mayoría de los episodios de Bravest Warriors son TV-PG, TV-14, y algunos episodios son TV-MA.\nSituado en el año 3085, la serie narra las aventuras de cuatro héroes adolescentes, que viajan a través del universo salvando a extraterrestres adorables y a sus mundos con el poder de sus emociones.​ La serie animada comenzó su transmisión en el canal Cartoon Hangover de Channel Frederator en YouTube el 8 de noviembre del 2012.​ La serie está basada en un corto de Frederator para el espacio Random! Cartoons, producido por Nicktoons Network, que fue emitido el 10 de enero de 2009. Una adaptación en cómic fue publicada por Boom! Studios el 24 de octubre de 2012.​\nLa serie ganó el premio Shorty al Mejor Programa Web en 2013.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Bravest_Warriors",
+        "title": "Bravest Warriors"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q4958418",
+  "slug": "bravest-warriors"
+}

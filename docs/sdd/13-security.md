@@ -18,7 +18,7 @@ In (v1): web (including passkeys, ADR 0017), `/api/v1`, `/app/v1`, admin, webhoo
 - FR-13-2: Every unsafe unauthenticated route has a §7.1 limit and answers 429 with `Retry-After`. Verify: table-driven `TestSecurity_A06_HexaLimits`.
 - FR-13-3: The proof-of-work challenge (§7.2) triggers on the ADR 0016 thresholds and refuses a reused solution. Verify: `TestSecurity_A07_Pow*` (SDD 03).
 - FR-13-4: Every body, query, path, webhook field and stored jsonb value passes a `z` schema before use. Verify: lint flags `c.FormValue` and `map[string]any` decoding in `app/`; fuzz test per boundary.
-- FR-13-5: Admin routes need the `admin` role, confirmed 2FA and a session within §7.5 limits. Verify: `TestSecurity_A01_HexaAdminNeeds2FA`.
+- FR-13-5: Admin routes need the `admin` role (the moderation pages also admit `moderator`), confirmed 2FA and a session within §7.5 limits; both roles get the 2FA redirect and the session limits. Verify: `TestSecurity_A01_HexaAdminNeeds2FA`, `TestSecurity_A07_ModeratorRequires2FA`.
 - FR-13-6: Data-subject rights work end to end (§7.6). Verify: SDD 03/14 integration tests.
 - FR-13-7: Every incident follows §7.9 and gets a review within 5 working days. Verify: manual checklist.
 
@@ -165,6 +165,22 @@ Keys: IPv6 is bucketed by /64 [RL]. `c.IP()` trusts forwarding headers only from
 | `/csp-reports` | 30/min, body ≤ 16 KiB ([HDR] "Collecting violation reports") | IP |
 | `/stripe/webhook` | 600/min, signature checked first | IP |
 | Export | 1 per 7 days (SDD 14) | user |
+| Pages and Inertia visits (production) | anonymous 60/min and 600/h; with a session cookie 300/min and 3000/h; verified search crawlers exempt (§7.1.1) | IP |
+
+### 7.1.1 Anti-scraping of the public pages (ADR 0022, Q-A18)
+
+- `ScrapeGuard` (`app/http/middleware/scrape_guard.go`) runs in production as server middleware outside the view counter, gzip and `RenderCache`. It covers GET/HEAD page views and `X-Inertia` visits, never `/api`, `/app`, `/build`, `/covers`, `/og`, `/up`, `/docs`, `/.well-known`, `/sitemaps`, `/challenge`, `/search/suggest` or file paths.
+- Allowed crawlers (`app/botverify`): Googlebot (`googlebot.com`, `google.com`, `gae.googleusercontent.com`), Bingbot (`search.msn.com`), Applebot (`applebot.apple.com`) and YandexBot (`yandex.ru`, `yandex.net`, `yandex.com`) are verified by reverse DNS plus forward confirmation, with a 1.5 s timeout. The verdict is cached 24 h (1 min after a DNS failure). A verified crawler is exempt from the page limits.
+  - DuckDuckBot, GPTBot, ClaudeBot, CCBot and PerplexityBot publish IP lists only, so they are UA-matched and keep the anonymous limits.
+  - A crawler UA that DNS proves false gets 403 and logs `alert=scrape`. A DNS timeout only leaves the client unverified.
+- Tool UAs (empty, python-requests, curl, wget, Scrapy, Go-http-client, axios, node-fetch, HeadlessChrome, PhantomJS and similar) get 403 problem+json, which points to `/docs`.
+- Honeypot: a hidden link (`hidden`, `aria-hidden`, `tabindex=-1`, `rel=nofollow`) to `/data/export`, which robots.txt disallows. An unverified client that requests it is banned from pages for 24 h, keyed by IP (/64 for IPv6), in the cache store, and logs `alert=scrape`. A ban store that cannot be read answers 503.
+- Client IP: `c.IP()` / `ratelimit.ByIP`, so forwarding headers are trusted only from `TRUSTED_PROXIES` ([OV] A01).
+- `PAGE_LIMIT_SCALE` multiplies the page limits for the QA stack only. Production leaves it unset, and any value that is not a positive integer refuses to boot.
+- Props: the item, entity and public list pages send only the fields they render, so the page JSON never exposes more than the HTML.
+- Tests: `TestSecurity_A06_ScrapeToolUADenied`, `_ScrapeAPIRoutesUnaffected`, `_ScrapeSpoofedGooglebot`, `_ScrapeVerifiedGooglebot`, `_ScrapePageRateLimit`, `_ScrapeHoneypotBan`, `TestSecurity_A10_ScrapeBanStoreDown503`, `app/botverify` tests (fake resolver, no live DNS), `TestRobots_Production`, `TestTermsParityAndScrapingClause`.
+- Turnstile step-up (ADR 0016 amendment): a soft per-IP budget (`pages.soft`, 30/min, scaled by `PAGE_LIMIT_SCALE`) runs before the hard anonymous limits; past it `challenge.StepUp.Require` writes a 403 `noindex`, `no-store` interstitial whose form posts to `POST /turnstile` (`/challenge` is the proof-of-work route) and sets a 30 min clearance cookie bound to the IP prefix and User-Agent. `Skip` is the botverify verdict, so verified crawlers are never asked. A soft-limiter store error does not challenge (the hard limits fail closed). `POST /turnstile` is outside session and CSRF (the interstitial is written before them; a forged post only grants a clearance) and rate limited like `/challenge`. Tests: `TestSecurity_A06_ScrapeSoftLimitStepsUp`, `TestTurnstileStepUpPath`.
+- Not covered here: Cloudflare bot management and WAF (P2, owner-gated).
 
 ### 7.2 Challenge and form integrity (ADR 0016)
 
@@ -176,7 +192,7 @@ Keys: IPv6 is bucketed by /64 [RL]. `c.IP()` trusts forwarding headers only from
 - Server check order: HMAC, expiry, route, zero bits, then single use via cache `Add("pow:"+c)`. A replay gets 428; a store error gets 503.
 - Accessibility: no puzzle and no image. An `aria-live` region says "Checking your browser…". After 10 s the client may ask once for `bits-2` (1/h per IP): `GET /challenge?route=…&fallback=1`; the gate accepts solutions down to `bits-2`, since only that endpoint hands them out. Without JS, a localised notice offers "Continue with Google", which is never challenged.
 - Honeypot `website` field, plus a minimum fill time of 3 s taken from the render time in the signed form token (`form_token`, `app/forms`; a missing or forged token counts as a violation). A violation gets the normal success answer, stores nothing and logs `security.honeypot`. Suggestions get a 422 instead (SDD 04).
-- Turnstile: app setting `BOT_CHALLENGE=pow|turnstile` (HexaScore config, not vukem). It adds `https://challenges.cloudflare.com` to `script-src`/`frame-src` on challenged pages only. Using it in production needs an ADR 0016 update (issue 12). The framework hook is requested in VF-003.
+- Turnstile (ADR 0016 amendment, vukem `challenge`): on when `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` are both set. `POST /signup` (action `register`), `/login` and `/contact` need an `X-Challenge-Token` solved for that action, checked before the proof-of-work gate; a missing, invalid or cross-form token gets the validation error `challenge` (422 for JSON). Siteverify gets the client IP and an idempotency key; an outage answers 503. The CSP gains `https://challenges.cloudflare.com` in `script-src` and `frame-src` only when on, and `api.js` loads with the request nonce on the three form pages. `TURNSTILE_VERIFY_URL` (test fake) refuses to boot in production. Tests: `TestSecurity_A07_TurnstileProtectsForms`, `TestTurnstileOnLoginPage`, `TestSecurity_A05_TurnstileFakeVerifyRefusedInProduction`.
 
 ### 7.3 Input handling
 
@@ -237,6 +253,7 @@ Keys: IPv6 is bucketed by /64 [RL]. `c.IP()` trusts forwarding headers only from
   - Session: idle 30 min, absolute 12 h. Optional `ADMIN_IP_ALLOWLIST` (CIDRs, checked with `c.IP()`). The 2FA gate, lifetimes and allowlist are HexaScore middleware, `[NOT IN VUKEM DOCS]` (issue 7): `AdminGuard` (`app/http/middleware/admin_guard.go`, P2.D.3.1), router-wide so it also covers the moderation routes mounted next to the panel; allowlist miss -> 404, expired admin session -> logout and `/login`, admin without confirmed TOTP on `/admin` -> `/user/two-factor`. vukem v0.33.0 `admin.Config{TwoFactor, MaxSessionAge, AllowCIDRs}` (VF-030) guards only the panel's own routes and has no idle timeout, so it is not used (VF-058). 2FA confirmation calls `Regenerate()`; a CLI role change ends the user's sessions (session version bump, remember-me tokens deleted).
   - Panel writes are audited in the same transaction ([ADM] "The audit log"). Other admin actions emit `web.AuditEvent` ([BB] "Audit events").
   - No impersonation (VF-012).
+- Response compression (BREACH, CWE-200): a compressed body leaks a secret that sits next to attacker-chosen input, so HTML is plain by default. The exception is the anonymous public catalogue page (home, listings, item and entity pages) served with `Cache-Control: public, max-age=60`: request without the session cookie, response without `Set-Cookie`, status 200. Such a page has no CSRF token (CSRF uses Origin/Sec-Fetch-Site; the fallback token exists only on session-bound admin pages) and no session data; its one per-request secret is the CSP nonce, fresh on every response (the render cache swaps it per request), so there is no stable secret to recover. Login, profile, admin, 404s, JSON and anything session-bound or cookie-setting are never compressed. `GzipPublicPages` wraps `RenderCache` and adds `Vary: Accept-Encoding`. Test: `TestSecurity_A02_GzipNeverCompressesSessionOrCSRFResponses`.
 
 ### 7.6 Data-subject rights ([LGPD] Art. 18; 15 days, Art. 19)
 
@@ -254,7 +271,7 @@ The privacy policy must list:
 - the §5 inventory with bases and retention;
 - cookies: session, 2FA, `locale`, `theme`, consent;
 - opt-in analytics (SDD 12) and YouTube embeds after consent;
-- processors: Railway, Grafana Cloud, Resend, Stripe, Google, Telegram; international transfers;
+- processors: Railway, Resend, Stripe, Google, Telegram; international transfers;
 - IGDB/TMDB attribution and the A-07 licence;
 - minimum age 13;
 - the encarregado contact (issue 6).
@@ -352,4 +369,4 @@ Review in `docs/incidents/YYYY-MM-DD-<slug>.md` within 5 working days: UTC timel
 9. No antivirus for uploads (D-08); accepted with §7.3 controls. Owner: owner. Revisit if uploads go beyond moderated images.
 10. HSTS `preload` deferred. Owner: owner. Revisit 2027-06.
 11. The restore runbook must re-apply deletions made after the dump. Owner: architect (SDD 11). Closes when the monthly drill covers it. Status 2026-10-29: `backup:restore` replays deletions, schedules and cancellations from the running database (`TestRestoreReappliesDeletions`, P2.E.3.1, runbook `docs/runbooks/restore.md`); stays open until the first staging drill.
-12. Turnstile in production needs an ADR 0016 update and a policy line. Owner: owner. Closes on the ADR edit.
+12. Closed 2026-11-01: ADR 0016 amendment and §7.2 "Turnstile" (ADOPT-vukem-0.36.0).

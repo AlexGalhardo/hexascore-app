@@ -1,5 +1,6 @@
 import { Head, InfiniteScroll, router } from "@inertiajs/react";
 
+import Btn from "../../components/ui/Btn";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
@@ -44,11 +45,43 @@ export default function Notifications({
 							<span
 								className={`min-w-0 flex-1 ${n.readAt ? "text-muted" : "font-medium"}`}
 							>
-								{t(`notifications.kind.${n.kind}`, n.payload)}
+								{t(`notifications.kind.${n.kind}`, {
+									...n.payload,
+									// The server stores the raw target type ("review", "comment"); show it translated.
+									...(typeof n.payload.targetType === "string" && {
+										targetType: t(
+											`notifications.target.${n.payload.targetType}`,
+										),
+									}),
+								})}
 								<span className="ml-2 text-sm text-muted">
 									{new Date(n.createdAt).toLocaleString()}
 								</span>
 							</span>
+							{n.kind === "follow_request" &&
+								typeof n.payload.nickname === "string" && (
+									<span className="flex w-full gap-2 sm:w-auto">
+										{(["accept", "decline"] as const).map((answer) => (
+											<Btn
+												key={answer}
+												kind={answer === "accept" ? "primary" : "secondary"}
+												onClick={() =>
+													router.post(
+														l(
+															`/me/follow-requests/${n.payload.nickname}/${answer}`,
+														),
+													)
+												}
+											>
+												{t(
+													answer === "accept"
+														? "notifications.followAccept"
+														: "notifications.followDecline",
+												)}
+											</Btn>
+										))}
+									</span>
+								)}
 							{!n.readAt && (
 								<button
 									type="button"

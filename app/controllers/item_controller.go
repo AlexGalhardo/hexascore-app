@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"strconv"
@@ -14,7 +15,9 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/app/recommend/related"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
+	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
 // Item serves the item pages Catalog/Show and Catalog/Edition (SDD 09 §6.2).
@@ -22,11 +25,19 @@ type Item struct {
 	app    *vukem.App
 	writer *scoring.Writer
 	user   func(c *web.Ctx) (models.User, error)
+	// Social adds the deferred `reviews` prop while the feature flag `social` is on (SDD 14 §12.10); nil on SQLite.
+	Social *social.Follows
+	reco   related.Events
 }
 
 // NewItem builds the handlers; writer reads the viewer's own rating, status and time to beat.
-func NewItem(app *vukem.App, writer *scoring.Writer, user func(c *web.Ctx) (models.User, error)) *Item {
-	return &Item{app: app, writer: writer, user: user}
+func NewItem(
+	app *vukem.App,
+	writer *scoring.Writer,
+	user func(c *web.Ctx) (models.User, error),
+	reco related.Events,
+) *Item {
+	return &Item{app: app, writer: writer, user: user, reco: reco}
 }
 
 // Show renders Catalog/Show for the item type typ; `me` and `myLists` exist only when logged in.
@@ -46,8 +57,8 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 		}
 
 		props := inertia.Props{
-			"item":          page.Item,
-			"ratingSummary": page.RatingSummary,
+			"item":          pageItem(page.Item),
+			"ratingSummary": webRatingSummary{RatingSummary: page.RatingSummary},
 			"entities":      page.Entities,
 			"editions":      page.Editions,
 			"editionCount":  page.EditionCount,
@@ -56,7 +67,25 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 			"cover":         page.Cover,
 		}
 
+		rel, err := related.Load(c.Context(), db, page.Item.ID, typ, i18n.Locale(c.Context()))
+		if err != nil {
+			return err
+		}
+
+		props["similar"], props["crossMedia"] = rel.Similar, rel.CrossMedia
+		if len(rel.Similar) > 0 {
+			h.reco.Impression(c.Context(), "similar", typ, page.Item.ID)
+		}
+		if len(rel.CrossMedia) > 0 {
+			h.reco.Impression(c.Context(), "crossmedia", typ, page.Item.ID)
+		}
+		if from := related.FromSurface(c.Query("from")); from != "" {
+			h.reco.Click(c.Context(), from, typ, page.Item.ID)
+		}
+
+		var viewerID int64
 		if u, err := h.user(c); err == nil {
+			viewerID = u.ID
 			me, err := h.writer.Me(c.Context(), u.ID, page.Item.ID)
 			if err != nil {
 				return err
@@ -66,6 +95,23 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 				return err
 			}
 			props["me"], props["myLists"] = me, lists
+		}
+
+		if h.Social.Enabled(c.Context()) {
+			props["ogImage"] = ogImage("items", page.Item.ID)
+			locale := i18n.Locale(c.Context())
+			props["reviews"] = inertia.Defer(func(ctx context.Context) (any, error) {
+				data, mine, err := h.Social.ItemReviews(ctx, viewerID, page.Item.ID, locale)
+
+				return map[string]any{"data": data, "mine": mine}, err
+			}).Group("reviews")
+
+			// Per-viewer, so deferred: the public HTML stays cacheable (SDD 14 §12.12).
+			if viewerID != 0 {
+				props["friendsScore"] = inertia.Defer(func(ctx context.Context) (any, error) {
+					return h.Social.FriendsScore(ctx, viewerID, page.Item.ID)
+				}).Group("personal")
+			}
 		}
 
 		return inertia.Render(c, "Catalog/Show", props)
@@ -136,4 +182,34 @@ func publicRatingsPage(c *web.Ctx) (int, error) {
 		return 0, errs.New(http.StatusBadRequest, "page must be an integer between 1 and 100.")
 	}
 	return n, nil
+}
+
+// webItem is the part of catalog.ItemDetail the item page renders: the Inertia JSON (and the page JSON
+// in the HTML) carries no more than the page shows (ADR 0022). Wikidata id, external ids, credits,
+// affiliate links and provenance stay with the paid API.
+type webItem struct {
+	ID             string            `json:"id"`
+	Type           string            `json:"type"`
+	Slug           string            `json:"slug"`
+	Title          string            `json:"title,omitempty"`
+	Synopsis       *catalog.Synopsis `json:"synopsis,omitempty"`
+	ReleaseDate    string            `json:"releaseDate,omitempty"`
+	RuntimeMinutes *int              `json:"runtimeMinutes,omitempty"`
+	PageCount      *int              `json:"pageCount,omitempty"`
+	Cover          string            `json:"cover,omitempty"`
+}
+
+func pageItem(d catalog.ItemDetail) webItem {
+	return webItem{
+		ID: d.ID, Type: d.Type, Slug: d.Slug, Title: d.Title, Synopsis: d.Synopsis, ReleaseDate: d.ReleaseDate,
+		RuntimeMinutes: d.RuntimeMinutes, PageCount: d.PageCount, Cover: d.Cover,
+	}
+}
+
+// webRatingSummary hides the formula version the page does not show: the outer, empty field shadows the
+// embedded one in encoding/json and is omitted.
+type webRatingSummary struct {
+	catalog.RatingSummary
+
+	FormulaVersion *int `json:"formulaVersion,omitempty"`
 }

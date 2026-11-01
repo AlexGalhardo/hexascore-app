@@ -7,6 +7,7 @@ import type { ItemType } from "./types";
 
 const STATUSES = ["want", "in_progress", "completed", "dropped"] as const;
 
+// Four toggle buttons (design v1 status picker); pressing the active one clears the status.
 export default function StatusPicker({
 	itemId,
 	type,
@@ -35,21 +36,24 @@ export default function StatusPicker({
 	};
 
 	return (
-		<label className="grid gap-1">
-			<span className="font-semibold">{t("social.status.label")}</span>
-			<select
-				className="min-h-11 rounded border px-2"
-				value={value}
-				disabled={busy}
-				onChange={(e) => change(e.target.value)}
-			>
-				<option value="">{t("social.status.none")}</option>
+		<fieldset className="grid gap-2 border-t border-border pt-3">
+			<legend className="mb-2 text-xs font-semibold tracking-widest uppercase">
+				{t("social.status.label")}
+			</legend>
+			<div className="grid grid-cols-2 gap-2">
 				{STATUSES.map((s) => (
-					<option key={s} value={s}>
+					<button
+						key={s}
+						type="button"
+						aria-pressed={value === s}
+						disabled={busy}
+						onClick={() => change(value === s ? "" : s)}
+						className="min-h-11 rounded-xs border border-fg px-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary aria-pressed:bg-fg aria-pressed:text-bg not-aria-pressed:bg-bg not-aria-pressed:hover:bg-hover disabled:cursor-wait"
+					>
 						{t(`social.status.${type}.${s}`)}
-					</option>
+					</button>
 				))}
-			</select>
-		</label>
+			</div>
+		</fieldset>
 	);
 }

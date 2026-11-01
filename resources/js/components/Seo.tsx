@@ -23,6 +23,11 @@ export function jsonLdText(data: object[]): string {
 	return JSON.stringify(data.length === 1 ? data[0] : data).replace(/</g, String.raw`\u003c`);
 }
 
+// Open Graph needs an absolute image URL; a path such as a share card is resolved against the canonical origin.
+export function absoluteUrl(src: string, canonical: string | undefined): string {
+	return canonical ? new URL(src, canonical).href : src;
+}
+
 // Seo sets the document head from the shared `seo` prop (canonical, hreflang,
 // robots) and the page's own title, description, image and JSON-LD (SDD 09 §7.7).
 export default function Seo({
@@ -39,7 +44,8 @@ export default function Seo({
 
 	const pageTitle = truncate(title ?? (seo?.title || appName), 60);
 	const text = truncate(description ?? (seo?.description || t("meta.description")), 160);
-	const cover = image ?? seo?.og.image;
+	const coverSrc = image ?? seo?.og.image;
+	const cover = coverSrc && absoluteUrl(coverSrc, seo?.canonical);
 	const robots = robotsOverride ?? (noindex ? "noindex" : seo?.robots);
 	const blocks = jsonLd ?? seo?.jsonLd;
 

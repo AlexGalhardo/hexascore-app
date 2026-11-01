@@ -1,5 +1,7 @@
 import { router } from "@inertiajs/react";
-import { useRef, useState } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { withQueryClient } from "../../lib/queryClient";
 
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
@@ -15,40 +17,36 @@ interface Edition {
 const label = (e: Edition): string =>
 	[e.title, e.language, e.publisher, e.publicationYear].filter(Boolean).join(" · ");
 
-export default function EditionPicker({ itemId }: { itemId: string }) {
+function EditionPicker({ itemId }: { itemId: string }) {
 	const t = useT();
 	const l = useLocalized();
-	const [editions, setEditions] = useState<Edition[] | null>(null);
-	const [failed, setFailed] = useState(false);
+	const [started, setStarted] = useState(false);
 	const [choice, setChoice] = useState("");
-	const [next, setNext] = useState(-1);
-	// A ref, not state: two quick clicks in one render would both pass a state check and append a page twice.
-	const busy = useRef(false);
-
-	const load = async (cursor: number) => {
-		if (busy.current) return;
-		busy.current = true;
-		setFailed(false);
-		try {
-			const res = await fetch(`/items/${itemId}/editions?cursor=${cursor}`, {
+	const query = useInfiniteQuery({
+		queryKey: ["editions", itemId],
+		queryFn: async ({ pageParam, signal }): Promise<{ data: Edition[]; next: number }> => {
+			const res = await fetch(`/items/${itemId}/editions?cursor=${pageParam}`, {
+				signal,
 				headers: { Accept: "application/json" },
 			});
 			if (!res.ok) throw new Error(String(res.status));
-			const body = (await res.json()) as { data: Edition[]; next: number };
-			setEditions((prev) => [...(prev ?? []), ...body.data]);
-			if (cursor === 0) setChoice(body.data[0]?.id ?? "");
-			setNext(body.next);
-		} catch {
-			setFailed(true);
-		} finally {
-			busy.current = false;
-		}
-	};
+			return res.json();
+		},
+		initialPageParam: 0,
+		getNextPageParam: (last) => (last.next >= 0 ? last.next : undefined),
+		enabled: started,
+	});
+	const editions = query.data?.pages.flatMap((p) => p.data) ?? null;
+	const failed = query.isError;
+	const selected = choice || (editions?.[0]?.id ?? "");
+	// cancelRefetch false: a second click while a page loads must not fetch it again.
+	const start = () => (started ? void query.refetch({ cancelRefetch: false }) : setStarted(true));
+	const more = () => void query.fetchNextPage({ cancelRefetch: false });
 
 	if (editions === null) {
 		return (
 			<span className="text-sm">
-				<button type="button" className="underline" onClick={() => load(0)}>
+				<button type="button" className="underline" onClick={start}>
 					{t("library.chooseEdition")}
 				</button>
 				{failed && (
@@ -68,7 +66,7 @@ export default function EditionPicker({ itemId }: { itemId: string }) {
 		<span className="flex items-center gap-2 text-sm">
 			<select
 				aria-label={t("library.pickEdition")}
-				value={choice}
+				value={selected}
 				onChange={(e) => setChoice(e.target.value)}
 				className="rounded-md border border-border bg-surface px-2 py-1"
 			>
@@ -78,8 +76,8 @@ export default function EditionPicker({ itemId }: { itemId: string }) {
 					</option>
 				))}
 			</select>
-			{next >= 0 && (
-				<button type="button" className="underline" onClick={() => load(next)}>
+			{query.hasNextPage && (
+				<button type="button" className="underline" onClick={more}>
 					{t("library.moreEditions")}
 				</button>
 			)}
@@ -94,7 +92,7 @@ export default function EditionPicker({ itemId }: { itemId: string }) {
 				onClick={() =>
 					router.put(
 						l(`/items/${itemId}/edition`),
-						{ editionId: choice },
+						{ editionId: selected },
 						{ preserveScroll: true },
 					)
 				}
@@ -104,3 +102,5 @@ export default function EditionPicker({ itemId }: { itemId: string }) {
 		</span>
 	);
 }
+
+export default withQueryClient(EditionPicker);

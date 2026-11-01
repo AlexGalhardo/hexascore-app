@@ -1,8 +1,12 @@
 import { Link, usePage } from "@inertiajs/react";
 
-import ItemLink, { type ItemRef } from "../../components/library/ItemLink";
+import type { ItemRef } from "../../components/library/ItemLink";
+import ShelfCard from "../../components/library/ShelfCard";
 import ReportDialog from "../../components/ReportDialog";
 import Seo from "../../components/Seo";
+import CommentThread, { type CommentEntry } from "../../components/social/CommentThread";
+import ReactionBar, { type ReactionKind } from "../../components/social/ReactionBar";
+import ShareButton from "../../components/social/ShareButton";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
@@ -19,9 +23,23 @@ interface Props {
 	items: { position: number; note: string | null; item: ItemRef }[];
 	canEdit: boolean;
 	indexable: boolean;
+	/** Share-card path while the feature flag `social` is on and the page is public (SDD 14 §11 item 12). */
+	ogImage?: string;
+	/** Deferred (group `social`) while the feature flag `social` is on (SDD 14 §12.11). */
+	reactions?: { likes: number; helpful: number; mine: ReactionKind | "" };
+	comments?: CommentEntry[];
 }
 
-export default function List({ list, owner, items, canEdit, indexable }: Props) {
+export default function List({
+	list,
+	owner,
+	items,
+	canEdit,
+	indexable,
+	ogImage,
+	reactions,
+	comments,
+}: Props) {
 	const t = useT();
 	const { locale, auth } = usePage<SharedProps>().props;
 
@@ -31,9 +49,13 @@ export default function List({ list, owner, items, canEdit, indexable }: Props) 
 				title={list.title}
 				description={list.description ?? undefined}
 				noindex={!indexable}
+				image={ogImage}
 			/>
-			<h1 className="text-2xl font-semibold">{list.title}</h1>
-			<p className="mt-1 text-muted">
+			<h1 className="mt-6 font-display text-4xl leading-none font-bold tracking-[-0.02em] md:mt-10 md:text-[56px]">
+				{list.title}
+			</h1>
+			{ogImage && <ShareButton title={list.title} />}
+			<p className="mt-3 text-muted">
 				<Link
 					href={localized(`/u/${owner.nickname.toLowerCase()}`, locale)}
 					className="underline"
@@ -61,14 +83,38 @@ export default function List({ list, owner, items, canEdit, indexable }: Props) 
 			{items.length === 0 ? (
 				<p className="mt-4">{t("userLists.empty")}</p>
 			) : (
-				<ol className="mt-4 divide-y divide-border">
+				<ol className="mt-8 grid gap-4 border-t-2 border-fg pt-6 sm:grid-cols-2 lg:grid-cols-3">
 					{items.map((e) => (
-						<li key={e.item.id} className="py-2">
-							<ItemLink item={e.item} />
-							{e.note && <p className="text-sm text-muted">{e.note}</p>}
+						<li key={e.item.id}>
+							<ShelfCard item={e.item}>
+								{e.note && <p className="text-sm text-muted">{e.note}</p>}
+							</ShelfCard>
 						</li>
 					))}
 				</ol>
+			)}
+			{reactions && (
+				<div className="mt-6">
+					<ReactionBar
+						target="list"
+						id={list.id}
+						likes={reactions.likes}
+						helpful={reactions.helpful}
+						mine={reactions.mine}
+						canReact={Boolean(auth?.user) && !canEdit}
+					/>
+				</div>
+			)}
+			{comments && (
+				<div className="mt-6">
+					<h2 className="font-display text-2xl font-bold">{t("comments.title")}</h2>
+					<CommentThread
+						target="list"
+						id={list.id}
+						comments={comments}
+						canWrite={Boolean(auth?.user)}
+					/>
+				</div>
 			)}
 		</>
 	);

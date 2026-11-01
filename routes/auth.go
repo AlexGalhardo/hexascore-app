@@ -34,12 +34,23 @@ func Auth(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
+	ts, err := LoadTurnstile(app)
+	if err != nil {
+		return err
+	}
+
 	formKey, err := app.DeriveKey("signup.form", 32)
 	if err != nil {
 		return err
 	}
 
 	h := account.New(acc, forms.Token{Key: formKey, Now: app.Now})
+	if acc.DB.Dialect().Name() == "postgres" {
+		if h.Social, err = SocialService(app, acc); err != nil {
+			return err
+		}
+	}
+
 	guest := auth.Guest(acc.Web)
 	required := auth.Required(acc.Web)
 	// Signed-in pages also need a verified email; unverified users are sent
@@ -60,12 +71,12 @@ func Auth(r *router.Router, app *vukem.App) error {
 	signupEmail := ratelimit.Middleware(limits.SignupEmail.From(limiters), account.RegisterThrottleKey)
 
 	r.Get("/login", h.ShowLogin).Name("login").Use(guest)
-	r.Post("/login", h.Login).Use(guest, anyIdentifier, throttle, perAccount, pow.Require("login"))
+	r.Post("/login", h.Login).Use(guest, anyIdentifier, throttle, perAccount, ts.protect("login"), pow.Require("login"))
 	// Passkey sign-in is not behind PoW: the authenticator ceremony is the proof.
 	r.Post("/login/passkey/options", h.PasskeyLoginOptions).Name("login.passkey.options").Use(guest, anyIdentifier)
 	r.Post("/login/passkey", h.PasskeyLogin).Name("login.passkey").Use(guest, anyIdentifier)
 	r.Get("/signup", h.ShowRegister).Name("register").Use(guest)
-	r.Post("/signup", h.Register).Use(guest, signupIP, signupEmail, pow.Require("signup"))
+	r.Post("/signup", h.Register).Use(guest, signupIP, signupEmail, ts.protect("register"), pow.Require("signup"))
 	r.Get("/signup/check-email", h.CheckEmail).Name("register.check").Use(guest)
 	r.Post("/logout", h.Logout).Name("logout").Use(required)
 

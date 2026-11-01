@@ -1,0 +1,53 @@
+{
+  "item": {
+    "external_ids": {
+      "hltb": "9114",
+      "igdb": "star-wars-masters-of-teras-kasi",
+      "imdb": "tt0190804"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Lucasfilm Games"
+      ],
+      "genres": [
+        "3D fighting game"
+      ],
+      "platforms": [
+        "PlayStation"
+      ]
+    },
+    "popularity": 9.0,
+    "qid": "Q55257",
+    "release_date": "1997-10-31",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Star Wars: Masters of Teräs Käsi is a fighting game developed and published by LucasArts, which was released for the PlayStation in 1997. In the game's story, which is set in the Star Wars universe, the Emperor seeks retaliation for the destruction of the Death Star and recruits the mysterious Arden Lyn to battle in the art of Teräs Käsi, an unarmed combat discipline, against leaders of the Rebel Alliance. The game features Star Wars Legends characters, including the Emperor's Hand Mara Jade.\nDevelopment for Masters of Teräs Käsi was handled internally at LucasArts. It was both the first fighting game and first PlayStation title for the company, which presented challenges. Industrial Light & Magic assisted with motion capture, used for character animations. While spirits were high during the development and promotion of Masters of Teräs Käsi, the game was met with underwhelming reviews. Criticisms were directed at the sluggish movement of the characters and the unbalanced moves, though the basic concept of combining weapons-based and hand-to-hand combat was praised.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Star_Wars:_Masters_of_Ter%C3%A4s_K%C3%A4si",
+        "title": "Star Wars: Masters of Teräs Käsi"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Star Wars: Masters of Teräs Käsi"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Star Wars: Masters of Teräs Käsi"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q55257",
+  "slug": "star-wars-masters-of-teras-kasi"
+}

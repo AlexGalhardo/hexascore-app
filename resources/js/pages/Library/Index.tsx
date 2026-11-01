@@ -2,8 +2,10 @@ import { Link, router, usePage } from "@inertiajs/react";
 import type { FormEvent } from "react";
 
 import EditionPicker from "../../components/library/EditionPicker";
-import ItemLink, { type ItemRef } from "../../components/library/ItemLink";
+import type { ItemRef } from "../../components/library/ItemLink";
+import ShelfCard from "../../components/library/ShelfCard";
 import Seo from "../../components/Seo";
+import { btnClass } from "../../components/ui/Btn";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
@@ -46,9 +48,15 @@ const sum = (counts: Props["counts"], status: string, type: string): number =>
 			0,
 		);
 
+const field =
+	"min-h-11 w-full rounded-xs border border-field bg-field-bg px-3 text-[15px] font-normal text-fg focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary";
+const label = "grid gap-1.5 text-[13px] font-semibold sm:w-[220px]";
+
 export default function Index({ counts, groups, filters }: Props) {
 	const t = useT();
-	const { locale } = usePage<SharedProps>().props;
+	const { locale, auth } = usePage<SharedProps>().props;
+	const owner = auth?.user?.nickname ?? auth?.user?.name;
+	const all = sum(counts, "", "");
 	const path = localized("/library", locale);
 
 	const pageHref = (type: string, cursor?: number) =>
@@ -71,16 +79,26 @@ export default function Index({ counts, groups, filters }: Props) {
 	return (
 		<>
 			<Seo title={t("library.title")} noindex />
-			<h1 className="text-2xl font-semibold">{t("library.title")}</h1>
-			<form onSubmit={apply} className="mt-4 flex flex-wrap items-end gap-3">
-				<label className="flex flex-col text-sm">
+			<header className="mt-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 md:mt-10">
+				<div>
+					{owner && (
+						<p className="text-xs font-bold tracking-[0.1em] text-primary uppercase">
+							{t("library.shelvesOf", { name: owner })}
+						</p>
+					)}
+					<h1 className="mt-2 font-display text-5xl leading-none font-bold tracking-[-0.02em] md:text-[64px]">
+						{t("library.title")}
+					</h1>
+				</div>
+				<p className="text-sm text-muted">{t("library.titleCount", { count: all })}</p>
+			</header>
+			<form onSubmit={apply} className="mt-6 flex flex-wrap items-end gap-3 md:mt-8">
+				<label className={label}>
 					{t("library.status")}
-					<select
-						name="status"
-						defaultValue={filters.status}
-						className="rounded-md border border-border bg-surface px-2 py-1"
-					>
-						<option value="">{t("library.allStatuses")}</option>
+					<select name="status" defaultValue={filters.status} className={field}>
+						<option value="">
+							{t("library.allStatuses")} ({sum(counts, "", filters.type)})
+						</option>
 						{STATUSES.map((s) => (
 							<option key={s} value={s}>
 								{t(`social.status.shelves.${s}`)} ({sum(counts, s, filters.type)})
@@ -88,13 +106,9 @@ export default function Index({ counts, groups, filters }: Props) {
 						))}
 					</select>
 				</label>
-				<label className="flex flex-col text-sm">
+				<label className={label}>
 					{t("library.type")}
-					<select
-						name="type"
-						defaultValue={filters.type}
-						className="rounded-md border border-border bg-surface px-2 py-1"
-					>
+					<select name="type" defaultValue={filters.type} className={field}>
 						<option value="">{t("library.allTypes")}</option>
 						{TYPES.map((s) => (
 							<option key={s} value={s}>
@@ -103,13 +117,9 @@ export default function Index({ counts, groups, filters }: Props) {
 						))}
 					</select>
 				</label>
-				<label className="flex flex-col text-sm">
+				<label className={label}>
 					{t("library.sort")}
-					<select
-						name="sort"
-						defaultValue={filters.sort || "updated"}
-						className="rounded-md border border-border bg-surface px-2 py-1"
-					>
+					<select name="sort" defaultValue={filters.sort || "updated"} className={field}>
 						{SORTS.map((s) => (
 							<option key={s} value={s}>
 								{t(`library.sorts.${s}`)}
@@ -117,69 +127,97 @@ export default function Index({ counts, groups, filters }: Props) {
 						))}
 					</select>
 				</label>
-				<button
-					type="submit"
-					className="rounded-md border border-border px-3 py-1 font-medium"
-				>
+				<button type="submit" className={btnClass("primary")}>
 					{t("library.apply")}
 				</button>
 			</form>
 			{groups.data.length === 0 ? (
-				<p className="mt-6">{t("library.empty")}</p>
+				<p className="mt-8 border-t-2 border-fg pt-6 font-display text-2xl italic">
+					{t("library.empty")}
+				</p>
 			) : (
-				groups.data.map((g) => (
-					<section key={g.type} className="mt-6" aria-labelledby={`group-${g.type}`}>
-						<h2 id={`group-${g.type}`} className="text-lg font-semibold">
-							{t(`itemTypes.${g.type}`)}{" "}
-							<span className="text-sm font-normal text-muted">
-								{t("library.showing", { count: g.items.length, total: g.total })}
-							</span>
-						</h2>
-						<ul className="mt-2 divide-y divide-border">
-							{g.items.map((item) => (
-								<li
-									key={item.id}
-									className="flex flex-wrap items-center gap-x-4 gap-y-1 py-2"
-								>
-									<ItemLink item={item} />
-									<span className="text-sm text-muted">
-										{t(`social.status.${item.type}.${item.status}`)}
-									</span>
-									{item.stars !== null && (
-										<span className="text-sm">
-											{t("library.score", { stars: item.stars })}
-										</span>
-									)}
-									{item.type === "book" && !item.edition && (
-										<EditionPicker itemId={item.id} />
-									)}
-									{item.edition && (
-										<span className="text-sm text-muted">
-											{t("library.edition", { title: item.edition.title })}{" "}
-											<button
-												type="button"
-												className="underline"
-												onClick={() => clearEdition(item.id)}
-											>
-												{t("library.clearEdition")}
-											</button>
-										</span>
-									)}
-								</li>
-							))}
-						</ul>
-						{g.next >= 0 && (
-							<Link
-								className="mt-2 inline-block underline"
-								href={
-									filters.type ? pageHref(filters.type, g.next) : pageHref(g.type)
-								}
+				<>
+					{STATUSES.map((status) => {
+						const cards = groups.data.flatMap((g) =>
+							g.items.filter((i) => i.status === status),
+						);
+						if (cards.length === 0) return null;
+						return (
+							<section
+								key={status}
+								className="mt-8 border-t-2 border-fg pt-4"
+								aria-labelledby={`status-${status}`}
 							>
-								{filters.type ? t("lists.next") : t("library.seeAll")}
-							</Link>
-						)}
-					</section>
-				))
+								<h2
+									id={`status-${status}`}
+									className="flex flex-wrap items-baseline gap-x-3 font-display text-[28px] leading-tight font-bold"
+								>
+									{t(`social.status.shelves.${status}`)}
+									<span className="font-sans text-sm font-normal text-muted">
+										{t("library.titleCount", {
+											count: sum(counts, status, filters.type),
+										})}
+									</span>
+								</h2>
+								<ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+									{cards.map((item) => (
+										<li key={item.id}>
+											<ShelfCard
+												item={item}
+												stars={item.stars}
+												own
+												statusLabel={t(
+													`social.status.${item.type}.${item.status}`,
+												)}
+											>
+												{item.type === "book" && !item.edition && (
+													<EditionPicker itemId={item.id} />
+												)}
+												{item.edition && (
+													<span className="text-sm text-muted">
+														{t("library.edition", {
+															title: item.edition.title,
+														})}{" "}
+														<button
+															type="button"
+															className="font-semibold text-primary underline"
+															onClick={() => clearEdition(item.id)}
+														>
+															{t("library.clearEdition")}
+														</button>
+													</span>
+												)}
+											</ShelfCard>
+										</li>
+									))}
+								</ul>
+							</section>
+						);
+					})}
+					{groups.data
+						.filter((g) => g.next >= 0)
+						.map((g) => (
+							<p key={g.type} className="mt-6">
+								{t(`itemTypes.${g.type}`)}{" "}
+								<span className="text-muted">
+									{t("library.showing", {
+										count: g.items.length,
+										total: g.total,
+									})}
+								</span>{" "}
+								<Link
+									className="inline-flex min-h-11 items-center font-semibold text-primary hover:underline"
+									href={
+										filters.type
+											? pageHref(filters.type, g.next)
+											: pageHref(g.type)
+									}
+								>
+									{filters.type ? t("lists.next") : t("library.seeAll")}
+								</Link>
+							</p>
+						))}
+				</>
 			)}
 		</>
 	);

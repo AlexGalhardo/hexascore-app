@@ -1,0 +1,42 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "2568065",
+      "openlibrary": "OL891817W"
+    },
+    "meta": {
+      "countries": [
+        "Nigeria"
+      ],
+      "creators": [
+        "Chinua Achebe"
+      ],
+      "genres": [
+        "fiction literature"
+      ]
+    },
+    "popularity": 10.0,
+    "qid": "Q3886052",
+    "release_date": "1960-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "No Longer at Ease is a 1960 novel by Chinua Achebe. It is the story of an Igbo man, Obi Okonkwo, who leaves his village for an education in Britain and then a job in the Colonial Nigeria civil service, but is conflicted between his African culture and Western lifestyle and ends up taking a bribe. The novel is the second novel by Achebe, and the second work in his \"African trilogy\", following Things Fall Apart and preceding Arrow of God.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/No_Longer_at_Ease",
+        "title": "No Longer at Ease"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Me alegraría de otra muerte (en inglés: No Longer at Ease, literalmente: Ya no estoy a gusto) es una novela escrita en 1960 por el nigeriano Chinua Achebe. Narra la historia de un poblador igbo llamado Obi Okonkwo, quién abandona su aldea para recibir una educación británica y trabajar como funcionario civil colonial nigeriano, pero lucha para adaptarse al estilo de vida occidental, y termina recibiendo un soborno. Es su segunda novela en ser publicada, la cual es considerada como parte de la apodada \"trilogía africana\", junto con su predecesora Todo se desmorona y su sucesora llamada Flecha de Dios. La primera obra cuenta la historia del abuelo de Obi Okonkwo, quien se resiste contra los cambios traídos por los británicos.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Me_alegrar%C3%ADa_de_otra_muerte",
+        "title": "Me alegraría de otra muerte"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q3886052",
+  "slug": "no-longer-at-ease"
+}

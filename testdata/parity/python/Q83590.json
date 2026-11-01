@@ -1,0 +1,38 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "14615397"
+    },
+    "meta": {
+      "countries": [
+        "Southern Qi"
+      ],
+      "genres": [
+        "essay"
+      ]
+    },
+    "popularity": 33.0,
+    "qid": "Q83590",
+    "release_date": null,
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Thirty-Six Stratagems is a Chinese essay used to illustrate a series of stratagems used in politics, war, and civil interaction.\nIts focus on the use of cunning and deception both on the battlefield and in court have drawn comparisons to Sun Tzu's The Art of War.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Thirty-Six_Stratagems",
+        "title": "Thirty-Six Stratagems"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Os Trinta e Seis Estratagemas são um ensaio chinês usado para exemplificar uma série de estratagemas empregados em política, guerra e interação civil.\nSeu foco no uso de astúcia e dissimulação tanto no campo de batalha quanto na corte tem sido comparado ao A Arte da Guerra de Sun Tzu. The Book of Swindles, de Zhang Yingyu, uma obra do final da Dinastia Ming que trata dos domínios do comércio e da sociedade civil, compartilha algumas semelhanças temáticas.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Trinta_e_Seis_Estratagemas",
+        "title": "Trinta e Seis Estratagemas"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q83590",
+  "slug": "thirty-six-stratagems"
+}

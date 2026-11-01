@@ -1,9 +1,11 @@
 package api
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -351,4 +353,37 @@ func TestQuotaNoOverAdmissionDuringFlush(t *testing.T) {
 func freeForAll(context.Context, int64) (Plan, error) {
 	p, _ := PlanByID(PlanFree)
 	return p, nil
+}
+
+func TestAlert_QuotaFlush(t *testing.T) {
+	var b bytes.Buffer
+	st := newMemStore()
+	m := &Meter{Store: st, Now: (&clock{time.Now()}).now, Log: slog.New(slog.NewTextHandler(&b, nil))}
+	ctx := context.Background()
+
+	if _, err := m.Admit(ctx, 7, "", free(t)); err != nil {
+		t.Fatal(err)
+	}
+
+	for i := 1; i <= 5; i++ {
+		st.fail = true
+		_ = m.Flush(ctx)
+		if got := strings.Contains(b.String(), "alert=A10"); got != (i == 5) {
+			t.Fatalf("after %d failures alert=%v (%s)", i, got, b.String())
+		}
+	}
+
+	if !strings.Contains(b.String(), "level=ERROR") {
+		t.Errorf("A10 must log at ERROR: %s", b.String())
+	}
+
+	b.Reset()
+	if err := m.Flush(ctx); err != nil {
+		t.Fatal(err)
+	}
+	st.fail = true
+	_ = m.Flush(ctx)
+	if strings.Contains(b.String(), "alert=") {
+		t.Errorf("a success must reset the failure streak: %s", b.String())
+	}
 }

@@ -281,6 +281,7 @@ LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'`
 var exportJSON = []struct{ name, query string }{
 	{"profile", `SELECT json_build_object('id', id, 'email', email, 'name', name, 'username', username,
   'locale', locale, 'profilePrivate', profile_private, 'personalizationOptOut', personalization_opt_out,
+  'communityMailOptOut', community_mail_opt_out,
   'createdAt', created_at)
 FROM users WHERE id = $1::bigint AND $2::text IS NOT NULL`},
 	{
@@ -315,7 +316,7 @@ WHERE b.user_id = $1::bigint`,
 FROM user_item_editions ue JOIN items i ON i.id = ue.item_id JOIN editions e ON e.id = ue.edition_id
 WHERE ue.user_id = $1::bigint AND $2::text IS NOT NULL`,
 	},
-	// shortcut: edit suggestions (SDD 04) have no table yet; fill this when it lands so the ZIP keeps its 12 files.
+	// shortcut: edit suggestions (SDD 04) have no table yet; fill this when it lands so the ZIP keeps its 17 files.
 	{"suggestions", `SELECT '[]'::json WHERE $1::bigint IS NOT NULL AND $2::text IS NOT NULL`},
 	{"lists", `SELECT coalesce(json_agg(json_build_object('id', l.id, 'type', l.type, 'title', l.title,
   'description', l.description, 'isPublic', l.is_public, 'hidden', l.hidden,
@@ -328,6 +329,25 @@ FROM lists l WHERE l.user_id = $1::bigint`},
 	{"notifications", `SELECT coalesce(json_agg(json_build_object('kind', kind, 'payload', payload, 'readAt', read_at,
   'createdAt', created_at) ORDER BY created_at), '[]')
 FROM user_notifications WHERE user_id = $1::bigint AND $2::text IS NOT NULL`},
+	{
+		"reviews",
+		`SELECT coalesce(json_agg(json_build_object('itemId', i.id, 'type', i.type, 'title', ` + exportTitle + `,
+  'body', v.body, 'spoiler', v.spoiler, 'createdAt', v.created_at, 'updatedAt', v.updated_at) ORDER BY v.created_at), '[]')
+FROM reviews v JOIN items i ON i.id = v.item_id ` + exportTitleJn + `
+WHERE v.user_id = $1::bigint`,
+	},
+	{
+		"comments",
+		`SELECT coalesce(json_agg(json_build_object('id', c.id, 'reviewId', c.review_id, 'listId', c.list_id,
+  'parentId', c.parent_id, 'body', c.body, 'createdAt', c.created_at) ORDER BY c.created_at), '[]')
+FROM comments c WHERE c.user_id = $1::bigint AND $2::text IS NOT NULL`,
+	},
+	{
+		"reactions",
+		`SELECT coalesce(json_agg(json_build_object('reviewId', x.review_id, 'commentId', x.comment_id,
+  'listId', x.list_id, 'kind', x.kind, 'createdAt', x.created_at) ORDER BY x.created_at), '[]')
+FROM reactions x WHERE x.user_id = $1::bigint AND $2::text IS NOT NULL`,
+	},
 	// apiKeys and subscriptions wait for SDD 05 keys and SDD 11 billing tables.
 	{"account", `SELECT json_build_object(
   'socialAccounts', (SELECT coalesce(json_agg(json_build_object('provider', provider, 'createdAt', created_at)
@@ -367,6 +387,27 @@ WHERE r.user_id = $1::bigint ORDER BY r.created_at`,
   coalesce(li.note, ''), to_char(li.added_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')
 FROM lists l JOIN list_items li ON li.list_id = l.id JOIN items i ON i.id = li.item_id ` + exportTitleJn + `
 WHERE l.user_id = $1::bigint ORDER BY l.created_at, li.position`,
+	},
+	// SDD 14 §12.9: both follow directions by nickname, and the user's own activity events.
+	{
+		"follows",
+		[]string{"direction", "nickname", "state", "since"},
+		`SELECT d, nick, state, to_char(at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') FROM (
+  SELECT 'follower' AS d, coalesce(u.display_username, u.username, '') AS nick, f.state, f.created_at AS at
+  FROM follows f JOIN users u ON u.id = f.follower_id WHERE f.followee_id = $1::bigint
+  UNION ALL
+  SELECT 'following', coalesce(u.display_username, u.username, ''), f.state, f.created_at
+  FROM follows f JOIN users u ON u.id = f.followee_id WHERE f.follower_id = $1::bigint) x
+WHERE $2::text IS NOT NULL ORDER BY d, at`,
+	},
+	{
+		"activity",
+		[]string{"kind", "type", "title", "list", "createdAt"},
+		`SELECT e.kind, coalesce(i.type, ''), coalesce(` + exportTitle + `, ''), coalesce(l.title, ''),
+  to_char(e.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')
+FROM activity_events e LEFT JOIN items i ON i.id = e.item_id ` + exportTitleJn + `
+LEFT JOIN lists l ON l.id = e.list_id
+WHERE e.actor_id = $1::bigint ORDER BY e.id`,
 	},
 }
 
@@ -492,10 +533,15 @@ Your personal records on HexaScore, read at one instant. Dates are ISO 8601. Sco
 - lists.json: your lists with their items, positions and notes.
 - suggestions.json: your catalog edit suggestions (empty until suggestions open).
 - notifications.json: notifications sent to you.
+- reviews.json: your reviews (Markdown text, spoiler flag, dates).
+- comments.json: your comments on reviews and lists (text, reply parent, date).
+- reactions.json: your likes and "helpful" votes on reviews, comments and lists.
 - account.json: linked sign-in providers, API keys, subscriptions, remembered sessions (expiry only), app tokens
   (name, abilities, dates; never the secret) and account events.
 - ratings.csv: type,title,year,externalIds,overall,c1..c6,ratedAt — for import into other services.
 - lists.csv: list,position,type,title,year,note,addedAt.
+- follows.csv: direction (follower or following),nickname,state,since — the people you follow and who follow you.
+- activity.csv: kind,type,title,list,createdAt — your activity events shown to followers (kept 180 days).
 
 CSV cells that start with =, +, -, @, tab or carriage return are prefixed with ' so spreadsheets do not run them.
 Passwords, two-factor secrets, token hashes and other people's data are never included.

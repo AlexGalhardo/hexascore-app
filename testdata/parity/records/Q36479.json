@@ -1,0 +1,268 @@
+{
+  "qid": "Q36479",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q36479",
+      "labels": {
+        "en": "The Lion King",
+        "es": "El rey león",
+        "pt": "O Rei Leão",
+        "pt-br": "O Rei Leão"
+      },
+      "aliases": {
+        "en": [
+          "Lion King",
+          "1994 The Lion King",
+          "1994 Lion King"
+        ],
+        "es": [
+          "El Rey León",
+          "El rey leon"
+        ],
+        "mul": [
+          "The Lion King"
+        ],
+        "pt": [
+          "Rei Leão"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "The Lion King",
+        "eswiki": "El rey león",
+        "ptwiki": "O Rei Leão"
+      },
+      "sitelinks_count": 132,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/the_lion_king",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q842256",
+            "rank": "normal"
+          },
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q319221",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1361932",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "The Lion King",
+            "rank": "preferred"
+          },
+          {
+            "value": "Король Лев",
+            "rank": "normal"
+          },
+          {
+            "value": "Król Lew",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/the-lion-king",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q56070713",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+88",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q1047410",
+            "rank": "normal"
+          },
+          {
+            "value": "Q191224",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0110357",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "preferred"
+          },
+          {
+            "value": "Q7838",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13218",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10179",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "8587",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q847468",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1151111",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1994-11-18T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1995-07-15T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1994-06-15T00:00:00Z"
+            },
+            "rank": "preferred"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1994-11-17T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1994-11-09T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1994-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q6069146",
+            "rank": "normal"
+          },
+          {
+            "value": "Q946215",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1072923",
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q2901452",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q10179": "Zulu",
+        "Q1047410": "Walt Disney Animation Studios",
+        "Q1072923": "Linda Woolverton",
+        "Q1151111": "Rob Minkoff",
+        "Q130232": "drama film",
+        "Q13218": "Xhosa",
+        "Q1361932": "family film",
+        "Q1860": "English",
+        "Q191224": "Walt Disney Pictures",
+        "Q2901452": "The Lion King",
+        "Q30": "United States",
+        "Q319221": "adventure film",
+        "Q56070713": "Walt Disney Animation Studios feature film",
+        "Q6069146": "Irene Mecchi",
+        "Q7838": "Swahili",
+        "Q842256": "musical film",
+        "Q847468": "Roger Allers",
+        "Q946215": "Jonathan Roberts"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q36479",
+      "lang": "en",
+      "title": "The Lion King",
+      "extract": "The Lion King is a 1994 American animated musical drama film directed by Roger Allers and Rob Minkoff and written by Irene Mecchi, Jonathan Roberts, and Linda Woolverton. Produced by Walt Disney Feature Animation, it features an ensemble voice cast consisting of Matthew Broderick, James Earl Jones, Jeremy Irons, Jonathan Taylor Thomas, Moira Kelly, Niketa Calame, Madge Sinclair, Nathan Lane, Ernie Sabella, Whoopi Goldberg, Cheech Marin, Rowan Atkinson, and Robert Guillaume. The story follows a young lion prince named Simba, who is exiled from his kingdom after his father Mufasa is murdered by his uncle Scar to seize the throne. As he grows up, Simba must decide whether to return home to confront Scar and reclaim his place as king.\nThe Lion King was conceived during conversations among various Disney executives, to whom several writers submitted early treatments under the title King of the Jungle. Original director George Scribner had envisioned The Lion King as a nature documentary-style film, with Allers joining as co-director. The Lion King's plot draws inspiration from several sources, notably Bambi (1942), William Shakespeare's play Hamlet, as well as the Bible. Woolverton, the screenwriter for Disney's Beauty and the Beast (1991), drafted early scripts for The Lion King before Mecchi and Roberts were hired to revise once Woolverton left to prioritize other projects. Scribner departed due to disagreements over the studio's decision to reimagine the film as a musical, with original songs by Elton John and Tim Rice. Minkoff was hired to replace him in April 1992. Throughout production, the creative team visited Kenya for research and inspiration.\nReleased in theaters on June 24, 1994 by Walt Disney Pictures, The Lion King was praised by critics for its music, story, themes, and animation. With an initial worldwide gross of $763 million, it completed its theatrical run as the highest-grossing film of 1994 and the second-highest-grossing film of all time, behind Jurassic Park (1993). It held the title of highest-grossing animated film until it was replaced by Finding Nemo in 2003. The film remains as the highest-grossing traditionally animated film of all time. The film was also the best-selling film on home video, having sold over 55 million copies worldwide. It won two Academy Awards, as well as the Golden Globe Award for Best Motion Picture – Musical or Comedy. \nThe success of the film launched a multibillion-dollar franchise comprising a Broadway adaptation, two direct-to-video follow-ups, two television series, and a photorealistic remake (which itself spawned a prequel), which in 2019 also became the highest-grossing animated film at the time of its release. In 2016, The Lion King was selected for preservation in the United States National Film Registry by the Library of Congress as being \"culturally, historically, or aesthetically significant\".",
+      "url": "https://en.wikipedia.org/wiki/The_Lion_King"
+    },
+    "wikipedia:es": {
+      "qid": "Q36479",
+      "lang": "es",
+      "title": "El rey león",
+      "extract": "El rey león (The Lion King en su título original en inglés) es una película animada producida por Walt Disney Feature Animation y distribuida por Walt Disney Pictures. Es la trigésima segunda película en el canon de Walt Disney Animation y se realizó en un período conocido como el Renacimiento de Disney. La película se realizó bajo la dirección de Rob Minkoff y Roger Allers, el productor Don Hahn, los guiones de Irene Mecchi, Jonathan Roberts y Linda Woolverton, y con Hans Zimmer, Elton John y Tim Rice como encargados de la banda sonora. \nAdemás, cuenta con un amplio reparto coral en el que participaron Matthew Broderick, Jeremy Irons, James Earl Jones, Jonathan Taylor Thomas, Moira Kelly y Nathan Lane. \nEl argumento de El rey león se desarrolla en África y tiene inspiraciones en las historias bíblicas de José y Moisés, y en la obra Hamlet de William Shakespeare. Cuenta la historia de Simba, un joven león que tras la muerte de su padre, rey de Pride Lands,​ es exiliado de su hogar por su tío, que usurpa el trono. Con ayuda de sus amigos y las enseñanzas de su padre, Simba es alentado tiempo después a regresar y reclamar su lugar en el reino.\nEl desarrollo del filme comenzó en 1988, en una reunión entre Jeffrey Katzenberg, Roy E. Disney y Peter Schneider, mientras promocionaban Oliver y su pandilla en Europa. Thomas Disch escribió un tratamiento y Woolverton avanzó los primeros guiones cuando George Scribner fue asignado director, al que se unió Allers posteriormente. La producción empezó en 1991 al mismo tiempo que Pocahontas, que es la que tenía a los mejores animadores de Disney. Más tarde, parte del personal viajó a Kenia a visitar el parque nacional de Hell's Gate con tal de investigar animales y la ubicación en la que se basaría la película. Scribner abandonó la producción tiempo después debido a diferencias creativas, por lo que fue reemplazado por Minkoff. Cuando Hahn se unió al proyecto, se mostró insatisfecho con el guion, por lo que la historia se volvió a escribir rápidamente. Unos veinte minutos en secuencias de animación se elaboraron en Disney-MGM Studios, ubicados en el estado estadounidense de Florida, a la que se añadió la animación por computadora, recurso utilizado varias veces en el filme.\nLa cinta fue lanzada el 15 de junio de 1994. Obtuvo reacción positiva por parte de la crítica, que la elogió sobre todo por su música, argumento y animación. Tras un relanzamiento en versión 3D en 2011, la recaudación ascendió hasta unos 968 millones USD desde su estreno original hasta ese mismo año, además de ser la cinta cuyos dibujos están hechos a mano y en 2D con más recaudación, y se encuentra entre las películas que más ingresos ha generado tanto en Estados Unidos como en otros países. El rey león ganó dos premios Óscar gracias a su banda sonora y el Globo de Oro en la categoría de mejor película comedia o musical, entre otros. De esta película derivaron varios trabajos como la adaptación al teatro, las películas The Lion King II: Simba's Pride (1998) y El rey león 3: Hakuna Matata (2004), así como las series Timón y Pumba y The Lion Guard.",
+      "url": "https://es.wikipedia.org/wiki/El_rey_le%C3%B3n"
+    },
+    "wikipedia:pt": {
+      "qid": "Q36479",
+      "lang": "pt",
+      "title": "O Rei Leão",
+      "extract": "The Lion King (bra/prt: O Rei Leão) é o 32.º longa-metragem animado produzido pela Walt Disney Feature Animation e pela Walt Disney Pictures e distribuído pela Buena Vista Pictures. Foi dirigido por Roger Allers e Rob Minkoff, com roteiro creditado a Linda Woolverton, Irene Mecchi e Jonathan Roberts, e música de Elton John com letras de Tim Rice. O filme narra a história do jovem leão Simba (Matthew Broderick), que sente-se culpado pelo assassinato do seu pai, o rei Mufasa (James Earl Jones), e foge do seu Reino, sem saber que a morte foi orquestrada pelo seu tio Scar (Jeremy Irons) para tomar o poder.\nO desenvolvimento de O Rei Leão começou em 1988 durante uma reunião entre Jeffrey Katzenberg, Roy E. Disney e Peter Schneider, promovendo Oliver \u0026 Company na Europa. Thomas Disch escreveu o tratamento do filme, e Woolverton desenvolveu os primeiros esboços, enquanto George Scribner foi  escalado como diretor, e mais tarde Allers também foi chamado. A produção começou em 1991 em simultâneo com Pocahontas, que acabou atraindo a maioria dos principais animadores da Disney. Após a equipe viajar para o Parque Nacional Hell's Gate no Quênia, para pesquisar o cenário do filme e os animais, Scribner deixou a produção discordando da decisão de transformar o filme em um musical e foi substituído por Minkoff. Quando Don Hahn se juntou ao projeto, ele ficou insatisfeito com o roteiro e a história foi reescrita. Quase 20 minutos de sequências animadas foram produzidas no Disney-MGM Studios, na Flórida. A animação por computador também foi usada em várias cenas, principalmente na sequência da debanda dos gnus.\nO Rei Leão foi lançado em 15 de junho de 1994 e foi aclamado pela crítica e público, que elogiou o filme pela sua música, enredo e animação, ganhando dentre os vários prêmios, o Oscar de Melhor Trilha Sonora Original (Hans Zimmer) e Melhor Canção Original (\"Can You Feel the Love Tonight\", de Elton John e Tim Rice), e o Globo de Ouro de Melhor Filme Comédia ou Musical. O filme foi considerado a maior clássico da era do Renascimento da Disney e a maior animação de todos os tempos.\nO filme saiu de cartaz como a maior bilheteria de 1994 e foi a segunda maior bilheteria de todos os tempos, perdendo apenas para Jurassic Park. Após o re-lançamento em 3D em 2011, O Rei Leão chegou a US$978.8 milhões de dólares em bilheterias ao redor do mundo, tornando-se a animação desenhada à mão de maior público e uma das maiores bilheterias da história. O sucesso levou a uma adaptação teatral na Broadway que está em cartaz desde 1997, duas sequências diretamente em vídeo, O Rei Leão 2 e O Rei Leão 3, duas séries televisivas, Timão e Pumba e A Guarda do Leão, uma refilmagem em 2019 e uma prequela em 2024.",
+      "url": "https://pt.wikipedia.org/wiki/O_Rei_Le%C3%A3o"
+    }
+  },
+  "tier": "top",
+  "type": "movie"
+}

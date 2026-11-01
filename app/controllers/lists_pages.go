@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"strings"
 
 	"github.com/AlexGalhardo/vukem/auth"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
 // Index renders Lists/Index with the signed-in user's lists (SDD 14 §6.2).
@@ -84,8 +86,55 @@ func (h *Lists) Show(c *web.Ctx) error {
 		c.Writer().Header().Set("X-Robots-Tag", "noindex")
 	}
 
-	return inertia.Render(c, "User/List", inertia.Props{
-		"list": listJSON(l), "owner": map[string]string{"nickname": nick}, "items": items, "canEdit": canEdit,
-		"indexable": indexable,
-	})
+	// Only what the public list page renders (ADR 0022): no version, timestamps or added dates.
+	entries := make([]publicListEntry, len(items))
+	for i, e := range items {
+		entries[i] = publicListEntry{Position: e.Position, Note: e.Note, Item: publicListItem{ListItemRef: e.Item}}
+	}
+
+	props := inertia.Props{
+		"list": map[string]any{
+			"id":          l.ID,
+			"title":       l.Title,
+			"description": l.Description,
+			"isPublic":    l.IsPublic,
+			"itemCount":   l.ItemCount,
+		},
+		"owner": map[string]string{"nickname": nick}, "items": entries, "canEdit": canEdit, "indexable": indexable,
+	}
+	if l.IsPublic && !l.Hidden && !l.OwnerPrivate && !banned && h.Social.Enabled(ctx) {
+		props["ogImage"] = ogImage("lists", l.ID)
+	}
+	if h.Social.Enabled(ctx) {
+		viewerID := viewer.ID // zero for an anonymous visitor
+		// Deferred like the item page's reviews, so the list HTML stays the same for every viewer.
+		props["reactions"] = inertia.Defer(func(ctx context.Context) (any, error) {
+			return h.Social.ListReactions(ctx, viewerID, l.ID)
+		}).Group("social")
+		props["comments"] = inertia.Defer(func(ctx context.Context) (any, error) {
+			threads, err := h.Social.Comments(ctx, viewerID, "list", []string{l.ID})
+			if threads[l.ID] == nil {
+				return []social.Comment{}, err
+			}
+
+			return threads[l.ID], err
+		}).Group("social")
+	}
+
+	return inertia.Render(c, "User/List", props)
+}
+
+// publicListEntry is library.ListEntry without the date the owner added the item.
+type publicListEntry struct {
+	Position int            `json:"position"`
+	Note     *string        `json:"note"`
+	Item     publicListItem `json:"item"`
+}
+
+// publicListItem hides the raw cover key (the page uses cover): the outer, empty field shadows the
+// embedded one in encoding/json and is omitted.
+type publicListItem struct {
+	library.ListItemRef
+
+	CoverThumbKey *string `json:"coverThumbKey,omitempty"`
 }

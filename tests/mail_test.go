@@ -58,3 +58,22 @@ func TestMailLocaleFromPayload(t *testing.T) {
 		}
 	}
 }
+
+// TestAutomaticMailFromAndReplyTo: a real verification mail leaves from noreply@ with Reply-To support@ (Q-A17).
+func TestAutomaticMailFromAndReplyTo(t *testing.T) {
+	app := vukemtest.New(t, bootstrap.New)
+	register(t, app, app.Client(t), "sender@example.com")
+
+	sent := app.Mails().SentTo("sender@example.com")
+	if len(sent) == 0 {
+		t.Fatal("no mail sent")
+	}
+	for _, m := range sent {
+		if m.From != "HexaScore <noreply@hexascore.app>" && !strings.Contains(m.From, "noreply@hexascore.app") {
+			t.Errorf("From = %q", m.From)
+		}
+		if len(m.ReplyTo) != 1 || !strings.Contains(m.ReplyTo[0], "support@hexascore.app") {
+			t.Errorf("ReplyTo = %v", m.ReplyTo)
+		}
+	}
+}

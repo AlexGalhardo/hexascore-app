@@ -1,0 +1,658 @@
+{
+	"entities": {
+		"Q10307893": {
+			"type": "item",
+			"id": "Q10307893",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "John Shiban"
+				}
+			}
+		},
+		"Q1172164": {
+			"type": "item",
+			"id": "Q1172164",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "CD Projekt RED"
+				},
+				"mul": {
+					"language": "mul",
+					"value": "CD Projekt RED"
+				}
+			}
+		},
+		"Q127800": {
+			"type": "item",
+			"id": "Q127800",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Michelle MacLaren"
+				}
+			}
+		},
+		"Q1279422": {
+			"type": "item",
+			"id": "Q1279422",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Charles Haid"
+				},
+				"mul": {
+					"language": "mul",
+					"value": "Charles Haid"
+				}
+			}
+		},
+		"Q13361286": {
+			"type": "item",
+			"id": "Q13361286",
+			"labels": {
+				"mul": {
+					"language": "mul",
+					"value": "Xbox One"
+				}
+			}
+		},
+		"Q1341051": {
+			"type": "item",
+			"id": "Q1341051",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "post-apocalyptic film"
+				}
+			}
+		},
+		"Q1366112": {
+			"type": "item",
+			"id": "Q1366112",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "drama television series"
+				}
+			}
+		},
+		"Q1373742": {
+			"type": "item",
+			"id": "Q1373742",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Johan Renck"
+				},
+				"mul": {
+					"language": "mul",
+					"value": "Johan Renck"
+				}
+			}
+		},
+		"Q1406": {
+			"type": "item",
+			"id": "Q1406",
+			"labels": {
+				"mul": {
+					"language": "mul",
+					"value": "Microsoft Windows"
+				},
+				"en": {
+					"language": "en",
+					"value": "Microsoft Windows"
+				}
+			}
+		},
+		"Q1422746": {
+			"type": "item",
+			"id": "Q1422746",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "action role-playing game"
+				}
+			}
+		},
+		"Q145": {
+			"type": "item",
+			"id": "Q145",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "United Kingdom"
+				}
+			}
+		},
+		"Q15042700": {
+			"type": "item",
+			"id": "Q15042700",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Thomas Schnauz"
+				}
+			}
+		},
+		"Q15062348": {
+			"type": "item",
+			"id": "Q15062348",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "dystopian fiction"
+				}
+			}
+		},
+		"Q1535153": {
+			"type": "item",
+			"id": "Q1535153",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "superhero film"
+				}
+			}
+		},
+		"Q1699742": {
+			"type": "item",
+			"id": "Q1699742",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "John Dahl"
+				},
+				"mul": {
+					"language": "mul",
+					"value": "John Dahl"
+				}
+			}
+		},
+		"Q174526": {
+			"type": "item",
+			"id": "Q174526",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "cyberpunk"
+				}
+			}
+		},
+		"Q185867": {
+			"type": "item",
+			"id": "Q185867",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "film noir"
+				}
+			}
+		},
+		"Q188473": {
+			"type": "item",
+			"id": "Q188473",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "action film"
+				}
+			}
+		},
+		"Q19610114": {
+			"type": "item",
+			"id": "Q19610114",
+			"labels": {
+				"mul": {
+					"language": "mul",
+					"value": "Nintendo Switch"
+				}
+			}
+		},
+		"Q20443008": {
+			"type": "item",
+			"id": "Q20443008",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "dystopian film"
+				}
+			}
+		},
+		"Q20652466": {
+			"type": "item",
+			"id": "Q20652466",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "black comedy television series"
+				}
+			}
+		},
+		"Q2254211": {
+			"type": "item",
+			"id": "Q2254211",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "political fiction"
+				}
+			}
+		},
+		"Q23547": {
+			"type": "item",
+			"id": "Q23547",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Bryan Cranston"
+				},
+				"mul": {
+					"language": "mul",
+					"value": "Bryan Cranston"
+				}
+			}
+		},
+		"Q2484376": {
+			"type": "item",
+			"id": "Q2484376",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "thriller film"
+				}
+			}
+		},
+		"Q24925": {
+			"type": "item",
+			"id": "Q24925",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "science fiction"
+				}
+			}
+		},
+		"Q30": {
+			"type": "item",
+			"id": "Q30",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "United States"
+				}
+			}
+		},
+		"Q3335": {
+			"type": "item",
+			"id": "Q3335",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "George Orwell"
+				},
+				"mul": {
+					"language": "mul",
+					"value": "George Orwell"
+				}
+			}
+		},
+		"Q3440795": {
+			"type": "item",
+			"id": "Q3440795",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Adam Bernstein"
+				},
+				"mul": {
+					"language": "mul",
+					"value": "Adam Bernstein"
+				}
+			}
+		},
+		"Q36": {
+			"type": "item",
+			"id": "Q36",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Poland"
+				}
+			}
+		},
+		"Q371455": {
+			"type": "item",
+			"id": "Q371455",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "David Slade"
+				},
+				"mul": {
+					"language": "mul",
+					"value": "David Slade"
+				}
+			}
+		},
+		"Q3952882": {
+			"type": "item",
+			"id": "Q3952882",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Scott Winant"
+				}
+			}
+		},
+		"Q3990883": {
+			"type": "item",
+			"id": "Q3990883",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "action thriller"
+				}
+			}
+		},
+		"Q408": {
+			"type": "item",
+			"id": "Q408",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Australia"
+				}
+			}
+		},
+		"Q42409239": {
+			"type": "item",
+			"id": "Q42409239",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "fantasy video game"
+				}
+			}
+		},
+		"Q4500": {
+			"type": "item",
+			"id": "Q4500",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Vince Gilligan"
+				},
+				"mul": {
+					"language": "mul",
+					"value": "Vince Gilligan"
+				}
+			}
+		},
+		"Q462727": {
+			"type": "item",
+			"id": "Q462727",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Félix Enríquez Alcalá"
+				}
+			}
+		},
+		"Q471839": {
+			"type": "item",
+			"id": "Q471839",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "science fiction film"
+				}
+			}
+		},
+		"Q4974114": {
+			"type": "item",
+			"id": "Q4974114",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Bronwen Hughes"
+				}
+			}
+		},
+		"Q5014725": {
+			"type": "item",
+			"id": "Q5014725",
+			"labels": {
+				"mul": {
+					"language": "mul",
+					"value": "PlayStation 4"
+				}
+			}
+		},
+		"Q5144932": {
+			"type": "item",
+			"id": "Q5144932",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Colin Bucksey"
+				},
+				"mul": {
+					"language": "mul",
+					"value": "Colin Bucksey"
+				}
+			}
+		},
+		"Q548834": {
+			"type": "item",
+			"id": "Q548834",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Tim Hunter"
+				}
+			}
+		},
+		"Q5542223": {
+			"type": "item",
+			"id": "Q5542223",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "George Mastras"
+				},
+				"mul": {
+					"language": "mul",
+					"value": "George Mastras"
+				}
+			}
+		},
+		"Q6196851": {
+			"type": "item",
+			"id": "Q6196851",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Jim McKay"
+				}
+			}
+		},
+		"Q621818": {
+			"type": "item",
+			"id": "Q621818",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Rian Johnson"
+				},
+				"mul": {
+					"language": "mul",
+					"value": "Rian Johnson"
+				}
+			}
+		},
+		"Q63184502": {
+			"type": "item",
+			"id": "Q63184502",
+			"labels": {
+				"mul": {
+					"language": "mul",
+					"value": "PlayStation 5"
+				}
+			}
+		},
+		"Q67175872": {
+			"type": "item",
+			"id": "Q67175872",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "thriller television series"
+				}
+			}
+		},
+		"Q6834453": {
+			"type": "item",
+			"id": "Q6834453",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Michael Slovis"
+				}
+			}
+		},
+		"Q7174311": {
+			"type": "item",
+			"id": "Q7174311",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Peter Gould"
+				}
+			}
+		},
+		"Q7181639": {
+			"type": "item",
+			"id": "Q7181639",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Phil Abraham"
+				}
+			}
+		},
+		"Q724100": {
+			"type": "item",
+			"id": "Q724100",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Peter Medak"
+				}
+			}
+		},
+		"Q7407299": {
+			"type": "item",
+			"id": "Q7407299",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Sam Catlin"
+				}
+			}
+		},
+		"Q7704779": {
+			"type": "item",
+			"id": "Q7704779",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Terry McDonough"
+				},
+				"mul": {
+					"language": "mul",
+					"value": "Terry McDonough"
+				}
+			}
+		},
+		"Q7841104": {
+			"type": "item",
+			"id": "Q7841104",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Tricia Brock"
+				}
+			}
+		},
+		"Q78528852": {
+			"type": "item",
+			"id": "Q78528852",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "contemporary Western film"
+				}
+			}
+		},
+		"Q9335577": {
+			"type": "item",
+			"id": "Q9335577",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "crime television series"
+				}
+			}
+		},
+		"Q944250": {
+			"type": "item",
+			"id": "Q944250",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "social science fiction"
+				}
+			}
+		},
+		"Q9544977": {
+			"type": "item",
+			"id": "Q9544977",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Lilly Wachowski"
+				},
+				"mul": {
+					"language": "mul",
+					"value": "Lilly Wachowski"
+				}
+			}
+		},
+		"Q9545711": {
+			"type": "item",
+			"id": "Q9545711",
+			"labels": {
+				"mul": {
+					"language": "mul",
+					"value": "Lana Wachowski"
+				}
+			}
+		},
+		"Q98973368": {
+			"type": "item",
+			"id": "Q98973368",
+			"labels": {
+				"en": {
+					"language": "en",
+					"value": "Xbox Series X and Series S"
+				},
+				"mul": {
+					"language": "mul",
+					"value": "Xbox Series X/S"
+				}
+			}
+		}
+	}
+}

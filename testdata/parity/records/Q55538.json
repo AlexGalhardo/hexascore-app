@@ -1,0 +1,161 @@
+{
+  "qid": "Q55538",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q55538",
+      "labels": {
+        "en": "007: Licence to Kill",
+        "es": "Licencia para matar",
+        "mul": "007: Licence to Kill",
+        "pt": "007: Licence to Kill",
+        "pt-br": "007: Licence to Kill"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Licence to Kill (1989 video game)",
+        "eswiki": "Licencia para matar (videojuego)",
+        "ptwiki": "007: Licence to Kill"
+      },
+      "sitelinks_count": 9,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q1235040",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q1044478",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q309086",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q2635372",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "30",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0490765",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q170434",
+            "rank": "normal"
+          },
+          {
+            "value": "Q627302",
+            "rank": "normal"
+          },
+          {
+            "value": "Q478829",
+            "rank": "normal"
+          },
+          {
+            "value": "Q749976",
+            "rank": "normal"
+          },
+          {
+            "value": "Q99775",
+            "rank": "normal"
+          },
+          {
+            "value": "Q853547",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23882",
+            "rank": "normal"
+          },
+          {
+            "value": "Q100047",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1989-04-20T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "james-bond-007-licence-to-kill",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q100047": "Commodore Amiga",
+        "Q1044478": "shoot 'em up",
+        "Q1235040": "Domark Software",
+        "Q145": "United Kingdom",
+        "Q170434": "DOS",
+        "Q1860": "English",
+        "Q208850": "single-player video game",
+        "Q23882": "ZX Spectrum",
+        "Q2635372": "James Bond",
+        "Q309086": "Licence to Kill",
+        "Q478829": "Amstrad CPC",
+        "Q627302": "Atari ST",
+        "Q749976": "BBC Micro",
+        "Q853547": "MSX",
+        "Q99775": "Commodore 64"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q55538",
+      "lang": "en",
+      "title": "Licence to Kill (1989 video game)",
+      "extract": "Licence to Kill is a vertically scrolling shooter based on the James Bond film of the same name, developed by Quixel and published by Domark in 1989. It was released for Amiga, Amstrad CPC, Atari ST, BBC Micro, Commodore 64, MS-DOS, MSX, and ZX Spectrum. \nThe game closely follows the plot of the film, consisting of six scenes in which Bond chases drug czar Sanchez who has murdered his best friend Felix Leiter's bride. The scenes within the game vary in setting and include helicopter chases, underwater diving, water-skis and behind the wheel of an 18-wheel tanker truck.",
+      "url": "https://en.wikipedia.org/wiki/Licence_to_Kill_(1989_video_game)"
+    },
+    "wikipedia:es": {
+      "qid": "Q55538",
+      "lang": "es",
+      "title": "Licencia para matar (videojuego)",
+      "extract": "007: Licence to kill es un videojuego de 1989 basado en la película de James Bond del mismo nombre, desarrollado por Quixel y publicado por Domark en 1989. Al principio fue lanzado para DOS y luego publicado para Amiga, Amstrad CPC, Atari ST, Commodore 64, MSX y ZX Spectrum.​",
+      "url": "https://es.wikipedia.org/wiki/Licencia_para_matar_(videojuego)"
+    }
+  },
+  "tier": "tail",
+  "type": "game"
+}

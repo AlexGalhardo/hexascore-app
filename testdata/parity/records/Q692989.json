@@ -1,0 +1,181 @@
+{
+  "qid": "Q692989",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q692989",
+      "labels": {
+        "en": "Roblox",
+        "es": "Roblox",
+        "mul": "Roblox"
+      },
+      "aliases": {
+        "mul": [
+          "RB",
+          "Robot Blox"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Roblox",
+        "eswiki": "Roblox",
+        "ptwiki": "Roblox"
+      },
+      "sitelinks_count": 86,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q67186598",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q175173",
+            "rank": "normal"
+          },
+          {
+            "value": "Q862490",
+            "rank": "normal"
+          },
+          {
+            "value": "Q25397095",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q67186598",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "37366",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt6667676",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q14116",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13361286",
+            "rank": "normal"
+          },
+          {
+            "value": "Q94",
+            "rank": "normal"
+          },
+          {
+            "value": "Q48493",
+            "rank": "normal"
+          },
+          {
+            "value": "Q18845397",
+            "rank": "normal"
+          },
+          {
+            "value": "Q63184502",
+            "rank": "normal"
+          },
+          {
+            "value": "Q98973368",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          },
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1758804",
+            "rank": "normal"
+          },
+          {
+            "value": "Q719798",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2006-08-27T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "roblox",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q13361286": "Xbox One",
+        "Q1406": "Microsoft Windows",
+        "Q14116": "macOS",
+        "Q175173": "massively multiplayer online role-playing game",
+        "Q1758804": "co-op mode",
+        "Q18845397": "Windows 10 Mobile",
+        "Q208850": "single-player video game",
+        "Q25397095": "sandbox game",
+        "Q30": "United States",
+        "Q48493": "iOS",
+        "Q63184502": "PlayStation 5",
+        "Q67186598": "Roblox Corporation",
+        "Q6895044": "multiplayer video game",
+        "Q719798": "player versus player",
+        "Q862490": "massively multiplayer online game",
+        "Q94": "Android",
+        "Q98973368": "Xbox Series X and Series S"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q692989",
+      "lang": "en",
+      "title": "Roblox",
+      "extract": "Roblox ( , ROH-bloks) is an online game platform and game creation system developed by Roblox Corporation that allows users to program and play games created by themselves or other users. It was developed by David Baszucki and Erik Cassel in 2004, and released to the public in 2006. As of February 2025, the platform has reported an average of 85.3 million daily active users. According to the company, its monthly player base includes half of all American children under the age of 16.\nThe platform hosts millions of user-created games, created using Luau, a modified dialect of the programming language Lua and the platform's game engine, Roblox Studio. While Roblox is free-to-play, it features in-game purchases done through its virtual currency known as Robux, and game developers on the platform are able to create items that cost Robux. The platform hosts a large virtual economy centered around those items and Robux. Using the platform's Developer Exchange program, creators are able to exchange their earned Robux for real-world currency. The platform has been used to host virtual concerts and events, as well as advergames.\nWhile Roblox started off small—both in playerbase and as a company—it began to grow rapidly in the second half of the 2010s. This growth was further accelerated by the COVID-19 pandemic. By 2020, over 5,000 games on Roblox had been played over a million times, and over 20 had been played over one billion times. Although critic reviews for Roblox have been positive, it has faced criticism concerning child safety and its content moderation, due to material pornographic or politically extremist in nature. It has been criticized for its alleged exploitative practices toward children and microtransactions. The platform has been restricted or completely blocked in several countries, including China, Egypt, Turkey, and Iraq.",
+      "url": "https://en.wikipedia.org/wiki/Roblox"
+    },
+    "wikipedia:es": {
+      "qid": "Q692989",
+      "lang": "es",
+      "title": "Roblox",
+      "extract": "Roblox es una plataforma de videojuegos en línea y un sistema de creación de videojuegos desarrollado por Roblox Corporation que permite a los usuarios programar y jugar juegos creados por ellos mismos o por otros usuarios. Fue creada por David Baszucki y Erik Cassel en 2003 y lanzada al público en 2006. A febrero de 2025, la plataforma reportó un promedio de 85,3 millones de usuarios activos diarios. Según la compañía, su base de jugadores mensual incluye a la mitad de los menores de 16 años en Estados Unidos.\nLa plataforma alberga millones de juegos y otras creaciones realizadas por usuarios (oficialmente denominados \"experiencias\"),​ todos creados utilizando un dialecto del lenguaje de programación Lua y el motor de juegos de la plataforma, Roblox Studio. Si bien Roblox es un juego gratuito, incluye compras dentro del juego realizadas a través de su moneda virtual conocida como \"Robux\". y los desarrolladores de juegos en la plataforma pueden crear elementos que cuestan Robux. Además, la plataforma alberga una gran economía virtual centrada en esos artículos y Robux. Utilizando el programa \"Developer Exchange\" de la plataforma, los desarrolladores de la plataforma pueden intercambiar los Robux obtenidos por dinero real. La plataforma también se ha utilizado para albergar conciertos y eventos virtuales, así como advergames.\nAunque Roblox comenzó siendo una empresa pequeña, tanto en número de jugadores como en tamaño, experimentó un rápido crecimiento en la segunda mitad de la década de 2010. Este crecimiento se aceleró aún más con la pandemia de COVID-19. Para 2020, más de 5000 juegos en Roblox habían superado el millón de partidas, y más de 20 habían superado los mil millones de partidas. Si bien las críticas a Roblox han sido positivas, ha recibido fuertes críticas por su moderación de contenido, debido a la gran cantidad de material sexual o políticamente extremista en la plataforma. También ha sido criticada por sus supuestas prácticas de explotación infantil y por el uso excesivo de microtransacciones. La plataforma ha sido restringida o bloqueada por completo en varios países, entre ellos República Popular China, Egipto, Turquía e Irak.",
+      "url": "https://es.wikipedia.org/wiki/Roblox"
+    },
+    "wikipedia:pt": {
+      "qid": "Q692989",
+      "lang": "pt",
+      "title": "Roblox",
+      "extract": "Roblox é uma plataforma de jogos online e um sistema de criação de jogos desenvolvido pela Roblox Corporation que permite aos usuários programar e jogar jogos criados por eles próprios ou por outros usuários. Foi criado por David Baszucki e Erik Cassel em 2004 e lançado ao público em 2006. Em fevereiro de 2025, a plataforma registrava uma média de 85.3 milhões de usuários ativos diários. Segundo a empresa, sua base mensal de jogadores inclui metade de todas as crianças norte-americanas com menos de 16 anos.\nA plataforma hospeda milhões de jogos criados por usuários (oficialmente chamados de \"experiências\"), todos criados usando um dialeto da linguagem de programação Lua e o mecanismo de jogo da plataforma, Roblox Studio. Embora o Roblox seja gratuito, ele oferece compras no jogo feitas por meio de sua moeda virtual, conhecida como Robux, e os desenvolvedores de jogos na plataforma podem criar itens que custam Robux. Além disso, a plataforma hospeda uma grande economia virtual centrada nesses itens e Robux. Usando o programa \"Developer Exchange\" da plataforma, os criadores podem trocar os Robux ganhos por moeda real. A plataforma também tem sido usada para hospedar eventos e concertos virtuais, bem como advergames.\nEmbora o Roblox tenha começado pequeno — tanto em base de jogadores quanto como empresa — ele começou a crescer rapidamente na segunda metade da década de 2010. Esse crescimento foi ainda mais acelerado pela pandemia de COVID-19. Em 2020, mais de 5.000 jogos no Roblox foram jogados mais de um milhão de vezes, e mais de 20 jogos foram jogados mais de um bilhão de vezes. Embora as avaliações da crítica sobre o Roblox tenham sido positivas, a plataforma tem enfrentado duras críticas por sua moderação de conteúdo, o que, por sua vez, levou a uma grande quantidade de material sexual ou politicamente extremista na plataforma. A plataforma também foi criticada por suas supostas práticas de exploração de crianças e microtransações. A plataforma foi restringida ou completamente bloqueada em vários países, incluindo China, Turquia e Jordânia.",
+      "url": "https://pt.wikipedia.org/wiki/Roblox"
+    }
+  },
+  "tier": "top",
+  "type": "game"
+}

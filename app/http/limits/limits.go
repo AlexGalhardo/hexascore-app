@@ -42,6 +42,10 @@ var (
 	TimeToBeat   = Rule{"time-to-beat", 30, time.Minute}
 	Lists        = Rule{"lists", 60, time.Minute}
 	Editions     = Rule{"edition", 60, time.Minute}
+	Follows      = Rule{"follows", 60, time.Hour}    // SDD 14 NFR-14-8
+	Reviews      = Rule{"reviews", 30, time.Hour}    // SDD 14 §12.10
+	Comments     = Rule{"comments", 60, time.Hour}   // SDD 14 §12.11
+	Reactions    = Rule{"reactions", 300, time.Hour} // SDD 14 §12.11
 	Notify       = Rule{"notifications", 120, time.Minute}
 	Reports      = Rule{"reports", 10, time.Hour}
 	Search       = Rule{"search", 60, time.Minute}
@@ -71,6 +75,15 @@ var (
 	CommunitySubmitIP = Rule{"community.submit.ip", 10, time.Minute}
 	CommunityUpload   = Rule{"community.uploads", 10, time.Hour}
 	CommunityUploadIP = Rule{"community.uploads.ip", 10, time.Hour}
+	// Page views per IP on HTML and Inertia routes (ADR 0022). A reader opens a page every few seconds:
+	// 60/min allows a quick burst of tabs, 600/h caps a steady crawl at one page per 6 s. A request with a
+	// session cookie gets 5x; verified search crawlers are exempt.
+	PageViews = Rule{"pages", 60, time.Minute}
+	// Below PageViews: past it an anonymous client is asked to solve Turnstile once (step-up, ADR 0022).
+	PageViewsSoft     = Rule{"pages.soft", 30, time.Minute}
+	PageViewsHour     = Rule{"pages.hour", 600, time.Hour}
+	PageViewsUser     = Rule{"pages.user", 300, time.Minute}
+	PageViewsUserHour = Rule{"pages.user.hour", 3000, time.Hour}
 )
 
 // APIPlan is the per-key rate of a public API plan (SDD 05 §6.2): up to burst requests at once, rps sustained.
@@ -82,11 +95,57 @@ func APIPlan(plan string, rps, burst int) Rule {
 // All lists the fixed rules, for the table test.
 func All() []Rule {
 	return []Rule{
-		Login, LoginIP, LoginAccount, Signup, SignupEmail, Forgot, ForgotEmail, Mails, TwoFactor, TwoFactorSet,
-		Deletion, Contact, Ratings, Status, TimeToBeat, Lists, Editions, Notify, Reports, Search, Suggest,
-		SearchEvents, APIIP, AppIP, AppRead, AppWrite, AppTokens, AppTokensAcc, AppTokensUsr, AppTokenRotate, App2FA,
-		Challenge, Exports, CSPReports, ClientErrors, ClientMetrics,
-		CommunityDraft, CommunityDraftIP, CommunitySubmit, CommunitySubmitIP, CommunityUpload, CommunityUploadIP,
+		Login,
+		LoginIP,
+		LoginAccount,
+		Signup,
+		SignupEmail,
+		Forgot,
+		ForgotEmail,
+		Mails,
+		TwoFactor,
+		TwoFactorSet,
+		Deletion,
+		Contact,
+		Ratings,
+		Status,
+		TimeToBeat,
+		Lists,
+		Editions,
+		Follows,
+		Reviews,
+		Comments,
+		Reactions,
+		Notify,
+		Reports,
+		Search,
+		Suggest,
+		SearchEvents,
+		APIIP,
+		AppIP,
+		AppRead,
+		AppWrite,
+		AppTokens,
+		AppTokensAcc,
+		AppTokensUsr,
+		AppTokenRotate,
+		App2FA,
+		Challenge,
+		Exports,
+		CSPReports,
+		ClientErrors,
+		ClientMetrics,
+		CommunityDraft,
+		CommunityDraftIP,
+		CommunitySubmit,
+		CommunitySubmitIP,
+		CommunityUpload,
+		CommunityUploadIP,
+		PageViews,
+		PageViewsSoft,
+		PageViewsHour,
+		PageViewsUser,
+		PageViewsUserHour,
 	}
 }
 

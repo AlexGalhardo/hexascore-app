@@ -1,0 +1,115 @@
+{
+  "qid": "Q81841",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q81841",
+      "labels": {
+        "en": "Fracture",
+        "mul": "Fracture"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Fracture (video game)"
+      },
+      "sitelinks_count": 8,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q216611",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q380266",
+            "rank": "normal"
+          },
+          {
+            "value": "Q27670585",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Fracture",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q2076545",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt1253846",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q48263",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10683",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          },
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2008-10-07T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "fracture",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q10683": "PlayStation 3",
+        "Q2076545": "Wargaming Chicago-Baltimore",
+        "Q208850": "single-player video game",
+        "Q216611": "Lucasfilm Games",
+        "Q27670585": "science fiction video game",
+        "Q30": "United States",
+        "Q380266": "third-person shooter",
+        "Q48263": "Xbox 360",
+        "Q6895044": "multiplayer video game"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q81841",
+      "lang": "en",
+      "title": "Fracture (video game)",
+      "extract": "Fracture is a third-person shooter video game developed by Day 1 Studios and was published by LucasArts. It was released for the PlayStation 3 and Xbox 360 in October 2008. Set in the 22nd century, the story involves two factions, Pacific and Atlantic, fighting in a xenophobic America split by global warming. The player assumes control of Jet Brody, an Atlantic Sergeant ordered to capture Pacifican Commander Sheridan. The game is notable for its focus on terrain movement through the use of futuristic weapons. Fracture garnered mixed reviews upon release.",
+      "url": "https://en.wikipedia.org/wiki/Fracture_(video_game)"
+    }
+  },
+  "tier": "tail",
+  "type": "game"
+}

@@ -1,0 +1,360 @@
+{
+  "qid": "Q173626",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q173626",
+      "labels": {
+        "es": "Pac-Man",
+        "mul": "Pac-Man",
+        "pt": "Pac-Man",
+        "pt-br": "Pac-Man"
+      },
+      "aliases": {
+        "es": [
+          "Pacman",
+          "Pac Man",
+          "Come cocos",
+          "Comecocos"
+        ],
+        "mul": [
+          "Puck Man"
+        ],
+        "pt": [
+          "Pac Man"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Pac-Man",
+        "eswiki": "Pac-Man",
+        "ptwiki": "Pac-Man"
+      },
+      "sitelinks_count": 73,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q309996",
+            "rank": "normal"
+          },
+          {
+            "value": "Q149947",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q13717398",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "パックマン",
+            "rank": "normal"
+          },
+          {
+            "value": "Pac-Man",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q956020",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q309996",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Pac-Man gameplay (1x pixel-perfect recreation).png",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "6856",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0260264",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q188642",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4885200",
+            "rank": "normal"
+          },
+          {
+            "value": "Q94",
+            "rank": "normal"
+          },
+          {
+            "value": "Q743222",
+            "rank": "normal"
+          },
+          {
+            "value": "Q918232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q206261",
+            "rank": "normal"
+          },
+          {
+            "value": "Q853547",
+            "rank": "normal"
+          },
+          {
+            "value": "Q99775",
+            "rank": "normal"
+          },
+          {
+            "value": "Q751719",
+            "rank": "normal"
+          },
+          {
+            "value": "Q388",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23882",
+            "rank": "normal"
+          },
+          {
+            "value": "Q48263",
+            "rank": "normal"
+          },
+          {
+            "value": "Q100047",
+            "rank": "normal"
+          },
+          {
+            "value": "Q170434",
+            "rank": "normal"
+          },
+          {
+            "value": "Q172742",
+            "rank": "normal"
+          },
+          {
+            "value": "Q183259",
+            "rank": "normal"
+          },
+          {
+            "value": "Q48493",
+            "rank": "normal"
+          },
+          {
+            "value": "Q135321",
+            "rank": "normal"
+          },
+          {
+            "value": "Q201652",
+            "rank": "normal"
+          },
+          {
+            "value": "Q249075",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1061441",
+            "rank": "normal"
+          },
+          {
+            "value": "Q454390",
+            "rank": "normal"
+          },
+          {
+            "value": "Q202712",
+            "rank": "normal"
+          },
+          {
+            "value": "Q203992",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1977455",
+            "rank": "normal"
+          },
+          {
+            "value": "Q14094",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5014725",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13361286",
+            "rank": "normal"
+          },
+          {
+            "value": "Q170325",
+            "rank": "normal"
+          },
+          {
+            "value": "Q192851",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q17",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1980-05-22T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 10,
+              "time": "+1980-07-00T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1993-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 10,
+              "time": "+1988-10-00T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1984-11-02T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "pac-man--16",
+            "rank": "normal"
+          },
+          {
+            "value": "pac-man--18",
+            "rank": "normal"
+          },
+          {
+            "value": "pac-man--12",
+            "rank": "normal"
+          },
+          {
+            "value": "pac-man--5",
+            "rank": "normal"
+          },
+          {
+            "value": "pac-man--23",
+            "rank": "normal"
+          },
+          {
+            "value": "pac-man--13",
+            "rank": "normal"
+          },
+          {
+            "value": "pac-man--14",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q100047": "Commodore Amiga",
+        "Q1061441": "Intellivision",
+        "Q13361286": "Xbox One",
+        "Q135321": "Famicom Disk System",
+        "Q13717398": "maze video game",
+        "Q1406": "Microsoft Windows",
+        "Q14094": "IPod touch",
+        "Q149947": "Midway Games",
+        "Q17": "Japan",
+        "Q170325": "PlayStation Portable",
+        "Q170434": "DOS",
+        "Q172742": "Nintendo Entertainment System",
+        "Q183259": "Super Nintendo Entertainment System",
+        "Q188642": "Game Boy Advance",
+        "Q192851": "arcade video game machine",
+        "Q1977455": "Neo Geo Pocket Color",
+        "Q201652": "Apple II series",
+        "Q202712": "IBM Personal Computer",
+        "Q203992": "Game Boy Color",
+        "Q206261": "Atari 2600",
+        "Q208850": "single-player video game",
+        "Q23882": "ZX Spectrum",
+        "Q249075": "Atari 8-bit family",
+        "Q309996": "Namco",
+        "Q388": "Linux",
+        "Q454390": "Texas Instruments TI-99/4A",
+        "Q48263": "Xbox 360",
+        "Q48493": "iOS",
+        "Q4885200": "Windows Phone",
+        "Q5014725": "PlayStation 4",
+        "Q743222": "Atari 5200",
+        "Q751719": "Game Gear",
+        "Q853547": "MSX",
+        "Q918232": "Commodore VIC-20",
+        "Q94": "Android",
+        "Q956020": "Tōru Iwatani",
+        "Q99775": "Commodore 64"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q173626",
+      "lang": "en",
+      "title": "Pac-Man",
+      "extract": "Pac-Man, originally titled Puck Man in Japan, is a 1980 maze video game developed and published by Namco for arcades. It was released in Japan on May 22, 1980 and by Midway Manufacturing in North America in October 1980. The player controls Pac-Man, who must eat all the dots inside an enclosed maze while avoiding four colored ghosts. Eating large flashing dots called \"Power Pellets\" causes the ghosts to temporarily turn blue and vulnerable, allowing Pac-Man to eat the ghosts for bonus points.\nPac-Man was designed by Toru Iwatani, who led a nine-man team; the game's development began in early 1979. Iwatani wanted to create a game that could appeal to women as well as men, because most video games of the time had themes that appealed to traditionally masculine interests, such as war or sports. Although the inspiration for the Pac-Man character was the image of a pizza with a slice removed, Iwatani has said he rounded out the Japanese character for mouth, kuchi (Japanese: 口). The in-game characters were made to be cute and colorful to appeal to younger players. The original Japanese title of Puck Man was derived from the Japanese phrase paku paku taberu, which refers to gobbling something up; the title was changed to Pac-Man for the North American release due to fears of vandals defacing cabinets by converting the P into an F, as in fuck.\nPac-Man is regarded as one of the most influential and greatest video games of all time. It was a widespread critical and commercial success, leading to several sequels, extensive merchandise, and two television series, as well as a hit single, \"Pac-Man Fever\", by Buckner \u0026 Garcia. The character of Pac-Man became the official mascot of Namco and later Bandai Namco Entertainment. The game remains one of the highest-grossing and best-selling video games, generating more than $14 billion in revenue (as of 2016) and 43 million units in combined sales, and retains an enduring commercial and cultural legacy.",
+      "url": "https://en.wikipedia.org/wiki/Pac-Man"
+    },
+    "wikipedia:es": {
+      "qid": "Q173626",
+      "lang": "es",
+      "title": "Pac-Man",
+      "extract": "Pac Man (パックマン, Pakku Man?) es un videojuego arcade creado por el diseñador de videojuegos Toru Iwatani de la empresa Namco,​ y distribuido por Midway Games al mercado estadounidense a principios de los años 1980.\nDesde que Pac-Man fue lanzado el 22 de mayo de 1980,​ fue un éxito. Se convirtió en un fenómeno mundial en la industria de los videojuegos, llegó a tener el récord Guiness del videojuego de arcade más exitoso de todos los tiempos con un total de 293 822 máquinas vendidas desde 1981 hasta 1987 y acabó con el dominio de Space Invaders, donde la acción predominante era shoot 'em up (disparar a todos) para reemplazarla por un formato único, más humorístico y poco violento que gustó a muchísimas personas. «Todos los juegos que estaban disponibles en ese entonces -fines de los 70- eran de tipo violento, de guerra o como el Space Invaders», recordó en una entrevista Iwatani, agregando que «no había juegos que todos pudieran disfrutar, y especialmente no había ninguno para mujeres. Quería hacer un juego 'cómico' que las mujeres pudiesen disfrutar».",
+      "url": "https://es.wikipedia.org/wiki/Pac-Man"
+    },
+    "wikipedia:pt": {
+      "qid": "Q173626",
+      "lang": "pt",
+      "title": "Pac-Man",
+      "extract": "Pac-Man (conhecido em japonês com o nome de Puckman ou パックマン) é um jogo eletrônico criado por Tōru Iwatani para a empresa Namco, e sendo distribuído para o mercado americano pela Midway Games. Produzido originalmente para Arcade no início dos anos 1980, tornou-se um dos jogos mais jogados e populares no momento, tendo versões modernas para diversos consoles e continuações para tantos outros, inclusive na atualidade. A mecânica do jogo é simples: o jogador era uma cabeça redonda com uma boca que se abre e fecha, posicionado em um labirinto simples repleto de pastilhas e 4 fantasmas que o perseguiam. O objetivo era comer todas as pastilhas sem ser alcançado pelos fantasmas, em ritmo progressivo de dificuldade.\nO jogo foi lançado no dia 22 de maio de 1980.\nO jogo original rendeu muitas versões ainda para o Atari 2600 (como \"Mrs. Pacman\", e \"Super Pac-Man.\", além de outros não relacionados mas que seguiam o mesmo estilo), e posteriormente para diversos outros consoles e para o computador. Atualmente existem versões em 3 dimensões, outras em estilo \"adventure\", sempre remontando ao personagem redondo e faminto do jogo original e seus perseguidores fantasmas.",
+      "url": "https://pt.wikipedia.org/wiki/Pac-Man"
+    }
+  },
+  "tier": "top",
+  "type": "game"
+}

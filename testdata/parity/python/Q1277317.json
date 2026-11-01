@@ -1,0 +1,49 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "1969171"
+    },
+    "meta": {
+      "countries": [
+        "Soviet Union"
+      ],
+      "creators": [
+        "Alexander Grin"
+      ],
+      "genres": [
+        "short novel",
+        "féerie"
+      ]
+    },
+    "popularity": 15.0,
+    "qid": "Q1277317",
+    "release_date": "1923-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Scarlet Sails (Russian: Алые паруса, Alye parusa) is a 1923 romantic novel with elements of fantasy by Russian writer Alexander Grin. The author described the genre of the novel as féerie. It is a story about a dream coming true no matter how futile it seems. It was written from 1916–1922.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Scarlet_Sails_(novel)",
+        "title": "Scarlet Sails"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Алые паруса"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Алые паруса"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q1277317",
+  "slug": "scarlet-sails"
+}

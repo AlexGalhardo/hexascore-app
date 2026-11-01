@@ -1,0 +1,141 @@
+{
+  "qid": "Q785880",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q785880",
+      "labels": {
+        "en": "New Women",
+        "es": "Nuevas mujeres",
+        "mul": "新女性",
+        "pt": "Nova Mulher"
+      },
+      "aliases": {
+        "en": [
+          "The New Women",
+          "New Woman",
+          "New Female"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "New Women",
+        "eswiki": "Nuevas mujeres"
+      },
+      "sitelinks_count": 8,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/new_women_1934",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q226730",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "新女性",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q254196",
+            "rank": "normal"
+          },
+          {
+            "value": "Q197624",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+106",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q1536079",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0477928",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "150314",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q13426199",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q384708",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1935-02-02T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q88603023",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q130232": "drama film",
+        "Q13426199": "Republic of China",
+        "Q1536079": "Lianhua Film Company",
+        "Q197624": "Zheng Junli",
+        "Q226730": "silent film",
+        "Q254196": "Ruan Lingyu",
+        "Q384708": "Cai Chusheng",
+        "Q88603023": "Sun Shiyi"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q785880",
+      "lang": "en",
+      "title": "New Women",
+      "extract": "New Women (Chinese: 新女性; pinyin: Xīn nǚxìng) is a 1935 Chinese silent drama film produced by the United Photoplay Service. It is sometimes translated as New Woman. The film starred Ruan Lingyu (in her penultimate film) and was directed by Cai Chusheng. This film became one of Ruan Lingyu's better-known works. Her suicide on International Women's Day (8 March 1935) drew attention to the controversial status of new women and made this film a sensation in modern China.\nNew Women was considered to be a \"problem film\" in inciting \"the woman question\" (妇女问题, fùnü wèntí). It offered criticism to the traditional gender ideology and offered China a change from \"old women\" to \"new women\" as an alternative social convention.\nNew Women was based upon the life of Chinese actress and writer, Ai Xia, who had committed suicide in 1934. Ai Xia's death following her role in A Modern Woman (1933) inspired Cai Chusheng to emulate the tragedy in this film.\nA print of New Women is currently maintained by the China Film Archive.",
+      "url": "https://en.wikipedia.org/wiki/New_Women"
+    },
+    "wikipedia:es": {
+      "qid": "Q785880",
+      "lang": "es",
+      "title": "Nuevas mujeres",
+      "extract": "Nuevas mujeres​ (en chino: 新女性 pinyin:  Xīn nǚxìng) es una película muda china estrenada en Shanghái por la Lianhua Film Company en 1935. Conocida también bajo el título internacional de New Women, la película fue protagonizada por Ruan Lingyu (en su penúltima película) y estuvo dirigida por Cai Chusheng.​\nNuevas mujeres se basa en la vida de otra actriz china, Ai Xia, quien se había suicidado en 1934.​ La película es uno de los papeles más conocidos de Ruan Lingyu, en buena medida debido a su suicidio poco después del estreno del film.\nUna copia de la película se conserva en la actualidad en el Archivo de Películas de China.​",
+      "url": "https://es.wikipedia.org/wiki/Nuevas_mujeres"
+    }
+  },
+  "tier": "non-latin",
+  "type": "movie"
+}

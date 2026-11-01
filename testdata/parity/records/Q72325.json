@@ -1,0 +1,278 @@
+{
+  "qid": "Q72325",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q72325",
+      "labels": {
+        "en": "A Short Film About Killing",
+        "es": "No matarás",
+        "pt": "Krótki film o zabijaniu"
+      },
+      "aliases": {
+        "en": [
+          "Short Film About Killing"
+        ],
+        "es": [
+          "Krótki film o zabijaniu",
+          "No mataras",
+          "Krotki film o zabijaniu"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "A Short Film About Killing",
+        "eswiki": "No matarás (película de 1988)",
+        "ptwiki": "Krótki film o zabijaniu"
+      },
+      "sitelinks_count": 35,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/a_short_film_about_killing",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q1183562",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Krótki film o zabijaniu",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q55370",
+            "rank": "normal"
+          },
+          {
+            "value": "Q272433",
+            "rank": "normal"
+          },
+          {
+            "value": "Q712727",
+            "rank": "normal"
+          },
+          {
+            "value": "Q168199",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6440137",
+            "rank": "normal"
+          },
+          {
+            "value": "Q558395",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9389839",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9145185",
+            "rank": "normal"
+          },
+          {
+            "value": "Q11719258",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9165345",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4972891",
+            "rank": "normal"
+          },
+          {
+            "value": "Q11765664",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7945058",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9152046",
+            "rank": "normal"
+          },
+          {
+            "value": "Q11765483",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9387787",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9175268",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9152871",
+            "rank": "normal"
+          },
+          {
+            "value": "Q11728087",
+            "rank": "normal"
+          },
+          {
+            "value": "Q115796649",
+            "rank": "normal"
+          },
+          {
+            "value": "Q11736321",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+84",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q8069684",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4050610",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0095468",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q809",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "10754",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q36",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q55165",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1988-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1988-03-11T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1989-01-26T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q59549",
+            "rank": "normal"
+          },
+          {
+            "value": "Q55165",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q115796649": "Marlena Miarczyńska",
+        "Q11719258": "Jan Tesarz",
+        "Q11728087": "Jolanta Mielech",
+        "Q11736321": "Karol Stępkowski",
+        "Q11765483": "Maciej Maciejewski",
+        "Q11765664": "Maciej Szary",
+        "Q1183562": "Decalogue V",
+        "Q130232": "drama film",
+        "Q168199": "Zbigniew Zapasiewicz",
+        "Q272433": "Krystyna Janda",
+        "Q36": "Poland",
+        "Q4050610": "TOR film studio",
+        "Q4972891": "Małgorzata Pieczyńska",
+        "Q55165": "Krzysztof Kieślowski",
+        "Q55370": "Artur Barciś",
+        "Q558395": "Olgierd Łukaszewicz",
+        "Q59549": "Krzysztof Piesiewicz",
+        "Q6440137": "Krzysztof Globisz",
+        "Q712727": "Mirosław Baka",
+        "Q7945058": "Helena Kowalczykowa",
+        "Q8069684": "Zespoły Filmowe",
+        "Q809": "Polish",
+        "Q9145185": "Aleksander Bednarz",
+        "Q9152046": "Andrzej Gawroński",
+        "Q9152871": "Andrzej Mastalerz",
+        "Q9165345": "Barbara Dziekan",
+        "Q9175268": "Bogdan Niewinowski",
+        "Q9387787": "Zbigniew Borek",
+        "Q9389839": "Zdzisław Rychter"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q72325",
+      "lang": "en",
+      "title": "A Short Film About Killing",
+      "extract": "A Short Film About Killing (Polish: Krótki film o zabijaniu) is a 1988 psychological crime tragedy film directed by Krzysztof Kieślowski and starring Mirosław Baka, Krzysztof Globisz, and Jan Tesarz. Written by Krzysztof Kieślowski and Krzysztof Piesiewicz, the film was expanded from Dekalog: Five of the Polish television series Dekalog. Set in Warsaw, Poland, the film compares the senseless, violent murder of an individual to the cold, calculated execution by the state. A Short Film About Killing won both the Jury Prize and the FIPRESCI Prize at the 1988 Cannes Film Festival, as well as the European Film Award for Best Film.",
+      "url": "https://en.wikipedia.org/wiki/A_Short_Film_About_Killing"
+    },
+    "wikipedia:es": {
+      "qid": "Q72325",
+      "lang": "es",
+      "title": "No matarás (película de 1988)",
+      "extract": "No matarás (título original en polaco: Krótki film o zabijaniu, 'Un cortometraje sobre la matanza') es la versión fílmica ampliada del quinto episodio del drama psicológico para la televisión compuesto de diez episodios llamado Dekalog ('El decálogo'), del director polaco Krzysztof Kieślowski, de 1988.",
+      "url": "https://es.wikipedia.org/wiki/No_matar%C3%A1s_(pel%C3%ADcula_de_1988)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q72325",
+      "lang": "pt",
+      "title": "Krótki film o zabijaniu",
+      "extract": "Krótki film o zabijaniu (bra: Não Matarás; prt: Breve Filme sobre o Acto de Matar) é um filme de drama polonês de 1988 dirigido por Krzysztof Kieślowski e escrito por Kieślowski e Krzysztof Piesiewicz. Estrelado por Mirosław Baka, Krzysztof Globisz e Jan Tesarz, completa a sequência Krótki film o miłości.",
+      "url": "https://pt.wikipedia.org/wiki/Kr%C3%B3tki_film_o_zabijaniu"
+    }
+  },
+  "tier": "mid",
+  "type": "movie"
+}

@@ -1,0 +1,52 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt5319572",
+      "tmdb": "65288"
+    },
+    "meta": {
+      "countries": [
+        "People's Republic of China"
+      ],
+      "episodes": 36,
+      "genres": [
+        "LGBT-related television series"
+      ],
+      "trailers": [
+        {
+          "youtubeId": "oDzg6WxGa5c"
+        }
+      ]
+    },
+    "popularity": 6.0,
+    "qid": "Q22078939",
+    "release_date": "2015-12-13",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Go Princess Go (Chinese: 太子妃升职记; pinyin: Tàizǐfēi Shēngzhí Jì) is a 2015 Chinese streaming series produced by and aired on the streaming service LeTV. The story was adapted from the novel of the same name by Xian Chen. The series stars Zhang Tianai, Sheng Yilun, Yu Menglong, Jiang Qilin and Guo Junchen in the lead roles. It premiered in December 2015 with 35 episodes.\nThe show incorporates various themes such as time travel, bisexuality and gender identity. A third of the show was censored in China.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Go_Princess_Go",
+        "title": "Go Princess Go"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Go Princess Go"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Go Princess Go"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q22078939",
+  "slug": "go-princess-go"
+}

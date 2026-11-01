@@ -57,7 +57,7 @@ type EntityPage struct {
 // languages). typ empty lists the first page of every type; typ set pages that type from offset.
 // ErrItemNotFound when there is no such entity.
 func LoadEntityPage(ctx context.Context, db Querier, kind, key, locale, typ string, offset int) (EntityPage, error) {
-	page := EntityPage{Counts: map[string]int{}, AvgScore: map[string]float64{}}
+	page := EntityPage{Groups: []EntityGroup{}, Counts: map[string]int{}, AvgScore: map[string]float64{}}
 	// Codes match case-insensitively so the controller can 301 /countries/br to the canonical /countries/BR.
 	match := "e.slug = $2"
 	if kind == "country" || kind == "language" {

@@ -4,3 +4,4 @@ android/
 ios/
 dist/
 coverage/
+.bundle-check/

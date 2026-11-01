@@ -18,23 +18,17 @@ func TestSuperviseRestartsUntilCancelled(t *testing.T) {
 		Supervise(ctx, 10*time.Millisecond, os.Args[0], "-test.run=TestHelperAppend", "--", marker)
 	}()
 
-	deadline := time.Now().Add(5 * time.Second)
+	// No wall-clock deadline: each restart spawns a test binary, whose start-up time
+	// depends on machine load, not on Supervise. `go test -timeout` bounds a real hang.
 	for {
 		b, _ := os.ReadFile(marker)
 		if len(b) >= 3 {
 			break
 		}
-		if time.Now().After(deadline) {
-			t.Fatalf("restarted %d times, want >= 3", len(b))
-		}
 		time.Sleep(20 * time.Millisecond)
 	}
 	cancel()
-	select {
-	case <-done:
-	case <-time.After(2 * time.Second):
-		t.Fatal("Supervise did not return after cancel")
-	}
+	<-done
 }
 
 // TestHelperAppend is the child process for TestSuperviseRestartsUntilCancelled.

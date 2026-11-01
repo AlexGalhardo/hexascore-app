@@ -4,6 +4,7 @@ package seeders_test
 
 import (
 	"context"
+	"fmt"
 	"slices"
 	"testing"
 
@@ -74,13 +75,14 @@ func TestDemoCatalog(t *testing.T) {
 	db := seededDB(t)
 
 	for query, want := range map[string]int{
-		`SELECT count(*) FROM items`:                                                    300,
-		`SELECT count(DISTINCT type) FROM items`:                                        4,
-		`SELECT count(*) FROM item_translations`:                                        900,
-		`SELECT count(*) FROM ratings`:                                                  2000,
-		`SELECT count(*) FROM users`:                                                    51,
-		`SELECT count(*) FROM users WHERE role = 'admin'`:                               1,
-		`SELECT count(*) FROM editions`:                                                 75 + 25,
+		`SELECT count(*) FROM items`:                      300,
+		`SELECT count(DISTINCT type) FROM items`:          4,
+		`SELECT count(*) FROM item_translations`:          900,
+		`SELECT count(*) FROM ratings`:                    2000,
+		`SELECT count(*) FROM users`:                      52,
+		`SELECT count(*) FROM users WHERE role = 'admin'`: 2,
+		fmt.Sprintf(`SELECT count(*) FROM users WHERE role = 'admin' AND email = '%s'`, seeders.DemoSecondAdminEmail): 1,
+		`SELECT count(*) FROM editions`: 75 + 25,
 		`SELECT count(*) FROM items WHERE type = 'book' AND primary_edition_id IS NULL`: 0,
 		`SELECT count(*) FROM entity_translations`:                                      3 * (6 + 10 + 3 + 40 + 15 + 10),
 	} {

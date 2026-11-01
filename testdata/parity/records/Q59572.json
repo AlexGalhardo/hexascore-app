@@ -1,0 +1,228 @@
+{
+  "qid": "Q59572",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q59572",
+      "labels": {
+        "en": "In the Cut",
+        "es": "En carne viva",
+        "pt": "In the Cut"
+      },
+      "aliases": {
+        "es": [
+          "In the Cut"
+        ],
+        "pt": [
+          "Em Carne Viva"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "In the Cut (film)",
+        "eswiki": "En carne viva (película de 2003)",
+        "ptwiki": "In the Cut"
+      },
+      "sitelinks_count": 26,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/in_the_cut",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q2421031",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1200678",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2484376",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2439025",
+            "rank": "normal"
+          },
+          {
+            "value": "Q599558",
+            "rank": "normal"
+          },
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "In the Cut",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q167498",
+            "rank": "normal"
+          },
+          {
+            "value": "Q41422",
+            "rank": "normal"
+          },
+          {
+            "value": "Q232902",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3454165",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3870096",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4145",
+            "rank": "normal"
+          },
+          {
+            "value": "Q710766",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16729989",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/in-the-cut",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+114",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q1544011",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0199626",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "10944",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          },
+          {
+            "value": "Q408",
+            "rank": "normal"
+          },
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q230448",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+2003-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2004-09-30T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q230448",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1200678": "mystery film",
+        "Q130232": "drama film",
+        "Q145": "United Kingdom",
+        "Q1544011": "Pathé",
+        "Q16729989": "Michelle Hurst",
+        "Q167498": "Meg Ryan",
+        "Q1860": "English",
+        "Q230448": "Jane Campion",
+        "Q232902": "Jennifer Jason Leigh",
+        "Q2421031": "neo-noir",
+        "Q2439025": "erotic thriller",
+        "Q2484376": "thriller film",
+        "Q30": "United States",
+        "Q3454165": "Kevin Bacon",
+        "Q3870096": "Nancy La Scala",
+        "Q408": "Australia",
+        "Q41422": "Mark Ruffalo",
+        "Q4145": "Patrice O'Neal",
+        "Q599558": "erotic film",
+        "Q710766": "Arthur J. Nascarella"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q59572",
+      "lang": "en",
+      "title": "In the Cut (film)",
+      "extract": "In the Cut is a 2003 psychological thriller film written and directed by Jane Campion and starring Meg Ryan, Mark Ruffalo, Jennifer Jason Leigh and Kevin Bacon. Campion's screenplay is an adaptation of the 1995 novel of the same name by Susanna Moore. The film focuses on an English teacher who becomes personally entangled with a detective investigating a series of gruesome murders in her Manhattan neighborhood.\nThe film received a limited release on October 22, 2003, in the United States, and was subsequently given a wide release on Halloween that year in the United States and United Kingdom. The film received mixed reviews from critics upon release. Negative reviews were critical of the story and narrative structure, while positive reviews praised the acting and Campion's visuals.\nIn recent years, the film has undergone a reappraisal for its subversion of the male gaze and other common movie tropes.",
+      "url": "https://en.wikipedia.org/wiki/In_the_Cut_(film)"
+    },
+    "wikipedia:es": {
+      "qid": "Q59572",
+      "lang": "es",
+      "title": "En carne viva (película de 2003)",
+      "extract": "En carne viva es una película drama protagonizado por Meg Ryan y Mark Ruffalo. Dirigido por Jane Campion. Estrenado el 22 de octubre de 2003 en Estados Unidos y el 30 de enero de 2004 en España.",
+      "url": "https://es.wikipedia.org/wiki/En_carne_viva_(pel%C3%ADcula_de_2003)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q59572",
+      "lang": "pt",
+      "title": "In the Cut",
+      "extract": "In the Cut (prt: In the Cut - Atracção Perigosa; bra: Em Carne Viva) é um filme de suspense de 2003, uma coprodução entre Estados Unidos, Reino Unido e Austrália, realizado por Jane Campion.",
+      "url": "https://pt.wikipedia.org/wiki/In_the_Cut"
+    }
+  },
+  "tier": "mid",
+  "type": "movie"
+}

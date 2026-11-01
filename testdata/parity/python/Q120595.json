@@ -1,0 +1,49 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "631927",
+      "openlibrary": "OL472130W"
+    },
+    "meta": {
+      "countries": [
+        "United Kingdom"
+      ],
+      "creators": [
+        "Agatha Christie"
+      ],
+      "genres": [
+        "detective fiction"
+      ]
+    },
+    "popularity": 26.0,
+    "qid": "Q120595",
+    "release_date": "1941-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "N or M? is a mystery novel by Agatha Christie first published in the US by Dodd, Mead and Company in 1941 and in the UK by the Collins Crime Club in November of the same year. The US edition retailed $2.00 and the UK edition at seven shillings and sixpence (7/6).\nThe title is taken from a catechism in the Book of Common Prayer which asks, \"What is your Christian name? Answer N. or M.\" The \"N. or M.\" here stands for the Latin, \"nomen vel nomina\", meaning \"name or names\". It was an accident of typography that \"nomina\" (\"nn\") came to be represented by \"m\".\nThe novel is the first to feature the mature versions of her detectives Tommy and Tuppence, whose previous appearances had been in the adventure The Secret Adversary (1922) and the short story collection Partners in Crime (1929).",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/N_or_M%3F",
+        "title": "N or M?"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "N or M? (M ou N?, no Brasil/ Tempo de Espionagem ou N ou M?, em Portugal) é um romance policial de Agatha Christie, publicado em 1941.\nÉ o terceiro livro protagonizado pelo casal de detetives Tommy e Tuppence Beresford.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/N_or_M%3F",
+        "title": "N or M?"
+      },
+      {
+        "locale": "es",
+        "synopsis": "El misterio de Sans Souci (N or M? en la versión original en inglés) es una novela de la escritora británica Agatha Christie publicada en 1941.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/El_misterio_de_Sans_Souci",
+        "title": "El misterio de Sans Souci"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q120595",
+  "slug": "n-or-m"
+}

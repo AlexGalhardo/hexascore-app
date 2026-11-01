@@ -40,7 +40,7 @@ for (const game of data.data) console.log(game.score, game.title);
 
 const first = await getItem({ client, path: { type: "games", id: data.data[0].id } });
 const shawshank = await lookupItem({ client, query: { source: "imdb", id: "tt0111161" } });
-console.log(response.headers.get("ratelimit-remaining"));
+console.log(response.headers.get("x-quota-remaining"));
 ```
 
 ### Operations
@@ -51,13 +51,15 @@ console.log(response.headers.get("ratelimit-remaining"));
 | Genres | `listGameGenres`, `listMovieGenres`, `listSeriesGenres`, `listBookGenres` |
 | Entities | `getEntity`, `listEntityItems`, `getFranchise`, `getOrganization`, `getPerson`, `getPlatform` |
 | Search | `searchItems`, `searchEntities`, `lookupItem` |
+| Changes | `listChanges` (`since` cursor over catalogue edits) |
+| Webhooks | `listWebhooks`, `createWebhook`, `deleteWebhook`, `testWebhook` |
 | Account | `getUsage` |
 
 Types such as `ItemSummary`, `ItemDetail`, `ItemList`, `Problem` and `Usage` are exported too.
 
 ### Pagination
 
-List endpoints are cursor based: pass `next_cursor` of one page as `cursor` of the next until it is `null`.
+List endpoints are cursor based: pass `meta.next_cursor` of one page as `cursor` of the next until it is absent.
 
 ```ts
 let cursor: string | undefined;
@@ -65,7 +67,7 @@ do {
 	const { data, error } = await listMovies({ client, query: { sort: "-score", limit: 100, cursor } });
 	if (error) throw new Error(error.detail);
 	for (const movie of data.data) console.log(movie.title);
-	cursor = data.next_cursor ?? undefined;
+	cursor = data.meta?.next_cursor;
 } while (cursor);
 ```
 
@@ -89,7 +91,7 @@ Pass `throwOnError: true` to an operation to throw instead. Network failures alw
 ```ts
 createHexascoreClient({
 	apiKey: "hx_live_…",
-	baseUrl: "https://<host>", // another deployment; defaults to https://api.hexascore.app
+	baseUrl: "https://<host>/v1", // another deployment; defaults to https://api.hexascore.app/v1
 	fetch: myFetch, // custom fetch (tests, proxies)
 });
 ```
@@ -103,7 +105,7 @@ bun run typecheck && bun test && bun run build
 ```
 
 `src/gen/` is generated: never edit it. The only hand-written code is `src/index.ts`. Regenerate whenever
-`openapi/api-v1.json` changes (`vukem openapi:export`). Publishing: `docs/sdk-publish-npm.md` and `docs/sdk-publish-jsr.md` in
+`openapi/api-v1.json` changes (`vukem openapi:export`). Publishing: `docs/runbooks/sdk-release.md` in
 the repository.
 
 ## License

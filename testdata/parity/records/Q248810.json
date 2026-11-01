@@ -1,0 +1,180 @@
+{
+  "qid": "Q248810",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q248810",
+      "labels": {
+        "en": "Dwarf Fortress",
+        "mul": "Dwarf Fortress"
+      },
+      "aliases": {
+        "en": [
+          "Slaves to Armok: God of Blood 2: DF",
+          "Slaves to Armok II: Dwarf Fortress"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Dwarf Fortress",
+        "eswiki": "Dwarf Fortress",
+        "ptwiki": "Dwarf Fortress"
+      },
+      "sitelinks_count": 26,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q23301680",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q1143132",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1036289",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23916",
+            "rank": "normal"
+          },
+          {
+            "value": "Q25397095",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1823737",
+            "rank": "normal"
+          },
+          {
+            "value": "Q21030988",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q14906064",
+            "rank": "normal"
+          },
+          {
+            "value": "Q70916463",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q14906064",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Dwarf Fortress - mapa świata.png",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "58828",
+            "rank": "normal"
+          },
+          {
+            "value": "8632",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q388",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2006-08-08T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2022-12-06T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "dwarf-fortress",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1036289": "construction and management simulation",
+        "Q1143132": "roguelike",
+        "Q1406": "Microsoft Windows",
+        "Q14906064": "Tarn Adams",
+        "Q1823737": "text-based video game",
+        "Q1860": "English",
+        "Q208850": "single-player video game",
+        "Q21030988": "survival game",
+        "Q23301680": "Kitfox Games",
+        "Q23916": "adventure video game",
+        "Q25397095": "sandbox game",
+        "Q30": "United States",
+        "Q388": "Linux",
+        "Q70916463": "Zach Adams"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q248810",
+      "lang": "en",
+      "title": "Dwarf Fortress",
+      "extract": "Dwarf Fortress (previously titled Slaves to Armok: God of Blood Chapter II: Dwarf Fortress) is a construction and management simulation and roguelike indie video game created by Bay 12 Games. Available as freeware and in development since 2002, its first alpha version was released in 2006 and received attention for being a two-member project surviving solely on donations.\nOriginally displayed using ASCII arts, the game is set in a detailed, procedurally generated fantasy world with randomized creatures, NPCs, and history. Players can control a colony of dwarves in a fortress or explore the world as a player character. Its mechanics have been lauded for their depth and complexity.\nPrior to Dwarf Fortress, Tarn Adams was working on a project called Slaves to Armok: God of Blood which was a role-playing game. By 2004, Adams decided to shift from the original Armok to Dwarf Fortress after the former became difficult to maintain. Adams calls it his life's work and said in 2011 that version 1.0 will not be ready for at least another 20 years, and even after that he would continue to work on it. A paid edition with graphical tiles and a new soundtrack was published by Kitfox Games and released to Steam and Itch.io in 2022.\nCritics praised its complex and emergent gameplay but had mixed reactions to its difficulty and learning curve. The game influenced Minecraft, RimWorld, and others, and was selected among other games to be featured in the Museum of Modern Art to show the history of video gaming in 2012. The game has a cult following and an active online community. As there are no win conditions, every fortress, no matter how successful, will eventually fall; this has prompted the community motto: \"Losing is Fun!\"",
+      "url": "https://en.wikipedia.org/wiki/Dwarf_Fortress"
+    },
+    "wikipedia:es": {
+      "qid": "Q248810",
+      "lang": "es",
+      "title": "Dwarf Fortress",
+      "extract": "Slaves to Armok: God of Blood Chapter II: Dwarf Fortress, también llamado Slaves to Armok II: Dwarf Fortress, pero más conocido como Dwarf Fortress, es un juego para computadoras freeware desarrollado por Bay 12 Games para Microsoft Windows, Linux y Mac OS X ambientado en un universo fantástico que combina aspectos del roguelike y de los juegos de construcción de ciudades y es principalmente conocido por su alto nivel de complejidad y dificultad. El título del juego se debe a que en el principal modo de juego el jugador debe tomar el mando de un grupo de enanos y construir una fortaleza subterránea. El desarrollo empezó en octubre de 2002, seguido por la primera versión pública lanzada en agosto de 2006 y sigue en desarrollo. El juego está en continuo desarrollo, añadiendo características constantemente.​ \nEn marzo de 2013, el Museo de Arte Moderno de Nueva York (MOMA) ha incorporado el juego a sus exhibiciones como parte de 40 videojuegos de toda la historia que son \"ejemplos destacados de diseño de interacciones\".​",
+      "url": "https://es.wikipedia.org/wiki/Dwarf_Fortress"
+    },
+    "wikipedia:pt": {
+      "qid": "Q248810",
+      "lang": "pt",
+      "title": "Dwarf Fortress",
+      "extract": "Dwarf Fortress (anteriormente chamado Slaves to Armok: God of Blood Chapter II: Dwarf Fortress) é um jogo eletrônico de simulação de construção e gerenciamento e roguelike indie criado pela Bay 12 Games. Disponível gratuitamente como freeware e em desenvolvimento desde 2002, sua versão alfa foi lançada em 2006 e recebeu atenção por ser um projeto criado por duas pessoas e financiado por doações.\nOriginalmente com gráficos ASCII, o jogo se passa em um mundo de fantasia detalhado e gerado proceduralmente com criaturas aleatórias, NPCs e história. Os jogadores podem controlar uma colônia de anões em uma fortaleza ou explorar o mundo como personagem do jogador. Suas mecânicas foram elogiadas por suas profundidades e complexidades.\nAntes da criação de Dwarf Fortress, Tarn Adams estava trabalhando em um projeto chamado Slaves to Armok: God of Blood, que era um RPG de fantasia para um jogador. Em 2004, Adams optou por abandonar o Armok original e trabalhar no Dwarf Fortress depois que o primeiro passou a ser complicado de manter. Adams considera ele o trabalho de uma vida e em 2011, disse que a versão 1.0 não ficará concluída por pelo menos mais 20 anos, e que mesmo depois disso ele continuaria a trabalhar nele. Uma versão paga com gráficos atualizados e uma nova trilha sonora foi publicada pela Kitfox Games e lançada na Steam e Itch.io em 2022.\nCríticos elogiaram sua complexidade e jogabilidade emergente, mas tiveram reações variadas em relação à sua dificuldade. O jogo influenciou Minecraft, RimWorld e outros, sendo selecionado entre outros jogos para ser apresentado no Museu de Arte Moderna e representar a história dos videogames em 2012. O jogo tem seguidores cult e uma comunidade online ativa. Por não ter condições de vitória, toda fortaleza, não importa quão boa seja, irá cair eventualmente; isso resultou no lema da comunidade: \"Perder é divertido!\"",
+      "url": "https://pt.wikipedia.org/wiki/Dwarf_Fortress"
+    }
+  },
+  "tier": "mid",
+  "type": "game"
+}

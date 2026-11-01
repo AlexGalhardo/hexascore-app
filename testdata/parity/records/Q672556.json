@@ -1,0 +1,95 @@
+{
+  "qid": "Q672556",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q672556",
+      "labels": {
+        "en": "Boxer Protocol",
+        "es": "Protocolo Bóxer",
+        "pt": "Protocolo Boxer"
+      },
+      "aliases": {
+        "en": [
+          "Xin Chou Treaty",
+          "Xinchou (year 1901) treaty",
+          "Xinchou (year 1901) all-nation peace treaty",
+          "Xinchou all-nation peace treaty",
+          "Beijing protocol",
+          "Xinchou treaty"
+        ],
+        "es": [
+          "Tratado de Xin Chou",
+          "Tratado de paz de Xin Chou",
+          "Protocolo de Beijing",
+          "acuerdo final entre China y once países sobre compensación por los disturbios de 1900",
+          "Tratado de Xinchou",
+          "Tratado de Xinchou (año 1901)",
+          "Tratado multinacional de Xinchou (1901)",
+          "Protocolo de Pekín",
+          "Tratado multinacional de Xinchou"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Boxer Protocol",
+        "eswiki": "Protocolo Bóxer",
+        "ptwiki": "Protocolo Boxer"
+      },
+      "sitelinks_count": 28,
+      "claims": {
+        "P18": [
+          {
+            "value": "Chinaboxerprotocolsignature.png",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q150",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7850",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1901-09-07T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q150": "French",
+        "Q7850": "Chinese"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q672556",
+      "lang": "en",
+      "title": "Boxer Protocol",
+      "extract": "The Boxer Protocol was a diplomatic protocol signed in China's capital Beijing on September 7, 1901, between the Qing Empire of China and the Eight-Nation Alliance that had provided military forces (including France, Germany, United Kingdom, Italy, Austria-Hungary, Japan, Russia, and the United States) as well as Belgium, Spain, and the Netherlands, after China's defeat in the intervention to put down the Boxer Rebellion. The protocol is regarded as one of China's unequal treaties.",
+      "url": "https://en.wikipedia.org/wiki/Boxer_Protocol"
+    },
+    "wikipedia:es": {
+      "qid": "Q672556",
+      "lang": "es",
+      "title": "Protocolo Bóxer",
+      "extract": "El Protocolo Bóxer, también conocido como el Tratado de Xinchou, es el tratado firmado el 7 de septiembre de 1901 por el Imperio Qing de China, la Alianza de las Ocho Naciones (Reino Unido de Gran Bretaña e Irlanda, Imperio Austrohúngaro, Rusia, Alemania, Francia, Estados Unidos, Italia y Japón) que habían proporcionado tropas militares para sofocar el Levantamiento de los bóxers, y los reinos de España, de Bélgica y de los Países Bajos. El tratado puso fin a la rebelión, y es considerado como uno de los tratados desiguales entre China y las potencias occidentales.",
+      "url": "https://es.wikipedia.org/wiki/Protocolo_B%C3%B3xer"
+    },
+    "wikipedia:pt": {
+      "qid": "Q672556",
+      "lang": "pt",
+      "title": "Protocolo Boxer",
+      "extract": "Protocolo de Paz Boxer foi o tratado que encerrou a Rebelião dos Boxers, sendo assinado em 7 de setembro de 1901 entre o Império Chinês sob a dinastia Qing e uma coalizão de nações estrangeiras imperialistas conhecida como Aliança das Oito Nações (Áustria-Hungria, França, Alemanha, Itália, Japão, Rússia, Reino Unido e os Estados Unidos) - que haviam fornecido forças militares numa intervenção para acabar com a rebelião - juntamente com a Bélgica, a Espanha e a Holanda. É um dos Tratados Desiguais negociados por Li Hongzhang ao imperador Guangxu com as potências estrangeiras.",
+      "url": "https://pt.wikipedia.org/wiki/Protocolo_Boxer"
+    }
+  },
+  "tier": "mid",
+  "type": "book"
+}

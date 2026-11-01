@@ -1,0 +1,45 @@
+{
+  "item": {
+    "external_ids": {
+      "openlibrary": "OL39527684W"
+    },
+    "meta": {
+      "creators": [
+        "Vyasa"
+      ],
+      "genres": [
+        "epic poem"
+      ]
+    },
+    "popularity": 169.0,
+    "qid": "Q8276",
+    "release_date": null,
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Mahābhārata ( mə-HAH-BAR-ə-tə, MAH-hə-; Sanskrit: महाभारतम्, IAST: Mahābhāratam, pronounced [mɐɦaːˈbʱaːrɐt̪ɐm], 'Great Bharata') is one of the two major Sanskrit epics of ancient India revered in Hinduism, the other being the Ramayana. Both are considered smṛti and itihasa texts. The Mahābhārata narrates the events around the Kurukshetra War, while also discussing philosophical concepts, such as the four \"goals of life\" or puruṣārtha. A principal element of the Mahābhārata is the Bhagavad Gita, which is a prominent sacred text in Hindu traditions.\nThe Mahābhārata recounts the events of the dynastic struggle for the throne of Hastinapura, that leads to the battle of Kurukshetra, a war of succession between princely cousins, the Kauravas and the Pāṇḍavas. The multiple stories in the Mahābhārata include the story of Damayanti, Shakuntala, Pururava and Urvashi, Savitri and Satyavan, Kacha and Devayani, Rishyasringa and an abbreviated version of the Rāmāyaṇa. The epic theorizes about dharmayuddha, \"just war\", and the Bhagavad Gita discusses the Vedic concept of dharma (duty, rightful action) in a dialogue between the Pandava prince Arjuna and his charioteer guide Krishna.\nTraditionally, the authorship of the Mahābhārata is attributed to Vyāsa. There have been many attempts to unravel its historical growth and compositional layers. The bulk of the Mahābhārata was probably compiled between the 3rd century BCE and the 3rd century CE, with the oldest preserved parts not much older than around 400 BCE. The text probably reached its final form by the early Gupta period (c. 4th century CE).\nThe title is translated as \"Great Bharat (India)\", or \"the story of the great descendants of Bharata\", or as \"The Great Indian Tale\". The Mahābhārata is one of the longest epic poems known. Its longest version consists of over 100,000 shlokas (verses) or over 200,000 individual lines (each shloka is a couplet), and long prose passages. At about 1.8 million words in total, the Mahābhārata is roughly ten times the length of the Iliad and the Odyssey combined, or about four times the length of the Rāmāyaṇa, albeit more than 2.5 times shorter than the world's longest poem, The Epic of Manas. Within the Indian tradition it is sometimes called the fifth Veda.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Mahabharata",
+        "title": "Mahabharata"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "O Mahabharata, conhecido também como Maabárata, Mahabarata e Maha-Bharata (devanágari: महाभारत, transl. Mahābhārata), é um dos dois principais textos Smriti e épicos sânscritos da Índia antiga reverenciados no hinduísmo, sendo o outro o Rāmāyaṇa. Ele narra os eventos e as consequências da Guerra de Kurukshetra, uma guerra de sucessão entre dois grupos de primos principescos, os Kauravas e os Pāṇḍavas.\nEle também contém material filosófico e devocional, como uma discussão sobre os quatro \"objetivos da vida\" ou puruṣārtha (12.161). Entre as principais obras e histórias do Mahābhārata estão o Bhagavad Gita, a história de Damayanti, a história de Shakuntala, a história de Pururava e Urvashi, a história de Savitri e Satyavan, a história de Kacha e Devayani, a história de Rishyasringa e uma versão abreviada do Rāmāyaṇa, frequentemente consideradas obras por direito próprio.\nTradicionalmente, a autoria do Mahābhārata é atribuída a Vyāsa. Houve muitas tentativas de desvendar seu crescimento histórico e camadas composicionais. A maior parte do Mahābhārata foi provavelmente compilada entre o século III a.C. e o século III d.C., com as partes mais antigas preservadas não muito mais antigas do que cerca de 400 a.C. O texto provavelmente atingiu sua forma final no início do período Gupta (c. século IV d.C.). O Mahābhārata é também traduzido como \"Grande Bharat (Índia)\", ou \"a história dos grandes descendentes de Bharata\", ou como \"O Grande Conto Indiano\".\nO Mahābhārata é o poema épico mais longo conhecido e foi descrito como \"o poema mais longo já escrito\". Sua versão mais longa consiste em mais de 100.000 śloka ou mais de 200.000 linhas de versos individuais (cada shloka é um dístico) e longas passagens em prosa. Com cerca de 1,8 milhão de palavras no total, o Mahābhārata tem aproximadamente dez vezes o comprimento da Ilíada e da Odisseia combinadas, ou cerca de quatro vezes o comprimento do Rāmāyaṇa. Dentro da tradição indiana, às vezes é chamado de quinto Veda.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Mahabharata",
+        "title": "Mahabharata"
+      },
+      {
+        "locale": "es",
+        "synopsis": "El Mahabhárata (c. siglo III a. C.), tradicionalmente atribuido a Viasa, es un extenso texto épico-mitológico de la India, escrito en idioma sánscrito.\nEs una de las dos principales poesías épicas de ese país (la otra es el Ramaiana).​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Mahabharata",
+        "title": "Majabhárata"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q8276",
+  "slug": "mahabharata"
+}

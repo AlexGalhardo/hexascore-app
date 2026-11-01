@@ -1,17 +1,25 @@
-import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { expect, test, vi } from "vitest";
+import { render, screen } from "../../lib/testing";
 
 import Edit from "./Edit";
 
+const put = vi.hoisted(() => vi.fn());
 vi.mock("../../lib/useT", () => ({ useT: () => (key: string) => key }));
 vi.mock("../../components/Seo", () => ({ default: () => null }));
+vi.mock("../../components/search/SuggestBox", () => ({
+	default: ({ onPick, type }: { onPick: (s: { id: string }) => void; type: string }) => (
+		<button type="button" onClick={() => onPick({ id: "new-item" })}>
+			suggest-{type}
+		</button>
+	),
+}));
 vi.mock("@inertiajs/react", () => ({
 	Link: ({ href, children }: { href: string; children: ReactNode }) => (
 		<a href={href}>{children}</a>
 	),
-	router: { delete: vi.fn(), put: vi.fn() },
+	router: { delete: vi.fn(), put },
 	usePage: () => ({ props: { locale: "en" } }),
 	useForm: (data: Record<string, unknown>) => ({
 		data,
@@ -32,7 +40,14 @@ test("keyboard reorder keeps focus on the moved row", async () => {
 	const user = userEvent.setup();
 	render(
 		<Edit
-			list={{ id: "l1", title: "L", description: null, isPublic: true, hidden: false }}
+			list={{
+				id: "l1",
+				type: "game",
+				title: "L",
+				description: null,
+				isPublic: true,
+				hidden: false,
+			}}
 			items={[entry("a", 1), entry("b", 2), entry("c", 3)]}
 			version={1}
 		/>,
@@ -50,4 +65,25 @@ test("keyboard reorder keeps focus on the moved row", async () => {
 		"c",
 		"a",
 	]);
+});
+
+test("picking a suggestion puts the item into the list", async () => {
+	render(
+		<Edit
+			list={{
+				id: "l1",
+				type: "game",
+				title: "L",
+				description: null,
+				isPublic: true,
+				hidden: false,
+			}}
+			items={[]}
+			version={1}
+		/>,
+	);
+	await userEvent
+		.setup()
+		.click(screen.getAllByRole("button", { name: "suggest-game" }).at(-1) as HTMLElement);
+	expect(put).toHaveBeenCalledWith("/lists/l1/items/new-item", {}, { preserveScroll: true });
 });

@@ -5,6 +5,7 @@ import DataExport from "../../components/DataExport";
 import DeleteAccount from "../../components/DeleteAccount";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
+import FeedOptIn from "../../components/social/FeedOptIn";
 import { checkPassword, passwordAdvice } from "../../lib/password-policy";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
@@ -31,6 +32,9 @@ interface Props {
 	passkeys?: PasskeyRow[];
 	sessions: SessionRow[];
 	privacy: { profilePrivate: boolean; personalizationOptOut: boolean };
+	notifications: { communityMailOptOut: boolean };
+	/** Present only while the feature flag `social` is on (SDD 14 FR-14-18). */
+	social?: { feedOptIn: boolean };
 }
 
 const LOCALES = [
@@ -40,7 +44,7 @@ const LOCALES = [
 ] as const;
 
 const button =
-	"rounded-md bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500 disabled:opacity-50";
+	"rounded-md bg-primary px-4 py-2 font-medium text-on-primary hover:bg-primary-hover disabled:opacity-50";
 
 function Section({
 	id,
@@ -162,12 +166,15 @@ export default function Index({
 	passkeys = [],
 	sessions,
 	privacy,
+	notifications,
+	social,
 }: Props) {
 	const t = useT();
 	const l = useLocalized();
 	const detailsForm = useForm({ name: details.name, locale: details.locale });
 	const passwordForm = useForm({ currentPassword: "", newPassword: "" });
 	const privacyForm = useForm(privacy);
+	const notificationsForm = useForm(notifications);
 
 	const saveDetails = (e: FormEvent) => {
 		e.preventDefault();
@@ -180,6 +187,10 @@ export default function Index({
 	const savePrivacy = (e: FormEvent) => {
 		e.preventDefault();
 		privacyForm.patch(l("/profile/privacy"));
+	};
+	const saveNotifications = (e: FormEvent) => {
+		e.preventDefault();
+		notificationsForm.patch(l("/profile/notifications"));
 	};
 
 	return (
@@ -345,6 +356,40 @@ export default function Index({
 					</label>
 					<button type="submit" disabled={privacyForm.processing} className={button}>
 						{t("account.privacy.save")}
+					</button>
+				</form>
+				{social && (
+					<div className="mt-6 border-t border-border pt-4">
+						<FeedOptIn on={social.feedOptIn} />
+					</div>
+				)}
+			</Section>
+
+			<Section id="notifications" title={t("account.notifications.title")}>
+				<form onSubmit={saveNotifications} className="space-y-4">
+					<label className="flex items-start gap-2">
+						<input
+							type="checkbox"
+							checked={notificationsForm.data.communityMailOptOut}
+							onChange={(e) =>
+								notificationsForm.setData("communityMailOptOut", e.target.checked)
+							}
+						/>
+						<span>
+							<span className="font-medium">
+								{t("account.notifications.community")}
+							</span>
+							<span className="block text-sm text-muted">
+								{t("account.notifications.communityHelp")}
+							</span>
+						</span>
+					</label>
+					<button
+						type="submit"
+						disabled={notificationsForm.processing}
+						className={button}
+					>
+						{t("account.notifications.save")}
 					</button>
 				</form>
 			</Section>

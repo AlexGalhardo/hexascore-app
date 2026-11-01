@@ -1,0 +1,44 @@
+{
+  "item": {
+    "external_ids": {},
+    "meta": {
+      "countries": [
+        "Australia"
+      ],
+      "episodes": 151,
+      "genres": [
+        "splatter film"
+      ]
+    },
+    "popularity": 7.0,
+    "qid": "Q22908092",
+    "release_date": "2013-11-07",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "RackaRacka"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "RackaRacka"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "RackaRacka"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q22908092",
+  "slug": "rackaracka"
+}

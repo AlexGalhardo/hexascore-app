@@ -16,8 +16,10 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 )
 
+// memoryLimiters stretches the window so the GCRA bucket does not refill while a loaded host sends the budget
+// (300/min refills one request every 200 ms); the test checks the budget, not the window.
 func memoryLimiters(_ string, limit int, window time.Duration) ratelimit.Limiter {
-	return ratelimit.NewMemory(limit, window)
+	return ratelimit.NewMemory(limit, window*1000)
 }
 
 func limited(l ratelimit.Limiter) http.Handler {

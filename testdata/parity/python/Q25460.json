@@ -1,0 +1,47 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt1239285",
+      "metacritic": "movie/36-vues-du-pic-saint-loup",
+      "rottentomatoes": "m/36_vues_du_pic_saint_loup",
+      "tmdb": "59947"
+    },
+    "meta": {
+      "countries": [
+        "France",
+        "Italy"
+      ],
+      "creators": [
+        "Jacques Rivette"
+      ],
+      "genres": [
+        "drama film",
+        "circus film"
+      ],
+      "runtimeMinutes": 84
+    },
+    "popularity": 8.0,
+    "qid": "Q25460",
+    "release_date": "2009-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Around a Small Mountain (French: 36 vues du pic Saint-Loup) is a 2009 French drama film directed by Jacques Rivette, which was his final film before his death on 29 January 2016, and starred Jane Birkin and Sergio Castellitto. It was screened in the main competition at the 66th Venice International Film Festival.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Around_a_Small_Mountain",
+        "title": "36 Views from the Pic Saint-Loup"
+      },
+      {
+        "locale": "es",
+        "synopsis": "El último verano (36 vues du pic Saint-Loup) es una película franco-italiana dirigida por Jacques Rivette en 2008 y estrenada en los cines 9 de septiembre de 2009 en francés.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/El_%C3%BAltimo_verano_(pel%C3%ADcula)",
+        "title": "El último verano"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q25460",
+  "slug": "36-views-from-the-pic-saint-loup"
+}

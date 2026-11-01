@@ -50,6 +50,9 @@ func Lists(r *router.Router, app *vukem.App) error {
 	limit := limits.Lists.From(limiters)
 
 	web := controllers.NewLists(svc, gate, acc.Web.Name(), false)
+	if web.Social, err = SocialService(app, acc); err != nil {
+		return err
+	}
 	required, verified := auth.Required(acc.Web), auth.Verified(acc.Web)
 	byUser := ratelimit.Middleware(limit, ratelimit.ByUser(acc.Web.Name()))
 	r.Get("/lists", web.Index).Name("lists.index").Use(required, verified)

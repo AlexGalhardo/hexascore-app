@@ -28,6 +28,8 @@ const (
 	DemoPassword = "Demo-password-1"
 	// DemoAdminEmail is the demo administrator.
 	DemoAdminEmail = "admin@example.test"
+	// DemoSecondAdminEmail is the second moderator, so two admins can contest one claim (P4.B.5.1).
+	DemoSecondAdminEmail = "admin2@example.test"
 )
 
 var (
@@ -51,7 +53,7 @@ var (
 
 // DemoCatalog fills a Postgres database with a deterministic demo catalogue:
 // 300 items (75 per type) with translations in en, pt-BR and es, entities,
-// book editions, one admin and 50 users. The same seed gives the same slugs;
+// book editions, two admins and 50 users. The same seed gives the same slugs;
 // a second run on the same database does nothing.
 type DemoCatalog struct{}
 
@@ -178,13 +180,17 @@ func seedDemoUsers(ctx context.Context, tx *database.Tx) error {
 		return err
 	}
 
-	users := factories.User(passwordHash).Seed(demoSeed).Count(demoUsers + 1).Make()
+	users := factories.User(passwordHash).Seed(demoSeed).Count(demoUsers + 2).Make()
 
 	for i := range users {
 		role, username := "user", "demo"+letters(i)
 
 		if i == 0 {
 			users[i].Email, users[i].Name, role, username = DemoAdminEmail, "Demo Admin", "admin", "demoadmin"
+		}
+
+		if i == len(users)-1 {
+			users[i].Email, users[i].Name, role, username = DemoSecondAdminEmail, "Demo Admin Two", "admin", "demoadmintwo"
 		}
 
 		if err := orm.Create(ctx, tx, &users[i]); err != nil {

@@ -1,0 +1,124 @@
+{
+  "qid": "Q72309",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q72309",
+      "labels": {
+        "en": "The Legend of Sleepy Hollow",
+        "es": "La leyenda de Sleepy Hollow",
+        "pt": "A Lenda do Cavaleiro Sem-Cabeça"
+      },
+      "aliases": {
+        "es": [
+          "La leyenda del jinete sin cabeza",
+          "La leyenda del Valle Encantado"
+        ],
+        "pt": [
+          "Cavaleiro sem-cabeça",
+          "Cavaleiro Sem Cabeça",
+          "The Legend of Sleepy Hollow"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "The Legend of Sleepy Hollow",
+        "eswiki": "La leyenda de Sleepy Hollow",
+        "ptwiki": "The Legend of Sleepy Hollow"
+      },
+      "sitelinks_count": 35,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q19715429",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1519335",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "The Legend of Sleepy Hollow",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "The Headless Horseman Pursuing Ichabod Crane.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q181667",
+            "rank": "normal"
+          }
+        ],
+        "P571": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1819-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL63985W",
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "24816020",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1519335": "ghost story",
+        "Q181667": "Washington Irving",
+        "Q1860": "English",
+        "Q19715429": "Gothic literature",
+        "Q30": "United States"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q72309",
+      "lang": "en",
+      "title": "The Legend of Sleepy Hollow",
+      "extract": "The Legend of Sleepy Hollow is an 1820 short story by American author Washington Irving contained in his collection of 34 essays and short stories titled The Sketch Book of Geoffrey Crayon, Gent. Irving wrote the story while living in Birmingham, England.\nThe Legend of Sleepy Hollow is among the earliest examples of American fiction with enduring appeal along with Rip Van Winkle. Irving's early literary success with The Sketch Book established his career, providing the financial means to support himself and his family as a professional writer. The Legend has remained continuously in print since its initial publication and is one of Irving's most popular works.\nIt has been adapted for the screen several times, including a 1922 silent film and a 1949 Walt Disney animation as one of two segments in the package film The Adventures of Ichabod and Mr. Toad.",
+      "url": "https://en.wikipedia.org/wiki/The_Legend_of_Sleepy_Hollow"
+    },
+    "wikipedia:es": {
+      "qid": "Q72309",
+      "lang": "es",
+      "title": "La leyenda de Sleepy Hollow",
+      "extract": "La leyenda de Sleepy Hollow o La leyenda del jinete sin cabeza es un relato corto de terror y romanticismo, escrito por Washington Irving en 1820, en su colección de ensayos e historias cortas The Sketch Book of Geoffrey Crayon.",
+      "url": "https://es.wikipedia.org/wiki/La_leyenda_de_Sleepy_Hollow"
+    },
+    "wikipedia:pt": {
+      "qid": "Q72309",
+      "lang": "pt",
+      "title": "The Legend of Sleepy Hollow",
+      "extract": "The Legend of Sleepy Hollow (traduzido como A Lenda da Caverna Adormecida (título em Portugal) ou A Lenda do Cavaleiro sem Cabeça (título no Brasil)) é um conto de Washington Irving incluído na coleção The Sketch Book of Geoffrey Crayon, Gent., escrita enquanto o autor vivia em Birmingham, Inglaterra. A primeira publicação foi em 1820. Ao lado da história de Rip Van Winkle, A Lenda do Cavaleiro sem Cabeça é um dos contos mais antigos de ficção norte-americana que é lido até hoje.",
+      "url": "https://pt.wikipedia.org/wiki/The_Legend_of_Sleepy_Hollow"
+    }
+  },
+  "tier": "mid",
+  "type": "book"
+}

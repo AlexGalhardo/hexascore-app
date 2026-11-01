@@ -3,6 +3,7 @@ import { type FormEvent, useEffect, useRef, useState } from "react";
 import Field from "../../components/Field";
 import ItemLink, { type ItemRef } from "../../components/library/ItemLink";
 import Seo from "../../components/Seo";
+import SuggestBox from "../../components/search/SuggestBox";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
@@ -16,6 +17,7 @@ interface Entry {
 interface Props {
 	list: {
 		id: string;
+		type: string;
 		title: string;
 		description: string | null;
 		isPublic: boolean;
@@ -38,6 +40,9 @@ export default function Edit({ list, items, version }: Props) {
 	});
 	const base = localized(`/lists/${list.id}`, locale);
 	const dirty = order.some((e, i) => e.item.id !== items[i]?.item.id);
+
+	// An added item arrives as new props; the local order must follow them.
+	useEffect(() => setOrder(items), [items]);
 
 	// Reordering moves the row's DOM node, which drops keyboard focus; put it back on the same row's button
 	// (or the opposite one when the row reached an end and its button became disabled).
@@ -115,6 +120,15 @@ export default function Edit({ list, items, version }: Props) {
 				</div>
 			</form>
 			<h2 className="mt-8 text-lg font-semibold">{t("userLists.items")}</h2>
+			<div className="mt-2">
+				<SuggestBox
+					type={list.type}
+					label={t("userLists.addItem")}
+					onPick={(s) =>
+						router.put(`${base}/items/${s.id}`, {}, { preserveScroll: true })
+					}
+				/>
+			</div>
 			{order.length === 0 ? (
 				<p className="mt-2">{t("userLists.empty")}</p>
 			) : (

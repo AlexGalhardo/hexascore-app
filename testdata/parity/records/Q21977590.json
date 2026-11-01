@@ -1,0 +1,104 @@
+{
+  "qid": "Q21977590",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q21977590",
+      "labels": {
+        "en": "Falling for challenge",
+        "pt": "Falling for Challenge"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Falling for Challenge",
+        "ptwiki": "Falling for Challenge"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+6",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q10834841",
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q20716",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt6289578",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q9176",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q64822152",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q884",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "64292",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2015-10-26T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q10834841": "Xiumin",
+        "Q20716": "Samsung Group",
+        "Q64822152": "Naver TV",
+        "Q884": "South Korea",
+        "Q9176": "Korean"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q21977590",
+      "lang": "en",
+      "title": "Falling for Challenge",
+      "extract": "Falling for Challenge (Korean: 도전에 반하다; RR: Dojeone banhada) is a web drama created by Samsung company. The drama stars South Korean actress Kim So-eun and Kim Min-seok. The web drama became the most watched web drama in 2015 with 21,124,965 views. \"Falling for Challenge\" is one of the most watched web dramas ever, with over 24 million views.",
+      "url": "https://en.wikipedia.org/wiki/Falling_for_Challenge"
+    },
+    "wikipedia:pt": {
+      "qid": "Q21977590",
+      "lang": "pt",
+      "title": "Falling for Challenge",
+      "extract": "Falling for Challenge (coreano: 도전에 반하다; RR: Dojeone Banhada) é um webdrama sul-coreano da Samsung estrelada pela atriz sul-coreana Kim So-eun e pelo artista Xiumin. Tendo estreado em 26 de outubro de 2015, tornou-se o webdrama mais visualizado de 2015, totalizando mais de 21 milhões de visualizações. Desde então, Falling for Challenge alcançou mais de 35 milhões de visualizações, e é o terceiro webdrama sul-coreano mais visualizado da história.",
+      "url": "https://pt.wikipedia.org/wiki/Falling_for_Challenge"
+    }
+  },
+  "tier": "tail",
+  "type": "series"
+}

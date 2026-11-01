@@ -95,12 +95,12 @@ Every SDD ends with an "Open issues" section. This file is the architect's triag
 | 10 | 10 | Source of the device model for `deviceName` | roadmap | Resolved at implementation with the Expo Device API; not a design question. |
 | 12 | 1 | No app-level meter accessor | vukem | VF-019 narrowed: `Config.Global` + upstream OTel API works; request an accessor. |
 | 12 | 2 | Request-logger policy (hashed user id, truncated IP, request id = trace id) | vukem | VF-022. |
-| 12 | 3 | `/metrics` endpoint needs the OTel Prometheus exporter dependency | decided (owner) | Answered 2026-10-28, see brainstorming.md D-22 to D-36. Original note: asked in the Phase 3 question round; architect default: not at launch (Grafana Cloud OTLP is enough). |
+| 12 | 3 | `/metrics` endpoint needs the OTel Prometheus exporter dependency | decided (owner) | Answered 2026-10-28, see brainstorming.md D-22 to D-36. Original note: asked in the Phase 3 question round; architect default: not at launch (Railway traces only; amended 2026-10-31: no app metrics at all). |
 | 12 | 4 | Railway plan decides log retention and monitors | roadmap | SDD 11 records the plan; alerts use app metrics regardless. |
 | 12 | 5 | Where to host the static status page | decided | GitHub Pages on a `status` repo or `status.hexascore.app` served by the same app as a static page; choose GitHub Pages so it survives an outage of the app. |
 | 12 | 6 | Metric name alignment between SDD 08 and SDD 12 | decided | SDD 12 names win; SDD 08 updated in the review pass. |
 | 12 | 7 | Metric views for high-cardinality attributes | vukem | VF-019 (same entry); trigger: > 6,000 series on staging. |
-| 12 | 8 | Grafana Telegram contact point, OTLP URL, certificate checks unverified | roadmap | Verified when the Grafana Cloud account is created. |
+| 12 | 8 | Railway monitor options and webhook delivery unverified | roadmap | Verified when the Pro plan is on (D-35 amended 2026-10-31: Railway native only). |
 | 12 | 9 | Railway hard usage limit value | decided (owner) | Answered 2026-10-28, see brainstorming.md D-22 to D-36. Original note: asked in the Phase 3 question round; architect default: hard limit US$45 (1.5 × ceiling), email alert at US$24. |
 | 12 | 10 | vukem.dev documentation gaps (health-check API, logger options, scheduler metric hook) | vukem | VF-023. |
 | 09 | 1 | URL-prefix locale source missing in `i18n.Middleware` | vukem + decided | VF-024. App middleware resolves the locale from the path prefix before vukem's middleware. |
@@ -135,6 +135,10 @@ Every SDD ends with an "Open issues" section. This file is the architect's triag
 | 14 | 5 | Private profile 404 (SDD 09) vs 200 + `noindex` (SDD 14, legacy) | decided | 200 with nickname only and `noindex` (legacy parity); SDD 09 updated, plus `/library`, `/lists`, `/lists/{id}/edit` pages added. |
 | 14 | 6 | Export helpers write only to `http.ResponseWriter` | vukem | VF-029. |
 | 14 | 7 | Deleting a user deletes public lists others may link to | decided (owner) | D-38: anonymise public lists, delete private ones. |
+| 14 | 8 | Lawful basis for showing a user's activity to followers (Q-A5 a) | owner | Social layer behind flag `social` (default off); when on, activity reaches followers only after `users.feed_opt_in` (default false). Closes with a D-xx after legal review (D-21). |
+| 14 | 9 | Legacy follows (Q-A5 b) | owner | Phase 7 starts with an empty graph; legacy rows stay in the cutover archive. A restore, if chosen, inserts `accepted` rows between existing, unbanned users. |
+| 14 | 10 | Markdown subset for reviews (P7.B.1.1) | roadmap | No renderer in `go.mod` and none in vukem docs [NOT IN VUKEM DOCS]; default stdlib-only subset through `html/template`; a library needs the owner's yes and an ADR. |
+| 14 | 11 | Letterboxd reference (Q-A9) | owner | Research report partial; SDD 14 §12 does not depend on it. |
 | 13 | 1 | Data export conflict SDD 03 vs SDD 14 | decided | SDD 03 already follows SDD 14 (review pass); closed. |
 | 13 | 2 | CSRF token fallback on (SDD 03/13) vs off (SDD 09) | decided | On; SDD 09 §7.8 line updated. |
 | 13 | 3 | Lint tool Biome (SDD 09, D-22) vs ESLint (SDD 11) | decided | Biome; SDD 11 pipeline table updated. |

@@ -17,6 +17,12 @@ import (
 var SubmissionsFlag = flags.Bool("community_submissions", false).
 	Describe("Accept community edit suggestions (SDD 04 §6); keep off until moderation is staffed")
 
+// TrustedModeratorsFlag lets the moderator role use the moderation queue (SDD 04 §6, D-15), default off. SDD 04 names
+// it community.trusted_moderators; the code name is community_trusted_moderators (env
+// FLAG_COMMUNITY_TRUSTED_MODERATORS).
+var TrustedModeratorsFlag = flags.Bool("community_trusted_moderators", false).
+	Describe("Let the moderator role use the moderation queue (SDD 04 §6); revert and locks stay admin-only")
+
 // ErrTargetNotFound is a suggest target that does not exist or is not public.
 var ErrTargetNotFound = errors.New("community: target not found")
 
@@ -224,12 +230,23 @@ ORDER BY field`, t.Kind, t.ID, now.UTC())
 }
 
 func latestDraft(ctx context.Context, tx *database.Tx, authorID int64, t Target) (*DraftView, error) {
+	return latestDraftOf(ctx, tx, authorID, "edit", t.Kind, t.ID, "")
+}
+
+// latestDraftOf finds the newest draft of kind: an edit by target, a create (no target) or merge by domain.
+func latestDraftOf(
+	ctx context.Context,
+	tx *database.Tx,
+	authorID int64,
+	kind, targetType, targetID, domain string,
+) (*DraftView, error) {
 	var d DraftView
 	var urls []string
 	err := tx.QueryRowContext(ctx, `
 SELECT id, version, locale, note, source_urls, changes FROM suggestions
-WHERE author_id = $1 AND status = 'draft' AND kind = 'edit' AND target_type = $2 AND target_id = $3
-ORDER BY updated_at DESC LIMIT 1`, authorID, t.Kind, t.ID).
+WHERE author_id = $1 AND status = 'draft' AND kind = $2 AND target_type = $3
+AND ($4 = '' OR target_id::text = $4) AND ($5 = '' OR target_domain = $5)
+ORDER BY updated_at DESC LIMIT 1`, authorID, kind, targetType, targetID, domain).
 		Scan(&d.ID, &d.Version, &d.Locale, &d.Note, &urls, &d.Changes)
 	if errors.Is(err, sql.ErrNoRows) {
 		return nil, nil //nolint:nilnil // no draft is a normal answer
@@ -243,4 +260,56 @@ ORDER BY updated_at DESC LIMIT 1`, authorID, t.Kind, t.ID).
 	}
 
 	return &d, nil
+}
+
+// CreatePage is everything Community/SuggestCreate needs: a new-record (create) or duplicate-report (merge) form.
+type CreatePage struct {
+	Domain string     `json:"domain"`
+	Kind   string     `json:"kind"`
+	Target string     `json:"target"`
+	Fields []string   `json:"fields"`
+	Quota  Quota      `json:"quota"`
+	Draft  *DraftView `json:"draft"`
+}
+
+// LoadCreatePage reads the quota and latest draft of kind ("create" or "merge") and target ("item", "entity" or,
+// for books, "edition") for domain, with the target's fields and its create-only ones. An unknown domain, kind or
+// target, an edition outside books and a merge of anything but items are ErrTargetNotFound.
+func LoadCreatePage(
+	ctx context.Context,
+	db *database.DB,
+	authorID int64,
+	domain, kind, target string,
+	now time.Time,
+) (CreatePage, error) {
+	if _, err := targetSchema.Parse(domain); err != nil || (kind != "create" && kind != "merge") {
+		return CreatePage{}, ErrTargetNotFound
+	}
+
+	switch {
+	case target == "item":
+	case kind == "merge", target == "edition" && domain != "book", target != "entity" && target != "edition":
+		return CreatePage{}, ErrTargetNotFound
+	}
+
+	page := CreatePage{
+		Domain: domain, Kind: kind, Target: target,
+		Fields: append(EditableFields(target, domain), createOnly[target]...),
+	}
+
+	err := db.Tx(ctx, func(tx *database.Tx) error {
+		used, err := submittedToday(ctx, tx, authorID, now)
+		if err != nil {
+			return err
+		}
+		page.Quota = Quota{
+			Limit: dailyLimit, Used: used, Left: max(dailyLimit-used, 0), ResetAt: nextUTCMidnight(now),
+		}
+
+		page.Draft, err = latestDraftOf(ctx, tx, authorID, kind, target, "", domain)
+
+		return err
+	})
+
+	return page, err
 }

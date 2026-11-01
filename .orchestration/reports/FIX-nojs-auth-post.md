@@ -18,3 +18,5 @@ verdict: APROVADO (merge queued: main frozen for v0.12.0)
 re-run: detached worktree at 5388590: `bunx vitest run resources/js/pages/Auth` -> 2 files / 3 tests; golangci-lint --build-tags integration ./tests 0 issues; `go test -tags integration ./tests -run 'TestSecurity_A07|TestSecurity_A10'` -> ok, TestSecurity_A07_NoJSFormPost PASS
 checked: A07, SDD 13 §7.2: every SSR input named (identifier, password, remember=true, name, email, password, password_confirmation, website honeypot, hidden form_token); Field spreads `name` onto the input; `challenge.go` and app/challenge untouched (diff is 4 files); past the PoW threshold a no-JS post stays 428 with no user (fail closed); cross-site post 403
 notes: the raw 428 JSON for no-JS users past the threshold is a UX follow-up, not a security gap
+
+PRONTO_PARA_MERGE agent/senior/FIX-nojs-auth-post (merged dc99c4d; gate: go build ok, golangci tests 0 issues, TestSecurity_A07_NoJSFormPost pass, biome/tsc ok, vitest 23 files / 79 tests)

@@ -1,0 +1,92 @@
+{
+  "qid": "Q22908092",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q22908092",
+      "labels": {
+        "en": "RackaRacka",
+        "es": "RackaRacka",
+        "pt": "RackaRacka"
+      },
+      "aliases": {
+        "en": [
+          "Danny and Michael Philippou"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "RackaRacka"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+151",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q909586",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "RackaRacka",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "RackaRacka on Cold Ones.png",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q408",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q121118648",
+            "rank": "normal"
+          },
+          {
+            "value": "Q121118618",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2013-11-07T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q121118618": "Danny Philippou",
+        "Q121118648": "Michael Philippou",
+        "Q1860": "English",
+        "Q408": "Australia",
+        "Q909586": "splatter film"
+      }
+    }
+  },
+  "tier": "tail",
+  "type": "series"
+}

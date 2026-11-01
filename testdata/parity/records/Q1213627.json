@@ -1,0 +1,210 @@
+{
+  "qid": "Q1213627",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q1213627",
+      "labels": {
+        "en": "Coffin Island",
+        "es": "Isla de treinta ataúdes",
+        "pt": "L'Île aux trente cercueils"
+      },
+      "aliases": {
+        "en": [
+          "The Island of the 30 Coffins"
+        ],
+        "es": [
+          "Isla de treinta ataudes"
+        ]
+      },
+      "sitelinks": {
+        "eswiki": "Isla de treinta ataúdes",
+        "ptwiki": "L'Île aux trente cercueils"
+      },
+      "sitelinks_count": 8,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+6",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q959790",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q1364469",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "L'Île aux trente cercueils",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q183471",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1400753",
+            "rank": "normal"
+          },
+          {
+            "value": "Q962377",
+            "rank": "normal"
+          },
+          {
+            "value": "Q722421",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1677779",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1712194",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1358453",
+            "rank": "normal"
+          },
+          {
+            "value": "Q89130",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+289",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+1",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0169519",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q150",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q525894",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "2378",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q142",
+            "rank": "normal"
+          },
+          {
+            "value": "Q31",
+            "rank": "normal"
+          },
+          {
+            "value": "Q39",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "13405",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q929534",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1979-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1979-09-21T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1358453": "Marie Mergey",
+        "Q1364469": "The Island of Thirty Coffins",
+        "Q1400753": "Jean-Paul Zehnacker",
+        "Q142": "France",
+        "Q150": "French",
+        "Q1677779": "Pascal Sellier",
+        "Q1712194": "Julie Philippe",
+        "Q183471": "Claude Jade",
+        "Q31": "Belgium",
+        "Q39": "Switzerland",
+        "Q525894": "France 2",
+        "Q722421": "Georges Marchal",
+        "Q89130": "Pierre Semmler",
+        "Q929534": "Marcel Cravenne",
+        "Q959790": "crime film",
+        "Q962377": "Yves Beneyton"
+      }
+    },
+    "wikipedia:es": {
+      "qid": "Q1213627",
+      "lang": "es",
+      "title": "Isla de treinta ataúdes",
+      "extract": "Isla de treinta ataúdes (L'île aux trente cercueils / Island of Thirty Coffins), era una miniserie de Francia producida en 1979.",
+      "url": "https://es.wikipedia.org/wiki/Isla_de_treinta_ata%C3%BAdes"
+    },
+    "wikipedia:pt": {
+      "qid": "Q1213627",
+      "lang": "pt",
+      "title": "L'Île aux trente cercueils",
+      "extract": "L'Île aux trente cercueils é uma minissérie francesa de 1979, livremente adaptada do romance de Maurice Leblanc con Claude Jade (Véronique d'Hergemont)\nUma 1979 série de televisão adaptação do livro de Maurice Leblanc foi dirigido por Marcel Cravenne . É estrelado por Claude Jade como Véronique d'Hergemont, uma protagonista feminina, que está na corrida e na busca de seu pai e seu filho, envolvido em aventuras horríveis em um fantástico ilha. Foi transmitida em Portugal na RTP 2 pelas 21h25, às sextas-feiras, de 16 de julho / 13 de agosto de 1982",
+      "url": "https://pt.wikipedia.org/wiki/L%27%C3%8Ele_aux_trente_cercueils"
+    }
+  },
+  "tier": "year-precision",
+  "type": "series"
+}

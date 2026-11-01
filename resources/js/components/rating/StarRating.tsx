@@ -1,6 +1,9 @@
-import { type KeyboardEvent, type PointerEvent, useState } from "react";
+import { usePage } from "@inertiajs/react";
+import { type KeyboardEvent, useId, useState } from "react";
 
 import { useT } from "../../lib/useT";
+import type { SharedProps } from "../../types";
+import { formatScore } from "../ui/ScoreBadge";
 
 const MAX = 10;
 const STEP = 0.5;
@@ -11,25 +14,29 @@ const STAR_PATH = "M12 2.5l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.6 5.9 21.1l1.4-6.
 
 type StarFill = "full" | "half" | "empty";
 
-// Inline SVG, so half stars render the same on every platform (the text glyph for a half star
-// does not). The amber layer is clipped to half of the box for "half".
-function Star({ fill }: { fill: StarFill }) {
-	const svg = (cls: string) => (
-		<svg viewBox="0 0 24 24" className={`size-6 shrink-0 ${cls}`} aria-hidden="true">
-			<path d={STAR_PATH} fill="currentColor" />
+// One shared symbol keeps the 120 stars of a rating panel small in the SSR HTML; render it once
+// per page (RatingPanel does). The filled layer is clipped to the left half for a half star.
+export function StarSymbol() {
+	return (
+		<svg aria-hidden="true" className="absolute size-0">
+			<symbol id="hs-star" viewBox="0 0 24 24">
+				<path d={STAR_PATH} strokeWidth="1.5" strokeLinejoin="round" />
+			</symbol>
 		</svg>
 	);
+}
+
+function Star({ fill }: { fill: StarFill }) {
 	return (
-		<span aria-hidden="true" data-fill={fill} className="relative inline-flex size-6 shrink-0">
-			{svg("text-gray-300")}
+		<svg viewBox="0 0 24 24" aria-hidden="true" data-fill={fill} className="size-6 shrink-0">
+			<use href="#hs-star" className="fill-none stroke-field" />
 			{fill !== "empty" && (
-				<span
-					className={`absolute inset-y-0 left-0 overflow-hidden ${fill === "half" ? "w-1/2" : "w-full"}`}
-				>
-					{svg("text-amber-500")}
-				</span>
+				<use
+					href="#hs-star"
+					className={`fill-star stroke-star-line${fill === "half" ? " [clip-path:inset(0_50%_0_0)]" : ""}`}
+				/>
 			)}
-		</span>
+		</svg>
 	);
 }
 
@@ -40,93 +47,96 @@ export interface StarRatingProps {
 	disabled?: boolean;
 }
 
-// Half-star slider (SDD 09 §7.4): 0.5-10 in 0.5 steps, null = unset.
+const KEY_MOVES: Record<string, (current: number) => number | null> = {
+	ArrowRight: (c) => clamp(c + STEP),
+	ArrowUp: (c) => clamp(c + STEP),
+	ArrowLeft: (c) => clamp(c - STEP),
+	ArrowDown: (c) => clamp(c - STEP),
+	Home: () => STEP,
+	End: () => MAX,
+	Delete: () => null,
+	Backspace: () => null,
+};
+
+// Ten stars, each two native radios (left half n - 0.5, right half n): one radio group of
+// 20 options per category (design v1 rating-widget/states). Arrow keys clamp instead of
+// wrapping, Home/End jump to the ends, Delete clears; the value is printed beside the label.
 export default function StarRating({ label, value, onChange, disabled = false }: StarRatingProps) {
 	const t = useT();
+	const { locale } = usePage<SharedProps>().props;
+	const name = useId();
 	const [hover, setHover] = useState<number | null>(null);
 	const shown = hover ?? value ?? 0;
 
-	const set = (next: number | null) => {
-		if (!disabled) onChange(next);
-	};
-
-	const fromPointer = (e: PointerEvent<HTMLElement>): number => {
-		const box = e.currentTarget.getBoundingClientRect();
-		const ratio = box.width > 0 ? (e.clientX - box.left) / box.width : 0;
-		return clamp(Math.ceil(ratio * MAX * 2) / 2);
-	};
-
-	const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
-		const current = value ?? 0;
-		const moves: Record<string, number | null> = {
-			ArrowLeft: current - STEP,
-			ArrowDown: current - STEP,
-			ArrowRight: current + STEP,
-			ArrowUp: current + STEP,
-			PageDown: current - 1,
-			PageUp: current + 1,
-			Home: STEP,
-			End: MAX,
-			Delete: null,
-		};
-		if (!(e.key in moves)) return;
+	const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+		const move = KEY_MOVES[e.key];
+		if (!move || disabled) return;
 		e.preventDefault();
-		const next = moves[e.key];
-		// Decrementing at the minimum stays at the minimum rather than clearing.
-		set(next === null ? null : clamp(next));
+		const next = move(value ?? 0);
+		onChange(next);
+		if (next !== null) {
+			e.currentTarget.querySelector<HTMLInputElement>(`input[value="${next}"]`)?.focus();
+		}
 	};
 
-	const valueText = value === null ? t("rating.unset") : t("rating.valuetext", { value });
+	const status =
+		hover !== null && hover !== value
+			? t("rating.preview", { value: formatScore(hover, locale) })
+			: value === null
+				? t("rating.unset")
+				: t("rating.outOf", { value: formatScore(value, locale) });
 
 	return (
-		<div className="flex flex-wrap items-center gap-2">
-			<span className="w-full text-sm font-medium sm:w-28 sm:shrink-0">{label}</span>
-			<button
-				type="button"
-				className="size-11 rounded border"
-				aria-label={`${label} -`}
-				disabled={disabled}
-				tabIndex={-1}
-				onClick={() => set(clamp((value ?? 0) - STEP))}
-			>
-				-
-			</button>
+		<div className="grid gap-1 border-b border-border pb-2">
+			<div className="flex items-baseline justify-between gap-2">
+				<span id={`${name}-label`} className="text-sm font-semibold">
+					{label}
+				</span>
+				<span
+					data-testid="rating-value"
+					className={`text-sm tabular-nums ${value === null && hover === null ? "text-muted" : "font-semibold"}`}
+				>
+					{status}
+				</span>
+			</div>
 			<div
-				role="slider"
-				tabIndex={disabled ? -1 : 0}
-				aria-label={label}
-				aria-valuemin={0}
-				aria-valuemax={MAX}
-				aria-valuenow={value ?? 0}
-				aria-valuetext={valueText}
-				aria-disabled={disabled}
-				className="flex min-h-11 flex-1 cursor-pointer items-center outline-offset-2 focus-visible:outline-2"
+				role="radiogroup"
+				aria-labelledby={`${name}-label`}
+				aria-disabled={disabled || undefined}
+				className="flex w-fit cursor-pointer rounded-xs outline-offset-2 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary aria-disabled:cursor-not-allowed"
 				onKeyDown={onKeyDown}
-				onPointerMove={(e) => !disabled && setHover(fromPointer(e))}
 				onPointerLeave={() => setHover(null)}
-				onClick={(e) => set(fromPointer(e as unknown as PointerEvent<HTMLElement>))}
 			>
 				{Array.from({ length: MAX }, (_, i) => (
-					<Star
+					<span
 						// biome-ignore lint/suspicious/noArrayIndexKey: fixed list of 10 positions
 						key={i}
-						fill={shown >= i + 1 ? "full" : shown >= i + 0.5 ? "half" : "empty"}
-					/>
+						className="relative flex h-11 w-7 items-center justify-center"
+					>
+						<Star
+							fill={shown >= i + 1 ? "full" : shown >= i + 0.5 ? "half" : "empty"}
+						/>
+						{[i + 0.5, i + 1].map((v) => (
+							<label
+								key={v}
+								className={`absolute inset-y-0 w-1/2 ${v % 1 ? "left-0" : "right-0"}`}
+								onPointerEnter={() => !disabled && setHover(v)}
+							>
+								<input
+									type="radio"
+									name={name}
+									value={v}
+									checked={value === v}
+									disabled={disabled}
+									onChange={() => onChange(v)}
+									aria-label={t("rating.valuetext", { value: v })}
+									className="sr-only"
+								/>
+							</label>
+						))}
+					</span>
 				))}
 			</div>
-			<button
-				type="button"
-				className="size-11 rounded border"
-				aria-label={`${label} +`}
-				disabled={disabled}
-				tabIndex={-1}
-				onClick={() => set(clamp((value ?? 0) + STEP))}
-			>
-				+
-			</button>
-			<output className="w-10 text-right tabular-nums">
-				{value === null ? <span className="text-muted">–</span> : value.toFixed(1)}
-			</output>
 		</div>
 	);
 }

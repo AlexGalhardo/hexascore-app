@@ -6,6 +6,185 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- **seo:** `/llms.txt` and `/llms-full.txt` (catalogue sections, API docs Markdown, legal pages; outside the scrape guard), IndexNow notifications of changed item and entity pages in the three locales (`seo.indexnow_changes` every minute, `indexnow_cursor` starting at the current end, score-only updates skipped) and Search Console/Bing verification (ADOPT-vukem-0.36.0)
+- **analytics:** cookieless Umami and GA4 in consent mode, loaded only after Accept in the cookie banner, which now offers Accept/Reject and reopens from a footer "Cookie settings" button (ADR 0023) (ADOPT-vukem-0.36.0)
+- **security:** Cloudflare Turnstile on sign-up, login and contact when both keys are set, and a Turnstile step-up at `POST /turnstile` for anonymous clients past a soft page budget, never for verified crawlers (ADR 0016 amendment) (ADOPT-vukem-0.36.0)
+- **security:** server-side anti-scraping of the public pages (ADR 0022): verified search crawlers pass, tool User-Agents and spoofed crawlers get 403, per-IP page limits (a higher budget only for a logged-in session), a honeypot link that bans an IP for 24 h, a robots.txt allow list, page props trimmed to what the pages render, and a Terms clause (SEC-anti-scraping, Q-A18)
+- **mail:** automatic mail is sent from `noreply@hexascore.app` with a `support@hexascore.app` Reply-To, and the contact form goes to the support inbox, configurable through `MAIL_FROM`, `MAIL_SUPPORT_ADDRESS` and `CONTACT_INBOX` (CONFIG-email-addresses, Q-A17)
+- **ingest:** WebP covers with a pinned `cwebp` and resource limits, the covers job (content-hashed keys on the bucket, 30-day deferred delete through `cover_gc` and `covers.gc`) behind `ingest_covers`, the YouTube trailer check and its weekly chain, Open Library, IGDB (with `igdb.refresh` and 7-day retention), Steam and GOG connectors, all off by default (P6.B.2.1, P6.B.2.2, P6.B.2.3, P6.A.2.4, P6.B.1.2, P6.B.1.3)
+- **ingest:** `dq.asserts` (DQ-01..14, DQ-I-01..13) and `dq.frontend_fields` with missing-field system suggestions; rollback of a bad fetch run, retry of failed targets and retention prunes; a pressure gate that holds chunks while the site is busy and alert A7 as `alert=A7` log lines (P6.B.4.1, P6.B.4.2, P6.B.4.4, P6.B.4.5)
+- **admin:** `/admin/ingest` (status, run trigger with `qids`, cancel, rollback), the match review queue at `/admin/ingest/reviews`, and job runs, ingest failures and DQ results in the panel (P6.B.3.3, P6.B.4.3, FIX-ingest-qids-param)
+- **social:** the friends' average next to the community score on the item page and a "rated by people you follow" strip on the home, both deferred per viewer; an admin outcome that unhides a review or comment; reports on reviews and comments answer 404 while the `social` flag is off (P7.C.1.1, FIX-P7.B.1.3-followups)
+- **qa:** dev-only `CommunityLoad` seeder (`db:seed CommunityLoad --count N`, refused in production), a second demo admin (`admin2@example.test`), `qa/k6/moderation.js` and the Playwright community spec with the two-admin claim conflict (P4.B.5.1)
+- **api:** `listExports` and `getExport` (302 to a 5-minute presigned URL, `Cache-Control: no-store`) for Pro and Business; the daily id files leave out `popularity` until the owner confirms it (P3.A.4.2)
+- **social:** feed opt-in in settings and onboarding, a "recent activity" profile tab, 180-day activity retention and follows/activity files in the data export (P7.A.1.3 part 2); reviews on rated items with a Markdown subset and a spoiler flag (P7.B.1.1); comments with one level of replies and like/helpful reactions on reviews, comments and lists, with notifications (P7.B.1.2); members can report reviews and comments, and admins can hide or delete them or ban the author (P7.B.1.3); Open Graph share cards and a share button on items, lists and profiles (P7.C.1.2); all behind the `social` flag (default off)
+- **ci:** mobile release flow with EAS: `apps/mobile/eas.json` profiles (development, preview, e2e-test, production with remote `versionCode` and `autoIncrement`; submit as a draft to the Play internal track), runbook docs/runbooks/mobile-release.md, rule `.claude/rules/mobile-release.md`, skill `hexascore-mobile-release`, and the manual `mobile-release.yml` workflow (submit gated by the `play-store` environment)
+- **web:** a "Feed" link in the navbar for signed-in users while the `social` flag is on (`flags.social` shared through vukem `flags.Share`) (IMPL-web-feed-nav)
+- **social:** SDD 14 §12 social layer design and ADR 0021 (activity feed from the write path) (P7.A.1.1); follows with requests for private profiles, follower counts, and the `/feed` page with activity events and `users.feed_opt_in`, all behind the `social` flag (`FLAG_SOCIAL`, default off, Q-A5 open) (P7.A.1.2, P7.A.1.3 part 1)
+- **ingest:** ingestion pipeline (SDD 06): run framework with chunked continuation, dead letters and kill switches (off by default); outbound client with per-host throttle, retries and breaker; Wikidata and Wikipedia connectors; item core, enrichment with provenance and community locks, relations and the normalize job; legacy parity test (200 QIDs); chains, schedules and `ingest:bootstrap` (P6.A.1.3-P6.A.4.1)
+- **ingest:** TMDB connector and `tmdb.expire` job behind `ingest_tmdb` (P6.B.1.1), credit-to-entity resolution with a `hs_norm` name index (P6.B.3.2), edition ISBN rules, Wikidata edition extraction and `backfill.editions` (P6.B.3.1, partial)
+- **docs:** API guides for changes, exports and webhooks (Standard Webhooks verification in TypeScript and Python), with translated sidebar labels (P3.B.3.1)
+- **ci:** manual SDK release workflow (trusted publishing for npm with provenance, JSR and PyPI) and English runbook docs/runbooks/sdk-release.md (P3.B.2.1)
+- **ci:** ci job sdk (regenerate both SDKs, drift check, packaging dry-runs) (P3.B.1.3)
+- **mobile:** mobile entity page shows a "Next" control per item group when more items exist (IMPL-mobile-entity-more), and it now loads the next page per group from `meta.next_cursor` (IMPL-mobile-entity-paging)
+- **mobile:** "Add to list" button on the item screen opening the add-to-list sheet (FIX-mobile-item-add-to-list); v1 look for the lists tab and the add-to-list sheet (IMPL-mobile-v1-lists-ui)
+- **mobile:** the search tab's empty state lists the top 5 trending items across types, with a loading line while they load (IMPL-mobile-search-trending, FIX-mobile-search-trending-flash)
+- **mobile:** `/pt-br` and `/es` App Links switch the language for the session only; the stored choice is kept (FIX-mobile-deeplink-locale)
+- **mobile:** the Android search tab searches the catalogue (type chips, see all, paged results) (IMPL-mobile-v1-search-wire)
+- **mobile:** Android profile tab (name, nickname with inline nickname-taken, language override without restart, personalisation opt-out, devices with revoke, crash-report consent, theme, logout); `GET /app/v1/me` returns the account `email` (P5.B.4.2)
+- **mobile:** Android profile account actions (data export with cooldown, account deletion after a 10 s countdown), About screen with TMDB/IGDB attribution, and the notifications list with mark-as-read and an unread count (P5.B.4.3)
+- **mobile:** Android status sheet and games-only time-to-beat sheet, both queued offline with optimistic cache and rollback (P5.B.2.4)
+- **mobile:** Android entity screen (`entities/[id]`) with items grouped by type (P5.B.2.5)
+- **mobile:** Android lists tab, list detail (rename, delete, reorder online only; queued single remove) and add-to-list sheet (queued add, create-with-item online only) (P5.B.4.1)
+- **mobile:** `GET /.well-known/assetlinks.json` from `ANDROID_PACKAGE` and `ANDROID_CERT_SHA256`, and verified Android App Links for the catalogue, entity, list and locale-prefixed web URLs (P5.B.5.1)
+- **mobile:** v1 home sections component (three trending cards and a grid of six per type) (IMPL-mobile-v1-home-ui)
+- **mobile:** v1 full-screen search sheet component (autofocused input, recent and trending, first 8 results with see all) (IMPL-mobile-v1-search-ui)
+- **mobile:** v1 app header (serif wordmark, search, theme toggle) and tab bar theme (IMPL-mobile-v1-shell, part 1)
+- **mobile:** Banned and deletion-scheduled accounts get their own screens (ban reason and end date; cancel deletion on the web) instead of falling through to login or the app (FIX-mobile-blocked-screens)
+- **mobile:** Offline banner and a first-launch crash-report opt-in (default off); reports carry only app version, Android API, route pattern, message and an 8 KB stack, redacted, to `POST /app/v1/client-errors` (P5.A.4.3)
+- **mobile:** The Android app queues rating, status, time-to-beat and list add/remove writes offline (up to 50 for 72 h, bound to the user), replays them in order with backoff, follows the server on conflicts and pauses while an update is required (P5.A.4.2)
+- **mobile:** Read queries are cached with TanStack Query and persisted on Expo SQLite for 24 h within 10 MB; mutations, errors and token data are never persisted, and a formula version change busts the cache (P5.A.4.1)
+- **mobile:** v1 fonts (Inter, Playfair Display, OFL, embedded via expo-font) and Ionicons glyphs in the Android app; `@expo/ui` for native sheets and pickers (ADR 0019 amendment 1) (IMPL-mobile-v1-deps)
+- **mobile:** Android v1 primitives (button with depth, score badge, 2:3 cover, theme toggle) and an accessible ten-star half-step rating input (IMPL-mobile-v1-ui)
+- **catalog:** Ingestion tables and the canonical-hash record store (`internal/ingest/store`), hashes byte-compatible with the legacy Python `canonical_hash` (P6.A.1.2)
+- **admin:** Admins revert catalogue changes (single, cascade, force) from `/admin/catalog-audit`, restoring value and provenance (P4.B.2.4)
+- **admin:** Admins edit catalogue fields from the item manage page; each change writes a `catalog_audit` row (`source=admin`) and can be reverted (P4.B.2.5)
+- **admin:** Admins lock catalogue fields or records at `/admin/locks` and export the catalogue audit log as CSV or NDJSON (P4.B.2.6)
+- **community:** Public "Recent changes" tab on item, edition and entity pages; profiles show contribution counts and approval rate (P4.B.2.7)
+- **community:** Community suggestions can create entities (people, organizations, franchises, platforms, genres) and book editions; admins apply them like item creates (P4.B.2.3b)
+- **community:** Authors get an in-app notice and an email in their language when a suggestion is approved, applied, rejected, reverted or expires (email opt-out per account) (P4.B.3.1)
+- **catalog:** `item_similar` and `user_recommendations` tables and pure similarity functions (feature extraction, `g_f` weights, weighted Jaccard) (P6.D.1.1)
+- **catalog:** Nightly `ComputeSimilar` job (02:00) filling `item_similar` from shared catalogue features; chunked writes and co-occurrence, unchanged items skipped before candidate work (P6.D.1.2, PERF-compute-similar)
+- **catalog:** "For you" profile, scoring and greedy re-ranker as pure functions (P6.D.2.1)
+- **ui:** "For you": `recommend_user` job with stale-while-refresh, `/app/v1/me/for-you`, the `/for-you` page, the home strip and the opt-out purge (P6.D.2.2)
+- **catalog:** Offline recommendation evaluation (temporal hold-out, precision@10, nDCG@10 with bootstrap CI) and the monthly CF trigger check (P6.D.3.1)
+- **community:** Moderators can apply community create requests and merge reports; a merge asks for the deleted item's typed title and expires its open suggestions (P4.B.2.3)
+- **community:** `catalog.changed` reindexes the edited item or entity and refreshes its sitemap `lastmod` once per audit row; child sitemaps print `<lastmod>` (P4.B.2.2)
+- **community:** Approving a community edit applies it to the catalogue in one transaction: per-field audit rows, provenance `community`, API change feed rows, stale flags on competing suggestions and a per-target lock with one deadlock retry (P4.B.2.1)
+- **api:** `GET /api/v1/{type}/trending` and `GET /app/v1/{type}/trending` (top 10 over 30 days, ETag, 5-minute public cache) and the business-only `GET /api/v1/{type}/{id}/activity` with raw daily counts; app client and TypeScript and Python SDKs regenerated (P3.A.1.4, P6.C.3.2)
+- **catalog:** Hourly `ComputeTrending` job (rollup, top 10 per type over 30 days with prior fill, cache invalidation), 90-day snapshot prune, item rebuild on user ban and unban, trending metrics and Grafana alert A14 for a snapshot older than 3 h (P6.C.2.2)
+- **catalog:** Trending rollup that recomputes the weighted per-user daily activity (ratings, statuses, list adds, suggestions) for today and yesterday, idempotently, leaving views and search clicks alone (P6.C.1.3)
+- **docs:** Design round 1 in `docs/openpencil/`: three visual directions (v1 editorial, v2 noir, v3 paper), 19 frames each, `ROUND-1.md` with the comparison and WCAG contrast table, the `openpencil-design` skill and the design rule (DESIGN-round-1)
+- **admin:** Moderation queue at `/admin/moderation`, oldest first with keyset pages, filters (status, kind, domain, locale, field, author, assignee, age), ageing, competing, stale and unreachable badges, and claim/release (P4.B.1.2)
+- **admin:** Moderation detail page with the per-field diff, reject with reason and note, clone as new draft (admins) and bulk actions up to 50 ids with per-id results; approve answers 503 until the apply service lands (P4.B.1.3)
+- **catalog:** Item page views and `/app/v1` item reads (deduplicated per visitor and UTC day, at most 50 items per visitor, prefetch, partial reloads and bots excluded) and search clicks are counted in memory and flushed every minute and on shutdown into `item_activity_daily` (P6.C.1.2)
+- **mobile:** Login screen with two-factor (TOTP or backup code) and bot-challenge branches; device name from `expo-device`, editable (P5.A.3.3)
+- **mobile:** Google sign-in token flow (silent cancel, 2FA retry, `auth.errors.emailUnverifiedAtProvider` in en, pt-BR and es); the account picker waits on the Android OAuth client id (P5.A.3.4)
+- **mobile:** Token rotation on foreground (under 15 days left, at most once per 24 h, never two in flight), logout that always wipes locally, and the update-required screen with logout (P5.A.3.5)
+- **catalog:** `item_activity_daily` and `trending_snapshots` tables; merging items sums the source item's daily activity into the target (P6.C.1.1)
+- **mobile:** Token store in SecureStore (this device only) and session state machine (401 sign-out with data wipe, ban, unverified email, scheduled deletion); runtime dependencies approved in Q-B1 recorded in ADR 0019 (P5.A.3.2)
+- **admin:** Moderation gate abilities (`moderate`, `viewCatalogAudit`, `revertCatalog`, `lockCatalog`), the `community_trusted_moderators` flag (default off), the `moderator` role and the `/admin/moderation` page shell (P4.B.1.1)
+- **community:** "Suggest a new `<type>`" links on section listings and empty search results (FIX-community-create-ux)
+- **ui:** Anonymous catalogue HTML (home, listings, items, entities) is cached in process for 60 s, keyed by path, query, display cookies and, on unprefixed pages, `Accept-Language`, and sent with `Cache-Control: public, max-age=60, stale-while-revalidate=300`; the CSP nonce stays per request and session requests stay `private, no-store` (P2.H.3.5)
+- **lists:** List owners add items from the list edit page with a suggest box limited to the list type (P2.H.1.5)
+- **mobile:** Android API client wrapper with auth, version and locale headers, idempotency keys, problem-code mapping and minimum-version detection (P5.A.3.1)
+- **community:** `Community/SuggestEdit` page with draft save and restore, quota, locked-field reasons, "Suggest an edit" links on item, edition and entity pages, and `community.*` strings in en, pt-BR and es (P4.A.3.1c)
+- **community:** `/suggest/new/{domain}` page to propose a new record or report a duplicate (merge request), drafts only (P4.A.3.2)
+- **community:** Suggestion status page, My suggestions list, and submit and withdraw actions for the author; admins can view, others get 404 (P4.A.3.3)
+- **repo:** `scripts/ci/local.sh` runs every `ci.yml` job except e2e locally, in parallel, on a clean checkout of HEAD with isolated databases, ports and compose project; `qa/schemathesis/ci.sh` reads `DATABASE_URL` and works on Docker Desktop (QA-ci-local-script)
+- **community:** SuggestEdit edits the release date (with precision) and relation fields (genres, creators, organizations, franchise, platforms) as typed changes, with translated precision and role names (P4.A.3.1d)
+- **admin:** Moderation metrics page at `/admin/moderation/metrics` (queue size, oldest open age, p50/p95 time to decision, approval rate over 7 and 30 days) (P4.B.4.1)
+- **community:** Nightly `community.asserts` job (05:10 UTC): every applied suggestion has audit rows, no open suggestion targets a missing record, contributor stats equal a rebuild; a failure logs `alert=community_asserts` (P4.B.4.2)
+- **community:** The suggest form can propose new people, companies, tags and book editions ("What to add" tabs; the item tab reads "Game, movie, series or book") (FIX-community-create-kinds-ui, FIX-community-create-tab-label)
+- **account:** Profile switch to stop community suggestion emails (in-app notices stay); the data export includes it (FIX-community-mail-optout-ui)
+- **mobile:** Android home screen with the four "Top 10 trending (30 days)" sections and the shared listing row (P5.B.1.1)
+- **mobile:** Android section listing with sort, genre filter and infinite scroll (P5.B.1.2)
+- **mobile:** Android item screen with score, confidence, category averages, entities by role, book editions, attribution and the user's own rating (P5.B.2.1)
+- Android app v1 screens: catalogue listing (filters, sort, pager), item detail (score block, category bars, half-star rating, more like this), library shelves, login and settings with a Google sign-in button, shared state page, entity, list detail, notifications and book editions components (IMPL-mobile-v1-catalog-ui, -item-ui, -library-ui, -auth-ui, -states-ui, -detail-ui).
+- Android app header (wordmark, search, theme toggle), themed tab bar with translated titles, and the profile tab showing the v1 settings page with the crash-report consent switch (IMPL-mobile-v1-shell-wire, -settings-wire).
+- Android rating data flow: half-star input with selection haptics, ratings queued offline with an optimistic cache update and rollback (P5.B.2.2).
+- Android rate sheet (six categories, offline-queued save and delete, rollback toasts); `GET /app/v1/me` returns the user `id` and `deletionScheduledAt` (P5.B.2.3).
+- Web search command palette (Ctrl K / ⌘K or the navbar trigger) with keyboard navigation, recent searches and a see-all row (IMPL-web-v1-search-palette).
+- App-side alerts A5 (SSR fallback on a public route), A6 (a job kind exhausted twice in a row) and A10 (five consecutive quota flush failures) as structured `alert=` log lines (P2.C.3.3, P2.C.alerts-a5-test).
+- Runbooks R1-R9 under `docs/runbooks/` with an alert-to-runbook map and the monthly cost checklist (P2.C.4.2).
+- `search:reindex` console command: rebuilds the search indexes concurrently, then the suggest table (P2.C.search-reindex).
+- Item page props `similar` (up to 8, with the shared feature) and `crossMedia`, and `GET /app/v1/items/{id}/related` (P6.D.1.3); the item page shows them as "More games/movies/series/books like this" and "In other media" strips (IMPL-web-v1-more-like-this).
+
+### Changed
+
+- **web:** the mobile menu, the report dialog and the data-fetching code load on first use; first-load script down from 171-184 KB to 135-146 KB, under the 150 KB Lighthouse budget (FIX-lighthouse-script-size)
+- **deps:** vukem v0.36.0 (contrib/stripe v0.5.1, drivers/postgres v0.6.1, drivers/s3 v0.4.1); problem codes, request-line route and user fields, export encoders and the mail Reply-To default now use native vukem APIs (VF-066, VF-067, VF-069, VF-070); `X-Problem-Code` is gone (ADOPT-vukem-0.36.0)
+- **ingest:** a run restricted to `qids` filters the tmdb, igdb, trailers and openlibrary targets in SQL instead of scanning every target (FIX-ingest-qids-pushdown)
+- **ingest:** the two-job ingestion cap is vukem `QUEUE_LIMITS` (default `ingest=2` when unset) instead of an in-process semaphore, which also deadlocked nested chain dispatch on the sync queue; the legacy 2FA import hashes recovery codes with `totp.HashRecoveryCode` (CLEAN-dangling-vf-ids)
+- **api:** `getItemActivity` is now `getGameActivity`, `getMovieActivity`, `getSeriesActivity` and `getBookActivity` (same URLs; both SDKs regenerated) (P3.A.4.2); scaffold pages use the `primary` design token instead of hardcoded indigo classes (P2.H.3.4); item-page recommendation impressions (sampled 1 in 10) and clicks are `event=reco_impression` / `event=reco_click` log lines instead of unused in-process counters (FIX-reco-log-events)
+- **web:** below `lg` the navbar shows only the title, a search field and a hamburger that opens a sheet with sections, Feed, notifications, account, language and theme (FIX-nav-mobile-hamburger); the follow bar, follow requests, feed and activity cards use the editorial design, with "1 follower" plurals and a neutral "Score" on others' ratings (IMPL-web-social-v1)
+- **mobile:** v1 look for the status and time-to-beat sheets (IMPL-mobile-v1-status-ui), the account extras with an unread badge on the profile tab (IMPL-mobile-v1-account-ui), and translated search type labels, recent removal and empty trending text (IMPL-mobile-search-i18n)
+- **ui:** client-fetched web data (search suggestions, user-ratings dialog, edition picker, data export) uses TanStack Query 5.105.0 (ADR 0020); the Ctrl+K search palette loads on first open (ADOPT-tanstack-query-web, FIX-lighthouse-budgets-main)
+- **web:** anonymous public catalogue HTML is served gzip-compressed (session-bound, cookie-setting and non-200 responses stay plain; SDD 13 BREACH note); light book accent darkened to oklch 0.5 for AA contrast (PERF-web-lcp, FIX-lighthouse-budgets-main)
+- **sdk:** Python SDK version and README quota header aligned with the contract (P3.B.1.2)
+- **ui:** Design tokens use the v1 Editorial palette (light and dark) and add primary, ledge, field and on-score tokens; the Android app can follow the system theme or a stored light/dark choice (IMPL-mobile-v1-tokens)
+- **community:** Banning or deleting an account withdraws its open suggestions; merging an item expires the open suggestions on it; account deletion removes the user from community moderation records (P4.B.3.2)
+- **ui:** The home page shows the trending of the last 7 days, 3 per type; the 30-day API list is unchanged (FIX-trending-7d-home)
+- **api:** The public API base URL is `https://api.hexascore.app/v1`: the OpenAPI document, Scalar reference and SDKs use `/v1/...` paths on the API host; `/api/v1/...` keeps answering (FIX-openapi-api-host-paths)
+- **db:** Indexes on `rating_events.at`, `item_status.updated_at`, `list_items.added_at` and `suggestion_events.created_at` (concurrent builds) so the hourly trending rollup no longer scans whole tables (FIX-trending-rollup-indexes)
+- **community:** Moderation is two-step (owner Q-A15): moderators record approve or reject recommendations with a note, and only admins apply or reject suggestions (FIX-moderation-two-step)
+- **community:** The merge form picks both records with the search box instead of raw ids, and relation and merge diffs on the suggestion status page show names (FIX-community-create-ux)
+- **ui:** The library, public lists and profile ratings render shared shelf cards (cover, status, score); the library groups by status with counts (P2.H.1.4)
+- **infra:** Observability is Railway-native only (D-35 amended): service metrics, log search, traces and `alert=` log lines; the policy page no longer lists Grafana Cloud (FIX-observability-railway-native)
+- **deps:** vukem v0.35.0 (drivers/postgres v0.6.0, drivers/s3 v0.4.0, contrib/stripe v0.5.0); the OpenAPI app document uses `Info.Docs` instead of reading the command line; covers from S3 answer 304 on a matching ETag (ADOPT-vukem-0.35.0)
+- The Android banned, deletion-scheduled and update-required screens use the v1 state layout (IMPL-mobile-v1-states-ui).
+- Web v1 editorial shell: self-hosted Inter and Playfair Display (OFL texts shipped), button with ledge and pressed states, sticky navbar with language dropdown, theme toggle and Ctrl K trigger, footer without language links, one 1152 px container (IMPL-web-v1-shell).
+- Web catalogue listings in the v1 look: title with the result count, ruled filter row, Reset as a button, score badges with the band colour (IMPL-web-v1-catalog).
+- The web item page follows design v1: score block with band and explanation, genre and platform chips, category averages, ten half stars per category as a keyboard radio group, status toggles, time to beat rows, trailers behind consent; `hover` and `backdrop` colour tokens in packages/tokens (IMPL-web-v1-item).
+- The web home page follows design v1: one block per item type with three cards trending over the last 7 days, six other titles and a see-all link (IMPL-web-v1-home).
+- The Android home shows the v1 trending sections: three ranked cards and a grid of six per type, with covers and a see-all link (IMPL-mobile-v1-home)
+- The Android section listing uses the v1 catalogue page: title, filter panel with sort and genre chips, Previous/Next pager, rows with year, rating count and score (IMPL-mobile-v1-listing)
+- The Android item screen uses the v1 item page (kicker, score badge with verdict, genre chips, category bars, synopsis, people, editions, attribution); Rate opens the rating sheet (IMPL-mobile-v1-item)
+- Login, signup, password recovery and reset follow design v1, with a "Sign in with Google" / "Sign up with Google" button in Google's branding (IMPL-web-v1-auth)
+- The search page follows design v1: grouped results with section accents, filter chips, a people and companies panel, and a no-results state with section links (IMPL-web-v1-search-page)
+- The library, your lists and public list pages follow design v1: status sections and shelf cards with your score (IMPL-web-v1-library-lists)
+- `release.yml` manual runs take a `version` input (an existing tag) that drives the checkout, image tags, `APP_VERSION` and release notes (P2.B.2.2).
+- Page-only i18n namespaces (docs, terms, policy, help, billing, ...) are sent only on their pages, with a once-prop key per namespace set (PERF-i18n-page-namespaces).
+- The legacy `entities` import stage is set-based (about 12 statements per 1,000 items instead of about 5,900) and `hexascore:import-legacy` takes `--workers N` for the entities, social and library stages; the checkpoint only advances past contiguous committed batches (FIX-legacyimport-entities-setbased).
+- Search hits (web and `/app/v1`) carry the release `year` and the community `score` (null under 5 ratings); library items, profile ratings and list entries carry the community `score` (FIX-search-hit-meta, FIX-library-item-score).
+- The book edition, entity and recent changes pages follow design v1 (IMPL-web-v1-edition-entity, IMPL-web-v1-recent-changes).
+- API docs, terms and privacy, error and pricing pages follow design v1 (IMPL-web-v1-docs-legal-errors).
+
+### Fixed
+
+- **mobile:** the release JS bundle builds from a clean `bun install` (`main` entry, Metro hierarchical lookup and css-interop JSX runtime resolution, NativeWind Babel plugins resolved from the app), and CI `mobile` runs `bundle:check`, which fails when the bundle is missing or empty (FIX-mobile-release-bundle)
+- **infra:** CI Schemathesis and Lighthouse reach the production-mode QA app on its `APP_URL` host (no CanonicalHost redirect), and the api-v1 scan uses the `/api/v1` base (FIX-ci-release-checks)
+- **ingest:** a rollback of an IGDB, TMDB or other non-Wikidata run queues the Wikidata record again and clears the cover that source gave the item, restored records get back their archived `checked_at`, credit changes reach `/changes` as `entities`, and hidden or takedown items leave the feed (`deleted`) and return to it (`created`) through the `items_visibility_changes` trigger; the ingest runner refuses `DB_MAX_OPEN=1` (FIX-ingest-rollback-gaps)
+- **ingest:** normalize writes `created` and `updated` (changed public fields) rows to the `/changes` feed, and an ingest rollback writes `deleted` for every item it deletes or hides (FIX-ingest-rollback-api-changes)
+- **ingest:** a covers step reserves each new object key in `cover_gc` outside its transaction before the upload, so objects of a rolled back step are reaped by the covers GC (FIX-covers-orphans-on-rollback)
+- **ingest:** one failing A7 alert check no longer skips the remaining checks; their errors are joined (FIX-ingest-alerts-continue)
+- **ci:** `scripts/ci/local.sh` exits at once with a clear message when `openapi` or `lighthouse` is selected without the `build` job, instead of waiting forever (FIX-ci-local-need-build)
+- **ingest:** an edition QID held by another work records a failure and a review instead of failing the item; a Retry-After pause longer than a minute no longer fails the request (each attempt has its own deadline); `entity_match_reviews.resolved_by` is a bigint (FIX-editions-qid-conflict, FIX-ingest-retry-after-timeout, P6.B.3.3)
+- **web:** the desktop navbar no longer overflows at 1024–1440 px with the Feed link (Feed inline from `xl`, in the account menu below) (FIX-nav-lg-width)
+- **web:** shelf cards on the feed and other users' pages label the score neutrally ("Score 7.0") instead of "Your score" (FIX-shelf-score-label)
+- **ci:** the bun:test SDK workflow tests run with `bun test` instead of Vitest, so `bun run test` is green again (P3.B.1.3)
+- **ingest:** a redelivered run resumes from the locked cursor, only the breaker probe closes an open breaker, a resume whose QID left the selection restarts, and an outage no longer parks targets (P6.A review)
+- **api:** /problems/{code} answers 301; docs and SDK READMEs use meta.next_cursor; SDK READMEs list listChanges and webhook operations (FIX-problems-redirect-301)
+- **sdk:** TypeScript SDK pinned to typescript 6.0.3 so regeneration works; version and README header sync (P3.B.1.1)
+- **api:** the API host serves only the API: `/v1/*`, `/api/v1/*`, `/up`, a JSON index at `/`, and a 404 problem+json for everything else; it no longer renders the web frontend (FIX-api-host-only-api)
+- **mobile:** The Android root layout restores the session, rotates the token on foreground and routes a 426 to the update-required screen; login and update screens use the device locale and catalogue strings (FIX-mobile-root-wiring, P5.A.3.5)
+- **infra:** Requests to `www.hexascore.app` or the Railway domain answer 301 to the canonical host, keeping path and query (`/up` and the API host excluded) (FIX-www-redirect)
+- **deploy:** Two overlapping `hexascore:predeploy` runs no longer hang when a migration builds an index concurrently; `catalog.changed` queues its reindex through the search package (QA gate 2026-10-31)
+- **api:** Approved community edits are served on `/api/v1`: the default `CATALOG_API_SOURCES` includes `community`, whose `data_sources` licence is `HEXASCORE-API-TERMS` (FIX-community-api-source)
+- **admin:** Moderators need confirmed 2FA to open `/admin` and fall under the admin session limits, like admins (FIX-moderator-2fa)
+- **community:** In-page community links and suggestion form posts keep the visitor's locale prefix (FIX-community-create-ux, QA-community-e2e)
+- **auth:** A no-JS form post past the proof-of-work threshold gets an HTML 428 page offering Google sign-in instead of raw problem JSON (FIX-nojs-428-page)
+- **ssr:** The supervisor restart test no longer fails on a wall-clock deadline under load (FIX-ssr-supervise-flake)
+- **mobile:** The login navigation test no longer hits the Jest timeout on a cold cache (FIX-mobile-login-test-timeout)
+- **api:** Community problem codes (`suggestion-*`, `field-locked`, `stale-before`, `invalid-transition`, `community-submissions-closed`, `validation`) resolve at `/problems/{code}` and are documented in the errors page (FIX-community-problem-codes)
+- **auth:** Login and signup forms post their named fields, the signed form token and `remember` without JavaScript (FIX-nojs-auth-post)
+- **mobile:** The catalogue copy script emits Biome-formatted JSON; committed copies refreshed (P5.A.1.1)
+- **mobile:** The navigation test renders each route in its own test and no longer hits the Jest timeout under load (FIX-mobile-nav-test-timeout)
+- **tests:** `TestReleaseBursts` no longer fails when the Postgres container clock runs ahead of the host (FIX-scoring-burst-clock)
+- **api:** `/app/v1` catalogue items carry `coverThumbUrl` and `coverUrl` (app audience only; the paid API still omits covers) (FIX-app-item-cover-urls)
+- **api:** The app API documents the `/app/v1/search` and `/search/suggest` query parameters, so the generated client can send `q` (FIX-app-search-query-params)
+- **mobile:** The Android app opens web item links that carry only the slug; `GET /app/v1/{type}/{id}` also takes a slug and answers 301 for a renamed one (FIX-app-item-by-slug)
+- **mobile:** The rating input reports its accessibility value in integer half steps (6.5 is 13 of 20) (FIX-mobile-rating-a11y-now)
+- An entity with no linked titles showed a blank page (IMPL-web-v1-edition-entity).
+- The terms and privacy pages showed the raw `updatedLabel` key instead of "Last updated" (IMPL-web-v1-docs-legal-errors).
+
+### Removed
+
+- **api:** the `TypeGuard` middleware and the VF-049/VF-051 workarounds; typed 304s, the `enum` tag and the Stripe list calls use native vukem v0.35.0 APIs with the same behaviour (CLEAN-stale-vukem-workarounds)
+- **infra:** App OpenTelemetry metric instruments (`app/metrics`) and the Grafana alert and dashboard artifacts (`ops/grafana`) (FIX-observability-railway-native)
+
 ## [0.12.4] - 2026-11-01
 
 ### Fixed

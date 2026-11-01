@@ -1,36 +1,40 @@
-import { router } from "@inertiajs/react";
-import { lazy, Suspense, useState } from "react";
+import { Link, router, usePage } from "@inertiajs/react";
+import { type ReactNode, useState } from "react";
 
-import { useLocalized } from "../../lib/useLocalized";
+import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
-import StarRating from "../rating/StarRating";
-import { CATEGORY_KEYS, type ItemType, type RatingSummary } from "./types";
-
-const RatingsDialog = lazy(() => import("./RatingsDialog"));
-
-const seeScoresButton =
-	"inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-surface";
+import type { SharedProps } from "../../types";
+import StarRating, { StarSymbol } from "../rating/StarRating";
+import Btn, { btnClass } from "../ui/Btn";
+import ScoreBadge from "../ui/ScoreBadge";
+import { CATEGORY_KEYS, type ItemType } from "./types";
 
 interface Props {
 	itemId: string;
+	title: string;
 	type: ItemType;
-	summary: RatingSummary;
 	mine: Record<string, number> | null | undefined;
 	canWrite: boolean;
+	children?: ReactNode;
 }
 
-// Community aggregate plus the viewer's own six-category rating. Local values
-// are optimistic; the aggregate always comes from the server reload.
-export default function RatingPanel({ itemId, type, summary, mine, canWrite }: Props) {
+// The viewer's six-category rating (design v1 "Your rating" panel). Values are local until saved;
+// the server needs every category, so Save stays disabled until all six are set.
+export default function RatingPanel({ itemId, title, type, mine, canWrite, children }: Props) {
 	const t = useT();
-	const l = useLocalized();
+	const { locale } = usePage<SharedProps>().props;
+	const l = (path: string) => localized(path, locale);
 	const keys = CATEGORY_KEYS[type];
 	const [values, setValues] = useState<Record<string, number | null>>(
 		Object.fromEntries(keys.map((k) => [k, mine?.[k] ?? null])),
 	);
 	const [busy, setBusy] = useState(false);
-	const [scoresOpen, setScoresOpen] = useState(false);
-	const complete = keys.every((k) => values[k] !== null);
+	const rated = keys.map((k) => values[k]).filter((v): v is number => v !== null);
+	const complete = rated.length === keys.length;
+	// Preview only; the server computes the stored overall itself.
+	const overall = rated.length
+		? Math.round((rated.reduce((a, b) => a + b, 0) / rated.length) * 10) / 10
+		: null;
 
 	const visit = { preserveScroll: true, onFinish: () => setBusy(false) };
 	const save = () => {
@@ -44,97 +48,78 @@ export default function RatingPanel({ itemId, type, summary, mine, canWrite }: P
 	};
 
 	return (
-		<section aria-labelledby="rating-heading" className="grid gap-4">
-			<h2 id="rating-heading" className="text-xl font-bold">
-				{t("item.communityScore")}
-			</h2>
-			{summary.score === null ? (
-				<p>
-					<strong>{t("item.notEnough")}</strong>{" "}
-					<span>{t("item.notEnoughHint", { min: 5 })}</span>
+		<section
+			id="your-rating"
+			aria-labelledby="rating-heading"
+			className="grid scroll-mt-20 gap-4 border-t-2 border-primary bg-surface p-5"
+		>
+			<div className="grid gap-2">
+				<p className="text-xs font-semibold tracking-widest uppercase">{t("item.rate")}</p>
+				<h2 id="rating-heading" className="text-2xl leading-tight">
+					{t("item.panel.title", { title })}
+				</h2>
+				<p className="text-sm text-muted">
+					{canWrite ? t("item.panel.help") : t("item.panel.helpGuest")}
 				</p>
-			) : (
-				<>
-					<p className="text-4xl font-bold">
-						{summary.score}
-						<span className="sr-only">
-							{" "}
-							{t("rating.valuetext", { value: summary.score })}
-						</span>
-					</p>
-					<h3 className="sr-only">{t("item.categoryScores")}</h3>
-					<dl className="grid grid-cols-2 gap-1">
-						{keys.map((k) => (
-							<div key={k} className="contents">
-								<dt>{t(`categories.${type}.${k}`)}</dt>
-								<dd>{summary.scoreByCategory[k] ?? "-"}</dd>
-							</div>
-						))}
-					</dl>
-				</>
-			)}
-			{scoresOpen ? (
-				<Suspense
-					fallback={
-						<button type="button" className={seeScoresButton} disabled>
-							{t("item.seeUserScores")}
-						</button>
-					}
-				>
-					<RatingsDialog
-						itemId={itemId}
-						categoryLabels={keys.map((k) => t(`categories.${type}.${k}`))}
-						initialOpen
+			</div>
+			<div className="grid gap-2">
+				<StarSymbol />
+				{keys.map((k) => (
+					<StarRating
+						key={k}
+						label={t(`categories.${type}.${k}`)}
+						value={values[k]}
+						onChange={(v) => setValues((s) => ({ ...s, [k]: v }))}
+						disabled={!canWrite || busy}
 					/>
-				</Suspense>
-			) : (
-				<button
-					type="button"
-					className={seeScoresButton}
-					onClick={() => setScoresOpen(true)}
-				>
-					{t("item.seeUserScores")}
-				</button>
-			)}
-			<h3 className="font-semibold">{t("ratings.title")}</h3>
+				))}
+			</div>
 			{canWrite ? (
 				<>
-					{keys.map((k) => (
-						<StarRating
-							key={k}
-							label={t(`categories.${type}.${k}`)}
-							value={values[k]}
-							onChange={(v) => setValues((s) => ({ ...s, [k]: v }))}
-							disabled={busy}
-						/>
-					))}
-					<div className="flex gap-2">
-						<button
-							type="button"
-							className="min-h-11 rounded border px-4"
-							disabled={!complete || busy}
-							onClick={save}
-						>
+					<div className="flex items-center justify-between gap-4">
+						<div className="grid gap-0.5">
+							<p className="text-sm font-semibold">{t("item.panel.overall")}</p>
+							<p className="text-xs text-muted">
+								{t("item.panel.overallHint", {
+									rated: rated.length,
+									total: keys.length,
+								})}
+								{!complete && ` ${t("item.panel.completeHint")}`}
+							</p>
+						</div>
+						<ScoreBadge score={overall} size="md" />
+					</div>
+					<div className="grid gap-2">
+						<Btn disabled={!complete || busy} onClick={save} className="w-full">
 							{busy
 								? t("ratings.saving")
 								: mine
 									? t("ratings.update")
 									: t("ratings.save")}
-						</button>
+						</Btn>
 						{mine && (
-							<button
-								type="button"
-								className="min-h-11 rounded border px-4"
-								disabled={busy}
-								onClick={remove}
-							>
+							<Btn kind="ghost" disabled={busy} onClick={remove} className="w-full">
 								{t("ratings.delete")}
-							</button>
+							</Btn>
 						)}
 					</div>
+					{children}
 				</>
 			) : (
-				<p>{t("item.loginToRate")}</p>
+				<div className="grid gap-2">
+					<Link href={l("/login")} className={btnClass("primary", "w-full")}>
+						{t("item.loginToRate")}
+					</Link>
+					<p className="text-sm text-muted">
+						{t("item.panel.noAccount")}{" "}
+						<Link
+							href={l("/signup")}
+							className="font-semibold text-primary hover:underline"
+						>
+							{t("item.panel.signupFree")}
+						</Link>
+					</p>
+				</div>
 			)}
 		</section>
 	);

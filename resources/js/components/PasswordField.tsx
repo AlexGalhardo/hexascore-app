@@ -1,6 +1,8 @@
 import { useId, useState } from "react";
 
 import type { PasswordAdvice, PasswordCheck } from "../lib/password-policy";
+import { useT } from "../lib/useT";
+import { fieldClass } from "./Field";
 
 interface Props {
 	label: string;
@@ -20,13 +22,7 @@ interface Props {
 	advice?: PasswordAdvice;
 }
 
-const meter = [
-	"bg-zinc-300 dark:bg-zinc-700",
-	"bg-red-500",
-	"bg-amber-500",
-	"bg-lime-500",
-	"bg-green-600",
-];
+const meter = ["bg-border", "bg-red-500", "bg-amber-500", "bg-lime-500", "bg-green-600"];
 
 // PasswordField is a password input with a show/hide toggle inside the field
 // and, when `checks` are given, the server's rules checked as you type.
@@ -51,6 +47,7 @@ export default function PasswordField({
 	checks,
 	advice,
 }: Props) {
+	const t = useT();
 	const [visible, setVisible] = useState(false);
 	const id = useId();
 	const errorId = `${id}-error`;
@@ -63,10 +60,10 @@ export default function PasswordField({
 
 	return (
 		<div>
-			<label htmlFor={id} className="font-medium">
+			<label htmlFor={id} className="text-sm font-semibold">
 				{label}
 			</label>
-			<div className="relative mt-1">
+			<div className="relative">
 				<input
 					id={id}
 					name={name}
@@ -77,52 +74,34 @@ export default function PasswordField({
 					onChange={(e) => onChange(e.target.value)}
 					aria-invalid={error ? true : undefined}
 					aria-describedby={describedBy || undefined}
-					className="block w-full rounded-md border border-zinc-300 bg-transparent py-2 pr-11 pl-3 focus:border-indigo-500 focus:outline-none dark:border-zinc-700"
+					className={`${fieldClass} pr-24`}
 				/>
 				<button
 					type="button"
 					onClick={() => setVisible((shown) => !shown)}
-					aria-label={visible ? "Hide password" : "Show password"}
+					aria-label={t(visible ? "auth.fields.hide" : "auth.fields.show")}
 					aria-pressed={visible}
 					aria-controls={id}
-					className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-md text-zinc-500 hover:text-zinc-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-zinc-400 dark:hover:text-zinc-100"
+					className="absolute top-2 right-0 bottom-0 flex min-w-11 items-center justify-center px-3.5 text-[15px] font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary"
 				>
-					<svg
-						aria-hidden="true"
-						viewBox="0 0 20 20"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth="1.5"
-						className="size-5"
-					>
-						<path d="M1.5 10S4.8 4.5 10 4.5 18.5 10 18.5 10 15.2 15.5 10 15.5 1.5 10 1.5 10Z" />
-						<circle cx="10" cy="10" r="2.75" />
-						{!visible && <path d="M3.5 3.5l13 13" />}
-					</svg>
+					{t(visible ? "auth.fields.hideShort" : "auth.fields.showShort")}
 				</button>
 			</div>
 			{error && (
-				<p id={errorId} className="mt-1 text-sm text-red-600">
+				<p id={errorId} className="mt-1.5 text-sm text-danger">
 					{error}
 				</p>
 			)}
 			{checks && (
 				// biome-ignore lint/a11y/noRedundantRoles: list-style none drops list semantics in Safari VoiceOver (see comment above)
-				<ul id={checksId} role="list" className="mt-2 space-y-1 text-sm">
+				<ul id={checksId} role="list" className="mt-3 space-y-1 text-sm">
 					{checks.map((check) => (
-						<li
-							key={check.id}
-							className={
-								check.met
-									? "text-green-700 dark:text-green-400"
-									: "text-zinc-600 dark:text-zinc-400"
-							}
-						>
+						<li key={check.id} className={check.met ? "text-fg" : "text-muted"}>
 							<span
 								aria-hidden="true"
-								className="mr-1.5 inline-block w-3 text-center"
+								className={`mr-2 inline-block w-3 text-center ${check.met ? "text-score-high" : ""}`}
 							>
-								{check.met ? "✓" : "•"}
+								{check.met ? "✓" : "×"}
 							</span>
 							{check.label}
 							<span className="sr-only">
@@ -133,7 +112,7 @@ export default function PasswordField({
 				</ul>
 			)}
 			{advice && (
-				<div id={adviceId} className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+				<div id={adviceId} className="mt-2 text-sm text-muted">
 					<div aria-hidden="true" className="mb-1 flex gap-1">
 						{[1, 2, 3, 4].map((step) => (
 							<span

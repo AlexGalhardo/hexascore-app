@@ -1,0 +1,54 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0119468",
+      "metacritic": "movie/kiss-the-girls",
+      "rottentomatoes": "m/kiss_the_girls",
+      "tmdb": "9437"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Gary Fleder"
+      ],
+      "genres": [
+        "crime film",
+        "drama film",
+        "neo-noir"
+      ],
+      "runtimeMinutes": 111
+    },
+    "popularity": 33.0,
+    "qid": "Q60016",
+    "release_date": "1998-03-05",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Kiss the Girls (stylized in all lowercase) is a 1997 American neo-noir psychological thriller film directed by Gary Fleder, and starring Morgan Freeman, Ashley Judd, and Cary Elwes. The screenplay by David Klass is based on James Patterson's best-selling 1995 novel of the same name. A sequel titled Along Came a Spider was released in 2001.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Kiss_the_Girls_(1997_film)",
+        "title": "Kiss the Girls"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Beijos Que Matam (Kiss the Girls) é um filme de thriller e drama norte-americano (com trechos falados em mandarim) baseado no bestseller \"Kiss the Girls\" do escritor James Patterson realizado em 1997 pelo cineasta Gary Fleder. Teve uma sequência em 2001, também estrelada por Morgan Freeman que voltou a interpretar o personagem Alex Cross, chamada Along Came a Spider. Em 2012 foi lançado Alex Cross.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Beijos_Que_Matam",
+        "title": "Beijos Que Matam"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Kiss the Girls, titulada El coleccionista de amantes en España y Besos que matan en Hispanoamérica, es una película de género suspense basada en la novela de James Patterson. Fue estrenada el 3 de octubre de 1997 en Estados Unidos, protagonizada por Morgan Freeman y Ashley Judd y dirigida por Gary Fleder. \nEl personaje de Alex Cross, interpretado por Morgan Freeman, vuelve a ser interpretado otra vez por el actor en la película Along Came a Spider (2001).​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Kiss_the_Girls",
+        "title": "Kiss the Girls"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q60016",
+  "slug": "kiss-the-girls"
+}

@@ -1,5 +1,6 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react-native";
-import type { ReactNode } from "react";
+import type { ReactElement, ReactNode } from "react";
 import RootLayout from "../app/_layout";
 import Login from "../app/(auth)/login";
 import TabsLayout from "../app/(tabs)/_layout";
@@ -8,12 +9,15 @@ import Home from "../app/(tabs)/index";
 import Lists from "../app/(tabs)/lists";
 import Profile from "../app/(tabs)/profile";
 import Search from "../app/(tabs)/search";
-import ItemScreen, { ItemBody } from "../app/[type]/[slug]";
+import ItemScreen, { ItemBody, itemIdOf } from "../app/[type]/[slug]";
+import AboutScreen from "../app/about";
 import EntityScreen from "../app/entities/[id]";
 import ListScreen from "../app/lists/[id]";
+import NotificationsRoute from "../app/notifications";
 import UpdateRequired from "../app/update-required";
 import { getNetworkState, setNetworkState } from "./platform/network";
 import { storeListingUrl } from "./platform/store";
+import { LocaleProvider } from "./providers/root";
 
 jest.mock("expo-router", () => {
 	const React = require("react") as typeof import("react");
@@ -33,62 +37,82 @@ jest.mock("expo-router", () => {
 	Stack.Screen = function Screen(): null {
 		return null;
 	};
+	Stack.Protected = function Protected(props: { children?: ReactNode }): ReactNode {
+		return Frame(props);
+	};
 	return {
 		Stack,
 		Tabs,
+		useRouter: () => ({ navigate: () => undefined }),
+		useSegments: () => [],
 		useLocalSearchParams: () =>
 			(globalThis as { __routeParams?: Record<string, string> }).__routeParams ?? {},
 	};
 });
 
+// Route smoke tests check mounting, not data: queries never fire, so no request leaves the test.
+function offline(element: ReactElement): ReactElement {
+	const client = new QueryClient({ defaultOptions: { queries: { enabled: false } } });
+	return <QueryClientProvider client={client}>{element}</QueryClientProvider>;
+}
+
+// Expo Router provides the SafeAreaProvider at runtime; the router is mocked here.
+jest.mock("react-native-safe-area-context", () => ({
+	useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
+}));
+
 function params(next: Record<string, string>): void {
 	(globalThis as { __routeParams?: Record<string, string> }).__routeParams = next;
 }
 
-test("each SDD 10 route renders its placeholder", async () => {
-	await render(<Login />);
-	expect(screen.getByText("Login")).toBeTruthy();
+// One test per route: a single test rendering all eleven screens shared one 5 s
+// budget, and the cold first render (lazy nativewind runtime) ate most of it
+// when Jest workers competed for CPU.
+const routes: [string, Record<string, string>, () => ReactElement, string | null][] = [
+	["(auth)/login", {}, () => <Login />, null],
+	["(tabs)/index", {}, () => offline(<Home />), "HexaScore"],
+	["(tabs)/[type]", { type: "games" }, () => offline(<SectionScreen />), "Games"],
+	["(tabs)/search", {}, () => offline(<Search />), "All"],
+	["(tabs)/lists", {}, () => offline(<Lists />), "My lists"],
+	["(tabs)/profile", {}, () => offline(<Profile />), "Settings"],
+	["[type]/[slug]", { type: "movies", slug: "" }, () => <ItemScreen />, "Page not found"],
+	// The entity screen renders nothing until GET /entities/{id} answers.
+	["entities/[id]", { id: "42" }, () => offline(<EntityScreen />), null],
+	// The list screen renders nothing until GET /lists/{id} answers.
+	["lists/[id]", { id: "7" }, () => offline(<ListScreen />), null],
+	[
+		"about",
+		{},
+		() => <AboutScreen />,
+		"This product uses the TMDB API but is not endorsed or certified by TMDB.",
+	],
+	["notifications", {}, () => offline(<NotificationsRoute />), "Notifications"],
+	["update-required", {}, () => <UpdateRequired />, storeListingUrl()],
+	["_layout", {}, () => <RootLayout />, null],
+	["(tabs)/_layout", {}, () => offline(<TabsLayout />), null],
+];
 
-	await render(<Home />);
-	expect(screen.getByText("HexaScore")).toBeTruthy();
-
-	params({ type: "games" });
-	await render(<SectionScreen />);
-	expect(screen.getByText("Section games")).toBeTruthy();
-
-	await render(<Search />);
-	expect(screen.getByText("Search")).toBeTruthy();
-
-	await render(<Lists />);
-	expect(screen.getByText("Lists")).toBeTruthy();
-
-	await render(<Profile />);
-	expect(screen.getByText("Profile")).toBeTruthy();
-
-	params({ type: "movies", slug: "arrival" });
-	await render(<ItemScreen />);
-	expect(screen.getByText("Item movies arrival")).toBeTruthy();
-
-	params({ id: "42" });
-	await render(<EntityScreen />);
-	expect(screen.getByText("Entity 42")).toBeTruthy();
-
-	params({ id: "7" });
-	await render(<ListScreen />);
-	expect(screen.getByText("List 7")).toBeTruthy();
-
-	await render(<UpdateRequired />);
-	expect(screen.getByText(`Update required ${storeListingUrl()}`)).toBeTruthy();
-
-	await render(<RootLayout />);
-	await render(<TabsLayout />);
+test.each(routes)("route %s renders its placeholder", async (_name, routeParams, element, text) => {
+	params(routeParams);
+	await render(element());
+	if (text !== null) expect(screen.getByText(text)).toBeTruthy();
 });
 
 test.each(["games", "movies", "series", "books"])("section and item accept %s", async (type) => {
-	await render(<SectionBody type={type} />);
-	expect(screen.getByText(`Section ${type}`)).toBeTruthy();
-	await render(<ItemBody type={type} slug="title" />);
-	expect(screen.getByText(`Item ${type} title`)).toBeTruthy();
+	await render(offline(<SectionBody type={type} />));
+	expect(screen.getByTestId("listing")).toBeTruthy();
+	await render(
+		offline(<ItemBody type={type} slug="title" id="0192f1c6-0000-7000-8000-000000000001" />),
+	);
+	expect(screen.getByTestId("item")).toBeTruthy();
+});
+
+test("a bare slug from a web App Link is read as the item key", () => {
+	const id = "0192f1c6-0000-7000-8000-000000000001";
+	expect(itemIdOf("arrival", "")).toBe("arrival");
+	expect(itemIdOf("arrival", id)).toBe(id);
+	expect(itemIdOf(id, "")).toBe(id);
+	expect(itemIdOf("", "")).toBeNull();
 });
 
 test("[type] rejects anything outside games|movies|series|books", async () => {
@@ -107,4 +131,14 @@ test("platform boundary exposes network state and the Play listing", () => {
 	expect(getNetworkState()).toBe("offline");
 	setNetworkState("unknown");
 	expect(storeListingUrl()).toBe("market://details?id=app.hexascore");
+});
+
+test("update-required reads its title and logout label in the active locale", async () => {
+	await render(
+		<LocaleProvider locale="es">
+			<UpdateRequired />
+		</LocaleProvider>,
+	);
+	expect(screen.getByText("Actualización necesaria")).toBeTruthy();
+	expect(screen.getByText("Cerrar sesión")).toBeTruthy();
 });

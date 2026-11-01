@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { renderCss, renderTs } from "./build";
@@ -27,5 +27,13 @@ describe("tokens", () => {
 	it("committed outputs are up to date", () => {
 		expect(readFileSync(join(import.meta.dirname, "tokens.css"), "utf8")).toBe(renderCss());
 		expect(readFileSync(join(import.meta.dirname, "tokens.ts"), "utf8")).toBe(renderTs());
+	});
+
+	it("no hardcoded indigo-* classes remain in resources/js", () => {
+		const root = join(import.meta.dirname, "..", "..", "resources", "js");
+		const hits = (readdirSync(root, { recursive: true, encoding: "utf8" }) as string[])
+			.filter((f) => /\.(tsx?|css)$/.test(f))
+			.filter((f) => /indigo-/.test(readFileSync(join(root, f), "utf8")));
+		expect(hits).toEqual([]);
 	});
 });

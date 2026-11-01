@@ -1,0 +1,121 @@
+name: SDK release
+
+# Manual only (P3.B.2.1, SDD 05 section 6.5). Run from the Actions tab on the release commit.
+# `publish` defaults to false: the run then only rehearses every registry (dry runs).
+# Publishing uses trusted publishing (OIDC) on npm, JSR and PyPI: no registry token is stored
+# anywhere, so a run fails closed until the owner configures the trusted publishers and the
+# `npm`, `jsr` and `pypi` environments (see docs/runbooks/sdk-release.md).
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish for real (otherwise dry runs only)
+        type: boolean
+        default: false
+      pypi_index:
+        description: PyPI registry to publish to (rehearse on testpypi first)
+        type: choice
+        options: [testpypi, pypi]
+        default: testpypi
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify and dry-run all three registries
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - run: pipx install uv==0.13.6
+      - name: Versions agree across package.json, jsr.json and pyproject.toml
+        run: |
+          set -euo pipefail
+          ts=$(bun -e 'console.log((await Bun.file("sdks/ts/package.json").json()).version)')
+          jsr=$(bun -e 'console.log((await Bun.file("sdks/ts/jsr.json").json()).version)')
+          py=$(sed -n 's/^version = "\(.*\)"/\1/p' sdks/python/pyproject.toml | head -n 1)
+          echo "ts=$ts jsr=$jsr py=$py"
+          [ "$ts" = "$jsr" ] && [ "$ts" = "$py" ] || { echo "SDK versions differ" >&2; exit 1; }
+      - name: TypeScript SDK
+        working-directory: sdks/ts
+        run: |
+          bun install --frozen-lockfile --ignore-scripts
+          bun run typecheck
+          bun test
+          bun run build
+          npm pack --dry-run
+          npm publish --dry-run
+          bunx jsr@0.13.5 publish --dry-run --allow-dirty
+      - name: Python SDK
+        working-directory: sdks/python
+        run: |
+          uv run pytest -q
+          uv build
+          uvx twine@6.2.0 check dist/*
+
+  publish-npm:
+    name: Publish to npm (provenance)
+    needs: verify
+    if: ${{ inputs.publish }}
+    runs-on: ubuntu-24.04
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - name: Publish
+        working-directory: sdks/ts
+        run: |
+          bun install --frozen-lockfile --ignore-scripts
+          # Trusted publishing needs npm >= 11.5.1; the runner ships an older one.
+          npx --yes npm@11.6.2 publish --provenance --access public
+
+  publish-jsr:
+    name: Publish to JSR (OIDC)
+    needs: verify
+    if: ${{ inputs.publish }}
+    runs-on: ubuntu-24.04
+    environment: jsr
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - name: Publish
+        working-directory: sdks/ts
+        run: bunx jsr@0.13.5 publish
+
+  publish-pypi:
+    name: Publish to PyPI (trusted publisher)
+    needs: verify
+    if: ${{ inputs.publish }}
+    runs-on: ubuntu-24.04
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: pipx install uv==0.13.6
+      - name: Build and publish
+        working-directory: sdks/python
+        env:
+          PYPI_INDEX: ${{ inputs.pypi_index }}
+        run: |
+          set -euo pipefail
+          uv build
+          if [ "$PYPI_INDEX" = "testpypi" ]; then
+            uv publish --trusted-publishing always --publish-url https://test.pypi.org/legacy/
+          else
+            uv publish --trusted-publishing always
+          fi

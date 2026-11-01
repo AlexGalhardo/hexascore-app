@@ -1,0 +1,54 @@
+{
+  "item": {
+    "external_ids": {
+      "hltb": "20145",
+      "igdb": "simisle-missions-in-the-rainforest"
+    },
+    "meta": {
+      "countries": [
+        "United Kingdom"
+      ],
+      "creators": [
+        "Intelligent Games"
+      ],
+      "genres": [
+        "construction and management simulation"
+      ],
+      "platforms": [
+        "Microsoft Windows",
+        "DOS",
+        "Classic Mac OS"
+      ]
+    },
+    "popularity": 8.0,
+    "qid": "Q63266",
+    "release_date": "1995-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "SimIsle: Missions in the Rainforest is a 1995 simulation video game developed by Intelligent Games and published by Maxis.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/SimIsle:_Missions_in_the_Rainforest",
+        "title": "SimIsle"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "SimIsle"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "SimIsle"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q63266",
+  "slug": "simisle"
+}

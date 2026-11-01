@@ -1,0 +1,155 @@
+{
+  "qid": "Q25524",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q25524",
+      "labels": {
+        "en": "Hurlevent",
+        "es": "Cumbres borrascosas"
+      },
+      "aliases": {
+        "en": [
+          "Wuthering Heights"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Hurlevent"
+      },
+      "sitelinks_count": 9,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/hurlevent",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q202975",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Hurlevent",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q1873071",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3063675",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16667921",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3351412",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2087671",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+130",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0089312",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q150",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "145745",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q142",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q167475",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1985-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q167475",
+            "rank": "normal"
+          },
+          {
+            "value": "Q289645",
+            "rank": "normal"
+          },
+          {
+            "value": "Q458455",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q130232": "drama film",
+        "Q142": "France",
+        "Q150": "French",
+        "Q16667921": "Olivier Cruveiller",
+        "Q167475": "Jacques Rivette",
+        "Q1873071": "Lucas Belvaux",
+        "Q202975": "Wuthering Heights",
+        "Q2087671": "Philippe Morier-Genoud",
+        "Q289645": "Pascal Bonitzer",
+        "Q3063675": "Fabienne Babe",
+        "Q3351412": "Olivier Torres",
+        "Q458455": "Suzanne Schiffman"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q25524",
+      "lang": "en",
+      "title": "Hurlevent",
+      "extract": "Hurlevent ([yʁ.lə.vɑ̃], \"Howling wind\") is a 1985 French drama film directed and co-written by Jacques Rivette. It is an adaptation of Emily Brontë's 1847 novel Wuthering Heights. Based on the first part of the novel, set in 1930s southern France, it starred three unknown actors: Fabienne Babe as Catherine, Lucas Belvaux as Roch (Heathcliff), and Olivier Cruveiller as Catherine's brother.",
+      "url": "https://en.wikipedia.org/wiki/Hurlevent"
+    }
+  },
+  "tier": "tail",
+  "type": "movie"
+}

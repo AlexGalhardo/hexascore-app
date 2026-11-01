@@ -1,0 +1,45 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0085934",
+      "rottentomatoes": "m/merry_go_round_1981",
+      "tmdb": "162514"
+    },
+    "meta": {
+      "countries": [
+        "France"
+      ],
+      "creators": [
+        "Jacques Rivette"
+      ],
+      "genres": [
+        "drama film",
+        "crime film"
+      ],
+      "runtimeMinutes": 160
+    },
+    "popularity": 6.0,
+    "qid": "Q25519",
+    "release_date": "1980-02-14",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Merry-Go-Round is a 1981 French experimental mystery directed by Jacques Rivette, starring Maria Schneider and Joe Dallesandro. The film, which revolves around a kidnapping plot, follows a structure similar to that of a crime drama. The script was written by Rivette in collaboration with Eduardo de Gregorio and Suzanne Schiffman, with dialogue by de Gregorio. Filming took place in 1977, but the film remained unreleased until 1981.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Merry-Go-Round_(1981_film)",
+        "title": "Merry-Go-Round"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Merry-Go-Round"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q25519",
+  "slug": "merry-go-round"
+}

@@ -1,0 +1,84 @@
+{
+  "item": {
+    "external_ids": {
+      "hltb": "6064",
+      "igdb": "minecraft-java-edition",
+      "imdb": "tt2011970"
+    },
+    "meta": {
+      "countries": [
+        "Sweden"
+      ],
+      "creators": [
+        "Mojang Studios",
+        "Microsoft"
+      ],
+      "genres": [
+        "survival game",
+        "action-adventure game",
+        "sandbox game",
+        "retro-style video game",
+        "construction and management simulation"
+      ],
+      "platforms": [
+        "Microsoft Windows",
+        "Xbox 360",
+        "Android",
+        "Linux",
+        "PlayStation 3",
+        "macOS",
+        "Xbox One",
+        "PlayStation 4",
+        "PlayStation Vita",
+        "Windows Phone",
+        "iOS",
+        "ChromeOS",
+        "Ouya",
+        "Kindle Fire HD",
+        "Java virtual machine",
+        "Wii U",
+        "Nintendo Switch",
+        "New Nintendo 3DS",
+        "tvOS",
+        "iPadOS",
+        "Fire OS",
+        "Apple TV",
+        "Nintendo 3DS",
+        "ARM architecture",
+        "PlayStation 5",
+        "Xbox Series X and Series S",
+        "Nintendo Switch 2"
+      ]
+    },
+    "popularity": 156.0,
+    "qid": "Q49740",
+    "release_date": "2009-05-17",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Minecraft is a sandbox video game developed and published by the Swedish company Mojang Studios. Following its initial public alpha release as an early access title on 17 May 2009, it was formally released on 18 November 2011 for personal computers. The game has since been ported to numerous platforms, including mobile devices and various video game consoles.\nIn Minecraft, players explore a procedurally generated world with virtually infinite terrain made up of three-dimensional blocks represented as voxels. They can discover and extract raw materials, craft tools and items, build structures, fight hostile mobs, and cooperate with or compete against other players in multiplayer. In addition, the game's large community offers a wide variety of user-generated content, such as modifications, servers, player skins, texture packs, and custom maps, which add new game mechanics and possibilities.\nOriginally created by Markus \"Notch\" Persson using the Java programming language, Jens \"Jeb\" Bergensten was handed control over the game's development following its full release. In November 2014, Mojang and the Minecraft intellectual property were purchased by Microsoft for US$2.5 billion; Xbox Game Studios holds the publishing rights for the Bedrock Edition, the unified cross-platform version which evolved from the Pocket Edition codebase and replaced the legacy console editions. Bedrock is updated concurrently with Mojang's original Java Edition, although with numerous, generally small, differences.\nMinecraft is the best-selling video game of all time with over 400 million copies sold. It has received critical acclaim, winning several awards and being cited as one of the best video games ever made. Social media, parodies, adaptations, merchandise, and annual Minecon conventions have played prominent roles in popularizing it. A film adaptation, titled A Minecraft Movie, was released in 2025 and became the second highest-grossing video game film at the time of its release.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Minecraft",
+        "title": "Minecraft"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Minecraft é um jogo eletrônico sandbox de sobrevivência de 2011 desenvolvido e publicado pela desenvolvedora sueca Mojang Studios. Originalmente criado por Markus \"Notch\" Persson usando a linguagem de programação Java, a primeira versão alfa pública foi lançada em 17 de maio de 2009. O jogo foi desenvolvido continuamente a partir de então, recebendo um lançamento completo em 18 de novembro de 2011. Posteriormente, Persson deixou a Mojang e cedeu o controle do desenvolvimento a Jens \"Jeb\" Bergensten. Nos anos desde o seu lançamento, o jogo foi portado para diversas plataformas, incluindo smartphones, tablets e diversos consoles de jogos eletrônicos. Em 2014, a Mojang e a propriedade intelectual de Minecraft foram compradas pela Microsoft por US$ 2.5 bilhões.\nEm Minecraft, os jogadores exploram um mundo aberto tridimensional intencionalmente em blocos, pixelizado e gerado proceduralmente com terreno virtualmente infinito, podendo descobrir e extrair matérias-primas, ferramentas artesanais, construir estruturas ou terraplenagens e, dependendo do modo de jogo, podem combater inimigos controlados por computador, bem como cooperar ou competir contra outros jogadores no mesmo mundo. Esses modos incluem um modo sobrevivência, no qual o jogador precisa adquirir recursos para construir o mundo e se manter vivo, e um modo criativo, onde os jogadores têm recursos ilimitados e a capacidade de voar. A grande comunidade do jogo oferece uma grande variedade de conteúdo gerado pelos usuários, como modificações, servidores, skins de jogadores, pacotes de texturas e mapas personalizados, que adicionam novas mecânicas e possibilidades ao jogo. O cenário de speedrunning do jogo atraiu um número significativo de seguidores.\nMinecraft é o jogo eletrônico mais vendido de todos os tempos, vendendo mais de 425 milhões de cópias em todas as plataformas até 2026, com mais de 155 milhões de jogadores ativos mensalmente e 300 mil jogadores novos a cada dia. O jogo recebeu elogios da crítica, ganhou vários prêmios e foi citado como um dos melhores jogos eletrônicos de todos os tempos; redes sociais, paródias, adaptações, produtos e as convenções anuais da Minecon desempenharam papéis importantes na popularização do jogo. Minecraft tem sido usado em ambientes educacionais para ensinar química, desenho assistido por computador e ciência da computação. A franquia Minecraft inclui vários títulos spin-off, como Minecraft: Story Mode (2015), Minecraft Earth (2019), Minecraft Dungeons (2020), Minecraft Legends (2023), Minecraft Dungeons II (2026) e o futuro Minecraft Blast. Uma adaptação cinematográfica, intitulada Um Filme Minecraft, foi lançada em 2025.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Minecraft",
+        "title": "Minecraft"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Minecraft es un videojuego de construcción de tipo «mundo abierto» o en inglés sandbox creado originalmente por el sueco Markus Persson (conocido comúnmente como «Notch»), que creó posteriormente Mojang Studios (actualmente parte de Microsoft).​​ Está programado en el lenguaje de programación Java​ para la versión Java Edition y posteriormente desarrollado en C++ para la versión de Bedrock Edition.​ Fue lanzado el 17 de mayo de 2009, y después de numerosos cambios, su primera versión estable «1.0» fue publicada el 18 de noviembre de 2011.\n\nUn mes antes del lanzamiento de su versión completa se estrenó una versión para dispositivos móviles llamada Minecraft: Pocket Edition en Android,​ y el 17 de noviembre del mismo año fue lanzada la misma versión para iOS, aunque posteriormente esta pasaría a ser Minecraft: Bedrock Edition.​​ El 9 de mayo de 2012 fue lanzada la versión del juego para Xbox 360 y PS3. Todas las versiones de Minecraft reciben actualizaciones constantes desde su lanzamiento. En octubre de 2014, Minecraft lanzó su edición para PlayStation Vita,​ desarrollada por Mojang y 4J Studios. Esta versión presenta las mismas actualizaciones y similares características que las otras versiones de consola; además, cuenta con el sistema de venta cruzada, es decir que al comprar la versión de PlayStation 3 se obtiene también la de PlayStation Vita.\nEl 15 de septiembre de 2014, fue adquirido por la empresa Microsoft por un valor de 2500 millones de dólares estadounidenses. Este suceso provocó el alejamiento de Markus Persson de la compañía.​ En noviembre de 2016, Microsoft anunció el lanzamiento de la versión completa de Minecraft: Education Edition.​\nPara fines de 2025 se habían vendido más de 350  millones de copias, siendo actualmente el videojuego más vendido de la historia.​​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Minecraft",
+        "title": "Minecraft"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q49740",
+  "slug": "minecraft"
+}

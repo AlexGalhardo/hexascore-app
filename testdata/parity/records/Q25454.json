@@ -1,0 +1,123 @@
+{
+  "qid": "Q25454",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q25454",
+      "labels": {
+        "en": "Black Box BRD",
+        "es": "Black Box BRD"
+      },
+      "aliases": {
+        "en": [
+          "Black Box Germany"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Black Box BRD"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/black_box_brd",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q93204",
+            "rank": "normal"
+          },
+          {
+            "value": "Q645928",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Black Box BRD",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q2518",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+101",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0283941",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q188",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "11089",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q183",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q53412",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2001-05-24T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q53412",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q183": "Germany",
+        "Q188": "German",
+        "Q2518": "Helmut Kohl",
+        "Q53412": "Andres Veiel",
+        "Q645928": "biographical film",
+        "Q93204": "documentary film"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q25454",
+      "lang": "en",
+      "title": "Black Box BRD",
+      "extract": "Black Box BRD is a 2001 German documentary film written and directed by Andres Veiel. The film deals with West German politics of the 1970s and 1980s, a period marked by turmoil and the highly publicized activities of the left-wing terrorist group known as the Red Army Faction (RAF).\nThe film focuses on the lives and deaths of Alfred Herrhausen, a prominent banker and chairman of the Deutsche Bank who was assassinated in 1989, and Wolfgang Grams, member of RAF who was a suspect in the attack on Herrhausen and who later shot himself in the head while being chased by the German police in 1993. A number of relatives, friends, and colleagues of both men were interviewed for the film.\nIn Germany the film was released in May 2001, and then re-released in September 2002. It was screened at a number of festivals and won several awards in 2001 and 2002, including the 2002 German Film Award for Best Documentary Film and the 2001 European Film Award.\nIn the United States the film was shown on PBS, retitled as Black Box Germany.",
+      "url": "https://en.wikipedia.org/wiki/Black_Box_BRD"
+    }
+  },
+  "tier": "tail",
+  "type": "movie"
+}

@@ -6,7 +6,9 @@ package publicapi
 
 import (
 	"context"
+	"database/sql"
 	"errors"
+	"fmt"
 	"maps"
 	"net/http"
 	"net/url"
@@ -23,7 +25,6 @@ import (
 
 	hxapi "github.com/AlexGalhardo/hexascore-app/app/api"
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
-	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/internal/search"
 )
@@ -41,11 +42,6 @@ var (
 	uuidRe  = regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
 )
 
-// errNotModified ends a typed handler after c.NotModified wrote the 304: the error handler sees the response
-// written and only logs it at debug level.
-// workaround(vukem): VF-049, typed handlers have no documented way to answer 304.
-var errNotModified = errs.New(http.StatusNotModified, "not modified")
-
 // Controller holds the catalogue read handlers shared by /api/v1 and /app/v1.
 type Controller struct {
 	DB     catalog.Querier
@@ -56,6 +52,10 @@ type Controller struct {
 	Search search.Searcher
 	// Redirects resolves merged item ids (catalog.ResolveID needs a database.Executor).
 	Redirects func(ctx context.Context, typ, id string) (catalog.Target, bool, error)
+	// SlugRedirects, when set, lets getItem take a slug in place of the id and resolves renamed slugs
+	// (catalog.ResolveSlug). Only /app/v1 sets it: web App Links carry the slug (SDD 10 FR-10-7); the paid
+	// API stays id-only.
+	SlugRedirects func(ctx context.Context, typ, slug string) (catalog.Target, bool, error)
 	// Now is the clock for the changes window. Nil means time.Now.
 	Now func() time.Time
 	// Mount is this audience's URL prefix. Empty stays /api/v1 so a merged id
@@ -105,7 +105,7 @@ type ItemPageJSON struct {
 // ListItemsInput documents the listItems query; values are parsed by catalog.ParseListQuery so a bad value is
 // a 400 invalid-query (not counted, FR-05-4) instead of a 422. `min_<category>` filters are dynamic per type.
 type ListItemsInput struct {
-	Type     string `json:"type"      doc:"games, movies, series or books"                     validate:"oneof=games movies series books"`
+	Type     string `json:"type"      doc:"games, movies, series or books"                     enum:"games,movies,series,books"`
 	Genre    string `json:"genre"     doc:"genre entity slug"`
 	Platform string `json:"platform"  doc:"platform entity slug (games)"`
 	Year     string `json:"year"      doc:"release year, 1800-2100"`
@@ -122,7 +122,7 @@ const unknownType = "unknown type: use games, movies, series or books"
 
 // GetItemInput is the getItem path and query.
 type GetItemInput struct {
-	Type   string `json:"type"   doc:"games, movies, series or books" validate:"oneof=games movies series books"`
+	Type   string `json:"type"   doc:"games, movies, series or books" enum:"games,movies,series,books"`
 	ID     string `json:"id"`
 	Locale string `json:"locale" doc:"en, pt-BR or es"`
 }
@@ -187,7 +187,7 @@ func (h *Controller) itemPage(c *web.Ctx, params catalog.ListParams, locale stri
 		out.Links.Next = &next
 	}
 
-	return out, notModified(c, out)
+	return out, NotModified(c, out)
 }
 
 // GetItem is getItem: GET /api/v1/{type}/{id}. Merged ids answer 301 to the surviving item; hidden or unknown
@@ -205,7 +205,15 @@ func (h *Controller) GetItem(c *web.Ctx, in GetItemInput) (ItemJSON, error) {
 		return ItemJSON{}, err
 	}
 	if !uuidRe.MatchString(in.ID) {
-		return ItemJSON{}, errs.ErrNotFound
+		if h.SlugRedirects == nil {
+			return ItemJSON{}, errs.ErrNotFound
+		}
+
+		id, err := h.bySlug(c, typ, in)
+		if err != nil {
+			return ItemJSON{}, err
+		}
+		in.ID = id
 	}
 
 	items, err := catalog.LoadAPIItems(c.Context(), h.DB, []string{in.ID}, locale, h.Policy, true)
@@ -221,7 +229,30 @@ func (h *Controller) GetItem(c *web.Ctx, in GetItemInput) (ItemJSON, error) {
 
 	out := itemJSON(items[0], locale)
 
-	return out, notModified(c, out)
+	return out, NotModified(c, out)
+}
+
+// bySlug maps a live slug to its item id; a renamed slug answers 301 to the id, an unknown one 404.
+func (h *Controller) bySlug(c *web.Ctx, typ string, in GetItemInput) (string, error) {
+	var id string
+	err := h.DB.QueryRowContext(c.Context(), `SELECT id::text FROM items WHERE type = $1 AND slug = $2`, typ, in.ID).
+		Scan(&id)
+	if err == nil {
+		return id, nil
+	}
+	if !errors.Is(err, sql.ErrNoRows) {
+		return "", fmt.Errorf("item by slug: %w", err)
+	}
+
+	t, ok, err := h.SlugRedirects(c.Context(), typ, in.ID)
+	if err != nil {
+		return "", err
+	}
+	if !ok {
+		return "", errs.ErrNotFound
+	}
+
+	return "", h.movedTo(c, "/"+in.Type+"/"+t.ID)
 }
 
 // merged answers 301 to the item a merged-away id now points at, else 404.
@@ -286,17 +317,16 @@ func sectionOf(typ string) string {
 	return typ
 }
 
-// notModified sets the strong ETag and Cache-Control of v (SDD 05 §6.1) and, when If-None-Match matches, has
-// written a 304 and returns errNotModified (FR-05-8; the quota still counts it, FR-05-4).
-func notModified(c *web.Ctx, v any) error {
+// NotModified sets the strong ETag and Cache-Control of v (SDD 05 §6.1) and, when If-None-Match matches, has
+// written a 304 (FR-05-8; the quota still counts it, FR-05-4). Typed handlers return the zero or computed
+// value with this nil error: api.Register sees the written response and skips the body.
+func NotModified(c *web.Ctx, v any) error {
 	etag, err := web.ETagOf(v)
 	if err != nil {
 		return err
 	}
 	c.SetHeader("Cache-Control", "private, no-cache")
-	if c.NotModified(etag, time.Time{}) {
-		return errNotModified
-	}
+	c.NotModified(etag, time.Time{})
 
 	return nil
 }
@@ -370,22 +400,6 @@ func localeOf(raw string) (string, error) {
 	return raw, nil
 }
 
-// TypeGuard answers an unknown {type} with the 400 invalid-query problem. The oneof tag on the inputs only
-// feeds the OpenAPI enum: left alone it would answer 422, which the quota counts and the contract (SDD 05
-// FR-05-4) forbids.
-// workaround(vukem): VF-NEW-P2.H.3.1.
-func TypeGuard(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		if t := req.PathValue("type"); t != "" {
-			if _, ok := typeOf[t]; !ok {
-				web.NewCtx(w, req, web.ServicesFrom(req.Context())).HandleError(invalid(unknownType))
-				return
-			}
-		}
-		next.ServeHTTP(w, req)
-	})
-}
-
 // invalid is the 400 invalid-query problem; the quota refunds it (FR-05-4).
 func invalid(detail string) error {
 	return errs.New(http.StatusBadRequest, "invalid-query: "+detail)
@@ -394,7 +408,7 @@ func invalid(detail string) error {
 func badQuery(err error) error {
 	if errors.Is(err, catalog.ErrInvalidCursor) {
 		return errs.New(http.StatusBadRequest, err.Error()).
-			WithHeader(appmiddleware.ProblemCodeHeader, "invalid-cursor")
+			WithExtension("code", "invalid-cursor")
 	}
 
 	if errors.Is(err, catalog.ErrInvalidQuery) {

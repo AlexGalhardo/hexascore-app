@@ -1,0 +1,255 @@
+{
+  "qid": "Q1083390",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q1083390",
+      "labels": {
+        "en": "Christine",
+        "es": "Amoríos"
+      },
+      "aliases": {
+        "es": [
+          "Cristina"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Christine (1958 film)"
+      },
+      "sitelinks_count": 15,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/christine_1959",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1054574",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1919632",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q1823758",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Christine",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q78469",
+            "rank": "normal"
+          },
+          {
+            "value": "Q106529",
+            "rank": "normal"
+          },
+          {
+            "value": "Q446235",
+            "rank": "normal"
+          },
+          {
+            "value": "Q106326",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1613544",
+            "rank": "normal"
+          },
+          {
+            "value": "Q509314",
+            "rank": "normal"
+          },
+          {
+            "value": "Q78953",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2837650",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2897800",
+            "rank": "normal"
+          },
+          {
+            "value": "Q269832",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1867601",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1450969",
+            "rank": "normal"
+          },
+          {
+            "value": "Q955901",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3171592",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3172199",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3172943",
+            "rank": "normal"
+          },
+          {
+            "value": "Q88317",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3293801",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3384879",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3490942",
+            "rank": "normal"
+          },
+          {
+            "value": "Q513456",
+            "rank": "normal"
+          },
+          {
+            "value": "Q91319",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+100",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0051477",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q150",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "4956",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q142",
+            "rank": "normal"
+          },
+          {
+            "value": "Q38",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q973127",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1958-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q1583099",
+            "rank": "normal"
+          },
+          {
+            "value": "Q973127",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3103263",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1054574": "romance film",
+        "Q106326": "Jean-Claude Brialy",
+        "Q106529": "Alain Delon",
+        "Q130232": "drama film",
+        "Q142": "France",
+        "Q1450969": "François Chaumette",
+        "Q150": "French",
+        "Q1583099": "Hans Wilhelm",
+        "Q1613544": "Jacques Toja",
+        "Q1823758": "Flirtation",
+        "Q1867601": "Dominique Zardi",
+        "Q1919632": "melodrama",
+        "Q269832": "Claudine Auger",
+        "Q2837650": "Allain Dhurtal",
+        "Q2897800": "Bernard Dhéran",
+        "Q3103263": "Georges Neveux",
+        "Q3171592": "Jean Davy",
+        "Q3172199": "Jean Galland",
+        "Q3172943": "Jean Lagache",
+        "Q3293801": "Marius Gaidon",
+        "Q3384879": "Pierre Durou",
+        "Q3490942": "Sophie Grimaldi",
+        "Q38": "Italy",
+        "Q446235": "Micheline Presle",
+        "Q509314": "Fernand Ledoux",
+        "Q513456": "Yvonne Clech",
+        "Q78469": "Romy Schneider",
+        "Q78953": "Joseph Egger",
+        "Q88317": "Jean-Pierre Zola",
+        "Q91319": "Carl Lange",
+        "Q955901": "Jacques Duby",
+        "Q973127": "Pierre Gaspard-Huit"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q1083390",
+      "lang": "en",
+      "title": "Christine (1958 film)",
+      "extract": "Christine is a 1958 French period drama film, based on the 1894 play Liebelei (Flirtation) by Arthur Schnitzler. The film was directed by Pierre Gaspard-Huit and the title character was played by Romy Schneider. The cast included Alain Delon as a young lieutenant.\nSchnitzler's play had been filmed in 1933 by Max Ophüls as Liebelei, starring Romy Schneider's mother, Magda Schneider.",
+      "url": "https://en.wikipedia.org/wiki/Christine_(1958_film)"
+    }
+  },
+  "tier": "year-precision",
+  "type": "movie"
+}

@@ -14,7 +14,7 @@ import (
 )
 
 // TestQueue_ObservedPriorityOrder records how the database driver picks across
-// QUEUE_NAMES=default,ingest (VF-018, open issue 11-7: undocumented in
+// QUEUE_NAMES=default,ingest (open issue 11-7: undocumented in
 // v0.32.0). No app code may rely on it; this test only flags a change.
 func TestQueue_ObservedPriorityOrder(t *testing.T) {
 	t.Parallel()

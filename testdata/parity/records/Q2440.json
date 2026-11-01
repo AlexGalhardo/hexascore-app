@@ -1,0 +1,136 @@
+{
+  "qid": "Q2440",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q2440",
+      "labels": {
+        "en": "Freedom Force vs the 3rd Reich",
+        "es": "Freedom Force vs The 3rd Reich",
+        "mul": "Freedom Force vs the 3rd Reich"
+      },
+      "aliases": {
+        "en": [
+          "Freedom Force vs. The 3rd Reich"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Freedom Force vs the 3rd Reich",
+        "eswiki": "Freedom Force vs The 3rd Reich"
+      },
+      "sitelinks_count": 9,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q173941",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q2313710",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1529437",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "8890",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q743717",
+            "rank": "normal"
+          }
+        ],
+        "P2725": [
+          {
+            "value": "game/freedom_force_vs_the_3rd_reich",
+            "rank": "preferred"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "3695",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          },
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2005-03-08T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "freedom-force-vs-the-3rd-reich",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1406": "Microsoft Windows",
+        "Q1529437": "tactical role-playing game",
+        "Q173941": "Electronic Arts",
+        "Q1860": "English",
+        "Q208850": "single-player video game",
+        "Q2313710": "real-time tactics",
+        "Q30": "United States",
+        "Q6895044": "multiplayer video game",
+        "Q743717": "Irrational Games"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q2440",
+      "lang": "en",
+      "title": "Freedom Force vs the 3rd Reich",
+      "extract": "Freedom Force vs the 3rd Reich is a real-time tactical role-playing game developed and published by Irrational Games. The sequel to Freedom Force, the player guides a team of superheroes as they travel back in time, and help overthrow Nazi Germany and its allies during World War II. In the game, players take control of a team of up to four characters and battle their way through completely destructible 3D maps in a series of missions based on classic superhero comics.",
+      "url": "https://en.wikipedia.org/wiki/Freedom_Force_vs_the_3rd_Reich"
+    },
+    "wikipedia:es": {
+      "qid": "Q2440",
+      "lang": "es",
+      "title": "Freedom Force vs The 3rd Reich",
+      "extract": "Freedom Force vs The 3rd Reich es un videojuego de rol táctico en tiempo real​​ desarrollado y distribuido por Irrational Games. En esta secuela para Freedom Force, el jugador guía a un grupo de superhéroes cuando ellos viajan atrás en el tiempo a derrocar a la Alemania Nazi y sus aliados durante la Segunda Guerra Mundial. Este fue lanzado a principios de marzo de 2005.",
+      "url": "https://es.wikipedia.org/wiki/Freedom_Force_vs_The_3rd_Reich"
+    }
+  },
+  "tier": "tail",
+  "type": "game"
+}

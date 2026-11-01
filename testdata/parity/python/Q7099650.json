@@ -1,0 +1,55 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt2372162",
+      "metacritic": "tv/orange-is-the-new-black",
+      "rottentomatoes": "tv/orange_is_the_new_black",
+      "tmdb": "1424"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Jenji Kohan"
+      ],
+      "episodes": 91,
+      "genres": [
+        "comedy drama",
+        "LGBT-related television series",
+        "crime television series"
+      ],
+      "seasons": 7
+    },
+    "popularity": 47.0,
+    "qid": "Q7099650",
+    "release_date": "2013-07-11",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Orange Is the New Black (sometimes abbreviated to OITNB) is an American comedy-drama television series created by Jenji Kohan for Netflix. It is based on Piper Kerman's memoir Orange Is the New Black: My Year in a Women's Prison (2010), about her experiences at FCI Danbury, a minimum security federal prison. Produced by Tilted Productions in association with Lionsgate Television, the series premiered on Netflix on July 11, 2013, and ran for seven seasons until July 26, 2019.\nOrange Is the New Black received critical acclaim throughout its run and many accolades. Among other awards, it garnered 16 Emmy Award nominations and four wins in comedy and drama (the first series to score nominations in both genre categories), six Writers Guild of America Award nominations, six Golden Globe Award nominations, a Producers Guild of America Award, an American Film Institute Award, and a Peabody Award. As of 2016, Orange Is the New Black was Netflix's most-watched as well as its longest-running original series.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Orange_Is_the_New_Black",
+        "title": "Orange Is the New Black"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Orange Is the New Black (às vezes, abreviado como OITNB) é uma série de televisão via streaming americana desenvolvida por Jenji Kohan, Sara Hess e Tara Herrmann para a Netflix, estrelada por Taylor Schilling. É baseada em Orange Is the New Black: My Year in a Women's Prison (2010), memória criada por Piper Kerman, sobre suas experiências na FCI Danbury, uma prisão federal de segurança mínima. A série foi oficializada no primeiro semestre de 2013, com ordem de 13 episódios para a primeira temporada, que foi lançada em 11 de julho de 2013. Em 5 de fevereiro de 2016, a Netflix renovou a série para uma quinta, sexta e sétima temporada. Em 17 de outubro de 2018, foi confirmado que a sétima temporada seria a última da série e foi lançada em 26 de julho de 2019.\nNo Brasil, está no catalogo do Netflix Brasil e também é exibido na TV fechada pelo Comedy Central Brasil e na TV aberta pela Band.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Orange_Is_the_New_Black",
+        "title": "Orange Is the New Black"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Orange Is the New Black (abreviado como OITNB) es una serie estadounidense de comedia dramática​ creada por Jenji Leslie Kohan. La serie fue producida por Lionsgate Television y se emitió por primera vez en Netflix el 11 de julio de 2013.​ Se basa en el libro autobiográfico Orange Is the New Black: Crónica de mi año en una prisión federal de mujeres de Piper Kerman, que relata sus memorias sobre la vida en la cárcel.​\nLa protagonista principal de la serie es la actriz Taylor Schilling interpretando a Piper Chapman, una mujer que llega a prisión por transportar dinero proveniente del narcotráfico. También está protagonizada por Laura Prepon en el papel de Alex Vause, narcotraficante y examante de Piper, Michael Harney como Sam Healy, consejero de la prisión, Kate Mulgrew como la cocinera Red y Jason Biggs como Larry Bloom, el novio de Piper.\nEl 27 de junio de 2013 Netflix renueva Orange Is the New Black para una segunda temporada, cuyo estreno tuvo lugar el 6 de junio de 2014.​ El estreno de su tercera temporada fue el 12 de junio de 2015. El 15 de abril de 2015 la serie fue renovada para una cuarta temporada, programada para el 17 de junio de 2016. En febrero de 2016 Netflix renueva OITNB por tres temporadas más, es decir, hasta la séptima temporada en 2019.​\nNetflix publicó un vídeo de 15 segundos en el cual se dio a conocer que la quinta temporada de la serie sería estrenada el 9 de junio de 2017. El 30 de abril de 2017 fueron liberados ilegalmente 10 capítulos de la quinta temporada de la serie, que estaba prevista estrenarse el 9 de junio de 2017.​\nRecibió 12 nominaciones a los Premios Emmy, ganando 1 de ellos.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Orange_Is_the_New_Black",
+        "title": "Orange is the new Black"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q7099650",
+  "slug": "orange-is-the-new-black"
+}

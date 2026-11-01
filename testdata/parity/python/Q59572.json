@@ -1,0 +1,59 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0199626",
+      "metacritic": "movie/in-the-cut",
+      "rottentomatoes": "m/in_the_cut",
+      "tmdb": "10944"
+    },
+    "meta": {
+      "countries": [
+        "United Kingdom",
+        "Australia",
+        "United States"
+      ],
+      "creators": [
+        "Jane Campion"
+      ],
+      "genres": [
+        "neo-noir",
+        "mystery film",
+        "thriller film",
+        "erotic thriller",
+        "erotic film",
+        "drama film"
+      ],
+      "runtimeMinutes": 114
+    },
+    "popularity": 26.0,
+    "qid": "Q59572",
+    "release_date": "2003-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "In the Cut is a 2003 psychological thriller film written and directed by Jane Campion and starring Meg Ryan, Mark Ruffalo, Jennifer Jason Leigh and Kevin Bacon. Campion's screenplay is an adaptation of the 1995 novel of the same name by Susanna Moore. The film focuses on an English teacher who becomes personally entangled with a detective investigating a series of gruesome murders in her Manhattan neighborhood.\nThe film received a limited release on October 22, 2003, in the United States, and was subsequently given a wide release on Halloween that year in the United States and United Kingdom. The film received mixed reviews from critics upon release. Negative reviews were critical of the story and narrative structure, while positive reviews praised the acting and Campion's visuals.\nIn recent years, the film has undergone a reappraisal for its subversion of the male gaze and other common movie tropes.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/In_the_Cut_(film)",
+        "title": "In the Cut"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "In the Cut (prt: In the Cut - Atracção Perigosa; bra: Em Carne Viva) é um filme de suspense de 2003, uma coprodução entre Estados Unidos, Reino Unido e Austrália, realizado por Jane Campion.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/In_the_Cut",
+        "title": "In the Cut"
+      },
+      {
+        "locale": "es",
+        "synopsis": "En carne viva es una película drama protagonizado por Meg Ryan y Mark Ruffalo. Dirigido por Jane Campion. Estrenado el 22 de octubre de 2003 en Estados Unidos y el 30 de enero de 2004 en España.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/En_carne_viva_(pel%C3%ADcula_de_2003)",
+        "title": "En carne viva"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q59572",
+  "slug": "in-the-cut"
+}

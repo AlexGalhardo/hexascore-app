@@ -7,6 +7,8 @@ import (
 	"github.com/AlexGalhardo/vukem"
 	vapi "github.com/AlexGalhardo/vukem/api"
 	"github.com/AlexGalhardo/vukem/auth"
+	vconfig "github.com/AlexGalhardo/vukem/config"
+	"github.com/AlexGalhardo/vukem/drivers/s3"
 	"github.com/AlexGalhardo/vukem/middleware"
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/router"
@@ -103,6 +105,11 @@ func APIV1(r *router.Router, app *vukem.App) error {
 		})
 	}
 
+	bucket, err := exportsBucket(app)
+	if err != nil {
+		return err
+	}
+
 	r.Group("/api/v1", func(g *router.Group) {
 		g.Use(
 			middleware.JSONOnly(),
@@ -113,7 +120,6 @@ func APIV1(r *router.Router, app *vukem.App) error {
 			}, acc.ProblemBase, app.Now),
 			throttle,
 			api.Quota(meter, plans, acc.ProblemBase),
-			publicapi.TypeGuard,
 		)
 
 		read := func(name string) vapi.Op {
@@ -134,6 +140,18 @@ func APIV1(r *router.Router, app *vukem.App) error {
 		} {
 			vapi.Register(g, "GET /"+section+"/genres", read(op), items.ListGenres(section))
 		}
+		for section, op := range map[string]string{
+			"games": "listGameTrending", "movies": "listMovieTrending",
+			"series": "listSeriesTrending", "books": "listBookTrending",
+		} {
+			vapi.Register(g, "GET /"+section+"/trending", read(op), items.ListTrending(section))
+		}
+		for section, op := range map[string]string{
+			"games": "getGameActivity", "movies": "getMovieActivity",
+			"series": "getSeriesActivity", "books": "getBookActivity",
+		} {
+			vapi.Register(g, "GET /"+section+"/{id}/activity", read(op), items.GetItemActivity(section))
+		}
 		vapi.Register(g, "GET /search/entities", read("searchEntities"), items.SearchEntities)
 		vapi.Register(g, "GET /search", read("searchItems"), items.SearchItems)
 		vapi.Register(g, "GET /lookup", read("lookupItem"), items.LookupItem)
@@ -150,9 +168,31 @@ func APIV1(r *router.Router, app *vukem.App) error {
 		testHook := hook("testWebhook")
 		testHook.Status = http.StatusOK
 		vapi.Register(g, "POST /webhooks/{id}/test", testHook, hooks.Test)
+		exports := &apiv1.Exports{Plans: plans, Bucket: bucket}
+		exp := hook("listExports")
+		exp.Tags = []string{"exports"}
+		vapi.Register(g, "GET /exports", exp, exports.List)
+		get := hook("getExport")
+		get.Tags = []string{"exports"}
+		vapi.Register(g, "GET /exports/{type}/{day}", get, exports.Get)
 		vapi.Register(g, "GET /{type}/{id}", read("getItem"), items.GetItem)
 		vapi.Register(g, "GET /{type}", read("listItems"), items.ListItems)
 	})
 
 	return nil
+}
+
+// exportsBucket is the S3 disk the daily ID exports live on, or nil without S3_BUCKET (development writes them to
+// a local directory, which cannot presign).
+func exportsBucket(app *vukem.App) (apiv1.Bucket, error) {
+	if app.Source.Get("S3_BUCKET") == "" {
+		return nil, nil
+	}
+
+	cfg, err := vconfig.Load[s3.Config](app.Source)
+	if err != nil {
+		return nil, err
+	}
+
+	return s3.New(cfg)
 }

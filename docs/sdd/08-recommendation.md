@@ -6,7 +6,8 @@ Status: reviewed (2026-10-28 consistency pass). Decisions: D-01, D-02, D-07, D-1
 
 This domain drives discovery from HexaScore's own data. It produces three things:
 
-- a "Top 10 trending (30 days)" list per master category (D-02);
+- a "Top 10 trending (30 days)" list per master category (D-02), served by the API and the snapshot;
+- a "Top 3 trending (7 days)" strip per master category on the home page (owner decision 2026-10-31, §7.2 "Home window");
 - "You may also like" and cross-media blocks on item pages;
 - an explainable "For you" list for logged-in users (A-02).
 
@@ -101,7 +102,7 @@ create table item_similar (
 -- item_links (based_on, Wikidata P144) is owned by SDD 01 §5.2 and filled by SDD 06 FR-06-11 (08-1).
 
 create table user_recommendations (         -- 24 h cache
-  user_id text not null references users(id) on delete cascade, item_type text not null,  -- users.id is text (SDD 03 §5)
+  user_id bigint not null references users(id) on delete cascade, item_type text not null,  -- users.id is bigint (migration 20261031203200; SDD 03 §5 says text, wrong)
   item_ids uuid[] not null, reason_item_ids uuid[] not null,
   events_at_compute bigint not null, computed_at timestamptz not null,
   primary key (user_id, item_type));
@@ -122,7 +123,7 @@ Errors follow RFC 9457 (vukem `https://vukem.dev/docs/basics/error-handling` "Er
 | Method, path | Auth | Output | Errors |
 | --- | --- | --- | --- |
 | GET `/api/v1/{type}/trending` (`listTrending`) | API key | `{computedAt, data:[{rank, basis, trendScore, item}]}` | 400 |
-| GET `/api/v1/{type}/{id}/activity?from=&to=` (`getItemActivity`) | business plan (SDD 05 FR-05-17); counts as 1 request | raw daily counts, ≤ 90 days within the last 365 | 403 `plan-required`, 404, 422 |
+| GET `/api/v1/{type}/{id}/activity?from=&to=` (`get<Type>Activity`, one literal route per type) | business plan (SDD 05 FR-05-17); counts as 1 request | raw daily counts, ≤ 90 days within the last 365 | 403 `plan-required`, 404, 422 |
 | GET `/app/v1/{type}/trending` | token `catalog:read` (A-01) | same + display fields | 400 |
 | GET `/app/v1/items/{id}/related` | token `catalog:read` | `{similar, crossMedia}` | 404 |
 | GET `/app/v1/me/for-you?type=` | token `catalog:read` | `{basis:"profile"\|"onboarding", data:[{item, reason}]}` | 400 |
@@ -139,9 +140,9 @@ Trending responses send `web.ETagOf(payload)` and `c.NotModified(etag, computedA
 Inertia props (vukem `https://vukem.dev/docs/frontend/inertia` "Inertia v3 (BETA)"):
 
 - Home:
-  - `trending` is eager and SSR-rendered (D-07: public SEO content is eager; `Defer` only for personalised or below-the-fold non-SEO props, open issue 08-8), shaped `{game|movie|series|book: {computedAt, items:[{rank, basis, id, slug, title, coverThumbUrl, score, ratingCount}]}}`.
+  - `trending` is eager and SSR-rendered (D-07: public SEO content is eager; `Defer` only for personalised or below-the-fold non-SEO props, open issue 08-8), shaped `{game|movie|series|book: {computedAt, items:[{rank, basis, id, slug, title, coverThumbUrl, score, ratingCount}]}}` with at most 3 items per type over the last 7 days (not the snapshot, §7.2 "Home window").
   - `forYou` is `inertia.Defer(fn).Group("personal")`, logged-in only.
-  - The section title is "Top 10 trending (30 days)" and prior entries show a "Popular" chip. If every entry is prior, the title becomes "Popular {type}".
+  - The home section title is "Trending this week" and prior entries show a "Popular" chip. If every entry is prior, the title becomes "Popular {type}". The `/app/v1` and `/api/v1` trending lists keep the 30-day window and 10 ranks.
 - Item page: `similar` (8, each with `reason` such as `{"kind":"franchise","entity":"Zelda"}`) and `crossMedia`, both eager.
 - `ForYou/Index`: one `Defer` section per type.
 
@@ -165,7 +166,7 @@ Metrics (names from the SDD 12 §6.2 catalogue, open issue 12-6):
 
 - compute time: `trending.compute.duration`, `similar.compute.duration`, `recommend.compute.duration` (histograms, seconds);
 - list quality: `trending.eligible_items`, `trending.prior_slots`, `trending.churn` (new entries per hour / 10), `trending.snapshot_age_seconds`, `similar.empty_ratio`;
-- click-through: `reco.impressions` and `reco.clicks{surface,type}` (counters). Links carry `?from=trending|similar|crossmedia|foryou`, which the canonical URL drops.
+- click-through (D-35, no app metrics): INFO log lines `event=reco_impression` (sampled 1 in 10, `sample_rate` attribute) and `event=reco_click` with `surface`, `type` and `item`, counted in Railway log search (`app/recommend/related/events.go`). Links carry `?from=trending|similar|crossmedia|foryou`, which the canonical URL drops.
 
 Privacy (LGPD):
 
@@ -212,6 +213,8 @@ Golden example, item X:
 | 14 | views 200, `ratings_new_w` 5 | 53.03 | 30 | ×0.25 = 20.76 |
 
 Result: `T = 118.97`, `A = 16`, eligible.
+
+Home window (owner decision 2026-10-31): the home shows the trending of the last 7 days, 3 entries per type. It reuses the formula above with `a ∈ {0..6}` and the same eligibility and prior-fill rules (§7.3), computed on demand from `item_activity_daily` and held 5 minutes in the cache (`home:trending7:v1:{locale}`); nothing is stored in `trending_snapshots`, whose rows stay the 30-day top 10 served by the APIs. A quiet week therefore falls back to `prior` entries, labelled "Popular".
 
 Burst example, item Y on day 0: 300 views and 60 ratings from accounts younger than 7 days with no status. Each rating weighs 0.175 × 0.25 (burst shadow), so `ratings_new_w = 2.625`. That gives `T = 57.07 + 15.75 = 72.8` and `A = 2.625`: not eligible. Unweighted, the same activity would score `T = 417.1`.
 
@@ -292,7 +295,7 @@ CF ships only through a new ADR, and only with:
 - [ ] Staging: `psql "$DATABASE_URL" -c "select item_type, count(*) from trending_snapshots where computed_at = date_trunc('hour', now()) group by 1"` returns 4 rows of 10.
 - [ ] `curl -sI …/api/v1/game/trending -H "Authorization: Bearer $KEY"` returns an `ETag`, and the same request with `If-None-Match` returns 304. `…/activity` with a non-business key returns 403.
 - [ ] `k6 run tests/k6/home.js`: `p(95) < 200ms` with the cache warm.
-- [ ] Schemathesis passes on `listTrending` and `getItemActivity`, and the responses contain no TMDB/IGDB fields.
+- [ ] Schemathesis passes on `listTrending` and `get<Type>Activity`, and the responses contain no TMDB/IGDB fields.
 
 ## 10. Test strategy
 

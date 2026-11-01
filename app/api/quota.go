@@ -7,6 +7,8 @@ import (
 	"log/slog"
 	"sync"
 	"time"
+
+	"github.com/AlexGalhardo/hexascore-app/app/alerts"
 )
 
 const (
@@ -16,6 +18,8 @@ const (
 	MaxUnflushed = 10 * time.Minute
 	// flushBatch is the number of users written per transaction.
 	flushBatch = 500
+	// flushAlertAfter is the number of consecutive failed flushes that raises alert A10.
+	flushAlertAfter = 5
 )
 
 // ErrMeterStale is returned by Admit when deltas have not been flushed for MaxUnflushed: the API answers 503
@@ -92,6 +96,8 @@ type Meter struct {
 	mu        sync.Mutex
 	users     map[int64]*userState
 	lastFlush time.Time
+	// flushFailures counts consecutive failed flushes for alert A10.
+	flushFailures int
 }
 
 func newDelta(userID int64) UserDelta {
@@ -246,6 +252,29 @@ func (m *Meter) pendingLocked() bool {
 // write, so requests admitted while it runs still see them (no over-admission during a flush); restore takes
 // them back out on failure.
 func (m *Meter) Flush(ctx context.Context) error {
+	err := m.flush(ctx)
+	m.trackFlush(ctx, err)
+
+	return err
+}
+
+// trackFlush logs alert A10 once flushAlertAfter flushes in a row have failed (SDD 12 section 7.5).
+func (m *Meter) trackFlush(ctx context.Context, err error) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	if err == nil {
+		m.flushFailures = 0
+		return
+	}
+
+	m.flushFailures++
+	if m.flushFailures >= flushAlertAfter && m.Log != nil {
+		alerts.Error(ctx, m.Log, alerts.A10, "api usage flush failing", "failures", m.flushFailures)
+	}
+}
+
+func (m *Meter) flush(ctx context.Context) error {
 	m.mu.Lock()
 
 	var batch []UserDelta

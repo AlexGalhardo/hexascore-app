@@ -17,7 +17,9 @@ type ExportReady struct {
 
 // Envelope implements mail.Mailable.
 func (m ExportReady) Envelope() mail.Envelope {
-	return mail.Envelope{To: []string{m.User.Email}, Subject: cmp.Or(m.Subject, "Your HexaScore data export is ready")}
+	return Auto(
+		mail.Envelope{To: []string{m.User.Email}, Subject: cmp.Or(m.Subject, "Your HexaScore data export is ready")},
+	)
 }
 
 // Content implements mail.Mailable.

@@ -1,12 +1,18 @@
 package routes
 
 import (
+	"context"
+	"errors"
 	"time"
 
 	"github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/schedule"
 
 	"github.com/AlexGalhardo/hexascore-app/app/jobs"
+	"github.com/AlexGalhardo/hexascore-app/app/recommend/primitives"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/covers"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 )
 
 // Schedule declares the scheduled tasks. "vukem serve" runs them in process;
@@ -20,6 +26,14 @@ import (
 //	s.Job(jobs.PruneSessions{}).Hourly()
 func Schedule(s *schedule.Schedule, app *vukem.App) {
 	s.Command("search:purge").DailyAt("03:30").WithoutOverlapping()
+	// A crash loses at most this minute of views and clicks (SDD 08 NFR-08-4); app shutdown flushes too.
+	// workaround(vukem): VF-064, cache.Buffer has no key cap (SDD 08 section 8).
+	s.Func("trending:flush", primitives.For(app).Flush).EveryMinute()
+	s.Job(jobs.ComputeTrending{}).Cron("5 * * * *").WithoutOverlapping()
+	// 04:45 stays clear of the 04:40 and 04:50 prunes.
+	s.Job(jobs.PruneTrending{}).DailyAt("04:45").WithoutOverlapping()
+	s.Job(jobs.ComputeSimilar{}).DailyAt("02:00").WithoutOverlapping()
+	s.Job(jobs.RecoEvalMonthly{}).MonthlyOn(1, "05:30").WithoutOverlapping()
 	s.Job(jobs.RefreshEntityStats{}).Hourly().WithoutOverlapping()
 	s.Job(jobs.SyncSearchSuggest{}).EveryMinute().WithoutOverlapping()
 	s.Job(jobs.DeletionPurge{}).DailyAt("03:00").WithoutOverlapping()
@@ -31,13 +45,63 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	s.Job(jobs.PruneAPIChanges{}).DailyAt("04:50").WithoutOverlapping()
 	// Fan-out reads api_changes after webhook_cursor (SDD 05 §7.3).
 	s.Job(jobs.FanoutWebhooks{}).EveryMinute().WithoutOverlapping()
+	// IndexNow reads the same feed with its own cursor; a no-op while INDEXNOW_KEY is unset.
+	s.Job(jobs.IndexNowChanges{}).EveryMinute().WithoutOverlapping()
 	// webhook_deliveries is kept 30 days (SDD 05 §5). 04:40 stays clear of the 04:50 api_changes prune.
 	s.Job(jobs.PruneWebhookDeliveries{}).DailyAt("04:40").WithoutOverlapping()
+	// activity_events is kept 180 days (SDD 14 NFR-14-9).
+	s.Job(jobs.PruneActivity{}).DailyAt("04:40").WithoutOverlapping()
 	s.Job(jobs.ExpireExports{}).Hourly().WithoutOverlapping()
 	s.Job(jobs.CommunityHourly{}).Hourly().WithoutOverlapping()
+	// After the 04:00 score recompute, clear of the 04:30-04:50 prunes.
+	s.Job(jobs.CommunityAsserts{}).DailyAt("05:10").WithoutOverlapping()
 	s.Job(jobs.ExportIDs{}).DailyAt("07:00").WithoutOverlapping()
 	// backup.daily (SDD 11 §7.3 step 1): moves after the SDD 06 asserts once they exist (P6).
 	s.Command("backup:run", "--kind", "daily").DailyAt("06:00").In(saoPaulo).WithoutOverlapping()
+
+	// Ingestion (SDD 06 §7.6).
+	// A task starts only the first stage; each finished stage queues the next (ingest.Advance).
+	s.Func("ingest:wikidata-incremental", startChain(app, ingest.WikidataIncremental)).
+		DailyAt("00:30").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:wikidata-weekly", startChain(app, ingest.WikidataWeekly)).
+		WeeklyOn(time.Sunday, "01:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:wikipedia-weekly", startChain(app, ingest.WikipediaWeekly)).
+		WeeklyOn(time.Monday, "01:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:openlibrary-weekly", startChain(app, ingest.OpenLibraryWeekly)).
+		WeeklyOn(time.Tuesday, "01:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:steam-weekly", startChain(app, ingest.SteamWeekly)).
+		WeeklyOn(time.Wednesday, "01:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:gog-weekly", startChain(app, ingest.GOGWeekly)).
+		WeeklyOn(time.Thursday, "01:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:tmdb-weekly", startChain(app, ingest.TMDBWeekly)).
+		WeeklyOn(time.Friday, "01:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:trailers-weekly", startChain(app, ingest.TrailersWeekly)).
+		WeeklyOn(time.Sunday, "04:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:tmdb-expire", startChain(app, ingest.TMDBExpire)).
+		DailyAt("03:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:igdb-weekly", startChain(app, ingest.IGDBWeekly)).
+		WeeklyOn(time.Saturday, "01:00").In(saoPaulo).WithoutOverlapping()
+	// D-36: every 6 h, at :15 so it never starts in the same minute as the 00:30/01:00 runs.
+	s.Func("ingest:igdb-refresh", startChain(app, ingest.IGDBRefresh)).
+		Cron("15 */6 * * *").In(saoPaulo).WithoutOverlapping()
+
+	// 02:30 prunes, 03:30 retries the dead letter (SDD 06 §7.6); the 03:00 expiry run clears the TMDB records first.
+	s.Func("ingest:prune", pruneIngest(app)).DailyAt("02:30").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:retry-failures", retryFailures(app)).DailyAt("03:30").In(saoPaulo).WithoutOverlapping()
+
+	// Alert A7 reads the ingestion tables once an hour and logs alert=A7 lines (SDD 12 §6.2, §7.5).
+	s.Func("ingest:alerts", ingestAlerts(app)).Hourly().WithoutOverlapping()
+
+	s.Func("ingest:covers-daily", startChain(app, ingest.CoversDaily)).
+		DailyAt("04:15").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:covers-weekly", startChain(app, ingest.CoversWeekly)).
+		WeeklyOn(time.Sunday, "02:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:covers-gc", coversGC(app)).DailyAt("02:30").In(saoPaulo).WithoutOverlapping()
+
+	s.Func("ingest:dq-daily", startChain(app, ingest.DQDaily)).
+		DailyAt("05:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:frontend-fields", startChain(app, ingest.FrontendFields)).
+		DailyAt("05:30").In(saoPaulo).WithoutOverlapping()
 
 	// backup.drill (SDD 11 §7.4): staging only. Staging also runs APP_ENV=production, so the
 	// signal is the source bucket only staging is given. Cron ORs day-of-month with
@@ -56,3 +120,120 @@ var saoPaulo = func() *time.Location {
 
 	return time.FixedZone("BRT", -3*60*60)
 }()
+
+// startChain queues the first stage of c unless its kill switch is off or the stage is still active from the
+// previous period; both are normal, not errors.
+func startChain(app *vukem.App, c ingest.Chain) func(ctx context.Context) error {
+	return func(ctx context.Context) error {
+		ff, err := app.Flags()
+		if err != nil {
+			return err
+		}
+
+		if !run.Allowed(ctx, ff, c.Stages[0].Source) {
+			return nil
+		}
+
+		db, err := app.DB()
+		if err != nil {
+			return err
+		}
+
+		q, err := app.Queue()
+		if err != nil {
+			return err
+		}
+
+		if _, err := c.Start(ctx, db, q, "schedule", nil); err != nil && !errors.Is(err, run.ErrRunActive) {
+			return err
+		}
+
+		return nil
+	}
+}
+
+// pruneIngest applies the retention windows of the ingestion tables (SDD 06 §5).
+func pruneIngest(app *vukem.App) func(ctx context.Context) error {
+	return func(ctx context.Context) error {
+		db, err := app.DB()
+		if err != nil {
+			return err
+		}
+
+		_, err = run.Prune(ctx, db)
+
+		return err
+	}
+}
+
+// coversGC deletes the cover objects released more than 30 days ago (SDD 06 §7.6 "covers.gc"); it stays idle
+// while the covers kill switch is off or no bucket is configured.
+func coversGC(app *vukem.App) func(ctx context.Context) error {
+	return func(ctx context.Context) error {
+		ff, err := app.Flags()
+		if err != nil {
+			return err
+		}
+
+		if !run.Allowed(ctx, ff, covers.JobName) {
+			return nil
+		}
+
+		disk, err := jobs.CoversDisk(app)
+		if err != nil || disk == nil {
+			return err
+		}
+
+		db, err := app.DB()
+		if err != nil {
+			return err
+		}
+
+		_, err = covers.GC(ctx, db, disk, app.Now())
+
+		return err
+	}
+}
+
+// retryFailures queues a run per source for the dead-letter targets that are not parked yet.
+func retryFailures(app *vukem.App) func(ctx context.Context) error {
+	return func(ctx context.Context) error {
+		ff, err := app.Flags()
+		if err != nil {
+			return err
+		}
+
+		db, err := app.DB()
+		if err != nil {
+			return err
+		}
+
+		q, err := app.Queue()
+		if err != nil {
+			return err
+		}
+
+		_, err = run.RetryFailures(ctx, db, q, ff)
+
+		return err
+	}
+}
+
+// ingestAlerts checks the A7 conditions; with the master kill switch off it stays silent.
+func ingestAlerts(app *vukem.App) func(ctx context.Context) error {
+	return func(ctx context.Context) error {
+		ff, err := app.Flags()
+		if err != nil {
+			return err
+		}
+
+		db, err := app.DB()
+		if err != nil {
+			return err
+		}
+
+		_, err = ingest.CheckA7(ctx, db, app.Log, app.Now(), run.Allowed(ctx, ff, ""))
+
+		return err
+	}
+}

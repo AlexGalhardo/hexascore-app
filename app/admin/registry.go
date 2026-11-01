@@ -18,7 +18,8 @@ func Resources(acc *accounts.Accounts, postgres bool) []vadmin.AnyResource {
 	if postgres {
 		out = append(out, ScoreBurstsResource(), RatingFlagsResource(), ScoreActionsResource(),
 			ScoreFormulaVersionsResource(),
-			ReportsResource(), ContactMessagesResource(), ItemsResource())
+			ReportsResource(), ContactMessagesResource(), ItemsResource(),
+			JobRunsResource(), IngestFailuresResource(), DQResultsResource())
 	}
 
 	return out
@@ -36,5 +37,8 @@ func Policies(now func() time.Time) []authz.Policy {
 		authz.For[*models.Report](readOnlyPolicy[models.Report]{now: now, detail: true}),
 		authz.For[*models.Item](readOnlyPolicy[models.Item]{now: now, detail: true}),
 		authz.For[*models.ContactMessage](contactPolicy{now: now}),
+		authz.For[*models.JobRun](readOnlyPolicy[models.JobRun]{now: now, detail: true}),
+		authz.For[*models.IngestFailure](readOnlyPolicy[models.IngestFailure]{now: now}),
+		authz.For[*models.DQResult](readOnlyPolicy[models.DQResult]{now: now}),
 	}
 }

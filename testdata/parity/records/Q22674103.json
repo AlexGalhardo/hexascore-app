@@ -1,0 +1,99 @@
+{
+  "qid": "Q22674103",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q22674103",
+      "labels": {
+        "en": "Choco Bank",
+        "es": "Choco Bank"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Choco Bank",
+        "eswiki": "Choco Bank"
+      },
+      "sitelinks_count": 8,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+6",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q10775090",
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+1",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt6284006",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q884",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "65617",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2016-02-15T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q10775090": "Kai",
+        "Q130232": "drama film",
+        "Q884": "South Korea"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q22674103",
+      "lang": "en",
+      "title": "Choco Bank",
+      "extract": "Choco Bank (Korean: 초코 뱅크) is a South Korean web series created by Cheil Worldwide Inc. for the Financial Services Commission (FSC). It consists of six episodes about the financial management of start up businesses. The web drama recorded 2,519,849 views in the week of February 15 to February 21, 2016, according to cons TV.",
+      "url": "https://en.wikipedia.org/wiki/Choco_Bank"
+    },
+    "wikipedia:es": {
+      "qid": "Q22674103",
+      "lang": "es",
+      "title": "Choco Bank",
+      "extract": "Choco Bank (en hangul, 초코 뱅크) es una serie web surcoreana que consta de seis episodios que es acerca de la gestión financiera de la puesta en marcha de negocios creado por Cheil Worldwide Inc. El drama ha registrado más 2,5 millones (2.519.849 millones) de vistas durante la semana del 15 de febrero al 21 de febrero.​",
+      "url": "https://es.wikipedia.org/wiki/Choco_Bank"
+    }
+  },
+  "tier": "tail",
+  "type": "series"
+}

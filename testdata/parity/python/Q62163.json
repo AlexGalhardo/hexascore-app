@@ -1,0 +1,57 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0024548",
+      "rottentomatoes": "m/she_done_him_wrong",
+      "tmdb": "43595"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Lowell Sherman"
+      ],
+      "genres": [
+        "romantic comedy",
+        "drama film"
+      ],
+      "runtimeMinutes": 68,
+      "trailers": [
+        {
+          "youtubeId": "Dxk172nDNfA"
+        }
+      ]
+    },
+    "popularity": 31.0,
+    "qid": "Q62163",
+    "release_date": "1933-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "She Done Him Wrong is a 1933 pre-Code American crime/comedy film starring Mae West and Cary Grant, directed by Lowell Sherman. The plot includes melodramatic and musical elements, with a supporting cast featuring Owen Moore, Gilbert Roland, Noah Beery Sr., Rochelle Hudson, and Louise Beavers. The film was adapted from the successful 1928 Broadway play Diamond Lil by Mae West. The film is famous for West's many double entendres and quips, including her best-known \"Why don't you come up sometime and see me?\".  She Done Him Wrong was a box-office success and the film was nominated for the Academy Award for Best Picture.\nIn 1996, She Done Him Wrong was selected for preservation in the United States National Film Registry by the Library of Congress as being \"culturally, historically, or aesthetically significant\".",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/She_Done_Him_Wrong",
+        "title": "She Done Him Wrong"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "She Done Him Wrong (bra/prt: Uma Loira para Três) é um filme pre-Code estadunidense de 1933, do gênero comédia romântica dramática, dirigido por Lowell Sherman, estrelado por Mae West, e coestrelado por Cary Grant e Gilbert Roland. O roteiro de Harvey F. Thew e John Bright foi baseado na peça teatral \"Diamond Lil\" (1928), da própria West.\nA trama retrata a história de uma cantora de boate sedutora que lida com vários pretendentes, mas é ameaçada com violência por um deles se agir de forma infiel enquanto ele estiver na prisão.\nO filme é famoso pelas muitas insinuações sexuais e trocadilhos de West, incluindo seu mais conhecido \"Why don't you come up sometime and see me?\" (em tradução livre: \"Por que você não sobe algum dia para me ver?\").\nEm 1996, \"She Done Him Wrong\" foi selecionado para preservação no National Film Registry, seleção filmográfica da Biblioteca do Congresso dos Estados Unidos, como sendo \"culturalmente, historicamente ou esteticamente significativo\".",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Uma_Loira_para_Tr%C3%AAs",
+        "title": "She Done Him Wrong"
+      },
+      {
+        "locale": "es",
+        "synopsis": "She Done Him Wrong (titulada en español como Lady Lou, nacida para pecar) es una película cómica y de crimen pre-code estadounidense de 1933 protagonizada por Mae West y Cary Grant. La trama incluye elementos melodramáticos y musicales, con un elenco de apoyo con Owen Moore, Gilbert Roland, Noah Beery, Rochelle Hudson y Louise Beavers. Fue dirigida por Lowell Sherman y producida por William LeBaron. La película es famosa por las muchas bromas y dobles sentidos de West, incluida la más conocida (y frecuentemente erróneamente citada), «Why don't you come up sometime and see me?» («¿Por qué no subes alguna vez y me ves?»).\nLa película fue adaptada de la exitosa obra de Broadway de 1928 Diamond Lil de Mae West. El Código Hays declaró a la obra prohibida para su reproducción en la gran pantalla y exigió repetidamente cambios para eliminar asociaciones o elementos de la obra, incluidos títulos sugeridos con la palabra «diamante». Finalmente, se permitió la adaptación con la condición de que no se hiciera referencia a la obra en publicidades.​\nLa Venus rubia (con Marlene Dietrich) y Madame Butterfly (con Sylvia Sidney), ambas son anteriores a She Done Him Wrong, pero West siempre afirmó haber descubierto a la actriz que necesitaba para su película en el papel de Grant, afirmando que hasta entonces Grant solo había hecho «algunas pruebas con estrellas».\nEl guion fue adaptado por Harvey F. Thew y John Bright. La música original fue compuesta por Ralph Rainger, John Leipold y Stephan Pasternacki. Charles Lang fue el responsable de la cinematografía, mientras que el vestuario fue diseñado por Edith Head.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/She_Done_Him_Wrong",
+        "title": "She Done Him Wrong"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q62163",
+  "slug": "she-done-him-wrong"
+}

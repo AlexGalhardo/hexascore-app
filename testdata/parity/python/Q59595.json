@@ -1,0 +1,58 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0280590",
+      "metacritic": "movie/mr-deeds",
+      "rottentomatoes": "m/mr_deeds",
+      "tmdb": "2022"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Steven Brill"
+      ],
+      "genres": [
+        "romantic comedy film",
+        "comedy film"
+      ],
+      "runtimeMinutes": 93,
+      "trailers": [
+        {
+          "youtubeId": "DYerEhQMFuc"
+        }
+      ]
+    },
+    "popularity": 30.0,
+    "qid": "Q59595",
+    "release_date": "2002-06-28",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Mr. Deeds is a 2002 American comedy film directed by Steven Brill, written by Tim Herlihy, and produced by Sid Ganis and Jack Giarraputo. It stars Adam Sandler in the title role, alongside Winona Ryder, Peter Gallagher, Jared Harris, Allen Covert, Erick Avari, and John Turturro. The film is a remake of the 1936 Frank Capra film Mr. Deeds Goes to Town, which itself was based on the 1935 short story \"Opera Hat\" by Clarence Budington Kelland. It tells the story of a pizzeria owner who learns that he is the heir of a late multi-billionaire.\nMr. Deeds was released by Sony Pictures Releasing on June 28, 2002. It received negative reviews from critics, but was a commercial success, grossing $171.3 million against a production budget of $50 million.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Mr._Deeds",
+        "title": "Mr. Deeds"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Mr. Deeds (br: A Herança de Mr. Deeds; pt: Mr. Deeds) é um filme de comédia americano de 2002, dirigido por Steven Brill, escrito por Tim Herlihy e produzido por Sid Ganis e Jack Giarraputo. Estrelado por Adam Sandler no papel principal, o filme também conta com Winona Ryder, Peter Gallagher, Jared Harris, Allen Covert, Erick Avari e John Turturro no elenco. \nTrata-se de uma remake do filme Mr. Deeds Goes to Town (1936), de Frank Capra, que por sua vez foi baseado no conto \"Opera Hat\" (1935), de Clarence Budington Kelland. A trama gira em torno de um simpático dono de pizzaria do interior que descobre ser o herdeiro de um bilionário recém-falecido de Nova Iorque.\nProduzido pela Columbia Pictures, New Line Cinema e pela produtora de Sandler, Happy Madison Productions, em associação com a Out of the Blue...Entertainment, Mr. Deeds foi lançado nos Estados Unidos pela Sony Pictures Releasing em 28 de junho de 2002. Apesar do sucesso financeiro, o filme recebeu críticas negativas.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Mr._Deeds",
+        "title": "Mr. Deeds"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Mr. Deeds (titulada La herencia del Sr. Deeds en Hispanoamérica) es una película cómica estadounidense de 2002, dirigida por Steven Brill y protagonizada por Adam Sandler y Winona Ryder. También forman parte del reparto Peter Gallagher, John Turturro, Jared Harris, Allen Covert, Conchata Ferrell y Steve Buscemi.\nSe trata de un remake de la película de 1936 El secreto de vivir, dirigida por Frank Capra y basada a su vez en el relato Opera Hat, de Clarence Budington Kelland.\nFue producida por Happy Madison y New Line Cinema y distribuida por Columbia Pictures.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Mr._Deeds",
+        "title": "Mr. Deeds"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q59595",
+  "slug": "mr-deeds"
+}

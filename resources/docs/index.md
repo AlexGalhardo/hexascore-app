@@ -19,7 +19,7 @@ curl -H "Authorization: Bearer $HEXASCORE_API_KEY" \
 
 ## 3. Read the response
 
-Lists return `data` plus a `next_cursor` for the next page. Field names are snake_case and dates are ISO 8601. `score` and `categories` are `null` until an item has 5 ratings.
+Lists return `data` plus `meta.next_cursor` for the next page. Field names are snake_case and dates are ISO 8601. `score` and `categories` are `null` until an item has 5 ratings.
 
 ## Next steps
 

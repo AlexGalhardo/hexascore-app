@@ -1,0 +1,79 @@
+{
+  "qid": "Q11289281",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q11289281",
+      "labels": {
+        "en": "Ultraman Mebius Side Story: Hikari Saga"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Ultraman Mebius Side Story: Hikari Saga"
+      },
+      "sitelinks_count": 6,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q1366112",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q3270546",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "ウルトラマンメビウス外伝 ヒカリサーガ",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q5287",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "589027",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q17",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2006-06-30T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1366112": "drama television series",
+        "Q17": "Japan",
+        "Q3270546": "Ultraman Mebius",
+        "Q5287": "Japanese"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q11289281",
+      "lang": "en",
+      "title": "Ultraman Mebius Side Story: Hikari Saga",
+      "extract": "Ultraman Mebius Side Story: Hikari Saga (ウルトラマンメビウス外伝 ヒカリサーガ, Urutoraman Mebiusu Gaiden Hikari Sāga) is a Japanese direct-to-video web series launched by FLET'S Square, Japan's first internet television delivery service. The web series was available to be watched from June 30, 2006 until March 31, 2007 whereas DVD release of the miniseries is available under the label Bandai Visual.\nThe series served as a spin-off to the 2006 Ultra Series entry, Ultraman Mebius as it focused on Ultraman Hikari, the show's secondary Ultra Warrior during his time in outer space. It had also won Digital Content Prize of Encouragement Award from the ATP Awards TV Grand Prix in 2006.",
+      "url": "https://en.wikipedia.org/wiki/Ultraman_Mebius_Side_Story:_Hikari_Saga"
+    }
+  },
+  "tier": "tail",
+  "type": "series"
+}

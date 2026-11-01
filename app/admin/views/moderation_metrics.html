@@ -1,0 +1,24 @@
+{{define "content"}}
+<div class="toolbar"><h1>{{.Title}}</h1><a class="button" href="/admin/moderation">Open queue, oldest first</a></div>
+{{with .Metrics}}
+<table>
+	<tbody>
+	<tr><th scope="row">Queue size</th><td>{{.Open}}</td></tr>
+	<tr><th scope="row">Oldest open</th><td>{{if .Open}}{{.OldestOpen}}{{else}}none{{end}}</td></tr>
+	</tbody>
+</table>
+<table>
+	<thead><tr><th>Window</th><th>Decisions</th><th>Approval rate</th><th>p50 time to decision</th><th>p95 time to decision</th></tr></thead>
+	<tbody>
+	{{template "metrics_window" .Week}}
+	{{template "metrics_window" .Month}}
+	</tbody>
+</table>
+<p class="muted">Target (NFR-04-2): 95 % of submissions decided within 24 h. Withdrawn and expired suggestions are not decisions.</p>
+{{end}}
+{{end}}
+{{define "metrics_window"}}<tr>
+		<td>{{.Days}} days</td>
+		<td>{{.Decided}}</td>
+		{{if .Decided}}<td>{{.Approved}} / {{.Decided}} ({{printf "%.2f" .ApprovalRate}})</td><td>{{.P50}}</td><td>{{.P95}}</td>{{else}}<td>-</td><td>-</td><td>-</td>{{end}}
+	</tr>{{end}}

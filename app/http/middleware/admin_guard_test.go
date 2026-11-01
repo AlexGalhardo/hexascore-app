@@ -115,6 +115,23 @@ func TestSecurity_A01_HexaAdminNeeds2FA(t *testing.T) {
 	}
 }
 
+func TestSecurity_A07_ModeratorRequires2FA(t *testing.T) {
+	t.Parallel()
+
+	e := newGuard(t, "")
+	e.user = &models.User{ID: 9, Role: models.RoleModerator}
+
+	if rec := e.get("/admin/moderation", "203.0.113.5:1"); rec.Code != http.StatusSeeOther ||
+		rec.Header().Get("Location") != "/user/two-factor" {
+		t.Fatalf("moderator without 2FA: %d %q, want 303 to setup", rec.Code, rec.Header().Get("Location"))
+	}
+
+	e.twoFactor = true
+	if rec := e.get("/admin/moderation", "203.0.113.5:1"); rec.Code != http.StatusOK {
+		t.Fatalf("moderator with 2FA: %d, want 200", rec.Code)
+	}
+}
+
 func TestSecurity_A07_HexaAdminSessionExpiry(t *testing.T) {
 	t.Parallel()
 

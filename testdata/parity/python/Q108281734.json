@@ -1,0 +1,26 @@
+{
+  "item": {
+    "external_ids": {},
+    "meta": {
+      "creators": [
+        "Vicente Costalago"
+      ]
+    },
+    "popularity": 6.0,
+    "qid": "Q108281734",
+    "release_date": "2021-12-14",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Li sercha in li castelle Dewahl e altri racontas"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q108281734",
+  "slug": "li-sercha-in-li-castelle-dewahl-e-altri-racontas"
+}

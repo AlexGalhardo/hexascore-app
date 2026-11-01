@@ -1,0 +1,148 @@
+{
+  "qid": "Q1152075",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q1152075",
+      "labels": {
+        "en": "Kamen Rider Kuuga",
+        "es": "Kamen Rider Kūga",
+        "mul": "仮面ライダークウガ",
+        "pt": "Kamen Rider Kuuga"
+      },
+      "aliases": {
+        "es": [
+          "Kūga",
+          "Kamen Rider Kuuga"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Kamen Rider Kuuga",
+        "eswiki": "Kamen Rider Kūga",
+        "ptwiki": "Kamen Rider Kuuga"
+      },
+      "sitelinks_count": 15,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+49",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q275934",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "仮面ライダークウガ",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q288114",
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+1",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q1066018",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0188340",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q5287",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q908436",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q17",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "239741",
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q8188996",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2000-01-30T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q577752",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1066018": "Toei Company",
+        "Q17": "Japan",
+        "Q275934": "tokusatsu",
+        "Q288114": "Joe Odagiri",
+        "Q5287": "Japanese",
+        "Q577752": "Kamen Rider Series",
+        "Q8188996": "Naruhisa Arakawa",
+        "Q908436": "TV Asahi"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q1152075",
+      "lang": "en",
+      "title": "Kamen Rider Kuuga",
+      "extract": "Kamen Rider Kuuga (仮面ライダークウガ, Kamen Raidā Kūga) is a Japanese tokusatsu television series. It is the 10th installment of the popular Kamen Rider Series of tokusatsu shows and the first of the series to air entirely in the Heisei period, as well as the first standalone Kamen Rider TV series since Kamen Rider Black RX and the first series of the revived run of Kamen Rider, bringing Kamen Rider into the 21st century.\nIt was a joint collaboration between Asatsu-DK and Toei, and was shown on TV Asahi from January 30, 2000, to January 21, 2001, replacing Moero!! Robocon in its timeslot. Kamen Rider Kuuga is the first Kamen Rider Series to be broadcast in a widescreen (letterboxed) format, albeit cropped during airing. It aired alongside Mirai Sentai Timeranger.",
+      "url": "https://en.wikipedia.org/wiki/Kamen_Rider_Kuuga"
+    },
+    "wikipedia:es": {
+      "qid": "Q1152075",
+      "lang": "es",
+      "title": "Kamen Rider Kūga",
+      "extract": "Kamen Rider Kūga (仮面ライダークウガ, Kamen Raidā Kūga?) es el título de la 10.ª temporada de la franquicia Kamen Rider, producida por Toei Company y emitida en TV Asahi del 30 de enero de 2000 al 21 de enero de 2001, constando de 49 episodios. Significó el regreso a la emisión regular de la franquicia tras 11 años de ausencia y la primera temporada de la era Heisei. También fue la primera temporada de la franquicia producida íntegramente en 16:9, en formato letterbox, y la primera que se grabó en vídeo en lugar de emplear película. El eslogan de la temporada es \"Un nuevo héroe, una nueva leyenda\" (新しいヒーロー、新しい伝説, Atarashī hīrō, atarashī densetsu?).",
+      "url": "https://es.wikipedia.org/wiki/Kamen_Rider_K%C5%ABga"
+    }
+  },
+  "tier": "non-latin",
+  "type": "series"
+}

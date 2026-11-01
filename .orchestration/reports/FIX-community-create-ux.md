@@ -1,0 +1,33 @@
+# FIX-community-create-ux create/merge UX
+status: concluida
+branch: agent/senior/FIX-community-create-ux @ 68b17b6
+files: app/community/status.go, tests/community_status_test.go, resources/js/pages/Community/{SuggestCreate,SuggestionStatus}(.test).tsx, resources/js/pages/{Catalog,Search}/Index.tsx, resources/js/components/community/{ItemPicker,SuggestNewLink}(.test).tsx, resources/lang/{en,pt-BR,es}.json
+acceptance:
+- `go test -tags integration -run 'TestCommunityStatusNames|TestCommunitySubmitWithdrawFlow' ./tests/` -> ok (suggestion.names.<entity id> = default_name)
+- `bunx vitest run resources/js/pages/Community resources/js/components/community` -> 4 files / 13 tests pass (merge picks via SuggestBox, submit disabled until both set; names in diff; SuggestNewLink href)
+- tsc clean, biome clean, golangci-lint ./app/community 0 issues, go test ./tests/i18n ok
+validation: browser not run (QA-community-e2e row covers it; community-create.spec still types ids in the merge form and needs updating, see risks)
+changelog: Changed: merge/duplicate form picks records with the search box instead of raw ids; relation and merge diffs on the suggestion status page show entity/item names; Added: "Suggest a new <type>" links on section listings and empty search results.
+roadmap: no box (follow-up of P4.A.3.2/3.3)
+risks / follow-ups:
+- qa/e2e/specs/community-create.spec.ts may fill the old id inputs of the merge form; QA-community-e2e row must adjust it.
+- Link shows on every listing even with the flag off (the page shows the closed notice); intentional, no flag in shared props.
+- Names come from entities.default_name / items.original_title, not localized.
+
+## Review (especialista, 2026-10-31)
+verdict: CORRIGIDO_E_APROVADO
+re-run: `go test -tags integration ./tests -run 'TestCommunityStatus|TestCommunitySubmitWithdrawFlow'` ok; `bunx vitest run resources/js/pages/Community resources/js/components/community resources/js/pages/Search` 4 files / 13 tests; tsc clean; biome clean; golangci-lint app/community 0 issues; `go test ./tests/i18n/...` ok
+checked: ids validated by uuidRe and bound as parameters (no injection), names are public catalogue data, merge picker limited to the domain, submit disabled until both records are set, i18n parity
+fixes: 1. `changeNames` compared `id::text IN (...)`, which bypasses the primary key index on entities and items (sequential scan per status page view); now binds `$n::uuid` and compares `id` (6967690 on agent/especialista/FIX-community-create-ux-fix)
+follow-ups: pt-BR/es "Sugerir novo(a) {type}" reads awkwardly with a capitalised type mid-sentence (text pass); qa/e2e community-create.spec merge form inputs need the picker (QA-community-e2e)
+PRONTO_PARA_MERGE agent/especialista/FIX-community-create-ux-fix (merged 7732fee)
+
+## Round 2 (QA-community-e2e, same branch, head 68b17b6)
+- QA stack tag sa (port 3160), flags FLAG_COMMUNITY_SUBMISSIONS=true E2E_COMMUNITY_OPEN=true. First run: 4/12 pass (en only); pt-BR/es failed for real reasons found by the run.
+- Fixes: (1) community-create/status specs navigated without the locale prefix (now `${prefix}/...`); (2) app bug: in-page links (merge tab, my-suggestions, status) and router.post/patch targets dropped the locale, so a pt-BR visitor fell back to English after a click or a withdraw; now prefixed through new lib/useLocalized.ts.
+- Result: `bun run e2e specs/community-create.spec.ts specs/community-status.spec.ts` -> 12 passed (1.4m) (desktop+mobile x en/pt-BR/es, axe included). vitest community 13 tests ok, tsc/biome clean. Stack stopped, database dropped.
+- ROADMAP boxes P4.A.3.2 and P4.A.3.3 can be ticked once this merges.
+
+### r2 (especialista, 2026-10-31)
+Commits 6e0467c and 68b17b6 (QA-community-e2e: in-page links and `router.post`/`patch` targets go through `useLocalized`, e2e specs use the locale prefix) reviewed after the first merge; merged 7ebbc1a. Orchestrator: QA-community-e2e 12/12 across 6 projects, so P4.A.3.2 and P4.A.3.3 are ticked.
+gate on main (batch 2, 311e39b): build ok, bun lint/typecheck ok, vitest 27 files / 96 tests, go test -tags integration ./... exit 0; golangci-lint found 5 issues in the new tests (golines x2, gci, gofumpt, rowserrcheck), fixed in agent/especialista/FIX-gate-lint (merged b344207)

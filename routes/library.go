@@ -35,12 +35,20 @@ func Library(r *router.Router, app *vukem.App) error {
 	web := controllers.NewLibrary(acc.DB, app.Now, acc.Web.Name(), false, "")
 	required, verified := auth.Required(acc.Web), auth.Verified(acc.Web)
 	byUser := ratelimit.Middleware(limit, ratelimit.ByUser(acc.Web.Name()))
+	fySvc, err := ForYouService(app)
+	if err != nil {
+		return err
+	}
+	r.Get("/for-you", controllers.NewForYou(fySvc, acc.Web.Name()).Index).Name("for_you").Use(required, verified)
 	r.Get("/library", web.Index).Name("library").Use(required, verified)
 	r.Get("/items/{id}/editions", web.Editions).Name("edition.list").Use(required, verified)
 	r.Put("/items/{id}/edition", web.PutEdition).Name("edition.put").Use(required, verified, byUser)
 	r.Delete("/items/{id}/edition", web.DeleteEdition).Name("edition.delete").Use(required, verified, byUser)
 
 	profile := controllers.NewPublicProfile(acc.DB, false, "", acc.Web.Name())
+	if profile.Follows, err = SocialService(app, acc); err != nil {
+		return err
+	}
 	r.Get("/u/{nickname}", profile.Show).Name("profile.public").Use(auth.Optional(acc.Web))
 
 	coversBase := catalog.CoversBase(app.Source.Get("COVERS_BASE_URL"))

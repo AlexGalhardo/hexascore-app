@@ -71,6 +71,10 @@ type userSQL struct {
 	stamped     bool
 }
 
+// userKeysSQL lists the legacy user id ending every batch of $2 users after $1 (Stage.KeysSQL).
+const userKeysSQL = `SELECT id FROM (SELECT id, row_number() OVER (ORDER BY id) AS rn FROM legacy_import."user" WHERE id > $1) x
+WHERE rn % $2 = 0 ORDER BY id`
+
 // userBatches imports the rows of the next n legacy users with stmts; the rows counted are users, so
 // the checkpoint key is the last legacy user id. first runs with the first batch, last after the final
 // one (in the empty batch that ends the stage); both must be idempotent like stmts.

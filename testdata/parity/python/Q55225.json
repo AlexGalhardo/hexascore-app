@@ -1,0 +1,58 @@
+{
+  "item": {
+    "external_ids": {
+      "gog": "game/star_wars_starfighter",
+      "hltb": "9124",
+      "igdb": "star-wars-starfighter",
+      "imdb": "tt0278059",
+      "steam": "32350"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Lucasfilm Games"
+      ],
+      "genres": [
+        "action game"
+      ],
+      "platforms": [
+        "Xbox",
+        "PlayStation 2",
+        "Microsoft Windows",
+        "arcade video game machine"
+      ]
+    },
+    "popularity": 9.0,
+    "qid": "Q55225",
+    "release_date": "2001-02-19",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Star Wars: Starfighter is a 2001 action game developed and published by LucasArts. It takes place right before the Battle of Naboo. The player unites alongside three starfighter pilots and is allowed to take control of several different spacecraft to help stop the invasion that threatens Naboo.\nStarfighter was revealed at E3 2001. Initially released for PlayStation 2, an Xbox version was later released as Star Wars: Starfighter: Special Edition. An additional port to Microsoft Windows followed in late January 2002, based on the PlayStation 2 version. Both ports were developed by Secret Level, Inc. In 2003, an arcade version was released on Tsunami Visual Technologies' motion-base platform. LucasArts re-released the game on the digital distribution platform Steam on July 8, 2009, and on the PlayStation 3 in the United States in 2015 via the PlayStation Store. A sequel was released in 2002, named Star Wars: Jedi Starfighter.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Star_Wars:_Starfighter_(video_game)",
+        "title": "Star Wars: Starfighter"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Star Wars: Starfighter é um jogo de ação que foi desenvolvido e publicado pela LucasArts. Ele se ambienta em um momento antes da batalha de Naboo. O jogador se une ao lado de três pilotos de Caça e está autorizado a assumir o controle de várias diferentes naves para ajudar a deter a invasão, que ameaça Naboo.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Star_Wars:_Starfighter_(jogo_eletr%C3%B4nico)",
+        "title": "Star Wars: Starfighter"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Star Wars: Starfighter"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q55225",
+  "slug": "star-wars-starfighter"
+}

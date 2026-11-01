@@ -1,0 +1,256 @@
+{
+  "qid": "Q62163",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q62163",
+      "labels": {
+        "en": "She Done Him Wrong",
+        "es": "She Done Him Wrong",
+        "pt": "She Done Him Wrong",
+        "pt-br": "She Done Him Wrong"
+      },
+      "aliases": {
+        "en": [
+          "Lady Lou"
+        ],
+        "pt": [
+          "Uma Loira para Três"
+        ],
+        "pt-br": [
+          "Uma Loira para Três"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "She Done Him Wrong",
+        "eswiki": "She Done Him Wrong",
+        "ptwiki": "Uma Loira para Três"
+      },
+      "sitelinks_count": 31,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/she_done_him_wrong",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q860626",
+            "rank": "normal"
+          },
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q5270863",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "She Done Him Wrong",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q202878",
+            "rank": "normal"
+          },
+          {
+            "value": "Q452545",
+            "rank": "normal"
+          },
+          {
+            "value": "Q966972",
+            "rank": "normal"
+          },
+          {
+            "value": "Q83410",
+            "rank": "normal"
+          },
+          {
+            "value": "Q919206",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2756371",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1383202",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2826799",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3018253",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5268209",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3091328",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3263669",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3417293",
+            "rank": "normal"
+          }
+        ],
+        "P1651": [
+          {
+            "value": "Dxk172nDNfA",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Rafaela Ottiano in She Done Him Wrong.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+68",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q159846",
+            "rank": "normal"
+          }
+        ],
+        "P3383": [
+          {
+            "value": "She Done Him Wrong (1932 poster - six sheet).jpg",
+            "rank": "normal"
+          },
+          {
+            "value": "She Done Him Wrong (1933 poster).jpg",
+            "rank": "preferred"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0024548",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "43595",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q2058654",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1933-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1933-02-09T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q1699408",
+            "rank": "normal"
+          },
+          {
+            "value": "Q60831125",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q130232": "drama film",
+        "Q1383202": "Leo White",
+        "Q159846": "Paramount Pictures",
+        "Q1699408": "John Bright",
+        "Q1860": "English",
+        "Q202878": "Mae West",
+        "Q2058654": "Lowell Sherman",
+        "Q2756371": "Rochelle Hudson",
+        "Q2826799": "Aggie Herring",
+        "Q30": "United States",
+        "Q3018253": "David Landau",
+        "Q3091328": "Fuzzy Knight",
+        "Q3263669": "Louise Beavers",
+        "Q3417293": "Rafaela Ottiano",
+        "Q452545": "Noah Beery, Sr.",
+        "Q5268209": "Dewey Robinson",
+        "Q5270863": "Diamond Lil",
+        "Q60831125": "Harvey F. Thew",
+        "Q83410": "Cary Grant",
+        "Q860626": "romantic comedy",
+        "Q919206": "Gilbert Roland",
+        "Q966972": "Owen Moore"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q62163",
+      "lang": "en",
+      "title": "She Done Him Wrong",
+      "extract": "She Done Him Wrong is a 1933 pre-Code American crime/comedy film starring Mae West and Cary Grant, directed by Lowell Sherman. The plot includes melodramatic and musical elements, with a supporting cast featuring Owen Moore, Gilbert Roland, Noah Beery Sr., Rochelle Hudson, and Louise Beavers. The film was adapted from the successful 1928 Broadway play Diamond Lil by Mae West. The film is famous for West's many double entendres and quips, including her best-known \"Why don't you come up sometime and see me?\".  She Done Him Wrong was a box-office success and the film was nominated for the Academy Award for Best Picture.\nIn 1996, She Done Him Wrong was selected for preservation in the United States National Film Registry by the Library of Congress as being \"culturally, historically, or aesthetically significant\".",
+      "url": "https://en.wikipedia.org/wiki/She_Done_Him_Wrong"
+    },
+    "wikipedia:es": {
+      "qid": "Q62163",
+      "lang": "es",
+      "title": "She Done Him Wrong",
+      "extract": "She Done Him Wrong (titulada en español como Lady Lou, nacida para pecar) es una película cómica y de crimen pre-code estadounidense de 1933 protagonizada por Mae West y Cary Grant. La trama incluye elementos melodramáticos y musicales, con un elenco de apoyo con Owen Moore, Gilbert Roland, Noah Beery, Rochelle Hudson y Louise Beavers. Fue dirigida por Lowell Sherman y producida por William LeBaron. La película es famosa por las muchas bromas y dobles sentidos de West, incluida la más conocida (y frecuentemente erróneamente citada), «Why don't you come up sometime and see me?» («¿Por qué no subes alguna vez y me ves?»).\nLa película fue adaptada de la exitosa obra de Broadway de 1928 Diamond Lil de Mae West. El Código Hays declaró a la obra prohibida para su reproducción en la gran pantalla y exigió repetidamente cambios para eliminar asociaciones o elementos de la obra, incluidos títulos sugeridos con la palabra «diamante». Finalmente, se permitió la adaptación con la condición de que no se hiciera referencia a la obra en publicidades.​\nLa Venus rubia (con Marlene Dietrich) y Madame Butterfly (con Sylvia Sidney), ambas son anteriores a She Done Him Wrong, pero West siempre afirmó haber descubierto a la actriz que necesitaba para su película en el papel de Grant, afirmando que hasta entonces Grant solo había hecho «algunas pruebas con estrellas».\nEl guion fue adaptado por Harvey F. Thew y John Bright. La música original fue compuesta por Ralph Rainger, John Leipold y Stephan Pasternacki. Charles Lang fue el responsable de la cinematografía, mientras que el vestuario fue diseñado por Edith Head.",
+      "url": "https://es.wikipedia.org/wiki/She_Done_Him_Wrong"
+    },
+    "wikipedia:pt": {
+      "qid": "Q62163",
+      "lang": "pt",
+      "title": "Uma Loira para Três",
+      "extract": "She Done Him Wrong (bra/prt: Uma Loira para Três) é um filme pre-Code estadunidense de 1933, do gênero comédia romântica dramática, dirigido por Lowell Sherman, estrelado por Mae West, e coestrelado por Cary Grant e Gilbert Roland. O roteiro de Harvey F. Thew e John Bright foi baseado na peça teatral \"Diamond Lil\" (1928), da própria West.\nA trama retrata a história de uma cantora de boate sedutora que lida com vários pretendentes, mas é ameaçada com violência por um deles se agir de forma infiel enquanto ele estiver na prisão.\nO filme é famoso pelas muitas insinuações sexuais e trocadilhos de West, incluindo seu mais conhecido \"Why don't you come up sometime and see me?\" (em tradução livre: \"Por que você não sobe algum dia para me ver?\").\nEm 1996, \"She Done Him Wrong\" foi selecionado para preservação no National Film Registry, seleção filmográfica da Biblioteca do Congresso dos Estados Unidos, como sendo \"culturalmente, historicamente ou esteticamente significativo\".",
+      "url": "https://pt.wikipedia.org/wiki/Uma_Loira_para_Tr%C3%AAs"
+    }
+  },
+  "tier": "mid",
+  "type": "movie"
+}

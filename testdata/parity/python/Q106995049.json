@@ -1,0 +1,29 @@
+{
+  "item": {
+    "external_ids": {},
+    "meta": {},
+    "popularity": 8.0,
+    "qid": "Q106995049",
+    "release_date": null,
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Constantinian Excerpts was a 53-volume Greek anthology of excerpts from at least 25 historians. It was commissioned by the Byzantine emperor Constantine VII (945–959), but probably not completed until after his death. Today only four volumes survive in various states of completeness. The titles of 21 other volumes are known. The volumes are typically known by their Latin titles. The title of the whole, Excerpts, is also conventional.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Constantinian_Excerpts",
+        "title": "Constantinian Excerpts"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Las Excerpta Constantiniana, Excerpta Historica o simplemente, Excerpta (en griego:᾽Εκλογαί, Eklogai) son una antología griega de 53 volúmenes de extractos o recopilaciones de al menos 25 historiadores.​ Fueron encargadas por el emperador bizantino Constantino VII entre 945–959, pero probablemente no se completaron hasta después de su muerte.​ Hoy solo sobreviven dos volúmenes completos más fragmentos de otros tres. Se conocen los títulos de otros 21 volúmenes.​ Los volúmenes se conocen por sus títulos en latín.​ El título del conjunto, Excerptos, también es convencional.​​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Excerpta_Constantiniana",
+        "title": "Excerpta Constantiniana"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q106995049",
+  "slug": "constantinian-excerpts"
+}

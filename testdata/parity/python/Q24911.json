@@ -1,0 +1,46 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0056167",
+      "tmdb": "114696"
+    },
+    "meta": {
+      "countries": [
+        "Denmark",
+        "Germany"
+      ],
+      "creators": [
+        "Frank Dunlop",
+        "Anker Sørensen",
+        "Edvin Tiemroth"
+      ],
+      "genres": [
+        "war film"
+      ],
+      "runtimeMinutes": 93
+    },
+    "popularity": 7.0,
+    "qid": "Q24911",
+    "release_date": "1960-09-30",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Last Winter (Danish: Den sidste vinter) is a 1960 Danish war film directed by Frank Dunlop, Anker Sørensen and Edvin Tiemroth. It was entered into the 2nd Moscow International Film Festival.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/The_Last_Winter_(1960_film)",
+        "title": "The Last Winter"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Den sidste vinter"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q24911",
+  "slug": "the-last-winter"
+}

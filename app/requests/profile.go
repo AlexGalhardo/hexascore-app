@@ -33,8 +33,58 @@ type ProfilePrivacy struct {
 	PersonalizationOptOut bool `json:"personalizationOptOut" form:"personalizationOptOut"`
 }
 
+// ProfileNotifications is the email notices section.
+type ProfileNotifications struct {
+	CommunityMailOptOut bool `json:"communityMailOptOut" form:"communityMailOptOut"`
+}
+
+// ProfileNotificationsSchema validates ProfileNotifications.
+var ProfileNotificationsSchema = z.Struct[ProfileNotifications](z.Shape{
+	"communityMailOptOut": z.Bool().Default(false),
+})
+
 // ProfilePrivacySchema validates ProfilePrivacy.
 var ProfilePrivacySchema = z.Struct[ProfilePrivacy](z.Shape{
 	"profilePrivate":        z.Bool().Default(false),
 	"personalizationOptOut": z.Bool().Default(false),
 })
+
+// ProfileFeed is the feed opt-in switch (SDD 14 FR-14-18).
+type ProfileFeed struct {
+	FeedOptIn bool `json:"feedOptIn" form:"feedOptIn"`
+}
+
+// ProfileFeedSchema validates ProfileFeed.
+var ProfileFeedSchema = z.Struct[ProfileFeed](z.Shape{"feedOptIn": z.Bool().Default(false)})
+
+// Review is a review of a rated item (SDD 14 §12.10).
+type Review struct {
+	Body    string `json:"body"    form:"body"`
+	Spoiler bool   `json:"spoiler" form:"spoiler"`
+}
+
+// ReviewSchema validates Review; the database also checks 1 to 5,000 characters.
+var ReviewSchema = z.Struct[Review](z.Shape{
+	"body":    z.String().Trim().Min(1).Max(5000),
+	"spoiler": z.Bool().Default(false),
+})
+
+// Comment is a comment on a review or list, or a reply to a top-level comment (SDD 14 §12.11).
+type Comment struct {
+	Body     string `json:"body"     form:"body"`
+	ParentID string `json:"parentId" form:"parentId"`
+}
+
+// CommentSchema validates Comment; the database also checks 1 to 2,000 characters.
+var CommentSchema = z.Struct[Comment](z.Shape{
+	"body":     z.String().Trim().Min(1).Max(2000),
+	"parentId": z.String().UUID().Default(""),
+})
+
+// Reaction is a reaction on a review, comment or list (SDD 14 §12.11).
+type Reaction struct {
+	Kind string `json:"kind" form:"kind"`
+}
+
+// ReactionSchema validates Reaction.
+var ReactionSchema = z.Struct[Reaction](z.Shape{"kind": z.Enum("like", "helpful")})

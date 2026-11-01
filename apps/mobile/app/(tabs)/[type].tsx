@@ -1,11 +1,17 @@
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import type { ReactElement } from "react";
-import { firstParam, isCatalogType } from "../../src/navigation/catalog";
+import type { AppItemJSON } from "../../../../packages/app-client/src/api";
+import { appClient } from "../../src/auth/runtime";
+import { firstParam, isCatalogType, itemHref } from "../../src/navigation/catalog";
+import { useLocale } from "../../src/providers/root";
+import { ListingBody } from "../../src/screens/Listing";
 import { Placeholder } from "../../src/ui/Placeholder";
 
 export function SectionBody({ type }: { type: string }): ReactElement {
+	const locale = useLocale();
 	if (!isCatalogType(type)) return <Placeholder title="Unknown section" />;
-	return <Placeholder title={`Section ${type}`} />;
+	const openItem = (item: AppItemJSON): void => router.push(itemHref(type, item));
+	return <ListingBody type={type} read={appClient.read} locale={locale} onOpen={openItem} />;
 }
 
 export default function SectionScreen(): ReactElement {

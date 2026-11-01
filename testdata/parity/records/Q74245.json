@@ -1,0 +1,87 @@
+{
+  "qid": "Q74245",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q74245",
+      "labels": {
+        "en": "GetAmped",
+        "es": "GetAmped",
+        "mul": "GetAmped",
+        "pt": "GetAmped"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "ptwiki": "GetAmped"
+      },
+      "sitelinks_count": 6,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q3008112",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q862490",
+            "rank": "normal"
+          },
+          {
+            "value": "Q270948",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q3008112",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q3297989",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2004-12-13T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "splash-fighters--1",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1406": "Microsoft Windows",
+        "Q270948": "action game",
+        "Q3008112": "CyberStep Holdings",
+        "Q3297989": "multiplayer online game",
+        "Q862490": "massively multiplayer online game"
+      }
+    },
+    "wikipedia:pt": {
+      "qid": "Q74245",
+      "lang": "pt",
+      "title": "GetAmped",
+      "extract": "GetAmped foi um jogo de luta em 3D desenvolvido pela CyberStep. Até 16 pessoas podem jogar simultaneamente. No Brasil foi distribuído pela HIVE Corporation até que a CyberStep, desenvolvedora original, reivindicou o jogo e realizou o re-lançamento. Os servidores foram encerrados e o jogo não se encontra mais disponível. A sequência, intitulada GetAmped 2 também não é mais operante no Brasil.",
+      "url": "https://pt.wikipedia.org/wiki/GetAmped"
+    }
+  },
+  "tier": "tail",
+  "type": "game"
+}

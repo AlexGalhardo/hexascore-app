@@ -10,7 +10,12 @@ import (
 // database, clock and mailer; vukem make:job appends here and names the
 // parameter "app" with the first handler that needs it.
 func All(app *vukem.App) []queue.Registration {
-	return []queue.Registration{
+	return AllWith(app, IngestSources{})
+}
+
+// AllWith is All with the ingestion sources replaced; only tests pass a non-zero value.
+func AllWith(app *vukem.App, ingestSrc IngestSources) []queue.Registration {
+	regs := []queue.Registration{
 		handleRefreshEntityStats(app),
 		handleMerged(app),
 		handleRecomputeScores(app),
@@ -26,9 +31,24 @@ func All(app *vukem.App) []queue.Registration {
 		handleFanoutWebhooks(app),
 		handleWebhookDeliver(app),
 		handlePruneWebhookDeliveries(app),
+		handlePruneActivity(app),
 		handleCommunityHourly(app),
+		handleCommunityAsserts(app),
 		handleCheckSources(app),
 		handleCoverFetch(app),
 		handleExportIDs(app),
+		handleComputeSimilar(app),
+		handleRecommendUser(app),
+		handleRecoEvalMonthly(app),
+		handleComputeTrending(app),
+		handleTrendingRebuild(app),
+		handlePruneTrending(app),
+		handleCatalogChanged(app),
+		handleCommunityNotify(app),
+		handleItemsChanged(app),
+		handleIngest(app, ingestSrc),
+		handleIndexNowChanges(app),
 	}
+
+	return append(regs, indexNowHandlers(app)...)
 }

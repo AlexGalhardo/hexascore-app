@@ -1,0 +1,56 @@
+{
+  "item": {
+    "external_ids": {
+      "hltb": "9117",
+      "igdb": "star-wars-rebel-assault-ii-the-hidden-empire",
+      "imdb": "tt0166366"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Lucasfilm Games"
+      ],
+      "genres": [
+        "shoot 'em up"
+      ],
+      "platforms": [
+        "IBM PC compatible",
+        "PlayStation",
+        "Classic Mac OS",
+        "DOS"
+      ]
+    },
+    "popularity": 7.0,
+    "qid": "Q74061",
+    "release_date": "1995-11-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Star Wars: Rebel Assault II: The Hidden Empire is a 1995 rail shooter video game developed by LucasArts. It is the sequel to Star Wars: Rebel Assault, set in the Star Wars expanded universe. The player character, Rookie One, pilots ships such as a YT-1300 Corellian Transport, a B-wing, and a Y-wing, and encounters new enemy ships, including TIE Interceptors. They uncover, and eventually disable production of, a new TIE variant known as the TIE Phantom, which has the ability to cloak.\nIt contains mostly original filming with actors and stunts, while the scenery and the space scenes were 3D rendered. According to LucasArts' magazine, The Adventurer, the game was the first media to incorporate live-action actors and footage in the Star Wars universe since Return of the Jedi. The player proceeds down predetermined paths, but has the ability to control aiming, shooting, and dodging. The game makes use of Lucasarts' proprietary INSANE game engine. The game received mixed reception upon release. While critics generally praised the visuals, many cited frustrations with the game's control scheme. It has since been featured in worst-of lists by IGN and Kotaku.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Star_Wars:_Rebel_Assault_II:_The_Hidden_Empire",
+        "title": "Star Wars: Rebel Assault II: The Hidden Empire"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Star Wars: Rebel Assault II: The Hidden Empire"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Star Wars: Rebel Assault II: The Hidden Empire es una secuela del videojuego Star Wars: Rebel Assault, lanzada en noviembre de 1995. \nEl modo de juego es los que se conoce como rail shooter, donde las naves se mueven sobre un camino preestablecido y el jugador tiene que encargarse de disparar a los enemigos, antes de que estos le disparen a él.\nEn esta entrega, el personaje principal Rookie One, debe luchar contra los Phantom TIE, un nuevo tipo de TIE Fighter que tiene la capacidad de ser invisible evadiendo todo tipo de escáner o radar siendo una peligrosa amenaza que podría destruir a la Alianza Rebelde.\nSe utilizan varias de las naves vistas dentro de las películas de Star Wars e incluye una misión a pie. \nLa banda sonora del juego fue compuesta por Peter McConnell.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Star_Wars:_Rebel_Assault_II:_The_Hidden_Empire",
+        "title": "Star Wars: Rebel Assault II"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q74061",
+  "slug": "star-wars-rebel-assault-ii-the-hidden-empire"
+}

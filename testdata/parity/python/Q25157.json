@@ -1,0 +1,44 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt1854506",
+      "rottentomatoes": "m/aliens_vs_avatars",
+      "tmdb": "79582"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Lewis Schoenbrun"
+      ],
+      "genres": [
+        "science fiction film"
+      ],
+      "runtimeMinutes": 80
+    },
+    "popularity": 6.0,
+    "qid": "Q25157",
+    "release_date": "2011-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Aliens vs. Avatars is a 2011 American science fiction film directed by Lewis Schoenbrun. The film is a mockbuster of Alien vs. Predator and Avatar. The film follows the intergalactic battle between a quarrelsome alien race and shape-shifting extraterrestrials, while six college friends find themselves in the middle of the interstellar war. The film stars Jason Lockhart, Kim Argetsinger, Dylan Vox, Georgina Totentino, Marlene Mc'Cohen and Ginny You. \nAliens vs. Avatars was released onto video, DVD and TV on September 20, 2011. As of 2021, the film's distributor, Summer Hill Entertainment, refers to the film as \"Alien vs. Alien\".",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Aliens_vs._Avatars",
+        "title": "Aliens vs Avatars"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Aliens vs. Avatars"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q25157",
+  "slug": "aliens-vs-avatars"
+}

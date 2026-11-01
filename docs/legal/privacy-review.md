@@ -6,7 +6,7 @@ Status: draft for the owner. This file is not a legal opinion.
 
 The public policy in `resources/lang/{en,pt-BR,es}.json` (`policy`, rendered by `Legal/Page`) now names:
 
-- processors: Railway, Grafana Cloud, Resend, Stripe, Google, Telegram
+- processors: Railway, Resend, Stripe, Google, Telegram
 - cookies: session, two-factor, `locale`, `theme`, `consent`
 - retention: session IP and user agent 30 days, opt-in client reports 7 days, export files 24 hours, account deletion grace 30 days
 - minimum age 13

@@ -49,6 +49,9 @@ func AppCatalog(r *router.Router, app *vukem.App) error {
 		Redirects: func(ctx context.Context, typ, id string) (catalog.Target, bool, error) {
 			return catalog.ResolveID(ctx, acc.DB, catalog.ScopeItem, typ, id)
 		},
+		SlugRedirects: func(ctx context.Context, typ, slug string) (catalog.Target, bool, error) {
+			return catalog.ResolveSlug(ctx, acc.DB, catalog.ScopeItem, typ, slug)
+		},
 		Now: app.Now,
 	}
 
@@ -56,7 +59,7 @@ func AppCatalog(r *router.Router, app *vukem.App) error {
 	r.Group("/app/v1", func(g *router.Group) {
 		g.Use(appapi.KnownType)
 		g.Use(stack...)
-		appapi.Catalog(g, items)
+		appapi.Catalog(g, items, catalog.CoversBase(app.Source.Get("COVERS_BASE_URL")))
 	}).Name("app.v1.")
 
 	return nil

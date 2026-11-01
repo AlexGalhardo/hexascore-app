@@ -1,0 +1,138 @@
+{
+  "qid": "Q129289",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q129289",
+      "labels": {
+        "en": "Julie, or the New Heloise",
+        "es": "Julia, o la nueva Eloísa",
+        "pt": "Júlia ou A Nova Heloísa"
+      },
+      "aliases": {
+        "en": [
+          "Nouvelle Heloïse",
+          "Julie; or, The New Eloise"
+        ],
+        "es": [
+          "Julie, la nouvelle Héloïse",
+          "Julia o la nueva Eloisa",
+          "Julie, ou la nouvelle Héloïse",
+          "Julia, o la Nueva Eloisa"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Julie; or, The New Heloise",
+        "eswiki": "Julia, o la nueva Eloísa",
+        "ptwiki": "Júlia ou A Nova Heloísa"
+      },
+      "sitelinks_count": 27,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q465821",
+            "rank": "normal"
+          },
+          {
+            "value": "Q8253",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Julie ou la Nouvelle Héloïse",
+            "rank": "normal"
+          },
+          {
+            "value": "Nowa Heloiza",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "RousseauJulie.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q150",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q142",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q6527",
+            "rank": "normal"
+          }
+        ],
+        "P571": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1757-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1761-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL8996772W",
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "2195139",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q142": "France",
+        "Q150": "French",
+        "Q465821": "epistolary novel",
+        "Q6527": "Jean-Jacques Rousseau",
+        "Q8253": "fiction"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q129289",
+      "lang": "en",
+      "title": "Julie; or, The New Heloise",
+      "extract": "Julie or the New Heloise (French: Julie ou la nouvelle Héloïse), originally entitled Lettres de Deux Amans, Habitans d'une petite Ville au pied des Alpes (Letters from two lovers, living in a small town at the foot of the Alps), is an epistolary novel by Jean-Jacques Rousseau, published in 1761 by Marc-Michel Rey in Amsterdam. The novel's subtitle points to the history of Héloïse d'Argenteuil and Peter Abélard, a medieval story of passion and Christian renunciation.",
+      "url": "https://en.wikipedia.org/wiki/Julie;_or,_The_New_Heloise"
+    },
+    "wikipedia:es": {
+      "qid": "Q129289",
+      "lang": "es",
+      "title": "Julia, o la nueva Eloísa",
+      "extract": "Julia, o la nueva Eloísa (Julie ou la Nouvelle Héloïse) es una novela epistolar de Jean-Jacques Rousseau publicada en 1761. Originariamente titulada Cartas de dos amantes, Habitantes de una pequeña ciudad a los pies de los Alpes, La Nueva Eloísa se inspira en la historia de Eloísa y Pedro Abelardo, en la que la sublime entrega poco a poco sobrepasa la pasión amorosa.\nA pesar del género novelesco con que se presenta, la obra está llena de una teoría filosófica con la que Rousseau explora los valores morales de la autonomía y la autenticidad para dar preferencia a la ética de esta contra los principios morales racionales: cumplir lo que la sociedad exige solo si es conforme a sus propios \"principios secretos\" y a los sentimientos que constituyen la identidad profunda.\nArthur Schopenhauer citó Julia, o la Nueva Eloísa como una de las cuatro mejores novelas jamás escritas, junto con Tristram Shandy, Wilhelm Meister y Don Quijote.​",
+      "url": "https://es.wikipedia.org/wiki/Julia,_o_la_nueva_Elo%C3%ADsa"
+    },
+    "wikipedia:pt": {
+      "qid": "Q129289",
+      "lang": "pt",
+      "title": "Júlia ou A Nova Heloísa",
+      "extract": "Júlia ou a Nova Heloísa (em francês:  Julie ou la nouvelle Héloïse), originalmente intitulado Lettres de Deux Amans, Habitans d'une petite Ville au pied des Alpes (\"Cartas de dois amantes, vivendo em uma pequena cidade no sopé dos Alpes\"), é um romance epistolar de Jean-Jacques Rousseau, publicado em 1761 por Marc-Michel Rey em Amsterdã. O subtítulo do romance aponta para a história de Heloísa de Argenteuil e Pedro Abelardo, uma história medieval de paixão e renúncia cristã.\nCom pelo menos 70 edições antes de 1800, A Nova Heloísa pode ter sido a obra mais vendida do século XVIII. A procura era tal que, não conseguindo imprimir exemplares suficientes do romance, os livreiros começaram a alugá-lo ao dia ou mesmo à hora.",
+      "url": "https://pt.wikipedia.org/wiki/J%C3%BAlia_ou_A_Nova_Helo%C3%ADsa"
+    }
+  },
+  "tier": "mid",
+  "type": "book"
+}

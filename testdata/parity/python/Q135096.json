@@ -1,0 +1,53 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0074006",
+      "rottentomatoes": "tv/i_claudius",
+      "tmdb": "5487"
+    },
+    "meta": {
+      "countries": [
+        "United Kingdom"
+      ],
+      "creators": [
+        "Robert Graves"
+      ],
+      "episodes": 12,
+      "genres": [
+        "historical drama",
+        "political drama"
+      ],
+      "runtimeMinutes": 50
+    },
+    "popularity": 25.0,
+    "qid": "Q135096",
+    "release_date": "1976-09-20",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "I, Claudius (stylised as I·CLAVDIVS) is a 1976 BBC Television adaptation of Robert Graves' 1934 novel I, Claudius and its 1935 sequel Claudius the God. Written by Jack Pulman, it stars Derek Jacobi as Claudius, with Siân Phillips, Brian Blessed, George Baker, Margaret Tyzack, John Hurt, Patricia Quinn, Ian Ogilvy, Kevin McNally, Patrick Stewart and John Rhys-Davies. The series covers the history of the early Roman Empire, told from the perspective of the elderly Emperor Claudius, who narrates the series.\nAmong many other productions and adaptations, Graves' Claudius novels have also been adapted for a BBC Radio 4 broadcast (2010) and for the stage (1972).",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/I,_Claudius_(TV_series)",
+        "title": "I, Claudius"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "I, Claudius (prt: Eu, Cláudio), estilizado como I·CLAVDIVS, é uma minissérie britânica da BBC2 de 1976, adaptada do romance homónimo, de Robert Graves, de 1934, e da sua sequência de 1935, Claudius the God. A série foi exibida em Portugal na RTP2, entre 17 de outubro e 9 de janeiro de 1979, às terças-feiras, às 22 horas e 30 minutos, a seguir ao \"Informação 2\".",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/I,_Claudius_(s%C3%A9rie)",
+        "title": "I, Claudius (série)"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Yo, Claudio (en inglés I, Claudius)  es una miniserie británica de televisión producida y emitida por la BBC en 1976. Se trata de una adaptación de las novelas Yo, Claudio y Claudio, el dios, y su esposa Mesalina, de Robert Graves. Esta miniserie fue creada por Jack Pullman, quien escribió el guion de los trece episodios. Se muestra en ella la vida de la Dinastía Julio-Claudia desde el primer principado de Octavio Augusto hasta los últimos días de Claudio desde el punto de vista de este último, que ha escrito su autobiografía. Los personajes principales fueron interpretados por actores del teatro shakespeariano, y destacan las actuaciones de Derek Jacobi (Claudio), Siân Phillips (Livia), John Hurt (Calígula) y Brian Blessed (Augusto).\nLa miniserie fue rodada en vídeo, en una escenografía teatral y sin exteriores.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Yo,_Claudio_(miniserie)",
+        "title": "Yo, Claudio"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q135096",
+  "slug": "i-claudius"
+}

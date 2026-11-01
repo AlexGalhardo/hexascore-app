@@ -130,3 +130,52 @@ VALUES ($1::text, $1::text || '@example.test', 'x', $1::text, $2) RETURNING id`,
 		PropEquals("recent.0.by", "anna").
 		PropEquals("recent.0.score", 8)
 }
+
+// TestHome_Trending7d: the home strip ranks the last 7 days only, 3 per type; activity 20 days ago does not count.
+func TestHome_Trending7d(t *testing.T) {
+	app := vukemtest.New(
+		t,
+		bootstrap.New,
+		vukemtest.Options{Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")}},
+	)
+
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	exec := func(q string, args ...any) {
+		t.Helper()
+
+		if _, err := db.ExecContext(t.Context(), q, args...); err != nil {
+			t.Fatalf("%s: %v", q, err)
+		}
+	}
+
+	exec(`INSERT INTO data_sources (code, name, licence, url) VALUES ('hexascore', 'x', 'proprietary', 'https://x')`)
+
+	// Games 0-3 are active today with growing ratings; game 4 only 20 days ago, with far more activity.
+	for i := range 5 {
+		id := uuid.NewV7().String()
+		exec(`INSERT INTO items (id, type, slug, wikidata_qid, release_date)
+VALUES ($1, 'game', $2, $3, '2020-05-01')`, id, fmt.Sprintf("trend-%d", i), fmt.Sprintf("Q%d", 8000+i))
+		exec(`INSERT INTO item_translations (item_id, locale, title, title_source) VALUES ($1, 'en', $2, 'hexascore')`,
+			id, fmt.Sprintf("Trend %d", i))
+
+		if i < 4 {
+			exec(`INSERT INTO item_activity_daily (item_id, day, item_type, views, ratings_new_w)
+VALUES ($1, current_date, 'game', 100, $2)`, id, 6+i)
+		} else {
+			exec(`INSERT INTO item_activity_daily (item_id, day, item_type, views, ratings_new_w)
+VALUES ($1, current_date - 20, 'game', 9000, 60)`, id)
+		}
+	}
+
+	app.Client(t).Inertia("").Get("/").AssertOK().AssertInertia("Home/Index").
+		HasProp("trending.game.items", 3).
+		PropEquals("trending.game.items.0.title", "Trend 3").
+		PropEquals("trending.game.items.0.rank", 1).
+		PropEquals("trending.game.items.0.basis", "trend").
+		PropEquals("trending.game.items.2.title", "Trend 1").
+		HasProp("trending.movie.items", 0)
+}

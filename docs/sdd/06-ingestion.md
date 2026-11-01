@@ -153,11 +153,11 @@ Kill switches (<https://vukem.dev/docs/digging-deeper/feature-flags> "Feature fl
 | Wikidata | CC0 | QID, titles, dates, credits, external IDs, trailers P1651, poster P3383, sitelinks | yes | — |
 | Wikipedia en/pt/es | CC BY-SA 4.0 | synopses; entity descriptions (≥ 3 items) | yes, licence + URL | "From Wikipedia, CC BY-SA 4.0" + link per synopsis |
 | Commons (P3383) | per file | film poster fallback | per file | author, licence, URL |
-| Open Library | pending A-05; connector off until `docs/legal/open-library.md` exists (01-2, 06-1) | pages, editions, covers | identifiers and titles only until then | per A-05 |
+| Open Library | no rights asserted by the Internet Archive (<https://openlibrary.org/developers/licensing>); legal read cleared by the owner (Q-A16, 2026-11-01); connector behind `ingest_openlibrary`, default off | pages, editions, covers | identifiers and titles only (`limitedSources`) until a licence note widens it | — |
 | TMDB | no commercial use, ≤ 6-month cache | poster, fallback facts, trailers | never | logo + not-endorsed notice on item pages using TMDB fields and `/about` |
-| IGDB | interim rule D-36: site-only, refreshed every 24 h, never cached > 7 days, until the owner records `docs/legal/igdb.md` | cover, fallback facts, trailers | never | "Game data by IGDB.com" in game page footers and `/about` |
-| Steam `appdetails` | [NOT VERIFIED] | header image, OS platforms | store ID (Wikidata) | — |
-| GOG catalog | [NOT VERIFIED] | store link, cover, OS platforms | store ID (Wikidata) | — |
+| IGDB | Twitch Developer Services Agreement (<https://www.twitch.tv/p/en/legal/developer-agreement/>) and IGDB API terms (<https://api-docs.igdb.com/>: commercial use through a partnership, visible attribution); owner cleared the read (Q-A16); interim rule D-36 still applies: site-only, refreshed every 24 h, never cached > 7 days | cover, fallback facts, trailers | never | "Game data by IGDB.com" in game page footers and `/about` |
+| Steam `appdetails` | Steam Web API Terms of Use (<https://steamcommunity.com/dev/apiterms>: data "as is", no implied Valve endorsement); owner cleared the read (Q-A16) | header image, OS platforms | store ID (Wikidata) | — |
+| GOG catalog | no published API terms; GOG User Agreement (<https://www.gog.com/en/user_agreement>) governs the site; owner cleared the read (Q-A16) | store link, cover, OS platforms | store ID (Wikidata) | — |
 | YouTube oEmbed | YouTube ToS | embeddability verdict | IDs (Wikidata) | player |
 
 Steam/GOG images are site-only, store IDs are used for links only, and images stay out of the app until both terms are read (roadmap task, open issue 06-8); affiliate URLs come from store IDs, flag `affiliates` (SDD 01).
@@ -231,7 +231,8 @@ Pressure gate: app middleware counts in-flight requests; batches wait while > 16
 | score recompute | daily 04:00 | owned by SDD 02 |
 | `dq.asserts` | after normalise; daily 05:00 | §7.7 |
 | `dq.frontend_fields` | daily 05:30 | §7.7 |
-| `covers.gc`, prunes | daily 02:30 | retention §5 |
+| `covers` | daily 04:15 incremental; Sun 02:00 full | own chains (`covers-daily`, `covers-weekly`) → asserts, so the `ingest_covers` kill switch never stops another chain; the full run drops Commons covers without a P3383 poster |
+| `covers.gc`, prunes | daily 02:30 | retention §5; `cover_gc` is filled by a trigger on `items`/`editions` whenever a `covers/` key is released |
 
 Dead letter: vukem `failed_jobs` (`queue:failed`, `queue:retry`) for jobs; `ingest_failures` per target, parked after 5 failed runs. A run with `heartbeat_at` older than 15 min becomes `failed` and resumable.
 
@@ -261,7 +262,7 @@ Missing-field detector: daily 500 items per type (top 200 + 300 random) rendered
 
 New field over 100k items: nullable expand migration → `backfill.<name>`, keyset over `items.id`, 500 per transaction, `WHERE col IS NULL`, 100 ms pause, progress `seen/total_estimate` → assert `warn` until 100 %, then `error` → `NOT NULL` next release (ADR 0014).
 
-Bad run: restore history rows with `superseded_by_run = <id>`, clear `normalized_at`, delete records the run inserted; the normaliser rebuilds items; items the run created are deleted unless user data references them (then flagged); covers re-run (old objects live 30 days). Logged as a `rollback` run plus audit entry. Beyond 30 days: restore the latest dump into a scratch database (ADR 0014) and copy catalogue tables back in one transaction, user tables untouched (runbook: SDD 11).
+Bad run: restore history rows with `superseded_by_run = <id>`, clear `normalized_at`, delete records the run inserted; the normaliser rebuilds items; items the run created are deleted unless user data references them (then flagged); a rolled-back non-Wikidata record queues its Wikidata record again and clears the cover that source gave the item (the covers job re-picks it), and a restored record gets back the `checked_at` its history row archived (`fetched_at` for older rows); covers re-run (old objects live 30 days). Logged as a `rollback` run plus audit entry. Beyond 30 days: restore the latest dump into a scratch database (ADR 0014) and copy catalogue tables back in one transaction, user tables untouched (runbook: SDD 11).
 
 ### 7.9 Legacy import and parity
 

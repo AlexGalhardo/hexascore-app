@@ -1,0 +1,46 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "881601",
+      "openlibrary": "OL804246W"
+    },
+    "meta": {
+      "countries": [
+        "United Kingdom"
+      ],
+      "creators": [
+        "Arthur Koestler"
+      ]
+    },
+    "popularity": 25.0,
+    "qid": "Q73580",
+    "release_date": "1940-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Darkness at Noon (German: Sonnenfinsternis, lit. 'Solar eclipse') is a novel by Austrian-Hungarian-born novelist Arthur Koestler, first published in 1940. His best known work, it is the tale of Rubashov, an Old Bolshevik who is arrested, imprisoned, and tried for treason against the government that he had helped to create.\nThe novel is set between 1938 and 1940, after the Great Purge and Moscow show trials. Despite being based on real events, the novel does not name either Russia or the Soviets, and tends to use generic terms to describe people and organizations; for example, the Soviet government is referred to as \"the Party\" and Nazi Germany is referred to as \"the Dictatorship\". Joseph Stalin is represented by \"Number One\", a menacing dictator. The novel expresses the author's disillusionment with Bolshevism, Stalinism, and the ideology of the Communist Party of the Soviet Union at the outset of World War II.\nIn 1998, the Modern Library ranked Darkness at Noon number eight on its list of the 100 best English-language novels of the 20th century, even though Koestler wrote it in German. This is because the German-language version was lost at the time, and the novel was known only from an English translation.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Darkness_at_Noon",
+        "title": "Darkness at Noon"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "O Zero e o Infinito (no original, em alemão,  Sonnenfinsternis, isto é, Eclipse solar) é um romance escrito por Arthur Koestler, publicado inicialmente em inglês com o título Darkness at Noon, Escuridão ao meio-dia, em 1940.\nO personagem principal do romance, o fictício e velho militante Rubachov é inspirado nos líderes bolcheviques aniquilados pelo regime estalinista durante o Grande Expurgo na União Soviética. O livro relata as reflexões do preso político e o processo que o conduz a confessar um crime que ele não cometeu e, finalmente, à sua execução.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/O_Zero_e_o_Infinito",
+        "title": "O Zero e o Infinito"
+      },
+      {
+        "locale": "es",
+        "synopsis": "El cero y el infinito (Sonnenfinsternis (Eclipse solar) en alemán; Darkness at Noon (Oscuridad al mediodía) en inglés) es la principal novela de Arthur Koestler, autor judío húngaro nacionalizado británico. Publicada en 1940, narra la historia de Nikolái Rubashov, un viejo bolchevique de la Revolución rusa de 1917 y ex comisario del Pueblo que se ve en problemas en la Unión Soviética dirigida por Iósif Stalin.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/El_cero_y_el_infinito",
+        "title": "El cero y el infinito"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q73580",
+  "slug": "darkness-at-noon"
+}

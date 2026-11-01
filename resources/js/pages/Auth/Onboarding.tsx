@@ -5,10 +5,10 @@ import Field from "../../components/Field";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
-export default function Onboarding() {
+export default function Onboarding({ socialEnabled = false }: { socialEnabled?: boolean }) {
 	const t = useT();
 	const l = useLocalized();
-	const form = useForm({ nickname: "" });
+	const form = useForm({ nickname: "", feedOptIn: false });
 
 	const submit = (e: FormEvent) => {
 		e.preventDefault();
@@ -43,10 +43,25 @@ export default function Onboarding() {
 				<p className="text-sm text-zinc-600 dark:text-zinc-400">
 					{t("auth.signup.nicknameHint")}
 				</p>
+				{socialEnabled && (
+					<label className="flex items-start gap-2">
+						<input
+							type="checkbox"
+							checked={form.data.feedOptIn}
+							onChange={(e) => form.setData("feedOptIn", e.target.checked)}
+						/>
+						<span>
+							<span className="font-medium">{t("social.optIn.label")}</span>
+							<span className="block text-sm text-zinc-600 dark:text-zinc-400">
+								{t("social.optIn.help")}
+							</span>
+						</span>
+					</label>
+				)}
 				<button
 					type="submit"
 					disabled={form.processing}
-					className="rounded-md bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
+					className="rounded-md bg-primary px-4 py-2 font-medium text-on-primary hover:bg-primary-hover disabled:opacity-50"
 				>
 					{t("auth.onboarding.submit")}
 				</button>

@@ -1,0 +1,37 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt6289578",
+      "tmdb": "64292"
+    },
+    "meta": {
+      "countries": [
+        "South Korea"
+      ],
+      "episodes": 6
+    },
+    "popularity": 7.0,
+    "qid": "Q21977590",
+    "release_date": "2015-10-26",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Falling for Challenge (Korean: 도전에 반하다; RR: Dojeone banhada) is a web drama created by Samsung company. The drama stars South Korean actress Kim So-eun and Kim Min-seok. The web drama became the most watched web drama in 2015 with 21,124,965 views. \"Falling for Challenge\" is one of the most watched web dramas ever, with over 24 million views.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Falling_for_Challenge",
+        "title": "Falling for challenge"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Falling for Challenge (coreano: 도전에 반하다; RR: Dojeone Banhada) é um webdrama sul-coreano da Samsung estrelada pela atriz sul-coreana Kim So-eun e pelo artista Xiumin. Tendo estreado em 26 de outubro de 2015, tornou-se o webdrama mais visualizado de 2015, totalizando mais de 21 milhões de visualizações. Desde então, Falling for Challenge alcançou mais de 35 milhões de visualizações, e é o terceiro webdrama sul-coreano mais visualizado da história.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Falling_for_Challenge",
+        "title": "Falling for Challenge"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q21977590",
+  "slug": "falling-for-challenge"
+}

@@ -43,7 +43,9 @@ func TestInertiaPages_UserLibraryLists(t *testing.T) {
 	t.Run("User/List", func(*testing.T) {
 		own.Get("/u/pageowner/lists/"+pub).AssertOK().AssertInertia("User/List").
 			PropEquals("canEdit", true).HasProp("items", 1)
-		oth.Get("/u/pageowner/lists/"+pub).AssertOK().AssertInertia("User/List").PropEquals("canEdit", false)
+		oth.Get("/u/pageowner/lists/"+pub).AssertOK().AssertInertia("User/List").PropEquals("canEdit", false).
+			MissingProp("list.version").MissingProp("list.createdAt").MissingProp("items.0.addedAt").
+			MissingProp("items.0.item.coverThumbKey")
 		// One item is not indexable (SDD 14 FR-14-6 needs three); two more make it so.
 		anon.Get("/u/pageowner/lists/"+pub).AssertOK().AssertInertia("User/List").
 			PropEquals("canEdit", false).PropEquals("indexable", false)

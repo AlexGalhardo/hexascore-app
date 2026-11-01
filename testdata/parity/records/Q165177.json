@@ -1,0 +1,82 @@
+{
+  "qid": "Q165177",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q165177",
+      "labels": {
+        "en": "Great Britons",
+        "es": "100 Greatest Britons",
+        "pt": "100 Greatest Britons",
+        "pt-br": "100 Greatest Britons"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Great Britons",
+        "eswiki": "100 Greatest Britons",
+        "ptwiki": "100 Greatest Britons"
+      },
+      "sitelinks_count": 34,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q1319865",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0364166",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q9531",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "15148",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1319865": "ranking show",
+        "Q145": "United Kingdom",
+        "Q9531": "British Broadcasting Corporation"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q165177",
+      "lang": "en",
+      "title": "Great Britons",
+      "extract": "Great Britons is a television series that was broadcast by the BBC in 2002. It was based on a television poll conducted to determine who the British people at that time considered the greatest Britons in history. The series included individual programmes featuring the top ten, with viewers having further opportunity to vote after each programme. It concluded with a debate and final determination of the ranking of the top ten. Although many living people were included among the top 100, all of the top ten were deceased.",
+      "url": "https://en.wikipedia.org/wiki/Great_Britons"
+    },
+    "wikipedia:es": {
+      "qid": "Q165177",
+      "lang": "es",
+      "title": "100 Greatest Britons",
+      "extract": "100 Greatest Britons fue un programa de televisión británico de 2002 en el que los telespectadores votaron a los que consideraron los cien personajes británicos más importantes de todos los tiempos.​​​\nEl formato ha sido adaptado o copiado por varias cadenas de televisión en todo el mundo, que también han elegido a sus propios ciudadanos más importantes de la historia.",
+      "url": "https://es.wikipedia.org/wiki/100_Greatest_Britons"
+    },
+    "wikipedia:pt": {
+      "qid": "Q165177",
+      "lang": "pt",
+      "title": "100 Greatest Britons",
+      "extract": "100 Greatest Britons foi uma série de televisão transmitida pela BBC em 2002. Consistiu de uma votação popular feita para determinar quais eram os maiores britânicos da história. A série apresentava episódios individuais mostrando os dez mais votados até aquela altura, com os espectadores tendo a chance de votar novamente após cada programa.",
+      "url": "https://pt.wikipedia.org/wiki/100_Greatest_Britons"
+    }
+  },
+  "tier": "mid",
+  "type": "series"
+}

@@ -1,0 +1,55 @@
+{
+  "item": {
+    "external_ids": {
+      "gog": "game/dramatical_murder",
+      "hltb": "13408",
+      "steam": "1481080"
+    },
+    "meta": {
+      "countries": [
+        "Japan"
+      ],
+      "creators": [
+        "Nitro chiral"
+      ],
+      "genres": [
+        "LGBT-themed video game",
+        "Boys' Love game",
+        "science fiction video game"
+      ],
+      "platforms": [
+        "Microsoft Windows"
+      ]
+    },
+    "popularity": 15.0,
+    "qid": "Q5206006",
+    "release_date": "2012-03-23",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Dramatical Murder (ドラマティカル マーダー, Doramatikaru Mādā; stylized as DRAMAtical Murder) is a Japanese BL visual novel developed and published by Nitro+chiral. It was originally released on March 23, 2012, for Windows PCs as a first press edition, with a regular edition released on April 27, 2012. A fan disc follow-up titled Dramatical Murder re:connect, also for Windows PCs, was released on April 26, 2013, adding additional scenes, images and songs to the existing routes, as well as four new character routes to play through. On October 30, 2014, a version of the visual novel aimed at ages 15 and above titled Dramatical Murder re:code was released for the PlayStation Vita which removed the sex scenes, toned down the violence, and included an additional route for the character Mizuki.\nAn anime adaption by studio NAZ premiered on July 6, 2014. It is directed by Kazuya Miura, with Touko Machida and Kabura Fuchii handling series composition, Yukiko Ban designing the characters and Yuki Hayashi composing the music.\nOn July 4, 2018, it was announced at the Anime Expo that JAST USA's new JAST BLUE branch, which focuses on boys-love games, would release Nitro+CHiRAL's DRAMAtical Murder games and its other visual novel titles in English.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Dramatical_Murder",
+        "title": "Dramatical Murder"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Dramatical Murder (ドラマティカル マーダー, Doramatikaru Mādā; estilizado como DRAMAtical Murder) é um jogo eletrônico de romance visual BL japonês desenvolvido e publicado pela Nitro+Chiral. Foi originalmente lançado em 23 de março de 2012 para Windows como uma primeira edição de imprensa, com uma edição regular sendo lançada em 27 de abril de 2012. Uma sequência intitulada Dramatical Murder Re:Connect (ドラマティカル マーダー リコネクト, Doramatikaru Mada Rikonekuto), também para Windows, foi lançada em 26 de abril de 2013, acrescentando cenários, imagens e músicas adicionais às rotas existentes, além de quatro novas rotas de personagens para jogar. Em 30 de outubro de 2014, foi lançada para PlayStation Vita uma versão do visual novel voltada para maiores de 15 anos, intitulada Dramatical Murder Re:Code. Essa versão removeu as cenas de sexo, suavizou a violência e apresentou uma rota adicional para o personagem Mizuki.\nUma adaptação para anime pelo estúdio NAZ estreou em 6 de julho de 2014. É dirigida por Kazuya Miura, com Touko Machida e Kabura Fuchii cuidando da composição da série, Yukiko Ban desenhando os personagens e Yuki Hayashi compondo a música. \nEm 4 de julho de 2018, foi anunciado na Anime Expo que a nova divisão JAST BLUE da JAST USA, focada em jogos boys' love, lançaria os jogos de Dramatical Murder da Nitro+Chiral e seus outros títulos de romance visual em inglês.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Dramatical_Murder",
+        "title": "DRAMAtical Murder"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Dramatical Murder (ドラマティカル マーダー, Doramatikaru Mādā?), estilizado como DRAMAtical Murder, es una novela visual japonesa de género yaoi y ciencia ficción desarrollada por Nitro+Chiral. Fue lanzada el 23 de marzo de 2012 para formato PC como una edición de prensa, mientras que una edición regular fue lanzada el 27 de abril de 2012.​ Debido al éxito obtenido con la primera entrega y, al poco espacio habido en el primer disco, una segunda parte titulada DRAMAtical Murder re:connect (ドラマティカル マーダー リコネクト, Doramatikaru Mādā Rikonekuto?), fue lanzada también para PC el 26 de abril de 2013.​ Un remake basado en el juego original, DRAMAtical Murder re:code (ドラマティカル マーダー リコード, Doramatikaru Mādā Rikōdo?), fue lanzado el 30 de octubre de 2014 para PlayStation Vita. re:code cuenta con material extra y con una notoria disminución del contenido sexual y de violencia que caracterizaron las dos entregas anteriores de Dramatical Murder, principalmente con el objetivo de llegar a una audiencia más joven.​​​ Una adaptación a serie de anime realizada por el estudio NAZ y dirigida por Kazuya Miura, fue estrenada en Japón el 6 de julio de 2014. El anime cuenta con doce episodios y un OVA.​​ \nLa historia se desarrolla en un futuro distópico donde un juego de realidad virtual llamado Rhyme ha ganado popularidad entre los jóvenes. El protagonista Aoba Seragaki se verá envuelto en una serie de extraños sucesos que amenazarán con poner en riesgo su vida cotidiana. Aoba deberá descubrir que relación guarda su olvidado pasado con Rhyme y aún más importante, con el antagonista principal, Tōue. \nLa banda sonora principal estuvo a cargo del grupo musical GOATBED,​ mientras que las canciones individuales para cada personaje y sus respectivas rutas fueron compuestas e interpretadas por la cantante Kanako Itō, el cantante Seizi Kimura y la banda VERTUEUX. Considerada como la «obra maestra» de Nitro+Chiral, Dramatical Murder mezcla diversos temas como la individualidad, enfermedades mentales presentes en los personajes, trastornos de identidad que caracterizan al protagonista,​ abuso físico y psicológico y la compleja función del cerebro humano, así como también la capacidad y poder que este mismo puede llegar a adquirir.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Dramatical_Murder",
+        "title": "Dramatical Murder"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q5206006",
+  "slug": "dramatical-murder"
+}

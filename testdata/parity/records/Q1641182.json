@@ -1,0 +1,88 @@
+{
+  "qid": "Q1641182",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q1641182",
+      "labels": {
+        "en": "Prutenic Tables",
+        "es": "Tablas prusianas"
+      },
+      "aliases": {
+        "en": [
+          "Prussian tables"
+        ],
+        "es": [
+          "Tablas pruténicas"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Prutenic Tables",
+        "eswiki": "Tablas prusianas"
+      },
+      "sitelinks_count": 15,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q384515",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Tabulæ Prutenicæ",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Prutenic Tables.png",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q397",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q544169",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1551-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q384515": "treatise",
+        "Q397": "Latin",
+        "Q544169": "Erasmus Reinhold"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q1641182",
+      "lang": "en",
+      "title": "Prutenic Tables",
+      "extract": "The Prutenic Tables (Latin: Tabulae prutenicae from Prutenia meaning \"Prussia\", German: Prutenische oder Preußische Tafeln), were an ephemeris (astronomical tables) by the astronomer Erasmus Reinhold published in 1551 (reprinted in 1562, 1571 \u0026 1585). They are sometimes called the Prussian Tables after Albert I, Duke of Prussia, who supported Reinhold and financed the printing. Reinhold calculated this new set of astronomical tables based on Nicolaus Copernicus' De revolutionibus orbium coelestium, the epochal exposition of Copernican heliocentrism published in 1543. Throughout his explanatory canons, Reinhold used as his paradigm the position of Saturn at the birth of the Duke, on 17 May 1490. With these tables, Reinhold intended to replace the Alfonsine Tables; he added redundant tables to his new tables so that compilers of almanacs familiar with the older Alfonsine Tables could perform all the steps in an analogous manner.\nSeveral tables based on the Alfonsine Tables were published after the publication of the Prussian Tables. Copernicus's heliocentric claims were slow to be accepted by all European astronomers. Rather, the Prussian Tables became popular in German speaking countries for nationalistic and confessional reasons, and it is through these tables that Copernicus's reputation was established as a skilled mathematician or an astronomer on a par with Ptolemy, and helped to disseminate the Copernicus' methods of calculating the positions of astronomical objects throughout the Holy Roman Empire. They eventually replaced the Alfonsine tables, which astronomers and astrologers had used for 300 years.\nThe Alfonsine tables in Table of the Stars by Regiomontanus  also were used by sailors and sea explores during the fourteenth and fifteenth centuries.\nChristopher Clavius used Reinhold's Prutenic Tables and Copernicus' work as a basis for the calendar reform instituted under Pope Gregory XIII.\nDecades later, in Prague, Johannes Kepler compiled the Rudolphine Tables, based on Tycho Brahe's lifetime of astronomical observations, which were the most extensive and accurate observations until his time. Kepler completed the work in 1625 and managed to publish it in 1627.\nIn 1970 Owen Gingerich discovered Reinhold's heavily annotated copy of Copernicus' De revolutionibus. This inspired him to explore the dissemination and use of De revolutionibus in the several decades following its publication. Gingerich wrote about his explorations and their results, and the role of Reinhold's Prutenic Tables, in The Book Nobody Read: Chasing the Revolutions of Nicolaus Copernicus (2004).",
+      "url": "https://en.wikipedia.org/wiki/Prutenic_Tables"
+    },
+    "wikipedia:es": {
+      "qid": "Q1641182",
+      "lang": "es",
+      "title": "Tablas prusianas",
+      "extract": "Las Tablas pruténicas, veces llamadas Tablas prusianas, (en latín: Tabulae prutenicae, significado pruténico «de Prusia», en alemán: Preußische Tafeln), eran unas tablas astronómicas (efemérides) que el astrónomo Erasmo Reinhold publicó en 1551. Reciben su nombre por el patronazgo de Alberto I, duque de Prusia, que había financiado a Reinhold.",
+      "url": "https://es.wikipedia.org/wiki/Tablas_prusianas"
+    }
+  },
+  "tier": "year-precision",
+  "type": "book"
+}

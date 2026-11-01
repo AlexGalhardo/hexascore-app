@@ -9,10 +9,15 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
+	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
 // Handlers serve the profile page and its section forms.
-type Handlers struct{ a *accounts.Accounts }
+type Handlers struct {
+	a *accounts.Accounts
+	// Social adds the feed opt-in switch while the feature flag `social` is on (SDD 14 FR-14-18); nil on SQLite.
+	Social *social.Follows
+}
 
 // New builds the handlers.
 func New(a *accounts.Accounts) *Handlers { return &Handlers{a: a} }
@@ -54,7 +59,7 @@ func (h *Handlers) Show(c *web.Ctx) error {
 		})
 	}
 
-	return inertia.Render(c, "Profile/Index", inertia.Props{
+	props := inertia.Props{
 		"details":     inertia.Props{"name": u.Name, "email": u.Email, "locale": p.Locale},
 		"passwordSet": p.PasswordSet,
 		"twoFactor":   inertia.Props{"enabled": tf.Enabled()},
@@ -63,8 +68,20 @@ func (h *Handlers) Show(c *web.Ctx) error {
 		"privacy": inertia.Props{
 			"profilePrivate": p.ProfilePrivate, "personalizationOptOut": p.PersonalizationOptOut,
 		},
+		"notifications":       inertia.Props{"communityMailOptOut": p.CommunityMailOptOut},
 		"deletionScheduledAt": u.DeletionScheduledAt,
-	})
+	}
+
+	if h.Social.Enabled(c.Context()) {
+		on, err := h.Social.FeedOptIn(c.Context(), u.ID)
+		if err != nil {
+			return err
+		}
+
+		props["social"] = inertia.Props{"feedOptIn": on}
+	}
+
+	return inertia.Render(c, "Profile/Index", props)
 }
 
 // UpdateDetails saves name and locale.
@@ -132,6 +149,27 @@ func (h *Handlers) UpdatePrivacy(c *web.Ctx) error {
 	}
 
 	inertia.Flash(c, "status", h.a.T(c.Context(), "auth.profile.privacy_saved"))
+
+	return c.Redirect("/profile")
+}
+
+// UpdateNotifications saves the email notice switches.
+func (h *Handlers) UpdateNotifications(c *web.Ctx) error {
+	u, err := h.user(c)
+	if err != nil {
+		return err
+	}
+
+	in, err := web.Parse(c, requests.ProfileNotificationsSchema)
+	if err != nil {
+		return err
+	}
+
+	if err := h.a.UpdateCommunityMail(c.Context(), u.ID, in.CommunityMailOptOut); err != nil {
+		return err
+	}
+
+	inertia.Flash(c, "status", h.a.T(c.Context(), "auth.profile.notifications_saved"))
 
 	return c.Redirect("/profile")
 }

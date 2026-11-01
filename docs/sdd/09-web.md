@@ -31,11 +31,11 @@ In (v1): shell, SSR, routing/i18n, §6.2 pages, components, tokens, budgets, acc
 
 | ID | Metric | Budget | Measured by |
 | --- | --- | --- | --- |
-| NFR-09-1 | LCP, mobile emulation (Moto G Power, slow 4G) | ≤ 2.0 s | Lighthouse CI, median of 3 runs |
+| NFR-09-1 | LCP, mobile emulation (Moto G Power, slow 4G) | ≤ 2.5 s (was 2.0 s; raised per Q-A20) | Lighthouse CI, median of 3 runs |
 | NFR-09-2 | INP | ≤ 150 ms field (p75); lab proxy TBT ≤ 200 ms (open issue 09-11) | Lighthouse CI TBT; Playwright Event Timing on star click; field: `web-vitals` beacon (LCP, INP, CLS, TTFB; opt-in, anonymous) to `POST /app/v1/client-metrics` (SDD 05 §6.4, SDD 12) |
 | NFR-09-3 | CLS | ≤ 0.05 | Lighthouse CI |
 | NFR-09-4 | TTFB p75 (SSR, staging) | ≤ 400 ms; ≤ 150 ms on props-cache hit | k6 + SDD 12 histogram |
-| NFR-09-5 | JS on item page | ≤ 150 kB gzip total, ≤ 90 kB before interaction | Lighthouse `resource-summary` + `bun run size` |
+| NFR-09-5 | JS on item page | ≤ 170 kB gzip total (was 150 kB; raised per Q-A20), ≤ 90 kB before interaction | Lighthouse `resource-summary` + `bun run size` |
 | NFR-09-6 | CSS | ≤ 30 kB gzip | same |
 | NFR-09-7 | Fonts | ≤ 3 WOFF2 files, ≤ 100 kB total, `font-display: swap`, 1 preload | Lighthouse |
 | NFR-09-8 | Lighthouse scores (mobile) | Performance ≥ 90, Accessibility 100, SEO 100, Best Practices ≥ 95 | Lighthouse CI |
@@ -44,6 +44,8 @@ In (v1): shell, SSR, routing/i18n, §6.2 pages, components, tokens, budgets, acc
 | NFR-09-11 | Accessibility | WCAG 2.2 AA; axe 0 serious/critical | Playwright + axe |
 | NFR-09-12 | SQL per page render | 0 N+1 alerts; item page ≤ 12 queries cold | vukem devtools `/_vukem/queries` (<https://vukem.dev/docs/digging-deeper/devtools#finding-an-n1-query>), dev checklist |
 | NFR-09-13 | Viewport | every page usable at 360 px (legacy `docs/design-system.md` "Princípios") | Playwright mobile project |
+
+Note (2026-11-01, Q-A20 in `docs/orchestration/QUESTIONS.md`): the owner raised NFR-09-1 from 2.0 s to 2.5 s (the Core Web Vitals "good" threshold) and NFR-09-5 from 150 kB to 170 kB after the release PR's Lighthouse check failed on GitHub runners (LCP medians 2.1 to 2.5 s). `lighthouserc.cjs` asserts the same values.
 
 ## 5. Data model
 
@@ -81,7 +83,7 @@ type Shared = {
 };
 ```
 
-Prop types reuse the OpenAPI schemas: `vukem codegen:types` over the `/app/v1` document (ADR 0009) writes `resources/js/types/api.d.ts`; page-only props live in `resources/js/types/pages.ts`. Typed routes via `vukem codegen:routes` (<https://vukem.dev/docs/cli/reference-runtime#vukem-codegenroutes>; types: `#vukem-codegentypes`). The web makes no fetch calls except `/search/suggest` and `/search/events` (SDD 07 §6); no generated HTTP client ships to the browser.
+Prop types reuse the OpenAPI schemas: `vukem codegen:types` over the `/app/v1` document (ADR 0009) writes `resources/js/types/api.d.ts`; page-only props live in `resources/js/types/pages.ts`. Typed routes via `vukem codegen:routes` (<https://vukem.dev/docs/cli/reference-runtime#vukem-codegenroutes>; types: `#vukem-codegentypes`). The web makes no fetch calls except `/search/suggest` and `/search/events` (SDD 07 §6), the ratings dialog, the edition picker and the data export; no generated HTTP client ships to the browser. Those client-fetched calls go through TanStack Query (ADR 0020): one `QueryClient` per browser app, a fresh one per SSR render, and never for Inertia page props.
 
 ### 6.2 Page inventory
 
@@ -135,8 +137,8 @@ Web mutation routes (session guard, same handlers as `/app/v1`, SDD 02 §6): `PU
 
 - Public page props are cached with `cache.Remember` (<https://vukem.dev/docs/digging-deeper/cache#remember-compute-once-read-many-times>, stampede-safe) in `cache.NewMemory(5000)`, key `page:v1:{locale}:{component}:{path}?{sorted allowed query}`, TTL 60 s (home 300 s); `catalog.ItemsChanged` (SDD 06) and `ItemScoreChanged` (SDD 02) delete the item's and its entities' keys in 3 locales. Logged-in requests reuse them and add `me`, `notifications`.
 - No documented hook caches SSR output [NOT IN VUKEM DOCS]; every first load runs SSR.
-- Anonymous Inertia JSON visits: `web.ETagOf(pageObject)` + `c.NotModified` (<https://vukem.dev/docs/basics/responses#conditional-requests>), `private, no-cache`, `Vary: X-Inertia`. Full HTML loads: `private, no-cache`, never an ETag (a 304 would pair cached HTML's old nonce with a new CSP; decided 09-2). ETag only on JSON (Inertia visits, APIs) and assets; the TTFB budget is met by the props render cache plus SSR, not by 304s. Logged in: `private, no-store`.
-- `/build/*` immutable (<https://vukem.dev/docs/frontend/vite#asset-caching>); covers 1 year immutable (SDD 06); sitemaps and robots `public, max-age=3600` + ETag. Only those `/build` JS, CSS, SVG, font and source-map responses are gzip-encoded (`app/http/middleware.GzipStatic`). HTML and any response that sets a cookie stay uncompressed (BREACH).
+- Anonymous Inertia JSON visits: `web.ETagOf(pageObject)` + `c.NotModified` (<https://vukem.dev/docs/basics/responses#conditional-requests>), `private, no-cache`, `Vary: X-Inertia`. Full HTML loads of the public catalogue pages (home, listings, items, entities; `app/http/middleware.RenderCache`): `public, max-age=60, stale-while-revalidate=300` with `Vary: Cookie, Accept-Language` for anonymous 200 responses that set no cookie, so a cache keeps the page and the CSP header with its nonce together; `private, no-store` when the request has the session cookie or the response sets a cookie. The same anonymous 200 pages are also kept in process for 60 s (max 1000 entries, one render per key at a time, keyed by path, query, the `theme`, `consent` and `locale` cookies and, on unprefixed paths, `Accept-Language` (it picks the FR-09-3 redirect); session requests and responses that set a cookie bypass it) and replayed with the nonce swapped for the request's own CSP nonce, so SSR runs once per page per minute and the nonce stays per request (A05). Other HTML: `private, no-cache`. Never an ETag on HTML (a 304 would pair cached HTML's old nonce with a new CSP; decided 09-2). ETag only on JSON (Inertia visits, APIs) and assets; the TTFB budget is met by the props render cache plus SSR, not by 304s. Logged in: `private, no-store`.
+- `/build/*` immutable (<https://vukem.dev/docs/frontend/vite#asset-caching>); covers 1 year immutable (SDD 06); sitemaps and robots `public, max-age=3600` + ETag. Only those `/build` JS, CSS, SVG, font and source-map responses are gzip-encoded (`app/http/middleware.GzipStatic`). Anonymous public catalogue HTML (the pages `RenderCache` marks `public, max-age=60`, no session cookie in, no cookie out) is gzip-encoded by `GzipPublicPages` with `Vary: Accept-Encoding` (145 kB to about 25 kB, mobile LCP); all other HTML and any response that sets a cookie stay uncompressed (BREACH, SDD 13 §7.5).
 
 ### 7.3 Listings and pagination
 
@@ -146,8 +148,8 @@ Listing rule (legacy `docs/frontend.md` lines 60–62): mixed results grouped by
 
 - One widget per category (six per type, `legacy/apps/web/lib/categories.ts`, A-06); 0.5–10 in 0.5 steps, unset = null; Save sends all six (SDD 02) and is enabled once all are set.
 - Pointer: 10 stars × 2 half zones, hover preview, one click sets, drag updates. Touch: the row is one ≥ 44 px tall target plus 44×44 px − / + buttons for precision at 360 px.
-- Keyboard (SDD 02 NFR-02-7): Left/Down −0.5, Right/Up +0.5, PageDown/PageUp ±1, Home 0.5, End 10, Delete clears; 2 px focus ring in the type accent.
-- ARIA: `role="slider"`, `aria-label` = category, `aria-valuemin="0"`, `aria-valuemax="10"`, `aria-valuenow` (0 = unset), `aria-valuetext` `rating.valuetext` "{value} of 10 stars" / `rating.unset` "Not rated".
+- Keyboard (SDD 02 NFR-02-7): Left/Down −0.5, Right/Up +0.5 (no wrapping), Home 0.5, End 10, Delete/Backspace clears; one Tab stop per category; 2 px focus ring in `primary` around the group.
+- ARIA (design v1): a radio group, not a slider. `role="radiogroup"` labelled by the category, 20 native `type="radio"` inputs (0.5 to 10) sharing one `name`, each labelled `rating.valuetext` "{value} of 10 stars"; no radio checked = unset ("Not rated"). Native radios keep the form usable without JavaScript and give screen readers the standard "n of 20" position.
 - Filled `star`, empty `border`; the number is always visible; no animation under reduced motion.
 - Disabled: logged out (login link), `rating-not-released`, `ratingsLimitedUntil`, 429 → notice keyed by problem `code`.
 - `ScoreStars` (read-only): `7.8/10`, `ratingCount`, confidence chip; `null` → "Not enough ratings (n/5)".
@@ -184,6 +186,9 @@ Skip link to `#main` first. On each Inertia `navigate` (not partial reloads) foc
 - JSON-LD data block (`<` escaped): `VideoGame`, `Movie`, `TVSeries`, `Book` (editions as `workExample` with `isbn`), `Person`, `Organization`; `aggregateRating {ratingValue, bestRating: 10, worstRating: 0.5, ratingCount}` only when `score` is not null.
 - Sitemaps: index → `/sitemaps/static.xml`, `items-{type}-{n}.xml`, `entities-{kind}-{n}.xml`, app handler (SDD 01 open issue 8). Entities are listed and indexable only with ≥ 3 items, else `noindex, follow`. Merged slugs 301.
 - `robots.txt`: disallow `/admin`, `/profile`, `/me`, `/billing`, `/suggest`, `/suggestions`, `/library`, `/lists`, `/login`, `/signup`, `/*?cursor=`; `Sitemap:` line; search stays crawlable so its `noindex` is seen.
+- `/llms.txt` and `/llms-full.txt` (vukem `llmstxt`, <https://vukem.dev/docs/digging-deeper/llms-txt>, `routes/llms.go`): what HexaScore is, the four catalogue sections, the API docs, pricing, terms and privacy; `llms-full.txt` streams the API docs Markdown (`resources/docs/*.md`), never item pages. Both are outside the scrape guard.
+- Analytics and verification (vukem `analytics`, <https://vukem.dev/docs/digging-deeper/analytics>): `{{analytics}}` in `app.html` before the Vite tags renders Umami (cookieless, always on when `UMAMI_WEBSITE_ID` is set), GA4 in Consent Mode v2 (denied until the cookie banner's Accept, ADR 0023) and the Search Console and Bing verification metas. All off while their variables are unset.
+- IndexNow (vukem `indexnow`, <https://vukem.dev/docs/digging-deeper/seo-integrations>): the `seo.indexnow_changes` job (every minute) reads `api_changes` after `indexnow_cursor` and the indexable entities updated since the last run, skips score-only updates and queues one `indexnow.Job` with the en, pt-br and es URLs. vukem serves the key at `/{INDEXNOW_KEY}.txt`. The Bing Webmaster API client is configured from `BING_WEBMASTER_API_KEY` (`App.Config.BingWebmaster`); no admin page uses it yet.
 
 ### 7.8 Security headers and CSP
 
@@ -199,7 +204,7 @@ frame-ancestors 'none'; upgrade-insecure-requests
 
 - `'strict-dynamic'` is one of the keywords `CSPSources` accepts (<https://vukem.dev/docs/security/security-headers#what-cspsources-refuses>).
 - No `'unsafe-inline'` styles (vukem refuses it): SSR markup carries no `style=`; dynamic styles go through CSSOM after mount; CI `rg -n "style=\{\{" resources/js` against an allowlist.
-- `/docs/reference`: `apidocs`' own nonce CSP (<https://vukem.dev/docs/rest-apis/openapi#api-reference-with-scalar>; nonce handling of Scalar styles: local `vukem/docs/security.md` A02 [SITE PAGE MISSING]) + `connect-src https://api.hexascore.app`. Turnstile (ADR 0016, flag) adds `https://challenges.cloudflare.com` to `script-src`/`frame-src` only when on.
+- `/docs/reference`: `apidocs`' own nonce CSP (<https://vukem.dev/docs/rest-apis/openapi#api-reference-with-scalar>; nonce handling of Scalar styles: local `vukem/docs/security.md` A02 [SITE PAGE MISSING]) + `connect-src https://api.hexascore.app`. Turnstile (ADR 0016 amendment) adds `https://challenges.cloudflare.com` to `script-src`/`frame-src` only when both keys are set; the analytics providers add their origins the same way (vukem fills `CSPSources`; `SecureHeaders` appends to it, never replaces it).
 - Extra: legacy `Permissions-Policy` list (`legacy/apps/web/lib/security-headers.ts`), `Cross-Origin-Resource-Policy: same-site`, HSTS without `preload` (vukem never adds it, <https://vukem.dev/docs/security/security-headers#lifetime>; legacy had it, preload listing dropped).
 - CSRF: Fetch Metadata `http.CrossOriginProtection` + `SameSite=Lax` (<https://vukem.dev/docs/basics/csrf#how-a-request-is-checked>); token fallback on for browsers without Fetch Metadata (SDD 03, SDD 13 §6; consistency pass 2026-10-28); `/stripe/webhook` bypassed (SDD 05).
 
@@ -250,7 +255,7 @@ Bell badge from `notifications.unread` (partial index, caps at "99+"). Rows rend
 
 1. No URL-prefix source in `i18n.Middleware` [NOT IN VUKEM DOCS]. VF-024; decided: app middleware resolves the locale from the prefix before vukem's middleware. Owner: vukem.
 2. HTML ETag/304 vs CSP nonces. Decided (09-2): no ETag on HTML documents (§7.2).
-3. No SSR output cache hook [NOT IN VUKEM DOCS]. Owner: vukem. Closes with `SSRConfig.Cache` or k6 proof of TTFB p75 ≤ 400 ms without it.
+3. No SSR output cache hook [NOT IN VUKEM DOCS]. Owner: vukem. Closes with `SSRConfig.Cache` or k6 proof of TTFB p75 ≤ 400 ms without it. Mitigated by `RenderCache` (§7.2), k6 `qa/k6/pages-ttfb.js` p75 ≈ 90 ms.
 4. `ScrollMeta` is documented with page numbers; opaque string cursors [NOT VERIFIED] (SDD 07 open issue 4). Owner: vukem. Closes when `Catalog/Index` ships.
 5. Flat catalogues for mobile. Decided (09-5): shared flatten step in `packages/i18n` (§7.1); SDD 10 consumes it.
 6. `theme` for `data-theme` is [NOT IN VUKEM DOCS] (`inertia.RootData` has `.Inertia`, `.Head`, `.Page`, <https://vukem.dev/docs/frontend/inertia#the-pieces-of-an-inertia-app>). VF-028; decided: a view function reading the `theme` cookie (§6.1). Owner: vukem.

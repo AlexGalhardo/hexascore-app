@@ -1,14 +1,18 @@
 import { InfiniteScroll, Link, usePage } from "@inertiajs/react";
-
-import ItemLink, { type ItemRef } from "../../components/library/ItemLink";
+import { ReviewCard, type ReviewEntry } from "../../components/item/Reviews";
+import type { ItemRef } from "../../components/library/ItemLink";
+import ShelfCard from "../../components/library/ShelfCard";
 import ReportDialog from "../../components/ReportDialog";
 import Seo from "../../components/Seo";
+import ActivityCard, { type ActivityEntry } from "../../components/social/ActivityCard";
+import FollowBar, { type SocialProps } from "../../components/social/FollowBar";
+import ShareButton from "../../components/social/ShareButton";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
 
-const TABS = ["ratings", "status", "lists"] as const;
-type Tab = (typeof TABS)[number];
+const BASE_TABS = ["ratings", "status", "lists"] as const;
+type Tab = (typeof BASE_TABS)[number] | "reviews" | "activity";
 
 interface Rating extends ItemRef {
 	stars: number;
@@ -31,19 +35,65 @@ interface Props {
 	ratings?: { data: Rating[] };
 	lists?: ProfileList[];
 	indexable: boolean;
+	social?: SocialProps;
+	/** On ?tab=activity: deferred (group `personal`) when the viewer may see it, null when not shared (FR-14-17). */
+	activity?: ActivityEntry[] | null;
+	/** Deferred (group `personal`) on ?tab=reviews when the profile is visible (SDD 14 §12.10). */
+	reviews?: ReviewEntry[];
+	contributions?: {
+		submitted: number;
+		approved: number;
+		rejected: number;
+		approvalRate: number;
+		tier?: string;
+		accuracy?: number;
+	};
+	/** Share-card path while the feature flag `social` is on and the page is public (SDD 14 §11 item 12). */
+	ogImage?: string;
 }
 
-export default function Profile({ profile, stats, ratings, lists, indexable }: Props) {
+export default function Profile({
+	profile,
+	stats,
+	ratings,
+	lists,
+	indexable,
+	social,
+	activity,
+	reviews,
+	contributions,
+	ogImage,
+}: Props) {
 	const t = useT();
 	const page = usePage<SharedProps>();
 	const viewer = page.props.auth?.user;
 	const base = localized(`/u/${profile.nickname.toLowerCase()}`, page.props.locale);
 	const requested = new URLSearchParams(page.url.split("?")[1] ?? "").get("tab");
-	const tab: Tab = TABS.find((x) => x === requested) ?? "ratings";
+	const tabs: readonly Tab[] = social ? [...BASE_TABS, "reviews", "activity"] : BASE_TABS;
+	const tab: Tab = tabs.find((x) => x === requested) ?? "ratings";
+	const activityList = (
+		<section className="mt-4" aria-busy={activity === undefined}>
+			{activity === undefined ? (
+				<p className="text-muted">{t("social.profile.activityLoading")}</p>
+			) : activity === null ? (
+				<p>{t("social.profile.activityHidden")}</p>
+			) : activity.length === 0 ? (
+				<p>{t("social.profile.noActivity")}</p>
+			) : (
+				<ul className="divide-y divide-border">
+					{activity.map((e) => (
+						<li key={e.id}>
+							<ActivityCard entry={e} />
+						</li>
+					))}
+				</ul>
+			)}
+		</section>
+	);
 
 	return (
 		<>
-			<Seo title={profile.nickname} noindex={!indexable} />
+			<Seo title={profile.nickname} noindex={!indexable} image={ogImage} />
 			<header className="flex flex-wrap items-center gap-4">
 				<span
 					aria-hidden="true"
@@ -53,6 +103,37 @@ export default function Profile({ profile, stats, ratings, lists, indexable }: P
 				</span>
 				<div className="min-w-0 flex-1">
 					<h1 className="text-2xl font-semibold">{profile.nickname}</h1>
+					{ogImage && <ShareButton title={profile.nickname} />}
+					{contributions && (
+						<section
+							aria-label={t("social.profile.contributions.title")}
+							className="text-sm text-muted"
+						>
+							<p>
+								{t("social.profile.contributions.summary", {
+									submitted: contributions.submitted,
+									approved: contributions.approved,
+									rejected: contributions.rejected,
+								})}
+								{" · "}
+								{t("social.profile.contributions.rate", {
+									rate: new Intl.NumberFormat(page.props.locale, {
+										style: "percent",
+									}).format(contributions.approvalRate),
+								})}
+							</p>
+							{contributions.tier && (
+								<p>
+									{t("social.profile.contributions.tier", {
+										tier: contributions.tier,
+										accuracy: new Intl.NumberFormat(page.props.locale, {
+											style: "percent",
+										}).format(contributions.accuracy ?? 0),
+									})}
+								</p>
+							)}
+						</section>
+					)}
 					{stats && (
 						<p className="text-sm text-muted">
 							{t("social.profile.summary", {
@@ -69,6 +150,13 @@ export default function Profile({ profile, stats, ratings, lists, indexable }: P
 					<ReportDialog targetType="user" targetId={profile.nickname} />
 				)}
 			</header>
+			{social && (
+				<FollowBar
+					nickname={profile.nickname}
+					social={social}
+					canFollow={Boolean(viewer) && !profile.isOwner}
+				/>
+			)}
 			{profile.isPrivate && !profile.isOwner && (
 				<p className="mt-4">{t("social.profile.private")}</p>
 			)}
@@ -81,7 +169,7 @@ export default function Profile({ profile, stats, ratings, lists, indexable }: P
 						aria-label={t("social.profile.sections")}
 						className="mt-4 flex gap-4 border-b border-border"
 					>
-						{TABS.map((x) => (
+						{tabs.map((x) => (
 							<Link
 								key={x}
 								href={`${base}?tab=${x}`}
@@ -104,12 +192,12 @@ export default function Profile({ profile, stats, ratings, lists, indexable }: P
 									className="divide-y divide-border"
 								>
 									{ratings?.data.map((r) => (
-										<li
-											key={r.id}
-											className="flex items-center justify-between gap-3 py-2"
-										>
-											<ItemLink item={r} />
-											<span className="font-semibold">{r.stars}</span>
+										<li key={r.id} className="py-2">
+											<ShelfCard
+												item={r}
+												stars={r.stars}
+												statusLabel={t(`itemTypes.${r.type}`)}
+											/>
 										</li>
 									))}
 								</InfiniteScroll>
@@ -158,8 +246,32 @@ export default function Profile({ profile, stats, ratings, lists, indexable }: P
 							)}
 						</section>
 					)}
+					{tab === "reviews" && (
+						<section className="mt-4" aria-busy={reviews === undefined}>
+							{reviews === undefined ? (
+								<p className="text-muted">{t("social.profile.activityLoading")}</p>
+							) : reviews.length === 0 ? (
+								<p>{t("social.profile.noReviews")}</p>
+							) : (
+								<ul className="divide-y divide-border">
+									{reviews.map((r) => (
+										<li key={r.id}>
+											{r.item && (
+												<p className="pt-3 text-sm font-medium">
+													{r.item.title}
+												</p>
+											)}
+											<ReviewCard review={r} />
+										</li>
+									))}
+								</ul>
+							)}
+						</section>
+					)}
+					{tab === "activity" && activityList}
 				</>
 			)}
+			{!stats && social && tab === "activity" && activityList}
 		</>
 	);
 }

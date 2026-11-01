@@ -1,0 +1,61 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt1931533",
+      "metacritic": "movie/seven-psychopaths",
+      "rottentomatoes": "m/seven_psychopaths",
+      "tmdb": "86838"
+    },
+    "meta": {
+      "countries": [
+        "United Kingdom",
+        "United States"
+      ],
+      "creators": [
+        "Martin McDonagh"
+      ],
+      "genres": [
+        "comedy film",
+        "drama film",
+        "mystery film",
+        "crime film"
+      ],
+      "runtimeMinutes": 110,
+      "trailers": [
+        {
+          "youtubeId": "oG2Sy003pbY"
+        }
+      ]
+    },
+    "popularity": 33.0,
+    "qid": "Q59610",
+    "release_date": "2012-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Seven Psychopaths is a 2012 satirical crime comedy-drama film directed, written, and co-produced by Martin McDonagh and starring Colin Farrell, Sam Rockwell, Woody Harrelson, and Christopher Walken, with Tom Waits, Abbie Cornish, Olga Kurylenko, and Željko Ivanek in supporting roles. A co-production between the United Kingdom and the United States, it marks the second collaboration among McDonagh, Farrell, and Ivanek, following the director's In Bruges (2008).\nSeven Psychopaths had its world premiere on 7 September 2012 at the Toronto International Film Festival, and was theatrically released in the United States and Canada on 12 October 2012, and in the United Kingdom on 5 December 2012. The film received positive reviews from critics.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Seven_Psychopaths",
+        "title": "Seven Psychopaths"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Seven Psychopaths (bra: Sete Psicopatas e um Shih Tzu; prt: Sete Psicopatas) é um filme britano-estadunidense de 2012, do gênero comédia de ação, coproduzido e dirigido por Martin McDonagh. É estrelado por Colin Farrell, Sam Rockwell, Woody Harrelson, Tom Waits e Christopher Walken. Seven Psychopaths é o segundo filme consecutivo do diretor Martin McDonagh com o ator Colin Farrell no papel do protagonista, depois de In Bruges. Foi exibido pela primeira vez no Festival de Toronto em 7 de setembro de 2012, no festival venceu o prêmio Midnight Madness. Em 12 de outubro de 2012 foi lançado nos Estados Unidos e em 4 de janeiro de 2013 no Brasil.\nMickey Rourke desistiu de The Expendables 2 para estrelar o filme. Mais tarde ele saiu de Seven Psychopaths após ter desentendimentos com o diretor McDonagh, chamando-o de um \"babaca\". Ele foi substituído por Woody Harrelson.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Seven_Psychopaths",
+        "title": "Seven Psychopaths"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Seven Psychopaths (Siete psicópatas en España, y Siete psicópatas y un perro en Hispanoamérica) es una película cómica británica de humor negro de 2012, escrita, coproducida y dirigida por Martin McDonagh y protagonizada por Colin Farrell, Sam Rockwell, Woody Harrelson, Christopher Walken, Tom Waits, Abbie Cornish y Olga Kurylenko. Es la segunda colaboración entre McDonagh y Farrell, después de In Bruges (2008).",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Seven_Psychopaths",
+        "title": "Siete psicópatas"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q59610",
+  "slug": "seven-psychopaths"
+}

@@ -1,0 +1,140 @@
+{
+  "qid": "Q2181182",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q2181182",
+      "labels": {
+        "en": "Kirby Air Ride",
+        "es": "Kirby Air Ride",
+        "mul": "カービィのエアライド",
+        "pt": "Kirby Air Ride"
+      },
+      "aliases": {
+        "mul": [
+          "Kirby Air Ride"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Kirby Air Ride",
+        "eswiki": "Kirby Air Ride",
+        "ptwiki": "Kirby Air Ride"
+      },
+      "sitelinks_count": 16,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q8093",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q860750",
+            "rank": "normal"
+          },
+          {
+            "value": "Q131317489",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q1068734",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q2569953",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0420716",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q182172",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          },
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q17",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q1906721",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2003-07-11T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "kirby-air-ride",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1068734": "HAL Laboratory",
+        "Q131317489": "mascot racer",
+        "Q17": "Japan",
+        "Q182172": "Nintendo GameCube",
+        "Q1906721": "Masahiro Sakurai",
+        "Q208850": "single-player video game",
+        "Q2569953": "Kirby",
+        "Q6895044": "multiplayer video game",
+        "Q8093": "Nintendo",
+        "Q860750": "racing video game"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q2181182",
+      "lang": "en",
+      "title": "Kirby Air Ride",
+      "extract": "Kirby Air Ride is a 2003 kart racing game developed by HAL Laboratory and published by Nintendo for the GameCube. A spin-off of the Kirby series, the player controls Kirby or his multicolored counterparts as they compete in races. The game supports up to four players, and was the first GameCube title to support LAN play using broadband adapters and up to four GameCube systems.\nThe game had a convoluted development cycle, starting as one of the first wave of Nintendo 64 games before undergoing numerous revisions to the basic concept, being cancelled for a time and ultimately completed for GameCube through a tight production schedule. It was the final Kirby game directed by series creator Masahiro Sakurai before his departure from HAL Laboratory. Upon its eventual release for the GameCube it saw a mixed reception from critics, who criticized its simplicity, but was a commercial success and later developed a cult following. Kirby Air Ride sold 1.35 million worldwide as of 2020. A sequel directed by Sakurai, Kirby Air Riders, was released for the Nintendo Switch 2 on November 20, 2025.",
+      "url": "https://en.wikipedia.org/wiki/Kirby_Air_Ride"
+    },
+    "wikipedia:es": {
+      "qid": "Q2181182",
+      "lang": "es",
+      "title": "Kirby Air Ride",
+      "extract": "Kirby Air Ride, conocido en Japón como Kirby no Air Ride (カービィのエアライド, Kābī no Ea Raido?), es un videojuego de carreras desarrollado por HAL Laboratory y publicado por Nintendo para la videoconsola GameCube protagonizado por Kirby, uno de los personajes de HAL. Fue publicado en primer lugar en Japón el 11 de julio de 2003, y fue posteriormente publicado en América del Norte el 13 de octubre de 2003 y en Europa el 20 de febrero de 2004.\nKirby Air Ride tiene a los jugadores y corredores controlados por ordenador en máquinas que flotan sobre el aire. Kirby Air Ride admite hasta cuatro jugadores y fue el primer título de GameCube en soportar juego a través de LAN usando adaptadores de banda ancha y hasta cuatro sistemas GameCube. Fue el único juego para esta consola donde Kirby es el protagonista obligatoriamente.\nMasahiro Sakurai, el diseñador de juegos detrás de la mayoría de los juegos de Kirby, renunció a su posición en HAL Laboratory sólo días después de dar una entrevista en la que criticaba abiertamente a Nintendo por circunstancias que rodeaban al desarrollo de Kirby Air Ride.​​",
+      "url": "https://es.wikipedia.org/wiki/Kirby_Air_Ride"
+    },
+    "wikipedia:pt": {
+      "qid": "Q2181182",
+      "lang": "pt",
+      "title": "Kirby Air Ride",
+      "extract": "Kirby Air Ride (カービィのエアライド, Kābī no Ea Raido) é um jogo eletrônico de corrida desenvolvido pela HAL Laboratory e publicado pela Nintendo para o GameCube. O jogo foi lançado em 22 de fevereiro de 2004 na América do Norte. Kirby Air Ride vendeu 422.311 cópias no Japão e aproximadamente 750 mil nos Estados Unidos.",
+      "url": "https://pt.wikipedia.org/wiki/Kirby_Air_Ride"
+    }
+  },
+  "tier": "non-latin",
+  "type": "game"
+}

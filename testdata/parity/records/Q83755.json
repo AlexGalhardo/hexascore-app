@@ -1,0 +1,116 @@
+{
+  "qid": "Q83755",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q83755",
+      "labels": {
+        "en": "Strange Stories from a Chinese Studio",
+        "mul": "Liaozhai Zhiyi",
+        "pt": "Contos Estranhos do Estúdio de Liao"
+      },
+      "aliases": {
+        "en": [
+          "Strange Tales from a Chinese Studio",
+          "Strange Stories from a Chinese Studio",
+          "Strange Tales from Make-Do Studio",
+          "Strange Tales from a Studio of Leisure"
+        ],
+        "mul": [
+          "Liaozhai"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Strange Tales from a Chinese Studio",
+        "ptwiki": "Contos Estranhos do Estúdio de Liao"
+      },
+      "sitelinks_count": 25,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q14739201",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16143859",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "聊齋誌異",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "聊斋图说-罗祖.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q37041",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q8733",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q318406",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1740-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL808821W",
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "149666",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q14739201": "Zhiguai xiaoshuo",
+        "Q16143859": "chuanqi",
+        "Q318406": "Pu Songling",
+        "Q37041": "Classical Chinese",
+        "Q8733": "Qing dynasty"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q83755",
+      "lang": "en",
+      "title": "Strange Tales from a Chinese Studio",
+      "extract": "Liaozhai zhiyi, sometimes shortened to Liaozhai, or known in English as Strange Tales from a Chinese Studio (Chinese: 聊齋誌異, liáozhāi zhìyì), is a collection of Classical Chinese stories by Qing dynasty writer Pu Songling, comprising close to 500 stories or \"marvel tales\" in the zhiguai and chuanqi styles, which according to some critics, served to implicitly criticise societal problems.\nWritten over a period of forty years from the late 1600s and ending in the early 1700s, it circulated in manuscripts that were copied and recopied among the author's friends but did not appear in print until 1766. Since then, many of the critically lauded stories have been adapted for other media such as film and television.",
+      "url": "https://en.wikipedia.org/wiki/Strange_Tales_from_a_Chinese_Studio"
+    },
+    "wikipedia:pt": {
+      "qid": "Q83755",
+      "lang": "pt",
+      "title": "Contos Estranhos do Estúdio de Liao",
+      "extract": "Liaozhai zhiyi, às vezes abreviado para Liaozhai, conhecido como Contos Estranhos do Estúdio de Liao, Contos Estranhos de um Estúdio Chinês, ou literalmente Contos Estranhos de um Estúdio de Lazer, é uma coleção em chinês clássico de histórias do escritor da dinastia Qing Pu Songling, compreendendo cerca de 500 histórias ou \"contos maravilhosos\" nos estilos zhiguai e chuanqi, que, segundo alguns críticos, serviram para criticar implicitamente os problemas sociais. Escrito ao longo de um período de quarenta anos, desde o final dos anos 1600 até o início dos anos 1700, circulou em manuscritos que foram copiados e recopiados entre os amigos do autor, mas não apareceram impressos até 1766. Desde então, muitas das histórias elogiadas pela crítica foram adaptadas para outras mídias, como cinema e televisão.",
+      "url": "https://pt.wikipedia.org/wiki/Contos_Estranhos_do_Est%C3%BAdio_de_Liao"
+    }
+  },
+  "tier": "mid",
+  "type": "book"
+}

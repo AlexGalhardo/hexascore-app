@@ -84,6 +84,16 @@ func Merge(ctx context.Context, db *database.DB, q *queue.Queue, from, into stri
 	})
 }
 
+// MergeTx is Merge inside a transaction the caller owns: the community apply (SDD 04 section 7.6) commits the merge
+// with its audit row and suggestion state.
+func MergeTx(ctx context.Context, tx *database.Tx, q *queue.Queue, from, into string, actorID int64) error {
+	if from == into {
+		return ErrMergeSelf
+	}
+
+	return merge(ctx, tx, q, from, into, actorID)
+}
+
 type mergeRow struct {
 	typ, slug string
 	primary   sql.NullString
@@ -174,6 +184,10 @@ VALUES ($1, $2, $3, $4, jsonb_build_object('source', $5::jsonb, 'target', $6::js
 		return err
 	}
 
+	if err := sumActivity(ctx, tx, from, into); err != nil {
+		return err
+	}
+
 	// Primary edition: keep the target's, else adopt the source's (already moved).
 	if _, err := tx.ExecContext(ctx, `UPDATE items SET
 external_ids = (SELECT external_ids FROM items WHERE id = $3) || external_ids,
@@ -198,6 +212,33 @@ updated_at = now() WHERE id = $1 AND type = $2`,
 	}
 
 	return q.DispatchTx(ctx, tx, Merged{Type: src.typ, FromID: from, IntoID: into})
+}
+
+// activityColumns are the additive columns of item_activity_daily.
+var activityColumns = []string{
+	"views", "search_clicks", "ratings_new", "ratings_updated", "status_want", "status_in_progress",
+	"status_completed", "status_dropped", "list_adds", "suggestions", "ratings_new_w", "ratings_updated_w",
+	"want_w", "in_progress_w", "completed_w", "dropped_w", "list_adds_w", "suggestions_w",
+}
+
+// sumActivity adds the source's daily activity to the target per day (SDD 08 section 8). The source rows go
+// with the item (ON DELETE CASCADE); trending snapshots of the source go the same way.
+func sumActivity(ctx context.Context, ex database.Executor, from, into string) error {
+	cols := strings.Join(activityColumns, ", ")
+
+	set := make([]string, len(activityColumns))
+	for i, c := range activityColumns {
+		set[i] = fmt.Sprintf("%[1]s = t.%[1]s + EXCLUDED.%[1]s", c)
+	}
+
+	_, err := ex.ExecContext(ctx, fmt.Sprintf(`INSERT INTO item_activity_daily AS t (item_id, day, item_type, %[1]s)
+SELECT $2::uuid, day, item_type, %[1]s FROM item_activity_daily WHERE item_id = $1
+ON CONFLICT (item_id, day) DO UPDATE SET %[2]s`, cols, strings.Join(set, ", ")), from, into)
+	if err != nil {
+		return fmt.Errorf("sum activity: %w", err)
+	}
+
+	return nil
 }
 
 func moveRelations(ctx context.Context, ex database.Executor, from, into string) error {

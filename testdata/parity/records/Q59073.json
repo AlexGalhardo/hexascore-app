@@ -1,0 +1,240 @@
+{
+  "qid": "Q59073",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q59073",
+      "labels": {
+        "en": "Places in the Heart",
+        "es": "En un lugar del corazón",
+        "pt": "Places in the Heart"
+      },
+      "aliases": {
+        "es": [
+          "Places in the Heart",
+          "En un lugar del corazon"
+        ],
+        "pt": [
+          "Um lugar no coração",
+          "Lugares no Coração"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Places in the Heart",
+        "eswiki": "En un lugar del corazón",
+        "ptwiki": "Um Lugar no Coração"
+      },
+      "sitelinks_count": 31,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/places_in_the_heart",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Places in the Heart",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q187033",
+            "rank": "normal"
+          },
+          {
+            "value": "Q238912",
+            "rank": "normal"
+          },
+          {
+            "value": "Q192165",
+            "rank": "normal"
+          },
+          {
+            "value": "Q172261",
+            "rank": "normal"
+          },
+          {
+            "value": "Q104791",
+            "rank": "normal"
+          },
+          {
+            "value": "Q235219",
+            "rank": "normal"
+          },
+          {
+            "value": "Q740939",
+            "rank": "normal"
+          },
+          {
+            "value": "Q271637",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7297161",
+            "rank": "normal"
+          },
+          {
+            "value": "Q20973996",
+            "rank": "normal"
+          },
+          {
+            "value": "Q827443",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4047007",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1207488",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3808023",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2529777",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3260127",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1676283",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/places-in-the-heart",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+112",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0087921",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "13681",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q59085",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1984-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1985-03-01T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1984-10-05T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q59085",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q104791": "Ed Harris",
+        "Q1207488": "De'voreaux White",
+        "Q130232": "drama film",
+        "Q1676283": "J. C. Quinn",
+        "Q172261": "John Malkovich",
+        "Q1860": "English",
+        "Q187033": "Sally Field",
+        "Q192165": "Danny Glover",
+        "Q20973996": "Gennie James",
+        "Q235219": "Amy Madigan",
+        "Q238912": "Lindsay Crouse",
+        "Q2529777": "Trey Wilson",
+        "Q271637": "Terry O'Quinn",
+        "Q30": "United States",
+        "Q3260127": "Lou Hancock",
+        "Q3808023": "Jerry Haynes",
+        "Q4047007": "Toni Hudson",
+        "Q59085": "Robert Benton",
+        "Q7297161": "Ray Baker",
+        "Q740939": "Lane Smith",
+        "Q827443": "Bert Remsen"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q59073",
+      "lang": "en",
+      "title": "Places in the Heart",
+      "extract": "Places in the Heart is a 1984 American drama film written and directed by Robert Benton. Set in 1930s Texas during the Great Depression, the film stars Sally Field as a recently widowed woman who struggles to save her farm with the help of a blind lodger and a black laborer. The cast also includes John Malkovich, Lindsay Crouse, Ed Harris, Amy Madigan, Danny Glover, and Terry O'Quinn.\nThe film premiered at the 35th Berlin International Film Festival, where Benton won the Silver Bear for Best Director. Released theatrically by Tri-Star Pictures on September 21, 1984, it was both a critical and commercial success, earning $34.9 million on a $9.5 million budget. Places in the Heart received seven Academy Award nominations, including Best Picture, and won two: Best Actress for Field and Best Original Screenplay for Benton. The film won the People's Choice Award at the 9th Toronto International Film Festival.",
+      "url": "https://en.wikipedia.org/wiki/Places_in_the_Heart"
+    },
+    "wikipedia:es": {
+      "qid": "Q59073",
+      "lang": "es",
+      "title": "En un lugar del corazón",
+      "extract": "En un lugar del corazón (Places in the Heart) es una película dramática estadounidense dirigida y escrita por Robert Benton y protagonizada por Sally Field. Contó además con las interpretaciones de John Malkovich, Lindsay Crouse, Danny Glover y Ed Harris. La fotografía estuvo a cargo de Néstor Almendros.\nLa película se estrenó en el Festival Internacional de Cine de Berlín, donde compitió por el Oso de Oro, mientras que Benton ganó el Oso de Plata al Mejor Director. Fue estrenada en cines el 21 de septiembre de 1984 por TriStar Pictures con éxito comercial y de crítica. Los críticos elogiaron el guion y la dirección de Benton y las actuaciones del elenco, particularmente de Field, Malkovich y Crouse. Debido a su interpretación, Field recibió su segundo Premio Oscar a la Mejor Actriz, mientras que Malkovich y Crouse fueron nominados en la categoría de papeles de reparto.",
+      "url": "https://es.wikipedia.org/wiki/En_un_lugar_del_coraz%C3%B3n"
+    },
+    "wikipedia:pt": {
+      "qid": "Q59073",
+      "lang": "pt",
+      "title": "Um Lugar no Coração",
+      "extract": "Places in the Heart (bra/prt: Um Lugar no Coração) é um filme estadunidense de 1984, do gênero drama, dirigido por Robert Benton.",
+      "url": "https://pt.wikipedia.org/wiki/Um_Lugar_no_Cora%C3%A7%C3%A3o"
+    }
+  },
+  "tier": "mid",
+  "type": "movie"
+}

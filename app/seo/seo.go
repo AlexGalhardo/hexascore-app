@@ -93,8 +93,9 @@ func (c Config) For(r *http.Request) Meta {
 
 // Disallowed lists the robots.txt Disallow rules (SDD 09 §7.7).
 func Disallowed() []string {
-	rules := make([]string, 0, len(privatePrefixes)+1)
+	rules := make([]string, 0, len(privatePrefixes)+2)
 	rules = append(rules, privatePrefixes...)
 
-	return append(rules, "/*?cursor=")
+	// The honeypot of ADR 0022: a crawler that honours robots.txt never reaches it.
+	return append(rules, "/*?cursor=", "/data/export")
 }

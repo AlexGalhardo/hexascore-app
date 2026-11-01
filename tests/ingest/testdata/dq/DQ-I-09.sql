@@ -1,0 +1,1 @@
+UPDATE items SET release_date = '1500-01-01' WHERE id = '0192f1c6-0000-7000-8000-0000000000d1'

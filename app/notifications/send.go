@@ -25,6 +25,10 @@ const (
 	RatingFlagged      = "rating_flagged"
 	ListHidden         = "list_hidden"
 	System             = "system"
+	NewFollower        = "new_follower"
+	FollowRequest      = "follow_request"
+	ContentHidden      = "content_hidden"
+	ContentDeleted     = "content_deleted"
 )
 
 // PageSize is the web page size; MaxReadIDs caps one mark-read request.

@@ -1,0 +1,30 @@
+{
+  "item": {
+    "external_ids": {},
+    "meta": {
+      "countries": [
+        "British Raj"
+      ],
+      "creators": [
+        "Ahmed Raza Khan Barelvi"
+      ],
+      "pages": 22000
+    },
+    "popularity": 8.0,
+    "qid": "Q20565830",
+    "release_date": null,
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Fatawa-i Razawiyya (Urdu: فتاویِٰ رضویہ, romanized: Fatāwā-i Raẓāwiyya) is a Sunni Islamic compilation of fatawa (legal edicts) of the Hanafi madhhab (school of thought) authored by a renowned Islamic scholar Ahmad Raza Khan. An influential sharia manual spanning 400 treaties and nearly 7,000 fatawa, the work is distinguished in Sufism.\nThe Fatawa-i Razawiyya was discussed by Arun Shourie in his book, The World of Fatwas or the Sharia in Action \nIts 12 volumes were first published by Ahmed Raza Khan's brother at Hasani press, and only two volumes of various Fatawa's were published during the lifetime of the author. Later published by Raza Foundation Lahore in 30 Volumes. Raza Academy was first to publish its various volumes in 1985. The Beirut-based Dar al-Imam Yusuf al-Nabhani (DIYN) publishing house is currently undertaking a complete Arabic translation of all 30 volumes.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Fatawa_Razawiyyah",
+        "title": "Fatawa-e-Razvia"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q20565830",
+  "slug": "fatawa-e-razvia"
+}

@@ -1,0 +1,497 @@
+{
+  "qid": "Q8539",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q8539",
+      "labels": {
+        "en": "The Big Bang Theory",
+        "es": "The Big Bang Theory",
+        "mul": "The Big Bang Theory",
+        "pt": "The Big Bang Theory",
+        "pt-br": "The Big Bang Theory"
+      },
+      "aliases": {
+        "mul": [
+          "TBBT",
+          "Big Bang Theory"
+        ],
+        "pt": [
+          "A Teoria do Big Bang"
+        ],
+        "pt-br": [
+          "Big Bang: A Teoria"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "The Big Bang Theory",
+        "eswiki": "The Big Bang Theory",
+        "ptwiki": "The Big Bang Theory"
+      },
+      "sitelinks_count": 113,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+279",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/the_big_bang_theory",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q170238",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "The Big Bang Theory",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q190972",
+            "rank": "normal"
+          },
+          {
+            "value": "Q295739",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16759",
+            "rank": "normal"
+          },
+          {
+            "value": "Q299297",
+            "rank": "normal"
+          },
+          {
+            "value": "Q310375",
+            "rank": "normal"
+          },
+          {
+            "value": "Q231405",
+            "rank": "normal"
+          },
+          {
+            "value": "Q236364",
+            "rank": "normal"
+          },
+          {
+            "value": "Q231093",
+            "rank": "normal"
+          },
+          {
+            "value": "Q983229",
+            "rank": "normal"
+          },
+          {
+            "value": "Q522856",
+            "rank": "normal"
+          },
+          {
+            "value": "Q718078",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4725713",
+            "rank": "normal"
+          },
+          {
+            "value": "Q303192",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3809587",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16832120",
+            "rank": "normal"
+          },
+          {
+            "value": "Q264699",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2447922",
+            "rank": "normal"
+          },
+          {
+            "value": "Q236711",
+            "rank": "normal"
+          },
+          {
+            "value": "Q265099",
+            "rank": "normal"
+          },
+          {
+            "value": "Q552802",
+            "rank": "normal"
+          },
+          {
+            "value": "Q445638",
+            "rank": "normal"
+          },
+          {
+            "value": "Q358990",
+            "rank": "normal"
+          },
+          {
+            "value": "Q120406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q229134",
+            "rank": "normal"
+          },
+          {
+            "value": "Q103939",
+            "rank": "normal"
+          },
+          {
+            "value": "Q236854",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2841058",
+            "rank": "normal"
+          },
+          {
+            "value": "Q339864",
+            "rank": "normal"
+          },
+          {
+            "value": "Q230405",
+            "rank": "normal"
+          },
+          {
+            "value": "Q931654",
+            "rank": "normal"
+          },
+          {
+            "value": "Q635974",
+            "rank": "normal"
+          },
+          {
+            "value": "Q181900",
+            "rank": "normal"
+          },
+          {
+            "value": "Q230335",
+            "rank": "normal"
+          },
+          {
+            "value": "Q210200",
+            "rank": "normal"
+          },
+          {
+            "value": "Q110154",
+            "rank": "normal"
+          },
+          {
+            "value": "Q552176",
+            "rank": "normal"
+          },
+          {
+            "value": "Q240199",
+            "rank": "normal"
+          },
+          {
+            "value": "Q429619",
+            "rank": "normal"
+          },
+          {
+            "value": "Q238843",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1189095",
+            "rank": "normal"
+          },
+          {
+            "value": "Q236189",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16728666",
+            "rank": "normal"
+          },
+          {
+            "value": "Q978367",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2940994",
+            "rank": "normal"
+          },
+          {
+            "value": "Q444480",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1712385",
+            "rank": "normal"
+          },
+          {
+            "value": "Q433417",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3453757",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1157743",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23833725",
+            "rank": "normal"
+          },
+          {
+            "value": "Q366403",
+            "rank": "normal"
+          },
+          {
+            "value": "Q489831",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5488124",
+            "rank": "normal"
+          },
+          {
+            "value": "Q328409",
+            "rank": "normal"
+          },
+          {
+            "value": "Q442661",
+            "rank": "normal"
+          },
+          {
+            "value": "Q351156",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1120939",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15712264",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q430844",
+            "rank": "normal"
+          },
+          {
+            "value": "Q862389",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "tv/the-big-bang-theory",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Cast of The Big Bang Theory 05 (cropped).jpg",
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+12",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q1156642",
+            "rank": "normal"
+          },
+          {
+            "value": "Q11945143",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0898266",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q43380",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "1418",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q2510311",
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q430844",
+            "rank": "normal"
+          },
+          {
+            "value": "Q862389",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7615062",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2007-09-24T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q141934409",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q103939": "Charlie Sheen",
+        "Q110154": "George Takei",
+        "Q1120939": "Joel Murray",
+        "Q1156642": "Warner Bros. Television Studios",
+        "Q1157743": "Dakin Matthews",
+        "Q1189095": "Courtney Ford",
+        "Q11945143": "Chuck Lorre Productions",
+        "Q120406": "Riki Lindhome",
+        "Q141934409": "The Big Bang Theory",
+        "Q15712264": "Lauren Lapkus",
+        "Q16728666": "Jen Drohan",
+        "Q16759": "Kaley Cuoco",
+        "Q16832120": "Laura Spencer",
+        "Q170238": "sitcom",
+        "Q1712385": "Julio Oscar Mechoso",
+        "Q181900": "Stan Lee",
+        "Q1860": "English",
+        "Q190972": "Jim Parsons",
+        "Q210200": "Eliza Dushku",
+        "Q229134": "Christine Baranski",
+        "Q230335": "Katee Sackhoff",
+        "Q230405": "Jodi Lyn O'Keefe",
+        "Q231093": "Mayim Bialik",
+        "Q231405": "Sara Gilbert",
+        "Q236189": "Judy Greer",
+        "Q236364": "Melissa Rauch",
+        "Q236711": "Laurie Metcalf",
+        "Q236854": "Summer Glau",
+        "Q23833725": "Karl T. Wright",
+        "Q238843": "Lio Tipton",
+        "Q240199": "Sara Rue",
+        "Q2447922": "Mark Harelik",
+        "Q2510311": "Mark Cendrowski",
+        "Q264699": "Wil Wheaton",
+        "Q265099": "Margo Harshman",
+        "Q2841058": "Amanda Walsh",
+        "Q2940994": "Casey Sander",
+        "Q295739": "Johnny Galecki",
+        "Q299297": "Simon Helberg",
+        "Q30": "United States",
+        "Q303192": "Aarti Mann",
+        "Q310375": "Kunal Nayyar",
+        "Q328409": "Peter Onorati",
+        "Q339864": "Courtney Henggeler",
+        "Q3453757": "Ryan Cartwright",
+        "Q351156": "Adam West",
+        "Q358990": "James Hong",
+        "Q366403": "Matt Battaglia",
+        "Q3809587": "John Ross Bowie",
+        "Q429619": "Valerie Azlynn",
+        "Q430844": "Chuck Lorre",
+        "Q433417": "Keith Carradine",
+        "Q43380": "CBS",
+        "Q442661": "Susanna Thompson",
+        "Q444480": "Elizabeth Bogush",
+        "Q445638": "DJ Qualls",
+        "Q4725713": "Alice Amter",
+        "Q489831": "Kevin Smith",
+        "Q522856": "Kate Micucci",
+        "Q5488124": "Frank Maharajh",
+        "Q552176": "Steven Yeun",
+        "Q552802": "Brian Patrick Wade",
+        "Q635974": "Michael Trucco",
+        "Q718078": "Bob Newhart",
+        "Q7615062": "Steven Molaro",
+        "Q862389": "Bill Prady",
+        "Q931654": "Travis Schuldt",
+        "Q978367": "Jesse Heiman",
+        "Q983229": "Kevin Sussman"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q8539",
+      "lang": "en",
+      "title": "The Big Bang Theory",
+      "extract": "The Big Bang Theory is an American television sitcom created by Chuck Lorre and Bill Prady for CBS. It aired from September 24, 2007, to May 16, 2019, running for 12 seasons and 279 episodes.\nThe show originally centered on five characters living in Pasadena, California: Leonard Hofstadter (Johnny Galecki) and Sheldon Cooper (Jim Parsons), both physicists at the California Institute of Technology, who share an apartment; Penny (Kaley Cuoco), a waitress and aspiring actress who lives across the hall; and Leonard and Sheldon's similarly geeky and socially awkward friends and coworkers, aerospace engineer Howard Wolowitz (Simon Helberg) and astrophysicist Raj Koothrappali (Kunal Nayyar). Over time, supporting characters were promoted to starring roles, including neuroscientist Amy Farrah Fowler (Mayim Bialik), microbiologist Bernadette Rostenkowski (Melissa Rauch), and comic book store owner Stuart Bloom (Kevin Sussman).\nThe series was filmed in front of a live audience and produced by Chuck Lorre Productions, with Warner Bros. Television handling distribution. While the first season received mixed reviews, critical reception improved in subsequent seasons. Seven seasons ranked within the top ten of the final-season ratings, and the series reached the No. 1 spot in its eleventh season. It was nominated for the Emmy Award for Outstanding Comedy Series from 2011 to 2014 and won the Emmy Award for Outstanding Lead Actor in a Comedy Series four times for Parsons, totaling seven Emmy Awards from 46 nominations. Parsons also won the Golden Globe for Best Actor in a Television Comedy Series in 2011.\nThe success of The Big Bang Theory launched a multimedia franchise. A prequel series focusing on Parsons' character Sheldon Cooper, Young Sheldon, aired from 2017 to 2024, with Parsons narrating as the adult Sheldon. The third series in the franchise, a sequel to Young Sheldon titled Georgie \u0026 Mandy's First Marriage, premiered in October 2024 and follows Sheldon's older brother, Georgie, and his wife, Mandy. A fourth series, following Stuart Bloom, his girlfriend Denise, geologist Bert Kibbler, and physicist Barry Kripke, titled Stuart Fails to Save the Universe, premiered in July 2026 on streaming platform HBO Max.",
+      "url": "https://en.wikipedia.org/wiki/The_Big_Bang_Theory"
+    },
+    "wikipedia:es": {
+      "qid": "Q8539",
+      "lang": "es",
+      "title": "The Big Bang Theory",
+      "extract": "The Big Bang Theory (también conocida como La teoría del Big Bang y Big Bang en los distintos países de Hispanoamérica)​​​​ es una comedia de situación estadounidense creada por Chuck Lorre y Bill Prady, quienes se desempeñaron como productores ejecutivos y escritores principales de la serie, junto con Steven Molaro. Se emitió en CBS del 24 de septiembre de 2007 al 16 de mayo de 2019, con 12 temporadas y 279 episodios.​​​​​\nEl programa se centró originalmente en cinco personajes que vivían en Pasadena, California: Leonard Hofstadter (Johnny Galecki) y Sheldon Cooper (Jim Parsons), ambos físicos de Caltech, que comparten apartamento; Penny (Kaley Cuoco), una camarera y aspirante a actriz que vive al otro lado del pasillo; y los amigos y compañeros de trabajo igualmente geek y socialmente incómodos de Leonard y Sheldon, el ingeniero aeroespacial Howard Wolowitz (Simon Helberg) y el astrofísico Rajesh Koothrappali (Kunal Nayyar). Con el tiempo, personajes secundarios fueron promovidos a papeles protagónicos, incluida la neurocientífica Amy Farrah Fowler (Mayim Bialik), la microbióloga Bernadette Rostenkowski (Melissa Rauch) y el dueño de una tienda de cómics Stuart Bloom (Kevin Sussman).\nEl programa fue filmado frente a una audiencia en vivo en los estudios Warner Bros de Los Ángeles, y producido por Chuck Lorre Productions y Warner Bros. Television. Recibió críticas mixtas durante su primera temporada, pero la recepción fue más favorable en la segunda y tercera temporada. A pesar de las primeras críticas mixtas, siete temporadas se clasificaron entre las diez primeras de las calificaciones de la temporada final y finalmente alcanzó el no. 1 puesto en su undécima temporada. Estuvo nominada al premio Emmy a la mejor serie de comedia de 2011 a 2014 y ganó el premio Emmy al mejor actor principal en una serie de comedia cuatro veces para Parsons, con un total de siete premios Emmy de 46 nominaciones. Parsons también ganó el Globo de Oro al Mejor Actor en una Serie de Comedia de Televisión en 2011.​ Una serie precuela, El joven Sheldon, basada en el personaje de Parsons, Sheldon Cooper, se estrenó en 2017, con Parsons retomando su papel del Sheldon adulto narrador.​ Otra serie derivada y secuela de El joven Sheldon, titulada Georgie \u0026 Mandy's First Marriage, se estrenó en otoño de 2024 y sigue al hermano mayor de Sheldon, Georgie, y a su esposa Mandy.​ El 23 de julio de 2026 se estreno el spin-off Stuart Fails to Save the Universe, centrado en los personajes de Stuart Bloom, Denise, Bert Kibbler y Barry Kripke.",
+      "url": "https://es.wikipedia.org/wiki/The_Big_Bang_Theory"
+    },
+    "wikipedia:pt": {
+      "qid": "Q8539",
+      "lang": "pt",
+      "title": "The Big Bang Theory",
+      "extract": "The Big Bang Theory é uma série de televisão norte-americana de comédia de situação que estreou na CBS em 24 de setembro de 2007 e terminou em 16 de maio de 2019, totalizando 279 episódios e doze temporadas. Criada por Chuck Lorre e Bill Prady, a série conta com cinco personagens que vivem em Pasadena, entre eles o físico teórico Sheldon Cooper e o físico experimental Leonard Hofstadter, ambos vivendo juntos, partilhando um apartamento e trabalhando no Instituto de Tecnologia da Califórnia - Caltech; Penny, uma garçonete e aspirante a atriz que mais tarde se torna uma representante farmacêutica, e que vive como vizinha de ambos; e o engenheiro aeroespacial Howard Wolowitz e o astrofísico Rajesh Koothrappali, amigos e colegas de trabalho geeks, semelhantes e socialmente desajeitados de Leonard e Sheldon. Os hábitos geeks e o intelecto dos quatro rapazes entra em contraste em relação ao efeito cômico com habilidades sociais e senso comum de Penny.\nO show foi produzido pela Warner Bros. Television em conjunto com a Chuck Lorre Productions. Em agosto de 2009, a sitcom ganhou o prêmio TCA de \"melhor série comédia\" e Jim Parsons ganhou o prêmio por seu desempenho individual na comédia. Parsons também conquistou quatro Emmy Awards de melhor ator em série de comédia e um Globo de Ouro. Quando a terceira temporada estreou em 21 de setembro de 2009, ela alcançou o patamar de programa de maior audiência da CBS. A série estreou na televisão aberta Brasileira pelo SBT no dia 20 de agosto de 2011, deixando de ser exibida neste canal uma semana depois, no dia 27, devido à baixa audiência. Em 12 de novembro de 2012, o SBT estreou a exibição diária de madrugada após Two and a Half Men. Retornou a grade do SBT em 9 de junho de 2018, mas ficou ao ar até o dia 23, sendo cancelada mais uma vez por conta da baixa audiência no final da tarde. \nVoltou pela terceira vez no SBT em 1.° de agosto de 2020, agora com exibição nas primeiras horas do dia. Ficou no ar até o dia 12 de setembro do mesmo ano, sendo substituído pela extensão do Sábado Animado. Voltou a grade em 5 de dezembro de 2020, ficando no ar até 15 de maio de 2021, nas madrugadas de sábado para domingo. \nEm março de 2014, a emissora americana CBS anunciou a renovação da série por mais três anos, até a décima temporada (2016/2017). A emissora estava satisfeita com os altos índices de audiência e pelas críticas positivas que o seriado cômico vem alcançando.\nEm agosto de 2015, o presidente da CBS, Glenn Geller, afirmou que a série poderia ser renovada para uma 11º temporada. Ainda assim na época, não houve uma confirmação. Em Fevereiro de 2017, foi anunciado de que a série seria renovada para mais duas temporadas, assim, com um possível encerramento da série na 12º temporada.\nA 12ª temporada marcou o fim da série multi-câmera mais longa na história da televisão (junto com Two and a half men). A série se encerrou porque o astro Jim Parsons, intérprete de Sheldon Cooper, estava pronto para se despedir da sitcom de sucesso. A 12ª e última temporada estreou na segunda-feira, 24 de setembro, na CBS, antes de passar para o período regular na quinta-feira, 27 de setembro, e encerrou em 16 de maio de 2019. Já no Brasil a série estreou domingo, 07 de outubro ás 20h no canal pago Warner Channel, e se encerrou domingo, 02 de junho de 2019.",
+      "url": "https://pt.wikipedia.org/wiki/The_Big_Bang_Theory"
+    }
+  },
+  "tier": "top",
+  "type": "series"
+}

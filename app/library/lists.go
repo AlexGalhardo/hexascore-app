@@ -33,6 +33,12 @@ const (
 
 // Events dispatched after commit (SDD 14 §6.5).
 type (
+	// ListCreated follows a new list.
+	ListCreated struct {
+		ListID string
+		UserID int64
+		At     time.Time
+	}
 	// ListItemAdded follows an item landing in a list.
 	ListItemAdded struct {
 		ListID, ItemID string
@@ -175,6 +181,8 @@ VALUES ($1, $2, $3, $4, $5, $6, $7, $7, $8, $8)`,
 			`SELECT `+listCols+` FROM lists l JOIN users u ON u.id = l.user_id WHERE l.id = $1`, id)); err != nil {
 			return err
 		}
+
+		s.dispatch(tx, ListCreated{ListID: id, UserID: userID, At: now})
 
 		if in.FirstItemID != "" {
 			s.dispatch(

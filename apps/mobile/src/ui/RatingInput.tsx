@@ -1,0 +1,85 @@
+import { type ReactElement, useState } from "react";
+import { type AccessibilityActionEvent, Pressable, Text, View } from "react-native";
+import { formatScore } from "./format";
+import { Icon } from "./Icon";
+
+const STARS = 10;
+const MIN = 0.5;
+
+const POSITIONS = Array.from({ length: STARS }, (_, index) => index + 1);
+
+const clamp = (value: number): number => Math.min(STARS, Math.max(MIN, value));
+
+/** Touch x inside a row `width` wide to a score in 0.5 steps (each star is two halves). */
+export function valueAt(x: number, width: number): number {
+	return clamp(Math.ceil((x / width) * STARS * 2) / 2);
+}
+
+export interface RatingInputProps {
+	label: string;
+	value: number | null;
+	onChange: (value: number) => void;
+	locale: string;
+}
+
+function Star({ fill }: { fill: 0 | 0.5 | 1 }): ReactElement {
+	return (
+		<View className="h-11 flex-1 items-center justify-center">
+			<Icon name="star-outline" size={24} className="text-star-line dark:text-star-line-dark" />
+			{fill > 0 && (
+				<View
+					className={`absolute bottom-0 left-0 top-0 items-start justify-center overflow-hidden ${fill === 1 ? "w-full" : "w-1/2"}`}
+				>
+					{/* The glyph box spans the whole star so the clipped half lines up with the outline. */}
+					<View className={`items-center ${fill === 1 ? "w-full" : "w-[200%]"}`}>
+						<Icon name="star" size={24} className="text-star dark:text-star-dark" />
+					</View>
+				</View>
+			)}
+		</View>
+	);
+}
+
+// Round 2 item 6: ten stars, half steps, value printed beside, 44 px row.
+// TalkBack sees one adjustable control (swipe up/down = ±0.5) instead of 20 radios.
+export function RatingInput({ label, value, onChange, locale }: RatingInputProps): ReactElement {
+	const [width, setWidth] = useState(0);
+	const text = `${formatScore(value, locale)} / ${STARS}`;
+	const onAction = (event: AccessibilityActionEvent): void => {
+		const step = event.nativeEvent.actionName === "increment" ? MIN : -MIN;
+		onChange(clamp((value ?? 0) + step));
+	};
+	return (
+		<View
+			accessible
+			accessibilityRole="adjustable"
+			accessibilityLabel={label}
+			// RN `now` must be an integer: report half steps (6.5 -> 13); `text` carries the real score.
+			accessibilityValue={{
+				min: 1,
+				max: STARS * 2,
+				...(value === null ? {} : { now: value * 2 }),
+				text,
+			}}
+			accessibilityActions={[{ name: "increment" }, { name: "decrement" }]}
+			onAccessibilityAction={onAction}
+			className="flex-row items-center gap-3"
+		>
+			<Pressable
+				testID="rating-stars"
+				importantForAccessibility="no-hide-descendants"
+				onLayout={(event) => setWidth(event.nativeEvent.layout.width)}
+				onPress={(event) => width > 0 && onChange(valueAt(event.nativeEvent.locationX, width))}
+				className="flex-1 flex-row"
+			>
+				{POSITIONS.map((position) => {
+					const filled = (value ?? 0) - position + 1;
+					return <Star key={position} fill={filled >= 1 ? 1 : filled >= 0.5 ? 0.5 : 0} />;
+				})}
+			</Pressable>
+			<Text className="w-20 text-right font-text text-16 font-semibold tabular-nums text-fg dark:text-fg-dark">
+				{text}
+			</Text>
+		</View>
+	);
+}

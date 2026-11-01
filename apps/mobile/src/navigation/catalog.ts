@@ -10,3 +10,19 @@ export function firstParam(value: string | string[] | undefined): string {
 	if (Array.isArray(value)) return value[0] ?? "";
 	return value ?? "";
 }
+
+// API items carry the plural route segment as `type`; catalogue keys are singular.
+export const SINGULAR: Record<CatalogType, string> = {
+	games: "game",
+	movies: "movie",
+	series: "series",
+	books: "book",
+};
+
+// The slug keeps the URL readable; the id is what GET /{type}/{id} takes.
+export function itemHref(
+	type: CatalogType,
+	item: { slug: string; id: string },
+): `/${CatalogType}/${string}` {
+	return `/${type}/${item.slug}?id=${encodeURIComponent(item.id)}`;
+}

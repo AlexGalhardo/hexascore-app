@@ -1,0 +1,50 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "497745",
+      "openlibrary": "OL22995492M"
+    },
+    "meta": {
+      "countries": [
+        "Japan"
+      ],
+      "creators": [
+        "Eiko Kadono"
+      ],
+      "genres": [
+        "fantasy",
+        "children's fiction"
+      ]
+    },
+    "popularity": 13.0,
+    "qid": "Q1768944",
+    "release_date": "1985-01-25",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Kiki's Delivery Service (魔女の宅急便, Majo no Takkyūbin; lit. 'Witch's Express Home Delivery') is a children's fantasy novel written by Eiko Kadono and illustrated by Akiko Hayashi. It was first published by Fukuinkan Shoten on January 25, 1985. It is the basis of the 1989 Studio Ghibli anime film of the same title and of the 2014 live action film also of the same name.\nThe book won numerous awards in Japan. Encouraged by this and by the success of the Ghibli film, Kadono has written eight more novels over a period of more than thirty-five years. The most recent was published in January 2022.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Kiki%27s_Delivery_Service_(novel)",
+        "title": "Kiki's Delivery Service"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Majo no Takkyūbin (魔女の宅急便) é um romance infantil escrito por Eiko Kadono e ilustrado por Akiko Hayashi. Foi lançado pela editora Fukuinkan Shoten, em 25 de janeiro de 1985. Em 1989, foi produzido uma adaptação homônima pelo Studio Ghibli e uma versão em live-action em 2014, também com o mesmo título.\nO romance ganhou numerosos prêmios no Japão, e incentivado por isso e pelo sucesso do longa-metragem, Kadono escreveu mais cinco romances, ao longo de vários anos.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Majo_no_Takky%C5%ABbin_(romance)",
+        "title": "Majo no Takkyūbin"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Kiki's Delivery Service (魔女の宅急便, Majo no Takkyūbin?,  literalmente, «Servicio urgente a domicilio de la bruja») es una novela fantástica infantil escrita por Eiko Kadono e ilustrada por Akiko Hayashi. Fue publicada por primera vez por Fukuinkan Shoten el 25 de enero de 1985. La obra sirvió de base para la película de anime de 1989 de Studio Ghibli, Kiki's Delivery Service, y para la película de imagen real de 2014 Kiki's Delivery Service.\nEl libro recibió numerosos premios en Japón. Animada por esos reconocimientos y por el éxito de la película de Ghibli, Kadono escribió ocho novelas más a lo largo de más de treinta y cinco años. La más reciente fue publicada en enero de 2022.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Nicky,_la_aprendiz_de_bruja_(novela)",
+        "title": "Nicky, la aprendiz de bruja (novela)"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q1768944",
+  "slug": "kiki-s-delivery-service"
+}

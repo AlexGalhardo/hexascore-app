@@ -6,11 +6,11 @@
   },
   "servers": [
     {
-      "url": "https://api.hexascore.app"
+      "url": "https://api.hexascore.app/v1"
     }
   ],
   "paths": {
-    "/api/v1/books/genres": {
+    "/books/genres": {
       "get": {
         "operationId": "listBookGenres",
         "summary": "listBookGenres",
@@ -42,7 +42,113 @@
         ]
       }
     },
-    "/api/v1/books/{id}/editions": {
+    "/books/trending": {
+      "get": {
+        "operationId": "listBookTrending",
+        "summary": "listBookTrending",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/books/{id}/activity": {
+      "get": {
+        "operationId": "getBookActivity",
+        "summary": "getBookActivity",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "first UTC day, YYYY-MM-DD; default 30 days before to",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "last UTC day, YYYY-MM-DD; default today",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/books/{id}/editions": {
       "get": {
         "operationId": "listEditions",
         "summary": "listEditions",
@@ -103,7 +209,7 @@
         ]
       }
     },
-    "/api/v1/changes": {
+    "/changes": {
       "get": {
         "operationId": "listChanges",
         "summary": "listChanges",
@@ -172,7 +278,7 @@
         ]
       }
     },
-    "/api/v1/entities/{id}": {
+    "/entities/{id}": {
       "get": {
         "operationId": "getEntity",
         "summary": "getEntity",
@@ -225,7 +331,7 @@
         ]
       }
     },
-    "/api/v1/entities/{id}/items": {
+    "/entities/{id}/items": {
       "get": {
         "operationId": "listEntityItems",
         "summary": "listEntityItems",
@@ -318,7 +424,93 @@
         ]
       }
     },
-    "/api/v1/franchises/{id}": {
+    "/exports": {
+      "get": {
+        "operationId": "listExports",
+        "summary": "listExports",
+        "tags": [
+          "exports"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportList"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/exports/{type}/{day}": {
+      "get": {
+        "operationId": "getExport",
+        "summary": "getExport",
+        "tags": [
+          "exports"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "description": "games, movies, series or books",
+            "schema": {
+              "enum": [
+                "games",
+                "movies",
+                "series",
+                "books"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "day",
+            "in": "path",
+            "required": true,
+            "description": "UTC day, YYYY-MM-DD",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/franchises/{id}": {
       "get": {
         "operationId": "getFranchise",
         "summary": "getFranchise",
@@ -371,7 +563,7 @@
         ]
       }
     },
-    "/api/v1/games/genres": {
+    "/games/genres": {
       "get": {
         "operationId": "listGameGenres",
         "summary": "listGameGenres",
@@ -403,7 +595,113 @@
         ]
       }
     },
-    "/api/v1/lookup": {
+    "/games/trending": {
+      "get": {
+        "operationId": "listGameTrending",
+        "summary": "listGameTrending",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/games/{id}/activity": {
+      "get": {
+        "operationId": "getGameActivity",
+        "summary": "getGameActivity",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "first UTC day, YYYY-MM-DD; default 30 days before to",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "last UTC day, YYYY-MM-DD; default today",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/lookup": {
       "get": {
         "operationId": "lookupItem",
         "summary": "lookupItem",
@@ -464,7 +762,7 @@
         ]
       }
     },
-    "/api/v1/me/usage": {
+    "/me/usage": {
       "get": {
         "operationId": "getUsage",
         "summary": "getUsage",
@@ -496,7 +794,7 @@
         ]
       }
     },
-    "/api/v1/movies/genres": {
+    "/movies/genres": {
       "get": {
         "operationId": "listMovieGenres",
         "summary": "listMovieGenres",
@@ -528,7 +826,113 @@
         ]
       }
     },
-    "/api/v1/organizations/{id}": {
+    "/movies/trending": {
+      "get": {
+        "operationId": "listMovieTrending",
+        "summary": "listMovieTrending",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/movies/{id}/activity": {
+      "get": {
+        "operationId": "getMovieActivity",
+        "summary": "getMovieActivity",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "first UTC day, YYYY-MM-DD; default 30 days before to",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "last UTC day, YYYY-MM-DD; default today",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/organizations/{id}": {
       "get": {
         "operationId": "getOrganization",
         "summary": "getOrganization",
@@ -581,7 +985,7 @@
         ]
       }
     },
-    "/api/v1/people/{id}": {
+    "/people/{id}": {
       "get": {
         "operationId": "getPerson",
         "summary": "getPerson",
@@ -634,7 +1038,7 @@
         ]
       }
     },
-    "/api/v1/platforms/{id}": {
+    "/platforms/{id}": {
       "get": {
         "operationId": "getPlatform",
         "summary": "getPlatform",
@@ -687,7 +1091,7 @@
         ]
       }
     },
-    "/api/v1/search": {
+    "/search": {
       "get": {
         "operationId": "searchItems",
         "summary": "searchItems",
@@ -764,7 +1168,7 @@
         ]
       }
     },
-    "/api/v1/search/entities": {
+    "/search/entities": {
       "get": {
         "operationId": "searchEntities",
         "summary": "searchEntities",
@@ -841,7 +1245,7 @@
         ]
       }
     },
-    "/api/v1/series/genres": {
+    "/series/genres": {
       "get": {
         "operationId": "listSeriesGenres",
         "summary": "listSeriesGenres",
@@ -873,7 +1277,113 @@
         ]
       }
     },
-    "/api/v1/webhooks": {
+    "/series/trending": {
+      "get": {
+        "operationId": "listSeriesTrending",
+        "summary": "listSeriesTrending",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/series/{id}/activity": {
+      "get": {
+        "operationId": "getSeriesActivity",
+        "summary": "getSeriesActivity",
+        "tags": [
+          "catalog"
+        ],
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "first UTC day, YYYY-MM-DD; default 30 days before to",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "last UTC day, YYYY-MM-DD; default today",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityJSON"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/webhooks": {
       "get": {
         "operationId": "listWebhooks",
         "summary": "listWebhooks",
@@ -971,7 +1481,7 @@
         ]
       }
     },
-    "/api/v1/webhooks/{id}": {
+    "/webhooks/{id}": {
       "delete": {
         "operationId": "deleteWebhook",
         "summary": "deleteWebhook",
@@ -1010,7 +1520,7 @@
         ]
       }
     },
-    "/api/v1/webhooks/{id}/test": {
+    "/webhooks/{id}/test": {
       "post": {
         "operationId": "testWebhook",
         "summary": "testWebhook",
@@ -1067,7 +1577,7 @@
         ]
       }
     },
-    "/api/v1/{type}": {
+    "/{type}": {
       "get": {
         "operationId": "listItems",
         "summary": "listItems",
@@ -1191,7 +1701,7 @@
         ]
       }
     },
-    "/api/v1/{type}/{id}": {
+    "/{type}/{id}": {
       "get": {
         "operationId": "getItem",
         "summary": "getItem",
@@ -1262,6 +1772,59 @@
   },
   "components": {
     "schemas": {
+      "ActivityDayJSON": {
+        "properties": {
+          "day": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "listAdds": {
+            "type": "integer"
+          },
+          "ratingsNew": {
+            "type": "integer"
+          },
+          "ratingsUpdated": {
+            "type": "integer"
+          },
+          "searchClicks": {
+            "type": "integer"
+          },
+          "statusCompleted": {
+            "type": "integer"
+          },
+          "statusDropped": {
+            "type": "integer"
+          },
+          "statusInProgress": {
+            "type": "integer"
+          },
+          "statusWant": {
+            "type": "integer"
+          },
+          "suggestions": {
+            "type": "integer"
+          },
+          "views": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "day"
+        ],
+        "type": "object"
+      },
+      "ActivityJSON": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ActivityDayJSON"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "ChangeJSON": {
         "properties": {
           "action": {
@@ -1543,6 +2106,40 @@
         ],
         "type": "object"
       },
+      "ExportJSON": {
+        "properties": {
+          "day": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "games",
+              "movies",
+              "series",
+              "books"
+            ],
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "day"
+        ],
+        "type": "object"
+      },
+      "ExportList": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ExportJSON"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "FieldSource": {
         "properties": {
           "licence": {
@@ -1805,6 +2402,50 @@
           },
           "text": {
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TrendingEntryJSON": {
+        "properties": {
+          "basis": {
+            "enum": [
+              "trend",
+              "prior"
+            ],
+            "minLength": 1,
+            "type": "string"
+          },
+          "item": {
+            "$ref": "#/components/schemas/ItemJSON"
+          },
+          "rank": {
+            "type": "integer"
+          },
+          "trendScore": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "rank",
+          "basis"
+        ],
+        "type": "object"
+      },
+      "TrendingJSON": {
+        "properties": {
+          "computedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/TrendingEntryJSON"
+            },
+            "type": "array"
           }
         },
         "type": "object"

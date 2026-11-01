@@ -1,0 +1,66 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0499549",
+      "metacritic": "movie/avatar",
+      "rottentomatoes": "m/avatar",
+      "tmdb": "19995"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "James Cameron"
+      ],
+      "genres": [
+        "science fiction film",
+        "action film",
+        "adventure film",
+        "military science fiction",
+        "live-action/animated film",
+        "epic film",
+        "white savior film"
+      ],
+      "runtimeMinutes": 162,
+      "trailers": [
+        {
+          "youtubeId": "mZQmHEUbxKE"
+        },
+        {
+          "youtubeId": "o_26SGY83-I"
+        }
+      ]
+    },
+    "popularity": 122.0,
+    "qid": "Q24871",
+    "release_date": "2009-12-16",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Avatar is a 2009 epic science fiction film written and directed by James Cameron. It features an ensemble cast including Sam Worthington, Zoe Saldaña, Stephen Lang, Michelle Rodriguez, and Sigourney Weaver. It is the first installment in the Avatar film series. It is set in the mid-22nd century, when humans are colonizing Pandora, a lush habitable moon, in order to mine the valuable mineral unobtanium. The expansion of the mining colony threatens the existence of a local tribe of Na'vi, a humanoid species indigenous to Pandora. The title of the film refers to an \"avatar\", which is a genetically engineered Na'vi body remotely operated from the brain of a human, and which is used to interact with the Na'vi.\nDevelopment of Avatar began in 1994, when Cameron wrote an 80-page treatment for the film. Filming was due to take place after the completion of Cameron's 1997 film Titanic, for a planned release in 1999; however, according to Cameron, the necessary technology was not yet available to achieve his vision of the film. Work on the fictional constructed language of the Na'vi began in 2005, and Cameron began developing the screenplay and fictional universe in early 2006. Avatar was budgeted at $237 million, due to the groundbreaking array of new visual effects Cameron achieved in cooperation with Weta Digital. Some estimates put the cost at between $280 million and $310 million for production, and at $150 million for promotion. The film made extensive use of 3D computer graphics and new motion capture filming techniques, and reunited Cameron with his Titanic co-producer Jon Landau.\nAvatar premiered at the Odeon Leicester Square theater in London on December 10, 2009, and was released in the United States on December 18 by 20th Century Fox. The film received positive reviews from critics, who praised its groundbreaking visual effects, though the plot received criticism for being derivative. The film broke several box office records, including becoming the highest-grossing film of all time from 2010 to 2019 and again from 2021 to 2026. It also became the first film to gross more than $2 billion, and was the best-selling video title of 2010 in the United States. Adjusted for inflation, Avatar grossed around $4 billion, making it the second-highest-grossing film behind Gone with the Wind (1939).\nAvatar received nine nominations at the 82nd Academy Awards, winning three awards, and received numerous other accolades. Its success led to an increase in popularity of 3D films, and to electronics manufacturers releasing 3D televisions. Two sequels have been released: Avatar: The Way of Water (2022) and Avatar: Fire and Ash (2025), with two more in development.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Avatar_(2009_film)",
+        "title": "Avatar"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Avatar é um filme épico de ficção científica norte-americana de 2009, escrito e dirigido por James Cameron, e estrelado por Sam Worthington, Zoë Saldaña, Michelle Rodriguez, Sigourney Weaver e Stephen Lang. O filme, que foi produzido pela Lightstorm Entertainment e distribuído pela 20th Century Fox, tem seu enredo localizado no ano 2154 e é baseado em um conflito em Pandora, uma das luas de Polifemo, um dos três planetas gasosos fictícios que orbitam o sistema Alpha Centauri. Em Pandora, os colonizadores humanos e os Na'vi, nativos humanoides, entram em guerra pelos recursos naturais do planeta e pela continuação da existência da espécie nativa. O título do filme refere-se aos corpos híbridos feitos a partir do ADN/DNA misturado de humanos e Na'vi , criados por um grupo de cientistas através de engenharia genética, para interagir com os nativos de Pandora.\nO desenvolvimento de Avatar começou a ser trabalhado por James Cameron em 1994, tendo escrito o rascunho de um roteiro, com cerca de 80 páginas, sendo esse seu primeiro filme após Titanic. As filmagens deveriam ter sido iniciadas logo após esse filme, e Avatar seria lançado em 1999, mas, de acordo com Cameron, a tecnologia necessária para produzir o filme a partir de sua visão ainda não estava disponível. A língua na'vi utilizada durante o filme começou a ser criada em 2005 pelo linguista Paul Frommer, e Cameron iniciou a finalização do seu roteiro e universo ficcional no início de 2006.\nO orçamento oficial de Avatar foi de 237 milhões de dólares.  Porém, foi estimado um custo entre 280 milhões e 310 milhões de dólares para a produção e 150 milhões de dólares para divulgação. O filme foi lançado em 2D, 3D – usando os formatos RealD 3D, Dolby 3D, XpanD 3D e IMAX 3D – e também em 4D, na Coreia. A crítica diz que Avatar é uma inovação em termos de tecnologia cinematográfica devido ao seu desenvolvimento com visualização 3D e gravação com câmeras que foram feitas especialmente para a produção do filme, sendo um divisor de águas para questão de efeitos visuais e do cinema atual.\nAvatar teve sua première em Londres, no dia 10 de dezembro de 2009. Os lançamentos no Brasil e em Portugal ocorreram nos dias 18 e 17 do mesmo mês, respectivamente. Arrecadou aproximadamente 232 milhões de dólares mundialmente em seu primeiro final de semana de lançamento, a sétima maior arrecadação em um primeiro final de semana da história do cinema e a maior para um filme original, que não é adaptação ou sequência. Em menos de um mês, Avatar superou um bilhão de dólares de faturamento – o quinto filme a alcançar essa cifra –, superando Titanic com a maior bilheteria da história; manteve-se na posição continuamente até julho de 2019, quando foi ultrapassado por Avengers: Endgame, mas retornou ao primeiro lugar após um relançamento na China em março de 2021. Também tornou-se o primeiro filme a alcançar mais de dois bilhões em bilheteria. Depois desse faturamento, James Cameron confirmou que seria lançada uma sequência do filme, e, possivelmente, uma terceira, formando uma trilogia. Avatar foi nomeado em nove categorias do Oscar, incluindo Melhor Filme e Melhor Diretor, porém foi premiado apenas em três categorias: Melhor Fotografia, Melhores Efeitos Visuais e Melhor Direção de Arte.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Avatar_(filme)",
+        "title": "Avatar"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Avatar (comercializada como Avatar de James Cameron) es una película épica de ciencia ficción militar y animación estadounidense de 2009,​​\nescrita, producida y dirigida por James Cameron y protagonizada por Sam Worthington, Zoe Saldaña, Sigourney Weaver, Stephen Lang y Michelle Rodriguez.\nEstá ambientada en el año 2154 y los acontecimientos que se narran en la historia Pandora, una luna (y aparentemente la más grande) de un planeta similar a Júpiter llamado Polifemo, habitada por una especie humanoide llamada na’vi, con la que los humanos se encuentran en conflicto debido a que uno de sus clanes está asentado alrededor de un gigantesco árbol que cubre una inmensa veta de un mineral muy cotizado y que supondría la solución a los problemas energéticos de la Tierra: el unobtainium.​​\nJake Sully, un marine que quedó paralítico, es seleccionado para participar en el programa Avatar, un proyecto que transporta la mente de los científicos a unos cuerpos artificiales de na’vi para que la comunicación con los nativos resulte así más sencilla.​\nDurante esa búsqueda de confianza entre Jake y los na’vi, Jake debe ser aprobado por la tribu y experimenta todas las relaciones con el bosque, la fauna y la flora que tienen los nativos, junto con sus costumbres y su lengua. A pesar del fin científico del proyecto, el coronel Quaritch, quien dirige la defensa de la base humana en Pandora, convence a Jake para que le proporcione información sobre los nativos en caso de que fuera necesario recurrir a la fuerza para que se marchen. En un principio, Jake cumple profesionalmente su misión, pero se enamora de una de las nativas, Neytiri, y se da cuenta de que estos jamás renunciarán a su tierra, haciendo inevitable un conflicto armado; él deberá decidir de qué lado está.​\nEl desarrollo de Avatar comenzó en 1994, cuando Cameron escribió un guion de ochenta hojas para la película.​​\nSe suponía que la filmación tendría lugar después de la finalización de Titanic, para un estreno previsto en 1999,​\npero de acuerdo con el director, la tecnología de la época no era apta para la visión de la película.​\nEl trabajo sobre el idioma de los seres extraterrestres de la película comenzó en 2005, y Cameron comenzó a desarrollar el guion y el universo ficticio a principios de 2006.​​\nEl presupuesto oficial de Avatar fue de 237 millones de dólares,​\naunque algunas estimaciones lo sitúan entre los 280 y los 310 millones, más otros 150 millones dedicados al marketing.​​​\nLa película hizo uso extensivo de nuevas técnicas de captura de movimiento, y fue lanzada para visualizaciones de manera convencional, proyecciones 3D (usando los formatos RealD 3D, Dolby 3D, XpanD 3D, y IMAX 3D), y proyecciones 4D en algunos cines de Corea del Sur.​\nLa cinematografía estereoscópica se promocionó como un avance en la tecnología cinematográfica.​\nAvatar se estrenó por primera vez en Londres, Inglaterra, e internacionalmente el 18 de diciembre de 2009, aunque en algunos países se proyectó en fechas distintas, tanto anteriores como posteriores, al estreno internacional. Algunos de ellos fueron Perú, Bélgica, Francia, Indonesia, Jamaica y Egipto, donde pudo ser vista desde el 16 de diciembre, mientras que en Argentina, China e Italia fue estrenada el 1, 2 y 15 de enero de 2010, respectivamente.​​\nEn Cuba fue estrenada el 6 de febrero de aquel año. La película obtuvo reseñas positivas, con los críticos elogiando altamente sus efectos visuales.​​​\nEl día de su estreno Avatar logró una recaudación de aproximadamente 27 millones de dólares,​\naumentando esta cifra hasta los 241 millones tras su primer fin de semana en taquilla.​\nDiecisiete días después de que se estrenara, se convirtió en la película que más rápido ha alcanzado la cifra de mil millones de dólares en recaudación,​\ny tiempo después se situó como la película con mayor recaudación de todos los tiempos, superando así a Titanic (1997), también de James Cameron.​\nAvatar consiguió superar esa marca en menos de seis semanas, convirtiéndose por entonces en la película más taquillera de la historia del cine (siendo superada por Avengers: Endgame en 2019, aunque recuperaría el trono en 2021 con su lanzamiento en China),​\nlogrando además ser la primera película en sobrepasar la barrera de los 2000 millones de dólares en recaudación después de seis semanas de su estreno mundial.​\nEn 2010 fue nominada al premio Óscar a la mejor película. Y ganó dicho premio en las categorías de mejores efectos visuales, mejor dirección artística y mejor fotografía. Ganó tres Globos de Oro (premios concedidos por la asociación de la prensa extranjera), en 2010, en las categorías de mejor película dramática, mejor director y mejor banda sonora.\nLa película se reestrenó en Estados Unidos el 27 de agosto de 2010 en salas 3D y IMAX 3D, con algunas escenas inéditas.\nEl 13 de marzo de 2021 (11 años y 3 meses después de su estreno), la película recuperó el título de la película más taquillera de todos los tiempos, superando a Avengers: Endgame, tras un exitoso reestreno en China.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Avatar_(pel%C3%ADcula)",
+        "title": "Avatar"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q24871",
+  "slug": "avatar"
+}

@@ -13,3 +13,5 @@ risks / follow-ups: flag names now `community_submissions` / `community_trusted_
 ## Review (especialista, 2026-10-31)
 verdict: APROVADO (merge queued: main frozen for v0.12.0)
 checked: vukem flag names match `^[a-z][a-z0-9_]{0,99}$` (vukem flags/flags.go nameRe; docs page cited in the diff); `app/community/page.go` declares `flags.Bool("community_submissions", false)`; both SDD 04 §6 lines changed, nothing else
+
+PRONTO_PARA_MERGE agent/senior/DOC-sdd-flag-names (merged d21e0db; markdownlint ok, no stale flag names in docs)

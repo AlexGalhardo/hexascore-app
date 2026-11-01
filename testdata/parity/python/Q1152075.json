@@ -1,0 +1,48 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0188340",
+      "tmdb": "239741"
+    },
+    "meta": {
+      "countries": [
+        "Japan"
+      ],
+      "episodes": 49,
+      "genres": [
+        "tokusatsu"
+      ],
+      "seasons": 1
+    },
+    "popularity": 15.0,
+    "qid": "Q1152075",
+    "release_date": "2000-01-30",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Kamen Rider Kuuga (仮面ライダークウガ, Kamen Raidā Kūga) is a Japanese tokusatsu television series. It is the 10th installment of the popular Kamen Rider Series of tokusatsu shows and the first of the series to air entirely in the Heisei period, as well as the first standalone Kamen Rider TV series since Kamen Rider Black RX and the first series of the revived run of Kamen Rider, bringing Kamen Rider into the 21st century.\nIt was a joint collaboration between Asatsu-DK and Toei, and was shown on TV Asahi from January 30, 2000, to January 21, 2001, replacing Moero!! Robocon in its timeslot. Kamen Rider Kuuga is the first Kamen Rider Series to be broadcast in a widescreen (letterboxed) format, albeit cropped during airing. It aired alongside Mirai Sentai Timeranger.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Kamen_Rider_Kuuga",
+        "title": "Kamen Rider Kuuga"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Kamen Rider Kuuga"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Kamen Rider Kūga (仮面ライダークウガ, Kamen Raidā Kūga?) es el título de la 10.ª temporada de la franquicia Kamen Rider, producida por Toei Company y emitida en TV Asahi del 30 de enero de 2000 al 21 de enero de 2001, constando de 49 episodios. Significó el regreso a la emisión regular de la franquicia tras 11 años de ausencia y la primera temporada de la era Heisei. También fue la primera temporada de la franquicia producida íntegramente en 16:9, en formato letterbox, y la primera que se grabó en vídeo en lugar de emplear película. El eslogan de la temporada es \"Un nuevo héroe, una nueva leyenda\" (新しいヒーロー、新しい伝説, Atarashī hīrō, atarashī densetsu?).",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Kamen_Rider_K%C5%ABga",
+        "title": "Kamen Rider Kūga"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q1152075",
+  "slug": "kamen-rider-kuuga"
+}

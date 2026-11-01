@@ -1,0 +1,632 @@
+{
+  "qid": "Q1079",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q1079",
+      "labels": {
+        "en": "Breaking Bad",
+        "es": "Breaking Bad",
+        "pt": "Breaking Bad",
+        "pt-br": "Breaking Bad"
+      },
+      "aliases": {
+        "en": [
+          "BB",
+          "BrBa"
+        ],
+        "pt": [
+          "Ruptura Total",
+          "Química do Mal"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Breaking Bad",
+        "eswiki": "Breaking Bad",
+        "ptwiki": "Breaking Bad"
+      },
+      "sitelinks_count": 103,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+62",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/breaking_bad",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q9335577",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1366112",
+            "rank": "normal"
+          },
+          {
+            "value": "Q67175872",
+            "rank": "normal"
+          },
+          {
+            "value": "Q20652466",
+            "rank": "normal"
+          },
+          {
+            "value": "Q78528852",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Breaking Bad",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q271050",
+            "rank": "normal"
+          },
+          {
+            "value": "Q302491",
+            "rank": "normal"
+          },
+          {
+            "value": "Q432385",
+            "rank": "normal"
+          },
+          {
+            "value": "Q462622",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2118568",
+            "rank": "normal"
+          },
+          {
+            "value": "Q198638",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23547",
+            "rank": "normal"
+          },
+          {
+            "value": "Q888178",
+            "rank": "normal"
+          },
+          {
+            "value": "Q726142",
+            "rank": "normal"
+          },
+          {
+            "value": "Q266067",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1138674",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16194347",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2439744",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7615053",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1364886",
+            "rank": "normal"
+          },
+          {
+            "value": "Q443044",
+            "rank": "normal"
+          },
+          {
+            "value": "Q439163",
+            "rank": "normal"
+          },
+          {
+            "value": "Q223830",
+            "rank": "normal"
+          },
+          {
+            "value": "Q711898",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1060758",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2487180",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3837599",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1151830",
+            "rank": "normal"
+          },
+          {
+            "value": "Q920607",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1093867",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2617121",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1802786",
+            "rank": "normal"
+          },
+          {
+            "value": "Q24076563",
+            "rank": "normal"
+          },
+          {
+            "value": "Q960721",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1176939",
+            "rank": "normal"
+          },
+          {
+            "value": "Q667979",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23013340",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1093347",
+            "rank": "normal"
+          },
+          {
+            "value": "Q934506",
+            "rank": "normal"
+          },
+          {
+            "value": "Q566885",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16186952",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3530283",
+            "rank": "normal"
+          },
+          {
+            "value": "Q258793",
+            "rank": "normal"
+          },
+          {
+            "value": "Q445638",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2652939",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2680038",
+            "rank": "normal"
+          },
+          {
+            "value": "Q550778",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3481379",
+            "rank": "normal"
+          },
+          {
+            "value": "Q440023",
+            "rank": "normal"
+          },
+          {
+            "value": "Q604762",
+            "rank": "normal"
+          },
+          {
+            "value": "Q80782",
+            "rank": "normal"
+          },
+          {
+            "value": "Q714479",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6162394",
+            "rank": "normal"
+          },
+          {
+            "value": "Q155378",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5578715",
+            "rank": "normal"
+          },
+          {
+            "value": "Q608695",
+            "rank": "normal"
+          },
+          {
+            "value": "Q121045",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2447922",
+            "rank": "normal"
+          },
+          {
+            "value": "Q22943994",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3122207",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2924449",
+            "rank": "normal"
+          },
+          {
+            "value": "Q367155",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15198783",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q4500",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "tv/breaking-bad",
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+5",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q652390",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0903747",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q7976",
+            "rank": "preferred"
+          },
+          {
+            "value": "Q3058369",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q294660",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "1396",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q4500",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3440795",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6196851",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7841104",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4974114",
+            "rank": "normal"
+          },
+          {
+            "value": "Q548834",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23547",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1279422",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7704779",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1699742",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1373742",
+            "rank": "normal"
+          },
+          {
+            "value": "Q724100",
+            "rank": "normal"
+          },
+          {
+            "value": "Q462727",
+            "rank": "normal"
+          },
+          {
+            "value": "Q127800",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7181639",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5144932",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3952882",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10307893",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6834453",
+            "rank": "normal"
+          },
+          {
+            "value": "Q621818",
+            "rank": "normal"
+          },
+          {
+            "value": "Q371455",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7174311",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5542223",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15042700",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7407299",
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q4500",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7174311",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5542223",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7407299",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10307893",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15042700",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2008-01-20T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q113461786",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q10307893": "John Shiban",
+        "Q1060758": "Adam Godley",
+        "Q1093347": "Ryan Lee",
+        "Q1093867": "Damon Herriman",
+        "Q113461786": "Breaking Bad",
+        "Q1138674": "Jesse Plemons",
+        "Q1151830": "Nate Mooney",
+        "Q1176939": "David Ury",
+        "Q121045": "Norbert Weisser",
+        "Q127800": "Michelle MacLaren",
+        "Q1279422": "Charles Haid",
+        "Q1364886": "Raymond Cruz",
+        "Q1366112": "drama television series",
+        "Q1373742": "Johan Renck",
+        "Q15042700": "Thomas Schnauz",
+        "Q15198783": "Charles Baker",
+        "Q155378": "Jim Beaver",
+        "Q16186952": "Michael Shamus Wiles",
+        "Q16194347": "Marius Stan",
+        "Q1699742": "John Dahl",
+        "Q1802786": "Matt Jones",
+        "Q198638": "Jonathan Banks",
+        "Q20652466": "black comedy television series",
+        "Q2118568": "RJ Mitte",
+        "Q223830": "Danny Trejo",
+        "Q22943994": "Jamie McShane",
+        "Q23013340": "Franc Ross",
+        "Q23547": "Bryan Cranston",
+        "Q24076563": "Michael Bofshever",
+        "Q2439744": "Christopher Cousins",
+        "Q2447922": "Mark Harelik",
+        "Q2487180": "Dale Dickey",
+        "Q258793": "Krysten Ritter",
+        "Q2617121": "Keith Jardine",
+        "Q2652939": "Larry Hankin",
+        "Q266067": "Laura Fraser",
+        "Q2680038": "David Costabile",
+        "Q271050": "Anna Gunn",
+        "Q2924449": "Brennan Brown",
+        "Q294660": "AMC",
+        "Q30": "United States",
+        "Q302491": "Aaron Paul",
+        "Q3058369": "Spanish language in the Americas",
+        "Q3122207": "Guy Wilson",
+        "Q3440795": "Adam Bernstein",
+        "Q3481379": "Jere Burns",
+        "Q3530283": "Todd Terry",
+        "Q367155": "Robert Forster",
+        "Q371455": "David Slade",
+        "Q3837599": "Louis Herthum",
+        "Q3952882": "Scott Winant",
+        "Q432385": "Dean Norris",
+        "Q439163": "Jessica Hecht",
+        "Q440023": "Emily Rios",
+        "Q443044": "Tess Harper",
+        "Q445638": "DJ Qualls",
+        "Q4500": "Vince Gilligan",
+        "Q462622": "Betsy Brandt",
+        "Q462727": "Félix Enríquez Alcalá",
+        "Q4974114": "Bronwen Hughes",
+        "Q5144932": "Colin Bucksey",
+        "Q548834": "Tim Hunter",
+        "Q550778": "John de Lancie",
+        "Q5542223": "George Mastras",
+        "Q5578715": "J. B. Blanc",
+        "Q566885": "Harry Groener",
+        "Q604762": "Michael Bowen",
+        "Q608695": "Carlo Rota",
+        "Q6162394": "Jason Douglas",
+        "Q6196851": "Jim McKay",
+        "Q621818": "Rian Johnson",
+        "Q652390": "Sony Pictures Television",
+        "Q667979": "Aaron Hill",
+        "Q67175872": "thriller television series",
+        "Q6834453": "Michael Slovis",
+        "Q711898": "Sam McMurray",
+        "Q714479": "Louis Ferreira",
+        "Q7174311": "Peter Gould",
+        "Q7181639": "Phil Abraham",
+        "Q724100": "Peter Medak",
+        "Q726142": "Giancarlo Esposito",
+        "Q7407299": "Sam Catlin",
+        "Q7615053": "Steven Michael Quezada",
+        "Q7704779": "Terry McDonough",
+        "Q7841104": "Tricia Brock",
+        "Q78528852": "contemporary Western film",
+        "Q7976": "American English",
+        "Q80782": "Kevin Rankin",
+        "Q888178": "Bob Odenkirk",
+        "Q920607": "Caleb Landry Jones",
+        "Q9335577": "crime television series",
+        "Q934506": "Mark Margolis",
+        "Q960721": "Jeremy Howard"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q1079",
+      "lang": "en",
+      "title": "Breaking Bad",
+      "extract": "Breaking Bad is an American neo-Western crime drama television series created by Vince Gilligan for AMC. Set and filmed in Albuquerque, New Mexico, the series follows Walter White (Bryan Cranston), an overqualified high school chemistry teacher who, after being diagnosed with stage-three lung cancer, begins producing and selling methamphetamine with former student Jesse Pinkman (Aaron Paul) to secure his family's financial future. The series also stars Anna Gunn, Dean Norris, Betsy Brandt, RJ Mitte, Giancarlo Esposito, Bob Odenkirk, Jonathan Banks, Laura Fraser, and Jesse Plemons.\nBreaking Bad premiered on AMC on January 20, 2008, and concluded on September 29, 2013, after five seasons and 62 episodes. Its first season received generally positive reviews, while later seasons, especially the fifth and final season, received widespread critical acclaim for the performances, writing, direction, cinematography, and character development. The series had modest viewership during its first three seasons, before viewership increased after it became available on Netflix prior to the fourth season. Viewership rose further during the second half of the final season in 2013, and the series finale became one of the most watched cable television episodes of its era.\nSince its conclusion, Breaking Bad has been widely regarded by critics as one of the greatest television series of all time. It received numerous accolades, including 16 Primetime Emmy Awards, 2 Golden Globe Awards, 2 Peabody Awards, and a British Academy Television Award. Cranston won the Primetime Emmy Award for Outstanding Lead Actor in a Drama Series four times, Paul won the Primetime Emmy Award for Outstanding Supporting Actor in a Drama Series three times, and Gunn won the Primetime Emmy Award for Outstanding Supporting Actress in a Drama Series twice. The series has continued to appear in retrospective rankings of the best television programs.\nThe series gave rise to the larger Breaking Bad franchise. Better Call Saul, a spin-off series centered on Odenkirk's character Saul Goodman, debuted on AMC on February 8, 2015, and concluded on August 15, 2022. El Camino: A Breaking Bad Movie, a sequel film starring Paul, was released on Netflix and in selected theaters on October 11, 2019.",
+      "url": "https://en.wikipedia.org/wiki/Breaking_Bad"
+    },
+    "wikipedia:es": {
+      "qid": "Q1079",
+      "lang": "es",
+      "title": "Breaking Bad",
+      "extract": "Breaking Bad es una serie de televisión estadounidense que se emitió entre 2008 y 2013, creada y producida por Vince Gilligan. Narra la historia de Walter White (Bryan Cranston), un profesor de química con dificultades económicas a quien le diagnostican un cáncer de pulmón inoperable. Para pagar su tratamiento y asegurar el futuro económico de su familia, comienza a cocinar y vender metanfetamina​ junto con Jesse Pinkman (Aaron Paul), un antiguo alumno suyo. La serie, ambientada y producida en Albuquerque (Nuevo México), se caracteriza por sus escenarios desérticos y por la tendencia en la historia de poner a sus personajes en situaciones que aparentemente no tienen salida, lo que llevó a que su creador la describa como un wéstern contemporáneo.​ \nLa serie se estrenó el 20 de enero de 2008 y es una producción de Sony Pictures Television. En Estados Unidos y Canadá se emitió por la cadena AMC.​ La temporada final se dividió en dos partes de ocho episodios cada una y se emitió en el transcurso de dos años; la primera mitad se estrenó el 15 de julio de 2012 y concluyó el 2 de septiembre de 2012, mientras que la segunda mitad se estrenó el 11 de agosto de 2013 y concluyó el 29 de septiembre del mismo año, con un final altamente satisfactorio para los seguidores y la crítica.​\nBreaking Bad ha sido aclamada con entusiasmo por buena parte de la crítica​​​​​ y del público y está considerada como una de las mejores series televisivas de todos los tiempos.​​​​ En 2013, Breaking Bad fue uno de los programas de televisión por cable más vistos en los Estados Unidos: la audiencia de la segunda mitad de la quinta temporada duplicó a la de la primera.​\nLa serie logró obtener tres años consecutivos el premio a la mejor serie por parte de los Premios WGA y ha ganado dieciséis premios Primetime Emmy, incluyendo cuatro galardones para Bryan Cranston en la categoría de mejor actor; tres para Aaron Paul al mejor actor de reparto; dos para Anna Gunn como mejor actriz de reparto; y otros dos como mejor serie dramática después de tres nominaciones. La serie también fue nominada a los premios Globo de Oro como mejor serie dramática y Cranston recibió tres nominaciones a mejor actor, además de cuatro ternas más en los premios del Sindicato de Actores en la misma categoría; en 2013 se alzó con el premio. En ese mismo año, el Gremio de Guionistas de los Estados Unidos nombró a Breaking Bad como la decimotercera serie mejor guionada de todos los tiempos.​ En septiembre, fue incorporada al Libro Guinness de los récords como la serie mejor valorada de la historia, con una puntuación de 99 sobre 100 en Metacritic en su quinta temporada.​ Stephen King la calificó como la mejor serie de televisión de la historia.​\nEn 2015 se estrenó Better Call Saul, una serie derivada que sirve también de precuela, centrada en el personaje del abogado Saul Goodman.​ En 2019 se estrenó la película El Camino, epílogo de la serie que sirve de cierre para el personaje de Jesse Pinkman.​",
+      "url": "https://es.wikipedia.org/wiki/Breaking_Bad"
+    },
+    "wikipedia:pt": {
+      "qid": "Q1079",
+      "lang": "pt",
+      "title": "Breaking Bad",
+      "extract": "Breaking Bad é uma série de televisão americana criada e produzida por Vince Gilligan. Ela retrata a vida do químico Walter Hartwell White, um Professor brilhante frustrado em dar aulas para adolescentes do ensino médio enquanto lida com um filho sofrendo de paralisia cerebral, Skyler White, Sua esposa grávida e dívidas intermináveis. White, então, é diagnosticado com um câncer no pulmão — o que o leva a sofrer um colapso emocional e abraçar uma vida de crimes para pagar suas dívidas hospitalares e dar uma boa vida aos seus filhos. Walter resolve produzir metanfetamina de alta pureza com seu ex-aluno, Jesse Pinkman.\nBreaking Bad se passa em Albuquerque, Novo México, e gira em torno das escolhas de seu protagonista, as quais o levam a uma intensa, dolorosa e inevitável transformação. Amplamente considerada como uma das melhores séries da história, ao seu final, foi um dos programas da televisão a cabo mais assistidos nos Estados Unidos, recebendo inúmeros prémios, incluindo dezesseis Primetime Emmy Awards, oito Satellite Awards, dois Globos de Ouro e um Prémio Escolha Popular. Em 2014, entrou para o Livro dos Recordes como o seriado mais bem avaliado de todos os tempos pela crítica.\nA série foi originalmente exibida pelo canal de televisão por assinatura AMC, onde estreou no dia 20 de janeiro de 2008 e, depois de cinco temporadas de sucesso, teve seu último episódio transmitido no dia 29 de setembro de 2013. Em Portugal, foi exibida (sob o título Ruptura Total) pelos canais SIC Radical, TVSéries e MOV. No Brasil, o seriado é exibido pelo canal pago AXN e pelo serviço de streaming Netflix e, na TV aberta, foi exibida pela Rede Record e pela Band. Na Galiza, foi estreada no dia 2 de julho de 2012 na TVG com o título Breaking Bad (Ruptura total).",
+      "url": "https://pt.wikipedia.org/wiki/Breaking_Bad"
+    }
+  },
+  "tier": "top",
+  "type": "series"
+}

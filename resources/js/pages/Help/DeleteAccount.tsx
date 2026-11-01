@@ -2,7 +2,7 @@ import { Head, Link } from "@inertiajs/react";
 
 import { useT } from "../../lib/useT";
 
-const link = "text-indigo-600 hover:underline dark:text-indigo-400";
+const link = "text-primary hover:underline";
 
 export default function DeleteAccount() {
 	const t = useT();

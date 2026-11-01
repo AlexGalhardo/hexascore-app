@@ -1,0 +1,53 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0384680",
+      "metacritic": "movie/the-weather-man",
+      "rottentomatoes": "m/weather_man",
+      "tmdb": "6963"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Gore Verbinski"
+      ],
+      "genres": [
+        "comedy film",
+        "drama film"
+      ],
+      "runtimeMinutes": 102
+    },
+    "popularity": 28.0,
+    "qid": "Q60296",
+    "release_date": "2005-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Weather Man is a 2005 American dark comedy-drama film directed by Gore Verbinski, written by Steve Conrad, and starring Nicolas Cage as a Chicago-area weatherman who is in a midst of a mid-life crisis even as his career is potentially about to take off with a new job on a national television morning show. The film also stars Michael Caine and Hope Davis in supporting roles. The film was released on October 28, 2005, and grossed $19 million worldwide. It received mixed to positive reviews upon release.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/The_Weather_Man",
+        "title": "The Weather Man"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "The Weather Man (br: O Sol de Cada Manhã) é um filme de drama dos Estados Unidos realizado por Gore Verbinski.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/The_Weather_Man",
+        "title": "The Weather Man"
+      },
+      {
+        "locale": "es",
+        "synopsis": "El hombre del tiempo (The Weather Man) es una película estadounidense de comedia dramática oscura de 2005 dirigida por Gore Verbinski, escrita por Steve Conrad y protagonizada por Nicolas Cage, Michael Caine, Hope Davis y Nicholas Hoult.  \nLa película se estrenó el 28 de octubre de 2005.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/El_hombre_del_tiempo",
+        "title": "El hombre del tiempo"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q60296",
+  "slug": "the-weather-man"
+}

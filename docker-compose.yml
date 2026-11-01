@@ -61,6 +61,8 @@ services:
       TRUSTED_PROXIES: 172.16.0.0/12
       # A parallel suite signs up far more than 30 accounts an hour from one host. Production leaves this unset.
       CHALLENGE_GLOBAL_LIMIT: "100000"
+      # The page guard (ADR 0022) limits page views per IP; one host runs the e2e and Lighthouse suites. Production leaves this unset.
+      PAGE_LIMIT_SCALE: "1000"
       # Billing routes refuse to boot without Stripe settings; these are inert placeholders (no Stripe call is made by the auth, profile and api-keys specs).
       STRIPE_KEY: sk_test_placeholder_e2e
       STRIPE_WEBHOOK_SECRET: whsec_placeholder_e2e
@@ -68,6 +70,8 @@ services:
       STRIPE_PRICE_BUSINESS: price_placeholder_business
       # Community submissions flag (vukem feature flag, env FLAG_<NAME>); off unless the shell opens it.
       FLAG_COMMUNITY_SUBMISSIONS: ${FLAG_COMMUNITY_SUBMISSIONS:-false}
+      # Social layer flag (SDD 14 §12.3); off unless the shell opens it (E2E_SOCIAL_OPEN=true for qa/e2e/specs/social.spec.ts).
+      FLAG_SOCIAL: ${FLAG_SOCIAL:-false}
     # Migrate, then seed DemoCatalog (1 admin, 50 users, 300 items); the seeder is idempotent, so a failure is real.
     entrypoint: ["/bin/sh", "-c", "/app/app migrate && /app/app db:seed --force DemoCatalog"]
     # A stack in another compose project cannot resolve "postgres"; it reaches the published 5433 through the host.

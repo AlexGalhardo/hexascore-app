@@ -25,7 +25,7 @@ func (h *Handlers) ShowOnboarding(c *web.Ctx) error {
 		return c.Redirect("/dashboard")
 	}
 
-	return inertia.Render(c, "Auth/Onboarding", nil)
+	return inertia.Render(c, "Auth/Onboarding", inertia.Props{"socialEnabled": h.Social.Enabled(c.Context())})
 }
 
 // Onboarding stores the nickname once (it never changes afterwards, SDD 03).
@@ -44,6 +44,12 @@ func (h *Handlers) Onboarding(c *web.Ctx) error {
 
 	if err := h.a.SetNickname(c.Context(), u.ID, in.Nickname, "nickname"); err != nil {
 		return err
+	}
+
+	if in.FeedOptIn && h.Social.Enabled(c.Context()) {
+		if err := h.Social.SetFeedOptIn(c.Context(), u.ID, true); err != nil {
+			return err
+		}
 	}
 
 	return c.Redirect("/dashboard")

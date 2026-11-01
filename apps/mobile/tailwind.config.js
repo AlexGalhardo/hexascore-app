@@ -7,7 +7,7 @@ const dark = tokens.palette("dark");
 module.exports = {
 	content: ["./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
 	presets: [require("nativewind/preset")],
-	darkMode: "media",
+	darkMode: "class",
 	theme: {
 		extend: {
 			colors: Object.fromEntries(
@@ -19,8 +19,8 @@ module.exports = {
 				Object.entries(tokens.radius).map(([name, value]) => [name, `${value}px`]),
 			),
 			fontFamily: {
-				display: ["serif"],
-				text: ["sans-serif"],
+				display: ["Playfair Display"],
+				text: ["Inter"],
 			},
 		},
 	},

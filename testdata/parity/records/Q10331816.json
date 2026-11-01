@@ -1,0 +1,178 @@
+{
+  "qid": "Q10331816",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q10331816",
+      "labels": {
+        "en": "Money, Women and Guns",
+        "es": "Dinero, mujeres y armas",
+        "pt": "Money, Women and Guns"
+      },
+      "aliases": {
+        "es": [
+          "Dinero, mujeres y sueños"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Money, Women and Guns",
+        "ptwiki": "Money, Women and Guns"
+      },
+      "sitelinks_count": 8,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q172980",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Money, Women and Guns",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q614160",
+            "rank": "normal"
+          },
+          {
+            "value": "Q59824",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7803677",
+            "rank": "normal"
+          },
+          {
+            "value": "Q966420",
+            "rank": "normal"
+          },
+          {
+            "value": "Q552848",
+            "rank": "normal"
+          },
+          {
+            "value": "Q318261",
+            "rank": "normal"
+          },
+          {
+            "value": "Q179393",
+            "rank": "normal"
+          },
+          {
+            "value": "Q726398",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3187960",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7325191",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1655562",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Money, Women and Guns - 02 - Jock Mahoney.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+80",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q168383",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0051946",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "124400",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q7323990",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1958-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1655562": "Ian MacDonald",
+        "Q168383": "Universal Pictures",
+        "Q172980": "Western film",
+        "Q179393": "William Campbell",
+        "Q1860": "English",
+        "Q30": "United States",
+        "Q318261": "Lon Chaney Jr.",
+        "Q3187960": "Judi Meredith",
+        "Q552848": "Tom Drake",
+        "Q59824": "Kim Hunter",
+        "Q614160": "Jock Mahoney",
+        "Q726398": "James Gleason",
+        "Q7323990": "Richard Bartlett",
+        "Q7325191": "Richard Devon",
+        "Q7803677": "Tim Hovey",
+        "Q966420": "Gene Evans"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q10331816",
+      "lang": "en",
+      "title": "Money, Women and Guns",
+      "extract": "Money, Women and Guns is a 1958 American Western film directed by Richard Bartlett and written by Montgomery Pittman. The film stars Jock Mahoney, Kim Hunter, Tim Hovey, Gene Evans, Tom Drake, Lon Chaney Jr., William Campbell, Jeffrey Stone, James Gleason, Judi Meredith, and Phillip Terry. The film was released in October 1958, by Universal Pictures.",
+      "url": "https://en.wikipedia.org/wiki/Money,_Women_and_Guns"
+    },
+    "wikipedia:pt": {
+      "qid": "Q10331816",
+      "lang": "pt",
+      "title": "Money, Women and Guns",
+      "extract": "Money, Women and Guns (Brasil: Falta um Para Vingar ) é um filme estadunidense, de 1959, do gênero faroeste e suspense, dirigido por Richard H.Bartlett, roteirizado por Montgomery Pittman.",
+      "url": "https://pt.wikipedia.org/wiki/Money,_Women_and_Guns"
+    }
+  },
+  "tier": "year-precision",
+  "type": "movie"
+}

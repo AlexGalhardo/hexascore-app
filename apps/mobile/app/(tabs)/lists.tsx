@@ -1,6 +1,16 @@
+import { router } from "expo-router";
 import type { ReactElement } from "react";
-import { Placeholder } from "../../src/ui/Placeholder";
+import { listsDeps } from "../../src/auth/runtime";
+import { ListsTab } from "../../src/lists/ListsTab";
+import { useLocale } from "../../src/providers/root";
 
 export default function ListsScreen(): ReactElement {
-	return <Placeholder title="Lists" />;
+	const locale = useLocale();
+	return (
+		<ListsTab
+			deps={listsDeps}
+			locale={locale}
+			onOpen={(list) => router.push(`/lists/${encodeURIComponent(list.id)}`)}
+		/>
+	);
 }

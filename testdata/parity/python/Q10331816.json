@@ -1,0 +1,50 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0051946",
+      "tmdb": "124400"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Richard Bartlett"
+      ],
+      "genres": [
+        "Western film"
+      ],
+      "runtimeMinutes": 80
+    },
+    "popularity": 8.0,
+    "qid": "Q10331816",
+    "release_date": "1958-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Money, Women and Guns is a 1958 American Western film directed by Richard Bartlett and written by Montgomery Pittman. The film stars Jock Mahoney, Kim Hunter, Tim Hovey, Gene Evans, Tom Drake, Lon Chaney Jr., William Campbell, Jeffrey Stone, James Gleason, Judi Meredith, and Phillip Terry. The film was released in October 1958, by Universal Pictures.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Money,_Women_and_Guns",
+        "title": "Money, Women and Guns"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Money, Women and Guns (Brasil: Falta um Para Vingar ) é um filme estadunidense, de 1959, do gênero faroeste e suspense, dirigido por Richard H.Bartlett, roteirizado por Montgomery Pittman.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Money,_Women_and_Guns",
+        "title": "Money, Women and Guns"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Dinero, mujeres y armas"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q10331816",
+  "slug": "money-women-and-guns"
+}

@@ -3,6 +3,7 @@
 package tests
 
 import (
+	"net/http"
 	"strings"
 	"testing"
 
@@ -56,6 +57,10 @@ func TestAPIEdge(t *testing.T) {
 		}{
 			{"/api/v1/games?bogus=1", "invalid-query", 400},
 			{"/api/v1/games?cursor=garbage", "invalid-cursor", 400},
+			{"/api/v1/films", "invalid-query", 400},
+			{"/api/v1/films/" + uuid.NewV7().String(), "invalid-query", 400},
+			// activity is four literal routes (P3.A.4.2), so an unknown section is an unknown path.
+			{"/api/v1/films/" + uuid.NewV7().String() + "/activity", "not-found", 404},
 			{"/api/v1/games/" + uuid.NewV7().String(), "not-found", 404},
 			{"/api/v1/nope/a/b/c", "not-found", 404},
 		} {
@@ -66,13 +71,39 @@ func TestAPIEdge(t *testing.T) {
 		r.app.Client(t).GetJSON("/api/v1/games").AssertStatus(401).AssertJSONPath("code", "unauthorized")
 	})
 
+	// server URL + documented path must reach the same handler as the /api/v1 route (SDD 05 section 6.1).
+	t.Run("openapi_urls_resolve", func(t *testing.T) {
+		doc, err := r.app.OpenAPI()
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		server := strings.Replace(doc.Servers[0].URL, "https://", "http://", 1)
+		fill := strings.NewReplacer("{type}", "games", "{id}", r.game)
+
+		for path, ops := range doc.Paths {
+			for method := range ops {
+				p := fill.Replace(path)
+				documented := r.client.Do(strings.ToUpper(method), server+p, nil, "").Status()
+				route := r.client.Do(strings.ToUpper(method), "/api/v1"+p, nil, "").Status()
+
+				if documented != route || documented == http.StatusMethodNotAllowed {
+					t.Errorf("%s %s%s = %d, /api/v1%s = %d", method, server, path, documented, p, route)
+				}
+			}
+		}
+
+		r.client.GetJSON(server + "/games").AssertOK()
+		r.client.GetJSON(server + "/me/usage").AssertOK()
+	})
+
 	t.Run("openapi_servers", func(t *testing.T) {
 		doc, err := r.app.OpenAPI()
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		if len(doc.Servers) != 1 || doc.Servers[0].URL != "https://api.hexascore.app" {
+		if len(doc.Servers) != 1 || doc.Servers[0].URL != "https://api.hexascore.app/v1" {
 			t.Fatalf("servers = %+v", doc.Servers)
 		}
 	})

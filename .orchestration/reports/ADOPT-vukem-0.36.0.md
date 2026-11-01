@@ -1,0 +1,39 @@
+# ADOPT-vukem-0.36.0 vukem v0.36.0 adoption, llms.txt, analytics + consent, IndexNow, Turnstile
+status: parcial (VF-063, VF-064, VF-068 not adopted: the v0.36.0 API leaves a gap, entries narrowed)
+branch: agent/senior/ADOPT-vukem-0.36.0 @ d60cce15 (wt/senior-ADOPT-vukem-0.36.0, from main 83ff96c1, 13 commits)
+files: go.mod/go.sum; app/jobs/{export_ids,indexnow,registry}.go, app/recommend/eval, app/logging, app/mail, app/catalog/indexnow.go, app/controllers/{exports_controller,publicapi/*}.go, app/http/middleware/{api_edge,security_headers,scrape_guard,share_props}.go (request_log.go removed), app/http/limits, bootstrap/app.go, routes/{web,auth,reports,schedule,llms,turnstile}.go, database/migrations (indexnow_cursor), resources/{resources.go,views/app.html,lang/*}, resources/js/{components/{CookieBanner,Footer,Turnstile}*,lib/preferences.ts,pages/Auth/{Login,Signup},pages/Contact/Index,types.ts}, tests/{analytics,indexnow,turnstile,content_pages}_test.go, tests/testdata/route_inventory.txt, .env.example, vukem-feedback.md, AGENTS.md, docs/sdd/{09,12,13}, docs/adrs/{0016 amendment,0023 new,README}, docs/design-system.md
+acceptance:
+- deps exact: vukem v0.36.0, contrib/stripe v0.5.1, drivers/postgres v0.6.1, drivers/s3 v0.4.1; `go build ./...` ok, `go test -p 2 ./...` exit 0
+- adopted: VF-066 (export.EncodeNDJSON/EncodeCSV; eval CSV now leaves plain numbers unguarded, test updated), VF-067 (ProblemDecorator + WithType/WithTitle; X-Problem-Code header gone), VF-069 (web.AddLogAttrs; RequestLog/RequestRoute removed), VF-070 (Mailer.SetReplyTo; MAIL_REPLY_TO wins, else MAIL_SUPPORT_ADDRESS)
+- kept, entry narrowed: VF-068 (Only() host group cannot serve vukem's /up, unexported handler; APIEdge keeps host gate + /v1 rewrite), VF-063 (TrackIdle/MaxSessionAge/TwoFactorRedirect semantics differ from FR-13-5 tests), VF-064 (cache.Buffer has no key cap; SDD 08 §8 MaxKeys). VF-065 stays open (not covered)
+- `TEST_DATABASE_URL=… go test -tags integration ./tests/ -run 'Security|Inventory|API|Auth|Login|Signup|Contact|Report|Analytics|IndexNow|Scrape|LLMs|Turnstile|Robots|Export|Mail|Changes|Problem|Webhook' -parallel 4` → ok (95 s); new: TestLLMsTxt, TestAnalyticsHeadTags/OffByDefault, TestIndexNowChanges(+_RetryKeepsCursor, KeyFile; fake https endpoint), TestSecurity_A07_TurnstileProtectsForms, TestTurnstileOnLoginPage (fake siteverify), TestSecurity_A06_ScrapeSoftLimitStepsUp, TestTurnstileStepUpPath, TestSecurity_A05_TurnstileFakeVerifyRefusedInProduction, TestSecurity_A05_CSPSourcesExtendedNotReplaced
+- vitest: CookieBanner.test.tsx (6), Turnstile.test.tsx (4); full `bun run test` 56 files / 211 tests ok
+validation: golangci-lint run --build-tags integration (-j 2) 0 issues; `golangci-lint fmt --diff` clean; bun lint/typecheck ok; markdownlint ok; `scripts/openapi-check.sh` exit 0 (goldens unchanged); migration-policy 3 pass; mobile not run (no bundled namespace changed); browser not checked (no QA stack run)
+changelog: Added: llms.txt/llms-full.txt; Umami/GA4 (consent banner, ADR 0023) and Search Console/Bing verification; IndexNow notifications of catalogue changes; Cloudflare Turnstile on sign-up, login and contact plus a scrape-guard step-up (ADR 0016 amendment). Changed: vukem v0.36.0; problem codes, request-line fields, export encoders and mail Reply-To on native vukem APIs
+roadmap: no box
+risks / follow-ups:
+- Turnstile: Protect has `when` = nil (always asked when keys set), stacked before PoW; ADR 0016 amended accordingly — reviewer/owner confirm. POST /turnstile is outside session+CSRF (interstitial is written before them). e2e/k6 stay usable while QA leaves TURNSTILE_* unset; if the main .env sets them, use the test keys (never read .env here).
+- IndexNow: new migration `indexnow_cursor` (starts at current max api_changes id, no backfill); score-only updates skipped; entities via updated_at > cursor.
+- Cookie banner reuses the existing `consent` cookie (all = embeds + GA4); copy changed to Accept/Reject in 3 locales; privacy and terms texts updated.
+- Bing Webmaster: config only (App.Config.BingWebmaster); no admin page built.
+- Owner request about the vukem CHANGELOG (sent here by mistake) was forwarded to main; nothing changed in vukem/.
+
+## Review (especialista, 2026-11-01)
+
+verdict: CORRIGIDO_E_APROVADO
+re-run: `go test -tags integration -p 2 ./tests/ -run 'Security|Inventory|API|Auth|Login|Signup|Contact|Report|Analytics|IndexNow|Scrape|LLMs|Turnstile|Robots|Export|Mail|Changes|Problem|Webhook|Request' -parallel 4` → ok (96 s); `go test -p 2 ./app/... ./routes/... ./bootstrap/...` → ok
+checked: POST /turnstile (vukem challenge.StepUp: no token = 403 interstitial and no cookie, a solve only sets an HttpOnly clearance bound to IP prefix + UA, return field through LocalPath, interstitial no-store + noindex, Skip = verified crawler, POST never guarded by ScrapeGuard so no loop); Turnstile off in compose (explicit env list), CI and scripts; `/app/v1/tokens` not behind Turnstile (mobile sign-up opens the web page); GA4 gtag.js injected only on a grant, replay on every full load, Reject keeps GA and YouTube off, Umami independent; CSP sources added only per enabled provider; 3-locale banner parity; IndexNow cursor seeded at max(id), score-only skip, 3 locales on APP_URL, notify inside the cursor tx; migration id unique; problem goldens unchanged, request line keeps route + user_hash, Reply-To envelope > MAIL_REPLY_TO > MAIL_SUPPORT_ADDRESS; VF-063/064/068 entries name the gaps; llms.txt content, scrape-guard exempt, `public, max-age=3600` + ETag from vukem
+fixes: 1. `TestSecurity_A01_TurnstileStepUpPostIsHarmless` (forged cross-site post: no token → 403 no-store/noindex, no cookie; token for another action → 403; solved → 303 local-only redirect, HttpOnly clearance) (879e2bc3)
+follow-ups (not blocking): IndexNow cursor does not advance while INDEXNOW_KEY is unset, so setting the key long after this deploy submits the backlog still in api_changes (bounded by its prune, chunked/deduped by vukem); with Turnstile on, the no-JS login/sign-up fallback cannot pass (widget needs JS); migration id is dated 2026-11-02, later-today migrations would sort before it
+PRONTO_PARA_MERGE agent/especialista/ADOPT-vukem-0.36.0-fix
+
+### Full gate on main (especialista, 2026-11-01)
+
+Merge 3a285b80, board d6c825b0, test fix c7b1594b. `scripts/ci/local.sh` in halves, golangci with `--timeout 15m -j 2`:
+
+- lint: golangci 0 issues, fmt, vet, OpenAPI goldens, Redocly, Biome, tsc, markdownlint pass; commitlint over `v0.12.3..HEAD` (899 local commits) fails on old messages: process limit, the release PR carries one squashed commit (section 8.1)
+- test-go, test-ts, migrations, vuln, deps, build, mobile: PASS
+- test-go-integration: PASS on c7b1594b; first run failed `TestSecurity_A06_HexaLimits/search.suggest` (GCRA refilled one token while the loaded host sent 300 requests), fixed in c7b1594b
+- setup-windows: PASS (first run failed only on the reviewer's golangci wrapper on PATH)
+- openapi: export, Redocly and codegen pass; Schemathesis cannot reach the image (Docker Desktop, no `--network host`): host limit
+- lighthouse: host run fails LCP (Kaspersky) and script size; clean Linux run: LCP 1.1-1.7 s pass, script 174.7-178 KB over 153600 B on all URLs, same on the pre-merge image, so not from this merge: row FIX-lighthouse-script-size

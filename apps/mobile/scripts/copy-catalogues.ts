@@ -5,13 +5,18 @@ import type { Message } from "../src/i18n/format";
 
 export const BUNDLED_NAMESPACES = [
 	"common",
+	"nav",
 	"auth",
 	"account",
 	"catalog",
 	"categories",
+	"home",
 	"item",
+	"entity",
+	"itemTypes",
 	"lists",
 	"ratings",
+	"score",
 	"search",
 	"errors",
 ] as const;
@@ -60,7 +65,7 @@ if (process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import
 	mkdirSync(outDir, { recursive: true });
 	for (const locale of LOCALES) {
 		const messages = loadLocale(repoRoot, locale);
-		writeFileSync(join(outDir, `${locale}.json`), `${JSON.stringify(messages, null, 2)}\n`);
+		writeFileSync(join(outDir, `${locale}.json`), `${JSON.stringify(messages, null, "\t")}\n`);
 		console.log(`${locale}: ${Object.keys(messages).length} keys`);
 	}
 }

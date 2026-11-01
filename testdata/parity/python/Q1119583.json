@@ -1,0 +1,46 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0051887",
+      "rottentomatoes": "m/machine_gun_kelly",
+      "tmdb": "43119"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Roger Corman"
+      ],
+      "genres": [
+        "crime film",
+        "biographical film",
+        "action film"
+      ],
+      "runtimeMinutes": 80
+    },
+    "popularity": 8.0,
+    "qid": "Q1119583",
+    "release_date": "1958-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Machine-Gun Kelly is a 1958 American gangster film noir produced and directed by Roger Corman, from a screenplay by R. Wright Campbell, loosely based on the criminal exploits of George \"Machine Gun\" Kelly and his wife Kathryn Kelly. It stars Charles Bronson as the titular character, his first leading role in a feature film, and Susan Cabot as his wife and partner-in-crime (fictionalized as ‘Flo Becker’).\nDespite its low budget, the film received a positive critical reception. Corman called the film \"a major turning point in my career,\" because it was the first for which he had received serious critical attention.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Machine-Gun_Kelly_(film)",
+        "title": "Machine-Gun Kelly"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "La ley de las armas"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q1119583",
+  "slug": "machine-gun-kelly"
+}

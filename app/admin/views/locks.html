@@ -1,0 +1,35 @@
+{{define "content"}}
+<div class="toolbar"><h1>{{.Title}}</h1></div>
+<p class="muted">A locked field (or a whole record with field <code>*</code>) refuses community submits and approvals with 423.</p>
+{{if not .Locks}}
+<p class="muted">No active locks.</p>
+{{else}}
+<table>
+	<thead><tr><th>Target</th><th>Field</th><th>Reason</th><th>By</th><th>Expires</th><th></th></tr></thead>
+	<tbody>
+	{{range .Locks}}
+	<tr>
+		<td>{{.TargetType}} {{.TargetID}}</td>
+		<td>{{.Field}}</td>
+		<td>{{.Reason}}</td>
+		<td>{{if .LockedBy}}#{{.LockedBy}}{{end}}</td>
+		<td>{{if .ExpiresAt}}{{.ExpiresAt}} UTC{{else}}never{{end}}</td>
+		<td><form method="post" action="/admin/locks/{{.ID}}/delete">{{csrfField}}<button type="submit" class="button danger">Unlock</button></form></td>
+	</tr>
+	{{end}}
+	</tbody>
+</table>
+{{end}}
+<h2>Lock</h2>
+<form method="post" action="/admin/locks" class="stack">
+	{{csrfField}}
+	<label>Target
+		<select name="target">{{range .LockTargets}}<option>{{.}}</option>{{end}}</select>
+	</label>
+	<label>Target id <input name="target_id" required pattern="[0-9a-fA-F-]{36}" maxlength="36"></label>
+	<label>Field <input name="field" placeholder="* (whole record)" maxlength="100"></label>
+	<label>Reason <input name="reason" required maxlength="500"></label>
+	<label>Expires after (days, empty for never) <input type="number" name="days" min="1" max="365"></label>
+	<button type="submit" class="button">Lock</button>
+</form>
+{{end}}

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"sync"
 	"testing"
@@ -233,4 +234,32 @@ func TestSecurity_A10_HexaPowStoreDown503(t *testing.T) {
 	if rec.Code != http.StatusOK {
 		t.Fatalf("counter store down: status %d, want 200", rec.Code)
 	}
+}
+
+// TestSecurity_A07_NoJSFormPost: the browser's own urlencoded form post (no X-Challenge, no Inertia, no
+// script) signs up while the IP is under the PoW threshold, and past it stays refused with 428 and stores
+// nothing (fail closed; the page offers Google sign-in instead, SDD 13 §7.2).
+func TestSecurity_A07_NoJSFormPost(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+	c := app.Client(t).WithHeader("Sec-Fetch-Site", "same-origin")
+
+	post := func(email string) *vukemtest.Response {
+		return c.PostForm("/signup", url.Values{
+			"name": {"No Script"}, "email": {email}, "password": {testPassword},
+			"password_confirmation": {testPassword}, "website": {""}, "form_token": {signupToken(app)},
+		})
+	}
+
+	for i := range 3 {
+		post(fmt.Sprintf("nojs%d@example.com", i)).AssertRedirect("/signup/check-email")
+		vukemtest.AssertDatabaseHas(t, app, "users", map[string]any{"email": fmt.Sprintf("nojs%d@example.com", i)})
+	}
+
+	post("nojs-late@example.com").AssertStatus(http.StatusPreconditionRequired)
+	vukemtest.AssertDatabaseMissing(t, app, "users", map[string]any{"email": "nojs-late@example.com"})
+
+	c.WithHeader("Sec-Fetch-Site", "cross-site").PostForm("/signup", url.Values{"email": {"x@example.com"}}).
+		AssertStatus(http.StatusForbidden)
 }

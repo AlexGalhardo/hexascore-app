@@ -31,6 +31,10 @@ export interface SharedProps {
 	auth?: { user: User | null };
 	seo?: SeoMeta;
 	consent?: "all" | "essential";
+	/** Public Turnstile site key; empty while Turnstile is off. */
+	turnstileSiteKey?: string;
 	unreadNotifications?: number;
+	/** Allowlisted feature flags (vukem flags.Share); `social` gates Phase 7. */
+	flags?: { social?: boolean };
 	[key: string]: unknown;
 }

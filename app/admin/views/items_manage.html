@@ -2,6 +2,24 @@
 <div class="toolbar"><h1>{{.Title}}</h1></div>
 <p><a href="/admin/items/{{.Item.ID}}">Back to item</a> · {{.Item.Type}} · {{.Item.Slug}}</p>
 
+<h2>Edit a field</h2>
+<p class="muted">Written with a catalogue audit entry (Recent changes, revert). Empty clears the value.</p>
+<form method="post" action="/admin/catalog/item/{{.Item.ID}}/fields" class="stack">
+	{{csrfField}}
+	<label>Field
+		<select name="field">
+			<option value="title">Original title</option>
+			<option value="release_date">Release date (YYYY-MM-DD)</option>
+			<option value="translations.en.title">Title (en)</option>
+			<option value="translations.pt-BR.title">Title (pt-BR)</option>
+			<option value="translations.es.title">Title (es)</option>
+			<option value="external_ids.wikidata">Wikidata id</option>
+		</select>
+	</label>
+	<label>Value <input name="value" maxlength="500"></label>
+	<button type="submit" class="button">Save field</button>
+</form>
+
 <h2>Affiliate links</h2>
 {{if not .Affiliates}}<p class="muted">No affiliate links. They only show on the site while the affiliates flag is on.</p>{{end}}
 <table>

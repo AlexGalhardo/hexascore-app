@@ -17,6 +17,10 @@
 	{{/* A missing /favicon.ico is the full HTML 404. That body is large enough to miss the LCP budget when it finishes first. */}}
 	<link rel="icon" href="/favicon.ico" sizes="16x16" type="image/x-icon">
 	<meta property="csp-nonce" nonce="{{cspNonce}}">
+	{{/* Umami, GA4 (consent mode, denied until the cookie banner grants it) and site verification metas; before the app scripts so window.vukemAnalytics exists when they run. */}}
+	{{analytics}}
+	{{/* Turnstile api.js only where a protected form renders; the widget component loads it itself after a client-side visit. */}}
+	{{if or (eq .Page.Component "Auth/Login") (eq .Page.Component "Auth/Signup") (eq .Page.Component "Contact/Index")}}{{turnstileScript cspNonce}}{{end}}
 	{{viteReactRefresh}}
 	{{/* CSS first: modulepreloads from the script entry must not queue ahead of the render-blocking sheet (LCP). */}}
 	{{vite "resources/css/app.css"}}
@@ -32,5 +36,7 @@
 		<div class="h-24 rounded bg-surface"></div>
 		<div class="h-24 rounded bg-surface"></div>
 	</div>{{end}}
+	{{/* Honeypot (ADR 0022): never rendered, focusable or announced; robots.txt disallows it, so only a scraper that ignores both follows it. */}}
+	<a href="/data/export" hidden aria-hidden="true" tabindex="-1" rel="nofollow"></a>
 </body>
 </html>

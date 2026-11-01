@@ -1,0 +1,374 @@
+{
+  "qid": "Q855673",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q855673",
+      "labels": {
+        "en": "Pride and Prejudice",
+        "es": "Orgullo y prejuicio",
+        "mul": "Pride and Prejudice",
+        "pt": "Pride and Prejudice"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Pride and Prejudice (1995 TV series)",
+        "eswiki": "Orgullo y prejuicio (serie de televisión de 1995)",
+        "ptwiki": "Pride and Prejudice (1995)"
+      },
+      "sitelinks_count": 32,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+6",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/pride_and_prejudice",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q1366112",
+            "rank": "normal"
+          },
+          {
+            "value": "Q84270297",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q170583",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Pride and Prejudice",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q235721",
+            "rank": "normal"
+          },
+          {
+            "value": "Q162492",
+            "rank": "normal"
+          },
+          {
+            "value": "Q272567",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1140191",
+            "rank": "normal"
+          },
+          {
+            "value": "Q265452",
+            "rank": "normal"
+          },
+          {
+            "value": "Q440728",
+            "rank": "normal"
+          },
+          {
+            "value": "Q213257",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2458875",
+            "rank": "normal"
+          },
+          {
+            "value": "Q274046",
+            "rank": "normal"
+          },
+          {
+            "value": "Q447160",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3334867",
+            "rank": "normal"
+          },
+          {
+            "value": "Q441159",
+            "rank": "normal"
+          },
+          {
+            "value": "Q433089",
+            "rank": "normal"
+          },
+          {
+            "value": "Q436620",
+            "rank": "normal"
+          },
+          {
+            "value": "Q441667",
+            "rank": "normal"
+          },
+          {
+            "value": "Q572958",
+            "rank": "normal"
+          },
+          {
+            "value": "Q960494",
+            "rank": "normal"
+          },
+          {
+            "value": "Q817739",
+            "rank": "normal"
+          },
+          {
+            "value": "Q462216",
+            "rank": "normal"
+          },
+          {
+            "value": "Q441610",
+            "rank": "normal"
+          },
+          {
+            "value": "Q373432",
+            "rank": "normal"
+          },
+          {
+            "value": "Q441641",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6771752",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1964106",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15633756",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3269551",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2966550",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16107434",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7372960",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3338880",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7407167",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16196031",
+            "rank": "normal"
+          },
+          {
+            "value": "Q545328",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4966756",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7407194",
+            "rank": "normal"
+          },
+          {
+            "value": "Q106569443",
+            "rank": "normal"
+          },
+          {
+            "value": "Q111366044",
+            "rank": "normal"
+          },
+          {
+            "value": "Q111366048",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q460080",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Luckington Court - geograph.org.uk - 4065.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+55",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+1",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q9531",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0112130",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q191472",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "1457",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q460080",
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q504430",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1995-09-24T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q106569443": "Roger Barclay",
+        "Q111366044": "Norma Streader",
+        "Q111366048": "Alexandra Howerd",
+        "Q1140191": "Crispin Bonham-Carter",
+        "Q1366112": "drama television series",
+        "Q145": "United Kingdom",
+        "Q15633756": "David Bark-Jones",
+        "Q16107434": "Paul Moriarty",
+        "Q16196031": "Andrew Grainger",
+        "Q162492": "Colin Firth",
+        "Q170583": "Pride and Prejudice",
+        "Q1860": "English",
+        "Q191472": "BBC One",
+        "Q1964106": "Rupert Vansittart",
+        "Q213257": "Emilia Fox",
+        "Q235721": "Jennifer Ehle",
+        "Q2458875": "Tim Wylton",
+        "Q265452": "Susannah Harker",
+        "Q272567": "Julia Sawalha",
+        "Q274046": "Victoria Hamilton",
+        "Q2966550": "Christopher Benjamin",
+        "Q3269551": "Lynn Farleigh",
+        "Q3334867": "Nadia Chambers",
+        "Q3338880": "Neville Phillips",
+        "Q373432": "Adrian Lukis",
+        "Q433089": "Anna Chancellor",
+        "Q436620": "Lucy Davis",
+        "Q440728": "Alison Steadman",
+        "Q441159": "Barbara Leigh-Hunt",
+        "Q441610": "Lucy Robinson",
+        "Q441641": "Lucy Scott",
+        "Q441667": "Polly Maberly",
+        "Q447160": "Joanna David",
+        "Q460080": "Simon Langton",
+        "Q462216": "Lucy Briers",
+        "Q4966756": "Bridget Turner",
+        "Q504430": "Andrew Davies",
+        "Q545328": "Tom Ward",
+        "Q572958": "Anthony Calf",
+        "Q6771752": "Marlene Sidaway",
+        "Q7372960": "Roy Holder",
+        "Q7407167": "Sam Beazley",
+        "Q7407194": "Sam Bloom",
+        "Q817739": "Benjamin Whitrow",
+        "Q84270297": "romance television series",
+        "Q9531": "British Broadcasting Corporation",
+        "Q960494": "David Bamber"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q855673",
+      "lang": "en",
+      "title": "Pride and Prejudice (1995 TV series)",
+      "extract": "Pride and Prejudice is a six-episode 1995 British television drama, adapted by Andrew Davies from Jane Austen's 1813 novel of the same name. Jennifer Ehle and Colin Firth starred as Elizabeth Bennet and Fitzwilliam Darcy, respectively. Produced by Sue Birtwistle and directed by Simon Langton, the serial was a BBC production with additional funding from the American A\u0026E Network. BBC1 originally broadcast the 55-minute episodes from 24 September to 29 October 1995. In the United States, the A\u0026E Network aired the series in double episodes on three consecutive nights beginning 14 January 1996.\nCritically acclaimed and a popular success, Pride and Prejudice was honoured with several awards, including the BAFTA TV Award for Best Actress for Jennifer Ehle and the Primetime Emmy Award for Outstanding Individual Achievement in Costume Design for a Miniseries or a Special. The role of Mr. Darcy elevated Colin Firth to stardom. A scene showing Firth in a wet shirt was recognised as \"one of the most unforgettable moments in British TV history\". The New York Times called the adaptation \"a witty mix of love stories and social conniving, cleverly wrapped in the ambitions and illusions of a provincial gentry\". The series inspired author Helen Fielding to write the popular Bridget Jones novels, and their screen adaptations subsequently featured Firth as Bridget's love interest, Mark Darcy.",
+      "url": "https://en.wikipedia.org/wiki/Pride_and_Prejudice_(1995_TV_series)"
+    },
+    "wikipedia:es": {
+      "qid": "Q855673",
+      "lang": "es",
+      "title": "Orgullo y prejuicio (serie de televisión de 1995)",
+      "extract": "Orgullo y Prejuicio es una serie británica de televisión de 1995 que consta de seis episodios, fue adaptada por Andrew Davies de la novela de 1813 de Jane Austen Orgullo y Prejuicio. Jennifer Ehle y Colin Firth protagonizaron como Elizabeth Bennet y Fitzwilliam Darcy respectivamente. Producida por Sue Birtwistle y dirigida por Simon Langton. La serie fue una producción de la BBC, con ayuda adicional en cuanto a fondos, de la cadena americana A\u0026E Network. BBC One originalmente transmitió los episodios de 55 minutos del 24 de septiembre al 29 de octubre de 1995. La cadena A\u0026E Network transmitió la serie por doble episodio en tres noches consecutivas comenzando el 14 de enero de 1996.\nAmbientada en Inglaterra a comienzos del siglo XIX, \"Orgullo y Prejuicio\" cuenta la historia del Sr. y la Sra. Bennet (Benjamin Whitrow y Alison Steadman) y sus cinco hijas solteras (Susannah Harker, Jennifer Ehle, Lucy Briers, Polly Maberly, Julia Sawalha), luego de que el rico y casadero, Sr. Bingley (Crispin Bonham-Carter) y su amigo, el Sr. Darcy, se mudan al vecindario. Mientras que el Sr. Bingley de inmediato toma interés por la mayor de las Bennet, Jane, a Darcy se le dificulta adaptarse a la sociedad local y repetidamente se topa con la hermana que le sigue en edad a Jane, Elizabeth. El Times llamó a la adaptación \"una ingeniosa mezcla de historias de amor y convivencia social, inteligentemente envuelta en las ambiciones e ilusiones de la gente de provincia\".​\nLa aclamación de los críticos y su éxito popular le hicieron ganar a la serie varios premios, incluyendo un BAFTA Television Award a Jennifer Ehle por \"Mejor Actriz\" y un Emmy por \"notable trabajo individual en diseño de vestuario para una miniserie o especial\". El papel del Sr. Darcy elevó a Colin Firth al estrellato. Una escena que mostraba a Firth en una camisa mojada fue reconocida como \"uno de los momentos más inolvidables en la historia de la televisión británica\".​ La serie inspiró a la autora Helen Fielding a escribir la popular novela Bridget Jones; la adaptación a pantalla grande de ésta incluyó a Firth como Mark Darcy, el interés amoroso de Bridget.",
+      "url": "https://es.wikipedia.org/wiki/Orgullo_y_prejuicio_(serie_de_televisi%C3%B3n_de_1995)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q855673",
+      "lang": "pt",
+      "title": "Pride and Prejudice (1995)",
+      "extract": "Pride and Prejudice é uma série britânica em 6 episódios, produzida em 1995, adaptada por Andrew Davies da obra homônima de Jane Austen, publicada em 1813. Jennifer Ehle e Colin Firth interpretam Elizabeth Bennet e Mr Darcy, foi produzida por Sue Birtwistle e dirigida por Simon Langton. A série foi uma produção da BBC, com parceria com a estadunidense A\u0026E Network, e o lançamento original pela BBC foi entre 24 de setembro a 29 de outubro de 1995. O lançamento pela A\u0026E Network, em episódios duplos, foi em três noites consecutives com início em 14 de janeiro de 1996.\nAmbientada na Inglaterra no início do século XIX, Pride and Prejudice conta a história das 5 filhas solteiras de Mr. e Mrs. Bennet (Benjamin Whitrow e Alison Steadman), interpretadas por Susannah Harker, Jennifer Ehle, Lucy Briers, Polly Maberly, Julia Sawalha, após o rico Mr. Bingley (Crispin Bonham-Carter) e seu amigo Mr. Darcy, terem se instalado nas vizinhanças da sua propriedade. Enquanto Bingley se interessa imediatamente pela mais velha das irmãs Bennet, Jane, Darcy tem dificuldades em se adaptar à sociedade local, e entra em discórdia com a segunda das irmãs, Elizabeth.\nThe New York Times chamou a adaptação “um misto engenhoso de histórias de amor e convivência social, inteligentemente embalado nas ambições e ilusões do povo provinciano” (“a witty mix of love stories and social conniving, cleverly wrapped in the ambitions and illusions of a provincial gentry”).\nAclamado pela crítica e um sucesso popular imediato, Pride and Prejudice foi homenageado com vários prêmios, inclusive o BAFTA Television Award para Jennifer Ehle como melhor atriz, e o Emmy por \"Outstanding Individual Achievement in Costume Design for a Miniseries or a Special\". O papel de Mr. Darcy elevou Colin Firth ao estrelato; uma cena em que Firth sai do banho no lago com a camisa molhada foi reconhecida como “um dos mais inesquecíveis momentos na história da TV britânica” (\"one of the most unforgettable moments in British TV history\"). A série inspirou Helen Fielding a escrever os populares romances de Bridget Jones; a adaptação cinematográfica apresentou Firth como Mark Darcy, que inspira o amor de Bridget.",
+      "url": "https://pt.wikipedia.org/wiki/Pride_and_Prejudice_(1995)"
+    }
+  },
+  "tier": "mid",
+  "type": "series"
+}

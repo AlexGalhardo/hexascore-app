@@ -1,0 +1,47 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0051477",
+      "rottentomatoes": "m/christine_1959",
+      "tmdb": "4956"
+    },
+    "meta": {
+      "countries": [
+        "France",
+        "Italy"
+      ],
+      "creators": [
+        "Pierre Gaspard-Huit"
+      ],
+      "genres": [
+        "drama film",
+        "romance film",
+        "melodrama"
+      ],
+      "runtimeMinutes": 100
+    },
+    "popularity": 15.0,
+    "qid": "Q1083390",
+    "release_date": "1958-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Christine is a 1958 French period drama film, based on the 1894 play Liebelei (Flirtation) by Arthur Schnitzler. The film was directed by Pierre Gaspard-Huit and the title character was played by Romy Schneider. The cast included Alain Delon as a young lieutenant.\nSchnitzler's play had been filmed in 1933 by Max Ophüls as Liebelei, starring Romy Schneider's mother, Magda Schneider.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Christine_(1958_film)",
+        "title": "Christine"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Amoríos"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q1083390",
+  "slug": "christine"
+}

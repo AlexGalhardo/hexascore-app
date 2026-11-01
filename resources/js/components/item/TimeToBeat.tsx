@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
+import Btn from "../ui/Btn";
 import type { Hours } from "./types";
 
 export interface Medians extends Hours {
@@ -44,25 +45,40 @@ export default function TimeToBeat({ itemId, medians, mine, canReport }: Props) 
 	};
 
 	return (
-		<section aria-labelledby="ttb-heading" className="grid gap-2">
-			<h2 id="ttb-heading" className="text-xl font-bold">
+		<section
+			aria-labelledby="ttb-heading"
+			className="grid content-start gap-3 border-t-2 border-fg pt-4"
+		>
+			<h2 id="ttb-heading" className="text-2xl">
 				{t("item.timeToBeat.title")}
 			</h2>
 			{none ? (
 				<p>{t("item.timeToBeat.notEnough", { min: 3 })}</p>
 			) : (
-				<dl className="grid grid-cols-2 gap-1">
+				<dl className="grid">
 					{STYLES.map(([style, k]) =>
 						medians[k] === null ? null : (
-							<div key={style} className="contents">
-								<dt>{t(`item.timeToBeat.styles.${style}`)}</dt>
-								<dd>{t("item.timeToBeat.hours", { hours: medians[k] })}</dd>
+							<div
+								key={style}
+								className="grid grid-cols-[8rem_1fr] gap-4 border-b border-border py-2.5 text-sm"
+							>
+								<dt className="text-muted">
+									{t(`item.timeToBeat.styles.${style}`)}
+								</dt>
+								<dd className="tabular-nums">
+									{t("item.timeToBeat.hours", { hours: medians[k] })}
+								</dd>
 							</div>
 						),
 					)}
 				</dl>
 			)}
-			<p className="text-sm">{t("item.timeToBeat.reports", { count: medians.reports })}</p>
+			{!none && (
+				<p className="text-xs text-muted">
+					{t("item.timeToBeat.hint")}{" "}
+					{t("item.timeToBeat.reports", { count: medians.reports })}
+				</p>
+			)}
 			{canReport && (
 				<form
 					className="grid gap-2"
@@ -71,35 +87,39 @@ export default function TimeToBeat({ itemId, medians, mine, canReport }: Props) 
 						save();
 					}}
 				>
-					<h3 className="font-semibold">{t("item.timeToBeat.yours")}</h3>
-					<p className="text-sm">{t("item.timeToBeat.yoursHint")}</p>
-					{STYLES.map(([style, k]) => (
-						<label key={style} className="grid gap-1">
-							<span>{t(`item.timeToBeat.styles.${style}`)}</span>
-							<input
-								type="number"
-								min={0.5}
-								max={10000}
-								step={0.5}
-								className="min-h-11 rounded border px-2"
-								placeholder={t("item.timeToBeat.hoursPlaceholder")}
-								value={draft[k]}
-								onChange={(e) => setDraft((d) => ({ ...d, [k]: e.target.value }))}
-							/>
-						</label>
-					))}
-					<div className="flex gap-2">
-						<button
-							type="submit"
-							className="min-h-11 rounded border px-4"
-							disabled={busy}
-						>
+					<h3 className="text-xs font-semibold tracking-widest uppercase">
+						{t("item.timeToBeat.yours")}
+					</h3>
+					<p className="text-xs text-muted">{t("item.timeToBeat.yoursHint")}</p>
+					<div className="grid grid-cols-3 gap-2">
+						{STYLES.map(([style, k]) => (
+							<label
+								key={style}
+								className="grid content-end gap-1 text-xs text-muted"
+							>
+								<span>{t(`item.timeToBeat.styles.${style}`)}</span>
+								<input
+									type="number"
+									min={0.5}
+									max={10000}
+									step={0.5}
+									className="min-h-11 w-full rounded-xs border border-field bg-field-bg px-2 text-sm text-fg"
+									placeholder={t("item.timeToBeat.hoursPlaceholder")}
+									value={draft[k]}
+									onChange={(e) =>
+										setDraft((d) => ({ ...d, [k]: e.target.value }))
+									}
+								/>
+							</label>
+						))}
+					</div>
+					<div className="flex flex-wrap gap-2">
+						<Btn type="submit" kind="secondary" disabled={busy}>
 							{t("item.timeToBeat.save")}
-						</button>
+						</Btn>
 						{mine && (
-							<button
-								type="button"
-								className="min-h-11 rounded border px-4"
+							<Btn
+								kind="ghost"
 								disabled={busy}
 								onClick={() =>
 									router.delete(l(`/items/${itemId}/time-to-beat`), {
@@ -108,7 +128,7 @@ export default function TimeToBeat({ itemId, medians, mine, canReport }: Props) 
 								}
 							>
 								{t("item.timeToBeat.delete")}
-							</button>
+							</Btn>
 						)}
 					</div>
 				</form>

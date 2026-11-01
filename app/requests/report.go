@@ -12,7 +12,7 @@ type Report struct {
 
 // ReportSchema validates Report; the target is resolved by library.Reports.
 var ReportSchema = z.Struct[Report](z.Shape{
-	"targetType": z.Enum("list", "user"),
+	"targetType": z.Enum("list", "user", "review", "comment"),
 	"targetId":   z.String().Trim().Min(1).Max(64),
 	"reason":     z.Enum("spam", "offensive", "harassment", "impersonation", "other"),
 	"details":    z.String().Trim().Max(500).Default(""),
@@ -26,6 +26,7 @@ type ReportResolve struct {
 
 // ReportResolveSchema validates ReportResolve; the outcome must also fit the target (library.Reports.Resolve).
 var ReportResolveSchema = z.Struct[ReportResolve](z.Shape{
-	"outcome":   z.Enum("dismissed", "list_hidden", "user_banned", "no_action"),
+	"outcome": z.Enum("dismissed", "list_hidden", "user_banned", "no_action", "content_hidden", "content_deleted",
+		"content_unhidden"),
 	"adminNote": z.String().Trim().Max(1000).Default(""),
 })

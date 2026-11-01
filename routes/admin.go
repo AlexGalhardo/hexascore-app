@@ -15,9 +15,13 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/admin"
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
+	"github.com/AlexGalhardo/hexascore-app/app/community"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/app/moderation"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/entities"
 )
 
 // Admin mounts the admin panel at /admin (vukem install:admin). Admins are
@@ -58,6 +62,12 @@ func Admin(r *router.Router, app *vukem.App) error {
 	gate.DefineResult(vadmin.AbilityAdmin, isAdmin)
 	gate.DefineResult(vadmin.AbilityAudit, isAdmin)
 	gate.DefineResult(vadmin.AbilityFlags, isAdmin)
+
+	admin.DefineModeration(gate, app.Now, func(ctx context.Context) bool {
+		ff, err := app.Flags()
+
+		return err == nil && ff.Enabled(ctx, community.TrustedModeratorsFlag)
+	})
 
 	if err := gate.Register(admin.Policies(app.Now)...); err != nil {
 		return err
@@ -148,6 +158,76 @@ func Admin(r *router.Router, app *vukem.App) error {
 	r.Post("/admin/items/{id}/affiliate-links/{store}/delete", catalogH.DeleteAffiliateLink).
 		Name("admin.items.affiliate.delete").Use(moderator...)
 	r.Post("/admin/items/{id}/merge", catalogH.Merge).Name("admin.items.merge").Use(moderator...)
+	applier := community.Applier{DB: acc.DB, Queue: q, Now: app.Now}
+	catalogH.Editor = &applier
+	catalogH.AuthorizeApply = func(c *web.Ctx) error {
+		return gate.Authorize(c.Context(), admin.AbilityApplySuggestion, nil)
+	}
+	r.Post("/admin/catalog/{type}/{id}/fields", catalogH.EditFields).Name("admin.catalog.fields").Use(moderator...)
+	moderationH := admin.ModerationHandlers{
+		Pages:    catalogH,
+		Queue:    moderation.Queue{DB: acc.DB, Now: app.Now, Applier: applier, Jobs: q},
+		Reverter: applier,
+		AuthorizeAudit: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityViewCatalogAudit, nil)
+		},
+		AuthorizeRevert: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityRevertCatalog, nil)
+		},
+		AuthorizeLock: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityLockCatalog, nil)
+		},
+		Authorize: func(c *web.Ctx) error { return gate.Authorize(c.Context(), admin.AbilityModerate, nil) },
+		AuthorizeApply: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityApplySuggestion, nil)
+		},
+	}
+	r.Get("/admin/moderation", moderationH.Index).Name("admin.moderation").Use(auth.Required(acc.Web), csrfMW)
+	modMW := []func(http.Handler) http.Handler{auth.Required(acc.Web), csrfMW}
+	r.Get("/admin/moderation/metrics", moderationH.Metrics).Name("admin.moderation.metrics").Use(modMW...)
+	r.Post("/admin/moderation/{id}/claim", moderationH.Claim).Name("admin.moderation.claim").Use(modMW...)
+	r.Post("/admin/moderation/{id}/release", moderationH.Release).Name("admin.moderation.release").Use(modMW...)
+	r.Get("/admin/moderation/{id}", moderationH.Detail).Name("admin.moderation.detail").Use(modMW...)
+	r.Post("/admin/moderation/{id}/recommend", moderationH.Recommend).
+		Name("admin.moderation.recommend").Use(modMW...)
+	r.Post("/admin/moderation/{id}/approve", moderationH.Approve).Name("admin.moderation.approve").Use(modMW...)
+	r.Post("/admin/moderation/{id}/reject", moderationH.Reject).Name("admin.moderation.reject").Use(modMW...)
+	r.Post("/admin/moderation/{id}/clone", moderationH.Clone).Name("admin.moderation.clone").Use(modMW...)
+	r.Post("/admin/moderation/bulk", moderationH.Bulk).Name("admin.moderation.bulk").Use(modMW...)
+	r.Get("/admin/catalog-audit", moderationH.Audit).Name("admin.catalog_audit").Use(modMW...)
+	r.Post("/admin/catalog-audit/{id}/revert", moderationH.Revert).Name("admin.catalog_audit.revert").Use(modMW...)
+	r.Get("/admin/catalog-audit/export.csv", moderationH.AuditExport("csv")).
+		Name("admin.catalog_audit.export_csv").Use(modMW...)
+	r.Get("/admin/catalog-audit/export.ndjson", moderationH.AuditExport("ndjson")).
+		Name("admin.catalog_audit.export_ndjson").Use(modMW...)
+	r.Get("/admin/locks", moderationH.Locks).Name("admin.locks").Use(modMW...)
+	r.Post("/admin/locks", moderationH.CreateLock).Name("admin.locks.create").Use(modMW...)
+	r.Post("/admin/locks/{id}/delete", moderationH.DeleteLock).Name("admin.locks.delete").Use(modMW...)
+	reviewsH := admin.IngestReviewHandlers{
+		Pages:   catalogH,
+		Reviews: entities.ReviewQueue{DB: acc.DB, KindOf: catalog.RoleKind},
+		Authorize: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityRunIngestion, nil)
+		},
+	}
+	r.Get("/admin/ingest/reviews", reviewsH.List).Name("admin.ingest.reviews").Use(modMW...)
+	r.Post("/admin/ingest/reviews/{id}", reviewsH.Resolve).Name("admin.ingest.reviews.resolve").Use(modMW...)
+	ingestH := admin.IngestHandlers{
+		Pages: catalogH, DB: acc.DB, Queue: q, Flags: ff, Now: app.Now,
+		AuthorizeView: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityViewIngestion, nil)
+		},
+		AuthorizeRun: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityRunIngestion, nil)
+		},
+		AuthorizeRollback: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityRollbackIngestion, nil)
+		},
+	}
+	r.Get("/admin/ingest", ingestH.Index).Name("admin.ingest").Use(modMW...)
+	r.Post("/admin/ingest/runs", ingestH.Trigger).Name("admin.ingest.runs").Use(modMW...)
+	r.Post("/admin/ingest/runs/{id}/cancel", ingestH.Cancel).Name("admin.ingest.runs.cancel").Use(modMW...)
+	r.Post("/admin/ingest/runs/{id}/rollback", ingestH.Rollback).Name("admin.ingest.runs.rollback").Use(modMW...)
 	r.Get("/admin/ingestion", catalogH.Ingestion).Name("admin.ingestion").Use(auth.Required(acc.Web), csrfMW)
 
 	return nil

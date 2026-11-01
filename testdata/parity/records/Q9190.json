@@ -1,0 +1,145 @@
+{
+  "qid": "Q9190",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q9190",
+      "labels": {
+        "en": "Exodus",
+        "es": "Éxodo",
+        "mul": "Šəmōṯ",
+        "pt": "Livro do Êxodo",
+        "pt-br": "Livro do Êxodo"
+      },
+      "aliases": {
+        "en": [
+          "Book of Exodus"
+        ],
+        "mul": [
+          "Shmoys",
+          "Shʼmót",
+          "Shemot"
+        ],
+        "pt": [
+          "Êxodo",
+          "Segundo Livro de Moisés"
+        ],
+        "pt-br": [
+          "Êxodo"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Book of Exodus",
+        "eswiki": "Éxodo",
+        "ptwiki": "Livro do Êxodo"
+      },
+      "sitelinks_count": 152,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+40",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q179461",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Exodus",
+            "rank": "normal"
+          },
+          {
+            "value": "שמות",
+            "rank": "preferred"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Fl- 37v Biblia de Cervera, Exodo.jpg",
+            "rank": "normal"
+          },
+          {
+            "value": "1611 KJV Ex 6,1-3 IEHOVAH.jpg",
+            "rank": "normal"
+          },
+          {
+            "value": "Exodus in Foochow.gif",
+            "rank": "normal"
+          },
+          {
+            "value": "Facial Chronicle - b.01, p.351 - Book of Exodus title page.jpg",
+            "rank": "normal"
+          },
+          {
+            "value": "Peshitta464 (The S.S. Teacher's Edition-The Holy Bible - Plate XIII).jpg",
+            "rank": "normal"
+          },
+          {
+            "value": "Page from the Wenzel Bible.jpg",
+            "rank": "normal"
+          },
+          {
+            "value": "TNMÊxodo6.jpg",
+            "rank": "normal"
+          },
+          {
+            "value": "London, British Library Ms Papyrus 2053 - POxy1075 (Papyrus 18) recto Exodus 40, 26–38.jpg",
+            "rank": "normal"
+          },
+          {
+            "value": "سفر الخروج بالعربيَّة.png",
+            "rank": "normal"
+          },
+          {
+            "value": "Biblia Fjellstedt I (1890) 146.jpg",
+            "rank": "normal"
+          },
+          {
+            "value": "Bibbia di Federico da Montefeltro - BAV Urb.Lat.1\u00262 - Exodus f27r.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1982248",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q179461": "religious text",
+        "Q1982248": "Biblical Hebrew"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q9190",
+      "lang": "en",
+      "title": "Book of Exodus",
+      "extract": "The Book of Exodus (from Ancient Greek: Ἔξοδος, romanized: Éxodos; Biblical Hebrew: שְׁמוֹת Šəmōṯ, 'Names'; Latin: Liber Exodus) is the second book of the Bible. \nThe book is the first part of the narrative of the Exodus, the origin myth of the Israelites, in which they leave slavery in biblical Egypt through the strength of God, who chose them as his people. The Israelites then journey with the prophet Moses to Mount Sinai, where God gives them the Law of Moses and enters into a covenant with them and their descendants. God promises to make them a \"holy nation, and a kingdom of priests\" on condition of their faithfulness. He gives them laws and instructions to build the Tabernacle, the means by which he will come from heaven and dwell with them and lead them in a holy war to conquer Canaan (the \"Promised Land\"), which had earlier, according to the Book of Genesis, been promised to the \"seed\" of Abraham, the patriarch of the Israelites.\nTraditionally ascribed to Moses himself, the formation of the Pentateuch, including the Book of Exodus, is dated to the fifth through fourth centuries BC. Modern scholars see its initial composition as a product of the Babylonian exile (6th century BCE), based on earlier written sources and oral traditions, with final revisions in the Persian post-exilic period (5th century BCE). American biblical scholar Carol Meyers, in her commentary on Exodus, suggests that it is arguably the most important book in the Bible, as it presents the defining features of Israel's identity—memories of a past marked by hardship and escape, a binding covenant with their God, who chooses Israel, and the establishment of the life of the community and the guidelines for sustaining it. \nThe consensus of modern scholars is that the Pentateuch does not give an accurate account of the origins of the Israelites, who appear instead to have formed as an entity in the central highlands of Canaan in the late second millennium BCE (around the time of the Late Bronze Age collapse) from the indigenous Canaanite culture.",
+      "url": "https://en.wikipedia.org/wiki/Book_of_Exodus"
+    },
+    "wikipedia:es": {
+      "qid": "Q9190",
+      "lang": "es",
+      "title": "Éxodo",
+      "extract": "El Éxodo es el segundo libro de la Biblia. Se trata de un texto tradicional que narra la historia del éxodo en la que los israelitas abandonan definitivamente la esclavitud en Egipto por la fuerza de Yahveh (capítulos 1-12). Es una narrativa del Éxodo, el relato del origen de los israelitas que abandonan la esclavitud en el Egipto bíblico gracias a la fuerza de su deidad llamada Yahvé, quien, según la historia, los eligió no para otorgarles un privilegio, como se suele interpretar erróneamente, sino para cumplir con el pacto de llevar adelante la palabra de Dios, sus mandamientos y preceptos. Es decir que el pueblo elegido no es por privilegio, sino para hacerse cargo de aplicar la ley. \nLos israelitas viajan entonces con el legendario profeta Moisés al monte Sinaí, donde Yahvé da los Diez Mandamientos y ellos entran en un pacto mosaico con Yahvé, quien promete hacerlos una «nación santa y un reino de sacerdotes» a condición de su fidelidad. Él les da sus leyes e instrucciones para construir el Tabernáculo, el medio por el cual él descenderá del cielo y habitará entre ellos y los guiará en una guerra santa para conquistar Canaán (la «Tierra Prometida»), que, según el relato bíblico del Génesis, Yahvé había prometido a Abraham, considerado el patriarca de los israelitas según la tradición bíblica, y a su descendencia. Narra cómo Dios envía las diez plagas sobre Egipto para doblegar la resistencia del faraón y conseguir que libere al pueblo de Israel de la esclavitud. Una vez en el monte Sinaí, Yahvé establece una alianza con los israelitas, les exige fidelidad y obediencia, y reafirma su promesa de conducirlos a la tierra de Canaán, conocida como la Tierra Prometida. Entran en un pacto mosaico con Yahveh, y la redacción de los Diez Mandamientos y otras normas legales (caps. 19-24). Las instrucciones para construir el Tabernáculo, el medio por el que vendrá del cielo y habitará con ellos y los dirigirá en una guerra santa para poseer la tierra, y luego les dará la paz (caps. 25-31). El episodio del becerro de oro, donde se da la ley por segunda vez (caps. 32-34). Y por último, más sobre la construcción del tabernáculo, la vestimenta del sacerdote y otros objetos rituales (capítulos 35-40).\nEn el judaísmo, el libro del Éxodo forma parte del canon, encontrándose contenido en la Torá y formando uno de los cinco libros del Pentateuco, que forman la primera parte de la Biblia hebrea.​ En el cristianismo, el libro del Éxodo también forma parte del canon y se encuentra en el Antiguo Testamento.\nEl Éxodo se atribuyó tradicionalmente al propio Moisés, pero los eruditos modernos ven su composición final como un producto del exilio babilónico (siglo VI a. C.), basado en tradiciones escritas y orales anteriores.​​ El consenso entre los estudiosos sostiene que el Éxodo tal y como aparece en la Biblia es legendario y no describe con exactitud eventos históricos,​ aunque una mayoría simple mantiene la existencia de un núcleo histórico que dio sustancia a la tradición bíblica posterior.​​",
+      "url": "https://es.wikipedia.org/wiki/%C3%89xodo"
+    },
+    "wikipedia:pt": {
+      "qid": "Q9190",
+      "lang": "pt",
+      "title": "Livro do Êxodo",
+      "extract": "O Livro do Êxodo (do em grego clássico: ἔξοδος, éxodos, \"saída\" ou \"partida\"; em hebraico:  שְׁמוֹת, Shəmōṯ, \"nomes\", a segunda palavra do começo do texto: \"Ora estes são os nomes dos filhos de Israel, que entraram no Egito\") é um dos livros do Tanakh e do Antigo Testamento, que integra a seção da Torá e do Pentateuco. Narra a libertação do povo hebreu da escravidão no Egito por meio de Moisés e o recebimento das instruções iniciais de Deus no monte Sinai.\nTradicionalmente atribuído ao próprio Moisés, os estudiosos modernos entendem que o livro foi, inicialmente, produzido no cativeiro da Babilônia (século VI a.C.) tendo como base tradições escritas e orais mais antigas com revisões finais no período pós-exílio (século V a.C.). Alguns estudiosos defendem que este é o mais importante livro do Antigo Testamento, pois ele define as principais características da identidade de Israel: a memória de um passado marcado por dificuldades e pela fuga, uma aliança com Deus, que escolheu Israel, e o estabelecimento de uma vida comunitária e as leis necessárias para mantê-la.",
+      "url": "https://pt.wikipedia.org/wiki/Livro_do_%C3%8Axodo"
+    }
+  },
+  "tier": "top",
+  "type": "book"
+}

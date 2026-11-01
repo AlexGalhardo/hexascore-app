@@ -1,0 +1,159 @@
+{
+  "qid": "Q160083",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q160083",
+      "labels": {
+        "en": ".kkrieger",
+        "mul": ".kkrieger"
+      },
+      "aliases": {
+        "mul": [
+          ".kkrieger chapter 1"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": ".kkrieger",
+        "eswiki": ".kkrieger",
+        "ptwiki": ".kkrieger"
+      },
+      "sitelinks_count": 16,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q583905",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q185029",
+            "rank": "normal"
+          },
+          {
+            "value": "Q270948",
+            "rank": "normal"
+          },
+          {
+            "value": "Q27670585",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": ".kkrieger",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q18123780",
+            "rank": "normal"
+          },
+          {
+            "value": "Q583905",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": ".kkrieger 3.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "62902",
+            "rank": "normal"
+          },
+          {
+            "value": "51425",
+            "rank": "normal"
+          },
+          {
+            "value": "66574",
+            "rank": "normal"
+          },
+          {
+            "value": "66575",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q183",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+2004-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "dot-kkrieger-chapter-1",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1406": "Microsoft Windows",
+        "Q18123780": ".theprodukkt",
+        "Q183": "Germany",
+        "Q185029": "first-person shooter",
+        "Q1860": "English",
+        "Q208850": "single-player video game",
+        "Q270948": "action game",
+        "Q27670585": "science fiction video game",
+        "Q583905": "Farbrausch"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q160083",
+      "lang": "en",
+      "title": ".kkrieger",
+      "extract": ".kkrieger (from Krieger, German for warrior) is a first-person shooter video game created by German demogroup .theprodukkt (a former subdivision of Farbrausch), which won first place in the 96k game competition at Breakpoint in April 2004. The game has never been fully released, remaining instead in the beta stage of development as of 2026, which renders it a perpetual beta.",
+      "url": "https://en.wikipedia.org/wiki/.kkrieger"
+    },
+    "wikipedia:es": {
+      "qid": "Q160083",
+      "lang": "es",
+      "title": ".kkrieger",
+      "extract": ".kkrieger es un videojuego desarrollado por .theprodukkt en 2004 para Microsoft Windows.",
+      "url": "https://es.wikipedia.org/wiki/.kkrieger"
+    },
+    "wikipedia:pt": {
+      "qid": "Q160083",
+      "lang": "pt",
+      "title": ".kkrieger",
+      "extract": ".kkrieger (do alemão Krieger, significando guerreiro) é um jogo eletrônico de tiro em primeira pessoa criado pelo grupo da demoscene alemã .theprodukkt. O jogo ainda está em fase beta de desenvolvimento, e foi lançado sob licença gratuita (freeware).\nO jogo inteiro utiliza apenas 97,280 bytes (95 Kb) de espaço, apesar de conter grande qualidade gráfica - em contraste com jogos atuais que ocupam CDs ou DVDs inteiros: um DVD comum possui aproximadamente 5,7 gigabytes - mais de 50,000 vezes mais do que o jogo completo. .kkrieger venceu dois prêmios de desenvolvimento de jogos na \"Deutscher Entwiclerpreis\" em 2006: inovação e avanços.\nO grupo .theprodukkt está desenvolvendo .kkrieger desde 2002, utilizando o software criado por eles mesmos chamado .werkkzeug. Em 2014, o código-fonte da terceira versão do .werkkzeug foi disponibilizado gratuitamente na internet pelos desenvolvedores, em licença BSD ou como domínio público.",
+      "url": "https://pt.wikipedia.org/wiki/.kkrieger"
+    }
+  },
+  "tier": "year-precision",
+  "type": "game"
+}

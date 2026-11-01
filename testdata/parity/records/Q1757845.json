@@ -1,0 +1,159 @@
+{
+  "qid": "Q1757845",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q1757845",
+      "labels": {
+        "en": "Sacred",
+        "es": "Sacred",
+        "mul": "Sacred",
+        "pt": "Sacred"
+      },
+      "aliases": {
+        "es": [
+          "Sacred: La Leyenda del Arma Sagrada"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Sacred (video game)",
+        "eswiki": "Sacred (videojuego)"
+      },
+      "sitelinks_count": 15,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q5375522",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q1422746",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "12320",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q651089",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q4048937",
+            "rank": "normal"
+          }
+        ],
+        "P2725": [
+          {
+            "value": "game/sacred_gold",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "8053",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0423108",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q388",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          },
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1758804",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q183",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+2004-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "sacred-gold",
+            "rank": "normal"
+          },
+          {
+            "value": "sacred",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1406": "Microsoft Windows",
+        "Q1422746": "action role-playing game",
+        "Q1758804": "co-op mode",
+        "Q183": "Germany",
+        "Q1860": "English",
+        "Q208850": "single-player video game",
+        "Q388": "Linux",
+        "Q4048937": "Sacred",
+        "Q5375522": "Encore, Inc.",
+        "Q651089": "Ascaron",
+        "Q6895044": "multiplayer video game"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q1757845",
+      "lang": "en",
+      "title": "Sacred (video game)",
+      "extract": "Sacred is a 2004 action role-playing game developed by the German company Ascaron and published by Take 2 Interactive. It is set on the magical continent of Ancaria, with characters of various races (dark elf, vampiress, dwarf, etc.) each with their own missions. Two expansion packs were released for the game in 2004 and 2005. In 2008, Linux Game Publishing announced that they would port the game to the Linux operating system.\nSacred was a commercial hit, with sales above 2 million units worldwide by 2009. It spawned the Sacred video game franchise, and was followed by the sequels Sacred 2: Fallen Angel, Sacred Citadel, and Sacred 3.",
+      "url": "https://en.wikipedia.org/wiki/Sacred_(video_game)"
+    },
+    "wikipedia:es": {
+      "qid": "Q1757845",
+      "lang": "es",
+      "title": "Sacred (videojuego)",
+      "extract": "Sacred es un videojuego de rol de acción para PC, ambientado en el fantástico mundo de Ancaria, repleto de criaturas mágicas. Más de 1,8 millones de copias del juego fueron vendidas por todo el mundo.​\nEn el juego se puede elegir entre seis personajes diferentes: el Mago, la Seraphín, el Elfo Oscuro, la Elfa del Bosque, la Vampiresa y el Gladiador, además de dos personajes extra que vienen en la expansión de Sacred, el Enano y la Diablesa.",
+      "url": "https://es.wikipedia.org/wiki/Sacred_(videojuego)"
+    }
+  },
+  "tier": "year-precision",
+  "type": "game"
+}

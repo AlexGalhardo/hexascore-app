@@ -1,0 +1,76 @@
+{
+  "qid": "Q127047",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q127047",
+      "labels": {
+        "en": "Cain Rose Up"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Cain Rose Up"
+      },
+      "sitelinks_count": 6,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q16575965",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q7976",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q39829",
+            "rank": "normal"
+          }
+        ],
+        "P571": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1968-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1985-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q16575965": "horror fiction",
+        "Q30": "United States",
+        "Q39829": "Stephen King",
+        "Q7976": "American English"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q127047",
+      "lang": "en",
+      "title": "Cain Rose Up",
+      "extract": "\"Cain Rose Up\" is a horror short story by American writer Stephen King. It was originally published in the Spring 1968 issue of Ubris magazine, and collected in King's Skeleton Crew in 1985. It deals with a depressed and homicidal college student, Curt Garrish, who goes on a murderous sniper rampage from his dormitory room.",
+      "url": "https://en.wikipedia.org/wiki/Cain_Rose_Up"
+    }
+  },
+  "tier": "tail",
+  "type": "book"
+}

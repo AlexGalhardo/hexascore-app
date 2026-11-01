@@ -1,0 +1,46 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0116675",
+      "rottentomatoes": "m/jaded",
+      "tmdb": "78086"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Caryn Krooth"
+      ],
+      "genres": [
+        "trial film",
+        "drama film",
+        "LGBTQ-related film"
+      ],
+      "runtimeMinutes": 91
+    },
+    "popularity": 7.0,
+    "qid": "Q24618",
+    "release_date": "1997-01-24",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Jaded is a 1997 American drama film directed by Caryn Krooth, and co-written with Wendy Olinger. It stars Carla Gugino, Rya Kihlstedt, Christopher McDonald, and Anna Thomson.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Jaded_(film)",
+        "title": "Jaded"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Jaded"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q24618",
+  "slug": "jaded"
+}

@@ -62,6 +62,42 @@ HTTP 429. More requests per second than your plan allows. The `Retry-After` head
 
 HTTP 500. Something failed on our side. The request is refunded to your quota. Retry with exponential backoff; if it persists, send us the `request_id`.
 
+### community-submissions-closed
+
+HTTP 403. Community suggestions are switched off right now. Try again later.
+
+### suggestion-not-eligible
+
+HTTP 403. Your account cannot submit suggestions (unverified email, too new, banned from submissions, or the suggestion is not yours).
+
+### suggestion-duplicate
+
+HTTP 409. An open suggestion for the same item and fields already exists. Edit or withdraw it instead.
+
+### stale-before
+
+HTTP 409. The field changed since you loaded it. Reload and re-apply your edit.
+
+### invalid-transition
+
+HTTP 409. The suggestion cannot move from its current status to the requested one.
+
+### field-locked
+
+HTTP 423. A moderator locked this field; community edits to it are not accepted.
+
+### suggestion-quota
+
+HTTP 429. You reached your daily suggestion quota. Try again after the reset.
+
+### suggestion-cooldown
+
+HTTP 429. Wait for the cooldown to pass; the `Retry-After` header gives the seconds.
+
+### validation
+
+HTTP 422. The submission failed validation.
+
 ### service-unavailable
 
 HTTP 503. A dependency is temporarily down. Comes with `Retry-After`. Retry after the indicated delay.

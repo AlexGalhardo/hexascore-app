@@ -99,3 +99,18 @@ func TestLoadCatalogParses(t *testing.T) {
 		t.Fatal(diff)
 	}
 }
+
+// Approved community edits carry provenance `community`; SDD 01 §6.1 and SDD 05 §5 (A-07) serve them on
+// the paid API under the API terms, so the default allowlist must include it.
+func TestVisibilityCommunityReachesAPI(t *testing.T) {
+	src := fixtureItem()
+	src.Title = Sourced[string]{"Edited Title", "community"}
+	src.Synopsis = &SynopsisIn{Text: "Community synopsis", Source: "community", Licence: "HEXASCORE-API-TERMS"}
+	api := Assemble(src, NewPolicy(AudienceAPI, config.DefaultCatalogAPISources))
+	if api.Title != "Edited Title" || api.Synopsis == nil || api.Synopsis.Text != "Community synopsis" {
+		t.Fatalf("community fields must reach the api; got title %q synopsis %+v", api.Title, api.Synopsis)
+	}
+	if got := Assemble(src, NewPolicy(AudienceAPI, []string{"wikidata"})).Title; got != "" {
+		t.Fatalf("an allowlist without community must hide the field, got %q", got)
+	}
+}

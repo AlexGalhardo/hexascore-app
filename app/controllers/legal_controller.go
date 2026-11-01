@@ -7,7 +7,7 @@ import (
 
 // legalUpdatedAt is the effective date of the legal texts in resources/lang.
 // Bump it together with any change to the policy or terms copy.
-const legalUpdatedAt = "2026-10-30"
+const legalUpdatedAt = "2026-11-01"
 
 // Legal renders /terms and /policy; the text lives in the catalogues under
 // the slug's namespace (owner reviews the copy, Q-D-007).
