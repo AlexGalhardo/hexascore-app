@@ -23,6 +23,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/recommend/related"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 	"github.com/AlexGalhardo/hexascore-app/app/seo"
+	"github.com/AlexGalhardo/hexascore-app/app/wellknown"
 	"github.com/AlexGalhardo/hexascore-app/internal/search"
 	"github.com/AlexGalhardo/hexascore-app/resources"
 )
@@ -169,6 +170,10 @@ func Web(r *router.Router, app *vukem.App) error {
 
 	r.Get("/help/score", controllers.HelpScore).Name("help.score")
 	r.Get("/robots.txt", controllers.Robots(app)).Name("robots")
+	r.Get("/.well-known/assetlinks.json", wellknown.AssetLinks(
+		cmp.Or(app.Source.Get("ANDROID_PACKAGE"), "app.hexascore"),
+		app.Source.Get("ANDROID_CERT_SHA256"),
+	)).Name("wellknown.assetlinks")
 	r.Get("/terms", controllers.Legal("terms")).Name("terms")
 	r.Get("/policy", controllers.Legal("policy")).Name("policy")
 	r.Get("/pricing", controllers.Pricing).Name("pricing")

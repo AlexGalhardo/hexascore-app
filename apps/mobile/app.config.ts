@@ -10,6 +10,30 @@ const config: ExpoConfig = {
 	userInterfaceStyle: "automatic",
 	android: {
 		package: "app.hexascore",
+		// Verified App Links (SDD 10 §7.6); the Go app serves /.well-known/assetlinks.json.
+		// Expo loads this file without TS module resolution, so the list is inlined;
+		// src/linking.test.ts keeps it equal to APP_LINK_PREFIXES.
+		intentFilters: [
+			{
+				action: "VIEW",
+				autoVerify: true,
+				data: [
+					"/games",
+					"/movies",
+					"/series",
+					"/books",
+					"/entities",
+					"/lists",
+					"/pt-br",
+					"/es",
+				].map((pathPrefix) => ({
+					scheme: "https",
+					host: "hexascore.app",
+					pathPrefix,
+				})),
+				category: ["BROWSABLE", "DEFAULT"],
+			},
+		],
 	},
 	plugins: [
 		"expo-router",
