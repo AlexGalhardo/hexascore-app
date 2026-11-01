@@ -17,8 +17,8 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | VF-NEW-PROBLEM-TYPE | 2026-11-01 | medium | open |
 | VF-NEW-HOST-ONLY | 2026-11-01 | medium | open |
 | VF-NEW-REQUEST-LINE-FIELDS | 2026-11-01 | low | open |
-| VF-NEW-ADMIN-GUARD-SCOPE | 2026-11-01 | low | open |
-| VF-NEW-BUFFERED-COUNTER | 2026-11-01 | low | open |
+| VF-063 | 2026-11-01 | low | open |
+| VF-064 | 2026-11-01 | low | open |
 
 ## VF-NEW-EXPORT-WRITER: export streams only to an HTTP response, so background jobs reimplement CSV/NDJSON
 
@@ -56,7 +56,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 - **Workaround**: `bootstrap/app.go` wraps `app.Log` with `logging.NewHandler` and `middleware.RequestLog` stores a `logging.Fields` holder in the context that inner middleware fill (`workaround(vukem)` comments in `app/http/middleware/request_log.go` and `bootstrap/app.go`).
 - **Request**: `web.LogFields(ctx)` (or `c.LogAttr(k, v)`) whose attributes the request line includes, and a `Services.RequestLogAttrs func(*web.Ctx) []slog.Attr` hook run after the response.
 
-## VF-NEW-ADMIN-GUARD-SCOPE: the admin hardening options guard only the panel routes, answer 403 and cannot redirect to a 2FA setup
+## VF-063: the admin hardening options guard only the panel routes, answer 403 and cannot redirect to a 2FA setup
 
 - **Date**: 2026-11-01. **Severity**: low. **Status**: open.
 - **vukem version**: v0.35.0. **Docs consulted**: <https://vukem.dev/docs/digging-deeper/admin> (heading "Hardening"): `AllowCIDRs` answers 403 "before any login redirect"; `IdleTimeout` is "updated only by those routes, so using the rest of the app does n[ot refresh it]"; `panel.Mount` "is the only place that installs this stack", so routes beside the panel need `panel.Guard()`; `TwoFactor` is 403 when off.
@@ -65,7 +65,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 - **Workaround**: the app keeps its own router-wide `AdminGuard` and does not set the native options (the native checks would only duplicate it on the panel routes and change the answers the tests pin).
 - **Request**: per-option behaviour switches on `admin.Config`, for example `DenyStatus int` (404 for `AllowCIDRs`), `TwoFactorRedirect string` (a path to redirect to instead of 403) and `IdleActivity func(*http.Request) bool` (or a documented `admin.TouchIdle(session, now)` for the app's own middleware), so an app-wide policy can use the native options instead of reimplementing them.
 
-## VF-NEW-BUFFERED-COUNTER: no buffered counter that batches hot-path increments into one periodic write
+## VF-064: no buffered counter that batches hot-path increments into one periodic write
 
 - **Date**: 2026-11-01. **Severity**: low. **Status**: open.
 - **vukem version**: v0.35.0. **Docs consulted**: <https://vukem.dev/docs/digging-deeper/cache> (heading "Counters"): `Increment` is atomic, one store write per call, and the counter lives in the cache store; <https://vukem.dev/docs/digging-deeper/scheduler> (heading "Frequencies"): `EveryMinute()` and `HourlyAt(m)` exist, but no page describes accumulating counts in memory and flushing them on a schedule or at shutdown.
