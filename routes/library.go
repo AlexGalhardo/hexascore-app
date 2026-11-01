@@ -46,6 +46,9 @@ func Library(r *router.Router, app *vukem.App) error {
 	r.Delete("/items/{id}/edition", web.DeleteEdition).Name("edition.delete").Use(required, verified, byUser)
 
 	profile := controllers.NewPublicProfile(acc.DB, false, "", acc.Web.Name())
+	if profile.Follows, err = SocialService(app, acc); err != nil {
+		return err
+	}
 	r.Get("/u/{nickname}", profile.Show).Name("profile.public").Use(auth.Optional(acc.Web))
 
 	coversBase := catalog.CoversBase(app.Source.Get("COVERS_BASE_URL"))

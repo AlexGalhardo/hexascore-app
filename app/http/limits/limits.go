@@ -42,6 +42,7 @@ var (
 	TimeToBeat   = Rule{"time-to-beat", 30, time.Minute}
 	Lists        = Rule{"lists", 60, time.Minute}
 	Editions     = Rule{"edition", 60, time.Minute}
+	Follows      = Rule{"follows", 60, time.Hour} // SDD 14 NFR-14-8
 	Notify       = Rule{"notifications", 120, time.Minute}
 	Reports      = Rule{"reports", 10, time.Hour}
 	Search       = Rule{"search", 60, time.Minute}
@@ -83,7 +84,7 @@ func APIPlan(plan string, rps, burst int) Rule {
 func All() []Rule {
 	return []Rule{
 		Login, LoginIP, LoginAccount, Signup, SignupEmail, Forgot, ForgotEmail, Mails, TwoFactor, TwoFactorSet,
-		Deletion, Contact, Ratings, Status, TimeToBeat, Lists, Editions, Notify, Reports, Search, Suggest,
+		Deletion, Contact, Ratings, Status, TimeToBeat, Lists, Editions, Follows, Notify, Reports, Search, Suggest,
 		SearchEvents, APIIP, AppIP, AppRead, AppWrite, AppTokens, AppTokensAcc, AppTokensUsr, AppTokenRotate, App2FA,
 		Challenge, Exports, CSPReports, ClientErrors, ClientMetrics,
 		CommunityDraft, CommunityDraftIP, CommunitySubmit, CommunitySubmitIP, CommunityUpload, CommunityUploadIP,

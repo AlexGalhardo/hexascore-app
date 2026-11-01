@@ -4,6 +4,7 @@ import type { ItemRef } from "../../components/library/ItemLink";
 import ShelfCard from "../../components/library/ShelfCard";
 import ReportDialog from "../../components/ReportDialog";
 import Seo from "../../components/Seo";
+import FollowBar, { type SocialProps } from "../../components/social/FollowBar";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
@@ -32,6 +33,7 @@ interface Props {
 	ratings?: { data: Rating[] };
 	lists?: ProfileList[];
 	indexable: boolean;
+	social?: SocialProps;
 	contributions?: {
 		submitted: number;
 		approved: number;
@@ -48,6 +50,7 @@ export default function Profile({
 	ratings,
 	lists,
 	indexable,
+	social,
 	contributions,
 }: Props) {
 	const t = useT();
@@ -115,6 +118,13 @@ export default function Profile({
 					<ReportDialog targetType="user" targetId={profile.nickname} />
 				)}
 			</header>
+			{social && (
+				<FollowBar
+					nickname={profile.nickname}
+					social={social}
+					canFollow={Boolean(viewer) && !profile.isOwner}
+				/>
+			)}
 			{profile.isPrivate && !profile.isOwner && (
 				<p className="mt-4">{t("social.profile.private")}</p>
 			)}

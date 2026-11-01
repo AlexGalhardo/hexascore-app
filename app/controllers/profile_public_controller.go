@@ -15,6 +15,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
 // PublicProfile serves /u/{nickname} and GET /app/v1/users/{nickname} (SDD 14 §6.2, §6.3, §7.2).
@@ -24,6 +25,8 @@ type PublicProfile struct {
 	api    bool
 	// coversBase makes the JSON cover URLs absolute (COVERS_BASE_URL); the Inertia page keeps paths.
 	coversBase string
+	// Follows adds the `social` prop to the web page when the feature flag `social` is on (SDD 14 §12.2).
+	Follows *social.Follows
 }
 
 // NewPublicProfile builds the handlers; guards are tried in order to find an optional viewer.
@@ -117,6 +120,16 @@ func (h *PublicProfile) Show(c *web.Ctx) error {
 	}
 
 	props := inertia.Props{"profile": head, "indexable": indexable}
+	if !p.Banned {
+		follow, ok, err := h.Follows.ProfileProps(ctx, viewer.ID, p.UserID, hidden)
+		if err != nil {
+			return err
+		}
+		if ok {
+			props["social"] = follow
+		}
+	}
+
 	if !hidden {
 		meta := inertia.ScrollMeta{PageName: "cursor"}
 		if p.NextRatings >= 0 {

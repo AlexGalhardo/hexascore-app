@@ -1505,6 +1505,14 @@
       "title": "Choose your nickname",
       "body": "Your nickname is your public handle on profiles, lists and the community scores.",
       "submit": "Save nickname"
+    },
+    "follow": {
+      "followers": "{count} followers",
+      "following": "{count} following",
+      "follow": "Follow",
+      "unfollow": "Unfollow",
+      "requested": "Requested · cancel",
+      "label": "Follows"
     }
   },
   "help": {
@@ -1567,8 +1575,12 @@
       "report_resolved": "Your report was reviewed. Thank you.",
       "rating_flagged": "One of your ratings was flagged for review.",
       "list_hidden": "One of your lists was hidden by a moderator.",
-      "system": "Notice from the team."
-    }
+      "system": "Notice from the team.",
+      "new_follower": "{nickname} started following you.",
+      "follow_request": "{nickname} asked to follow you."
+    },
+    "followAccept": "Accept",
+    "followDecline": "Decline"
   },
   "library": {
     "title": "Your library",
