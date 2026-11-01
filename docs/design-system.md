@@ -151,7 +151,7 @@ Desktop (from `sm`/`md`):
 
 - Row `min-h-14`: brand link (`appName`, `text-lg font-bold`), section nav (Games, Movies, TV Series, Books; `hidden md:flex`, plain text colour), then a right-aligned group: `SuggestBox` (`sm:w-64`), theme toggle, and either the logged-out controls or the logged-in controls.
 - Logged out: "Log in" link and a "More" `details` menu (hamburger icon, label `nav.more`) containing the language links, "Sign up", "Pricing", "API docs".
-- Logged in: notification bell with an unread badge (`bg-accent-movie`, caps at "99+"), and an account `details` menu (user icon) with the user name, Library, Lists, Public profile (if nickname), Profile, API keys, Admin (role admin only), the language links, and Log out (`POST /logout`).
+- Logged in: an account `details` menu (user icon) with the user name, Library, Lists, Public profile (if nickname), Profile, API keys, Admin (role admin only), the language links, and Log out (`POST /logout`).
 
 Mobile (below `md`, see [home-mobile-390.png](design-system/home-mobile-390.png)):
 

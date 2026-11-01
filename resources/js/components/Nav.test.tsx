@@ -230,30 +230,25 @@ test("the hamburger sheet holds sections, language, theme and login; Escape retu
 	expect(document.activeElement).toBe(burger);
 });
 
-test("signed in with the flag on, the hamburger shows unread and the sheet has feed and account", async () => {
+// Owner round 2026-11-01 item 27: no unread badge or notifications entry in the navbar UI.
+test("signed in with the flag on, the hamburger stays 'Menu' and the sheet has feed and account", async () => {
 	const user = userEvent.setup();
 	try {
 		props.auth.user = { name: "Ana", nickname: "ana" };
 		props.flags = { social: true };
 		props.unreadNotifications = 3;
 		render(<Nav />);
-		const burger = screen.getByRole("button", { name: "nav.menuUnread" });
-		expect(burger.textContent).toContain("3");
+		const burger = screen.getByRole("button", { name: "nav.menu" });
+		expect(burger.textContent).not.toContain("3");
+		expect(screen.queryByRole("link", { name: /nav\.notifications/ })).toBeNull();
 		await user.click(burger);
 		const sheet = await screen.findByRole("dialog", {}, { timeout: 5000 });
 		const hrefs = [...sheet.querySelectorAll("a")].map((a) => a.getAttribute("href"));
 		expect(hrefs).toEqual(
-			expect.arrayContaining([
-				"/feed",
-				"/me/notifications",
-				"/library",
-				"/lists",
-				"/u/ana",
-				"/logout",
-			]),
+			expect.arrayContaining(["/feed", "/library", "/lists", "/u/ana", "/logout"]),
 		);
 		expect(sheet.textContent).toContain("Ana");
-		expect(sheet.querySelector('a[href="/me/notifications"]')?.textContent).toContain("3");
+		expect(sheet.querySelector('a[href="/me/notifications"]')).toBeNull();
 	} finally {
 		props.auth.user = null;
 		props.flags = {};
@@ -281,15 +276,16 @@ test("Tab and Shift+Tab right after opening never leave the sheet", async () => 
 	}
 });
 
-test("the hamburger name follows the unread count when it changes", () => {
+test("the hamburger name ignores the unread count", () => {
 	try {
 		props.auth.user = { name: "Ana", nickname: "ana" };
 		const { rerender } = render(<Nav />);
 		expect(screen.getByRole("button", { name: "nav.menu" })).toBeTruthy();
 		props.unreadNotifications = 2;
 		rerender(<Nav />);
-		const burger = screen.getByRole("button", { name: "nav.menuUnread" });
-		expect(burger.textContent).toContain("2");
+		const burger = screen.getByRole("button", { name: "nav.menu" });
+		expect(burger.textContent).not.toContain("2");
+		expect(document.querySelector('a[href="/me/notifications"]')).toBeNull();
 	} finally {
 		props.auth.user = null;
 		props.unreadNotifications = 0;

@@ -56,7 +56,6 @@ const ICONS = {
 	search: "M11 4a7 7 0 1 0 0 14a7 7 0 1 0 0-14 M16 16 L21 21",
 	moon: "M20 14.5 A8.5 8.5 0 1 1 9.5 4 A7 7 0 0 0 20 14.5 Z",
 	sun: "M12 8 a4 4 0 1 0 0 8 a4 4 0 1 0 0-8 M12 2 V4.5 M12 19.5 V22 M2 12 H4.5 M19.5 12 H22 M4.9 4.9 L6.7 6.7 M17.3 17.3 L19.1 19.1 M4.9 19.1 L6.7 17.3 M17.3 6.7 L19.1 4.9",
-	bell: "M6 16 V11 a6 6 0 0 1 12 0 V16 L19.5 18 H4.5 Z M10 20.5 a2 2 0 0 0 4 0",
 	menu: "M4 7 H20 M4 12 H20 M4 17 H20",
 	down: "M6 9 L12 15 L18 9",
 	check: "M5 12 L10 17 L19 7",
@@ -111,11 +110,11 @@ function useShortcutHint(): string {
 export default function Nav() {
 	const t = useT();
 	const page = usePage<SharedProps>();
-	const { auth, locale, unreadNotifications: unread = 0 } = page.props;
+	// Owner round 2026-11-01 item 27: no bell or unread badge in the navbar (unreadNotifications stays shared).
+	const { auth, locale } = page.props;
 	const user = auth?.user;
 	const feedHref = user && page.props.flags?.social ? localized("/feed", locale) : null;
 	const here = unlocalized(page.url);
-	const unreadLabel = unread > 99 ? "99+" : String(unread);
 	const scrolled = useScrolled();
 	const hint = useShortcutHint();
 	const searchHref = localized("/search", locale);
@@ -129,11 +128,6 @@ export default function Nav() {
 	if (menuOpen && !sheetMounted) setSheetMounted(true);
 	const burger = useRef<HTMLButtonElement>(null);
 	const sheet = useRef<HTMLDivElement>(null);
-	const unreadBadge = unread > 0 && (
-		<span className="absolute top-1 right-0 min-w-5 rounded-full bg-primary px-1 text-center text-[10px] font-bold leading-[18px] text-on-primary tabular-nums">
-			{unreadLabel}
-		</span>
-	);
 
 	useEffect(() => {
 		const onKey = (e: KeyboardEvent) => {
@@ -355,15 +349,6 @@ export default function Nav() {
 						</div>
 						{user ? (
 							<div className="flex items-center gap-1">
-								<Link
-									href={localized("/me/notifications", locale)}
-									className={`${iconButton} relative`}
-									aria-label={`${t("nav.notifications")}${unread > 0 ? ` (${unreadLabel})` : ""}`}
-									title={t("nav.notifications")}
-								>
-									<Icon name="bell" />
-									{unreadBadge}
-								</Link>
 								<Dropdown
 									label={t("nav.account")}
 									triggerClassName={`inline-flex min-h-11 items-center gap-2 rounded-xs pl-1 pr-1 hover:bg-hover ${focus}`}
@@ -412,16 +397,13 @@ export default function Nav() {
 					type="button"
 					aria-haspopup="dialog"
 					aria-expanded={menuOpen}
-					aria-label={
-						user && unread > 0 ? t("nav.menuUnread", { count: unread }) : t("nav.menu")
-					}
+					aria-label={t("nav.menu")}
 					onClick={() => setMenuOpen(true)}
 					onPointerDown={() => setSheetMounted(true)}
 					onFocus={() => setSheetMounted(true)}
-					className={`${iconButton} relative lg:hidden`}
+					className={`${iconButton} lg:hidden`}
 				>
 					<Icon name="menu" />
-					{user && unreadBadge}
 				</button>
 			</div>
 			{sheetMounted && (
@@ -462,21 +444,7 @@ export default function Nav() {
 							)}
 						</nav>
 						{user ? (
-							<div className="border-b border-border py-1">
-								<Link
-									href={localized("/me/notifications", locale)}
-									className={menuItem}
-								>
-									<Icon name="bell" />
-									<span className="flex-1">{t("nav.notifications")}</span>
-									{unread > 0 && (
-										<span className="min-w-5 rounded-full bg-primary px-1 text-center text-xs font-bold leading-5 text-on-primary tabular-nums">
-											{unreadLabel}
-										</span>
-									)}
-								</Link>
-								{accountLinks}
-							</div>
+							<div className="border-b border-border py-1">{accountLinks}</div>
 						) : (
 							auth && (
 								<div className="border-b border-border py-1">
