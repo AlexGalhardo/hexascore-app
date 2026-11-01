@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **qa:** dev-only `CommunityLoad` seeder (`db:seed CommunityLoad --count N`, refused in production), a second demo admin (`admin2@example.test`), `qa/k6/moderation.js` and the Playwright community spec with the two-admin claim conflict (P4.B.5.1)
 - **api:** `listExports` and `getExport` (302 to a 5-minute presigned URL, `Cache-Control: no-store`) for Pro and Business; the daily id files leave out `popularity` until the owner confirms it (P3.A.4.2)
 - **social:** feed opt-in in settings and onboarding, a "recent activity" profile tab, 180-day activity retention and follows/activity files in the data export (P7.A.1.3 part 2); reviews on rated items with a Markdown subset and a spoiler flag (P7.B.1.1); comments with one level of replies and like/helpful reactions on reviews, comments and lists, with notifications (P7.B.1.2); members can report reviews and comments, and admins can hide or delete them or ban the author (P7.B.1.3); Open Graph share cards and a share button on items, lists and profiles (P7.C.1.2); all behind the `social` flag (default off)
 - **ci:** mobile release flow with EAS: `apps/mobile/eas.json` profiles (development, preview, e2e-test, production with remote `versionCode` and `autoIncrement`; submit as a draft to the Play internal track), runbook docs/runbooks/mobile-release.md, rule `.claude/rules/mobile-release.md`, skill `hexascore-mobile-release`, and the manual `mobile-release.yml` workflow (submit gated by the `play-store` environment)

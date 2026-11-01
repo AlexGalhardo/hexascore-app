@@ -2916,6 +2916,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - Playwright `community.spec.ts`: suggest → submit → approve → Recent changes → revert; axe clean in en, pt-BR, es
     - k6 `moderation.js` with 10,000 open suggestions: queue p95 < 500 ms, submit p95 < 300 ms
   - Notes: seeder via `vukem make:seeder`; never run it against production.
+  - Status (2026-11-01): parts in main (merge of agent/especialista/P4.B.5.1): `TestSecurity_Community_*` 5 PASS; `community.spec.ts` (axe in three locales, two-admin claim conflict with the new `admin2@example.test`), the dev-only `CommunityLoad` seeder (`db:seed CommunityLoad --count 10000`, refused in production) and `qa/k6/moderation.js` are written. Open: the Playwright, k6 and ZAP runs (long checks, batch run; ZAP needs a live host).
 
 - [ ] **P4.B.5.2** Rehearse on staging: process 100 synthetic suggestions (mixed kinds, approvals, rejections, a revert, a lock, a competing pair) and confirm the SLA dashboard and notifications.
   - Files/modules: `app/commands/community_rehearsal.go`, `docs/runbooks/community-rehearsal.md`
