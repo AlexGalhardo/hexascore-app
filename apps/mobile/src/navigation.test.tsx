@@ -63,7 +63,7 @@ function params(next: Record<string, string>): void {
 const routes: [string, Record<string, string>, () => ReactElement, string | null][] = [
 	["(auth)/login", {}, () => <Login />, null],
 	["(tabs)/index", {}, () => offline(<Home />), "HexaScore"],
-	["(tabs)/[type]", { type: "games" }, () => <SectionScreen />, "Section games"],
+	["(tabs)/[type]", { type: "games" }, () => offline(<SectionScreen />), "Games"],
 	["(tabs)/search", {}, () => <Search />, "Search"],
 	["(tabs)/lists", {}, () => <Lists />, "Lists"],
 	["(tabs)/profile", {}, () => <Profile />, "Profile"],
@@ -87,8 +87,8 @@ test.each(routes)("route %s renders its placeholder", async (_name, routeParams,
 });
 
 test.each(["games", "movies", "series", "books"])("section and item accept %s", async (type) => {
-	await render(<SectionBody type={type} />);
-	expect(screen.getByText(`Section ${type}`)).toBeTruthy();
+	await render(offline(<SectionBody type={type} />));
+	expect(screen.getByTestId("listing")).toBeTruthy();
 	await render(<ItemBody type={type} slug="title" />);
 	expect(screen.getByText(`Item ${type} title`)).toBeTruthy();
 });
