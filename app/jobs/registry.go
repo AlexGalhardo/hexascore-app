@@ -15,7 +15,7 @@ func All(app *vukem.App) []queue.Registration {
 
 // AllWith is All with the ingestion sources replaced; only tests pass a non-zero value.
 func AllWith(app *vukem.App, ingestSrc IngestSources) []queue.Registration {
-	return []queue.Registration{
+	regs := []queue.Registration{
 		handleRefreshEntityStats(app),
 		handleMerged(app),
 		handleRecomputeScores(app),
@@ -47,5 +47,8 @@ func AllWith(app *vukem.App, ingestSrc IngestSources) []queue.Registration {
 		handleCommunityNotify(app),
 		handleItemsChanged(app),
 		handleIngest(app, ingestSrc),
+		handleIndexNowChanges(app),
 	}
+
+	return append(regs, indexNowHandlers(app)...)
 }
