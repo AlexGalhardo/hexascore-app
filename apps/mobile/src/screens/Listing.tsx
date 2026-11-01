@@ -3,10 +3,9 @@ import { type ReactElement, useCallback, useState } from "react";
 import { FlatList, Pressable, ScrollView, Text, View } from "react-native";
 import type { ItemJSON } from "../../../../packages/app-client/src/api";
 import type { ReadClient } from "../api/client";
-import { SINGULAR } from "../navigation/catalog";
 import { ITEM_ROW_HEIGHT, ItemRow } from "../components/ItemRow";
 import { type AppLocale, t } from "../i18n";
-import type { CatalogType } from "../navigation/catalog";
+import { type CatalogType, SINGULAR } from "../navigation/catalog";
 import { GENRE_METHOD, queryKeys } from "../query/keys";
 
 export type ListingReader = Pick<ReadClient, "listItems" | (typeof GENRE_METHOD)[CatalogType]>;
