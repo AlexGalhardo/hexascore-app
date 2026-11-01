@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"slices"
+	"sync"
 	"time"
 
 	"github.com/AlexGalhardo/vukem/auth/hash"
@@ -38,6 +39,10 @@ type Stage struct {
 	Tables []string
 	// Batch is nil until the stage is implemented (P2.F.2.2 to P2.F.4.1).
 	Batch BatchFunc
+	// KeysSQL, when set, lets Runner.Workers split the stage: it takes $1 = checkpoint key ("" at the start)
+	// and $2 = batch size, and returns the key ending every full batch after the checkpoint, in order. Such
+	// a stage's Batch must be safe to run concurrently on disjoint key ranges.
+	KeysSQL string
 	// Run replaces Batch for a stage that is not a keyed copy (finalise): it
 	// runs once, outside a batch transaction, must be idempotent and returns
 	// the rows it touched.
@@ -56,13 +61,18 @@ func Stages() []Stage {
 			Tables: []string{"items", "item_translations", "source_records", "affiliate_links"},
 			Batch:  catalogBatch(time.Now),
 		},
-		{Name: "entities", Tables: []string{"items"}, Batch: entitiesBatch()},
+		{Name: "entities", Tables: []string{"items"}, Batch: entitiesBatch(), KeysSQL: entityKeysSQL},
 		{
 			Name:   "social",
 			Tables: []string{"ratings", "lists", "list_items", "reports", "contact_messages"},
-			Batch:  socialBatch(time.Now),
+			Batch:  socialBatch(time.Now), KeysSQL: userKeysSQL,
 		},
-		{Name: "library", Tables: []string{"item_status", "time_to_beat"}, Batch: libraryBatch(time.Now)},
+		{
+			Name:    "library",
+			Tables:  []string{"item_status", "time_to_beat"},
+			Batch:   libraryBatch(time.Now),
+			KeysSQL: userKeysSQL,
+		},
 		{Name: "billing", Tables: []string{
 			"api_keys", "api_usage_daily", "subscriptions", "stripe_customers", "credit_ledger", "pix_charges",
 		}, Batch: billingBatch(time.Now)},
@@ -126,6 +136,9 @@ type Runner struct {
 	Batch int
 	Out   io.Writer
 	Now   func() time.Time
+	// Workers is how many batches of a stage with KeysSQL run at once, each in its own transaction on its own
+	// connection (the pool must allow that many). 0 or 1 is sequential.
+	Workers int
 }
 
 type checkpoint struct {
@@ -191,6 +204,17 @@ VALUES ($1, 'running', $2, $2) ON CONFLICT (stage) DO UPDATE SET status = 'runni
 		}
 	}
 
+	if s.Run == nil && r.Workers > 1 && s.KeysSQL != "" {
+		var n int64
+
+		if after, n, err = r.runParallel(ctx, s, after); err != nil {
+			return fmt.Errorf("legacyimport: %s after key %q: %w", s.Name, after, err)
+		}
+
+		total += n
+	}
+
+	// With workers this only runs the tail (a last short batch) and the empty batch that ends the stage.
 	for s.Run == nil {
 		var n int
 
@@ -230,6 +254,135 @@ WHERE stage = $1`, s.Name, r.Now().UTC()); err != nil {
 	_, _ = fmt.Fprintf(r.Out, "%s: done, %d rows\n", s.Name, total)
 
 	return nil
+}
+
+// runParallel imports the full batches after `after` with r.Workers goroutines. The checkpoint moves only
+// to the end of the longest prefix of batches that are all committed, so a crash re-runs (idempotently)
+// the batches finished out of order and never skips one. It returns the checkpoint it reached.
+func (r *Runner) runParallel(ctx context.Context, s Stage, after string) (string, int64, error) {
+	bounds, err := r.boundaries(ctx, s, after)
+	if err != nil || len(bounds) == 0 {
+		return after, 0, err
+	}
+
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	var (
+		mu       sync.Mutex
+		wg       sync.WaitGroup
+		firstErr error
+		next     int
+		done     = make([]int, len(bounds))
+		reached  = after
+		moved    int64
+		jobs     = make(chan int)
+	)
+
+	finish := func(j, rows int) error {
+		mu.Lock()
+		defer mu.Unlock()
+
+		done[j] = rows
+
+		var add int64
+
+		for next < len(bounds) && done[next] > 0 {
+			add += int64(done[next])
+			reached = bounds[next]
+			next++
+		}
+
+		if add == 0 {
+			return nil
+		}
+
+		moved += add
+
+		_, err := r.DB.ExecContext(ctx, `UPDATE legacy_import_runs SET last_key = $2, rows = rows + $3, updated_at = $4
+WHERE stage = $1`, s.Name, reached, add, r.Now().UTC())
+
+		return err
+	}
+
+	fail := func(err error) {
+		mu.Lock()
+		defer mu.Unlock()
+
+		if firstErr == nil {
+			firstErr = err
+		}
+
+		cancel()
+	}
+
+	for range r.Workers {
+		wg.Go(func() {
+			for j := range jobs {
+				lo := after
+				if j > 0 {
+					lo = bounds[j-1]
+				}
+
+				var rows int
+
+				err := r.DB.Tx(ctx, func(tx *database.Tx) error {
+					last, n, err := s.Batch(ctx, tx, lo, r.Batch)
+					if err == nil && last != bounds[j] {
+						err = fmt.Errorf("batch after %q ended at %q, expected %q", lo, last, bounds[j])
+					}
+
+					rows = n
+
+					return err
+				})
+				if err == nil {
+					err = finish(j, rows)
+				}
+
+				if err != nil {
+					fail(err)
+					return
+				}
+			}
+		})
+	}
+
+feed:
+	for j := range bounds {
+		select {
+		case jobs <- j:
+		case <-ctx.Done():
+			break feed
+		}
+	}
+
+	close(jobs)
+	wg.Wait()
+
+	return reached, moved, firstErr
+}
+
+func (r *Runner) boundaries(ctx context.Context, s Stage, after string) ([]string, error) {
+	rows, err := r.DB.QueryContext(ctx, s.KeysSQL, after, r.Batch)
+	if err != nil {
+		return nil, fmt.Errorf("legacyimport: %s batch boundaries: %w", s.Name, err)
+	}
+
+	defer func() { _ = rows.Close() }()
+
+	var out []string
+
+	for rows.Next() {
+		var k string
+		if err := rows.Scan(&k); err != nil {
+			return nil, err
+		}
+
+		out = append(out, k)
+	}
+
+	return out, rows.Err()
 }
 
 func (r *Runner) load(ctx context.Context, stage string) (checkpoint, error) {

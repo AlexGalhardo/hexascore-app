@@ -22,6 +22,7 @@ func ImportLegacy() vukem.Command {
 		stage        *string
 		dryRun       *bool
 		batch        *int
+		workers      *int
 		stdin        *bool
 		allowNoLogin *bool
 	)
@@ -37,6 +38,11 @@ func ImportLegacy() vukem.Command {
 			)
 			dryRun = fs.Bool("dry-run", false, "print pre-flight and planned counts, write nothing")
 			batch = fs.Int("batch", legacyimport.DefaultBatch, "rows per transaction")
+			workers = fs.Int(
+				"workers",
+				1,
+				"batches of the entities, social and library stages run at once (needs that many DB connections)",
+			)
 			stdin = fs.Bool("stdin", false, "read the twofactor export (NDJSON) from stdin")
 			allowNoLogin = fs.Bool("allow-no-login", false,
 				"opt in to importing users who have no password, Google link, or passkey")
@@ -106,7 +112,7 @@ func ImportLegacy() vukem.Command {
 				}
 			}
 
-			r := &legacyimport.Runner{DB: db, Batch: *batch, Out: out, Now: app.Now}
+			r := &legacyimport.Runner{DB: db, Batch: *batch, Workers: *workers, Out: out, Now: app.Now}
 
 			return r.Run(ctx, stages)
 		},

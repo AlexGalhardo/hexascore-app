@@ -77,6 +77,20 @@ func UniqueSlug(
 	}
 }
 
+// FirstFreeSlug is the search UniqueSlug runs without the year step, for callers that already know
+// which slugs are taken: base, then -2, -3, ..., skipping reserved words.
+func FirstFreeSlug(base string, taken func(slug string) bool) string {
+	if !reserved[base] && !taken(base) {
+		return base
+	}
+
+	for n := 2; ; n++ {
+		if slug := withSuffix(base, strconv.Itoa(n)); !reserved[slug] && !taken(slug) {
+			return slug
+		}
+	}
+}
+
 func withSuffix(base, suffix string) string {
 	if room := MaxSlugLength - len(suffix) - 1; len(base) > room {
 		base = strings.TrimRight(base[:room], "-")
