@@ -233,3 +233,40 @@ func TestSuggestRebuildRefillsEverything(t *testing.T) {
 		t.Fatalf("dirty rows after rebuild = %d, want 0", got)
 	}
 }
+
+// Reindex rewrites every search index (disk-full runbook R6) and then rebuilds the suggest rows.
+func TestReindexRewritesIndexesAndRebuilds(t *testing.T) {
+	db := migratedDB(t)
+	seedItems(t, db, 3)
+
+	if err := search.DrainSuggest(t.Context(), db); err != nil {
+		t.Fatal(err)
+	}
+
+	want := count(t, db, `SELECT count(*) FROM search_suggest`)
+	exec(t, db, `TRUNCATE search_suggest`)
+
+	const files = `SELECT coalesce(string_agg(relname || ':' || relfilenode, ',' ORDER BY relname), '') FROM pg_class
+WHERE relname IN ('item_translations_tsv_gin', 'search_suggest_prefix', 'search_suggest_trgm')`
+
+	var before, after string
+	if err := db.QueryRowContext(t.Context(), files).Scan(&before); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := search.Reindex(t.Context(), db); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := db.QueryRowContext(t.Context(), files).Scan(&after); err != nil {
+		t.Fatal(err)
+	}
+
+	if before == after || strings.Count(after, ":") != 3 {
+		t.Fatalf("index files unchanged or missing: before %q after %q", before, after)
+	}
+
+	if got := count(t, db, `SELECT count(*) FROM search_suggest`); got != want || want == 0 {
+		t.Fatalf("suggest rows after reindex = %d, want %d (> 0)", got, want)
+	}
+}
