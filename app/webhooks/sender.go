@@ -17,6 +17,8 @@ import (
 	"github.com/AlexGalhardo/vukem/mail"
 	"github.com/AlexGalhardo/vukem/queue"
 	vwebhook "github.com/AlexGalhardo/vukem/webhook"
+
+	appmail "github.com/AlexGalhardo/hexascore-app/app/mail"
 )
 
 // DeliveryRetries is how many times a failed delivery is retried (SDD 05 §7.3:
@@ -261,7 +263,7 @@ type disabledNotice struct {
 }
 
 func (n disabledNotice) Envelope() mail.Envelope {
-	return mail.Envelope{To: []string{n.To}, Subject: "Webhook endpoint disabled"}
+	return appmail.Auto(mail.Envelope{To: []string{n.To}, Subject: "Webhook endpoint disabled"})
 }
 
 func (n disabledNotice) Content() mail.Content {

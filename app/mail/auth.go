@@ -18,7 +18,7 @@ type VerifyEmail struct {
 
 // Envelope implements mail.Mailable.
 func (m VerifyEmail) Envelope() mail.Envelope {
-	return mail.Envelope{To: []string{m.User.Email}, Subject: cmp.Or(m.Subject, "Verify your email address")}
+	return Auto(mail.Envelope{To: []string{m.User.Email}, Subject: cmp.Or(m.Subject, "Verify your email address")})
 }
 
 // Content implements mail.Mailable.
@@ -33,7 +33,7 @@ type ResetPassword struct {
 
 // Envelope implements mail.Mailable.
 func (m ResetPassword) Envelope() mail.Envelope {
-	return mail.Envelope{To: []string{m.User.Email}, Subject: cmp.Or(m.Subject, "Reset your password")}
+	return Auto(mail.Envelope{To: []string{m.User.Email}, Subject: cmp.Or(m.Subject, "Reset your password")})
 }
 
 // Content implements mail.Mailable.
@@ -51,10 +51,10 @@ type AccountExists struct {
 
 // Envelope implements mail.Mailable.
 func (m AccountExists) Envelope() mail.Envelope {
-	return mail.Envelope{
+	return Auto(mail.Envelope{
 		To:      []string{m.User.Email},
 		Subject: cmp.Or(m.Subject, "Someone tried to sign up with your email"),
-	}
+	})
 }
 
 // Content implements mail.Mailable.
@@ -70,10 +70,10 @@ type TwoFactorReset struct {
 
 // Envelope implements mail.Mailable.
 func (m TwoFactorReset) Envelope() mail.Envelope {
-	return mail.Envelope{
+	return Auto(mail.Envelope{
 		To:      []string{m.User.Email},
 		Subject: cmp.Or(m.Subject, "Two-factor authentication was reset"),
-	}
+	})
 }
 
 // Content implements mail.Mailable.
@@ -89,10 +89,10 @@ type DeletionScheduled struct {
 
 // Envelope implements mail.Mailable.
 func (m DeletionScheduled) Envelope() mail.Envelope {
-	return mail.Envelope{
+	return Auto(mail.Envelope{
 		To:      []string{m.User.Email},
 		Subject: cmp.Or(m.Subject, "Your account is scheduled for deletion"),
-	}
+	})
 }
 
 // Content implements mail.Mailable.
@@ -107,7 +107,7 @@ type AccountAnonymized struct {
 
 // Envelope implements mail.Mailable.
 func (m AccountAnonymized) Envelope() mail.Envelope {
-	return mail.Envelope{To: []string{m.User.Email}, Subject: cmp.Or(m.Subject, "Your account was deleted")}
+	return Auto(mail.Envelope{To: []string{m.User.Email}, Subject: cmp.Or(m.Subject, "Your account was deleted")})
 }
 
 // Content implements mail.Mailable.
@@ -132,7 +132,7 @@ type PasswordChanged struct {
 
 // Envelope implements mail.Mailable.
 func (m PasswordChanged) Envelope() mail.Envelope {
-	return mail.Envelope{To: []string{m.User.Email}, Subject: cmp.Or(m.Subject, "Your password was changed")}
+	return Auto(mail.Envelope{To: []string{m.User.Email}, Subject: cmp.Or(m.Subject, "Your password was changed")})
 }
 
 // Content implements mail.Mailable.
@@ -148,10 +148,10 @@ type TwoFactorChanged struct {
 
 // Envelope implements mail.Mailable.
 func (m TwoFactorChanged) Envelope() mail.Envelope {
-	return mail.Envelope{
+	return Auto(mail.Envelope{
 		To:      []string{m.User.Email},
 		Subject: cmp.Or(m.Subject, "Two-factor authentication changed"),
-	}
+	})
 }
 
 // Content implements mail.Mailable.
@@ -166,7 +166,7 @@ type PasskeyChanged struct {
 
 // Envelope implements mail.Mailable.
 func (m PasskeyChanged) Envelope() mail.Envelope {
-	return mail.Envelope{To: []string{m.User.Email}, Subject: cmp.Or(m.Subject, "Your passkey was changed")}
+	return Auto(mail.Envelope{To: []string{m.User.Email}, Subject: cmp.Or(m.Subject, "Your passkey was changed")})
 }
 
 // Content implements mail.Mailable.
@@ -179,7 +179,9 @@ type ContactMessage struct {
 
 // Envelope implements mail.Mailable.
 func (m ContactMessage) Envelope() mail.Envelope {
-	return mail.Envelope{To: []string{m.Inbox}, ReplyTo: []string{m.Email}, Subject: "HexaScore contact: " + m.Subject}
+	return Auto(
+		mail.Envelope{To: []string{m.Inbox}, ReplyTo: []string{m.Email}, Subject: "HexaScore contact: " + m.Subject},
+	)
 }
 
 // Content implements mail.Mailable.
