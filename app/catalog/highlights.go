@@ -98,7 +98,7 @@ func scanHighlights(rows *sql.Rows) ([]Highlight, error) {
 	return got, rows.Err()
 }
 
-// HighlightsByID loads the public items with the given ids, in the order of ids; unknown or hidden ids are skipped.
+// HighlightsByID loads the public items among ids, in the order of ids. Titles fall back like Highlights.
 func HighlightsByID(ctx context.Context, db Querier, ids []string, locale string) ([]Highlight, error) {
 	if len(ids) == 0 {
 		return []Highlight{}, nil
@@ -109,31 +109,14 @@ func HighlightsByID(ctx context.Context, db Querier, ids []string, locale string
   extract(year FROM i.release_date)::int,
   `+starsScore+`,
   i.rating_count, i.cover_key, i.cover_thumb_key
-FROM items i
+FROM unnest($1::uuid[]) WITH ORDINALITY AS w(id, n)
+JOIN items i ON i.id = w.id AND i.visibility = 'public'
 LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $2
 LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
-WHERE i.id = ANY($1::uuid[]) AND i.visibility = 'public'`, "{"+strings.Join(ids, ",")+"}", locale)
+ORDER BY w.n`, "{"+strings.Join(ids, ",")+"}", locale)
 	if err != nil {
 		return nil, fmt.Errorf("highlights by id: %w", err)
 	}
 
-	got, err := scanHighlights(rows)
-	if err != nil {
-		return nil, err
-	}
-
-	byID := make(map[string]Highlight, len(got))
-	for _, h := range got {
-		byID[h.ID] = h
-	}
-
-	out := make([]Highlight, 0, len(ids))
-
-	for _, id := range ids {
-		if h, ok := byID[id]; ok {
-			out = append(out, h)
-		}
-	}
-
-	return out, nil
+	return scanHighlights(rows)
 }
