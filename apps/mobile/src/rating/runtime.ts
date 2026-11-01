@@ -25,6 +25,8 @@ export type RatingRuntimeDeps = {
 	paused: () => boolean;
 	notify: (message: RatingToast) => void;
 	schedule?: DrainDeps["schedule"];
+	/** Other lanes of the shared queue (lists) hear their results here. */
+	onResult?: DrainDeps["onResult"];
 };
 
 export type RatingRuntime = {
@@ -67,6 +69,7 @@ export function createRatingRuntime(deps: RatingRuntimeDeps): RatingRuntime {
 			statusCache.onResult(entry, result);
 			const toast = toastFor(result, entry.op);
 			if (toast) deps.notify(toast);
+			deps.onResult?.(entry, result);
 		},
 	});
 	return {

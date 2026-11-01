@@ -2,7 +2,7 @@ import Constants from "expo-constants";
 import cacheStorage from "expo-sqlite/kv-store";
 import { createAppClient } from "../api/client";
 import { resolveLocale, t } from "../i18n";
-import { createLocaleStore } from "../i18n/locale";
+import { type ListsDeps, listLaneResult } from "../lists/data";
 import { subscribeAppActive } from "../platform/appState";
 import { getNetworkState, subscribeNetwork } from "../platform/network";
 import type { RootDeps } from "../providers/root";
@@ -25,9 +25,7 @@ import { createSession } from "./session";
 export const apiBaseUrl = process.env.EXPO_PUBLIC_API_BASE_URL ?? "";
 
 // Hermes ships Intl, so the device tag needs no localization package.
-export const appLocale = createLocaleStore(
-	resolveLocale([Intl.DateTimeFormat().resolvedOptions().locale]),
-);
+export const appLocale = resolveLocale([Intl.DateTimeFormat().resolvedOptions().locale]);
 
 const vault = createSecureVault();
 const appVersion = Constants.expoConfig?.version ?? "0.0.0";
@@ -42,7 +40,8 @@ export const persistOptions = {
 wireQueryManagers();
 trackFormulaVersion(queryClient, cacheStorage);
 
-// The queue is not wiped: it replays only for its own user after re-login (SDD 10 §8).
+// The offline queue stays out of the wipe: a 401 also wipes, and the queue replays for the same
+// user after re-login; another user discards it through the user binding (SDD 10 §8).
 export const session = createSession({
 	vault,
 	wipeUserData: async () => {
@@ -56,7 +55,7 @@ let notifyUpgrade = (): void => {};
 export const appClient = createAppClient({
 	baseUrl: apiBaseUrl,
 	version: appVersion,
-	locale: appLocale.get,
+	locale: appLocale,
 	token: () => session.token(),
 	onUpgradeRequired: () => notifyUpgrade(),
 });
@@ -88,8 +87,16 @@ const ratings = createRatingRuntime({
 	send: (entry) => sendEntry(appClient, entry),
 	online: () => getNetworkState() !== "offline",
 	paused: () => appClient.upgradeRequired(),
-	notify: (message) => showToast(t(appLocale.get(), message)),
+	notify: (message) => showToast(t(appLocale, message)),
+	onResult: listLaneResult(queryClient, showToast, appLocale),
 });
 export const ratingQueue = ratings.queue;
+export const listsDeps: ListsDeps = {
+	read: appClient.read,
+	write: appClient.write,
+	newKey: () => appClient.newIdempotencyKey(),
+	queue: ratings.queue,
+	notify: showToast,
+};
 followMe(session, () => appClient.read.meShow(), ratings.setUser);
 startQueue(ratings.drain, { subscribeNetwork, subscribeAppActive });

@@ -1266,7 +1266,12 @@
     "errors": {
       "title": "1–80 caracteres.",
       "description": "Hasta 500 caracteres."
-    }
+    },
+    "offline": "Conéctate a internet para crear, renombrar, eliminar o reordenar listas.",
+    "conflict": "Esta lista cambió en otro lugar. Mostrando la versión más reciente.",
+    "notSaved": "No se guardó el cambio en tu lista.",
+    "addedTo": "Añadido a {title}.",
+    "cancel": "Cancelar"
   },
   "ratings": {
     "title": "Tu valoración",
