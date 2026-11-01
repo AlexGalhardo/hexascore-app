@@ -4,6 +4,8 @@ import type { ItemRef } from "../../components/library/ItemLink";
 import ShelfCard from "../../components/library/ShelfCard";
 import ReportDialog from "../../components/ReportDialog";
 import Seo from "../../components/Seo";
+import CommentThread, { type CommentEntry } from "../../components/social/CommentThread";
+import ReactionBar, { type ReactionKind } from "../../components/social/ReactionBar";
 import ShareButton from "../../components/social/ShareButton";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
@@ -23,9 +25,21 @@ interface Props {
 	indexable: boolean;
 	/** Share-card path while the feature flag `social` is on and the page is public (SDD 14 §11 item 12). */
 	ogImage?: string;
+	/** Deferred (group `social`) while the feature flag `social` is on (SDD 14 §12.11). */
+	reactions?: { likes: number; helpful: number; mine: ReactionKind | "" };
+	comments?: CommentEntry[];
 }
 
-export default function List({ list, owner, items, canEdit, indexable, ogImage }: Props) {
+export default function List({
+	list,
+	owner,
+	items,
+	canEdit,
+	indexable,
+	ogImage,
+	reactions,
+	comments,
+}: Props) {
 	const t = useT();
 	const { locale, auth } = usePage<SharedProps>().props;
 
@@ -78,6 +92,29 @@ export default function List({ list, owner, items, canEdit, indexable, ogImage }
 						</li>
 					))}
 				</ol>
+			)}
+			{reactions && (
+				<div className="mt-6">
+					<ReactionBar
+						target="list"
+						id={list.id}
+						likes={reactions.likes}
+						helpful={reactions.helpful}
+						mine={reactions.mine}
+						canReact={Boolean(auth?.user) && !canEdit}
+					/>
+				</div>
+			)}
+			{comments && (
+				<div className="mt-6">
+					<h2 className="font-display text-2xl font-bold">{t("comments.title")}</h2>
+					<CommentThread
+						target="list"
+						id={list.id}
+						comments={comments}
+						canWrite={Boolean(auth?.user)}
+					/>
+				</div>
 			)}
 		</>
 	);

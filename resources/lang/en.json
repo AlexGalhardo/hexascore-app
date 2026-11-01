@@ -1512,7 +1512,9 @@
       "list_hidden": "One of your lists was hidden by a moderator.",
       "system": "Notice from the team.",
       "new_follower": "{nickname} started following you.",
-      "follow_request": "{nickname} asked to follow you."
+      "follow_request": "{nickname} asked to follow you.",
+      "new_comment": "{nickname} commented on your post.",
+      "new_reaction": "{nickname} reacted to your post."
     },
     "followAccept": "Accept",
     "followDecline": "Decline"
@@ -1756,5 +1758,17 @@
     "delete": "Delete review",
     "empty": "No reviews yet.",
     "rateFirst": "Rate this title to write a review."
+  },
+  "comments": {
+    "title": "Comments",
+    "label": "Write a comment",
+    "replyLabel": "Write a reply",
+    "send": "Send",
+    "reply": "Reply",
+    "delete": "Delete"
+  },
+  "reactions": {
+    "like": "Like ({count})",
+    "helpful": "Helpful ({count})"
   }
 }

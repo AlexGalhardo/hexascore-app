@@ -1512,7 +1512,9 @@
       "list_hidden": "Un moderador ocultó una de tus listas.",
       "system": "Aviso del equipo.",
       "new_follower": "{nickname} empezó a seguirte.",
-      "follow_request": "{nickname} pidió seguirte."
+      "follow_request": "{nickname} pidió seguirte.",
+      "new_comment": "{nickname} comentó tu publicación.",
+      "new_reaction": "{nickname} reaccionó a tu publicación."
     },
     "followAccept": "Aceptar",
     "followDecline": "Rechazar"
@@ -1756,5 +1758,17 @@
     "delete": "Eliminar reseña",
     "empty": "Aún no hay reseñas.",
     "rateFirst": "Valora este título para escribir una reseña."
+  },
+  "comments": {
+    "title": "Comentarios",
+    "label": "Escribe un comentario",
+    "replyLabel": "Escribe una respuesta",
+    "send": "Enviar",
+    "reply": "Responder",
+    "delete": "Eliminar"
+  },
+  "reactions": {
+    "like": "Me gusta ({count})",
+    "helpful": "Útil ({count})"
   }
 }

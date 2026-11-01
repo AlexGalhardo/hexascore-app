@@ -12,7 +12,8 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
-// Follows registers follow, unfollow, the follow-request answers, /feed and reviews (SDD 14 §12.6, §12.10). The routes always exist; the
+// Follows registers follow, unfollow, the follow-request answers, /feed, reviews, comments and reactions (SDD 14
+// §12.6, §12.10, §12.11). The routes always exist; the
 // handlers answer 404 while the feature flag `social` is off. The table exists only on Postgres (VF-033).
 func Follows(r *router.Router, app *vukem.App) error {
 	acc, err := accounts.New(app)
@@ -45,6 +46,13 @@ func Follows(r *router.Router, app *vukem.App) error {
 	reviewLimit := ratelimit.Middleware(limits.Reviews.From(limiters), ratelimit.ByUser(acc.Web.Name()))
 	r.Put("/items/{id}/review", reviews.Put).Name("reviews.put").Use(required, verified, reviewLimit)
 	r.Delete("/items/{id}/review", reviews.Delete).Name("reviews.delete").Use(required, verified, reviewLimit)
+	comments := controllers.NewComments(svc, acc.Web.Name())
+	commentLimit := ratelimit.Middleware(limits.Comments.From(limiters), ratelimit.ByUser(acc.Web.Name()))
+	reactLimit := ratelimit.Middleware(limits.Reactions.From(limiters), ratelimit.ByUser(acc.Web.Name()))
+	r.Post("/comments/{type}/{id}", comments.Create).Name("comments.create").Use(required, verified, commentLimit)
+	r.Delete("/comments/{id}", comments.Delete).Name("comments.delete").Use(required, verified)
+	r.Put("/reactions/{type}/{id}", comments.React).Name("reactions.put").Use(required, verified, reactLimit)
+	r.Delete("/reactions/{type}/{id}", comments.Unreact).Name("reactions.delete").Use(required, verified, reactLimit)
 	r.Patch("/profile/feed", h.UpdateFeedOptIn).Name("profile.feed").Use(required, verified)
 	r.Get("/feed", controllers.NewFeed(svc, acc.Web.Name()).Index).Name("feed").Use(required, verified)
 
