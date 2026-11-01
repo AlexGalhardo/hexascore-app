@@ -3,6 +3,7 @@ package jobs
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"sync"
 
 	vukem "github.com/AlexGalhardo/vukem"
@@ -68,7 +69,37 @@ func handleIngest(app *vukem.App, src IngestSources) queue.Registration {
 	)
 }
 
+// minDBConns is the pool the ingest steps need: a step holds its transaction's connection while covers.Reserver
+// writes cover_gc on a second one, so a pool of 1 would wait on itself forever. vukem reads DB_MAX_OPEN, default 10.
+const minDBConns = 2
+
+func checkPool(maxOpen string) error {
+	if maxOpen == "" {
+		return nil
+	}
+
+	n, err := strconv.Atoi(maxOpen)
+	if err != nil || n < 0 {
+		return fmt.Errorf("ingest runner: DB_MAX_OPEN %q is not a connection count", maxOpen)
+	}
+
+	// 0 is database/sql's "unlimited".
+	if n > 0 && n < minDBConns {
+		return fmt.Errorf(
+			"ingest runner: DB_MAX_OPEN=%d, ingestion needs at least %d connections (a step transaction plus the cover_gc reservation)",
+			n,
+			minDBConns,
+		)
+	}
+
+	return nil
+}
+
 func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
+	if err := checkPool(app.Source.Get("DB_MAX_OPEN")); err != nil {
+		return nil, err
+	}
+
 	db, err := app.DB()
 	if err != nil {
 		return nil, err

@@ -62,3 +62,39 @@ func recordChange(ctx context.Context, ex database.Executor, id, kind string, be
 
 	return changes.Record(ctx, ex, changes.Change{ItemID: id, ItemType: kind, Action: "updated", Fields: fields})
 }
+
+// withEntitiesChange runs save and, when it changed the item's credits, writes an `updated` row naming `entities`.
+func withEntitiesChange(ctx context.Context, ex database.Executor, id, kind string, save func() error) error {
+	before, err := entitiesFingerprint(ctx, ex, id)
+	if err != nil {
+		return err
+	}
+
+	if err := save(); err != nil {
+		return err
+	}
+
+	after, err := entitiesFingerprint(ctx, ex, id)
+	if err != nil || after == before {
+		return err
+	}
+
+	return changes.Record(
+		ctx,
+		ex,
+		changes.Change{ItemID: id, ItemType: kind, Action: "updated", Fields: []string{"entities"}},
+	)
+}
+
+func entitiesFingerprint(ctx context.Context, ex database.Executor, id string) (string, error) {
+	var fp string
+
+	err := ex.QueryRowContext(ctx, `SELECT coalesce(string_agg(role || ':' || entity_id::text || ':' || position
+  || ':' || coalesce(character_name, ''), ',' ORDER BY role, entity_id), '') FROM item_entities WHERE item_id = $1`, id).
+		Scan(&fp)
+	if err != nil {
+		return "", fmt.Errorf("fingerprint credits of %s: %w", id, err)
+	}
+
+	return fp, nil
+}

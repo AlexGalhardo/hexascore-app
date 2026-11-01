@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -134,28 +135,43 @@ WHERE h.superseded_by_run = $1 AND h.fetched_at < $2 AND `+laterChange, p.Target
 		return res, fmt.Errorf("rollback: count skipped: %w", err)
 	}
 
-	var restored int
-
-	err = tx.QueryRowContext(ctx, `WITH pre AS (
-  SELECT DISTINCT ON (h.source, h.external_id) h.source, h.external_id, h.hash, h.payload, h.fetched_at
+	rows, err := tx.QueryContext(ctx, `WITH pre AS (
+  SELECT DISTINCT ON (h.source, h.external_id) h.source, h.external_id, h.hash, h.payload, h.fetched_at, h.checked_at
   FROM source_record_history h
   WHERE h.superseded_by_run = $1 AND h.fetched_at < $2 AND NOT `+laterChange+`
   ORDER BY h.source, h.external_id, h.superseded_at
 ), upd AS (
   UPDATE source_records s SET payload = p.payload, hash = p.hash, fetched_at = p.fetched_at, normalized_at = NULL,
-    last_run_id = $3
+    last_run_id = $3, checked_at = coalesce(p.checked_at, p.fetched_at)
   FROM pre p WHERE s.source = p.source AND s.external_id = p.external_id RETURNING s.source, s.external_id
 ), del AS (
   DELETE FROM source_record_history h USING upd
   WHERE h.source = upd.source AND h.external_id = upd.external_id AND h.superseded_by_run = $1 RETURNING 1
 )
-SELECT count(*) FROM upd`, p.TargetRun, started.Time, r.ID).Scan(&restored)
+SELECT source, external_id FROM upd`, p.TargetRun, started.Time, r.ID)
 	if err != nil {
 		return res, fmt.Errorf("rollback: restore records: %w", err)
 	}
 
-	qids, removed, err := deleteInserted(ctx, tx, p.TargetRun, started.Time)
+	restored, err := readRecs(rows)
 	if err != nil {
+		return res, err
+	}
+
+	inserted, err := deleteInserted(ctx, tx, p.TargetRun, started.Time)
+	if err != nil {
+		return res, err
+	}
+
+	var qids []string
+
+	for _, rc := range inserted {
+		if rc.source == "wikidata" {
+			qids = append(qids, rc.id)
+		}
+	}
+
+	if err := requeueWikidata(ctx, tx, slices.Concat(restored, inserted)); err != nil {
 		return res, err
 	}
 
@@ -164,16 +180,67 @@ SELECT count(*) FROM upd`, p.TargetRun, started.Time, r.ID).Scan(&restored)
 	}
 
 	res.Done = true
-	res.Targets = restored + removed
+	res.Targets = len(restored) + len(inserted)
 	res.Seen = res.Targets
 	res.Changed = res.Targets
 
 	return res, nil
 }
 
+// rec is a source record a rollback restored or deleted.
+type rec struct{ source, id string }
+
+func readRecs(rows *sql.Rows) ([]rec, error) {
+	defer func() { _ = rows.Close() }()
+
+	var out []rec
+
+	for rows.Next() {
+		var r rec
+		if err := rows.Scan(&r.source, &r.id); err != nil {
+			return nil, err
+		}
+
+		out = append(out, r)
+	}
+
+	return out, rows.Err()
+}
+
+// requeueWikidata makes the items of the touched records derive again: the Wikidata record of each QID is queued for
+// the normaliser (a deleted igdb or tmdb record leaves the item no pending record of its own), and a cover the
+// rolled-back source gave an item is cleared so the covers job picks it again from what is stored now.
+func requeueWikidata(ctx context.Context, tx *database.Tx, recs []rec) error {
+	var sources, qids []string
+
+	for _, r := range recs {
+		if r.source != "wikidata" {
+			sources, qids = append(sources, r.source), append(qids, r.id)
+		}
+	}
+
+	if len(qids) == 0 {
+		return nil
+	}
+
+	if _, err := tx.ExecContext(ctx, `UPDATE source_records SET normalized_at = NULL
+WHERE source = 'wikidata' AND external_id = ANY($1::text[])`, qids); err != nil {
+		return fmt.Errorf("rollback: requeue wikidata records: %w", err)
+	}
+
+	if _, err := tx.ExecContext(ctx, `UPDATE items i SET cover_key = NULL, cover_thumb_key = NULL, cover_source = NULL,
+  cover_attribution = NULL, updated_at = now()
+FROM unnest($1::text[], $2::text[]) AS t(source, qid)
+WHERE i.wikidata_qid = t.qid AND i.cover_source = t.source`, sources, qids); err != nil {
+		return fmt.Errorf("rollback: clear covers: %w", err)
+	}
+
+	return nil
+}
+
 // deleteInserted removes the records the run inserted (written by it, never superseded from a pre-run version)
-// and returns their Wikidata QIDs and how many went.
-func deleteInserted(ctx context.Context, tx *database.Tx, target int64, started time.Time) ([]string, int, error) {
+// and returns them.
+func deleteInserted(ctx context.Context, tx *database.Tx, target int64, started time.Time) ([]rec, error) {
 	rows, err := tx.QueryContext(ctx, `WITH del AS (
   DELETE FROM source_records s WHERE s.last_run_id = $1 AND s.fetched_at >= $2
     AND NOT EXISTS (SELECT 1 FROM source_record_history h WHERE h.source = s.source AND h.external_id = s.external_id
@@ -185,30 +252,10 @@ func deleteInserted(ctx context.Context, tx *database.Tx, target int64, started 
 )
 SELECT source, external_id FROM del`, target, started)
 	if err != nil {
-		return nil, 0, fmt.Errorf("rollback: delete inserted records: %w", err)
+		return nil, fmt.Errorf("rollback: delete inserted records: %w", err)
 	}
 
-	defer func() { _ = rows.Close() }()
-
-	var (
-		qids []string
-		n    int
-	)
-
-	for rows.Next() {
-		var source, id string
-		if err := rows.Scan(&source, &id); err != nil {
-			return nil, 0, err
-		}
-
-		n++
-
-		if source == "wikidata" {
-			qids = append(qids, id)
-		}
-	}
-
-	return qids, n, rows.Err()
+	return readRecs(rows)
 }
 
 type removable struct {
@@ -254,13 +301,15 @@ VALUES (NULLIF($1, 0), 'admin', 'admin', 'item', $2, $3, $4::jsonb, $5)`,
 			return err
 		}
 
-		// A hidden item leaves the public API as a deleted one does.
-		if err := changes.Record(
-			ctx,
-			tx,
-			changes.Change{ItemID: it.id, ItemType: it.kind, Action: "deleted"},
-		); err != nil {
-			return err
+		// A hidden item is filed by the items_visibility_changes trigger; a deleted one has no row left to fire it.
+		if !it.used {
+			if err := changes.Record(
+				ctx,
+				tx,
+				changes.Change{ItemID: it.id, ItemType: it.kind, Action: "deleted"},
+			); err != nil {
+				return err
+			}
 		}
 	}
 

@@ -138,7 +138,7 @@ func (n Normalizer) Step(ctx context.Context, tx *database.Tx, r run.Run) (run.R
 		res.Changed++
 	}
 
-	if err := n.saveRelations(ctx, tx, r, &res, qids, recs, ids, items); err != nil {
+	if err := n.saveRelations(ctx, tx, r, &res, qids, recs, ids, items, known); err != nil {
 		return res, err
 	}
 
@@ -181,9 +181,13 @@ func (n Normalizer) saveOne(
 		}
 	}
 
+	// A hidden or takedown item answers 404 on the API (FR-01-14), so the feed must not name it (SDD 05 §7.3); the
+	// items_visibility_changes trigger announces it when it becomes public again.
+	announce := old != nil && old.Public
+
 	var before map[string]string
 
-	if old != nil {
+	if announce {
 		var err error
 		if before, err = publicSnapshot(ctx, tx, id); err != nil {
 			return "", err
@@ -195,8 +199,10 @@ func (n Normalizer) saveOne(
 		return "", err
 	}
 
-	if err := recordChange(ctx, tx, id, item.Type, before); err != nil {
-		return "", err
+	if old == nil || announce {
+		if err := recordChange(ctx, tx, id, item.Type, before); err != nil {
+			return "", err
+		}
 	}
 
 	if dateChanged && n.ScoreChanged != nil {
@@ -252,6 +258,7 @@ func (n Normalizer) saveRelations(
 	recs map[string][]store.Record,
 	ids map[string]string,
 	items map[string]*Item,
+	olds map[string]*existing,
 ) error {
 	// based_on may point at an item stored by an earlier batch.
 	targets := map[string]bool{}
@@ -300,6 +307,13 @@ func (n Normalizer) saveRelations(
 			rel, rerr := ExtractRelations(qid, recs[qid], known)
 			if rerr != nil {
 				return rerr
+			}
+
+			// Credits arrive after the item row; a created item already has its row, a non-public one has none.
+			if old := olds[qid]; old != nil && old.Public {
+				return withEntitiesChange(ctx, tx, id, items[qid].Type, func() error {
+					return saveRelations(ctx, tx, id, rel, all)
+				})
 			}
 
 			return saveRelations(ctx, tx, id, rel, all)

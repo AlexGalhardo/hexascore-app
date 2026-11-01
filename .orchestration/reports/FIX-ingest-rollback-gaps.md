@@ -1,0 +1,15 @@
+# FIX-ingest-rollback-gaps
+status: concluida
+branch: agent/senior/FIX-ingest-rollback-gaps (worktree wt/senior-fw-gaps, from local main fb1b61df)
+files: `internal/ingest/rollback/rollback.go`, `internal/ingest/normalize/{changes.go,job.go,save.go}`, `internal/ingest/store/records.go`, `database/migrations/20261101220000_add_rollback_gap_fixes.go` (+ registry), `app/jobs/ingest.go`, `tests/ingest/{rollback_gaps,normalize_gaps}_test.go`, `app/jobs/ingest_pool_test.go`, SDD 06 and 11 notes
+red: tests first; `go test -tags integration ./tests/ingest -run 'TestRollbackOfNonWikidata|TestRollbackRestore|TestNormalizeCreditsOnly|TestNormalizeNonPublic'` failed on all 5 (wikidata not requeued, cover kept, no `checked_at` column, no entities row, hidden item wrote a row, no re-announce).
+green: same command ok; `-run 'TestRollback|TestNormalize|TestRecompute|TestLocked|TestSlug|TestCancelled|TestBad|TestCovers|TestWiring'` ok (36 s); `go test ./internal/ingest/... ./database/migrations ./app/jobs` ok; migration-policy test ok; golangci-lint (-j 2, integration tags, tests/ingest, internal/ingest, app/jobs, migrations) 0 issues.
+design:
+1. Rollback collects every restored and deleted record. For non-wikidata ones it sets the Wikidata record's `normalized_at` NULL and clears `cover_*` on items whose `cover_source` is that source (the `cover_gc` trigger releases the keys; the covers job re-picks).
+2. Migration adds `source_record_history.checked_at`; `store.upsertSQL` archives it; rollback restores `coalesce(h.checked_at, h.fetched_at)` (rows archived before the migration fall back to `fetched_at`, the safe side for the 180-day TMDB clock).
+3. Normalize wraps the credits save (`saveRelations`) with a before/after fingerprint of `item_entities` (role, entity, position, character) and writes `updated` with `entities` when it differs, only for an item that existed and is public (a new item already has `created`).
+4. SDD 05 §7.3 and FR-01-14: a non-public item is 404 on the API, so normalize writes no row for it (no snapshot, no credits row). A trigger `items_visibility_changes` on `items.visibility` files `deleted` when an item leaves public and `created` when it comes back, whatever wrote the column (rollback, admin, SQL); hidden to takedown writes nothing. Rollback no longer writes the explicit `deleted` for a hidden item (the trigger does; a deleted item keeps the explicit row). `TestRollbackWritesAPIChanges` still asserts exactly one row each.
+pool: vukem reads `DB_MAX_OPEN` (default 10, production 20). A step holds one connection and `covers.Reserver(db)` takes a second, so a pool of 1 would hang. `checkPool` in `newIngestRunner` fails the runner build for `DB_MAX_OPEN` 1 or invalid (0 = unlimited and unset pass); unit test `TestCheckPool`; SDD 11 note.
+not done: the restored-record cover is cleared even if it would have been the same (one extra covers run); `item_entities` rows of vanished credits are still never deleted (earlier handoff).
+changelog: Fixed (rollback of non-wikidata runs, restored checked_at, credits in /changes, non-public items in /changes). Not edited (rule).
+roadmap: no box (follow-up of P6.B)

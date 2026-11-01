@@ -39,7 +39,7 @@ Each is verified by the matching §9 item.
 
 Postgres major **18** (vukem Compose pins `postgres:18.6-alpine3.24` [vk-deploy], as `legacy/infra/docker-compose.yaml`), minimum 16 (SDD 07). Railway's image is based on the official one [postgres]; its major, `pg_trgm`/`unaccent` (legacy `0000_extensions.sql`) and `ALTER SYSTEM` are [NOT VERIFIED]. Tuning: `shared_buffers=256MB`, `work_mem=8MB`, `maintenance_work_mem=256MB`, `max_connections=60`.
 
-Sizing: 2 GB data + 600 MB indexes (SDD 07) + 1 GB WAL ≈ 3.6 GB; alert at 70 % of the volume. Pool: `DB_MAX_OPEN=20`, `DB_MAX_IDLE=10` (defaults 10/5 [vk-db]) for ~14 HTTP, 3 workers, scheduler; pre-deploy and `pg_dump` add ≤ 5.
+Sizing: 2 GB data + 600 MB indexes (SDD 07) + 1 GB WAL ≈ 3.6 GB; alert at 70 % of the volume. Pool: `DB_MAX_OPEN=20`, `DB_MAX_IDLE=10` (defaults 10/5 [vk-db]; ingestion needs `DB_MAX_OPEN` >= 2, because a step transaction and the `cover_gc` reservation hold two connections, and the ingest runner refuses to build below that) for ~14 HTTP, 3 workers, scheduler; pre-deploy and `pg_dump` add ≤ 5.
 
 ```sql
 CREATE TABLE backup_runs (
