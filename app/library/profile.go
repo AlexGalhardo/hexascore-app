@@ -38,6 +38,7 @@ type ProfileRating struct {
 	CoverThumbKey *string        `json:"coverThumbKey"`
 	Cover         *catalog.Cover `json:"cover"`
 	Stars         float64        `json:"stars"`
+	Score         *float64       `json:"score"`
 	RatedAt       time.Time      `json:"ratedAt"`
 }
 
@@ -158,7 +159,7 @@ func profileRatings(
 	ctx context.Context, db *database.DB, userID int64, locale string, offset int,
 ) ([]ProfileRating, int, error) {
 	rows, err := db.SQL().QueryContext(ctx, `SELECT i.id, i.type, i.slug, `+libraryTitle+`,
-  extract(year FROM i.release_date)::int, i.cover_thumb_key, round(r.overall / 10, 1)::float8, r.updated_at
+  extract(year FROM i.release_date)::int, i.cover_thumb_key, round(r.overall / 10, 1)::float8, `+catalog.StarsScore+`, r.updated_at
 FROM ratings r
 JOIN items i ON i.id = r.item_id AND i.visibility = 'public'
 LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $2
@@ -181,6 +182,7 @@ WHERE r.user_id = $1 ORDER BY r.updated_at DESC, i.id DESC LIMIT $3 OFFSET $4`,
 			&r.Year,
 			&r.CoverThumbKey,
 			&r.Stars,
+			&r.Score,
 			&r.RatedAt,
 		); err != nil {
 			return nil, -1, err
