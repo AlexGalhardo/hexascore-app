@@ -111,7 +111,7 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 		app.Log = slog.New(logging.NewHandler(app.Log.Handler(), logKey))
 		r.UseServer(middleware.RequestLog)
 		r.Use(middleware.RequestRoute)
-		edge, err := middleware.APIEdge(config.APIHost(app.Source.Get),
+		edge, err := middleware.APIEdge(config.APIHost(app.Source.Get), cmp.Or(app.Source.Get("APP_URL"), "https://hexascore.app"),
 			cmp.Or(app.Source.Get("APP_PROBLEM_BASE_URL"), "https://hexascore.app/problems/"))
 		if err != nil {
 			return err
