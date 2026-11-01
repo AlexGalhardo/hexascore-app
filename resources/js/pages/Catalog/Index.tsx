@@ -29,32 +29,44 @@ export default function Index({ type, items, filters, facets, total }: Props) {
 	return (
 		<>
 			<Seo title={title} description={t(`catalog.intro.${type}`)} />
-			<h1 className="text-2xl font-bold">{title}</h1>
-			<p className="mt-1 text-muted">{t(`catalog.intro.${type}`)}</p>
-			<div className="mt-4">
-				<Filters
-					action={path}
-					type={type}
-					filters={filters}
-					genres={facets.genres}
-					platforms={facets.platforms}
-				/>
+			{/* Title alone, the result count on the right (design v1, round 2 item 11). */}
+			<div className="flex items-end gap-6 pt-6 pb-6 md:pt-8">
+				<h1 className="font-display text-5xl leading-none font-bold tracking-[-0.02em] md:text-[88px]">
+					{title}
+				</h1>
+				{total !== undefined && (
+					<p className="ml-auto hidden flex-col items-end md:flex">
+						<span className="text-5xl leading-none font-bold tabular-nums">
+							{new Intl.NumberFormat(locale).format(total)}
+						</span>
+						<span className="mt-1 text-[13px] text-muted">
+							{t("catalog.itemsFoundLabel", { count: total })}
+						</span>
+					</p>
+				)}
 			</div>
+			<Filters
+				action={path}
+				type={type}
+				filters={filters}
+				genres={facets.genres}
+				platforms={facets.platforms}
+			/>
 			{total !== undefined && (
-				<p className="mt-4 text-sm text-muted">
+				<p className="mt-4 text-sm text-muted md:sr-only">
 					{t("catalog.resultCount", { count: total })}
 				</p>
 			)}
 			{items.data.length === 0 ? (
-				<p className="mt-4">{t("catalog.empty")}</p>
+				<p className="mt-8 text-[15px]">{t("catalog.empty")}</p>
 			) : (
-				<InfiniteScroll data="items" as="ul" className="mt-2 divide-y divide-border">
+				<InfiniteScroll data="items" as="ul" className="mt-2">
 					{items.data.map((item) => (
 						<ItemCard key={item.id} item={item} href={`${path}/${item.slug}`} />
 					))}
 				</InfiniteScroll>
 			)}
-			<p className="mt-6 text-sm">
+			<p className="mt-6 text-sm text-muted">
 				{t("community.create.missing")} <SuggestNewLink domain={type} />
 			</p>
 		</>
