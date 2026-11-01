@@ -187,7 +187,7 @@ func (h *Controller) itemPage(c *web.Ctx, params catalog.ListParams, locale stri
 		out.Links.Next = &next
 	}
 
-	return out, notModified(c, out)
+	return out, NotModified(c, out)
 }
 
 // GetItem is getItem: GET /api/v1/{type}/{id}. Merged ids answer 301 to the surviving item; hidden or unknown
@@ -221,7 +221,7 @@ func (h *Controller) GetItem(c *web.Ctx, in GetItemInput) (ItemJSON, error) {
 
 	out := itemJSON(items[0], locale)
 
-	return out, notModified(c, out)
+	return out, NotModified(c, out)
 }
 
 // merged answers 301 to the item a merged-away id now points at, else 404.
@@ -286,9 +286,9 @@ func sectionOf(typ string) string {
 	return typ
 }
 
-// notModified sets the strong ETag and Cache-Control of v (SDD 05 §6.1) and, when If-None-Match matches, has
+// NotModified sets the strong ETag and Cache-Control of v (SDD 05 §6.1) and, when If-None-Match matches, has
 // written a 304 and returns errNotModified (FR-05-8; the quota still counts it, FR-05-4).
-func notModified(c *web.Ctx, v any) error {
+func NotModified(c *web.Ctx, v any) error {
 	etag, err := web.ETagOf(v)
 	if err != nil {
 		return err

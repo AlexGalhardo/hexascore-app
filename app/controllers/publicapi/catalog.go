@@ -55,7 +55,7 @@ func (h *Controller) genres(c *web.Ctx, typ string) (GenreListJSON, error) {
 		out.Data[i] = GenreJSON{Slug: g.Slug, Count: g.Count}
 	}
 
-	return out, notModified(c, out)
+	return out, NotModified(c, out)
 }
 
 // EditionJSON is one book edition; omitted fields are absent and listed in meta (FR-05-6).
@@ -138,7 +138,7 @@ func (h *Controller) ListEditions(c *web.Ctx, in ListEditionsInput) (EditionPage
 		out.Links.Next = &next
 	}
 
-	return out, notModified(c, out)
+	return out, NotModified(c, out)
 }
 
 // mergedEditions sends a merged-away book id to the surviving work's edition list (SDD 01).

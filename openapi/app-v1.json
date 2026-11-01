@@ -65,7 +65,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TrendingJSON"
+                  "$ref": "#/components/schemas/AppTrendingJSON"
                 }
               }
             }
@@ -326,7 +326,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ItemPageJSON"
+                  "$ref": "#/components/schemas/AppItemPageJSON"
                 }
               }
             }
@@ -403,7 +403,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TrendingJSON"
+                  "$ref": "#/components/schemas/AppTrendingJSON"
                 }
               }
             }
@@ -1218,7 +1218,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TrendingJSON"
+                  "$ref": "#/components/schemas/AppTrendingJSON"
                 }
               }
             }
@@ -1387,7 +1387,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TrendingJSON"
+                  "$ref": "#/components/schemas/AppTrendingJSON"
                 }
               }
             }
@@ -1686,7 +1686,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ItemPageJSON"
+                  "$ref": "#/components/schemas/AppItemPageJSON"
                 }
               }
             }
@@ -1754,7 +1754,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ItemJSON"
+                  "$ref": "#/components/schemas/AppItemJSON"
                 }
               }
             }
@@ -1779,6 +1779,184 @@
   },
   "components": {
     "schemas": {
+      "AppItemJSON": {
+        "properties": {
+          "confidence": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "coverThumbUrl": {
+            "type": "string"
+          },
+          "coverUrl": {
+            "type": "string"
+          },
+          "entities": {
+            "items": {
+              "$ref": "#/components/schemas/EntityRef"
+            },
+            "type": "array"
+          },
+          "externalIds": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "formulaVersion": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "locale": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ItemMeta"
+          },
+          "pageCount": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "provenance": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/FieldSource"
+            },
+            "type": "object"
+          },
+          "ratingCount": {
+            "type": "integer"
+          },
+          "releaseDate": {
+            "type": "string"
+          },
+          "releasePrecision": {
+            "type": "string"
+          },
+          "runtimeMinutes": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "score": {
+            "format": "double",
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "scoreByCategory": {
+            "additionalProperties": {
+              "format": "double",
+              "type": "number"
+            },
+            "type": "object"
+          },
+          "slug": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "synopsis": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Synopsis"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "wikidataQid": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "slug",
+          "locale"
+        ],
+        "type": "object"
+      },
+      "AppItemPageJSON": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/AppItemJSON"
+            },
+            "type": "array"
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        },
+        "type": "object"
+      },
+      "AppTrendingEntryJSON": {
+        "properties": {
+          "basis": {
+            "enum": [
+              "trend",
+              "prior"
+            ],
+            "minLength": 1,
+            "type": "string"
+          },
+          "item": {
+            "$ref": "#/components/schemas/AppItemJSON"
+          },
+          "rank": {
+            "type": "integer"
+          },
+          "trendScore": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "rank",
+          "basis"
+        ],
+        "type": "object"
+      },
+      "AppTrendingJSON": {
+        "properties": {
+          "computedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/AppTrendingEntryJSON"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "EditionJSON": {
         "properties": {
           "format": {
@@ -1983,117 +2161,6 @@
         },
         "type": "object"
       },
-      "ItemJSON": {
-        "properties": {
-          "confidence": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "entities": {
-            "items": {
-              "$ref": "#/components/schemas/EntityRef"
-            },
-            "type": "array"
-          },
-          "externalIds": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object"
-          },
-          "formulaVersion": {
-            "type": [
-              "integer",
-              "null"
-            ]
-          },
-          "id": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "locale": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "meta": {
-            "$ref": "#/components/schemas/ItemMeta"
-          },
-          "pageCount": {
-            "type": [
-              "integer",
-              "null"
-            ]
-          },
-          "provenance": {
-            "additionalProperties": {
-              "$ref": "#/components/schemas/FieldSource"
-            },
-            "type": "object"
-          },
-          "ratingCount": {
-            "type": "integer"
-          },
-          "releaseDate": {
-            "type": "string"
-          },
-          "releasePrecision": {
-            "type": "string"
-          },
-          "runtimeMinutes": {
-            "type": [
-              "integer",
-              "null"
-            ]
-          },
-          "score": {
-            "format": "double",
-            "type": [
-              "number",
-              "null"
-            ]
-          },
-          "scoreByCategory": {
-            "additionalProperties": {
-              "format": "double",
-              "type": "number"
-            },
-            "type": "object"
-          },
-          "slug": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "synopsis": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/Synopsis"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "title": {
-            "type": "string"
-          },
-          "type": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "wikidataQid": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "type",
-          "slug",
-          "locale"
-        ],
-        "type": "object"
-      },
       "ItemMeta": {
         "properties": {
           "omittedFields": {
@@ -2101,23 +2168,6 @@
               "type": "string"
             },
             "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "ItemPageJSON": {
-        "properties": {
-          "data": {
-            "items": {
-              "$ref": "#/components/schemas/ItemJSON"
-            },
-            "type": "array"
-          },
-          "links": {
-            "$ref": "#/components/schemas/Links"
-          },
-          "meta": {
-            "$ref": "#/components/schemas/Meta"
           }
         },
         "type": "object"
@@ -2208,50 +2258,6 @@
           },
           "text": {
             "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "TrendingEntryJSON": {
-        "properties": {
-          "basis": {
-            "enum": [
-              "trend",
-              "prior"
-            ],
-            "minLength": 1,
-            "type": "string"
-          },
-          "item": {
-            "$ref": "#/components/schemas/ItemJSON"
-          },
-          "rank": {
-            "type": "integer"
-          },
-          "trendScore": {
-            "format": "double",
-            "type": "number"
-          }
-        },
-        "required": [
-          "rank",
-          "basis"
-        ],
-        "type": "object"
-      },
-      "TrendingJSON": {
-        "properties": {
-          "computedAt": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "data": {
-            "items": {
-              "$ref": "#/components/schemas/TrendingEntryJSON"
-            },
-            "type": "array"
           }
         },
         "type": "object"

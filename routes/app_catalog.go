@@ -56,7 +56,7 @@ func AppCatalog(r *router.Router, app *vukem.App) error {
 	r.Group("/app/v1", func(g *router.Group) {
 		g.Use(appapi.KnownType)
 		g.Use(stack...)
-		appapi.Catalog(g, items)
+		appapi.Catalog(g, items, catalog.CoversBase(app.Source.Get("COVERS_BASE_URL")))
 	}).Name("app.v1.")
 
 	return nil

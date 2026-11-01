@@ -98,7 +98,7 @@ func (h *Controller) entity(c *web.Ctx, in GetEntityInput, kind string) (EntityJ
 		out.Meta.OmittedFields = e.Meta.OmittedFields
 	}
 
-	return out, notModified(c, out)
+	return out, NotModified(c, out)
 }
 
 // ListEntityItems is listEntityItems: GET /api/v1/entities/{id}/items.

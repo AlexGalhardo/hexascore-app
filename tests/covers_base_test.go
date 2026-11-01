@@ -76,6 +76,12 @@ VALUES ($1, 'game', 'game-0', 'Q5000', 10, 'covers/a-1.webp', 'covers/a-1-t.webp
 		AssertJSONPath("groups.0.items.0.cover.thumb", thumb)
 	owner.GetJSON("/app/v1/users/coverfan").AssertOK().
 		AssertJSONPath("ratings.0.cover.thumb", thumb)
+	owner.GetJSON("/app/v1/games/"+itemID).AssertOK().
+		AssertJSONPath("coverThumbUrl", thumb).
+		AssertJSONPath("coverUrl", full)
+	owner.GetJSON("/app/v1/games").AssertOK().
+		AssertJSONPath("data.0.coverThumbUrl", thumb).
+		AssertJSONPath("data.0.coverUrl", full)
 	app.Client(t).Get("/search/suggest?q=zel").AssertOK().AssertJSONPath("data.0.coverThumbUrl", thumb)
 	app.Client(t).Get("/app/v1/search/suggest?q=zel").AssertOK().AssertJSONPath("data.0.coverThumbUrl", thumb)
 
