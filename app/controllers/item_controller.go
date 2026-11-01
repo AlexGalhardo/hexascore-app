@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"strconv"
@@ -16,6 +17,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/recommend/related"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
+	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
 // Item serves the item pages Catalog/Show and Catalog/Edition (SDD 09 §6.2).
@@ -23,6 +25,8 @@ type Item struct {
 	app    *vukem.App
 	writer *scoring.Writer
 	user   func(c *web.Ctx) (models.User, error)
+	// Social adds the deferred `reviews` prop while the feature flag `social` is on (SDD 14 §12.10); nil on SQLite.
+	Social *social.Follows
 	reco   related.Events
 }
 
@@ -79,7 +83,9 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 			h.reco.Click(c.Context(), from, typ, page.Item.ID)
 		}
 
+		var viewerID int64
 		if u, err := h.user(c); err == nil {
+			viewerID = u.ID
 			me, err := h.writer.Me(c.Context(), u.ID, page.Item.ID)
 			if err != nil {
 				return err
@@ -89,6 +95,16 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 				return err
 			}
 			props["me"], props["myLists"] = me, lists
+		}
+
+		if h.Social.Enabled(c.Context()) {
+			props["ogImage"] = ogImage("items", page.Item.ID)
+			locale := i18n.Locale(c.Context())
+			props["reviews"] = inertia.Defer(func(ctx context.Context) (any, error) {
+				data, mine, err := h.Social.ItemReviews(ctx, viewerID, page.Item.ID, locale)
+
+				return map[string]any{"data": data, "mine": mine}, err
+			}).Group("reviews")
 		}
 
 		return inertia.Render(c, "Catalog/Show", props)
