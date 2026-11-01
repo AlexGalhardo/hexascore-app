@@ -1823,7 +1823,7 @@ Phase-specific conventions:
   - Notes: buckets have no lifecycle rules: pruning is app code. The task will run after the SDD 06 asserts once they exist (P6); until then 06:00 alone.
   - Status (2026-10-29): verify, monthly copy, prune and the 06:00 schedule delivered; `app/metrics/backup.go` moves to P2.C.2.2 (no meter provider before P2.C.2.1); staging and Grafana checks deferred (owner gate).
 
-- [ ] **P2.E.2.3** Mail the owner a 7-day signed link to the encrypted monthly dump (off-site copy).
+- [x] **P2.E.2.3** Mail the owner a 7-day signed link to the encrypted monthly dump (off-site copy).
   - Files/modules: `app/backup/offsite.go`, `resources/views/mail/backup_offsite.*`, `tests/backup_offsite_test.go`, `docs/runbooks/restore.md` (section "Off-site copy")
   - Refs: SDD 11 §7.3 step 6, §11 issue 11; D-32; <https://vukem.dev/docs/security/signed-urls>
   - Depends on: P2.E.2.2
@@ -1831,7 +1831,7 @@ Phase-specific conventions:
   - Acceptance:
     - `go test -tags=integration ./tests -run TestBackupOffsiteLinkMailed` → PASS: `storage.TemporaryURL` valid 7 days, `backup_runs(kind='offsite')` written when mailed, mail sent to `ADMIN_EMAILS` only
   - Notes: HUMAN GATE (production data): the owner downloads the file each month to personal storage and keeps `BACKUP_KEY` offline separately; the link is never posted to Telegram. Replaced by an external bucket at the first budget increase.
-  - Status (2026-11-01): open, code-only: code-only and open: `app/backup/offsite.go` and `TestBackupOffsiteLinkMailed` do not exist on main.
+  - Status (2026-11-01): done on main (1646de34): `TestBackupOffsiteLinkMailed` and `TestSecurity_A01_BackupOffsiteLink` pass. Open (owner): set `ADMIN_EMAILS` in production and download the first monthly copy.
 
 #### P2.E.3 Drills
 
@@ -3357,7 +3357,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.A.1 Legal gate and foundations
 
-- [ ] **P6.A.1.1** Read the Open Library licensing and covers pages and record quotes, date and the A-05 decision in `docs/legal/open-library.md`, then set `CATALOG_API_SOURCES` and the `openlibrary` licence row accordingly.
+- [x] **P6.A.1.1** Read the Open Library licensing and covers pages and record quotes, date and the A-05 decision in `docs/legal/open-library.md`, then set `CATALOG_API_SOURCES` and the `openlibrary` licence row accordingly.
   - Files/modules: `docs/legal/open-library.md`, `database/seeders/data_sources.go` (licence row), `.env.example` (`CATALOG_API_SOURCES`), `docs/sdd/06-ingestion.md` §7.1, `docs/sdd/open-issues.md` (01-2, 06-1)
   - Refs: SDD 06 §7.1 "A-05 blocking task", §11 issue 1; SDD 01 open issue 2; A-05; D-03
   - Depends on: P2.G
@@ -3366,7 +3366,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `rg -c "openlibrary.org/developers/licensing|openlibrary.org/dev/docs/api/covers" docs/legal/open-library.md` → 2, with an access date and quoted text
     - `rg "01 \| 2|06 \| 1" docs/sdd/open-issues.md` → both rows `decided`
   - Notes: apply the rule as written. CC0 or public domain → ingest, API-eligible. Attribution-only → API-eligible with `data_sources.attribution`. Silent, non-commercial or no-redistribution → do not ingest, purge, and drop it from `CATALOG_API_SOURCES`. Covers are API-eligible only with an explicit grant. Architect task; the owner confirms the file before P6.A.2.4 enables the connector.
-  - Status (2026-11-01): open, code-only: the legal gate is cleared (Q-A16, 2026-11-01), but `docs/legal/open-library.md` with the quotes and the open-issues rows 01-2/06-1 are not on main.
+  - Status (2026-11-01): done on main (1646de34): both acceptance `rg` checks pass. Open (owner): confirm `docs/legal/open-library.md`; then a follow-up row lifts `openlibrary` from `limitedSources` with a cover-specific rule, and the owner decides on cover copies vs hot-linking.
 
 - [x] **P6.A.1.2** Create the ingestion tables (`source_records` extensions, `source_record_history`, `job_runs`, `ingest_failures`, `entity_match_reviews`, `dq_results`, `catalog_counts`, `field_coverage`) and the record store: canonical SHA-256, upsert that writes history in the same CTE, and `checked_at`-only on an unchanged hash.
   - Files/modules: `database/migrations/<ts>_create_ingestion_tables.go`, `internal/ingest/store/hash.go`, `internal/ingest/store/records.go`, `internal/ingest/store/records_test.go`

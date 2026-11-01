@@ -12,10 +12,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **mobile:** `mobile-v*` tag builds production behind the API contract job and the `play-store` environment approval, refusing to submit when the environment has no required reviewer (P5.C.1.3)
 - **legal:** Play data safety answers in `docs/legal/play-data-safety.md` (P5.C.2.1)
 - **mobile:** Play store listing texts in en, pt-BR and es with a limits check (`apps/mobile/store/listing/check.ts`, P5.C.2.2)
+- **infra:** `backup:offsite` mails `ADMIN_EMAILS` on day 1 a 7-day signed link (key derived from `APP_KEY`) to the encrypted monthly dump, served under `/backups/offsite/` for monthly dumps only and never cached (P2.E.2.3)
+- **legal:** Open Library licence record and A-05 decision in `docs/legal/open-library.md`; `CATALOG_API_SOURCES` listed in `.env.example` (P6.A.1.1)
 
 ### Fixed
 
 - **legal:** The delete-account help page links keep the visitor's locale prefix (P5.C.2.1)
+- **repo:** `scripts/release.sh` starts the range at the commit whose tree matches the highest `vX.Y.Z` tag (not `git describe`), takes `--since <rev>`, and updates the compare links; its test runs under `bun test` in CI and `scripts/ci/local.sh`
 
 ## [0.39.0] - 2026-11-01
 
