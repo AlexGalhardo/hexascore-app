@@ -400,3 +400,41 @@ func TestRecordFetchedMidBatchStaysPending(t *testing.T) {
 		t.Errorf("pending after the batch = %d, want only the record fetched mid-batch", n)
 	}
 }
+
+func TestNormalizeWritesAPIChanges(t *testing.T) {
+	db := newDB(t)
+	loadWikidata(t, db)
+	drain(t, db, (&normSpy{}).job(0))
+
+	if n := count(t, db, `SELECT count(*) FROM api_changes WHERE action = 'created'`); n != 4 {
+		t.Errorf("created api_changes rows = %d, want 4", n)
+	}
+
+	// Re-normalising unchanged records adds nothing.
+	repend(t, db, "1 minute")
+	drain(t, db, (&normSpy{}).job(0))
+
+	if n := count(t, db, `SELECT count(*) FROM api_changes`); n != 4 {
+		t.Errorf("api_changes rows after an unchanged re-run = %d, want 4", n)
+	}
+
+	var id string
+	if err := db.QueryRowContext(t.Context(), `SELECT id::text FROM items WHERE wikidata_qid = 'Q83495'`).
+		Scan(&id); err != nil {
+		t.Fatal(err)
+	}
+
+	// A stored change to a public field is rewritten by the next run and lands in the feed.
+	if _, err := db.ExecContext(t.Context(), `UPDATE items SET runtime_minutes = 1 WHERE id = $1`, id); err != nil {
+		t.Fatal(err)
+	}
+
+	repend(t, db, "2 minutes")
+	drain(t, db, (&normSpy{}).job(0))
+
+	var fields string
+	if err := db.QueryRowContext(t.Context(), `SELECT array_to_string(fields, ',') FROM api_changes
+WHERE item_id = $1 AND action = 'updated'`, id).Scan(&fields); err != nil || fields != "runtimeMinutes" {
+		t.Errorf("updated fields = %q, %v; want runtimeMinutes", fields, err)
+	}
+}
