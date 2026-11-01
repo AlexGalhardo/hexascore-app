@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **ci:** mobile release flow with EAS: `apps/mobile/eas.json` profiles (development, preview, e2e-test, production with remote `versionCode` and `autoIncrement`; submit as a draft to the Play internal track), runbook docs/runbooks/mobile-release.md, rule `.claude/rules/mobile-release.md`, skill `hexascore-mobile-release`, and the manual `mobile-release.yml` workflow (submit gated by the `play-store` environment)
 - **web:** a "Feed" link in the navbar for signed-in users while the `social` flag is on (`flags.social` shared through vukem `flags.Share`) (IMPL-web-feed-nav)
 - **social:** SDD 14 §12 social layer design and ADR 0021 (activity feed from the write path) (P7.A.1.1); follows with requests for private profiles, follower counts, and the `/feed` page with activity events and `users.feed_opt_in`, all behind the `social` flag (`FLAG_SOCIAL`, default off, Q-A5 open) (P7.A.1.2, P7.A.1.3 part 1)
 - **ingest:** ingestion pipeline (SDD 06): run framework with chunked continuation, dead letters and kill switches (off by default); outbound client with per-host throttle, retries and breaker; Wikidata and Wikipedia connectors; item core, enrichment with provenance and community locks, relations and the normalize job; legacy parity test (200 QIDs); chains, schedules and `ingest:bootstrap` (P6.A.1.3-P6.A.4.1)

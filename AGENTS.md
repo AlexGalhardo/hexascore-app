@@ -64,6 +64,7 @@ Railway rules that override the skill's deploy-from-cwd shortcut: do not run `ra
 | `bun run build:docs` | re-render `resources/docs/*.md` into the committed `resources/docs/docs.json` (a vitest test fails when stale) |
 | `bun run lint` / `bun run typecheck` / `bun run test` | TypeScript lint, types, unit tests |
 | `bun run --cwd apps/mobile lint` / `typecheck` / `test` | Android app (Biome, `tsc`, Jest). `catalogues` recopies the bundled i18n namespaces |
+| `bunx eas-cli@27.2.0 build` / `submit` / `update` (in `apps/mobile`) | mobile release with EAS: follow `docs/runbooks/mobile-release.md` (skill `hexascore-mobile-release`); owner confirms version, every submit and production OTA; CI: manual `mobile-release.yml` |
 | `vukem openapi:export -prefix /api/v1` (or `/app/v1`) | export an OpenAPI document; `scripts/openapi-check.sh` diffs both against the goldens (`--image` exports from a built image; CI `openapi`), `--write` refreshes them |
 | `scripts/ci/local.sh [--only a,b] [--skip a,b] [--base REV] [--tree] [--keep]` | release gate in one command: every `ci.yml` job except e2e, in parallel, on a clean checkout of HEAD, with its own databases, ports and compose project; one log per job in `.ci-local/logs/`, summary table, exit 1 if any job fails (needs Docker, the compose Postgres on 5433, go, bun, golangci-lint; `setup-windows` runs only on Windows) |
 | `qa/schemathesis/ci.sh [image]` | migrate the CI Postgres, insert a business key and an app token, run Schemathesis 4.29.0 against that image (Linux `--network host`) |
