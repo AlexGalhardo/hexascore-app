@@ -65,6 +65,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **mobile:** Android home screen with the four "Top 10 trending (30 days)" sections and the shared listing row (P5.B.1.1)
 - **mobile:** Android section listing with sort, genre filter and infinite scroll (P5.B.1.2)
 - **mobile:** Android item screen with score, confidence, category averages, entities by role, book editions, attribution and the user's own rating (P5.B.2.1)
+- Android app v1 screens: catalogue listing (filters, sort, pager), item detail (score block, category bars, half-star rating, more like this), library shelves, login and settings with a Google sign-in button, shared state page, entity, list detail, notifications and book editions components (IMPL-mobile-v1-catalog-ui, -item-ui, -library-ui, -auth-ui, -states-ui, -detail-ui).
+- Android app header (wordmark, search, theme toggle), themed tab bar with translated titles, and the profile tab showing the v1 settings page with the crash-report consent switch (IMPL-mobile-v1-shell-wire, -settings-wire).
 
 ### Changed
 
@@ -78,6 +80,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **ui:** The library, public lists and profile ratings render shared shelf cards (cover, status, score); the library groups by status with counts (P2.H.1.4)
 - **infra:** Observability is Railway-native only (D-35 amended): service metrics, log search, traces and `alert=` log lines; the policy page no longer lists Grafana Cloud (FIX-observability-railway-native)
 - **deps:** vukem v0.35.0 (drivers/postgres v0.6.0, drivers/s3 v0.4.0, contrib/stripe v0.5.0); the OpenAPI app document uses `Info.Docs` instead of reading the command line; covers from S3 answer 304 on a matching ETag (ADOPT-vukem-0.35.0)
+- The Android banned, deletion-scheduled and update-required screens use the v1 state layout (IMPL-mobile-v1-states-ui).
 
 ### Fixed
 
