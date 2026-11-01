@@ -538,6 +538,7 @@
     "next": "Próxima",
     "previous": "Anterior",
     "pagination": "Páginas",
+    "page": "Página {page}",
     "landing": {
       "topRated": "Melhores notas",
       "newest": "Lançamentos",

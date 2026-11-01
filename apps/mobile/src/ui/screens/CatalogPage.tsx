@@ -34,7 +34,8 @@ export interface CatalogLabels {
 export interface CatalogPageProps {
 	title: string;
 	rows: CatalogRow[];
-	total: number;
+	/** Null when the API pages by cursor and sends no total: the count line is hidden. */
+	total: number | null;
 	page: number;
 	pages: number;
 	activeFilters: number;
@@ -119,7 +120,11 @@ export function CatalogPage(props: CatalogPageProps): ReactElement {
 		: "bg-field-bg border-fg dark:bg-field-bg-dark dark:border-fg-dark";
 	const toggleText = filtersOpen ? "text-bg dark:text-bg-dark" : "text-fg dark:text-fg-dark";
 	return (
-		<ScrollView className="flex-1 bg-bg dark:bg-bg-dark" contentContainerClassName="px-4 pb-8">
+		<ScrollView
+			testID="listing"
+			className="flex-1 bg-bg dark:bg-bg-dark"
+			contentContainerClassName="px-4 pb-8"
+		>
 			<Text
 				accessibilityRole="header"
 				className="pb-4 pt-6 font-display text-36 font-bold text-fg dark:text-fg-dark"
@@ -170,9 +175,11 @@ export function CatalogPage(props: CatalogPageProps): ReactElement {
 				</View>
 			) : (
 				<>
-					<Text accessibilityLiveRegion="polite" className={`${MUTED} pt-4 tabular-nums`}>
-						{labels.found(total)}
-					</Text>
+					{total === null ? null : (
+						<Text accessibilityLiveRegion="polite" className={`${MUTED} pt-4 tabular-nums`}>
+							{labels.found(total)}
+						</Text>
+					)}
 					<Pager page={page} pages={pages} labels={labels} onPage={props.onPage} />
 					{rows.map((row) => (
 						<Row

@@ -279,6 +279,7 @@
 	"catalog.next": "Next",
 	"catalog.previous": "Previous",
 	"catalog.pagination": "Pages",
+	"catalog.page": "Page {page}",
 	"catalog.landing.topRated": "Top rated",
 	"catalog.landing.newest": "New releases",
 	"catalog.landing.mostRated": "Most rated",
