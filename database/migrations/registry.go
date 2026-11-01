@@ -69,6 +69,13 @@ func All() []schema.Migration {
 		m20261031120000CreatePasskeysTable(),
 		m20261031150000CreateTrendingTables(),
 		m20261031160000AllowModeratorRole(),
+		m20261031173100CreateCatalogChangedDone(),
+		m20261031190000CreateSuggestionReviews(),
+		m20261031190100AddRatingEventsAtIndex(),
+		m20261031190200AddItemStatusUpdatedAtIndex(),
+		m20261031190300AddListItemsAddedAtIndex(),
+		m20261031190400AddSuggestionEventsCreatedAtIndex(),
+		m20261031203100AddCommunityMailOptOut(),
 		m20261031203200CreateSimilarTables(),
 	}
 }
