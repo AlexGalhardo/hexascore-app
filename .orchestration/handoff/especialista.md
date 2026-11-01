@@ -1,50 +1,50 @@
-# Handoff: especialista (2026-10-31, session 14)
+# Handoff: especialista (2026-11-01, session 15)
 
-Reason: 11 reviews plus 2 rejections this session (limit about 12). STATUS: HANDOFF.
+Reason: 10 reviews merged plus the main gate; context heavy. STATUS: HANDOFF.
 
 ## Done this session (local `main`, no push, no tag)
 
 | Row | Verdict | Merge |
 | --- | --- | --- |
-| REV-FIX-observability-railway-native | CORRIGIDO_E_APROVADO (perfsprint in foryou_test, SDD 12 names `alert=trending_counter_dropped`) | 3cc01ff |
-| REV-P4.B.4.1 | APROVADO | b491a88 |
-| REV-P4.B.4.2 | CORRIGIDO_E_APROVADO (metrics, Grafana files and metrics test stripped per D-35; job logs `alert=community_asserts`; ROADMAP ticked with a note: the A9 in-app check is new work) | 7eff904 |
-| REV-FIX-community-create-kinds-ui | APROVADO | 6fe871f |
-| REV-FIX-community-create-tab-label | APROVADO | 07807ac |
-| REV-FIX-community-mail-optout-ui | CORRIGIDO_E_APROVADO (P4.B.3.1 migration restored; SQLite column in new `20261101140000_add_community_mail_opt_out_sqlite`) | ac21bc3 |
-| REV-ADOPT-vukem-0.35.0 | CORRIGIDO_E_APROVADO (predeploy lock kept around drop + migrate, 13796ad; goldens unchanged; covers ETag test ran on RustFS) | 8a73a3c |
-| REV-FIX-api-host-only-api | CORRIGIDO_E_APROVADO (golines) | cf25938 |
-| REV-P5.B.1.1 / 1.2 / 2.1 | APROVADO / APROVADO / CORRIGIDO_E_APROVADO (mobile catalogues recopied; main's keys.test was red since the mail-optout merge) | 63ed8f4 / ddd03d7 / 44f826d |
-| REV-P6.A.3.2, REV-P6.A.3.4 | REJEITADO (rows `rework`, lists in the reports) | none |
+| main lint regression | `tests/api_edge_test.go` gci/golines (bbe689d); duplicate `### Fixed` in Unreleased folded (fcf63bf) | direct commits |
+| REV-FIX-app-item-cover-urls, REV-FIX-app-search-query-params, REV-FIX-app-item-by-slug (+ mobile branch) | CORRIGIDO_E_APROVADO: one batch, golden + client regenerated (23d1177), conflicts resolved by combining both sides | bd95e7d |
+| REV-IMPL-mobile-v1-home, -listing, -item, REV-FIX-mobile-rating-a11y-now | CORRIGIDO_E_APROVADO / APROVADO for a11y: mobile followed the client renames (`ItemJSON` -> `AppItemJSON`, `TrendingEntryJSON`/`TrendingJSON` -> `AppTrending*`), covers wired (`coverThumbUrl`/`coverUrl`), listing filter label uses the plural `catalog.filters`, catalogues recopied (4286dab) | bd95e7d |
+| REV-IMPL-web-v1-auth, -search-page, -library-lists | CORRIGIDO_E_APROVADO (mobile catalogues recopied, 0c4927e) | f99bafd |
 
-Integration tests (Docker back): `app/moderation`, `app/jobs`, `app/community` and the named `./tests` patterns for the first six rows passed on main 2199f1f. Later rows ran their own targeted integration tests.
+Gate on main (local.sh, alone, in parts): test-go, test-ts, migrations, vuln, deps, setup-windows, mobile PASS on bbe689d; test-go-integration PASS on bbe689d; build PASS on fcf63bf; golangci-lint `--timeout 15m -j 2` 0 issues.
+Still red on main:
+
+- lighthouse: perf 0.62, best-practices 0.75, script 375 KB, CSS 230 KB on all five URLs (also red on 127eeeb). New row `FIX-lighthouse-budgets-main` (prio 1, senior). Lead: `vite build` emits chunks for `resources/js/pages/**/*.test.tsx` (e.g. `SuggestCreate.test-*.js`).
+- openapi on fcf63bf: stale app client. Fixed by the bd95e7d batch; re-run `--only openapi` to confirm.
+- lint commitlint: old local commits since v0.12.3 (`test(e2e): E2E_DB_NAME ...` sentence case, long footers). History cannot be rewritten; the release squash commit avoids it. Not a row.
+
+The full gate was not re-run after bd95e7d / f99bafd. Run `scripts/ci/local.sh --only openapi,test-ts,mobile` and then `--only test-go-integration` first.
 
 ## Open, in order
 
-1. REV-P6.A.1.3, 1.4, 2.1, 2.2, 2.3, 3.1, 3.3, FIX-ingest-trim-titles: not merged. A fresh-context static review of the whole stack gave these to verify by hand before merging (they are in branches below 3.2):
-   - 1.3 `run/continuation.go`: the Step uses the in-memory cursor read before the lock; `SELECT ... FOR UPDATE` reads only status; the UPDATE to `running` has no status guard (a redelivery can reprocess a chunk, move the cursor back, or revive a cancelled run). Probable small fix: read status + cursor under FOR UPDATE, exit unless queued/running, guard the UPDATE.
-   - 2.1 `wikidata/select.go`: on resume, if the `after` QID is no longer in the re-run selection every remaining target is skipped and the run ends succeeded.
-   - 1.4 `httpx/breaker.go`: any success (also an in-flight one) closes an open breaker without the probe; concurrent finish can allow a second probe. `client.go`: 60 s client timeout covers the whole retry loop while Retry-After pauses up to 300 s.
-   - 2.2/2.3: infrastructure errors (circuit open, host not allowed, ctx cancel) become per-target failures and count toward parking.
-   - 2.2 `wikidata/entities.go`: process-wide unbounded `refs` cache filled before commit.
-   - 1.4: only one `TestSecurity_A01_IngestSSRF` (2 cases); no tests for redirect to a blocked host, http scheme, body caps.
-   Worktree `wt/especialista-P6.A` (detached, stack tip 3.4 with main merged, built) may still exist; remove it if stale.
-2. P6.A.3.5a (senior-fw, doing) is stacked on the rejected P6.A.3.4: tell the orchestrator.
-3. REV-P5.B.2.2, REV-P5.B.2.3, then impl-mobile rows (catalog-ui, item-ui, library-ui, states-ui, detail-ui, settings-wire).
-4. impl-web rows: shell, search-palette, catalog.
-5. REV-FIX-seed-flag: do not merge separately (ships in hotfix v0.12.4; the orchestrator back-merges origin/main).
-6. Full `scripts/ci/local.sh` on main was not run this session (Docker came back mid-session; run it alone or in halves).
+1. **senior-b batch is prepared, not tested:** worktree `wt/especialista-senior-b-batch`, branch `agent/especialista/senior-b-batch`, cut from main bbe689d.
+   - It holds P2.C.3.3-fix (9113a78, locale prefix in A5), P2.C.alerts-a5-test, P2.C.4.2-fix (df53498), search-reindex, PERF-i18n-page-namespaces and P2.B.2.2-fix (db007f0).
+   - Plus two of my commits: 2aaa66d (disk-full runbook now points at `/app/app search:reindex`) and 6cc9e68 (`"updatedLabel."` -> `"updatedLabel"` in routes/web.go, orchestrator note: keep the dot-less key).
+   - Static review done, all look approvable.
+   - To do: `git merge main`, `go build`, targeted tests (`./app/alerts ./app/ssr ./app/api`, `-tags integration ./tests -run 'TestAlert_A5|TestReady|TestI18n'`, `./internal/search -run 'TestReindex|TestSearchSQLConfined|TestSuggestRebuild'`), golangci on touched packages, markdownlint docs/runbooks. Then merge, changelog (6 lines from the reports), ROADMAP ticks P2.C.3.3, P2.C.4.2, P2.B.2.2, and set the rows to `ready`.
+2. senior-b: FIX-search-hit-meta (c18d716), then FIX-library-item-score (cb2ea44, stacked on it).
+3. impl-web stack: REV-P6.D.1.3 first, then edition-entity -> recent-changes -> docs-legal-errors -> more-like-this (P6.D.1.3 is merged into more-like-this).
+   - impl-web fixes the blank empty entity page (`entity_page.go`, null `items.data`) and the `updatedLabel` prefix.
+   - Keep the dot-less `updatedLabel` in routes/web.go whichever of PERF / impl-web lands second.
+4. senior-up: P3.B.1.1–1.3, P3.B.2.1, P3.B.3.1, P4.B.5.1, P6.D.1.3, FIX-problems-redirect-301, FIX-docs-next-cursor.
+5. senior-fw: P6.A stack. The verification list from the session 14 handoff still applies (1.3 continuation lock/guard, 2.1 resume skip, 1.4 breaker probe and timeout, 2.2/2.3 infra errors counted as target failures, 2.2 unbounded refs cache, 1.4 thin SSRF tests).
+6. REV-FIX-seed-flag: do not merge (hotfix v0.12.4, PR #64).
 
-## Low findings, no rows
+## Cleanup left
 
-- FIX-api-host-only-api put its changelog line under Added (it is a fix); hotfix v0.12.4 also carries it, expect a CHANGELOG/api_edge.go overlap on the back-merge.
-- P4.B.4.2 merge resolution lives in merge commit a5e9095 (the follow-up empty commit was refused by the header length hook).
-- Mobile `itemMe` query key reuses element 0 `"me"`; a prefix invalidation of `["me"]` also hits item ratings.
+- The worktree folder `wt/senior-FIX-app-item-cover-urls` gave "Permission denied" on removal; its branch is deleted. Prune it later.
+- The impl-mobile worktrees (`impl-mobile-home-wire`, `impl-mobile-listing-wire`, `impl-mobile-a11y`, ...) still point at merged branches. They belong to impl-mobile, so I left them in place.
+- Many detached `Temp/tmp.*` worktrees remain from crashed local.sh runs: `git worktree remove --force` them when no run is live.
 
-## Pitfalls
+## Pitfalls (new)
 
-- Python on Windows rewrites LF to CRLF in text mode: open with `newline=''`. Helpers used: scratchpad `addcl.py` (changelog group append) and `row.py` (TASKS row status/owner/note).
-- Some TASKS rows have no trailing pipe; split on `|` and handle it.
-- After merging any change to `resources/lang/*.json` keys under bundled mobile namespaces (`account`, `catalog`, `item`, ...), run `bun run --cwd apps/mobile catalogues` or `keys.test.ts` fails on main.
-- `.git/index.lock` can be held briefly by the orchestrator: retry, never delete it.
-- golangci-lint hits the default timeout under host load: pass `--timeout 15m --allow-parallel-runners`.
+- MSYS path conversion mangles `-prefix /app/v1`: export `MSYS_NO_PATHCONV=1` before `go run ./cmd/app codegen:client -prefix /app/v1 -o -`. Without it the output is empty and `&&` hides the failure.
+- Python on Windows: open files with `encoding='utf-8', newline=''`. Without the encoding, files that contain `·` fail to match.
+- The full `bun run test` and mobile Jest time out under host load. Re-run the failing files alone before you call anything red.
+- markdownlint-cli2 lints every glob from `.markdownlint-cli2.jsonc` even when you name one file.
+- Every commit header must stay at or under 100 characters (hook).
