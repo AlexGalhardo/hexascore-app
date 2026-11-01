@@ -108,13 +108,14 @@ func isbnCheck(twelve string) int {
 }
 
 // entityDump renders what the entities stage wrote without surrogate ids. withSlugs adds the entity slugs,
-// which depend on the order entities are created in (a parallel run may hand out "-2" differently).
+// and the work behind each edition, which depend on the order batches commit in (a parallel run may hand out "-2"
+// differently, and a shared ISBN13 goes to whichever work commits first).
 func entityDump(t *testing.T, db *database.DB, withSlugs bool) string {
 	t.Helper()
 
-	slug := "''"
+	slug, edWork := "''", "''"
 	if withSlugs {
-		slug = "e.slug"
+		slug, edWork = "e.slug", "w.slug || '|' || ed.title"
 	}
 
 	queries := []string{
@@ -123,7 +124,8 @@ func entityDump(t *testing.T, db *database.DB, withSlugs bool) string {
 		`SELECT coalesce(string_agg(concat_ws('|', i.slug, ie.role, ie.position, ie.source, e.kind, e.wikidata_qid,
   e.default_name, ` + slug + `), E'\n' ORDER BY i.slug, ie.role, e.kind, coalesce(e.wikidata_qid, ''), e.default_name), '')
 FROM item_entities ie JOIN items i ON i.id = ie.item_id JOIN entities e ON e.id = ie.entity_id`,
-		`SELECT coalesce(string_agg(concat_ws('|', w.slug, ed.isbn13, ed.title, ed.language, ed.source), E'\n'
+		`SELECT coalesce(string_agg(concat_ws('|', ` + edWork + `, ed.isbn13, ed.language, ed.source), E'
+'
   ORDER BY ed.isbn13), '') FROM editions ed JOIN items w ON w.id = ed.work_id`,
 		`SELECT status || ' ' || rows || ' ' || coalesce(last_key, '') FROM legacy_import_runs WHERE stage = 'entities'`,
 	}
