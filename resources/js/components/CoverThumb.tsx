@@ -1,7 +1,7 @@
 import { usePage } from "@inertiajs/react";
 import type { SharedProps } from "../types";
 
-export type CoverSize = "sm" | "md" | "lg";
+export type CoverSize = "sm" | "md" | "lg" | "card";
 
 export interface Cover {
 	thumb: string;
@@ -12,6 +12,14 @@ const DIMENSIONS: Record<CoverSize, { width: number; height: number }> = {
 	sm: { width: 32, height: 48 },
 	md: { width: 44, height: 64 },
 	lg: { width: 240, height: 360 },
+	card: { width: 160, height: 240 },
+};
+
+const SIZES: Record<CoverSize, string> = {
+	sm: "32px",
+	md: "44px",
+	lg: "(min-width: 48rem) 240px, 96px",
+	card: "(min-width: 48rem) 160px, 30vw",
 };
 
 // Tailwind classes instead of a style prop: SSR would emit a style attribute, blocked by style-src.
@@ -19,6 +27,7 @@ const BOX: Record<CoverSize, string> = {
 	sm: "w-8 h-12",
 	md: "w-11 h-16",
 	lg: "w-24 h-36 md:w-60 md:h-90",
+	card: "w-full h-auto aspect-[2/3]",
 };
 
 // CoverThumb is the list-row cover (32×48 or 44×64; "lg" 144×208 for the item page header), 96w/600w sources, lazy.
@@ -52,7 +61,7 @@ export default function CoverThumb({
 		<img
 			src={`${coversBase}${size === "lg" ? cover.full : cover.thumb}`}
 			srcSet={`${coversBase}${cover.thumb} 96w, ${coversBase}${cover.full} 600w`}
-			sizes={size === "lg" ? "(min-width: 48rem) 240px, 96px" : `${width}px`}
+			sizes={SIZES[size]}
 			width={width}
 			height={height}
 			alt={alt}

@@ -644,7 +644,31 @@
     "ratedBy": "by {name}",
     "trendingWeek": "Trending this week",
     "popularType": "Popular {type}",
-    "popular": "Popular"
+    "popular": "Popular",
+    "trendingRank": "#{rank} trending this week",
+    "popularRank": "#{rank} popular",
+    "titles": {
+      "one": "{n} title",
+      "other": "{n} titles"
+    },
+    "seeAll": {
+      "game": "See all games",
+      "movie": "See all movies",
+      "series": "See all TV series",
+      "book": "See all books"
+    },
+    "more": {
+      "game": "More games",
+      "movie": "More movies",
+      "series": "More TV series",
+      "book": "More books"
+    },
+    "ratingsOfMin": "{count} of {min} ratings",
+    "trendingNote": "Trending = most rated in the last 7 days.",
+    "fromRatings": {
+      "one": "from {n} rating",
+      "other": "from {n} ratings"
+    }
   },
   "footer": {
     "terms": "Terms",

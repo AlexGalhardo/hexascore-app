@@ -27,6 +27,7 @@ const FILL: Record<ScoreBand, string> = {
 	none: "bg-score-none",
 };
 const SIZE = {
+	xs: "size-8 text-sm",
 	sm: "size-10 text-base",
 	md: "size-14 text-[22px]",
 	lg: "size-24 text-[40px]",
