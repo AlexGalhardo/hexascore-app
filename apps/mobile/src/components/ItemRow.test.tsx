@@ -4,7 +4,7 @@ import { ItemRow } from "./ItemRow";
 
 const item: ItemJSON = {
 	id: "01",
-	type: "game",
+	type: "games",
 	slug: "outer-wilds",
 	locale: "en",
 	title: "Outer Wilds",

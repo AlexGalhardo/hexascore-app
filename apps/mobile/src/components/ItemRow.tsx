@@ -3,6 +3,7 @@ import { memo, type ReactElement } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { ItemJSON } from "../../../../packages/app-client/src/api";
 import { type AppLocale, t } from "../i18n";
+import { isCatalogType, SINGULAR } from "../navigation/catalog";
 import { scoreBand } from "../theme/scoreBand";
 
 /** Fixed height so lists can use getItemLayout (SDD 10 §7.1). */
@@ -57,7 +58,7 @@ function ItemRowView({ item, locale, basis, coverThumbUrl, onPress }: ItemRowPro
 			)}
 			<View className="flex-1 gap-1">
 				<Text className="text-12 text-muted dark:text-muted-dark">
-					{t(locale, `catalog.title.${item.type}`)}
+					{t(locale, `catalog.title.${isCatalogType(item.type) ? SINGULAR[item.type] : item.type}`)}
 				</Text>
 				<Text numberOfLines={2} className="text-16 text-fg dark:text-fg-dark">
 					{item.title ?? item.slug}
