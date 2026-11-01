@@ -49,7 +49,7 @@ func TestSecurity_A01_ContactUsesSessionIdentity(t *testing.T) {
 	}
 
 	if name != "contactme" || email != "contact-me@example.com" {
-		t.Fatalf("stored %q <%s>, want the session account", name, email)
+		t.Fatalf("stored %q (%s), want the session account", name, email)
 	}
 }
 
