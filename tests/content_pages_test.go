@@ -36,7 +36,7 @@ func TestLegalPages(t *testing.T) {
 			app.Client(t).Get(prefix+"/"+slug).AssertOK().AssertInertia("Legal/Page").
 				PropEquals("slug", slug).
 				HasProp("updatedAt").
-				HasProp("messages")
+				HasProp("messages.updatedLabel")
 		}
 	}
 }
