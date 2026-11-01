@@ -3013,7 +3013,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - Manual on the reference device (preview build): Google account sign-in → token stored, home loads
   - Notes: **owner input needed.** SDD 10 does not name the Google sign-in library, and every candidate is a new dependency. Write the ADR (options, licence, native config plugin under CNG) and get the owner's yes before you code. Only the ID token goes to the server. No access token is stored.
 
-- [ ] **P5.A.3.5** Rotate the token on foreground (`expiresAt − now < 15 d`, at most once per 24 h), log out with `DELETE /tokens/current` (wiping locally even when the call fails), and show the blocking update screen on 426 or a higher min version. Logout stays available there.
+- [x] **P5.A.3.5** Rotate the token on foreground (`expiresAt − now < 15 d`, at most once per 24 h), log out with `DELETE /tokens/current` (wiping locally even when the call fails), and show the blocking update screen on 426 or a higher min version. Logout stays available there.
   - Files/modules: `apps/mobile/src/auth/rotate.ts`, `src/auth/rotate.test.ts`, `src/auth/logout.ts`, `app/update-required.tsx`, `src/platform/store.ts` (`market://details?id=app.hexascore`)
   - Refs: SDD 10 §6.2 (Rotate, Logout rows), §7.4, FR-10-5, §8 (rotate response lost; 426 with a pending queue)
   - Depends on: P5.A.3.2
@@ -3025,7 +3025,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 #### P5.A.4 Query cache and offline queue
 
-- [ ] **P5.A.4.1** Configure TanStack Query with the legacy defaults (`staleTime` 30 s, `retry` 1), `focusManager` and `onlineManager` through `src/platform/`, and `persistQueryClient` on Expo SQLite (10 MB, `maxAge` 24 h, `buster` = app version + `formulaVersion`, read queries only).
+- [x] **P5.A.4.1** Configure TanStack Query with the legacy defaults (`staleTime` 30 s, `retry` 1), `focusManager` and `onlineManager` through `src/platform/`, and `persistQueryClient` on Expo SQLite (10 MB, `maxAge` 24 h, `buster` = app version + `formulaVersion`, read queries only).
   - Files/modules: `apps/mobile/src/query/client.ts`, `src/query/persister.ts`, `src/query/persister.test.ts`, `src/platform/network.ts`
   - Refs: SDD 10 §5 (persisted cache row), §7.1, §7.3 "Reads", NFR-10-6; D-22; open issue 10-6; [E2]
   - Depends on: P5.A.3.2
@@ -3034,7 +3034,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/query` → a mutation result or a problem body is never persisted; data older than 24 h is discarded; a `formulaVersion` change busts the cache; the persisted size stays ≤ 10 MB with a 2,000-item fixture
   - Notes: Expo SQLite is approved (D-22); no other storage library. Keep the dehydrate filter an allowlist of query keys, not a denylist.
 
-- [ ] **P5.A.4.2** Implement the offline mutation queue in `src/queue/`: persisted entries `{id, op, itemId, payload, idempotencyKey, createdAt, attempts}` (≤ 50, 72 h), replacement per `(itemId, op)` with a fresh key, FIFO drain on reconnect/foreground with 2 s/10 s/60 s backoff, the §7.3 response table, user binding, and pause on 426.
+- [x] **P5.A.4.2** Implement the offline mutation queue in `src/queue/`: persisted entries `{id, op, itemId, payload, idempotencyKey, createdAt, attempts}` (≤ 50, 72 h), replacement per `(itemId, op)` with a fresh key, FIFO drain on reconnect/foreground with 2 s/10 s/60 s backoff, the §7.3 response table, user binding, and pause on 426.
   - Files/modules: `apps/mobile/src/queue/store.ts`, `src/queue/drain.ts`, `src/queue/policy.ts`, `src/queue/queue.test.ts`
   - Refs: SDD 10 §5 (mutation queue row), §7.3, §8, FR-10-4; <https://vukem.dev/docs/rest-apis/idempotency> (409 in flight, 422 reused key)
   - Depends on: P5.A.4.1
@@ -3044,7 +3044,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/queue -t "replace"` → a newer write for the same `(itemId, op)` replaces the queued one with a new key
   - Notes: the server wins on conflict. Never reuse a key with a new body (that returns 422). The queue replays only for the user who created it. Lists create, rename, delete and reorder are not queued (SDD 10 §7.3).
 
-- [ ] **P5.A.4.3** Add the offline banner and the crash-report opt-in (first launch, default off, revocable): a JS handler and an error boundary post `{appVersion, versionCode, androidApi, screen, message, stack ≤ 8 KB}` to `POST /app/v1/client-errors`.
+- [x] **P5.A.4.3** Add the offline banner and the crash-report opt-in (first launch, default off, revocable): a JS handler and an error boundary post `{appVersion, versionCode, androidApi, screen, message, stack ≤ 8 KB}` to `POST /app/v1/client-errors`.
   - Files/modules: `apps/mobile/src/platform/OfflineBanner.tsx`, `src/telemetry/consent.ts`, `src/telemetry/crash.ts`, `src/telemetry/crash.test.ts`, `app/_layout.tsx`
   - Refs: SDD 10 §7.7, §5 (preferences row); SDD 05 §6.4; SDD 12 §6.4; open issue 10-2
   - Depends on: P5.A.4.1, P3.C.4.1

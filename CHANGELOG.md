@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **mobile:** Banned and deletion-scheduled accounts get their own screens (ban reason and end date; cancel deletion on the web) instead of falling through to login or the app (FIX-mobile-blocked-screens)
+- **mobile:** Offline banner and a first-launch crash-report opt-in (default off); reports carry only app version, Android API, route pattern, message and an 8 KB stack, redacted, to `POST /app/v1/client-errors` (P5.A.4.3)
+- **mobile:** The Android app queues rating, status, time-to-beat and list add/remove writes offline (up to 50 for 72 h, bound to the user), replays them in order with backoff, follows the server on conflicts and pauses while an update is required (P5.A.4.2)
+- **mobile:** Read queries are cached with TanStack Query and persisted on Expo SQLite for 24 h within 10 MB; mutations, errors and token data are never persisted, and a formula version change busts the cache (P5.A.4.1)
 - **mobile:** v1 fonts (Inter, Playfair Display, OFL, embedded via expo-font) and Ionicons glyphs in the Android app; `@expo/ui` for native sheets and pickers (ADR 0019 amendment 1) (IMPL-mobile-v1-deps)
 - **mobile:** Android v1 primitives (button with depth, score badge, 2:3 cover, theme toggle) and an accessible ten-star half-step rating input (IMPL-mobile-v1-ui)
 - **catalog:** Ingestion tables and the canonical-hash record store (`internal/ingest/store`), hashes byte-compatible with the legacy Python `canonical_hash` (P6.A.1.2)
@@ -61,6 +65,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **mobile:** The Android root layout restores the session, rotates the token on foreground and routes a 426 to the update-required screen; login and update screens use the device locale and catalogue strings (FIX-mobile-root-wiring, P5.A.3.5)
 - **infra:** Requests to `www.hexascore.app` or the Railway domain answer 301 to the canonical host, keeping path and query (`/up` and the API host excluded) (FIX-www-redirect)
 - **deploy:** Two overlapping `hexascore:predeploy` runs no longer hang when a migration builds an index concurrently; `catalog.changed` queues its reindex through the search package (QA gate 2026-10-31)
 - **api:** Approved community edits are served on `/api/v1`: the default `CATALOG_API_SOURCES` includes `community`, whose `data_sources` licence is `HEXASCORE-API-TERMS` (FIX-community-api-source)
