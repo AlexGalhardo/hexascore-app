@@ -56,6 +56,8 @@ type Runner struct {
 	Limits Limits
 	Steps  map[string]Step
 	Now    func() time.Time
+	// After is called once a run reached a final status (chains queue the next stage here).
+	After func(ctx context.Context, id int64) error
 }
 
 func (r *Runner) limits() Limits {
@@ -168,7 +170,11 @@ WHERE id = $1`, id, cursorArg(res.Cursor), res.Seen, res.Changed, res.Failed, re
 // HandleAttempt executes run id and closes it as failed when the error is permanent or last is true, so a run
 // never stays running after its retries are spent.
 func HandleAttempt(ctx context.Context, r *Runner, id int64, last bool) error {
-	_, err := r.Execute(ctx, id)
+	out, err := r.Execute(ctx, id)
+	if err == nil && out == Finished && r.After != nil {
+		return r.After(ctx, id)
+	}
+
 	if err != nil && (last || errors.Is(err, queue.ErrPermanent)) {
 		if ferr := Finish(context.WithoutCancel(ctx), r.DB, id, StatusFailed, err); ferr != nil {
 			return errors.Join(err, ferr)

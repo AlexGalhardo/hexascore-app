@@ -1,0 +1,169 @@
+package ingest
+
+import (
+	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"maps"
+
+	"github.com/AlexGalhardo/vukem/database"
+
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
+)
+
+// Stage is one job of a chain; its run is created when the previous stage succeeds.
+type Stage struct {
+	Job    string
+	Source string
+	Mode   string
+}
+
+// Chain is an ordered list of stages (SDD 06 §7.6). A stage that ends succeeded or partial (bad targets sit in
+// ingest_failures) dispatches the next; failed, cancelled or skipped stops the chain.
+type Chain struct {
+	Name   string
+	Stages []Stage
+}
+
+func fetch(source, mode string) Stage {
+	return Stage{Job: "fetch." + source, Source: source, Mode: mode}
+}
+
+// The chains of the open sources. Covers, trailers and asserts join them when their jobs exist
+// (P6.A.5, P6.A.6); the normalise stage stays last.
+var (
+	// Bootstrap is run by hand: Wikidata top-N, referenced entities, then the normaliser.
+	Bootstrap = Chain{"bootstrap", []Stage{
+		fetch("wikidata", run.ModeBootstrap),
+		{Job: "fetch.entities", Source: "wikidata:entity", Mode: run.ModeBootstrap},
+		{Job: "normalize", Mode: run.ModeBootstrap},
+	}}
+	WikidataIncremental = Chain{"wikidata-incremental", []Stage{
+		fetch("wikidata", run.ModeIncremental),
+		{Job: "fetch.entities", Source: "wikidata:entity", Mode: run.ModeIncremental},
+		{Job: "normalize", Mode: run.ModeIncremental},
+	}}
+	WikidataWeekly = Chain{"wikidata-weekly", []Stage{
+		fetch("wikidata", run.ModeFull),
+		{Job: "fetch.entities", Source: "wikidata:entity", Mode: run.ModeFull},
+		{Job: "normalize", Mode: run.ModeFull},
+	}}
+	WikipediaWeekly = Chain{"wikipedia-weekly", []Stage{
+		fetch("wikipedia:en", run.ModeFull),
+		fetch("wikipedia:pt", run.ModeFull),
+		fetch("wikipedia:es", run.ModeFull),
+		{Job: "normalize", Mode: run.ModeFull},
+	}}
+	OpenLibraryWeekly = Chain{"openlibrary-weekly", []Stage{
+		fetch("openlibrary", run.ModeFull),
+		{Job: "normalize", Mode: run.ModeFull},
+	}}
+
+	// Chains lists every chain by name, which is how a run's params find the next stage.
+	Chains = []Chain{Bootstrap, WikidataIncremental, WikidataWeekly, WikipediaWeekly, OpenLibraryWeekly}
+)
+
+// chainParams is the "chain" key of job_runs.params.
+type chainParams struct {
+	Name  string `json:"name"`
+	Stage int    `json:"stage"`
+}
+
+func (c Chain) spec(stage int, params map[string]json.RawMessage, by string) (run.Spec, error) {
+	p := map[string]json.RawMessage{}
+	maps.Copy(p, params)
+
+	marker, err := json.Marshal(chainParams{Name: c.Name, Stage: stage})
+	if err != nil {
+		return run.Spec{}, err
+	}
+
+	p["chain"] = marker
+
+	raw, err := json.Marshal(p)
+	if err != nil {
+		return run.Spec{}, err
+	}
+
+	s := c.Stages[stage]
+
+	return run.Spec{Job: s.Job, Source: s.Source, Mode: s.Mode, Params: raw, TriggeredBy: by}, nil
+}
+
+// Start queues the first stage. params (limit, since, types) are copied to every stage. It returns
+// run.ErrRunActive when that stage is already queued or running.
+func (c Chain) Start(
+	ctx context.Context, db *database.DB, d run.Dispatcher, by string, params map[string]json.RawMessage,
+) (run.Run, error) {
+	spec, err := c.spec(0, params, by)
+	if err != nil {
+		return run.Run{}, err
+	}
+
+	return run.Create(ctx, db, d, spec)
+}
+
+// Advance queues the stage after run id when id belongs to a chain and ended succeeded or partial. It is safe to
+// call twice for the same run: a successor already created for it is not duplicated. A successor that is already
+// active (the normaliser another chain started) is enough, since its pending index covers this stage's work.
+func Advance(ctx context.Context, db *database.DB, d run.Dispatcher, id int64) error {
+	r, err := run.Load(ctx, db, id)
+	if err != nil {
+		return err
+	}
+
+	if r.Status != run.StatusSucceeded && r.Status != run.StatusPartial {
+		return nil
+	}
+
+	var params map[string]json.RawMessage
+	if err := json.Unmarshal(r.Params, &params); err != nil {
+		return fmt.Errorf("ingest chain: run %d params: %w", id, err)
+	}
+
+	raw, ok := params["chain"]
+	if !ok {
+		return nil
+	}
+
+	var cp chainParams
+	if err := json.Unmarshal(raw, &cp); err != nil {
+		return fmt.Errorf("ingest chain: run %d chain marker: %w", id, err)
+	}
+
+	var chain Chain
+
+	for _, c := range Chains {
+		if c.Name == cp.Name {
+			chain = c
+		}
+	}
+
+	if chain.Name == "" || cp.Stage+1 >= len(chain.Stages) {
+		return nil
+	}
+
+	by := fmt.Sprintf("chain:%d", id)
+
+	var n int
+	err = db.QueryRowContext(ctx, `SELECT count(*) FROM job_runs WHERE triggered_by = $1`, by).Scan(&n)
+	if err != nil {
+		return err
+	}
+
+	if n > 0 {
+		return nil
+	}
+
+	spec, err := chain.spec(cp.Stage+1, params, by)
+	if err != nil {
+		return err
+	}
+
+	if _, err := run.Create(ctx, db, d, spec); err != nil && !errors.Is(err, run.ErrRunActive) {
+		return err
+	}
+
+	return nil
+}

@@ -24,5 +24,6 @@ func Commands() []vukem.Command {
 		console.ImportLegacy(),
 		console.ExportSince(),
 		console.CommunityStatsRebuild(),
+		console.IngestBootstrap(),
 	}
 }

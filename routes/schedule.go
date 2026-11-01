@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"context"
+	"errors"
 	"time"
 
 	"github.com/AlexGalhardo/vukem"
@@ -8,6 +10,8 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/jobs"
 	"github.com/AlexGalhardo/hexascore-app/app/recommend/primitives"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 )
 
 // Schedule declares the scheduled tasks. "vukem serve" runs them in process;
@@ -50,6 +54,17 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	// backup.daily (SDD 11 §7.3 step 1): moves after the SDD 06 asserts once they exist (P6).
 	s.Command("backup:run", "--kind", "daily").DailyAt("06:00").In(saoPaulo).WithoutOverlapping()
 
+	// Ingestion (SDD 06 §7.6). The weekly full runs of Wed-Sat sources join when their connectors exist.
+	// A task starts only the first stage; each finished stage queues the next (ingest.Advance).
+	s.Func("ingest:wikidata-incremental", startChain(app, ingest.WikidataIncremental)).
+		DailyAt("00:30").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:wikidata-weekly", startChain(app, ingest.WikidataWeekly)).
+		WeeklyOn(time.Sunday, "01:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:wikipedia-weekly", startChain(app, ingest.WikipediaWeekly)).
+		WeeklyOn(time.Monday, "01:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:openlibrary-weekly", startChain(app, ingest.OpenLibraryWeekly)).
+		WeeklyOn(time.Tuesday, "01:00").In(saoPaulo).WithoutOverlapping()
+
 	// backup.drill (SDD 11 §7.4): staging only. Staging also runs APP_ENV=production, so the
 	// signal is the source bucket only staging is given. Cron ORs day-of-month with
 	// day-of-week, so the command itself skips Sundays after the 7th.
@@ -67,3 +82,34 @@ var saoPaulo = func() *time.Location {
 
 	return time.FixedZone("BRT", -3*60*60)
 }()
+
+// startChain queues the first stage of c unless its kill switch is off or the stage is still active from the
+// previous period; both are normal, not errors.
+func startChain(app *vukem.App, c ingest.Chain) func(ctx context.Context) error {
+	return func(ctx context.Context) error {
+		ff, err := app.Flags()
+		if err != nil {
+			return err
+		}
+
+		if !run.Allowed(ctx, ff, c.Stages[0].Source) {
+			return nil
+		}
+
+		db, err := app.DB()
+		if err != nil {
+			return err
+		}
+
+		q, err := app.Queue()
+		if err != nil {
+			return err
+		}
+
+		if _, err := c.Start(ctx, db, q, "schedule", nil); err != nil && !errors.Is(err, run.ErrRunActive) {
+			return err
+		}
+
+		return nil
+	}
+}
