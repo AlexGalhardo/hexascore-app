@@ -1,0 +1,44 @@
+{
+  "qid": "Q108281734",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q108281734",
+      "labels": {
+        "en": "Li sercha in li castelle Dewahl e altri racontas"
+      },
+      "aliases": {},
+      "sitelinks": {},
+      "sitelinks_count": 6,
+      "claims": {
+        "P407": [
+          {
+            "value": "Q35850",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q97269314",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2021-12-14T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q35850": "Interlingue",
+        "Q97269314": "Vicente Costalago"
+      }
+    }
+  },
+  "tier": "tail",
+  "type": "book"
+}

@@ -1,0 +1,120 @@
+{
+  "qid": "Q125628",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q125628",
+      "labels": {
+        "en": "Timm Thaler"
+      },
+      "aliases": {
+        "en": [
+          "Timm Thaler oder Das verkaufte Lachen"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Timm Thaler (novel)"
+      },
+      "sitelinks_count": 9,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q24925",
+            "rank": "normal"
+          },
+          {
+            "value": "Q132311",
+            "rank": "normal"
+          },
+          {
+            "value": "Q56451354",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q1093419",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Timm Thaler",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q188",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q183",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q28147",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1962-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL23516980W",
+            "rank": "normal"
+          },
+          {
+            "value": "OL9060121W",
+            "rank": "normal"
+          },
+          {
+            "value": "OL24467722W",
+            "rank": "normal"
+          },
+          {
+            "value": "OL9060120W",
+            "rank": "normal"
+          },
+          {
+            "value": "OL29308750W",
+            "rank": "normal"
+          },
+          {
+            "value": "OL20194750W",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1093419": "Peter Schlemihl",
+        "Q132311": "fantasy",
+        "Q183": "Germany",
+        "Q188": "German",
+        "Q24925": "science fiction",
+        "Q28147": "James Krüss",
+        "Q56451354": "children's fiction"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q125628",
+      "lang": "en",
+      "title": "Timm Thaler (novel)",
+      "extract": "Timm Thaler oder Das verkaufte Lachen (roughly translated as Timm Thaler, or the Traded Laughter and best known as simply Timm Thaler) is a 1962 children's novel by German author James Krüss.\nRegarded by the Oxford Encyclopedia of Children's Literature as Krüss' best known children's book, Timm Thaler tells the story of a boy who trades his enchanting laughter to a wealthy mysterious Mephistopheles-like Baron in exchange for the ability to win any bet he makes. Regretting the exchange, he undertakes a four-year journey to win his laughter back.\nIn 1979, Krüss wrote a sequel novel, Timm Thalers Puppen oder Die verkaufte Menschenliebe (roughly translated as Timm Thaler's Puppets, or the Traded Love for Mankind).",
+      "url": "https://en.wikipedia.org/wiki/Timm_Thaler_(novel)"
+    }
+  },
+  "tier": "tail",
+  "type": "book"
+}

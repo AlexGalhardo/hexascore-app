@@ -1,0 +1,268 @@
+{
+  "qid": "Q83265",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q83265",
+      "labels": {
+        "en": "Grand Theft Auto: San Andreas",
+        "es": "Grand Theft Auto: San Andreas",
+        "mul": "Grand Theft Auto: San Andreas"
+      },
+      "aliases": {
+        "mul": [
+          "Grand Theft Auto San Andreas",
+          "GTA: San Andreas",
+          "GTA San Andreas",
+          "GTA: SA",
+          "GTA:SA",
+          "GTA SA",
+          "GTASA",
+          "San Andreas"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Grand Theft Auto: San Andreas",
+        "eswiki": "Grand Theft Auto: San Andreas",
+        "ptwiki": "Grand Theft Auto: San Andreas"
+      },
+      "sitelinks_count": 88,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q94912",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q343568",
+            "rank": "normal"
+          },
+          {
+            "value": "Q380266",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Grand Theft Auto",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "12120",
+            "rank": "preferred"
+          },
+          {
+            "value": "12250",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q94893",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q132730",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "4073",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0383385",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q10680",
+            "rank": "normal"
+          },
+          {
+            "value": "Q132020",
+            "rank": "normal"
+          },
+          {
+            "value": "Q48263",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10683",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4885200",
+            "rank": "normal"
+          },
+          {
+            "value": "Q94",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q14116",
+            "rank": "normal"
+          },
+          {
+            "value": "Q48493",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5014725",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321",
+            "rank": "normal"
+          },
+          {
+            "value": "Q150",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2004-10-26T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2005-06-07T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2008-10-20T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2010-11-12T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2012-12-11T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "grand-theft-auto-san-andreas",
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q935340",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1154230",
+            "rank": "normal"
+          },
+          {
+            "value": "Q109301274",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q10680": "PlayStation 2",
+        "Q10683": "PlayStation 3",
+        "Q109301274": "James Worrall",
+        "Q1154230": "DJ Pooh",
+        "Q132020": "Xbox",
+        "Q1321": "Spanish",
+        "Q132730": "Grand Theft Auto",
+        "Q1406": "Microsoft Windows",
+        "Q14116": "macOS",
+        "Q145": "United Kingdom",
+        "Q150": "French",
+        "Q1860": "English",
+        "Q208850": "single-player video game",
+        "Q343568": "action-adventure game",
+        "Q380266": "third-person shooter",
+        "Q48263": "Xbox 360",
+        "Q48493": "iOS",
+        "Q4885200": "Windows Phone",
+        "Q5014725": "PlayStation 4",
+        "Q6895044": "multiplayer video game",
+        "Q935340": "Dan Houser",
+        "Q94": "Android",
+        "Q94893": "Rockstar North",
+        "Q94912": "Rockstar Games"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q83265",
+      "lang": "en",
+      "title": "Grand Theft Auto: San Andreas",
+      "extract": "Grand Theft Auto: San Andreas is a 2004 action-adventure game developed by Rockstar North and published by Rockstar Games. It is the fifth main game in the Grand Theft Auto series and the seventh overall entry, following 2002's Grand Theft Auto: Vice City. Set within the fictional U.S. state of San Andreas (based on California and Nevada) in 1992, the game follows Carl \"CJ\" Johnson, a former gangster who returns home following his mother's murder. Finding his old street gang in decline, CJ works to rebuild it while clashing with corrupt authorities and rival criminals, and gradually uncovers the truth behind his mother's death.\nThe game is played from a third-person perspective and its world is navigated on foot or by vehicle. The open world design lets the player freely roam San Andreas, consisting of three major metropolitan cities: Los Santos, San Fierro, and Las Venturas, based on Los Angeles, San Francisco, and Las Vegas, respectively. Rockstar conducted on-site research in each city and consulted Los Angeles natives DJ Pooh, Estevan Oriol, and Mister Cartoon for help imitating the city's culture. The narrative is based on multiple real-life events in Los Angeles, including the Bloods and Crips street gang rivalry, the 1990s crack epidemic, the 1992 Los Angeles riots, and the Rampart scandal. The 75-person development team spent nearly two years creating the game. San Andreas was released in October 2004 for the PlayStation 2.\nThe game received critical acclaim for its characters, narrative, open world design, and visual fidelity, but mixed responses towards its mission design, technical issues, and portrayal of race. It generated controversy when the hidden \"Hot Coffee\" sex minigame was discovered, briefly requiring the game to be re-rated Adults Only. San Andreas received year-end accolades from several gaming publications, and it is considered one of the sixth generation of console gaming's most significant titles and among the best video games ever made. It was released for Windows and the Xbox in 2005, followed by enhanced versions and mobile ports in the 2010s, and a remastered version in 2021. San Andreas is the best-selling PlayStation 2 game with over 17.3 million copies sold, and one of the best-selling games of all time with 27.5 million copies sold overall. Its successor, Grand Theft Auto IV, was released in April 2008.",
+      "url": "https://en.wikipedia.org/wiki/Grand_Theft_Auto:_San_Andreas"
+    },
+    "wikipedia:es": {
+      "qid": "Q83265",
+      "lang": "es",
+      "title": "Grand Theft Auto: San Andreas",
+      "extract": "Grand Theft Auto: San Andreas (abreviado como GTA: San Andreas) es un videojuego de acción-aventura de mundo abierto de disparos en tercera persona desarrollado por Rockstar North y publicado por Rockstar Games. Es el quinto videojuego principal de la serie Grand Theft Auto, después de Grand Theft Auto: Vice City de 2002, y la séptima entrega en general. Ambientado en el estado estadounidense ficticio de San Andreas, el juego sigue a Carl \"CJ\" Johnson, que regresa a casa después del asesinato de su madre y descubre que su antigua banda ha perdido gran parte de su territorio. En el transcurso del juego, intenta reconstruir la pandilla, se enfrenta a autoridades corruptas y criminales poderosos, y poco a poco desentraña la verdad detrás del asesinato de su madre.\nEl juego se juega desde una perspectiva en tercera persona y se navega por su mundo a pie o en vehículo. El diseño de mundo abierto permite al jugador recorrer libremente San Andreas, que consta de tres ciudades metropolitanas importantes: Los Santos, San Fierro y Las Venturas, basadas en Los Ángeles, San Francisco y Las Vegas, respectivamente. Rockstar realizó una investigación in situ en cada ciudad y consultó a DJ Pooh, Estevan Oriol y Mister Cartoon, nativos de Los Ángeles, para que les ayudaran a imitar la cultura de la ciudad. La narrativa se basa en múltiples eventos de la vida real en Los Ángeles, incluida la rivalidad entre las pandillas callejeras Bloods y Crips, la epidemia de crack de la década de 1990, los disturbios de Los Ángeles de 1992 y el escándalo de Rampart. El equipo de desarrollo de 50 personas pasó casi dos años creando el juego. San Andreas se lanzó en octubre de 2004 para PlayStation 2.\nEl juego recibió elogios de la crítica por sus personajes, narrativa, diseño de mundo abierto y fidelidad visual, pero hubo respuestas mixtas hacia el diseño de la misión, los problemas técnicos y la representación de la raza. Generó controversia cuando se descubrió el minijuego sexual oculto \"Hot Coffee\", lo que requirió brevemente que el juego fuera clasificado solo para adultos. San Andreas recibió elogios de fin de año de varias publicaciones de juegos, y es considerado uno de los títulos más importantes de la sexta generación de juegos de consola y uno de los mejores videojuegos jamás creados. Se lanzó para Microsoft Windows y Xbox en 2005, seguido de las versiones mejoradas y adaptaciones móviles en la década de 2010, y una versión remasterizada en 2021. San Andreas es el juego de PlayStation 2 más vendido con más de 17,3 millones de copias vendidas y uno de los juegos más vendidos de todos los tiempos con 27,5 millones de copias vendidas en total. Su sucesor, Grand Theft Auto IV, fue lanzado en abril de 2008.",
+      "url": "https://es.wikipedia.org/wiki/Grand_Theft_Auto:_San_Andreas"
+    },
+    "wikipedia:pt": {
+      "qid": "Q83265",
+      "lang": "pt",
+      "title": "Grand Theft Auto: San Andreas",
+      "extract": "Grand Theft Auto: San Andreas é um jogo eletrônico de ação-aventura de 2004 desenvolvido pela Rockstar North e publicado pela Rockstar Games. É o quinto jogo principal da série Grand Theft Auto e o sétimo no geral, após Grand Theft Auto: Vice City (2002). Ambientado no estado fictício estadunidense de San Andreas (baseado na Califórnia e Nevada) em 1992, o jogo acompanha Carl \"CJ\" Johnson, um ex-gângster que retorna para casa após o assassinato de sua mãe. Ao encontrar sua antiga gangue em declínio, CJ trabalha para reconstruí-la enquanto enfrenta autoridades corruptas e criminosos rivais, e gradualmente descobre a verdade por trás da morte de sua mãe.\nA jogabilidade é mostrada em uma perspectiva de terceira pessoa e seu mundo é explorado a pé ou de veículo. O design de mundo aberto permite que o jogador percorra livremente San Andreas, que consiste em três grandes cidades metropolitanas: Los Santos, San Fierro e Las Venturas, baseadas em Los Angeles, São Francisco e Las Vegas, respectivamente. A Rockstar realizou pesquisas de campo em cada cidade e consultou os nativos de Los Angeles DJ Pooh, Estevan Oriol e Mister Cartoon para ajudar a imitar a cultura local. A narrativa é baseada em diversos eventos reais de Los Angeles, incluindo a rivalidade entre as gangues de rua Bloods e Crips, a epidemia de crack da década de 1990, os distúrbios de Los Angeles de 1992 e o escândalo Rampart do Departamento de Polícia de Los Angeles. A equipe de desenvolvimento, composta por 75 pessoas, levou quase dois anos para criar o jogo. San Andreas foi lançado em outubro de 2004 para PlayStation 2.\nO jogo recebeu aclamação da crítica por seus personagens, narrativa, design de mundo aberto e fidelidade visual, mas teve reações mistas em relação ao design das missões, problemas técnicos e representação racial. Gerou controvérsia quando o minigame sexual oculto \"Hot Coffee\" foi descoberto, o que levou à sua reclassificação para \"Apenas para Adultos\" por um breve período. San Andreas recebeu prêmios de fim de ano de diversas publicações especializadas em jogos e é considerado um dos títulos mais importantes da sexta geração de consoles e um dos melhores jogos de todos os tempos. Foi lançado para Windows e Xbox em 2005, seguido por versões aprimoradas e portes para dispositivos móveis na década de 2010, e uma versão remasterizada em 2021. San Andreas é o jogo mais vendido para PlayStation 2, com mais de 17.3 milhões de cópias vendidas, e um dos jogos mais vendidos de todos os tempos, com 27.5 milhões de cópias vendidas no total. Seu sucessor, Grand Theft Auto IV, foi lançado em abril de 2008.",
+      "url": "https://pt.wikipedia.org/wiki/Grand_Theft_Auto:_San_Andreas"
+    }
+  },
+  "tier": "top",
+  "type": "game"
+}

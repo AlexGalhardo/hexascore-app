@@ -1,0 +1,202 @@
+{
+  "qid": "Q303352",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q303352",
+      "labels": {
+        "en": "Spartacus: Gods of the Arena",
+        "es": "Espartaco: Dioses de la arena",
+        "pt": "Spartacus: Gods of the Arena"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Spartacus: Gods of the Arena",
+        "eswiki": "Spartacus: Gods of the Arena",
+        "ptwiki": "Spartacus: Gods of the Arena"
+      },
+      "sitelinks_count": 25,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+6",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/spartacus/s02",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q7168625",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q1249642",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q298243",
+            "rank": "normal"
+          },
+          {
+            "value": "Q429595",
+            "rank": "normal"
+          },
+          {
+            "value": "Q469145",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2290587",
+            "rank": "normal"
+          },
+          {
+            "value": "Q657080",
+            "rank": "normal"
+          },
+          {
+            "value": "Q240180",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6430750",
+            "rank": "normal"
+          },
+          {
+            "value": "Q133112",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2120207",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7609819",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q927371",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "tv/spartacus-gods-of-the-arena",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+55",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+1",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt39020004",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q2422698",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "327461",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2011-01-21T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1249642": "Spartacus",
+        "Q133112": "Lucy Lawless",
+        "Q1860": "English",
+        "Q2120207": "Jeffrey Thomas",
+        "Q2290587": "Nick E. Tarabay",
+        "Q240180": "Jaime Murray",
+        "Q2422698": "Starz",
+        "Q298243": "John Hannah",
+        "Q30": "United States",
+        "Q429595": "Manu Bennett",
+        "Q469145": "Peter Mensah",
+        "Q6430750": "Marisa Ramirez",
+        "Q657080": "Dustin Clare",
+        "Q7168625": "historical drama",
+        "Q7609819": "Stephen Lovatt",
+        "Q927371": "Steven S. DeKnight"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q303352",
+      "lang": "en",
+      "title": "Spartacus: Gods of the Arena",
+      "extract": "Spartacus: Gods of the Arena is a television miniseries created by Steven S. DeKnight for Starz. It is a prequel to Spartacus, which premiered in 2011. The series follows the character Gannicus (Dustin Clare), the first gladiator representing Lentulus Batiatus to become Champion of Capua. Cast members and characters reprised from the original series include John Hannah as Batiatus, Lucy Lawless as Lucretia, Peter Mensah as Oenomaus, Nick E. Tarabay as Ashur, Lesley-Ann Brandt as Naevia, Antonio Te Maioha as Barca, and Manu Bennett as Crixus.\nThe miniseries aired in Canada on Movie Central and The Movie Network, on Sky1 in the United Kingdom and on FX in Latin America.",
+      "url": "https://en.wikipedia.org/wiki/Spartacus:_Gods_of_the_Arena"
+    },
+    "wikipedia:es": {
+      "qid": "Q303352",
+      "lang": "es",
+      "title": "Spartacus: Gods of the Arena",
+      "extract": "Spartacus: dioses de la arena o Espartaco: dioses de la arena (en inglés: Spartacus: Gods of the Arena) es una miniserie de la cadena Starz de televisión y precuela a Spartacus: sangre y arena. Comenzó su emisión en Estados Unidos el 21 de enero de 2011. La serie trabaja el papel de Gánico (Dustin Clare), el primer gladiador que se hace Campeón de Capua. Los miembros del reparto incluyen a John Hannah como Batiatus, Lucy Lawless como Lucretia, Peter Mensah como Oenomaus, Nick Tarabay como Ashur, Lesley-Ana Brandt como Naevia, y Manu Bennett como Crixus. \nEl motivo de la creación de esta serie se debido al retraso de la filmación de la segunda temporada de la historia, llamada Spartacus: Vengeance, por el tratamiento al que se sometió el actor Andy Whitfield para el linfoma no-Hodgkin que estaba padeciendo y poder continuar con su rol de Espartaco. Esta situación no se pudo dar, ya que el actor murió el 11 de septiembre de 2011. \nIGN otorgó una nota muy alta a la serie, sobre todo al final, dándole un 9,5/10 y llamándola «increíble».",
+      "url": "https://es.wikipedia.org/wiki/Spartacus:_Gods_of_the_Arena"
+    },
+    "wikipedia:pt": {
+      "qid": "Q303352",
+      "lang": "pt",
+      "title": "Spartacus: Gods of the Arena",
+      "extract": "Spartacus: Gods of the Arena (Brasil: Spartacus Origens: Deuses da Arena no DVD e Spartacus: Viva a Origem no FX Brasil / Portugal: Spartacus, Os Deuses da Arena) é uma minissérie televisiva exibida originalmente pela Starz entre 21 de Janeiro e 25 de fevereiro de 2011, nos Estados Unidos, sendo a prequela da série Spartacus. \nTotalizando 6 episódios, a minissérie segue o personagem Gannicus ([Dustin Clare), o primeiro gladiador a se tornar campeão de Cápua. O elenco e personagens foram reprisados da série original, incluindo, Lucy Lawless como Lucretia, John Hannah como Batiatus, Peter Mensah como Oenomaus, e Manu Bennett como Crixus. Andy Whitfield fez uma pequena aparição como Spartacus. Como na primeira temporada, a série traz muitas cenas de conteúdo violento, além de sexo e nudez.",
+      "url": "https://pt.wikipedia.org/wiki/Spartacus:_Gods_of_the_Arena"
+    }
+  },
+  "tier": "mid",
+  "type": "series"
+}

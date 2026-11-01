@@ -1,0 +1,82 @@
+{
+  "qid": "Q117809",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q117809",
+      "labels": {
+        "en": "Kal Online",
+        "mul": "Kal Online",
+        "pt": "KAL-Online"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "ptwiki": "KAL-Online"
+      },
+      "sitelinks_count": 9,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q175173",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q884",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+2004-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "kalonline",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1406": "Microsoft Windows",
+        "Q175173": "massively multiplayer online role-playing game",
+        "Q1860": "English",
+        "Q6895044": "multiplayer video game",
+        "Q884": "South Korea"
+      }
+    },
+    "wikipedia:pt": {
+      "qid": "Q117809",
+      "lang": "pt",
+      "title": "KAL-Online",
+      "extract": "KAL-Online (칼온라인, kal é uma palavra coreana para \"Espada\") é um MMORPG Free-to-Play de fantasia produzido pela Inixsoft, da Coreia do Sul. Diferente de outros MMORPGs, que são baseados em um contexto medieval europeu, KAL-Online apresenta a si mesmo como um jogo de \"Fantasia Oriental\". O jogo é baseado na mitologia de uma guerra entre o grande rei Ha-Nin e a tropa de demônios Ban-Go.",
+      "url": "https://pt.wikipedia.org/wiki/KAL-Online"
+    }
+  },
+  "tier": "year-precision",
+  "type": "game"
+}

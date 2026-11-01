@@ -1,0 +1,228 @@
+{
+  "qid": "Q25468",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q25468",
+      "labels": {
+        "en": "Gang of Four",
+        "es": "La banda de las cuatro",
+        "pt": "O Bando Das Quatro",
+        "pt-br": "O Bando Das Quatro"
+      },
+      "aliases": {
+        "en": [
+          "The Gang of Four",
+          "Band of Four"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Gang of Four (film)",
+        "ptwiki": "La Bande des Quatre"
+      },
+      "sitelinks_count": 9,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/the_gang_of_four",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1200678",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "La Bande des quatre",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q204336",
+            "rank": "normal"
+          },
+          {
+            "value": "Q124389",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2896655",
+            "rank": "normal"
+          },
+          {
+            "value": "Q230659",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3154362",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1761684",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1930952",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3336667",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+160",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0094709",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q150",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "55853",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q142",
+            "rank": "normal"
+          },
+          {
+            "value": "Q39",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q167475",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 10,
+              "time": "+1989-02-00T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1989-02-08T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1989-06-15T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1989-09-10T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1989-10-20T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1989-12-22T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1990-02-22T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 10,
+              "time": "+1990-03-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q167475",
+            "rank": "normal"
+          },
+          {
+            "value": "Q289645",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1200678": "mystery film",
+        "Q124389": "Albert Dupontel",
+        "Q130232": "drama film",
+        "Q142": "France",
+        "Q150": "French",
+        "Q167475": "Jacques Rivette",
+        "Q1761684": "Laurence Côte",
+        "Q1930952": "Michel Vuillermoz",
+        "Q204336": "Bulle Ogier",
+        "Q230659": "Irène Jacob",
+        "Q289645": "Pascal Bonitzer",
+        "Q2896655": "Benoît Régent",
+        "Q3154362": "Irina Dalle",
+        "Q3336667": "Nathalie Richard",
+        "Q39": "Switzerland"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q25468",
+      "lang": "en",
+      "title": "Gang of Four (film)",
+      "extract": "Gang of Four (French: La bande des quatre) is a 1989 French drama film directed by Jacques Rivette. It was entered into the 39th Berlin International Film Festival, where it won a Honourable Mention.",
+      "url": "https://en.wikipedia.org/wiki/Gang_of_Four_(film)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q25468",
+      "lang": "pt",
+      "title": "La Bande des Quatre",
+      "extract": "O Grupo dos Quatro (em francês:  La Bande des Quatre) é um filme francês de drama de 1989 dirigido por Jacques Rivette.\nParticipou do 39º Festival de Berlim, onde ganhou menção honrosa.",
+      "url": "https://pt.wikipedia.org/wiki/La_Bande_des_Quatre"
+    }
+  },
+  "tier": "tail",
+  "type": "movie"
+}

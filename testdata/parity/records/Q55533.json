@@ -1,0 +1,196 @@
+{
+  "qid": "Q55533",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q55533",
+      "labels": {
+        "en": "Saboteur II: Avenging Angel",
+        "es": "Saboteur II: Avenging Angel",
+        "mul": "Saboteur II: Avenging Angel"
+      },
+      "aliases": {
+        "en": [
+          "Saboteur II",
+          "Saboteur 2"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Saboteur II: Avenging Angel",
+        "eswiki": "Saboteur II: Avenging Angel"
+      },
+      "sitelinks_count": 6,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q5316349",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q343568",
+            "rank": "normal"
+          },
+          {
+            "value": "Q828322",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "1119030",
+            "rank": "normal"
+          }
+        ],
+        "P2725": [
+          {
+            "value": "game/saboteur_ii_avenging_angel",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "75614",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q23882",
+            "rank": "normal"
+          },
+          {
+            "value": "Q170434",
+            "rank": "normal"
+          },
+          {
+            "value": "Q478829",
+            "rank": "normal"
+          },
+          {
+            "value": "Q99775",
+            "rank": "normal"
+          },
+          {
+            "value": "Q19610114",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          },
+          {
+            "value": "Q150",
+            "rank": "normal"
+          },
+          {
+            "value": "Q652",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321",
+            "rank": "normal"
+          },
+          {
+            "value": "Q809",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5146",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7737",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1987-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1987-12-31T00:00:00Z"
+            },
+            "rank": "preferred"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "saboteur-ii-avenging-angel",
+            "rank": "normal"
+          },
+          {
+            "value": "saboteur-ii",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1321": "Spanish",
+        "Q1406": "Microsoft Windows",
+        "Q145": "United Kingdom",
+        "Q150": "French",
+        "Q170434": "DOS",
+        "Q1860": "English",
+        "Q188": "German",
+        "Q19610114": "Nintendo Switch",
+        "Q208850": "single-player video game",
+        "Q23882": "ZX Spectrum",
+        "Q343568": "action-adventure game",
+        "Q478829": "Amstrad CPC",
+        "Q5146": "Portuguese",
+        "Q5316349": "Durell Software",
+        "Q652": "Italian",
+        "Q7737": "Russian",
+        "Q809": "Polish",
+        "Q828322": "platform game",
+        "Q99775": "Commodore 64"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q55533",
+      "lang": "en",
+      "title": "Saboteur II: Avenging Angel",
+      "extract": "Saboteur II: Avenging Angel, also known as  Saboteur 2, is an action-adventure game created by Clive Townsend and released by Durell Software in 1987 for the ZX Spectrum, Amstrad CPC, Commodore 64, and MS-DOS compatible operating systems. A sequel to 1985's Saboteur, the player controls a sister of Ninja from the first game on a mission to avenge his death. Saboteur II was one of the first action-adventure games with a female protagonist and was well received by critics.",
+      "url": "https://en.wikipedia.org/wiki/Saboteur_II:_Avenging_Angel"
+    },
+    "wikipedia:es": {
+      "qid": "Q55533",
+      "lang": "es",
+      "title": "Saboteur II: Avenging Angel",
+      "extract": "Saboteur II: Avenging Angel es un juego de acción con elementos de aventura, publicado en 1987 por Durell Software para varios ordenadores de 8 bits y PC. Fue programado por Clive Townsend.",
+      "url": "https://es.wikipedia.org/wiki/Saboteur_II:_Avenging_Angel"
+    }
+  },
+  "tier": "tail",
+  "type": "game"
+}

@@ -1,0 +1,181 @@
+{
+  "qid": "Q25471",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q25471",
+      "labels": {
+        "en": "Escape from Zahrain",
+        "es": "Fuga de Zahrain",
+        "pt": "Escape from Zahrain"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Escape from Zahrain",
+        "ptwiki": "Escape from Zahrain"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/escape-from-zahrain",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q188473",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Escape from Zahrain",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q102813",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2852826",
+            "rank": "normal"
+          },
+          {
+            "value": "Q380997",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6166988",
+            "rank": "normal"
+          },
+          {
+            "value": "Q275276",
+            "rank": "normal"
+          },
+          {
+            "value": "Q373968",
+            "rank": "normal"
+          },
+          {
+            "value": "Q209186",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1855635",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6525762",
+            "rank": "normal"
+          },
+          {
+            "value": "Q107049738",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+93",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q159846",
+            "rank": "normal"
+          },
+          {
+            "value": "Q43380",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0055963",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "118300",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q460090",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1962-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q7352381",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q102813": "Yul Brynner",
+        "Q107049738": "Serena Sande",
+        "Q159846": "Paramount Pictures",
+        "Q1855635": "Vladimir Sokoloff",
+        "Q1860": "English",
+        "Q188473": "action film",
+        "Q209186": "James Mason",
+        "Q275276": "Madlyn Rhue",
+        "Q2852826": "Anthony Caruso",
+        "Q30": "United States",
+        "Q373968": "Jack Warden",
+        "Q380997": "Sal Mineo",
+        "Q43380": "CBS",
+        "Q460090": "Ronald Neame",
+        "Q6166988": "Jay Novello",
+        "Q6525762": "Leonard Strong",
+        "Q7352381": "Robin Estridge"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q25471",
+      "lang": "en",
+      "title": "Escape from Zahrain",
+      "extract": "Escape from Zahrain is a 1962 American Panavision adventure film directed by Ronald Neame and starring Yul Brynner. The film is based on the novel Appointment in Zahrain by Michael Barrett (1960) and is produced and distributed by Paramount Pictures.",
+      "url": "https://en.wikipedia.org/wiki/Escape_from_Zahrain"
+    },
+    "wikipedia:pt": {
+      "qid": "Q25471",
+      "lang": "pt",
+      "title": "Escape from Zahrain",
+      "extract": "Escape from Zahrain é um filme estadunidense de 1962, dos gêneros aventura, drama e suspense, dirigido por Ronald Neame, roteirizado por Michael Barrett e Robin Estridge, música de Lyn Murray.",
+      "url": "https://pt.wikipedia.org/wiki/Escape_from_Zahrain"
+    }
+  },
+  "tier": "tail",
+  "type": "movie"
+}

@@ -1,0 +1,161 @@
+{
+  "qid": "Q11252497",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q11252497",
+      "labels": {
+        "en": "Bad Cat",
+        "es": "Bad Cat",
+        "pt": "Bad Cat"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Bad Cat",
+        "eswiki": "Bad Cat",
+        "ptwiki": "Bad Cat"
+      },
+      "sitelinks_count": 121,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/bad_cat_2017",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q157443",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188473",
+            "rank": "normal"
+          },
+          {
+            "value": "Q319221",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2143665",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q20817983",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Kötü Kedi Şerafettin",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+85",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt4695548",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q256",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "355066",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q43",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q104215650",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2016-02-05T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2016-05-05T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2017-02-02T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q6535202",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q104215650": "Mehmet Kurtuluş",
+        "Q157443": "comedy film",
+        "Q188473": "action film",
+        "Q20817983": "Kötü Kedi Şerafettin",
+        "Q2143665": "children's film",
+        "Q256": "Turkish",
+        "Q319221": "adventure film",
+        "Q43": "Turkey",
+        "Q6535202": "Levent Kazak"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q11252497",
+      "lang": "en",
+      "title": "Bad Cat",
+      "extract": "Bad Cat (Turkish: Kötü Kedi Şerafettin) is a 2016 Turkish adult animated action comedy film directed by Mehmet Kurtuluş and Ayşe Ünal. The film is based on the comic strip Kötü Kedi Şerafettin by Bülent Üstün. It is a self-funded independent film, and some its profits originated from product placement. \nBad Cat premiered on February 5, 2016, in Turkey and at the Annecy International Animation Film Festival in 2016. The film was released on Tubi on April 20, 2023. A video game adaptation, titled The Bad Cat, was released on mobile devices shortly after the film's release.",
+      "url": "https://en.wikipedia.org/wiki/Bad_Cat"
+    },
+    "wikipedia:es": {
+      "qid": "Q11252497",
+      "lang": "es",
+      "title": "Bad Cat",
+      "extract": "Bad Cat es una película turca de animación para adultos basada en el cómic homónimo, creado por Bülent Üstün. La cinta fue dirigida por Mehmet Kurtuluş y Ayşe Ünal y realizada por el estudio de animación Anima Istambul. La película fue presentada, fuera de concurso, en el Festival de Annecy.​ En España, fue presentada en el 49.º Festival de Cine de Sitges​ y el 26º Festival de Cine Fantástico de Málaga.​ La película fue estrenada en Panamá el 2 de febrero de 2017.​ Se estrenó el 23 de noviembre de 2017 en Argentina. La película se estrenó el 27 de mayo de 2022 en España en la plataforma de cine en línea Filmin.​",
+      "url": "https://es.wikipedia.org/wiki/Bad_Cat"
+    },
+    "wikipedia:pt": {
+      "qid": "Q11252497",
+      "lang": "pt",
+      "title": "Bad Cat",
+      "extract": "Bad Cat (turco: Kötü Kedi Şerafettin – Gato Sórdido (título no Brasil), – Gato Mau (título em Portugal)) é um filme de animação turco de 2016, adaptado da série de quadrinhos homônima criada por Bülent Üstün.\nO filme foi produzido entre 2011-2015 pelo Anima Istanbul e dirigido por Mehmet Kurtuluş e Ayşe Ünal. Em 2016, Bad Cat foi exibido no festival Anima Mundi, bem como no festival Cinanima. Em Portugal, o filme lançado em 11 de Outubro de 2018 através da Lanterna de Pedra Filmes. Gato Sórdido estreou na televisão brasileira nas afiliadas da Rede Telecine em todo o Brasil.",
+      "url": "https://pt.wikipedia.org/wiki/Bad_Cat"
+    }
+  },
+  "tier": "top",
+  "type": "movie"
+}

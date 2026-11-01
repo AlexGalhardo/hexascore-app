@@ -1,0 +1,131 @@
+{
+  "qid": "Q8258",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q8258",
+      "labels": {
+        "en": "One Thousand and One Nights",
+        "es": "Las mil y una noches",
+        "pt": "As Mil e uma Noites",
+        "pt-br": "As Mil e uma Noites"
+      },
+      "aliases": {
+        "en": [
+          "1,001 Nights",
+          "The 1,001 Nights",
+          "Arabian Nights",
+          "The Arabian Nights",
+          "1001 night",
+          "1001 Arabian nights",
+          "Las mil y una noches",
+          "El libro de las mil y una noches",
+          "Noches árabes",
+          "Mil y una noches",
+          "The One Thousand and One Nights",
+          "Thousand and One Nights",
+          "The Thousand and One Nights",
+          "1001 Nights",
+          "The 1001 Nights",
+          "Arabian Nights Entertainments",
+          "Alf Laylah wa-Laylah",
+          "Alif Layla"
+        ],
+        "es": [
+          "Las mil y una",
+          "Noches árabes"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "One Thousand and One Nights",
+        "eswiki": "Las mil y una noches",
+        "ptwiki": "As Mil e Uma Noites"
+      },
+      "sitelinks_count": 160,
+      "claims": {
+        "P1476": [
+          {
+            "value": "ألف ليلة وليلة",
+            "rank": "preferred"
+          },
+          {
+            "value": "Arabian Nightskuyurdtpok;j^tyxr",
+            "rank": "normal"
+          },
+          {
+            "value": "anglais",
+            "rank": "normal"
+          },
+          {
+            "value": "allemend",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Sughrat.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q84072",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q7204",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q2818964",
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL18967432W",
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "859375",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q2818964": "various authors",
+        "Q7204": "Middle East",
+        "Q84072": "Turkish people"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q8258",
+      "lang": "en",
+      "title": "One Thousand and One Nights",
+      "extract": "One Thousand and One Nights or The Thousand and One Nights (Persian: هزار و یک شب) is a collection of Middle Eastern folktales compiled in the Arabic language during the Iranian Golden Age. It is often known in English as The Arabian Nights, from the first English-language edition (c. 1706–1721), which rendered the title as The Arabian Nights' Entertainments.\nThe work was collected over many centuries by various authors, translators, and scholars across West Asia, Central Asia, South Asia, and North Africa.  Some tales trace their roots back to ancient and medieval Persian, Arabic, and Mesopotamian literature. Most tales, however, were originally folk stories from the Abbasid and Mamluk eras, while others, especially the frame story, are drawn from the Pahlavi Persian work Hezār Afsān (Persian: هزار افسان, lit. 'A Thousand Tales'), which in turn relied partly on Indian elements.\nIf there was ever a canonical text with all the stories in a specific order, that text is no longer extant. But remaining editions of the Nights have some things in common, including the story's framing device. In the frame story, the ruler Shahryar is told the tales by his wife Scheherazade, with one tale told over each night of storytelling. The stories proceed from this original tale; some are framed within other tales, while some are self-contained. Some editions contain only a few hundred nights of storytelling, while others include 1001 or more. The bulk of the text is in prose, although verse is occasionally used for songs and riddles and to express heightened emotion. Most of the poems are single couplets or quatrains, although some are longer.\nSome of the stories commonly associated with the Arabian Nights—particularly \"Aladdin and the Wonderful Lamp\" and \"Ali Baba and the Forty Thieves\"—were not part of the collection in the original Arabic versions, but were instead added to the collection by French translator Antoine Galland after he heard them from Syrian writer Hanna Diyab during the latter's visit to Paris in 1709. Other stories, such as \"The Seven Voyages of Sinbad the Sailor\", had an independent existence before being added to the collection in later manuscripts and translations.",
+      "url": "https://en.wikipedia.org/wiki/One_Thousand_and_One_Nights"
+    },
+    "wikipedia:es": {
+      "qid": "Q8258",
+      "lang": "es",
+      "title": "Las mil y una noches",
+      "extract": "Las mil y una noches (en árabe: ألف ليلة وليلة‎, romanizado: Alf leyla wa-leyla)​ es una recopilación medieval de cuentos tradicionales de Oriente Próximo recopilados en lengua árabe durante la Edad de Oro del islam.\nLa obra fue tomando forma durante el transcurso de varios siglos con las contribuciones de diferentes escritores y traductores de Asia Occidental, Asia Central, Asia Meridional y el norte de África. Muchas historias eran originalmente cuentos populares de los períodos abasí y mameluco, mientras que otras, especialmente la que sirve de marco narrativo, provienen muy probablemente de la obra persa pahlaví Hezār Afsān (en persa: هزار افسان‎, lit. 'Mil leyendas'), que a su vez contenía algunos elementos indios.​ \nTodas las ediciones de la obra tienen en común el uso de la forma del relato enmarcado, es decir, de relatos que se incluyen dentro de otros relatos, en la forma de la historia de que el sultán Shahriar escucha cada noche los cuentos que le narra su esposa, Scheherezade, uno por cada noche de narración. Los relatos parten de esta historia original, y algunos están enmarcados en otros relatos, mientras que otros son independientes. Algunas ediciones contienen sólo unos cientos de noches de narración, mientras que otras incluyen 1001 o más. La mayor parte del texto está en prosa, aunque ocasionalmente se utiliza el verso para canciones y adivinanzas o para expresar emociones intensas. La mayoría de los poemas son pareados o cuartetos, aunque algunos son más largos.\nAlgunos de los cuentos que suelen asociarse con Las mil y una noches—en particular «Aladino y la lámpara maravillosa» y «Alí Babá y los cuarenta ladrones»—, pero también el del príncipe Ahmed y el hada Peri Banú, el de la aventura nocturna de Harún Al Rashid, el de las dos hermanas envidiosas de la hermana menor,​ no formaban de hecho parte de la colección en las versiones árabes originales, sino que fueron añadidos por el traductor francés Antoine Galland después de que se los contara el escritor y narrador sirio Hanna Diyab durante su visita a París. Otros relatos, como «Los siete viajes de Simbad el Marino», tuvieron una existencia independiente antes de ser añadidos a la colección.",
+      "url": "https://es.wikipedia.org/wiki/Las_mil_y_una_noches"
+    },
+    "wikipedia:pt": {
+      "qid": "Q8258",
+      "lang": "pt",
+      "title": "As Mil e Uma Noites",
+      "extract": "As Mil e Uma Noites (em árabe: كتاب ألف ليلة وليلة; romaniz.: Quitâb 'alf laila ua-laila, \"O Livro das Mil e Uma Noites\"; em persa: هزار و یک شب; romaniz.: Hezār-o yek šab) ou ainda \"Mil noites e uma noite\", é coleção de histórias e contos populares originárias do Médio Oriente e do sul da Ásia e compiladas em língua árabe a partir do século IX. No mundo moderno ocidental, a obra passou a ser amplamente conhecida a partir de uma tradução para o francês realizada em 1704 pelo orientalista Antoine Galland, transformando-se num clássico da literatura mundial.\nAs histórias que compõem as Mil e uma noites têm várias origens, incluindo o folclore indiano, persa e árabe. Não existe versão definida ou definitiva da obra, uma vez que os antigos manuscritos árabes diferem no número e no conjunto de contos. O que é invariável nas distintas versões é que os contos estão organizados como série de histórias em cadeia narrados por Xerazade, esposa do rei Xariar. Este rei, louco por haver sido traído por sua primeira esposa, desposa uma noiva diferente todas as noites, mandando matá-las na manhã seguinte. Xerazade consegue escapar a esse destino contando histórias maravilhosas sobre diversos temas que captam a curiosidade do rei. Ao amanhecer, Xerazade interrompe cada conto para continuá-lo na noite seguinte, o que a mantém viva ao longo de várias noites - as mil e uma do título - ao fim das quais o rei já se arrependeu de seu comportamento e desistiu de executá-la.",
+      "url": "https://pt.wikipedia.org/wiki/As_Mil_e_Uma_Noites"
+    }
+  },
+  "tier": "top",
+  "type": "book"
+}

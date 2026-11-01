@@ -1,0 +1,538 @@
+{
+  "qid": "Q470572",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q470572",
+      "labels": {
+        "en": "Jesus of Nazareth",
+        "es": "Jesus of Nazareth",
+        "pt": "Jesus de Nazaré"
+      },
+      "aliases": {
+        "es": [
+          "Jesús de Nazareth (película)",
+          "Jesus de Nazareth (película)",
+          "Jesus de Nazaret (pelicula)",
+          "Jesús de Nazareth (1977)",
+          "Jesús de Nazareth (película de 1977)",
+          "Jesús de Nazaret (película de 1977)",
+          "Jesus of Nazareth (1977)",
+          "Jesus de Nazareth (pelicula)",
+          "Jesus de Nazaret (pelicula de 1977)",
+          "Jesus de Nazareth (1977)",
+          "Jesus de Nazareth (pelicula de 1977)",
+          "Jesús de Nazaret (pelicula)",
+          "Jesus de Nazaret (película)",
+          "Jesús de Nazaret (pelicula de 1977)",
+          "Jesus de Nazaret (película de 1977)",
+          "Jesús de Nazareth (pelicula)",
+          "Jesús de Nazareth (pelicula de 1977)",
+          "Jesus de Nazareth (película de 1977)",
+          "Jesús de Nazaret (película)",
+          "Jesús de Nazareth (miniserie)",
+          "Jesus of Nazareth (mini-serie)",
+          "Jesús de Nazaret (miniserie de 1977)"
+        ],
+        "pt": [
+          "Gesù di nazareth",
+          "Jesus of Nazareth",
+          "Gesù di Nazareth"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Jesus of Nazareth (TV series)",
+        "eswiki": "Jesús de Nazaret (miniserie)",
+        "ptwiki": "Jesus de Nazaré (filme)"
+      },
+      "sitelinks_count": 33,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+5",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/jesus_of_nazareth",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q7168625",
+            "rank": "normal"
+          },
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1433443",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q18813",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Jesus of Nazareth",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q504982",
+            "rank": "normal"
+          },
+          {
+            "value": "Q183532",
+            "rank": "normal"
+          },
+          {
+            "value": "Q102551",
+            "rank": "normal"
+          },
+          {
+            "value": "Q107006",
+            "rank": "normal"
+          },
+          {
+            "value": "Q259986",
+            "rank": "normal"
+          },
+          {
+            "value": "Q723404",
+            "rank": "normal"
+          },
+          {
+            "value": "Q203960",
+            "rank": "normal"
+          },
+          {
+            "value": "Q315090",
+            "rank": "normal"
+          },
+          {
+            "value": "Q776052",
+            "rank": "normal"
+          },
+          {
+            "value": "Q209186",
+            "rank": "normal"
+          },
+          {
+            "value": "Q234141",
+            "rank": "normal"
+          },
+          {
+            "value": "Q55245",
+            "rank": "normal"
+          },
+          {
+            "value": "Q314914",
+            "rank": "normal"
+          },
+          {
+            "value": "Q190523",
+            "rank": "normal"
+          },
+          {
+            "value": "Q83484",
+            "rank": "normal"
+          },
+          {
+            "value": "Q106743",
+            "rank": "normal"
+          },
+          {
+            "value": "Q381285",
+            "rank": "normal"
+          },
+          {
+            "value": "Q273215",
+            "rank": "normal"
+          },
+          {
+            "value": "Q55796",
+            "rank": "normal"
+          },
+          {
+            "value": "Q298777",
+            "rank": "normal"
+          },
+          {
+            "value": "Q234293",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1148591",
+            "rank": "normal"
+          },
+          {
+            "value": "Q223091",
+            "rank": "normal"
+          },
+          {
+            "value": "Q356924",
+            "rank": "normal"
+          },
+          {
+            "value": "Q499097",
+            "rank": "normal"
+          },
+          {
+            "value": "Q451206",
+            "rank": "normal"
+          },
+          {
+            "value": "Q459019",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1345576",
+            "rank": "normal"
+          },
+          {
+            "value": "Q697383",
+            "rank": "normal"
+          },
+          {
+            "value": "Q124930",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1953854",
+            "rank": "normal"
+          },
+          {
+            "value": "Q991700",
+            "rank": "normal"
+          },
+          {
+            "value": "Q645423",
+            "rank": "normal"
+          },
+          {
+            "value": "Q608022",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1703086",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1541570",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3713649",
+            "rank": "normal"
+          },
+          {
+            "value": "Q176028",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5482921",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3423469",
+            "rank": "normal"
+          },
+          {
+            "value": "Q634574",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5467233",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3424824",
+            "rank": "normal"
+          },
+          {
+            "value": "Q510769",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3343748",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3182295",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6387896",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3335591",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2143641",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7372960",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7087837",
+            "rank": "normal"
+          },
+          {
+            "value": "Q110519187",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3993318",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6829553",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5261992",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6385029",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1148690",
+            "rank": "normal"
+          },
+          {
+            "value": "Q106239010",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3294062",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4979124",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5040151",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3483986",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2043799",
+            "rank": "normal"
+          }
+        ],
+        "P1651": [
+          {
+            "value": "yumoqNlaPCE",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "tv/jesus-of-nazareth",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+96",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0075520",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q258131",
+            "rank": "normal"
+          },
+          {
+            "value": "Q674608",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q38",
+            "rank": "normal"
+          },
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "19649",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q53040",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1977-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q217619",
+            "rank": "normal"
+          },
+          {
+            "value": "Q268443",
+            "rank": "normal"
+          },
+          {
+            "value": "Q53040",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1977-03-27T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q102551": "Ernest Borgnine",
+        "Q106239010": "John Tordoff",
+        "Q106743": "Fernando Rey",
+        "Q107006": "Claudia Cardinale",
+        "Q110519187": "George Camiller",
+        "Q1148591": "Cyril Cusack",
+        "Q1148690": "Cyril Shaps",
+        "Q124930": "Oliver Tobias",
+        "Q130232": "drama film",
+        "Q1345576": "Lee Montague",
+        "Q1433443": "sword-and-sandal film",
+        "Q145": "United Kingdom",
+        "Q1541570": "Pino Colizzi",
+        "Q1703086": "Jonathan Adams",
+        "Q176028": "Martin Benson",
+        "Q183532": "Anne Bancroft",
+        "Q18813": "New Testament",
+        "Q190523": "Christopher Plummer",
+        "Q1953854": "Murray Salem",
+        "Q203960": "James Earl Jones",
+        "Q2043799": "Abdelmajid Lakhal",
+        "Q209186": "James Mason",
+        "Q2143641": "Renato Terra",
+        "Q217619": "Anthony Burgess",
+        "Q223091": "Ian Holm",
+        "Q234141": "Ian McShane",
+        "Q234293": "Olivia Hussey",
+        "Q258131": "Rai 1",
+        "Q259986": "Valentina Cortese",
+        "Q268443": "Suso Cecchi d'Amico",
+        "Q273215": "Rod Steiger",
+        "Q298777": "Michael York",
+        "Q314914": "Donald Pleasence",
+        "Q315090": "Stacy Keach",
+        "Q3182295": "John Phillips",
+        "Q3294062": "Mark Eden",
+        "Q3335591": "Nancy Nevinson",
+        "Q3343748": "Norman Bowler",
+        "Q3423469": "Regina Bianchi",
+        "Q3424824": "Renato Montalbano",
+        "Q3483986": "Harold Bennett",
+        "Q356924": "Yorgo Voyagis",
+        "Q3713649": "Donald Sumpter",
+        "Q38": "Italy",
+        "Q381285": "Ralph Richardson",
+        "Q3993318": "Tony Vogel",
+        "Q451206": "Marina Berti",
+        "Q459019": "Maria Carta",
+        "Q4979124": "Bruno Barnabe",
+        "Q499097": "Ian Bannen",
+        "Q5040151": "Carl Forgione",
+        "Q504982": "Robert Powell",
+        "Q510769": "Robert Brown",
+        "Q5261992": "Derek Godfrey",
+        "Q53040": "Franco Zeffirelli",
+        "Q5467233": "Forbes Collins",
+        "Q5482921": "Francis de Wolff",
+        "Q55245": "Laurence Olivier",
+        "Q55796": "Peter Ustinov",
+        "Q608022": "Simon MacCorkindale",
+        "Q634574": "Robert Beatty",
+        "Q6385029": "Keith Skinner",
+        "Q6387896": "Ken Jones",
+        "Q645423": "John Duttine",
+        "Q674608": "ITV1",
+        "Q6829553": "Michael Cronin",
+        "Q697383": "Renato Rascel",
+        "Q7087837": "Oliver Smith",
+        "Q7168625": "historical drama",
+        "Q723404": "James Farentino",
+        "Q7372960": "Roy Holder",
+        "Q776052": "Tony Lo Bianco",
+        "Q83484": "Anthony Quinn",
+        "Q991700": "Bruce Lidington"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q470572",
+      "lang": "en",
+      "title": "Jesus of Nazareth (TV series)",
+      "extract": "Jesus of Nazareth (Italian: Gesù di Nazareth) is a 1977 epic television drama serial directed by Franco Zeffirelli and co-written by Anthony Burgess and Suso Cecchi d'Amico, which dramatizes the birth, life, ministry, crucifixion and resurrection of Jesus. It stars Robert Powell as Jesus, and features an all-star ensemble cast of renowned actors, including seven who had won or would go on to win Academy Awards: Anne Bancroft, Ernest Borgnine, Laurence Olivier, Christopher Plummer, Anthony Quinn, Rod Steiger, Peter Ustinov; and James Earl Jones who received an Academy Honorary Award. Additionally, the ensemble cast also featured Academy Award nominees James Mason, Ian Holm, Ian Bannen and Valentina Cortese.\nSome scenes were added during the writing process, with some characters (such as Zerah) added for brevity or dramatic effect. Jesus of Nazareth depicts Judas Iscariot as initially well-intentioned, but later as a selfish dupe of Zerah's who betrays Jesus largely as a result of Zerah's false platitudes and pretexts. However, in accordance with the Gospels, the film depicts Nicodemus and Joseph of Arimathea as sympathetic members of the Sanhedrin. Many of the miracles of Jesus, such as the changing of water into wine at the wedding at Cana, the transfiguration, and the calming of the storm, are not shown, although Jesus's healing of Jairus's daughter, healing the centurion's servant, the blind man and the crippled woman on the Sabbath, the feeding of the multitude, and the raising of Lazarus from the dead are presented.\nJesus of Nazareth premiered on 27 March 1977, on the Italian channel Rai 1, and was first aired in the United Kingdom, on 3 April 1977, on the ITV Network. It was a huge ratings success and received acclaim, with particular praise for Powell's portrayal of Jesus.",
+      "url": "https://en.wikipedia.org/wiki/Jesus_of_Nazareth_(TV_series)"
+    },
+    "wikipedia:es": {
+      "qid": "Q470572",
+      "lang": "es",
+      "title": "Jesús de Nazaret (miniserie)",
+      "extract": "Jesús de Nazaret (Jesus of Nazareth) es una miniserie de televisión anglo-italiana de 1977 que dramatiza el nacimiento, vida, ministerio, muerte y resurrección de Jesús, según los relatos de los cuatro evangelios canónicos del Nuevo Testamento.\nLa miniserie fue dirigida por Franco Zeffirelli, producida por Lew Grade, a través de su compañía CCI Entertainment y la banda sonora estuvo a cargo del compositor Maurice Jarre. Fue protagonizada por el actor británico Robert Powell como Jesús. Cuenta con un elenco estelar de actores de renombre, incluidos ocho que habían ganado o ganarían el Premio Óscar: Anne Bancroft, Ernest Borgnine, Laurence Olivier, Christopher Plummer, Anthony Quinn, Rod Steiger, James Earl Jones y Peter Ustinov. Además también contó con la participación de Olivia Hussey, James Mason y Valentina Cortese.\nZeffirelli coescribió el guion con Anthony Burgess y Suso Cecchi d'Amico. Se rodó en Túnez y Marruecos con un reparto de estrellas del cine, tanto europeas como estadounidenses. La versión sin cortes solo está disponible en DVD y no en VHS. La duración total de la producción es de seis horas y veintiún minutos.\nLa miniserie se estrenó el 27 de marzo de 1977 en el canal italiano Rai 1 y se emitió por primera vez en el Reino Unido el 3 de abril de 1977 en la cadena ITV. Fue un gran éxito de audiencia y recibió elogios, destacando especialmente la interpretación de Jesús por parte de Powell. Según la crítica, es uno de los proyectos mejor valorados y más populares del cine religioso.​",
+      "url": "https://es.wikipedia.org/wiki/Jes%C3%BAs_de_Nazaret_(miniserie)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q470572",
+      "lang": "pt",
+      "title": "Jesus de Nazaré (filme)",
+      "extract": "Jesus de Nazaré (em italiano:  Gesù di Nazareth; em inglês:  Jesus of Nazareth) é uma minissérie ítalo-britânica, exibida nos cinemas, dirigido por Franco Zeffirelli em 1977.",
+      "url": "https://pt.wikipedia.org/wiki/Jesus_de_Nazar%C3%A9_(filme)"
+    }
+  },
+  "tier": "year-precision",
+  "type": "series"
+}

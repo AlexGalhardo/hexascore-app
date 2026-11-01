@@ -1,0 +1,808 @@
+{
+  "qid": "Q134773",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q134773",
+      "labels": {
+        "mul": "Forrest Gump"
+      },
+      "aliases": {
+        "pt-br": [
+          "Forrest gump - o contador de histórias"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Forrest Gump",
+        "eswiki": "Forrest Gump (película)",
+        "ptwiki": "Forrest Gump"
+      },
+      "sitelinks_count": 138,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/forrest_gump",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q102429885",
+            "rank": "normal"
+          },
+          {
+            "value": "Q21401869",
+            "rank": "normal"
+          },
+          {
+            "value": "Q157443",
+            "rank": "normal"
+          },
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7168625",
+            "rank": "normal"
+          },
+          {
+            "value": "Q118612349",
+            "rank": "normal"
+          },
+          {
+            "value": "Q192881",
+            "rank": "normal"
+          },
+          {
+            "value": "Q111278985",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q552213",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Forrest Gump",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q2263",
+            "rank": "normal"
+          },
+          {
+            "value": "Q180272",
+            "rank": "normal"
+          },
+          {
+            "value": "Q187033",
+            "rank": "normal"
+          },
+          {
+            "value": "Q272972",
+            "rank": "normal"
+          },
+          {
+            "value": "Q741555",
+            "rank": "normal"
+          },
+          {
+            "value": "Q489856",
+            "rank": "normal"
+          },
+          {
+            "value": "Q14446",
+            "rank": "normal"
+          },
+          {
+            "value": "Q442310",
+            "rank": "normal"
+          },
+          {
+            "value": "Q374447",
+            "rank": "normal"
+          },
+          {
+            "value": "Q103157",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3376545",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26857959",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1357803",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26857960",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26857961",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26857962",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26857964",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26857972",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26857974",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26857976",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26857979",
+            "rank": "normal"
+          },
+          {
+            "value": "Q457991",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26857995",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26857997",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26857999",
+            "rank": "normal"
+          },
+          {
+            "value": "Q20993894",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858377",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2966611",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858530",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858533",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858540",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858542",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858544",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858547",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858550",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2384946",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4962360",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858558",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16091645",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858567",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3536506",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858570",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858576",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858577",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858584",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858589",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4703990",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858593",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858602",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23926673",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858615",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858619",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858621",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858623",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858634",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2825721",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858662",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858676",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858677",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858680",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858681",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2691042",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858689",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858692",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858695",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858706",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858709",
+            "rank": "normal"
+          },
+          {
+            "value": "Q22985966",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858732",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858734",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858737",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858744",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858753",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858756",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3498519",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858768",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858807",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858814",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26858889",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859033",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859059",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859068",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859100",
+            "rank": "normal"
+          },
+          {
+            "value": "Q22673621",
+            "rank": "normal"
+          },
+          {
+            "value": "Q950104",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1502946",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859151",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7914705",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859179",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859187",
+            "rank": "normal"
+          },
+          {
+            "value": "Q375356",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6212499",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859208",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859284",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859347",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859371",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1691318",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859423",
+            "rank": "normal"
+          },
+          {
+            "value": "Q22665449",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859485",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859526",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859543",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7050088",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859576",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16017365",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859640",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859664",
+            "rank": "normal"
+          },
+          {
+            "value": "Q869771",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859763",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859788",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859856",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859957",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26859981",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26860001",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2386386",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9582",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1203",
+            "rank": "normal"
+          },
+          {
+            "value": "Q452552",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/forrest-gump",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Snap from Wax Museum at Innovative Film city Bangalore 144344.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+142",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q159846",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0109830",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "13",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q187364",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1994-06-23T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1994-07-06T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1994-10-13T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1994-10-14T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1994-10-05T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q942932",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q102429885": "coming-of-age film",
+        "Q103157": "Kurt Russell",
+        "Q111278985": "American football film",
+        "Q118612349": "romantic comedy film",
+        "Q1203": "John Lennon",
+        "Q130232": "drama film",
+        "Q1357803": "Michael Conner Humphreys",
+        "Q14446": "Hanna R. Hall",
+        "Q1502946": "Geoffrey Blake",
+        "Q157443": "comedy film",
+        "Q159846": "Paramount Pictures",
+        "Q16017365": "Hallie D'Amore",
+        "Q16091645": "Daniel C. Striepeke",
+        "Q1691318": "Joe Alaskey",
+        "Q180272": "Gary Sinise",
+        "Q1860": "English",
+        "Q187033": "Sally Field",
+        "Q187364": "Robert Zemeckis",
+        "Q192881": "tragicomedy",
+        "Q20993894": "E. A. Hanks",
+        "Q21401869": "flashback film",
+        "Q2263": "Tom Hanks",
+        "Q22665449": "W. Benson Terry",
+        "Q22673621": "Kevin Davis",
+        "Q22985966": "Michael Burgess",
+        "Q2384946": "Sonny Shroyer",
+        "Q2386386": "Jacqueline Lovell",
+        "Q23926673": "Don Fischer",
+        "Q26857959": "Rebecca Williams",
+        "Q26857960": "Harold G. Herthum",
+        "Q26857961": "George Kelly",
+        "Q26857962": "Bob Penny",
+        "Q26857964": "John Randall",
+        "Q26857972": "Margo Moorer",
+        "Q26857974": "Ione M. Telech",
+        "Q26857976": "Christine Seabrook",
+        "Q26857979": "John Worsham",
+        "Q26857995": "Alexander Zemeckis",
+        "Q26857997": "Logan Livingston Gomez",
+        "Q26857999": "Ben Waddel",
+        "Q26858377": "Tyler Long",
+        "Q26858530": "Grady Bowman",
+        "Q26858533": "Kevin Mangan",
+        "Q26858540": "Fay Genens",
+        "Q26858542": "Frank Geyer",
+        "Q26858544": "Rob Landry",
+        "Q26858547": "Jason McGuire",
+        "Q26858550": "Pete Auster",
+        "Q26858558": "Ed Davis",
+        "Q26858567": "Bruce Lucvia",
+        "Q26858570": "Kirk Ward",
+        "Q26858576": "Angela Lomas",
+        "Q26858577": "Timothy Record",
+        "Q26858584": "Deborah McTeer",
+        "Q26858589": "Mark Matheisen",
+        "Q26858593": "Jed Gillin",
+        "Q26858602": "Bob Harks",
+        "Q26858615": "Kenneth Bevington",
+        "Q26858619": "Michael Flannery",
+        "Q26858621": "Gary Robinson",
+        "Q26858623": "Marlena Smalls",
+        "Q26858634": "Kitty K. Green",
+        "Q26858662": "Matt Wallace",
+        "Q26858676": "Danté McCarthy",
+        "Q26858677": "Paulie DiCocco",
+        "Q26858680": "Mike Jolly",
+        "Q26858681": "Michael Kemmerling",
+        "Q26858689": "Jeffrey Winner",
+        "Q26858692": "Russ Wilson",
+        "Q26858695": "Daniel J. Gillooly",
+        "Q26858706": "Calvin Gadsden",
+        "Q26858709": "Aaron Izbicki",
+        "Q26858732": "Steven Griffith",
+        "Q26858734": "William Acy \"Billy\" Roberson Jr",
+        "Q26858737": "Michael McFall",
+        "Q26858744": "Eric Underwood",
+        "Q26858753": "Steve DeRelian",
+        "Q26858756": "Byron Minns",
+        "Q26858768": "Bonnie Ann Burgess",
+        "Q26858807": "Scott Oliver",
+        "Q26858814": "John William Galt",
+        "Q26858889": "Hilary Chaplain",
+        "Q26859033": "Isabel Rose",
+        "Q26859059": "Jay Ross",
+        "Q26859068": "Richard D'Alessandro",
+        "Q26859100": "Dick Stilwell",
+        "Q26859151": "Tim Perry",
+        "Q26859179": "Paul Raczkowski",
+        "Q26859187": "Valentine",
+        "Q26859208": "Tiffany Salerno",
+        "Q26859284": "Marla Sucharetza",
+        "Q26859347": "Aloysius Gigl",
+        "Q26859371": "Jack Bowden",
+        "Q26859423": "Lazarus Jackson",
+        "Q26859485": "Matt Rebenkoff",
+        "Q26859526": "Peter Bannon",
+        "Q26859543": "Joe Washington",
+        "Q26859576": "Natalie Hendrix",
+        "Q26859640": "Chiffonye Cobb",
+        "Q26859664": "Juan Singleton",
+        "Q26859763": "Michael Mattison",
+        "Q26859788": "Lenny Herb",
+        "Q26859856": "Charles Boswell",
+        "Q26859957": "Timothy McNeil",
+        "Q26859981": "Lonnie Hamilton",
+        "Q26860001": "Teresa Denton",
+        "Q2691042": "John Voldstad",
+        "Q272972": "Robin Wright",
+        "Q2825721": "Afemo Omilami",
+        "Q2966611": "Christopher Jones",
+        "Q30": "United States",
+        "Q3376545": "Peter Dobson",
+        "Q3498519": "Stephen Bridgewater",
+        "Q3536506": "David Brisbin",
+        "Q374447": "Sam Anderson",
+        "Q375356": "Dick Cavett",
+        "Q442310": "Mary Ellen Trainor",
+        "Q452552": "Grand L. Bush",
+        "Q457991": "Siobhan Fallon Hogan",
+        "Q4703990": "Al Harrington",
+        "Q489856": "Haley Joel Osment",
+        "Q4962360": "Brett Rice",
+        "Q552213": "Forrest Gump",
+        "Q6212499": "Joe Stefanelli",
+        "Q7050088": "Nora Dunfee",
+        "Q7168625": "historical drama",
+        "Q741555": "Mykelti Williamson",
+        "Q7914705": "Vanessa Roth",
+        "Q869771": "Bobby Richardson",
+        "Q942932": "Eric Roth",
+        "Q950104": "Michael Jace",
+        "Q9582": "Gerald Ford"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q134773",
+      "lang": "en",
+      "title": "Forrest Gump",
+      "extract": "Forrest Gump is a 1994 American comedy-drama film directed by Robert Zemeckis. An adaptation of the 1986 novel of the same name by Winston Groom, the film's screenplay was written by Eric Roth. It stars Tom Hanks in the title role, alongside Robin Wright, Gary Sinise, Mykelti Williamson, and Sally Field in lead roles. The film follows the life of an Alabama man named Forrest Gump (Hanks) and his experiences in the 20th-century United States.\nPrincipal photography took place between August and December 1993, mainly in the tri-states Georgia, North Carolina, and South Carolina. Extensive visual effects were used to incorporate Hanks into archived footage and to develop other scenes. The soundtrack features songs reflecting the different periods seen in the film. Various interpretations have been made of the protagonist and the film's political symbolism.\nForrest Gump was released in the United States by Paramount Pictures on July 6, 1994, and received widespread critical acclaim for Zemeckis's direction, the performances (particularly those of Hanks and Sinise), story, writing, emotional weight, visual effects, music, character development and screenplay. The film was a major success at the box office: it became the top-grossing film in the United States released that year and earned over US$678 million worldwide against a $55 million budget during its theatrical run, making it the second-highest-grossing film of 1994, behind The Lion King. The soundtrack sold over 12 million copies. Forrest Gump is often regarded as one of the greatest and most influential films ever made, and won six Academy Awards: Best Picture, Best Director, Best Actor for Hanks, Best Adapted Screenplay, Best Visual Effects, and Best Film Editing. It received many award nominations, including Golden Globes, British Academy Film Awards, and Screen Actors Guild Awards.\nIn 2011, the Library of Congress selected the film for preservation in the United States National Film Registry as being \"culturally, historically, or aesthetically significant\".",
+      "url": "https://en.wikipedia.org/wiki/Forrest_Gump"
+    },
+    "wikipedia:es": {
+      "qid": "Q134773",
+      "lang": "es",
+      "title": "Forrest Gump (película)",
+      "extract": "Forrest Gump es una película cómico-dramática estadounidense, estrenada en 1994. Basada en la novela homónima del escritor Winston Groom y dirigida por Robert Zemeckis, la protagonizan Tom Hanks, Robin Wright, Gary Sinise y Sally Field. La historia describe varias décadas de la vida de Forrest Gump, un nativo de Alabama que sufre una leve discapacidad intelectual; esto no le impide ser testigo privilegiado, y en algunos casos actor decisivo, de muchos de los momentos más transcendentales de la historia de los Estados Unidos en la segunda mitad del siglo XX, específicamente entre 1945 y 1982.\nLa película difiere sustancialmente de la novela en que se basa, entre otras cosas, en la propia personalidad del protagonista y en las diversas circunstancias en las que se ve envuelto. El rodaje se realizó en 1993, principalmente en los estados norteamericanos de Georgia, Carolina del Norte y Carolina del Sur. Se usaron numerosos efectos visuales para integrar al protagonista en imágenes históricas reales y recrear otras escenas. En la banda sonora, la película incluye numerosas canciones propias de cada época que en ella se retratan, una recopilación musical que, en su salida comercial como álbum, fue todo un éxito gracias a los ocho millones de ejemplares vendidos en todo el mundo.\nEstrenada el 6 de julio de 1994, Forrest Gump recibió alabanzas de la crítica especializada y fue un gran éxito de público, pues se convirtió en la película más taquillera del año en Estados Unidos después del El rey león, y recaudó en todo el mundo 677 millones de dólares. La película se hizo acreedora de los premios Óscar a mejor película, mejor director (Robert Zemeckis), mejor actor (Tom Hanks), mejor guion adaptado, mejores efectos especiales y mejor montaje. Obtuvo, asimismo, los Globo de Oro, los People's Choice y los Young Artist. En 2011 la Biblioteca del Congreso de Estados Unidos seleccionó Forrest Gump para ser preservada en el National Film Registry por ser «cultural, histórica o estéticamente significante».​",
+      "url": "https://es.wikipedia.org/wiki/Forrest_Gump_(pel%C3%ADcula)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q134773",
+      "lang": "pt",
+      "title": "Forrest Gump",
+      "extract": "Forrest Gump (bra: Forrest Gump: O Contador de Histórias; prt: Forrest Gump) é um filme norte-americano de 1994, dirigido por Robert Zemeckis, com roteiro de Eric Roth,  baseado no romance homônimo de Winston Groom. O filme traz Tom Hanks no papel-título, além de Robin Wright e Gary Sinise. A trama atravessa várias décadas na vida do personagem central, Forrest Gump, um homem simples do Alabama que, em suas andanças pelo país, acaba encontrando personalidades históricas, influenciando a cultura popular e testemunhando alguns dos eventos mais notórios da história dos Estados Unidos no final do século XX.\nAs filmagens principais ocorreram entre agosto e dezembro de 1993 com locações nos estados americanos da Geórgia, Carolina do Norte e Carolina do Sul. Efeitos visuais abrangentes foram usados ​​para incorporar Hanks em imagens de arquivo para desenvolvimento de outras cenas. Sua trilha sonora traz canções que refletem os diferentes períodos vistos no filme.\nForrest Gump foi lançado nacionalmente nos Estados Unidos em 6 de julho de 1994 e recebeu críticas favoráveis ​​pela direção de Zemeckis, pelas performances de Sinise e Hanks, pelos efeitos visuais, pela música e pelo roteiro. O filme foi um enorme sucesso de bilheteria; tornou-se o filme de maior bilheteria na América lançado naquele ano e arrecadou mais de US$ 677  milhões em todo o mundo durante sua exibição teatral, tornando-se o segundo filme de maior bilheteria de 1994, atrás apenas da animação O Rei Leão. A trilha sonora vendeu mais de doze milhões de cópias. Forrest Gump ganhou o Óscar de Melhor Filme, Melhor Diretor, Melhor Ator para Tom Hanks, Melhor Roteiro Adaptado, Melhores Efeitos Visuais e Melhor Edição; também recebeu diversas indicações para outros prêmios, incluindo Globo de Ouro, BAFTA e Screen Actors Guild Awards.\nDiversas interpretações foram feitas do protagonista e do simbolismo político do filme. Em 2011, a Biblioteca do Congresso selecionou o filme para preservação no National Film Registry dos Estados Unidos como sendo \"culturalmente, historicamente ou esteticamente significativo\".",
+      "url": "https://pt.wikipedia.org/wiki/Forrest_Gump"
+    }
+  },
+  "tier": "top",
+  "type": "movie"
+}

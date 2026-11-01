@@ -1,0 +1,114 @@
+{
+  "qid": "Q24191484",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q24191484",
+      "labels": {
+        "en": "WHIH Newsfront",
+        "pt": "WHIH Newsfront"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "WHIH Newsfront",
+        "ptwiki": "WHIH Newsfront"
+      },
+      "sitelinks_count": 8,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+10",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q1358344",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q192724",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "WHIH Newsfront",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q239453",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt5296048",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q866",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "69069",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1358344": "news program",
+        "Q1860": "English",
+        "Q192724": "Iron Man",
+        "Q239453": "Leslie Bibb",
+        "Q30": "United States",
+        "Q866": "YouTube"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q24191484",
+      "lang": "en",
+      "title": "WHIH Newsfront",
+      "extract": "WHIH Newsfront is a faux American current affairs web series serving as the center of several viral marketing campaigns for Marvel Studios. Based on the fictional television network WHIH World News that appears throughout the Marvel Cinematic Universe (MCU), the YouTube videos began as marketing for the film Ant-Man, and deal with major events depicted in the MCU's films and television series. The videos were created by Marvel Studios in partnership with Google.\nThe news program features Leslie Bibb as Christine Everhart, reprising her role from the MCU films, with Al Madrigal portraying political correspondent Will Adams. Several other actors reprise their roles from the films, while archival footage of others is also used. The initial videos were released during July 2015, focusing on the immediate aftermath of Avengers: Age of Ultron, while leading up to the events of Ant-Man. More were released beginning in April 2016, as a WHIH Newsfront Special Report, focusing on the Avengers and the political issues surrounding them, as part of a similar viral marketing campaign for the film Captain America: Civil War.\nThe videos are accompanied by additional marketing materials, such as in-universe web articles and social media posts. The series has been received positively, seen as better than average viral marketing campaigns, and as a fun and insightful expansion of the MCU for fans of the franchise.",
+      "url": "https://en.wikipedia.org/wiki/WHIH_Newsfront"
+    },
+    "wikipedia:pt": {
+      "qid": "Q24191484",
+      "lang": "pt",
+      "title": "WHIH Newsfront",
+      "extract": "WHIH Newsfront é um programa americano fictício de Notícia em Websérie, servindo como um centro de Marketing viral, realizando campanhas para a Marvel Studios. Baseado na fictícia rede de televisão WHIH World News, que aparece em todo o Universo Cinematográfico Marvel (MCU), os vídeos exibidos no YouTube começaram como marketing para o filme Homem-Formiga, e lidam com grandes eventos ocorridos no MCU. Os vídeos foram criados pela Marvel Studios em parceria com o Google.\nO Telejornalismo apresenta a Leslie Bibb como Christine Everhart, reprisando o seu papel nos filmes do MCU, juntamente com o Al Madrigal retratando um correspondente político Will Adams. Vários outros atores também reprisam seus papéis dos filmes. Os primeiros vídeos foram liberados no mês de julho de 2015, com foco na continuação de Avengers: Age of Ultron, antecedendo os eventos de Homem-Formiga. Após isso foram liberados a partir de abril de 2016, agora como WHIH Newsfront relatório especial, concentrando-se nos Vingadores e as questões políticas em torno deles, como parte de uma campanha de marketing viral diretamente para o filme Capitão América: Guerra Civil.\nOs vídeos são acompanhados por materiais de marketing adicionais, como artigos da web e mensagens de mídia social. A série foi recebida de forma positiva, visto como a melhor campanha de marketing viral da atualidade, e como um divertimento e expansão perspicaz do MCU para os fãs da franquia.",
+      "url": "https://pt.wikipedia.org/wiki/WHIH_Newsfront"
+    }
+  },
+  "tier": "tail",
+  "type": "series"
+}

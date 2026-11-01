@@ -1,0 +1,184 @@
+{
+  "qid": "Q25460",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q25460",
+      "labels": {
+        "en": "36 Views from the Pic Saint-Loup",
+        "es": "El último verano"
+      },
+      "aliases": {
+        "en": [
+          "36 vues du pic Saint-Loup"
+        ],
+        "es": [
+          "El ultimo verano"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Around a Small Mountain",
+        "eswiki": "El último verano (película)"
+      },
+      "sitelinks_count": 8,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/36_vues_du_pic_saint_loup",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q107022805",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "36 vues du pic Saint-Loup",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q212873",
+            "rank": "normal"
+          },
+          {
+            "value": "Q524544",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2848242",
+            "rank": "normal"
+          },
+          {
+            "value": "Q923461",
+            "rank": "normal"
+          },
+          {
+            "value": "Q441071",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3559331",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3219316",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/36-vues-du-pic-saint-loup",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+84",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt1239285",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q150",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "59947",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q142",
+            "rank": "normal"
+          },
+          {
+            "value": "Q38",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q167475",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+2009-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q167475",
+            "rank": "normal"
+          },
+          {
+            "value": "Q524544",
+            "rank": "normal"
+          },
+          {
+            "value": "Q289645",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q107022805": "circus film",
+        "Q130232": "drama film",
+        "Q142": "France",
+        "Q150": "French",
+        "Q167475": "Jacques Rivette",
+        "Q212873": "Jane Birkin",
+        "Q2848242": "André Marcon",
+        "Q289645": "Pascal Bonitzer",
+        "Q3219316": "Laurent Lacotte",
+        "Q3559331": "Vimala Pons",
+        "Q38": "Italy",
+        "Q441071": "Julie-Marie Parmentier",
+        "Q524544": "Sergio Castellitto",
+        "Q923461": "Jacques Bonnaffé"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q25460",
+      "lang": "en",
+      "title": "Around a Small Mountain",
+      "extract": "Around a Small Mountain (French: 36 vues du pic Saint-Loup) is a 2009 French drama film directed by Jacques Rivette, which was his final film before his death on 29 January 2016, and starred Jane Birkin and Sergio Castellitto. It was screened in the main competition at the 66th Venice International Film Festival.",
+      "url": "https://en.wikipedia.org/wiki/Around_a_Small_Mountain"
+    },
+    "wikipedia:es": {
+      "qid": "Q25460",
+      "lang": "es",
+      "title": "El último verano (película)",
+      "extract": "El último verano (36 vues du pic Saint-Loup) es una película franco-italiana dirigida por Jacques Rivette en 2008 y estrenada en los cines 9 de septiembre de 2009 en francés.",
+      "url": "https://es.wikipedia.org/wiki/El_%C3%BAltimo_verano_(pel%C3%ADcula)"
+    }
+  },
+  "tier": "tail",
+  "type": "movie"
+}

@@ -1,0 +1,120 @@
+{
+  "qid": "Q55257",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q55257",
+      "labels": {
+        "en": "Star Wars: Masters of Teräs Käsi",
+        "mul": "Star Wars: Masters of Teräs Käsi",
+        "pt": "Star Wars: Masters of Teräs Käsi",
+        "pt-br": "Star Wars: Masters of Teräs Käsi"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Star Wars: Masters of Teräs Käsi",
+        "ptwiki": "Star Wars: Masters of Teräs Käsi"
+      },
+      "sitelinks_count": 9,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q216611",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q130270628",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Star Wars",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q216611",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "9114",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0190804",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q10677",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          },
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1997-10-31T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "star-wars-masters-of-teras-kasi",
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q462",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q10677": "PlayStation",
+        "Q130270628": "3D fighting game",
+        "Q208850": "single-player video game",
+        "Q216611": "Lucasfilm Games",
+        "Q30": "United States",
+        "Q462": "Star Wars",
+        "Q6895044": "multiplayer video game"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q55257",
+      "lang": "en",
+      "title": "Star Wars: Masters of Teräs Käsi",
+      "extract": "Star Wars: Masters of Teräs Käsi is a fighting game developed and published by LucasArts, which was released for the PlayStation in 1997. In the game's story, which is set in the Star Wars universe, the Emperor seeks retaliation for the destruction of the Death Star and recruits the mysterious Arden Lyn to battle in the art of Teräs Käsi, an unarmed combat discipline, against leaders of the Rebel Alliance. The game features Star Wars Legends characters, including the Emperor's Hand Mara Jade.\nDevelopment for Masters of Teräs Käsi was handled internally at LucasArts. It was both the first fighting game and first PlayStation title for the company, which presented challenges. Industrial Light \u0026 Magic assisted with motion capture, used for character animations. While spirits were high during the development and promotion of Masters of Teräs Käsi, the game was met with underwhelming reviews. Criticisms were directed at the sluggish movement of the characters and the unbalanced moves, though the basic concept of combining weapons-based and hand-to-hand combat was praised.",
+      "url": "https://en.wikipedia.org/wiki/Star_Wars:_Masters_of_Ter%C3%A4s_K%C3%A4si"
+    }
+  },
+  "tier": "tail",
+  "type": "game"
+}

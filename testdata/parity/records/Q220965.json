@@ -1,0 +1,181 @@
+{
+  "qid": "Q220965",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q220965",
+      "labels": {
+        "es": "Heroes of Might and Magic III",
+        "mul": "Heroes of Might and Magic III: The Restoration of Erathia",
+        "pt": "Heroes of Might and Magic III",
+        "pt-br": "Heroes of Might and Magic III"
+      },
+      "aliases": {
+        "en": [
+          "Heroes of Might and Magic Three"
+        ],
+        "mul": [
+          "HoMM 3",
+          "Heroes III",
+          "Heroes of Might and Magic 3",
+          "Heroes 3",
+          "Heroes of Might and Magic III"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Heroes of Might and Magic III",
+        "eswiki": "Heroes of Might and Magic III"
+      },
+      "sitelinks_count": 34,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q1062171",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188273",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q2176159",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Heroes of Might and Magic III",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "4921760",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q1889419",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q216572",
+            "rank": "normal"
+          }
+        ],
+        "P2725": [
+          {
+            "value": "game/heroes_of_might_and_magic_3_complete_edition",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "4425",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0379311",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q388",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q94",
+            "rank": "normal"
+          },
+          {
+            "value": "Q48493",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13522376",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          },
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1630770",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1999-02-28T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "heroes-of-might-and-magic-iii-complete",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1062171": "The 3DO Company",
+        "Q13522376": "Classic Mac OS",
+        "Q1406": "Microsoft Windows",
+        "Q1630770": "hotseat",
+        "Q188273": "Ubisoft",
+        "Q1889419": "New World Computing",
+        "Q208850": "single-player video game",
+        "Q216572": "Heroes of Might and Magic",
+        "Q2176159": "turn-based strategy video game",
+        "Q30": "United States",
+        "Q388": "Linux",
+        "Q48493": "iOS",
+        "Q6895044": "multiplayer video game",
+        "Q94": "Android"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q220965",
+      "lang": "en",
+      "title": "Heroes of Might and Magic III",
+      "extract": "Heroes of Might and Magic III: The Restoration of Erathia (commonly referred to as Heroes of Might and Magic 3, or Heroes 3, or abbreviated HoMM 3) is a turn-based strategy game, developed by Jon Van Caneghem through New World Computing and originally released for Microsoft Windows by The 3DO Company in 1999.\nAs the third installment of the Heroes of Might and Magic series, the game was released to universal acclaim and commercial success, becoming a defining classic of the turn-based strategy genre. It received two major official expansion packs, Armageddon's Blade and The Shadow of Death, which were packaged together in 2000 as Heroes of Might and Magic III Complete.\nIn 2026, Heroes of Might and Magic III Remake was announced, set to release in 2027 on PlayStation 5, Xbox Series X/S and Windows.\nHeroes III receives continued unofficial support through community modding projects, notably the 2011 Horn of the Abyss expansion.",
+      "url": "https://en.wikipedia.org/wiki/Heroes_of_Might_and_Magic_III"
+    },
+    "wikipedia:es": {
+      "qid": "Q220965",
+      "lang": "es",
+      "title": "Heroes of Might and Magic III",
+      "extract": "Heroes of Might and Magic III: The Restoration of Erathia (también conocido como Heroes III y HoMM3) es un videojuego de estrategia por turnos desarrollado por New World Computing y publicado por the 3DO Company. Salió a la venta el 28 de febrero de 1999 para Microsoft Windows, el 20 de diciembre para Linux y el 21 para Macintosh. El videojuego contó con las expansiones Armageddon's Blade (1999) y The Shadow of Death (2000). Tras la adquisición de la propiedad intelectual por parte de Ubisoft, la empresa lanzó en 2015 la «versión HD» para Microsoft Windows, iOS y Android, con gráficos renovados y compatibilidad con pantalla ancha. No obstante, no incluyó las expansiones por la pérdida de su código fuente.\nEl jugador puede optar por jugar a través de siete campañas diferentes que cuentan la historia del videojuego, o jugar en un escenario contra personas o la inteligencia artificial. La jugabilidad es similar a la de sus predecesores, donde el jugador controla a un número de héroes que comandan un ejército de criaturas inspiradas en mitos y leyendas. El modo de juego está dividido en dos secciones, la exploración táctica por tierra y un sistema de combate por turnos. El jugador crea un ejército utilizando recursos y desarrolla ciudades en uno de los ocho tipos de facciones. El héroe también adquiere experiencia a medida que entra en combate con monstruos y héroes enemigos. Las condiciones de victoria varían dependiendo del mapa, incluyendo la conquista y captura de todas las facciones y enemigos, recolección de una cierta cantidad de recursos, o encontrar el artefacto grial.\nEl título se desarrolló bajo la dirección de David Mullich. El proyecto comenzó en septiembre de 1997 con un equipo de unas treinta personas y un plazo de catorce meses, reutilizando el motor de la entrega anterior. Mientras Jon Van Caneghem y Greg Fulton se enfocaron en el diseño y el equilibrio de las mecánicas, Mullich lideró una profunda renovación artística, impulsando una estética más oscura y refinada inspirada en la fantasía clásica. En paralelo, el equipo amplió el apartado técnico y añadió nuevas características jugables. La banda sonora, compuesta por Paul Romero junto a Rob King y Steve Baca, adoptó un lenguaje orquestal de inspiración romántica. La música se convirtió en uno de los elementos más reconocidos del juego y ha trascendido su lanzamiento a través de conciertos, reinterpretaciones sinfónicas y ediciones remasterizadas.",
+      "url": "https://es.wikipedia.org/wiki/Heroes_of_Might_and_Magic_III"
+    }
+  },
+  "tier": "mid",
+  "type": "game"
+}

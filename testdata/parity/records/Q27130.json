@@ -1,0 +1,181 @@
+{
+  "qid": "Q27130",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q27130",
+      "labels": {
+        "en": "The Screaming Shadow",
+        "es": "The Screaming Shadow",
+        "pt": "The Screaming Shadow",
+        "pt-br": "The Screaming Shadow"
+      },
+      "aliases": {
+        "en": [
+          "Screaming Shadow"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "The Screaming Shadow",
+        "ptwiki": "The Screaming Shadow"
+      },
+      "sitelinks_count": 6,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q226730",
+            "rank": "normal"
+          },
+          {
+            "value": "Q319221",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188473",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7751682",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "The Screaming Shadow",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q2895417",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3305788",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3141535",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3185767",
+            "rank": "normal"
+          },
+          {
+            "value": "Q8008167",
+            "rank": "normal"
+          },
+          {
+            "value": "Q8003921",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5495220",
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q20055988",
+            "rank": "normal"
+          }
+        ],
+        "P3383": [
+          {
+            "value": "Ben Wilson in The Screaming Shadow by Ben F. Wilson and Duke Worne Film Daily 1920.png",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0011667",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "288353",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q2895417",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5312913",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1920-02-22T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q6105849",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3388109",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1860": "English",
+        "Q188473": "action film",
+        "Q20055988": "Hallmark Pictures Corporation",
+        "Q226730": "silent film",
+        "Q2895417": "Ben F. Wilson",
+        "Q30": "United States",
+        "Q3141535": "Howard Crampton",
+        "Q3185767": "Joseph W. Girard",
+        "Q319221": "adventure film",
+        "Q3305788": "Neva Gerber",
+        "Q3388109": "Harvey Gates",
+        "Q5312913": "Duke Worne",
+        "Q5495220": "Fred Gamble",
+        "Q6105849": "J. Grubb Alexander",
+        "Q7751682": "serial film",
+        "Q8003921": "William A. Carroll",
+        "Q8008167": "William Dyer"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q27130",
+      "lang": "en",
+      "title": "The Screaming Shadow",
+      "extract": "The Screaming Shadow is a 1920 American 15-chapter silent film serial directed by Ben F. Wilson and Duke Worne. The film is considered to be lost.",
+      "url": "https://en.wikipedia.org/wiki/The_Screaming_Shadow"
+    },
+    "wikipedia:pt": {
+      "qid": "Q27130",
+      "lang": "pt",
+      "title": "The Screaming Shadow",
+      "extract": "The Screaming Shadow é um seriado estadunidense de 1920, no gênero ação, dirigido por Ben F. Wilson e Duke Worne, em 15 capítulos, estrelado por Ben F. Wilson e Neva Gerber. Foi produzido pela Hallmark Pictures Corporation, e veiculou nos cinemas estadunidenses entre 26 de janeiro e 22 de maio de 1920.\nEste seriado é considerado perdido.",
+      "url": "https://pt.wikipedia.org/wiki/The_Screaming_Shadow"
+    }
+  },
+  "tier": "tail",
+  "type": "movie"
+}

@@ -1,0 +1,154 @@
+{
+  "qid": "Q12594651",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q12594651",
+      "labels": {
+        "en": "The Sound of Your Heart",
+        "es": "El sonido de tu corazón",
+        "pt": "The Sound Of Your Heart"
+      },
+      "aliases": {
+        "en": [
+          "Your Voice"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "The Sound of Your Heart (TV series)",
+        "ptwiki": "The Sound Of Your Heart"
+      },
+      "sitelinks_count": 9,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+20",
+              "unit": "1"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "amount": "+5",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q170238",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q488090",
+            "rank": "normal"
+          },
+          {
+            "value": "Q17963974",
+            "rank": "normal"
+          },
+          {
+            "value": "Q170001",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15630925",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6677761",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt4613520",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q9176",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q9176",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q485639",
+            "rank": "normal"
+          },
+          {
+            "value": "Q498825",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q884",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "68945",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2016-11-07T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2016-12-09T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q15630925": "Kim Byeong-ok",
+        "Q170001": "Jung So-min",
+        "Q170238": "sitcom",
+        "Q17963974": "Kim Dae-myung",
+        "Q485639": "Naver",
+        "Q488090": "Lee Kwang-soo",
+        "Q498825": "Korean Broadcasting System",
+        "Q6677761": "Kim Mi-kyung",
+        "Q884": "South Korea",
+        "Q9176": "Korean"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q12594651",
+      "lang": "en",
+      "title": "The Sound of Your Heart (TV series)",
+      "extract": "The Sound of Your Heart (Korean: 마음의 소리; RR: Maeumui sori) is a South Korean television series starring Lee Kwang-soo and Jung So-min. The sitcom is based on the webtoon of the same name. The first 10 episodes were aired as a web series  on 7 November 2016 through Naver TV Cast on Mondays at 6:00 (KST), and the remaining 10 episodes aired from December 2016. The web series hit 100 million views on Sohu TV and ranked No. 1 among Korean dramas on the site. On Naver TV Cast, the web series has more than 40 million views in South Korea as of February 2017. It is also now airing on Netflix.",
+      "url": "https://en.wikipedia.org/wiki/The_Sound_of_Your_Heart_(TV_series)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q12594651",
+      "lang": "pt",
+      "title": "The Sound Of Your Heart",
+      "extract": "The Sound Of Your Heart (coreano: 마음의 소리; RR: Maeumui Sori) é uma série de televisão sul-coreana, estrelando Lee Kwang-soo e Jung So-min. A sitcom é baseada no webtoon de mesmo nome, do quadrinista Jo Seok. Os episódios tem no máximo 30 minutos, com um humor inteligente e envolvente e classificação livre para todas as idades.  A série também está disponível na Netflix. Em 2018, a Netflix produziu uma sequência, chamada The Sound of Your Heart: Reboot.",
+      "url": "https://pt.wikipedia.org/wiki/The_Sound_Of_Your_Heart"
+    }
+  },
+  "tier": "tail",
+  "type": "series"
+}

@@ -1,0 +1,146 @@
+{
+  "qid": "Q483166",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q483166",
+      "labels": {
+        "en": "My Sassy Girl",
+        "es": "My Sassy Girl",
+        "pt": "Yeopgijeogin geunyeo"
+      },
+      "aliases": {
+        "en": [
+          "Yeopgijeogin Geunyeo"
+        ],
+        "pt": [
+          "Minha Bizarra Garota",
+          "My Sassy Girl",
+          "엽기적인 그녀"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "My Sassy Girl",
+        "eswiki": "Mi chica descarada",
+        "ptwiki": "Yeopgijeogin geunyeo"
+      },
+      "sitelinks_count": 31,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/my_sassy_girl",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q860626",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "엽기적인 그녀",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q253626",
+            "rank": "normal"
+          },
+          {
+            "value": "Q483704",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+123",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0293715",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q9176",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "11178",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q884",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q484686",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+2001-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2001-07-27T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q253626": "Jun Ji-hyun",
+        "Q483704": "Cha Tae-hyun",
+        "Q484686": "Kwak Jae-yong",
+        "Q860626": "romantic comedy",
+        "Q884": "South Korea",
+        "Q9176": "Korean"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q483166",
+      "lang": "en",
+      "title": "My Sassy Girl",
+      "extract": "My Sassy Girl (Korean: 엽기적인 그녀; RR: Yeopgijeogin geunyeo; lit. 'That Bizarre Girl') is a 2001 South Korean romantic comedy film directed by Kwak Jae-yong, starring Jun Ji-hyun and Cha Tae-hyun. The film is based on a true story told in a series of blog posts written by Kim Ho-sik, who later adapted them into a novel.\nThe film was very successful in South Korea, where it was the highest-grossing comedy of all time, and one of the top five highest-grossing films ever at the time. When My Sassy Girl was released across East Asia, it became a blockbuster in the region, becoming a hit in Japan, Taiwan and Hong Kong. The film's success in Asia drew comparisons to Titanic. Its DVD release also drew a large international cult following, particularly in China, Southeast Asia, and parts of South Asia. My Sassy Girl sparked an international breakthrough for Korean cinema, and it played a key role in the spread of the Korean Wave.\nThe film has spawned an international media franchise, consisting of film remakes and television adaptations in different countries as well as a sequel. An American remake, starring Jesse Bradford and Elisha Cuthbert, and directed by Yann Samuell, was released in 2008. A Japanese drama adaptation with Tsuyoshi Kusanagi and actress Rena Tanaka as the leads started broadcasting in April 2008. A sequel, My New Sassy Girl, a collaborative work between Korea and China, was released in 2016. My Sassy Girl has received numerous remakes and adaptations, including Japanese and Korean television adaptations as well as a number of remakes from other countries (American, Indian, Chinese, Nepali, Lithuanian, Indonesian and Philippine versions).",
+      "url": "https://en.wikipedia.org/wiki/My_Sassy_Girl"
+    },
+    "wikipedia:es": {
+      "qid": "Q483166",
+      "lang": "es",
+      "title": "Mi chica descarada",
+      "extract": "Mi chica descarada (en hangul, 엽기적인 그녀) es una película de 2001 dirigida por Kwak Jae-yong. Protagonizada por Jun Ji Hyun y Cha Tae-hyun.\nLa película fue muy exitosa en Corea del Sur y fue la comedia coreana más recaudadora de todos los tiempos.​ Cuando la película fue estrenada en Asia, se convirtió en un éxito en toda la región, desde Japón, China, Taiwán, Hong Kong, como también Asia del Sur, hasta el punto que la comparaban con Titanic.\nSe hizo una adaptación estadounidense, protagonizada por Jesse Bradford y Elisha Cuthbert, y dirigida por Yann Samuell, estrenada en 2008.​",
+      "url": "https://es.wikipedia.org/wiki/Mi_chica_descarada"
+    },
+    "wikipedia:pt": {
+      "qid": "Q483166",
+      "lang": "pt",
+      "title": "Yeopgijeogin geunyeo",
+      "extract": "Yeopgijeogin geunyeo (em coreano:  엽기적인 그녀/em inglês:  My Sassy Girl) é um filme sul-coreano de 2001, do gênero comédia romântica, dirigido por Kwak Jae-yong. É parcialmente baseada em uma história real publicada em capítulos em um blog na internet por Kim Ho-sik.\nO filme foi um sucesso comercial na Coreia do Sul e no leste asiático, especialmente no Japão, China, Taiwan, Filipinas, Hong Kong, Singapura, Vietnã e Indonésia, a ponto de ser comparado com Titanic.\nEm 2007 foi produzida uma versão norte-americana do filme, estrelado por Jesse Bradford, Elisha Cuthbert e dirigido por Yann Samuell.",
+      "url": "https://pt.wikipedia.org/wiki/Yeopgijeogin_geunyeo"
+    }
+  },
+  "tier": "mid",
+  "type": "series"
+}

@@ -1,0 +1,255 @@
+{
+  "qid": "Q264257",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q264257",
+      "labels": {
+        "en": "Tribal Wars",
+        "es": "Guerras Tribales",
+        "mul": "Tribal Wars",
+        "pt": "Tribal Wars",
+        "pt-br": "Tribal Wars"
+      },
+      "aliases": {
+        "en": [
+          "TribalWars",
+          "TW"
+        ],
+        "es": [
+          "Tribal Wars"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Tribal Wars",
+        "eswiki": "Guerras Tribales",
+        "ptwiki": "Tribal Wars"
+      },
+      "sitelinks_count": 29,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q673888",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q208189",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "675690",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q673888",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "57248",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q48493",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q14116",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          },
+          {
+            "value": "Q150",
+            "rank": "normal"
+          },
+          {
+            "value": "Q652",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13955",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9056",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9035",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7411",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9129",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9067",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9043",
+            "rank": "normal"
+          },
+          {
+            "value": "Q809",
+            "rank": "normal"
+          },
+          {
+            "value": "Q750553",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7913",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7737",
+            "rank": "normal"
+          },
+          {
+            "value": "Q56649449",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9027",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9217",
+            "rank": "normal"
+          },
+          {
+            "value": "Q256",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5146",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9058",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q183",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2003-06-10T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2020-11-12T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "tribal-wars--1",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1321": "Spanish",
+        "Q13955": "Arabic",
+        "Q1406": "Microsoft Windows",
+        "Q14116": "macOS",
+        "Q150": "French",
+        "Q183": "Germany",
+        "Q1860": "English",
+        "Q188": "German",
+        "Q208189": "real-time strategy",
+        "Q256": "Turkish",
+        "Q48493": "iOS",
+        "Q5146": "Portuguese",
+        "Q56649449": "Latin American Spanish",
+        "Q652": "Italian",
+        "Q673888": "InnoGames",
+        "Q6895044": "multiplayer video game",
+        "Q7411": "Dutch",
+        "Q750553": "Brazilian Portuguese",
+        "Q7737": "Russian",
+        "Q7913": "Romanian",
+        "Q809": "Polish",
+        "Q9027": "Swedish",
+        "Q9035": "Danish",
+        "Q9043": "Norwegian",
+        "Q9056": "Czech",
+        "Q9058": "Slovak",
+        "Q9067": "Hungarian",
+        "Q9129": "Greek",
+        "Q9217": "Thai"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q264257",
+      "lang": "en",
+      "title": "Tribal Wars",
+      "extract": "Tribal Wars (TW) is a browser-based, real-time strategy, massively multiplayer online game set in the Middle Ages. The game is set with each player starting off controlling a small village, with the objective being to slowly expand and conquer new villages through the formation of complex armies and a tactical combat system. The game incorporates multiple components of teamwork, planning, and strategy. The game allows players to collect resources, build armies, construct buildings, combat other armies (players or neutral), and conquer new villages. The game also allows for a level of player-specific customization, in regards to village names, army types, and troop-counts. The game operates under world-specific settings that vary from world to world.",
+      "url": "https://en.wikipedia.org/wiki/Tribal_Wars"
+    },
+    "wikipedia:es": {
+      "qid": "Q264257",
+      "lang": "es",
+      "title": "Guerras Tribales",
+      "extract": "Guerras Tribales, o Tribal Wars (TW) en inglés, es un juego de navegador multijugador masivo de estrategia en tiempo real (MMORTS), ambientado en la Edad Media. En Guerras Tribales, cada jugador comienza con un poblado y debe hacerlo crecer para posteriormente conquistar los pueblos de otros jugadores y expandir su territorio.",
+      "url": "https://es.wikipedia.org/wiki/Guerras_Tribales"
+    },
+    "wikipedia:pt": {
+      "qid": "Q264257",
+      "lang": "pt",
+      "title": "Tribal Wars",
+      "extract": "Tribal Wars(pt-BR) ou Tribos(pt-PT?) é um jogo multijogador massivo online (MMO) de estratégia em tempo real onde o objetivo é aniquilar as tribos e aldeias inimigas baseado na idade média, criado pela empresa alemã InnoGames GmbH. Ele segue o mesmo estilo de Travian e Ikariam, cada jogador é senhor de uma pequena aldeia, qual deve ajudar a ganhar poder e glória. \nO registro no jogo é gratuito, porém existe a possibilidade de ter uma conta paga, chamada \"Conta Premium\". Possuidores desse tipo de conta adquirem variados privilégios, como receber uma notificação de quando um amigo fica online, adicionar várias edificações simultaneamente, pesquisar várias tecnologias no ferreiro, entre outros.\nExistem os mundos do jogo, além das rodadas Speed, o mundo Clássico e o mundo Casual. O número de jogadores em todo mundo passa dos 50 milhões, sendo um dos jogos de estratégia mais jogados no mundo.",
+      "url": "https://pt.wikipedia.org/wiki/Tribal_Wars"
+    }
+  },
+  "tier": "mid",
+  "type": "game"
+}

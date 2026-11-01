@@ -1,0 +1,55 @@
+{
+  "qid": "Q102376902",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q102376902",
+      "labels": {
+        "en": "Going South",
+        "es": "Going South (libro)",
+        "pt": "Going South (livro)"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Going South (book)",
+        "eswiki": "Going South (libro)",
+        "ptwiki": "Going South (livro)"
+      },
+      "sitelinks_count": 6,
+      "claims": {
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1860": "English"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q102376902",
+      "lang": "en",
+      "title": "Going South (book)",
+      "extract": "Going South is a 2021 memoir and photo-book by New Zealand singer and songwriter Lorde, published under her personal name, Ella Yelich-O'Connor. The book documents her experience visiting the continent of Antarctica for a week in January 2019, with accompanying photos taken by New Zealand photographer Harriet Were.\nAll proceeds from the book were used to fund a postgraduate scholarship created by Antarctica New Zealand, a government agency.",
+      "url": "https://en.wikipedia.org/wiki/Going_South_(book)"
+    },
+    "wikipedia:es": {
+      "qid": "Q102376902",
+      "lang": "es",
+      "title": "Going South (libro)",
+      "extract": "Going South (2021) es una de las memorias de la cantautora neozelandesa Lorde .Documenta su experiencia al visitar el continente de la Antártida en enero de 2019 con fotos tomadas por la fotógrafa de Nueva Zelanda Harriet Were. Todas las ganancias del libro se utilizarán para financiar una beca de posgrado creada por Antarctica New Zealand, una agencia gubernamental.",
+      "url": "https://es.wikipedia.org/wiki/Going_South_(libro)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q102376902",
+      "lang": "pt",
+      "title": "Going South (livro)",
+      "extract": "Going South é um livro de memórias e de fotografia da cantora e compositora neozelandesa Lorde. Ele documenta sua experiência visitando o continente da Antártida em janeiro de 2019 com fotos tiradas pela fotógrafa Harriet Were da Nova Zelândia. Todos os rendimentos do livro serão usados ​​para financiar uma bolsa de estudos criada pela Antarctica New Zealand, uma agência governamental.",
+      "url": "https://pt.wikipedia.org/wiki/Going_South_(livro)"
+    }
+  },
+  "tier": "tail",
+  "type": "book"
+}

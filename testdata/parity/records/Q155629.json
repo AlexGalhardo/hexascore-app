@@ -1,0 +1,532 @@
+{
+  "qid": "Q155629",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q155629",
+      "labels": {
+        "en": "Sesame Street",
+        "es": "Sesame Street",
+        "pt": "Sesame Street",
+        "pt-br": "Sesame Street"
+      },
+      "aliases": {
+        "es": [
+          "Barrio Sésamo",
+          "Plaza Sésamo",
+          "Barrio Sesamo",
+          "Plaza Sesamo"
+        ],
+        "mul": [
+          "Sesame Street"
+        ],
+        "pt": [
+          "Plaza Sésamo"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Sesame Street",
+        "eswiki": "Sesame Street",
+        "ptwiki": "Sesame Street"
+      },
+      "sitelinks_count": 92,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+4744",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/sesame_street",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q743934",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1273568",
+            "rank": "normal"
+          },
+          {
+            "value": "Q861402",
+            "rank": "normal"
+          },
+          {
+            "value": "Q107547472",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1153173",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Sesame Street",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q1029467",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6551417",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7561732",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4707393",
+            "rank": "normal"
+          },
+          {
+            "value": "Q266335",
+            "rank": "normal"
+          },
+          {
+            "value": "Q888121",
+            "rank": "normal"
+          },
+          {
+            "value": "Q561396",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5371852",
+            "rank": "normal"
+          },
+          {
+            "value": "Q299342",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3241583",
+            "rank": "normal"
+          },
+          {
+            "value": "Q468028",
+            "rank": "normal"
+          },
+          {
+            "value": "Q311319",
+            "rank": "normal"
+          },
+          {
+            "value": "Q191037",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2665614",
+            "rank": "normal"
+          },
+          {
+            "value": "Q561765",
+            "rank": "normal"
+          },
+          {
+            "value": "Q561809",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4727017",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16202876",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7041592",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16204626",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2550087",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1319913",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2469336",
+            "rank": "normal"
+          },
+          {
+            "value": "Q317654",
+            "rank": "normal"
+          },
+          {
+            "value": "Q329716",
+            "rank": "normal"
+          },
+          {
+            "value": "Q473189",
+            "rank": "normal"
+          },
+          {
+            "value": "Q230495",
+            "rank": "normal"
+          },
+          {
+            "value": "Q121507",
+            "rank": "normal"
+          },
+          {
+            "value": "Q231811",
+            "rank": "normal"
+          },
+          {
+            "value": "Q454412",
+            "rank": "normal"
+          },
+          {
+            "value": "Q47100",
+            "rank": "normal"
+          },
+          {
+            "value": "Q36949",
+            "rank": "normal"
+          },
+          {
+            "value": "Q58444",
+            "rank": "normal"
+          },
+          {
+            "value": "Q229271",
+            "rank": "normal"
+          },
+          {
+            "value": "Q232592",
+            "rank": "normal"
+          },
+          {
+            "value": "Q442309",
+            "rank": "normal"
+          },
+          {
+            "value": "Q44380",
+            "rank": "normal"
+          },
+          {
+            "value": "Q486740",
+            "rank": "normal"
+          },
+          {
+            "value": "Q723011",
+            "rank": "normal"
+          },
+          {
+            "value": "Q483907",
+            "rank": "normal"
+          },
+          {
+            "value": "Q14540",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23762246",
+            "rank": "normal"
+          },
+          {
+            "value": "Q244441",
+            "rank": "normal"
+          },
+          {
+            "value": "Q466508",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1274818",
+            "rank": "normal"
+          },
+          {
+            "value": "Q262170",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1645740",
+            "rank": "normal"
+          },
+          {
+            "value": "Q230218",
+            "rank": "normal"
+          },
+          {
+            "value": "Q603317",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13133",
+            "rank": "normal"
+          },
+          {
+            "value": "Q618233",
+            "rank": "normal"
+          },
+          {
+            "value": "Q372723",
+            "rank": "normal"
+          },
+          {
+            "value": "Q170530",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2907990",
+            "rank": "normal"
+          },
+          {
+            "value": "Q912103",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2864827",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5478651",
+            "rank": "normal"
+          },
+          {
+            "value": "Q434111",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q6205061",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6662652",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "tv/sesame-street",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Strong4635.JPG",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+25",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+56",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q3480580",
+            "rank": "normal"
+          },
+          {
+            "value": "Q99741928",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0063951",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q3873154",
+            "rank": "normal"
+          },
+          {
+            "value": "Q215616",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23633",
+            "rank": "preferred"
+          },
+          {
+            "value": "Q249892",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "502",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q2734593",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3496492",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1969-11-10T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q106804572",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1029467": "Kevin Clash",
+        "Q106804572": "Sesame Street",
+        "Q107547472": "puppet show",
+        "Q1153173": "educational entertainment",
+        "Q121507": "Alicia Keys",
+        "Q1273568": "children's television series",
+        "Q1274818": "Alexis Cruz",
+        "Q13133": "Michelle Obama",
+        "Q1319913": "Eugene Byrd",
+        "Q14540": "Tina Fey",
+        "Q16202876": "Chris Knowings",
+        "Q16204626": "Ismaël Cruz Córdova",
+        "Q1645740": "Paul Benedict",
+        "Q170530": "Sarah Jessica Parker",
+        "Q1860": "English",
+        "Q191037": "Jim Henson",
+        "Q215616": "PBS",
+        "Q229271": "Lily Tomlin",
+        "Q230218": "Shirley Jones",
+        "Q230495": "Kim Raver",
+        "Q231811": "Kristin Chenoweth",
+        "Q232592": "Jill Scott",
+        "Q23633": "HBO",
+        "Q23762246": "Brandon Slagle",
+        "Q244441": "Pete Seeger",
+        "Q2469336": "Gedde Watanabe",
+        "Q249892": "Cinemax",
+        "Q2550087": "Eric Jacobson",
+        "Q262170": "Amy Sedaris",
+        "Q266335": "Charlotte Rae",
+        "Q2665614": "Fran Brill",
+        "Q2734593": "John R. Dilworth",
+        "Q2864827": "Arte Johnson",
+        "Q2907990": "Bobby Moynihan",
+        "Q299342": "Loretta Long",
+        "Q30": "United States",
+        "Q311319": "Frank Oz",
+        "Q317654": "Raul Julia",
+        "Q3241583": "Northern Calloway",
+        "Q329716": "Michael Jeter",
+        "Q3480580": "Sesame Workshop",
+        "Q3496492": "Stan Lathan",
+        "Q36949": "Robert De Niro",
+        "Q372723": "Clarice Taylor",
+        "Q3873154": "National Educational Television",
+        "Q434111": "Alaina Reed Hall",
+        "Q442309": "Andrea Martin",
+        "Q44380": "Cameron Diaz",
+        "Q454412": "Keshia Knight Pulliam",
+        "Q466508": "Rosemary Clooney",
+        "Q468028": "Jerry Nelson",
+        "Q4707393": "Alan Muraoka",
+        "Q47100": "Ben Stiller",
+        "Q4727017": "Alison Bartlett-O'Reilly",
+        "Q473189": "Will Lee",
+        "Q483907": "Jack Black",
+        "Q486740": "Conan O'Brien",
+        "Q5371852": "Emilio Delgado",
+        "Q5478651": "Frances Foster",
+        "Q561396": "Roscoe Orman",
+        "Q561765": "Caroll Spinney",
+        "Q561809": "Richard Hunt",
+        "Q58444": "Liam Neeson",
+        "Q603317": "Bill Irwin",
+        "Q618233": "Wendy Williams",
+        "Q6205061": "Joan Ganz Cooney",
+        "Q6551417": "Linda Bove",
+        "Q6662652": "Lloyd Morrisett",
+        "Q7041592": "Nitya Vidyasagar",
+        "Q723011": "Tyler James Williams",
+        "Q743934": "sketch comedy",
+        "Q7561732": "Sonia Manzano",
+        "Q861402": "educational television",
+        "Q888121": "Bob McGrath",
+        "Q912103": "Brian Doyle-Murray",
+        "Q99741928": "Children's Television Workshop"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q155629",
+      "lang": "en",
+      "title": "Sesame Street",
+      "extract": "Sesame Street is an American educational children's television series that combines live-action, sketch comedy, animation, and puppetry. It is produced by Sesame Workshop (known as the Children's Television Workshop until June 2000) and was created by Joan Ganz Cooney and Lloyd Morrisett. It features Jim Henson's Muppets, and includes short films, with humor and cultural references. It premiered on November 10, 1969, to positive reviews, some controversy, and high viewership. It has aired on the United States national public television provider PBS since its debut, with its first run moving to premium channel HBO on January 16, 2016, then its sister streaming service HBO Max on November 12, 2020, which continued through the service's rebrand as Max in 2023 and as HBO Max in 2025, and most recently Netflix on November 10, 2025.\nThe show's format consists of a combination of commercial television production elements and techniques that have evolved to reflect changes in American culture and audiences' viewing habits. It was the first children's TV show to use educational goals and a curriculum to shape its content, and the first show whose educational effects were formally studied. Its format and content have undergone significant changes over the years to reflect changes to its curriculum.\nShortly after its creation, its producers developed what came to be called the CTW model (after the production company's previous name), a system of planning, production, and evaluation based on collaboration between producers, writers, educators, and researchers. The show was initially funded by government and private foundations but has become somewhat self-supporting due to revenues from licensing arrangements, international sales, and other media. By 2006, independently produced versions (co-productions) of Sesame Street were broadcast in 20 countries. In 2001, there were over 120 million viewers of various international versions of Sesame Street; and by its 40th anniversary in 2009, it was broadcast in more than 140 countries.\nSince its debut, Sesame Street has garnered widespread acclaim, and it is considered one of the greatest television series of all time. By the show's 40th anniversary in 2009 it was the 15th-highest-rated children's television show in the United States. A 1996 survey found that 95% of all American preschoolers had watched it by the time they were three. In 2018, it was estimated that 86 million Americans had watched it as children. As of 2022, it has won 222 Emmy Awards and 11 Grammy Awards, more than any other children's show. Sesame Street remains one of the longest-running shows in the world. In 2019, the series was chosen for preservation in the American Archive of Public Broadcasting by the Library of Congress.",
+      "url": "https://en.wikipedia.org/wiki/Sesame_Street"
+    },
+    "wikipedia:es": {
+      "qid": "Q155629",
+      "lang": "es",
+      "title": "Sesame Street",
+      "extract": "Sesame Street es una serie de televisión educativa estadounidense apta para todo público, muy conocida por sus personajes títeres, The Muppets.\nSu primera emisión en los Estados Unidos fue el 10 de noviembre de 1969 por la cadena pública National Educational Television (NET) (actual Public Broadcasting Service -PBS), y llegó a alcanzar un total 4.698 episodios en su temporada 54, lo que lo convierte en el programa para niños más duradero de toda la historia de la televisión, seguido por Bob Esponja.​",
+      "url": "https://es.wikipedia.org/wiki/Sesame_Street"
+    },
+    "wikipedia:pt": {
+      "qid": "Q155629",
+      "lang": "pt",
+      "title": "Sesame Street",
+      "extract": "Sesame Street (bra: Vila Sésamo; prt: Rua Sésamo) é uma série de televisão educativa estadunidense para crianças que combina live-action, comédia de esquetes, animação e marionetes. É produzida pela Sesame Workshop (anteriormente conhecida como Children's Television Workshop até junho de 2000) e foi criada por Joan Ganz Cooney e Lloyd Morrisett. É conhecida por suas imagens comunicadas através do uso dos Muppets de Jim Henson e inclui curtas-metragens com humor e referências culturais. Estreou em 10 de novembro de 1969, recebendo críticas positivas, alguma controvérsia e uma grande audiência. A série é transmitida pela PBS, a emissora nacional de televisão pública dos Estados Unidos, desde sua estreia, e sua primeira exibição passou para o canal premium HBO em 16 de janeiro de 2016, e posteriormente para o serviço de streaming Max em 2020. Sesame Street é um dos programas mais duradouros do mundo.\nO formato do programa consiste em uma combinação de elementos e técnicas de produção televisiva comercial que evoluíram para refletir as mudanças na cultura americana e nos hábitos de visualização do público. Foi o primeiro programa de TV infantil a utilizar metas educacionais e um currículo para moldar seu conteúdo, e o primeiro programa cujos efeitos educacionais foram estudados formalmente. Seu formato e conteúdo passaram por mudanças significativas para refletir as alterações em seu currículo.\nPouco depois de sua criação, os produtores desenvolveram o que veio a ser chamado de Modelo CTW (em referência ao nome anterior da empresa de produção), um sistema de planejamento, produção e avaliação baseado na colaboração entre produtores, roteiristas, educadores e pesquisadores. O programa foi inicialmente financiado por órgãos governamentais e fundações privadas, mas se tornou em parte autossustentável devido às receitas provenientes de acordos de licenciamento, vendas internacionais e outros meios de comunicação. Até 2006, versões independentemente produzidas (\"coproduções\") da Sesame Street foram transmitidas em 20 países. Em 2001, havia mais de 120 milhões de espectadores em diversas versões internacionais da Sesame Street; e no seu 40.º aniversário, em 2009, o programa era transmitido em mais de 140 países.\nNaquela época, Sesame Street era o 15.º programa de televisão infantil com maior audiência nos Estados Unidos. Uma pesquisa de 1996 constatou que 95% de todas as crianças em idade pré-escolar nos Estados Unidos haviam assistido ao programa até completarem três anos. Em 2018, estimava-se que 86 milhões de americanos haviam assistido ao programa quando crianças. Até 2022, o programa havia ganhado 222 Emmy Awards e 11 Grammy Awards, mais do que qualquer outro programa infantil.",
+      "url": "https://pt.wikipedia.org/wiki/Sesame_Street"
+    }
+  },
+  "tier": "top",
+  "type": "series"
+}

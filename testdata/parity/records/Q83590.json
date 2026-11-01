@@ -1,0 +1,71 @@
+{
+  "qid": "Q83590",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q83590",
+      "labels": {
+        "en": "Thirty-Six Stratagems",
+        "pt": "Trinta e Seis Estratagemas"
+      },
+      "aliases": {
+        "en": [
+          "Sanshiliu ji",
+          "36 ji"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Thirty-Six Stratagems",
+        "ptwiki": "Trinta e Seis Estratagemas"
+      },
+      "sitelinks_count": 33,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q35760",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q2016252",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q62456",
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "14615397",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q2016252": "Middle Chinese",
+        "Q35760": "essay",
+        "Q62456": "Southern Qi"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q83590",
+      "lang": "en",
+      "title": "Thirty-Six Stratagems",
+      "extract": "The Thirty-Six Stratagems is a Chinese essay used to illustrate a series of stratagems used in politics, war, and civil interaction.\nIts focus on the use of cunning and deception both on the battlefield and in court have drawn comparisons to Sun Tzu's The Art of War.",
+      "url": "https://en.wikipedia.org/wiki/Thirty-Six_Stratagems"
+    },
+    "wikipedia:pt": {
+      "qid": "Q83590",
+      "lang": "pt",
+      "title": "Trinta e Seis Estratagemas",
+      "extract": "Os Trinta e Seis Estratagemas são um ensaio chinês usado para exemplificar uma série de estratagemas empregados em política, guerra e interação civil.\nSeu foco no uso de astúcia e dissimulação tanto no campo de batalha quanto na corte tem sido comparado ao A Arte da Guerra de Sun Tzu. The Book of Swindles, de Zhang Yingyu, uma obra do final da Dinastia Ming que trata dos domínios do comércio e da sociedade civil, compartilha algumas semelhanças temáticas.",
+      "url": "https://pt.wikipedia.org/wiki/Trinta_e_Seis_Estratagemas"
+    }
+  },
+  "tier": "mid",
+  "type": "book"
+}

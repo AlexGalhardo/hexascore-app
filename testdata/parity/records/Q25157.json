@@ -1,0 +1,117 @@
+{
+  "qid": "Q25157",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q25157",
+      "labels": {
+        "en": "Aliens vs Avatars",
+        "es": "Aliens vs. Avatars"
+      },
+      "aliases": {
+        "en": [
+          "Aliens vs. Avatars"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Aliens vs. Avatars"
+      },
+      "sitelinks_count": 6,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/aliens_vs_avatars",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q471839",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Aliens vs Avatars",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q4347523",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23664080",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+80",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt1854506",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "79582",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q23771513",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+2011-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1860": "English",
+        "Q23664080": "Cassie Fliegel",
+        "Q23771513": "Lewis Schoenbrun",
+        "Q30": "United States",
+        "Q4347523": "Dylan Vox",
+        "Q471839": "science fiction film"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q25157",
+      "lang": "en",
+      "title": "Aliens vs. Avatars",
+      "extract": "Aliens vs. Avatars is a 2011 American science fiction film directed by Lewis Schoenbrun. The film is a mockbuster of Alien vs. Predator and Avatar. The film follows the intergalactic battle between a quarrelsome alien race and shape-shifting extraterrestrials, while six college friends find themselves in the middle of the interstellar war. The film stars Jason Lockhart, Kim Argetsinger, Dylan Vox, Georgina Totentino, Marlene Mc'Cohen and Ginny You. \nAliens vs. Avatars was released onto video, DVD and TV on September 20, 2011. As of 2021, the film's distributor, Summer Hill Entertainment, refers to the film as \"Alien vs. Alien\".",
+      "url": "https://en.wikipedia.org/wiki/Aliens_vs._Avatars"
+    }
+  },
+  "tier": "tail",
+  "type": "movie"
+}

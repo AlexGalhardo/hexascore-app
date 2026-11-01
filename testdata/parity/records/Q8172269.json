@@ -1,0 +1,210 @@
+{
+  "qid": "Q8172269",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q8172269",
+      "labels": {
+        "en": "Liv and Maddie",
+        "es": "Liv y Maddie",
+        "pt": "Liv e Maddie",
+        "pt-br": "Liv e Maddie"
+      },
+      "aliases": {
+        "en": [
+          "Liv \u0026 Maddie",
+          "Liv \u0026 Maddie: Cali Style",
+          "Liv and Maddie: Cali Style"
+        ],
+        "es": [
+          "Liv y Maddie: California Style",
+          "Liv and Maddie",
+          "Liv \u0026 Maddie",
+          "Liv y Maddie: Estilo California"
+        ],
+        "pt": [
+          "Liv and Maddie",
+          "Liv \u0026 Maddie"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Liv and Maddie",
+        "eswiki": "Liv y Maddie",
+        "ptwiki": "Liv e Maddie"
+      },
+      "sitelinks_count": 118,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+80",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/liv_and_maddie_cali_style",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q9335576",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1273568",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Liv and Maddie",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q13560423",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15731279",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16942080",
+            "rank": "normal"
+          },
+          {
+            "value": "Q437449",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4888916",
+            "rank": "normal"
+          },
+          {
+            "value": "Q28843836",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q3181310",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "tv/liv-maddie",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+22",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+4",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt2794380",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q178837",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "59375",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q525725",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2013-07-19T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1273568": "children's television series",
+        "Q13560423": "Dove Cameron",
+        "Q15731279": "Joey Bragg",
+        "Q16942080": "Tenzing Norgay Trainor",
+        "Q178837": "Disney Channel",
+        "Q1860": "English",
+        "Q28843836": "Lauren Lindsey Donzis",
+        "Q30": "United States",
+        "Q3181310": "John D. Beck",
+        "Q437449": "Kali Rocha",
+        "Q4888916": "Benjamin King",
+        "Q525725": "Andy Fickman",
+        "Q9335576": "comedy television series"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q8172269",
+      "lang": "en",
+      "title": "Liv and Maddie",
+      "extract": "Liv and Maddie is an American teen sitcom created by John D. Beck and Ron Hart. It premiered on Disney Channel on July 19, 2013, and concluded after four seasons on March 24, 2017, with the episode \"End-a-Rooney\", which was also the series' eightieth episode. The series stars Dove Cameron, Joey Bragg, Tenzing Norgay Trainor, Kali Rocha, Benjamin King, and Lauren Lindsey Donzis.\nA significant feature of the series is that Dove Cameron plays dual roles, one being Liv, an actress who has returned to her home after starring on a popular television series in Hollywood for four years, and the other one being Maddie, Liv's identical twin who remained behind. Another significant feature of the series are documentary-style cutaways where characters speak to the viewers to explain their opinions on various situations in each episode.",
+      "url": "https://en.wikipedia.org/wiki/Liv_and_Maddie"
+    },
+    "wikipedia:es": {
+      "qid": "Q8172269",
+      "lang": "es",
+      "title": "Liv y Maddie",
+      "extract": "Liv y Maddie (título original: Liv and Maddie)​ es una serie de televisión estadounidense creada por John Beck y Ron Hart, y producida en forma conjunta por Beck \u0026 Hart Productions, Oops Doughnuts Productions e It's a Laugh Productions para Disney Channel. La serie comenzó su producción en abril y se emitió por primera vez el 19 de julio de 2013.​\nEl 13 de enero de 2014, Disney renovó Liv y Maddie para una segunda temporada con 13 episodios programada para estrenarse en otoño de 2014​ aunque después fue extendida a 24.​ El 3 de abril de 2015, la serie fue renovada para una tercera temporada.\nEl 29 de junio de 2016, se dio a conocer el final de la serie. El 19 de agosto de 2016 se dio a conocer que la última temporada de Liv y Maddie cambiara el nombre a Liv and Maddie: Cali Style, así como pasó con la serie Hannah Montana Forever que en su última temporada cambió su nombre.\nEl final de la serie se estrenó el 24 de marzo de 2017. En Latinoamérica este episodio se estrenó sin promoción el 14 de mayo de 2017.",
+      "url": "https://es.wikipedia.org/wiki/Liv_y_Maddie"
+    },
+    "wikipedia:pt": {
+      "qid": "Q8172269",
+      "lang": "pt",
+      "title": "Liv e Maddie",
+      "extract": "Liv and Maddie (Liv e Maddie (no Brasil e em Portugal)) é uma série de televisão estadunidense do Disney Channel. No dia 19 de julho de 2013 houve uma pré-estreia nos EUA, e lançada oficialmente em 15 de setembro de 2013. No Brasil, a série teve sua pré-estreia em 31 de dezembro de 2013, e foi lançada oficialmente em 22 de fevereiro de 2014.\nA 4ª temporada foi promovida como Liv and Maddie: Cali Style (Liv e Maddie: California Style (título em Portugal) ) (bra: Liv e Maddie: Estilo Califórnia)\nA série já foi exibida pela TV Globo (parabólica) na faixa do Praça TV 1ª Edição.",
+      "url": "https://pt.wikipedia.org/wiki/Liv_e_Maddie"
+    }
+  },
+  "tier": "top",
+  "type": "series"
+}

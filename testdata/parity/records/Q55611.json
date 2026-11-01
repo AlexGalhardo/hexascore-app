@@ -1,0 +1,131 @@
+{
+  "qid": "Q55611",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q55611",
+      "labels": {
+        "en": "Army Moves",
+        "mul": "Army Moves"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Army Moves",
+        "eswiki": "Army Moves"
+      },
+      "sitelinks_count": 6,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q3148930",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q270948",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1037904",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q3028255",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q23882",
+            "rank": "normal"
+          },
+          {
+            "value": "Q170434",
+            "rank": "normal"
+          },
+          {
+            "value": "Q100047",
+            "rank": "normal"
+          },
+          {
+            "value": "Q99775",
+            "rank": "normal"
+          },
+          {
+            "value": "Q627302",
+            "rank": "normal"
+          },
+          {
+            "value": "Q853547",
+            "rank": "normal"
+          },
+          {
+            "value": "Q478829",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q29",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1986-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "army-moves",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q100047": "Commodore Amiga",
+        "Q1037904": "scrolling shooter",
+        "Q170434": "DOS",
+        "Q208850": "single-player video game",
+        "Q23882": "ZX Spectrum",
+        "Q270948": "action game",
+        "Q29": "Spain",
+        "Q3028255": "Dinamic Software",
+        "Q3148930": "Imagine Software",
+        "Q478829": "Amstrad CPC",
+        "Q627302": "Atari ST",
+        "Q853547": "MSX",
+        "Q99775": "Commodore 64"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q55611",
+      "lang": "en",
+      "title": "Army Moves",
+      "extract": "Army Moves is a scrolling shooter game developed by Dinamic Software and released for the Amiga, Amstrad CPC, Atari ST, Commodore 64, MSX and ZX Spectrum. It is the first installment in the Moves Trilogy and was followed by Navy Moves in 1987 and Arctic Moves in 1995. It was first released in 1986 and published by Dinamic in Spain and by Imagine Software. Dinamic Software also developed an MS-DOS version of the game, published in 1989 in Spain.",
+      "url": "https://en.wikipedia.org/wiki/Army_Moves"
+    },
+    "wikipedia:es": {
+      "qid": "Q55611",
+      "lang": "es",
+      "title": "Army Moves",
+      "extract": "Army Moves es un videojuego del género arcade y primera parte de la tetralogía Moves diseñado por Víctor Ruiz, de Dinamic Software para Commodore Amiga, Amstrad CPC, Atari ST, Commodore 64, MSX y ZX Spectrum en 1986. En el año 1989 salió en España una versión para PC.\nEl juego contiene siete niveles que son divididos en dos secciones principales. Los cuatro primeros niveles constituyen la primera sección, donde el jugador tiene que conducir una unidad de ejército (un jeep o un helicóptero) por una zona hostil llena de enemigos.\nEn los últimos tres niveles que conforman la segunda sección, hay que tomar el papel de un soldado que debe eliminar a los enemigos por el camino. En el nivel 5, el soldado debe saltar rocas, disparar a diferentes aves, etc. Posteriormente, el protagonista hace su camino en la base enemiga con el objetivo de recuperar los documentos secretos.\nArmy Moves tuvo versiones para Amstrad CPC, ZX Spectrum, Commodore 64, MSX, PC (CGA), Commodore Amiga y Atari ST. De las versiones de 8 bits la que más colorido tiene, ampliamente alabada por la crítica de la época, es la de Amstrad CPC. De 16 bits, la de Amiga fue la más valorada.",
+      "url": "https://es.wikipedia.org/wiki/Army_Moves"
+    }
+  },
+  "tier": "tail",
+  "type": "game"
+}

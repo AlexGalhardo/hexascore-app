@@ -1,0 +1,101 @@
+{
+  "qid": "Q22099437",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q22099437",
+      "labels": {
+        "en": "High-End Crush",
+        "es": "Enamoramiento de Alta Gama"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "High-End Crush",
+        "eswiki": "Enamoramiento de alta gama"
+      },
+      "sitelinks_count": 8,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+20",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q157443",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1054574",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "고품격 짝사랑",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q494116",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt6096696",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q884",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "64529",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2015-11-14T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1054574": "romance film",
+        "Q157443": "comedy film",
+        "Q494116": "Jung Il-woo",
+        "Q884": "South Korea"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q22099437",
+      "lang": "en",
+      "title": "High-End Crush",
+      "extract": "High-End Crush (Korean: 고품격 짝사랑; Chinese: 高品格单恋) is a South Korean-Chinese production web drama, starring Jung Il-woo and Jin Se-yeon. It was aired on Sohu TV on Saturdays \u0026 Sundays at 00:00 (CST). In just four months, the web drama had recorded over 200 million views in China.\nThe series was slated to air for the first time in South Korean television on April 4, 2018, on the generalist pay TV channel MBN.",
+      "url": "https://en.wikipedia.org/wiki/High-End_Crush"
+    },
+    "wikipedia:es": {
+      "qid": "Q22099437",
+      "lang": "es",
+      "title": "Enamoramiento de alta gama",
+      "extract": "Enamoramiento de alta gama (en hangul, 고품격 짝사랑; en chino simplificado, 高品格单恋) es una serie de internet de producción chino-surcoreana, protagonizado por Jung Il-woo y Jin Se-yeon. Fue transmitido en Sohu TV los sábados \u0026 domingos a las 00:00 (CST). En solo cuatro meses, el drama web ha registrado más de 200 millones de visitas en China.​\nEnamoramiento de alta gama es una comedia romántica que representa la sincera y pura historia de amor de un hombre con todo en sus manos, que se enamora por primera vez en su vida de una mujer que ha vivido en circunstancias completamente opuestas a las suyas.\nLa serie saldrá al aire por primera vez en la televisión de Corea del Sur el 4 de abril de 2018 en el canal de televisión de pago MBN.​",
+      "url": "https://es.wikipedia.org/wiki/Enamoramiento_de_alta_gama"
+    }
+  },
+  "tier": "tail",
+  "type": "series"
+}

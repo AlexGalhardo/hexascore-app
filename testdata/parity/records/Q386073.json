@@ -1,0 +1,110 @@
+{
+  "qid": "Q386073",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q386073",
+      "labels": {
+        "en": "New Book of Tang",
+        "mul": "Xīn Tángshū",
+        "pt": "Novo Livro de Tang",
+        "pt-br": "Novo Livro de Tang"
+      },
+      "aliases": {
+        "en": [
+          "Book of Tang",
+          "Annals of Tang",
+          "Book of T'ang",
+          "Annals of T'ang",
+          "Book of Thang",
+          "Annals of Thang"
+        ],
+        "mul": [
+          "Xin Tang Shu",
+          "Hsin T'angshu",
+          "Tángshū",
+          "T'angshu",
+          "Xin Tangshu"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "New Book of Tang",
+        "ptwiki": "Novo Livro de Tang"
+      },
+      "sitelinks_count": 24,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q1619411",
+            "rank": "normal"
+          },
+          {
+            "value": "Q11080698",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "唐書",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q175077",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q2016252",
+            "rank": "normal"
+          },
+          {
+            "value": "Q37041",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q319460",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1060-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q11080698": "dynastic history",
+        "Q1619411": "jizhuanti",
+        "Q175077": "Twenty-Four Histories",
+        "Q2016252": "Middle Chinese",
+        "Q319460": "Northern Song dynasty",
+        "Q37041": "Classical Chinese"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q386073",
+      "lang": "en",
+      "title": "New Book of Tang",
+      "extract": "The New Book of Tang, generally translated as the \"New History of the Tang\" or \"New Tang History\", is a work of official history covering the Tang dynasty in ten volumes and 225 chapters. The work was compiled by a team of scholars of the Song dynasty, led by Ouyang Xiu and Song Qi.\nIt was originally simply called the Tangshu (唐書, Book of Tang) until the 18th century.",
+      "url": "https://en.wikipedia.org/wiki/New_Book_of_Tang"
+    },
+    "wikipedia:pt": {
+      "qid": "Q386073",
+      "lang": "pt",
+      "title": "Novo Livro de Tang",
+      "extract": "O Novo Livro de Tang, geralmente traduzido como Nova História de Tang ou Nova História Tang, é uma obra de história oficial que abrange a dinastia Tang em dez volumes e 225 capítulos. A obra foi compilada por uma equipe de estudiosos da dinastia Song, liderada por Ouyang Xiu e Song Qi.\nOriginalmente, era simplesmente chamado de Tangshu (Livro de Tang) até o século XVIII.",
+      "url": "https://pt.wikipedia.org/wiki/Novo_Livro_de_Tang"
+    }
+  },
+  "tier": "year-precision",
+  "type": "book"
+}

@@ -1,0 +1,123 @@
+{
+  "qid": "Q132269",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q132269",
+      "labels": {
+        "en": "Howl's Moving Castle",
+        "es": "El castillo ambulante",
+        "pt": "Howl's Moving Castle"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Howl's Moving Castle (novel)",
+        "eswiki": "El castillo ambulante",
+        "ptwiki": "Howl's Moving Castle"
+      },
+      "sitelinks_count": 30,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q95149",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q132311",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Howl's Moving Castle",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q113839147",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q236829",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1986-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 10,
+              "time": "+1986-04-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL2540706M",
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "2001",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q132311": "fantasy",
+        "Q145": "United Kingdom",
+        "Q1860": "English",
+        "Q236829": "Diana Wynne Jones",
+        "Q95149": "HarperCollins"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q132269",
+      "lang": "en",
+      "title": "Howl's Moving Castle (novel)",
+      "extract": "Howl's Moving Castle is a fantasy novel by British author Diana Wynne Jones, first published in 1986 by Greenwillow Books of New York. It was a runner-up for the annual Boston Globe–Horn Book Award, and won the Phoenix Award twenty years later. It was adapted into a Studio Ghibli animated film of the same name in 2004, which was nominated for the Academy Award for Best Animated Feature.\nHowl's Moving Castle is the first novel in the series of books called the Howl series. This series also includes Castle in the Air, published in 1990, and House of Many Ways, published in 2008. Howl's Moving Castle is the author's work most widely held in Worldcat participating libraries, followed by its first sequel Castle in the Air.\nFor the idea Jones \"very much\" thanked a boy in a school she was visiting, whose name she had noted but lost and forgot. He asked her to write a book titled The Moving Castle.",
+      "url": "https://en.wikipedia.org/wiki/Howl%27s_Moving_Castle_(novel)"
+    },
+    "wikipedia:es": {
+      "qid": "Q132269",
+      "lang": "es",
+      "title": "El castillo ambulante",
+      "extract": "El castillo ambulante (título original: Howl's Moving Castle) es una novela fantástica de la autora británica Diana Wynne Jones, publicada por primera vez en 1986. En 1990 se publicó una secuela, titulada Castle in the Air (Castillo en el aire). Una segunda secuela, House of Many Ways (La casa de los mil pasillos) apareció en junio de 2008.",
+      "url": "https://es.wikipedia.org/wiki/El_castillo_ambulante"
+    },
+    "wikipedia:pt": {
+      "qid": "Q132269",
+      "lang": "pt",
+      "title": "Howl's Moving Castle",
+      "extract": "O Castelo Animado (Howl's Moving Castle) é um livro escrito por Diana Wynne Jones, lançado em 1986, e que ganhou vários prêmios por todo o mundo. Em 2004 foi adaptado para a animação O Castelo Animado pelo premiado diretor Hayao Miyazaki no Studio Ghibli. A parceria entre a autora e o diretor culminou na produção do filme que, em 2006, foi indicado ao Oscar de Melhor Animação [1].",
+      "url": "https://pt.wikipedia.org/wiki/Howl%27s_Moving_Castle"
+    }
+  },
+  "tier": "mid",
+  "type": "book"
+}

@@ -1,0 +1,247 @@
+{
+  "qid": "Q40302",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q40302",
+      "labels": {
+        "en": "The Fox and the Hound",
+        "es": "The Fox and the Hound",
+        "pt": "The Fox and the Hound",
+        "pt-br": "O Cão e a Raposa"
+      },
+      "aliases": {
+        "en": [
+          "Fox and the Hound"
+        ],
+        "es": [
+          "Tod y Toby",
+          "El Zorro y el Sabueso"
+        ],
+        "pt": [
+          "O Cão e a Raposa",
+          "Papuça e Dentuça",
+          "Fox and the Hound"
+        ],
+        "pt-br": [
+          "The Fox and the Hound"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "The Fox and the Hound",
+        "eswiki": "The Fox and the Hound",
+        "ptwiki": "The Fox and the Hound (filme)"
+      },
+      "sitelinks_count": 135,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/fox_and_the_hound",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q663106",
+            "rank": "normal"
+          },
+          {
+            "value": "Q859369",
+            "rank": "normal"
+          },
+          {
+            "value": "Q102429885",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1361932",
+            "rank": "normal"
+          },
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q918060",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "The Fox and the Hound",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/the-fox-and-the-hound",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q56070713",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+83",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q7414",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0082406",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "10948",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q3517016",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1153718",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2864567",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1981-07-10T00:00:00Z"
+            },
+            "rank": "preferred"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1981-12-05T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1981-11-13T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q3517016",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3554450",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3498959",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2928589",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3218036",
+            "rank": "normal"
+          },
+          {
+            "value": "Q18818307",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16546380",
+            "rank": "normal"
+          },
+          {
+            "value": "Q28538243",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q102429885": "coming-of-age film",
+        "Q1153718": "Richard Rich",
+        "Q130232": "drama film",
+        "Q1361932": "family film",
+        "Q16546380": "David Michener",
+        "Q1860": "English",
+        "Q18818307": "Peter Young",
+        "Q28538243": "Earl Kress",
+        "Q2864567": "Art Stevens",
+        "Q2928589": "Burny Mattinson",
+        "Q30": "United States",
+        "Q3218036": "Larry Clemmons",
+        "Q3498959": "Steve Hulett",
+        "Q3517016": "Ted Berman",
+        "Q3554450": "Vance Gerry",
+        "Q56070713": "Walt Disney Animation Studios feature film",
+        "Q663106": "buddy film",
+        "Q7414": "The Walt Disney Company",
+        "Q859369": "comedy drama",
+        "Q918060": "The Fox and the Hound"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q40302",
+      "lang": "en",
+      "title": "The Fox and the Hound",
+      "extract": "The Fox and the Hound is a 1981 American animated buddy film produced by Walt Disney Productions and directed by Ted Berman, Richard Rich, and Art Stevens. Mickey Rooney and Kurt Russell respectively star as the voices of Tod and Copper, with Pearl Bailey, Jack Albertson (in his final film role), Sandy Duncan, Jeanette Nolan, Pat Buttram, John Fiedler, John McIntire, Dick Bakalyan, Paul Winchell, Keith Mitchell, and Corey Feldman in supporting roles. Loosely based on the 1967 novel by Daniel P. Mannix, the film  tells the story of the unlikely friendship between a red fox named Tod and a hound named Copper, as they struggle against their emerging instincts and the realization that they are meant to be adversaries.\nWalt Disney Productions first obtained the film rights to the novel by Daniel P. Mannix in 1967; however, actual development on the film would not occur until spring 1977. It marked the last involvement of the remaining members of Disney's Nine Old Men, which included Frank Thomas and Ollie Johnston. Though they had involvement in early development of the film, it was ultimately handed over to a new generation of animators following the retirement of the old animators. As such, it was the first film for future directors, including Tim Burton, Brad Bird, and John Lasseter. During production, its release was delayed by over six months following the abrupt departure of Don Bluth and his team of animators. Further concerns were raised over the handling of the scene in which Chief is hit by a train, which was originally planned to result in him dying. After debating the handling of the scene, the filmmakers decided to change the death into a non-fatal injury by which he suffers a broken leg.\nThe film was released to theaters on July 10, 1981, by Buena Vista Distribution. It was a financial success, earning $39.9 million domestically and receiving mixed reviews from critics. It was nominated for three awards, of which it won one. At the time of its release, it was the most expensive animated film produced to date, costing $12 million. It was re-released to theaters on March 25, 1988. An intermediate follow-up, The Fox and the Hound 2, was released directly-to-DVD on December 12, 2006.",
+      "url": "https://en.wikipedia.org/wiki/The_Fox_and_the_Hound"
+    },
+    "wikipedia:es": {
+      "qid": "Q40302",
+      "lang": "es",
+      "title": "The Fox and the Hound",
+      "extract": "The Fox and the Hound (titulada El zorro y el sabueso en Hispanoamérica y Tod y Toby en España) es una película de drama animada estadounidense de 1981, producida por Walt Disney Productions y basada libremente en la novela del mismo nombre de Daniel P. Mannix. La película cuenta la historia de dos amigos improbables, un zorro rojo llamado Tod y un perro de cacería llamado Toby, que luchan por preservar su amistad a pesar de sus instintos emergentes y las presiones sociales que quieren llevarles a ser adversarios. Dirigida por Ted Berman, Richard Rich, y Art Stevens, la película incluye las voces de Mickey Rooney, Kurt Russell, Pearl Bailey, Jack Albertson, Sandy Duncan, Jeanette Nolan, Pat Buttram, John Fiedler, John McIntire, Dick Bakalyan, Paul Winchell, Keith Mitchell, y Corey Feldman.\nThe Fox and the Hound se estrenó en los cines de los Estados Unidos el 10 de julio de 1981. En su momento fue la película animada más cara producida hasta esa fecha, con un presupuesto de 12 millones de dólares. Se reestrenó en cines el 25 de marzo de 1988. En 2006 se lanzó una secuela para el mercado de cine en casa titulada The Fox and the Hound 2.",
+      "url": "https://es.wikipedia.org/wiki/The_Fox_and_the_Hound"
+    },
+    "wikipedia:pt": {
+      "qid": "Q40302",
+      "lang": "pt",
+      "title": "The Fox and the Hound (filme)",
+      "extract": "The Fox and the Hound  (bra: O Cão e a Raposa; prt: Papuça e Dentuça) é um filme de animação estadunidense de 1981 do gênero drama produzido pela Walt Disney Productions. Sendo vagamente baseado no romance homônimo de 1967, escrito por Daniel P. Mannix, o filme conta a história de uma amizade improvável entre uma raposa-vermelha chamada Tod e um cão de caça chamado Copper, enquanto eles lutam contra seus instintos emergentes e a percepção de que foram concebidos para serem adversários.\nO filme foi dirigido por Ted Berman, Richard Rich e Art Stevens, marcando a estreia de Berman e Rich como diretores de cinema. Foi produzido por Ron Miller , Wolfgang Reitherman e Stevens. O elenco de vozes estrela Mickey Rooney e Kurt Russell como Tod e Copper, respectivamente, acompanhados de Pearl Bailey, Jack Albertson, Sandy Duncan, Jeanette Nolan, Pat Buttram, John Fiedler, John McIntire, Dick Bakalyan e Paul Winchell que dão as vozes aos demais personagens do filme; Keith Mitchell e Corey Feldman dublaram Tod e Copper mais jovens. A trilha musical instrumental do filme foi composta e regida por Buddy Baker, com Walter Sheets realizando a orquestração.\nA Walt Disney Productions obteve os direitos cinematográficos do romance original de Daniel P. Mannix logo em 1967; no entanto, o desenvolvimento real do filme só veio a ocorrer uma década depois. A produção marcou o último envolvimento dos membros restantes dos Nove Anciões da Disney, que incluíam Frank Thomas e Ollie Johnston. Embora estes tivessem envolvimento no desenvolvimento inicial do filme, a produção acabou sendo repassada a uma nova geração de animadores após a aposentadoria dos antigos; essa nova leva de animadores incluiu futuros diretores renomados como Tim Burton, Brad Bird e John Lasseter. O filme ficou conhecido por seus bastidores polêmicos, o que afetou diretamente o cronograma da produção, atrasando seu lançamento por mais de seis meses, principalmente devido a saída abrupta de Don Bluth e sua equipe de animadores. Discordâncias entre os animadores veteranos e os novatos também contribuíram significativamente para atraso de sua produção.\nFoi lançado nos cinemas da América do Norte em 10 de julho de 1981 pela Buena Vista Distribution, se tornando um sucesso financeiro, arrecadando US$ 39,9 milhões no mercado interno e recebendo críticas mistas dos críticos. Na época de seu lançamento, foi o filme de animação mais caro produzido até então, custando US$ 12 milhões; foi relançado nos cinemas em 25 de março de 1988, onde ganhou mais US$ 23,5 milhões. O filme originou uma continuação intermediária, The Fox and the Hound 2, que foi lançada diretamente em DVD em 12 de dezembro de 2006.",
+      "url": "https://pt.wikipedia.org/wiki/The_Fox_and_the_Hound_(filme)"
+    }
+  },
+  "tier": "top",
+  "type": "movie"
+}

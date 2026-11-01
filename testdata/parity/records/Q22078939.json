@@ -1,0 +1,108 @@
+{
+  "qid": "Q22078939",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q22078939",
+      "labels": {
+        "en": "Go Princess Go",
+        "mul": "Go Princess Go"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Go Princess Go"
+      },
+      "sitelinks_count": 6,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+36",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q85133165",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "太子妃升职记",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q22338290",
+            "rank": "normal"
+          }
+        ],
+        "P1651": [
+          {
+            "value": "oDzg6WxGa5c",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt5319572",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q727694",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q148",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "65288",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q47546058",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2015-12-13T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q148": "People's Republic of China",
+        "Q22338290": "Zhang Tian'ai",
+        "Q47546058": "Lu Hao Jiji",
+        "Q727694": "Standard Chinese",
+        "Q85133165": "LGBT-related television series"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q22078939",
+      "lang": "en",
+      "title": "Go Princess Go",
+      "extract": "Go Princess Go (Chinese: 太子妃升职记; pinyin: Tàizǐfēi Shēngzhí Jì) is a 2015 Chinese streaming series produced by and aired on the streaming service LeTV. The story was adapted from the novel of the same name by Xian Chen. The series stars Zhang Tianai, Sheng Yilun, Yu Menglong, Jiang Qilin and Guo Junchen in the lead roles. It premiered in December 2015 with 35 episodes.\nThe show incorporates various themes such as time travel, bisexuality and gender identity. A third of the show was censored in China.",
+      "url": "https://en.wikipedia.org/wiki/Go_Princess_Go"
+    }
+  },
+  "tier": "tail",
+  "type": "series"
+}

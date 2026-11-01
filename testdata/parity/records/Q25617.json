@@ -1,0 +1,179 @@
+{
+  "qid": "Q25617",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q25617",
+      "labels": {
+        "en": "Up, Down, Fragile",
+        "es": "Alto bajo frágil",
+        "pt": "Alto Baixo Frágil"
+      },
+      "aliases": {
+        "en": [
+          "Haut bas fragile"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Up, Down, Fragile"
+      },
+      "sitelinks_count": 9,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q842256",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Haut bas fragile",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q3336667",
+            "rank": "normal"
+          },
+          {
+            "value": "Q273342",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2848242",
+            "rank": "normal"
+          },
+          {
+            "value": "Q232113",
+            "rank": "normal"
+          },
+          {
+            "value": "Q116189",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3055538",
+            "rank": "normal"
+          },
+          {
+            "value": "Q167475",
+            "rank": "normal"
+          },
+          {
+            "value": "Q375191",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1761684",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3288738",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3385702",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3568173",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+169",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0113273",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q150",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "65040",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q142",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q167475",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1995-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1996-05-16T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q167475",
+            "rank": "normal"
+          },
+          {
+            "value": "Q289645",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q116189": "Bruno Todeschini",
+        "Q142": "France",
+        "Q150": "French",
+        "Q167475": "Jacques Rivette",
+        "Q1761684": "Laurence Côte",
+        "Q232113": "Anna Karina",
+        "Q273342": "Marianne Denicourt",
+        "Q2848242": "André Marcon",
+        "Q289645": "Pascal Bonitzer",
+        "Q3055538": "Enzo Enzo",
+        "Q3288738": "Marcel Bozonnet",
+        "Q3336667": "Nathalie Richard",
+        "Q3385702": "Pierre Lacan",
+        "Q3568173": "Wilfred Benaïche",
+        "Q375191": "László Szabó",
+        "Q842256": "musical film"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q25617",
+      "lang": "en",
+      "title": "Up, Down, Fragile",
+      "extract": "Up, Down, Fragile (original title in French: Haut bas fragile) is a 1995 French film directed by Jacques Rivette. It was entered into the 19th Moscow International Film Festival. Interspersed with songs and dances, the film recounts the adventures of three young women in Paris, each at a turning point in her life.",
+      "url": "https://en.wikipedia.org/wiki/Up,_Down,_Fragile"
+    }
+  },
+  "tier": "tail",
+  "type": "movie"
+}

@@ -1,0 +1,194 @@
+{
+  "qid": "Q24618",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q24618",
+      "labels": {
+        "en": "Jaded",
+        "es": "Jaded"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Jaded (film)"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/jaded",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q3072039",
+            "rank": "normal"
+          },
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q20442589",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Jaded",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q228871",
+            "rank": "normal"
+          },
+          {
+            "value": "Q786720",
+            "rank": "normal"
+          },
+          {
+            "value": "Q115134",
+            "rank": "normal"
+          },
+          {
+            "value": "Q448587",
+            "rank": "normal"
+          },
+          {
+            "value": "Q457395",
+            "rank": "normal"
+          },
+          {
+            "value": "Q349857",
+            "rank": "normal"
+          },
+          {
+            "value": "Q943589",
+            "rank": "normal"
+          },
+          {
+            "value": "Q460786",
+            "rank": "normal"
+          },
+          {
+            "value": "Q223193",
+            "rank": "normal"
+          },
+          {
+            "value": "Q435652",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2094005",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5220087",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+91",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0116675",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "78086",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q113017570",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1998-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1997-01-24T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2000-01-18T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 10,
+              "time": "+1997-05-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q113017570": "Caryn Krooth",
+        "Q115134": "Aida Turturro",
+        "Q130232": "drama film",
+        "Q1860": "English",
+        "Q20442589": "LGBTQ-related film",
+        "Q2094005": "Peter McRobbie",
+        "Q223193": "Robert Knepper",
+        "Q228871": "Carla Gugino",
+        "Q30": "United States",
+        "Q3072039": "trial film",
+        "Q349857": "Christopher McDonald",
+        "Q435652": "Rya Kihlstedt",
+        "Q448587": "Anna Thomson",
+        "Q457395": "Catherine Dent",
+        "Q460786": "Lorraine Toussaint",
+        "Q5220087": "Danny Aiello III",
+        "Q786720": "Richard Bright",
+        "Q943589": "Frankie Faison"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q24618",
+      "lang": "en",
+      "title": "Jaded (film)",
+      "extract": "Jaded is a 1997 American drama film directed by Caryn Krooth, and co-written with Wendy Olinger. It stars Carla Gugino, Rya Kihlstedt, Christopher McDonald, and Anna Thomson.",
+      "url": "https://en.wikipedia.org/wiki/Jaded_(film)"
+    }
+  },
+  "tier": "tail",
+  "type": "movie"
+}

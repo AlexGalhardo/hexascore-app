@@ -1,0 +1,123 @@
+{
+  "qid": "Q220107",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q220107",
+      "labels": {
+        "en": "Zoo Tycoon 2",
+        "es": "Zoo Tycoon 2",
+        "mul": "Zoo Tycoon 2",
+        "pt": "Zoo Tycoon 2"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Zoo Tycoon 2",
+        "eswiki": "Zoo Tycoon 2",
+        "ptwiki": "Zoo Tycoon 2"
+      },
+      "sitelinks_count": 25,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q73801",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q1198141",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q3641158",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q5381702",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "15315",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0910981",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q14116",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2004-11-09T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "zoo-tycoon-2",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1198141": "business simulation game",
+        "Q1406": "Microsoft Windows",
+        "Q14116": "macOS",
+        "Q208850": "single-player video game",
+        "Q30": "United States",
+        "Q3641158": "Blue Fang Games",
+        "Q5381702": "Zoo Tycoon",
+        "Q73801": "Xbox Game Studios"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q220107",
+      "lang": "en",
+      "title": "Zoo Tycoon 2",
+      "extract": "Zoo Tycoon 2 is a business simulation video game developed by Blue Fang Games and published by Microsoft Game Studios and MacSoft. Originally released in 2004 for Microsoft Windows, Zoo Tycoon 2 is also available for Windows Mobile, PDA, and Mac OS X, although expansions are not included in the Mac version. A Nintendo DS version, titled Zoo Tycoon 2 DS, was released in 2008.\nSimilar to its predecessor, 2001's Zoo Tycoon, the objective is to build and operate a zoo by creating exhibits and aquariums, keeping guests and animals happy, and maintaining employees, finances, terrain, foliage, and scenery.",
+      "url": "https://en.wikipedia.org/wiki/Zoo_Tycoon_2"
+    },
+    "wikipedia:es": {
+      "qid": "Q220107",
+      "lang": "es",
+      "title": "Zoo Tycoon 2",
+      "extract": "Zoo Tycoon 2 es un videojuego de simulación económica cuyo objetivo principal consiste en la creación y administración de un zoológico,a fin de recaudar dinero para su reinversion, satisfaciendo las necesidades de sus visitantes, contratado personal para cuidar animales, comprando edificios y atracciones, entre otras actividades.",
+      "url": "https://es.wikipedia.org/wiki/Zoo_Tycoon_2"
+    }
+  },
+  "tier": "mid",
+  "type": "game"
+}

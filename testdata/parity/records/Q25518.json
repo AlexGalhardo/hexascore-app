@@ -1,0 +1,159 @@
+{
+  "qid": "Q25518",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q25518",
+      "labels": {
+        "en": "Charisma",
+        "es": "Charisma"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Charisma (film)",
+        "eswiki": "Charisma (película de 1999)"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/charisma",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "カリスマ",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q975146",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2699910",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1138332",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3548603",
+            "rank": "normal"
+          },
+          {
+            "value": "Q873539",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3547298",
+            "rank": "normal"
+          },
+          {
+            "value": "Q873810",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+104",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q201487",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0201517",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q5287",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "72490",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q17",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q53834",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1999-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q53834",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1138332": "Ren Ōsugi",
+        "Q130232": "drama film",
+        "Q17": "Japan",
+        "Q201487": "Nikkatsu",
+        "Q2699910": "Hiroyuki Ikeuchi",
+        "Q3547298": "Akira Ōtaka",
+        "Q3548603": "Yoriko Dōguchi",
+        "Q5287": "Japanese",
+        "Q53834": "Kiyoshi Kurosawa",
+        "Q873539": "Jun Fubuki",
+        "Q873810": "Yutaka Matsushige",
+        "Q975146": "Kōji Yakusho"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q25518",
+      "lang": "en",
+      "title": "Charisma (film)",
+      "extract": "Charisma (Japanese: カリスマ, Hepburn: Karisuma) is a 1999 Japanese philosophical drama film written and directed by Kiyoshi Kurosawa, starring Kōji Yakusho.\nThe film is about a dispute between a number of people about a unique but possibly toxic tree growing in an unnamed forest. The film is largely seen from the point of view of Goro Yabuike (Kōji Yakusho), a police negotiator who has been relieved of his duties following his failure to prevent the death of an important hostage.  He stands in the middle of the conflicting opinions about the future of the tree, and has to decide which course to commit himself to.",
+      "url": "https://en.wikipedia.org/wiki/Charisma_(film)"
+    },
+    "wikipedia:es": {
+      "qid": "Q25518",
+      "lang": "es",
+      "title": "Charisma (película de 1999)",
+      "extract": "Charisma ('カリスマ', 'Karisuma'?) es una película de 1999 dirigida por el japonés Kiyoshi Kurosawa. La película trata de un litigio entre varias personas sobre un árbol único pero posiblemente tóxico que crece en un bosque sin nombre.\nLa película se narra desde el punto de vista de Goro Yabuike (Kōji Yakusho), un negociador de rehenes de la policía al que han relevado de sus funciones tras su fracaso en prevenir la muerte de un rehén importante. Se encuentra en medio de las opiniones contradictorias sobre el futuro del árbol, y tiene que decidir con qué opción comprometerse.\nLa película ha sido interpretada por algunos como un cuento alegórico sobre la estructura de la sociedad japonesa, y la tensión entre la importancia de la individualidad, por una parte, y la importancia del grupo sobre el otro. También es posible discernir un mensaje ecológico.\nOtros miembros del reparto incluyen Hiroyuki Ikeuchi (Kiriyama, que quiere proteger el árbol), Ren Osugi (Nakasone), Yoriko Douguchi (Chizuru Jinbo), Jun Fubuki (Mitsuko Jinbo, un experto en plantas), Akira Otaka (Tsuboi) y Yutaka Matsushige (Nekoshima).",
+      "url": "https://es.wikipedia.org/wiki/Charisma_(pel%C3%ADcula_de_1999)"
+    }
+  },
+  "tier": "tail",
+  "type": "movie"
+}

@@ -1,0 +1,173 @@
+{
+  "qid": "Q473204",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q473204",
+      "labels": {
+        "en": "Annoying Orange",
+        "es": "Annoying Orange",
+        "pt": "The Annoying Orange"
+      },
+      "aliases": {
+        "en": [
+          "AnnoyingOrange"
+        ],
+        "pt": [
+          "A Laranja Irritante",
+          "Laranja Irritante"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Annoying Orange",
+        "eswiki": "The Annoying Orange",
+        "ptwiki": "The Annoying Orange"
+      },
+      "sitelinks_count": 34,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+852",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q9335576",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Annoying Orange",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q26210887",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2372674",
+            "rank": "normal"
+          },
+          {
+            "value": "Q21597747",
+            "rank": "normal"
+          },
+          {
+            "value": "Q95043",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5215862",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6397071",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q5215862",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Annoying Orange.png",
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+18",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt1715368",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q866",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "106768",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2009-10-09T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1860": "English",
+        "Q21597747": "Anthony Padilla",
+        "Q2372674": "iJustine",
+        "Q26210887": "Wilson Cleveland",
+        "Q30": "United States",
+        "Q5215862": "Dane Boedigheimer",
+        "Q6397071": "Kevin Nalty",
+        "Q866": "YouTube",
+        "Q9335576": "comedy television series",
+        "Q95043": "James Caan"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q473204",
+      "lang": "en",
+      "title": "Annoying Orange",
+      "extract": "Annoying Orange is an American live-action/animated comedy web series created by Dane Boedigheimer (known online as DaneBoe). Set in a world of anthropomorphic food, the series follows its titular character, Orange, who always annoys others by telling crude jokes and puns and making annoying noises until their certain demises. The Annoying Orange YouTube channel has 13.9 million subscribers as of 2026.\nThe original web series has also expanded to multiple separate series, such as The Adventures of Liam the Leprechaun, The Misfortune of Being Ned, The Marshmallow Show, the television series The High Fructose Adventures of Annoying Orange, and a gaming channel, Annoying Orange Gaming, where they upload Let's Play videos. \nThe channel uploads biweekly episodes including a variety of mini-series, each dedicated to covering different themes of typical YouTube genre tropes such as Ask Orange, HOW2, The Juice, Foodsplosion, Shocktober, and more. The channel also frequently re-uploads older videos as parts of larger compilations, as seen with their weekly compilation mini-series Saturday Supercut.",
+      "url": "https://en.wikipedia.org/wiki/Annoying_Orange"
+    },
+    "wikipedia:es": {
+      "qid": "Q473204",
+      "lang": "es",
+      "title": "The Annoying Orange",
+      "extract": "The Annoying Orange (conocida como La naranja molesta) es una serie web de comedia originaria de la plataforma YouTube, creada por la productora, actriz y cantante estadounidense Dane Boedigheimer. Trata acerca de objetos antropomórficos; el protagonista es una naranja que vive fastidiando a otras frutas, verduras u otros objetos, con bromas generalmente de humor negro, de allí el nombre de la serie. El primer episodio fue subido a la plataforma el 9 de octubre de 2009, y para fin de mes, los videos llegaron a una acumulación de 380 millones de vistas.​​ \nOriginalmente, los episodios fueron subidos en el canal de YouTube de la compañía de Boedigheimer, Gagfilms, canal llamado actualmente Dane Boe, pero cuando el primer episodio de Annoying Orange alcanzó las 11 millones de vistas, Boedigheimer se inspiró a crear un canal propio con el mismo nombre de su serie, donde realizaría exclusivamente todo el trabajo relacionado con su obra. El proyecto también contaba con un canal de YouTube diseñado para público hispanohablante, EspNaranjaMolesta,  en el que solo se dobló los 9 capítulos del canal original al español, y que actualmente está abandonado. \nEl 28 de mayo del 2012  se estrenó su show de TV en Cartoon Network de USA y el 9 de septiembre en Cartoon Network de México, que terminó siendo cancelado el 24 de marzo de 2014. A fines de 2016, el canal The Annoying Orange de YouTube contaba con cinco millones y medio de suscriptores y 4000000 millones de visitas.",
+      "url": "https://es.wikipedia.org/wiki/The_Annoying_Orange"
+    },
+    "wikipedia:pt": {
+      "qid": "Q473204",
+      "lang": "pt",
+      "title": "The Annoying Orange",
+      "extract": "A Laranja Irritante (no original em inglês:  The Annoying Orange) é uma websérie de animação em computação gráfica produzida pela Gag Films em parceria com Daneboe (Dane Boedigheimer). Estreou na internet em 9 de outubro de 2009, obtendo reconhecimento no início de 2010, no site YouTube, onde conseguiu sucesso internacional, principalmente no Brasil, em forma legendada. A série difundiu-se internacionalmente, com mais de dois milhões de acessos ao vídeo inicial (Hey, Apple) e mais de 108 milhões de visualizações da série inteira, até abril de 2010. Em março de 2010 foi considerada a websérie mais vista na internet pelo site Mashable. Já fez paródias com personalidades como Lady Gaga e Michael Jackson e com filmes como Jogos Mortais, De Volta para o Futuro e Matrix.",
+      "url": "https://pt.wikipedia.org/wiki/The_Annoying_Orange"
+    }
+  },
+  "tier": "mid",
+  "type": "series"
+}

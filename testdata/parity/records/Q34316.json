@@ -1,0 +1,571 @@
+{
+  "qid": "Q34316",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q34316",
+      "labels": {
+        "en": "Doctor Who",
+        "es": "Doctor Who",
+        "mul": "Doctor Who",
+        "pt": "Doctor Who",
+        "pt-br": "Doctor Who"
+      },
+      "aliases": {
+        "en": [
+          "Dr Who",
+          "Dr. Who"
+        ],
+        "es": [
+          "Doctor Misterio",
+          "Dr Who",
+          "El Doctor",
+          "Dr. Who",
+          "The Doctor"
+        ],
+        "mul": [
+          "Dr. Who"
+        ],
+        "pt": [
+          "Dr. Who",
+          "Dr Who"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Doctor Who",
+        "eswiki": "Doctor Who",
+        "ptwiki": "Doctor Who"
+      },
+      "sitelinks_count": 100,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+826",
+              "unit": "1"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "amount": "+798",
+              "unit": "1"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "amount": "+892",
+              "unit": "1"
+            },
+            "rank": "preferred"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/doctor_who_1963",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q140472311",
+            "rank": "normal"
+          },
+          {
+            "value": "Q343782",
+            "rank": "normal"
+          },
+          {
+            "value": "Q104767031",
+            "rank": "normal"
+          },
+          {
+            "value": "Q56064758",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1366112",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Doctor Who",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q455551",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7410764",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23903083",
+            "rank": "normal"
+          },
+          {
+            "value": "Q544165",
+            "rank": "normal"
+          },
+          {
+            "value": "Q273403",
+            "rank": "normal"
+          },
+          {
+            "value": "Q232187",
+            "rank": "normal"
+          },
+          {
+            "value": "Q125942",
+            "rank": "normal"
+          },
+          {
+            "value": "Q231237",
+            "rank": "normal"
+          },
+          {
+            "value": "Q24632",
+            "rank": "normal"
+          },
+          {
+            "value": "Q254766",
+            "rank": "normal"
+          },
+          {
+            "value": "Q234430",
+            "rank": "normal"
+          },
+          {
+            "value": "Q665139",
+            "rank": "normal"
+          },
+          {
+            "value": "Q151113",
+            "rank": "normal"
+          },
+          {
+            "value": "Q234539",
+            "rank": "normal"
+          },
+          {
+            "value": "Q460245",
+            "rank": "normal"
+          },
+          {
+            "value": "Q467601",
+            "rank": "normal"
+          },
+          {
+            "value": "Q358421",
+            "rank": "normal"
+          },
+          {
+            "value": "Q361996",
+            "rank": "normal"
+          },
+          {
+            "value": "Q214601",
+            "rank": "normal"
+          },
+          {
+            "value": "Q559430",
+            "rank": "normal"
+          },
+          {
+            "value": "Q732661",
+            "rank": "normal"
+          },
+          {
+            "value": "Q671093",
+            "rank": "normal"
+          },
+          {
+            "value": "Q440963",
+            "rank": "normal"
+          },
+          {
+            "value": "Q358427",
+            "rank": "normal"
+          },
+          {
+            "value": "Q335863",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2471880",
+            "rank": "normal"
+          },
+          {
+            "value": "Q312380",
+            "rank": "normal"
+          },
+          {
+            "value": "Q312385",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2364161",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7422813",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7373369",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5534446",
+            "rank": "normal"
+          },
+          {
+            "value": "Q559156",
+            "rank": "normal"
+          },
+          {
+            "value": "Q440678",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4942381",
+            "rank": "normal"
+          },
+          {
+            "value": "Q125689",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5102271",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3752509",
+            "rank": "normal"
+          },
+          {
+            "value": "Q439404",
+            "rank": "normal"
+          },
+          {
+            "value": "Q560067",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7326622",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7028968",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2471362",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1812342",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15493968",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1858592",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13519936",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1273924",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5580938",
+            "rank": "normal"
+          },
+          {
+            "value": "Q525859",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3181111",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3376823",
+            "rank": "normal"
+          },
+          {
+            "value": "Q8944720",
+            "rank": "normal"
+          },
+          {
+            "value": "Q668681",
+            "rank": "normal"
+          },
+          {
+            "value": "Q200405",
+            "rank": "normal"
+          },
+          {
+            "value": "Q449402",
+            "rank": "normal"
+          },
+          {
+            "value": "Q351505",
+            "rank": "normal"
+          },
+          {
+            "value": "Q81815569",
+            "rank": "normal"
+          },
+          {
+            "value": "Q60618349",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4955063",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7827837",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16597655",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6222003",
+            "rank": "normal"
+          },
+          {
+            "value": "Q111299232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q317251",
+            "rank": "normal"
+          },
+          {
+            "value": "Q47459178",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q736114",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1945715",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1280214",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "tv/doctor-who-1963",
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+26",
+              "unit": "1"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "amount": "+15",
+              "unit": "1"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "amount": "+41",
+              "unit": "1"
+            },
+            "rank": "preferred"
+          },
+          {
+            "value": {
+              "amount": "+1",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q9531",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q7979",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q191472",
+            "rank": "preferred"
+          },
+          {
+            "value": "Q1638793",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "121",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1963-11-23T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q98137611",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q104767031": "time-travel fiction",
+        "Q111299232": "Millie Gibson",
+        "Q125689": "Nicholas Courtney",
+        "Q125942": "Arthur Darvill",
+        "Q1273924": "Michael Sheard",
+        "Q1280214": "Sydney Newman",
+        "Q13519936": "David Banks",
+        "Q1366112": "drama television series",
+        "Q140472311": "science fiction television series",
+        "Q145": "United Kingdom",
+        "Q151113": "Billie Piper",
+        "Q15493968": "John Scott Martin",
+        "Q1638793": "BBC HD",
+        "Q16597655": "Mandip Gill",
+        "Q1812342": "John Leeson",
+        "Q1858592": "Anthony Ainley",
+        "Q191472": "BBC One",
+        "Q1945715": "C. E. Webber",
+        "Q200405": "John Hurt",
+        "Q214601": "David Tennant",
+        "Q231237": "Karen Gillan",
+        "Q232187": "Alex Kingston",
+        "Q234430": "Freema Agyeman",
+        "Q234539": "Elisabeth Sladen",
+        "Q2364161": "Carole Ann Ford",
+        "Q23903083": "Pearl Mackie",
+        "Q24632": "John Barrowman",
+        "Q2471362": "Peter Purves",
+        "Q2471880": "William Russell",
+        "Q254766": "Catherine Tate",
+        "Q273403": "Jenna Coleman",
+        "Q312380": "Christopher Eccleston",
+        "Q312385": "Matt Smith",
+        "Q317251": "Matt Lucas",
+        "Q3181111": "Anneke Wills",
+        "Q335863": "Paul McGann",
+        "Q3376823": "Peter Pratt",
+        "Q343782": "action television series",
+        "Q351505": "Sacha Dhawan",
+        "Q358421": "Tom Baker",
+        "Q358427": "Peter Davison",
+        "Q361996": "William Hartnell",
+        "Q3752509": "Frazer Hines",
+        "Q439404": "Lalla Ward",
+        "Q440678": "Caroline John",
+        "Q440963": "Colin Baker",
+        "Q449402": "Jodie Whittaker",
+        "Q455551": "Sylvester McCoy",
+        "Q460245": "Kate O'Mara",
+        "Q467601": "Jon Pertwee",
+        "Q47459178": "Varada Sethu",
+        "Q4942381": "Bonnie Langford",
+        "Q4955063": "Bradley Walsh",
+        "Q5102271": "Deborah Watling",
+        "Q525859": "Sophie Aldred",
+        "Q544165": "Penelope Wilton",
+        "Q5534446": "Geoffrey Beevers",
+        "Q5580938": "Louise Jameson",
+        "Q559156": "Katy Manning",
+        "Q559430": "Patrick Troughton",
+        "Q560067": "Roger Delgado",
+        "Q56064758": "adventure television series",
+        "Q60618349": "Ncuti Gatwa",
+        "Q6222003": "John Bishop",
+        "Q665139": "Noel Clarke",
+        "Q668681": "Janet Fielding",
+        "Q671093": "Jacqueline Hill",
+        "Q7028968": "Nicola Bryant",
+        "Q732661": "Peter Capaldi",
+        "Q7326622": "Richard Hurndall",
+        "Q736114": "Donald Wilson",
+        "Q7373369": "Roy Skelton",
+        "Q7410764": "Samuel Anderson",
+        "Q7422813": "Sarah Sutton",
+        "Q7827837": "Tosin Cole",
+        "Q7979": "British English",
+        "Q81815569": "Alisha Bailey",
+        "Q8944720": "Mark Strickson",
+        "Q9531": "British Broadcasting Corporation",
+        "Q98137611": "Doctor Who"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q34316",
+      "lang": "en",
+      "title": "Doctor Who",
+      "extract": "Doctor Who is a British science fiction television series first broadcast by the BBC in 1963. The series, created by Sydney Newman, C. E. Webber and Donald Wilson, follows the adventures of the Doctor, an extraterrestrial being from a humanoid species known as Time Lords. The Doctor travels through space and time using a time travelling spaceship called the TARDIS, which has an exterior that resembles a British police box. The Doctor encounters various civilisations, which they seek to protect by outwitting foes and solving crises. The Doctor usually travels with a companion.\nBeginning with William Hartnell, fourteen actors have headlined the series as the Doctor; the most recent being Ncuti Gatwa, who portrayed the Fifteenth Doctor from 2023 to 2025. The transition between actors is woven into the story via the plot device of regeneration. When a Time Lord is fatally injured or weakened by old age, their cells regenerate into a new body; while they retain their memories, their personality changes. The different portrayals function as distinct stages within a single, continuous narrative. Due to time travel, these different incarnations occasionally cross paths.\nA British popular culture staple with a global cult following, the show has shaped generations of British television professionals. Fans of the series are sometimes referred to as Whovians. The series has been listed in Guinness World Records as the longest-running science-fiction television series in the world, as well as the \"most successful\" science-fiction series of all time, based on its overall broadcast ratings, DVD and book sales.\nThe series originally ran from 1963 to 1989. There was an unsuccessful attempt to revive regular production in 1996 with a backdoor pilot in the form of a television film titled Doctor Who. The series was relaunched in 2005, with production moving to BBC Wales in Cardiff. Since 2016, the show has been produced or co-produced by BBC Studios Productions in Cardiff. Since 2026, the series has been pending an invitation to tender for future episodes. The Doctor Who franchise, or Whoniverse, spans a wide range of media, including television spin-offs, literature, audio dramas, and films. As a global cultural phenomenon, it has become one of the most frequently referenced and parodied series in television history.",
+      "url": "https://en.wikipedia.org/wiki/Doctor_Who"
+    },
+    "wikipedia:es": {
+      "qid": "Q34316",
+      "lang": "es",
+      "title": "Doctor Who",
+      "extract": "Doctor Who (anteriormente conocida como Doctor Misterio en algunos países de Hispanoamérica)​ es una serie de televisión británica de ciencia ficción producida por la BBC. Está dividida en dos etapas: la denominada serie clásica, emitida entre 1963 y 1989, y la serie moderna, iniciada en 2005 y que continúa emitiéndose en la actualidad. Forma parte también de la serie oficial una película para televisión emitida en 1996 titulada Doctor Who: La película producida entre Reino Unido, Estados Unidos y Canadá.\nLa serie narra las aventuras de un ser extraterrestre llamado «el Doctor», parte de una especie humanoide llamados los Señores del Tiempo. El Doctor explora el universo en su TARDIS, una nave espacial con consciencia propia capaz de viajar a través del tiempo y el espacio. Por fuera, parece una cabina de policía azul, que era un elemento común de las calles del Reino Unido cuando la serie comenzó en 1963. Con la ayuda de distintos acompañantes, el Doctor se enfrenta a una variedad de enemigos mientras salva civilizaciones, libera pueblos oprimidos y visita tanto el pasado como el futuro, ayudando a gente común y corrigiendo injusticias.\nEmpezando con William Hartnell, catorce actores o actrices han protagonizado la serie como el Doctor, siendo el más reciente es Ncuti Gatwa, quien interpretó al Decimoquinto Doctor entre 2023 y 2025.​ La transición entre actores está integrada en la trama de la serie mediante el concepto de regeneración en una nueva encarnación, un recurso argumental en el que, cuando un Señor del Tiempo resulta herido de muerte o debilitado por la vejez, sus células se regeneran y se reencarna en un cuerpo diferente con nuevos gestos y comportamiento, pero conservando los mismos recuerdos. Esto explica la interpretación distintiva de cada actor, ya que todos representan diferentes etapas en la vida del Doctor y, juntos, conforman una sola vida con una narrativa continua. La naturaleza de los viajes en el tiempo de la trama permite que diferentes encarnaciones del Doctor se encuentren ocasionalmente. El Doctor puede cambiar de apariencia étnica o de género: en 2017, Jodie Whittaker se convirtió en la primera mujer en interpretar el papel principal, y en 2023, Gatwa se convirtió en el primer actor negro en protagonizar la serie. Las diferentes encarnaciones visten trajes distintivos, creados por diseñadores como Alexandra Tynan y Barbara Lane.​\nDoctor Who figura en el Libro Guinness de los Récords como la serie de televisión de ciencia ficción de mayor duración del mundo​ y es también un icono de la cultura popular británica.​​ Ha sido reconocida por sus historias imaginativas, efectos especiales creativos de bajo costo durante la serie original y el uso pionero de la música electrónica. A lo largo de sus 60 años de historia, se ha convertido en una serie de culto que ha influido en varias generaciones de profesionales de la televisión británica. Ha recibido el reconocimiento por parte tanto de crítica como de público como uno de los mejores programas británicos de televisión, ganando un BAFTA a la Mejor serie dramática en 2006, varios Premios Hugo y varios National Television Awards. Doctor Who también ha creado varios productos derivados, como las series de televisión Torchwood o The Sarah Jane Adventures, el episodio piloto K-9 and Company y una infinidad de novelas, audiolibros, videojuegos, recopilatorios de la banda sonora de la serie en discos compactos, cómics y juguetes.\nLa serie original se producía en el BBC Television Centre de Londres y cesó su realización en 1989. Posteriormente se filmó una película en 1996, que se produjo en Canadá con el objetivo de relanzar la serie con capital de BBC y Universal, pero la baja audiencia que recibió en Estados Unidos no propició la producción de una nueva serie. Finalmente, la serie moderna vería la luz el 26 de marzo de 2005, con producción de BBC Wales y la Canadian Broadcasting Corporation (CBC) y Cardiff como principal lugar de rodaje. Posterior se cancelo el especial de navidad de 2026.",
+      "url": "https://es.wikipedia.org/wiki/Doctor_Who"
+    },
+    "wikipedia:pt": {
+      "qid": "Q34316",
+      "lang": "pt",
+      "title": "Doctor Who",
+      "extract": "Doctor Who (bra: Doctor Who; prt: Doctor Who ou Dr. Who) é uma série de ficção científica britânica, produzida e transmitida pela British Broadcasting Corporation (BBC) desde 1963. A série retrata as aventuras do Doutor, um alienígena da espécie fictícia de Senhores do Tempo do planeta Gallifrey que explora o universo em sua máquina capaz de viajar pelo espaço e pelo tempo, conhecida como TARDIS (Time and Relative Dimension in Space), cuja aparência exterior se assemelha a uma cabine de polícia londrina de 1963. Juntamente aos seus companheiros, o Doutor enfrenta uma variedade de inimigos, enquanto trabalha para salvar as civilizações, ajudar as pessoas comuns e corrigir erros.\nComeçando com William Hartnell, diversos atores já atuaram na série como diferentes encarnações do Doutor. Em papel de destaque, já foram ao todo 19 atores dando vida a 17 encarnações, sendo quinze \"oficiais\" e duas versões especiais de John Hurt e Jo Martin (o Primeiro Doutor foi interpretado por três atores diferentes, enquanto David Tennant interpreta tanto o Décimo quanto o Décimo Quarto Doutor). A transição de um ator para outro é descrita no enredo da série como regeneração, um processo biológico dos Senhores do Tempo pelo qual o personagem do Doutor assume um novo corpo e uma nova personalidade, que ocorre quando o personagem sofre uma lesão que seria fatal para a maioria das outras espécies. Apesar de cada interpretação ser diferente, e em algumas ocasiões uma encarnação encontrar outra, elas são pensadas para serem aspectos do mesmo personagem. \nA série é uma parte significativa da cultura popular britânica, e em outros países se tornou um programa favorito clássico da televisão. O show tem influenciado gerações de profissionais da televisão britânica, muitos dos quais cresceram assistindo a série. A série está listada no Guinness World Records como a série de ficção científica mais duradoura do mundo, assim como a mais bem-sucedida.\nO programa originalmente funcionou de 1963 a 1989. Depois de uma tentativa frustrada de retomar a produção normal em 1996 com um piloto secreto na forma de um filme para a televisão, o programa foi relançado em 2005 pela BBC Wales, em Cardiff com a produção de Russell T Davies, que atuou como produtor executivo e escritor-chefe nos cinco primeiros anos. A primeira temporada no século XXI, com Christopher Eccleston como o Nono Doutor, foi produzida pela BBC. As segundas e terceiras temporadas tiveram algum dinheiro de desenvolvimento contribuído pela Canadian Broadcasting Corporation (CBC), que foi creditada como co-produtora. Doctor Who também gerou spin-offs em várias mídias, incluindo Torchwood (2006) e As Aventuras de Sarah Jane (2007), ambas as séries criadas por Russell T Davies; Class (2016), criada por Patrick Ness e co-Produzida por Steven Moffat; uma série de vídeos dividida em quatro partes chamado P.R.O.B.E (1994) e um único episódio piloto de K-9 and Company (1981). Houve também muitas paródias e referências culturais do personagem em outras mídias. K-9 (2009), criada por Bob Baker e Paul Tams, apesar de não se passar no mesmo universo das demais, foi uma série anglo-australiana de 26 episódios que utilizou alguns elementos de Doctor Who, como o personagem K-9; é também a única a não ter sido transmitida originalmente pela BBC, e sim pela Ten Network, na Austrália, e pela Disney XD, na Europa.",
+      "url": "https://pt.wikipedia.org/wiki/Doctor_Who"
+    }
+  },
+  "tier": "top",
+  "type": "series"
+}

@@ -1,0 +1,68 @@
+{
+  "qid": "Q112169066",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q112169066",
+      "labels": {
+        "en": "Foundations of Real-World Economics"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Foundations of Real-World Economics"
+      },
+      "sitelinks_count": 12,
+      "claims": {
+        "P1104": [
+          {
+            "value": {
+              "amount": "+306",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P123": [
+          {
+            "value": "Q1508259",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q1668889",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+2019-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL20520854W",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1508259": "Routledge",
+        "Q1668889": "John Komlos"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q112169066",
+      "lang": "en",
+      "title": "Foundations of Real-World Economics",
+      "extract": "Foundations of Real-World Economics: What Every Economics Student Needs to Know is a 2023 book by John Komlos in which the author argues that the turbulence of the 21st century, including the dot-com bubble, the 2008 financial crisis, the rise of right-wing populism, COVID-19 pandemic, and the Russo-Ukrainian War, cannot be adequately understood with conventional 20th-century economic thinking.",
+      "url": "https://en.wikipedia.org/wiki/Foundations_of_Real-World_Economics"
+    }
+  },
+  "tier": "isbn10-only",
+  "type": "book"
+}

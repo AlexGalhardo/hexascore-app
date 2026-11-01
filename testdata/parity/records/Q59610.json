@@ -1,0 +1,290 @@
+{
+  "qid": "Q59610",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q59610",
+      "labels": {
+        "en": "Seven Psychopaths",
+        "es": "Siete psicópatas",
+        "pt": "Seven Psychopaths"
+      },
+      "aliases": {
+        "en": [
+          "7 Psychopaths"
+        ],
+        "es": [
+          "Siete psicópatas y un perro",
+          "Seven Psychopaths"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Seven Psychopaths",
+        "eswiki": "Seven Psychopaths",
+        "ptwiki": "Seven Psychopaths"
+      },
+      "sitelinks_count": 33,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/seven_psychopaths",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q157443",
+            "rank": "normal"
+          },
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1200678",
+            "rank": "normal"
+          },
+          {
+            "value": "Q959790",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Seven Psychopaths",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q172035",
+            "rank": "normal"
+          },
+          {
+            "value": "Q236097",
+            "rank": "normal"
+          },
+          {
+            "value": "Q201279",
+            "rank": "normal"
+          },
+          {
+            "value": "Q185051",
+            "rank": "normal"
+          },
+          {
+            "value": "Q316446",
+            "rank": "normal"
+          },
+          {
+            "value": "Q164730",
+            "rank": "normal"
+          },
+          {
+            "value": "Q184805",
+            "rank": "normal"
+          },
+          {
+            "value": "Q382197",
+            "rank": "normal"
+          },
+          {
+            "value": "Q241854",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1334725",
+            "rank": "normal"
+          },
+          {
+            "value": "Q230113",
+            "rank": "normal"
+          },
+          {
+            "value": "Q438445",
+            "rank": "normal"
+          },
+          {
+            "value": "Q352540",
+            "rank": "normal"
+          },
+          {
+            "value": "Q28498",
+            "rank": "normal"
+          },
+          {
+            "value": "Q314290",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2745996",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7329928",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6555605",
+            "rank": "normal"
+          },
+          {
+            "value": "Q12026921",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4088048",
+            "rank": "normal"
+          },
+          {
+            "value": "Q28151585",
+            "rank": "normal"
+          }
+        ],
+        "P1651": [
+          {
+            "value": "oG2Sy003pbY",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/seven-psychopaths",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+110",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q5448886",
+            "rank": "normal"
+          },
+          {
+            "value": "Q260528",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt1931533",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "86838",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          },
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q372394",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2012-12-06T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 9,
+              "time": "+2012-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q372394",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1200678": "mystery film",
+        "Q12026921": "Joseph Lyle Taylor",
+        "Q130232": "drama film",
+        "Q1334725": "Kevin Corrigan",
+        "Q145": "United Kingdom",
+        "Q157443": "comedy film",
+        "Q164730": "Olga Kurylenko",
+        "Q172035": "Colin Farrell",
+        "Q184805": "Tom Waits",
+        "Q185051": "Christopher Walken",
+        "Q1860": "English",
+        "Q201279": "Woody Harrelson",
+        "Q230113": "Gabourey Sidibe",
+        "Q236097": "Abbie Cornish",
+        "Q241854": "Helena Mattsson",
+        "Q260528": "British Film Institute",
+        "Q2745996": "Sandy Martin",
+        "Q28151585": "Christine Marzano",
+        "Q28498": "Brendan Sexton III",
+        "Q30": "United States",
+        "Q314290": "Harry Dean Stanton",
+        "Q316446": "Sam Rockwell",
+        "Q352540": "Michael Pitt",
+        "Q372394": "Martin McDonagh",
+        "Q382197": "Željko Ivanek",
+        "Q4088048": "Ronnie Gene Blevins",
+        "Q438445": "Michael Stuhlbarg",
+        "Q5448886": "Film4 Productions",
+        "Q6555605": "Lionel D. Carson",
+        "Q7329928": "Richard Wharton",
+        "Q959790": "crime film"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q59610",
+      "lang": "en",
+      "title": "Seven Psychopaths",
+      "extract": "Seven Psychopaths is a 2012 satirical crime comedy-drama film directed, written, and co-produced by Martin McDonagh and starring Colin Farrell, Sam Rockwell, Woody Harrelson, and Christopher Walken, with Tom Waits, Abbie Cornish, Olga Kurylenko, and Željko Ivanek in supporting roles. A co-production between the United Kingdom and the United States, it marks the second collaboration among McDonagh, Farrell, and Ivanek, following the director's In Bruges (2008).\nSeven Psychopaths had its world premiere on 7 September 2012 at the Toronto International Film Festival, and was theatrically released in the United States and Canada on 12 October 2012, and in the United Kingdom on 5 December 2012. The film received positive reviews from critics.",
+      "url": "https://en.wikipedia.org/wiki/Seven_Psychopaths"
+    },
+    "wikipedia:es": {
+      "qid": "Q59610",
+      "lang": "es",
+      "title": "Seven Psychopaths",
+      "extract": "Seven Psychopaths (Siete psicópatas en España, y Siete psicópatas y un perro en Hispanoamérica) es una película cómica británica de humor negro de 2012, escrita, coproducida y dirigida por Martin McDonagh y protagonizada por Colin Farrell, Sam Rockwell, Woody Harrelson, Christopher Walken, Tom Waits, Abbie Cornish y Olga Kurylenko. Es la segunda colaboración entre McDonagh y Farrell, después de In Bruges (2008).",
+      "url": "https://es.wikipedia.org/wiki/Seven_Psychopaths"
+    },
+    "wikipedia:pt": {
+      "qid": "Q59610",
+      "lang": "pt",
+      "title": "Seven Psychopaths",
+      "extract": "Seven Psychopaths (bra: Sete Psicopatas e um Shih Tzu; prt: Sete Psicopatas) é um filme britano-estadunidense de 2012, do gênero comédia de ação, coproduzido e dirigido por Martin McDonagh. É estrelado por Colin Farrell, Sam Rockwell, Woody Harrelson, Tom Waits e Christopher Walken. Seven Psychopaths é o segundo filme consecutivo do diretor Martin McDonagh com o ator Colin Farrell no papel do protagonista, depois de In Bruges. Foi exibido pela primeira vez no Festival de Toronto em 7 de setembro de 2012, no festival venceu o prêmio Midnight Madness. Em 12 de outubro de 2012 foi lançado nos Estados Unidos e em 4 de janeiro de 2013 no Brasil.\nMickey Rourke desistiu de The Expendables 2 para estrelar o filme. Mais tarde ele saiu de Seven Psychopaths após ter desentendimentos com o diretor McDonagh, chamando-o de um \"babaca\". Ele foi substituído por Woody Harrelson.",
+      "url": "https://pt.wikipedia.org/wiki/Seven_Psychopaths"
+    }
+  },
+  "tier": "mid",
+  "type": "movie"
+}

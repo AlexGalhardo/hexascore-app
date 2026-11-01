@@ -1,0 +1,126 @@
+{
+  "qid": "Q55536",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q55536",
+      "labels": {
+        "en": "10th Frame",
+        "mul": "10th Frame"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "10th Frame"
+      },
+      "sitelinks_count": 8,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q1930918",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q868217",
+            "rank": "normal"
+          },
+          {
+            "value": "Q61719251",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "10th Frame",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q1425540",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q23882",
+            "rank": "normal"
+          },
+          {
+            "value": "Q853547",
+            "rank": "normal"
+          },
+          {
+            "value": "Q478829",
+            "rank": "normal"
+          },
+          {
+            "value": "Q99775",
+            "rank": "normal"
+          },
+          {
+            "value": "Q170434",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1986-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "10th-frame",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1425540": "Indie Built",
+        "Q170434": "DOS",
+        "Q1860": "English",
+        "Q1930918": "U.S. Gold",
+        "Q208850": "single-player video game",
+        "Q23882": "ZX Spectrum",
+        "Q30": "United States",
+        "Q478829": "Amstrad CPC",
+        "Q61719251": "bowling video game",
+        "Q853547": "MSX",
+        "Q868217": "sports video game",
+        "Q99775": "Commodore 64"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q55536",
+      "lang": "en",
+      "title": "10th Frame",
+      "extract": "10th Frame is a ten-pin bowling sports video game published by Access Software in 1986. Up to eight players can take part in open bowling or a tournament. It was released for the Amstrad CPC, Atari ST, Commodore 64, IBM PC compatibles, MSX, and ZX Spectrum.",
+      "url": "https://en.wikipedia.org/wiki/10th_Frame"
+    }
+  },
+  "tier": "tail",
+  "type": "game"
+}

@@ -1,0 +1,181 @@
+{
+  "qid": "Q55225",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q55225",
+      "labels": {
+        "en": "Star Wars: Starfighter",
+        "mul": "Star Wars: Starfighter",
+        "pt": "Star Wars: Starfighter",
+        "pt-br": "Star Wars: Starfighter"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Star Wars: Starfighter (video game)",
+        "ptwiki": "Star Wars: Starfighter (jogo eletrônico)"
+      },
+      "sitelinks_count": 9,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q216611",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q270948",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Star Wars: Starfighter",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "32350",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q216611",
+            "rank": "normal"
+          }
+        ],
+        "P2725": [
+          {
+            "value": "game/star_wars_starfighter",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "9124",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0278059",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q132020",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10680",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q192851",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          },
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          },
+          {
+            "value": "Q150",
+            "rank": "normal"
+          },
+          {
+            "value": "Q652",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2001-02-19T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "star-wars-starfighter",
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q462",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q10680": "PlayStation 2",
+        "Q132020": "Xbox",
+        "Q1321": "Spanish",
+        "Q1406": "Microsoft Windows",
+        "Q150": "French",
+        "Q1860": "English",
+        "Q188": "German",
+        "Q192851": "arcade video game machine",
+        "Q208850": "single-player video game",
+        "Q216611": "Lucasfilm Games",
+        "Q270948": "action game",
+        "Q30": "United States",
+        "Q462": "Star Wars",
+        "Q652": "Italian",
+        "Q6895044": "multiplayer video game"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q55225",
+      "lang": "en",
+      "title": "Star Wars: Starfighter (video game)",
+      "extract": "Star Wars: Starfighter is a 2001 action game developed and published by LucasArts. It takes place right before the Battle of Naboo. The player unites alongside three starfighter pilots and is allowed to take control of several different spacecraft to help stop the invasion that threatens Naboo.\nStarfighter was revealed at E3 2001. Initially released for PlayStation 2, an Xbox version was later released as Star Wars: Starfighter: Special Edition. An additional port to Microsoft Windows followed in late January 2002, based on the PlayStation 2 version. Both ports were developed by Secret Level, Inc. In 2003, an arcade version was released on Tsunami Visual Technologies' motion-base platform. LucasArts re-released the game on the digital distribution platform Steam on July 8, 2009, and on the PlayStation 3 in the United States in 2015 via the PlayStation Store. A sequel was released in 2002, named Star Wars: Jedi Starfighter.",
+      "url": "https://en.wikipedia.org/wiki/Star_Wars:_Starfighter_(video_game)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q55225",
+      "lang": "pt",
+      "title": "Star Wars: Starfighter (jogo eletrônico)",
+      "extract": "Star Wars: Starfighter é um jogo de ação que foi desenvolvido e publicado pela LucasArts. Ele se ambienta em um momento antes da batalha de Naboo. O jogador se une ao lado de três pilotos de Caça e está autorizado a assumir o controle de várias diferentes naves para ajudar a deter a invasão, que ameaça Naboo.",
+      "url": "https://pt.wikipedia.org/wiki/Star_Wars:_Starfighter_(jogo_eletr%C3%B4nico)"
+    }
+  },
+  "tier": "tail",
+  "type": "game"
+}

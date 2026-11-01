@@ -1,0 +1,116 @@
+{
+  "qid": "Q117182",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q117182",
+      "labels": {
+        "en": "Salammbô",
+        "es": "Salambó",
+        "pt": "Salammbô"
+      },
+      "aliases": {
+        "en": [
+          "Salammbo"
+        ],
+        "es": [
+          "Salammbô",
+          "Salammbo",
+          "Salambo"
+        ],
+        "pt": [
+          "Salambo",
+          "Salambô"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Salammbô",
+        "eswiki": "Salambó",
+        "ptwiki": "Salammbô"
+      },
+      "sitelinks_count": 34,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q1196408",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Salammbô",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "FlaubertSalammbo.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q150",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q142",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q43444",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1862-11-24T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL893958W",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1196408": "historical fiction",
+        "Q142": "France",
+        "Q150": "French",
+        "Q43444": "Gustave Flaubert"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q117182",
+      "lang": "en",
+      "title": "Salammbô",
+      "extract": "Salammbô is an 1862 historical novel by Gustave Flaubert, set in Carthage immediately before and during the Mercenary War (241–237 BCE). Flaubert's principal  source was Book I of the Histories by the Greek historian Polybius. \nThe novel was enormously popular when first published in 1862. It was translated into English by Eleanor Marx in 1886, thus introduced to the English-speaking world and becoming an English-language bestseller. \nThe novel jumpstarted a renewed interest in the history of the Roman Republic's conflict with the North African Phoenician outpost of Carthage.",
+      "url": "https://en.wikipedia.org/wiki/Salammb%C3%B4"
+    },
+    "wikipedia:es": {
+      "qid": "Q117182",
+      "lang": "es",
+      "title": "Salambó",
+      "extract": "Salambó (Salammbô en francés) es una novela histórica escrita por Gustave Flaubert. \nFue publicada por primera vez en 1862.​ La acción de la obra tiene lugar en el siglo III a. C. en el territorio de Cartago, durante la conocida como Guerra de los Mercenarios, ocurrida poco después de la derrota cartaginesa frente a los romanos en la primera guerra púnica.\nAl igual que la novela anterior del mismo autor, Madame Bovary, esta obra tuvo una gran acogida y consolidó la reputación de Flaubert como novelista. La novela, en su esfuerzo por resucitar la olvidada cultura cartaginesa, mencionó cuantos detalles pudo el autor recopilar en los libros de historia y ofreció minuciosas y coloristas descripciones de la vida cotidiana de Cartago, de sus costumbres y atavíos, descripciones que, a su vez, ejercieron una cierta influencia sobre la moda francesa contemporánea.​\nCasi todos los personajes principales de la novela son históricos. Del lado cartaginés sobresalen Amílcar Barca y su joven hijo Aníbal, y los generales Hannón y Giscón. Por parte los mercenarios, tanto sus jefes, Matho, Espendio, Autarito como el númida Narr'Havas también existieron. Solo la protagonista principal, Salambó, supuesta hija de Amílcar y hermana mayor de Aníbal, es ficticia. Es un personaje que Flaubert tuvo que inventarse para poder articular en torno a ella una trama amorosa que animara la novela. \nSi bien la trama amorosa es ficticia, no lo son así los hechos militares, con su sucesión de revueltas, batallas, asedios, armas y máquinas de guerra. Y en cuanto a los detalles geográficos y la reconstrucción del aspecto urbano de Cartago, Flaubert hace grandes esfuerzos por inventar lo menos posible, limitándose a dar vida a los datos históricos y a los restos arqueológicos.​",
+      "url": "https://es.wikipedia.org/wiki/Salamb%C3%B3"
+    },
+    "wikipedia:pt": {
+      "qid": "Q117182",
+      "lang": "pt",
+      "title": "Salammbô",
+      "extract": "Salammbô é o título de um romance histórico de Gustave Flaubert, publicado pela primeira vez em 1862, cujo enredo reconstitui a vida na antiga Cartago.",
+      "url": "https://pt.wikipedia.org/wiki/Salammb%C3%B4"
+    }
+  },
+  "tier": "mid",
+  "type": "book"
+}

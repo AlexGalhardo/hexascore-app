@@ -1,0 +1,136 @@
+{
+  "qid": "Q5330957",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q5330957",
+      "labels": {
+        "en": "EastSiders",
+        "es": "EastSiders"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "EastSiders",
+        "eswiki": "EastSiders"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+21",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/eastsiders",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q85133165",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "EastSiders",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q6417491",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "EastSiders.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+3",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt2558816",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q907311",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1812233",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "67202",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2012-12-14T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1812233": "Logo TV",
+        "Q1860": "English",
+        "Q30": "United States",
+        "Q6417491": "Kit Williamson",
+        "Q85133165": "LGBT-related television series",
+        "Q907311": "Netflix"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q5330957",
+      "lang": "en",
+      "title": "EastSiders",
+      "extract": "EastSiders is an American dark comedy web series created by Kit Williamson. It premiered on YouTube on December 14, 2012, and began streaming through Logo TV's website on April 23, 2013. Set in Silver Lake, Los Angeles, the series follows couple Thom (Van Hansis) and Cal (Williamson) as they struggle with infidelity and substance abuse. It also explores the relationship between Kathy (Constance Wu), Cal's best friend, and her boyfriend Ian (John Halbach) as they reach their six-month anniversary, making it Kathy's longest relationship.\nThe first two episodes of the first season premiered on YouTube, and the subsequent seven episodes were funded by a Kickstarter campaign. On April 2, 2013, it was announced that the series was picked up for distribution through Logo TV's website, and the remainder of the season premiered on April 23, 2013. The second season premiered on September 15, 2015, through Vimeo's on demand service. The series was later sold to Netflix, and the third season premiered November 28, 2017.\nSince its release, the series has received numerous accolades, including two Indie Series Awards and several Daytime Emmy Award nominations.\nThe fourth and final season premiered on December 1, 2019.",
+      "url": "https://en.wikipedia.org/wiki/EastSiders"
+    },
+    "wikipedia:es": {
+      "qid": "Q5330957",
+      "lang": "es",
+      "title": "EastSiders",
+      "extract": "EastSiders es una serie web estadounidense de comedia negra creada por Kit Williamson. La serie se estrenó en YouTube el 14 de diciembre de 2012 y comenzó a transmitirse a través del sitio web de Logo TV el 23 de abril de 2013. Ambientada en Silver Lake, Los Ángeles, la serie sigue a la pareja Thom (Van Hansis) y Cal (Williamson) mientras luchan contra la infidelidad y el abuso de sustancias. También explora la relación entre Kathy (Constance Wu), la mejor amiga de Cal, y su novio Ian (John Halbach) cuando llegan a su sexto aniversario, lo que la convierte en la relación más larga de Kathy.​​\nLos dos primeros episodios de la primera temporada se estrenaron en YouTube y los siete episodios posteriores fueron financiados mediante una campaña de Kickstarter. El 2 de abril de 2013, se anunció que la serie se retiró de YouTube para su distribución a través del sitio web de Logo TV, y el resto de la temporada se estrenó el 23 de abril de 2013. La segunda temporada se estrenó el 15 de septiembre de 2015 a través del servicio on demand de Vimeo . La serie más tarde fue vendida a Netflix,​ y la tercera temporada se estrenó el 28 de noviembre de 2017​\nLa cuarta y última temporada se estrenó el 1 de diciembre de 2019.​\nDesde su lanzamiento, la serie ha recibido numerosos elogios, incluidos dos premios Indie Series y varias nominaciones a los premios Daytime Emmy.",
+      "url": "https://es.wikipedia.org/wiki/EastSiders"
+    }
+  },
+  "tier": "tail",
+  "type": "series"
+}

@@ -1,0 +1,92 @@
+{
+  "qid": "Q4338113",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q4338113",
+      "labels": {
+        "en": "Principles of Economics"
+      },
+      "aliases": {
+        "en": [
+          "Grundsätze der Volkswirtschaftslehre"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Principles of Economics (Menger book)"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q213051",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Grundsätze der Volkswirtschaftslehre",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q188",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q28513",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q84177",
+            "rank": "normal"
+          }
+        ],
+        "P571": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1871-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1871-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL1338940W",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q188": "German",
+        "Q213051": "non-fiction",
+        "Q28513": "Austria–Hungary",
+        "Q84177": "Carl Menger"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q4338113",
+      "lang": "en",
+      "title": "Principles of Economics (Menger book)",
+      "extract": "Principles of Economics (German: Grundsätze der Volkswirtschaftslehre; 1871) is a book by economist Carl Menger which is credited with the founding of the Austrian School of economics. It was one of the first modern treatises to advance the theory of marginal utility.",
+      "url": "https://en.wikipedia.org/wiki/Principles_of_Economics_(Menger_book)"
+    }
+  },
+  "tier": "tail",
+  "type": "book"
+}

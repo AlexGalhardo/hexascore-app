@@ -1,0 +1,292 @@
+{
+  "qid": "Q73580",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q73580",
+      "labels": {
+        "en": "Darkness at Noon",
+        "es": "El cero y el infinito",
+        "pt": "O Zero e o Infinito"
+      },
+      "aliases": {
+        "es": [
+          "Oscuridad a medianoche",
+          "Sonnenfinsternis",
+          "Darkness at Noon"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Darkness at Noon",
+        "eswiki": "El cero y el infinito",
+        "ptwiki": "O Zero e o Infinito"
+      },
+      "sitelinks_count": 25,
+      "claims": {
+        "P1476": [
+          {
+            "value": "Sonnenfinsternis",
+            "rank": "preferred"
+          },
+          {
+            "value": "Darkness at Noon",
+            "rank": "normal"
+          },
+          {
+            "value": "Le zéro et l'infini",
+            "rank": "normal"
+          },
+          {
+            "value": "Pomracenje o podne",
+            "rank": "normal"
+          },
+          {
+            "value": "Sötétség délben",
+            "rank": "normal"
+          },
+          {
+            "value": "Tagmeza mallumo",
+            "rank": "normal"
+          },
+          {
+            "value": "El cero y el infinito",
+            "rank": "normal"
+          },
+          {
+            "value": "Buio a mezzogiorno",
+            "rank": "normal"
+          },
+          {
+            "value": "O Zero e o Infinito",
+            "rank": "normal"
+          },
+          {
+            "value": "Günorta qaranlığı",
+            "rank": "normal"
+          },
+          {
+            "value": "ডার্কনেস এট নুন",
+            "rank": "normal"
+          },
+          {
+            "value": "ظلمت در نیمروز",
+            "rank": "normal"
+          },
+          {
+            "value": "Pimeää keskellä päivää",
+            "rank": "normal"
+          },
+          {
+            "value": "אפלה בצהריים",
+            "rank": "normal"
+          },
+          {
+            "value": "真昼の暗黒",
+            "rank": "normal"
+          },
+          {
+            "value": "Mørke midt på dagen",
+            "rank": "normal"
+          },
+          {
+            "value": "Ciemność w południe",
+            "rank": "normal"
+          },
+          {
+            "value": "Слепящая тьма",
+            "rank": "normal"
+          },
+          {
+            "value": "Natt klockan tolv på dagen",
+            "rank": "normal"
+          },
+          {
+            "value": "Ніч ополудні",
+            "rank": "normal"
+          },
+          {
+            "value": "中午的黑暗",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "DarknessAtNoon.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q188",
+            "rank": "preferred"
+          },
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          },
+          {
+            "value": "Q150",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6654",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9067",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321",
+            "rank": "normal"
+          },
+          {
+            "value": "Q652",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5146",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9292",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9610",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9168",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1412",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9288",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5287",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9043",
+            "rank": "normal"
+          },
+          {
+            "value": "Q809",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7737",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9027",
+            "rank": "normal"
+          },
+          {
+            "value": "Q8798",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7850",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q78494",
+            "rank": "normal"
+          }
+        ],
+        "P571": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1940-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1940-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL804246W",
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "881601",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1321": "Spanish",
+        "Q1412": "Finnish",
+        "Q145": "United Kingdom",
+        "Q150": "French",
+        "Q1860": "English",
+        "Q188": "German",
+        "Q5146": "Portuguese",
+        "Q5287": "Japanese",
+        "Q652": "Italian",
+        "Q6654": "Croatian",
+        "Q7737": "Russian",
+        "Q78494": "Arthur Koestler",
+        "Q7850": "Chinese",
+        "Q809": "Polish",
+        "Q8798": "Ukrainian",
+        "Q9027": "Swedish",
+        "Q9043": "Norwegian",
+        "Q9067": "Hungarian",
+        "Q9168": "Persian",
+        "Q9288": "Hebrew",
+        "Q9292": "Azerbaijani",
+        "Q9610": "Bangla"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q73580",
+      "lang": "en",
+      "title": "Darkness at Noon",
+      "extract": "Darkness at Noon (German: Sonnenfinsternis, lit. 'Solar eclipse') is a novel by Austrian-Hungarian-born novelist Arthur Koestler, first published in 1940. His best known work, it is the tale of Rubashov, an Old Bolshevik who is arrested, imprisoned, and tried for treason against the government that he had helped to create.\nThe novel is set between 1938 and 1940, after the Great Purge and Moscow show trials. Despite being based on real events, the novel does not name either Russia or the Soviets, and tends to use generic terms to describe people and organizations; for example, the Soviet government is referred to as \"the Party\" and Nazi Germany is referred to as \"the Dictatorship\". Joseph Stalin is represented by \"Number One\", a menacing dictator. The novel expresses the author's disillusionment with Bolshevism, Stalinism, and the ideology of the Communist Party of the Soviet Union at the outset of World War II.\nIn 1998, the Modern Library ranked Darkness at Noon number eight on its list of the 100 best English-language novels of the 20th century, even though Koestler wrote it in German. This is because the German-language version was lost at the time, and the novel was known only from an English translation.",
+      "url": "https://en.wikipedia.org/wiki/Darkness_at_Noon"
+    },
+    "wikipedia:es": {
+      "qid": "Q73580",
+      "lang": "es",
+      "title": "El cero y el infinito",
+      "extract": "El cero y el infinito (Sonnenfinsternis (Eclipse solar) en alemán; Darkness at Noon (Oscuridad al mediodía) en inglés) es la principal novela de Arthur Koestler, autor judío húngaro nacionalizado británico. Publicada en 1940, narra la historia de Nikolái Rubashov, un viejo bolchevique de la Revolución rusa de 1917 y ex comisario del Pueblo que se ve en problemas en la Unión Soviética dirigida por Iósif Stalin.",
+      "url": "https://es.wikipedia.org/wiki/El_cero_y_el_infinito"
+    },
+    "wikipedia:pt": {
+      "qid": "Q73580",
+      "lang": "pt",
+      "title": "O Zero e o Infinito",
+      "extract": "O Zero e o Infinito (no original, em alemão,  Sonnenfinsternis, isto é, Eclipse solar) é um romance escrito por Arthur Koestler, publicado inicialmente em inglês com o título Darkness at Noon, Escuridão ao meio-dia, em 1940.\nO personagem principal do romance, o fictício e velho militante Rubachov é inspirado nos líderes bolcheviques aniquilados pelo regime estalinista durante o Grande Expurgo na União Soviética. O livro relata as reflexões do preso político e o processo que o conduz a confessar um crime que ele não cometeu e, finalmente, à sua execução.",
+      "url": "https://pt.wikipedia.org/wiki/O_Zero_e_o_Infinito"
+    }
+  },
+  "tier": "mid",
+  "type": "book"
+}

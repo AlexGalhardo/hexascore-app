@@ -1,0 +1,223 @@
+{
+  "qid": "Q901217",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q901217",
+      "labels": {
+        "en": "Scenes from a Marriage",
+        "es": "Secretos de un matrimonio",
+        "pt": "Scener ur ett äktenskap"
+      },
+      "aliases": {
+        "es": [
+          "Scener ur ett äktenskap",
+          "Scener ur ett aktenskap"
+        ],
+        "pt": [
+          "Scenes from a Marriage",
+          "Cenas da vida conjugal",
+          "Cenas de um Casamento"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Scenes from a Marriage",
+        "eswiki": "Secretos de un matrimonio",
+        "ptwiki": "Scener ur ett äktenskap"
+      },
+      "sitelinks_count": 30,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+6",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "m/scenes_from_a_marriage",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Scener ur ett äktenskap",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q191064",
+            "rank": "normal"
+          },
+          {
+            "value": "Q321344",
+            "rank": "normal"
+          },
+          {
+            "value": "Q234921",
+            "rank": "normal"
+          },
+          {
+            "value": "Q259911",
+            "rank": "normal"
+          },
+          {
+            "value": "Q247626",
+            "rank": "normal"
+          },
+          {
+            "value": "Q728985",
+            "rank": "normal"
+          },
+          {
+            "value": "Q270441",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2850193",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4938570",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4895701",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q7546",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+281",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0070644",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q9027",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q9027",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q215363",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q34",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "65170",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q7546",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1973-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q7546",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1973-04-11T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q130232": "drama film",
+        "Q191064": "Liv Ullmann",
+        "Q215363": "Sveriges Television",
+        "Q234921": "Bibi Andersson",
+        "Q247626": "Barbro Hiort af Ornäs",
+        "Q259911": "Gunnel Lindblom",
+        "Q270441": "Wenche Foss",
+        "Q2850193": "Anita Wall",
+        "Q321344": "Erland Josephson",
+        "Q34": "Sweden",
+        "Q4895701": "Bertil Norström",
+        "Q4938570": "Lena Bergman",
+        "Q728985": "Jan Malmsjö",
+        "Q7546": "Ingmar Bergman",
+        "Q9027": "Swedish"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q901217",
+      "lang": "en",
+      "title": "Scenes from a Marriage",
+      "extract": "Scenes from a Marriage (Swedish: Scener ur ett äktenskap) is a 1973 Swedish television miniseries written and directed by Ingmar Bergman. Over the course of six hour-long episodes, it explores the disintegration of the marriage between Marianne (Liv Ullmann), a divorce lawyer, and Johan (Erland Josephson), a reader in psychology. The series spans a period of 10 years. Bergman's teleplay draws on his own experiences, including his relationship with Ullmann. It was shot on a small budget in Stockholm and Fårö in 1972.\nAfter initially airing on Swedish TV in six parts, the miniseries was condensed into a theatrical version and received positive reviews in Sweden and internationally. Scenes from a Marriage was also the subject of controversy for its perceived influence on rising divorce rates in Europe. The film was ineligible for the Academy Award for Best Foreign Language Film, but won the Golden Globe Award for Best Foreign Language Film and several other honours. The miniseries and film version influenced filmmakers such as Woody Allen and Richard Linklater. It was followed by a sequel, Saraband, in 2003, and stage adaptations. It was also adapted into an HBO miniseries in 2021.",
+      "url": "https://en.wikipedia.org/wiki/Scenes_from_a_Marriage"
+    },
+    "wikipedia:es": {
+      "qid": "Q901217",
+      "lang": "es",
+      "title": "Secretos de un matrimonio",
+      "extract": "Scener ur ett äktenskap (en español, Secretos de un matrimonio o Escenas de la vida conyugal)​ es una miniserie y, posteriormente, película sueca de drama psicológico de 1973 escrita y dirigida por Ingmar Bergman.​ La historia retrata el matrimonio de Marianne y Johan, quienes, después de varios problemas, finalizan su relación divorciándose pero manteniendo la relación.​\nSe rodó en 1973, con Liv Ullmann y Erland Josephson en los papeles principales, estrenándose el 11 de abril de 1973 en la televisión sueca.​ Obtuvo un considerable éxito internacional, incluyendo premios como el Globo de Oro 1975 a la Mejor Película Extranjera.​",
+      "url": "https://es.wikipedia.org/wiki/Secretos_de_un_matrimonio"
+    },
+    "wikipedia:pt": {
+      "qid": "Q901217",
+      "lang": "pt",
+      "title": "Scener ur ett äktenskap",
+      "extract": "Scener ur ett äktenskap (pt: Cenas da vida conjugal / br: Cenas de um casamento) é um filme sueco de 1974, do gênero drama, escrito e realizado por Ingmar Bergman e com direção de fotografia de Sven Nykvist. A história original foi lançada como uma minissérie de TV em 1973.",
+      "url": "https://pt.wikipedia.org/wiki/Scener_ur_ett_%C3%A4ktenskap"
+    }
+  },
+  "tier": "mid",
+  "type": "series"
+}

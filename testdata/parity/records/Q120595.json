@@ -1,0 +1,118 @@
+{
+  "qid": "Q120595",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q120595",
+      "labels": {
+        "en": "N or M?",
+        "es": "El misterio de Sans Souci",
+        "pt": "N or M?"
+      },
+      "aliases": {
+        "pt": [
+          "Tempo de Espionagem"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "N or M?",
+        "eswiki": "El misterio de Sans Souci",
+        "ptwiki": "N or M?"
+      },
+      "sitelinks_count": 26,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q5287721",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q186424",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "N or M?",
+            "rank": "normal"
+          },
+          {
+            "value": "Tempo de Espionagem",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q35064",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1941-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL472130W",
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "631927",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q145": "United Kingdom",
+        "Q1860": "English",
+        "Q186424": "detective fiction",
+        "Q35064": "Agatha Christie",
+        "Q5287721": "Dodd, Mead \u0026 Co."
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q120595",
+      "lang": "en",
+      "title": "N or M?",
+      "extract": "N or M? is a mystery novel by Agatha Christie first published in the US by Dodd, Mead and Company in 1941 and in the UK by the Collins Crime Club in November of the same year. The US edition retailed $2.00 and the UK edition at seven shillings and sixpence (7/6).\nThe title is taken from a catechism in the Book of Common Prayer which asks, \"What is your Christian name? Answer N. or M.\" The \"N. or M.\" here stands for the Latin, \"nomen vel nomina\", meaning \"name or names\". It was an accident of typography that \"nomina\" (\"nn\") came to be represented by \"m\".\nThe novel is the first to feature the mature versions of her detectives Tommy and Tuppence, whose previous appearances had been in the adventure The Secret Adversary (1922) and the short story collection Partners in Crime (1929).",
+      "url": "https://en.wikipedia.org/wiki/N_or_M%3F"
+    },
+    "wikipedia:es": {
+      "qid": "Q120595",
+      "lang": "es",
+      "title": "El misterio de Sans Souci",
+      "extract": "El misterio de Sans Souci (N or M? en la versión original en inglés) es una novela de la escritora británica Agatha Christie publicada en 1941.",
+      "url": "https://es.wikipedia.org/wiki/El_misterio_de_Sans_Souci"
+    },
+    "wikipedia:pt": {
+      "qid": "Q120595",
+      "lang": "pt",
+      "title": "N or M?",
+      "extract": "N or M? (M ou N?, no Brasil/ Tempo de Espionagem ou N ou M?, em Portugal) é um romance policial de Agatha Christie, publicado em 1941.\nÉ o terceiro livro protagonizado pelo casal de detetives Tommy e Tuppence Beresford.",
+      "url": "https://pt.wikipedia.org/wiki/N_or_M%3F"
+    }
+  },
+  "tier": "mid",
+  "type": "book"
+}

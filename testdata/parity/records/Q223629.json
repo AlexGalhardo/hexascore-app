@@ -1,0 +1,193 @@
+{
+  "qid": "Q223629",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q223629",
+      "labels": {
+        "en": "Half-Life 2: Lost Coast",
+        "es": "Half-Life 2: Lost Coast",
+        "mul": "Half-Life 2: Lost Coast",
+        "pt": "Half-Life 2: Lost Coast",
+        "pt-br": "Half-Life 2: Lost Coast"
+      },
+      "aliases": {
+        "en": [
+          "Lost Coast",
+          "Half Life 2: Lost Coast",
+          "Half-Life 2 Lost Coast"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Half-Life 2: Lost Coast",
+        "eswiki": "Half-Life 2: Lost Coast",
+        "ptwiki": "Half-Life 2: Lost Coast"
+      },
+      "sitelinks_count": 28,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q193559",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q185029",
+            "rank": "normal"
+          },
+          {
+            "value": "Q115101598",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "340",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q193559",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q752241",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "4252",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q388",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q14116",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          },
+          {
+            "value": "Q150",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188",
+            "rank": "normal"
+          },
+          {
+            "value": "Q652",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7737",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13414913",
+            "rank": "normal"
+          },
+          {
+            "value": "Q18130932",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9176",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2005-10-27T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "half-life-2-lost-coast",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q115101598": "post-apocalyptic video game",
+        "Q1321": "Spanish",
+        "Q13414913": "Simplified Chinese",
+        "Q1406": "Microsoft Windows",
+        "Q14116": "macOS",
+        "Q150": "French",
+        "Q18130932": "Traditional Chinese",
+        "Q185029": "first-person shooter",
+        "Q1860": "English",
+        "Q188": "German",
+        "Q193559": "Valve Corporation",
+        "Q208850": "single-player video game",
+        "Q30": "United States",
+        "Q388": "Linux",
+        "Q652": "Italian",
+        "Q752241": "Half-Life",
+        "Q7737": "Russian",
+        "Q9176": "Korean"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q223629",
+      "lang": "en",
+      "title": "Half-Life 2: Lost Coast",
+      "extract": "Half-Life 2: Lost Coast is an additional level for the 2004 first-person shooter game Half-Life 2. Developed by Valve, it was released on October 27, 2005, as a free download for owners of Half-Life 2 on Steam. Players control Half-Life protagonist Gordon Freeman as he travels up a coastal cliff to destroy a Combine weapon in a monastery.\nLost Coast is a technology demonstration showcasing the high-dynamic-range rendering implemented in the Source engine. It was designed with environments to emphasize these effects. Lost Coast was the first Valve game with a commentary mode, in which the developers explain elements of design as the player progresses through the level.\nThe Lost Coast level was created for Half-Life 2, but was removed from the game. It was originally going to be a level in \"Highway 17\" where Gordon ends up in a strange place meeting a Fisherman. As a result, it has several minor story details that were not included in Half-Life 2. It received a generally positive reception, and there was consensus among reviewers that the new features included in Lost Coast should be integrated into future games released by Valve.",
+      "url": "https://en.wikipedia.org/wiki/Half-Life_2:_Lost_Coast"
+    },
+    "wikipedia:es": {
+      "qid": "Q223629",
+      "lang": "es",
+      "title": "Half-Life 2: Lost Coast",
+      "extract": "Half-Life 2: Lost Coast (estilizado HλLF-LIFE2: LOST COAST) es un capítulo adicional para el videojuego de disparos en primera persona Half-Life 2, lanzado en 2004 y desarrollado por Valve Corporation. Se lanzó el 27 de octubre de 2005, a través de la plataforma Steam como descarga gratuita para quienes compraron la versión de Half-Life 2 para Microsoft Windows. Lost Coast sirve como una demostración tecnológica, presentando especialmente la nueva implementación al motor de juego Source y los gráficos en HDR. El nivel fue diseñado con una variedad de ambientes apropiados para enfatizar estos efectos. Además, Lost Coast fue el primer videojuego desarrollado por Valve que le permitió a los desarrolladores explicar varios elementos de diseño a medida que el jugador avanza a través del nivel.\nLost Coast sigue al protagonista Gordon Freeman mientras viaja por un acantilado costero para destruir una batería de artillería Combine emplazada dentro de un monasterio, que está disparando contra una ciudad cercana. El nivel Lost Coast se creó originalmente para Half-Life 2, pero finalmente se eliminó del juego. Como resultado, tiene varios detalles menores de la historia que no se incluyeron en Half-Life 2. El nivel recibió críticas generalmente positivas, y hubo un consenso entre los revisores de que las nuevas características incluidas en Lost Coast deberían integrarse en futuros juegos de Valve.",
+      "url": "https://es.wikipedia.org/wiki/Half-Life_2:_Lost_Coast"
+    },
+    "wikipedia:pt": {
+      "qid": "Q223629",
+      "lang": "pt",
+      "title": "Half-Life 2: Lost Coast",
+      "extract": "Half-Life 2: Lost Coast é uma fase adicional para o jogo eletrônico de tiro em primeira pessoa Half-Life 2 da Valve Corporation. Foi originalmente planeado para fazer parte do capítulo Highway 17 do jogo, mas acabou sendo cortado do produto final. Foi lançado no dia 27 de Outubro de 2005.",
+      "url": "https://pt.wikipedia.org/wiki/Half-Life_2:_Lost_Coast"
+    }
+  },
+  "tier": "mid",
+  "type": "game"
+}
