@@ -3,7 +3,7 @@ package migrations
 import "github.com/AlexGalhardo/vukem/schema"
 
 // m20261101164000CreateActivityEvents adds the feed opt-in (default off while Q-A5 is open) and the activity
-// events the feed reads (SDD 14 §12.4, ADR 0020).
+// events the feed reads (SDD 14 §12.4, ADR 0021).
 func m20261101164000CreateActivityEvents() schema.Migration {
 	return postgresMigration("20261101164000_create_activity_events",
 		[]string{

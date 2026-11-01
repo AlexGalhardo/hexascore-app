@@ -1,6 +1,6 @@
-# ADR 0020: the activity feed is built from the write path, without fan-out
+# ADR 0021: the activity feed is built from the write path, without fan-out
 
-Status: accepted (2026-11-01). Decisions: D-06 (amended 2026-10-31, Q-A1), D-29; SDD 14 §12; ROADMAP P7.A.1.1. The ROADMAP names this record 0019; that number went to the mobile runtime dependencies (ADR 0019).
+Status: accepted (2026-11-01). Decisions: D-06 (amended 2026-10-31, Q-A1), D-29; SDD 14 §12; ROADMAP P7.A.1.1.
 
 ## Context
 

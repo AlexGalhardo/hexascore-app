@@ -301,7 +301,7 @@ CREATE INDEX activity_events_actor_idx ON activity_events (actor_id, id DESC);
 CREATE INDEX activity_events_created_idx ON activity_events (created_at);
 ```
 
-`user_notifications.kind` gains `new_follower` and `follow_request` (dedupe key `follow:<follower_id>`). Rapid repeats collapse: a rating changed twice within 10 minutes updates the actor's last `rating_saved` event for that item instead of inserting a second one (ADR 0020).
+`user_notifications.kind` gains `new_follower` and `follow_request` (dedupe key `follow:<follower_id>`). Rapid repeats collapse: a rating changed twice within 10 minutes updates the actor's last `rating_saved` event for that item instead of inserting a second one (ADR 0021).
 
 ### 12.5 Privacy matrix
 
@@ -331,7 +331,7 @@ Following a banned user is 404, like a missing one; accept and decline match onl
 
 ### 12.7 Feed query
 
-ADR 0020: events are recorded by an after-commit listener on the write-path events (no fan-out); the feed reads `activity_events` of followed actors with a keyset cursor:
+ADR 0021: events are recorded by an after-commit listener on the write-path events (no fan-out); the feed reads `activity_events` of followed actors with a keyset cursor:
 
 ```sql
 SELECT e.* FROM activity_events e

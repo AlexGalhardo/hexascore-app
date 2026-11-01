@@ -27,7 +27,7 @@ const (
 // FeedPageSize is the /feed page (SDD 14 FR-14-16).
 const FeedPageSize = 20
 
-// ratingWindow folds repeated star changes into one event (ADR 0020).
+// ratingWindow folds repeated star changes into one event (ADR 0021).
 const ratingWindow = 10 * time.Minute
 
 // Listeners record activity after each write commits, only while the flag is on and the actor opted in (SDD 14
