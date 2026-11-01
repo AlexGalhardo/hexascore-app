@@ -50,13 +50,19 @@ func Reports(r *router.Router, app *vukem.App) error {
 	}
 
 	svc := ReportService(app, acc)
+
+	sc, err := SocialService(app, acc)
+	if err != nil {
+		return err
+	}
+
 	limit := limits.Reports.From(limiters)
 
-	h := controllers.NewReports(svc, acc.Web.Name(), false)
+	h := controllers.NewReports(svc, sc, acc.Web.Name(), false)
 	r.Post("/reports", h.Create).Name("reports.create").
 		Use(auth.Required(acc.Web), auth.Verified(acc.Web), ratelimit.Middleware(limit, ratelimit.ByUser(acc.Web.Name())))
 
-	api := controllers.NewReports(svc, acc.API.Name(), true)
+	api := controllers.NewReports(svc, sc, acc.API.Name(), true)
 	stack, err := AppWriteStack(app, acc, limiters,
 		auth.Ability(acc.API, "profile:write"),
 		ratelimit.Middleware(limit, ratelimit.ByUser(acc.API.Name())),

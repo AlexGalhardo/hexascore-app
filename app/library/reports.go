@@ -31,6 +31,8 @@ const (
 	// OutcomeContentHidden and OutcomeContentDeleted apply to a review or a comment (SDD 14 §12.11).
 	OutcomeContentHidden  = "content_hidden"
 	OutcomeContentDeleted = "content_deleted"
+	// OutcomeContentUnhidden restores a hidden review or comment; the author is not notified.
+	OutcomeContentUnhidden = "content_unhidden"
 
 	MaxReportDetails = 500
 	MaxAdminNote     = 1000
@@ -41,7 +43,7 @@ var (
 	ReportReasons  = []string{"spam", "offensive", "harassment", "impersonation", "other"}
 	ReportOutcomes = []string{
 		OutcomeDismissed, OutcomeListHidden, OutcomeUserBanned, OutcomeNoAction, OutcomeContentHidden,
-		OutcomeContentDeleted,
+		OutcomeContentDeleted, OutcomeContentUnhidden,
 	}
 )
 
@@ -253,7 +255,7 @@ func (s *Reports) Resolve(ctx context.Context, actorID int64, id string, in Reso
 		switch in.Outcome {
 		case OutcomeListHidden:
 			return s.hideList(ctx, tx, rep.targetID, id)
-		case OutcomeContentHidden, OutcomeContentDeleted:
+		case OutcomeContentHidden, OutcomeContentDeleted, OutcomeContentUnhidden:
 			return s.moderateContent(ctx, tx, rep, in.Outcome, id)
 		}
 
@@ -335,6 +337,12 @@ func (s *Reports) moderateContent(
 		table = "comments"
 	}
 
+	if outcome == OutcomeContentUnhidden {
+		_, err := tx.ExecContext(ctx, `UPDATE `+table+` SET hidden = false WHERE id = $1`, rep.targetID)
+
+		return err
+	}
+
 	q := `UPDATE ` + table + ` SET hidden = true WHERE id = $1 RETURNING user_id`
 	if outcome == OutcomeContentDeleted {
 		q, kind = `DELETE FROM `+table+` WHERE id = $1 RETURNING user_id`, notifications.ContentDeleted
@@ -382,7 +390,7 @@ func validOutcome(targetType, outcome string) error {
 		(outcome == OutcomeListHidden && targetType == TargetList) ||
 		(outcome == OutcomeUserBanned &&
 			(targetType == TargetUser || targetType == TargetReview || targetType == TargetComment)) ||
-		((outcome == OutcomeContentHidden || outcome == OutcomeContentDeleted) &&
+		((outcome == OutcomeContentHidden || outcome == OutcomeContentDeleted || outcome == OutcomeContentUnhidden) &&
 			(targetType == TargetReview || targetType == TargetComment))
 	if !ok {
 		return problem(http.StatusUnprocessableEntity, "reports.outcome", "invalid-outcome",
