@@ -2,6 +2,7 @@
 // password hashes. Keep these constants in sync with that file.
 export const DEMO_PASSWORD = "Demo-password-1";
 export const DEMO_ADMIN_EMAIL = "admin@example.test";
+export const DEMO_SECOND_ADMIN_EMAIL = "admin2@example.test";
 
 // Notifications have no UI trigger a spec can reach cheaply (they come from moderation and suggestion
 // decisions), so the spec inserts the row the app itself would write. The Postgres container is the app
