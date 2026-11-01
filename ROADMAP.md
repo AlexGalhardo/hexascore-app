@@ -1479,7 +1479,7 @@ Phase-specific conventions:
     - `gh api repos/AlexGalhardo/hexascore-app/branches/main/protection` → required checks `lint`, `test`, `vuln`, `openapi`, `build`, `e2e`, `lighthouse`
   - Notes: Railway's "wait for CI" option is [NOT VERIFIED] (11-8); if it does not exist, turn autodeploy off and deploy staging from the workflow with `railway up --detach` after the checks. HUMAN GATE: branch protection is a repository setting the owner applies or approves.
 
-- [ ] **P2.B.2.2** Write `release.yml`: tag `v*` and `workflow_dispatch(version)` deploy production with notes taken from `CHANGELOG.md`, behind a GitHub environment approval.
+- [x] **P2.B.2.2** Write `release.yml`: tag `v*` and `workflow_dispatch(version)` deploy production with notes taken from `CHANGELOG.md`, behind a GitHub environment approval.
   - Files/modules: `.github/workflows/release.yml`, `Taskfile.yml` (`release`), `docs/runbooks/release.md` (release, missed run, rollback by `-f version=vPREV`)
   - Refs: SDD 11 §6.6 (`release`), §7.1, §8 ("Tag pushed without a run"); ADR 0013; D-20, D-37; <https://docs.railway.com/reference/cli-api> "Deployment" (`railway up --detach`)
   - Depends on: P2.B.2.1
@@ -1580,7 +1580,7 @@ Phase-specific conventions:
     - A1 drill: stopping staging `app` for 3 min → page in Telegram within 2 min; restart → resolved
   - Notes: Telegram as a Grafana contact point and certificate-expiry checks are [NOT VERIFIED]: record the result; fall back to e-mail if Telegram is not offered. Production probes are switched on in P2.G.3.3.
 
-- [ ] **P2.C.3.3** Implement the app-side alerts: SSR fallback page (A5), job failed twice (A6), quota flush errors (A10).
+- [x] **P2.C.3.3** Implement the app-side alerts: SSR fallback page (A5), job failed twice (A6), quota flush errors (A10).
   - Files/modules: `bootstrap/app.go` (`SSRConfig.OnFailure`), `app/alerts/jobs.go` (`q.AddObserver`), `app/api/quota/flush.go`, `tests/alerts_test.go`
   - Refs: SDD 12 FR-12-3, §7.2, §7.5 (A5, A6, A10), §8, §9 item 4; D-07; VF-002; <https://vukem.dev/docs/frontend/inertia> "Server-side rendering"; <https://vukem.dev/docs/digging-deeper/telegram-logging>
   - Depends on: P2.C.1.2, P2.C.2.2
@@ -1622,7 +1622,7 @@ Phase-specific conventions:
     - `dig +short CNAME status.hexascore.app` → the GitHub Pages host; HTTPS certificate valid
   - Notes: HUMAN GATE (DNS, new repository): the owner creates the repository and the Cloudflare record. Static HTML only, no build step, no third-party script.
 
-- [ ] **P2.C.4.2** Commit runbooks R1–R9 and the monthly cost checklist under `docs/runbooks/`, and rehearse R1 and R7 on staging.
+- [x] **P2.C.4.2** Commit runbooks R1–R9 and the monthly cost checklist under `docs/runbooks/`, and rehearse R1 and R7 on staging.
   - Files/modules: `docs/runbooks/{ssr-crash-loop,pg-connections,ingestion-stuck,quota-drift,suggestion-backlog,disk-full,rollback,restore,leaked-secret}.md`, `docs/runbooks/cost.md`, `docs/runbooks/README.md` (index with alert → runbook map)
   - Refs: SDD 12 §7.8, §7.9; SDD 11 §7.5; SDD 13 §7.9; <https://vukem.dev/docs/cli/reference-runtime> "`vukem down` and `vukem up`"; <https://docs.railway.com/guides/roll-back-bad-deploy>
   - Depends on: P2.C.3.3
