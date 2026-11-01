@@ -10,7 +10,7 @@ import { ListingBody, type ListingReader } from "./Listing";
 function items(prefix: string, count: number): ItemJSON[] {
 	return Array.from({ length: count }, (_, i) => ({
 		id: `${prefix}${i}`,
-		type: "game",
+		type: "games",
 		slug: `${prefix}${i}`,
 		locale: "en",
 		title: `${prefix} ${i}`,
