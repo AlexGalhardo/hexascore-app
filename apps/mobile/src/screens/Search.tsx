@@ -5,6 +5,7 @@ import type { SearchHit } from "../../../../packages/app-client/src/api";
 import type { ReadClient } from "../api/client";
 import { type AppLocale, t } from "../i18n";
 import { CATALOG_TYPES, type CatalogType, itemHref, SINGULAR } from "../navigation/catalog";
+import { formatScore } from "../ui/format";
 import { type SearchLabels, type SearchRow, SearchSheet } from "../ui/screens/SearchSheet";
 
 export type SearchReader = Pick<ReadClient, "searchIndex">;
@@ -99,12 +100,11 @@ export function SearchBody({
 		return {
 			id: hit.id ?? "",
 			title: hit.title ?? hit.slug ?? "",
-			// shortcut: search hits carry no year or score yet; show them once SearchHit has the fields.
-			year: null,
+			year: hit.year ?? null,
 			// shortcut: catalog.title.* is the section name; switch to itemTypes.* once that namespace is bundled.
 			typeLabel: plural ? t(locale, `catalog.title.${SINGULAR[plural]}`) : "",
 			coverUri: hit.cover?.thumb || null,
-			score: null,
+			score: hit.score ?? null,
 		};
 	};
 
@@ -127,7 +127,10 @@ export function SearchBody({
 		firstOf: (_shown, total) => t(locale, "search.count", { n: total }),
 		seeAll: (text) =>
 			expanded ? t(locale, "search.next") : t(locale, "search.palette.seeAll", { q: text }),
-		score: () => t(locale, "score.none"),
+		score: (row) =>
+			row.score === null
+				? t(locale, "score.none")
+				: t(locale, "score.outOf", { score: formatScore(row.score, locale) }),
 	};
 
 	const pick = (next: CatalogType | undefined): void => {
