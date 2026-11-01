@@ -29,4 +29,7 @@ export const queryKeys = {
 		["getItem", { type, id, locale }] as const,
 	editions: (id: string) => ["listEditions", { id }] as const,
 	itemMe: (id: string) => ["me", { id }] as const,
+	entity: (id: string, locale: AppLocale) => ["getEntity", { id, locale }] as const,
+	entityItems: (id: string, type: CatalogType, locale: AppLocale) =>
+		["listEntityItems", { id, type, locale }] as const,
 };
