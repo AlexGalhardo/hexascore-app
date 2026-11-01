@@ -22,7 +22,11 @@ func TestAppSearch(t *testing.T) {
 		AssertJSONPath("data.0.title", "Zelda").
 		AssertJSONCount("data", 3)
 	anon.GetJSON("/app/v1/search?q=zel").AssertOK().AssertJSONPath("data.0.title", "Zelda")
-	anon.GetJSON("/app/v1/search/suggest?q=zel").AssertOK().AssertJSONPath("data.0.title", "Zelda")
+	etag := anon.GetJSON("/app/v1/search/suggest?q=zel").AssertOK().AssertJSONPath("data.0.title", "Zelda").
+		Header("ETag")
+	app.Client(t).WithHeader("If-None-Match", etag).GetJSON("/app/v1/search/suggest?q=zel").
+		AssertStatus(http.StatusNotModified)
+	anon.GetJSON("/app/v1/search?q=zelda&page=x").AssertOK()
 
 	long := strings.Repeat("a", 101)
 	anon.GetJSON("/app/v1/search?q=" + long).AssertStatus(http.StatusBadRequest)

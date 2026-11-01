@@ -248,9 +248,18 @@ func (h *Search) Index(c *web.Ctx) error {
 	return inertia.Render(c, "Search/Index", props)
 }
 
-// AppIndex is GET /app/v1/search. Auth is optional (SDD 10). The audience is
-// site, and the stored surface is app so web analytics stay separate.
-func (h *Search) AppIndex(c *web.Ctx) error {
+// AppSearchJSON is the /app/v1/search answer: one flat page of hits. searchId keys the click events.
+type AppSearchJSON struct {
+	SearchID string      `json:"searchId" validate:"required"`
+	Data     []SearchHit `json:"data"`
+	Total    int         `json:"total"`
+	TooShort bool        `json:"tooShort"`
+}
+
+// AppSearch is GET /app/v1/search. Auth is optional (SDD 10). The audience is
+// site, and the stored surface is app so web analytics stay separate. It reads
+// q, type, locale and page from the query (searchParams).
+func (h *Search) AppSearch(c *web.Ctx) (AppSearchJSON, error) {
 	text, locale, types := searchParams(c)
 	page := max(1, c.QueryInt("page", 1))
 	query := search.Query{
@@ -262,7 +271,7 @@ func (h *Search) AppIndex(c *web.Ctx) error {
 
 	out, err := h.run(c.Context(), query, "")
 	if err != nil {
-		return badQuery(err)
+		return AppSearchJSON{}, badQuery(err)
 	}
 
 	searchID := uuid.NewV4().String()
@@ -281,9 +290,11 @@ func (h *Search) AppIndex(c *web.Ctx) error {
 		hits[i].Cover = hits[i].Cover.WithBase(h.coversBase)
 	}
 
-	return c.JSON(http.StatusOK, map[string]any{
-		"searchId": searchID, "data": hits, "total": out.Total, "tooShort": out.TooShort,
-	})
+	if hits == nil {
+		hits = []SearchHit{}
+	}
+
+	return AppSearchJSON{SearchID: searchID, Data: hits, Total: out.Total, TooShort: out.TooShort}, nil
 }
 
 // searchRetryAfter is the Retry-After (seconds) of a degraded search.
@@ -401,9 +412,32 @@ type SuggestItem struct {
 	Path          string `json:"path"`
 }
 
+// SuggestJSON is the /search/suggest answer.
+type SuggestJSON struct {
+	Data []SuggestItem `json:"data"`
+}
+
+// errSuggestNotModified ends a typed suggest read after c.NotModified wrote the 304.
+// workaround(vukem): VF-049, typed handlers have no documented way to answer 304.
+var errSuggestNotModified = errs.New(http.StatusNotModified, "not modified")
+
 // Suggest answers /search/suggest with up to 8 entries; anonymous answers are
 // cached for 300 s and carry an ETag.
 func (h *Search) Suggest(c *web.Ctx) error {
+	body, err := h.SuggestRead(c)
+	if errors.Is(err, errSuggestNotModified) {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, body)
+}
+
+// SuggestRead is the typed form of Suggest (GET /app/v1/search/suggest). It reads q, type and locale from the
+// query (searchParams) and returns errSuggestNotModified once a 304 is written.
+func (h *Search) SuggestRead(c *web.Ctx) (SuggestJSON, error) {
 	text, locale, types := searchParams(c)
 	prefix := i18n.PathPrefix(c.Context())
 
@@ -447,7 +481,7 @@ func (h *Search) Suggest(c *web.Ctx) error {
 	} else {
 		store, cerr := h.app.Cache()
 		if cerr != nil {
-			return cerr
+			return SuggestJSON{}, cerr
 		}
 
 		items, err = cache.Remember(
@@ -462,23 +496,23 @@ func (h *Search) Suggest(c *web.Ctx) error {
 	}
 
 	if err != nil {
-		return badQuery(err)
+		return SuggestJSON{}, badQuery(err)
 	}
 
-	body := map[string]any{"data": items}
+	body := SuggestJSON{Data: items}
 
 	if _, signed := h.signedIn(c); !signed {
 		etag, err := web.ETagOf(body)
 		if err != nil {
-			return err
+			return SuggestJSON{}, err
 		}
 
 		if c.NotModified(etag, time.Time{}) {
-			return nil
+			return SuggestJSON{}, errSuggestNotModified
 		}
 	}
 
-	return c.JSON(http.StatusOK, body)
+	return body, nil
 }
 
 // Event records a result click (POST /search/events, 204) and dispatches
