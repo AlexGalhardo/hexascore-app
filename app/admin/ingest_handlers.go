@@ -102,7 +102,7 @@ func (h IngestHandlers) Index(c *web.Ctx) error {
 	for i, r := range d.Runs {
 		d.Runs[i].Rollbackable = d.Ingest.CanRollback && r.Status != run.StatusQueued &&
 			r.Status != run.StatusRunning &&
-			(strings.HasPrefix(r.Job, "fetch.") || r.Job == "tmdb.expire")
+			strings.HasPrefix(r.Job, "fetch.")
 	}
 
 	return h.Pages.render(c, "ingest", d)

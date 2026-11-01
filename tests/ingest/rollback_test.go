@@ -203,6 +203,30 @@ func TestRollbackKeepsItemsWithUserData(t *testing.T) {
 	}
 }
 
+// A review alone also keeps the item: reviews cascade on DELETE, so deleting the item would destroy it.
+func TestRollbackKeepsItemsWithOnlyAReview(t *testing.T) {
+	db := newDB(t)
+	target := seedBadRun(t, db)
+	ctx := t.Context()
+
+	if _, err := db.ExecContext(ctx, `INSERT INTO reviews (id, user_id, item_id, body)
+SELECT '0192f1c6-0000-7000-8000-0000000000c1', id, $1, 'Kept' FROM users WHERE username = 'rollbacker'`,
+		itemOwned); err != nil {
+		t.Fatal(err)
+	}
+
+	runRollback(t, db, target)
+
+	var vis string
+	if err := db.QueryRowContext(ctx, `SELECT visibility FROM items WHERE id = $1`, itemOwned).Scan(&vis); err != nil {
+		t.Fatalf("item with a review must survive: %v", err)
+	}
+
+	if vis != "hidden" {
+		t.Errorf("visibility = %q, want hidden (flagged)", vis)
+	}
+}
+
 func TestRollbackIsLoggedAsRunAndAudit(t *testing.T) {
 	db := newDB(t)
 	target := seedBadRun(t, db)
@@ -320,6 +344,17 @@ VALUES ('normalize', 'full', 'succeeded', 'schedule', now()) RETURNING id`).Scan
 		rollback.ErrNotRollbackable,
 	) {
 		t.Errorf("normalize err = %v, want ErrNotRollbackable", err)
+	}
+
+	// tmdb.expire deletes leave no history, and the TMDB term forbids restoring expired data.
+	var exp int64
+	if err := db.QueryRowContext(ctx, `INSERT INTO job_runs (job, source, mode, status, triggered_by, started_at)
+VALUES ('tmdb.expire', 'tmdb', 'full', 'succeeded', 'schedule', now()) RETURNING id`).Scan(&exp); err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := ingest.StartRollback(ctx, db, &recorder{}, exp, 0, "x"); !errors.Is(err, rollback.ErrNotRollbackable) {
+		t.Errorf("tmdb.expire err = %v, want ErrNotRollbackable", err)
 	}
 
 	if _, err := ingest.StartRollback(ctx, db, &recorder{}, 999999, 0, "x"); !errors.Is(err, rollback.ErrRunNotFound) {

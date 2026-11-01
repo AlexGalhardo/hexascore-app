@@ -107,7 +107,11 @@ func newFake(t *testing.T, status int) (*ingest.Client, *fake) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/oauth2/token", func(w http.ResponseWriter, r *http.Request) {
 		f.mu.Lock()
-		f.grants = append(f.grants, r.URL.Query().Get("grant_type")+"|"+r.URL.Query().Get("client_id"))
+		if r.URL.RawQuery != "" {
+			t.Errorf("token request carries a query string: %q", r.URL.RawQuery)
+		}
+
+		f.grants = append(f.grants, r.PostFormValue("grant_type")+"|"+r.PostFormValue("client_id"))
 		f.mu.Unlock()
 
 		_, _ = w.Write([]byte(`{"access_token": "abc", "expires_in": 5000, "token_type": "bearer"}`))
