@@ -59,7 +59,8 @@ func TestAPIEdge(t *testing.T) {
 			{"/api/v1/games?cursor=garbage", "invalid-cursor", 400},
 			{"/api/v1/films", "invalid-query", 400},
 			{"/api/v1/films/" + uuid.NewV7().String(), "invalid-query", 400},
-			{"/api/v1/films/" + uuid.NewV7().String() + "/activity", "invalid-query", 400},
+			// activity is four literal routes (P3.A.4.2), so an unknown section is an unknown path.
+			{"/api/v1/films/" + uuid.NewV7().String() + "/activity", "not-found", 404},
 			{"/api/v1/games/" + uuid.NewV7().String(), "not-found", 404},
 			{"/api/v1/nope/a/b/c", "not-found", 404},
 		} {

@@ -46,8 +46,8 @@ type ExportList struct {
 
 // ExportInput is the getExport path.
 type ExportInput struct {
-	Type string `json:"type" validate:"oneof=games movies series books" doc:"games, movies, series or books"`
-	Day  string `json:"day"                                             doc:"UTC day, YYYY-MM-DD"`
+	Type string `json:"type" enum:"games,movies,series,books" doc:"games, movies, series or books"`
+	Day  string `json:"day"                                   doc:"UTC day, YYYY-MM-DD"`
 }
 
 var exportKey = regexp.MustCompile(`^exports/([a-z]+)_ids_(\d{4})_(\d{2})_(\d{2})\.json\.gz$`)
@@ -89,6 +89,14 @@ func (h *Exports) List(c *web.Ctx, _ struct{}) (ExportList, error) {
 func (h *Exports) Get(c *web.Ctx, in ExportInput) (struct{}, error) {
 	if err := h.requirePlan(c); err != nil {
 		return struct{}{}, err
+	}
+
+	// The enum tag only documents the values; an unknown type is a 400 invalid-query, never a 422 (FR-05-4).
+	if !slices.Contains([]string{"games", "movies", "series", "books"}, in.Type) {
+		return struct{}{}, errs.New(
+			http.StatusBadRequest,
+			"invalid-query: unknown type: use games, movies, series or books",
+		)
 	}
 
 	day, err := time.Parse(time.DateOnly, in.Day)
