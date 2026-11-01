@@ -327,3 +327,11 @@ web   GET    /suggestions/{id}
 web   GET    /me/suggestions
 web   POST   /suggestions/{id}/submit
 web   POST   /suggestions/{id}/withdraw
+web   GET    /og/{kind}/{file}
+web   PUT    /items/{id}/review
+web   DELETE /items/{id}/review
+web   POST   /comments/{type}/{id}
+web   DELETE /comments/{id}
+web   PUT    /reactions/{type}/{id}
+web   DELETE /reactions/{type}/{id}
+web   PATCH  /profile/feed

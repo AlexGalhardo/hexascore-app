@@ -42,8 +42,10 @@ var (
 	TimeToBeat   = Rule{"time-to-beat", 30, time.Minute}
 	Lists        = Rule{"lists", 60, time.Minute}
 	Editions     = Rule{"edition", 60, time.Minute}
-	Follows      = Rule{"follows", 60, time.Hour} // SDD 14 NFR-14-8
-	Reviews      = Rule{"reviews", 30, time.Hour} // SDD 14 §12.10
+	Follows      = Rule{"follows", 60, time.Hour}    // SDD 14 NFR-14-8
+	Reviews      = Rule{"reviews", 30, time.Hour}    // SDD 14 §12.10
+	Comments     = Rule{"comments", 60, time.Hour}   // SDD 14 §12.11
+	Reactions    = Rule{"reactions", 300, time.Hour} // SDD 14 §12.11
 	Notify       = Rule{"notifications", 120, time.Minute}
 	Reports      = Rule{"reports", 10, time.Hour}
 	Search       = Rule{"search", 60, time.Minute}
@@ -103,6 +105,8 @@ func All() []Rule {
 		Editions,
 		Follows,
 		Reviews,
+		Comments,
+		Reactions,
 		Notify,
 		Reports,
 		Search,

@@ -379,6 +379,18 @@ CREATE INDEX reviews_item_idx ON reviews (item_id, helpful_count DESC, created_a
 - The body is stored as Markdown and sent as a node tree (`p`, `br`, `strong`, `em`, `code`, `a`, `ul`, `ol`, `li`, `blockquote`, `text`); the page also refuses a non-http(s) `href`.
 - The first publication records `review_published` (§12.7); edits do not. The purge deletes the user's reviews; the export adds `reviews.json`.
 
-### 12.11 Tests
+### 12.11 Comments and reactions
 
-`TestFollows`, `TestSecurity_A01_PrivateProfileFollowRequiresApproval`, `TestSecurity_A06_HexaLimits` (rule `follows`), `TestFeedPrivacy`, `TestSocialDisabledByDefault` (routes 404 and no events with the flag off), `TestReviews`, `TestSecurity_A05_ReviewMarkdown`, k6 `qa/k6/feed.js`, Playwright `social.spec.ts` and `reviews.spec.ts`.
+P7.B.1.2, behind the flag `social`. Comments are plain text (1 to 2,000 characters, no Markdown) on a review or a list, with one level of replies. A reaction is `like` or `helpful`; a user has at most one reaction per review, comment or list, and a new kind replaces the old one.
+
+- Tables `comments` (`review_id` or `list_id`, `parent_id`, `body`, `like_count`, `helpful_count`) and `reactions` (`review_id`, `comment_id` or `list_id`, `kind`), with typed nullable foreign keys (`num_nonnulls(...) = 1`) so that deleting a target cascades, and partial unique indexes on `(user_id, <target>)`. `reviews.like_count`, `lists.like_count` and `lists.helpful_count` are new; the existing `reviews.helpful_count` is now live.
+- An `AFTER` trigger on `reactions` moves the counters in the same transaction, including cascades and account deletion.
+- `POST /comments/{review|list}/{id}` takes `{body, parentId}`. It answers 303 back, or 422 `reply-depth` for a reply to a reply, 404 for a target the author cannot see (§12.5) or a parent on another target, and 429. The rate limit `comments` is 60/h per user. `DELETE /comments/{id}` deletes the author's own comment and its replies; any other comment is 404.
+- `PUT /reactions/{review|comment|list}/{id}` takes `{kind}` and answers 303, 422 `cannot-react-to-self`, or 404. `DELETE` removes the reaction. The rate limit `reactions` is 300/h per user. Every route answers 404 while the flag is off.
+- Notifications: `new_comment` goes to the target's author, and for a reply to the parent comment's author too. `new_reaction` goes to the target's author once per reactor and target, so toggling a reaction does not send it again. Nobody is notified about their own actions.
+- Reads: each review card on the item page gains `likes`, `myReaction` and `comments`, where a top-level comment carries its `replies`. The list page defers `reactions` (`{likes, helpful, mine}`) and `comments` in group `social`. Comments by authors hidden from the viewer are left out, and so are the replies under them. Each load returns at most 500 comments (`// shortcut:`).
+- LGPD: the export gains `comments.json` and `reactions.json` (17 files). The purge deletes the user's reactions first, so the counters come back down, and then their comments.
+
+### 12.12 Tests
+
+`TestFollows`, `TestSecurity_A01_PrivateProfileFollowRequiresApproval`, `TestSecurity_A06_HexaLimits` (rule `follows`), `TestFeedPrivacy`, `TestSocialDisabledByDefault` (routes 404 and no events with the flag off), `TestReviews`, `TestSecurity_A05_ReviewMarkdown`, `TestComments`, `TestComments_RateLimit`, `TestReactions`, `TestCommentsDisabledByDefault`, k6 `qa/k6/feed.js`, Playwright `social.spec.ts` and `reviews.spec.ts`.

@@ -343,6 +343,9 @@ func purgeUserData(ctx context.Context, tx database.Executor, userID int64, now 
 			stmt{`DELETE FROM activity_events WHERE actor_id = $1`, []any{userID}},
 			// Review text can identify the person, like list descriptions.
 			stmt{`DELETE FROM reviews WHERE user_id = $1`, []any{userID}},
+			// Reactions first: their trigger takes the counters back down while the targets still exist.
+			stmt{`DELETE FROM reactions WHERE user_id = $1`, []any{userID}},
+			stmt{`DELETE FROM comments WHERE user_id = $1`, []any{userID}},
 			stmt{`UPDATE users SET feed_opt_in = false WHERE id = $1`, []any{userID}},
 		)
 	}

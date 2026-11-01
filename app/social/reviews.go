@@ -32,16 +32,20 @@ func ErrRatingRequired() error {
 
 // Review is one review card. Source, the raw Markdown, is set only on the viewer's own review (the edit form).
 type Review struct {
-	ID        string    `json:"id"`
-	Author    Actor     `json:"author"`
-	Item      *FeedItem `json:"item,omitempty"`
-	Stars     *float64  `json:"stars"`
-	Body      []Node    `json:"body"`
-	Source    string    `json:"source,omitempty"`
-	Spoiler   bool      `json:"spoiler"`
-	Helpful   int       `json:"helpful"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	ID      string    `json:"id"`
+	Author  Actor     `json:"author"`
+	Item    *FeedItem `json:"item,omitempty"`
+	Stars   *float64  `json:"stars"`
+	Body    []Node    `json:"body"`
+	Source  string    `json:"source,omitempty"`
+	Spoiler bool      `json:"spoiler"`
+	Helpful int       `json:"helpful"`
+	Likes   int       `json:"likes"`
+	// MyReaction and Comments are filled on the item page only (P7.B.1.2).
+	MyReaction string    `json:"myReaction,omitempty"`
+	Comments   []Comment `json:"comments,omitempty"`
+	CreatedAt  time.Time `json:"createdAt"`
+	UpdatedAt  time.Time `json:"updatedAt"`
 }
 
 // SaveReview creates or edits userID's review of itemID. The user must have rated the item; the first publication
@@ -93,7 +97,7 @@ func (s *Follows) DeleteReview(ctx context.Context, userID int64, itemID string)
 
 // reviewQuery lists reviews whose rating still exists, by helpfulness then date; $1 is the locale, filter uses $2+.
 func reviewQuery(filter string) string {
-	return `SELECT v.id, v.user_id, coalesce(u.display_username, u.username), v.body, v.spoiler, v.helpful_count,
+	return `SELECT v.id, v.user_id, coalesce(u.display_username, u.username), v.body, v.spoiler, v.helpful_count, v.like_count,
   v.created_at, v.updated_at, round(r.overall / 10, 1)::float8,
   i.id, i.type, i.slug, coalesce(t.title, te.title, i.original_title, i.slug), i.cover_thumb_key
 FROM reviews v
@@ -103,7 +107,9 @@ JOIN items i ON i.id = v.item_id
 LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $1
 LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
 WHERE ` + filter + `
-ORDER BY v.helpful_count DESC, v.created_at DESC LIMIT ` + strconv.Itoa(reviewPage)
+ORDER BY v.helpful_count DESC, v.created_at DESC LIMIT ` + strconv.Itoa(
+		reviewPage,
+	)
 }
 
 // ItemReviews lists the reviews of itemID by public, active authors (SDD 14 §12.5), plus the viewer's own review
@@ -117,9 +123,26 @@ func (s *Follows) ItemReviews(
 		return nil, nil, err
 	}
 
+	ids := make([]string, len(all))
+	for i := range all {
+		ids[i] = all[i].ID
+	}
+
+	mineByID, err := s.myReactions(ctx, viewerID, "review", ids)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	threads, err := s.Comments(ctx, viewerID, "review", ids)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	data = []Review{}
 
 	for i := range all {
+		all[i].MyReaction, all[i].Comments = mineByID[all[i].ID], threads[all[i].ID]
+
 		if all[i].Source != "" {
 			mine = &all[i]
 		}
@@ -153,7 +176,7 @@ func (s *Follows) reviews(ctx context.Context, viewerID int64, query string, arg
 			cover  *string
 		)
 
-		if err := rows.Scan(&v.ID, &author, &v.Author.Nickname, &body, &v.Spoiler, &v.Helpful, &v.CreatedAt,
+		if err := rows.Scan(&v.ID, &author, &v.Author.Nickname, &body, &v.Spoiler, &v.Helpful, &v.Likes, &v.CreatedAt,
 			&v.UpdatedAt, &v.Stars, &it.ID, &it.Type, &it.Slug, &it.Title, &cover); err != nil {
 			return nil, fmt.Errorf("social: review row: %w", err)
 		}

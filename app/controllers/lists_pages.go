@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"strings"
 
 	"github.com/AlexGalhardo/vukem/auth"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
 // Index renders Lists/Index with the signed-in user's lists (SDD 14 §6.2).
@@ -90,6 +92,21 @@ func (h *Lists) Show(c *web.Ctx) error {
 	}
 	if l.IsPublic && !l.Hidden && !l.OwnerPrivate && !banned && h.Social.Enabled(ctx) {
 		props["ogImage"] = ogImage("lists", l.ID)
+	}
+	if h.Social.Enabled(ctx) {
+		viewerID := viewer.ID // zero for an anonymous visitor
+		// Deferred like the item page's reviews, so the list HTML stays the same for every viewer.
+		props["reactions"] = inertia.Defer(func(ctx context.Context) (any, error) {
+			return h.Social.ListReactions(ctx, viewerID, l.ID)
+		}).Group("social")
+		props["comments"] = inertia.Defer(func(ctx context.Context) (any, error) {
+			threads, err := h.Social.Comments(ctx, viewerID, "list", []string{l.ID})
+			if threads[l.ID] == nil {
+				return []social.Comment{}, err
+			}
+
+			return threads[l.ID], err
+		}).Group("social")
 	}
 
 	return inertia.Render(c, "User/List", props)

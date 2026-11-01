@@ -331,6 +331,9 @@ func TestFeedPurgedOnAnonymise(t *testing.T) {
 	reviewed := r.releasedItem("game")
 	r.rate(gc, reviewed, 8)
 	review(gc, reviewed, "Identifying text", false).AssertStatus(http.StatusSeeOther)
+	list := r.publicList(stay, reviewed, true)
+	comment(gc, "list", list, "Identifying comment", "").AssertStatus(http.StatusSeeOther)
+	react(gc, "list", list, "like").AssertStatus(http.StatusSeeOther)
 
 	r.exec(`UPDATE users SET deletion_scheduled_at = now() - interval '31 days' WHERE id = $1`, gone.ID)
 
@@ -352,5 +355,10 @@ func TestFeedPurgedOnAnonymise(t *testing.T) {
 
 	if n := r.count(`SELECT count(*) FROM reviews WHERE user_id = $1`, gone.ID); n != 0 {
 		t.Errorf("%d reviews left after the purge", n)
+	}
+
+	if n := r.count(`SELECT (SELECT count(*) FROM comments WHERE user_id = $1) + (SELECT count(*) FROM reactions
+WHERE user_id = $1) + (SELECT like_count FROM lists WHERE id = $2)`, gone.ID, list); n != 0 {
+		t.Errorf("%d comments, reactions or list likes left after the purge", n)
 	}
 }

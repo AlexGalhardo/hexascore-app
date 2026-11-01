@@ -68,3 +68,23 @@ var ReviewSchema = z.Struct[Review](z.Shape{
 	"body":    z.String().Trim().Min(1).Max(5000),
 	"spoiler": z.Bool().Default(false),
 })
+
+// Comment is a comment on a review or list, or a reply to a top-level comment (SDD 14 §12.11).
+type Comment struct {
+	Body     string `json:"body"     form:"body"`
+	ParentID string `json:"parentId" form:"parentId"`
+}
+
+// CommentSchema validates Comment; the database also checks 1 to 2,000 characters.
+var CommentSchema = z.Struct[Comment](z.Shape{
+	"body":     z.String().Trim().Min(1).Max(2000),
+	"parentId": z.String().UUID().Default(""),
+})
+
+// Reaction is a reaction on a review, comment or list (SDD 14 §12.11).
+type Reaction struct {
+	Kind string `json:"kind" form:"kind"`
+}
+
+// ReactionSchema validates Reaction.
+var ReactionSchema = z.Struct[Reaction](z.Shape{"kind": z.Enum("like", "helpful")})
