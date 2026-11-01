@@ -1,50 +1,37 @@
-# Handoff: especialista (2026-11-01, session 15)
+# Handoff: especialista (2026-11-01, session 16)
 
-Reason: 10 reviews merged plus the main gate; context heavy. STATUS: HANDOFF.
+Reason: 14 rows reviewed and merged (about 12 reviews); context heavy. STATUS: HANDOFF.
 
 ## Done this session (local `main`, no push, no tag)
 
-| Row | Verdict | Merge |
+| Rows | Verdict | Merge |
 | --- | --- | --- |
-| main lint regression | `tests/api_edge_test.go` gci/golines (bbe689d); duplicate `### Fixed` in Unreleased folded (fcf63bf) | direct commits |
-| REV-FIX-app-item-cover-urls, REV-FIX-app-search-query-params, REV-FIX-app-item-by-slug (+ mobile branch) | CORRIGIDO_E_APROVADO: one batch, golden + client regenerated (23d1177), conflicts resolved by combining both sides | bd95e7d |
-| REV-IMPL-mobile-v1-home, -listing, -item, REV-FIX-mobile-rating-a11y-now | CORRIGIDO_E_APROVADO / APROVADO for a11y: mobile followed the client renames (`ItemJSON` -> `AppItemJSON`, `TrendingEntryJSON`/`TrendingJSON` -> `AppTrending*`), covers wired (`coverThumbUrl`/`coverUrl`), listing filter label uses the plural `catalog.filters`, catalogues recopied (4286dab) | bd95e7d |
-| REV-IMPL-web-v1-auth, -search-page, -library-lists | CORRIGIDO_E_APROVADO (mobile catalogues recopied, 0c4927e) | f99bafd |
+| P2.C.3.3, P2.C.alerts-a5-test, P2.C.4.2, P2.C.search-reindex, P2.B.2.2, PERF-i18n-page-namespaces (senior-b batch) | CORRIGIDO_E_APROVADO (fixes 2aaa66d, 6cc9e68 from session 15) | 7044df3; ROADMAP P2.C.3.3, P2.C.4.2, P2.B.2.2 ticked |
+| FIX-legacyimport-entities-setbased (prio 0) | CORRIGIDO_E_APROVADO: editions insert ordered by isbn13 (cross-worker deadlock), long-slug LIKE prefix trimmed, `TestFirstFreeSlug`, runbook section "Legacy import: entities stage" in docs/runbooks/migrations.md with `./app hexascore:import-legacy --stage entities --workers 4` (2f664c82) | merged after a3f1791 |
+| FIX-search-hit-meta, FIX-library-item-score | CORRIGIDO_E_APROVADO: `SearchHit` is in `/app/v1`, golden + app client regenerated (84ebe78c) | merged before 2bea45d |
+| P6.D.1.3, IMPL-web-v1-edition-entity, -recent-changes, -docs-legal-errors, -more-like-this | CORRIGIDO_E_APROVADO: routes/web.go conflict resolved to main's base list (terms./policy. only through PageNamespaces, dot-less `updatedLabel`), mobile catalogues recopied (f70d09a7) | merged before 5b1c252; ROADMAP P6.D.1.3 ticked |
 
-Gate on main (local.sh, alone, in parts): test-go, test-ts, migrations, vuln, deps, setup-windows, mobile PASS on bbe689d; test-go-integration PASS on bbe689d; build PASS on fcf63bf; golangci-lint `--timeout 15m -j 2` 0 issues.
-Still red on main:
+Openapi on main after the merges: `scripts/openapi-check.sh` ok, `codegen:client -prefix /app/v1` equals `packages/app-client/src/api.ts`, redocly lint ok, app-client typecheck + test ok. Not run: the Docker-image part of the `openapi` job (Schemathesis).
+Full gate on main was not run this session (section 8.2: targeted tests only per row). Run `scripts/ci/local.sh --only test-go,test-ts,mobile` then `--only test-go-integration` alone first.
 
-- lighthouse: perf 0.62, best-practices 0.75, script 375 KB, CSS 230 KB on all five URLs (also red on 127eeeb). New row `FIX-lighthouse-budgets-main` (prio 1, senior). Lead: `vite build` emits chunks for `resources/js/pages/**/*.test.tsx` (e.g. `SuggestCreate.test-*.js`).
-- openapi on fcf63bf: stale app client. Fixed by the bd95e7d batch; re-run `--only openapi` to confirm.
-- lint commitlint: old local commits since v0.12.3 (`test(e2e): E2E_DB_NAME ...` sentence case, long footers). History cannot be rewritten; the release squash commit avoids it. Not a row.
-
-The full gate was not re-run after bd95e7d / f99bafd. Run `scripts/ci/local.sh --only openapi,test-ts,mobile` and then `--only test-go-integration` first.
+TASKS.md rows were set to `ready` on disk but TASKS.md is not committed (it carries other agents' uncommitted edits).
 
 ## Open, in order
 
-1. **senior-b batch is prepared, not tested:** worktree `wt/especialista-senior-b-batch`, branch `agent/especialista/senior-b-batch`, cut from main bbe689d.
-   - It holds P2.C.3.3-fix (9113a78, locale prefix in A5), P2.C.alerts-a5-test, P2.C.4.2-fix (df53498), search-reindex, PERF-i18n-page-namespaces and P2.B.2.2-fix (db007f0).
-   - Plus two of my commits: 2aaa66d (disk-full runbook now points at `/app/app search:reindex`) and 6cc9e68 (`"updatedLabel."` -> `"updatedLabel"` in routes/web.go, orchestrator note: keep the dot-less key).
-   - Static review done, all look approvable.
-   - To do: `git merge main`, `go build`, targeted tests (`./app/alerts ./app/ssr ./app/api`, `-tags integration ./tests -run 'TestAlert_A5|TestReady|TestI18n'`, `./internal/search -run 'TestReindex|TestSearchSQLConfined|TestSuggestRebuild'`), golangci on touched packages, markdownlint docs/runbooks. Then merge, changelog (6 lines from the reports), ROADMAP ticks P2.C.3.3, P2.C.4.2, P2.B.2.2, and set the rows to `ready`.
-2. senior-b: FIX-search-hit-meta (c18d716), then FIX-library-item-score (cb2ea44, stacked on it).
-3. impl-web stack: REV-P6.D.1.3 first, then edition-entity -> recent-changes -> docs-legal-errors -> more-like-this (P6.D.1.3 is merged into more-like-this).
-   - impl-web fixes the blank empty entity page (`entity_page.go`, null `items.data`) and the `updatedLabel` prefix.
-   - Keep the dot-less `updatedLabel` in routes/web.go whichever of PERF / impl-web lands second.
-4. senior-up: P3.B.1.1–1.3, P3.B.2.1, P3.B.3.1, P4.B.5.1, P6.D.1.3, FIX-problems-redirect-301, FIX-docs-next-cursor.
-5. senior-fw: P6.A stack. The verification list from the session 14 handoff still applies (1.3 continuation lock/guard, 2.1 resume skip, 1.4 breaker probe and timeout, 2.2/2.3 infra errors counted as target failures, 2.2 unbounded refs cache, 1.4 thin SSRF tests).
-6. REV-FIX-seed-flag: do not merge (hotfix v0.12.4, PR #64).
+1. senior-up: P3.B.1.1 -> 1.2 -> 1.3 -> P3.B.2.1 (stacked; review the 2.1 tip as one batch), P3.B.3.1, FIX-problems-redirect-301, FIX-docs-next-cursor. P4.B.5.1 is still `doing`. PERF-web-lcp / FIX-lighthouse-budgets-main still `doing`.
+2. senior-a: P5.B.4.2, P5.B.2.4, P5.B.2.5, later rows.
+3. senior-fw P6.A stack; the session 14 verification list still applies (1.3 continuation lock/guard, 2.1 resume skip, 1.4 breaker probe and timeout, 2.2/2.3 infra errors counted as target failures, 2.2 unbounded refs cache, 1.4 thin SSRF tests).
+4. REV-FIX-seed-flag: do not merge (hotfix v0.12.4, PR #64).
 
 ## Cleanup left
 
-- The worktree folder `wt/senior-FIX-app-item-cover-urls` gave "Permission denied" on removal; its branch is deleted. Prune it later.
-- The impl-mobile worktrees (`impl-mobile-home-wire`, `impl-mobile-listing-wire`, `impl-mobile-a11y`, ...) still point at merged branches. They belong to impl-mobile, so I left them in place.
-- Many detached `Temp/tmp.*` worktrees remain from crashed local.sh runs: `git worktree remove --force` them when no run is live.
+- Merged branches still checked out in old worktrees: `agent/especialista/P2.B.2.2-fix`, `P2.C.3.3-fix`, `P2.C.4.2-fix`, `IMPL-web-batch2`. Remove those worktrees and branches when idle.
+- senior-b's worktree `wt/senior-FIX-legacyimport-entities-setbased` and branch are senior-b's to remove.
+- `wt/senior-FIX-app-item-cover-urls` folder (Permission denied) and detached `Temp/tmp.*` worktrees from session 15.
+- Untracked `resources/js/vite-env.d.ts` in the main checkout is not mine; left alone.
 
 ## Pitfalls (new)
 
-- MSYS path conversion mangles `-prefix /app/v1`: export `MSYS_NO_PATHCONV=1` before `go run ./cmd/app codegen:client -prefix /app/v1 -o -`. Without it the output is empty and `&&` hides the failure.
-- Python on Windows: open files with `encoding='utf-8', newline=''`. Without the encoding, files that contain `·` fail to match.
-- The full `bun run test` and mobile Jest time out under host load. Re-run the failing files alone before you call anything red.
-- markdownlint-cli2 lints every glob from `.markdownlint-cli2.jsonc` even when you name one file.
-- Every commit header must stay at or under 100 characters (hook).
+- Worktrees have no node_modules: `cmd /c mklink /J <wt>\node_modules <main>\node_modules`, then `cmd //c rmdir <wt>\node_modules` before `git worktree remove` (rmdir removes only the junction).
+- `git diff --no-index` cannot read `/tmp` paths on Git Bash; write temp files to the scratchpad and use `diff -q`.
+- Mobile catalogues: `bun apps/mobile/scripts/copy-catalogues.ts` from the repo root after any `resources/lang` change in a merged batch.
