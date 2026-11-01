@@ -81,8 +81,9 @@ type sourceRow struct {
 }
 
 type runRow struct {
-	Job, Source, Status, Started, Finished string
-	Seen, Changed, Failed                  int
+	ID                                            int64
+	Job, Source, Status, Error, Started, Finished string
+	Seen, Changed, Failed                         int
 }
 
 // pageData feeds the panel layout (same field names as vukem's admin page) and the pages below.
@@ -108,6 +109,7 @@ type pageData struct {
 	Metrics       moderation.Metrics
 	LockTargets   []string
 	Reviews       []entities.OpenReviewRow
+	Ingest        IngestStatus
 }
 
 // panelNav mirrors the sidebar vukem builds from admin.Resources (same order, same plural labels);
@@ -121,6 +123,9 @@ var panelNav = []navLink{
 	{Label: "Reports", URL: "/admin/reports"},
 	{Label: "Contact messages", URL: "/admin/contact-messages"},
 	{Label: "Items", URL: "/admin/items"},
+	{Label: "Job runs", URL: "/admin/job-runs"},
+	{Label: "Ingest failures", URL: "/admin/ingest-failures"},
+	{Label: "Dq results", URL: "/admin/dq-results"},
 }
 
 func (h CatalogHandlers) newPage(title string) pageData {
@@ -451,9 +456,12 @@ FROM source_records GROUP BY source ORDER BY source`)
 }
 
 func loadRuns(ctx context.Context, db *sql.DB) ([]runRow, error) {
-	rows, err := db.QueryContext(ctx, `SELECT DISTINCT ON (job, coalesce(source, '')) job, coalesce(source, ''), status,
+	rows, err := db.QueryContext(
+		ctx,
+		`SELECT DISTINCT ON (job, coalesce(source, '')) id, job, coalesce(source, ''), status, coalesce(error, ''),
   seen, changed, failed, started_at, finished_at
-FROM job_runs ORDER BY job, coalesce(source, ''), created_at DESC`)
+FROM job_runs ORDER BY job, coalesce(source, ''), created_at DESC`,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -467,7 +475,18 @@ FROM job_runs ORDER BY job, coalesce(source, ''), created_at DESC`)
 			r       runRow
 			st, fin sql.NullTime
 		)
-		if err := rows.Scan(&r.Job, &r.Source, &r.Status, &r.Seen, &r.Changed, &r.Failed, &st, &fin); err != nil {
+		if err := rows.Scan(
+			&r.ID,
+			&r.Job,
+			&r.Source,
+			&r.Status,
+			&r.Error,
+			&r.Seen,
+			&r.Changed,
+			&r.Failed,
+			&st,
+			&fin,
+		); err != nil {
 			return nil, err
 		}
 

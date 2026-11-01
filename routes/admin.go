@@ -212,6 +212,18 @@ func Admin(r *router.Router, app *vukem.App) error {
 	}
 	r.Get("/admin/ingest/reviews", reviewsH.List).Name("admin.ingest.reviews").Use(modMW...)
 	r.Post("/admin/ingest/reviews/{id}", reviewsH.Resolve).Name("admin.ingest.reviews.resolve").Use(modMW...)
+	ingestH := admin.IngestHandlers{
+		Pages: catalogH, DB: acc.DB, Queue: q, Flags: ff, Now: app.Now,
+		AuthorizeView: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityViewIngestion, nil)
+		},
+		AuthorizeRun: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityRunIngestion, nil)
+		},
+	}
+	r.Get("/admin/ingest", ingestH.Index).Name("admin.ingest").Use(modMW...)
+	r.Post("/admin/ingest/runs", ingestH.Trigger).Name("admin.ingest.runs").Use(modMW...)
+	r.Post("/admin/ingest/runs/{id}/cancel", ingestH.Cancel).Name("admin.ingest.runs.cancel").Use(modMW...)
 	r.Get("/admin/ingestion", catalogH.Ingestion).Name("admin.ingestion").Use(auth.Required(acc.Web), csrfMW)
 
 	return nil
