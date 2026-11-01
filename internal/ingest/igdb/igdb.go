@@ -173,12 +173,14 @@ func New(clientID, secret string) *Connector {
 // Source names the connector in source_records.
 func (*Connector) Source() string { return "igdb" }
 
-// targetsSQL: $1 after, $2 since (null = any), $3 only missing, $4 limit (0 = none).
+// targetsSQL: $1 after, $2 since (null = any), $3 only missing, $4 limit (0 = none),
+// $5 QIDs (empty = all).
 const targetsSQL = `
 SELECT i.wikidata_qid, i.external_ids->>'igdb'
 FROM items i
 WHERE i.type = 'game' AND i.external_ids ? 'igdb'
   AND i.wikidata_qid > $1
+  AND (coalesce(cardinality($5::text[]), 0) = 0 OR i.wikidata_qid = ANY($5::text[]))
   AND ($2::timestamptz IS NULL OR i.updated_at >= $2)
   AND (NOT $3::boolean OR NOT EXISTS (
     SELECT 1 FROM source_records s WHERE s.source = 'igdb' AND s.external_id = i.wikidata_qid))
@@ -195,7 +197,7 @@ func (*Connector) Targets(
 			since = p.Since
 		}
 
-		rows, err := db.QueryContext(ctx, targetsSQL, after, since, p.Mode == run.ModeBootstrap, p.Limit)
+		rows, err := db.QueryContext(ctx, targetsSQL, after, since, p.Mode == run.ModeBootstrap, p.Limit, p.QIDs)
 		if err != nil {
 			yield(ingest.Target{}, fmt.Errorf("igdb targets: %w", err))
 

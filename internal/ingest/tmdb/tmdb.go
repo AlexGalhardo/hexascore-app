@@ -255,13 +255,14 @@ func unique(in []string) []string {
 }
 
 // targetsSQL: $1 after, $2 since (null = any), $3 only missing (skip QIDs that already have a tmdb record),
-// $4 limit (0 = none).
+// $4 limit (0 = none), $5 QIDs (empty = all).
 const targetsSQL = `
 SELECT i.wikidata_qid, i.type, coalesce(i.external_ids->>'tmdb', ''), coalesce(i.external_ids->>'imdb', '')
 FROM items i
 WHERE i.type IN ('movie', 'series')
   AND (i.external_ids ? 'tmdb' OR i.external_ids ? 'imdb')
   AND i.wikidata_qid > $1
+  AND (coalesce(cardinality($5::text[]), 0) = 0 OR i.wikidata_qid = ANY($5::text[]))
   AND ($2::timestamptz IS NULL OR i.updated_at >= $2)
   AND (NOT $3::boolean OR NOT EXISTS (
     SELECT 1 FROM source_records s WHERE s.source = 'tmdb' AND s.external_id = i.wikidata_qid))
@@ -279,7 +280,7 @@ func (*Connector) Targets(
 			since = p.Since
 		}
 
-		rows, err := db.QueryContext(ctx, targetsSQL, after, since, p.Mode == run.ModeBootstrap, p.Limit)
+		rows, err := db.QueryContext(ctx, targetsSQL, after, since, p.Mode == run.ModeBootstrap, p.Limit, p.QIDs)
 		if err != nil {
 			yield(ingest.Target{}, fmt.Errorf("tmdb targets: %w", err))
 
