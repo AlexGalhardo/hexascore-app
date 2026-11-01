@@ -34,6 +34,10 @@ UNION ALL SELECT 'run', status||seen||'/'||changed||'/'||failed FROM job_runs OR
 		out.WriteString(k + ":" + v + "\n")
 	}
 
+	if err := rows.Err(); err != nil {
+		t.Fatal(err)
+	}
+
 	return out.String()
 }
 

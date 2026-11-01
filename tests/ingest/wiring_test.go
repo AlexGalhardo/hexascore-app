@@ -269,6 +269,10 @@ func jobStatus(t *testing.T, app *vukemtest.App) map[string]string {
 		got[job] = status
 	}
 
+	if err := rows.Err(); err != nil {
+		t.Fatal(err)
+	}
+
 	return got
 }
 
