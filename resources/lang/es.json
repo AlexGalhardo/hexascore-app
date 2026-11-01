@@ -1072,7 +1072,6 @@
     "breadcrumb": "Ruta de navegación",
     "loadTrailerN": "Cargar tráiler {n}",
     "panel": {
-      "title": "Valorar {title}",
       "help": "Diez estrellas por categoría; cada media estrella vale 0,5. Las flechas mueven 0,5; Inicio y Fin saltan a 0,5 y 10.",
       "helpGuest": "Diez estrellas por categoría, con medias estrellas (0,5 a 10). Tu puntuación cuenta cuando confirmes tu correo.",
       "noAccount": "¿No tienes cuenta?",

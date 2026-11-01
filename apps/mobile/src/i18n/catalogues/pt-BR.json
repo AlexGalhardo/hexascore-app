@@ -513,7 +513,6 @@
 	"item.goToRating": "Ir para sua avaliação",
 	"item.breadcrumb": "Trilha de navegação",
 	"item.loadTrailerN": "Carregar trailer {n}",
-	"item.panel.title": "Avaliar {title}",
 	"item.panel.help": "Dez estrelas por categoria; cada meia estrela vale 0,5. As setas mudam 0,5; Home e End vão para 0,5 e 10.",
 	"item.panel.helpGuest": "Dez estrelas por categoria, com meias estrelas (0,5 a 10). Sua nota conta depois que você confirmar o e-mail.",
 	"item.panel.noAccount": "Não tem conta?",

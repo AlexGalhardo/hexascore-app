@@ -513,7 +513,6 @@
 	"item.goToRating": "Ir a tu valoración",
 	"item.breadcrumb": "Ruta de navegación",
 	"item.loadTrailerN": "Cargar tráiler {n}",
-	"item.panel.title": "Valorar {title}",
 	"item.panel.help": "Diez estrellas por categoría; cada media estrella vale 0,5. Las flechas mueven 0,5; Inicio y Fin saltan a 0,5 y 10.",
 	"item.panel.helpGuest": "Diez estrellas por categoría, con medias estrellas (0,5 a 10). Tu puntuación cuenta cuando confirmes tu correo.",
 	"item.panel.noAccount": "¿No tienes cuenta?",

@@ -45,6 +45,8 @@ export interface StarRatingProps {
 	value: number | null;
 	onChange: (value: number | null) => void;
 	disabled?: boolean;
+	/** Id of the (visually hidden) help text that explains the keys. */
+	describedBy?: string;
 }
 
 const KEY_MOVES: Record<string, (current: number) => number | null> = {
@@ -61,7 +63,13 @@ const KEY_MOVES: Record<string, (current: number) => number | null> = {
 // Ten stars, each two native radios (left half n - 0.5, right half n): one radio group of
 // 20 options per category (design v1 rating-widget/states). Arrow keys clamp instead of
 // wrapping, Home/End jump to the ends, Delete clears; the value is printed beside the label.
-export default function StarRating({ label, value, onChange, disabled = false }: StarRatingProps) {
+export default function StarRating({
+	label,
+	value,
+	onChange,
+	disabled = false,
+	describedBy,
+}: StarRatingProps) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
 	const name = useId();
@@ -102,6 +110,7 @@ export default function StarRating({ label, value, onChange, disabled = false }:
 			<div
 				role="radiogroup"
 				aria-labelledby={`${name}-label`}
+				aria-describedby={describedBy}
 				aria-disabled={disabled || undefined}
 				className="flex w-fit cursor-pointer rounded-xs outline-offset-2 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary aria-disabled:cursor-not-allowed"
 				onKeyDown={onKeyDown}

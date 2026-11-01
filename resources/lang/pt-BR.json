@@ -1072,7 +1072,6 @@
     "breadcrumb": "Trilha de navegação",
     "loadTrailerN": "Carregar trailer {n}",
     "panel": {
-      "title": "Avaliar {title}",
       "help": "Dez estrelas por categoria; cada meia estrela vale 0,5. As setas mudam 0,5; Home e End vão para 0,5 e 10.",
       "helpGuest": "Dez estrelas por categoria, com meias estrelas (0,5 a 10). Sua nota conta depois que você confirmar o e-mail.",
       "noAccount": "Não tem conta?",

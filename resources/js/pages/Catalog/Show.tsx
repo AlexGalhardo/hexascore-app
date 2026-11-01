@@ -285,7 +285,6 @@ export default function Show({
 					<RatingPanel
 						key={item.id + (me?.rating ? "r" : "n")}
 						itemId={item.id}
-						title={title}
 						type={item.type}
 						mine={me?.rating}
 						canWrite={loggedIn}

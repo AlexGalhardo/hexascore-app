@@ -11,7 +11,6 @@ import { CATEGORY_KEYS, type ItemType } from "./types";
 
 interface Props {
 	itemId: string;
-	title: string;
 	type: ItemType;
 	mine: Record<string, number> | null | undefined;
 	canWrite: boolean;
@@ -20,7 +19,7 @@ interface Props {
 
 // The viewer's six-category rating (design v1 "Your rating" panel). Values are local until saved;
 // the server needs every category, so Save stays disabled until all six are set.
-export default function RatingPanel({ itemId, title, type, mine, canWrite, children }: Props) {
+export default function RatingPanel({ itemId, type, mine, canWrite, children }: Props) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
 	const l = (path: string) => localized(path, locale);
@@ -53,15 +52,13 @@ export default function RatingPanel({ itemId, title, type, mine, canWrite, child
 			aria-labelledby="rating-heading"
 			className="grid scroll-mt-20 gap-4 border-t-2 border-primary bg-surface p-5"
 		>
-			<div className="grid gap-2">
-				<p className="text-xs font-semibold tracking-widest uppercase">{t("item.rate")}</p>
-				<h2 id="rating-heading" className="text-2xl leading-tight">
-					{t("item.panel.title", { title })}
-				</h2>
-				<p className="text-sm text-muted">
-					{canWrite ? t("item.panel.help") : t("item.panel.helpGuest")}
-				</p>
-			</div>
+			<h2 id="rating-heading" className="text-2xl leading-tight">
+				{t("item.rate")}
+			</h2>
+			{/* Hidden from sight, not from assistive tech: each star group points here for the keys. */}
+			<p id="rating-help" className="sr-only">
+				{canWrite ? t("item.panel.help") : t("item.panel.helpGuest")}
+			</p>
 			<div className="grid gap-2">
 				<StarSymbol />
 				{keys.map((k) => (
@@ -71,6 +68,7 @@ export default function RatingPanel({ itemId, title, type, mine, canWrite, child
 						value={values[k]}
 						onChange={(v) => setValues((s) => ({ ...s, [k]: v }))}
 						disabled={!canWrite || busy}
+						describedBy="rating-help"
 					/>
 				))}
 			</div>
