@@ -20,6 +20,6 @@ verdict: CORRIGIDO_E_APROVADO
 re-run: `go build ./...`, `go vet -tags integration ./...` → ok (main 679005b merged in, clean); `go test ./app/recommend/... ./app/webhooks/... ./app/scheduler/...` → ok; golangci-lint on bootstrap, app/recommend, app/webhooks, app/scheduler → 0 issues; `--build-tags integration ./tests/...` → 0 issues after fix 1; markdownlint on the four docs → 0
 checked: SDD 12 §6.2/§7.5 (D-35 amended), authz (none touched), secrets (none), sql (deleted query only), i18n (policy processors line edited in en/pt-BR/es, parity kept), scope (go.mod tidy drops otel; testify shows up as indirect from tidy), tests
 fixes: 1. tests/foryou_test.go perfsprint (strconv.FormatInt) (cb251c1) 2. SDD 12 §6.2 names the non-A-code key `alert=trending_counter_dropped` emitted by primitives/flush.go (d2e386d)
-pending (Docker down): `go test -tags integration ./tests -run 'TestAPIWebhookTest|TestPruneDeliveries|TestReady|TestLGPD|Policy|TestForYou|TestRecoEval'`
+integration (run on main 2199f1f after Docker came back): `go test -tags integration ./tests -run 'TestAPIWebhookTest|TestPruneDeliveries|TestReady|TestLGPD|Policy|TestForYou|TestRecoEval'` → ok (app/moderation, app/jobs, app/community packages and the named ./tests patterns)
 gate on main after merge (3cc01ff): go build ok, go vet -tags integration ok; full gate waits Docker
 PRONTO_PARA_MERGE agent/especialista/FIX-observability-railway-native-fix

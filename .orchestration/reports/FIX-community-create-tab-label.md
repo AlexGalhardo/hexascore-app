@@ -28,6 +28,6 @@ Only the catalogue values change; the key and the component are untouched. The m
 verdict: APROVADO
 re-run (tab-label tip with main merged, contains kinds-ui): `bunx vitest run resources/js/pages/Community resources/js/lib` → 6 files, 25 passed (i18n parity included); `bun run typecheck`, `bun run lint` clean; `go build ./...`, `go test ./app/community/...` ok; `golangci-lint run --build-tags integration ./app/community/... ./app/controllers/community/... ./tests/...` → 0 issues
 checked: SDD 04 §7.6 create and route table, authz (drafts only; apply stays admin-only, server `checkCreate` is the source of truth; unknown target and edition outside books 404), secrets none, sql (no new query; draft lookup bound), i18n (en/pt-BR/es parity), scope, tests
-pending (Docker down): `go test -tags integration ./tests -run 'TestCommunityCreateTargetKinds|TestCommunity|Suggest'`
+integration (run on main 2199f1f after Docker came back): `go test -tags integration ./tests -run 'TestCommunityCreateTargetKinds|TestCommunity|Suggest'` → ok (app/moderation, app/jobs, app/community packages and the named ./tests patterns)
 gate on main after merge (07807ac): go build ok; full gate waits Docker
 PRONTO_PARA_MERGE agent/senior/FIX-community-create-tab-label
