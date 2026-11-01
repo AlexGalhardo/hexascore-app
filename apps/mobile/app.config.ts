@@ -4,6 +4,7 @@ import type { ExpoConfig } from "expo/config";
 const config: ExpoConfig = {
 	name: "HexaScore",
 	slug: "hexascore",
+	owner: "alexgalhardo",
 	scheme: "hexascore",
 	version: "1.0.0",
 	orientation: "portrait",
@@ -66,6 +67,12 @@ const config: ExpoConfig = {
 	],
 	experiments: {
 		typedRoutes: true,
+	},
+	// EAS project @alexgalhardo/hexascore (public id, not a secret; docs/runbooks/mobile-release.md).
+	extra: {
+		eas: {
+			projectId: "b1206657-bbbb-474f-8dce-336a773d9dd6",
+		},
 	},
 	web: {
 		bundler: "metro",
