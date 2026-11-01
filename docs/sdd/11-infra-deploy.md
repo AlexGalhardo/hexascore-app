@@ -172,7 +172,7 @@ Actions pinned by SHA. Staging: Railway GitHub autodeploy of `main` [vk-deploy].
 ### 7.1 Release (ADR 0013; `vukem/docs/tooling.md` "Release process", "Tag pushes" [SITE PAGE MISSING])
 
 1. `main` green, staging smoke green, migration rehearsal done (§7.2).
-2. `git-cliff --config .config/cliff.toml --unreleased --tag vX.Y.Z` (preview); `scripts/release.sh vX.Y.Z` (POSIX shell, requires git-cliff; no Task) replaces the body of `[Unreleased]` with the generated section, commits `chore(release): vX.Y.Z`, tags.
+2. `git-cliff --config .config/cliff.toml --unreleased --tag vX.Y.Z` (preview); `scripts/release.sh vX.Y.Z` (POSIX shell, requires git-cliff; no Task) replaces the body of `[Unreleased]` with the generated section, commits `chore(release): vX.Y.Z`, tags. The range starts after the newest first-parent commit whose tree equals the highest tag's tree (squash releases leave tags off `main`); `--since <rev>` overrides it, and the compare links at the bottom are updated ([release-range runbook](../runbooks/release-range.md)).
 3. `git push origin main`; `git push origin vX.Y.Z` (one tag per push); `gh run list --workflow release.yml`.
 4. Release body from the literal `awk` heading match; empty body fails.
 5. `curl -sI https://hexascore.app/up` shows the version; dashboards clean 15 min.

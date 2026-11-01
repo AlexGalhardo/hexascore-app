@@ -32,4 +32,4 @@ Operator procedures from SDD 12 §7.8 and §7.9. Alerts are `alert=<code>` lines
 
 Search the logs with the code, for example `alert=A10`. Alert lines carry counts and names, never ids, emails or raw paths.
 
-Release procedures: [sdk-release](sdk-release.md) (SDKs), [mobile-release](mobile-release.md) (Android app with EAS).
+Release procedures: [sdk-release](sdk-release.md) (SDKs), [mobile-release](mobile-release.md) (Android app with EAS), [release-range](release-range.md) (how `scripts/release.sh` picks the changelog range).

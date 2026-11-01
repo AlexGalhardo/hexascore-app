@@ -83,7 +83,7 @@ Railway rules that override the skill's deploy-from-cwd shortcut: do not run `ra
 | `./app backup:offsite` | mail `ADMIN_EMAILS` the 7-day signed link to this month's encrypted monthly dump (day 1, 07:00; runbook `docs/runbooks/restore.md` "Off-site copy") |
 | `./app hexascore:predeploy` | pre-deploy entry point: drop `INVALID` index leftovers, then `migrate` (runbook `docs/runbooks/migrations.md`) |
 | `./app admin:grant <email>` / `admin:revoke <email>` / `user:reset-2fa <email> --reason "<text>"` | role changes and manual 2FA reset (account_events with actor NULL, `data.cli=true`); admins are users with `role = admin`, not `ADMIN_EMAILS` |
-| `scripts/release.sh vX.Y.Z` | changelog section via git-cliff (`.config/cliff.toml`), `chore(release)` commit and tag; needs git-cliff installed (`scoop install git-cliff` / `brew install git-cliff`) |
+| `scripts/release.sh vX.Y.Z [--since <rev>]` | changelog section via git-cliff (`.config/cliff.toml`) from the commit whose tree matches the highest tag (not `git describe`; [release-range](docs/runbooks/release-range.md)), compare links, `chore(release)` commit and tag; needs git-cliff installed (`scoop install git-cliff` / `brew install git-cliff`) |
 | `setups/setup-unix.sh` | same setup for Linux and macOS |
 
 ## Optional integrations (vukem v0.36.0)
