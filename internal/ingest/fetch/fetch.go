@@ -130,6 +130,7 @@ func collect(
 			return page{}, false, err
 		}
 
+		// The wikidata, tmdb, igdb, trailers and openlibrary SQL already filters; this keeps the rest honest.
 		if len(p.QIDs) > 0 && !slices.Contains(p.QIDs, t.ID) {
 			continue
 		}

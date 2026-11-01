@@ -172,12 +172,14 @@ type Connector struct {
 func (*Connector) Source() string { return Source }
 
 // shortcut: the aggregate reads the trailer keys of every stored record of the item; fine at 100k items, add a
-// partial index on source_records(source, external_id) if the plan shows a scan.
+// partial index on source_records(source, external_id) if the plan shows a scan. Args: $1 after, $2 since, $3 limit,
+// $4 QIDs (empty = all).
 const targetsSQL = `SELECT external_id, jsonb_object_agg(source, CASE source
     WHEN 'wikidata' THEN payload #> '{claims,P1651}'
     WHEN 'youtube' THEN payload
     ELSE payload -> 'trailers' END)
 FROM source_records WHERE source IN ('wikidata', 'tmdb', 'igdb', 'youtube') AND external_id > $1
+  AND (coalesce(cardinality($4::text[]), 0) = 0 OR external_id = ANY($4::text[]))
 GROUP BY external_id
 HAVING $2::timestamptz IS NULL OR max(fetched_at) FILTER (WHERE source <> 'youtube') >= $2
 ORDER BY external_id LIMIT NULLIF($3, 0)`
@@ -193,7 +195,7 @@ func (*Connector) Targets(
 			since = p.Since
 		}
 
-		rows, err := db.QueryContext(ctx, targetsSQL, after, since, p.Limit)
+		rows, err := db.QueryContext(ctx, targetsSQL, after, since, p.Limit, p.QIDs)
 		if err != nil {
 			yield(ingest.Target{}, fmt.Errorf("trailers targets: %w", err))
 

@@ -178,14 +178,15 @@ func Ref(path string, hasSynopsis bool) string {
 	return path + "|0"
 }
 
-// targetsSQL: $1 after, $2 since (null = any), $3 only missing, $4 limit (0 = none). Only missing skips records
-// in the current shape (an overview key) and older ones with nothing left to fill (legacy complete_ids).
+// targetsSQL: $1 after, $2 since (null = any), $3 only missing, $4 limit (0 = none), $5 QIDs (empty = all).
+// Only missing skips records in the current shape (an overview key) and older ones with nothing left to fill (legacy complete_ids).
 const targetsSQL = `
 SELECT i.wikidata_qid, i.external_ids, EXISTS (SELECT 1 FROM source_records w
   WHERE w.source = 'wikipedia:en' AND w.external_id = i.wikidata_qid)
 FROM items i
 WHERE i.type = 'book' AND (i.external_ids ? 'isbn13' OR i.external_ids ? 'openlibrary')
   AND i.wikidata_qid > $1
+  AND (coalesce(cardinality($5::text[]), 0) = 0 OR i.wikidata_qid = ANY($5::text[]))
   AND ($2::timestamptz IS NULL OR i.updated_at >= $2)
   AND (NOT $3::boolean OR NOT EXISTS (SELECT 1 FROM source_records o
     WHERE o.source = 'openlibrary' AND o.external_id = i.wikidata_qid AND (o.payload ? 'overview'
@@ -204,7 +205,7 @@ func (*Connector) Targets(
 			since = p.Since
 		}
 
-		rows, err := db.QueryContext(ctx, targetsSQL, after, since, p.Mode == run.ModeBootstrap, p.Limit)
+		rows, err := db.QueryContext(ctx, targetsSQL, after, since, p.Mode == run.ModeBootstrap, p.Limit, p.QIDs)
 		if err != nil {
 			yield(ingest.Target{}, fmt.Errorf("openlibrary targets: %w", err))
 
