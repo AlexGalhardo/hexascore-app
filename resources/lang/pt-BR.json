@@ -109,7 +109,11 @@
       "button": "Pedir exportação",
       "requested": "Exportação pedida. Você receberá um e-mail com o link em breve.",
       "cooldown": "Você pode pedir uma exportação a cada 7 dias. Tente de novo mais tarde.",
-      "failed": "Não foi possível pedir a exportação. Tente de novo."
+      "failed": "Não foi possível pedir a exportação. Tente de novo.",
+      "retryIn": {
+        "one": "Você pode tentar de novo em {count} dia.",
+        "other": "Você pode tentar de novo em {count} dias."
+      }
     },
     "notifications": {
       "title": "Avisos por email",
@@ -142,6 +146,31 @@
       "themeLight": "Claro",
       "themeDark": "Escuro",
       "crashReports": "Enviar relatórios de falhas"
+    },
+    "inbox": {
+      "title": "Notificações",
+      "empty": "Você não tem notificações.",
+      "markAll": "Marcar tudo como lido",
+      "unread": "Não lida",
+      "unreadCount": {
+        "one": "{count} não lida",
+        "other": "{count} não lidas"
+      },
+      "kind": {
+        "suggestion_decided": "Sua sugestão foi analisada.",
+        "suggestion_reverted": "Uma alteração sugerida por você foi revertida.",
+        "suggestion_expired": "Sua sugestão expirou.",
+        "report_resolved": "Sua denúncia foi analisada. Obrigado.",
+        "rating_flagged": "Uma das suas avaliações foi sinalizada para revisão.",
+        "list_hidden": "Uma das suas listas foi ocultada por um moderador.",
+        "system": "Aviso da equipe."
+      }
+    },
+    "about": {
+      "title": "Sobre",
+      "version": "Versão {version}",
+      "tmdb": "Este produto usa a API do TMDB, mas não é endossado nem certificado pelo TMDB.",
+      "igdb": "Os dados de jogos são fornecidos pelo IGDB.com."
     }
   },
   "actions": {

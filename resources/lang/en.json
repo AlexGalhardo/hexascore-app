@@ -109,7 +109,11 @@
       "button": "Request export",
       "requested": "Export requested. You will get an email with the link soon.",
       "cooldown": "You can request one export every 7 days. Try again later.",
-      "failed": "Could not request the export. Try again."
+      "failed": "Could not request the export. Try again.",
+      "retryIn": {
+        "one": "You can try again in {count} day.",
+        "other": "You can try again in {count} days."
+      }
     },
     "notifications": {
       "title": "Email notices",
@@ -142,6 +146,31 @@
       "themeLight": "Light",
       "themeDark": "Dark",
       "crashReports": "Send crash reports"
+    },
+    "inbox": {
+      "title": "Notifications",
+      "empty": "You have no notifications.",
+      "markAll": "Mark all as read",
+      "unread": "Unread",
+      "unreadCount": {
+        "one": "{count} unread",
+        "other": "{count} unread"
+      },
+      "kind": {
+        "suggestion_decided": "Your suggestion was reviewed.",
+        "suggestion_reverted": "A change you suggested was reverted.",
+        "suggestion_expired": "Your suggestion expired.",
+        "report_resolved": "Your report was reviewed. Thank you.",
+        "rating_flagged": "One of your ratings was flagged for review.",
+        "list_hidden": "One of your lists was hidden by a moderator.",
+        "system": "Notice from the team."
+      }
+    },
+    "about": {
+      "title": "About",
+      "version": "Version {version}",
+      "tmdb": "This product uses the TMDB API but is not endorsed or certified by TMDB.",
+      "igdb": "Game data is provided by IGDB.com."
     }
   },
   "actions": {

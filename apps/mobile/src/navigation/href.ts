@@ -10,6 +10,8 @@ declare module "expo-router" {
 				| "/lists"
 				| "/profile"
 				| "/update-required"
+				| "/about"
+				| "/notifications"
 				| "/games"
 				| "/movies"
 				| "/series"
