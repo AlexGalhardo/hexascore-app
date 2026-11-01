@@ -1188,7 +1188,9 @@
     "loginToRate": "Entre para avaliar",
     "chooseNickname": "Escolha um nickname para avaliar",
     "verifyToRate": "Confirme seu e-mail para avaliar.",
-    "verifyLink": "Reenviar o e-mail de confirmação"
+    "verifyLink": "Reenviar o e-mail de confirmação",
+    "notReleased": "A avaliação abre quando o item for lançado.",
+    "notSaved": "Não foi possível salvar sua avaliação. Tente novamente."
   },
   "search": {
     "title": "Busca",

@@ -5,6 +5,7 @@ package tests
 import (
 	"database/sql"
 	"net/http"
+	"strconv"
 	"testing"
 	"time"
 
@@ -69,7 +70,9 @@ func TestAppMe(t *testing.T) {
 		t.Fatalf("profile after taken nickname = name %q username %v", name, username.String)
 	}
 
-	app.Client(t).WithToken(write).GetJSON("/app/v1/me").AssertOK().AssertJSONPath("name", "Test")
+	// The offline queue binds its writes to this id (SDD 10 §7.3); a string, so no JS precision loss.
+	app.Client(t).WithToken(write).GetJSON("/app/v1/me").AssertOK().AssertJSONPath("name", "Test").
+		AssertJSONPath("id", strconv.FormatInt(user.ID, 10)).AssertJSONPath("deletionScheduledAt", nil)
 
 	c := app.Client(t).WithToken(write)
 	c.PostJSON("/app/v1/me/export", map[string]any{}).AssertStatus(http.StatusAccepted)

@@ -476,6 +476,8 @@
 	"ratings.chooseNickname": "Choose a nickname to rate",
 	"ratings.verifyToRate": "Confirm your email to rate items.",
 	"ratings.verifyLink": "Resend the confirmation email",
+	"ratings.notReleased": "The rating opens when the item is released.",
+	"ratings.notSaved": "Your rating could not be saved. Try again.",
 	"search.title": "Search",
 	"search.label": "Search",
 	"search.submit": "Search",

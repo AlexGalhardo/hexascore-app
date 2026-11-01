@@ -1188,7 +1188,9 @@
     "loginToRate": "Log in to rate",
     "chooseNickname": "Choose a nickname to rate",
     "verifyToRate": "Confirm your email to rate items.",
-    "verifyLink": "Resend the confirmation email"
+    "verifyLink": "Resend the confirmation email",
+    "notReleased": "The rating opens when the item is released.",
+    "notSaved": "Your rating could not be saved. Try again."
   },
   "search": {
     "title": "Search",

@@ -1,12 +1,15 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type ReactElement, useEffect, useRef, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Modal, Pressable, ScrollView, Text, View } from "react-native";
 import type { EntityRef } from "../../../../../packages/app-client/src/api";
 import type { ReadClient } from "../../api/client";
 import { formatScore } from "../../components/ItemRow";
 import { type AppLocale, t } from "../../i18n";
 import type { CatalogType } from "../../navigation/catalog";
 import { queryKeys } from "../../query/keys";
+import type { Scores } from "../../rating/cache";
+import { RateSheet } from "../../rating/RateSheet";
+import { Btn } from "../../ui/Btn";
 import { Attribution } from "./Attribution";
 import { ItemHeader } from "./ItemHeader";
 
@@ -20,6 +23,13 @@ export function overallOf(me: unknown): number | null {
 	const stars = Object.values(rating).filter((value): value is number => typeof value === "number");
 	if (stars.length === 0) return null;
 	return stars.reduce((sum, value) => sum + value, 0) / stars.length;
+}
+
+function ratingOf(me: unknown): Scores | null {
+	const rating = (me as { rating?: unknown } | null | undefined)?.rating;
+	return typeof rating === "object" && rating !== null && Object.keys(rating).length > 0
+		? (rating as Scores)
+		: null;
 }
 
 function groupByRole(entities: EntityRef[]): [string, EntityRef[]][] {
@@ -50,6 +60,7 @@ export function ItemView({
 	const queryClient = useQueryClient();
 	const [id, setId] = useState(requestedId);
 	const mergedFrom = useRef<string | null>(null);
+	const [rating, setRating] = useState(false);
 
 	const item = useQuery({
 		queryKey: queryKeys.item(type, id, locale),
@@ -112,6 +123,18 @@ export function ItemView({
 					<Text className="text-16 text-fg dark:text-fg-dark">{formatScore(overall, locale)}</Text>
 				</View>
 			) : null}
+			<View className="px-4 pt-3">
+				<Btn label={t(locale, "ratings.title")} onPress={() => setRating(true)} />
+			</View>
+			<Modal visible={rating} animationType="slide" onRequestClose={() => setRating(false)}>
+				<RateSheet
+					itemId={id}
+					type={type}
+					initial={ratingOf(me.data)}
+					locale={locale}
+					onDone={() => setRating(false)}
+				/>
+			</Modal>
 			{groupByRole(resolved.entities ?? []).map(([role, entities]) => (
 				<View key={role} className="gap-1 px-4 pt-3">
 					<Text className="text-16 text-fg dark:text-fg-dark">

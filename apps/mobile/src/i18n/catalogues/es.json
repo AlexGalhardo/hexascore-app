@@ -476,6 +476,8 @@
 	"ratings.chooseNickname": "Elige un nickname para valorar",
 	"ratings.verifyToRate": "Confirma tu correo para valorar.",
 	"ratings.verifyLink": "Reenviar el correo de confirmación",
+	"ratings.notReleased": "La valoración se abre cuando el título se estrene.",
+	"ratings.notSaved": "No se pudo guardar tu valoración. Inténtalo de nuevo.",
 	"search.title": "Búsqueda",
 	"search.label": "Buscar",
 	"search.submit": "Buscar",
