@@ -21,8 +21,9 @@ const Batch = 50
 
 var _ ingest.Connector = (*Connector)(nil)
 
-// refs remembers the referenced entities already seen in this process, so
-// a person credited in many items is fetched and stored once.
+// refs remembers the referenced entities already seen in one Fetch call, so a person credited in many items of
+// the chunk is fetched and stored once. It must not outlive the call: the caller stores the records in a
+// transaction that may roll back, and the retry has to emit them again.
 type refs struct {
 	mu    sync.Mutex
 	label map[string]string
@@ -108,6 +109,7 @@ func (w *Connector) Fetch(
 	var (
 		records []ingest.Record
 		errs    []ingest.TargetError
+		seen    = &refs{label: map[string]string{}}
 	)
 
 	for chunk := range slices.Chunk(batch, Batch) {
@@ -144,7 +146,7 @@ func (w *Connector) Fetch(
 
 			p := Trim(e, t.Type)
 
-			entityRecs, err := w.resolveRefs(ctx, c, &p)
+			entityRecs, err := w.resolveRefs(ctx, c, seen, &p)
 			if err != nil {
 				errs = append(errs, ingest.TargetError{Target: t, Err: err})
 
@@ -168,13 +170,15 @@ func (w *Connector) Fetch(
 
 // resolveRefs fills p.Refs with English (else "mul") labels and returns
 // records for the entities not seen before.
-func (w *Connector) resolveRefs(ctx context.Context, c *ingest.Client, p *Payload) ([]ingest.Record, error) {
+func (w *Connector) resolveRefs(
+	ctx context.Context, c *ingest.Client, seen *refs, p *Payload,
+) ([]ingest.Record, error) {
 	qids := ReferencedQids(*p)
 
 	var need []string
 
 	for _, q := range qids {
-		if _, seen := w.refs.get(q); !seen {
+		if _, seen := seen.get(q); !seen {
 			need = append(need, q)
 		}
 	}
@@ -208,12 +212,12 @@ func (w *Connector) resolveRefs(ctx context.Context, c *ingest.Client, p *Payloa
 				}
 			}
 
-			w.refs.put(q, label)
+			seen.put(q, label)
 		}
 	}
 
 	for _, q := range qids {
-		if l, _ := w.refs.get(q); l != "" {
+		if l, _ := seen.get(q); l != "" {
 			p.Refs[q] = l
 		}
 	}
