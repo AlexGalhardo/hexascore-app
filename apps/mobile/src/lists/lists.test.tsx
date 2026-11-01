@@ -216,9 +216,17 @@ test("a rolled-back list write refetches that list and toasts", () => {
 	const invalidate = jest.spyOn(client, "invalidateQueries");
 	const notify = jest.fn();
 	const entry = { op: "list:l1", itemId: "a" } as unknown as QueueEntry;
-	listLaneResult(client, notify, "en")(entry, { kind: "rollback", code: null, retryAfter: null });
+	listLaneResult(
+		client,
+		notify,
+		() => "en",
+	)(entry, { kind: "rollback", code: null, retryAfter: null });
 	expect(invalidate).toHaveBeenCalledWith({ queryKey: listKeys.one("l1") });
 	expect(notify).toHaveBeenCalledWith("Your list change was not saved.");
-	listLaneResult(client, notify, "en")({ ...entry, op: "rating" }, { kind: "applied", body: {} });
+	listLaneResult(
+		client,
+		notify,
+		() => "en",
+	)({ ...entry, op: "rating" }, { kind: "applied", body: {} });
 	expect(notify).toHaveBeenCalledTimes(1);
 });

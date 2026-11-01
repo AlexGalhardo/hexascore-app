@@ -1,7 +1,7 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
 import type { ReactElement } from "react";
 import { Linking, View } from "react-native";
-import type { EntityJSON, ItemJSON } from "../../../../packages/app-client/src/api";
+import type { AppItemJSON, EntityJSON } from "../../../../packages/app-client/src/api";
 import type { ReadClient } from "../api/client";
 import { formatScore } from "../components/ItemRow";
 import { type AppLocale, t } from "../i18n";
@@ -23,7 +23,7 @@ function factsOf(entity: EntityJSON, locale: AppLocale): EntityFact[] {
 		.map(([key, value]) => ({ label: t(locale, key), value: String(value) }));
 }
 
-function rowOf(item: ItemJSON, locale: AppLocale): ItemRowData {
+function rowOf(item: AppItemJSON, locale: AppLocale): ItemRowData {
 	const score = item.score ?? null;
 	return {
 		id: item.id,
@@ -65,7 +65,7 @@ export function EntityView({
 
 	if (!entity.data) return <View testID="entity" className="flex-1 bg-bg dark:bg-bg-dark" />;
 	const data = entity.data;
-	const byId = new Map<string, [CatalogType, ItemJSON]>();
+	const byId = new Map<string, [CatalogType, AppItemJSON]>();
 	const groups: EntityGroup[] = CATALOG_TYPES.map((type, index) => {
 		const items = pages[index]?.data?.data ?? [];
 		for (const item of items) byId.set(item.id, [type, item]);
