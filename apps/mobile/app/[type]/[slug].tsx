@@ -9,12 +9,11 @@ import { Placeholder } from "../../src/ui/Placeholder";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-// GET /{type}/{id} takes the item id only. In-app links add `?id=`; a bare slug (a web App Link) has no
-// lookup route yet (FIX-app-item-by-slug), so it shows not-found instead of guessing.
+// In-app links add `?id=`. A bare slug (a web App Link, FR-10-7) goes to GET /{type}/{id} as is: the app
+// audience resolves slugs, and the answer's id moves the screen to the uuid key (same path as a merge).
 export function itemIdOf(slug: string, id: string): string | null {
 	if (UUID.test(id)) return id;
-	if (UUID.test(slug)) return slug;
-	return null;
+	return slug === "" ? null : slug;
 }
 
 export function ItemBody({

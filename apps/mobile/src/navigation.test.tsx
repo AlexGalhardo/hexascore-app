@@ -9,7 +9,7 @@ import Home from "../app/(tabs)/index";
 import Lists from "../app/(tabs)/lists";
 import Profile from "../app/(tabs)/profile";
 import Search from "../app/(tabs)/search";
-import ItemScreen, { ItemBody } from "../app/[type]/[slug]";
+import ItemScreen, { ItemBody, itemIdOf } from "../app/[type]/[slug]";
 import EntityScreen from "../app/entities/[id]";
 import ListScreen from "../app/lists/[id]";
 import UpdateRequired from "../app/update-required";
@@ -41,7 +41,6 @@ jest.mock("expo-router", () => {
 	return {
 		Stack,
 		Tabs,
-		useRouter: () => ({ navigate: () => undefined }),
 		useSegments: () => [],
 		useLocalSearchParams: () =>
 			(globalThis as { __routeParams?: Record<string, string> }).__routeParams ?? {},
@@ -53,11 +52,6 @@ function offline(element: ReactElement): ReactElement {
 	const client = new QueryClient({ defaultOptions: { queries: { enabled: false } } });
 	return <QueryClientProvider client={client}>{element}</QueryClientProvider>;
 }
-
-// Expo Router provides the SafeAreaProvider at runtime; the router is mocked here.
-jest.mock("react-native-safe-area-context", () => ({
-	useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
-}));
 
 function params(next: Record<string, string>): void {
 	(globalThis as { __routeParams?: Record<string, string> }).__routeParams = next;
@@ -72,8 +66,8 @@ const routes: [string, Record<string, string>, () => ReactElement, string | null
 	["(tabs)/[type]", { type: "games" }, () => offline(<SectionScreen />), "Games"],
 	["(tabs)/search", {}, () => <Search />, "Search"],
 	["(tabs)/lists", {}, () => <Lists />, "Lists"],
-	["(tabs)/profile", {}, () => <Profile />, "Settings"],
-	["[type]/[slug]", { type: "movies", slug: "arrival" }, () => <ItemScreen />, "Page not found"],
+	["(tabs)/profile", {}, () => <Profile />, "Profile"],
+	["[type]/[slug]", { type: "movies", slug: "" }, () => <ItemScreen />, "Page not found"],
 	["entities/[id]", { id: "42" }, () => <EntityScreen />, "Entity 42"],
 	["lists/[id]", { id: "7" }, () => <ListScreen />, "List 7"],
 	["update-required", {}, () => <UpdateRequired />, storeListingUrl()],
@@ -94,6 +88,14 @@ test.each(["games", "movies", "series", "books"])("section and item accept %s", 
 		offline(<ItemBody type={type} slug="title" id="0192f1c6-0000-7000-8000-000000000001" />),
 	);
 	expect(screen.getByTestId("item")).toBeTruthy();
+});
+
+test("a bare slug from a web App Link is read as the item key", () => {
+	const id = "0192f1c6-0000-7000-8000-000000000001";
+	expect(itemIdOf("arrival", "")).toBe("arrival");
+	expect(itemIdOf("arrival", id)).toBe(id);
+	expect(itemIdOf(id, "")).toBe(id);
+	expect(itemIdOf("", "")).toBeNull();
 });
 
 test("[type] rejects anything outside games|movies|series|books", async () => {
