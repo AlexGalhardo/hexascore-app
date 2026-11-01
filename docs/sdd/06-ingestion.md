@@ -231,7 +231,8 @@ Pressure gate: app middleware counts in-flight requests; batches wait while > 16
 | score recompute | daily 04:00 | owned by SDD 02 |
 | `dq.asserts` | after normalise; daily 05:00 | §7.7 |
 | `dq.frontend_fields` | daily 05:30 | §7.7 |
-| `covers.gc`, prunes | daily 02:30 | retention §5 |
+| `covers` | daily 04:15 incremental; Sun 02:00 full | own chains (`covers-daily`, `covers-weekly`) → asserts, so the `ingest_covers` kill switch never stops another chain; the full run drops Commons covers without a P3383 poster |
+| `covers.gc`, prunes | daily 02:30 | retention §5; `cover_gc` is filled by a trigger on `items`/`editions` whenever a `covers/` key is released |
 
 Dead letter: vukem `failed_jobs` (`queue:failed`, `queue:retry`) for jobs; `ingest_failures` per target, parked after 5 failed runs. A run with `heartbeat_at` older than 15 min becomes `failed` and resumable.
 

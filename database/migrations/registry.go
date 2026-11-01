@@ -79,5 +79,6 @@ func All() []schema.Migration {
 		m20261101170000AddEntitiesNameNormIndex(),
 		m20261101190000AddEntityMatchReviewsCreatedAt(),
 		m20261101200000FixEntityMatchReviewsResolvedBy(),
+		m20261101210000CreateCoverGC(),
 	}
 }

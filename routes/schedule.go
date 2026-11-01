@@ -11,6 +11,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/jobs"
 	"github.com/AlexGalhardo/hexascore-app/app/recommend/primitives"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/covers"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 )
 
@@ -89,6 +90,12 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	// Alert A7 reads the ingestion tables once an hour and logs alert=A7 lines (SDD 12 §6.2, §7.5).
 	s.Func("ingest:alerts", ingestAlerts(app)).Hourly().WithoutOverlapping()
 
+	s.Func("ingest:covers-daily", startChain(app, ingest.CoversDaily)).
+		DailyAt("04:15").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:covers-weekly", startChain(app, ingest.CoversWeekly)).
+		WeeklyOn(time.Sunday, "02:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:covers-gc", coversGC(app)).DailyAt("02:30").In(saoPaulo).WithoutOverlapping()
+
 	s.Func("ingest:dq-daily", startChain(app, ingest.DQDaily)).
 		DailyAt("05:00").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:frontend-fields", startChain(app, ingest.FrontendFields)).
@@ -152,6 +159,35 @@ func pruneIngest(app *vukem.App) func(ctx context.Context) error {
 		}
 
 		_, err = run.Prune(ctx, db)
+
+		return err
+	}
+}
+
+// coversGC deletes the cover objects released more than 30 days ago (SDD 06 §7.6 "covers.gc"); it stays idle
+// while the covers kill switch is off or no bucket is configured.
+func coversGC(app *vukem.App) func(ctx context.Context) error {
+	return func(ctx context.Context) error {
+		ff, err := app.Flags()
+		if err != nil {
+			return err
+		}
+
+		if !run.Allowed(ctx, ff, covers.JobName) {
+			return nil
+		}
+
+		disk, err := jobs.CoversDisk(app)
+		if err != nil || disk == nil {
+			return err
+		}
+
+		db, err := app.DB()
+		if err != nil {
+			return err
+		}
+
+		_, err = covers.GC(ctx, db, disk, app.Now())
 
 		return err
 	}

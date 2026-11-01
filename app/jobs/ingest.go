@@ -6,14 +6,18 @@ import (
 	"sync"
 
 	vukem "github.com/AlexGalhardo/vukem"
+	"github.com/AlexGalhardo/vukem/config"
 	"github.com/AlexGalhardo/vukem/database"
+	"github.com/AlexGalhardo/vukem/drivers/s3"
 	"github.com/AlexGalhardo/vukem/queue"
+	"github.com/AlexGalhardo/vukem/storage"
 
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/community"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/backfill"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/covers"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/dq"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/fetch"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/gog"
@@ -47,6 +51,9 @@ type IngestSources struct {
 	// SteamAPI and GOGAPI replace the storefront endpoints.
 	SteamAPI string
 	GOGAPI   string
+	// Covers and CoversEncoder replace the bucket and cwebp.
+	Covers        storage.Disk
+	CoversEncoder covers.Encoder
 	// Pressure holds ingestion chunks while the site is busy; bootstrap fills it and feeds it from the Inflight middleware.
 	Pressure *ingest.Pressure
 }
@@ -105,7 +112,35 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		ig.APIURL = src.IGDBAPI
 	}
 
+	disk, err := CoversDisk(app)
+	if err != nil {
+		// A broken bucket config must not stop the other sources: the covers step then fails with ErrNoDisk.
+		app.Log.Error("ingest runner: covers disk", "error", err)
+
+		disk = nil
+	}
+
+	if src.Covers != nil {
+		disk = src.Covers
+	}
+
+	var stat dq.Stat
+	if disk != nil {
+		stat = disk.Exists
+	}
+
+	coversJob := &covers.Job{
+		Disk: disk, HTTP: client.Image, Encoder: &covers.Cwebp{}, Now: app.Now,
+		ItemsChanged: func(ctx context.Context, ex database.Executor, ids []string) error {
+			return q.DispatchTx(ctx, ex, catalog.ItemsChanged{IDs: ids})
+		},
+	}
+	if src.CoversEncoder != nil {
+		coversJob.Encoder = src.CoversEncoder
+	}
+
 	steps := map[string]run.Step{
+		covers.JobName:       coversJob.Step,
 		"fetch.igdb":         fetch.Step(ig, client, app.Now),
 		"fetch.steam":        fetch.Step(&steam.Connector{APIURL: src.SteamAPI}, client, app.Now),
 		"fetch.gog":          fetch.Step(&gog.Connector{APIURL: src.GOGAPI}, client, app.Now),
@@ -116,8 +151,8 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		"fetch.entities":     fetch.Step(wd.Entities(), client, app.Now),
 		"fetch.youtube":      fetch.Step(&trailers.Connector{}, client, app.Now),
 		backfill.EditionsJob: backfill.Editions{}.Step,
-		// workaround: Stat (DQ-I-04) and Serialise (DQ-I-12) stay nil until the covers store (P6.B.2.2) and the API probe exist.
-		dq.Job:       dq.Asserts{}.Step,
+		// workaround: Serialise (DQ-I-12) stays nil until the API probe exists; Stat is nil without a bucket.
+		dq.Job:       dq.Asserts{Stat: stat}.Step,
 		rollback.Job: rollback.Step,
 		dq.FrontendJob: dq.FrontendFields{
 			Suggest: community.IngestGate{DB: db}.OpenMissingField,
@@ -162,4 +197,19 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 	}
 
 	return runner, nil
+}
+
+// CoversDisk is the S3 bucket covers live in, or nil when S3_BUCKET is unset (development: the embedded demo
+// covers are served instead and the covers job fails with covers.ErrNoDisk).
+func CoversDisk(app *vukem.App) (storage.Disk, error) {
+	if app.Source.Get("S3_BUCKET") == "" {
+		return nil, nil //nolint:nilnil // no bucket is a supported setup
+	}
+
+	cfg, err := config.Load[s3.Config](app.Source)
+	if err != nil {
+		return nil, fmt.Errorf("covers disk: %w", err)
+	}
+
+	return s3.New(cfg)
 }
