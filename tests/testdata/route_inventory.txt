@@ -5,6 +5,7 @@ web   POST   /csp-reports
 web   GET    /up
 web   GET    /help/score
 web   GET    /robots.txt
+web   GET    /.well-known/assetlinks.json
 web   GET    /terms
 web   GET    /policy
 web   GET    /pricing
