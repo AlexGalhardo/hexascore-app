@@ -39,6 +39,13 @@ selected() {
 	[ -z "$only" ] || case ",$only," in *",$1,"*) ;; *) return 1 ;; esac
 	case ",$skip," in *",$1,"*) return 1 ;; esac
 }
+# openapi and lighthouse wait for the image of the build job; without it they would wait forever.
+for j in openapi lighthouse; do
+	if selected "$j" && ! selected build; then
+		echo "local.sh: job $j needs the build job; select it too (--only build,$j) or do not skip it" >&2
+		exit 2
+	fi
+done
 
 ID="$(date +%H%M%S)$$"
 RUN=$(mktemp -d)
@@ -149,6 +156,7 @@ gl() {
 
 step() { printf '\n==> %s\n' "$*"; }
 need_build() {
+	selected build || { echo "build job not selected, dependent job not run"; return 1; }
 	step "waiting for the build job"
 	while [ ! -f "$RUN/build.rc" ]; do sleep 2; done
 	[ "$(cut -d' ' -f1 "$RUN/build.rc")" -eq 0 ] || { echo "build failed, dependent job not run"; return 1; }
@@ -196,7 +204,7 @@ job_test_go_integration() {
 job_test_ts() {
 	cd "$TREE"
 	step "bun run test"; bun run test
-	step "migration policy"; bun test scripts/ci/migration-policy.test.ts scripts/ci/sdk-job.test.ts scripts/ci/sdk-release.test.ts
+	step "migration policy"; bun test scripts/ci/migration-policy.test.ts scripts/ci/sdk-job.test.ts scripts/ci/sdk-release.test.ts scripts/ci/local.test.ts
 	step "TypeScript SDK"; (cd sdks/ts && bun install --frozen-lockfile --ignore-scripts && bun run typecheck && bun test)
 }
 job_migrations() {

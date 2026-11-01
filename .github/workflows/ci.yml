@@ -125,7 +125,7 @@ jobs:
       - run: go test -race -count=1 -tags integration ./...
       - run: bun run test
       - name: Migration policy
-        run: bun test scripts/ci/migration-policy.test.ts scripts/ci/sdk-job.test.ts scripts/ci/sdk-release.test.ts
+        run: bun test scripts/ci/migration-policy.test.ts scripts/ci/sdk-job.test.ts scripts/ci/sdk-release.test.ts scripts/ci/local.test.ts
 
   sdk:
     name: SDKs (regenerate, diff, typecheck, tests, packaging)
