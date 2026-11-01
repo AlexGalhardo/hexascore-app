@@ -91,7 +91,7 @@ Once it is installed:
 
 After Step 1 and Step 2, the owner (or an agent with the owner's yes) pushes the tag: `git tag mobile-vX.Y.Z && git push origin mobile-vX.Y.Z`.
 
-1. `mobile-release.yml` runs on the tag: it fails when `X.Y.Z` differs from `version` in `app.config.ts`, then runs lint, typecheck, Jest and `bundle:check`, then `eas build --profile production` (AAB, remote `versionCode`).
+1. `mobile-release.yml` runs on the tag: it fails when `X.Y.Z` differs from `version` in `app.config.ts`, then runs the API contract job (OpenAPI goldens and lint, app client codegen diff, as in `ci.yml`), lint, typecheck, Jest and `bundle:check`, then `eas build --profile production` (AAB, remote `versionCode`).
 2. The submit job then waits on the `play-store` environment. Nothing is submitted until the owner opens the run, checks the build id in the job summary, and approves the deployment: that approval is the "sim" for that build (Step 4). Rejecting it, or letting it time out, leaves the build unsubmitted.
 3. The submit job refuses to run if `play-store` has no required reviewer, so a missing environment setup never turns into an automatic submission.
 
