@@ -531,6 +531,12 @@
       "mostRated": "Mais avaliados",
       "seeAll": "Ver tudo em {section}",
       "empty": "Nada por aqui ainda."
+    },
+    "trending": {
+      "title": "{type}: top 10 em alta (30 dias)",
+      "allPrior": "{type} populares",
+      "popular": "Popular",
+      "empty": "Nada em alta ainda."
     }
   },
   "categories": {
