@@ -16,11 +16,11 @@ func TestPasswordRules(t *testing.T) {
 		name, password string
 		ok             bool
 	}{
-		{"128 characters accepted", pad(128), true},
-		{"129 characters rejected", pad(129), false},
+		{"32 characters accepted", pad(32), true},
+		{"33 characters rejected", pad(33), false},
 		{"8 characters accepted", "Abcde1!x", true},
 		{"7 characters rejected", "Abcd1!x", false},
-		{"128 multibyte runes accepted", "Aa1!" + strings.Repeat("é", 124), true},
+		{"32 multibyte runes accepted", "Aa1!" + strings.Repeat("é", 28), true},
 		{"no uppercase", "abcde1!x", false},
 		{"no lowercase", "ABCDE1!X", false},
 		{"no digit", "Abcdef!x", false},

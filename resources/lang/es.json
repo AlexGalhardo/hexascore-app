@@ -436,7 +436,6 @@
       "body": "Tu nickname es tu nombre público en HexaScore. Es único y no se puede cambiar después.",
       "submit": "Guardar nickname"
     },
-    "members": "Miembros",
     "googleSignIn": "Iniciar sesión con Google",
     "googleSignUp": "Registrarse con Google"
   },

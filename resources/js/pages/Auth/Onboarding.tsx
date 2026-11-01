@@ -2,6 +2,13 @@ import { Head, useForm } from "@inertiajs/react";
 import type { FormEvent } from "react";
 
 import Field from "../../components/Field";
+import {
+	NICKNAME_ERRORS,
+	NICKNAME_MAX,
+	NICKNAME_MIN,
+	NICKNAME_PATTERN,
+	normalizeNickname,
+} from "../../lib/signup-policy";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
@@ -15,12 +22,8 @@ export default function Onboarding({ socialEnabled = false }: { socialEnabled?: 
 		form.post(l("/onboarding"));
 	};
 
-	const codes: Record<string, string> = {
-		"nickname-taken": "auth.errors.usernameTaken",
-		"invalid-nickname": "auth.errors.invalidNickname",
-	};
 	const code = form.errors.nickname;
-	const error = code ? t(codes[code] ?? "auth.errors.generic") : undefined;
+	const error = code ? t(NICKNAME_ERRORS[code] ?? "auth.errors.generic") : undefined;
 
 	return (
 		<>
@@ -32,12 +35,12 @@ export default function Onboarding({ socialEnabled = false }: { socialEnabled?: 
 					label={t("auth.fields.nickname")}
 					autoComplete="username"
 					autoCapitalize="none"
-					minLength={4}
-					maxLength={16}
-					pattern="[a-z]{4,16}"
+					minLength={NICKNAME_MIN}
+					maxLength={NICKNAME_MAX}
+					pattern={NICKNAME_PATTERN}
 					required
 					value={form.data.nickname}
-					onChange={(e) => form.setData("nickname", e.target.value.toLowerCase())}
+					onChange={(e) => form.setData("nickname", normalizeNickname(e.target.value))}
 					error={error}
 				/>
 				<p className="text-sm text-zinc-600 dark:text-zinc-400">

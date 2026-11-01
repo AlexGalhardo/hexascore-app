@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -43,6 +44,38 @@ func (a *Accounts) SetNickname(ctx context.Context, userID int64, raw, field str
 	}
 
 	return err
+}
+
+// checkSignupNickname normalises the optional sign-up nickname and rejects it
+// when it breaks the rule or is taken. An empty one is allowed: the account
+// then picks it at /onboarding.
+func (a *Accounts) checkSignupNickname(ctx context.Context, raw string) (string, error) {
+	nick := strings.ToLower(strings.TrimSpace(raw))
+	if nick == "" {
+		return "", nil
+	}
+
+	if !nicknameRe.MatchString(nick) {
+		return "", errs.NewValidation().Add("nickname", NicknameInvalid)
+	}
+
+	var taken bool
+	if err := a.DB.QueryRowContext(ctx, `SELECT EXISTS (SELECT 1 FROM users WHERE username = $1)`, nick).
+		Scan(&taken); err != nil {
+		return "", fmt.Errorf("check nickname: %w", err)
+	}
+
+	if taken {
+		return "", errs.NewValidation().Add("nickname", NicknameTaken)
+	}
+
+	return nick, nil
+}
+
+func isNicknameTaken(err error) bool {
+	v, ok := errors.AsType[*errs.ValidationError](err)
+
+	return ok && v.First("nickname") == NicknameTaken
 }
 
 // HasNickname reports whether the user has chosen a nickname (SDD 03 FR-03-9).

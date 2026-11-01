@@ -19,7 +19,7 @@ Out of scope: admin impersonation (not in v1, VF-012; no legacy UI used it; only
 Each line names its test (Go unless stated).
 
 - FR-03-1: Sign-up (email, password, display name, nickname) answers alike for new and existing emails (vukem "`install:auth` scaffold", Register). `TestSecurity_A07_SignupIsEnumerationSafe`.
-- FR-03-2: Validation reuses `legacy/apps/web/lib/validation.ts`: password 8–128 chars (maximum raised from legacy 32 by D-24; minimum as legacy) with upper, lower, digit, non-alphanumeric; nickname `^[a-z]{4,16}$` after trim + lowercase; sign-up email ≤ 48, other emails ≤ 254; name 1–100. Password rules apply to sign-up, reset, change, set; never to login. Table test on `app/requests/auth.go`.
+- FR-03-2: Validation reuses `legacy/apps/web/lib/validation.ts`: password 8–32 chars (D-24, owner round 2026-11-01) with upper, lower, digit, non-alphanumeric; nickname `^[a-z]{4,16}$` after trim + lowercase; sign-up email 12–48, other emails ≤ 254; the sign-up form also takes the nickname (optional server-side, same rule and codes as onboarding; a taken nickname is checked before the email so the answer does not reveal accounts); name 1–100. Password rules apply to sign-up, reset, change, set; never to login. Table test on `app/requests/auth.go`.
 - FR-03-3: Login takes email or nickname (contains `@` → email); unknown identifier and wrong password give the same 422. `TestSecurity_A07_LoginErrorsDoNotRevealUsers`, `TestLoginByNickname`.
 - FR-03-4: Unverified users sign in and browse; every write, token, 2FA and export needs `auth.Verified`. Generated `TestUnverifiedUsersSeeTheNotice`.
 - FR-03-5: Verification link signed, 1 h, bound to `email_hash`, needs the account's login; resend 3/min; verifying ends other sessions and tokens. `TestSecurity_A07_VerificationLinkRequiresLogin`.
@@ -296,5 +296,5 @@ Built on `auth/webauthn` in vukem v0.34.0 (VF-001); no app-local WebAuthn verifi
 6. Impersonation [NOT IN VUKEM DOCS], not in v1. Minimal design: `POST /admin/_users/{id}/impersonate` storing `impersonator_id` in the session, 30-min cap, writes blocked, banner, `account_events`. Feedback entry: "`SessionGuard.Impersonate`/`StopImpersonating` with audit event" (VF-012). Owner: vukem. Not in v1 (open issue 03-6).
 7. Session timeout env names and defaults [NOT VERIFIED]. Owner: architect. Closes when read in Phase 4.
 8. Locale for queued mail outside a request [NOT VERIFIED]. Owner: vukem. Closes with a documented API.
-9. Legacy password max 32 is weak. Decided: maximum 128 (D-24; FR-03-2).
+9. Legacy password max 32 is weak. Decided: maximum 128 (D-24), reverted to 32 by the owner on 2026-11-01 (FR-03-2).
 10. `install:auth` column and Inertia page names [NOT VERIFIED]. Owner: architect. Closes after running the scaffold.

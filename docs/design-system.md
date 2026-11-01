@@ -441,7 +441,7 @@ All Auth pages render `h1` (`text-2xl font-semibold`), a form with `space-y-4` a
 | Component | Route | Purpose and blocks | States |
 | --- | --- | --- | --- |
 | `Auth/Login` | `GET /login` | Email or nickname `Field`, `PasswordField`, remember-me checkbox, `SubmitButton`, `ChallengeStatus`, "Forgot your password?" and "Create account" links, outlined "Sign in with a passkey" button | per-field errors, passkey failure `role="alert"`, pending and "checking" state |
-| `Auth/Signup` | `GET /signup` | Name, email, password with rule checklist and strength meter, confirmation, honeypot form token, `SubmitButton`, "Have an account? Log in" | per-field errors, challenge check |
+| `Auth/Signup` | `GET /signup` | Name, nickname (4 to 16 lowercase letters, lowercased as typed, hint that it cannot change), email (12 to 48 characters), password (8 to 32) with rule checklist and strength meter, confirmation, honeypot form token, `SubmitButton`, "Have an account? Log in" | per-field errors, challenge check |
 | `Auth/CheckEmail` | `GET /signup/check-email` | Notice after sign-up and a login link | static |
 | `Auth/VerifyNotice` | `GET /verify-email` | "Sent to email" notice, resend link | static, flash toast on resend |
 | `Auth/Onboarding` | `GET /onboarding` | Nickname `Field` with hint and submit | error codes `nickname-taken`, `invalid-nickname` mapped to catalogue text |

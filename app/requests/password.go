@@ -6,11 +6,12 @@ import (
 	"github.com/AlexGalhardo/vukem/z"
 )
 
-// Password length bounds in runes. Legacy minimum 8; the maximum is raised
-// from legacy 32 to 128 by D-24 (SDD 03 FR-03-2).
+// Password length bounds in runes. Owner round 2026-11-01 item 8 sets the
+// maximum back to the legacy 32 (it was 128 under D-24); logins never check it,
+// so an older, longer password still signs in.
 const (
 	PasswordMin = 8
-	PasswordMax = 128
+	PasswordMax = 32
 )
 
 // PasswordSchema is the rule set for a new password (sign-up, reset, change,
