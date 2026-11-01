@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/database"
@@ -76,6 +77,12 @@ func RunPredeploy(ctx context.Context, db *database.DB, m *schema.Migrator, out 
 		return errors.New("hexascore:predeploy needs PostgreSQL")
 	}
 
+	release, err := predeployLock(ctx, db)
+	if err != nil {
+		return err
+	}
+	defer release()
+
 	dropped, err := DropInvalidIndexes(ctx, db)
 	for _, name := range dropped {
 		_, _ = fmt.Fprintln(out, "Dropped INVALID index:", name)
@@ -95,6 +102,46 @@ func RunPredeploy(ctx context.Context, db *database.DB, m *schema.Migrator, out 
 	}
 
 	return err
+}
+
+// predeployLockKey serialises hexascore:predeploy runs ("hexapred").
+const predeployLockKey int64 = 0x6865786170726564
+
+// predeployLock holds a session advisory lock on a pinned connection for the whole run. The migrator's own lock covers
+// only Up; without this one, a second run's DropInvalidIndexes could list a leftover, then drop the same-named index
+// that the first run's migration is rebuilding. It polls a try-lock so a waiting run holds no snapshot that a
+// concurrent CREATE INDEX CONCURRENTLY would wait on.
+func predeployLock(ctx context.Context, db *database.DB) (func(), error) {
+	conn, err := db.SQL().Conn(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("predeploy lock: %w", err)
+	}
+
+	for {
+		var ok bool
+		if err := conn.QueryRowContext(ctx, `SELECT pg_try_advisory_lock($1)`, predeployLockKey).Scan(&ok); err != nil {
+			_ = conn.Close()
+
+			return nil, fmt.Errorf("predeploy lock: %w", err)
+		}
+
+		if ok {
+			break
+		}
+
+		select {
+		case <-ctx.Done():
+			_ = conn.Close()
+
+			return nil, fmt.Errorf("predeploy lock: %w", ctx.Err())
+		case <-time.After(500 * time.Millisecond):
+		}
+	}
+
+	return func() {
+		_, _ = conn.ExecContext(context.WithoutCancel(ctx), `SELECT pg_advisory_unlock($1)`, predeployLockKey)
+		_ = conn.Close()
+	}, nil
 }
 
 // Predeploy is the Railway pre-deploy command (SDD 11 §7.2); a failure stops
