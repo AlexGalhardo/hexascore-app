@@ -11,7 +11,6 @@ import (
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/i18n"
 	"github.com/AlexGalhardo/vukem/middleware"
-	vukemmw "github.com/AlexGalhardo/vukem/middleware"
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/router"
 	"github.com/AlexGalhardo/vukem/web"
@@ -62,7 +61,7 @@ func Web(r *router.Router, app *vukem.App) error {
 		imgHosts...,
 	)
 	err = vukem.DefaultMiddlewareWith(app, r, vukem.MiddlewareOptions{
-		SecureHeaders: func(cfg *vukemmw.SecureHeadersConfig) {
+		SecureHeaders: func(cfg *middleware.SecureHeadersConfig) {
 			secure(cfg)
 			appmiddleware.AddCSPSources(cfg, ts.CSPSources())
 		},

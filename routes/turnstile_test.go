@@ -7,16 +7,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/AlexGalhardo/vukem/challenge"
 	"github.com/AlexGalhardo/vukem/config"
 	"github.com/AlexGalhardo/vukem/web"
 )
 
 // Cloudflare's published test keys (always pass); no real secret in tests.
-var testTurnstile = Turnstile{TurnstileConfig: challenge.TurnstileConfig{
-	SiteKey:   "1x00000000000000000000AA",
-	SecretKey: config.NewSecret("1x0000000000000000000000000000000AA"),
-}}
+var testTurnstile = func() Turnstile {
+	var t Turnstile
+	t.SiteKey, t.SecretKey = "1x00000000000000000000AA", config.NewSecret("1x0000000000000000000000000000000AA")
+
+	return t
+}()
 
 // A fake siteverify accepts any token, so production must never boot with one.
 func TestSecurity_A05_TurnstileFakeVerifyRefusedInProduction(t *testing.T) {

@@ -37,34 +37,8 @@ func ChangedURLs(ctx context.Context, ex database.Executor, base string, c Index
 ) {
 	next := IndexNowCursor{LastChangeID: c.LastChangeID, EntitiesSince: now}
 
-	rows, err := ex.QueryContext(ctx, `SELECT c.id, coalesce(i.type, ''), coalesce(i.slug, '')
-FROM (SELECT id, item_id, action, fields FROM api_changes WHERE id > $1 ORDER BY id LIMIT $2) c
-LEFT JOIN items i ON i.id = c.item_id
-WHERE NOT (c.action = 'updated' AND c.fields <@ ARRAY['score', 'confidence', 'ratingCount']::text[])
-ORDER BY c.id`, c.LastChangeID, IndexNowBatch)
+	paths, err := changedItemPaths(ctx, ex, c.LastChangeID)
 	if err != nil {
-		return nil, c, fmt.Errorf("indexnow: read api_changes: %w", err)
-	}
-
-	var paths []string
-
-	for rows.Next() {
-		var (
-			id        int64
-			typ, slug string
-		)
-		if err := rows.Scan(&id, &typ, &slug); err != nil {
-			_ = rows.Close()
-
-			return nil, c, err
-		}
-
-		if section := itemSection(typ); section != "" && slug != "" {
-			paths = append(paths, "/"+section+"/"+slug)
-		}
-	}
-
-	if err := rows.Close(); err != nil {
 		return nil, c, err
 	}
 
@@ -124,4 +98,33 @@ GROUP BY e.id HAVING count(DISTINCT ie.item_id) >= %[2]d`, s.column, MinIndexabl
 	}
 
 	return keys, rows.Err()
+}
+
+// changedItemPaths lists the item page paths in the api_changes rows after lastID (at most IndexNowBatch), without
+// score-only updates.
+func changedItemPaths(ctx context.Context, ex database.Executor, lastID int64) ([]string, error) {
+	rows, err := ex.QueryContext(ctx, `SELECT coalesce(i.type, ''), coalesce(i.slug, '')
+FROM (SELECT id, item_id, action, fields FROM api_changes WHERE id > $1 ORDER BY id LIMIT $2) c
+LEFT JOIN items i ON i.id = c.item_id
+WHERE NOT (c.action = 'updated' AND c.fields <@ ARRAY['score', 'confidence', 'ratingCount']::text[])
+ORDER BY c.id`, lastID, IndexNowBatch)
+	if err != nil {
+		return nil, fmt.Errorf("indexnow: read api_changes: %w", err)
+	}
+	defer rows.Close()
+
+	var paths []string
+
+	for rows.Next() {
+		var typ, slug string
+		if err := rows.Scan(&typ, &slug); err != nil {
+			return nil, err
+		}
+
+		if section := itemSection(typ); section != "" && slug != "" {
+			paths = append(paths, "/"+section+"/"+slug)
+		}
+	}
+
+	return paths, rows.Err()
 }
