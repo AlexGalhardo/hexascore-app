@@ -81,6 +81,7 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 		vukem.WithDatabaseDrivers(postgres.Driver()),
 		vukem.WithMigrations(migrations.All()),
 		vukem.WithSeeders(seeders.All()...),
+		vukem.WithAppSeeders(devSeeders()...),
 		vukem.WithListeners(listeners.All()...),
 		vukem.WithJobsFunc(func(app *vukem.App) []queue.Registration { return jobs.AllWith(app, ingestSrc) }),
 		vukem.WithSchedule(func(s *schedule.Schedule, app *vukem.App) {

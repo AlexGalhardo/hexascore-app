@@ -1,6 +1,7 @@
 import { createVerifiedAccount } from "../helpers/account";
 import { signIn } from "../helpers/auth";
 import { expectNoSeriousA11yViolations } from "../helpers/axe";
+import { DEMO_ADMIN_EMAIL, DEMO_SECOND_ADMIN_EMAIL } from "../helpers/db";
 import { expect, test } from "../helpers/fixtures";
 import { canReadMail } from "../helpers/mail";
 
@@ -68,6 +69,37 @@ test.describe("community quality gate", () => {
 		await expect(page.getByText(title)).toBeVisible();
 	});
 
-	// Both moderators must be distinct users; the DemoCatalog seeds only one admin.
-	test.fixme("two admins claiming one suggestion: the second claim is refused", () => {});
+	// Needs an open suggestion in the queue (the member test above or the CommunityLoad seeder leaves one).
+	test("two admins claiming one suggestion: the second claim is refused", async ({ browser }) => {
+		test.setTimeout(120_000);
+		const first = await browser.newContext({ locale: "en" });
+		const second = await browser.newContext({ locale: "en" });
+
+		try {
+			const a = await first.newPage();
+			const b = await second.newPage();
+			await signIn(a, "", DEMO_ADMIN_EMAIL);
+			await signIn(b, "", DEMO_SECOND_ADMIN_EMAIL);
+			await a.goto("/admin/moderation");
+			await b.goto("/admin/moderation");
+
+			const action = await a.locator("form[action$='/claim']").first().getAttribute("action");
+			expect(action).not.toBeNull();
+			const claim = (page: typeof a) =>
+				page.locator(`form[action='${action}'] button`).click();
+
+			const won = a.waitForResponse((r) => r.url().endsWith(action ?? ""));
+			await claim(a);
+			expect((await won).status()).toBeLessThan(400);
+
+			const lost = b.waitForResponse((r) => r.url().endsWith(action ?? ""));
+			await claim(b);
+			const status = (await lost).status();
+			expect(status).toBeGreaterThanOrEqual(400);
+			expect(status).toBeLessThan(500);
+		} finally {
+			await first.close();
+			await second.close();
+		}
+	});
 });
