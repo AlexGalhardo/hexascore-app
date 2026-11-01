@@ -54,7 +54,13 @@ export function RatingInput({ label, value, onChange, locale }: RatingInputProps
 			accessible
 			accessibilityRole="adjustable"
 			accessibilityLabel={label}
-			accessibilityValue={{ min: 0, max: STARS, now: value ?? 0, text }}
+			// RN `now` must be an integer: report half steps (6.5 -> 13); `text` carries the real score.
+			accessibilityValue={{
+				min: 1,
+				max: STARS * 2,
+				...(value === null ? {} : { now: value * 2 }),
+				text,
+			}}
 			accessibilityActions={[{ name: "increment" }, { name: "decrement" }]}
 			onAccessibilityAction={onAction}
 			className="flex-row items-center gap-3"

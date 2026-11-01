@@ -69,10 +69,11 @@ describe("RatingInput", () => {
 		const onChange = jest.fn();
 		await render(<RatingInput label="Gameplay" value={8.5} onChange={onChange} locale="pt-BR" />);
 		const slider = screen.getByRole("adjustable", { name: "Gameplay" });
-		expect(slider.props.accessibilityValue).toMatchObject({
-			min: 0,
-			max: 10,
-			now: 8.5,
+		// RN `now` is an integer, so the value is sent in half steps (8.5 -> 17).
+		expect(slider.props.accessibilityValue).toEqual({
+			min: 1,
+			max: 20,
+			now: 17,
 			text: "8,5 / 10",
 		});
 		expect(screen.getByText("8,5 / 10")).toBeTruthy();
@@ -80,6 +81,11 @@ describe("RatingInput", () => {
 		expect(onChange).toHaveBeenLastCalledWith(9);
 		await fireEvent(slider, "accessibilityAction", { nativeEvent: { actionName: "decrement" } });
 		expect(onChange).toHaveBeenLastCalledWith(8);
+	});
+
+	test("reports 6.5 as now 13 (P5.B.2.2 acceptance)", async () => {
+		await render(<RatingInput label="Story" value={6.5} onChange={jest.fn()} locale="en" />);
+		expect(screen.getByRole("adjustable").props.accessibilityValue.now).toBe(13);
 	});
 
 	test("clamps at the ends and starts from nothing at the minimum", async () => {
@@ -93,6 +99,11 @@ describe("RatingInput", () => {
 		expect(onChange).toHaveBeenLastCalledWith(10);
 		await rerender(<RatingInput label="Story" value={null} onChange={onChange} locale="en" />);
 		expect(screen.getByText("– / 10")).toBeTruthy();
+		expect(screen.getByRole("adjustable").props.accessibilityValue).toEqual({
+			min: 1,
+			max: 20,
+			text: "– / 10",
+		});
 		await fireEvent(screen.getByRole("adjustable"), "accessibilityAction", {
 			nativeEvent: { actionName: "increment" },
 		});
