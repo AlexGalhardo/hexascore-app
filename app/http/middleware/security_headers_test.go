@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"regexp"
+	"slices"
 	"strings"
 	"testing"
 
@@ -177,5 +178,23 @@ func TestSecurity_A05_UpgradeInsecureOnlyForHTTPSProduction(t *testing.T) {
 		if got := middleware.UpgradeInsecure(c.production, c.url); got != c.want {
 			t.Errorf("UpgradeInsecure(%v, %q) = %v, want %v", c.production, c.url, got, c.want)
 		}
+	}
+}
+
+// The analytics origins vukem puts in CSPSources survive the app's adjustment.
+func TestSecurity_A05_CSPSourcesExtendedNotReplaced(t *testing.T) {
+	cfg := vukemmw.SecureHeadersConfig{CSPSources: map[string][]string{
+		"script-src":  {"https://www.googletagmanager.com"},
+		"connect-src": {"https://gateway.umami.is"},
+	}}
+	middleware.SecureHeaders(false)(&cfg)
+
+	if got := cfg.CSPSources["script-src"]; !slices.Contains(got, "https://www.googletagmanager.com") ||
+		!slices.Contains(got, "'strict-dynamic'") {
+		t.Errorf("script-src = %v", got)
+	}
+
+	if got := cfg.CSPSources["connect-src"]; !slices.Contains(got, "https://gateway.umami.is") {
+		t.Errorf("connect-src = %v", got)
 	}
 }

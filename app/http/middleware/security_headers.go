@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"slices"
 	"strings"
 
 	vukemmw "github.com/AlexGalhardo/vukem/middleware"
@@ -33,13 +34,29 @@ func SecureHeaders(upgradeInsecure bool, extraImgHosts ...string) func(*vukemmw.
 
 		cfg.PermissionsPolicy = permissionsPolicy
 		cfg.ReportURI = "/csp-reports"
-		cfg.CSPSources = map[string][]string{
+		// Added to, never replaced: vukem fills CSPSources from the analytics config (Umami, GA4).
+		AddCSPSources(cfg, map[string][]string{
 			"script-src": {"'strict-dynamic'"},
 			"img-src":    extraImgHosts,
 			"form-action": {
 				"https://checkout.stripe.com", "https://billing.stripe.com", "https://accounts.google.com",
 			},
-		}
+		})
+	}
+}
+
+// AddCSPSources appends src to cfg.CSPSources per directive, keeping the sources already there.
+func AddCSPSources(cfg *vukemmw.SecureHeadersConfig, src map[string][]string) {
+	if len(src) == 0 {
+		return
+	}
+
+	if cfg.CSPSources == nil {
+		cfg.CSPSources = map[string][]string{}
+	}
+
+	for directive, sources := range src {
+		cfg.CSPSources[directive] = slices.Concat(cfg.CSPSources[directive], sources)
 	}
 }
 
