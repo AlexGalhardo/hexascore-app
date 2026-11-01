@@ -142,3 +142,23 @@ ON CONFLICT (ref_id) DO NOTHING`); err != nil {
 
 	return DrainSuggest(ctx, db)
 }
+
+// searchIndexes are every index SDD 07 §5 creates; Reindex rewrites them to reclaim bloat.
+var searchIndexes = []string{
+	"item_translations_tsv_gin", "item_translations_tsv_api_gin", "item_translations_title_trgm",
+	"item_alt_titles_trgm", "editions_title_trgm", "entity_translations_name_trgm", "entities_name_trgm",
+	"search_suggest_prefix", "search_suggest_trgm",
+}
+
+// Reindex rewrites every search index without blocking writes (REINDEX CONCURRENTLY cannot run inside a
+// transaction, so each statement runs on its own) and then rebuilds the suggest rows (runbook R6).
+func Reindex(ctx context.Context, db *database.DB) error {
+	for _, name := range searchIndexes {
+		// name comes from the constant list above, never from input.
+		if _, err := db.ExecContext(ctx, `REINDEX INDEX CONCURRENTLY `+name); err != nil {
+			return fmt.Errorf("search: reindex %s: %w", name, err)
+		}
+	}
+
+	return Rebuild(ctx, db)
+}
