@@ -138,6 +138,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **ingest:** normalize writes `created` and `updated` (changed public fields) rows to the `/changes` feed, and an ingest rollback writes `deleted` for every item it deletes or hides (FIX-ingest-rollback-api-changes)
+- **ingest:** a covers step reserves each new object key in `cover_gc` outside its transaction before the upload, so objects of a rolled back step are reaped by the covers GC (FIX-covers-orphans-on-rollback)
+- **ingest:** one failing A7 alert check no longer skips the remaining checks; their errors are joined (FIX-ingest-alerts-continue)
 - **ci:** `scripts/ci/local.sh` exits at once with a clear message when `openapi` or `lighthouse` is selected without the `build` job, instead of waiting forever (FIX-ci-local-need-build)
 - **ingest:** an edition QID held by another work records a failure and a review instead of failing the item; a Retry-After pause longer than a minute no longer fails the request (each attempt has its own deadline); `entity_match_reviews.resolved_by` is a bigint (FIX-editions-qid-conflict, FIX-ingest-retry-after-timeout, P6.B.3.3)
 - **web:** the desktop navbar no longer overflows at 1024–1440 px with the Feed link (Feed inline from `xl`, in the account menu below) (FIX-nav-lg-width)
