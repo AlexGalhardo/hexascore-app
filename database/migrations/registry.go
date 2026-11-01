@@ -68,5 +68,6 @@ func All() []schema.Migration {
 		webhook.Migrations("")[0],
 		m20261031120000CreatePasskeysTable(),
 		m20261101130000CatalogAuditGuardRowLevel(),
+		m20261101140000AddIsSeedToUsers(),
 	}
 }

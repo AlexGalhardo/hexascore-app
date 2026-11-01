@@ -215,6 +215,8 @@ Consistency note (SDD 13 open issue 11, 2026-10-28): after a restore, re-apply a
 
 ### 7.6 Legacy cutover (A-04, D-21, ADR 0013)
 
+**Seed users (owner decision 2026-11-01).** The 10,000 legacy users (`@example.test` emails, `legacy_id` `seed-user-*`) are fake. They and their ratings, statuses, lists and time to beat stay in production for now, flagged `users.is_seed` (migration `20261101140000`). A seed user can never sign in (password, remember-me, app tokens, Google, passkeys, password reset all fail closed like a wrong password; `TestSecurity_A07_SeedUserCannotSignIn`). `./app seed:mark --email-suffix @example.test --legacy-prefix seed-user- [--dry-run]` sets the flag (a user must match every filter; admins are never marked). `./app seed:purge [--dry-run] [--batch 500] --confirm` later deletes them in batches (one transaction each; the 31 foreign keys to `users.id` cascade or set null, the tables without a FK are deleted explicitly), then queues the score recompute and the search suggest refresh of the affected items and prints counts per table.
+
 - T-14 d: timed staging rehearsal of steps 2–7 on a fresh Neon copy; Google callback added (SDD 03 §7.7).
 - T-7 d: `scripts/legacy/blob-export.ts` in this repository (Bun; `legacy/` is read-only, runbook `docs/migration/covers.md`) reads cover URLs **referenced by the DB** (orphans are never copied), uploads to the production bucket under SDD 06 keys, writes `manifest.ndjson {legacyUrl,key,sha256}`; ~79k objects (`legacy/docs/backup-local.md`).
 - T-24 h: DNS TTL 60 s; banner on legacy.
