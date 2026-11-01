@@ -25,6 +25,9 @@ const SECTIONS = [
 	["books", "nav.books", "text-accent-book"],
 ] as const;
 
+// The owner picks one of resources/public/icons/hexascore-icon-{1,2,3}; app-icon.svg is a copy of the pick (see its README).
+export const APP_ICON = "/icons/app-icon.svg";
+
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
 const item = `inline-flex min-h-11 items-center rounded-xs hover:text-primary ${focus}`;
 export const iconButton = `inline-flex size-11 shrink-0 items-center justify-center rounded-xs hover:bg-hover ${focus}`;
@@ -260,8 +263,9 @@ export default function Nav() {
 			<div className="shell flex h-14 items-center gap-2 lg:h-[72px] lg:gap-7">
 				<Link
 					href={localized("/", locale)}
-					className={`${item} shrink-0 font-display text-2xl font-bold hover:text-fg lg:text-[28px]`}
+					className={`${item} shrink-0 gap-2 font-display text-2xl font-bold hover:text-fg lg:text-[28px]`}
 				>
+					<img src={APP_ICON} alt="" width={32} height={32} className="size-7 lg:size-8" />
 					{page.props.appName}
 				</Link>
 				<nav

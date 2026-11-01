@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="HexaScore">
+	<rect width="512" height="512" rx="96" fill="#13161b"/>
+	<g stroke="#13161b" stroke-width="14" stroke-linejoin="round">
+		<path fill="#a796ff" d="M256 256L256 56L429.2 156Z"/>
+		<path fill="#a796ff" d="M256 256L429.2 156V356Z"/>
+		<path fill="#a796ff" d="M256 256L429.2 356L256 456Z"/>
+		<path fill="#a796ff" d="M256 256L256 456L82.8 356Z"/>
+		<path fill="#a796ff" d="M256 256L82.8 356V156Z"/>
+		<path fill="#5e4db8" d="M256 256L82.8 156L256 56Z"/>
+	</g>
+</svg>

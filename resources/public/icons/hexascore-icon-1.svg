@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="HexaScore">
+	<path fill="#5b3fc4" stroke="#5b3fc4" stroke-width="32" stroke-linejoin="round" d="M256 24L456.9 140V372L256 488L55.1 372V140Z"/>
+	<path fill="#fff" d="M136 146H226V170H206V236H306V170H286V146H376V170H356V342H376V366H286V342H306V276H206V342H226V366H136V342H156V170H136Z"/>
+</svg>
