@@ -7,6 +7,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/AlexGalhardo/vukem/database"
+
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/normalize"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/store"
 )
@@ -305,11 +307,15 @@ type fakeCommunity struct {
 	suggested []normalize.SystemSuggestion
 }
 
-func (f *fakeCommunity) CommunityFields(context.Context, string) (map[string]normalize.CommunityField, error) {
+func (f *fakeCommunity) CommunityFields(
+	context.Context,
+	*database.Tx,
+	string,
+) (map[string]normalize.CommunityField, error) {
 	return f.fields, nil
 }
 
-func (f *fakeCommunity) OpenSystemSuggestion(_ context.Context, s normalize.SystemSuggestion) error {
+func (f *fakeCommunity) OpenSystemSuggestion(_ context.Context, _ *database.Tx, s normalize.SystemSuggestion) error {
 	f.suggested = append(f.suggested, s)
 
 	return nil
@@ -336,7 +342,7 @@ func TestApplyCommunitySkipsAndSuggests(t *testing.T) {
 			"translations.en.title": {Since: edited, Current: c.current},
 		}}
 
-		res, err := normalize.ApplyCommunity(t.Context(), fake, "item-1", item, edited.AddDate(0, 0, c.days))
+		res, err := normalize.ApplyCommunity(t.Context(), fake, nil, "item-1", item, edited.AddDate(0, 0, c.days))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -358,6 +364,38 @@ func TestApplyCommunitySkipsAndSuggests(t *testing.T) {
 			if s.ItemID != "item-1" || s.Domain != "movie" || s.Field != "translations.en.title" ||
 				string(s.Before) != `"Matrix, The"` || string(s.After) != `"The Matrix"` || s.Source != "wikidata" {
 				t.Errorf("%s: suggestion = %+v", c.name, s)
+			}
+		}
+	}
+}
+
+// A community field the source does not carry must still be skipped, inside
+// and after the lock window, or the writer would wipe the approved value (FR-06-4).
+func TestApplyCommunityKeepsFieldsTheSourceLacks(t *testing.T) {
+	edited := time.Date(2026, 5, 1, 0, 0, 0, 0, time.UTC)
+
+	for _, field := range []string{"release_date", "external_ids.imdb", "synopsis.en"} {
+		for _, days := range []int{10, 400} {
+			item := build(t, "Q83495", wikidataRecord(t, "Q83495"))
+			item.ReleaseDate, item.ExternalIDs, item.Synopses = nil, map[string]string{}, nil
+
+			fake := &fakeCommunity{fields: map[string]normalize.CommunityField{
+				field: {Since: edited, Current: json.RawMessage(`"kept"`)},
+			}}
+
+			if _, err := normalize.ApplyCommunity(
+				t.Context(),
+				fake,
+				nil,
+				"item-1",
+				item,
+				edited.AddDate(0, 0, days),
+			); err != nil {
+				t.Fatal(err)
+			}
+
+			if !item.Skip[field] || len(fake.suggested) != 0 {
+				t.Errorf("%s day %d: skip = %v, suggested = %v", field, days, item.Skip, fake.suggested)
 			}
 		}
 	}

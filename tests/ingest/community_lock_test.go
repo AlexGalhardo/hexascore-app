@@ -5,6 +5,7 @@ package ingest_test
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"os"
 	"testing"
 	"time"
@@ -77,6 +78,29 @@ func built(t *testing.T) *normalize.Item {
 	return item
 }
 
+// apply runs ApplyCommunity in its own transaction, as the normalize Step does.
+func apply(
+	t *testing.T,
+	db *database.DB,
+	gate community.IngestGate,
+	item *normalize.Item,
+	now time.Time,
+) (normalize.CommunityResult, error) {
+	t.Helper()
+
+	var res normalize.CommunityResult
+
+	err := db.Tx(t.Context(), func(tx *database.Tx) error {
+		var err error
+
+		res, err = normalize.ApplyCommunity(t.Context(), gate, tx, itemID, item, now)
+
+		return err
+	})
+
+	return res, err
+}
+
 func lockCount(t *testing.T, db *database.DB, q string) int {
 	t.Helper()
 
@@ -97,7 +121,7 @@ func TestCommunityFieldLock(t *testing.T) {
 	for _, days := range []int{179, 181} {
 		item := built(t)
 
-		res, err := normalize.ApplyCommunity(t.Context(), gate, itemID, item, edited.AddDate(0, 0, days))
+		res, err := apply(t, db, gate, item, edited.AddDate(0, 0, days))
 		if err != nil {
 			t.Fatalf("day %d: %v", days, err)
 		}
@@ -142,7 +166,7 @@ func TestCommunityFieldLockSameValueExpires(t *testing.T) {
 	for days, wantSkip := range map[int]bool{179: true, 181: false} {
 		item := built(t)
 
-		if _, err := normalize.ApplyCommunity(t.Context(), gate, itemID, item, edited.AddDate(0, 0, days)); err != nil {
+		if _, err := apply(t, db, gate, item, edited.AddDate(0, 0, days)); err != nil {
 			t.Fatal(err)
 		}
 
@@ -153,5 +177,59 @@ func TestCommunityFieldLockSameValueExpires(t *testing.T) {
 
 	if n := lockCount(t, db, `SELECT count(*) FROM suggestions`); n != 0 {
 		t.Errorf("suggestions = %d, want 0", n)
+	}
+}
+
+// A rejected system suggestion with the same value is not reopened by the next run.
+func TestRejectedSystemSuggestionStaysClosed(t *testing.T) {
+	db := seed(t)
+	gate := community.IngestGate{DB: db}
+
+	if _, err := apply(t, db, gate, built(t), edited.AddDate(0, 0, 10)); err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := db.ExecContext(
+		t.Context(),
+		`UPDATE suggestions SET status = 'rejected' WHERE author_id IS NULL`,
+	); err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := apply(t, db, gate, built(t), edited.AddDate(0, 0, 11)); err != nil {
+		t.Fatal(err)
+	}
+
+	if n := lockCount(t, db, `SELECT count(*) FROM suggestions WHERE author_id IS NULL`); n != 1 {
+		t.Errorf("system suggestions = %d, want 1 (the rejected one)", n)
+	}
+}
+
+// The suggestion lives in the caller's transaction: a rollback leaves none.
+func TestSystemSuggestionRollsBackWithTheCaller(t *testing.T) {
+	db := seed(t)
+	gate := community.IngestGate{DB: db}
+	errRollback := errors.New("rollback")
+
+	err := db.Tx(t.Context(), func(tx *database.Tx) error {
+		if _, err := normalize.ApplyCommunity(
+			t.Context(),
+			gate,
+			tx,
+			itemID,
+			built(t),
+			edited.AddDate(0, 0, 10),
+		); err != nil {
+			return err
+		}
+
+		return errRollback
+	})
+	if !errors.Is(err, errRollback) {
+		t.Fatal(err)
+	}
+
+	if n := lockCount(t, db, `SELECT count(*) FROM suggestions`); n != 0 {
+		t.Errorf("suggestions = %d, want 0 after rollback", n)
 	}
 }
