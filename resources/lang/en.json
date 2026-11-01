@@ -736,7 +736,7 @@
   "about": {
     "title": "About HexaScore",
     "description": "What HexaScore is: community scores for games, movies, TV series and books, a published formula, a public API and open source code.",
-    "intro": "HexaScore is a community catalogue of games, movies, TV series and books. Members rate each item from 0 to 10 in six categories of its type, and the score of the item comes from those ratings through a published formula.",
+    "intro": "HexaScore is a community catalogue of games, movies, TV series and books. Members rate each item from 0.5 to 10 stars, in half-star steps, in up to six categories of its type, and the score of the item comes from those ratings through a published formula.",
     "categoriesTitle": "Four categories",
     "categoriesBody": "Every item belongs to one category, and each category has its own six rating criteria.",
     "scoresTitle": "How scores work",

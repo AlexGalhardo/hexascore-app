@@ -736,7 +736,7 @@
   "about": {
     "title": "Sobre o HexaScore",
     "description": "O que é o HexaScore: notas da comunidade para jogos, filmes, séries e livros, uma fórmula publicada, uma API pública e código aberto.",
-    "intro": "O HexaScore é um catálogo da comunidade de jogos, filmes, séries e livros. Os membros avaliam cada item de 0 a 10 em seis categorias do seu tipo, e a nota do item vem dessas avaliações por meio de uma fórmula publicada.",
+    "intro": "O HexaScore é um catálogo da comunidade de jogos, filmes, séries e livros. Os membros avaliam cada item de 0,5 a 10 estrelas, em meias estrelas, em até seis categorias do seu tipo, e a nota do item vem dessas avaliações por meio de uma fórmula publicada.",
     "categoriesTitle": "Quatro categorias",
     "categoriesBody": "Cada item pertence a uma categoria, e cada categoria tem seus próprios seis critérios de avaliação.",
     "scoresTitle": "Como as notas funcionam",
