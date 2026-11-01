@@ -6,7 +6,8 @@
 	<thead><tr><th>Run</th><th>Job</th><th>Source</th><th>Status</th><th>Seen</th><th>Changed</th><th>Failed</th><th>Started</th><th>Finished</th><th>Error</th><th></th></tr></thead>
 	<tbody>
 	{{range .Runs}}<tr><td>{{.ID}}</td><td>{{.Job}}</td><td>{{.Source}}</td><td>{{.Status}}</td><td>{{.Seen}}</td><td>{{.Changed}}</td><td>{{.Failed}}</td><td>{{.Started}}</td><td>{{.Finished}}</td><td>{{.Error}}</td>
-		<td>{{if or (eq .Status "queued") (eq .Status "running")}}{{if $.Ingest.CanRun}}<form method="post" action="/admin/ingest/runs/{{.ID}}/cancel">{{csrfField}}<button type="submit" class="button danger">Cancel</button></form>{{end}}{{end}}</td></tr>{{end}}
+		<td>{{if or (eq .Status "queued") (eq .Status "running")}}{{if $.Ingest.CanRun}}<form method="post" action="/admin/ingest/runs/{{.ID}}/cancel">{{csrfField}}<button type="submit" class="button danger">Cancel</button></form>{{end}}{{end}}
+		{{if .Rollbackable}}<form method="post" action="/admin/ingest/runs/{{.ID}}/rollback">{{csrfField}}<input name="reason" maxlength="500" placeholder="Reason" required aria-label="Rollback reason"><button type="submit" class="button danger">Roll back</button></form>{{end}}</td></tr>{{end}}
 	</tbody>
 </table>
 {{end}}

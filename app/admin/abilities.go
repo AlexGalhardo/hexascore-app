@@ -11,13 +11,14 @@ import (
 
 // Moderation abilities (SDD 04 §6).
 const (
-	AbilityModerate         = "moderate"
-	AbilityApplySuggestion  = "applySuggestion"
-	AbilityViewCatalogAudit = "viewCatalogAudit"
-	AbilityRevertCatalog    = "revertCatalog"
-	AbilityLockCatalog      = "lockCatalog"
-	AbilityViewIngestion    = "viewIngestion"
-	AbilityRunIngestion     = "runIngestion"
+	AbilityModerate          = "moderate"
+	AbilityApplySuggestion   = "applySuggestion"
+	AbilityViewCatalogAudit  = "viewCatalogAudit"
+	AbilityRevertCatalog     = "revertCatalog"
+	AbilityLockCatalog       = "lockCatalog"
+	AbilityViewIngestion     = "viewIngestion"
+	AbilityRunIngestion      = "runIngestion"
+	AbilityRollbackIngestion = "rollbackIngestion"
 )
 
 // DefineModeration registers the moderation abilities. Unlike the panel gate they answer 403, not 404: the pages
@@ -43,6 +44,7 @@ func DefineModeration(
 	g.DefineResult(AbilityLockCatalog, adminOnly)
 	g.DefineResult(AbilityViewIngestion, adminOnly)
 	g.DefineResult(AbilityRunIngestion, adminOnly)
+	g.DefineResult(AbilityRollbackIngestion, adminOnly)
 	g.DefineResult(AbilityModerate, func(ctx context.Context, u *models.User) authz.Result {
 		if IsAdmin(u, now()) {
 			return authz.Allow()

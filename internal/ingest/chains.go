@@ -12,6 +12,7 @@ import (
 	"github.com/AlexGalhardo/vukem/database"
 
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/dq"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/rollback"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 )
 
@@ -100,6 +101,14 @@ var (
 	// FrontendFields renders a sample of item pages and reports the missing required fields (SDD 06 §7.7).
 	FrontendFields = Chain{"frontend-fields", []Stage{{Job: dq.FrontendJob, Mode: run.ModeIncremental}}}
 
+	// Rollback undoes a bad run, then re-normalises what it restored and re-checks the catalogue (SDD 06 §7.8).
+	// It starts only through StartRollback, which checks the target and records who asked and why.
+	Rollback = Chain{"rollback", []Stage{
+		{Job: rollback.Job, Mode: run.ModeRollback},
+		{Job: "normalize", Mode: run.ModeFull},
+		{Job: dq.Job, Mode: run.ModeFull},
+	}}
+
 	// Chains lists every chain by name, which is how a run's params find the next stage.
 	Chains = []Chain{
 		Bootstrap,
@@ -113,6 +122,7 @@ var (
 		TrailersWeekly,
 		DQDaily,
 		FrontendFields,
+		Rollback,
 	}
 )
 
@@ -230,12 +240,39 @@ func Advance(ctx context.Context, db *database.DB, d run.Dispatcher, id int64) e
 	return nil
 }
 
+// StartRollback queues the rollback of run target for the admin actor (0 for none) after Check: the errors of
+// package rollback tell why a run cannot be undone, run.ErrRunActive that another rollback is under way.
+func StartRollback(
+	ctx context.Context, db *database.DB, d run.Dispatcher, target, actor int64, reason string,
+) (run.Run, error) {
+	if err := rollback.Check(ctx, db, target); err != nil {
+		return run.Run{}, err
+	}
+
+	raw, err := json.Marshal(rollback.Params{TargetRun: target, Actor: actor, Reason: reason})
+	if err != nil {
+		return run.Run{}, err
+	}
+
+	var params map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &params); err != nil {
+		return run.Run{}, err
+	}
+
+	return Rollback.Start(ctx, db, d, fmt.Sprintf("admin:%d", actor), params)
+}
+
 // Stages lists the (job, source) pairs an operator may trigger by hand: every stage of every chain, once.
 func Stages() []Stage {
 	var out []Stage
 
 	for _, c := range Chains {
 		for _, s := range c.Stages {
+			// a rollback needs its target run, so only StartRollback may queue it
+			if s.Job == rollback.Job {
+				continue
+			}
+
 			if !slices.ContainsFunc(out, func(o Stage) bool { return o.Job == s.Job && o.Source == s.Source }) {
 				out = append(out, Stage{Job: s.Job, Source: s.Source})
 			}

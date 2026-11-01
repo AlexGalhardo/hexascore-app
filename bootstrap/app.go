@@ -33,6 +33,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/config"
 	"github.com/AlexGalhardo/hexascore-app/database/migrations"
 	"github.com/AlexGalhardo/hexascore-app/database/seeders"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 	"github.com/AlexGalhardo/hexascore-app/resources"
 	"github.com/AlexGalhardo/hexascore-app/routes"
@@ -75,6 +76,10 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 	}
 
 	heartbeat := scheduler.NewHeartbeat(time.Now)
+
+	// The Inflight middleware feeds this gate and the ingestion runner reads it (SDD 06 §7.5).
+	pressure := ingest.NewPressure(time.Now)
+	ingestSrc.Pressure = pressure
 
 	base := []vukem.Option{
 		vukem.WithProviders(Providers()...),
@@ -122,6 +127,7 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 		}
 		app.Log = slog.New(logging.NewHandler(app.Log.Handler(), logKey))
 		r.UseServer(middleware.RequestLog)
+		r.UseServer(middleware.Inflight(pressure))
 		r.Use(middleware.RequestRoute)
 		edge, err := middleware.APIEdge(
 			config.APIHost(app.Source.Get),

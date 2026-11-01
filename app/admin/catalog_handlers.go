@@ -84,6 +84,7 @@ type runRow struct {
 	ID                                            int64
 	Job, Source, Status, Error, Started, Finished string
 	Seen, Changed, Failed                         int
+	Rollbackable                                  bool
 }
 
 // pageData feeds the panel layout (same field names as vukem's admin page) and the pages below.

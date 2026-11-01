@@ -29,6 +29,7 @@ const (
 	ModeFollowup    = "followup"
 	ModeManual      = "manual"
 	ModeBackfill    = "backfill"
+	ModeRollback    = "rollback"
 )
 
 // ErrRunActive is returned by Create when job_runs_one_active already holds a queued or running run of the
