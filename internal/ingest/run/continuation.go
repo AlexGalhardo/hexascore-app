@@ -190,6 +190,12 @@ const MaxConcurrent = 2
 
 // Registration is the queue handler of Job: queue ingest, 10 minute timeout, 3 retries (four attempts).
 func Registration(r *Runner) queue.Registration {
+	return LazyRegistration(func() (*Runner, error) { return r, nil })
+}
+
+// LazyRegistration is Registration for a Runner that cannot be built when the jobs are listed (the queue itself
+// is built from that list, so the Runner reaching for it there would loop). get runs on every job and must cache.
+func LazyRegistration(get func() (*Runner, error)) queue.Registration {
 	slots := make(chan struct{}, MaxConcurrent)
 
 	return queue.Handle(func(ctx context.Context, j Job) error {
@@ -198,6 +204,11 @@ func Registration(r *Runner) queue.Registration {
 			defer func() { <-slots }()
 		case <-ctx.Done():
 			return ctx.Err()
+		}
+
+		r, err := get()
+		if err != nil {
+			return err
 		}
 
 		a, ok := queue.AttemptFrom(ctx)
