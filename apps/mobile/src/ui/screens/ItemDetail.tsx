@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { scoreBand } from "../../theme/scoreBand";
 import { Btn } from "../Btn";
@@ -59,18 +59,22 @@ export interface ItemDetailLabels {
 
 export interface ItemDetailProps {
 	item: ItemDetailView;
-	/** Current library status ("Want to play") or the "set status" prompt. */
-	statusLabel: string;
+	/** Current library status ("Want to play") or the "set status" prompt; the button is hidden without it. */
+	statusLabel?: string;
 	similar: SimilarItem[];
 	rating: RatingDraft | null;
+	/** The viewer's saved overall score, shown under the actions. */
+	ownScore?: { label: string; score: number } | null;
 	labels: ItemDetailLabels;
 	locale: string;
 	onRate: () => void;
-	onStatus: () => void;
-	onAddToList: () => void;
+	onStatus?: () => void;
+	onAddToList?: () => void;
 	onRateCategory: (key: string, value: number) => void;
 	onSave: () => void;
 	onOpenSimilar: (item: SimilarItem) => void;
+	/** Screen-specific blocks (entities, editions, attribution) after the sections. */
+	children?: ReactNode;
 }
 
 const BAR = {
@@ -121,6 +125,7 @@ export function ItemDetail(props: ItemDetailProps): ReactElement {
 	const { item, rating, labels, locale } = props;
 	return (
 		<ScrollView
+			testID="item"
 			className="flex-1 bg-bg dark:bg-bg-dark"
 			contentContainerClassName="gap-6 px-4 pb-8 pt-4"
 		>
@@ -138,12 +143,14 @@ export function ItemDetail(props: ItemDetailProps): ReactElement {
 					</Text>
 					{item.byline !== null && <Text className={MUTED}>{item.byline}</Text>}
 					<View className="mt-2 flex-row items-center gap-3">
-						<ScoreBadge
-							score={item.score}
-							locale={locale}
-							label={labels.score(item.score)}
-							size="lg"
-						/>
+						<View testID={`score-band-${scoreBand(item.score)}`}>
+							<ScoreBadge
+								score={item.score}
+								locale={locale}
+								label={labels.score(item.score)}
+								size="lg"
+							/>
+						</View>
 						<Text className={`${MUTED} flex-1`}>
 							{`${labels.verdict(item.score)} · ${labels.ratings(item.ratingCount)}`}
 						</Text>
@@ -167,18 +174,34 @@ export function ItemDetail(props: ItemDetailProps): ReactElement {
 				<View className="flex-1">
 					<Btn label={labels.rate} onPress={props.onRate} />
 				</View>
-				<View className="flex-1">
-					<Btn variant="secondary" label={props.statusLabel} onPress={props.onStatus} />
-				</View>
-				<Pressable
-					accessibilityRole="button"
-					accessibilityLabel={labels.addToList}
-					onPress={props.onAddToList}
-					className="h-11 w-11 items-center justify-center rounded-sm border border-b-2 border-fg bg-field-bg active:border-b dark:border-fg-dark dark:bg-field-bg-dark"
-				>
-					<Icon name="add" size={22} className="text-fg dark:text-fg-dark" />
-				</Pressable>
+				{props.statusLabel !== undefined && props.onStatus && (
+					<View className="flex-1">
+						<Btn variant="secondary" label={props.statusLabel} onPress={props.onStatus} />
+					</View>
+				)}
+				{props.onAddToList && (
+					<Pressable
+						accessibilityRole="button"
+						accessibilityLabel={labels.addToList}
+						onPress={props.onAddToList}
+						className="h-11 w-11 items-center justify-center rounded-sm border border-b-2 border-fg bg-field-bg active:border-b dark:border-fg-dark dark:bg-field-bg-dark"
+					>
+						<Icon name="add" size={22} className="text-fg dark:text-fg-dark" />
+					</Pressable>
+				)}
 			</View>
+			{props.ownScore && (
+				<View className="flex-row items-center justify-between">
+					<Text className="font-text text-16 font-semibold text-fg dark:text-fg-dark">
+						{props.ownScore.label}
+					</Text>
+					<ScoreBadge
+						score={props.ownScore.score}
+						locale={locale}
+						label={`${props.ownScore.label}, ${labels.score(props.ownScore.score)}`}
+					/>
+				</View>
+			)}
 			{rating !== null && (
 				<View className="gap-4 border-t-2 border-primary bg-surface p-4 dark:border-primary-dark dark:bg-surface-dark">
 					<Text className={H2}>{labels.rateTitle(item.title)}</Text>
@@ -257,6 +280,7 @@ export function ItemDetail(props: ItemDetailProps): ReactElement {
 					</View>
 				</View>
 			)}
+			{props.children}
 		</ScrollView>
 	);
 }

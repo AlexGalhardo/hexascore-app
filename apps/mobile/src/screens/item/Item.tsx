@@ -1,17 +1,21 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type ReactElement, useEffect, useRef, useState } from "react";
-import { Modal, Pressable, ScrollView, Text, View } from "react-native";
-import type { EntityRef } from "../../../../../packages/app-client/src/api";
+import { Modal, Pressable, Text, View } from "react-native";
+import type { EntityRef, ItemJSON } from "../../../../../packages/app-client/src/api";
 import type { ReadClient } from "../../api/client";
-import { formatScore } from "../../components/ItemRow";
 import { type AppLocale, t } from "../../i18n";
-import type { CatalogType } from "../../navigation/catalog";
+import { type CatalogType, SINGULAR } from "../../navigation/catalog";
 import { queryKeys } from "../../query/keys";
 import type { Scores } from "../../rating/cache";
 import { RateSheet } from "../../rating/RateSheet";
-import { Btn } from "../../ui/Btn";
+import { formatScore } from "../../ui/format";
+import { EditionsList } from "../../ui/screens/EditionsList";
+import {
+	ItemDetail,
+	type ItemDetailLabels,
+	type ItemDetailView,
+} from "../../ui/screens/ItemDetail";
 import { Attribution } from "./Attribution";
-import { ItemHeader } from "./ItemHeader";
 
 export type ItemReader = Pick<ReadClient, "getItem" | "listEditions" | "me">;
 
@@ -39,6 +43,50 @@ function groupByRole(entities: EntityRef[]): [string, EntityRef[]][] {
 		groups.set(role, [...(groups.get(role) ?? []), entity]);
 	}
 	return [...groups];
+}
+
+const H2 = "font-display text-24 font-bold text-fg dark:text-fg-dark";
+
+function detailOf(item: ItemJSON, type: CatalogType, locale: AppLocale): ItemDetailView {
+	const year = item.releaseDate?.slice(0, 4);
+	return {
+		title: item.title ?? item.slug,
+		kicker: [t(locale, `catalog.title.${SINGULAR[type]}`), year].filter(Boolean).join(" · "),
+		byline: null,
+		// shortcut: /app/v1 items carry no cover URL yet (FIX-app-item-cover-urls); pass item.coverUrl once it lands.
+		coverUri: null,
+		score: item.score ?? null,
+		ratingCount: item.ratingCount ?? 0,
+		genres: (item.entities ?? []).filter((e) => e.role === "genre").map((e) => e.name),
+		synopsis: item.synopsis?.text ?? null,
+		categories: Object.entries(item.scoreByCategory ?? {}).map(([key, score]) => ({
+			key,
+			label: t(locale, `categories.${SINGULAR[type]}.${key}`),
+			score,
+		})),
+	};
+}
+
+function labelsOf(locale: AppLocale, rated: boolean): ItemDetailLabels {
+	const score = (value: number | null): string =>
+		value === null
+			? t(locale, "score.none")
+			: t(locale, "score.outOf", { score: formatScore(value, locale) });
+	return {
+		verdict: (value) => t(locale, value === null ? "item.notEnough" : "item.communityScore"),
+		ratings: (count) => t(locale, "catalog.ratingCount", { count }),
+		score,
+		rate: t(locale, rated ? "ratings.update" : "item.rateIt"),
+		addToList: t(locale, "lists.addToList"),
+		categoryAverages: t(locale, "item.categoryScores"),
+		synopsis: t(locale, "item.synopsis"),
+		noSynopsis: t(locale, "item.noSynopsis"),
+		// The inline panel is unused here (rating = null): rating goes through RateSheet.
+		rateTitle: () => t(locale, "ratings.title"),
+		overall: t(locale, "ratings.yourOverall"),
+		save: t(locale, "ratings.save"),
+		moreLikeThis: "",
+	};
 }
 
 export function ItemView({
@@ -112,20 +160,57 @@ export function ItemView({
 
 	const overall = overallOf(me.data);
 	const editionRows = editions.data?.data ?? [];
+	const groups = groupByRole((resolved.entities ?? []).filter((e) => e.role !== "genre"));
+	const noop = (): void => {};
 	return (
-		<ScrollView testID="item" className="flex-1 bg-bg dark:bg-bg-dark">
-			<ItemHeader item={resolved} locale={locale} />
-			{overall !== null ? (
-				<View className="flex-row justify-between px-4 pt-3">
-					<Text className="text-16 text-fg dark:text-fg-dark">
-						{t(locale, "ratings.yourOverall")}
-					</Text>
-					<Text className="text-16 text-fg dark:text-fg-dark">{formatScore(overall, locale)}</Text>
-				</View>
-			) : null}
-			<View className="px-4 pt-3">
-				<Btn label={t(locale, "ratings.title")} onPress={() => setRating(true)} />
-			</View>
+		<>
+			<ItemDetail
+				item={detailOf(resolved, type, locale)}
+				similar={[]}
+				rating={null}
+				ownScore={
+					overall === null ? null : { label: t(locale, "ratings.yourOverall"), score: overall }
+				}
+				labels={labelsOf(locale, overall !== null)}
+				locale={locale}
+				onRate={() => setRating(true)}
+				onRateCategory={noop}
+				onSave={noop}
+				onOpenSimilar={noop}
+			>
+				{groups.map(([role, entities]) => (
+					<View key={role} className="gap-1">
+						<Text accessibilityRole="header" className={H2}>
+							{t(locale, `item.roles.${role}`)}
+						</Text>
+						{entities.map((entity) => (
+							<Pressable
+								key={entity.id ?? entity.name}
+								accessibilityRole="link"
+								className="min-h-11 justify-center"
+								onPress={() => {
+									if (entity.id) onOpenEntity?.(entity.id);
+								}}
+							>
+								<Text className="font-text text-16 text-fg underline dark:text-fg-dark">
+									{entity.name}
+								</Text>
+							</Pressable>
+						))}
+					</View>
+				))}
+				<EditionsList
+					title={t(locale, "item.editions.title")}
+					editions={editionRows.map((edition) => ({
+						id: edition.id,
+						title: edition.title ?? edition.isbn13 ?? edition.id,
+						facts: edition.publisher
+							? [{ label: t(locale, "item.roles.publisher"), value: edition.publisher }]
+							: [],
+					}))}
+				/>
+				<Attribution item={resolved} locale={locale} />
+			</ItemDetail>
 			<Modal visible={rating} animationType="slide" onRequestClose={() => setRating(false)}>
 				<RateSheet
 					itemId={id}
@@ -135,38 +220,6 @@ export function ItemView({
 					onDone={() => setRating(false)}
 				/>
 			</Modal>
-			{groupByRole(resolved.entities ?? []).map(([role, entities]) => (
-				<View key={role} className="gap-1 px-4 pt-3">
-					<Text className="text-16 text-fg dark:text-fg-dark">
-						{t(locale, `item.roles.${role}`)}
-					</Text>
-					{entities.map((entity) => (
-						<Pressable
-							key={entity.id ?? entity.name}
-							accessibilityRole="link"
-							className="min-h-11 justify-center"
-							onPress={() => {
-								if (entity.id) onOpenEntity?.(entity.id);
-							}}
-						>
-							<Text className="text-14 text-fg dark:text-fg-dark">{entity.name}</Text>
-						</Pressable>
-					))}
-				</View>
-			))}
-			{editionRows.length > 0 ? (
-				<View className="gap-1 px-4 pt-3">
-					<Text className="text-16 text-fg dark:text-fg-dark">
-						{t(locale, "item.editions.title")}
-					</Text>
-					{editionRows.map((edition) => (
-						<Text key={edition.id} className="text-14 text-fg dark:text-fg-dark">
-							{edition.title ?? edition.isbn13 ?? edition.id}
-						</Text>
-					))}
-				</View>
-			) : null}
-			<Attribution item={resolved} locale={locale} />
-		</ScrollView>
+		</>
 	);
 }

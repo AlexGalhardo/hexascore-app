@@ -98,23 +98,40 @@ test("a TMDB-sourced field brings the attribution block", async () => {
 	expect(await screen.findByTestId("attribution")).toBeTruthy();
 });
 
-test("the header shows score with band, rating count, confidence and categories", async () => {
-	await renderItem(reader(base));
-	expect(await screen.findByText("8.5")).toBeTruthy();
+test("the v1 header shows kicker, score badge with band, verdict and category bars", async () => {
+	await renderItem(reader({ ...base, releaseDate: "1965-08-01" }));
+	expect(await screen.findByText("Books · 1965")).toBeTruthy();
+	expect(screen.getByRole("header", { name: "Dune" })).toBeTruthy();
 	expect(screen.getByTestId("score-band-score-high")).toBeTruthy();
-	expect(screen.getByText("12 ratings")).toBeTruthy();
-	expect(screen.getByText("Confidence: high")).toBeTruthy();
-	expect(screen.getByText("Plot")).toBeTruthy();
-	expect(screen.getByText("9.0")).toBeTruthy();
+	expect(screen.getByText("8.5")).toBeTruthy();
+	expect(screen.getByText("Community score · 12 ratings")).toBeTruthy();
+	expect(screen.getByText("Category averages")).toBeTruthy();
+	expect(screen.getByLabelText("Plot, Score 9.0 out of 10")).toBeTruthy();
+	expect(screen.getByRole("button", { name: "Rate it" })).toBeTruthy();
 });
 
-test("an unscored item shows dashes and no category block", async () => {
+test("genre entities become chips and the synopsis text is shown", async () => {
+	await renderItem(
+		reader({
+			...base,
+			entities: [{ id: "g1", role: "genre", name: "Science fiction" }],
+			synopsis: { text: "Spice and sand." },
+		}),
+	);
+	expect(await screen.findByText("Science fiction")).toBeTruthy();
+	expect(screen.getAllByTestId("genre-chip")).toHaveLength(1);
+	expect(screen.queryByText("Genres")).toBeNull();
+	expect(screen.getByText("Spice and sand.")).toBeTruthy();
+});
+
+test("an unscored item shows the not-enough verdict and no category block", async () => {
 	await renderItem(
 		reader({ ...base, score: null, confidence: null, scoreByCategory: {}, ratingCount: 3 }),
 	);
 	expect(await screen.findByText("Dune")).toBeTruthy();
 	expect(screen.getByTestId("score-band-score-none")).toBeTruthy();
-	expect(screen.getByText("Confidence: –")).toBeTruthy();
+	expect(screen.getByText("Not enough ratings · 3 ratings")).toBeTruthy();
+	expect(screen.getByText("No synopsis yet.")).toBeTruthy();
 	expect(screen.queryByText("Category averages")).toBeNull();
 });
 
@@ -123,5 +140,6 @@ test("the user's own rating from /items/{id}/me is shown", async () => {
 		reader(base, { data: [] }, { rating: { plot: 7, characters: 8 }, status: null }),
 	);
 	expect(await screen.findByText("Your overall score")).toBeTruthy();
-	expect(screen.getByText("7.5")).toBeTruthy();
+	expect(screen.getByLabelText("Your overall score, Score 7.5 out of 10")).toBeTruthy();
+	expect(screen.getByRole("button", { name: "Update rating" })).toBeTruthy();
 });
