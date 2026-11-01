@@ -45,3 +45,31 @@ export function resolveLocale(
 ): AppLocale {
 	return readLocaleOverride(store) ?? matchLocale(deviceTags);
 }
+
+export type LocaleStore = {
+	get(): AppLocale;
+	/** Stores the override and re-renders subscribers (FR-10-6: no restart). */
+	set(locale: AppLocale): void;
+	subscribe(listener: () => void): () => void;
+};
+
+export function createLocaleStore(
+	initial: AppLocale,
+	store: PreferenceStore = memoryPreferences,
+): LocaleStore {
+	let current = initial;
+	const listeners = new Set<() => void>();
+	return {
+		get: () => current,
+		set(locale) {
+			writeLocaleOverride(locale, store);
+			if (locale === current) return;
+			current = locale;
+			for (const listener of listeners) listener();
+		},
+		subscribe(listener) {
+			listeners.add(listener);
+			return () => listeners.delete(listener);
+		},
+	};
+}

@@ -25,7 +25,7 @@ function stub(
 	return { fetch: impl as typeof fetch, calls };
 }
 
-const base = { baseUrl: "https://api.test", version: "1.2.0", locale: "pt-BR" as const };
+const base = { baseUrl: "https://api.test", version: "1.2.0", locale: (): "pt-BR" => "pt-BR" };
 
 test("reads send Authorization, X-App-Version and Accept-Language but no Idempotency-Key", async () => {
 	const { fetch: f, calls } = stub(200, {});

@@ -72,6 +72,7 @@ func TestAppMe(t *testing.T) {
 
 	// The offline queue binds its writes to this id (SDD 10 §7.3); a string, so no JS precision loss.
 	app.Client(t).WithToken(write).GetJSON("/app/v1/me").AssertOK().AssertJSONPath("name", "Test").
+		AssertJSONPath("email", "me-user@example.com").
 		AssertJSONPath("id", strconv.FormatInt(user.ID, 10)).AssertJSONPath("deletionScheduledAt", nil)
 
 	c := app.Client(t).WithToken(write)

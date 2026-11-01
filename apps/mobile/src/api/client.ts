@@ -60,7 +60,8 @@ export type AppClientOptions = {
 	baseUrl: string;
 	/** Running app version (SemVer), sent as X-App-Version. */
 	version: string;
-	locale: AppLocale;
+	/** Read per request, so a locale change applies without a restart. */
+	locale: () => AppLocale;
 	token?: () => string | null;
 	fetch?: typeof fetch;
 	onUpgradeRequired?: () => void;
@@ -95,7 +96,7 @@ export function createAppClient(options: AppClientOptions): AppClient {
 		const token = options.token?.();
 		return {
 			"X-App-Version": options.version,
-			"Accept-Language": options.locale,
+			"Accept-Language": options.locale(),
 			...(token ? { Authorization: `Bearer ${token}` } : {}),
 		};
 	};

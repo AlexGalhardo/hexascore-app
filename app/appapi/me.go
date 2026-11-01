@@ -136,23 +136,23 @@ func (h *Me) Cancel(c *web.Ctx) error {
 func (h *Me) load(c *web.Ctx, userID int64) (map[string]any, error) {
 	p := h.a.DB.Dialect().Placeholder
 
-	var name, locale string
+	var name, email, locale string
 	var private, optOut bool
 	var username sql.NullString
 	var deletion sql.NullTime
 	err := h.a.DB.QueryRowContext(
 		c.Context(),
-		"SELECT name, locale, profile_private, personalization_opt_out, username, deletion_scheduled_at "+
+		"SELECT name, email, locale, profile_private, personalization_opt_out, username, deletion_scheduled_at "+
 			"FROM users WHERE id = "+p(1),
 		userID,
-	).Scan(&name, &locale, &private, &optOut, &username, &deletion)
+	).Scan(&name, &email, &locale, &private, &optOut, &username, &deletion)
 	if err != nil {
 		return nil, err
 	}
 
 	// id is a string so JavaScript never rounds it; the app's offline queue binds writes to it (SDD 10 §7.3).
 	out := map[string]any{
-		"id": strconv.FormatInt(userID, 10), "name": name, "locale": locale,
+		"id": strconv.FormatInt(userID, 10), "name": name, "email": email, "locale": locale,
 		"profilePrivate": private, "personalizationOptOut": optOut, "deletionScheduledAt": nil,
 	}
 	if deletion.Valid {

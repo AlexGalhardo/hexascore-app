@@ -1,4 +1,6 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { fireEvent, render, screen } from "@testing-library/react-native";
+import type { ReactElement } from "react";
 import Profile from "../app/(tabs)/profile";
 import { memoryPreferences } from "./platform/preferences";
 import { LocaleProvider } from "./providers/root";
@@ -17,6 +19,11 @@ jest.mock("./telemetry/runtime", () => ({
 const mockNavigate = jest.fn();
 jest.mock("expo-router", () => ({ router: { navigate: (href: string) => mockNavigate(href) } }));
 
+// The root layout provides the query client in the app; the profile tab reads GET /me through it.
+function Wrapped({ children }: { children: ReactElement }): ReactElement {
+	return <QueryClientProvider client={new QueryClient()}>{children}</QueryClientProvider>;
+}
+
 beforeEach(() => {
 	mockConsent.value = "unset";
 	mockSetConsent.mockClear();
@@ -26,16 +33,22 @@ beforeEach(() => {
 describe("profile tab settings", () => {
 	test("renders the v1 settings page in the active locale", async () => {
 		await render(
-			<LocaleProvider locale="pt-BR">
-				<Profile />
-			</LocaleProvider>,
+			<Wrapped>
+				<LocaleProvider locale="pt-BR">
+					<Profile />
+				</LocaleProvider>
+			</Wrapped>,
 		);
 		expect(screen.getByRole("header", { name: "Configurações" })).toBeTruthy();
 		expect(screen.getByRole("radio", { name: "Escuro" })).toBeTruthy();
 	});
 
 	test("choosing a theme mode applies and stores it", async () => {
-		await render(<Profile />);
+		await render(
+			<Wrapped>
+				<Profile />
+			</Wrapped>,
+		);
 		await fireEvent.press(screen.getByRole("radio", { name: "Dark" }));
 		expect(readThemePreference(memoryPreferences)).toBe("dark");
 		expect(screen.getByRole("radio", { name: "Dark" }).props.accessibilityState).toMatchObject({
@@ -46,7 +59,11 @@ describe("profile tab settings", () => {
 	});
 
 	test("signed out: log in opens the login route", async () => {
-		await render(<Profile />);
+		await render(
+			<Wrapped>
+				<Profile />
+			</Wrapped>,
+		);
 		await fireEvent.press(screen.getByRole("button", { name: "Log in" }));
 		expect(mockNavigate).toHaveBeenCalledWith("/login");
 	});
