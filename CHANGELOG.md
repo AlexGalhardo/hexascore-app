@@ -144,6 +144,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **mobile:** the release JS bundle builds from a clean `bun install` (`main` entry, Metro hierarchical lookup and css-interop JSX runtime resolution, NativeWind Babel plugins resolved from the app), and CI `mobile` runs `bundle:check`, which fails when the bundle is missing or empty (FIX-mobile-release-bundle)
 - **infra:** CI Schemathesis and Lighthouse reach the production-mode QA app on its `APP_URL` host (no CanonicalHost redirect), and the api-v1 scan uses the `/api/v1` base (FIX-ci-release-checks)
 - **ingest:** a rollback of an IGDB, TMDB or other non-Wikidata run queues the Wikidata record again and clears the cover that source gave the item, restored records get back their archived `checked_at`, credit changes reach `/changes` as `entities`, and hidden or takedown items leave the feed (`deleted`) and return to it (`created`) through the `items_visibility_changes` trigger; the ingest runner refuses `DB_MAX_OPEN=1` (FIX-ingest-rollback-gaps)
 - **ingest:** normalize writes `created` and `updated` (changed public fields) rows to the `/changes` feed, and an ingest rollback writes `deleted` for every item it deletes or hides (FIX-ingest-rollback-api-changes)
