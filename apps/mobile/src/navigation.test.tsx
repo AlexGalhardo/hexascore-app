@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react-native";
 import type { ReactElement, ReactNode } from "react";
 import RootLayout from "../app/_layout";
@@ -46,6 +47,12 @@ jest.mock("expo-router", () => {
 	};
 });
 
+// Route smoke tests check mounting, not data: queries never fire, so no request leaves the test.
+function offline(element: ReactElement): ReactElement {
+	const client = new QueryClient({ defaultOptions: { queries: { enabled: false } } });
+	return <QueryClientProvider client={client}>{element}</QueryClientProvider>;
+}
+
 function params(next: Record<string, string>): void {
 	(globalThis as { __routeParams?: Record<string, string> }).__routeParams = next;
 }
@@ -55,7 +62,7 @@ function params(next: Record<string, string>): void {
 // when Jest workers competed for CPU.
 const routes: [string, Record<string, string>, () => ReactElement, string | null][] = [
 	["(auth)/login", {}, () => <Login />, null],
-	["(tabs)/index", {}, () => <Home />, "HexaScore"],
+	["(tabs)/index", {}, () => offline(<Home />), "HexaScore"],
 	["(tabs)/[type]", { type: "games" }, () => <SectionScreen />, "Section games"],
 	["(tabs)/search", {}, () => <Search />, "Search"],
 	["(tabs)/lists", {}, () => <Lists />, "Lists"],

@@ -531,6 +531,12 @@
       "mostRated": "Most rated",
       "seeAll": "All {section}",
       "empty": "Nothing here yet."
+    },
+    "trending": {
+      "title": "{type}: top 10 trending (30 days)",
+      "allPrior": "Popular {type}",
+      "popular": "Popular",
+      "empty": "Nothing is trending yet."
     }
   },
   "categories": {
