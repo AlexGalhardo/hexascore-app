@@ -1,5 +1,5 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import type { ReactElement } from "react";
+import { type ReactElement, useState } from "react";
 import { Linking, View } from "react-native";
 import type { AppItemJSON, EntityJSON } from "../../../../packages/app-client/src/api";
 import type { ReadClient } from "../api/client";
@@ -38,7 +38,10 @@ function rowOf(item: AppItemJSON, locale: AppLocale): ItemRowData {
 	};
 }
 
-/** Entity screen (SDD 10 §6.1): one `/entities/{id}/items?type=` page per type, in `ITEM_TYPES` order. */
+/**
+ * Entity screen (SDD 10 §6.1): `/entities/{id}/items?type=` per type, in `ITEM_TYPES` order;
+ * each group's Next appends the page at its last `meta.next_cursor`.
+ */
 export function EntityView({
 	id,
 	read,
@@ -56,25 +59,49 @@ export function EntityView({
 		queryKey: queryKeys.entity(id, locale),
 		queryFn: () => read.getEntity({ params: { id }, query: { locale } }),
 	});
+	// Cursors of the extra pages per type; scoped so a new entity or locale restarts at page one.
+	const scope = `${id}|${locale}`;
+	const [more, setMore] = useState<{
+		scope: string;
+		cursors: Partial<Record<CatalogType, string[]>>;
+	}>({
+		scope,
+		cursors: {},
+	});
+	const cursors = more.scope === scope ? more.cursors : {};
+	const slots = CATALOG_TYPES.flatMap((type) =>
+		[undefined, ...(cursors[type] ?? [])].map((cursor) => ({ type, cursor })),
+	);
 	const pages = useQueries({
-		queries: CATALOG_TYPES.map((type) => ({
-			queryKey: queryKeys.entityItems(id, type, locale),
-			queryFn: () => read.listEntityItems({ params: { id }, query: { type, locale } }),
+		queries: slots.map(({ type, cursor }) => ({
+			queryKey: queryKeys.entityItems(id, type, locale, cursor),
+			// Opaque, server-signed cursor (VF-005): passed back as received.
+			queryFn: () =>
+				read.listEntityItems({
+					params: { id },
+					query: { type, locale, ...(cursor ? { cursor } : {}) },
+				}),
 		})),
 	});
+	const pagesOf = (type: CatalogType) => pages.filter((_, index) => slots[index]?.type === type);
+	const nextCursor = (type: CatalogType) =>
+		pagesOf(type).at(-1)?.data?.meta?.next_cursor || undefined;
 
 	if (!entity.data) return <View testID="entity" className="flex-1 bg-bg dark:bg-bg-dark" />;
 	const data = entity.data;
 	const byId = new Map<string, [CatalogType, AppItemJSON]>();
-	const groups: EntityGroup[] = CATALOG_TYPES.map((type, index) => {
-		const items = pages[index]?.data?.data ?? [];
+	const groups: EntityGroup[] = CATALOG_TYPES.map((type) => {
+		const typePages = pagesOf(type);
+		const items = typePages.flatMap((page) => page.data?.data ?? []);
 		for (const item of items) byId.set(item.id, [type, item]);
-		const total = pages[index]?.data?.meta?.total ?? items.length;
+		const total = typePages[0]?.data?.meta?.total ?? items.length;
 		return {
 			key: type,
 			title: t(locale, `nav.${type}`),
 			count: t(locale, "entity.showing", { count: items.length, total }),
 			rows: items.map((item) => rowOf(item, locale)),
+			// Hidden while the next page loads, so a double tap cannot request it twice.
+			hasMore: nextCursor(type) !== undefined,
 		};
 	});
 	const description = data.description?.text ?? null;
@@ -92,6 +119,13 @@ export function EntityView({
 			licence={t(locale, "entity.descriptionSource", { licence: data.description?.licence ?? "" })}
 			sourceLabel={t(locale, "item.source")}
 			groups={groups}
+			moreLabel={t(locale, "entity.next")}
+			onMore={(key) => {
+				const type = key as CatalogType;
+				const cursor = nextCursor(type);
+				if (cursor)
+					setMore({ scope, cursors: { ...cursors, [type]: [...(cursors[type] ?? []), cursor] } });
+			}}
 			empty={{ title: t(locale, "entity.empty"), body: "", action: t(locale, "errors.home") }}
 			locale={locale}
 			onRole={() => {}}

@@ -70,4 +70,27 @@ describe("entity screen", () => {
 		await fireEvent.press(await screen.findByRole("button", { name: /games title 1/ }));
 		expect(onOpen).toHaveBeenCalledWith("/games/games-slug-1?id=games-1");
 	});
+
+	test("Next follows meta.next_cursor and appends the group's next page", async () => {
+		const read = reader({ books: [item("books", 1)] });
+		read.listEntityItems.mockImplementation(
+			async (args: { query?: { type?: string; cursor?: string } }) => {
+				if (args.query?.type !== "games") return { data: [], meta: { total: 0 } };
+				return args.query.cursor === "c2"
+					? { data: [item("games", 2)], meta: { total: 2, next_cursor: "" } }
+					: { data: [item("games", 1)], meta: { total: 2, next_cursor: "c2" } };
+			},
+		);
+		await renderEntity(read);
+		await screen.findByText("games title 1");
+		expect(screen.getAllByRole("button", { name: "Next" })).toHaveLength(1);
+		await fireEvent.press(screen.getByRole("button", { name: "Next" }));
+		expect(await screen.findByText("games title 2")).toBeTruthy();
+		expect(screen.getByText("games title 1")).toBeTruthy();
+		expect(read.listEntityItems).toHaveBeenCalledWith({
+			params: { id: "e1" },
+			query: { type: "games", locale: "en", cursor: "c2" },
+		});
+		expect(screen.queryByRole("button", { name: "Next" })).toBeNull();
+	});
 });
