@@ -122,3 +122,5 @@ These stay unchecked. None of them is in a worker queue. Say the word here and n
   - Answer (2026-11-01, owner, in chat): `noreply@hexascore.app` sends every automatic message. `support@hexascore.app` is the only address that receives and answers user email, including Reply-To and contact-form replies.
 - Q-A18 (2026-11-01, anti-scraping of the web frontend, row SEC-anti-scraping).
   - Answer (2026-11-01, owner, in chat): protect hexascore.app so automated tools cannot harvest item data from the web frontend; only search engines (Google, Bing, etc.) index pages for SEO. (a) AI crawlers (GPTBot, ClaudeBot, CCBot, PerplexityBot, Google-Extended, Applebot-Extended and the like) are allowed. (b) No UI copy blocking (no user-select or right-click tricks); protection lives on the server.
+- Q-A19 (2026-11-01, LGPD contact address).
+  - Answer (2026-11-01, owner, in chat): "LGPD vai para privacy@". Data-protection requests keep `privacy@hexascore.app` (D-39); `support@hexascore.app` stays the general support inbox. Both forward through Cloudflare Email Routing. No code change: the legal pages already show `privacy@`.
