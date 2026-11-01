@@ -68,7 +68,44 @@ test("renders actors as nickname, team or deleted, values as text, and paging", 
 	expect(screen.getByRole("link", { name: "item.next" }).getAttribute("href")).toBe(
 		"/movies/old/changes?page=3",
 	);
-	expect(screen.getByRole("link", { name: "community.recent.back" }).getAttribute("href")).toBe(
-		"/movies/old",
+	expect(
+		screen.getByRole("link", { name: "community.recent.overview" }).getAttribute("href"),
+	).toBe("/movies/old");
+});
+
+test("shows a column header row and the empty state", () => {
+	const { unmount } = render(
+		<RecentChanges
+			target={{ type: "item", id: "i1", title: "Old" }}
+			page={1}
+			nextPage={null}
+			entries={[]}
+		/>,
 	);
+	expect(screen.getByText("community.recent.empty")).toBeTruthy();
+	expect(screen.queryByRole("table")).toBeNull();
+	unmount();
+	render(
+		<RecentChanges
+			target={{ type: "item", id: "i1", title: "Old" }}
+			page={1}
+			nextPage={null}
+			entries={[
+				{
+					id: 1,
+					occurredAt: at,
+					source: "community",
+					field: "x_col",
+					before: "1",
+					after: "2",
+					actor: "system",
+				},
+			]}
+		/>,
+	);
+	expect(
+		screen.getByRole("columnheader", { name: "community.recent.columns.field" }),
+	).toBeTruthy();
+	expect(screen.getByRole("cell", { name: "x_col" })).toBeTruthy();
+	expect(screen.queryByRole("link", { name: "item.previous" })).toBeNull();
 });
