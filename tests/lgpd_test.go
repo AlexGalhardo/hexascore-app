@@ -38,7 +38,7 @@ func TestLGPD_ExportDeleteOptOut(t *testing.T) {
 	})
 
 	for _, prefix := range []string{"", "/pt-br", "/es"} {
-		page := app.Client(t).Get(prefix + "/policy").AssertOK()
+		page := app.Client(t).Get(prefix + "/privacy").AssertOK()
 		page.AssertSee("Railway").AssertSee("privacy@hexascore.app")
 		page.AssertInertia("Legal/Page").PropEquals("slug", "policy")
 	}

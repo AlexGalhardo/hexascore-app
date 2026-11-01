@@ -36,7 +36,7 @@ export default function ScoreBlock({
 							})}
 				</p>
 				<Link
-					href={localized("/help/score", locale)}
+					href={localized("/how-score-works", locale)}
 					className="w-fit text-sm font-medium text-primary underline-offset-2 hover:underline"
 				>
 					{t("item.howScoreWorks")} <span aria-hidden="true">→</span>

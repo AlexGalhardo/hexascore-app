@@ -39,6 +39,6 @@ Your account is the same on the app and on hexascore.app. Subscriptions and API 
 
 PRIVACY
 
-No ads and no tracking SDKs. Crash reports are sent only if you allow them. You can delete your account in the app or at hexascore.app/help/delete-account.
+No ads and no tracking SDKs. Crash reports are sent only if you allow them. You can delete your account in the app or at hexascore.app/help/delete-account. Privacy policy: hexascore.app/privacy.
 
 Movie and series data from TMDB. Game data from IGDB. This product uses the TMDB API but is not endorsed or certified by TMDB.

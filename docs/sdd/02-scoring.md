@@ -308,7 +308,7 @@ Legacy parity (`legacy/docs/data-model.md`): medians via `percentile_cont(0.5)` 
 - Load: k6 50 concurrent raters on one hot item (NFR-02-1).
 - Data quality asserts (nightly): `rating_count` equals recount; no `score` outside [5,100]; drift count exported as a metric with an alert above 0 (SDD 12).
 
-Help page outline (`/help/score`, localised per D-17): categories per type; half-star input; formula 7.1 with the worked example; current `m` and priors; minimum of 5; confidence; weights; release gate; burst limiter, notice and review/reversal; daily caps; version history.
+Help page outline (`/how-score-works`, localised per D-17; `/help/score` answers 301): categories per type; half-star input; formula 7.1 with the worked example; current `m` and priors; minimum of 5; confidence; weights; release gate; burst limiter, notice and review/reversal; daily caps; version history.
 
 i18n: labels in `resources/lang/<locale>.json` as `categories.game.gameplay` etc. (vukem `https://vukem.dev/docs/digging-deeper/localization` "i18n"), keys from `legacy/apps/web/lib/categories.ts` (A-06); widget `rating.valuetext` "{value} of 10 stars". How catalogues reach React components through Inertia is [NOT IN VUKEM DOCS]; SDD 09 owns it.
 

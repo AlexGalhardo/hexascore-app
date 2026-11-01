@@ -15,11 +15,11 @@ export default function Footer() {
 	const links: [string, string][] = [
 		[localized("/about", locale), "footer.about"],
 		[localized("/terms", locale), "footer.terms"],
-		[localized("/policy", locale), "footer.privacy"],
+		[localized("/privacy", locale), "footer.privacy"],
 		[localized("/contact", locale), "footer.contact"],
 		["/docs", "footer.apiDocs"],
 		[localized("/pricing", locale), "footer.pricing"],
-		[localized("/help/score", locale), "footer.howScores"],
+		[localized("/how-score-works", locale), "footer.howScores"],
 	];
 
 	// Language lives in the navbar only (design v1, round 2 item 14).

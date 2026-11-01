@@ -236,7 +236,7 @@ func Web(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	r.Get("/help/score", controllers.HelpScore).Name("help.score")
+	r.Get("/how-score-works", controllers.HelpScore).Name("help.score")
 	r.Get("/robots.txt", controllers.Robots(app)).Name("robots")
 	if err := LLMs(r, app); err != nil {
 		return err
@@ -247,11 +247,18 @@ func Web(r *router.Router, app *vukem.App) error {
 	)).Name("wellknown.assetlinks")
 	r.Get("/about", controllers.About).Name("about")
 	r.Get("/terms", controllers.Legal("terms")).Name("terms")
-	r.Get("/policy", controllers.Legal("policy")).Name("policy")
-	// SDD 10 §7.8 and the Play listing name /legal/privacy; the policy page lives at /policy.
-	r.Get("/legal/privacy", func(c *web.Ctx) error {
-		return c.RedirectStatus(http.StatusMovedPermanently, i18n.PathPrefix(c.Context())+"/policy")
-	}).Name("legal.privacy")
+	r.Get("/privacy", controllers.Legal("policy")).Name("policy")
+	// Old paths of the content pages (owner round 2026-11-01 item 10); /legal/privacy is the URL SDD 10 §7.8
+	// and the first Play listing used. One hop each, so the locale prefix is applied here.
+	for old, target := range map[string]string{
+		"/policy":        "/privacy",
+		"/legal/privacy": "/privacy",
+		"/help/score":    "/how-score-works",
+	} {
+		r.Get(old, func(c *web.Ctx) error {
+			return c.RedirectStatus(http.StatusMovedPermanently, i18n.PathPrefix(c.Context())+target)
+		}).Name("redirect" + strings.ReplaceAll(old, "/", "."))
+	}
 	r.Get("/pricing", controllers.Pricing(coverage)).Name("pricing")
 	r.Get("/docs", docs).Name("docs")
 	r.Get("/docs/{slug}", docs).Name("docs.page")

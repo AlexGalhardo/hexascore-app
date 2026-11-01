@@ -39,6 +39,6 @@ Tu cuenta es la misma en la app y en hexascore.app. Las suscripciones y las clav
 
 PRIVACIDAD
 
-Sin anuncios y sin SDK de rastreo. Los informes de fallos solo se envían si lo permites. Puedes eliminar tu cuenta en la app o en hexascore.app/es/help/delete-account.
+Sin anuncios y sin SDK de rastreo. Los informes de fallos solo se envían si lo permites. Puedes eliminar tu cuenta en la app o en hexascore.app/es/help/delete-account. Política de privacidad: hexascore.app/es/privacy.
 
 Datos de películas y series de TMDB. Datos de juegos de IGDB. Este producto usa la API de TMDB, pero no está respaldado ni certificado por TMDB.

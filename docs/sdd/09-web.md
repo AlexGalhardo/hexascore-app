@@ -113,9 +113,9 @@ Paths shown without locale prefix; every public path also exists under `/pt-br` 
 | (vukem views) | `/admin/moderation…` (SDD 04), `/admin/ingest` (SDD 06) | Go `html/template` | not Inertia: server-rendered views inside the vukem admin layout (<https://vukem.dev/docs/digging-deeper/admin>, <https://vukem.dev/docs/basics/views>), open issue 09-12 |
 | `Docs/Page` | `/docs`, `/docs/{authentication,errors,pagination,rate-limits,coverage,webhooks,exports,changes,changelog}` | SSR | `slug`, `body` (pre-rendered HTML from Markdown at build, sanitised), `toc` |
 | (vukem `apidocs`) | `/docs/reference` | Go | Scalar, SDD 05 §6 |
-| `Help/Score` | `/help/score` | SSR | SDD 02 help outline |
+| `Help/Score` | `/how-score-works` (301 from `/help/score`) | SSR | SDD 02 help outline; same `DocumentPage` layout as `Legal/Page` |
 | `Help/DeleteAccount` | `/help/delete-account` | SSR, public | how to delete the account in the app and on the web, what is kept (anonymised ratings) and the 30-day grace; link to `/profile#delete` (SDD 03 FR-03-15); URL registered in Google Play (SDD 10, open issue 10-7) |
-| `Legal/Page` | `/terms`, `/policy` | SSR | `slug`, `body`, `updatedAt` |
+| `Legal/Page` | `/terms`, `/privacy` (301 from `/policy` and `/legal/privacy`) | SSR | `slug`, `body`, `updatedAt` |
 | `Contact/Index` | `/contact` | SSR | `topics`; POST with honeypot (SDD 03) |
 | `Error` | catch-all `GET /{path...}` per prefix, and `inertia.RenderStatus` (<https://vukem.dev/docs/frontend/inertia#rendering-pages>) | SSR | `status`, `title`, `message` |
 

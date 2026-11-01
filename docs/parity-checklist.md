@@ -43,7 +43,7 @@ Test names are Go tests under `tests/` (or `tests/scoring/`) unless marked other
 | R19 | `/feed` | none | none | deferred D-06 |
 | R20 | `/login` | `GET /login`, `POST /login` | TestSecurity_A07_LoginThrottle | done |
 | R21 | `/onboarding` | `GET /onboarding`, `POST /onboarding` | TestOnboardingNickname | done |
-| R22 | `/policy` | `GET /policy` | TestLegalPages | done |
+| R22 | `/policy` | `GET /privacy` (301 from `/policy`) | TestLegalPages, TestContentPageRedirects | done |
 | R23 | `/pricing` | `GET /pricing` | TestPricingPage | done |
 | R24 | `/profile` | `GET /profile` | TestProfileDetails | done |
 | R25 | `/profile/api` | `GET /profile/api` | TestKeysWebFlow | done |

@@ -66,5 +66,8 @@ func TestHelpScorePage(t *testing.T) {
 
 	app := vukemtest.New(t, bootstrap.New)
 
-	app.Client(t).Get("/help/score").AssertOK().AssertInertia("Help/Score").HasProp("categoryKeys")
+	for _, prefix := range []string{"", "/pt-br", "/es"} {
+		app.Client(t).Get(prefix + "/how-score-works").AssertOK().AssertInertia("Help/Score").
+			HasProp("categoryKeys")
+	}
 }

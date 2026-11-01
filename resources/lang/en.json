@@ -1618,6 +1618,7 @@
     },
     "score": {
       "metaTitle": "How scores work",
+      "contents": "Contents",
       "title": "How HexaScore scores work",
       "intro": "Every score is a weighted average of community ratings. The rules below are public and versioned.",
       "categoriesTitle": "Rating categories",

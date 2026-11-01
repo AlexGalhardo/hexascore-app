@@ -183,7 +183,7 @@ The Go app serves `GET /.well-known/assetlinks.json` [E12] via `r.Get` ([V1] "De
 - **Account deletion [E15]:** directing users to web signup counts as in-app account creation, so deletion is offered in-app (FR-10-8) and on a web resource naming HexaScore that works without the app: `https://hexascore.app/help/delete-account` (SDD 09, issue 7), explaining the 30-day grace and the anonymised ratings kept (SDD 03 §7.5).
 - **Data safety [E16]** (SDK traffic counts): collected, not shared, encrypted in transit, deletable: email and name; app interactions and user content (ratings, statuses, lists); in-app search history (30 days); crash logs (optional). Not collected: location, contacts, device IDs, financial data.
 - **OTA:** `runtimeVersion` policy `fingerprint` [E17], one channel per profile, only for JS/asset, copy and catalogue fixes [E18]. A store release is mandatory for a fingerprint change, new permission, target API bump, new screen or feature, data-collection change, or a min-version raise.
-- **Listing assets:** texts in three locales, 512 px icon, 1024 × 500 graphic, ≥ 4 screenshots per locale (Maestro `takeScreenshot`), privacy URL `/legal/privacy`.
+- **Listing assets:** texts in three locales, 512 px icon, 1024 × 500 graphic, ≥ 4 screenshots per locale (Maestro `takeScreenshot`), privacy URL `https://hexascore.app/privacy` (`/legal/privacy` answers 301 there).
 
 ## 8. Edge cases
 

@@ -39,6 +39,6 @@ Sua conta é a mesma no app e em hexascore.app. Assinaturas e chaves de API para
 
 PRIVACIDADE
 
-Sem anúncios e sem SDKs de rastreamento. Relatórios de falhas são enviados somente se você permitir. Você pode excluir sua conta no app ou em hexascore.app/pt-br/help/delete-account.
+Sem anúncios e sem SDKs de rastreamento. Relatórios de falhas são enviados somente se você permitir. Você pode excluir sua conta no app ou em hexascore.app/pt-br/help/delete-account. Política de privacidade: hexascore.app/pt-br/privacy.
 
 Dados de filmes e séries do TMDB. Dados de jogos do IGDB. Este produto usa a API do TMDB, mas não é endossado nem certificado pelo TMDB.

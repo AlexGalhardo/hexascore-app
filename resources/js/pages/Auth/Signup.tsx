@@ -29,7 +29,7 @@ export function Agreement({
 	text: string;
 	l: (path: string) => string;
 }): React.ReactElement {
-	const href = { terms: "/terms", privacy: "/policy" } as const;
+	const href = { terms: "/terms", privacy: "/privacy" } as const;
 
 	return (
 		<p className="text-sm text-muted">
