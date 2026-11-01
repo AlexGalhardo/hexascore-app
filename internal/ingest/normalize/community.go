@@ -7,6 +7,8 @@ import (
 	"reflect"
 	"strings"
 	"time"
+
+	"github.com/AlexGalhardo/vukem/database"
 )
 
 // SourceCommunity is the data_sources code of approved community edits.
@@ -34,10 +36,11 @@ type SystemSuggestion struct {
 }
 
 // Community is the SDD 04 side of the merge, implemented by app/community.
-// The normaliser never writes suggestion or audit tables itself.
+// The normaliser never writes suggestion or audit tables itself. Both methods
+// run on the caller's transaction, so a rolled-back batch leaves no suggestion.
 type Community interface {
-	CommunityFields(ctx context.Context, itemID string) (map[string]CommunityField, error)
-	OpenSystemSuggestion(ctx context.Context, s SystemSuggestion) error
+	CommunityFields(ctx context.Context, tx *database.Tx, itemID string) (map[string]CommunityField, error)
+	OpenSystemSuggestion(ctx context.Context, tx *database.Tx, s SystemSuggestion) error
 }
 
 // CommunityResult lists what ApplyCommunity did.
@@ -75,18 +78,20 @@ func (it *Item) FieldValue(field string) (json.RawMessage, bool) {
 // ApplyCommunity keeps ingestion away from community-owned fields. A field
 // whose value the source also has is skipped for CommunityLock after the
 // edit; a value that differs opens a system suggestion and is never written,
-// before or after the lock expires. Skipped fields are marked in item.Skip and
+// before or after the lock expires. A field the source does not carry is
+// always skipped, so a missing source value never erases the community one. Skipped fields are marked in item.Skip and
 // dropped from item.Provenance; the writer must not store them.
 func ApplyCommunity(
 	ctx context.Context,
 	c Community,
+	tx *database.Tx,
 	itemID string,
 	item *Item,
 	now time.Time,
 ) (CommunityResult, error) {
 	var res CommunityResult
 
-	fields, err := c.CommunityFields(ctx, itemID)
+	fields, err := c.CommunityFields(ctx, tx, itemID)
 	if err != nil {
 		return res, fmt.Errorf("read community fields of %s: %w", itemID, err)
 	}
@@ -94,6 +99,11 @@ func ApplyCommunity(
 	for field, cf := range fields {
 		after, ok := item.FieldValue(field)
 		if !ok {
+			item.Skip[field] = true
+			delete(item.Provenance, field)
+
+			res.Skipped = append(res.Skipped, field)
+
 			continue
 		}
 
@@ -105,7 +115,7 @@ func ApplyCommunity(
 				ItemID: itemID, Domain: item.Type, Field: field,
 				Before: cf.Current, After: after, Source: item.Provenance[field],
 			}
-			if err := c.OpenSystemSuggestion(ctx, s); err != nil {
+			if err := c.OpenSystemSuggestion(ctx, tx, s); err != nil {
 				return res, fmt.Errorf("open system suggestion for %s %s: %w", itemID, field, err)
 			}
 
