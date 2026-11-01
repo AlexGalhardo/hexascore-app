@@ -26,6 +26,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **auth:** Sign-up asks for the nickname (4-16 letters, stored lowercase, cannot be changed later; a taken one answers the same for new and existing emails) and bounds the email to 12-48 characters (item 8)
 - **auth:** Two-factor settings live in a `/profile` section with every control and rate limit kept; `/user/two-factor` answers 301 to `/profile#two-factor` with the locale prefix (item 21)
 - **ui:** `/contact` shows a live `0/512` counter; signed-in senders are always stored with their account nickname and email (item 9)
+- **infra:** Telegram alerts: page-severity alert codes and `LevelFatal` ring the page chat, other alerts and errors go to a silent chat, 30 min dedup per fingerprint, a 08:00 America/Sao_Paulo digest from the new `error_digest_daily` table and `alerts:test`; off while `TELEGRAM_*` is unset (P2.C.1.2)
+- **infra:** `SEO_NOINDEX=true` (staging) makes `robots.txt` disallow everything and adds `X-Robots-Tag: noindex, nofollow` to every response; staging runbook `docs/runbooks/staging.md`
 - **catalog:** `covers:rekey [--dry-run] [--batch 500]` copies content-hashed item covers to their slug keys and moves the rows, idempotent; community uploads and other keys stay (item 18)
 - **ui:** Full-page 5xx errors render a localized page with a link home (`resources/views/errors/{500,503}.html`, item 14)
 
