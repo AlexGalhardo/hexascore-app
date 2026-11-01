@@ -3199,7 +3199,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `go test ./tests -run TestAssetLinks` → 200 `application/json`, `Cache-Control: public, max-age=3600`, no auth, no redirect, package `app.hexascore`, every fingerprint in `ANDROID_CERT_SHA256`
     - `adb shell pm get-app-links app.hexascore` (preview build, staging host override) → `verified`; `maestro test .maestro/smoke/deep-link.yaml` → PASSED for `/pt-br/games/<slug>` and `/entities/<id>`
   - Notes: `ANDROID_CERT_SHA256` holds a comma-separated list (upload key now, Play signing key added in P5.C.2.1, from `eas credentials -p android`). Locale-prefixed paths open the same screen with that locale applied for the session only.
-  - Status (2026-11-01): code done on main: `go test -tags integration ./tests -run TestAssetLinks` PASS, `src/linking` tests PASS. Open (owner gate): `adb shell pm get-app-links app.hexascore` on a preview build and the Maestro deep-link run.
+  - Status (2026-11-01): code done on main: `go test -tags integration ./tests -run TestAssetLinks` PASS, `src/linking` tests PASS; the `/pt-br` and `/es` prefixes set the session locale (FIX-mobile-deeplink-locale, `src/nativeIntent` tests PASS). Open (owner gate): `adb shell pm get-app-links app.hexascore` on a preview build and the Maestro deep-link run.
 
 - [ ] **P5.B.5.2** Complete the Maestro smoke suite (`login`, `rate-item`, `add-to-list`, `offline-rating`, `deep-link`) on staging and run the accessibility checks (role/label queries, TalkBack, 200 % font scale, Accessibility Scanner on 8 screens).
   - Files/modules: `.maestro/smoke/offline-rating.yaml`, `.maestro/smoke/config.yaml`, `docs/release/mobile-a11y-checklist.md`
