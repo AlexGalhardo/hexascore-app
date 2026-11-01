@@ -23,6 +23,18 @@ All versions are exact (no `^` or `~`). Expo packages were installed with `bunx 
 
 The config plugins `expo-secure-store`, `expo-sqlite` and `expo-image` are added to `app.config.ts`.
 
+## Amendment 1 (2026-11-01): fonts, icons and native UI
+
+Owner approval Q-B3 (2026-11-01, in chat), for the design v1 implementation (`IMPL-mobile-v1-*`). Versions from Expo's SDK 58 bundled native modules list (`expo-font ~58.0.11`, `@expo/vector-icons ^15.0.2`, `@expo/ui ~58.0.25`), latest stable release in that range, pinned exactly; `bunx expo install --check` reports none of them.
+
+| Package | Version | Why |
+| --- | --- | --- |
+| `expo-font` | 58.0.11 | Config plugin embeds the v1 families at build time (no runtime load, no fallback flash): Inter 400/600/700 and Playfair Display 700. |
+| `@expo/vector-icons` | 15.1.1 | Ionicons glyphs for the theme toggle (moon/sun), rating stars and tab icons. |
+| `@expo/ui` | 58.0.26 | Native Jetpack Compose sheets, pickers and switches for the v1 screens. |
+
+The font files are self-hosted in `apps/mobile/assets/fonts/` with their OFL licences: Inter 4.1 static TTFs from the `rsms/inter` release, Playfair Display 700 static TTF from Google Fonts (upstream `clauseggers/Playfair` ships only variable fonts). Android cannot load the web's WOFF2 files, so the two apps use the same families from different file formats.
+
 ## Alternatives considered
 
 - **AsyncStorage persister.** Needs another package and has a 6 MB default cap on Android. Rejected for `expo-sqlite`.

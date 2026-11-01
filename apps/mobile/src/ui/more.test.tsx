@@ -22,7 +22,7 @@ test("ThemeToggle shows a moon in light, flips to dark and labels the action", a
 			labels={{ toDark: "Dark theme", toLight: "Light theme" }}
 		/>,
 	);
-	expect(screen.getByText("☾")).toBeTruthy();
+	expect(screen.getByTestId("icon-moon-outline", { includeHiddenElements: true })).toBeTruthy();
 	await fireEvent.press(screen.getByRole("button", { name: "Dark theme" }));
 	expect(onChange).toHaveBeenCalledWith("dark");
 });
@@ -36,7 +36,7 @@ test("ThemeToggle shows a sun in dark", async () => {
 			labels={{ toDark: "Dark theme", toLight: "Light theme" }}
 		/>,
 	);
-	expect(screen.getByText("☀")).toBeTruthy();
+	expect(screen.getByTestId("icon-sunny-outline", { includeHiddenElements: true })).toBeTruthy();
 	await fireEvent.press(screen.getByRole("button", { name: "Light theme" }));
 	expect(onChange).toHaveBeenCalledWith("light");
 });

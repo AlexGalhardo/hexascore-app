@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
-import { Pressable, Text } from "react-native";
+import { Pressable } from "react-native";
+import { Icon } from "./Icon";
 
 export interface ThemeToggleProps {
 	scheme: "light" | "dark";
@@ -17,7 +18,11 @@ export function ThemeToggle({ scheme, onChange, labels }: ThemeToggleProps): Rea
 			onPress={() => onChange(next)}
 			className="h-11 w-11 items-center justify-center rounded-full"
 		>
-			<Text className="text-20 text-fg dark:text-fg-dark">{scheme === "light" ? "☾" : "☀"}</Text>
+			<Icon
+				name={scheme === "light" ? "moon-outline" : "sunny-outline"}
+				size={22}
+				className="text-fg dark:text-fg-dark"
+			/>
 		</Pressable>
 	);
 }

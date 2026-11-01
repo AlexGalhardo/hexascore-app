@@ -48,7 +48,7 @@ export function Btn({
 			onPress={onPress}
 			className={`min-h-11 flex-row items-center justify-center rounded-sm px-4 ${SURFACE[variant]} ${ledge} ${sink} ${disabled ? "opacity-50" : ""}`}
 		>
-			<Text className={`text-16 font-semibold ${LABEL[variant]}`}>{label}</Text>
+			<Text className={`font-text text-16 font-semibold ${LABEL[variant]}`}>{label}</Text>
 		</Pressable>
 	);
 }

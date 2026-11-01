@@ -19,8 +19,8 @@ module.exports = {
 				Object.entries(tokens.radius).map(([name, value]) => [name, `${value}px`]),
 			),
 			fontFamily: {
-				display: ["serif"],
-				text: ["sans-serif"],
+				display: ["Playfair Display"],
+				text: ["Inter"],
 			},
 		},
 	},
