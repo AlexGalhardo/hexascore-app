@@ -130,7 +130,7 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 	}
 
 	coversJob := &covers.Job{
-		Disk: disk, HTTP: client.Image, Encoder: &covers.Cwebp{}, Now: app.Now,
+		Disk: disk, HTTP: client.Image, Encoder: &covers.Cwebp{}, Now: app.Now, Reserve: covers.Reserver(db),
 		ItemsChanged: func(ctx context.Context, ex database.Executor, ids []string) error {
 			return q.DispatchTx(ctx, ex, catalog.ItemsChanged{IDs: ids})
 		},
