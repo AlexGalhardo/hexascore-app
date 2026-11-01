@@ -6,13 +6,11 @@ import httpx
 
 from ...client import AuthenticatedClient, Client
 from ...models.activity_json import ActivityJSON
-from ...models.get_item_activity_type import GetItemActivityType
 from ...models.problem import Problem
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
-    type_: GetItemActivityType,
     id: str,
     *,
     from_: str | Unset = UNSET,
@@ -29,8 +27,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/{type_}/{id}/activity".format(
-            type_=quote(str(type_), safe=""),
+        "url": "/series/{id}/activity".format(
             id=quote(str(id), safe=""),
         ),
         "params": params,
@@ -72,17 +69,15 @@ def _build_response(
 
 
 def sync_detailed(
-    type_: GetItemActivityType,
     id: str,
     *,
     client: AuthenticatedClient,
     from_: str | Unset = UNSET,
     to: str | Unset = UNSET,
 ) -> Response[ActivityJSON | Problem]:
-    """getItemActivity
+    """getSeriesActivity
 
     Args:
-        type_ (GetItemActivityType):
         id (str):
         from_ (str | Unset):
         to (str | Unset):
@@ -96,7 +91,6 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        type_=type_,
         id=id,
         from_=from_,
         to=to,
@@ -110,17 +104,15 @@ def sync_detailed(
 
 
 def sync(
-    type_: GetItemActivityType,
     id: str,
     *,
     client: AuthenticatedClient,
     from_: str | Unset = UNSET,
     to: str | Unset = UNSET,
 ) -> ActivityJSON | Problem | None:
-    """getItemActivity
+    """getSeriesActivity
 
     Args:
-        type_ (GetItemActivityType):
         id (str):
         from_ (str | Unset):
         to (str | Unset):
@@ -134,7 +126,6 @@ def sync(
     """
 
     return sync_detailed(
-        type_=type_,
         id=id,
         client=client,
         from_=from_,
@@ -143,17 +134,15 @@ def sync(
 
 
 async def asyncio_detailed(
-    type_: GetItemActivityType,
     id: str,
     *,
     client: AuthenticatedClient,
     from_: str | Unset = UNSET,
     to: str | Unset = UNSET,
 ) -> Response[ActivityJSON | Problem]:
-    """getItemActivity
+    """getSeriesActivity
 
     Args:
-        type_ (GetItemActivityType):
         id (str):
         from_ (str | Unset):
         to (str | Unset):
@@ -167,7 +156,6 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        type_=type_,
         id=id,
         from_=from_,
         to=to,
@@ -179,17 +167,15 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    type_: GetItemActivityType,
     id: str,
     *,
     client: AuthenticatedClient,
     from_: str | Unset = UNSET,
     to: str | Unset = UNSET,
 ) -> ActivityJSON | Problem | None:
-    """getItemActivity
+    """getSeriesActivity
 
     Args:
-        type_ (GetItemActivityType):
         id (str):
         from_ (str | Unset):
         to (str | Unset):
@@ -204,7 +190,6 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
-            type_=type_,
             id=id,
             client=client,
             from_=from_,

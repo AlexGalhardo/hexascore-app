@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 
-class GetItemActivityType(StrEnum):
+class GetExportType(StrEnum):
     BOOKS = "books"
     GAMES = "games"
     MOVIES = "movies"
