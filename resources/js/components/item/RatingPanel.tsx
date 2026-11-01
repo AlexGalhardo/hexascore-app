@@ -4,7 +4,7 @@ import { type ReactNode, useState } from "react";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
-import StarRating from "../rating/StarRating";
+import StarRating, { StarSymbol } from "../rating/StarRating";
 import Btn, { btnClass } from "../ui/Btn";
 import ScoreBadge from "../ui/ScoreBadge";
 import { CATEGORY_KEYS, type ItemType } from "./types";
@@ -63,6 +63,7 @@ export default function RatingPanel({ itemId, title, type, mine, canWrite, child
 				</p>
 			</div>
 			<div className="grid gap-2">
+				<StarSymbol />
 				{keys.map((k) => (
 					<StarRating
 						key={k}
