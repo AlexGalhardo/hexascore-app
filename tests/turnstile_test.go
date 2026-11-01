@@ -113,3 +113,45 @@ func TestTurnstileOnLoginPage(t *testing.T) {
 		t.Error("terms page loads Turnstile")
 	}
 }
+
+// TestSecurity_A01_TurnstileStepUpPostIsHarmless: POST /turnstile runs without session and CSRF, so a forged
+// cross-site post must do nothing beyond what a solve does: no token sets no cookie, a solved token only sets an
+// HttpOnly clearance cookie, and the return field never redirects off the site.
+func TestSecurity_A01_TurnstileStepUpPostIsHarmless(t *testing.T) {
+	app := turnstileApp(t)
+
+	post := func(token, ret string) *vukemtest.Response {
+		form := url.Values{"return": {ret}}
+		if token != "" {
+			form.Set("cf-turnstile-response", token)
+		}
+
+		return app.Client(t).WithHeader("Origin", "https://evil.example").
+			WithHeader("Sec-Fetch-Site", "cross-site").PostForm("/turnstile", form)
+	}
+
+	res := post("", "/games/zelda").AssertForbidden().AssertHeader("Cache-Control", "no-store").
+		AssertHeaderContains("X-Robots-Tag", "noindex")
+	if strings.Contains(res.Header("Set-Cookie"), "vukem_clearance") {
+		t.Error("a post without a token set the clearance cookie")
+	}
+
+	post("good-login", "/games/zelda").AssertForbidden()
+
+	for ret, want := range map[string]string{
+		"/games/zelda?page=2":   "/games/zelda?page=2",
+		"//evil.example/x":      "/",
+		"https://evil.example/": "/",
+		`/\evil.example`:        "/",
+	} {
+		res := post("good-step-up", ret).AssertStatus(http.StatusSeeOther)
+		if loc := res.Header("Location"); loc != want {
+			t.Errorf("return %q redirected to %q, want %q", ret, loc, want)
+		}
+
+		ck := res.Header("Set-Cookie")
+		if !strings.Contains(ck, "vukem_clearance=") || !strings.Contains(ck, "HttpOnly") {
+			t.Errorf("solved step-up cookie: %q", ck)
+		}
+	}
+}
