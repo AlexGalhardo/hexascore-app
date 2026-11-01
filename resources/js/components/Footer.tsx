@@ -5,12 +5,15 @@ import { localized } from "../lib/route";
 import { useT } from "../lib/useT";
 import type { SharedProps } from "../types";
 
+const SOURCE_URL = "https://github.com/AlexGalhardo/hexascore-app";
+
 export default function Footer() {
 	const t = useT();
 	const { appName, locale } = usePage<SharedProps>().props;
 	const link =
 		"inline-flex min-h-11 items-center justify-center rounded-xs text-[15px] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg md:text-[13px]";
 	const links: [string, string][] = [
+		[localized("/about", locale), "footer.about"],
 		[localized("/terms", locale), "footer.terms"],
 		[localized("/policy", locale), "footer.privacy"],
 		[localized("/contact", locale), "footer.contact"],
@@ -32,6 +35,16 @@ export default function Footer() {
 								</Link>
 							</li>
 						))}
+						<li>
+							<a
+								href={SOURCE_URL}
+								target="_blank"
+								rel="noopener noreferrer"
+								className={link}
+							>
+								{t("footer.sourceCode")}
+							</a>
+						</li>
 						<li>
 							<button type="button" onClick={openCookieSettings} className={link}>
 								{t("footer.cookieSettings")}

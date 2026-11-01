@@ -361,13 +361,18 @@
 	"categories.book.impact": "Impacto",
 	"home.title": "Todo jogo, filme, série e livro — avaliado pelas pessoas, categoria por categoria.",
 	"home.explore": "Explorar",
-	"home.recent": "Avaliados recentemente pelos membros",
 	"home.ratedBy": "por {name}",
 	"home.trendingWeek": "Em alta esta semana",
 	"home.popularType": "Populares: {type}",
 	"home.popular": "Popular",
-	"home.trendingRank": "#{rank} em alta na semana",
-	"home.popularRank": "#{rank} popular",
+	"home.trendingRank": "#{rank} em alta",
+	"home.carousel.label": "{type} em alta",
+	"home.carousel.previous": "Slide anterior",
+	"home.carousel.next": "Próximo slide",
+	"home.carousel.pause": "Pausar a troca automática",
+	"home.carousel.play": "Retomar a troca automática",
+	"home.carousel.slide": "Slide {n} de {total}",
+	"home.carousel.goTo": "Ir para o slide {n}",
 	"home.titles": {
 		"one": "{n} título",
 		"other": "{n} títulos"
@@ -381,7 +386,6 @@
 	"home.more.series": "Mais séries",
 	"home.more.book": "Mais livros",
 	"home.ratingsOfMin": "{count} de {min} avaliações",
-	"home.trendingNote": "Em alta = mais avaliados nos últimos 7 dias.",
 	"home.fromRatings": {
 		"one": "de {n} avaliação",
 		"other": "de {n} avaliações"

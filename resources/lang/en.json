@@ -702,13 +702,20 @@
   "home": {
     "title": "Every game, movie, series and book — scored by people, category by category.",
     "explore": "Explore",
-    "recent": "Recently rated by members",
     "ratedBy": "by {name}",
     "trendingWeek": "Trending this week",
     "popularType": "Popular {type}",
     "popular": "Popular",
-    "trendingRank": "#{rank} trending this week",
-    "popularRank": "#{rank} popular",
+    "trendingRank": "#{rank} trending",
+    "carousel": {
+      "label": "Trending {type}",
+      "previous": "Previous slide",
+      "next": "Next slide",
+      "pause": "Pause automatic slides",
+      "play": "Play automatic slides",
+      "slide": "Slide {n} of {total}",
+      "goTo": "Go to slide {n}"
+    },
     "titles": {
       "one": "{n} title",
       "other": "{n} titles"
@@ -726,13 +733,34 @@
       "book": "More books"
     },
     "ratingsOfMin": "{count} of {min} ratings",
-    "trendingNote": "Trending = most rated in the last 7 days.",
     "fromRatings": {
       "one": "from {n} rating",
       "other": "from {n} ratings"
     }
   },
+  "about": {
+    "title": "About HexaScore",
+    "description": "What HexaScore is: community scores for games, movies, TV series and books, a published formula, a public API and open source code.",
+    "intro": "HexaScore is a community catalogue of games, movies, TV series and books. Members rate each item from 0.5 to 10 stars, in half-star steps, in up to six categories of its type, and the score of the item comes from those ratings through a published formula.",
+    "categoriesTitle": "Four categories",
+    "categoriesBody": "Every item belongs to one category, and each category has its own six rating criteria.",
+    "scoresTitle": "How scores work",
+    "scoresBody": "An item shows a score once it has at least 5 ratings. The score is out of 10 with one decimal, and its colour follows three bands: below 5.0, 5.0 to 7.4, and 7.5 and above.",
+    "scoresLink": "Read how scores work",
+    "communityTitle": "Community",
+    "communityBody": "Members keep a library with a status for each item, build lists, suggest edits to the catalogue data and can see the recent changes of every item.",
+    "apiTitle": "Public API",
+    "apiBody": "A read-only JSON API serves the catalogue and the scores, with paid plans and quotas.",
+    "apiLink": "Read the API docs",
+    "openSourceTitle": "Open source",
+    "openSourceBody": "The source code of the site is public on GitHub.",
+    "openSourceLink": "View the source code",
+    "contactTitle": "Contact",
+    "contactBody": "Questions, corrections and other requests reach the team through the contact form.",
+    "contactLink": "Contact us"
+  },
   "footer": {
+    "about": "About",
     "terms": "Terms",
     "privacy": "Privacy",
     "contact": "Contact",
@@ -741,7 +769,8 @@
     "apiDocs": "API docs",
     "pricing": "Pricing",
     "howScores": "How scores work",
-    "cookieSettings": "Cookie settings"
+    "cookieSettings": "Cookie settings",
+    "sourceCode": "Source Code"
   },
   "cookies": {
     "label": "Cookie settings",

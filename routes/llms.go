@@ -70,6 +70,7 @@ func llmsDoc(site string, docsJSON []byte) (llmstxt.Doc, error) {
 			}},
 			{Title: "API", Links: docs},
 			{Title: "Plans and policies", Links: []llmstxt.Link{
+				section("/about", "About", "what HexaScore is, how it scores and where its code lives"),
 				section("/pricing", "Pricing", "API plans and quotas"),
 				section("/terms", "Terms of use", ""),
 				section("/policy", "Privacy policy", ""),

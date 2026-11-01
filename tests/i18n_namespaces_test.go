@@ -28,7 +28,8 @@ func TestI18nPageNamespaces(t *testing.T) {
 		path, own string
 		others    []string
 	}{
-		{"/", "nav.", []string{"terms.", "policy.", "docs.", "help.", "billing.", "contact.", "coverage."}},
+		{"/", "nav.", []string{"terms.", "policy.", "docs.", "help.", "billing.", "contact.", "coverage.", "about."}},
+		{"/about", "about.", []string{"terms.", "docs.", "help."}},
 		{"/terms", "terms.", []string{"policy.", "docs.", "billing."}},
 		{"/policy", "policy.", []string{"terms.", "docs."}},
 		{"/docs", "docs.", []string{"terms.", "policy."}},

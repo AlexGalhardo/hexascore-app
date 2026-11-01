@@ -9,8 +9,16 @@ const config: ExpoConfig = {
 	version: "1.0.0",
 	orientation: "portrait",
 	userInterfaceStyle: "automatic",
+	// Icon candidate 3 (owner, 2026-11-01), rendered from resources/public/icons/hexascore-icon-3.svg.
+	icon: "./assets/images/icon.png",
 	android: {
 		package: "app.hexascore",
+		// Foreground glyph inside the 66 % safe zone; the background is the ink tile of the icon
+		// (token `fg`, light mode, #16130f), inlined because Expo loads this file without TS module resolution.
+		adaptiveIcon: {
+			foregroundImage: "./assets/images/adaptive-icon.png",
+			backgroundColor: "#16130f",
+		},
 		// EAS sets versionCode remotely; only the Gradle fallback (.github/workflows/mobile-gradle.yml) passes it.
 		...(process.env.ANDROID_VERSION_CODE
 			? { versionCode: Number(process.env.ANDROID_VERSION_CODE) }

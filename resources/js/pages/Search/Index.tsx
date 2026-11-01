@@ -1,7 +1,7 @@
 import { Head, Link, usePage } from "@inertiajs/react";
-
+import CategoryIcon from "../../components/CategoryIcon";
 import SuggestNewLink from "../../components/community/SuggestNewLink";
-import { ACCENT_BG, ACCENT_TEXT } from "../../components/home/TypeSection";
+import { ACCENT_TEXT } from "../../components/home/TypeSection";
 import ResultGroup, { type Hit } from "../../components/search/ResultGroup";
 import { btnClass } from "../../components/ui/Btn";
 import { localized } from "../../lib/route";
@@ -124,7 +124,14 @@ export default function Index({
 									aria-current={current ? "page" : undefined}
 									className={`inline-flex min-h-11 items-center border px-4 text-[15px] font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg ${current ? "border-fg bg-fg text-bg" : "border-border bg-surface hover:bg-hover"}`}
 								>
-									{isType(type) ? t(NAV_KEY[type]) : t("search.all")}
+									{isType(type) ? (
+										<span className="inline-flex items-center gap-2">
+											<CategoryIcon type={type} className="size-[18px]" />
+											{t(NAV_KEY[type])}
+										</span>
+									) : (
+										t("search.all")
+									)}
 								</Link>
 							);
 						})}
@@ -166,10 +173,7 @@ export default function Index({
 											href={localized(SECTION[type], locale)}
 											className={`inline-flex min-h-11 items-center gap-2 font-semibold hover:underline ${ACCENT_TEXT[type]}`}
 										>
-											<span
-												aria-hidden="true"
-												className={`size-2.5 ${ACCENT_BG[type]}`}
-											/>
+											<CategoryIcon type={type} className="size-[18px]" />
 											{t(NAV_KEY[type])}
 										</Link>
 									</li>
@@ -186,9 +190,9 @@ export default function Index({
 						<section key={g.type} className="mt-8 border-t-2 border-fg pt-4">
 							<h2 className="flex items-baseline gap-3">
 								{isType(g.type) && (
-									<span
-										aria-hidden="true"
-										className={`size-2.5 self-center ${ACCENT_BG[g.type]}`}
+									<CategoryIcon
+										type={g.type}
+										className={`size-6 self-center ${ACCENT_TEXT[g.type]}`}
 									/>
 								)}
 								<span className="font-display text-[28px] leading-tight font-bold">

@@ -361,13 +361,18 @@
 	"categories.book.impact": "Impact",
 	"home.title": "Every game, movie, series and book — scored by people, category by category.",
 	"home.explore": "Explore",
-	"home.recent": "Recently rated by members",
 	"home.ratedBy": "by {name}",
 	"home.trendingWeek": "Trending this week",
 	"home.popularType": "Popular {type}",
 	"home.popular": "Popular",
-	"home.trendingRank": "#{rank} trending this week",
-	"home.popularRank": "#{rank} popular",
+	"home.trendingRank": "#{rank} trending",
+	"home.carousel.label": "Trending {type}",
+	"home.carousel.previous": "Previous slide",
+	"home.carousel.next": "Next slide",
+	"home.carousel.pause": "Pause automatic slides",
+	"home.carousel.play": "Play automatic slides",
+	"home.carousel.slide": "Slide {n} of {total}",
+	"home.carousel.goTo": "Go to slide {n}",
 	"home.titles": {
 		"one": "{n} title",
 		"other": "{n} titles"
@@ -381,7 +386,6 @@
 	"home.more.series": "More TV series",
 	"home.more.book": "More books",
 	"home.ratingsOfMin": "{count} of {min} ratings",
-	"home.trendingNote": "Trending = most rated in the last 7 days.",
 	"home.fromRatings": {
 		"one": "from {n} rating",
 		"other": "from {n} ratings"

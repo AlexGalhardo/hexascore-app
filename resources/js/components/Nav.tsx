@@ -4,6 +4,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { LOCALE_PREFIXES, localized, unlocalized } from "../lib/route";
 import { useT } from "../lib/useT";
 import type { SharedProps } from "../types";
+import CategoryIcon from "./CategoryIcon";
 import Dropdown from "./ui/Dropdown";
 
 // Loaded on first open: keeps the palette and the query hooks off the first-load script.
@@ -19,15 +20,19 @@ const LOCALE_NAMES: Record<string, string> = {
 	es: "Español",
 };
 const SECTIONS = [
-	["games", "nav.games", "text-accent-game"],
-	["movies", "nav.movies", "text-accent-movie"],
-	["series", "nav.series", "text-accent-series"],
-	["books", "nav.books", "text-accent-book"],
+	["games", "nav.games", "text-accent-game", "game"],
+	["movies", "nav.movies", "text-accent-movie", "movie"],
+	["series", "nav.series", "text-accent-series", "series"],
+	["books", "nav.books", "text-accent-book", "book"],
 ] as const;
+
+// The owner picks one of resources/public/icons/hexascore-icon-{1,2,3}; app-icon.svg is a copy of the pick (see its README).
+export const APP_ICON = "/icons/app-icon.svg";
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
 const item = `inline-flex min-h-11 items-center rounded-xs hover:text-primary ${focus}`;
-export const iconButton = `inline-flex size-11 shrink-0 items-center justify-center rounded-xs hover:bg-hover ${focus}`;
+// Pressed: 1 px down onto an inset shadow (the move is dropped under prefers-reduced-motion).
+export const iconButton = `inline-flex size-11 shrink-0 items-center justify-center rounded-xs transition-[background-color,box-shadow,translate] duration-100 hover:bg-hover active:translate-y-px active:bg-surface active:shadow-pressed motion-reduce:transition-none motion-reduce:active:translate-y-0 ${focus}`;
 const menuItem = `flex min-h-11 w-full items-center gap-2.5 px-3 text-left text-[15px] hover:bg-hover ${focus}`;
 
 function setCookie(name: string, value: string) {
@@ -51,11 +56,19 @@ const ICONS = {
 	search: "M11 4a7 7 0 1 0 0 14a7 7 0 1 0 0-14 M16 16 L21 21",
 	moon: "M20 14.5 A8.5 8.5 0 1 1 9.5 4 A7 7 0 0 0 20 14.5 Z",
 	sun: "M12 8 a4 4 0 1 0 0 8 a4 4 0 1 0 0-8 M12 2 V4.5 M12 19.5 V22 M2 12 H4.5 M19.5 12 H22 M4.9 4.9 L6.7 6.7 M17.3 17.3 L19.1 19.1 M4.9 19.1 L6.7 17.3 M17.3 6.7 L19.1 4.9",
-	bell: "M6 16 V11 a6 6 0 0 1 12 0 V16 L19.5 18 H4.5 Z M10 20.5 a2 2 0 0 0 4 0",
 	menu: "M4 7 H20 M4 12 H20 M4 17 H20",
 	down: "M6 9 L12 15 L18 9",
 	check: "M5 12 L10 17 L19 7",
 	close: "M6 6 L18 18 M18 6 L6 18",
+	library: "M5 4 V20 M10 4 V20 M14.5 5 L19 19 M4 20 H20",
+	lists: "M9 6 H20 M9 12 H20 M9 18 H20 M4.5 6 h.01 M4.5 12 h.01 M4.5 18 h.01",
+	user: "M12 4 a4 4 0 1 0 0 8 a4 4 0 1 0 0-8 M4.5 20 a7.5 7.5 0 0 1 15 0",
+	settings:
+		"M12 9 a3 3 0 1 0 0 6 a3 3 0 1 0 0-6 M12 2.5 V5 M12 19 V21.5 M2.5 12 H5 M19 12 H21.5 M5.3 5.3 L7 7 M17 17 L18.7 18.7 M5.3 18.7 L7 17 M17 7 L18.7 5.3",
+	key: "M8 10 a4 4 0 1 0 0 8 a4 4 0 1 0 0-8 M10.8 11.2 L20 2 M16 6 L19 9 M14 8 L16 10",
+	shield: "M12 3 L19.5 6 V11.5 C19.5 16 16.5 19.5 12 21 C7.5 19.5 4.5 16 4.5 11.5 V6 Z M9 12 L11 14 L15 10",
+	feed: "M5 5 a14 14 0 0 1 14 14 M5 11 a8 8 0 0 1 8 8 M5.5 18.5 h.01",
+	logout: "M14 4 H19 V20 H14 M10 8 L6 12 L10 16 M6 12 H16",
 } as const;
 
 // Icons from the v1 set; the label lives in aria-label or next to the icon.
@@ -97,11 +110,11 @@ function useShortcutHint(): string {
 export default function Nav() {
 	const t = useT();
 	const page = usePage<SharedProps>();
-	const { auth, locale, unreadNotifications: unread = 0 } = page.props;
+	// Owner round 2026-11-01 item 27: no bell or unread badge in the navbar (unreadNotifications stays shared).
+	const { auth, locale } = page.props;
 	const user = auth?.user;
 	const feedHref = user && page.props.flags?.social ? localized("/feed", locale) : null;
 	const here = unlocalized(page.url);
-	const unreadLabel = unread > 99 ? "99+" : String(unread);
 	const scrolled = useScrolled();
 	const hint = useShortcutHint();
 	const searchHref = localized("/search", locale);
@@ -115,11 +128,6 @@ export default function Nav() {
 	if (menuOpen && !sheetMounted) setSheetMounted(true);
 	const burger = useRef<HTMLButtonElement>(null);
 	const sheet = useRef<HTMLDivElement>(null);
-	const unreadBadge = unread > 0 && (
-		<span className="absolute top-1 right-0 min-w-5 rounded-full bg-primary px-1 text-center text-[10px] font-bold leading-[18px] text-on-primary tabular-nums">
-			{unreadLabel}
-		</span>
-	);
 
 	useEffect(() => {
 		const onKey = (e: KeyboardEvent) => {
@@ -183,9 +191,11 @@ export default function Nav() {
 	const accountLinks = user && (
 		<>
 			<Link href={localized("/library", locale)} className={menuItem}>
+				<Icon name="library" />
 				{t("nav.library")}
 			</Link>
 			<Link href={localized("/lists", locale)} className={menuItem}>
+				<Icon name="lists" />
 				{t("nav.lists")}
 			</Link>
 			{user.nickname && (
@@ -193,22 +203,27 @@ export default function Nav() {
 					href={localized(`/u/${user.nickname.toLowerCase()}`, locale)}
 					className={menuItem}
 				>
+					<Icon name="user" />
 					{t("nav.publicProfile")}
 				</Link>
 			)}
 			<Link href="/profile" className={menuItem}>
+				<Icon name="settings" />
 				{t("nav.profile")}
 			</Link>
 			<Link href="/profile/api" className={menuItem}>
+				<Icon name="key" />
 				{t("nav.api")}
 			</Link>
 			{user.role === "admin" && (
 				<Link href="/admin" className={menuItem}>
+					<Icon name="shield" />
 					{t("nav.admin")}
 				</Link>
 			)}
 			<div className="my-1 border-t border-border" />
 			<Link href="/logout" method="post" as="button" className={menuItem}>
+				<Icon name="logout" />
 				{t("nav.logout")}
 			</Link>
 		</>
@@ -260,20 +275,28 @@ export default function Nav() {
 			<div className="shell flex h-14 items-center gap-2 lg:h-[72px] lg:gap-7">
 				<Link
 					href={localized("/", locale)}
-					className={`${item} shrink-0 font-display text-2xl font-bold hover:text-fg lg:text-[28px]`}
+					className={`${item} shrink-0 gap-2 font-display text-2xl font-bold hover:text-fg lg:text-[28px]`}
 				>
+					<img
+						src={APP_ICON}
+						alt=""
+						width={32}
+						height={32}
+						className="size-7 lg:size-8"
+					/>
 					{page.props.appName}
 				</Link>
 				<nav
 					aria-label={t("nav.sections")}
 					className="hidden items-center gap-7 whitespace-nowrap lg:flex"
 				>
-					{SECTIONS.map(([path, key]) => (
+					{SECTIONS.map(([path, key, , type]) => (
 						<Link
 							key={path}
 							href={localized(`/${path}`, locale)}
-							className={`${item} text-[15px] font-medium`}
+							className={`${item} gap-1.5 text-[15px] font-medium`}
 						>
+							<CategoryIcon type={type} className="size-[18px]" />
 							{t(key)}
 						</Link>
 					))}
@@ -326,36 +349,15 @@ export default function Nav() {
 						</div>
 						{user ? (
 							<div className="flex items-center gap-1">
-								<Link
-									href={localized("/me/notifications", locale)}
-									className={`${iconButton} relative`}
-									aria-label={`${t("nav.notifications")}${unread > 0 ? ` (${unreadLabel})` : ""}`}
-									title={t("nav.notifications")}
-								>
-									<Icon name="bell" />
-									{unreadBadge}
-								</Link>
 								<Dropdown
 									label={t("nav.account")}
 									triggerClassName={`inline-flex min-h-11 items-center gap-2 rounded-xs pl-1 pr-1 hover:bg-hover ${focus}`}
 									panelClassName="w-64"
-									trigger={
-										<>
-											{avatar}
-											{/* with the inline Feed link the 1152 px bar has no room for the name; the menu still shows it */}
-											<span
-												className={`hidden max-w-32 truncate font-semibold ${feedHref ? "" : "xl:inline"}`}
-											>
-												{user.nickname || user.name}
-											</span>
-										</>
-									}
+									trigger={avatar}
 								>
-									<p className="truncate px-3 py-2 text-sm font-semibold">
-										{user.name}
-									</p>
 									{feedHref && (
 										<Link href={feedHref} className={`${menuItem} xl:hidden`}>
+											<Icon name="feed" />
 											{t("social.feed.title")}
 										</Link>
 									)}
@@ -395,16 +397,13 @@ export default function Nav() {
 					type="button"
 					aria-haspopup="dialog"
 					aria-expanded={menuOpen}
-					aria-label={
-						user && unread > 0 ? t("nav.menuUnread", { count: unread }) : t("nav.menu")
-					}
+					aria-label={t("nav.menu")}
 					onClick={() => setMenuOpen(true)}
 					onPointerDown={() => setSheetMounted(true)}
 					onFocus={() => setSheetMounted(true)}
-					className={`${iconButton} relative lg:hidden`}
+					className={`${iconButton} lg:hidden`}
 				>
 					<Icon name="menu" />
-					{user && unreadBadge}
 				</button>
 			</div>
 			{sheetMounted && (
@@ -424,12 +423,13 @@ export default function Nav() {
 							</div>
 						)}
 						<nav aria-label={t("nav.sections")} className="border-b border-border py-1">
-							{SECTIONS.map(([path, key, accent]) => (
+							{SECTIONS.map(([path, key, accent, type]) => (
 								<Link
 									key={path}
 									href={localized(`/${path}`, locale)}
 									className={`${menuItem} font-semibold ${accent}`}
 								>
+									<CategoryIcon type={type} />
 									{t(key)}
 								</Link>
 							))}
@@ -444,21 +444,7 @@ export default function Nav() {
 							)}
 						</nav>
 						{user ? (
-							<div className="border-b border-border py-1">
-								<Link
-									href={localized("/me/notifications", locale)}
-									className={menuItem}
-								>
-									<Icon name="bell" />
-									<span className="flex-1">{t("nav.notifications")}</span>
-									{unread > 0 && (
-										<span className="min-w-5 rounded-full bg-primary px-1 text-center text-xs font-bold leading-5 text-on-primary tabular-nums">
-											{unreadLabel}
-										</span>
-									)}
-								</Link>
-								{accountLinks}
-							</div>
+							<div className="border-b border-border py-1">{accountLinks}</div>
 						) : (
 							auth && (
 								<div className="border-b border-border py-1">

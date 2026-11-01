@@ -1,5 +1,5 @@
 import { Link, usePage } from "@inertiajs/react";
-
+import CategoryIcon from "../../components/CategoryIcon";
 import ItemCard from "../../components/catalog/ItemCard";
 import { type Highlight, SECTION_PATHS } from "../../components/catalog/SectionHighlights";
 import Seo, { truncate } from "../../components/Seo";
@@ -168,7 +168,11 @@ export default function Show({
 						className="mt-10 border-t-2 border-fg pt-4"
 						aria-labelledby={`group-${g.type}`}
 					>
-						<h2 id={`group-${g.type}`} className="text-3xl">
+						<h2
+							id={`group-${g.type}`}
+							className="flex flex-wrap items-baseline gap-x-3 text-3xl"
+						>
+							<CategoryIcon type={g.type} className="size-7 self-center" />
 							{t(`catalog.title.${g.type}`)}
 							<span className="ml-3 font-sans text-sm font-normal text-muted tabular-nums">
 								{t("entity.showing", {

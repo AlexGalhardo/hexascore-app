@@ -361,13 +361,18 @@
 	"categories.book.impact": "Impacto",
 	"home.title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
 	"home.explore": "Explorar",
-	"home.recent": "Valorados recientemente por los miembros",
 	"home.ratedBy": "por {name}",
 	"home.trendingWeek": "Tendencia esta semana",
 	"home.popularType": "Populares: {type}",
 	"home.popular": "Popular",
-	"home.trendingRank": "#{rank} en tendencia esta semana",
-	"home.popularRank": "#{rank} popular",
+	"home.trendingRank": "#{rank} en tendencia",
+	"home.carousel.label": "{type} en tendencia",
+	"home.carousel.previous": "Diapositiva anterior",
+	"home.carousel.next": "Diapositiva siguiente",
+	"home.carousel.pause": "Pausar el cambio automático",
+	"home.carousel.play": "Reanudar el cambio automático",
+	"home.carousel.slide": "Diapositiva {n} de {total}",
+	"home.carousel.goTo": "Ir a la diapositiva {n}",
 	"home.titles": {
 		"one": "{n} título",
 		"other": "{n} títulos"
@@ -381,7 +386,6 @@
 	"home.more.series": "Más series",
 	"home.more.book": "Más libros",
 	"home.ratingsOfMin": "{count} de {min} valoraciones",
-	"home.trendingNote": "Tendencia = más valorados en los últimos 7 días.",
 	"home.fromRatings": {
 		"one": "de {n} valoración",
 		"other": "de {n} valoraciones"

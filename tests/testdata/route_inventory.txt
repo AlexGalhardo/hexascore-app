@@ -8,6 +8,7 @@ web   GET    /robots.txt
 web   GET    /llms.txt
 web   GET    /llms-full.txt
 web   GET    /.well-known/assetlinks.json
+web   GET    /about
 web   GET    /terms
 web   GET    /policy
 web   GET    /legal/privacy

@@ -8,8 +8,9 @@ import (
 	"strings"
 )
 
-// HighlightRows is the row count of each landing block (legacy SectionHighlights).
-const HighlightRows = 6
+// PoolSize is how many items each landing block sends for the "More …" grid; the client shows a random 12 of them
+// after hydration, so the cached HTML stays identical for every visitor (owner round 2026-11-01 item 26).
+const PoolSize = 36
 
 // Highlight is one ranked landing row. Score is nil until the item has 5
 // counted ratings (SDD 02 read gate).
@@ -24,19 +25,17 @@ type Highlight struct {
 	Cover       *Cover   `json:"cover"`
 }
 
-// SectionHighlights is one item type's landing section.
+// SectionHighlights is one item type's landing section: the public item count and the recommendation pool.
 type SectionHighlights struct {
-	Type      string      `json:"type"`
-	Count     int         `json:"count"`
-	TopRated  []Highlight `json:"topRated"`
-	Newest    []Highlight `json:"newest"`
-	MostRated []Highlight `json:"mostRated"`
+	Type  string      `json:"type"`
+	Count int         `json:"count"`
+	Pool  []Highlight `json:"pool"`
 }
 
-// Highlights loads the three landing lists and the public item count for typ.
-// Titles fall back from locale to en, then to the original title.
+// Highlights loads the public item count and the pool of typ: the best scored items, then the most rated ones
+// until PoolSize. Titles fall back from locale to en, then to the original title.
 func Highlights(ctx context.Context, db Querier, typ, locale string) (SectionHighlights, error) {
-	out := SectionHighlights{Type: typ, TopRated: []Highlight{}, Newest: []Highlight{}, MostRated: []Highlight{}}
+	out := SectionHighlights{Type: typ, Pool: []Highlight{}}
 
 	err := db.QueryRowContext(ctx,
 		`SELECT count(*) FROM items WHERE type = $1 AND visibility = 'public'`, typ).Scan(&out.Count)
@@ -44,16 +43,11 @@ func Highlights(ctx context.Context, db Querier, typ, locale string) (SectionHig
 		return out, fmt.Errorf("count highlights: %w", err)
 	}
 
-	blocks := []struct {
-		dst  *[]Highlight
-		sort string
-		gate string
-	}{
-		{&out.TopRated, "-score", " AND " + visibleScore},
-		{&out.Newest, "-release_date", ""},
-		{&out.MostRated, "-rating_count", ""},
-	}
-	for _, b := range blocks {
+	seen := map[string]bool{}
+	for _, b := range []struct{ sort, gate string }{
+		{"-score", " AND " + visibleScore},
+		{"-rating_count", ""},
+	} {
 		field, _, _ := ParseSort(b.sort)
 		q := `SELECT i.id, i.type, i.slug,
   coalesce(t.title, te.title, i.original_title, i.slug),
@@ -64,7 +58,7 @@ FROM items i
 LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $2
 LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
 WHERE i.type = $1 AND i.visibility = 'public'` + b.gate + `
-ORDER BY ` + sortFields[field].desc + ` DESC, i.id DESC LIMIT ` + strconv.Itoa(HighlightRows)
+ORDER BY ` + sortFields[field].desc + ` DESC, i.id DESC LIMIT ` + strconv.Itoa(PoolSize)
 
 		rows, err := db.QueryContext(ctx, q, typ, locale)
 		if err != nil {
@@ -74,7 +68,12 @@ ORDER BY ` + sortFields[field].desc + ` DESC, i.id DESC LIMIT ` + strconv.Itoa(H
 		if err != nil {
 			return out, err
 		}
-		*b.dst = got
+		for _, h := range got {
+			if len(out.Pool) < PoolSize && !seen[h.ID] {
+				seen[h.ID] = true
+				out.Pool = append(out.Pool, h)
+			}
+		}
 	}
 
 	return out, nil

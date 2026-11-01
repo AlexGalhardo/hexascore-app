@@ -36,7 +36,7 @@ VALUES ($1,'game','scaled','Q1',1,10,87,'public')`, id); err != nil {
 	}
 
 	hl, err := catalog.Highlights(ctx, db, "game", "en")
-	if err != nil || len(hl.TopRated) != 1 || hl.TopRated[0].Score == nil {
+	if err != nil || len(hl.Pool) != 1 || hl.Pool[0].Score == nil {
 		t.Fatalf("highlights: %v %+v", err, hl)
 	}
 	sums, err := catalog.Summaries(ctx, db, []string{id}, "en")
@@ -47,7 +47,7 @@ VALUES ($1,'game','scaled','Q1',1,10,87,'public')`, id); err != nil {
 	if err != nil || page.RatingSummary.Score == nil {
 		t.Fatalf("item page: %v", err)
 	}
-	for name, got := range map[string]float64{"highlights": *hl.TopRated[0].Score, "summaries": *sums[0].Score, "item": *page.RatingSummary.Score} {
+	for name, got := range map[string]float64{"highlights": *hl.Pool[0].Score, "summaries": *sums[0].Score, "item": *page.RatingSummary.Score} {
 		if got != 8.7 {
 			t.Errorf("%s score = %v, want 8.7", name, got)
 		}

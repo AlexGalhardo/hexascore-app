@@ -99,10 +99,10 @@ Typography:
 
 ### 2.5 Shadows, z-index, breakpoints, motion
 
-- Shadows: only `shadow-lg`, on the nav menu panel, SuggestBox listbox, toast, dialog popup and cookie banner. No shadow tokens.
+- Shadows: `shadow-lg` on the nav menu panel, SuggestBox listbox, toast, dialog popup and cookie banner. Button tokens in `resources/css/app.css` (derived from the colour tokens): `shadow-ledge-primary` / `-secondary` (2 px ledge plus a soft drop) and their `-pressed` 1 px variants for `btnClass`, `shadow-pressed` (inset) for ghost buttons and `iconButton`.
 - Z-index (literal values, no tokens): menu panel `z-40`, SuggestBox popups and cookie banner `z-50`, dialog backdrop `z-[55]`, dialog popup `z-[60]`, toast `z-[70]`, skip link `z-[80]`.
 - Breakpoints: Tailwind defaults (no custom `--breakpoint-*`). Used: `sm` 640 (search box width, footer, hero size), `md` 768 (header section nav switches between the top row and the scroller row; home block grid; docs sidebar), `lg` 1024 (item page two columns, home recent grid). The e2e projects use 1280x800 desktop and 360x740 mobile (`qa/e2e/playwright.config.ts`).
-- Motion: none by design. The only animations are the `submit-spin` keyframes of `.submit-spinner` (0.8 s, slowed to 3 s under `prefers-reduced-motion: reduce`, `resources/css/app.css`) and `animate-pulse` on the CSR placeholder in `resources/views/app.html`. No transitions, no motion tokens. The Inertia progress bar uses `#4f46e5`.
+- Motion: none by design. The only animations are the `submit-spin` keyframes of `.submit-spinner` (0.8 s, slowed to 3 s under `prefers-reduced-motion: reduce`, `resources/css/app.css`) and `animate-pulse` on the CSR placeholder in `resources/views/app.html`. Buttons: every `button` and `[role="button"]` moves 1 px down while pressed (a base rule in `app.css`, 100 ms; no movement under `prefers-reduced-motion: reduce`); `btnClass` and `iconButton` add the pressed ledge or inset. No motion tokens. The Inertia progress bar uses `#4f46e5`.
 
 ## 3. Theming and CSP
 
@@ -151,7 +151,7 @@ Desktop (from `sm`/`md`):
 
 - Row `min-h-14`: brand link (`appName`, `text-lg font-bold`), section nav (Games, Movies, TV Series, Books; `hidden md:flex`, plain text colour), then a right-aligned group: `SuggestBox` (`sm:w-64`), theme toggle, and either the logged-out controls or the logged-in controls.
 - Logged out: "Log in" link and a "More" `details` menu (hamburger icon, label `nav.more`) containing the language links, "Sign up", "Pricing", "API docs".
-- Logged in: notification bell with an unread badge (`bg-accent-movie`, caps at "99+"), and an account `details` menu (user icon) with the user name, Library, Lists, Public profile (if nickname), Profile, API keys, Admin (role admin only), the language links, and Log out (`POST /logout`).
+- Logged in: an account dropdown (avatar only, no user name; an icon before each entry) with Library, Lists, Public profile (if nickname), Profile, API keys, Admin (role admin only), the language links, and Log out (`POST /logout`).
 
 Mobile (below `md`, see [home-mobile-390.png](design-system/home-mobile-390.png)):
 
@@ -165,7 +165,7 @@ Menus are native `<details>` elements styled by `menuPanel` (`absolute right-0 z
 
 ### 4.4 Footer
 
-`resources/js/components/Footer.tsx`: `mt-12 border-t border-border text-sm text-muted`, one row inside `max-w-6xl`: copyright with the current year and `appName`, then Terms, Privacy, Contact links (44 px high). There is no link to Docs, Pricing, Help or the language switcher in the footer.
+`resources/js/components/Footer.tsx`: `mt-12 border-t border-border text-sm text-muted`, one row inside `max-w-6xl`: copyright with the current year and `appName`, then Terms, Privacy, Contact links (44 px high). There is no link to Docs, Pricing, Help or the language switcher in the footer. A "Source Code" link opens the GitHub repository in a new tab (`rel="noopener noreferrer"`).
 
 ### 4.5 Cookie banner
 
@@ -195,6 +195,10 @@ All files are under `resources/js/components/` unless stated. Props are the Type
 
 - Props: `item: Highlight { id, type, slug, title, year, score, ratingCount, cover }`, `href`.
 - Layout: `flex items-center gap-3 py-2`: `CoverThumb md`, title link (`flex-1 truncate font-medium`), year (`font-mono text-xs text-muted`), `catalog.ratingCount` text, score (`w-8 text-right font-mono text-sm`, `title` attribute "Score x out of 10" or "Not enough ratings yet"; an en dash when `score` is null). No score colour, no badge.
+
+**ItemTile** (`catalog/ItemTile.tsx`). Vertical grid card (landing "More …" rows; meant for category grids).
+
+- Props: `item: Highlight`, `href`. One link: `CoverThumb card`, then a footer `grid-cols-[2fr_1fr]` with `min-h-16` (no layout shift): title (`line-clamp-2`) and year on the left, `ScoreBadge size="fill"` filling the right third with the number centred.
 
 **ShelfCard** (`library/ShelfCard.tsx`). Card used by Library, list pages and public profile tabs.
 
@@ -300,10 +304,10 @@ Every Inertia page component in `resources/js/pages/` (33 components; `ls resour
 
 - Route: `GET /` (SSR). File: `pages/Home/Index.tsx`. Screenshots: [desktop](design-system/home-desktop-1440.png), [mobile](design-system/home-mobile-390.png).
 - Purpose: landing and discovery.
-- Blocks: hero `h1` ("Every game, movie, series and book, scored by people, category by category.", `text-3xl sm:text-4xl`) with an "Explore" primary button linking to `/search`; "Recently rated" grid (cover, title, "rated by name", score; only when `recent` is non-empty); one `SectionHighlights` per type (Games, Movies, TV Series, Books) with Top rated, New releases and Most rated columns of six rows.
+- Blocks: hero `h1` ("Every game, movie, series and book, scored by people, category by category.", `text-3xl sm:text-4xl`) with an "Explore" primary button linking to `/search`; one `home/TypeSection` per type (Games, Movies, TV Series, Books): a three-zone header, a `home/Carousel` of the 12 most rated items of the last 30 days (4 slides of 3, auto-advance every 4 s; pause/play, previous/next, labelled indicators, arrow keys, swipe; still under `prefers-reduced-motion`, on hover and on focus; only the first slide's covers eager), then a "More …" grid of 12 `ItemTile`s (2 rows of 6) picked at random from the pool after hydration.
 - Actions: Explore, section "See all" links, row links, header search.
-- Data: `sections[{type, count, topRated, newest, mostRated}]`, `recent[{id, type, slug, title, score, by, cover}]`.
-- States: empty column "Nothing here yet."; no "recent" block when empty (production currently shows none); items without a score show an en dash.
+- Data: `sections[{type, count, pool}]` (`pool`: up to 36 best scored then most rated items, the same for every visitor so the cached HTML stays valid), `trending.<type>.items[{rank, basis, genre, ...Highlight}]` (`genre`: primary genre name or null, shown next to the year; every card reads "#N trending"). The "Recently rated by members" strip and its query were removed (owner round 2026-11-01 item 5).
+- States: empty column "Nothing here yet."; items without a score show an en dash.
 
 #### Catalog/Index
 
@@ -458,6 +462,10 @@ All Auth pages render `h1` (`text-2xl font-semibold`), a form with `space-y-4` a
 - Purpose: public API documentation.
 - Blocks: left column nav (pages, "API reference", on-page table of contents of `h2`s), prose article (`max-w-3xl`, build-time sanitised Markdown HTML, headings and code styled with arbitrary-variant classes).
 - States: none beyond 404.
+
+#### About/Index
+
+- Route: `GET /about` (all locales, SSR). File: `pages/About/Index.tsx`. Reading width 45rem like the legal pages; sections: categories (with `CategoryIcon`), scores (link `/how-score-works`), community, public API (`/docs`), open source (GitHub, new tab), contact. Copy in the `about.` namespace, shipped only on `/about`; in the sitemap, `llms.txt` and the footer.
 
 #### Legal/Page
 

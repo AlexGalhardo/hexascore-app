@@ -702,13 +702,20 @@
   "home": {
     "title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
     "explore": "Explorar",
-    "recent": "Valorados recientemente por los miembros",
     "ratedBy": "por {name}",
     "trendingWeek": "Tendencia esta semana",
     "popularType": "Populares: {type}",
     "popular": "Popular",
-    "trendingRank": "#{rank} en tendencia esta semana",
-    "popularRank": "#{rank} popular",
+    "trendingRank": "#{rank} en tendencia",
+    "carousel": {
+      "label": "{type} en tendencia",
+      "previous": "Diapositiva anterior",
+      "next": "Diapositiva siguiente",
+      "pause": "Pausar el cambio automático",
+      "play": "Reanudar el cambio automático",
+      "slide": "Diapositiva {n} de {total}",
+      "goTo": "Ir a la diapositiva {n}"
+    },
     "titles": {
       "one": "{n} título",
       "other": "{n} títulos"
@@ -726,13 +733,34 @@
       "book": "Más libros"
     },
     "ratingsOfMin": "{count} de {min} valoraciones",
-    "trendingNote": "Tendencia = más valorados en los últimos 7 días.",
     "fromRatings": {
       "one": "de {n} valoración",
       "other": "de {n} valoraciones"
     }
   },
+  "about": {
+    "title": "Acerca de HexaScore",
+    "description": "Qué es HexaScore: puntuaciones de la comunidad para juegos, películas, series y libros, una fórmula publicada, una API pública y código abierto.",
+    "intro": "HexaScore es un catálogo de la comunidad de juegos, películas, series y libros. Los miembros valoran cada elemento de 0,5 a 10 estrellas, en medias estrellas, en hasta seis categorías de su tipo, y la puntuación del elemento sale de esas valoraciones mediante una fórmula publicada.",
+    "categoriesTitle": "Cuatro categorías",
+    "categoriesBody": "Cada elemento pertenece a una categoría, y cada categoría tiene sus propios seis criterios de valoración.",
+    "scoresTitle": "Cómo funcionan las puntuaciones",
+    "scoresBody": "Un elemento muestra una puntuación cuando tiene al menos 5 valoraciones. La puntuación es sobre 10 con un decimal, y su color sigue tres franjas: por debajo de 5,0, de 5,0 a 7,4, y 7,5 o más.",
+    "scoresLink": "Leer cómo funcionan las puntuaciones",
+    "communityTitle": "Comunidad",
+    "communityBody": "Los miembros llevan una biblioteca con un estado para cada elemento, crean listas, sugieren ediciones en los datos del catálogo y pueden ver los cambios recientes de cada elemento.",
+    "apiTitle": "API pública",
+    "apiBody": "Una API JSON de solo lectura ofrece el catálogo y las puntuaciones, con planes de pago y cuotas.",
+    "apiLink": "Leer la documentación de la API",
+    "openSourceTitle": "Código abierto",
+    "openSourceBody": "El código fuente del sitio es público en GitHub.",
+    "openSourceLink": "Ver el código fuente",
+    "contactTitle": "Contacto",
+    "contactBody": "Las preguntas, correcciones y otras solicitudes llegan al equipo mediante el formulario de contacto.",
+    "contactLink": "Contáctanos"
+  },
   "footer": {
+    "about": "Acerca de",
     "terms": "Términos",
     "privacy": "Privacidad",
     "contact": "Contacto",
@@ -741,7 +769,8 @@
     "apiDocs": "Docs de la API",
     "pricing": "Precios",
     "howScores": "Cómo funcionan las notas",
-    "cookieSettings": "Configuración de cookies"
+    "cookieSettings": "Configuración de cookies",
+    "sourceCode": "Código fuente"
   },
   "cookies": {
     "label": "Configuración de cookies",

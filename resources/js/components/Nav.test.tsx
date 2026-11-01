@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { afterEach, expect, test, vi } from "vitest";
-import { cleanup, render, screen } from "../lib/testing";
+import { cleanup, render, screen, within } from "../lib/testing";
 
 import Footer from "./Footer";
 import Nav from "./Nav";
@@ -75,9 +75,27 @@ test("navbar has the search trigger, moon/sun toggle and four sections; footer h
 		2,
 	);
 	const footer = screen.getByRole("navigation", { name: "footer.label" });
-	expect(footer.querySelectorAll("a")).toHaveLength(6);
+	expect(footer.querySelectorAll("a")).toHaveLength(8);
+	expect(screen.getByRole("link", { name: "footer.about" }).getAttribute("href")).toBe("/about");
+	const source = screen.getByRole("link", { name: "footer.sourceCode" });
+	expect(source.getAttribute("href")).toBe("https://github.com/AlexGalhardo/hexascore-app");
+	expect(source.getAttribute("target")).toBe("_blank");
+	expect(source.getAttribute("rel")).toBe("noopener noreferrer");
 	expect(screen.getByRole("button", { name: "footer.cookieSettings" })).toBeTruthy();
 	expect(footer.querySelector("[hreflang]")).toBeNull();
+});
+
+test("each section link starts with its category icon and keeps the name as text", () => {
+	render(<Nav />);
+	const sections = screen.getByRole("navigation", { name: "nav.sections" });
+	const links = within(sections).getAllByRole("link");
+	expect(links.map((l) => l.firstElementChild?.getAttribute("data-category-icon"))).toEqual([
+		"game",
+		"movie",
+		"series",
+		"book",
+	]);
+	expect(links[0].textContent).toBe("nav.games");
 });
 
 test("the Feed link shows only to signed-in users while the social flag is on", () => {
@@ -116,9 +134,30 @@ test("the inline Feed link waits for xl and the account menu carries it below", 
 		// a bare inline-flex would win over hidden in Tailwind's sort and undo the fix
 		expect(inline?.className).not.toMatch(/(^|\s)inline-flex(\s|$)/);
 		expect(inline?.className).toContain("xl:inline-flex");
-		// Feed takes the room of the name next to the avatar (the menu still shows it).
+		// The trigger is the avatar alone (owner round 2026-11-01 item 13).
 		const trigger = screen.getAllByRole("button", { name: "nav.account" })[0];
 		expect(trigger.querySelector(".xl\\:inline")).toBeNull();
+	} finally {
+		props.auth.user = null;
+		props.flags = {};
+	}
+});
+
+// Owner round 2026-11-01 item 13: no user name in the account dropdown, an icon before each link.
+test("the account dropdown shows no user name and every entry starts with an icon", async () => {
+	try {
+		props.auth.user = { name: "Ana Real", nickname: "ana", role: "admin" };
+		props.flags = { social: true };
+		render(<Nav />);
+		const trigger = screen.getAllByRole("button", { name: "nav.account" })[0];
+		expect(trigger.textContent).toBe("A");
+		await userEvent.click(trigger);
+		const panel = document.getElementById(trigger.getAttribute("aria-controls") ?? "");
+		expect(panel).toBeTruthy();
+		expect(panel?.textContent).not.toContain("Ana Real");
+		const entries = [...(panel?.querySelectorAll("a, button") ?? [])];
+		expect(entries.length).toBeGreaterThanOrEqual(7);
+		for (const entry of entries) expect(entry.firstElementChild?.tagName).toBe("svg");
 	} finally {
 		props.auth.user = null;
 		props.flags = {};
@@ -191,30 +230,25 @@ test("the hamburger sheet holds sections, language, theme and login; Escape retu
 	expect(document.activeElement).toBe(burger);
 });
 
-test("signed in with the flag on, the hamburger shows unread and the sheet has feed and account", async () => {
+// Owner round 2026-11-01 item 27: no unread badge or notifications entry in the navbar UI.
+test("signed in with the flag on, the hamburger stays 'Menu' and the sheet has feed and account", async () => {
 	const user = userEvent.setup();
 	try {
 		props.auth.user = { name: "Ana", nickname: "ana" };
 		props.flags = { social: true };
 		props.unreadNotifications = 3;
 		render(<Nav />);
-		const burger = screen.getByRole("button", { name: "nav.menuUnread" });
-		expect(burger.textContent).toContain("3");
+		const burger = screen.getByRole("button", { name: "nav.menu" });
+		expect(burger.textContent).not.toContain("3");
+		expect(screen.queryByRole("link", { name: /nav\.notifications/ })).toBeNull();
 		await user.click(burger);
 		const sheet = await screen.findByRole("dialog", {}, { timeout: 5000 });
 		const hrefs = [...sheet.querySelectorAll("a")].map((a) => a.getAttribute("href"));
 		expect(hrefs).toEqual(
-			expect.arrayContaining([
-				"/feed",
-				"/me/notifications",
-				"/library",
-				"/lists",
-				"/u/ana",
-				"/logout",
-			]),
+			expect.arrayContaining(["/feed", "/library", "/lists", "/u/ana", "/logout"]),
 		);
 		expect(sheet.textContent).toContain("Ana");
-		expect(sheet.querySelector('a[href="/me/notifications"]')?.textContent).toContain("3");
+		expect(sheet.querySelector('a[href="/me/notifications"]')).toBeNull();
 	} finally {
 		props.auth.user = null;
 		props.flags = {};
@@ -242,15 +276,16 @@ test("Tab and Shift+Tab right after opening never leave the sheet", async () => 
 	}
 });
 
-test("the hamburger name follows the unread count when it changes", () => {
+test("the hamburger name ignores the unread count", () => {
 	try {
 		props.auth.user = { name: "Ana", nickname: "ana" };
 		const { rerender } = render(<Nav />);
 		expect(screen.getByRole("button", { name: "nav.menu" })).toBeTruthy();
 		props.unreadNotifications = 2;
 		rerender(<Nav />);
-		const burger = screen.getByRole("button", { name: "nav.menuUnread" });
-		expect(burger.textContent).toContain("2");
+		const burger = screen.getByRole("button", { name: "nav.menu" });
+		expect(burger.textContent).not.toContain("2");
+		expect(document.querySelector('a[href="/me/notifications"]')).toBeNull();
 	} finally {
 		props.auth.user = null;
 		props.unreadNotifications = 0;

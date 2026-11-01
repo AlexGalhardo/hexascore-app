@@ -48,7 +48,7 @@ var sitemapSources = []sitemapSource{
 	{"entities", "language", "languages", "code"},
 }
 
-var staticPaths = []string{"/", "/games", "/movies", "/series", "/books"}
+var staticPaths = []string{"/", "/games", "/movies", "/series", "/books", "/about"}
 
 func (s sitemapSource) name(n int) string { return fmt.Sprintf("%s-%s-%d.xml", s.family, s.key, n) }
 
