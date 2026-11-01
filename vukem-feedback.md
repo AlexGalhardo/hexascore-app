@@ -23,4 +23,3 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 - **Repro**: in a job with no request, try to stream an ORM iterator to a `*os.File` or an S3 upload writer with `export.NDJSON`: there is no request and no `ResponseWriter`.
 - **Workaround**: hand-written encoders in the app, duplicating the formula guard (CWE-1236) logic.
 - **Request**: add writer-level helpers, for example `export.EncodeCSV(io.Writer, header, rows, record, opts...)` and `export.EncodeNDJSON(io.Writer, rows, opts...)`, sharing the same formula guard and flush options; keep the HTTP helpers as thin wrappers over them, and document the job use case on the exports page.
-
