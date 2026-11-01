@@ -2965,7 +2965,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Notes: owner input: who moderates (owner alone or with a helper) and when. Rehearsal rows are reverted or deleted afterwards only through revert, never by editing `catalog_audit` (append-only). The command flag names are app code (`vukem make:command`), not vukem flags.
   - Status (2026-11-01): owner gate (staging environment): the 100-suggestion rehearsal runs on staging (owner yes for the staging environment).
 
-- [x] **P4.B.5.3** Release `v1.5.0` and turn the community submissions flag on in production. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
+- [ ] **P4.B.5.3** Release `v1.5.0` and turn the community submissions flag on in production. Status (2026-11-01): the version number is superseded by the rebuilt release series v0.1.0–v0.39.0; still open for turning the community submissions flag on in production (owner gate).
   - Files/modules: `CHANGELOG.md`
   - Refs: ADR 0013; ADR 0010; P4.A.4.1 flag
   - Depends on: P4.B.5.2
@@ -3341,7 +3341,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - Play Console vitals after 7 days → crash-free sessions ≥ 99 %, recorded with the date in `docs/PROGRESS.md`
   - Notes: the owner manages the testers list. A crash fix that changes only JS may ship over the air under the OTA rule; anything else needs a new store build.
 
-- [x] **P5.C.3.3** Release to production with a staged rollout of 20 % → 100 % over ≥ 3 days, raise `APP_MIN_SUPPORTED_VERSION` to `1.0.0`, and release `v1.8.0`. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
+- [ ] **P5.C.3.3** Release to production with a staged rollout of 20 % → 100 % over ≥ 3 days, raise `APP_MIN_SUPPORTED_VERSION` to `1.0.0`, and release `v1.8.0`. Status (2026-11-01): the version number is superseded by the rebuilt release series v0.1.0–v0.39.0; still open for the Play Store staged rollout (owner gate).
   - Files/modules: `CHANGELOG.md`, production env `APP_MIN_SUPPORTED_VERSION`, `docs/PROGRESS.md`
   - Refs: SDD 10 §7.4, §7.8; SDD 05 §6.4 (kill switch); ADR 0013
   - Depends on: P5.C.3.2
@@ -3503,7 +3503,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `QUEUE_CONNECTION=database vukem queue:work -queue ingest -stop-when-empty` after `bootstrap --limit 20` on a dev database → 80 items normalised, `job_runs` all `succeeded`
   - Notes: scheduler locks live in `app.Cache()`. Use `CACHE_STORE=database` in production so a restart does not double-run (scheduler page "Overlapping runs"). Registering custom commands is [NOT VERIFIED] in SDD 06 §7.9; confirm it on the vukem CLI docs or expose bootstrap as an admin run only (P6.B.4.3).
 
-- [x] **P6.A.4.2** Release `v1.9.0` with `ingest_wikidata` and `ingest_wikipedia` on in staging (and `ingest_openlibrary` only if A-05 allows), after 7 days of green daily runs. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
+- [ ] **P6.A.4.2** Release `v1.9.0` with `ingest_wikidata` and `ingest_wikipedia` on in staging (and `ingest_openlibrary` only if A-05 allows), after 7 days of green daily runs. Status (2026-11-01): the version number is superseded by the rebuilt release series v0.1.0–v0.39.0; still open for turning the Wikidata/Wikipedia ingestion on (owner gate).
   - Files/modules: `CHANGELOG.md`, staging/production env `FLAG_INGEST_*`, `docs/PROGRESS.md`
   - Refs: ADR 0013; SDD 06 §6 "Kill switches", §9
   - Depends on: P6.A.4.1
@@ -3664,7 +3664,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.B.5 Release
 
-- [x] **P6.B.5.1** Release `v1.10.0` with every source on in staging, then production, and start the 30-day green-jobs clock for the phase exit. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
+- [ ] **P6.B.5.1** Release `v1.10.0` with every source on in staging, then production, and start the 30-day green-jobs clock for the phase exit. Status (2026-11-01): the version number is superseded by the rebuilt release series v0.1.0–v0.39.0; still open for turning every source on and the 30-day gate (owner gate).
   - Files/modules: `CHANGELOG.md`, env `FLAG_INGEST_*`, `docs/PROGRESS.md`
   - Refs: ADR 0013; SDD 06 §9; ROADMAP P6 exit criteria
   - Depends on: P6.B.4.5, P6.B.2.3, P6.B.3.3, P6.B.4.2
@@ -3832,7 +3832,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.D.4 Release
 
-- [x] **P6.D.4.1** Release `v1.12.0` and close Phase 6 once daily jobs have been green for 30 days and trending and similar are live. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
+- [ ] **P6.D.4.1** Release `v1.12.0` and close Phase 6 once daily jobs have been green for 30 days and trending and similar are live. Status (2026-11-01): the version number is superseded by the rebuilt release series v0.1.0–v0.39.0; still open for the 30 green days and trending checks before closing Phase 6 (owner gate).
   - Files/modules: `CHANGELOG.md`, `docs/PROGRESS.md`, `ROADMAP.md` status table
   - Refs: ADR 0013; SDD 08 §9; SDD 06 §9; ROADMAP P6 exit criteria
   - Depends on: P6.D.1.3, P6.D.3.1, P6.B.5.1
@@ -3942,7 +3942,7 @@ Design principles for the whole phase: every social write is moderated by the P4
     - `curl -sI localhost:3000/og/items/<id>.png` → `image/png`, `Cache-Control: public, max-age=86400`; the item page `<meta property="og:image">` points at it
   - Status (2026-11-01): done (a9343e81): `TestOGImage` PASS (GET and HEAD 200 `image/png`, `Cache-Control: public, max-age=86400`, 1200x630; the page sets `ogImage` for the og:image meta). `dwebp` 1.6.0 ships in the runtime image's `libwebp-tools`; the WebP decode path is checked on the first deploy.
 
-- [x] **P7.C.1.3** Release `v1.15.0` and close Phase 7 once the moderation SLA covers reviews and comments for 30 days. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
+- [ ] **P7.C.1.3** Release `v1.15.0` and close Phase 7 once the moderation SLA covers reviews and comments for 30 days. Status (2026-11-01): the version number is superseded by the rebuilt release series v0.1.0–v0.39.0; still open for the 30-day moderation SLA before closing Phase 7 (owner gate).
   - Depends on: P7.C.1.2, P7.B.1.4
   - Model: Sonnet
   - Acceptance: `gh release view v1.15.0` → non-empty body; moderation median ≤ 24 h over 30 days
