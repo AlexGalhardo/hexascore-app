@@ -5,7 +5,7 @@
 --
 -- Run on the staging copy with a read-only role and save the CSV for the site (P3.B.3.2):
 --   psql "$STAGING_DATABASE_URL" --csv -f qa/sql/api_coverage.sql > /tmp/api_coverage.csv
---   bun scripts/api-coverage-json.ts /tmp/api_coverage.csv > resources/data/api_coverage.json
+--   bun scripts/api-coverage-json.ts /tmp/api_coverage.csv <YYYY-MM-DD> > resources/data/api_coverage.json
 -- The allowlist defaults to config.DefaultCatalogAPISources; when production sets CATALOG_API_SOURCES, pass the
 -- same value: PGOPTIONS='-c hexascore.api_sources=wikidata,hexascore' psql ...
 WITH allowed AS (
