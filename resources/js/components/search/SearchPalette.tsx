@@ -210,18 +210,18 @@ export default function SearchPalette({ open, onOpenChange, returnFocus }: Props
 												<span className="aspect-[2/3] w-8 shrink-0 border border-border bg-surface" />
 											)}
 											<span className="min-w-0 flex-1">
-												<span className="block truncate font-display text-base font-bold">
+												<span className="block truncate text-[15px] font-semibold">
 													{row.s.title}
-													{row.s.year != null && (
-														<span className="ml-2 font-sans text-sm font-normal text-muted tabular-nums">
-															{row.s.year}
-														</span>
-													)}
 												</span>
 												<span className="block text-[13px] text-muted">
 													{t(`itemTypes.${row.s.type}`)}
 												</span>
 											</span>
+											{row.s.year != null && (
+												<span className="shrink-0 text-sm text-muted tabular-nums">
+													{row.s.year}
+												</span>
+											)}
 										</>
 									)}
 									{row.kind === "recent" && (
