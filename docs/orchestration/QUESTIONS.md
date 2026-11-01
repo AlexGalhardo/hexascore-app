@@ -118,3 +118,5 @@ These stay unchecked. None of them is in a worker queue. Say the word here and n
   - Answer (2026-11-01, owner, in chat): approved `expo-font` with the Playfair Display and Inter font files (OFL), `@expo/vector-icons`, and `@expo/ui`. Exact versions compatible with Expo SDK 58, pinned; ADR 0019 is amended in the same change.
 - Q-A16 (2026-11-01, legal reads D-36 / A-05 / Steam-GOG).
   - Answer (2026-11-01, owner, in chat): "Legal reads still owed (D-36 Twitch/IGDB, A-05 Open Library, Steam/GOG terms) -> pode finalizar". The legal gates are cleared: IGDB (Twitch Developer Services Agreement), Open Library, Steam and GOG sources may be implemented and enabled per their published terms. Unblocks P6.A.2.4, P6.B.1.2, P6.B.1.3, P6.B.2.2. Licence values in `data_sources` must cite each source's terms page.
+- Q-A17 (2026-11-01, mail addresses).
+  - Answer (2026-11-01, owner, in chat): `noreply@hexascore.app` sends every automatic message. `support@hexascore.app` is the only address that receives and answers user email, including Reply-To and contact-form replies.
