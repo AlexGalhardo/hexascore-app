@@ -110,6 +110,38 @@
       "requested": "Export requested. You will get an email with the link soon.",
       "cooldown": "You can request one export every 7 days. Try again later.",
       "failed": "Could not request the export. Try again."
+    },
+    "notifications": {
+      "title": "Email notices",
+      "community": "Do not email me about my community suggestions",
+      "communityHelp": "You still see every decision on your suggestions in your notifications.",
+      "save": "Save email preferences"
+    },
+    "updateRequired": {
+      "title": "Update required"
+    },
+    "offline": "You are offline. Changes sync when you reconnect.",
+    "crashReports": {
+      "title": "Send crash reports?",
+      "body": "If the app crashes, send the app version, Android version, screen and error details to HexaScore. No account, e-mail or token is included. You can turn this off in Settings.",
+      "allow": "Send reports",
+      "deny": "Don't send"
+    },
+    "blocked": {
+      "title": "Your account is suspended",
+      "reason": "Reason: {reason}",
+      "until": "Until {date}",
+      "permanent": "No end date",
+      "back": "Back to login"
+    },
+    "settings": {
+      "title": "Settings",
+      "account": "Account",
+      "appearance": "Appearance",
+      "themeSystem": "System",
+      "themeLight": "Light",
+      "themeDark": "Dark",
+      "crashReports": "Send crash reports"
     }
   },
   "actions": {
@@ -246,7 +278,8 @@
       "name": "Name",
       "show": "Show password",
       "hide": "Hide password",
-      "confirmPassword": "Confirm password"
+      "confirmPassword": "Confirm password",
+      "deviceName": "Device name"
     },
     "rules": {
       "title": "Your password must have:",
@@ -512,6 +545,12 @@
       "seeAll": "All {section}",
       "empty": "Nothing here yet."
     },
+    "trending": {
+      "title": "{type}: top 10 trending (30 days)",
+      "allPrior": "Popular {type}",
+      "popular": "Popular",
+      "empty": "Nothing is trending yet."
+    },
     "itemsFoundLabel": {
       "one": "item found",
       "other": "items found"
@@ -585,6 +624,9 @@
     "pricing": "Pricing",
     "language": "Language",
     "openSearch": "Open search",
+    "searchTab": "Search",
+    "themeDark": "Switch to dark theme",
+    "themeLight": "Switch to light theme",
     "menu": "Menu",
     "skip": "Skip to content",
     "dismiss": "Dismiss",
@@ -916,6 +958,12 @@
       "delete": "Delete times",
       "saved": "Times saved.",
       "deleted": "Times deleted."
+    },
+    "confidence": "Confidence: {level}",
+    "confidenceLevel": {
+      "low": "low",
+      "medium": "medium",
+      "high": "high"
     }
   },
   "updatedLabel": "Last updated",
@@ -960,7 +1008,7 @@
       "4": {
         "heading": "5. Who we share data with",
         "body": {
-          "0": "We do not sell personal data. We share it only with providers that process it on our behalf: Railway (hosting and database), Grafana Cloud (metrics and logs), Resend (transactional email), Stripe (payments), Google (only if you choose \"Continue with Google\") and Telegram (operator alerts).",
+          "0": "We do not sell personal data. We share it only with providers that process it on our behalf: Railway (hosting, database, metrics and logs), Resend (transactional email), Stripe (payments), Google (only if you choose \"Continue with Google\") and Telegram (operator alerts).",
           "1": "Some of these providers are located outside your country, including in the United States. Transfers use the safeguards those laws allow.",
           "2": "Catalogue metadata from IGDB and TMDB is shown with the attribution those sources require. Community catalogue contributions stay under the A-07 licence."
         }
@@ -1153,7 +1201,9 @@
     "loginToRate": "Log in to rate",
     "chooseNickname": "Choose a nickname to rate",
     "verifyToRate": "Confirm your email to rate items.",
-    "verifyLink": "Resend the confirmation email"
+    "verifyLink": "Resend the confirmation email",
+    "notReleased": "The rating opens when the item is released.",
+    "notSaved": "Your rating could not be saved. Try again."
   },
   "search": {
     "title": "Search",
@@ -1471,7 +1521,10 @@
       "creators": "Creators",
       "organizations": "Organizations",
       "franchise": "Franchise",
-      "platforms": "Platforms"
+      "platforms": "Platforms",
+      "entity_kind": "Kind",
+      "work_id": "Book",
+      "language": "Language (code, e.g. en, pt-BR)"
     },
     "precision": {
       "label": "Precision",
@@ -1493,7 +1546,14 @@
       "mergeDest": "Record to keep",
       "change": "Change",
       "link": "Suggest a new {type}",
-      "missing": "Cannot find it?"
+      "missing": "Cannot find it?",
+      "targets": {
+        "label": "What to add",
+        "item": "Game, movie, series or book",
+        "entity": "Person, company or tag",
+        "edition": "Book edition"
+      },
+      "choose": "Choose…"
     },
     "status": {
       "title": "Your suggestion",
@@ -1541,6 +1601,13 @@
         "system": "HexaScore",
         "user": "member"
       }
+    },
+    "entityKinds": {
+      "person": "Person",
+      "organization": "Organization",
+      "franchise": "Franchise",
+      "platform": "Platform",
+      "genre": "Genre"
     }
   },
   "forYou": {
