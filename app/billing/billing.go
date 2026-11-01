@@ -302,7 +302,7 @@ func (b *Billing) SyncSubscription(ctx context.Context, id string) error {
 		return ErrNotConfigured
 	}
 
-	sub, created, err := getSubscription(ctx, b.Stripe, id)
+	sub, err := b.Stripe.GetSubscription(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -338,7 +338,7 @@ func (b *Billing) SyncSubscription(ctx context.Context, id string) error {
 	}
 
 	if row.State == StateActive {
-		if row.State, err = b.supersede(ctx, row.UserID, sub.ID, created); err != nil {
+		if row.State, err = b.supersede(ctx, row.UserID, sub.ID, sub.Created); err != nil {
 			return err
 		}
 
@@ -444,7 +444,7 @@ func (b *Billing) supersede(ctx context.Context, userID int64, id string, create
 	}
 
 	for _, o := range others {
-		other, otherCreated, err := getSubscription(ctx, b.Stripe, o.StripeSubscriptionID)
+		other, err := b.Stripe.GetSubscription(ctx, o.StripeSubscriptionID)
 		if err != nil {
 			return "", err
 		}
@@ -453,7 +453,7 @@ func (b *Billing) supersede(ctx context.Context, userID int64, id string, create
 			continue // stale local row: the transaction retires it
 		}
 
-		if otherCreated > created || (otherCreated == created && other.ID > id) {
+		if other.Created > created || (other.Created == created && other.ID > id) {
 			b.Log.WarnContext(ctx, "cancelling a superseded stripe subscription", "subscription", id, "kept", other.ID)
 
 			return StateCanceled, cancelSubscription(ctx, b.Stripe, id)

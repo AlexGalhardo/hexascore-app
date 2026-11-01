@@ -43,11 +43,6 @@ var (
 	uuidRe  = regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
 )
 
-// errNotModified ends a typed handler after c.NotModified wrote the 304: the error handler sees the response
-// written and only logs it at debug level.
-// workaround(vukem): VF-049, typed handlers have no documented way to answer 304.
-var errNotModified = errs.New(http.StatusNotModified, "not modified")
-
 // Controller holds the catalogue read handlers shared by /api/v1 and /app/v1.
 type Controller struct {
 	DB     catalog.Querier
@@ -111,7 +106,7 @@ type ItemPageJSON struct {
 // ListItemsInput documents the listItems query; values are parsed by catalog.ParseListQuery so a bad value is
 // a 400 invalid-query (not counted, FR-05-4) instead of a 422. `min_<category>` filters are dynamic per type.
 type ListItemsInput struct {
-	Type     string `json:"type"      doc:"games, movies, series or books"                     validate:"oneof=games movies series books"`
+	Type     string `json:"type"      doc:"games, movies, series or books"                     enum:"games,movies,series,books"`
 	Genre    string `json:"genre"     doc:"genre entity slug"`
 	Platform string `json:"platform"  doc:"platform entity slug (games)"`
 	Year     string `json:"year"      doc:"release year, 1800-2100"`
@@ -128,7 +123,7 @@ const unknownType = "unknown type: use games, movies, series or books"
 
 // GetItemInput is the getItem path and query.
 type GetItemInput struct {
-	Type   string `json:"type"   doc:"games, movies, series or books" validate:"oneof=games movies series books"`
+	Type   string `json:"type"   doc:"games, movies, series or books" enum:"games,movies,series,books"`
 	ID     string `json:"id"`
 	Locale string `json:"locale" doc:"en, pt-BR or es"`
 }
@@ -324,16 +319,15 @@ func sectionOf(typ string) string {
 }
 
 // NotModified sets the strong ETag and Cache-Control of v (SDD 05 §6.1) and, when If-None-Match matches, has
-// written a 304 and returns errNotModified (FR-05-8; the quota still counts it, FR-05-4).
+// written a 304 (FR-05-8; the quota still counts it, FR-05-4). Typed handlers return the zero or computed
+// value with this nil error: api.Register sees the written response and skips the body.
 func NotModified(c *web.Ctx, v any) error {
 	etag, err := web.ETagOf(v)
 	if err != nil {
 		return err
 	}
 	c.SetHeader("Cache-Control", "private, no-cache")
-	if c.NotModified(etag, time.Time{}) {
-		return errNotModified
-	}
+	c.NotModified(etag, time.Time{})
 
 	return nil
 }
@@ -405,22 +399,6 @@ func localeOf(raw string) (string, error) {
 	}
 
 	return raw, nil
-}
-
-// TypeGuard answers an unknown {type} with the 400 invalid-query problem. The oneof tag on the inputs only
-// feeds the OpenAPI enum: left alone it would answer 422, which the quota counts and the contract (SDD 05
-// FR-05-4) forbids.
-// workaround(vukem): VF-NEW-P2.H.3.1.
-func TypeGuard(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		if t := req.PathValue("type"); t != "" {
-			if _, ok := typeOf[t]; !ok {
-				web.NewCtx(w, req, web.ServicesFrom(req.Context())).HandleError(invalid(unknownType))
-				return
-			}
-		}
-		next.ServeHTTP(w, req)
-	})
 }
 
 // invalid is the 400 invalid-query problem; the quota refunds it (FR-05-4).

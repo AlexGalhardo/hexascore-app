@@ -188,7 +188,7 @@ func Coverage(cases []UserCase, catalogue int) float64 {
 }
 
 // WriteCSV writes rows with encoding/csv. A cell starting with = + - @ tab or CR gets a leading apostrophe so a
-// spreadsheet never reads it as a formula (VF-029: the export helpers only write to http.ResponseWriter).
+// spreadsheet never reads it as a formula (VF-NEW-EXPORT-WRITER: the export helpers only write to http.ResponseWriter).
 func WriteCSV(w io.Writer, rows [][]string) error {
 	cw := csv.NewWriter(w)
 

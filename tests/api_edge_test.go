@@ -57,6 +57,9 @@ func TestAPIEdge(t *testing.T) {
 		}{
 			{"/api/v1/games?bogus=1", "invalid-query", 400},
 			{"/api/v1/games?cursor=garbage", "invalid-cursor", 400},
+			{"/api/v1/films", "invalid-query", 400},
+			{"/api/v1/films/" + uuid.NewV7().String(), "invalid-query", 400},
+			{"/api/v1/films/" + uuid.NewV7().String() + "/activity", "invalid-query", 400},
 			{"/api/v1/games/" + uuid.NewV7().String(), "not-found", 404},
 			{"/api/v1/nope/a/b/c", "not-found", 404},
 		} {

@@ -120,7 +120,6 @@ func APIV1(r *router.Router, app *vukem.App) error {
 			}, acc.ProblemBase, app.Now),
 			throttle,
 			api.Quota(meter, plans, acc.ProblemBase),
-			publicapi.TypeGuard,
 		)
 
 		read := func(name string) vapi.Op {

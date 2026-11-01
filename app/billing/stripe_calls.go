@@ -2,40 +2,12 @@ package billing
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
 
 	"github.com/AlexGalhardo/vukem/contrib/stripe"
 )
-
-// workaround(vukem): VF-051 — contrib/stripe has no subscription list, no checkout session
-// list/expire and no Subscription.Created, so these go through Client.Call.
-
-// getSubscription is GetSubscription plus the subscription's created time (unix seconds).
-func getSubscription(ctx context.Context, c *stripe.Client, id string) (stripe.Subscription, int64, error) {
-	var raw json.RawMessage
-	if err := c.Call(ctx, http.MethodGet, "/v1/subscriptions/"+url.PathEscape(id), nil, &raw); err != nil {
-		return stripe.Subscription{}, 0, err
-	}
-
-	var sub stripe.Subscription
-	if err := json.Unmarshal(raw, &sub); err != nil {
-		return sub, 0, fmt.Errorf("decode subscription %s: %w", id, err)
-	}
-
-	// Decoded separately: Subscription's UnmarshalJSON would swallow an embedding struct's extra field.
-	var meta struct {
-		Created int64 `json:"created"`
-	}
-	if err := json.Unmarshal(raw, &meta); err != nil {
-		return sub, 0, fmt.Errorf("decode subscription %s: %w", id, err)
-	}
-
-	return sub, meta.Created, nil
-}
 
 // customerSubscriptions lists every subscription of a Stripe customer, whatever its status.
 func customerSubscriptions(ctx context.Context, c *stripe.Client, customer string) ([]stripe.Subscription, error) {
@@ -43,8 +15,8 @@ func customerSubscriptions(ctx context.Context, c *stripe.Client, customer strin
 
 	p := stripe.Params{"customer": customer, "status": "all", "limit": 100}
 	for {
-		var page stripe.List[stripe.Subscription]
-		if err := c.Call(ctx, http.MethodGet, "/v1/subscriptions", p, &page); err != nil {
+		page, err := c.ListSubscriptions(ctx, p)
+		if err != nil {
 			return nil, fmt.Errorf("list stripe subscriptions: %w", err)
 		}
 
@@ -60,9 +32,8 @@ func customerSubscriptions(ctx context.Context, c *stripe.Client, customer strin
 // expireOpenCheckouts expires the customer's open subscription Checkout Sessions, so only the session about to be
 // created can still start a subscription (two tabs would otherwise create two).
 func expireOpenCheckouts(ctx context.Context, c *stripe.Client, customer string) error {
-	var page stripe.List[stripe.CheckoutSession]
-	if err := c.Call(ctx, http.MethodGet, "/v1/checkout/sessions",
-		stripe.Params{"customer": customer, "status": "open", "limit": 100}, &page); err != nil {
+	page, err := c.ListCheckoutSessions(ctx, stripe.Params{"customer": customer, "status": "open", "limit": 100})
+	if err != nil {
 		return fmt.Errorf("list open checkout sessions: %w", err)
 	}
 
@@ -71,7 +42,7 @@ func expireOpenCheckouts(ctx context.Context, c *stripe.Client, customer string)
 			continue
 		}
 
-		err := c.Call(ctx, http.MethodPost, "/v1/checkout/sessions/"+url.PathEscape(cs.ID)+"/expire", nil, nil)
+		_, err := c.ExpireCheckoutSession(ctx, cs.ID)
 		if err != nil && !isNotFoundOrNotOpen(err) {
 			return fmt.Errorf("expire checkout session %s: %w", cs.ID, err)
 		}

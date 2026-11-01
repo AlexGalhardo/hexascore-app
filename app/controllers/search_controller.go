@@ -419,26 +419,23 @@ type SuggestJSON struct {
 	Data []SuggestItem `json:"data"`
 }
 
-// errSuggestNotModified ends a typed suggest read after c.NotModified wrote the 304.
-// workaround(vukem): VF-049, typed handlers have no documented way to answer 304.
-var errSuggestNotModified = errs.New(http.StatusNotModified, "not modified")
-
 // Suggest answers /search/suggest with up to 8 entries; anonymous answers are
 // cached for 300 s and carry an ETag.
 func (h *Search) Suggest(c *web.Ctx) error {
 	body, err := h.SuggestRead(c)
-	if errors.Is(err, errSuggestNotModified) {
-		return nil
-	}
 	if err != nil {
 		return err
+	}
+
+	if c.Writer().Written() {
+		return nil
 	}
 
 	return c.JSON(http.StatusOK, body)
 }
 
 // SuggestRead is the typed form of Suggest (GET /app/v1/search/suggest). It reads q, type and locale from the
-// query (searchParams) and returns errSuggestNotModified once a 304 is written.
+// query (searchParams) and writes the 304 itself when If-None-Match matches.
 func (h *Search) SuggestRead(c *web.Ctx) (SuggestJSON, error) {
 	text, locale, types := searchParams(c)
 	prefix := i18n.PathPrefix(c.Context())
@@ -510,7 +507,7 @@ func (h *Search) SuggestRead(c *web.Ctx) (SuggestJSON, error) {
 		}
 
 		if c.NotModified(etag, time.Time{}) {
-			return SuggestJSON{}, errSuggestNotModified
+			return SuggestJSON{}, nil
 		}
 	}
 

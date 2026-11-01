@@ -8,7 +8,7 @@ import (
 
 // RequestLog gives the request a logging.Fields holder. It is a server
 // middleware registered before vukem's Logger, so the request line can read
-// the route and user that inner middleware record (workaround(vukem): VF-022).
+// the route and user that inner middleware record (workaround(vukem): VF-NEW-REQUEST-LINE-FIELDS).
 func RequestLog(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		next.ServeHTTP(w, r.WithContext(logging.WithFields(r.Context())))

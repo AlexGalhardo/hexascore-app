@@ -22,11 +22,11 @@ const (
 	hostV1Prefix = "/v1"
 )
 
-// APIEdge is the workaround(vukem) VF-015/VF-016 for the public API edge. Install it with Router.UseServer
-// before every other server middleware. It (1) rewrites /v1/... to /api/v1/... when the request Host is apiHost
-// (port ignored), (2) answers CORS for /api/v1 with origin "*" and no credentials, and (3) makes every
-// application/problem+json under /api/v1 and /app/v1 carry a catalogue `code` and a `type` ending in it, including problems
-// vukem raises itself (404, 405, typed-route 400s), which cannot carry extension members (VF-016).
+// APIEdge is the public API edge, a workaround(vukem) for VF-NEW-HOST-ONLY and VF-NEW-PROBLEM-TYPE. Install it with
+// Router.UseServer before every other server middleware. It (1) rewrites /v1/... to /api/v1/... when the request Host
+// is apiHost (port ignored), (2) answers CORS for /api/v1 with origin "*" and no credentials, and (3) makes every
+// application/problem+json under /api/v1 and /app/v1 carry a catalogue `code` and a `type` ending in it, including
+// problems vukem raises itself (404, 405, typed-route 400s), which cannot carry a code or type (VF-NEW-PROBLEM-TYPE).
 // On apiHost only the API is served (SDD 05 section 6.1): /v1 and /api/v1, /up, and a JSON index at "/"; every other
 // path is a 404 problem+json that never reaches the web stack (no HTML, no session cookie, no Inertia). appURL is the
 // web origin the index links to.
