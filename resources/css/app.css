@@ -58,6 +58,10 @@
 	h2 {
 		font-family: var(--font-display);
 	}
+	/* AppLayout moves focus to the new <h1> after a visit for screen readers; it is not a control. */
+	h1[tabindex="-1"]:focus {
+		outline: none;
+	}
 }
 
 /* The server-rendered placeholder of CSR pages (views/app.html) disappears once React fills #app. */

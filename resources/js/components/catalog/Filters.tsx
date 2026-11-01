@@ -63,7 +63,10 @@ export default function Filters({
 				aria-expanded={open}
 				aria-controls={panel}
 				onClick={() => setOpen((o) => !o)}
-				className={`${btnClass("secondary", "px-3.5")} ${open ? "bg-fg text-bg hover:bg-fg" : ""} md:hidden`}
+				className={btnClass(
+					"secondary",
+					"px-3.5 aria-expanded:bg-fg aria-expanded:text-bg aria-expanded:hover:bg-fg md:hidden",
+				)}
 			>
 				<svg aria-hidden="true" viewBox="0 0 24 24" className="size-4" fill="none">
 					<path
