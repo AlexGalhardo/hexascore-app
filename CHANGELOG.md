@@ -16,9 +16,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **legal:** Open Library licence record and A-05 decision in `docs/legal/open-library.md`; `CATALOG_API_SOURCES` listed in `.env.example` (P6.A.1.1)
 - **mobile:** Search tab suggests while typing (debounced `/search/suggest`), groups full `/search` results by type, cuts queries to 100 code points and reports clicks through `POST /search/events` without the query (P5.B.3.1)
 - **legal:** `/legal/privacy` answers 301 to `/policy`, keeping the `/pt-br` or `/es` prefix
+- **api:** `qa/sql/api_coverage.sql` measures per-field API coverage with the serialiser's source rules (checked by `TestAPICoverageSQL`); `scripts/api-coverage-json.ts` writes `resources/data/api_coverage.json` from its CSV (P3.A.2.2)
+- **api:** `/pricing` and `/docs/coverage` show the coverage table from `api_coverage.json`, or say the numbers are not measured yet; the pricing statement says film, series and game covers and trailers are never in the API (P3.B.3.2)
+- **ingest:** Wikidata edition records (P747, 50 per work) give each book edition its language, year and ISBN (P6.B.3.1)
 
 ### Fixed
 
+- **ui:** Item pages ship the reviews, comments and reactions strings instead of raw keys (P7.B.1.1)
+- **infra:** `qa/k6/moderation.js` keeps one signed-in session per account (admin TOTP included), and `CommunityLoad` dates its load before today so members keep their daily submit quota (P4.B.5.1)
 - **legal:** The delete-account help page links keep the visitor's locale prefix (P5.C.2.1)
 - **repo:** `scripts/release.sh` starts the range at the commit whose tree matches the highest `vX.Y.Z` tag (not `git describe`), takes `--since <rev>`, and updates the compare links; its test runs under `bun test` in CI and `scripts/ci/local.sh`
 

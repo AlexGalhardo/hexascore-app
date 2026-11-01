@@ -2357,6 +2357,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Acceptance:
     - `psql "$STAGING_DATABASE_URL" -f qa/sql/api_coverage.sql` → one row per (type, field) with `pct` 0–100 and no error
     - `git diff --stat docs/sdd/05-public-api.md` → coverage table updated, `[NOT VERIFIED]` removed
+  - Status (2026-11-01): code done on main (b3995fc6): per-(type, field) SQL, `TestAPICoverageSQL` (SQL equals `catalog.LoadAPIItems` on fixtures) and `scripts/api-coverage-json.ts`. Open (owner gate): the staging run, `resources/data/api_coverage.json` from it and the SDD 05 numbers.
   - Notes: run on the staging copy only (read-only role). The SQL reads `provenance` jsonb and `*_source` columns using the same allowlist as the serialiser; a mismatch is a bug in one of them. Closes open issue 05-11.
 
 #### P3.A.3 Changes feed
@@ -2546,6 +2547,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Model: Sonnet
   - Acceptance:
     - `bun run e2e -- pricing.spec.ts` → coverage statement and link to `/docs/coverage` visible in three locales; numbers equal `resources/data/api_coverage.json`
+  - Status (2026-11-01): code done on main (805dda84): `CoverageTable` on `/pricing` and `/docs/coverage` from `api_coverage.json`, "not measured yet" while it has no rows; `TestCoverageRoutes` and `TestPricingPage` PASS. Open: numbers wait for the P3.A.2.2 staging run (owner gate); `pricing.spec.ts` not run.
   - Notes: prices stay the legacy table (D-33); do not change amounts. The statement must say covers for films, series and games are never in the API (SDD 05 §6.2).
 
 - [ ] **P3.B.3.3** Release `v1.2.0` (SDKs published, docs live).
@@ -2938,7 +2940,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P4.B.5 Gate, rehearsal and release
 
-- [ ] **P4.B.5.1** Run the community quality gate: `TestSecurity_Community_*`, ZAP, Playwright `community.spec.ts` end to end with axe in three locales, two-admin claim conflict, and k6 `moderation.js` with 10,000 open suggestions.
+- [x] **P4.B.5.1** Run the community quality gate: `TestSecurity_Community_*`, ZAP, Playwright `community.spec.ts` end to end with axe in three locales, two-admin claim conflict, and k6 `moderation.js` with 10,000 open suggestions.
   - Files/modules: `qa/e2e/community.spec.ts`, `qa/k6/moderation.js`, `database/seeders/community_load_seeder.go`
   - Refs: SDD 04 §9, §10, NFR-04-1
   - Depends on: P4.B.3.2, P4.B.4.2, P4.B.2.7, P4.B.2.6
@@ -2950,6 +2952,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Notes: seeder via `vukem make:seeder`; never run it against production.
   - Status (2026-11-01): parts in main (merge of agent/especialista/P4.B.5.1): `TestSecurity_Community_*` 5 PASS; `community.spec.ts` (axe in three locales, two-admin claim conflict with the new `admin2@example.test`), the dev-only `CommunityLoad` seeder (`db:seed CommunityLoad --count 10000`, refused in production) and `qa/k6/moderation.js` are written. Open: the Playwright, k6 and ZAP runs (long checks, batch run; ZAP needs a live host).
   - Status (2026-11-01): open, code-only: code on main and `TestSecurity_Community_*` PASS; open: the local k6 `moderation.js` run on 10,000 seeded suggestions (batch run); Playwright is not a gate since 2026-10-31.
+  - Done (2026-11-01): k6 `moderation.js` with 10,000 open suggestions after FIX-P4.B.5.1-k6 (merge e2c642ea): queue p(95) 82 ms, submit p(95) 148 ms, checks 100 %. Playwright `community.spec.ts` and ZAP not run (not gates since 2026-10-31).
 
 - [ ] **P4.B.5.2** Rehearse on staging: process 100 synthetic suggestions (mixed kinds, approvals, rejections, a revert, a lock, a competing pair) and confirm the SLA dashboard and notifications.
   - Files/modules: `app/commands/community_rehearsal.go`, `docs/runbooks/community-rehearsal.md`
@@ -3588,6 +3591,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - staging after `backfill.editions`: `psql -c "select round(100.0*count(*) filter (where cover_key is not null)/count(*)) from items where type='book'"` → ≥ 60 (only if A-05 allows Open Library; otherwise record the number and the reason)
   - Notes: `market_country = BR` from publish country `bl` is [NOT VERIFIED]; pin it with an Open Library fixture or leave it null. Edition contributors (translator, illustrator) are out (D-30).
   - Status (2026-11-01): code done on main: the four editions unit tests PASS. Open (owner gate): `backfill.editions` on a live database and the books cover percentage (Open Library only if A-05 allows).
+  - Status (2026-11-01, 3099bd16): P747 edition records are fetched (50 per work) and give each edition its language, year and ISBN. Still open: publisher (entity resolution), primary edition (needs edition covers), the 100 ms batch pause, Open Library editions (A-05).
 
 - [x] **P6.B.3.2** Resolve credits to entities: (1) QID; (2) source external id (`tmdb_person`, `tmdb_company`, `igdb_company`, `openlibrary_author`); (3) normalised name (NFKD, ASCII fold, lowercase, punctuation to space) + kind + year ±1. One candidate links, ≥ 2 (or a QID under another kind) opens `entity_match_reviews`, and none creates a native entity.
   - Files/modules: `internal/ingest/entities/match.go`, `internal/ingest/entities/normalize_name.go`, `internal/ingest/entities/match_test.go`
@@ -3864,7 +3868,7 @@ Design principles for the whole phase: every social write is moderated by the P4
     - `go test -tags integration ./tests -run 'TestFollows|TestSecurity_A01_PrivateProfileFollow'` → green
     - Playwright `social.spec.ts` → follow, unfollow and counts in the three locales
 
-- [ ] **P7.A.1.3** Emit activity events from the existing write paths (rating saved, status changed, list created or item added, review published) and build `/feed` (followed users, 20 per page, cursor) plus the "recent activity" tab on the public profile.
+- [x] **P7.A.1.3** Emit activity events from the existing write paths (rating saved, status changed, list created or item added, review published) and build `/feed` (followed users, 20 per page, cursor) plus the "recent activity" tab on the public profile.
   - Files/modules: `app/social/activity.go` (listener on `scoring`, `library` events), `app/controllers/feed_controller.go`, `resources/js/pages/Feed/Index.tsx`, `resources/js/components/social/ActivityCard.tsx`
   - Refs: SDD 14 §12; SDD 08 §7.1 (primitives shared with trending, P6.C.1); SDD 09 §7.3 (cursor)
   - Depends on: P7.A.1.2, P6.C.1.1
@@ -3873,6 +3877,7 @@ Design principles for the whole phase: every social write is moderated by the P4
     - `k6 run qa/k6/feed.js` → p95 ≤ 300 ms at 30 rps with 10k events
     - `go test -tags integration ./tests -run TestFeedPrivacy` → private profiles and hidden lists never appear in another user's feed
   - Status (2026-11-01): code done on main (parts 1 and 2, a9343e81): `TestFeedPrivacy`, `TestProfileActivityTab`, `TestActivityRetention` and `TestFeedPurgedOnAnonymise` PASS. Open: `k6 run qa/k6/feed.js` (written with `qa/k6/feed-seed.sql`, not run on this host; batch run). Flag `social` stays off while Q-A5 is open.
+  - Done (2026-11-01): `k6 run qa/k6/feed.js` on a local QA stack with 10,000 events: 30 rps for 60 s, feed p(95) 252 ms, 0 % failed (reports/P7.A.1.3.md "Acceptance run").
 
 - [ ] **P7.A.1.4** Release `v1.13.0` (follows and feed).
   - Depends on: P7.A.1.3
@@ -3882,7 +3887,7 @@ Design principles for the whole phase: every social write is moderated by the P4
 
 ### P7.B Reviews, comments and reactions
 
-- [ ] **P7.B.1.1** Reviews: optional text (≤ 5,000 chars, Markdown subset, spoiler flag) attached to a rating; shown on the item page (sorted by helpfulness, then date) and on the profile.
+- [x] **P7.B.1.1** Reviews: optional text (≤ 5,000 chars, Markdown subset, spoiler flag) attached to a rating; shown on the item page (sorted by helpfulness, then date) and on the profile.
   - Files/modules: `database/migrations/<ts>_create_reviews_table.go`, `app/social/reviews.go`, `app/controllers/reviews_controller.go`, `resources/js/components/item/Reviews.tsx`, `resources/js/components/item/ReviewForm.tsx`
   - Refs: SDD 14 §12; SDD 13 A05 (sanitised Markdown, no raw HTML); A-07 (licence of contributions); Letterboxd review model: DOC-research-letterboxd report
   - Depends on: P7.A.1.1
@@ -3891,6 +3896,7 @@ Design principles for the whole phase: every social write is moderated by the P4
     - `go test -tags integration ./tests -run 'TestReviews|TestSecurity_A05_ReviewMarkdown'` → green; a `<script>` in a review renders as text
     - Playwright `reviews.spec.ts` → write, edit, delete, spoiler toggle; axe 0 serious
   - Status (2026-11-01): code done on main (a9343e81): `TestReviews`, `TestReviewsDisabledByDefault` and `TestSecurity_A05_ReviewMarkdown` PASS. Open: Playwright `reviews.spec.ts` (written, not run; e2e is not a gate since 2026-10-31).
+  - Done (2026-11-01): the item page now ships the `reviews.`, `comments.` and `reactions.` strings (raw keys before; FIX-P7.B.1.1-i18n, merge 93b8930a); `reviews.spec.ts` 6 passed (desktop and mobile, en, pt-BR, es; axe 0 serious; `<script>` as text).
 
 - [x] **P7.B.1.2** Comments on reviews and lists (one level of threading, 60/h per user) and reactions (`like`, `helpful`) on reviews, comments and lists, with counts updated in the same transaction.
   - Files/modules: `database/migrations/<ts>_create_comments_and_reactions.go`, `app/social/comments.go`, `app/social/reactions.go`, controllers and routes, `resources/js/components/social/CommentThread.tsx`, `ReactionBar.tsx`
