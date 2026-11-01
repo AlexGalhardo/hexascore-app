@@ -82,6 +82,7 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 	ingestSrc.Pressure = pressure
 
 	base := []vukem.Option{
+		vukem.WithEnv(nil, config.WithQueueLimits(os.LookupEnv)),
 		vukem.WithProviders(Providers()...),
 		vukem.WithDatabaseDrivers(postgres.Driver()),
 		vukem.WithMigrations(migrations.All()),

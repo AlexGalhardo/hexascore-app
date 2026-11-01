@@ -17,6 +17,8 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | VF-NEW-PROBLEM-TYPE | 2026-11-01 | medium | open |
 | VF-NEW-HOST-ONLY | 2026-11-01 | medium | open |
 | VF-NEW-REQUEST-LINE-FIELDS | 2026-11-01 | low | open |
+| VF-NEW-ADMIN-GUARD-SCOPE | 2026-11-01 | low | open |
+| VF-NEW-BUFFERED-COUNTER | 2026-11-01 | low | open |
 
 ## VF-NEW-EXPORT-WRITER: export streams only to an HTTP response, so background jobs reimplement CSV/NDJSON
 
@@ -53,3 +55,21 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 - **Repro**: log in, `GET /library`: the `request` line has method, path, status, but no route pattern and no user.
 - **Workaround**: `bootstrap/app.go` wraps `app.Log` with `logging.NewHandler` and `middleware.RequestLog` stores a `logging.Fields` holder in the context that inner middleware fill (`workaround(vukem)` comments in `app/http/middleware/request_log.go` and `bootstrap/app.go`).
 - **Request**: `web.LogFields(ctx)` (or `c.LogAttr(k, v)`) whose attributes the request line includes, and a `Services.RequestLogAttrs func(*web.Ctx) []slog.Attr` hook run after the response.
+
+## VF-NEW-ADMIN-GUARD-SCOPE: the admin hardening options guard only the panel routes, answer 403 and cannot redirect to a 2FA setup
+
+- **Date**: 2026-11-01. **Severity**: low. **Status**: open.
+- **vukem version**: v0.35.0. **Docs consulted**: <https://vukem.dev/docs/digging-deeper/admin> (heading "Hardening"): `AllowCIDRs` answers 403 "before any login redirect"; `IdleTimeout` is "updated only by those routes, so using the rest of the app does n[ot refresh it]"; `panel.Mount` "is the only place that installs this stack", so routes beside the panel need `panel.Guard()`; `TwoFactor` is 403 when off.
+- **Context**: HexaScore's `AdminGuard` (`app/http/middleware/admin_guard.go`, SDD 13 FR-13-5, `TestSecurity_A01_HexaAdminNeeds2FA`, `TestSecurity_A07_HexaAdminSessionExpiry`, `TestSecurity_A01_HexaAdminIPAllowlist`) must hide the panel from outside the allowlist with a 404 (not a 403 that confirms it exists), apply the 30 minute idle and 12 hour absolute caps to every request of an admin or moderator (also on public pages, so a signed-in moderator who browses elsewhere keeps one clock), and send an admin without TOTP to the 2FA setup page with a flash message.
+- **Repro**: set `Config.AllowCIDRs` and request `/admin` from another IP: 403, not 404. Set `IdleTimeout`, browse public pages for longer than the timeout, open `/admin`: signed out, although the user was active. Set `TwoFactor` to a function returning false: 403, no redirect.
+- **Workaround**: the app keeps its own router-wide `AdminGuard` and does not set the native options (the native checks would only duplicate it on the panel routes and change the answers the tests pin).
+- **Request**: per-option behaviour switches on `admin.Config`, for example `DenyStatus int` (404 for `AllowCIDRs`), `TwoFactorRedirect string` (a path to redirect to instead of 403) and `IdleActivity func(*http.Request) bool` (or a documented `admin.TouchIdle(session, now)` for the app's own middleware), so an app-wide policy can use the native options instead of reimplementing them.
+
+## VF-NEW-BUFFERED-COUNTER: no buffered counter that batches hot-path increments into one periodic write
+
+- **Date**: 2026-11-01. **Severity**: low. **Status**: open.
+- **vukem version**: v0.35.0. **Docs consulted**: <https://vukem.dev/docs/digging-deeper/cache> (heading "Counters"): `Increment` is atomic, one store write per call, and the counter lives in the cache store; <https://vukem.dev/docs/digging-deeper/scheduler> (heading "Frequencies"): `EveryMinute()` and `HourlyAt(m)` exist, but no page describes accumulating counts in memory and flushing them on a schedule or at shutdown.
+- **Context**: item page views and search clicks (SDD 08 NFR-08-4) must not cost one database write per request; the app adds them in memory and a scheduled task upserts one row per item every minute (`app/recommend/primitives/flush.go`, `routes/schedule.go`), with a flush at shutdown.
+- **Repro**: `cache.Increment` on the database store runs one statement per view; on the memory store the count is not in a table the app can query or join, and a restart loses it.
+- **Workaround**: an app-owned `sync.Mutex` counter map swapped by `Flush`; a failed flush puts the counts back for the next one.
+- **Request**: a small `counter.Buffered[K]` (or `cache.Buffer`) with `Add(key, delta)`, `Swap() map[K]int64`, `Restore(map)` and a shutdown hook, so apps do not reimplement the swap-and-restore, plus a documented scheduler recipe.

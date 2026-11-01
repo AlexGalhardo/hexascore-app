@@ -3,17 +3,15 @@ package legacyimport
 import (
 	"bufio"
 	"context"
-	"crypto/sha256"
 	"database/sql"
 	"encoding/base32"
-	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
-	"strings"
 	"time"
 
+	"github.com/AlexGalhardo/vukem/auth/totp"
 	"github.com/AlexGalhardo/vukem/database"
 	"github.com/AlexGalhardo/vukem/orm"
 
@@ -116,17 +114,13 @@ LEFT JOIN users n ON n.legacy_id = t.user_id WHERE t.user_id = $1 ORDER BY t.id 
 	return err
 }
 
-// recoveryHashes hashes Better Auth's unused backup codes the way vukem's
-// totp.UseRecoveryCode checks them.
-//
-// workaround(vukem): VF-060, totp has no exported hash for an
-// existing code; TestTwoFactorUsersPassChallenge proves the format still matches.
+// recoveryHashes hashes Better Auth's unused backup codes into the form
+// totp.UseRecoveryCode checks.
 func recoveryHashes(codes []string) []string {
 	out := make([]string, 0, len(codes))
 
 	for _, c := range codes {
-		sum := sha256.Sum256([]byte("totp-recovery:" + strings.ToUpper(strings.TrimSpace(c))))
-		out = append(out, hex.EncodeToString(sum[:]))
+		out = append(out, totp.HashRecoveryCode(c))
 	}
 
 	return out
