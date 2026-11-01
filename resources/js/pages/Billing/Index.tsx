@@ -31,7 +31,7 @@ interface Props {
 
 const currencies: Currency[] = ["usd", "brl", "eur"];
 const button =
-	"rounded-md bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500 disabled:opacity-50";
+	"rounded-md bg-primary px-4 py-2 font-medium text-on-primary hover:bg-primary-hover disabled:opacity-50";
 
 // Checkout and the portal are Stripe pages: the server answers these
 // visits with a full page redirect (inertia.Location).
