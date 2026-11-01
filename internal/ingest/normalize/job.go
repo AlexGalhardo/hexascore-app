@@ -2,6 +2,7 @@ package normalize
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
@@ -57,7 +58,7 @@ func (n Normalizer) Step(ctx context.Context, tx *database.Tx, r run.Run) (run.R
 		return res, nil
 	}
 
-	recs, err := loadRecords(ctx, tx, qids)
+	recs, seen, err := loadRecords(ctx, tx, qids)
 	if err != nil {
 		return res, err
 	}
@@ -74,6 +75,17 @@ func (n Normalizer) Step(ctx context.Context, tx *database.Tx, r run.Run) (run.R
 
 	// Pass 1 writes items so that pass 2 can link items of the same batch.
 	for _, qid := range qids {
+		parked, err := run.IsParked(ctx, tx, JobName, qid)
+		if err != nil {
+			return res, err
+		}
+
+		if parked {
+			res.Skipped++
+
+			continue
+		}
+
 		item, err := BuildItem(qid, recs[qid], now)
 
 		switch {
@@ -92,31 +104,32 @@ func (n Normalizer) Step(ctx context.Context, tx *database.Tx, r run.Run) (run.R
 		}
 
 		old := known[qid]
-		id, slug := "", ""
+		id := ""
 
-		if old != nil {
-			id, slug = old.ID, old.Slug
+		// One bad record must not roll back the chunk: it is recorded and the run goes on.
+		err = isolate(ctx, tx, func() error {
+			var serr error
 
-			if _, err := ApplyCommunity(ctx, n.Community, id, item, now); err != nil {
-				return res, err
-			}
-		} else {
-			id = uuid.NewV7().String()
+			id, serr = n.saveOne(ctx, tx, old, item, now)
 
-			if slug, err = chooseSlug(ctx, tx, item); err != nil {
-				return res, err
-			}
-		}
-
-		dateChanged, err := saveItem(ctx, tx, id, slug, old, item, now)
+			return serr
+		})
 		if err != nil {
-			return res, err
-		}
-
-		if dateChanged && n.ScoreChanged != nil {
-			if err := n.dispatchScore(ctx, tx, id); err != nil {
+			if ctx.Err() != nil {
 				return res, err
 			}
+
+			res.Failed++
+
+			if _, ferr := run.RecordFailure(ctx, tx, r.ID, JobName, qid, "save_failed", err); ferr != nil {
+				return res, ferr
+			}
+
+			continue
+		}
+
+		if err := run.ClearFailure(ctx, tx, JobName, qid); err != nil {
+			return res, err
 		}
 
 		ids[qid], items[qid] = id, item
@@ -124,11 +137,11 @@ func (n Normalizer) Step(ctx context.Context, tx *database.Tx, r run.Run) (run.R
 		res.Changed++
 	}
 
-	if err := n.saveRelations(ctx, tx, qids, recs, ids, items); err != nil {
+	if err := n.saveRelations(ctx, tx, r, &res, qids, recs, ids, items); err != nil {
 		return res, err
 	}
 
-	if err := markDone(ctx, tx, qids, ids); err != nil {
+	if err := markDone(ctx, tx, qids, ids, seen); err != nil {
 		return res, err
 	}
 
@@ -139,6 +152,67 @@ func (n Normalizer) Step(ctx context.Context, tx *database.Tx, r run.Run) (run.R
 	}
 
 	return res, nil
+}
+
+// saveOne applies the community locks, picks the slug and writes one item. It returns the item id.
+func (n Normalizer) saveOne(
+	ctx context.Context,
+	tx *database.Tx,
+	old *existing,
+	item *Item,
+	now time.Time,
+) (string, error) {
+	id, slug := "", ""
+
+	if old != nil {
+		id, slug = old.ID, old.Slug
+
+		if _, err := ApplyCommunity(ctx, n.Community, tx, id, item, now); err != nil {
+			return "", err
+		}
+	} else {
+		var err error
+
+		id = uuid.NewV7().String()
+
+		if slug, err = chooseSlug(ctx, tx, item); err != nil {
+			return "", err
+		}
+	}
+
+	dateChanged, err := saveItem(ctx, tx, id, slug, old, item, now)
+	if err != nil {
+		return "", err
+	}
+
+	if dateChanged && n.ScoreChanged != nil {
+		if err := n.dispatchScore(ctx, tx, id); err != nil {
+			return "", err
+		}
+	}
+
+	return id, nil
+}
+
+// isolate runs fn inside a savepoint, so a failure undoes only fn's writes and leaves the transaction usable.
+func isolate(ctx context.Context, tx *database.Tx, fn func() error) error {
+	if _, err := tx.ExecContext(ctx, `SAVEPOINT normalize_item`); err != nil {
+		return fmt.Errorf("open savepoint: %w", err)
+	}
+
+	if err := fn(); err != nil {
+		if _, rerr := tx.ExecContext(ctx, `ROLLBACK TO SAVEPOINT normalize_item`); rerr != nil {
+			return errors.Join(err, fmt.Errorf("roll back savepoint: %w", rerr))
+		}
+
+		return err
+	}
+
+	if _, err := tx.ExecContext(ctx, `RELEASE SAVEPOINT normalize_item`); err != nil {
+		return fmt.Errorf("release savepoint: %w", err)
+	}
+
+	return nil
 }
 
 func (n Normalizer) dispatchScore(ctx context.Context, tx *database.Tx, id string) error {
@@ -158,6 +232,8 @@ func (n Normalizer) dispatchScore(ctx context.Context, tx *database.Tx, id strin
 func (n Normalizer) saveRelations(
 	ctx context.Context,
 	tx *database.Tx,
+	r run.Run,
+	res *run.Result,
 	qids []string,
 	recs map[string][]store.Record,
 	ids map[string]string,
@@ -206,13 +282,24 @@ func (n Normalizer) saveRelations(
 			continue
 		}
 
-		rel, err := ExtractRelations(qid, recs[qid], known)
-		if err != nil {
-			return err
-		}
+		err := isolate(ctx, tx, func() error {
+			rel, rerr := ExtractRelations(qid, recs[qid], known)
+			if rerr != nil {
+				return rerr
+			}
 
-		if err := saveRelations(ctx, tx, id, rel, all); err != nil {
-			return err
+			return saveRelations(ctx, tx, id, rel, all)
+		})
+		if err != nil {
+			if ctx.Err() != nil {
+				return err
+			}
+
+			res.Failed++
+
+			if _, ferr := run.RecordFailure(ctx, tx, r.ID, JobName, qid, "relations_failed", err); ferr != nil {
+				return ferr
+			}
 		}
 	}
 
@@ -243,39 +330,66 @@ ORDER BY external_id LIMIT $2`, jsonList(Sources), limit)
 	return out, rows.Err()
 }
 
-func loadRecords(ctx context.Context, tx *database.Tx, qids []string) (map[string][]store.Record, error) {
-	rows, err := tx.QueryContext(ctx, `SELECT source, external_id, payload FROM source_records
+// seenRecord is a source record as loadRecords read it; markDone only retires that exact version.
+type seenRecord struct {
+	Source    string    `json:"source"`
+	FetchedAt time.Time `json:"fetched_at"`
+}
+
+func loadRecords(
+	ctx context.Context,
+	tx *database.Tx,
+	qids []string,
+) (map[string][]store.Record, map[string][]seenRecord, error) {
+	rows, err := tx.QueryContext(ctx, `SELECT source, external_id, payload, fetched_at FROM source_records
 WHERE source IN (SELECT jsonb_array_elements_text($1::jsonb))
   AND external_id IN (SELECT jsonb_array_elements_text($2::jsonb))`, jsonList(Sources), jsonList(qids))
 	if err != nil {
-		return nil, fmt.Errorf("read source records: %w", err)
+		return nil, nil, fmt.Errorf("read source records: %w", err)
 	}
 	defer func() { _ = rows.Close() }()
 
 	out := map[string][]store.Record{}
+	seen := map[string][]seenRecord{}
 
 	for rows.Next() {
-		var r store.Record
-		if err := rows.Scan(&r.Source, &r.ExternalID, &r.Payload); err != nil {
-			return nil, fmt.Errorf("read source records: %w", err)
+		var (
+			r  store.Record
+			at time.Time
+		)
+
+		if err := rows.Scan(&r.Source, &r.ExternalID, &r.Payload, &at); err != nil {
+			return nil, nil, fmt.Errorf("read source records: %w", err)
 		}
 
 		out[r.ExternalID] = append(out[r.ExternalID], r)
+		seen[r.ExternalID] = append(seen[r.ExternalID], seenRecord{r.Source, at})
 	}
 
-	return out, rows.Err()
+	return out, seen, rows.Err()
 }
 
-func markDone(ctx context.Context, tx *database.Tx, qids []string, ids map[string]string) error {
+// markDone retires the versions that were read. A record fetched while the batch ran has a newer fetched_at,
+// stays pending and is picked up by the next run.
+func markDone(
+	ctx context.Context,
+	tx *database.Tx,
+	qids []string,
+	ids map[string]string,
+	seen map[string][]seenRecord,
+) error {
 	for _, qid := range qids {
 		var id any
 		if v, ok := ids[qid]; ok {
 			id = v
 		}
 
-		if _, err := tx.ExecContext(ctx, `UPDATE source_records SET normalized_at = now(), item_id = $2
-WHERE source IN (SELECT jsonb_array_elements_text($1::jsonb)) AND external_id = $3`,
-			jsonList(Sources), id, qid); err != nil {
+		versions, _ := json.Marshal(seen[qid])
+
+		if _, err := tx.ExecContext(ctx, `UPDATE source_records s SET normalized_at = now(), item_id = $1
+FROM jsonb_to_recordset($2::jsonb) AS v(source text, fetched_at timestamptz)
+WHERE s.external_id = $3 AND s.source = v.source AND s.fetched_at = v.fetched_at`,
+			id, string(versions), qid); err != nil {
 			return fmt.Errorf("mark %s normalised: %w", qid, err)
 		}
 	}

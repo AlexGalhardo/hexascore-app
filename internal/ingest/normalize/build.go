@@ -18,10 +18,11 @@ import (
 )
 
 // Release statuses stored in items.release_status. Cancelled is set by
-// editors, never by the normaliser.
+// editors; the normaliser only keeps it.
 const (
 	StatusReleased  = "released"
 	StatusAnnounced = "announced"
+	StatusCancelled = "cancelled"
 )
 
 // MaxTrailers is the trailer cap kept in meta.
