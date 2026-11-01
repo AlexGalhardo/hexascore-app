@@ -16,6 +16,8 @@ function hits(prefix: string, count: number, type = "game"): SearchHit[] {
 		title: `${prefix} ${i}`,
 		path: `/games/${prefix}-slug-${i}`,
 		cover: { thumb: `https://cdn.test/${prefix}${i}.webp`, full: "" },
+		year: i === 0 ? null : 2015,
+		score: i === 0 ? null : 9.1,
 	}));
 }
 
@@ -55,7 +57,11 @@ test("typing searches with q, locale and page 1, and a row opens the item route"
 	expect(await screen.findByText("w 0")).toBeTruthy();
 	expect(read.calls.at(-1)).toEqual({ q: "witcher", locale: "en", page: "1" });
 	expect(screen.getByText("3 results")).toBeTruthy();
-	await fireEvent.press(screen.getByRole("button", { name: /^w 1, Games/ }));
+	expect(
+		screen.getByRole("button", { name: "w 1, 2015, Games, Score 9.1 out of 10" }),
+	).toBeTruthy();
+	expect(screen.getByRole("button", { name: "w 0, Games, Not enough ratings yet" })).toBeTruthy();
+	await fireEvent.press(screen.getByRole("button", { name: /^w 1, 2015, Games/ }));
 	expect(onOpen).toHaveBeenCalledWith("/games/w-slug-1?id=w1");
 });
 
