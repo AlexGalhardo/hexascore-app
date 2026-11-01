@@ -58,6 +58,8 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	s.Job(jobs.ExportIDs{}).DailyAt("07:00").WithoutOverlapping()
 	// backup.daily (SDD 11 §7.3 step 1): moves after the SDD 06 asserts once they exist (P6).
 	s.Command("backup:run", "--kind", "daily").DailyAt("06:00").In(saoPaulo).WithoutOverlapping()
+	// backup.offsite (SDD 11 §7.3 step 6): day 1, an hour after the run that copies the monthly dump.
+	s.Command("backup:offsite").MonthlyOn(1, "07:00").In(saoPaulo).WithoutOverlapping()
 
 	// Ingestion (SDD 06 §7.6).
 	// A task starts only the first stage; each finished stage queues the next (ingest.Advance).

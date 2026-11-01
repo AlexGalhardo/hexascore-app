@@ -1,0 +1,10 @@
+{{/* layout: none */}}
+<!doctype html>
+<html lang="en">
+<body>
+	<p>This month's encrypted database dump is ready for the off-site copy.</p>
+	<p><a href="{{.Link}}">Download the encrypted dump</a> (valid until {{.Expires}}).</p>
+	<p>Object: {{.Key}}<br>Size: {{.Bytes}} bytes<br>SHA-256 of the ciphertext: {{.SHA256}}</p>
+	<p>Store the file in personal storage. It opens only with BACKUP_KEY, which you keep offline; the key is never sent by mail. Do not forward or post this link. Restore steps: docs/runbooks/restore.md.</p>
+</body>
+</html>

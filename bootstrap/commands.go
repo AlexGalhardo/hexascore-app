@@ -23,6 +23,7 @@ func Commands() []vukem.Command {
 		console.BackupRun(),
 		console.BackupRestore(),
 		console.BackupDrill(),
+		console.BackupOffsite(),
 		console.ImportLegacy(),
 		console.ExportSince(),
 		console.CommunityStatsRebuild(),

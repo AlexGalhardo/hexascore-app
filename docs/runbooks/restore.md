@@ -31,3 +31,12 @@ Restores an encrypted `backup:run` dump (SDD 11 §7.3) into a new Postgres datab
 Steps: latest daily dump and its manifest → `DROP DATABASE IF EXISTS hexascore_drill WITH (FORCE)`, `CREATE DATABASE hexascore_drill` on the staging server → restore → row counts equal to the manifest → `catalog:check` asserts (SDD 01 §7.6 plus scoring; SDD 06 asserts join in P6) with 0 errors → drop → `backup_runs(kind='drill')` `verified`, or `failed` with the reason. Pass also needs `duration_s < 3600` (FR-11-6). The drill never restores over the staging database.
 
 Manual run: `/app/app backup:drill` (without `--first-sunday` it runs any day). A mismatch prints one `count mismatch <table>: want N, got M` line per table.
+
+## Off-site copy
+
+On day 1 at 07:00 America/Sao_Paulo, an hour after `backup.daily` makes the monthly copy, `backup:offsite` mails `ADMIN_EMAILS` (from `noreply@`, Reply-To `support@`) a link to the encrypted monthly dump (SDD 11 §7.3 step 6, D-32). It records `backup_runs(kind='offsite')`: `uploaded` when mailed, `failed` with the reason otherwise. It mails once per monthly dump, so it is safe to run again: `/app/hexascore backup:offsite`.
+
+- The link is signed with a key derived from `APP_KEY` and expires after 7 days. The app serves it under `/backups/offsite/` (<https://vukem.dev/docs/security/signed-urls> "Temporary file downloads") and answers 404 for any path outside `backups/postgres/monthly/`.
+- Download the file to personal storage within the 7 days and check its SHA-256 against the mail. The file opens only with `BACKUP_KEY`, which you keep offline. The mail never contains the key.
+- Never forward the link or post it in Telegram. If it leaks, rotating `APP_KEY` invalidates it; the dump stays encrypted either way.
+- If a month is missing a mail, check `SELECT * FROM backup_runs WHERE kind IN ('monthly', 'offsite') ORDER BY started_at DESC LIMIT 4`. A missing monthly row means the 06:00 run failed; rerun `backup:offsite` after it succeeds.
