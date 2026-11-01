@@ -16,11 +16,11 @@ Conventions:
 
 | Field | Value |
 | --- | --- |
-| Current phase | P1 done (`v0.9.0`). P2 in progress: code-only items of P2.A to P2.F merged; 39 boxes wait for owner gates (Railway, DNS, Stripe live, real data, cutover). P3.A/P3.C and P4.A were built ahead of the cutover (`v0.11.0`). P2.H (launch readiness, audit 2026-10-31) is the next code-only group |
-| Last release | app `v0.11.0` (2026-10-31, vukem `v0.34.0`, deployed by `release.yml`); passkeys stay off until `adotar VF-001` |
-| Next microtask | P2.H.1.1 (home and catalogue covers), then the rest of P2.H; owner-gated P2 items as the owner releases them (`liberar <ID>` in `developer-manual-todos.md`) |
+| Current phase | P0, P1 done; P2–P7 code delivered except the rest of P6.B.3.1; 300 of 343 boxes done, 43 open, almost all owner gates (store, device tests, flags on in production, 30-day gates, decisions Q-A5/Q-A10/Q-A11/Q-A12). Out-of-plan owner round of 27 UI/route/infra items delivered 2026-11-01 (see [architect brief](docs/review/2026-11-01-architect-brief.md)) |
+| Last release | GitHub release series rebuilt 2026-11-01 as v0.1.0–v0.39.0 (tags on `release/history-linear`, v0.39.0 Latest with the sideload APK); production on Railway; vukem v0.36.0 adopted |
+| Next microtask | Land the owner round (direct push under Q-A21) with the one-time history rewrite, then `covers:rekey` in production; code-only: rest of P6.B.3.1; owner gates as listed in each box's dated status line |
 | v1.0.0 definition | parity with the legacy app and a successful cutover (ADR 0013), plus P2.H done: the audit of 2026-10-31 found the UI at wireframe level, which is not a public launch |
-| Updated | 2026-10-31 |
+| Updated | 2026-11-01 |
 
 ## Resuming work (read first in a new session)
 

@@ -22,3 +22,9 @@ Follow [docs/runbooks/mobile-release.md](../../../docs/runbooks/mobile-release.m
 - Ask for, print or store credentials or tokens.
 - Submit, promote, publish to production, or delete builds, channels, branches or credentials without the owner's explicit yes for that action.
 - Bump `versionCode` by hand or install `eas-cli` globally from an unpinned tag.
+
+## Without EAS
+
+- Owner test build: follow the runbook section "Local sideload APK" (test key outside git, arm64-v8a, ninja ≥ 1.13 init script on Windows, `apksigner` verification), then attach the APK to the latest GitHub release.
+- Store build without EAS: the manual `mobile-gradle.yml` workflow (D-34 fallback) builds a signed AAB and APK on Linux from the upload-key secrets; it never submits.
+- Always run `bun run --cwd apps/mobile bundle:check` before any build: a broken release bundle is not caught by Jest.
