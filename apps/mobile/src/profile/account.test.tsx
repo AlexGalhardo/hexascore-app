@@ -1,5 +1,9 @@
-import { act, fireEvent, render, screen } from "@testing-library/react-native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { act, fireEvent, render, screen, within } from "@testing-library/react-native";
 import { ApiError } from "../../../../packages/app-client/src/api";
+import type { NotificationsApi } from "../notifications/useUnread";
+import { About } from "./About";
+import { AccountExtras } from "./AccountExtras";
 import { DeleteAccount } from "./DeleteAccount";
 import { ExportData } from "./Export";
 
@@ -57,5 +61,53 @@ describe("delete account", () => {
 		await fireEvent.press(screen.getByRole("button", { name: "Keep my account" }));
 		await fireEvent.press(screen.getByRole("button", { name: "Delete my account" }));
 		expect(screen.getByRole("button", { name: "Confirm (10)" })).toBeDisabled();
+	});
+});
+
+describe("v1 look", () => {
+	const inbox = (unread: number): NotificationsApi => ({
+		read: {
+			notificationsIndex: jest.fn(async () => ({ data: [], meta: { unread } })),
+		} as never,
+		write: jest.fn(),
+	});
+	const extras = (unread: number) => (
+		<QueryClientProvider client={new QueryClient()}>
+			<AccountExtras
+				locale="en"
+				signedIn
+				notifications={inbox(unread)}
+				write={jest.fn()}
+				onScheduled={() => {}}
+				onOpen={() => {}}
+			/>
+		</QueryClientProvider>
+	);
+
+	test("notifications row prints the unread count in a badge and in its name", async () => {
+		await render(extras(3));
+		const row = await screen.findByRole("button", { name: "Notifications, 3 unread" });
+		expect(within(row).getByTestId("unread-badge")).toHaveTextContent("3");
+	});
+
+	test("no badge without unread notifications", async () => {
+		await render(extras(0));
+		expect(await screen.findByRole("button", { name: "Notifications" })).toBeTruthy();
+		expect(screen.queryByTestId("unread-badge")).toBeNull();
+	});
+
+	test("the deletion dialog is a danger panel with a titled header", async () => {
+		await render(<DeleteAccount locale="en" write={jest.fn()} onScheduled={() => {}} />);
+		await fireEvent.press(screen.getByRole("button", { name: "Delete my account" }));
+		const dialog = screen.getByTestId("delete-dialog");
+		expect(within(dialog).getByRole("header", { name: "Delete your account?" })).toBeTruthy();
+	});
+
+	test("About groups the version and the data attributions under rules", async () => {
+		await render(<About locale="en" version="1.2.3" />);
+		expect(screen.getByRole("header", { name: "About" })).toBeTruthy();
+		const sources = screen.getByTestId("about-sources");
+		expect(within(sources).getByTestId("attribution-tmdb")).toBeTruthy();
+		expect(within(sources).getByTestId("attribution-igdb")).toBeTruthy();
 	});
 });

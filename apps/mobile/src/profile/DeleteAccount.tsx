@@ -60,8 +60,15 @@ export function DeleteAccount({
 			{left === null ? (
 				<Btn variant="secondary" label={t(locale, "account.delete.button")} onPress={open} />
 			) : (
-				<View accessibilityRole="alert" className="gap-2">
-					<Text className="font-text text-16 font-bold text-fg dark:text-fg-dark">
+				<View
+					testID="delete-dialog"
+					accessibilityRole="alert"
+					className="gap-3 border-t-2 border-danger bg-surface p-4 dark:border-danger-dark dark:bg-surface-dark"
+				>
+					<Text
+						accessibilityRole="header"
+						className="font-display text-20 font-bold text-fg dark:text-fg-dark"
+					>
 						{t(locale, "account.delete.dialogTitle")}
 					</Text>
 					<Text className={FG}>{t(locale, "account.delete.dialogBody")}</Text>

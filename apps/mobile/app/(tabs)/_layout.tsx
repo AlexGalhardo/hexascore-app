@@ -1,14 +1,17 @@
 import { Tabs, useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
-import { type ReactElement, useEffect } from "react";
+import { type ReactElement, useEffect, useSyncExternalStore } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { session } from "../../src/auth/runtime";
 import { t } from "../../src/i18n";
+import { notificationsApi } from "../../src/notifications/runtime";
+import { useUnread } from "../../src/notifications/useUnread";
 import { memoryPreferences } from "../../src/platform/preferences";
 import { useLocale } from "../../src/providers/root";
 import { applyThemePreference, restoreThemePreference } from "../../src/theme";
 import { AppHeader } from "../../src/ui/AppHeader";
 import { TabIcon, type TabRoute } from "../../src/ui/TabIcon";
-import { tabBarTheme } from "../../src/ui/tabBarTheme";
+import { profileBadge, tabBarTheme } from "../../src/ui/tabBarTheme";
 
 // Round 2 order: Home, Search, Sections, Lists, Profile.
 const TABS: readonly [TabRoute, string][] = [
@@ -24,6 +27,8 @@ export default function TabsLayout(): ReactElement {
 	const router = useRouter();
 	const { top } = useSafeAreaInsets();
 	const scheme = useColorScheme().colorScheme === "dark" ? "dark" : "light";
+	const signedIn = useSyncExternalStore(session.subscribe, session.state).kind === "active";
+	const badge = profileBadge(useUnread(notificationsApi, signedIn));
 	useEffect(() => {
 		restoreThemePreference(memoryPreferences);
 	}, []);
@@ -53,6 +58,7 @@ export default function TabsLayout(): ReactElement {
 					options={{
 						title: t(locale, key),
 						tabBarIcon: (props) => <TabIcon route={route} {...props} />,
+						tabBarBadge: route === "profile" ? badge : undefined,
 					}}
 				/>
 			))}
