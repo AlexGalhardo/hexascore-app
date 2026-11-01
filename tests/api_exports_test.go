@@ -75,9 +75,11 @@ func newExportsRig(t *testing.T, srv *httptest.Server) *keyRig {
 			"S3_BUCKET": "exports-bucket", "S3_ENDPOINT": srv.URL, "S3_USE_PATH_STYLE": "true",
 			"S3_INSECURE_HTTP": "true", "S3_ACCESS_KEY_ID": "k", "S3_SECRET_ACCESS_KEY": "s",
 		},
-		AppOptions: []vukem.Option{vukem.WithRateLimiters(func(_ string, _ int, window time.Duration) ratelimit.Limiter {
-			return ratelimit.NewMemory(1000, window)
-		})},
+		AppOptions: []vukem.Option{
+			vukem.WithRateLimiters(func(_ string, _ int, window time.Duration) ratelimit.Limiter {
+				return ratelimit.NewMemory(1000, window)
+			}),
+		},
 	})
 
 	acc, err := accounts.New(app.App)
