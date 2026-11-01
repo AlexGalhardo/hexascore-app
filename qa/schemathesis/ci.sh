@@ -35,8 +35,8 @@ k6_url="http://127.0.0.1:${port}"
 if [ "$(docker info --format "{{.OperatingSystem}}" 2>/dev/null)" = "Docker Desktop" ]; then
 	net=(-p "127.0.0.1:${port}:${port}")
 	app_db=${db//127.0.0.1/host.docker.internal}
-	k6_net=()
-	k6_url="http://host.docker.internal:${port}"
+	# k6 shares the app's network namespace so its Host is the APP_URL host (CanonicalHost 301s any other).
+	k6_net=(--network "container:${name}")
 fi
 app_env=(
 	-e APP_ENV=production
@@ -86,7 +86,7 @@ for _ in $(seq 1 40); do
 done
 curl -fsS "http://127.0.0.1:${port}/up" >/dev/null
 
-HX_TEST_KEY="$key" QA_BASE_URL="http://127.0.0.1:${port}" bash qa/schemathesis/run.sh openapi/api-v1.json
+HX_TEST_KEY="$key" QA_BASE_URL="http://127.0.0.1:${port}/api/v1" bash qa/schemathesis/run.sh openapi/api-v1.json
 HX_TEST_KEY="$app_token" QA_BASE_URL="http://127.0.0.1:${port}" bash qa/schemathesis/run.sh openapi/app-v1.json
 
 # Anonymous search, 1 rps, under the 60/min IP limit. Host network reaches the app on 127.0.0.1.

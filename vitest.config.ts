@@ -19,6 +19,8 @@ export default defineConfig({
 			"scripts/ci/sdk-job.test.ts",
 			"scripts/ci/sdk-release.test.ts",
 			"scripts/ci/local.test.ts",
+			"scripts/ci/schemathesis-run.test.ts",
+			"scripts/ci/lighthouse-config.test.ts",
 			"scripts/ops/projected-spend.test.ts",
 			"packages/app-client/**",
 		],
