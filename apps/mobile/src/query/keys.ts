@@ -10,6 +10,19 @@ export const TRENDING_METHOD = {
 	books: "listBookTrending",
 } as const satisfies Record<CatalogType, keyof ReadClient>;
 
+export const GENRE_METHOD = {
+	games: "listGameGenres",
+	movies: "listMovieGenres",
+	series: "listSeriesGenres",
+	books: "listBookGenres",
+} as const satisfies Record<CatalogType, keyof ReadClient>;
+
+export type ListingFilter = { sort: string; genre?: string };
+
 export const queryKeys = {
 	trending: (type: CatalogType, locale: AppLocale) => [TRENDING_METHOD[type], { locale }] as const,
+	genres: (type: CatalogType) => [GENRE_METHOD[type]] as const,
+	// The cursor is the page param, not part of the key: a new sort or genre is a new key, so paging restarts.
+	listing: (type: CatalogType, filter: ListingFilter, locale: AppLocale) =>
+		["listItems", { type, ...filter, locale }] as const,
 };
