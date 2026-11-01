@@ -103,7 +103,7 @@ func (h *Controller) SearchItems(c *web.Ctx, in SearchItemsInput) (ItemPageJSON,
 	}
 	out.Links.Self = c.Request().URL.RequestURI()
 
-	return out, notModified(c, out)
+	return out, NotModified(c, out)
 }
 
 // SearchEntities is searchEntities: GET /api/v1/search/entities.
@@ -141,7 +141,7 @@ func (h *Controller) SearchEntities(c *web.Ctx, in SearchEntitiesInput) (EntityP
 		out.Data[i] = EntitySummaryJSON{ID: e.ID, Kind: e.Kind, Slug: e.Slug, Name: e.Name, ItemCount: e.ItemCount}
 	}
 
-	return out, notModified(c, out)
+	return out, NotModified(c, out)
 }
 
 // LookupItem is lookupItem: GET /api/v1/lookup. The source id is input only; the body is the getItem
@@ -178,7 +178,7 @@ func (h *Controller) LookupItem(c *web.Ctx, in LookupInput) (ItemJSON, error) {
 
 	out := itemJSON(items[0], locale)
 
-	return out, notModified(c, out)
+	return out, NotModified(c, out)
 }
 
 // paging parses page (default 1) and limit (default 20, at most 50 and the plan page size); the searcher

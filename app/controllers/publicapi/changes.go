@@ -93,7 +93,7 @@ func (h *Controller) ListChanges(c *web.Ctx, in ListChangesInput) (ChangePageJSO
 		out.Links.Next = &next
 	}
 
-	return out, notModified(c, out)
+	return out, NotModified(c, out)
 }
 
 func (h *Controller) now() time.Time {
