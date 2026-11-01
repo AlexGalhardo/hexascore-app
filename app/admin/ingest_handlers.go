@@ -20,6 +20,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/rollback"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 )
 
@@ -40,8 +41,8 @@ type IngestHandlers struct {
 	Queue run.Dispatcher
 	Flags *flags.Flags
 	// AuthorizeView and AuthorizeRun check viewIngestion and runIngestion.
-	AuthorizeView, AuthorizeRun func(c *web.Ctx) error
-	Now                         func() time.Time
+	AuthorizeView, AuthorizeRun, AuthorizeRollback func(c *web.Ctx) error
+	Now                                            func() time.Time
 }
 
 // IngestStage is a (job, source) option of the trigger form.
@@ -66,13 +67,14 @@ type IngestCoverage struct {
 
 // IngestStatus feeds the status part of the page.
 type IngestStatus struct {
-	Failures   []IngestFailureSummary
-	Asserts    []IngestAssert
-	OldestTMDB string
-	Coverage   []IngestCoverage
-	Stages     []IngestStage
-	Modes      []string
-	CanRun     bool
+	Failures    []IngestFailureSummary
+	Asserts     []IngestAssert
+	OldestTMDB  string
+	Coverage    []IngestCoverage
+	Stages      []IngestStage
+	Modes       []string
+	CanRun      bool
+	CanRollback bool
 }
 
 // Index renders GET /admin/ingest.
@@ -95,6 +97,13 @@ func (h IngestHandlers) Index(c *web.Ctx) error {
 	}
 
 	d.Ingest.CanRun = authorizeOr403(h.AuthorizeRun, c) == nil
+	d.Ingest.CanRollback = authorizeOr403(h.AuthorizeRollback, c) == nil
+
+	for i, r := range d.Runs {
+		d.Runs[i].Rollbackable = d.Ingest.CanRollback && r.Status != run.StatusQueued &&
+			r.Status != run.StatusRunning &&
+			(strings.HasPrefix(r.Job, "fetch.") || r.Job == "tmdb.expire")
+	}
 
 	return h.Pages.render(c, "ingest", d)
 }
@@ -335,4 +344,47 @@ WHERE id = $1 AND status IN ('queued', 'running')`, id)
 	}
 
 	return c.Redirect("/admin/ingest")
+}
+
+// Rollback handles POST /admin/ingest/runs/{id}/rollback (rollbackIngestion): it queues the undo of a finished
+// fetch run (SDD 06 §7.8). 404 unknown run, 409 history-expired, already rolled back or another rollback active,
+// 422 without a reason or for a run that is not a finished fetch run.
+func (h IngestHandlers) Rollback(c *web.Ctx) error {
+	if err := authorizeOr403(h.AuthorizeRollback, c); err != nil {
+		return err
+	}
+
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil || id < 1 {
+		return errs.ErrNotFound
+	}
+
+	reason := strings.TrimSpace(c.FormValue("reason"))
+	if reason == "" || len(reason) > 500 {
+		return invalid("A rollback needs a reason of up to 500 characters.")
+	}
+
+	u, err := auth.UserFrom[models.User](c.Context(), h.Pages.Accounts.Web.Name())
+	if err != nil {
+		return err
+	}
+
+	_, err = ingest.StartRollback(c.Context(), h.DB, h.Queue, id, u.ID, reason)
+
+	switch {
+	case err == nil:
+		return c.Redirect("/admin/ingest")
+	case errors.Is(err, rollback.ErrRunNotFound):
+		return errs.ErrNotFound
+	case errors.Is(err, rollback.ErrNotRollbackable):
+		return invalid("Only a finished fetch run can be rolled back.")
+	case errors.Is(err, rollback.ErrHistoryExpired):
+		return errs.New(http.StatusConflict, "history-expired: restore the dump instead (runbook in SDD 11).")
+	case errors.Is(err, rollback.ErrAlreadyRolledBack):
+		return errs.New(http.StatusConflict, "This run was already rolled back.")
+	case errors.Is(err, run.ErrRunActive):
+		return errs.New(http.StatusConflict, "run-active: another rollback is under way.")
+	}
+
+	return err
 }

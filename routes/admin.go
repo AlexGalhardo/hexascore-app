@@ -220,10 +220,14 @@ func Admin(r *router.Router, app *vukem.App) error {
 		AuthorizeRun: func(c *web.Ctx) error {
 			return gate.Authorize(c.Context(), admin.AbilityRunIngestion, nil)
 		},
+		AuthorizeRollback: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityRollbackIngestion, nil)
+		},
 	}
 	r.Get("/admin/ingest", ingestH.Index).Name("admin.ingest").Use(modMW...)
 	r.Post("/admin/ingest/runs", ingestH.Trigger).Name("admin.ingest.runs").Use(modMW...)
 	r.Post("/admin/ingest/runs/{id}/cancel", ingestH.Cancel).Name("admin.ingest.runs.cancel").Use(modMW...)
+	r.Post("/admin/ingest/runs/{id}/rollback", ingestH.Rollback).Name("admin.ingest.runs.rollback").Use(modMW...)
 	r.Get("/admin/ingestion", catalogH.Ingestion).Name("admin.ingestion").Use(auth.Required(acc.Web), csrfMW)
 
 	return nil

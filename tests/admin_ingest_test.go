@@ -165,6 +165,7 @@ func TestSecurity_A01_IngestRunsAdminOnly(t *testing.T) {
 		c.Get("/admin/ingest").AssertForbidden()
 		c.PostForm("/admin/ingest/runs", url.Values{"job": {"normalize"}, "mode": {"manual"}}).AssertForbidden()
 		c.PostForm("/admin/ingest/runs/1/cancel", url.Values{}).AssertForbidden()
+		c.PostForm("/admin/ingest/runs/1/rollback", url.Values{"reason": {"x"}}).AssertForbidden()
 	}
 
 	if n := runsOf(t, app, `true`); n != 0 {
@@ -184,4 +185,51 @@ func TestSecurity_A01_IngestRunsRequireCSRF(t *testing.T) {
 	if n := runsOf(t, app, `true`); n != 0 {
 		t.Fatalf("a cross-site post created a run: %d", n)
 	}
+}
+
+// P6.B.4.4: rollbackIngestion queues a rollback run for a finished fetch run: 303, 409 history-expired or already
+// rolled back, 422 without a reason or for a run that is not a fetch run, 404 for an unknown run.
+func TestAdminIngestRollback(t *testing.T) {
+	t.Parallel()
+
+	app := ingestAdminApp(t, map[string]string{"FLAG_INGEST_ENABLED": "true"})
+	user := makeUser(t, app, "ingest-rb@example.com", models.RoleAdmin, true)
+	admin := browserFor(t, app, user)
+
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var good, old, norm int64
+	for q, dst := range map[string]*int64{
+		`INSERT INTO job_runs (job, source, mode, status, triggered_by, started_at, finished_at)
+VALUES ('fetch.wikidata', 'wikidata', 'full', 'succeeded', 'schedule', now(), now()) RETURNING id`: &good,
+		`INSERT INTO job_runs (job, source, mode, status, triggered_by, started_at, finished_at, created_at)
+VALUES ('fetch.tmdb', 'tmdb', 'full', 'succeeded', 'schedule', now() - interval '40 days', now() - interval '40 days',
+  now() - interval '40 days') RETURNING id`: &old,
+		`INSERT INTO job_runs (job, mode, status, triggered_by, started_at) VALUES ('normalize', 'full', 'succeeded', 'schedule', now())
+RETURNING id`: &norm,
+	} {
+		if err := db.QueryRowContext(t.Context(), q).Scan(dst); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	post := func(id int64, reason string) *vukemtest.Response {
+		return admin.PostForm("/admin/ingest/runs/"+itoa(id)+"/rollback", url.Values{"reason": {reason}})
+	}
+
+	post(good, "").AssertStatus(422)
+	post(norm, "x").AssertStatus(422)
+	post(old, "late").AssertStatus(409)
+	post(999999, "x").AssertNotFound()
+	post(good, "bad payloads").AssertRedirect("/admin/ingest")
+
+	if n := runsOf(t, app, `job = 'rollback' AND mode = 'rollback' AND triggered_by = 'admin:`+itoa(user.ID)+`'
+AND params->>'target_run' = '`+itoa(good)+`' AND params->>'reason' = 'bad payloads'`); n != 1 {
+		t.Fatalf("rollback runs = %d, want 1", n)
+	}
+
+	post(good, "again").AssertStatus(409)
 }

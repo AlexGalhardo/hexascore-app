@@ -56,6 +56,10 @@ type Runner struct {
 	Limits Limits
 	Steps  map[string]Step
 	Now    func() time.Time
+	// Gate holds each chunk while the site is busy (the pressure gate, SDD 06 §7.5); nil never waits.
+	Gate interface {
+		Wait(ctx context.Context) error
+	}
 	// After is called once a run reached a final status (chains queue the next stage here).
 	After func(ctx context.Context, id int64) error
 }
@@ -111,6 +115,12 @@ started_at = coalesce(started_at, now()), heartbeat_at = now() WHERE id = $1 AND
 
 	for {
 		var out Outcome
+
+		if r.Gate != nil {
+			if err := r.Gate.Wait(ctx); err != nil {
+				return "", err
+			}
+		}
 
 		err := r.DB.Tx(ctx, func(tx *database.Tx) error {
 			// status and cursor are re-read under the lock: a redelivered job running next to this one must

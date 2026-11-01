@@ -73,6 +73,13 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	s.Func("ingest:tmdb-expire", startChain(app, ingest.TMDBExpire)).
 		DailyAt("03:00").In(saoPaulo).WithoutOverlapping()
 
+	// 02:30 prunes, 03:30 retries the dead letter (SDD 06 §7.6); the 03:00 expiry run clears the TMDB records first.
+	s.Func("ingest:prune", pruneIngest(app)).DailyAt("02:30").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:retry-failures", retryFailures(app)).DailyAt("03:30").In(saoPaulo).WithoutOverlapping()
+
+	// Alert A7 reads the ingestion tables once an hour and logs alert=A7 lines (SDD 12 §6.2, §7.5).
+	s.Func("ingest:alerts", ingestAlerts(app)).Hourly().WithoutOverlapping()
+
 	s.Func("ingest:dq-daily", startChain(app, ingest.DQDaily)).
 		DailyAt("05:00").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:frontend-fields", startChain(app, ingest.FrontendFields)).
@@ -124,5 +131,62 @@ func startChain(app *vukem.App, c ingest.Chain) func(ctx context.Context) error 
 		}
 
 		return nil
+	}
+}
+
+// pruneIngest applies the retention windows of the ingestion tables (SDD 06 §5).
+func pruneIngest(app *vukem.App) func(ctx context.Context) error {
+	return func(ctx context.Context) error {
+		db, err := app.DB()
+		if err != nil {
+			return err
+		}
+
+		_, err = run.Prune(ctx, db)
+
+		return err
+	}
+}
+
+// retryFailures queues a run per source for the dead-letter targets that are not parked yet.
+func retryFailures(app *vukem.App) func(ctx context.Context) error {
+	return func(ctx context.Context) error {
+		ff, err := app.Flags()
+		if err != nil {
+			return err
+		}
+
+		db, err := app.DB()
+		if err != nil {
+			return err
+		}
+
+		q, err := app.Queue()
+		if err != nil {
+			return err
+		}
+
+		_, err = run.RetryFailures(ctx, db, q, ff)
+
+		return err
+	}
+}
+
+// ingestAlerts checks the A7 conditions; with the master kill switch off it stays silent.
+func ingestAlerts(app *vukem.App) func(ctx context.Context) error {
+	return func(ctx context.Context) error {
+		ff, err := app.Flags()
+		if err != nil {
+			return err
+		}
+
+		db, err := app.DB()
+		if err != nil {
+			return err
+		}
+
+		_, err = ingest.CheckA7(ctx, db, app.Log, app.Now(), run.Allowed(ctx, ff, ""))
+
+		return err
 	}
 }

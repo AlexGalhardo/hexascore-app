@@ -18,6 +18,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/fetch"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/httpx"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/normalize"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/rollback"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/tmdb"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/trailers"
@@ -34,6 +35,8 @@ type IngestSources struct {
 	// WikipediaAPI is a URL prefix; the edition code is appended.
 	WikipediaAPI string
 	TMDBAPI      string
+	// Pressure holds ingestion chunks while the site is busy; bootstrap fills it and feeds it from the Inflight middleware.
+	Pressure *ingest.Pressure
 }
 
 const defaultContactURL = "https://hexascore.app"
@@ -90,7 +93,8 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		"fetch.youtube":      fetch.Step(&trailers.Connector{}, client, app.Now),
 		backfill.EditionsJob: backfill.Editions{}.Step,
 		// workaround: Stat (DQ-I-04) and Serialise (DQ-I-12) stay nil until the covers store (P6.B.2.2) and the API probe exist.
-		dq.Job: dq.Asserts{}.Step,
+		dq.Job:       dq.Asserts{}.Step,
+		rollback.Job: rollback.Step,
 		dq.FrontendJob: dq.FrontendFields{
 			Suggest: community.IngestGate{DB: db}.OpenMissingField,
 			Now:     app.Now,
@@ -121,12 +125,17 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		steps["fetch."+c.Source()] = fetch.Step(c, client, app.Now)
 	}
 
-	return &run.Runner{
+	runner := &run.Runner{
 		DB:    db,
 		Queue: q,
 		Flags: ff,
 		Steps: steps,
 		Now:   app.Now,
 		After: func(ctx context.Context, id int64) error { return ingest.Advance(ctx, db, q, id) },
-	}, nil
+	}
+	if src.Pressure != nil {
+		runner.Gate = src.Pressure
+	}
+
+	return runner, nil
 }
