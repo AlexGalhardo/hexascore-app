@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **mobile:** v1 fonts (Inter, Playfair Display, OFL, embedded via expo-font) and Ionicons glyphs in the Android app; `@expo/ui` for native sheets and pickers (ADR 0019 amendment 1) (IMPL-mobile-v1-deps)
 - **mobile:** Android v1 primitives (button with depth, score badge, 2:3 cover, theme toggle) and an accessible ten-star half-step rating input (IMPL-mobile-v1-ui)
 - **catalog:** Ingestion tables and the canonical-hash record store (`internal/ingest/store`), hashes byte-compatible with the legacy Python `canonical_hash` (P6.A.1.2)
 - **admin:** Admins revert catalogue changes (single, cascade, force) from `/admin/catalog-audit`, restoring value and provenance (P4.B.2.4)
