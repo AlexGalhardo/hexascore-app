@@ -1,0 +1,32 @@
+{
+  "item": {
+    "external_ids": {},
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Stephen King"
+      ],
+      "genres": [
+        "horror fiction"
+      ]
+    },
+    "popularity": 6.0,
+    "qid": "Q127047",
+    "release_date": "1985-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "\"Cain Rose Up\" is a horror short story by American writer Stephen King. It was originally published in the Spring 1968 issue of Ubris magazine, and collected in King's Skeleton Crew in 1985. It deals with a depressed and homicidal college student, Curt Garrish, who goes on a murderous sniper rampage from his dormitory room.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Cain_Rose_Up",
+        "title": "Cain Rose Up"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q127047",
+  "slug": "cain-rose-up"
+}

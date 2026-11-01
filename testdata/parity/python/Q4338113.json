@@ -1,0 +1,34 @@
+{
+  "item": {
+    "external_ids": {
+      "openlibrary": "OL1338940W"
+    },
+    "meta": {
+      "countries": [
+        "Austria–Hungary"
+      ],
+      "creators": [
+        "Carl Menger"
+      ],
+      "genres": [
+        "non-fiction"
+      ]
+    },
+    "popularity": 7.0,
+    "qid": "Q4338113",
+    "release_date": "1871-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Principles of Economics (German: Grundsätze der Volkswirtschaftslehre; 1871) is a book by economist Carl Menger which is credited with the founding of the Austrian School of economics. It was one of the first modern treatises to advance the theory of marginal utility.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Principles_of_Economics_(Menger_book)",
+        "title": "Principles of Economics"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q4338113",
+  "slug": "principles-of-economics"
+}

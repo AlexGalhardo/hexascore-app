@@ -1,0 +1,62 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0318034",
+      "metacritic": "movie/russian-ark",
+      "rottentomatoes": "m/russian_ark",
+      "tmdb": "16646"
+    },
+    "meta": {
+      "countries": [
+        "Russia",
+        "Germany",
+        "France",
+        "Japan",
+        "Canada",
+        "Finland",
+        "Denmark"
+      ],
+      "creators": [
+        "Alexander Sokurov"
+      ],
+      "genres": [
+        "fantasy film",
+        "historical drama",
+        "mystery film",
+        "ghost film",
+        "experimental film"
+      ],
+      "runtimeMinutes": 99
+    },
+    "popularity": 33.0,
+    "qid": "Q59721",
+    "release_date": "2002-05-22",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Russian Ark (Russian: Русский ковчег, romanized: Russkij kovcheg) is a 2002 experimental historical drama film directed by Alexander Sokurov. The plot follows an unnamed narrator, who wanders through the Winter Palace in Saint Petersburg, and implies that he died in some horrible accident and is a ghost drifting through. In each room, he encounters various real and fictional people from various periods in the city's 300-year history. He is accompanied by \"the European\", who represents the Marquis de Custine, a 19th-century French traveler.\nAn international co-production between Russia and Germany, Russian Ark was shot entirely in the Winter Palace of the Russian State Hermitage Museum on 23 December 2001, using a one-take single 87-minute Steadicam sequence shot. It extensively uses the fourth wall device, but repeatedly broken and re-erected. At times, the narrator and the companion interact with the other performers, while at other times they pass unnoticed.\nThe film was entered into the 2002 Cannes Film Festival.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Russian_Ark",
+        "title": "Russian Ark"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Arca Russa (Russo: Русский ковчег, Russkij Kovcheg) é um drama histórico experimental de 2002 dirigido por Alexander Sokurov. Em Arca Russa um narrador sem nome vagueia pelo Palácio de Inverno em São Petersburgo e sugere que ele morreu em um acidente horrível e é um fantasma vagando pelo palácio. \nEm cada sala, ele encontra personagens históricos e fictícios de vários períodos dos 300 anos de história da antiga capital russa. O narrador está acompanhado por um \"europeu\",  o Marquês de Custine, um viajante francês do século XIX. O filme foi inteiramente gravado no Palácio de Inverno do Museu Hermitage em 23 de dezembro de 2001, em uma única tomada de 96 minutos, usando o estabilizador de câmera Steadicam. \nA Arca Russa usa extensivamente a convenção dramática da quarta parede, mas ela é repetidamente quebrada e reerguida. Às vezes o narrador e o acompanhante interagem com os demais atores, mas outras vezes passam despercebidos. O filme foi inscrito no Festival de Cinema de Cannes de 2002.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Russian_Ark",
+        "title": "Russian Ark"
+      },
+      {
+        "locale": "es",
+        "synopsis": "El arca rusa (en ruso: Русский ковчег, transliterada: Russkiy kovcheg), también conocida por su título en inglés Russian Ark, es una película de 2002 del director de cine ruso Aleksandr Sokúrov. Destaca por ser la primera película en formato de alta definición sin comprimir, y la primera película comercial sin editar, pues consiste en un solo plano secuencia con Steadicam de 90 minutos. Fue rodada el 23 de diciembre de 2001 en el Museo del Hermitage. La cinta participó en la selección oficial del Festival de Cannes de 2002.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/El_arca_rusa",
+        "title": "El arca rusa"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q59721",
+  "slug": "russian-ark"
+}

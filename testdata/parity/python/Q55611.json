@@ -1,0 +1,58 @@
+{
+  "item": {
+    "external_ids": {
+      "igdb": "army-moves"
+    },
+    "meta": {
+      "countries": [
+        "Spain"
+      ],
+      "creators": [
+        "Dinamic Software"
+      ],
+      "genres": [
+        "action game",
+        "scrolling shooter"
+      ],
+      "platforms": [
+        "ZX Spectrum",
+        "DOS",
+        "Commodore Amiga",
+        "Commodore 64",
+        "Atari ST",
+        "MSX",
+        "Amstrad CPC"
+      ]
+    },
+    "popularity": 6.0,
+    "qid": "Q55611",
+    "release_date": "1986-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Army Moves is a scrolling shooter game developed by Dinamic Software and released for the Amiga, Amstrad CPC, Atari ST, Commodore 64, MSX and ZX Spectrum. It is the first installment in the Moves Trilogy and was followed by Navy Moves in 1987 and Arctic Moves in 1995. It was first released in 1986 and published by Dinamic in Spain and by Imagine Software. Dinamic Software also developed an MS-DOS version of the game, published in 1989 in Spain.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Army_Moves",
+        "title": "Army Moves"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Army Moves"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Army Moves es un videojuego del género arcade y primera parte de la tetralogía Moves diseñado por Víctor Ruiz, de Dinamic Software para Commodore Amiga, Amstrad CPC, Atari ST, Commodore 64, MSX y ZX Spectrum en 1986. En el año 1989 salió en España una versión para PC.\nEl juego contiene siete niveles que son divididos en dos secciones principales. Los cuatro primeros niveles constituyen la primera sección, donde el jugador tiene que conducir una unidad de ejército (un jeep o un helicóptero) por una zona hostil llena de enemigos.\nEn los últimos tres niveles que conforman la segunda sección, hay que tomar el papel de un soldado que debe eliminar a los enemigos por el camino. En el nivel 5, el soldado debe saltar rocas, disparar a diferentes aves, etc. Posteriormente, el protagonista hace su camino en la base enemiga con el objetivo de recuperar los documentos secretos.\nArmy Moves tuvo versiones para Amstrad CPC, ZX Spectrum, Commodore 64, MSX, PC (CGA), Commodore Amiga y Atari ST. De las versiones de 8 bits la que más colorido tiene, ampliamente alabada por la crítica de la época, es la de Amstrad CPC. De 16 bits, la de Amiga fue la más valorada.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Army_Moves",
+        "title": "Army Moves"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q55611",
+  "slug": "army-moves"
+}

@@ -1,0 +1,45 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0283941",
+      "rottentomatoes": "m/black_box_brd",
+      "tmdb": "11089"
+    },
+    "meta": {
+      "countries": [
+        "Germany"
+      ],
+      "creators": [
+        "Andres Veiel"
+      ],
+      "genres": [
+        "documentary film",
+        "biographical film"
+      ],
+      "runtimeMinutes": 101
+    },
+    "popularity": 7.0,
+    "qid": "Q25454",
+    "release_date": "2001-05-24",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Black Box BRD is a 2001 German documentary film written and directed by Andres Veiel. The film deals with West German politics of the 1970s and 1980s, a period marked by turmoil and the highly publicized activities of the left-wing terrorist group known as the Red Army Faction (RAF).\nThe film focuses on the lives and deaths of Alfred Herrhausen, a prominent banker and chairman of the Deutsche Bank who was assassinated in 1989, and Wolfgang Grams, member of RAF who was a suspect in the attack on Herrhausen and who later shot himself in the head while being chased by the German police in 1993. A number of relatives, friends, and colleagues of both men were interviewed for the film.\nIn Germany the film was released in May 2001, and then re-released in September 2002. It was screened at a number of festivals and won several awards in 2001 and 2002, including the 2002 German Film Award for Best Documentary Film and the 2001 European Film Award.\nIn the United States the film was shown on PBS, retitled as Black Box Germany.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Black_Box_BRD",
+        "title": "Black Box BRD"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Black Box BRD"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q25454",
+  "slug": "black-box-brd"
+}

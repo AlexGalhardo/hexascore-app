@@ -1,0 +1,56 @@
+{
+  "item": {
+    "external_ids": {
+      "igdb": "10th-frame"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Indie Built"
+      ],
+      "genres": [
+        "sports video game",
+        "bowling video game"
+      ],
+      "platforms": [
+        "ZX Spectrum",
+        "MSX",
+        "Amstrad CPC",
+        "Commodore 64",
+        "DOS"
+      ]
+    },
+    "popularity": 8.0,
+    "qid": "Q55536",
+    "release_date": "1986-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "10th Frame is a ten-pin bowling sports video game published by Access Software in 1986. Up to eight players can take part in open bowling or a tournament. It was released for the Amstrad CPC, Atari ST, Commodore 64, IBM PC compatibles, MSX, and ZX Spectrum.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/10th_Frame",
+        "title": "10th Frame"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "10th Frame"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "10th Frame"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q55536",
+  "slug": "10th-frame"
+}

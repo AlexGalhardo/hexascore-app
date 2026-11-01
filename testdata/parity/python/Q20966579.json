@@ -1,0 +1,57 @@
+{
+  "item": {
+    "external_ids": {
+      "hltb": "36262",
+      "igdb": "pokemon-go",
+      "imdb": "tt5024026"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Scopely",
+        "Niantic Games Team"
+      ],
+      "genres": [
+        "augmented reality",
+        "location-based game"
+      ],
+      "platforms": [
+        "Android",
+        "iOS",
+        "iPadOS"
+      ]
+    },
+    "popularity": 75.0,
+    "qid": "Q20966579",
+    "release_date": "2016-07-06",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Pokémon Go (stylized as Pokémon GO) is a 2016 augmented reality (AR) mobile game originally developed and published by Niantic and since 2025 by Scopely Explore, in partnership with Nintendo and the Pokémon Company, for iOS and Android devices. The game uses GPS to locate, capture, train, and battle Pokémon. It is free-to-play, featuring a freemium model that includes in-app purchases for additional in-game items. Pokémon Go launched with approximately 150 Pokémon species, with new species regularly introduced.\nUpon its release, Pokémon Go received \"mixed\" or \"average\" reviews; critics found the experience enjoyable, but noted several technical issues. Despite this, it became one of the most popular and profitable mobile apps of 2016, amassing over 500 million downloads worldwide. The game is credited with popularizing location-based and AR technology, encouraging physical activity and social interaction. However, it has also faced criticism for causing accidents and public disturbances. Some governments raised security concerns and imposed regulations on its use. As of May 2018, Pokémon Go had over 147 million monthly active users and had been downloaded more than 1 billion times worldwide by early 2019. By 2020, the game had generated over 6 billion dollars in revenue. It is considered among the best mobile games of all time.\nIn 2025, Scopely acquired the game as part of a 3.5 billion dollar purchase of Niantic's gaming division.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Pok%C3%A9mon_Go",
+        "title": "Pokémon Go"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Pokémon GO é um jogo eletrônico free-to-play de realidade aumentada voltado para smartphones. O jogo é desenvolvido e publicado pela Niantic, Inc., em colaboração com a Nintendo e a The Pokémon Company para as plataformas iOS e Android. O jogo foi inicialmente lançado em julho de 2016 para alguns países, eventualmente foi expandindo para o resto do mundo. Com o uso do sistema de posicionamento global (GPS) e a câmara de dispositivos compatíveis, o jogo permite aos jogadores capturar, batalhar, domesticar e treinar criaturas virtuais chamadas Pokémon, que aparecem na tela do jogador usando realidade aumentada. Também há um acessório opcional, o Pokémon Go Plus, que alerta os usuários quando alguns Pokémon estiverem nas proximidades.\nPokémon GO foi lançado com críticas equilibradas. Alguns analistas elogiaram o conceito do jogo e o estímulo para que os jogadores se tornassem mais ativos no mundo real, embora houvessem alguns problemas técnicos que se evidenciaram no lançamento. Ainda assim, o jogo tornou-se um fenômeno global e um dos aplicativos móveis mais utilizados em 2016, baixado mais de 500 milhões de vezes em todo o mundo. Foi-lhe creditada a popularização dos jogos baseados em geolocalização e realidade aumentada, com estímulo à atividade física dos jogadores e movimento aos negócios locais. Porém, o jogo também atraiu controvérsias ao contribuir para várias ocorrências de acidentes e perturbação da ordem pública.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Pok%C3%A9mon_GO",
+        "title": "Pokémon GO"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Pokémon GO es un videojuego de realidad aumentada basado en la ubicación desarrollado por Niantic y recientemente adquirido por Scopely,​​y este ha sido publicado por The Pokémon Company para dispositivos iOS y Android. Es un videojuego gratuito pero contiene microtransacciones.​ El juego consiste en buscar y capturar personajes de la saga Pokémon que aparecen en ubicaciones del mundo real y luchar con ellos enfrentándose a personas reales o contra bots, lo que implica desplazarse físicamente por las calles de la ciudad para progresar. La aplicación comporta un elemento de interacción social, ya que promueve reuniones físicas de los usuarios en distintas ubicaciones de sus poblaciones y bosques, entre otros.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Pok%C3%A9mon_GO",
+        "title": "Pokémon GO"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q20966579",
+  "slug": "pokemon-go"
+}

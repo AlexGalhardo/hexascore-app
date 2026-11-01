@@ -1,0 +1,49 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt4306696",
+      "tmdb": "61858"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "episodes": 21,
+      "genres": [
+        "black comedy",
+        "satire"
+      ],
+      "seasons": 3
+    },
+    "popularity": 6.0,
+    "qid": "Q22096213",
+    "release_date": "2014-11-12",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Cyanide & Happiness Show is an American adult animated web series created by Kris Wilson, Rob DenBleyker, Matt Melvin, and Dave McElfatrick based on their webcomic Cyanide & Happiness. Each episode consists of a few short stories that have little to no connection to each other (with the exception of six episodes from the third season, which were a story arc). The creators described the goal of each episode to be \"to extract the human excretion known as laughter from your face hole via fast-paced weird comedy.\"\nThe Cyanide & Happiness Show was funded through a successful Kickstarter campaign. The first season was initially released on YouTube from November 12, 2014, to January 21, 2015. The show was later acquired by Seeso, which produced second and third seasons before selling the show to VRV in mid-2017. On February 20, 2019, it was announced that VRV had renewed the show for a fourth season, which comprised ten episodes. Following the closure of VRV, the show has not seen any new seasons or episodes since 2019 with all the episodes being released on Explosm’s YouTube channel.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/The_Cyanide_%26_Happiness_Show",
+        "title": "The Cyanide & Happiness Show"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "The Cyanide & Happiness Show é uma websérie americana de animação adulta criada por Kris Wilson, Rob DenBleyker, Matt Melvin e Dave McElfatrick, baseada na sua webcomic Cyanide & Happiness. Cada episódio consiste em algumas histórias curtas que têm pouca ou nenhuma conexão entre si (com exceção de seis episódios da terceira temporada, que formavam um arco narrativo). Os criadores descreveram o objetivo de cada episódio como sendo \"extrair a excreção humana conhecida como riso do seu orifício facial através de uma comédia estranha e acelerada\".\nThe Cyanide & Happiness Show foi financiado por meio de uma campanha bem-sucedida no Kickstarter. A primeira temporada foi lançada inicialmente no YouTube, de 12 de novembro de 2014 a 21 de janeiro de 2015. Posteriormente, a série foi adquirida pela Seeso, que produziu a segunda e a terceira temporadas antes de vendê-la para a VRV em meados de 2017. Em 20 de fevereiro de 2019, foi anunciado que a VRV renovou o programa para uma quarta temporada, que compreendeu dez episódios. Após o encerramento da VRV, a série não teve novas temporadas ou episódios desde 2019, com todos os episódios sendo lançados no canal do Explosm no YouTube.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/The_Cyanide_%26_Happiness_Show",
+        "title": "The Cyanide & Happiness Show"
+      },
+      {
+        "locale": "es",
+        "synopsis": "The Cyanide & Happiness Show es una serie estadounidense creada por Rob DenBleyker, Dave McElfatrick, Matt Melvin y Kris Wilson, los cuales también crearon los webcomics Cyanide & Happiness. Cada episodio consta de algunas historias cortas que tienen poca o ninguna conexión entre sí. \nLa primera temporada se lanzó inicialmente en YouTube del 12 de noviembre de 2014 al 21 de enero de 2015. El programa fue adquirido más tarde por Seeso , que produjo la segunda y la tercera temporada antes de vender el programa a VRV a mediados de 2017.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/The_Cyanide_%26_Happiness_Show",
+        "title": "The Cyanide & Happiness Show"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q22096213",
+  "slug": "the-cyanide-happiness-show"
+}

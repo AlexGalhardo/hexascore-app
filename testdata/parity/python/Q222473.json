@@ -1,0 +1,59 @@
+{
+  "item": {
+    "external_ids": {
+      "gog": "game/hearts_of_iron_iii",
+      "hltb": "4368",
+      "igdb": "hearts-of-iron-iii",
+      "imdb": "tt4429888",
+      "steam": "25890"
+    },
+    "meta": {
+      "countries": [
+        "Sweden"
+      ],
+      "creators": [
+        "Development Studio"
+      ],
+      "genres": [
+        "grand strategy wargame",
+        "real-time strategy",
+        "computer wargame",
+        "historical video game"
+      ],
+      "platforms": [
+        "Microsoft Windows",
+        "macOS"
+      ]
+    },
+    "popularity": 31.0,
+    "qid": "Q222473",
+    "release_date": "2009-06-29",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Hearts of Iron III is a 2009 grand strategy video game developed by Paradox Development Studio and published by Paradox Interactive for Microsoft Windows. A Mac OS X version was released the same year. A grand strategy wargame that focuses on World War II, it is the sequel to 2005's Hearts of Iron II and the third main installment in the Hearts of Iron series.\nInitially, the game received a mixed reception, largely because of the large number of bugs present in the game at release. After several patches, the game's reception improved. In December 2009, it had an average score of 77 on Metacritic. A sequel, Hearts of Iron IV, was released on June 6, 2016.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Hearts_of_Iron_III",
+        "title": "Hearts of Iron III"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Hearts of Iron III é um jogo eletrônico de estratégia com temática de guerra desenvolvido pela Paradox Development Studio e publicado pela Paradox Interactive.\nFoi lançado em 7 de agosto de 2009 para o sistema Windows. Uma versão para OS X foi disponibilizada em Virtual Programming em  7 de dezembro de 2009.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Hearts_of_Iron_III",
+        "title": "Hearts of Iron III"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Hearts of Iron III es un videojuego de estrategia bélica compleja, desarrollado por Paradox Interactive para Microsoft Windows, OSX y Linux.​ Es la secuela de la serie Hearts of Iron, de la misma compañía. Fue anunciado el 20 de agosto de 2008 y salió al mercado el 7 de agosto de 2009.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Hearts_of_Iron_III",
+        "title": "Hearts of Iron III"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q222473",
+  "slug": "hearts-of-iron-iii"
+}

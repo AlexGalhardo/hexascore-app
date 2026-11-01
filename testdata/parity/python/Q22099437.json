@@ -1,0 +1,41 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt6096696",
+      "tmdb": "64529"
+    },
+    "meta": {
+      "countries": [
+        "South Korea"
+      ],
+      "episodes": 20,
+      "genres": [
+        "comedy film",
+        "romance film"
+      ]
+    },
+    "popularity": 8.0,
+    "qid": "Q22099437",
+    "release_date": "2015-11-14",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "High-End Crush (Korean: 고품격 짝사랑; Chinese: 高品格单恋) is a South Korean-Chinese production web drama, starring Jung Il-woo and Jin Se-yeon. It was aired on Sohu TV on Saturdays & Sundays at 00:00 (CST). In just four months, the web drama had recorded over 200 million views in China.\nThe series was slated to air for the first time in South Korean television on April 4, 2018, on the generalist pay TV channel MBN.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/High-End_Crush",
+        "title": "High-End Crush"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Enamoramiento de alta gama (en hangul, 고품격 짝사랑; en chino simplificado, 高品格单恋) es una serie de internet de producción chino-surcoreana, protagonizado por Jung Il-woo y Jin Se-yeon. Fue transmitido en Sohu TV los sábados & domingos a las 00:00 (CST). En solo cuatro meses, el drama web ha registrado más de 200 millones de visitas en China.​\nEnamoramiento de alta gama es una comedia romántica que representa la sincera y pura historia de amor de un hombre con todo en sus manos, que se enamora por primera vez en su vida de una mujer que ha vivido en circunstancias completamente opuestas a las suyas.\nLa serie saldrá al aire por primera vez en la televisión de Corea del Sur el 4 de abril de 2018 en el canal de televisión de pago MBN.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Enamoramiento_de_alta_gama",
+        "title": "Enamoramiento de Alta Gama"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q22099437",
+  "slug": "high-end-crush"
+}

@@ -1,0 +1,52 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0087921",
+      "metacritic": "movie/places-in-the-heart",
+      "rottentomatoes": "m/places_in_the_heart",
+      "tmdb": "13681"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Robert Benton"
+      ],
+      "genres": [
+        "drama film"
+      ],
+      "runtimeMinutes": 112
+    },
+    "popularity": 31.0,
+    "qid": "Q59073",
+    "release_date": "1984-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Places in the Heart is a 1984 American drama film written and directed by Robert Benton. Set in 1930s Texas during the Great Depression, the film stars Sally Field as a recently widowed woman who struggles to save her farm with the help of a blind lodger and a black laborer. The cast also includes John Malkovich, Lindsay Crouse, Ed Harris, Amy Madigan, Danny Glover, and Terry O'Quinn.\nThe film premiered at the 35th Berlin International Film Festival, where Benton won the Silver Bear for Best Director. Released theatrically by Tri-Star Pictures on September 21, 1984, it was both a critical and commercial success, earning $34.9 million on a $9.5 million budget. Places in the Heart received seven Academy Award nominations, including Best Picture, and won two: Best Actress for Field and Best Original Screenplay for Benton. The film won the People's Choice Award at the 9th Toronto International Film Festival.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Places_in_the_Heart",
+        "title": "Places in the Heart"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Places in the Heart (bra/prt: Um Lugar no Coração) é um filme estadunidense de 1984, do gênero drama, dirigido por Robert Benton.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Um_Lugar_no_Cora%C3%A7%C3%A3o",
+        "title": "Places in the Heart"
+      },
+      {
+        "locale": "es",
+        "synopsis": "En un lugar del corazón (Places in the Heart) es una película dramática estadounidense dirigida y escrita por Robert Benton y protagonizada por Sally Field. Contó además con las interpretaciones de John Malkovich, Lindsay Crouse, Danny Glover y Ed Harris. La fotografía estuvo a cargo de Néstor Almendros.\nLa película se estrenó en el Festival Internacional de Cine de Berlín, donde compitió por el Oso de Oro, mientras que Benton ganó el Oso de Plata al Mejor Director. Fue estrenada en cines el 21 de septiembre de 1984 por TriStar Pictures con éxito comercial y de crítica. Los críticos elogiaron el guion y la dirección de Benton y las actuaciones del elenco, particularmente de Field, Malkovich y Crouse. Debido a su interpretación, Field recibió su segundo Premio Oscar a la Mejor Actriz, mientras que Malkovich y Crouse fueron nominados en la categoría de papeles de reparto.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/En_un_lugar_del_coraz%C3%B3n",
+        "title": "En un lugar del corazón"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q59073",
+  "slug": "places-in-the-heart"
+}

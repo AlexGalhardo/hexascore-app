@@ -1,0 +1,43 @@
+{
+  "item": {
+    "external_ids": {},
+    "meta": {
+      "creators": [
+        "Luke the Evangelist"
+      ],
+      "genres": [
+        "Gospel"
+      ]
+    },
+    "popularity": 149.0,
+    "qid": "Q39939",
+    "release_date": "0085-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Gospel of Luke is a book in the New Testament that is the third of the canonical Gospels. It tells of the origins, birth, ministry, death, resurrection, and ascension of Jesus. Together with the Acts of the Apostles, it makes up a two-volume work called Luke–Acts, accounting for 27.5% of the New Testament.\nThe Gospel of Luke shares the same author as the Acts of the Apostles. Tradition identifies the writer as Luke the Evangelist, a doctor who travelled with Paul the Apostle, though the text does not name its author. The author is presented as a participant in the events narrated in the first-person we passages of Acts. Most critical scholars maintain that the author was a traveling companion of Paul, though some cite differences with the Pauline epistles. Luke used the Gospel of Mark, and the two-source hypothesis also posits usage of Q, though a growing number of scholars contend Luke used Matthew instead. Most scholars now agree the Gospel of John knew and used Luke and the other Synoptics. Luke follows Mark closely compared to other ancient historians' usage of sources, though the parallels and variations of the Synoptic gospels are typical of ancient historical biographies. The most common dating for its composition is around AD 80–90. The earliest witnesses for Luke are the Alexandrian and the revised western text-type.\nFollowing the preface and the birth narratives of John and Jesus, the gospel begins in Galilee and moves gradually to its climax in Jerusalem. Luke espouses a three-stage \"salvation history\" starting with the Law and the prophets, the epoch of Jesus, and the period of the church. The gospel's high Christology portrays Jesus as divine in various ways, identifying him with the God of Israel and as a preexistent messiah within its Jewish and Greco-Roman context. The Holy Spirit also plays a more prominent role compared to other Christian works, forming the basis of the early Christian community.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Gospel_of_Luke",
+        "title": "Gospel of Luke"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Evangelho Segundo Lucas (em grego: Τὸ κατὰ Λουκᾶν εὐαγγέλιον; romaniz.: To kata Loukan euangelion), também conhecido por O Santo Evangelho Segundo Lucas ou Evangelho de São Lucas em algumas versões da Bíblia, é o terceiro dos quatro evangelhos canônicos. Ele relata a vida e o ministério de Jesus de Nazaré, detalhando a história dos acontecimentos de Seu nascimento até Sua Ascensão.\nO autor é tradicionalmente identificado como Lucas, o evangelista. Certas histórias populares, como o Filho Pródigo e o Bom samaritano, são encontradas somente neste evangelho. A obra tem uma ênfase especial sobre a oração, a atividade do Espírito Santo, a alegria e o cuidado de Deus para com os pobres, as crianças e as mulheres. Lucas apresenta Jesus como o Filho de Deus, mas volta sua atenção especialmente para a humanidade d'Ele, com Sua compaixão para com os fracos, os aflitos e os marginalizados.\nDe acordo com o prefácio do livro, o propósito de Lucas é relatar o início do cristianismo, enquanto procura o significado teológico da história. O evangelista divide seu evangelho em três fases: a primeira termina com João Batista, a segunda consiste no ministério terrestre de Jesus e a terceira é a vida da Igreja após a ressurreição de Cristo. O livro contém ao todo 24 capítulos, 24 parábolas e 21 milagres. O autor retrata o cristianismo como divino, respeitável, cumpridor da lei e internacional. Aqui, a compaixão de Jesus estende a todos os que estão necessitados, as mulheres são importantes entre os seus seguidores, os samaritanos desprezados são elogiados e os gentios são prometidos a oportunidade de aceitar o evangelho. Enquanto o Evangelho é escrito como uma narrativa histórica, muitos dos fatos retratados nele são baseados em tradições orais e anteriores aos quatro evangelhos canônicos. A mais moderna erudição crítica concluiu que Lucas usou o Evangelho segundo Marcos para a sua cronologia e uma hipotética fonte Q, que provavelmente continha muitos dos ensinamentos de Jesus. Lucas também pode ter utilizado registros escritos independentes. A erudição cristã tradicional tem datado a composição do evangelho para o início dos anos 60 d.C., enquanto a alta crítica data para décadas mais tarde do século I. Enquanto a visão tradicional de que o companheiro de Paulo, Lucas, foi o autor do terceiro Evangelho, um número de possíveis contradições entre Atos e as cartas de Paulo levam muitos estudiosos a duvidar disso. De acordo com Raymond E. Brown, não é impossível que Lucas foi o autor do Evangelho. Já Leon Morris afirma que não há nada no Evangelho segundo Lucas que coloque em xeque a visão tradicional da Igreja Primitiva. De acordo com a opinião da maioria, o autor é simplesmente desconhecido.\nOs estudiosos da Bíblia estão em amplo consenso de que o autor do Evangelho segundo Lucas também escreveu o Atos dos Apóstolos. Muitos acreditam que o Evangelho segundo Lucas e os Atos dos Apóstolos originalmente constituíam uma obra de dois volumes, que os estudiosos chamam de Lucas-Atos.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Evangelho_segundo_Lucas",
+        "title": "Evangelho segundo Lucas"
+      },
+      {
+        "locale": "es",
+        "synopsis": "El Evangelio de Lucas, abreviado Lc, es el tercero y más extenso de los cuatro evangelios canónicos del Nuevo Testamento bíblico. \nRelata la vida de Jesús de Nazaret, centrándose especialmente en su nacimiento, ministerio público, muerte, resurrección y termina con el relato de su ascensión. El propósito de Lucas, al escribir una historia de la vida, muerte y resurrección de Jesucristo, era que las personas fuera de la fe y cultura judía pudieran entender el mensaje de salvación.\nEn griego su título se escribe Κατά Λουκᾶν εὐαγγέλιον [katá loukán euanguélion].",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Evangelio_de_Lucas",
+        "title": "Evangelio de Lucas"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q39939",
+  "slug": "gospel-of-luke"
+}

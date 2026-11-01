@@ -1,0 +1,62 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0034492",
+      "metacritic": "movie/bambi",
+      "rottentomatoes": "m/bambi",
+      "tmdb": "3170"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "David Hand",
+        "James Algar",
+        "Bill Roberts",
+        "Norman Wright",
+        "Samuel Armstrong",
+        "Paul Satterfield",
+        "Graham Heid"
+      ],
+      "genres": [
+        "musical film",
+        "coming-of-age film",
+        "children's film",
+        "fantasy film",
+        "drama film"
+      ],
+      "runtimeMinutes": 69
+    },
+    "popularity": 113.0,
+    "qid": "Q43051",
+    "release_date": "1942-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Bambi is a 1942 American animated coming-of-age film produced by Walt Disney and released by RKO Radio Pictures, loosely based on Felix Salten's 1923 novel Bambi, a Life in the Woods. It was directed by David D. Hand, and a team of six sequence directors.\nThe main characters are Bambi, a white-tailed deer; his parents (the Great Prince of the forest and his unnamed mother); his friends Thumper (a pink-nosed cottontail rabbit) and Flower (a skunk); and his childhood friend and future mate, Faline. In the original book, Bambi was a roe deer, a species native to Europe, but Disney decided to base the character on a mule deer from Arrowhead, California. Illustrator Maurice \"Jake\" Day convinced Disney that the mule deer had large \"mule-like\" ears and were more common to western North America, but that the white-tail deer was more recognized throughout the United States. The film received three Academy Award nominations: Best Sound (Sam Slyfield), Best Song (for \"Love Is a Song\" sung by Donald Novis) and Original Music Score.\nIn June 2008, the American Film Institute presented a list of its \"10 Top 10\"—the best ten films in each of ten classic American film genres—after polling over 1,500 people from the creative community. Bambi attained third in animation. In December 2011, the film was selected for preservation in the National Film Registry of the Library of Congress, being deemed \"culturally, historically and aesthetically significant\". A follow-up, Bambi II, premiered in theaters in Argentina on January 26, 2006, before being released as a direct-to-video title in the United States on February 7, 2006. In January 2020, it was announced that a photorealistic computer-animated remake was set to be in development.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Bambi",
+        "title": "Bambi"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Bambi (bra: Bambi) é um filme estadunidense do gênero animação produzido pela Disney em 1942 e baseado no romance Bambi, a Life in the Woods do austríaco Felix Salten.\nÉ o quinto longa-metragem de animação dos estúdios Disney e foi lançado nos cinemas em 13 de agosto de 1942. O personagem principal é o cervo Bambi que vive em uma floresta com sua mãe e seus amigos animais. Bambi passa a viver só quando sua mãe é morta por caçadores.\nPossui uma sequência, Bambi 2 - O Grande Príncipe da Floresta, de 2006, e que mostra parte da infância de Bambi ao lado do pai, o grande príncipe da floresta. Em outubro de 2008, foi divulgada uma pesquisa onde o filme aparece como um dos que mais fizeram o público chorar.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Bambi",
+        "title": "Bambi"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Bambi es una película de animación en color dirigida por David Hand, producida por Walt Disney Productions, distribuida por la compañía RKO Radio Pictures y estrenada en Estados Unidos el 21 de agosto de 1942. La película relata la historia, desde el nacimiento hasta la etapa adulta, de un ciervo de Virginia llamado Bambi. El ciervo de Virginia es una especie norteamericana, relativamente bien conocida por el público al que se dirigía Disney en 1942, pero en la obra literaria en la que se basa la película (la novela Bambi, una vida en el bosque, escrita por el austriaco Felix Salten y publicada por primera vez en Viena en 1923),​ Bambi es un corzo, una especie de ciervo común en Europa central.\nBambi es la quinta película animada de Walt Disney. Además, fue distinguida con tres nominaciones a los premios de la Academia en las categorías de Mejor sonido, Mejor canción por «El amor es una canción» y Mejor banda sonora. Forma parte del AFI's 10 Top 10, en la categoría «Película de animación», e incluida en el National Film Registry de la Biblioteca del Congreso de Estados Unidos en 2011.​ Por otra parte, el dinosaurio Bambiraptor feinbergi fue nombrado en honor al personaje homónimo de esta película.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Bambi",
+        "title": "Bambi"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q43051",
+  "slug": "bambi"
+}

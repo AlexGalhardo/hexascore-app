@@ -1,0 +1,51 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0169519",
+      "tmdb": "13405"
+    },
+    "meta": {
+      "countries": [
+        "France",
+        "Belgium",
+        "Switzerland"
+      ],
+      "episodes": 6,
+      "genres": [
+        "crime film"
+      ],
+      "runtimeMinutes": 289,
+      "seasons": 1
+    },
+    "popularity": 8.0,
+    "qid": "Q1213627",
+    "release_date": "1979-09-21",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Coffin Island"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "L'Île aux trente cercueils é uma minissérie francesa de 1979, livremente adaptada do romance de Maurice Leblanc con Claude Jade (Véronique d'Hergemont)\nUma 1979 série de televisão adaptação do livro de Maurice Leblanc foi dirigido por Marcel Cravenne . É estrelado por Claude Jade como Véronique d'Hergemont, uma protagonista feminina, que está na corrida e na busca de seu pai e seu filho, envolvido em aventuras horríveis em um fantástico ilha. Foi transmitida em Portugal na RTP 2 pelas 21h25, às sextas-feiras, de 16 de julho / 13 de agosto de 1982",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/L%27%C3%8Ele_aux_trente_cercueils",
+        "title": "L'Île aux trente cercueils"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Isla de treinta ataúdes (L'île aux trente cercueils / Island of Thirty Coffins), era una miniserie de Francia producida en 1979.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Isla_de_treinta_ata%C3%BAdes",
+        "title": "Isla de treinta ataúdes"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q1213627",
+  "slug": "coffin-island"
+}

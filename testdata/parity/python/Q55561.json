@@ -1,0 +1,60 @@
+{
+  "item": {
+    "external_ids": {
+      "igdb": "3d-construction-kit"
+    },
+    "meta": {
+      "countries": [
+        "United Kingdom"
+      ],
+      "creators": [
+        "Incentive Software"
+      ],
+      "genres": [
+        "graphics software",
+        "game creation system",
+        "3D computer graphics software"
+      ],
+      "platforms": [
+        "Acorn Archimedes",
+        "Amstrad CPC",
+        "Atari ST",
+        "Commodore 64",
+        "Commodore 128",
+        "DOS",
+        "ZX Spectrum",
+        "Commodore Amiga"
+      ]
+    },
+    "popularity": 6.0,
+    "qid": "Q55561",
+    "release_date": "1991-06-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "3D Construction Kit (US, Canada and Israel release title: Virtual Reality Studio), also known as 3D Virtual Studio, is a utility for creating 3D worlds in Freescape. Developed by Incentive Software and published by Domark, it was released in 1991 on multiple platforms. The game originally retailed for £24.99 for the 8-bit version, and £49.99 for 16-bit version and the 32-bit Acorn Archimedes version, in the United Kingdom. A sequel, 3D Construction Kit II, was released in 1992, but only available on Amiga, Atari ST and MS-DOS.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/3D_Construction_Kit",
+        "title": "3D Construction Kit"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "3D Construction Kit"
+      },
+      {
+        "locale": "es",
+        "synopsis": "3D Construction Kit (publicado en EE. UU., Canadá e Israel con el título: Virtual Reality Studio​), también conocido como 3D Virtual Studio, es una utilidad para crear mundos 3D en Freescape. Desarrollado por Incentive Software y comercializado por Domark, fue publicado en 1991 para múltiples plataformas. El año siguiente se publicó una secuela.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/3D_Construction_Kit",
+        "title": "3D Construction Kit"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q55561",
+  "slug": "3d-construction-kit"
+}

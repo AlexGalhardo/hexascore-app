@@ -1,0 +1,56 @@
+{
+  "item": {
+    "external_ids": {
+      "hltb": "4252",
+      "igdb": "half-life-2-lost-coast",
+      "steam": "340"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Valve Corporation"
+      ],
+      "genres": [
+        "first-person shooter",
+        "post-apocalyptic video game"
+      ],
+      "platforms": [
+        "Linux",
+        "Microsoft Windows",
+        "macOS"
+      ]
+    },
+    "popularity": 28.0,
+    "qid": "Q223629",
+    "release_date": "2005-10-27",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Half-Life 2: Lost Coast is an additional level for the 2004 first-person shooter game Half-Life 2. Developed by Valve, it was released on October 27, 2005, as a free download for owners of Half-Life 2 on Steam. Players control Half-Life protagonist Gordon Freeman as he travels up a coastal cliff to destroy a Combine weapon in a monastery.\nLost Coast is a technology demonstration showcasing the high-dynamic-range rendering implemented in the Source engine. It was designed with environments to emphasize these effects. Lost Coast was the first Valve game with a commentary mode, in which the developers explain elements of design as the player progresses through the level.\nThe Lost Coast level was created for Half-Life 2, but was removed from the game. It was originally going to be a level in \"Highway 17\" where Gordon ends up in a strange place meeting a Fisherman. As a result, it has several minor story details that were not included in Half-Life 2. It received a generally positive reception, and there was consensus among reviewers that the new features included in Lost Coast should be integrated into future games released by Valve.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Half-Life_2:_Lost_Coast",
+        "title": "Half-Life 2: Lost Coast"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Half-Life 2: Lost Coast é uma fase adicional para o jogo eletrônico de tiro em primeira pessoa Half-Life 2 da Valve Corporation. Foi originalmente planeado para fazer parte do capítulo Highway 17 do jogo, mas acabou sendo cortado do produto final. Foi lançado no dia 27 de Outubro de 2005.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Half-Life_2:_Lost_Coast",
+        "title": "Half-Life 2: Lost Coast"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Half-Life 2: Lost Coast (estilizado HλLF-LIFE2: LOST COAST) es un capítulo adicional para el videojuego de disparos en primera persona Half-Life 2, lanzado en 2004 y desarrollado por Valve Corporation. Se lanzó el 27 de octubre de 2005, a través de la plataforma Steam como descarga gratuita para quienes compraron la versión de Half-Life 2 para Microsoft Windows. Lost Coast sirve como una demostración tecnológica, presentando especialmente la nueva implementación al motor de juego Source y los gráficos en HDR. El nivel fue diseñado con una variedad de ambientes apropiados para enfatizar estos efectos. Además, Lost Coast fue el primer videojuego desarrollado por Valve que le permitió a los desarrolladores explicar varios elementos de diseño a medida que el jugador avanza a través del nivel.\nLost Coast sigue al protagonista Gordon Freeman mientras viaja por un acantilado costero para destruir una batería de artillería Combine emplazada dentro de un monasterio, que está disparando contra una ciudad cercana. El nivel Lost Coast se creó originalmente para Half-Life 2, pero finalmente se eliminó del juego. Como resultado, tiene varios detalles menores de la historia que no se incluyeron en Half-Life 2. El nivel recibió críticas generalmente positivas, y hubo un consenso entre los revisores de que las nuevas características incluidas en Lost Coast deberían integrarse en futuros juegos de Valve.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Half-Life_2:_Lost_Coast",
+        "title": "Half-Life 2: Lost Coast"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q223629",
+  "slug": "half-life-2-lost-coast"
+}

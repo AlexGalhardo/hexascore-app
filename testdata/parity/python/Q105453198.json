@@ -1,0 +1,22 @@
+{
+  "item": {
+    "external_ids": {},
+    "meta": {},
+    "popularity": 6.0,
+    "qid": "Q105453198",
+    "release_date": null,
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "In Sufism, the Salat al-Fatih (Arabic: صَلَاةُ الْفَاتِحِ, \"opener's prayer\")  was transmitted to the Muslims by Sheikh Muhammad ibn Abi al-Hasan al-Bakri, a successor of Abu Bakr al-Siddiq later this is  accepted and litany (wird)  prayer for Muhammad practiced individually or in congregation by followers (murids) in the Tijaniyya order.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Salat_al-Fatih",
+        "title": "Salat al-Fatih"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q105453198",
+  "slug": "salat-al-fatih"
+}

@@ -1,0 +1,34 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt6058390",
+      "tmdb": "68150"
+    },
+    "meta": {
+      "countries": [
+        "People's Republic of China",
+        "South Korea"
+      ],
+      "episodes": 20,
+      "genres": [
+        "drama television series"
+      ]
+    },
+    "popularity": 7.0,
+    "qid": "Q24211321",
+    "release_date": "2016-07-02",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Gogh, The Starry Night (Korean: 고호의 별이 빛나는 밤에) is a Chinese-South Korean web-drama starring Kwon Yu-ri, Kim Young-kwang and Lee Ji-hoon. It was broadcast on Sohu TV every Saturday and Sunday at 00:00 from July 2, 2016.\nThe drama also aired on SBS on Saturdays and Sundays at 22:00 on October 22 as a 4-episode mini drama, after Second to Last Love ended.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Gogh,_The_Starry_Night",
+        "title": "Gogh, The Starry Night"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q24211321",
+  "slug": "gogh-the-starry-night"
+}

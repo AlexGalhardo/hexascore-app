@@ -1,0 +1,53 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt7695916",
+      "metacritic": "tv/tell-me-a-story",
+      "rottentomatoes": "tv/tell_me_a_story",
+      "tmdb": "81747"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Kevin Williamson"
+      ],
+      "episodes": 20,
+      "genres": [
+        "psychological thriller"
+      ],
+      "seasons": 2
+    },
+    "popularity": 16.0,
+    "qid": "Q55074622",
+    "release_date": "2018-10-31",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Tell Me a Story is an American psychological thriller anthology television series created by Kevin Williamson for CBS All Access. Based on the Spanish television series Cuéntame un cuento, it depicts iconic fairy tales reimagined as modern-day thrillers. Each season features a mostly different cast ensemble, with Danielle Campbell and Paul Wesley appearing in both seasons of the series.\n\nThe first season premiered on October 31, 2018, and concluded on January 3, 2019, after 10 episodes. A second season was announced shortly before the first season ended, which premiered on December 5, 2019, and concluded on February 6, 2020, after another set of 10 episodes. In May 2020, the series was canceled after two seasons. Subsequently, the television broadcast rights to the series were picked up by The CW, where it premiered in July 2020 and aired through December 2020.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Tell_Me_a_Story_(TV_series)",
+        "title": "Tell Me a Story"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Tell Me a Story  é uma série de televisão  americana de thriller psicológico, baseada na série de televisão Mexicana Érase una vez criado por Marcos Osório Vidal, que estreou em 31 de outubro de 2018, na CBS All Acces. A série foi desenvolvida para o público americano por Kevin Williamson e é estrelada por Billy Magnussen, Kim Cattrall, Danielle Campbell, Paul Wesley, James Wolk, Dania Ramirez, Sam Jaeger, Davi Santos, Zabryna Guevara, e Dorian Missick. Em 17 de dezembro de 2018, foi anunciado que a série fora renovada para uma segunda temporada.\nNo dia 11 de maio de 2020, foi anunciado que a série foi cancelada após 2 temporadas. Além disso, também foi anunciado que a The CW iria incluir as duas temporadas em sua programação.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Tell_Me_a_Story",
+        "title": "Tell Me a Story"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Tell Me a Story es una serie de televisión en línea estadounidense de suspenso psicológico, basada en la serie española de televisión Cuéntame un cuento; una serie del 2014 emitida por la cadena Antena 3 y en la que también se basa la serie mexicana Érase una vez.​ Se estrenó el 31 de octubre de 2018 en CBS All Access.​ La serie fue creada por Kevin Williamson y está protagonizada por James Wolk, Billy Magnussen, Dania Ramirez, Danielle Campbell, Dorian Crossmond Missick, Sam Jaeger, Davi Santos, Michael Raymond-James, Zabryna Guevara, Paul Wesley, y Kim Cattrall. Cada temporada presenta un conjunto de elenco en su mayoría diferente, con Danielle Campbell y Paul Wesley apareciendo en ambas temporadas de la serie.\nLa primera temporada se estrenó el 31 de octubre de 2018 y concluyó el 3 de enero de 2019, después de 10 episodios. Se anunció una segunda temporada poco antes de que terminara la primera, que se estrenó el 5 de diciembre de 2019 y concluyó el 6 de febrero de 2020, otro conjunto de 10 episodios. Después de las dos temporadas, CBS All Access canceló la serie en mayo de 2020.​ Los derechos de la serie fueron adquiridos posteriormente por The CW, que emitió repeticiones de la primera y segunda temporada.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Tell_Me_a_Story",
+        "title": "Tell Me a Story"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q55074622",
+  "slug": "tell-me-a-story"
+}

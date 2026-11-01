@@ -1,0 +1,55 @@
+{
+  "item": {
+    "external_ids": {
+      "gog": "game/freedom_force_vs_the_3rd_reich",
+      "hltb": "3695",
+      "igdb": "freedom-force-vs-the-3rd-reich",
+      "steam": "8890"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Irrational Games"
+      ],
+      "genres": [
+        "real-time tactics",
+        "tactical role-playing game"
+      ],
+      "platforms": [
+        "Microsoft Windows"
+      ]
+    },
+    "popularity": 9.0,
+    "qid": "Q2440",
+    "release_date": "2005-03-08",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Freedom Force vs the 3rd Reich is a real-time tactical role-playing game developed and published by Irrational Games. The sequel to Freedom Force, the player guides a team of superheroes as they travel back in time, and help overthrow Nazi Germany and its allies during World War II. In the game, players take control of a team of up to four characters and battle their way through completely destructible 3D maps in a series of missions based on classic superhero comics.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Freedom_Force_vs_the_3rd_Reich",
+        "title": "Freedom Force vs the 3rd Reich"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Freedom Force vs the 3rd Reich"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Freedom Force vs The 3rd Reich es un videojuego de rol táctico en tiempo real​​ desarrollado y distribuido por Irrational Games. En esta secuela para Freedom Force, el jugador guía a un grupo de superhéroes cuando ellos viajan atrás en el tiempo a derrocar a la Alemania Nazi y sus aliados durante la Segunda Guerra Mundial. Este fue lanzado a principios de marzo de 2005.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Freedom_Force_vs_The_3rd_Reich",
+        "title": "Freedom Force vs The 3rd Reich"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q2440",
+  "slug": "freedom-force-vs-the-3rd-reich"
+}

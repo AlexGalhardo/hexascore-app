@@ -1,0 +1,52 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0011093",
+      "tmdb": "358246"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "W. S. Van Dyke"
+      ],
+      "genres": [
+        "silent film",
+        "serial film",
+        "mystery film",
+        "action film"
+      ]
+    },
+    "popularity": 8.0,
+    "qid": "Q27067",
+    "release_date": "1920-02-02",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Daredevil Jack is a 1920 American silent 15-chapter action film serial directed by W. S. Van Dyke and starring heavyweight champion Jack Dempsey and featuring Lon Chaney as a villain. The chapters were shown weekly between February and May 1920. The serial's working titles were Daredevil Durant or Dead or Alive. An incomplete copy of the film is housed in the UCLA Film & Television Archive.\nThe supporting cast features Lon Chaney, Edgar Kennedy, John George and Bull Montana. This was the first of 23 films, many of them short subjects, in which the iconic boxer Dempsey appeared, usually as the top-billed leading man. Dempsey claimed Lon Chaney applied his makeup in the film, and said he had \"a feather-like touch\" compared to the other makeup men he worked with.\nThe serial is today mostly lost, with some incomplete segments (mainly chapters 1, 2 and 4) stored at University of California, Los Angeles. Lon Chaney does not appear in the existing footage, which is unfortunate as this was Lon Chaney's only appearance in a serial.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Daredevil_Jack",
+        "title": "Daredevil Jack"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Daredevil Jack, também conhecido como Daredevil Durrant, Dead or Alive ou The Adventures of Daredevil Jack, é um seriado estadunidense de 1920, no gênero ação, dirigido por W. S. Van Dyke, em 15 capítulos, estrelado por Jack Dempsey e Josie Sedgwick. Foi produzido pela Astra Film Corporation, distribuído pela Pathé Exchange, e veiculou nos cinemas estadunidenses de 15 de fevereiro a 23 de maio de 1920.\nUma cópia incompleta está guardada na UCLA Film & Television Archive.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Daredevil_Jack",
+        "title": "Daredevil Jack"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Daredevil Jack"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q27067",
+  "slug": "daredevil-jack"
+}

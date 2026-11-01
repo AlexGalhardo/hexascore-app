@@ -1,0 +1,50 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0113273",
+      "tmdb": "65040"
+    },
+    "meta": {
+      "countries": [
+        "France"
+      ],
+      "creators": [
+        "Jacques Rivette"
+      ],
+      "genres": [
+        "musical film"
+      ],
+      "runtimeMinutes": 169
+    },
+    "popularity": 9.0,
+    "qid": "Q25617",
+    "release_date": "1995-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Up, Down, Fragile (original title in French: Haut bas fragile) is a 1995 French film directed by Jacques Rivette. It was entered into the 19th Moscow International Film Festival. Interspersed with songs and dances, the film recounts the adventures of three young women in Paris, each at a turning point in her life.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Up,_Down,_Fragile",
+        "title": "Up, Down, Fragile"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Alto Baixo Frágil"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Alto bajo frágil"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q25617",
+  "slug": "up-down-fragile"
+}

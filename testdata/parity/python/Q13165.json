@@ -1,0 +1,53 @@
+{
+  "item": {
+    "external_ids": {
+      "gog": "game/death_to_spies",
+      "hltb": "2369",
+      "igdb": "death-to-spies",
+      "steam": "9800"
+    },
+    "meta": {
+      "countries": [
+        "Russia"
+      ],
+      "genres": [
+        "third-person shooter",
+        "stealth game",
+        "shooter game"
+      ],
+      "platforms": [
+        "Microsoft Windows"
+      ]
+    },
+    "popularity": 7.0,
+    "qid": "Q13165",
+    "release_date": "2007-10-16",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Death to Spies (Russian: Смерть шпионам) is a stealth third-person shooter video game set in World War II. Produced by 1C Company and Russian studio Haggard Games, it was released in 2007 for Windows and later via Valve's digital distribution system Steam on 12 March 2008. The game received mixed to positive reviews. Two sequels, Death to Spies: Moment of Truth and Alekhine's Gun, were released in 2009 and 2016, respectively.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Death_to_Spies",
+        "title": "Death to Spies"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Death to Spies"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Death to Spies"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q13165",
+  "slug": "death-to-spies"
+}

@@ -1,0 +1,50 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "149666",
+      "openlibrary": "OL808821W"
+    },
+    "meta": {
+      "countries": [
+        "Qing dynasty"
+      ],
+      "creators": [
+        "Pu Songling"
+      ],
+      "genres": [
+        "Zhiguai xiaoshuo",
+        "chuanqi"
+      ]
+    },
+    "popularity": 25.0,
+    "qid": "Q83755",
+    "release_date": "1740-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Liaozhai zhiyi, sometimes shortened to Liaozhai, or known in English as Strange Tales from a Chinese Studio (Chinese: 聊齋誌異, liáozhāi zhìyì), is a collection of Classical Chinese stories by Qing dynasty writer Pu Songling, comprising close to 500 stories or \"marvel tales\" in the zhiguai and chuanqi styles, which according to some critics, served to implicitly criticise societal problems.\nWritten over a period of forty years from the late 1600s and ending in the early 1700s, it circulated in manuscripts that were copied and recopied among the author's friends but did not appear in print until 1766. Since then, many of the critically lauded stories have been adapted for other media such as film and television.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Strange_Tales_from_a_Chinese_Studio",
+        "title": "Strange Stories from a Chinese Studio"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Liaozhai zhiyi, às vezes abreviado para Liaozhai, conhecido como Contos Estranhos do Estúdio de Liao, Contos Estranhos de um Estúdio Chinês, ou literalmente Contos Estranhos de um Estúdio de Lazer, é uma coleção em chinês clássico de histórias do escritor da dinastia Qing Pu Songling, compreendendo cerca de 500 histórias ou \"contos maravilhosos\" nos estilos zhiguai e chuanqi, que, segundo alguns críticos, serviram para criticar implicitamente os problemas sociais. Escrito ao longo de um período de quarenta anos, desde o final dos anos 1600 até o início dos anos 1700, circulou em manuscritos que foram copiados e recopiados entre os amigos do autor, mas não apareceram impressos até 1766. Desde então, muitas das histórias elogiadas pela crítica foram adaptadas para outras mídias, como cinema e televisão.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Contos_Estranhos_do_Est%C3%BAdio_de_Liao",
+        "title": "Contos Estranhos do Estúdio de Liao"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Liaozhai Zhiyi"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q83755",
+  "slug": "strange-stories-from-a-chinese-studio"
+}

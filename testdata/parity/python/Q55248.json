@@ -1,0 +1,52 @@
+{
+  "item": {
+    "external_ids": {
+      "hltb": "9094",
+      "igdb": "star-wars-trilogy-arcade"
+    },
+    "meta": {
+      "countries": [
+        "Japan"
+      ],
+      "creators": [
+        "Sega AM3"
+      ],
+      "genres": [
+        "shoot 'em up"
+      ],
+      "platforms": [
+        "arcade video game machine"
+      ]
+    },
+    "popularity": 7.0,
+    "qid": "Q55248",
+    "release_date": "1999-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Star Wars Trilogy Arcade is a 1998 rail shooter video game developed by Sega AM Annex and published by Sega for arcades. It is based on the original trilogy of Star Wars films, and was released shortly after those films' special editions. Accompanied by the Star Wars Trilogy pinball game, it is the second in Sega's Star Wars Arcade series, preceded by 1993's Star Wars Arcade and followed by 2000's Star Wars Racer Arcade.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Star_Wars_Trilogy_Arcade",
+        "title": "Star Wars Trilogy Arcade"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Star Wars Trilogy Arcade"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Star Wars Trilogy Arcade es un juego de arcade lanzado en 1998. Es un juego de disparos en 3D basado en la trilogía original de las películas de Star Wars y fue lanzado junto con las ediciones especiales de estas películas. Acompañado por el juego de pinball Star Wars Trilogy, es el segundo en la serie Star Wars Arcade de Sega; está precedido por Star Wars Arcade de 1993 y seguido por Star Wars: Racer Arcade de 2000.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Star_Wars_Trilogy_Arcade",
+        "title": "Star Wars Trilogy Arcade"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q55248",
+  "slug": "star-wars-trilogy-arcade"
+}

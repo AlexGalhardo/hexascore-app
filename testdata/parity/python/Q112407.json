@@ -1,0 +1,39 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "610037",
+      "openlibrary": "OL94863W"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Tom Robbins"
+      ]
+    },
+    "popularity": 6.0,
+    "qid": "Q112407",
+    "release_date": "1976-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Even Cowgirls Get the Blues is a  1976 novel by Tom Robbins.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Even_Cowgirls_Get_the_Blues_(novel)",
+        "title": "Even Cowgirls Get the Blues"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "También las vaqueras sienten melancolía"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q112407",
+  "slug": "even-cowgirls-get-the-blues"
+}

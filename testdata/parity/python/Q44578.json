@@ -1,0 +1,66 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0120338",
+      "metacritic": "movie/titanic",
+      "rottentomatoes": "m/titanic",
+      "tmdb": "597"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "James Cameron"
+      ],
+      "genres": [
+        "disaster film",
+        "drama film",
+        "romance film",
+        "flashback film",
+        "melodrama",
+        "historical film",
+        "epic film"
+      ],
+      "runtimeMinutes": 194,
+      "trailers": [
+        {
+          "youtubeId": "4S2Ruqhcz78"
+        },
+        {
+          "youtubeId": "QnmMjj9e2Dc"
+        }
+      ]
+    },
+    "popularity": 138.0,
+    "qid": "Q44578",
+    "release_date": "1997-11-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Titanic is a 1997 American historical romance film written and directed by James Cameron. Incorporating both historical and fictional aspects, it is based on accounts of the sinking of RMS Titanic in 1912. Leonardo DiCaprio and Kate Winslet star as members of different social classes who fall in love during the ship's ill-fated maiden voyage. The ensemble cast includes Billy Zane, Kathy Bates, Frances Fisher, Bernard Hill, Jonathan Hyde, Danny Nucci, David Warner and Bill Paxton.\nCameron's inspiration came from his fascination with shipwrecks. He felt a love story interspersed with human loss would be essential to convey the emotional impact of the disaster. Production began on September 1, 1995, when Cameron shot footage of the Titanic wreck. The modern scenes were shot on board the Shirshov Institute of Oceanology research vessel Akademik Mstislav Keldysh, which Cameron had used as a base when filming the wreck. Scale models, computer-generated imagery (CGI), and a reconstruction of the Titanic built at Baja Studios were used to recreate the sinking. Titanic was initially in development at 20th Century Fox, but delays and a mounting budget resulted in Fox partnering with Paramount Pictures for financial help. It was the most expensive film ever made at the time, with a production budget of $200 million. Filming took place from July 1996 to March 1997.\nTitanic premiered at the Tokyo International Film Festival on November 1, 1997, and was released in the United States on December 19. It was distributed by Paramount Pictures in the United States and Canada and by 20th Century Fox in other territories. It was praised for its visual effects, performances (particularly those of DiCaprio, Winslet, and Gloria Stuart), production values, direction, score, cinematography, story, and emotional depth. Among other awards, the film received fourteen nominations at the 70th Academy Awards and won eleven, including Best Picture and Best Director. In doing so, it tied both All About Eve (1950) for the record for the most Academy Award nominations, and Ben-Hur (1959) for the most Academy Awards won by a film, making Titanic the most successful individual film in Academy Award history.\nWith an initial worldwide gross of over $1.84 billion, becoming the highest-grossing film of 1997, Titanic was the first film to reach the billion-dollar mark, and was the highest-grossing film of all time until Cameron's next film, Avatar (2009), surpassed it in 2010. Income from the initial theatrical release, retail video, and soundtrack sales and US broadcast rights exceeded $3.2 billion. Re-releases pushed the worldwide theatrical total to $2.264 billion, making Titanic the second film to gross more than $2 billion worldwide after Avatar; as of 2026, it is the fifth-highest-grossing film. In 2017, the Library of Congress selected it for preservation in the United States National Film Registry as \"culturally, historically, or aesthetically significant\".",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Titanic_(1997_film)",
+        "title": "Titanic"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Titanic é um filme épico de romance e drama norte-americano de 1997, escrito, dirigido, co-produzido e co-editado por James Cameron. É uma história de ficção do naufrágio real do RMS Titanic, estrelando Leonardo DiCaprio como Jack Dawson, e Kate Winslet como Rose DeWitt Bukater, membros de diferentes classes sociais que se apaixonam durante a fatídica viagem inaugural do navio, saindo de Southampton para Nova Iorque em 10 de abril de 1912. Apesar dos personagens principais serem fictícios, alguns personagens são figuras históricas. Gloria Stuart interpreta Rose idosa, que narra o filme, enquanto Billy Zane interpreta Cal Hockley, o arrogante noivo rico da jovem Rose. Cameron viu a história de amor como um jeito de cativar o público para o desastre real.\nA produção começou em 1996, quando Cameron filmou os verdadeiros destroços do RMS Titanic. As cenas modernas foram filmadas no Akademik Mstslav Keldysh, navio de pesquisas russo que Cameron usou como base para filmar os destroços. Uma réplica do Titanic foi construída em Playas de Rosarito, no México; com miniaturas e computação gráfica sendo usadas para recriar o naufrágio. O filme foi financiado pela Paramount Pictures e pela 20th Century Fox. Na época, Titanic foi o longa-metragem mais caro já produzido, com um orçamento de aproximadamente 200 milhões de dólares.\nO filme tinha lançamento previsto originalmente para 2 de julho de 1997, porém, atrasos na pós-produção adiaram seu lançamento para 19 de dezembro. Titanic tornou-se um fenômeno de bilheteria em sua época de lançamento. Foi indicado a 14 Óscars, vencendo 11 prêmios, incluindo Melhor Filme e Melhor Diretor. Com uma bilheteria total de 2,2 bilhões de dólares, Titanic foi o primeiro filme a arrecadar mais de um bilhão de dólares mundialmente, permanecendo como a produção de maior arrecadação da história do cinema por doze anos até Avatar, também de James Cameron, ultrapassá-lo em 2009; e manteve-se na segunda colocação até ter sido novamente superado em 2019 por Avengers: Endgame.\nTitanic foi relançado nos cinemas em 4 de abril de 2012, após uma conversão 3D em homenagem aos cem anos da viagem inaugural do RMS Titanic. Após o relançamento em 3D, conquistou mais de trezentos milhões de dólares e conseguiu o feito de ser o segundo longa a atingir a marca dos dois bilhões em bilheteria de dólares. O longa foi distribuído pela Paramount Pictures apenas na América do Norte, enquanto a 20th Century Fox ficou responsável pela distribuição mundial.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Titanic_(filme_de_1997)",
+        "title": "Titanic"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Titanic es una película estadounidense de 1997, dramática y de catástrofe, dirigida y escrita por James Cameron y protagonizada por Leonardo DiCaprio, Kate Winslet, Billy Zane, Kathy Bates, Gloria Stuart y Bill Paxton.​​ La trama, una epopeya romántica,​​ relata la relación de Jack Dawson y Rose DeWitt Bukater, dos jóvenes que se conocen y se enamoran a bordo del transatlántico RMS Titanic en su viaje inaugural desde Southampton (Inglaterra) a Nueva York (Estados Unidos) en abril de 1912. Pertenecientes a diferentes clases sociales, intentan salir adelante pese a las adversidades que los separarían de forma definitiva, entre ellas el prometido de Rose, Caledon «Cal» Hockley (un adinerado del cual ella no está enamorada, pero su madre la ha obligado a permanecer con él para garantizar un futuro económico próspero) y el hundimiento del barco tras chocar con un iceberg.\nSi bien Jack y Rose son personajes ficticios, varios otros secundarios como Margaret Brown​ (pasajera de primera clase), Thomas Andrews (diseñador del barco) y Edward John Smith (capitán del buque) son personas que realmente vivieron los acontecimientos históricos del hundimiento del transatlántico en 1912.​​​ También son auténticas las escenas del pecio del barco que figuran en las escenas iniciales, para las cuales se destinaron tres millones de dólares estadounidenses del presupuesto total de la producción.​\nCameron estaba fascinado por la historia del Titanic, y su interés en él aumentó al reunirse con Robert Ballard,​ el oceanógrafo que descubrió el pecio en 1985,​ durante la producción de The Abyss.​ El cineasta buscó patrocinadores en Hollywood para llevar a cabo una expedición al lugar donde reposa el barco, sin todavía tener la intención de hacer una película en torno a los sucesos.​ Tiempo después, escribió un boceto para una cinta sobre el hundimiento del Titanic​ y se lo presentó a los ejecutivos de 20th Century Fox,​ quienes le dieron «luz verde» al proyecto, a pesar de que no estaban muy convencidos sobre el éxito que pudiera llegar a tener.​ Cameron no comenzó a escribir el guion sino hasta después de realizar grabaciones del pecio y de estudiar detenidamente a cada uno de los personajes y pasajeros históricos del barco, ya que quería honrar a todos los fallecidos en la catástrofe.​​\nFox invirtió 57 millones de dólares estadounidenses​ en la adquisición de 161 874 m² de la costa sur de Playas de Rosarito, Baja California, en México, donde comenzó a construir el Fox Baja Studios, diseñado especialmente para la filmación del proyecto en mayo de 1996.​​​ En ese estudio se edificó el barco a escala completa.​ El rodaje principal comenzó en septiembre de ese mismo año, duró 160 días y se concretó en marzo de 1997.​​ A su vez, la composición de la banda sonora recayó en James Horner y contó con la participación de la cantante noruega Sissel.​ Al igual que la cinta, gozó de un gran éxito comercial y crítico; vendió más de treinta millones de copias,​ once millones de ellas en Estados Unidos, lo que le valió ser certificada «11 x Platinum» por la RIAA.​ Un segundo álbum, titulado Back to Titanic, se distribuyó a partir del 25 de agosto de 1998, una semana antes del lanzamiento de la película en VHS.​\nTras su estreno el 19 de diciembre de 1997 en los Estados Unidos,​ a pesar de que varios analistas y expertos de la industria vaticinaban un fracaso en taquilla, ya que en su momento era considerada como «la producción más costosa del cine de todos los tiempos»,​ la película se convirtió en un gran éxito tanto en el aspecto comercial como en cuanto a la evaluación de la crítica: obtuvo un 83 % de aceptación en Rotten Tomatoes y un puntaje de 74 sobre 100 en el Metascore.​​ Tan solo en su primer día en Estados Unidos y Canadá recaudó 8 658 814 de dólares estadounidenses.​ En su primera semana en cartelera, logró obtener ganancias de 52,9 millones de dólares.​ Se mantuvo con una recaudación parecida por varias semanas, y permaneció en el primer lugar en Estados Unidos y Canadá por dieciséis semanas consecutivas y en el top 10 hasta la semana número 26.​ Finalmente, cerró con más de 600 millones de dólares en Estados Unidos y Canadá y más de 1800 millones de dólares a nivel internacional.​​​ Con estos números, se convirtió en la película más taquillera de la historia a nivel mundial, título que retuvo por más de una década hasta ser desplazada por Avatar (también dirigida por James Cameron), que recaudó más de 2700 millones de dólares. Actualmente, Titanic ocupa el tercer lugar del listado tras ser superada por Avengers: Endgame en 2019.​​​ La película ganó 89 premios, entre los que se encuentran once premios de la Academia (cifra solamente igualada por Ben-Hur y El Señor de los Anillos: el retorno del Rey),​ cuatro Globos de Oro, ocho galardones Satellite, un par de premios People's Choice, dos más de MTV Movie, un reconocimiento del Sindicato de Actores y una estatuilla Annie.​\nLa película se reestrenó en formato 3D el 4 de abril de 2012,​ seis días antes de la fecha del centenario de la partida del Titanic de Inglaterra y un mes antes del centésimo aniversario de Paramount Pictures, la otra casa productora de la película.​ Junto con la recaudación del reestreno, la recaudación total de la película suma 2 264 162 353 dólares.​\nEn 2017, la Biblioteca del Congreso la seleccionó para su preservación en el Registro Nacional de Cine de los Estados Unidos como \"cultural, histórica o estéticamente significativa\".",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Titanic_(pel%C3%ADcula_de_1997)",
+        "title": "Titanic (película de 1997)"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q44578",
+  "slug": "titanic"
+}

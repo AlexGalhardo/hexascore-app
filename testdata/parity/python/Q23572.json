@@ -1,0 +1,58 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0944947",
+      "metacritic": "tv/game-of-thrones",
+      "rottentomatoes": "tv/game_of_thrones",
+      "tmdb": "1399"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "D. B. Weiss",
+        "David Benioff"
+      ],
+      "episodes": 73,
+      "genres": [
+        "action television series",
+        "adventure television series",
+        "fantasy television series",
+        "drama television series"
+      ],
+      "runtimeMinutes": 66,
+      "seasons": 8
+    },
+    "popularity": 139.0,
+    "qid": "Q23572",
+    "release_date": "2011-04-17",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Game of Thrones is an American fantasy drama television series created by David Benioff and D. B. Weiss for HBO. It is the first adaptation of A Song of Ice and Fire, a series of high fantasy novels by George R. R. Martin, and the first in what would become the Game of Thrones franchise. The show premiered on HBO in the United States on April 17, 2011, and concluded on May 19, 2019, with 73 episodes broadcast over eight seasons.\nSet on the fictional continents of Westeros and Essos, Game of Thrones has a large ensemble cast and follows several story arcs throughout the course of the show. The first major arc concerns the Iron Throne of the Seven Kingdoms of Westeros through a web of political conflicts among the noble families, either vying to claim the throne or fighting for independence. The second major arc focuses on the last descendant of the realm's deposed ruling dynasty, who has been exiled to Essos and is plotting to return and reclaim the throne. The third follows the Night's Watch, a military order defending the realm against threats from beyond the Seven Kingdoms' northern border.\nGame of Thrones attracted a record viewership on HBO and has a broad, active, and international fan base. Many critics and publications have named the show one of the greatest television series of all time. Critics have praised the series for its acting, complex characters, story, scope, and production values, although its frequent use of nudity and violence (including sexual violence) generated controversy. The final season received significant criticism for its reduced length and creative decisions, with many considering it a disappointing conclusion. The series received 59 Primetime Emmy Awards, the most by a drama series, including Outstanding Drama Series in 2015, 2016, 2018 and 2019. Its other awards and nominations include three Hugo Awards for Best Dramatic Presentation, a Peabody Award, and five nominations for the Golden Globe Award for Best Television Series – Drama.\n\nTwo prequel series, House of the Dragon and A Knight of the Seven Kingdoms, premiered on HBO in 2022 and 2026, respectively.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Game_of_Thrones",
+        "title": "Game of Thrones"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Game of Thrones é uma série de televisão norte-americana criada por David Benioff e D. B. Weiss, baseada na série de livros A Song of Ice and Fire de George R. R. Martin. Eleita  como a melhor série de TV do século XXI em 2020, numa votação popular feita pela revista Digital Spy, Game of Thrones foi transmitida originalmente pelo canal HBO entre 17 de abril de 2011 a 19 de maio de 2019. No elenco principal estão Peter Dinklage, Nikolaj Coster-Waldau, Lena Headey, Emilia Clarke, Iain Glen, Michelle Fairley, Richard Madden, Kit Harington, Sophie Turner, Maisie Williams, Isaac Hempstead Wright, entre outros.\nAo longo de oito temporadas e mais de sessenta episódios, Game of Thrones cobre o enredo dos primeiros cinco livros de Martin com certas modificações e a adição de material não publicado com base na descrição do autor de eventos futuros em seu universo literário. Situada nos continentes fictícios de Westeros e Essos, a série apresenta um enredo de alianças e conflitos entre famílias nobres dinásticas dos Sete Reinos, que competem para reivindicar o imperioso Trono de Ferro ou lutam para não serem governados por quem o possui. Para adaptar os cenários fictícios da saga A Song of Ice and Fire, a série foi filmada em nove países, sendo eles: Canadá, Croácia, Escócia, Espanha, Estados Unidos, Irlanda do Norte, Islândia, Malta, e Marrocos. Tornou-se, assim, uma das série mais caras já feitas na história da televisão, cujas filmagens envolveram até quatro unidades paralelas de filmagem e a produção de efeitos visuais exigiu a participação simultânea de até quatorze estúdios em diferentes países. \nMuito aguardada desde seus primeiros estágios de desenvolvimento, Game of Thrones foi muito bem recebida pela crítica especializada. Certos meios de comunicação, como The Washington Post, Time, The Hollywood Reporter e Rolling Stone classificaram-na como uma das melhores séries de televisão já feitas e os críticos elogiaram aspectos como suas atuações, roteiros, efeitos especiais, sequências de batalha e música. Sua primeira temporada foi indicada em vários prêmios, incluindo o Emmy do Primetime de melhor série de drama e o Globo de Ouro de melhor série dramática; Peter Dinklage, que interpreta Tyrion Lannister, venceu quatro Emmy do Primetime de melhor ator coadjuvante em série dramática e um Globo de Ouro de melhor ator coadjuvante em série de televisão. A série também conquistou o Emmy de melhor projeto de créditos principais, e possui uma das melhores notas entre os telespectadores para séries no site IMDb. Game of Thrones é recordista em ter ganhado 59 Emmys, mais do que qualquer outra série de televisão ha história. Em 2013, o Writers Guild of America listou Game of Thrones como a 40ª série de \"melhor escrita\" da história da televisão.  Em 2015, o The Hollywood Reporter colocou a série na quarta posição na lista de \"melhores programas de TV de todos os tempos\", enquanto em 2016 a série foi classificada em sétimo lugar na lista \"Os 50 melhores programas de TV de todos os tempos\" da Empire.  No mesmo ano, a Rolling Stone a nomeou como o décimo segundo \"maior programa de TV de todos os tempos\". A série entrou para o Livro de Recordes como a série dramática com a maior transmissão simultânea ao redor do mundo. O número foi alcançado graças ao segundo episódio da quinta temporada, intitulado \"The House of Black and White\". \nNa sexta temporada, a emissora HBO decidiu produzir um talk show para Game of Thrones, chamado After the Thrones, assim como a emissora AMC fez com a série Breaking Bad, produzindo um talk show chamado Talking Bad. Com o mesmo formato de Thronecast e Talking Dead, o programa After the Thrones apresentava recapitulações, comentários e teorias de Game of Thrones e foi exibido nas segundas-feiras pela HBO Now, HBO Go, HBO on Demand e pela própria emissora HBO.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Game_of_Thrones",
+        "title": "A Guerra dos Tronos"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Game of Thrones (conocida como Juego de tronos en España y abreviada como GOT) es una serie de televisión de drama y fantasía medieval desarrollada por David Benioff y D. B. Weiss y producida por la cadena HBO. Su argumento está inspirado en la serie de novelas Canción de hielo y fuego, escrita por el estadounidense George R. R. Martin, y relata las vivencias de un grupo de personajes de distintas casas nobiliarias en el continente ficticio de Poniente para tener el control del Trono de Hierro y gobernar los siete reinos que conforman el territorio.​\nEl desarrollo de la serie se remonta a 2006, cuando Benioff y Weiss tuvieron una reunión con Martin para discutir ideas en torno a una adaptación televisiva de su material literario.​​ Si bien los guiones del episodio piloto, «Winter Is Coming», quedaron concluidos en 2008,​​ las grabaciones tuvieron lugar en 2010 bajo la dirección de Tim Van Patten.​ A lo largo de ocho temporadas y más de setenta episodios, Game of Thrones cubre el argumento de las primeras cinco novelas de Martin con ciertas modificaciones​ y la adición de material inédito a partir de una descripción del autor sobre los eventos futuros de su universo literario.​ Se trata de una de las series más costosas en la historia de la televisión,​ cuyo rodaje llegó a involucrar hasta cuatro unidades de filmación en paralelo​ y la producción de efectos visuales requirió de la participación simultánea de hasta catorce estudios en distintos países.​\nEl primer episodio se estrenó en abril de 2011 en Estados Unidos y Canadá​ y desde 2015 la transmisión de sus episodios se llevó a cabo de forma simultánea en más de un centenar de países.​ La serie posee elevados niveles de audiencia y es uno de los programas de televisión bajo demanda más populares de HBO,​ así como uno de los «mayores dramas» y el «programa más comentado» de la televisión en 2014.​ Ciertos medios, como The Washington Post, Time, The Hollywood Reporter y Rolling Stone la catalogaron como una de las mejores series de televisión​​ y la crítica ha elogiado aspectos como sus actuaciones, los guiones, los efectos especiales, las secuencias de batallas y la música,​​​ esta última a cargo del compositor Ramin Djawadi.​ No obstante, también ha recibido comentarios desfavorables por sus escenas de violencia, sexo y desnudez.​​​ Entre sus numerosos premios y reconocimientos sobresale la mayor cantidad de galardones Emmy obtenidos en toda la historia de la ceremonia.​ Su éxito ha dado lugar a la producción de una amplia variedad de productos entre los cuales se incluyen juguetes, videojuegos, libros y réplicas de armas y armaduras, lo cual la convierte en una de las marcas más populares del sector televisivo.​​​ A mediados de 2017 HBO anunció su interés en producir nuevas series inspiradas en Canción de hielo y fuego, cuya trama habría de servir de precuela a los acontecimientos de Game of Thrones.​​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Game_of_Thrones",
+        "title": "Juego de Tronos"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q23572",
+  "slug": "game-of-thrones"
+}

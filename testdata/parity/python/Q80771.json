@@ -1,0 +1,49 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "3173046",
+      "openlibrary": "OL81295W"
+    },
+    "meta": {
+      "countries": [
+        "United Kingdom"
+      ],
+      "creators": [
+        "D. H. Lawrence"
+      ],
+      "genres": [
+        "autobiographical novel"
+      ]
+    },
+    "popularity": 29.0,
+    "qid": "Q80771",
+    "release_date": "1913-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Sons and Lovers is a 1913 novel by the English writer D. H. Lawrence. It traces emotional conflicts through the protagonist, Paul Morel, and his suffocating relationships with a demanding mother and two very different lovers, which exert complex influences on the development of his manhood. The novel was originally published by Gerald Duckworth and Company Ltd., London, and Mitchell Kennerley Publishers, New York. While the novel initially received a mediocre reception, along with allegations of obscenity, it is today considered a masterpiece by many critics and is often regarded as Lawrence's finest achievement. It goes into detail about Lawrence's life and his phases. His first phase was in 1910 when he lost his mother, to whom he was particularly attached. He met Frieda Richthofen during that time. Also, he began conceiving his other two novels, The Rainbow and Women in Love, which had more sexual emphasis and maturity.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Sons_and_Lovers",
+        "title": "Sons and Lovers"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Filhos e Amantes é um romance de D. H. Lawrence publicado em 1912. Narra a história da família rural Morel, formada pelo típico camponês Walter e sua esposa Gertrude, uma burguesa cujas decepções são aliviadas no amor e nas expectativas que deposita nos filhos, que crescem marcados pelo ambiente familiar.\nÉ o terceiro romance de Lawrence, considerado sua primeira grande obra, reunindo parte de suas características literárias, como uma abordagem profunda dos sentimentos sexuais e de uma sociedade rural, bem como suas expressões idiomáticas.\nFoi o único romance de Lawrence a ser incluído na lista dos 100 melhores livros de todos os tempos do The Guardian.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Filhos_e_Amantes_(livro)",
+        "title": "Filhos e Amantes (livro)"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Hijos y amantes (título original en inglés, Sons and Lovers) es una novela del autor inglés D. H. Lawrence, publicada en 1913. La Modern Library la situó 9.ª en su lista de 100 mejores novelas del siglo XX. Mientras que la novela inicialmente tuvo una tibia recepción crítica, junto con alegaciones de obscenidad, actualmente está considerada como una obra maestra por muchos críticos y a menudo se considera el mejor logro de Lawrence.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Hijos_y_amantes",
+        "title": "Hijos y amantes"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q80771",
+  "slug": "sons-and-lovers"
+}

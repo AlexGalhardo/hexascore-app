@@ -1,0 +1,47 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0293715",
+      "rottentomatoes": "m/my_sassy_girl"
+    },
+    "meta": {
+      "countries": [
+        "South Korea"
+      ],
+      "genres": [
+        "romantic comedy"
+      ],
+      "runtimeMinutes": 123
+    },
+    "popularity": 31.0,
+    "qid": "Q483166",
+    "release_date": "2001-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "My Sassy Girl (Korean: 엽기적인 그녀; RR: Yeopgijeogin geunyeo; lit. 'That Bizarre Girl') is a 2001 South Korean romantic comedy film directed by Kwak Jae-yong, starring Jun Ji-hyun and Cha Tae-hyun. The film is based on a true story told in a series of blog posts written by Kim Ho-sik, who later adapted them into a novel.\nThe film was very successful in South Korea, where it was the highest-grossing comedy of all time, and one of the top five highest-grossing films ever at the time. When My Sassy Girl was released across East Asia, it became a blockbuster in the region, becoming a hit in Japan, Taiwan and Hong Kong. The film's success in Asia drew comparisons to Titanic. Its DVD release also drew a large international cult following, particularly in China, Southeast Asia, and parts of South Asia. My Sassy Girl sparked an international breakthrough for Korean cinema, and it played a key role in the spread of the Korean Wave.\nThe film has spawned an international media franchise, consisting of film remakes and television adaptations in different countries as well as a sequel. An American remake, starring Jesse Bradford and Elisha Cuthbert, and directed by Yann Samuell, was released in 2008. A Japanese drama adaptation with Tsuyoshi Kusanagi and actress Rena Tanaka as the leads started broadcasting in April 2008. A sequel, My New Sassy Girl, a collaborative work between Korea and China, was released in 2016. My Sassy Girl has received numerous remakes and adaptations, including Japanese and Korean television adaptations as well as a number of remakes from other countries (American, Indian, Chinese, Nepali, Lithuanian, Indonesian and Philippine versions).",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/My_Sassy_Girl",
+        "title": "My Sassy Girl"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Yeopgijeogin geunyeo (em coreano:  엽기적인 그녀/em inglês:  My Sassy Girl) é um filme sul-coreano de 2001, do gênero comédia romântica, dirigido por Kwak Jae-yong. É parcialmente baseada em uma história real publicada em capítulos em um blog na internet por Kim Ho-sik.\nO filme foi um sucesso comercial na Coreia do Sul e no leste asiático, especialmente no Japão, China, Taiwan, Filipinas, Hong Kong, Singapura, Vietnã e Indonésia, a ponto de ser comparado com Titanic.\nEm 2007 foi produzida uma versão norte-americana do filme, estrelado por Jesse Bradford, Elisha Cuthbert e dirigido por Yann Samuell.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Yeopgijeogin_geunyeo",
+        "title": "Yeopgijeogin geunyeo"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Mi chica descarada (en hangul, 엽기적인 그녀) es una película de 2001 dirigida por Kwak Jae-yong. Protagonizada por Jun Ji Hyun y Cha Tae-hyun.\nLa película fue muy exitosa en Corea del Sur y fue la comedia coreana más recaudadora de todos los tiempos.​ Cuando la película fue estrenada en Asia, se convirtió en un éxito en toda la región, desde Japón, China, Taiwán, Hong Kong, como también Asia del Sur, hasta el punto que la comparaban con Titanic.\nSe hizo una adaptación estadounidense, protagonizada por Jesse Bradford y Elisha Cuthbert, y dirigida por Yann Samuell, estrenada en 2008.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Mi_chica_descarada",
+        "title": "My Sassy Girl"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q483166",
+  "slug": "my-sassy-girl"
+}

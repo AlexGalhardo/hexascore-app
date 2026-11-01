@@ -1,0 +1,44 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0201517",
+      "rottentomatoes": "m/charisma",
+      "tmdb": "72490"
+    },
+    "meta": {
+      "countries": [
+        "Japan"
+      ],
+      "creators": [
+        "Kiyoshi Kurosawa"
+      ],
+      "genres": [
+        "drama film"
+      ],
+      "runtimeMinutes": 104
+    },
+    "popularity": 7.0,
+    "qid": "Q25518",
+    "release_date": "1999-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Charisma (Japanese: カリスマ, Hepburn: Karisuma) is a 1999 Japanese philosophical drama film written and directed by Kiyoshi Kurosawa, starring Kōji Yakusho.\nThe film is about a dispute between a number of people about a unique but possibly toxic tree growing in an unnamed forest. The film is largely seen from the point of view of Goro Yabuike (Kōji Yakusho), a police negotiator who has been relieved of his duties following his failure to prevent the death of an important hostage.  He stands in the middle of the conflicting opinions about the future of the tree, and has to decide which course to commit himself to.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Charisma_(film)",
+        "title": "Charisma"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Charisma ('カリスマ', 'Karisuma'?) es una película de 1999 dirigida por el japonés Kiyoshi Kurosawa. La película trata de un litigio entre varias personas sobre un árbol único pero posiblemente tóxico que crece en un bosque sin nombre.\nLa película se narra desde el punto de vista de Goro Yabuike (Kōji Yakusho), un negociador de rehenes de la policía al que han relevado de sus funciones tras su fracaso en prevenir la muerte de un rehén importante. Se encuentra en medio de las opiniones contradictorias sobre el futuro del árbol, y tiene que decidir con qué opción comprometerse.\nLa película ha sido interpretada por algunos como un cuento alegórico sobre la estructura de la sociedad japonesa, y la tensión entre la importancia de la individualidad, por una parte, y la importancia del grupo sobre el otro. También es posible discernir un mensaje ecológico.\nOtros miembros del reparto incluyen Hiroyuki Ikeuchi (Kiriyama, que quiere proteger el árbol), Ren Osugi (Nakasone), Yoriko Douguchi (Chizuru Jinbo), Jun Fubuki (Mitsuko Jinbo, un experto en plantas), Akira Otaka (Tsuboi) y Yutaka Matsushige (Nekoshima).",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Charisma_(pel%C3%ADcula_de_1999)",
+        "title": "Charisma"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q25518",
+  "slug": "charisma"
+}

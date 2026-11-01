@@ -1,0 +1,45 @@
+{
+  "item": {
+    "external_ids": {
+      "igdb": "erepublik"
+    },
+    "meta": {
+      "genres": [
+        "massively multiplayer online game"
+      ],
+      "platforms": [
+        "web browser"
+      ]
+    },
+    "popularity": 30.0,
+    "qid": "Q244503",
+    "release_date": "2008-10-21",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "eRepublik is a free-to-play, web browser-based massively multiplayer online game developed by Romanian studio eRepublik Labs which was launched outside of beta phase on 14 October 2008 and is accessible via the Internet. The game is set in a mirror world (called the New World) where players, referred to as citizens, join in local and national politics where they can help formulate national economic and social policies as well as initiating wars with their neighbours and/or tread the path of a private citizen working, fighting and voting for their state. It was developed by Alexis Bonte and George Lemnaru.\neRepublik is programmed in PHP using Symfony framework and runs in most modern browsers. eRepublik has spawned a number of similar games due to the commercial success.\nOn 30 May 2017, it was announced that Stillfront Group has acquired eRepublik Labs.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/ERepublik",
+        "title": "eRepublik"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "ERepublik"
+      },
+      {
+        "locale": "es",
+        "synopsis": "eRepublik es un videojuego multijugador masivo en línea, red social y juego de estrategia desarrollado por eRepublik Labs Limited que lo abrió al público el 20 de noviembre de 2007. Es accesible a través de Internet de forma gratuita. El juego se desarrolla en un mundo paralelo llamado el Nuevo Mundo donde los jugadores, conocidos como ciudadanos, participan en la política local y nacional, establecen políticas económicas, crean negocios y mantienen guerras con otros países.​ Ha sido desarrollado por Alexis Bonte y George Lemnaru.\nEl 30 de mayo de 2017 eRepublik fue adquirido por Stillfront Group.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/ERepublik",
+        "title": "ERepublik"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q244503",
+  "slug": "erepublik"
+}

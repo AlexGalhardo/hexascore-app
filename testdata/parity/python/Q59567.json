@@ -1,0 +1,57 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0362225",
+      "metacritic": "movie/tell-no-one",
+      "rottentomatoes": "m/tell_no_one_2006",
+      "tmdb": "10795"
+    },
+    "meta": {
+      "countries": [
+        "France"
+      ],
+      "creators": [
+        "Guillaume Canet"
+      ],
+      "genres": [
+        "flashback film",
+        "LGBTQ-related film",
+        "drama film",
+        "crime film",
+        "thriller film",
+        "mystery film"
+      ],
+      "runtimeMinutes": 131
+    },
+    "popularity": 25.0,
+    "qid": "Q59567",
+    "release_date": "2006-11-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Tell No One (French: Ne le dis à personne) is a 2006 French thriller film directed by Guillaume Canet and based on the 2001 novel of the same name by Harlan Coben. Written by Canet and Philippe Lefebvre and starring François Cluzet, the film won four categories at the 2007 César Awards in France: Best Director (Guillaume Canet), Best Actor (François Cluzet), Best Editing and Best Music Written for a Film.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Tell_No_One",
+        "title": "Tell No One"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Ne le dis à personne (Brasil: Não Conte a Ninguém / Portugal: Não Digas a Ninguém) é um filme francês dirigido por Guillaume Canet e lançado em 2006. Esse filme é baseado no livro Tell No One do escritor americano Harlan Coben, lançado em 2001.\nO filme conta a história de um médico que teve a esposa assassinada 8 anos atrás. Mas a recente descoberta de 2 corpos enterrados próximos ao local do crime e o recebimento de um e-mail misterioso dão uma reviravolta no caso, colocando-o como suspeito pela morte da esposa. Agora ele precisa provar sua inocência, descobrir a verdade e fugir de um assassino profissional. Para isso ele contará apenas com a ajuda de sua melhor amiga, de uma advogada durona e de um traficante de drogas.\nNe le dis à personne recebeu nove indicações para o premio César (cinema), onde ganhou quatro, inclusive nas categorias melhor ator e melhor diretor.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Ne_le_dis_%C3%A0_personne",
+        "title": "Ne le dis à personne"
+      },
+      {
+        "locale": "es",
+        "synopsis": "No se lo digas a nadie (título original: Ne le dis à personne) es una película francesa de 2006 del género suspense dirigida por Guillaume Canet y basada en la novela homónima de  Harlan Coben. El guion fue escrito por Guillaume Canet y Philippe Lefebvre. \nEl largometraje se estrenó el 1 de noviembre de 2006. Ganó cuatro categorías en los Premios César de 2007, incluyendo mejor director y mejor actor.​\nMiramax y Focus Features Intl. han comprado los derechos para la realización de un remake que será producido por Kathleen Kennedy.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/No_se_lo_digas_a_nadie_(pel%C3%ADcula_de_2006)",
+        "title": "No se lo digas a nadie"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q59567",
+  "slug": "tell-no-one"
+}

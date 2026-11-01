@@ -1,0 +1,45 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt4409784",
+      "tmdb": "61988"
+    },
+    "meta": {
+      "countries": [
+        "People's Republic of China"
+      ],
+      "episodes": 75,
+      "seasons": 1
+    },
+    "popularity": 12.0,
+    "qid": "Q15978227",
+    "release_date": "2014-12-21",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Empress of China (simplified Chinese: 武媚娘传奇; traditional Chinese: 武媚娘傳奇; pinyin: Wǔ Mèiniáng chuánqí) is a 2014 Chinese television series based on events in the 7th and 8th-century Tang dynasty, starring producer Fan Bingbing as the titular character Wu Zetian—the only female emperor (empress regnant) in Chinese history.\nIt is the third television production by Fan Bingbing Studio and boasts of a budget of over ¥300 million (roughly US$49.53 million). As such, it is believed to be among the most expensive TV series in Chinese history, beating the previous record of ¥280 million by Heroes in Sui and Tang Dynasties (2013). The television series was first broadcast on Hunan Television on 21 December 2014 in mainland China.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/The_Empress_of_China",
+        "title": "The Empress of China"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "武媚娘传奇"
+      },
+      {
+        "locale": "es",
+        "synopsis": "La emperatriz de China, también conocido como La leyenda de Wu Mei-niang (chino tradicional: 武媚娘傳奇; chino simplificado: 武媚娘传奇; Wade-Giles: Wu3 mei4 niang2 ch'uan2 ch'i2; pinyin: Wǔ mèi niáng chuán qí) en Taiwán y China, Mou Zak-tin (chino tradicional: 武則天; Wade-Giles: Wu Tsê-t'ien) en Hong Kong, Macao, Malasia y Singapur, Busokuten (japonés: 武則天 -The Empress-) en Japón, es una serie de televisión china basada en los eventos de la dinastía Tang del siglo VII y siglo VIII, protagonizada Fan Bingbing como el personaje del título Wu Tsê-t'ien, la única mujer de la historia de China que gobernó como un emperador.\nEs la tercera producción de televisión por Fan Bingbing Studio y cuenta con un presupuesto de más de 300 millones de yuanes (unos 39 millones de euros).​ Por ello, se cree que es la serie de televisión china más cara,​ superando el récord anterior de 280 millones de yuanes de Los héroes de las dinastías Sui y Tang (2013).​ La serie de televisión fue emitida por primera vez en Televisión de Hunan el 21 de diciembre del 2014 en la China continental.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/La_emperatriz_de_China",
+        "title": "La emperatriz de China"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q15978227",
+  "slug": "the-empress-of-china"
+}

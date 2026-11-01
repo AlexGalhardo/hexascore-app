@@ -1,0 +1,61 @@
+{
+  "item": {
+    "external_ids": {
+      "hltb": "1100",
+      "igdb": "black-mesa",
+      "imdb": "tt2778298",
+      "steam": "362890"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Crowbar Collective"
+      ],
+      "genres": [
+        "first-person shooter",
+        "science fiction video game"
+      ],
+      "platforms": [
+        "Microsoft Windows",
+        "Linux"
+      ],
+      "trailers": [
+        {
+          "youtubeId": "zVYJ9o6Bddo"
+        }
+      ]
+    },
+    "popularity": 28.0,
+    "qid": "Q211229",
+    "release_date": "2020-03-06",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Black Mesa is a 2020 first-person shooter video game developed and published by Crowbar Collective. It is a fan-made remake of Half-Life (1998) in the Source game engine. Originally published as a free mod in September 2012, Black Mesa was approved for commercial release by Valve, the developers of Half-Life. The first commercial version was published as an early-access release in May 2015 with an abridged campaign, followed by a full release in March 2020 restoring the final chapters.\nBlack Mesa was developed in response to Half-Life: Source (2004), Valve's port of Half-Life to the Source engine, which lacked new features or improvements over the original version that used GoldSrc. Two teams wanted to improve on the Source remake and eventually merged to become Crowbar Collective. The project was originally slated to release in 2009, but was pushed back significantly for quality reasons.\nAdapting Half-Life to an improved version of the Source engine and completely reworking the often-derided final 4 chapters of the game, set outside of the Black Mesa facility on the alien borderworld of Xen, lengthened the development efforts of the remake. Due to its long development time, the modification became notable for its delays on the status of its completion. Major changes include a reskinned collection of textures, models and NPCs, a longer runtime, altered level and puzzle designs, along with different enemy artificial intelligence, and additional dialogue and story elements. Black Mesa received positive reviews, with critics praising the gameplay and attention to detail akin to that of an official Valve release.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Black_Mesa_(video_game)",
+        "title": "Black Mesa"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Black Mesa (anteriormente conhecido como Black Mesa: Source) é a terceira modificação total do motor de jogo Source da Valve Corporation. O objetivo declarado do projeto é recriar a aclamada série de jogos de 1998, Half-Life, usando os recursos mais avançados do motor Source. Com uma equipe de desenvolvimento voluntário com mais de 40 pessoas esperam criar um jogo com um ambiente mais envolvente, além de um mundo complexo com as mais desafiadoras jogabilidades e realismos.\nDurante seus oito anos de desenvolvimento, Black Mesa tem sido destaque em publicações de vários jogos eletrônicos e recebeu atenção direta da Valve. Devido ao seu longo tempo de desenvolvimento a modificação tornou-se notável por seus delays, e atualizações diminutas sobre seu estado e conclusão. Os delays levaram a revista Wired conceder o título \"Vaporware do ano\", listas dos anos 2009 e 2010.\nA primeira parte da Black Mesa, fabricada com remakes de todos capítulos de Half-Life, excepto os definidos no mundo alienígena \"Xen\", foi lançada como um download independente em 14 de setembro de 2012. Uma votação pública através do programa Steam Greenlight viu o jogo aprovado para distribuição na Steam.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Black_Mesa_(jogo_eletr%C3%B4nico)",
+        "title": "Black Mesa"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Black Mesa (previamente conocido como Black Mesa: Source) es un videojuego de disparos en primera persona desarrollado y publicado por Crowbar Collective. Es una nueva versión del videojuego Half-Life que utiliza el motor gráfico Source. Fue originalmente publicado como un mod gratuito en septiembre de 2012 y luego fue aprobado por Valve (los desarrolladores de Half-Life) para su lanzamiento comercial. La versión comercial fue publicada como un título de acceso anticipado en mayo de 2015 y su versión completa fue lanzada en marzo de 2020 para las plataformas Microsoft Windows y Linux.\nBlack Mesa fue desarrollado en respuesta a Half-Life: Source (2005), la propia adaptación de Valve de Half-Life al motor Source, que carecía de nuevas características o mejoras. El proyecto se formó mediante la fusión de dos equipos separados que querían mejorar la nueva versión de Half-Life, quienes luego pasaron a llamarse Crowbar Collective. Si bien originalmente habían apuntado a un lanzamiento en 2009, el equipo se dio cuenta de que se habían apresurado hasta este punto y revaluaron sus esfuerzos para mejorar la calidad de la nueva versión.\nDesde entonces, la atención a los detalles, la adaptación del videojuego a una versión mejorada del motor Source y la reelaboración completa de los capítulos finales de Half-Life conocidos como \"Xen\" habían alargado los esfuerzos de desarrollo de la nueva versión. Debido a su largo tiempo de desarrollo, el mod se hizo notable por sus retrasos en el estado de su finalización. Entre los principales cambios en la nueva versión se incluyen texturas, modelos y PNJs retocados, un tiempo de juego más prolongado, un diseño de niveles y puzles mejorados junto con enemigos con una inteligencia artificial desafiante y elementos adicionales de diálogo e historia.\nBlack Mesa recibió reseñas positivas en su lanzamiento inicial y fue alabado a medida que el videojuego se iba actualizado y mejorando. El elogio se dirigió hacia la jugabilidad y la atención al detalle, comparándolo como si fuese un lanzamiento oficial de Valve, así como por las mejoras que habían realizado en los capítulos de Xen.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Black_Mesa_(videojuego)",
+        "title": "Black Mesa"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q211229",
+  "slug": "black-mesa"
+}
