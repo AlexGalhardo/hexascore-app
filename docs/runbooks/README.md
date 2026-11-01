@@ -31,3 +31,5 @@ Operator procedures from SDD 12 §7.8 and §7.9. Alerts are `alert=<code>` lines
 | R9 | [leaked-secret](leaked-secret.md) |
 
 Search the logs with the code, for example `alert=A10`. Alert lines carry counts and names, never ids, emails or raw paths.
+
+Release procedures: [sdk-release](sdk-release.md) (SDKs), [mobile-release](mobile-release.md) (Android app with EAS).

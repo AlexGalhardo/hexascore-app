@@ -1,0 +1,80 @@
+name: Mobile release
+
+# Manual only (SDD 10 section 7.8, docs/runbooks/mobile-release.md). Android only until iOS enters.
+# The build job needs the EXPO_TOKEN secret and fails closed without it.
+# The submit job runs only when `submit` is ticked, and waits on the `play-store` environment,
+# whose required reviewer (the owner) approves the exact build before it reaches Play Console.
+# Submissions land as a draft on the internal track; promotion and rollout stay in Play Console.
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: EAS build profile
+        type: choice
+        options: [production, preview, development, e2e-test]
+        default: production
+      submit:
+        description: Submit the build to the Play internal track (production profile only)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mobile-release
+  cancel-in-progress: false
+
+env:
+  EAS: bunx eas-cli@27.2.0
+
+jobs:
+  build:
+    name: Check and build (${{ inputs.profile }})
+    runs-on: ubuntu-24.04
+    outputs:
+      build_id: ${{ steps.build.outputs.build_id }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - run: bun install --frozen-lockfile
+      - name: Lint, typecheck and tests
+        working-directory: apps/mobile
+        run: |
+          bun run lint
+          bun run typecheck
+          bun run test -- --runInBand --forceExit
+      - name: Expo doctor
+        working-directory: apps/mobile
+        run: bunx expo-doctor
+      - name: EAS build
+        id: build
+        working-directory: apps/mobile
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          set -euo pipefail
+          [ -n "$EXPO_TOKEN" ] || { echo "EXPO_TOKEN secret is not set" >&2; exit 1; }
+          $EAS build --platform android --profile "${{ inputs.profile }}" --non-interactive --wait --json > build.json
+          id=$(bun -e 'console.log((await Bun.file("build.json").json())[0].id)')
+          echo "build_id=$id" >> "$GITHUB_OUTPUT"
+          echo "Build: https://expo.dev/builds/$id" >> "$GITHUB_STEP_SUMMARY"
+
+  submit:
+    name: Submit to Play internal track (draft)
+    needs: build
+    if: inputs.submit && inputs.profile == 'production'
+    runs-on: ubuntu-24.04
+    environment: play-store
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - name: EAS submit
+        working-directory: apps/mobile
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: $EAS submit --platform android --id "${{ needs.build.outputs.build_id }}" --profile production --non-interactive
