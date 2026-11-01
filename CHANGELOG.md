@@ -69,6 +69,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Android app header (wordmark, search, theme toggle), themed tab bar with translated titles, and the profile tab showing the v1 settings page with the crash-report consent switch (IMPL-mobile-v1-shell-wire, -settings-wire).
 - Android rating data flow: half-star input with selection haptics, ratings queued offline with an optimistic cache update and rollback (P5.B.2.2).
 - Android rate sheet (six categories, offline-queued save and delete, rollback toasts); `GET /app/v1/me` returns the user `id` and `deletionScheduledAt` (P5.B.2.3).
+- Web search command palette (Ctrl K / ⌘K or the navbar trigger) with keyboard navigation, recent searches and a see-all row (IMPL-web-v1-search-palette).
 
 ### Changed
 
@@ -83,6 +84,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **infra:** Observability is Railway-native only (D-35 amended): service metrics, log search, traces and `alert=` log lines; the policy page no longer lists Grafana Cloud (FIX-observability-railway-native)
 - **deps:** vukem v0.35.0 (drivers/postgres v0.6.0, drivers/s3 v0.4.0, contrib/stripe v0.5.0); the OpenAPI app document uses `Info.Docs` instead of reading the command line; covers from S3 answer 304 on a matching ETag (ADOPT-vukem-0.35.0)
 - The Android banned, deletion-scheduled and update-required screens use the v1 state layout (IMPL-mobile-v1-states-ui).
+- Web v1 editorial shell: self-hosted Inter and Playfair Display (OFL texts shipped), button with ledge and pressed states, sticky navbar with language dropdown, theme toggle and Ctrl K trigger, footer without language links, one 1152 px container (IMPL-web-v1-shell).
+- Web catalogue listings in the v1 look: title with the result count, ruled filter row, Reset as a button, score badges with the band colour (IMPL-web-v1-catalog).
+- The web item page follows design v1: score block with band and explanation, genre and platform chips, category averages, ten half stars per category as a keyboard radio group, status toggles, time to beat rows, trailers behind consent; `hover` and `backdrop` colour tokens in packages/tokens (IMPL-web-v1-item).
+- The web home page follows design v1: one block per item type with three cards trending over the last 7 days, six other titles and a see-all link (IMPL-web-v1-home).
 
 ### Fixed
 
