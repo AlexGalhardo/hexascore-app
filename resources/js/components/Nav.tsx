@@ -181,7 +181,7 @@ export default function Nav() {
 						<Link
 							href={feedHref}
 							aria-current={here === "/feed" ? "page" : undefined}
-							className={`${item} border-l border-border pl-7 text-[15px] font-medium aria-[current=page]:font-bold`}
+							className={`hidden min-h-11 items-center rounded-xs border-l border-border pl-7 text-[15px] font-medium hover:text-primary aria-[current=page]:font-bold xl:inline-flex ${focus}`}
 						>
 							{t("social.feed.title")}
 						</Link>
@@ -260,7 +260,7 @@ export default function Nav() {
 									{user.name}
 								</p>
 								{feedHref && (
-									<Link href={feedHref} className={`${menuItem} lg:hidden`}>
+									<Link href={feedHref} className={`${menuItem} xl:hidden`}>
 										{t("social.feed.title")}
 									</Link>
 								)}

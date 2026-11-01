@@ -104,3 +104,22 @@ test("the Feed link shows only to signed-in users while the social flag is on", 
 		props.flags = {};
 	}
 });
+
+// jsdom has no layout: the classes are the contract. At lg (1024 px) four sections
+// plus Feed pushed the bell off-screen, so Feed sits inline only from xl.
+test("the inline Feed link waits for xl and the account menu carries it below", () => {
+	try {
+		props.auth.user = { name: "Ana", nickname: "ana" };
+		props.flags = { social: true };
+		render(<Nav />);
+		const [sections] = screen.getAllByRole("navigation", { name: "nav.sections" });
+		const inline = sections.querySelector('a[href="/feed"]');
+		expect(inline?.className).toMatch(/(^|\s)hidden(\s|$)/);
+		// a bare inline-flex would win over hidden in Tailwind's sort and undo the fix
+		expect(inline?.className).not.toMatch(/(^|\s)inline-flex(\s|$)/);
+		expect(inline?.className).toContain("xl:inline-flex");
+	} finally {
+		props.auth.user = null;
+		props.flags = {};
+	}
+});
