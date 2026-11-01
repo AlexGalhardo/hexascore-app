@@ -5,6 +5,7 @@ import type { Message } from "../src/i18n/format";
 
 export const BUNDLED_NAMESPACES = [
 	"common",
+	"nav",
 	"auth",
 	"account",
 	"catalog",
