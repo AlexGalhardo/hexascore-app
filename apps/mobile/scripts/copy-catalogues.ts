@@ -14,6 +14,7 @@ export const BUNDLED_NAMESPACES = [
 	"item",
 	"lists",
 	"ratings",
+	"score",
 	"search",
 	"errors",
 ] as const;
