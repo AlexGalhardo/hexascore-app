@@ -57,7 +57,7 @@ function detailOf(item: ItemJSON, type: CatalogType, locale: AppLocale): ItemDet
 		coverUri: null,
 		score: item.score ?? null,
 		ratingCount: item.ratingCount ?? 0,
-		genres: (item.entities ?? []).filter((e) => e.role === "genre").map((e) => e.name),
+		genres: (item.entities ?? []).flatMap((e) => (e.role === "genre" && e.name ? [e.name] : [])),
 		synopsis: item.synopsis?.text ?? null,
 		categories: Object.entries(item.scoreByCategory ?? {}).map(([key, score]) => ({
 			key,
