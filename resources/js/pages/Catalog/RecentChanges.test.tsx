@@ -61,6 +61,7 @@ test("renders actors as nickname, team or deleted, values as text, and paging", 
 	expect(screen.getByRole("link", { name: "Ana" }).getAttribute("href")).toBe("/u/ana");
 	expect(screen.getByText("community.recent.actors.team")).toBeTruthy();
 	expect(screen.getByText("community.recent.actors.deleted")).toBeTruthy();
+	expect(screen.queryByText("*merge*")).toBeNull();
 	expect(screen.getByText("<b>x</b>")).toBeTruthy();
 	expect(screen.getByText('{"value":"2001-02-03"}')).toBeTruthy();
 	expect(screen.getByText("—")).toBeTruthy();
