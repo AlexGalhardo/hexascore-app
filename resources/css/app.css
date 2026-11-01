@@ -32,13 +32,19 @@
 	--font-display: "Playfair Display", ui-serif, Georgia, serif;
 }
 
-/* Derived from the colour tokens (no new hues): button ledges
-   (2 px at rest, 1 px pressed) and the soft shadow of the scrolled navbar. */
+/* Derived from the colour tokens (no new hues): button ledges (2 px at rest, 1 px pressed) over a
+   soft drop for depth, the inset of a pressed flat button, and the soft shadow of the scrolled navbar.
+   ledge-secondary is near black in both themes, so the drop reads in light and dark mode. */
 @theme inline {
-	--shadow-ledge-primary: 0 2px 0 var(--color-ledge-primary);
+	--shadow-ledge-primary:
+		0 2px 0 var(--color-ledge-primary),
+		0 4px 10px -4px color-mix(in oklch, var(--color-ledge-secondary) 45%, transparent);
 	--shadow-ledge-primary-pressed: 0 1px 0 var(--color-ledge-primary);
-	--shadow-ledge-secondary: 0 2px 0 var(--color-ledge-secondary);
+	--shadow-ledge-secondary:
+		0 2px 0 var(--color-ledge-secondary),
+		0 4px 10px -4px color-mix(in oklch, var(--color-ledge-secondary) 35%, transparent);
 	--shadow-ledge-secondary-pressed: 0 1px 0 var(--color-ledge-secondary);
+	--shadow-pressed: inset 0 2px 3px color-mix(in oklch, var(--color-ledge-secondary) 25%, transparent);
 	--shadow-nav: 0 4px 12px var(--color-border);
 	--shadow-nav-dark: 0 4px 12px oklch(0 0 0);
 }
@@ -59,6 +65,23 @@
 	/* AppLayout moves focus to the new <h1> after a visit for screen readers; it is not a control. */
 	h1[tabindex="-1"]:focus {
 		outline: none;
+	}
+	/* Every button presses 1 px down, including the ones a page styles itself; btnClass and
+	   iconButton add the ledge or inset on top. Utilities win over this base rule. */
+	button:not(:disabled),
+	[role="button"]:not([aria-disabled="true"]) {
+		transition-property: translate, box-shadow, background-color;
+		transition-duration: 100ms;
+	}
+	button:not(:disabled):active,
+	[role="button"]:not([aria-disabled="true"]):active {
+		translate: 0 1px;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		button:not(:disabled):active,
+		[role="button"]:not([aria-disabled="true"]):active {
+			translate: none;
+		}
 	}
 }
 

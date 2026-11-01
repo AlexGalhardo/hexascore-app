@@ -99,10 +99,10 @@ Typography:
 
 ### 2.5 Shadows, z-index, breakpoints, motion
 
-- Shadows: only `shadow-lg`, on the nav menu panel, SuggestBox listbox, toast, dialog popup and cookie banner. No shadow tokens.
+- Shadows: `shadow-lg` on the nav menu panel, SuggestBox listbox, toast, dialog popup and cookie banner. Button tokens in `resources/css/app.css` (derived from the colour tokens): `shadow-ledge-primary` / `-secondary` (2 px ledge plus a soft drop) and their `-pressed` 1 px variants for `btnClass`, `shadow-pressed` (inset) for ghost buttons and `iconButton`.
 - Z-index (literal values, no tokens): menu panel `z-40`, SuggestBox popups and cookie banner `z-50`, dialog backdrop `z-[55]`, dialog popup `z-[60]`, toast `z-[70]`, skip link `z-[80]`.
 - Breakpoints: Tailwind defaults (no custom `--breakpoint-*`). Used: `sm` 640 (search box width, footer, hero size), `md` 768 (header section nav switches between the top row and the scroller row; home block grid; docs sidebar), `lg` 1024 (item page two columns, home recent grid). The e2e projects use 1280x800 desktop and 360x740 mobile (`qa/e2e/playwright.config.ts`).
-- Motion: none by design. The only animations are the `submit-spin` keyframes of `.submit-spinner` (0.8 s, slowed to 3 s under `prefers-reduced-motion: reduce`, `resources/css/app.css`) and `animate-pulse` on the CSR placeholder in `resources/views/app.html`. No transitions, no motion tokens. The Inertia progress bar uses `#4f46e5`.
+- Motion: none by design. The only animations are the `submit-spin` keyframes of `.submit-spinner` (0.8 s, slowed to 3 s under `prefers-reduced-motion: reduce`, `resources/css/app.css`) and `animate-pulse` on the CSR placeholder in `resources/views/app.html`. Buttons: every `button` and `[role="button"]` moves 1 px down while pressed (a base rule in `app.css`, 100 ms; no movement under `prefers-reduced-motion: reduce`); `btnClass` and `iconButton` add the pressed ledge or inset. No motion tokens. The Inertia progress bar uses `#4f46e5`.
 
 ## 3. Theming and CSP
 
