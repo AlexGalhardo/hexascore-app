@@ -6,7 +6,7 @@ import { useT } from "../lib/useT";
 import type { SharedProps } from "../types";
 import Dropdown from "./ui/Dropdown";
 
-// Loaded on first open: keeps the palette and the query hooks off the first-load script.
+// The palette pulls in the dialog library (~20 KB): fetch it on first open.
 const SearchPalette = lazy(() => import("./search/SearchPalette"));
 
 const LOCALE_LABELS: Record<string, string> = { en: "EN", "pt-BR": "PT", es: "ES" };
@@ -102,8 +102,8 @@ export default function Nav() {
 	const hint = useShortcutHint();
 	const searchHref = localized("/search", locale);
 	const [paletteOpen, setPaletteOpen] = useState(false);
-	const [paletteMounted, setPaletteMounted] = useState(false);
-	if (paletteOpen && !paletteMounted) setPaletteMounted(true);
+	const [paletteLoaded, setPaletteLoaded] = useState(false);
+	if (paletteOpen && !paletteLoaded) setPaletteLoaded(true);
 	const searchTrigger = useRef<HTMLAnchorElement>(null);
 
 	useEffect(() => {
@@ -330,7 +330,7 @@ export default function Nav() {
 					</Link>
 				))}
 			</nav>
-			{paletteMounted && (
+			{paletteLoaded ? (
 				<Suspense fallback={null}>
 					<SearchPalette
 						open={paletteOpen}
@@ -338,7 +338,7 @@ export default function Nav() {
 						returnFocus={searchTrigger}
 					/>
 				</Suspense>
-			)}
+			) : null}
 		</header>
 	);
 }
