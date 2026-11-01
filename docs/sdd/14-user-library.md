@@ -320,14 +320,14 @@ Rules that apply to every cell: events on a list that is private or `hidden`, or
 
 | Route | Auth | Response |
 | --- | --- | --- |
-| `PUT /u/{nickname}/follow` | session | 200 `{state}`; 404 unknown or banned target; 422 `cannot-follow-self`; 429 |
-| `DELETE /u/{nickname}/follow` | session | 204 (also when no row existed) |
+| `PUT /u/{nickname}/follow` | session | 303 back; 404 unknown or banned target; 422 `cannot-follow-self`; 429 |
+| `DELETE /u/{nickname}/follow` | session | 303 back (also when no row existed); 404 unknown user |
 | `GET /me/follow-requests` | session | Inertia `Social/Requests` |
-| `POST /me/follow-requests/{nickname}/accept` and `/decline` | session | 204; 404 when no pending row |
+| `POST /me/follow-requests/{nickname}/accept` and `/decline` | session | 303 back; 404 when no pending row |
 | `GET /feed?cursor=` | session | Inertia `Feed/Index` with `events`, `nextCursor` |
 | `GET /u/{nickname}?tab=activity` | public | the profile page with `activity` deferred in group `personal` |
 
-`FollowPolicy` (`vukem make:policy`): following a banned user is `authz.DenyAsNotFound()`. Writes run in one transaction with `notifications.Send`.
+Following a banned user is 404, like a missing one; accept and decline match only the signed-in followee's own pending rows, so no policy object is needed. Follow writes run in one transaction with `notifications.Send`. Routes live in `routes/follows.go` (`routes/social.go` is the OAuth sign-in file). The public profile gets a `social` prop (`followers`, `following` unless hidden; `state` for a signed-in non-owner).
 
 ### 12.7 Feed query
 

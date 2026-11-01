@@ -49,6 +49,31 @@ export default function Notifications({
 									{new Date(n.createdAt).toLocaleString()}
 								</span>
 							</span>
+							{n.kind === "follow_request" &&
+								typeof n.payload.nickname === "string" && (
+									<span className="flex gap-3 text-sm">
+										{(["accept", "decline"] as const).map((answer) => (
+											<button
+												key={answer}
+												type="button"
+												className="underline"
+												onClick={() =>
+													router.post(
+														l(
+															`/me/follow-requests/${n.payload.nickname}/${answer}`,
+														),
+													)
+												}
+											>
+												{t(
+													answer === "accept"
+														? "notifications.followAccept"
+														: "notifications.followDecline",
+												)}
+											</button>
+										))}
+									</span>
+								)}
 							{!n.readAt && (
 								<button
 									type="button"

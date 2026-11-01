@@ -80,6 +80,6 @@ func All() []schema.Migration {
 		m20261101120000CreateIngestionTables(),
 		m20261101130000CatalogAuditGuardRowLevel(),
 		m20261101140000AddCommunityMailOptOutSQLite(),
-		m20261101170000AddEntitiesNameNormIndex(),
+		m20261101163000CreateFollowsTable(),
 	}
 }
