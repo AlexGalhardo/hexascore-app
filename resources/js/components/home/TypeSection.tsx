@@ -15,13 +15,13 @@ export interface TrendingEntry extends Highlight {
 type ItemType = Section["type"];
 
 // Full class names so Tailwind keeps them: one accent per section (design v1).
-const ACCENT_BG: Record<ItemType, string> = {
+export const ACCENT_BG: Record<ItemType, string> = {
 	game: "bg-accent-game",
 	movie: "bg-accent-movie",
 	series: "bg-accent-series",
 	book: "bg-accent-book",
 };
-const ACCENT_TEXT: Record<ItemType, string> = {
+export const ACCENT_TEXT: Record<ItemType, string> = {
 	game: "text-accent-game",
 	movie: "text-accent-movie",
 	series: "text-accent-series",

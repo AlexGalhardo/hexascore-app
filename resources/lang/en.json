@@ -1292,7 +1292,22 @@
       "move": "move",
       "open": "open",
       "esc": "close"
-    }
+    },
+    "count": {
+      "one": "{n} result",
+      "other": "{n} results"
+    },
+    "allIn": {
+      "game": "All {n} games for “{q}”",
+      "movie": "All {n} movies for “{q}”",
+      "series": "All {n} TV series for “{q}”",
+      "book": "All {n} books for “{q}”"
+    },
+    "nothingFound": "Nothing found for “{q}”.",
+    "checkSpelling": "Check the spelling or try another title.",
+    "didYouMean": "Did you mean:",
+    "orBrowse": "Or browse a section",
+    "people": "People and companies"
   },
   "social": {
     "profile": {

@@ -1292,7 +1292,22 @@
       "move": "mover",
       "open": "abrir",
       "esc": "fechar"
-    }
+    },
+    "count": {
+      "one": "{n} resultado",
+      "other": "{n} resultados"
+    },
+    "allIn": {
+      "game": "Todos os {n} jogos para “{q}”",
+      "movie": "Todos os {n} filmes para “{q}”",
+      "series": "Todas as {n} séries para “{q}”",
+      "book": "Todos os {n} livros para “{q}”"
+    },
+    "nothingFound": "Nada encontrado para “{q}”.",
+    "checkSpelling": "Confira a grafia ou tente outro título.",
+    "didYouMean": "Você quis dizer:",
+    "orBrowse": "Ou navegue por uma seção",
+    "people": "Pessoas e empresas"
   },
   "social": {
     "profile": {
