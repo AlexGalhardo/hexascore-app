@@ -81,6 +81,8 @@ func Web(r *router.Router, app *vukem.App) error {
 	// session cookie name; the app does not override it (production adds a __Host- prefix).
 	// Outside RenderCache so item pages served from the cache still count as views (SDD 08 §7.1).
 	r.UseServer(primitives.For(app).Middleware("vukem_session", localePrefixes))
+	// Wraps RenderCache: compresses only its anonymous public pages (SDD 13 §7.5, BREACH).
+	r.UseServer(appmiddleware.GzipPublicPages("vukem_session", localePrefixes))
 	r.UseServer(appmiddleware.RenderCache("vukem_session", localePrefixes))
 	// First UseServer is outermost. MovePageScript rewrites the finished HTML:
 	// LCP text before the page JSON, and the module graph after first paint.
