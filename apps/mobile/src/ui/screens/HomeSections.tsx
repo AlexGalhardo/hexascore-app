@@ -29,7 +29,7 @@ export interface HomeSection {
 
 export interface HomeLabels {
 	seeAll: (section: HomeSection) => string;
-	rank: (position: number) => string;
+	rank: (position: number, item: HomeItem) => string;
 	/** "High score", "Not enough ratings", ... */
 	verdict: (item: HomeItem) => string;
 	/** "from 213 ratings", "3 of 5 ratings", ... */
@@ -82,7 +82,9 @@ function TrendingCard({
 	return (
 		<Pressable
 			accessibilityRole="button"
-			accessibilityLabel={[labels.rank(position), item.title, meta, labels.score(item)].join(", ")}
+			accessibilityLabel={[labels.rank(position, item), item.title, meta, labels.score(item)].join(
+				", ",
+			)}
 			onPress={() => onOpen(item, section.type)}
 			className={`flex-row gap-3 border border-t-2 border-border bg-surface p-3 active:opacity-80 dark:border-border-dark dark:bg-surface-dark ${ACCENT_BORDER[section.type]}`}
 		>
@@ -90,7 +92,7 @@ function TrendingCard({
 			<View className="flex-1 gap-1">
 				{/* fg, not the accent: accent-book on surface is 4.28:1 in light, below AA for 12 px text. */}
 				<Text className="font-text text-12 font-bold text-fg dark:text-fg-dark">
-					{labels.rank(position)}
+					{labels.rank(position, item)}
 				</Text>
 				<Text className="font-display text-20 font-bold text-fg dark:text-fg-dark">
 					{item.title}
