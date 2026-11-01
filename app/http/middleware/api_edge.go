@@ -21,7 +21,7 @@ const (
 // APIEdge is the public API edge. Install it with Router.UseServer before every other server middleware. It (1)
 // rewrites /v1/... to /api/v1/... when the request Host is apiHost (port ignored) and (2) answers CORS for /api/v1
 // with origin "*" and no credentials. Problem codes come from ProblemDecorator.
-// workaround(vukem): VF-NEW-ADOPT-vukem-0.36.0 (router.Group.Only cannot keep /up on the API host).
+// workaround(vukem): VF-068 (an Only() host group cannot serve the framework /up and openapi routes).
 // On apiHost only the API is served (SDD 05 section 6.1): /v1 and /api/v1, /up, and a JSON index at "/"; every other
 // path is a 404 problem+json that never reaches the web stack (no HTML, no session cookie, no Inertia). appURL is the
 // web origin the index links to.
