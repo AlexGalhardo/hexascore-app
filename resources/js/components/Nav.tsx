@@ -61,6 +61,15 @@ const ICONS = {
 	down: "M6 9 L12 15 L18 9",
 	check: "M5 12 L10 17 L19 7",
 	close: "M6 6 L18 18 M18 6 L6 18",
+	library: "M5 4 V20 M10 4 V20 M14.5 5 L19 19 M4 20 H20",
+	lists: "M9 6 H20 M9 12 H20 M9 18 H20 M4.5 6 h.01 M4.5 12 h.01 M4.5 18 h.01",
+	user: "M12 4 a4 4 0 1 0 0 8 a4 4 0 1 0 0-8 M4.5 20 a7.5 7.5 0 0 1 15 0",
+	settings:
+		"M12 9 a3 3 0 1 0 0 6 a3 3 0 1 0 0-6 M12 2.5 V5 M12 19 V21.5 M2.5 12 H5 M19 12 H21.5 M5.3 5.3 L7 7 M17 17 L18.7 18.7 M5.3 18.7 L7 17 M17 7 L18.7 5.3",
+	key: "M8 10 a4 4 0 1 0 0 8 a4 4 0 1 0 0-8 M10.8 11.2 L20 2 M16 6 L19 9 M14 8 L16 10",
+	shield: "M12 3 L19.5 6 V11.5 C19.5 16 16.5 19.5 12 21 C7.5 19.5 4.5 16 4.5 11.5 V6 Z M9 12 L11 14 L15 10",
+	feed: "M5 5 a14 14 0 0 1 14 14 M5 11 a8 8 0 0 1 8 8 M5.5 18.5 h.01",
+	logout: "M14 4 H19 V20 H14 M10 8 L6 12 L10 16 M6 12 H16",
 } as const;
 
 // Icons from the v1 set; the label lives in aria-label or next to the icon.
@@ -188,9 +197,11 @@ export default function Nav() {
 	const accountLinks = user && (
 		<>
 			<Link href={localized("/library", locale)} className={menuItem}>
+				<Icon name="library" />
 				{t("nav.library")}
 			</Link>
 			<Link href={localized("/lists", locale)} className={menuItem}>
+				<Icon name="lists" />
 				{t("nav.lists")}
 			</Link>
 			{user.nickname && (
@@ -198,22 +209,27 @@ export default function Nav() {
 					href={localized(`/u/${user.nickname.toLowerCase()}`, locale)}
 					className={menuItem}
 				>
+					<Icon name="user" />
 					{t("nav.publicProfile")}
 				</Link>
 			)}
 			<Link href="/profile" className={menuItem}>
+				<Icon name="settings" />
 				{t("nav.profile")}
 			</Link>
 			<Link href="/profile/api" className={menuItem}>
+				<Icon name="key" />
 				{t("nav.api")}
 			</Link>
 			{user.role === "admin" && (
 				<Link href="/admin" className={menuItem}>
+					<Icon name="shield" />
 					{t("nav.admin")}
 				</Link>
 			)}
 			<div className="my-1 border-t border-border" />
 			<Link href="/logout" method="post" as="button" className={menuItem}>
+				<Icon name="logout" />
 				{t("nav.logout")}
 			</Link>
 		</>
@@ -352,23 +368,11 @@ export default function Nav() {
 									label={t("nav.account")}
 									triggerClassName={`inline-flex min-h-11 items-center gap-2 rounded-xs pl-1 pr-1 hover:bg-hover ${focus}`}
 									panelClassName="w-64"
-									trigger={
-										<>
-											{avatar}
-											{/* with the inline Feed link the 1152 px bar has no room for the name; the menu still shows it */}
-											<span
-												className={`hidden max-w-32 truncate font-semibold ${feedHref ? "" : "xl:inline"}`}
-											>
-												{user.nickname || user.name}
-											</span>
-										</>
-									}
+									trigger={avatar}
 								>
-									<p className="truncate px-3 py-2 text-sm font-semibold">
-										{user.name}
-									</p>
 									{feedHref && (
 										<Link href={feedHref} className={`${menuItem} xl:hidden`}>
+											<Icon name="feed" />
 											{t("social.feed.title")}
 										</Link>
 									)}

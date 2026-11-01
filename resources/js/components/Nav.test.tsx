@@ -129,9 +129,30 @@ test("the inline Feed link waits for xl and the account menu carries it below", 
 		// a bare inline-flex would win over hidden in Tailwind's sort and undo the fix
 		expect(inline?.className).not.toMatch(/(^|\s)inline-flex(\s|$)/);
 		expect(inline?.className).toContain("xl:inline-flex");
-		// Feed takes the room of the name next to the avatar (the menu still shows it).
+		// The trigger is the avatar alone (owner round 2026-11-01 item 13).
 		const trigger = screen.getAllByRole("button", { name: "nav.account" })[0];
 		expect(trigger.querySelector(".xl\\:inline")).toBeNull();
+	} finally {
+		props.auth.user = null;
+		props.flags = {};
+	}
+});
+
+// Owner round 2026-11-01 item 13: no user name in the account dropdown, an icon before each link.
+test("the account dropdown shows no user name and every entry starts with an icon", async () => {
+	try {
+		props.auth.user = { name: "Ana Real", nickname: "ana", role: "admin" };
+		props.flags = { social: true };
+		render(<Nav />);
+		const trigger = screen.getAllByRole("button", { name: "nav.account" })[0];
+		expect(trigger.textContent).toBe("A");
+		await userEvent.click(trigger);
+		const panel = document.getElementById(trigger.getAttribute("aria-controls") ?? "");
+		expect(panel).toBeTruthy();
+		expect(panel?.textContent).not.toContain("Ana Real");
+		const entries = [...(panel?.querySelectorAll("a, button") ?? [])];
+		expect(entries.length).toBeGreaterThanOrEqual(7);
+		for (const entry of entries) expect(entry.firstElementChild?.tagName).toBe("svg");
 	} finally {
 		props.auth.user = null;
 		props.flags = {};
