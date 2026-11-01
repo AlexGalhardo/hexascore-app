@@ -153,19 +153,19 @@ func TestEvaluateAndCSV(t *testing.T) {
 	var buf bytes.Buffer
 	if err := eval.WriteCSV(
 		&buf,
-		[][]string{{"metric", "value"}, {"=cmd", "+1"}, {"@x", "-2"}, {"ok", "0.1"}},
+		[][]string{{"metric", "value"}, {"=cmd", "+cmd"}, {"@x", "-cmd"}, {"ok", "0.1"}, {"neg", "-2"}},
 	); err != nil {
 		t.Fatal(err)
 	}
 
 	out := buf.String()
-	for _, bad := range []string{"\n=cmd", ",+1", "\n@x", ",-2"} {
+	for _, bad := range []string{"\n=cmd", ",+cmd", "\n@x", ",-cmd"} {
 		if strings.Contains(out, bad) {
 			t.Fatalf("formula cell not guarded (%q) in:\n%s", bad, out)
 		}
 	}
 
-	if !strings.Contains(out, "'=cmd") || !strings.Contains(out, "ok,0.1") {
+	if !strings.Contains(out, "'=cmd") || !strings.Contains(out, "ok,0.1") || !strings.Contains(out, "neg,-2") {
 		t.Fatalf("csv = %s", out)
 	}
 }
