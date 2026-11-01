@@ -1,13 +1,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 import type {
-	ItemJSON,
-	ItemPageJSON,
+	AppItemJSON,
+	AppItemPageJSON,
 	ListItemsQuery,
 } from "../../../../packages/app-client/src/api";
 import { ListingBody, type ListingReader } from "./Listing";
 
-function items(prefix: string, count: number): ItemJSON[] {
+function items(prefix: string, count: number): AppItemJSON[] {
 	return Array.from({ length: count }, (_, i) => ({
 		id: `${prefix}${i}`,
 		type: "games",
@@ -21,7 +21,9 @@ function items(prefix: string, count: number): ItemJSON[] {
 }
 
 // Pages keyed by the cursor the client sent ("" = first page).
-function reader(pages: Record<string, ItemPageJSON>): ListingReader & { calls: ListItemsQuery[] } {
+function reader(
+	pages: Record<string, AppItemPageJSON>,
+): ListingReader & { calls: ListItemsQuery[] } {
 	const calls: ListItemsQuery[] = [];
 	return {
 		calls,

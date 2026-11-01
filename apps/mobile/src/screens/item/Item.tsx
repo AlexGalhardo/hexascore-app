@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type ReactElement, useEffect, useRef, useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
-import type { EntityRef, ItemJSON } from "../../../../../packages/app-client/src/api";
+import type { AppItemJSON, EntityRef } from "../../../../../packages/app-client/src/api";
 import type { ReadClient } from "../../api/client";
 import { type AppLocale, t } from "../../i18n";
 import { type CatalogType, SINGULAR } from "../../navigation/catalog";
@@ -47,14 +47,13 @@ function groupByRole(entities: EntityRef[]): [string, EntityRef[]][] {
 
 const H2 = "font-display text-24 font-bold text-fg dark:text-fg-dark";
 
-function detailOf(item: ItemJSON, type: CatalogType, locale: AppLocale): ItemDetailView {
+function detailOf(item: AppItemJSON, type: CatalogType, locale: AppLocale): ItemDetailView {
 	const year = item.releaseDate?.slice(0, 4);
 	return {
 		title: item.title ?? item.slug,
 		kicker: [t(locale, `catalog.title.${SINGULAR[type]}`), year].filter(Boolean).join(" · "),
 		byline: null,
-		// shortcut: /app/v1 items carry no cover URL yet (FIX-app-item-cover-urls); pass item.coverUrl once it lands.
-		coverUri: null,
+		coverUri: item.coverUrl ?? null,
 		score: item.score ?? null,
 		ratingCount: item.ratingCount ?? 0,
 		genres: (item.entities ?? []).flatMap((e) => (e.role === "genre" && e.name ? [e.name] : [])),

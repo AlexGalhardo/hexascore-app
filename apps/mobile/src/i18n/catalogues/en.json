@@ -324,6 +324,26 @@
 	"home.trendingWeek": "Trending this week",
 	"home.popularType": "Popular {type}",
 	"home.popular": "Popular",
+	"home.trendingRank": "#{rank} trending this week",
+	"home.popularRank": "#{rank} popular",
+	"home.titles": {
+		"one": "{n} title",
+		"other": "{n} titles"
+	},
+	"home.seeAll.game": "See all games",
+	"home.seeAll.movie": "See all movies",
+	"home.seeAll.series": "See all TV series",
+	"home.seeAll.book": "See all books",
+	"home.more.game": "More games",
+	"home.more.movie": "More movies",
+	"home.more.series": "More TV series",
+	"home.more.book": "More books",
+	"home.ratingsOfMin": "{count} of {min} ratings",
+	"home.trendingNote": "Trending = most rated in the last 7 days.",
+	"home.fromRatings": {
+		"one": "from {n} rating",
+		"other": "from {n} ratings"
+	},
 	"item.metaDescription": "{title} ({type}) — community score and 6-category averages.",
 	"item.communityScore": "Community score",
 	"item.coverAlt": "Cover of {title}",

@@ -1,7 +1,7 @@
 import { useQueries } from "@tanstack/react-query";
 import type { ReactElement } from "react";
 import { ScrollView, Text, View } from "react-native";
-import type { ItemJSON, TrendingEntryJSON } from "../../../../packages/app-client/src/api";
+import type { AppItemJSON, AppTrendingEntryJSON } from "../../../../packages/app-client/src/api";
 import type { ReadClient } from "../api/client";
 import { type AppLocale, t } from "../i18n";
 import { CATALOG_TYPES, type CatalogType, SINGULAR } from "../navigation/catalog";
@@ -25,21 +25,24 @@ const PLURAL = Object.fromEntries(CATALOG_TYPES.map((type) => [SINGULAR[type], t
 >;
 
 // SDD 08 §6: an all-prior list is titled "Popular {type}".
-function trendingTitle(type: CatalogType, entries: TrendingEntryJSON[], locale: AppLocale): string {
+function trendingTitle(
+	type: CatalogType,
+	entries: AppTrendingEntryJSON[],
+	locale: AppLocale,
+): string {
 	const allPrior = entries.every((entry) => entry.basis === "prior");
 	return t(locale, allPrior ? "catalog.trending.allPrior" : "catalog.trending.title", {
 		type: t(locale, `catalog.title.${SINGULAR[type]}`),
 	});
 }
 
-function homeItem(item: ItemJSON): HomeItem {
+function homeItem(item: AppItemJSON): HomeItem {
 	const year = Number.parseInt(item.releaseDate?.slice(0, 4) ?? "", 10);
 	return {
 		id: item.id,
 		title: item.title ?? item.slug,
 		year: Number.isNaN(year) ? null : year,
-		// shortcut: /app/v1 items carry no cover URL yet (FIX-app-item-cover-urls); Cover reserves the 2:3 box.
-		coverUri: null,
+		coverUri: item.coverThumbUrl ?? null,
 		score: item.score ?? null,
 		ratingCount: item.ratingCount ?? 0,
 	};
@@ -53,7 +56,7 @@ export function HomeBody({
 }: {
 	read: TrendingReader;
 	locale: AppLocale;
-	onOpen?: (item: ItemJSON) => void;
+	onOpen?: (item: AppItemJSON) => void;
 	onSeeAll?: (type: CatalogType) => void;
 }): ReactElement {
 	const results = useQueries({
@@ -65,14 +68,14 @@ export function HomeBody({
 	const settled = results.every((result) => !result.isPending);
 
 	// At most 4 × 10 entries: rebuilt per render, no memo.
-	const sources = new Map<string, { item: ItemJSON; basis: TrendingEntryJSON["basis"] }>();
+	const sources = new Map<string, { item: AppItemJSON; basis: AppTrendingEntryJSON["basis"] }>();
 	const sections: HomeSection[] = [];
 	CATALOG_TYPES.forEach((type, index) => {
 		// A failed or empty type is hidden (ROADMAP P5.B.1.1); nothing is ever filled in client-side.
 		const entries = (results[index]?.data?.data ?? []).filter((entry) => entry.item);
 		if (entries.length === 0) return;
 		const items = entries.map((entry) => {
-			const item = entry.item as ItemJSON;
+			const item = entry.item as AppItemJSON;
 			sources.set(item.id, { item, basis: entry.basis });
 			return homeItem(item);
 		});

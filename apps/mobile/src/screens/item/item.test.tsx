@@ -1,10 +1,10 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react-native";
-import type { EditionPageJSON, ItemJSON } from "../../../../../packages/app-client/src/api";
+import type { AppItemJSON, EditionPageJSON } from "../../../../../packages/app-client/src/api";
 import { queryKeys } from "../../query/keys";
 import { type ItemReader, ItemView } from "./Item";
 
-const base: ItemJSON = {
+const base: AppItemJSON = {
 	id: "new",
 	type: "books",
 	slug: "dune",
@@ -19,7 +19,7 @@ const base: ItemJSON = {
 };
 
 function reader(
-	item: ItemJSON,
+	item: AppItemJSON,
 	editions: EditionPageJSON = { data: [] },
 	me: unknown = {},
 ): ItemReader {

@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
-import type { ItemJSON } from "../../../../packages/app-client/src/api";
+import type { AppItemJSON } from "../../../../packages/app-client/src/api";
 import { ItemRow } from "./ItemRow";
 
-const item: ItemJSON = {
+const item: AppItemJSON = {
 	id: "01",
 	type: "games",
 	slug: "outer-wilds",
