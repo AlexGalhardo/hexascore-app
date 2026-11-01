@@ -362,3 +362,19 @@ WHERE user_id = $1) + (SELECT like_count FROM lists WHERE id = $2)`, gone.ID, li
 		t.Errorf("%d comments, reactions or list likes left after the purge", n)
 	}
 }
+
+// TestSocialFlagShared: the nav reads `flags.social` to show the Feed link (IMPL-web-feed-nav).
+func TestSocialFlagShared(t *testing.T) {
+	for _, on := range []bool{false, true} {
+		r := newSocialRig(t, on)
+		_, c := r.member(fmt.Sprintf("flag-%v@example.com", on), fmt.Sprintf("Flag%v", on), false)
+
+		raw, ok := c.Inertia("").Get("/library").AssertOK().AssertInertia("Library/Index").Prop("flags")
+		if !ok {
+			t.Fatalf("social=%v: no flags prop", on)
+		}
+		if got := raw.(map[string]any)["social"]; got != on {
+			t.Fatalf("flags.social = %v, want %v", got, on)
+		}
+	}
+}

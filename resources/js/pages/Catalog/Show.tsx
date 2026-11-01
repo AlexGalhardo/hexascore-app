@@ -4,6 +4,7 @@ import CoverThumb, { type Cover } from "../../components/CoverThumb";
 import AddToList, { type ListChoice } from "../../components/item/AddToList";
 import CategoryAverages from "../../components/item/CategoryAverages";
 import Editions from "../../components/item/Editions";
+import MoreLikeThis, { type CrossItem, type SimilarItem } from "../../components/item/MoreLikeThis";
 import RatingPanel from "../../components/item/RatingPanel";
 import Reviews, { type ReviewEntry } from "../../components/item/Reviews";
 import ScoreBlock from "../../components/item/ScoreBlock";
@@ -68,6 +69,8 @@ interface Props {
 	reviews?: { data: ReviewEntry[]; mine: ReviewEntry | null };
 	/** Share-card path while the feature flag `social` is on and the page is public (SDD 14 §11 item 12). */
 	ogImage?: string;
+	similar?: SimilarItem[];
+	crossMedia?: CrossItem[];
 }
 
 const LD_TYPE: Record<ItemType, string> = {
@@ -123,6 +126,8 @@ export default function Show({
 	cover = null,
 	reviews,
 	ogImage,
+	similar = [],
+	crossMedia = [],
 }: Props) {
 	const t = useT();
 	const { locale, auth } = usePage<SharedProps>().props;
@@ -409,6 +414,8 @@ export default function Show({
 							/>
 						</Section>
 					)}
+
+					<MoreLikeThis type={item.type} similar={similar} crossMedia={crossMedia} />
 
 					<p className="text-xs text-muted">{t("item.attribution")}</p>
 				</div>
