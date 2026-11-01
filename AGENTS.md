@@ -85,6 +85,14 @@ Railway rules that override the skill's deploy-from-cwd shortcut: do not run `ra
 | `scripts/release.sh vX.Y.Z` | changelog section via git-cliff (`.config/cliff.toml`), `chore(release)` commit and tag; needs git-cliff installed (`scoop install git-cliff` / `brew install git-cliff`) |
 | `setups/setup-unix.sh` | same setup for Linux and macOS |
 
+## Optional integrations (vukem v0.36.0)
+
+All off while their variables are unset; names in `.env.example`, owner steps in [docs/analytics-acess.md](docs/analytics-acess.md).
+
+- Analytics and verification: `UMAMI_WEBSITE_ID`, `UMAMI_DOMAINS`, `GA_MEASUREMENT_ID`, `GOOGLE_SITE_VERIFICATION`, `BING_SITE_VERIFICATION` render through `{{analytics}}` in `app.html`. GA4 waits for the cookie banner's Accept (ADR 0023); Umami is cookieless.
+- SEO: `INDEXNOW_KEY` (key file `/{key}.txt`, job `seo.indexnow_changes` every minute), `BING_WEBMASTER_API_KEY` (client config only). `/llms.txt` and `/llms-full.txt` are always served.
+- Turnstile: `TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` (+ `TURNSTILE_HOSTNAME`) protect `POST /signup`, `/login`, `/contact` and enable the scrape-guard step-up at `POST /turnstile` (ADR 0016 amendment). Local and tests use Cloudflare's test keys; `TURNSTILE_VERIFY_URL` points siteverify at a fake and refuses to boot in production.
+
 ## Agents
 
 - Roles `orchestrator`, `senior`, `estagiario` (intern) and `especialista` (specialist) are defined in `PROMPT-WORKERS.md` and `.orchestration/briefs/`. The names are not tied to a vendor; the model per role is a recommendation from the owner (Opus for orchestrator and specialist, Sonnet for seniors, Haiku for the intern).

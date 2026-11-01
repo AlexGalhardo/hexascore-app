@@ -1,6 +1,6 @@
 # ADR 0016: Bot and abuse protection without Vercel BotID
 
-Status: accepted (2026-10-28). Decisions: brainstorming D-05, D-08; SDD 03 open issue 4; `vukem-feedback.md` VF-003.
+Status: accepted (2026-10-28), amended 2026-11-01 (Turnstile in production, see the end). Decisions: brainstorming D-05, D-08; SDD 03 open issue 4; `vukem-feedback.md` VF-003.
 
 ## Context
 
@@ -28,3 +28,13 @@ Layered, server-side, in this order:
 - Positive: no new runtime dependency by default; works on any host; signals reused by scoring and moderation.
 - Negative: proof-of-work does not stop well-funded abuse; the escalation to Turnstile must be easy to flip.
 - Obligations: SDD 13 defines thresholds and tests (`TestSecurity_*` names); `vukem-feedback.md` VF-003 asks for a framework challenge hook.
+
+## Amendment 2026-11-01: Cloudflare Turnstile in production
+
+vukem v0.36.0 ships the hook VF-003 asked for (`challenge.TurnstileConfig`, `challenge.StepUp`; <https://vukem.dev/docs/security/bot-challenge>) and the owner issued production keys (board row ADOPT-vukem-0.36.0).
+
+- Turnstile is on exactly when `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` are both set (one without the other refuses to boot). Unset, every form and page behaves as before.
+- When on, `POST /signup`, `/login` and `/contact` need a token solved for that form (actions `register`, `login`, `contact`), checked before the proof-of-work gate, which stays as the second layer. The `api.js` script loads only on those three pages (and from the widget after a client-side visit), not site-wide.
+- The page guard (ADR 0022) adds a soft per-IP budget (`pages.soft`, 30/min) below the hard limits: past it an anonymous client solves Turnstile once at `POST /turnstile` and gets a 30 min clearance cookie; verified search crawlers are never asked.
+- Siteverify outages fail closed (503); `TURNSTILE_INSECURE_FAIL_OPEN` stays unset.
+- Tests and local e2e use Cloudflare's published test keys and a local fake siteverify (`TURNSTILE_VERIFY_URL`, which refuses to boot in production).
