@@ -83,6 +83,15 @@ type Item struct {
 	// Titles is keyed by locale (en, pt-BR, es); a locale without a title is absent.
 	Titles     map[string]string
 	Popularity float64
+	// Synopses is keyed by locale; only Wikipedia extracts and HexaScore's
+	// own text appear here, never TMDB, IGDB or Open Library text.
+	Synopses map[string]Synopsis
+	// Cover is the cover a source record names, if any.
+	Cover *Cover
+	// Provenance records the data_sources code of every merged field.
+	Provenance Provenance
+	// Skip lists fields owned by the community; the writer must not store them.
+	Skip map[string]bool
 }
 
 // BuildItem maps the stored records of one QID to an Item. It is a pure
@@ -91,6 +100,11 @@ type Item struct {
 // ErrNoEnglishTitle when the item must be skipped.
 func BuildItem(qid string, recs []store.Record, now time.Time) (*Item, error) {
 	wd, summaries, err := decode(qid, recs)
+	if err != nil {
+		return nil, err
+	}
+
+	src, err := decodeSources(qid, recs)
 	if err != nil {
 		return nil, err
 	}
@@ -109,15 +123,19 @@ func BuildItem(qid string, recs []store.Record, now time.Time) (*Item, error) {
 		Meta:             buildMeta(wd),
 		Titles:           titles,
 		Popularity:       float64(wd.SitelinksCount),
+		Provenance:       Provenance{},
+		Skip:             map[string]bool{},
 	}
 
 	if d, ok := releaseDate(wd); ok {
 		item.ReleaseDate, item.ReleasePrecision = &d.Time, d.Precision
+	}
 
-		today := time.Date(now.UTC().Year(), now.UTC().Month(), now.UTC().Day(), 0, 0, 0, 0, time.UTC)
-		if d.Time.After(today) {
-			item.ReleaseStatus = StatusAnnounced
-		}
+	enrich(item, wd, summaries, src)
+
+	today := time.Date(now.UTC().Year(), now.UTC().Month(), now.UTC().Day(), 0, 0, 0, 0, time.UTC)
+	if item.ReleaseDate != nil && item.ReleaseDate.After(today) {
+		item.ReleaseStatus = StatusAnnounced
 	}
 
 	return item, nil
@@ -293,10 +311,6 @@ func buildMeta(wd wikidata.Payload) Meta {
 		if id, _ := c.Value.(string); id != "" && !slices.Contains(m.Trailers, id) {
 			m.Trailers = append(m.Trailers, id)
 		}
-	}
-
-	if len(m.Trailers) > MaxTrailers {
-		m.Trailers = m.Trailers[:MaxTrailers]
 	}
 
 	return m
