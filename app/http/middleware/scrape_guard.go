@@ -95,7 +95,7 @@ func (g *ScrapeGuard) Middleware(next http.Handler) http.Handler {
 		crawler, claims := botverify.Claimed(ua)
 
 		if claims {
-			// workaround(vukem): VF-NEW-SEC-anti-scraping (no raw client IP helper outside a *web.Ctx).
+			// workaround(vukem): VF-065 (no raw client IP helper outside a *web.Ctx).
 			ip := web.NewCtx(nil, r, web.ServicesFrom(ctx)).IP()
 			verdict = g.Bots.Verify(ctx, crawler, ip)
 		}
