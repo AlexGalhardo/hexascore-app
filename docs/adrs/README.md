@@ -25,3 +25,4 @@ Format: [MADR](https://adr.github.io/madr/) (title, status, context, decision, a
 | [0019](0019-mobile-runtime-dependencies.md) | Mobile runtime dependencies for auth, cache and media | accepted |
 | [0020](0020-web-tanstack-query.md) | TanStack Query for client-fetched data on the web | accepted |
 | [0021](0021-social-feed.md) | Activity feed built from the write path, no fan-out until 10k followers | accepted |
+| [0022](0022-anti-scraping.md) | Server-side anti-scraping: verified crawlers, tool UA deny, per-IP page limits, honeypot | accepted |

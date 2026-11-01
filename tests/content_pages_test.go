@@ -69,12 +69,25 @@ func TestRobots_Production(t *testing.T) {
 		"STRIPE_PRICE_BUSINESS": "price_business",
 	}})
 	// Production redirects any host but APP_URL's, and vukemtest requests default to example.com.
-	app.Client(t).Get("https://example.test/robots.txt").AssertOK().
+	res := app.Client(t).Get("https://example.test/robots.txt").AssertOK().
 		AssertSee("Allow: /" + nl).
 		AssertSee("Disallow: /admin" + nl).
 		AssertSee("Disallow: /profile" + nl).
 		AssertSee("Disallow: /me" + nl).
+		AssertSee("Disallow: /*?cursor=" + nl).
+		// The honeypot is off limits for every crawler that reads robots.txt (Q-A18).
+		AssertSee("Disallow: /data/export" + nl).
 		AssertSee("Sitemap: https://example.test/sitemap.xml")
+
+	// Search engines and AI crawlers are named in the allowed group (Q-A18 a).
+	for _, bot := range []string{
+		"Googlebot", "Bingbot", "DuckDuckBot", "Applebot", "YandexBot",
+		"GPTBot", "ClaudeBot", "CCBot", "PerplexityBot", "Google-Extended", "Applebot-Extended",
+	} {
+		res.AssertSee("User-agent: " + bot + nl)
+	}
+
+	res.AssertSee("User-agent: *" + nl)
 }
 
 const nl = "\n"

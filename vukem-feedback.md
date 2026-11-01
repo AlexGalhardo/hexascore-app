@@ -19,7 +19,15 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | VF-NEW-REQUEST-LINE-FIELDS | 2026-11-01 | low | open |
 | VF-063 | 2026-11-01 | low | open |
 | VF-064 | 2026-11-01 | low | open |
-| VF-NEW-MAIL-REPLYTO | 2026-11-01 | low | open |
+| VF-NEW-SEC-anti-scraping | 2026-11-01 | low | open |
+
+## VF-NEW-SEC-anti-scraping: no client-IP helper for server middleware and no verified-crawler check
+
+- **Date**: 2026-11-01. **Severity**: low. **Status**: open.
+- **vukem version**: v0.35.0. **Docs consulted**: <https://vukem.dev/docs/security/rate-limiting> (`ratelimit.ByIP`, "Keys"). `[NOT IN VUKEM DOCS]`: how plain `func(http.Handler) http.Handler` middleware gets the raw client IP that honours `TRUSTED_PROXIES`; only `c.IP()` on `*web.Ctx` and the hashed or prefixed `ratelimit.ByIP` key exist.
+- **Context**: the HexaScore page guard (ADR 0022) runs as `UseServer` middleware and needs the raw IP for reverse-DNS crawler verification (IPv6 included, so the `/64` key of `ByIP` does not fit).
+- **Workaround**: `web.NewCtx(nil, r, web.ServicesFrom(r.Context())).IP()` in `app/http/middleware/scrape_guard.go`, marked `workaround(vukem): VF-NEW-SEC-anti-scraping`.
+- **Request**: export `web.ClientIP(r *http.Request) string` with the same trusted-proxy rules. Optionally ship a `security/crawlers` helper (rDNS plus forward-confirm with a timeout and a cache) for the Googlebot/Bingbot verification every public site needs.
 
 ## VF-NEW-EXPORT-WRITER: export streams only to an HTTP response, so background jobs reimplement CSV/NDJSON
 
@@ -29,14 +37,6 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 - **Repro**: in a job with no request, try to stream an ORM iterator to a `*os.File` or an S3 upload writer with `export.NDJSON`: there is no request and no `ResponseWriter`.
 - **Workaround**: hand-written encoders in the app, duplicating the formula guard (CWE-1236) logic.
 - **Request**: add writer-level helpers, for example `export.EncodeCSV(io.Writer, header, rows, record, opts...)` and `export.EncodeNDJSON(io.Writer, rows, opts...)`, sharing the same formula guard and flush options; keep the HTTP helpers as thin wrappers over them, and document the job use case on the exports page.
-
-## VF-NEW-MAIL-REPLYTO: no global default Reply-To for mail
-
-- **Date**: 2026-11-01. **Severity**: low. **Status**: open.
-- **vukem version**: v0.35.0. **Docs consulted**: <https://vukem.dev/docs/digging-deeper/mail> (`MAIL_FROM` sets the default sender; `Envelope.ReplyTo` is per message).
-- **Context**: owner decision Q-A17: noreply@ sends all automatic mail and replies must reach support@.
-- **Workaround**: `app/mail.Auto` stamps From and ReplyTo on every Envelope (`workaround(vukem): VF-NEW-MAIL-REPLYTO`).
-- **Request**: add `MAIL_REPLY_TO` (default Reply-To applied when the envelope has none), next to `MAIL_FROM`.
 
 ## VF-NEW-PROBLEM-TYPE: problems cannot carry a custom type, title or catalogue code from vukem-raised errors
 

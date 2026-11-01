@@ -3,6 +3,7 @@ package routes
 import (
 	"cmp"
 	"context"
+	"net"
 	"net/url"
 	"strings"
 
@@ -14,6 +15,7 @@ import (
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/botverify"
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
@@ -78,6 +80,17 @@ func Web(r *router.Router, app *vukem.App) error {
 	r.Use(limits.Body)
 
 	r.UseServer(appmiddleware.CrossOriginResourcePolicy("same-site"))
+	// Outside the view counter, gzip and RenderCache: cached pages are limited too and a denied request
+	// never counts as a view (ADR 0022). Production only (the QA image included): tests and dev tools
+	// fetch pages without a browser User-Agent.
+	if app.Config.IsProduction() {
+		guard, err := scrapeGuard(app)
+		if err != nil {
+			return err
+		}
+
+		r.UseServer(guard.Middleware)
+	}
 	// Outside MovePageScript so the cache keeps the rewritten document. vukem's default
 	// session cookie name; the app does not override it (production adds a __Host- prefix).
 	// Outside RenderCache so item pages served from the cache still count as views (SDD 08 §7.1).
@@ -279,4 +292,45 @@ func seoConfig(app *vukem.App) seo.Config {
 		BaseURL: strings.TrimRight(cmp.Or(app.Source.Get("APP_URL"), "https://hexascore.app"), "/"),
 		Locales: []seo.Locale{{Code: "en"}, {Code: "pt-BR", Prefix: "/pt-br"}, {Code: "es", Prefix: "/es"}},
 	}
+}
+
+// scrapeGuard builds the page guard of ADR 0022 on the shared limiter and cache stores.
+func scrapeGuard(app *vukem.App) (*appmiddleware.ScrapeGuard, error) {
+	scale, err := appmiddleware.PageLimitScale(app.Source.Get("PAGE_LIMIT_SCALE"))
+	if err != nil {
+		return nil, err
+	}
+
+	factory, err := limits.Factory(app)
+	if err != nil {
+		return nil, err
+	}
+
+	store, err := app.Cache()
+	if err != nil {
+		return nil, err
+	}
+
+	scaled := func(rules ...limits.Rule) []ratelimit.Limiter {
+		out := make([]ratelimit.Limiter, 0, len(rules))
+		for _, rule := range rules {
+			rule.Limit *= scale
+			out = append(out, rule.From(factory))
+		}
+
+		return out
+	}
+
+	return &appmiddleware.ScrapeGuard{
+		Bots: &botverify.Verifier{
+			Resolver: net.DefaultResolver,
+			Cache:    store,
+			Timeout:  botverify.DefaultTimeout,
+		},
+		Bans:           store,
+		Anon:           scaled(limits.PageViews, limits.PageViewsHour),
+		User:           scaled(limits.PageViewsUser, limits.PageViewsUserHour),
+		SessionCookie:  "vukem_session",
+		LocalePrefixes: localePrefixes,
+	}, nil
 }

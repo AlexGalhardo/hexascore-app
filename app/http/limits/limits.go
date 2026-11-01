@@ -75,6 +75,13 @@ var (
 	CommunitySubmitIP = Rule{"community.submit.ip", 10, time.Minute}
 	CommunityUpload   = Rule{"community.uploads", 10, time.Hour}
 	CommunityUploadIP = Rule{"community.uploads.ip", 10, time.Hour}
+	// Page views per IP on HTML and Inertia routes (ADR 0022). A reader opens a page every few seconds:
+	// 60/min allows a quick burst of tabs, 600/h caps a steady crawl at one page per 6 s. A request with a
+	// session cookie gets 5x; verified search crawlers are exempt.
+	PageViews         = Rule{"pages", 60, time.Minute}
+	PageViewsHour     = Rule{"pages.hour", 600, time.Hour}
+	PageViewsUser     = Rule{"pages.user", 300, time.Minute}
+	PageViewsUserHour = Rule{"pages.user.hour", 3000, time.Hour}
 )
 
 // APIPlan is the per-key rate of a public API plan (SDD 05 §6.2): up to burst requests at once, rps sustained.
@@ -132,6 +139,10 @@ func All() []Rule {
 		CommunitySubmitIP,
 		CommunityUpload,
 		CommunityUploadIP,
+		PageViews,
+		PageViewsHour,
+		PageViewsUser,
+		PageViewsUserHour,
 	}
 }
 

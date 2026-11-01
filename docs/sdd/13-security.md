@@ -165,6 +165,21 @@ Keys: IPv6 is bucketed by /64 [RL]. `c.IP()` trusts forwarding headers only from
 | `/csp-reports` | 30/min, body ≤ 16 KiB ([HDR] "Collecting violation reports") | IP |
 | `/stripe/webhook` | 600/min, signature checked first | IP |
 | Export | 1 per 7 days (SDD 14) | user |
+| Pages and Inertia visits (production) | anonymous 60/min and 600/h; with a session cookie 300/min and 3000/h; verified search crawlers exempt (§7.1.1) | IP |
+
+### 7.1.1 Anti-scraping of the public pages (ADR 0022, Q-A18)
+
+- `ScrapeGuard` (`app/http/middleware/scrape_guard.go`) runs in production as server middleware outside the view counter, gzip and `RenderCache`. It covers GET/HEAD page views and `X-Inertia` visits, never `/api`, `/app`, `/build`, `/covers`, `/og`, `/up`, `/docs`, `/.well-known`, `/sitemaps`, `/challenge`, `/search/suggest` or file paths.
+- Allowed crawlers (`app/botverify`): Googlebot (`googlebot.com`, `google.com`, `gae.googleusercontent.com`), Bingbot (`search.msn.com`), Applebot (`applebot.apple.com`) and YandexBot (`yandex.ru`, `yandex.net`, `yandex.com`) are verified by reverse DNS plus forward confirmation, with a 1.5 s timeout. The verdict is cached 24 h (1 min after a DNS failure). A verified crawler is exempt from the page limits.
+  - DuckDuckBot, GPTBot, ClaudeBot, CCBot and PerplexityBot publish IP lists only, so they are UA-matched and keep the anonymous limits.
+  - A crawler UA that DNS proves false gets 403 and logs `alert=scrape`. A DNS timeout only leaves the client unverified.
+- Tool UAs (empty, python-requests, curl, wget, Scrapy, Go-http-client, axios, node-fetch, HeadlessChrome, PhantomJS and similar) get 403 problem+json, which points to `/docs`.
+- Honeypot: a hidden link (`hidden`, `aria-hidden`, `tabindex=-1`, `rel=nofollow`) to `/data/export`, which robots.txt disallows. An unverified client that requests it is banned from pages for 24 h, keyed by IP (/64 for IPv6), in the cache store, and logs `alert=scrape`. A ban store that cannot be read answers 503.
+- Client IP: `c.IP()` / `ratelimit.ByIP`, so forwarding headers are trusted only from `TRUSTED_PROXIES` ([OV] A01).
+- `PAGE_LIMIT_SCALE` multiplies the page limits for the QA stack only. Production leaves it unset, and any value that is not a positive integer refuses to boot.
+- Props: the item, entity and public list pages send only the fields they render, so the page JSON never exposes more than the HTML.
+- Tests: `TestSecurity_A06_ScrapeToolUADenied`, `_ScrapeAPIRoutesUnaffected`, `_ScrapeSpoofedGooglebot`, `_ScrapeVerifiedGooglebot`, `_ScrapePageRateLimit`, `_ScrapeHoneypotBan`, `TestSecurity_A10_ScrapeBanStoreDown503`, `app/botverify` tests (fake resolver, no live DNS), `TestRobots_Production`, `TestTermsParityAndScrapingClause`.
+- Not covered here: Cloudflare bot management and WAF (P2, owner-gated), and Turnstile step-up (no vukem hook, VF-003; keys not issued).
 
 ### 7.2 Challenge and form integrity (ADR 0016)
 
