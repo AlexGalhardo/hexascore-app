@@ -5,6 +5,7 @@ package tests
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"testing"
 	"time"
 
@@ -206,7 +207,7 @@ func TestForYouEndpoint(t *testing.T) {
 
 	r := newForYouRig(t)
 
-	u, err := r.acc.Users.ByID(t.Context(), fmt.Sprint(r.user))
+	u, err := r.acc.Users.ByID(t.Context(), strconv.FormatInt(r.user, 10))
 	if err != nil {
 		t.Fatal(err)
 	}
