@@ -2029,7 +2029,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
     - ratings created after the cutover replay as legacy 0–100 values unchanged (multiples of 5 are valid legacy values)
   - Notes: accepted losses (sessions, suggestions, flag changes) are listed in the runbook. Replay targets Neon only after R2 (read-only off) and never runs automatically.
 
-- [ ] **P2.G.1.2** Write the cutover runbook with the go/no-go checklist, and send the pre-cutover notices.
+- [x] **P2.G.1.2** Write the cutover runbook with the go/no-go checklist, and send the pre-cutover notices. Closed by owner decision 2026-11-01; actual state: cutover ran without a formal runbook or notices; rollback runbook exists in `docs/runbooks/cutover-rollback.md`.
   - Files/modules: `docs/runbooks/cutover.md` (T-14 d … T+30 d, commands, owners, timings from dry run 2, abort points), `docs/runbooks/cutover-rollback.md`, `docs/runbooks/dns-legacy.txt` (refreshed)
   - Refs: SDD 11 §7.6, NFR-11-6; SDD 03 §7.7, §8 (passkey-only users mailed); SDD 13 NFR-13-3; D-21, D-29; ADR 0013
   - Depends on: P2.G.1.1
@@ -2041,7 +2041,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
 
 #### P2.G.2 Rehearsal and go/no-go
 
-- [ ] **P2.G.2.1** Run the full timed rehearsal at T-14 d on staging, including rollback R1–R3.
+- [x] **P2.G.2.1** Run the full timed rehearsal at T-14 d on staging, including rollback R1–R3. Closed by owner decision 2026-11-01; actual state: no staging rehearsal; the local rehearsal of the legacy import passed (MIGRATE-legacy-data).
   - Files/modules: `docs/migration/rehearsal.md` (actual time per step, deviations)
   - Refs: SDD 11 §7.6 (T-14 d), §9 item 7, NFR-11-6; SDD 12 §10 (staging probe is a D-21 gate); ADR 0013; D-21
   - Depends on: P2.G.1.2
@@ -2051,7 +2051,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
     - rollback: test hostname back to the Vercel target (R1), read-only off on the branch (R2), `hexascore:export-since` replay of staging writes into the branch (R3) → rows visible in the legacy shape
   - Notes: HUMAN GATE (production data, DNS): the Neon branch and the test record are the owner's. The Stripe webhook switch is rehearsed with test-mode endpoints only.
 
-- [ ] **P2.G.2.2** Hold the go/no-go: parity checklist re-signed on staging, gates green, drill passed, legal review done.
+- [x] **P2.G.2.2** Hold the go/no-go: parity checklist re-signed on staging, gates green, drill passed, legal review done. Closed by owner decision 2026-11-01; actual state: no formal go/no-go; the owner decided the cutover on 2026-10-31.
   - Files/modules: `docs/parity-checklist.md` (re-signed on staging), `docs/migration/go-no-go.md`
   - Refs: ROADMAP phase map (P2 exit); D-21, D-29; SDD 13 NFR-13-3; SDD 11 §9; P1.I.6.1, P2.F.5.2, P2.E.3.1
   - Depends on: P2.G.2.1
@@ -2062,7 +2062,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
 
 #### P2.G.3 Window
 
-- [ ] **P2.G.3.1** Prepare production: bulk covers copy at T-7 d, live secrets, custom domains staged, TTL 60 s at T-24 h.
+- [x] **P2.G.3.1** Prepare production: bulk covers copy at T-7 d, live secrets, custom domains staged, TTL 60 s at T-24 h. Closed by owner decision 2026-11-01; actual state: domains moved to Railway on 2026-10-31; covers served from the production bucket; Google OAuth secrets set 2026-10-31.
   - Files/modules: `docs/runbooks/cutover.md` (checked boxes), `docs/migration/covers.md` (production counts)
   - Refs: SDD 11 §6.1, §6.4, §7.6 (T-7 d, T-24 h), NFR-11-6; SDD 05 (Stripe live); D-28
   - Depends on: P2.G.2.2
@@ -2073,7 +2073,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
     - production `/up?checks=1` on the Railway domain → 200, all checks `ok`, release tag in `X-Hexascore-Version`
   - Notes: HUMAN GATE (DNS, secrets): the owner sets Stripe live keys and lowers the TTLs. Whether Railway accepts and certifies custom domains before DNS points at it, and how long TLS issuance takes, are [NOT VERIFIED]: check the service networking settings and put the measured delay into the runbook.
 
-- [ ] **P2.G.3.2** Run the read-only window and the final migration into production.
+- [x] **P2.G.3.2** Run the read-only window and the final migration into production. Closed by owner decision 2026-11-01; actual state: legacy data imported into production 2026-10-31/11-01 (users, catalogue, entities, social, library; seed users kept and to be flagged, owner decision).
   - Files/modules: `docs/migration/cutover-log.md` (UTC timestamps per step, counts, verify output)
   - Refs: SDD 11 §7.6 window steps 1–6, FR-11-7, NFR-11-6; SDD 03 §7.7; D-21; A-04
   - Depends on: P2.G.3.1
@@ -2084,7 +2084,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
     - freeze to verify ≤ 45 min target, 60 max
   - Notes: HUMAN GATE (production data): the owner runs or approves every command in the session. Abort rule: verify fails or 60 min pass → R2 (read-only off on Neon), the window ends with legacy serving, nothing else changes. `vukem down` keeps the new production closed to visitors until DNS switches.
 
-- [ ] **P2.G.3.3** Switch DNS and the Stripe live webhook, and turn on production monitoring.
+- [x] **P2.G.3.3** Switch DNS and the Stripe live webhook, and turn on production monitoring. Closed by owner decision 2026-11-01; actual state: DNS for hexascore.app, www and api switched to Railway on 2026-10-31; Stripe live webhook and monitoring are still owner actions.
   - Files/modules: `docs/migration/cutover-log.md`, `ops/grafana/synthetics.md` (production checks)
   - Refs: SDD 11 §6.1 (apex CNAME flattening, proxy off), §7.6 step 7, §9 item 8; SDD 12 §7.4, §7.7; D-28; ADR 0002
   - Depends on: P2.G.3.2
@@ -2097,7 +2097,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
 
 #### P2.G.4 After the cutover
 
-- [ ] **P2.G.4.1** Watch production for 2 h and then daily for 7 days; close the rollback window at T+7 d.
+- [x] **P2.G.4.1** Watch production for 2 h and then daily for 7 days; close the rollback window at T+7 d. Closed by owner decision 2026-11-01; actual state: no formal 7-day watch window was run.
   - Files/modules: `docs/migration/post-cutover.md` (daily rows: 5xx %, SSR fallbacks, login success vs legacy baseline, Stripe events, job failures, backup status)
   - Refs: SDD 11 §7.6 step 8 and Rollback ("until T+7 d, then forward-fix"); SDD 12 §7.5; ADR 0014; D-21
   - Depends on: P2.G.3.3
@@ -2107,7 +2107,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
     - first production `backup.daily` → `verified`; the next `backup:drill` on staging from the production dump → pass
   - Notes: a breach before T+7 d → the owner decides between forward fix and R1–R3. At T+7 d record "rollback window closed, forward-fix only" in `docs/PROGRESS.md`. Neon stays read-only until T+30 d.
 
-- [ ] **P2.G.4.2** Release `v1.0.0` (parity and cutover).
+- [x] **P2.G.4.2** Release `v1.0.0` (parity and cutover). Closed by owner decision 2026-11-01; actual state: no v1.0.0 tag yet; production runs v0.12.x.
   - Files/modules: `CHANGELOG.md`, tag `v1.0.0`, `docs/PROGRESS.md`, `ROADMAP.md` (status table, phase map: P2 done), `AGENTS.md`
   - Refs: ADR 0013 ("`v1.0.0` = parity with the legacy app and successful cutover"); SDD 11 §7.1; D-20, D-21; ROADMAP phase map (P2 exit criteria)
   - Depends on: P2.G.3.3
@@ -2117,7 +2117,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
     - `gh release view v1.0.0` → non-empty body; `curl -sI https://hexascore.app/up | grep -i x-hexascore-version` → `v1.0.0`
   - Notes: HUMAN GATE (release, production deploy): the owner chooses the moment, at the earliest after the first production drill passes, and pushes the tag (one tag per push).
 
-- [ ] **P2.G.4.3** At T+30 d take the final legacy dump, decommission Vercel, Neon, Upstash and Blob, and re-baseline the cost sheet.
+- [x] **P2.G.4.3** At T+30 d take the final legacy dump, decommission Vercel, Neon, Upstash and Blob, and re-baseline the cost sheet. Closed by owner decision 2026-11-01; actual state: not done yet: Vercel project, Neon, Upstash and Blob still exist.
   - Files/modules: `docs/migration/decommission.md` (checklist with dates), `docs/sdd/11-infra-deploy.md` (§6.5 measured averages, §11 issue 13 closed), `docs/sdd/open-issues.md` (row 11-13)
   - Refs: SDD 11 §7.6 (T+30 d), §6.5, §11 issue 13; SDD 12 §7.9; ADR 0002, 0013; D-21
   - Depends on: P2.G.4.1
