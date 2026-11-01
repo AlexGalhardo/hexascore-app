@@ -1188,7 +1188,9 @@
     "loginToRate": "Inicia sesión para valorar",
     "chooseNickname": "Elige un nickname para valorar",
     "verifyToRate": "Confirma tu correo para valorar.",
-    "verifyLink": "Reenviar el correo de confirmación"
+    "verifyLink": "Reenviar el correo de confirmación",
+    "notReleased": "La valoración se abre cuando el título se estrene.",
+    "notSaved": "No se pudo guardar tu valoración. Inténtalo de nuevo."
   },
   "search": {
     "title": "Búsqueda",

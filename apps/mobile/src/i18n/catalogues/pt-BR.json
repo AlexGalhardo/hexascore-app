@@ -476,6 +476,8 @@
 	"ratings.chooseNickname": "Escolha um nickname para avaliar",
 	"ratings.verifyToRate": "Confirme seu e-mail para avaliar.",
 	"ratings.verifyLink": "Reenviar o e-mail de confirmação",
+	"ratings.notReleased": "A avaliação abre quando o item for lançado.",
+	"ratings.notSaved": "Não foi possível salvar sua avaliação. Tente novamente.",
 	"search.title": "Busca",
 	"search.label": "Buscar",
 	"search.submit": "Buscar",

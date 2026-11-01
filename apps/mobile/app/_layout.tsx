@@ -3,10 +3,11 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import { type ErrorBoundaryProps, Stack, useSegments } from "expo-router";
 import { type ReactElement, useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import { appLocale, persistOptions, queryClient, rootDeps } from "../src/auth/runtime";
+import { appLocale, persistOptions, queryClient, ratingQueue, rootDeps } from "../src/auth/runtime";
 import { t } from "../src/i18n";
 import { OfflineBanner } from "../src/platform/OfflineBanner";
 import { LocaleProvider, routeGuards, useRoot } from "../src/providers/root";
+import { RatingQueueProvider } from "../src/rating/useRateMutation";
 import { CrashConsentPrompt } from "../src/telemetry/CrashConsentPrompt";
 import {
 	crashConsent,
@@ -47,36 +48,38 @@ export default function RootLayout(): ReactElement | null {
 	return (
 		<PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
 			<LocaleProvider locale={appLocale}>
-				<OfflineBanner locale={appLocale} />
-				{consent === "unset" ? (
-					<CrashConsentPrompt
-						locale={appLocale}
-						onChoose={(granted) => {
-							setConsent(granted ? "granted" : "denied");
-							void setCrashConsent(granted);
-						}}
-					/>
-				) : null}
-				<Stack screenOptions={{ headerShown: false }}>
-					<Stack.Protected guard={guards.update}>
-						<Stack.Screen name="update-required" />
-					</Stack.Protected>
-					<Stack.Protected guard={guards.banned}>
-						<Stack.Screen name="banned" />
-					</Stack.Protected>
-					<Stack.Protected guard={guards.deletion}>
-						<Stack.Screen name="deletion-scheduled" />
-					</Stack.Protected>
-					<Stack.Protected guard={guards.auth}>
-						<Stack.Screen name="(auth)/login" />
-					</Stack.Protected>
-					<Stack.Protected guard={guards.app}>
-						<Stack.Screen name="(tabs)" />
-						<Stack.Screen name="[type]/[slug]" />
-						<Stack.Screen name="entities/[id]" />
-						<Stack.Screen name="lists/[id]" />
-					</Stack.Protected>
-				</Stack>
+				<RatingQueueProvider value={ratingQueue}>
+					<OfflineBanner locale={appLocale} />
+					{consent === "unset" ? (
+						<CrashConsentPrompt
+							locale={appLocale}
+							onChoose={(granted) => {
+								setConsent(granted ? "granted" : "denied");
+								void setCrashConsent(granted);
+							}}
+						/>
+					) : null}
+					<Stack screenOptions={{ headerShown: false }}>
+						<Stack.Protected guard={guards.update}>
+							<Stack.Screen name="update-required" />
+						</Stack.Protected>
+						<Stack.Protected guard={guards.banned}>
+							<Stack.Screen name="banned" />
+						</Stack.Protected>
+						<Stack.Protected guard={guards.deletion}>
+							<Stack.Screen name="deletion-scheduled" />
+						</Stack.Protected>
+						<Stack.Protected guard={guards.auth}>
+							<Stack.Screen name="(auth)/login" />
+						</Stack.Protected>
+						<Stack.Protected guard={guards.app}>
+							<Stack.Screen name="(tabs)" />
+							<Stack.Screen name="[type]/[slug]" />
+							<Stack.Screen name="entities/[id]" />
+							<Stack.Screen name="lists/[id]" />
+						</Stack.Protected>
+					</Stack>
+				</RatingQueueProvider>
 			</LocaleProvider>
 		</PersistQueryClientProvider>
 	);

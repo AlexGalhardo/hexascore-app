@@ -1,7 +1,9 @@
 import Constants from "expo-constants";
 import cacheStorage from "expo-sqlite/kv-store";
 import { createAppClient } from "../api/client";
-import { resolveLocale } from "../i18n";
+import { resolveLocale, t } from "../i18n";
+import { subscribeAppActive } from "../platform/appState";
+import { getNetworkState, subscribeNetwork } from "../platform/network";
 import type { RootDeps } from "../providers/root";
 import { createQueryClient, wireQueryManagers } from "../query/client";
 import {
@@ -12,6 +14,9 @@ import {
 	readFormulaVersion,
 	trackFormulaVersion,
 } from "../query/persister";
+import { sendEntry, startQueue } from "../queue/drain";
+import { createRatingRuntime, followMe } from "../rating/runtime";
+import { showToast } from "../rating/toast";
 import { startForegroundRotation } from "./rotate";
 import { createSecureVault } from "./secureVault";
 import { createSession } from "./session";
@@ -34,7 +39,8 @@ export const persistOptions = {
 wireQueryManagers();
 trackFormulaVersion(queryClient, cacheStorage);
 
-// wipeUserData grows with the offline queue (P5.A.4.2).
+// The offline queue stays out of the wipe: a 401 also wipes, and the queue replays for the same
+// user after re-login; another user discards it through the user binding (SDD 10 §8).
 export const session = createSession({
 	vault,
 	wipeUserData: async () => {
@@ -72,3 +78,16 @@ export const rootDeps: RootDeps = {
 		};
 	},
 };
+
+const ratings = createRatingRuntime({
+	storage: cacheStorage,
+	queryClient,
+	newKey: () => appClient.newIdempotencyKey(),
+	send: (entry) => sendEntry(appClient, entry),
+	online: () => getNetworkState() !== "offline",
+	paused: () => appClient.upgradeRequired(),
+	notify: (message) => showToast(t(appLocale, message)),
+});
+export const ratingQueue = ratings.queue;
+followMe(session, () => appClient.read.meShow(), ratings.setUser);
+startQueue(ratings.drain, { subscribeNetwork, subscribeAppActive });
