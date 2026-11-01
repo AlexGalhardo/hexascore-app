@@ -1,6 +1,6 @@
-import { cleanup, render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, expect, test, vi } from "vitest";
+import { cleanup, render, screen } from "../../lib/testing";
 
 import Show from "./Show";
 

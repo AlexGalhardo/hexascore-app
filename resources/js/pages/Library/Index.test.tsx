@@ -1,7 +1,7 @@
-import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { expect, test, vi } from "vitest";
+import { render, screen } from "../../lib/testing";
 
 import Index from "./Index";
 

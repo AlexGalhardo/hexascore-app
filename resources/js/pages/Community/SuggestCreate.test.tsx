@@ -1,11 +1,10 @@
-import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { beforeEach, expect, test, vi } from "vitest";
-
 import en from "../../../lang/en.json";
 import es from "../../../lang/es.json";
 import ptBR from "../../../lang/pt-BR.json";
+import { cleanup, render, screen } from "../../lib/testing";
 import SuggestCreate from "./SuggestCreate";
 
 const patch = vi.fn();

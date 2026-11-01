@@ -81,7 +81,7 @@ type Shared = {
 };
 ```
 
-Prop types reuse the OpenAPI schemas: `vukem codegen:types` over the `/app/v1` document (ADR 0009) writes `resources/js/types/api.d.ts`; page-only props live in `resources/js/types/pages.ts`. Typed routes via `vukem codegen:routes` (<https://vukem.dev/docs/cli/reference-runtime#vukem-codegenroutes>; types: `#vukem-codegentypes`). The web makes no fetch calls except `/search/suggest` and `/search/events` (SDD 07 §6); no generated HTTP client ships to the browser.
+Prop types reuse the OpenAPI schemas: `vukem codegen:types` over the `/app/v1` document (ADR 0009) writes `resources/js/types/api.d.ts`; page-only props live in `resources/js/types/pages.ts`. Typed routes via `vukem codegen:routes` (<https://vukem.dev/docs/cli/reference-runtime#vukem-codegenroutes>; types: `#vukem-codegentypes`). The web makes no fetch calls except `/search/suggest` and `/search/events` (SDD 07 §6), the ratings dialog, the edition picker and the data export; no generated HTTP client ships to the browser. Those client-fetched calls go through TanStack Query (ADR 0020): one `QueryClient` per browser app, a fresh one per SSR render, and never for Inertia page props.
 
 ### 6.2 Page inventory
 
