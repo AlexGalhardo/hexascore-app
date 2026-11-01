@@ -20,7 +20,7 @@ func Problems(r *router.Router, _ *vukem.App) error {
 			return errs.ErrNotFound
 		}
 
-		return c.RedirectStatus(http.StatusFound, problems.DocsPath+"#"+code)
+		return c.RedirectStatus(http.StatusMovedPermanently, problems.DocsPath+"#"+code)
 	}).Name("problems.redirect")
 
 	return nil

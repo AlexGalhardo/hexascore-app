@@ -24,7 +24,7 @@ func TestProblemCatalog(t *testing.T) {
 	}
 
 	for _, p := range problems.Catalog {
-		app.Client(t).Get("/problems/" + p.Code).AssertStatus(302).AssertRedirect("/docs/errors#" + p.Code)
+		app.Client(t).Get("/problems/" + p.Code).AssertStatus(301).AssertRedirect("/docs/errors#" + p.Code)
 
 		if !strings.Contains(string(doc), "\n### "+p.Code+"\n") {
 			t.Errorf("resources/docs/errors.md has no section for %q", p.Code)
