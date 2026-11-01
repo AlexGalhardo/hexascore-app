@@ -19,9 +19,10 @@ type DataSource struct {
 	Code, Name, Licence, Attribution, URL string
 }
 
-// DataSources lists the rows the merge labels fields with. The licences of the
-// commercial APIs and Open Library are placeholders until legal review
-// (SDD 01 §6.1, A-05) [NOT VERIFIED]; they only decide what is displayed.
+// DataSources lists the rows the merge labels fields with. Licences name the
+// terms each source publishes (owner cleared the legal reads in Q-A16,
+// 2026-11-01); they only decide what is displayed. Terms pages:
+//   - Open Library: https://openlibrary.org/developers/licensing (no rights asserted by the Internet Archive)
 var DataSources = []DataSource{
 	{SourceWikidata, "Wikidata", "CC0-1.0", "", "https://www.wikidata.org"},
 	{SourceWikipedia, "Wikipedia", "CC-BY-SA-4.0", "Wikipedia (CC BY-SA 4.0)", "https://www.wikipedia.org"},
@@ -29,10 +30,13 @@ var DataSources = []DataSource{
 	{SourceIGDB, "IGDB", "IGDB-API-TERMS", "IGDB", "https://www.igdb.com"},
 	{SourceSteam, "Steam", "STEAM-API-TERMS", "", "https://store.steampowered.com"},
 	{SourceGOG, "GOG", "GOG-API-TERMS", "", "https://www.gog.com"},
-	{SourceOpenLibrary, "Open Library", "OPEN-LIBRARY-PENDING-A05", "", "https://openlibrary.org"},
+	{SourceOpenLibrary, "Open Library", "OPEN-LIBRARY-NO-RIGHTS-ASSERTED", "", "https://openlibrary.org"},
 	{SourceOwn, "HexaScore", "proprietary", "", "https://hexascore.app"},
 	{SourceCommons, "Wikimedia Commons", "PER-FILE", "", "https://commons.wikimedia.org"},
 }
+
+// licencePlaceholders are the values seeded before the terms were read; SeedDataSources replaces them.
+var licencePlaceholders = []string{"IGDB-API-TERMS", "STEAM-API-TERMS", "GOG-API-TERMS", "OPEN-LIBRARY-PENDING-A05"}
 
 // Licence returns the data_sources licence of code, or "" for an unknown source.
 func Licence(code string) string {
