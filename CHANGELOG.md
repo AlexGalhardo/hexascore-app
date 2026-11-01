@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- **mobile:** Manual Gradle-on-Actions release build (`mobile-gradle.yml`, D-34): signed AAB and APK, fails closed on missing upload-key secrets or a different signer; `app.config.ts` reads `ANDROID_VERSION_CODE` only when set (P5.C.1.2)
+- **mobile:** `mobile-v*` tag builds production behind the API contract job and the `play-store` environment approval, refusing to submit when the environment has no required reviewer (P5.C.1.3)
+- **legal:** Play data safety answers in `docs/legal/play-data-safety.md` (P5.C.2.1)
+- **mobile:** Play store listing texts in en, pt-BR and es with a limits check (`apps/mobile/store/listing/check.ts`, P5.C.2.2)
+
+### Fixed
+
+- **legal:** The delete-account help page links keep the visitor's locale prefix (P5.C.2.1)
+
 ## [0.39.0] - 2026-11-01
 
 ### Added

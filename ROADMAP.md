@@ -3281,6 +3281,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `gh workflow run mobile-gradle.yml -f ref=main` then `gh run watch` → success, artifact `app-release.aab` present
     - `unzip -l app-release.aab | rg BundleConfig.pb` → one match
   - Notes: never commit the generated `android/` folder or the keystore. The upload key lives only in Actions secrets and with EAS credentials. Pin the JDK and Gradle action versions. The workflow stays `workflow_dispatch` until EAS stops being free.
+  - Status (2026-11-01): code merged (`mobile-gradle.yml`, `version_code` input required, signing secrets step-scoped, fails closed on missing secrets or a non-upload-key signer; runbook section in `docs/runbooks/mobile-release.md`). Open: owner exports the EAS upload key into the 4 `ANDROID_UPLOAD_*` Actions secrets, then `gh workflow run mobile-gradle.yml -f ref=main -f version_code=<N>`.
 
 - [ ] **P5.C.1.3** Add the tag workflow for `mobile-v*`: `eas build --profile production` and `eas submit` to the internal testing track, gated on lint, typecheck, Jest and the contract check.
   - Files/modules: `apps/mobile/.eas/workflows/release.yml` (or `.github/workflows/mobile-release.yml`), `docs/release/mobile-release-checklist.md`
@@ -3290,6 +3291,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
   - Acceptance:
     - a dry run on tag `mobile-v0.9.1` → AAB submitted to internal testing, visible in Play Console
   - Notes: the release checklist covers target API, data safety, assetlinks, deletion URL, min version, OTA rule and staged rollout (SDD 10 §10). The Play service account JSON is an EAS secret, never in the repository.
+  - Status (2026-11-01): code merged (`mobile-v*` tag on `mobile-release.yml`, tag must equal the app version, build needs the contract job, submit only on a tag push or ticked dispatch and refuses when `play-store` has no required reviewer; checklist in `docs/runbooks/mobile-release.md`). Open: owner creates the `play-store` environment with a required reviewer, EAS and Play service account, then the `mobile-v0.9.1` dry run.
 
 #### P5.C.2 Play Store compliance
 
@@ -3302,6 +3304,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `curl -s https://hexascore.app/help/delete-account | rg -c "30"` → ≥ 1 (grace period stated); same for `/pt-br/` and `/es/` paths
     - `curl -s https://hexascore.app/.well-known/assetlinks.json | jq '.[0].target.sha256_cert_fingerprints | length'` → 2
   - Notes: **owner input needed:** the Play Console account and the data safety form submission are the owner's. The answers follow SDD 10 §7.8 exactly: email, name, interactions, user content, search history (30 days) and optional crash logs are collected, not shared, encrypted in transit and deletable. Location, contacts, device IDs and financial data are not collected. Verify that no bundled SDK contradicts this before submitting.
+  - Status (2026-11-01): code merged (delete-account links keep the locale; `docs/legal/play-data-safety.md`; target API 36 confirmed from the release APK). Acceptance curl needs a browser `-A` (scrape guard 403s bare curl). Open (owner): Play signing fingerprint into `ANDROID_CERT_SHA256`, data safety form in Play Console.
 
 - [ ] **P5.C.2.2** Produce the store listing: texts in `en`, `pt-BR`, `es`, the 512 px icon, the 1024 × 500 graphic, ≥ 4 screenshots per locale from Maestro `takeScreenshot`, and the privacy URL `/legal/privacy`.
   - Files/modules: `apps/mobile/store/listing.<locale>.md`, `.maestro/screenshots/*.yaml`, `apps/mobile/store/assets/`
@@ -3311,6 +3314,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
   - Acceptance:
     - `maestro test .maestro/screenshots/` → ≥ 4 PNGs per locale in `apps/mobile/store/assets/screenshots/<locale>/`
   - Notes: copy edits go to the `text-editor` subagent. Listing texts state that billing and API keys stay on the web (D-12).
+  - Status (2026-11-01): texts merged in `apps/mobile/store/listing/{en,pt-BR,es}.md` (`bun apps/mobile/store/listing/check.ts` green). Open (designer/owner): app icon source, 512 px icon, 1024 × 500 graphic, Maestro screenshots; privacy URL is `/policy` (`/legal/privacy` redirect in FIX-legal-privacy-redirect).
 
 #### P5.C.3 Tracks
 
