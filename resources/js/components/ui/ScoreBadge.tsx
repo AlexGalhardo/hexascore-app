@@ -31,6 +31,8 @@ const SIZE = {
 	sm: "size-10 text-base",
 	md: "size-14 text-[22px]",
 	lg: "size-24 text-[40px]",
+	// Fills its box (the item tile footer): the parent sets the height, the number stays centred.
+	fill: "size-full text-2xl",
 } as const;
 
 // The number is always printed on the band colour (ink on every fill, both themes).

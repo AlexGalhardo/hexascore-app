@@ -196,6 +196,10 @@ All files are under `resources/js/components/` unless stated. Props are the Type
 - Props: `item: Highlight { id, type, slug, title, year, score, ratingCount, cover }`, `href`.
 - Layout: `flex items-center gap-3 py-2`: `CoverThumb md`, title link (`flex-1 truncate font-medium`), year (`font-mono text-xs text-muted`), `catalog.ratingCount` text, score (`w-8 text-right font-mono text-sm`, `title` attribute "Score x out of 10" or "Not enough ratings yet"; an en dash when `score` is null). No score colour, no badge.
 
+**ItemTile** (`catalog/ItemTile.tsx`). Vertical grid card (landing "More …" rows; meant for category grids).
+
+- Props: `item: Highlight`, `href`. One link: `CoverThumb card`, then a footer `grid-cols-[2fr_1fr]` with `min-h-16` (no layout shift): title (`line-clamp-2`) and year on the left, `ScoreBadge size="fill"` filling the right third with the number centred.
+
 **ShelfCard** (`library/ShelfCard.tsx`). Card used by Library, list pages and public profile tabs.
 
 - Props: `item: ItemRef`, `stars?: number | null`, `statusLabel?: string`, `children?`.

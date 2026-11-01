@@ -5,6 +5,7 @@ import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
 import CategoryIcon from "../CategoryIcon";
 import CoverThumb from "../CoverThumb";
+import ItemTile from "../catalog/ItemTile";
 import { type Highlight, SECTION_PATHS, type Section } from "../catalog/SectionHighlights";
 import ScoreBadge, { scoreBand } from "../ui/ScoreBadge";
 
@@ -140,23 +141,7 @@ export default function TypeSection({
 					</h3>
 					<ul className="grid grid-cols-3 gap-x-4 gap-y-6 md:grid-cols-6 md:gap-x-5">
 						{others.map((item) => (
-							<li key={item.id} className="grid content-start gap-2">
-								<Link
-									href={`${base}/${item.slug}`}
-									className="group grid gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
-								>
-									<CoverThumb cover={item.cover} alt="" size="card" />
-									<span className="font-display text-sm leading-snug font-bold group-hover:text-primary">
-										{item.title}
-									</span>
-								</Link>
-								<div className="flex items-center justify-between gap-2">
-									<span className="text-xs text-muted tabular-nums">
-										{item.year}
-									</span>
-									<ScoreBadge score={item.score} size="xs" />
-								</div>
-							</li>
+							<ItemTile key={item.id} item={item} href={`${base}/${item.slug}`} />
 						))}
 					</ul>
 				</div>
