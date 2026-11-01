@@ -196,7 +196,7 @@ job_test_go_integration() {
 job_test_ts() {
 	cd "$TREE"
 	step "bun run test"; bun run test
-	step "migration policy"; bun test scripts/ci/migration-policy.test.ts
+	step "migration policy"; bun test scripts/ci/migration-policy.test.ts scripts/ci/sdk-job.test.ts scripts/ci/sdk-release.test.ts
 	step "TypeScript SDK"; (cd sdks/ts && bun install --frozen-lockfile --ignore-scripts && bun run typecheck && bun test)
 }
 job_migrations() {

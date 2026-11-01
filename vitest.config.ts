@@ -16,6 +16,8 @@ export default defineConfig({
 			"**/node_modules/**",
 			"**/dist/**",
 			"scripts/ci/migration-policy.test.ts",
+			"scripts/ci/sdk-job.test.ts",
+			"scripts/ci/sdk-release.test.ts",
 			"scripts/ops/projected-spend.test.ts",
 			"packages/app-client/**",
 		],
