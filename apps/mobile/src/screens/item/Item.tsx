@@ -4,6 +4,8 @@ import { Modal, Pressable, Text, View } from "react-native";
 import type { AppItemJSON, EntityRef } from "../../../../../packages/app-client/src/api";
 import type { ReadClient } from "../../api/client";
 import { type AppLocale, t } from "../../i18n";
+import { AddToListSheet } from "../../lists/AddToListSheet";
+import type { ListsDeps, ListType } from "../../lists/data";
 import { type CatalogType, SINGULAR } from "../../navigation/catalog";
 import { queryKeys } from "../../query/keys";
 import type { Scores } from "../../rating/cache";
@@ -99,6 +101,7 @@ export function ItemView({
 	locale,
 	onMerged,
 	onOpenEntity,
+	lists,
 }: {
 	type: CatalogType;
 	id: string;
@@ -107,12 +110,14 @@ export function ItemView({
 	/** Called with the surviving id after a merged id was followed (301), so the route can be rewritten. */
 	onMerged?: (id: string) => void;
 	onOpenEntity?: (id: string) => void;
+	/** Without it the screen has no "Add to list" button (tests and previews). */
+	lists?: ListsDeps;
 }): ReactElement {
 	const queryClient = useQueryClient();
 	const [id, setId] = useState(requestedId);
 	const mergedFrom = useRef<string | null>(null);
 	const [rating, setRating] = useState(false);
-	const [sheet, setSheet] = useState<"status" | "timeToBeat" | null>(null);
+	const [sheet, setSheet] = useState<"status" | "timeToBeat" | "list" | null>(null);
 
 	const item = useQuery({
 		queryKey: queryKeys.item(type, id, locale),
@@ -178,6 +183,7 @@ export function ItemView({
 				labels={labelsOf(locale, overall !== null)}
 				locale={locale}
 				onRate={() => setRating(true)}
+				onAddToList={lists ? () => setSheet("list") : undefined}
 				onRateCategory={noop}
 				onSave={noop}
 				onOpenSimilar={noop}
@@ -230,6 +236,15 @@ export function ItemView({
 						itemId={id}
 						type={type}
 						current={statusOf(me.data)}
+						locale={locale}
+						onDone={() => setSheet(null)}
+					/>
+				) : null}
+				{sheet === "list" && lists ? (
+					<AddToListSheet
+						deps={lists}
+						itemId={id}
+						type={SINGULAR[type] as ListType}
 						locale={locale}
 						onDone={() => setSheet(null)}
 					/>

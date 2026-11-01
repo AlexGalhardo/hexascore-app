@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen, waitFor } from "@testing-library/react-native";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
 import type { AppItemJSON, EditionPageJSON } from "../../../../../packages/app-client/src/api";
+import type { ListsDeps } from "../../lists/data";
 import { queryKeys } from "../../query/keys";
 import { type ItemReader, ItemView } from "./Item";
 
@@ -142,4 +143,38 @@ test("the user's own rating from /items/{id}/me is shown", async () => {
 	expect(await screen.findByText("Your overall score")).toBeTruthy();
 	expect(screen.getByLabelText("Your overall score, Score 7.5 out of 10")).toBeTruthy();
 	expect(screen.getByRole("button", { name: "Update rating" })).toBeTruthy();
+});
+
+test("Add to list opens the add-to-list sheet with the item's own list type", async () => {
+	const listsIndex = jest.fn(async () => ({
+		data: [
+			{ id: "l1", type: "book", title: "To read", isPublic: true, hidden: false, itemCount: 2 },
+			{ id: "l2", type: "game", title: "Backlog", isPublic: true, hidden: false, itemCount: 1 },
+		],
+	}));
+	const lists = {
+		read: { listsIndex, listsShow: jest.fn() },
+		write: jest.fn(),
+		newKey: jest.fn(),
+		queue: { enqueue: jest.fn(), drain: jest.fn() },
+		notify: jest.fn(),
+	} as unknown as ListsDeps;
+	const client = new QueryClient({
+		defaultOptions: { queries: { retry: false, gcTime: Number.POSITIVE_INFINITY } },
+	});
+	await render(
+		<QueryClientProvider client={client}>
+			<ItemView type="books" id="new" read={reader(base)} locale="en" lists={lists} />
+		</QueryClientProvider>,
+	);
+	await fireEvent.press(await screen.findByRole("button", { name: "Add to list" }));
+	expect(await screen.findByRole("header", { name: "Add to list" })).toBeTruthy();
+	expect(await screen.findByText(/To read/)).toBeTruthy();
+	expect(screen.queryByText(/Backlog/)).toBeNull();
+});
+
+test("without lists deps the item screen has no Add to list button", async () => {
+	await renderItem(reader(base));
+	expect(await screen.findByText("Dune")).toBeTruthy();
+	expect(screen.queryByRole("button", { name: "Add to list" })).toBeNull();
 });

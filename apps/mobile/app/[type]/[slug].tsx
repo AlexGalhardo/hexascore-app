@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from "expo-router";
 import type { ReactElement } from "react";
-import { appClient } from "../../src/auth/runtime";
+import { appClient, listsDeps } from "../../src/auth/runtime";
 import { t } from "../../src/i18n";
 import { firstParam, isCatalogType } from "../../src/navigation/catalog";
 import { useLocale } from "../../src/providers/root";
@@ -34,6 +34,7 @@ export function ItemBody({
 			type={type}
 			id={itemId}
 			read={appClient.read}
+			lists={listsDeps}
 			locale={locale}
 			// No typed-routes manifest is generated, so setParams is typed `never` (same as useSegments).
 			onMerged={(next) => (router.setParams as (params: { id: string }) => void)({ id: next })}
