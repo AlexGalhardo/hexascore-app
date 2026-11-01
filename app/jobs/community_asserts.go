@@ -13,7 +13,8 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/community"
 )
 
-// CommunityAsserts runs the SDD 04 §10 nightly asserts; a failure fails the job, which alert A6 reports.
+// CommunityAsserts runs the SDD 04 §10 nightly asserts. A failure logs `alert=community_asserts` at ERROR (SDD 12
+// §6.2) and fails the job, which alert A6 reports.
 type CommunityAsserts struct{}
 
 // Kind names the job on the queue.
@@ -26,7 +27,12 @@ func handleCommunityAsserts(app *vukem.App) queue.Registration {
 			return err
 		}
 
-		return communityAsserts(ctx, db)
+		err = communityAsserts(ctx, db)
+		if err != nil {
+			app.Log.ErrorContext(ctx, "community asserts failed", "alert", "community_asserts", "err", err)
+		}
+
+		return err
 	})
 }
 

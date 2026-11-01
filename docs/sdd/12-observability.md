@@ -25,7 +25,7 @@ In scope (v1):
 Out of scope:
 
 - a paid APM or hosted error tracker (each needs an ADR);
-- self-hosted Prometheus/Grafana (§7.3);
+- Prometheus, Grafana (self-hosted or cloud) and any metrics pipeline outside Railway (D-35, §7.3);
 - an automated status page;
 - log shipping, since Railway "does not have a log drain setting" [R-logs].
 
@@ -56,33 +56,31 @@ Source keys, all accessed 2026-10-28. vukem facts cite <https://vukem.dev/docs>.
 | R-cost | <https://docs.railway.com/pricing/cost-control> |
 | R-roll | <https://docs.railway.com/guides/roll-back-bad-deploy> |
 | R-inc | <https://docs.railway.com/guides/debug-production-incident> |
-| G-price | <https://grafana.com/pricing/> |
 
 ## 3. Functional requirements
 
 - FR-12-1: Each request writes one JSON line to stdout. Fields: `request_id`, `trace_id`, `route`, `method`, `status`, `duration_ms`, and `user_hash` when authenticated. No email ever appears. Verify: `TestLog_RequestLineShape`.
-- FR-12-2: Every route group (§6.2) emits `http.server.request.duration`. Verify: `TestMetrics_EveryRouteGroupEmitsLatency`.
-- FR-12-3: The SSR `OnFailure` hook increments `hexa.ssr.fallbacks{http.route,public}`. On public routes it also logs at `telegram.LevelFatal` [V-inertia; VF-002]. Verify: integration test that stops Node.
-- FR-12-4: Each alert in §7.5 has a rule plus a fixture test that fires it. Verify: `promtool test rules`.
+- FR-12-2: Traces cover every route group (HTTP, SQL, queue, outbound; §6.3). Verify: `vukemtest` request with an in-memory span exporter, one span per group.
+- FR-12-3: The SSR `OnFailure` hook logs the fallback with `http.route` and `public`. On public routes it also logs at `telegram.LevelFatal` [V-inertia; VF-002]. Verify: integration test that stops Node.
+- FR-12-4: Each app-sourced alert in §7.5 has an in-app check that logs `alert=<code>` and a fixture test that fires and clears it. Verify: the tests of §10.
 - FR-12-5: `/up?checks=1` reports `db`, `ssr`, `storage` and `scheduler`. Verify: `TestReady_ChecksPresent`.
 - FR-12-6: A digest of error fingerprints is sent to Telegram daily at 08:00 America/Sao_Paulo. Verify: fake-clock test.
-- FR-12-7: `POST /app/v1/client-errors` (route in SDD 05 §6.4) takes opt-in mobile crash reports (SDD 10) with no PII. Each is logged as `client.error`, increments `client.errors`, is rate-limited to 10/min per IP, and is kept 7 days (open issue 10-2). Verify: integration test.
-- FR-12-9: `POST /app/v1/client-metrics` (SDD 05 §6.4) takes the opt-in, anonymous web-vitals beacon from SDD 09 (LCP, INP, CLS, TTFB per route pattern and locale) into `client.web_vitals`; raw rows kept 7 days (open issue 09-11). Verify: integration test.
+- FR-12-7: `POST /app/v1/client-errors` (route in SDD 05 §6.4) takes opt-in mobile crash reports (SDD 10) with no PII. Each is logged as `client.error`, is rate-limited to 10/min per IP, and is kept 7 days (open issue 10-2). Verify: integration test.
+- FR-12-9: `POST /app/v1/client-metrics` (SDD 05 §6.4) takes the opt-in, anonymous web-vitals beacon from SDD 09 (LCP, INP, CLS, TTFB per route pattern and locale) into `client_reports`; raw rows kept 7 days (open issue 09-11). Verify: integration test.
 - FR-12-10: A "projected spend at day 20" alert (A17) fires when month-to-date Railway usage extrapolated to the full month exceeds US$27, so the owner can raise the US$30 hard limit before it stops the service (D-27). Verify: fixture test on the projection.
 - FR-12-8: Logs never contain passwords, tokens, API keys, emails or raw search text. Verify: `TestSecurity_A09_HexaLogsRedacted`.
 
 ## 4. Non-functional requirements
 
-- NFR-12-1 Cost: US$0/month. Grafana Cloud Free covers "10k active series", 50 GB of logs and 50 GB of traces, "14 days" retention, and "100k API test executions" [G-price]. Telegram is free.
-- NFR-12-2 Cardinality: at most 6,000 active series, which is 60 % of the free tier. Labels never carry ids, slugs, user data or raw paths.
+- NFR-12-1 Cost: no spend beyond the Railway plan. Telegram is free.
+- NFR-12-2 Cardinality: no metric series exist. Log fields and span attributes never carry ids, slugs, user data or raw paths.
 - NFR-12-3 Overhead: telemetry adds at most 3 % CPU and 40 MB RSS. Verify: k6 with tracing on and off.
 - NFR-12-4 Log volume: at most 50 lines/s at 50 rps. Railway drops logs above 500 lines/s per replica [R-logs].
 - NFR-12-5 Retention:
   - Railway keeps logs 7 days on Hobby and 30 on Pro [R-logs].
   - The LGPD maximum for logs that carry IPs is 30 days (NFR-03-7; L-sec says IP retention is the app's responsibility).
-  - Grafana keeps data 14 days.
   - `error_digest_daily` keeps 90 days.
-- NFR-12-6 Detection: app down within 2 min; SSR fallback within 5 min.
+- NFR-12-6 Detection: app down within 2 min (Railway healthcheck); SSR fallback within 5 min.
 
 ## 5. Data model
 
@@ -130,51 +128,22 @@ Gauges read from tables owned by other SDDs:
   - Password and token redaction is documented only in [L-sec] (`TestSecurity_A09_LoggerNeverLogsCredentials`).
   - App layer (`app/logging`, `TestSecurity_A09_HexaLogsRedacted`): values of keys such as `password`, `token`, `authorization`, `cookie`, `api_key`, `email`, `q`, `query` become `[REDACTED]`; emails, `Bearer`/`Basic` credentials, `hx_live_`/`hx_app_`/Stripe/Resend keys and sensitive query parameters are scrubbed from messages, strings and errors.
 
-### 6.2 Metrics catalogue
+### 6.2 Signals
 
-Export uses `drivers/otel` OTLP/HTTP push. Built-ins: `http.server.request.duration`, `http.client.request.duration`, `db.client.operation.duration`, `messaging.process.duration` and `vukem.queue.job.failures` [V-otel "Metrics"].
+D-35 (amended 2026-10-31): observability uses only Railway's native tools. Railway's OTLP receiver accepts traces only, so the app exports no metrics: there is no `/metrics` endpoint, no OTel Prometheus exporter and no `hexa.*` meter instruments (removed in FIX-observability-railway-native; `OTEL_METRICS_EXPORTER=none` stays set). Adding any of them needs a new decision first.
 
-App metrics use meter `hexascore` (`go.opentelemetry.io/otel` v1.47.0). The adopted module `github.com/AlexGalhardo/vukem` v0.33.0 does not include `drivers/otel`, so `http.server.request.duration` is recorded by `app/metrics` until P2.C.2.1 adopts a tag that registers `otel.New` first. `Config.Global` remains the VF-019 workaround once that provider exists. Search and `/api/v1` exist only on Postgres (VF-033); the latency test probes those patterns on the sqlite test app.
+The signals are:
 
-Route groups are derived from the `http.route` prefix at query time, with no extra label: `web.public`, `web.app`, `admin`, `api.v1`, `app.v1`, `search`, `health`.
+| Signal | Where | Used for |
+| --- | --- | --- |
+| Service metrics (CPU, RAM, network, disk, volume) | Railway dashboard and monitors [R-alerts] | capacity, A11, A15 |
+| JSON log lines (§6.1) | Railway log search | debugging, per-request facts, ingestion and job outcomes |
+| Traces | Railway OTLP receiver (§6.3) | latency of a request, SQL, queue, outbound calls |
+| `alert=` log lines | Railway log search; ERROR also reaches Telegram | the alerts of §7.5 that need app knowledge |
 
-| Name | Type | Labels | Owner |
-| --- | --- | --- | --- |
-| `http.server.request.duration` (built-in) | histogram | method, `http.route`, status | 12 |
-| `hexa.http.inflight` | up-down counter | — | 12 |
-| `hexa.ssr.render.duration` | histogram | `http.route` | 09 |
-| `hexa.ssr.fallbacks` | counter | `http.route`, `public` | 12 |
-| `db.client.operation.duration` (built-in) | histogram | operation, `error.type` | 12 |
-| `hexa.db.pool.in_use`, `.max`, `.wait_count` | gauge | — | 12 (`db.SQL()` stats [V-db]; `DB_MAX_OPEN` default 10) |
-| `hexa.db.slow_queries` (> 200 ms) | counter | operation | 12 (`database.QueryObserver` [V-dev]) |
-| `hexa.pg.connections`, `hexa.pg.database.size_bytes` | gauge (SQL every 60 s) | — | 11 |
-| `messaging.process.duration`, `vukem.queue.job.failures` (built-in) | histogram, counter | `vukem.job.kind` | 06 |
-| `hexa.schedule.runs`, `hexa.scheduler.heartbeat_age_seconds` | counter, gauge | task, outcome | 12 |
-| `ingest.run.duration`, `ingest.records`, `ingest.http.rate_limited`, `ingest.breaker.open`, `ingest.dq.failed`, `ingest.tmdb.max_age_days` | per SDD 06 §10 | job, source, host, code | 06 |
-| `score.recomputes` | counter | path | 02 |
-| `score.burst.trips`, `score.flags.created` | counter | reason | 02 |
-| `score.dq.drift` | gauge | — | 02 |
-| `suggest.queue.size`, `.age_p50_seconds`, `.age_p95_seconds`, `.oldest_seconds` | gauge | — | 04 |
-| `suggest.decisions`, `suggest.sla.breaches` | counter | decision (`approved`, `rejected`; after commit; a breach is a decision more than 24 h after submit) | 04 (`app/metrics/community.go`; A9 rule `ops/grafana/alerts/a9_moderation.yaml`, dashboard `ops/grafana/dashboards/moderation.json`) |
-| `api.requests` | counter | plan, status class | 05 |
-| `api.quota.denials`, `api.refunds_5xx`, `api.quota.flush_errors` | counter | plan | 05 |
-| `api.webhook.deliveries` | counter | outcome | 05 |
-| `search.duration` | histogram | kind | 07 |
-| `search.performed`, `search.zero_results` | counter | locale | 07 |
-| `trending.compute.duration`, `trending.churn`, `trending.snapshot_age_seconds` | histogram, gauge, gauge | type | 08 |
-| `trending.eligible_items`, `trending.prior_slots`, `trending.counter.dropped` | gauge, gauge, counter | type | 08 |
-| `similar.compute.duration`, `similar.empty_ratio`, `recommend.compute.duration` | histogram, gauge, histogram | type | 08 |
-| `reco.impressions`, `reco.clicks` | counter | surface, type | 08 |
-| `backup.last_success_age_seconds`, `backup.dump_size_bytes` | gauge | — | 11 (ADR 0014) |
-| `biz.signups`, `biz.verified` | counter | — | 03 |
-| `biz.ratings_24h`, `biz.api_keys_active` | gauge (SQL every 5 min) | — | 12 |
-| `hexa.errors` | counter | `error.type` (50 values, then `other`) | 12 |
-| `client.errors` | counter | `app_version` (10 values) | 10 |
-| `client.web_vitals` | histogram | name (LCP/INP/CLS/TTFB), route group, locale | 09 |
+An in-app check is a job or middleware that evaluates its condition and writes one line with a stable key: `level=WARN|ERROR alert=A14 msg="trending snapshot stale" age_s=...`. Keys are the alert codes of §7.5, plus `trending_counter_dropped` (WARN, informational: the trending key counter hit its cap and dropped keys; no paging rule) and `community_asserts` (ERROR: a SDD 04 §10 nightly assert failed; the message carries counts and check names only); the line carries numbers, never ids, emails or raw paths. A check that cannot run logs `alert=<code> state=unknown` at ERROR (fail closed).
 
-These names are canonical: SDD 08 §6 uses them as written (open issue 12-6); no underscore variants exist.
-
-No `/metrics` endpoint at launch (D-35): metrics go to Grafana Cloud over OTLP only. If one is added later it needs the OTel Prometheus exporter (a new dependency, owner approval), would be mounted as `r.Handle("GET /metrics", handler)` [V-route] and would require `Authorization: Bearer $METRICS_TOKEN` (`config.Secret`, constant-time compare, 404 when unset).
+Business and queue figures (suggestion queue age, ratings per day, active keys, DB size) are SQL reads in the admin screens or in the check that needs them; they are not exported.
 
 ### 6.3 Traces
 
@@ -187,8 +156,7 @@ No `/metrics` endpoint at launch (D-35): metrics go to Grafana Cloud over OTLP o
 
   Spans never carry paths or query strings [V-otel "Outbound HTTP calls", "Security"].
 - Sampler: `parentbased_traceidratio`. `OTEL_TRACES_SAMPLER_ARG` is 0.1 in production and 1.0 in staging.
-- Destination: Grafana Cloud OTLP, the same place as metrics, via `OTEL_EXPORTER_OTLP_ENDPOINT` and `_HEADERS` (a `config.Secret`). The URL format is [NOT VERIFIED].
-- Fallback: Railway's receiver. It accepts "traces only", keeps them for the log retention period, and has a limit of 1,000 spans per 10 s per replica. It needs `OTEL_METRICS_EXPORTER=none`, or `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT` pointed elsewhere [R-trace; V-otel].
+- Destination: Railway's OTLP receiver. It accepts "traces only", keeps them for the log retention period, and has a limit of 1,000 spans per 10 s per replica. It needs `OTEL_METRICS_EXPORTER=none` [R-trace; V-otel].
 - Correlation: responses carry `X-Request-ID` (vukem) and `X-Trace-ID` (app middleware). Making request id equal trace id is [NOT IN VUKEM DOCS] (issue 2).
 
 ### 6.4 Routes
@@ -223,7 +191,7 @@ Railway polls the Healthcheck Path only on deploys and switches traffic after a 
   Dedup collapses repeats.
 - The app's error handler:
   - fingerprints each error from (`http.route`, `error.type`, `event`);
-  - increments `hexa.errors`;
+  - logs the fingerprint with the request id;
   - buffers upserts into `error_digest_daily`.
 - The 08:00 digest posts the top 20 fingerprints with one request id each, via `app.Telegram.SendSync` [V-tg].
 
@@ -231,65 +199,49 @@ Railway polls the Healthcheck Path only on deploys and switches traffic after a 
 
 | Option | Cost | Verdict |
 | --- | --- | --- |
-| Grafana Cloud Free (metrics, traces, alerting, synthetics) | US$0; 10k series, 14 days [G-price] | **Recommended** |
-| Railway metrics and monitors | Monitors need the Pro plan [R-alerts]; container metrics only | Complement |
-| Prometheus + Grafana inside the app container | CPU, RAM and a TSDB volume inside the US$30 container | **Rejected**: competes with HTTP/SSR (D-08) and dies with what it watches, so it cannot report "app down" |
+| Railway metrics, logs, traces and alerts | included; monitors need the Pro plan [R-alerts] | **Chosen** (D-35) |
+| Hosted metrics or alerting outside Railway (Grafana Cloud and similar) | free tiers, extra processor | **Rejected** by the owner (D-35, 2026-10-31) |
+| Prometheus + Grafana inside the app container | CPU, RAM and a TSDB volume inside the US$30 container | **Rejected**: competes with HTTP/SSR (D-08) and dies with what it watches |
 
-### 7.4 Synthetic probe
+### 7.4 Liveness
 
-Grafana Synthetic Monitoring runs three checks:
-
-| Check | Interval | Probe | Executions/month |
-| --- | --- | --- | --- |
-| `/up` | 60 s | A | 43,200 |
-| `/up` | 120 s | B | 21,600 |
-| `/up?checks=1` | 300 s | A | 8,640 |
-
-The total is 73,440, under the 100k free tier [G-price]. Railway manages TLS (ADR 0002). Certificate-expiry checks are [NOT VERIFIED].
+Railway's healthcheck on `/up` (ADR 0002) restarts a failing container and emails the deploy failure [R-alerts]. `/up?checks=1` is read by hand and by the post-deploy smoke test. There is no external synthetic probe; certificate expiry is Railway's concern.
 
 ### 7.5 Alerts
 
 Channels:
 
-- Grafana alerting sends to Telegram, with email as fallback. The Telegram contact point is [NOT VERIFIED].
-- App alerts go through the vukem Telegram handler [V-tg] with `TELEGRAM_MIN_LEVEL=error` and `TELEGRAM_RATE_LIMIT=20`. `ChatIDs` sends `LevelFatal` to the page chat; the error chat is `Silent: true`.
-- Railway notifies about deploys by email and in-app [R-alerts].
+- Railway monitors and usage alerts notify by email and webhook [R-alerts].
+- App checks write `alert=` log lines (§6.2). ERROR lines go through the vukem Telegram handler [V-tg] with `TELEGRAM_MIN_LEVEL=error` and `TELEGRAM_RATE_LIMIT=20`. `ChatIDs` sends `LevelFatal` to the page chat; the error chat is `Silent: true`.
+- A saved Railway log search per `alert=` code is the way to review history.
 
-On-call is the owner. Quiet hours run 23:00–08:00 America/Sao_Paulo: only `page` rings. Ack targets: page within 15 min while awake, warn the same day.
+On-call is the owner. Quiet hours run 23:00-08:00 America/Sao_Paulo: only `page` rings. Ack targets: page within 15 min while awake, warn the same day.
 
 | # | Alert | Condition | Window | Sev | Source |
 | --- | --- | --- | --- | --- | --- |
-| A1 | App down | `/up` fails 2 consecutive probes | 2 min | page | synthetic |
-| A2 | Readiness | `/up?checks=1` ≠ 200 on 2 runs | 10 min | page | synthetic |
-| A3 | 5xx rate | > 1 % with at least 20 requests | 5 min | page | Grafana |
-| A4 | Latency p95 | `web.public` 500 ms; `api.v1` 300 ms (NFR-05-1); search 300 ms; suggest 50 ms; `app.v1` 300 ms | 10 min | warn | Grafana |
-| A5 | SSR fallback | `increase(hexa.ssr.fallbacks{public="true"}) > 0` | 5 min | page | Grafana + app |
-| A6 | Job failed twice | same kind fails 2 runs in a row (`queue.JobFailed` via `q.AddObserver` [V-queue]) | — | warn | app |
-| A7 | Ingestion | SDD 06 §10 list: failed run; no incremental in 26 h; `error` assert; TMDB data older than 170 d; breaker open over 1 h | SDD 06 | warn | Grafana |
-| A8 | Backup missing | age > 93,600 s (26 h), or no data | 15 min | page (not during quiet hours) | Grafana |
-| A9 | Moderation | oldest open > 20 h (NFR-04-2), or p95 age > 24 h | 30 min | warn | Grafana |
-| A10 | Quota flush | 5 consecutive flush errors (SDD 05 §7) | — | page | app |
-| A11 | Disk | DB size / `PG_VOLUME_BYTES` > 0.8 | 30 min | warn | Grafana |
-| A12 | Connections | pool in use / max > 0.8 (8 of 10), or server connections > 0.8 × `max_connections` | 5 min | page | Grafana |
-| A13 | Score drift | `score.dq.drift > 0` (SDD 02) | nightly | warn | Grafana |
-| A14 | Trending stale | snapshot older than 3 h (SDD 08) | 15 min | warn | Grafana |
-| A15 | Cost | Railway usage ≥ US$24 (80 % of US$30), set as "Custom email alert" [R-cost]; hard limit US$30 (D-27) | cycle | warn | Railway |
-| A16 | Telemetry gone | no HTTP metric data | 10 min | warn | Grafana |
-| A17 | Projected spend | on day 20 of the billing cycle (and daily after), month-to-date usage × days in cycle / elapsed days > US$27 (D-27: hard limit US$30) | daily | warn | GitHub Actions cron reading Railway usage [R-cost] (programmatic access [NOT VERIFIED]; fallback: calendar reminder to the owner on day 20) |
+| A1 | App down | `/up` healthcheck fails and Railway restarts the service | 2 min | page | Railway healthcheck and deploy email |
+| A2 | Readiness | `/up?checks=1` is not 200 after a deploy | per deploy | page | post-deploy smoke test |
+| A3 | 5xx rate | > 1 % with at least 20 requests, from a rolling in-process counter in the request middleware | 5 min | page | app check |
+| A4 | Latency | `request` lines over 1 s in more than 5 % of requests per route group | 10 min | warn | app check (traces for detail) |
+| A5 | SSR fallback | the `OnFailure` hook fires on a public route (already logs at `telegram.LevelFatal`, FR-12-3) | immediate | page | app |
+| A6 | Job failed twice | same kind fails 2 runs in a row (`queue.JobFailed` via `q.AddObserver` [V-queue]) | - | warn | app |
+| A7 | Ingestion | SDD 06 §10 list: failed run; no incremental in 26 h; `error` assert; TMDB data older than 170 d; breaker open over 1 h | SDD 06 | warn | app check |
+| A8 | Backup missing | newest backup older than 26 h, read from the backup bucket or `job_runs` | 15 min | page (not during quiet hours) | app check |
+| A9 | Moderation | oldest open suggestion > 20 h (NFR-04-2) | 30 min | warn | app check |
+| A10 | Quota flush | 5 consecutive flush errors (SDD 05 §7) | - | page | app |
+| A11 | Disk | Postgres volume usage > 80 % | 30 min | warn | Railway monitor |
+| A12 | Connections | pool in use / max > 0.8 (8 of 10), read from `db.SQL()` stats | 5 min | page | app check |
+| A13 | Score drift | nightly drift check finds a mismatch (SDD 02) | nightly | warn | app check |
+| A14 | Trending stale | newest snapshot older than 3 h (SDD 08) | 15 min | warn | app check |
+| A15 | Cost | Railway usage >= US$24 (80 % of US$30), "Custom email alert" [R-cost]; hard limit US$30 (D-27) | cycle | warn | Railway |
+| A16 | Logs gone | no `request` line for 10 min while the service is up | 10 min | warn | app check |
+| A17 | Projected spend | on day 20 of the billing cycle (and daily after), month-to-date usage x days in cycle / elapsed days > US$27 (D-27: hard limit US$30) | daily | warn | GitHub Actions cron reading Railway usage [R-cost] (programmatic access [NOT VERIFIED]; fallback: calendar reminder to the owner on day 20) |
 
-Checked 2026-10-30: no documented Railway usage API was found in the repo, so `projected-spend.yml` takes the fallback. It logs a day-20 reminder and, when `USAGE_USD` is set, evaluates the formula. It posts to Telegram only when that step's secret is present and the formula alerts or the reminder is due. The formula fixture is `bun test scripts/ops/projected-spend.test.ts`.
+Checked 2026-10-30: no documented Railway usage API was found in the repo, so `projected-spend.yml` takes the fallback. It logs a day-20 reminder and, when `USAGE_USD` is set, evaluates the formula. It posts to Telegram only when that step's secret is present and the formula alerts or the reminder is due.
 
-### 7.6 Dashboards
+### 7.6 Views
 
-Dashboards live in Grafana Cloud; their JSON is in `ops/grafana/dashboards/`.
-
-| Dashboard | Panels |
-| --- | --- |
-| Service health | rate, 5xx %, p50/p95/p99 per group, in-flight, SSR p95/fallbacks, pool, slow queries, CPU/RAM, uptime |
-| API customers | requests per plan, quota denials, refunds, webhook success, active keys |
-| Ingestion | runs by source/outcome, duration, records, 429s per host, breakers, DQ failures, TMDB age |
-| Moderation | queue size, oldest, p50/p95 age, decisions/day, SLA breaches |
-| Scoring integrity | recomputes, burst trips, flags, drift, ratings/24 h, signups, verified |
+No external dashboards. Service health is the Railway service-metrics page; the rest are saved Railway log searches per `alert=` code and the admin screens (moderation queue, API customers, ingestion runs from `job_runs`).
 
 ### 7.7 Status page
 
@@ -368,7 +320,7 @@ Monthly checklist:
 
 1. `railway usage limit status` [R-cost].
 2. Invoice vs US$30.
-3. Grafana series and GB.
+3. Log volume and trace span count against Railway limits.
 4. Postgres size vs plan.
 5. Bucket size (≈ 2.1 GB per 100k items, NFR-06-7).
 6. Egress; cover egress > US$5/month triggers the CDN decision (SDD 11 open issue 2).
@@ -382,43 +334,39 @@ Budget-increase predictors (the first step is splitting out the worker, D-08):
 
 ## 8. Edge cases
 
-- Exporter down: data is dropped, serving continues, and A16 fires.
-- Telegram down: stdout still has the logs; Grafana falls back to email.
-- SSR fallback on a logged-in route: counted with `public="false"`, no page.
-- Container down: in-app alerts are silent, but A1, A8 and A16 are evaluated externally.
-- Label cap overflow: the value becomes `other`, with one WARN.
+- OTLP receiver down: traces are dropped, serving continues, logs are unaffected.
+- Telegram down: stdout still has the `alert=` lines in Railway logs.
+- SSR fallback on a logged-in route: logged with `public=false`, no page.
+- Container down: in-app checks are silent; A1 comes from Railway's healthcheck.
 
 ## 9. Acceptance criteria
 
-- `go test ./... -run 'TestMetrics_|TestLog_|TestReady_|TestSecurity_A09_Hexa'` passes.
-- `promtool test rules ops/alerts/tests.yaml`, in a pinned `prom/prometheus` image, reports `SUCCESS` for A3–A16.
+- `go test ./... -run 'TestLog_|TestReady_|TestSecurity_A09_Hexa'` passes.
 - `curl -s https://staging.hexascore.app/up?checks=1` returns 200 with all four checks `ok`.
 - After `pkill node`, the same call returns 503 with `ssr: fail`, and a Telegram page arrives within 5 min.
-- `curl -sI https://staging.hexascore.app/` shows `X-Request-ID` and `X-Trace-ID`, and the trace id opens in Grafana.
-- After the k6 run of `qa/k6/api-v1.js`, Grafana shows at most 6,000 active series.
+- `curl -sI https://staging.hexascore.app/` shows `X-Request-ID` and `X-Trace-ID`, and the trace id opens in Railway's trace view.
 - `railway logs` lines parse as JSON with `level`, `request_id` and `route`, and a scripted grep finds no email pattern.
+- Each in-app check writes its `alert=<code>` line on a fixture that breaches it, and nothing when it does not.
 - The Railway usage page shows the US$24 email alert.
 
 ## 10. Test strategy
 
-- Unit: fingerprinting, label caps, sampling (5xx always kept).
-- `TestMetrics_EveryRouteGroupEmitsLatency`: `Config.MetricReader` = `sdkmetric.NewManualReader` [V-otel]; hit one route per group with `vukemtest`; assert one histogram point per group.
-- Integration (Postgres): SQL gauges on fixtures; digest flush and prune.
-- Alert rules: `promtool` fixtures fire and resolve each rule. Grafana ruler import is [NOT VERIFIED].
+- Unit: fingerprinting, sampling (5xx always kept), the rolling 5xx counter.
+- Integration (Postgres): in-app checks on fixtures (each fires and clears); digest flush and prune.
 - `TestSecurity_A09_HexaLogsRedacted`: a request carrying a password, a bearer token, an API key, an email and a search query leaves none of them in the captured JSON.
-- Synthetic: the staging probe is a D-21 gate. Monthly A1 drill: stop the service for 3 min.
-- Load: k6 for NFR-12-3.
+- Monthly A1 drill: stop the service for 3 min and confirm Railway's restart and email.
+- Load: k6 for NFR-12-3 (tracing on and off).
 
 ## 11. Open issues
 
-1. VF-019: there is no app meter accessor. Workaround: `Config.Global` plus the upstream API. Owner: vukem. Closes when `otel.Meter()` is documented.
+1. VF-019: there is no app meter accessor. Moot since D-35 (amended 2026-10-31): the app has no meter instruments.
 2. Request-logger policy: hash the user id, truncate the IP, make the request id equal the trace id. All three are [NOT IN VUKEM DOCS]. Owner: vukem (new VF entry). Closes when it is filed and resolved.
-3. `/metrics`. Decided (D-35): no endpoint at launch (§6.2).
+3. `/metrics`. Decided (D-35, amended 2026-10-31): no endpoint and no app metrics (§6.2).
 4. The Railway plan (Hobby or Pro) sets log retention (7 or 30 days) and whether monitors exist. Owner: architect (SDD 11). Closes when SDD 11 records the plan.
 5. Status page hosting. Decided (12-5): GitHub Pages (§7.7).
 6. SDD 08 metric names. Decided (12-6): §6.2 names are canonical; SDD 08 aligned.
 7. Metric Views to drop high-cardinality attributes are [NOT IN VUKEM DOCS]. Owner: vukem. Trigger: staging series above 6,000.
-8. Three Grafana points are [NOT VERIFIED]: Telegram as a contact point, the OTLP URL, and cert-expiry checks. Owner: architect. Closes in the observability roadmap task.
+8. Railway monitor options (metrics offered, webhook delivery, plan) are [NOT VERIFIED] until the Pro plan is on. Owner: architect. Closes in the observability roadmap task.
 9. Railway hard usage limit. Decided (D-27): US$30, e-mail alert US$24, plus the day-20 projection alert A17.
 10. Site documentation gaps, all [SITE PAGE MISSING]. Owner: vukem. Closes when a logging/health page is published.
     - the health check API (`AddHealthCheckTimeout`, `ReadyHandler`, `ok`/`fail` output);
@@ -426,4 +374,4 @@ Budget-increase predictors (the first step is splitting out the worker, D-08):
     - `logging.NewDedup` and `WithLogger` semantics;
     - the A09/A10 test names.
 
-    Separately, there is no documented metric hook for scheduled tasks, only the ERROR log, so `hexa.schedule.runs` is an app wrapper around `s.Func`/`s.Job`.
+    Separately, there is no documented metric hook for scheduled tasks, only the ERROR log; the `alert=` checks of §6.2 do not depend on one.
