@@ -47,7 +47,8 @@ the parsed body; the `_detailed` ones return a `Response` with `status_code`, `h
 
 | Package | Modules |
 | --- | --- |
-| `hexascore.api.catalog` | `list_items`, `get_item`, `list_editions`, `list_game_genres`, `list_movie_genres`, `list_series_genres`, `list_book_genres`, `get_entity`, `list_entity_items`, `get_franchise`, `get_organization`, `get_person`, `get_platform`, `search_items`, `search_entities`, `lookup_item`, `get_usage` |
+| `hexascore.api.catalog` | `list_items`, `get_item`, `list_editions`, `list_game_genres`, `list_movie_genres`, `list_series_genres`, `list_book_genres`, `get_entity`, `list_entity_items`, `get_franchise`, `get_organization`, `get_person`, `get_platform`, `search_items`, `search_entities`, `lookup_item`, `get_usage`, `list_changes` |
+| `hexascore.api.webhooks` | `list_webhooks`, `create_webhook`, `delete_webhook`, `test_webhook` |
 
 Models (`ItemSummary`, `ItemDetail`, `ItemList`, `Problem`, `Usage`, the `…Sort` and `…Locale` enums) are in
 `hexascore.models`.
@@ -72,7 +73,7 @@ asyncio.run(main())
 
 ### Pagination
 
-List endpoints are cursor based: pass `next_cursor` of one page as `cursor` of the next until it is `None`.
+List endpoints are cursor based: pass `meta.next_cursor` of one page as `cursor` of the next until it is unset.
 
 ```python
 from hexascore.types import UNSET
@@ -84,9 +85,9 @@ while True:
         raise RuntimeError(page.detail)
     for game in page.data:
         print(game.title)
-    if page.next_cursor is None:
+    if page.meta is UNSET or page.meta.next_cursor is UNSET:
         break
-    cursor = page.next_cursor
+    cursor = page.meta.next_cursor
 ```
 
 ### Errors
