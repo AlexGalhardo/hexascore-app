@@ -229,7 +229,7 @@ func Web(r *router.Router, app *vukem.App) error {
 		if err != nil {
 			return err
 		}
-		reco := related.NewMetrics()
+		reco := related.Events{Log: app.Log, ImpressionEvery: 10}
 		items := controllers.NewItem(
 			app,
 			&scoring.Writer{DB: acc.DB, Events: app.Events, Now: app.Now},

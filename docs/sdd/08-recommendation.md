@@ -166,7 +166,7 @@ Metrics (names from the SDD 12 §6.2 catalogue, open issue 12-6):
 
 - compute time: `trending.compute.duration`, `similar.compute.duration`, `recommend.compute.duration` (histograms, seconds);
 - list quality: `trending.eligible_items`, `trending.prior_slots`, `trending.churn` (new entries per hour / 10), `trending.snapshot_age_seconds`, `similar.empty_ratio`;
-- click-through: `reco.impressions` and `reco.clicks{surface,type}` (counters). Links carry `?from=trending|similar|crossmedia|foryou`, which the canonical URL drops.
+- click-through (D-35, no app metrics): INFO log lines `event=reco_impression` (sampled 1 in 10, `sample_rate` attribute) and `event=reco_click` with `surface`, `type` and `item`, counted in Railway log search (`app/recommend/related/events.go`). Links carry `?from=trending|similar|crossmedia|foryou`, which the canonical URL drops.
 
 Privacy (LGPD):
 
