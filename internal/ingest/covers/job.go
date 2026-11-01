@@ -15,6 +15,7 @@ import (
 	"github.com/AlexGalhardo/vukem/queue"
 	"github.com/AlexGalhardo/vukem/storage"
 
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/normalize"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/store"
@@ -65,8 +66,11 @@ func Reserver(db database.Executor) func(ctx context.Context, key string) error 
 
 // Target is one item and its stored cover columns.
 type Target struct {
-	ItemID, QID, Type string
-	Records           []store.Record
+	ItemID, QID, Type, Slug string
+	// ThumbTaken means the thumbnail's slug key is another item's full key (catalog.ThumbCollides); the
+	// thumbnail then keeps a content-hashed key.
+	ThumbTaken bool
+	Records    []store.Record
 	// Key, ThumbKey and Source are the current cover_key, cover_thumb_key and cover_source ("" when null).
 	Key, ThumbKey, Source string
 }
@@ -83,33 +87,41 @@ type Outcome struct {
 	Err   error
 }
 
-// Key is the immutable object key of a variant: covers/<id>-<sha256(source)[:16]><suffix>.webp.
+// Key is the content-hashed object key of a variant: covers/<id>-<sha256(source)[:16]><suffix>.webp. New covers
+// use the slug key of catalog.CoverKey; this one is left for a thumbnail whose slug key is taken.
 func Key(id string, source []byte, suffix string) string {
 	sum := sha256.Sum256(source)
 
 	return "covers/" + id + "-" + hex.EncodeToString(sum[:8]) + suffix + ".webp"
 }
 
-// Store downloads src and writes each variant whose current key does not already hold this source's hash, so a
-// cover stored before thumbnails existed only gets its thumbnail.
-func (j *Job) Store(ctx context.Context, itemID, src, curKey, curThumb string) (key, thumb string, err error) {
+// Store downloads src and writes both variants under the item's slug keys (catalog.CoverKey, owner decision
+// 2026-11-01, item 18), overwriting the previous cover in place. With sameSource the variants t already has are
+// kept, so a cover stored before thumbnails existed only gets its thumbnail.
+func (j *Job) Store(ctx context.Context, t Target, src string, sameSource bool) (key, thumb string, err error) {
 	body, err := j.get(ctx, src)
 	if err != nil {
 		return "", "", err
 	}
 
+	thumbKey := catalog.CoverKey(t.Type, t.Slug, true)
+	if t.ThumbTaken {
+		thumbKey = Key(t.ItemID, body, "-t")
+	}
+
 	out := [2]string{}
 
 	for i, v := range []struct {
-		cur, suffix string
-		variant     Variant
-	}{{curKey, "", Full}, {curThumb, "-t", Thumb}} {
-		k := Key(itemID, body, v.suffix)
-		out[i] = k
-
-		if v.cur == k {
+		cur, key string
+		variant  Variant
+	}{{t.Key, catalog.CoverKey(t.Type, t.Slug, false), Full}, {t.ThumbKey, thumbKey, Thumb}} {
+		k := v.key
+		if sameSource && v.cur != "" {
+			out[i] = v.cur
 			continue
 		}
+
+		out[i] = k
 
 		webp, err := j.Encoder.Encode(ctx, body, v.variant)
 		if err != nil {
@@ -155,7 +167,7 @@ func (j *Job) Cover(ctx context.Context, t Target) (*Patch, error) {
 		return nil, nil //nolint:nilnil // current cover
 	}
 
-	key, thumb, err := j.Store(ctx, t.ItemID, c.URL, t.Key, t.ThumbKey)
+	key, thumb, err := j.Store(ctx, t, c.URL, c.Source == t.Source)
 	if err != nil {
 		return nil, err
 	}
@@ -357,8 +369,9 @@ func loadTargets(
 		list = qids
 	}
 
-	rows, err := tx.QueryContext(ctx, `SELECT i.id::text, i.wikidata_qid, i.type, coalesce(i.cover_key, ''),
-  coalesce(i.cover_thumb_key, ''), coalesce(i.cover_source, '')
+	rows, err := tx.QueryContext(ctx, `SELECT i.id::text, i.wikidata_qid, i.type, i.slug, coalesce(i.cover_key, ''),
+  coalesce(i.cover_thumb_key, ''), coalesce(i.cover_source, ''),
+  EXISTS (SELECT 1 FROM items o WHERE o.type = i.type AND o.slug = i.slug || '-t')
 FROM items i
 WHERE i.id > $1::uuid
   AND ($2::text[] IS NULL OR i.wikidata_qid = ANY($2::text[]))
@@ -380,7 +393,16 @@ ORDER BY i.id LIMIT $4`, after, list, since, limit)
 
 	for rows.Next() {
 		var t Target
-		if err := rows.Scan(&t.ItemID, &t.QID, &t.Type, &t.Key, &t.ThumbKey, &t.Source); err != nil {
+		if err := rows.Scan(
+			&t.ItemID,
+			&t.QID,
+			&t.Type,
+			&t.Slug,
+			&t.Key,
+			&t.ThumbKey,
+			&t.Source,
+			&t.ThumbTaken,
+		); err != nil {
 			return nil, err
 		}
 

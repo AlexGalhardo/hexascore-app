@@ -102,24 +102,25 @@ func key(id string, suffix string) string {
 	return "covers/" + id + "-" + hex.EncodeToString(sum[:])[:16] + suffix + ".webp"
 }
 
+// zelda is a Store target; covers live under the slug keys covers/games/zelda[-t].webp (item 18).
+func zelda(cur, curThumb string) covers.Target {
+	return covers.Target{ItemID: "item-1", Type: "game", Slug: "zelda", Key: cur, ThumbKey: curThumb}
+}
+
 func steamRecords(qid, header string) []store.Record {
 	return []store.Record{{Source: "steam", ExternalID: qid, Payload: []byte(`{"header_image":"` + header + `"}`)}}
 }
 
-func TestStoreCoverUploadsContentAddressedFullAndThumb(t *testing.T) {
+func TestStoreCoverUploadsFullAndThumbUnderSlugKeys(t *testing.T) {
 	h, disk := &hosts{}, newDisk()
 
-	full, thumb, err := newJob(h, disk).Store(context.Background(), "item-1", sourceURL, "", "")
+	full, thumb, err := newJob(h, disk).Store(context.Background(), zelda("", ""), sourceURL, false)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if full != key("item-1", "") || thumb != key("item-1", "-t") {
+	if full != "covers/games/zelda.webp" || thumb != "covers/games/zelda-t.webp" {
 		t.Fatalf("keys = %q, %q", full, thumb)
-	}
-
-	if !strings.HasPrefix(full, "covers/item-1-") || strings.TrimSuffix(full, ".webp")+"-t.webp" != thumb {
-		t.Fatalf("thumb key %q does not follow full key %q", thumb, full)
 	}
 
 	if !slices.Equal(disk.puts, []string{full, thumb}) || h.gets.Load() != 1 {
@@ -138,7 +139,7 @@ func TestStoreCoverSkipsUploadWhenSameSourceIsStored(t *testing.T) {
 	h, disk := &hosts{}, newDisk()
 
 	full, thumb, err := newJob(h, disk).
-		Store(context.Background(), "item-1", sourceURL, key("item-1", ""), key("item-1", "-t"))
+		Store(context.Background(), zelda(key("item-1", ""), key("item-1", "-t")), sourceURL, true)
 	if err != nil || full != key("item-1", "") || thumb != key("item-1", "-t") {
 		t.Fatalf("got %q %q %v", full, thumb, err)
 	}
@@ -151,12 +152,12 @@ func TestStoreCoverSkipsUploadWhenSameSourceIsStored(t *testing.T) {
 func TestStoreCoverAddsOnlyMissingThumb(t *testing.T) {
 	h, disk := &hosts{}, newDisk()
 
-	full, thumb, err := newJob(h, disk).Store(context.Background(), "item-1", sourceURL, key("item-1", ""), "")
-	if err != nil || full != key("item-1", "") || thumb != key("item-1", "-t") {
+	full, thumb, err := newJob(h, disk).Store(context.Background(), zelda(key("item-1", ""), ""), sourceURL, true)
+	if err != nil || full != key("item-1", "") || thumb != "covers/games/zelda-t.webp" {
 		t.Fatalf("got %q %q %v", full, thumb, err)
 	}
 
-	if !slices.Equal(disk.puts, []string{key("item-1", "-t")}) {
+	if !slices.Equal(disk.puts, []string{"covers/games/zelda-t.webp"}) {
 		t.Fatalf("puts = %v", disk.puts)
 	}
 }
@@ -164,10 +165,22 @@ func TestStoreCoverAddsOnlyMissingThumb(t *testing.T) {
 func TestStoreCoverReuploadsWhenSourceChanged(t *testing.T) {
 	h, disk := &hosts{}, newDisk()
 
-	full, thumb, err := newJob(h, disk).Store(context.Background(), "item-1", sourceURL,
-		"covers/item-1-0000000000000000.webp", "covers/item-1-0000000000000000-t.webp")
-	if err != nil || full != key("item-1", "") || thumb != key("item-1", "-t") || len(disk.puts) != 2 {
+	full, thumb, err := newJob(h, disk).Store(context.Background(),
+		zelda("covers/item-1-0000000000000000.webp", "covers/item-1-0000000000000000-t.webp"), sourceURL, false)
+	if err != nil || full != "covers/games/zelda.webp" || thumb != "covers/games/zelda-t.webp" || len(disk.puts) != 2 {
 		t.Fatalf("got %q %q %v, puts %v", full, thumb, err, disk.puts)
+	}
+}
+
+// The thumbnail slug key of "zelda" is the full key of an item slugged "zelda-t": that item keeps it.
+func TestStoreCoverThumbKeepsAHashedKeyWhenItsSlugKeyIsTaken(t *testing.T) {
+	h, disk := &hosts{}, newDisk()
+	target := zelda("", "")
+	target.ThumbTaken = true
+
+	full, thumb, err := newJob(h, disk).Store(context.Background(), target, sourceURL, false)
+	if err != nil || full != "covers/games/zelda.webp" || thumb != key("item-1", "-t") {
+		t.Fatalf("got %q %q %v", full, thumb, err)
 	}
 }
 
@@ -176,7 +189,7 @@ func TestStoreCoverRejectsAFailedDownload(t *testing.T) {
 		"/404.jpg": func() *http.Response { return reply(http.StatusNotFound, nil) },
 	}}
 
-	_, _, err := newJob(h, newDisk()).Store(context.Background(), "x", "https://cdn.example/404.jpg", "", "")
+	_, _, err := newJob(h, newDisk()).Store(context.Background(), zelda("", ""), "https://cdn.example/404.jpg", false)
 	if err == nil || !strings.Contains(err.Error(), "404") {
 		t.Fatalf("err = %v, want a 404 error", err)
 	}
@@ -232,7 +245,7 @@ func TestRunIsolatesPerItemFailures(t *testing.T) {
 	targets := []covers.Target{
 		{ItemID: "broken", QID: "Q1", Type: "game", Records: steamRecords("Q1", "https://cdn.example/broken.jpg")},
 		{ItemID: "gone", QID: "Q2", Type: "game", Records: steamRecords("Q2", "https://cdn.example/404.jpg")},
-		{ItemID: "ok", QID: "Q3", Type: "game", Records: steamRecords("Q3", sourceURL)},
+		{ItemID: "ok", QID: "Q3", Type: "game", Slug: "ok", Records: steamRecords("Q3", sourceURL)},
 	}
 
 	out := newJob(h, newDisk()).Run(context.Background(), targets)
@@ -242,7 +255,8 @@ func TestRunIsolatesPerItemFailures(t *testing.T) {
 	}
 
 	ok := out[2]
-	if ok.Err != nil || ok.Patch == nil || ok.Patch.Key != key("ok", "") || ok.Patch.ThumbKey != key("ok", "-t") ||
+	if ok.Err != nil || ok.Patch == nil || ok.Patch.Key != "covers/games/ok.webp" ||
+		ok.Patch.ThumbKey != "covers/games/ok-t.webp" ||
 		ok.Patch.Source != "steam" {
 		t.Fatalf("ok = %+v", ok)
 	}
@@ -251,17 +265,17 @@ func TestRunIsolatesPerItemFailures(t *testing.T) {
 func TestRunBackfillsThumbForLegacyCover(t *testing.T) {
 	h, disk := &hosts{}, newDisk()
 	target := covers.Target{
-		ItemID: "item-1", QID: "Q1", Type: "game", Records: steamRecords("Q1", sourceURL),
+		ItemID: "item-1", QID: "Q1", Type: "game", Slug: "zelda", Records: steamRecords("Q1", sourceURL),
 		Key: key("item-1", ""), Source: "steam",
 	}
 
 	out := newJob(h, disk).Run(context.Background(), []covers.Target{target})
 	if p := out[0].Patch; out[0].Err != nil || p == nil || p.Key != key("item-1", "") ||
-		p.ThumbKey != key("item-1", "-t") {
+		p.ThumbKey != "covers/games/zelda-t.webp" {
 		t.Fatalf("out = %+v", out[0])
 	}
 
-	if !slices.Equal(disk.puts, []string{key("item-1", "-t")}) {
+	if !slices.Equal(disk.puts, []string{"covers/games/zelda-t.webp"}) {
 		t.Fatalf("puts = %v", disk.puts)
 	}
 }
@@ -362,7 +376,7 @@ func TestStoreReservesEachKeyBeforeItsPut(t *testing.T) {
 		return nil
 	}
 
-	full, thumb, err := j.Store(context.Background(), "item-1", sourceURL, "", "")
+	full, thumb, err := j.Store(context.Background(), zelda("", ""), sourceURL, false)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -381,7 +395,7 @@ func TestStoreWritesNothingWhenReserveFails(t *testing.T) {
 	j := newJob(h, disk)
 	j.Reserve = func(context.Context, string) error { return errors.New("db down") }
 
-	if _, _, err := j.Store(context.Background(), "item-1", sourceURL, "", ""); err == nil {
+	if _, _, err := j.Store(context.Background(), zelda("", ""), sourceURL, false); err == nil {
 		t.Fatal("want the reserve error")
 	}
 

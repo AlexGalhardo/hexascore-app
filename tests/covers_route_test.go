@@ -23,7 +23,7 @@ func coversServer(t *testing.T) http.Handler {
 	}
 
 	mux := http.NewServeMux()
-	mux.Handle("GET /covers/{key...}", controllers.CoversFrom(disk))
+	mux.Handle("GET /covers/{key...}", controllers.CoversFrom(disk, nil))
 
 	return mux
 }
@@ -58,7 +58,7 @@ func TestCoversRoute_NoBucketIs404(t *testing.T) {
 	t.Parallel()
 
 	mux := http.NewServeMux()
-	mux.Handle("GET /covers/{key...}", controllers.CoversFrom(nil))
+	mux.Handle("GET /covers/{key...}", controllers.CoversFrom(nil, nil))
 
 	rec := httptest.NewRecorder()
 	mux.ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/covers/ok.jpg", nil))
