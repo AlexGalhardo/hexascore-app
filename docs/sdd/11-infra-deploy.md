@@ -126,9 +126,12 @@ Railway service variables per environment; `.env` locally; `.env.example` lists 
 | `TMDB_READ_ACCESS_TOKEN`, `IGDB_TWITCH_CLIENT_ID`, `IGDB_TWITCH_CLIENT_SECRET` | | secret (legacy names shortened) |
 | `OTEL_*` | injected by Railway tracing; `OTEL_METRICS_EXPORTER=none` | Railway receiver is trace-only [vk-deploy], [vk-otel] |
 | `FLAG_PIX_CHECKOUT`, `FLAG_PUBLIC_API_SIGNUP`, `FLAG_SEED_DATA` | `false`, `true`, `false` | names must be lowercase + `_` [vk-flags], so `pix-checkout` → `pix_checkout` |
+| `SEO_NOINDEX` | unset; `true` on staging | disallow-all `robots.txt` and `X-Robots-Tag: noindex, nofollow` |
 | `GOMEMLIMIT`, `NODE_OPTIONS` | `900MiB`, `--max-old-space-size=384` | |
 
 Dropped (`legacy/apps/web/lib/env.ts`): `BETTER_AUTH_*`, `UPSTASH_*`, `KV_*`, `BLOB_READ_WRITE_TOKEN`, `CRON_SECRET`, `VERCEL_ENV`, `NEXT_PUBLIC_*`. Legacy crons (`legacy/apps/web/vercel.json`: 00:15, 12:00, 03:00) become scheduler tasks of SDDs 05 and 03. Staging: Stripe test keys, `noindex`, mail allowlist, ingestion on demand.
+
+Staging as built (2026-11-01, owner request; runbook [staging](../runbooks/staging.md)): empty environment `staging` (not a duplicate of production), services `app` (GitHub `main`) and `Postgres-cOb3` (no TCP proxy), bucket `hexascore-staging` (`iad`), URL <https://app-staging-9215.up.railway.app>. `APP_ENV=production` because vukem serves Vite dev assets in any other environment, so `SEO_NOINDEX=true` keeps it out of search engines (`robots.txt` disallow-all and `X-Robots-Tag: noindex, nofollow` on every response; `config.Indexable`). Mail is `MAIL_MAILER=log` instead of an allowlist; billing boots with a placeholder `rk_test_` key and no Stripe account until real test keys exist; Turnstile uses Cloudflare's test keys; no analytics, verification, IndexNow or Bing variables. Data: DemoCatalog seed only.
 
 ### 6.5 Cost sheet
 

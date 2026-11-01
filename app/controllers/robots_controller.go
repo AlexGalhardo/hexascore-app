@@ -8,14 +8,16 @@ import (
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/seo"
+	"github.com/AlexGalhardo/hexascore-app/config"
 )
 
-// Robots serves /robots.txt (SDD 09 §7.7, ADR 0022). Only production is indexable, so
-// previews and local builds never compete with it in search results.
+// Robots serves /robots.txt (SDD 09 §7.7, ADR 0022). Only production without SEO_NOINDEX is
+// indexable, so staging, previews and local builds never compete with it in search results.
 func Robots(app *vukem.App) web.HandlerFunc {
 	var b strings.Builder
 
-	if app.Config.IsProduction() {
+	indexable := config.Indexable(app.Config.IsProduction(), app.Source.Get)
+	if indexable {
 		// Search engines and AI crawlers are allowed by name (Q-A18 a), in one group with "*".
 		for _, bot := range []string{
 			"Googlebot", "Bingbot", "DuckDuckBot", "Applebot", "YandexBot",
@@ -27,7 +29,7 @@ func Robots(app *vukem.App) web.HandlerFunc {
 
 	b.WriteString("User-agent: *\n")
 
-	if app.Config.IsProduction() {
+	if indexable {
 		b.WriteString("Allow: /\n")
 
 		for _, rule := range seo.Disallowed() {

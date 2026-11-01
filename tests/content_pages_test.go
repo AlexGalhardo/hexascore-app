@@ -137,6 +137,44 @@ func TestRobots_Production(t *testing.T) {
 
 const nl = "\n"
 
+// Staging runs APP_ENV=production (SDD 11 §6.4), so SEO_NOINDEX is what keeps it out of search results.
+func TestRobots_ProductionNoindex(t *testing.T) {
+	t.Parallel()
+
+	env := map[string]string{
+		"APP_ENV":               "production",
+		"APP_URL":               "https://example.test/",
+		"RATE_LIMIT_STORE":      "cache",
+		"CACHE_STORE":           "database",
+		"STRIPE_KEY":            stripeKey,
+		"STRIPE_WEBHOOK_SECRET": webhookSecret,
+		"STRIPE_PRICE_PRO":      "price_pro",
+		"STRIPE_PRICE_BUSINESS": "price_business",
+		"SEO_NOINDEX":           "true",
+	}
+	c := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: env}).Client(t)
+
+	res := c.Get("https://example.test/robots.txt").AssertOK().AssertSee("Disallow: /" + nl)
+	res.AssertDontSee("Allow: /" + nl).AssertDontSee("Googlebot")
+
+	for _, path := range []string{"/", "/robots.txt", "/up"} {
+		c.Get("https://example.test"+path).AssertHeader("X-Robots-Tag", "noindex, nofollow")
+	}
+
+	delete(env, "SEO_NOINDEX")
+	prod := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: env}).Client(t)
+	if got := prod.Get("https://example.test/robots.txt").Header("X-Robots-Tag"); got != "" {
+		t.Errorf("production X-Robots-Tag = %q, want none", got)
+	}
+}
+
+func TestRobots_NonProductionHeader(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+	app.Client(t).Get("/robots.txt").AssertHeader("X-Robots-Tag", "noindex, nofollow")
+}
+
 func TestCanonicalHost_Production(t *testing.T) {
 	t.Parallel()
 
