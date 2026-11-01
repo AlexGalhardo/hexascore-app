@@ -2405,6 +2405,13 @@
           "path": {
             "type": "string"
           },
+          "score": {
+            "format": "double",
+            "type": [
+              "number",
+              "null"
+            ]
+          },
           "slug": {
             "type": "string"
           },
@@ -2413,6 +2420,12 @@
           },
           "type": {
             "type": "string"
+          },
+          "year": {
+            "type": [
+              "integer",
+              "null"
+            ]
           }
         },
         "type": "object"
