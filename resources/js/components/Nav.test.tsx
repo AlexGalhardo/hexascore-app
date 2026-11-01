@@ -1,7 +1,7 @@
-import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { afterEach, expect, test, vi } from "vitest";
+import { cleanup, render, screen } from "../lib/testing";
 
 import Footer from "./Footer";
 import Nav from "./Nav";
@@ -228,4 +228,12 @@ test("the hamburger name follows the unread count when it changes", () => {
 		props.auth.user = null;
 		props.unreadNotifications = 0;
 	}
+});
+
+test("the search palette is loaded on the first Ctrl+K, not with the navbar", async () => {
+	render(<Nav />);
+	expect(screen.queryByRole("dialog")).toBeNull();
+	await userEvent.keyboard("{Control>}k{/Control}");
+	// The palette chunk is imported on demand; under a loaded host that takes longer than the 1 s default.
+	expect(await screen.findByRole("dialog", {}, { timeout: 5000 })).toBeTruthy();
 });
