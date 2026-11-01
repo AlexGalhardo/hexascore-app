@@ -129,7 +129,7 @@ func Web(r *router.Router, app *vukem.App) error {
 			"entity.",
 			"errors.",
 			"item.",
-			"updatedLabel.",
+			"updatedLabel",
 			"lists.",
 			"rating.",
 			"ratings.",
