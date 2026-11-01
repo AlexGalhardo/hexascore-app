@@ -1,26 +1,10 @@
-import type { ReactElement, ReactNode } from "react";
-import { Pressable, Text, View } from "react-native";
+import type { ReactElement } from "react";
 import { type AppLocale, t } from "../i18n";
+import { StatePage } from "../ui/screens/StatePage";
 
 // UTC so the server's end date is not shifted to the previous day west of Greenwich.
 const longDate = (locale: AppLocale, iso: string): string =>
 	new Intl.DateTimeFormat(locale, { dateStyle: "long", timeZone: "UTC" }).format(new Date(iso));
-
-function Screen({ children }: { children: ReactNode }): ReactElement {
-	return (
-		<View className="flex-1 items-center justify-center gap-4 bg-bg px-4 dark:bg-bg-dark">
-			{children}
-		</View>
-	);
-}
-
-function Action({ label, onPress }: { label: string; onPress: () => void }): ReactElement {
-	return (
-		<Pressable accessibilityRole="button" className="min-h-11 justify-center" onPress={onPress}>
-			<Text className="text-fg dark:text-fg-dark">{label}</Text>
-		</Pressable>
-	);
-}
 
 /** 403 `account-banned` (SDD 10 §6.2): the vault is already wiped; leaving returns to login. */
 export function BannedBody(props: {
@@ -31,22 +15,16 @@ export function BannedBody(props: {
 }): ReactElement {
 	const { locale } = props;
 	return (
-		<Screen>
-			<Text className="text-20 text-fg dark:text-fg-dark">
-				{t(locale, "account.blocked.title")}
-			</Text>
-			{props.reason ? (
-				<Text className="text-fg dark:text-fg-dark">
-					{t(locale, "account.blocked.reason", { reason: props.reason })}
-				</Text>
-			) : null}
-			<Text className="text-fg dark:text-fg-dark">
-				{props.expiresAt
+		<StatePage
+			title={t(locale, "account.blocked.title")}
+			body={[
+				props.reason ? t(locale, "account.blocked.reason", { reason: props.reason }) : null,
+				props.expiresAt
 					? t(locale, "account.blocked.until", { date: longDate(locale, props.expiresAt) })
-					: t(locale, "account.blocked.permanent")}
-			</Text>
-			<Action label={t(locale, "account.blocked.back")} onPress={props.onLeave} />
-		</Screen>
+					: t(locale, "account.blocked.permanent"),
+			].filter((line): line is string => line !== null)}
+			actions={[{ label: t(locale, "account.blocked.back"), onPress: props.onLeave }]}
+		/>
 	);
 }
 
@@ -59,12 +37,17 @@ export function DeletionScheduledBody(props: {
 }): ReactElement {
 	const { locale } = props;
 	return (
-		<Screen>
-			<Text className="text-fg dark:text-fg-dark">
-				{t(locale, "account.banner.text", { date: longDate(locale, props.scheduledAt) })}
-			</Text>
-			<Action label={t(locale, "account.banner.cancel")} onPress={() => props.openWeb("/login")} />
-			<Action label={t(locale, "account.blocked.back")} onPress={props.onLogout} />
-		</Screen>
+		<StatePage
+			title={t(locale, "account.banner.text", { date: longDate(locale, props.scheduledAt) })}
+			body={[]}
+			actions={[
+				{ label: t(locale, "account.banner.cancel"), onPress: () => props.openWeb("/login") },
+				{
+					label: t(locale, "account.blocked.back"),
+					onPress: props.onLogout,
+					variant: "secondary",
+				},
+			]}
+		/>
 	);
 }
