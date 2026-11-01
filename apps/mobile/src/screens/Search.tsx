@@ -1,18 +1,20 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueries } from "@tanstack/react-query";
 import { type ReactElement, useEffect, useState } from "react";
 import { Pressable, ScrollView, Text } from "react-native";
-import type { SearchHit } from "../../../../packages/app-client/src/api";
+import type { AppItemJSON, SearchHit } from "../../../../packages/app-client/src/api";
 import type { ReadClient } from "../api/client";
 import { type AppLocale, t } from "../i18n";
 import { CATALOG_TYPES, type CatalogType, itemHref, SINGULAR } from "../navigation/catalog";
+import { queryKeys, TRENDING_METHOD } from "../query/keys";
 import { formatScore } from "../ui/format";
 import { type SearchLabels, type SearchRow, SearchSheet } from "../ui/screens/SearchSheet";
 
-export type SearchReader = Pick<ReadClient, "searchIndex">;
+export type SearchReader = Pick<ReadClient, "searchIndex" | (typeof TRENDING_METHOD)[CatalogType]>;
 
 // Same floor as the server's tooShort answer (SDD 07): shorter queries are never sent.
 const MIN_CHARS = 2;
 const RECENT_MAX = 5;
+const TRENDING_MAX = 5;
 
 const PLURAL = Object.fromEntries(CATALOG_TYPES.map((type) => [SINGULAR[type], type])) as Record<
 	string,
@@ -90,11 +92,29 @@ export function SearchBody({
 		},
 	});
 
+	// Same keys as the home screen: the cached (and persisted) trending lists are reused.
+	const trendingResults = useQueries({
+		queries: CATALOG_TYPES.map((key) => ({
+			queryKey: queryKeys.trending(key, locale),
+			queryFn: () => read[TRENDING_METHOD[key]]({ query: { locale } }),
+		})),
+	});
+	// Top items across types: lowest rank first, ties in catalogue order (sort is stable); failed types are skipped.
+	const trending = trendingResults
+		.flatMap((result) => result.data?.data ?? [])
+		.filter((entry) => entry.item)
+		.sort((a, b) => a.rank - b.rank)
+		.slice(0, TRENDING_MAX)
+		.map((entry) => entry.item as AppItemJSON);
+
 	const remember = (text: string): void =>
 		setRecent((list) => [text, ...list.filter((r) => r !== text)].slice(0, RECENT_MAX));
 
 	const hits = (search.data?.pages ?? []).flatMap((page) => page.data ?? []);
-	const byId = new Map(hits.map((hit) => [hit.id ?? "", hit]));
+	const byId = new Map<string, { type?: string; slug?: string }>([
+		...trending.map((item) => [item.id, item] as const),
+		...hits.map((hit) => [hit.id ?? "", hit] as const),
+	]);
 	const toRow = (hit: SearchHit): SearchRow => {
 		const plural = PLURAL[hit.type ?? ""];
 		return {
@@ -107,8 +127,21 @@ export function SearchBody({
 		};
 	};
 
+	const trendingRow = (item: AppItemJSON): SearchRow => {
+		const plural = PLURAL[item.type];
+		const year = Number.parseInt(item.releaseDate?.slice(0, 4) ?? "", 10);
+		return {
+			id: item.id,
+			title: item.title ?? item.slug,
+			year: Number.isNaN(year) ? null : year,
+			typeLabel: plural ? t(locale, `itemTypes.${SINGULAR[plural]}`) : "",
+			coverUri: item.coverThumbUrl || null,
+			score: item.score ?? null,
+		};
+	};
+
 	const state = ((): Parameters<typeof SearchSheet>[0]["state"] => {
-		if (!enabled) return { kind: "empty", recent, trending: [] };
+		if (!enabled) return { kind: "empty", recent, trending: trending.map(trendingRow) };
 		if (search.isError) return { kind: "error", message: t(locale, "search.unavailable") };
 		if (search.isPending) return { kind: "loading" };
 		return { kind: "results", rows: hits.map(toRow), total: search.data.pages[0]?.total ?? 0 };
@@ -178,7 +211,7 @@ export function SearchBody({
 				const hit = byId.get(row.id);
 				const plural = PLURAL[hit?.type ?? ""];
 				if (!hit?.slug || !plural) return;
-				remember(q);
+				if (enabled) remember(q);
 				onOpen(itemHref(plural, { slug: hit.slug, id: row.id }));
 			}}
 			onRecent={(text) => {
