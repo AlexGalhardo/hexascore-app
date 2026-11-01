@@ -27,11 +27,11 @@ test("renders cover, status label and score", () => {
 	const { container } = render(<ShelfCard item={item} statusLabel="Playing" stars={8.5} />);
 	expect(container.querySelector("img")).toBeTruthy();
 	expect(screen.getByText("Zelda")).toBeTruthy();
-	expect(screen.getByText("Playing")).toBeTruthy();
-	expect(screen.getByText("library.score:8.5")).toBeTruthy();
+	expect(screen.getByText("itemTypes.game · 2017 · Playing")).toBeTruthy();
+	expect(screen.getByText("library.yourScore:8.5")).toBeTruthy();
 });
 
-test("missing score renders the dash", () => {
+test("no own score reads not rated by you", () => {
 	render(<ShelfCard item={item} statusLabel="Playing" stars={null} />);
-	expect(screen.getByText("—")).toBeTruthy();
+	expect(screen.getByText("library.notRated")).toBeTruthy();
 });

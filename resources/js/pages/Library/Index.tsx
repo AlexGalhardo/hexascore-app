@@ -5,6 +5,7 @@ import EditionPicker from "../../components/library/EditionPicker";
 import type { ItemRef } from "../../components/library/ItemLink";
 import ShelfCard from "../../components/library/ShelfCard";
 import Seo from "../../components/Seo";
+import { btnClass } from "../../components/ui/Btn";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
@@ -47,9 +48,15 @@ const sum = (counts: Props["counts"], status: string, type: string): number =>
 			0,
 		);
 
+const field =
+	"min-h-11 w-full rounded-xs border border-field bg-field-bg px-3 text-[15px] text-fg focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary";
+const label = "grid gap-1.5 text-[13px] font-semibold sm:w-[220px]";
+
 export default function Index({ counts, groups, filters }: Props) {
 	const t = useT();
-	const { locale } = usePage<SharedProps>().props;
+	const { locale, auth } = usePage<SharedProps>().props;
+	const owner = auth?.user?.nickname ?? auth?.user?.name;
+	const all = sum(counts, "", "");
 	const path = localized("/library", locale);
 
 	const pageHref = (type: string, cursor?: number) =>
@@ -72,16 +79,26 @@ export default function Index({ counts, groups, filters }: Props) {
 	return (
 		<>
 			<Seo title={t("library.title")} noindex />
-			<h1 className="text-2xl font-semibold">{t("library.title")}</h1>
-			<form onSubmit={apply} className="mt-4 flex flex-wrap items-end gap-3">
-				<label className="flex flex-col text-sm">
+			<header className="mt-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 md:mt-10">
+				<div>
+					{owner && (
+						<p className="text-xs font-bold tracking-[0.1em] text-primary uppercase">
+							{t("library.shelvesOf", { name: owner })}
+						</p>
+					)}
+					<h1 className="mt-2 font-display text-5xl leading-none font-bold tracking-[-0.02em] md:text-[64px]">
+						{t("library.title")}
+					</h1>
+				</div>
+				<p className="text-sm text-muted">{t("library.titleCount", { count: all })}</p>
+			</header>
+			<form onSubmit={apply} className="mt-6 flex flex-wrap items-end gap-3 md:mt-8">
+				<label className={label}>
 					{t("library.status")}
-					<select
-						name="status"
-						defaultValue={filters.status}
-						className="rounded-md border border-border bg-surface px-2 py-1"
-					>
-						<option value="">{t("library.allStatuses")}</option>
+					<select name="status" defaultValue={filters.status} className={field}>
+						<option value="">
+							{t("library.allStatuses")} ({sum(counts, "", filters.type)})
+						</option>
 						{STATUSES.map((s) => (
 							<option key={s} value={s}>
 								{t(`social.status.shelves.${s}`)} ({sum(counts, s, filters.type)})
@@ -89,13 +106,9 @@ export default function Index({ counts, groups, filters }: Props) {
 						))}
 					</select>
 				</label>
-				<label className="flex flex-col text-sm">
+				<label className={label}>
 					{t("library.type")}
-					<select
-						name="type"
-						defaultValue={filters.type}
-						className="rounded-md border border-border bg-surface px-2 py-1"
-					>
+					<select name="type" defaultValue={filters.type} className={field}>
 						<option value="">{t("library.allTypes")}</option>
 						{TYPES.map((s) => (
 							<option key={s} value={s}>
@@ -104,13 +117,9 @@ export default function Index({ counts, groups, filters }: Props) {
 						))}
 					</select>
 				</label>
-				<label className="flex flex-col text-sm">
+				<label className={label}>
 					{t("library.sort")}
-					<select
-						name="sort"
-						defaultValue={filters.sort || "updated"}
-						className="rounded-md border border-border bg-surface px-2 py-1"
-					>
+					<select name="sort" defaultValue={filters.sort || "updated"} className={field}>
 						{SORTS.map((s) => (
 							<option key={s} value={s}>
 								{t(`library.sorts.${s}`)}
@@ -118,15 +127,14 @@ export default function Index({ counts, groups, filters }: Props) {
 						))}
 					</select>
 				</label>
-				<button
-					type="submit"
-					className="rounded-md border border-border px-3 py-1 font-medium"
-				>
+				<button type="submit" className={btnClass("primary")}>
 					{t("library.apply")}
 				</button>
 			</form>
 			{groups.data.length === 0 ? (
-				<p className="mt-6">{t("library.empty")}</p>
+				<p className="mt-8 border-t-2 border-fg pt-6 font-display text-2xl italic">
+					{t("library.empty")}
+				</p>
 			) : (
 				<>
 					{STATUSES.map((status) => {
@@ -137,16 +145,21 @@ export default function Index({ counts, groups, filters }: Props) {
 						return (
 							<section
 								key={status}
-								className="mt-6"
+								className="mt-8 border-t-2 border-fg pt-4"
 								aria-labelledby={`status-${status}`}
 							>
-								<h2 id={`status-${status}`} className="text-lg font-semibold">
-									{t(`social.status.shelves.${status}`)}{" "}
-									<span className="text-sm font-normal text-muted">
-										({sum(counts, status, filters.type)})
+								<h2
+									id={`status-${status}`}
+									className="flex flex-wrap items-baseline gap-x-3 font-display text-[28px] leading-tight font-bold"
+								>
+									{t(`social.status.shelves.${status}`)}
+									<span className="font-sans text-sm font-normal text-muted">
+										{t("library.titleCount", {
+											count: sum(counts, status, filters.type),
+										})}
 									</span>
 								</h2>
-								<ul className="mt-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+								<ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 									{cards.map((item) => (
 										<li key={item.id}>
 											<ShelfCard
@@ -166,7 +179,7 @@ export default function Index({ counts, groups, filters }: Props) {
 														})}{" "}
 														<button
 															type="button"
-															className="underline"
+															className="font-semibold text-primary underline"
 															onClick={() => clearEdition(item.id)}
 														>
 															{t("library.clearEdition")}
@@ -183,7 +196,7 @@ export default function Index({ counts, groups, filters }: Props) {
 					{groups.data
 						.filter((g) => g.next >= 0)
 						.map((g) => (
-							<p key={g.type} className="mt-4 text-sm">
+							<p key={g.type} className="mt-6">
 								{t(`itemTypes.${g.type}`)}{" "}
 								<span className="text-muted">
 									{t("library.showing", {
@@ -192,7 +205,7 @@ export default function Index({ counts, groups, filters }: Props) {
 									})}
 								</span>{" "}
 								<Link
-									className="underline"
+									className="inline-flex min-h-11 items-center font-semibold text-primary hover:underline"
 									href={
 										filters.type
 											? pageHref(filters.type, g.next)
