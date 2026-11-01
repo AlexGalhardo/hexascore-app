@@ -76,6 +76,7 @@ test("navbar has the search trigger, moon/sun toggle and four sections; footer h
 	);
 	const footer = screen.getByRole("navigation", { name: "footer.label" });
 	expect(footer.querySelectorAll("a")).toHaveLength(6);
+	expect(screen.getByRole("button", { name: "footer.cookieSettings" })).toBeTruthy();
 	expect(footer.querySelector("[hreflang]")).toBeNull();
 });
 

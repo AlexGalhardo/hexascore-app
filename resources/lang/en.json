@@ -735,12 +735,14 @@
     "label": "Footer",
     "apiDocs": "API docs",
     "pricing": "Pricing",
-    "howScores": "How scores work"
+    "howScores": "How scores work",
+    "cookieSettings": "Cookie settings"
   },
   "cookies": {
-    "text": "We only use essential cookies (session and preferences). Video embeds from YouTube load only if you allow them.",
-    "accept": "Allow embeds",
-    "decline": "Essential only"
+    "label": "Cookie settings",
+    "text": "We use essential cookies (session and preferences). If you accept, we also load YouTube video embeds and Google Analytics, which sets cookies. Umami counts visits without cookies either way.",
+    "accept": "Accept",
+    "decline": "Reject"
   },
   "sandbox": {
     "banner": "Sandbox environment — users, ratings and lists are fictitious (test data)."
@@ -1152,8 +1154,8 @@
       "3": {
         "heading": "4. Cookies",
         "body": {
-          "0": "We only use essential cookies: the session cookie that keeps you logged in, short-lived two-factor cookies, and the locale, theme and consent cookies. We use no advertising or cross-site tracking cookies.",
-          "1": "Optional analytics load only after you allow them. Trailers are served from youtube-nocookie.com and only load after you allow embeds in the cookie banner.",
+          "0": "Essential cookies: the session cookie that keeps you logged in, short-lived two-factor cookies, and the locale, theme and consent cookies. We use no advertising or cross-site tracking cookies.",
+          "1": "Optional cookies load only after you accept them in the cookie banner: Google Analytics 4 (it sets _ga cookies and measures visits; before you accept, Google receives nothing) and trailers served from youtube-nocookie.com. You can change your choice at any time with \"Cookie settings\" in the footer. We also count visits with Umami, which sets no cookies and stores no personal data, so it runs without consent.",
           "2": "When you follow an affiliate link to Amazon or Mercado Livre you leave our site; those stores set their own cookies under their own policies."
         }
       },
@@ -1260,7 +1262,7 @@
       "7": {
         "heading": "8. Cookies",
         "body": {
-          "0": "We use only essential cookies (session, security and preferences) and load video embeds only with your consent. Details are in the Privacy policy."
+          "0": "We use essential cookies (session, security and preferences) and load Google Analytics and video embeds only with your consent; cookieless Umami statistics run for everyone. Details are in the Privacy policy."
         }
       },
       "8": {

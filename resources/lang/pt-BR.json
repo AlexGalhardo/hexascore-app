@@ -735,12 +735,14 @@
     "label": "Rodapé",
     "apiDocs": "Docs da API",
     "pricing": "Preços",
-    "howScores": "Como as notas funcionam"
+    "howScores": "Como as notas funcionam",
+    "cookieSettings": "Configurações de cookies"
   },
   "cookies": {
-    "text": "Usamos apenas cookies essenciais (sessão e preferências). Vídeos do YouTube só carregam se você permitir.",
-    "accept": "Permitir vídeos",
-    "decline": "Só essenciais"
+    "label": "Configurações de cookies",
+    "text": "Usamos cookies essenciais (sessão e preferências). Se você aceitar, também carregamos vídeos do YouTube e o Google Analytics, que usa cookies. O Umami conta visitas sem cookies em qualquer caso.",
+    "accept": "Aceitar",
+    "decline": "Recusar"
   },
   "sandbox": {
     "banner": "Ambiente sandbox — usuários, avaliações e listas são fictícios (dados de teste)."
@@ -1152,8 +1154,8 @@
       "3": {
         "heading": "4. Cookies",
         "body": {
-          "0": "Usamos apenas cookies essenciais: o cookie de sessão que mantém você conectado, cookies temporários de dois fatores, e os cookies locale, theme e consent. Não usamos cookies de publicidade nem de rastreamento entre sites.",
-          "1": "Estatísticas opcionais só carregam depois que você permitir. Trailers vêm de youtube-nocookie.com e só carregam depois que você permite os vídeos no banner de cookies.",
+          "0": "Cookies essenciais: o cookie de sessão que mantém você conectado, cookies temporários de dois fatores, e os cookies locale, theme e consent. Não usamos cookies de publicidade nem de rastreamento entre sites.",
+          "1": "Cookies opcionais só carregam depois que você os aceita no banner de cookies: o Google Analytics 4 (usa cookies _ga e mede visitas; antes de você aceitar, o Google não recebe nada) e os trailers de youtube-nocookie.com. Você pode mudar sua escolha a qualquer momento em \"Configurações de cookies\", no rodapé. Também contamos visitas com o Umami, que não usa cookies nem guarda dados pessoais, por isso funciona sem consentimento.",
           "2": "Ao seguir um link de afiliado para a Amazon ou o Mercado Livre você sai do nosso site; essas lojas usam seus próprios cookies, conforme suas próprias políticas."
         }
       },
@@ -1260,7 +1262,7 @@
       "7": {
         "heading": "8. Cookies",
         "body": {
-          "0": "Usamos apenas cookies essenciais (sessão, segurança e preferências) e só carregamos vídeos incorporados com o seu consentimento. Os detalhes estão na Política de privacidade."
+          "0": "Usamos cookies essenciais (sessão, segurança e preferências) e só carregamos o Google Analytics e vídeos incorporados com o seu consentimento; as estatísticas do Umami, sem cookies, valem para todos. Os detalhes estão na Política de privacidade."
         }
       },
       "8": {
