@@ -141,7 +141,7 @@ The signals are:
 | Traces | Railway OTLP receiver (§6.3) | latency of a request, SQL, queue, outbound calls |
 | `alert=` log lines | Railway log search; ERROR also reaches Telegram | the alerts of §7.5 that need app knowledge |
 
-An in-app check is a job or middleware that evaluates its condition and writes one line with a stable key: `level=WARN|ERROR alert=A14 msg="trending snapshot stale" age_s=...`. Keys are the alert codes of §7.5; the line carries numbers, never ids, emails or raw paths. A check that cannot run logs `alert=<code> state=unknown` at ERROR (fail closed).
+An in-app check is a job or middleware that evaluates its condition and writes one line with a stable key: `level=WARN|ERROR alert=A14 msg="trending snapshot stale" age_s=...`. Keys are the alert codes of §7.5, plus `trending_counter_dropped` (WARN, informational: the trending key counter hit its cap and dropped keys; no paging rule); the line carries numbers, never ids, emails or raw paths. A check that cannot run logs `alert=<code> state=unknown` at ERROR (fail closed).
 
 Business and queue figures (suggestion queue age, ratings per day, active keys, DB size) are SQL reads in the admin screens or in the check that needs them; they are not exported.
 
