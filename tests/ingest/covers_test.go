@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"image"
 	"image/color"
 	"image/jpeg"
@@ -179,5 +180,45 @@ func exec(t *testing.T, db *database.DB, q string, args ...any) {
 
 	if _, err := db.ExecContext(t.Context(), q, args...); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestCoversStepRollbackLeavesReservedKeys(t *testing.T) {
+	db, disk := newDB(t), storage.NewMemory("")
+
+	img := image.NewNRGBA(image.Rect(0, 0, 40, 60))
+	img.Set(1, 1, color.White)
+
+	var src bytes.Buffer
+	if err := jpeg.Encode(&src, img, nil); err != nil {
+		t.Fatal(err)
+	}
+
+	exec(t, db, `INSERT INTO items (id, type, slug, wikidata_qid) VALUES ($1, 'game', 'a', 'Q1')`, coverA)
+	exec(t, db, `INSERT INTO source_records (source, external_id, payload, hash) VALUES
+('steam', 'Q1', '{"header_image":"https://shared.akamai.steamstatic.com/a.jpg"}', repeat('1', 64))`)
+
+	job := &covers.Job{
+		Disk: disk, HTTP: &http.Client{Transport: coverHosts{src.Bytes()}}, Encoder: tagEncoder{},
+		Reserve: covers.Reserver(db),
+	}
+
+	err := db.Tx(t.Context(), func(tx *database.Tx) error {
+		if _, err := job.Step(t.Context(), tx, run.Run{Mode: run.ModeFull}); err != nil {
+			return err
+		}
+
+		return errors.New("boom")
+	})
+	if err == nil {
+		t.Fatal("want the forced rollback")
+	}
+
+	if n := count(t, db, `SELECT count(*) FROM items WHERE id = $1 AND cover_key IS NOT NULL`, coverA); n != 0 {
+		t.Fatal("the item update must have rolled back")
+	}
+
+	if n := count(t, db, `SELECT count(*) FROM cover_gc WHERE key LIKE 'covers/' || $1 || '-%'`, coverA); n != 2 {
+		t.Errorf("reserved keys = %d, want 2 so the GC reaps the orphaned objects", n)
 	}
 }

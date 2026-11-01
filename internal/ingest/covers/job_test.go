@@ -349,3 +349,43 @@ func TestRunProcessesItemsConcurrently(t *testing.T) {
 		t.Fatalf("peak concurrency %d, want 2..4", peak.Load())
 	}
 }
+
+func TestStoreReservesEachKeyBeforeItsPut(t *testing.T) {
+	h, disk := &hosts{}, newDisk()
+	j := newJob(h, disk)
+
+	var order []string
+
+	j.Reserve = func(_ context.Context, k string) error {
+		order = append(order, "reserve "+k)
+
+		return nil
+	}
+
+	full, thumb, err := j.Store(context.Background(), "item-1", sourceURL, "", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if want := []string{"reserve " + full, "reserve " + thumb}; !slices.Equal(order, want) {
+		t.Fatalf("reserved = %v, want %v", order, want)
+	}
+
+	if len(disk.puts) != 2 {
+		t.Fatalf("puts = %v", disk.puts)
+	}
+}
+
+func TestStoreWritesNothingWhenReserveFails(t *testing.T) {
+	h, disk := &hosts{}, newDisk()
+	j := newJob(h, disk)
+	j.Reserve = func(context.Context, string) error { return errors.New("db down") }
+
+	if _, _, err := j.Store(context.Background(), "item-1", sourceURL, "", ""); err == nil {
+		t.Fatal("want the reserve error")
+	}
+
+	if len(disk.puts) != 0 {
+		t.Fatalf("puts = %v, want none", disk.puts)
+	}
+}

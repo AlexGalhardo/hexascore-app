@@ -49,6 +49,18 @@ type Job struct {
 	Workers, Batch int
 	// ItemsChanged is told which items got a new cover, in the step's transaction; nil skips it.
 	ItemsChanged func(ctx context.Context, ex database.Executor, ids []string) error
+	// Reserve records a key in cover_gc outside the step's transaction before its object is written, so an
+	// object whose transaction rolls back is still reaped by GC (which forgets reserved keys an item points at).
+	Reserve func(ctx context.Context, key string) error
+}
+
+// Reserver is the Reserve func that writes cover_gc through db, a handle outside the step's transaction.
+func Reserver(db database.Executor) func(ctx context.Context, key string) error {
+	return func(ctx context.Context, key string) error {
+		_, err := db.ExecContext(ctx, `INSERT INTO cover_gc (key) VALUES ($1) ON CONFLICT (key) DO NOTHING`, key)
+
+		return err
+	}
 }
 
 // Target is one item and its stored cover columns.
@@ -102,6 +114,12 @@ func (j *Job) Store(ctx context.Context, itemID, src, curKey, curThumb string) (
 		webp, err := j.Encoder.Encode(ctx, body, v.variant)
 		if err != nil {
 			return "", "", fmt.Errorf("encode %s: %w", k, err)
+		}
+
+		if j.Reserve != nil {
+			if err := j.Reserve(ctx, k); err != nil {
+				return "", "", fmt.Errorf("reserve %s: %w", k, err)
+			}
 		}
 
 		if err := storage.PutBytes(ctx, j.Disk, k, webp); err != nil {
