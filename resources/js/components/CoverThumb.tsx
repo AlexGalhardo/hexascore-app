@@ -1,7 +1,7 @@
 import { usePage } from "@inertiajs/react";
 import type { SharedProps } from "../types";
 
-export type CoverSize = "sm" | "md" | "lg" | "card";
+export type CoverSize = "sm" | "md" | "trend" | "lg" | "card";
 
 export interface Cover {
 	thumb: string;
@@ -11,6 +11,7 @@ export interface Cover {
 const DIMENSIONS: Record<CoverSize, { width: number; height: number }> = {
 	sm: { width: 32, height: 48 },
 	md: { width: 44, height: 64 },
+	trend: { width: 96, height: 144 },
 	lg: { width: 240, height: 360 },
 	card: { width: 160, height: 240 },
 };
@@ -18,6 +19,7 @@ const DIMENSIONS: Record<CoverSize, { width: number; height: number }> = {
 const SIZES: Record<CoverSize, string> = {
 	sm: "32px",
 	md: "44px",
+	trend: "(min-width: 48rem) 96px, 80px",
 	lg: "(min-width: 48rem) 240px, 96px",
 	card: "(min-width: 48rem) 160px, 30vw",
 };
@@ -26,6 +28,7 @@ const SIZES: Record<CoverSize, string> = {
 const BOX: Record<CoverSize, string> = {
 	sm: "w-8 h-12",
 	md: "w-11 h-16",
+	trend: "w-20 h-30 md:w-24 md:h-36",
 	lg: "w-24 h-36 md:w-60 md:h-90",
 	card: "w-full h-auto aspect-[2/3]",
 };
