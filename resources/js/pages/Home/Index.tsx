@@ -11,6 +11,12 @@ import type { SharedProps } from "../../types";
 
 type Trending = Partial<Record<Section["type"], { computedAt: string; items: TrendingEntry[] }>>;
 
+interface FriendRated {
+	nickname: string;
+	score: number;
+	item: { id: string; type: Section["type"]; slug: string; title: string; cover: Cover | null };
+}
+
 interface RecentRating {
 	id: string;
 	type: Section["type"];
@@ -28,11 +34,14 @@ export default function Index({
 	recent,
 	trending,
 	forYou,
+	friends,
 }: {
 	sections: Section[];
 	recent: RecentRating[];
 	trending: Trending;
 	forYou?: Partial<Record<Section["type"], ForYouList>>;
+	/** Deferred (group `personal`) while the flag `social` is on. */
+	friends?: FriendRated[];
 }) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
@@ -72,6 +81,41 @@ export default function Index({
 										</span>
 									</div>
 									<ScoreBadge score={r.score} size="xs" />
+								</li>
+							))}
+						</ul>
+					</section>
+				)}
+				{friends && friends.length > 0 && (
+					<section
+						aria-labelledby="home-friends"
+						className="grid gap-4 border-t-2 border-fg pt-4"
+					>
+						<h2 id="home-friends" className="text-3xl">
+							{t("friendsScore.home")}
+						</h2>
+						<ul className="grid gap-x-6 sm:grid-cols-2 lg:grid-cols-3">
+							{friends.map((f) => (
+								<li
+									key={`${f.item.id}-${f.nickname}`}
+									className="flex items-center gap-3 border-b border-border py-2.5"
+								>
+									<CoverThumb cover={f.item.cover} alt="" size="md" />
+									<div className="min-w-0 flex-1">
+										<Link
+											href={localized(
+												`/${SECTION_PATHS[f.item.type]}/${f.item.slug}`,
+												locale,
+											)}
+											className="block truncate font-display font-bold hover:text-primary"
+										>
+											{f.item.title}
+										</Link>
+										<span className="text-xs text-muted">
+											{t("home.ratedBy", { name: f.nickname })}
+										</span>
+									</div>
+									<ScoreBadge score={f.score} size="xs" />
 								</li>
 							))}
 						</ul>

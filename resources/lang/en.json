@@ -689,6 +689,11 @@
     "more": "More",
     "searchShort": "Search…"
   },
+  "friendsScore": {
+    "title": "Rated by people you follow",
+    "summary": "Rated by {count} people you follow",
+    "home": "Rated by people you follow"
+  },
   "home": {
     "title": "Every game, movie, series and book — scored by people, category by category.",
     "explore": "Explore",
