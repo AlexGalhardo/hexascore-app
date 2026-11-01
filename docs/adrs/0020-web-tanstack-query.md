@@ -19,7 +19,7 @@ Inertia gives every page its data as server props, and those need no client cach
 ## Consequences
 
 - The four components lose their custom abort and sequence code. Requests are keyed and cancelled through the query `signal`, and repeated suggest queries are served from the cache for 30 s.
-- Bundle: query-core and the React bindings add 2.7 KB gzip in their own chunk. The numbers are in `reports/ADOPT-tanstack-query-web.md`.
+- Bundle: the `QueryClient` core sits on the first-load path (about 7 KB gzip, because the provider wraps the app). To pay for it, the Ctrl+K palette and the query hooks it uses now load on its first open (`React.lazy` in `Nav.tsx`). First-load JS went from 134.4 KB to 121.8 KB gzip. The numbers are in `reports/ADOPT-tanstack-query-web.md`.
 - Tests render through `resources/js/lib/testing.tsx`, which wraps `render` in a fresh client with retries off.
 
 ## Alternatives considered

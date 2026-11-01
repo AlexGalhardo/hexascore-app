@@ -80,3 +80,10 @@ test("navbar has the search trigger, moon/sun toggle and four sections; footer h
 	expect(footer.querySelectorAll("a")).toHaveLength(6);
 	expect(footer.querySelector("[hreflang]")).toBeNull();
 });
+
+test("the search palette is loaded on the first Ctrl+K, not with the navbar", async () => {
+	render(<Nav />);
+	expect(screen.queryByRole("dialog")).toBeNull();
+	await userEvent.keyboard("{Control>}k{/Control}");
+	expect(await screen.findByRole("dialog")).toBeTruthy();
+});
