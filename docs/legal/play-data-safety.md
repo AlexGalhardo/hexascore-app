@@ -23,7 +23,7 @@ All rows: collected, **not shared**, processed by HexaScore only, encrypted in t
 | Personal info > Name | nickname shown on ratings and lists | Required for an account | App functionality, Account management | `src/profile/Settings.tsx` |
 | App activity > App interactions | ratings, library statuses, list changes, notification read state | Optional (only when the user acts) | App functionality, Personalization (opt-out in Profile) | `src/rating/`, `src/status/`, `src/lists/`, `src/notifications/` |
 | App activity > Other user-generated content | list names and descriptions | Optional | App functionality | `src/lists/` |
-| App activity > In-app search history | queries sent to `/search`; once the search tab sends `POST /search/events` (P5.B.3.1, not wired yet), `search.performed` and `search.clicked`. The server keeps raw queries at most 30 days and stores clicks with a query hash | Optional | Analytics, App functionality | `src/screens/Search.tsx`; server `search_events` (SDD 07 §7.8) |
+| App activity > In-app search history | queries sent to `/search` and `/search/suggest`; the server records `search.performed` and the app sends `search.clicked` through `POST /search/events`. The server keeps raw queries at most 30 days and stores clicks with a query hash | Optional | Analytics, App functionality | `src/screens/Search.tsx`, `src/search/events.ts`; server `search_events` (SDD 07 §7.8) |
 | App info and performance > Crash logs | screen name, error message and stack (emails and tokens redacted), app version, versionCode, Android API level; no user id | Optional: sent only after the user grants crash-report consent | Analytics (stability) | `src/telemetry/crash.ts`, `src/telemetry/consent.ts` |
 
 ## Not collected

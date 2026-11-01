@@ -3182,7 +3182,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 #### P5.B.3 Search
 
-- [ ] **P5.B.3.1** Build the search tab: debounced `/search/suggest`, full `/search` results grouped by type, and `POST /search/events` for `search.performed` and `search.clicked`. Auth is optional.
+- [x] **P5.B.3.1** Build the search tab: debounced `/search/suggest`, full `/search` results grouped by type, and `POST /search/events` for `search.performed` and `search.clicked`. Auth is optional.
   - Files/modules: `apps/mobile/app/(tabs)/search.tsx`, `src/search/useSuggest.ts`, `src/search/events.ts`, `src/search/search.test.tsx`
   - Refs: SDD 10 §6.1 (Search row), §7.7 (only these two client events); SDD 07 §6, §7.8; SDD 08 §6 (`SearchResultClicked` feeds `search_clicks`)
   - Depends on: P5.B.1.2, P3.C.2.2
@@ -3190,6 +3190,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
   - Acceptance:
     - `bun run --cwd apps/mobile test -- src/search` → one suggest call per debounce window; `q` > 100 chars is cut before sending; the click event carries item id and position, not the raw query (the server hashes it)
   - Notes: search history is "in-app search history (30 days)" in the data safety answers (P5.C.2.1). Keep it consistent with what the server stores.
+  - Status (2026-11-01): done on main (a2833612): `src/search` 13 tests pass, `bundle:check` ok.
 
 #### P5.B.4 Lists, profile and notifications
 

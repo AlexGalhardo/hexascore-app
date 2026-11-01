@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **mobile:** Play store listing texts in en, pt-BR and es with a limits check (`apps/mobile/store/listing/check.ts`, P5.C.2.2)
 - **infra:** `backup:offsite` mails `ADMIN_EMAILS` on day 1 a 7-day signed link (key derived from `APP_KEY`) to the encrypted monthly dump, served under `/backups/offsite/` for monthly dumps only and never cached (P2.E.2.3)
 - **legal:** Open Library licence record and A-05 decision in `docs/legal/open-library.md`; `CATALOG_API_SOURCES` listed in `.env.example` (P6.A.1.1)
+- **mobile:** Search tab suggests while typing (debounced `/search/suggest`), groups full `/search` results by type, cuts queries to 100 code points and reports clicks through `POST /search/events` without the query (P5.B.3.1)
+- **legal:** `/legal/privacy` answers 301 to `/policy`, keeping the `/pt-br` or `/es` prefix
 
 ### Fixed
 
