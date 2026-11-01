@@ -1381,7 +1381,9 @@
       "seeAll": "See all results for “{q}”",
       "move": "move",
       "open": "open",
-      "esc": "close"
+      "esc": "close",
+      "removeRecent": "Remove “{q}” from recent searches",
+      "trendingEmpty": "Nothing is trending this week yet."
     },
     "count": {
       "one": "{n} result",

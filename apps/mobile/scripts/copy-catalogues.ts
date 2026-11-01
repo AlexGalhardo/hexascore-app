@@ -12,7 +12,7 @@ export const BUNDLED_NAMESPACES = [
 	"categories",
 	"home",
 	"item",
-	"entity",
+	"itemTypes",
 	"lists",
 	"ratings",
 	"score",

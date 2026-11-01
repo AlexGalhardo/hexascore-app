@@ -57,11 +57,9 @@ test("typing searches with q, locale and page 1, and a row opens the item route"
 	expect(await screen.findByText("w 0")).toBeTruthy();
 	expect(read.calls.at(-1)).toEqual({ q: "witcher", locale: "en", page: "1" });
 	expect(screen.getByText("3 results")).toBeTruthy();
-	expect(
-		screen.getByRole("button", { name: "w 1, 2015, Games, Score 9.1 out of 10" }),
-	).toBeTruthy();
-	expect(screen.getByRole("button", { name: "w 0, Games, Not enough ratings yet" })).toBeTruthy();
-	await fireEvent.press(screen.getByRole("button", { name: /^w 1, 2015, Games/ }));
+	expect(screen.getByRole("button", { name: "w 1, 2015, Game, Score 9.1 out of 10" })).toBeTruthy();
+	expect(screen.getByRole("button", { name: "w 0, Game, Not enough ratings yet" })).toBeTruthy();
+	await fireEvent.press(screen.getByRole("button", { name: /^w 1, 2015, Game,/ }));
 	expect(onOpen).toHaveBeenCalledWith("/games/w-slug-1?id=w1");
 });
 
@@ -125,6 +123,14 @@ test("an opened search becomes a recent search", async () => {
 	await fireEvent.press(await screen.findByRole("button", { name: /^w 0,/ }));
 	await fireEvent.changeText(input(), "");
 	expect(await screen.findByText("Recent searches")).toBeTruthy();
+	expect(
+		screen.getByRole("button", { name: "Remove “witcher” from recent searches" }),
+	).toBeTruthy();
 	await fireEvent.press(screen.getByRole("button", { name: "witcher" }));
 	expect(input().props.value).toBe("witcher");
+});
+
+test("the empty sheet shows the trending empty state", async () => {
+	await renderSearch(reader(() => ({ searchId: "s", data: [], total: 0 })));
+	expect(screen.getByText("Nothing is trending this week yet.")).toBeTruthy();
 });

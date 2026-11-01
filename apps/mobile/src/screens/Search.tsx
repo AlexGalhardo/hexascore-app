@@ -101,8 +101,7 @@ export function SearchBody({
 			id: hit.id ?? "",
 			title: hit.title ?? hit.slug ?? "",
 			year: hit.year ?? null,
-			// shortcut: catalog.title.* is the section name; switch to itemTypes.* once that namespace is bundled.
-			typeLabel: plural ? t(locale, `catalog.title.${SINGULAR[plural]}`) : "",
+			typeLabel: plural ? t(locale, `itemTypes.${SINGULAR[plural]}`) : "",
 			coverUri: hit.cover?.thumb || null,
 			score: hit.score ?? null,
 		};
@@ -120,8 +119,9 @@ export function SearchBody({
 		cancel: t(locale, "search.palette.close"),
 		recent: t(locale, "search.palette.recent"),
 		// shortcut: no "remove recent search" key yet (resources/lang is locked by P5.B.4.3); add one after it merges.
-		removeRecent: (text) => `${t(locale, "lists.remove")}: ${text}`,
+		removeRecent: (text) => t(locale, "search.palette.removeRecent", { q: text }),
 		trending: t(locale, "home.trendingWeek"),
+		trendingEmpty: t(locale, "search.palette.trendingEmpty"),
 		loading: t(locale, "search.searching"),
 		noResults: (text) => t(locale, "search.noResults", { q: text }),
 		firstOf: (_shown, total) => t(locale, "search.count", { n: total }),
