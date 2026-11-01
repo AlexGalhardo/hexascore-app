@@ -84,3 +84,48 @@ ORDER BY isbn13 NULLS LAST LIMIT 1) WHERE id = $1`, work, c.ISBN, c.QID, c.OpenL
 
 	return nil
 }
+
+// FailureSource is the ingest_failures.source of an edition that could not be saved. It is not the job name, so a
+// standing ISBN conflict never parks the item itself.
+const FailureSource = "editions"
+
+// SaveAll saves the candidates of one work. An ISBN held by another work moves nothing: it opens an
+// entity_match_reviews row (role "edition", the holder as the candidate, once per ISBN) and is returned, so the
+// caller records the failure.
+func SaveAll(ctx context.Context, ex database.Executor, work string, in []Candidate) ([]string, error) {
+	store := PG{Ex: ex}
+
+	var conflicts []string
+
+	for _, c := range in {
+		out, err := Save(ctx, store, work, c)
+		if err != nil {
+			return nil, err
+		}
+
+		if out != Conflict {
+			continue
+		}
+
+		owner, _, err := store.WorkOfISBN(ctx, c.ISBN)
+		if err != nil {
+			return nil, err
+		}
+
+		if _, err := ex.ExecContext(
+			ctx,
+			`INSERT INTO entity_match_reviews (item_id, role, source, raw_name, raw_external_id, candidates)
+VALUES ($1, 'edition', $2, $3, $3, ARRAY[$4::uuid]) ON CONFLICT (item_id, role, source, raw_name) DO NOTHING`,
+			work,
+			c.Source,
+			c.ISBN,
+			owner,
+		); err != nil {
+			return nil, fmt.Errorf("editions: open review: %w", err)
+		}
+
+		conflicts = append(conflicts, c.ISBN)
+	}
+
+	return conflicts, nil
+}

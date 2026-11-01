@@ -39,6 +39,7 @@ var ScalarProps = []string{
 	"P345", "P5794", "P1733", "P4947", "P4983", "P212", "P648", "P2816",
 	"P8383", "P1712", "P1258", "P6278", "P2725",
 	"P1476", "P1448", "P2561", // original title, official name, name (alt titles)
+	"P957", "P747", // ISBN-10, editions (QIDs only: the edition entities are not fetched)
 }
 
 // EntityProps are the external ids kept on a wikidata:entity record, used

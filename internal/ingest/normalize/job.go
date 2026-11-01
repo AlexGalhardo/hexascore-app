@@ -10,6 +10,7 @@ import (
 	"github.com/AlexGalhardo/vukem/database"
 	"github.com/AlexGalhardo/vukem/uuid"
 
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/editions"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/store"
 )
@@ -290,16 +291,22 @@ func (n Normalizer) saveRelations(
 
 			return saveRelations(ctx, tx, id, rel, all)
 		})
-		if err != nil {
-			if ctx.Err() != nil {
-				return err
+		if err == nil {
+			if eerr := n.saveEditions(ctx, tx, r, res, qid, id, recs[qid]); eerr != nil {
+				return eerr
 			}
 
-			res.Failed++
+			continue
+		}
 
-			if _, ferr := run.RecordFailure(ctx, tx, r.ID, JobName, qid, "relations_failed", err); ferr != nil {
-				return ferr
-			}
+		if ctx.Err() != nil {
+			return err
+		}
+
+		res.Failed++
+
+		if _, ferr := run.RecordFailure(ctx, tx, r.ID, JobName, qid, "relations_failed", err); ferr != nil {
+			return ferr
 		}
 	}
 
@@ -391,6 +398,53 @@ FROM jsonb_to_recordset($2::jsonb) AS v(source text, fetched_at timestamptz)
 WHERE s.external_id = $3 AND s.source = v.source AND s.fetched_at = v.fetched_at`,
 			id, string(versions), qid); err != nil {
 			return fmt.Errorf("mark %s normalised: %w", qid, err)
+		}
+	}
+
+	return nil
+}
+
+// saveEditions stores the editions of a book. An ISBN held by another work is not an item failure: it counts as a
+// failed target and sits in ingest_failures under the editions source, with a review opened by editions.SaveAll.
+func (Normalizer) saveEditions(
+	ctx context.Context,
+	tx *database.Tx,
+	r run.Run,
+	res *run.Result,
+	qid, id string,
+	recs []store.Record,
+) error {
+	cands, _, err := ExtractEditions(qid, recs)
+	if err != nil || len(cands) == 0 {
+		return err
+	}
+
+	var conflicts []string
+
+	err = isolate(ctx, tx, func() error {
+		var serr error
+
+		conflicts, serr = editions.SaveAll(ctx, tx, id, cands)
+
+		return serr
+	})
+	if err != nil {
+		if ctx.Err() != nil {
+			return err
+		}
+
+		res.Failed++
+		_, ferr := run.RecordFailure(ctx, tx, r.ID, JobName, qid, "editions_failed", err)
+
+		return ferr
+	}
+
+	for _, isbn := range conflicts {
+		res.Failed++
+
+		if _, err := run.RecordFailure(ctx, tx, r.ID, editions.FailureSource, isbn, "isbn_conflict",
+			fmt.Errorf("isbn %s of %s belongs to another work", isbn, qid)); err != nil {
+			return err
 		}
 	}
 

@@ -74,6 +74,11 @@ var (
 		{Job: "normalize", Mode: run.ModeFull},
 	}}
 
+	// EditionsBackfill walks the books once and saves the editions their stored Wikidata records list (SDD 06 §7.8).
+	EditionsBackfill = Chain{"editions-backfill", []Stage{
+		{Job: "backfill.editions", Mode: run.ModeBackfill},
+	}}
+
 	// Chains lists every chain by name, which is how a run's params find the next stage.
 	Chains = []Chain{
 		Bootstrap,
@@ -83,6 +88,7 @@ var (
 		OpenLibraryWeekly,
 		TMDBWeekly,
 		TMDBExpire,
+		EditionsBackfill,
 	}
 )
 

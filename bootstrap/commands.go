@@ -25,5 +25,6 @@ func Commands() []vukem.Command {
 		console.ExportSince(),
 		console.CommunityStatsRebuild(),
 		console.IngestBootstrap(),
+		console.IngestBackfillEditions(),
 	}
 }
