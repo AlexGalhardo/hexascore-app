@@ -22,7 +22,8 @@ test.describe("reviews", () => {
 		// Its own slot offset keeps this spec off the items the ratings and profile specs rate in the same run.
 		await openTopItem(page, prefix, "movies", projectSlot(testInfo) + 7);
 
-		const reviews = page.locator("#reviews");
+		// Section ids sit on the heading (reviews-heading); the section is labelled by it.
+		const reviews = page.locator("section[aria-labelledby=reviews-heading]");
 		await expect(reviews.getByText(t("reviews.rateFirst"))).toBeVisible();
 
 		const groups = page.getByRole("radiogroup");
@@ -38,7 +39,9 @@ test.describe("reviews", () => {
 		await reviews.getByRole("button", { name: t("reviews.save") }).click();
 		await expect(reviews.locator("strong", { hasText: "Loved" })).toBeVisible();
 		await expect(
-			reviews.getByText("<script>window.pwned = 1</script>", { exact: false }),
+			reviews
+				.locator("article")
+				.getByText("<script>window.pwned = 1</script>", { exact: false }),
 		).toBeVisible();
 		expect(
 			await page.evaluate(() => (window as unknown as { pwned?: number }).pwned),

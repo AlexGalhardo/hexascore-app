@@ -38,6 +38,10 @@ func TestI18nPageNamespaces(t *testing.T) {
 		{"/docs/coverage", "coverage.", []string{"terms.", "billing."}},
 		{"/contact", "contact.", []string{"terms.", "docs."}},
 		{"/help/score", "help.", []string{"terms.", "docs."}},
+		// Reviews, comments and reactions render on item, list and profile pages (P7.B.1.1, P7.B.1.2): base list.
+		{"/", "reviews.", nil},
+		{"/", "comments.", nil},
+		{"/", "reactions.", nil},
 	} {
 		body := c.Get(tc.path).AssertOK().Body()
 		if !strings.Contains(body, `"`+tc.own) {
