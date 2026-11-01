@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **docs:** API guides for changes, exports and webhooks (Standard Webhooks verification in TypeScript and Python), with translated sidebar labels (P3.B.3.1)
+- **ci:** manual SDK release workflow (trusted publishing for npm with provenance, JSR and PyPI) and English runbook docs/runbooks/sdk-release.md (P3.B.2.1)
+- **ci:** ci job sdk (regenerate both SDKs, drift check, packaging dry-runs) (P3.B.1.3)
 - **mobile:** mobile entity page shows a "Next" control per item group when more items exist (IMPL-mobile-entity-more)
 - **mobile:** the Android search tab searches the catalogue (type chips, see all, paged results) (IMPL-mobile-v1-search-wire)
 - **mobile:** Android profile tab (name, nickname with inline nickname-taken, language override without restart, personalisation opt-out, devices with revoke, crash-report consent, theme, logout); `GET /app/v1/me` returns the account `email` (P5.B.4.2)
@@ -81,6 +84,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **sdk:** Python SDK version and README quota header aligned with the contract (P3.B.1.2)
 - **ui:** Design tokens use the v1 Editorial palette (light and dark) and add primary, ledge, field and on-score tokens; the Android app can follow the system theme or a stored light/dark choice (IMPL-mobile-v1-tokens)
 - **community:** Banning or deleting an account withdraws its open suggestions; merging an item expires the open suggestions on it; account deletion removes the user from community moderation records (P4.B.3.2)
 - **ui:** The home page shows the trending of the last 7 days, 3 per type; the 30-day API list is unchanged (FIX-trending-7d-home)
@@ -111,6 +115,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **api:** /problems/{code} answers 301; docs and SDK READMEs use meta.next_cursor; SDK READMEs list listChanges and webhook operations (FIX-problems-redirect-301)
+- **sdk:** TypeScript SDK pinned to typescript 6.0.3 so regeneration works; version and README header sync (P3.B.1.1)
 - **api:** the API host serves only the API: `/v1/*`, `/api/v1/*`, `/up`, a JSON index at `/`, and a 404 problem+json for everything else; it no longer renders the web frontend (FIX-api-host-only-api)
 - **mobile:** The Android root layout restores the session, rotates the token on foreground and routes a 426 to the update-required screen; login and update screens use the device locale and catalogue strings (FIX-mobile-root-wiring, P5.A.3.5)
 - **infra:** Requests to `www.hexascore.app` or the Railway domain answer 301 to the canonical host, keeping path and query (`/up` and the API host excluded) (FIX-www-redirect)

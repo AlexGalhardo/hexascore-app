@@ -2442,7 +2442,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.B.1 SDK generation
 
-- [ ] **P3.B.1.1** Port the TypeScript SDK (`sdks/ts`, `@hexascore/sdk`) from legacy and regenerate it from `openapi/api-v1.json`.
+- [x] **P3.B.1.1** Port the TypeScript SDK (`sdks/ts`, `@hexascore/sdk`) from legacy and regenerate it from `openapi/api-v1.json`.
   - Files/modules: `sdks/ts/package.json`, `sdks/ts/jsr.json`, `sdks/ts/openapi-ts.config.ts`, `sdks/ts/src/`, `sdks/ts/tsconfig.json`, `sdks/ts/README.md`
   - Refs: SDD 05 §6.5, §9; `legacy/sdks/ts/package.json`; `legacy/docs/sdk-publish-npm.md` §2; `legacy/docs/sdk-publish-jsr.md` "Regras do JSR"
   - Depends on: P3.A.7.1
@@ -2452,7 +2452,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `cd sdks/ts && npm pack --dry-run` → only `dist/**`, `README.md`, `LICENSE`, `package.json`
   - Notes: keep exact pins (`@hey-api/openapi-ts` 0.99.0, `typescript` 6.0.3) and `importFileExtension: ".ts"` for JSR. Version = `API_VERSION` in `package.json` and `jsr.json`. Rewrite the README for the new headers (`X-Quota-*`, problem codes); legacy `RateLimit-*` carried the quota and no longer does.
 
-- [ ] **P3.B.1.2** Port the Python SDK (`sdks/python`, `hexascore`) and regenerate it with openapi-python-client 0.29.1 `--meta none`.
+- [x] **P3.B.1.2** Port the Python SDK (`sdks/python`, `hexascore`) and regenerate it with openapi-python-client 0.29.1 `--meta none`.
   - Files/modules: `sdks/python/pyproject.toml`, `sdks/python/config.yml`, `sdks/python/hexascore/` (generated), `sdks/python/tests/`
   - Refs: SDD 05 §6.5, §9; `legacy/sdks/python/pyproject.toml`; `legacy/docs/sdk-publish-pypi.md` §2
   - Depends on: P3.B.1.1
@@ -2461,7 +2461,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `cd sdks/python && uv run pytest -q` → pass; `uv build && uvx twine@6.2.0 check dist/*` → `PASSED`
   - Notes: `hexascore/` is generated; never edit it by hand. Same version as the TS SDK.
 
-- [ ] **P3.B.1.3** Add the CI job that regenerates both SDKs and fails on diff, then runs typecheck, tests and dry-run packaging.
+- [x] **P3.B.1.3** Add the CI job that regenerates both SDKs and fails on diff, then runs typecheck, tests and dry-run packaging.
   - Files/modules: `.github/workflows/ci.yml` (job `sdk`), root `package.json` scripts `sdk:generate`, `sdk:generate:python`
   - Refs: SDD 05 FR-05-15, §10 "SDK smoke"
   - Depends on: P3.B.1.2
