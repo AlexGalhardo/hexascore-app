@@ -8,7 +8,6 @@ import (
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/i18n"
-	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/middleware"
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/router"
@@ -113,32 +112,24 @@ func Web(r *router.Router, app *vukem.App) error {
 	// messages or future server-only keys (SDD 09 §6.1).
 	r.Use(
 		app.Inertia.Middleware,
-		inertia.I18n(
+		appmiddleware.PageI18n([]string{
 			"account.",
 			"actions.",
-			"api.",
 			"auth.",
-			"billing.",
 			"catalog.",
 			"categories.",
-			"dashboard.",
 			"itemTypes.",
 			"score.",
 			"meta.",
 			"nav.",
 			"home.",
-			"help.",
 			"footer.",
 			"cookies.",
 			"sandbox.",
-			"contact.",
-			"docs.",
 			"entity.",
 			"errors.",
 			"item.",
 			"updatedLabel.",
-			"policy.",
-			"terms.",
 			"lists.",
 			"rating.",
 			"ratings.",
@@ -149,7 +140,7 @@ func Web(r *router.Router, app *vukem.App) error {
 			"forYou.",
 			"userLists.",
 			"community.",
-		),
+		}, localePrefixes),
 		appmiddleware.ShareProps(appmiddleware.ShareConfig{
 			AppName:    cmp.Or(app.Source.Get("APP_NAME"), "HexaScore"),
 			CoversBase: coversBase,
