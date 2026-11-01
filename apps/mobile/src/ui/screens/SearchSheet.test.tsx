@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
+import { Text } from "react-native";
 import {
 	type SearchLabels,
 	type SearchRow,
@@ -93,4 +94,25 @@ test("results show the first 8 rows with year, type and score, and see all", asy
 	expect(props.onOpen).toHaveBeenCalledWith(rows[1]);
 	await fireEvent.press(screen.getByRole("button", { name: "See all results for “an”" }));
 	expect(props.onSeeAll).toHaveBeenCalled();
+});
+
+test("a raised limit shows every row; without onSeeAll there is no footer", async () => {
+	const rows = Array.from({ length: 10 }, (_, index) => row(index, `Grand Theft Auto ${index}`));
+	const props = setup({
+		query: "an",
+		state: { kind: "results", rows, total: 10 },
+		limit: Number.POSITIVE_INFINITY,
+		onSeeAll: undefined,
+	});
+	await render(<SearchSheet {...props} />);
+	expect(screen.getByText("First 10 of 10 matches")).toBeTruthy();
+	expect(screen.getByText("Grand Theft Auto 9")).toBeTruthy();
+	expect(screen.queryByText(/See all/)).toBeNull();
+});
+
+test("renders the filters slot and an error message", async () => {
+	const props = setup({ query: "an", state: { kind: "error", message: "Search is busy" } });
+	await render(<SearchSheet {...props} filters={<Text>Type chips</Text>} />);
+	expect(screen.getByText("Type chips")).toBeTruthy();
+	expect(screen.getByText("Search is busy")).toBeTruthy();
 });

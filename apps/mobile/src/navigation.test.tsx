@@ -10,10 +10,8 @@ import Lists from "../app/(tabs)/lists";
 import Profile from "../app/(tabs)/profile";
 import Search from "../app/(tabs)/search";
 import ItemScreen, { ItemBody, itemIdOf } from "../app/[type]/[slug]";
-import AboutScreen from "../app/about";
 import EntityScreen from "../app/entities/[id]";
 import ListScreen from "../app/lists/[id]";
-import NotificationsRoute from "../app/notifications";
 import UpdateRequired from "../app/update-required";
 import { getNetworkState, setNetworkState } from "./platform/network";
 import { storeListingUrl } from "./platform/store";
@@ -72,21 +70,12 @@ const routes: [string, Record<string, string>, () => ReactElement, string | null
 	["(auth)/login", {}, () => <Login />, null],
 	["(tabs)/index", {}, () => offline(<Home />), "HexaScore"],
 	["(tabs)/[type]", { type: "games" }, () => offline(<SectionScreen />), "Games"],
-	["(tabs)/search", {}, () => <Search />, "Search"],
-	["(tabs)/lists", {}, () => offline(<Lists />), "My lists"],
-	["(tabs)/profile", {}, () => offline(<Profile />), "Settings"],
+	["(tabs)/search", {}, () => offline(<Search />), "All"],
+	["(tabs)/lists", {}, () => <Lists />, "Lists"],
+	["(tabs)/profile", {}, () => <Profile />, "Settings"],
 	["[type]/[slug]", { type: "movies", slug: "" }, () => <ItemScreen />, "Page not found"],
-	// The entity screen renders nothing until GET /entities/{id} answers.
-	["entities/[id]", { id: "42" }, () => offline(<EntityScreen />), null],
-	// The list screen renders nothing until GET /lists/{id} answers.
-	["lists/[id]", { id: "7" }, () => offline(<ListScreen />), null],
-	[
-		"about",
-		{},
-		() => <AboutScreen />,
-		"This product uses the TMDB API but is not endorsed or certified by TMDB.",
-	],
-	["notifications", {}, () => offline(<NotificationsRoute />), "Notifications"],
+	["entities/[id]", { id: "42" }, () => <EntityScreen />, "Entity 42"],
+	["lists/[id]", { id: "7" }, () => <ListScreen />, "List 7"],
 	["update-required", {}, () => <UpdateRequired />, storeListingUrl()],
 	["_layout", {}, () => <RootLayout />, null],
 	["(tabs)/_layout", {}, () => <TabsLayout />, null],
