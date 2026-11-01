@@ -1,6 +1,8 @@
 package tests
 
 import (
+	"encoding/json"
+	"os"
 	"testing"
 
 	"github.com/AlexGalhardo/vukem/vukemtest"
@@ -27,5 +29,39 @@ func TestPricingPage(t *testing.T) {
 			PropEquals("currency", c.currency).
 			HasProp("plans").
 			HasProp("coverage")
+	}
+}
+
+// P3.B.3.2, D-33: /pricing and /docs/coverage publish exactly resources/data/api_coverage.json (written from
+// qa/sql/api_coverage.sql), in every locale; other docs pages do not carry it.
+func TestCoverageRoutes(t *testing.T) {
+	t.Parallel()
+
+	raw, err := os.ReadFile("../resources/data/api_coverage.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var want struct {
+		MeasuredAt any `json:"measuredAt"`
+		Rows       any `json:"rows"`
+	}
+	if err := json.Unmarshal(raw, &want); err != nil {
+		t.Fatal(err)
+	}
+
+	app := vukemtest.New(t, bootstrap.New)
+
+	for _, prefix := range []string{"", "/pt-br", "/es"} {
+		app.Client(t).Get(prefix+"/pricing").AssertOK().AssertInertia("Pricing/Index").
+			PropEquals("coverage.docsPath", "/docs/coverage").
+			PropEquals("coverage.measuredAt", want.MeasuredAt).
+			PropEquals("coverage.rows", want.Rows)
+		app.Client(t).Get(prefix+"/docs/coverage").AssertOK().AssertInertia("Docs/Page").
+			PropEquals("slug", "coverage").
+			PropEquals("coverage.measuredAt", want.MeasuredAt).
+			PropEquals("coverage.rows", want.Rows)
+		app.Client(t).Get(prefix+"/docs/changelog").AssertOK().AssertInertia("Docs/Page").
+			PropEquals("slug", "changelog").
+			MissingProp("coverage")
 	}
 }

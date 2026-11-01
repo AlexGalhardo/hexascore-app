@@ -15,7 +15,7 @@ import (
 
 // all: keeps build/.vite/manifest.json (a dot directory) in the binary.
 //
-//go:embed views lang docs/docs.json docs/*.md all:public
+//go:embed views lang docs/docs.json docs/*.md data/api_coverage.json all:public
 var embedded embed.FS
 
 // Views returns the html/template views.
@@ -64,3 +64,7 @@ func DocsJSON() ([]byte, error) { return embedded.ReadFile("docs/docs.json") }
 
 // DocsMarkdown returns the Markdown source of one API docs page (resources/docs/<slug>.md), for /llms-full.txt.
 func DocsMarkdown(slug string) ([]byte, error) { return embedded.ReadFile("docs/" + slug + ".md") }
+
+// APICoverage returns resources/data/api_coverage.json, written from qa/sql/api_coverage.sql by
+// scripts/api-coverage-json.ts and published on /pricing and /docs/coverage (D-33).
+func APICoverage() ([]byte, error) { return embedded.ReadFile("data/api_coverage.json") }

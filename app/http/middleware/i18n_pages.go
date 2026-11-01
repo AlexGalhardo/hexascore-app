@@ -12,12 +12,12 @@ import (
 // on pages under that prefix. A namespace used outside the listed prefixes (a layout, Nav, Footer) must stay in
 // the base list.
 var PageNamespaces = map[string][]string{
-	"/docs":        {"docs."},
+	"/docs":        {"docs.", "coverage."},
 	"/terms":       {"terms."},
 	"/policy":      {"policy."},
 	"/help":        {"help."},
 	"/billing":     {"billing."},
-	"/pricing":     {"billing."},
+	"/pricing":     {"billing.", "coverage."},
 	"/profile/api": {"api."},
 	"/contact":     {"contact."},
 	"/dashboard":   {"dashboard."},

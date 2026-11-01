@@ -218,7 +218,17 @@ func Web(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	docs, err := controllers.Docs(docsJSON)
+	coverageJSON, err := resources.APICoverage()
+	if err != nil {
+		return err
+	}
+
+	coverage, err := controllers.ParseAPICoverage(coverageJSON)
+	if err != nil {
+		return err
+	}
+
+	docs, err := controllers.Docs(docsJSON, coverage)
 	if err != nil {
 		return err
 	}
@@ -238,7 +248,7 @@ func Web(r *router.Router, app *vukem.App) error {
 	r.Get("/legal/privacy", func(c *web.Ctx) error {
 		return c.RedirectStatus(http.StatusMovedPermanently, i18n.PathPrefix(c.Context())+"/policy")
 	}).Name("legal.privacy")
-	r.Get("/pricing", controllers.Pricing).Name("pricing")
+	r.Get("/pricing", controllers.Pricing(coverage)).Name("pricing")
 	r.Get("/docs", docs).Name("docs")
 	r.Get("/docs/{slug}", docs).Name("docs.page")
 	r.Get("/", controllers.Home(app)).Name("home")

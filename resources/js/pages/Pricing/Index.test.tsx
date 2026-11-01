@@ -30,7 +30,7 @@ test("prices in the chosen currency, marks pro as most chosen and the current cu
 			plans={[plan("free", 0), plan("pro", 600), plan("business", 2950)]}
 			currency="usd"
 			currencies={["usd", "brl"]}
-			coverage={{ measured: false, docsPath: "/docs/coverage" }}
+			coverage={{ measuredAt: null, rows: [], docsPath: "/docs/coverage" }}
 		/>,
 	);
 	const pro = screen.getByRole("listitem", { name: /billing\.plans\.pro/ });
@@ -41,4 +41,27 @@ test("prices in the chosen currency, marks pro as most chosen and the current cu
 	expect(within(free).getByText("billing.pricing.lifetime")).toBeTruthy();
 	expect(within(free).queryByText("billing.pricing.popular")).toBeNull();
 	expect(screen.getByRole("link", { name: "USD" }).getAttribute("aria-current")).toBe("true");
+});
+
+test("states the coverage, links /docs/coverage and prints the measured numbers", () => {
+	render(
+		<Index
+			plans={[plan("free", 0), plan("pro", 600), plan("business", 2950)]}
+			currency="usd"
+			currencies={["usd"]}
+			coverage={{
+				measuredAt: "2026-11-01",
+				rows: [{ type: "movie", field: "synopsis", items: 3, pct: 66.7 }],
+				docsPath: "/docs/coverage",
+			}}
+		/>,
+	);
+	const aside = screen.getByRole("complementary", { name: "billing.pricing.coverageTitle" });
+	expect(within(aside).getByText("billing.pricing.coverageBody")).toBeTruthy();
+	expect(
+		within(aside)
+			.getByRole("link", { name: /billing\.pricing\.coverageLink/ })
+			.getAttribute("href"),
+	).toBe("/docs/coverage");
+	expect(within(aside).getByText("66.7%")).toBeTruthy();
 });

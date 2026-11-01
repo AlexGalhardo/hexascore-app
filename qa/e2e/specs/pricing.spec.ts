@@ -13,9 +13,15 @@ test.describe("pricing", () => {
 				page.getByRole("heading", { name: t(`billing.plans.${plan}`), exact: true }),
 			).toBeVisible();
 		}
+		const coverage = page.getByRole("complementary", {
+			name: t("billing.pricing.coverageTitle"),
+		});
+		await expect(coverage.getByText(t("billing.pricing.coverageBody"))).toBeVisible();
 		await expect(
-			page.getByRole("heading", { name: t("billing.pricing.coverageTitle") }),
-		).toBeVisible();
+			coverage.getByRole("link", { name: t("billing.pricing.coverageLink") }),
+		).toHaveAttribute("href", `${prefix}/docs/coverage`);
+		// resources/data/api_coverage.json has no rows until the staging run (P3.A.2.2).
+		await expect(coverage.getByText(t("coverage.notMeasured"))).toBeVisible();
 
 		const currency = page.getByRole("navigation", { name: t("billing.pricing.currency") });
 		await currency.getByRole("link", { name: "EUR" }).click();

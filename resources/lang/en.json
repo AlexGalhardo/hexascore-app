@@ -1,4 +1,9 @@
 {
+  "coverage": {
+    "caption": "Share of public items whose field the API returns, measured on {date}.",
+    "field": "Field",
+    "notMeasured": "Per-field percentages are not published yet. They are measured on a copy of the production catalogue and will appear here with the date of the measurement."
+  },
   "flash": {
     "ratingSaved": "Rating saved.",
     "ratingRemoved": "Rating removed.",
@@ -465,7 +470,7 @@
       "ctaSignup": "Sign up to subscribe",
       "notConfigured": "Online payments are not available yet. Paid plans will open soon.",
       "coverageTitle": "Data coverage",
-      "coverageBody": "The API only returns fields we may republish, so some are patchy and some are always omitted (covers, trailers). Coverage percentages are not published yet.",
+      "coverageBody": "The API only returns fields we may republish, so some are patchy. Covers for films, series and games, and trailers, are never in the API.",
       "coverageLink": "Read the coverage details",
       "eyebrow": "Public API · read-only",
       "popular": "Most chosen",
