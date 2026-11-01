@@ -6,7 +6,8 @@ import (
 	vmail "github.com/AlexGalhardo/vukem/mail"
 )
 
-func TestAutomaticMailSenderAndReplyTo(t *testing.T) {
+// The support Reply-To is set on the vukem mailer (SetReplyTo); tests/mail_test.go checks it end to end.
+func TestAutomaticMailSender(t *testing.T) {
 	Configure("", "")
 	cases := map[string]vmail.Envelope{
 		"verify":    VerifyEmail{}.Envelope(),
@@ -19,8 +20,8 @@ func TestAutomaticMailSenderAndReplyTo(t *testing.T) {
 		if e.From != "HexaScore <noreply@hexascore.app>" {
 			t.Errorf("%s: From = %q", name, e.From)
 		}
-		if len(e.ReplyTo) != 1 || e.ReplyTo[0] != "support@hexascore.app" {
-			t.Errorf("%s: ReplyTo = %v", name, e.ReplyTo)
+		if len(e.ReplyTo) != 0 {
+			t.Errorf("%s: ReplyTo = %v, want the mailer default", name, e.ReplyTo)
 		}
 	}
 }
@@ -29,7 +30,7 @@ func TestConfigureOverrides(t *testing.T) {
 	t.Cleanup(func() { Configure("", "") })
 	Configure("A <a@example.com>", "s@example.com")
 	e := VerifyEmail{}.Envelope()
-	if e.From != "A <a@example.com>" || e.ReplyTo[0] != "s@example.com" {
+	if e.From != "A <a@example.com>" || SupportAddress() != "s@example.com" {
 		t.Fatalf("got %+v", e)
 	}
 }
