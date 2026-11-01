@@ -124,7 +124,7 @@ export default function Index({
 									aria-current={current ? "page" : undefined}
 									className={`inline-flex min-h-11 items-center border px-4 text-[15px] font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg ${current ? "border-fg bg-fg text-bg" : "border-border bg-surface hover:bg-hover"}`}
 								>
-									{type ? t(`itemTypes.${type}`) : t("search.all")}
+									{isType(type) ? t(NAV_KEY[type]) : t("search.all")}
 								</Link>
 							);
 						})}
@@ -192,9 +192,9 @@ export default function Index({
 									/>
 								)}
 								<span className="font-display text-[28px] leading-tight font-bold">
-									{t(`itemTypes.${g.type}`)}
+									{isType(g.type) ? t(NAV_KEY[g.type]) : g.type}
 								</span>
-								<span className="text-sm text-muted">
+								<span className="font-sans text-sm text-muted">
 									{t("search.count", { count: g.total, n: num(g.total) })}
 								</span>
 							</h2>
@@ -256,7 +256,7 @@ export default function Index({
 				</div>
 				{entities.length > 0 && (
 					<aside className="self-start bg-surface px-5 py-6">
-						<h2 className="text-xs font-bold tracking-[0.1em] uppercase">
+						<h2 className="font-sans text-xs font-bold tracking-[0.1em] uppercase">
 							{t("search.people")}
 						</h2>
 						<ul className="mt-2">
