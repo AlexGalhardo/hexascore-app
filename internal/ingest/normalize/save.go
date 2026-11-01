@@ -11,6 +11,8 @@ import (
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
+
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/entities"
 )
 
 // Sources is the list of source_records sources that feed an item; the other
@@ -226,6 +228,24 @@ func saveRelations(ctx context.Context, ex database.Executor, id string, rel *Re
 VALUES ($1, $2, NULLIF($3, ''), $4, $5) ON CONFLICT (item_id, title) DO NOTHING`,
 			id, a.Title, a.Lang, a.Kind, a.Source); err != nil {
 			return fmt.Errorf("save alt title: %w", err)
+		}
+	}
+
+	// Credits only name Wikidata QIDs here; source external ids and years arrive with the TMDB and Open Library credits.
+	store := entities.PG{Ex: ex}
+
+	for _, c := range rel.Credits {
+		_, err := entities.Resolve(ctx, store, entities.Credit{
+			ItemID:   id,
+			Role:     c.Role,
+			Kind:     c.Kind,
+			Source:   wikidataSource,
+			QID:      c.QID,
+			Name:     c.Name,
+			Position: c.Position,
+		})
+		if err != nil {
+			return fmt.Errorf("save credit %s %s: %w", c.Role, c.QID, err)
 		}
 	}
 
