@@ -90,6 +90,7 @@ func loadFake(t *testing.T) *fakeSources {
 	mux.HandleFunc("/sparql", f.sparql)
 	mux.HandleFunc("/wikidata", f.wbgetentities)
 	mux.HandleFunc("/wikipedia/", f.extracts)
+	mux.HandleFunc("/3/", f.tmdb)
 
 	f.srv = httptest.NewServer(mux)
 	t.Cleanup(f.srv.Close)
@@ -169,12 +170,14 @@ func newIngestApp(t *testing.T, f *fakeSources, flagsOn ...string) *vukemtest.Ap
 		WikidataRDF:  f.srv.URL + "/sparql",
 		WikidataAPI:  f.srv.URL + "/wikidata",
 		WikipediaAPI: f.srv.URL + "/wikipedia/",
+		TMDBAPI:      f.srv.URL + "/3",
 	}
 
 	env := map[string]string{
-		"DATABASE_URL":     pgtest.Database(t, ""),
-		"QUEUE_CONNECTION": "database",
-		"QUEUE_NAMES":      "ingest,default",
+		"DATABASE_URL":                           pgtest.Database(t, ""),
+		"QUEUE_CONNECTION":                       "database",
+		"QUEUE_NAMES":                            "ingest,default",
+		"THEMOVIEDATABASE_API_READ_ACCESS_TOKEN": "test-token",
 	}
 	for _, name := range flagsOn {
 		env["FLAG_INGEST_"+name] = "true"

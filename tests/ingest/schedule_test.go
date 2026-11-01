@@ -29,6 +29,8 @@ func TestScheduleTable(t *testing.T) {
 		"ingest:wikidata-weekly":      "0 1 * * 0",
 		"ingest:wikipedia-weekly":     "0 1 * * 1",
 		"ingest:openlibrary-weekly":   "0 1 * * 2",
+		"ingest:tmdb-weekly":          "0 1 * * 5",
+		"ingest:tmdb-expire":          "0 3 * * *",
 	}
 
 	for _, task := range sched.Tasks() {
