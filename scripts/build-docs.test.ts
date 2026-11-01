@@ -32,6 +32,45 @@ it("docs.json is up to date (run: bun scripts/build-docs.ts)", () => {
 	expect(readFileSync(join(docsDir, "docs.json"), "utf8")).toBe(docsJSON(docsDir));
 });
 
+describe("developer guides", () => {
+	const page = (slug: string): string => readFileSync(join(docsDir, `${slug}.md`), "utf8");
+	const pages = docsJSON(docsDir);
+
+	it("has an errors anchor for every problem code of the catalogue", () => {
+		const catalog = readFileSync(join(docsDir, "..", "..", "app", "http", "problems", "catalog.go"), "utf8");
+		const codes = [...catalog.matchAll(/\{"([a-z-]+)", http\./g)].map((m) => m[1]);
+		expect(codes.length).toBeGreaterThan(15);
+		for (const code of codes) expect(page("errors"), code).toContain(`### ${code}\n`);
+	});
+
+	it("documents changes, exports and webhooks, in sidebar order before errors", () => {
+		const slugs = (JSON.parse(pages) as { slug: string }[]).map((p) => p.slug);
+		expect(slugs.slice(slugs.indexOf("rate-limits"))).toEqual([
+			"rate-limits",
+			"changes",
+			"exports",
+			"webhooks",
+			"errors",
+			"coverage",
+			"changelog",
+		]);
+	});
+
+	it("shows Standard Webhooks verification in TypeScript and Python", () => {
+		const md = page("webhooks");
+		for (const needle of ["```ts", "```python", "webhook-signature", "webhook-timestamp", "whsec_", "timingSafeEqual", "compare_digest"]) {
+			expect(md, needle).toContain(needle);
+		}
+	});
+
+	it("uses the published SDKs, not raw fetch, in the changes guide", () => {
+		const md = page("changes");
+		expect(md).toContain("listChanges");
+		expect(md).toContain("list_changes");
+		expect(md).not.toContain("fetch(");
+	});
+});
+
 it("documents the cursor as meta.next_cursor, never top-level", () => {
 	for (const f of ["index.md", "pagination.md"]) {
 		const md = readFileSync(join(docsDir, f), "utf8");
