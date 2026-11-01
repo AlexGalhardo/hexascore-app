@@ -51,7 +51,7 @@ func NewSearch(app *vukem.App, searcher search.Searcher, user func(c *web.Ctx) (
 	}
 }
 
-// SearchHit is one result row; the catalogue read model adds score and cover later.
+// SearchHit is one result row; cover, year and score are attached from the catalogue after the search.
 type SearchHit struct {
 	ID             string               `json:"id"`
 	Type           string               `json:"type"`
@@ -61,6 +61,8 @@ type SearchHit struct {
 	MatchedTitle   string               `json:"matchedTitle,omitempty"`
 	MatchedEdition *search.EditionMatch `json:"matchedEdition,omitempty"`
 	Cover          *catalog.Cover       `json:"cover"`
+	Year           *int                 `json:"year"`
+	Score          *float64             `json:"score"`
 }
 
 // SearchGroup is one type's block of the grouped page.
@@ -556,7 +558,7 @@ func LegacySuggest(c *web.Ctx) error {
 	return nil
 }
 
-// attachCovers fills Cover on every hit of the page with one query.
+// attachCovers fills Cover, Year and Score on every hit of the page with two queries.
 func (h *Search) attachCovers(ctx context.Context, out *searchPage) error {
 	var hits []*SearchHit
 	for i := range out.Results {
@@ -585,8 +587,16 @@ func (h *Search) attachCovers(ctx context.Context, out *searchPage) error {
 	if err != nil {
 		return err
 	}
+
+	meta, err := catalog.HitMetaFor(ctx, db, ids)
+	if err != nil {
+		return err
+	}
+
 	for _, hit := range hits {
 		hit.Cover = covers[hit.ID]
+		m := meta[hit.ID]
+		hit.Year, hit.Score = m.Year, m.Score
 	}
 
 	return nil
