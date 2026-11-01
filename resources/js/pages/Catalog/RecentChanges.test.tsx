@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { expect, test, vi } from "vitest";
+import { afterEach, expect, test, vi } from "vitest";
 
 import RecentChanges from "./RecentChanges";
 
@@ -14,6 +14,8 @@ vi.mock("@inertiajs/react", () => ({
 	),
 	usePage: () => ({ url: "/movies/old/changes?page=2", props: { locale: "en" } }),
 }));
+
+afterEach(cleanup);
 
 const at = "2026-10-31T10:00:00Z";
 
