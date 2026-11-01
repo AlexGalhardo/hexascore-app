@@ -8,6 +8,9 @@ const DOC_PAGES = [
 	"errors",
 	"pagination",
 	"rate-limits",
+	"changes",
+	"exports",
+	"webhooks",
 	"coverage",
 	"changelog",
 ] as const;
