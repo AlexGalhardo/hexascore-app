@@ -279,8 +279,8 @@ In: follow and unfollow, follow requests for private profiles, follower and foll
 ALTER TABLE users ADD COLUMN feed_opt_in boolean NOT NULL DEFAULT false;
 
 CREATE TABLE follows (
-  follower_id text NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  followee_id text NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  follower_id bigint NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  followee_id bigint NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   state text NOT NULL CHECK (state IN ('accepted','pending')),
   created_at timestamptz NOT NULL DEFAULT now(),
   accepted_at timestamptz,
@@ -290,7 +290,7 @@ CREATE INDEX follows_followee_idx ON follows (followee_id, state);
 
 CREATE TABLE activity_events (
   id uuid PRIMARY KEY,                                   -- v7, the cursor
-  actor_id text NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  actor_id bigint NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   kind text NOT NULL CHECK (kind IN ('rating_saved','status_changed','list_created',
        'list_item_added','review_published')),
   item_id uuid REFERENCES items(id) ON DELETE CASCADE,
