@@ -26,6 +26,7 @@ type ReportResolve struct {
 
 // ReportResolveSchema validates ReportResolve; the outcome must also fit the target (library.Reports.Resolve).
 var ReportResolveSchema = z.Struct[ReportResolve](z.Shape{
-	"outcome":   z.Enum("dismissed", "list_hidden", "user_banned", "no_action", "content_hidden", "content_deleted"),
+	"outcome":   z.Enum("dismissed", "list_hidden", "user_banned", "no_action", "content_hidden", "content_deleted",
+		"content_unhidden"),
 	"adminNote": z.String().Trim().Max(1000).Default(""),
 })

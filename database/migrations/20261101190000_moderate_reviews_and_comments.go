@@ -14,7 +14,7 @@ func m20261101190000ModerateReviewsAndComments() schema.Migration {
   ADD CONSTRAINT reports_target_type_check CHECK (target_type IN ('list','user','suggestion','review','comment')),
   DROP CONSTRAINT reports_outcome_check,
   ADD CONSTRAINT reports_outcome_check CHECK (outcome IN ('dismissed','list_hidden','user_banned',
-    'suggestion_rejected','no_action','content_hidden','content_deleted'))`,
+    'suggestion_rejected','no_action','content_hidden','content_deleted','content_unhidden'))`,
 			`ALTER TABLE user_notifications DROP CONSTRAINT user_notifications_kind_check,
   ADD CONSTRAINT user_notifications_kind_check CHECK (kind IN ('suggestion_decided','suggestion_reverted',
     'suggestion_expired','report_resolved','rating_flagged','list_hidden','system','new_follower','follow_request',
