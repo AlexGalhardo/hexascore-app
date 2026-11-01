@@ -691,7 +691,7 @@
   },
   "friendsScore": {
     "title": "Rated by people you follow",
-    "summary": "Rated by {count} people you follow",
+    "summary": "{count} of the people you follow rated it",
     "home": "Rated by people you follow"
   },
   "home": {
