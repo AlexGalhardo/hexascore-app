@@ -1521,7 +1521,11 @@
       "content_deleted": "Your {targetType} was removed by a moderator."
     },
     "followAccept": "Accept",
-    "followDecline": "Decline"
+    "followDecline": "Decline",
+    "target": {
+      "review": "review",
+      "comment": "comment"
+    }
   },
   "library": {
     "title": "Your library",
