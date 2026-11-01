@@ -95,7 +95,7 @@ export default function TypeSection({
 							key={item.id}
 							className={`flex gap-4 border-t-2 bg-surface p-3 ${ACCENT_BORDER[type]}`}
 						>
-							<CoverThumb cover={item.cover} alt="" size="md" />
+							<CoverThumb cover={item.cover} alt="" size="trend" />
 							<div className="grid min-w-0 content-start gap-1">
 								<p className={`text-xs font-semibold ${ACCENT_TEXT[type]}`}>
 									{item.basis === "prior"
