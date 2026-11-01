@@ -49,7 +49,7 @@ const sum = (counts: Props["counts"], status: string, type: string): number =>
 		);
 
 const field =
-	"min-h-11 w-full rounded-xs border border-field bg-field-bg px-3 text-[15px] text-fg focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary";
+	"min-h-11 w-full rounded-xs border border-field bg-field-bg px-3 text-[15px] font-normal text-fg focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary";
 const label = "grid gap-1.5 text-[13px] font-semibold sm:w-[220px]";
 
 export default function Index({ counts, groups, filters }: Props) {
