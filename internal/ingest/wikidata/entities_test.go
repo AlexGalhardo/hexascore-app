@@ -2,6 +2,7 @@ package wikidata_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"maps"
 	"net/http"
@@ -371,5 +372,53 @@ func TestFetchReemitsEntityRecordsWhenTheChunkIsRetried(t *testing.T) {
 
 	if again := count(); again != first {
 		t.Fatalf("retried chunk emitted %d entity records, want %d", again, first)
+	}
+}
+
+// ADR 0012: P747 editions are referenced entities, so their records are fetched (at most 50 per work), and an
+// edition record keeps the language, date, publisher and ISBNs the edition matcher reads.
+func TestTrimFetchesEditionsAndKeepsTheirClaims(t *testing.T) {
+	stmt := func(typ, value string) string {
+		return `{"mainsnak":{"snaktype":"value","datavalue":{"type":"` + typ + `","value":` + value + `}},"rank":"normal"}`
+	}
+
+	var eds []string
+	for i := range 60 {
+		eds = append(eds, stmt("wikibase-entityid", fmt.Sprintf(`{"id":"Q%d"}`, 1000+i)))
+	}
+
+	work, err := wikidata.ParseEntity(
+		[]byte(`{"id":"Q5","labels":{},"claims":{"P747":[` + strings.Join(eds, ",") + `]},"sitelinks":{}}`),
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if refs := wikidata.ReferencedQids(
+		wikidata.Trim(work, "book"),
+	); len(refs) != 50 ||
+		!slices.Contains(refs, "Q1000") {
+		t.Errorf("referenced editions = %d (%v), want the first 50", len(refs), refs)
+	}
+
+	ed, err := wikidata.ParseEntity([]byte(`{"id":"Q1000","labels":{"en":{"language":"en","value":"Dune"}},"claims":{` +
+		`"P407":[` + stmt("wikibase-entityid", `{"id":"Q1860"}`) + `],` +
+		`"P577":[` + stmt("time", `{"time":"+1965-00-00T00:00:00Z","precision":9}`) + `],` +
+		`"P123":[` + stmt("wikibase-entityid", `{"id":"Q7"}`) + `],` +
+		`"P212":[` + stmt("string", `"978-0-441-01359-3"`) + `],"P957":[` + stmt("string", `"0-441-01359-7"`) + `],` +
+		`"P31":[` + stmt("wikibase-entityid", `{"id":"Q3331189"}`) + `]},"sitelinks":{}}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := wikidata.TrimEntity(ed).Claims
+	for _, prop := range []string{"P407", "P577", "P123", "P212", "P957"} {
+		if len(got[prop]) != 1 {
+			t.Errorf("%s = %v, want kept", prop, got[prop])
+		}
+	}
+
+	if _, ok := got["P31"]; ok {
+		t.Error("P31 is not read by the matcher and must not be kept")
 	}
 }

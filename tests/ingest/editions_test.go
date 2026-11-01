@@ -334,3 +334,56 @@ func TestNormalizeQidConflictIsAFailureAndAReviewAndTheItemStillSaves(t *testing
 		t.Errorf("a QID conflict must not park the item (%d normalize failures)", n)
 	}
 }
+
+// editionEntity stores the wikidata:entity record of a P747 edition.
+func editionEntity(t *testing.T, db *database.DB, qid, lang, year string) {
+	t.Helper()
+
+	payload := fmt.Sprintf(`{"id":%q,"labels":{"en":"Edition %s"},"claims":{
+"P407":[{"value":%q,"rank":"normal"}],
+"P577":[{"value":{"time":"+%s-00-00T00:00:00Z","precision":9},"rank":"normal"}]}}`, qid, qid, lang, year)
+	if _, err := db.ExecContext(t.Context(), `INSERT INTO source_records (source, external_id, payload, hash)
+VALUES ('wikidata:entity', $1::text, $2::jsonb, encode(sha256(($1::text)::bytea), 'hex'))`, qid, payload); err != nil {
+		t.Fatal(err)
+	}
+}
+
+// ADR 0012: normalize and backfill.editions read the stored P747 edition records, so the editions carry language
+// and year (P407, P577) instead of `und` and no year.
+func TestEditionsTakeLanguageAndYearFromEditionRecords(t *testing.T) {
+	db := newDB(t)
+	bookRecord(t, db, "Q700", nil, "Q701")
+	editionEntity(t, db, "Q701", "Q5146", "1999")
+	drain(t, db, (&normSpy{}).job(0))
+
+	var lang string
+	var year int
+	if err := db.QueryRowContext(t.Context(), `SELECT language, coalesce(publication_year, 0) FROM editions
+WHERE wikidata_qid = 'Q701'`).Scan(&lang, &year); err != nil {
+		t.Fatal(err)
+	}
+	if lang != "pt" || year != 1999 {
+		t.Errorf("normalize: edition = %s %d, want pt 1999", lang, year)
+	}
+
+	if _, err := db.ExecContext(t.Context(), `DELETE FROM editions`); err != nil {
+		t.Fatal(err)
+	}
+
+	err := db.Tx(t.Context(), func(tx *database.Tx) error {
+		_, err := backfill.Editions{}.Step(t.Context(), tx, run.Run{ID: 9})
+
+		return err
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if err := db.QueryRowContext(t.Context(), `SELECT language, coalesce(publication_year, 0) FROM editions
+WHERE wikidata_qid = 'Q701'`).Scan(&lang, &year); err != nil {
+		t.Fatal(err)
+	}
+	if lang != "pt" || year != 1999 {
+		t.Errorf("backfill: edition = %s %d, want pt 1999", lang, year)
+	}
+}

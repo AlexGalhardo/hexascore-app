@@ -441,6 +441,11 @@ func (Normalizer) saveEditions(
 	qid, id string,
 	recs []store.Record,
 ) error {
+	recs, err := WithEditionRecords(ctx, tx, qid, recs)
+	if err != nil {
+		return err
+	}
+
 	cands, _, err := ExtractEditions(qid, recs)
 	if err != nil || len(cands) == 0 {
 		return err
