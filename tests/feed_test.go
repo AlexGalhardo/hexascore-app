@@ -328,7 +328,9 @@ func TestFeedPurgedOnAnonymise(t *testing.T) {
 	r.optIn(gone, true)
 	r.acceptFollow(gone, stay)
 	r.acceptFollow(stay, gone)
-	r.rate(gc, r.releasedItem("game"), 8)
+	reviewed := r.releasedItem("game")
+	r.rate(gc, reviewed, 8)
+	review(gc, reviewed, "Identifying text", false).AssertStatus(http.StatusSeeOther)
 
 	r.exec(`UPDATE users SET deletion_scheduled_at = now() - interval '31 days' WHERE id = $1`, gone.ID)
 
@@ -346,5 +348,9 @@ func TestFeedPurgedOnAnonymise(t *testing.T) {
 
 	if n := r.count(`SELECT count(*) FROM users WHERE id = $1 AND feed_opt_in`, gone.ID); n != 0 {
 		t.Error("feed opt-in survived the purge")
+	}
+
+	if n := r.count(`SELECT count(*) FROM reviews WHERE user_id = $1`, gone.ID); n != 0 {
+		t.Errorf("%d reviews left after the purge", n)
 	}
 }

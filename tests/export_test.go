@@ -132,8 +132,8 @@ func TestExportZip(t *testing.T) {
 
 	want := []string{
 		"README.md", "account.json", "activity.csv", "editions.json", "follows.csv", "lists.csv", "lists.json",
-		"notifications.json", "profile.json", "ratings.csv", "ratings.json", "statuses.json", "suggestions.json",
-		"time_to_beat.json",
+		"notifications.json", "profile.json", "ratings.csv", "ratings.json", "reviews.json", "statuses.json",
+		"suggestions.json", "time_to_beat.json",
 	}
 	got := make([]string, 0, len(files))
 	for name := range files {

@@ -316,7 +316,7 @@ WHERE b.user_id = $1::bigint`,
 FROM user_item_editions ue JOIN items i ON i.id = ue.item_id JOIN editions e ON e.id = ue.edition_id
 WHERE ue.user_id = $1::bigint AND $2::text IS NOT NULL`,
 	},
-	// shortcut: edit suggestions (SDD 04) have no table yet; fill this when it lands so the ZIP keeps its 14 files.
+	// shortcut: edit suggestions (SDD 04) have no table yet; fill this when it lands so the ZIP keeps its 15 files.
 	{"suggestions", `SELECT '[]'::json WHERE $1::bigint IS NOT NULL AND $2::text IS NOT NULL`},
 	{"lists", `SELECT coalesce(json_agg(json_build_object('id', l.id, 'type', l.type, 'title', l.title,
   'description', l.description, 'isPublic', l.is_public, 'hidden', l.hidden,
@@ -329,6 +329,13 @@ FROM lists l WHERE l.user_id = $1::bigint`},
 	{"notifications", `SELECT coalesce(json_agg(json_build_object('kind', kind, 'payload', payload, 'readAt', read_at,
   'createdAt', created_at) ORDER BY created_at), '[]')
 FROM user_notifications WHERE user_id = $1::bigint AND $2::text IS NOT NULL`},
+	{
+		"reviews",
+		`SELECT coalesce(json_agg(json_build_object('itemId', i.id, 'type', i.type, 'title', ` + exportTitle + `,
+  'body', v.body, 'spoiler', v.spoiler, 'createdAt', v.created_at, 'updatedAt', v.updated_at) ORDER BY v.created_at), '[]')
+FROM reviews v JOIN items i ON i.id = v.item_id ` + exportTitleJn + `
+WHERE v.user_id = $1::bigint`,
+	},
 	// apiKeys and subscriptions wait for SDD 05 keys and SDD 11 billing tables.
 	{"account", `SELECT json_build_object(
   'socialAccounts', (SELECT coalesce(json_agg(json_build_object('provider', provider, 'createdAt', created_at)
@@ -514,6 +521,7 @@ Your personal records on HexaScore, read at one instant. Dates are ISO 8601. Sco
 - lists.json: your lists with their items, positions and notes.
 - suggestions.json: your catalog edit suggestions (empty until suggestions open).
 - notifications.json: notifications sent to you.
+- reviews.json: your reviews (Markdown text, spoiler flag, dates).
 - account.json: linked sign-in providers, API keys, subscriptions, remembered sessions (expiry only), app tokens
   (name, abilities, dates; never the secret) and account events.
 - ratings.csv: type,title,year,externalIds,overall,c1..c6,ratedAt — for import into other services.

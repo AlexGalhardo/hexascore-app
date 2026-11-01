@@ -341,6 +341,8 @@ func purgeUserData(ctx context.Context, tx database.Executor, userID int64, now 
 		stmts = append(stmts,
 			stmt{`DELETE FROM follows WHERE follower_id = $1 OR followee_id = $1`, []any{userID}},
 			stmt{`DELETE FROM activity_events WHERE actor_id = $1`, []any{userID}},
+			// Review text can identify the person, like list descriptions.
+			stmt{`DELETE FROM reviews WHERE user_id = $1`, []any{userID}},
 			stmt{`UPDATE users SET feed_opt_in = false WHERE id = $1`, []any{userID}},
 		)
 	}

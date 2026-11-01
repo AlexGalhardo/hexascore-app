@@ -56,3 +56,15 @@ type ProfileFeed struct {
 
 // ProfileFeedSchema validates ProfileFeed.
 var ProfileFeedSchema = z.Struct[ProfileFeed](z.Shape{"feedOptIn": z.Bool().Default(false)})
+
+// Review is a review of a rated item (SDD 14 §12.10).
+type Review struct {
+	Body    string `json:"body"    form:"body"`
+	Spoiler bool   `json:"spoiler" form:"spoiler"`
+}
+
+// ReviewSchema validates Review; the database also checks 1 to 5,000 characters.
+var ReviewSchema = z.Struct[Review](z.Shape{
+	"body":    z.String().Trim().Min(1).Max(5000),
+	"spoiler": z.Bool().Default(false),
+})

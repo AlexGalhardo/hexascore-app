@@ -246,7 +246,7 @@ List by `id DESC` (UUID v7 ≈ time) with cursor pagination (<https://vukem.dev/
 7. Lists of a deleted user. Owner question (asked with the SDD 13 batch). Current rule until answered: anonymise public lists, delete private ones (§8). Closes with the owner's answer.
 8. Lawful basis for the feed (Q-A5 a). Owner question, with legal review (D-21). D-29 covers aggregates and personalisation, not showing a user's activity to followers. Current rule until answered: the whole social layer is off (feature flag `social` off, §12.3), and when it is on, a user's activity reaches followers only after an explicit opt-in (`users.feed_opt_in`, default `false` for every account). Closes with a D-xx in `docs/brainstorming.md`; if the answer is "public profile implies feed", the opt-in column becomes a default-on opt-out in a later migration.
 9. Legacy follows (Q-A5 b). Owner question. Current rule: Phase 7 starts with an empty graph; the legacy rows stay in the cutover archive (§5 migration note, SDD 11 §7.6). Closes with the owner's answer; a restore, if chosen, is a one-off command that inserts `accepted` rows only between users who still exist and are not banned.
-10. Markdown subset for reviews (P7.B.1.1). Open: `go.mod` has no Markdown renderer and <https://vukem.dev/docs> names none [NOT IN VUKEM DOCS]. Default: a stdlib-only subset (bold, italic, links, line breaks, spoiler block) rendered through `html/template`; a library needs the owner's yes and an ADR. Closes in P7.B.1.1.
+10. Markdown subset for reviews (P7.B.1.1). Decided (orchestrator decision 2026-11-01, owner may override): allowed are bold, italic, inline code, links (http and https only, rendered `rel="nofollow ugc noopener"`), unordered and ordered lists, blockquotes and line breaks; raw HTML, images, headings, tables and autolinked bare URLs stay plain text. No new dependency: a stdlib parser (`app/social/markdown.go`) turns the source into a node tree that React renders node by node (§12.10), so user text never reaches the page as an HTML string (frontend rule: no `dangerouslySetInnerHTML` with user content). `TestSecurity_A05_ReviewMarkdown` covers it.
 11. Letterboxd reference (Q-A9). The research report is partial; §12 does not depend on it. Closes with the owner's answer.
 
 ## 12. Social layer
@@ -355,6 +355,29 @@ The visibility filters of §12.5 apply to the joined items and lists in the same
 
 Basis: open issue 8 (Q-A5). The data export ZIP (§7.4) gains `follows.csv` (`direction,nickname,state,since`, both directions) and `activity.csv` (`kind,type,title,list,createdAt`, the user's own events). The purge (SDD 03 §7.5) deletes both directions of `follows`, the user's `activity_events` and resets `feed_opt_in`. The daily job `social.prune_activity` (04:40) applies NFR-14-9 whatever the flag.
 
-### 12.10 Tests
+### 12.10 Reviews
 
-`TestFollows`, `TestSecurity_A01_PrivateProfileFollowRequiresApproval`, `TestSecurity_A06_HexaLimits` (rule `follows`), `TestFeedPrivacy`, `TestSocialDisabledByDefault` (routes 404 and no events with the flag off), k6 `qa/k6/feed.js`, Playwright `social.spec.ts`.
+P7.B.1.1, behind the flag `social`. A review is optional text attached to the author's rating of an item.
+
+```sql
+CREATE TABLE reviews (
+  id uuid PRIMARY KEY,
+  user_id bigint NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  item_id uuid NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+  body text NOT NULL CHECK (char_length(body) BETWEEN 1 AND 5000),  -- Markdown subset, open issue 10
+  spoiler boolean NOT NULL DEFAULT false,
+  helpful_count integer NOT NULL DEFAULT 0,                        -- kept by P7.B.1.2 reactions
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (user_id, item_id));
+CREATE INDEX reviews_item_idx ON reviews (item_id, helpful_count DESC, created_at DESC);
+```
+
+- `PUT /items/{id}/review` (session, `{body, spoiler}`) creates or edits; 422 `rating-required` without a rating; 303 back. `DELETE /items/{id}/review` removes it. Rate limit `reviews` 30/h per user. Both answer 404 while the flag is off.
+- A review is shown only while its rating exists. The item page defers `reviews` (group `reviews`): `{data, mine}`, sorted by `helpful_count` then newest, first 50, authors public, not banned, not anonymised (§12.5), plus the viewer's own review with its Markdown `source`. The profile defers `reviews` on `?tab=reviews` (group `personal`) unless the profile is hidden from the viewer.
+- The body is stored as Markdown and sent as a node tree (`p`, `br`, `strong`, `em`, `code`, `a`, `ul`, `ol`, `li`, `blockquote`, `text`); the page also refuses a non-http(s) `href`.
+- The first publication records `review_published` (§12.7); edits do not. The purge deletes the user's reviews; the export adds `reviews.json`.
+
+### 12.11 Tests
+
+`TestFollows`, `TestSecurity_A01_PrivateProfileFollowRequiresApproval`, `TestSecurity_A06_HexaLimits` (rule `follows`), `TestFeedPrivacy`, `TestSocialDisabledByDefault` (routes 404 and no events with the flag off), `TestReviews`, `TestSecurity_A05_ReviewMarkdown`, k6 `qa/k6/feed.js`, Playwright `social.spec.ts` and `reviews.spec.ts`.
