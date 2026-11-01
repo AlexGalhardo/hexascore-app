@@ -6,10 +6,19 @@ updates:
     groups:
       go: { patterns: ["*"] }
   - package-ecosystem: bun
-    directories: ["/", "/sdks/ts"]
+    directory: /
     schedule: { interval: weekly }
     groups:
       js: { patterns: ["*"] }
+  # @hey-api/openapi-ts 0.99.0 needs the TypeScript 6 compiler API; the SDK stays on 6.x until it supports 7.
+  - package-ecosystem: bun
+    directory: /sdks/ts
+    schedule: { interval: weekly }
+    groups:
+      sdk-js: { patterns: ["*"] }
+    ignore:
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: weekly }
