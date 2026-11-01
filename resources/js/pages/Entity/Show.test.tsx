@@ -72,3 +72,9 @@ test("indexable entity leaves robots to the shared value", () => {
 	render(<Show {...props} indexable />);
 	expect(seo).toHaveBeenCalledWith(expect.objectContaining({ robots: undefined }));
 });
+
+test("empty entity shows the empty state with a way back to the catalogue", () => {
+	render(<Show {...props} items={{ data: [] }} />);
+	expect(screen.getByRole("heading", { name: "entity.empty" })).toBeTruthy();
+	expect(screen.getByText("entity.browse").closest("a")?.getAttribute("href")).toBe("/pt-br/");
+});

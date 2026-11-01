@@ -1532,7 +1532,10 @@
     "showing": "{count} of {total}",
     "avgScore": "Average score: {score}",
     "seeAll": "See all",
-    "next": "Next"
+    "next": "Next",
+    "emptyHint": "Items linked to this page will appear here once they are in the catalogue.",
+    "browse": "Browse the catalogue",
+    "source": "Source"
   },
   "userLists": {
     "addItem": "Add an item",
