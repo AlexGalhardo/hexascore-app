@@ -2878,7 +2878,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P4.B.4 Metrics and SLA
 
-- [ ] **P4.B.4.1** Build `/admin/moderation/metrics`: queue size, oldest open age, p50/p95 time-to-decision, approval rate over 7 and 30 days.
+- [x] **P4.B.4.1** Build `/admin/moderation/metrics`: queue size, oldest open age, p50/p95 time-to-decision, approval rate over 7 and 30 days.
   - Files/modules: `app/moderation/metrics.go`, `resources/views/moderation/metrics.html`, `tests/moderation_metrics_test.go`
   - Refs: SDD 04 FR-04-16, NFR-04-2; SDD 12 runbook R5
   - Depends on: P4.B.2.4
