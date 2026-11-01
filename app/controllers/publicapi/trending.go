@@ -133,9 +133,23 @@ type ActivityInput struct {
 	To   string `json:"to"                                              doc:"last UTC day, YYYY-MM-DD; default today"`
 }
 
-// GetItemActivity is getItemActivity: GET /api/v1/{type}/{id}/activity, business plan only (SDD 05 FR-05-17). It
-// is one request on the quota, like any read.
-func (h *Controller) GetItemActivity(c *web.Ctx, in ActivityInput) (ActivityJSON, error) {
+// SectionActivityInput is the get<Type>Activity path and query: the type is in the literal path.
+type SectionActivityInput struct {
+	ID   string `json:"id"`
+	From string `json:"from" doc:"first UTC day, YYYY-MM-DD; default 30 days before to"`
+	To   string `json:"to"   doc:"last UTC day, YYYY-MM-DD; default today"`
+}
+
+// GetItemActivity is get<Type>Activity: GET /api/v1/{games,movies,series,books}/{id}/activity, business plan only
+// (SDD 05 FR-05-17). Literal sections because "/{type}/{id}/activity" overlaps "/exports/{type}/{day}" on the
+// ServeMux. It is one request on the quota, like any read.
+func (h *Controller) GetItemActivity(section string) func(*web.Ctx, SectionActivityInput) (ActivityJSON, error) {
+	return func(c *web.Ctx, in SectionActivityInput) (ActivityJSON, error) {
+		return h.activity(c, ActivityInput{Type: section, ID: in.ID, From: in.From, To: in.To})
+	}
+}
+
+func (h *Controller) activity(c *web.Ctx, in ActivityInput) (ActivityJSON, error) {
 	typ, ok := typeOf[in.Type]
 	if !ok {
 		return ActivityJSON{}, invalid(unknownType)

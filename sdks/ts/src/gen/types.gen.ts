@@ -98,6 +98,15 @@ export type EntitySummaryJson = {
     slug: string;
 };
 
+export type ExportJson = {
+    day: string;
+    type: 'games' | 'movies' | 'series' | 'books';
+};
+
+export type ExportList = {
+    data?: Array<ExportJson>;
+};
+
 export type FieldSource = {
     licence?: string;
     source?: string;
@@ -308,6 +317,50 @@ export type ListBookTrendingResponses = {
 
 export type ListBookTrendingResponse = ListBookTrendingResponses[keyof ListBookTrendingResponses];
 
+export type GetBookActivityData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: {
+        /**
+         * first UTC day, YYYY-MM-DD; default 30 days before to
+         */
+        from?: string;
+        /**
+         * last UTC day, YYYY-MM-DD; default today
+         */
+        to?: string;
+    };
+    url: '/books/{id}/activity';
+};
+
+export type GetBookActivityErrors = {
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    401: Problem;
+    /**
+     * Validation failed; errors maps each field to its messages
+     */
+    422: Problem;
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    default: Problem;
+};
+
+export type GetBookActivityError = GetBookActivityErrors[keyof GetBookActivityErrors];
+
+export type GetBookActivityResponses = {
+    /**
+     * OK
+     */
+    200: ActivityJson;
+};
+
+export type GetBookActivityResponse = GetBookActivityResponses[keyof GetBookActivityResponses];
+
 export type ListEditionsData = {
     body?: never;
     path: {
@@ -502,6 +555,77 @@ export type ListEntityItemsResponses = {
 
 export type ListEntityItemsResponse = ListEntityItemsResponses[keyof ListEntityItemsResponses];
 
+export type ListExportsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/exports';
+};
+
+export type ListExportsErrors = {
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    401: Problem;
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    default: Problem;
+};
+
+export type ListExportsError = ListExportsErrors[keyof ListExportsErrors];
+
+export type ListExportsResponses = {
+    /**
+     * OK
+     */
+    200: ExportList;
+};
+
+export type ListExportsResponse = ListExportsResponses[keyof ListExportsResponses];
+
+export type GetExportData = {
+    body?: never;
+    path: {
+        /**
+         * games, movies, series or books
+         */
+        type: 'games' | 'movies' | 'series' | 'books';
+        /**
+         * UTC day, YYYY-MM-DD
+         */
+        day: string;
+    };
+    query?: never;
+    url: '/exports/{type}/{day}';
+};
+
+export type GetExportErrors = {
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    401: Problem;
+    /**
+     * Validation failed; errors maps each field to its messages
+     */
+    422: Problem;
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    default: Problem;
+};
+
+export type GetExportError = GetExportErrors[keyof GetExportErrors];
+
+export type GetExportResponses = {
+    /**
+     * No Content
+     */
+    204: void;
+};
+
+export type GetExportResponse = GetExportResponses[keyof GetExportResponses];
+
 export type GetFranchiseData = {
     body?: never;
     path: {
@@ -608,6 +732,50 @@ export type ListGameTrendingResponses = {
 };
 
 export type ListGameTrendingResponse = ListGameTrendingResponses[keyof ListGameTrendingResponses];
+
+export type GetGameActivityData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: {
+        /**
+         * first UTC day, YYYY-MM-DD; default 30 days before to
+         */
+        from?: string;
+        /**
+         * last UTC day, YYYY-MM-DD; default today
+         */
+        to?: string;
+    };
+    url: '/games/{id}/activity';
+};
+
+export type GetGameActivityErrors = {
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    401: Problem;
+    /**
+     * Validation failed; errors maps each field to its messages
+     */
+    422: Problem;
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    default: Problem;
+};
+
+export type GetGameActivityError = GetGameActivityErrors[keyof GetGameActivityErrors];
+
+export type GetGameActivityResponses = {
+    /**
+     * OK
+     */
+    200: ActivityJson;
+};
+
+export type GetGameActivityResponse = GetGameActivityResponses[keyof GetGameActivityResponses];
 
 export type LookupItemData = {
     body?: never;
@@ -750,6 +918,50 @@ export type ListMovieTrendingResponses = {
 };
 
 export type ListMovieTrendingResponse = ListMovieTrendingResponses[keyof ListMovieTrendingResponses];
+
+export type GetMovieActivityData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: {
+        /**
+         * first UTC day, YYYY-MM-DD; default 30 days before to
+         */
+        from?: string;
+        /**
+         * last UTC day, YYYY-MM-DD; default today
+         */
+        to?: string;
+    };
+    url: '/movies/{id}/activity';
+};
+
+export type GetMovieActivityErrors = {
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    401: Problem;
+    /**
+     * Validation failed; errors maps each field to its messages
+     */
+    422: Problem;
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    default: Problem;
+};
+
+export type GetMovieActivityError = GetMovieActivityErrors[keyof GetMovieActivityErrors];
+
+export type GetMovieActivityResponses = {
+    /**
+     * OK
+     */
+    200: ActivityJson;
+};
+
+export type GetMovieActivityResponse = GetMovieActivityResponses[keyof GetMovieActivityResponses];
 
 export type GetOrganizationData = {
     body?: never;
@@ -1046,6 +1258,50 @@ export type ListSeriesTrendingResponses = {
 
 export type ListSeriesTrendingResponse = ListSeriesTrendingResponses[keyof ListSeriesTrendingResponses];
 
+export type GetSeriesActivityData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: {
+        /**
+         * first UTC day, YYYY-MM-DD; default 30 days before to
+         */
+        from?: string;
+        /**
+         * last UTC day, YYYY-MM-DD; default today
+         */
+        to?: string;
+    };
+    url: '/series/{id}/activity';
+};
+
+export type GetSeriesActivityErrors = {
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    401: Problem;
+    /**
+     * Validation failed; errors maps each field to its messages
+     */
+    422: Problem;
+    /**
+     * Error (RFC 9457 problem details)
+     */
+    default: Problem;
+};
+
+export type GetSeriesActivityError = GetSeriesActivityErrors[keyof GetSeriesActivityErrors];
+
+export type GetSeriesActivityResponses = {
+    /**
+     * OK
+     */
+    200: ActivityJson;
+};
+
+export type GetSeriesActivityResponse = GetSeriesActivityResponses[keyof GetSeriesActivityResponses];
+
 export type ListWebhooksData = {
     body?: never;
     path?: never;
@@ -1302,51 +1558,3 @@ export type GetItemResponses = {
 };
 
 export type GetItemResponse = GetItemResponses[keyof GetItemResponses];
-
-export type GetItemActivityData = {
-    body?: never;
-    path: {
-        /**
-         * games, movies, series or books
-         */
-        type: 'games' | 'movies' | 'series' | 'books';
-        id: string;
-    };
-    query?: {
-        /**
-         * first UTC day, YYYY-MM-DD; default 30 days before to
-         */
-        from?: string;
-        /**
-         * last UTC day, YYYY-MM-DD; default today
-         */
-        to?: string;
-    };
-    url: '/{type}/{id}/activity';
-};
-
-export type GetItemActivityErrors = {
-    /**
-     * Error (RFC 9457 problem details)
-     */
-    401: Problem;
-    /**
-     * Validation failed; errors maps each field to its messages
-     */
-    422: Problem;
-    /**
-     * Error (RFC 9457 problem details)
-     */
-    default: Problem;
-};
-
-export type GetItemActivityError = GetItemActivityErrors[keyof GetItemActivityErrors];
-
-export type GetItemActivityResponses = {
-    /**
-     * OK
-     */
-    200: ActivityJson;
-};
-
-export type GetItemActivityResponse = GetItemActivityResponses[keyof GetItemActivityResponses];
