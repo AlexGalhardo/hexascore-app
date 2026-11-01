@@ -133,6 +133,15 @@
       "until": "Until {date}",
       "permanent": "No end date",
       "back": "Back to login"
+    },
+    "settings": {
+      "title": "Settings",
+      "account": "Account",
+      "appearance": "Appearance",
+      "themeSystem": "System",
+      "themeLight": "Light",
+      "themeDark": "Dark",
+      "crashReports": "Send crash reports"
     }
   },
   "actions": {

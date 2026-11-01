@@ -133,6 +133,15 @@
       "until": "Hasta el {date}",
       "permanent": "Sin fecha de finalización",
       "back": "Volver al inicio de sesión"
+    },
+    "settings": {
+      "title": "Ajustes",
+      "account": "Cuenta",
+      "appearance": "Apariencia",
+      "themeSystem": "Sistema",
+      "themeLight": "Claro",
+      "themeDark": "Oscuro",
+      "crashReports": "Enviar informes de errores"
     }
   },
   "actions": {
