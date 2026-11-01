@@ -1,10 +1,8 @@
-import type { QueryClient } from "@tanstack/react-query";
-import type { ReactElement } from "react";
+import { type QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
+import { render } from "@testing-library/react";
 import { expect, test } from "vitest";
 
-import { makeQueryClient, withQueryClient } from "./queryClient";
-
-const clientOf = (el: ReactElement): QueryClient => (el.props as { client: QueryClient }).client;
+import { appQueryClient, makeQueryClient, withQueryClient } from "./queryClient";
 
 test("defaults: 30 s stale time, one retry, no refetch on focus", () => {
 	expect(makeQueryClient().getDefaultOptions().queries).toMatchObject({
@@ -15,12 +13,28 @@ test("defaults: 30 s stale time, one retry, no refetch on focus", () => {
 });
 
 test("the browser keeps one client across visits; SSR gets a fresh one per render", () => {
-	const app = <main />;
-	expect(clientOf(withQueryClient(app, { ssr: false }))).toBe(
-		clientOf(withQueryClient(app, { ssr: false })),
+	expect(appQueryClient(false)).toBe(appQueryClient(false));
+	const a = appQueryClient(true);
+	expect(a).not.toBe(appQueryClient(true));
+	expect(a).not.toBe(appQueryClient(false));
+});
+
+test("withQueryClient gives the app client, and an outer provider wins", () => {
+	const seen: QueryClient[] = [];
+	const Probe = withQueryClient(() => {
+		seen.push(useQueryClient());
+		return null;
+	});
+	render(<Probe />);
+	render(<Probe />);
+	expect(seen[0]).toBe(appQueryClient(false));
+	expect(seen[1]).toBe(seen[0]);
+
+	const outer = makeQueryClient();
+	render(
+		<QueryClientProvider client={outer}>
+			<Probe />
+		</QueryClientProvider>,
 	);
-	const a = clientOf(withQueryClient(app, { ssr: true }));
-	const b = clientOf(withQueryClient(app, { ssr: true }));
-	expect(a).not.toBe(b);
-	expect(a).not.toBe(clientOf(withQueryClient(app, { ssr: false })));
+	expect(seen[2]).toBe(outer);
 });

@@ -142,13 +142,39 @@ test("below lg the bar keeps title, search field and hamburger; the rest is desk
 	expect(burger.getAttribute("aria-expanded")).toBe("false");
 });
 
+// Kept before the other sheet tests so it covers the very first open, while the lazy chunk still loads.
+test("the lazy sheet is not in the first render and the first open still traps Tab", async () => {
+	const user = userEvent.setup({ delay: null });
+	render(<Nav />);
+	expect(screen.queryByRole("dialog")).toBeNull();
+	const burger = screen.getByRole("button", { name: "nav.menu" });
+	await user.click(burger);
+	// Keys pressed before the sheet arrives must not reach the page behind it.
+	for (let i = 0; i < 5; i++) {
+		await user.keyboard("{Tab}");
+		const sheet = screen.queryByRole("dialog");
+		const a = document.activeElement;
+		expect(a === burger || !!sheet?.contains(a)).toBe(true);
+	}
+	const sheet = await screen.findByRole("dialog", {}, { timeout: 5000 });
+	for (const keys of ["{Tab}", "{Shift>}{Tab}{/Shift}"]) {
+		for (let i = 0; i < 20; i++) {
+			await user.keyboard(keys);
+			expect(sheet.contains(document.activeElement)).toBe(true);
+		}
+	}
+	await user.keyboard("{Escape}");
+	expect(screen.queryByRole("dialog")).toBeNull();
+	expect(document.activeElement).toBe(burger);
+});
+
 test("the hamburger sheet holds sections, language, theme and login; Escape returns focus", async () => {
 	const user = userEvent.setup();
 	render(<Nav />);
 	const burger = screen.getByRole("button", { name: "nav.menu" });
 	await user.click(burger);
 	expect(burger.getAttribute("aria-expanded")).toBe("true");
-	const sheet = screen.getByRole("dialog");
+	const sheet = await screen.findByRole("dialog", {}, { timeout: 5000 });
 	expect(sheet.contains(document.activeElement)).toBe(true);
 	const hrefs = [...sheet.querySelectorAll("a")].map((a) => a.getAttribute("href"));
 	expect(hrefs).toEqual(
@@ -175,7 +201,7 @@ test("signed in with the flag on, the hamburger shows unread and the sheet has f
 		const burger = screen.getByRole("button", { name: "nav.menuUnread" });
 		expect(burger.textContent).toContain("3");
 		await user.click(burger);
-		const sheet = screen.getByRole("dialog");
+		const sheet = await screen.findByRole("dialog", {}, { timeout: 5000 });
 		const hrefs = [...sheet.querySelectorAll("a")].map((a) => a.getAttribute("href"));
 		expect(hrefs).toEqual(
 			expect.arrayContaining([
@@ -203,7 +229,7 @@ test("Tab and Shift+Tab right after opening never leave the sheet", async () => 
 		const user = userEvent.setup({ delay: null });
 		render(<Nav />);
 		await user.click(screen.getByRole("button", { name: "nav.menu" }));
-		const sheet = screen.getByRole("dialog");
+		const sheet = await screen.findByRole("dialog", {}, { timeout: 5000 });
 		const outside: string[] = [];
 		for (let i = 0; i < 40; i++) {
 			await user.keyboard(keys);

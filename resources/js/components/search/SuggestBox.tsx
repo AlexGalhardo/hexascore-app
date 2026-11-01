@@ -1,5 +1,6 @@
 import { router, usePage } from "@inertiajs/react";
 import { Fragment, useEffect, useId, useState } from "react";
+import { withQueryClient } from "../../lib/queryClient";
 
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
@@ -17,7 +18,7 @@ interface Props {
 }
 
 // Suggest combobox (ARIA 1.2 combobox with a listbox popup, focus stays in the input). Header search by default.
-export default function SuggestBox({ onPick, type, label }: Props = {}) {
+function SuggestBox({ onPick, type, label }: Props) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
 	const base = useId();
@@ -150,3 +151,5 @@ export default function SuggestBox({ onPick, type, label }: Props = {}) {
 		</search>
 	);
 }
+
+export default withQueryClient(SuggestBox);

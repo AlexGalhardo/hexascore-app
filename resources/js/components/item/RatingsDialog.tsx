@@ -2,6 +2,7 @@ import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { abbreviateLabel, pageWindow } from "../../lib/pageWindow";
+import { withQueryClient } from "../../lib/queryClient";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 import { dialogBackdrop, dialogPopup } from "../Dialog";
@@ -28,7 +29,7 @@ function isRatingsPage(value: unknown): value is RatingsPage {
 const pageButton =
 	"inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border px-3 text-sm hover:bg-surface disabled:cursor-not-allowed disabled:opacity-50";
 
-export default function RatingsDialog({
+function RatingsDialog({
 	itemId,
 	categoryLabels,
 	initialOpen = false,
@@ -244,3 +245,5 @@ export default function RatingsDialog({
 		</BaseDialog.Root>
 	);
 }
+
+export default withQueryClient(RatingsDialog);

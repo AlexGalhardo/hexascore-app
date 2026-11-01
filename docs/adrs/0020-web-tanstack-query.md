@@ -10,7 +10,7 @@ Inertia gives every page its data as server props, and those need no client cach
 
 - Add `@tanstack/react-query` **5.105.0** to the root `package.json`, pinned exactly. This is the same version as `apps/mobile`.
 - **Scope.** Only data the client fetches by itself goes through `useQuery`, `useInfiniteQuery` or `useMutation`. Inertia page props, partial reloads, deferred props and Inertia form submits stay on Inertia. Proof-of-work (`lib/challenge.ts`) and the auth forms keep their current flow.
-- **Client lifecycle** (`resources/js/lib/queryClient.tsx`, wired through Inertia's `withApp` in `app.tsx` and `ssr.tsx`):
+- **Client lifecycle** (`resources/js/lib/queryClient.tsx`; since FIX-lighthouse-script-size each data-fetching component is wrapped in `withQueryClient(Component)` instead of Inertia's `withApp`, so the query core loads only with those components):
   - In the browser, one `QueryClient` lives for the whole app and survives Inertia page visits.
   - SSR creates a fresh client for every render, so no cached data crosses requests. Nothing is prefetched on the server.
   - Defaults: `staleTime` 30 s, `retry` 1, `refetchOnWindowFocus` off. The suggest query sets `retry: false`, because the next keystroke is the retry.
@@ -19,7 +19,7 @@ Inertia gives every page its data as server props, and those need no client cach
 ## Consequences
 
 - The four components lose their custom abort and sequence code. Requests are keyed and cancelled through the query `signal`, and repeated suggest queries are served from the cache for 30 s.
-- Bundle: the `QueryClient` core sits on the first-load path (about 7 KB gzip, because the provider wraps the app). To pay for it, the Ctrl+K palette and the query hooks it uses now load on its first open (`React.lazy` in `Nav.tsx`). First-load JS went from 134.4 KB to 121.8 KB gzip. The numbers are in `reports/ADOPT-tanstack-query-web.md`.
+- Bundle: the `QueryClient` core sits on the first-load path (about 7 KB gzip, because the provider wraps the app). To pay for it, the Ctrl+K palette and the query hooks it uses now load on its first open (`React.lazy` in `Nav.tsx`). First-load JS went from 134.4 KB to 121.8 KB gzip. The numbers are in `reports/ADOPT-tanstack-query-web.md`. Later the provider moved onto the five consumers (DataExport, RatingsDialog, EditionPicker, SuggestBox, SearchPalette), which took the query core off the first-load path entirely (`reports/FIX-lighthouse-script-size.md`).
 - Tests render through `resources/js/lib/testing.tsx`, which wraps `render` in a fresh client with retries off.
 
 ## Alternatives considered
