@@ -45,7 +45,13 @@ export default function Notifications({
 							<span
 								className={`min-w-0 flex-1 ${n.readAt ? "text-muted" : "font-medium"}`}
 							>
-								{t(`notifications.kind.${n.kind}`, n.payload)}
+								{t(`notifications.kind.${n.kind}`, {
+									...n.payload,
+									// The server stores the raw target type ("review", "comment"); show it translated.
+									...(typeof n.payload.targetType === "string" && {
+										targetType: t(`notifications.target.${n.payload.targetType}`),
+									}),
+								})}
 								<span className="ml-2 text-sm text-muted">
 									{new Date(n.createdAt).toLocaleString()}
 								</span>

@@ -1521,7 +1521,11 @@
       "content_deleted": "Un moderador eliminó tu contenido ({targetType})."
     },
     "followAccept": "Aceptar",
-    "followDecline": "Rechazar"
+    "followDecline": "Rechazar",
+    "target": {
+      "review": "reseña",
+      "comment": "comentario"
+    }
   },
   "library": {
     "title": "Tu biblioteca",
