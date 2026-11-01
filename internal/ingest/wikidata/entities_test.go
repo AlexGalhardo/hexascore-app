@@ -221,6 +221,33 @@ func TestTrimKeepsAliasesAndSeriesProperty(t *testing.T) {
 	}
 }
 
+func TestTrimKeepsTitleClaimsAndLatnAliases(t *testing.T) {
+	raw := `{"id":"Q5","labels":{},
+	"aliases":{"ja-latn":[{"language":"ja-latn","value":"Kimi"}],"fr-latn":[{"language":"fr-latn","value":"y"}],"fr":[{"language":"fr","value":"x"}]},
+	"claims":{
+	"P1476":[{"mainsnak":{"snaktype":"value","datavalue":{"type":"monolingualtext","value":{"text":"Orig","language":"ja"}}},"rank":"normal"}],
+	"P1448":[{"mainsnak":{"snaktype":"value","datavalue":{"type":"monolingualtext","value":{"text":"Off","language":"ja"}}},"rank":"normal"}],
+	"P2561":[{"mainsnak":{"snaktype":"value","datavalue":{"type":"monolingualtext","value":{"text":"Old","language":"en"}}},"rank":"normal"}]},
+	"sitelinks":{}}`
+
+	e, err := wikidata.ParseEntity([]byte(raw))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	p := wikidata.Trim(e, "series")
+
+	for prop, want := range map[string]string{"P1476": "Orig", "P1448": "Off", "P2561": "Old"} {
+		if got := p.Claims[prop]; len(got) != 1 || got[0].Value != want {
+			t.Errorf("%s = %v", prop, got)
+		}
+	}
+
+	if !slices.Equal(p.Aliases["ja-latn"], []string{"Kimi"}) || len(p.Aliases) != 2 {
+		t.Errorf("aliases = %v", p.Aliases)
+	}
+}
+
 func TestMissingEntitiesAreSkipped(t *testing.T) {
 	a := loadAPI(t)
 	w, c := fetcher(t, a)
@@ -277,7 +304,7 @@ func TestFetchBatchesFiftyIds(t *testing.T) {
 }
 
 // The reference hashes come from the legacy Python trim_entity with the same
-// deliberate changes (no P444, aliases, role properties); see
+// deliberate changes (no P444, aliases incl. *-latn, role and title properties); see
 // testdata/trim_reference.py.
 func TestTrimHashMatchesPython(t *testing.T) {
 	main, _, _ := fetchRecorded(t)

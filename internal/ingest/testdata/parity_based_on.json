@@ -136,6 +136,32 @@
       "rank": "normal",
       "value": "Q930001"
      }
+    ],
+    "P1476": [
+     {
+      "rank": "normal",
+      "value": "Shingeki Example Original"
+     }
+    ],
+    "P1448": [
+     {
+      "rank": "normal",
+      "value": "Example Official"
+     },
+     {
+      "rank": "deprecated",
+      "value": "Dropped"
+     }
+    ],
+    "P2561": [
+     {
+      "rank": "normal",
+      "value": "Example Old Name"
+     },
+     {
+      "rank": "normal",
+      "value": "Example Anime"
+     }
     ]
    },
    "refs": {
