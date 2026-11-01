@@ -40,5 +40,6 @@ func All(app *vukem.App) []queue.Registration {
 		handleCatalogChanged(app),
 		handleCommunityNotify(app),
 		handleItemsChanged(app),
+		handleIngest(app),
 	}
 }
