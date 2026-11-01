@@ -300,10 +300,10 @@ Every Inertia page component in `resources/js/pages/` (33 components; `ls resour
 
 - Route: `GET /` (SSR). File: `pages/Home/Index.tsx`. Screenshots: [desktop](design-system/home-desktop-1440.png), [mobile](design-system/home-mobile-390.png).
 - Purpose: landing and discovery.
-- Blocks: hero `h1` ("Every game, movie, series and book, scored by people, category by category.", `text-3xl sm:text-4xl`) with an "Explore" primary button linking to `/search`; "Recently rated" grid (cover, title, "rated by name", score; only when `recent` is non-empty); one `SectionHighlights` per type (Games, Movies, TV Series, Books) with Top rated, New releases and Most rated columns of six rows.
+- Blocks: hero `h1` ("Every game, movie, series and book, scored by people, category by category.", `text-3xl sm:text-4xl`) with an "Explore" primary button linking to `/search`; one `SectionHighlights` per type (Games, Movies, TV Series, Books) with Top rated, New releases and Most rated columns of six rows.
 - Actions: Explore, section "See all" links, row links, header search.
-- Data: `sections[{type, count, topRated, newest, mostRated}]`, `recent[{id, type, slug, title, score, by, cover}]`.
-- States: empty column "Nothing here yet."; no "recent" block when empty (production currently shows none); items without a score show an en dash.
+- Data: `sections[{type, count, topRated, newest, mostRated}]`. The "Recently rated by members" strip and its query were removed (owner round 2026-11-01 item 5).
+- States: empty column "Nothing here yet."; items without a score show an en dash.
 
 #### Catalog/Index
 

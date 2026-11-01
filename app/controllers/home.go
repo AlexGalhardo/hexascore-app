@@ -18,9 +18,6 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
-// recentTTL bounds how stale the "recently rated" strip may be.
-const recentTTL = 60 * time.Second
-
 // Home trending strip (SDD 08 section 7.2 "Home window"): 3 per type over the last 7 days, held 5 minutes.
 const (
 	trendingTTL  = 5 * time.Minute
@@ -42,7 +39,6 @@ func Home(app *vukem.App) web.HandlerFunc {
 
 	return func(c *web.Ctx) error {
 		sections := make([]catalog.SectionHighlights, 0, len(homeTypes))
-		recent := []catalog.RecentRating{}
 		trend := map[string]trendingSection{}
 
 		db, err := app.DB()
@@ -74,15 +70,6 @@ func Home(app *vukem.App) web.HandlerFunc {
 				return err
 			}
 
-			// Shared across anonymous and signed-in visitors: the strip holds only public data.
-			recent, err = cache.Remember(c.Context(), store, "home:recent:v1:"+locale, recentTTL,
-				func(ctx context.Context) ([]catalog.RecentRating, error) {
-					return catalog.RecentRatings(ctx, db.SQL(), locale)
-				})
-			if err != nil {
-				return err
-			}
-
 			trend, err = cache.Remember(c.Context(), store, "home:trending7:v1:"+locale, trendingTTL,
 				func(ctx context.Context) (map[string]trendingSection, error) {
 					return homeTrending(ctx, db.SQL(), app.Now(), locale)
@@ -92,7 +79,7 @@ func Home(app *vukem.App) web.HandlerFunc {
 			}
 		}
 
-		props := inertia.Props{"sections": sections, "recent": recent, "trending": trend}
+		props := inertia.Props{"sections": sections, "trending": trend}
 
 		if db.Dialect().Name() == "postgres" {
 			once.Do(func() {
