@@ -1415,7 +1415,9 @@
       },
       "details": "Details (optional)",
       "submit": "Send report",
-      "close": "Close"
+      "close": "Close",
+      "reportReview": "Report this review",
+      "reportComment": "Report this comment"
     },
     "onboarding": {
       "title": "Choose your nickname",
@@ -1514,7 +1516,9 @@
       "new_follower": "{nickname} started following you.",
       "follow_request": "{nickname} asked to follow you.",
       "new_comment": "{nickname} commented on your post.",
-      "new_reaction": "{nickname} reacted to your post."
+      "new_reaction": "{nickname} reacted to your post.",
+      "content_hidden": "Your {targetType} was hidden by a moderator.",
+      "content_deleted": "Your {targetType} was removed by a moderator."
     },
     "followAccept": "Accept",
     "followDecline": "Decline"

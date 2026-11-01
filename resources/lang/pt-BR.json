@@ -1415,7 +1415,9 @@
       },
       "details": "Detalhes (opcional)",
       "submit": "Enviar denúncia",
-      "close": "Fechar"
+      "close": "Fechar",
+      "reportReview": "Denunciar esta resenha",
+      "reportComment": "Denunciar este comentário"
     },
     "onboarding": {
       "title": "Escolha seu nickname",
@@ -1514,7 +1516,9 @@
       "new_follower": "{nickname} começou a seguir você.",
       "follow_request": "{nickname} pediu para seguir você.",
       "new_comment": "{nickname} comentou na sua publicação.",
-      "new_reaction": "{nickname} reagiu à sua publicação."
+      "new_reaction": "{nickname} reagiu à sua publicação.",
+      "content_hidden": "Um moderador ocultou seu conteúdo ({targetType}).",
+      "content_deleted": "Um moderador removeu seu conteúdo ({targetType})."
     },
     "followAccept": "Aceitar",
     "followDecline": "Recusar"

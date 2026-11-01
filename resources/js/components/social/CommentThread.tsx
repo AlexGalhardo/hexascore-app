@@ -3,6 +3,7 @@ import { type FormEvent, useState } from "react";
 
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
+import ReportDialog from "../ReportDialog";
 import Btn from "../ui/Btn";
 import ReactionBar, { type ReactionKind } from "./ReactionBar";
 
@@ -119,6 +120,7 @@ export default function CommentThread({ target, id, comments, canWrite }: Props)
 						{t("comments.delete")}
 					</button>
 				)}
+				{canWrite && !c.mine && <ReportDialog targetType="comment" targetId={c.id} />}
 			</div>
 			{top && replyTo === c.id && (
 				<CommentForm

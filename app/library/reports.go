@@ -19,13 +19,18 @@ import (
 
 // Report targets, reasons and outcomes (SDD 14 §5).
 const (
-	TargetList = "list"
-	TargetUser = "user"
+	TargetList    = "list"
+	TargetUser    = "user"
+	TargetReview  = "review"
+	TargetComment = "comment"
 
 	OutcomeDismissed  = "dismissed"
 	OutcomeListHidden = "list_hidden"
 	OutcomeUserBanned = "user_banned"
 	OutcomeNoAction   = "no_action"
+	// OutcomeContentHidden and OutcomeContentDeleted apply to a review or a comment (SDD 14 §12.11).
+	OutcomeContentHidden  = "content_hidden"
+	OutcomeContentDeleted = "content_deleted"
 
 	MaxReportDetails = 500
 	MaxAdminNote     = 1000
@@ -34,7 +39,10 @@ const (
 // ReportReasons and ReportOutcomes mirror the table's CHECKs; suggestion_rejected waits for SDD 04.
 var (
 	ReportReasons  = []string{"spam", "offensive", "harassment", "impersonation", "other"}
-	ReportOutcomes = []string{OutcomeDismissed, OutcomeListHidden, OutcomeUserBanned, OutcomeNoAction}
+	ReportOutcomes = []string{
+		OutcomeDismissed, OutcomeListHidden, OutcomeUserBanned, OutcomeNoAction, OutcomeContentHidden,
+		OutcomeContentDeleted,
+	}
 )
 
 // Problem codes (SDD 14 §6.3, §6.4).
@@ -132,9 +140,35 @@ WHERE l.id = $1`, in.Target).Scan(&owner, &public, &hidden, &private)
 		}
 
 		return strconv.FormatInt(id, 10), id, err
+	case TargetReview, TargetComment:
+		owner, err := s.contentAuthor(ctx, s.DB, in.TargetType, in.Target)
+
+		return in.Target, owner, err
 	}
 
 	return "", 0, ErrNotFound()
+}
+
+// contentAuthor returns the author of a review or comment that is not hidden. The table name comes from the
+// target type, never from input.
+func (s *Reports) contentAuthor(ctx context.Context, ex database.Executor, targetType, id string) (int64, error) {
+	if _, err := uuid.Parse(id); err != nil {
+		return 0, ErrNotFound()
+	}
+
+	table := "reviews"
+	if targetType == TargetComment {
+		table = "comments"
+	}
+
+	var owner int64
+
+	err := ex.QueryRowContext(ctx, `SELECT user_id FROM `+table+` WHERE id = $1 AND NOT hidden`, id).Scan(&owner)
+	if errors.Is(err, sql.ErrNoRows) {
+		return 0, ErrNotFound()
+	}
+
+	return owner, err
 }
 
 // ResolveInput is an admin's decision on an open report.
@@ -165,6 +199,10 @@ func (s *Reports) Resolve(ctx context.Context, actorID int64, id string, in Reso
 
 	if in.Outcome == OutcomeUserBanned {
 		uid, err := strconv.ParseInt(rep.targetID, 10, 64)
+		if rep.targetType != TargetUser {
+			// Banning on a review or comment report bans its author.
+			uid, err = s.contentAuthor(ctx, s.DB, rep.targetType, rep.targetID)
+		}
 		if err != nil {
 			return ErrNotFound()
 		}
@@ -212,8 +250,11 @@ func (s *Reports) Resolve(ctx context.Context, actorID int64, id string, in Reso
 			}
 		}
 
-		if in.Outcome == OutcomeListHidden {
+		switch in.Outcome {
+		case OutcomeListHidden:
 			return s.hideList(ctx, tx, rep.targetID, id)
+		case OutcomeContentHidden, OutcomeContentDeleted:
+			return s.moderateContent(ctx, tx, rep, in.Outcome, id)
 		}
 
 		return nil
@@ -281,6 +322,41 @@ func (s *Reports) hideList(ctx context.Context, tx *database.Tx, listID, reportI
 	return nil
 }
 
+// moderateContent hides or deletes the reported review or comment and notifies its author. Deleting a review takes
+// its comments and reactions with it (cascade); a target already gone closes the reports all the same.
+func (s *Reports) moderateContent(
+	ctx context.Context,
+	tx *database.Tx,
+	rep openReport,
+	outcome, reportID string,
+) error {
+	table, kind := "reviews", notifications.ContentHidden
+	if rep.targetType == TargetComment {
+		table = "comments"
+	}
+
+	q := `UPDATE ` + table + ` SET hidden = true WHERE id = $1 RETURNING user_id`
+	if outcome == OutcomeContentDeleted {
+		q, kind = `DELETE FROM `+table+` WHERE id = $1 RETURNING user_id`, notifications.ContentDeleted
+	}
+
+	var author int64
+
+	err := tx.QueryRowContext(ctx, q, rep.targetID).Scan(&author)
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil
+	}
+
+	if err != nil {
+		return err
+	}
+
+	_, err = notifications.Send(ctx, tx, author, kind, "report:"+reportID,
+		map[string]any{"targetType": rep.targetType})
+
+	return err
+}
+
 func (s *Reports) load(ctx context.Context, ex database.Executor, id string, lock ...bool) (openReport, error) {
 	if _, err := uuid.Parse(id); err != nil {
 		return openReport{}, ErrNotFound()
@@ -304,7 +380,10 @@ func (s *Reports) load(ctx context.Context, ex database.Executor, id string, loc
 func validOutcome(targetType, outcome string) error {
 	ok := outcome == OutcomeDismissed || outcome == OutcomeNoAction ||
 		(outcome == OutcomeListHidden && targetType == TargetList) ||
-		(outcome == OutcomeUserBanned && targetType == TargetUser)
+		(outcome == OutcomeUserBanned &&
+			(targetType == TargetUser || targetType == TargetReview || targetType == TargetComment)) ||
+		((outcome == OutcomeContentHidden || outcome == OutcomeContentDeleted) &&
+			(targetType == TargetReview || targetType == TargetComment))
 	if !ok {
 		return problem(http.StatusUnprocessableEntity, "reports.outcome", "invalid-outcome",
 			"That outcome does not apply to this report.")
