@@ -92,6 +92,8 @@ func loadFake(t *testing.T) *fakeSources {
 	mux.HandleFunc("/wikipedia/", f.extracts)
 	mux.HandleFunc("/3/", f.tmdb)
 	mux.HandleFunc("/openlibrary/", f.openlibrary)
+	mux.HandleFunc("/twitch/oauth2/token", f.twitchToken)
+	mux.HandleFunc("/igdb/v4/games", f.igdb)
 
 	f.srv = httptest.NewServer(mux)
 	t.Cleanup(f.srv.Close)
@@ -173,6 +175,8 @@ func newIngestApp(t *testing.T, f *fakeSources, flagsOn ...string) *vukemtest.Ap
 		WikipediaAPI:   f.srv.URL + "/wikipedia/",
 		TMDBAPI:        f.srv.URL + "/3",
 		OpenLibraryAPI: f.srv.URL + "/openlibrary",
+		TwitchTokenURL: f.srv.URL + "/twitch/oauth2/token",
+		IGDBAPI:        f.srv.URL + "/igdb/v4",
 	}
 
 	env := map[string]string{
@@ -180,6 +184,8 @@ func newIngestApp(t *testing.T, f *fakeSources, flagsOn ...string) *vukemtest.Ap
 		"QUEUE_CONNECTION":                       "database",
 		"QUEUE_NAMES":                            "ingest,default",
 		"THEMOVIEDATABASE_API_READ_ACCESS_TOKEN": "test-token",
+		"IGDB_TWITCH_CLIENT_ID":                  "test-id",
+		"IGDB_TWITCH_CLIENT_SECRET":              "test-secret",
 	}
 	for _, name := range flagsOn {
 		env["FLAG_INGEST_"+name] = "true"

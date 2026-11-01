@@ -22,12 +22,13 @@ type DataSource struct {
 // DataSources lists the rows the merge labels fields with. Licences name the
 // terms each source publishes (owner cleared the legal reads in Q-A16,
 // 2026-11-01); they only decide what is displayed. Terms pages:
+//   - IGDB: https://www.twitch.tv/p/en/legal/developer-agreement/ and https://api-docs.igdb.com/ (visible attribution)
 //   - Open Library: https://openlibrary.org/developers/licensing (no rights asserted by the Internet Archive)
 var DataSources = []DataSource{
 	{SourceWikidata, "Wikidata", "CC0-1.0", "", "https://www.wikidata.org"},
 	{SourceWikipedia, "Wikipedia", "CC-BY-SA-4.0", "Wikipedia (CC BY-SA 4.0)", "https://www.wikipedia.org"},
 	{SourceTMDB, "TMDB", "TMDB-API-TERMS", "TMDB", "https://www.themoviedb.org"},
-	{SourceIGDB, "IGDB", "IGDB-API-TERMS", "IGDB", "https://www.igdb.com"},
+	{SourceIGDB, "IGDB", "TWITCH-DEVELOPER-SERVICES-AGREEMENT", "IGDB", "https://www.igdb.com"},
 	{SourceSteam, "Steam", "STEAM-API-TERMS", "", "https://store.steampowered.com"},
 	{SourceGOG, "GOG", "GOG-API-TERMS", "", "https://www.gog.com"},
 	{SourceOpenLibrary, "Open Library", "OPEN-LIBRARY-NO-RIGHTS-ASSERTED", "", "https://openlibrary.org"},

@@ -83,6 +83,18 @@ var (
 		{Job: dq.Job, Mode: run.ModeFull},
 	}}
 
+	IGDBWeekly = Chain{"igdb-weekly", []Stage{
+		fetch("igdb", run.ModeFull),
+		{Job: "normalize", Mode: run.ModeFull},
+		{Job: dq.Job, Mode: run.ModeFull},
+	}}
+	// IGDBRefresh applies the D-36 interim rule: refresh records past 24 h, delete the ones past 7 days.
+	IGDBRefresh = Chain{"igdb-refresh", []Stage{
+		{Job: "igdb.refresh", Source: "igdb", Mode: run.ModeFull},
+		{Job: "normalize", Mode: run.ModeFull},
+		{Job: dq.Job, Mode: run.ModeFull},
+	}}
+
 	// EditionsBackfill walks the books once and saves the editions their stored Wikidata records list (SDD 06 §7.8).
 	EditionsBackfill = Chain{"editions-backfill", []Stage{
 		{Job: "backfill.editions", Mode: run.ModeBackfill},
@@ -118,6 +130,8 @@ var (
 		OpenLibraryWeekly,
 		TMDBWeekly,
 		TMDBExpire,
+		IGDBWeekly,
+		IGDBRefresh,
 		EditionsBackfill,
 		TrailersWeekly,
 		DQDaily,

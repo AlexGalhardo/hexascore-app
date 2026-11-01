@@ -72,6 +72,11 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 		WeeklyOn(time.Sunday, "04:00").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:tmdb-expire", startChain(app, ingest.TMDBExpire)).
 		DailyAt("03:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:igdb-weekly", startChain(app, ingest.IGDBWeekly)).
+		WeeklyOn(time.Saturday, "01:00").In(saoPaulo).WithoutOverlapping()
+	// D-36: every 6 h, at :15 so it never starts in the same minute as the 00:30/01:00 runs.
+	s.Func("ingest:igdb-refresh", startChain(app, ingest.IGDBRefresh)).
+		Cron("15 */6 * * *").In(saoPaulo).WithoutOverlapping()
 
 	// 02:30 prunes, 03:30 retries the dead letter (SDD 06 §7.6); the 03:00 expiry run clears the TMDB records first.
 	s.Func("ingest:prune", pruneIngest(app)).DailyAt("02:30").In(saoPaulo).WithoutOverlapping()
