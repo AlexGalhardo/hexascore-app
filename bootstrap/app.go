@@ -27,6 +27,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/listeners"
 	"github.com/AlexGalhardo/hexascore-app/app/logging"
+	appmail "github.com/AlexGalhardo/hexascore-app/app/mail"
 	"github.com/AlexGalhardo/hexascore-app/app/scheduler"
 	"github.com/AlexGalhardo/hexascore-app/app/social"
 	"github.com/AlexGalhardo/hexascore-app/app/ssr"
@@ -116,6 +117,7 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 	}
 
 	base = append(base, vukem.WithRoutes(func(r *router.Router, app *vukem.App) error {
+		appmail.Configure(app.Source.Get("MAIL_FROM"), app.Source.Get("MAIL_SUPPORT_ADDRESS"))
 		if err := addReadyChecks(app, heartbeat); err != nil {
 			return err
 		}

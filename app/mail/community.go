@@ -17,10 +17,10 @@ type SuggestionNotice struct {
 
 // Envelope implements mail.Mailable.
 func (m SuggestionNotice) Envelope() mail.Envelope {
-	return mail.Envelope{
+	return Auto(mail.Envelope{
 		To:      []string{m.User.Email},
 		Subject: cmp.Or(m.Subject, "Your HexaScore suggestion was updated"),
-	}
+	})
 }
 
 // Content implements mail.Mailable.
