@@ -21,19 +21,17 @@ type Plan struct {
 	MaxPageSize int
 	// RPS is the per-user throttle in requests per second.
 	RPS int
-	// Burst is how many requests may arrive at once; the sustained rate stays RPS (Q-A2).
-	Burst int
 }
 
 // PlanByID returns the plan named id; unknown ids are not a plan.
 func PlanByID(id string) (Plan, bool) {
 	switch id {
 	case PlanFree:
-		return Plan{ID: PlanFree, Quota: 100, Lifetime: true, MaxPageSize: 10, RPS: 1, Burst: 5}, true
+		return Plan{ID: PlanFree, Quota: 100, Lifetime: true, MaxPageSize: 10, RPS: 1}, true
 	case PlanPro:
-		return Plan{ID: PlanPro, Quota: 50_000, MaxPageSize: 100, RPS: 10, Burst: 10}, true
+		return Plan{ID: PlanPro, Quota: 50_000, MaxPageSize: 100, RPS: 10}, true
 	case PlanBusiness:
-		return Plan{ID: PlanBusiness, Quota: 500_000, MaxPageSize: 100, RPS: 50, Burst: 50}, true
+		return Plan{ID: PlanBusiness, Quota: 500_000, MaxPageSize: 100, RPS: 50}, true
 	}
 
 	return Plan{}, false

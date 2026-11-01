@@ -18,7 +18,7 @@ func Summaries(ctx context.Context, db Querier, ids []string, locale string) ([]
   coalesce(t.title, te.title, i.original_title, i.slug),
   extract(year FROM i.release_date)::int,
   `+starsScore+`,
-  i.rating_count, i.cover_key, i.cover_thumb_key
+  i.rating_count
 FROM unnest($1::uuid[]) WITH ORDINALITY AS o(id, n)
 JOIN items i ON i.id = o.id
 LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $2

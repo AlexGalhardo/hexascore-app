@@ -20,7 +20,6 @@ import (
 	"github.com/AlexGalhardo/vukem/uuid"
 	"github.com/AlexGalhardo/vukem/web"
 
-	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
 	"github.com/AlexGalhardo/hexascore-app/internal/search"
@@ -37,18 +36,13 @@ const (
 type Search struct {
 	app      *vukem.App
 	searcher search.Searcher
-	// coversBase makes the JSON cover URLs absolute (COVERS_BASE_URL).
-	coversBase string
 	// user returns the signed-in user, or an error for anonymous requests.
 	user func(c *web.Ctx) (models.User, error)
 }
 
 // NewSearch builds the handlers.
 func NewSearch(app *vukem.App, searcher search.Searcher, user func(c *web.Ctx) (models.User, error)) *Search {
-	return &Search{
-		app: app, searcher: searcher, user: user,
-		coversBase: catalog.CoversBase(app.Source.Get("COVERS_BASE_URL")),
-	}
+	return &Search{app: app, searcher: searcher, user: user}
 }
 
 // SearchHit is one result row; the catalogue read model adds score and cover later.
@@ -60,7 +54,6 @@ type SearchHit struct {
 	Path           string               `json:"path"`
 	MatchedTitle   string               `json:"matchedTitle,omitempty"`
 	MatchedEdition *search.EditionMatch `json:"matchedEdition,omitempty"`
-	Cover          *catalog.Cover       `json:"cover"`
 }
 
 // SearchGroup is one type's block of the grouped page.
@@ -95,8 +88,6 @@ type searchPage struct {
 	Entities   []SearchEntity `json:"entities"`
 	DidYouMean *string        `json:"didYouMean"`
 	TooShort   bool           `json:"tooShort"`
-	// Unavailable marks a degraded answer: the search backend timed out.
-	Unavailable bool `json:"unavailable"`
 }
 
 var (
@@ -203,29 +194,24 @@ func (h *Search) Index(c *web.Ctx) error {
 		)
 	}
 
-	degraded := errors.Is(err, search.ErrTimeout)
-	if degraded {
-		out = searchPage{Groups: []SearchGroup{}, Results: []SearchHit{}, Entities: []SearchEntity{}, Unavailable: true}
-		c.SetHeader("Retry-After", searchRetryAfter)
-	} else if err != nil {
+	if err != nil {
 		return badQuery(err)
 	}
 
 	searchID := uuid.NewV4().String()
 
 	props := inertia.Props{
-		"query":       searchQueryProp{Q: text, Type: strings.Join(types, ","), Locale: locale, Page: page},
-		"groups":      out.Groups,
-		"results":     out.Results,
-		"total":       out.Total,
-		"entities":    out.Entities,
-		"didYouMean":  out.DidYouMean,
-		"searchId":    searchID,
-		"tooShort":    out.TooShort,
-		"unavailable": out.Unavailable,
+		"query":      searchQueryProp{Q: text, Type: strings.Join(types, ","), Locale: locale, Page: page},
+		"groups":     out.Groups,
+		"results":    out.Results,
+		"total":      out.Total,
+		"entities":   out.Entities,
+		"didYouMean": out.DidYouMean,
+		"searchId":   searchID,
+		"tooShort":   out.TooShort,
 	}
 
-	if signed || degraded {
+	if signed {
 		c.SetHeader("Cache-Control", "private, no-store")
 	} else if inertia.IsInertia(c.Request()) {
 		// searchId differs per request and must not defeat the 304.
@@ -241,7 +227,7 @@ func (h *Search) Index(c *web.Ctx) error {
 		}
 	}
 
-	if text != "" && !out.TooShort && !degraded {
+	if text != "" && !out.TooShort {
 		h.recordPerformed(c, searchID, query, user, signed, out, time.Since(start), "web")
 	}
 
@@ -277,26 +263,15 @@ func (h *Search) AppIndex(c *web.Ctx) error {
 		}
 	}
 
-	for i := range hits {
-		hits[i].Cover = hits[i].Cover.WithBase(h.coversBase)
-	}
-
 	return c.JSON(http.StatusOK, map[string]any{
 		"searchId": searchID, "data": hits, "total": out.Total, "tooShort": out.TooShort,
 	})
 }
 
-// searchRetryAfter is the Retry-After (seconds) of a degraded search.
-const searchRetryAfter = "5"
-
-// badQuery maps the searcher's validation failures to 400 (SDD 07 §6) and a
-// backend timeout to a 503 problem with Retry-After.
+// badQuery maps the searcher's validation failures to 400 (SDD 07 §6).
 func badQuery(err error) error {
-	switch {
-	case errors.Is(err, search.ErrInvalidQuery):
+	if errors.Is(err, search.ErrInvalidQuery) {
 		return errs.New(http.StatusBadRequest, err.Error())
-	case errors.Is(err, search.ErrTimeout):
-		return errs.New(http.StatusServiceUnavailable, "search timeout").WithHeader("Retry-After", searchRetryAfter)
 	}
 
 	return err
@@ -328,10 +303,6 @@ func (h *Search) run(ctx context.Context, q search.Query, prefix string) (search
 		}
 
 		out.Groups = append(out.Groups, sg)
-	}
-
-	if err := h.attachCovers(ctx, &out); err != nil {
-		return searchPage{}, err
 	}
 
 	if q.Page == 1 && len(q.Types) == 0 && !res.TooShort {
@@ -421,7 +392,7 @@ func (h *Search) Suggest(c *web.Ctx) error {
 			}
 
 			if r.ThumbKey != "" {
-				it.CoverThumbURL = catalog.Absolute(h.coversBase, catalog.CoverURL(r.ThumbKey))
+				it.CoverThumbURL = "/covers/" + strings.TrimPrefix(r.ThumbKey, "covers/")
 			}
 
 			if section, ok := itemSection[r.Kind]; ok {
@@ -518,42 +489,6 @@ func LegacySuggest(c *web.Ctx) error {
 	}
 
 	http.Redirect(c.Writer(), c.Request(), target, http.StatusPermanentRedirect)
-
-	return nil
-}
-
-// attachCovers fills Cover on every hit of the page with one query.
-func (h *Search) attachCovers(ctx context.Context, out *searchPage) error {
-	var hits []*SearchHit
-	for i := range out.Results {
-		hits = append(hits, &out.Results[i])
-	}
-	for g := range out.Groups {
-		for i := range out.Groups[g].Items {
-			hits = append(hits, &out.Groups[g].Items[i])
-		}
-	}
-	if len(hits) == 0 {
-		return nil
-	}
-
-	ids := make([]string, len(hits))
-	for i, hit := range hits {
-		ids[i] = hit.ID
-	}
-
-	db, err := h.app.DB()
-	if err != nil {
-		return err
-	}
-
-	covers, err := catalog.CoversFor(ctx, db, ids)
-	if err != nil {
-		return err
-	}
-	for _, hit := range hits {
-		hit.Cover = covers[hit.ID]
-	}
 
 	return nil
 }

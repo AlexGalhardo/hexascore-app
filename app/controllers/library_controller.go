@@ -13,7 +13,6 @@ import (
 	"github.com/AlexGalhardo/vukem/z"
 
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
-	"github.com/AlexGalhardo/hexascore-app/app/flash"
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 )
@@ -24,13 +23,11 @@ type Library struct {
 	now   func() time.Time
 	guard string
 	api   bool
-	// coversBase makes the JSON cover URLs absolute (COVERS_BASE_URL); the Inertia page keeps paths.
-	coversBase string
 }
 
 // NewLibrary builds the handlers; api selects JSON answers.
-func NewLibrary(db *database.DB, now func() time.Time, guard string, api bool, coversBase string) *Library {
-	return &Library{db: db, now: now, guard: guard, api: api, coversBase: coversBase}
+func NewLibrary(db *database.DB, now func() time.Time, guard string, api bool) *Library {
+	return &Library{db: db, now: now, guard: guard, api: api}
 }
 
 // EditionForm is the body of PUT /items/{id}/edition.
@@ -59,13 +56,6 @@ func (h *Library) Index(c *web.Ctx) error {
 	}
 
 	if h.api {
-		for g := range view.Groups {
-			for i := range view.Groups[g].Items {
-				it := &view.Groups[g].Items[i]
-				it.Cover = it.Cover.WithBase(h.coversBase)
-			}
-		}
-
 		return c.JSON(200, view)
 	}
 
@@ -98,8 +88,6 @@ func (h *Library) PutEdition(c *web.Ctx) error {
 	}
 
 	if !h.api {
-		flash.Status(c, "flash.editionSaved")
-
 		return c.Back("/library")
 	}
 
@@ -131,8 +119,6 @@ func (h *Library) DeleteEdition(c *web.Ctx) error {
 	}
 
 	if !h.api {
-		flash.Status(c, "flash.editionRemoved")
-
 		return c.Back("/library")
 	}
 

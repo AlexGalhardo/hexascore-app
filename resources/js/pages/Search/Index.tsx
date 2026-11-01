@@ -31,7 +31,6 @@ interface Props {
 	didYouMean: string | null;
 	searchId: string;
 	tooShort: boolean;
-	unavailable?: boolean;
 }
 
 export default function Index({
@@ -43,7 +42,6 @@ export default function Index({
 	didYouMean,
 	searchId,
 	tooShort,
-	unavailable = false,
 }: Props) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
@@ -53,8 +51,7 @@ export default function Index({
 			locale,
 		);
 	const pages = Math.ceil(total / PER_PAGE);
-	const empty =
-		!tooShort && !unavailable && query.q !== "" && groups.length === 0 && results.length === 0;
+	const empty = !tooShort && query.q !== "" && groups.length === 0 && results.length === 0;
 
 	return (
 		<>
@@ -81,11 +78,6 @@ export default function Index({
 			</form>
 			{query.q === "" && <p className="mt-4">{t("search.prompt")}</p>}
 			{tooShort && <p className="mt-4">{t("search.tooShort")}</p>}
-			{unavailable && (
-				<p role="status" className="mt-4">
-					{t("search.unavailable")}
-				</p>
-			)}
 			{empty && <p className="mt-4">{t("search.noResults", { q: query.q })}</p>}
 			{empty && didYouMean && (
 				<p className="mt-2">

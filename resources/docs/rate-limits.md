@@ -6,7 +6,7 @@ Each plan has a request quota, a per-second rate limit and a maximum page size.
 
 | Plan | Quota | Requests / second | Max page size |
 | --- | --- | --- | --- |
-| Free | 100 in total | 1 (burst of 5) | 10 |
+| Free | 100 in total | 1 | 10 |
 | Pro | 50,000 / month | 10 | 100 |
 | Business | 500,000 / month | 50 | 100 |
 
@@ -31,7 +31,5 @@ Successful responses tell you where you stand (IETF RateLimit header fields).
 | `Retry-After` | On 429 and 503: seconds to wait before retrying. |
 
 ## When you hit a limit
-
-The Free plan accepts a burst of 5 requests at once and then sustains 1 request per second; the other plans burst up to their per-second rate.
 
 Too many requests per second returns [`429 rate-limited`](/docs/errors#rate-limited): wait `Retry-After` seconds. Quota exhausted returns [`402 quota-exhausted`](/docs/errors#quota-exhausted): upgrade your plan; retrying will not help until the reset.

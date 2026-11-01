@@ -66,7 +66,7 @@ test.describe("keyboard", () => {
 				k.startsWith("__reactProps$"),
 			),
 		);
-		const link = page.locator(`header a[href^="${prefix}/games"]:visible`).first();
+		const link = page.locator(`header a[href^="${prefix}/games"]`).first();
 		await link.focus();
 		await page.keyboard.press("Enter");
 		await expect(page).toHaveURL(/\/games$/);

@@ -157,21 +157,6 @@ func (m TwoFactorChanged) Envelope() mail.Envelope {
 // Content implements mail.Mailable.
 func (m TwoFactorChanged) Content() mail.Content { return mail.View("mail/two_factor_changed", m) }
 
-// PasskeyChanged tells a user that a passkey was added or removed. Text.body says which.
-type PasskeyChanged struct {
-	User      models.User
-	ResetLink string
-	Strings
-}
-
-// Envelope implements mail.Mailable.
-func (m PasskeyChanged) Envelope() mail.Envelope {
-	return mail.Envelope{To: []string{m.User.Email}, Subject: cmp.Or(m.Subject, "Your passkey was changed")}
-}
-
-// Content implements mail.Mailable.
-func (m PasskeyChanged) Content() mail.Content { return mail.View("mail/passkey_changed", m) }
-
 // ContactMessage forwards a contact form message to the inbox; replying answers the sender.
 type ContactMessage struct {
 	Inbox, Name, Email, Subject, Message string

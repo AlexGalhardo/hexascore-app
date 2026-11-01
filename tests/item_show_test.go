@@ -37,8 +37,7 @@ func TestInertiaPages_Catalog_Show(t *testing.T) {
 
 	game, book := uuid.NewV7().String(), uuid.NewV7().String()
 	exec(
-		`INSERT INTO items (id, type, slug, wikidata_qid, rating_count, score, cover_key, cover_thumb_key)
-		 VALUES ($1, 'game', 'zelda', 'Q9001', 9, 87.25, 'covers/zelda-0123456789abcdef.webp', 'covers/zelda-0123456789abcdef-t.webp')`,
+		`INSERT INTO items (id, type, slug, wikidata_qid, rating_count, score) VALUES ($1, 'game', 'zelda', 'Q9001', 9, 87.25)`,
 		game,
 	)
 	exec(`INSERT INTO items (id, type, slug, wikidata_qid) VALUES ($1, 'book', 'dune', 'Q9002')`, book)
@@ -66,8 +65,6 @@ func TestInertiaPages_Catalog_Show(t *testing.T) {
 		PropEquals("ratingSummary.score", 8.7).
 		PropEquals("ratingSummary.ratingCount", 9).
 		HasProp("timeToBeat.reports").
-		PropEquals("cover.full", "/covers/zelda-0123456789abcdef.webp").
-		PropEquals("cover.thumb", "/covers/zelda-0123456789abcdef-t.webp").
 		MissingProp("me")
 
 	client.Inertia("").Get("/pt-br/books/dune").AssertOK().AssertInertia("Catalog/Show").

@@ -11,7 +11,6 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/appapi"
-	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	"github.com/AlexGalhardo/hexascore-app/app/http/limits"
 	"github.com/AlexGalhardo/hexascore-app/app/library"
@@ -81,7 +80,7 @@ func Lists(r *router.Router, app *vukem.App) error {
 	}).Name("app.v1.")
 
 	// Reads use catalog:read, not the write group that requires lists:write (SDD 14 §6.3).
-	reads := appapi.NewLists(svc, gate, acc.API.Name(), catalog.CoversBase(app.Source.Get("COVERS_BASE_URL")))
+	reads := appapi.NewLists(svc, gate, acc.API.Name())
 	read := AppAuthStack(app, acc, limiters, auth.Ability(acc.API, "catalog:read"))
 	r.Group("/app/v1", func(g *router.Group) {
 		g.Use(read...)

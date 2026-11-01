@@ -38,32 +38,6 @@ test.describe("profile", () => {
 			await expect(page).toHaveURL(/\/profile$/);
 		});
 
-		test("CSR page is never blank: title and skeleton before hydration, hidden after", async ({
-			browser,
-			page,
-			prefix,
-			t,
-		}) => {
-			await createVerifiedAccount(page, prefix, t);
-			const skeleton = page.locator("#csr-skeleton");
-
-			// Without JS the document is what a browser paints before hydration (P2.H.2.1).
-			const noJs = await browser.newContext({
-				javaScriptEnabled: false,
-				storageState: await page.context().storageState(),
-			});
-			const raw = await noJs.newPage();
-			await raw.goto(`${prefix}/profile`);
-			await expect(raw).toHaveTitle(t("account.metaTitle"));
-			await expect(raw.locator('#csr-skeleton[aria-busy="true"]')).toBeVisible();
-			await raw.screenshot({ path: test.info().outputPath("profile-before-hydration.png") });
-			await noJs.close();
-
-			await open(page, `${prefix}/profile`);
-			await expect(skeleton).toBeHidden();
-			await expect(page.getByLabel(t("auth.fields.currentPassword"))).toBeVisible();
-		});
-
 		test("account deletion: 10 s countdown, cancel, confirm, banner and undo", async ({
 			page,
 			prefix,

@@ -223,7 +223,7 @@ export type GetEntityParams = {
 };
 
 export type GetItemParams = {
-  type: "games" | "movies" | "series" | "books";
+  type: string;
   id: string;
 };
 
@@ -236,7 +236,7 @@ export type ListEntityItemsParams = {
 };
 
 export type ListItemsParams = {
-  type: "games" | "movies" | "series" | "books";
+  type: string;
 };
 
 export type ListsDeleteParams = {

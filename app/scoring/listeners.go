@@ -92,17 +92,3 @@ func dispatchBatch(ctx context.Context, db *database.DB, q *queue.Queue, ids []s
 		return nil
 	})
 }
-
-// EnqueueRecomputes dispatches RecomputeItemScore for each id, BatchSize ids per transaction.
-func EnqueueRecomputes(ctx context.Context, db *database.DB, q *queue.Queue, ids []string) error {
-	for len(ids) > 0 {
-		n := min(len(ids), BatchSize)
-		if err := dispatchBatch(ctx, db, q, ids[:n]); err != nil {
-			return err
-		}
-
-		ids = ids[n:]
-	}
-
-	return nil
-}

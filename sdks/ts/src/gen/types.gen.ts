@@ -4,22 +4,6 @@ export type ClientOptions = {
     baseUrl: 'https://api.hexascore.app' | (string & {});
 };
 
-export type ChangeJson = {
-    action: 'created' | 'updated' | 'deleted';
-    changedAt: string;
-    fields?: Array<string>;
-    id: string;
-    itemId: string;
-    itemType: 'games' | 'movies' | 'series' | 'books';
-    mergedInto?: string | null;
-};
-
-export type ChangePageJson = {
-    data?: Array<ChangeJson>;
-    links?: Links;
-    meta?: Meta;
-};
-
 export type EditionJson = {
     format?: string | null;
     id: string;
@@ -183,34 +167,6 @@ export type UsageRateLimit = {
     requests_per_second?: number;
 };
 
-export type WebhookCreated = {
-    createdAt: string;
-    disabled?: boolean;
-    events: Array<string>;
-    id: string;
-    itemTypes: Array<string>;
-    secret: string;
-    url: string;
-};
-
-export type WebhookJson = {
-    createdAt: string;
-    disabled?: boolean;
-    events: Array<string>;
-    id: string;
-    itemTypes: Array<string>;
-    url: string;
-};
-
-export type WebhookList = {
-    data?: Array<WebhookJson>;
-};
-
-export type WebhookTestResult = {
-    delivered?: boolean;
-    status?: number;
-};
-
 export type ListBookGenresData = {
     body?: never;
     path?: never;
@@ -283,56 +239,6 @@ export type ListEditionsResponses = {
 };
 
 export type ListEditionsResponse = ListEditionsResponses[keyof ListEditionsResponses];
-
-export type ListChangesData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * RFC 3339, at most 14 days ago
-         */
-        since?: string;
-        /**
-         * games, movies, series or books
-         */
-        type?: string;
-        /**
-         * opaque next_cursor of the previous page
-         */
-        cursor?: string;
-        /**
-         * 1 to 1000, default 100
-         */
-        limit?: string;
-    };
-    url: '/api/v1/changes';
-};
-
-export type ListChangesErrors = {
-    /**
-     * Error (RFC 9457 problem details)
-     */
-    401: Problem;
-    /**
-     * Validation failed; errors maps each field to its messages
-     */
-    422: Problem;
-    /**
-     * Error (RFC 9457 problem details)
-     */
-    default: Problem;
-};
-
-export type ListChangesError = ListChangesErrors[keyof ListChangesErrors];
-
-export type ListChangesResponses = {
-    /**
-     * OK
-     */
-    200: ChangePageJson;
-};
-
-export type ListChangesResponse = ListChangesResponses[keyof ListChangesResponses];
 
 export type GetEntityData = {
     body?: never;
@@ -864,151 +770,13 @@ export type ListSeriesGenresResponses = {
 
 export type ListSeriesGenresResponse = ListSeriesGenresResponses[keyof ListSeriesGenresResponses];
 
-export type ListWebhooksData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/api/v1/webhooks';
-};
-
-export type ListWebhooksErrors = {
-    /**
-     * Error (RFC 9457 problem details)
-     */
-    401: Problem;
-    /**
-     * Error (RFC 9457 problem details)
-     */
-    default: Problem;
-};
-
-export type ListWebhooksError = ListWebhooksErrors[keyof ListWebhooksErrors];
-
-export type ListWebhooksResponses = {
-    /**
-     * OK
-     */
-    200: WebhookList;
-};
-
-export type ListWebhooksResponse = ListWebhooksResponses[keyof ListWebhooksResponses];
-
-export type CreateWebhookData = {
-    body: {
-        events: Array<string>;
-        itemTypes: Array<string>;
-        url: string;
-    };
-    path?: never;
-    query?: never;
-    url: '/api/v1/webhooks';
-};
-
-export type CreateWebhookErrors = {
-    /**
-     * Error (RFC 9457 problem details)
-     */
-    401: Problem;
-    /**
-     * Validation failed; errors maps each field to its messages
-     */
-    422: Problem;
-    /**
-     * Error (RFC 9457 problem details)
-     */
-    default: Problem;
-};
-
-export type CreateWebhookError = CreateWebhookErrors[keyof CreateWebhookErrors];
-
-export type CreateWebhookResponses = {
-    /**
-     * Created
-     */
-    201: WebhookCreated;
-};
-
-export type CreateWebhookResponse = CreateWebhookResponses[keyof CreateWebhookResponses];
-
-export type DeleteWebhookData = {
-    body?: never;
-    path: {
-        id: string;
-    };
-    query?: never;
-    url: '/api/v1/webhooks/{id}';
-};
-
-export type DeleteWebhookErrors = {
-    /**
-     * Error (RFC 9457 problem details)
-     */
-    401: Problem;
-    /**
-     * Validation failed; errors maps each field to its messages
-     */
-    422: Problem;
-    /**
-     * Error (RFC 9457 problem details)
-     */
-    default: Problem;
-};
-
-export type DeleteWebhookError = DeleteWebhookErrors[keyof DeleteWebhookErrors];
-
-export type DeleteWebhookResponses = {
-    /**
-     * No Content
-     */
-    204: void;
-};
-
-export type DeleteWebhookResponse = DeleteWebhookResponses[keyof DeleteWebhookResponses];
-
-export type TestWebhookData = {
-    body: {
-        [key: string]: unknown;
-    };
-    path: {
-        id: string;
-    };
-    query?: never;
-    url: '/api/v1/webhooks/{id}/test';
-};
-
-export type TestWebhookErrors = {
-    /**
-     * Error (RFC 9457 problem details)
-     */
-    401: Problem;
-    /**
-     * Validation failed; errors maps each field to its messages
-     */
-    422: Problem;
-    /**
-     * Error (RFC 9457 problem details)
-     */
-    default: Problem;
-};
-
-export type TestWebhookError = TestWebhookErrors[keyof TestWebhookErrors];
-
-export type TestWebhookResponses = {
-    /**
-     * OK
-     */
-    200: WebhookTestResult;
-};
-
-export type TestWebhookResponse = TestWebhookResponses[keyof TestWebhookResponses];
-
 export type ListItemsData = {
     body?: never;
     path: {
         /**
          * games, movies, series or books
          */
-        type: 'games' | 'movies' | 'series' | 'books';
+        type: string;
     };
     query?: {
         /**
@@ -1080,10 +848,7 @@ export type ListItemsResponse = ListItemsResponses[keyof ListItemsResponses];
 export type GetItemData = {
     body?: never;
     path: {
-        /**
-         * games, movies, series or books
-         */
-        type: 'games' | 'movies' | 'series' | 'books';
+        type: string;
         id: string;
     };
     query?: {

@@ -41,11 +41,6 @@ func (h *Handlers) Show(c *web.Ctx) error {
 		return err
 	}
 
-	passkeys, err := h.a.PasskeyList(c.Context(), u.ID)
-	if err != nil {
-		return err
-	}
-
 	rows := make([]map[string]any, 0, len(sessions))
 	for _, s := range sessions {
 		rows = append(rows, map[string]any{
@@ -58,7 +53,6 @@ func (h *Handlers) Show(c *web.Ctx) error {
 		"details":     inertia.Props{"name": u.Name, "email": u.Email, "locale": p.Locale},
 		"passwordSet": p.PasswordSet,
 		"twoFactor":   inertia.Props{"enabled": tf.Enabled()},
-		"passkeys":    passkeys,
 		"sessions":    rows,
 		"privacy": inertia.Props{
 			"profilePrivate": p.ProfilePrivate, "personalizationOptOut": p.PersonalizationOptOut,

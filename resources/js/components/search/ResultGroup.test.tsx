@@ -25,7 +25,6 @@ vi.mock("@inertiajs/react", () => ({
 			{children}
 		</a>
 	),
-	usePage: () => ({ props: { coversBase: "" } }),
 }));
 
 afterEach(cleanup);

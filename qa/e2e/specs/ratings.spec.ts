@@ -1,4 +1,4 @@
-import { createVerifiedAccount, reload } from "../helpers/account";
+import { createVerifiedAccount } from "../helpers/account";
 import { expectNoSeriousA11yViolations } from "../helpers/axe";
 import { openTopItem, projectSlot } from "../helpers/catalog";
 import { expect, test } from "../helpers/fixtures";
@@ -33,7 +33,7 @@ test.describe("ratings", () => {
 		const update = page.getByRole("button", { name: any("ratings.update") });
 		await expect(update).toBeVisible();
 
-		await reload(page);
+		await page.reload();
 		await expect(sliders.first()).toHaveAttribute("aria-valuenow", "10");
 
 		await sliders.first().focus();
@@ -43,7 +43,7 @@ test.describe("ratings", () => {
 		await update.click();
 		await expect(update).toBeEnabled();
 
-		await reload(page);
+		await page.reload();
 		await expect(sliders.first()).toHaveAttribute("aria-valuenow", "9");
 
 		await page.getByRole("button", { name: any("ratings.delete") }).click();
@@ -60,12 +60,12 @@ test.describe("ratings", () => {
 			await status.selectOption(value);
 			await expect(status).toBeEnabled();
 		}
-		await reload(page);
+		await page.reload();
 		await expect(status).toHaveValue("dropped");
 
 		await status.selectOption("");
 		await expect(status).toBeEnabled();
-		await reload(page);
+		await page.reload();
 		await expect(status).toHaveValue("");
 	});
 });

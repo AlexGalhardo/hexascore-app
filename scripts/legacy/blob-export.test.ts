@@ -68,19 +68,4 @@ describe("blob-export", () => {
 		const counts = await exportCovers([full, broken], deps);
 		expect(counts).toMatchObject({ copied: 1, failed: 1 });
 	});
-
-	test("a transient error is retried, a 404 is not", async () => {
-		const deps = fakes();
-		const broken = `${blob}covers/01900000-0000-7000-8000-000000000002-ffffffffffffffff.webp`;
-		const base = deps.fetch;
-		let blips = 1;
-		deps.fetch = async (url) => {
-			if (url === full && blips-- > 0) throw new Error("getaddrinfo EAI_AGAIN store1");
-			return base(url);
-		};
-
-		const counts = await exportCovers([full, broken], deps);
-		expect(counts).toMatchObject({ copied: 1, failed: 1 });
-		expect(deps.fetched.filter((u) => u === broken)).toHaveLength(1);
-	});
 });

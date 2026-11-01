@@ -222,8 +222,6 @@ select i.id, 10 * e::int + 5 * p::int + case when sim >= 0.2 then 2 + sim else 0
 
 Grouped mode adds `row_number() over (partition by i.type …) <= 8` and `count(*) over (partition by i.type)` for `total`. SQL is written with `?` and `database.Rebind`, run via `db.QueryContext` (<https://vukem.dev/docs/database/orm> "Query builder"). Trigram branches are skipped when the normalised query is under 3 characters.
 
-Production size (FIX-search-prod-slow, 2026-10-31): each trigram branch keeps only its 500 most similar rows (`ORDER BY word_similarity(...) DESC LIMIT 500`), so for a broad query `total` (and the per-type count in grouped mode) is a lower bound; the FTS, exact and ISBN branches are not capped. The display title is looked up after the page is cut. The search transaction sets `enable_seqscan = off` with `set_config(..., true)` (transaction-local) because the planner prices the trigram operators as cheap and seq-scans `item_alt_titles` instead of its GIN index; replace it with a planner-level fix (statistics or index shape) when one is measured. Measured p95 on a synthetic 160k-item seed: 347 ms, above NFR-07-1 (300 ms); re-measure on the real catalogue.
-
 ### 7.4 Entities
 
 Same E/P/S tiers (no FTS) over `entity_translations.name_norm` and `entities.name_norm`, kinds person/organization/franchise; tie-break `entity_stats.item_count` (SDD 01 §7.4).

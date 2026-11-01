@@ -37,10 +37,7 @@ func TestSecurity_A02_HexaHeadersWeb(t *testing.T) {
 		t.Errorf("CORP = %q, want same-site", got)
 	}
 
-	for _, feature := range []string{
-		"camera=()", "microphone=()", "geolocation=()", "payment=()",
-		"publickey-credentials-get=(self)", "publickey-credentials-create=(self)",
-	} {
+	for _, feature := range []string{"camera=()", "microphone=()", "geolocation=()", "payment=()", "publickey-credentials-get=()"} {
 		if !strings.Contains(res.Header("Permissions-Policy"), feature) {
 			t.Errorf("Permissions-Policy %q lacks %s", res.Header("Permissions-Policy"), feature)
 		}

@@ -61,9 +61,6 @@ func Auth(r *router.Router, app *vukem.App) error {
 
 	r.Get("/login", h.ShowLogin).Name("login").Use(guest)
 	r.Post("/login", h.Login).Use(guest, anyIdentifier, throttle, perAccount, pow.Require("login"))
-	// Passkey sign-in is not behind PoW: the authenticator ceremony is the proof.
-	r.Post("/login/passkey/options", h.PasskeyLoginOptions).Name("login.passkey.options").Use(guest, anyIdentifier)
-	r.Post("/login/passkey", h.PasskeyLogin).Name("login.passkey").Use(guest, anyIdentifier)
 	r.Get("/signup", h.ShowRegister).Name("register").Use(guest)
 	r.Post("/signup", h.Register).Use(guest, signupIP, signupEmail, pow.Require("signup"))
 	r.Get("/signup/check-email", h.CheckEmail).Name("register.check").Use(guest)
@@ -102,10 +99,6 @@ func Auth(r *router.Router, app *vukem.App) error {
 		Use(required, ratelimit.Middleware(limits.Deletion.From(limiters), deleteKey))
 	r.Delete("/profile/deletion", h.CancelDeletion).Name("deletion.cancel").Use(required)
 	r.Get("/help/delete-account", h.HelpDeleteAccount).Name("help.delete-account")
-
-	r.Post("/user/passkeys/options", h.PasskeyOptions).Name("passkey.options").Use(required, verified)
-	r.Post("/user/passkeys", h.PasskeyCreate).Name("passkey.create").Use(required, verified)
-	r.Delete("/profile/passkeys/{id}", h.PasskeyDelete).Name("passkey.delete").Use(required, verified)
 
 	r.Get("/dashboard", h.Dashboard).Name("dashboard").Use(required, verified)
 
