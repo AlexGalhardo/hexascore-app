@@ -51,13 +51,15 @@ console.log(response.headers.get("x-quota-remaining"));
 | Genres | `listGameGenres`, `listMovieGenres`, `listSeriesGenres`, `listBookGenres` |
 | Entities | `getEntity`, `listEntityItems`, `getFranchise`, `getOrganization`, `getPerson`, `getPlatform` |
 | Search | `searchItems`, `searchEntities`, `lookupItem` |
+| Changes | `listChanges` (`since` cursor over catalogue edits) |
+| Webhooks | `listWebhooks`, `createWebhook`, `deleteWebhook`, `testWebhook` |
 | Account | `getUsage` |
 
 Types such as `ItemSummary`, `ItemDetail`, `ItemList`, `Problem` and `Usage` are exported too.
 
 ### Pagination
 
-List endpoints are cursor based: pass `next_cursor` of one page as `cursor` of the next until it is `null`.
+List endpoints are cursor based: pass `meta.next_cursor` of one page as `cursor` of the next until it is absent.
 
 ```ts
 let cursor: string | undefined;
@@ -65,7 +67,7 @@ do {
 	const { data, error } = await listMovies({ client, query: { sort: "-score", limit: 100, cursor } });
 	if (error) throw new Error(error.detail);
 	for (const movie of data.data) console.log(movie.title);
-	cursor = data.next_cursor ?? undefined;
+	cursor = data.meta?.next_cursor;
 } while (cursor);
 ```
 
