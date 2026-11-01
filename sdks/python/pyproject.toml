@@ -2,7 +2,7 @@
 # `--meta none`, so regenerating never touches this file, the README, the LICENSE or the tests.
 [project]
 name = "hexascore"
-version = "0.1.0"
+version = "1.0.0"
 description = "Typed client for the Hexascore API (community scores for games, movies, TV series and books)."
 readme = "README.md"
 license = "MIT"
