@@ -675,6 +675,11 @@
     "themeDark": "Mudar para o tema escuro",
     "themeLight": "Mudar para o tema claro",
     "menu": "Menu",
+    "menuUnread": {
+      "one": "Menu, {count} notificação não lida",
+      "other": "Menu, {count} notificações não lidas"
+    },
+    "closeMenu": "Fechar menu",
     "skip": "Ir para o conteúdo",
     "dismiss": "Dispensar",
     "home": "Início",

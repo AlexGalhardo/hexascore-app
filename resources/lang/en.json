@@ -675,6 +675,11 @@
     "themeDark": "Switch to dark theme",
     "themeLight": "Switch to light theme",
     "menu": "Menu",
+    "menuUnread": {
+      "one": "Menu, {count} unread notification",
+      "other": "Menu, {count} unread notifications"
+    },
+    "closeMenu": "Close menu",
     "skip": "Skip to content",
     "dismiss": "Dismiss",
     "home": "Home",
