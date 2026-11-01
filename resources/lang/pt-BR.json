@@ -1030,6 +1030,18 @@
       "overall": "Sua nota geral",
       "overallHint": "A média das categorias que você avaliou ({rated} de {total}).",
       "completeHint": "Avalie todas as categorias para salvar."
+    },
+    "moreLike": {
+      "game": "Mais jogos como este",
+      "movie": "Mais filmes como este",
+      "series": "Mais séries como esta",
+      "book": "Mais livros como este"
+    },
+    "similarReason": "Em comum: {entity}",
+    "crossMedia": "Em outras mídias",
+    "relation": {
+      "based_on": "Obra original",
+      "adapted_as": "Adaptação"
     }
   },
   "updatedLabel": "Última atualização",
