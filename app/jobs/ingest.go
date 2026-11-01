@@ -21,7 +21,8 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/wikipedia"
 )
 
-// IngestSources replaces the outbound client and the source endpoints; tests only, set before the app is built.
+// IngestSources replaces the outbound client and the source endpoints; tests only, passed to AllWith or
+// bootstrap.NewWithIngest. The zero value is production.
 type IngestSources struct {
 	Client      *ingest.Client
 	WikidataAPI string
@@ -30,16 +31,13 @@ type IngestSources struct {
 	WikipediaAPI string
 }
 
-// IngestOverride is the test seam of handleIngest; production leaves it zero.
-var IngestOverride IngestSources
-
 const defaultContactURL = "https://hexascore.app"
 
 // handleIngest registers the ingestion run job (queue ingest). The Runner is built on first use because it
 // needs the queue, which is built from this very list.
-func handleIngest(app *vukem.App) queue.Registration {
+func handleIngest(app *vukem.App, src IngestSources) queue.Registration {
 	return run.LazyRegistration(
-		sync.OnceValues(func() (*run.Runner, error) { return newIngestRunner(app, IngestOverride) }),
+		sync.OnceValues(func() (*run.Runner, error) { return newIngestRunner(app, src) }),
 	)
 }
 
