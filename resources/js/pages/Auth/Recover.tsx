@@ -1,8 +1,10 @@
 import { Head, useForm } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
 
+import AuthFrame from "../../components/auth/AuthFrame";
 import ChallengeStatus from "../../components/ChallengeStatus";
 import Field from "../../components/Field";
+import SubmitButton from "../../components/SubmitButton";
 import { challengeHeaders } from "../../lib/challenge";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
@@ -21,11 +23,14 @@ export default function Recover() {
 	};
 
 	return (
-		<>
+		<AuthFrame
+			heading={t("auth.recover.heading")}
+			lede={t("auth.recover.lede")}
+			title={t("auth.recover.title")}
+		>
 			<Head title={t("auth.recover.metaTitle")} />
-			<h1 className="mb-2 text-2xl font-semibold">{t("auth.recover.title")}</h1>
-			<p className="mb-4 text-zinc-600 dark:text-zinc-400">{t("auth.recover.body")}</p>
-			<form onSubmit={submit} className="space-y-4">
+			<p className="mb-5 text-muted">{t("auth.recover.body")}</p>
+			<form onSubmit={submit} className="space-y-5">
 				<Field
 					label={t("auth.fields.email")}
 					type="email"
@@ -35,15 +40,11 @@ export default function Recover() {
 					onChange={(e) => form.setData("email", e.target.value)}
 					error={form.errors.email}
 				/>
-				<button
-					type="submit"
-					disabled={form.processing}
-					className="rounded-md bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
-				>
+				<SubmitButton pending={form.processing || checking} className="w-full">
 					{t("auth.recover.submit")}
-				</button>
+				</SubmitButton>
 				<ChallengeStatus checking={checking} />
 			</form>
-		</>
+		</AuthFrame>
 	);
 }

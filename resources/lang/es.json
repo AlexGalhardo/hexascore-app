@@ -279,7 +279,9 @@
       "show": "Mostrar contraseña",
       "hide": "Ocultar contraseña",
       "confirmPassword": "Confirmar contraseña",
-      "deviceName": "Nombre del dispositivo"
+      "deviceName": "Nombre del dispositivo",
+      "showShort": "Mostrar",
+      "hideShort": "Ocultar"
     },
     "rules": {
       "title": "Tu contraseña debe tener:",
@@ -333,7 +335,10 @@
       "trustDevice": "Confiar en este dispositivo durante 30 días",
       "verify": "Verificar",
       "rememberMe": "Recordarme",
-      "backupCode": "Código de respaldo"
+      "backupCode": "Código de respaldo",
+      "heading": "Entra para puntuar, organizar y crear listas.",
+      "lede": "Una cuenta para el sitio y la app de Android. Tus puntuaciones forman la nota de la comunidad cuando cinco miembros puntúan un título.",
+      "newHere": "¿Eres nuevo?"
     },
     "signup": {
       "metaTitle": "Crear cuenta",
@@ -346,7 +351,11 @@
       "checkBody": "Enviamos un enlace de confirmación a {email}. Ábrelo para activar tu cuenta.",
       "agree": "Al crear la cuenta aceptas los <terms>Términos</terms> y la <privacy>Política de privacidad</privacy>.",
       "checkNotice": "Si la dirección puede usarse, le enviamos un enlace para verificarla. Si ya tiene una cuenta, enviamos un enlace para iniciar sesión o restablecer la contraseña.",
-      "goLogin": "Ir a la página de inicio de sesión"
+      "goLogin": "Ir a la página de inicio de sesión",
+      "heading": "Únete y puntúa en seis categorías.",
+      "lede": "Cuenta gratuita. Confirma tu correo y tus puntuaciones empiezan a contar para la nota de la comunidad.",
+      "alreadyMember": "¿Ya eres miembro?",
+      "cardTitle": "Crea tu cuenta"
     },
     "verify": {
       "metaTitle": "Verificar correo",
@@ -366,7 +375,9 @@
       "body": "Introduce el correo de tu cuenta y te enviaremos un enlace para elegir una nueva contraseña.",
       "submit": "Enviar enlace",
       "sent": "Si existe una cuenta con este correo, un enlace para restablecerla está en camino. Caduca en 1 hora.",
-      "back": "Volver a entrar"
+      "back": "Volver a entrar",
+      "heading": "De vuelta en un minuto.",
+      "lede": "Enviamos un enlace válido por una hora al correo de tu cuenta; nada cambia hasta que lo abras."
     },
     "reset": {
       "metaTitle": "Elige una nueva contraseña",
@@ -395,7 +406,10 @@
       "title": "Elige tu nickname",
       "body": "Tu nickname es tu nombre público en HexaScore. Es único y no se puede cambiar después.",
       "submit": "Guardar nickname"
-    }
+    },
+    "members": "Miembros",
+    "googleSignIn": "Iniciar sesión con Google",
+    "googleSignUp": "Registrarse con Google"
   },
   "billing": {
     "plans": {

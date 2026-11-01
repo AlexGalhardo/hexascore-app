@@ -279,7 +279,9 @@
       "show": "Mostrar senha",
       "hide": "Ocultar senha",
       "confirmPassword": "Confirmar senha",
-      "deviceName": "Nome do dispositivo"
+      "deviceName": "Nome do dispositivo",
+      "showShort": "Mostrar",
+      "hideShort": "Ocultar"
     },
     "rules": {
       "title": "Sua senha precisa ter:",
@@ -333,7 +335,10 @@
       "trustDevice": "Confiar neste dispositivo por 30 dias",
       "verify": "Verificar",
       "rememberMe": "Lembrar de mim",
-      "backupCode": "Código de backup"
+      "backupCode": "Código de backup",
+      "heading": "Entre para avaliar, organizar e criar listas.",
+      "lede": "Uma conta para o site e o app Android. Suas avaliações formam a nota da comunidade quando cinco membros avaliam um título.",
+      "newHere": "Novo por aqui?"
     },
     "signup": {
       "metaTitle": "Criar conta",
@@ -346,7 +351,11 @@
       "checkBody": "Enviamos um link de confirmação para {email}. Abra-o para ativar sua conta.",
       "agree": "Ao criar a conta você concorda com os <terms>Termos</terms> e a <privacy>Política de privacidade</privacy>.",
       "checkNotice": "Se o endereço puder ser usado, enviamos um link para verificá-lo. Se já existir uma conta, enviamos um link para entrar ou redefinir a senha.",
-      "goLogin": "Ir para a página de login"
+      "goLogin": "Ir para a página de login",
+      "heading": "Participe e avalie em seis categorias.",
+      "lede": "Conta gratuita. Confirme seu e-mail e suas avaliações passam a contar para a nota da comunidade.",
+      "alreadyMember": "Já é membro?",
+      "cardTitle": "Crie sua conta"
     },
     "verify": {
       "metaTitle": "Verificar e-mail",
@@ -366,7 +375,9 @@
       "body": "Informe o e-mail da sua conta e enviaremos um link para você escolher uma nova senha.",
       "submit": "Enviar link",
       "sent": "Se existir uma conta com este e-mail, um link de redefinição está a caminho. Ele expira em 1 hora.",
-      "back": "Voltar para entrar"
+      "back": "Voltar para entrar",
+      "heading": "De volta em um minuto.",
+      "lede": "Enviamos um link válido por uma hora para o e-mail da sua conta; nada muda até você abri-lo."
     },
     "reset": {
       "metaTitle": "Escolha uma nova senha",
@@ -395,7 +406,10 @@
       "title": "Escolha seu nickname",
       "body": "Seu nickname é seu nome público no HexaScore. É único e não pode ser alterado depois.",
       "submit": "Salvar nickname"
-    }
+    },
+    "members": "Membros",
+    "googleSignIn": "Fazer login com o Google",
+    "googleSignUp": "Inscrever-se com o Google"
   },
   "billing": {
     "plans": {

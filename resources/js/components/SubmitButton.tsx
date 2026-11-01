@@ -1,5 +1,7 @@
 import type { ButtonHTMLAttributes } from "react";
 
+import { btnClass } from "./ui/Btn";
+
 interface Props extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
 	pending?: boolean;
 }
@@ -21,7 +23,7 @@ export default function SubmitButton({
 			data-pending={pending || undefined}
 			aria-busy={pending}
 			disabled={pending || rest.disabled}
-			className={`inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500 disabled:opacity-50 ${className}`}
+			className={btnClass("primary", className)}
 		>
 			<span className="submit-spinner" aria-hidden="true" />
 			{children}

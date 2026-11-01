@@ -146,8 +146,8 @@ Listing rule (legacy `docs/frontend.md` lines 60–62): mixed results grouped by
 
 - One widget per category (six per type, `legacy/apps/web/lib/categories.ts`, A-06); 0.5–10 in 0.5 steps, unset = null; Save sends all six (SDD 02) and is enabled once all are set.
 - Pointer: 10 stars × 2 half zones, hover preview, one click sets, drag updates. Touch: the row is one ≥ 44 px tall target plus 44×44 px − / + buttons for precision at 360 px.
-- Keyboard (SDD 02 NFR-02-7): Left/Down −0.5, Right/Up +0.5, PageDown/PageUp ±1, Home 0.5, End 10, Delete clears; 2 px focus ring in the type accent.
-- ARIA: `role="slider"`, `aria-label` = category, `aria-valuemin="0"`, `aria-valuemax="10"`, `aria-valuenow` (0 = unset), `aria-valuetext` `rating.valuetext` "{value} of 10 stars" / `rating.unset` "Not rated".
+- Keyboard (SDD 02 NFR-02-7): Left/Down −0.5, Right/Up +0.5 (no wrapping), Home 0.5, End 10, Delete/Backspace clears; one Tab stop per category; 2 px focus ring in `primary` around the group.
+- ARIA (design v1): a radio group, not a slider. `role="radiogroup"` labelled by the category, 20 native `type="radio"` inputs (0.5 to 10) sharing one `name`, each labelled `rating.valuetext` "{value} of 10 stars"; no radio checked = unset ("Not rated"). Native radios keep the form usable without JavaScript and give screen readers the standard "n of 20" position.
 - Filled `star`, empty `border`; the number is always visible; no animation under reduced motion.
 - Disabled: logged out (login link), `rating-not-released`, `ratingsLimitedUntil`, 429 → notice keyed by problem `code`.
 - `ScoreStars` (read-only): `7.8/10`, `ratingCount`, confidence chip; `null` → "Not enough ratings (n/5)".
