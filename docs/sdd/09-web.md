@@ -31,11 +31,11 @@ In (v1): shell, SSR, routing/i18n, §6.2 pages, components, tokens, budgets, acc
 
 | ID | Metric | Budget | Measured by |
 | --- | --- | --- | --- |
-| NFR-09-1 | LCP, mobile emulation (Moto G Power, slow 4G) | ≤ 2.0 s | Lighthouse CI, median of 3 runs |
+| NFR-09-1 | LCP, mobile emulation (Moto G Power, slow 4G) | ≤ 2.5 s (was 2.0 s; raised per Q-A20) | Lighthouse CI, median of 3 runs |
 | NFR-09-2 | INP | ≤ 150 ms field (p75); lab proxy TBT ≤ 200 ms (open issue 09-11) | Lighthouse CI TBT; Playwright Event Timing on star click; field: `web-vitals` beacon (LCP, INP, CLS, TTFB; opt-in, anonymous) to `POST /app/v1/client-metrics` (SDD 05 §6.4, SDD 12) |
 | NFR-09-3 | CLS | ≤ 0.05 | Lighthouse CI |
 | NFR-09-4 | TTFB p75 (SSR, staging) | ≤ 400 ms; ≤ 150 ms on props-cache hit | k6 + SDD 12 histogram |
-| NFR-09-5 | JS on item page | ≤ 150 kB gzip total, ≤ 90 kB before interaction | Lighthouse `resource-summary` + `bun run size` |
+| NFR-09-5 | JS on item page | ≤ 170 kB gzip total (was 150 kB; raised per Q-A20), ≤ 90 kB before interaction | Lighthouse `resource-summary` + `bun run size` |
 | NFR-09-6 | CSS | ≤ 30 kB gzip | same |
 | NFR-09-7 | Fonts | ≤ 3 WOFF2 files, ≤ 100 kB total, `font-display: swap`, 1 preload | Lighthouse |
 | NFR-09-8 | Lighthouse scores (mobile) | Performance ≥ 90, Accessibility 100, SEO 100, Best Practices ≥ 95 | Lighthouse CI |
@@ -44,6 +44,8 @@ In (v1): shell, SSR, routing/i18n, §6.2 pages, components, tokens, budgets, acc
 | NFR-09-11 | Accessibility | WCAG 2.2 AA; axe 0 serious/critical | Playwright + axe |
 | NFR-09-12 | SQL per page render | 0 N+1 alerts; item page ≤ 12 queries cold | vukem devtools `/_vukem/queries` (<https://vukem.dev/docs/digging-deeper/devtools#finding-an-n1-query>), dev checklist |
 | NFR-09-13 | Viewport | every page usable at 360 px (legacy `docs/design-system.md` "Princípios") | Playwright mobile project |
+
+Note (2026-11-01, Q-A20 in `docs/orchestration/QUESTIONS.md`): the owner raised NFR-09-1 from 2.0 s to 2.5 s (the Core Web Vitals "good" threshold) and NFR-09-5 from 150 kB to 170 kB after the release PR's Lighthouse check failed on GitHub runners (LCP medians 2.1 to 2.5 s). `lighthouserc.cjs` asserts the same values.
 
 ## 5. Data model
 
