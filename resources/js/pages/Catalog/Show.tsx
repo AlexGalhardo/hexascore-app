@@ -1,6 +1,13 @@
 import { Link, usePage } from "@inertiajs/react";
 import { lazy, type ReactNode, Suspense, useState } from "react";
 import CoverThumb, { type Cover } from "../../components/CoverThumb";
+import {
+	ChartIcon,
+	HistoryIcon,
+	ListIcon,
+	PencilIcon,
+	StarIcon,
+} from "../../components/item/ActionIcons";
 import AddToList, { type ListChoice } from "../../components/item/AddToList";
 import CategoryAverages from "../../components/item/CategoryAverages";
 import Editions from "../../components/item/Editions";
@@ -168,15 +175,15 @@ export default function Show({
 		}),
 	};
 
+	const action = btnClass("secondary", "w-full justify-start");
 	const seeScores = (
 		<button
 			type="button"
-			className={
-				"min-h-11 w-fit text-left text-sm font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg disabled:text-muted"
-			}
+			className={action}
 			onClick={() => setScoresOpen(true)}
 			disabled={scoresOpen}
 		>
+			<ChartIcon />
 			{t("item.seeUserScores")}
 		</button>
 	);
@@ -209,13 +216,65 @@ export default function Show({
 					</li>
 				</ol>
 			</nav>
-			<article className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-x-12 xl:grid-cols-[minmax(0,1fr)_24rem]">
-				<header className="grid grid-cols-[auto_minmax(0,1fr)] content-start gap-x-4 gap-y-5 sm:gap-x-6">
-					<div className="sm:row-span-2">
-						<CoverThumb cover={cover} alt={title} size="lg" priority />
+			{/* Owner request (round 2026-11-01 item 7): no mouse text selection on the item page. Form fields stay
+			    selectable; keyboard focus and screen readers are unaffected by user-select. */}
+			<article
+				data-testid="item-page"
+				className="grid gap-8 select-none [&_input]:select-text [&_textarea]:select-text sm:grid-cols-[12rem_minmax(0,1fr)] lg:grid-cols-[12rem_minmax(0,1fr)_19rem] lg:gap-x-10 xl:grid-cols-[14rem_minmax(0,1fr)_22rem]"
+			>
+				<div data-testid="item-col-actions" className="grid content-start gap-4">
+					<CoverThumb cover={cover} alt={title} size="lg" priority />
+					<div className="grid grid-cols-1 gap-2 min-[400px]:grid-cols-2 sm:grid-cols-1">
+						{scoresOpen ? (
+							<Suspense fallback={seeScores}>
+								<RatingsDialog
+									itemId={item.id}
+									categoryLabels={categoryLabels}
+									initialOpen
+									icon={<ChartIcon />}
+									triggerClassName={action}
+								/>
+							</Suspense>
+						) : (
+							seeScores
+						)}
+						<a
+							href="#your-rating"
+							className={btnClass("primary", "w-full justify-start")}
+						>
+							<StarIcon />
+							{loggedIn && me?.rating ? t("item.goToRating") : t("item.rateIt")}
+						</a>
+						{loggedIn && myLists ? (
+							<AddToList
+								itemId={item.id}
+								lists={myLists}
+								icon={<ListIcon />}
+								triggerClassName={action}
+							/>
+						) : (
+							<Link href={l("/login")} className={action}>
+								<ListIcon />
+								{t("lists.addToList")}
+							</Link>
+						)}
+						<Link href={l(`/suggest/item/${item.id}`)} className={action}>
+							<PencilIcon />
+							{t("community.suggest.link")}
+						</Link>
+						<Link
+							href={l(`/${SECTIONS[item.type]}/${item.slug}/changes`)}
+							className={action}
+						>
+							<HistoryIcon />
+							{t("community.recent.link")}
+						</Link>
 					</div>
-					<div className="grid min-w-0 content-start gap-2">
-						<h1 className="text-3xl leading-none sm:text-4xl md:text-6xl">{title}</h1>
+				</div>
+
+				<div data-testid="item-col-main" className="grid min-w-0 content-start gap-10">
+					<header className="grid content-start gap-4">
+						<h1 className="text-3xl leading-none sm:text-4xl md:text-5xl">{title}</h1>
 						{ogImage && <ShareButton title={title} />}
 						<p className="text-muted md:text-lg">
 							{[
@@ -226,15 +285,13 @@ export default function Show({
 								.filter(Boolean)
 								.join(" · ")}
 						</p>
-					</div>
-					<div className="col-span-2 grid content-start gap-4 sm:col-span-1">
 						{chips.length > 0 && (
-							<ul className="flex flex-wrap gap-2">
+							<ul data-testid="item-chips" className="flex flex-wrap gap-2">
 								{chips.map((e) => (
 									<li key={`${e.kind}-${e.id}`}>
 										<Link
 											href={entityHref(e)}
-											className="inline-flex min-h-10 items-center rounded-full border border-fg px-3.5 text-sm hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+											className="inline-flex min-h-10 items-center rounded-xs border border-fg px-3.5 text-sm hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
 										>
 											{e.name}
 										</Link>
@@ -242,81 +299,7 @@ export default function Show({
 								))}
 							</ul>
 						)}
-						<ScoreBlock
-							score={ratingSummary.score}
-							ratingCount={ratingSummary.ratingCount}
-						/>
-						<FriendsScore data={friendsScore} />
-						<div className="grid grid-cols-2 items-center gap-3 sm:flex sm:flex-wrap">
-							<a href="#your-rating" className={btnClass("primary")}>
-								{loggedIn && me?.rating ? t("item.goToRating") : t("item.rateIt")}
-							</a>
-							{loggedIn && myLists ? (
-								<AddToList itemId={item.id} lists={myLists} full />
-							) : (
-								<Link href={l("/login")} className={btnClass("secondary")}>
-									{t("lists.addToList")}
-								</Link>
-							)}
-							<Link
-								href={l(`/suggest/item/${item.id}`)}
-								className={btnClass("ghost", "col-span-2 justify-self-start px-2")}
-							>
-								<svg
-									viewBox="0 0 24 24"
-									aria-hidden="true"
-									className="size-4 fill-none stroke-current stroke-2"
-								>
-									<path d="M4 20h4L19 9l-4-4L4 16z" />
-								</svg>
-								{t("community.suggest.link")}
-							</Link>
-							<Link
-								href={l(`/${SECTIONS[item.type]}/${item.slug}/changes`)}
-								className={btnClass("ghost", "col-span-2 justify-self-start px-2")}
-							>
-								{t("community.recent.link")}
-							</Link>
-						</div>
-					</div>
-				</header>
-
-				<aside className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
-					<RatingPanel
-						key={item.id + (me?.rating ? "r" : "n")}
-						itemId={item.id}
-						type={item.type}
-						mine={me?.rating}
-						canWrite={loggedIn}
-					>
-						<StatusPicker
-							itemId={item.id}
-							type={item.type}
-							status={me?.status ?? null}
-						/>
-						{myLists && <AddToList itemId={item.id} lists={myLists} full />}
-					</RatingPanel>
-				</aside>
-
-				<div className="grid min-w-0 content-start gap-12">
-					<Section id="averages" title={t("item.categoryScores")}>
-						<CategoryAverages
-							keys={keys}
-							labels={categoryLabels}
-							averages={ratingSummary.scoreByCategory}
-						/>
-						{scoresOpen ? (
-							<Suspense fallback={seeScores}>
-								<RatingsDialog
-									itemId={item.id}
-									categoryLabels={categoryLabels}
-									initialOpen
-								/>
-							</Suspense>
-						) : (
-							seeScores
-						)}
-					</Section>
+					</header>
 
 					<Section id="synopsis" title={t("item.synopsis")}>
 						{item.synopsis ? (
@@ -341,6 +324,14 @@ export default function Show({
 						) : (
 							<p className="text-muted">{t("item.noSynopsis")}</p>
 						)}
+					</Section>
+
+					<Section id="averages" title={t("item.categoryScores")}>
+						<CategoryAverages
+							keys={keys}
+							labels={categoryLabels}
+							averages={ratingSummary.scoreByCategory}
+						/>
 					</Section>
 
 					<div className="grid gap-12 md:grid-cols-2 md:gap-8">
@@ -423,6 +414,31 @@ export default function Show({
 
 					<p className="text-xs text-muted">{t("item.attribution")}</p>
 				</div>
+
+				<aside
+					data-testid="item-col-rating"
+					className="grid content-start gap-4 sm:col-span-2 lg:col-span-1 lg:self-start"
+				>
+					<ScoreBlock
+						score={ratingSummary.score}
+						ratingCount={ratingSummary.ratingCount}
+					/>
+					<FriendsScore data={friendsScore} />
+					<RatingPanel
+						key={item.id + (me?.rating ? "r" : "n")}
+						itemId={item.id}
+						type={item.type}
+						mine={me?.rating}
+						canWrite={loggedIn}
+					>
+						<StatusPicker
+							itemId={item.id}
+							type={item.type}
+							status={me?.status ?? null}
+						/>
+						{myLists && <AddToList itemId={item.id} lists={myLists} full />}
+					</RatingPanel>
+				</aside>
 			</article>
 		</>
 	);

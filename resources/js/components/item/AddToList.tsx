@@ -16,19 +16,29 @@ export default function AddToList({
 	itemId,
 	lists,
 	full = false,
+	icon,
+	triggerClassName,
 }: {
 	itemId: string;
 	lists: ListChoice[];
 	full?: boolean;
+	/** Drawn before the label (item page action column). */
+	icon?: React.ReactNode;
+	triggerClassName?: string;
 }) {
 	const t = useT();
 	const loc = useLocalized();
 
 	return (
 		<Dropdown
-			trigger={t("lists.addToList")}
+			trigger={
+				<>
+					{icon}
+					{t("lists.addToList")}
+				</>
+			}
 			label={t("lists.addToList")}
-			triggerClassName={btnClass("secondary", full ? "w-full" : "")}
+			triggerClassName={triggerClassName ?? btnClass("secondary", full ? "w-full" : "")}
 			panelClassName="left-0"
 		>
 			{lists.length === 0 ? (
