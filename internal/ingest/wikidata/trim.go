@@ -15,6 +15,10 @@ import (
 // valid in every language and is the fallback for names.
 var LabelLangs = []string{"en", "mul", "pt-br", "pt", "es"}
 
+// latnSuffix marks romanised alias codes ("ja-latn"); they are kept whatever
+// the language, as transliteration alt titles.
+const latnSuffix = "-latn"
+
 // SitelinkSites are the sitelinks kept by name; the total is kept as a count.
 var SitelinkSites = []string{"enwiki", "ptwiki", "eswiki"}
 
@@ -34,6 +38,7 @@ var ScalarProps = []string{
 	"P1651", "P18", "P3383", // trailers, images
 	"P345", "P5794", "P1733", "P4947", "P4983", "P212", "P648", "P2816",
 	"P8383", "P1712", "P1258", "P6278", "P2725",
+	"P1476", "P1448", "P2561", // original title, official name, name (alt titles)
 }
 
 // EntityProps are the external ids kept on a wikidata:entity record, used
@@ -236,8 +241,12 @@ func Trim(e Entity, itemType string) Payload {
 		Refs:           map[string]string{},
 	}
 
-	for _, lang := range LabelLangs {
-		for _, a := range e.Aliases[lang] {
+	for lang, terms := range e.Aliases {
+		if !slices.Contains(LabelLangs, lang) && !strings.HasSuffix(lang, latnSuffix) {
+			continue
+		}
+
+		for _, a := range terms {
 			p.Aliases[lang] = append(p.Aliases[lang], a.Value)
 		}
 	}

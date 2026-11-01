@@ -4,7 +4,9 @@ Runs the legacy `trim_entity` (legacy/webscrappings/connectors/wikidata.py) over
 with the three deliberate changes of the Go port applied on top:
   - P444 (review scores) is not kept (D-09),
   - aliases of the kept languages are added,
-  - P144 and the SDD 06 7.4 role properties are kept as reference properties.
+  - P144 and the SDD 06 7.4 role properties are kept as reference properties,
+  - P1476, P1448 and P2561 (alt titles) are kept as scalar properties,
+  - aliases of any "*-latn" language are kept next to the label languages.
 The "qualifiers" key (always empty once P444 is gone) is dropped from claims.
 
 Usage (from this directory):  python -X utf8 trim_reference.py <path to legacy/webscrappings> > trim_hashes.json
@@ -26,7 +28,7 @@ from connectors import wikidata as w  # noqa: E402
 
 EXTRA_REFS = ("P144", "P58", "P161", "P272", "P449", "P404", "P179", "P8345", "P364", "P407", "P123")
 REF_PROPS = w.REF_PROPS + EXTRA_REFS
-SCALAR_PROPS = tuple(p for p in w.SCALAR_PROPS if p != "P444")
+SCALAR_PROPS = tuple(p for p in w.SCALAR_PROPS if p != "P444") + ("P1476", "P1448", "P2561")
 KEPT = frozenset(REF_PROPS + SCALAR_PROPS)
 
 TYPES = {"Q83495": "movie", "Q4267401": "game", "Q1079": "series", "Q208460": "book"}
@@ -50,10 +52,11 @@ def trim(raw: dict, item_type: str) -> dict:
         if kept:
             claims[prop] = kept
     aliases = {}
-    for lang in w.LABEL_LANGS:
-        values = [a["value"] for a in raw.get("aliases", {}).get(lang, [])]
-        if values:
-            aliases[lang] = values
+    for lang, terms in raw.get("aliases", {}).items():
+        if lang in w.LABEL_LANGS or lang.endswith("-latn"):
+            values = [a["value"] for a in terms]
+            if values:
+                aliases[lang] = values
     payload = {
         "type": item_type,
         "id": entity.id,

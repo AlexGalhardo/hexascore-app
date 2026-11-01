@@ -136,8 +136,8 @@ func credits(wd wikidata.Payload) []Credit {
 	return out
 }
 
-// altTitles lists transliterations (labels-language aliases ending in -latn),
-// then the other aliases in label-language order, skipping any text equal to
+// altTitles lists transliterations (aliases ending in -latn), the original
+// title (P1476), former names (P1448, P2561), then the other aliases in label-language order, skipping any text equal to
 // a locale title or already listed, up to MaxAltTitles.
 func altTitles(wd wikidata.Payload, titles map[string]string) []AltTitle {
 	seen := map[string]bool{}
@@ -158,22 +158,34 @@ func altTitles(wd wikidata.Payload, titles map[string]string) []AltTitle {
 
 	slices.Sort(trans)
 
+	addText := func(text, lang, kind string) {
+		text = strings.TrimSpace(text)
+		key := strings.ToLower(text)
+
+		if text == "" || len(out) >= MaxAltTitles || seen[key] {
+			return
+		}
+
+		seen[key] = true
+		out = append(out, AltTitle{Title: text, Lang: lang, Kind: kind, Source: wikidataSource})
+	}
+
 	add := func(lang, kind string) {
 		for _, a := range wd.Aliases[lang] {
-			a = strings.TrimSpace(a)
-			key := strings.ToLower(a)
-
-			if a == "" || len(out) >= MaxAltTitles || seen[key] {
-				continue
-			}
-
-			seen[key] = true
-			out = append(out, AltTitle{Title: a, Lang: bcp47(lang), Kind: kind, Source: wikidataSource})
+			addText(a, bcp47(lang), kind)
 		}
 	}
 
 	for _, lang := range trans {
 		add(lang, "transliteration")
+	}
+
+	for _, c := range []struct{ prop, kind string }{{"P1476", "original"}, {"P1448", "former"}, {"P2561", "former"}} {
+		for _, t := range ranked(wd.Claims[c.prop]) {
+			if text, _ := t.Value.(string); t.Rank != "deprecated" {
+				addText(text, "", c.kind)
+			}
+		}
 	}
 
 	for _, lang := range wikidata.LabelLangs {

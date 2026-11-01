@@ -103,6 +103,9 @@ func TestAltTitles(t *testing.T) {
 	got := relations(t, syntheticRecord(t, "Q900001")).AltTitles
 	want := []normalize.AltTitle{
 		{Title: "Shingeki Example", Lang: "ja-Latn", Kind: "transliteration", Source: "wikidata"},
+		{Title: "Shingeki Example Original", Lang: "", Kind: "original", Source: "wikidata"},
+		{Title: "Example Official", Lang: "", Kind: "former", Source: "wikidata"},
+		{Title: "Example Old Name", Lang: "", Kind: "former", Source: "wikidata"},
 		{Title: "Anime Example", Lang: "en", Kind: "alias", Source: "wikidata"},
 		{Title: "EX", Lang: "", Kind: "alias", Source: "wikidata"},
 	}
