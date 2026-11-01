@@ -1444,6 +1444,10 @@
       "label": "Compartir mi actividad con seguidores",
       "help": "Tus valoraciones, estados y listas públicas aparecen en el feed de quienes te siguen y en tu perfil. Desactivado por defecto; al desactivarlo, la actividad anterior se oculta al instante.",
       "saved": "Compartir actividad guardado."
+    },
+    "share": {
+      "action": "Compartir",
+      "copied": "Enlace copiado"
     }
   },
   "help": {

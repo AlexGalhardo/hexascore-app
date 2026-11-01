@@ -84,8 +84,13 @@ func (h *Lists) Show(c *web.Ctx) error {
 		c.Writer().Header().Set("X-Robots-Tag", "noindex")
 	}
 
-	return inertia.Render(c, "User/List", inertia.Props{
+	props := inertia.Props{
 		"list": listJSON(l), "owner": map[string]string{"nickname": nick}, "items": items, "canEdit": canEdit,
 		"indexable": indexable,
-	})
+	}
+	if l.IsPublic && !l.Hidden && !l.OwnerPrivate && !banned && h.Social.Enabled(ctx) {
+		props["ogImage"] = ogImage("lists", l.ID)
+	}
+
+	return inertia.Render(c, "User/List", props)
 }

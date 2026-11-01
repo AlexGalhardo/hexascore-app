@@ -1444,6 +1444,10 @@
       "label": "Compartilhar minha atividade com seguidores",
       "help": "Suas avaliações, status e listas públicas aparecem no feed de quem segue você e no seu perfil. Desligado por padrão; ao desligar, a atividade anterior some na hora.",
       "saved": "Compartilhamento de atividade salvo."
+    },
+    "share": {
+      "action": "Compartilhar",
+      "copied": "Link copiado"
     }
   },
   "help": {

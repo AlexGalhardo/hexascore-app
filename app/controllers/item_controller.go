@@ -75,6 +75,7 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 		}
 
 		if h.Social.Enabled(c.Context()) {
+			props["ogImage"] = ogImage("items", page.Item.ID)
 			locale := i18n.Locale(c.Context())
 			props["reviews"] = inertia.Defer(func(ctx context.Context) (any, error) {
 				data, mine, err := h.Social.ItemReviews(ctx, viewerID, page.Item.ID, locale)

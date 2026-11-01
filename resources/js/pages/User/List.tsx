@@ -4,6 +4,7 @@ import type { ItemRef } from "../../components/library/ItemLink";
 import ShelfCard from "../../components/library/ShelfCard";
 import ReportDialog from "../../components/ReportDialog";
 import Seo from "../../components/Seo";
+import ShareButton from "../../components/social/ShareButton";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
@@ -20,9 +21,11 @@ interface Props {
 	items: { position: number; note: string | null; item: ItemRef }[];
 	canEdit: boolean;
 	indexable: boolean;
+	/** Share-card path while the feature flag `social` is on and the page is public (SDD 14 §11 item 12). */
+	ogImage?: string;
 }
 
-export default function List({ list, owner, items, canEdit, indexable }: Props) {
+export default function List({ list, owner, items, canEdit, indexable, ogImage }: Props) {
 	const t = useT();
 	const { locale, auth } = usePage<SharedProps>().props;
 
@@ -32,10 +35,12 @@ export default function List({ list, owner, items, canEdit, indexable }: Props) 
 				title={list.title}
 				description={list.description ?? undefined}
 				noindex={!indexable}
+				image={ogImage}
 			/>
 			<h1 className="mt-6 font-display text-4xl leading-none font-bold tracking-[-0.02em] md:mt-10 md:text-[56px]">
 				{list.title}
 			</h1>
+			{ogImage && <ShareButton title={list.title} />}
 			<p className="mt-3 text-muted">
 				<Link
 					href={localized(`/u/${owner.nickname.toLowerCase()}`, locale)}
