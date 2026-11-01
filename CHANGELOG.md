@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **mobile:** mobile entity page shows a "Next" control per item group when more items exist (IMPL-mobile-entity-more)
+- **mobile:** the Android search tab searches the catalogue (type chips, see all, paged results) (IMPL-mobile-v1-search-wire)
 - **mobile:** Android profile tab (name, nickname with inline nickname-taken, language override without restart, personalisation opt-out, devices with revoke, crash-report consent, theme, logout); `GET /app/v1/me` returns the account `email` (P5.B.4.2)
 - **mobile:** Android profile account actions (data export with cooldown, account deletion after a 10 s countdown), About screen with TMDB/IGDB attribution, and the notifications list with mark-as-read and an unread count (P5.B.4.3)
 - **mobile:** Android status sheet and games-only time-to-beat sheet, both queued offline with optimistic cache and rollback (P5.B.2.4)
