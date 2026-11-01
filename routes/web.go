@@ -194,6 +194,9 @@ func Web(r *router.Router, app *vukem.App) error {
 
 	r.Get("/help/score", controllers.HelpScore).Name("help.score")
 	r.Get("/robots.txt", controllers.Robots(app)).Name("robots")
+	if err := LLMs(r, app); err != nil {
+		return err
+	}
 	r.Get("/.well-known/assetlinks.json", wellknown.AssetLinks(
 		cmp.Or(app.Source.Get("ANDROID_PACKAGE"), "app.hexascore"),
 		app.Source.Get("ANDROID_CERT_SHA256"),

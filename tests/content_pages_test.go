@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/AlexGalhardo/vukem/vukemtest"
@@ -113,4 +114,32 @@ func TestCanonicalHost_Production(t *testing.T) {
 	c.Get("http://www.example.test/up").AssertOK()
 	// SQLite has no catalogue routes: 404 proves the API host was not redirected.
 	c.Get("http://api.hexascore.app/v1/games").AssertStatus(404)
+}
+
+// /llms.txt lists the catalogue, the API docs and the legal pages; /llms-full.txt carries the docs Markdown and no
+// item page.
+func TestLLMsTxt(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(
+		t,
+		bootstrap.New,
+		vukemtest.Options{Env: map[string]string{"APP_URL": "https://example.test/"}},
+	)
+	app.Client(t).Get("/llms.txt").AssertOK().
+		AssertHeader("Content-Type", "text/plain; charset=utf-8").
+		AssertSee("# HexaScore\n").
+		AssertSee("[Games](https://example.test/games)").
+		AssertSee("[Books](https://example.test/books)").
+		AssertSee("[Authentication](https://example.test/docs/authentication)").
+		AssertSee("[Pricing](https://example.test/pricing)").
+		AssertSee("[Terms of use](https://example.test/terms)").
+		AssertSee("[Privacy policy](https://example.test/policy)")
+
+	full := app.Client(t).Get("/llms-full.txt").AssertOK().
+		AssertSee("Source: https://example.test/docs/authentication").
+		AssertSee("Every request is authenticated with a secret API key")
+	if strings.Contains(full.Body(), "Source: https://example.test/games") {
+		t.Error("llms-full.txt streams an item listing")
+	}
 }

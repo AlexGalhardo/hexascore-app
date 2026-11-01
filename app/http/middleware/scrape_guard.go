@@ -24,10 +24,11 @@ const ScrapeTrapPath = "/data/export"
 const ScrapeBanTTL = 24 * time.Hour
 
 // scrapeExempt are the path prefixes the guard never sees: the paid and app APIs (own keys and limits),
-// assets, health, the API docs a denied client is pointed to, and fetches made by the pages themselves.
+// assets, health, the API docs a denied client is pointed to, the llms.txt files written for language models, and
+// fetches made by the pages themselves.
 var scrapeExempt = []string{
 	"/api", "/app", "/build", "/covers", "/og", "/up", "/docs", "/.well-known", "/sitemaps",
-	"/challenge", "/search/suggest",
+	"/challenge", "/search/suggest", "/llms.txt", "/llms-full.txt",
 }
 
 // toolAgents are User-Agent substrings of HTTP libraries and headless browsers no reader uses.
