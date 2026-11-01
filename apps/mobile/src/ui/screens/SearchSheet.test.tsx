@@ -50,6 +50,7 @@ test("focuses the input on open and cancels", async () => {
 	await render(<SearchSheet {...props} />);
 	const input = screen.getByPlaceholderText(labels.placeholder);
 	expect(input.props.autoFocus).toBe(true);
+	expect(screen.getByLabelText(labels.placeholder)).toBe(input);
 	await fireEvent.changeText(input, "gta");
 	expect(props.onQueryChange).toHaveBeenCalledWith("gta");
 	await fireEvent.press(screen.getByRole("button", { name: "Cancel" }));

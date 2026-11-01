@@ -108,6 +108,7 @@ export function SearchSheet({
 				<Icon name="search-outline" size={20} className="text-fg dark:text-fg-dark" />
 				<TextInput
 					autoFocus
+					accessibilityLabel={labels.placeholder}
 					value={query}
 					onChangeText={onQueryChange}
 					placeholder={labels.placeholder}
