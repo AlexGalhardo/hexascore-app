@@ -1,5 +1,5 @@
 import { InfiniteScroll, Link, usePage } from "@inertiajs/react";
-
+import { ReviewCard, type ReviewEntry } from "../../components/item/Reviews";
 import type { ItemRef } from "../../components/library/ItemLink";
 import ShelfCard from "../../components/library/ShelfCard";
 import ReportDialog from "../../components/ReportDialog";
@@ -11,7 +11,7 @@ import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
 
 const BASE_TABS = ["ratings", "status", "lists"] as const;
-type Tab = (typeof BASE_TABS)[number] | "activity";
+type Tab = (typeof BASE_TABS)[number] | "reviews" | "activity";
 
 interface Rating extends ItemRef {
 	stars: number;
@@ -37,6 +37,8 @@ interface Props {
 	social?: SocialProps;
 	/** On ?tab=activity: deferred (group `personal`) when the viewer may see it, null when not shared (FR-14-17). */
 	activity?: ActivityEntry[] | null;
+	/** Deferred (group `personal`) on ?tab=reviews when the profile is visible (SDD 14 §12.10). */
+	reviews?: ReviewEntry[];
 	contributions?: {
 		submitted: number;
 		approved: number;
@@ -55,6 +57,7 @@ export default function Profile({
 	indexable,
 	social,
 	activity,
+	reviews,
 	contributions,
 }: Props) {
 	const t = useT();
@@ -62,7 +65,7 @@ export default function Profile({
 	const viewer = page.props.auth?.user;
 	const base = localized(`/u/${profile.nickname.toLowerCase()}`, page.props.locale);
 	const requested = new URLSearchParams(page.url.split("?")[1] ?? "").get("tab");
-	const tabs: readonly Tab[] = social ? [...BASE_TABS, "activity"] : BASE_TABS;
+	const tabs: readonly Tab[] = social ? [...BASE_TABS, "reviews", "activity"] : BASE_TABS;
 	const tab: Tab = tabs.find((x) => x === requested) ?? "ratings";
 	const activityList = (
 		<section className="mt-4" aria-busy={activity === undefined}>
@@ -232,6 +235,28 @@ export default function Profile({
 											<span className="text-sm text-muted">
 												{t("userLists.itemCount", { count: l.itemCount })}
 											</span>
+										</li>
+									))}
+								</ul>
+							)}
+						</section>
+					)}
+					{tab === "reviews" && (
+						<section className="mt-4" aria-busy={reviews === undefined}>
+							{reviews === undefined ? (
+								<p className="text-muted">{t("social.profile.activityLoading")}</p>
+							) : reviews.length === 0 ? (
+								<p>{t("social.profile.noReviews")}</p>
+							) : (
+								<ul className="divide-y divide-border">
+									{reviews.map((r) => (
+										<li key={r.id}>
+											{r.item && (
+												<p className="pt-3 text-sm font-medium">
+													{r.item.title}
+												</p>
+											)}
+											<ReviewCard review={r} />
 										</li>
 									))}
 								</ul>

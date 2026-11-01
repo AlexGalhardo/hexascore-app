@@ -4,8 +4,8 @@ import CoverThumb, { type Cover } from "../../components/CoverThumb";
 import AddToList, { type ListChoice } from "../../components/item/AddToList";
 import CategoryAverages from "../../components/item/CategoryAverages";
 import Editions from "../../components/item/Editions";
-import MoreLikeThis, { type CrossItem, type SimilarItem } from "../../components/item/MoreLikeThis";
 import RatingPanel from "../../components/item/RatingPanel";
+import Reviews, { type ReviewEntry } from "../../components/item/Reviews";
 import ScoreBlock from "../../components/item/ScoreBlock";
 import StatusPicker from "../../components/item/StatusPicker";
 import TimeToBeat, { type Medians } from "../../components/item/TimeToBeat";
@@ -63,8 +63,8 @@ interface Props {
 	myLists?: ListChoice[];
 	trailers?: { youtubeId: string; title?: string }[];
 	cover?: Cover | null;
-	similar?: SimilarItem[];
-	crossMedia?: CrossItem[];
+	/** Deferred (group `reviews`) while the feature flag `social` is on (SDD 14 §12.10). */
+	reviews?: { data: ReviewEntry[]; mine: ReviewEntry | null };
 }
 
 const LD_TYPE: Record<ItemType, string> = {
@@ -118,8 +118,7 @@ export default function Show({
 	myLists,
 	trailers = [],
 	cover = null,
-	similar = [],
-	crossMedia = [],
+	reviews,
 }: Props) {
 	const t = useT();
 	const { locale, auth } = usePage<SharedProps>().props;
@@ -390,7 +389,20 @@ export default function Show({
 						<Editions slug={item.slug} editions={editions} total={editionCount} />
 					)}
 
-					<MoreLikeThis type={item.type} similar={similar} crossMedia={crossMedia} />
+					{reviews && (
+						<Section
+							id="reviews"
+							title={t("reviews.title")}
+							count={reviews.data.length}
+						>
+							<Reviews
+								itemId={item.id}
+								reviews={reviews}
+								canWrite={loggedIn}
+								rated={Boolean(me?.rating)}
+							/>
+						</Section>
+					)}
 
 					<p className="text-xs text-muted">{t("item.attribution")}</p>
 				</div>

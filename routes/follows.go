@@ -12,7 +12,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
-// Follows registers follow, unfollow, the follow-request answers and /feed (SDD 14 §12.6). The routes always exist; the
+// Follows registers follow, unfollow, the follow-request answers, /feed and reviews (SDD 14 §12.6, §12.10). The routes always exist; the
 // handlers answer 404 while the feature flag `social` is off. The table exists only on Postgres (VF-033).
 func Follows(r *router.Router, app *vukem.App) error {
 	acc, err := accounts.New(app)
@@ -41,6 +41,10 @@ func Follows(r *router.Router, app *vukem.App) error {
 	r.Delete("/u/{nickname}/follow", h.Unfollow).Name("follows.delete").Use(required, verified, byUser)
 	r.Post("/me/follow-requests/{nickname}/accept", h.Accept).Name("follows.accept").Use(required, verified)
 	r.Post("/me/follow-requests/{nickname}/decline", h.Decline).Name("follows.decline").Use(required, verified)
+	reviews := controllers.NewReviews(svc, acc.Web.Name())
+	reviewLimit := ratelimit.Middleware(limits.Reviews.From(limiters), ratelimit.ByUser(acc.Web.Name()))
+	r.Put("/items/{id}/review", reviews.Put).Name("reviews.put").Use(required, verified, reviewLimit)
+	r.Delete("/items/{id}/review", reviews.Delete).Name("reviews.delete").Use(required, verified, reviewLimit)
 	r.Patch("/profile/feed", h.UpdateFeedOptIn).Name("profile.feed").Use(required, verified)
 	r.Get("/feed", controllers.NewFeed(svc, acc.Web.Name()).Index).Name("feed").Use(required, verified)
 

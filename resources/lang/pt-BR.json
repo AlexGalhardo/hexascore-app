@@ -1338,7 +1338,8 @@
         "ratings": "Avaliações",
         "status": "Status",
         "lists": "Listas",
-        "activity": "Atividade"
+        "activity": "Atividade",
+        "reviews": "Resenhas"
       },
       "byCategory": "Avaliações por categoria",
       "allTypes": "Todas",
@@ -1362,7 +1363,8 @@
       },
       "activityLoading": "Carregando atividade…",
       "activityHidden": "Esta atividade não é compartilhada.",
-      "noActivity": "Nenhuma atividade recente."
+      "noActivity": "Nenhuma atividade recente.",
+      "noReviews": "Nenhuma resenha ainda."
     },
     "status": {
       "label": "Status",
@@ -1435,7 +1437,8 @@
       "rating_saved": "avaliou",
       "status_changed": "marcou como {status}",
       "list_created": "criou a lista",
-      "list_item_added": "adicionou a"
+      "list_item_added": "adicionou a",
+      "review_published": "resenhou"
     },
     "optIn": {
       "label": "Compartilhar minha atividade com seguidores",
@@ -1737,5 +1740,17 @@
     "completed": "Porque você completou {title}",
     "wanted": "Porque você quis {title}",
     "loading": "Carregando..."
+  },
+  "reviews": {
+    "title": "Resenhas",
+    "body": "Sua resenha",
+    "help": "Até 5.000 caracteres. **negrito**, *itálico*, `código`, [links](https://…), listas e > citações.",
+    "spoiler": "Contém spoilers",
+    "spoilerTag": "Spoiler",
+    "reveal": "Mostrar spoiler",
+    "save": "Salvar resenha",
+    "delete": "Excluir resenha",
+    "empty": "Nenhuma resenha ainda.",
+    "rateFirst": "Avalie este título para escrever uma resenha."
   }
 }

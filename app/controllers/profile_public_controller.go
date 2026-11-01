@@ -129,6 +129,13 @@ func (h *PublicProfile) Show(c *web.Ctx) error {
 			props["social"] = follow
 		}
 
+		if ok && !hidden && c.Query("tab") == "reviews" {
+			locale := i18n.Locale(ctx)
+			props["reviews"] = inertia.Defer(func(ctx context.Context) (any, error) {
+				return h.Follows.UserReviews(ctx, viewer.ID, p.UserID, locale)
+			}).Group("personal")
+		}
+
 		if ok && c.Query("tab") == "activity" {
 			allowed, err := h.Follows.ActivityAllowed(ctx, viewer.ID, p.UserID)
 			if err != nil {

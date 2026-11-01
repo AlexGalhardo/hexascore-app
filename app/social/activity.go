@@ -16,7 +16,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 )
 
-// Event kinds (SDD 14 FR-14-16); review_published arrives with P7.B.1.1.
+// Event kinds (SDD 14 FR-14-16); KindReview lives in reviews.go.
 const (
 	KindRating   = "rating_saved"
 	KindStatus   = "status_changed"

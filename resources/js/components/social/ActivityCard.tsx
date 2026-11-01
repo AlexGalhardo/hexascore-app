@@ -11,7 +11,12 @@ import { formatScore } from "../ui/ScoreBadge";
 /** One entry of the `events` prop of Feed/Index (app/social/activity.go Entry). */
 export interface ActivityEntry {
 	id: string;
-	kind: "rating_saved" | "status_changed" | "list_created" | "list_item_added";
+	kind:
+		| "rating_saved"
+		| "status_changed"
+		| "list_created"
+		| "list_item_added"
+		| "review_published";
 	actor: { nickname: string; initial: string };
 	item?: {
 		id: string;

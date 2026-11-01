@@ -1338,7 +1338,8 @@
         "ratings": "Ratings",
         "status": "Status",
         "lists": "Lists",
-        "activity": "Activity"
+        "activity": "Activity",
+        "reviews": "Reviews"
       },
       "byCategory": "Ratings by category",
       "allTypes": "All",
@@ -1362,7 +1363,8 @@
       },
       "activityLoading": "Loading activity…",
       "activityHidden": "This activity is not shared.",
-      "noActivity": "No recent activity."
+      "noActivity": "No recent activity.",
+      "noReviews": "No reviews yet."
     },
     "status": {
       "label": "Status",
@@ -1435,7 +1437,8 @@
       "rating_saved": "rated",
       "status_changed": "marked as {status}",
       "list_created": "created the list",
-      "list_item_added": "added to"
+      "list_item_added": "added to",
+      "review_published": "reviewed"
     },
     "optIn": {
       "label": "Share my activity with followers",
@@ -1737,5 +1740,17 @@
     "completed": "Because you completed {title}",
     "wanted": "Because you wanted {title}",
     "loading": "Loading..."
+  },
+  "reviews": {
+    "title": "Reviews",
+    "body": "Your review",
+    "help": "Up to 5,000 characters. **bold**, *italic*, `code`, [links](https://…), lists and > quotes.",
+    "spoiler": "Contains spoilers",
+    "spoilerTag": "Spoiler",
+    "reveal": "Show spoiler",
+    "save": "Save review",
+    "delete": "Delete review",
+    "empty": "No reviews yet.",
+    "rateFirst": "Rate this title to write a review."
   }
 }

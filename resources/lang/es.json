@@ -1338,7 +1338,8 @@
         "ratings": "Valoraciones",
         "status": "Estado",
         "lists": "Listas",
-        "activity": "Actividad"
+        "activity": "Actividad",
+        "reviews": "Reseñas"
       },
       "byCategory": "Valoraciones por categoría",
       "allTypes": "Todas",
@@ -1362,7 +1363,8 @@
       },
       "activityLoading": "Cargando actividad…",
       "activityHidden": "Esta actividad no se comparte.",
-      "noActivity": "Sin actividad reciente."
+      "noActivity": "Sin actividad reciente.",
+      "noReviews": "Aún no hay reseñas."
     },
     "status": {
       "label": "Estado",
@@ -1435,7 +1437,8 @@
       "rating_saved": "puntuó",
       "status_changed": "marcó como {status}",
       "list_created": "creó la lista",
-      "list_item_added": "añadió a"
+      "list_item_added": "añadió a",
+      "review_published": "reseñó"
     },
     "optIn": {
       "label": "Compartir mi actividad con seguidores",
@@ -1737,5 +1740,17 @@
     "completed": "Porque completaste {title}",
     "wanted": "Porque querías {title}",
     "loading": "Cargando..."
+  },
+  "reviews": {
+    "title": "Reseñas",
+    "body": "Tu reseña",
+    "help": "Hasta 5.000 caracteres. **negrita**, *cursiva*, `código`, [enlaces](https://…), listas y > citas.",
+    "spoiler": "Contiene spoilers",
+    "spoilerTag": "Spoiler",
+    "reveal": "Mostrar spoiler",
+    "save": "Guardar reseña",
+    "delete": "Eliminar reseña",
+    "empty": "Aún no hay reseñas.",
+    "rateFirst": "Valora este título para escribir una reseña."
   }
 }
