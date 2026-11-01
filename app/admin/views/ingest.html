@@ -1,0 +1,55 @@
+{{define "content"}}
+<div class="toolbar"><h1>{{.Title}}</h1><a href="/admin/ingest/reviews">Match reviews</a></div>
+<h2>Last run per job</h2>
+{{if not .Runs}}<p class="muted">No runs yet.</p>{{else}}
+<table>
+	<thead><tr><th>Run</th><th>Job</th><th>Source</th><th>Status</th><th>Seen</th><th>Changed</th><th>Failed</th><th>Started</th><th>Finished</th><th>Error</th><th></th></tr></thead>
+	<tbody>
+	{{range .Runs}}<tr><td>{{.ID}}</td><td>{{.Job}}</td><td>{{.Source}}</td><td>{{.Status}}</td><td>{{.Seen}}</td><td>{{.Changed}}</td><td>{{.Failed}}</td><td>{{.Started}}</td><td>{{.Finished}}</td><td>{{.Error}}</td>
+		<td>{{if or (eq .Status "queued") (eq .Status "running")}}{{if $.Ingest.CanRun}}<form method="post" action="/admin/ingest/runs/{{.ID}}/cancel">{{csrfField}}<button type="submit" class="button danger">Cancel</button></form>{{end}}{{end}}</td></tr>{{end}}
+	</tbody>
+</table>
+{{end}}
+<h2>Failing asserts (latest dq.asserts run)</h2>
+{{if not .Ingest.Asserts}}<p class="muted">None failing.</p>{{else}}
+<table>
+	<thead><tr><th>Code</th><th>Severity</th><th>Observed</th></tr></thead>
+	<tbody>{{range .Ingest.Asserts}}<tr><td>{{.Code}}</td><td>{{.Severity}}</td><td>{{.Observed}}</td></tr>{{end}}</tbody>
+</table>
+{{end}}
+<h2>Dead-letter targets</h2>
+{{if not .Ingest.Failures}}<p class="muted">No failures.</p>{{else}}
+<table>
+	<thead><tr><th>Source</th><th>Targets</th><th>Parked</th></tr></thead>
+	<tbody>{{range .Ingest.Failures}}<tr><td>{{.Source}}</td><td>{{.Total}}</td><td>{{.Parked}}</td></tr>{{end}}</tbody>
+</table>
+{{end}}
+<h2>Oldest TMDB record</h2>
+<p>{{if .Ingest.OldestTMDB}}{{.Ingest.OldestTMDB}}{{else}}<span class="muted">No TMDB records.</span>{{end}}</p>
+<h2>Field coverage (last 14 days)</h2>
+{{if not .Ingest.Coverage}}<p class="muted">No coverage runs yet.</p>{{else}}
+<table>
+	<thead><tr><th>Day</th><th>Type</th><th>Sampled items</th><th>Missing values</th></tr></thead>
+	<tbody>{{range .Ingest.Coverage}}<tr><td>{{.Day}}</td><td>{{.Type}}</td><td>{{.Sampled}}</td><td>{{.Missing}}</td></tr>{{end}}</tbody>
+</table>
+{{end}}
+{{if .Ingest.CanRun}}
+<h2>Start a run</h2>
+<form method="post" action="/admin/ingest/runs" class="stack">
+	{{csrfField}}
+	<label>Job
+		<select name="job">{{range .Ingest.Stages}}<option value="{{.Job}}">{{.Job}}{{if .Source}} ({{.Source}}){{end}}</option>{{end}}</select>
+	</label>
+	<label>Source (empty for the job's first source) <input name="source" maxlength="60"></label>
+	<label>Mode
+		<select name="mode">{{range .Ingest.Modes}}<option>{{.}}</option>{{end}}</select>
+	</label>
+	<label>Since (RFC 3339) <input name="since" maxlength="40"></label>
+	<label>Limit <input type="number" name="limit" min="1"></label>
+	<label>QIDs (up to 500, space or comma separated) <textarea name="qids" rows="3"></textarea></label>
+	<label><input type="checkbox" name="allow_count_drop"> Allow a catalogue count drop (dq.asserts)</label>
+	<label>Reason <input name="reason" maxlength="500"></label>
+	<button type="submit" class="button">Start</button>
+</form>
+{{end}}
+{{end}}

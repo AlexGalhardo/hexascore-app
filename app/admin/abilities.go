@@ -16,6 +16,7 @@ const (
 	AbilityViewCatalogAudit = "viewCatalogAudit"
 	AbilityRevertCatalog    = "revertCatalog"
 	AbilityLockCatalog      = "lockCatalog"
+	AbilityViewIngestion    = "viewIngestion"
 	AbilityRunIngestion     = "runIngestion"
 )
 
@@ -40,6 +41,7 @@ func DefineModeration(
 	g.DefineResult(AbilityViewCatalogAudit, adminOnly)
 	g.DefineResult(AbilityRevertCatalog, adminOnly)
 	g.DefineResult(AbilityLockCatalog, adminOnly)
+	g.DefineResult(AbilityViewIngestion, adminOnly)
 	g.DefineResult(AbilityRunIngestion, adminOnly)
 	g.DefineResult(AbilityModerate, func(ctx context.Context, u *models.User) authz.Result {
 		if IsAdmin(u, now()) {

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"maps"
+	"slices"
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
@@ -227,4 +228,19 @@ func Advance(ctx context.Context, db *database.DB, d run.Dispatcher, id int64) e
 	}
 
 	return nil
+}
+
+// Stages lists the (job, source) pairs an operator may trigger by hand: every stage of every chain, once.
+func Stages() []Stage {
+	var out []Stage
+
+	for _, c := range Chains {
+		for _, s := range c.Stages {
+			if !slices.ContainsFunc(out, func(o Stage) bool { return o.Job == s.Job && o.Source == s.Source }) {
+				out = append(out, Stage{Job: s.Job, Source: s.Source})
+			}
+		}
+	}
+
+	return out
 }
