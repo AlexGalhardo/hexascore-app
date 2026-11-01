@@ -3327,7 +3327,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/store/... -run 'TestCanonicalHashIgnoresKeyOrder|TestUpsertIsNoopWhenPayloadUnchanged|TestStoreRecordsCountsInsertsAndChanges|TestHistoryWrittenOnHashChange'` → `ok` (ports `test_canonical_hash_ignores_key_order`, `test_upsert_is_noop_when_payload_unchanged`, `test_store_records_counts_inserts_and_changes`)
   - Notes: P2.F already imported `source_records` 1:1. Add only the missing columns (`checked_at`, `last_run_id`) and the `source_records_item_idx` index, and backfill `checked_at = fetched_at`. jsonb and text + CHECK are raw DDL (VF-006). The hash must equal Python's for the same payload; test against three fixture payloads hashed by `canonical_hash`.
 
-- [ ] **P6.A.1.3** Build the run framework: the `job_runs` lifecycle, heartbeat (stale > 15 min → `failed`, resumable), chunked continuation (≤ 500 targets or 5 min, cursor saved, successor via `q.DispatchTx` in the same transaction), `queue.ErrPermanent`, closing the run on the last attempt, per-target `ingest_failures` (parked after 5 runs), and fail-closed kill switches.
+- [x] **P6.A.1.3** Build the run framework: the `job_runs` lifecycle, heartbeat (stale > 15 min → `failed`, resumable), chunked continuation (≤ 500 targets or 5 min, cursor saved, successor via `q.DispatchTx` in the same transaction), `queue.ErrPermanent`, closing the run on the last attempt, per-target `ingest_failures` (parked after 5 runs), and fail-closed kill switches.
   - Files/modules: `internal/ingest/run/run.go`, `internal/ingest/run/continuation.go`, `internal/ingest/run/flags.go`, `internal/ingest/run/failures.go`, `tests/ingest/resume_test.go`, `tests/ingest/killswitch_test.go`
   - Refs: SDD 06 §6 (jobs, kill switches), §7.6 "Dead letter", FR-06-6, FR-06-7; <https://vukem.dev/docs/digging-deeper/queue> "Jobs and transactions", "Retries, backoff and timeouts"; <https://vukem.dev/docs/digging-deeper/feature-flags> "Feature flags"; VF-018
   - Depends on: P6.A.1.2
@@ -3337,7 +3337,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests/ingest -run 'TestKillSwitchSkips|TestOneActiveRunPerJob'` → disabled source ends `skipped` with zero `httptest` hits; a second queued run → 409 `run-active` (unique index)
   - Notes: queue `ingest`, `queue.Timeout(10*time.Minute)`, `queue.Retries(3)` (that is four attempts, per the queue page). VF-018 workaround: an app-level semaphore caps concurrent ingestion jobs at 2 (NFR-06-2) whatever `QUEUE_CONCURRENCY` is. The "close the run on the last attempt" helper SDD 06 §6 names (`queue.AttemptFrom(ctx).Last()`) is not on the fetched queue page; confirm it on <https://vukem.dev/docs/digging-deeper/queue> before use. If it is missing, write `[NOT IN VUKEM DOCS]`, add a `vukem-feedback.md` entry, and close the run from a `q.AddObserver` failure hook instead.
 
-- [ ] **P6.A.1.4** Build the outbound client on `httpclient.Safe`: per-host throttle with slot reservation, retries for transport errors and 429/5xx (5 attempts, `2^n` s ≤ 60 s), `Retry-After` ≤ 300 s that pauses the whole host, rate halving after 20 hits, a per-host breaker, the bot User-Agent, a host allowlist and size caps.
+- [x] **P6.A.1.4** Build the outbound client on `httpclient.Safe`: per-host throttle with slot reservation, retries for transport errors and 429/5xx (5 attempts, `2^n` s ≤ 60 s), `Retry-After` ≤ 300 s that pauses the whole host, rate halving after 20 hits, a per-host breaker, the bot User-Agent, a host allowlist and size caps.
   - Files/modules: `internal/ingest/httpx/client.go`, `internal/ingest/httpx/throttle.go`, `internal/ingest/httpx/breaker.go`, `internal/ingest/httpx/client_test.go`, `tests/ingest/security_ssrf_test.go`
   - Refs: SDD 06 §7.2, NFR-06-5, NFR-06-6; <https://vukem.dev/docs/security/overview> "A01"; VF-020; legacy `common/http.py` (`_throttle`, `retry_after_seconds`, `user_agent`), `tests/test_http.py`
   - Depends on: P6.A.1.3
@@ -3349,7 +3349,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.A.2 Open connectors
 
-- [ ] **P6.A.2.1** Define the `Connector` interface and the Wikidata selection: SPARQL by `P31` classes and sitelinks (bootstrap top-N per type, incremental `dateModified ≥ since` with ≥ 15 sitelinks).
+- [x] **P6.A.2.1** Define the `Connector` interface and the Wikidata selection: SPARQL by `P31` classes and sitelinks (bootstrap top-N per type, incremental `dateModified ≥ since` with ≥ 15 sitelinks).
   - Files/modules: `internal/ingest/connector.go`, `internal/ingest/wikidata/select.go`, `internal/ingest/wikidata/select_test.go`, `internal/ingest/testdata/sparql_top_movies.json`
   - Refs: SDD 06 §7.3 (interface, selection), §7.2 (query.wikidata.org 1/s); legacy `connectors/wikidata.py` `select_qids`, `top_query`, `modified_query`, `_values`; tests `test_select_qids_parses_sparql_bindings`, `test_queries_target_type_classes`
   - Depends on: P6.A.1.4
@@ -3358,7 +3358,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/wikidata/... -run 'TestSelectQidsParsesSparqlBindings|TestQueriesTargetTypeClasses'` → `ok`
   - Notes: the interface is exactly SDD 06 §7.3 (`Source`, `Targets` as `iter.Seq2`, `Fetch`). Do not add methods "for later".
 
-- [ ] **P6.A.2.2** Fetch and trim Wikidata entities (`wbgetentities`, 50 ids, kept props incl. aliases and P144) and fetch referenced QIDs as `wikidata:entity` records.
+- [x] **P6.A.2.2** Fetch and trim Wikidata entities (`wbgetentities`, 50 ids, kept props incl. aliases and P144) and fetch referenced QIDs as `wikidata:entity` records.
   - Files/modules: `internal/ingest/wikidata/entities.go`, `internal/ingest/wikidata/trim.go`, `internal/ingest/wikidata/entities_test.go`
   - Refs: SDD 06 §7.3 ("trimming is load-bearing"), §7.4 (role properties), FR-06-11; legacy `connectors/wikidata.py` `simplify_value`, `trim_entity`, `referenced_qids`, `get_entities`, `fetch_entities`; tests `test_trim_entity_keeps_only_used_data`, `test_score_statements_keep_their_qualifiers`, `test_missing_entities_are_skipped`, `test_invalid_entity_payload_is_rejected`
   - Depends on: P6.A.2.1
@@ -3368,7 +3368,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/wikidata/... -run TestTrimHashMatchesPython` → hash of the trimmed `wikidata_entities.json` equals the Python value recorded in testdata
   - Notes: score qualifiers are dropped (D-09, no critic scores). Port `test_score_statements_keep_their_qualifiers` as a test that score statements are removed, and note the deliberate divergence in the test name. Adding a property changes every hash and needs a `full` run (≈ 1 h).
 
-- [ ] **P6.A.2.3** Port the Wikipedia connector for `en`, `pt` and `es`: batched summaries/extracts that reject disambiguation, missing pages and a mismatched `wikibase_item`, with concurrent requests within host limits.
+- [x] **P6.A.2.3** Port the Wikipedia connector for `en`, `pt` and `es`: batched summaries/extracts that reject disambiguation, missing pages and a mismatched `wikibase_item`, with concurrent requests within host limits.
   - Files/modules: `internal/ingest/wikipedia/wikipedia.go`, `internal/ingest/wikipedia/wikipedia_test.go`
   - Refs: SDD 06 §7.1 (CC BY-SA 4.0 attribution), §7.2, §7.3; legacy `connectors/wikipedia.py` `parse_extracts`, `targets`, `fetch`; tests `test_wikipedia_extracts`, `test_wikipedia_rejects_disambiguation_missing_and_other_entities`, `test_wikipedia_fetch_runs_requests_concurrently`
   - Depends on: P6.A.2.2
@@ -3389,7 +3389,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.A.3 Normaliser
 
-- [ ] **P6.A.3.1** Port `BuildItem` core fields as a pure function: skip without a Wikidata record or English title, slug (ASCII, ≤ 80, `-<year>` then `-<qid>` on collision, never changed), release date (min P577; series P580 first; fallback P571) with `release_precision` and `release_status`, titles per locale, external ids and quantities.
+- [x] **P6.A.3.1** Port `BuildItem` core fields as a pure function: skip without a Wikidata record or English title, slug (ASCII, ≤ 80, `-<year>` then `-<qid>` on collision, never changed), release date (min P577; series P580 first; fallback P571) with `release_precision` and `release_status`, titles per locale, external ids and quantities.
   - Files/modules: `internal/ingest/normalize/build.go`, `internal/ingest/normalize/slug.go`, `internal/ingest/normalize/dates.go`, `internal/ingest/normalize/build_test.go`
   - Refs: SDD 06 §7.3, FR-06-2; SDD 01 FR-01-15; open issue 02-1; legacy `normalize.py` `slugify`, `slug_candidates`, `parse_time`, `release_date`, `first_value`, `quantity`, `external_ids`, `build_translations`, `build_item`; tests `test_slugify_is_ascii_lowercase`, `test_slug_candidates_add_year_then_qid`, `test_parse_time_precisions`, `test_movie_mapping`, `test_series_mapping`, `test_items_without_wikidata_or_english_title_are_skipped`
   - Depends on: P6.A.2.2
@@ -3399,7 +3399,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/normalize/... -run TestBuildItemOrderIndependent -count=50` → a property test shuffling records gives identical output (FR-06-2)
   - Notes: `release_status = announced` when the date is in the future. The TMDB/IGDB "unreleased" field names are [NOT VERIFIED]; wire them in P6.B.1.1/P6.B.1.2 with fixtures. `scores` and `_score_time` are not ported (D-09).
 
-- [ ] **P6.A.3.2** Port the enrichment merge with provenance: Wikidata wins, other sources fill empty fields only, `{field: source}` provenance and licence from `data_sources`, synopsis only from Wikipedia or `synopsis`, TMDB/IGDB/Open Library text never in `item_translations`, and `community` fields skipped for 180 days, with a `system` suggestion on divergence.
+- [x] **P6.A.3.2** Port the enrichment merge with provenance: Wikidata wins, other sources fill empty fields only, `{field: source}` provenance and licence from `data_sources`, synopsis only from Wikipedia or `synopsis`, TMDB/IGDB/Open Library text never in `item_translations`, and `community` fields skipped for 180 days, with a `system` suggestion on divergence.
   - Files/modules: `internal/ingest/normalize/enrich.go`, `internal/ingest/normalize/provenance.go`, `internal/ingest/normalize/enrich_test.go`, `tests/ingest/community_lock_test.go`
   - Refs: SDD 06 FR-06-3, FR-06-4, §7.3; SDD 04 §7.3; open issue 04-3; ADR 0006; legacy `normalize.py` `enrichment`, `build_meta`; tests `test_tmdb_fills_only_what_wikidata_lacks`, `test_igdb_cover_wins_over_steam`, `test_game_mapping_with_steam_enrichment`, `test_book_mapping_uses_open_library_pages_as_fallback`, `test_own_synopsis_only_fills_locales_without_wikipedia`, `test_commons_cover_attribution`
   - Depends on: P6.A.3.1, P4.B
@@ -3409,7 +3409,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests/ingest -run TestCommunityFieldLock` → at day 179 the source is skipped and a `system` suggestion opens; at day 181 a divergence still opens a suggestion and never overwrites (fake clock)
   - Notes: enrichment payloads come from fixtures here; the connectors land in P6.B.1. The `system` suggestion uses the SDD 04 model from P4.A/P4.B. Do not write to the suggestions tables directly; call its service.
 
-- [ ] **P6.A.3.3** Extract relations: entity credits by role property (§7.4 table, cast first 15), `item_alt_titles` from aliases, transliterations, original-language and former titles (≤ 20, source `wikidata`), and `item_links` `based_on` from P144 when both QIDs are catalogue items.
+- [x] **P6.A.3.3** Extract relations: entity credits by role property (§7.4 table, cast first 15), `item_alt_titles` from aliases, transliterations, original-language and former titles (≤ 20, source `wikidata`), and `item_links` `based_on` from P144 when both QIDs are catalogue items.
   - Files/modules: `internal/ingest/normalize/relations.go`, `internal/ingest/normalize/alttitles.go`, `internal/ingest/normalize/relations_test.go`, `internal/ingest/testdata/parity_based_on.json`
   - Refs: SDD 06 §7.4, FR-06-11; SDD 01 §5.2 (`item_alt_titles`, `item_links`, `item_entities`, role compatibility), DQ-08, DQ-14; open issues 07-6, 08-1, 06-9; D-30 (no engines or edition contributors)
   - Depends on: P6.A.3.1
@@ -3418,7 +3418,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/normalize/... -run 'TestRelationsByRole|TestAltTitles|TestBasedOnLink'` → a manga-based anime and a novel-based film fixture produce `based_on`; alt titles capped at 20 with the right `kind` and `-Latn` lang
   - Notes: role properties beyond the legacy set are [NOT VERIFIED] until fixtures pin them (SDD 06 issue 9). Record each fixture's QID and property in testdata. Entity matching against existing rows is P6.B.3.2; here, emit credits by QID only.
 
-- [ ] **P6.A.3.4** Build the `normalize` job: pending QIDs from `source_records_pending_idx`, one transaction per 200 QIDs, slug collision against the database, `catalog.ItemsChanged{IDs}` per committed batch, and `RecomputeItemScore` via `DispatchTx` when a rated item's date, precision or status changes.
+- [x] **P6.A.3.4** Build the `normalize` job: pending QIDs from `source_records_pending_idx`, one transaction per 200 QIDs, slug collision against the database, `catalog.ItemsChanged{IDs}` per committed batch, and `RecomputeItemScore` via `DispatchTx` when a rated item's date, precision or status changes.
   - Files/modules: `internal/ingest/normalize/job.go`, `internal/ingest/normalize/save.go`, `tests/ingest/normalize_job_test.go`
   - Refs: SDD 06 §6 "Events", §7.3, NFR-06-3; SDD 02 §6; <https://vukem.dev/docs/digging-deeper/events> "Queued listeners"; <https://vukem.dev/docs/digging-deeper/queue> "Jobs and transactions"; legacy `normalize.py` `choose_slug`, `known_items`, `save_item`, `pending_qids`, `normalize_batch`; tests `test_normalize_writes_item_translations_and_scores`, `test_slug_collision_appends_year`
   - Depends on: P6.A.3.2, P6.A.3.3
@@ -3427,7 +3427,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests/ingest -run 'TestNormalizeWritesItemTranslations|TestSlugCollisionAppendsYear|TestRecomputeDispatchedOnDateChange|TestItemsChangedPerBatch'` → `ok`
   - Notes: stream rows in batches of 200 and read only the needed JSON keys (NFR-06-3, ≤ 256 MB). The ported translations test drops its score assertions (D-09).
 
-- [ ] **P6.A.3.5** Build the parity test: `testdata/parity/qids.txt` (200 QIDs, 50 per type, top/mid/tail, non-Latin titles, year-precision dates, P580 series, ISBN-10-only book, Steam-only game) with frozen `source_records`, a Python runner that emits canonical JSON from `build_item`, and Go `TestParityLegacy`.
+- [x] **P6.A.3.5** Build the parity test: `testdata/parity/qids.txt` (200 QIDs, 50 per type, top/mid/tail, non-Latin titles, year-precision dates, P580 series, ISBN-10-only book, Steam-only game) with frozen `source_records`, a Python runner that emits canonical JSON from `build_item`, and Go `TestParityLegacy`.
   - Files/modules: `testdata/parity/qids.txt`, `testdata/parity/records/*.json`, `testdata/parity/python/*.json` (committed outputs), `scripts/parity/dump_python.py` (run against `legacy/webscrappings` with `uv run`), `tests/ingest/parity_test.go`
   - Refs: SDD 06 §7.9 "Parity", FR-06-10, §9; open issue 06-9; D-11
   - Depends on: P6.A.3.4
@@ -3438,7 +3438,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.A.4 Schedules and release
 
-- [ ] **P6.A.4.1** Wire the schedules and chains for the open sources (`bootstrap` command, `fetch.wikidata` incremental at 00:30, weekly Sunday Wikidata + entities, Monday Wikipedia, Tuesday Open Library, each followed by normalise) with `SCHEDULE_TIMEZONE=America/Sao_Paulo` and `WithoutOverlapping()`.
+- [x] **P6.A.4.1** Wire the schedules and chains for the open sources (`bootstrap` command, `fetch.wikidata` incremental at 00:30, weekly Sunday Wikidata + entities, Monday Wikipedia, Tuesday Open Library, each followed by normalise) with `SCHEDULE_TIMEZONE=America/Sao_Paulo` and `WithoutOverlapping()`.
   - Files/modules: `routes/schedule.go`, `internal/ingest/chains.go`, `cmd/app/ingest_bootstrap.go`, `tests/ingest/schedule_test.go`
   - Refs: SDD 06 §7.6; <https://vukem.dev/docs/digging-deeper/scheduler> "Frequencies", "Overlapping runs"; <https://vukem.dev/docs/digging-deeper/queue> "Inside serve"; ADR 0007; D-08; VF-018
   - Depends on: P6.A.3.5
@@ -3533,7 +3533,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - staging after `backfill.editions`: `psql -c "select round(100.0*count(*) filter (where cover_key is not null)/count(*)) from items where type='book'"` → ≥ 60 (only if A-05 allows Open Library; otherwise record the number and the reason)
   - Notes: `market_country = BR` from publish country `bl` is [NOT VERIFIED]; pin it with an Open Library fixture or leave it null. Edition contributors (translator, illustrator) are out (D-30).
 
-- [ ] **P6.B.3.2** Resolve credits to entities: (1) QID; (2) source external id (`tmdb_person`, `tmdb_company`, `igdb_company`, `openlibrary_author`); (3) normalised name (NFKD, ASCII fold, lowercase, punctuation to space) + kind + year ±1. One candidate links, ≥ 2 (or a QID under another kind) opens `entity_match_reviews`, and none creates a native entity.
+- [x] **P6.B.3.2** Resolve credits to entities: (1) QID; (2) source external id (`tmdb_person`, `tmdb_company`, `igdb_company`, `openlibrary_author`); (3) normalised name (NFKD, ASCII fold, lowercase, punctuation to space) + kind + year ±1. One candidate links, ≥ 2 (or a QID under another kind) opens `entity_match_reviews`, and none creates a native entity.
   - Files/modules: `internal/ingest/entities/match.go`, `internal/ingest/entities/normalize_name.go`, `internal/ingest/entities/match_test.go`
   - Refs: SDD 06 §7.4 "Matching per credit"; SDD 01 FR-01-4, DQ-08, DQ-09; D-01
   - Depends on: P6.A.3.4
