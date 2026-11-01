@@ -56,7 +56,7 @@ func Step(c ingest.Connector, client *ingest.Client, now func() time.Time) run.S
 		}
 
 		batch, exhausted, err := collect(ctx, tx, c, ingest.RunParams{
-			Mode: r.Mode, Since: p.Since, Types: p.Types, Limit: p.Limit,
+			RunID: r.ID, Mode: r.Mode, Since: p.Since, Types: p.Types, Limit: p.Limit,
 		}, cur.After)
 		if err != nil {
 			return run.Result{}, err
