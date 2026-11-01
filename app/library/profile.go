@@ -9,8 +9,6 @@ import (
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
-
-	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 )
 
 // ProfilePageSize is the recent ratings per profile page (SDD 14 §7.2).
@@ -30,15 +28,14 @@ type ProfileHead struct {
 
 // ProfileRating is one recent rating on a profile; Stars are 0.5–10.
 type ProfileRating struct {
-	ID            string         `json:"id"`
-	Type          string         `json:"type"`
-	Slug          string         `json:"slug"`
-	Title         string         `json:"title"`
-	Year          *int           `json:"year"`
-	CoverThumbKey *string        `json:"coverThumbKey"`
-	Cover         *catalog.Cover `json:"cover"`
-	Stars         float64        `json:"stars"`
-	RatedAt       time.Time      `json:"ratedAt"`
+	ID            string    `json:"id"`
+	Type          string    `json:"type"`
+	Slug          string    `json:"slug"`
+	Title         string    `json:"title"`
+	Year          *int      `json:"year"`
+	CoverThumbKey *string   `json:"coverThumbKey"`
+	Stars         float64   `json:"stars"`
+	RatedAt       time.Time `json:"ratedAt"`
 }
 
 // ProfileList is a public list shown on a profile.
@@ -186,7 +183,6 @@ WHERE r.user_id = $1 ORDER BY r.updated_at DESC, i.id DESC LIMIT $3 OFFSET $4`,
 			return nil, -1, err
 		}
 
-		r.Cover = catalog.CoverFromThumbKey(r.CoverThumbKey)
 		out = append(out, r)
 	}
 

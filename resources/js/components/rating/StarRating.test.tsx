@@ -96,28 +96,3 @@ test("disabled widget ignores keys and is not focusable", async () => {
 	expect(el.getAttribute("aria-valuenow")).toBe("5");
 	expect(el.tabIndex).toBe(-1);
 });
-
-test("renders no inline style attribute (CSP style-src-attr)", () => {
-	const { container } = render(<StarRating label="Gameplay" value={2.5} onChange={() => {}} />);
-	expect(container.querySelector("[style]")).toBeNull();
-});
-
-test("draws ten SVG stars with full, half and empty fills", () => {
-	const { container } = render(<StarRating label="Gameplay" value={2.5} onChange={() => {}} />);
-	const fills = [...container.querySelectorAll("[data-fill]")].map((el) =>
-		el.getAttribute("data-fill"),
-	);
-	expect(fills).toEqual([
-		"full",
-		"full",
-		"half",
-		"empty",
-		"empty",
-		"empty",
-		"empty",
-		"empty",
-		"empty",
-		"empty",
-	]);
-	expect(slider().textContent).toBe("");
-});

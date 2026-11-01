@@ -14,7 +14,7 @@ func TestHome(t *testing.T) {
 	app := vukemtest.New(t, bootstrap.New)
 
 	// First visit: HTML with the page object; Inertia visits: JSON.
-	app.Client(t).Get("/").AssertOK().AssertInertia("Home/Index").HasProp("appName").HasProp("coversBase")
+	app.Client(t).Get("/").AssertOK().AssertInertia("Home/Index").HasProp("appName")
 	app.Client(t).Inertia("").Get("/").AssertOK().AssertInertia("Home/Index")
 	app.Client(t).Get("/up").AssertOK()
 }

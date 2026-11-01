@@ -1,4 +1,4 @@
-"""A client library for accessing HexaScore API"""
+"""A client library for accessing Vukem"""
 
 from .client import AuthenticatedClient, Client
 

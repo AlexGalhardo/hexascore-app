@@ -5,14 +5,13 @@ from urllib.parse import quote
 import httpx
 
 from ...client import AuthenticatedClient, Client
-from ...models.get_item_type import GetItemType
 from ...models.item_json import ItemJSON
 from ...models.problem import Problem
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
-    type_: GetItemType,
+    type_: str,
     id: str,
     *,
     locale: str | Unset = UNSET,
@@ -67,7 +66,7 @@ def _build_response(*, client: AuthenticatedClient | Client, response: httpx.Res
 
 
 def sync_detailed(
-    type_: GetItemType,
+    type_: str,
     id: str,
     *,
     client: AuthenticatedClient,
@@ -76,7 +75,7 @@ def sync_detailed(
     """getItem
 
     Args:
-        type_ (GetItemType):
+        type_ (str):
         id (str):
         locale (str | Unset):
 
@@ -102,7 +101,7 @@ def sync_detailed(
 
 
 def sync(
-    type_: GetItemType,
+    type_: str,
     id: str,
     *,
     client: AuthenticatedClient,
@@ -111,7 +110,7 @@ def sync(
     """getItem
 
     Args:
-        type_ (GetItemType):
+        type_ (str):
         id (str):
         locale (str | Unset):
 
@@ -132,7 +131,7 @@ def sync(
 
 
 async def asyncio_detailed(
-    type_: GetItemType,
+    type_: str,
     id: str,
     *,
     client: AuthenticatedClient,
@@ -141,7 +140,7 @@ async def asyncio_detailed(
     """getItem
 
     Args:
-        type_ (GetItemType):
+        type_ (str):
         id (str):
         locale (str | Unset):
 
@@ -165,7 +164,7 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    type_: GetItemType,
+    type_: str,
     id: str,
     *,
     client: AuthenticatedClient,
@@ -174,7 +173,7 @@ async def asyncio(
     """getItem
 
     Args:
-        type_ (GetItemType):
+        type_ (str):
         id (str):
         locale (str | Unset):
 

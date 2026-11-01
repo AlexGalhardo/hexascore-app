@@ -32,6 +32,5 @@ func All() []func(r *router.Router, app *vukem.App) error {
 		AppMe,
 		AppTelemetry,
 		Billing,
-		Community,
 	}
 }

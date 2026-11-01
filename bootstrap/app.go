@@ -18,7 +18,6 @@ import (
 	"github.com/AlexGalhardo/vukem/schedule"
 	"github.com/AlexGalhardo/vukem/storage"
 
-	"github.com/AlexGalhardo/hexascore-app/app/community"
 	"github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/i18nhash"
 	"github.com/AlexGalhardo/hexascore-app/app/jobs"
@@ -75,7 +74,6 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 			routes.Schedule(s, app)
 			s.Func("heartbeat", scheduler.Counted("heartbeat", heartbeat.Beat)).EveryMinute()
 		}),
-		vukem.WithFlags(community.SubmissionsFlag),
 		vukem.WithViews(resources.Views()),
 		vukem.WithVite(resources.Public()),
 		vukem.WithTranslations(resources.Lang()),
@@ -111,11 +109,8 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 		app.Log = slog.New(logging.NewHandler(app.Log.Handler(), logKey))
 		r.UseServer(middleware.RequestLog)
 		r.Use(middleware.RequestRoute)
-		edge, err := middleware.APIEdge(
-			config.APIHost(app.Source.Get),
-			cmp.Or(app.Source.Get("APP_URL"), "https://hexascore.app"),
-			cmp.Or(app.Source.Get("APP_PROBLEM_BASE_URL"), "https://hexascore.app/problems/"),
-		)
+		edge, err := middleware.APIEdge(config.APIHost(app.Source.Get),
+			cmp.Or(app.Source.Get("APP_PROBLEM_BASE_URL"), "https://hexascore.app/problems/"))
 		if err != nil {
 			return err
 		}

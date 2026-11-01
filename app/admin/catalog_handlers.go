@@ -48,8 +48,6 @@ type CatalogHandlers struct {
 	Views    *view.Engine
 	// Authorize is the panel gate check (404 for non-admins).
 	Authorize func(c *web.Ctx) error
-	// FlagsURL is the vukem feature-flags page; empty when no flag is registered.
-	FlagsURL string
 }
 
 type navLink struct {
@@ -89,23 +87,15 @@ type pageData struct {
 	Runs       []runRow
 }
 
-// panelNav mirrors the sidebar vukem builds from admin.Resources (same order, same plural labels);
-// TestAdminIngestionSharesPanelNavigation fails when the two drift apart.
-var panelNav = []navLink{
-	{Label: "Users", URL: "/admin/users"},
-	{Label: "Score bursts", URL: "/admin/score-bursts"},
-	{Label: "Rating flags", URL: "/admin/rating-flags"},
-	{Label: "Score actions", URL: "/admin/score-actions"},
-	{Label: "Score formula versions", URL: "/admin/score-formula-versions"},
-	{Label: "Reports", URL: "/admin/reports"},
-	{Label: "Contact messages", URL: "/admin/contact-messages"},
-	{Label: "Items", URL: "/admin/items"},
-}
-
-func (h CatalogHandlers) newPage(title string) pageData {
+func newPage(title string) pageData {
 	return pageData{Title: title, Panel: panelData{
 		Title: "HexaScore admin", Home: "/admin", CSS: "/admin/_assets/admin.css", AuditURL: "/admin/_audit",
-		FlagsURL: h.FlagsURL, Nav: panelNav,
+		Nav: []navLink{
+			{Label: "Users", URL: "/admin/users"},
+			{Label: "Items", URL: "/admin/items"},
+			{Label: "Reports", URL: "/admin/reports"},
+			{Label: "Contact messages", URL: "/admin/contact-messages"},
+		},
 	}}
 }
 
@@ -151,7 +141,7 @@ func (h CatalogHandlers) Manage(c *web.Ctx) error {
 		return err
 	}
 
-	d := h.newPage("Manage item")
+	d := newPage("Manage item")
 	d.Item.ID = id
 	db := h.Accounts.DB.SQL()
 
@@ -376,7 +366,7 @@ func (h CatalogHandlers) Ingestion(c *web.Ctx) error {
 	}
 
 	ctx, db := c.Context(), h.Accounts.DB.SQL()
-	d := h.newPage("Ingestion")
+	d := newPage("Ingestion")
 
 	var recs, runs sql.NullString
 	if err := db.QueryRowContext(ctx, `SELECT to_regclass('source_records')::text, to_regclass('job_runs')::text`).

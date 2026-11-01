@@ -177,10 +177,6 @@ func (h *Tokens) verifyGoogle(c *web.Ctx, idToken string) (jwt.Claims, bool) {
 
 // issue applies the checks that follow a proven identity (ban, verified email, second factor) and mints the token.
 func (h *Tokens) issue(c *web.Ctx, u models.User, device, code, recovery string) error {
-	if u.IsSeed {
-		return h.problem(c, http.StatusUnprocessableEntity, "invalid-credentials", "Invalid credentials")
-	}
-
 	if u.IsBanned(h.a.Clock()) {
 		return middleware.BannedProblem(c, h.a.ProblemBase, u)
 	}

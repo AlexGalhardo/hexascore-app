@@ -1,20 +1,4 @@
 {
-  "flash": {
-    "ratingSaved": "Calificación guardada.",
-    "ratingRemoved": "Calificación eliminada.",
-    "statusSaved": "Estado guardado.",
-    "statusRemoved": "Estado eliminado.",
-    "timeToBeatSaved": "Tiempos guardados.",
-    "timeToBeatRemoved": "Tiempos eliminados.",
-    "listCreated": "Lista creada.",
-    "listUpdated": "Lista actualizada.",
-    "listDeleted": "Lista eliminada.",
-    "listItemAdded": "Añadido a la lista.",
-    "listItemRemoved": "Quitado de la lista.",
-    "editionSaved": "Edición guardada.",
-    "editionRemoved": "Edición olvidada.",
-    "adminTwoFactorRequired": "La autenticación en dos pasos es obligatoria para abrir el área de administración. Configúrala aquí."
-  },
   "account": {
     "metaTitle": "Perfil",
     "title": "Tu perfil",
@@ -57,21 +41,6 @@
       "cancel": "Cancelar",
       "needPassword": "Define una contraseña arriba antes de activar la autenticación en dos pasos.",
       "manage": "Gestionar la autenticación en dos pasos"
-    },
-    "passkeys": {
-      "title": "Passkeys",
-      "body": "Entra con tu huella, tu rostro o el PIN del dispositivo en lugar de la contraseña.",
-      "empty": "Aún no hay passkeys.",
-      "add": "Añadir passkey",
-      "remove": "Eliminar",
-      "removeLabel": "Eliminar passkey {name}",
-      "unnamed": "Passkey",
-      "added": "Añadida el {date}",
-      "failed": "La passkey no se guardó. Vuelve a intentarlo.",
-      "lastWarning": "Si eliminas la última passkey, aún puedes recuperar la cuenta con el correo de restablecimiento.",
-      "confirmGoogle": "Confirmar con Google",
-      "limit": "Puedes guardar como máximo 10 passkeys.",
-      "password": "Contraseña"
     },
     "privacy": {
       "title": "Privacidad",
@@ -258,7 +227,6 @@
     },
     "or": "o",
     "google": "Continuar con Google",
-    "passkey": "Entrar con passkey",
     "challenge": {
       "checking": "Comprobando tu navegador…",
       "noscript": "Este formulario necesita JavaScript. Sin él, puedes"
@@ -278,8 +246,7 @@
       "invalidNickname": "De 4 a 16 letras minúsculas, sin números ni símbolos.",
       "invalidEmail": "Introduce un correo válido.",
       "invalidName": "Introduce tu nombre.",
-      "invalidToken": "Este enlace no es válido o ha caducado.",
-      "passkeyFailed": "El acceso con passkey se canceló o falló."
+      "invalidToken": "Este enlace no es válido o ha caducado."
     },
     "login": {
       "metaTitle": "Entrar",
@@ -587,9 +554,7 @@
   },
   "home": {
     "title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
-    "explore": "Explorar",
-    "recent": "Valorados recientemente por los miembros",
-    "ratedBy": "por {name}"
+    "explore": "Explorar"
   },
   "footer": {
     "terms": "Términos",
@@ -1145,7 +1110,6 @@
     "resultsFor": "Resultados para “{q}”",
     "prompt": "Busca juegos, películas, series y libros por título.",
     "tooShort": "Escribe al menos 2 caracteres.",
-    "unavailable": "La búsqueda está ocupada ahora. Inténtalo de nuevo en unos segundos.",
     "noResults": "No se encontró nada para “{q}”. Revisa la ortografía o prueba otro título.",
     "all": "Todos",
     "suggestions": "Sugerencias",

@@ -5,7 +5,6 @@ import (
 	"github.com/AlexGalhardo/vukem/errs"
 	"github.com/AlexGalhardo/vukem/web"
 
-	"github.com/AlexGalhardo/hexascore-app/app/flash"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
@@ -41,8 +40,6 @@ func (h *Status) PutStatus(c *web.Ctx) error {
 	}
 
 	if !h.api {
-		flash.Status(c, "flash.statusSaved")
-
 		return c.Back("/")
 	}
 
@@ -60,7 +57,7 @@ func (h *Status) DeleteStatus(c *web.Ctx) error {
 		return err
 	}
 
-	return h.done(c, "flash.statusRemoved")
+	return h.done(c)
 }
 
 // PutTimeToBeat reports the signed-in user's time to beat for the game in {id}.
@@ -88,8 +85,6 @@ func (h *Status) PutTimeToBeat(c *web.Ctx) error {
 	}
 
 	if !h.api {
-		flash.Status(c, "flash.timeToBeatSaved")
-
 		return c.Back("/")
 	}
 
@@ -107,7 +102,7 @@ func (h *Status) DeleteTimeToBeat(c *web.Ctx) error {
 		return err
 	}
 
-	return h.done(c, "flash.timeToBeatRemoved")
+	return h.done(c)
 }
 
 // Me answers the user's own rating, status and time to beat of the item in {id}.
@@ -125,11 +120,8 @@ func (h *Status) Me(c *web.Ctx) error {
 	return c.JSON(200, me)
 }
 
-// done answers a delete: 303 back with the flash message of key for the session guard, 204 for the token guard.
-func (h *Status) done(c *web.Ctx, key string) error {
+func (h *Status) done(c *web.Ctx) error {
 	if !h.api {
-		flash.Status(c, key)
-
 		return c.Back("/")
 	}
 

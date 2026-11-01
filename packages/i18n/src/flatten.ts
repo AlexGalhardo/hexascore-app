@@ -7,11 +7,13 @@ import { join } from "node:path";
 
 export const LOCALES = ["en", "pt-BR", "es"] as const;
 
-// D-06: per-locale OpenAPI docs, PIX/AbacatePay, credit packs, feed
+// D-06: per-locale OpenAPI docs, passkeys, PIX/AbacatePay, credit packs, feed
 // and follows are out of the rewrite (inventory: task E-013).
-// Passkeys shipped with P1.C.7 (ADR 0017); their keys stay in the catalogue.
 const DROPPED_FILES = new Set(["openapi.json"]);
 const DROPPED_KEYS = [
+	/^account\.passkeys(\.|$)/,
+	/^auth\.passkey$/,
+	/^auth\.errors\.passkeyFailed$/,
 	/^api\.profile\.plan\.credits$/,
 	/^billing\..*(pix|abacate|credit|pack)/i,
 	/^nav\.feed$/,

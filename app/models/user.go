@@ -25,8 +25,6 @@ type User struct {
 	// DeletionScheduledAt starts the 30-day grace period; AnonymizedAt marks a purged account.
 	DeletionScheduledAt orm.NullTime `json:"deletion_scheduled_at"`
 	AnonymizedAt        orm.NullTime `json:"-"`
-	// IsSeed marks a fake legacy seed user: it can never sign in and `seed:purge` deletes it.
-	IsSeed bool `json:"-"`
 }
 
 // RoleAdmin is the Role of administrators.

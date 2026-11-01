@@ -1,4 +1,4 @@
-import { createVerifiedAccount, reload } from "../helpers/account";
+import { createVerifiedAccount } from "../helpers/account";
 import { expectNoSeriousA11yViolations } from "../helpers/axe";
 import { openTopItem, projectSlot } from "../helpers/catalog";
 import { expect, test } from "../helpers/fixtures";
@@ -33,7 +33,7 @@ test.describe("time to beat", () => {
 		await block.getByRole("button", { name: t("item.timeToBeat.save") }).click();
 		expect((await saved).status()).toBeLessThan(400);
 
-		await reload(page);
+		await page.reload();
 		await expect(block.getByLabel(any("item.timeToBeat.styles.main"))).toHaveValue("12");
 
 		await page.locator("select:has(option[value=completed])").selectOption("dropped");

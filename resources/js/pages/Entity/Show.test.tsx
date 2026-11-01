@@ -45,7 +45,6 @@ const props = {
 						year: 1979,
 						score: null,
 						ratingCount: 0,
-						cover: null,
 					},
 				],
 			},

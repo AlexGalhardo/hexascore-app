@@ -290,8 +290,6 @@ jobs:
 
   e2e:
     name: Playwright (3 locales, desktop and mobile)
-    # Disabled by the owner on 2026-10-31: e2e no longer gates CI or releases. Set the repo variable RUN_E2E=true to re-enable.
-    if: vars.RUN_E2E == 'true'
     needs: build
     runs-on: ubuntu-24.04
     steps:
