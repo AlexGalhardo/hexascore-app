@@ -11,6 +11,10 @@ const config: ExpoConfig = {
 	userInterfaceStyle: "automatic",
 	android: {
 		package: "app.hexascore",
+		// EAS sets versionCode remotely; only the Gradle fallback (.github/workflows/mobile-gradle.yml) passes it.
+		...(process.env.ANDROID_VERSION_CODE
+			? { versionCode: Number(process.env.ANDROID_VERSION_CODE) }
+			: {}),
 		// Verified App Links (SDD 10 §7.6); the Go app serves /.well-known/assetlinks.json.
 		// Expo loads this file without TS module resolution, so the list is inlined;
 		// src/linking.test.ts keeps it equal to APP_LINK_PREFIXES.

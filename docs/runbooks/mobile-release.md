@@ -9,7 +9,7 @@ Scope today: **Android only** (SDD 10 §1, iOS is later). Every `--platform` bel
 | App config, `version` | `apps/mobile/app.config.ts` |
 | Build and submit profiles | `apps/mobile/eas.json` (`development`, `preview`, `e2e-test`, `production`) |
 | `versionCode` | EAS remote source, `autoIncrement` on `production` (SDD 10 [E8]); never edit it by hand |
-| CI | `.github/workflows/mobile-release.yml`, manual `workflow_dispatch` only |
+| CI | `.github/workflows/mobile-release.yml` (manual dispatch or tag `mobile-v*`; EAS build, owner-gated submit); `.github/workflows/mobile-gradle.yml` (Gradle fallback, manual) |
 | CLI | `eas-cli` pinned `27.2.0`, run as `bunx eas-cli@27.2.0` (no global install needed) |
 
 ## Hard rules
@@ -87,6 +87,50 @@ Once it is installed:
 
 3. Ask the owner before publishing to the `production` branch.
 
+## Tag release (`mobile-vX.Y.Z`)
+
+After Step 1 and Step 2, the owner (or an agent with the owner's yes) pushes the tag: `git tag mobile-vX.Y.Z && git push origin mobile-vX.Y.Z`.
+
+1. `mobile-release.yml` runs on the tag: it fails when `X.Y.Z` differs from `version` in `app.config.ts`, then runs the API contract job (OpenAPI goldens and lint, app client codegen diff, as in `ci.yml`), lint, typecheck, Jest and `bundle:check`, then `eas build --profile production` (AAB, remote `versionCode`).
+2. The submit job then waits on the `play-store` environment. Nothing is submitted until the owner opens the run, checks the build id in the job summary, and approves the deployment: that approval is the "sim" for that build (Step 4). Rejecting it, or letting it time out, leaves the build unsubmitted.
+3. The submit job refuses to run if `play-store` has no required reviewer, so a missing environment setup never turns into an automatic submission.
+
+## Release checklist (SDD 10 §10)
+
+Before approving a production submission:
+
+- [ ] Target API 36 (`targetSdkVersion` in the build; Expo SDK 58 default, checked by `aapt2 dump badging`).
+- [ ] Data safety answers still match `docs/legal/play-data-safety.md` (a new SDK or new data field means a new answer first).
+- [ ] `https://hexascore.app/.well-known/assetlinks.json` lists the upload and Play signing fingerprints (`ANDROID_CERT_SHA256`).
+- [ ] `https://hexascore.app/help/delete-account` (and `/pt-br/`, `/es/`) answers 200 and states the 30-day grace.
+- [ ] `APP_MIN_SUPPORTED_VERSION` on the server: raise it only after the new build is live for everyone it must reach (older builds get 426).
+- [ ] OTA rule: this change needs a store build (Step 5 list) or is OTA-eligible.
+- [ ] Rollout: internal → closed (≥ 7 days, crashes ≤ 1 % of sessions) → production 20 % → 100 % over ≥ 3 days, in Play Console by the owner.
+
+## Gradle fallback on GitHub Actions (D-34)
+
+Used only when EAS Build is unavailable or stops being free (SDD 10 §7.8). `.github/workflows/mobile-gradle.yml` is `workflow_dispatch` only. It runs lint, typecheck, Jest and `bundle:check`, then `expo prebuild` and `./gradlew bundleRelease assembleRelease` on `ubuntu-24.04` with Temurin JDK 21, and uploads two artifacts kept for 7 days: `app-release.aab` (Play) and `app-release.apk` (sideload). It never submits to Play.
+
+```sh
+bunx eas-cli@27.2.0 build:version:get --platform android   # owner: last remote versionCode, use it + 1
+gh workflow run mobile-gradle.yml -f ref=main -f version_code=<N>
+gh run watch
+gh run download <run-id> -n app-release.aab
+unzip -l app-release.aab | rg BundleConfig.pb              # one match
+```
+
+- Signing: the upload key comes from four Actions secrets, `ANDROID_UPLOAD_KEYSTORE_BASE64`, `ANDROID_UPLOAD_KEYSTORE_PASSWORD`, `ANDROID_UPLOAD_KEY_ALIAS` and `ANDROID_UPLOAD_KEY_PASSWORD`. The job fails before checkout when any is empty, and fails after the build when the AAB or the APK is not signed with that key (SHA-256 compared with `keytool`/`apksigner`). The keystore is decoded to `$RUNNER_TEMP` and deleted at the end; only the steps that sign or verify see the secrets.
+- `versionCode`: EAS keeps it remotely, so the run takes it as the `version_code` input (exported as `ANDROID_VERSION_CODE`, read by `app.config.ts`). It must be higher than every build already sent to Play. After a fallback upload, set the EAS remote value to the same number (`eas build:version:set`) so the next EAS build does not collide.
+- The repository is public: artifacts can be downloaded by any signed-in GitHub user while they are kept. Treat a fallback AAB as published.
+- The generated `android/` folder and the keystore are never committed.
+- Windows-only workarounds from the local sideload build (ninja long paths, `NODE_PATH`) are not needed on Linux.
+
+### Owner setup for the fallback (one time)
+
+1. Download the EAS-managed upload keystore: `bunx eas-cli@27.2.0 credentials -p android` > production > Keystore > Download. Note the alias and both passwords it prints.
+2. Store it in GitHub secrets without echoing it: `base64 -w0 <keystore.jks> | gh secret set ANDROID_UPLOAD_KEYSTORE_BASE64`, then `gh secret set ANDROID_UPLOAD_KEYSTORE_PASSWORD`, `ANDROID_UPLOAD_KEY_ALIAS` and `ANDROID_UPLOAD_KEY_PASSWORD` (each prompts for the value).
+3. Delete the local keystore copy.
+
 ## Final report
 
 Short summary: what ran, `version` and `versionCode`, build links, submission status, open items.
@@ -96,4 +140,4 @@ Short summary: what ran, `version` and `versionCode`, build links, submission st
 1. Expo account and project: `bunx eas-cli@27.2.0 login`, then `bunx eas-cli@27.2.0 init` in `apps/mobile` (writes `extra.eas.projectId` into the app config; commit it).
 2. Android credentials: `bunx eas-cli@27.2.0 credentials -p android` (upload keystore managed by EAS). Record the SHA-256 fingerprints for `ANDROID_CERT_SHA256` (SDD 10 §7.4).
 3. Play Console app `app.hexascore` and a service account JSON key uploaded to EAS for `eas submit` (never committed).
-4. GitHub: secret `EXPO_TOKEN` (an Expo robot or personal access token), and environment `play-store` with the owner as required reviewer; the submit job waits on it.
+4. GitHub: secret `EXPO_TOKEN` (an Expo robot or personal access token), and environment `play-store` with the owner as required reviewer and deployment tags limited to `mobile-v*` plus branch `main`; the submit job waits on it and refuses to run without a reviewer.
