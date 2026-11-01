@@ -165,7 +165,7 @@ Menus are native `<details>` elements styled by `menuPanel` (`absolute right-0 z
 
 ### 4.4 Footer
 
-`resources/js/components/Footer.tsx`: `mt-12 border-t border-border text-sm text-muted`, one row inside `max-w-6xl`: copyright with the current year and `appName`, then Terms, Privacy, Contact links (44 px high). There is no link to Docs, Pricing, Help or the language switcher in the footer.
+`resources/js/components/Footer.tsx`: `mt-12 border-t border-border text-sm text-muted`, one row inside `max-w-6xl`: copyright with the current year and `appName`, then Terms, Privacy, Contact links (44 px high). There is no link to Docs, Pricing, Help or the language switcher in the footer. A "Source Code" link opens the GitHub repository in a new tab (`rel="noopener noreferrer"`).
 
 ### 4.5 Cookie banner
 

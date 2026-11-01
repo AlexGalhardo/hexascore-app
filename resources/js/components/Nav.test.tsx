@@ -75,7 +75,11 @@ test("navbar has the search trigger, moon/sun toggle and four sections; footer h
 		2,
 	);
 	const footer = screen.getByRole("navigation", { name: "footer.label" });
-	expect(footer.querySelectorAll("a")).toHaveLength(6);
+	expect(footer.querySelectorAll("a")).toHaveLength(7);
+	const source = screen.getByRole("link", { name: "footer.sourceCode" });
+	expect(source.getAttribute("href")).toBe("https://github.com/AlexGalhardo/hexascore-app");
+	expect(source.getAttribute("target")).toBe("_blank");
+	expect(source.getAttribute("rel")).toBe("noopener noreferrer");
 	expect(screen.getByRole("button", { name: "footer.cookieSettings" })).toBeTruthy();
 	expect(footer.querySelector("[hreflang]")).toBeNull();
 });

@@ -733,7 +733,8 @@
     "apiDocs": "API docs",
     "pricing": "Pricing",
     "howScores": "How scores work",
-    "cookieSettings": "Cookie settings"
+    "cookieSettings": "Cookie settings",
+    "sourceCode": "Source Code"
   },
   "cookies": {
     "label": "Cookie settings",

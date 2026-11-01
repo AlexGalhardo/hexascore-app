@@ -733,7 +733,8 @@
     "apiDocs": "Docs de la API",
     "pricing": "Precios",
     "howScores": "Cómo funcionan las notas",
-    "cookieSettings": "Configuración de cookies"
+    "cookieSettings": "Configuración de cookies",
+    "sourceCode": "Código fuente"
   },
   "cookies": {
     "label": "Configuración de cookies",
