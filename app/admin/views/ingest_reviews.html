@@ -1,0 +1,23 @@
+{{define "content"}}
+<div class="toolbar"><h1>{{.Title}}</h1><a href="/admin/ingestion">Ingestion</a></div>
+<p class="muted">Credits the ingestion could not match to one entity. Link the right candidate, create a native entity from the raw credit, or dismiss.</p>
+{{if not .Reviews}}<p class="muted">No open reviews.</p>{{else}}
+{{range .Reviews}}
+<section>
+	<h2>{{.RawName}}{{if .RawYear}} ({{.RawYear}}){{end}} <small>as {{.Role}} on {{.ItemType}} {{.ItemTitle}}</small></h2>
+	<p class="muted">Source {{.Source}}{{if .RawExternalID}}, id {{.RawExternalID}}{{end}}</p>
+	<form method="post" action="/admin/ingest/reviews/{{.ID}}" class="stack">
+		{{csrfField}}
+		{{if .Candidates}}
+		<label>Candidate
+			<select name="entity_id">{{range .Candidates}}<option value="{{.ID}}">{{.Name}} ({{.Kind}}{{if .QID}}, {{.QID}}{{end}}) {{.ID}}</option>{{end}}</select>
+		</label>
+		{{end}}
+		<button type="submit" name="action" value="link" class="button">Link</button>
+		<button type="submit" name="action" value="create" class="button">Create new entity</button>
+		<button type="submit" name="action" value="dismiss" class="button danger">Dismiss</button>
+	</form>
+</section>
+{{end}}
+{{end}}
+{{end}}

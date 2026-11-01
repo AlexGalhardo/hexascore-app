@@ -16,6 +16,7 @@ const (
 	AbilityViewCatalogAudit = "viewCatalogAudit"
 	AbilityRevertCatalog    = "revertCatalog"
 	AbilityLockCatalog      = "lockCatalog"
+	AbilityRunIngestion     = "runIngestion"
 )
 
 // DefineModeration registers the moderation abilities. Unlike the panel gate they answer 403, not 404: the pages
@@ -39,6 +40,7 @@ func DefineModeration(
 	g.DefineResult(AbilityViewCatalogAudit, adminOnly)
 	g.DefineResult(AbilityRevertCatalog, adminOnly)
 	g.DefineResult(AbilityLockCatalog, adminOnly)
+	g.DefineResult(AbilityRunIngestion, adminOnly)
 	g.DefineResult(AbilityModerate, func(ctx context.Context, u *models.User) authz.Result {
 		if IsAdmin(u, now()) {
 			return authz.Allow()

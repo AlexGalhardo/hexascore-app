@@ -27,6 +27,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/community"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/moderation"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/entities"
 )
 
 //go:embed views
@@ -106,6 +107,7 @@ type pageData struct {
 	Locks         []moderation.Lock
 	Metrics       moderation.Metrics
 	LockTargets   []string
+	Reviews       []entities.OpenReviewRow
 }
 
 // panelNav mirrors the sidebar vukem builds from admin.Resources (same order, same plural labels);
