@@ -1,5 +1,6 @@
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
-import { useEffect, useRef, useState } from "react";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useRef, useState } from "react";
 import { abbreviateLabel, pageWindow } from "../../lib/pageWindow";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
@@ -40,38 +41,38 @@ export default function RatingsDialog({
 	const l = useLocalized();
 	const [open, setOpen] = useState(initialOpen);
 	const [page, setPage] = useState(1);
-	const [rows, setRows] = useState<Row[]>([]);
-	const [pageCount, setPageCount] = useState(0);
-	const [status, setStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
-	const [attempt, setAttempt] = useState(0);
 	const scroller = useRef<HTMLDivElement>(null);
-	const busy = status === "loading";
-
-	useEffect(() => {
-		if (!open) return;
-		const ctrl = new AbortController();
-		const timer = setTimeout(() => ctrl.abort(), 10_000);
-		let ignore = false;
-		setStatus("loading");
-		fetch(`/api/items/${itemId}/ratings?page=${page}&r=${attempt}`, { signal: ctrl.signal })
-			.then(async (response) => {
+	const query = useQuery({
+		queryKey: ["ratings", itemId, page],
+		queryFn: async ({ signal }): Promise<RatingsPage> => {
+			const ctrl = new AbortController();
+			const timer = setTimeout(() => ctrl.abort(), 10_000);
+			signal.addEventListener("abort", () => ctrl.abort());
+			try {
+				const response = await fetch(`/api/items/${itemId}/ratings?page=${page}`, {
+					signal: ctrl.signal,
+				});
 				if (!response.ok) throw new Error(`HTTP ${response.status}`);
 				const body: unknown = await response.json();
 				if (!isRatingsPage(body)) throw new Error("shape");
-				if (ignore) return;
-				setRows(body.data);
-				setPageCount(body.page_count);
-				setStatus("ready");
-			})
-			.catch(() => {
-				if (!ignore) setStatus("error");
-			});
-		return () => {
-			ignore = true;
-			clearTimeout(timer);
-			ctrl.abort();
-		};
-	}, [open, page, itemId, attempt]);
+				return body;
+			} finally {
+				clearTimeout(timer);
+			}
+		},
+		enabled: open,
+		placeholderData: keepPreviousData,
+	});
+	const rows = query.data?.data ?? [];
+	const pageCount = query.data?.page_count ?? 0;
+	const status = query.isFetching
+		? "loading"
+		: query.isError
+			? "error"
+			: query.isSuccess
+				? "ready"
+				: "idle";
+	const busy = status === "loading";
 
 	function goTo(next: number): void {
 		setPage(next);
@@ -174,7 +175,7 @@ export default function RatingsDialog({
 								<p>{t("item.loadError")}</p>
 								<button
 									type="button"
-									onClick={() => setAttempt((n) => n + 1)}
+									onClick={() => void query.refetch()}
 									className={pageButton}
 								>
 									{t("item.retry")}

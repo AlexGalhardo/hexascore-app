@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
 import { localized } from "../../lib/route";
 
@@ -22,41 +23,40 @@ export interface SuggestState {
 	answered: string;
 }
 
-/** Debounced /search/suggest lookup; stale answers are dropped. */
+interface Answer {
+	q: string;
+	items: Suggestion[];
+}
+
+/** Debounced, cached /search/suggest lookup; a superseded request is aborted. */
 export function useSuggest(text: string, locale: string, type?: string): SuggestState {
-	const [state, setState] = useState<SuggestState>({ items: [], pending: false, answered: "" });
-	const seq = useRef(0);
-
+	const q = text.trim();
+	const [debounced, setDebounced] = useState("");
 	useEffect(() => {
-		const q = text.trim();
-		if (q.length < MIN_CHARS) {
-			seq.current++;
-			setState({ items: [], pending: false, answered: "" });
-			return;
-		}
-		const ctrl = new AbortController();
-		const mine = ++seq.current;
-		setState((s) => ({ ...s, pending: true }));
-		const timer = setTimeout(async () => {
-			try {
-				const res = await fetch(
-					`${localized("/search/suggest", locale)}?q=${encodeURIComponent(q)}${type ? `&type=${encodeURIComponent(type)}` : ""}`,
-					{ signal: ctrl.signal, headers: { Accept: "application/json" } },
-				);
-				if (!res.ok) throw new Error(String(res.status));
-				const body = (await res.json()) as { data: Suggestion[] };
-				if (mine === seq.current)
-					setState({ items: body.data, pending: false, answered: q });
-			} catch (err) {
-				if ((err as Error).name === "AbortError") return;
-				if (mine === seq.current) setState({ items: [], pending: false, answered: q });
-			}
-		}, DEBOUNCE_MS);
-		return () => {
-			clearTimeout(timer);
-			ctrl.abort();
-		};
-	}, [text, locale, type]);
+		const timer = setTimeout(() => setDebounced(q), DEBOUNCE_MS);
+		return () => clearTimeout(timer);
+	}, [q]);
 
-	return state;
+	const enabled = debounced.length >= MIN_CHARS;
+	const query = useQuery({
+		queryKey: ["suggest", locale, type ?? "", debounced],
+		queryFn: async ({ signal }): Promise<Answer> => {
+			const res = await fetch(
+				`${localized("/search/suggest", locale)}?q=${encodeURIComponent(debounced)}${type ? `&type=${encodeURIComponent(type)}` : ""}`,
+				{ signal, headers: { Accept: "application/json" } },
+			);
+			if (!res.ok) throw new Error(String(res.status));
+			const body = (await res.json()) as { data: Suggestion[] };
+			return { q: debounced, items: body.data };
+		},
+		enabled,
+		// The next keystroke is the retry.
+		retry: false,
+		placeholderData: keepPreviousData,
+	});
+
+	if (q.length < MIN_CHARS) return { items: [], pending: false, answered: "" };
+	const pending = debounced !== q || query.isFetching;
+	if (query.isError && !query.isFetching) return { items: [], pending, answered: debounced };
+	return { items: query.data?.items ?? [], pending, answered: query.data?.q ?? "" };
 }

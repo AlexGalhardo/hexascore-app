@@ -1,7 +1,7 @@
-import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { afterEach, expect, test, vi } from "vitest";
+import { cleanup, render, screen } from "../lib/testing";
 
 import Footer from "./Footer";
 import Nav from "./Nav";
