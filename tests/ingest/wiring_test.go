@@ -14,6 +14,7 @@ import (
 	"sync"
 	"testing"
 
+	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/drivers/postgres/pgtest"
 	"github.com/AlexGalhardo/vukem/vukemtest"
 
@@ -163,13 +164,12 @@ func newIngestApp(t *testing.T, f *fakeSources, flagsOn ...string) *vukemtest.Ap
 		Allow:      []netip.Prefix{netip.MustParsePrefix("127.0.0.0/8")},
 	})
 
-	jobs.IngestOverride = jobs.IngestSources{
+	src := jobs.IngestSources{
 		Client:       client,
 		WikidataRDF:  f.srv.URL + "/sparql",
 		WikidataAPI:  f.srv.URL + "/wikidata",
 		WikipediaAPI: f.srv.URL + "/wikipedia/",
 	}
-	t.Cleanup(func() { jobs.IngestOverride = jobs.IngestSources{} })
 
 	env := map[string]string{
 		"DATABASE_URL":     pgtest.Database(t, ""),
@@ -180,7 +180,9 @@ func newIngestApp(t *testing.T, f *fakeSources, flagsOn ...string) *vukemtest.Ap
 		env["FLAG_INGEST_"+name] = "true"
 	}
 
-	return vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: env})
+	return vukemtest.New(t, func(opts ...vukem.Option) (*vukem.App, error) {
+		return bootstrap.NewWithIngest(src, opts...)
+	}, vukemtest.Options{Env: env})
 }
 
 func runCommand(t *testing.T, app *vukemtest.App, name string, args ...string) {
