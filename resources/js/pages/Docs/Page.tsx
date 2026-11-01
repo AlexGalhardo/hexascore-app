@@ -56,7 +56,7 @@ export default function Page({ slug, body, toc, pages }: Props) {
 							{/* Scalar is a standalone page outside Inertia, so this is a full navigation. */}
 							<a
 								href="/docs/reference"
-								className={`${navLink} border-transparent font-semibold text-primary`}
+								className={`${navLink} gap-1 border-transparent font-semibold text-primary`}
 							>
 								{t("docs.nav.reference")} <span aria-hidden="true">›</span>
 							</a>
