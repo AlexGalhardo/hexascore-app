@@ -3,10 +3,10 @@ module github.com/AlexGalhardo/hexascore-app
 go 1.27.3
 
 require (
-	github.com/AlexGalhardo/vukem v0.35.0
-	github.com/AlexGalhardo/vukem/contrib/stripe v0.5.0
-	github.com/AlexGalhardo/vukem/drivers/postgres v0.6.0
-	github.com/AlexGalhardo/vukem/drivers/s3 v0.4.0
+	github.com/AlexGalhardo/vukem v0.36.0
+	github.com/AlexGalhardo/vukem/contrib/stripe v0.5.1
+	github.com/AlexGalhardo/vukem/drivers/postgres v0.6.1
+	github.com/AlexGalhardo/vukem/drivers/s3 v0.4.1
 	github.com/google/go-cmp v0.7.0
 	golang.org/x/crypto v0.58.0
 	golang.org/x/text v0.43.0
