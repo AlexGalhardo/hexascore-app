@@ -61,7 +61,7 @@ Source keys, all accessed 2026-10-28. vukem facts cite <https://vukem.dev/docs>.
 
 - FR-12-1: Each request writes one JSON line to stdout. Fields: `request_id`, `trace_id`, `route`, `method`, `status`, `duration_ms`, and `user_hash` when authenticated. No email ever appears. Verify: `TestLog_RequestLineShape`.
 - FR-12-2: Traces cover every route group (HTTP, SQL, queue, outbound; §6.3). Verify: `vukemtest` request with an in-memory span exporter, one span per group.
-- FR-12-3: The SSR `OnFailure` hook logs the fallback with `http.route` and `public`. On public routes it also logs at `telegram.LevelFatal` [V-inertia; VF-002]. Verify: integration test that stops Node.
+- FR-12-3: The SSR `OnFailure` hook logs the fallback with `http.route` and `public`. On public routes it also logs at `telegram.LevelFatal` [V-inertia; VF-002]. Verify: integration test that stops Node. Implemented (P2.C.3.3): a public-route fallback logs `alert=A5` at ERROR, a private one a plain WARN; `alert=A6` (same job kind exhausted its retries twice in a row) and `alert=A10` (5 consecutive failed quota flushes) log at ERROR; no metrics (D-35). Code: `app/alerts`, `app/ssr`, `app/api/quota.go`.
 - FR-12-4: Each app-sourced alert in §7.5 has an in-app check that logs `alert=<code>` and a fixture test that fires and clears it. Verify: the tests of §10.
 - FR-12-5: `/up?checks=1` reports `db`, `ssr`, `storage` and `scheduler`. Verify: `TestReady_ChecksPresent`.
 - FR-12-6: A digest of error fingerprints is sent to Telegram daily at 08:00 America/Sao_Paulo. Verify: fake-clock test.

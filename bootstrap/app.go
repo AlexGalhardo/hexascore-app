@@ -87,7 +87,7 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 					ssrFailures.Observe(ctx, err)
 				},
 				// Private pages skip SSR: no SEO value, user data stays out of the Node process (SDD 09 §6.1).
-				Except: []string{"/admin", "/profile", "/me", "/billing", "/suggest", "/suggestions"},
+				Except: ssr.PrivatePrefixes,
 			},
 		}),
 	}
