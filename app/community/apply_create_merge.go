@@ -101,9 +101,22 @@ func insertItem(ctx context.Context, tx *database.Tx, s applyRow, title string) 
 	}
 
 	newID := uuid.NewV7().String()
-	if _, err := tx.ExecContext(ctx, `INSERT INTO items (id, type, slug, wikidata_qid) VALUES ($1, $2, $3, $4)`,
-		newID, s.domain, slug, qid); err != nil {
+
+	// ON CONFLICT: a concurrent create or ingest of the same Q-id committed after the lookup; answer 409 with its id.
+	res, err := tx.ExecContext(ctx, `INSERT INTO items (id, type, slug, wikidata_qid) VALUES ($1, $2, $3, $4)
+ON CONFLICT (wikidata_qid) DO NOTHING`, newID, s.domain, slug, qid)
+	if err != nil {
 		return "", duplicateOr(err, "community: insert item")
+	}
+
+	if n, err := res.RowsAffected(); err != nil {
+		return "", fmt.Errorf("community: insert item: %w", err)
+	} else if n == 0 {
+		if err := refuseExisting(ctx, tx, `SELECT id::text FROM items WHERE wikidata_qid = $1`, qid); err != nil {
+			return "", err
+		}
+
+		return "", fmt.Errorf("community: insert item: %s conflicted but no item holds it", qid)
 	}
 
 	return newID, nil
