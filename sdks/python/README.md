@@ -37,7 +37,7 @@ with client as c:
 
     detail = get_item.sync("games", client=c, id=page.data[0].id)
     found = lookup_item.sync_detailed(client=c, source="imdb", id="tt0111161")
-    print(found.status_code, found.headers.get("ratelimit-remaining"))
+    print(found.status_code, found.headers.get("x-quota-remaining"))
 ```
 
 ### Operations
@@ -124,7 +124,7 @@ uv build                      # dist/hexascore-<version>.tar.gz and .whl
 
 Regenerate whenever `openapi/api-v1.json` changes (`vukem openapi:export`). The generator is pinned
 (`openapi-python-client` 0.29.1, run through `uvx`) and formats its output with `ruff` 0.16.10. Publishing:
-`docs/sdk-publish-pypi.md` in the repository.
+`docs/runbooks/sdk-release.md` in the repository.
 
 ## License
 
