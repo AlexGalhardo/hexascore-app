@@ -15,12 +15,14 @@ import (
 	"github.com/AlexGalhardo/vukem/drivers/postgres"
 	"github.com/AlexGalhardo/vukem/flags"
 	"github.com/AlexGalhardo/vukem/inertia"
+	"github.com/AlexGalhardo/vukem/logging/telegram"
 	"github.com/AlexGalhardo/vukem/openapi"
 	"github.com/AlexGalhardo/vukem/queue"
 	"github.com/AlexGalhardo/vukem/router"
 	"github.com/AlexGalhardo/vukem/schedule"
 	"github.com/AlexGalhardo/vukem/storage"
 
+	"github.com/AlexGalhardo/hexascore-app/app/alerts"
 	"github.com/AlexGalhardo/hexascore-app/app/community"
 	"github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/i18nhash"
@@ -86,8 +88,16 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 	// Set by the routes callback below, read at render time by the turnstileScript view function.
 	var turnstile routes.Turnstile
 
+	// Set by the routes callback (nil while TELEGRAM_* is unset), read when the digest task runs.
+	var notifier *alerts.Notifier
+
 	base := []vukem.Option{
 		vukem.WithEnv(nil, config.WithQueueLimits(os.LookupEnv)),
+		// alerts.Notifier routes records to the page and the silent error chat (SDD 12 §7.5); vukem's own handler
+		// would send every ERROR again, with sound, to TELEGRAM_CHAT_ID.
+		vukem.WithTelegram(func(c *telegram.Config) {
+			c.Filter = func(context.Context, slog.Record) bool { return false }
+		}),
 		vukem.WithProviders(Providers()...),
 		vukem.WithDatabaseDrivers(postgres.Driver()),
 		vukem.WithMigrations(migrations.All()),
@@ -98,6 +108,13 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 		vukem.WithSchedule(func(s *schedule.Schedule, app *vukem.App) {
 			routes.Schedule(s, app)
 			s.Func("heartbeat", heartbeat.Beat).EveryMinute()
+			s.Func("errors:digest", func(ctx context.Context) error {
+				db, err := app.DB()
+				if err != nil {
+					return err
+				}
+				return alerts.SendDigest(ctx, db, notifier, app.Now())
+			}).DailyAt("08:00").In(alerts.Location()).WithoutOverlapping()
 		}),
 		vukem.WithFlags(
 			append(
@@ -145,7 +162,23 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 		if err != nil {
 			return err
 		}
-		app.Log = slog.New(logging.NewHandler(app.Log.Handler(), logKey))
+		notifier, err = alerts.FromApp(app)
+		if err != nil {
+			return err
+		}
+		db, err := app.DB()
+		if err != nil {
+			return err
+		}
+		recorder := alerts.NewRecorder(db, app.Now)
+		app.AddRunner("error-digest", recorder)
+		// Both sit behind the redacting handler, so Telegram and error_digest_daily only see scrubbed records.
+		sinks := []slog.Handler{app.Log.Handler(), recorder}
+		if notifier != nil {
+			sinks = append(sinks, notifier)
+			app.OnShutdown(notifier.Close)
+		}
+		app.Log = slog.New(logging.NewHandler(slog.NewMultiHandler(sinks...), logKey))
 		r.UseServer(middleware.Inflight(pressure))
 		edge, err := middleware.APIEdge(
 			config.APIHost(app.Source.Get),

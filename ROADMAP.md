@@ -1536,12 +1536,12 @@ Phase-specific conventions:
   - Notes: VF-022 workaround. SDD 12 derives the hash key as `app.DeriveKey("log", 32)` and SDD 13 NFR-13-4 as `app.DeriveKey("logid", 32)`: pick one, fix the other SDD in the same change. Responses also carry `X-Trace-ID`; making request id equal trace id stays open (issue 2). Output to stdout only (Railway maps stderr to error).
 
 - [ ] **P2.C.1.2** Wire the Telegram channel (page chat and silent error chat), dedup, and the daily error-fingerprint digest.
-  - Files/modules: `bootstrap/app.go` (handler chain), `app/errors/fingerprint.go`, `app/errors/digest.go`, migration `create_error_digest_daily`, `app/errors/digest_test.go`, `.env.example` (`TELEGRAM_*`)
+  - Files/modules: `bootstrap/app.go` (handler chain, `errors:digest` task), `app/alerts/telegram.go` (fingerprint, routing, dedup), `app/alerts/digest.go`, migration `create_error_digest_daily`, `app/alerts/digest_test.go`, `app/console/alerts.go` (`alerts:test`), `.env.example` (`TELEGRAM_*`)
   - Refs: SDD 12 FR-12-6, §5, §7.2, §7.5 (Channels); <https://vukem.dev/docs/digging-deeper/telegram-logging> "Quick start"; <https://vukem.dev/docs/configuration> (`LOG_DEDUP_WINDOW`)
   - Depends on: P2.C.1.1
   - Model: Sonnet
   - Acceptance:
-    - `go test ./app/errors -run 'TestFingerprint|TestDigestFakeClock'` → PASS: top 20 fingerprints at 08:00 America/Sao_Paulo, one request id each, prune > 90 days
+    - `go test -tags integration ./app/alerts -run 'TestFingerprint|TestDigestFakeClock|TestTelegram|TestSecurity_A09_TelegramTokenNeverLogged'` → PASS: top 20 fingerprints at 08:00 America/Sao_Paulo, one request id each, prune > 90 days
     - on staging, a forced test error → one message in the error chat (silent); a `LevelFatal` test record → the page chat rings
   - Notes: HUMAN GATE (secrets): the owner creates the bot and the two chats and sets `TELEGRAM_BOT_TOKEN` and the chat ids. `TELEGRAM_MIN_LEVEL=error`, `TELEGRAM_RATE_LIMIT=20`. Digest uses `app.Telegram.SendSync`. Buffered upserts every 60 s (VF-021 pattern), never per error.
   - Status (2026-11-01): owner gate (Telegram): owner creates the bot and the page and error chats and sets `TELEGRAM_BOT_TOKEN` and the chat ids on Railway.

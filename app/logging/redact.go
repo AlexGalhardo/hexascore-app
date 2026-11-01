@@ -50,10 +50,12 @@ var (
 	// The password-reset token travels in the path, which the request line logs.
 	// workaround(vukem): VF-071 (middleware.Logger cannot redact path params).
 	tokenPathRe = regexp.MustCompile(`(/reset-password/)[^/?#\s"]+`)
+	// A Telegram bot token (<bot id>:<secret>) travels in the Bot API path /bot<token>/, so a url.Error carries it.
+	telegramRe = regexp.MustCompile(`\d{5,}:[A-Za-z0-9_-]{30,}`)
 )
 
 // Scrub removes emails, bearer credentials, API keys, sensitive query
-// parameters (link signatures and expiries included) and reset tokens from
+// parameters (link signatures and expiries included), reset tokens and Telegram bot tokens from
 // free text (error messages, URLs, request paths).
 func Scrub(s string) string {
 	s = emailRe.ReplaceAllString(s, Redacted)
@@ -61,6 +63,7 @@ func Scrub(s string) string {
 	s = keyRe.ReplaceAllString(s, "${1}"+Redacted)
 
 	s = tokenPathRe.ReplaceAllString(s, "${1}"+Redacted)
+	s = telegramRe.ReplaceAllString(s, Redacted)
 
 	return paramRe.ReplaceAllString(s, "${1}="+Redacted)
 }
