@@ -2,7 +2,7 @@
   // markdownlint-cli2 configuration (D-37). Long lines are allowed: tables and citations are long by nature.
   "default": true,
   "MD013": false,
-  "MD033": { "allowed_elements": ["br", "sub", "sup"] },
+  "MD033": { "allowed_elements": ["br", "sub", "sup", "div", "h1", "a"] },
   "MD024": { "siblings_only": true },
   "MD041": false,
   "MD010": { "code_blocks": false },
