@@ -80,6 +80,12 @@ func TestCoversRekey(t *testing.T) {
 		)
 	}
 
+	// fan: a community upload, never moved (its object is the user's, outside covers/).
+	ids["fan"] = uuid.NewV7().String()
+	put("community/covers/fan.webp")
+	exec(`INSERT INTO items (id, type, slug, wikidata_qid, cover_key) VALUES ($1, 'series', 'fan', 'Q8899', $2)`,
+		ids["fan"], "community/covers/fan.webp")
+
 	keys := func(slug string) (string, string) {
 		t.Helper()
 
@@ -98,7 +104,7 @@ func TestCoversRekey(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if dry != (covers.RekeyResult{Items: 4, Moved: 3, Missing: 1}) {
+	if dry != (covers.RekeyResult{Items: 5, Moved: 3, Current: 1, Missing: 1}) {
 		t.Fatalf("dry run = %+v", dry)
 	}
 
@@ -116,7 +122,7 @@ func TestCoversRekey(t *testing.T) {
 	}
 
 	// x's thumbnail stays where it is: 5 objects for 3 moved rows.
-	if res != (covers.RekeyResult{Items: 4, Moved: 3, Copied: 5, Missing: 1}) {
+	if res != (covers.RekeyResult{Items: 5, Moved: 3, Copied: 5, Current: 1, Missing: 1}) {
 		t.Fatalf("run = %+v", res)
 	}
 
@@ -125,6 +131,7 @@ func TestCoversRekey(t *testing.T) {
 		"x":     {"covers/games/x.webp", old(ids["x"], "-t")},
 		"x-t":   {"covers/games/x-t.webp", "covers/games/x-t-t.webp"},
 		"dune":  {old(ids["dune"], ""), old(ids["dune"], "-t")},
+		"fan":   {"community/covers/fan.webp", ""},
 	} {
 		if full, thumb := keys(slug); full != want[0] || thumb != want[1] {
 			t.Errorf("%s keys = %q, %q, want %q, %q", slug, full, thumb, want[0], want[1])
@@ -151,7 +158,7 @@ func TestCoversRekey(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if again != (covers.RekeyResult{Items: 4, Current: 3, Missing: 1}) {
+	if again != (covers.RekeyResult{Items: 5, Current: 4, Missing: 1}) {
 		t.Fatalf("second run = %+v, want nothing to move", again)
 	}
 

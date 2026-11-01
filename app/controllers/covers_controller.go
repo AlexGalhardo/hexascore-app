@@ -114,7 +114,8 @@ func CoversFrom(disk storage.Disk, db catalog.Querier) http.Handler {
 				return
 			}
 
-			serve(w, r, coversHandler(stored, immutable, bySlug), stored)
+			// The slug URL changes content with the cover, even while its row still holds a hashed key.
+			serve(w, r, bySlug, stored)
 
 			return
 		}

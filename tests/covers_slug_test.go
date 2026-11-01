@@ -89,11 +89,9 @@ func TestCoversRoute_BySlug(t *testing.T) {
 		}
 	}
 
-	// Slug keys can change content: a day of cache, revalidated by ETag; content-hashed keys stay immutable.
-	if got := get(
-		"/covers/games/zelda.webp",
-	).Header().
-		Get("Cache-Control"); got != "public, max-age=31536000, immutable" {
+	// A slug URL can change content (rekey, new cover): a day of cache, revalidated by ETag, even while the row
+	// still holds a hashed key; content-hashed URLs stay immutable.
+	if got := get("/covers/games/zelda.webp").Header().Get("Cache-Control"); got != "public, max-age=86400" {
 		t.Errorf("hashed key behind a slug URL: Cache-Control = %q", got)
 	}
 
