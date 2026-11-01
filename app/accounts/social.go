@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/AlexGalhardo/vukem"
+	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/database"
 	"github.com/AlexGalhardo/vukem/errs"
 	"github.com/AlexGalhardo/vukem/orm"
@@ -102,7 +103,12 @@ func (a *Accounts) FindOrCreateFromSocial(ctx context.Context, su social.User) (
 
 	link, err := links.Where("provider_id", su.ID).First(ctx)
 	if err == nil {
-		return orm.QueryOf[models.User](a.DB).Find(ctx, link.UserID)
+		u, err := orm.QueryOf[models.User](a.DB).Find(ctx, link.UserID)
+		if err == nil && u.IsSeed {
+			return models.User{}, auth.ErrUnauthenticated
+		}
+
+		return u, err
 	}
 
 	if !errors.Is(err, orm.ErrNotFound) {
@@ -123,6 +129,8 @@ func (a *Accounts) FindOrCreateFromSocial(ctx context.Context, su social.User) (
 		existing, err := orm.QueryOf[models.User](tx).Where("email", email).First(ctx)
 
 		switch {
+		case err == nil && existing.IsSeed:
+			return auth.ErrUnauthenticated
 		case err == nil && su.EmailVerified:
 			u = existing
 
