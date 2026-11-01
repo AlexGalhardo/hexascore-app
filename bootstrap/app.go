@@ -121,17 +121,15 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 		if err := addReadyChecks(app, heartbeat); err != nil {
 			return err
 		}
-		// workaround(vukem): VF-NEW-REQUEST-LINE-FIELDS. vukem's Logger takes app.Log when routes.Web installs the
-		// default stack, which runs after this callback; wrapping app.Log here keeps
-		// LOG_FORMAT, dedup and trace correlation from vukem's own handler chain.
+		// vukem's Logger takes app.Log when routes.Web installs the default stack, which runs after this callback;
+		// wrapping app.Log here keeps LOG_FORMAT, dedup and trace correlation from vukem's own handler chain. The
+		// router adds the route pattern to the request line and NotBanned the user (web.AddLogAttrs).
 		logKey, err := app.DeriveKey("log", 32)
 		if err != nil {
 			return err
 		}
 		app.Log = slog.New(logging.NewHandler(app.Log.Handler(), logKey))
-		r.UseServer(middleware.RequestLog)
 		r.UseServer(middleware.Inflight(pressure))
-		r.Use(middleware.RequestRoute)
 		edge, err := middleware.APIEdge(
 			config.APIHost(app.Source.Get),
 			cmp.Or(app.Source.Get("APP_URL"), "https://hexascore.app"),
