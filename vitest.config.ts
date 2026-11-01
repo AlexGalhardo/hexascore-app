@@ -22,6 +22,7 @@ export default defineConfig({
 			"scripts/ci/schemathesis-run.test.ts",
 			"scripts/ci/lighthouse-config.test.ts",
 			"scripts/ops/projected-spend.test.ts",
+			"scripts/release.test.ts",
 			"packages/app-client/**",
 		],
 	},

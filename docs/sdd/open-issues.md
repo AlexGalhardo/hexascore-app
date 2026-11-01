@@ -5,7 +5,7 @@ Every SDD ends with an "Open issues" section. This file is the architect's triag
 | SDD | # | Issue (short) | Status | Disposition |
 | --- | --- | --- | --- | --- |
 | 01 | 1 | Legacy ISBN-only books lack edition language/publisher | decided | Take language and publisher from Open Library edition data when present; otherwise language `und`, publisher null, data-quality flag DQ-10; never block the migration. |
-| 01 | 2 | Open Library licence check (A-05) | roadmap | Blocking task before the ingestion milestone: read the Open Library data licence page, record the decision in `docs/legal/open-library.md`; until then `openlibrary` is in the API allowlist only for identifiers and titles. |
+| 01 | 2 | Open Library licence check (A-05) | decided | Read 2026-11-01 (P6.A.1.1, `docs/legal/open-library.md`): the Internet Archive asserts no rights over the data, so it is API-eligible under licence `OPEN-LIBRARY-NO-RIGHTS-ASSERTED`; covers have no explicit grant and stay out of the API. Identifiers and titles only (`limitedSources`) until the owner confirms the file. |
 | 01 | 3 | Engines, edition contributors (translator, illustrator), episode-level data not in v1 | decided (owner) | Answered 2026-10-28, see brainstorming.md D-22 to D-36. Original note: asked in the Phase 3 question round; default if unanswered: out of v1.0.0. |
 | 01 | 4 | Cursor pagination over (sort value, id) not in vukem docs | vukem | VF-005. App implements with `WhereRaw` and a signed cursor. |
 | 01 | 5 | `t.JSON` / `t.Enum` mapping on Postgres undocumented | vukem | VF-006. DDL uses raw jsonb and text + CHECK. |
@@ -59,7 +59,7 @@ Every SDD ends with an "Open issues" section. This file is the architect's triag
 | 07 | 7 | API search matching on TMDB-sourced synopses | decided | Search for the paid API ranks only on allowlisted-source text (titles, alt titles, Wikipedia synopsis); site search may use all text. Two configurations of the same interface. |
 | 07 | 8 | Suggest p95 at 2-character prefixes unverified | roadmap | k6 decides; fallback 3-character minimum. |
 | 07 | 9 | Railway Postgres version and index sizing unverified | roadmap | SDD 11 records the Postgres version (≥ 16 target) and plan size; measured on the first staging copy. |
-| 06 | 1 | Open Library licence unread (A-05) | roadmap | Blocking task before the ingestion milestone (same as 01-2); connector off until `docs/legal/open-library.md` exists. |
+| 06 | 1 | Open Library licence unread (A-05) | decided | Read 2026-11-01 (same as 01-2): ingest and keep `openlibrary` in `CATALOG_API_SOURCES`; covers are not API-eligible; record in `docs/legal/open-library.md`. |
 | 06 | 2 | Twitch Developer Services Agreement unread; IGDB retention unknown | decided (owner) | Answered 2026-10-28, see brainstorming.md D-22 to D-36. Original note: asked in the Phase 3 question round (owner reads and records in `docs/legal/igdb.md`); until then IGDB fields refreshed every 24 h and never cached longer than 7 days. |
 | 06 | 3 | `contrib/imaging` lacks WebP encoding | vukem + decided | VF-004; plan: pinned `cwebp` via `contrib/engine`, parity test ±10 % size vs Pillow output. |
 | 06 | 4 | Cover storage key format differs between SDD 01 and SDD 06 | decided | Keep the legacy key `covers/<id>-<hash16>.webp` (no migration of 80k objects); SDD 01 §5.4 updated in the review pass. |
