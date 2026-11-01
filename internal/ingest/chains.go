@@ -6,11 +6,15 @@ import (
 	"errors"
 	"fmt"
 	"maps"
+	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
 
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 )
+
+// IncrementalWindow is how far back an incremental run looks when nothing says otherwise (SDD 06 §7.6).
+const IncrementalWindow = 36 * time.Hour
 
 // Stage is one job of a chain; its run is created when the previous stage succeeds.
 type Stage struct {
@@ -98,6 +102,16 @@ func (c Chain) spec(stage int, params map[string]json.RawMessage, by string) (ru
 	}
 
 	p["chain"] = marker
+
+	// Fixed when the chain starts and copied to every stage, so a worker restart or a resume never moves the cursor.
+	if _, ok := p["since"]; !ok && c.Stages[stage].Mode == run.ModeIncremental {
+		since, err := json.Marshal(time.Now().Add(-IncrementalWindow).UTC())
+		if err != nil {
+			return run.Spec{}, err
+		}
+
+		p["since"] = since
+	}
 
 	raw, err := json.Marshal(p)
 	if err != nil {

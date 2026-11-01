@@ -20,8 +20,8 @@ import (
 // BatchSize is how many targets one Step call fetches and stores in its transaction (NFR-06-3).
 const BatchSize = 200
 
-// IncrementalWindow is how far back an incremental run looks when its params carry no since (SDD 06 §7.6).
-const IncrementalWindow = 36 * time.Hour
+// IncrementalWindow is the fallback for a run whose params carry no since (a run not created by a chain).
+const IncrementalWindow = ingest.IncrementalWindow
 
 type runParams struct {
 	Limit int       `json:"limit"`
