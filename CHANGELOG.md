@@ -6,10 +6,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-### Fixed
-
-- **api:** the API host serves only the API: `/v1/*`, `/api/v1/*`, `/up`, a JSON index at `/`, and a 404 problem+json for everything else; it no longer renders the web frontend (FIX-api-host-only-api)
-
 ### Added
 
 - **mobile:** v1 home sections component (three trending cards and a grid of six per type) (IMPL-mobile-v1-home-ui)
@@ -91,6 +87,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **api:** the API host serves only the API: `/v1/*`, `/api/v1/*`, `/up`, a JSON index at `/`, and a 404 problem+json for everything else; it no longer renders the web frontend (FIX-api-host-only-api)
 - **mobile:** The Android root layout restores the session, rotates the token on foreground and routes a 426 to the update-required screen; login and update screens use the device locale and catalogue strings (FIX-mobile-root-wiring, P5.A.3.5)
 - **infra:** Requests to `www.hexascore.app` or the Railway domain answer 301 to the canonical host, keeping path and query (`/up` and the API host excluded) (FIX-www-redirect)
 - **deploy:** Two overlapping `hexascore:predeploy` runs no longer hang when a migration builds an index concurrently; `catalog.changed` queues its reindex through the search package (QA gate 2026-10-31)
