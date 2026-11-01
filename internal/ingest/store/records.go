@@ -33,7 +33,7 @@ type Querier interface {
 // superseded_at uses clock_timestamp() so two changes of one record in one transaction do not collide.
 const upsertSQL = `
 WITH old AS (
-  SELECT source, external_id, hash, payload, fetched_at FROM source_records
+  SELECT source, external_id, hash, payload, fetched_at, checked_at FROM source_records
   WHERE source = $1 AND external_id = $2
 ), upd AS (
   INSERT INTO source_records (source, external_id, payload, hash, fetched_at, checked_at, last_run_id)
@@ -48,8 +48,8 @@ WITH old AS (
   WHERE source = $1 AND external_id = $2 AND hash = $4
   RETURNING 1
 ), hist AS (
-  INSERT INTO source_record_history (source, external_id, hash, payload, fetched_at, superseded_at, superseded_by_run)
-  SELECT o.source, o.external_id, o.hash, o.payload, o.fetched_at, clock_timestamp(), $5
+  INSERT INTO source_record_history (source, external_id, hash, payload, fetched_at, checked_at, superseded_at, superseded_by_run)
+  SELECT o.source, o.external_id, o.hash, o.payload, o.fetched_at, o.checked_at, clock_timestamp(), $5
   FROM old o WHERE o.hash <> $4
   RETURNING 1
 )

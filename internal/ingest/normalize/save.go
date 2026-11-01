@@ -26,6 +26,7 @@ var Sources = []string{
 type existing struct {
 	ID         string
 	Slug       string
+	Public     bool
 	Date       sql.NullTime
 	Precision  string
 	Status     string
@@ -52,7 +53,7 @@ WHERE data_sources.licence = ANY($6::text[]) AND data_sources.licence <> exclude
 
 func loadExisting(ctx context.Context, ex database.Executor, qids []string) (map[string]*existing, error) {
 	rows, err := ex.QueryContext(ctx, `SELECT wikidata_qid, id::text, slug, release_date, release_precision,
-release_status, external_ids, provenance FROM items WHERE wikidata_qid IN (SELECT jsonb_array_elements_text($1::jsonb))`, jsonList(qids))
+release_status, external_ids, provenance, visibility = 'public' FROM items WHERE wikidata_qid IN (SELECT jsonb_array_elements_text($1::jsonb))`, jsonList(qids))
 	if err != nil {
 		return nil, fmt.Errorf("read known items: %w", err)
 	}
@@ -67,7 +68,7 @@ release_status, external_ids, provenance FROM items WHERE wikidata_qid IN (SELEC
 			ext, prv []byte
 		)
 
-		if err := rows.Scan(&qid, &e.ID, &e.Slug, &e.Date, &e.Precision, &e.Status, &ext, &prv); err != nil {
+		if err := rows.Scan(&qid, &e.ID, &e.Slug, &e.Date, &e.Precision, &e.Status, &ext, &prv, &e.Public); err != nil {
 			return nil, fmt.Errorf("read known items: %w", err)
 		}
 

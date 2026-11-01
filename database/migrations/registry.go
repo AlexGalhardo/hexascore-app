@@ -89,5 +89,6 @@ func All() []schema.Migration {
 		m20261101191000AddEntityMatchReviewsCreatedAt(),
 		m20261101200000FixEntityMatchReviewsResolvedBy(),
 		m20261101210000CreateCoverGC(),
+		m20261101220000AddRollbackGapFixes(),
 	}
 }
