@@ -6,17 +6,16 @@ package eval
 import (
 	"cmp"
 	"context"
-	"encoding/csv"
 	"fmt"
 	"io"
 	"math"
 	"math/rand/v2" //nolint:depguard // seeded, reproducible resampling; nothing security-sensitive
 	"slices"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
+	"github.com/AlexGalhardo/vukem/export"
 )
 
 const (
@@ -187,33 +186,18 @@ func Coverage(cases []UserCase, catalogue int) float64 {
 	return float64(len(seen)) / float64(catalogue)
 }
 
-// WriteCSV writes rows with encoding/csv. A cell starting with = + - @ tab or CR gets a leading apostrophe so a
-// spreadsheet never reads it as a formula (VF-NEW-EXPORT-WRITER: the export helpers only write to http.ResponseWriter).
+// WriteCSV writes rows with export.EncodeCSV, whose SafeCell guard keeps a spreadsheet from reading a cell as a
+// formula; plain numbers stay as they are.
 func WriteCSV(w io.Writer, rows [][]string) error {
-	cw := csv.NewWriter(w)
-
-	for _, row := range rows {
-		safe := make([]string, len(row))
-		for i, c := range row {
-			safe[i] = guard(c)
-		}
-
-		if err := cw.Write(safe); err != nil {
-			return err
+	all := func(yield func([]string, error) bool) {
+		for _, r := range rows {
+			if !yield(r, nil) {
+				return
+			}
 		}
 	}
 
-	cw.Flush()
-
-	return cw.Error()
-}
-
-func guard(c string) string {
-	if c != "" && strings.ContainsRune("=+-@\t\r", rune(c[0])) {
-		return "'" + c
-	}
-
-	return c
+	return export.EncodeCSV(w, nil, all, func(r []string) []string { return r })
 }
 
 // Rows renders a report as metric, value, ci_low, ci_high rows with a header.

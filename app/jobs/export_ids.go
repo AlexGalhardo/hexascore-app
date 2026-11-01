@@ -5,15 +5,16 @@ import (
 	"compress/gzip"
 	"context"
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"io"
+	"iter"
 	"regexp"
 	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/config"
 	"github.com/AlexGalhardo/vukem/drivers/s3"
+	"github.com/AlexGalhardo/vukem/export"
 	"github.com/AlexGalhardo/vukem/queue"
 	"github.com/AlexGalhardo/vukem/storage"
 )
@@ -41,7 +42,6 @@ type idLine struct {
 
 // RunExportIDs writes one object per type for the UTC day of now, then deletes the objects of days older than
 // exportRetentionDays. Rows stream through gzip into the disk, so no type is ever held in memory.
-// workaround(vukem): VF-NEW-EXPORT-WRITER (export.NDJSON needs a request, so the job pipes the rows itself).
 // popularity_prior is left out of the files until the owner confirms it as the exported popularity (A-07, Q-A11).
 func RunExportIDs(ctx context.Context, db *sql.DB, disk storage.Disk, now time.Time) error {
 	now = now.UTC()
@@ -86,19 +86,8 @@ FROM items WHERE type = $1 AND visibility = 'public' ORDER BY id`, itemType)
 	defer rows.Close()
 
 	zw := gzip.NewWriter(w)
-	enc := json.NewEncoder(zw)
-
-	for rows.Next() {
-		var l idLine
-		if err := rows.Scan(&l.ID, &l.Slug, &l.Wikidata, &l.UpdatedAt); err != nil {
-			return err
-		}
-
-		l.UpdatedAt = l.UpdatedAt.UTC()
-
-		if err := enc.Encode(l); err != nil {
-			return err
-		}
+	if err := export.EncodeNDJSON(zw, idLines(rows)); err != nil {
+		return err
 	}
 
 	if err := rows.Err(); err != nil {
@@ -106,6 +95,25 @@ FROM items WHERE type = $1 AND visibility = 'public' ORDER BY id`, itemType)
 	}
 
 	return zw.Close()
+}
+
+func idLines(rows *sql.Rows) iter.Seq2[idLine, error] {
+	return func(yield func(idLine, error) bool) {
+		for rows.Next() {
+			var l idLine
+			if err := rows.Scan(&l.ID, &l.Slug, &l.Wikidata, &l.UpdatedAt); err != nil {
+				yield(l, err)
+
+				return
+			}
+
+			l.UpdatedAt = l.UpdatedAt.UTC()
+
+			if !yield(l, nil) {
+				return
+			}
+		}
+	}
 }
 
 func pruneExports(ctx context.Context, disk storage.Disk, now time.Time) error {
