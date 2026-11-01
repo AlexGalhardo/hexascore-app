@@ -1,4 +1,4 @@
-# Handoff: especialista (2026-11-01, session 22)
+# Handoff: especialista (2026-11-01, session 23)
 
 Reason: assigned work done. STATUS: HANDOFF.
 
@@ -6,21 +6,20 @@ Reason: assigned work done. STATUS: HANDOFF.
 
 | Rows | Verdict | Merge |
 | --- | --- | --- |
-| Board sync (live uncommitted TASKS.md) | | 02fb1b90 |
-| FIX-ingest-rollback-api-changes, FIX-covers-orphans-on-rollback, FIX-ingest-alerts-continue | CORRIGIDO_E_APROVADO: fix 8d1a251c adds `rows.Err()` checks in `tests/ingest/resume_test.go` and `wiring_test.go` (the two rowserrcheck findings) | 9c366902, reviews 91e4e582 |
-| FIX-ingest-qids-pushdown | APROVADO; trailers red observed by reverting trailers.go | f7f78a3c, review b47486d0 |
+| FIX-ingest-rollback-gaps | CORRIGIDO_E_APROVADO: fix 058edf32 lists the `items_visibility_changes` trigger among the `api_changes` writers in SDD 05 §7.3 | b22161a2 |
 
-All four delivery rows and their REV rows are `ready`. Worktrees `wt/senior-fw-rollback` and `wt/senior-fw-qids` and their branches are removed.
+Both rows are `ready`. Worktree `wt/senior-fw-gaps` and branches `agent/senior/FIX-ingest-rollback-gaps` and `agent/especialista/FIX-ingest-rollback-gaps-fix` are removed.
 
 ## Open
 
-1. New row FIX-ingest-rollback-gaps (prio 3, senior): non-wikidata rollback requeue and cover, restored payloads' `checked_at`, `entities` in the normalize snapshot, normalize writing `updated` for hidden/takedown items.
-2. Full integration suite not run on main after these merges (host short on memory); left to the batch gate.
-3. Items 1-5 of the previous handoff (REV-FIX-seed-flag hotfix path, VF-065, provisional VF ids in app comments, no release PR, prio 3 rows) still stand.
+1. Follow-ups (not filed as rows): scoring `ItemScoreChanged` and community apply still write `updated` for non-public items; rollback turns a run-created `takedown` item into `hidden`.
+2. Full integration suite not run on main after the merges (host short on memory); left to the batch gate.
+3. Items 1-5 of the session-21 handoff (REV-FIX-seed-flag hotfix path, VF-065, provisional VF ids in app comments, no release PR, prio 3 rows) still stand.
 
 ## Pitfalls
 
 - Git Bash mangles `branch:path` in `git show`: export `MSYS_NO_PATHCONV=1`.
 - The commit-msg hook rejects git's default `Merge branch ...` header: pass `-m "chore(repo): merge ..."`.
-- Branches commit their own reports while main holds untracked copies: `cmp` and remove them before merging.
+- `TEST_DATABASE_URL` must be exported in the same Bash call as `go test` (each call is a fresh shell); `pgtest` fails, it does not skip.
+- `markdownlint-cli2` on one file also lints its config globs; a stray `qa/e2e/test-results/**/error-context.md` reports MD047 (not ours).
 - Previous pitfalls (`.env.example`/`tsconfig.json` local edits, golangci `fmt --diff`, `-j 2`, route inventory test, mobile catalogues) still apply.
