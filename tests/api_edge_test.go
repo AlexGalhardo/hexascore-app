@@ -129,7 +129,7 @@ func TestAPIEdgeHostOnlyAPI(t *testing.T) {
 	})
 
 	t.Run("unknown_path_is_problem", func(t *testing.T) {
-		res := r.app.Client(t).Get(api + "/nope").AssertStatus(404).
+		res := r.app.Client(t).Get(api+"/nope").AssertStatus(404).
 			AssertJSONPath("code", "not-found").AssertJSONPath("type", "https://hexascore.app/problems/not-found")
 		if ct := res.Recorder().Header().Get("Content-Type"); !strings.HasPrefix(ct, "application/problem+json") {
 			t.Fatalf("Content-Type = %q", ct)
@@ -170,7 +170,8 @@ func TestSecurity_A05_ApiHostServesNoWebRoutes(t *testing.T) {
 				t.Fatalf("%s answered %q (X-Inertia %q)", tc.path, ct, h.Get("X-Inertia"))
 			}
 
-			if strings.Contains(strings.ToLower(rec.Body.String()), "<html") || strings.Contains(rec.Body.String(), "data-page") {
+			if strings.Contains(strings.ToLower(rec.Body.String()), "<html") ||
+				strings.Contains(rec.Body.String(), "data-page") {
 				t.Fatalf("%s body looks like a page", tc.path)
 			}
 		})
