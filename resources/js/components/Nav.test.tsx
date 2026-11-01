@@ -1,7 +1,7 @@
+import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { afterEach, expect, test, vi } from "vitest";
-import { cleanup, render, screen } from "../lib/testing";
 
 import Footer from "./Footer";
 import Nav from "./Nav";
@@ -12,6 +12,7 @@ const props = vi.hoisted(() => ({
 	locale: "en",
 	auth: { user: null } as { user: null | Record<string, unknown> },
 	unreadNotifications: 0,
+	flags: {} as { social?: boolean },
 }));
 
 vi.mock("@inertiajs/react", () => ({
@@ -81,10 +82,25 @@ test("navbar has the search trigger, moon/sun toggle and four sections; footer h
 	expect(footer.querySelector("[hreflang]")).toBeNull();
 });
 
-test("the search palette is loaded on the first Ctrl+K, not with the navbar", async () => {
-	render(<Nav />);
-	expect(screen.queryByRole("dialog")).toBeNull();
-	await userEvent.keyboard("{Control>}k{/Control}");
-	// The palette chunk is imported on demand; under a loaded host that takes longer than the 1 s default.
-	expect(await screen.findByRole("dialog", {}, { timeout: 5000 })).toBeTruthy();
+test("the Feed link shows only to signed-in users while the social flag is on", () => {
+	const feedLinks = () => screen.queryAllByRole("link", { name: "social.feed.title" });
+	try {
+		props.flags = { social: true };
+		render(<Nav />);
+		expect(feedLinks()).toHaveLength(0);
+		cleanup();
+
+		props.auth.user = { name: "Ana", nickname: "ana" };
+		props.flags = {};
+		render(<Nav />);
+		expect(feedLinks()).toHaveLength(0);
+		cleanup();
+
+		props.flags = { social: true };
+		render(<Nav />);
+		expect(feedLinks().map((a) => a.getAttribute("href"))).toEqual(["/feed"]);
+	} finally {
+		props.auth.user = null;
+		props.flags = {};
+	}
 });

@@ -32,5 +32,7 @@ export interface SharedProps {
 	seo?: SeoMeta;
 	consent?: "all" | "essential";
 	unreadNotifications?: number;
+	/** Allowlisted feature flags (vukem flags.Share); `social` gates Phase 7. */
+	flags?: { social?: boolean };
 	[key: string]: unknown;
 }
