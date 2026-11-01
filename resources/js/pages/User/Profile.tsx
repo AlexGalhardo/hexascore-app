@@ -4,13 +4,14 @@ import type { ItemRef } from "../../components/library/ItemLink";
 import ShelfCard from "../../components/library/ShelfCard";
 import ReportDialog from "../../components/ReportDialog";
 import Seo from "../../components/Seo";
+import ActivityCard, { type ActivityEntry } from "../../components/social/ActivityCard";
 import FollowBar, { type SocialProps } from "../../components/social/FollowBar";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
 
-const TABS = ["ratings", "status", "lists"] as const;
-type Tab = (typeof TABS)[number];
+const BASE_TABS = ["ratings", "status", "lists"] as const;
+type Tab = (typeof BASE_TABS)[number] | "activity";
 
 interface Rating extends ItemRef {
 	stars: number;
@@ -34,6 +35,8 @@ interface Props {
 	lists?: ProfileList[];
 	indexable: boolean;
 	social?: SocialProps;
+	/** On ?tab=activity: deferred (group `personal`) when the viewer may see it, null when not shared (FR-14-17). */
+	activity?: ActivityEntry[] | null;
 	contributions?: {
 		submitted: number;
 		approved: number;
@@ -51,6 +54,7 @@ export default function Profile({
 	lists,
 	indexable,
 	social,
+	activity,
 	contributions,
 }: Props) {
 	const t = useT();
@@ -58,7 +62,27 @@ export default function Profile({
 	const viewer = page.props.auth?.user;
 	const base = localized(`/u/${profile.nickname.toLowerCase()}`, page.props.locale);
 	const requested = new URLSearchParams(page.url.split("?")[1] ?? "").get("tab");
-	const tab: Tab = TABS.find((x) => x === requested) ?? "ratings";
+	const tabs: readonly Tab[] = social ? [...BASE_TABS, "activity"] : BASE_TABS;
+	const tab: Tab = tabs.find((x) => x === requested) ?? "ratings";
+	const activityList = (
+		<section className="mt-4" aria-busy={activity === undefined}>
+			{activity === undefined ? (
+				<p className="text-muted">{t("social.profile.activityLoading")}</p>
+			) : activity === null ? (
+				<p>{t("social.profile.activityHidden")}</p>
+			) : activity.length === 0 ? (
+				<p>{t("social.profile.noActivity")}</p>
+			) : (
+				<ul className="divide-y divide-border">
+					{activity.map((e) => (
+						<li key={e.id}>
+							<ActivityCard entry={e} />
+						</li>
+					))}
+				</ul>
+			)}
+		</section>
+	);
 
 	return (
 		<>
@@ -137,7 +161,7 @@ export default function Profile({
 						aria-label={t("social.profile.sections")}
 						className="mt-4 flex gap-4 border-b border-border"
 					>
-						{TABS.map((x) => (
+						{tabs.map((x) => (
 							<Link
 								key={x}
 								href={`${base}?tab=${x}`}
@@ -214,8 +238,10 @@ export default function Profile({
 							)}
 						</section>
 					)}
+					{tab === "activity" && activityList}
 				</>
 			)}
+			{!stats && social && tab === "activity" && activityList}
 		</>
 	);
 }

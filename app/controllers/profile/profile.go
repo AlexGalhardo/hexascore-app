@@ -9,10 +9,15 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
+	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
 // Handlers serve the profile page and its section forms.
-type Handlers struct{ a *accounts.Accounts }
+type Handlers struct {
+	a *accounts.Accounts
+	// Social adds the feed opt-in switch while the feature flag `social` is on (SDD 14 FR-14-18); nil on SQLite.
+	Social *social.Follows
+}
 
 // New builds the handlers.
 func New(a *accounts.Accounts) *Handlers { return &Handlers{a: a} }
@@ -54,7 +59,7 @@ func (h *Handlers) Show(c *web.Ctx) error {
 		})
 	}
 
-	return inertia.Render(c, "Profile/Index", inertia.Props{
+	props := inertia.Props{
 		"details":     inertia.Props{"name": u.Name, "email": u.Email, "locale": p.Locale},
 		"passwordSet": p.PasswordSet,
 		"twoFactor":   inertia.Props{"enabled": tf.Enabled()},
@@ -65,7 +70,18 @@ func (h *Handlers) Show(c *web.Ctx) error {
 		},
 		"notifications":       inertia.Props{"communityMailOptOut": p.CommunityMailOptOut},
 		"deletionScheduledAt": u.DeletionScheduledAt,
-	})
+	}
+
+	if h.Social.Enabled(c.Context()) {
+		on, err := h.Social.FeedOptIn(c.Context(), u.ID)
+		if err != nil {
+			return err
+		}
+
+		props["social"] = inertia.Props{"feedOptIn": on}
+	}
+
+	return inertia.Render(c, "Profile/Index", props)
 }
 
 // UpdateDetails saves name and locale.

@@ -142,6 +142,25 @@ type Entry struct {
 	At      time.Time      `json:"at"`
 }
 
+// entryQuery selects feed cards: $1 is bound by the caller's join, $2 the locale, $3 the cursor ("" for none),
+// $4 the limit. The visibility filters of SDD 14 §12.5 for items and lists apply to every caller.
+func entryQuery(join string) string {
+	return `SELECT e.id, e.kind, coalesce(u.display_username, u.username), e.payload,
+  e.created_at, i.id, i.type, i.slug, coalesce(t.title, te.title, i.original_title, i.slug), i.cover_thumb_key,
+  round(r.overall / 10, 1)::float8, l.id, l.title
+FROM activity_events e
+` + join + `
+LEFT JOIN items i ON i.id = e.item_id
+LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $2
+LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
+LEFT JOIN ratings r ON e.kind = 'rating_saved' AND r.user_id = e.actor_id AND r.item_id = e.item_id
+LEFT JOIN lists l ON l.id = e.list_id
+WHERE (e.item_id IS NULL OR i.visibility = 'public')
+  AND (e.list_id IS NULL OR (l.is_public AND NOT l.hidden))
+  AND ($3 = '' OR e.id < $3::uuid)
+ORDER BY e.id DESC LIMIT $4`
+}
+
 // Feed returns up to FeedPageSize entries of the users viewerID follows (accepted), newest first, below cursor
 // (an event id; "" starts at the top), and the next cursor ("" on the last page). The privacy matrix of SDD 14
 // §12.5 is applied here, at read time: opted-in, not banned, not anonymised actors; public items; public, visible
@@ -151,25 +170,92 @@ func (s *Follows) Feed(ctx context.Context, viewerID int64, locale, cursor strin
 		cursor = ""
 	}
 
-	rows, err := s.DB.QueryContext(ctx, `SELECT e.id, e.kind, coalesce(u.display_username, u.username), e.payload,
-  e.created_at, i.id, i.type, i.slug, coalesce(t.title, te.title, i.original_title, i.slug), i.cover_thumb_key,
-  round(r.overall / 10, 1)::float8, l.id, l.title
-FROM follows f
-JOIN activity_events e ON e.actor_id = f.followee_id
+	out, err := s.entries(ctx, entryQuery(`JOIN follows f ON f.followee_id = e.actor_id
+  AND f.follower_id = $1 AND f.state = 'accepted'
 JOIN users u ON u.id = e.actor_id AND u.feed_opt_in AND u.anonymized_at IS NULL
-  AND NOT (u.banned_at IS NOT NULL AND (u.ban_expires_at IS NULL OR u.ban_expires_at > now()))
-LEFT JOIN items i ON i.id = e.item_id
-LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $2
-LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
-LEFT JOIN ratings r ON e.kind = 'rating_saved' AND r.user_id = e.actor_id AND r.item_id = e.item_id
-LEFT JOIN lists l ON l.id = e.list_id
-WHERE f.follower_id = $1 AND f.state = 'accepted'
-  AND (e.item_id IS NULL OR i.visibility = 'public')
-  AND (e.list_id IS NULL OR (l.is_public AND NOT l.hidden))
-  AND ($3 = '' OR e.id < $3::uuid)
-ORDER BY e.id DESC LIMIT $4`, viewerID, locale, cursor, FeedPageSize+1)
+  AND NOT (u.banned_at IS NOT NULL AND (u.ban_expires_at IS NULL OR u.ban_expires_at > now()))`),
+		viewerID, locale, cursor, FeedPageSize+1)
 	if err != nil {
-		return nil, "", fmt.Errorf("social: feed: %w", err)
+		return nil, "", err
+	}
+
+	next := ""
+	if len(out) > FeedPageSize {
+		out = out[:FeedPageSize]
+		next = out[FeedPageSize-1].ID
+	}
+
+	return out, next, nil
+}
+
+// ActivityAllowed reports whether viewerID may see the "recent activity" tab of userID (SDD 14 FR-14-17, §12.5):
+// never while the layer is off; the owner always; others only while the owner is opted in and, for a private
+// profile, when they are an accepted follower. Ban and anonymisation are handled by the profile page, which renders
+// nothing social for those users.
+func (s *Follows) ActivityAllowed(ctx context.Context, viewerID, userID int64) (bool, error) {
+	if !s.Enabled(ctx) {
+		return false, nil
+	}
+
+	if viewerID == userID {
+		return true, nil
+	}
+
+	var allowed bool
+
+	err := s.DB.QueryRowContext(ctx, `SELECT u.feed_opt_in AND (NOT u.profile_private OR EXISTS (
+  SELECT 1 FROM follows f WHERE f.follower_id = $2 AND f.followee_id = u.id AND f.state = 'accepted'))
+FROM users u WHERE u.id = $1`, userID, viewerID).Scan(&allowed)
+	if err != nil {
+		return false, fmt.Errorf("social: activity access: %w", err)
+	}
+
+	return allowed, nil
+}
+
+// Activity is userID's latest FeedPageSize entries; call ActivityAllowed first.
+func (s *Follows) Activity(ctx context.Context, userID int64, locale string) ([]Entry, error) {
+	return s.entries(ctx, entryQuery(`JOIN users u ON u.id = e.actor_id AND e.actor_id = $1`),
+		userID, locale, "", FeedPageSize)
+}
+
+// SetFeedOptIn records the user's choice (SDD 14 FR-14-18); turning it off hides past events at read time.
+func (s *Follows) SetFeedOptIn(ctx context.Context, userID int64, on bool) error {
+	if _, err := s.DB.ExecContext(ctx, `UPDATE users SET feed_opt_in = $2 WHERE id = $1`, userID, on); err != nil {
+		return fmt.Errorf("social: feed opt-in: %w", err)
+	}
+
+	return nil
+}
+
+// FeedOptIn reports the user's current choice.
+func (s *Follows) FeedOptIn(ctx context.Context, userID int64) (bool, error) {
+	var on bool
+	if err := s.DB.QueryRowContext(ctx, `SELECT feed_opt_in FROM users WHERE id = $1`, userID).Scan(&on); err != nil {
+		return false, fmt.Errorf("social: feed opt-in: %w", err)
+	}
+
+	return on, nil
+}
+
+// ActivityRetention is how long activity events are kept (SDD 14 NFR-14-9).
+const ActivityRetention = 180 * 24 * time.Hour
+
+// PruneActivity deletes events older than ActivityRetention at now; it runs whatever the flag, so turning the
+// layer off never keeps data longer.
+func PruneActivity(ctx context.Context, db *database.DB, now time.Time) (int64, error) {
+	res, err := db.ExecContext(ctx, `DELETE FROM activity_events WHERE created_at < $1`, now.Add(-ActivityRetention))
+	if err != nil {
+		return 0, fmt.Errorf("social: prune activity: %w", err)
+	}
+
+	return res.RowsAffected()
+}
+
+func (s *Follows) entries(ctx context.Context, query string, args ...any) ([]Entry, error) {
+	rows, err := s.DB.QueryContext(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("social: feed: %w", err)
 	}
 	defer rows.Close()
 
@@ -186,11 +272,11 @@ ORDER BY e.id DESC LIMIT $4`, viewerID, locale, cursor, FeedPageSize+1)
 
 		if err := rows.Scan(&e.ID, &e.Kind, &e.Actor.Nickname, &payload, &e.At, &itemID, &typ, &slug, &title, &cover,
 			&stars, &listID, &listTitle); err != nil {
-			return nil, "", fmt.Errorf("social: feed row: %w", err)
+			return nil, fmt.Errorf("social: feed row: %w", err)
 		}
 
 		if err := json.Unmarshal(payload, &e.Payload); err != nil {
-			return nil, "", fmt.Errorf("social: feed payload: %w", err)
+			return nil, fmt.Errorf("social: feed payload: %w", err)
 		}
 
 		if e.Actor.Nickname != "" {
@@ -210,14 +296,8 @@ ORDER BY e.id DESC LIMIT $4`, viewerID, locale, cursor, FeedPageSize+1)
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, "", fmt.Errorf("social: feed rows: %w", err)
+		return nil, fmt.Errorf("social: feed rows: %w", err)
 	}
 
-	next := ""
-	if len(out) > FeedPageSize {
-		out = out[:FeedPageSize]
-		next = out[FeedPageSize-1].ID
-	}
-
-	return out, next, nil
+	return out, nil
 }

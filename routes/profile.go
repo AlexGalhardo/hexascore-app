@@ -17,6 +17,12 @@ func Profile(r *router.Router, app *vukem.App) error {
 	}
 
 	h := profile.New(acc)
+	if acc.DB.Dialect().Name() == "postgres" {
+		if h.Social, err = SocialService(app, acc); err != nil {
+			return err
+		}
+	}
+
 	required, verified := auth.Required(acc.Web), auth.Verified(acc.Web)
 
 	r.Get("/profile", h.Show).Name("profile").Use(required)

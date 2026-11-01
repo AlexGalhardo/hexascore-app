@@ -41,6 +41,7 @@ func Follows(r *router.Router, app *vukem.App) error {
 	r.Delete("/u/{nickname}/follow", h.Unfollow).Name("follows.delete").Use(required, verified, byUser)
 	r.Post("/me/follow-requests/{nickname}/accept", h.Accept).Name("follows.accept").Use(required, verified)
 	r.Post("/me/follow-requests/{nickname}/decline", h.Decline).Name("follows.decline").Use(required, verified)
+	r.Patch("/profile/feed", h.UpdateFeedOptIn).Name("profile.feed").Use(required, verified)
 	r.Get("/feed", controllers.NewFeed(svc, acc.Web.Name()).Index).Name("feed").Use(required, verified)
 
 	return nil

@@ -77,8 +77,13 @@ var ResetPasswordSchema = z.Struct[ResetPassword](z.Shape{
 // Onboarding is the nickname form.
 type Onboarding struct {
 	Nickname string `json:"nickname" form:"nickname"`
+	// FeedOptIn is honoured only while the feature flag `social` is on (SDD 14 FR-14-18).
+	FeedOptIn bool `json:"feedOptIn" form:"feedOptIn"`
 }
 
 // OnboardingSchema validates Onboarding; the nickname rule and its error
 // codes live in the handler, which answers `invalid-nickname` and `nickname-taken`.
-var OnboardingSchema = z.Struct[Onboarding](z.Shape{"nickname": z.String().Trim()})
+var OnboardingSchema = z.Struct[Onboarding](z.Shape{
+	"nickname":  z.String().Trim(),
+	"feedOptIn": z.Bool().Default(false),
+})
