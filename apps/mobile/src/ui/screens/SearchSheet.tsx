@@ -17,7 +17,7 @@ export interface SearchRow {
 }
 
 export type SearchState =
-	| { kind: "empty"; recent: string[]; trending: SearchRow[] }
+	| { kind: "empty"; recent: string[]; trending: SearchRow[]; trendingLoading?: boolean }
 	| { kind: "loading" }
 	| { kind: "results"; rows: SearchRow[]; total: number }
 	| { kind: "error"; message: string };
@@ -29,6 +29,7 @@ export interface SearchLabels {
 	removeRecent: (query: string) => string;
 	trending: string;
 	trendingEmpty: string;
+	trendingLoading: string;
 	loading: string;
 	noResults: (query: string) => string;
 	firstOf: (shown: number, total: number) => string;
@@ -165,6 +166,10 @@ export function SearchSheet({
 						<Text className={SECTION}>{labels.trending}</Text>
 						{state.trending.length > 0 ? (
 							rows(state.trending)
+						) : state.trendingLoading ? (
+							<Text accessibilityLiveRegion="polite" className={`${MUTED} px-4 py-4`}>
+								{labels.trendingLoading}
+							</Text>
 						) : (
 							<Text className="px-4 font-text text-16 text-muted dark:text-muted-dark">
 								{labels.trendingEmpty}

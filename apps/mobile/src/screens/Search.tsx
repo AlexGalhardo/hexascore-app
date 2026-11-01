@@ -141,7 +141,14 @@ export function SearchBody({
 	};
 
 	const state = ((): Parameters<typeof SearchSheet>[0]["state"] => {
-		if (!enabled) return { kind: "empty", recent, trending: trending.map(trendingRow) };
+		if (!enabled)
+			return {
+				kind: "empty",
+				recent,
+				trending: trending.map(trendingRow),
+				// isLoading, not isPending: a paused (offline) query with no cache falls back to the empty message.
+				trendingLoading: trendingResults.some((result) => result.isLoading),
+			};
 		if (search.isError) return { kind: "error", message: t(locale, "search.unavailable") };
 		if (search.isPending) return { kind: "loading" };
 		return { kind: "results", rows: hits.map(toRow), total: search.data.pages[0]?.total ?? 0 };
@@ -155,6 +162,7 @@ export function SearchBody({
 		removeRecent: (text) => t(locale, "search.palette.removeRecent", { q: text }),
 		trending: t(locale, "home.trendingWeek"),
 		trendingEmpty: t(locale, "search.palette.trendingEmpty"),
+		trendingLoading: t(locale, "item.loading"),
 		loading: t(locale, "search.searching"),
 		noResults: (text) => t(locale, "search.noResults", { q: text }),
 		firstOf: (_shown, total) => t(locale, "search.count", { n: total }),
