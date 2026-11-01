@@ -169,7 +169,7 @@ Menus are native `<details>` elements styled by `menuPanel` (`absolute right-0 z
 
 ### 4.5 Cookie banner
 
-`CookieBanner.tsx`: fixed bottom bar (`z-50`, `bg-surface`, `border-t`, `shadow-lg`) with copy and two buttons: "Essential only" (outlined) and "Allow embeds" (solid `bg-fg text-bg`). Choice stored in cookie `consent` (`all` or `essential`, 1 year). A spacer (`h-36 sm:h-20`) keeps the page end reachable. Consent gates YouTube embeds (`Trailers.tsx`).
+`CookieBanner.tsx`: fixed bottom bar (`z-50`, `bg-surface`, `border-t`, `shadow-lg`, labelled region) with copy and two buttons: "Reject" (outlined) and "Accept" (solid `bg-fg text-bg`). Choice stored in cookie `consent` (`all` or `essential`, 1 year). A spacer (`h-36 sm:h-20`) keeps the page end reachable. Consent gates YouTube embeds (`Trailers.tsx`) and GA4 (`window.vukemAnalytics.consent`, ADR 0023). The footer's "Cookie settings" button reopens it and focuses "Reject".
 
 ### 4.6 Grid and containers
 

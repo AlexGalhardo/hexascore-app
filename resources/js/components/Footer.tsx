@@ -1,5 +1,6 @@
 import { Link, usePage } from "@inertiajs/react";
 
+import { openCookieSettings } from "../lib/preferences";
 import { localized } from "../lib/route";
 import { useT } from "../lib/useT";
 import type { SharedProps } from "../types";
@@ -31,6 +32,11 @@ export default function Footer() {
 								</Link>
 							</li>
 						))}
+						<li>
+							<button type="button" onClick={openCookieSettings} className={link}>
+								{t("footer.cookieSettings")}
+							</button>
+						</li>
 					</ul>
 				</nav>
 				<p className="text-[13px] text-muted md:ml-auto">
