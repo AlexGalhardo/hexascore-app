@@ -123,7 +123,7 @@ Errors follow RFC 9457 (vukem `https://vukem.dev/docs/basics/error-handling` "Er
 | Method, path | Auth | Output | Errors |
 | --- | --- | --- | --- |
 | GET `/api/v1/{type}/trending` (`listTrending`) | API key | `{computedAt, data:[{rank, basis, trendScore, item}]}` | 400 |
-| GET `/api/v1/{type}/{id}/activity?from=&to=` (`getItemActivity`) | business plan (SDD 05 FR-05-17); counts as 1 request | raw daily counts, ≤ 90 days within the last 365 | 403 `plan-required`, 404, 422 |
+| GET `/api/v1/{type}/{id}/activity?from=&to=` (`get<Type>Activity`, one literal route per type) | business plan (SDD 05 FR-05-17); counts as 1 request | raw daily counts, ≤ 90 days within the last 365 | 403 `plan-required`, 404, 422 |
 | GET `/app/v1/{type}/trending` | token `catalog:read` (A-01) | same + display fields | 400 |
 | GET `/app/v1/items/{id}/related` | token `catalog:read` | `{similar, crossMedia}` | 404 |
 | GET `/app/v1/me/for-you?type=` | token `catalog:read` | `{basis:"profile"\|"onboarding", data:[{item, reason}]}` | 400 |
@@ -295,7 +295,7 @@ CF ships only through a new ADR, and only with:
 - [ ] Staging: `psql "$DATABASE_URL" -c "select item_type, count(*) from trending_snapshots where computed_at = date_trunc('hour', now()) group by 1"` returns 4 rows of 10.
 - [ ] `curl -sI …/api/v1/game/trending -H "Authorization: Bearer $KEY"` returns an `ETag`, and the same request with `If-None-Match` returns 304. `…/activity` with a non-business key returns 403.
 - [ ] `k6 run tests/k6/home.js`: `p(95) < 200ms` with the cache warm.
-- [ ] Schemathesis passes on `listTrending` and `getItemActivity`, and the responses contain no TMDB/IGDB fields.
+- [ ] Schemathesis passes on `listTrending` and `get<Type>Activity`, and the responses contain no TMDB/IGDB fields.
 
 ## 10. Test strategy
 

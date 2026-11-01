@@ -118,7 +118,7 @@ Headers: `X-Request-Id`; `RateLimit-Limit/Remaining/Reset` = per-second throttle
 | --- | --- | --- |
 | `listItems` | GET `/v1/{type}` | games/movies/series/books; `genre`, `platform` (games), `year` 1800–2100, `min_score`/`max_score` 0–10 step 0.5, `min_<category>` (A-06), legacy `sort`, `limit` 1..cap (default 10), `cursor`, `locale` |
 | `getItem` | GET `/v1/{type}/{id}` | 301 for merged ids (SDD 01); non-`public` items 404 (SDD 01 FR-01-14) |
-| `getItemActivity` | GET `/v1/{type}/{id}/activity` | business plan only (else 403 `plan-required`), counts as 1 request (SDD 08 §6, open issue 08-6) |
+| `getGameActivity`, `getMovieActivity`, `getSeriesActivity`, `getBookActivity` | GET `/v1/{games,movies,series,books}/{id}/activity` (literal sections: `/{type}/{id}/activity` overlaps `/exports/{type}/{day}` on the ServeMux) | business plan only (else 403 `plan-required`), counts as 1 request (SDD 08 §6, open issue 08-6) |
 | `listGameGenres`, `listMovieGenres`, `listSeriesGenres`, `listBookGenres` | GET `/v1/{type}/genres` | `{data:[{slug,count}]}`; one operation per type because Go's ServeMux rejects `/{type}/genres` next to `/entities/{id}` (2026-10-29, P1.H.2.1b) |
 | `listTrending` | GET `/v1/{type}/trending` | top 10 per type over the last 30 days (owner decision 2026-10-30), no `window=` (400 `invalid-query`); read from the hourly snapshot (SDD 08), `ETag` and `Cache-Control: public, max-age=300`, `computedAt` null before the first snapshot; literal routes `/games`, `/movies`, `/series`, `/books` because `/{type}/trending` overlaps `/entities/{id}`; the home page alone shows 3 per type over 7 days (SDD 08 section 7.2 "Home window") |
 | `listEditions` | GET `/v1/books/{id}/editions` | D-10 |
@@ -127,7 +127,7 @@ Headers: `X-Request-Id`; `RateLimit-Limit/Remaining/Reset` = per-second throttle
 | `searchItems` | GET `/v1/search` | `q` 1–100 chars, `type`, `limit` ≤ 50 (SDD 07); ranks on allowlisted-source text only (07-7) |
 | `lookupItem` | GET `/v1/lookup` | `source`, `id` (legacy sources); returns allowlisted fields only, never echoes restricted-source ids (FR-05-16) |
 | `listChanges` | GET `/v1/changes` | `since` RFC 3339 required, `type`, `cursor`, `limit` ≤ 1000 |
-| `listExports`, `getExport` | GET `/v1/exports`, `/v1/exports/{type}/{day}` | pro/business (else 403 `plan-required`); `getExport` → 302 to `disk.PresignGet(key, 5*time.Minute)` (`https://vukem.dev/docs/digging-deeper/exports` "S3") |
+| `listExports`, `getExport` | GET `/v1/exports` (`{data:[{type,day}]}`, newest first), `/v1/exports/{type}/{day}` (`day` = YYYY-MM-DD; 302 with `Cache-Control: no-store`) | pro/business (else 403 `plan-required`); `getExport` → 302 to `disk.PresignGet(key, 5*time.Minute)` (`https://vukem.dev/docs/digging-deeper/exports` "S3") |
 | `listWebhooks`, `createWebhook`, `deleteWebhook`, `testWebhook` | GET/POST `/v1/webhooks`, DELETE `/v1/webhooks/{id}`, POST `/v1/webhooks/{id}/test` | pro/business; secret returned once; not counted |
 | `getUsage` | GET `/v1/me/usage` | legacy shape without credits; counts |
 
