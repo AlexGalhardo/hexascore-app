@@ -30,6 +30,9 @@ func All(app *vukem.App) []queue.Registration {
 		handleCheckSources(app),
 		handleCoverFetch(app),
 		handleExportIDs(app),
+		handleComputeTrending(app),
+		handleTrendingRebuild(app),
+		handlePruneTrending(app),
 		handleCatalogChanged(app),
 		handleCommunityNotify(app),
 	}
