@@ -1,0 +1,904 @@
+{
+  "qid": "Q23572",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q23572",
+      "labels": {
+        "en": "Game of Thrones",
+        "es": "Juego de Tronos",
+        "pt": "A Guerra dos Tronos",
+        "pt-br": "A Guerra dos Tronos"
+      },
+      "aliases": {
+        "en": [
+          "GOT"
+        ],
+        "mul": [
+          "GoT",
+          "Game of Thrones"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Game of Thrones",
+        "eswiki": "Game of Thrones",
+        "ptwiki": "Game of Thrones"
+      },
+      "sitelinks_count": 139,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+73",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/game_of_thrones",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q343782",
+            "rank": "normal"
+          },
+          {
+            "value": "Q56064758",
+            "rank": "normal"
+          },
+          {
+            "value": "Q98526245",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1366112",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q45875",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Game of Thrones",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q191104",
+            "rank": "normal"
+          },
+          {
+            "value": "Q445772",
+            "rank": "normal"
+          },
+          {
+            "value": "Q310937",
+            "rank": "normal"
+          },
+          {
+            "value": "Q235132",
+            "rank": "normal"
+          },
+          {
+            "value": "Q228789",
+            "rank": "normal"
+          },
+          {
+            "value": "Q371430",
+            "rank": "normal"
+          },
+          {
+            "value": "Q357607",
+            "rank": "normal"
+          },
+          {
+            "value": "Q240573",
+            "rank": "normal"
+          },
+          {
+            "value": "Q234363",
+            "rank": "normal"
+          },
+          {
+            "value": "Q967656",
+            "rank": "normal"
+          },
+          {
+            "value": "Q236839",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1148937",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16713577",
+            "rank": "normal"
+          },
+          {
+            "value": "Q358032",
+            "rank": "normal"
+          },
+          {
+            "value": "Q380178",
+            "rank": "normal"
+          },
+          {
+            "value": "Q342430",
+            "rank": "normal"
+          },
+          {
+            "value": "Q549101",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1530432",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2514417",
+            "rank": "normal"
+          },
+          {
+            "value": "Q63682",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16208371",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15069985",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1501158",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1126128",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1677416",
+            "rank": "normal"
+          },
+          {
+            "value": "Q707538",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1687736",
+            "rank": "normal"
+          },
+          {
+            "value": "Q503114",
+            "rank": "normal"
+          },
+          {
+            "value": "Q971177",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1655682",
+            "rank": "normal"
+          },
+          {
+            "value": "Q232384",
+            "rank": "normal"
+          },
+          {
+            "value": "Q552026",
+            "rank": "normal"
+          },
+          {
+            "value": "Q314892",
+            "rank": "normal"
+          },
+          {
+            "value": "Q440353",
+            "rank": "normal"
+          },
+          {
+            "value": "Q510848",
+            "rank": "normal"
+          },
+          {
+            "value": "Q461132",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6394546",
+            "rank": "normal"
+          },
+          {
+            "value": "Q460572",
+            "rank": "normal"
+          },
+          {
+            "value": "Q315271",
+            "rank": "normal"
+          },
+          {
+            "value": "Q262898",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1102002",
+            "rank": "normal"
+          },
+          {
+            "value": "Q320073",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5638484",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6187270",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6438398",
+            "rank": "normal"
+          },
+          {
+            "value": "Q777260",
+            "rank": "normal"
+          },
+          {
+            "value": "Q309690",
+            "rank": "normal"
+          },
+          {
+            "value": "Q733122",
+            "rank": "normal"
+          },
+          {
+            "value": "Q22675",
+            "rank": "normal"
+          },
+          {
+            "value": "Q459348",
+            "rank": "normal"
+          },
+          {
+            "value": "Q231086",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6832667",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2262485",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6968794",
+            "rank": "normal"
+          },
+          {
+            "value": "Q463585",
+            "rank": "normal"
+          },
+          {
+            "value": "Q312702",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5335413",
+            "rank": "normal"
+          },
+          {
+            "value": "Q17466021",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15069990",
+            "rank": "normal"
+          },
+          {
+            "value": "Q19650504",
+            "rank": "normal"
+          },
+          {
+            "value": "Q18385091",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15069989",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3726488",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3713649",
+            "rank": "normal"
+          },
+          {
+            "value": "Q368090",
+            "rank": "normal"
+          },
+          {
+            "value": "Q361536",
+            "rank": "normal"
+          },
+          {
+            "value": "Q312531",
+            "rank": "normal"
+          },
+          {
+            "value": "Q311165",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3817038",
+            "rank": "normal"
+          },
+          {
+            "value": "Q377072",
+            "rank": "normal"
+          },
+          {
+            "value": "Q466150",
+            "rank": "normal"
+          },
+          {
+            "value": "Q440013",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3941283",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2944958",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13479530",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1519956",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16873133",
+            "rank": "normal"
+          },
+          {
+            "value": "Q14752155",
+            "rank": "normal"
+          },
+          {
+            "value": "Q178046",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1964106",
+            "rank": "normal"
+          },
+          {
+            "value": "Q212351",
+            "rank": "normal"
+          },
+          {
+            "value": "Q232163",
+            "rank": "normal"
+          },
+          {
+            "value": "Q232876",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2165440",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2686633",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4885474",
+            "rank": "normal"
+          },
+          {
+            "value": "Q264751",
+            "rank": "normal"
+          },
+          {
+            "value": "Q981821",
+            "rank": "normal"
+          },
+          {
+            "value": "Q499644",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5218475",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1329519",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5368467",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5982285",
+            "rank": "normal"
+          },
+          {
+            "value": "Q560286",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6554671",
+            "rank": "normal"
+          },
+          {
+            "value": "Q740202",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10297782",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7132082",
+            "rank": "normal"
+          },
+          {
+            "value": "Q930691",
+            "rank": "normal"
+          },
+          {
+            "value": "Q42685525",
+            "rank": "normal"
+          },
+          {
+            "value": "Q519488",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1418319",
+            "rank": "normal"
+          },
+          {
+            "value": "Q591515",
+            "rank": "normal"
+          },
+          {
+            "value": "Q24891605",
+            "rank": "normal"
+          },
+          {
+            "value": "Q21208049",
+            "rank": "normal"
+          },
+          {
+            "value": "Q203215",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16201839",
+            "rank": "normal"
+          },
+          {
+            "value": "Q27898522",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16233528",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1852090",
+            "rank": "normal"
+          },
+          {
+            "value": "Q58749711",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1086864",
+            "rank": "normal"
+          },
+          {
+            "value": "Q272174",
+            "rank": "normal"
+          },
+          {
+            "value": "Q826043",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4228271",
+            "rank": "normal"
+          },
+          {
+            "value": "Q447614",
+            "rank": "normal"
+          },
+          {
+            "value": "Q19650458",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4354675",
+            "rank": "normal"
+          },
+          {
+            "value": "Q117906",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1190081",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1343000",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1320512",
+            "rank": "normal"
+          },
+          {
+            "value": "Q953257",
+            "rank": "normal"
+          },
+          {
+            "value": "Q19829668",
+            "rank": "normal"
+          },
+          {
+            "value": "Q18763973",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7440827",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7804116",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7325246",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3371571",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7184058",
+            "rank": "normal"
+          },
+          {
+            "value": "Q17180643",
+            "rank": "normal"
+          },
+          {
+            "value": "Q19788544",
+            "rank": "normal"
+          },
+          {
+            "value": "Q234141",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q1151388",
+            "rank": "normal"
+          },
+          {
+            "value": "Q503997",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "tv/game-of-thrones",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+66",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+8",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q123459509",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0944947",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "preferred"
+          },
+          {
+            "value": "Q2914733",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13563729",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q23633",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "1399",
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q181677",
+            "rank": "normal"
+          },
+          {
+            "value": "Q503997",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1151388",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4980025",
+            "rank": "normal"
+          },
+          {
+            "value": "Q289973",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15710074",
+            "rank": "normal"
+          },
+          {
+            "value": "Q19560737",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2011-04-17T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q10297782": "Hoji Fortuna",
+        "Q1086864": "Chris Newman",
+        "Q1102002": "Clive Russell",
+        "Q1126128": "Conleth Hill",
+        "Q1148937": "Iwan Rheon",
+        "Q1151388": "D. B. Weiss",
+        "Q117906": "Pilou Asbæk",
+        "Q1190081": "Tom Hopper",
+        "Q123459509": "HBO Entertainment",
+        "Q1320512": "Freddie Stroma",
+        "Q1329519": "Joseph Mawle",
+        "Q1343000": "James Faulkner",
+        "Q13479530": "Joseph Gatt",
+        "Q13563729": "Valyrian",
+        "Q1366112": "drama television series",
+        "Q1418319": "Ian Gelder",
+        "Q14752155": "Pedro Pascal",
+        "Q1501158": "Gemma Whelan",
+        "Q15069985": "Aimee Richardson",
+        "Q15069989": "Art Parkinson",
+        "Q15069990": "Callum Wharry",
+        "Q1519956": "Gethin Anthony",
+        "Q1530432": "Conan Stevens",
+        "Q15710074": "Vanessa Taylor",
+        "Q16201839": "Tom Brooke",
+        "Q16208371": "Joel Fry",
+        "Q16233528": "Alexandra Dowling",
+        "Q1655682": "Ian Whyte",
+        "Q16713577": "Dean-Charles Chapman",
+        "Q1677416": "Jacob Anderson",
+        "Q16873133": "J. J. Murphy",
+        "Q1687736": "Jerome Flynn",
+        "Q17180643": "Ben Hawkey",
+        "Q17466021": "Nell Tiger Free",
+        "Q178046": "Eugene Simon",
+        "Q181677": "George R. R. Martin",
+        "Q18385091": "Dominic Carter",
+        "Q1852090": "Tobias Menzies",
+        "Q1860": "English",
+        "Q18763973": "Michael Condron",
+        "Q191104": "Sean Bean",
+        "Q19560737": "Dave Hill",
+        "Q1964106": "Rupert Vansittart",
+        "Q19650458": "Brenock O'Connor",
+        "Q19650504": "Toby Sebastian",
+        "Q19788544": "Jóhannes Haukur Jóhannesson",
+        "Q19829668": "Brian Fortune",
+        "Q203215": "Max von Sydow",
+        "Q21208049": "Aisling Franciosi",
+        "Q212351": "Kate Dickie",
+        "Q2165440": "Ron Donachie",
+        "Q2262485": "Michiel Huisman",
+        "Q22675": "Tom Wlaschiha",
+        "Q228789": "Lena Headey",
+        "Q231086": "Hannah Murray",
+        "Q232163": "Natalia Tena",
+        "Q232384": "Carice van Houten",
+        "Q232876": "Diana Rigg",
+        "Q234141": "Ian McShane",
+        "Q234363": "Maisie Williams",
+        "Q235132": "Emilia Clarke",
+        "Q23633": "HBO",
+        "Q236839": "Natalie Dormer",
+        "Q240573": "Sophie Turner",
+        "Q24891605": "Bella Ramsey",
+        "Q2514417": "Ellie Kendrick",
+        "Q262898": "Michelle Fairley",
+        "Q264751": "Nonso Anozie",
+        "Q2686633": "DeObia Oparei",
+        "Q272174": "Tara Fitzgerald",
+        "Q27898522": "Daniel Tuite",
+        "Q289973": "Jane Espenson",
+        "Q2914733": "Dothraki",
+        "Q2944958": "Wilko Johnson",
+        "Q30": "United States",
+        "Q309690": "Charles Dance",
+        "Q310937": "Peter Dinklage",
+        "Q311165": "Alexander Siddig",
+        "Q312531": "Thomas Brodie-Sangster",
+        "Q312702": "Jonathan Pryce",
+        "Q314892": "Ciarán Hinds",
+        "Q315271": "Jason Momoa",
+        "Q320073": "David Bradley",
+        "Q3371571": "Paul Kaye",
+        "Q342430": "Mark Addy",
+        "Q343782": "action television series",
+        "Q357607": "Kit Harington",
+        "Q358032": "Aidan Gillen",
+        "Q361536": "Owen Teale",
+        "Q368090": "Finn Jones",
+        "Q3713649": "Donald Sumpter",
+        "Q371430": "Iain Glen",
+        "Q3726488": "Enzo Cilenti",
+        "Q377072": "Patrick Malahide",
+        "Q380178": "Harry Lloyd",
+        "Q3817038": "Kristian Nairn",
+        "Q3941283": "Rosabell Laurenti Sellers",
+        "Q4228271": "Yuri Kolokolnikov",
+        "Q42685525": "Wilf Scolding",
+        "Q4354675": "Luke Roberts",
+        "Q440013": "Esmé Bianco",
+        "Q440353": "Gwendoline Christie",
+        "Q445772": "Nikolaj Coster-Waldau",
+        "Q447614": "Mackenzie Crook",
+        "Q45875": "A Song of Ice and Fire",
+        "Q459348": "Oona Castilla Chaplin",
+        "Q460572": "Liam Cunningham",
+        "Q461132": "Rose Leslie",
+        "Q463585": "Indira Varma",
+        "Q466150": "Keisha Castle-Hughes",
+        "Q4885474": "Ben Crompton",
+        "Q4980025": "Bryan Cogman",
+        "Q499644": "Julian Glover",
+        "Q503114": "Joe Dempsie",
+        "Q503997": "David Benioff",
+        "Q510848": "Richard Madden",
+        "Q519488": "David Rintoul",
+        "Q5218475": "Daniel Portman",
+        "Q5335413": "Ed Skrein",
+        "Q5368467": "Elyes Gabel",
+        "Q549101": "John Bradley",
+        "Q552026": "Alfie Allen",
+        "Q560286": "Mark Gatiss",
+        "Q56064758": "adventure television series",
+        "Q5638484": "Hafþór Júlíus Björnsson",
+        "Q58749711": "Kae Alexander",
+        "Q591515": "Anton Lesser",
+        "Q5982285": "Ian McElhinney",
+        "Q6187270": "Jessica Henwick",
+        "Q63682": "Sibel Kekilli",
+        "Q6394546": "Kerry Ingram",
+        "Q6438398": "Kristofer Hivju",
+        "Q6554671": "Lino Facioli",
+        "Q6832667": "Michael McElhatton",
+        "Q6968794": "Nathalie Emmanuel",
+        "Q707538": "Stephen Dillane",
+        "Q7132082": "Paola Dionisotti",
+        "Q7184058": "Philip McGinley",
+        "Q7325246": "Richard Dormer",
+        "Q733122": "James Cosmo",
+        "Q740202": "Roger Ashton-Griffiths",
+        "Q7440827": "Sean Blowers",
+        "Q777260": "Jack Gleeson",
+        "Q7804116": "Tim Plester",
+        "Q826043": "Francis Magee",
+        "Q930691": "Peter Vaughan",
+        "Q953257": "Robert Pugh",
+        "Q967656": "Isaac Hempstead-Wright",
+        "Q971177": "Rory McCann",
+        "Q981821": "Burn Gorman",
+        "Q98526245": "fantasy television series"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q23572",
+      "lang": "en",
+      "title": "Game of Thrones",
+      "extract": "Game of Thrones is an American fantasy drama television series created by David Benioff and D. B. Weiss for HBO. It is the first adaptation of A Song of Ice and Fire, a series of high fantasy novels by George R. R. Martin, and the first in what would become the Game of Thrones franchise. The show premiered on HBO in the United States on April 17, 2011, and concluded on May 19, 2019, with 73 episodes broadcast over eight seasons.\nSet on the fictional continents of Westeros and Essos, Game of Thrones has a large ensemble cast and follows several story arcs throughout the course of the show. The first major arc concerns the Iron Throne of the Seven Kingdoms of Westeros through a web of political conflicts among the noble families, either vying to claim the throne or fighting for independence. The second major arc focuses on the last descendant of the realm's deposed ruling dynasty, who has been exiled to Essos and is plotting to return and reclaim the throne. The third follows the Night's Watch, a military order defending the realm against threats from beyond the Seven Kingdoms' northern border.\nGame of Thrones attracted a record viewership on HBO and has a broad, active, and international fan base. Many critics and publications have named the show one of the greatest television series of all time. Critics have praised the series for its acting, complex characters, story, scope, and production values, although its frequent use of nudity and violence (including sexual violence) generated controversy. The final season received significant criticism for its reduced length and creative decisions, with many considering it a disappointing conclusion. The series received 59 Primetime Emmy Awards, the most by a drama series, including Outstanding Drama Series in 2015, 2016, 2018 and 2019. Its other awards and nominations include three Hugo Awards for Best Dramatic Presentation, a Peabody Award, and five nominations for the Golden Globe Award for Best Television Series – Drama.\n\nTwo prequel series, House of the Dragon and A Knight of the Seven Kingdoms, premiered on HBO in 2022 and 2026, respectively.",
+      "url": "https://en.wikipedia.org/wiki/Game_of_Thrones"
+    },
+    "wikipedia:es": {
+      "qid": "Q23572",
+      "lang": "es",
+      "title": "Game of Thrones",
+      "extract": "Game of Thrones (conocida como Juego de tronos en España y abreviada como GOT) es una serie de televisión de drama y fantasía medieval desarrollada por David Benioff y D. B. Weiss y producida por la cadena HBO. Su argumento está inspirado en la serie de novelas Canción de hielo y fuego, escrita por el estadounidense George R. R. Martin, y relata las vivencias de un grupo de personajes de distintas casas nobiliarias en el continente ficticio de Poniente para tener el control del Trono de Hierro y gobernar los siete reinos que conforman el territorio.​\nEl desarrollo de la serie se remonta a 2006, cuando Benioff y Weiss tuvieron una reunión con Martin para discutir ideas en torno a una adaptación televisiva de su material literario.​​ Si bien los guiones del episodio piloto, «Winter Is Coming», quedaron concluidos en 2008,​​ las grabaciones tuvieron lugar en 2010 bajo la dirección de Tim Van Patten.​ A lo largo de ocho temporadas y más de setenta episodios, Game of Thrones cubre el argumento de las primeras cinco novelas de Martin con ciertas modificaciones​ y la adición de material inédito a partir de una descripción del autor sobre los eventos futuros de su universo literario.​ Se trata de una de las series más costosas en la historia de la televisión,​ cuyo rodaje llegó a involucrar hasta cuatro unidades de filmación en paralelo​ y la producción de efectos visuales requirió de la participación simultánea de hasta catorce estudios en distintos países.​\nEl primer episodio se estrenó en abril de 2011 en Estados Unidos y Canadá​ y desde 2015 la transmisión de sus episodios se llevó a cabo de forma simultánea en más de un centenar de países.​ La serie posee elevados niveles de audiencia y es uno de los programas de televisión bajo demanda más populares de HBO,​ así como uno de los «mayores dramas» y el «programa más comentado» de la televisión en 2014.​ Ciertos medios, como The Washington Post, Time, The Hollywood Reporter y Rolling Stone la catalogaron como una de las mejores series de televisión​​ y la crítica ha elogiado aspectos como sus actuaciones, los guiones, los efectos especiales, las secuencias de batallas y la música,​​​ esta última a cargo del compositor Ramin Djawadi.​ No obstante, también ha recibido comentarios desfavorables por sus escenas de violencia, sexo y desnudez.​​​ Entre sus numerosos premios y reconocimientos sobresale la mayor cantidad de galardones Emmy obtenidos en toda la historia de la ceremonia.​ Su éxito ha dado lugar a la producción de una amplia variedad de productos entre los cuales se incluyen juguetes, videojuegos, libros y réplicas de armas y armaduras, lo cual la convierte en una de las marcas más populares del sector televisivo.​​​ A mediados de 2017 HBO anunció su interés en producir nuevas series inspiradas en Canción de hielo y fuego, cuya trama habría de servir de precuela a los acontecimientos de Game of Thrones.​​",
+      "url": "https://es.wikipedia.org/wiki/Game_of_Thrones"
+    },
+    "wikipedia:pt": {
+      "qid": "Q23572",
+      "lang": "pt",
+      "title": "Game of Thrones",
+      "extract": "Game of Thrones é uma série de televisão norte-americana criada por David Benioff e D. B. Weiss, baseada na série de livros A Song of Ice and Fire de George R. R. Martin. Eleita  como a melhor série de TV do século XXI em 2020, numa votação popular feita pela revista Digital Spy, Game of Thrones foi transmitida originalmente pelo canal HBO entre 17 de abril de 2011 a 19 de maio de 2019. No elenco principal estão Peter Dinklage, Nikolaj Coster-Waldau, Lena Headey, Emilia Clarke, Iain Glen, Michelle Fairley, Richard Madden, Kit Harington, Sophie Turner, Maisie Williams, Isaac Hempstead Wright, entre outros.\nAo longo de oito temporadas e mais de sessenta episódios, Game of Thrones cobre o enredo dos primeiros cinco livros de Martin com certas modificações e a adição de material não publicado com base na descrição do autor de eventos futuros em seu universo literário. Situada nos continentes fictícios de Westeros e Essos, a série apresenta um enredo de alianças e conflitos entre famílias nobres dinásticas dos Sete Reinos, que competem para reivindicar o imperioso Trono de Ferro ou lutam para não serem governados por quem o possui. Para adaptar os cenários fictícios da saga A Song of Ice and Fire, a série foi filmada em nove países, sendo eles: Canadá, Croácia, Escócia, Espanha, Estados Unidos, Irlanda do Norte, Islândia, Malta, e Marrocos. Tornou-se, assim, uma das série mais caras já feitas na história da televisão, cujas filmagens envolveram até quatro unidades paralelas de filmagem e a produção de efeitos visuais exigiu a participação simultânea de até quatorze estúdios em diferentes países. \nMuito aguardada desde seus primeiros estágios de desenvolvimento, Game of Thrones foi muito bem recebida pela crítica especializada. Certos meios de comunicação, como The Washington Post, Time, The Hollywood Reporter e Rolling Stone classificaram-na como uma das melhores séries de televisão já feitas e os críticos elogiaram aspectos como suas atuações, roteiros, efeitos especiais, sequências de batalha e música. Sua primeira temporada foi indicada em vários prêmios, incluindo o Emmy do Primetime de melhor série de drama e o Globo de Ouro de melhor série dramática; Peter Dinklage, que interpreta Tyrion Lannister, venceu quatro Emmy do Primetime de melhor ator coadjuvante em série dramática e um Globo de Ouro de melhor ator coadjuvante em série de televisão. A série também conquistou o Emmy de melhor projeto de créditos principais, e possui uma das melhores notas entre os telespectadores para séries no site IMDb. Game of Thrones é recordista em ter ganhado 59 Emmys, mais do que qualquer outra série de televisão ha história. Em 2013, o Writers Guild of America listou Game of Thrones como a 40ª série de \"melhor escrita\" da história da televisão.  Em 2015, o The Hollywood Reporter colocou a série na quarta posição na lista de \"melhores programas de TV de todos os tempos\", enquanto em 2016 a série foi classificada em sétimo lugar na lista \"Os 50 melhores programas de TV de todos os tempos\" da Empire.  No mesmo ano, a Rolling Stone a nomeou como o décimo segundo \"maior programa de TV de todos os tempos\". A série entrou para o Livro de Recordes como a série dramática com a maior transmissão simultânea ao redor do mundo. O número foi alcançado graças ao segundo episódio da quinta temporada, intitulado \"The House of Black and White\". \nNa sexta temporada, a emissora HBO decidiu produzir um talk show para Game of Thrones, chamado After the Thrones, assim como a emissora AMC fez com a série Breaking Bad, produzindo um talk show chamado Talking Bad. Com o mesmo formato de Thronecast e Talking Dead, o programa After the Thrones apresentava recapitulações, comentários e teorias de Game of Thrones e foi exibido nas segundas-feiras pela HBO Now, HBO Go, HBO on Demand e pela própria emissora HBO.",
+      "url": "https://pt.wikipedia.org/wiki/Game_of_Thrones"
+    }
+  },
+  "tier": "top",
+  "type": "series"
+}

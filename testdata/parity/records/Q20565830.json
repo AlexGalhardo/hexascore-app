@@ -1,0 +1,60 @@
+{
+  "qid": "Q20565830",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q20565830",
+      "labels": {
+        "en": "Fatawa-e-Razvia"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Fatawa Razawiyyah"
+      },
+      "sitelinks_count": 8,
+      "claims": {
+        "P1104": [
+          {
+            "value": {
+              "amount": "+22000",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1617",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q129286",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q3629485",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q129286": "British Raj",
+        "Q1617": "Urdu",
+        "Q3629485": "Ahmed Raza Khan Barelvi"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q20565830",
+      "lang": "en",
+      "title": "Fatawa Razawiyyah",
+      "extract": "Fatawa-i Razawiyya (Urdu: فتاویِٰ رضویہ, romanized: Fatāwā-i Raẓāwiyya) is a Sunni Islamic compilation of fatawa (legal edicts) of the Hanafi madhhab (school of thought) authored by a renowned Islamic scholar Ahmad Raza Khan. An influential sharia manual spanning 400 treaties and nearly 7,000 fatawa, the work is distinguished in Sufism.\nThe Fatawa-i Razawiyya was discussed by Arun Shourie in his book, The World of Fatwas or the Sharia in Action \nIts 12 volumes were first published by Ahmed Raza Khan's brother at Hasani press, and only two volumes of various Fatawa's were published during the lifetime of the author. Later published by Raza Foundation Lahore in 30 Volumes. Raza Academy was first to publish its various volumes in 1985. The Beirut-based Dar al-Imam Yusuf al-Nabhani (DIYN) publishing house is currently undertaking a complete Arabic translation of all 30 volumes.",
+      "url": "https://en.wikipedia.org/wiki/Fatawa_Razawiyyah"
+    }
+  },
+  "tier": "isbn10-only",
+  "type": "book"
+}

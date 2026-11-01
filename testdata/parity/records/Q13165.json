@@ -1,0 +1,154 @@
+{
+  "qid": "Q13165",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q13165",
+      "labels": {
+        "en": "Death to Spies",
+        "es": "Death to Spies",
+        "mul": "Death to Spies"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Death to Spies"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q77202",
+            "rank": "normal"
+          },
+          {
+            "value": "Q207922",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q380266",
+            "rank": "normal"
+          },
+          {
+            "value": "Q858523",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4282636",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "9800",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q108371843",
+            "rank": "normal"
+          }
+        ],
+        "P2725": [
+          {
+            "value": "game/death_to_spies",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "2369",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7737",
+            "rank": "normal"
+          },
+          {
+            "value": "Q150",
+            "rank": "normal"
+          },
+          {
+            "value": "Q652",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q159",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2007-10-16T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "death-to-spies",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q108371843": "Death to Spies",
+        "Q1321": "Spanish",
+        "Q1406": "Microsoft Windows",
+        "Q150": "French",
+        "Q159": "Russia",
+        "Q1860": "English",
+        "Q188": "German",
+        "Q207922": "Atari",
+        "Q208850": "single-player video game",
+        "Q380266": "third-person shooter",
+        "Q4282636": "shooter game",
+        "Q652": "Italian",
+        "Q77202": "1C Company",
+        "Q7737": "Russian",
+        "Q858523": "stealth game"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q13165",
+      "lang": "en",
+      "title": "Death to Spies",
+      "extract": "Death to Spies (Russian: Смерть шпионам) is a stealth third-person shooter video game set in World War II. Produced by 1C Company and Russian studio Haggard Games, it was released in 2007 for Windows and later via Valve's digital distribution system Steam on 12 March 2008. The game received mixed to positive reviews. Two sequels, Death to Spies: Moment of Truth and Alekhine's Gun, were released in 2009 and 2016, respectively.",
+      "url": "https://en.wikipedia.org/wiki/Death_to_Spies"
+    }
+  },
+  "tier": "tail",
+  "type": "game"
+}

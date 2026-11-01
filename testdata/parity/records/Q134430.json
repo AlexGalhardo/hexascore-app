@@ -1,0 +1,300 @@
+{
+  "qid": "Q134430",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q134430",
+      "labels": {
+        "en": "Snow White and the Seven Dwarfs",
+        "es": "Snow White and the Seven Dwarfs",
+        "mul": "Snow White and the Seven Dwarfs",
+        "pt": "Branca de Neve e os Sete Anões",
+        "pt-br": "Branca de Neve e os Sete Anões"
+      },
+      "aliases": {
+        "en": [
+          "Snow White and the 7 Dwarfs",
+          "Snow White and the Seven Dwarves",
+          "Snow White and the 7 Dwarves"
+        ],
+        "es": [
+          "Blancanieves y los Siete Enanitos"
+        ],
+        "mul": [
+          "Snow White and the Seven Dwarfs"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Snow White and the Seven Dwarfs (film)",
+        "eswiki": "Snow White and the Seven Dwarfs",
+        "ptwiki": "Branca de Neve e os Sete Anões (filme)"
+      },
+      "sitelinks_count": 121,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/snow_white_and_the_seven_dwarfs",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q1054574",
+            "rank": "normal"
+          },
+          {
+            "value": "Q157394",
+            "rank": "normal"
+          },
+          {
+            "value": "Q842256",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1957385",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q11831",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Snow White and the Seven Dwarfs",
+            "rank": "normal"
+          }
+        ],
+        "P1651": [
+          {
+            "value": "-S4RGRWEiQU",
+            "rank": "normal"
+          },
+          {
+            "value": "xUzwb61RVYs",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/snow-white-and-the-seven-dwarfs",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q56070713",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Snow white 1937 trailer screenshot.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+83",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q7414",
+            "rank": "normal"
+          }
+        ],
+        "P3383": [
+          {
+            "value": "Snow White and the Seven Dwarfs (Style B) poster.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0029583",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "408",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q928976",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1758110",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1385379",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3218086",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3375098",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2549739",
+            "rank": "normal"
+          }
+        ],
+        "P571": [
+          {
+            "value": {
+              "precision": 8,
+              "time": "+1930-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1937-12-21T00:00:00Z"
+            },
+            "rank": "preferred"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1938-09-12T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1938-09-27T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1938-12-22T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1950-02-24T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q3306605",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3517047",
+            "rank": "normal"
+          },
+          {
+            "value": "Q20822236",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3357801",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3026620",
+            "rank": "normal"
+          },
+          {
+            "value": "Q28381428",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3566990",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3046385",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1054574": "romance film",
+        "Q11831": "Snow White",
+        "Q1385379": "Wilfred Jackson",
+        "Q157394": "fantasy film",
+        "Q1758110": "William Cottrell",
+        "Q1860": "English",
+        "Q1957385": "cinematic fairy tale",
+        "Q20822236": "Richard Creedon",
+        "Q2549739": "Ben Sharpsteen",
+        "Q28381428": "Dorothy Ann Blank",
+        "Q30": "United States",
+        "Q3026620": "Dick Rickard",
+        "Q3046385": "Earl Hurd",
+        "Q3218086": "Larry Morey",
+        "Q3306605": "Merrill De Maris",
+        "Q3357801": "Otto Englander",
+        "Q3375098": "Percival C. Pearce",
+        "Q3517047": "Ted Sears",
+        "Q3566990": "Webb Smith",
+        "Q56070713": "Walt Disney Animation Studios feature film",
+        "Q7414": "The Walt Disney Company",
+        "Q842256": "musical film",
+        "Q928976": "David Hand"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q134430",
+      "lang": "en",
+      "title": "Snow White and the Seven Dwarfs (film)",
+      "extract": "Snow White and the Seven Dwarfs is a 1937 American animated musical fantasy film produced by Walt Disney and released by RKO Radio Pictures, based on the 1812 German fairy tale \"Snow White\" by the Brothers Grimm. The film was supervised by David Hand and a team of five sequence directors: Perce Pearce, William Cottrell, Larry Morey, Wilfred Jackson, and Ben Sharpsteen. It is the first animated feature film produced in the United States and the first cel animated feature film.\nSnow White premiered at the Carthay Circle Theatre in Los Angeles, California, on December 21, 1937, and went into general release in the United States on February 4, 1938. Despite initial doubts from the film industry, it was a critical and commercial success, with international earnings of more than $8 million during its initial release against a $1.5 million production cost, becoming the highest-grossing film of 1938, and briefly holding the record of the highest-grossing sound film of all time. It was also the highest-grossing animated film for 55 years. The popularity of the film has led to its being re-released theatrically many times, until its home video release in the 1990s. Adjusted for inflation, it is one of the top-ten performers at the North American box office and is still the highest-grossing animated film with an adjusted gross of $2,297,000,000. Worldwide, its inflation-adjusted earnings top the animation list. Snow White was nominated for Best Musical Score at the Academy Awards in 1938, and the next year, producer Walt Disney was awarded an honorary Oscar for the film. This award was unique, consisting of one normal-sized, plus seven miniature Oscar statuettes. They were presented to Disney by Shirley Temple.\nSnow White was a landmark release in the early animation industry, and it is widely regarded as one of the greatest and most influential films ever made, credited with ushering in the golden age of animation. Disney's take on the fairy tale has had a significant cultural impact, resulting in popular theme park attractions, a video game, a Broadway musical, and a 2025 live-action film remake. In 1989, the United States Library of Congress deemed the film \"culturally, historically, or aesthetically significant\" and selected it as one of the inaugural 25 films for preservation in the National Film Registry. The American Film Institute ranked it among the 100 greatest American films, and also named the film as the greatest American animated film of all time in 2008.",
+      "url": "https://en.wikipedia.org/wiki/Snow_White_and_the_Seven_Dwarfs_(film)"
+    },
+    "wikipedia:es": {
+      "qid": "Q134430",
+      "lang": "es",
+      "title": "Snow White and the Seven Dwarfs",
+      "extract": "Snow White and the Seven Dwarfs (conocida como Blanca Nieves y los siete enanos en Hispanoamérica  y Blancanieves y los siete enanitos en España) es el primer largometraje de animación producido por Walt Disney y el primero incluido en el canon de Clásicos de Walt Disney.​ Se estrenó el 21 de diciembre de 1937 en el Carthay Circle Theatre de Hollywood. La película es una adaptación del cuento de hadas homónimo que publicaron los hermanos Grimm en 1812, una historia profundamente arraigada en las tradiciones europeas.\nSnow White and the Seven Dwarfs es considerada un hito en la historia de la animación por ser el primer largometraje animado dibujado en cel y a todo color, además de ser el primer largometraje animado que contribuyó a la era dorada de la animación estadounidense.​ En 1989, la película fue considerada «cultural, histórica y estéticamente significativa» por la Biblioteca del Congreso de Estados Unidos y seleccionada para su preservación en el National Film Registry.​ También forma parte de la lista AFI's 10 Top 10, liderando la categoría de animación.​",
+      "url": "https://es.wikipedia.org/wiki/Snow_White_and_the_Seven_Dwarfs"
+    },
+    "wikipedia:pt": {
+      "qid": "Q134430",
+      "lang": "pt",
+      "title": "Branca de Neve e os Sete Anões (filme)",
+      "extract": "Snow White and the Seven Dwarfs (bra/prt: Branca de Neve e os Sete Anões) é um filme estadunidense de animação, dos gêneros musical, romance e aventura lançado em 1937. É o primeiro longa-metragem de animação da Disney e é baseado no conto de fadas \"Branca de Neve\", dos Irmãos Grimm. A história foi adaptada por Dorothy Ann Blank, Richard Creedon, Merrill De Maris, Otto Englander, Earl Hurd, Dick Rickard, Ted Sears e Webb Smith. David Hand foi o diretor supervisor, enquanto William Cottrell, Wilfred Jackson, Larry Morey, Perce Pearce e Ben Sharpsteen dirigiram sequências individuais do filme. Branca de Neve e os Sete Anões foi o primeiro longa-metragem de animação produzido nos Estados Unidos, o primeiro totalmente a cores no mundo, o primeiro a ser produzido por Walt Disney e o primeiro filme dos considerados Clássicos Disney.\nBranca de Neve e os Sete Anões estreou no Carthay Circle Theatre em 21 de dezembro de 1937, seguido pelo seu lançamento nacional em 4 de fevereiro de 1938, e arrecadou 8 milhões de dólares em bilheterias ao redor do mundo. Na época, foi brevemente a maior bilheteria de um filme sonoro. A popularidade de Branca de Neve levou-o a ser relançado nos cinemas várias vezes nas décadas seguintes, até seu lançamento em home video nos anos 90.\nNo 11º Óscar, Walt Disney recebeu um Óscar honorário e a animação foi indicada ao Oscar de melhor banda sonora. Branca de Neve foi selecionado para preservação no National Film Registry pela Biblioteca do Congresso em 1989 por ser \"culturalmente, historicamente e esteticamente importante\". Foi classificado na lista dos melhores filmes estadunidenses segundo o American Film Institute, que também o nomeou como o maior filme de animação americana de todos os tempos em 2008. Branca de Neve e os sete anões teve um enorme impacto cultural, resultando em atrações nos parques temáticos da Disney, videogames, livros e marcando o início das animações nos cinemas.",
+      "url": "https://pt.wikipedia.org/wiki/Branca_de_Neve_e_os_Sete_An%C3%B5es_(filme)"
+    }
+  },
+  "tier": "top",
+  "type": "movie"
+}

@@ -1,0 +1,141 @@
+{
+  "qid": "Q139969024",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q139969024",
+      "labels": {
+        "mul": "Call of Duty: Modern Warfare 4"
+      },
+      "aliases": {
+        "mul": [
+          "Call of Duty: Modern Warfare 사",
+          "Call of Duty Modern Warfare 4"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Call of Duty: Modern Warfare 4",
+        "eswiki": "Call of Duty: Modern Warfare 4",
+        "ptwiki": "Call of Duty: Modern Warfare 4"
+      },
+      "sitelinks_count": 20,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q200491",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q185029",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Call of Duty: Modern Warfare 4",
+            "rank": "normal"
+          }
+        ],
+        "P1651": [
+          {
+            "value": "jLbst85USN8",
+            "rank": "normal"
+          },
+          {
+            "value": "ihbiHQ46Xto",
+            "rank": "normal"
+          },
+          {
+            "value": "7ld6xXlYFGs",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "4435490",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q731482",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q98973368",
+            "rank": "normal"
+          },
+          {
+            "value": "Q122761124",
+            "rank": "normal"
+          },
+          {
+            "value": "Q63184502",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2026-10-23T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q122761124": "Nintendo Switch 2",
+        "Q1406": "Microsoft Windows",
+        "Q185029": "first-person shooter",
+        "Q200491": "Activision",
+        "Q208850": "single-player video game",
+        "Q63184502": "PlayStation 5",
+        "Q6895044": "multiplayer video game",
+        "Q731482": "Infinity Ward",
+        "Q98973368": "Xbox Series X and Series S"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q139969024",
+      "lang": "en",
+      "title": "Call of Duty: Modern Warfare 4",
+      "extract": "Call of Duty: Modern Warfare 4 is a 2026 first-person shooter game developed by Infinity Ward and published by Activision. It is the twenty-third installment in the Call of Duty series and the fourth and final entry in the rebooted Modern Warfare sub-series, following Call of Duty: Modern Warfare III (2023). It was released on October 23, 2026, for Nintendo Switch 2, PlayStation 5, Windows, and Xbox Series X/S. Prior to release, Modern Warfare 4 received positive reviews from critics, with praise for its campaign mode.",
+      "url": "https://en.wikipedia.org/wiki/Call_of_Duty:_Modern_Warfare_4"
+    },
+    "wikipedia:es": {
+      "qid": "Q139969024",
+      "lang": "es",
+      "title": "Call of Duty: Modern Warfare 4",
+      "extract": "Call of Duty: Modern Warfare 4 es un juego de disparos en primera persona desarrollado por Infinity Ward y publicado por Activision. Es la vigésimo tercera entrega de la serie Call of Duty y la cuarta de la subsaga Modern Warfare, que ha sido reiniciada, después de Call of Duty: Modern Warfare III (2023). Fue lanzado el 23 de octubre de 2026 para Nintendo Switch 2, PlayStation 5, Windows y Xbox Series X/S.​",
+      "url": "https://es.wikipedia.org/wiki/Call_of_Duty:_Modern_Warfare_4"
+    },
+    "wikipedia:pt": {
+      "qid": "Q139969024",
+      "lang": "pt",
+      "title": "Call of Duty: Modern Warfare 4",
+      "extract": "Call of Duty: Modern Warfare 4 (estilizado como Call of Duty: Modern Warfare 사) é um jogo de tiro em primeira pessoa, foi desenvovido pela Infinity Ward e publicado pela Activision e distribuído pela Microsoft. Foi lançado em  23 de outubro de 2026 para Microsoft Windows, Xbox Series X/S, Nintendo Switch 2 e PlayStation 5.",
+      "url": "https://pt.wikipedia.org/wiki/Call_of_Duty:_Modern_Warfare_4"
+    }
+  },
+  "tier": "steam-only",
+  "type": "game"
+}

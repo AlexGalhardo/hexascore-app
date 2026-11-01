@@ -1,0 +1,355 @@
+{
+  "qid": "Q257469",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q257469",
+      "labels": {
+        "en": "Another World",
+        "es": "Another World",
+        "mul": "Another World",
+        "pt": "Another World"
+      },
+      "aliases": {
+        "en": [
+          "Out of This World",
+          "Out Of This World"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Another World (video game)",
+        "eswiki": "Another World",
+        "ptwiki": "Another World (jogo eletrônico)"
+      },
+      "sitelinks_count": 27,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q1930918",
+            "rank": "normal"
+          },
+          {
+            "value": "Q921944",
+            "rank": "normal"
+          },
+          {
+            "value": "Q628249",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q343568",
+            "rank": "normal"
+          },
+          {
+            "value": "Q96195505",
+            "rank": "normal"
+          },
+          {
+            "value": "Q27670585",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Another World",
+            "rank": "normal"
+          },
+          {
+            "value": "Outer World",
+            "rank": "normal"
+          },
+          {
+            "value": "Out of This World",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q719385",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q1184680",
+            "rank": "normal"
+          },
+          {
+            "value": "Q719385",
+            "rank": "normal"
+          }
+        ],
+        "P2725": [
+          {
+            "value": "game/another_world_20th_anniversary_edition",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "503",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0268516",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q229429",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q170434",
+            "rank": "normal"
+          },
+          {
+            "value": "Q100047",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1282269",
+            "rank": "normal"
+          },
+          {
+            "value": "Q627302",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10676",
+            "rank": "normal"
+          },
+          {
+            "value": "Q650601",
+            "rank": "normal"
+          },
+          {
+            "value": "Q14116",
+            "rank": "normal"
+          },
+          {
+            "value": "Q183259",
+            "rank": "normal"
+          },
+          {
+            "value": "Q483318",
+            "rank": "normal"
+          },
+          {
+            "value": "Q21207",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1047516",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13522376",
+            "rank": "normal"
+          },
+          {
+            "value": "Q94",
+            "rank": "normal"
+          },
+          {
+            "value": "Q48493",
+            "rank": "normal"
+          },
+          {
+            "value": "Q19610114",
+            "rank": "normal"
+          },
+          {
+            "value": "Q388",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188",
+            "rank": "normal"
+          },
+          {
+            "value": "Q150",
+            "rank": "normal"
+          },
+          {
+            "value": "Q652",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321",
+            "rank": "normal"
+          },
+          {
+            "value": "Q750553",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13414913",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9176",
+            "rank": "normal"
+          },
+          {
+            "value": "Q809",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5146",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7737",
+            "rank": "normal"
+          },
+          {
+            "value": "Q256",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q142",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1991-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1994-02-15T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1994-10-21T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1994-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 10,
+              "time": "+1992-11-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "out-of-this-world",
+            "rank": "normal"
+          }
+        ],
+        "P6278": [
+          {
+            "value": "another-world-20th-anniversary-edition-64660d",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q100047": "Commodore Amiga",
+        "Q1047516": "Sega CD/Mega CD",
+        "Q10676": "Sega Genesis/Mega Drive",
+        "Q1184680": "Delphine Software International",
+        "Q1282269": "Apple IIGS",
+        "Q1321": "Spanish",
+        "Q13414913": "Simplified Chinese",
+        "Q13522376": "Classic Mac OS",
+        "Q1406": "Microsoft Windows",
+        "Q14116": "macOS",
+        "Q142": "France",
+        "Q150": "French",
+        "Q170434": "DOS",
+        "Q183259": "Super Nintendo Entertainment System",
+        "Q1860": "English",
+        "Q188": "German",
+        "Q1930918": "U.S. Gold",
+        "Q19610114": "Nintendo Switch",
+        "Q208850": "single-player video game",
+        "Q21207": "Windows Mobile",
+        "Q229429": "3DO",
+        "Q256": "Turkish",
+        "Q27670585": "science fiction video game",
+        "Q343568": "action-adventure game",
+        "Q388": "Linux",
+        "Q483318": "Symbian",
+        "Q48493": "iOS",
+        "Q5146": "Portuguese",
+        "Q627302": "Atari ST",
+        "Q628249": "Interplay Entertainment",
+        "Q650601": "Atari Jaguar",
+        "Q652": "Italian",
+        "Q719385": "Éric Chahi",
+        "Q750553": "Brazilian Portuguese",
+        "Q7737": "Russian",
+        "Q809": "Polish",
+        "Q9176": "Korean",
+        "Q921944": "Focus Entertainment",
+        "Q94": "Android",
+        "Q96195505": "cinematic platformer"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q257469",
+      "lang": "en",
+      "title": "Another World (video game)",
+      "extract": "Another World is a cinematic platform action-adventure game designed by Éric Chahi and published by Delphine Software in November 1991. In North America it was published as Out of This World. The game tells the story of Lester, a young scientist who, as a result of an experiment gone wrong, finds himself on a dangerous alien world where he is forced to fight for his survival.\nAnother World was developed by Chahi alone over a period of about two years, with help with the soundtrack from Jean-François Freitas. Chahi developed his own game engine, creating all the game's art and animations in vector form to reduce memory use, with some use of rotoscoping to help plan out character movements. Both narratively and gameplay-wise, he wanted the game to be told with little to no language or user-interface elements. The game was originally developed for the Amiga and Atari ST but has since been widely ported to other contemporary systems, including home and portable consoles and mobile devices. Chahi has since overseen release of various anniversary releases of the game.\nAnother World was innovative in its use of cinematic effects in both real-time and cutscenes, which earned the game praise among critics and commercial success. It also influenced a number of other video games and designers, inspiring such titles as Ico, Metal Gear Solid, Silent Hill, and Delphine's later Flashback. It is now considered among the best video games ever made.",
+      "url": "https://en.wikipedia.org/wiki/Another_World_(video_game)"
+    },
+    "wikipedia:es": {
+      "qid": "Q257469",
+      "lang": "es",
+      "title": "Another World",
+      "extract": "Another World, también conocido como Out of this World en Norteamérica y como Outer World (アウターワールド, Autā Wārudo?) en Japón, es un videojuego de acción-aventura y plataforma cinemática de 1991 diseñado por Éric Chahi para Delphine Software.\nOriginalmente desarrollado para Amiga y posteriormente lanzado para Atari ST, Apple IIGS y DOS, el juego fue ampliamente portado a otros sistemas contemporáneos. Esfuerzos posteriores dieron lugar a diversas recreaciones del motor de juego para permitir su ejecución en ordenadores modernos, consolas y teléfonos móviles.\nAnother World fue muy innovador en el uso de efectos cinematográficos, tanto en tiempo real y en las escenas cortas, que le valió elogios al juego entre los críticos y el éxito comercial.",
+      "url": "https://es.wikipedia.org/wiki/Another_World"
+    },
+    "wikipedia:pt": {
+      "qid": "Q257469",
+      "lang": "pt",
+      "title": "Another World (jogo eletrônico)",
+      "extract": "Another World, também conhecido como Out of This World na América do Norte e Outer World no Japão, é um jogo eletrônico de ação e aventura cinematográfica de 1991 projetado por Éric Chahi para a Delphine Software e Interplay. O jogo conta a história de Lester, um jovem cientista que, como resultado de um experimento seu que deu errado, se encontra em um perigoso mundo alienígena, onde é forçado a lutar por sua sobrevivência.\nOriginalmente desenvolvido para o Amiga e o Atari ST, Another World foi amplamente utilizado em outros sistemas contemporâneos. Em 2006, a Chahi lançou de forma independente uma edição de 15º aniversário para computadores modernos, e uma edição subsequente do 20º aniversário, cinco anos depois, que adaptou o jogo para vários consoles e plataformas de computação móvel, como iOS, Android, Windows Mobile, Nintendo 3DS, etc.\nAnother World foi inovador no uso de efeitos cinematográficos tanto em tempo real como em cutscenes, o que rendeu elogios ao jogo entre os críticos e o sucesso comercial. Também influenciou vários outros videogames e designers, inspirando títulos como Ico, Metal Gear Solid, Silent Hill e até mesmo o Flashback, futuro jogo da Delphine.",
+      "url": "https://pt.wikipedia.org/wiki/Another_World_(jogo_eletr%C3%B4nico)"
+    }
+  },
+  "tier": "mid",
+  "type": "game"
+}

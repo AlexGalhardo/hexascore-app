@@ -1,0 +1,123 @@
+{
+  "qid": "Q80771",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q80771",
+      "labels": {
+        "en": "Sons and Lovers",
+        "es": "Hijos y amantes",
+        "pt": "Filhos e Amantes (livro)"
+      },
+      "aliases": {
+        "es": [
+          "Son and lovers"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Sons and Lovers",
+        "eswiki": "Hijos y amantes",
+        "ptwiki": "Filhos e Amantes (livro)"
+      },
+      "sitelinks_count": 29,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q15839178",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q3056541",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Sons and Lovers",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q34970",
+            "rank": "normal"
+          }
+        ],
+        "P571": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1913-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1913-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL81295W",
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "3173046",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q145": "United Kingdom",
+        "Q15839178": "Duckworth Books",
+        "Q1860": "English",
+        "Q3056541": "autobiographical novel",
+        "Q34970": "D. H. Lawrence"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q80771",
+      "lang": "en",
+      "title": "Sons and Lovers",
+      "extract": "Sons and Lovers is a 1913 novel by the English writer D. H. Lawrence. It traces emotional conflicts through the protagonist, Paul Morel, and his suffocating relationships with a demanding mother and two very different lovers, which exert complex influences on the development of his manhood. The novel was originally published by Gerald Duckworth and Company Ltd., London, and Mitchell Kennerley Publishers, New York. While the novel initially received a mediocre reception, along with allegations of obscenity, it is today considered a masterpiece by many critics and is often regarded as Lawrence's finest achievement. It goes into detail about Lawrence's life and his phases. His first phase was in 1910 when he lost his mother, to whom he was particularly attached. He met Frieda Richthofen during that time. Also, he began conceiving his other two novels, The Rainbow and Women in Love, which had more sexual emphasis and maturity.",
+      "url": "https://en.wikipedia.org/wiki/Sons_and_Lovers"
+    },
+    "wikipedia:es": {
+      "qid": "Q80771",
+      "lang": "es",
+      "title": "Hijos y amantes",
+      "extract": "Hijos y amantes (título original en inglés, Sons and Lovers) es una novela del autor inglés D. H. Lawrence, publicada en 1913. La Modern Library la situó 9.ª en su lista de 100 mejores novelas del siglo XX. Mientras que la novela inicialmente tuvo una tibia recepción crítica, junto con alegaciones de obscenidad, actualmente está considerada como una obra maestra por muchos críticos y a menudo se considera el mejor logro de Lawrence.",
+      "url": "https://es.wikipedia.org/wiki/Hijos_y_amantes"
+    },
+    "wikipedia:pt": {
+      "qid": "Q80771",
+      "lang": "pt",
+      "title": "Filhos e Amantes (livro)",
+      "extract": "Filhos e Amantes é um romance de D. H. Lawrence publicado em 1912. Narra a história da família rural Morel, formada pelo típico camponês Walter e sua esposa Gertrude, uma burguesa cujas decepções são aliviadas no amor e nas expectativas que deposita nos filhos, que crescem marcados pelo ambiente familiar.\nÉ o terceiro romance de Lawrence, considerado sua primeira grande obra, reunindo parte de suas características literárias, como uma abordagem profunda dos sentimentos sexuais e de uma sociedade rural, bem como suas expressões idiomáticas.\nFoi o único romance de Lawrence a ser incluído na lista dos 100 melhores livros de todos os tempos do The Guardian.",
+      "url": "https://pt.wikipedia.org/wiki/Filhos_e_Amantes_(livro)"
+    }
+  },
+  "tier": "mid",
+  "type": "book"
+}

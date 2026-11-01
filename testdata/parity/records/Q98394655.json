@@ -1,0 +1,65 @@
+{
+  "qid": "Q98394655",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q98394655",
+      "labels": {
+        "en": "Three Essays on Religion",
+        "es": "Tres ensayos sobre la religión"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Three Essays on Religion",
+        "eswiki": "Tres ensayos sobre la religión"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P1476": [
+          {
+            "value": "Three Essays on Religion",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Three Essays on Religion title page.png",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q50020",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1860": "English",
+        "Q50020": "John Stuart Mill"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q98394655",
+      "lang": "en",
+      "title": "Three Essays on Religion",
+      "extract": "Three Essays on Religion: Nature, the Utility of Religion, and Theism is an 1874 book by the English philosopher John Stuart Mill, published posthumously with an introductory notice by his stepdaughter Helen Taylor. It contains three essays written at different periods of his life: \"Nature\" and \"Utility of Religion\", composed between 1850 and 1858, and \"Theism\", written between 1868 and 1870. The essays examine the relationship between nature, morality, and religious belief. Mill criticises traditional religious doctrines, questions the existence of an omnipotent and benevolent God, and considers a secular \"religion of humanity\" as an alternative to supernatural religion.",
+      "url": "https://en.wikipedia.org/wiki/Three_Essays_on_Religion"
+    },
+    "wikipedia:es": {
+      "qid": "Q98394655",
+      "lang": "es",
+      "title": "Tres ensayos sobre la religión",
+      "extract": "Tres ensayos sobre la religión: la naturaleza, la utilidad de la religión y el teísmo (en inglés: Three Essays on Religion: Nature, the Utility of religion, and Theism) es un libro de 1874 del filósofo inglés John Stuart Mill, publicado póstumamente por su hijastra Helen Taylor, quien también escribió la introducción.Se compone de tres ensayos: \"La naturaleza\" y \"La utilidad de la religión\", ambos escritos entre 1850 y 1858, mientras que \"El teísmo\" se compuso entre 1868 y 1870.​ El libro es crítico con los puntos de vista religiosos tradicionales y, en cambio, aboga por una \"religión de la humanidad\".​",
+      "url": "https://es.wikipedia.org/wiki/Tres_ensayos_sobre_la_religi%C3%B3n"
+    }
+  },
+  "tier": "tail",
+  "type": "book"
+}

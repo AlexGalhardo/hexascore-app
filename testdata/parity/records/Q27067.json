@@ -1,0 +1,200 @@
+{
+  "qid": "Q27067",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q27067",
+      "labels": {
+        "en": "Daredevil Jack",
+        "es": "Daredevil Jack",
+        "pt": "Daredevil Jack"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Daredevil Jack",
+        "ptwiki": "Daredevil Jack"
+      },
+      "sitelinks_count": 8,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q226730",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7751682",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1200678",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188473",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Daredevil Jack",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q313686",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10308638",
+            "rank": "normal"
+          },
+          {
+            "value": "Q312656",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5744332",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5343388",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5487854",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2826799",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15454643",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5485887",
+            "rank": "normal"
+          },
+          {
+            "value": "Q714724",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3839914",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6235082",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5040845",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Daredevil Jack (1920) - 2.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0011093",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "358246",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q547078",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1920-02-02T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q3157157",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5496997",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1421677",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q10308638": "Josie Sedgwick",
+        "Q1200678": "mystery film",
+        "Q1421677": "Harry O. Hoyt",
+        "Q15454643": "Walter Charles Robinson",
+        "Q1860": "English",
+        "Q188473": "action film",
+        "Q226730": "silent film",
+        "Q2826799": "Aggie Herring",
+        "Q30": "United States",
+        "Q312656": "Lon Chaney",
+        "Q313686": "Jack Dempsey",
+        "Q3157157": "Jack Cunningham",
+        "Q3839914": "Bull Montana",
+        "Q5040845": "Carl Stockdale",
+        "Q5343388": "Edward Hearn",
+        "Q547078": "W. S. Van Dyke",
+        "Q5485887": "Frank Coghlan, Jr.",
+        "Q5487854": "Frank Lanning",
+        "Q5496997": "Frederic Chapin",
+        "Q5744332": "Herschel Mayall",
+        "Q6235082": "John George",
+        "Q714724": "Edgar Kennedy",
+        "Q7751682": "serial film"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q27067",
+      "lang": "en",
+      "title": "Daredevil Jack",
+      "extract": "Daredevil Jack is a 1920 American silent 15-chapter action film serial directed by W. S. Van Dyke and starring heavyweight champion Jack Dempsey and featuring Lon Chaney as a villain. The chapters were shown weekly between February and May 1920. The serial's working titles were Daredevil Durant or Dead or Alive. An incomplete copy of the film is housed in the UCLA Film \u0026 Television Archive.\nThe supporting cast features Lon Chaney, Edgar Kennedy, John George and Bull Montana. This was the first of 23 films, many of them short subjects, in which the iconic boxer Dempsey appeared, usually as the top-billed leading man. Dempsey claimed Lon Chaney applied his makeup in the film, and said he had \"a feather-like touch\" compared to the other makeup men he worked with.\nThe serial is today mostly lost, with some incomplete segments (mainly chapters 1, 2 and 4) stored at University of California, Los Angeles. Lon Chaney does not appear in the existing footage, which is unfortunate as this was Lon Chaney's only appearance in a serial.",
+      "url": "https://en.wikipedia.org/wiki/Daredevil_Jack"
+    },
+    "wikipedia:pt": {
+      "qid": "Q27067",
+      "lang": "pt",
+      "title": "Daredevil Jack",
+      "extract": "Daredevil Jack, também conhecido como Daredevil Durrant, Dead or Alive ou The Adventures of Daredevil Jack, é um seriado estadunidense de 1920, no gênero ação, dirigido por W. S. Van Dyke, em 15 capítulos, estrelado por Jack Dempsey e Josie Sedgwick. Foi produzido pela Astra Film Corporation, distribuído pela Pathé Exchange, e veiculou nos cinemas estadunidenses de 15 de fevereiro a 23 de maio de 1920.\nUma cópia incompleta está guardada na UCLA Film \u0026 Television Archive.",
+      "url": "https://pt.wikipedia.org/wiki/Daredevil_Jack"
+    }
+  },
+  "tier": "tail",
+  "type": "movie"
+}

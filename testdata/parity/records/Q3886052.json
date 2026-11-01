@@ -1,0 +1,112 @@
+{
+  "qid": "Q3886052",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q3886052",
+      "labels": {
+        "en": "No Longer at Ease",
+        "es": "Me alegraría de otra muerte"
+      },
+      "aliases": {
+        "es": [
+          "Me alegraria de otra muerte"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "No Longer at Ease",
+        "eswiki": "Me alegraría de otra muerte"
+      },
+      "sitelinks_count": 10,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q6273015",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q38072107",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "No Longer at Ease",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q1033",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q155845",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1969-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1960-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL891817W",
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "2568065",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1033": "Nigeria",
+        "Q155845": "Chinua Achebe",
+        "Q1860": "English",
+        "Q38072107": "fiction literature",
+        "Q6273015": "Heinemann"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q3886052",
+      "lang": "en",
+      "title": "No Longer at Ease",
+      "extract": "No Longer at Ease is a 1960 novel by Chinua Achebe. It is the story of an Igbo man, Obi Okonkwo, who leaves his village for an education in Britain and then a job in the Colonial Nigeria civil service, but is conflicted between his African culture and Western lifestyle and ends up taking a bribe. The novel is the second novel by Achebe, and the second work in his \"African trilogy\", following Things Fall Apart and preceding Arrow of God.",
+      "url": "https://en.wikipedia.org/wiki/No_Longer_at_Ease"
+    },
+    "wikipedia:es": {
+      "qid": "Q3886052",
+      "lang": "es",
+      "title": "Me alegraría de otra muerte",
+      "extract": "Me alegraría de otra muerte (en inglés: No Longer at Ease, literalmente: Ya no estoy a gusto) es una novela escrita en 1960 por el nigeriano Chinua Achebe. Narra la historia de un poblador igbo llamado Obi Okonkwo, quién abandona su aldea para recibir una educación británica y trabajar como funcionario civil colonial nigeriano, pero lucha para adaptarse al estilo de vida occidental, y termina recibiendo un soborno. Es su segunda novela en ser publicada, la cual es considerada como parte de la apodada \"trilogía africana\", junto con su predecesora Todo se desmorona y su sucesora llamada Flecha de Dios. La primera obra cuenta la historia del abuelo de Obi Okonkwo, quien se resiste contra los cambios traídos por los británicos.",
+      "url": "https://es.wikipedia.org/wiki/Me_alegrar%C3%ADa_de_otra_muerte"
+    }
+  },
+  "tier": "isbn10-only",
+  "type": "book"
+}

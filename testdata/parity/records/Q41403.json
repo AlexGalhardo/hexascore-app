@@ -1,0 +1,202 @@
+{
+  "qid": "Q41403",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q41403",
+      "labels": {
+        "en": "Teletubbies",
+        "es": "Teletubbies",
+        "mul": "Teletubbies",
+        "pt": "Teletubbies",
+        "pt-br": "Teletubbies"
+      },
+      "aliases": {
+        "en": [
+          "The Teletubbies"
+        ],
+        "es": [
+          "Los Teletubbies"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Teletubbies",
+        "eswiki": "Teletubbies",
+        "ptwiki": "Teletubbies"
+      },
+      "sitelinks_count": 107,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+425",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q1273568",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Teletubbies",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q3703057",
+            "rank": "normal"
+          },
+          {
+            "value": "Q18378434",
+            "rank": "normal"
+          },
+          {
+            "value": "Q20684252",
+            "rank": "normal"
+          },
+          {
+            "value": "Q20974104",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7258999",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q3305473",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4756763",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "tv/teletubbies",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "C Jill Reed - 2197077905.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+25",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+7",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q2449543",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3700394",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0142055",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q216108",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "1682",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1997-03-31T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1273568": "children's television series",
+        "Q145": "United Kingdom",
+        "Q18378434": "Simon Shelton",
+        "Q1860": "English",
+        "Q20684252": "John Simmit",
+        "Q20974104": "Nikky Smedley",
+        "Q216108": "BBC Two",
+        "Q2449543": "Ragdoll Productions",
+        "Q3305473": "Anne Wood",
+        "Q3700394": "WildBrain",
+        "Q3703057": "Dave Thompson",
+        "Q4756763": "Andrew Davenport",
+        "Q7258999": "Pui Fan Lee"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q41403",
+      "lang": "en",
+      "title": "Teletubbies",
+      "extract": "Teletubbies is a British children's television series created by Anne Wood and Andrew Davenport for the BBC. The programme focuses on four differently coloured characters known as the Teletubbies, named after the television screens on their bellies. Recognised throughout popular culture for the uniquely shaped antenna protruding from the head of each character, the Teletubbies communicate mostly through gibberish and were designed to bear resemblance to toddlers.\nThe series rapidly became a commercial success in Britain and abroad. It won multiple BAFTA awards and was nominated for two Daytime Emmys throughout its run. A single based on the show's theme song reached number 1 in the UK Singles Chart in December 1997 and remained in the Top 75 for 32 weeks, selling over a million copies. By October 2000, the franchise generated over £1 billion ($1.6 billion) in merchandise sales.\nThough the original run ended in 2001, a rebooted series was green-lit in 2014. The reboot premiered on CBeebies in the United Kingdom and on the Nick Jr. Channel in the United States. The reboot ran for 120 episodes, with the last episode airing on the Nick Jr. Channel on 17 August 2018. In 2022, a new version of the show premiered on Netflix for American audiences.",
+      "url": "https://en.wikipedia.org/wiki/Teletubbies"
+    },
+    "wikipedia:es": {
+      "qid": "Q41403",
+      "lang": "es",
+      "title": "Teletubbies",
+      "extract": "Teletubbies (Los Teletubbies en España) es un programa de televisión en acción real de la cadena británica BBC con contenidos orientados a los bebés y niños de edad preescolar, producido por Ragdoll Productions. Fue creado por Anne Wood, la directora creativa de Ragdoll y Andrew Davenport, quien escribió cada uno de los 365 episodios que componen la serie original. El programa se enfoca en cuatro personajes con aspecto de primates hominidos de diferentes colores conocidos como los teletubbies por sus vientres. Reconocidos en la cultura popular por la antena de forma única que sobresale de la cabeza de cada personaje, los teletubbies se comunican a través de galimatías y fueron diseñados para parecerse a los niños pequeños.​\nLa serie se convirtió rápidamente en un éxito comercial en el Reino Unido y en el extranjero. Ganó varios premios BAFTA y fue nominado a dos Daytime Emmy a lo largo de su carrera.​​ Un sencillo basado en el tema principal del programa alcanzó el número 1 en la lista de sencillos del Reino Unido en diciembre de 1997 y permaneció en el top 75 durante 32 semanas, vendiendo más de un millón de copias.​ En octubre de 2000, la franquicia generó más de 1 000 000 000 de libras esterlinas (1 600 000 000 de dólares estadounidenses) en ventas de mercancías.​\nAunque la serie original terminó en 2001,​ su relanzamiento se estrenó en 2015​ en el canal CBeebies en el Reino Unido y en Nick Jr. en los Estados Unidos.​\nEn 2022 Netflix ha lanzado un nuevo relanzamiento.​",
+      "url": "https://es.wikipedia.org/wiki/Teletubbies"
+    },
+    "wikipedia:pt": {
+      "qid": "Q41403",
+      "lang": "pt",
+      "title": "Teletubbies",
+      "extract": "Teletubbies é um programa televisivo britânico produzido pela BBC e Ragdoll Productions. Foi criado por Anne Wood CBE, o diretor criativo da Ragdoll, e Andrew Davenport, que escreveu cada um dos 365 episódios que compõem a série original. Narrado por Tim Whitnall (e Guilherme Briggs no Brasil), o programa rapidamente se tornou um sucesso comercial e de crítica na Grã-Bretanha e no exterior (particularmente notável para a sua produção de elevado valor), e conquistou dois BAFTAs em 2005 e 2009.\nNo Brasil, a série estreou pela Rede Globo no dia 11 de janeiro de 1999, dentro do programa Angel Mix, que era exibido às 8h30 com Angélica. Depois de ter a exibição concluída, foi exibida pela TV Cultura em São Paulo e pelo canal por assinatura Discovery Kids.\nEm 1 de julho de 2002 foi lançado Teletubbies: a Toda a Hora (Everywhere no original), são episódios de 10 minutos que ensinam sobre cores, formas, números e cultura. Uma série animada com os personagens de Tiddlytubbies estreou em 2018 no canal oficial dos Teletubbies no YouTube. Outro spin-off com animação CGI e foco na música intitulado Teletubbies: Ready, Steady, Go! foi lançado em setembro de 2021. Um spin-off animado com CGI chamado Teletubbies: Let's Go! foi anunciado em 15 de setembro de 2022 e estreou em outubro do mesmo ano no canal do YouTube. Tal qual acontece com os outros spin-offs online, foi produzido pela WildBrain Spark Studio e consistente em 52 curtas de cinco minutos. \nEm 1999, a Som Livre lançou o Teletubbies em VHS. A versão original contém 6 volumes. A PlayArte lançou outra versão em 2003.\nTeletubbies say \"Eh-oh!\", é um single que foi número um no UK singles chart em 1997, se manteve no top 75 por 29 semanas.\nA versão exibida pela Rede Globo exibia quadros e crianças brasileiras (em um vídeo do Youtube, é visto um caminhão dos bombeiros de São Paulo, mais precisamente do Jaguaré), apesar da série ser britânica. Na versão da TV Cultura, exibia quadros e crianças britânicas.",
+      "url": "https://pt.wikipedia.org/wiki/Teletubbies"
+    }
+  },
+  "tier": "top",
+  "type": "series"
+}

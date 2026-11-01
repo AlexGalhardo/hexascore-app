@@ -1,0 +1,87 @@
+{
+  "qid": "Q112577",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q112577",
+      "labels": {
+        "en": "The Twelve Days of Christmas",
+        "es": "The Twelve Days of Christmas",
+        "pt": "The Twelve Days of Christmas"
+      },
+      "aliases": {
+        "en": [
+          "The Twelve Days of Chriſtmas"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "The Twelve Days of Christmas (song)",
+        "eswiki": "The Twelve Days of Christmas",
+        "ptwiki": "The Twelve Days of Christmas"
+      },
+      "sitelinks_count": 30,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q503354",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "The Twelve Days of Christmas",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "12-days-title.png",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1780-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1860": "English",
+        "Q503354": "Christmas carol"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q112577",
+      "lang": "en",
+      "title": "The Twelve Days of Christmas (song)",
+      "extract": "\"The Twelve Days of Christmas\" is an English Christmas carol and nursery rhyme. A classic example of a cumulative song, the lyrics detail a series of increasingly numerous gifts given to the speaker by their \"true love\" on each of the twelve days of Christmas (the twelve days that make up the Christmas season, starting with Christmas Day). The carol, whose words were first published in England in the late eighteenth century, has a Roud Folk Song Index number of 68. A large number of different melodies have been associated with the song, of which the best known is derived from a 1909 arrangement of a traditional folk melody by English composer Frederic Austin.",
+      "url": "https://en.wikipedia.org/wiki/The_Twelve_Days_of_Christmas_(song)"
+    },
+    "wikipedia:es": {
+      "qid": "Q112577",
+      "lang": "es",
+      "title": "The Twelve Days of Christmas",
+      "extract": "«The Twelve Days of Christmas» («Los doce días de Navidad») es un carol o canción de Navidad en inglés antiguo y muy popular en los países anglófonos. Es una canción acumulativa en la que se enumeran doce regalos que una persona dice haber recibido de su enamorado/a durante los doce días consecutivos de Navidad (entre las festividades de Navidad y la epifanía).",
+      "url": "https://es.wikipedia.org/wiki/The_Twelve_Days_of_Christmas"
+    },
+    "wikipedia:pt": {
+      "qid": "Q112577",
+      "lang": "pt",
+      "title": "The Twelve Days of Christmas",
+      "extract": "\"The Twelve Days of Christmas\" (em português: \"Os Doze Dias do Natal\") é uma cantiga de Natal inglesa que enumera na forma de uma canção acumulativa uma série de presentes cada vez maior dados em cada um dos doze dias de Natal (correspondidos entre o dia de Natal e a Epifania do Senhor). A canção, publicada na Inglaterra em 1780 sem a música, como um canto ou rima, desconfia-se ser de origem francesa. \"The Twelve Days of Christmas\" está no número 68 do Índice Roud Folk Song. A música pode variar, mas a melodia padrão é derivada de um arranjo de 1909 de uma melodia popular tradicional feita pelo compositor inglês Frederic Austin, que primeiro introduziu o prolongamento do verso \"cinco anéis dourados\".",
+      "url": "https://pt.wikipedia.org/wiki/The_Twelve_Days_of_Christmas"
+    }
+  },
+  "tier": "mid",
+  "type": "book"
+}

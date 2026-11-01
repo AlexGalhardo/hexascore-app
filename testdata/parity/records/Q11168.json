@@ -1,0 +1,418 @@
+{
+  "qid": "Q11168",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q11168",
+      "labels": {
+        "en": "Super Mario Bros.",
+        "es": "Super Mario Bros.",
+        "mul": "Super Mario Bros.",
+        "pt": "Super Mario Bros.",
+        "pt-br": "Super Mario Bros."
+      },
+      "aliases": {
+        "en": [
+          "Super Mario Brothers",
+          "Super Mario Bros. 1",
+          "SMB",
+          "SMB1",
+          "SMB 1",
+          "SMB.",
+          "SMB. 1"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Super Mario Bros.",
+        "eswiki": "Super Mario Bros.",
+        "ptwiki": "Super Mario Bros."
+      },
+      "sitelinks_count": 77,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q8093",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q116790414",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "スーパーマリオブラザーズ",
+            "rank": "preferred"
+          },
+          {
+            "value": "Super Mario Bros.",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q170420",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q4802838",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Vs. Super Mario Bros.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "9371",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0177266",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q172742",
+            "rank": "preferred"
+          },
+          {
+            "value": "Q188642",
+            "rank": "normal"
+          },
+          {
+            "value": "Q192851",
+            "rank": "normal"
+          },
+          {
+            "value": "Q135321",
+            "rank": "normal"
+          },
+          {
+            "value": "Q203992",
+            "rank": "normal"
+          },
+          {
+            "value": "Q182172",
+            "rank": "normal"
+          },
+          {
+            "value": "Q215034",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1338888",
+            "rank": "normal"
+          },
+          {
+            "value": "Q370601",
+            "rank": "normal"
+          },
+          {
+            "value": "Q183259",
+            "rank": "normal"
+          },
+          {
+            "value": "Q8079",
+            "rank": "normal"
+          },
+          {
+            "value": "Q203597",
+            "rank": "normal"
+          },
+          {
+            "value": "Q56942",
+            "rank": "normal"
+          },
+          {
+            "value": "Q19610114",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          },
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q17",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q12382",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1985-09-13T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1985-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1986-02-21T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1986-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1987-05-15T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1987-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1999-05-10T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 10,
+              "time": "+1999-07-00T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2000-03-01T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2004-02-14T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2004-06-02T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2004-07-09T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2006-12-02T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2006-12-25T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2007-01-05T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2011-08-31T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2011-09-01T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2014-01-27T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2014-02-13T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2014-02-27T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2014-12-25T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2013-07-15T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2013-09-12T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2013-09-19T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2018-09-19T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 10,
+              "time": "+1985-10-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "super-mario-bros",
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q4803535",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q116790414": "2D platform game",
+        "Q12382": "Shigeru Miyamoto",
+        "Q1338888": "NEC PC-8800 series",
+        "Q135321": "Famicom Disk System",
+        "Q17": "Japan",
+        "Q170420": "Nintendo Entertainment Analysis \u0026 Development",
+        "Q172742": "Nintendo Entertainment System",
+        "Q182172": "Nintendo GameCube",
+        "Q183259": "Super Nintendo Entertainment System",
+        "Q1860": "English",
+        "Q188642": "Game Boy Advance",
+        "Q192851": "arcade video game machine",
+        "Q19610114": "Nintendo Switch",
+        "Q203597": "Nintendo 3DS",
+        "Q203992": "Game Boy Color",
+        "Q208850": "single-player video game",
+        "Q215034": "Game \u0026 Watch series",
+        "Q370601": "PlayChoice-10",
+        "Q4802838": "Super Mario",
+        "Q4803535": "Mario",
+        "Q56942": "Wii U",
+        "Q6895044": "multiplayer video game",
+        "Q8079": "Wii",
+        "Q8093": "Nintendo"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q11168",
+      "lang": "en",
+      "title": "Super Mario Bros.",
+      "extract": "Super Mario Bros. is a 1985 platform game developed and published by Nintendo for the Nintendo Entertainment System (NES). Directed and produced by Shigeru Miyamoto, it is the successor to the 1983 arcade game Mario Bros. and the first game in the Super Mario series. Players control Mario, or his brother Luigi in the multiplayer mode, to traverse the Mushroom Kingdom to rescue Princess Toadstool from King Koopa (later named Bowser). They traverse side-scrolling stages while avoiding hazards such as enemies and pits and collecting power-ups such as the Super Mushroom, Fire Flower, and Starman.\nMiyamoto and Takashi Tezuka designed Super Mario Bros. as a culmination of the team's experience working on Devil World and the side-scrollers Excitebike and Kung Fu. Miyamoto wanted to create a more colorful platform game with a scrolling screen and larger characters. The team designed the first level, World 1-1, as a tutorial for platform gameplay. Koji Kondo's soundtrack is one of the earliest in video games, making music a centerpiece of the design.\nSuper Mario Bros. was released in September 1985 in Japan for the Famicom, the Japanese version of the NES. Following a US test market release for the NES, it was converted to international arcades on the Nintendo VS. System in early 1986. The NES version was released in North America that year and in PAL regions in 1987. It has been rereleased on most Nintendo systems.\nSuper Mario Bros. is frequently cited as one of the greatest and most influential video games of all time, and is particularly admired for its precise controls. It is one of the best-selling games, with more than 58 million copies sold worldwide. Alongside the NES, it is credited as a key factor in reviving the video game industry after the 1983 crash, and helped popularize the side-scrolling platform genre. The soundtrack is often named among the best video game soundtracks. Mario has become prominent in popular culture, and Super Mario Bros. began a multimedia franchise including a long-running game series, an animated television series, a Japanese anime feature film, a live-action feature film and two animated feature films: The Super Mario Bros. Movie and The Super Mario Galaxy Movie.",
+      "url": "https://en.wikipedia.org/wiki/Super_Mario_Bros."
+    },
+    "wikipedia:es": {
+      "qid": "Q11168",
+      "lang": "es",
+      "title": "Super Mario Bros.",
+      "extract": "Super Mario Bros.​ es un videojuego de plataformas desarrollado y publicado por Nintendo para la Nintendo Entertainment System (NES). Dirigido y producido por Shigeru Miyamoto, es la secuela del arcade Mario Bros. de 1983 y el primero de la serie Super Mario. Los jugadores controlan a Mario, o a su hermano Luigi en el modo multijugador, para atravesar el Reino Champiñón y rescatar a la princesa Toadstool del rey Koopa —más tarde llamado Bowser—. Atraviesan niveles de desplazamiento lateral mientras evitan peligros como enemigos y fosos y recogen potenciadores como el Super Champiñón, la Flor de Fuego y la estrella.\nMiyamoto y Takashi Tezuka lo diseñaron como culminación de la experiencia del equipo tras trabajar en Devil World y los títulos de desplazamiento lateral Excitebike y Kung Fu.  Miyamoto quería crear uno de plataformas más colorido, con una pantalla de desplazamiento y personajes más grandes. El personal modeló la primera fase, World 1-1, como un tutorial para el género. La banda sonora de Koji Kondo es una de las primeras en los videojuegos, lo que convierte a la música en una pieza central del diseño.\nSalió a la venta en septiembre de 1985 en Japón para la Famicom, la versión de ese país de la NES. Tras un lanzamiento de prueba en los Estados Unidos, lo adaptaron a las salas recreativas internacionales en la Nintendo VS. System a principios de 1986. La adaptación para NES se publicó en Norteamérica ese mismo año y en las regiones PAL en 1987. Se ha relanzado en la mayoría de las consolas de Nintendo.\nSuper Mario Bros. es citado con frecuencia como uno de los mejores videojuegos y es especialmente admirado por sus controles precisos. Es uno de los más vendidos, con más de 58 millones de copias adquiridas en todo el mundo. Junto con la NES, se le atribuye haber sido un factor clave en la reactivación de la industria tras la crisis de 1983 y contribuyó a popularizar el género de plataformas de desplazamiento lateral. La banda sonora suele figurar entre las mejores. Mario ha adquirido gran relevancia en la cultura popular, y Super Mario Bros. dio inicio a una franquicia multimedia que incluye una longeva serie de títulos, una serie de televisión animada, un largometraje de anime japonés, una cinta de acción real y otra de animación.",
+      "url": "https://es.wikipedia.org/wiki/Super_Mario_Bros."
+    },
+    "wikipedia:pt": {
+      "qid": "Q11168",
+      "lang": "pt",
+      "title": "Super Mario Bros.",
+      "extract": "Super Mario Bros. (スーパーマリオブラザーズ, Sūpā Mario Burazāzu) é um jogo eletrônico de plataforma desenvolvido pela Nintendo Research \u0026 Development 4 e publicado pela Nintendo para o Famicom em 1985 no Japão e para o Nintendo Entertainment System (NES) em 1985 e 1987 na América do Norte e Europa, respectivamente. É o sucessor do jogo de arcade Mario Bros., de 1983. Os jogadores controlam Mario, ou seu irmão Luigi no modo multijogador, enquanto viajam pelo Reino Cogumelo para resgatar a Princesa Peach de Bowser. Eles devem percorrer os mundos em uma visão em rolagem lateral, evitando perigos como inimigos e buracos com a ajuda de potencializadores como o Supercogumelo, Flor de Fogo e Superestrela.\nO jogo foi projetado por Shigeru Miyamoto e Takashi Tezuka, e foi descrito como \"um grande ponto culminante\" dos três anos de experiência em programação e mecânica de jogos realizada pela equipe principal de desenvolvimento. O design da primeira fase, World 1-1, serve como um tutorial para os jogadores sobre a mecânica básica de um jogo de plataforma. O corte agressivamente otimizado do tamanho do jogo foi um adeus à mídia de cartucho do Famicom em favor do Famicom Disk System, cujos disquetes se tornaram temporariamente o meio de distribuição dominante por alguns anos.\nSuper Mario Bros. é frequentemente citado como um dos melhores jogos já feitos, com elogios direcionados principalmente a seus controles precisos. É um dos jogos mais vendidos de todos os tempos, com mais de 48 milhões de unidades comercializadas. Ele e o NES são creditados como um dos principais fatores da revitalização da indústria de jogos eletrônicos após a crise de 1983 e ajudaram a popularizar o gênero de jogos de plataforma com rolagem lateral. A trilha sonora de Koji Kondo é uma das primeiras e mais populares nos jogos eletrônicos, tornando a música uma peça central no design dos jogos. O sucesso do jogo levou ao desenvolvimento de uma franquia expansiva que inclui uma série de jogos, uma série animada de televisão e um filme. Relançamentos e participações especiais do jogo são encontrados na maioria dos sistemas seguintes da Nintendo. Juntamente com o próprio Mario, Super Mario Bros. se tornou proeminente na cultura popular.",
+      "url": "https://pt.wikipedia.org/wiki/Super_Mario_Bros."
+    }
+  },
+  "tier": "top",
+  "type": "game"
+}

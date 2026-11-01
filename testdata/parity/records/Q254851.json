@@ -1,0 +1,228 @@
+{
+  "qid": "Q254851",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q254851",
+      "labels": {
+        "en": "Harry Potter and the Order of the Phoenix",
+        "es": "Harry Potter y la Orden del Fénix",
+        "mul": "Harry Potter and the Order of the Phoenix"
+      },
+      "aliases": {
+        "es": [
+          "Harry Potter y la Orden del Fenix"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Harry Potter and the Order of the Phoenix (video game)",
+        "eswiki": "Harry Potter y la Orden del Fénix (videojuego)",
+        "ptwiki": "Harry Potter and the Order of the Phoenix (jogo eletrônico)"
+      },
+      "sitelinks_count": 29,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q173941",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q343568",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q102235",
+            "rank": "normal"
+          },
+          {
+            "value": "Q80817",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q173941",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q4040432",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "4314",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0944836",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q8079",
+            "rank": "normal"
+          },
+          {
+            "value": "Q48263",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10680",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10683",
+            "rank": "normal"
+          },
+          {
+            "value": "Q170325",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q14116",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321",
+            "rank": "normal"
+          },
+          {
+            "value": "Q11051",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2007-06-25T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2008-05-25T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2007-07-13T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2007-08-02T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2007-06-28T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2007-06-29T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "harry-potter-and-the-order-of-the-phoenix",
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q30739117",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q102235": "Harry Potter and the Order of the Phoenix",
+        "Q10680": "PlayStation 2",
+        "Q10683": "PlayStation 3",
+        "Q11051": "Hindustani",
+        "Q1321": "Spanish",
+        "Q1406": "Microsoft Windows",
+        "Q14116": "macOS",
+        "Q145": "United Kingdom",
+        "Q170325": "PlayStation Portable",
+        "Q173941": "Electronic Arts",
+        "Q1860": "English",
+        "Q208850": "single-player video game",
+        "Q30739117": "Wizarding World",
+        "Q343568": "action-adventure game",
+        "Q4040432": "Harry Potter",
+        "Q48263": "Xbox 360",
+        "Q8079": "Wii",
+        "Q80817": "Harry Potter and the Order of the Phoenix"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q254851",
+      "lang": "en",
+      "title": "Harry Potter and the Order of the Phoenix (video game)",
+      "extract": "Harry Potter and the Order of the Phoenix is a 2007 action-adventure game. It is based on the 2007 film of the same name. The game was released for mobile devices, Nintendo DS, PlayStation Portable, Microsoft Windows, PlayStation 2, PlayStation 3, Wii, Xbox 360, Game Boy Advance, and Mac OS X.",
+      "url": "https://en.wikipedia.org/wiki/Harry_Potter_and_the_Order_of_the_Phoenix_(video_game)"
+    },
+    "wikipedia:es": {
+      "qid": "Q254851",
+      "lang": "es",
+      "title": "Harry Potter y la Orden del Fénix (videojuego)",
+      "extract": "Harry Potter y la Orden del Fénix (título original en inglés: Harry Potter and the Order of the Phoenix) es un videojuego basado en la quinta entrega de Harry Potter, la popular saga de libros y películas de J. K. Rowling, para Microsoft Windows, PlayStation 2, PlayStation 3, Xbox 360, PSP, Nintendo DS, Wii,​ Game Boy Advance y Mac OS X.​ Para PlayStation 3, PlayStation Portable, PlayStation 2 y Windows fue lanzado el 25 de junio en Estados Unidos, el 28 de junio en Australia y el 29 de junio en el Reino Unido y Europa; y el 3 de julio para la mayoría de las otras plataformas.​ \nEl objetivo del juego es explorar Hogwarts y seguir la historia del libro y la película. EA fomentó la participación de los seguidores en el desarrollo del juego y trabajó con un equipo de fans. No obstante, al contrario de los anteriores títulos como el Cáliz de Fuego que está más orientado a la acción, esta vez la aventura se asemeja al estilo \"sandbox\" (como Bully o GTA): Hogwarts es totalmente explorable la mayor parte del tiempo, y hay \"puntos de descubrimientos\" que proveen recompensas a los jugadores, que pueden ser activadas completando misiones. Además, hay batallas entre grupos de estudiantes.",
+      "url": "https://es.wikipedia.org/wiki/Harry_Potter_y_la_Orden_del_F%C3%A9nix_(videojuego)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q254851",
+      "lang": "pt",
+      "title": "Harry Potter and the Order of the Phoenix (jogo eletrônico)",
+      "extract": "Harry Potter e a Ordem da Fênix (Brasil) / Harry Potter e a Ordem da Fénix (Portugal) é um videojogo e computador baseado na adaptação cinematográfica do quinto livro da escritora J.K. Rowling, a ser lançado junto com o filme em Julho de 2007. As primeiras imagens do jogo foram mostradas numa conferência da Electronic Arts em 11\\2006, que declarou que o ponto marcante do jogo é explorar o castelo de Hogwarts como nunca antes, enfrentando missões baseadas no livro/filme com algumas adaptações para o jogo.Foi lançado para XBOX 360, PC, PS3, WII, DS, PS2, PSP, GameBoy Advanced e Mac.",
+      "url": "https://pt.wikipedia.org/wiki/Harry_Potter_and_the_Order_of_the_Phoenix_(jogo_eletr%C3%B4nico)"
+    }
+  },
+  "tier": "mid",
+  "type": "game"
+}

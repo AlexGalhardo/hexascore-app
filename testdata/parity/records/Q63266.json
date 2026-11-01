@@ -1,0 +1,108 @@
+{
+  "qid": "Q63266",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q63266",
+      "labels": {
+        "en": "SimIsle",
+        "mul": "SimIsle"
+      },
+      "aliases": {
+        "en": [
+          "SimIsle: Missions in the Rainforest"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "SimIsle: Missions in the Rainforest"
+      },
+      "sitelinks_count": 8,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q220317",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q1036289",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q6044011",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "20145",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q170434",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13522376",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1995-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "simisle-missions-in-the-rainforest",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1036289": "construction and management simulation",
+        "Q13522376": "Classic Mac OS",
+        "Q1406": "Microsoft Windows",
+        "Q145": "United Kingdom",
+        "Q170434": "DOS",
+        "Q208850": "single-player video game",
+        "Q220317": "Maxis",
+        "Q6044011": "Intelligent Games"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q63266",
+      "lang": "en",
+      "title": "SimIsle: Missions in the Rainforest",
+      "extract": "SimIsle: Missions in the Rainforest is a 1995 simulation video game developed by Intelligent Games and published by Maxis.",
+      "url": "https://en.wikipedia.org/wiki/SimIsle:_Missions_in_the_Rainforest"
+    }
+  },
+  "tier": "tail",
+  "type": "game"
+}

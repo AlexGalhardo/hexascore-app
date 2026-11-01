@@ -1,0 +1,410 @@
+{
+  "qid": "Q833578",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q833578",
+      "labels": {
+        "en": "North and South",
+        "es": "Norte y Sur",
+        "pt": "North and South"
+      },
+      "aliases": {
+        "es": [
+          "North and South"
+        ],
+        "pt": [
+          "John Jakes' Heaven and Hell North and South Book III"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "North and South (miniseries)",
+        "eswiki": "Norte y Sur (serie de televisión)",
+        "ptwiki": "North and South"
+      },
+      "sitelinks_count": 25,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+15",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/north_and_south_1985",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q20267837",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1366112",
+            "rank": "normal"
+          },
+          {
+            "value": "Q102245189",
+            "rank": "normal"
+          },
+          {
+            "value": "Q84270297",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1259759",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q1853142",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "North and South",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q49004",
+            "rank": "normal"
+          },
+          {
+            "value": "Q151935",
+            "rank": "normal"
+          },
+          {
+            "value": "Q919478",
+            "rank": "normal"
+          },
+          {
+            "value": "Q115250",
+            "rank": "normal"
+          },
+          {
+            "value": "Q187038",
+            "rank": "normal"
+          },
+          {
+            "value": "Q471068",
+            "rank": "normal"
+          },
+          {
+            "value": "Q443638",
+            "rank": "normal"
+          },
+          {
+            "value": "Q441974",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1282382",
+            "rank": "normal"
+          },
+          {
+            "value": "Q211913",
+            "rank": "normal"
+          },
+          {
+            "value": "Q944198",
+            "rank": "normal"
+          },
+          {
+            "value": "Q314801",
+            "rank": "normal"
+          },
+          {
+            "value": "Q73089",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16472",
+            "rank": "normal"
+          },
+          {
+            "value": "Q107656",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1506084",
+            "rank": "normal"
+          },
+          {
+            "value": "Q202449",
+            "rank": "normal"
+          },
+          {
+            "value": "Q443982",
+            "rank": "normal"
+          },
+          {
+            "value": "Q34851",
+            "rank": "normal"
+          },
+          {
+            "value": "Q235972",
+            "rank": "normal"
+          },
+          {
+            "value": "Q346595",
+            "rank": "normal"
+          },
+          {
+            "value": "Q42775",
+            "rank": "normal"
+          },
+          {
+            "value": "Q182763",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1662316",
+            "rank": "normal"
+          },
+          {
+            "value": "Q442300",
+            "rank": "normal"
+          },
+          {
+            "value": "Q726140",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1699151",
+            "rank": "normal"
+          },
+          {
+            "value": "Q275244",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2559288",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1798588",
+            "rank": "normal"
+          },
+          {
+            "value": "Q328315",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2580166",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3260127",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5478651",
+            "rank": "normal"
+          },
+          {
+            "value": "Q465442",
+            "rank": "normal"
+          },
+          {
+            "value": "Q447276",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q902654",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+90",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+3",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q1156642",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0088583",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q7976",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q169889",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "3266",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q3431254",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1985-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1986-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1994-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q3038007",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1985-11-03T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q102245189": "war television series",
+        "Q107656": "Jean Simmons",
+        "Q115250": "Lesley-Anne Down",
+        "Q1156642": "Warner Bros. Television Studios",
+        "Q1259759": "miniseries",
+        "Q1282382": "Philip Casnoff",
+        "Q1366112": "drama television series",
+        "Q1506084": "Georg Stanford Brown",
+        "Q151935": "Kirstie Alley",
+        "Q16472": "Robert Mitchum",
+        "Q1662316": "Mitchell Ryan",
+        "Q169889": "American Broadcasting Company",
+        "Q1699151": "John Anderson",
+        "Q1798588": "Olivia Cole",
+        "Q182763": "Forest Whitaker",
+        "Q1853142": "North and South",
+        "Q1860": "English",
+        "Q187038": "David Carradine",
+        "Q202449": "David Ogden Stiers",
+        "Q20267837": "historical television series",
+        "Q211913": "Jim Metzler",
+        "Q235972": "Morgan Fairchild",
+        "Q2559288": "Wendy Fulton",
+        "Q2580166": "William Ostrander",
+        "Q275244": "Genie Francis",
+        "Q30": "United States",
+        "Q3038007": "Douglas Heyes",
+        "Q314801": "Hal Holbrook",
+        "Q3260127": "Lou Hancock",
+        "Q328315": "Cary Guffey",
+        "Q3431254": "Richard T. Heffron",
+        "Q346595": "Jonathan Frakes",
+        "Q34851": "Elizabeth Taylor",
+        "Q42775": "Johnny Cash",
+        "Q441974": "Terri Garber",
+        "Q442300": "Mark Moses",
+        "Q443638": "Wendy Kilbourne",
+        "Q443982": "Inga Swenson",
+        "Q447276": "Erica Gimpel",
+        "Q465442": "Robert Guillaume",
+        "Q471068": "Lewis Smith",
+        "Q49004": "Patrick Swayze",
+        "Q5478651": "Frances Foster",
+        "Q726140": "James Rebhorn",
+        "Q73089": "Gene Kelly",
+        "Q7976": "American English",
+        "Q84270297": "romance television series",
+        "Q902654": "David L. Wolper",
+        "Q919478": "James Read",
+        "Q944198": "John Stockwell"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q833578",
+      "lang": "en",
+      "title": "North and South (miniseries)",
+      "extract": "North and South is a trilogy of American television miniseries broadcast on the American Broadcasting Company network in 1985, 1986, and 1994. Set before, during, and immediately after the American Civil War, they are based on the 1980s trilogy of novels North and South by John Jakes. The 1985 first installment, North and South, remains the seventh-highest rated miniseries in TV history. North and South: Book II (1986) was met with similar success, while 1994's Heaven  and Hell: North and South Book III was poorly received by both critics and audiences.\nThe saga tells the story of the enduring friendship between Orry Main of South Carolina (Patrick Swayze) and George Hazard of Pennsylvania (James Read), who become best friends while attending the United States Military Academy at West Point but later find themselves and their families on opposite sides of the war. The slave-owning Mains are rural planters from outside Charleston, South Carolina, while the Hazards, who reside in a small Pennsylvania mill town, profit from ownership of iron manufacturing and industry capital, their differences reflecting the divisions between North and South that eventually led to the Civil War.",
+      "url": "https://en.wikipedia.org/wiki/North_and_South_(miniseries)"
+    },
+    "wikipedia:es": {
+      "qid": "Q833578",
+      "lang": "es",
+      "title": "Norte y Sur (serie de televisión)",
+      "extract": "Norte y Sur (North and South en su título original), es una serie de televisión, estrenada por la American Broadcasting Company en 1985, y basada en la trilogía homónima de John Jakes.",
+      "url": "https://es.wikipedia.org/wiki/Norte_y_Sur_(serie_de_televisi%C3%B3n)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q833578",
+      "lang": "pt",
+      "title": "North and South",
+      "extract": "North and South é o título de três minisséries norte-americanas lançadas pela ABC em 1985 (North and South), 1986 (North and South: Book II) e 1994 (Heaven and Hell: North and South Book III). Baseado na trilogia de romances homónima do escritor norte-americano John Jakes as miniséries (com 15 episódios no total) narram a amizade e o conflito entre dois protagonistas antes, durante e depois da Guerra de Secessão.",
+      "url": "https://pt.wikipedia.org/wiki/North_and_South"
+    }
+  },
+  "tier": "mid",
+  "type": "series"
+}

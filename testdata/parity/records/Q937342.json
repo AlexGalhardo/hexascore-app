@@ -1,0 +1,216 @@
+{
+  "qid": "Q937342",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q937342",
+      "labels": {
+        "en": "Angels in America",
+        "es": "Angels in America",
+        "pt": "Angels in America"
+      },
+      "aliases": {
+        "es": [
+          "Angeles en América",
+          "Angeles en America",
+          "Ángeles en América",
+          "Ángeles en America"
+        ],
+        "pt": [
+          "Anjos na América"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Angels in America (miniseries)",
+        "eswiki": "Angels in America",
+        "ptwiki": "Angels in America (minissérie)"
+      },
+      "sitelinks_count": 27,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+6",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/angels_in_america",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q1366112",
+            "rank": "normal"
+          },
+          {
+            "value": "Q98526245",
+            "rank": "normal"
+          },
+          {
+            "value": "Q85133165",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1259759",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q2337685",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Angels in America",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q41163",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q704433",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "tv/angels-in-america",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+60",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+1",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q23633",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0318997",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q23633",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "11245",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q51537",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+2003-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q704433",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2003-12-07T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1259759": "miniseries",
+        "Q1366112": "drama television series",
+        "Q1860": "English",
+        "Q2337685": "Angels in America",
+        "Q23633": "HBO",
+        "Q30": "United States",
+        "Q41163": "Al Pacino",
+        "Q51537": "Mike Nichols",
+        "Q704433": "Tony Kushner",
+        "Q85133165": "LGBT-related television series",
+        "Q98526245": "fantasy television series"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q937342",
+      "lang": "en",
+      "title": "Angels in America (miniseries)",
+      "extract": "Angels in America is a 2003 American miniseries directed by Mike Nichols and based on the Pulitzer Prize–winning 1991 play of the same name by Tony Kushner. Set in 1985, the miniseries revolves around six New Yorkers whose lives intersect. At its core, it is the fantastical story of Prior Walter, a gay man living with AIDS who is visited by an angel. The miniseries explores a wide variety of themes, including Reagan era politics, the spreading AIDS epidemic, and a rapidly changing social and political climate.\nHBO broadcast the film in various formats: two three-hour chunks that correspond to Millennium Approaches and Perestroika, further divided into six one-hour \"chapters\" that roughly correspond to an act or two of each of these plays; the first three chapters (\"Bad News\", \"In Vitro\", and \"The Messenger\") were initially broadcast on December 7, 2003, to international acclaim, with the final three chapters (\"Stop Moving!\", \"Beyond Nelly\", and \"Heaven, I'm in Heaven\") following.\nAngels in America was the most-watched made-for-cable film in 2003, and earned much critical acclaim and numerous accolades: at the 56th Primetime Emmy Awards, it became the first of only three programs in Emmy history (along with Schitt's Creek in 2020, and The Crown in 2021) to sweep every major eligible category, and won all four acting categories. It also won in all five eligible categories at the 61st Golden Globe Awards. In 2006, The Seattle Times listed the series among \"Best of the filmed AIDS portrayals\" on the occasion of the 25th anniversary of AIDS.",
+      "url": "https://en.wikipedia.org/wiki/Angels_in_America_(miniseries)"
+    },
+    "wikipedia:es": {
+      "qid": "Q937342",
+      "lang": "es",
+      "title": "Angels in America",
+      "extract": "Angels in America es una miniserie de HBO de 2003, basada en la obra teatral Angels in America: A Gay Fantasia on National Themes de Tony Kushner, quien a su vez escribió el guion adaptado para la versión televisiva, que Mike Nichols se encargó de dirigir. Está ambientada en 1985, narra la historia de dos parejas cuyas relaciones se disuelven en medio del contexto político del mandato de Ronald Reagan, la difusión de la pandemia de VIH/sida y distintos cambios sociales y políticos.​\nEn 2003 HBO emitió la miniserie en varios formatos: en segmentos de tres horas que corresponden a las dos partes, Millennium Approaches (El milenio se aproxima) y Perestroika, así como en capítulos de una hora que más o menos se corresponden con un acto de cada una de estas obras. Los primeros tres capítulos \"Bad News\", \"In Vitro\" y \"The Messenger\" (\"Malas noticias\", \"In Vitro\" y \"El mensajero\") fueron emitidos el 7 de diciembre recibiendo un aplauso internacional, los tres siguientes capítulos \"Stop Moving!\", \"Beyond Nelly\" \"Heaven, I'm in Heaven\" (\"¡Deja de moverte!\", \"Más allá de la homosexualidad\" y \"¡Cielo , estoy en el cielo!\") fueron emitidos el 14 de diciembre recibiendo la misma aclamación.\nAngels in America fue la película para televisión más vista de 2003 y ganó tanto el Globo de Oro como el Emmy a la mejor miniserie. En 2006, The Seattle Times puso la serie en la lista de \"Best of the filmed AIDS portrayals\" (\"Lo mejor filmado representando al SIDA\", en ocasión del 25 aniversario del SIDA.​",
+      "url": "https://es.wikipedia.org/wiki/Angels_in_America"
+    },
+    "wikipedia:pt": {
+      "qid": "Q937342",
+      "lang": "pt",
+      "title": "Angels in America (minissérie)",
+      "extract": "Angels in America (intitulado em Portugal Anjos na América) é uma minissérie do canal americano de televisão HBO em 2003, realizada por Mike Nichols. Foi adaptada da peça de teatro homónima de Tony Kushner.",
+      "url": "https://pt.wikipedia.org/wiki/Angels_in_America_(miniss%C3%A9rie)"
+    }
+  },
+  "tier": "mid",
+  "type": "series"
+}

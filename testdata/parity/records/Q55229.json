@@ -1,0 +1,139 @@
+{
+  "qid": "Q55229",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q55229",
+      "labels": {
+        "en": "Star Wars: Jedi Starfighter",
+        "es": "Star Wars Jedi Starfighter",
+        "mul": "Star Wars: Jedi Starfighter"
+      },
+      "aliases": {
+        "es": [
+          "Star Wars: Jedi Starfighter"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Star Wars: Jedi Starfighter",
+        "eswiki": "Star Wars Jedi Starfighter"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q216611",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q270948",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Star Wars: Jedi Starfighter",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q216611",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0316673",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q132020",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10680",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10683",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5014725",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1758804",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2002-03-10T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "star-wars-jedi-starfighter",
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q462",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q10680": "PlayStation 2",
+        "Q10683": "PlayStation 3",
+        "Q132020": "Xbox",
+        "Q1758804": "co-op mode",
+        "Q208850": "single-player video game",
+        "Q216611": "Lucasfilm Games",
+        "Q270948": "action game",
+        "Q30": "United States",
+        "Q462": "Star Wars",
+        "Q5014725": "PlayStation 4"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q55229",
+      "lang": "en",
+      "title": "Star Wars: Jedi Starfighter",
+      "extract": "Star Wars: Jedi Starfighter is a 2002 action video game for the PlayStation 2 and Xbox, developed and published by LucasArts. It is the sequel to Star Wars: Starfighter. Jedi Starfighter takes place just prior to the events of Attack of the Clones and during the Battle of Geonosis. On November 17, 2015, it was re-released for the PlayStation 4 in North America as part of the Star Wars Battlefront limited edition console bundle.",
+      "url": "https://en.wikipedia.org/wiki/Star_Wars:_Jedi_Starfighter"
+    },
+    "wikipedia:es": {
+      "qid": "Q55229",
+      "lang": "es",
+      "title": "Star Wars Jedi Starfighter",
+      "extract": "Star Wars: Jedi Starfighter es un videojuego de Star Wars para Xbox y PlayStation 2 que se desarrolla paralelamente al Episodio II.",
+      "url": "https://es.wikipedia.org/wiki/Star_Wars_Jedi_Starfighter"
+    }
+  },
+  "tier": "tail",
+  "type": "game"
+}

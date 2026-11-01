@@ -1,0 +1,189 @@
+{
+  "qid": "Q2539222",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q2539222",
+      "labels": {
+        "en": "Wagner",
+        "es": "Wagner",
+        "pt": "Wagner (série)"
+      },
+      "aliases": {
+        "pt": [
+          "Wagner"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Wagner (film)",
+        "ptwiki": "Wagner (minissérie)"
+      },
+      "sitelinks_count": 10,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+10",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q842256",
+            "rank": "normal"
+          },
+          {
+            "value": "Q645928",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Wagner",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q151973",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4943576",
+            "rank": "normal"
+          },
+          {
+            "value": "Q347879",
+            "rank": "normal"
+          },
+          {
+            "value": "Q55245",
+            "rank": "normal"
+          },
+          {
+            "value": "Q204685",
+            "rank": "normal"
+          },
+          {
+            "value": "Q381285",
+            "rank": "normal"
+          },
+          {
+            "value": "Q116265",
+            "rank": "normal"
+          },
+          {
+            "value": "Q296616",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+300",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+1",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0085107",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q9531",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "19086",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q454618",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1983-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1983-12-13T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q116265": "Marthe Keller",
+        "Q145": "United Kingdom",
+        "Q151973": "Richard Burton",
+        "Q1860": "English",
+        "Q204685": "John Gielgud",
+        "Q296616": "Gabriel Byrne",
+        "Q347879": "Vanessa Redgrave",
+        "Q381285": "Ralph Richardson",
+        "Q454618": "Tony Palmer",
+        "Q4943576": "Gemma Craven",
+        "Q55245": "Laurence Olivier",
+        "Q645928": "biographical film",
+        "Q842256": "musical film",
+        "Q9531": "British Broadcasting Corporation"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q2539222",
+      "lang": "en",
+      "title": "Wagner (film)",
+      "extract": "Wagner is a 1983 television miniseries on the life of Richard Wagner with Richard Burton in the title role. It was directed by Tony Palmer and written by Charles Wood. The film was later released on DVD as a ten-part miniseries.\nOther main roles were played by Vanessa Redgrave, Gemma Craven, Marthe Keller, Ronald Pickup, Miguel Herz-Kestranek and László Gálffi. Sir John Gielgud, Sir Ralph Richardson and Sir Laurence Olivier played ministers of Ludwig II of Bavaria.\nThe cast also includes the composer William Walton, and his wife Susan Walton, in the roles of the royal couple Frederick Augustus II of Saxony and Maria Anna of Bavaria.\nThe music of Wagner was specially recorded for the film, and conducted by Sir Georg Solti.",
+      "url": "https://en.wikipedia.org/wiki/Wagner_(film)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q2539222",
+      "lang": "pt",
+      "title": "Wagner (minissérie)",
+      "extract": "Wagner é uma minissérie que foi realizada em 1983, contando a vida do compositor alemão Richard Wagner, estrelada pelo ator galês Richard Burton.",
+      "url": "https://pt.wikipedia.org/wiki/Wagner_(miniss%C3%A9rie)"
+    }
+  },
+  "tier": "year-precision",
+  "type": "series"
+}

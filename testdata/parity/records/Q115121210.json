@@ -1,0 +1,44 @@
+{
+  "qid": "Q115121210",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q115121210",
+      "labels": {
+        "en": "Aalamul Quran"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Aalamul Quran"
+      },
+      "sitelinks_count": 6,
+      "claims": {
+        "P407": [
+          {
+            "value": "Q1617",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q4665524",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1617": "Urdu",
+        "Q4665524": "Abdul Majid Daryabadi"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q115121210",
+      "lang": "en",
+      "title": "Aalamul Quran",
+      "extract": "Aalamul Quran (Urdu: اعلام القرآن) is a book written by Indian scholar Abdul Majid Daryabadi on Science of Geography in the Quran. Published in 1959 by Sidq-i-Jadid Book Agency, Lucknow, comprising 208 pages, the book is an alphabetically arranged comprehensive dictionary of Quranic Personalities, whether human, angelic or diabolic mentioned in the Quran explicitly or implicitly. Thus, it is a book on the human geography of the Quran: both individual and tribal geography is furnished. The book introduces to 158 personalities. It is a unique work on this genre. Along with Tafseer-e-Majidi written both in Urdu \u0026 English, Daryabadi has authored another book entitled Jugrafiyah Qurani which elaborates physical geography employed in the Quran.",
+      "url": "https://en.wikipedia.org/wiki/Aalamul_Quran"
+    }
+  },
+  "tier": "tail",
+  "type": "book"
+}

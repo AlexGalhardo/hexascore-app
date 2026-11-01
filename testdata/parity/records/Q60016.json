@@ -1,0 +1,274 @@
+{
+  "qid": "Q60016",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q60016",
+      "labels": {
+        "en": "Kiss the Girls",
+        "es": "Kiss the Girls",
+        "pt": "Beijos Que Matam"
+      },
+      "aliases": {
+        "es": [
+          "El coleccionista de amantes"
+        ],
+        "pt": [
+          "Kiss the Girls"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Kiss the Girls (1997 film)",
+        "eswiki": "Kiss the Girls",
+        "ptwiki": "Beijos Que Matam"
+      },
+      "sitelinks_count": 33,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/kiss_the_girls",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q959790",
+            "rank": "normal"
+          },
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2421031",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q3221562",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Kiss the Girls",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q48337",
+            "rank": "normal"
+          },
+          {
+            "value": "Q228645",
+            "rank": "normal"
+          },
+          {
+            "value": "Q311093",
+            "rank": "normal"
+          },
+          {
+            "value": "Q224754",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1319653",
+            "rank": "normal"
+          },
+          {
+            "value": "Q34975",
+            "rank": "normal"
+          },
+          {
+            "value": "Q279834",
+            "rank": "normal"
+          },
+          {
+            "value": "Q202461",
+            "rank": "normal"
+          },
+          {
+            "value": "Q315083",
+            "rank": "normal"
+          },
+          {
+            "value": "Q374181",
+            "rank": "normal"
+          },
+          {
+            "value": "Q240541",
+            "rank": "normal"
+          },
+          {
+            "value": "Q461146",
+            "rank": "normal"
+          },
+          {
+            "value": "Q27535232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4282539",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9147116",
+            "rank": "normal"
+          },
+          {
+            "value": "Q223303",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3539035",
+            "rank": "normal"
+          },
+          {
+            "value": "Q467317",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1366460",
+            "rank": "normal"
+          },
+          {
+            "value": "Q210792",
+            "rank": "normal"
+          },
+          {
+            "value": "Q532229",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2572165",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/kiss-the-girls",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+111",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q159846",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0119468",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "9437",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q1494859",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1998-03-05T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q381656",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q130232": "drama film",
+        "Q1319653": "Jay O. Sanders",
+        "Q1366460": "Tracey Walter",
+        "Q1494859": "Gary Fleder",
+        "Q159846": "Paramount Pictures",
+        "Q1860": "English",
+        "Q202461": "Roma Maffia",
+        "Q210792": "Larry Cedar",
+        "Q223303": "Mena Suvari",
+        "Q224754": "Tony Goldwyn",
+        "Q228645": "Ashley Judd",
+        "Q240541": "Tatyana Ali",
+        "Q2421031": "neo-noir",
+        "Q2572165": "W. Earl Brown",
+        "Q27535232": "William Converse-Roberts",
+        "Q279834": "Bill Nunn",
+        "Q30": "United States",
+        "Q311093": "Cary Elwes",
+        "Q315083": "Jeremy Piven",
+        "Q3221562": "Kiss the Girls",
+        "Q34975": "Brian Cox",
+        "Q3539035": "Tricia Vessey",
+        "Q374181": "Richard T. Jones",
+        "Q381656": "David Klass",
+        "Q4282539": "Helen Martin",
+        "Q461146": "Gina Ravera",
+        "Q467317": "Meta Golding",
+        "Q48337": "Morgan Freeman",
+        "Q532229": "Justina Vail Evans",
+        "Q9147116": "Alex McArthur",
+        "Q959790": "crime film"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q60016",
+      "lang": "en",
+      "title": "Kiss the Girls (1997 film)",
+      "extract": "Kiss the Girls (stylized in all lowercase) is a 1997 American neo-noir psychological thriller film directed by Gary Fleder, and starring Morgan Freeman, Ashley Judd, and Cary Elwes. The screenplay by David Klass is based on James Patterson's best-selling 1995 novel of the same name. A sequel titled Along Came a Spider was released in 2001.",
+      "url": "https://en.wikipedia.org/wiki/Kiss_the_Girls_(1997_film)"
+    },
+    "wikipedia:es": {
+      "qid": "Q60016",
+      "lang": "es",
+      "title": "Kiss the Girls",
+      "extract": "Kiss the Girls, titulada El coleccionista de amantes en España y Besos que matan en Hispanoamérica, es una película de género suspense basada en la novela de James Patterson. Fue estrenada el 3 de octubre de 1997 en Estados Unidos, protagonizada por Morgan Freeman y Ashley Judd y dirigida por Gary Fleder. \nEl personaje de Alex Cross, interpretado por Morgan Freeman, vuelve a ser interpretado otra vez por el actor en la película Along Came a Spider (2001).​",
+      "url": "https://es.wikipedia.org/wiki/Kiss_the_Girls"
+    },
+    "wikipedia:pt": {
+      "qid": "Q60016",
+      "lang": "pt",
+      "title": "Beijos Que Matam",
+      "extract": "Beijos Que Matam (Kiss the Girls) é um filme de thriller e drama norte-americano (com trechos falados em mandarim) baseado no bestseller \"Kiss the Girls\" do escritor James Patterson realizado em 1997 pelo cineasta Gary Fleder. Teve uma sequência em 2001, também estrelada por Morgan Freeman que voltou a interpretar o personagem Alex Cross, chamada Along Came a Spider. Em 2012 foi lançado Alex Cross.",
+      "url": "https://pt.wikipedia.org/wiki/Beijos_Que_Matam"
+    }
+  },
+  "tier": "mid",
+  "type": "movie"
+}

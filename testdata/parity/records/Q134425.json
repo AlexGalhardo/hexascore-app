@@ -1,0 +1,157 @@
+{
+  "qid": "Q134425",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q134425",
+      "labels": {
+        "en": "Tao Te Ching",
+        "es": "Dào Dé Jing",
+        "mul": "道德經",
+        "pt": "Tao Te Ching"
+      },
+      "aliases": {
+        "en": [
+          "Laozi",
+          "Lao-tzu",
+          "Classic of the Way and Its Power",
+          "The Way and Its Power",
+          "Classic of the Way and Virtue",
+          "Classic of the Way and Natural Virtue",
+          "Classic of the Way of Power",
+          "The Way to Goodness and Power",
+          "The Book of the Way",
+          "The Way of Integrity",
+          "The Way of Life",
+          "The Way and Its Virtues",
+          "Dao de jing",
+          "Tao Te Ching",
+          "Daodejing"
+        ],
+        "es": [
+          "Dao de jing",
+          "Tao te ching",
+          "Daodejing",
+          "Dao Dé Jing",
+          "Tao Te King",
+          "Dàodéjing",
+          "Dào De Jing",
+          "Tao Te Ching"
+        ],
+        "mul": [
+          "DZ 664",
+          "Tao Te Ching",
+          "Daodejing",
+          "Tao-te Ching",
+          "Daode Zhenjing",
+          "Dao De Jing",
+          "Dàodéjīng"
+        ],
+        "pt": [
+          "Dao de jing",
+          "Daodejing",
+          "Tao-Te King",
+          "Tao Te King"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Tao Te Ching",
+        "eswiki": "Dàodé jīng",
+        "ptwiki": "Tao Te Ching"
+      },
+      "sitelinks_count": 95,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q179461",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10552833",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "道德經",
+            "rank": "normal"
+          },
+          {
+            "value": "道德眞經",
+            "rank": "normal"
+          },
+          {
+            "value": "老子道德經",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Mawangdui LaoTsu Ms2.JPG",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q37041",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q307066",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q9333",
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL10329120W",
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "100074",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q10552833": "Taoist literature",
+        "Q179461": "religious text",
+        "Q307066": "Eastern Zhou",
+        "Q37041": "Classical Chinese",
+        "Q9333": "Laozi"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q134425",
+      "lang": "en",
+      "title": "Tao Te Ching",
+      "extract": "The Tao Te Ching or Dào Dé Jīng, (traditional Chinese: 道德經; simplified Chinese: 道德经; lit. 'Classic of the Way and its Virtue') also known simply as the Laozi, is an ancient Chinese classic text traditionally attributed to the sage Laozi. It is regarded as the foundational Taoist text alongside the Zhuangzi. Central to both philosophical and religious Taoism, it has been \"profoundly influential\" more broadly in Chinese culture, art and medicine.\nThe texts' authorship and dating is debated, with several similar early versions recovered. Its oldest excavated manuscript fragments, the Guodian Chu slips, date to around the 300 BCE, the latter half of the Warring States period (475 – 221 BCE). Though the Guodian bundles are unlikely as a unified text, they are nominally taken as a version from the fourth century BCE (400-300 BCE). While tradition places Laozi earlier, a conservative estimation would date modern versions of the text to the mid third century BCE - the late Warring States period, drawing from collections consolidated during the fourth century BCE.\nTerminology originating within the text has been reinterpreted and elaborated upon by Legalist thinkers, Confucianists, and particularly through Chinese Buddhism, which arrived well after the formation and wide spread societal use of this text within Chinese culture. First translated into French in the early nineteenth century, it is one of the most translated texts in world literature, next to the Bible.",
+      "url": "https://en.wikipedia.org/wiki/Tao_Te_Ching"
+    },
+    "wikipedia:es": {
+      "qid": "Q134425",
+      "lang": "es",
+      "title": "Dàodé jīng",
+      "extract": "El Dàodé jīng (Chino: 道德經 , Wade-Giles: Tao Te Ching, también llamado Tao Te King),  también llamado Laozi (老子), es un texto clásico chino atribuido al sabio Lao-Tse del siglo VI a. C., aunque su fecha y autoría están abiertas al debate. \nSu nombre procede de las palabras con las que empiezan cada una de sus dos partes: 道 dào ‘el camino’, la primera del Capítulo 1, y 德 dé ‘virtud’, o ‘poder’, la primera del Capítulo 38, con el añadido 經 jīng, ‘libro clásico’. Según la tradición, fue escrito alrededor del siglo VI a. C. por el sabio Laozi, un archivista de la corte de la dinastía Zhou, por cuyo nombre se conoce el texto en China. La verdadera autoría y fecha de composición o de compilación del libro es aún objeto de debate.\nEste texto es uno de los fundamentos del taoísmo filosófico y tuvo una fuerte influencia sobre otras escuelas, como el legalismo y el neoconfucianismo. Tiene un papel importante en la religión china, relacionado no solo con el taoísmo religioso, sino también con el budismo, que cuando se introdujo por primera vez en China fue interpretado usando en gran medida palabras y conceptos taoístas. \nEn China la filosofía de la naturaleza y la visión del mundo están impregnadas del pensamiento taoísta y así muchos artistas, pintores, calígrafos y hasta jardineros han usado este libro como fuente de inspiración. Su influencia se ha esparcido también más allá del Lejano Oriente, ayudada por las muchas traducciones diferentes del texto a lenguas occidentales.",
+      "url": "https://es.wikipedia.org/wiki/D%C3%A0od%C3%A9_j%C4%ABng"
+    },
+    "wikipedia:pt": {
+      "qid": "Q134425",
+      "lang": "pt",
+      "title": "Tao Te Ching",
+      "extract": "Tao Te Ching, Dao de Jing ou Tao-te king (em chinês: , Dàodé jīng), comumente traduzido como O Livro do Caminho e da Virtude, é uma das mais conhecidas e importantes obras da literatura da China. Foi escrito entre 350 e 250 a.C. A sua autoria é tradicionalmente atribuída a Lao Tzi (literalmente, \"Velho Mestre\"),  porém a maioria dos estudiosos atuais acredita que Lao Tzi nunca existiu e que a obra é, na verdade, uma reunião de provérbios pertencentes a uma tradição oral coletiva, versando sobre o tao (a \"realidade última\" do universo). A obra inspirou o surgimento de diversas religiões e filosofias, em especial o taoismo e o budismo chan (e sua versão japonesa, o zen).",
+      "url": "https://pt.wikipedia.org/wiki/Tao_Te_Ching"
+    }
+  },
+  "tier": "non-latin",
+  "type": "book"
+}

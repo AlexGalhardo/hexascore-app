@@ -1,0 +1,286 @@
+{
+  "qid": "Q59931",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q59931",
+      "labels": {
+        "en": "Garden State",
+        "es": "Garden State",
+        "pt": "Garden State",
+        "pt-br": "Garden State"
+      },
+      "aliases": {
+        "es": [
+          "Algo en común",
+          "Algo en comun"
+        ],
+        "pt": [
+          "Hora de voltar"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Garden State (film)",
+        "eswiki": "Garden State",
+        "ptwiki": "Garden State"
+      },
+      "sitelinks_count": 30,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/garden_state",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q118612349",
+            "rank": "normal"
+          },
+          {
+            "value": "Q859369",
+            "rank": "normal"
+          },
+          {
+            "value": "Q102429885",
+            "rank": "normal"
+          },
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q157443",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Garden State",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q37876",
+            "rank": "normal"
+          },
+          {
+            "value": "Q315099",
+            "rank": "normal"
+          },
+          {
+            "value": "Q223091",
+            "rank": "normal"
+          },
+          {
+            "value": "Q139330",
+            "rank": "normal"
+          },
+          {
+            "value": "Q239069",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2255729",
+            "rank": "normal"
+          },
+          {
+            "value": "Q298694",
+            "rank": "normal"
+          },
+          {
+            "value": "Q976310",
+            "rank": "normal"
+          },
+          {
+            "value": "Q629696",
+            "rank": "normal"
+          },
+          {
+            "value": "Q190972",
+            "rank": "normal"
+          },
+          {
+            "value": "Q83677",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2558129",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4716763",
+            "rank": "normal"
+          },
+          {
+            "value": "Q461762",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5537604",
+            "rank": "normal"
+          },
+          {
+            "value": "Q439804",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3195",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3539595",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4817144",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6167882",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6116410",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/garden-state",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+99",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q953040",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0333766",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "401",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q139330",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2004-01-16T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2004-07-28T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2005-05-26T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q139330",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q102429885": "coming-of-age film",
+        "Q118612349": "romantic comedy film",
+        "Q130232": "drama film",
+        "Q139330": "Zach Braff",
+        "Q157443": "comedy film",
+        "Q1860": "English",
+        "Q190972": "Jim Parsons",
+        "Q223091": "Ian Holm",
+        "Q2255729": "Armando Riesco",
+        "Q239069": "Jean Smart",
+        "Q2558129": "Ann Dowd",
+        "Q298694": "Method Man",
+        "Q30": "United States",
+        "Q315099": "Peter Sarsgaard",
+        "Q3195": "Geoffrey Arend",
+        "Q3539595": "Trisha LaFache",
+        "Q37876": "Natalie Portman",
+        "Q439804": "Jill Flint",
+        "Q461762": "Aunjanue Ellis-Taylor",
+        "Q4716763": "Alex Burns",
+        "Q4817144": "Ato Essandoh",
+        "Q5537604": "George C. Wolfe",
+        "Q6116410": "Jackie Hoffman",
+        "Q6167882": "Jayne Houdyshell",
+        "Q629696": "Denis O'Hare",
+        "Q83677": "Michael Weston",
+        "Q859369": "comedy drama",
+        "Q953040": "Searchlight Pictures",
+        "Q976310": "Ron Leibman"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q59931",
+      "lang": "en",
+      "title": "Garden State (film)",
+      "extract": "Garden State is a 2004 American romantic comedy drama film, written and directed by Zach Braff, and starring him, Natalie Portman, Peter Sarsgaard and Ian Holm. The film centers on Andrew Largeman (Braff), a 26-year-old actor/waiter who returns to his hometown in New Jersey after his mother dies. Braff based the film on his real life experiences. It was filmed in April and May 2003 and released on July 28, 2004. New Jersey was the main setting and primary shooting location.\nGarden State received positive reviews and  was a box office success. It was an official selection of the Sundance Film Festival. The film's soundtrack, selected by Braff, won a Grammy Award for Best Compilation Soundtrack Album for a Motion Picture, Television or Other Visual Media.",
+      "url": "https://en.wikipedia.org/wiki/Garden_State_(film)"
+    },
+    "wikipedia:es": {
+      "qid": "Q59931",
+      "lang": "es",
+      "title": "Garden State",
+      "extract": "Garden State (titulada en español Tiempo de volver y Algo en común) es una película estadounidense de 2004, escrita, dirigida y protagonizada por Zach Braff. En la cinta también actúan Natalie Portman, Peter Sarsgaard y Sir Ian Holm.\nLa película, filmada en 25 días, entre abril y mayo de 2003, fue estrenada el 28 de julio de 2004 y se incluyó dentro de la selección oficial del Festival de Cine de Sundance. También ganó el primer premio en la categoría de largometrajes dentro de los Premios Independent Spirit.",
+      "url": "https://es.wikipedia.org/wiki/Garden_State"
+    },
+    "wikipedia:pt": {
+      "qid": "Q59931",
+      "lang": "pt",
+      "title": "Garden State",
+      "extract": "Garden State (no Brasil, Hora de Voltar) é um filme de comédia dramática de 2004 escrito e dirigido por Zach Braff e estrelado por Natalie Portman, Peter Sarsgaard, Ian Holm e o próprio Braff. O filme é sobre Andrew Largeman (Braff), um ator/garçom de 26 anos que retorna à sua cidade natal, em Nova Jersey depois que sua mãe morre. Braff baseou o filme em suas experiências da vida real.\nFoi filmado em abril e maio de 2003 e lançado em 28 de julho de 2004. Nova Jersey foi o cenário principal e local da filmagem primária.\nGarden State foi bem recebido e tem atraído um culto de seguidores. Ele saiu em uma seleção oficial do Festival Sundance de Cinema. O filme também gerou uma trilha sonora para que Braff, que escolheu a música ele mesmo, ganhou um prêmio Grammy.",
+      "url": "https://pt.wikipedia.org/wiki/Garden_State"
+    }
+  },
+  "tier": "mid",
+  "type": "movie"
+}

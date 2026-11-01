@@ -1,0 +1,2394 @@
+{
+  "qid": "Q23558",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q23558",
+      "labels": {
+        "en": "House M.D.",
+        "es": "House M. D.",
+        "mul": "House M.D.",
+        "pt": "House, M.D.",
+        "pt-br": "House, M.D."
+      },
+      "aliases": {
+        "en": [
+          "House",
+          "Dr. House"
+        ],
+        "mul": [
+          "House",
+          "Dr. House"
+        ],
+        "pt": [
+          "House"
+        ],
+        "pt-br": [
+          "Dr. House"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "House (TV series)",
+        "eswiki": "House M. D.",
+        "ptwiki": "House, M.D."
+      },
+      "sitelinks_count": 92,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+177",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/house",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q1786567",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "House",
+            "rank": "preferred"
+          },
+          {
+            "value": "House, M.D.",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q49017",
+            "rank": "normal"
+          },
+          {
+            "value": "Q229197",
+            "rank": "normal"
+          },
+          {
+            "value": "Q193160",
+            "rank": "normal"
+          },
+          {
+            "value": "Q297334",
+            "rank": "normal"
+          },
+          {
+            "value": "Q199929",
+            "rank": "normal"
+          },
+          {
+            "value": "Q270153",
+            "rank": "normal"
+          },
+          {
+            "value": "Q313516",
+            "rank": "normal"
+          },
+          {
+            "value": "Q200355",
+            "rank": "normal"
+          },
+          {
+            "value": "Q220536",
+            "rank": "normal"
+          },
+          {
+            "value": "Q231128",
+            "rank": "normal"
+          },
+          {
+            "value": "Q231614",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2301339",
+            "rank": "normal"
+          },
+          {
+            "value": "Q229187",
+            "rank": "normal"
+          },
+          {
+            "value": "Q236918",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3177046",
+            "rank": "normal"
+          },
+          {
+            "value": "Q83677",
+            "rank": "normal"
+          },
+          {
+            "value": "Q324647",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4653820",
+            "rank": "normal"
+          },
+          {
+            "value": "Q296370",
+            "rank": "normal"
+          },
+          {
+            "value": "Q440960",
+            "rank": "normal"
+          },
+          {
+            "value": "Q535998",
+            "rank": "normal"
+          },
+          {
+            "value": "Q471128",
+            "rank": "normal"
+          },
+          {
+            "value": "Q189448",
+            "rank": "normal"
+          },
+          {
+            "value": "Q720762",
+            "rank": "normal"
+          },
+          {
+            "value": "Q266313",
+            "rank": "normal"
+          },
+          {
+            "value": "Q463397",
+            "rank": "normal"
+          },
+          {
+            "value": "Q271040",
+            "rank": "normal"
+          },
+          {
+            "value": "Q83694",
+            "rank": "normal"
+          },
+          {
+            "value": "Q106942",
+            "rank": "normal"
+          },
+          {
+            "value": "Q261639",
+            "rank": "normal"
+          },
+          {
+            "value": "Q706513",
+            "rank": "normal"
+          },
+          {
+            "value": "Q199931",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16734816",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2842824",
+            "rank": "normal"
+          },
+          {
+            "value": "Q459638",
+            "rank": "normal"
+          },
+          {
+            "value": "Q509117",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1373450",
+            "rank": "normal"
+          },
+          {
+            "value": "Q690974",
+            "rank": "normal"
+          },
+          {
+            "value": "Q239150",
+            "rank": "normal"
+          },
+          {
+            "value": "Q189226",
+            "rank": "normal"
+          },
+          {
+            "value": "Q364822",
+            "rank": "normal"
+          },
+          {
+            "value": "Q242629",
+            "rank": "normal"
+          },
+          {
+            "value": "Q237273",
+            "rank": "normal"
+          },
+          {
+            "value": "Q225933",
+            "rank": "normal"
+          },
+          {
+            "value": "Q308792",
+            "rank": "normal"
+          },
+          {
+            "value": "Q459007",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3174736",
+            "rank": "normal"
+          },
+          {
+            "value": "Q561676",
+            "rank": "normal"
+          },
+          {
+            "value": "Q265037",
+            "rank": "normal"
+          },
+          {
+            "value": "Q312705",
+            "rank": "normal"
+          },
+          {
+            "value": "Q861494",
+            "rank": "normal"
+          },
+          {
+            "value": "Q156532",
+            "rank": "normal"
+          },
+          {
+            "value": "Q505600",
+            "rank": "normal"
+          },
+          {
+            "value": "Q783351",
+            "rank": "normal"
+          },
+          {
+            "value": "Q909704",
+            "rank": "normal"
+          },
+          {
+            "value": "Q256186",
+            "rank": "normal"
+          },
+          {
+            "value": "Q449431",
+            "rank": "normal"
+          },
+          {
+            "value": "Q229914",
+            "rank": "normal"
+          },
+          {
+            "value": "Q240774",
+            "rank": "normal"
+          },
+          {
+            "value": "Q228868",
+            "rank": "normal"
+          },
+          {
+            "value": "Q209094",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4756190",
+            "rank": "normal"
+          },
+          {
+            "value": "Q456358",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1341155",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10841812",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1139717",
+            "rank": "normal"
+          },
+          {
+            "value": "Q376182",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1320939",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5343929",
+            "rank": "normal"
+          },
+          {
+            "value": "Q263720",
+            "rank": "normal"
+          },
+          {
+            "value": "Q371786",
+            "rank": "normal"
+          },
+          {
+            "value": "Q212026",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1157743",
+            "rank": "normal"
+          },
+          {
+            "value": "Q367469",
+            "rank": "normal"
+          },
+          {
+            "value": "Q353978",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1631627",
+            "rank": "normal"
+          },
+          {
+            "value": "Q231006",
+            "rank": "normal"
+          },
+          {
+            "value": "Q460987",
+            "rank": "normal"
+          },
+          {
+            "value": "Q205278",
+            "rank": "normal"
+          },
+          {
+            "value": "Q89552",
+            "rank": "normal"
+          },
+          {
+            "value": "Q185122",
+            "rank": "normal"
+          },
+          {
+            "value": "Q44707",
+            "rank": "normal"
+          },
+          {
+            "value": "Q229394",
+            "rank": "normal"
+          },
+          {
+            "value": "Q260455",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2838353",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3307977",
+            "rank": "normal"
+          },
+          {
+            "value": "Q309592",
+            "rank": "normal"
+          },
+          {
+            "value": "Q220751",
+            "rank": "normal"
+          },
+          {
+            "value": "Q608709",
+            "rank": "normal"
+          },
+          {
+            "value": "Q234809",
+            "rank": "normal"
+          },
+          {
+            "value": "Q941232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2439744",
+            "rank": "normal"
+          },
+          {
+            "value": "Q272130",
+            "rank": "normal"
+          },
+          {
+            "value": "Q268298",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2447922",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1347483",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321014",
+            "rank": "normal"
+          },
+          {
+            "value": "Q452647",
+            "rank": "normal"
+          },
+          {
+            "value": "Q241749",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1635631",
+            "rank": "normal"
+          },
+          {
+            "value": "Q228725",
+            "rank": "normal"
+          },
+          {
+            "value": "Q444344",
+            "rank": "normal"
+          },
+          {
+            "value": "Q382295",
+            "rank": "normal"
+          },
+          {
+            "value": "Q595479",
+            "rank": "normal"
+          },
+          {
+            "value": "Q229528",
+            "rank": "normal"
+          },
+          {
+            "value": "Q27322",
+            "rank": "normal"
+          },
+          {
+            "value": "Q238712",
+            "rank": "normal"
+          },
+          {
+            "value": "Q941660",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1820773",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2830641",
+            "rank": "normal"
+          },
+          {
+            "value": "Q726708",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3852265",
+            "rank": "normal"
+          },
+          {
+            "value": "Q575761",
+            "rank": "normal"
+          },
+          {
+            "value": "Q228943",
+            "rank": "normal"
+          },
+          {
+            "value": "Q463482",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16299311",
+            "rank": "normal"
+          },
+          {
+            "value": "Q929634",
+            "rank": "normal"
+          },
+          {
+            "value": "Q242451",
+            "rank": "normal"
+          },
+          {
+            "value": "Q194881",
+            "rank": "normal"
+          },
+          {
+            "value": "Q237190",
+            "rank": "normal"
+          },
+          {
+            "value": "Q451917",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2575752",
+            "rank": "normal"
+          },
+          {
+            "value": "Q369292",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1336685",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1344323",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3135658",
+            "rank": "normal"
+          },
+          {
+            "value": "Q668925",
+            "rank": "normal"
+          },
+          {
+            "value": "Q379808",
+            "rank": "normal"
+          },
+          {
+            "value": "Q236696",
+            "rank": "normal"
+          },
+          {
+            "value": "Q233593",
+            "rank": "normal"
+          },
+          {
+            "value": "Q316641",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3129081",
+            "rank": "normal"
+          },
+          {
+            "value": "Q350595",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2350967",
+            "rank": "normal"
+          },
+          {
+            "value": "Q471003",
+            "rank": "normal"
+          },
+          {
+            "value": "Q465152",
+            "rank": "normal"
+          },
+          {
+            "value": "Q465210",
+            "rank": "normal"
+          },
+          {
+            "value": "Q707210",
+            "rank": "normal"
+          },
+          {
+            "value": "Q450496",
+            "rank": "normal"
+          },
+          {
+            "value": "Q200611",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3532579",
+            "rank": "normal"
+          },
+          {
+            "value": "Q257286",
+            "rank": "normal"
+          },
+          {
+            "value": "Q562257",
+            "rank": "normal"
+          },
+          {
+            "value": "Q598158",
+            "rank": "normal"
+          },
+          {
+            "value": "Q241620",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2859342",
+            "rank": "normal"
+          },
+          {
+            "value": "Q317228",
+            "rank": "normal"
+          },
+          {
+            "value": "Q467317",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1532012",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3374412",
+            "rank": "normal"
+          },
+          {
+            "value": "Q432281",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1648434",
+            "rank": "normal"
+          },
+          {
+            "value": "Q456426",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1383036",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7089646",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2532879",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3936377",
+            "rank": "normal"
+          },
+          {
+            "value": "Q436360",
+            "rank": "normal"
+          },
+          {
+            "value": "Q359873",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1809038",
+            "rank": "normal"
+          },
+          {
+            "value": "Q459928",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2736922",
+            "rank": "normal"
+          },
+          {
+            "value": "Q444390",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2825311",
+            "rank": "normal"
+          },
+          {
+            "value": "Q257165",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1139709",
+            "rank": "normal"
+          },
+          {
+            "value": "Q360674",
+            "rank": "normal"
+          },
+          {
+            "value": "Q235511",
+            "rank": "normal"
+          },
+          {
+            "value": "Q275476",
+            "rank": "normal"
+          },
+          {
+            "value": "Q262652",
+            "rank": "normal"
+          },
+          {
+            "value": "Q360663",
+            "rank": "normal"
+          },
+          {
+            "value": "Q327217",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2794236",
+            "rank": "normal"
+          },
+          {
+            "value": "Q517362",
+            "rank": "normal"
+          },
+          {
+            "value": "Q934484",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16832012",
+            "rank": "normal"
+          },
+          {
+            "value": "Q240467",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1029535",
+            "rank": "normal"
+          },
+          {
+            "value": "Q263935",
+            "rank": "normal"
+          },
+          {
+            "value": "Q460450",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1775097",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1087475",
+            "rank": "normal"
+          },
+          {
+            "value": "Q444450",
+            "rank": "normal"
+          },
+          {
+            "value": "Q260611",
+            "rank": "normal"
+          },
+          {
+            "value": "Q461278",
+            "rank": "normal"
+          },
+          {
+            "value": "Q550115",
+            "rank": "normal"
+          },
+          {
+            "value": "Q311517",
+            "rank": "normal"
+          },
+          {
+            "value": "Q380180",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3898137",
+            "rank": "normal"
+          },
+          {
+            "value": "Q152929",
+            "rank": "normal"
+          },
+          {
+            "value": "Q316541",
+            "rank": "normal"
+          },
+          {
+            "value": "Q339864",
+            "rank": "normal"
+          },
+          {
+            "value": "Q454698",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1198697",
+            "rank": "normal"
+          },
+          {
+            "value": "Q229993",
+            "rank": "normal"
+          },
+          {
+            "value": "Q40124",
+            "rank": "normal"
+          },
+          {
+            "value": "Q559092",
+            "rank": "normal"
+          },
+          {
+            "value": "Q52440",
+            "rank": "normal"
+          },
+          {
+            "value": "Q271469",
+            "rank": "normal"
+          },
+          {
+            "value": "Q236189",
+            "rank": "normal"
+          },
+          {
+            "value": "Q781381",
+            "rank": "normal"
+          },
+          {
+            "value": "Q65105",
+            "rank": "normal"
+          },
+          {
+            "value": "Q275254",
+            "rank": "normal"
+          },
+          {
+            "value": "Q234314",
+            "rank": "normal"
+          },
+          {
+            "value": "Q258350",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3945926",
+            "rank": "normal"
+          },
+          {
+            "value": "Q297128",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2820059",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2438469",
+            "rank": "normal"
+          },
+          {
+            "value": "Q440023",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321005",
+            "rank": "normal"
+          },
+          {
+            "value": "Q382197",
+            "rank": "normal"
+          },
+          {
+            "value": "Q450851",
+            "rank": "normal"
+          },
+          {
+            "value": "Q463316",
+            "rank": "normal"
+          },
+          {
+            "value": "Q44469",
+            "rank": "normal"
+          },
+          {
+            "value": "Q290156",
+            "rank": "normal"
+          },
+          {
+            "value": "Q203960",
+            "rank": "normal"
+          },
+          {
+            "value": "Q236574",
+            "rank": "normal"
+          },
+          {
+            "value": "Q511642",
+            "rank": "normal"
+          },
+          {
+            "value": "Q549948",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15666053",
+            "rank": "normal"
+          },
+          {
+            "value": "Q381841",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1189470",
+            "rank": "normal"
+          },
+          {
+            "value": "Q230395",
+            "rank": "normal"
+          },
+          {
+            "value": "Q19866609",
+            "rank": "normal"
+          },
+          {
+            "value": "Q38875",
+            "rank": "normal"
+          },
+          {
+            "value": "Q234438",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1066917",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2231922",
+            "rank": "normal"
+          },
+          {
+            "value": "Q287793",
+            "rank": "normal"
+          },
+          {
+            "value": "Q433241",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1145528",
+            "rank": "normal"
+          },
+          {
+            "value": "Q528126",
+            "rank": "normal"
+          },
+          {
+            "value": "Q230109",
+            "rank": "normal"
+          },
+          {
+            "value": "Q206440",
+            "rank": "normal"
+          },
+          {
+            "value": "Q60493",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1772138",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1343857",
+            "rank": "normal"
+          },
+          {
+            "value": "Q41340",
+            "rank": "normal"
+          },
+          {
+            "value": "Q201181",
+            "rank": "normal"
+          },
+          {
+            "value": "Q310318",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23365",
+            "rank": "normal"
+          },
+          {
+            "value": "Q268714",
+            "rank": "normal"
+          },
+          {
+            "value": "Q60422",
+            "rank": "normal"
+          },
+          {
+            "value": "Q536686",
+            "rank": "normal"
+          },
+          {
+            "value": "Q266888",
+            "rank": "normal"
+          },
+          {
+            "value": "Q137688",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5318091",
+            "rank": "normal"
+          },
+          {
+            "value": "Q448729",
+            "rank": "normal"
+          },
+          {
+            "value": "Q26968",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3216928",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1647937",
+            "rank": "normal"
+          },
+          {
+            "value": "Q229069",
+            "rank": "normal"
+          },
+          {
+            "value": "Q60640",
+            "rank": "normal"
+          },
+          {
+            "value": "Q509061",
+            "rank": "normal"
+          },
+          {
+            "value": "Q264946",
+            "rank": "normal"
+          },
+          {
+            "value": "Q383064",
+            "rank": "normal"
+          },
+          {
+            "value": "Q542069",
+            "rank": "normal"
+          },
+          {
+            "value": "Q171567",
+            "rank": "normal"
+          },
+          {
+            "value": "Q120406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q530000",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2960889",
+            "rank": "normal"
+          },
+          {
+            "value": "Q349488",
+            "rank": "normal"
+          },
+          {
+            "value": "Q260184",
+            "rank": "normal"
+          },
+          {
+            "value": "Q218228",
+            "rank": "normal"
+          },
+          {
+            "value": "Q274050",
+            "rank": "normal"
+          },
+          {
+            "value": "Q272166",
+            "rank": "normal"
+          },
+          {
+            "value": "Q446104",
+            "rank": "normal"
+          },
+          {
+            "value": "Q547310",
+            "rank": "normal"
+          },
+          {
+            "value": "Q235489",
+            "rank": "normal"
+          },
+          {
+            "value": "Q596626",
+            "rank": "normal"
+          },
+          {
+            "value": "Q668299",
+            "rank": "normal"
+          },
+          {
+            "value": "Q265826",
+            "rank": "normal"
+          },
+          {
+            "value": "Q229263",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3298525",
+            "rank": "normal"
+          },
+          {
+            "value": "Q453065",
+            "rank": "normal"
+          },
+          {
+            "value": "Q484662",
+            "rank": "normal"
+          },
+          {
+            "value": "Q269807",
+            "rank": "normal"
+          },
+          {
+            "value": "Q434661",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1549708",
+            "rank": "normal"
+          },
+          {
+            "value": "Q317194",
+            "rank": "normal"
+          },
+          {
+            "value": "Q958791",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7446648",
+            "rank": "normal"
+          },
+          {
+            "value": "Q235020",
+            "rank": "normal"
+          },
+          {
+            "value": "Q139610",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2633899",
+            "rank": "normal"
+          },
+          {
+            "value": "Q232927",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1057878",
+            "rank": "normal"
+          },
+          {
+            "value": "Q241530",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3013009",
+            "rank": "normal"
+          },
+          {
+            "value": "Q726128",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4058",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2342145",
+            "rank": "normal"
+          },
+          {
+            "value": "Q374038",
+            "rank": "normal"
+          },
+          {
+            "value": "Q29086",
+            "rank": "normal"
+          },
+          {
+            "value": "Q260177",
+            "rank": "normal"
+          },
+          {
+            "value": "Q187828",
+            "rank": "normal"
+          },
+          {
+            "value": "Q723011",
+            "rank": "normal"
+          },
+          {
+            "value": "Q265516",
+            "rank": "normal"
+          },
+          {
+            "value": "Q422310",
+            "rank": "normal"
+          },
+          {
+            "value": "Q236086",
+            "rank": "normal"
+          },
+          {
+            "value": "Q517137",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2680038",
+            "rank": "normal"
+          },
+          {
+            "value": "Q271533",
+            "rank": "normal"
+          },
+          {
+            "value": "Q241873",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2844564",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2558129",
+            "rank": "normal"
+          },
+          {
+            "value": "Q229766",
+            "rank": "normal"
+          },
+          {
+            "value": "Q238884",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1151830",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2046436",
+            "rank": "normal"
+          },
+          {
+            "value": "Q182931",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5365231",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5334589",
+            "rank": "normal"
+          },
+          {
+            "value": "Q953735",
+            "rank": "normal"
+          },
+          {
+            "value": "Q20090990",
+            "rank": "normal"
+          },
+          {
+            "value": "Q785270",
+            "rank": "normal"
+          },
+          {
+            "value": "Q451720",
+            "rank": "normal"
+          },
+          {
+            "value": "Q242623",
+            "rank": "normal"
+          },
+          {
+            "value": "Q462192",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3978226",
+            "rank": "normal"
+          },
+          {
+            "value": "Q19478542",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2846252",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1711483",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2599535",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2636244",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1626817",
+            "rank": "normal"
+          },
+          {
+            "value": "Q437799",
+            "rank": "normal"
+          },
+          {
+            "value": "Q447276",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3242394",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3039407",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2936231",
+            "rank": "normal"
+          },
+          {
+            "value": "Q528866",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1344354",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2870857",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15733996",
+            "rank": "normal"
+          },
+          {
+            "value": "Q213736",
+            "rank": "normal"
+          },
+          {
+            "value": "Q966151",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6962622",
+            "rank": "normal"
+          },
+          {
+            "value": "Q455029",
+            "rank": "normal"
+          },
+          {
+            "value": "Q468570",
+            "rank": "normal"
+          },
+          {
+            "value": "Q355024",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1264937",
+            "rank": "normal"
+          },
+          {
+            "value": "Q371574",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15479218",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2610657",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3312816",
+            "rank": "normal"
+          },
+          {
+            "value": "Q20090949",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1187274",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1103579",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1402293",
+            "rank": "normal"
+          },
+          {
+            "value": "Q444373",
+            "rank": "normal"
+          },
+          {
+            "value": "Q210792",
+            "rank": "normal"
+          },
+          {
+            "value": "Q517602",
+            "rank": "normal"
+          },
+          {
+            "value": "Q530213",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1260701",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3121197",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3558573",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16148950",
+            "rank": "normal"
+          },
+          {
+            "value": "Q859899",
+            "rank": "normal"
+          },
+          {
+            "value": "Q22943994",
+            "rank": "normal"
+          },
+          {
+            "value": "Q960721",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23301696",
+            "rank": "normal"
+          },
+          {
+            "value": "Q541535",
+            "rank": "normal"
+          },
+          {
+            "value": "Q242855",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5389146",
+            "rank": "normal"
+          },
+          {
+            "value": "Q18711097",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3987992",
+            "rank": "normal"
+          },
+          {
+            "value": "Q20676079",
+            "rank": "normal"
+          },
+          {
+            "value": "Q449507",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2437370",
+            "rank": "normal"
+          },
+          {
+            "value": "Q314877",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16555505",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5363591",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1894164",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2606371",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3023753",
+            "rank": "normal"
+          },
+          {
+            "value": "Q24008487",
+            "rank": "normal"
+          },
+          {
+            "value": "Q561689",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3916731",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4924324",
+            "rank": "normal"
+          },
+          {
+            "value": "Q186384",
+            "rank": "normal"
+          },
+          {
+            "value": "Q651681",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3300864",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3952855",
+            "rank": "normal"
+          },
+          {
+            "value": "Q60355",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2975115",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6379219",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23932052",
+            "rank": "normal"
+          },
+          {
+            "value": "Q25176107",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5424111",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23927006",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16149506",
+            "rank": "normal"
+          },
+          {
+            "value": "Q265099",
+            "rank": "normal"
+          },
+          {
+            "value": "Q469897",
+            "rank": "normal"
+          },
+          {
+            "value": "Q712647",
+            "rank": "normal"
+          },
+          {
+            "value": "Q114447",
+            "rank": "normal"
+          },
+          {
+            "value": "Q456258",
+            "rank": "normal"
+          },
+          {
+            "value": "Q679987",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15851192",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1701620",
+            "rank": "normal"
+          },
+          {
+            "value": "Q617215",
+            "rank": "normal"
+          },
+          {
+            "value": "Q235905",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q434272",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "tv/house",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+42",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+8",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q1337530",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0412142",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q166419",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "1408",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q724100",
+            "rank": "normal"
+          },
+          {
+            "value": "Q220751",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1676908",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7176168",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1367452",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2735655",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2927184",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3121773",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2527608",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1977014",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1738056",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3014648",
+            "rank": "normal"
+          },
+          {
+            "value": "Q548834",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5495238",
+            "rank": "normal"
+          },
+          {
+            "value": "Q951523",
+            "rank": "normal"
+          },
+          {
+            "value": "Q951531",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5498207",
+            "rank": "normal"
+          },
+          {
+            "value": "Q462727",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3018772",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3467008",
+            "rank": "normal"
+          },
+          {
+            "value": "Q235503",
+            "rank": "normal"
+          },
+          {
+            "value": "Q726925",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6789317",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2130021",
+            "rank": "normal"
+          },
+          {
+            "value": "Q719256",
+            "rank": "normal"
+          },
+          {
+            "value": "Q460765",
+            "rank": "normal"
+          },
+          {
+            "value": "Q49017",
+            "rank": "normal"
+          },
+          {
+            "value": "Q353978",
+            "rank": "normal"
+          },
+          {
+            "value": "Q434272",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3339752",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7417611",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6844804",
+            "rank": "normal"
+          },
+          {
+            "value": "Q360477",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4909622",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7804317",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5144932",
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q5523915",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7421656",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6833718",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3181991",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2004-11-16T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1029535": "Evan Jones",
+        "Q1057878": "Gabrielle Christian",
+        "Q1066917": "Charlie Hofheimer",
+        "Q106942": "Candice Bergen",
+        "Q10841812": "Wendy Gazelle",
+        "Q1087475": "A. J. Trauth",
+        "Q1103579": "Mary Elizabeth Ellis",
+        "Q1139709": "Bryce Johnson",
+        "Q1139717": "Cress Williams",
+        "Q114447": "Janel Moloney",
+        "Q1145528": "Curtis Armstrong",
+        "Q1151830": "Nate Mooney",
+        "Q1157743": "Dakin Matthews",
+        "Q1187274": "Ralph Garman",
+        "Q1189470": "Jimmi Simpson",
+        "Q1198697": "Pruitt Taylor Vince",
+        "Q120406": "Riki Lindhome",
+        "Q1260701": "Dru Mouser",
+        "Q1264937": "Sterling Beaumon",
+        "Q1320939": "Tom Lenk",
+        "Q1321005": "Wood Harris",
+        "Q1321014": "Jason Winston George",
+        "Q1336685": "William Katt",
+        "Q1337530": "Universal Television",
+        "Q1341155": "Robin Thomas",
+        "Q1343857": "Jon Seda",
+        "Q1344323": "Kip Pardue",
+        "Q1344354": "Sharif Atkins",
+        "Q1347483": "John Patrick Amedori",
+        "Q1367452": "Newton Thomas Sigel",
+        "Q1373450": "Mike Starr",
+        "Q137688": "Jack Coleman",
+        "Q1383036": "Khleo Thomas",
+        "Q139610": "Zachary Knighton",
+        "Q1402293": "Italia Ricci",
+        "Q152929": "Meat Loaf",
+        "Q1532012": "Krista Kalmus",
+        "Q15479218": "Joseph Culp",
+        "Q1549708": "Tiya Sircar",
+        "Q156532": "Peter Graves",
+        "Q15666053": "Michelle Harrison",
+        "Q15733996": "Amanda Leighton",
+        "Q15851192": "Tony Ray Rossi",
+        "Q16148950": "Bruno Amato",
+        "Q16149506": "Charlene Amoia",
+        "Q1626817": "Jacob Zachar",
+        "Q16299311": "James Immekus",
+        "Q1631627": "Brian Klugman",
+        "Q1635631": "Braeden Lemasters",
+        "Q1647937": "Tom Wright",
+        "Q1648434": "Slade Pearce",
+        "Q16555505": "David Wells",
+        "Q166419": "Fox Broadcasting Company",
+        "Q16734816": "Kimberly Quinn",
+        "Q1676908": "Jace Alexander",
+        "Q16832012": "Angela Gots",
+        "Q1701620": "John Rubinstein",
+        "Q1711483": "Natalie Dreyfuss",
+        "Q171567": "Laura Prepon",
+        "Q1738056": "Keith Gordon",
+        "Q1772138": "Julia Ling",
+        "Q1775097": "Lindsay Pulsipher",
+        "Q1786567": "medical drama",
+        "Q1809038": "Caroline Lagerfelt",
+        "Q1820773": "Vicellous Reon Shannon",
+        "Q182931": "John Kapelos",
+        "Q185122": "Carmen Electra",
+        "Q1860": "English",
+        "Q186384": "John Scurti",
+        "Q18711097": "Cody Saintgnue",
+        "Q187828": "Sasha Roiz",
+        "Q189226": "Amanda Seyfried",
+        "Q1894164": "Marcus Giamatti",
+        "Q189448": "Zena Grey",
+        "Q193160": "Robert Sean Leonard",
+        "Q19478542": "Demetrius Grosse",
+        "Q194881": "Howard Hesseman",
+        "Q1977014": "Nelson McCormick",
+        "Q19866609": "Shelby Rabara",
+        "Q199929": "Jennifer Morrison",
+        "Q199931": "Leighton Meester",
+        "Q200355": "Olivia Wilde",
+        "Q200611": "Meredith Eaton",
+        "Q20090949": "Tina Huang",
+        "Q20090990": "Brittany Ishibashi",
+        "Q201181": "Sarah Wayne Callies",
+        "Q203960": "James Earl Jones",
+        "Q2046436": "Skylar Astin",
+        "Q205278": "Dominic Purcell",
+        "Q206440": "David Marciano",
+        "Q20676079": "Brad Carter",
+        "Q209094": "Robin Tunneyio",
+        "Q210792": "Larry Cedar",
+        "Q212026": "Mira Sorvino",
+        "Q2130021": "Elodie Keene",
+        "Q213736": "Bridgit Mendler",
+        "Q218228": "Zoe McLellan",
+        "Q220536": "Kal Penn",
+        "Q220751": "Bryan Singer",
+        "Q2231922": "Ashton Holmes",
+        "Q225933": "Nestor Carbonell",
+        "Q228725": "Cynthia Nixon",
+        "Q228868": "Piper Perabo",
+        "Q228943": "Elle Fanning",
+        "Q229069": "Jennifer Stone",
+        "Q229187": "Sela Ward",
+        "Q229197": "Lisa Edelstein",
+        "Q229263": "Alyson Stoner",
+        "Q229394": "Elizabeth Mitchell",
+        "Q22943994": "Jamie McShane",
+        "Q229528": "Michelle Trachtenberg",
+        "Q229766": "Shohreh Aghdashloo",
+        "Q229914": "Lyndsy Fonseca",
+        "Q229993": "Sherilyn Fenn",
+        "Q230109": "Cynthia Watros",
+        "Q2301339": "Lo Mutuc",
+        "Q230395": "Meaghan Jette Martin",
+        "Q231006": "Jayma Mays",
+        "Q231128": "Amber Tamblyn",
+        "Q231614": "Odette Annable",
+        "Q232927": "Jennifer Grey",
+        "Q23301696": "S.E. Perry",
+        "Q233593": "Sheryl Lee",
+        "Q23365": "Jeremy Renner",
+        "Q2342145": "Stella Maeve",
+        "Q234314": "Felicia Day",
+        "Q234438": "Marin Hinkle",
+        "Q234809": "Sarah Clarke",
+        "Q235020": "Amy Irving",
+        "Q2350967": "Jurnee Smollett",
+        "Q235489": "Kim Rhodes",
+        "Q235503": "Laura Innes",
+        "Q235511": "Taraji P. Henson",
+        "Q235905": "Melanie Lynskey",
+        "Q236086": "Justin Chon",
+        "Q236189": "Judy Greer",
+        "Q236574": "Beau Garrett",
+        "Q236696": "Kathleen Quinlan",
+        "Q236918": "Anne Dudek",
+        "Q237190": "Samantha Mathis",
+        "Q237273": "Salli Richardson",
+        "Q238712": "Sasha Pieterse",
+        "Q238884": "Shirley Knight",
+        "Q239150": "Leslie Hope",
+        "Q23927006": "Charles C. Stevenson Jr.",
+        "Q23932052": "James Ingersoll",
+        "Q24008487": "Jim Gleason",
+        "Q240467": "Natasha Gregson Wagner",
+        "Q240774": "Frank Whaley",
+        "Q241530": "Keiko Agena",
+        "Q241620": "Wendy Makkena",
+        "Q241749": "Bailee Madison",
+        "Q241873": "Linda Park",
+        "Q242451": "Cameron Richardson",
+        "Q242623": "Rena Sofer",
+        "Q242629": "Meredith Monroe",
+        "Q242855": "Amy Davidson",
+        "Q2437370": "Barry Pearl",
+        "Q2438469": "Todd Louiso",
+        "Q2439744": "Christopher Cousins",
+        "Q2447922": "Mark Harelik",
+        "Q25176107": "Kevin Christy",
+        "Q2527608": "Dan Attias",
+        "Q2532879": "Clementine Ford",
+        "Q2558129": "Ann Dowd",
+        "Q256186": "Laura Allen",
+        "Q257165": "Ivana Miličević",
+        "Q257286": "Meagan Good",
+        "Q2575752": "Mackenzie Astin",
+        "Q258350": "Taylor Dooley",
+        "Q2599535": "Tina Holmes",
+        "Q260177": "Sprague Grayden",
+        "Q260184": "Eva Amurri",
+        "Q260455": "Clare Kramer",
+        "Q260611": "Adair Tishler",
+        "Q2606371": "Jennifer Landon",
+        "Q2610657": "Erich Anderson",
+        "Q261639": "Lori Petty",
+        "Q262652": "Azura Skye",
+        "Q2633899": "Erin Cahill",
+        "Q2636244": "Jeff Hephner",
+        "Q263720": "Jessy Schram",
+        "Q263935": "Michael Michele",
+        "Q264946": "Marnette Patterson",
+        "Q265037": "Skye McCole Bartusiak",
+        "Q265099": "Margo Harshman",
+        "Q265516": "Ashley Jones",
+        "Q265826": "Lindsey McKeon",
+        "Q266313": "Diane Baker",
+        "Q266888": "Vinessa Shaw",
+        "Q2680038": "David Costabile",
+        "Q268298": "Katheryn Winnick",
+        "Q268714": "Leigh-Allyn Baker",
+        "Q26968": "Sarah Jones",
+        "Q269807": "Michelle Clunie",
+        "Q270153": "Jesse Spencer",
+        "Q271040": "Paula Marshall",
+        "Q271469": "Daryl Sabara",
+        "Q271533": "Megan Follows",
+        "Q272130": "Mika Boorem",
+        "Q272166": "Tracy Middendorf",
+        "Q27322": "Jason Lewis",
+        "Q2735655": "Greg Yaitanes",
+        "Q2736922": "Tyson Ritter",
+        "Q274050": "China Shavers",
+        "Q275254": "Lucinda Jenney",
+        "Q275476": "Kay Lenz",
+        "Q2794236": "Matt DeCaro",
+        "Q2820059": "Aaron Himelstein",
+        "Q2825311": "Adrienne Janic",
+        "Q2830641": "Alanna Ubach",
+        "Q2838353": "Allison Smith",
+        "Q2842824": "America Olivo",
+        "Q2844564": "Amy Landecker",
+        "Q2846252": "Andray Johnson",
+        "Q2859342": "Arabella Field",
+        "Q2870857": "Audrey Marie Anderson",
+        "Q287793": "Carl Reiner",
+        "Q290156": "Christine Woods",
+        "Q29086": "Matthew Lillard",
+        "Q2927184": "Bryan Spicer",
+        "Q2936231": "Candace Kita",
+        "Q2960889": "Charlie Weber",
+        "Q296370": "David Morse",
+        "Q297128": "David Henrie",
+        "Q297334": "Omar Epps",
+        "Q2975115": "Claire Rankin",
+        "Q30": "United States",
+        "Q3013009": "Samantha Smith",
+        "Q3014648": "Daniel Sackheim",
+        "Q3018772": "David Semel",
+        "Q3023753": "Derek Mio",
+        "Q3039407": "Drew Powell",
+        "Q308792": "Patrick Bauchau",
+        "Q309592": "Greg Grunberg",
+        "Q310318": "David Strathairn",
+        "Q311517": "Kevin Zegers",
+        "Q3121197": "Sarah Aldrich",
+        "Q3121773": "Guy Ferland",
+        "Q312705": "John Cho",
+        "Q3129081": "Heather Kafka",
+        "Q313516": "Peter Jacobson",
+        "Q3135658": "Hillary Tuck",
+        "Q314877": "Patrick Stump",
+        "Q316541": "Lucas Till",
+        "Q316641": "Joel Grey",
+        "Q317194": "Nathan Kress",
+        "Q317228": "Kurtwood Smith",
+        "Q3174736": "Shari Headley",
+        "Q3177046": "Jennifer Crystal Foley",
+        "Q3181991": "John Mankiewicz",
+        "Q3216928": "Lance Guest",
+        "Q3242394": "Lisa Darr",
+        "Q324647": "Edi Gathegi",
+        "Q327217": "Holmes Osborne",
+        "Q3298525": "Whitney Cummings",
+        "Q3300864": "Maurice Godin",
+        "Q3307977": "Michael A. Goorjian",
+        "Q3312816": "Gerald McCullouch",
+        "Q3339752": "Nick Gomez",
+        "Q3374412": "Pej Vahdat",
+        "Q339864": "Courtney Henggeler",
+        "Q3467008": "James Hayman",
+        "Q349488": "Adam Garcia",
+        "Q350595": "Ricky Ullman",
+        "Q3532579": "Tory Kittles",
+        "Q353978": "R. Lee Ermey",
+        "Q355024": "Jamie Bamber",
+        "Q3558573": "Kenneth Choi",
+        "Q359873": "Andy Milder",
+        "Q360477": "Peter Weller",
+        "Q360663": "Thomas F. Wilson",
+        "Q360674": "Breckin Meyer",
+        "Q364822": "Scott Foley",
+        "Q367469": "Kadeem Hardison",
+        "Q369292": "Thomas Dekker",
+        "Q371574": "Greg Finley",
+        "Q371786": "Joel David Moore",
+        "Q374038": "Kuno Becker",
+        "Q376182": "Wings Hauser",
+        "Q379808": "Elias Koteas",
+        "Q380180": "Jake Thomas",
+        "Q381841": "Carter Jenkins",
+        "Q382197": "Željko Ivanek",
+        "Q382295": "Marc Blucas",
+        "Q383064": "Ethan Embry",
+        "Q3852265": "Matthew John Armstrong",
+        "Q38875": "Yasiin Bey",
+        "Q3898137": "Paul Rae",
+        "Q3916731": "Henri Lubatti",
+        "Q3936377": "Nate Torrence",
+        "Q3945926": "Salvator Xuereb",
+        "Q3952855": "Scott Michael Campbell",
+        "Q3978226": "Susan Egan",
+        "Q3987992": "Pat Finn",
+        "Q40124": "Sam Trammell",
+        "Q4058": "Kayla Ewell",
+        "Q41340": "Katherine LaNasa",
+        "Q422310": "Chris Marquette",
+        "Q432281": "Carla Gallo",
+        "Q433241": "Maria Thayer",
+        "Q434272": "David Shore",
+        "Q434661": "Mimi Kennedy",
+        "Q436360": "Jane Adams",
+        "Q437799": "Amanda Foreman",
+        "Q440023": "Emily Rios",
+        "Q440960": "Karolina Wydra",
+        "Q444344": "Yvette Nicole Brown",
+        "Q444373": "Toni Trucks",
+        "Q444390": "Smith Cho",
+        "Q444450": "Sammi Hanratty",
+        "Q44469": "Holly Gagnier",
+        "Q446104": "Marika Domińczyk",
+        "Q44707": "Fred Durst",
+        "Q447276": "Erica Gimpel",
+        "Q448729": "Jenny O'Hara",
+        "Q449431": "Keri Lynn Pratt",
+        "Q449507": "Faith Prince",
+        "Q450496": "Alyssa Shafer",
+        "Q450851": "Megan Dodds",
+        "Q451720": "Bevin Prince",
+        "Q451917": "Mel Harris",
+        "Q452647": "Sunny Mabrey",
+        "Q453065": "Beverly Todd",
+        "Q454698": "Darcy Rose Byrnes",
+        "Q455029": "Jamie Rose",
+        "Q456258": "Charles Robinson",
+        "Q456358": "Scott Mechlowicz",
+        "Q456426": "Monique Gabriela Curnen",
+        "Q459007": "Joe Morton",
+        "Q459638": "Stacy Edwards",
+        "Q459928": "Ever Carradine",
+        "Q460450": "Alexis Thorpe",
+        "Q460765": "Lesli Linka Glatter",
+        "Q460987": "Roxanne Hart",
+        "Q461278": "Martin Henderson",
+        "Q462192": "Anne Ramsay",
+        "Q462727": "Félix Enríquez Alcalá",
+        "Q463316": "Jay Karnes",
+        "Q463397": "Andre Braugher",
+        "Q463482": "Julie Warner",
+        "Q465152": "Patrick Fugit",
+        "Q465210": "Cassi Thomson",
+        "Q4653820": "Cynthia Ettinger",
+        "Q467317": "Meta Golding",
+        "Q468570": "Vanessa Zima",
+        "Q469897": "Hedy Burress",
+        "Q471003": "John Larroquette",
+        "Q471128": "Chi McBride",
+        "Q4756190": "Andrew Airlie",
+        "Q484662": "Wentworth Miller",
+        "Q49017": "Hugh Laurie",
+        "Q4909622": "Bill Johnson",
+        "Q4924324": "Blake Anderson",
+        "Q505600": "Andrew Keegan",
+        "Q509061": "Christina Vidal",
+        "Q509117": "Chloe Webb",
+        "Q511642": "Erika Flores",
+        "Q5144932": "Colin Bucksey",
+        "Q517137": "Donal Logue",
+        "Q517362": "Damien Dante Wayans",
+        "Q517602": "Mary Kate Schellhardt",
+        "Q52440": "LL Cool J",
+        "Q528126": "Ron Livingston",
+        "Q528866": "Madison Davenport",
+        "Q530000": "Wes Ramsey",
+        "Q530213": "Corri English",
+        "Q5318091": "Dwier Brown",
+        "Q5334589": "Ed Brigadier",
+        "Q5343929": "Edward Kerr",
+        "Q535998": "Tracy Vilar",
+        "Q5363591": "Elizabeth Sung",
+        "Q5365231": "Ellery Sprayberry",
+        "Q536686": "Sarah Danielle Madison",
+        "Q5389146": "Erin Foster",
+        "Q541535": "Julia Campbell",
+        "Q542069": "Orlando Jones",
+        "Q5424111": "F. William Parker",
+        "Q547310": "Art LaFleur",
+        "Q548834": "Tim Hunter",
+        "Q5495238": "Fred Gerber",
+        "Q5498207": "Frederick King Keller",
+        "Q549948": "Jake McDorman",
+        "Q550115": "Anthony Montgomery",
+        "Q5523915": "Garrett Lerner",
+        "Q559092": "Nicholas D'Agosto",
+        "Q561676": "Eddie McClintock",
+        "Q561689": "Dan Butler",
+        "Q562257": "Geoffrey Lewis",
+        "Q575761": "Michael O'Keefe",
+        "Q595479": "Jonathan Sadowski",
+        "Q596626": "Elizabeth Tulloch",
+        "Q598158": "Jake Richardson",
+        "Q60355": "Freda Foh Shen",
+        "Q60422": "Joshua Malina",
+        "Q60493": "Lee Tergesen",
+        "Q60640": "Vicki Davis",
+        "Q608709": "Harry Lennix",
+        "Q617215": "Albert Espinosa",
+        "Q6379219": "Kavi Raz",
+        "Q65105": "Franka Potente",
+        "Q651681": "Rekha Sharma",
+        "Q668299": "Marc Menard",
+        "Q668925": "D. B. Sweeney",
+        "Q6789317": "Matt Shakman",
+        "Q679987": "Marshall Bell",
+        "Q6833718": "Michael R. Perry",
+        "Q6844804": "Miguel Sapochnik",
+        "Q690974": "Brandy Norwood",
+        "Q6962622": "Nancy Criss",
+        "Q706513": "Charles S. Dutton",
+        "Q707210": "Christopher Gartin",
+        "Q7089646": "Omar Avila",
+        "Q712647": "Kurt Fuller",
+        "Q7176168": "Peter O'Fallon",
+        "Q719256": "Paul McCrane",
+        "Q720762": "Currie Graham",
+        "Q723011": "Tyler James Williams",
+        "Q724100": "Peter Medak",
+        "Q726128": "Dylan Baker",
+        "Q726708": "Kristoffer Polaha",
+        "Q726925": "Juan J. Campanella",
+        "Q7417611": "Sanford Bookstaver",
+        "Q7421656": "Sara Hess",
+        "Q7446648": "Seidy López",
+        "Q7804317": "Tim Southam",
+        "Q781381": "Eyal Podell",
+        "Q783351": "Josh Zuckerman",
+        "Q785270": "Evan Peters",
+        "Q83677": "Michael Weston",
+        "Q83694": "Carmen Argenziano",
+        "Q859899": "Chad Faust",
+        "Q861494": "Matt Malloy",
+        "Q89552": "Danny Nucci",
+        "Q909704": "Brent Briscoe",
+        "Q929634": "Tom Verica",
+        "Q934484": "Nathan Gamble",
+        "Q941232": "Jascha Washington",
+        "Q941660": "Clifton Powell",
+        "Q951523": "Deran Sarafian",
+        "Q951531": "Paris Barclay",
+        "Q953735": "Jack Plotnick",
+        "Q958791": "George Wyner",
+        "Q960721": "Jeremy Howard",
+        "Q966151": "José Zúñiga"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q23558",
+      "lang": "en",
+      "title": "House (TV series)",
+      "extract": "House (also known as House, M.D. and Dr. House in some international markets) is an American medical drama television series created by David Shore for Fox. It aired for eight seasons from November 16, 2004 to May 21, 2012. It focuses on Dr. Gregory House (Hugh Laurie), an unconventional and misanthropic medical genius who, despite his dependence on pain medication, leads a team of diagnosticians at the fictional Princeton–Plainsboro Teaching Hospital (PPTH) in New Jersey. He often clashes with his fellow physicians, including his own diagnostic team, as his hypotheses about patients' illnesses are often based on subtle or controversial insights, and his flouting of hospital rules and procedures frequently leads him into conflict with his boss, hospital administrator and Dean of Medicine Dr. Lisa Cuddy (Lisa Edelstein). House's only true friend is Dr. James Wilson (Robert Sean Leonard), head of the Department of Oncology.\nDuring the first three seasons, House's diagnostic team consists of Dr. Robert Chase (Jesse Spencer), Dr. Allison Cameron (Jennifer Morrison), and Dr. Eric Foreman (Omar Epps). At the end of the third season, this team disbands. Rejoined by Foreman, House gradually selects three new team members: Dr. Remy \"Thirteen\" Hadley (Olivia Wilde), Dr. Chris Taub (Peter Jacobson), and Dr. Lawrence Kutner (Kal Penn). Chase and Cameron continue to appear occasionally in different roles at the hospital. Kutner dies late in season five; early in season six, Cameron departs the hospital, and Chase returns to the diagnostic team. Thirteen takes a leave of absence for most of season seven, and her position is filled by medical student Martha M. Masters (Amber Tamblyn). Cuddy and Masters depart before season eight; Foreman becomes the new Dean of Medicine, while Dr. Jessica Adams (Odette Annable) and Dr. Chi Park (Lo Mutuc) join House's team.\nThe premise of House originated with Paul Attanasio, while Shore was responsible for conceiving the titular character. The series' executive producers included Shore, Attanasio, Attanasio's business partner Katie Jacobs, and film director Bryan Singer. It was filmed largely in Century City, a neighborhood and business district in Los Angeles. The series was produced by Attanasio and Jacobs' Heel and Toe Films, Shore's Shore Z Productions, Singer's Bad Hat Harry Productions, and Universal Television.\nHouse was among the top 10 series in the United States from its second through fourth seasons. Distributed to 71 countries, it was the most-watched TV program in the world in 2008. It received numerous awards, including five Primetime Emmy Awards, two Golden Globe Awards, a Peabody Award, and nine People's Choice Awards. On February 8, 2012, Fox announced that the eighth season, then in progress, would be its last. The series finale aired on May 21, 2012, following an hour-long retrospective.",
+      "url": "https://en.wikipedia.org/wiki/House_(TV_series)"
+    },
+    "wikipedia:es": {
+      "qid": "Q23558",
+      "lang": "es",
+      "title": "House M. D.",
+      "extract": "House M. D. (en España, House; en Hispanoamérica,  Gregory House: diagnóstico médico durante las primeras tres temporadas y Dr. House posteriormente) es una serie de televisión estadounidense estrenada en 2004 por la cadena Fox y finalizada en 2012. Fue creada por David Shore, productor ejecutivo de la serie junto a otros como Paul Attanasio, Katie Jacobs o Bryan Singer. El personaje central es el Dr. Gregory House (Hugh Laurie), un genio médico, irónico, satírico y poco convencional e inconformista, que encabeza un equipo de diagnóstico en el ficticio Hospital Universitario Princeton-Plainsboro de Nueva Jersey. El argumento fue idea de Paul Attanasio, basándose en una columna médica escrita por la Dra. Lisa Sanders en el periódico The New York Times, mientras que la creación de los personajes corrió a cargo de Shore después de su visita a un hospital universitario. Las localizaciones están situadas en Century City, un distrito de Los Ángeles, California.\nEl Dr. House a menudo confronta a su jefa, la decana de medicina, la Dra. Lisa Cuddy (Lisa Edelstein), y a su equipo de diagnóstico, debido a la gran cantidad de hipótesis que surgen con respecto a la enfermedad del paciente basadas en finas o controvertidas perspicacias. El mejor amigo de House es el Dr. James Wilson (Robert Sean Leonard), quien es jefe del departamento de oncología. Durante las primeras tres temporadas, el equipo de diagnóstico de House se encontraba formado por el Dr. Robert Chase (Jesse Spencer), la Dra. Allison Cameron (Jennifer Morrison) y el Dr. Eric Foreman (Omar Epps). Al final de la tercera temporada, el equipo se disolvió. En la cuarta temporada, House poco a poco seleccionó a tres nuevos miembros: la Dra. Remy «Trece» Hadley (Olivia Wilde), el Dr. Chris Taub (Peter Jacobson), y el Dr. Lawrence Kutner (Kal Penn); este último abandonó el programa en 2009 al aceptar un trabajo de Barack Obama para formar parte de la oficina de relaciones internacionales. Chase y Cameron continuaron apareciendo en distintos papeles en el hospital hasta principios de la sexta temporada, cuando Jennifer Morrison, la actriz que encarnaba a Cameron, fue despedida del programa; y Chase regresó al equipo de House. «Trece» desaparece por gran parte de la séptima temporada y es reemplazada temporalmente por la estudiante de medicina Martha M. Masters (Amber Tamblyn). Cuddy y Masters salen de la serie antes del inicio de la octava temporada, Foreman se convierte en el nuevo decano de medicina, mientras que las doctoras Jessica Adams (Odette Annable) y Chi Park (Charlyne Yi) se unen al equipo de House.\nHouse M. D. ha gozado de la preferencia de la crítica y del público desde su lanzamiento, convirtiéndose en uno de los programas televisivos más vistos en los Estados Unidos​ y en todo el mundo.​ Ha recibido diversos reconocimientos y nominaciones, entre los que destacan un premio Peabody, dos Globos de Oro y tres premios Emmy. Fue la serie más vista en 2008, con un promedio de ochenta y dos millones de personas en sesenta y seis países.​ La sexta temporada comenzó con un episodio de dos horas, el 21 de septiembre de 2009 en Estados Unidos y terminó a principios de junio de 2010.​\nEl 8 de febrero de 2012, los productores de la serie, David Shore y Katie Jacobs, así como su protagonista Hugh Laurie, dieron a conocer a través de un comunicado de prensa que la serie llegaría a su fin después de ocho temporadas. «La decisión de terminar el programa ahora o en cualquier otro momento, es dolorosa, por el riesgo de separarnos de cientos de amistades cercanas que hemos hecho a lo largo de estos ocho años, pero también porque el programa en sí mismo ha sido fuente de gran orgullo para todos los involucrados», comienza el comunicado firmado por los productores y el actor.​ El episodio final «Everybody Dies» fue transmitido el 21 de mayo de 2012 seguido de un documental especial llamado Swan Song.",
+      "url": "https://es.wikipedia.org/wiki/House_M._D."
+    },
+    "wikipedia:pt": {
+      "qid": "Q23558",
+      "lang": "pt",
+      "title": "House, M.D.",
+      "extract": "House, M.D. ou simplesmente House (também conhecida no Brasil como Dr. House) é uma série médica norte-americana criada por David Shore e exibida originalmente nos Estados Unidos pela Fox de 16 de novembro de 2004 a 21 de maio de 2012. Seu personagem principal é o Dr. Gregory House, interpretado pelo ator inglês Hugh Laurie. A série passa-se no fictício hospital universitário Princeton-Plainsboro Teaching Hospital, em Princeton, Nova Jersey, Estados Unidos.\nHouse é um infectologista e nefrologista que se destaca não só pela capacidade de elaborar excelentes diagnósticos diferenciais, como também pelo seu mau humor, ceticismo e pelo seu distanciamento dos pacientes, comportamento antissocial (misantropia), já que ele considera completamente desnecessário interagir com eles. House comumente entra em conflito com os médicos do hospital conhecido por serem residentes , incluindo sua própria equipe de diagnóstico, porque a maior parte de seus diagnósticos a respeito das doenças dos pacientes são baseados em hipóteses controversas e pouco prováveis. Seu descaso com as regras e procedimentos padrão do hospital frequentemente geram atrito com sua chefe, administradora do hospital, Dr.ª Lisa Cuddy (Lisa Edelstein). O único amigo verdadeiro de House é o Dr. James Wilson (Robert Sean Leonard), chefe do departamento de Oncologia. Durante as três primeiras temporadas, a equipe de diagnósticos de House consiste em Dr. Robert Chase (Jesse Spencer), Dr.ª Alisson Cameron (Jennifer Morrison) e Dr. Eric Foreman (Omar Epps).\nAo final da terceira temporada a equipe se separa, remanescendo apenas Foreman. Gradualmente, House seleciona três novos membros para a equipe: Dr.ª Remy \"Treze\" Hadley (Olivia Wilde), Dr. Chris Taub (Peter Jacobson) e Dr. Lawrence Kutner (Kal Penn). Kutner faz sua última aparição ao final da 5.ª temporada e então só retorna no 22.º episódio da 8.ª temporada. Chase e Cameron continuam aparecendo em diversos papéis no hospital até o início da 6.ª Temporada. À essa altura, Cameron decide sair do hospital e Chase volta à equipa. \"Treze\" afasta-se durante boa parte da 7.ª Temporada, e seu espaço é preenchido pela estudante de medicina Martha M. Masters (Amber Tamblyn). Cuddy e Masters saem da série antes do início da 8.ª Temporada. Foreman se torna o novo Reitor de Medicina, enquanto Dr.ª Jessica Adams (Odette Annable) e Dr.ª Chi Park (Charlyne Yi) se juntam à equipe de House.\nHouse esteve entre as 10 melhores séries dos Estados Unidos de sua 2ª à sua 4.ª Temporada. Em territórios lusófonos, o programa é transmitido em vários canais: no Brasil na Universal Channel e na RecordTV, e em Portugal na Fox Portugal e na TVI. House também fora o programa de televisão mais assistido do mundo em 2008. A série recebeu inúmeros prêmios, incluindo cinco Emmys, dois Globos de Ouro, um Prêmio Peabody, e nove People's Choice Awards.\nA série conta com oito temporadas completas. No dia 8 de fevereiro de 2012, a Fox anunciou que a 8.ª temporada seria a última da série, tendo sua estreia em 3 de outubro de 2011 nos Estados Unidos e no Brasil em 3 de novembro do mesmo ano, encerrando-se em 21 de maio de 2012, no início de outubro de 2018 a Rede Globo adicionou a primeira temporada da série ao catálogo do Globoplay. A série também se encontra no Amazon Prime Video, HBO Max e Netflix. \nNo Brasil, voltou a ser exibida em TV aberta em 2021 pela Rede Bandeirantes.",
+      "url": "https://pt.wikipedia.org/wiki/House,_M.D."
+    }
+  },
+  "tier": "top",
+  "type": "series"
+}

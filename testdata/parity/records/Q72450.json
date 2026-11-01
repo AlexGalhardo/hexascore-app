@@ -1,0 +1,253 @@
+{
+  "qid": "Q72450",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q72450",
+      "labels": {
+        "en": "Shall We Dance?",
+        "es": "Shall We Dance?",
+        "mul": "Shall We Dance?",
+        "pt": "Shall We Dance?"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Shall We Dance? (2004 film)",
+        "eswiki": "¿Bailamos?",
+        "ptwiki": "Shall We Dance?"
+      },
+      "sitelinks_count": 33,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/shall_we_dance",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q860626",
+            "rank": "normal"
+          },
+          {
+            "value": "Q859369",
+            "rank": "normal"
+          },
+          {
+            "value": "Q20442589",
+            "rank": "normal"
+          },
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Shall We Dance?",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q48410",
+            "rank": "normal"
+          },
+          {
+            "value": "Q133050",
+            "rank": "normal"
+          },
+          {
+            "value": "Q40715",
+            "rank": "normal"
+          },
+          {
+            "value": "Q223117",
+            "rank": "normal"
+          },
+          {
+            "value": "Q428819",
+            "rank": "normal"
+          },
+          {
+            "value": "Q434802",
+            "rank": "normal"
+          },
+          {
+            "value": "Q288680",
+            "rank": "normal"
+          },
+          {
+            "value": "Q426911",
+            "rank": "normal"
+          },
+          {
+            "value": "Q456156",
+            "rank": "normal"
+          },
+          {
+            "value": "Q233736",
+            "rank": "normal"
+          },
+          {
+            "value": "Q313043",
+            "rank": "normal"
+          },
+          {
+            "value": "Q348533",
+            "rank": "normal"
+          },
+          {
+            "value": "Q309843",
+            "rank": "normal"
+          },
+          {
+            "value": "Q291029",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7822251",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4424852",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4412013",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5065435",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/shall-we-dance",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+106",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q465449",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0358135",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "4380",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q1333379",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2004-10-15T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2004-11-04T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q455862",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q130232": "drama film",
+        "Q133050": "Susan Sarandon",
+        "Q1333379": "Peter Chelsom",
+        "Q1860": "English",
+        "Q20442589": "LGBTQ-related film",
+        "Q223117": "Stanley Tucci",
+        "Q233736": "Mýa",
+        "Q288680": "Omar Benson Miller",
+        "Q291029": "Stark Sands",
+        "Q30": "United States",
+        "Q309843": "Ja Rule",
+        "Q313043": "Richard Jenkins",
+        "Q348533": "Nick Cannon",
+        "Q40715": "Jennifer Lopez",
+        "Q426911": "Tamara Hope",
+        "Q428819": "Bobby Cannavale",
+        "Q434802": "Lisa Ann Walter",
+        "Q4412013": "Slavik Kryklyvyy",
+        "Q4424852": "Karina Smirnoff",
+        "Q455862": "Audrey Wells",
+        "Q456156": "Anita Gillette",
+        "Q465449": "Miramax",
+        "Q48410": "Richard Gere",
+        "Q5065435": "Cesar Corrales",
+        "Q7822251": "Tony Dovolani",
+        "Q859369": "comedy drama",
+        "Q860626": "romantic comedy"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q72450",
+      "lang": "en",
+      "title": "Shall We Dance? (2004 film)",
+      "extract": "Shall We Dance? is a 2004 American romantic comedy-drama film directed by Peter Chelsom and starring Richard Gere, Jennifer Lopez, and Susan Sarandon. A remake of the 1996 Japanese film of the same name, the film received mixed reviews and grossed $170.1 million worldwide.",
+      "url": "https://en.wikipedia.org/wiki/Shall_We_Dance%3F_(2004_film)"
+    },
+    "wikipedia:es": {
+      "qid": "Q72450",
+      "lang": "es",
+      "title": "¿Bailamos?",
+      "extract": "¿Bailamos? (titulada originalmente en inglés Shall We Dance?) es una comedia dramática protagonizada por Richard Gere, Jennifer López y Susan Sarandon. Estrenada el 15 de octubre de 2004 en Estados Unidos y el 5 de noviembre del mismo año en España. Es el remake del filme japonés \"Shall we ダンス?\" (Sharu wi Dansu?).​ que a su vez se basa en la comedia musical de la RKO de 1937, Ritmo Loco (aunque el nombre en inglés es el mismo), protagonizada por Fred Astaire y Ginger Rogers.",
+      "url": "https://es.wikipedia.org/wiki/%C2%BFBailamos%3F"
+    },
+    "wikipedia:pt": {
+      "qid": "Q72450",
+      "lang": "pt",
+      "title": "Shall We Dance?",
+      "extract": "Shall We Dance? (bra Dança Comigo?; prt Vamos Dançar?) é um filme de comédia romântica estadunidense de 2004, dirigido por Peter Chelsom, protagonizado por Richard Gere, Susan Sarandon e Jennifer Lopez.\nTrata-se uma regravação do filme homônimo japonês de 1996.",
+      "url": "https://pt.wikipedia.org/wiki/Shall_We_Dance%3F"
+    }
+  },
+  "tier": "mid",
+  "type": "movie"
+}

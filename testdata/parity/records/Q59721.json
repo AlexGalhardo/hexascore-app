@@ -1,0 +1,490 @@
+{
+  "qid": "Q59721",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q59721",
+      "labels": {
+        "en": "Russian Ark",
+        "es": "El arca rusa",
+        "pt": "Russian Ark"
+      },
+      "aliases": {
+        "en": [
+          "Russkij Kovcheg",
+          "Russky kovcheg"
+        ],
+        "es": [
+          "Russian Ark",
+          "Russkiy kovcheg"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Russian Ark",
+        "eswiki": "El arca rusa",
+        "ptwiki": "Russian Ark"
+      },
+      "sitelinks_count": 33,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/russian_ark",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q157394",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7168625",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1200678",
+            "rank": "normal"
+          },
+          {
+            "value": "Q31888058",
+            "rank": "normal"
+          },
+          {
+            "value": "Q790192",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Русский ковчег",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q55172",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3955911",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2280388",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4245110",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4299607",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2180359",
+            "rank": "normal"
+          },
+          {
+            "value": "Q106632596",
+            "rank": "normal"
+          },
+          {
+            "value": "Q106632622",
+            "rank": "normal"
+          },
+          {
+            "value": "Q61138018",
+            "rank": "normal"
+          },
+          {
+            "value": "Q106632656",
+            "rank": "normal"
+          },
+          {
+            "value": "Q101440968",
+            "rank": "normal"
+          },
+          {
+            "value": "Q95710110",
+            "rank": "normal"
+          },
+          {
+            "value": "Q28355528",
+            "rank": "normal"
+          },
+          {
+            "value": "Q24351080",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4061583",
+            "rank": "normal"
+          },
+          {
+            "value": "Q165693",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4275405",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4410859",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4425048",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4342841",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4098574",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4054237",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4066336",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4077593",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4123310",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4145828",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4173663",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4226588",
+            "rank": "normal"
+          },
+          {
+            "value": "Q58394257",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15071330",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4293502",
+            "rank": "normal"
+          },
+          {
+            "value": "Q17749339",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4483774",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3291015",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13218081",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4484117",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15065785",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4424819",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4336721",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4350169",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4519594",
+            "rank": "normal"
+          },
+          {
+            "value": "Q18244611",
+            "rank": "normal"
+          },
+          {
+            "value": "Q95713639",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4316953",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/russian-ark",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+99",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q106641454",
+            "rank": "normal"
+          },
+          {
+            "value": "Q106641464",
+            "rank": "normal"
+          },
+          {
+            "value": "Q106641478",
+            "rank": "normal"
+          },
+          {
+            "value": "Q203453",
+            "rank": "normal"
+          },
+          {
+            "value": "Q8073",
+            "rank": "normal"
+          },
+          {
+            "value": "Q106641482",
+            "rank": "normal"
+          },
+          {
+            "value": "Q106641490",
+            "rank": "normal"
+          },
+          {
+            "value": "Q212128",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0318034",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q7737",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "16646",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q159",
+            "rank": "normal"
+          },
+          {
+            "value": "Q183",
+            "rank": "normal"
+          },
+          {
+            "value": "Q142",
+            "rank": "normal"
+          },
+          {
+            "value": "Q17",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16",
+            "rank": "normal"
+          },
+          {
+            "value": "Q33",
+            "rank": "normal"
+          },
+          {
+            "value": "Q35",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q55172",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2002-05-22T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2002-11-08T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2003-01-10T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2003-02-21T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2003-02-22T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q55172",
+            "rank": "normal"
+          },
+          {
+            "value": "Q95858708",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3506312",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q101440968": "Maksim Sergeyev",
+        "Q106632596": "Oleg Khmelnitsky",
+        "Q106632622": "Artyom Strelnikov",
+        "Q106632656": "Tamara Kurenkova",
+        "Q106641454": "Hermitage Bridge Studio",
+        "Q106641464": "Egoli Tossell Film AG",
+        "Q106641478": "Koppfilm Productions",
+        "Q106641482": "Fora Film",
+        "Q106641490": "AST Studio",
+        "Q1200678": "mystery film",
+        "Q13218081": "Viktor Mikhaylov",
+        "Q142": "France",
+        "Q15065785": "Konstantin Demidov",
+        "Q15071330": "Sergey Losev",
+        "Q157394": "fantasy film",
+        "Q159": "Russia",
+        "Q16": "Canada",
+        "Q165693": "Valery Gergiev",
+        "Q17": "Japan",
+        "Q17749339": "Elena Rufanova",
+        "Q18244611": "Aleksandra Kulikova",
+        "Q183": "Germany",
+        "Q203453": "Westdeutscher Rundfunk",
+        "Q212128": "NHK",
+        "Q2180359": "Alla Osipenko",
+        "Q2280388": "Mikhail Piotrovsky",
+        "Q24351080": "Lev Yeliseev",
+        "Q28355528": "Aleksandr Chaban",
+        "Q31888058": "ghost film",
+        "Q3291015": "Maria Kuznetsova",
+        "Q33": "Finland",
+        "Q35": "Denmark",
+        "Q3506312": "Svetlana Proskurina",
+        "Q3955911": "Sergey Dreyden",
+        "Q4054237": "Ğali Abaydulov",
+        "Q4061583": "Anna Aleksakhina",
+        "Q4066336": "Konstantin Anisimov",
+        "Q4077593": "Alexey Barabash",
+        "Q4098574": "Valentin Bukin",
+        "Q4123310": "Igor Volkov",
+        "Q4145828": "Yekaterina Gorokhovskaya",
+        "Q4173663": "Valentina Yegorenkova",
+        "Q4226588": "Valeri Kozinets",
+        "Q4245110": "Mariya Kuznetsova",
+        "Q4275405": "Yulian Makarov",
+        "Q4293502": "Kirill Miller",
+        "Q4299607": "Leonid Mozgovoy",
+        "Q4316953": "Svetlana Anatolevna Nemirovskaja",
+        "Q4336721": "Yury Orlov",
+        "Q4342841": "Oleg Palmov",
+        "Q4350169": "Sergey Peregudov",
+        "Q4410859": "Svetlana Svirko",
+        "Q4424819": "Svetlana Smirnova",
+        "Q4425048": "Boris Smolkin",
+        "Q4483774": "Yevgeny Filatov",
+        "Q4484117": "Helga Filippova",
+        "Q4519594": "Ilya Shakunov",
+        "Q55172": "Alexander Sokurov",
+        "Q58394257": "Vadim Lobanov",
+        "Q61138018": "David Giorgobiani",
+        "Q7168625": "historical drama",
+        "Q7737": "Russian",
+        "Q790192": "experimental film",
+        "Q8073": "Arte",
+        "Q95710110": "Natalya Nikulenko",
+        "Q95713639": "Svetlana Gajtan",
+        "Q95858708": "Anatoli Nikiforov"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q59721",
+      "lang": "en",
+      "title": "Russian Ark",
+      "extract": "Russian Ark (Russian: Русский ковчег, romanized: Russkij kovcheg) is a 2002 experimental historical drama film directed by Alexander Sokurov. The plot follows an unnamed narrator, who wanders through the Winter Palace in Saint Petersburg, and implies that he died in some horrible accident and is a ghost drifting through. In each room, he encounters various real and fictional people from various periods in the city's 300-year history. He is accompanied by \"the European\", who represents the Marquis de Custine, a 19th-century French traveler.\nAn international co-production between Russia and Germany, Russian Ark was shot entirely in the Winter Palace of the Russian State Hermitage Museum on 23 December 2001, using a one-take single 87-minute Steadicam sequence shot. It extensively uses the fourth wall device, but repeatedly broken and re-erected. At times, the narrator and the companion interact with the other performers, while at other times they pass unnoticed.\nThe film was entered into the 2002 Cannes Film Festival.",
+      "url": "https://en.wikipedia.org/wiki/Russian_Ark"
+    },
+    "wikipedia:es": {
+      "qid": "Q59721",
+      "lang": "es",
+      "title": "El arca rusa",
+      "extract": "El arca rusa (en ruso: Русский ковчег, transliterada: Russkiy kovcheg), también conocida por su título en inglés Russian Ark, es una película de 2002 del director de cine ruso Aleksandr Sokúrov. Destaca por ser la primera película en formato de alta definición sin comprimir, y la primera película comercial sin editar, pues consiste en un solo plano secuencia con Steadicam de 90 minutos. Fue rodada el 23 de diciembre de 2001 en el Museo del Hermitage. La cinta participó en la selección oficial del Festival de Cannes de 2002.",
+      "url": "https://es.wikipedia.org/wiki/El_arca_rusa"
+    },
+    "wikipedia:pt": {
+      "qid": "Q59721",
+      "lang": "pt",
+      "title": "Russian Ark",
+      "extract": "Arca Russa (Russo: Русский ковчег, Russkij Kovcheg) é um drama histórico experimental de 2002 dirigido por Alexander Sokurov. Em Arca Russa um narrador sem nome vagueia pelo Palácio de Inverno em São Petersburgo e sugere que ele morreu em um acidente horrível e é um fantasma vagando pelo palácio. \nEm cada sala, ele encontra personagens históricos e fictícios de vários períodos dos 300 anos de história da antiga capital russa. O narrador está acompanhado por um \"europeu\",  o Marquês de Custine, um viajante francês do século XIX. O filme foi inteiramente gravado no Palácio de Inverno do Museu Hermitage em 23 de dezembro de 2001, em uma única tomada de 96 minutos, usando o estabilizador de câmera Steadicam. \nA Arca Russa usa extensivamente a convenção dramática da quarta parede, mas ela é repetidamente quebrada e reerguida. Às vezes o narrador e o acompanhante interagem com os demais atores, mas outras vezes passam despercebidos. O filme foi inscrito no Festival de Cinema de Cannes de 2002.",
+      "url": "https://pt.wikipedia.org/wiki/Russian_Ark"
+    }
+  },
+  "tier": "mid",
+  "type": "movie"
+}

@@ -1,0 +1,170 @@
+{
+  "qid": "Q1165285",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q1165285",
+      "labels": {
+        "en": "A Page of Madness",
+        "es": "Una página de locura",
+        "mul": "狂つた一頁",
+        "pt": "Uma página de loucura"
+      },
+      "aliases": {
+        "en": [
+          "Page of Madness",
+          "A Crazy Page",
+          "The Forgotten Pages"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "A Page of Madness",
+        "eswiki": "Una página de locura",
+        "ptwiki": "Kurutta Ichipeiji"
+      },
+      "sitelinks_count": 14,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/kurutta-ippeji-a-crazy-pagea-page-of-madness",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q226730",
+            "rank": "normal"
+          },
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "狂つた一頁",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q11373074",
+            "rank": "normal"
+          }
+        ],
+        "P1651": [
+          {
+            "value": "SivLz0uCBOQ",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "A Page of Madness Still.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+71",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0017048",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "94525",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q17",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q723042",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1926-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1926-09-24T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1926-07-10T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 10,
+              "time": "+1975-01-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q43736",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q11373074": "Masao Inoue",
+        "Q130232": "drama film",
+        "Q17": "Japan",
+        "Q226730": "silent film",
+        "Q43736": "Yasunari Kawabata",
+        "Q723042": "Teinosuke Kinugasa"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q1165285",
+      "lang": "en",
+      "title": "A Page of Madness",
+      "extract": "A Page of Madness (狂った一頁, Kurutta Ichipēji) is a 1926 Japanese silent experimental horror film directed by Teinosuke Kinugasa. Lost for 45 years until it was rediscovered by Kinugasa in his storehouse in 1971, the film is the product of an avant-garde group of artists in Japan known as the Shinkankakuha (or School of New Perceptions) who tried to overcome naturalistic representation. The film is set in a mental institution in contemporary Japan.\nYasunari Kawabata, who won the Nobel Prize for Literature in 1968, was credited on the film with the original story. He is often cited as the screenwriter, and a version of the scenario is printed in his complete works, but the scenario is now considered a collaboration between him, Kinugasa, Banko Sawada, and Minoru Inuzuka. Eiji Tsuburaya is credited as an assistant cameraman.",
+      "url": "https://en.wikipedia.org/wiki/A_Page_of_Madness"
+    },
+    "wikipedia:es": {
+      "qid": "Q1165285",
+      "lang": "es",
+      "title": "Una página de locura",
+      "extract": "Una página de locura (狂った一頁, Kurutta Ichipeiji?) es una película muda japonesa de 1926 dirigida por Teinosuke Kinugasa. Perdida durante cuarenta y cinco años hasta que su director la redescubrió en su almacén en 1971,​​ la película es producto de un grupo de artistas de vanguardia en Japón conocido como Shinkankakuha (o Escuela de las Nuevas Percepciones) que intentó superar la representación naturalista.​​​\nYasunari Kawabata, quien ganaría el Premio Nobel de Literatura en 1968, fue acreditado en la película con la historia original. A menudo se le cita como el guionista de la película, y se imprime una versión del guion en sus obras completas, pero actualmente el guion se considera una colaboración entre él, Kinugasa, Banko Sawada y Minoru Inuzuka.​ Eiji Tsuburaya está acreditado como asistente de cámara.​",
+      "url": "https://es.wikipedia.org/wiki/Una_p%C3%A1gina_de_locura"
+    },
+    "wikipedia:pt": {
+      "qid": "Q1165285",
+      "lang": "pt",
+      "title": "Kurutta Ichipeiji",
+      "extract": "Kurutta Ippēji ou Ichipeiji (狂った一頁; Uma Página Louca (título em Portugal) ou Uma Página de Loucura (título no Brasil)) é um filme a preto e branco japonês do género drama, realizado e escrito por Teinosuke Kinugasa, Yasunari Kawabata, Banko Sawada e Minoru Inuzuka. O filme foi dado como perdido por quarenta e cinco anos, até ser redescoberto por Teinosuke Kinugasa no seu armazém em 1971. O filme foi produzido pelo grupo de vanguarda Shinkankakuha (Escola das Novas Perceções). Estreou-se no Japão a 24 de setembro de 1926.\nO escritor japonês Yasunari Kawabata, que foi galardoado com o Nobel de Literatura em 1968, foi creditado no filme como o autor da história original, e é citado frequentemente como o argumentista, e uma versão do argumento foi impressa nas suas obras. Eiji Tsuburaya foi creditado como o operador de câmara.",
+      "url": "https://pt.wikipedia.org/wiki/Kurutta_Ichipeiji"
+    }
+  },
+  "tier": "non-latin",
+  "type": "movie"
+}

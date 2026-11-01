@@ -1,0 +1,252 @@
+{
+  "qid": "Q171048",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q171048",
+      "labels": {
+        "en": "Toy Story",
+        "es": "Toy Story",
+        "mul": "Toy Story",
+        "pt": "Toy Story – Os Rivais",
+        "pt-br": "Toy Story"
+      },
+      "aliases": {
+        "mul": [
+          "Toy Story 1"
+        ],
+        "pt": [
+          "Toy Story - Os Rivais"
+        ],
+        "pt-br": [
+          "Toy Story - Um mundo de aventuras",
+          "Toy story: um mundo de aventuras"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Toy Story",
+        "eswiki": "Toy Story",
+        "ptwiki": "Toy Story"
+      },
+      "sitelinks_count": 116,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/toy_story",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q663106",
+            "rank": "normal"
+          },
+          {
+            "value": "Q157394",
+            "rank": "normal"
+          },
+          {
+            "value": "Q319221",
+            "rank": "normal"
+          },
+          {
+            "value": "Q157443",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Toy Story",
+            "rank": "normal"
+          }
+        ],
+        "P1651": [
+          {
+            "value": "vGe1JFJ8Ylc",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q269214",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/toy-story",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q2732470",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2316015",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+80",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q127552",
+            "rank": "normal"
+          },
+          {
+            "value": "Q191224",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0114709",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "862",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q269214",
+            "rank": "normal"
+          }
+        ],
+        "P571": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1995-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1995-11-22T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1996-03-08T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1996-03-21T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q298025",
+            "rank": "normal"
+          },
+          {
+            "value": "Q328723",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3397612",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3609030",
+            "rank": "normal"
+          },
+          {
+            "value": "Q269214",
+            "rank": "normal"
+          },
+          {
+            "value": "Q357627",
+            "rank": "normal"
+          },
+          {
+            "value": "Q453094",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q127552": "Pixar",
+        "Q1321": "Spanish",
+        "Q157394": "fantasy film",
+        "Q157443": "comedy film",
+        "Q1860": "English",
+        "Q191224": "Walt Disney Pictures",
+        "Q2316015": "Toy Story",
+        "Q269214": "John Lasseter",
+        "Q2732470": "list of Pixar films",
+        "Q298025": "Joss Whedon",
+        "Q30": "United States",
+        "Q319221": "adventure film",
+        "Q328723": "Andrew Stanton",
+        "Q3397612": "Joel Cohen",
+        "Q357627": "Pete Docter",
+        "Q3609030": "Alec Sokolow",
+        "Q453094": "Joe Ranft",
+        "Q663106": "buddy film"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q171048",
+      "lang": "en",
+      "title": "Toy Story",
+      "extract": "Toy Story is a 1995 American animated adventure comedy film directed by John Lasseter, and written by Joss Whedon, Andrew Stanton, Joel Cohen, and Alec Sokolow. The first entirely computer-animated feature film, as well as the first feature film produced by Pixar Animation Studios for Walt Disney Pictures, it stars the voices of Tom Hanks, Tim Allen, Annie Potts, John Ratzenberger, Don Rickles, Wallace Shawn, and Jim Varney. Set in a world in which toys come to life, Toy Story follows an old-fashioned cowboy doll named Woody (Hanks), who becomes jealous that a space cadet action figure, Buzz Lightyear (Allen), is replacing him as the favorite toy of their owner Andy.\nFollowing the success of the 1988 short film Tin Toy, Pixar was approached by Disney to produce a computer-animated feature film that was told from a small toy's perspective. Lasseter, Stanton, and Pete Docter wrote early story treatments, which were rejected by Disney, who wanted the film's tone to be edgier. After several disastrous story reels, production was halted, and the script was rewritten to better reflect the tone and theme Pixar desired: \"toys deeply want children to play with them, and ... this desire drives their hopes, fears, and actions\". The studio, then consisting of a relatively small number of employees, produced Toy Story under minor financial constraints.\nToy Story premiered at the El Capitan Theatre in Los Angeles on November 19, 1995, and was released theatrically in the United States on November 22. It set a record for the highest-grossing opening weekend and eventually grossed over $363 million worldwide, making it the second highest-grossing film of 1995. The film received widespread acclaim, with praise directed towards the animation, screenplay, Randy Newman's score, appeal to all age groups, and voice performances, particularly of Hanks and Allen. It holds a 100% approval rating on film aggregation website Rotten Tomatoes. \nThe film is frequently lauded as one of the greatest animated films ever made, and, due to its status as the first computer-animated film, one of the most important films in the medium's history and in film at large. The film received three Academy Award nominations—Best Original Screenplay (the first animated film to be nominated for the award), Best Original Song for \"You've Got a Friend in Me\", and Best Original Score—in addition to being honored with a non-competitive Special Achievement Academy Award.\nIn 2005, Toy Story was selected for preservation in the United States National Film Registry by the Library of Congress as being \"culturally, historically, or aesthetically significant\". The success of Toy Story launched a multimedia franchise, with four sequels beginning with Toy Story 2 (1999); a spin-off film, Lightyear (2022); and numerous short films. Toy Story has had several theatrical re-releases, including a 3D re-release in 2009 as part of a double feature with Toy Story 2, and a 30th anniversary re-release in 2025.",
+      "url": "https://en.wikipedia.org/wiki/Toy_Story"
+    },
+    "wikipedia:es": {
+      "qid": "Q171048",
+      "lang": "es",
+      "title": "Toy Story",
+      "extract": "Toy Story es una película infantil de animación por computadora dirigida por John Lasseter, estrenada en 1995 y producida por Pixar. Fue el primer largometraje de Pixar, además de la primera cinta animada completamente con efectos digitales en la historia del cine.​\nJoss Whedon, Andrew Stanton, Joel Cohen y Alec Sokolow redactaron el guion, y Randy Newman compuso la banda sonora. El reparto principal estuvo integrado por Tom Hanks y Tim Allen, quienes prestaron sus voces en inglés a los personajes de Woody y Buzz, respectivamente. Para el proceso de animación, colaboraron un total de 110 empleados de Pixar,​ a diferencia de los 800 que trabajaron en una de las últimas producciones de Disney en aquellos años, El rey león (1994).​\nLa historia sigue las aventuras de un grupo de juguetes vivientes, en particular del vaquero Woody y el guardián espacial Buzz Lightyear. Si bien al principio rivalizan entre sí, conforme transcurre la trama se van volviendo amigos. Tras su estreno, Toy Story se convirtió en la cinta más taquillera de EE. UU. y Canadá en su primer fin de semana de exhibición.​ En total recaudó más de 191 millones USD en ambos países, y más de 361 millones adicionales a nivel internacional.​ Se hizo acreedora a críticas positivas en su gran mayoría, en las que se elogió la innovación técnica de la animación y el guion.​​\nDisney y Pixar comenzaron una franquicia inspirada en los personajes y elementos de la película, que incluye juguetes y videojuegos, entre otros productos diversos. La trama de Toy Story fue continuada en el cine con Toy Story 2 (1999), Toy Story 3 (2010), Toy Story 4 (2019) y Toy Story 5 (2026), además de varios cortometrajes y especiales de televisión.​",
+      "url": "https://es.wikipedia.org/wiki/Toy_Story"
+    },
+    "wikipedia:pt": {
+      "qid": "Q171048",
+      "lang": "pt",
+      "title": "Toy Story",
+      "extract": "Toy Story (bra: Toy Story: Um Mundo de Aventuras; prt: Toy Story: Os Rivais) é um filme de animação, aventura e comédia americano lançado em 1995. Conhecido por ser o primeiro filme da história do cinema a ter sido compilado inteiramente por ferramentas de computação gráfica. Foi o precursor dentre os longas-metragens da Pixar e a primeira produção realizada por meio da parceria entre a própria Pixar e sua distribuidora, a Walt Disney Pictures. A história se passa num mundo onde os brinquedos têm vida e fingem ser inanimados quando os humanos estão por perto, com o enredo centrando-se na relação entre Woody (voz de Tom Hanks), um velho boneco caubói a corda, e Buzz Lightyear (voz de Tim Allen), um moderno brinquedo de temática espacial. A obra mostra como ambos evoluem de rivais competindo pela afeição de seu dono Andy para amigos que se unem pelo bem comum, enquanto a família do garoto prepara-se para se mudar para uma nova casa. O roteiro foi escrito por Joss Whedon, Andrew Stanton, Joel Cohen e Alec Sokolow a partir de uma história criada por Lasseter, Pete Docter, Stanton e Joe Ranft. O filme foi produzido por Steve Jobs e Edwin Catmull e a trilha sonora foi composta por Randy Newman.\nA Pixar, que produzia curtas-metragens de animação para promover seus computadores, foi abordada pela Disney para produzir um longa-metragem animado depois do sucesso de seu curta-metragem Tin Toy (1988), narrado a partir da perspectiva de um pequeno brinquedo. Lasseter, Stanton e Docter escreveram os primeiros tratamentos da história, que foram descartados pela Disney, a qual queria que o tom do filme fosse \"mais ousado\". Depois de várias histórias desastrosas, a produção foi interrompida e o roteiro foi reescrito, refletindo melhor o tom e o tema desejados pela Pixar: \"os brinquedos querem profundamente que as crianças brinquem com eles e esse desejo motiva esperanças, medos e ações\". O estúdio, até aquele momento composto por uma quantidade relativamente pequena de funcionários, produziu o filme com pouco orçamento.\nLançado nos cinemas em 22 de novembro de 1995, Toy Story foi o filme de maior bilheteria em seu fim de semana de estreia. Posteriormente, tornou-se um sucesso comercial nacional e internacional, arrecadando mais de 406 milhões de dólares no circuito mundial ante seu orçamento de trinta milhões. Foi avaliado positivamente pela crítica e pelo público, que elogiaram a inovação técnica da animação, a sagacidade e sofisticação temática do roteiro e os desempenhos de Hanks e Allen. Atualmente, é reconhecido por analistas e estudiosos de cinema como um clássico cult e um dos filmes mais influentes do século XX, notabilizando-se por ter entrado na lista de diversas publicações de \"os melhores\" e \"mais importantes\" filmes de animação. Em 2007, entrou para a história ao ter sido uma das duas animações a ter entrado na lista dos 100 melhores filmes americanos já realizados, segundo o Instituto Americano do Cinema. Toy Story recebeu três indicações ao Oscar 1996 para Melhor Roteiro Original, Melhor Trilha Sonora Original e Melhor Canção Original (\"You've Got a Friend in Me\"), além de ter ganhado um Oscar de Contribuição Especial. Em 2005, foi introduzido no National Film Registry como sendo \"cultural, histórica ou esteticamente significativo\" em seu primeiro ano de elegibilidade. Além de mídia doméstica e relançamentos nos cinemas, o material inspirado no filme inclui brinquedos, jogos eletrônicos, atrações de parques temáticos, histórias derivadas, publicidade e quatro sequências — Toy Story 2 (1999), Toy Story 3 (2010), Toy Story 4 (2019) e Toy Story 5  (2026) —, as quais também conquistaram grande sucesso comercial e aclamação da crítica.",
+      "url": "https://pt.wikipedia.org/wiki/Toy_Story"
+    }
+  },
+  "tier": "top",
+  "type": "movie"
+}

@@ -1,0 +1,86 @@
+{
+  "qid": "Q112407",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q112407",
+      "labels": {
+        "en": "Even Cowgirls Get the Blues",
+        "es": "También las vaqueras sienten melancolía"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Even Cowgirls Get the Blues (novel)"
+      },
+      "sitelinks_count": 6,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q390074",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Even Cowgirls Get the Blues",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q452404",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1976-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL94863W",
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "610037",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1860": "English",
+        "Q30": "United States",
+        "Q390074": "Houghton Mifflin Harcourt",
+        "Q452404": "Tom Robbins"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q112407",
+      "lang": "en",
+      "title": "Even Cowgirls Get the Blues (novel)",
+      "extract": "Even Cowgirls Get the Blues is a  1976 novel by Tom Robbins.",
+      "url": "https://en.wikipedia.org/wiki/Even_Cowgirls_Get_the_Blues_(novel)"
+    }
+  },
+  "tier": "tail",
+  "type": "book"
+}

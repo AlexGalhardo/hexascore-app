@@ -1,0 +1,164 @@
+{
+  "qid": "Q55561",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q55561",
+      "labels": {
+        "en": "3D Construction Kit",
+        "mul": "3D Construction Kit"
+      },
+      "aliases": {
+        "en": [
+          "3D Virtual Studio"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "3D Construction Kit",
+        "eswiki": "3D Construction Kit"
+      },
+      "sitelinks_count": 6,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q1235040",
+            "rank": "normal"
+          },
+          {
+            "value": "Q391183",
+            "rank": "preferred"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q868410",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5519929",
+            "rank": "normal"
+          },
+          {
+            "value": "Q229371",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "3D Construction Kit",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q391183",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q41357",
+            "rank": "normal"
+          },
+          {
+            "value": "Q478829",
+            "rank": "normal"
+          },
+          {
+            "value": "Q627302",
+            "rank": "normal"
+          },
+          {
+            "value": "Q99775",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1115919",
+            "rank": "normal"
+          },
+          {
+            "value": "Q170434",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23882",
+            "rank": "normal"
+          },
+          {
+            "value": "Q100047",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q145",
+            "rank": "normal"
+          }
+        ],
+        "P571": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1991-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1991-06-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "3d-construction-kit",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q100047": "Commodore Amiga",
+        "Q1115919": "Commodore 128",
+        "Q1235040": "Domark Software",
+        "Q145": "United Kingdom",
+        "Q170434": "DOS",
+        "Q1860": "English",
+        "Q229371": "3D computer graphics software",
+        "Q23882": "ZX Spectrum",
+        "Q391183": "Incentive Software",
+        "Q41357": "Acorn Archimedes",
+        "Q478829": "Amstrad CPC",
+        "Q5519929": "game creation system",
+        "Q627302": "Atari ST",
+        "Q868410": "graphics software",
+        "Q99775": "Commodore 64"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q55561",
+      "lang": "en",
+      "title": "3D Construction Kit",
+      "extract": "3D Construction Kit (US, Canada and Israel release title: Virtual Reality Studio), also known as 3D Virtual Studio, is a utility for creating 3D worlds in Freescape. Developed by Incentive Software and published by Domark, it was released in 1991 on multiple platforms. The game originally retailed for £24.99 for the 8-bit version, and £49.99 for 16-bit version and the 32-bit Acorn Archimedes version, in the United Kingdom. A sequel, 3D Construction Kit II, was released in 1992, but only available on Amiga, Atari ST and MS-DOS.",
+      "url": "https://en.wikipedia.org/wiki/3D_Construction_Kit"
+    },
+    "wikipedia:es": {
+      "qid": "Q55561",
+      "lang": "es",
+      "title": "3D Construction Kit",
+      "extract": "3D Construction Kit (publicado en EE. UU., Canadá e Israel con el título: Virtual Reality Studio​), también conocido como 3D Virtual Studio, es una utilidad para crear mundos 3D en Freescape. Desarrollado por Incentive Software y comercializado por Domark, fue publicado en 1991 para múltiples plataformas. El año siguiente se publicó una secuela.",
+      "url": "https://es.wikipedia.org/wiki/3D_Construction_Kit"
+    }
+  },
+  "tier": "tail",
+  "type": "game"
+}

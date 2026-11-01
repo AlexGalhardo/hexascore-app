@@ -1,0 +1,129 @@
+{
+  "qid": "Q22096213",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q22096213",
+      "labels": {
+        "en": "The Cyanide \u0026 Happiness Show",
+        "es": "The Cyanide \u0026 Happiness Show",
+        "pt": "The Cyanide \u0026 Happiness Show"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "The Cyanide \u0026 Happiness Show",
+        "eswiki": "The Cyanide \u0026 Happiness Show",
+        "ptwiki": "The Cyanide \u0026 Happiness Show"
+      },
+      "sitelinks_count": 6,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+21",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q53094",
+            "rank": "normal"
+          },
+          {
+            "value": "Q128758",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q2081043",
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+3",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt4306696",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "61858",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2014-11-12T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2014-11-12T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q109422701",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q109422701": "Cyanide \u0026 Happiness",
+        "Q128758": "satire",
+        "Q2081043": "Cyanide and Happiness",
+        "Q30": "United States",
+        "Q53094": "black comedy"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q22096213",
+      "lang": "en",
+      "title": "The Cyanide \u0026 Happiness Show",
+      "extract": "The Cyanide \u0026 Happiness Show is an American adult animated web series created by Kris Wilson, Rob DenBleyker, Matt Melvin, and Dave McElfatrick based on their webcomic Cyanide \u0026 Happiness. Each episode consists of a few short stories that have little to no connection to each other (with the exception of six episodes from the third season, which were a story arc). The creators described the goal of each episode to be \"to extract the human excretion known as laughter from your face hole via fast-paced weird comedy.\"\nThe Cyanide \u0026 Happiness Show was funded through a successful Kickstarter campaign. The first season was initially released on YouTube from November 12, 2014, to January 21, 2015. The show was later acquired by Seeso, which produced second and third seasons before selling the show to VRV in mid-2017. On February 20, 2019, it was announced that VRV had renewed the show for a fourth season, which comprised ten episodes. Following the closure of VRV, the show has not seen any new seasons or episodes since 2019 with all the episodes being released on Explosm’s YouTube channel.",
+      "url": "https://en.wikipedia.org/wiki/The_Cyanide_%26_Happiness_Show"
+    },
+    "wikipedia:es": {
+      "qid": "Q22096213",
+      "lang": "es",
+      "title": "The Cyanide \u0026 Happiness Show",
+      "extract": "The Cyanide \u0026 Happiness Show es una serie estadounidense creada por Rob DenBleyker, Dave McElfatrick, Matt Melvin y Kris Wilson, los cuales también crearon los webcomics Cyanide \u0026 Happiness. Cada episodio consta de algunas historias cortas que tienen poca o ninguna conexión entre sí. \nLa primera temporada se lanzó inicialmente en YouTube del 12 de noviembre de 2014 al 21 de enero de 2015. El programa fue adquirido más tarde por Seeso , que produjo la segunda y la tercera temporada antes de vender el programa a VRV a mediados de 2017.",
+      "url": "https://es.wikipedia.org/wiki/The_Cyanide_%26_Happiness_Show"
+    },
+    "wikipedia:pt": {
+      "qid": "Q22096213",
+      "lang": "pt",
+      "title": "The Cyanide \u0026 Happiness Show",
+      "extract": "The Cyanide \u0026 Happiness Show é uma websérie americana de animação adulta criada por Kris Wilson, Rob DenBleyker, Matt Melvin e Dave McElfatrick, baseada na sua webcomic Cyanide \u0026 Happiness. Cada episódio consiste em algumas histórias curtas que têm pouca ou nenhuma conexão entre si (com exceção de seis episódios da terceira temporada, que formavam um arco narrativo). Os criadores descreveram o objetivo de cada episódio como sendo \"extrair a excreção humana conhecida como riso do seu orifício facial através de uma comédia estranha e acelerada\".\nThe Cyanide \u0026 Happiness Show foi financiado por meio de uma campanha bem-sucedida no Kickstarter. A primeira temporada foi lançada inicialmente no YouTube, de 12 de novembro de 2014 a 21 de janeiro de 2015. Posteriormente, a série foi adquirida pela Seeso, que produziu a segunda e a terceira temporadas antes de vendê-la para a VRV em meados de 2017. Em 20 de fevereiro de 2019, foi anunciado que a VRV renovou o programa para uma quarta temporada, que compreendeu dez episódios. Após o encerramento da VRV, a série não teve novas temporadas ou episódios desde 2019, com todos os episódios sendo lançados no canal do Explosm no YouTube.",
+      "url": "https://pt.wikipedia.org/wiki/The_Cyanide_%26_Happiness_Show"
+    }
+  },
+  "tier": "tail",
+  "type": "series"
+}

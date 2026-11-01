@@ -1,0 +1,43 @@
+{
+  "qid": "Q105453198",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q105453198",
+      "labels": {
+        "en": "Salat al-Fatih"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Salat al-Fatih"
+      },
+      "sitelinks_count": 6,
+      "claims": {
+        "P18": [
+          {
+            "value": "FirstSurahKoran.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q13955",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q13955": "Arabic"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q105453198",
+      "lang": "en",
+      "title": "Salat al-Fatih",
+      "extract": "In Sufism, the Salat al-Fatih (Arabic: صَلَاةُ الْفَاتِحِ, \"opener's prayer\")  was transmitted to the Muslims by Sheikh Muhammad ibn Abi al-Hasan al-Bakri, a successor of Abu Bakr al-Siddiq later this is  accepted and litany (wird)  prayer for Muhammad practiced individually or in congregation by followers (murids) in the Tijaniyya order.",
+      "url": "https://en.wikipedia.org/wiki/Salat_al-Fatih"
+    }
+  },
+  "tier": "tail",
+  "type": "book"
+}

@@ -1,0 +1,79 @@
+{
+  "qid": "Q111903",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q111903",
+      "labels": {
+        "en": "Novel with Cocaine",
+        "pt": "Romance com Cocaína"
+      },
+      "aliases": {
+        "en": [
+          "Cocain Romance"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Novel with Cocaine",
+        "ptwiki": "Romance com Cocaína"
+      },
+      "sitelinks_count": 8,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q223945",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Роман с кокаином.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q142",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q517719",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1934-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q142": "France",
+        "Q223945": "Bildungsroman",
+        "Q517719": "M. Ageyev"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q111903",
+      "lang": "en",
+      "title": "Novel with Cocaine",
+      "extract": "Novel with Cocaine  (Russian: Роман с кокаином, romanized: Roman s kokainom, also translated as Cocain Romance and Romance with Cocaine) is a novel first published in 1934 in a Russian émigré literary magazine Chisla (Numbers) under a pen name M. Ageyev.  The English translation of the title fails to convey the double meaning of the Russian \"Роман,\" meaning both \"novel\" and \"romance\".",
+      "url": "https://en.wikipedia.org/wiki/Novel_with_Cocaine"
+    },
+    "wikipedia:pt": {
+      "qid": "Q111903",
+      "lang": "pt",
+      "title": "Romance com Cocaína",
+      "extract": "Romance com Cocaína (em russo:  Роман с кокаином, transl. Roman s kokainom, também traduzido como Um Romance com Cocaína e Romance com Cocaína: Memórias de um Doente), é um romance primeiro publicado em 1934 em uma revista literária emigrante russa, Chisla (Números) sob o pseudônimo M. Ageyev. A tradução para o inglês do título falha em transmitir o duplo significado do russo \"Роман\", que significa \"novela\" e \"romance\". A autoria da obra permaneceu controversa por muito tempo. Apenas em 1997 foram publicadas cartas de Marc Levy, incluindo rascunhos do romance.\nDmitry Merezhkovsky e outros críticos emigrados viram em Romance com Cocaína uma continuação polêmica dos temas do romance O Adolescente de Fiódor Dostoiévski.",
+      "url": "https://pt.wikipedia.org/wiki/Romance_com_Coca%C3%ADna"
+    }
+  },
+  "tier": "tail",
+  "type": "book"
+}

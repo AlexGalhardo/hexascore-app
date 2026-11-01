@@ -1,0 +1,227 @@
+{
+  "qid": "Q174555",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q174555",
+      "labels": {
+        "en": "Madagascar",
+        "es": "Madagascar",
+        "pt": "Madagascar"
+      },
+      "aliases": {
+        "pt": [
+          "Madagascar movie",
+          "Madagáscar"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Madagascar (2005 film)",
+        "eswiki": "Madagascar (película)",
+        "ptwiki": "Madagascar (filme)"
+      },
+      "sitelinks_count": 169,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/madagascar",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q663106",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2143665",
+            "rank": "normal"
+          },
+          {
+            "value": "Q319221",
+            "rank": "normal"
+          },
+          {
+            "value": "Q157443",
+            "rank": "normal"
+          },
+          {
+            "value": "Q15898171",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Madagascar",
+            "rank": "normal"
+          }
+        ],
+        "P1651": [
+          {
+            "value": "VxktuTHTTaA",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/madagascar",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q26196748",
+            "rank": "normal"
+          },
+          {
+            "value": "Q98123293",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+86",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q500088",
+            "rank": "normal"
+          },
+          {
+            "value": "Q533547",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0351283",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "953",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q2630467",
+            "rank": "normal"
+          },
+          {
+            "value": "Q74227",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2005-05-27T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2005-09-02T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2005-07-14T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2005-06-24T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q2630467",
+            "rank": "normal"
+          },
+          {
+            "value": "Q74227",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6766943",
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q2261392",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q157443": "comedy film",
+        "Q15898171": "survival film",
+        "Q1860": "English",
+        "Q2143665": "children's film",
+        "Q2261392": "Madagascar",
+        "Q26196748": "DreamWorks Animation feature films",
+        "Q2630467": "Eric Darnell",
+        "Q30": "United States",
+        "Q319221": "adventure film",
+        "Q500088": "DreamWorks Animation",
+        "Q533547": "Pacific Data Images",
+        "Q663106": "buddy film",
+        "Q6766943": "Mark Burton",
+        "Q74227": "Tom McGrath",
+        "Q98123293": "Madagascar"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q174555",
+      "lang": "en",
+      "title": "Madagascar (2005 film)",
+      "extract": "Madagascar is a 2005 American animated comedy film directed by Eric Darnell and Tom McGrath and written by Mark Burton, Billy Frolick, Darnell and McGrath. Produced by DreamWorks Animation and PDI/DreamWorks, the film stars the voices of Ben Stiller, Chris Rock, David Schwimmer and Jada Pinkett Smith as a quartet of anthropomorphic animals from the Central Park Zoo who find themselves stranded on the island of Madagascar and must adjust to living in the wild. Sacha Baron Cohen, Cedric the Entertainer, and Andy Richter also voice supporting roles. The film features a musical score by Hans Zimmer, and also features a cover version by Baron Cohen of \"I Like to Move It\" by Reel 2 Real, which has since become a recurring theme song throughout the franchise.\nMadagascar was released in the United States by DreamWorks Pictures on May 27, 2005. The film received mixed reviews from critics, who praised the animation, voice acting and visuals, but criticized the story and some of its humor. It was a success at the box office, grossing $558 million on a production budget of $75 million, becoming the sixth highest-grossing film of 2005. The success of Madagascar launched a multimedia franchise, which includes two sequels, a spin-off film, several short films, television series and specials and a number of video games, theme park attractions and live stage shows.",
+      "url": "https://en.wikipedia.org/wiki/Madagascar_(2005_film)"
+    },
+    "wikipedia:es": {
+      "qid": "Q174555",
+      "lang": "es",
+      "title": "Madagascar (película)",
+      "extract": "Madagascar es una película de comedia de supervivencia animada estadounidense de 2005 dirigida por Eric Darnell y Tom McGrath, y escrita por Mark Burton, Billy Frolick, Darnell y McGrath. Producida por DreamWorks Animation y PDI/DreamWorks, y distribuida por DreamWorks Pictures, la película está protagonizada por las voces de Ben Stiller, Chris Rock, David Schwimmer y Jada Pinkett Smith como un cuarteto de animales del zoológico de Central Park que se encuentran varados en la isla de Madagascar y deben adaptarse a la vida en la naturaleza. La película cuenta con una banda sonora de Hans Zimmer. También incluye una versión de \"I Like to Move It\" de Sacha Baron Cohen, que desde entonces se ha convertido en un tema recurrente de la franquicia.\nEstrenada en cines el 27 de mayo de 2005, Madagascar recibió críticas mixtas, que elogiaron su atractivo visual y su encanto, pero criticaron la historia y el humor. Fue un éxito de taquilla, recaudando 556,6 millones de dólares con un presupuesto de producción de 75 millones, convirtiéndose en la sexta película más taquillera de 2005. El éxito de Madagascar dio origen a una franquicia multimedia que incluye dos secuelas, una película derivada, varios cortometrajes, series de televisión y especiales, además de numerosos videojuegos, atracciones de parques temáticos y espectáculos en vivo.",
+      "url": "https://es.wikipedia.org/wiki/Madagascar_(pel%C3%ADcula)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q174555",
+      "lang": "pt",
+      "title": "Madagascar (filme)",
+      "extract": "Madagascar (bra: Madagascar; prt: Madagáscar) é um filme de animação estadunidense dos gêneros comédia e aventura de 2005, produzido pela DreamWorks Animation e distribuído pela DreamWorks Pictures. Foi dirigido por Eric Darnell e Tom McGrath (este último em sua estréia como diretor) a partir de um roteiro de Mark Burton, Billy Frolick, Eric Darnell e Tom McGrath e conta com Ben Stiller, Chris Rock, David Schwimmer, Jada Pinkett Smith, Sacha Baron Cohen, Cedric the Entertainer e Andy Richter no elenco original de dublagem. A trama do filme gira em torno de quatro animais do Zoológico do Central Park que inesperadamente se encontram presos em Madagascar e precisam aprender a se adaptar à natureza.\nMadagascar foi lançado nos cinemas americanos em 27 de maio de 2005. Apesar de receber críticas mistas dos críticos, foi um sucesso comercial nas bilheterias. O filme originou uma franquia de longas, incluindo duas sequências diretas: Madagascar: Escape 2 Africa, de 2008, e Madagascar 3: Europe's Most Wanted, de 2012, ambos recebidos mais positivamente; um spin-off com os pinguins da série, Penguins of Madagascar, foi lançado em 26 de novembro de 2014.",
+      "url": "https://pt.wikipedia.org/wiki/Madagascar_(filme)"
+    }
+  },
+  "tier": "top",
+  "type": "movie"
+}

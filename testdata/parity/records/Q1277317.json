@@ -1,0 +1,107 @@
+{
+  "qid": "Q1277317",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q1277317",
+      "labels": {
+        "en": "Scarlet Sails",
+        "mul": "Алые паруса"
+      },
+      "aliases": {
+        "en": [
+          "Алые паруса",
+          "Alye parusa",
+          "Crimson sails",
+          "Alyye parusa"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Scarlet Sails (novel)"
+      },
+      "sitelinks_count": 15,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q12799318",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3092278",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Алые паруса",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Scarlet Sails first edition cover.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q7737",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q15180",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q213997",
+            "rank": "normal"
+          }
+        ],
+        "P571": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1922-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1923-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "1969171",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q12799318": "short novel",
+        "Q15180": "Soviet Union",
+        "Q213997": "Alexander Grin",
+        "Q3092278": "féerie",
+        "Q7737": "Russian"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q1277317",
+      "lang": "en",
+      "title": "Scarlet Sails (novel)",
+      "extract": "Scarlet Sails (Russian: Алые паруса, Alye parusa) is a 1923 romantic novel with elements of fantasy by Russian writer Alexander Grin. The author described the genre of the novel as féerie. It is a story about a dream coming true no matter how futile it seems. It was written from 1916–1922.",
+      "url": "https://en.wikipedia.org/wiki/Scarlet_Sails_(novel)"
+    }
+  },
+  "tier": "non-latin",
+  "type": "book"
+}

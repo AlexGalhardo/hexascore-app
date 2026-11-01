@@ -1,0 +1,210 @@
+{
+  "qid": "Q60296",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q60296",
+      "labels": {
+        "en": "The Weather Man",
+        "es": "El hombre del tiempo",
+        "pt": "The Weather Man"
+      },
+      "aliases": {
+        "en": [
+          "Weather Man"
+        ],
+        "es": [
+          "The Weather Man"
+        ],
+        "pt": [
+          "O sol de cada manhã",
+          "O homem do tempo"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "The Weather Man",
+        "eswiki": "El hombre del tiempo",
+        "ptwiki": "The Weather Man"
+      },
+      "sitelinks_count": 28,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/weather_man",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q157443",
+            "rank": "normal"
+          },
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "The Weather Man",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q42869",
+            "rank": "normal"
+          },
+          {
+            "value": "Q123351",
+            "rank": "normal"
+          },
+          {
+            "value": "Q236399",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1189681",
+            "rank": "normal"
+          },
+          {
+            "value": "Q298347",
+            "rank": "normal"
+          },
+          {
+            "value": "Q360313",
+            "rank": "normal"
+          },
+          {
+            "value": "Q275835",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/the-weather-man",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+102",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q369786",
+            "rank": "normal"
+          },
+          {
+            "value": "Q159846",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0384680",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "6963",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q295463",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+2005-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2006-03-02T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2005-10-28T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q7614580",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1189681": "Michael Rispoli",
+        "Q123351": "Michael Caine",
+        "Q130232": "drama film",
+        "Q157443": "comedy film",
+        "Q159846": "Paramount Pictures",
+        "Q1860": "English",
+        "Q236399": "Hope Davis",
+        "Q275835": "Judith McConnell",
+        "Q295463": "Gore Verbinski",
+        "Q298347": "Nicholas Hoult",
+        "Q30": "United States",
+        "Q360313": "Gil Bellows",
+        "Q369786": "Escape Artists",
+        "Q42869": "Nicolas Cage",
+        "Q7614580": "Steven Conrad"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q60296",
+      "lang": "en",
+      "title": "The Weather Man",
+      "extract": "The Weather Man is a 2005 American dark comedy-drama film directed by Gore Verbinski, written by Steve Conrad, and starring Nicolas Cage as a Chicago-area weatherman who is in a midst of a mid-life crisis even as his career is potentially about to take off with a new job on a national television morning show. The film also stars Michael Caine and Hope Davis in supporting roles. The film was released on October 28, 2005, and grossed $19 million worldwide. It received mixed to positive reviews upon release.",
+      "url": "https://en.wikipedia.org/wiki/The_Weather_Man"
+    },
+    "wikipedia:es": {
+      "qid": "Q60296",
+      "lang": "es",
+      "title": "El hombre del tiempo",
+      "extract": "El hombre del tiempo (The Weather Man) es una película estadounidense de comedia dramática oscura de 2005 dirigida por Gore Verbinski, escrita por Steve Conrad y protagonizada por Nicolas Cage, Michael Caine, Hope Davis y Nicholas Hoult.  \nLa película se estrenó el 28 de octubre de 2005.",
+      "url": "https://es.wikipedia.org/wiki/El_hombre_del_tiempo"
+    },
+    "wikipedia:pt": {
+      "qid": "Q60296",
+      "lang": "pt",
+      "title": "The Weather Man",
+      "extract": "The Weather Man (br: O Sol de Cada Manhã) é um filme de drama dos Estados Unidos realizado por Gore Verbinski.",
+      "url": "https://pt.wikipedia.org/wiki/The_Weather_Man"
+    }
+  },
+  "tier": "mid",
+  "type": "movie"
+}

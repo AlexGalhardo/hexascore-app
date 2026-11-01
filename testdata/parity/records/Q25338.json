@@ -1,0 +1,166 @@
+{
+  "qid": "Q25338",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q25338",
+      "labels": {
+        "en": "The Little Prince",
+        "es": "El Principito",
+        "pt": "O Principezinho",
+        "pt-br": "O Pequeno Príncipe"
+      },
+      "aliases": {
+        "en": [
+          "B612",
+          "Le Pettit Prince",
+          "Little Prince"
+        ],
+        "es": [
+          "Principito",
+          "Le Petit Prince",
+          "El pequeño príncipe"
+        ],
+        "pt": [
+          "O Pequeno Príncipe",
+          "Pequeno Príncipe"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "The Little Prince",
+        "eswiki": "El principito",
+        "ptwiki": "Le Petit Prince"
+      },
+      "sitelinks_count": 151,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q109311786",
+            "rank": "normal"
+          },
+          {
+            "value": "Q20737414",
+            "rank": "normal"
+          },
+          {
+            "value": "Q17991521",
+            "rank": "normal"
+          },
+          {
+            "value": "Q11163999",
+            "rank": "normal"
+          },
+          {
+            "value": "Q56451354",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1080374",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Le Petit Prince",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Saint Exupery exhibit - Air \u0026 Space Museum, Le Bourget, Paris, France, absent artwork and not subject to copyright.jpg",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q150",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          },
+          {
+            "value": "Q142",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q2908",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1943-04-06T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 10,
+              "time": "+1943-04-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL10264W",
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "2180358",
+            "rank": "normal"
+          },
+          {
+            "value": "157993",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1080374": "science fantasy",
+        "Q109311786": "lyrical novel",
+        "Q11163999": "children's and young adult literature",
+        "Q142": "France",
+        "Q150": "French",
+        "Q17991521": "tale",
+        "Q20737414": "philosophical fiction",
+        "Q2908": "Antoine de Saint-Exupéry",
+        "Q30": "United States",
+        "Q56451354": "children's fiction"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q25338",
+      "lang": "en",
+      "title": "The Little Prince",
+      "extract": "The Little Prince (French: Le Petit Prince, pronounced [lə p(ə)ti pʁãs]) is a novella written and illustrated by French writer and aviator Antoine de Saint-Exupéry. It was first published in English and French in the United States by Reynal \u0026 Hitchcock in April 1943 and was published posthumously in France following liberation; Saint-Exupéry's works had been banned by the Vichy Regime. The story follows a young prince who visits various planets, including Earth, and addresses themes of loneliness, friendship, love, and loss. Despite its style as a children's book, The Little Prince makes observations about life, adults, and human nature.\nThe Little Prince became Saint-Exupéry's most successful work, selling an estimated 140 million copies worldwide, which makes it one of the best-selling in history. \nBy November 2024, the book had been translated into 600 different languages and dialects worldwide. It became the second most translated work ever published, trailing only the Bible. The Little Prince has been adapted to numerous art forms and media, including audio recordings, radio plays, live stage, film, television, ballet, and opera.",
+      "url": "https://en.wikipedia.org/wiki/The_Little_Prince"
+    },
+    "wikipedia:es": {
+      "qid": "Q25338",
+      "lang": "es",
+      "title": "El principito",
+      "extract": "El principito (en francés: Le Petit Prince, pronunciación en francés: /lə pəti pʁɛ̃s/) es una novela corta y la obra más famosa del escritor y aviador francés Antoine de Saint-Exupéry (1900-1944).​\nLa novela fue publicada en abril de 1943, tanto en francés como en inglés, por la editorial estadounidense Reynal \u0026 Hitchcock, mientras que la editorial francesa Gallimard no pudo imprimir la obra hasta 1946,​ tras la liberación de Francia. Incluido entre los mejores libros del siglo XX en Francia, El principito se ha convertido en el libro escrito en francés más leído y más traducido de todos los tiempos. Así pues, cuenta con traducciones a más de doscientos cincuenta idiomas, incluyendo el sistema de lectura braille.​​ Además, el libro es considerado el primero del mundo en haber sido transcrito en símbolos fonéticos en lengua inglesa para estudiantes de inglés como segunda lengua. La obra también se ha convertido en uno de los libros más vendidos de todos los tiempos, puesto que ha logrado vender más de 140 millones de ejemplares en todo el mundo, con más de un millón de ventas por año.​​​ La novela fue traducida al idioma castellano por Bonifacio del Carril y su primera publicación en dicho idioma fue realizada por la editorial argentina Emecé Editores en septiembre de 1951. Desde entonces, diversos traductores y editoriales han realizado sus propias versiones.​\nSaint-Exupéry, ganador de varios de los principales premios literarios de Francia y piloto militar al comienzo de la Segunda Guerra Mundial, escribió e ilustró el manuscrito mientras se encontraba exiliado en los Estados Unidos tras la batalla de Francia. Ahí tenía la misión personal de persuadir al gobierno de dicho país para que le declarara la guerra a la Alemania nazi. En medio de una crisis personal y con la salud cada vez más deteriorada, produjo en su exilio casi la mitad de los escritos por los que sería recordado; entre ellos, El principito, un relato considerado como un libro infantil (por la forma en la que está escrito), pero que es en realidad una crítica a la adultez en la que se tratan temas profundos como el sentido de la vida, la soledad, la amistad, el amor y la pérdida.​\nEn relatos autobiográficos previos, se relatan sus experiencias como aviador en el desierto del Sahara y se cree que esas mismas experiencias le sirvieron como elementos para el argumento de El principito. Desde su primera publicación, la novela ha dado lugar a diversas adaptaciones a lo largo del tiempo, entre las que se incluyen grabaciones de audio, obras de teatro, películas, ballets, obras de ópera e incluso una serie animada y un anime.​​​",
+      "url": "https://es.wikipedia.org/wiki/El_principito"
+    },
+    "wikipedia:pt": {
+      "qid": "Q25338",
+      "lang": "pt",
+      "title": "Le Petit Prince",
+      "extract": "Le Petit Prince (pronúncia em francês: ​[lə.pə.tiˈpʁɛ̃s]) (prt: O Principezinho; bra: O Pequeno Príncipe) é uma novela do escritor francês Antoine de Saint-Exupéry, originalmente publicada em inglês e francês em abril de 1943 nos Estados Unidos.\nDurante a Segunda Guerra Mundial, Saint-Exupéry foi exilado para a América do Norte. Em meio a turbulências pessoais e sua saúde falhando, ele produziu quase metade das obras no qual ele seria lembrado, incluindo o conto de solidão, amizade, amor e perda, em forma de um jovem príncipe que caiu na Terra. Um livro de memórias feito pelo autor que contava suas experiências de aviação no deserto do Saara, e é pensado que ele usou estas experiências como base para a novela.\nEm abril de 1943, Saint-Exupéry deixou os Estados Unidos para combater as tropas nazis e deu o manuscrito à sua companheira, a jornalista Sylvia Hamilton, que o vendeu à Morgan Library \u0026 Museum de Nova Iorque 25 anos depois.\nSe trata de uma das obras literárias mais traduzidas no mundo, tendo sido publicado em mais de 220 idiomas e dialetos. O autor do livro foi também autor das ilustrações originais. Em Portugal, O Principezinho integra o conjunto de obras sugeridas para leitura integral, na disciplina de Língua Portuguesa, no 2º Ciclo do Ensino Básico e também foi traduzido para o Mirandês, com o título de \"L Princepico\".",
+      "url": "https://pt.wikipedia.org/wiki/Le_Petit_Prince"
+    }
+  },
+  "tier": "top",
+  "type": "book"
+}

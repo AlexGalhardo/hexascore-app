@@ -1,0 +1,164 @@
+{
+  "qid": "Q25511",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q25511",
+      "labels": {
+        "en": "Noroît",
+        "es": "Noroît"
+      },
+      "aliases": {
+        "en": [
+          "Noroit"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Noroît (film)"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Noroît",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q230636",
+            "rank": "normal"
+          },
+          {
+            "value": "Q289068",
+            "rank": "normal"
+          },
+          {
+            "value": "Q952740",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2850889",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3015145",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3587895",
+            "rank": "normal"
+          },
+          {
+            "value": "Q321395",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3218005",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+145",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0074974",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q150",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "66556",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q142",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q167475",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1976-11-17T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1977-09-16T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q167475",
+            "rank": "normal"
+          },
+          {
+            "value": "Q126144",
+            "rank": "normal"
+          },
+          {
+            "value": "Q19573590",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q126144": "Eduardo de Gregorio",
+        "Q130232": "drama film",
+        "Q142": "France",
+        "Q150": "French",
+        "Q167475": "Jacques Rivette",
+        "Q19573590": "Marilù Parolini",
+        "Q230636": "Geraldine Chaplin",
+        "Q2850889": "Anne-Marie Reynaud",
+        "Q289068": "Bernadette Lafont",
+        "Q3015145": "Danièle Gégauff",
+        "Q321395": "Humbert Balsan",
+        "Q3218005": "Larrio Ekson",
+        "Q3587895": "Élisabeth Lafont",
+        "Q952740": "Kika Markham"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q25511",
+      "lang": "en",
+      "title": "Noroît (film)",
+      "extract": "Noroît (Une vengeance) is a 1976 experimental adventure fantasy drama directed by Jacques Rivette. The title is an alteration of nord-ouest (north-west), meaning the direction or the wind from that direction (in English, a \"nor'wester\"). The story is loosely based on Thomas Middleton's The Revenger's Tragedy. The film stars Geraldine Chaplin and  Bernadette Lafont as pirates. Noroît would have followed Duelle (1976) as the third episode of the intended four-film series Scènes de la vie parallèle (the first being a supernatural love story and the fourth a musical).",
+      "url": "https://en.wikipedia.org/wiki/Noro%C3%AEt_(film)"
+    }
+  },
+  "tier": "tail",
+  "type": "movie"
+}

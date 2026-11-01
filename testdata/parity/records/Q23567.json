@@ -1,0 +1,696 @@
+{
+  "qid": "Q23567",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q23567",
+      "labels": {
+        "en": "Lost",
+        "es": "Lost",
+        "pt": "Lost",
+        "pt-br": "Lost"
+      },
+      "aliases": {
+        "en": [
+          "Lost: The Full Story",
+          "Lost The Full Story",
+          "Lost - The Full Story"
+        ],
+        "es": [
+          "Perdidos",
+          "Desaparecidos"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Lost (TV series)",
+        "eswiki": "Lost",
+        "ptwiki": "Lost (série de televisão)"
+      },
+      "sitelinks_count": 90,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+121",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/lost",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q140472311",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1366112",
+            "rank": "normal"
+          },
+          {
+            "value": "Q56064758",
+            "rank": "normal"
+          },
+          {
+            "value": "Q67175872",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Lost",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q225933",
+            "rank": "normal"
+          },
+          {
+            "value": "Q160392",
+            "rank": "normal"
+          },
+          {
+            "value": "Q229394",
+            "rank": "normal"
+          },
+          {
+            "value": "Q130447",
+            "rank": "normal"
+          },
+          {
+            "value": "Q184219",
+            "rank": "normal"
+          },
+          {
+            "value": "Q310551",
+            "rank": "normal"
+          },
+          {
+            "value": "Q294586",
+            "rank": "normal"
+          },
+          {
+            "value": "Q312337",
+            "rank": "normal"
+          },
+          {
+            "value": "Q230465",
+            "rank": "normal"
+          },
+          {
+            "value": "Q216793",
+            "rank": "normal"
+          },
+          {
+            "value": "Q294404",
+            "rank": "normal"
+          },
+          {
+            "value": "Q208374",
+            "rank": "normal"
+          },
+          {
+            "value": "Q299700",
+            "rank": "normal"
+          },
+          {
+            "value": "Q229389",
+            "rank": "normal"
+          },
+          {
+            "value": "Q314606",
+            "rank": "normal"
+          },
+          {
+            "value": "Q231450",
+            "rank": "normal"
+          },
+          {
+            "value": "Q276302",
+            "rank": "normal"
+          },
+          {
+            "value": "Q215523",
+            "rank": "normal"
+          },
+          {
+            "value": "Q310553",
+            "rank": "normal"
+          },
+          {
+            "value": "Q271637",
+            "rank": "normal"
+          },
+          {
+            "value": "Q437693",
+            "rank": "normal"
+          },
+          {
+            "value": "Q152165",
+            "rank": "normal"
+          },
+          {
+            "value": "Q294819",
+            "rank": "normal"
+          },
+          {
+            "value": "Q264914",
+            "rank": "normal"
+          },
+          {
+            "value": "Q218542",
+            "rank": "normal"
+          },
+          {
+            "value": "Q185554",
+            "rank": "normal"
+          },
+          {
+            "value": "Q230109",
+            "rank": "normal"
+          },
+          {
+            "value": "Q312051",
+            "rank": "normal"
+          },
+          {
+            "value": "Q228795",
+            "rank": "normal"
+          },
+          {
+            "value": "Q433198",
+            "rank": "normal"
+          },
+          {
+            "value": "Q237579",
+            "rank": "normal"
+          },
+          {
+            "value": "Q374447",
+            "rank": "normal"
+          },
+          {
+            "value": "Q722038",
+            "rank": "normal"
+          },
+          {
+            "value": "Q381791",
+            "rank": "normal"
+          },
+          {
+            "value": "Q318231",
+            "rank": "normal"
+          },
+          {
+            "value": "Q350194",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4488",
+            "rank": "normal"
+          },
+          {
+            "value": "Q40248",
+            "rank": "normal"
+          },
+          {
+            "value": "Q320084",
+            "rank": "normal"
+          },
+          {
+            "value": "Q506778",
+            "rank": "normal"
+          },
+          {
+            "value": "Q454874",
+            "rank": "normal"
+          },
+          {
+            "value": "Q322056",
+            "rank": "normal"
+          },
+          {
+            "value": "Q4963861",
+            "rank": "normal"
+          },
+          {
+            "value": "Q722312",
+            "rank": "normal"
+          },
+          {
+            "value": "Q272977",
+            "rank": "normal"
+          },
+          {
+            "value": "Q976176",
+            "rank": "normal"
+          },
+          {
+            "value": "Q28732",
+            "rank": "normal"
+          },
+          {
+            "value": "Q465628",
+            "rank": "normal"
+          },
+          {
+            "value": "Q230115",
+            "rank": "normal"
+          },
+          {
+            "value": "Q609464",
+            "rank": "normal"
+          },
+          {
+            "value": "Q464169",
+            "rank": "normal"
+          },
+          {
+            "value": "Q227123",
+            "rank": "normal"
+          },
+          {
+            "value": "Q437135",
+            "rank": "normal"
+          },
+          {
+            "value": "Q254980",
+            "rank": "normal"
+          },
+          {
+            "value": "Q44362",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2101495",
+            "rank": "normal"
+          },
+          {
+            "value": "Q930937",
+            "rank": "normal"
+          },
+          {
+            "value": "Q238052",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2575752",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1373335",
+            "rank": "normal"
+          },
+          {
+            "value": "Q326444",
+            "rank": "normal"
+          },
+          {
+            "value": "Q381841",
+            "rank": "normal"
+          },
+          {
+            "value": "Q351293",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1351441",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1364838",
+            "rank": "normal"
+          },
+          {
+            "value": "Q242805",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1257075",
+            "rank": "normal"
+          },
+          {
+            "value": "Q572831",
+            "rank": "normal"
+          },
+          {
+            "value": "Q610862",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5112638",
+            "rank": "normal"
+          },
+          {
+            "value": "Q272761",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1424923",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1264937",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1189389",
+            "rank": "normal"
+          },
+          {
+            "value": "Q129978",
+            "rank": "normal"
+          },
+          {
+            "value": "Q575317",
+            "rank": "normal"
+          },
+          {
+            "value": "Q935989",
+            "rank": "normal"
+          },
+          {
+            "value": "Q295431",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3195676",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1394891",
+            "rank": "normal"
+          },
+          {
+            "value": "Q32986389",
+            "rank": "normal"
+          },
+          {
+            "value": "Q943613",
+            "rank": "normal"
+          },
+          {
+            "value": "Q265037",
+            "rank": "normal"
+          },
+          {
+            "value": "Q41034",
+            "rank": "normal"
+          },
+          {
+            "value": "Q371972",
+            "rank": "normal"
+          },
+          {
+            "value": "Q309592",
+            "rank": "normal"
+          },
+          {
+            "value": "Q230929",
+            "rank": "normal"
+          },
+          {
+            "value": "Q346411",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1990672",
+            "rank": "normal"
+          },
+          {
+            "value": "Q555559",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q310556",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188137",
+            "rank": "normal"
+          },
+          {
+            "value": "Q376260",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "tv/lost",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+42",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+6",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q287218",
+            "rank": "normal"
+          },
+          {
+            "value": "Q798768",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0411008",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q169889",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "4607",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q362793",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3073488",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188137",
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q310556",
+            "rank": "normal"
+          },
+          {
+            "value": "Q443440",
+            "rank": "normal"
+          },
+          {
+            "value": "Q713912",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2395333",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1134799",
+            "rank": "normal"
+          },
+          {
+            "value": "Q849628",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2004-09-22T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1134799": "Elizabeth Sarnoff",
+        "Q1189389": "Chris Mulkey",
+        "Q1257075": "Tom Irwin",
+        "Q1264937": "Sterling Beaumon",
+        "Q129978": "Justin Chatwin",
+        "Q130447": "Ian Somerhalder",
+        "Q1351441": "Eric Lange",
+        "Q1364838": "Fredric Lehne",
+        "Q1366112": "drama television series",
+        "Q1373335": "Sean Whalen",
+        "Q1394891": "Frederick Koehler",
+        "Q140472311": "science fiction television series",
+        "Q1424923": "Jenny Gago",
+        "Q152165": "Dominic Monaghan",
+        "Q160392": "Evangeline Lilly",
+        "Q169889": "American Broadcasting Company",
+        "Q184219": "Michelle Rodriguez",
+        "Q185554": "Matthew Fox",
+        "Q1860": "English",
+        "Q188137": "J. J. Abrams",
+        "Q1990672": "L. Scott Caldwell",
+        "Q208374": "Naveen Andrews",
+        "Q2101495": "Marlene Forte",
+        "Q215523": "Emilie de Ravin",
+        "Q216793": "Josh Holloway",
+        "Q218542": "Maggie Grace",
+        "Q225933": "Nestor Carbonell",
+        "Q227123": "Zoë Bell",
+        "Q228795": "Zuleikha Robinson",
+        "Q229389": "Yunjin Kim",
+        "Q229394": "Elizabeth Mitchell",
+        "Q230109": "Cynthia Watros",
+        "Q230115": "Sonya Walger",
+        "Q230465": "Kiele Sanchez",
+        "Q230929": "Melissa Gilbert",
+        "Q231450": "Rebecca Mader",
+        "Q237579": "Fionnula Flanagan",
+        "Q238052": "Swoosie Kurtz",
+        "Q2395333": "Adam Horowitz",
+        "Q242805": "Diana Scarwid",
+        "Q254980": "Madeline Carroll",
+        "Q2575752": "Mackenzie Astin",
+        "Q264914": "Jorge Garcia",
+        "Q265037": "Skye McCole Bartusiak",
+        "Q271637": "Terry O'Quinn",
+        "Q272761": "Veronica Hamel",
+        "Q272977": "Robert Patrick",
+        "Q276302": "Michael Emerson",
+        "Q287218": "ABC Signature",
+        "Q28732": "Beth Broderick",
+        "Q294404": "Henry Ian Cusick",
+        "Q294586": "Adewale Akinnuoye-Agbaje",
+        "Q294819": "Rodrigo Santoro",
+        "Q295431": "Julian Barnes",
+        "Q299700": "Daniel Dae Kim",
+        "Q30": "United States",
+        "Q3073488": "Stephen Williams",
+        "Q309592": "Greg Grunberg",
+        "Q310551": "Harold Perrineau",
+        "Q310553": "Malcolm David Kelley",
+        "Q310556": "Damon Lindelof",
+        "Q312051": "Ken Leung",
+        "Q312337": "Jeremy Davies",
+        "Q314606": "Jeff Fahey",
+        "Q318231": "William Mapother",
+        "Q3195676": "Kevin Chapman",
+        "Q320084": "Kevin Durand",
+        "Q322056": "Lance Reddick",
+        "Q326444": "Mark Pellegrino",
+        "Q32986389": "Jose Yenque",
+        "Q346411": "Michael Landon",
+        "Q350194": "Alan Dale",
+        "Q351293": "Josh Randall",
+        "Q362793": "Jack Bender",
+        "Q371972": "Faran Tahir",
+        "Q374447": "Sam Anderson",
+        "Q376260": "Jeffrey Lieber",
+        "Q381791": "John Terry",
+        "Q381841": "Carter Jenkins",
+        "Q40248": "Julie Bowen",
+        "Q41034": "Julie Adams",
+        "Q433198": "Paula Malcomson",
+        "Q437135": "Marguerite Moreau",
+        "Q437693": "Titus Welliver",
+        "Q443440": "Carlton Cuse",
+        "Q44362": "Theo Rossi",
+        "Q4488": "Clancy Brown",
+        "Q454874": "Alexandra Krosney",
+        "Q464169": "Fisher Stevens",
+        "Q465628": "Andrew Divoff",
+        "Q4963861": "Brian Goodman",
+        "Q506778": "Doug Hutchison",
+        "Q5112638": "Christopher Jaymes",
+        "Q555559": "François Chau",
+        "Q56064758": "adventure television series",
+        "Q572831": "Anthony Azizi",
+        "Q575317": "Ian Gomez",
+        "Q609464": "Graham McTavish",
+        "Q610862": "Jeff Perry",
+        "Q67175872": "thriller television series",
+        "Q713912": "Edward Kitsis",
+        "Q722038": "M.C. Gainey",
+        "Q722312": "Bill Duke",
+        "Q798768": "Bad Robot Productions",
+        "Q849628": "Brian K. Vaughan",
+        "Q930937": "Michael Cudlitz",
+        "Q935989": "Rob McElhenney",
+        "Q943613": "Samm Levine",
+        "Q976176": "Saul Rubinek"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q23567",
+      "lang": "en",
+      "title": "Lost (TV series)",
+      "extract": "Lost is an American science fiction adventure drama television series created by Jeffrey Lieber, J. J. Abrams, and Damon Lindelof that aired on ABC from September 22, 2004, to May 23, 2010, with a total of 121 episodes over six seasons. It contains elements of supernatural fiction and follows the survivors of Oceanic Airlines flight 815 (flying between Sydney and Los Angeles) after the plane crashes on a mysterious island somewhere in the South Pacific Ocean. Episodes typically feature a primary storyline set on the island, augmented by flashback or flashforward sequences which provide additional insight into the involved characters.\nLindelof and Carlton Cuse served as showrunners and were executive producers along with Abrams and Bryan Burk. Inspired by the 2000 film Cast Away, the show is told in a heavily serialized manner. Due to its large ensemble cast and the cost of filming primarily on location in Oahu, Hawaii, the series was one of the most expensive on television, with the pilot alone costing over $14 million. The fictional universe and mythology of Lost were expanded upon by a number of related media—most importantly a series of mini-episodes, called Missing Pieces, and a 12-minute epilogue called \"The New Man in Charge\".\nLost has regularly been ranked by critics as one of the greatest television series of all time. The first season had an estimated average of 16 million viewers per episode on ABC. During the sixth and final season, the show averaged over 11 million U.S. viewers per episode. Nevertheless, the series finale received a strongly polarized reaction from both fans and TV critics alike. Lost was the recipient of hundreds of industry award nominations throughout its run and won numerous of these awards, including the Primetime Emmy Award for Outstanding Drama Series in 2005, Best American Import at the British Academy Television Awards in 2005, the Golden Globe Award for Best Television Series – Drama in 2006, and the Screen Actors Guild Award for Outstanding Performance by an Ensemble in a Drama Series.",
+      "url": "https://en.wikipedia.org/wiki/Lost_(TV_series)"
+    },
+    "wikipedia:es": {
+      "qid": "Q23567",
+      "lang": "es",
+      "title": "Lost",
+      "extract": "Lost (conocida en España como Perdidos y en algunos países de Hispanoamérica como Desaparecidos) es una serie de televisión estadounidense emitida originalmente por American Broadcasting Company (ABC) entre 2004 y 2010, hasta completar un total de seis temporadas. \nLa serie narra las vivencias de los pasajeros supervivientes del vuelo 815 de Oceanic Airlines Sidney-Los Ángeles en una isla aparentemente desierta, en la cual ocurren cosas muy extrañas. Con frecuencia hace referencia de manera específica a las historias de los protagonistas antes del accidente, con lo que explica las decisiones que estos toman en la isla, el motivo por el cual tomaron ese avión; y, para mostrar que ellos, sin saberlo, estaban perdidos en sus vidas.\nEl episodio piloto fue escrito por Jeffrey Lieber, J. J. Abrams y Damon Lindelof, y, dirigido por Abrams. Fue rodado en la isla de Oahu, Hawái, como el resto de la serie, convirtiéndose en el episodio más caro de la historia de la televisión en el momento de su estreno (actualmente solo ha sido superado por los pilotos de  Terra Nova y Boardwalk Empire).\nLa serie terminó el 23 de mayo de 2010, tras 121 episodios, con un episodio final emitido simultáneamente en nueve países. Para satisfacer a los fanáticos de la serie, se produjo un epílogo en el que se resolvían algunos misterios de la isla que quedaron pendientes.\nFue un éxito generalizado en los países en los que se emitió, llegando a tener en su primera temporada una media de 16,1 millones de telespectadores en Estados Unidos, y formando parte con rapidez de la cultura popular estadounidense (ya que ha sido referida en multitud de programas de televisión, cómics, canciones, etc.). También ganó numerosos premios, entre los que se encuentran un Globo de Oro y seis Premios Emmy.",
+      "url": "https://es.wikipedia.org/wiki/Lost"
+    },
+    "wikipedia:pt": {
+      "qid": "Q23567",
+      "lang": "pt",
+      "title": "Lost (série de televisão)",
+      "extract": "Lost (Perdidos, em Portugal) é  uma série de televisão norte-americana de drama, fantasia e ficção científica que seguiu a vida dos sobreviventes de um acidente aéreo numa misteriosa ilha tropical, após o avião que viajava de Sydney, Austrália para Los Angeles, Estados Unidos cair em algum lugar do Oceano Pacífico.\nA série teve um estilo único que seguia dois tipos de histórias não ligadas entre si: primeiro, a luta dos 48 sobreviventes do desastre para sobreviver e viver juntos na ilha, e segundo, a vida das personagens principais, antes do desastre, através de retrospectivas pessoais, os flashbacks, flashforwards e flash-sideways. Lost foi criada por Jeffrey Lieber, J. J. Abrams e Damon Lindelof e foi filmada em Oahu, Havaí. O episódio piloto foi ao ar nos Estados Unidos em 22 de setembro de 2004. Lost foi produzida por ABC Studios, Bad Robot Productions e Grass Skirt Productions e foi exibida pela Rede ABC em seu país de origem. A música incidental foi produzida por Michael Giacchino. Os produtores executivos são J. J. Abrams, Damon Lindelof, Bryan Burk, Carlton Cuse, Jack Bender, Jeff Pinkner, Edward Kitsis, Adam Horowitz e Elizabeth Sarnoff. Por causa de seu vasto elenco e os custos de se filmar no Havaí, a série é uma das mais caras produzidas até hoje.\nSucesso de crítica e público, a série teve uma média de 15,5 milhões de espectadores por episódio durante todo o seu primeiro ano de exibição, garantindo prêmios da indústria audiovisual como o Award Emmy para Melhor Série televisiva na categoria drama em 2005, melhor série norte-americana importada na Academia Britânica de Prêmios Televisivos também em 2005 e o Golden Globe Award para Melhor Série (drama) em 2006.\nA série foi logo agregada à cultura pop dos Estados Unidos, por ser um fenômeno que encanta cada vez mais espectadores e mídias externas, como comerciais, revistas em quadrinhos, webcomics, revistas de humor e canções populares. O universo ficcional da série foi explorado também através de novelas e de jogos de realidade alternativa, com o Lost Experience e o Find 815.\nEm maio de 2007 foi anunciado que Lost continuaria com a quarta, quinta e sexta temporadas, concluindo com o 121º episódio produzido em maio de 2010. As três últimas temporadas consistiriam-se de apenas 16 episódios, exibidos semanalmente sem interrupções ou reprises. No entanto, devido à greve dos roteiristas dos Estados Unidos, a quarta temporada foi encurtada para 14 episódios, incluindo o episódio final de três horas (exibido em diferentes noites para não colidir com os términos de temporadas de Ugly Betty e Grey's Anatomy). A quarta temporada estreou no dia 31 de janeiro de 2008 nos Estados Unidos e terminou no dia 29 de maio de 2008. Uma outra consequência da greve foi a decisão da ABC de prolongar o final de duas temporadas de Lost, adicionando um décimo sétimo episódio de cada época restante. Lost acabou em sua sexta temporada, contabilizando um total de 121 episódios, com seu último episódio exibido no dia 23 de maio de 2010. A última temporada teve 18 episódios.\nUm documentário está sendo preparado para celebrar os 20 anos da série, a ser completados em setembro de 2024. Batizado de Getting Lost, a produção vai usar cerca de 100 horas de imagens inéditas.\nEm 6 de junho de 2023, chega às livrarias americanas o livro Burn It Down, que revela bastidores de Lost, expondo o ambiente tóxico e a cultura racista que imperava atrás das câmeras, tendo como alvo Harold Perrineau. Segundo depoimentos de roteiristas e atores da série, havia a preferência nítida de dar destaque aos personagens brancos, tidos como \"heróis\", deixando de lado, propositadamente, o Michael (vivido por Perrineau). Ele foi demitido após pedir mais espaço na trama.\nEm setembro de 2024, é lançado o documentário \"Getting Lost\", que reuniu grande parte do elenco para celebrar o legado da série. Ainda não disponível no Brasil.",
+      "url": "https://pt.wikipedia.org/wiki/Lost_(s%C3%A9rie_de_televis%C3%A3o)"
+    }
+  },
+  "tier": "top",
+  "type": "series"
+}

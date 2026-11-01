@@ -1,0 +1,175 @@
+{
+  "qid": "Q74061",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q74061",
+      "labels": {
+        "en": "Star Wars: Rebel Assault II: The Hidden Empire",
+        "es": "Star Wars: Rebel Assault II",
+        "mul": "Star Wars: Rebel Assault II: The Hidden Empire"
+      },
+      "aliases": {
+        "es": [
+          "Rebel Assault 2",
+          "Star Wars Rebel Assault II",
+          "Star Wars: Rebel Assault II - El Imperio Oculto"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Star Wars: Rebel Assault II: The Hidden Empire",
+        "eswiki": "Star Wars: Rebel Assault II: The Hidden Empire"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q216611",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q1044478",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Star Wars: Rebel Assault II: The Hidden Empire",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q3161584",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3189207",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q216611",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q29582712",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "9117",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0166366",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q751046",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10677",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13522376",
+            "rank": "normal"
+          },
+          {
+            "value": "Q170434",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q670923",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 10,
+              "time": "+1995-11-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "star-wars-rebel-assault-ii-the-hidden-empire",
+            "rank": "normal"
+          }
+        ],
+        "P8345": [
+          {
+            "value": "Q462",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1044478": "shoot 'em up",
+        "Q10677": "PlayStation",
+        "Q13522376": "Classic Mac OS",
+        "Q170434": "DOS",
+        "Q1860": "English",
+        "Q208850": "single-player video game",
+        "Q216611": "Lucasfilm Games",
+        "Q29582712": "Star Wars Rebel Assault",
+        "Q30": "United States",
+        "Q3161584": "Jamison Jones",
+        "Q3189207": "Julie Eccles",
+        "Q462": "Star Wars",
+        "Q670923": "Hal Barwood",
+        "Q751046": "IBM PC compatible"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q74061",
+      "lang": "en",
+      "title": "Star Wars: Rebel Assault II: The Hidden Empire",
+      "extract": "Star Wars: Rebel Assault II: The Hidden Empire is a 1995 rail shooter video game developed by LucasArts. It is the sequel to Star Wars: Rebel Assault, set in the Star Wars expanded universe. The player character, Rookie One, pilots ships such as a YT-1300 Corellian Transport, a B-wing, and a Y-wing, and encounters new enemy ships, including TIE Interceptors. They uncover, and eventually disable production of, a new TIE variant known as the TIE Phantom, which has the ability to cloak.\nIt contains mostly original filming with actors and stunts, while the scenery and the space scenes were 3D rendered. According to LucasArts' magazine, The Adventurer, the game was the first media to incorporate live-action actors and footage in the Star Wars universe since Return of the Jedi. The player proceeds down predetermined paths, but has the ability to control aiming, shooting, and dodging. The game makes use of Lucasarts' proprietary INSANE game engine. The game received mixed reception upon release. While critics generally praised the visuals, many cited frustrations with the game's control scheme. It has since been featured in worst-of lists by IGN and Kotaku.",
+      "url": "https://en.wikipedia.org/wiki/Star_Wars:_Rebel_Assault_II:_The_Hidden_Empire"
+    },
+    "wikipedia:es": {
+      "qid": "Q74061",
+      "lang": "es",
+      "title": "Star Wars: Rebel Assault II: The Hidden Empire",
+      "extract": "Star Wars: Rebel Assault II: The Hidden Empire es una secuela del videojuego Star Wars: Rebel Assault, lanzada en noviembre de 1995. \nEl modo de juego es los que se conoce como rail shooter, donde las naves se mueven sobre un camino preestablecido y el jugador tiene que encargarse de disparar a los enemigos, antes de que estos le disparen a él.\nEn esta entrega, el personaje principal Rookie One, debe luchar contra los Phantom TIE, un nuevo tipo de TIE Fighter que tiene la capacidad de ser invisible evadiendo todo tipo de escáner o radar siendo una peligrosa amenaza que podría destruir a la Alianza Rebelde.\nSe utilizan varias de las naves vistas dentro de las películas de Star Wars e incluye una misión a pie. \nLa banda sonora del juego fue compuesta por Peter McConnell.",
+      "url": "https://es.wikipedia.org/wiki/Star_Wars:_Rebel_Assault_II:_The_Hidden_Empire"
+    }
+  },
+  "tier": "tail",
+  "type": "game"
+}

@@ -1,0 +1,153 @@
+{
+  "qid": "Q480",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q480",
+      "labels": {
+        "en": "Don Quixote",
+        "es": "Don Quijote de la Mancha",
+        "mul": "Don Quijote",
+        "pt": "Dom Quixote",
+        "pt-br": "Dom Quixote"
+      },
+      "aliases": {
+        "en": [
+          "The Ingenious Gentleman Don Quixote of La Mancha",
+          "Don Quijote de la Mancha"
+        ],
+        "es": [
+          "El Quijote",
+          "Don Quijote",
+          "Quijote",
+          "Don Quixote",
+          "El ingenioso hidalgo don Quixote de la Mancha",
+          "El ingenioso hidalgo don Quijote de la Mancha"
+        ],
+        "mul": [
+          "Don Quixote"
+        ],
+        "pt": [
+          "Dom Quixote de la Mancha",
+          "O Engenhoso Fidalgo Dom Quixote de la Mancha"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Don Quixote",
+        "eswiki": "Don Quijote de la Mancha",
+        "ptwiki": "Dom Quixote"
+      },
+      "sitelinks_count": 147,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q1159457",
+            "rank": "normal"
+          },
+          {
+            "value": "Q21802675",
+            "rank": "normal"
+          },
+          {
+            "value": "Q16669008",
+            "rank": "normal"
+          },
+          {
+            "value": "Q25377629",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Don Quijote de la Mancha",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Miguel de Cervantes (1605) El ingenioso hidalgo Don Quixote de la Mancha.png",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q5364419",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q29",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q5682",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1605-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1615-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL503666W",
+            "rank": "normal"
+          }
+        ],
+        "P8383": [
+          {
+            "value": "121842",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1159457": "chivalric romance",
+        "Q16669008": "parody",
+        "Q21802675": "adventure fiction",
+        "Q25377629": "found manuscript",
+        "Q29": "Spain",
+        "Q5364419": "Early Modern Spanish",
+        "Q5682": "Miguel de Cervantes"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q480",
+      "lang": "en",
+      "title": "Don Quixote",
+      "extract": "Don Quixote is a novel by Miguel de Cervantes, written in Early Modern Spanish and published in two parts in 1605 and 1615. It is considered a founding work of Western literature and the first modern novel. It is also one of the most-translated books in the world and one of the best-selling books in history.\nThe plot revolves around the adventures of a member of the lowest nobility, an hidalgo from La Mancha named Alonso Quijano, who reads so many chivalric romances that he decides to become a knight-errant (caballero andante) to revive chivalry and serve his nation, under the name Don Quixote de la Mancha. He recruits as his squire a simple farm labourer, Sancho Panza, who brings an earthy wit to Don Quixote's lofty rhetoric. In the first part of the book, Don Quixote does not see the world for what it is and prefers to imagine that he is living out a knightly story meant for the annals of all time. As Salvador de Madariaga pointed out in his Guía del lector del Quijote (1972 [1926]), opposing Quixotization with Sanchification, \"Sancho's spirit ascends from reality to illusion\" while Don Quixote's does the opposite.\nThe book had a major influence on the literary community, being directly referenced in works of 19th‑century French literature such as Alexandre Dumas's The Three Musketeers (1844) and Edmond Rostand's Cyrano de Bergerac (1897). Even the word quixotic ('impractically idealistic') became part of language. Mark Twain referred to Don Quixote as having \"swept the world's admiration for the mediaeval chivalry-silliness out of existence\". It has been described by some as the greatest work ever written.",
+      "url": "https://en.wikipedia.org/wiki/Don_Quixote"
+    },
+    "wikipedia:es": {
+      "qid": "Q480",
+      "lang": "es",
+      "title": "Don Quijote de la Mancha",
+      "extract": "Don Quijote de la Mancha​ es una novela escrita por el español Miguel de Cervantes Saavedra. Publicada su primera parte con el título de El ingenioso hidalgo don Quijote de la Mancha a comienzos de 1605, es considerada la obra más destacada de la literatura española y una de las más importantes de la literatura universal.​En 1615 apareció su continuación con el título de Segunda parte del ingenioso caballero don Quijote de la Mancha.​\nEs la primera obra genuinamente desmitificadora de la tradición caballeresca y cortés por su tratamiento burlesco. Ha sido considerada por parte de la crítica como una de las primeras novelas modernas y, como tal, ha ejercido un enorme influjo en la narrativa europea. En 2002, a petición del Club Noruego del Libro y Bokklubben World Library, fue incluida en una lista elaborada mediante votación de cien escritores de 54 nacionalidades sobre las mejores obras literarias de la historia, donde ocupó el primer puesto.​",
+      "url": "https://es.wikipedia.org/wiki/Don_Quijote_de_la_Mancha"
+    },
+    "wikipedia:pt": {
+      "qid": "Q480",
+      "lang": "pt",
+      "title": "Dom Quixote",
+      "extract": "Don Quixote, cujo título completo é O Engenhoso Fidalgo Dom Quixote da Mancha, é um romance espanhol de Miguel de Cervantes. Publicado originalmente em duas partes, em 1605 e 1615, o romance é considerado uma obra fundadora da Literatura ocidental e o primeiro romance moderno. O romance foi classificado por muitos autores conhecidos como o \"melhor romance de todos os tempos\" e a \"obra melhor e mais central na literatura mundial\". Dom Quixote é também um dos livros mais traduzidos do mundo e um dos romances mais vendidos de todos os tempos. O romance é uma sátira aos romances de cavalaria e às convenções literárias da época.\nA trama gira em torno das aventuras de um membro da baixa nobreza, um fidalgo de La Mancha chamado Alonso Quijano, que lê tantos romances de cavalaria que decide se tornar um Cavaleiro andante (caballero andante) para reviver a cavalaria e servir sua nação, sob o nome de Dom Quixote da Mancha. Ele recruta como seu escudeiro um simples trabalhador rural, Sancho Pança, que traz um humor terrenal à retórica elevada de Dom Quixote. Na primeira parte do livro, Dom Quixote não vê o mundo como ele é e prefere imaginar que está vivendo uma história cavalheiresca destinada aos anais de todos os tempos. No entanto, como Salvador de Madariaga apontou em seu Guía del lector del Quijote (1972 [1926]), referindo-se à \"Sanchificação de Dom Quixote e a Quixotização de Sancho\", \"o espírito de Sancho ascende da realidade à ilusão, o de Dom Quixote declina da ilusão à realidade\".\nO livro teve uma grande influência na comunidade literária, como evidenciado por referências diretas em Os Três Mosqueteiros (1844) de Alexandre Dumas, e no Cyrano de Bergerac (1897) de Edmond Rostand, bem como pela palavra quixotesco. Mark Twain referiu-se ao livro como tendo \"varrido a admiração do mundo pela tolice da cavalaria medieval da existência\". Foi descrito por alguns como a maior obra já escrita.",
+      "url": "https://pt.wikipedia.org/wiki/Dom_Quixote"
+    }
+  },
+  "tier": "top",
+  "type": "book"
+}

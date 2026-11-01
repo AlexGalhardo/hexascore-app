@@ -1,0 +1,157 @@
+{
+  "qid": "Q25552",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q25552",
+      "labels": {
+        "en": "Top Secret",
+        "es": "Confidencial",
+        "mul": "Secret défense"
+      },
+      "aliases": {
+        "en": [
+          "Secret défense",
+          "Secret defense"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Secret Defense (1998 film)"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/secret_defense",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Secret défense",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q232937",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1373318",
+            "rank": "normal"
+          },
+          {
+            "value": "Q456668",
+            "rank": "normal"
+          },
+          {
+            "value": "Q285206",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1807890",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+170",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q2864822",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0120665",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q150",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "49559",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q142",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q167475",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1998-10-29T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q167475",
+            "rank": "normal"
+          },
+          {
+            "value": "Q289645",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3052950",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q130232": "drama film",
+        "Q1373318": "Jerzy Radziwilowicz",
+        "Q142": "France",
+        "Q150": "French",
+        "Q167475": "Jacques Rivette",
+        "Q1807890": "Laure Marsac",
+        "Q232937": "Sandrine Bonnaire",
+        "Q285206": "Grégoire Colin",
+        "Q2864822": "Arte France Cinéma",
+        "Q289645": "Pascal Bonitzer",
+        "Q3052950": "Emmanuelle Cuau",
+        "Q456668": "Françoise Fabian"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q25552",
+      "lang": "en",
+      "title": "Secret Defense (1998 film)",
+      "extract": "Secret Defense (French: Secret défense) is a 1998 French drama film directed by Jacques Rivette.",
+      "url": "https://en.wikipedia.org/wiki/Secret_Defense_(1998_film)"
+    }
+  },
+  "tier": "tail",
+  "type": "movie"
+}

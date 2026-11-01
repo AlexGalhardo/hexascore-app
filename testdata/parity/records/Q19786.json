@@ -1,0 +1,90 @@
+{
+  "qid": "Q19786",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q19786",
+      "labels": {
+        "en": "Old Testament",
+        "es": "Antiguo Testamento",
+        "pt": "Antigo Testamento"
+      },
+      "aliases": {
+        "en": [
+          "OT"
+        ],
+        "es": [
+          "Viejo Testamento",
+          "Escrituras Hebreas"
+        ],
+        "pt": [
+          "Bíblia Judaica",
+          "Velho testamento",
+          "Escrituras hebraicas",
+          "Primeiro testamento"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Old Testament",
+        "eswiki": "Antiguo Testamento",
+        "ptwiki": "Antigo Testamento"
+      },
+      "sitelinks_count": 179,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q12617225",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Rembrandt Harmensz. van Rijn 079.jpg",
+            "rank": "normal"
+          },
+          {
+            "value": "1911 Old Testament translated in Korean language.jpg",
+            "rank": "normal"
+          },
+          {
+            "value": "Armeno-Turkish Old Testament.png",
+            "rank": "normal"
+          }
+        ],
+        "P50": [
+          {
+            "value": "Q2818964",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q12617225": "religious literature",
+        "Q2818964": "various authors"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q19786",
+      "lang": "en",
+      "title": "Old Testament",
+      "extract": "The Old Testament (OT) is the first division of the Christian Bible. It is based primarily upon the 24 books of the Hebrew Bible, or the Tanakh, a collection of ancient religious Hebrew and occasionally Aramaic writings by the Israelites, but differs from the Jewish canon in order, textual tradition, and, in some Christian traditions, contents. The second division of the Christian Bible is the New Testament, written in Koine Greek.\nThe Old Testament consists of many distinct books by various authors produced over a period of centuries. Christians traditionally divide the Old Testament into four sections: the Pentateuch or the first five books (which corresponds to the Jewish Torah); the Historical books telling the history of the Israelites, from their conquest of Canaan to their defeat and exile in Babylon; the Poetic Books, which explore themes of human experience, morality, and divine justice; and the Prophetic books, warning of the consequences of turning away from God.\nThe Old Testament canon differs among Christian denominations. The Catholic canon contains 46, the Eastern Orthodox and Oriental Orthodox Churches include up to 49 books, and the Protestant Bible typically has 39. Some books found in Christian Old Testament, but not in the Hebrew canon, are called deuterocanonical books, mostly originating from the Septuagint, an ancient Greek translation of the Hebrew Bible. Catholic and Orthodox churches include these, while most Protestant Bibles exclude them, though some Anglican and Lutheran versions place them in a separate section called Apocrypha.\nBecause the term \"Old Testament\" is used within Christianity, the same texts may be interpreted differently in Christian and Jewish traditions. Christian interpretation has often read passages of the Old Testament in light of the New Testament, while Jewish interpretation does not treat these writings as part of an \"old\" covenant superseded by a New Testament.\nWhile early histories of the ancient Israel and Judah were largely based on biblical accounts, their reliability has been increasingly questioned over time. Key debates have focused on the historicity of the Patriarchs, the Exodus, the Israelite conquest, and the United Monarchy, with archaeological evidence often challenging these narratives. Mainstream scholarship generally takes a skeptical but balanced approach to historical material from the 9th century BC onward; some chronologically later biblical traditions align with archaeological findings.",
+      "url": "https://en.wikipedia.org/wiki/Old_Testament"
+    },
+    "wikipedia:es": {
+      "qid": "Q19786",
+      "lang": "es",
+      "title": "Antiguo Testamento",
+      "extract": "El Antiguo Testamento (AT) es la primera parte de la Biblia cristiana. La segunda parte de la Biblia cristiana es el Nuevo Testamento. El Antiguo Testamento se compone del Pentateuco, y otras series de libros históricos, sapienciales y proféticos. En total se enumeran en el Antiguo Testamento 39 libros en la versión protestante, 46 libros en la versión de la Iglesia católica y 49 libros en la de la Iglesia ortodoxa.\nLos judíos dividen los 24​​ libros del Tanaj en tres grupos distintos: Torá (la Ley), Neviim (los Profetas) y Ketuvim (los escritos o sapienciales).",
+      "url": "https://es.wikipedia.org/wiki/Antiguo_Testamento"
+    },
+    "wikipedia:pt": {
+      "qid": "Q19786",
+      "lang": "pt",
+      "title": "Antigo Testamento",
+      "extract": "As Escrituras Hebraicas, conhecidas pelos cristãos como Antigo ou Velho Testamento, têm 46 livros na versão usada pelos católicos e 39 na dos protestantes, e constitui a primeira grande parte da Bíblia cristã e a totalidade da Bíblia hebraica, sendo dividida em 24 livros no Judaísmo, pois alguns dos livros que são divididos em dois pelos cristãos são apenas um para os judeus, como Reis e Crônicas. Foram compostos em sua grande maioria em hebraico, grego e partes em aramaico.\nChama-se também Tanakh, acrônimo lembrando as grandes divisões dos escritos sagrados da Bíblia hebraica que são os Livros da Lei (ou Torá), os livros dos profetas (ou Nevi'im), e os chamados escritos (Ketuvim). Entretanto, os cristãos dividem o Antigo Testamento em outras partes, e reordena os livros dividindo-os em categorias; Lei, história, poesia (ou livros de sabedoria) e Profecias.\nO termo Antigo Testamento, apesar de comum, é muitas vezes considerado pejorativo pelos judeus, pois pode ser interpretado como inferior ou antiquado ao Novo Testamento dos cristãos. Já a expressão Bíblia hebraica é adotada por alguns estudiosos para tentar evitar algum sectarismo.",
+      "url": "https://pt.wikipedia.org/wiki/Antigo_Testamento"
+    }
+  },
+  "tier": "top",
+  "type": "book"
+}

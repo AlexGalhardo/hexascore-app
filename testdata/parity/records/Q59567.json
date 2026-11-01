@@ -1,0 +1,386 @@
+{
+  "qid": "Q59567",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q59567",
+      "labels": {
+        "en": "Tell No One",
+        "es": "No se lo digas a nadie",
+        "pt": "Ne le dis à personne"
+      },
+      "aliases": {
+        "en": [
+          "Ne le dis à personne",
+          "Ne le dis a personne"
+        ],
+        "es": [
+          "Ne le dis a personne",
+          "Ne le dis à personne"
+        ],
+        "pt": [
+          "Ne le dis à personne aka Tell No One"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Tell No One",
+        "eswiki": "No se lo digas a nadie (película de 2006)",
+        "ptwiki": "Ne le dis à personne"
+      },
+      "sitelinks_count": 25,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/tell_no_one_2006",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q21401869",
+            "rank": "normal"
+          },
+          {
+            "value": "Q20442589",
+            "rank": "normal"
+          },
+          {
+            "value": "Q130232",
+            "rank": "normal"
+          },
+          {
+            "value": "Q959790",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2484376",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1200678",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q152629",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Ne le dis à personne",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q600051",
+            "rank": "normal"
+          },
+          {
+            "value": "Q239341",
+            "rank": "normal"
+          },
+          {
+            "value": "Q518457",
+            "rank": "normal"
+          },
+          {
+            "value": "Q208590",
+            "rank": "normal"
+          },
+          {
+            "value": "Q576085",
+            "rank": "normal"
+          },
+          {
+            "value": "Q106573",
+            "rank": "normal"
+          },
+          {
+            "value": "Q106555",
+            "rank": "normal"
+          },
+          {
+            "value": "Q292760",
+            "rank": "normal"
+          },
+          {
+            "value": "Q552639",
+            "rank": "normal"
+          },
+          {
+            "value": "Q694259",
+            "rank": "normal"
+          },
+          {
+            "value": "Q314403",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3470839",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2829519",
+            "rank": "normal"
+          },
+          {
+            "value": "Q466991",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2925417",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3014839",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3591288",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3591351",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1429389",
+            "rank": "normal"
+          },
+          {
+            "value": "Q318099",
+            "rank": "normal"
+          },
+          {
+            "value": "Q556578",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3169522",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3219319",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3292684",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3295752",
+            "rank": "normal"
+          },
+          {
+            "value": "Q444170",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3313116",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3380199",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3382884",
+            "rank": "normal"
+          },
+          {
+            "value": "Q461617",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3106169",
+            "rank": "normal"
+          },
+          {
+            "value": "Q766656",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3086407",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3015113",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2966467",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2863129",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3190701",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2848938",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3130760",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/tell-no-one",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+131",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q1032540",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2973041",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0362225",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q150",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "10795",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q142",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q314403",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2006-11-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q314403",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3380199",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1032540": "Canal+",
+        "Q106555": "Jean Rochefort",
+        "Q106573": "Nathalie Baye",
+        "Q1200678": "mystery film",
+        "Q130232": "drama film",
+        "Q142": "France",
+        "Q1429389": "Florence Thomassin",
+        "Q150": "French",
+        "Q152629": "Tell No One",
+        "Q20442589": "LGBTQ-related film",
+        "Q208590": "Kristin Scott Thomas",
+        "Q21401869": "flashback film",
+        "Q239341": "Marie-Josée Croze",
+        "Q2484376": "thriller film",
+        "Q2829519": "Alain Attal",
+        "Q2848938": "Andrée Damant",
+        "Q2863129": "Arnaud Henriet",
+        "Q2925417": "Brigitte Catillon",
+        "Q292760": "Marina Hands",
+        "Q2966467": "Christophe Rossignon",
+        "Q2973041": "Ciné+ Classic",
+        "Q3014839": "Daniel Znyk",
+        "Q3015113": "Danièle Ajoret",
+        "Q3086407": "Françoise Bertin",
+        "Q3106169": "Thierry Neuvic",
+        "Q3130760": "Karim Adda",
+        "Q314403": "Guillaume Canet",
+        "Q3169522": "Jean-Pierre Lorit",
+        "Q318099": "Harlan Coben",
+        "Q3190701": "Jérémie Covillault",
+        "Q3219319": "Laurent Lafitte",
+        "Q3292684": "Marie Martin",
+        "Q3295752": "Martine Chevallier",
+        "Q3313116": "Mika'ela Fisher",
+        "Q3380199": "Philippe Lefebvre",
+        "Q3382884": "Pierre-Benoist Varoclier",
+        "Q3470839": "Samir Guesmi",
+        "Q3591288": "Éric Naggar",
+        "Q3591351": "Éric Savin",
+        "Q444170": "Yodelice",
+        "Q461617": "Sara Martins",
+        "Q466991": "Anne Marivin",
+        "Q518457": "André Dussollier",
+        "Q552639": "Gilles Lellouche",
+        "Q556578": "Jalil Lespert",
+        "Q576085": "François Berléand",
+        "Q600051": "François Cluzet",
+        "Q694259": "Olivier Marchal",
+        "Q766656": "Christian Carion",
+        "Q959790": "crime film"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q59567",
+      "lang": "en",
+      "title": "Tell No One",
+      "extract": "Tell No One (French: Ne le dis à personne) is a 2006 French thriller film directed by Guillaume Canet and based on the 2001 novel of the same name by Harlan Coben. Written by Canet and Philippe Lefebvre and starring François Cluzet, the film won four categories at the 2007 César Awards in France: Best Director (Guillaume Canet), Best Actor (François Cluzet), Best Editing and Best Music Written for a Film.",
+      "url": "https://en.wikipedia.org/wiki/Tell_No_One"
+    },
+    "wikipedia:es": {
+      "qid": "Q59567",
+      "lang": "es",
+      "title": "No se lo digas a nadie (película de 2006)",
+      "extract": "No se lo digas a nadie (título original: Ne le dis à personne) es una película francesa de 2006 del género suspense dirigida por Guillaume Canet y basada en la novela homónima de  Harlan Coben. El guion fue escrito por Guillaume Canet y Philippe Lefebvre. \nEl largometraje se estrenó el 1 de noviembre de 2006. Ganó cuatro categorías en los Premios César de 2007, incluyendo mejor director y mejor actor.​\nMiramax y Focus Features Intl. han comprado los derechos para la realización de un remake que será producido por Kathleen Kennedy.​",
+      "url": "https://es.wikipedia.org/wiki/No_se_lo_digas_a_nadie_(pel%C3%ADcula_de_2006)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q59567",
+      "lang": "pt",
+      "title": "Ne le dis à personne",
+      "extract": "Ne le dis à personne (Brasil: Não Conte a Ninguém / Portugal: Não Digas a Ninguém) é um filme francês dirigido por Guillaume Canet e lançado em 2006. Esse filme é baseado no livro Tell No One do escritor americano Harlan Coben, lançado em 2001.\nO filme conta a história de um médico que teve a esposa assassinada 8 anos atrás. Mas a recente descoberta de 2 corpos enterrados próximos ao local do crime e o recebimento de um e-mail misterioso dão uma reviravolta no caso, colocando-o como suspeito pela morte da esposa. Agora ele precisa provar sua inocência, descobrir a verdade e fugir de um assassino profissional. Para isso ele contará apenas com a ajuda de sua melhor amiga, de uma advogada durona e de um traficante de drogas.\nNe le dis à personne recebeu nove indicações para o premio César (cinema), onde ganhou quatro, inclusive nas categorias melhor ator e melhor diretor.",
+      "url": "https://pt.wikipedia.org/wiki/Ne_le_dis_%C3%A0_personne"
+    }
+  },
+  "tier": "mid",
+  "type": "movie"
+}

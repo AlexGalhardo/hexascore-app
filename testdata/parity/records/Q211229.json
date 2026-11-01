@@ -1,0 +1,303 @@
+{
+  "qid": "Q211229",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q211229",
+      "labels": {
+        "en": "Black Mesa",
+        "es": "Black Mesa",
+        "mul": "Black Mesa",
+        "pt": "Black Mesa",
+        "pt-br": "Black Mesa"
+      },
+      "aliases": {
+        "en": [
+          "Black Mesa Source",
+          "Black Mesa: Source"
+        ],
+        "es": [
+          "Black Mesa Source"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Black Mesa (video game)",
+        "eswiki": "Black Mesa (videojuego)",
+        "ptwiki": "Black Mesa (jogo eletrônico)"
+      },
+      "sitelinks_count": 28,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q33543336",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q185029",
+            "rank": "normal"
+          },
+          {
+            "value": "Q27670585",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q279744",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Black Mesa",
+            "rank": "normal"
+          }
+        ],
+        "P1651": [
+          {
+            "value": "zVYJ9o6Bddo",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "362890",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q33543336",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "1100",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt2778298",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q388",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1412",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9043",
+            "rank": "normal"
+          },
+          {
+            "value": "Q150",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5146",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7737",
+            "rank": "normal"
+          },
+          {
+            "value": "Q652",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9056",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9035",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7411",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9067",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9176",
+            "rank": "normal"
+          },
+          {
+            "value": "Q809",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7913",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13414913",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9027",
+            "rank": "normal"
+          },
+          {
+            "value": "Q18130932",
+            "rank": "normal"
+          },
+          {
+            "value": "Q256",
+            "rank": "normal"
+          },
+          {
+            "value": "Q8798",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13955",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9129",
+            "rank": "normal"
+          },
+          {
+            "value": "Q5287",
+            "rank": "normal"
+          },
+          {
+            "value": "Q750553",
+            "rank": "normal"
+          },
+          {
+            "value": "Q56649449",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9199",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2020-03-06T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "black-mesa",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1321": "Spanish",
+        "Q13414913": "Simplified Chinese",
+        "Q13955": "Arabic",
+        "Q1406": "Microsoft Windows",
+        "Q1412": "Finnish",
+        "Q150": "French",
+        "Q18130932": "Traditional Chinese",
+        "Q185029": "first-person shooter",
+        "Q1860": "English",
+        "Q188": "German",
+        "Q208850": "single-player video game",
+        "Q256": "Turkish",
+        "Q27670585": "science fiction video game",
+        "Q279744": "Half-Life",
+        "Q30": "United States",
+        "Q33543336": "Crowbar Collective",
+        "Q388": "Linux",
+        "Q5146": "Portuguese",
+        "Q5287": "Japanese",
+        "Q56649449": "Latin American Spanish",
+        "Q652": "Italian",
+        "Q6895044": "multiplayer video game",
+        "Q7411": "Dutch",
+        "Q750553": "Brazilian Portuguese",
+        "Q7737": "Russian",
+        "Q7913": "Romanian",
+        "Q809": "Polish",
+        "Q8798": "Ukrainian",
+        "Q9027": "Swedish",
+        "Q9035": "Danish",
+        "Q9043": "Norwegian",
+        "Q9056": "Czech",
+        "Q9067": "Hungarian",
+        "Q9129": "Greek",
+        "Q9176": "Korean",
+        "Q9199": "Vietnamese"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q211229",
+      "lang": "en",
+      "title": "Black Mesa (video game)",
+      "extract": "Black Mesa is a 2020 first-person shooter video game developed and published by Crowbar Collective. It is a fan-made remake of Half-Life (1998) in the Source game engine. Originally published as a free mod in September 2012, Black Mesa was approved for commercial release by Valve, the developers of Half-Life. The first commercial version was published as an early-access release in May 2015 with an abridged campaign, followed by a full release in March 2020 restoring the final chapters.\nBlack Mesa was developed in response to Half-Life: Source (2004), Valve's port of Half-Life to the Source engine, which lacked new features or improvements over the original version that used GoldSrc. Two teams wanted to improve on the Source remake and eventually merged to become Crowbar Collective. The project was originally slated to release in 2009, but was pushed back significantly for quality reasons.\nAdapting Half-Life to an improved version of the Source engine and completely reworking the often-derided final 4 chapters of the game, set outside of the Black Mesa facility on the alien borderworld of Xen, lengthened the development efforts of the remake. Due to its long development time, the modification became notable for its delays on the status of its completion. Major changes include a reskinned collection of textures, models and NPCs, a longer runtime, altered level and puzzle designs, along with different enemy artificial intelligence, and additional dialogue and story elements. Black Mesa received positive reviews, with critics praising the gameplay and attention to detail akin to that of an official Valve release.",
+      "url": "https://en.wikipedia.org/wiki/Black_Mesa_(video_game)"
+    },
+    "wikipedia:es": {
+      "qid": "Q211229",
+      "lang": "es",
+      "title": "Black Mesa (videojuego)",
+      "extract": "Black Mesa (previamente conocido como Black Mesa: Source) es un videojuego de disparos en primera persona desarrollado y publicado por Crowbar Collective. Es una nueva versión del videojuego Half-Life que utiliza el motor gráfico Source. Fue originalmente publicado como un mod gratuito en septiembre de 2012 y luego fue aprobado por Valve (los desarrolladores de Half-Life) para su lanzamiento comercial. La versión comercial fue publicada como un título de acceso anticipado en mayo de 2015 y su versión completa fue lanzada en marzo de 2020 para las plataformas Microsoft Windows y Linux.\nBlack Mesa fue desarrollado en respuesta a Half-Life: Source (2005), la propia adaptación de Valve de Half-Life al motor Source, que carecía de nuevas características o mejoras. El proyecto se formó mediante la fusión de dos equipos separados que querían mejorar la nueva versión de Half-Life, quienes luego pasaron a llamarse Crowbar Collective. Si bien originalmente habían apuntado a un lanzamiento en 2009, el equipo se dio cuenta de que se habían apresurado hasta este punto y revaluaron sus esfuerzos para mejorar la calidad de la nueva versión.\nDesde entonces, la atención a los detalles, la adaptación del videojuego a una versión mejorada del motor Source y la reelaboración completa de los capítulos finales de Half-Life conocidos como \"Xen\" habían alargado los esfuerzos de desarrollo de la nueva versión. Debido a su largo tiempo de desarrollo, el mod se hizo notable por sus retrasos en el estado de su finalización. Entre los principales cambios en la nueva versión se incluyen texturas, modelos y PNJs retocados, un tiempo de juego más prolongado, un diseño de niveles y puzles mejorados junto con enemigos con una inteligencia artificial desafiante y elementos adicionales de diálogo e historia.\nBlack Mesa recibió reseñas positivas en su lanzamiento inicial y fue alabado a medida que el videojuego se iba actualizado y mejorando. El elogio se dirigió hacia la jugabilidad y la atención al detalle, comparándolo como si fuese un lanzamiento oficial de Valve, así como por las mejoras que habían realizado en los capítulos de Xen.",
+      "url": "https://es.wikipedia.org/wiki/Black_Mesa_(videojuego)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q211229",
+      "lang": "pt",
+      "title": "Black Mesa (jogo eletrônico)",
+      "extract": "Black Mesa (anteriormente conhecido como Black Mesa: Source) é a terceira modificação total do motor de jogo Source da Valve Corporation. O objetivo declarado do projeto é recriar a aclamada série de jogos de 1998, Half-Life, usando os recursos mais avançados do motor Source. Com uma equipe de desenvolvimento voluntário com mais de 40 pessoas esperam criar um jogo com um ambiente mais envolvente, além de um mundo complexo com as mais desafiadoras jogabilidades e realismos.\nDurante seus oito anos de desenvolvimento, Black Mesa tem sido destaque em publicações de vários jogos eletrônicos e recebeu atenção direta da Valve. Devido ao seu longo tempo de desenvolvimento a modificação tornou-se notável por seus delays, e atualizações diminutas sobre seu estado e conclusão. Os delays levaram a revista Wired conceder o título \"Vaporware do ano\", listas dos anos 2009 e 2010.\nA primeira parte da Black Mesa, fabricada com remakes de todos capítulos de Half-Life, excepto os definidos no mundo alienígena \"Xen\", foi lançada como um download independente em 14 de setembro de 2012. Uma votação pública através do programa Steam Greenlight viu o jogo aprovado para distribuição na Steam.",
+      "url": "https://pt.wikipedia.org/wiki/Black_Mesa_(jogo_eletr%C3%B4nico)"
+    }
+  },
+  "tier": "mid",
+  "type": "game"
+}

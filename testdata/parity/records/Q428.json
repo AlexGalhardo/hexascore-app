@@ -1,0 +1,127 @@
+{
+  "qid": "Q428",
+  "records": {
+    "wikidata": {
+      "type": "book",
+      "id": "Q428",
+      "labels": {
+        "en": "Qur’an",
+        "es": "Corán",
+        "mul": "Qurʾān",
+        "pt": "Alcorão",
+        "pt-br": "Alcorão"
+      },
+      "aliases": {
+        "en": [
+          "Holy Qur'an",
+          "the Holy Koran",
+          "Korân",
+          "the Koran",
+          "Alcoran",
+          "Holy Quran",
+          "al-Qur'an",
+          "The Holy Qur'an",
+          "Al Koran",
+          "the Quran",
+          "Qur'an",
+          "the Holy Quran",
+          "Coran",
+          "Qurân",
+          "al-Quran",
+          "Holy Koran",
+          "the Qur'an",
+          "Qurʾān",
+          "Koran",
+          "the Holy Qur'an"
+        ],
+        "es": [
+          "Korán",
+          "Qurʾān"
+        ],
+        "mul": [
+          "al-Qurʾān"
+        ],
+        "pt": [
+          "Corão"
+        ],
+        "pt-br": [
+          "Corão"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Quran",
+        "eswiki": "Corán",
+        "ptwiki": "Alcorão"
+      },
+      "sitelinks_count": 282,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q12617225",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "القرآن",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "AndalusQuran.JPG",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q109016888",
+            "rank": "normal"
+          }
+        ],
+        "P571": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+0631-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P648": [
+          {
+            "value": "OL9991493W",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q109016888": "Quranic Arabic",
+        "Q12617225": "religious literature"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q428",
+      "lang": "en",
+      "title": "Quran",
+      "extract": "The Quran (Arabic: الْقُرْآن, lit. 'the recitation' or 'the lecture'), also romanized Qur'an or Koran, is the central religious text of Islam, and is believed by Muslims to be a revelation directly from God (Allāh). It is organized in 114 chapters (sūrah, pl. suwar) which consist of individual verses (āyah). Aside from its religious significance, it is widely regarded as the finest work in Arabic literature and has significantly influenced the Arabic language.\nMuslims believe the Quran was orally revealed by God to the final Islamic prophet Muhammad through the angel Gabriel incrementally over a period of some 23 years, beginning on the Laylat al-Qadr when Muhammad was 40 and concluding in 11 AH/632 CE, the year of his death. Muslims regard the Quran as Muhammad's most important miracle, a proof of his prophethood, and the culmination of a series of divine messages starting with those revealed to the first Islamic prophet Adam, including the holy books of the Torah, Psalms, and Gospel in Islam. The Quran is believed by Muslims to be God's own divine speech providing a complete code of conduct across all facets of life. This has led Muslim theologians to fiercely debate whether the Quran was \"created or uncreated\". According to tradition, several of Muhammad's companions served as scribes, recording the revelations. Shortly after Muhammad's death, the Quran was compiled on the order of the first caliph Abu Bakr (r. 632–634) by the companions, who had written down or memorized parts of it. Caliph Uthman (r. 644–656) established a standard version, now known as the Uthmanic codex, which is generally considered the archetype of the Quran known today. There are, however, canonical variant readings (qirāʾāt), transmitted through oral tradition, with minor variations in wording and nuance that may lead to subtle differences in meaning, while preserving the core message of the Quran. It is the subject of a modern field of academic research known as Quranic studies. Some argue that manuscript evidence, textual variants (such as the Sanaa manuscript), and historical sources suggest a more gradual and complex process of compilation and canonization.\nThe Quran describes itself as a guide for humanity (2:185). It alludes to significant narratives found in biblical and apocryphal texts. While it devotes considerable space to some of these narratives, it does not quote any paragraph from these sources directly, but summarizes and uses different versions of some in different sections. Islamic theorists tend to explain this situation as the Quran's focus on the moral lessons to be drawn from events. This allusive style and summarization entail many explanatory efforts (exegesis). To extrapolate the meaning of a particular Quranic verse, Muslims rely on tafsir, or commentary, often in conjunction with translations of the text. Furthermore, hadiths, which are valued in most Islamic schools of thought for their role in establishing Islamic laws and regulations, are oral traditions that were later written down and are believed to reflect the words and actions of Muhammad, serving as additional guidance alongside the Quran for most Muslims. During prayers, the Quran is recited only in Arabic. A person who has memorized the entire Quran is called a hafiz (female hafiza). Ideally, verses are recited with a special kind of prosody reserved for this purpose called tajwid. It is a tradition for some Muslims to recite the entire Quran during the tarawih prayers throughout the month of Ramadan.",
+      "url": "https://en.wikipedia.org/wiki/Quran"
+    },
+    "wikipedia:es": {
+      "qid": "Q428",
+      "lang": "es",
+      "title": "Corán",
+      "extract": "El Corán (en árabe: الْقُرْآن‎, romanizado: al-qurʔān, lit. 'La recitación'; en persa: [ɢoɾˈʔɒːn]; a veces nombrado en árabe: ٱلقُرآنَ ٱلْكَرِيمَ‎, romanizado: al-qurʔāna al-karīma, lit. 'La recitación sacra'), también transliterado como Alcorán, Qurán o Korán, es el libro sagrado del islam, en el que representa la palabra de Dios (en árabe Allāh, الله), revelada a Mahoma (محمد Muhammad), quien se considera que recibió estas revelaciones por medio del arcángel Gabriel (جبريل Ŷibrīl).​​ \nDurante la vida del profeta Mahoma, las revelaciones eran transmitidas oralmente o escritas en hojas de palmeras, trozos de cuero o huesos, etc.​ A la muerte del profeta, en 632, sus seguidores comenzaron a reunir estas revelaciones, que durante el Califato de Uthmán ibn Affán (عثمان بن عفان) tomaron la forma que hoy conocemos, 114 capítulos (azoras, سورة), cada uno dividido en aleyas (آية).​\nEl Corán menciona muchos personajes que aparecen en los libros sagrados del judaísmo y el cristianismo (Tanaj y Biblia) y en la literatura devota (por ejemplo, los libros apócrifos), con muchas diferencias en detalle. Personajes del mundo hebreo y cristiano muy conocidos como Adán, Noé, Abraham, Moisés, María de Nazaret, Jesús de Nazaret y Juan el Bautista aparecen mencionados como profetas islámicos.​\nLos musulmanes afirman que el Corán es la palabra «eterna e increada» de Dios. Por ello, su transmisión debería realizarse sin el menor cambio en la lengua originaria, el árabe clásico.​ El Corán ha sido traducido a muchos idiomas, principalmente pensando en aquellos creyentes cuyas lenguas no son el árabe. Aun así, en la liturgia se utiliza exclusivamente el árabe, ya que la traducción únicamente tiene valor didáctico, como glosa o instrumento para ayudar a entender el texto original. De hecho, una traducción del Corán ni siquiera se considera un Corán​ auténtico sino una interpretación del mismo.",
+      "url": "https://es.wikipedia.org/wiki/Cor%C3%A1n"
+    },
+    "wikipedia:pt": {
+      "qid": "Q428",
+      "lang": "pt",
+      "title": "Alcorão",
+      "extract": "Esta página contém alguns caracteres especiais e é possível que a impressão não corresponda ao artigo original.\n\nO Alcorão (em árabe: القرآن, transl. al-Qurʾān, lit. \"a recitação\") é o texto religioso central do islamismo, que os muçulmanos acreditam ser uma revelação diretamente de Deus (Alá). É organizado em 114 capítulos (sūrah, pl. suwar), que consistem em versículos individuais (āyah). Além de sua importância religiosa, é amplamente considerado a melhor obra da literatura árabe e influenciou significativamente a língua árabe.\nOs muçulmanos acreditam que o Alcorão foi revelado oralmente por Deus ao último profeta islâmico, Maomé, por meio do anjo Gabriel, gradualmente ao longo de cerca de 23 anos, começando na Laylat al-Qadr, quando Maomé tinha 40 anos, e terminando em 11 AH/632 d.C., ano de sua morte. Os muçulmanos consideram o Alcorão o mais importante milagre de Maomé, uma prova de sua condição de profeta e o ponto culminante de uma série de mensagens divinas iniciada com as reveladas ao primeiro profeta islâmico, Adão, incluindo os livros sagrados da Torá, dos Salmos e do Evangelho no islamismo. Os muçulmanos acreditam que o Alcorão seja a própria palavra divina de Deus, fornecendo um código completo de conduta para todos os aspectos da vida. Isso levou os teólogos muçulmanos a debater intensamente se o Alcorão foi \"criado ou incriado\". Segundo a tradição, vários companheiros de Maomé serviram como escribas, registrando as revelações. Pouco depois da morte de Maomé, o Alcorão foi compilado por ordem do primeiro califa, Abu Becre (r. 632–634), pelos companheiros que haviam escrito ou memorizado partes dele. O califa Otomão (r. 644–656) estabeleceu uma versão-padrão, hoje conhecida como códice de Otomão, geralmente considerada o arquétipo do Alcorão conhecido atualmente. Existem, contudo, leituras variantes canônicas (qirāʾāt), transmitidas pela tradição oral, com pequenas variações de redação e nuance que podem levar a diferenças sutis de significado, preservando ao mesmo tempo a mensagem central do Alcorão. Ele é objeto de um campo moderno de pesquisa acadêmica conhecido como estudos corânicos. Alguns argumentam que evidências manuscritas, variantes textuais (como o manuscrito de Saná) e fontes históricas sugerem um processo de compilação e canonização mais gradual e complexo.\nO Alcorão descreve a si próprio como um guia para a humanidade (2:185). Faz alusão a narrativas importantes encontradas no cânone bíblico e em textos apócrifos. Embora dedique espaço considerável a algumas dessas narrativas, não cita diretamente nenhum parágrafo dessas fontes, mas resume e utiliza versões diferentes de algumas delas em seções distintas. Teóricos islâmicos tendem a explicar essa situação pelo foco do Alcorão nas lições morais a serem extraídas dos acontecimentos. Esse estilo alusivo e a sumarização exigem muitos esforços explicativos (exegese). Para extrair o significado de determinado versículo corânico, os muçulmanos recorrem ao tafsir, ou comentário, muitas vezes em conjunto com traduções do texto. Além disso, os hádices, valorizados na maioria das escolas de pensamento islâmicas por seu papel no estabelecimento de leis islâmicas e regulamentos, são tradições orais posteriormente registradas por escrito e que se acredita refletirem as palavras e ações de Maomé, servindo como orientação adicional ao lado do Alcorão para a maioria dos muçulmanos. Durante as orações, o Alcorão é recitado apenas em árabe. Uma pessoa que memorizou todo o Alcorão é chamada de hafiz (no feminino, hafiza). Idealmente, os versículos são recitados com um tipo especial de prosódia reservado para esse propósito, chamado tajwid. É tradição entre alguns muçulmanos recitar o Alcorão inteiro durante as orações tarawih ao longo do mês do Ramadã.",
+      "url": "https://pt.wikipedia.org/wiki/Alcor%C3%A3o"
+    }
+  },
+  "tier": "top",
+  "type": "book"
+}

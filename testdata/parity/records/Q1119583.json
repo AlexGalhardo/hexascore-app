@@ -1,0 +1,184 @@
+{
+  "qid": "Q1119583",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q1119583",
+      "labels": {
+        "en": "Machine-Gun Kelly",
+        "es": "La ley de las armas"
+      },
+      "aliases": {
+        "en": [
+          "Machine Gun Kelly"
+        ],
+        "es": [
+          "Kelly el ametralladora"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Machine-Gun Kelly (film)"
+      },
+      "sitelinks_count": 8,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/machine_gun_kelly",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q959790",
+            "rank": "normal"
+          },
+          {
+            "value": "Q645928",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188473",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Machine-Gun Kelly",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q36105",
+            "rank": "normal"
+          },
+          {
+            "value": "Q453516",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3323951",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2947119",
+            "rank": "normal"
+          },
+          {
+            "value": "Q556332",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3317234",
+            "rank": "normal"
+          },
+          {
+            "value": "Q510642",
+            "rank": "normal"
+          },
+          {
+            "value": "Q7325191",
+            "rank": "normal"
+          },
+          {
+            "value": "Q515659",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2555623",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+80",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q465224",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0051887",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "43119",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q318292",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1958-01-01T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q7351271",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1860": "English",
+        "Q188473": "action film",
+        "Q2555623": "Michael Fox",
+        "Q2947119": "Jack Lambert",
+        "Q30": "United States",
+        "Q318292": "Roger Corman",
+        "Q3317234": "Mitzi McCall",
+        "Q3323951": "Morey Amsterdam",
+        "Q36105": "Charles Bronson",
+        "Q453516": "Susan Cabot",
+        "Q465224": "American International Pictures",
+        "Q510642": "Connie Gilchrist",
+        "Q515659": "Lori Martin",
+        "Q556332": "Frank de Kova",
+        "Q645928": "biographical film",
+        "Q7325191": "Richard Devon",
+        "Q7351271": "Robert Wright Campbell",
+        "Q959790": "crime film"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q1119583",
+      "lang": "en",
+      "title": "Machine-Gun Kelly (film)",
+      "extract": "Machine-Gun Kelly is a 1958 American gangster film noir produced and directed by Roger Corman, from a screenplay by R. Wright Campbell, loosely based on the criminal exploits of George \"Machine Gun\" Kelly and his wife Kathryn Kelly. It stars Charles Bronson as the titular character, his first leading role in a feature film, and Susan Cabot as his wife and partner-in-crime (fictionalized as ‘Flo Becker’).\nDespite its low budget, the film received a positive critical reception. Corman called the film \"a major turning point in my career,\" because it was the first for which he had received serious critical attention.",
+      "url": "https://en.wikipedia.org/wiki/Machine-Gun_Kelly_(film)"
+    }
+  },
+  "tier": "year-precision",
+  "type": "movie"
+}

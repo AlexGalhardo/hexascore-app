@@ -1,0 +1,242 @@
+{
+  "qid": "Q71910",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q71910",
+      "labels": {
+        "es": "Tetris",
+        "mul": "Tetris",
+        "pt": "Tetris",
+        "pt-br": "Tetris"
+      },
+      "aliases": {
+        "en": [
+          "1984 Tetris"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Tetris",
+        "eswiki": "Tetris",
+        "ptwiki": "Tetris"
+      },
+      "sitelinks_count": 93,
+      "claims": {
+        "P136": [
+          {
+            "value": "Q54767",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q92600",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q92600",
+            "rank": "normal"
+          },
+          {
+            "value": "Q822879",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1136981",
+            "rank": "normal"
+          }
+        ],
+        "P18": [
+          {
+            "value": "Emacs Tetris vector based detail.svg",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "9715",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0207153",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q188642",
+            "rank": "normal"
+          },
+          {
+            "value": "Q478833",
+            "rank": "normal"
+          },
+          {
+            "value": "Q23882",
+            "rank": "normal"
+          },
+          {
+            "value": "Q342163",
+            "rank": "normal"
+          },
+          {
+            "value": "Q100047",
+            "rank": "normal"
+          },
+          {
+            "value": "Q172742",
+            "rank": "normal"
+          },
+          {
+            "value": "Q183505",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1048035",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10676",
+            "rank": "normal"
+          },
+          {
+            "value": "Q43627",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1023103",
+            "rank": "normal"
+          },
+          {
+            "value": "Q853547",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1282269",
+            "rank": "normal"
+          },
+          {
+            "value": "Q478829",
+            "rank": "normal"
+          },
+          {
+            "value": "Q99775",
+            "rank": "normal"
+          },
+          {
+            "value": "Q186437",
+            "rank": "normal"
+          },
+          {
+            "value": "Q3095025",
+            "rank": "normal"
+          },
+          {
+            "value": "Q627302",
+            "rank": "normal"
+          },
+          {
+            "value": "Q753619",
+            "rank": "normal"
+          },
+          {
+            "value": "Q19610114",
+            "rank": "normal"
+          },
+          {
+            "value": "Q94",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          },
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q15180",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1984-06-06T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "tetris",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q100047": "Commodore Amiga",
+        "Q1023103": "Philips CD-i",
+        "Q1048035": "WonderSwan Color",
+        "Q10676": "Sega Genesis/Mega Drive",
+        "Q1136981": "Vadim Gerasimov",
+        "Q1282269": "Apple IIGS",
+        "Q15180": "Soviet Union",
+        "Q172742": "Nintendo Entertainment System",
+        "Q183505": "NEC PC-9800 series",
+        "Q186437": "Game Boy",
+        "Q188642": "Game Boy Advance",
+        "Q19610114": "Nintendo Switch",
+        "Q208850": "single-player video game",
+        "Q23882": "ZX Spectrum",
+        "Q3095025": "MOTO Gamme",
+        "Q342163": "Acorn Electron",
+        "Q43627": "Mac operating system",
+        "Q478829": "Amstrad CPC",
+        "Q478833": "Amstrad PCW",
+        "Q54767": "puzzle video game",
+        "Q627302": "Atari ST",
+        "Q6895044": "multiplayer video game",
+        "Q753619": "Atari Falcon",
+        "Q822879": "Vladimir Pokhilko",
+        "Q853547": "MSX",
+        "Q92600": "Alexey Pajitnov",
+        "Q94": "Android",
+        "Q99775": "Commodore 64"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q71910",
+      "lang": "en",
+      "title": "Tetris",
+      "extract": "Tetris (Russian: Тетрис) is a puzzle video game created by Alexey Pajitnov, a Soviet software engineer, in the mid-1980s. In Tetris, falling pieces made up of four connected blocks, known as tetrominoes, must be arranged into a stack. Once a horizontal line of the playfield is filled with blocks, the line disappears, granting points and clearing space. The objective is to score as many points as possible while keeping the stack from reaching the top, at which point the game ends. Approximately 220 versions of Tetris have been released across at least 70 platforms. Newer versions frequently add game mechanics, some of which have become standard over time, such as the ability to \"hold\" a tetromino for later use.\nIn the mid-1980s, Pajitnov created Tetris in his spare time while working at the Dorodnitsyn Computing Center of the Academy of Sciences. He initially programmed it in Pascal for the Elektronika 60 in about three weeks, then spent over two months porting it to the IBM PC using Turbo Pascal with help from Dmitry Pavlovsky and Vadim Gerasimov. Floppy disk copies were distributed freely throughout Moscow before spreading to Eastern Europe. Robert Stein of Andromeda Software saw Tetris in Hungary and contacted the Dorodnitsyn Computing Center to secure a license to release it commercially. Stein sublicensed it to Mirrorsoft in the UK and Spectrum HoloByte in the US. Both companies released Tetris in 1988 to commercial success and sublicensed to additional companies, including Henk Rogers' Bullet-Proof Software. Rogers negotiated with Nikolai Belikov, director of Elektronorgtechnica, the state-owned organization in charge of licensing Soviet software, to license Tetris to Nintendo for the Game Boy and Nintendo Entertainment System (NES); both versions were released in 1989. \nTetris for Game Boy contributed to the success of the Game Boy and popularized Tetris. To date, it is the best-selling version of Tetris, with over 35 million sales. After Nintendo's license to the game expired in 1995, Pajitnov claimed the rights to Tetris and established The Tetris Company alongside Rogers and, prior to 2003, Belikov. The company created guidelines for licensed Tetris games to follow and has enforced its copyright through cease-and-desist letters and DMCA takedowns against unauthorized clones. Versions of Tetris were released on mobile devices starting in the 2000s, with Electronic Arts holding a license on such ports from 2006 to 2020, to commercial success. The popularity of Tetris was renewed with the critically successful Tetris Effect (2018) and Tetris 99 (2019).\nTetris is the best-selling video game of all time, having sold 520 million copies as of 2022. It is frequently cited as one of the greatest and most influential games, and was among the inaugural class inducted into the World Video Game Hall of Fame in 2015. Its gameplay has been influential in the genre of puzzle video games, being cited as an early example of casual gaming. It has been represented in an array of media, such as architecture and art, and been the subject of academic research, including studies of its potential for psychological intervention. A competitive culture has formed around Tetris, particularly the NES version, with players – typically adolescents – competing at the annual Classic Tetris World Championship. A film dramatization of its development was released in 2023.",
+      "url": "https://en.wikipedia.org/wiki/Tetris"
+    },
+    "wikipedia:es": {
+      "qid": "Q71910",
+      "lang": "es",
+      "title": "Tetris",
+      "extract": "Tetris (del cirílico Те́трис) (anteriormente estilizado como TETЯIS) es un videojuego de lógica soviético originalmente diseñado y programado por Alekséi Pázhitnov. Se publicó el 6 de junio de 1984,​ mientras trabajaba para la Academia de Ciencias de la Unión Soviética en Moscú, RSFS de Rusia.​ Su nombre deriva del prefijo numérico griego tetra- (cuatro), ya que todas las piezas del juego, conocidas como tetrominós, contienen cuatro segmentos y, del tenis, el deporte favorito de Pázhitnov.​​\nEn el Tetris, se juega con los tetrominós, el caso especial de cuatro elementos de poliominós. Los poliominós se han utilizado en rompecabezas populares por lo menos desde 1907. Les dio el nombre el matemático Solomon W. Golomb en 1953. Sin embargo, incluso la enumeración de los pentominós data de la antigüedad.\nEl juego (o una de sus muchas variantes)está disponible para casi todas las consolas de videojuegos y sistemas operativos de PC, así como en dispositivos tales como las calculadoras gráficas, teléfonos móviles, reproductores de multimedia portátiles, PDAs, reproductores de música en red e incluso como huevo de pascua en productos no mediáticos como los osciloscopios.​ También ha inspirado servicios de mesa​ y se ha jugado en varios edificios.​​ Mantiene el récord de ser el juego completamente funcional más grande del mundo gracias al esfuerzo de estudiantes holandeses que en 1995 iluminaron quince pisos del Departamento de Ingeniería Eléctrica en la Universidad Técnica de Delft.​​​\nAunque diferentes versiones de Tetris se habían vendido para una amplia gama de plataformas de ordenadores domésticos y arcades durante los años 1980, fue la inmensamente exitosa versión portátil para la Game Boy lanzada en 1989 la que lo convirtió en uno de los juegos más populares de todos los tiempos. La edición número 100 del Electronic Gaming Monthly otorgó a Tetris el número 1 en el escalafón de \"Mejores juegos de todos los tiempos\". En 2007, Tetris ocupó el segundo lugar en los «100 mejores videojuegos de todos los tiempos» para IGN.​ Ha vendido más de 170 millones de copias hasta 2016.​ En enero de 2010, se anunció que el Tetris había vendido más de 100 millones de unidades para teléfonos móviles desde 2005.​",
+      "url": "https://es.wikipedia.org/wiki/Tetris"
+    },
+    "wikipedia:pt": {
+      "qid": "Q71910",
+      "lang": "pt",
+      "title": "Tetris",
+      "extract": "Tetris (em russo:  Тетрис) é um jogo eletrônico do gênero de quebra-cabeça criado pelo engenheiro de software soviético Alexey Pajitnov e lançado no ano de 1984. A primeira versão foi criada para o computador Electronika 60, enquanto Pajitnov trabalhava no Centro de Computação da Academia de Ciências da União Soviética.\nA mecânica central do jogo consiste em manipular o encaixe de peças geométricas em queda contínua, conhecidas como tetraminós, com o objetivo de completar linhas horizontais. Quando uma linha é preenchida, ela desaparece, concedendo pontos ao jogador e liberando espaço para o encaixe de novas peças.\nDurante o fim da década de 1980, o jogo foi centro de uma complexa disputa de direitos autorais e licenciamento de hardware, envolvendo o governo da União Soviética e empresas de tecnologia do ocidente. Após a resolução legal, o título alcançou uma enorme popularidade global através de sua distribuição para consoles de mesa e dispositivos portáteis, como o Game Boy, consolidando-se como um dos jogos mais vendidos e influentes da história da computação.",
+      "url": "https://pt.wikipedia.org/wiki/Tetris"
+    }
+  },
+  "tier": "top",
+  "type": "game"
+}

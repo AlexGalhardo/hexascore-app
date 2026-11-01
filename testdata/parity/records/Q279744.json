@@ -1,0 +1,260 @@
+{
+  "qid": "Q279744",
+  "records": {
+    "wikidata": {
+      "type": "game",
+      "id": "Q279744",
+      "labels": {
+        "en": "Half-Life",
+        "mul": "Half-Life"
+      },
+      "aliases": {
+        "en": [
+          "HL",
+          "HL1",
+          "HλLF-LIFE",
+          "Half-Life 1"
+        ],
+        "es": [
+          "HL",
+          "HL1",
+          "HλLF-LIFE",
+          "Half-Life 1"
+        ],
+        "mul": [
+          "HλLF-LIFE"
+        ],
+        "pt": [
+          "HL",
+          "HL1",
+          "HλLF-LIFE",
+          "Half-Life 1"
+        ],
+        "pt-br": [
+          "HL",
+          "HL1",
+          "HλLF-LIFE",
+          "Half-Life 1"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "Half-Life (video game)",
+        "eswiki": "Half-Life (videojuego)",
+        "ptwiki": "Half-Life"
+      },
+      "sitelinks_count": 72,
+      "claims": {
+        "P123": [
+          {
+            "value": "Q494614",
+            "rank": "normal"
+          },
+          {
+            "value": "Q193559",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q185029",
+            "rank": "normal"
+          },
+          {
+            "value": "Q27670585",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "Half-Life",
+            "rank": "normal"
+          }
+        ],
+        "P1733": [
+          {
+            "value": "70",
+            "rank": "normal"
+          }
+        ],
+        "P178": [
+          {
+            "value": "Q193559",
+            "rank": "preferred"
+          },
+          {
+            "value": "Q1046593",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q752241",
+            "rank": "normal"
+          }
+        ],
+        "P2816": [
+          {
+            "value": "4247",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0239023",
+            "rank": "normal"
+          }
+        ],
+        "P400": [
+          {
+            "value": "Q388",
+            "rank": "normal"
+          },
+          {
+            "value": "Q10680",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1406",
+            "rank": "normal"
+          },
+          {
+            "value": "Q14116",
+            "rank": "normal"
+          }
+        ],
+        "P404": [
+          {
+            "value": "Q6895044",
+            "rank": "normal"
+          },
+          {
+            "value": "Q208850",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          },
+          {
+            "value": "Q150",
+            "rank": "normal"
+          },
+          {
+            "value": "Q188",
+            "rank": "normal"
+          },
+          {
+            "value": "Q652",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1321",
+            "rank": "normal"
+          },
+          {
+            "value": "Q13414913",
+            "rank": "normal"
+          },
+          {
+            "value": "Q18130932",
+            "rank": "normal"
+          },
+          {
+            "value": "Q9176",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1998-11-19T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2001-11-11T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2013-02-14T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P5794": [
+          {
+            "value": "half-life",
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q2521946",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1046593": "Gearbox Software",
+        "Q10680": "PlayStation 2",
+        "Q1321": "Spanish",
+        "Q13414913": "Simplified Chinese",
+        "Q1406": "Microsoft Windows",
+        "Q14116": "macOS",
+        "Q150": "French",
+        "Q18130932": "Traditional Chinese",
+        "Q185029": "first-person shooter",
+        "Q1860": "English",
+        "Q188": "German",
+        "Q193559": "Valve Corporation",
+        "Q208850": "single-player video game",
+        "Q2521946": "Marc Laidlaw",
+        "Q27670585": "science fiction video game",
+        "Q30": "United States",
+        "Q388": "Linux",
+        "Q494614": "Sierra Entertainment",
+        "Q652": "Italian",
+        "Q6895044": "multiplayer video game",
+        "Q752241": "Half-Life",
+        "Q9176": "Korean"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q279744",
+      "lang": "en",
+      "title": "Half-Life (video game)",
+      "extract": "Half-Life is a 1998 first-person shooter (FPS) game developed by Valve Corporation and published by Sierra Studios for Windows. It was Valve's debut product and the first game in the Half-Life series. The player controls Gordon Freeman, a theoretical physicist who must escape from the Black Mesa Research Facility after it is overrun by aliens following a disastrous scientific experiment. Its gameplay consists of combat, exploration and puzzles.\nValve was disappointed with the lack of innovation in the FPS genre and aimed to create a more immersive world. Half-Life runs on the engine GoldSrc, a heavily modified version of the Quake engine, licensed from id Software. The science fiction novelist Marc Laidlaw was hired to craft the plot and assist with design. Unlike other games at the time, the player has almost uninterrupted control of the player character; the story is mostly conveyed through scripted sequences rather than cutscenes.\nHalf-Life received acclaim for its graphics, gameplay and narrative and won more than 50 PC \"Game of the Year\" awards. It is considered one of the most influential FPS games and one of the greatest video games. By 2008, it had sold more than nine million copies. It was ported to the PlayStation 2 in 2001, along with the multiplayer expansion Decay, and to OS X and Linux in 2013. Valve ported Half-Life to its next game engine, Source, as Half-Life: Source in 2004. In 2020, a fanmade remake, Black Mesa, was released.\nHalf-Life inspired numerous fan-made mods, some of which became standalone games, such as Counter-Strike (2000), Day of Defeat (2003), and Sven Co-op (1999). It was followed by the expansion packs Opposing Force (1999) and Blue Shift (2001), developed by Gearbox Software, and the sequels Half-Life 2 (2004), Episode One (2006), Episode Two (2007) and Half-Life: Alyx (2020).",
+      "url": "https://en.wikipedia.org/wiki/Half-Life_(video_game)"
+    },
+    "wikipedia:es": {
+      "qid": "Q279744",
+      "lang": "es",
+      "title": "Half-Life (videojuego)",
+      "extract": "Half-Life es un videojuego de disparos en primera persona de 1998 desarrollado por Valve Corporation y publicado por Sierra Studios para Windows. Fue el producto debut de Valve y el primer juego de la serie Half-Life. El jugador asume el papel de Gordon Freeman, un científico que debe escapar de Black Mesa Research Facility tras ser invadido por extraterrestres después de un desastroso experimento científico. La jugabilidad se basa en combate, exploración y puzles.\nValve, decepcionada por la falta de innovación en el género FPS, se propuso crear un mundo inmersivo en lugar de una «galería de tiros». Desarrollaron el juego utilizando GoldSrc, una versión muy modificada del Quake engine, con licencia de id Software. El novelista de ciencia ficción Marc Laidlaw fue contratado para crear la trama y ayudar con el diseño. A diferencia de otros juegos de la época, el jugador tiene un control casi ininterrumpido del personaje; la historia se desarrolla principalmente mediante secuencias guionadas en lugar de cinemáticas.\nHalf-Life fue aclamado por sus gráficos, jugabilidad y narrativa, y ganó más de 50 premios al «Game of the Year» para PC. Se considera uno de los juegos de disparos en primera persona (FPS) más influyentes y uno de los mejores videojuegos de la historia. Para 2008, había vendido más de nueve millones de copias. Fue porteado a PlayStation 2 en 2001, junto con la expansión multijugador Decay, y a OS X y Linux en 2013. Valve portó Half-Life a su motor de juego, Source, como Half-Life: Source en 2004. En 2020, se lanzó Black Mesa, un remake no oficial de Half-Life creado por fanáticos y desarrollado por Crowbar Collective con el motor Source.\nHalf-Life inspiró numerosos mods creados por aficionados, algunos de los cuales se convirtieron en juegos independientes, como Counter-Strike (2000), Day of Defeat (2003) y Sven Co-op (1999). Le siguieron los paquetes de expansión Opposing Force (1999) y Blue Shift (2001), desarrollados por Gearbox Software, y las secuelas Half-Life 2 (2004), Episode One (2006), Episode Two (2007) y Half-Life: Alyx (2020).",
+      "url": "https://es.wikipedia.org/wiki/Half-Life_(videojuego)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q279744",
+      "lang": "pt",
+      "title": "Half-Life",
+      "extract": "Half-Life (estilizado como HλLF-LIFE) é um jogo eletrônico de tiro em primeira pessoa e ficção científica de 1998, desenvolvido pela Valve Corporation e publicado pela Sierra Studios para Microsoft Windows. É o produto de estreia da empresa e o primeiro na série Half-Life. Nele, o jogador assume o papel de Gordon Freeman, um físico teórico que precisa escapar do Black Mesa Research Facility após ele ser invadido por criaturas alienígenas em virtude de um experimento científico desastroso. A jogabilidade consiste em combate, exploração e quebra-cabeças.\nA Valve estava decepcionada com a falta de inovação no gênero FPS e buscou criar um mundo imersivo em vez de uma \"galeria de tiros\". Ao contrário de outros jogos da época, o jogador tem controle quase ininterrupto do personagem; a história é vivenciada principalmente por meio de sequências roteirizadas e não de cutscenes. A Valve desenvolveu o jogo usando GoldSrc, uma versão bastante modificada do motor de Quake, licenciada pela id Software. O romancista de ficção científica Marc Laidlaw foi contratado para criar o enredo e auxiliar no design.\nHalf-Life foi aclamado por seus gráficos, jogabilidade e narrativa e ganhou mais de 50 prêmios de \"Jogo do Ano\" para PC. É considerado um dos jogos de tiro em primeira pessoa mais influentes e um dos melhores jogos eletrônicos já feitos. Em 2008, já havia vendido mais de nove milhões de cópias mundialmente. Foi portado para PlayStation 2 em 2001, junto com a expansão multijogador Decay, e para OS X e Linux em 2013. A Valve portou Half-Life para seu próprio motor de jogo, Source, como Half-Life: Source em 2004. Em 2020, Black Mesa foi lançado, um remake não oficial de Half-Life feito por fãs e desenvolvido pela Crowbar Collective usando o motor Source.\nA IGN classificou Half-Life como o maior jogo de tiro em primeira pessoa de todos os tempos, declarando que \"quando se olha para a história dos jogos de tiro em primeira pessoa, tudo se resume muito claramente em eras pré-Half-Life e pós-Half-Life\". Half-Life inspirou vários mods feitos por fãs, alguns dos quais se tornaram jogos independentes, como Counter-Strike, Day of Defeat e Sven Co-op. O primeiro título da série foi seguido pelos pacotes de expansão Opposing Force (1999) e Blue Shift (2001), desenvolvidos pela Gearbox Software, e as sequências Half-Life 2 (2004), Episode One (2006), Episode Two (2007) e Half-Life: Alyx (2020).",
+      "url": "https://pt.wikipedia.org/wiki/Half-Life"
+    }
+  },
+  "tier": "top",
+  "type": "game"
+}

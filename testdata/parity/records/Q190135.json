@@ -1,0 +1,241 @@
+{
+  "qid": "Q190135",
+  "records": {
+    "wikidata": {
+      "type": "movie",
+      "id": "Q190135",
+      "labels": {
+        "en": "The Little Mermaid",
+        "es": "La sirenita",
+        "pt": "A Pequena Sereia",
+        "pt-br": "A Pequena Sereia"
+      },
+      "aliases": {
+        "en": [
+          "Little Mermaid",
+          "TLM",
+          "1989 The Little Mermaid",
+          "1989 Little Mermaid"
+        ],
+        "es": [
+          "The Little Mermaid"
+        ],
+        "pt": [
+          "The Little Mermaid",
+          "Ariel"
+        ],
+        "pt-br": [
+          "The Little Mermaid"
+        ]
+      },
+      "sitelinks": {
+        "enwiki": "The Little Mermaid (1989 film)",
+        "eswiki": "La sirenita (película de 1989)",
+        "ptwiki": "A Pequena Sereia (filme de 1989)"
+      },
+      "sitelinks_count": 116,
+      "claims": {
+        "P1258": [
+          {
+            "value": "m/the_little_mermaid_1989",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q1054574",
+            "rank": "normal"
+          },
+          {
+            "value": "Q842256",
+            "rank": "normal"
+          },
+          {
+            "value": "Q157394",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2143665",
+            "rank": "normal"
+          },
+          {
+            "value": "Q191489",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1957385",
+            "rank": "normal"
+          }
+        ],
+        "P144": [
+          {
+            "value": "Q11859",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "The Little Mermaid",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "movie/the-little-mermaid",
+            "rank": "normal"
+          }
+        ],
+        "P179": [
+          {
+            "value": "Q56070713",
+            "rank": "normal"
+          },
+          {
+            "value": "Q906232",
+            "rank": "normal"
+          }
+        ],
+        "P2047": [
+          {
+            "value": {
+              "amount": "+83",
+              "unit": "Q7727"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q191224",
+            "rank": "normal"
+          },
+          {
+            "value": "Q25917011",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt0097757",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P4947": [
+          {
+            "value": "10144",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P57": [
+          {
+            "value": "Q735440",
+            "rank": "normal"
+          },
+          {
+            "value": "Q930209",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1989-11-17T00:00:00Z"
+            },
+            "rank": "preferred"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1990-11-30T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1990-11-29T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 11,
+              "time": "+1990-12-05T00:00:00Z"
+            },
+            "rank": "normal"
+          },
+          {
+            "value": {
+              "precision": 9,
+              "time": "+1989-00-00T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P58": [
+          {
+            "value": "Q735440",
+            "rank": "normal"
+          },
+          {
+            "value": "Q930209",
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1054574": "romance film",
+        "Q11859": "The Little Mermaid",
+        "Q157394": "fantasy film",
+        "Q1860": "English",
+        "Q191224": "Walt Disney Pictures",
+        "Q191489": "melodrama",
+        "Q1957385": "cinematic fairy tale",
+        "Q2143665": "children's film",
+        "Q25917011": "Silver Screen Partners IV",
+        "Q30": "United States",
+        "Q56070713": "Walt Disney Animation Studios feature film",
+        "Q735440": "John Musker",
+        "Q842256": "musical film",
+        "Q906232": "Disney Renaissance",
+        "Q930209": "Ron Clements"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q190135",
+      "lang": "en",
+      "title": "The Little Mermaid (1989 film)",
+      "extract": "The Little Mermaid is a 1989 American animated musical fantasy film written and directed by John Musker and Ron Clements and produced by Musker and Howard Ashman, who also wrote the film's songs with composer Alan Menken. Loosely based on the 1837 Danish fairy tale \"The Little Mermaid\" by Hans Christian Andersen, it was produced by Walt Disney Feature Animation in association with Silver Screen Partners IV and released by Walt Disney Pictures. The film features the voices of René Auberjonois, Christopher Daniel Barnes, Jodi Benson, Pat Carroll, Paddi Edwards, Buddy Hackett, Jason Marin, Kenneth Mars, Ben Wright, and Samuel E. Wright. The story follows a teenage mermaid princess named Ariel (Benson) who dreams of becoming human and falls in love with a human prince named Eric (Barnes), which leads her to forge an agreement with the sea witch Ursula (Carroll) to be with him.\nWalt Disney planned to put the story in a proposed package film containing Andersen's stories, but he scrapped the project. In 1985, while working on The Great Mouse Detective (1986), Clements and Musker decided to adapt the fairy tale. They proposed it to Walt Disney Studios chairman Jeffrey Katzenberg, who initially declined because of its similarities to a proposed sequel to the 1984 film Splash, but ultimately approved it. Ashman became involved, and brought in Menken. With supervision from Katzenberg, they made a Broadway-style structure with musical numbers as the staff was working on Oliver \u0026 Company (1988). Katzenberg warned that the film would earn less since it appealed to female viewers, but he eventually became convinced that it would be another blockbuster hit for the company.\nThe Little Mermaid was released in theaters on November 17, 1989, to critical acclaim, earning praise for the animation, music, and characters. It was also a commercial success, garnering $84 million at the domestic box office during its initial release, and $235 million in total lifetime gross worldwide, becoming the sixth-highest-grossing film of 1989. Along with the major successes of The Great Mouse Detective, the 1988 Disney/Amblin live-action/animated film Who Framed Roger Rabbit and Oliver \u0026 Company, The Little Mermaid is given credit for revitalizing the art of Disney animated feature films after an uneven period. It also marked the start of the era known as the Disney Renaissance. The film won two Academy Awards for Best Original Score and Best Original Song (\"Under the Sea\").\nThe film's success led to a media franchise. A prequel television series aired on CBS from 1992 to 1994. A direct-to-video sequel was released in 2000, focusing on Ariel's daughter Melody. A prequel followed in 2008. The first film was adapted into a stage musical with a book by Doug Wright and additional songs by Alan Menken and new lyricist Glenn Slater opened in Denver in July 2007 and began performances on Broadway January 10, 2008 starring Sierra Boggess. Other derived works and material inspired by the film, include a 2019 live musical presentation on ABC as part of The Wonderful World of Disney, and a 2023 live-action film adaptation directed by Rob Marshall and starring Halle Bailey. In 2022, the film was selected for preservation in the United States National Film Registry by the Library of Congress as being \"culturally, historically, or aesthetically significant\".",
+      "url": "https://en.wikipedia.org/wiki/The_Little_Mermaid_(1989_film)"
+    },
+    "wikipedia:es": {
+      "qid": "Q190135",
+      "lang": "es",
+      "title": "La sirenita (película de 1989)",
+      "extract": "La sirenita (en inglés: The Little Mermaid) es una película de animación de 1989, basada en el cuento homónimo de Hans Christian Andersen, producida por Walt Disney Pictures bajo su división Walt Disney Feature Animation, y dirigida por Ron Clements y John Musker. \nSe estrenó el 15 de noviembre de 1989 en Estados Unidos, y el 17 de noviembre en Canadá y México, y fue la única película en la historia cuya fecha de estreno mundial se extendió por casi 800 días (más de dos años) entre la Avant Premier y su estreno en Japón el 30 de enero de 1991. En España, no llegó a los cines hasta el 5 de diciembre de 1990 pero con su doblaje al español realizado en Los Ángeles, California. Fue una de las películas animadas más populares y aclamadas en la historia de la compañía; superando los 19 millones de espectadores solo en Estados Unidos durante su presentación inicial en cines.\nEs la vigésima octava película en el canon de largometrajes de Walt Disney Animation Studios. Se convirtió en todo un éxito, dando inicio a una nueva época dorada a la compañía y a la que siguieron otros grandes éxitos como La bella y la bestia, Aladdín y El rey león, películas tradicionales y representativas de la primera mitad de los años 1990, la cual terminó en 1999. El largometraje animado tuvo una secuela, una precuela, una serie animada, un musical y una adaptación de acción real.",
+      "url": "https://es.wikipedia.org/wiki/La_sirenita_(pel%C3%ADcula_de_1989)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q190135",
+      "lang": "pt",
+      "title": "A Pequena Sereia (filme de 1989)",
+      "extract": "A Pequena Sereia (no original em inglês The Little Mermaid) é um filme de animação norte-americano de 1989 dos gêneros romance, musical e fantasia produzido pela Walt Disney Feature Animation em associação com a Silver Screen Partners IV, sendo lançado pela Walt Disney Pictures. É vagamente baseado no conto de fadas dinamarquês homônimo de 1837 de autoria de Hans Christian Andersen. Foi escrito e dirigido por John Musker e Ron Clements e produzido por Musker e Howard Ashman, que também escreveu as canções do filme junto com Alan Menken; Menken também compôs a trilha sonora do filme. Apresentando as vozes de Jodi Benson, Christopher Daniel Barnes, Jason Marin, Samuel E. Wright, Pat Carroll, Kenneth Mars e Buddy Hackett, A Pequena Sereia conta a história de uma princesa sereia adolescente chamada Ariel, que se apaixona por um príncipe humano chamado Eric e deseja ser humana para se casar com ele, o que a leva a fazer um acordo de feitiçaria com a bruxa do mar, Ursula, para se tornar humana e ficar com ele.\nO fundador do estúdio Walt Disney já havia cogitado adaptar para os cinemas a história da Pequena Sereia juntamente com outros contos de Andersen, mas posteriormente abandonou a ideia. Em 1985, enquanto trabalhavam em The Great Mouse Detective (que foi lançado no ano seguinte), Clements e Musker decidiram adaptar o conto de fadas e o propuseram ao presidente do Walt Disney Studios, Jeffrey Katzenberg, que inicialmente recusou devido às suas semelhanças com uma proposta de sequência para o filme Splash de 1984, mas depois voltou atrás e aprovou a produção. Durante esta, Ashman se envolveu e trouxe Menken. Com a supervisão de Katzenberg, eles criaram uma estrutura ao estilo Broadway para a história com números musicais enquanto a equipe trabalhava em Oliver \u0026 Company (1988). Katzenberg presumiu que o filme ganharia menos por atrair mais o público infantil feminino, mas acabou se convencendo de que a animação poderia se tornar o primeiro sucesso de bilheteria da Disney em anos.\nA Pequena Sereia foi lançado nos cinemas dos Estados Unidos em 17 de novembro de 1989 recebendo aclamação da crítica, ganhando elogios pela animação, música e personagens. Também se tornou um sucesso comercial, arrecadando US$ 84 milhões de bilheteria doméstica durante seu lançamento inicial (contra um orçamento estimado em US$ 40 milhões) e US$ 235 milhões no total bruto através de relançamentos posteriores. Junto com os filmes anteriores The Great Mouse Detective e Who Framed Roger Rabbit (feito em parceria com a Amblin combinando animação com live-action), lançado no ano anterior, A Pequena Sereia é reconhecida até hoje com uma das produções responsáveis por trazer de volta à Disney o respeito e o reconhecimento perdidos depois que alguns filmes produzidos pela empresa estavam sendo mal recebidos pela crítica e pelo público. A animação também marcou o início do que ficou conhecido como Era Renascentista da Disney. O filme ganhou dois Óscars: Melhor Trilha Sonora Original e Melhor Canção Original, pela faixa \"Under the Sea\"; também se tornou o primeiro longa de animação a ser indicado ao Globo de Ouro para a categoria de Melhor filme de comédia ou musical.\nO sucesso do filme originou uma grande franquia de mídia. Uma sequência lançada diretamente em vídeo foi lançada em 2000, com foco na filha de Ariel e Eric, Melody, com uma prequela, também em lançada em home video, sendo lançada em 2008. A Pequena Sereia também originou uma peça musical que incluiu novas canções, estreando em Denver em julho de 2007 e posteriormente indo até a Broadway em 2008, sendo estrelada pela atriz Sierra Boggess. Outros trabalhos derivados e materiais inspirados no filme incluem uma apresentação musical ao vivo transmitida na televisão em 2019 no canal americano ABC como parte da série antológica The Wonderful World of Disney e uma adaptação cinematográfica em live-action de 2023 dirigida por Rob Marshall e estrelada por Halle Bailey. Em 14 de dezembro de 2022, o filme foi selecionado para preservação no National Film Registry dos Estados Unidos pela Biblioteca do Congresso como sendo \"culturalmente, historicamente ou esteticamente significativo\".",
+      "url": "https://pt.wikipedia.org/wiki/A_Pequena_Sereia_(filme_de_1989)"
+    }
+  },
+  "tier": "top",
+  "type": "movie"
+}

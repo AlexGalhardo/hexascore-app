@@ -1,0 +1,120 @@
+{
+  "qid": "Q24211321",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q24211321",
+      "labels": {
+        "en": "Gogh, The Starry Night"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Gogh, The Starry Night"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+20",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q1366112",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q276158",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt6058390",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q9176",
+            "rank": "normal"
+          }
+        ],
+        "P407": [
+          {
+            "value": "Q9176",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q965133",
+            "rank": "normal"
+          },
+          {
+            "value": "Q928831",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q148",
+            "rank": "normal"
+          },
+          {
+            "value": "Q884",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "68150",
+            "rank": "normal"
+          }
+        ],
+        "P577": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2016-10-22T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2016-07-02T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q1366112": "drama television series",
+        "Q148": "People's Republic of China",
+        "Q276158": "Kwon Yu-ri",
+        "Q884": "South Korea",
+        "Q9176": "Korean",
+        "Q928831": "Seoul Broadcasting System",
+        "Q965133": "Sohu"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q24211321",
+      "lang": "en",
+      "title": "Gogh, The Starry Night",
+      "extract": "Gogh, The Starry Night (Korean: 고호의 별이 빛나는 밤에) is a Chinese-South Korean web-drama starring Kwon Yu-ri, Kim Young-kwang and Lee Ji-hoon. It was broadcast on Sohu TV every Saturday and Sunday at 00:00 from July 2, 2016.\nThe drama also aired on SBS on Saturdays and Sundays at 22:00 on October 22 as a 4-episode mini drama, after Second to Last Love ended.",
+      "url": "https://en.wikipedia.org/wiki/Gogh,_The_Starry_Night"
+    }
+  },
+  "tier": "tail",
+  "type": "series"
+}

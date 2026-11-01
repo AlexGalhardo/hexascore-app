@@ -1,0 +1,190 @@
+{
+  "qid": "Q112761982",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q112761982",
+      "labels": {
+        "en": "The Bear",
+        "es": "The Bear",
+        "mul": "The Bear",
+        "pt": "The Bear (series de TV)"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "The Bear (TV series)",
+        "eswiki": "The Bear (serie de televisión)",
+        "ptwiki": "The Bear (série de televisão)"
+      },
+      "sitelinks_count": 34,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+47",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P1258": [
+          {
+            "value": "tv/the_bear",
+            "rank": "normal"
+          }
+        ],
+        "P136": [
+          {
+            "value": "Q859369",
+            "rank": "normal"
+          }
+        ],
+        "P1476": [
+          {
+            "value": "The Bear",
+            "rank": "normal"
+          }
+        ],
+        "P161": [
+          {
+            "value": "Q1411012",
+            "rank": "normal"
+          },
+          {
+            "value": "Q1279993",
+            "rank": "normal"
+          },
+          {
+            "value": "Q99365507",
+            "rank": "normal"
+          },
+          {
+            "value": "Q11833191",
+            "rank": "normal"
+          },
+          {
+            "value": "Q2708237",
+            "rank": "normal"
+          },
+          {
+            "value": "Q119574595",
+            "rank": "normal"
+          },
+          {
+            "value": "Q60215396",
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q26906864",
+            "rank": "normal"
+          }
+        ],
+        "P1712": [
+          {
+            "value": "tv/the-bear",
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+5",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P272": [
+          {
+            "value": "Q11950961",
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt14452776",
+            "rank": "normal"
+          }
+        ],
+        "P364": [
+          {
+            "value": "Q1860",
+            "rank": "normal"
+          }
+        ],
+        "P449": [
+          {
+            "value": "Q1630304",
+            "rank": "normal"
+          },
+          {
+            "value": "Q108409114",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q30",
+            "rank": "normal"
+          }
+        ],
+        "P4983": [
+          {
+            "value": "136315",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2022-06-23T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q108409114": "FX on Hulu",
+        "Q11833191": "Liza Colón-Zayas",
+        "Q11950961": "FX Productions",
+        "Q119574595": "Lionel Boyce",
+        "Q1279993": "Ebon Moss-Bachrach",
+        "Q1411012": "Jeremy Allen White",
+        "Q1630304": "Hulu",
+        "Q1860": "English",
+        "Q26906864": "Christopher Storer",
+        "Q2708237": "Abby Elliott",
+        "Q30": "United States",
+        "Q60215396": "Matty Matheson",
+        "Q859369": "comedy drama",
+        "Q99365507": "Ayo Edebiri"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q112761982",
+      "lang": "en",
+      "title": "The Bear (TV series)",
+      "extract": "The Bear is an American comedy-drama television series created by Christopher Storer for FX on Hulu. Jeremy Allen White stars as Carmy Berzatto, an award-winning chef who returns to his hometown of Chicago to manage the chaotic kitchen at his recently deceased brother's Italian beef sandwich shop. The regular cast includes Ebon Moss-Bachrach, Ayo Edebiri, Lionel Boyce, Liza Colón-Zayas, Abby Elliott, Matty Matheson, and Edwin Lee Gibson.\nThe first season was released in its entirety on FX on Hulu on June 23, 2022. The second, third and fourth seasons were released in June 2023, June 2024, and June 2025, respectively. A standalone special episode was released on May 5, 2026, starring Moss-Bachrach and Jon Bernthal, and focused solely on their characters. The fifth and final season was released on June 25, 2026.\nThe series received critical acclaim for its performances, writing, directing, visual style, soundtrack, and production values; however, from season three onwards, the show was also criticized for a shift in tone, uncharacteristic celebrity-cameos and narrative stagnation. Also, many real-life culinary professionals have praised the show for its sense of urgency and realistic depiction of the physical, emotional, and financial demands of restaurant life. The Bear has received many accolades, including 22 Primetime Emmy Awards (including Outstanding Comedy Series) and five Golden Globe Awards (including Best Television Series – Musical or Comedy).",
+      "url": "https://en.wikipedia.org/wiki/The_Bear_(TV_series)"
+    },
+    "wikipedia:es": {
+      "qid": "Q112761982",
+      "lang": "es",
+      "title": "The Bear (serie de televisión)",
+      "extract": "The Bear (El Oso en Hispanoamérica) es una serie de televisión estadounidense de comedia dramática, creada por Christopher Storer. Se estrenó en FX on Hulu el 23 de junio de 2022,​ y está protagonizada por Jeremy Allen White, Ebon Moss-Bachrach, Ayo Edebiri, Lionel Boyce, Liza Colón-Zayas, Abby Elliott, Matty Matheson y Edwin Lee Gibson.​\nEn julio de 2022, se renovó para una segunda temporada,​ que se estrenó el 22 de junio de 2023 y consta de 10 episodios.​​ En noviembre de 2023, se renovó para una tercera temporada, estrenada el 26 de junio de 2024.​​En marzo de 2024, fue renovada para una cuarta temporada que se estrenó el 25 de junio de 2025. ​​ En julio de 2025, fue renovada por una quinta y última temporada que se estrenó el 25 de junio de 2026.​Un episodio especial se estrenó el 5 de mayo de 2026.​\nLa serie ha recibido elogios de la crítica, particularmente por la dirección, escritura, producción y las actuaciones de su elenco. La primera temporada obtuvo 13 nominaciones a los Emmy, incluido a la Mejor serie de comedia y nominaciones como actores para White, Moss-Bachrach, Edebiri, Jon Bernthal y Oliver Platt. The Bear también ganó cuatro Premios Globo de Oro, con victorias en actuación para White y Edebiri y el Premio Globo de Oro a la Mejor Serie de Televisión - Musical o Comedia en 2024. ​",
+      "url": "https://es.wikipedia.org/wiki/The_Bear_(serie_de_televisi%C3%B3n)"
+    },
+    "wikipedia:pt": {
+      "qid": "Q112761982",
+      "lang": "pt",
+      "title": "The Bear (série de televisão)",
+      "extract": "The Bear (bra: O Urso) é uma série de televisão de comédia dramática americana criada por Christopher Storer. Estreou no FX on Hulu em 23 de junho de 2022, com Jeremy Allen White, Ebon Moss-Bachrach, Ayo Edebiri, Lionel Boyce, Liza Colón-Zayas, Abby Elliott, Matty Matheson e Edwin Lee Gibson no elenco. \nA série recebeu aclamação da crítica por suas atuações, roteiro, direção, estilo visual, trilha sonora e valores de produção. Além disso, muitos profissionais culinários da vida real elogiaram o programa por seu senso de urgência e representação realista das demandas físicas, emocionais e financeiras da vida em um restaurante. The Bear recebeu muitos prêmios, sendo indicada 49 vezes ao Emmy, ganhando 21 estatuetas (incluindo Melhor série de comédia) e cinco Globo de Ouro. Em 14 de julho de 2022, foi renovada para uma segunda temporada, estreada a 22 de junho de 2023. A série foi renovada para uma terceira temporada em 2023, que foi lançada em 26 de junho de 2024. Antes da estreia da terceira temporada, o programa foi renovado para uma quarta temporada, que foi filmada junto com a terceira temporada, com a temporada estreando em 25 de junho de 2025. A quinta e última temporada foi confirmada em julho de 2025 e lançada em 25 de junho de 2026. Um episódio especial foi lançado em 5 de maio de 2026.\nA série é inspirada no restaurante Mr. Beef, localizado em Chicago, Estados Unidos.",
+      "url": "https://pt.wikipedia.org/wiki/The_Bear_(s%C3%A9rie_de_televis%C3%A3o)"
+    }
+  },
+  "tier": "mid",
+  "type": "series"
+}

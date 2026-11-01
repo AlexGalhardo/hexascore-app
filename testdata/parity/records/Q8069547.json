@@ -1,0 +1,77 @@
+{
+  "qid": "Q8069547",
+  "records": {
+    "wikidata": {
+      "type": "series",
+      "id": "Q8069547",
+      "labels": {
+        "en": "Zero Punctuation"
+      },
+      "aliases": {},
+      "sitelinks": {
+        "enwiki": "Zero Punctuation"
+      },
+      "sitelinks_count": 7,
+      "claims": {
+        "P1113": [
+          {
+            "value": {
+              "amount": "+443",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P170": [
+          {
+            "value": "Q730941",
+            "rank": "normal"
+          }
+        ],
+        "P2437": [
+          {
+            "value": {
+              "amount": "+1",
+              "unit": "1"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P345": [
+          {
+            "value": "tt2793136",
+            "rank": "normal"
+          }
+        ],
+        "P495": [
+          {
+            "value": "Q408",
+            "rank": "normal"
+          }
+        ],
+        "P580": [
+          {
+            "value": {
+              "precision": 11,
+              "time": "+2007-07-24T00:00:00Z"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "refs": {
+        "Q408": "Australia",
+        "Q730941": "Yahtzee Croshaw"
+      }
+    },
+    "wikipedia:en": {
+      "qid": "Q8069547",
+      "lang": "en",
+      "title": "Zero Punctuation",
+      "extract": "Zero Punctuation is a video game reviews web series created by the English comedy writer and video game journalist Ben \"Yahtzee\" Croshaw. From its inception in 2007, episodes were published weekly by internet magazine The Escapist. Episodes typically range from five to six minutes in length. Videos provide caustic humour, rapid-fire delivery, visual gags and critical insight into recently released video games, with occasional reviews of older games and retrospectives of the industry itself. In 2023, Zero Punctuation was discontinued following Croshaw's resignation from The Escapist and the formation of Second Wind, with new reviews being published by him in the same format under the rebranded series Fully Ramblomatic.",
+      "url": "https://en.wikipedia.org/wiki/Zero_Punctuation"
+    }
+  },
+  "tier": "tail",
+  "type": "series"
+}
