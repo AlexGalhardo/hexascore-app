@@ -2,6 +2,7 @@ import { type ReactElement, useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { type AppLocale, t } from "../i18n";
 import { Btn } from "../ui/Btn";
+import { Icon } from "../ui/Icon";
 import { TextField } from "../ui/TextField";
 import {
 	type ListSummary,
@@ -15,8 +16,35 @@ import {
 const TYPES: ListType[] = ["game", "movie", "series", "book"];
 const FG = "text-fg dark:text-fg-dark";
 const MUTED = "font-text text-14 text-muted dark:text-muted-dark";
+// Same panel as the status and add-to-list sheets.
+const PANEL =
+	"gap-4 border-t-2 border-primary bg-surface p-4 dark:border-primary-dark dark:bg-surface-dark";
 
-// shortcut: plain primitives on tokens; impl-mobile restyles it (IMPL-mobile-v1-lists-ui).
+function TypeChip({
+	label,
+	selected,
+	onPress,
+}: {
+	label: string;
+	selected: boolean;
+	onPress: () => void;
+}): ReactElement {
+	return (
+		<Pressable
+			accessibilityRole="button"
+			accessibilityState={{ selected }}
+			onPress={onPress}
+			className={`min-h-11 justify-center rounded-full border px-4 ${selected ? "border-fg bg-fg dark:border-fg-dark dark:bg-fg-dark" : "border-border dark:border-border-dark"}`}
+		>
+			<Text
+				className={`font-text text-14 ${selected ? "text-bg dark:text-bg-dark" : "text-fg dark:text-fg-dark"}`}
+			>
+				{label}
+			</Text>
+		</Pressable>
+	);
+}
+
 export function ListsTab({
 	deps,
 	locale,
@@ -52,32 +80,40 @@ export function ListsTab({
 				<Text className={`font-text text-16 ${FG}`}>{t(locale, "lists.noLists")}</Text>
 			) : null}
 			<View className="border-t-2 border-fg dark:border-fg-dark">
-				{rows.map((list) => (
-					<Pressable
-						key={list.id}
-						accessibilityRole="button"
-						onPress={() => onOpen(list)}
-						className="min-h-11 justify-center gap-1 border-b border-border py-3 dark:border-border-dark"
-					>
-						<Text className={`font-text text-16 font-bold ${FG}`}>{list.title}</Text>
-						<Text className={MUTED}>
-							{t(locale, "lists.itemCount", { count: list.itemCount })} ·{" "}
-							{t(locale, list.isPublic ? "lists.public" : "lists.private")}
-						</Text>
-					</Pressable>
-				))}
+				{rows.map((list) => {
+					const meta = [
+						t(locale, `catalog.title.${list.type}`),
+						t(locale, "lists.itemCount", { count: list.itemCount }),
+						t(locale, list.isPublic ? "lists.public" : "lists.private"),
+					];
+					return (
+						<Pressable
+							key={list.id}
+							accessibilityRole="button"
+							accessibilityLabel={[list.title, ...meta].join(", ")}
+							onPress={() => onOpen(list)}
+							className="min-h-11 flex-row items-center gap-4 border-b border-border py-3 active:bg-surface dark:border-border-dark dark:active:bg-surface-dark"
+						>
+							<View className="flex-1 gap-1">
+								<Text className={`font-text text-16 font-bold ${FG}`}>{list.title}</Text>
+								<Text className={`${MUTED} tabular-nums`}>{meta.join(" · ")}</Text>
+							</View>
+							<Icon name="chevron-forward" size={20} className="text-muted dark:text-muted-dark" />
+						</Pressable>
+					);
+				})}
 			</View>
-			<View className="gap-3">
-				<Text accessibilityRole="header" className={`font-text text-20 font-bold ${FG}`}>
+			<View className={PANEL}>
+				<Text accessibilityRole="header" className={`font-display text-24 font-bold ${FG}`}>
 					{t(locale, "lists.new")}
 				</Text>
 				<TextField label={t(locale, "lists.fieldTitle")} value={title} onChangeText={setTitle} />
 				<Text className={MUTED}>{t(locale, "lists.fieldType")}</Text>
 				<View className="flex-row flex-wrap gap-2">
 					{TYPES.map((value) => (
-						<Btn
+						<TypeChip
 							key={value}
-							variant={type === value ? "primary" : "secondary"}
+							selected={type === value}
 							label={t(locale, `catalog.title.${value}`)}
 							onPress={() => setType(value)}
 						/>

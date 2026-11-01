@@ -230,3 +230,31 @@ test("a rolled-back list write refetches that list and toasts", () => {
 	)({ ...entry, op: "rating" }, { kind: "applied", body: {} });
 	expect(notify).toHaveBeenCalledTimes(1);
 });
+
+test("v1 lists tab: rows name type, count and visibility; the type picker is a selectable chip row", async () => {
+	setNetworkState("online");
+	const deps = makeDeps();
+	const onOpen = jest.fn();
+	await render(wrap(<ListsTab deps={deps} locale="en" onOpen={onOpen} />));
+	const row = await screen.findByRole("button", { name: "Backlog, Games, 2 items, Public" });
+	await fireEvent.press(row);
+	expect(onOpen).toHaveBeenCalledWith(expect.objectContaining({ id: "l1" }));
+	expect(screen.getByRole("button", { name: "Games" }).props.accessibilityState).toMatchObject({
+		selected: true,
+	});
+	await fireEvent.press(screen.getByRole("button", { name: "Movies" }));
+	expect(screen.getByRole("button", { name: "Movies" }).props.accessibilityState).toMatchObject({
+		selected: true,
+	});
+	await fireEvent.changeText(screen.getByLabelText("Title"), "Watch");
+	await fireEvent.press(screen.getByRole("button", { name: "Create list" }));
+	expect(deps.calls.create).toEqual([{ type: "movie", title: "Watch", isPublic: true }]);
+});
+
+test("v1 add-to-list sheet: a titled panel whose rows name title and count", async () => {
+	setNetworkState("online");
+	await render(wrap(<AddToListSheet deps={makeDeps()} itemId="it9" type="game" locale="en" />));
+	expect(screen.getByTestId("add-to-list-sheet")).toBeTruthy();
+	expect(screen.getByRole("header", { name: "Add to list" })).toBeTruthy();
+	expect(await screen.findByRole("button", { name: "Backlog, 2 items" })).toBeTruthy();
+});

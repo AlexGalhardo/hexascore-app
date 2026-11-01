@@ -2,6 +2,7 @@ import { type ReactElement, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { type AppLocale, t } from "../i18n";
 import { Btn } from "../ui/Btn";
+import { Icon } from "../ui/Icon";
 import { TextField } from "../ui/TextField";
 import { type ListsDeps, type ListType, useListActions, useMyLists, useOnline } from "./data";
 
@@ -36,8 +37,11 @@ export function AddToListSheet({
 	};
 
 	return (
-		<View className="gap-3 bg-bg px-4 py-4 dark:bg-bg-dark">
-			<Text accessibilityRole="header" className={`font-text text-20 font-bold ${FG}`}>
+		<View
+			testID="add-to-list-sheet"
+			className="gap-4 border-t-2 border-primary bg-surface p-4 dark:border-primary-dark dark:bg-surface-dark"
+		>
+			<Text accessibilityRole="header" className={`font-display text-24 font-bold ${FG}`}>
 				{t(locale, "lists.addToList")}
 			</Text>
 			{rows.length === 0 && !lists.isPending ? (
@@ -45,18 +49,26 @@ export function AddToListSheet({
 					{t(locale, `lists.noListsOfType.${type === "book" ? "other" : type}`)}
 				</Text>
 			) : null}
-			{rows.map((list) => (
-				<Pressable
-					key={list.id}
-					accessibilityRole="button"
-					onPress={() => void actions.addItem(list, itemId).then((ok) => ok && onDone?.())}
-					className="min-h-11 justify-center border-b border-border py-2 dark:border-border-dark"
-				>
-					<Text className={`font-text text-16 ${FG}`}>
-						{list.title} · {t(locale, "lists.itemCount", { count: list.itemCount })}
-					</Text>
-				</Pressable>
-			))}
+			<View className="border-t-2 border-fg dark:border-fg-dark">
+				{rows.map((list) => {
+					const count = t(locale, "lists.itemCount", { count: list.itemCount });
+					return (
+						<Pressable
+							key={list.id}
+							accessibilityRole="button"
+							accessibilityLabel={`${list.title}, ${count}`}
+							onPress={() => void actions.addItem(list, itemId).then((ok) => ok && onDone?.())}
+							className="min-h-11 flex-row items-center gap-4 border-b border-border py-3 active:bg-bg dark:border-border-dark dark:active:bg-bg-dark"
+						>
+							<View className="flex-1 gap-1">
+								<Text className={`font-text text-16 font-bold ${FG}`}>{list.title}</Text>
+								<Text className={`${MUTED} tabular-nums`}>{count}</Text>
+							</View>
+							<Icon name="add" size={20} className={FG} />
+						</Pressable>
+					);
+				})}
+			</View>
 			<TextField label={t(locale, "lists.fieldTitle")} value={title} onChangeText={setTitle} />
 			<Btn
 				variant="secondary"
