@@ -35,6 +35,9 @@ test("a rating names the actor, the item and the stars", () => {
 	expect(screen.getByText("social.feed.rating_saved:OpenA")).toBeTruthy();
 	expect(screen.getByRole("link", { name: "OpenA" }).getAttribute("href")).toBe("/u/opena");
 	expect(screen.getByText("Zelda")).toBeTruthy();
+	// The actor's score, not ShelfCard's "Your score".
+	expect(screen.getByText("social.feed.score:9.0")).toBeTruthy();
+	expect(screen.queryByText(/library.yourScore/)).toBeNull();
 });
 
 test("a status change prints the status label; a list links to the list", () => {
