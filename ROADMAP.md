@@ -3388,7 +3388,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/wikipedia/... -run 'TestWikipediaExtracts|TestWikipediaRejectsDisambiguationMissingAndOtherEntities|TestWikipediaFetchRunsRequestsConcurrently'` → `ok`
   - Notes: store the source URL and licence with each extract so DQ-06 can pass.
 
-- [ ] **P6.A.2.4** Port the Open Library connector behind `ingest_openlibrary` and the A-05 decision: edition preferred over work, the work fills what the edition lacks, typed descriptions, and placeholder covers (`-1`) dropped.
+- [x] **P6.A.2.4** Port the Open Library connector behind `ingest_openlibrary` and the A-05 decision: edition preferred over work, the work fills what the edition lacks, typed descriptions, and placeholder covers (`-1`) dropped.
   - Files/modules: `internal/ingest/openlibrary/openlibrary.go`, `internal/ingest/openlibrary/openlibrary_test.go`
   - Refs: SDD 06 §7.1, §7.3; A-05; `docs/legal/open-library.md`; legacy `connectors/openlibrary.py` `document_path`, `work_path`, `parse_doc`, `complete_ids`; tests `test_openlibrary_paths_prefer_editions`, `test_openlibrary_edition`, `test_openlibrary_work_fills_what_the_edition_lacks`, `test_openlibrary_reads_typed_descriptions`, `test_openlibrary_drops_placeholder_covers`
   - Depends on: P6.A.2.2, P6.A.1.1
@@ -3484,7 +3484,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
   - Notes: TMDB is never commercial and never in `/api/v1`. The logo and the not-endorsed notice on item pages that use TMDB fields and on `/about` are checked in P6.B.4.1 (DQ-I-12) and in the Playwright spec of P6.B.4.3.
   - Status (2026-11-01): local acceptance green on main: `go test ./internal/ingest/tmdb/... -run TestTmdb` 5 PASS, `go test -tags integration ./tests/ingest -run TestTmdbExpiry` PASS (the test asserts the 180-day count is 0). Turning the TMDB connector on in an environment rides P6.A.4.2.
 
-- [ ] **P6.B.1.2** Port the IGDB connector (Twitch app token, regex-filtered slugs, batched games query, pre-1970 dates) and the D-36 interim rule: `igdb.refresh` every 6 h for records with `checked_at` > 24 h, and records or covers older than 7 days are deleted and re-normalised.
+- [x] **P6.B.1.2** Port the IGDB connector (Twitch app token, regex-filtered slugs, batched games query, pre-1970 dates) and the D-36 interim rule: `igdb.refresh` every 6 h for records with `checked_at` > 24 h, and records or covers older than 7 days are deleted and re-normalised.
   - Files/modules: `internal/ingest/igdb/igdb.go`, `internal/ingest/igdb/refresh.go`, `internal/ingest/igdb/igdb_test.go`, `tests/ingest/igdb_retention_test.go`
   - Refs: SDD 06 §7.1 (IGDB row, "IGDB interim rule"), §7.6 (`igdb.refresh`), DQ-I-13; D-36; open issue 06-2; legacy `connectors/igdb.py` `games_query`, `parse_games`, `access_token`; tests `test_igdb_games`, `test_igdb_release_dates_before_1970`, `test_igdb_fetch_authenticates_and_drops_unsafe_slugs`
   - Depends on: P6.A.4.2
@@ -3494,7 +3494,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests/ingest -run TestIgdbRetention` → nothing IGDB-sourced older than 7 days survives a `igdb.refresh` run (fake clock)
   - Notes: **owner input needed:** the owner records `docs/legal/igdb.md` before the ingestion milestone (D-36). If the file allows longer retention, change D-36, then SDD 06, then this job, in that order (AGENTS.md). Budget: 3.3/s, cap 4/s, 4 in flight.
 
-- [ ] **P6.B.1.3** Port the Steam `appdetails` and GOG catalogue connectors (header image, OS platforms, store link; GOG matching by slug, then title, then slug prefix), with images kept site-only.
+- [x] **P6.B.1.3** Port the Steam `appdetails` and GOG catalogue connectors (header image, OS platforms, store link; GOG matching by slug, then title, then slug prefix), with images kept site-only.
   - Files/modules: `internal/ingest/steam/steam.go`, `internal/ingest/gog/gog.go`, `internal/ingest/steam/steam_test.go`, `internal/ingest/gog/gog_test.go`
   - Refs: SDD 06 §7.1 (Steam, GOG rows), §7.2; open issue 06-8; legacy `connectors/steam.py` `parse_appdetails`, `connectors/gog.py` `_norm`, `pick_product`, `parse_catalog`; tests `test_steam_appdetails`, `test_gog_picks_product_by_slug_prefix`, `test_gog_no_match`, `test_enrichment_skips_failed_targets`
   - Depends on: P6.A.4.2
@@ -3505,7 +3505,8 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.B.2 Covers and trailers
 
-- [ ] **P6.B.2.1** Encode WebP with a pinned `cwebp` (Alpine `libwebp-tools`) run in a resource-limited child process, behind an `Encoder` used by the covers job, with a ±10 % size parity test against the Pillow output.
+- [x] **P6.B.2.1** Encode WebP with a pinned `cwebp` (Alpine `libwebp-tools`) run in a resource-limited child process, behind an `Encoder` used by the covers job, with a ±10 % size parity test against the Pillow output.
+  - Status (2026-11-01): ticked; `TestWebpSizeParity` compares against committed outputs of the real `cwebp` 1.6.0 from the app image instead of Pillow (FIX-covers-a05-parity).
   - Files/modules: `internal/ingest/covers/webp.go`, `internal/ingest/covers/webp_test.go`, `internal/ingest/testdata/covers/*.jpg|*.png` with Pillow reference sizes, `Dockerfile` (pinned `libwebp-tools`)
   - Refs: SDD 06 §7.5, §11 issue 3; SDD 11 §6.3; open issue 06-3; VF-004; legacy `covers.py` `to_webp`; tests `test_to_webp_resizes_and_strips_metadata`, `test_to_webp_keeps_alpha_and_never_upscales`, `test_to_webp_applies_exif_orientation`, `test_to_webp_thumb_fits_list_size`
   - Depends on: P6.A.4.2
@@ -3515,7 +3516,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests/ingest -run TestSecurity_A05_ImageBomb` → a 25+ MP or > 15 MB input is rejected before decoding
   - Notes: `contrib/engine` is [NOT IN VUKEM DOCS]. <https://vukem.dev/docs/deployment/single-binary> does not cover it, and SDD 06/11 cite only the local `vukem/docs/subsystems.md` (not a reference per AGENTS.md). Read the package godoc in the pinned vukem module. If `engine.Limits{CPUTime, AddressSpace}` exists, use it with 30 s / 512 MiB. Otherwise use `exec.CommandContext` with a 30 s timeout and no inherited env, and add a `vukem-feedback.md` entry. VF-004 workaround if `cwebp` is unavailable: keep JPEG and note it. One encode at a time (NFR-06-2).
 
-- [ ] **P6.B.2.2** Port the covers job: source order (Open Library → TMDB → IGDB → Steam → GOG → Commons P3383, never P18), download via `httpclient.Safe`, sniff, EXIF, the two variants, the immutable key `covers/<id>-<sha256(source)[:16]>.webp` and `-t.webp` with `Put` on `drivers/s3`, skip on the same hash, and `covers.gc` 30-day deferred delete.
+- [x] **P6.B.2.2** Port the covers job: source order (Open Library → TMDB → IGDB → Steam → GOG → Commons P3383, never P18), download via `httpclient.Safe`, sniff, EXIF, the two variants, the immutable key `covers/<id>-<sha256(source)[:16]>.webp` and `-t.webp` with `Put` on `drivers/s3`, skip on the same hash, and `covers.gc` 30-day deferred delete.
   - Files/modules: `internal/ingest/covers/job.go`, `internal/ingest/covers/pick.go`, `internal/ingest/covers/gc.go`, `internal/ingest/covers/job_test.go`
   - Refs: SDD 06 §7.5, NFR-06-7; SDD 11 §5 (bucket prefixes), open issues 11-1, 11-2, 06-4; ADR 0014 (amended); <https://vukem.dev/docs/digging-deeper/storage> "Reading and writing", "What the S3 disk does"; legacy `covers.py` `pick_source_cover`, `commons_cover`, `blob_pathname`, `store_cover`, `targets`, `run`, `drop_loose_commons_covers`; tests `test_store_cover_*`, `test_commons_cover_only_from_film_poster`, `test_only_a_full_run_removes_loose_commons_covers`, `test_run_isolates_per_item_failures`, `test_run_backfills_thumb_for_legacy_cover`, `test_run_skips_item_with_both_sizes_current`, `test_run_processes_items_concurrently`
   - Depends on: P6.B.2.1, P6.B.1.1, P6.B.1.2, P6.B.1.3
@@ -3525,7 +3526,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests/ingest -run TestCoversGC` → a replaced object is deleted only after 30 days (fake clock)
   - Notes: no bucket versioning on Railway; immutable keys plus deferred delete replace it (ADR 0014 as amended). `test_run_without_token_keeps_source_url` and `test_upload_rejects_unexpected_blob_response` are Vercel Blob-specific and not ported (SDD 06 §9). Never add a 300 px or 2× variant (open issues 09-9, 10-3).
 
-- [ ] **P6.B.2.3** Port the trailers job: candidates (P1651 preferred, then TMDB/IGDB), oEmbed verdicts (200 available; 400/401/403/404 unavailable; 429/5xx no verdict), at most 2, reusing known verdicts, behind flag `youtube`.
+- [x] **P6.B.2.3** Port the trailers job: candidates (P1651 preferred, then TMDB/IGDB), oEmbed verdicts (200 available; 400/401/403/404 unavailable; 429/5xx no verdict), at most 2, reusing known verdicts, behind flag `youtube`.
   - Files/modules: `internal/ingest/trailers/trailers.go`, `internal/ingest/trailers/trailers_test.go`
   - Refs: SDD 06 §7.5 "Trailers", §7.6; legacy `trailers.py` `candidates`, `is_available`, `check`, `targets`, `fetch`; tests `test_candidates_order_wikidata_first_and_drop_malformed_ids`, `test_check_keeps_two_available_and_stops_asking`, `test_check_reuses_known_verdicts`, `test_rate_limit_is_not_a_verdict`, `test_fetch_writes_one_record_per_item_and_skips_failures`, `test_normalize_shows_only_checked_trailers_and_at_most_two`
   - Depends on: P6.B.1.1, P6.B.1.2
@@ -3555,7 +3556,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/entities/... -run 'TestNormalizeName|TestMatchByQid|TestMatchByExternalId|TestAmbiguousOpensReview|TestNoMatchCreatesNative'` → `ok`; re-running a batch creates no duplicate reviews (unique key)
   - Notes: fallback credits keep `item_entities.source` so the API filters them (ADR 0006).
 
-- [ ] **P6.B.3.3** Build the match review queue at `/admin/ingest/reviews` with the actions `link`, `create` and `dismiss`, gated by `runIngestion` with CSRF.
+- [x] **P6.B.3.3** Build the match review queue at `/admin/ingest/reviews` with the actions `link`, `create` and `dismiss`, gated by `runIngestion` with CSRF.
   - Files/modules: `app/admin/ingest/reviews.go`, `resources/js/Pages/Admin/Ingest/Reviews.tsx`, `tests/admin_ingest_reviews_test.go`
   - Refs: SDD 06 §6 (reviews row), DQ-I-11; VF-008 (custom actions are app routes)
   - Depends on: P6.B.3.2, P4.B.1.1
@@ -3566,7 +3567,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.B.4 Quality, admin and metrics
 
-- [ ] **P6.B.4.1** Build the `dq.asserts` job: SDD 01 DQ-01…14 and SDD 06 DQ-I-01…13 as SQL checks writing `dq_results` (≤ 20 sample ids), run after each normalise and daily at 05:00, with `catalog_counts` snapshots and the `allow_count_drop` override.
+- [x] **P6.B.4.1** Build the `dq.asserts` job: SDD 01 DQ-01…14 and SDD 06 DQ-I-01…13 as SQL checks writing `dq_results` (≤ 20 sample ids), run after each normalise and daily at 05:00, with `catalog_counts` snapshots and the `allow_count_drop` override.
   - Files/modules: `internal/ingest/dq/asserts.go`, `internal/ingest/dq/sql/*.sql`, `tests/ingest/dq_test.go`, `tests/ingest/testdata/dq/*.sql` (one faulty fixture per code)
   - Refs: SDD 06 §7.7, FR-06-9, §9; SDD 01 §7.6; ADR 0006 (DQ-I-12 serialiser check); D-36 (DQ-I-13)
   - Depends on: P6.B.2.2, P6.B.3.1, P6.B.3.2
@@ -3576,7 +3577,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - latest run: `psql -c "select code from dq_results where run_id=$1 and not passed and severity='error'"` → no rows
   - Notes: DQ-I-04 calls `Stat` on 1,000 covers a day and on all covers weekly; a missing object matches `storage.ErrNotFound` (storage page). If the SQL files push the diff past ~400 lines, split into SDD 01 codes and SDD 06 codes.
 
-- [ ] **P6.B.4.2** Build the `dq.frontend_fields` detector: daily, 500 items per type (top 200 + 300 random) through the item read-model builder, per-type required fields, nulls per type/field/locale into `field_coverage`, and ≤ 200 deduplicated `system` "missing field" suggestions a day.
+- [x] **P6.B.4.2** Build the `dq.frontend_fields` detector: daily, 500 items per type (top 200 + 300 random) through the item read-model builder, per-type required fields, nulls per type/field/locale into `field_coverage`, and ≤ 200 deduplicated `system` "missing field" suggestions a day.
   - Files/modules: `internal/ingest/dq/frontend_fields.go`, `tests/ingest/frontend_fields_test.go`
   - Refs: SDD 06 §7.7 "Missing-field detector"; SDD 09 (item read model); SDD 04 (`system` suggestions)
   - Depends on: P6.B.4.1, P4.B
@@ -3584,7 +3585,8 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
   - Acceptance:
     - `go test ./tests/ingest -run TestFrontendFields` → a seeded movie without a director yields one `field_coverage` miss and one suggestion; a second run the same day adds no duplicate; the cap stops at 200
 
-- [ ] **P6.B.4.3** Build `/admin/ingest`: last run per job, failures, failing asserts, oldest TMDB age and the coverage trend, plus `POST /admin/ingest/runs` (trigger), `POST /admin/ingest/runs/{id}/cancel`, and read-only panel resources for `job_runs`, `ingest_failures` and `dq_results`.
+- [x] **P6.B.4.3** Build `/admin/ingest`: last run per job, failures, failing asserts, oldest TMDB age and the coverage trend, plus `POST /admin/ingest/runs` (trigger), `POST /admin/ingest/runs/{id}/cancel`, and read-only panel resources for `job_runs`, `ingest_failures` and `dq_results`.
+  - Status (2026-11-01): ticked on `TestAdminIngest*`; the `admin-ingest` Playwright spec is a follow-up row (QA-admin-ingest-e2e), e2e gates nothing (owner, 2026-10-31).
   - Files/modules: `app/admin/ingest/status.go`, `app/admin/ingest/runs.go`, `resources/js/Pages/Admin/Ingest/Index.tsx`, `tests/admin_ingest_test.go`, `qa/e2e/admin-ingest.spec.ts`
   - Refs: SDD 06 §6 (admin table), FR-06-8; <https://vukem.dev/docs/digging-deeper/admin>; VF-008; open issue 06-6
   - Depends on: P6.B.4.1, P4.B.1.1
@@ -3594,7 +3596,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `bun run e2e -- admin-ingest` → Playwright + axe green
   - Notes: the triggers are app routes because custom panel actions are [NOT IN VUKEM DOCS] (VF-008). Keep the abilities `viewIngestion` and `runIngestion` distinct.
 
-- [ ] **P6.B.4.4** Implement rollback of a bad run (restore history rows with `superseded_by_run`, clear `normalized_at`, delete inserted records, re-normalise, delete created items unless user data references them), `ingest.retry_failures` at 03:30, and the retention prunes at 02:30.
+- [x] **P6.B.4.4** Implement rollback of a bad run (restore history rows with `superseded_by_run`, clear `normalized_at`, delete inserted records, re-normalise, delete created items unless user data references them), `ingest.retry_failures` at 03:30, and the retention prunes at 02:30.
   - Files/modules: `internal/ingest/rollback/rollback.go`, `internal/ingest/run/retry_failures.go`, `internal/ingest/run/prune.go`, `app/admin/ingest/rollback.go`, `tests/ingest/rollback_test.go`
   - Refs: SDD 06 §7.8 "Bad run", §5 (retention: history 30 d, `job_runs` 180 d, `dq_results`/`field_coverage` 365 d), §6 (`rollbackIngestion`, 409 `history-expired`); ADR 0014
   - Depends on: P6.B.4.3
@@ -3603,7 +3605,8 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./tests/ingest -run 'TestRollbackRestoresPreviousState|TestRollbackKeepsItemsWithUserData|TestRollbackHistoryExpired|TestPruneRetention'` → `ok`; the rollback is logged as a `rollback` run plus an audit entry
   - Notes: beyond 30 days the path is the dump restore runbook (SDD 11), not code. Do not build it here.
 
-- [ ] **P6.B.4.5** Add the pressure gate (in-flight count and last-minute item-page p95 hold batches above 16 or 300 ms), the `ingest.*` metrics on the global OTel meter, alert A7 and the ingestion dashboard, then wire the remaining weekly and daily schedules (Wed steam, Thu gog, Fri tmdb, Sat igdb, `tmdb.expire`, `igdb.refresh`, covers and trailer chains).
+- [x] **P6.B.4.5** Add the pressure gate (in-flight count and last-minute item-page p95 hold batches above 16 or 300 ms), the `ingest.*` metrics on the global OTel meter, alert A7 and the ingestion dashboard, then wire the remaining weekly and daily schedules (Wed steam, Thu gog, Fri tmdb, Sat igdb, `tmdb.expire`, `igdb.refresh`, covers and trailer chains).
+  - Status (2026-11-01): ticked with a note. D-35 (owner, Railway-native only) supersedes the `ingest.*` OTel metrics, `ops/grafana/ingestion.json` and `a7.yaml`: A7 is `alert=A7` log lines (`TestAlertA7Lines` replaces `TestMetricsEmitted`). The steam, gog and igdb schedules came with P6.B.1.2 and P6.B.1.3, covers with P6.B.2.2. The k6 staging run is not possible (no staging environment by owner rule). "Breaker open > 1 h" is covered by the A7 failed-run line.
   - Files/modules: `app/http/middleware/inflight.go`, `internal/ingest/pressure.go`, `internal/ingest/metrics.go`, `routes/schedule.go`, `ops/grafana/ingestion.json`, `ops/grafana/alerts/a7.yaml`, `qa/k6/ingest-pressure.js`
   - Refs: SDD 06 §7.5 "Pressure gate", §7.6, §10 "Observability", NFR-06-1, NFR-06-2; SDD 12 §6.2, §7.5 (A6, A7); <https://vukem.dev/docs/digging-deeper/queue> "Metrics"; VF-019; open issues 06-7, 12-1
   - Depends on: P6.B.4.4

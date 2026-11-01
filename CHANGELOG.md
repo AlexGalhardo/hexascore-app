@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **ingest:** WebP covers with a pinned `cwebp` and resource limits, the covers job (content-hashed keys on the bucket, 30-day deferred delete through `cover_gc` and `covers.gc`) behind `ingest_covers`, the YouTube trailer check and its weekly chain, Open Library, IGDB (with `igdb.refresh` and 7-day retention), Steam and GOG connectors, all off by default (P6.B.2.1, P6.B.2.2, P6.B.2.3, P6.A.2.4, P6.B.1.2, P6.B.1.3)
+- **ingest:** `dq.asserts` (DQ-01..14, DQ-I-01..13) and `dq.frontend_fields` with missing-field system suggestions; rollback of a bad fetch run, retry of failed targets and retention prunes; a pressure gate that holds chunks while the site is busy and alert A7 as `alert=A7` log lines (P6.B.4.1, P6.B.4.2, P6.B.4.4, P6.B.4.5)
+- **admin:** `/admin/ingest` (status, run trigger with `qids`, cancel, rollback), the match review queue at `/admin/ingest/reviews`, and job runs, ingest failures and DQ results in the panel (P6.B.3.3, P6.B.4.3, FIX-ingest-qids-param)
 - **social:** the friends' average next to the community score on the item page and a "rated by people you follow" strip on the home, both deferred per viewer; an admin outcome that unhides a review or comment; reports on reviews and comments answer 404 while the `social` flag is off (P7.C.1.1, FIX-P7.B.1.3-followups)
 - **qa:** dev-only `CommunityLoad` seeder (`db:seed CommunityLoad --count N`, refused in production), a second demo admin (`admin2@example.test`), `qa/k6/moderation.js` and the Playwright community spec with the two-admin claim conflict (P4.B.5.1)
 - **api:** `listExports` and `getExport` (302 to a 5-minute presigned URL, `Cache-Control: no-store`) for Pro and Business; the daily id files leave out `popularity` until the owner confirms it (P3.A.4.2)
@@ -129,6 +132,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **ingest:** an edition QID held by another work records a failure and a review instead of failing the item; a Retry-After pause longer than a minute no longer fails the request (each attempt has its own deadline); `entity_match_reviews.resolved_by` is a bigint (FIX-editions-qid-conflict, FIX-ingest-retry-after-timeout, P6.B.3.3)
 - **web:** the desktop navbar no longer overflows at 1024–1440 px with the Feed link (Feed inline from `xl`, in the account menu below) (FIX-nav-lg-width)
 - **web:** shelf cards on the feed and other users' pages label the score neutrally ("Score 7.0") instead of "Your score" (FIX-shelf-score-label)
 - **ci:** the bun:test SDK workflow tests run with `bun test` instead of Vitest, so `bun run test` is green again (P3.B.1.3)
