@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **seo:** `/llms.txt` and `/llms-full.txt` (catalogue sections, API docs Markdown, legal pages; outside the scrape guard), IndexNow notifications of changed item and entity pages in the three locales (`seo.indexnow_changes` every minute, `indexnow_cursor` starting at the current end, score-only updates skipped) and Search Console/Bing verification (ADOPT-vukem-0.36.0)
+- **analytics:** cookieless Umami and GA4 in consent mode, loaded only after Accept in the cookie banner, which now offers Accept/Reject and reopens from a footer "Cookie settings" button (ADR 0023) (ADOPT-vukem-0.36.0)
+- **security:** Cloudflare Turnstile on sign-up, login and contact when both keys are set, and a Turnstile step-up at `POST /turnstile` for anonymous clients past a soft page budget, never for verified crawlers (ADR 0016 amendment) (ADOPT-vukem-0.36.0)
 - **security:** server-side anti-scraping of the public pages (ADR 0022): verified search crawlers pass, tool User-Agents and spoofed crawlers get 403, per-IP page limits (a higher budget only for a logged-in session), a honeypot link that bans an IP for 24 h, a robots.txt allow list, page props trimmed to what the pages render, and a Terms clause (SEC-anti-scraping, Q-A18)
 - **mail:** automatic mail is sent from `noreply@hexascore.app` with a `support@hexascore.app` Reply-To, and the contact form goes to the support inbox, configurable through `MAIL_FROM`, `MAIL_SUPPORT_ADDRESS` and `CONTACT_INBOX` (CONFIG-email-addresses, Q-A17)
 - **ingest:** WebP covers with a pinned `cwebp` and resource limits, the covers job (content-hashed keys on the bucket, 30-day deferred delete through `cover_gc` and `covers.gc`) behind `ingest_covers`, the YouTube trailer check and its weekly chain, Open Library, IGDB (with `igdb.refresh` and 7-day retention), Steam and GOG connectors, all off by default (P6.B.2.1, P6.B.2.2, P6.B.2.3, P6.A.2.4, P6.B.1.2, P6.B.1.3)
@@ -101,6 +104,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **deps:** vukem v0.36.0 (contrib/stripe v0.5.1, drivers/postgres v0.6.1, drivers/s3 v0.4.1); problem codes, request-line route and user fields, export encoders and the mail Reply-To default now use native vukem APIs (VF-066, VF-067, VF-069, VF-070); `X-Problem-Code` is gone (ADOPT-vukem-0.36.0)
 - **ingest:** a run restricted to `qids` filters the tmdb, igdb, trailers and openlibrary targets in SQL instead of scanning every target (FIX-ingest-qids-pushdown)
 - **ingest:** the two-job ingestion cap is vukem `QUEUE_LIMITS` (default `ingest=2` when unset) instead of an in-process semaphore, which also deadlocked nested chain dispatch on the sync queue; the legacy 2FA import hashes recovery codes with `totp.HashRecoveryCode` (CLEAN-dangling-vf-ids)
 - **api:** `getItemActivity` is now `getGameActivity`, `getMovieActivity`, `getSeriesActivity` and `getBookActivity` (same URLs; both SDKs regenerated) (P3.A.4.2); scaffold pages use the `primary` design token instead of hardcoded indigo classes (P2.H.3.4); item-page recommendation impressions (sampled 1 in 10) and clicks are `event=reco_impression` / `event=reco_click` log lines instead of unused in-process counters (FIX-reco-log-events)
