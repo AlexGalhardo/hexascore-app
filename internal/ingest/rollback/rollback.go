@@ -62,7 +62,8 @@ func Check(ctx context.Context, ex database.Executor, id int64) error {
 		return fmt.Errorf("rollback: load run %d: %w", id, err)
 	}
 
-	if !strings.HasPrefix(job, "fetch.") && job != "tmdb.expire" {
+	// tmdb.expire is not rollbackable: its deletes leave no history and the 180-day TMDB term forbids restoring them.
+	if !strings.HasPrefix(job, "fetch.") {
 		return fmt.Errorf("%w: %s", ErrNotRollbackable, job)
 	}
 
@@ -89,10 +90,13 @@ AND status IN ('queued', 'running', 'succeeded', 'partial')`, Job, strconv.Forma
 	return nil
 }
 
-// userData is true for an item that a user rated, tracked, listed or attached an edition to.
+// userData is true for an item that a user rated, tracked, listed, reviewed or attached an edition to, or that
+// carries admin-authored affiliate links or activity events: every one of those tables cascades on DELETE.
 const userData = `EXISTS (SELECT 1 FROM ratings WHERE item_id = i.id) OR EXISTS (SELECT 1 FROM item_status WHERE item_id = i.id)
 OR EXISTS (SELECT 1 FROM time_to_beat WHERE item_id = i.id) OR EXISTS (SELECT 1 FROM list_items WHERE item_id = i.id)
-OR EXISTS (SELECT 1 FROM user_item_editions WHERE item_id = i.id)`
+OR EXISTS (SELECT 1 FROM user_item_editions WHERE item_id = i.id) OR EXISTS (SELECT 1 FROM reviews WHERE item_id = i.id)
+OR EXISTS (SELECT 1 FROM activity_events WHERE item_id = i.id)
+OR EXISTS (SELECT 1 FROM affiliate_links WHERE item_id = i.id)`
 
 // laterChange is true when a run after $1 superseded the same record again, so the record no longer belongs to
 // the target run.

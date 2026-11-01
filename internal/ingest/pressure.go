@@ -80,7 +80,11 @@ func (p *Pressure) Record(d time.Duration) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
-	p.samples = append(p.samples, sample{at: p.now(), d: d})
+	// Trim here too: P95 runs only while an ingestion run waits, so between runs the slice would grow per request.
+	now := p.now()
+	cut := now.Add(-Window)
+	p.samples = slices.DeleteFunc(p.samples, func(s sample) bool { return s.at.Before(cut) })
+	p.samples = append(p.samples, sample{at: now, d: d})
 }
 
 // InFlight is the number of requests being served.

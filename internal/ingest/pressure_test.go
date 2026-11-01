@@ -116,3 +116,18 @@ func TestPressureGateGivesUpAndCancels(t *testing.T) {
 		t.Errorf("err = %v, want context.Canceled", err)
 	}
 }
+
+// Samples older than Window are dropped on Record, so the slice stays bounded while no run calls P95.
+func TestPressureRecordTrimsOldSamples(t *testing.T) {
+	c := &fakeClock{t: time.Unix(1_700_000_000, 0)}
+	p := NewPressure(c.now)
+
+	for range 100 {
+		p.Record(time.Millisecond)
+		c.t = c.t.Add(Window + time.Second)
+	}
+
+	if n := len(p.samples); n != 1 {
+		t.Errorf("samples = %d, want 1", n)
+	}
+}

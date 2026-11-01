@@ -234,14 +234,17 @@ func (c *Connector) token(ctx context.Context, client *ingest.Client) (string, e
 
 	q := url.Values{"client_id": {c.clientID}, "client_secret": {c.secret}, "grant_type": {"client_credentials"}}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.TokenURL+"?"+q.Encode(), nil)
+	// Form body, not the query string, so the secret stays out of proxy and access logs.
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.TokenURL, strings.NewReader(q.Encode()))
 	if err != nil {
 		return "", fmt.Errorf("build twitch token request: %w", err)
 	}
 
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
 	resp, err := client.JSON.Do(req)
 	if err != nil {
-		// The URL carries the secret; never wrap it into a stored error message.
+		// Never wrap the transport error into a stored message: it may echo the request.
 		return "", errors.New("twitch token request failed")
 	}
 
