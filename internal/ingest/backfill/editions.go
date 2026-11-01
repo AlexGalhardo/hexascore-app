@@ -83,10 +83,15 @@ func (Editions) one(ctx context.Context, tx *database.Tx, r run.Run, id, qid str
 		return fmt.Errorf("backfill editions: read record of %s: %w", qid, err)
 	}
 
-	cands, _, err := normalize.ExtractEditions(
-		qid,
-		[]store.Record{{Source: "wikidata", ExternalID: qid, Payload: payload}},
+	recs, err := normalize.WithEditionRecords(
+		ctx, tx, qid, []store.Record{{Source: "wikidata", ExternalID: qid, Payload: payload}},
 	)
+
+	var cands []editions.Candidate
+	if err == nil {
+		cands, _, err = normalize.ExtractEditions(qid, recs)
+	}
+
 	if err != nil {
 		res.Failed++
 

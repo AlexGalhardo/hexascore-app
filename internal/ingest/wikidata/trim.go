@@ -28,7 +28,13 @@ var SitelinkSites = []string{"enwiki", "ptwiki", "eswiki"}
 var RefProps = []string{
 	"P136", "P400", "P57", "P170", "P178", "P50", "P495",
 	"P144", "P58", "P161", "P272", "P449", "P404", "P179", "P8345", "P364", "P407", "P123",
+	"P747", // editions (ADR 0012): their records carry EditionProps, at most MaxEditions per work
 }
+
+// MaxEditions caps the P747 editions kept (and so fetched) per work, like editions.MaxPerWork (SDD 06 §7.4).
+// shortcut: the first 50 in Wikidata order, not pt/en/es first (their languages are unknown before the fetch);
+// upgrade if works with more than 50 editions lose the Portuguese ones.
+const MaxEditions = 50
 
 // ScalarProps hold values read as they are. P444 (review scores) is not kept:
 // D-09 has no critic scores.
@@ -39,13 +45,17 @@ var ScalarProps = []string{
 	"P345", "P5794", "P1733", "P4947", "P4983", "P212", "P648", "P2816",
 	"P8383", "P1712", "P1258", "P6278", "P2725",
 	"P1476", "P1448", "P2561", // original title, official name, name (alt titles)
-	"P957", "P747", // ISBN-10, editions (QIDs only: the edition entities are not fetched)
+	"P957", // ISBN-10
 }
 
 // EntityProps are the external ids kept on a wikidata:entity record, used
 // to match credits (SDD 06 §7.4). P4985 and P8084 are [NOT VERIFIED] until
 // fixtures pin them.
 var EntityProps = []string{"P345", "P648", "P4985", "P8084"}
+
+// EditionProps are the claims of a P747 edition the edition matcher reads: language, publication date, publisher
+// and ISBNs (ADR 0012).
+var EditionProps = []string{"P407", "P577", "P123", "P212", "P957"}
 
 // KeptProps is every claim property of a trimmed item entity.
 var KeptProps = func() map[string]bool {
@@ -242,6 +252,10 @@ func Trim(e Entity, itemType string) Payload {
 		Refs:           map[string]string{},
 	}
 
+	if eds := p.Claims["P747"]; len(eds) > MaxEditions {
+		p.Claims["P747"] = eds[:MaxEditions]
+	}
+
 	for lang, terms := range e.Aliases {
 		if !slices.Contains(LabelLangs, lang) && !strings.HasSuffix(lang, latnSuffix) {
 			continue
@@ -290,9 +304,9 @@ type EntityPayload struct {
 	Claims map[string][]Claim `json:"claims"`
 }
 
-// TrimEntity keeps the labels and external ids of a referenced entity.
+// TrimEntity keeps the labels, the external ids and the edition claims of a referenced entity.
 func TrimEntity(e Entity) EntityPayload {
-	return EntityPayload{ID: e.ID, Labels: labels(e), Claims: claims(e, EntityProps)}
+	return EntityPayload{ID: e.ID, Labels: labels(e), Claims: claims(e, slices.Concat(EntityProps, EditionProps))}
 }
 
 // refLabel is the English label, else the "mul" one; empty when neither exists.
