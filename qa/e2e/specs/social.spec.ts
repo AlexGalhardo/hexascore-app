@@ -19,9 +19,9 @@ test.describe("profiles", () => {
 		const itemHref = await openTopItem(page, prefix, "books", projectSlot(testInfo));
 		const title = ((await page.locator("h1").textContent()) ?? "").trim();
 
-		const sliders = page.getByRole("slider");
+		const groups = page.getByRole("radiogroup");
 		for (let i = 0; i < 6; i++) {
-			await sliders.nth(i).focus();
+			await groups.nth(i).getByRole("radio").first().focus();
 			await page.keyboard.press("End");
 		}
 		await page.getByRole("button", { name: t("ratings.save") }).click();

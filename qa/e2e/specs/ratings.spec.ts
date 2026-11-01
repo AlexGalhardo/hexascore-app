@@ -18,14 +18,15 @@ test.describe("ratings", () => {
 		await createVerifiedAccount(page, prefix, any);
 		await openTopItem(page, prefix, "games", projectSlot(testInfo));
 
-		const sliders = page.getByRole("slider");
-		await expect(sliders).toHaveCount(6);
+		const groups = page.getByRole("radiogroup");
+		await expect(groups).toHaveCount(6);
+		const checked = (i: number) => groups.nth(i).locator("input:checked");
 		await expect(page.getByRole("button", { name: t("ratings.save") })).toBeDisabled();
 
 		for (let i = 0; i < 6; i++) {
-			await sliders.nth(i).focus();
+			await groups.nth(i).getByRole("radio").first().focus();
 			await page.keyboard.press("End");
-			await expect(sliders.nth(i)).toHaveAttribute("aria-valuenow", "10");
+			await expect(checked(i)).toHaveValue("10");
 		}
 		await expectNoSeriousA11yViolations(page);
 
@@ -34,38 +35,40 @@ test.describe("ratings", () => {
 		await expect(update).toBeVisible();
 
 		await reload(page);
-		await expect(sliders.first()).toHaveAttribute("aria-valuenow", "10");
+		await expect(checked(0)).toHaveValue("10");
 
-		await sliders.first().focus();
+		await checked(0).focus();
 		await page.keyboard.press("ArrowLeft");
 		await page.keyboard.press("ArrowLeft");
-		await expect(sliders.first()).toHaveAttribute("aria-valuenow", "9");
+		await expect(checked(0)).toHaveValue("9");
 		await update.click();
 		await expect(update).toBeEnabled();
 
 		await reload(page);
-		await expect(sliders.first()).toHaveAttribute("aria-valuenow", "9");
+		await expect(checked(0)).toHaveValue("9");
 
 		await page.getByRole("button", { name: any("ratings.delete") }).click();
 		await expect(page.getByRole("button", { name: any("ratings.save") })).toBeVisible();
-		await expect(sliders.first()).toHaveAttribute("aria-valuenow", "0");
+		await expect(checked(0)).toHaveCount(0);
 	});
 
-	test("item status can be set and cleared", async ({ page, prefix, any }, testInfo) => {
+	test("item status can be set and cleared", async ({ page, prefix, t, any }, testInfo) => {
 		await createVerifiedAccount(page, prefix, any);
 		await openTopItem(page, prefix, "movies", projectSlot(testInfo));
 
-		const status = page.locator("select:has(option[value=completed])");
+		const status = page.getByRole("group", { name: t("social.status.label") });
 		for (const value of ["want", "in_progress", "completed", "dropped"]) {
-			await status.selectOption(value);
-			await expect(status).toBeEnabled();
+			const button = status.getByRole("button", { name: t(`social.status.movie.${value}`) });
+			await button.click();
+			await expect(button).toHaveAttribute("aria-pressed", "true");
 		}
+		const dropped = status.getByRole("button", { name: t("social.status.movie.dropped") });
 		await reload(page);
-		await expect(status).toHaveValue("dropped");
+		await expect(dropped).toHaveAttribute("aria-pressed", "true");
 
-		await status.selectOption("");
-		await expect(status).toBeEnabled();
+		await dropped.click();
+		await expect(dropped).toHaveAttribute("aria-pressed", "false");
 		await reload(page);
-		await expect(status).toHaveValue("");
+		await expect(status.locator("[aria-pressed=true]")).toHaveCount(0);
 	});
 });

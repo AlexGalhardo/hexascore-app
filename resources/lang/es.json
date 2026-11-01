@@ -110,38 +110,6 @@
       "requested": "Exportación solicitada. Pronto recibirás un correo con el enlace.",
       "cooldown": "Puedes pedir una exportación cada 7 días. Inténtalo más tarde.",
       "failed": "No se pudo pedir la exportación. Inténtalo de nuevo."
-    },
-    "notifications": {
-      "title": "Avisos por correo",
-      "community": "No enviarme correos sobre mis sugerencias a la comunidad",
-      "communityHelp": "Sigues viendo cada decisión sobre tus sugerencias en tus notificaciones.",
-      "save": "Guardar preferencias de correo"
-    },
-    "updateRequired": {
-      "title": "Actualización necesaria"
-    },
-    "offline": "Estás sin conexión. Los cambios se sincronizarán cuando vuelvas a conectarte.",
-    "crashReports": {
-      "title": "¿Enviar informes de errores?",
-      "body": "Si la app falla, envía a HexaScore la versión de la app, la versión de Android, la pantalla y los detalles del error. No se incluye ninguna cuenta, correo ni token. Puedes desactivarlo en Ajustes.",
-      "allow": "Enviar informes",
-      "deny": "No enviar"
-    },
-    "blocked": {
-      "title": "Tu cuenta está suspendida",
-      "reason": "Motivo: {reason}",
-      "until": "Hasta el {date}",
-      "permanent": "Sin fecha de finalización",
-      "back": "Volver al inicio de sesión"
-    },
-    "settings": {
-      "title": "Ajustes",
-      "account": "Cuenta",
-      "appearance": "Apariencia",
-      "themeSystem": "Sistema",
-      "themeLight": "Claro",
-      "themeDark": "Oscuro",
-      "crashReports": "Enviar informes de errores"
     }
   },
   "actions": {
@@ -278,8 +246,7 @@
       "name": "Nombre",
       "show": "Mostrar contraseña",
       "hide": "Ocultar contraseña",
-      "confirmPassword": "Confirmar contraseña",
-      "deviceName": "Nombre del dispositivo"
+      "confirmPassword": "Confirmar contraseña"
     },
     "rules": {
       "title": "Tu contraseña debe tener:",
@@ -545,12 +512,6 @@
       "seeAll": "Ver todo en {section}",
       "empty": "Aún no hay nada aquí."
     },
-    "trending": {
-      "title": "{type}: top 10 en tendencia (30 días)",
-      "allPrior": "{type} populares",
-      "popular": "Popular",
-      "empty": "Todavía no hay tendencias."
-    },
     "itemsFoundLabel": {
       "one": "elemento encontrado",
       "other": "elementos encontrados"
@@ -624,9 +585,6 @@
     "pricing": "Precios",
     "language": "Idioma",
     "openSearch": "Abrir búsqueda",
-    "searchTab": "Buscar",
-    "themeDark": "Cambiar al tema oscuro",
-    "themeLight": "Cambiar al tema claro",
     "menu": "Menú",
     "skip": "Ir al contenido",
     "dismiss": "Descartar",
@@ -959,11 +917,29 @@
       "saved": "Tiempos guardados.",
       "deleted": "Tiempos borrados."
     },
-    "confidence": "Confianza: {level}",
-    "confidenceLevel": {
-      "low": "baja",
-      "medium": "media",
-      "high": "alta"
+    "band": {
+      "high": "Puntuación alta",
+      "mid": "Puntuación media",
+      "low": "Puntuación baja"
+    },
+    "scoreFrom": {
+      "one": "de {n} valoración · seis categorías, una fórmula",
+      "other": "de {n} valoraciones · seis categorías, una fórmula"
+    },
+    "howScoreWorks": "Cómo funciona la puntuación",
+    "rateIt": "Valorar",
+    "goToRating": "Ir a tu valoración",
+    "breadcrumb": "Ruta de navegación",
+    "loadTrailerN": "Cargar tráiler {n}",
+    "panel": {
+      "title": "Valorar {title}",
+      "help": "Diez estrellas por categoría; cada media estrella vale 0,5. Las flechas mueven 0,5; Inicio y Fin saltan a 0,5 y 10.",
+      "helpGuest": "Diez estrellas por categoría, con medias estrellas (0,5 a 10). Tu puntuación cuenta cuando confirmes tu correo.",
+      "noAccount": "¿No tienes cuenta?",
+      "signupFree": "Regístrate gratis",
+      "overall": "Tu puntuación general",
+      "overallHint": "La media de las categorías que valoraste ({rated} de {total}).",
+      "completeHint": "Valora todas las categorías para guardar."
     }
   },
   "updatedLabel": "Última actualización",
@@ -1008,7 +984,7 @@
       "4": {
         "heading": "5. Con quién compartimos datos",
         "body": {
-          "0": "No vendemos datos personales. Solo los compartimos con operadores que los tratan en nuestro nombre: Railway (alojamiento, base de datos, métricas y registros), Resend (correos transaccionales), Stripe (pagos), Google (solo si eliges \"Continuar con Google\") y Telegram (alertas del operador).",
+          "0": "No vendemos datos personales. Solo los compartimos con operadores que los tratan en nuestro nombre: Railway (alojamiento y base de datos), Grafana Cloud (métricas y registros), Resend (correos transaccionales), Stripe (pagos), Google (solo si eliges \"Continuar con Google\") y Telegram (alertas del operador).",
           "1": "Algunos de estos operadores están fuera de tu país, incluso en Estados Unidos. Las transferencias usan las salvaguardas que esas leyes permiten.",
           "2": "Los metadatos de catálogo de IGDB y TMDB se muestran con la atribución que esas fuentes exigen. Las contribuciones de la comunidad al catálogo quedan bajo la licencia A-07."
         }
@@ -1201,9 +1177,7 @@
     "loginToRate": "Inicia sesión para valorar",
     "chooseNickname": "Elige un nickname para valorar",
     "verifyToRate": "Confirma tu correo para valorar.",
-    "verifyLink": "Reenviar el correo de confirmación",
-    "notReleased": "La valoración se abre cuando el título se estrene.",
-    "notSaved": "No se pudo guardar tu valoración. Inténtalo de nuevo."
+    "verifyLink": "Reenviar el correo de confirmación"
   },
   "search": {
     "title": "Búsqueda",
@@ -1383,7 +1357,9 @@
   },
   "rating": {
     "valuetext": "{value} de 10 estrellas",
-    "unset": "Sin valorar"
+    "unset": "Sin valorar",
+    "outOf": "{value} / 10",
+    "preview": "Vista previa {value}"
   },
   "notifications": {
     "title": "Notificaciones",
@@ -1521,10 +1497,7 @@
       "creators": "Creadores",
       "organizations": "Organizaciones",
       "franchise": "Franquicia",
-      "platforms": "Plataformas",
-      "entity_kind": "Tipo",
-      "work_id": "Libro",
-      "language": "Idioma (código, p. ej. en, pt-BR)"
+      "platforms": "Plataformas"
     },
     "precision": {
       "label": "Precisión",
@@ -1546,14 +1519,7 @@
       "mergeDest": "Registro que se conserva",
       "change": "Cambiar",
       "link": "Sugerir nuevo/a {type}",
-      "missing": "¿No lo encuentras?",
-      "targets": {
-        "label": "Qué añadir",
-        "item": "Juego, película, serie o libro",
-        "entity": "Persona, empresa o etiqueta",
-        "edition": "Edición de libro"
-      },
-      "choose": "Elige…"
+      "missing": "¿No lo encuentras?"
     },
     "status": {
       "title": "Tu sugerencia",
@@ -1601,13 +1567,6 @@
         "system": "HexaScore",
         "user": "miembro"
       }
-    },
-    "entityKinds": {
-      "person": "Persona",
-      "organization": "Organización",
-      "franchise": "Franquicia",
-      "platform": "Plataforma",
-      "genre": "Género"
     }
   },
   "forYou": {

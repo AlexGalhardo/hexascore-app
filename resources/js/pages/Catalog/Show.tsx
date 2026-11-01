@@ -1,16 +1,28 @@
 import { Link, usePage } from "@inertiajs/react";
+import { lazy, type ReactNode, Suspense, useState } from "react";
 import CoverThumb, { type Cover } from "../../components/CoverThumb";
 import AddToList, { type ListChoice } from "../../components/item/AddToList";
+import CategoryAverages from "../../components/item/CategoryAverages";
 import Editions from "../../components/item/Editions";
 import RatingPanel from "../../components/item/RatingPanel";
+import ScoreBlock from "../../components/item/ScoreBlock";
 import StatusPicker from "../../components/item/StatusPicker";
 import TimeToBeat, { type Medians } from "../../components/item/TimeToBeat";
 import Trailers from "../../components/item/Trailers";
-import type { EditionRow, ItemType, Me, RatingSummary } from "../../components/item/types";
+import {
+	CATEGORY_KEYS,
+	type EditionRow,
+	type ItemType,
+	type Me,
+	type RatingSummary,
+} from "../../components/item/types";
 import Seo, { truncate } from "../../components/Seo";
+import { btnClass } from "../../components/ui/Btn";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
+
+const RatingsDialog = lazy(() => import("../../components/item/RatingsDialog"));
 
 const SECTIONS: Record<ItemType, string> = {
 	game: "games",
@@ -70,6 +82,11 @@ const ENTITY_PATH: Record<string, string> = {
 	language: "languages",
 };
 
+// Chips under the title: genres and platforms, linked to their entity pages.
+const CHIP_ROLES = ["genre", "platform"];
+// The first of these credits completes the meta line under the title.
+const CREDIT_ROLES = ["developer", "author", "director", "creator", "network"];
+
 const ROLE_ORDER = [
 	"director",
 	"writer",
@@ -101,9 +118,22 @@ export default function Show({
 }: Props) {
 	const t = useT();
 	const { locale, auth } = usePage<SharedProps>().props;
+	const l = (path: string) => localized(path, locale);
 	const title = item.title ?? item.slug;
 	const loggedIn = Boolean(auth?.user);
 	const roles = ROLE_ORDER.filter((r) => entities[r]?.length);
+	const keys = CATEGORY_KEYS[item.type];
+	const categoryLabels = keys.map((k) => t(`categories.${item.type}.${k}`));
+	const [scoresOpen, setScoresOpen] = useState(false);
+	const entityHref = (e: EntityLink) => l(`/${ENTITY_PATH[e.kind]}/${e.code ?? e.slug}`);
+	const credit = CREDIT_ROLES.map((r) => entities[r]?.[0]).find(Boolean);
+	const chips = CHIP_ROLES.flatMap((r) => entities[r] ?? []);
+	const release =
+		item.releaseDate?.length === 10
+			? new Intl.DateTimeFormat(locale, { dateStyle: "long", timeZone: "UTC" }).format(
+					new Date(`${item.releaseDate}T00:00:00Z`),
+				)
+			: item.releaseDate;
 
 	const jsonLd: object = {
 		"@context": "https://schema.org",
@@ -121,6 +151,17 @@ export default function Show({
 		}),
 	};
 
+	const seeScores = (
+		<button
+			type="button"
+			className={btnClass("ghost", "w-fit px-0")}
+			onClick={() => setScoresOpen(true)}
+			disabled={scoresOpen}
+		>
+			{t("item.seeUserScores")}
+		</button>
+	);
+
 	return (
 		<>
 			<Seo
@@ -132,140 +173,194 @@ export default function Show({
 				)}
 				jsonLd={[jsonLd]}
 			/>
-			<article className="grid gap-8">
-				<header className="flex items-start gap-4">
-					<CoverThumb cover={cover} alt={title} size="lg" priority />
-					<div className="grid min-w-0 gap-2">
-						<h1 className="text-3xl font-bold">{title}</h1>
+			<nav aria-label={t("item.breadcrumb")} className="mb-6 text-sm text-muted">
+				<ol className="flex flex-wrap gap-2">
+					<li>
 						<Link
-							href={localized(`/suggest/item/${item.id}`, locale)}
-							className="text-sm underline"
+							href={l(`/${SECTIONS[item.type]}`)}
+							className="hover:text-fg hover:underline"
 						>
-							{t("community.suggest.link")}
+							{t(`nav.${SECTIONS[item.type]}`)}
 						</Link>
-						<Link
-							href={localized(`/${SECTIONS[item.type]}/${item.slug}/changes`, locale)}
-							className="text-sm underline"
-						>
-							{t("community.recent.link")}
-						</Link>
-						<p className="text-muted">
-							{t(`itemTypes.${item.type}`)}
-							{item.releaseDate && ` · ${item.releaseDate.slice(0, 4)}`}
+					</li>
+					<li aria-hidden="true">/</li>
+					<li aria-current="page" className="text-fg">
+						{title}
+					</li>
+				</ol>
+			</nav>
+			<article className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-x-12 xl:grid-cols-[minmax(0,1fr)_24rem]">
+				<header className="grid grid-cols-[auto_minmax(0,1fr)] content-start gap-x-4 gap-y-5 sm:gap-x-6">
+					<div className="sm:row-span-2">
+						<CoverThumb cover={cover} alt={title} size="lg" priority />
+					</div>
+					<div className="grid min-w-0 content-start gap-2">
+						<h1 className="text-3xl leading-none sm:text-4xl md:text-6xl">{title}</h1>
+						<p className="text-muted md:text-lg">
+							{[
+								t(`itemTypes.${item.type}`),
+								item.releaseDate?.slice(0, 4),
+								credit?.name,
+							]
+								.filter(Boolean)
+								.join(" · ")}
 						</p>
-						<p
-							data-testid="score-badge"
-							className="inline-flex w-fit items-center rounded-md bg-surface px-3 py-1 text-lg font-bold"
-						>
-							{ratingSummary.score === null
-								? t("item.notEnough")
-								: t("score.outOf", { score: ratingSummary.score })}
-						</p>
+					</div>
+					<div className="col-span-2 grid content-start gap-4 sm:col-span-1">
+						{chips.length > 0 && (
+							<ul className="flex flex-wrap gap-2">
+								{chips.map((e) => (
+									<li key={`${e.kind}-${e.id}`}>
+										<Link
+											href={entityHref(e)}
+											className="inline-flex min-h-10 items-center rounded-full border border-fg px-3.5 text-sm hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+										>
+											{e.name}
+										</Link>
+									</li>
+								))}
+							</ul>
+						)}
+						<ScoreBlock
+							score={ratingSummary.score}
+							ratingCount={ratingSummary.ratingCount}
+						/>
+						<div className="flex flex-wrap items-center gap-3">
+							<a href="#your-rating" className={btnClass("primary", "max-sm:flex-1")}>
+								{loggedIn && me?.rating ? t("item.goToRating") : t("item.rateIt")}
+							</a>
+							{loggedIn && myLists ? (
+								<AddToList itemId={item.id} lists={myLists} />
+							) : (
+								<Link
+									href={l("/login")}
+									className={btnClass("secondary", "max-sm:flex-1")}
+								>
+									{t("lists.addToList")}
+								</Link>
+							)}
+							<Link
+								href={l(`/suggest/item/${item.id}`)}
+								className={btnClass("ghost", "px-2")}
+							>
+								<svg
+									viewBox="0 0 24 24"
+									aria-hidden="true"
+									className="size-4 fill-none stroke-current stroke-2"
+								>
+									<path d="M4 20h4L19 9l-4-4L4 16z" />
+								</svg>
+								{t("community.suggest.link")}
+							</Link>
+							<Link
+								href={l(`/${SECTIONS[item.type]}/${item.slug}/changes`)}
+								className={btnClass("ghost", "px-2")}
+							>
+								{t("community.recent.link")}
+							</Link>
+						</div>
 					</div>
 				</header>
 
-				<div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem]">
-					<div className="order-1 lg:order-2 lg:sticky lg:top-4 lg:self-start">
-						<RatingPanel
-							key={item.id + (me?.rating ? "r" : "n")}
+				<aside className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
+					<RatingPanel
+						key={item.id + (me?.rating ? "r" : "n")}
+						itemId={item.id}
+						title={title}
+						type={item.type}
+						mine={me?.rating}
+						canWrite={loggedIn}
+					>
+						<StatusPicker
 							itemId={item.id}
 							type={item.type}
-							summary={ratingSummary}
-							mine={me?.rating}
-							canWrite={loggedIn}
+							status={me?.status ?? null}
 						/>
-					</div>
-					<div className="order-2 grid min-w-0 gap-8 lg:order-1">
-						<div className="grid gap-8 md:grid-cols-[3fr_2fr]">
-							<section aria-labelledby="synopsis-heading" className="grid gap-2">
-								<h2 id="synopsis-heading" className="text-xl font-bold">
-									{t("item.synopsis")}
-								</h2>
-								{item.synopsis ? (
-									<>
-										<p>{item.synopsis.text}</p>
-										<p className="text-sm text-muted">
-											{t("item.license", { license: item.synopsis.licence })}
-											{item.synopsis.sourceUrl && (
-												<>
-													{" · "}
-													<a
-														href={item.synopsis.sourceUrl}
-														rel="noopener noreferrer nofollow"
-													>
-														{t("item.source")}
-													</a>
-												</>
-											)}
-										</p>
-									</>
-								) : (
-									<p>{t("item.noSynopsis")}</p>
+						{myLists && <AddToList itemId={item.id} lists={myLists} full />}
+					</RatingPanel>
+				</aside>
+
+				<div className="grid min-w-0 content-start gap-12">
+					<Section id="averages" title={t("item.categoryScores")}>
+						<CategoryAverages
+							keys={keys}
+							labels={categoryLabels}
+							averages={ratingSummary.scoreByCategory}
+						/>
+						{scoresOpen ? (
+							<Suspense fallback={seeScores}>
+								<RatingsDialog
+									itemId={item.id}
+									categoryLabels={categoryLabels}
+									initialOpen
+								/>
+							</Suspense>
+						) : (
+							seeScores
+						)}
+					</Section>
+
+					<Section id="synopsis" title={t("item.synopsis")}>
+						{item.synopsis ? (
+							<>
+								<p className="text-lg/relaxed">{item.synopsis.text}</p>
+								<p className="text-xs text-muted">
+									{t("item.license", { license: item.synopsis.licence })}
+									{item.synopsis.sourceUrl && (
+										<>
+											{" · "}
+											<a
+												href={item.synopsis.sourceUrl}
+												rel="noopener noreferrer nofollow"
+												className="text-primary hover:underline"
+											>
+												{t("item.source")}
+											</a>
+										</>
+									)}
+								</p>
+							</>
+						) : (
+							<p className="text-muted">{t("item.noSynopsis")}</p>
+						)}
+					</Section>
+
+					<div className="grid gap-12 md:grid-cols-2 md:gap-8">
+						<Section id="details" title={t("item.details")}>
+							<dl className="grid">
+								{release && (
+									<DetailRow label={t("item.fields.releaseDate")}>
+										{release}
+									</DetailRow>
 								)}
-							</section>
-
-							<section aria-labelledby="details-heading" className="grid gap-2">
-								<h2 id="details-heading" className="text-xl font-bold">
-									{t("item.details")}
-								</h2>
-								<dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1">
-									{item.runtimeMinutes !== undefined && (
-										<>
-											<dt>{t("item.fields.runtime")}</dt>
-											<dd>
-												{t("item.runtimeValue", {
-													minutes: item.runtimeMinutes,
-												})}
-											</dd>
-										</>
-									)}
-									{item.pageCount !== undefined && (
-										<>
-											<dt>{t("item.fields.pages")}</dt>
-											<dd>{item.pageCount}</dd>
-										</>
-									)}
-									{roles.map((role) => (
-										<div key={role} className="contents">
-											<dt>{t(`item.roles.${role}`)}</dt>
-											<dd>
-												{entities[role].map((e, i) => (
-													<span key={e.id}>
-														{i > 0 && ", "}
-														<Link
-															href={localized(
-																`/${ENTITY_PATH[e.kind]}/${e.code ?? e.slug}`,
-																locale,
-															)}
-														>
-															{e.name}
-														</Link>
-														{e.character && ` (${e.character})`}
-													</span>
-												))}
-											</dd>
-										</div>
-									))}
-								</dl>
-							</section>
-						</div>
-
-						{trailers.length > 0 && (
-							<section aria-labelledby="trailers-heading" className="grid gap-3">
-								<h2 id="trailers-heading" className="text-xl font-bold">
-									{t("item.trailers")}
-								</h2>
-								<Trailers trailers={trailers.slice(0, 3)} />
-							</section>
-						)}
-
-						{loggedIn && (
-							<StatusPicker
-								itemId={item.id}
-								type={item.type}
-								status={me?.status ?? null}
-							/>
-						)}
+								{item.runtimeMinutes !== undefined && (
+									<DetailRow label={t("item.fields.runtime")}>
+										{t("item.runtimeValue", { minutes: item.runtimeMinutes })}
+									</DetailRow>
+								)}
+								{item.pageCount !== undefined && (
+									<DetailRow label={t("item.fields.pages")}>
+										{item.pageCount}
+									</DetailRow>
+								)}
+								{roles.map((role) => (
+									<DetailRow key={role} label={t(`item.roles.${role}`)}>
+										{entities[role].map((e, i) => (
+											<span key={e.id}>
+												{i > 0 && ", "}
+												<Link
+													href={entityHref(e)}
+													className="text-primary hover:underline"
+												>
+													{e.name}
+												</Link>
+												{e.character && ` (${e.character})`}
+											</span>
+										))}
+									</DetailRow>
+								))}
+							</dl>
+						</Section>
 
 						{timeToBeat && (
 							<TimeToBeat
@@ -275,17 +370,64 @@ export default function Show({
 								canReport={me?.status === "completed"}
 							/>
 						)}
-
-						{editions && (
-							<Editions slug={item.slug} editions={editions} total={editionCount} />
-						)}
-
-						{loggedIn && myLists && <AddToList itemId={item.id} lists={myLists} />}
 					</div>
-				</div>
 
-				<p className="text-sm text-muted">{t("item.attribution")}</p>
+					{trailers.length > 0 && (
+						<Section
+							id="trailers"
+							title={t("item.trailers")}
+							count={Math.min(trailers.length, 3)}
+						>
+							<Trailers trailers={trailers.slice(0, 3)} />
+						</Section>
+					)}
+
+					{editions && (
+						<Editions slug={item.slug} editions={editions} total={editionCount} />
+					)}
+
+					<p className="text-xs text-muted">{t("item.attribution")}</p>
+				</div>
 			</article>
 		</>
+	);
+}
+
+// A block of the item page: 2 px ink rule on top, serif heading (design v1).
+function Section({
+	id,
+	title,
+	count,
+	children,
+}: {
+	id: string;
+	title: string;
+	count?: number;
+	children: ReactNode;
+}) {
+	return (
+		<section
+			aria-labelledby={`${id}-heading`}
+			className="grid content-start gap-4 border-t-2 border-fg pt-4"
+		>
+			<h2 id={`${id}-heading`} className="text-2xl">
+				{title}
+				{count !== undefined && (
+					<span className="ml-2 align-middle font-sans text-xs font-normal text-muted">
+						{count}
+					</span>
+				)}
+			</h2>
+			{children}
+		</section>
+	);
+}
+
+function DetailRow({ label, children }: { label: string; children: ReactNode }) {
+	return (
+		<div className="grid grid-cols-[7rem_minmax(0,1fr)] gap-4 border-b border-border py-2.5 text-sm">
+			<dt className="text-muted">{label}</dt>
+			<dd>{children}</dd>
+		</div>
 	);
 }
