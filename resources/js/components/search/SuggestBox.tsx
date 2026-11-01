@@ -1,21 +1,12 @@
 import { router, usePage } from "@inertiajs/react";
-import { Fragment, useEffect, useId, useRef, useState } from "react";
+import { Fragment, useEffect, useId, useState } from "react";
 
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
+import { type Suggestion, useSuggest } from "./useSuggest";
 
-export interface Suggestion {
-	id: string;
-	type: string;
-	kind: string;
-	title: string;
-	year: number | null;
-	path: string;
-}
-
-const MIN_CHARS = 2;
-const DEBOUNCE_MS = 150;
+export type { Suggestion } from "./useSuggest";
 
 interface Props {
 	// Replaces the default navigation to the suggestion (and to /search on submit): the box becomes a picker.
@@ -32,47 +23,16 @@ export default function SuggestBox({ onPick, type, label }: Props = {}) {
 	const base = useId();
 	const listId = `${base}-list`;
 	const [text, setText] = useState("");
-	const [items, setItems] = useState<Suggestion[]>([]);
+	const { items, pending, answered } = useSuggest(text, locale, type);
 	const [open, setOpen] = useState(false);
 	const [active, setActive] = useState(-1);
-	const [pending, setPending] = useState(false);
-	const seq = useRef(0);
 
+	// A fresh answer opens the popup with nothing highlighted; a short query closes it.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: a new answer for the same query must reopen the popup
 	useEffect(() => {
-		const q = text.trim();
-		if (q.length < MIN_CHARS) {
-			setItems([]);
-			setOpen(false);
-			setPending(false);
-			return;
-		}
-		const ctrl = new AbortController();
-		const mine = ++seq.current;
-		setPending(true);
-		const timer = setTimeout(async () => {
-			try {
-				const res = await fetch(
-					`${localized("/search/suggest", locale)}?q=${encodeURIComponent(q)}${type ? `&type=${encodeURIComponent(type)}` : ""}`,
-					{ signal: ctrl.signal, headers: { Accept: "application/json" } },
-				);
-				if (!res.ok) throw new Error(String(res.status));
-				const body = (await res.json()) as { data: Suggestion[] };
-				if (mine !== seq.current) return;
-				setItems(body.data);
-				setActive(-1);
-				setOpen(true);
-			} catch (err) {
-				if ((err as Error).name === "AbortError") return;
-				setItems([]);
-			} finally {
-				if (mine === seq.current) setPending(false);
-			}
-		}, DEBOUNCE_MS);
-		return () => {
-			clearTimeout(timer);
-			ctrl.abort();
-		};
-	}, [text, locale, type]);
+		setActive(-1);
+		setOpen(answered !== "");
+	}, [answered, items]);
 
 	const expanded = open && items.length > 0;
 	const optionId = (i: number) => `${base}-opt-${i}`;
@@ -86,7 +46,6 @@ export default function SuggestBox({ onPick, type, label }: Props = {}) {
 		if (!onPick) return go(s.path);
 		setOpen(false);
 		setText("");
-		setItems([]);
 		onPick(s);
 	}
 
