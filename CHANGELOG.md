@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **security:** server-side anti-scraping of the public pages (ADR 0022): verified search crawlers pass, tool User-Agents and spoofed crawlers get 403, per-IP page limits (a higher budget only for a logged-in session), a honeypot link that bans an IP for 24 h, a robots.txt allow list, page props trimmed to what the pages render, and a Terms clause (SEC-anti-scraping, Q-A18)
 - **mail:** automatic mail is sent from `noreply@hexascore.app` with a `support@hexascore.app` Reply-To, and the contact form goes to the support inbox, configurable through `MAIL_FROM`, `MAIL_SUPPORT_ADDRESS` and `CONTACT_INBOX` (CONFIG-email-addresses, Q-A17)
 - **ingest:** WebP covers with a pinned `cwebp` and resource limits, the covers job (content-hashed keys on the bucket, 30-day deferred delete through `cover_gc` and `covers.gc`) behind `ingest_covers`, the YouTube trailer check and its weekly chain, Open Library, IGDB (with `igdb.refresh` and 7-day retention), Steam and GOG connectors, all off by default (P6.B.2.1, P6.B.2.2, P6.B.2.3, P6.A.2.4, P6.B.1.2, P6.B.1.3)
 - **ingest:** `dq.asserts` (DQ-01..14, DQ-I-01..13) and `dq.frontend_fields` with missing-field system suggestions; rollback of a bad fetch run, retry of failed targets and retention prunes; a pressure gate that holds chunks while the site is busy and alert A7 as `alert=A7` log lines (P6.B.4.1, P6.B.4.2, P6.B.4.4, P6.B.4.5)
