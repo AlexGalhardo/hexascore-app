@@ -204,7 +204,7 @@ job_test_go_integration() {
 job_test_ts() {
 	cd "$TREE"
 	step "bun run test"; bun run test
-	step "migration policy"; bun test scripts/ci/migration-policy.test.ts scripts/ci/sdk-job.test.ts scripts/ci/sdk-release.test.ts scripts/ci/local.test.ts
+	step "migration policy"; bun test scripts/ci/migration-policy.test.ts scripts/ci/sdk-job.test.ts scripts/ci/sdk-release.test.ts scripts/ci/local.test.ts scripts/ci/schemathesis-run.test.ts scripts/ci/lighthouse-config.test.ts
 	step "TypeScript SDK"; (cd sdks/ts && bun install --frozen-lockfile --ignore-scripts && bun run typecheck && bun test)
 }
 job_migrations() {
@@ -313,7 +313,7 @@ job_lighthouse() {
 	"${c[@]}" run --rm --no-deps app-init
 	"${c[@]}" up -d --wait --no-deps --no-build app
 	step Lighthouse
-	E2E_BASE_URL="http://127.0.0.1:$port" CHROME_PATH="$(W "$chrome")" bunx @lhci/cli@0.15.1 autorun
+	E2E_BASE_URL="http://localhost:$port" CHROME_PATH="$(W "$chrome")" bunx @lhci/cli@0.15.1 autorun
 }
 job_mobile() {
 	cd "$TREE"

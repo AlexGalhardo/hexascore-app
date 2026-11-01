@@ -18,8 +18,9 @@ ensure_resource_availability.enabled = false
 unsupported_method.enabled = false
 # Query and path values are strings in the document. A value the handler rejects
 # (unknown type, bad cursor, bad year) is 400 invalid-query, which is not a 5xx.
+# Every operation of both documents: api-v1 paths are relative to /v1 (/books/...), app-v1 paths start with /app/v1.
 [[operations]]
-include-path-regex = "^/(api|app)/v1/"
+include-path-regex = "^/"
 # 415: JSONOnly and the telemetry decoder reject a body that is not JSON.
 checks.positive_data_acceptance.expected-statuses = ["2xx", "400", "401", "403", "404", "409", "415", "422", "428", "429", "5xx"]
 
