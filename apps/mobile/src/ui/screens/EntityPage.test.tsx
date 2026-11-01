@@ -85,4 +85,43 @@ describe("EntityPage", () => {
 		await fireEvent.press(screen.getByRole("button", { name: "Browse games" }));
 		expect(props.onBrowse).toHaveBeenCalledTimes(1);
 	});
+	test("a group with more rows shows a Next control that asks for that group", async () => {
+		const onMore = jest.fn();
+		const props = setup({
+			groups: [
+				{
+					key: "game",
+					title: "Games",
+					count: "1 of 30",
+					hasMore: true,
+					rows: [row("1", "Diablo V", null)],
+				},
+				{ key: "book", title: "Books", count: "1 of 1", rows: [row("2", "Warcraft", null)] },
+			],
+			moreLabel: "Next",
+			onMore,
+		});
+		await render(<EntityPage {...props} />);
+		const next = screen.getAllByRole("button", { name: "Next" });
+		expect(next).toHaveLength(1);
+		expect(next[0]?.props.accessibilityHint).toBe("Games");
+		await fireEvent.press(next[0] as never);
+		expect(onMore).toHaveBeenCalledWith("game");
+	});
+
+	test("no Next control without onMore", async () => {
+		const props = setup({
+			groups: [
+				{
+					key: "game",
+					title: "Games",
+					count: "1 of 30",
+					hasMore: true,
+					rows: [row("1", "Diablo V", null)],
+				},
+			],
+		});
+		await render(<EntityPage {...props} />);
+		expect(screen.queryByRole("button", { name: "Next" })).toBeNull();
+	});
 });

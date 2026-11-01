@@ -21,6 +21,8 @@ export interface EntityGroup {
 	count: string;
 	note?: string;
 	rows: ItemRowData[];
+	/** The wiring has another page for this group (`meta.next_cursor`). */
+	hasMore?: boolean;
 }
 
 export interface EntityPageProps {
@@ -35,6 +37,9 @@ export interface EntityPageProps {
 	/** In `ITEM_TYPES` order; the wiring decides it, empty groups are hidden here. */
 	groups: EntityGroup[];
 	empty: { title: string; body: string; action: string };
+	/** Label of the per-group "next" control (`entity.next`); the control shows only with `onMore`. */
+	moreLabel?: string;
+	onMore?: (groupKey: string) => void;
 	locale: string;
 	onRole: (key: string) => void;
 	onOpen: (row: ItemRowData) => void;
@@ -140,6 +145,16 @@ export function EntityPage(props: EntityPageProps): ReactElement {
 						{group.rows.map((row) => (
 							<ItemRow key={row.id} row={row} locale={props.locale} onOpen={props.onOpen} />
 						))}
+						{group.hasMore && props.onMore ? (
+							<View className="items-start pt-2">
+								<Btn
+									variant="secondary"
+									label={props.moreLabel ?? ""}
+									accessibilityHint={group.title}
+									onPress={() => props.onMore?.(group.key)}
+								/>
+							</View>
+						) : null}
 					</View>
 				))
 			)}
