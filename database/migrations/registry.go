@@ -79,5 +79,6 @@ func All() []schema.Migration {
 		m20261031203200CreateSimilarTables(),
 		m20261101120000CreateIngestionTables(),
 		m20261101130000CatalogAuditGuardRowLevel(),
+		m20261101140000AddCommunityMailOptOutSQLite(),
 	}
 }

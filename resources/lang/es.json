@@ -116,6 +116,23 @@
       "community": "No enviarme correos sobre mis sugerencias a la comunidad",
       "communityHelp": "Sigues viendo cada decisión sobre tus sugerencias en tus notificaciones.",
       "save": "Guardar preferencias de correo"
+    },
+    "updateRequired": {
+      "title": "Actualización necesaria"
+    },
+    "offline": "Estás sin conexión. Los cambios se sincronizarán cuando vuelvas a conectarte.",
+    "crashReports": {
+      "title": "¿Enviar informes de errores?",
+      "body": "Si la app falla, envía a HexaScore la versión de la app, la versión de Android, la pantalla y los detalles del error. No se incluye ninguna cuenta, correo ni token. Puedes desactivarlo en Ajustes.",
+      "allow": "Enviar informes",
+      "deny": "No enviar"
+    },
+    "blocked": {
+      "title": "Tu cuenta está suspendida",
+      "reason": "Motivo: {reason}",
+      "until": "Hasta el {date}",
+      "permanent": "Sin fecha de finalización",
+      "back": "Volver al inicio de sesión"
     }
   },
   "actions": {
@@ -252,7 +269,8 @@
       "name": "Nombre",
       "show": "Mostrar contraseña",
       "hide": "Ocultar contraseña",
-      "confirmPassword": "Confirmar contraseña"
+      "confirmPassword": "Confirmar contraseña",
+      "deviceName": "Nombre del dispositivo"
     },
     "rules": {
       "title": "Tu contraseña debe tener:",
@@ -271,6 +289,7 @@
     },
     "errors": {
       "invalidCredentials": "Correo/nickname o contraseña incorrectos.",
+      "emailUnverifiedAtProvider": "Google no ha verificado este correo. Verifícalo en Google o inicia sesión con tu contraseña.",
       "emailNotVerified": "Confirma tu correo antes de entrar.",
       "rateLimited": "Demasiados intentos. Espera un minuto y vuelve a intentarlo.",
       "network": "No se pudo conectar con el servidor. Revisa tu conexión y vuelve a intentarlo.",
@@ -595,7 +614,10 @@
     "title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
     "explore": "Explorar",
     "recent": "Valorados recientemente por los miembros",
-    "ratedBy": "por {name}"
+    "ratedBy": "por {name}",
+    "trendingWeek": "Tendencia esta semana",
+    "popularType": "Populares: {type}",
+    "popular": "Popular"
   },
   "footer": {
     "terms": "Términos",
@@ -949,7 +971,7 @@
       "4": {
         "heading": "5. Con quién compartimos datos",
         "body": {
-          "0": "No vendemos datos personales. Solo los compartimos con operadores que los tratan en nuestro nombre: Railway (alojamiento y base de datos), Grafana Cloud (métricas y registros), Resend (correos transaccionales), Stripe (pagos), Google (solo si eliges \"Continuar con Google\") y Telegram (alertas del operador).",
+          "0": "No vendemos datos personales. Solo los compartimos con operadores que los tratan en nuestro nombre: Railway (alojamiento, base de datos, métricas y registros), Resend (correos transaccionales), Stripe (pagos), Google (solo si eliges \"Continuar con Google\") y Telegram (alertas del operador).",
           "1": "Algunos de estos operadores están fuera de tu país, incluso en Estados Unidos. Las transferencias usan las salvaguardas que esas leyes permiten.",
           "2": "Los metadatos de catálogo de IGDB y TMDB se muestran con la atribución que esas fuentes exigen. Las contribuciones de la comunidad al catálogo quedan bajo la licencia A-07."
         }
@@ -1480,7 +1502,7 @@
       "missing": "¿No lo encuentras?",
       "targets": {
         "label": "Qué añadir",
-        "item": "Título",
+        "item": "Juego, película, serie o libro",
         "entity": "Persona, empresa o etiqueta",
         "edition": "Edición de libro"
       },
@@ -1540,5 +1562,16 @@
       "platform": "Plataforma",
       "genre": "Género"
     }
+  },
+  "forYou": {
+    "title": "Para ti",
+    "home": "Para ti",
+    "onboarding": "Valora 3 títulos de {type} para recibir recomendaciones. Mientras tanto, mira lo que es tendencia.",
+    "empty": "Aún no hay recomendaciones.",
+    "optedOut": "Las recomendaciones personalizadas están desactivadas. Puedes activarlas en la configuración de privacidad.",
+    "rated": "Porque valoraste {title} con {stars}/5",
+    "completed": "Porque completaste {title}",
+    "wanted": "Porque querías {title}",
+    "loading": "Cargando..."
   }
 }

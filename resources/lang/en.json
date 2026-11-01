@@ -116,6 +116,23 @@
       "community": "Do not email me about my community suggestions",
       "communityHelp": "You still see every decision on your suggestions in your notifications.",
       "save": "Save email preferences"
+    },
+    "updateRequired": {
+      "title": "Update required"
+    },
+    "offline": "You are offline. Changes sync when you reconnect.",
+    "crashReports": {
+      "title": "Send crash reports?",
+      "body": "If the app crashes, send the app version, Android version, screen and error details to HexaScore. No account, e-mail or token is included. You can turn this off in Settings.",
+      "allow": "Send reports",
+      "deny": "Don't send"
+    },
+    "blocked": {
+      "title": "Your account is suspended",
+      "reason": "Reason: {reason}",
+      "until": "Until {date}",
+      "permanent": "No end date",
+      "back": "Back to login"
     }
   },
   "actions": {
@@ -252,7 +269,8 @@
       "name": "Name",
       "show": "Show password",
       "hide": "Hide password",
-      "confirmPassword": "Confirm password"
+      "confirmPassword": "Confirm password",
+      "deviceName": "Device name"
     },
     "rules": {
       "title": "Your password must have:",
@@ -271,6 +289,7 @@
     },
     "errors": {
       "invalidCredentials": "Wrong email/nickname or password.",
+      "emailUnverifiedAtProvider": "Google has not verified this email address. Verify it with Google or log in with your password.",
       "emailNotVerified": "Confirm your email before logging in.",
       "rateLimited": "Too many attempts. Wait a minute and try again.",
       "network": "Could not reach the server. Check your connection and try again.",
@@ -595,7 +614,10 @@
     "title": "Every game, movie, series and book — scored by people, category by category.",
     "explore": "Explore",
     "recent": "Recently rated by members",
-    "ratedBy": "by {name}"
+    "ratedBy": "by {name}",
+    "trendingWeek": "Trending this week",
+    "popularType": "Popular {type}",
+    "popular": "Popular"
   },
   "footer": {
     "terms": "Terms",
@@ -949,7 +971,7 @@
       "4": {
         "heading": "5. Who we share data with",
         "body": {
-          "0": "We do not sell personal data. We share it only with providers that process it on our behalf: Railway (hosting and database), Grafana Cloud (metrics and logs), Resend (transactional email), Stripe (payments), Google (only if you choose \"Continue with Google\") and Telegram (operator alerts).",
+          "0": "We do not sell personal data. We share it only with providers that process it on our behalf: Railway (hosting, database, metrics and logs), Resend (transactional email), Stripe (payments), Google (only if you choose \"Continue with Google\") and Telegram (operator alerts).",
           "1": "Some of these providers are located outside your country, including in the United States. Transfers use the safeguards those laws allow.",
           "2": "Catalogue metadata from IGDB and TMDB is shown with the attribution those sources require. Community catalogue contributions stay under the A-07 licence."
         }
@@ -1480,7 +1502,7 @@
       "missing": "Cannot find it?",
       "targets": {
         "label": "What to add",
-        "item": "Title",
+        "item": "Game, movie, series or book",
         "entity": "Person, company or tag",
         "edition": "Book edition"
       },
@@ -1540,5 +1562,16 @@
       "platform": "Platform",
       "genre": "Genre"
     }
+  },
+  "forYou": {
+    "title": "For you",
+    "home": "For you",
+    "onboarding": "Rate 3 {type} to get recommendations. Meanwhile, here is what is trending.",
+    "empty": "No recommendations yet.",
+    "optedOut": "Personalised recommendations are off. You can turn them on in your privacy settings.",
+    "rated": "Because you rated {title} {stars}/5",
+    "completed": "Because you completed {title}",
+    "wanted": "Because you wanted {title}",
+    "loading": "Loading..."
   }
 }
