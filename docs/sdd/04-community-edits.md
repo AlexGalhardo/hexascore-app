@@ -365,7 +365,7 @@ Implementation: revert is admin-only (`revertCatalog`; the service also refuses 
 - Integration (Postgres 17): 20 concurrent submits by one user, duplicate lock, apply/revert, append-only trigger, stats rebuild, deletion nulling, `DispatchTx` rollback.
 - Security: `TestSecurity_Community_A01_PolicyFailsClosed`, `_A01_SourceURLSSRF`, `_A01_CSRF`, `_A03_DiffEscapesHTML`, `_A04_HoneypotLogged`; ZAP.
 - E2E: Playwright + axe, including a two-admin claim conflict.
-- Nightly asserts: every `applied` has audit rows; no open suggestion targets a missing record; stats equal rebuild. Implementation: job `community.asserts` daily at 05:10 UTC (`app/jobs/community_asserts.go`, `TestCommunityAsserts`); a failure fails the job, so alert A6 reports it.
+- Nightly asserts: every `applied` has audit rows; no open suggestion targets a missing record; stats equal rebuild. Implementation: job `community.asserts` daily at 05:10 UTC (`app/jobs/community_asserts.go`, `TestCommunityAsserts`); a failure logs `alert=community_asserts` at ERROR (SDD 12 §6.2) and fails the job, so alert A6 also reports it.
 
 ## 11. Open issues
 
