@@ -33,17 +33,16 @@ var exportTypes = [...][2]string{{"game", "games"}, {"movie", "movies"}, {"serie
 var exportKey = regexp.MustCompile(`^exports/[a-z]+_ids_(\d{4}_\d{2}_\d{2})\.json\.gz$`)
 
 type idLine struct {
-	ID         string    `json:"id"`
-	Slug       string    `json:"slug"`
-	Wikidata   string    `json:"wikidata"`
-	Popularity float64   `json:"popularity"`
-	UpdatedAt  time.Time `json:"updatedAt"`
+	ID        string    `json:"id"`
+	Slug      string    `json:"slug"`
+	Wikidata  string    `json:"wikidata"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 
 // RunExportIDs writes one object per type for the UTC day of now, then deletes the objects of days older than
 // exportRetentionDays. Rows stream through gzip into the disk, so no type is ever held in memory.
 // workaround(vukem): VF-NEW-EXPORT-WRITER (export.NDJSON needs a request, so the job pipes the rows itself).
-// popularity is popularity_prior, a sort-only field; ship it in a bulk file only after the owner confirms (A-07).
+// popularity_prior is left out of the files until the owner confirms it as the exported popularity (A-07, Q-A11).
 func RunExportIDs(ctx context.Context, db *sql.DB, disk storage.Disk, now time.Time) error {
 	now = now.UTC()
 	day := now.Format("2006_01_02")
@@ -79,7 +78,7 @@ func exportTypeIDs(ctx context.Context, db *sql.DB, disk storage.Disk, itemType,
 
 func writeIDLines(ctx context.Context, db *sql.DB, w io.Writer, itemType string) error {
 	rows, err := db.QueryContext(ctx, `
-SELECT id::text, slug, wikidata_qid, popularity_prior, updated_at
+SELECT id::text, slug, wikidata_qid, updated_at
 FROM items WHERE type = $1 AND visibility = 'public' ORDER BY id`, itemType)
 	if err != nil {
 		return err
@@ -91,7 +90,7 @@ FROM items WHERE type = $1 AND visibility = 'public' ORDER BY id`, itemType)
 
 	for rows.Next() {
 		var l idLine
-		if err := rows.Scan(&l.ID, &l.Slug, &l.Wikidata, &l.Popularity, &l.UpdatedAt); err != nil {
+		if err := rows.Scan(&l.ID, &l.Slug, &l.Wikidata, &l.UpdatedAt); err != nil {
 			return err
 		}
 
