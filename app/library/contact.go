@@ -2,6 +2,7 @@ package library
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"net/mail"
@@ -38,7 +39,8 @@ type Contact struct {
 	Log *slog.Logger
 }
 
-// ContactInput is a validated form. Name and Email are replaced by the account's when UserID is set.
+// ContactInput is a validated form. Name and Email are replaced by the account's nickname (or name) and email
+// when UserID is set.
 type ContactInput struct {
 	UserID                        *int64
 	Name, Email, Subject, Message string
@@ -62,6 +64,14 @@ func (c *Contact) Submit(ctx context.Context, in ContactInput) error {
 
 	if !c.tokenOK(in.Token) {
 		return problem(http.StatusUnprocessableEntity, "contact.bot_check", CodeBotCheck, "Please try again.")
+	}
+
+	// A signed-in sender cannot speak for someone else: the account's nickname (or name) and email win.
+	if in.UserID != nil {
+		if err := c.DB.QueryRowContext(ctx, `SELECT COALESCE(username, name), email FROM users WHERE id = $1`,
+			*in.UserID).Scan(&in.Name, &in.Email); err != nil {
+			return fmt.Errorf("contact sender %d: %w", *in.UserID, err)
+		}
 	}
 
 	in.Name, in.Email = strings.TrimSpace(in.Name), strings.TrimSpace(in.Email)

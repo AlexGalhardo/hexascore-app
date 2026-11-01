@@ -473,7 +473,7 @@ All Auth pages render `h1` (`text-2xl font-semibold`), a form with `space-y-4` a
 
 #### Contact/Index
 
-- Route: `GET /contact`, `POST /contact` (SSR). Purpose: contact form. Blocks: `h1`, intro, name, email, topic select, message textarea with hint, hidden honeypot, submit. States: `contact.sent` confirmation (`role="status"`), per-field errors.
+- Route: `GET /contact`, `POST /contact` (SSR). Purpose: contact form in a centred `max-w-xl` column. Blocks: `h1`, intro, name (nickname when signed in), email, topic select, message textarea with hint and a live `n/512` counter, hidden honeypot, submit. Signed in, name and email are prefilled read-only and the server stores the session account's nickname (or name) and email, never the posted ones. States: `contact.sent` confirmation (`role="status"`), per-field errors.
 
 #### Error
 

@@ -27,7 +27,8 @@ func (h *Contact) Index(c *web.Ctx) error {
 	})
 }
 
-// Send stores the message. A signed-in user cannot speak for someone else: name and email come from the account.
+// Send stores the message. A signed-in user cannot speak for someone else: Submit takes name and email from the
+// account, not from the form.
 func (h *Contact) Send(c *web.Ctx) error {
 	in, err := web.Parse(c, requests.ContactSchema)
 	if err != nil {
@@ -39,7 +40,7 @@ func (h *Contact) Send(c *web.Ctx) error {
 		Honeypot: in.Website, Token: in.Token,
 	}
 	if u, err := h.user(c); err == nil {
-		ci.UserID, ci.Name, ci.Email = &u.ID, u.Name, u.Email
+		ci.UserID = &u.ID
 	}
 
 	if err := h.svc.Submit(c.Context(), ci); err != nil {
