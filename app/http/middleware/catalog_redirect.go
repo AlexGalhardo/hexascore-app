@@ -31,7 +31,8 @@ var catalogSections = map[string]catalogSection{
 	"game-modes": {catalog.ScopeEntity, "game_mode"},
 }
 
-// CatalogRedirect answers 301 for `/{section}/{old-slug-or-merged-id}` with
+// CatalogRedirect answers 301 for `/{section}/{old-slug-or-merged-id}` (and
+// `/{section}/{entity path}/{old-slug-or-merged-id}`) with
 // the live slug (SDD 01 §7.1). A live slug can never also be a redirect
 // (invariant I-1), so one indexed lookup in catalog_redirects is enough and
 // misses fall through to routing and its 404. Install it with Router.UseServer
@@ -61,6 +62,13 @@ func lookupRedirect(r *http.Request, ex database.Executor, log *slog.Logger) (st
 
 	section, key, ok := strings.Cut(strings.TrimPrefix(r.URL.Path, "/"), "/")
 	sec, known := catalogSections[section]
+
+	// /{item section}/{entity path}/{key}: an entity page under its category (owner round 2026-11-01 item 19).
+	if sub, entityKey, nested := strings.Cut(key, "/"); nested && sec.scope == catalog.ScopeItem {
+		if es, isEntity := catalogSections[sub]; isEntity && es.scope == catalog.ScopeEntity {
+			section, key, sec = section+"/"+sub, entityKey, es
+		}
+	}
 
 	if !ok || !known || key == "" || strings.Contains(key, "/") {
 		return "", false

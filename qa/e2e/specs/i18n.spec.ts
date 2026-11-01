@@ -41,8 +41,10 @@ test.describe("i18n", () => {
 		await api.dispose();
 	});
 
-	test("an unknown prefix is a 404", async ({ request }) => {
-		expect((await request.get("/xx/games")).status()).toBe(404);
+	test("an unknown prefix is a 301 home", async ({ request }) => {
+		const response = await request.get("/xx/games", { maxRedirects: 0 });
+		expect(response.status()).toBe(301);
+		expect(response.headers().location).toBe("/");
 	});
 
 	test("the catalogue renders translated copy, not message keys", async ({ page, prefix }) => {

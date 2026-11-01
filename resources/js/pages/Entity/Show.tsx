@@ -51,9 +51,16 @@ export default function Show({
 	const t = useT();
 	const page = usePage<SharedProps>();
 	const { locale } = page.props;
-	const base = localized(unlocalized(page.url.split("?")[0]), locale);
-	const pageHref = (type: string, cursor?: number) =>
-		`${base}?${new URLSearchParams({ type, ...(cursor !== undefined && { cursor: String(cursor) }) })}`;
+	// The page lives under one category, /{section}/{entity path}/{key} (owner round 2026-11-01 item 19);
+	// the same entity in another category swaps the first segment.
+	const path = unlocalized(page.url.split("?")[0]);
+	const base = localized(path, locale);
+	const pageHref = (cursor: number) => `${base}?cursor=${cursor}`;
+	const inSection = (type: ItemType) =>
+		localized(path.replace(/^\/[^/]+/, `/${SECTION_PATHS[type]}`), locale);
+	const others = (Object.keys(SECTION_PATHS) as ItemType[]).filter(
+		(type) => type !== filters.type && (counts[type] ?? 0) > 0,
+	);
 
 	const facts: [string, string | number | undefined][] = [
 		[t("entity.born"), entity.bornOn],
@@ -97,6 +104,26 @@ export default function Show({
 						</svg>
 						{t("community.suggest.link")}
 					</Link>
+					{others.length > 0 && (
+						<nav
+							aria-label={t("entity.alsoIn")}
+							className="flex flex-wrap items-center gap-2 text-sm"
+						>
+							<span className="text-muted">{t("entity.alsoIn")}</span>
+							{others.map((type) => (
+								<Link
+									key={type}
+									href={inSection(type)}
+									className="rounded-xs border border-border px-3 py-2 font-medium hover:bg-hover"
+								>
+									{t(`catalog.title.${type}`)}{" "}
+									<span className="text-muted tabular-nums">
+										({counts[type]})
+									</span>
+								</Link>
+							))}
+						</nav>
+					)}
 					{roles.length > 0 && (
 						<ul className="flex flex-wrap gap-2 text-sm">
 							{roles.map((r) => (
@@ -199,13 +226,8 @@ export default function Show({
 							))}
 						</ul>
 						{g.next >= 0 && (
-							<Link
-								className={btnClass("secondary", "mt-6")}
-								href={
-									filters.type ? pageHref(filters.type, g.next) : pageHref(g.type)
-								}
-							>
-								{filters.type ? t("entity.next") : t("entity.seeAll")}
+							<Link className={btnClass("secondary", "mt-6")} href={pageHref(g.next)}>
+								{t("entity.next")}
 							</Link>
 						)}
 					</section>

@@ -49,10 +49,15 @@ func TestInertiaPages_Catalog_Show(t *testing.T) {
 			title,
 		)
 	}
+	edition := uuid.NewV7().String()
 	for i := range 12 {
+		id := uuid.NewV7().String()
+		if i == 0 {
+			id = edition
+		}
 		exec(
 			`INSERT INTO editions (id, work_id, openlibrary_id, title, language, source) VALUES ($1, $2, $3, $4, 'en', 'hexascore')`,
-			uuid.NewV7().String(),
+			id,
 			book,
 			fmt.Sprintf("OL%dM", i),
 			fmt.Sprintf("Dune %d", i),
@@ -80,5 +85,13 @@ func TestInertiaPages_Catalog_Show(t *testing.T) {
 		PropEquals("editionCount", 12).
 		HasProp("editions", 10)
 
-	client.Inertia("").Get("/games/missing").AssertStatus(404)
+	client.Inertia("").Get("/games/missing").AssertStatus(301).AssertHeader("Location", "/")
+
+	// The edition and changes pages share their patterns with the entity pages under /books (item 19).
+	client.Inertia("").Get("/books/dune/editions/" + edition).AssertOK().AssertInertia("Catalog/Edition")
+	client.Inertia("").Get("/es/books/dune/editions/" + edition + "/changes").AssertOK().
+		AssertInertia("Catalog/RecentChanges")
+	client.Inertia("").Get("/books/dune/changes").AssertOK().AssertInertia("Catalog/RecentChanges")
+	client.Inertia("").Get("/books/dune/nope").AssertStatus(301).AssertHeader("Location", "/")
+	client.Inertia("").Get("/books/dune/nope/x").AssertStatus(301).AssertHeader("Location", "/")
 }

@@ -75,7 +75,7 @@ VALUES ($1, $2, $3, 'item', $4, $5, '"a"', $6::jsonb)`, actor, role, source, ite
 		t.Fatalf("SSR body lacks the entries: %.300s", html)
 	}
 
-	app.Client(t).Get("/movies/missing/changes").AssertNotFound()
+	app.Client(t).Get("/movies/missing/changes").AssertStatus(301).AssertHeader("Location", "/")
 }
 
 // FR-04-15: profiles show contribution counts and approval rate after at least one decision; tier and accuracy only

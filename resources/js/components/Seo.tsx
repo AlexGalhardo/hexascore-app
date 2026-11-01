@@ -12,6 +12,8 @@ export interface SeoProps {
 	// robots overrides the shared value, e.g. "noindex,follow" for thin entity pages.
 	robots?: string;
 	jsonLd?: object[];
+	// canonical overrides the shared value, e.g. a paged listing that keeps its `cursor` and `per` query.
+	canonical?: string;
 }
 
 export function truncate(text: string, max: number): string {
@@ -38,6 +40,7 @@ export default function Seo({
 	noindex,
 	robots: robotsOverride,
 	jsonLd,
+	canonical: canonicalOverride,
 }: SeoProps) {
 	const t = useT();
 	const { appName, seo } = usePage<SharedProps>().props;
@@ -48,13 +51,14 @@ export default function Seo({
 	const cover = coverSrc && absoluteUrl(coverSrc, seo?.canonical);
 	const robots = robotsOverride ?? (noindex ? "noindex" : seo?.robots);
 	const blocks = jsonLd ?? seo?.jsonLd;
+	const canonical = canonicalOverride ?? seo?.canonical;
 
 	return (
 		<Head>
 			<title>{pageTitle}</title>
 			<meta head-key="description" name="description" content={text} />
 			{robots && <meta head-key="robots" name="robots" content={robots} />}
-			{seo && <link head-key="canonical" rel="canonical" href={seo.canonical} />}
+			{canonical && <link head-key="canonical" rel="canonical" href={canonical} />}
 			{seo &&
 				// Lower-case attribute: Inertia's head serializer prints props verbatim.
 				Object.entries(seo.alternates).map(([lang, href]) => (
@@ -73,7 +77,7 @@ export default function Seo({
 				property="og:type"
 				content={type ?? seo?.og.type ?? "website"}
 			/>
-			{seo && <meta head-key="og:url" property="og:url" content={seo.canonical} />}
+			{canonical && <meta head-key="og:url" property="og:url" content={canonical} />}
 			{cover && <meta head-key="og:image" property="og:image" content={cover} />}
 			<meta
 				head-key="twitter:card"

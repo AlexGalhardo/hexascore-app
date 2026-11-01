@@ -22,7 +22,7 @@ test.describe("ssr without javascript", () => {
 		"/books",
 		"/docs",
 		"/terms",
-		"/policy",
+		"/privacy",
 		"/contact",
 		"/login",
 		"/signup",

@@ -8,11 +8,17 @@ test.describe("404s", () => {
 		"/docs/nope",
 		"/a/b/c",
 	]) {
-		test(`${path} answers 404 with the localized page`, async ({ page, prefix, t }) => {
-			const response = await page.goto(`${prefix}${path}`);
-			expect(response?.status()).toBe(404);
+		// Owner decision 2026-11-01 (item 14): a missing HTML page is a 301 to the home page of its locale.
+		test(`${path} answers 301 to the localized home page`, async ({
+			page,
+			request,
+			prefix,
+		}) => {
+			const response = await request.get(`${prefix}${path}`, { maxRedirects: 0 });
+			expect(response.status()).toBe(301);
+			expect(response.headers().location).toBe(`${prefix}/`);
+			await page.goto(`${prefix}${path}`);
 			await expect(page.locator("h1")).toBeVisible();
-			await expect(page.getByRole("link", { name: t("errors.home") })).toBeVisible();
 			await expectNoSeriousA11yViolations(page);
 		});
 	}

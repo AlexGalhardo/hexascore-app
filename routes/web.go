@@ -236,7 +236,7 @@ func Web(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	r.Get("/help/score", controllers.HelpScore).Name("help.score")
+	r.Get("/how-score-works", controllers.HelpScore).Name("help.score")
 	r.Get("/robots.txt", controllers.Robots(app)).Name("robots")
 	if err := LLMs(r, app); err != nil {
 		return err
@@ -247,11 +247,18 @@ func Web(r *router.Router, app *vukem.App) error {
 	)).Name("wellknown.assetlinks")
 	r.Get("/about", controllers.About).Name("about")
 	r.Get("/terms", controllers.Legal("terms")).Name("terms")
-	r.Get("/policy", controllers.Legal("policy")).Name("policy")
-	// SDD 10 §7.8 and the Play listing name /legal/privacy; the policy page lives at /policy.
-	r.Get("/legal/privacy", func(c *web.Ctx) error {
-		return c.RedirectStatus(http.StatusMovedPermanently, i18n.PathPrefix(c.Context())+"/policy")
-	}).Name("legal.privacy")
+	r.Get("/privacy", controllers.Legal("policy")).Name("policy")
+	// Old paths of the content pages (owner round 2026-11-01 item 10); /legal/privacy is the URL SDD 10 §7.8
+	// and the first Play listing used. One hop each, so the locale prefix is applied here.
+	for old, target := range map[string]string{
+		"/policy":        "/privacy",
+		"/legal/privacy": "/privacy",
+		"/help/score":    "/how-score-works",
+	} {
+		r.Get(old, func(c *web.Ctx) error {
+			return c.RedirectStatus(http.StatusMovedPermanently, i18n.PathPrefix(c.Context())+target)
+		}).Name("redirect" + strings.ReplaceAll(old, "/", "."))
+	}
 	r.Get("/pricing", controllers.Pricing(coverage)).Name("pricing")
 	r.Get("/docs", docs).Name("docs")
 	r.Get("/docs/{slug}", docs).Name("docs.page")
@@ -309,33 +316,86 @@ func Web(r *router.Router, app *vukem.App) error {
 		}
 		r.Get("/og/{kind}/{file}", controllers.OGImage(app, items.Social)).Name("og.image")
 		changes := controllers.NewRecentChanges(app)
-		for section, typ := range map[string]string{"games": "game", "movies": "movie", "series": "series", "books": "book"} {
+		entities := controllers.NewEntity(app)
+		for typ, section := range catalog.Sections {
 			r.Get("/"+section, listings.Index(typ)).Name("catalog." + typ)
 			r.Get("/"+section+"/{slug}", items.Show(typ)).Name("item." + typ)
-			r.Get("/"+section+"/{slug}/changes", changes.Item(typ)).Name("item." + typ + ".changes")
+			// Entity pages share these patterns with the item changes page and the book editions, which
+			// ServeMux rejects as conflicting, so one handler per segment count dispatches (item 19).
+			var edition web.HandlerFunc
+			if typ == "book" {
+				edition = items.Edition
+			}
+			sub := sectionPages(typ, entities, changes, edition)
+			r.Get("/"+section+"/{first}/{second}", sub).Name("section." + typ + ".sub")
+			r.Get("/"+section+"/{first}/{second}/{third}", sub).Name("section." + typ + ".subsub")
 		}
-		r.Get("/books/{slug}/editions/{id}", items.Edition).Name("item.edition")
 		r.Get("/books/{slug}/editions/{id}/changes", changes.Edition()).Name("item.edition.changes")
 		r.Get("/api/items/{id}/ratings", items.Ratings).Name("item.ratings")
-		entities := controllers.NewEntity(app)
-		for _, e := range []struct{ path, kind, param string }{
-			{"people", "person", "slug"},
-			{"companies", "organization", "slug"},
-			{"franchises", "franchise", "slug"},
-			{"platforms", "platform", "slug"},
-			{"genres", "genre", "slug"},
-			{"game-modes", "game_mode", "slug"},
-			{"countries", "country", "code"},
-			{"languages", "language", "code"},
-		} {
-			r.Get("/"+e.path+"/{"+e.param+"}", entities.Show(e.kind, e.param)).Name("entity." + e.kind)
-			r.Get("/"+e.path+"/{"+e.param+"}/changes", changes.Entity(e.kind, e.param)).
-				Name("entity." + e.kind + ".changes")
+		// The old top-level entity paths answer one 301 to the entity under its category.
+		for kind, p := range catalog.EntityPaths {
+			param := entityParam(kind)
+			r.Get("/"+p+"/{"+param+"}", entities.Home(kind, param, "")).Name("entity." + kind)
+			r.Get("/"+p+"/{"+param+"}/changes", entities.Home(kind, param, "/changes")).
+				Name("entity." + kind + ".changes")
 		}
 		r.Get("/api/search/suggest", controllers.LegacySuggest).Name("search.suggest.legacy").Use(suggest)
 	}
 
 	return nil
+}
+
+// entityParam is the path parameter of an entity kind's URL key: countries and languages are keyed by code.
+func entityParam(kind string) string {
+	if kind == "country" || kind == "language" {
+		return "code"
+	}
+
+	return "slug"
+}
+
+// sectionPages serves the three- and four-segment pages under the section of item type typ:
+// /{section}/{entity path}/{key} and its /changes (Entity/Show and the entity's recent changes), the item's
+// /{slug}/changes and, for books, /{slug}/editions/{id} (edition non-nil). Anything else is a missing page.
+func sectionPages(
+	typ string,
+	entities *controllers.Entity,
+	changes *controllers.RecentChanges,
+	edition web.HandlerFunc,
+) web.HandlerFunc {
+	return func(c *web.Ctx) error {
+		r := c.Request()
+		first, second, third := c.Param("first"), c.Param("second"), c.Param("third")
+
+		for kind, p := range catalog.EntityPaths {
+			if p != first || third != "" && third != "changes" {
+				continue
+			}
+
+			param := entityParam(kind)
+			r.SetPathValue(param, second)
+
+			if third == "changes" {
+				return changes.Entity(kind, param)(c)
+			}
+
+			return entities.Show(kind, param, typ)(c)
+		}
+
+		switch {
+		case third == "" && second == "changes":
+			r.SetPathValue("slug", first)
+
+			return changes.Item(typ)(c)
+		case edition != nil && second == "editions" && third != "":
+			r.SetPathValue("slug", first)
+			r.SetPathValue("id", third)
+
+			return edition(c)
+		}
+
+		return controllers.NotFound(c)
+	}
 }
 
 // seoConfig derives canonical and hreflang URLs from APP_URL and the locale

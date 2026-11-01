@@ -56,9 +56,10 @@ func TestInertiaPages_UserLibraryLists(t *testing.T) {
 		anon.Get("/u/pageowner/lists/"+pub).AssertOK().AssertInertia("User/List").
 			PropEquals("canEdit", false).PropEquals("indexable", true)
 		own.Get("/u/pageowner/lists/"+priv).AssertOK().AssertInertia("User/List").PropEquals("indexable", false)
-		oth.Get("/u/pageowner/lists/" + priv).AssertNotFound()
-		anon.Get("/u/pageowner/lists/" + priv).AssertNotFound()
-		anon.Get("/u/pageother/lists/" + pub).AssertNotFound()
+		// A private list looks exactly like a missing one: 301 home (item 14), nothing else to tell them apart.
+		oth.Get("/u/pageowner/lists/"+priv).AssertStatus(301).AssertHeader("Location", "/")
+		anon.Get("/u/pageowner/lists/"+priv).AssertStatus(301).AssertHeader("Location", "/")
+		anon.Get("/u/pageother/lists/"+pub).AssertStatus(301).AssertHeader("Location", "/")
 
 		r.exec(`UPDATE users SET banned_at = now() WHERE id = $1`, owner.ID)
 		anon.Get("/u/pageowner/lists/"+pub).AssertOK().AssertHeader("X-Robots-Tag", "noindex").

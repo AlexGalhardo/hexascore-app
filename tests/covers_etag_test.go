@@ -53,7 +53,7 @@ func TestCoversRoute_S3ConditionalGetIs304(t *testing.T) {
 	})
 
 	mux := http.NewServeMux()
-	mux.Handle("GET /covers/{key...}", controllers.CoversFrom(disk))
+	mux.Handle("GET /covers/{key...}", controllers.CoversFrom(disk, nil))
 
 	first := httptest.NewRecorder()
 	mux.ServeHTTP(first, httptest.NewRequest(http.MethodGet, "/covers/ok.jpg", nil))

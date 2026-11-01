@@ -3,8 +3,8 @@ package controllers
 import (
 	"errors"
 	"net/http"
+	"net/url"
 	"path"
-	"slices"
 	"strconv"
 
 	vukem "github.com/AlexGalhardo/vukem"
@@ -27,18 +27,14 @@ func NewEntity(app *vukem.App) *Entity {
 	return &Entity{app: app}
 }
 
-// Show renders Entity/Show for the entity kind; param names the path parameter holding the slug (or the
-// code for countries and languages). `?type=` pages one item type from `?cursor=`.
-func (h *Entity) Show(kind, param string) web.HandlerFunc {
+// Show renders Entity/Show for the entity kind under the section of item type typ
+// (/{section}/{entity path}/{key}, owner round 2026-11-01 item 19); param names the path parameter holding the
+// slug (or the code for countries and languages). `?cursor=` pages the type's items.
+func (h *Entity) Show(kind, param, typ string) web.HandlerFunc {
 	return func(c *web.Ctx) error {
 		db, err := h.app.DB()
 		if err != nil {
 			return err
-		}
-
-		typ := c.Query("type")
-		if typ != "" && !slices.Contains([]string{"game", "movie", "series", "book"}, typ) {
-			typ = ""
 		}
 
 		page, err := catalog.LoadEntityPage(
@@ -70,7 +66,7 @@ func (h *Entity) Show(kind, param string) web.HandlerFunc {
 		}
 
 		meta := inertia.ScrollMeta{PageName: "cursor"}
-		if typ != "" && len(page.Groups) == 1 && page.Groups[0].Next >= 0 {
+		if len(page.Groups) == 1 && page.Groups[0].Next >= 0 {
 			meta.NextPage = strconv.Itoa(page.Groups[0].Next)
 		}
 
@@ -87,5 +83,40 @@ func (h *Entity) Show(kind, param string) web.HandlerFunc {
 			"filters":   map[string]string{"type": typ},
 			"indexable": page.Indexable,
 		})
+	}
+}
+
+// Home answers the old top-level entity path (/{entity path}/{key} plus suffix, "" or "/changes") with one 301
+// to the same page under the entity's category: `?type=` when it names an item type, else the type with the
+// most public items. The canonical code and the other query parameters travel along.
+func (h *Entity) Home(kind, param, suffix string) web.HandlerFunc {
+	return func(c *web.Ctx) error {
+		db, err := h.app.DB()
+		if err != nil {
+			return err
+		}
+
+		typ, key, err := catalog.EntityHome(c.Context(), db, kind, c.Param(param))
+		if errors.Is(err, catalog.ErrItemNotFound) {
+			return NotFound(c)
+		}
+		if err != nil {
+			return err
+		}
+
+		q := c.Request().URL.Query()
+		if _, ok := catalog.Sections[q.Get("type")]; ok {
+			typ = q.Get("type")
+		}
+		q.Del("type")
+
+		u := url.URL{
+			Path: i18n.PathPrefix(
+				c.Context(),
+			) + "/" + catalog.Sections[typ] + "/" + catalog.EntityPaths[kind] + "/" + key + suffix,
+			RawQuery: q.Encode(),
+		}
+
+		return c.RedirectStatus(http.StatusMovedPermanently, u.String())
 	}
 }

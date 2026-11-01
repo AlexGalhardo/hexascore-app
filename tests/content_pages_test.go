@@ -24,8 +24,8 @@ func TestDocsPages(t *testing.T) {
 			HasProp("toc")
 	}
 
-	app.Client(t).Get("/docs/no-such-doc").AssertStatus(404).AssertInertia("Error")
-	app.Client(t).Get("/docs/index").AssertStatus(404)
+	app.Client(t).Get("/docs/no-such-doc").AssertStatus(301).AssertHeader("Location", "/")
+	app.Client(t).Get("/docs/index").AssertStatus(301)
 }
 
 // TestAboutPage: owner round 2026-11-01 item 25, served in every locale with only its own namespace.
@@ -56,9 +56,9 @@ func TestLegalPages(t *testing.T) {
 
 	app := vukemtest.New(t, bootstrap.New)
 
-	for _, slug := range []string{"terms", "policy"} {
+	for path, slug := range map[string]string{"/terms": "terms", "/privacy": "policy"} {
 		for _, prefix := range []string{"", "/pt-br", "/es"} {
-			app.Client(t).Get(prefix+"/"+slug).AssertOK().AssertInertia("Legal/Page").
+			app.Client(t).Get(prefix+path).AssertOK().AssertInertia("Legal/Page").
 				PropEquals("slug", slug).
 				HasProp("updatedAt").
 				HasProp("messages.updatedLabel")
@@ -66,16 +66,23 @@ func TestLegalPages(t *testing.T) {
 	}
 }
 
-// TestLegalPrivacyRedirect: SDD 10 §7.8 and the Play listing name /legal/privacy; the page is /policy.
-func TestLegalPrivacyRedirect(t *testing.T) {
+// TestContentPageRedirects: the old content paths answer one 301 straight to the new page in every locale
+// (owner round 2026-11-01 item 10); /legal/privacy is the URL SDD 10 §7.8 and the Play listing used.
+func TestContentPageRedirects(t *testing.T) {
 	t.Parallel()
 
 	app := vukemtest.New(t, bootstrap.New)
 
-	for _, prefix := range []string{"", "/pt-br", "/es"} {
-		app.Client(t).Get(prefix+"/legal/privacy").
-			AssertStatus(http.StatusMovedPermanently).
-			AssertHeader("Location", prefix+"/policy")
+	for old, target := range map[string]string{
+		"/policy":        "/privacy",
+		"/legal/privacy": "/privacy",
+		"/help/score":    "/how-score-works",
+	} {
+		for _, prefix := range []string{"", "/pt-br", "/es"} {
+			app.Client(t).Get(prefix+old).
+				AssertStatus(http.StatusMovedPermanently).
+				AssertHeader("Location", prefix+target)
+		}
 	}
 }
 
@@ -171,7 +178,8 @@ func TestLLMsTxt(t *testing.T) {
 		AssertSee("[Authentication](https://example.test/docs/authentication)").
 		AssertSee("[Pricing](https://example.test/pricing)").
 		AssertSee("[Terms of use](https://example.test/terms)").
-		AssertSee("[Privacy policy](https://example.test/policy)")
+		AssertSee("[Privacy policy](https://example.test/privacy)").
+		AssertSee("/games/platforms/playstation-5")
 
 	full := app.Client(t).Get("/llms-full.txt").AssertOK().
 		AssertSee("Source: https://example.test/docs/authentication").

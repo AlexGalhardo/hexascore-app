@@ -41,7 +41,7 @@ test.describe("API docs", () => {
 		await expect(page.getByText("HexaScore API").first()).toBeVisible({ timeout: 30_000 });
 	});
 
-	test("an unknown docs page is a 404", async ({ page, prefix }) => {
-		expect((await page.goto(`${prefix}/docs/nope`))?.status()).toBe(404);
+	test("an unknown docs page is a 301 home", async ({ request, prefix }) => {
+		expect((await request.get(`${prefix}/docs/nope`, { maxRedirects: 0 })).status()).toBe(301);
 	});
 });

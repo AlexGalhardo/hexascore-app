@@ -20,7 +20,8 @@ export type DeepLink = { path: string; locale: AppLocale | null };
 /**
  * Maps a web URL to an app route: `/{,pt-br/,es/}{type}/{slug}`, `/entities/{id}` and `/lists/{id}`
  * keep their path (the route segments are the web's, FR-10-7); the locale prefix is returned
- * apart so the caller applies it for the session only. Anything else opens home.
+ * apart so the caller applies it for the session only. Anything else, including the entity pages under a
+ * category (`/games/platforms/playstation-5`), opens home.
  */
 export function resolveDeepLink(url: string): DeepLink {
 	// No `URL`: React Native's implementation leaves pathname unimplemented.
@@ -34,5 +35,7 @@ export function resolveDeepLink(url: string): DeepLink {
 	const locale = LOCALE_SEGMENTS[segments[0]?.toLowerCase() ?? ""] ?? null;
 	if (locale) segments.shift();
 	if (segments.length === 0 || !SCREENS.has(segments[0] ?? "")) return { path: "/", locale };
+	// Deeper web pages under a section (`/games/platforms/playstation-5`, changes, editions) have no screen.
+	if (segments.length > 2) return { path: "/", locale };
 	return { path: `/${segments.join("/")}${search}`, locale };
 }

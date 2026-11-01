@@ -16,7 +16,7 @@ func TestLocalePrefix_Routing(t *testing.T) {
 	app.Client(t).Get("/pt-br/").AssertOK().AssertInertia("Home/Index")
 	app.Client(t).Get("/es").AssertOK().AssertInertia("Home/Index")
 	app.Client(t).Get("/").AssertOK().AssertInertia("Home/Index")
-	app.Client(t).Get("/xx/").AssertStatus(404)
+	app.Client(t).Get("/xx/").AssertStatus(301).AssertHeader("Location", "/")
 
 	// No cookie: never redirected. Cookie naming a prefixed locale: 307.
 	app.Client(t).WithCookie("locale", "pt-BR").Get("/").AssertStatus(307).AssertRedirect("/pt-br/")

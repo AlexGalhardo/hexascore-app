@@ -201,7 +201,7 @@ func TestPublicProfilePrivacy(t *testing.T) {
 	anon.Get("/u/openone").AssertOK().AssertHeaderMissing("X-Robots-Tag").AssertInertia("User/Profile").
 		PropEquals("indexable", true).HasProp("stats.statusByType.game.want")
 
-	anon.Get("/u/nobody").AssertNotFound()
+	anon.Get("/u/nobody").AssertStatus(301).AssertHeader("Location", "/")
 
 	r.exec(`UPDATE users SET banned_at = now() WHERE id = $1`, pub.ID)
 	anon.Get("/u/openone").AssertOK().AssertHeader("X-Robots-Tag", "noindex").AssertInertia("User/Profile").

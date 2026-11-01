@@ -147,7 +147,7 @@ func TestCoversStepStoresReportsAndDropsLooseCommons(t *testing.T) {
 	}
 
 	if n := count(t, db, `SELECT count(*) FROM items WHERE id = $1 AND cover_source = 'steam'
-AND cover_key LIKE 'covers/' || $1 || '-%.webp' AND cover_thumb_key LIKE '%-t.webp'`, coverA); n != 1 {
+AND cover_key = 'covers/games/a.webp' AND cover_thumb_key = 'covers/games/a-t.webp'`, coverA); n != 1 {
 		t.Fatal("item A has no steam cover")
 	}
 
@@ -218,7 +218,7 @@ func TestCoversStepRollbackLeavesReservedKeys(t *testing.T) {
 		t.Fatal("the item update must have rolled back")
 	}
 
-	if n := count(t, db, `SELECT count(*) FROM cover_gc WHERE key LIKE 'covers/' || $1 || '-%'`, coverA); n != 2 {
+	if n := count(t, db, `SELECT count(*) FROM cover_gc WHERE key LIKE 'covers/games/a%.webp'`); n != 2 {
 		t.Errorf("reserved keys = %d, want 2 so the GC reaps the orphaned objects", n)
 	}
 }

@@ -469,11 +469,11 @@ All Auth pages render `h1` (`text-2xl font-semibold`), a form with `space-y-4` a
 
 #### Legal/Page
 
-- Route: `GET /terms`, `/policy` (SSR). Purpose: legal text. Blocks: `h1`, "Last updated" date, sections with `h2`. Copy comes from the catalogue.
+- Route: `GET /terms`, `/privacy` (SSR). Purpose: legal text. Blocks: `h1`, "Last updated" date, sections with `h2`. Copy comes from the catalogue.
 
 #### Help/Score
 
-- Route: `GET /help/score` (SSR). Purpose: explains how the score is built. Blocks: `h1`, intro, categories list for the four types (`categoryKeys`), several explanatory sections.
+- Route: `GET /how-score-works` (SSR). Purpose: explains how the score is built. Same layout as `/terms` (`DocumentPage`). Blocks: `h1`, intro, categories list for the four types (`categoryKeys`), several explanatory sections.
 
 #### Help/DeleteAccount
 

@@ -103,6 +103,7 @@ Before approving a production submission:
 - [ ] Data safety answers still match `docs/legal/play-data-safety.md` (a new SDK or new data field means a new answer first).
 - [ ] `https://hexascore.app/.well-known/assetlinks.json` lists the upload and Play signing fingerprints (`ANDROID_CERT_SHA256`).
 - [ ] `https://hexascore.app/help/delete-account` (and `/pt-br/`, `/es/`) answers 200 and states the 30-day grace.
+- [ ] The Play Console privacy policy URL is `https://hexascore.app/privacy` and answers 200 (`/policy` and `/legal/privacy` only 301 there).
 - [ ] `APP_MIN_SUPPORTED_VERSION` on the server: raise it only after the new build is live for everyone it must reach (older builds get 426).
 - [ ] OTA rule: this change needs a store build (Step 5 list) or is OTA-eligible.
 - [ ] Rollout: internal → closed (≥ 7 days, crashes ≤ 1 % of sessions) → production 20 % → 100 % over ≥ 3 days, in Play Console by the owner.

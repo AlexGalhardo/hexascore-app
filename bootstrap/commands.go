@@ -29,5 +29,6 @@ func Commands() []vukem.Command {
 		console.CommunityStatsRebuild(),
 		console.IngestBootstrap(),
 		console.IngestBackfillEditions(),
+		console.CoversRekey(),
 	}
 }

@@ -52,18 +52,20 @@ var staticPaths = []string{"/", "/games", "/movies", "/series", "/books", "/abou
 
 func (s sitemapSource) name(n int) string { return fmt.Sprintf("%s-%s-%d.xml", s.family, s.key, n) }
 
-// query selects the URL keys of one source; column is a constant, never input.
+// query selects the URL key, item type and lastmod of one source; column is a constant, never input. An entity
+// has one row per item type with enough public items: its pages live under each category (item 19).
 func (s sitemapSource) query() string {
 	if s.family == "items" {
-		return `SELECT slug, updated_at FROM items WHERE type = $1 AND visibility = 'public' ORDER BY id OFFSET $2 LIMIT $3`
+		return `SELECT slug, type::text, updated_at FROM items WHERE type = $1 AND visibility = 'public'
+ORDER BY id OFFSET $2 LIMIT $3`
 	}
 
-	return fmt.Sprintf(`SELECT e.%[1]s, e.updated_at FROM entities e
+	return fmt.Sprintf(`SELECT e.%[1]s, i.type::text, e.updated_at FROM entities e
 JOIN item_entities ie ON ie.entity_id = e.id
 JOIN items i ON i.id = ie.item_id AND i.visibility = 'public'
 WHERE e.kind = $1 AND e.%[1]s IS NOT NULL
-GROUP BY e.id HAVING count(DISTINCT ie.item_id) >= %[2]d
-ORDER BY e.id OFFSET $2 LIMIT $3`, s.column, MinIndexableItems)
+GROUP BY e.id, i.type HAVING count(DISTINCT ie.item_id) >= %[2]d
+ORDER BY e.id, i.type OFFSET $2 LIMIT $3`, s.column, MinIndexableItems)
 }
 
 func (s sitemapSource) count(ctx context.Context, ex database.Executor) (int, error) {
@@ -180,10 +182,10 @@ func writeChunk(ctx context.Context, ex database.Executor, w io.Writer, base str
 
 	for rows.Next() {
 		var (
-			key string
-			mod time.Time
+			key, typ string
+			mod      time.Time
 		)
-		if err := rows.Scan(&key, &mod); err != nil {
+		if err := rows.Scan(&key, &typ, &mod); err != nil {
 			return err
 		}
 
@@ -193,7 +195,12 @@ func writeChunk(ctx context.Context, ex database.Executor, w io.Writer, base str
 
 		written++
 
-		if err := writeURL(bw, base, "/"+s.path+"/"+key, mod); err != nil {
+		p := "/" + s.path + "/" + key
+		if s.family == "entities" {
+			p = "/" + Sections[typ] + p
+		}
+
+		if err := writeURL(bw, base, p, mod); err != nil {
 			return err
 		}
 	}

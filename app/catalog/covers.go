@@ -3,6 +3,7 @@ package catalog
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"strings"
 )
@@ -13,7 +14,82 @@ type Cover struct {
 	Full  string `json:"full"`
 }
 
-// CoverURL maps a bucket key such as "covers/<id>-<hash>.webp" to its same-origin path; the client prepends the shared coversBase prop (COVERS_BASE_URL); "" when the key is empty or unsafe.
+// CoverKey is the bucket key of an item cover, which is also its URL path after "/":
+// covers/{section}/{slug}.webp, and covers/{section}/{slug}-t.webp for the thumbnail (owner decision 2026-11-01,
+// item 18). Covers written before it keep covers/<id>-<hash>[-t].webp until covers:rekey moves them.
+func CoverKey(typ, slug string, thumb bool) string {
+	suffix := ""
+	if thumb {
+		suffix = "-t"
+	}
+
+	return "covers/" + Sections[typ] + "/" + slug + suffix + ".webp"
+}
+
+// ThumbCollides reports whether the thumbnail key of the item (typ, slug) is the full key of another item of the
+// same type, slugged slug+"-t". That item wins the key; this thumbnail keeps a content-hashed key.
+func ThumbCollides(ctx context.Context, db Querier, typ, slug string) (bool, error) {
+	var taken bool
+
+	err := db.QueryRowContext(ctx, `SELECT EXISTS (SELECT 1 FROM items WHERE type = $1 AND slug = $2)`,
+		typ, slug+"-t").Scan(&taken)
+	if err != nil {
+		return false, fmt.Errorf("cover key collision: %w", err)
+	}
+
+	return taken, nil
+}
+
+// ResolveCover maps a slug cover path ("{section}/{name}.webp" under /covers) to the stored key of the variant it
+// names: the full cover of the item slugged name, else the thumbnail of the item slugged name minus "-t". It
+// returns "" when no item of the section has that cover.
+func ResolveCover(ctx context.Context, db Querier, typ, name string) (string, error) {
+	var key string
+
+	err := db.QueryRowContext(ctx, `SELECT coalesce(cover_key, '') FROM items WHERE type = $1 AND slug = $2`,
+		typ, name).Scan(&key)
+	if errors.Is(err, sql.ErrNoRows) {
+		base, ok := strings.CutSuffix(name, "-t")
+		if !ok {
+			return "", nil
+		}
+
+		err = db.QueryRowContext(ctx, `SELECT coalesce(cover_thumb_key, '') FROM items WHERE type = $1 AND slug = $2`,
+			typ, base).Scan(&key)
+	}
+	if errors.Is(err, sql.ErrNoRows) {
+		return "", nil
+	}
+	if err != nil {
+		return "", fmt.Errorf("resolve cover: %w", err)
+	}
+
+	return key, nil
+}
+
+// CoverPathFor is the slug URL path of the cover variant of item id ("" when id is no item, or when the thumbnail
+// path would name another item's cover): where an old /covers/<id>-<hash>.webp URL moves to.
+func CoverPathFor(ctx context.Context, db Querier, id string, thumb bool) (string, error) {
+	var typ, slug string
+
+	err := db.QueryRowContext(ctx, `SELECT type::text, slug FROM items WHERE id = $1`, id).Scan(&typ, &slug)
+	if errors.Is(err, sql.ErrNoRows) {
+		return "", nil
+	}
+	if err != nil {
+		return "", fmt.Errorf("cover path: %w", err)
+	}
+
+	if thumb {
+		if taken, err := ThumbCollides(ctx, db, typ, slug); err != nil || taken {
+			return "", err
+		}
+	}
+
+	return "/" + CoverKey(typ, slug, thumb), nil
+}
+
+// CoverURL maps a bucket key such as "covers/games/zelda.webp" (or an older "covers/<id>-<hash>.webp") to its same-origin path; the client prepends the shared coversBase prop (COVERS_BASE_URL); "" when the key is empty or unsafe.
 func CoverURL(key string) string {
 	if key == "" || strings.HasPrefix(key, "/") || strings.Contains(key, "..") {
 		return ""

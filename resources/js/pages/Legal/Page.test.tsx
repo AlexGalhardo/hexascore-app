@@ -32,7 +32,7 @@ test("numbered sections get anchors listed in the contents, plus a link to the o
 		"#section-1",
 	);
 	expect(screen.getByRole("link", { name: "Privacy policy" }).getAttribute("href")).toBe(
-		"/policy",
+		"/privacy",
 	);
 	expect(screen.getByText("October 30, 2026")).toBeTruthy();
 });

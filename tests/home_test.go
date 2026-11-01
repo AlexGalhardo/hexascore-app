@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"net/http"
 	"testing"
 
 	"github.com/AlexGalhardo/vukem/vukemtest"
@@ -24,8 +25,8 @@ func TestErrorPage(t *testing.T) {
 
 	app := vukemtest.New(t, bootstrap.New)
 
-	// Full page loads render it too (catch-all route).
-	app.Client(t).Inertia("").Get("/no-such-page").AssertStatus(404).
+	// A miss that keeps its 404 (outside the HTML pages, item 14) still renders the Error component.
+	app.Client(t).Inertia("").Get("/build/no-such-asset").AssertStatus(404).
 		AssertInertia("Error").
 		PropEquals("status", 404).
 		PropEquals("message", "Not Found")
@@ -49,16 +50,32 @@ func TestShell_SEO(t *testing.T) {
 	app.Client(t).Get("/login").AssertOK().AssertInertia("Auth/Login").PropEquals("seo.robots", "noindex,nofollow")
 }
 
-func TestErrorPage_FullLoad(t *testing.T) {
+// TestMissingPage_RedirectsHome: an unknown HTML page answers 301 to the home page of its locale (owner decision
+// 2026-11-01, item 14); the APIs keep problem+json and asset misses keep a real 404.
+func TestMissingPage_RedirectsHome(t *testing.T) {
 	t.Parallel()
 
 	app := vukemtest.New(t, bootstrap.New)
+	c := app.Client(t)
 
-	app.Client(t).Get("/no-such-page").AssertStatus(404).AssertInertia("Error").
-		PropEquals("status", 404).
-		HasProp("seo")
-	app.Client(t).Get("/api/no-such").AssertStatus(404)
-	app.Client(t).Get("/pt-br/no-such-page").AssertStatus(404).AssertInertia("Error")
+	for _, prefix := range []string{"", "/pt-br", "/es"} {
+		c.Get(prefix+"/no-such-page").AssertStatus(301).AssertHeader("Location", prefix+"/")
+		c.Get(prefix+"/docs/no-such-doc").AssertStatus(301).AssertHeader("Location", prefix+"/")
+		app.Client(t).Inertia("").Get(prefix+"/no/such/page").AssertStatus(301).AssertHeader("Location", prefix+"/")
+	}
+
+	c.Do(http.MethodHead, "/no-such-page", nil, "").AssertStatus(301)
+
+	for _, p := range []string{
+		"/api/no-such", "/app/v1/no-such", "/build/assets/missing.js", "/covers/missing.webp",
+		"/og/item/missing.png", "/sitemaps/missing.xml", "/missing.png", "/pt-br/missing.css",
+	} {
+		c.Get(p).AssertStatus(404)
+	}
+
+	app.Client(t).AcceptJSON().Get("/api/no-such").AssertStatus(404).
+		AssertHeader("Content-Type", "application/problem+json")
+	c.PostForm("/no-such-page", nil).AssertStatus(405)
 }
 
 func TestHelpScorePage(t *testing.T) {
@@ -66,5 +83,8 @@ func TestHelpScorePage(t *testing.T) {
 
 	app := vukemtest.New(t, bootstrap.New)
 
-	app.Client(t).Get("/help/score").AssertOK().AssertInertia("Help/Score").HasProp("categoryKeys")
+	for _, prefix := range []string{"", "/pt-br", "/es"} {
+		app.Client(t).Get(prefix + "/how-score-works").AssertOK().AssertInertia("Help/Score").
+			HasProp("categoryKeys")
+	}
 }

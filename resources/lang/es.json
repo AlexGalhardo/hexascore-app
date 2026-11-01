@@ -592,6 +592,7 @@
     "next": "Siguiente",
     "previous": "Anterior",
     "pagination": "Páginas",
+    "perPage": "Elementos por página",
     "page": "Página {page}",
     "landing": {
       "topRated": "Mejor valorados",
@@ -1618,6 +1619,7 @@
     },
     "score": {
       "metaTitle": "Cómo funcionan las notas",
+      "contents": "Contenido",
       "title": "Cómo funcionan las notas de HexaScore",
       "intro": "Cada nota es una media ponderada de las valoraciones de la comunidad. Las reglas siguientes son públicas y están versionadas.",
       "categoriesTitle": "Categorías de valoración",
@@ -1710,6 +1712,7 @@
     }
   },
   "entity": {
+    "alsoIn": "También en",
     "kinds": {
       "person": "Persona",
       "organization": "Empresa",

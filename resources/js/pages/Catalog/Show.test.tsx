@@ -73,7 +73,7 @@ test("logged out: score block with explanation, chips, disabled stars and a log 
 	expect(screen.getByText(/item.band.high/)).toBeTruthy();
 	expect(screen.getByText(/item.scoreFrom.*1,482/)).toBeTruthy();
 	expect(screen.getAllByRole("link", { name: "MMORPG" })[0].getAttribute("href")).toBe(
-		"/genres/mmorpg",
+		"/games/genres/mmorpg",
 	);
 	expect(screen.getByText("itemTypes.game · 2004 · Blizzard Entertainment")).toBeTruthy();
 	expect(screen.getAllByRole("radiogroup")).toHaveLength(6);

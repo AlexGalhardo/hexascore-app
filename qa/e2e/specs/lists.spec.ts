@@ -83,8 +83,12 @@ test.describe("lists", () => {
 			await page.getByLabel(t("userLists.public")).uncheck();
 			await page.getByRole("button", { name: t("userLists.save"), exact: true }).click();
 			await expect
-				.poll(async () => (await visitor.goto(publicUrl))?.status(), { timeout: 15_000 })
-				.toBe(404);
+				.poll(
+					async () =>
+						(await visitor.request.get(publicUrl, { maxRedirects: 0 })).status(),
+					{ timeout: 15_000 },
+				)
+				.toBe(301);
 			await visitor.context().close();
 
 			// Delete.

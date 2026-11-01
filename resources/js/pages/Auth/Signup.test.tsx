@@ -16,7 +16,7 @@ test("the agreement links the terms and the privacy policy", () => {
 
 	expect(screen.getByRole("link", { name: "Terms" }).getAttribute("href")).toBe("/es/terms");
 	expect(screen.getByRole("link", { name: "Privacy policy" }).getAttribute("href")).toBe(
-		"/es/policy",
+		"/es/privacy",
 	);
 	expect(screen.getByText(/By creating an account/).textContent).toBe(
 		"By creating an account you agree to the Terms and the Privacy policy.",

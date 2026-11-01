@@ -45,4 +45,4 @@ Play requires target API 36 for new apps and updates since 2026-08-31 (SDD 10 [E
 - Fill the Play Console data safety form with the tables above.
 - Add the Play app signing certificate SHA-256 (Play Console > App integrity) to the production `ANDROID_CERT_SHA256`, next to the upload key fingerprint.
 - Set the account deletion URL in Play Console to `https://hexascore.app/help/delete-account`.
-- Privacy policy URL: `https://hexascore.app/policy` (200 in production on 2026-11-01, also `/pt-br/policy` and `/es/policy`). SDD 10 §7.8 and ROADMAP P5.C.2.2 say `/legal/privacy`, which is a 404: the route is `/policy` (`routes/web.go`).
+- Privacy policy URL: `https://hexascore.app/privacy` (also `/pt-br/privacy` and `/es/privacy`). The old `/policy` and `/legal/privacy` (the URL SDD 10 §7.8 and ROADMAP P5.C.2.2 first named) answer one 301 to `/privacy` in every locale.

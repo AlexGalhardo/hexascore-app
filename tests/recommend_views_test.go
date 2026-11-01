@@ -89,7 +89,7 @@ func TestViewsDedupPerVisitorPerDay(t *testing.T) {
 
 	// Same visitor through the locale prefix and a missing page: no extra views.
 	client.Inertia("").Get("/pt-br/games/zelda").AssertOK()
-	client.Inertia("").Get("/games/missing").AssertStatus(404)
+	client.Inertia("").Get("/games/missing").AssertStatus(301)
 
 	if v, _ := r.counts(t); v != 1 {
 		t.Fatalf("views = %d after 5 GETs by one visitor, want 1", v)

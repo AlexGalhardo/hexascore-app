@@ -307,7 +307,7 @@ Paths follow the README route-prefix convention (07-5): `/api/v1` in the app rou
 
 `{type}` path values are `games|movies|series|books` (`legacy/apps/web/lib/sections.ts`). Query: `genre`, `platform` (entity slugs), `year` (1800–2100), `min_score`/`max_score` (0–10, step 0.5), `min_<category>` (keys from `legacy/apps/web/lib/categories.ts`, A-06), `sort`, `limit`, `cursor`. RFC 9457 errors: `invalid-query` (400), `invalid-cursor` (400), `not-found` (404). Envelope per <https://vukem.dev/docs/rest-apis/pagination> "Envelopes" with `meta.next_cursor`/`prev_cursor`.
 
-Inertia pages (SDD 09 owns layout): `Catalog/Index` props `{type, filters, items: ItemSummary[], cursor, total}`; `Catalog/Show` `{item: ItemDetail, editions?, ratingSummary}`; `Entity/Show` `{entity: EntityDetail, items, cursor}`. Web paths: `/{section}/{slug}`, `/people/{slug}`, `/companies/{slug}`, `/franchises/{slug}`, `/platforms/{slug}`, `/genres/{slug}`, `/game-modes/{slug}`, `/countries/{code}`, `/languages/{code}`, all with `/pt-br` and `/es` prefixes (D-17).
+Inertia pages (SDD 09 owns layout): `Catalog/Index` props `{type, filters, items: ItemSummary[], cursor, total}`; `Catalog/Show` `{item: ItemDetail, editions?, ratingSummary}`; `Entity/Show` `{entity: EntityDetail, items, cursor}`. Web paths: `/{section}/{slug}`, and entity pages under each section: `/{section}/people/{slug}`, `/{section}/companies/{slug}`, `/{section}/franchises/{slug}`, `/{section}/platforms/{slug}`, `/{section}/genres/{slug}`, `/{section}/game-modes/{slug}`, `/{section}/countries/{code}`, `/{section}/languages/{code}` (owner round 2026-11-01 item 19; the old top-level paths answer 301), all with `/pt-br` and `/es` prefixes (D-17).
 
 ### 6.3 Item detail example (audience `api`, default sources)
 

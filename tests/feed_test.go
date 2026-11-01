@@ -88,7 +88,7 @@ func TestFeedDisabledByDefault(t *testing.T) {
 	r.optIn(a, true)
 	r.rate(ac, r.releasedItem("game"), 8)
 
-	ac.Inertia("").Get("/feed").AssertNotFound()
+	ac.Inertia("").Get("/feed").AssertStatus(301).AssertHeader("Location", "/")
 	ac.PatchJSON("/profile/feed", map[string]any{"feedOptIn": true}).AssertNotFound()
 	ac.Inertia("").Get("/profile").AssertOK().AssertInertia("Profile/Index").MissingProp("social")
 	ac.Inertia("").Get("/u/OffFeedA?tab=activity").AssertOK().AssertInertia("User/Profile").MissingProp("activity").
