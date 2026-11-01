@@ -1532,7 +1532,10 @@
     "showing": "{count} de {total}",
     "avgScore": "Nota media: {score}",
     "seeAll": "Ver todos",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "emptyHint": "Los elementos vinculados a esta página aparecerán aquí cuando estén en el catálogo.",
+    "browse": "Explorar el catálogo",
+    "source": "Fuente"
   },
   "userLists": {
     "addItem": "Añadir un elemento",
