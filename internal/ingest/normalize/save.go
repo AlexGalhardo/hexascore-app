@@ -126,6 +126,12 @@ func saveItem(
 	prov := maps.Clone(it.Provenance)
 	ext := maps.Clone(it.ExternalIDs)
 
+	// Ids a source stopped listing (or never listed) survive: the stored object is merged, not replaced.
+	if old != nil {
+		ext = maps.Clone(old.ExternalID)
+		maps.Copy(ext, it.ExternalIDs)
+	}
+
 	var dateArg any
 	if date != nil {
 		dateArg = date.Format("2006-01-02")
@@ -134,6 +140,11 @@ func saveItem(
 	dateChanged := false
 
 	if old != nil {
+		// cancelled is set by an editor; ingestion never revives the item.
+		if old.Status == StatusCancelled {
+			status = StatusCancelled
+		}
+
 		if it.Skip["release_date"] {
 			dateArg, precision, status = nullDate(old.Date), old.Precision, old.Status
 			if v, ok := old.Provenance["release_date"]; ok {
