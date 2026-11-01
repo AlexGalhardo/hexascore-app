@@ -11,9 +11,10 @@ import (
 	"net/netip"
 	"regexp"
 	"strings"
-	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/AlexGalhardo/vukem/web"
 )
 
 // RequestMessage is the message of vukem's request log line
@@ -86,44 +87,13 @@ func UserHash(key []byte, id string) string {
 	return hex.EncodeToString(m.Sum(nil))[:16]
 }
 
-// Fields carries what the request line needs from inside the handler chain:
-// vukem's Logger only sees the outer request, so values set deeper (matched
-// route, authenticated user) travel through this shared, mutable holder.
-type Fields struct {
-	mu     sync.Mutex
-	route  string
-	userID string
-}
+// userAttr carries the raw user id from SetUser to the request line, where Handle replaces it with user_hash.
+const userAttr = "user_id"
 
-type fieldsKey struct{}
-
-// WithFields returns ctx carrying a new Fields holder.
-func WithFields(ctx context.Context) context.Context {
-	return context.WithValue(ctx, fieldsKey{}, &Fields{})
-}
-
-func fieldsFrom(ctx context.Context) *Fields {
-	f, _ := ctx.Value(fieldsKey{}).(*Fields)
-	return f
-}
-
-// SetRoute records the matched route pattern; a no-op without a holder.
-func SetRoute(ctx context.Context, route string) {
-	if f := fieldsFrom(ctx); f != nil {
-		f.mu.Lock()
-		f.route = route
-		f.mu.Unlock()
-	}
-}
-
-// SetUser records the authenticated user id (hashed when logged); a no-op
-// without a holder.
+// SetUser records the authenticated user id for the request line, which
+// carries it hashed; a no-op outside a request logged by vukem's Logger.
 func SetUser(ctx context.Context, id string) {
-	if f := fieldsFrom(ctx); f != nil {
-		f.mu.Lock()
-		f.userID = id
-		f.mu.Unlock()
-	}
+	web.AddLogAttrs(ctx, slog.String(userAttr, id))
 }
 
 // Handler redacts every record and reshapes vukem's request line: ip and
@@ -177,6 +147,8 @@ func (h *Handler) Handle(ctx context.Context, rec slog.Record) error {
 		dur    time.Duration
 	)
 
+	route, user := "unmatched", ""
+
 	rec.Attrs(func(a slog.Attr) bool {
 		switch a.Key {
 		case "ip", "peer":
@@ -188,6 +160,14 @@ func (h *Handler) Handle(ctx context.Context, rec slog.Record) error {
 		case "duration":
 			dur = a.Value.Duration()
 			a = slog.Int64("duration_ms", dur.Milliseconds())
+		case "route":
+			route = cmp.Or(a.Value.String(), route)
+
+			return true
+		case userAttr:
+			user = a.Value.String()
+
+			return true
 		}
 
 		out.AddAttrs(redact(a))
@@ -197,13 +177,6 @@ func (h *Handler) Handle(ctx context.Context, rec slog.Record) error {
 
 	if !h.keep(path, status, dur) {
 		return nil
-	}
-
-	route, user := "unmatched", ""
-	if f := fieldsFrom(ctx); f != nil {
-		f.mu.Lock()
-		route, user = cmp.Or(f.route, route), f.userID
-		f.mu.Unlock()
 	}
 
 	out.AddAttrs(slog.String("route", route))

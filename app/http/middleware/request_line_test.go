@@ -10,15 +10,15 @@ import (
 	"testing"
 
 	vmw "github.com/AlexGalhardo/vukem/middleware"
+	"github.com/AlexGalhardo/vukem/web"
 
-	"github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/logging"
 )
 
 var logKey = bytes.Repeat([]byte{7}, 32)
 
-// stack mirrors production: RequestLog (server, outermost), vukem's
-// RequestID and Logger, then RequestRoute on each matched route.
+// stack mirrors production: vukem's RequestID and Logger, then the route
+// attribute the vukem router adds on each matched route.
 func stack(t *testing.T) (http.Handler, *slog.Logger, *bytes.Buffer) {
 	t.Helper()
 
@@ -26,7 +26,12 @@ func stack(t *testing.T) (http.Handler, *slog.Logger, *bytes.Buffer) {
 
 	log := slog.New(logging.NewHandler(slog.NewJSONHandler(&buf, nil), logKey))
 	mux := http.NewServeMux()
-	route := func(pattern string, h http.HandlerFunc) { mux.Handle(pattern, middleware.RequestRoute(h)) }
+	route := func(pattern string, h http.HandlerFunc) {
+		mux.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
+			web.AddLogAttrs(r.Context(), slog.String("route", r.Pattern))
+			h(w, r)
+		})
+	}
 
 	route("GET /items/{slug}", func(_ http.ResponseWriter, r *http.Request) {
 		logging.SetUser(r.Context(), "42")
@@ -48,7 +53,7 @@ func stack(t *testing.T) (http.Handler, *slog.Logger, *bytes.Buffer) {
 		}
 	})
 
-	return middleware.RequestLog(vmw.RequestID()(vmw.Logger(log)(mux))), log, &buf
+	return vmw.RequestID()(vmw.Logger(log)(mux)), log, &buf
 }
 
 type errStr string
