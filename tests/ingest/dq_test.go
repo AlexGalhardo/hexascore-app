@@ -43,12 +43,20 @@ VALUES ('dq.asserts', 'manual', 'running', 'test', $1::jsonb) RETURNING id`, par
 			return err
 		}
 
-		if _, err := a.Step(t.Context(), tx, run.Run{ID: id, Mode: run.ModeManual, Params: []byte(params)}); err != nil {
+		if _, err := a.Step(
+			t.Context(),
+			tx,
+			run.Run{ID: id, Mode: run.ModeManual, Params: []byte(params)},
+		); err != nil {
 			return err
 		}
 
-		rows, err := tx.QueryContext(t.Context(), `SELECT code, severity, passed, coalesce(observed, 0), jsonb_array_length(sample)
-FROM dq_results WHERE run_id = $1`, id)
+		rows, err := tx.QueryContext(
+			t.Context(),
+			`SELECT code, severity, passed, coalesce(observed, 0), jsonb_array_length(sample)
+FROM dq_results WHERE run_id = $1`,
+			id,
+		)
 		if err != nil {
 			return err
 		}
@@ -192,11 +200,17 @@ func TestDQSnapshotMovesOnlyWhenTheAssertPasses(t *testing.T) {
 	db := dqDB(t)
 
 	err := db.Tx(t.Context(), func(tx *database.Tx) error {
-		if _, err := tx.ExecContext(t.Context(), `INSERT INTO catalog_counts (day, type, items) VALUES (current_date - 1, 'game', 100)`); err != nil {
+		if _, err := tx.ExecContext(
+			t.Context(),
+			`INSERT INTO catalog_counts (day, type, items) VALUES (current_date - 1, 'game', 100)`,
+		); err != nil {
 			return err
 		}
 
-		if _, err := tx.ExecContext(t.Context(), `INSERT INTO items (id, type, slug, wikidata_qid) SELECT gen_random_uuid(), 'game', 'g' || n, 'Q' || (n + 100) FROM generate_series(1, 100) n`); err != nil {
+		if _, err := tx.ExecContext(
+			t.Context(),
+			`INSERT INTO items (id, type, slug, wikidata_qid) SELECT gen_random_uuid(), 'game', 'g' || n, 'Q' || (n + 100) FROM generate_series(1, 100) n`,
+		); err != nil {
 			return err
 		}
 
@@ -211,7 +225,8 @@ VALUES ('dq.asserts', 'manual', 'running', 'test') RETURNING id`).Scan(&id); err
 		}
 
 		var games int
-		if err := tx.QueryRowContext(t.Context(), `SELECT items FROM catalog_counts WHERE day = current_date AND type = 'game'`).Scan(&games); err != nil {
+		if err := tx.QueryRowContext(t.Context(), `SELECT items FROM catalog_counts WHERE day = current_date AND type = 'game'`).
+			Scan(&games); err != nil {
 			return err
 		}
 
