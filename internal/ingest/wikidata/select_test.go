@@ -129,3 +129,39 @@ func TestTargetsBootstrapAndIncrementalAndResume(t *testing.T) {
 		t.Errorf("incremental query: %s", q)
 	}
 }
+
+func TestTargetsSelectsOncePerRunAndType(t *testing.T) {
+	w, _, s := newConnector(t)
+
+	drain := func(runID int64, after string) []ingest.Target {
+		var got []ingest.Target
+
+		p := ingest.RunParams{RunID: runID, Mode: run.ModeBootstrap, Types: []string{"movie", "game"}, Limit: 2}
+		for tg, err := range w.Targets(t.Context(), nil, p, after) {
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			got = append(got, tg)
+		}
+
+		return got
+	}
+
+	all := drain(7, "")
+
+	// One chunk per call, as fetch.Step does: every continuation resumes from the cursor.
+	for _, tg := range all[:len(all)-1] {
+		drain(7, tg.ID)
+	}
+
+	if len(s.queries) != 2 {
+		t.Fatalf("one run must issue one SPARQL query per type, got %d", len(s.queries))
+	}
+
+	drain(8, "")
+
+	if len(s.queries) != 4 {
+		t.Fatalf("a new run must select again, got %d queries", len(s.queries))
+	}
+}

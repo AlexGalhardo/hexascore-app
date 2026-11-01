@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
@@ -49,6 +50,53 @@ type Connector struct {
 	APIURL string
 
 	refs *refs
+
+	selMu sync.Mutex
+	// sel keeps the selection of a run so each 200-target chunk does not rerun the SPARQL query. In memory only:
+	// a restarted worker selects once again.
+	sel map[selKey][]string
+}
+
+type selKey struct {
+	runID    int64
+	itemType string
+}
+
+// maxCachedSelections bounds sel; runs of one connector are few and short, so a reset on overflow is enough.
+const maxCachedSelections = 16
+
+func (w *Connector) selection(
+	ctx context.Context, itemType string, p ingest.RunParams, since time.Time,
+) ([]string, error) {
+	if p.RunID == 0 {
+		return w.SelectQids(ctx, w.client, itemType, since, p.Limit)
+	}
+
+	k := selKey{p.RunID, itemType}
+
+	w.selMu.Lock()
+	qids, ok := w.sel[k]
+	w.selMu.Unlock()
+
+	if ok {
+		return qids, nil
+	}
+
+	qids, err := w.SelectQids(ctx, w.client, itemType, since, p.Limit)
+	if err != nil {
+		return nil, err
+	}
+
+	w.selMu.Lock()
+	defer w.selMu.Unlock()
+
+	if w.sel == nil || len(w.sel) >= maxCachedSelections {
+		w.sel = map[selKey][]string{}
+	}
+
+	w.sel[k] = qids
+
+	return qids, nil
 }
 
 // New returns a Connector for the public endpoint.
@@ -171,7 +219,7 @@ func (w *Connector) SelectQids(
 // Targets yields the selected QIDs per type. A bootstrap run (or an
 // incremental one without a since time) takes the top items; after skips
 // everything up to and including that QID so a continuation resumes. The
-// selection is re-run on resume, which is cheap (one query per type).
+// selection is cached per run (one query per type); a restarted worker selects again.
 func (w *Connector) Targets(
 	ctx context.Context,
 	_ database.Executor,
@@ -192,7 +240,7 @@ func (w *Connector) Targets(
 		skipping := after != ""
 
 		for _, itemType := range types {
-			qids, err := w.SelectQids(ctx, w.client, itemType, since, p.Limit)
+			qids, err := w.selection(ctx, itemType, p, since)
 			if err != nil {
 				yield(ingest.Target{}, err)
 

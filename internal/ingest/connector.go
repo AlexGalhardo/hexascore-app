@@ -28,6 +28,8 @@ type Target struct {
 
 // RunParams is the subset of job_runs.params a connector reads.
 type RunParams struct {
+	// RunID lets a connector cache per-run work; zero disables caching.
+	RunID int64
 	Mode  string
 	Since time.Time
 	Types []string
