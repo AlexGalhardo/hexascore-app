@@ -118,6 +118,11 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 
 	base = append(base, vukem.WithRoutes(func(r *router.Router, app *vukem.App) error {
 		appmail.Configure(app.Source.Get("MAIL_FROM"), app.Source.Get("MAIL_SUPPORT_ADDRESS"))
+		// MAIL_REPLY_TO wins; otherwise automatic mail answers to MAIL_SUPPORT_ADDRESS (Q-A17). A mailer error
+		// is not swallowed: Send returns the same error on first use.
+		if m, err := app.Mailer(); err == nil && app.Source.Get("MAIL_REPLY_TO") == "" {
+			m.SetReplyTo(appmail.SupportAddress())
+		}
 		if err := addReadyChecks(app, heartbeat); err != nil {
 			return err
 		}

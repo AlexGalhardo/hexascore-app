@@ -22,8 +22,21 @@ func Configure(from, support string) {
 	})
 }
 
-// Auto stamps the sender and, unless already set, the support Reply-To on an
-// automatic message. vukem has no global default Reply-To (see vukem-feedback.md).
+// SupportAddress is the configured support address, the default Reply-To of
+// automatic mail (bootstrap passes it to the vukem mailer's SetReplyTo).
+func SupportAddress() string {
+	a := addrs.Load()
+	if a == nil {
+		Configure("", "")
+		a = addrs.Load()
+	}
+	return a.support
+}
+
+// Auto stamps the sender on an automatic message: the HexaScore default
+// differs from vukem's MAIL_FROM default, so an unset MAIL_FROM still sends
+// from noreply@. The Reply-To comes from the mailer (MAIL_REPLY_TO, else
+// MAIL_SUPPORT_ADDRESS).
 func Auto(e mail.Envelope) mail.Envelope {
 	a := addrs.Load()
 	if a == nil {
@@ -32,9 +45,6 @@ func Auto(e mail.Envelope) mail.Envelope {
 	}
 	if e.From == "" {
 		e.From = a.from
-	}
-	if len(e.ReplyTo) == 0 {
-		e.ReplyTo = []string{a.support}
 	}
 	return e
 }
