@@ -48,30 +48,8 @@ func (a Asserts) covers(ctx context.Context, tx *database.Tx, r run.Run) (result
 		limit = -1
 	}
 
-	rows, err := tx.QueryContext(ctx, `SELECT id::text, key FROM (
-  SELECT id, cover_key AS key FROM items WHERE cover_key IS NOT NULL
-  UNION ALL SELECT id, cover_thumb_key FROM items WHERE cover_thumb_key IS NOT NULL
-) c ORDER BY random() LIMIT CASE WHEN $1 < 0 THEN NULL ELSE $1 END`, limit)
+	list, err := coverSample(ctx, tx, limit)
 	if err != nil {
-		return result{}, fmt.Errorf("dq: list covers: %w", err)
-	}
-
-	type cover struct{ id, key string }
-
-	var list []cover
-
-	for rows.Next() {
-		var c cover
-		if err := rows.Scan(&c.id, &c.key); err != nil {
-			_ = rows.Close()
-
-			return result{}, err
-		}
-
-		list = append(list, c)
-	}
-
-	if err := rows.Close(); err != nil {
 		return result{}, err
 	}
 
@@ -95,4 +73,30 @@ func (a Asserts) covers(ctx context.Context, tx *database.Tx, r run.Run) (result
 	res.passed = res.observed == 0
 
 	return res, nil
+}
+
+type cover struct{ id, key string }
+
+func coverSample(ctx context.Context, tx *database.Tx, limit int) ([]cover, error) {
+	rows, err := tx.QueryContext(ctx, `SELECT id::text, key FROM (
+  SELECT id, cover_key AS key FROM items WHERE cover_key IS NOT NULL
+  UNION ALL SELECT id, cover_thumb_key FROM items WHERE cover_thumb_key IS NOT NULL
+) c ORDER BY random() LIMIT CASE WHEN $1 < 0 THEN NULL ELSE $1 END`, limit)
+	if err != nil {
+		return nil, fmt.Errorf("dq: list covers: %w", err)
+	}
+	defer func() { _ = rows.Close() }()
+
+	var list []cover
+
+	for rows.Next() {
+		var c cover
+		if err := rows.Scan(&c.id, &c.key); err != nil {
+			return nil, err
+		}
+
+		list = append(list, c)
+	}
+
+	return list, rows.Err()
 }

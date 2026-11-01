@@ -96,6 +96,8 @@ var (
 
 	// DQDaily runs the data-quality asserts on their own (SDD 06 §7.7); every chain above ends with the same stage.
 	DQDaily = Chain{"dq-daily", []Stage{{Job: dq.Job, Mode: run.ModeIncremental}}}
+	// FrontendFields renders a sample of item pages and reports the missing required fields (SDD 06 §7.7).
+	FrontendFields = Chain{"frontend-fields", []Stage{{Job: dq.FrontendJob, Mode: run.ModeIncremental}}}
 
 	// Chains lists every chain by name, which is how a run's params find the next stage.
 	Chains = []Chain{
@@ -109,6 +111,7 @@ var (
 		EditionsBackfill,
 		TrailersWeekly,
 		DQDaily,
+		FrontendFields,
 	}
 )
 

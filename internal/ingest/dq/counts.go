@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"maps"
 	"math"
 
 	"github.com/AlexGalhardo/vukem/database"
@@ -22,57 +23,20 @@ func (Asserts) countDrop(ctx context.Context, tx *database.Tx, r run.Run) (resul
 		now[t] = 0
 	}
 
-	rows, err := tx.QueryContext(ctx, `SELECT type, count(*) FROM items GROUP BY type`)
+	counts, err := typeCounts(ctx, tx, `SELECT type, count(*) FROM items GROUP BY type`)
 	if err != nil {
 		return result{}, fmt.Errorf("dq: count items: %w", err)
 	}
 
-	for rows.Next() {
-		var (
-			t string
-			n int
-		)
+	maps.Copy(now, counts)
 
-		if err := rows.Scan(&t, &n); err != nil {
-			_ = rows.Close()
-
-			return result{}, err
-		}
-
-		now[t] = n
-	}
-
-	if err := rows.Close(); err != nil {
-		return result{}, err
-	}
-
-	prev := map[string]int{}
-
-	rows, err = tx.QueryContext(
+	prev, err := typeCounts(
 		ctx,
+		tx,
 		`SELECT DISTINCT ON (type) type, items FROM catalog_counts ORDER BY type, day DESC`,
 	)
 	if err != nil {
 		return result{}, fmt.Errorf("dq: read snapshot: %w", err)
-	}
-
-	for rows.Next() {
-		var (
-			t string
-			n int
-		)
-
-		if err := rows.Scan(&t, &n); err != nil {
-			_ = rows.Close()
-
-			return result{}, err
-		}
-
-		prev[t] = n
-	}
-
-	if err := rows.Close(); err != nil {
-		return result{}, err
 	}
 
 	res := result{
@@ -121,4 +85,29 @@ func allowsDrop(params json.RawMessage) bool {
 	}
 
 	return json.Unmarshal(params, &p) == nil && p.Allow && p.Reason != ""
+}
+
+func typeCounts(ctx context.Context, tx *database.Tx, q string) (map[string]int, error) {
+	rows, err := tx.QueryContext(ctx, q)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = rows.Close() }()
+
+	out := map[string]int{}
+
+	for rows.Next() {
+		var (
+			t string
+			n int
+		)
+
+		if err := rows.Scan(&t, &n); err != nil {
+			return nil, err
+		}
+
+		out[t] = n
+	}
+
+	return out, rows.Err()
 }

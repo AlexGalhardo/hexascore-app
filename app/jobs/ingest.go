@@ -90,7 +90,11 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		"fetch.youtube":      fetch.Step(&trailers.Connector{}, client, app.Now),
 		backfill.EditionsJob: backfill.Editions{}.Step,
 		// workaround: Stat (DQ-I-04) and Serialise (DQ-I-12) stay nil until the covers store (P6.B.2.2) and the API probe exist.
-		dq.Job:              dq.Asserts{}.Step,
+		dq.Job: dq.Asserts{}.Step,
+		dq.FrontendJob: dq.FrontendFields{
+			Suggest: community.IngestGate{DB: db}.OpenMissingField,
+			Now:     app.Now,
+		}.Step,
 		"fetch.openlibrary": fetch.Unavailable("openlibrary", "licence unverified, A-05"),
 		"normalize": normalize.Normalizer{
 			Community: community.IngestGate{DB: db},

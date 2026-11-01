@@ -75,11 +75,35 @@ WHERE a.target_type = 'item' AND a.target_id = $1 AND a.source = 'community'
 // moderator already rejected or let expire, is not repeated, so a re-run does
 // not flood the queue or reopen a decided one. It runs on the caller's tx.
 func (g IngestGate) OpenSystemSuggestion(ctx context.Context, tx *database.Tx, s normalize.SystemSuggestion) error {
+	_, err := g.open(ctx, tx, s, "Source "+s.Source+" differs from the approved community value.",
+		map[string]any{"system": true, "source": s.Source})
+
+	return err
+}
+
+// MissingFieldSource is the meta source of the suggestions the missing-field detector files (SDD 06 §7.7).
+const MissingFieldSource = "dq.frontend_fields"
+
+// OpenMissingField files a system suggestion asking the community to fill a required field of an item page. The
+// proposed value is null: a moderator rejects it or turns it into a real edit. The dedup of OpenSystemSuggestion
+// applies (an open, rejected or expired entry for the field is not repeated); the result says whether a new row was
+// filed.
+func (g IngestGate) OpenMissingField(ctx context.Context, tx *database.Tx, itemID, domain, field string) (bool, error) {
+	return g.open(ctx, tx, normalize.SystemSuggestion{
+		ItemID: itemID, Domain: domain, Field: field, Before: json.RawMessage("null"), After: json.RawMessage("null"),
+		Source: MissingFieldSource,
+	}, "The "+field+" field is missing on the item page.",
+		map[string]any{"system": true, "source": MissingFieldSource, "missing_field": field})
+}
+
+func (g IngestGate) open(
+	ctx context.Context, tx *database.Tx, s normalize.SystemSuggestion, note string, metaFields map[string]any,
+) (bool, error) {
 	changes, err := json.Marshal(map[string]map[string]json.RawMessage{
 		s.Field: {"before": s.Before, "after": s.After},
 	})
 	if err != nil {
-		return fmt.Errorf("community: encode system suggestion: %w", err)
+		return false, fmt.Errorf("community: encode system suggestion: %w", err)
 	}
 
 	locale := "en"
@@ -96,29 +120,29 @@ func (g IngestGate) OpenSystemSuggestion(ctx context.Context, tx *database.Tx, s
 		`SELECT pg_advisory_xact_lock(hashtext('item'), hashtext($1))`,
 		s.ItemID,
 	); err != nil {
-		return fmt.Errorf("community: lock suggestion target: %w", err)
+		return false, fmt.Errorf("community: lock suggestion target: %w", err)
 	}
 
 	var open int
 	if err := tx.QueryRowContext(ctx, `SELECT count(*) FROM suggestions
 WHERE author_id IS NULL AND target_type = 'item' AND target_id = $1 AND status IN ('submitted','in_review','rejected','expired')
   AND changes -> $2 -> 'after' = $3::jsonb`, s.ItemID, s.Field, string(s.After)).Scan(&open); err != nil {
-		return fmt.Errorf("community: scan open system suggestions: %w", err)
+		return false, fmt.Errorf("community: scan open system suggestions: %w", err)
 	}
 
 	if open > 0 {
-		return nil
+		return false, nil
 	}
 
 	id := uuid.NewV7().String()
-	meta, _ := json.Marshal(map[string]any{"system": true, "source": s.Source})
+	meta, _ := json.Marshal(metaFields)
 
 	if _, err := tx.ExecContext(ctx, `INSERT INTO suggestions
 (id, author_id, kind, target_type, target_id, target_domain, locale, changes, note, meta)
 VALUES ($1, NULL, 'edit', 'item', $2, $3, $4, $5::jsonb, $6, $7::jsonb)`,
 		id, s.ItemID, s.Domain, locale, changes,
-		"Source "+s.Source+" differs from the approved community value.", meta); err != nil {
-		return fmt.Errorf("community: insert system suggestion: %w", err)
+		note, meta); err != nil {
+		return false, fmt.Errorf("community: insert system suggestion: %w", err)
 	}
 
 	if _, err := tx.ExecContext(
@@ -127,16 +151,16 @@ VALUES ($1, NULL, 'edit', 'item', $2, $3, $4, $5::jsonb, $6, $7::jsonb)`,
 VALUES ($1, NULL, 'draft', 'system')`,
 		id,
 	); err != nil {
-		return fmt.Errorf("community: insert system suggestion event: %w", err)
+		return false, fmt.Errorf("community: insert system suggestion event: %w", err)
 	}
 
 	if err := TransitionTx(ctx, tx, id, 1, "submitted", system); err != nil {
-		return err
+		return false, err
 	}
 
 	if _, err := tx.ExecContext(ctx, `UPDATE suggestions SET submitted_at = now() WHERE id = $1`, id); err != nil {
-		return fmt.Errorf("community: set submitted_at: %w", err)
+		return false, fmt.Errorf("community: set submitted_at: %w", err)
 	}
 
-	return nil
+	return true, nil
 }
