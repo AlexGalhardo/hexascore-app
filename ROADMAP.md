@@ -2239,13 +2239,14 @@ Goal: close the gap between "parity" and "a product people can use in public". S
   - Acceptance:
     - `curl -s -b "$ADMIN_SESSION" localhost:3000/admin/ingestion | grep -c 'href="/admin/score-bursts"'` → 1
 
-- [ ] **P2.H.3.4** Define a `primary` design token (buttons, links, focus) in `packages/tokens` and replace the scaffold's hardcoded `indigo-*` classes in the 21 files that use them.
+- [x] **P2.H.3.4** Define a `primary` design token (buttons, links, focus) in `packages/tokens` and replace the scaffold's hardcoded `indigo-*` classes in the 21 files that use them.
   - Files/modules: `packages/tokens/tokens.json`, `packages/tokens/build.ts`, `packages/tokens/tokens.css`, `resources/js/**/*.tsx`
   - Refs: SDD 09 §7.5; ADR 0009 (tokens shared with mobile); audit A20
   - Depends on: —
   - Model: Sonnet
   - Acceptance:
     - `grep -rn "indigo-" resources/js | wc -l` → 0; `bun run test -- tokens` → round-trip test green; `bun run --cwd apps/mobile typecheck` → green
+  - Status (2026-11-01): done (f45e8a09): `grep -rn "indigo-" resources/js | wc -l` -> 0 (pinned by a tokens test), `bunx vitest run packages/tokens` 35 passed, mobile typecheck green.
 
 - [x] **P2.H.3.5** Cache anonymous HTML for the public catalogue pages (SDD 09 §7.2) and prove it with the k6 TTFB scenario.
   - Files/modules: `app/http/middleware/render_cache.go`, `routes/web.go`, `qa/k6/page-ttfb.js`
@@ -2367,7 +2368,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - staging: total size of one day's objects ≤ 50 MB
   - Notes: VF-029 workaround: vukem `export.NDJSON(w, r, …)` needs a request, so the job streams rows with `Query.Each` into `gzip.Writer` → `io.Pipe` → `d.Put` (no CSV, so the formula guard is not needed). Never load all rows in memory. `popularity` is `popularity_prior` (sort-only field, SDD 01 §6.1): confirm with the owner before shipping it in a bulk file (A-07 "no bulk redistribution").
 
-- [ ] **P3.A.4.2** Serve `listExports` and `getExport` (`/v1/exports/{type}/{day}` → 302 to a 5-minute presigned URL) for pro and business.
+- [x] **P3.A.4.2** Serve `listExports` and `getExport` (`/v1/exports/{type}/{day}` → 302 to a 5-minute presigned URL) for pro and business.
   - Files/modules: `app/api/v1/exports.go`, `tests/api_exports_test.go`
   - Refs: SDD 05 §6.2; <https://vukem.dev/docs/digging-deeper/storage> (`PresignGet(p, ttl)`)
   - Depends on: P3.A.4.1
@@ -2375,6 +2376,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Acceptance:
     - `go test ./tests -run TestAPIExports` → free key 403 `plan-required`; pro key 302 with `Location` expiring in 300 s; missing day 404
   - Notes: list from the bucket prefix (no table, SDD 05 §5). The presigned URL must not be cached (`Cache-Control: no-store` on the 302).
+  - Status (2026-11-01): done (b9d6a66a): `TestAPIExports` PASS. The files leave `popularity` out until the owner answers Q-A11 (A-07); `getItemActivity` became four literal operations (same URLs) to avoid the ServeMux conflict with `/exports/{type}/{day}`.
 
 #### P3.A.5 Webhooks
 

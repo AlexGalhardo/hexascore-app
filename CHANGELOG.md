@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **api:** `listExports` and `getExport` (302 to a 5-minute presigned URL, `Cache-Control: no-store`) for Pro and Business; the daily id files leave out `popularity` until the owner confirms it (P3.A.4.2)
 - **social:** feed opt-in in settings and onboarding, a "recent activity" profile tab, 180-day activity retention and follows/activity files in the data export (P7.A.1.3 part 2); reviews on rated items with a Markdown subset and a spoiler flag (P7.B.1.1); comments with one level of replies and like/helpful reactions on reviews, comments and lists, with notifications (P7.B.1.2); members can report reviews and comments, and admins can hide or delete them or ban the author (P7.B.1.3); Open Graph share cards and a share button on items, lists and profiles (P7.C.1.2); all behind the `social` flag (default off)
 - **ci:** mobile release flow with EAS: `apps/mobile/eas.json` profiles (development, preview, e2e-test, production with remote `versionCode` and `autoIncrement`; submit as a draft to the Play internal track), runbook docs/runbooks/mobile-release.md, rule `.claude/rules/mobile-release.md`, skill `hexascore-mobile-release`, and the manual `mobile-release.yml` workflow (submit gated by the `play-store` environment)
 - **web:** a "Feed" link in the navbar for signed-in users while the `social` flag is on (`flags.social` shared through vukem `flags.Share`) (IMPL-web-feed-nav)
@@ -90,6 +91,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **api:** `getItemActivity` is now `getGameActivity`, `getMovieActivity`, `getSeriesActivity` and `getBookActivity` (same URLs; both SDKs regenerated) (P3.A.4.2); scaffold pages use the `primary` design token instead of hardcoded indigo classes (P2.H.3.4); item-page recommendation impressions (sampled 1 in 10) and clicks are `event=reco_impression` / `event=reco_click` log lines instead of unused in-process counters (FIX-reco-log-events)
 - **web:** below `lg` the navbar shows only the title, a search field and a hamburger that opens a sheet with sections, Feed, notifications, account, language and theme (FIX-nav-mobile-hamburger); the follow bar, follow requests, feed and activity cards use the editorial design, with "1 follower" plurals and a neutral "Score" on others' ratings (IMPL-web-social-v1)
 - **mobile:** v1 look for the status and time-to-beat sheets (IMPL-mobile-v1-status-ui), the account extras with an unread badge on the profile tab (IMPL-mobile-v1-account-ui), and translated search type labels, recent removal and empty trending text (IMPL-mobile-search-i18n)
 - **ui:** client-fetched web data (search suggestions, user-ratings dialog, edition picker, data export) uses TanStack Query 5.105.0 (ADR 0020); the Ctrl+K search palette loads on first open (ADOPT-tanstack-query-web, FIX-lighthouse-budgets-main)
