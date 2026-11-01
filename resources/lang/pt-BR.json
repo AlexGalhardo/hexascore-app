@@ -437,7 +437,10 @@
       "notConfigured": "Pagamentos online ainda não estão disponíveis. Os planos pagos abrem em breve.",
       "coverageTitle": "Cobertura de dados",
       "coverageBody": "A API só retorna campos que podemos republicar, então alguns são irregulares e outros sempre ficam de fora (capas, trailers). As porcentagens de cobertura ainda não foram publicadas.",
-      "coverageLink": "Ver os detalhes da cobertura"
+      "coverageLink": "Ver os detalhes da cobertura",
+      "eyebrow": "API pública · somente leitura",
+      "popular": "Mais escolhido",
+      "lifetime": "vitalício"
     },
     "checkout": {
       "metaTitle": "Plano e cobrança",
@@ -1109,7 +1112,10 @@
           "0": "Atualizaremos esta página quando nossas práticas mudarem e alteraremos a data acima. Mudanças relevantes são avisadas no site ou por e-mail antes de entrarem em vigor."
         }
       }
-    }
+    },
+    "contents": "Sumário",
+    "also": "Veja também",
+    "otherTitle": "Termos de uso e cookies"
   },
   "terms": {
     "title": "Termos de uso e cookies",
@@ -1194,7 +1200,10 @@
           "0": "Dúvidas sobre estes termos, pedidos de arrependimento ou reembolso e pedidos de privacidade podem ser enviados pelo formulário de contato."
         }
       }
-    }
+    },
+    "contents": "Sumário",
+    "also": "Veja também",
+    "otherTitle": "Política de privacidade"
   },
   "lists": {
     "addToList": "Adicionar à lista",

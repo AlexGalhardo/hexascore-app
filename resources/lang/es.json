@@ -437,7 +437,10 @@
       "notConfigured": "Los pagos en línea aún no están disponibles. Los planes de pago abrirán pronto.",
       "coverageTitle": "Cobertura de datos",
       "coverageBody": "La API solo devuelve campos que podemos republicar, así que algunos son irregulares y otros siempre se omiten (portadas, tráilers). Los porcentajes de cobertura aún no se han publicado.",
-      "coverageLink": "Ver los detalles de la cobertura"
+      "coverageLink": "Ver los detalles de la cobertura",
+      "eyebrow": "API pública · solo lectura",
+      "popular": "El más elegido",
+      "lifetime": "de por vida"
     },
     "checkout": {
       "metaTitle": "Plan y facturación",
@@ -1109,7 +1112,10 @@
           "0": "Actualizaremos esta página cuando cambien nuestras prácticas y cambiaremos la fecha de arriba. Los cambios importantes se anuncian en el sitio o por correo antes de entrar en vigor."
         }
       }
-    }
+    },
+    "contents": "Contenido",
+    "also": "Ver también",
+    "otherTitle": "Términos de uso y cookies"
   },
   "terms": {
     "title": "Términos de uso y cookies",
@@ -1194,7 +1200,10 @@
           "0": "Las dudas sobre estos términos, las solicitudes de desistimiento o reembolso y las solicitudes de privacidad pueden enviarse mediante el formulario de contacto."
         }
       }
-    }
+    },
+    "contents": "Contenido",
+    "also": "Ver también",
+    "otherTitle": "Política de privacidad"
   },
   "lists": {
     "addToList": "Añadir a una lista",
