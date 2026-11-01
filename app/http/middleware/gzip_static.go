@@ -31,7 +31,7 @@ func GzipStatic() func(http.Handler) http.Handler {
 }
 
 func gzipAsset(r *http.Request) bool {
-	if r.Method == http.MethodHead || !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
+	if r.Method == http.MethodHead || !acceptsGzip(r) {
 		return false
 	}
 
@@ -60,6 +60,8 @@ type gzipStaticWriter struct {
 	status int
 	buf    []byte
 	wrote  bool
+	// html opts in to the public catalogue pages (GzipPublicPages); /build assets leave it false.
+	html bool
 }
 
 func (g *gzipStaticWriter) WriteHeader(code int) {
@@ -99,6 +101,10 @@ func (g *gzipStaticWriter) finish() {
 		return
 	}
 
+	if g.html && g.Header().Get("Cache-Control") == publicPageCache {
+		g.Header().Add("Vary", "Accept-Encoding")
+	}
+
 	if g.compressible() {
 		g.Header().Set("Content-Encoding", "gzip")
 		g.Header().Del("Content-Length")
@@ -125,6 +131,13 @@ func (g *gzipStaticWriter) compressible() bool {
 	}
 
 	ct := strings.ToLower(h.Get("Content-Type"))
+	if g.html {
+		return h.Get("Cache-Control") == publicPageCache && strings.Contains(ct, "text/html")
+	}
 
 	return !strings.Contains(ct, "text/html")
+}
+
+func acceptsGzip(r *http.Request) bool {
+	return strings.Contains(r.Header.Get("Accept-Encoding"), "gzip")
 }
