@@ -1,0 +1,8 @@
+{
+	"source": "cwebp 1.6.0 (libwebp-tools=1.6.0-r0 from the app image) -q <q> -m 6 -metadata none [-resize W H] on the fixture; generated once, see TestWebpSizeParity",
+	"sizes": {
+		"photo.jpg": {"full": 5948, "thumb": 902},
+		"art.png": {"full": 12996, "thumb": 1790},
+		"small.png": {"full": 2842, "thumb": 2266}
+	}
+}
