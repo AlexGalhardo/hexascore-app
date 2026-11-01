@@ -2,7 +2,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { chmodSync, copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterAll, describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "bun:test";
 
 // release.sh against a scratch repository that reproduces the squash-merge release: the tag sits on a branch
 // main never reaches, and main only gets an equal tree through a merge-back. A fake git-cliff records its arguments.
