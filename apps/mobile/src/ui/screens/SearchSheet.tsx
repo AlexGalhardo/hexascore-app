@@ -13,13 +13,21 @@ export interface SearchRow {
 	year: number | null;
 	typeLabel: string;
 	coverUri: string | null;
-	score: number | null;
+	/** Absent (suggestions carry no score): no badge. */
+	score?: number | null;
+}
+
+export interface SearchGroup {
+	key: string;
+	label: string;
+	rows: SearchRow[];
 }
 
 export type SearchState =
 	| { kind: "empty"; recent: string[]; trending: SearchRow[]; trendingLoading?: boolean }
 	| { kind: "loading" }
-	| { kind: "results"; rows: SearchRow[]; total: number }
+	| { kind: "results"; rows: SearchRow[]; total: number; heading?: string }
+	| { kind: "groups"; groups: SearchGroup[]; total: number }
 	| { kind: "error"; message: string };
 
 export interface SearchLabels {
@@ -46,6 +54,8 @@ export interface SearchSheetProps {
 	onRemoveRecent: (query: string) => void;
 	/** Absent: no footer button and the keyboard search key does nothing. */
 	onSeeAll?: () => void;
+	/** Keyboard search key; defaults to onSeeAll. */
+	onSubmit?: () => void;
 	state: SearchState;
 	/** Rows shown before "see all"; defaults to MAX_ROWS. */
 	limit?: number;
@@ -70,7 +80,7 @@ function Row({
 	locale: string;
 	onOpen: (row: SearchRow) => void;
 }): ReactElement {
-	const scoreLabel = labels.score(row);
+	const scoreLabel = row.score === undefined ? "" : labels.score(row);
 	return (
 		<Pressable
 			accessibilityRole="button"
@@ -88,7 +98,9 @@ function Row({
 				<Text className={MUTED}>{row.typeLabel}</Text>
 			</View>
 			{row.year !== null && <Text className={`${MUTED} tabular-nums`}>{row.year}</Text>}
-			<ScoreBadge score={row.score} locale={locale} label={scoreLabel} />
+			{row.score !== undefined && (
+				<ScoreBadge score={row.score} locale={locale} label={scoreLabel} />
+			)}
 		</Pressable>
 	);
 }
@@ -102,6 +114,7 @@ export function SearchSheet({
 	onRecent,
 	onRemoveRecent,
 	onSeeAll,
+	onSubmit,
 	state,
 	labels,
 	locale,
@@ -123,7 +136,7 @@ export function SearchSheet({
 					onChangeText={onQueryChange}
 					placeholder={labels.placeholder}
 					returnKeyType="search"
-					onSubmitEditing={onSeeAll}
+					onSubmitEditing={onSubmit ?? onSeeAll}
 					className="h-12 flex-1 font-text text-16 text-fg dark:text-fg-dark"
 				/>
 				<Pressable
@@ -195,9 +208,48 @@ export function SearchSheet({
 				{state.kind === "results" && state.rows.length > 0 && (
 					<>
 						<Text accessibilityLiveRegion="polite" className={SECTION}>
-							{labels.firstOf(Math.min(limit, state.rows.length), state.total)}
+							{state.heading ?? labels.firstOf(Math.min(limit, state.rows.length), state.total)}
 						</Text>
 						{rows(state.rows)}
+						{onSeeAll && (
+							<Pressable
+								accessibilityRole="button"
+								accessibilityLabel={labels.seeAll(query)}
+								onPress={onSeeAll}
+								className="min-h-11 flex-row items-center justify-between border-t border-border px-4 py-3 dark:border-border-dark"
+							>
+								<Text className="font-text text-16 font-semibold text-primary dark:text-primary-dark">
+									{labels.seeAll(query)}
+								</Text>
+								<Icon
+									name="arrow-forward"
+									size={18}
+									className="text-primary dark:text-primary-dark"
+								/>
+							</Pressable>
+						)}
+					</>
+				)}
+				{state.kind === "groups" && state.groups.length === 0 && (
+					<Text accessibilityLiveRegion="polite" className={`${MUTED} px-4 py-4`}>
+						{labels.noResults(query)}
+					</Text>
+				)}
+				{state.kind === "groups" && state.groups.length > 0 && (
+					<>
+						<Text accessibilityLiveRegion="polite" className={SECTION}>
+							{labels.firstOf(state.total, state.total)}
+						</Text>
+						{state.groups.map((group) => (
+							<View key={group.key}>
+								<Text accessibilityRole="header" className={SECTION}>
+									{group.label}
+								</Text>
+								{group.rows.map((row) => (
+									<Row key={row.id} row={row} labels={labels} locale={locale} onOpen={onOpen} />
+								))}
+							</View>
+						))}
 						{onSeeAll && (
 							<Pressable
 								accessibilityRole="button"
