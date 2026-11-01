@@ -188,14 +188,14 @@ export function useListActions(deps: ListsDeps, locale: AppLocale): ListActions 
 export function listLaneResult(
 	client: QueryClient,
 	notify: (message: string) => void,
-	locale: AppLocale,
+	locale: () => AppLocale,
 ): (entry: QueueEntry, result: QueueResult) => void {
 	return (entry, result) => {
 		if (!entry.op.startsWith(LANE)) return;
 		void client.invalidateQueries({ queryKey: listKeys.one(entry.op.slice(LANE.length)) });
 		void client.invalidateQueries({ queryKey: listKeys.mine });
 		if (result.kind === "rollback" || (result.kind === "drop" && result.toast)) {
-			notify(t(locale, "lists.notSaved"));
+			notify(t(locale(), "lists.notSaved"));
 		}
 	};
 }
