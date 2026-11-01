@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **mobile:** Android v1 primitives (button with depth, score badge, 2:3 cover, theme toggle) and an accessible ten-star half-step rating input (IMPL-mobile-v1-ui)
 - **catalog:** Ingestion tables and the canonical-hash record store (`internal/ingest/store`), hashes byte-compatible with the legacy Python `canonical_hash` (P6.A.1.2)
 - **admin:** Admins revert catalogue changes (single, cascade, force) from `/admin/catalog-audit`, restoring value and provenance (P4.B.2.4)
 - **admin:** Admins edit catalogue fields from the item manage page; each change writes a `catalog_audit` row (`source=admin`) and can be reverted (P4.B.2.5)
@@ -48,6 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **ui:** Design tokens use the v1 Editorial palette (light and dark) and add primary, ledge, field and on-score tokens; the Android app can follow the system theme or a stored light/dark choice (IMPL-mobile-v1-tokens)
 - **community:** Banning or deleting an account withdraws its open suggestions; merging an item expires the open suggestions on it; account deletion removes the user from community moderation records (P4.B.3.2)
 - **ui:** The home page shows the trending of the last 7 days, 3 per type; the 30-day API list is unchanged (FIX-trending-7d-home)
 - **api:** The public API base URL is `https://api.hexascore.app/v1`: the OpenAPI document, Scalar reference and SDKs use `/v1/...` paths on the API host; `/api/v1/...` keeps answering (FIX-openapi-api-host-paths)
