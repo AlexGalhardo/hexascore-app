@@ -3786,7 +3786,7 @@ Design principles for the whole phase: every social write is moderated by the P4
 
 ### P7.A Follows and activity feed
 
-- [ ] **P7.A.1.1** Amend D-06, write SDD 14 §12 "Social layer" (follows and feed subsection) (tables `follows`, `activity_events`, privacy matrix, retention 180 days) and ADR 0021 (feed built from the write path, no fan-out until 10k followers).
+- [x] **P7.A.1.1** Amend D-06, write SDD 14 §12 "Social layer" (follows and feed subsection) (tables `follows`, `activity_events`, privacy matrix, retention 180 days) and ADR 0021 (feed built from the write path, no fan-out until 10k followers).
   - Files/modules: `docs/brainstorming.md`, `docs/sdd/14-user-library.md`, `docs/adrs/0021-social-feed.md`
   - Refs: SDD 14 §1, §2; D-06; D-29; web-research §6 (Goodreads), §7 (Skoob); Letterboxd: DOC-research-letterboxd report
   - Depends on: P2.G.4.2
@@ -3794,7 +3794,7 @@ Design principles for the whole phase: every social write is moderated by the P4
   - Acceptance:
     - `bunx markdownlint-cli2@0.24.0 docs/sdd/14-user-library.md docs/adrs/0021-social-feed.md` → 0 errors; the open-issues table lists the new rows
 
-- [ ] **P7.A.1.2** Build `follows`: `PUT|DELETE /u/{nickname}/follow`, follower and following counts on the profile, `TestSecurity_A01_PrivateProfileFollowRequiresApproval`.
+- [x] **P7.A.1.2** Build `follows`: `PUT|DELETE /u/{nickname}/follow`, follower and following counts on the profile, `TestSecurity_A01_PrivateProfileFollowRequiresApproval`.
   - Files/modules: `database/migrations/<ts>_create_follows_table.go`, `app/social/follows.go`, `app/controllers/follows_controller.go`, `routes/social.go`, `resources/js/pages/User/Profile.tsx` (follow button, counts), `tests/follows_test.go`
   - Refs: SDD 14 §12; SDD 13 A01, A06 (rate limit 60/h)
   - Depends on: P7.A.1.1
