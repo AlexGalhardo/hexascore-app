@@ -68,7 +68,7 @@ export default function Edition({ work, edition }: Props) {
 				{edition.subtitle && <p className="text-xl text-muted">{edition.subtitle}</p>}
 				<Link
 					href={localized(`/suggest/edition/${edition.id}`, locale)}
-					className={btnClass("ghost", "justify-self-start px-2")}
+					className={btnClass("ghost", "-ml-5 justify-self-start")}
 				>
 					{pencil}
 					{t("community.suggest.link")}
@@ -86,7 +86,7 @@ export default function Edition({ work, edition }: Props) {
 							</div>
 						))}
 				</dl>
-				<Link href={workHref} className={btnClass("ghost", "mt-6 justify-self-start px-2")}>
+				<Link href={workHref} className={btnClass("ghost", "mt-6 -ml-5 justify-self-start")}>
 					<span aria-hidden="true">‹</span>
 					{t("item.editions.backToWork")}
 				</Link>
