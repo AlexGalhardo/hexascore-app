@@ -46,6 +46,8 @@ type Config struct {
 	Clock Clock
 	// Base replaces the Safe transport; tests only.
 	Base http.RoundTripper
+	// Timeout bounds one attempt; zero means 60 s. Tests only.
+	Timeout time.Duration
 }
 
 // Client holds one client per body cap, sharing throttle and breaker state.
@@ -65,11 +67,13 @@ type policy struct {
 	hosts map[string]*host
 	ua    string
 	clock Clock
+	// timeout bounds one attempt, from the moment it is sent until its body is closed.
+	timeout time.Duration
 }
 
 // New builds the client.
 func New(cfg Config) *Client {
-	p := &policy{hosts: map[string]*host{}, ua: UserAgent(cfg.ContactURL), clock: cfg.Clock}
+	p := &policy{hosts: map[string]*host{}, ua: UserAgent(cfg.ContactURL), clock: cfg.Clock, timeout: cfg.Timeout}
 	if p.clock == nil {
 		p.clock = realClock{}
 	}
@@ -78,14 +82,23 @@ func New(cfg Config) *Client {
 		p.hosts[name] = newHost(l)
 	}
 
+	if p.timeout <= 0 {
+		p.timeout = timeout
+	}
+
+	// The clients get no overall Timeout: it would also cover the retry loop, so a Retry-After pause near 60 s
+	// failed the request. Each attempt gets its own deadline in send instead.
 	build := func(limit int64) *http.Client {
 		if cfg.Base != nil {
-			return &http.Client{Transport: p.wrap(cfg.Base), Timeout: timeout}
+			return &http.Client{Transport: p.wrap(cfg.Base)}
 		}
 
-		return httpclient.Safe(httpclient.Options{
-			Timeout: timeout, MaxBody: limit, Allow: cfg.Allow, WrapTransport: p.wrap,
+		c := httpclient.Safe(httpclient.Options{
+			Timeout: p.timeout, MaxBody: limit, Allow: cfg.Allow, WrapTransport: p.wrap,
 		})
+		c.Timeout = 0
+
+		return c
 	}
 
 	return &Client{JSON: build(MaxJSONBytes), Image: build(MaxImageBytes), p: p}
@@ -176,14 +189,17 @@ func (p *policy) send(ctx context.Context, h *host, next http.RoundTripper, req 
 		return nil, err
 	}
 
-	resp, err := next.RoundTrip(req)
+	actx, cancel := context.WithTimeout(ctx, p.timeout)
+
+	resp, err := next.RoundTrip(req.WithContext(actx))
 	if err != nil {
+		cancel()
 		release()
 
 		return nil, err
 	}
 
-	resp.Body = &releaseBody{ReadCloser: resp.Body, release: release}
+	resp.Body = &releaseBody{ReadCloser: resp.Body, release: func() { release(); cancel() }}
 
 	return resp, nil
 }

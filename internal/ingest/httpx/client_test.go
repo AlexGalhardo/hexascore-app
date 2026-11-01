@@ -376,3 +376,55 @@ func TestHostOutsideAllowlistIsRefused(t *testing.T) {
 }
 
 func (c *Client) policyHost(name string) *host { return c.p.hosts[name] }
+
+// slowClock is a fakeClock whose long sleeps (a Retry-After pause) take real time: they last until the context
+// ends or real passes, so a deadline that wraps the pause makes the request fail.
+type slowClock struct {
+	*fakeClock
+
+	real time.Duration
+}
+
+func (c slowClock) Sleep(ctx context.Context, d time.Duration) error {
+	if d >= time.Minute {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-time.After(c.real):
+		}
+	}
+
+	return c.fakeClock.Sleep(ctx, d)
+}
+
+func TestRetryAfterPauseDoesNotEatTheRequestTimeout(t *testing.T) {
+	clk := slowClock{newClock(), 300 * time.Millisecond}
+	sc := &script{steps: []step{
+		{status: 429, header: http.Header{"Retry-After": {"120"}}},
+		{status: 200},
+	}, clock: clk.fakeClock}
+	c := New(Config{
+		Hosts: map[string]HostLimit{"api.test": {PerSecond: 5}}, Clock: clk, Base: sc, Timeout: 100 * time.Millisecond,
+	})
+
+	code, err := get(t, c, "api.test")
+	if err != nil || code != http.StatusOK || sc.calls != 2 {
+		t.Fatalf("code = %v, err = %v, calls = %d; want 200 after one pause", code, err, sc.calls)
+	}
+}
+
+func TestEachAttemptStillHasADeadline(t *testing.T) {
+	block := httpclient.RoundTripperFunc(func(r *http.Request) (*http.Response, error) {
+		<-r.Context().Done()
+
+		return nil, r.Context().Err()
+	})
+	c := New(Config{
+		Hosts: map[string]HostLimit{"api.test": {PerSecond: 5}}, Clock: newClock(), Base: block,
+		Timeout: 50 * time.Millisecond,
+	})
+
+	if _, err := get(t, c, "api.test"); !errors.Is(err, context.DeadlineExceeded) {
+		t.Fatalf("err = %v, want a deadline error", err)
+	}
+}
