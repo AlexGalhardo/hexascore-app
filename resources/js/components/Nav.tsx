@@ -1,11 +1,13 @@
 import { Link, usePage } from "@inertiajs/react";
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
 import { LOCALE_PREFIXES, localized, unlocalized } from "../lib/route";
 import { useT } from "../lib/useT";
 import type { SharedProps } from "../types";
-import SearchPalette from "./search/SearchPalette";
 import Dropdown from "./ui/Dropdown";
+
+// Loaded on first open: keeps the palette and the query hooks off the first-load script.
+const SearchPalette = lazy(() => import("./search/SearchPalette"));
 
 const LOCALE_LABELS: Record<string, string> = { en: "EN", "pt-BR": "PT", es: "ES" };
 // Endonyms: each language is named in itself, identical in every locale.
@@ -100,6 +102,8 @@ export default function Nav() {
 	const hint = useShortcutHint();
 	const searchHref = localized("/search", locale);
 	const [paletteOpen, setPaletteOpen] = useState(false);
+	const [paletteMounted, setPaletteMounted] = useState(false);
+	if (paletteOpen && !paletteMounted) setPaletteMounted(true);
 	const searchTrigger = useRef<HTMLAnchorElement>(null);
 
 	useEffect(() => {
@@ -326,11 +330,15 @@ export default function Nav() {
 					</Link>
 				))}
 			</nav>
-			<SearchPalette
-				open={paletteOpen}
-				onOpenChange={setPaletteOpen}
-				returnFocus={searchTrigger}
-			/>
+			{paletteMounted && (
+				<Suspense fallback={null}>
+					<SearchPalette
+						open={paletteOpen}
+						onOpenChange={setPaletteOpen}
+						returnFocus={searchTrigger}
+					/>
+				</Suspense>
+			)}
 		</header>
 	);
 }
