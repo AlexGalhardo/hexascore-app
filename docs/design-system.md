@@ -302,7 +302,7 @@ Every Inertia page component in `resources/js/pages/` (33 components; `ls resour
 - Purpose: landing and discovery.
 - Blocks: hero `h1` ("Every game, movie, series and book, scored by people, category by category.", `text-3xl sm:text-4xl`) with an "Explore" primary button linking to `/search`; one `SectionHighlights` per type (Games, Movies, TV Series, Books) with Top rated, New releases and Most rated columns of six rows.
 - Actions: Explore, section "See all" links, row links, header search.
-- Data: `sections[{type, count, topRated, newest, mostRated}]`. The "Recently rated by members" strip and its query were removed (owner round 2026-11-01 item 5).
+- Data: `sections[{type, count, topRated, newest, mostRated}]`, `trending.<type>.items[{rank, basis, genre, ...Highlight}]` (`genre`: primary genre name or null, shown next to the year; every card reads "#N trending"). The "Recently rated by members" strip and its query were removed (owner round 2026-11-01 item 5).
 - States: empty column "Nothing here yet."; items without a score show an en dash.
 
 #### Catalog/Index

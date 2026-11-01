@@ -701,8 +701,7 @@
     "trendingWeek": "Tendencia esta semana",
     "popularType": "Populares: {type}",
     "popular": "Popular",
-    "trendingRank": "#{rank} en tendencia esta semana",
-    "popularRank": "#{rank} popular",
+    "trendingRank": "#{rank} en tendencia",
     "titles": {
       "one": "{n} título",
       "other": "{n} títulos"

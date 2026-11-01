@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"context"
+	"fmt"
+	"strings"
 	"sync"
 	"time"
 
@@ -70,7 +72,7 @@ func Home(app *vukem.App) web.HandlerFunc {
 				return err
 			}
 
-			trend, err = cache.Remember(c.Context(), store, "home:trending7:v1:"+locale, trendingTTL,
+			trend, err = cache.Remember(c.Context(), store, "home:trending7:v2:"+locale, trendingTTL,
 				func(ctx context.Context) (map[string]trendingSection, error) {
 					return homeTrending(ctx, db.SQL(), app.Now(), locale)
 				})
@@ -131,8 +133,9 @@ func homeForYou(ctx context.Context, svc *foryou.Service, userID int64, locale s
 }
 
 type trendingEntry struct {
-	Rank  int    `json:"rank"`
-	Basis string `json:"basis"`
+	Rank  int     `json:"rank"`
+	Basis string  `json:"basis"`
+	Genre *string `json:"genre"`
 	catalog.Highlight
 }
 
@@ -174,9 +177,19 @@ func homeTrending(
 			byID[h.ID] = h
 		}
 
+		genres, err := primaryGenres(ctx, db, ids, locale)
+		if err != nil {
+			return nil, err
+		}
+
 		for _, e := range entries {
 			if h, ok := byID[e.ID]; ok {
-				sec.Items = append(sec.Items, trendingEntry{Rank: len(sec.Items) + 1, Basis: e.Basis, Highlight: h})
+				var genre *string
+				if g, ok := genres[e.ID]; ok {
+					genre = &g
+				}
+
+				sec.Items = append(sec.Items, trendingEntry{Rank: len(sec.Items) + 1, Basis: e.Basis, Genre: genre, Highlight: h})
 			}
 		}
 
@@ -184,4 +197,37 @@ func homeTrending(
 	}
 
 	return out, nil
+}
+
+// primaryGenres maps each of ids to the localized name of its first genre (lowest position); items without one are
+// absent.
+func primaryGenres(ctx context.Context, db catalog.Querier, ids []string, locale string) (map[string]string, error) {
+	out := make(map[string]string, len(ids))
+	if len(ids) == 0 {
+		return out, nil
+	}
+
+	rows, err := db.QueryContext(ctx, `SELECT DISTINCT ON (ie.item_id) ie.item_id::text,
+  coalesce(t.name, te.name, e.default_name)
+FROM item_entities ie
+JOIN entities e ON e.id = ie.entity_id
+LEFT JOIN entity_translations t ON t.entity_id = e.id AND t.locale = $2
+LEFT JOIN entity_translations te ON te.entity_id = e.id AND te.locale = 'en'
+WHERE ie.item_id = ANY($1::uuid[]) AND ie.role = 'genre'
+ORDER BY ie.item_id, ie.position, e.slug`, "{"+strings.Join(ids, ",")+"}", locale)
+	if err != nil {
+		return nil, fmt.Errorf("home primary genres: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id, name string
+		if err := rows.Scan(&id, &name); err != nil {
+			return nil, fmt.Errorf("scan primary genre: %w", err)
+		}
+
+		out[id] = name
+	}
+
+	return out, rows.Err()
 }

@@ -48,9 +48,9 @@ const section: Section = {
 };
 
 const trending: TrendingEntry[] = [
-	{ ...h("t1", 8.4), rank: 1, basis: "trend" },
-	{ ...h("t2"), rank: 2, basis: "trend" },
-	{ ...h("t3"), rank: 3, basis: "prior" },
+	{ ...h("t1", 8.4), rank: 1, basis: "trend", genre: "Action" },
+	{ ...h("t2"), rank: 2, basis: "trend", genre: null },
+	{ ...h("t3"), rank: 3, basis: "prior", genre: "Adventure" },
 ];
 
 test("other titles skip trending ones and duplicates, six at most", () => {
@@ -63,7 +63,11 @@ test("three trending cards with rank, score explanation, then more titles and se
 	expect(within(cards[0]).getByText(/home.trendingRank.*"rank":1/)).toBeTruthy();
 	expect(within(cards[0]).getByText("item.band.high")).toBeTruthy();
 	expect(within(cards[1]).getByText(/home.ratingsOfMin.*"count":3,"min":5/)).toBeTruthy();
-	expect(within(cards[2]).getByText(/home.popularRank/)).toBeTruthy();
+	// Owner round 2026-11-01 item 15: "#3 trending" even on the prior-week fallback, and the genre, not the type.
+	expect(within(cards[2]).getByText(/home.trendingRank.*"rank":3/)).toBeTruthy();
+	expect(within(cards[0]).getByText("2020 · Action")).toBeTruthy();
+	expect(within(cards[1]).getByText("2020")).toBeTruthy();
+	expect(screen.queryByText(/itemTypes\./)).toBeNull();
 	expect(cards[0].querySelector("a")?.getAttribute("href")).toBe("/games/slug-t1?from=trending");
 	expect(screen.getByText("home.more.game")).toBeTruthy();
 	expect(

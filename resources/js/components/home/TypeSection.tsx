@@ -11,6 +11,8 @@ import ScoreBadge, { scoreBand } from "../ui/ScoreBadge";
 export interface TrendingEntry extends Highlight {
 	rank: number;
 	basis: "trend" | "prior";
+	/** Localized name of the item's primary genre, null when it has none. */
+	genre: string | null;
 }
 
 type ItemType = Section["type"];
@@ -93,9 +95,7 @@ export default function TypeSection({
 							<CoverThumb cover={item.cover} alt="" size="trend" />
 							<div className="grid min-w-0 content-start gap-1">
 								<p className={`text-xs font-semibold ${ACCENT_TEXT[type]}`}>
-									{item.basis === "prior"
-										? t("home.popularRank", { rank: item.rank })
-										: t("home.trendingRank", { rank: item.rank })}
+									{t("home.trendingRank", { rank: item.rank })}
 								</p>
 								<Link
 									href={`${base}/${item.slug}?from=trending`}
@@ -104,9 +104,7 @@ export default function TypeSection({
 									{item.title}
 								</Link>
 								<p className="text-xs text-muted">
-									{[item.year, t(`itemTypes.${type}`)]
-										.filter(Boolean)
-										.join(" · ")}
+									{[item.year, item.genre].filter(Boolean).join(" · ")}
 								</p>
 								<div className="mt-2 flex items-center gap-3">
 									<ScoreBadge score={item.score} size="sm" />

@@ -365,8 +365,7 @@
 	"home.trendingWeek": "Tendencia esta semana",
 	"home.popularType": "Populares: {type}",
 	"home.popular": "Popular",
-	"home.trendingRank": "#{rank} en tendencia esta semana",
-	"home.popularRank": "#{rank} popular",
+	"home.trendingRank": "#{rank} en tendencia",
 	"home.titles": {
 		"one": "{n} título",
 		"other": "{n} títulos"

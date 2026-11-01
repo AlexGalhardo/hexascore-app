@@ -365,8 +365,7 @@
 	"home.trendingWeek": "Trending this week",
 	"home.popularType": "Popular {type}",
 	"home.popular": "Popular",
-	"home.trendingRank": "#{rank} trending this week",
-	"home.popularRank": "#{rank} popular",
+	"home.trendingRank": "#{rank} trending",
 	"home.titles": {
 		"one": "{n} title",
 		"other": "{n} titles"

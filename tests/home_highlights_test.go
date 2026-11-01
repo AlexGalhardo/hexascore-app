@@ -93,6 +93,17 @@ VALUES ($1, 'game', $2, $3, '2020-05-01')`, id, fmt.Sprintf("trend-%d", i), fmt.
 		exec(`INSERT INTO item_translations (item_id, locale, title, title_source) VALUES ($1, 'en', $2, 'hexascore')`,
 			id, fmt.Sprintf("Trend %d", i))
 
+		if i == 3 {
+			// Two genres: the one at the lower position is the primary one shown on the card.
+			for pos, g := range []string{"adventure", "action"} {
+				gid := uuid.NewV7().String()
+				exec(`INSERT INTO entities (id, kind, slug, default_name) VALUES ($1, 'genre', $2, $3)`,
+					gid, g, map[string]string{"action": "Action", "adventure": "Adventure"}[g])
+				exec(`INSERT INTO item_entities (item_id, role, entity_id, source, position) VALUES ($1, 'genre', $2, 'hexascore', $3)`,
+					id, gid, 1-pos)
+			}
+		}
+
 		if i < 4 {
 			exec(`INSERT INTO item_activity_daily (item_id, day, item_type, views, ratings_new_w)
 VALUES ($1, current_date, 'game', 100, $2)`, id, 6+i)
@@ -107,6 +118,8 @@ VALUES ($1, current_date - 20, 'game', 9000, 60)`, id)
 		PropEquals("trending.game.items.0.title", "Trend 3").
 		PropEquals("trending.game.items.0.rank", 1).
 		PropEquals("trending.game.items.0.basis", "trend").
+		PropEquals("trending.game.items.0.genre", "Action").
+		PropEquals("trending.game.items.1.genre", nil).
 		PropEquals("trending.game.items.2.title", "Trend 1").
 		HasProp("trending.movie.items", 0)
 }
