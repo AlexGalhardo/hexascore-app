@@ -933,6 +933,12 @@
       "delete": "Delete times",
       "saved": "Times saved.",
       "deleted": "Times deleted."
+    },
+    "confidence": "Confidence: {level}",
+    "confidenceLevel": {
+      "low": "low",
+      "medium": "medium",
+      "high": "high"
     }
   },
   "updatedLabel": "Last updated",

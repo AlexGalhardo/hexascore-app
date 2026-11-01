@@ -67,12 +67,7 @@ const routes: [string, Record<string, string>, () => ReactElement, string | null
 	["(tabs)/search", {}, () => <Search />, "Search"],
 	["(tabs)/lists", {}, () => <Lists />, "Lists"],
 	["(tabs)/profile", {}, () => <Profile />, "Profile"],
-	[
-		"[type]/[slug]",
-		{ type: "movies", slug: "arrival" },
-		() => <ItemScreen />,
-		"Item movies arrival",
-	],
+	["[type]/[slug]", { type: "movies", slug: "arrival" }, () => <ItemScreen />, "Page not found"],
 	["entities/[id]", { id: "42" }, () => <EntityScreen />, "Entity 42"],
 	["lists/[id]", { id: "7" }, () => <ListScreen />, "List 7"],
 	["update-required", {}, () => <UpdateRequired />, storeListingUrl()],
@@ -89,8 +84,10 @@ test.each(routes)("route %s renders its placeholder", async (_name, routeParams,
 test.each(["games", "movies", "series", "books"])("section and item accept %s", async (type) => {
 	await render(offline(<SectionBody type={type} />));
 	expect(screen.getByTestId("listing")).toBeTruthy();
-	await render(<ItemBody type={type} slug="title" />);
-	expect(screen.getByText(`Item ${type} title`)).toBeTruthy();
+	await render(
+		offline(<ItemBody type={type} slug="title" id="0192f1c6-0000-7000-8000-000000000001" />),
+	);
+	expect(screen.getByTestId("item")).toBeTruthy();
 });
 
 test("[type] rejects anything outside games|movies|series|books", async () => {

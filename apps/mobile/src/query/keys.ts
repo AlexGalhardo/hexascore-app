@@ -25,4 +25,8 @@ export const queryKeys = {
 	// The cursor is the page param, not part of the key: a new sort or genre is a new key, so paging restarts.
 	listing: (type: CatalogType, filter: ListingFilter, locale: AppLocale) =>
 		["listItems", { type, ...filter, locale }] as const,
+	item: (type: CatalogType, id: string, locale: AppLocale) =>
+		["getItem", { type, id, locale }] as const,
+	editions: (id: string) => ["listEditions", { id }] as const,
+	itemMe: (id: string) => ["me", { id }] as const,
 };

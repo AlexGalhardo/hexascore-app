@@ -18,3 +18,11 @@ export const SINGULAR: Record<CatalogType, string> = {
 	series: "series",
 	books: "book",
 };
+
+// The slug keeps the URL readable; the id is what GET /{type}/{id} takes.
+export function itemHref(
+	type: CatalogType,
+	item: { slug: string; id: string },
+): `/${CatalogType}/${string}` {
+	return `/${type}/${item.slug}?id=${encodeURIComponent(item.id)}`;
+}
