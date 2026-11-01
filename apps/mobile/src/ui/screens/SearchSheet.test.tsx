@@ -13,6 +13,7 @@ const labels: SearchLabels = {
 	recent: "Recent searches",
 	removeRecent: (query) => `Remove ${query}`,
 	trending: "Trending this week",
+	trendingEmpty: "Nothing is trending this week yet.",
 	loading: "Searching…",
 	noResults: (query) => `No results for “${query}”`,
 	firstOf: (shown, total) => `First ${shown} of ${total} matches`,
@@ -70,6 +71,12 @@ test("empty state lists recent searches and trending rows", async () => {
 	expect(props.onRemoveRecent).toHaveBeenCalledWith("witcher");
 	expect(screen.getByText("Trending this week")).toBeTruthy();
 	expect(screen.getByText("–")).toBeTruthy();
+});
+
+test("empty state without trending rows says so under the trending heading", async () => {
+	await render(<SearchSheet {...setup({})} />);
+	expect(screen.getByText("Trending this week")).toBeTruthy();
+	expect(screen.getByText("Nothing is trending this week yet.")).toBeTruthy();
 });
 
 test("loading and no-results states", async () => {

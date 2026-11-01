@@ -28,6 +28,7 @@ export interface SearchLabels {
 	recent: string;
 	removeRecent: (query: string) => string;
 	trending: string;
+	trendingEmpty: string;
 	loading: string;
 	noResults: (query: string) => string;
 	firstOf: (shown: number, total: number) => string;
@@ -161,8 +162,14 @@ export function SearchSheet({
 								</Pressable>
 							</View>
 						))}
-						{state.trending.length > 0 && <Text className={SECTION}>{labels.trending}</Text>}
-						{rows(state.trending)}
+						<Text className={SECTION}>{labels.trending}</Text>
+						{state.trending.length > 0 ? (
+							rows(state.trending)
+						) : (
+							<Text className="px-4 font-text text-16 text-muted dark:text-muted-dark">
+								{labels.trendingEmpty}
+							</Text>
+						)}
 					</>
 				)}
 				{state.kind === "loading" && (
