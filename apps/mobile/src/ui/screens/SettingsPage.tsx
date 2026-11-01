@@ -20,6 +20,8 @@ export interface SettingsPageProps {
 	/** Crash-report consent switch, wired from src/telemetry. */
 	crashReport: ReactNode;
 	labels: SettingsLabels;
+	/** Signed-in sections (profile form, devices) between Account and Appearance. */
+	children?: ReactNode;
 	onTheme: (theme: ThemePreference) => void;
 	onSignOut: () => void;
 	onSignIn: () => void;
@@ -34,6 +36,22 @@ function Heading({ children }: { children: string }): ReactElement {
 		<Text accessibilityRole="header" className={`font-display text-24 font-bold ${FG}`}>
 			{children}
 		</Text>
+	);
+}
+
+/** A titled settings section, for the sections passed as children. */
+export function SettingsSection({
+	title,
+	children,
+}: {
+	title: string;
+	children: ReactNode;
+}): ReactElement {
+	return (
+		<View className={SECTION}>
+			<Heading>{title}</Heading>
+			{children}
+		</View>
 	);
 }
 
@@ -69,6 +87,7 @@ export function SettingsPage(props: SettingsPageProps): ReactElement {
 					</>
 				)}
 			</View>
+			{props.children}
 			<View className={SECTION}>
 				<Heading>{labels.appearance}</Heading>
 				<View accessibilityRole="radiogroup" className="flex-row">

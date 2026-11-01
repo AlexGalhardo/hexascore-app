@@ -1,44 +1,39 @@
 import { router } from "expo-router";
 import { type ReactElement, useState, useSyncExternalStore } from "react";
 import { logout } from "../../src/auth/logout";
-import { appClient, session } from "../../src/auth/runtime";
-import { t } from "../../src/i18n";
+import { appClient, appLocale, session } from "../../src/auth/runtime";
 import { memoryPreferences } from "../../src/platform/preferences";
+import type { ProfileApi } from "../../src/profile/me";
+import { ProfileSettings } from "../../src/profile/Settings";
 import { useLocale } from "../../src/providers/root";
 import { CrashReportSwitch } from "../../src/telemetry/CrashReportSwitch";
 import { applyThemePreference, readThemePreference } from "../../src/theme";
-import { SettingsPage } from "../../src/ui/screens/SettingsPage";
+
+const api: ProfileApi = {
+	read: appClient.read,
+	write: (call) => appClient.write(appClient.newIdempotencyKey(), call),
+};
 
 export default function ProfileScreen(): ReactElement {
 	const locale = useLocale();
 	const state = useSyncExternalStore(session.subscribe, session.state);
 	const [theme, setTheme] = useState(() => readThemePreference(memoryPreferences));
 	return (
-		<SettingsPage
-			title={t(locale, "account.settings.title")}
-			// Name and e-mail come from GET /me, which P5.B.4.2 wires.
-			account={state.kind === "active" ? { name: null, email: null } : null}
+		<ProfileSettings
+			api={api}
+			signedIn={state.kind === "active"}
+			locale={locale}
+			onLocale={appLocale.set}
 			theme={theme}
-			crashReport={<CrashReportSwitch locale={locale} />}
-			labels={{
-				account: t(locale, "account.settings.account"),
-				appearance: t(locale, "account.settings.appearance"),
-				theme: {
-					system: t(locale, "account.settings.themeSystem"),
-					light: t(locale, "account.settings.themeLight"),
-					dark: t(locale, "account.settings.themeDark"),
-				},
-				privacy: t(locale, "account.privacy.title"),
-				signOut: t(locale, "account.sessions.revoke"),
-				signIn: t(locale, "auth.login.title"),
-			}}
 			onTheme={(next) => {
 				applyThemePreference(memoryPreferences, next);
 				setTheme(next);
 			}}
+			crashReport={<CrashReportSwitch locale={locale} />}
 			onSignOut={() =>
 				void appClient.write(appClient.newIdempotencyKey(), (client) => logout({ client, session }))
 			}
+			onCurrentRevoked={() => void session.signOut()}
 			onSignIn={() => router.navigate("/login")}
 		/>
 	);

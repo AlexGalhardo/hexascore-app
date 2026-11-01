@@ -1,7 +1,7 @@
 import "../global.css";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { type ErrorBoundaryProps, Stack, useSegments } from "expo-router";
-import { type ReactElement, useEffect, useState } from "react";
+import { type ReactElement, useEffect, useState, useSyncExternalStore } from "react";
 import { Pressable, Text, View } from "react-native";
 import { appLocale, persistOptions, queryClient, ratingQueue, rootDeps } from "../src/auth/runtime";
 import { t } from "../src/i18n";
@@ -22,14 +22,14 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps): ReactElemen
 	return (
 		<View className="flex-1 items-center justify-center gap-4 bg-bg px-4 dark:bg-bg-dark">
 			<Text className="text-20 text-fg dark:text-fg-dark">
-				{t(appLocale, "errors.serverTitle")}
+				{t(appLocale.get(), "errors.serverTitle")}
 			</Text>
 			<Pressable
 				accessibilityRole="button"
 				className="min-h-11 justify-center"
 				onPress={() => void retry()}
 			>
-				<Text className="text-fg dark:text-fg-dark">{t(appLocale, "errors.retry")}</Text>
+				<Text className="text-fg dark:text-fg-dark">{t(appLocale.get(), "errors.retry")}</Text>
 			</Pressable>
 		</View>
 	);
@@ -40,6 +40,7 @@ export default function RootLayout(): ReactElement | null {
 	// Route pattern segments (`[type]`, `[slug]`), never the concrete values, so no username reaches the report.
 	// The typed-routes manifest is not generated in this repo, so the hook is typed `never`.
 	const segments = (useSegments as () => string[])();
+	const locale = useSyncExternalStore(appLocale.subscribe, appLocale.get);
 	const [consent, setConsent] = useState(crashConsent);
 	useEffect(() => setCrashScreen(`/${segments.join("/")}`), [segments]);
 	// Every guard is false until the vault is read; render nothing instead of an unmatched route.
@@ -47,12 +48,12 @@ export default function RootLayout(): ReactElement | null {
 	const guards = routeGuards(state, upgrade);
 	return (
 		<PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
-			<LocaleProvider locale={appLocale}>
+			<LocaleProvider locale={locale}>
 				<RatingQueueProvider value={ratingQueue}>
-					<OfflineBanner locale={appLocale} />
+					<OfflineBanner locale={locale} />
 					{consent === "unset" ? (
 						<CrashConsentPrompt
-							locale={appLocale}
+							locale={locale}
 							onChoose={(granted) => {
 								setConsent(granted ? "granted" : "denied");
 								void setCrashConsent(granted);
