@@ -101,6 +101,7 @@ These stay unchecked. None of them is in a worker queue. Say the word here and n
 - Q-A13 (2026-10-31, security/CI, from QA-ci-local-script): osv-scanner reports GO-2026-5932 in `golang.org/x/crypto` 0.58.0 with no fixed version yet, so the CI `deps` job will turn red on the next PR. Options: (a) add a time-boxed ignore in `osv-scanner.toml` with the advisory id, a reason (reachability checked by govulncheck) and an expiry date, re-checked weekly; (b) keep CI red until upstream ships a fix. Recommendation: (a) with a 14-day expiry, after govulncheck confirms the vulnerable symbol is not reachable.
   - Answer (2026-10-31, owner, in chat): option (a). govulncheck confirmed the vulnerable code is not called; `osv-scanner.toml` ignores GO-2026-5932 until 2026-11-14 (main 8b58f48, hotfix v0.12.2). Re-check and bump x/crypto when a fix ships.
 - Q-A14 (2026-10-31, vukem release, owner action): the app pins `github.com/AlexGalhardo/vukem/drivers/s3` at v0.3.1, which predates vukem #29 (S3 disk ETag/Last-Modified), so `/covers/{key}` never answers 304. A `drivers/s3` release (and a vukem release for #104–#114 and the open #115–#120) is needed before the `ADOPT-vukem-<version>` rows. Owner: say "release vukem" when you want the specialist to cut it.
+  - Resolved (2026-11-01): vukem v0.35.0 and drivers/s3 v0.4.0 released on the owner's request; adoption in ADOPT-vukem-0.35.0 adds the /covers 304 test.
 
 ## Mobile dependencies (senior-b, 2026-10-31)
 
