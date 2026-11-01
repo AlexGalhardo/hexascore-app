@@ -13,8 +13,8 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 )
 
-// CatalogPageSize is the item count of one Catalog/Index scroll page (SDD 09 §7.3).
-const CatalogPageSize = 24
+// CatalogPageSize is the item count of one Catalog/Index page (owner round 2026-11-01 item 12).
+const CatalogPageSize = 20
 
 // Catalog serves the section listings Catalog/Index.
 type Catalog struct {
@@ -36,8 +36,9 @@ func NewCatalog(app *vukem.App) (*Catalog, error) {
 	return &Catalog{app: app, codec: codec}, nil
 }
 
-// Index renders Catalog/Index for the item type typ. `items` is a Scroll prop
-// whose next page is an opaque signed cursor. Facets are in the first paint.
+// Index renders Catalog/Index for the item type typ: one page of items plus the opaque signed cursors of the
+// pages before and after it ("" at either end), which the page turns into buttons and rel=prev/next links.
+// Facets are in the first paint.
 func (h *Catalog) Index(typ string) web.HandlerFunc {
 	return func(c *web.Ctx) error {
 		db, err := h.app.DB()
@@ -64,11 +65,6 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 			return err
 		}
 
-		meta := inertia.ScrollMeta{PageName: "cursor"}
-		if page.NextCursor != "" {
-			meta.NextPage = page.NextCursor
-		}
-
 		// Facets ride the first response. A follow-up reload used to widen the
 		// selects after paint and shift the list (CLS on /games).
 		genres, platforms, err := catalog.Facets(c.Context(), db, typ, nil)
@@ -77,8 +73,9 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 		}
 
 		props := inertia.Props{
-			"type":  typ,
-			"items": inertia.Scroll(map[string]any{"data": cards}, meta),
+			"type":       typ,
+			"items":      map[string]any{"data": cards},
+			"pagination": map[string]string{"prev": page.PrevCursor, "next": page.NextCursor},
 			"filters": map[string]any{
 				"genre": params.Genre, "platform": params.Platform, "year": params.Year,
 				"minScore": params.MinScore, "sort": params.Sort,

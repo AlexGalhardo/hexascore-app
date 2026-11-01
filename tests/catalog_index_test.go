@@ -57,7 +57,7 @@ VALUES ($1, 'movie', $2, $3, 6, 80)`, id, fmt.Sprintf("movie-%02d", i), fmt.Spri
 	c := app.Client(t).Inertia("")
 
 	first := c.Get("/movies").AssertOK().AssertInertia("Catalog/Index").
-		HasProp("items.data", 24).PropEquals("total", 30)
+		HasProp("items.data", 20).PropEquals("total", 30)
 	slug, ok := first.Prop("facets.genres.0.slug")
 	if !ok || slug != "rpg" {
 		t.Fatalf("first paint facets slug = %#v", slug)
@@ -66,13 +66,23 @@ VALUES ($1, 'movie', $2, $3, 6, 80)`, id, fmt.Sprintf("movie-%02d", i), fmt.Spri
 	if !ok || fmt.Sprint(count) != "3" {
 		t.Fatalf("first paint facet count = %#v", count)
 	}
-	scroll, _ := first.Page()["scrollProps"].(map[string]any)["items"].(map[string]any)
-	cursor, _ := scroll["nextPage"].(string)
+	// Paged with buttons, not infinite scroll (owner round 2026-11-01 item 12): signed cursors both ways.
+	first.PropEquals("pagination.prev", "")
+	next, _ := first.Prop("pagination.next")
+	cursor, _ := next.(string)
 	if cursor == "" {
 		t.Fatal("first page has no opaque next cursor")
 	}
 
-	c.Get("/movies?cursor="+cursor).AssertOK().AssertInertia("Catalog/Index").HasProp("items.data", 6)
+	second := c.Get("/movies?cursor="+cursor).AssertOK().AssertInertia("Catalog/Index").
+		HasProp("items.data", 10).PropEquals("pagination.next", "")
+	back, _ := second.Prop("pagination.prev")
+	prev, _ := back.(string)
+	if prev == "" {
+		t.Fatal("second page has no prev cursor")
+	}
+
+	c.Get("/movies?cursor="+prev).AssertOK().AssertInertia("Catalog/Index").HasProp("items.data", 20).PropEquals("pagination.prev", "")
 	c.Get("/movies?cursor=forged").AssertStatus(400)
 
 	c.Get("/movies?genre=rpg").AssertOK().AssertInertia("Catalog/Index").HasProp("items.data", 3).PropEquals("total", 3)
