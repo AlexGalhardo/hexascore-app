@@ -28,3 +28,16 @@ func TestSlugify(t *testing.T) {
 		t.Errorf("long slug length %d, want %d", len(got), catalog.MaxSlugLength)
 	}
 }
+
+func TestFirstFreeSlug(t *testing.T) {
+	t.Parallel()
+
+	taken := map[string]bool{"dune": true, "dune-2": true}
+	isTaken := func(s string) bool { return taken[s] }
+
+	for base, want := range map[string]string{"dune": "dune-3", "arrakis": "arrakis", "search": "search-2"} {
+		if got := catalog.FirstFreeSlug(base, isTaken); got != want {
+			t.Errorf("FirstFreeSlug(%q) = %q, want %q", base, got, want)
+		}
+	}
+}

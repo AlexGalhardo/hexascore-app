@@ -401,9 +401,10 @@ func assignSlugs(ctx context.Context, tx *database.Tx, missing []entityRef) ([]s
 		bases[i] = slugBase(m)
 
 		// Candidates are base-N, with base cut short only near MaxSlugLength, so a prefix covers them.
+		// withSuffix trims trailing dashes after the cut, so the prefix is trimmed the same way.
 		pat := bases[i] + "-%"
 		if room := catalog.MaxSlugLength - 8; len(bases[i]) > room {
-			pat = bases[i][:room] + "%"
+			pat = strings.TrimRight(bases[i][:room], "-") + "%"
 		}
 
 		kinds, exact, pats = append(kinds, m.kind), append(exact, bases[i]), append(pats, pat)
@@ -469,7 +470,9 @@ ON CONFLICT DO NOTHING`, itemIDs, entityIDs, roles, positions, sources)
 }
 
 // insertEditions creates one edition per legacy book isbn13 with an unknown language (DQ-10). A book whose
-// ISBN is missing or invalid, or already held by another work, simply gets no edition (01-1).
+// ISBN is missing or invalid, or already held by another work, simply gets no edition (01-1). Rows go in
+// isbn13 order (item order within one ISBN, so the lowest item still wins): two workers sharing ISBNs then
+// wait on each other's unique-index entries in the same order and cannot deadlock.
 func insertEditions(ctx context.Context, tx *database.Tx, items []entityItem) error {
 	var edIDs, works, isbns, titles []string
 
@@ -495,7 +498,8 @@ func insertEditions(ctx context.Context, tx *database.Tx, items []entityItem) er
 
 	_, err := tx.ExecContext(ctx, `INSERT INTO editions (id, work_id, isbn13, title, language, source)
 SELECT t.id::uuid, t.work_id::uuid, t.isbn13, t.title, 'und', 'legacy'
-FROM unnest($1::text[], $2::text[], $3::text[], $4::text[]) AS t(id, work_id, isbn13, title)
+FROM unnest($1::text[], $2::text[], $3::text[], $4::text[]) WITH ORDINALITY AS t(id, work_id, isbn13, title, o)
+ORDER BY t.isbn13, t.o
 ON CONFLICT (isbn13) DO NOTHING`, edIDs, works, isbns, titles)
 
 	return err

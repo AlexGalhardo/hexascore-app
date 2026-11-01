@@ -47,3 +47,7 @@ A failed build (timeout, unique violation) leaves an `INVALID` index and the mig
 
 - A failed migration rolls back its own transaction; fix forward with a new migration.
 - Stale lock: closing the session releases it. `SELECT pid, state FROM pg_stat_activity WHERE query LIKE '%pg_advisory_lock%'` finds the holder.
+
+## Legacy import: entities stage
+
+Run it as a one-off command inside Railway, next to the database (never from a laptop): `./app hexascore:import-legacy --stage entities --workers 4` on the `app` service environment. The database pool must allow at least `--workers` + 1 connections. It resumes after the checkpoint in `legacy_import_runs`. If it stops with a deadlock or "rerun the stage", run the same command again: finished batches are idempotent and the checkpoint never passes an unfinished one.
