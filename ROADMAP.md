@@ -3070,7 +3070,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 #### P5.B.1 Browse
 
-- [ ] **P5.B.1.1** Build the home screen with four "Top 10 trending (30 days)" sections from `GET /{type}/trending`, plus the shared listing row (category label with icon, 44 × 64 dp `coverThumbUrl` via `expo-image` `memory-disk`, tuned `FlatList`).
+- [x] **P5.B.1.1** Build the home screen with four "Top 10 trending (30 days)" sections from `GET /{type}/trending`, plus the shared listing row (category label with icon, 44 × 64 dp `coverThumbUrl` via `expo-image` `memory-disk`, tuned `FlatList`).
   - Files/modules: `apps/mobile/app/(tabs)/index.tsx`, `src/components/ItemRow.tsx`, `src/components/CategorySection.tsx`, `src/components/ItemRow.test.tsx`, `src/screens/home.test.tsx`
   - Refs: SDD 10 §6.1 (Home row), §7.1 (FlatList), §7.3 "Images", FR-10-10, NFR-10-2; SDD 08 §6 (title rule, "Popular" chip for `basis:"prior"`), FR-08-5, FR-08-11; D-02; [E6], [E7]
   - Depends on: P5.A.5.1, P3.C.2.1
@@ -3079,7 +3079,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/components src/screens/home` → sections in `ITEM_TYPES` order; empty type hidden; a prior entry shows the "Popular" chip; all-prior changes the title to "Popular {type}"; the score is always shown next to its band colour
   - Notes: the trending route on `/app/v1` exists only after P3.A.1.4, which waits for P6.C. Until then, show the empty state, never fabricated data. Raise the ordering question with the owner if P6.C is not pulled forward. FlashList only through an ADR if NFR-10-2 fails.
 
-- [ ] **P5.B.1.2** Build the section listing `(tabs)/[type]` with sort, genre filter (`/{type}/genres`) and cursor-based infinite scroll.
+- [x] **P5.B.1.2** Build the section listing `(tabs)/[type]` with sort, genre filter (`/{type}/genres`) and cursor-based infinite scroll.
   - Files/modules: `apps/mobile/app/(tabs)/[type].tsx`, `src/screens/listing.test.tsx`, `src/query/keys.ts`
   - Refs: SDD 10 §6.1 (Section row), FR-10-10, NFR-10-2; SDD 05 §6.2 "Cursors"
   - Depends on: P5.B.1.1
@@ -3090,7 +3090,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 #### P5.B.2 Item, rating and entity
 
-- [ ] **P5.B.2.1** Build the item screen `[type]/[slug]`: header with cover (600 px scaled), score with band, `ratingCount`, confidence or "–", categories, entities grouped by role, book editions, TMDB/IGDB attribution, and `/items/{id}/me` state.
+- [x] **P5.B.2.1** Build the item screen `[type]/[slug]`: header with cover (600 px scaled), score with band, `ratingCount`, confidence or "–", categories, entities grouped by role, book editions, TMDB/IGDB attribution, and `/items/{id}/me` state.
   - Files/modules: `apps/mobile/app/[type]/[slug].tsx`, `src/screens/item/ItemHeader.tsx`, `src/screens/item/Attribution.tsx`, `src/screens/item/item.test.tsx`
   - Refs: SDD 10 §6.1 (Item row), FR-10-9, §8 (merged item, empty groups), NFR-10-3; SDD 02 §6 (public read fields, FR-02-6); SDD 01 §6.1 (`site` audience); open issue 01-6
   - Depends on: P5.B.1.2

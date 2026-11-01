@@ -62,6 +62,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **community:** Nightly `community.asserts` job (05:10 UTC): every applied suggestion has audit rows, no open suggestion targets a missing record, contributor stats equal a rebuild; a failure logs `alert=community_asserts` (P4.B.4.2)
 - **community:** The suggest form can propose new people, companies, tags and book editions ("What to add" tabs; the item tab reads "Game, movie, series or book") (FIX-community-create-kinds-ui, FIX-community-create-tab-label)
 - **account:** Profile switch to stop community suggestion emails (in-app notices stay); the data export includes it (FIX-community-mail-optout-ui)
+- **mobile:** Android home screen with the four "Top 10 trending (30 days)" sections and the shared listing row (P5.B.1.1)
+- **mobile:** Android section listing with sort, genre filter and infinite scroll (P5.B.1.2)
+- **mobile:** Android item screen with score, confidence, category averages, entities by role, book editions, attribution and the user's own rating (P5.B.2.1)
 
 ### Changed
 
