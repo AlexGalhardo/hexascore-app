@@ -15,6 +15,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/recommend/foryou"
 	"github.com/AlexGalhardo/hexascore-app/app/recommend/trending"
+	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
 // recentTTL bounds how stale the "recently rated" strip may be.
@@ -36,6 +37,7 @@ func Home(app *vukem.App) web.HandlerFunc {
 		once sync.Once
 		acc  *accounts.Accounts
 		svc  *foryou.Service
+		sc   *social.Follows
 	)
 
 	return func(c *web.Ctx) error {
@@ -97,6 +99,10 @@ func Home(app *vukem.App) web.HandlerFunc {
 				if a, err := accounts.New(app); err == nil {
 					acc, svc = a, &foryou.Service{DB: db, Now: app.Now}
 				}
+
+				if ff, err := app.Flags(); err == nil {
+					sc = &social.Follows{DB: db, Flags: ff}
+				}
 			})
 
 			if acc != nil {
@@ -104,6 +110,12 @@ func Home(app *vukem.App) web.HandlerFunc {
 					props["forYou"] = inertia.Defer(func(ctx context.Context) (any, error) {
 						return homeForYou(ctx, svc, u.ID, i18n.Locale(ctx))
 					}).Group("personal")
+
+					if sc.Enabled(c.Context()) {
+						props["friends"] = inertia.Defer(func(ctx context.Context) (any, error) {
+							return sc.FriendsRated(ctx, u.ID, i18n.Locale(ctx))
+						}).Group("personal")
+					}
 				}
 			}
 		}

@@ -393,6 +393,10 @@ P7.B.1.2, behind the flag `social`. Comments are plain text (1 to 2,000 characte
 
 - Moderation (P7.B.1.3, FR-14-9): `reports.target_type` gains `review` and `comment` (the reporter's own content answers 403 `report-self`, and hidden or unknown content answers 404). The admin outcomes are `content_hidden`, which sets `hidden` on the review or comment so it leaves the item page, the threads, the feed's `review_published` entries and every reaction or comment target check; `content_deleted`, which deletes the row and cascades to its comments and reactions; and `content_unhidden`, which restores a hidden review or comment without notifying the author; and `user_banned`, which bans the author. `POST /reports` answers 404 for a review or comment target while the flag is off (other targets are unaffected). The author gets a `content_hidden` or `content_deleted` notification, and the reporters get `report_resolved` as before.
 
+### 12.11b Friends score (P7.C.1.1)
+
+While the flag is on, a signed-in viewer gets the deferred prop `friendsScore` (group `personal`) on the item page: `{count, average, friends[]}` over the ratings of members they follow with an accepted edge and who pass the section 12.5 visibility rule (public, not banned, not anonymised); it is `null` with no such rating. The home gets the deferred prop `friends` (group `personal`): the latest 12 ratings of public items by those members. Both are deferred so the public HTML stays identical for every visitor and cacheable.
+
 ### 12.12 Tests
 
 `TestFollows`, `TestSecurity_A01_PrivateProfileFollowRequiresApproval`, `TestSecurity_A06_HexaLimits` (rule `follows`), `TestFeedPrivacy`, `TestSocialDisabledByDefault` (routes 404 and no events with the flag off), `TestReviews`, `TestSecurity_A05_ReviewMarkdown`, `TestComments`, `TestComments_RateLimit`, `TestReactions`, `TestCommentsDisabledByDefault`, `TestReportsReviewComment`, `TestReportsReviewBanAuthor`, k6 `qa/k6/feed.js`, Playwright `social.spec.ts` and `reviews.spec.ts`.

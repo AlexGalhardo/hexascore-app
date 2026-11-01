@@ -105,6 +105,13 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 
 				return map[string]any{"data": data, "mine": mine}, err
 			}).Group("reviews")
+
+			// Per-viewer, so deferred: the public HTML stays cacheable (SDD 14 §12.12).
+			if viewerID != 0 {
+				props["friendsScore"] = inertia.Defer(func(ctx context.Context) (any, error) {
+					return h.Social.FriendsScore(ctx, viewerID, page.Item.ID)
+				}).Group("personal")
+			}
 		}
 
 		return inertia.Render(c, "Catalog/Show", props)

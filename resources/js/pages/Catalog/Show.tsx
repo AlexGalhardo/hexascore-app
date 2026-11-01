@@ -4,6 +4,7 @@ import CoverThumb, { type Cover } from "../../components/CoverThumb";
 import AddToList, { type ListChoice } from "../../components/item/AddToList";
 import CategoryAverages from "../../components/item/CategoryAverages";
 import Editions from "../../components/item/Editions";
+import FriendsScore, { type FriendsScoreData } from "../../components/item/FriendsScore";
 import MoreLikeThis, { type CrossItem, type SimilarItem } from "../../components/item/MoreLikeThis";
 import RatingPanel from "../../components/item/RatingPanel";
 import Reviews, { type ReviewEntry } from "../../components/item/Reviews";
@@ -67,6 +68,8 @@ interface Props {
 	cover?: Cover | null;
 	/** Deferred (group `reviews`) while the feature flag `social` is on (SDD 14 §12.10). */
 	reviews?: { data: ReviewEntry[]; mine: ReviewEntry | null };
+	/** Deferred (group `personal`) for signed-in viewers while the flag `social` is on. */
+	friendsScore?: FriendsScoreData | null;
 	/** Share-card path while the feature flag `social` is on and the page is public (SDD 14 §11 item 12). */
 	ogImage?: string;
 	similar?: SimilarItem[];
@@ -125,6 +128,7 @@ export default function Show({
 	trailers = [],
 	cover = null,
 	reviews,
+	friendsScore,
 	ogImage,
 	similar = [],
 	crossMedia = [],
@@ -242,6 +246,7 @@ export default function Show({
 							score={ratingSummary.score}
 							ratingCount={ratingSummary.ratingCount}
 						/>
+						<FriendsScore data={friendsScore} />
 						<div className="grid grid-cols-2 items-center gap-3 sm:flex sm:flex-wrap">
 							<a href="#your-rating" className={btnClass("primary")}>
 								{loggedIn && me?.rating ? t("item.goToRating") : t("item.rateIt")}

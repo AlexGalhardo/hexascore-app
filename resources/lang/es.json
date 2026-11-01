@@ -689,6 +689,11 @@
     "more": "Más",
     "searchShort": "Buscar…"
   },
+  "friendsScore": {
+    "title": "Valorado por quienes sigues",
+    "summary": "Valorado por {count} personas que sigues",
+    "home": "Valorados por quienes sigues"
+  },
   "home": {
     "title": "Cada juego, película, serie y libro — puntuado por la gente, categoría por categoría.",
     "explore": "Explorar",
