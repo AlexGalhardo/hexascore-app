@@ -162,9 +162,18 @@ func TestRobots_ProductionNoindex(t *testing.T) {
 	}
 
 	delete(env, "SEO_NOINDEX")
+	// Production leaves SEO_NOINDEX unset: the normal robots.txt with the ADR 0022 honeypot, and no X-Robots-Tag.
 	prod := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: env}).Client(t)
-	if got := prod.Get("https://example.test/robots.txt").Header("X-Robots-Tag"); got != "" {
-		t.Errorf("production X-Robots-Tag = %q, want none", got)
+	prod.Get("https://example.test/robots.txt").AssertOK().
+		AssertSee("Allow: /" + nl).
+		AssertSee("Disallow: /*?cursor=" + nl).
+		AssertSee("Disallow: /data/export" + nl).
+		AssertSee("Googlebot").
+		AssertDontSee("Disallow: /" + nl)
+	for _, path := range []string{"/", "/robots.txt", "/up"} {
+		if got := prod.Get("https://example.test" + path).Header("X-Robots-Tag"); got != "" {
+			t.Errorf("production %s X-Robots-Tag = %q, want none", path, got)
+		}
 	}
 }
 
