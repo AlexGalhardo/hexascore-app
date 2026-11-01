@@ -131,6 +131,17 @@ unzip -l app-release.aab | rg BundleConfig.pb              # one match
 2. Store it in GitHub secrets without echoing it: `base64 -w0 <keystore.jks> | gh secret set ANDROID_UPLOAD_KEYSTORE_BASE64`, then `gh secret set ANDROID_UPLOAD_KEYSTORE_PASSWORD`, `ANDROID_UPLOAD_KEY_ALIAS` and `ANDROID_UPLOAD_KEY_PASSWORD` (each prompts for the value).
 3. Delete the local keystore copy.
 
+## Local sideload APK (owner testing)
+
+A release APK for installing on the owner's phone, built on the Windows dev host without EAS (first done 2026-11-01, attached to GitHub release v0.39.0). Never use this key for a store build.
+
+1. Work in a clean worktree from `main` with its own `bun install --frozen-lockfile` (Metro does not follow a `node_modules` junction).
+2. `CI=1 EXPO_PUBLIC_API_BASE_URL=https://hexascore.app bunx expo prebuild --platform android --clean` in `apps/mobile` (`android/` is generated and gitignored; revert any `package.json` rewrite prebuild makes).
+3. Sign with a test keystore created by `keytool` outside the repo (password in a sibling `keystore.properties`, never printed), wired into the generated `android/app/build.gradle` through a `-P` property.
+4. Build with low memory and one ABI: `./gradlew assembleRelease --no-daemon --max-workers=2 -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=1g" -PreactNativeArchitectures=arm64-v8a`.
+5. Windows only: the SDK's CMake ships ninja 1.10.2, which cannot read paths over 260 characters under bun's isolated layout (`manifest 'build.ninja' still dirty after 100 tries`). Pass `--init-script` with a Gradle init script that adds `-DCMAKE_MAKE_PROGRAM=<ninja 1.13+>` to every Android module's `externalNativeBuild.cmake.arguments`, and delete the `.cxx` folders first. Do not replace the SDK's ninja.
+6. Verify with `apksigner verify --print-certs` and `aapt2 dump badging` (release, not debuggable, package `app.hexascore`), record size and SHA-256, and tell the owner to allow unknown sources and to uninstall it before installing a Play build (different key; App Links do not verify with the test key).
+
 ## Final report
 
 Short summary: what ran, `version` and `versionCode`, build links, submission status, open items.
