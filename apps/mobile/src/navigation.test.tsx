@@ -9,9 +9,11 @@ import Home from "../app/(tabs)/index";
 import Lists from "../app/(tabs)/lists";
 import Profile from "../app/(tabs)/profile";
 import Search from "../app/(tabs)/search";
-import ItemScreen, { ItemBody } from "../app/[type]/[slug]";
+import ItemScreen, { ItemBody, itemIdOf } from "../app/[type]/[slug]";
+import AboutScreen from "../app/about";
 import EntityScreen from "../app/entities/[id]";
 import ListScreen from "../app/lists/[id]";
+import NotificationsRoute from "../app/notifications";
 import UpdateRequired from "../app/update-required";
 import { getNetworkState, setNetworkState } from "./platform/network";
 import { storeListingUrl } from "./platform/store";
@@ -72,11 +74,19 @@ const routes: [string, Record<string, string>, () => ReactElement, string | null
 	["(tabs)/[type]", { type: "games" }, () => offline(<SectionScreen />), "Games"],
 	["(tabs)/search", {}, () => <Search />, "Search"],
 	["(tabs)/lists", {}, () => offline(<Lists />), "My lists"],
-	["(tabs)/profile", {}, () => <Profile />, "Settings"],
-	["[type]/[slug]", { type: "movies", slug: "arrival" }, () => <ItemScreen />, "Page not found"],
-	["entities/[id]", { id: "42" }, () => <EntityScreen />, "Entity 42"],
+	["(tabs)/profile", {}, () => offline(<Profile />), "Settings"],
+	["[type]/[slug]", { type: "movies", slug: "" }, () => <ItemScreen />, "Page not found"],
+	// The entity screen renders nothing until GET /entities/{id} answers.
+	["entities/[id]", { id: "42" }, () => offline(<EntityScreen />), null],
 	// The list screen renders nothing until GET /lists/{id} answers.
 	["lists/[id]", { id: "7" }, () => offline(<ListScreen />), null],
+	[
+		"about",
+		{},
+		() => <AboutScreen />,
+		"This product uses the TMDB API but is not endorsed or certified by TMDB.",
+	],
+	["notifications", {}, () => offline(<NotificationsRoute />), "Notifications"],
 	["update-required", {}, () => <UpdateRequired />, storeListingUrl()],
 	["_layout", {}, () => <RootLayout />, null],
 	["(tabs)/_layout", {}, () => <TabsLayout />, null],
@@ -95,6 +105,14 @@ test.each(["games", "movies", "series", "books"])("section and item accept %s", 
 		offline(<ItemBody type={type} slug="title" id="0192f1c6-0000-7000-8000-000000000001" />),
 	);
 	expect(screen.getByTestId("item")).toBeTruthy();
+});
+
+test("a bare slug from a web App Link is read as the item key", () => {
+	const id = "0192f1c6-0000-7000-8000-000000000001";
+	expect(itemIdOf("arrival", "")).toBe("arrival");
+	expect(itemIdOf("arrival", id)).toBe(id);
+	expect(itemIdOf(id, "")).toBe(id);
+	expect(itemIdOf("", "")).toBeNull();
 });
 
 test("[type] rejects anything outside games|movies|series|books", async () => {

@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { fireEvent, render, screen } from "@testing-library/react-native";
-import type { ItemJSON } from "../../../../packages/app-client/src/api";
+import type { AppItemJSON } from "../../../../packages/app-client/src/api";
 import { type EntityReader, EntityView } from "./Entity";
 
-const item = (type: string, n: number): ItemJSON => ({
+const item = (type: string, n: number): AppItemJSON => ({
 	id: `${type}-${n}`,
 	slug: `${type}-slug-${n}`,
 	type,
@@ -14,7 +14,7 @@ const item = (type: string, n: number): ItemJSON => ({
 	releaseDate: "2001-05-01",
 });
 
-function reader(byType: Record<string, ItemJSON[]>): EntityReader & {
+function reader(byType: Record<string, AppItemJSON[]>): EntityReader & {
 	listEntityItems: jest.Mock;
 } {
 	return {

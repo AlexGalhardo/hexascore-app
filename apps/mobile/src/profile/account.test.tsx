@@ -18,7 +18,9 @@ test("export: 202 confirms; a second export within 7 days shows Retry-After", as
 	await fireEvent.press(screen.getByRole("button", { name: "Request export" }));
 	expect(await screen.findByText(/Export requested/)).toBeTruthy();
 	await fireEvent.press(screen.getByRole("button", { name: "Request export" }));
-	expect(await screen.findByText("You can request one export every 7 days. Try again later.")).toBeTruthy();
+	expect(
+		await screen.findByText("You can request one export every 7 days. Try again later."),
+	).toBeTruthy();
 	expect(screen.getByText("You can try again in 3 days.")).toBeTruthy();
 });
 
