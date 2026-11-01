@@ -15,7 +15,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **infra:** `backup:offsite` mails `ADMIN_EMAILS` on day 1 a 7-day signed link (key derived from `APP_KEY`) to the encrypted monthly dump, served under `/backups/offsite/` for monthly dumps only and never cached (P2.E.2.3)
 - **legal:** Open Library licence record and A-05 decision in `docs/legal/open-library.md`; `CATALOG_API_SOURCES` listed in `.env.example` (P6.A.1.1)
 - **mobile:** Search tab suggests while typing (debounced `/search/suggest`), groups full `/search` results by type, cuts queries to 100 code points and reports clicks through `POST /search/events` without the query (P5.B.3.1)
-- **legal:** `/legal/privacy` answers 301 to `/policy`, keeping the `/pt-br` or `/es` prefix
 - **api:** `qa/sql/api_coverage.sql` measures per-field API coverage with the serialiser's source rules (checked by `TestAPICoverageSQL`); `scripts/api-coverage-json.ts` writes `resources/data/api_coverage.json` from its CSV (P3.A.2.2)
 - **api:** `/pricing` and `/docs/coverage` show the coverage table from `api_coverage.json`, or say the numbers are not measured yet; the pricing statement says film, series and game covers and trailers are never in the API (P3.B.3.2)
 - **ingest:** Wikidata edition records (P747, 50 per work) give each book edition its language, year and ISBN (P6.B.3.1)
@@ -27,6 +26,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **auth:** Sign-up asks for the nickname (4-16 letters, stored lowercase, cannot be changed later; a taken one answers the same for new and existing emails) and bounds the email to 12-48 characters (item 8)
 - **auth:** Two-factor settings live in a `/profile` section with every control and rate limit kept; `/user/two-factor` answers 301 to `/profile#two-factor` with the locale prefix (item 21)
 - **ui:** `/contact` shows a live `0/512` counter; signed-in senders are always stored with their account nickname and email (item 9)
+- **catalog:** `covers:rekey [--dry-run] [--batch 500]` copies content-hashed item covers to their slug keys and moves the rows, idempotent; community uploads and other keys stay (item 18)
+- **ui:** Full-page 5xx errors render a localized page with a link home (`resources/views/errors/{500,503}.html`, item 14)
 
 ### Changed
 
@@ -35,6 +36,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **auth:** New passwords are 8 to 32 characters (D-24 edited); logins never check the length (item 8)
 - **ui:** Item page in three columns with icon action buttons, square chips and no mouse text selection (inputs stay selectable); the users' scores modal is wider with 1.5x fonts and full category names; the rating card is headed "Your rating" and keeps its keyboard help for assistive tech only (items 7, 24)
 - **ui:** Narrower centred forms on `/contact` and `/profile` (items 9, 11)
+- **ui:** The score help moves to `/how-score-works` and the privacy policy to `/privacy`; `/help/score`, `/policy` and `/legal/privacy` answer one 301 in every locale (item 10)
+- **catalog:** Section listings are paged with previous/next buttons above and below the list, `rel=prev/next` links, a sticky left filter sidebar from `lg` up (a disclosure button below) and a 25/50/75/100 page size in `?per=`, validated server-side (items 12, 20)
+- **ui:** A missing HTML page (GET/HEAD, unknown route, item, entity, doc, hidden list, unknown profile, `/feed` while off) answers 301 to the localized home; APIs, JSON requests, assets and paths with an extension keep their 404 (item 14)
+- **catalog:** Entity pages live under their category (`/games/platforms/playstation-5`, also `/changes`); the old top-level paths answer one 301 to the category with the most public items, and the sitemap lists one URL per entity and category with at least 3 items (item 19)
+- **catalog:** Item covers are served at `/covers/{section}/{slug}[-t].webp` with a one-day cache plus ETag; old `/covers/<id>-<hash>.webp` item URLs answer 301 there and replaced covers are overwritten in place (ADR 0014 amended, item 18)
 
 ### Fixed
 
