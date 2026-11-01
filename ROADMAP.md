@@ -1902,6 +1902,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
     - `go test -tags=integration ./database/legacyimport -run TestPasskeysStage` → PASS: a Better Auth `passkey` fixture row (credential id, public key, counter, transports, AAGUID, backup flags, name, created_at) imports into `passkeys` and a signed assertion from the fixture authenticator verifies after import
   - Notes: `session`, `verification` and `rate_limit` are not imported. Legacy `passkey` rows are imported (ADR 0017, depends on P1.C.7.1); the Better Auth storage encoding (base64 vs base64url, COSE key layout) is [NOT VERIFIED] until proven on a Neon copy. Only if it proves incompatible: passkey-only users are counted and mailed the `passkeys_retired` reset notice 14 days before the window (P2.G.1.2). OAuth tokens dropped. Never log hashes or key material.
   - Status (2026-10-29): `users` stage and the scrypt login proof delivered; `passkeys.go` and `TestPasskeysStage` wait for P1.C.7.1 (no `passkeys` table before the vukem release with VF-001), tracked as P2.F.2.2b.
+  - Status (2026-11-01): code done on main: `TestUsersStage` and `TestPasskeysStage` PASS, `TestSecurity_A07_LegacyScryptVerifiesAndRehashes` PASS. Open (owner gate): the staging login with an imported Better Auth 1.7.7 hash.
 
 - [x] **P2.F.2.3** Export the 2FA secrets with a Bun script using Better Auth's own helpers and import them over stdin.
   - Files/modules: `scripts/legacy/twofactor-export.ts` (run from a temp copy of `legacy/apps/web` with its `node_modules`), `database/legacyimport/twofactor.go`, `database/legacyimport/twofactor_test.go`
@@ -2192,7 +2193,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - `curl -s -b "$SESSION" localhost:3000/profile | grep -c 'aria-busy="true"'` → 1 and `<title>Profile` present in the HTML
     - Playwright `profile.spec.ts` → no blank frame between navigation and first paint (screenshot assertion)
 
-- [ ] **P2.H.2.2** Make the hydration gap visible: a disabled state with a spinner on submit buttons until `inert` is lifted, and a no-JS fallback for login and signup (plain form post works without the challenge when `CHALLENGE_*` allows it).
+- [x] **P2.H.2.2** Make the hydration gap visible: a disabled state with a spinner on submit buttons until `inert` is lifted, and a no-JS fallback for login and signup (plain form post works without the challenge when `CHALLENGE_*` allows it).
   - Files/modules: `resources/js/app.tsx`, `resources/js/components/Field.tsx`, `resources/js/pages/Auth/Login.tsx`, `resources/js/pages/Auth/Signup.tsx`, `app/http/middleware/challenge.go`
   - Refs: audit A5; SDD 13 A07 (challenge); SDD 09 §7.6
   - Depends on: —
@@ -2200,6 +2201,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
   - Acceptance:
     - `go test -tags integration ./tests -run TestSecurity_A07` → green (no weakening)
     - Playwright: a click on "Log in" 100 ms after `DOMContentLoaded` either submits or shows the pending state; never a silent no-op
+  - Status (2026-11-01): local acceptance green on main: `TestSecurity_A07` 32 PASS; the hydration spec passed at review (ad5287f) and the no-JS fallback half shipped in FIX-nojs-auth-post (dc99c4d) and FIX-nojs-428-page (8772bf21).
 
 - [x] **P2.H.2.3** Success feedback after rating, status, time-to-beat and list changes (toast via `Flash`), and a message on `/user/two-factor` when the admin area redirected there.
   - Files/modules: `app/controllers/ratings_controller.go`, `app/controllers/library_controller.go`, `routes/admin.go` (flash before the redirect), `resources/js/components/Flash.tsx`
@@ -2481,6 +2483,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Acceptance:
     - workflow run against TestPyPI → package visible on test.pypi.org; `npm publish --dry-run` and `jsr publish --dry-run` steps green
   - Notes: owner input required once: npm org `hexascore` with 2FA `auth-and-writes`, JSR scope `@hexascore` linked to the repo, PyPI/TestPyPI accounts and trusted-publisher entries (environment `pypi`). Job needs `permissions: id-token: write`; no long-lived tokens in secrets. Actions pinned by commit SHA.
+  - Status (2026-11-01): code done on main: `.github/workflows/sdk-release.yml` (manual, dry runs by default, OIDC only) and `docs/runbooks/sdk-release.md`. Open (owner gate): npm org, JSR scope and PyPI/TestPyPI trusted publishers, then the TestPyPI rehearsal run.
 
 - [ ] **P3.B.2.2** Publish SDK `1.1.0` to npm, JSR and PyPI and run install smoke tests against staging.
   - Files/modules: `qa/sdk-smoke/ts.ts`, `qa/sdk-smoke/py.py`
@@ -2503,6 +2506,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `bun run e2e -- docs.spec.ts` → pages render SSR, axe 0 serious/critical in en, pt-BR, es
     - `curl -sI https://staging.hexascore.app/problems/quota-exhausted` → 301 to `/docs/errors#quota-exhausted`
   - Notes: guides in English (D-06), surrounding chrome translated via the `text-editor` subagent. Code samples use the published SDKs, not raw fetch.
+  - Status (2026-11-01): code done on main: `TestProblemCatalog` asserts 301 to `/docs/errors#<code>` for every problem code. Open: `docs.spec.ts` (Playwright, not a gate since 2026-10-31) and the live check, which needs a deploy; production still answers 302 (release before this change).
 
 - [ ] **P3.B.3.2** Add `/docs/coverage`, the pricing page coverage statement (D-33) and the API changelog page.
   - Files/modules: `resources/js/pages/Docs/Coverage.tsx`, `resources/js/pages/Pricing/Index.tsx`, `resources/js/pages/Docs/Changelog.tsx`, `app/web/pricing.go`
@@ -3013,6 +3017,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/auth/google` → cancel leaves the screen without an error; 409 shows `errors.email-unverified-at-provider`
     - Manual on the reference device (preview build): Google account sign-in → token stored, home loads
   - Notes: **owner input needed.** SDD 10 does not name the Google sign-in library, and every candidate is a new dependency. Write the ADR (options, licence, native config plugin under CNG) and get the owner's yes before you code. Only the ID token goes to the server. No access token is stored.
+  - Status (2026-11-01): code done on main: `bun run --cwd apps/mobile test -- src/auth/google` PASS. Open (owner gate): the sign-in on the reference device with a preview build.
 
 - [x] **P5.A.3.5** Rotate the token on foreground (`expiresAt − now < 15 d`, at most once per 24 h), log out with `DELETE /tokens/current` (wiping locally even when the call fails), and show the blocking update screen on 426 or a higher min version. Logout stays available there.
   - Files/modules: `apps/mobile/src/auth/rotate.ts`, `src/auth/rotate.test.ts`, `src/auth/logout.ts`, `app/update-required.tsx`, `src/platform/store.ts` (`market://details?id=app.hexascore`)
@@ -3158,6 +3163,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
   - Acceptance:
     - `bun run --cwd apps/mobile test -- src/lists` → offline create/rename/delete/reorder buttons are disabled; offline add is queued and drains on reconnect; 409 `list-version-conflict` refetches and shows a toast
     - `maestro test .maestro/smoke/add-to-list.yaml` (staging) → PASSED
+  - Status (2026-11-01): code done on main: `bun run --cwd apps/mobile test -- src/lists` PASS. Open (owner gate): `maestro test .maestro/smoke/add-to-list.yaml` on a device against a live host.
 
 - [x] **P5.B.4.2** Build the profile tab: `GET/PATCH /me` (nickname, locale override, `personalizationOptOut`), devices (`GET /tokens`, `DELETE /tokens/{id}`), crash-report consent toggle, theme, and logout.
   - Files/modules: `apps/mobile/app/(tabs)/profile.tsx`, `src/profile/Settings.tsx`, `src/profile/Devices.tsx`, `src/profile/profile.test.tsx`
@@ -3177,6 +3183,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/profile/account src/notifications` → the delete button is enabled only after 10 s; second export within 7 days shows `Retry-After`; mark-read sends ≤ 100 ids and clears the badge
     - `maestro test .maestro/flows/delete-account.yaml` (staging throwaway account) → PASSED, and the account shows `deletionScheduledAt`
   - Notes: no push notifications (out of scope, SDD 10 §2). Read `meta.unread` from the list response; do not poll.
+  - Status (2026-11-01): code done on main: `bun run --cwd apps/mobile test -- src/profile/account src/notifications` PASS. Open (owner gate): `maestro test .maestro/flows/delete-account.yaml` with a throwaway account on a live host.
 
 #### P5.B.5 Deep links and end-to-end flows
 
@@ -3189,6 +3196,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `go test ./tests -run TestAssetLinks` → 200 `application/json`, `Cache-Control: public, max-age=3600`, no auth, no redirect, package `app.hexascore`, every fingerprint in `ANDROID_CERT_SHA256`
     - `adb shell pm get-app-links app.hexascore` (preview build, staging host override) → `verified`; `maestro test .maestro/smoke/deep-link.yaml` → PASSED for `/pt-br/games/<slug>` and `/entities/<id>`
   - Notes: `ANDROID_CERT_SHA256` holds a comma-separated list (upload key now, Play signing key added in P5.C.2.1, from `eas credentials -p android`). Locale-prefixed paths open the same screen with that locale applied for the session only.
+  - Status (2026-11-01): code done on main: `go test -tags integration ./tests -run TestAssetLinks` PASS, `src/linking` tests PASS. Open (owner gate): `adb shell pm get-app-links app.hexascore` on a preview build and the Maestro deep-link run.
 
 - [ ] **P5.B.5.2** Complete the Maestro smoke suite (`login`, `rate-item`, `add-to-list`, `offline-rating`, `deep-link`) on staging and run the accessibility checks (role/label queries, TalkBack, 200 % font scale, Accessibility Scanner on 8 screens).
   - Files/modules: `.maestro/smoke/offline-rating.yaml`, `.maestro/smoke/config.yaml`, `docs/release/mobile-a11y-checklist.md`
@@ -3462,7 +3470,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.B.1 Display-only enrichment
 
-- [ ] **P6.B.1.1** Port the TMDB connector (IDs only via `/find/{imdb_id}`, movie and TV details, a 401 stops the run with `ErrPermanent`) and the `tmdb.expire` job (refresh when `checked_at` > 150 d; delete, re-normalise and drop the TMDB cover when > 180 d), with audience `site` only.
+- [x] **P6.B.1.1** Port the TMDB connector (IDs only via `/find/{imdb_id}`, movie and TV details, a 401 stops the run with `ErrPermanent`) and the `tmdb.expire` job (refresh when `checked_at` > 150 d; delete, re-normalise and drop the TMDB cover when > 180 d), with audience `site` only.
   - Files/modules: `internal/ingest/tmdb/tmdb.go`, `internal/ingest/tmdb/expire.go`, `internal/ingest/tmdb/tmdb_test.go`, `tests/ingest/tmdb_expiry_test.go`
   - Refs: SDD 06 §7.1 (TMDB row), §7.6 (`tmdb.expire`), FR-06-5, DQ-I-06; ADR 0006; D-03; legacy `connectors/tmdb.py` `parse_find`, `parse_details`, `targets`, `fetch`; tests `test_tmdb_movie_details`, `test_tmdb_series_details`, `test_tmdb_find_picks_the_result_of_the_item_type`, `test_tmdb_fetch_resolves_missing_ids_through_imdb`, `test_tmdb_rejected_token_stops_the_run`
   - Depends on: P6.A.4.2
@@ -3471,6 +3479,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/tmdb/... -run 'TestTmdb'` → the five ported tests `ok`
     - `go test ./tests/ingest -run TestTmdbExpiry` → at 151 d the record is refreshed; at 181 d the record and cover are gone and the item is re-normalised (fake clock); `psql -c "select count(*) from source_records where source='tmdb' and checked_at < now()-interval '180 days'"` → `0`
   - Notes: TMDB is never commercial and never in `/api/v1`. The logo and the not-endorsed notice on item pages that use TMDB fields and on `/about` are checked in P6.B.4.1 (DQ-I-12) and in the Playwright spec of P6.B.4.3.
+  - Status (2026-11-01): local acceptance green on main: `go test ./internal/ingest/tmdb/... -run TestTmdb` 5 PASS, `go test -tags integration ./tests/ingest -run TestTmdbExpiry` PASS (the test asserts the 180-day count is 0). Turning the TMDB connector on in an environment rides P6.A.4.2.
 
 - [ ] **P6.B.1.2** Port the IGDB connector (Twitch app token, regex-filtered slugs, batched games query, pre-1970 dates) and the D-36 interim rule: `igdb.refresh` every 6 h for records with `checked_at` > 24 h, and records or covers older than 7 days are deleted and re-normalised.
   - Files/modules: `internal/ingest/igdb/igdb.go`, `internal/ingest/igdb/refresh.go`, `internal/ingest/igdb/igdb_test.go`, `tests/ingest/igdb_retention_test.go`
@@ -3532,6 +3541,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `go test ./internal/ingest/editions/... -run 'TestIsbn10To13|TestIsbn13Checksum|TestPrimaryEdition|TestIsbnOnAnotherWorkIsNotMoved'` → `ok`
     - staging after `backfill.editions`: `psql -c "select round(100.0*count(*) filter (where cover_key is not null)/count(*)) from items where type='book'"` → ≥ 60 (only if A-05 allows Open Library; otherwise record the number and the reason)
   - Notes: `market_country = BR` from publish country `bl` is [NOT VERIFIED]; pin it with an Open Library fixture or leave it null. Edition contributors (translator, illustrator) are out (D-30).
+  - Status (2026-11-01): code done on main: the four editions unit tests PASS. Open (owner gate): `backfill.editions` on a live database and the books cover percentage (Open Library only if A-05 allows).
 
 - [x] **P6.B.3.2** Resolve credits to entities: (1) QID; (2) source external id (`tmdb_person`, `tmdb_company`, `igdb_company`, `openlibrary_author`); (3) normalised name (NFKD, ASCII fold, lowercase, punctuation to space) + kind + year ±1. One candidate links, ≥ 2 (or a QID under another kind) opens `entity_match_reviews`, and none creates a native entity.
   - Files/modules: `internal/ingest/entities/match.go`, `internal/ingest/entities/normalize_name.go`, `internal/ingest/entities/match_test.go`
