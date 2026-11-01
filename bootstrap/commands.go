@@ -17,6 +17,7 @@ func Commands() []vukem.Command {
 		console.AdminRevoke(),
 		console.UserReset2FA(),
 		console.SearchPurge(),
+		console.SearchReindex(),
 		console.SeedMark(),
 		console.SeedPurge(),
 		console.BackupRun(),
@@ -25,5 +26,7 @@ func Commands() []vukem.Command {
 		console.ImportLegacy(),
 		console.ExportSince(),
 		console.CommunityStatsRebuild(),
+		console.IngestBootstrap(),
+		console.IngestBackfillEditions(),
 	}
 }
