@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **mobile:** v1 full-screen search sheet component (autofocused input, recent and trending, first 8 results with see all) (IMPL-mobile-v1-search-ui)
+- **mobile:** v1 app header (serif wordmark, search, theme toggle) and tab bar theme (IMPL-mobile-v1-shell, part 1)
 - **mobile:** Banned and deletion-scheduled accounts get their own screens (ban reason and end date; cancel deletion on the web) instead of falling through to login or the app (FIX-mobile-blocked-screens)
 - **mobile:** Offline banner and a first-launch crash-report opt-in (default off); reports carry only app version, Android API, route pattern, message and an 8 KB stack, redacted, to `POST /app/v1/client-errors` (P5.A.4.3)
 - **mobile:** The Android app queues rating, status, time-to-beat and list add/remove writes offline (up to 50 for 72 h, bound to the user), replays them in order with backoff, follows the server on conflicts and pauses while an update is required (P5.A.4.2)
