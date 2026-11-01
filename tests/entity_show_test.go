@@ -104,8 +104,10 @@ func TestInertiaPages_Entity_Show(t *testing.T) {
 		HasProp("items.data", 1).
 		HasProp("items.data.0.items", 2)
 
+	// No linked items yet: the group list is an empty array, never null (the page reads its length).
 	client.Inertia("").Get("/countries/BR").AssertOK().AssertInertia("Entity/Show").
-		PropEquals("entity.code", "BR")
+		PropEquals("entity.code", "BR").
+		PropEquals("items.data", []any{})
 	client.Inertia("").Get("/countries/br").AssertStatus(301).AssertHeader("Location", "/countries/BR")
 	client.Inertia("").
 		Get("/pt-br/countries/br?type=game").
