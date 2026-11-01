@@ -73,10 +73,12 @@ export default function TimeToBeat({ itemId, medians, mine, canReport }: Props) 
 					)}
 				</dl>
 			)}
-			<p className="text-xs text-muted">
-				{t("item.timeToBeat.hint")}{" "}
-				{t("item.timeToBeat.reports", { count: medians.reports })}
-			</p>
+			{!none && (
+				<p className="text-xs text-muted">
+					{t("item.timeToBeat.hint")}{" "}
+					{t("item.timeToBeat.reports", { count: medians.reports })}
+				</p>
+			)}
 			{canReport && (
 				<form
 					className="grid gap-2"

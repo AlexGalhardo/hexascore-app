@@ -154,7 +154,9 @@ export default function Show({
 	const seeScores = (
 		<button
 			type="button"
-			className={btnClass("ghost", "w-fit px-0")}
+			className={
+				"min-h-11 w-fit text-left text-sm font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg disabled:text-muted"
+			}
 			onClick={() => setScoresOpen(true)}
 			disabled={scoresOpen}
 		>
@@ -225,23 +227,20 @@ export default function Show({
 							score={ratingSummary.score}
 							ratingCount={ratingSummary.ratingCount}
 						/>
-						<div className="flex flex-wrap items-center gap-3">
-							<a href="#your-rating" className={btnClass("primary", "max-sm:flex-1")}>
+						<div className="grid grid-cols-2 items-center gap-3 sm:flex sm:flex-wrap">
+							<a href="#your-rating" className={btnClass("primary")}>
 								{loggedIn && me?.rating ? t("item.goToRating") : t("item.rateIt")}
 							</a>
 							{loggedIn && myLists ? (
-								<AddToList itemId={item.id} lists={myLists} />
+								<AddToList itemId={item.id} lists={myLists} full />
 							) : (
-								<Link
-									href={l("/login")}
-									className={btnClass("secondary", "max-sm:flex-1")}
-								>
+								<Link href={l("/login")} className={btnClass("secondary")}>
 									{t("lists.addToList")}
 								</Link>
 							)}
 							<Link
 								href={l(`/suggest/item/${item.id}`)}
-								className={btnClass("ghost", "px-2")}
+								className={btnClass("ghost", "col-span-2 justify-self-start px-2")}
 							>
 								<svg
 									viewBox="0 0 24 24"
@@ -254,7 +253,7 @@ export default function Show({
 							</Link>
 							<Link
 								href={l(`/${SECTIONS[item.type]}/${item.slug}/changes`)}
-								className={btnClass("ghost", "px-2")}
+								className={btnClass("ghost", "col-span-2 justify-self-start px-2")}
 							>
 								{t("community.recent.link")}
 							</Link>
