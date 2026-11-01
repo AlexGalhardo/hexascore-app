@@ -1,6 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react-native";
-import type { TrendingEntryJSON, TrendingJSON } from "../../../../packages/app-client/src/api";
+import type {
+	AppTrendingEntryJSON,
+	AppTrendingJSON,
+} from "../../../../packages/app-client/src/api";
 import { HomeBody, type TrendingReader } from "./Home";
 
 function entry(
@@ -8,7 +11,7 @@ function entry(
 	rank: number,
 	basis: "trend" | "prior" = "trend",
 	score: number | null = 8,
-): TrendingEntryJSON {
+): AppTrendingEntryJSON {
 	return {
 		rank,
 		basis,
@@ -26,9 +29,9 @@ function entry(
 }
 
 function reader(
-	byType: Partial<Record<"games" | "movies" | "series" | "books", TrendingEntryJSON[]>>,
+	byType: Partial<Record<"games" | "movies" | "series" | "books", AppTrendingEntryJSON[]>>,
 ): TrendingReader {
-	const page = (data: TrendingEntryJSON[] | undefined): Promise<TrendingJSON> =>
+	const page = (data: AppTrendingEntryJSON[] | undefined): Promise<AppTrendingJSON> =>
 		Promise.resolve({ computedAt: null, data: data ?? [] });
 	return {
 		listGameTrending: jest.fn(() => page(byType.games)),

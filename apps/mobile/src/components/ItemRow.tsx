@@ -1,7 +1,7 @@
 import { Image } from "expo-image";
 import { memo, type ReactElement } from "react";
 import { Pressable, Text, View } from "react-native";
-import type { ItemJSON } from "../../../../packages/app-client/src/api";
+import type { AppItemJSON } from "../../../../packages/app-client/src/api";
 import { type AppLocale, t } from "../i18n";
 import { isCatalogType, SINGULAR } from "../navigation/catalog";
 import { scoreBand } from "../theme/scoreBand";
@@ -28,12 +28,12 @@ export function formatScore(score: number | null | undefined, locale: AppLocale)
 }
 
 export type ItemRowProps = {
-	item: ItemJSON;
+	item: AppItemJSON;
 	locale: AppLocale;
 	basis?: "trend" | "prior";
 	/** Absent until /app/v1 items carry cover URLs; a reserved box keeps the row height. */
 	coverThumbUrl?: string;
-	onPress?: (item: ItemJSON) => void;
+	onPress?: (item: AppItemJSON) => void;
 };
 
 function ItemRowView({ item, locale, basis, coverThumbUrl, onPress }: ItemRowProps): ReactElement {

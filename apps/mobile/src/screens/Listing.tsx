@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { type ReactElement, type ReactNode, useState } from "react";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
-import type { ItemJSON } from "../../../../packages/app-client/src/api";
+import type { AppItemJSON } from "../../../../packages/app-client/src/api";
 import type { ReadClient } from "../api/client";
 import { type AppLocale, t } from "../i18n";
 import { type CatalogType, SINGULAR } from "../navigation/catalog";
@@ -58,16 +58,16 @@ function Field({ label, children }: { label: string; children: ReactNode }): Rea
 	);
 }
 
-function toRow(item: ItemJSON): CatalogRow {
+function toRow(item: AppItemJSON): CatalogRow {
 	const year = Number.parseInt(item.releaseDate?.slice(0, 4) ?? "", 10);
 	return {
 		id: item.id,
 		title: item.title ?? item.slug,
 		year: Number.isNaN(year) ? null : year,
-		// shortcut: list items carry no byline or cover URL yet (FIX-app-item-cover-urls); upgrade when the API sends them.
+		// shortcut: list items carry no byline yet; upgrade when the API sends one.
 		byline: null,
 		ratingCount: item.ratingCount ?? 0,
-		coverUri: null,
+		coverUri: item.coverThumbUrl ?? null,
 		score: item.score ?? null,
 	};
 }
@@ -81,7 +81,7 @@ export function ListingBody({
 	type: CatalogType;
 	read: ListingReader;
 	locale: AppLocale;
-	onOpen?: (item: ItemJSON) => void;
+	onOpen?: (item: AppItemJSON) => void;
 }): ReactElement {
 	const [applied, setApplied] = useState<Filters>(DEFAULTS);
 	const [draft, setDraft] = useState<Filters>(DEFAULTS);
@@ -141,8 +141,7 @@ export function ListingBody({
 
 	const sortLabel = t(locale, `catalog.sorts.${applied.sort}`);
 	const labels: CatalogLabels = {
-		filters: (active) =>
-			active > 0 ? `${t(locale, "catalog.filters")} · ${active}` : t(locale, "catalog.filters"),
+		filters: (active) => t(locale, "catalog.filters", { count: active }),
 		closeFilters: t(locale, "item.close"),
 		sort: (current) => `${t(locale, "catalog.sort")}: ${current}`,
 		found: (total) => t(locale, "catalog.resultCount", { count: total }),
