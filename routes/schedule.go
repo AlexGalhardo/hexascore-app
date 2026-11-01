@@ -68,6 +68,8 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 		WeeklyOn(time.Tuesday, "01:00").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:tmdb-weekly", startChain(app, ingest.TMDBWeekly)).
 		WeeklyOn(time.Friday, "01:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:trailers-weekly", startChain(app, ingest.TrailersWeekly)).
+		WeeklyOn(time.Sunday, "04:00").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:tmdb-expire", startChain(app, ingest.TMDBExpire)).
 		DailyAt("03:00").In(saoPaulo).WithoutOverlapping()
 

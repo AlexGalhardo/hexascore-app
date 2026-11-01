@@ -19,6 +19,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/normalize"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/tmdb"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/trailers"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/wikidata"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/wikipedia"
 )
@@ -85,6 +86,7 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		"fetch.wikidata": fetch.Step(wd, client, app.Now),
 		"fetch.entities": fetch.Step(wd.Entities(), client, app.Now),
 		// The Open Library licence is unverified (A-05): the stage exists so the chain is complete, and the kill switch keeps it skipped.
+		"fetch.youtube":      fetch.Step(&trailers.Connector{}, client, app.Now),
 		backfill.EditionsJob: backfill.Editions{}.Step,
 		"fetch.openlibrary":  fetch.Unavailable("openlibrary", "licence unverified, A-05"),
 		"normalize": normalize.Normalizer{
