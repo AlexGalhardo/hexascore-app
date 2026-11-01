@@ -12,6 +12,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/rollback"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
+	"github.com/AlexGalhardo/hexascore-app/internal/search"
 )
 
 const (
@@ -181,8 +182,8 @@ func TestRollbackRestoresPreviousState(t *testing.T) {
 		t.Error("an item older than the run must stay")
 	}
 
-	if n := count(t, db, `SELECT count(*) FROM search_dirty WHERE ref_id = $1`, itemOwned); n != 1 {
-		t.Error("a deleted item must be queued for the search resync")
+	if dirty, err := search.IsDirty(t.Context(), db, itemOwned); err != nil || !dirty {
+		t.Errorf("a deleted item must be queued for the search resync (dirty %v, err %v)", dirty, err)
 	}
 }
 
