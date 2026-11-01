@@ -552,6 +552,7 @@
 	"item.status.book.completed": "Li",
 	"item.status.book.dropped": "Abandonei",
 	"item.status.notSaved": "Não foi possível salvar seu status. Tente novamente.",
+	"entity.alsoIn": "Também em",
 	"entity.kinds.person": "Pessoa",
 	"entity.kinds.organization": "Empresa",
 	"entity.kinds.franchise": "Franquia",

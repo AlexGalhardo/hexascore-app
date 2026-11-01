@@ -24,7 +24,10 @@ vi.mock("@inertiajs/react", () => ({
 	Link: ({ href, children }: { href: string; children: ReactNode }) => (
 		<a href={href}>{children}</a>
 	),
-	usePage: () => ({ url: "/pt-br/people/ridley-scott?type=movie", props: { locale: "pt-BR" } }),
+	usePage: () => ({
+		url: "/pt-br/movies/people/ridley-scott?cursor=12",
+		props: { locale: "pt-BR" },
+	}),
 }));
 
 const props = {
@@ -51,19 +54,22 @@ const props = {
 			},
 		],
 	},
-	counts: { movie: 14 },
+	counts: { movie: 14, book: 3 },
 	avgScore: { movie: 7.9 },
-	filters: { type: "" },
+	filters: { type: "movie" },
 	indexable: false,
 };
 
-test("thin entity is noindex,follow and links items and the next page in the active locale", () => {
+test("thin entity is noindex,follow and links items, the next page and its other categories", () => {
 	render(<Show {...props} />);
 	expect(seo).toHaveBeenCalledWith(expect.objectContaining({ robots: "noindex,follow" }));
 	expect(screen.getByText("Alien").getAttribute("href")).toBe("/pt-br/movies/alien");
-	expect(screen.getByText("entity.seeAll").closest("a")?.getAttribute("href")).toBe(
-		"/pt-br/people/ridley-scott?type=movie",
+	expect(screen.getByText("entity.next").closest("a")?.getAttribute("href")).toBe(
+		"/pt-br/movies/people/ridley-scott?cursor=12",
 	);
+	const books = screen.getByRole("link", { name: /catalog\.title\.book/ });
+	expect(books.getAttribute("href")).toBe("/pt-br/books/people/ridley-scott");
+	expect(screen.queryByRole("link", { name: /catalog\.title\.movie/ })).toBeNull();
 	expect(screen.getByText(/entity\.avgScore/)).toBeTruthy();
 });
 

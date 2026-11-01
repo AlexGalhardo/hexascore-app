@@ -80,7 +80,9 @@ func TestInertiaPages_Entity_Show(t *testing.T) {
 
 	client := app.Client(t)
 
-	client.Inertia("").Get("/people/ridley-scott").AssertOK().AssertHeader("X-Robots-Tag", "noindex, follow").
+	// Entity pages live under their category (owner round 2026-11-01 item 19): /{section}/{entity path}/{key}.
+	client.Inertia("").Get("/movies/people/ridley-scott").AssertOK().
+		AssertHeader("X-Robots-Tag", "noindex, follow").
 		AssertInertia("Entity/Show").
 		PropEquals("entity.name", "Ridley Scott").
 		PropEquals("entity.kind", "person").
@@ -89,35 +91,75 @@ func TestInertiaPages_Entity_Show(t *testing.T) {
 		PropEquals("indexable", false).
 		PropEquals("roles.0.role", "director").
 		PropEquals("roles.0.count", 2).
+		PropEquals("filters.type", "movie").
 		HasProp("items.data", 1).
 		HasProp("items.data.0.items", 2).
 		PropEquals("items.data.0.type", "movie")
 
-	client.Inertia("").Get("/pt-br/genres/rpg").AssertOK().AssertHeaderMissing("X-Robots-Tag").
+	client.Inertia("").Get("/pt-br/games/genres/rpg").AssertOK().AssertHeaderMissing("X-Robots-Tag").
 		AssertInertia("Entity/Show").
 		PropEquals("indexable", true).
 		PropEquals("counts.game", 5).
+		PropEquals("counts.movie", 1).
 		PropEquals("avgScore.game", 8.0).
-		HasProp("items.data", 2).
+		HasProp("items.data", 1).
+		PropEquals("items.data.0.type", "game").
 		MissingProp("avgScore.movie")
 
-	client.Inertia("").Get("/genres/rpg?type=game&cursor=3").AssertOK().AssertInertia("Entity/Show").
+	// Indexable counts the category's own items: one movie is below the threshold.
+	client.Inertia("").Get("/movies/genres/rpg").AssertOK().AssertHeader("X-Robots-Tag", "noindex, follow").
+		AssertInertia("Entity/Show").PropEquals("indexable", false).HasProp("items.data.0.items", 1)
+
+	client.Inertia("").Get("/games/genres/rpg?cursor=3").AssertOK().AssertInertia("Entity/Show").
 		HasProp("items.data", 1).
 		HasProp("items.data.0.items", 2)
 
 	// No linked items yet: the group list is an empty array, never null (the page reads its length).
-	client.Inertia("").Get("/countries/BR").AssertOK().AssertInertia("Entity/Show").
+	client.Inertia("").Get("/games/countries/BR").AssertOK().AssertInertia("Entity/Show").
 		PropEquals("entity.code", "BR").
 		PropEquals("items.data", []any{})
-	client.Inertia("").Get("/countries/br").AssertStatus(301).AssertHeader("Location", "/countries/BR")
-	client.Inertia("").
-		Get("/pt-br/countries/br?type=game").
-		AssertStatus(301).
-		AssertHeader("Location", "/pt-br/countries/BR?type=game")
+	client.Inertia("").Get("/games/countries/br").AssertStatus(301).AssertHeader("Location", "/games/countries/BR")
+
+	// The old top-level paths answer one 301 to the category with the most public items of the entity, or to
+	// ?type= when it names one; the canonical code and the other query parameters travel along.
+	for _, prefix := range []string{"", "/pt-br", "/es"} {
+		for old, target := range map[string]string{
+			"/people/ridley-scott":            "/movies/people/ridley-scott",
+			"/genres/rpg":                     "/games/genres/rpg",
+			"/genres/rpg?type=movie&cursor=0": "/movies/genres/rpg?cursor=0",
+			"/genres/rpg?type=bogus":          "/games/genres/rpg",
+			"/countries/br?type=series":       "/series/countries/BR",
+			"/countries/br":                   "/games/countries/BR",
+		} {
+			client.Get(prefix+old).AssertStatus(301).AssertHeader("Location", prefix+target)
+		}
+	}
+
+	// The entity's recent changes live under the category too; the old path keeps its /changes.
+	client.Inertia("").Get("/movies/people/ridley-scott/changes").AssertOK().AssertInertia("Catalog/RecentChanges")
+	client.Get("/pt-br/people/ridley-scott/changes").AssertStatus(301).
+		AssertHeader("Location", "/pt-br/movies/people/ridley-scott/changes")
+
 	// The item page links countries and languages by code, the key their entity route matches.
 	item("movie", "public", 10, 0, nil, country, "country")
 	client.Inertia("").Get("/movies/movie-10-"+country[:4]).AssertOK().AssertInertia("Catalog/Show").
 		PropEquals("entities.country.0.code", "BR")
-	client.Inertia("").Get("/people/missing").AssertStatus(301).AssertHeader("Location", "/")
-	client.Inertia("").Get("/genres/ridley-scott").AssertStatus(301).AssertHeader("Location", "/")
+	client.Get("/countries/BR").AssertStatus(301).AssertHeader("Location", "/movies/countries/BR")
+
+	// Missing entities, unknown entity paths and a kind mismatch are missing pages (item 14).
+	for _, p := range []string{
+		"/people/missing", "/movies/people/missing", "/games/genres/ridley-scott", "/games/no-such-kind/rpg",
+		"/games/no-such-kind/rpg/changes",
+	} {
+		client.Inertia("").Get(p).AssertStatus(301).AssertHeader("Location", "/")
+	}
+
+	// A renamed entity slug answers 301 under its category too (SDD 01 §7.1).
+	if err := catalog.RenameSlug(t.Context(), db, catalog.ScopeEntity, "genre", genre, "role-playing"); err != nil {
+		t.Fatal(err)
+	}
+
+	client.Get("/es/games/genres/rpg?cursor=3").
+		AssertStatus(301).
+		AssertHeader("Location", "/es/games/genres/role-playing?cursor=3")
 }

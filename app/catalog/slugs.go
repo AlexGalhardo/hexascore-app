@@ -18,8 +18,12 @@ const MaxSlugLength = 120
 
 var nonAlnum = regexp.MustCompile(`[^a-z0-9]+`)
 
-// reserved slugs collide with listing routes under the same section (SDD 01 §7.1).
-var reserved = map[string]bool{"genres": true, "trending": true, "search": true, "new": true}
+// reserved slugs collide with listing routes under the same section (SDD 01 §7.1), including the entity paths
+// of EntityPaths: /games/platforms/{slug} would shadow the changes page of an item slugged "platforms".
+var reserved = map[string]bool{
+	"genres": true, "trending": true, "search": true, "new": true, "people": true, "companies": true,
+	"franchises": true, "platforms": true, "game-modes": true, "countries": true, "languages": true,
+}
 
 // ErrEmptySlug means the title has no letter or digit to build a slug from.
 var ErrEmptySlug = errors.New("catalog: title yields an empty slug")

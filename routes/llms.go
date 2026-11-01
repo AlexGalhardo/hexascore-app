@@ -60,7 +60,9 @@ func llmsDoc(site string, docsJSON []byte) (llmstxt.Doc, error) {
 		Title:   "HexaScore",
 		Summary: "Community scores for games, movies, TV series and books, with a paid read-only JSON API.",
 		Details: "Members rate each item from 0 to 10 in six categories of its type; the score of an item is the " +
-			"community mean. The site is also served in Brazilian Portuguese (/pt-br/) and Spanish (/es/).",
+			"community mean. People, companies, franchises, platforms, genres, game modes, countries and languages " +
+			"have a page under each category, such as /games/platforms/playstation-5 or /movies/people/ridley-scott. " +
+			"The site is also served in Brazilian Portuguese (/pt-br/) and Spanish (/es/).",
 		Sections: []llmstxt.Section{
 			{Title: "Catalogue", Links: []llmstxt.Link{
 				section("/games", "Games", "community scores and categories of video games"),

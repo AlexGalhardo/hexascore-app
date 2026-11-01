@@ -150,7 +150,9 @@ export default function Show({
 	const keys = CATEGORY_KEYS[item.type];
 	const categoryLabels = keys.map((k) => t(`categories.${item.type}.${k}`));
 	const [scoresOpen, setScoresOpen] = useState(false);
-	const entityHref = (e: EntityLink) => l(`/${ENTITY_PATH[e.kind]}/${e.code ?? e.slug}`);
+	// Entity pages live under the item's own category (owner round 2026-11-01 item 19).
+	const entityHref = (e: EntityLink) =>
+		l(`/${SECTIONS[item.type]}/${ENTITY_PATH[e.kind]}/${e.code ?? e.slug}`);
 	const credit = CREDIT_ROLES.map((r) => entities[r]?.[0]).find(Boolean);
 	const chips = CHIP_ROLES.flatMap((r) => entities[r] ?? []);
 	const release =

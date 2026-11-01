@@ -91,7 +91,9 @@ func TestSitemaps(t *testing.T) {
 
 	// Entities need 3 public linked items: hidden and takedown links do not count.
 	ent := app.Client(t).Get("/sitemaps/entities-organization-1.xml").AssertOK()
-	ent.AssertSee("/companies/big-studio")
+	// One URL per category with enough items, under that category (owner round 2026-11-01 item 19).
+	ent.AssertSee("<loc>https://example.test/games/companies/big-studio</loc>")
+	ent.AssertDontSee("example.test/companies/")
 	ent.AssertDontSee("small-studio") // 3 links, but one is hidden
 }
 

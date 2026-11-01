@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"cmp"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -101,10 +102,23 @@ type searchPage struct {
 	Unavailable bool `json:"unavailable"`
 }
 
-var (
-	itemSection   = map[string]string{"game": "games", "movie": "movies", "series": "series", "book": "books"}
-	entitySection = map[string]string{"person": "people", "organization": "companies", "franchise": "franchises"}
-)
+var itemSection = map[string]string{"game": "games", "movie": "movies", "series": "series", "book": "books"}
+
+// entityPath is the web path of an entity under the category of item type typ ("" when it has no public
+// items: games), owner round 2026-11-01 item 19.
+func entityPath(prefix, kind, slug, typ string) string {
+	return prefix + "/" + catalog.Sections[cmp.Or(typ, "game")] + "/" + catalog.EntityPaths[kind] + "/" + slug
+}
+
+// entityTypes is catalog.EntityTypes on the app database.
+func (h *Search) entityTypes(ctx context.Context, ids []string) (map[string]string, error) {
+	db, err := h.app.DB()
+	if err != nil {
+		return nil, err
+	}
+
+	return catalog.EntityTypes(ctx, db, ids)
+}
 
 // searchParams reads q, type (comma separated) and locale; a missing locale
 // means the interface locale, an empty one means every locale.
@@ -355,10 +369,20 @@ func (h *Search) run(ctx context.Context, q search.Query, prefix string) (search
 			return searchPage{}, err
 		}
 
+		ids := make([]string, len(ents.Hits))
+		for i, e := range ents.Hits {
+			ids[i] = e.ID
+		}
+
+		types, err := h.entityTypes(ctx, ids)
+		if err != nil {
+			return searchPage{}, err
+		}
+
 		for _, e := range ents.Hits {
 			out.Entities = append(out.Entities, SearchEntity{
 				ID: e.ID, Kind: e.Kind, Name: e.Name, ItemCount: e.ItemCount,
-				Path: prefix + "/" + entitySection[e.Kind] + "/" + e.Slug,
+				Path: entityPath(prefix, e.Kind, e.Slug, types[e.ID]),
 			})
 		}
 	}
@@ -446,6 +470,18 @@ func (h *Search) SuggestRead(c *web.Ctx) (SuggestJSON, error) {
 			return nil, err
 		}
 
+		var ids []string
+		for _, r := range rows {
+			if _, ok := itemSection[r.Kind]; !ok {
+				ids = append(ids, r.RefID)
+			}
+		}
+
+		types, err := h.entityTypes(ctx, ids)
+		if err != nil {
+			return nil, err
+		}
+
 		items := make([]SuggestItem, 0, len(rows))
 		for _, r := range rows {
 			it := SuggestItem{ID: r.RefID, Type: r.Kind, Kind: r.Kind, Title: r.Title}
@@ -460,7 +496,7 @@ func (h *Search) SuggestRead(c *web.Ctx) (SuggestJSON, error) {
 			if section, ok := itemSection[r.Kind]; ok {
 				it.Path = prefix + "/" + section + "/" + r.Slug
 			} else {
-				it.Path = prefix + "/" + entitySection[r.Kind] + "/" + r.Slug
+				it.Path = entityPath(prefix, r.Kind, r.Slug, types[r.RefID])
 			}
 
 			items = append(items, it)

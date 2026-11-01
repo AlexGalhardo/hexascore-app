@@ -9,7 +9,7 @@ import http from "k6/http";
 // Distinct client address per request so the per-IP limits do not mask latency.
 const fakeIP = (n) => `10.${(n >> 8) % 250}.${n % 250}.${1 + ((n * 7) % 250)}`;
 const BASE = (__ENV.BASE_URL || "http://localhost:3000").replace(/\/$/, "");
-const ENTITIES = (__ENV.ENTITY_PATHS || "/people/ana-oliveira,/platforms/android,/companies/allen-studio-llc")
+const ENTITIES = (__ENV.ENTITY_PATHS || "/movies/people/ana-oliveira,/games/platforms/android,/games/companies/allen-studio-llc")
 	.split(",")
 	.filter(Boolean);
 const KINDS = ["home", "listing", "item", "entity"];

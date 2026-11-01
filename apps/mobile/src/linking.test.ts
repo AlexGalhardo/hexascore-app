@@ -13,6 +13,10 @@ test.each([
 	// Anything outside the declared prefixes lands on home instead of an unknown-route screen.
 	["https://hexascore.app/pricing", "/", null],
 	["https://hexascore.app/es/admin", "/", "es"],
+	// Entity pages live under their category on the web (owner round 2026-11-01 item 19); the app has no slug route.
+	["https://hexascore.app/games/platforms/playstation-5", "/", null],
+	["https://hexascore.app/pt-br/movies/people/ridley-scott", "/", "pt-BR"],
+	["https://hexascore.app/books/dune/editions/1", "/", null],
 ])("%s -> %s (%s)", (url, path, locale) => {
 	expect(resolveDeepLink(url)).toEqual({ path, locale });
 });

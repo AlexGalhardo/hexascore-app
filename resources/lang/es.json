@@ -1712,6 +1712,7 @@
     }
   },
   "entity": {
+    "alsoIn": "También en",
     "kinds": {
       "person": "Persona",
       "organization": "Empresa",

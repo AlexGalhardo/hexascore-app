@@ -178,7 +178,8 @@ func TestLLMsTxt(t *testing.T) {
 		AssertSee("[Authentication](https://example.test/docs/authentication)").
 		AssertSee("[Pricing](https://example.test/pricing)").
 		AssertSee("[Terms of use](https://example.test/terms)").
-		AssertSee("[Privacy policy](https://example.test/privacy)")
+		AssertSee("[Privacy policy](https://example.test/privacy)").
+		AssertSee("/games/platforms/playstation-5")
 
 	full := app.Client(t).Get("/llms-full.txt").AssertOK().
 		AssertSee("Source: https://example.test/docs/authentication").

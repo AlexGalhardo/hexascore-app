@@ -81,6 +81,33 @@ func TestSearchSuggest(t *testing.T) {
 		AssertRedirect("/search/suggest?q=zel&type=game")
 }
 
+// TestSearchSuggest_EntityPath: an entity suggestion links to its page under its main category (item 19).
+func TestSearchSuggest_EntityPath(t *testing.T) {
+	app, exec := searchApp(t)
+
+	person, movie := uuid.NewV7().String(), uuid.NewV7().String()
+	exec(
+		`INSERT INTO entities (id, kind, slug, default_name) VALUES ($1, 'person', 'quentin-q', 'Quentinella')`,
+		person,
+	)
+	exec(`INSERT INTO items (id, type, slug, wikidata_qid) VALUES ($1, 'movie', 'quentin-film', 'Q5999')`, movie)
+	exec(`INSERT INTO item_entities (item_id, role, entity_id, source) VALUES ($1, 'director', $2, 'hexascore')`,
+		movie, person)
+
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if err := search.DrainSuggest(t.Context(), db); err != nil {
+		t.Fatal(err)
+	}
+
+	app.Client(t).Get("/es/search/suggest?q=quentinella&locale=").AssertOK().
+		AssertJSONPath("data.0.kind", "person").
+		AssertJSONPath("data.0.path", "/es/movies/people/quentin-q")
+}
+
 func TestSearchPage(t *testing.T) {
 	app, _ := searchApp(t)
 

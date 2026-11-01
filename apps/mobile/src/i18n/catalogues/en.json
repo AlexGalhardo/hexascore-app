@@ -552,6 +552,7 @@
 	"item.status.book.completed": "Read",
 	"item.status.book.dropped": "Dropped",
 	"item.status.notSaved": "Your status could not be saved. Try again.",
+	"entity.alsoIn": "Also in",
 	"entity.kinds.person": "Person",
 	"entity.kinds.organization": "Company",
 	"entity.kinds.franchise": "Franchise",

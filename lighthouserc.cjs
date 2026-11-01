@@ -2,7 +2,7 @@
 // The default host must be the compose APP_URL host: in production mode CanonicalHost 301s any other
 // Host, and that redirect alone adds about 0.6 s of simulated LCP.
 const base = (process.env.E2E_BASE_URL ?? "http://localhost:3000").replace(/\/$/, "");
-const paths = ["/", "/games", "/games/adipiscing-consectetur", "/books/consectetur-2004", "/people/ana-oliveira"];
+const paths = ["/", "/games", "/games/adipiscing-consectetur", "/books/consectetur-2004", "/movies/people/ana-oliveira"];
 
 module.exports = {
 	"ci": {
