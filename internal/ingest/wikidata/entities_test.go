@@ -339,3 +339,37 @@ func TestTrimHashMatchesPython(t *testing.T) {
 		}
 	}
 }
+
+// A chunk that rolls back after Fetch is fetched again by the next attempt; the entity records must come out
+// again or they would be lost until the process restarts.
+func TestFetchReemitsEntityRecordsWhenTheChunkIsRetried(t *testing.T) {
+	a := loadAPI(t)
+	w, c := fetcher(t, a)
+	batch := []ingest.Target{{ID: "Q83495", Type: recordedTypes["Q83495"]}}
+
+	count := func() int {
+		recs, errs := w.Fetch(t.Context(), c, batch)
+		if len(errs) != 0 {
+			t.Fatalf("errors: %+v", errs)
+		}
+
+		n := 0
+
+		for _, r := range recs {
+			if r.Source == wikidata.EntitySource {
+				n++
+			}
+		}
+
+		return n
+	}
+
+	first := count()
+	if first == 0 {
+		t.Fatal("the fixture must reference entities")
+	}
+
+	if again := count(); again != first {
+		t.Fatalf("retried chunk emitted %d entity records, want %d", again, first)
+	}
+}

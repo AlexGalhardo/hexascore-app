@@ -49,8 +49,6 @@ type Connector struct {
 	// APIURL overrides APIURL; tests only.
 	APIURL string
 
-	refs *refs
-
 	selMu sync.Mutex
 	// sel keeps the selection of a run so each 200-target chunk does not rerun the SPARQL query. In memory only:
 	// a restarted worker selects once again.
@@ -101,7 +99,7 @@ func (w *Connector) selection(
 
 // New returns a Connector for the public endpoint.
 func New(c *ingest.Client) *Connector {
-	return &Connector{client: c, SparqlURL: SparqlURL, APIURL: APIURL, refs: &refs{label: map[string]string{}}}
+	return &Connector{client: c, SparqlURL: SparqlURL, APIURL: APIURL}
 }
 
 // Source names the connector in source_records.
