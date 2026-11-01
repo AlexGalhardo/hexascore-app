@@ -437,7 +437,10 @@
       "notConfigured": "Online payments are not available yet. Paid plans will open soon.",
       "coverageTitle": "Data coverage",
       "coverageBody": "The API only returns fields we may republish, so some are patchy and some are always omitted (covers, trailers). Coverage percentages are not published yet.",
-      "coverageLink": "Read the coverage details"
+      "coverageLink": "Read the coverage details",
+      "eyebrow": "Public API · read-only",
+      "popular": "Most chosen",
+      "lifetime": "lifetime"
     },
     "checkout": {
       "metaTitle": "Plan and billing",
@@ -1109,7 +1112,10 @@
           "0": "We will update this page when our practices change and change the date above. Material changes are announced on the site or by email before they take effect."
         }
       }
-    }
+    },
+    "contents": "Contents",
+    "also": "Also",
+    "otherTitle": "Terms of use and cookies"
   },
   "terms": {
     "title": "Terms of use and cookies",
@@ -1194,7 +1200,10 @@
           "0": "Questions about these terms, withdrawal or refund requests and privacy requests can be sent through the contact form."
         }
       }
-    }
+    },
+    "contents": "Contents",
+    "also": "Also",
+    "otherTitle": "Privacy policy"
   },
   "lists": {
     "addToList": "Add to list",
