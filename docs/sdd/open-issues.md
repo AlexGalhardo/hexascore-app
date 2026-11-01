@@ -135,6 +135,10 @@ Every SDD ends with an "Open issues" section. This file is the architect's triag
 | 14 | 5 | Private profile 404 (SDD 09) vs 200 + `noindex` (SDD 14, legacy) | decided | 200 with nickname only and `noindex` (legacy parity); SDD 09 updated, plus `/library`, `/lists`, `/lists/{id}/edit` pages added. |
 | 14 | 6 | Export helpers write only to `http.ResponseWriter` | vukem | VF-029. |
 | 14 | 7 | Deleting a user deletes public lists others may link to | decided (owner) | D-38: anonymise public lists, delete private ones. |
+| 14 | 8 | Lawful basis for showing a user's activity to followers (Q-A5 a) | owner | Social layer behind flag `social` (default off); when on, activity reaches followers only after `users.feed_opt_in` (default false). Closes with a D-xx after legal review (D-21). |
+| 14 | 9 | Legacy follows (Q-A5 b) | owner | Phase 7 starts with an empty graph; legacy rows stay in the cutover archive. A restore, if chosen, inserts `accepted` rows between existing, unbanned users. |
+| 14 | 10 | Markdown subset for reviews (P7.B.1.1) | roadmap | No renderer in `go.mod` and none in vukem docs [NOT IN VUKEM DOCS]; default stdlib-only subset through `html/template`; a library needs the owner's yes and an ADR. |
+| 14 | 11 | Letterboxd reference (Q-A9) | owner | Research report partial; SDD 14 §12 does not depend on it. |
 | 13 | 1 | Data export conflict SDD 03 vs SDD 14 | decided | SDD 03 already follows SDD 14 (review pass); closed. |
 | 13 | 2 | CSRF token fallback on (SDD 03/13) vs off (SDD 09) | decided | On; SDD 09 §7.8 line updated. |
 | 13 | 3 | Lint tool Biome (SDD 09, D-22) vs ESLint (SDD 11) | decided | Biome; SDD 11 pipeline table updated. |

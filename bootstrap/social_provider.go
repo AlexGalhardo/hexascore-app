@@ -6,7 +6,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
-// socialProvider records feed activity from the rating, status and list events (SDD 14 §12, ADR 0020).
+// socialProvider records feed activity from the rating, status and list events (SDD 14 §12, ADR 0021).
 type socialProvider struct{}
 
 // Register subscribes the activity recorder; the tables exist only on Postgres (VF-033).
