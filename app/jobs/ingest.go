@@ -17,6 +17,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/dq"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/fetch"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/httpx"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/igdb"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/normalize"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/openlibrary"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/rollback"
@@ -38,6 +39,9 @@ type IngestSources struct {
 	TMDBAPI      string
 	// OpenLibraryAPI replaces https://openlibrary.org.
 	OpenLibraryAPI string
+	// TwitchTokenURL and IGDBAPI replace the IGDB endpoints.
+	TwitchTokenURL string
+	IGDBAPI        string
 	// Pressure holds ingestion chunks while the site is busy; bootstrap fills it and feeds it from the Inflight middleware.
 	Pressure *ingest.Pressure
 }
@@ -87,7 +91,18 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		tc.APIURL = src.TMDBAPI
 	}
 
+	ig := igdb.New(app.Source.Get("IGDB_TWITCH_CLIENT_ID"), app.Source.Get("IGDB_TWITCH_CLIENT_SECRET"))
+	if src.TwitchTokenURL != "" {
+		ig.TokenURL = src.TwitchTokenURL
+	}
+
+	if src.IGDBAPI != "" {
+		ig.APIURL = src.IGDBAPI
+	}
+
 	steps := map[string]run.Step{
+		"fetch.igdb":         fetch.Step(ig, client, app.Now),
+		igdb.JobName:         igdb.RefreshStep(ig, client, app.Now),
 		"fetch.tmdb":         fetch.Step(tc, client, app.Now),
 		tmdb.JobName:         tmdb.ExpireStep(tc, client, app.Now),
 		"fetch.wikidata":     fetch.Step(wd, client, app.Now),

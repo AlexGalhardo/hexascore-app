@@ -15,5 +15,8 @@ func DefaultHosts() map[string]HostLimit {
 		"covers.openlibrary.org": {PerSecond: 10, InFlight: 4},
 		"api.themoviedb.org":     {PerSecond: 20, InFlight: 8},
 		"www.youtube.com":        {PerSecond: 10, InFlight: 4},
+		"id.twitch.tv":           {PerSecond: 1, InFlight: 1},
+		"api.igdb.com":           {PerSecond: 3.3, InFlight: 4},
+		"images.igdb.com":        {PerSecond: 20, InFlight: 4},
 	}
 }

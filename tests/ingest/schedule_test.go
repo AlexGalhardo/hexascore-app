@@ -32,6 +32,8 @@ func TestScheduleTable(t *testing.T) {
 		"ingest:tmdb-weekly":          "0 1 * * 5",
 		"ingest:trailers-weekly":      "0 4 * * 0",
 		"ingest:tmdb-expire":          "0 3 * * *",
+		"ingest:igdb-weekly":          "0 1 * * 6",
+		"ingest:igdb-refresh":         "15 */6 * * *",
 		"ingest:alerts":               "0 * * * *",
 		"ingest:prune":                "30 2 * * *",
 		"ingest:retry-failures":       "30 3 * * *",

@@ -155,7 +155,7 @@ Kill switches (<https://vukem.dev/docs/digging-deeper/feature-flags> "Feature fl
 | Commons (P3383) | per file | film poster fallback | per file | author, licence, URL |
 | Open Library | no rights asserted by the Internet Archive (<https://openlibrary.org/developers/licensing>); legal read cleared by the owner (Q-A16, 2026-11-01); connector behind `ingest_openlibrary`, default off | pages, editions, covers | identifiers and titles only (`limitedSources`) until a licence note widens it | — |
 | TMDB | no commercial use, ≤ 6-month cache | poster, fallback facts, trailers | never | logo + not-endorsed notice on item pages using TMDB fields and `/about` |
-| IGDB | interim rule D-36: site-only, refreshed every 24 h, never cached > 7 days, until the owner records `docs/legal/igdb.md` | cover, fallback facts, trailers | never | "Game data by IGDB.com" in game page footers and `/about` |
+| IGDB | Twitch Developer Services Agreement (<https://www.twitch.tv/p/en/legal/developer-agreement/>) and IGDB API terms (<https://api-docs.igdb.com/>: commercial use through a partnership, visible attribution); owner cleared the read (Q-A16); interim rule D-36 still applies: site-only, refreshed every 24 h, never cached > 7 days | cover, fallback facts, trailers | never | "Game data by IGDB.com" in game page footers and `/about` |
 | Steam `appdetails` | [NOT VERIFIED] | header image, OS platforms | store ID (Wikidata) | — |
 | GOG catalog | [NOT VERIFIED] | store link, cover, OS platforms | store ID (Wikidata) | — |
 | YouTube oEmbed | YouTube ToS | embeddability verdict | IDs (Wikidata) | player |
