@@ -1,0 +1,10 @@
+# P5.B.5.1 smoke (preview build with the staging host override, owner-gated).
+# Set SLUG and ENTITY_ID to a DemoCatalog game slug and entity id on staging.
+appId: app.hexascore
+---
+- launchApp
+- openLink: https://hexascore.app/pt-br/games/${SLUG}
+- assertVisible:
+    id: "item"
+- openLink: https://hexascore.app/entities/${ENTITY_ID}
+- assertNotVisible: "Unknown section"
