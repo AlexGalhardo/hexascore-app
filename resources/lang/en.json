@@ -538,6 +538,7 @@
     "next": "Next",
     "previous": "Previous",
     "pagination": "Pages",
+    "page": "Page {page}",
     "landing": {
       "topRated": "Top rated",
       "newest": "New releases",
