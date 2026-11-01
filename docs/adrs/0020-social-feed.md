@@ -14,7 +14,7 @@ The outline in `.orchestration/reports/AUDIT-social-sdd.md` §3 lists three opti
 
 ## Decision
 
-Option 2. Each write path that produces a feed event inserts one `activity_events` row inside its own transaction, only when `SOCIAL_ENABLED` is on and the actor has `feed_opt_in`. The feed reads it with one query (SDD 14 §12.7). Events older than 180 days are deleted daily.
+Option 2. Each write path that produces a feed event inserts one `activity_events` row inside its own transaction, only when the feature flag `social` is on and the actor has `feed_opt_in`. The feed reads it with one query (SDD 14 §12.7). Events older than 180 days are deleted daily.
 
 Fan-out (option 3) is not built until a user has 10,000 followers; at that point a follow-up ADR revisits it with measured numbers.
 
