@@ -27,3 +27,27 @@ Branch `fix/mobile-release-bundle` (from local `main` @ 0caee8d1). Worktree `C:\
 
 - Not run on Linux CI (host is Windows); the first CI run will confirm. `CI=1` was set locally.
 - No EAS build run. CHANGELOG/ROADMAP/PROGRESS untouched per brief.
+
+## Review (especialista, 2026-11-01)
+
+verdict: CORRIGIDO_E_APROVADO
+re-run (Windows host, fresh worktree, `CI=1`):
+
+- `bun run bundle:check` → exit 0, "Done writing bundle output", 2968544-byte bundle.
+- Broken relative import in `app/_layout.tsx` → exit 1 (Metro "Unable to resolve"), no bundle written.
+- Missing bare package in `app/(tabs)/index.tsx` → exit 1.
+- After the fix, a broken run that follows a good run → exit 1 (stale output cleared first).
+- `bun run lint` ok, `bun run typecheck` ok, `bun run test -- --runInBand --forceExit` → 56 suites, 373 tests pass.
+
+checked:
+
+- `"main": "expo-router/entry"` matches the `--entry-file` used by `bundle:check`.
+- `metro.config.js`: dropping `disableHierarchicalLookup` keeps `nodeModulesPaths`/`watchFolders`; the `resolveRequest` wrapper only rewrites the `react-native-css-interop/` prefix and delegates to NativeWind's resolver (or Metro's default).
+- `babel.config.js`: wrapper only re-resolves the NativeWind preset's string plugin names; Jest uses the same config and passes.
+- Scope: mobile config, CI step, `local.sh`. No dependency added, no secrets.
+
+fixes:
+
+1. `bundle:check` now runs `rm -rf .bundle-check` first and then `scripts/check-bundle.cjs`, which exits 1 when the bundle is missing or empty. The exit code was already non-zero in every resolution failure reproduced here; the guard covers the exit-0-with-error case the author saw and stale output from an earlier run (912a5a06).
+
+PRONTO_PARA_MERGE agent/especialista/FIX-mobile-release-bundle-fix @ 912a5a06 (merged 52f98cc5)
