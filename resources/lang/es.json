@@ -1513,6 +1513,15 @@
       "unfollow": "Dejar de seguir",
       "requested": "Solicitado · cancelar",
       "label": "Seguidores"
+    },
+    "feed": {
+      "title": "Feed",
+      "empty": "Nada todavía. Sigue a personas para ver lo que puntúan y listan.",
+      "more": "Actividad anterior",
+      "rating_saved": "puntuó",
+      "status_changed": "marcó como {status}",
+      "list_created": "creó la lista",
+      "list_item_added": "añadió a"
     }
   },
   "help": {

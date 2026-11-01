@@ -331,7 +331,7 @@ Following a banned user is 404, like a missing one; accept and decline match onl
 
 ### 12.7 Feed query
 
-ADR 0020: events are written on the write path (no fan-out); the feed reads `activity_events` of followed actors with a keyset cursor:
+ADR 0020: events are recorded by an after-commit listener on the write-path events (no fan-out); the feed reads `activity_events` of followed actors with a keyset cursor:
 
 ```sql
 SELECT e.* FROM activity_events e
