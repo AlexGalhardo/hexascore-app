@@ -165,6 +165,7 @@ export default function Index({ counts, groups, filters }: Props) {
 											<ShelfCard
 												item={item}
 												stars={item.stars}
+												own
 												statusLabel={t(
 													`social.status.${item.type}.${item.status}`,
 												)}
