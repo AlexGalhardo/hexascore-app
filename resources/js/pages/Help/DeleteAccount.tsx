@@ -1,11 +1,13 @@
 import { Head, Link } from "@inertiajs/react";
 
+import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
 const link = "text-primary hover:underline";
 
 export default function DeleteAccount() {
 	const t = useT();
+	const l = useLocalized();
 
 	return (
 		<>
@@ -21,10 +23,10 @@ export default function DeleteAccount() {
 			<p className="mb-2">{t("help.deleteAccount.erased")}</p>
 			<p className="mb-4">{t("help.deleteAccount.kept")}</p>
 			<p className="flex gap-4">
-				<Link href="/profile#delete" className={link}>
+				<Link href={l("/profile#delete")} className={link}>
 					{t("help.deleteAccount.cta")}
 				</Link>
-				<Link href="/login" className={link}>
+				<Link href={l("/login")} className={link}>
 					{t("help.deleteAccount.login")}
 				</Link>
 			</p>
