@@ -86,7 +86,7 @@ export default function Show({
 							`/suggest/entity/${entity.id}?domain=${items.data[0]?.type ?? "game"}`,
 							locale,
 						)}
-						className={btnClass("ghost", "px-2")}
+						className={btnClass("ghost", "-ml-5")}
 					>
 						<svg
 							viewBox="0 0 24 24"
