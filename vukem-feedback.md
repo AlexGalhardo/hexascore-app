@@ -14,7 +14,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 | VF-NEW-P4.B.2.5 | 2026-10-31 | medium | fixed on main, unreleased (PR #121) |
 | VF-NEW-PGTEST-orphans | 2026-10-31 | low | fixed on main, unreleased (PR #122) |
 | VF-NEW-migrator-lock-snapshot | 2026-10-31 | high | fixed on main, unreleased (PR #123) |
-| VF-NEW-OPENAPI-DOC-INFO | 2026-10-31 | low | open |
+| VF-NEW-OPENAPI-DOC-INFO | 2026-10-31 | low | fixed on main, unreleased (PR #124) |
 
 ## VF-NEW-P4.B.2.5: Admin panel updates write every column from a record loaded outside the transaction
 
@@ -45,7 +45,7 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 
 ## VF-NEW-OPENAPI-DOC-INFO: Servers and StripPrefix are app-wide, not per OpenAPI document
 
-- **Date**: 2026-10-31. **Severity**: low. **Status**: open.
+- **Date**: 2026-10-31. **Severity**: low. **Status**: fixed on main, unreleased (PR #124).
 - **vukem version**: v0.34.0. **Docs consulted**: <https://vukem.dev/docs/rest-apis/openapi> (`WithOpenAPI`, `Info.StripPrefix`, `ServeOpenAPIWith`). Neither says how two documents with different servers share one app. `[NOT IN VUKEM DOCS]`.
 - **Context**: HexaScore exports two documents: the public API (`/api/v1`, served from `https://api.hexascore.app/v1`, so `StripPrefix: /api/v1`) and the first-party app API (`/app/v1`, full paths). `WithOpenAPI` takes one `Info`, and `Build` requires a route to be under both `PathPrefix` and `StripPrefix`, so a global `StripPrefix` empties the `/app/v1` document.
 - **Repro**: `WithOpenAPI(openapi.Info{StripPrefix: "/api/v1"})`, then `openapi:export -prefix /app/v1` fails with "path prefix matches no route".
