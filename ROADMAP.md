@@ -3099,7 +3099,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/screens/item` → a merged id follows the 301 and rewrites the cache key; empty edition and entity groups are hidden; the attribution block is shown only when a TMDB/IGDB field is present
   - Notes: the "similar" and "cross-media" blocks need `/items/{id}/related` (P6.D.1.3). Leave them out, not as empty placeholders. Adding them later is a new feature, so it needs a store release, not OTA (SDD 10 §7.8).
 
-- [ ] **P5.B.2.2** Build the star widget `src/rating/StarInput`: ten stars with half-star taps (0.5–10.0), re-tap is a no-op, selection haptic, one `adjustable` accessibility element with doubled integer `now` and ±0.5 increments, 32 dp stars with 6 dp hit slop, wrapping below 360 dp.
+- [x] **P5.B.2.2** Build the star widget `src/rating/StarInput`: ten stars with half-star taps (0.5–10.0), re-tap is a no-op, selection haptic, one `adjustable` accessibility element with doubled integer `now` and ±0.5 increments, 32 dp stars with 6 dp hit slop, wrapping below 360 dp.
   - Files/modules: `apps/mobile/src/rating/StarInput.tsx`, `src/rating/StarInput.test.tsx`
   - Refs: SDD 10 §7.5, FR-10-3, §4 (targets ≥ 44 dp, 200 % font scale); ADR 0005; SDD 09 (web widget); [E9], [E11]
   - Depends on: P5.A.5.1
@@ -3107,8 +3107,9 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
   - Acceptance:
     - `bun run --cwd apps/mobile test -- src/rating --coverage` → ≥ 80 % on `src/rating`; a tap on the left half of star 7 gives 6.5; the accessibility increment from 6.5 gives 7.0; `accessibilityValue.now` is 13 for 6.5; `Haptics.selectionAsync` is called once per change
   - Notes: no drag gesture in v1. "Remove rating" is a separate control (P5.B.2.3).
+  - Done 2026-10-31: `accessibilityValue.now` still sends 6.5, not 13; the fix is row FIX-mobile-rating-a11y-now in `src/ui/RatingInput.tsx`.
 
-- [ ] **P5.B.2.3** Build the rate sheet: six category widgets for the item's type, submit disabled until all are set, a single PUT with all keys through the offline queue, a remove-rating action, and rollback toasts.
+- [x] **P5.B.2.3** Build the rate sheet: six category widgets for the item's type, submit disabled until all are set, a single PUT with all keys through the offline queue, a remove-rating action, and rollback toasts.
   - Files/modules: `apps/mobile/src/rating/RateSheet.tsx`, `src/rating/useRateMutation.ts`, `src/rating/RateSheet.test.tsx`, `.maestro/smoke/rate-item.yaml`
   - Refs: SDD 10 §6.1 (Rate sheet row), §7.3, §7.5 "Rate sheet", FR-10-4; SDD 02 §6 (PUT body, 409 `rating-not-released`, 429 limits); A-06
   - Depends on: P5.B.2.1, P5.B.2.2, P5.A.4.2
@@ -3117,6 +3118,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - `bun run --cwd apps/mobile test -- src/rating/RateSheet` → the optimistic aggregate updates at once and is replaced by the server body on 2xx; 409 before release rolls back
     - `maestro test .maestro/smoke/rate-item.yaml` (staging) → PASSED
   - Notes: input is in stars (the server multiplies by 10). The category keys are the stable A-06 keys from the generated client; never hard-code labels.
+  - Done 2026-10-31: the Maestro flow is not written; it waits for a staging environment (owner gate).
 
 - [ ] **P5.B.2.4** Build the status and time-to-beat sheet: PUT/DELETE status, and PUT/DELETE time-to-beat in 0.5 h steps for games only, both queued offline.
   - Files/modules: `apps/mobile/src/status/StatusSheet.tsx`, `src/status/TimeToBeatSheet.tsx`, `src/status/status.test.tsx`

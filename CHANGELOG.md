@@ -67,6 +67,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **mobile:** Android item screen with score, confidence, category averages, entities by role, book editions, attribution and the user's own rating (P5.B.2.1)
 - Android app v1 screens: catalogue listing (filters, sort, pager), item detail (score block, category bars, half-star rating, more like this), library shelves, login and settings with a Google sign-in button, shared state page, entity, list detail, notifications and book editions components (IMPL-mobile-v1-catalog-ui, -item-ui, -library-ui, -auth-ui, -states-ui, -detail-ui).
 - Android app header (wordmark, search, theme toggle), themed tab bar with translated titles, and the profile tab showing the v1 settings page with the crash-report consent switch (IMPL-mobile-v1-shell-wire, -settings-wire).
+- Android rating data flow: half-star input with selection haptics, ratings queued offline with an optimistic cache update and rollback (P5.B.2.2).
+- Android rate sheet (six categories, offline-queued save and delete, rollback toasts); `GET /app/v1/me` returns the user `id` and `deletionScheduledAt` (P5.B.2.3).
 
 ### Changed
 
