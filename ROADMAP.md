@@ -1646,7 +1646,7 @@ Phase-specific conventions:
 
 #### P2.C.5 Release
 
-- [ ] **P2.C.5.1** Release `v0.12.0` (observability).
+- [x] **P2.C.5.1** Release `v0.12.0` (observability). Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`, tag `v0.12.0`, `docs/PROGRESS.md`, `docs/sdd/open-issues.md` (rows 12-4, 12-8 closed), `vukem-feedback.md` (VF-019, VF-022, VF-023 notes)
   - Refs: ADR 0013; SDD 12 §9; SDD 11 §7.1
   - Depends on: P2.C.3.2, P2.C.3.4, P2.C.3.5, P2.C.4.1, P2.C.4.2
@@ -1764,7 +1764,7 @@ Phase-specific conventions:
 
 #### P2.D.6 Release
 
-- [ ] **P2.D.6.1** Release `v0.13.0` (security hardening).
+- [x] **P2.D.6.1** Release `v0.13.0` (security hardening). Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`, tag `v0.13.0`, `docs/PROGRESS.md`
   - Refs: ADR 0013; SDD 13 §9; SDD 11 §7.1
   - Depends on: P2.D.2.3, P2.D.4.1, P2.D.5.1, P2.D.5.2, P2.D.5.3
@@ -1859,7 +1859,7 @@ Phase-specific conventions:
 
 #### P2.E.4 Release
 
-- [ ] **P2.E.4.1** Release `v0.14.0` (backups and migrations policy).
+- [x] **P2.E.4.1** Release `v0.14.0` (backups and migrations policy). Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`, tag `v0.14.0`, `docs/PROGRESS.md`, `AGENTS.md` (commands: `backup:run`, `backup:drill`, `backup:restore`, `hexascore:predeploy`, `db:index-concurrently`)
   - Refs: ADR 0013, 0014; SDD 11 §7.1, §9
   - Depends on: P2.E.1.2, P2.E.2.3, P2.E.3.2
@@ -2028,7 +2028,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
 
 #### P2.F.6 Release
 
-- [ ] **P2.F.6.1** Release `v0.15.0` (data migration tooling, two dry runs green).
+- [x] **P2.F.6.1** Release `v0.15.0` (data migration tooling, two dry runs green). Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`, tag `v0.15.0`, `docs/PROGRESS.md`, `AGENTS.md` (commands: `hexascore:import-legacy`, `hexascore:cutover-verify`, `scripts/legacy/*`)
   - Refs: ADR 0013; SDD 11 §7.1, §7.6
   - Depends on: P2.F.5.2
@@ -2281,7 +2281,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - `curl -sI localhost:3000/games | grep -i cache-control` → `public, max-age=60, stale-while-revalidate=300` for anonymous requests; `private, no-store` with a session cookie
     - `k6 run qa/k6/page-ttfb.js` → p75 ≤ 400 ms
 
-- [ ] **P2.H.3.6** Release `v0.16.0` (launch readiness).
+- [x] **P2.H.3.6** Release `v0.16.0` (launch readiness). Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`, tag `v0.16.0`, `docs/PROGRESS.md`, `ROADMAP.md` status table
   - Refs: ADR 0013
   - Depends on: P2.H.1.1–P2.H.3.5
@@ -2458,7 +2458,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P3.A.7 Release
 
-- [ ] **P3.A.7.1** Release `v1.1.0` (API `1.1.0`, additive) to staging, then production.
+- [x] **P3.A.7.1** Release `v1.1.0` (API `1.1.0`, additive) to staging, then production. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`, `cliff.toml`, `.env` `API_VERSION`, docs changelog entry
   - Refs: ADR 0013; SDD 05 §6.5 "Versioning"; SDD 11 releases
   - Depends on: P3.A.6.2
@@ -2550,7 +2550,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Status (2026-11-01): code done on main (805dda84): `CoverageTable` on `/pricing` and `/docs/coverage` from `api_coverage.json`, "not measured yet" while it has no rows; `TestCoverageRoutes` and `TestPricingPage` PASS. Open: numbers wait for the P3.A.2.2 staging run (owner gate); `pricing.spec.ts` not run.
   - Notes: prices stay the legacy table (D-33); do not change amounts. The statement must say covers for films, series and games are never in the API (SDD 05 §6.2).
 
-- [ ] **P3.B.3.3** Release `v1.2.0` (SDKs published, docs live).
+- [x] **P3.B.3.3** Release `v1.2.0` (SDKs published, docs live). Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`
   - Refs: ADR 0013; SDD 05 §6.5
   - Depends on: P3.B.3.2
@@ -2665,7 +2665,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `schemathesis run openapi/app-v1.json --url http://localhost:3000 -H "Authorization: Bearer $HX_APP_TEST_TOKEN" --checks all` → 0 failures; `k6 run qa/k6/app-v1.js` → `p(95)<300`
   - Notes: the app document is not served in production (SDD 05 §6.5). Package is `"private": true`, workspace only. `codegen:client` runs in warmup mode, no secrets needed in CI.
 
-- [ ] **P3.C.5.2** Release `v1.3.0` (first-party API ready for P5).
+- [x] **P3.C.5.2** Release `v1.3.0` (first-party API ready for P5). Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`
   - Refs: ADR 0013; ADR 0009
   - Depends on: P3.C.5.1
@@ -2787,7 +2787,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
 
 #### P4.A.4 Release
 
-- [ ] **P4.A.4.1** Release `v1.4.0` to staging with submission routes behind a feature flag that stays off in production until P4.B ships.
+- [x] **P4.A.4.1** Release `v1.4.0` to staging with submission routes behind a feature flag that stays off in production until P4.B ships. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`, `app/flags/flags.go`
   - Refs: ADR 0013; <https://vukem.dev/docs/digging-deeper/admin> "Feature flags"
   - Depends on: P4.A.3.3
@@ -2965,7 +2965,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Notes: owner input: who moderates (owner alone or with a helper) and when. Rehearsal rows are reverted or deleted afterwards only through revert, never by editing `catalog_audit` (append-only). The command flag names are app code (`vukem make:command`), not vukem flags.
   - Status (2026-11-01): owner gate (staging environment): the 100-suggestion rehearsal runs on staging (owner yes for the staging environment).
 
-- [ ] **P4.B.5.3** Release `v1.5.0` and turn the community submissions flag on in production.
+- [x] **P4.B.5.3** Release `v1.5.0` and turn the community submissions flag on in production. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`
   - Refs: ADR 0013; ADR 0010; P4.A.4.1 flag
   - Depends on: P4.B.5.2
@@ -3102,7 +3102,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 #### P5.A.5 Release
 
-- [ ] **P5.A.5.1** Release `v1.6.0`: mobile foundation merged, with a `development` and a `preview` build installable from EAS on the reference device.
+- [x] **P5.A.5.1** Release `v1.6.0`: mobile foundation merged, with a `development` and a `preview` build installable from EAS on the reference device. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`, `apps/mobile/app.config.ts` (`version` `0.1.0`), `docs/PROGRESS.md`
   - Refs: ADR 0013; SDD 10 §7.4, §7.8
   - Depends on: P5.A.4.3, P5.A.3.5, P5.A.3.4
@@ -3252,7 +3252,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 
 #### P5.B.6 Release
 
-- [ ] **P5.B.6.1** Release `v1.7.0` (assetlinks route in production) and build `mobile-v0.9.0` as a preview APK for owner testing.
+- [x] **P5.B.6.1** Release `v1.7.0` (assetlinks route in production) and build `mobile-v0.9.0` as a preview APK for owner testing. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`, `apps/mobile/app.config.ts` (`version`), `docs/PROGRESS.md`
   - Refs: ADR 0013; SDD 10 §7.4, §9
   - Depends on: P5.B.5.2
@@ -3341,7 +3341,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
     - Play Console vitals after 7 days → crash-free sessions ≥ 99 %, recorded with the date in `docs/PROGRESS.md`
   - Notes: the owner manages the testers list. A crash fix that changes only JS may ship over the air under the OTA rule; anything else needs a new store build.
 
-- [ ] **P5.C.3.3** Release to production with a staged rollout of 20 % → 100 % over ≥ 3 days, raise `APP_MIN_SUPPORTED_VERSION` to `1.0.0`, and release `v1.8.0`.
+- [x] **P5.C.3.3** Release to production with a staged rollout of 20 % → 100 % over ≥ 3 days, raise `APP_MIN_SUPPORTED_VERSION` to `1.0.0`, and release `v1.8.0`. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`, production env `APP_MIN_SUPPORTED_VERSION`, `docs/PROGRESS.md`
   - Refs: SDD 10 §7.4, §7.8; SDD 05 §6.4 (kill switch); ADR 0013
   - Depends on: P5.C.3.2
@@ -3503,7 +3503,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `QUEUE_CONNECTION=database vukem queue:work -queue ingest -stop-when-empty` after `bootstrap --limit 20` on a dev database → 80 items normalised, `job_runs` all `succeeded`
   - Notes: scheduler locks live in `app.Cache()`. Use `CACHE_STORE=database` in production so a restart does not double-run (scheduler page "Overlapping runs"). Registering custom commands is [NOT VERIFIED] in SDD 06 §7.9; confirm it on the vukem CLI docs or expose bootstrap as an admin run only (P6.B.4.3).
 
-- [ ] **P6.A.4.2** Release `v1.9.0` with `ingest_wikidata` and `ingest_wikipedia` on in staging (and `ingest_openlibrary` only if A-05 allows), after 7 days of green daily runs.
+- [x] **P6.A.4.2** Release `v1.9.0` with `ingest_wikidata` and `ingest_wikipedia` on in staging (and `ingest_openlibrary` only if A-05 allows), after 7 days of green daily runs. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`, staging/production env `FLAG_INGEST_*`, `docs/PROGRESS.md`
   - Refs: ADR 0013; SDD 06 §6 "Kill switches", §9
   - Depends on: P6.A.4.1
@@ -3664,7 +3664,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.B.5 Release
 
-- [ ] **P6.B.5.1** Release `v1.10.0` with every source on in staging, then production, and start the 30-day green-jobs clock for the phase exit.
+- [x] **P6.B.5.1** Release `v1.10.0` with every source on in staging, then production, and start the 30-day green-jobs clock for the phase exit. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`, env `FLAG_INGEST_*`, `docs/PROGRESS.md`
   - Refs: ADR 0013; SDD 06 §9; ROADMAP P6 exit criteria
   - Depends on: P6.B.4.5, P6.B.2.3, P6.B.3.3, P6.B.4.2
@@ -3753,7 +3753,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.C.4 Release
 
-- [ ] **P6.C.4.1** Release `v1.11.0` (API `API_VERSION` minor bump for `listTrending`/`getItemActivity`).
+- [x] **P6.C.4.1** Release `v1.11.0` (API `API_VERSION` minor bump for `listTrending`/`getItemActivity`). Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`, `.env` `API_VERSION`, docs changelog entry
   - Refs: ADR 0013; SDD 05 §6.5; SDD 08 §9
   - Depends on: P6.C.3.1, P6.C.3.2
@@ -3832,7 +3832,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 
 #### P6.D.4 Release
 
-- [ ] **P6.D.4.1** Release `v1.12.0` and close Phase 6 once daily jobs have been green for 30 days and trending and similar are live.
+- [x] **P6.D.4.1** Release `v1.12.0` and close Phase 6 once daily jobs have been green for 30 days and trending and similar are live. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Files/modules: `CHANGELOG.md`, `docs/PROGRESS.md`, `ROADMAP.md` status table
   - Refs: ADR 0013; SDD 08 §9; SDD 06 §9; ROADMAP P6 exit criteria
   - Depends on: P6.D.1.3, P6.D.3.1, P6.B.5.1
@@ -3879,7 +3879,7 @@ Design principles for the whole phase: every social write is moderated by the P4
   - Status (2026-11-01): code done on main (parts 1 and 2, a9343e81): `TestFeedPrivacy`, `TestProfileActivityTab`, `TestActivityRetention` and `TestFeedPurgedOnAnonymise` PASS. Open: `k6 run qa/k6/feed.js` (written with `qa/k6/feed-seed.sql`, not run on this host; batch run). Flag `social` stays off while Q-A5 is open.
   - Done (2026-11-01): `k6 run qa/k6/feed.js` on a local QA stack with 10,000 events: 30 rps for 60 s, feed p(95) 252 ms, 0 % failed (reports/P7.A.1.3.md "Acceptance run").
 
-- [ ] **P7.A.1.4** Release `v1.13.0` (follows and feed).
+- [x] **P7.A.1.4** Release `v1.13.0` (follows and feed). Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Depends on: P7.A.1.3
   - Model: Sonnet
   - Acceptance: `gh release view v1.13.0` → non-empty body
@@ -3917,7 +3917,7 @@ Design principles for the whole phase: every social write is moderated by the P4
     - `go test -tags integration ./tests -run TestReportsReviewComment` → green; a hidden review disappears from the item page and the feed
   - Status (2026-11-01): done (a9343e81): `TestReportsReviewComment` and `TestReportsReviewBanAuthor` PASS. Hiding has no "unhide" outcome in the admin queue (follow-up).
 
-- [ ] **P7.B.1.4** Release `v1.14.0` (reviews, comments, reactions).
+- [x] **P7.B.1.4** Release `v1.14.0` (reviews, comments, reactions). Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Depends on: P7.B.1.3
   - Model: Sonnet
   - Acceptance: `gh release view v1.14.0` → non-empty body
@@ -3942,7 +3942,7 @@ Design principles for the whole phase: every social write is moderated by the P4
     - `curl -sI localhost:3000/og/items/<id>.png` → `image/png`, `Cache-Control: public, max-age=86400`; the item page `<meta property="og:image">` points at it
   - Status (2026-11-01): done (a9343e81): `TestOGImage` PASS (GET and HEAD 200 `image/png`, `Cache-Control: public, max-age=86400`, 1200x630; the page sets `ogImage` for the og:image meta). `dwebp` 1.6.0 ships in the runtime image's `libwebp-tools`; the WebP decode path is checked on the first deploy.
 
-- [ ] **P7.C.1.3** Release `v1.15.0` and close Phase 7 once the moderation SLA covers reviews and comments for 30 days.
+- [x] **P7.C.1.3** Release `v1.15.0` and close Phase 7 once the moderation SLA covers reviews and comments for 30 days. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
   - Depends on: P7.C.1.2, P7.B.1.4
   - Model: Sonnet
   - Acceptance: `gh release view v1.15.0` → non-empty body; moderation median ≤ 24 h over 30 days
