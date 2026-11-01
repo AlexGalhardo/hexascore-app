@@ -100,7 +100,8 @@ func (r *Runner) Execute(ctx context.Context, id int64) (Outcome, error) {
 	}
 
 	if _, err := r.DB.ExecContext(ctx, `UPDATE job_runs SET status = 'running', attempt = attempt + 1,
-started_at = coalesce(started_at, now()), heartbeat_at = now() WHERE id = $1`, id); err != nil {
+started_at = coalesce(started_at, now()), heartbeat_at = now() WHERE id = $1 AND status IN ('queued', 'running')`,
+		id); err != nil {
 		return "", err
 	}
 
@@ -112,16 +113,32 @@ started_at = coalesce(started_at, now()), heartbeat_at = now() WHERE id = $1`, i
 		var out Outcome
 
 		err := r.DB.Tx(ctx, func(tx *database.Tx) error {
-			var status string
-			if err := tx.QueryRowContext(ctx, `SELECT status FROM job_runs WHERE id = $1 FOR UPDATE`, id).
-				Scan(&status); err != nil {
+			// status and cursor are re-read under the lock: a redelivered job running next to this one must
+			// resume from the cursor the other committed, and a run closed meanwhile must not be stepped.
+			var (
+				status string
+				cursor json.RawMessage
+			)
+			if err := tx.QueryRowContext(ctx, `SELECT status, coalesce(cursor, 'null'::jsonb), failed FROM job_runs
+WHERE id = $1 FOR UPDATE`, id).Scan(&status, &cursor, &run.Failed); err != nil {
 				return err
 			}
 
-			if status == StatusCancelled {
+			switch status {
+			case StatusQueued, StatusRunning:
+			case StatusCancelled:
 				out = Cancelled
 
 				return nil
+			default:
+				out = Finished
+
+				return nil
+			}
+
+			run.Cursor = nil
+			if string(cursor) != "null" {
+				run.Cursor = cursor
 			}
 
 			res, err := step(ctx, tx, run)
