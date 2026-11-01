@@ -2,16 +2,8 @@ import type { ReactElement } from "react";
 import { Text, View } from "react-native";
 import type { ItemJSON, TrendingEntryJSON } from "../../../../packages/app-client/src/api";
 import { type AppLocale, t } from "../i18n";
-import type { CatalogType } from "../navigation/catalog";
+import { type CatalogType, SINGULAR } from "../navigation/catalog";
 import { ItemRow } from "./ItemRow";
-
-// Route segments are plural; catalogue keys and ItemJSON.type are singular.
-export const SINGULAR: Record<CatalogType, string> = {
-	games: "game",
-	movies: "movie",
-	series: "series",
-	books: "book",
-};
 
 // SDD 08 §6: prior entries get the chip; an all-prior list is titled "Popular {type}".
 export function trendingTitle(

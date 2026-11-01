@@ -10,3 +10,11 @@ export function firstParam(value: string | string[] | undefined): string {
 	if (Array.isArray(value)) return value[0] ?? "";
 	return value ?? "";
 }
+
+// API items carry the plural route segment as `type`; catalogue keys are singular.
+export const SINGULAR: Record<CatalogType, string> = {
+	games: "game",
+	movies: "movie",
+	series: "series",
+	books: "book",
+};
