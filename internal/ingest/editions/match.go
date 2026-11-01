@@ -106,6 +106,7 @@ func PrimaryEdition(in []Candidate, original string) int {
 // Store is the persistence Save needs.
 type Store interface {
 	WorkOfISBN(ctx context.Context, isbn13 string) (work string, found bool, err error)
+	WorkOfQID(ctx context.Context, qid string) (work string, found bool, err error)
 	Upsert(ctx context.Context, work string, c Candidate) error
 }
 
@@ -119,10 +120,21 @@ const (
 	Conflict Outcome = "conflict"
 )
 
-// Save writes one edition unless its ISBN is already held by a different work; an ISBN is never moved.
+// Save writes one edition unless its ISBN or edition QID is already held by a different work; neither is ever moved.
 func Save(ctx context.Context, s Store, work string, c Candidate) (Outcome, error) {
 	if c.ISBN != "" {
 		owner, found, err := s.WorkOfISBN(ctx, c.ISBN)
+		if err != nil {
+			return "", err
+		}
+
+		if found && owner != work {
+			return Conflict, nil
+		}
+	}
+
+	if c.QID != "" {
+		owner, found, err := s.WorkOfQID(ctx, c.QID)
 		if err != nil {
 			return "", err
 		}

@@ -100,11 +100,11 @@ func (Editions) one(ctx context.Context, tx *database.Tx, r run.Run, id, qid str
 		return err
 	}
 
-	for _, isbn := range conflicts {
+	for _, c := range conflicts {
 		res.Failed++
 
-		if _, err := run.RecordFailure(ctx, tx, r.ID, editions.FailureSource, isbn, "isbn_conflict",
-			fmt.Errorf("isbn %s belongs to another work", isbn)); err != nil {
+		if _, err := run.RecordFailure(ctx, tx, r.ID, editions.FailureSource, c.ID, c.Class,
+			fmt.Errorf("edition %s belongs to another work", c.ID)); err != nil {
 			return err
 		}
 	}

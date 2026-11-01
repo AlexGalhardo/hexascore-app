@@ -257,3 +257,80 @@ func TestBackfillEditionsWalksBooksByKeyset(t *testing.T) {
 		t.Errorf("editions = %d, want 3", n)
 	}
 }
+
+func TestNormalizeQidConflictIsAFailureAndAReviewAndTheItemStillSaves(t *testing.T) {
+	db := newDB(t)
+
+	if err := normalize.SeedDataSources(t.Context(), db); err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := db.ExecContext(
+		t.Context(),
+		`INSERT INTO items (id, type, slug, wikidata_qid) VALUES ($1, 'book', 'owner', 'Q1')`,
+		workA,
+	); err != nil {
+		t.Fatal(err)
+	}
+
+	if _, err := editions.Save(
+		t.Context(),
+		editions.PG{Ex: db},
+		workA,
+		editions.Candidate{QID: "Q777", Title: "Owner", Language: "pt", Source: "wikidata"},
+	); err != nil {
+		t.Fatal(err)
+	}
+
+	bookRecord(t, db, "Q500", []string{isbnTwo}, "Q777")
+
+	err := db.Tx(t.Context(), func(tx *database.Tx) error {
+		res, err := (&normSpy{}).job(0).Step(t.Context(), tx, run.Run{ID: 7})
+		if err == nil && res.Failed != 1 {
+			err = fmt.Errorf("failed = %d, want 1", res.Failed)
+		}
+
+		return err
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if n := count(t, db, `SELECT count(*) FROM items WHERE wikidata_qid = 'Q500'`); n != 1 {
+		t.Errorf("the item was not saved (%d)", n)
+	}
+
+	if n := count(t, db, `SELECT count(*) FROM editions WHERE wikidata_qid = 'Q777' AND work_id = $1`, workA); n != 1 {
+		t.Errorf("the QID moved away from its owner (%d)", n)
+	}
+
+	if n := count(
+		t,
+		db,
+		`SELECT count(*) FROM editions e JOIN items i ON i.id = e.work_id WHERE i.wikidata_qid = 'Q500' AND e.isbn13 = $1`,
+		isbnTwo,
+	); n != 1 {
+		t.Errorf("the other edition was not saved (%d)", n)
+	}
+
+	if n := count(
+		t,
+		db,
+		`SELECT count(*) FROM ingest_failures WHERE source = 'editions' AND external_id = 'Q777' AND error_class = 'qid_conflict'`,
+	); n != 1 {
+		t.Errorf("qid_conflict failures = %d, want 1", n)
+	}
+
+	if n := count(
+		t,
+		db,
+		`SELECT count(*) FROM entity_match_reviews WHERE role = 'edition' AND raw_name = 'Q777' AND $1::uuid = ANY(candidates)`,
+		workA,
+	); n != 1 {
+		t.Errorf("edition reviews = %d, want 1", n)
+	}
+
+	if n := count(t, db, `SELECT count(*) FROM ingest_failures WHERE source = 'normalize'`); n != 0 {
+		t.Errorf("a QID conflict must not park the item (%d normalize failures)", n)
+	}
+}
