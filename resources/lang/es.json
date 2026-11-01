@@ -675,6 +675,11 @@
     "themeDark": "Cambiar al tema oscuro",
     "themeLight": "Cambiar al tema claro",
     "menu": "Menú",
+    "menuUnread": {
+      "one": "Menú, {count} notificación sin leer",
+      "other": "Menú, {count} notificaciones sin leer"
+    },
+    "closeMenu": "Cerrar menú",
     "skip": "Ir al contenido",
     "dismiss": "Descartar",
     "home": "Inicio",

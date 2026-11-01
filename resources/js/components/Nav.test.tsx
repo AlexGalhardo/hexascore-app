@@ -74,9 +74,6 @@ test("navbar has the search trigger, moon/sun toggle and four sections; footer h
 	expect(screen.getByRole("button", { name: "nav.theme" }).querySelectorAll("svg")).toHaveLength(
 		2,
 	);
-	expect(screen.getAllByRole("navigation", { name: "nav.sections" })[1].className).toContain(
-		"justify-between",
-	);
 	const footer = screen.getByRole("navigation", { name: "footer.label" });
 	expect(footer.querySelectorAll("a")).toHaveLength(6);
 	expect(footer.querySelector("[hreflang]")).toBeNull();
@@ -124,5 +121,76 @@ test("the inline Feed link waits for xl and the account menu carries it below", 
 	} finally {
 		props.auth.user = null;
 		props.flags = {};
+	}
+});
+
+// Owner, 2026-11-01: below lg the bar holds only the title, the search field and a hamburger;
+// everything else lives in the hamburger's sheet (supersedes round 2 item 7 on web mobile).
+test("below lg the bar keeps title, search field and hamburger; the rest is desktop-only", () => {
+	render(<Nav />);
+	const search = screen.getByRole("link", { name: "nav.openSearch" });
+	expect(search.className).toContain("flex-1");
+	expect(search.querySelector("span")?.className).not.toMatch(/(^|\s)hidden(\s|$)/);
+	const desktop = screen.getByRole("button", { name: "nav.language" }).closest("[data-desktop]");
+	expect(desktop?.className).toMatch(/(^|\s)hidden(\s|$)/);
+	expect(desktop?.className).toContain("lg:flex");
+	expect(screen.getAllByRole("navigation", { name: "nav.sections" })).toHaveLength(1);
+	const burger = screen.getByRole("button", { name: "nav.menu" });
+	expect(burger.className).toContain("lg:hidden");
+	expect(burger.className).toContain("size-11");
+	expect(burger.getAttribute("aria-expanded")).toBe("false");
+});
+
+test("the hamburger sheet holds sections, language, theme and login; Escape returns focus", async () => {
+	const user = userEvent.setup();
+	render(<Nav />);
+	const burger = screen.getByRole("button", { name: "nav.menu" });
+	await user.click(burger);
+	expect(burger.getAttribute("aria-expanded")).toBe("true");
+	const sheet = screen.getByRole("dialog");
+	expect(sheet.contains(document.activeElement)).toBe(true);
+	const hrefs = [...sheet.querySelectorAll("a")].map((a) => a.getAttribute("href"));
+	expect(hrefs).toEqual(
+		expect.arrayContaining(["/games", "/movies", "/series", "/books", "/login"]),
+	);
+	expect(sheet.querySelectorAll("a[hreflang]")).toHaveLength(3);
+	expect(sheet.querySelector('[aria-current="true"]')?.getAttribute("hreflang")).toBe("en");
+	expect(sheet.querySelector("button[data-theme-toggle]")).not.toBeNull();
+	expect(sheet.className).toContain("motion-reduce:transition-none");
+
+	await user.keyboard("{Escape}");
+	expect(screen.queryByRole("dialog")).toBeNull();
+	expect(burger.getAttribute("aria-expanded")).toBe("false");
+	expect(document.activeElement).toBe(burger);
+});
+
+test("signed in with the flag on, the hamburger shows unread and the sheet has feed and account", async () => {
+	const user = userEvent.setup();
+	try {
+		props.auth.user = { name: "Ana", nickname: "ana" };
+		props.flags = { social: true };
+		props.unreadNotifications = 3;
+		render(<Nav />);
+		const burger = screen.getByRole("button", { name: "nav.menuUnread" });
+		expect(burger.textContent).toContain("3");
+		await user.click(burger);
+		const sheet = screen.getByRole("dialog");
+		const hrefs = [...sheet.querySelectorAll("a")].map((a) => a.getAttribute("href"));
+		expect(hrefs).toEqual(
+			expect.arrayContaining([
+				"/feed",
+				"/me/notifications",
+				"/library",
+				"/lists",
+				"/u/ana",
+				"/logout",
+			]),
+		);
+		expect(sheet.textContent).toContain("Ana");
+		expect(sheet.querySelector('a[href="/me/notifications"]')?.textContent).toContain("3");
+	} finally {
+		props.auth.user = null;
+		props.flags = {};
+		props.unreadNotifications = 0;
 	}
 });
