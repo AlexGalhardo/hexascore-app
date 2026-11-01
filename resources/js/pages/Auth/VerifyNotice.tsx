@@ -16,7 +16,7 @@ export default function VerifyNotice() {
 				href="/verify-email/resend"
 				method="post"
 				as="button"
-				className="rounded-md bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500"
+				className="rounded-md bg-primary px-4 py-2 font-medium text-on-primary hover:bg-primary-hover"
 			>
 				{t("auth.verify.resend")}
 			</Link>
