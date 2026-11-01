@@ -56,6 +56,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **community:** SuggestEdit edits the release date (with precision) and relation fields (genres, creators, organizations, franchise, platforms) as typed changes, with translated precision and role names (P4.A.3.1d)
 - **admin:** Moderation metrics page at `/admin/moderation/metrics` (queue size, oldest open age, p50/p95 time to decision, approval rate over 7 and 30 days) (P4.B.4.1)
 - **community:** Nightly `community.asserts` job (05:10 UTC): every applied suggestion has audit rows, no open suggestion targets a missing record, contributor stats equal a rebuild; a failure logs `alert=community_asserts` (P4.B.4.2)
+- **community:** The suggest form can propose new people, companies, tags and book editions ("What to add" tabs; the item tab reads "Game, movie, series or book") (FIX-community-create-kinds-ui, FIX-community-create-tab-label)
 
 ### Changed
 
