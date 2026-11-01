@@ -83,6 +83,16 @@ var (
 		{Job: dq.Job, Mode: run.ModeFull},
 	}}
 
+	SteamWeekly = Chain{"steam-weekly", []Stage{
+		fetch("steam", run.ModeFull),
+		{Job: "normalize", Mode: run.ModeFull},
+		{Job: dq.Job, Mode: run.ModeFull},
+	}}
+	GOGWeekly = Chain{"gog-weekly", []Stage{
+		fetch("gog", run.ModeFull),
+		{Job: "normalize", Mode: run.ModeFull},
+		{Job: dq.Job, Mode: run.ModeFull},
+	}}
 	IGDBWeekly = Chain{"igdb-weekly", []Stage{
 		fetch("igdb", run.ModeFull),
 		{Job: "normalize", Mode: run.ModeFull},
@@ -130,6 +140,8 @@ var (
 		OpenLibraryWeekly,
 		TMDBWeekly,
 		TMDBExpire,
+		SteamWeekly,
+		GOGWeekly,
 		IGDBWeekly,
 		IGDBRefresh,
 		EditionsBackfill,
