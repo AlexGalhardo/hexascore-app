@@ -2887,7 +2887,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test -tags=integration ./app/moderation/... -run TestMetricsQuery` → seeded fixture gives the expected percentiles and rates
   - Notes: one SQL query with `percentile_cont`; sortable by age (R5 step 1).
 
-- [ ] **P4.B.4.2** Emit `suggest.queue.*`, `suggest.decisions`, `suggest.sla.breaches`, add alert A9, the Moderation dashboard and the nightly SDD 04 asserts.
+- [x] **P4.B.4.2** Emit `suggest.queue.*`, `suggest.decisions`, `suggest.sla.breaches`, add alert A9, the Moderation dashboard and the nightly SDD 04 asserts.
   - Files/modules: `app/observability/community_metrics.go`, `ops/grafana/dashboards/moderation.json`, `ops/grafana/alerts/a9_moderation.yaml`, `app/jobs/community_asserts.go`, `tests/metrics_community_test.go`
   - Refs: SDD 12 §6 metrics table, §7.5 A9, §7.6 "Moderation"; SDD 04 NFR-04-2, §10 nightly asserts; VF-019
   - Depends on: P4.B.4.1
@@ -2896,6 +2896,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `go test ./tests -run TestMetrics_CommunityGauges` (manual reader) → gauges and counters present with the `decision` attribute
     - `go test -tags=integration ./app/jobs/... -run TestCommunityAsserts` → fails on an `applied` suggestion without audit rows
   - Notes: VF-019 workaround: meter from `Config.Global` plus the upstream OTel API. A9 fires when the oldest open suggestion passes 20 h or p95 age > 24 h, severity warn.
+  - Done (2026-10-31, D-35 amended): only the nightly `community.asserts` job (05:10 UTC, logs `alert=community_asserts`) shipped; the metrics, dashboard and Grafana A9 rule were dropped. The A9 in-app check (SDD 12 §7.5) is new work.
 
 #### P4.B.5 Gate, rehearsal and release
 
