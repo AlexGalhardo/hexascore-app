@@ -96,6 +96,7 @@ export default function Nav() {
 	const page = usePage<SharedProps>();
 	const { auth, locale, unreadNotifications: unread = 0 } = page.props;
 	const user = auth?.user;
+	const feedHref = user && page.props.flags?.social ? localized("/feed", locale) : null;
 	const here = unlocalized(page.url);
 	const unreadLabel = unread > 99 ? "99+" : String(unread);
 	const scrolled = useScrolled();
@@ -173,6 +174,15 @@ export default function Nav() {
 							{t(key)}
 						</Link>
 					))}
+					{feedHref && (
+						<Link
+							href={feedHref}
+							aria-current={here === "/feed" ? "page" : undefined}
+							className={`${item} border-l border-border pl-7 text-[15px] font-medium aria-[current=page]:font-bold`}
+						>
+							{t("social.feed.title")}
+						</Link>
+					)}
 				</nav>
 				<div className="ml-auto flex items-center gap-1 lg:gap-7">
 					{/* A plain link to /search; the command palette takes over the click and Ctrl/⌘ K. */}
@@ -246,6 +256,11 @@ export default function Nav() {
 								<p className="truncate px-3 py-2 text-sm font-semibold">
 									{user.name}
 								</p>
+								{feedHref && (
+									<Link href={feedHref} className={`${menuItem} lg:hidden`}>
+										{t("social.feed.title")}
+									</Link>
+								)}
 								<Link href={localized("/library", locale)} className={menuItem}>
 									{t("nav.library")}
 								</Link>

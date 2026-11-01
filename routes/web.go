@@ -20,10 +20,9 @@ import (
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/notifications"
 	"github.com/AlexGalhardo/hexascore-app/app/recommend/primitives"
-	"github.com/AlexGalhardo/hexascore-app/app/recommend/related"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 	"github.com/AlexGalhardo/hexascore-app/app/seo"
-	"github.com/AlexGalhardo/hexascore-app/app/wellknown"
+	"github.com/AlexGalhardo/hexascore-app/app/social"
 	"github.com/AlexGalhardo/hexascore-app/internal/search"
 	"github.com/AlexGalhardo/hexascore-app/resources"
 )
@@ -81,8 +80,6 @@ func Web(r *router.Router, app *vukem.App) error {
 	// session cookie name; the app does not override it (production adds a __Host- prefix).
 	// Outside RenderCache so item pages served from the cache still count as views (SDD 08 §7.1).
 	r.UseServer(primitives.For(app).Middleware("vukem_session", localePrefixes))
-	// Wraps RenderCache: compresses only its anonymous public pages (SDD 13 §7.5, BREACH).
-	r.UseServer(appmiddleware.GzipPublicPages("vukem_session", localePrefixes))
 	r.UseServer(appmiddleware.RenderCache("vukem_session", localePrefixes))
 	// First UseServer is outermost. MovePageScript rewrites the finished HTML:
 	// LCP text before the page JSON, and the module graph after first paint.
@@ -153,6 +150,13 @@ func Web(r *router.Router, app *vukem.App) error {
 		}),
 		appmiddleware.NotBanned(acc.Web.User, acc.ProblemBase, app.Now),
 	)
+
+	ff, err := app.Flags()
+	if err != nil {
+		return err
+	}
+	// The nav shows the Feed link only while the social layer is on (SDD 14 §12.3).
+	r.Use(ff.Share(social.Flag))
 	// user_notifications exists only on Postgres (VF-033).
 	if db.Dialect().Name() == "postgres" {
 		r.Use(appmiddleware.UnreadNotifications(acc.Web.User, func(ctx context.Context, id int64) (int, error) {
@@ -172,10 +176,6 @@ func Web(r *router.Router, app *vukem.App) error {
 
 	r.Get("/help/score", controllers.HelpScore).Name("help.score")
 	r.Get("/robots.txt", controllers.Robots(app)).Name("robots")
-	r.Get("/.well-known/assetlinks.json", wellknown.AssetLinks(
-		cmp.Or(app.Source.Get("ANDROID_PACKAGE"), "app.hexascore"),
-		app.Source.Get("ANDROID_CERT_SHA256"),
-	)).Name("wellknown.assetlinks")
 	r.Get("/terms", controllers.Legal("terms")).Name("terms")
 	r.Get("/policy", controllers.Legal("policy")).Name("policy")
 	r.Get("/pricing", controllers.Pricing).Name("pricing")
@@ -221,13 +221,7 @@ func Web(r *router.Router, app *vukem.App) error {
 		if err != nil {
 			return err
 		}
-		reco := related.NewMetrics()
-		items := controllers.NewItem(
-			app,
-			&scoring.Writer{DB: acc.DB, Events: app.Events, Now: app.Now},
-			acc.Web.User,
-			reco,
-		)
+		items := controllers.NewItem(app, &scoring.Writer{DB: acc.DB, Events: app.Events, Now: app.Now}, acc.Web.User)
 		changes := controllers.NewRecentChanges(app)
 		for section, typ := range map[string]string{"games": "game", "movies": "movie", "series": "series", "books": "book"} {
 			r.Get("/"+section, listings.Index(typ)).Name("catalog." + typ)
