@@ -96,6 +96,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **ingest:** the two-job ingestion cap is vukem `QUEUE_LIMITS` (default `ingest=2` when unset) instead of an in-process semaphore, which also deadlocked nested chain dispatch on the sync queue; the legacy 2FA import hashes recovery codes with `totp.HashRecoveryCode` (CLEAN-dangling-vf-ids)
 - **api:** `getItemActivity` is now `getGameActivity`, `getMovieActivity`, `getSeriesActivity` and `getBookActivity` (same URLs; both SDKs regenerated) (P3.A.4.2); scaffold pages use the `primary` design token instead of hardcoded indigo classes (P2.H.3.4); item-page recommendation impressions (sampled 1 in 10) and clicks are `event=reco_impression` / `event=reco_click` log lines instead of unused in-process counters (FIX-reco-log-events)
 - **web:** below `lg` the navbar shows only the title, a search field and a hamburger that opens a sheet with sections, Feed, notifications, account, language and theme (FIX-nav-mobile-hamburger); the follow bar, follow requests, feed and activity cards use the editorial design, with "1 follower" plurals and a neutral "Score" on others' ratings (IMPL-web-social-v1)
 - **mobile:** v1 look for the status and time-to-beat sheets (IMPL-mobile-v1-status-ui), the account extras with an unread badge on the profile tab (IMPL-mobile-v1-account-ui), and translated search type labels, recent removal and empty trending text (IMPL-mobile-search-i18n)
