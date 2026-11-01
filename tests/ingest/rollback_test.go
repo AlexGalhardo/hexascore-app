@@ -362,3 +362,25 @@ VALUES ('tmdb.expire', 'tmdb', 'full', 'succeeded', 'schedule', now()) RETURNING
 		t.Errorf("unknown run err = %v, want ErrRunNotFound", err)
 	}
 }
+
+func TestRollbackWritesAPIChanges(t *testing.T) {
+	db := newDB(t)
+	target := seedBadRun(t, db)
+
+	runRollback(t, db, target)
+
+	for _, id := range []string{itemOwned, itemCreated} {
+		if n := count(t, db, `SELECT count(*) FROM api_changes WHERE item_id = $1 AND action = 'deleted'
+AND item_type = 'movie'`, id); n != 1 {
+			t.Errorf(
+				"deleted api_changes rows for %s = %d, want 1 (deleted and hidden items both leave the feed)",
+				id,
+				n,
+			)
+		}
+	}
+
+	if n := count(t, db, `SELECT count(*) FROM api_changes WHERE item_id = $1`, itemOld); n != 0 {
+		t.Errorf("api_changes rows for an untouched item = %d, want 0", n)
+	}
+}

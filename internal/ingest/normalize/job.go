@@ -181,8 +181,21 @@ func (n Normalizer) saveOne(
 		}
 	}
 
+	var before map[string]string
+
+	if old != nil {
+		var err error
+		if before, err = publicSnapshot(ctx, tx, id); err != nil {
+			return "", err
+		}
+	}
+
 	dateChanged, err := saveItem(ctx, tx, id, slug, old, item, now)
 	if err != nil {
+		return "", err
+	}
+
+	if err := recordChange(ctx, tx, id, item.Type, before); err != nil {
 		return "", err
 	}
 

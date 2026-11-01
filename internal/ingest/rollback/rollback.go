@@ -15,6 +15,7 @@ import (
 	"github.com/AlexGalhardo/vukem/database"
 	"github.com/AlexGalhardo/vukem/queue"
 
+	"github.com/AlexGalhardo/hexascore-app/app/api/changes"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 	"github.com/AlexGalhardo/hexascore-app/internal/search"
 )
@@ -250,6 +251,15 @@ VALUES (NULLIF($1, 0), 'admin', 'admin', 'item', $2, $3, $4::jsonb, $5)`,
 		}
 
 		if err := search.MarkDirty(ctx, tx, "item", it.id); err != nil {
+			return err
+		}
+
+		// A hidden item leaves the public API as a deleted one does.
+		if err := changes.Record(
+			ctx,
+			tx,
+			changes.Change{ItemID: it.id, ItemType: it.kind, Action: "deleted"},
+		); err != nil {
 			return err
 		}
 	}
