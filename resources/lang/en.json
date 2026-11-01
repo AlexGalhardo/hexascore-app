@@ -1690,6 +1690,15 @@
         "deleted": "deleted user",
         "system": "HexaScore",
         "user": "member"
+      },
+      "lede": "Every accepted edit to this page, newest first.",
+      "overview": "Overview",
+      "columns": {
+        "date": "Date",
+        "field": "Field",
+        "before": "Before",
+        "after": "After",
+        "by": "By"
       }
     },
     "entityKinds": {

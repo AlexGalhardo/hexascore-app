@@ -1690,6 +1690,15 @@
         "deleted": "usuario eliminado",
         "system": "HexaScore",
         "user": "miembro"
+      },
+      "lede": "Todas las ediciones aceptadas de esta página, de la más reciente a la más antigua.",
+      "overview": "Resumen",
+      "columns": {
+        "date": "Fecha",
+        "field": "Campo",
+        "before": "Antes",
+        "after": "Después",
+        "by": "Por"
       }
     },
     "entityKinds": {
