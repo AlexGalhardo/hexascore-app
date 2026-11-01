@@ -41,3 +41,16 @@ for n in 1 2 3; do for s in 16 32 180 192 512; do
   resvg -w "$s" -h "$s" "hexascore-icon-$n.svg" "hexascore-icon-$n-$s.png"
 done; done
 ```
+
+## Android app and Play listing
+
+`apps/mobile/assets/images/icon.png` (1024 px, square tile), `adaptive-icon.png` (1024 px, the hexagon alone on transparent, about 62 % of the canvas, inside the 66 % safe zone; background `#16130f` in `app.config.ts`) and `apps/mobile/store/listing/icon-512.png` (512 px, square tile) come from candidate 3:
+
+```sh
+I=resources/public/icons/hexascore-icon-3.svg
+sed 's/ rx="96"//' "$I" > /tmp/square.svg
+sed -e '/<rect /d' -e 's#<g stroke#<g transform="translate(256 256) scale(0.78) translate(-256 -256)" stroke#' "$I" > /tmp/fg.svg
+resvg -w 1024 -h 1024 /tmp/square.svg apps/mobile/assets/images/icon.png
+resvg -w 1024 -h 1024 /tmp/fg.svg apps/mobile/assets/images/adaptive-icon.png
+resvg -w 512 -h 512 /tmp/square.svg apps/mobile/store/listing/icon-512.png
+```
