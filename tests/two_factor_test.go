@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/AlexGalhardo/vukem/auth/totp"
+	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/vukemtest"
 
 	"github.com/AlexGalhardo/hexascore-app/bootstrap"
@@ -56,7 +57,7 @@ func rejected(t *testing.T, c *vukemtest.Client, page, path, component, field st
 func recoveryCodes(t *testing.T, c *vukemtest.Client) []string {
 	t.Helper()
 
-	v, _ := c.Get("/user/two-factor").AssertInertia("Auth/TwoFactor").Prop("recoveryCodes")
+	v, _ := c.Get("/profile").AssertInertia("Profile/Index").Prop("twoFactor.recoveryCodes")
 	list, _ := v.([]any)
 
 	codes := make([]string, 0, len(list))
@@ -75,13 +76,16 @@ func enableTwoFactor(t *testing.T, app *vukemtest.App, c *vukemtest.Client, emai
 
 	register(t, app, c, email)
 
-	c.Get("/user/two-factor").AssertInertia("Auth/TwoFactor").PropEquals("enabled", false).PropEquals("pending", false)
-	c.PostJSON("/user/two-factor", nil).AssertRedirect("/user/two-factor")
+	c.Get("/profile").
+		AssertInertia("Profile/Index").
+		PropEquals("twoFactor.enabled", false).
+		PropEquals("twoFactor.pending", false)
+	c.PostJSON("/user/two-factor", nil).AssertRedirect("/profile")
 
-	page := c.Get("/user/two-factor").AssertInertia("Auth/TwoFactor").PropEquals("pending", true)
+	page := c.Get("/profile").AssertInertia("Profile/Index").PropEquals("twoFactor.pending", true)
 
-	secret, _ := page.Prop("secret")
-	qr, _ := page.Prop("qr")
+	secret, _ := page.Prop("twoFactor.secret")
+	qr, _ := page.Prop("twoFactor.qr")
 
 	s, _ := secret.(string)
 	if src, _ := qr.(string); s == "" || !strings.HasPrefix(src, "data:image/svg+xml;base64,") {
@@ -91,9 +95,9 @@ func enableTwoFactor(t *testing.T, app *vukemtest.App, c *vukemtest.Client, emai
 	// The secret is encrypted at rest.
 	vukemtest.AssertDatabaseMissing(t, app, "users", map[string]any{"two_factor_secret": s})
 
-	rejected(t, c, "/user/two-factor", "/user/two-factor/confirm", "Auth/TwoFactor", "code",
+	rejected(t, c, "/profile", "/user/two-factor/confirm", "Profile/Index", "code",
 		map[string]any{"code": wrongCode(t, s)})
-	c.PostJSON("/user/two-factor/confirm", map[string]any{"code": totpCode(t, s, 0)}).AssertRedirect("/user/two-factor")
+	c.PostJSON("/user/two-factor/confirm", map[string]any{"code": totpCode(t, s, 0)}).AssertRedirect("/profile")
 
 	codes := recoveryCodes(t, c)
 	if len(codes) != 8 {
@@ -101,11 +105,11 @@ func enableTwoFactor(t *testing.T, app *vukemtest.App, c *vukemtest.Client, emai
 	}
 
 	// Shown once.
-	c.Get("/user/two-factor").AssertInertia("Auth/TwoFactor").
-		PropEquals("enabled", true).
-		PropEquals("recoveryCodes", nil).
-		PropEquals("recoveryCodesLeft", 8).
-		PropEquals("secret", nil)
+	c.Get("/profile").AssertInertia("Profile/Index").
+		PropEquals("twoFactor.enabled", true).
+		PropEquals("twoFactor.recoveryCodes", nil).
+		PropEquals("twoFactor.recoveryCodesLeft", 8).
+		PropEquals("twoFactor.secret", nil)
 
 	return s, codes
 }
@@ -172,14 +176,14 @@ func TestTwoFactorRecoveryCodes(t *testing.T) {
 	c.PostJSON("/two-factor-challenge", map[string]any{"code": "", "recovery_code": codes[1]}).
 		AssertRedirect("/onboarding")
 
-	owner.Get("/user/two-factor").AssertInertia("Auth/TwoFactor").PropEquals("recoveryCodesLeft", 6)
+	owner.Get("/profile").AssertInertia("Profile/Index").PropEquals("twoFactor.recoveryCodesLeft", 6)
 
 	// Regenerating needs the current password, then replaces every code.
-	rejected(t, owner, "/user/two-factor", "/user/two-factor/recovery-codes", "Auth/TwoFactor", "password",
+	rejected(t, owner, "/profile", "/user/two-factor/recovery-codes", "Profile/Index", "password",
 		map[string]any{"password": "not my password"})
-	owner.Get("/user/two-factor").AssertInertia("Auth/TwoFactor").PropEquals("recoveryCodesLeft", 6)
+	owner.Get("/profile").AssertInertia("Profile/Index").PropEquals("twoFactor.recoveryCodesLeft", 6)
 	owner.PostJSON("/user/two-factor/recovery-codes", map[string]any{"password": testPassword}).
-		AssertRedirect("/user/two-factor")
+		AssertRedirect("/profile")
 
 	if fresh := recoveryCodes(t, owner); len(fresh) != 8 || fresh[0] == codes[2] {
 		t.Fatalf("regenerated codes = %v", fresh)
@@ -209,7 +213,7 @@ func TestSecurity_A07_TwoFactorThrottle(t *testing.T) {
 	// Confirming a new setup is limited too.
 	c := app.Client(t).Inertia("")
 	register(t, app, c, "dan2fa@example.com")
-	c.PostJSON("/user/two-factor", nil).AssertRedirect("/user/two-factor")
+	c.PostJSON("/user/two-factor", nil).AssertRedirect("/profile")
 
 	for range 5 {
 		c.PostJSON("/user/two-factor/confirm", map[string]any{"code": "000000"})
@@ -225,13 +229,16 @@ func TestSecurity_A07_TwoFactorDisableNeedsPassword(t *testing.T) {
 	c := app.Client(t).Inertia("")
 	enableTwoFactor(t, app, c, "eve2fa@example.com")
 
-	rejected(t, c, "/user/two-factor", "/user/two-factor/disable", "Auth/TwoFactor", "password",
+	rejected(t, c, "/profile", "/user/two-factor/disable", "Profile/Index", "password",
 		map[string]any{"password": "not my password"})
-	c.Get("/user/two-factor").AssertInertia("Auth/TwoFactor").PropEquals("enabled", true)
+	c.Get("/profile").AssertInertia("Profile/Index").PropEquals("twoFactor.enabled", true)
 
 	c.PostJSON("/user/two-factor/disable", map[string]any{"password": testPassword}).
-		AssertRedirect("/user/two-factor")
-	c.Get("/user/two-factor").AssertInertia("Auth/TwoFactor").PropEquals("enabled", false).PropEquals("pending", false)
+		AssertRedirect("/profile")
+	c.Get("/profile").
+		AssertInertia("Profile/Index").
+		PropEquals("twoFactor.enabled", false).
+		PropEquals("twoFactor.pending", false)
 
 	c.PostJSON("/logout", nil).AssertRedirect("/")
 	passwordStep(c, "eve2fa@example.com", false).AssertRedirect("/onboarding")
@@ -245,4 +252,24 @@ func TestSecurity_A07_TwoFactorChallengeNeedsPasswordStep(t *testing.T) {
 
 	c.Get("/two-factor-challenge").AssertRedirect("/login")
 	c.PostJSON("/two-factor-challenge", map[string]any{"code": "123456"}).AssertRedirect("/login")
+}
+
+// The settings page moved into /profile (owner round 2026-11-01 item 21): the old path answers 301 in every
+// locale, signed in or not, and the profile carries the whole two-factor state.
+func TestTwoFactorPageMovedToProfile(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+	for prefix, want := range map[string]string{
+		"": "/profile#two-factor", "/es": "/es/profile#two-factor",
+		"/pt-br": "/pt-br/profile#two-factor",
+	} {
+		app.Client(t).Get(prefix+"/user/two-factor").AssertStatus(301).AssertHeader("Location", want)
+	}
+
+	c := app.Client(t).Inertia("")
+	enableTwoFactor(t, app, c, "eve2fa@example.com")
+	// An Inertia visit cannot follow a fragment redirect, so it gets a client-side visit that keeps it.
+	c.Get("/user/two-factor").AssertStatus(409).AssertHeader(inertia.HeaderRedirect, "/profile#two-factor")
+	c.Get("/profile").AssertInertia("Profile/Index").PropEquals("twoFactor.enabled", true)
 }

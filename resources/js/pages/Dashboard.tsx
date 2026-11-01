@@ -53,7 +53,7 @@ export default function Dashboard() {
 				))}
 			</div>
 			<p className="mt-6 text-sm">
-				<Link href="/user/two-factor" className="underline">
+				<Link href={l("/profile#two-factor")} className="underline">
 					{t("dashboard.twoFactor")}
 				</Link>
 			</p>

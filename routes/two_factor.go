@@ -45,7 +45,8 @@ func TwoFactor(r *router.Router, app *vukem.App) error {
 	challenge := ratelimit.Middleware(limits.TwoFactor.From(limiters), account.TwoFactorThrottleKey)
 	confirm := ratelimit.Middleware(limits.TwoFactorSet.From(limiters), account.TwoFactorThrottleKey)
 
-	r.Get("/user/two-factor", h.Show).Name("two-factor.show").Use(required, verified, hasPassword)
+	// The settings live in the /profile section now; the old page answers 301.
+	r.Get("/user/two-factor", h.Show).Name("two-factor.show")
 	r.Post("/user/two-factor", h.Enable).Name("two-factor.enable").Use(required, verified, hasPassword)
 	r.Post("/user/two-factor/confirm", h.Confirm).
 		Name("two-factor.confirm").

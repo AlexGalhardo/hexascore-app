@@ -410,7 +410,7 @@ Every Inertia page component in `resources/js/pages/` (33 components; `ls resour
 
 - Route: `GET /profile` (CSR). File: `pages/Profile/Index.tsx`.
 - Purpose: account settings, a single long page in a centred `max-w-2xl` column of anchored sections (`#details`, `#password`, `#passkeys`, `#two-factor`, `#sessions`, `#privacy`, `#export`, `#delete`).
-- Blocks: Details (name, nickname, locale), Password (set or change), Passkeys (list, add, remove with last-passkey warning), Two-factor (status and manage link), Sessions (list, revoke, revoke all), Privacy (public profile, personalisation), Data export (`DataExport`), Delete account (`DeleteAccount`, 30-day grace).
+- Blocks: Details (name, nickname, locale), Password (set or change), Passkeys (list, add, remove with last-passkey warning), Two-factor (`account/TwoFactorSection`: enable; QR code with setup key and confirm form; enabled view with recovery codes shown once, regenerate and disable forms that ask for the password; the old `/user/two-factor` page answers 301 here), Sessions (list, revoke, revoke all), Privacy (public profile, personalisation), Data export (`DataExport`), Delete account (`DeleteAccount`, 30-day grace).
 - States: empty sessions and passkeys, failed passkey registration (`role="alert"`), pending form buttons; CSR placeholder before hydration.
 
 #### Developer/ApiKeys
@@ -448,7 +448,6 @@ All Auth pages render `h1` (`text-2xl font-semibold`), a form with `space-y-4` a
 | `Auth/Recover` | `GET /recover-password` | Email field, submit, `ChallengeStatus` | generic success via flash |
 | `Auth/Reset` | `GET /reset-password/{token}` | Email, new password, confirmation, submit | per-field errors |
 | `Auth/TwoFactorChallenge` | `GET /two-factor-challenge` | Code or recovery-code `Field`, verify, switch between authenticator and backup code | per-field error |
-| `Auth/TwoFactor` | `GET /user/two-factor` | Enable button; QR code (200 px) with setup key and confirm form; enabled view with recovery codes, regenerate and disable forms (each asks for the password); back to dashboard | three modes (off, pending, on); all copy is hard-coded English |
 
 ### 6.6 Content, help and system pages
 

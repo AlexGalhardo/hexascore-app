@@ -56,7 +56,11 @@
       "disabled": "Two-factor authentication disabled.",
       "cancel": "Cancel",
       "needPassword": "Set a password above before turning on two-factor authentication.",
-      "manage": "Manage two-factor authentication"
+      "manage": "Manage two-factor authentication",
+      "recoveryLeft": "You have {count} recovery codes left.",
+      "regenerate": "Regenerate recovery codes",
+      "turnOff": "Turn off",
+      "currentPassword": "Current password"
     },
     "passkeys": {
       "title": "Passkeys",

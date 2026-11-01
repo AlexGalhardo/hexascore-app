@@ -3,9 +3,11 @@ package account
 import (
 	"encoding/base64"
 	"errors"
+	"net/http"
 
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/errs"
+	"github.com/AlexGalhardo/vukem/i18n"
 	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/web"
 
@@ -14,16 +16,25 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
 )
 
-// Show renders the two-factor settings page.
-func (h *TwoFactorHandlers) Show(c *web.Ctx) error {
-	u, err := auth.User[models.User](c, "web")
-	if err != nil {
-		return err
-	}
+// TwoFactorPath is where the two-factor settings live: a section of /profile
+// (owner round 2026-11-01 item 21). The settings forms post to /user/two-factor/*
+// and come back to /profile without the fragment: an Inertia redirect with one
+// becomes a 409 full-page visit, and the page keeps its scroll instead.
+const TwoFactorPath = "/profile#two-factor"
 
-	tf, err := h.a.TwoFactor(c.Context(), u.ID)
+// Show answers the old settings page with a permanent redirect to the
+// profile section, keeping the locale prefix.
+func (*TwoFactorHandlers) Show(c *web.Ctx) error {
+	return c.RedirectStatus(http.StatusMovedPermanently, i18n.PathPrefix(c.Context())+TwoFactorPath)
+}
+
+// TwoFactorProps is the two-factor state the profile section renders: the
+// one-time recovery codes after a confirm or regenerate, and the secret and QR
+// code only while a setup waits for its first code.
+func TwoFactorProps(c *web.Ctx, a *accounts.Accounts, issuer string, u models.User) (inertia.Props, error) {
+	tf, err := a.TwoFactor(c.Context(), u.ID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	props := inertia.Props{
@@ -36,9 +47,9 @@ func (h *TwoFactorHandlers) Show(c *web.Ctx) error {
 	}
 
 	if tf.Pending() {
-		_, svg, err := accounts.TwoFactorQR(h.issuer, u.Email, tf.TwoFactorSecret.V)
+		_, svg, err := accounts.TwoFactorQR(issuer, u.Email, tf.TwoFactorSecret.V)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		// A data: URL rendered with <img>: the page never inserts raw HTML.
@@ -46,7 +57,7 @@ func (h *TwoFactorHandlers) Show(c *web.Ctx) error {
 		props["qr"] = "data:image/svg+xml;base64," + base64.StdEncoding.EncodeToString([]byte(svg))
 	}
 
-	return inertia.Render(c, "Auth/TwoFactor", props)
+	return props, nil
 }
 
 // Enable creates a secret to scan; it is active once confirmed.
@@ -60,7 +71,7 @@ func (h *TwoFactorHandlers) Enable(c *web.Ctx) error {
 		return err
 	}
 
-	return c.Redirect("/user/two-factor")
+	return c.Redirect("/profile")
 }
 
 // Confirm turns two-factor authentication on with a first code and shows
@@ -105,7 +116,7 @@ func (h *TwoFactorHandlers) Confirm(c *web.Ctx) error {
 	// Privilege change: a new session id against fixation (SDD 13 §7.5).
 	c.Session().Regenerate()
 
-	return c.Redirect("/user/two-factor")
+	return c.Redirect("/profile")
 }
 
 // RegenerateRecoveryCodes replaces the recovery codes and shows the new
@@ -134,7 +145,7 @@ func (h *TwoFactorHandlers) RegenerateRecoveryCodes(c *web.Ctx) error {
 
 	c.Session().Flash(recoveryCodesFlash, codes)
 
-	return c.Redirect("/user/two-factor")
+	return c.Redirect("/profile")
 }
 
 // Disable turns two-factor authentication off after checking the
@@ -161,7 +172,7 @@ func (h *TwoFactorHandlers) Disable(c *web.Ctx) error {
 
 	inertia.Flash(c, "status", h.a.T(c.Context(), "auth.two_factor.disabled"))
 
-	return c.Redirect("/user/two-factor")
+	return c.Redirect("/profile")
 }
 
 // ShowChallenge renders the code step of the login.

@@ -7,6 +7,7 @@ import (
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
+	"github.com/AlexGalhardo/hexascore-app/app/controllers/account"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
 	"github.com/AlexGalhardo/hexascore-app/app/social"
@@ -17,10 +18,12 @@ type Handlers struct {
 	a *accounts.Accounts
 	// Social adds the feed opt-in switch while the feature flag `social` is on (SDD 14 FR-14-18); nil on SQLite.
 	Social *social.Follows
+	// Issuer names the app in authenticator apps (the two-factor section).
+	Issuer string
 }
 
-// New builds the handlers.
-func New(a *accounts.Accounts) *Handlers { return &Handlers{a: a} }
+// New builds the handlers; issuer names the app in authenticator apps.
+func New(a *accounts.Accounts, issuer string) *Handlers { return &Handlers{a: a, Issuer: issuer} }
 
 func (h *Handlers) user(c *web.Ctx) (models.User, error) { return auth.User[models.User](c, "web") }
 
@@ -36,7 +39,7 @@ func (h *Handlers) Show(c *web.Ctx) error {
 		return err
 	}
 
-	tf, err := h.a.TwoFactor(c.Context(), u.ID)
+	tf, err := account.TwoFactorProps(c, h.a, h.Issuer, u)
 	if err != nil {
 		return err
 	}
@@ -62,7 +65,7 @@ func (h *Handlers) Show(c *web.Ctx) error {
 	props := inertia.Props{
 		"details":     inertia.Props{"name": u.Name, "email": u.Email, "locale": p.Locale},
 		"passwordSet": p.PasswordSet,
-		"twoFactor":   inertia.Props{"enabled": tf.Enabled()},
+		"twoFactor":   tf,
 		"passkeys":    passkeys,
 		"sessions":    rows,
 		"privacy": inertia.Props{

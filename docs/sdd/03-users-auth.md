@@ -164,7 +164,7 @@ Implementation (P2.F.2.2, `database/legacyimport/users.go`): batches keyed by th
 | GET | `/profile` | session | `Profile/Index` sections: details, password, twoFactor, passkeys, sessions, privacy, export, delete |
 | PATCH | `/profile/details` | verified | `{name, locale}` |
 | PUT | `/profile/password` | verified | `{currentPassword?, newPassword}` (current required when `password_set_at` not NULL) |
-| GET, POST | `/user/two-factor`, `/user/two-factor/confirm`, `/user/two-factor/recovery-codes`, `/user/two-factor/disable` | verified | vukem `--2fa` routes unchanged |
+| POST | `/user/two-factor`, `/user/two-factor/confirm`, `/user/two-factor/recovery-codes`, `/user/two-factor/disable` | verified, password set, rate-limited | vukem `--2fa` routes; they return to `/profile`. The settings render as the `#two-factor` section of `/profile` (owner round 2026-11-01 item 21); `GET /user/two-factor` answers 301 to `/profile#two-factor` with the locale prefix, and the admin 2FA gate sends there |
 | POST | `/login/passkey/options`, `/login/passkey` | guest | discoverable sign-in; satisfies 2FA |
 | POST | `/user/passkeys/options`, `/user/passkeys` | verified | registration options and verify |
 | DELETE | `/profile/passkeys/{id}` | verified | remove one of the caller's passkeys |

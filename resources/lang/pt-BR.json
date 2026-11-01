@@ -56,7 +56,11 @@
       "disabled": "Autenticação em dois fatores desativada.",
       "cancel": "Cancelar",
       "needPassword": "Defina uma senha acima antes de ativar a autenticação em duas etapas.",
-      "manage": "Gerenciar autenticação em duas etapas"
+      "manage": "Gerenciar autenticação em duas etapas",
+      "recoveryLeft": "Você tem {count} códigos de recuperação restantes.",
+      "regenerate": "Gerar novos códigos de recuperação",
+      "turnOff": "Desativar",
+      "currentPassword": "Senha atual"
     },
     "passkeys": {
       "title": "Passkeys",

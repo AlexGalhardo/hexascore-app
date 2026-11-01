@@ -221,14 +221,16 @@ func TestSecurity_A07_GoogleOnlyMustSetPasswordBefore2FA(t *testing.T) {
 	clearPasswordSet(t, app, "google@example.com")
 	linkGoogle(t, app, "google@example.com")
 
-	c.Get("/user/two-factor").AssertStatus(403)
+	c.Get("/profile").AssertInertia("Profile/Index").PropEquals("passwordSet", false).
+		PropEquals("twoFactor.pending", false)
 	c.PostJSON("/user/two-factor", nil).AssertStatus(403)
 	c.PostJSON("/user/two-factor/disable", map[string]any{"password": "x"}).AssertStatus(403)
 
 	c.WithHeader("Referer", "/profile").
 		PutJSON("/profile/password", map[string]any{"newPassword": "Another horse 7 staple!"}).
 		AssertRedirect("/profile")
-	c.Get("/user/two-factor").AssertOK().AssertInertia("Auth/TwoFactor")
+	c.PostJSON("/user/two-factor", nil).AssertRedirect("/profile")
+	c.Get("/profile").AssertInertia("Profile/Index").PropEquals("twoFactor.pending", true)
 
 	// The explanation exists in every locale.
 	acc, err := accounts.New(app.App)

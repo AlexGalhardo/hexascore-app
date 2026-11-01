@@ -41,3 +41,73 @@ test("the profile forms sit in a narrow centred column", () => {
 	expect(screen.getByTestId("profile-page").className).toContain("max-w-2xl");
 	expect(screen.getByTestId("profile-page").className).toContain("mx-auto");
 });
+
+const section = (): HTMLElement => document.getElementById("two-factor") as HTMLElement;
+
+test("two-factor off: the profile section offers to enable it", () => {
+	render(<Profile {...baseProps} />);
+
+	expect(section().textContent).toContain("account.twoFactor.off");
+	expect(screen.getByRole("button", { name: "account.twoFactor.enable" })).toBeTruthy();
+});
+
+test("two-factor pending: QR code, setup key and the code form", () => {
+	render(
+		<Profile
+			{...baseProps}
+			twoFactor={{
+				enabled: false,
+				pending: true,
+				secret: "SECRETKEY",
+				qr: "data:image/svg+xml;base64,AA",
+			}}
+		/>,
+	);
+
+	expect(screen.getByAltText("account.twoFactor.qrAlt").getAttribute("src")).toBe(
+		"data:image/svg+xml;base64,AA",
+	);
+	expect(section().querySelector("code")?.textContent).toBe("SECRETKEY");
+	expect(screen.getByLabelText("account.twoFactor.code").getAttribute("autocomplete")).toBe(
+		"one-time-code",
+	);
+});
+
+test("two-factor on: recovery codes shown once, regenerate and disable ask for the password", () => {
+	render(
+		<Profile
+			{...baseProps}
+			twoFactor={{
+				enabled: true,
+				recoveryCodes: ["aaaa-bbbb", "cccc-dddd"],
+				recoveryCodesLeft: 8,
+			}}
+		/>,
+	);
+
+	expect(screen.getByTestId("recovery-codes").textContent).toBe("aaaa-bbbbcccc-dddd");
+	expect(section().querySelectorAll("input[type=password][name=password]")).toHaveLength(2);
+	expect(screen.getByRole("button", { name: "account.twoFactor.regenerate" })).toBeTruthy();
+	expect(screen.getByRole("button", { name: "account.twoFactor.disable" })).toBeTruthy();
+});
+
+test("two-factor on, codes already seen: only the count is shown", () => {
+	render(
+		<Profile
+			{...baseProps}
+			twoFactor={{ enabled: true, recoveryCodes: null, recoveryCodesLeft: 6 }}
+		/>,
+	);
+
+	expect(screen.queryByTestId("recovery-codes")).toBeNull();
+	expect(section().textContent).toContain("account.twoFactor.recoveryLeft");
+});
+
+test("no password yet: the section explains a password is needed and offers no controls", () => {
+	render(<Profile {...baseProps} passwordSet={false} />);
+
+	expect(section().querySelector("[role=note]")?.textContent).toBe(
+		"account.twoFactor.needPassword",
+	);
+	expect(screen.queryByRole("button", { name: "account.twoFactor.enable" })).toBeNull();
+});

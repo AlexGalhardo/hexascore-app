@@ -56,7 +56,11 @@
       "disabled": "Autenticación en dos pasos desactivada.",
       "cancel": "Cancelar",
       "needPassword": "Define una contraseña arriba antes de activar la autenticación en dos pasos.",
-      "manage": "Gestionar la autenticación en dos pasos"
+      "manage": "Gestionar la autenticación en dos pasos",
+      "recoveryLeft": "Te quedan {count} códigos de recuperación.",
+      "regenerate": "Generar nuevos códigos de recuperación",
+      "turnOff": "Desactivar",
+      "currentPassword": "Contraseña actual"
     },
     "passkeys": {
       "title": "Passkeys",

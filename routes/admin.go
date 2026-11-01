@@ -17,6 +17,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/admin"
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/community"
+	"github.com/AlexGalhardo/hexascore-app/app/controllers/account"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/moderation"
@@ -49,7 +50,7 @@ func Admin(r *router.Router, app *vukem.App) error {
 		Logout:    acc.Web.Logout,
 		Allowlist: allowlist,
 		Now:       app.Now,
-		SetupPath: "/user/two-factor",
+		SetupPath: account.TwoFactorPath,
 		LoginPath: "/login",
 	}))
 
