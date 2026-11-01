@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **mail:** automatic mail is sent from `noreply@hexascore.app` with a `support@hexascore.app` Reply-To, and the contact form goes to the support inbox, configurable through `MAIL_FROM`, `MAIL_SUPPORT_ADDRESS` and `CONTACT_INBOX` (CONFIG-email-addresses, Q-A17)
 - **ingest:** WebP covers with a pinned `cwebp` and resource limits, the covers job (content-hashed keys on the bucket, 30-day deferred delete through `cover_gc` and `covers.gc`) behind `ingest_covers`, the YouTube trailer check and its weekly chain, Open Library, IGDB (with `igdb.refresh` and 7-day retention), Steam and GOG connectors, all off by default (P6.B.2.1, P6.B.2.2, P6.B.2.3, P6.A.2.4, P6.B.1.2, P6.B.1.3)
 - **ingest:** `dq.asserts` (DQ-01..14, DQ-I-01..13) and `dq.frontend_fields` with missing-field system suggestions; rollback of a bad fetch run, retry of failed targets and retention prunes; a pressure gate that holds chunks while the site is busy and alert A7 as `alert=A7` log lines (P6.B.4.1, P6.B.4.2, P6.B.4.4, P6.B.4.5)
 - **admin:** `/admin/ingest` (status, run trigger with `qids`, cancel, rollback), the match review queue at `/admin/ingest/reviews`, and job runs, ingest failures and DQ results in the panel (P6.B.3.3, P6.B.4.3, FIX-ingest-qids-param)
@@ -133,6 +134,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **ci:** `scripts/ci/local.sh` exits at once with a clear message when `openapi` or `lighthouse` is selected without the `build` job, instead of waiting forever (FIX-ci-local-need-build)
 - **ingest:** an edition QID held by another work records a failure and a review instead of failing the item; a Retry-After pause longer than a minute no longer fails the request (each attempt has its own deadline); `entity_match_reviews.resolved_by` is a bigint (FIX-editions-qid-conflict, FIX-ingest-retry-after-timeout, P6.B.3.3)
 - **web:** the desktop navbar no longer overflows at 1024–1440 px with the Feed link (Feed inline from `xl`, in the account menu below) (FIX-nav-lg-width)
 - **web:** shelf cards on the feed and other users' pages label the score neutrally ("Score 7.0") instead of "Your score" (FIX-shelf-score-label)
