@@ -592,6 +592,7 @@
     "next": "Próxima",
     "previous": "Anterior",
     "pagination": "Páginas",
+    "perPage": "Itens por página",
     "page": "Página {page}",
     "landing": {
       "topRated": "Melhores notas",

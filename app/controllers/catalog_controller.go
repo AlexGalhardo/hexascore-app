@@ -3,6 +3,7 @@ package controllers
 import (
 	"errors"
 	"net/http"
+	"strconv"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/errs"
@@ -13,8 +14,19 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 )
 
-// CatalogPageSize is the item count of one Catalog/Index page (owner round 2026-11-01 item 12).
-const CatalogPageSize = 20
+// CatalogPageSize is the default item count of one Catalog/Index page; ?per= picks 25, 50, 75 or 100
+// (owner round 2026-11-01 item 20).
+const CatalogPageSize = 25
+
+// catalogPageSize reads ?per=; any value but the four offered sizes is the default.
+func catalogPageSize(raw string) int {
+	switch n, _ := strconv.Atoi(raw); n {
+	case 25, 50, 75, 100:
+		return n
+	default:
+		return CatalogPageSize
+	}
+}
 
 // Catalog serves the section listings Catalog/Index.
 type Catalog struct {
@@ -47,7 +59,7 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 		}
 
 		params, err := catalog.ParseListQuery(c.Query, typ)
-		params.Limit = CatalogPageSize
+		params.Limit = catalogPageSize(c.Query("per"))
 		if err != nil {
 			return badListing(err)
 		}
@@ -78,7 +90,7 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 			"pagination": map[string]string{"prev": page.PrevCursor, "next": page.NextCursor},
 			"filters": map[string]any{
 				"genre": params.Genre, "platform": params.Platform, "year": params.Year,
-				"minScore": params.MinScore, "sort": params.Sort,
+				"minScore": params.MinScore, "sort": params.Sort, "per": params.Limit,
 			},
 			"facets": map[string]any{"genres": genres, "platforms": platforms},
 		}

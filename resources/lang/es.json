@@ -592,6 +592,7 @@
     "next": "Siguiente",
     "previous": "Anterior",
     "pagination": "Páginas",
+    "perPage": "Elementos por página",
     "page": "Página {page}",
     "landing": {
       "topRated": "Mejor valorados",

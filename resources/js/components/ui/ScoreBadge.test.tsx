@@ -31,11 +31,11 @@ test("the badge prints the number on the band colour", () => {
 	expect(badge.className).toContain("text-on-score");
 });
 
-test("activeCount ignores sort and empty filters", () => {
-	expect(activeCount({ genre: "", platform: "", year: 0, minScore: null, sort: "-score" })).toBe(
-		0,
-	);
-	expect(activeCount({ genre: "rpg", platform: "pc", year: 2020, minScore: 7, sort: "" })).toBe(
-		4,
-	);
+test("activeCount ignores sort, page size and empty filters", () => {
+	expect(
+		activeCount({ genre: "", platform: "", year: 0, minScore: null, sort: "-score", per: 50 }),
+	).toBe(0);
+	expect(
+		activeCount({ genre: "rpg", platform: "pc", year: 2020, minScore: 7, sort: "", per: 25 }),
+	).toBe(4);
 });

@@ -592,6 +592,7 @@
     "next": "Next",
     "previous": "Previous",
     "pagination": "Pages",
+    "perPage": "Items per page",
     "page": "Page {page}",
     "landing": {
       "topRated": "Top rated",

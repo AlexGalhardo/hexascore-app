@@ -39,11 +39,18 @@ test("one page renders no pager", () => {
 	expect(container.innerHTML).toBe("");
 });
 
-test("the canonical keeps the cursor and drops the filters", () => {
-	expect(pageCanonical("https://hexascore.app/games", "/games?genre=rpg&cursor=c1")).toBe(
+test("the canonical keeps the cursor and a non-default page size, never the filters", () => {
+	expect(pageCanonical("https://hexascore.app/games", "/games?genre=rpg&cursor=c1", 25)).toBe(
 		"https://hexascore.app/games?cursor=c1",
 	);
-	expect(pageCanonical("https://hexascore.app/games", "/games?genre=rpg")).toBe(
+	expect(pageCanonical("https://hexascore.app/games", "/games?genre=rpg&per=50", 50)).toBe(
+		"https://hexascore.app/games?per=50",
+	);
+	expect(pageCanonical("https://hexascore.app/games", "/games?per=7", 25)).toBe(
 		"https://hexascore.app/games",
 	);
+});
+
+test("page links keep the page size", () => {
+	expect(pageHref("/games?per=75&cursor=a", "b")).toBe("/games?per=75&cursor=b");
 });
