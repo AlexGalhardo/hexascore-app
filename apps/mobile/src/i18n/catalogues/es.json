@@ -379,7 +379,6 @@
 	"home.more.series": "Más series",
 	"home.more.book": "Más libros",
 	"home.ratingsOfMin": "{count} de {min} valoraciones",
-	"home.trendingNote": "Tendencia = más valorados en los últimos 7 días.",
 	"home.fromRatings": {
 		"one": "de {n} valoración",
 		"other": "de {n} valoraciones"

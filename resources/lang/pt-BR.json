@@ -719,7 +719,6 @@
       "book": "Mais livros"
     },
     "ratingsOfMin": "{count} de {min} avaliações",
-    "trendingNote": "Em alta = mais avaliados nos últimos 7 dias.",
     "fromRatings": {
       "one": "de {n} avaliação",
       "other": "de {n} avaliações"

@@ -379,7 +379,6 @@
 	"home.more.series": "More TV series",
 	"home.more.book": "More books",
 	"home.ratingsOfMin": "{count} of {min} ratings",
-	"home.trendingNote": "Trending = most rated in the last 7 days.",
 	"home.fromRatings": {
 		"one": "from {n} rating",
 		"other": "from {n} ratings"

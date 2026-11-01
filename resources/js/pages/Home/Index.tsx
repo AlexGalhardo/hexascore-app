@@ -93,7 +93,6 @@ export default function Index({
 						trending={trending[section.type]?.items ?? []}
 					/>
 				))}
-				<p className="text-xs text-muted">{t("home.trendingNote")}</p>
 			</div>
 		</>
 	);

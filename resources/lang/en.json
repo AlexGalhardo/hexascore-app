@@ -719,7 +719,6 @@
       "book": "More books"
     },
     "ratingsOfMin": "{count} of {min} ratings",
-    "trendingNote": "Trending = most rated in the last 7 days.",
     "fromRatings": {
       "one": "from {n} rating",
       "other": "from {n} ratings"
