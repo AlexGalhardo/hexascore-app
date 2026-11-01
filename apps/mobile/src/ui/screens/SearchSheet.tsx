@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
 import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { Cover } from "../Cover";
 import { Icon } from "../Icon";
@@ -19,7 +19,8 @@ export interface SearchRow {
 export type SearchState =
 	| { kind: "empty"; recent: string[]; trending: SearchRow[] }
 	| { kind: "loading" }
-	| { kind: "results"; rows: SearchRow[]; total: number };
+	| { kind: "results"; rows: SearchRow[]; total: number }
+	| { kind: "error"; message: string };
 
 export interface SearchLabels {
 	placeholder: string;
@@ -41,8 +42,13 @@ export interface SearchSheetProps {
 	onOpen: (row: SearchRow) => void;
 	onRecent: (query: string) => void;
 	onRemoveRecent: (query: string) => void;
-	onSeeAll: () => void;
+	/** Absent: no footer button and the keyboard search key does nothing. */
+	onSeeAll?: () => void;
 	state: SearchState;
+	/** Rows shown before "see all"; defaults to MAX_ROWS. */
+	limit?: number;
+	/** Rendered under the input, e.g. type chips. */
+	filters?: ReactNode;
 	labels: SearchLabels;
 	locale: string;
 }
@@ -97,10 +103,12 @@ export function SearchSheet({
 	state,
 	labels,
 	locale,
+	limit = MAX_ROWS,
+	filters,
 }: SearchSheetProps): ReactElement {
 	const rows = (list: SearchRow[]): ReactElement[] =>
 		list
-			.slice(0, MAX_ROWS)
+			.slice(0, limit)
 			.map((row) => <Row key={row.id} row={row} labels={labels} locale={locale} onOpen={onOpen} />);
 	return (
 		<View className="flex-1 bg-bg dark:bg-bg-dark">
@@ -127,6 +135,7 @@ export function SearchSheet({
 					</Text>
 				</Pressable>
 			</View>
+			{filters}
 			<ScrollView keyboardShouldPersistTaps="handled">
 				{state.kind === "empty" && (
 					<>
@@ -161,6 +170,11 @@ export function SearchSheet({
 						{labels.loading}
 					</Text>
 				)}
+				{state.kind === "error" && (
+					<Text accessibilityLiveRegion="polite" className={`${MUTED} px-4 py-4`}>
+						{state.message}
+					</Text>
+				)}
 				{state.kind === "results" && state.rows.length === 0 && (
 					<Text accessibilityLiveRegion="polite" className={`${MUTED} px-4 py-4`}>
 						{labels.noResults(query)}
@@ -169,24 +183,26 @@ export function SearchSheet({
 				{state.kind === "results" && state.rows.length > 0 && (
 					<>
 						<Text accessibilityLiveRegion="polite" className={SECTION}>
-							{labels.firstOf(Math.min(MAX_ROWS, state.rows.length), state.total)}
+							{labels.firstOf(Math.min(limit, state.rows.length), state.total)}
 						</Text>
 						{rows(state.rows)}
-						<Pressable
-							accessibilityRole="button"
-							accessibilityLabel={labels.seeAll(query)}
-							onPress={onSeeAll}
-							className="min-h-11 flex-row items-center justify-between border-t border-border px-4 py-3 dark:border-border-dark"
-						>
-							<Text className="font-text text-16 font-semibold text-primary dark:text-primary-dark">
-								{labels.seeAll(query)}
-							</Text>
-							<Icon
-								name="arrow-forward"
-								size={18}
-								className="text-primary dark:text-primary-dark"
-							/>
-						</Pressable>
+						{onSeeAll && (
+							<Pressable
+								accessibilityRole="button"
+								accessibilityLabel={labels.seeAll(query)}
+								onPress={onSeeAll}
+								className="min-h-11 flex-row items-center justify-between border-t border-border px-4 py-3 dark:border-border-dark"
+							>
+								<Text className="font-text text-16 font-semibold text-primary dark:text-primary-dark">
+									{labels.seeAll(query)}
+								</Text>
+								<Icon
+									name="arrow-forward"
+									size={18}
+									className="text-primary dark:text-primary-dark"
+								/>
+							</Pressable>
+						)}
 					</>
 				)}
 			</ScrollView>
