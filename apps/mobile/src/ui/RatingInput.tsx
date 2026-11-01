@@ -29,7 +29,8 @@ function Star({ fill }: { fill: 0 | 0.5 | 1 }): ReactElement {
 				<View
 					className={`absolute bottom-0 left-0 top-0 items-start justify-center overflow-hidden ${fill === 1 ? "w-full" : "w-1/2"}`}
 				>
-					<View className="w-full items-center">
+					{/* The glyph box spans the whole star so the clipped half lines up with the outline. */}
+					<View className={`items-center ${fill === 1 ? "w-full" : "w-[200%]"}`}>
 						<Text className="text-24 text-star dark:text-star-dark">★</Text>
 					</View>
 				</View>
