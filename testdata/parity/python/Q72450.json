@@ -1,0 +1,55 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0358135",
+      "metacritic": "movie/shall-we-dance",
+      "rottentomatoes": "m/shall_we_dance",
+      "tmdb": "4380"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Peter Chelsom"
+      ],
+      "genres": [
+        "romantic comedy",
+        "comedy drama",
+        "LGBTQ-related film",
+        "drama film"
+      ],
+      "runtimeMinutes": 106
+    },
+    "popularity": 33.0,
+    "qid": "Q72450",
+    "release_date": "2004-10-15",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Shall We Dance? is a 2004 American romantic comedy-drama film directed by Peter Chelsom and starring Richard Gere, Jennifer Lopez, and Susan Sarandon. A remake of the 1996 Japanese film of the same name, the film received mixed reviews and grossed $170.1 million worldwide.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Shall_We_Dance%3F_(2004_film)",
+        "title": "Shall We Dance?"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Shall We Dance? (bra Dança Comigo?; prt Vamos Dançar?) é um filme de comédia romântica estadunidense de 2004, dirigido por Peter Chelsom, protagonizado por Richard Gere, Susan Sarandon e Jennifer Lopez.\nTrata-se uma regravação do filme homônimo japonês de 1996.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Shall_We_Dance%3F",
+        "title": "Shall We Dance?"
+      },
+      {
+        "locale": "es",
+        "synopsis": "¿Bailamos? (titulada originalmente en inglés Shall We Dance?) es una comedia dramática protagonizada por Richard Gere, Jennifer López y Susan Sarandon. Estrenada el 15 de octubre de 2004 en Estados Unidos y el 5 de noviembre del mismo año en España. Es el remake del filme japonés \"Shall we ダンス?\" (Sharu wi Dansu?).​ que a su vez se basa en la comedia musical de la RKO de 1937, Ritmo Loco (aunque el nombre en inglés es el mismo), protagonizada por Fred Astaire y Ginger Rogers.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/%C2%BFBailamos%3F",
+        "title": "Shall We Dance?"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q72450",
+  "slug": "shall-we-dance"
+}

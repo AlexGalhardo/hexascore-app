@@ -1,0 +1,47 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt1901983",
+      "tmdb": "35289"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "episodes": 41,
+      "genres": [
+        "comedy film"
+      ]
+    },
+    "popularity": 8.0,
+    "qid": "Q10266132",
+    "release_date": "2010-11-18",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Dick Figures is an American adult animated web series created by Ed Skudder and Zack Keller and written, directed, and produced by Skudder and Keller. The series, featuring two human-like stick figures named Red and Blue who are best friends, aired for the first time on November 18, 2010. Episodes, which are typically under 4-minutes in length, are distributed on YouTube by Mondo Media. The series is aimed at mature audiences. In 2012, Keller was nominated for an Annie Award for Directing in an Animated Television/Broadcast Production for the episode titled \"Kung Fu Winners\".\nThe series, comprising over 50 episodes, has been viewed over 250 million times.\nAfter raising $313,411 on Kickstarter, Dick Figures was eventually given a feature-length comedy adventure film, titled Dick Figures: The Movie. The 73-minute film became available on all major digital platforms on September 17, 2013.\nAlthough some spin-off material was produced in 2015, the original run ended with the final episode of Season 5, \"Figured Out\", in July 2014.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Dick_Figures",
+        "title": "Dick Figures"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Dick Figures é uma série animada para adultos, distribuída no YouTube pela Mondo Mini Shows. A série foi criada por Ed Skudder e dirigida por Zack Keller e Ed Skudder. A série, estrelada por figuras de palito, foi ao ar pela primeira vez no dia 18 de novembro de 2010.\nDepois de levantar US$ 313,411 dólares no Kickstarter, os criadores desenvolveram o filme de comédia baseado na série e foi intitulado Dick Figures: The Movie. O filme de 73 minutos tornou-se disponível em nas principais plataformas digitais em 17 de setembro de 2013.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Dick_Figures",
+        "title": "Dick Figures"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Dick Figures"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q10266132",
+  "slug": "dick-figures"
+}

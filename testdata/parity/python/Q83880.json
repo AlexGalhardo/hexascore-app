@@ -1,0 +1,42 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "486428",
+      "openlibrary": "OL8053028W"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Andrew Keen"
+      ],
+      "genres": [
+        "non-fiction"
+      ]
+    },
+    "popularity": 6.0,
+    "qid": "Q83880",
+    "release_date": "2007-06-05",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Cult of the Amateur: How Today's Internet Is Killing Our Culture is a 2007 book written by entrepreneur and Internet critic Andrew Keen. Published by Currency, Keen's first book is a critique of the enthusiasm surrounding user-generated content, peer production, and other Web 2.0–related phenomena.\nThe book was based in part on a controversial essay Keen wrote for The Weekly Standard, criticizing Web 2.0 for being similar to Marxism, for destroying professionalism and for making it impossible to find high quality material amidst all of the user-generated web content.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/The_Cult_of_the_Amateur",
+        "title": "The Cult of the Amateur"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "O Culto do Amador é um livro de Andrew Keen que faz uma crítica à Web 2.0. Para o autor, estamos na era onde o amadorismo domina a produção da informação. Isso traz sérias consequências na vida, na economia e na cultura tradicional como nós a conhecemos.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/O_Culto_do_Amador",
+        "title": "O Culto do Amador"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q83880",
+  "slug": "the-cult-of-the-amateur"
+}

@@ -1,0 +1,39 @@
+{
+  "item": {
+    "external_ids": {},
+    "meta": {
+      "countries": [
+        "France"
+      ],
+      "creators": [
+        "M. Ageyev"
+      ],
+      "genres": [
+        "Bildungsroman"
+      ]
+    },
+    "popularity": 8.0,
+    "qid": "Q111903",
+    "release_date": "1934-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Novel with Cocaine  (Russian: Роман с кокаином, romanized: Roman s kokainom, also translated as Cocain Romance and Romance with Cocaine) is a novel first published in 1934 in a Russian émigré literary magazine Chisla (Numbers) under a pen name M. Ageyev.  The English translation of the title fails to convey the double meaning of the Russian \"Роман,\" meaning both \"novel\" and \"romance\".",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Novel_with_Cocaine",
+        "title": "Novel with Cocaine"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Romance com Cocaína (em russo:  Роман с кокаином, transl. Roman s kokainom, também traduzido como Um Romance com Cocaína e Romance com Cocaína: Memórias de um Doente), é um romance primeiro publicado em 1934 em uma revista literária emigrante russa, Chisla (Números) sob o pseudônimo M. Ageyev. A tradução para o inglês do título falha em transmitir o duplo significado do russo \"Роман\", que significa \"novela\" e \"romance\". A autoria da obra permaneceu controversa por muito tempo. Apenas em 1997 foram publicadas cartas de Marc Levy, incluindo rascunhos do romance.\nDmitry Merezhkovsky e outros críticos emigrados viram em Romance com Cocaína uma continuação polêmica dos temas do romance O Adolescente de Fiódor Dostoiévski.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Romance_com_Coca%C3%ADna",
+        "title": "Romance com Cocaína"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q111903",
+  "slug": "novel-with-cocaine"
+}

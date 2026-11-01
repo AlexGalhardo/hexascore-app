@@ -1,0 +1,54 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt4695548",
+      "rottentomatoes": "m/bad_cat_2017",
+      "tmdb": "355066"
+    },
+    "meta": {
+      "countries": [
+        "Turkey"
+      ],
+      "creators": [
+        "Mehmet Kurtuluş"
+      ],
+      "genres": [
+        "comedy film",
+        "action film",
+        "adventure film",
+        "children's film"
+      ],
+      "runtimeMinutes": 85
+    },
+    "popularity": 121.0,
+    "qid": "Q11252497",
+    "release_date": "2016-02-05",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Bad Cat (Turkish: Kötü Kedi Şerafettin) is a 2016 Turkish adult animated action comedy film directed by Mehmet Kurtuluş and Ayşe Ünal. The film is based on the comic strip Kötü Kedi Şerafettin by Bülent Üstün. It is a self-funded independent film, and some its profits originated from product placement. \nBad Cat premiered on February 5, 2016, in Turkey and at the Annecy International Animation Film Festival in 2016. The film was released on Tubi on April 20, 2023. A video game adaptation, titled The Bad Cat, was released on mobile devices shortly after the film's release.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Bad_Cat",
+        "title": "Bad Cat"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Bad Cat (turco: Kötü Kedi Şerafettin – Gato Sórdido (título no Brasil), – Gato Mau (título em Portugal)) é um filme de animação turco de 2016, adaptado da série de quadrinhos homônima criada por Bülent Üstün.\nO filme foi produzido entre 2011-2015 pelo Anima Istanbul e dirigido por Mehmet Kurtuluş e Ayşe Ünal. Em 2016, Bad Cat foi exibido no festival Anima Mundi, bem como no festival Cinanima. Em Portugal, o filme lançado em 11 de Outubro de 2018 através da Lanterna de Pedra Filmes. Gato Sórdido estreou na televisão brasileira nas afiliadas da Rede Telecine em todo o Brasil.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Bad_Cat",
+        "title": "Bad Cat"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Bad Cat es una película turca de animación para adultos basada en el cómic homónimo, creado por Bülent Üstün. La cinta fue dirigida por Mehmet Kurtuluş y Ayşe Ünal y realizada por el estudio de animación Anima Istambul. La película fue presentada, fuera de concurso, en el Festival de Annecy.​ En España, fue presentada en el 49.º Festival de Cine de Sitges​ y el 26º Festival de Cine Fantástico de Málaga.​ La película fue estrenada en Panamá el 2 de febrero de 2017.​ Se estrenó el 23 de noviembre de 2017 en Argentina. La película se estrenó el 27 de mayo de 2022 en España en la plataforma de cine en línea Filmin.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Bad_Cat",
+        "title": "Bad Cat"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q11252497",
+  "slug": "bad-cat"
+}

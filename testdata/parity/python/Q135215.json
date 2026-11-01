@@ -1,0 +1,51 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "4232388",
+      "openlibrary": "OL5036952W"
+    },
+    "meta": {
+      "countries": [
+        "United Kingdom"
+      ],
+      "creators": [
+        "Robert Graves"
+      ],
+      "genres": [
+        "autobiography",
+        "historical fiction",
+        "fictional memoir"
+      ]
+    },
+    "popularity": 27.0,
+    "qid": "Q135215",
+    "release_date": "1934-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "I, Claudius is a historical novel written by Robert Graves and published in 1934. Written in the form of an autobiography of the Roman Emperor Claudius, it tells the history of the Julio-Claudian dynasty and the early years of the Roman Empire, from Julius Caesar's assassination in 44 BC to Caligula's assassination in AD 41. Though the narrative is largely fictionalised, most of the events depicted are drawn from historical accounts of the same time period by the Roman historians Suetonius and Tacitus.\nThe \"autobiography\" continues in a sequel, Claudius the God (1935), which covers the period from Claudius's accession to his death in AD 54. The sequel also includes a section written as a biography of Herod Agrippa, a contemporary of Claudius and the king of Judaea. Both books were adapted by the BBC into the award-winning television serial I, Claudius in 1976.\nGraves stated in an interview with Malcolm Muggeridge in 1965, that he wrote I, Claudius mainly because he needed the money to pay off a debt, having been let down in a land deal. He needed to raise £4,000 (equivalent to £248,000 in 2025), but with the success of the books he brought in £8,000 (equivalent to £492,000 in 2025) in six months, thus extricating himself from his precarious financial position.\nIn 1998, the Modern Library ranked I, Claudius fourteenth on its list of the 100 best English-language novels of the 20th century. In 2005, the novel was chosen by Time as one of the 100 best English-language novels from 1923 to present.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/I,_Claudius",
+        "title": "I, Claudius"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "I, Claudius (lit.  \"Eu, Cláudio\") é um romance histórico do escritor inglês Robert Graves, publicado originalmente em 1934 e escrito em forma de autobiografia do imperador romano Cláudio. Incluiu a história da dinastia júlio-claudiana e do Império Romano, desde o assassinato de Júlio César em 44 a.C. até o assassinato de Calígula em 41 d.C.\nA \"autobiografia\" do Cláudio continua, depois da morte de Calígula até sua própria morte em 54, em Claudius the God (lit.  \"Cláudio, o Deus\", publicado em 1935. A sequência também inclui uma seção escrita como biografia de Herodes Agripa I, contemporâneo de Cláudio e o futuro rei da Judeia. Os dois livros foram adaptados pela BBC para uma série de televisão, I, Claudius.\nEm 1998, a Modern Library colocou I, Claudius em décimo quarto na lista dos 100 melhores romances do século XX. Em 2005, o romance foi escolhido pela revista Time como um dos cem melhores romances escritos desde 1923 até então.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/I,_Claudius_(romance)",
+        "title": "Eu, Claudius, Imperador"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Yo, Claudio (1934, en inglés I, Claudius) es la novela más conocida​ del escritor británico Robert Graves y una de las grandes superventas del siglo XX. Está basada en las historias de Tácito, Plutarco y las Vidas de los doce césares de Suetonio, a quien Graves había traducido. La revista Time la incluyó en su lista de las 100 mejores novelas hasta 2005.​ Su continuación es Claudio, el dios, y su esposa Mesalina (1935).\nLa miniserie de televisión homónima se basó en este libro.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Yo,_Claudio",
+        "title": "Yo, Claudio"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q135215",
+  "slug": "i-claudius"
+}

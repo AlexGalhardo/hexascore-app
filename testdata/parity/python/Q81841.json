@@ -1,0 +1,54 @@
+{
+  "item": {
+    "external_ids": {
+      "igdb": "fracture",
+      "imdb": "tt1253846"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Wargaming Chicago-Baltimore"
+      ],
+      "genres": [
+        "third-person shooter",
+        "science fiction video game"
+      ],
+      "platforms": [
+        "Xbox 360",
+        "PlayStation 3"
+      ]
+    },
+    "popularity": 8.0,
+    "qid": "Q81841",
+    "release_date": "2008-10-07",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Fracture is a third-person shooter video game developed by Day 1 Studios and was published by LucasArts. It was released for the PlayStation 3 and Xbox 360 in October 2008. Set in the 22nd century, the story involves two factions, Pacific and Atlantic, fighting in a xenophobic America split by global warming. The player assumes control of Jet Brody, an Atlantic Sergeant ordered to capture Pacifican Commander Sheridan. The game is notable for its focus on terrain movement through the use of futuristic weapons. Fracture garnered mixed reviews upon release.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Fracture_(video_game)",
+        "title": "Fracture"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Fracture"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Fracture"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q81841",
+  "slug": "fracture"
+}

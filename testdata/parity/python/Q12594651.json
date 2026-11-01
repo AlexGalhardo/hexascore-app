@@ -1,0 +1,47 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt4613520",
+      "tmdb": "68945"
+    },
+    "meta": {
+      "countries": [
+        "South Korea"
+      ],
+      "episodes": 20,
+      "genres": [
+        "sitcom"
+      ]
+    },
+    "popularity": 9.0,
+    "qid": "Q12594651",
+    "release_date": "2016-11-07",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Sound of Your Heart (Korean: 마음의 소리; RR: Maeumui sori) is a South Korean television series starring Lee Kwang-soo and Jung So-min. The sitcom is based on the webtoon of the same name. The first 10 episodes were aired as a web series  on 7 November 2016 through Naver TV Cast on Mondays at 6:00 (KST), and the remaining 10 episodes aired from December 2016. The web series hit 100 million views on Sohu TV and ranked No. 1 among Korean dramas on the site. On Naver TV Cast, the web series has more than 40 million views in South Korea as of February 2017. It is also now airing on Netflix.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/The_Sound_of_Your_Heart_(TV_series)",
+        "title": "The Sound of Your Heart"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "The Sound Of Your Heart (coreano: 마음의 소리; RR: Maeumui Sori) é uma série de televisão sul-coreana, estrelando Lee Kwang-soo e Jung So-min. A sitcom é baseada no webtoon de mesmo nome, do quadrinista Jo Seok. Os episódios tem no máximo 30 minutos, com um humor inteligente e envolvente e classificação livre para todas as idades.  A série também está disponível na Netflix. Em 2018, a Netflix produziu uma sequência, chamada The Sound of Your Heart: Reboot.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/The_Sound_Of_Your_Heart",
+        "title": "The Sound Of Your Heart"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "El sonido de tu corazón"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q12594651",
+  "slug": "the-sound-of-your-heart"
+}

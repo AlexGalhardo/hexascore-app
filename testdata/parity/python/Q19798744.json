@@ -1,0 +1,59 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt4635282",
+      "metacritic": "tv/the-oa",
+      "rottentomatoes": "tv/the_oa",
+      "tmdb": "69061"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Brit Marling",
+        "Zal Batmanglij"
+      ],
+      "episodes": 16,
+      "genres": [
+        "drama television series",
+        "mystery television series",
+        "science fiction television series",
+        "LGBT-related television series",
+        "fantasy television series"
+      ],
+      "runtimeMinutes": 30,
+      "seasons": 2
+    },
+    "popularity": 26.0,
+    "qid": "Q19798744",
+    "release_date": "2016-12-16",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The OA is an American mystery drama television series with science fiction, supernatural, and fantasy elements. The OA debuted on Netflix on December 16, 2016. Created and executive-produced by Brit Marling and Zal Batmanglij, the series is their third collaboration. The series consists of two seasons of eight episodes each, nearly all directed by Batmanglij, and is produced by Plan B Entertainment and Anonymous Content. In the series, Marling stars as a young woman named Prairie Johnson, who has resurfaced after having been missing for seven years. Prairie now calls herself \"the OA\" and can see, despite having been blind before her disappearance.\nOn February 8, 2017, Netflix renewed the series for a second season, dubbed \"Part II\", that was released on March 22, 2019. Although The OA was planned by its creators to be a five-part story told in five seasons, on August 5, 2019, Netflix canceled the series after two seasons, leaving the show with a cliffhanger ending. The OA received generally favorable critical reception, averaging 77% for Part I and 92% for Part II on Rotten Tomatoes. It has been included in the \"best of ...\" lists of many entertainment publications.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/The_OA",
+        "title": "The OA"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "The OA é uma série de televisão americana de drama e suspense com elementos de ficção científica, sobrenatural e fantasia criada e produzida por Brit Marling e Zal Batmanglij, sendo sua terceira colaboração, estreou em 16 de dezembro de 2016 na Netflix . A série consiste em duas temporadas de oito episódios cada, dirigidas por Batmanglij, produzida pela Plan B Entertainment e Anonymous Conten.\nNa série, Brit Marling interpreta uma jovem chamada Prairie Johnson, uma garota cega, que desaparece e retorna sete anos depois com a visão perfeita,  Prairie agora se chama \"OA\" (\"Anjo Original\").\nThe OA recebeu críticas geralmente favoráveis. A direção, o visual e a atuação da série foram muitas vezes elogiados.\nEm 8 de fevereiro de 2017, a Netflix renovou a série para uma segunda temporada, intitulada de \"Parte II\", lançada em 22 de março de 2019.\nEm 5 de agosto de 2019, a série foi cancelada pela Netflix após duas temporadas.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/The_OA",
+        "title": "The OA"
+      },
+      {
+        "locale": "es",
+        "synopsis": "The OA es una serie  estadounidense de misterio y drama con elementos de ciencia ficción, sobrenatural y fantasía,​​ que se estrenó en Netflix el 16 de diciembre de 2016,​​ fue creada y producida por Brit Marling y Zal Batmanglij en su tercera colaboración juntos.​​ La primera temporada de la serie consta de ocho episodios, todos dirigidos por Batmanglij y producidos por Plan B Entertainment y Anonymous Content.​ Marling interpreta a una joven llamada Prairie Johnson, que reaparece después de haber estado desaparecida durante siete años. Prairie ahora se hace llamar «OA» y ha recuperado la visión, a pesar de haber estado ciega antes de su desaparición.\nEl 8 de febrero de 2017, Netflix renovó la serie para una segunda temporada, cuyo estreno fue el 22 de marzo de 2019 y cuenta con ocho capítulos.​​\nEl 5 de agosto de 2019, Netflix anunció que la serie sería cancelada​ sin un final cerrado.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/The_OA",
+        "title": "The OA"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q19798744",
+  "slug": "the-oa"
+}

@@ -1,0 +1,53 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0094709",
+      "rottentomatoes": "m/the_gang_of_four",
+      "tmdb": "55853"
+    },
+    "meta": {
+      "countries": [
+        "France",
+        "Switzerland"
+      ],
+      "creators": [
+        "Jacques Rivette"
+      ],
+      "genres": [
+        "drama film",
+        "mystery film"
+      ],
+      "runtimeMinutes": 160
+    },
+    "popularity": 9.0,
+    "qid": "Q25468",
+    "release_date": "1989-02-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Gang of Four (French: La bande des quatre) is a 1989 French drama film directed by Jacques Rivette. It was entered into the 39th Berlin International Film Festival, where it won a Honourable Mention.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Gang_of_Four_(film)",
+        "title": "Gang of Four"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "O Grupo dos Quatro (em francês:  La Bande des Quatre) é um filme francês de drama de 1989 dirigido por Jacques Rivette.\nParticipou do 39º Festival de Berlim, onde ganhou menção honrosa.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/La_Bande_des_Quatre",
+        "title": "O Bando Das Quatro"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "La banda de las cuatro"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q25468",
+  "slug": "gang-of-four"
+}

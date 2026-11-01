@@ -1,0 +1,58 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0075520",
+      "metacritic": "tv/jesus-of-nazareth",
+      "rottentomatoes": "tv/jesus_of_nazareth",
+      "tmdb": "19649"
+    },
+    "meta": {
+      "countries": [
+        "Italy",
+        "United Kingdom"
+      ],
+      "episodes": 5,
+      "genres": [
+        "historical drama",
+        "drama film",
+        "sword-and-sandal film"
+      ],
+      "runtimeMinutes": 96,
+      "trailers": [
+        {
+          "youtubeId": "yumoqNlaPCE"
+        }
+      ]
+    },
+    "popularity": 33.0,
+    "qid": "Q470572",
+    "release_date": "1977-03-27",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Jesus of Nazareth (Italian: Gesù di Nazareth) is a 1977 epic television drama serial directed by Franco Zeffirelli and co-written by Anthony Burgess and Suso Cecchi d'Amico, which dramatizes the birth, life, ministry, crucifixion and resurrection of Jesus. It stars Robert Powell as Jesus, and features an all-star ensemble cast of renowned actors, including seven who had won or would go on to win Academy Awards: Anne Bancroft, Ernest Borgnine, Laurence Olivier, Christopher Plummer, Anthony Quinn, Rod Steiger, Peter Ustinov; and James Earl Jones who received an Academy Honorary Award. Additionally, the ensemble cast also featured Academy Award nominees James Mason, Ian Holm, Ian Bannen and Valentina Cortese.\nSome scenes were added during the writing process, with some characters (such as Zerah) added for brevity or dramatic effect. Jesus of Nazareth depicts Judas Iscariot as initially well-intentioned, but later as a selfish dupe of Zerah's who betrays Jesus largely as a result of Zerah's false platitudes and pretexts. However, in accordance with the Gospels, the film depicts Nicodemus and Joseph of Arimathea as sympathetic members of the Sanhedrin. Many of the miracles of Jesus, such as the changing of water into wine at the wedding at Cana, the transfiguration, and the calming of the storm, are not shown, although Jesus's healing of Jairus's daughter, healing the centurion's servant, the blind man and the crippled woman on the Sabbath, the feeding of the multitude, and the raising of Lazarus from the dead are presented.\nJesus of Nazareth premiered on 27 March 1977, on the Italian channel Rai 1, and was first aired in the United Kingdom, on 3 April 1977, on the ITV Network. It was a huge ratings success and received acclaim, with particular praise for Powell's portrayal of Jesus.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Jesus_of_Nazareth_(TV_series)",
+        "title": "Jesus of Nazareth"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Jesus de Nazaré (em italiano:  Gesù di Nazareth; em inglês:  Jesus of Nazareth) é uma minissérie ítalo-britânica, exibida nos cinemas, dirigido por Franco Zeffirelli em 1977.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Jesus_de_Nazar%C3%A9_(filme)",
+        "title": "Jesus de Nazaré"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Jesús de Nazaret (Jesus of Nazareth) es una miniserie de televisión anglo-italiana de 1977 que dramatiza el nacimiento, vida, ministerio, muerte y resurrección de Jesús, según los relatos de los cuatro evangelios canónicos del Nuevo Testamento.\nLa miniserie fue dirigida por Franco Zeffirelli, producida por Lew Grade, a través de su compañía CCI Entertainment y la banda sonora estuvo a cargo del compositor Maurice Jarre. Fue protagonizada por el actor británico Robert Powell como Jesús. Cuenta con un elenco estelar de actores de renombre, incluidos ocho que habían ganado o ganarían el Premio Óscar: Anne Bancroft, Ernest Borgnine, Laurence Olivier, Christopher Plummer, Anthony Quinn, Rod Steiger, James Earl Jones y Peter Ustinov. Además también contó con la participación de Olivia Hussey, James Mason y Valentina Cortese.\nZeffirelli coescribió el guion con Anthony Burgess y Suso Cecchi d'Amico. Se rodó en Túnez y Marruecos con un reparto de estrellas del cine, tanto europeas como estadounidenses. La versión sin cortes solo está disponible en DVD y no en VHS. La duración total de la producción es de seis horas y veintiún minutos.\nLa miniserie se estrenó el 27 de marzo de 1977 en el canal italiano Rai 1 y se emitió por primera vez en el Reino Unido el 3 de abril de 1977 en la cadena ITV. Fue un gran éxito de audiencia y recibió elogios, destacando especialmente la interpretación de Jesús por parte de Powell. Según la crítica, es uno de los proyectos mejor valorados y más populares del cine religioso.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Jes%C3%BAs_de_Nazaret_(miniserie)",
+        "title": "Jesus of Nazareth"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q470572",
+  "slug": "jesus-of-nazareth"
+}

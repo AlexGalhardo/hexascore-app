@@ -1,0 +1,56 @@
+{
+  "item": {
+    "external_ids": {
+      "gog": "game/sacred_gold",
+      "hltb": "8053",
+      "igdb": "sacred-gold",
+      "imdb": "tt0423108",
+      "steam": "12320"
+    },
+    "meta": {
+      "countries": [
+        "Germany"
+      ],
+      "creators": [
+        "Ascaron"
+      ],
+      "genres": [
+        "action role-playing game"
+      ],
+      "platforms": [
+        "Linux",
+        "Microsoft Windows"
+      ]
+    },
+    "popularity": 15.0,
+    "qid": "Q1757845",
+    "release_date": "2004-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Sacred is a 2004 action role-playing game developed by the German company Ascaron and published by Take 2 Interactive. It is set on the magical continent of Ancaria, with characters of various races (dark elf, vampiress, dwarf, etc.) each with their own missions. Two expansion packs were released for the game in 2004 and 2005. In 2008, Linux Game Publishing announced that they would port the game to the Linux operating system.\nSacred was a commercial hit, with sales above 2 million units worldwide by 2009. It spawned the Sacred video game franchise, and was followed by the sequels Sacred 2: Fallen Angel, Sacred Citadel, and Sacred 3.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Sacred_(video_game)",
+        "title": "Sacred"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Sacred"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Sacred es un videojuego de rol de acción para PC, ambientado en el fantástico mundo de Ancaria, repleto de criaturas mágicas. Más de 1,8 millones de copias del juego fueron vendidas por todo el mundo.​\nEn el juego se puede elegir entre seis personajes diferentes: el Mago, la Seraphín, el Elfo Oscuro, la Elfa del Bosque, la Vampiresa y el Gladiador, además de dos personajes extra que vienen en la expansión de Sacred, el Enano y la Diablesa.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Sacred_(videojuego)",
+        "title": "Sacred"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q1757845",
+  "slug": "sacred"
+}

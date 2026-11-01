@@ -1,0 +1,53 @@
+{
+  "item": {
+    "external_ids": {
+      "hltb": "26655",
+      "igdb": "ogame"
+    },
+    "meta": {
+      "countries": [
+        "Germany"
+      ],
+      "creators": [
+        "Gameforge"
+      ],
+      "genres": [
+        "massively multiplayer online game",
+        "turn-based strategy video game"
+      ],
+      "platforms": [
+        "web browser"
+      ]
+    },
+    "popularity": 34.0,
+    "qid": "Q219743",
+    "release_date": "2002-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "OGame is a browser-based, strategy and space-themed massively multiplayer online game developed and published by Gameforge. Originally released in 2002, it is one of the longest-running browser games and remains in active development. The game is available in multiple languages, with separate communities for different regions that share largely identical gameplay. Players are typically informed about updates, rule changes, and new features through official forums and in-game announcements.\nSince 2011, OGame has undergone continuous development, including major gameplay updates and technical improvements. Notable additions include the introduction of new mechanics such as Lifeforms, which expanded progression and strategic depth, as well as avatar and profile systems that enhanced player customization and social features.\nIn 2022, the game celebrated its 20th anniversary with large-scale in-game events, community activities, and content updates. The game has also been made accessible on mobile platforms, allowing players to manage their empires beyond traditional web browsers.\nOGame continues to operate globally with an active player base, receiving regular updates, seasonal events, and new universes, reflecting its long-term live-service model more than two decades after its original release.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/OGame",
+        "title": "OGame"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "OGame é um text based massively multiplayer online browser game de gerenciamento de recursos de guerra espacial, com cerca de dois milhões de contas em 2006. OGame foi criado em 2000 e é produzido e mantido pela Gameforge AG. Está disponível em vários idiomas, e diferentes nacionalidades possuem suas próprias comunidades. O jogo não difere entre a nacionalidade das comunidades exceto em casos raros. Os jogadores geralmente são avisados sobre as novidades e mudança nas regras ou novas versões através dos fóruns oficiais\nDesde 22 de outubro de 2009, OGame.org tem um total de 47 universos, incluindo quatro universos usando um novo design. Mas estão sendo adicionados periodicamente. OGame também hospeda o universo \"pr0game\", com regras diferentes e com 5 vezes a velocidade regular, atualmente listado no OGame.org como Universe 35.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/OGame",
+        "title": "OGame"
+      },
+      {
+        "locale": "es",
+        "synopsis": "OGame es un videojuego multijugador masivo en línea de estrategia desarrollado por la empresa alemana Gameforge. El juego está implementado en el lenguaje de programación PHP, requiriendo únicamente un navegador común para poder jugarlo: dando una gran ventaja en el aspecto de los videojuegos, tan necesitados de ram y memorias específica. Cada escenario de juego, denominado Universo, permite que se enfrenten simultáneamente hasta 16500 jugadores. El primer universo apareció en Alemania en 2002,​ donde en 2007 fue el juego en línea más popular. Existen versiones en diferentes idiomas: a destacar el español, inglés y portugués que tienen versiones para más de un país; asimismo hay versiones en otros 20 idiomas: alemán, checo, chino, croata, danés, eslovaco, esloveno, finés, francés, griego, húngaro, italiano, japonés, neerlandés, noruego, polaco, rumano, ruso, sueco, turco; es importante destacar que la versión en español se divide entre servidores de España, México y Argentina; la portuguesa entre Portugal y Brasil; y la inglesa entre Reino Unido y Estados Unidos. Asimismo, periódicamente se añaden nuevos servidores (universos) al juego.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/OGame",
+        "title": "OGame"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q219743",
+  "slug": "ogame"
+}

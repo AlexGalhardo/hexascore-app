@@ -1,0 +1,51 @@
+{
+  "item": {
+    "external_ids": {
+      "igdb": "fishville"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Zynga"
+      ],
+      "genres": [
+        "simulation video game"
+      ],
+      "platforms": [
+        "Facebook"
+      ]
+    },
+    "popularity": 6.0,
+    "qid": "Q80402",
+    "release_date": null,
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "FishVille is a defunct real-time aquarium simulation game developed by Zynga that was available as an application on the social-networking website Facebook. The game allowed members of Facebook to manage virtual aquariums by rearing fish. As of October 2011, FishVille had 1.6 million monthly active users. The game was discontinued on December 5, 2012.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/FishVille",
+        "title": "FishVille"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Fishville foi um jogo eletrônico para o Facebook desenvolvido pela empresa dos Estados Unidos chamada Zynga, que permite criar um ou mais aquários e fazer crescer peixes de forma a depois darem XP ou dinheiro.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/FishVille",
+        "title": "FishVille"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "FishVille"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q80402",
+  "slug": "fishville"
+}

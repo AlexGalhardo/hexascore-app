@@ -1,0 +1,51 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0055963",
+      "rottentomatoes": "m/escape-from-zahrain",
+      "tmdb": "118300"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Ronald Neame"
+      ],
+      "genres": [
+        "action film"
+      ],
+      "runtimeMinutes": 93
+    },
+    "popularity": 7.0,
+    "qid": "Q25471",
+    "release_date": "1962-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Escape from Zahrain is a 1962 American Panavision adventure film directed by Ronald Neame and starring Yul Brynner. The film is based on the novel Appointment in Zahrain by Michael Barrett (1960) and is produced and distributed by Paramount Pictures.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Escape_from_Zahrain",
+        "title": "Escape from Zahrain"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Escape from Zahrain é um filme estadunidense de 1962, dos gêneros aventura, drama e suspense, dirigido por Ronald Neame, roteirizado por Michael Barrett e Robin Estridge, música de Lyn Murray.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Escape_from_Zahrain",
+        "title": "Escape from Zahrain"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Fuga de Zahrain"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q25471",
+  "slug": "escape-from-zahrain"
+}

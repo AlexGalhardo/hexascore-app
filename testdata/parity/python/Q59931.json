@@ -1,0 +1,56 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0333766",
+      "metacritic": "movie/garden-state",
+      "rottentomatoes": "m/garden_state",
+      "tmdb": "401"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Zach Braff"
+      ],
+      "genres": [
+        "romantic comedy film",
+        "comedy drama",
+        "coming-of-age film",
+        "drama film",
+        "comedy film"
+      ],
+      "runtimeMinutes": 99
+    },
+    "popularity": 30.0,
+    "qid": "Q59931",
+    "release_date": "2004-01-16",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Garden State is a 2004 American romantic comedy drama film, written and directed by Zach Braff, and starring him, Natalie Portman, Peter Sarsgaard and Ian Holm. The film centers on Andrew Largeman (Braff), a 26-year-old actor/waiter who returns to his hometown in New Jersey after his mother dies. Braff based the film on his real life experiences. It was filmed in April and May 2003 and released on July 28, 2004. New Jersey was the main setting and primary shooting location.\nGarden State received positive reviews and  was a box office success. It was an official selection of the Sundance Film Festival. The film's soundtrack, selected by Braff, won a Grammy Award for Best Compilation Soundtrack Album for a Motion Picture, Television or Other Visual Media.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Garden_State_(film)",
+        "title": "Garden State"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Garden State (no Brasil, Hora de Voltar) é um filme de comédia dramática de 2004 escrito e dirigido por Zach Braff e estrelado por Natalie Portman, Peter Sarsgaard, Ian Holm e o próprio Braff. O filme é sobre Andrew Largeman (Braff), um ator/garçom de 26 anos que retorna à sua cidade natal, em Nova Jersey depois que sua mãe morre. Braff baseou o filme em suas experiências da vida real.\nFoi filmado em abril e maio de 2003 e lançado em 28 de julho de 2004. Nova Jersey foi o cenário principal e local da filmagem primária.\nGarden State foi bem recebido e tem atraído um culto de seguidores. Ele saiu em uma seleção oficial do Festival Sundance de Cinema. O filme também gerou uma trilha sonora para que Braff, que escolheu a música ele mesmo, ganhou um prêmio Grammy.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Garden_State",
+        "title": "Garden State"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Garden State (titulada en español Tiempo de volver y Algo en común) es una película estadounidense de 2004, escrita, dirigida y protagonizada por Zach Braff. En la cinta también actúan Natalie Portman, Peter Sarsgaard y Sir Ian Holm.\nLa película, filmada en 25 días, entre abril y mayo de 2003, fue estrenada el 28 de julio de 2004 y se incluyó dentro de la selección oficial del Festival de Cine de Sundance. También ganó el primer premio en la categoría de largometrajes dentro de los Premios Independent Spirit.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Garden_State",
+        "title": "Garden State"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q59931",
+  "slug": "garden-state"
+}

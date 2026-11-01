@@ -1,0 +1,57 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0088583",
+      "rottentomatoes": "tv/north_and_south_1985",
+      "tmdb": "3266"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "David L. Wolper"
+      ],
+      "episodes": 15,
+      "genres": [
+        "historical television series",
+        "drama television series",
+        "war television series",
+        "romance television series",
+        "miniseries"
+      ],
+      "runtimeMinutes": 90,
+      "seasons": 3
+    },
+    "popularity": 25.0,
+    "qid": "Q833578",
+    "release_date": "1985-11-03",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "North and South is a trilogy of American television miniseries broadcast on the American Broadcasting Company network in 1985, 1986, and 1994. Set before, during, and immediately after the American Civil War, they are based on the 1980s trilogy of novels North and South by John Jakes. The 1985 first installment, North and South, remains the seventh-highest rated miniseries in TV history. North and South: Book II (1986) was met with similar success, while 1994's Heaven  and Hell: North and South Book III was poorly received by both critics and audiences.\nThe saga tells the story of the enduring friendship between Orry Main of South Carolina (Patrick Swayze) and George Hazard of Pennsylvania (James Read), who become best friends while attending the United States Military Academy at West Point but later find themselves and their families on opposite sides of the war. The slave-owning Mains are rural planters from outside Charleston, South Carolina, while the Hazards, who reside in a small Pennsylvania mill town, profit from ownership of iron manufacturing and industry capital, their differences reflecting the divisions between North and South that eventually led to the Civil War.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/North_and_South_(miniseries)",
+        "title": "North and South"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "North and South é o título de três minisséries norte-americanas lançadas pela ABC em 1985 (North and South), 1986 (North and South: Book II) e 1994 (Heaven and Hell: North and South Book III). Baseado na trilogia de romances homónima do escritor norte-americano John Jakes as miniséries (com 15 episódios no total) narram a amizade e o conflito entre dois protagonistas antes, durante e depois da Guerra de Secessão.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/North_and_South",
+        "title": "North and South"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Norte y Sur (North and South en su título original), es una serie de televisión, estrenada por la American Broadcasting Company en 1985, y basada en la trilogía homónima de John Jakes.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Norte_y_Sur_(serie_de_televisi%C3%B3n)",
+        "title": "Norte y Sur"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q833578",
+  "slug": "north-and-south"
+}

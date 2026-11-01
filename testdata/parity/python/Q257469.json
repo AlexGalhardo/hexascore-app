@@ -1,0 +1,75 @@
+{
+  "item": {
+    "external_ids": {
+      "epic": "another-world-20th-anniversary-edition-64660d",
+      "gog": "game/another_world_20th_anniversary_edition",
+      "hltb": "503",
+      "igdb": "out-of-this-world",
+      "imdb": "tt0268516"
+    },
+    "meta": {
+      "countries": [
+        "France"
+      ],
+      "creators": [
+        "Delphine Software International",
+        "Éric Chahi"
+      ],
+      "genres": [
+        "action-adventure game",
+        "cinematic platformer",
+        "science fiction video game"
+      ],
+      "platforms": [
+        "3DO",
+        "Microsoft Windows",
+        "DOS",
+        "Commodore Amiga",
+        "Apple IIGS",
+        "Atari ST",
+        "Sega Genesis/Mega Drive",
+        "Atari Jaguar",
+        "macOS",
+        "Super Nintendo Entertainment System",
+        "Symbian",
+        "Windows Mobile",
+        "Sega CD/Mega CD",
+        "Classic Mac OS",
+        "Android",
+        "iOS",
+        "Nintendo Switch",
+        "Linux"
+      ]
+    },
+    "popularity": 27.0,
+    "qid": "Q257469",
+    "release_date": "1991-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Another World is a cinematic platform action-adventure game designed by Éric Chahi and published by Delphine Software in November 1991. In North America it was published as Out of This World. The game tells the story of Lester, a young scientist who, as a result of an experiment gone wrong, finds himself on a dangerous alien world where he is forced to fight for his survival.\nAnother World was developed by Chahi alone over a period of about two years, with help with the soundtrack from Jean-François Freitas. Chahi developed his own game engine, creating all the game's art and animations in vector form to reduce memory use, with some use of rotoscoping to help plan out character movements. Both narratively and gameplay-wise, he wanted the game to be told with little to no language or user-interface elements. The game was originally developed for the Amiga and Atari ST but has since been widely ported to other contemporary systems, including home and portable consoles and mobile devices. Chahi has since overseen release of various anniversary releases of the game.\nAnother World was innovative in its use of cinematic effects in both real-time and cutscenes, which earned the game praise among critics and commercial success. It also influenced a number of other video games and designers, inspiring such titles as Ico, Metal Gear Solid, Silent Hill, and Delphine's later Flashback. It is now considered among the best video games ever made.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Another_World_(video_game)",
+        "title": "Another World"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Another World, também conhecido como Out of This World na América do Norte e Outer World no Japão, é um jogo eletrônico de ação e aventura cinematográfica de 1991 projetado por Éric Chahi para a Delphine Software e Interplay. O jogo conta a história de Lester, um jovem cientista que, como resultado de um experimento seu que deu errado, se encontra em um perigoso mundo alienígena, onde é forçado a lutar por sua sobrevivência.\nOriginalmente desenvolvido para o Amiga e o Atari ST, Another World foi amplamente utilizado em outros sistemas contemporâneos. Em 2006, a Chahi lançou de forma independente uma edição de 15º aniversário para computadores modernos, e uma edição subsequente do 20º aniversário, cinco anos depois, que adaptou o jogo para vários consoles e plataformas de computação móvel, como iOS, Android, Windows Mobile, Nintendo 3DS, etc.\nAnother World foi inovador no uso de efeitos cinematográficos tanto em tempo real como em cutscenes, o que rendeu elogios ao jogo entre os críticos e o sucesso comercial. Também influenciou vários outros videogames e designers, inspirando títulos como Ico, Metal Gear Solid, Silent Hill e até mesmo o Flashback, futuro jogo da Delphine.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Another_World_(jogo_eletr%C3%B4nico)",
+        "title": "Another World"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Another World, también conocido como Out of this World en Norteamérica y como Outer World (アウターワールド, Autā Wārudo?) en Japón, es un videojuego de acción-aventura y plataforma cinemática de 1991 diseñado por Éric Chahi para Delphine Software.\nOriginalmente desarrollado para Amiga y posteriormente lanzado para Atari ST, Apple IIGS y DOS, el juego fue ampliamente portado a otros sistemas contemporáneos. Esfuerzos posteriores dieron lugar a diversas recreaciones del motor de juego para permitir su ejecución en ordenadores modernos, consolas y teléfonos móviles.\nAnother World fue muy innovador en el uso de efectos cinematográficos, tanto en tiempo real y en las escenas cortas, que le valió elogios al juego entre los críticos y el éxito comercial.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Another_World",
+        "title": "Another World"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q257469",
+  "slug": "another-world"
+}

@@ -1,0 +1,43 @@
+{
+  "item": {
+    "external_ids": {},
+    "meta": {
+      "creators": [
+        "Mark the Evangelist"
+      ],
+      "genres": [
+        "Gospel"
+      ]
+    },
+    "popularity": 155.0,
+    "qid": "Q107388",
+    "release_date": null,
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Gospel of Mark is the second of the four canonical Gospels and one of the three Synoptic Gospels. It narrates the ministry of Jesus from his baptism by John the Baptist to his crucifixion, his burial, and the discovery of his empty tomb. It portrays Jesus as a teacher, an exorcist, a healer, and a miracle worker.\nJesus refers to himself as the Son of Man and is called the Son of God, though he keeps his messianic nature secret and even his own disciples fail to understand him. This is consistent with the Christian interpretation of prophecy, which is believed to foretell the fate of the Messiah as a suffering servant.\nThe gospel is traditionally attributed to Mark the Evangelist, a companion of the Apostle Peter. The author is not named, and scholars debate the identity of the author. It is dated to around 70 CE  and was likely written in Rome for a Gentile audience. It is classified as an ancient biography that was intended to strengthen the existing faith of its intended audience rather than to evangelize.\nMost scholars believe that Mark is the earliest gospel and was used by Matthew, Luke, and John; some scholars have regarded Mark as the most reliable gospel, though this view is debated. Many scholars argue that Mark portrays Jesus as divine Lord. There is no universal agreement on the structure of Mark, but a break at Mark 8:26–31 is widely recognized. Mark 16:8, which ends with a resurrection announcement, was the original ending.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Gospel_of_Mark",
+        "title": "Gospel of Mark"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "O Evangelho Segundo Marcos (em grego:  κατὰ Μᾶρκον εὐαγγέλιον, τὸ εὐαγγέλιον κατὰ Μᾶρκον - transl. euangelion kata Markon) é o segundo livro do Novo Testamento. Sendo o evangelho mais curto da Bíblia cristã, com apenas 16 capítulos, ele conta a história de Jesus de Nazaré. É considerado pelos eruditos um dos três evangelhos sinópticos. De acordo com a tradição, Marcos foi pensado para ser um epítome, o que representaria sua atual posição na Bíblia, como um resumo de Mateus e Lucas. No entanto, a maioria dos estudiosos contemporâneos considera essa obra como a mais antiga dos evangelhos canônicos - uma posição conhecida como prioridade de Marcos - embora a obra contenha 31 versículos relativos a outros milagres não relatados nos outros evangelhos.\nO Evangelho segundo Marcos narra o ministério de Jesus, desde Seu batismo por João Batista até Sua Ascensão. A obra concentra-se particularmente na última semana de Sua vida (capítulos 11-16, a viagem até Jerusalém). Sua narrativa rápida retrata Jesus como um homem de ação heróica.\nUm tema importante de Marcos é o Segredo Messiânico. Jesus pede silêncio sobre sua identidade messiânica algumas vezes após fazer alguns milagres, além de esconder sua mensagem com parábolas. Os discípulos também não conseguem entender as implicações dos milagres de Cristo.\nTodos os quatro evangelhos canônicos são anônimos, mas a tradição cristã primitiva identifica o autor deste evangelho como Marcos, o Evangelista, de quem se diz ter baseado este trabalho sobre o testemunho de Pedro. Alguns estudiosos modernos consideram essa tradição essencialmente credível, enquanto outros a põe em xeque. No entanto, mesmo os estudiosos que duvidam da autoria de Marcos reconhecem que muito do material deste Evangelho remonta um longo caminho, representando informações importantes sobre o Jesus histórico. Por isso, o Evangelho segundo Marcos é muitas vezes considerado a fonte primária de informações sobre o ministério de Jesus.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Evangelho_segundo_Marcos",
+        "title": "Evangelho segundo Marcos"
+      },
+      {
+        "locale": "es",
+        "synopsis": "El Evangelio de Marcos (en griego, κατὰ Μᾶρκον εὐαγγέλιον; abreviado Mc), conocido por muchos cristianos como Evangelio según San Marcos, es el segundo libro del Nuevo Testamento de la Biblia cristiana. Narra la vida de Jesús de Nazaret desde su bautismo por Juan el Bautista hasta el momento de su resurrección. El relato final de las apariciones de Jesús resucitado es objeto de debate entre los estudiosos; la mayoría considera que se trata de un añadido posterior.​ \nEs el más breve de los cuatro evangelios canónicos y también el más antiguo según la opinión mayoritaria de los expertos bíblicos.​​ Existe un amplio consenso en datar el Evangelio de Marcos a finales de los años 60 del siglo I d. C., o poco después del año 70 d. C.​\nSu autor es desconocido. La tradición cristiana de los Padres de la Iglesia lo atribuyó a Marcos, un discípulo citado en otros pasajes del Nuevo Testamento, pero la mayoría de historiadores no da crédito a esta hipótesis. Se cree que el libro fue redactado para una comunidad de cristianos no judíos y por tanto no familiarizados con las lenguas ni la geografía de Palestina.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Evangelio_de_Marcos",
+        "title": "Evangelio de Marcos"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q107388",
+  "slug": "gospel-of-mark"
+}

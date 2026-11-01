@@ -1,0 +1,52 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "121842",
+      "openlibrary": "OL503666W"
+    },
+    "meta": {
+      "countries": [
+        "Spain"
+      ],
+      "creators": [
+        "Miguel de Cervantes"
+      ],
+      "genres": [
+        "chivalric romance",
+        "adventure fiction",
+        "parody",
+        "found manuscript"
+      ]
+    },
+    "popularity": 147.0,
+    "qid": "Q480",
+    "release_date": "1605-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Don Quixote is a novel by Miguel de Cervantes, written in Early Modern Spanish and published in two parts in 1605 and 1615. It is considered a founding work of Western literature and the first modern novel. It is also one of the most-translated books in the world and one of the best-selling books in history.\nThe plot revolves around the adventures of a member of the lowest nobility, an hidalgo from La Mancha named Alonso Quijano, who reads so many chivalric romances that he decides to become a knight-errant (caballero andante) to revive chivalry and serve his nation, under the name Don Quixote de la Mancha. He recruits as his squire a simple farm labourer, Sancho Panza, who brings an earthy wit to Don Quixote's lofty rhetoric. In the first part of the book, Don Quixote does not see the world for what it is and prefers to imagine that he is living out a knightly story meant for the annals of all time. As Salvador de Madariaga pointed out in his Guía del lector del Quijote (1972 [1926]), opposing Quixotization with Sanchification, \"Sancho's spirit ascends from reality to illusion\" while Don Quixote's does the opposite.\nThe book had a major influence on the literary community, being directly referenced in works of 19th‑century French literature such as Alexandre Dumas's The Three Musketeers (1844) and Edmond Rostand's Cyrano de Bergerac (1897). Even the word quixotic ('impractically idealistic') became part of language. Mark Twain referred to Don Quixote as having \"swept the world's admiration for the mediaeval chivalry-silliness out of existence\". It has been described by some as the greatest work ever written.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Don_Quixote",
+        "title": "Don Quixote"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Don Quixote, cujo título completo é O Engenhoso Fidalgo Dom Quixote da Mancha, é um romance espanhol de Miguel de Cervantes. Publicado originalmente em duas partes, em 1605 e 1615, o romance é considerado uma obra fundadora da Literatura ocidental e o primeiro romance moderno. O romance foi classificado por muitos autores conhecidos como o \"melhor romance de todos os tempos\" e a \"obra melhor e mais central na literatura mundial\". Dom Quixote é também um dos livros mais traduzidos do mundo e um dos romances mais vendidos de todos os tempos. O romance é uma sátira aos romances de cavalaria e às convenções literárias da época.\nA trama gira em torno das aventuras de um membro da baixa nobreza, um fidalgo de La Mancha chamado Alonso Quijano, que lê tantos romances de cavalaria que decide se tornar um Cavaleiro andante (caballero andante) para reviver a cavalaria e servir sua nação, sob o nome de Dom Quixote da Mancha. Ele recruta como seu escudeiro um simples trabalhador rural, Sancho Pança, que traz um humor terrenal à retórica elevada de Dom Quixote. Na primeira parte do livro, Dom Quixote não vê o mundo como ele é e prefere imaginar que está vivendo uma história cavalheiresca destinada aos anais de todos os tempos. No entanto, como Salvador de Madariaga apontou em seu Guía del lector del Quijote (1972 [1926]), referindo-se à \"Sanchificação de Dom Quixote e a Quixotização de Sancho\", \"o espírito de Sancho ascende da realidade à ilusão, o de Dom Quixote declina da ilusão à realidade\".\nO livro teve uma grande influência na comunidade literária, como evidenciado por referências diretas em Os Três Mosqueteiros (1844) de Alexandre Dumas, e no Cyrano de Bergerac (1897) de Edmond Rostand, bem como pela palavra quixotesco. Mark Twain referiu-se ao livro como tendo \"varrido a admiração do mundo pela tolice da cavalaria medieval da existência\". Foi descrito por alguns como a maior obra já escrita.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Dom_Quixote",
+        "title": "Dom Quixote"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Don Quijote de la Mancha​ es una novela escrita por el español Miguel de Cervantes Saavedra. Publicada su primera parte con el título de El ingenioso hidalgo don Quijote de la Mancha a comienzos de 1605, es considerada la obra más destacada de la literatura española y una de las más importantes de la literatura universal.​En 1615 apareció su continuación con el título de Segunda parte del ingenioso caballero don Quijote de la Mancha.​\nEs la primera obra genuinamente desmitificadora de la tradición caballeresca y cortés por su tratamiento burlesco. Ha sido considerada por parte de la crítica como una de las primeras novelas modernas y, como tal, ha ejercido un enorme influjo en la narrativa europea. En 2002, a petición del Club Noruego del Libro y Bokklubben World Library, fue incluida en una lista elaborada mediante votación de cien escritores de 54 nacionalidades sobre las mejores obras literarias de la historia, donde ocupó el primer puesto.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Don_Quijote_de_la_Mancha",
+        "title": "Don Quijote de la Mancha"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q480",
+  "slug": "don-quixote"
+}

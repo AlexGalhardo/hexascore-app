@@ -1,0 +1,51 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt1361843",
+      "rottentomatoes": "m/van_diemens_land",
+      "tmdb": "22882"
+    },
+    "meta": {
+      "countries": [
+        "Australia"
+      ],
+      "creators": [
+        "Jonathan auf der Heide"
+      ],
+      "genres": [
+        "horror film"
+      ],
+      "runtimeMinutes": 104
+    },
+    "popularity": 7.0,
+    "qid": "Q24154",
+    "release_date": "2009-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Van Diemen's Land is a 2009 Australian thriller, directed by Jonathan auf der Heide. Set in 1822 in colonial Tasmania it follows the story of the infamous Irish convict, Alexander Pearce, played by Oscar Redding and narrates the events of his escape from Sarah Island with seven other convicts. The voice-over and some of the dialogue is in Irish.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Van_Diemen%27s_Land_(film)",
+        "title": "Van Diemen's Land"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Van Diemen's Land é um filme australiano baseado em acontecimentos reais ocorridos no século XIX, onde o condenado reincidente Alexander Pearce, foge de uma colônia penal com alguns colegas detentos pelas matas inexploradas da Tasmânia (na época chamada de Terra de Van Diemen).\nQuando foi recapturado contou uma macabra estória de como sobreviveu estando no limite da fome.\nFoi considerado louco e insano até que fatos descobertos a posterior indicaram a possibilidade de veracidade na estória que relatou.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Van_Diemen%27s_Land_(filme)",
+        "title": "Van Diemen's Land"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Van Diemen's Land"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q24154",
+  "slug": "van-diemen-s-land"
+}

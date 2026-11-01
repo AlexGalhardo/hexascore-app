@@ -1,0 +1,43 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0074974",
+      "tmdb": "66556"
+    },
+    "meta": {
+      "countries": [
+        "France"
+      ],
+      "creators": [
+        "Jacques Rivette"
+      ],
+      "genres": [
+        "drama film"
+      ],
+      "runtimeMinutes": 145
+    },
+    "popularity": 7.0,
+    "qid": "Q25511",
+    "release_date": "1976-11-17",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Noroît (Une vengeance) is a 1976 experimental adventure fantasy drama directed by Jacques Rivette. The title is an alteration of nord-ouest (north-west), meaning the direction or the wind from that direction (in English, a \"nor'wester\"). The story is loosely based on Thomas Middleton's The Revenger's Tragedy. The film stars Geraldine Chaplin and  Bernadette Lafont as pirates. Noroît would have followed Duelle (1976) as the third episode of the intended four-film series Scènes de la vie parallèle (the first being a supernatural love story and the fourth a musical).",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Noro%C3%AEt_(film)",
+        "title": "Noroît"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Noroît"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q25511",
+  "slug": "noroit"
+}

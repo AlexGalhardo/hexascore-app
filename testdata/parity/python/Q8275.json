@@ -1,0 +1,49 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "3293141",
+      "openlibrary": "OL34610657W"
+    },
+    "meta": {
+      "countries": [
+        "Ancient Greece"
+      ],
+      "creators": [
+        "Homer"
+      ],
+      "genres": [
+        "epic poem"
+      ]
+    },
+    "popularity": 182.0,
+    "qid": "Q8275",
+    "release_date": null,
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Iliad (  ILL-ee-əd; Ancient Greek: Ἰλιάς, romanized: Iliás [iːliás]; lit. '[a poem] about Ilion (Troy)') is one of two major surviving ancient Greek epic poems, along with the Odyssey, attributed to Homer. It is one of the oldest extant works of literature still widely read by modern readers. Like the Odyssey, the poem is divided into 24 books and was written in dactylic hexameter. It contains 15,693 lines in its standard edition. The Iliad is often regarded as the first substantial piece of European literature and is central to the study of classical philology.\nSet towards the end of the Trojan War, a 10-year siege of the city of Troy by a coalition of Mycenaean Greek states, the poem depicts significant events in the war's final weeks. It focuses primarily on Achilles, a celebrated warrior, whose wrath (mēnis) is the driving force of the narrative, from his fierce quarrel with the king of Mycenae, Agamemnon, to his killing of the Trojan prince Hector. The narrative moves between wide battleground scenes and more personal interactions. Contrary to popular belief, the Iliad does not depict the fall of Troy nor mention the Trojan Horse used by the Greeks to conquer the city; these elements are attributed to later sources.\nThe Iliad and the Odyssey were likely composed in Homeric Greek, a literary mixture of Ionic Greek and other dialects, sometime between the late 8th to early 7th century. The poem's composition, historicity, and authorship are extensively debated (the Homeric Question), with Homeric scholars likewise debating whether the Iliad and the Odyssey were composed independently, and whether they survived via an oral or also written tradition. The poem's formulae, use of similes, and epithets are often explored by scholars. The Iliad was widely esteemed by the ancient Greeks and formed part of their standard education; the poem's conflation of different regional dialects, and its depiction of various Greek factions uniting to fight Troy, gave it strong resonance across the Hellenistic world. It was performed by professional reciters known as rhapsodes at Greek festivals such as the Panathenaia.\nCritical themes in the Iliad include kleos (glory), pride, fate, and wrath. Despite being predominantly known for its tragic and serious themes, the poem also contains instances of comedy and humor. It is frequently described as a \"heroic\" epic, centred around issues such as war, violence, and the heroic code. The poem contains detailed descriptions of ancient warfare, including battle tactics and equipment, and also explores social and domestic aspects of ancient culture, through scenes behind the walls of Troy and in the Greek camp. Additionally, the Olympian gods play a major role, aiding their favoured warriors and cities on the battlefield and intervening in personal disputes. Their anthropomorphic characterisation in the poem humanised them for Ancient Greek audiences, giving a concrete sense of their cultural and religious tradition.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Iliad",
+        "title": "Iliad"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "A Ilíada (em grego antigo: Ἰλιάς, AFI: [iːliás]) é um dos dois principais poemas épicos da Grécia Antiga, de autoria atribuída ao poeta Homero, que narra os acontecimentos decorridos no período de 51 dias durante o nono e penúltimo ano dos dez anos da Guerra de Troia, conflito empreendido para a conquista de Troia, cuja gênese radica na ira (μῆνις, mênis) de Aquiles.\nA Ilíada é atribuída a Homero, que se julga ter vivido por volta do século VIII a.C., na Jônia (atualmente, região da Turquia) e constitui o mais antigo e extenso documento literário grego e ocidental existente. Ainda hoje, contudo, se discute a verdadeira autoria e a existência real de Homero.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Il%C3%ADada",
+        "title": "Ilíada"
+      },
+      {
+        "locale": "es",
+        "synopsis": "La Ilíada​ (en griego homérico: Ἰλιάς Iliás; en griego moderno: Ιλιάδα Iliáda; en latín: Ilias) es una epopeya griega, atribuida tradicionalmente a Homero. Compuesta en hexámetros dactílicos, consta de 15 693 versos (divididos por los editores, ya en la antigüedad, en 24 cantos o rapsodias) y su trama radica en la cólera de Aquiles (μῆνις, mênis).​ Narra los acontecimientos ocurridos durante 51 días en el décimo y último año de la guerra de Troya. El título de la obra deriva de Ilión (Ἴλιον), otro nombre para denominar Troya.\nTanto la Ilíada como la Odisea fueron consideradas por los griegos de la época clásica y por las generaciones posteriores como las composiciones más importantes en la literatura de la antigua Grecia y fueron utilizadas como fundamentos de la pedagogía griega.​ Ambas forman parte de una serie más amplia de poemas épicos de diferentes autores y extensiones denominado ciclo troyano; sin embargo, de los otros poemas, únicamente han sobrevivido fragmentos.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Il%C3%ADada",
+        "title": "Ilíada"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q8275",
+  "slug": "iliad"
+}

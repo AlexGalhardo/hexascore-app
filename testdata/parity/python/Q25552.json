@@ -1,0 +1,51 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0120665",
+      "rottentomatoes": "m/secret_defense",
+      "tmdb": "49559"
+    },
+    "meta": {
+      "countries": [
+        "France"
+      ],
+      "creators": [
+        "Jacques Rivette"
+      ],
+      "genres": [
+        "drama film"
+      ],
+      "runtimeMinutes": 170
+    },
+    "popularity": 7.0,
+    "qid": "Q25552",
+    "release_date": "1998-10-29",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Secret Defense (French: Secret défense) is a 1998 French drama film directed by Jacques Rivette.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Secret_Defense_(1998_film)",
+        "title": "Top Secret"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Secret défense"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Confidencial"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q25552",
+  "slug": "top-secret"
+}

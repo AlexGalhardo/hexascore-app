@@ -1,0 +1,53 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0011667",
+      "tmdb": "288353"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Ben F. Wilson",
+        "Duke Worne"
+      ],
+      "genres": [
+        "silent film",
+        "adventure film",
+        "action film",
+        "serial film"
+      ]
+    },
+    "popularity": 6.0,
+    "qid": "Q27130",
+    "release_date": "1920-02-22",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Screaming Shadow is a 1920 American 15-chapter silent film serial directed by Ben F. Wilson and Duke Worne. The film is considered to be lost.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/The_Screaming_Shadow",
+        "title": "The Screaming Shadow"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "The Screaming Shadow é um seriado estadunidense de 1920, no gênero ação, dirigido por Ben F. Wilson e Duke Worne, em 15 capítulos, estrelado por Ben F. Wilson e Neva Gerber. Foi produzido pela Hallmark Pictures Corporation, e veiculou nos cinemas estadunidenses entre 26 de janeiro e 22 de maio de 1920.\nEste seriado é considerado perdido.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/The_Screaming_Shadow",
+        "title": "The Screaming Shadow"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "The Screaming Shadow"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q27130",
+  "slug": "the-screaming-shadow"
+}

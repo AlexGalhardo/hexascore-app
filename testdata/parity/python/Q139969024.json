@@ -1,0 +1,59 @@
+{
+  "item": {
+    "external_ids": {
+      "steam": "4435490"
+    },
+    "meta": {
+      "creators": [
+        "Infinity Ward"
+      ],
+      "genres": [
+        "first-person shooter"
+      ],
+      "platforms": [
+        "Microsoft Windows",
+        "Xbox Series X and Series S",
+        "Nintendo Switch 2",
+        "PlayStation 5"
+      ],
+      "trailers": [
+        {
+          "youtubeId": "jLbst85USN8"
+        },
+        {
+          "youtubeId": "ihbiHQ46Xto"
+        }
+      ]
+    },
+    "popularity": 20.0,
+    "qid": "Q139969024",
+    "release_date": "2026-10-23",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Call of Duty: Modern Warfare 4 is a 2026 first-person shooter game developed by Infinity Ward and published by Activision. It is the twenty-third installment in the Call of Duty series and the fourth and final entry in the rebooted Modern Warfare sub-series, following Call of Duty: Modern Warfare III (2023). It was released on October 23, 2026, for Nintendo Switch 2, PlayStation 5, Windows, and Xbox Series X/S. Prior to release, Modern Warfare 4 received positive reviews from critics, with praise for its campaign mode.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Call_of_Duty:_Modern_Warfare_4",
+        "title": "Call of Duty: Modern Warfare 4"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Call of Duty: Modern Warfare 4 (estilizado como Call of Duty: Modern Warfare 사) é um jogo de tiro em primeira pessoa, foi desenvovido pela Infinity Ward e publicado pela Activision e distribuído pela Microsoft. Foi lançado em  23 de outubro de 2026 para Microsoft Windows, Xbox Series X/S, Nintendo Switch 2 e PlayStation 5.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Call_of_Duty:_Modern_Warfare_4",
+        "title": "Call of Duty: Modern Warfare 4"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Call of Duty: Modern Warfare 4 es un juego de disparos en primera persona desarrollado por Infinity Ward y publicado por Activision. Es la vigésimo tercera entrega de la serie Call of Duty y la cuarta de la subsaga Modern Warfare, que ha sido reiniciada, después de Call of Duty: Modern Warfare III (2023). Fue lanzado el 23 de octubre de 2026 para Nintendo Switch 2, PlayStation 5, Windows y Xbox Series X/S.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Call_of_Duty:_Modern_Warfare_4",
+        "title": "Call of Duty: Modern Warfare 4"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q139969024",
+  "slug": "call-of-duty-modern-warfare-4"
+}

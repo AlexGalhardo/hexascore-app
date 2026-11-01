@@ -1,0 +1,51 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt1715368",
+      "tmdb": "106768"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Dane Boedigheimer"
+      ],
+      "episodes": 852,
+      "genres": [
+        "comedy television series"
+      ],
+      "seasons": 18
+    },
+    "popularity": 34.0,
+    "qid": "Q473204",
+    "release_date": "2009-10-09",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Annoying Orange is an American live-action/animated comedy web series created by Dane Boedigheimer (known online as DaneBoe). Set in a world of anthropomorphic food, the series follows its titular character, Orange, who always annoys others by telling crude jokes and puns and making annoying noises until their certain demises. The Annoying Orange YouTube channel has 13.9 million subscribers as of 2026.\nThe original web series has also expanded to multiple separate series, such as The Adventures of Liam the Leprechaun, The Misfortune of Being Ned, The Marshmallow Show, the television series The High Fructose Adventures of Annoying Orange, and a gaming channel, Annoying Orange Gaming, where they upload Let's Play videos. \nThe channel uploads biweekly episodes including a variety of mini-series, each dedicated to covering different themes of typical YouTube genre tropes such as Ask Orange, HOW2, The Juice, Foodsplosion, Shocktober, and more. The channel also frequently re-uploads older videos as parts of larger compilations, as seen with their weekly compilation mini-series Saturday Supercut.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Annoying_Orange",
+        "title": "Annoying Orange"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "A Laranja Irritante (no original em inglês:  The Annoying Orange) é uma websérie de animação em computação gráfica produzida pela Gag Films em parceria com Daneboe (Dane Boedigheimer). Estreou na internet em 9 de outubro de 2009, obtendo reconhecimento no início de 2010, no site YouTube, onde conseguiu sucesso internacional, principalmente no Brasil, em forma legendada. A série difundiu-se internacionalmente, com mais de dois milhões de acessos ao vídeo inicial (Hey, Apple) e mais de 108 milhões de visualizações da série inteira, até abril de 2010. Em março de 2010 foi considerada a websérie mais vista na internet pelo site Mashable. Já fez paródias com personalidades como Lady Gaga e Michael Jackson e com filmes como Jogos Mortais, De Volta para o Futuro e Matrix.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/The_Annoying_Orange",
+        "title": "The Annoying Orange"
+      },
+      {
+        "locale": "es",
+        "synopsis": "The Annoying Orange (conocida como La naranja molesta) es una serie web de comedia originaria de la plataforma YouTube, creada por la productora, actriz y cantante estadounidense Dane Boedigheimer. Trata acerca de objetos antropomórficos; el protagonista es una naranja que vive fastidiando a otras frutas, verduras u otros objetos, con bromas generalmente de humor negro, de allí el nombre de la serie. El primer episodio fue subido a la plataforma el 9 de octubre de 2009, y para fin de mes, los videos llegaron a una acumulación de 380 millones de vistas.​​ \nOriginalmente, los episodios fueron subidos en el canal de YouTube de la compañía de Boedigheimer, Gagfilms, canal llamado actualmente Dane Boe, pero cuando el primer episodio de Annoying Orange alcanzó las 11 millones de vistas, Boedigheimer se inspiró a crear un canal propio con el mismo nombre de su serie, donde realizaría exclusivamente todo el trabajo relacionado con su obra. El proyecto también contaba con un canal de YouTube diseñado para público hispanohablante, EspNaranjaMolesta,  en el que solo se dobló los 9 capítulos del canal original al español, y que actualmente está abandonado. \nEl 28 de mayo del 2012  se estrenó su show de TV en Cartoon Network de USA y el 9 de septiembre en Cartoon Network de México, que terminó siendo cancelado el 24 de marzo de 2014. A fines de 2016, el canal The Annoying Orange de YouTube contaba con cinco millones y medio de suscriptores y 4000000 millones de visitas.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/The_Annoying_Orange",
+        "title": "Annoying Orange"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q473204",
+  "slug": "annoying-orange"
+}

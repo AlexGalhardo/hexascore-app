@@ -1,0 +1,49 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "2080630",
+      "openlibrary": "OL17732899W"
+    },
+    "meta": {
+      "countries": [
+        "Mexico"
+      ],
+      "creators": [
+        "Juan Rulfo"
+      ],
+      "genres": [
+        "magic realism"
+      ]
+    },
+    "popularity": 11.0,
+    "qid": "Q1195272",
+    "release_date": "1953-09-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "El Llano en llamas is a collection of short stories written by Mexican author Juan Rulfo. Four English translations have been published: \n\nThe Burning Plain and Other Stories (University of Texas Press, 1971), translated by George D. Schade.\nThe Plain in Flames (University of Texas Press, 2012), translated by Ilan Stavans and Harold Augenbraum.\nEl Llano in flames (Structo Press, 2019), translated by Stephen Beechinor.\nThe Burning Plain (University of Texas Press, 2024), translated by Douglas J. Weatherford.\nThe stories were written over several years for different literary magazines, starting in 1945 with \"They Gave Us the Land\". The collection itself was first published in 1953 by the Fondo de Cultura Económica as part of the collection Letras Mexicanas. After its publication, two other stories, \"The Legacy of Matilde Arcángel\" and \"The Day of the Collapse\", were included in its second edition in 1970.\nThe stories in the book are set in the harsh countryside of the state of Jalisco where Rulfo was raised, with the context of post-Mexican Revolution events such as the distribution of ejidos after the land reform and the Cristero War. They explore the tragic lives of the area's inhabitants who suffer from extreme poverty, family discord, and crime. With a few bare phrases the author conveys a feeling for the bleak, harsh surroundings in which his people live.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/El_Llano_en_llamas",
+        "title": "The Burning Plain and Other Stories"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "El llano en llamas (Portugal: A planície em chamas, Brasil: Planalto em chamas, Chão em Chamas) é um livro de contos do escritor mexicano Juan Rulfo, lançado em 1953. O original trazia apenas 15 contos. A partir da segunda edição, de 1970, acrescentaram-se mais 2.\n\nTrata-se de uma obra regionalista. Todos os contos do livro utilizam uma narrativa bastante direta e lançam mão frequentemente de uma escrita coloquial e de termos típicos regionais nas vozes dos personagens, focalizando aspectos do semi-árido mexicano, em especial da região natal do autor, o estado de Jalisco: a pobreza, a morte, a violência, a distância e a omissão do governo, a falta de esperança e de perspectivas. A época é incerta, mas algumas histórias referem-se diretamente à Revolução Mexicana e à Guerra Cristera.\nEl llano en llamas foi o livro de estréia de Rulfo. As qualidades e a originalidade do livro tornaram seu autor famoso. Diferentemente da sua outra obra mestra, Pedro Páramo, aqui Rulfo não emprega o Realismo mágico, e sim um realismo bastante cru, beirando por vezes o naturalismo.\nNo Brasil, o livro foi lançado em duas edições:\n\nPlanalto em chamas, com tradução de Eliane Zaguri, pela Paz e Terra, em 1998\nChão em chamas, com tradução de Eric Nepomuceno, pela Editora Record, em 2004\nO título da primeira traduz por Planalto, que pode referir-se à região central do Brasil, o termo Llano, que corresponde à região mexicana onde se passam as histórias narradas. Já o título da segunda preserva a aliteração do título original.\n\nOs contos que compõem a obra são os seguintes:\n\nMacario\nNos han dado la tierra\nLa cuesta de las comadres\nEs que somos muy pobres\nEl hombre\nEn la madrugada\nTalpa\nEl llano en llamas\nDiles que no me maten\nLuvina\nLa noche que lo dejaron solo\nAcuérdate\n¿No oyes ladrar a los perros?\nPaso del Norte\nAnacleto Morones\nLa herencia de Matilde Arcángel\nEl día del derrumbe",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/El_llano_en_llamas",
+        "title": "El llano en llamas"
+      },
+      {
+        "locale": "es",
+        "synopsis": "El llano en llamas​  libro de cuentos del escritor mexicano Juan Rulfo, publicado el 1 de septiembre de 1953 bajo la editorial Fondo de Cultura Económica. Fue la primera publicación del escritor, si bien ciertos relatos habían sido publicados anteriormente en la revista América, en 1950.​\nEl clima que presentan los cuentos es, en cierto modo, una anticipación de lo que luego sería la primera novela de Rulfo, Pedro Páramo. Todos presentan una visión desesperanzada del mundo, retratando injusticias, casi siempre a través del monólogo interior de los personajes. Aunque se trata de historias diferentes, tienen en común la memoria del pasado y los estragos de la Revolución mexicana, que tanto marcó la vida y obra de Rulfo.\nLa obra se encuentra ubicada dentro del realismo mágico.​ Además, se destaca en ella el uso del lenguaje popular, y la narración, en su mayor parte, en la voz de los personajes.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/El_llano_en_llamas",
+        "title": "El llano en llamas"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q1195272",
+  "slug": "the-burning-plain-and-other-stories"
+}

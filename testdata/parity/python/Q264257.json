@@ -1,0 +1,55 @@
+{
+  "item": {
+    "external_ids": {
+      "hltb": "57248",
+      "igdb": "tribal-wars--1",
+      "steam": "675690"
+    },
+    "meta": {
+      "countries": [
+        "Germany"
+      ],
+      "creators": [
+        "InnoGames"
+      ],
+      "genres": [
+        "real-time strategy"
+      ],
+      "platforms": [
+        "iOS",
+        "Microsoft Windows",
+        "macOS"
+      ]
+    },
+    "popularity": 29.0,
+    "qid": "Q264257",
+    "release_date": "2003-06-10",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Tribal Wars (TW) is a browser-based, real-time strategy, massively multiplayer online game set in the Middle Ages. The game is set with each player starting off controlling a small village, with the objective being to slowly expand and conquer new villages through the formation of complex armies and a tactical combat system. The game incorporates multiple components of teamwork, planning, and strategy. The game allows players to collect resources, build armies, construct buildings, combat other armies (players or neutral), and conquer new villages. The game also allows for a level of player-specific customization, in regards to village names, army types, and troop-counts. The game operates under world-specific settings that vary from world to world.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Tribal_Wars",
+        "title": "Tribal Wars"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Tribal Wars(pt-BR) ou Tribos(pt-PT?) é um jogo multijogador massivo online (MMO) de estratégia em tempo real onde o objetivo é aniquilar as tribos e aldeias inimigas baseado na idade média, criado pela empresa alemã InnoGames GmbH. Ele segue o mesmo estilo de Travian e Ikariam, cada jogador é senhor de uma pequena aldeia, qual deve ajudar a ganhar poder e glória. \nO registro no jogo é gratuito, porém existe a possibilidade de ter uma conta paga, chamada \"Conta Premium\". Possuidores desse tipo de conta adquirem variados privilégios, como receber uma notificação de quando um amigo fica online, adicionar várias edificações simultaneamente, pesquisar várias tecnologias no ferreiro, entre outros.\nExistem os mundos do jogo, além das rodadas Speed, o mundo Clássico e o mundo Casual. O número de jogadores em todo mundo passa dos 50 milhões, sendo um dos jogos de estratégia mais jogados no mundo.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Tribal_Wars",
+        "title": "Tribal Wars"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Guerras Tribales, o Tribal Wars (TW) en inglés, es un juego de navegador multijugador masivo de estrategia en tiempo real (MMORTS), ambientado en la Edad Media. En Guerras Tribales, cada jugador comienza con un poblado y debe hacerlo crecer para posteriormente conquistar los pueblos de otros jugadores y expandir su territorio.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Guerras_Tribales",
+        "title": "Guerras Tribales"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q264257",
+  "slug": "tribal-wars"
+}

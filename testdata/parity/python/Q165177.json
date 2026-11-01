@@ -1,0 +1,46 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0364166",
+      "tmdb": "15148"
+    },
+    "meta": {
+      "countries": [
+        "United Kingdom"
+      ],
+      "genres": [
+        "ranking show"
+      ]
+    },
+    "popularity": 34.0,
+    "qid": "Q165177",
+    "release_date": null,
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Great Britons is a television series that was broadcast by the BBC in 2002. It was based on a television poll conducted to determine who the British people at that time considered the greatest Britons in history. The series included individual programmes featuring the top ten, with viewers having further opportunity to vote after each programme. It concluded with a debate and final determination of the ranking of the top ten. Although many living people were included among the top 100, all of the top ten were deceased.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Great_Britons",
+        "title": "Great Britons"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "100 Greatest Britons foi uma série de televisão transmitida pela BBC em 2002. Consistiu de uma votação popular feita para determinar quais eram os maiores britânicos da história. A série apresentava episódios individuais mostrando os dez mais votados até aquela altura, com os espectadores tendo a chance de votar novamente após cada programa.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/100_Greatest_Britons",
+        "title": "100 Greatest Britons"
+      },
+      {
+        "locale": "es",
+        "synopsis": "100 Greatest Britons fue un programa de televisión británico de 2002 en el que los telespectadores votaron a los que consideraron los cien personajes británicos más importantes de todos los tiempos.​​​\nEl formato ha sido adaptado o copiado por varias cadenas de televisión en todo el mundo, que también han elegido a sus propios ciudadanos más importantes de la historia.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/100_Greatest_Britons",
+        "title": "100 Greatest Britons"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q165177",
+  "slug": "great-britons"
+}

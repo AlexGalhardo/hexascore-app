@@ -1,0 +1,55 @@
+{
+  "item": {
+    "external_ids": {
+      "hltb": "62902",
+      "igdb": "dot-kkrieger-chapter-1"
+    },
+    "meta": {
+      "countries": [
+        "Germany"
+      ],
+      "creators": [
+        ".theprodukkt",
+        "Farbrausch"
+      ],
+      "genres": [
+        "first-person shooter",
+        "action game",
+        "science fiction video game"
+      ],
+      "platforms": [
+        "Microsoft Windows"
+      ]
+    },
+    "popularity": 16.0,
+    "qid": "Q160083",
+    "release_date": "2004-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": ".kkrieger (from Krieger, German for warrior) is a first-person shooter video game created by German demogroup .theprodukkt (a former subdivision of Farbrausch), which won first place in the 96k game competition at Breakpoint in April 2004. The game has never been fully released, remaining instead in the beta stage of development as of 2026, which renders it a perpetual beta.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/.kkrieger",
+        "title": ".kkrieger"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": ".kkrieger (do alemão Krieger, significando guerreiro) é um jogo eletrônico de tiro em primeira pessoa criado pelo grupo da demoscene alemã .theprodukkt. O jogo ainda está em fase beta de desenvolvimento, e foi lançado sob licença gratuita (freeware).\nO jogo inteiro utiliza apenas 97,280 bytes (95 Kb) de espaço, apesar de conter grande qualidade gráfica - em contraste com jogos atuais que ocupam CDs ou DVDs inteiros: um DVD comum possui aproximadamente 5,7 gigabytes - mais de 50,000 vezes mais do que o jogo completo. .kkrieger venceu dois prêmios de desenvolvimento de jogos na \"Deutscher Entwiclerpreis\" em 2006: inovação e avanços.\nO grupo .theprodukkt está desenvolvendo .kkrieger desde 2002, utilizando o software criado por eles mesmos chamado .werkkzeug. Em 2014, o código-fonte da terceira versão do .werkkzeug foi disponibilizado gratuitamente na internet pelos desenvolvedores, em licença BSD ou como domínio público.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/.kkrieger",
+        "title": ".kkrieger"
+      },
+      {
+        "locale": "es",
+        "synopsis": ".kkrieger es un videojuego desarrollado por .theprodukkt en 2004 para Microsoft Windows.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/.kkrieger",
+        "title": ".kkrieger"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q160083",
+  "slug": "kkrieger"
+}

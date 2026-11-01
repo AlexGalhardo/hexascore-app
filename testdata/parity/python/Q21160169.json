@@ -1,0 +1,36 @@
+{
+  "item": {
+    "external_ids": {
+      "isbn13": "9781501153648",
+      "openlibrary": "OL33860319M"
+    },
+    "meta": {
+      "creators": [
+        "John Koenig"
+      ]
+    },
+    "popularity": 8.0,
+    "qid": "Q21160169",
+    "release_date": null,
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Dictionary of Obscure Sorrows is an English word-construction project by John Koenig, seeking to coin and define neologisms for emotions not yet described in language. The project was launched as a website and YouTube channel, but was later compiled into a printed dictionary in 2021. The entries include extensive constructed etymologies based on Koenig's own research on linguistics, with roots and suffixes taken from Latin, Germanic, and Ancient Greek sources in emulation of existing English terms. The website includes verbal entries in the style of a conventional dictionary, and the YouTube channel picks some of those words and tries to express their meaning more thoroughly in the form of video essays. The book takes from those previous formats, so it has both dictionary style entries and some longer essays on specific words.\nKoenig's terms are often based on what was described as \"feelings of existentialism\" and are meant to \"fill a hole in the language\", often from reader contributions of specific emotions. Some videos incorporate large numbers of photographs. For example, the video for Vemödalen (See Notable Words section) combines 465 similar images taken by different photographers into a continuous sequence. Other videos are more personal, such as Avenoir, which involves a \"collage of his own home movies to piece together an exploration of life's linearity.\"\nThe official book for the Dictionary of Obscure Sorrows was released by Simon & Schuster on November 16, 2021.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/The_Dictionary_of_Obscure_Sorrows",
+        "title": "The Dictionary of Obscure Sorrows"
+      },
+      {
+        "locale": "es",
+        "synopsis": "The Dictionary of Obscure Sorrows (en español, El Diccionario de las Penas Oscuras) es un sitio web, un canal de YouTube y posteriormente un libro creados por el escritor suizo-estadounidense John Koenig. En éstos, Koenig inventa neologismos para nombrar a varias emociones muy específicas que hasta entonces carecían de un nombre qué las identificasen.​\nEl diccionario incluye las entradas verbales del sitio web con descripciones normalmente de un párrafo y vídeos de YouTube para cada entrada. Los neologismos, aunque creados íntegramente por Koenig, se basan en su investigación sobre las etimologías y los significados de los prefijos, sufijos y raíces de palabras ya utilizados en diversos idiomas.​\nLos términos suelen basarse en «sentimientos existencialistas»​  y pretenden «llenar un vacío en el lenguaje», recurriendo a menudo a las aportaciones de los lectores sobre emociones específicas.​ Algunos vídeos incluyen una gran cantidad de fotografías, como el vídeo de Vemödalen, que utiliza una «fusión casi exhaustiva —pero impecable— de 465 fotos similares de diferentes fotógrafos». Otros vídeos son más personales, como Avenoir, que consiste en un «collage de sus propias películas para reconstruir una exploración de la linealidad de la vida».​​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/The_Dictionary_of_Obscure_Sorrows",
+        "title": "The Dictionary of Obscure Sorrows"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q21160169",
+  "slug": "the-dictionary-of-obscure-sorrows"
+}

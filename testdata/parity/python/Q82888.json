@@ -1,0 +1,42 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "551321",
+      "openlibrary": "OL5587820W"
+    },
+    "meta": {
+      "countries": [
+        "United Kingdom"
+      ],
+      "creators": [
+        "Tom Shippey"
+      ],
+      "genres": [
+        "non-fiction"
+      ]
+    },
+    "popularity": 8.0,
+    "qid": "Q82888",
+    "release_date": "1982-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Road to Middle-Earth: How J. R. R. Tolkien Created a New Mythology is a scholarly study of the Middle-earth works of J. R. R. Tolkien written by Tom Shippey and first published in 1982. The book discusses Tolkien's philology, and then examines in turn the origins of The Hobbit, The Lord of the Rings, The Silmarillion, and his minor works. An appendix discusses Tolkien's many sources.\nTwo further editions extended and updated the work, including a discussion of Peter Jackson's film version of The Lord of the Rings. \nThe book's various versions, including new editions in 1993 and 2005, have been welcomed by Tolkien scholars and others as rigorous, convincing, and \"the single best book written on Tolkien\". Shippey won the 1984 Mythopoeic Scholarship Award in Inklings Studies for the book.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/The_Road_to_Middle-Earth",
+        "title": "The Road to Middle-earth"
+      },
+      {
+        "locale": "es",
+        "synopsis": "El camino a la Tierra Media es un estudio académico de las obras de J. R. R. Tolkien escrito por Tom Shippey. Fue publicado por primera vez por Allen & Unwin en 1982 en Gran Bretaña, con una segunda edición publicada en 1993 por Harper Collins y una tercera, revisada y expandida, publicada en 2003. Actualmente es publicado por Houghton Mifflin en Estados Unidos.\nEl libro habla de las inspiraciones de Tolkien en la creación de la Tierra Media y la escritura de obras como El hobbit, El Señor de los Anillos y El Silmarillion. La segunda edición incluyó comentarios de los 12 volúmenes de La historia de la Tierra Media, compilados y editados por Christopher Tolkien. Un tema recurrente a lo largo de El camino a la Tierra Media es el detallado estudio lingüístico de Tolkien (particularmente del nórdico antiguo y del anglosajón) y la creación de lenguas (como el sindarin y el khuzdul), que aparecen abundantemente en todas sus obras. Shippey descubrió esto durante su estancia en la Universidad de Oxford, cuando ofrecía el mismo plan de estudios que Tolkien, en una época en la que este aún pasaba tiempo allí.​\nLa edición revisada y expandida publicada en 2003 fue bien recibida por los críticos, que dijeron de Shippey que «escribe con claridad inusual y presenta bien sus argumentos».​ En 1984, el libro recibió Mythopoeic Scholarship Award de estudios sobre los Inklings,​ un premio «otorgado a libros sobre J. R. R. Tolkien [...] que hagan contribuciones importantes a los estudios sobre los Inklings».​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/El_camino_a_la_Tierra_Media",
+        "title": "El camino a la Tierra Media"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q82888",
+  "slug": "the-road-to-middle-earth"
+}

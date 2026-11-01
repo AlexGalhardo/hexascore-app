@@ -1,0 +1,46 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "1031493",
+      "openlibrary": "OL810991W"
+    },
+    "meta": {
+      "countries": [
+        "England"
+      ],
+      "creators": [
+        "John Milton"
+      ]
+    },
+    "popularity": 74.0,
+    "qid": "Q28754",
+    "release_date": "1667-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Paradise Lost is an epic poem in blank verse by the English poet John Milton (1608–1674). The poem concerns the biblical story of the fall of man: the temptation of Adam and Eve by the fallen angel Satan and their expulsion from the Garden of Eden. The first version, published in 1667, consists of ten books with over ten thousand lines of verse. A second edition followed in 1674, arranged into twelve books (in the manner of Virgil's Aeneid) with minor revisions throughout. It is considered to be Milton's masterpiece, and it helped solidify his reputation as one of the greatest English poets.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Paradise_Lost",
+        "title": "Paradise Lost"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Paraíso Perdido (em inglês: Paradise Lost) é um poema épico do século XVII, escrito por John Milton, originalmente publicado em 1667 em dez cantos. Uma segunda edição foi publicada em 1674 em doze cantos, com pequenas revisões do autor.\nO poema narra as penas dos anjos caídos após a rebelião no paraíso, o ardil de Satanás para fazer Adão e Eva comerem o fruto proibido da Árvore do Conhecimento, e a subsequente Queda do homem. Após uma invocação à Musa, o poeta descreve brevemente a rebelião dos anjos liderados por Lúcifer, a qual, fracassada, lhes custou o paraíso. Despertando no inferno depois de nove dias de confusão, estes deliberam sobre o que fazer, e Lúcifer, daí por diante chamado Satanás (do hebraico שָטָן, Satan: adversário), faz saber de um novo mundo e uma nova criatura — o homem — que seriam criados por Deus. Os demônios decidem corromper esse novo ser e desviá-lo do Criador, seu inimigo. Entrementes, no paraíso, Deus segreda a seu Filho a iminente transgressão do homem e todo o sofrimento que se lhe seguirá, e o Filho se oferece a si mesmo em sacrifício pela redenção da humanidade. Para assegurar que o homem seja responsável por seus atos, Deus envia um anjo para notificar Adão e Eva do perigo; no entanto, a despeito da advertência, Eva é seduzida por Satanás, então no corpo de uma serpente, e come o fruto proibido, fazendo-o comer também a Adão. Os pais da humanidade são expulsos do Jardim do Éden e tomam conhecimento, como toda a sua descendência, do pecado e da morte; mas uma revelação do futuro consola o primeiro homem, que testemunha o nascimento e a morte do Cristo e a remissão dos nossos pecados.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Para%C3%ADso_Perdido",
+        "title": "Paraíso Perdido"
+      },
+      {
+        "locale": "es",
+        "synopsis": "El paraíso perdido (Paradise Lost en inglés) es un poema narrativo de John Milton (1608-1674), publicado en 1667. Se lo considera un clásico de la literatura inglesa y ha dado origen a un tópico literario muy difundido en la literatura universal.\nEstá dividido en doce libros​ y sobrepasa los 10 000 versos escritos sin rima.​ El poema es una epopeya acerca del tema bíblico de la caída de Adán y Eva. La obra trata, fundamentalmente, sobre el problema del mal y el sufrimiento en el sentido de responder a la pregunta de por qué un Dios bueno y todopoderoso decide permitirlos cuando le sería fácil evitarlos.[cita requerida]\nMilton comienza expresando el fin de «justificar los caminos de Dios» respondiendo a través de una descripción psicológica de los principales protagonistas del poema: Dios, Adán, Eva y el Diablo, cuyas actitudes acaban por revelar el mensaje esperanzador que se esconde tras la pérdida del paraíso original. En el poema, el cielo y el infierno representan estados de ánimo antes que espacios físicos. \nLa obra comienza en el infierno (descrito mediante referencias a la permanente insatisfacción y desesperación de sus habitantes), desde donde Satanás (definido por el sufrimiento) decide vengarse de Dios de forma indirecta, esto es, a través de los seres recién creados que viven en un estado de felicidad permanente.\nEn 1671 Milton publicó El paraíso recobrado, un poema en cuatro libros en el que continúa la épica satánica del primer poema, pero centrado esta vez en los fracasados esfuerzos del diablo por tentar a Jesús durante su estancia en el desierto.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/El_para%C3%ADso_perdido",
+        "title": "Paradise Lost"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q28754",
+  "slug": "paradise-lost"
+}

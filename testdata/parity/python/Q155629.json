@@ -1,0 +1,59 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0063951",
+      "metacritic": "tv/sesame-street",
+      "rottentomatoes": "tv/sesame_street",
+      "tmdb": "502"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Joan Ganz Cooney",
+        "Lloyd Morrisett"
+      ],
+      "episodes": 4744,
+      "genres": [
+        "sketch comedy",
+        "children's television series",
+        "educational television",
+        "puppet show",
+        "educational entertainment"
+      ],
+      "runtimeMinutes": 25,
+      "seasons": 56
+    },
+    "popularity": 92.0,
+    "qid": "Q155629",
+    "release_date": "1969-11-10",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Sesame Street is an American educational children's television series that combines live-action, sketch comedy, animation, and puppetry. It is produced by Sesame Workshop (known as the Children's Television Workshop until June 2000) and was created by Joan Ganz Cooney and Lloyd Morrisett. It features Jim Henson's Muppets, and includes short films, with humor and cultural references. It premiered on November 10, 1969, to positive reviews, some controversy, and high viewership. It has aired on the United States national public television provider PBS since its debut, with its first run moving to premium channel HBO on January 16, 2016, then its sister streaming service HBO Max on November 12, 2020, which continued through the service's rebrand as Max in 2023 and as HBO Max in 2025, and most recently Netflix on November 10, 2025.\nThe show's format consists of a combination of commercial television production elements and techniques that have evolved to reflect changes in American culture and audiences' viewing habits. It was the first children's TV show to use educational goals and a curriculum to shape its content, and the first show whose educational effects were formally studied. Its format and content have undergone significant changes over the years to reflect changes to its curriculum.\nShortly after its creation, its producers developed what came to be called the CTW model (after the production company's previous name), a system of planning, production, and evaluation based on collaboration between producers, writers, educators, and researchers. The show was initially funded by government and private foundations but has become somewhat self-supporting due to revenues from licensing arrangements, international sales, and other media. By 2006, independently produced versions (co-productions) of Sesame Street were broadcast in 20 countries. In 2001, there were over 120 million viewers of various international versions of Sesame Street; and by its 40th anniversary in 2009, it was broadcast in more than 140 countries.\nSince its debut, Sesame Street has garnered widespread acclaim, and it is considered one of the greatest television series of all time. By the show's 40th anniversary in 2009 it was the 15th-highest-rated children's television show in the United States. A 1996 survey found that 95% of all American preschoolers had watched it by the time they were three. In 2018, it was estimated that 86 million Americans had watched it as children. As of 2022, it has won 222 Emmy Awards and 11 Grammy Awards, more than any other children's show. Sesame Street remains one of the longest-running shows in the world. In 2019, the series was chosen for preservation in the American Archive of Public Broadcasting by the Library of Congress.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Sesame_Street",
+        "title": "Sesame Street"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Sesame Street (bra: Vila Sésamo; prt: Rua Sésamo) é uma série de televisão educativa estadunidense para crianças que combina live-action, comédia de esquetes, animação e marionetes. É produzida pela Sesame Workshop (anteriormente conhecida como Children's Television Workshop até junho de 2000) e foi criada por Joan Ganz Cooney e Lloyd Morrisett. É conhecida por suas imagens comunicadas através do uso dos Muppets de Jim Henson e inclui curtas-metragens com humor e referências culturais. Estreou em 10 de novembro de 1969, recebendo críticas positivas, alguma controvérsia e uma grande audiência. A série é transmitida pela PBS, a emissora nacional de televisão pública dos Estados Unidos, desde sua estreia, e sua primeira exibição passou para o canal premium HBO em 16 de janeiro de 2016, e posteriormente para o serviço de streaming Max em 2020. Sesame Street é um dos programas mais duradouros do mundo.\nO formato do programa consiste em uma combinação de elementos e técnicas de produção televisiva comercial que evoluíram para refletir as mudanças na cultura americana e nos hábitos de visualização do público. Foi o primeiro programa de TV infantil a utilizar metas educacionais e um currículo para moldar seu conteúdo, e o primeiro programa cujos efeitos educacionais foram estudados formalmente. Seu formato e conteúdo passaram por mudanças significativas para refletir as alterações em seu currículo.\nPouco depois de sua criação, os produtores desenvolveram o que veio a ser chamado de Modelo CTW (em referência ao nome anterior da empresa de produção), um sistema de planejamento, produção e avaliação baseado na colaboração entre produtores, roteiristas, educadores e pesquisadores. O programa foi inicialmente financiado por órgãos governamentais e fundações privadas, mas se tornou em parte autossustentável devido às receitas provenientes de acordos de licenciamento, vendas internacionais e outros meios de comunicação. Até 2006, versões independentemente produzidas (\"coproduções\") da Sesame Street foram transmitidas em 20 países. Em 2001, havia mais de 120 milhões de espectadores em diversas versões internacionais da Sesame Street; e no seu 40.º aniversário, em 2009, o programa era transmitido em mais de 140 países.\nNaquela época, Sesame Street era o 15.º programa de televisão infantil com maior audiência nos Estados Unidos. Uma pesquisa de 1996 constatou que 95% de todas as crianças em idade pré-escolar nos Estados Unidos haviam assistido ao programa até completarem três anos. Em 2018, estimava-se que 86 milhões de americanos haviam assistido ao programa quando crianças. Até 2022, o programa havia ganhado 222 Emmy Awards e 11 Grammy Awards, mais do que qualquer outro programa infantil.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Sesame_Street",
+        "title": "Sesame Street"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Sesame Street es una serie de televisión educativa estadounidense apta para todo público, muy conocida por sus personajes títeres, The Muppets.\nSu primera emisión en los Estados Unidos fue el 10 de noviembre de 1969 por la cadena pública National Educational Television (NET) (actual Public Broadcasting Service -PBS), y llegó a alcanzar un total 4.698 episodios en su temporada 54, lo que lo convierte en el programa para niños más duradero de toda la historia de la televisión, seguido por Bob Esponja.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Sesame_Street",
+        "title": "Sesame Street"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q155629",
+  "slug": "sesame-street"
+}

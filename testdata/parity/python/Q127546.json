@@ -1,0 +1,46 @@
+{
+  "item": {
+    "external_ids": {
+      "goodreads": "1146102",
+      "openlibrary": "OL2699951W"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Eve Ensler"
+      ]
+    },
+    "popularity": 34.0,
+    "qid": "Q127546",
+    "release_date": null,
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "The Vagina Monologues is an episodic play written in 1996 by V (formerly known as Eve Ensler) which developed and premiered at HERE Arts Center, an off-off-Broadway venue in New York, and was followed by an off-Broadway run at the Westside Theatre. The play explores consensual and nonconsensual sexual experiences, body image, genital mutilation, direct and indirect encounters with sexual reproduction, vaginal care, menstruation, prostitution, and several other topics through the eyes of women with various ages, races, sexualities, and other differences.\nCharles Isherwood of The New York Times called the play \"probably the most important piece of political theater of the last decade.\"\nIn 2018, The New York Times stated \"No recent hour of theater has had a greater impact worldwide\" in an article titled \"The Great Work Continues: The 25 Best American Plays Since 'Angels in America'\".\nV originally starred in both the HERE premiere and in the first off-Broadway production, which was produced by David Stone, Nina Essman, Dan Markley, The Araca Group, Willa Shalit and the West Side Theater.  When she left the play, it was recast with three celebrity monologists. The play has been staged internationally, and a television version featuring V, was produced by cable TV channel HBO. In 1998, V and others, including Willa Shalit, a producer of the Westside Theatre production, launched V-Day, a global non-profit movement that has raised over US$100 million for groups working to end violence against women (including those who hold fluid identities that are subject to gender-based violence), through benefits of The Vagina Monologues.\nIn 2011, V was awarded the Isabelle Stevenson Award at the 65th Tony Awards, which recognizes an individual from the theater community who has made a substantial contribution of volunteered time and effort on behalf of humanitarian, social service, or charitable organizations for her creation of the V-Day movement.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/The_Vagina_Monologues",
+        "title": "The Vagina Monologues"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Os Monólogos da Vagina é um espetáculo teatral escrito pela autora norte-americana Eve Ensler. A produção já recebeu diversas adaptações para outros países, e uma versão para televisão com a presença de Ensler já foi produzida pela rede HBO.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Os_Mon%C3%B3logos_da_Vagina",
+        "title": "Os Monólogos da Vagina"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Los monólogos de la vagina es una obra teatral escrita por la feminista estadounidense Eve Ensler que se ha vuelto el epicentro de un movimiento sin ánimo de lucro que lucha en contra de la violencia de género.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Los_mon%C3%B3logos_de_la_vagina",
+        "title": "Los monólogos de la vagina"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q127546",
+  "slug": "the-vagina-monologues"
+}

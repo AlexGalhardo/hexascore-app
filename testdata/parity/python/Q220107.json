@@ -1,0 +1,54 @@
+{
+  "item": {
+    "external_ids": {
+      "hltb": "15315",
+      "igdb": "zoo-tycoon-2",
+      "imdb": "tt0910981"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Blue Fang Games"
+      ],
+      "genres": [
+        "business simulation game"
+      ],
+      "platforms": [
+        "Microsoft Windows",
+        "macOS"
+      ]
+    },
+    "popularity": 25.0,
+    "qid": "Q220107",
+    "release_date": "2004-11-09",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Zoo Tycoon 2 is a business simulation video game developed by Blue Fang Games and published by Microsoft Game Studios and MacSoft. Originally released in 2004 for Microsoft Windows, Zoo Tycoon 2 is also available for Windows Mobile, PDA, and Mac OS X, although expansions are not included in the Mac version. A Nintendo DS version, titled Zoo Tycoon 2 DS, was released in 2008.\nSimilar to its predecessor, 2001's Zoo Tycoon, the objective is to build and operate a zoo by creating exhibits and aquariums, keeping guests and animals happy, and maintaining employees, finances, terrain, foliage, and scenery.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Zoo_Tycoon_2",
+        "title": "Zoo Tycoon 2"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Zoo Tycoon 2"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Zoo Tycoon 2 es un videojuego de simulación económica cuyo objetivo principal consiste en la creación y administración de un zoológico,a fin de recaudar dinero para su reinversion, satisfaciendo las necesidades de sus visitantes, contratado personal para cuidar animales, comprando edificios y atracciones, entre otras actividades.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Zoo_Tycoon_2",
+        "title": "Zoo Tycoon 2"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q220107",
+  "slug": "zoo-tycoon-2"
+}

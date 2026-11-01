@@ -1,0 +1,54 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt39020004",
+      "metacritic": "tv/spartacus-gods-of-the-arena",
+      "rottentomatoes": "tv/spartacus/s02",
+      "tmdb": "327461"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Steven S. DeKnight"
+      ],
+      "episodes": 6,
+      "genres": [
+        "historical drama"
+      ],
+      "runtimeMinutes": 55,
+      "seasons": 1
+    },
+    "popularity": 25.0,
+    "qid": "Q303352",
+    "release_date": "2011-01-21",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Spartacus: Gods of the Arena is a television miniseries created by Steven S. DeKnight for Starz. It is a prequel to Spartacus, which premiered in 2011. The series follows the character Gannicus (Dustin Clare), the first gladiator representing Lentulus Batiatus to become Champion of Capua. Cast members and characters reprised from the original series include John Hannah as Batiatus, Lucy Lawless as Lucretia, Peter Mensah as Oenomaus, Nick E. Tarabay as Ashur, Lesley-Ann Brandt as Naevia, Antonio Te Maioha as Barca, and Manu Bennett as Crixus.\nThe miniseries aired in Canada on Movie Central and The Movie Network, on Sky1 in the United Kingdom and on FX in Latin America.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Spartacus:_Gods_of_the_Arena",
+        "title": "Spartacus: Gods of the Arena"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Spartacus: Gods of the Arena (Brasil: Spartacus Origens: Deuses da Arena no DVD e Spartacus: Viva a Origem no FX Brasil / Portugal: Spartacus, Os Deuses da Arena) é uma minissérie televisiva exibida originalmente pela Starz entre 21 de Janeiro e 25 de fevereiro de 2011, nos Estados Unidos, sendo a prequela da série Spartacus. \nTotalizando 6 episódios, a minissérie segue o personagem Gannicus ([Dustin Clare), o primeiro gladiador a se tornar campeão de Cápua. O elenco e personagens foram reprisados da série original, incluindo, Lucy Lawless como Lucretia, John Hannah como Batiatus, Peter Mensah como Oenomaus, e Manu Bennett como Crixus. Andy Whitfield fez uma pequena aparição como Spartacus. Como na primeira temporada, a série traz muitas cenas de conteúdo violento, além de sexo e nudez.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Spartacus:_Gods_of_the_Arena",
+        "title": "Spartacus: Gods of the Arena"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Spartacus: dioses de la arena o Espartaco: dioses de la arena (en inglés: Spartacus: Gods of the Arena) es una miniserie de la cadena Starz de televisión y precuela a Spartacus: sangre y arena. Comenzó su emisión en Estados Unidos el 21 de enero de 2011. La serie trabaja el papel de Gánico (Dustin Clare), el primer gladiador que se hace Campeón de Capua. Los miembros del reparto incluyen a John Hannah como Batiatus, Lucy Lawless como Lucretia, Peter Mensah como Oenomaus, Nick Tarabay como Ashur, Lesley-Ana Brandt como Naevia, y Manu Bennett como Crixus. \nEl motivo de la creación de esta serie se debido al retraso de la filmación de la segunda temporada de la historia, llamada Spartacus: Vengeance, por el tratamiento al que se sometió el actor Andy Whitfield para el linfoma no-Hodgkin que estaba padeciendo y poder continuar con su rol de Espartaco. Esta situación no se pudo dar, ya que el actor murió el 11 de septiembre de 2011. \nIGN otorgó una nota muy alta a la serie, sobre todo al final, dándole un 9,5/10 y llamándola «increíble».",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Spartacus:_Gods_of_the_Arena",
+        "title": "Espartaco: Dioses de la arena"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q303352",
+  "slug": "spartacus-gods-of-the-arena"
+}

@@ -1,0 +1,33 @@
+{
+  "item": {
+    "external_ids": {},
+    "meta": {
+      "creators": [
+        "John Stuart Mill"
+      ]
+    },
+    "popularity": 7.0,
+    "qid": "Q98394655",
+    "release_date": null,
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Three Essays on Religion: Nature, the Utility of Religion, and Theism is an 1874 book by the English philosopher John Stuart Mill, published posthumously with an introductory notice by his stepdaughter Helen Taylor. It contains three essays written at different periods of his life: \"Nature\" and \"Utility of Religion\", composed between 1850 and 1858, and \"Theism\", written between 1868 and 1870. The essays examine the relationship between nature, morality, and religious belief. Mill criticises traditional religious doctrines, questions the existence of an omnipotent and benevolent God, and considers a secular \"religion of humanity\" as an alternative to supernatural religion.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Three_Essays_on_Religion",
+        "title": "Three Essays on Religion"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Tres ensayos sobre la religión: la naturaleza, la utilidad de la religión y el teísmo (en inglés: Three Essays on Religion: Nature, the Utility of religion, and Theism) es un libro de 1874 del filósofo inglés John Stuart Mill, publicado póstumamente por su hijastra Helen Taylor, quien también escribió la introducción.Se compone de tres ensayos: \"La naturaleza\" y \"La utilidad de la religión\", ambos escritos entre 1850 y 1858, mientras que \"El teísmo\" se compuso entre 1868 y 1870.​ El libro es crítico con los puntos de vista religiosos tradicionales y, en cambio, aboga por una \"religión de la humanidad\".​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Tres_ensayos_sobre_la_religi%C3%B3n",
+        "title": "Tres ensayos sobre la religión"
+      }
+    ],
+    "type": "book"
+  },
+  "qid": "Q98394655",
+  "slug": "three-essays-on-religion"
+}

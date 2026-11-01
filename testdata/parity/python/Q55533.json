@@ -1,0 +1,57 @@
+{
+  "item": {
+    "external_ids": {
+      "gog": "game/saboteur_ii_avenging_angel",
+      "hltb": "75614",
+      "igdb": "saboteur-ii-avenging-angel",
+      "steam": "1119030"
+    },
+    "meta": {
+      "countries": [
+        "United Kingdom"
+      ],
+      "genres": [
+        "action-adventure game",
+        "platform game"
+      ],
+      "platforms": [
+        "ZX Spectrum",
+        "DOS",
+        "Amstrad CPC",
+        "Commodore 64",
+        "Nintendo Switch",
+        "Microsoft Windows"
+      ]
+    },
+    "popularity": 6.0,
+    "qid": "Q55533",
+    "release_date": "1987-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Saboteur II: Avenging Angel, also known as  Saboteur 2, is an action-adventure game created by Clive Townsend and released by Durell Software in 1987 for the ZX Spectrum, Amstrad CPC, Commodore 64, and MS-DOS compatible operating systems. A sequel to 1985's Saboteur, the player controls a sister of Ninja from the first game on a mission to avenge his death. Saboteur II was one of the first action-adventure games with a female protagonist and was well received by critics.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Saboteur_II:_Avenging_Angel",
+        "title": "Saboteur II: Avenging Angel"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Saboteur II: Avenging Angel"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Saboteur II: Avenging Angel es un juego de acción con elementos de aventura, publicado en 1987 por Durell Software para varios ordenadores de 8 bits y PC. Fue programado por Clive Townsend.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Saboteur_II:_Avenging_Angel",
+        "title": "Saboteur II: Avenging Angel"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q55533",
+  "slug": "saboteur-ii-avenging-angel"
+}

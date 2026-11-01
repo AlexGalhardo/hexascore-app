@@ -1,0 +1,55 @@
+{
+  "item": {
+    "external_ids": {
+      "igdb": "star-wars-jedi-starfighter",
+      "imdb": "tt0316673"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Lucasfilm Games"
+      ],
+      "genres": [
+        "action game"
+      ],
+      "platforms": [
+        "Xbox",
+        "PlayStation 2",
+        "PlayStation 3",
+        "PlayStation 4"
+      ]
+    },
+    "popularity": 7.0,
+    "qid": "Q55229",
+    "release_date": "2002-03-10",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Star Wars: Jedi Starfighter is a 2002 action video game for the PlayStation 2 and Xbox, developed and published by LucasArts. It is the sequel to Star Wars: Starfighter. Jedi Starfighter takes place just prior to the events of Attack of the Clones and during the Battle of Geonosis. On November 17, 2015, it was re-released for the PlayStation 4 in North America as part of the Star Wars Battlefront limited edition console bundle.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Star_Wars:_Jedi_Starfighter",
+        "title": "Star Wars: Jedi Starfighter"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Star Wars: Jedi Starfighter"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Star Wars: Jedi Starfighter es un videojuego de Star Wars para Xbox y PlayStation 2 que se desarrolla paralelamente al Episodio II.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Star_Wars_Jedi_Starfighter",
+        "title": "Star Wars Jedi Starfighter"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q55229",
+  "slug": "star-wars-jedi-starfighter"
+}

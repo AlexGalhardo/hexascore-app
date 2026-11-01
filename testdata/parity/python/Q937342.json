@@ -1,0 +1,57 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0318997",
+      "metacritic": "tv/angels-in-america",
+      "rottentomatoes": "tv/angels_in_america",
+      "tmdb": "11245"
+    },
+    "meta": {
+      "countries": [
+        "United States"
+      ],
+      "creators": [
+        "Tony Kushner"
+      ],
+      "episodes": 6,
+      "genres": [
+        "drama television series",
+        "fantasy television series",
+        "LGBT-related television series",
+        "miniseries"
+      ],
+      "runtimeMinutes": 60,
+      "seasons": 1
+    },
+    "popularity": 27.0,
+    "qid": "Q937342",
+    "release_date": "2003-12-07",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Angels in America is a 2003 American miniseries directed by Mike Nichols and based on the Pulitzer Prize–winning 1991 play of the same name by Tony Kushner. Set in 1985, the miniseries revolves around six New Yorkers whose lives intersect. At its core, it is the fantastical story of Prior Walter, a gay man living with AIDS who is visited by an angel. The miniseries explores a wide variety of themes, including Reagan era politics, the spreading AIDS epidemic, and a rapidly changing social and political climate.\nHBO broadcast the film in various formats: two three-hour chunks that correspond to Millennium Approaches and Perestroika, further divided into six one-hour \"chapters\" that roughly correspond to an act or two of each of these plays; the first three chapters (\"Bad News\", \"In Vitro\", and \"The Messenger\") were initially broadcast on December 7, 2003, to international acclaim, with the final three chapters (\"Stop Moving!\", \"Beyond Nelly\", and \"Heaven, I'm in Heaven\") following.\nAngels in America was the most-watched made-for-cable film in 2003, and earned much critical acclaim and numerous accolades: at the 56th Primetime Emmy Awards, it became the first of only three programs in Emmy history (along with Schitt's Creek in 2020, and The Crown in 2021) to sweep every major eligible category, and won all four acting categories. It also won in all five eligible categories at the 61st Golden Globe Awards. In 2006, The Seattle Times listed the series among \"Best of the filmed AIDS portrayals\" on the occasion of the 25th anniversary of AIDS.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Angels_in_America_(miniseries)",
+        "title": "Angels in America"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Angels in America (intitulado em Portugal Anjos na América) é uma minissérie do canal americano de televisão HBO em 2003, realizada por Mike Nichols. Foi adaptada da peça de teatro homónima de Tony Kushner.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Angels_in_America_(miniss%C3%A9rie)",
+        "title": "Angels in America"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Angels in America es una miniserie de HBO de 2003, basada en la obra teatral Angels in America: A Gay Fantasia on National Themes de Tony Kushner, quien a su vez escribió el guion adaptado para la versión televisiva, que Mike Nichols se encargó de dirigir. Está ambientada en 1985, narra la historia de dos parejas cuyas relaciones se disuelven en medio del contexto político del mandato de Ronald Reagan, la difusión de la pandemia de VIH/sida y distintos cambios sociales y políticos.​\nEn 2003 HBO emitió la miniserie en varios formatos: en segmentos de tres horas que corresponden a las dos partes, Millennium Approaches (El milenio se aproxima) y Perestroika, así como en capítulos de una hora que más o menos se corresponden con un acto de cada una de estas obras. Los primeros tres capítulos \"Bad News\", \"In Vitro\" y \"The Messenger\" (\"Malas noticias\", \"In Vitro\" y \"El mensajero\") fueron emitidos el 7 de diciembre recibiendo un aplauso internacional, los tres siguientes capítulos \"Stop Moving!\", \"Beyond Nelly\" \"Heaven, I'm in Heaven\" (\"¡Deja de moverte!\", \"Más allá de la homosexualidad\" y \"¡Cielo , estoy en el cielo!\") fueron emitidos el 14 de diciembre recibiendo la misma aclamación.\nAngels in America fue la película para televisión más vista de 2003 y ganó tanto el Globo de Oro como el Emmy a la mejor miniserie. En 2006, The Seattle Times puso la serie en la lista de \"Best of the filmed AIDS portrayals\" (\"Lo mejor filmado representando al SIDA\", en ocasión del 25 aniversario del SIDA.​",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Angels_in_America",
+        "title": "Angels in America"
+      }
+    ],
+    "type": "series"
+  },
+  "qid": "Q937342",
+  "slug": "angels-in-america"
+}

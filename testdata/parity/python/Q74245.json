@@ -1,0 +1,49 @@
+{
+  "item": {
+    "external_ids": {
+      "igdb": "splash-fighters--1"
+    },
+    "meta": {
+      "creators": [
+        "CyberStep Holdings"
+      ],
+      "genres": [
+        "massively multiplayer online game",
+        "action game"
+      ],
+      "platforms": [
+        "Microsoft Windows"
+      ]
+    },
+    "popularity": 6.0,
+    "qid": "Q74245",
+    "release_date": "2004-12-13",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "GetAmped"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "GetAmped foi um jogo de luta em 3D desenvolvido pela CyberStep. Até 16 pessoas podem jogar simultaneamente. No Brasil foi distribuído pela HIVE Corporation até que a CyberStep, desenvolvedora original, reivindicou o jogo e realizou o re-lançamento. Os servidores foram encerrados e o jogo não se encontra mais disponível. A sequência, intitulada GetAmped 2 também não é mais operante no Brasil.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/GetAmped",
+        "title": "GetAmped"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "GetAmped"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q74245",
+  "slug": "getamped"
+}

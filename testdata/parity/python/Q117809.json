@@ -1,0 +1,48 @@
+{
+  "item": {
+    "external_ids": {
+      "igdb": "kalonline"
+    },
+    "meta": {
+      "countries": [
+        "South Korea"
+      ],
+      "genres": [
+        "massively multiplayer online role-playing game"
+      ],
+      "platforms": [
+        "Microsoft Windows"
+      ]
+    },
+    "popularity": 9.0,
+    "qid": "Q117809",
+    "release_date": "2004-01-01",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Kal Online"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "KAL-Online (칼온라인, kal é uma palavra coreana para \"Espada\") é um MMORPG Free-to-Play de fantasia produzido pela Inixsoft, da Coreia do Sul. Diferente de outros MMORPGs, que são baseados em um contexto medieval europeu, KAL-Online apresenta a si mesmo como um jogo de \"Fantasia Oriental\". O jogo é baseado na mitologia de uma guerra entre o grande rei Ha-Nin e a tropa de demônios Ban-Go.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/KAL-Online",
+        "title": "KAL-Online"
+      },
+      {
+        "locale": "es",
+        "synopsis": null,
+        "synopsis_license": null,
+        "synopsis_source_url": null,
+        "title": "Kal Online"
+      }
+    ],
+    "type": "game"
+  },
+  "qid": "Q117809",
+  "slug": "kal-online"
+}

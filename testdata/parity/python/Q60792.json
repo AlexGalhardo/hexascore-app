@@ -1,0 +1,54 @@
+{
+  "item": {
+    "external_ids": {
+      "imdb": "tt0087578",
+      "rottentomatoes": "m/wheels_on_meals",
+      "tmdb": "11205"
+    },
+    "meta": {
+      "countries": [
+        "Hong Kong"
+      ],
+      "creators": [
+        "Sammo Hung"
+      ],
+      "genres": [
+        "action comedy film",
+        "adventure film",
+        "crime film",
+        "martial arts film"
+      ],
+      "runtimeMinutes": 104
+    },
+    "popularity": 28.0,
+    "qid": "Q60792",
+    "release_date": "1984-08-17",
+    "scores": [],
+    "translations": [
+      {
+        "locale": "en",
+        "synopsis": "Wheels on Meals (traditional Chinese: 快餐車; simplified Chinese: 快餐车) is a 1984 Hong Kong martial arts action comedy film written and directed by Sammo Hung, with action choreographed by Jackie Chan. The film stars Jackie Chan, Sammo Hung, Yuen Biao, Lola Forner, Benny Urquidez, and José Sancho. The film was shot in Barcelona, Spain.\nThe film was a box office hit in East Asia, including Japan where the film was released as Spartan X. The film was also well-received by critics for its comedy and action, particularly the final fight between Jackie Chan and Benny Urquidez, which is considered one of the greatest fight scenes of all time. Jackie Chan with his stunt team were nominated for Best Action Choreography, for both Wheels on Meals and Project A, at the 4th Hong Kong Film Awards, winning the award for Project A.\nWheels on Meals spawned the Spartan X franchise. In 1984, it was adapted into the video game Spartan X (released as Kung-Fu Master internationally), which laid the foundations for the beat 'em up genre of action games. The video game also had a sequel, Spartan X 2, and there was a Spartan X comic book series. The Spartan X franchise grossed an estimated total revenue of approximately US$134 million worldwide.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://en.wikipedia.org/wiki/Wheels_on_Meals",
+        "title": "Wheels on Meals"
+      },
+      {
+        "locale": "pt-BR",
+        "synopsis": "Wheels on Meals (em inglês) / Kuai Can Che (em cantonês), lançado no Brasil com o título Detonando em Barcelona, e em Portugal como Pancadaria Chinesa, é um filme de comédia e artes marciais produzido em Hong Kong em 1984. Foi dirigido por Sammo Hung e estrelado por Jackie Chan, Sammo Hung e Yuen Biao.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://pt.wikipedia.org/wiki/Wheels_on_Meals",
+        "title": "Wheels on Meals"
+      },
+      {
+        "locale": "es",
+        "synopsis": "Comidas a domicilio o Los supercamorristas, en su nombre original (en chino tradicional, 快餐車; en chino simplificado, 快餐车) Kwai tsan tseh, es una película de 1984 de acción y artes marciales de Hong Kong rodada en Barcelona, España. Escrita y dirigida por Sammo Hung, también actuó en ella. Coprotagonizada por Jackie Chan y Yuen Biao.\nEn la película se pueden ver a actores españoles como Amparo Moreno, Lola Forner y José Sancho e infinidad de localizaciones en Barcelona, como la Sagrada Familia, Las Ramblas, etc.",
+        "synopsis_license": "CC BY-SA 4.0",
+        "synopsis_source_url": "https://es.wikipedia.org/wiki/Kuai_can_che",
+        "title": "Kuai can che"
+      }
+    ],
+    "type": "movie"
+  },
+  "qid": "Q60792",
+  "slug": "wheels-on-meals"
+}
