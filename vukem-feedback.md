@@ -13,3 +13,14 @@ Status: `open`, `reported` (issue or PR link), `fixed in vX.Y.Z`, `wontfix`, `wi
 
 | id | date | severity | status |
 | --- | --- | --- | --- |
+| VF-NEW-EXPORT-WRITER | 2026-11-01 | medium | open |
+
+## VF-NEW-EXPORT-WRITER: export streams only to an HTTP response, so background jobs reimplement CSV/NDJSON
+
+- **Date**: 2026-11-01. **Severity**: medium. **Status**: open.
+- **vukem version**: v0.35.0. **Docs consulted**: <https://vukem.dev/docs/digging-deeper/exports> (table "`export.NDJSON(w, r, name, rows, opts...)`"). Every streaming helper (`CSV`, `WriteCSV`, `JSON`, `NDJSON`) takes `http.ResponseWriter` and `*http.Request`; none accepts an `io.Writer`. `[NOT IN VUKEM DOCS]`: how to produce the same output from a queue job.
+- **Context**: HexaScore builds two exports outside a request: the account data export (`library.export`, zipped CSV/JSON written to the bucket) and the daily bulk ID exports for the paid API (`app/jobs/export_ids.go`, NDJSON written to S3, served later through a presigned URL). Both re-implement CSV formula guarding and NDJSON line encoding that `export` already has (`workaround(vukem): VF-029` in `app/jobs/export_ids.go`).
+- **Repro**: in a job with no request, try to stream an ORM iterator to a `*os.File` or an S3 upload writer with `export.NDJSON`: there is no request and no `ResponseWriter`.
+- **Workaround**: hand-written encoders in the app, duplicating the formula guard (CWE-1236) logic.
+- **Request**: add writer-level helpers, for example `export.EncodeCSV(io.Writer, header, rows, record, opts...)` and `export.EncodeNDJSON(io.Writer, rows, opts...)`, sharing the same formula guard and flush options; keep the HTTP helpers as thin wrappers over them, and document the job use case on the exports page.
+
