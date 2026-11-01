@@ -16,15 +16,15 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/recommend/foryou"
-	"github.com/AlexGalhardo/hexascore-app/app/recommend/trending"
 	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
-// Home trending strip (SDD 08 section 7.2 "Home window"): 3 per type over the last 7 days, held 5 minutes.
+// Home trending carousel (owner round 2026-11-01 item 26): the 12 most rated items per type over the last 30 days,
+// filled with the most rated items overall when fewer were rated in the window, held 5 minutes.
 const (
 	trendingTTL  = 5 * time.Minute
-	trendingDays = 7
-	trendingTop  = 3
+	trendingDays = 30
+	trendingTop  = 12
 )
 
 var homeTypes = []string{"game", "movie", "series", "book"}
@@ -49,12 +49,7 @@ func Home(app *vukem.App) web.HandlerFunc {
 		}
 
 		for _, typ := range homeTypes {
-			s := catalog.SectionHighlights{
-				Type:      typ,
-				TopRated:  []catalog.Highlight{},
-				Newest:    []catalog.Highlight{},
-				MostRated: []catalog.Highlight{},
-			}
+			s := catalog.SectionHighlights{Type: typ, Pool: []catalog.Highlight{}}
 			// catalog tables exist only on Postgres (VF-033).
 			if db.Dialect().Name() == "postgres" {
 				if s, err = catalog.Highlights(c.Context(), db, typ, i18n.Locale(c.Context())); err != nil {
@@ -72,7 +67,7 @@ func Home(app *vukem.App) web.HandlerFunc {
 				return err
 			}
 
-			trend, err = cache.Remember(c.Context(), store, "home:trending7:v2:"+locale, trendingTTL,
+			trend, err = cache.Remember(c.Context(), store, "home:trending30:v1:"+locale, trendingTTL,
 				func(ctx context.Context) (map[string]trendingSection, error) {
 					return homeTrending(ctx, db.SQL(), app.Now(), locale)
 				})
@@ -157,7 +152,7 @@ func homeTrending(
 	for _, typ := range homeTypes {
 		sec := trendingSection{ComputedAt: now.UTC().Format(time.RFC3339), Items: []trendingEntry{}}
 
-		entries, err := trending.Window(ctx, db, typ, now, trendingDays, trendingTop)
+		entries, err := mostRatedWindow(ctx, db, typ, now, trendingDays, trendingTop)
 		if err != nil {
 			return nil, err
 		}
@@ -189,7 +184,10 @@ func homeTrending(
 					genre = &g
 				}
 
-				sec.Items = append(sec.Items, trendingEntry{Rank: len(sec.Items) + 1, Basis: e.Basis, Genre: genre, Highlight: h})
+				sec.Items = append(
+					sec.Items,
+					trendingEntry{Rank: len(sec.Items) + 1, Basis: e.Basis, Genre: genre, Highlight: h},
+				)
 			}
 		}
 
@@ -230,4 +228,78 @@ ORDER BY ie.item_id, ie.position, e.slug`, "{"+strings.Join(ids, ",")+"}", local
 	}
 
 	return out, rows.Err()
+}
+
+type windowEntry struct {
+	ID    string
+	Basis string
+}
+
+// mostRatedWindow ranks typ by new ratings over the last days UTC days ending at the day of now ("trend"), then
+// fills up to n with the most rated public items overall ("prior").
+func mostRatedWindow(
+	ctx context.Context,
+	db catalog.Querier,
+	typ string,
+	now time.Time,
+	days, n int,
+) ([]windowEntry, error) {
+	day := now.UTC().Truncate(24 * time.Hour)
+	out := []windowEntry{}
+	seen := map[string]bool{}
+
+	for _, q := range []struct {
+		basis, sql string
+		args       []any
+	}{
+		{"trend", `SELECT a.item_id::text
+FROM item_activity_daily a
+JOIN items i ON i.id = a.item_id AND i.visibility = 'public'
+WHERE a.item_type = $1 AND a.day > $2::date - $3::int AND a.day <= $2::date
+GROUP BY a.item_id, i.rating_count
+HAVING sum(a.ratings_new_w) > 0
+ORDER BY sum(a.ratings_new_w) DESC, i.rating_count DESC, a.item_id
+LIMIT $4`, []any{typ, day, days, n}},
+		{"prior", `SELECT id::text FROM items WHERE type = $1 AND visibility = 'public'
+ORDER BY rating_count DESC, id LIMIT $2`, []any{typ, n}},
+	} {
+		if len(out) == n {
+			break
+		}
+
+		ids, err := scanIDs(ctx, db, q.sql, q.args...)
+		if err != nil {
+			return nil, fmt.Errorf("home trending %s %s: %w", typ, q.basis, err)
+		}
+
+		for _, id := range ids {
+			if len(out) < n && !seen[id] {
+				seen[id] = true
+				out = append(out, windowEntry{ID: id, Basis: q.basis})
+			}
+		}
+	}
+
+	return out, nil
+}
+
+func scanIDs(ctx context.Context, db catalog.Querier, query string, args ...any) ([]string, error) {
+	rows, err := db.QueryContext(ctx, query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var ids []string
+
+	for rows.Next() {
+		var id string
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+
+		ids = append(ids, id)
+	}
+
+	return ids, rows.Err()
 }

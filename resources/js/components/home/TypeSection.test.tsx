@@ -3,9 +3,15 @@ import type { ReactNode } from "react";
 import { afterEach, expect, test, vi } from "vitest";
 
 import type { Highlight, Section } from "../catalog/SectionHighlights";
-import TypeSection, { otherTitles, type TrendingEntry } from "./TypeSection";
+import TypeSection, { pickRandom, type TrendingEntry } from "./TypeSection";
 
 afterEach(cleanup);
+// jsdom has no matchMedia; reduced motion keeps the carousel still in these tests.
+vi.stubGlobal("matchMedia", () => ({
+	matches: true,
+	addEventListener: () => {},
+	removeEventListener: () => {},
+}));
 
 vi.mock("../../lib/useT", () => ({
 	useT: () => (key: string, p?: Record<string, string | number>) =>
@@ -39,13 +45,9 @@ const h = (id: string, score: number | null = null): Highlight => ({
 	cover: null,
 });
 
-const section: Section = {
-	type: "game",
-	count: 24873,
-	topRated: [h("a"), h("b"), h("t1")],
-	newest: [h("c"), h("d"), h("e"), h("f"), h("g")],
-	mostRated: [h("t2"), h("b"), h("h")],
-};
+// 20 pool items, two of them also trending.
+const pool = [h("t1"), h("t2"), ...Array.from({ length: 18 }, (_, i) => h(`p${i}`))];
+const section: Section = { type: "game", count: 24873, pool };
 
 const trending: TrendingEntry[] = [
 	{ ...h("t1", 8.4), rank: 1, basis: "trend", genre: "Action" },
@@ -53,13 +55,36 @@ const trending: TrendingEntry[] = [
 	{ ...h("t3"), rank: 3, basis: "prior", genre: "Adventure" },
 ];
 
-test("other titles skip trending ones and duplicates, six at most", () => {
-	expect(otherTitles(section, trending).map((i) => i.id)).toEqual(["b", "h", "a", "c", "d", "e"]);
+// Owner round 2026-11-01 item 26 (b): a random 12 of the pool, never a trending item, picked after hydration.
+test("pickRandom returns n unique items driven by the injected rng", () => {
+	const items = Array.from({ length: 36 }, (_, i) => i);
+	const seq = [0.99, 0, 0.5, 0.25];
+	let k = 0;
+	const rng = () => seq[k++ % seq.length];
+	const got = pickRandom(items, 12, rng);
+	expect(got).toHaveLength(12);
+	expect(new Set(got).size).toBe(12);
+	expect(got[0]).toBe(35);
+	expect(got[1]).toBe(1);
+	expect(pickRandom(items, 12, () => 0)).toEqual(items.slice(0, 12));
+	expect(pickRandom([1, 2], 12)).toHaveLength(2);
 });
 
-test("three trending cards with rank, score explanation, then more titles and see all", () => {
+test("the More grid shows 12 tiles from the pool without the trending ones", () => {
 	render(<TypeSection section={section} trending={trending} />);
-	const cards = screen.getAllByRole("listitem").slice(0, 3);
+	const grid = screen.getByText("home.more.game").nextElementSibling as HTMLElement;
+	const hrefs = [...grid.querySelectorAll("a")].map((a) => a.getAttribute("href"));
+	expect(hrefs).toHaveLength(12);
+	expect(new Set(hrefs).size).toBe(12);
+	expect(hrefs).not.toContain("/games/slug-t1");
+	expect(hrefs).not.toContain("/games/slug-t2");
+	expect(grid.className).toContain("md:grid-cols-6");
+});
+
+test("trending cards with rank, score explanation, then more titles and see all", () => {
+	render(<TypeSection section={section} trending={trending} />);
+	const carousel = screen.getByRole("region", { name: /home.carousel.label/ });
+	const cards = within(carousel).getAllByRole("listitem").slice(0, 3);
 	expect(within(cards[0]).getByText(/home.trendingRank.*"rank":1/)).toBeTruthy();
 	expect(within(cards[0]).getByText("item.band.high")).toBeTruthy();
 	expect(within(cards[1]).getByText(/home.ratingsOfMin.*"count":3,"min":5/)).toBeTruthy();
@@ -99,7 +124,7 @@ test("the section header is a 1fr auto 1fr grid with the locale-formatted count 
 });
 
 test("a type with nothing to show renders nothing", () => {
-	const empty = { ...section, topRated: [], newest: [], mostRated: [] };
+	const empty = { ...section, pool: [] };
 	const { container } = render(<TypeSection section={empty} trending={[]} />);
 	expect(container.innerHTML).toBe("");
 });

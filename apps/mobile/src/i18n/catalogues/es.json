@@ -366,6 +366,13 @@
 	"home.popularType": "Populares: {type}",
 	"home.popular": "Popular",
 	"home.trendingRank": "#{rank} en tendencia",
+	"home.carousel.label": "{type} en tendencia",
+	"home.carousel.previous": "Diapositiva anterior",
+	"home.carousel.next": "Diapositiva siguiente",
+	"home.carousel.pause": "Pausar el cambio automático",
+	"home.carousel.play": "Reanudar el cambio automático",
+	"home.carousel.slide": "Diapositiva {n} de {total}",
+	"home.carousel.goTo": "Ir a la diapositiva {n}",
 	"home.titles": {
 		"one": "{n} título",
 		"other": "{n} títulos"

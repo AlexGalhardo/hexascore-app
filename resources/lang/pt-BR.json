@@ -702,6 +702,15 @@
     "popularType": "Populares: {type}",
     "popular": "Popular",
     "trendingRank": "#{rank} em alta",
+    "carousel": {
+      "label": "{type} em alta",
+      "previous": "Slide anterior",
+      "next": "Próximo slide",
+      "pause": "Pausar a troca automática",
+      "play": "Retomar a troca automática",
+      "slide": "Slide {n} de {total}",
+      "goTo": "Ir para o slide {n}"
+    },
     "titles": {
       "one": "{n} título",
       "other": "{n} títulos"

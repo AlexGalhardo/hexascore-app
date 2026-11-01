@@ -15,9 +15,8 @@ export interface Highlight {
 export interface Section {
 	type: "game" | "movie" | "series" | "book";
 	count: number;
-	topRated: Highlight[];
-	newest: Highlight[];
-	mostRated: Highlight[];
+	/** Recommendation pool of the "More …" grid (best scored, then most rated). */
+	pool: Highlight[];
 }
 
 export const SECTION_PATHS: Record<Section["type"], string> = {

@@ -1,4 +1,5 @@
 import { Link, usePage } from "@inertiajs/react";
+import { type ReactElement, useEffect, useMemo, useState } from "react";
 
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
@@ -8,6 +9,7 @@ import CoverThumb from "../CoverThumb";
 import ItemTile from "../catalog/ItemTile";
 import { type Highlight, SECTION_PATHS, type Section } from "../catalog/SectionHighlights";
 import ScoreBadge, { scoreBand } from "../ui/ScoreBadge";
+import Carousel from "./Carousel";
 
 export interface TrendingEntry extends Highlight {
 	rank: number;
@@ -33,21 +35,24 @@ const ACCENT_BORDER: Record<ItemType, string> = {
 };
 
 const MIN_RATINGS = 5;
-const MORE = 6;
+const PER_SLIDE = 3;
+const MORE = 12;
 
-// "Other titles": most rated, then top rated, then newest, without the trending ones.
-export function otherTitles(section: Section, trending: Highlight[]): Highlight[] {
-	const seen = new Set(trending.map((i) => i.id));
-	const out: Highlight[] = [];
-	for (const item of [...section.mostRated, ...section.topRated, ...section.newest]) {
-		if (seen.has(item.id)) continue;
-		seen.add(item.id);
-		out.push(item);
+/** n distinct items of pool in random order (partial Fisher-Yates); rng is injectable for tests. */
+export function pickRandom<T>(pool: readonly T[], n: number, rng: () => number = Math.random): T[] {
+	const a = [...pool];
+	const k = Math.min(n, a.length);
+	for (let i = 0; i < k; i++) {
+		const j = i + Math.floor(rng() * (a.length - i));
+		[a[i], a[j]] = [a[j], a[i]];
 	}
-	return out.slice(0, MORE);
+	return a.slice(0, k);
 }
 
-// One home block per item type: three trending cards (last 7 days), then other titles.
+// One home block per item type (owner round 2026-11-01 item 26): a carousel of the 12 trending items of the last
+// 30 days, 3 per slide, then 12 "More …" tiles. The server sends a pool and the page picks 12 at random after
+// hydration: the anonymous landing HTML is cached, so the first paint shows the pool's first 12 and only then
+// reshuffles into the same fixed grid (no layout shift).
 export default function TypeSection({
 	section,
 	trending,
@@ -59,7 +64,12 @@ export default function TypeSection({
 	const { locale } = usePage<SharedProps>().props;
 	const type = section.type;
 	const base = localized(`/${SECTION_PATHS[type]}`, locale);
-	const others = otherTitles(section, trending);
+	const candidates = useMemo(() => {
+		const shown = new Set(trending.map((i) => i.id));
+		return section.pool.filter((i) => !shown.has(i.id));
+	}, [section.pool, trending]);
+	const [others, setOthers] = useState(() => candidates.slice(0, MORE));
+	useEffect(() => setOthers(pickRandom(candidates, MORE)), [candidates]);
 	const num = new Intl.NumberFormat(locale);
 	if (trending.length === 0 && others.length === 0) return null;
 
@@ -89,51 +99,33 @@ export default function TypeSection({
 			</div>
 
 			{trending.length > 0 && (
-				<ol className="grid gap-4 md:grid-cols-3 md:gap-5">
-					{trending.slice(0, 3).map((item) => (
-						<li
-							key={item.id}
-							className={`flex gap-4 border-t-2 bg-surface p-3 ${ACCENT_BORDER[type]}`}
-						>
-							<CoverThumb cover={item.cover} alt="" size="trend" />
-							<div className="grid min-w-0 content-start gap-1">
-								<p className={`text-xs font-semibold ${ACCENT_TEXT[type]}`}>
-									{t("home.trendingRank", { rank: item.rank })}
-								</p>
-								<Link
-									href={`${base}/${item.slug}?from=trending`}
-									className="font-display text-xl leading-tight font-bold hover:text-primary"
+				<Carousel
+					label={t("home.carousel.label", { type: t(`catalog.title.${type}`) })}
+					slides={Array.from(
+						{ length: Math.ceil(trending.length / PER_SLIDE) },
+						(_, n) => ({
+							key: trending[n * PER_SLIDE].id,
+							node: (
+								<ol
+									start={n * PER_SLIDE + 1}
+									className="grid gap-4 md:grid-cols-3 md:gap-5"
 								>
-									{item.title}
-								</Link>
-								<p className="text-xs text-muted">
-									{[item.year, item.genre].filter(Boolean).join(" · ")}
-								</p>
-								<div className="mt-2 flex items-center gap-3">
-									<ScoreBadge score={item.score} size="sm" />
-									<p className="text-xs">
-										<span className="block font-semibold">
-											{item.score === null
-												? t("item.notEnough")
-												: t(`item.band.${scoreBand(item.score)}`)}
-										</span>
-										<span className="text-muted">
-											{item.score === null
-												? t("home.ratingsOfMin", {
-														count: item.ratingCount,
-														min: MIN_RATINGS,
-													})
-												: t("home.fromRatings", {
-														count: item.ratingCount,
-														n: num.format(item.ratingCount),
-													})}
-										</span>
-									</p>
-								</div>
-							</div>
-						</li>
-					))}
-				</ol>
+									{trending
+										.slice(n * PER_SLIDE, (n + 1) * PER_SLIDE)
+										.map((item) => (
+											<TrendCard
+												key={item.id}
+												item={item}
+												type={type}
+												base={base}
+												eager={n === 0}
+											/>
+										))}
+								</ol>
+							),
+						}),
+					)}
+				/>
 			)}
 
 			{others.length > 0 && (
@@ -149,5 +141,62 @@ export default function TypeSection({
 				</div>
 			)}
 		</section>
+	);
+}
+
+function TrendCard({
+	item,
+	type,
+	base,
+	eager,
+}: {
+	item: TrendingEntry;
+	type: ItemType;
+	base: string;
+	/** Only the first slide's covers load eagerly (the LCP candidate). */
+	eager: boolean;
+}): ReactElement {
+	const t = useT();
+	const { locale } = usePage<SharedProps>().props;
+	const num = new Intl.NumberFormat(locale);
+	return (
+		<li key={item.id} className={`flex gap-4 border-t-2 bg-surface p-3 ${ACCENT_BORDER[type]}`}>
+			<CoverThumb cover={item.cover} alt="" size="trend" priority={eager} />
+			<div className="grid min-w-0 content-start gap-1">
+				<p className={`text-xs font-semibold ${ACCENT_TEXT[type]}`}>
+					{t("home.trendingRank", { rank: item.rank })}
+				</p>
+				<Link
+					href={`${base}/${item.slug}?from=trending`}
+					className="font-display text-xl leading-tight font-bold hover:text-primary"
+				>
+					{item.title}
+				</Link>
+				<p className="text-xs text-muted">
+					{[item.year, item.genre].filter(Boolean).join(" · ")}
+				</p>
+				<div className="mt-2 flex items-center gap-3">
+					<ScoreBadge score={item.score} size="sm" />
+					<p className="text-xs">
+						<span className="block font-semibold">
+							{item.score === null
+								? t("item.notEnough")
+								: t(`item.band.${scoreBand(item.score)}`)}
+						</span>
+						<span className="text-muted">
+							{item.score === null
+								? t("home.ratingsOfMin", {
+										count: item.ratingCount,
+										min: MIN_RATINGS,
+									})
+								: t("home.fromRatings", {
+										count: item.ratingCount,
+										n: num.format(item.ratingCount),
+									})}
+						</span>
+					</p>
+				</div>
+			</div>
+		</li>
 	);
 }

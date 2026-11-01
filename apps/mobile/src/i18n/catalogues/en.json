@@ -366,6 +366,13 @@
 	"home.popularType": "Popular {type}",
 	"home.popular": "Popular",
 	"home.trendingRank": "#{rank} trending",
+	"home.carousel.label": "Trending {type}",
+	"home.carousel.previous": "Previous slide",
+	"home.carousel.next": "Next slide",
+	"home.carousel.pause": "Pause automatic slides",
+	"home.carousel.play": "Play automatic slides",
+	"home.carousel.slide": "Slide {n} of {total}",
+	"home.carousel.goTo": "Go to slide {n}",
 	"home.titles": {
 		"one": "{n} title",
 		"other": "{n} titles"

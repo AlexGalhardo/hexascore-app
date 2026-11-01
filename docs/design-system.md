@@ -151,7 +151,7 @@ Desktop (from `sm`/`md`):
 
 - Row `min-h-14`: brand link (`appName`, `text-lg font-bold`), section nav (Games, Movies, TV Series, Books; `hidden md:flex`, plain text colour), then a right-aligned group: `SuggestBox` (`sm:w-64`), theme toggle, and either the logged-out controls or the logged-in controls.
 - Logged out: "Log in" link and a "More" `details` menu (hamburger icon, label `nav.more`) containing the language links, "Sign up", "Pricing", "API docs".
-- Logged in: an account `details` menu (user icon) with the user name, Library, Lists, Public profile (if nickname), Profile, API keys, Admin (role admin only), the language links, and Log out (`POST /logout`).
+- Logged in: an account dropdown (avatar only, no user name; an icon before each entry) with Library, Lists, Public profile (if nickname), Profile, API keys, Admin (role admin only), the language links, and Log out (`POST /logout`).
 
 Mobile (below `md`, see [home-mobile-390.png](design-system/home-mobile-390.png)):
 
@@ -304,9 +304,9 @@ Every Inertia page component in `resources/js/pages/` (33 components; `ls resour
 
 - Route: `GET /` (SSR). File: `pages/Home/Index.tsx`. Screenshots: [desktop](design-system/home-desktop-1440.png), [mobile](design-system/home-mobile-390.png).
 - Purpose: landing and discovery.
-- Blocks: hero `h1` ("Every game, movie, series and book, scored by people, category by category.", `text-3xl sm:text-4xl`) with an "Explore" primary button linking to `/search`; one `SectionHighlights` per type (Games, Movies, TV Series, Books) with Top rated, New releases and Most rated columns of six rows.
+- Blocks: hero `h1` ("Every game, movie, series and book, scored by people, category by category.", `text-3xl sm:text-4xl`) with an "Explore" primary button linking to `/search`; one `home/TypeSection` per type (Games, Movies, TV Series, Books): a three-zone header, a `home/Carousel` of the 12 most rated items of the last 30 days (4 slides of 3, auto-advance every 4 s; pause/play, previous/next, labelled indicators, arrow keys, swipe; still under `prefers-reduced-motion`, on hover and on focus; only the first slide's covers eager), then a "More …" grid of 12 `ItemTile`s (2 rows of 6) picked at random from the pool after hydration.
 - Actions: Explore, section "See all" links, row links, header search.
-- Data: `sections[{type, count, topRated, newest, mostRated}]`, `trending.<type>.items[{rank, basis, genre, ...Highlight}]` (`genre`: primary genre name or null, shown next to the year; every card reads "#N trending"). The "Recently rated by members" strip and its query were removed (owner round 2026-11-01 item 5).
+- Data: `sections[{type, count, pool}]` (`pool`: up to 36 best scored then most rated items, the same for every visitor so the cached HTML stays valid), `trending.<type>.items[{rank, basis, genre, ...Highlight}]` (`genre`: primary genre name or null, shown next to the year; every card reads "#N trending"). The "Recently rated by members" strip and its query were removed (owner round 2026-11-01 item 5).
 - States: empty column "Nothing here yet."; items without a score show an en dash.
 
 #### Catalog/Index
