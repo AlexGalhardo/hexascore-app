@@ -86,6 +86,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **ui:** client-fetched web data (search suggestions, user-ratings dialog, edition picker, data export) uses TanStack Query 5.105.0 (ADR 0020); the Ctrl+K search palette loads on first open (ADOPT-tanstack-query-web, FIX-lighthouse-budgets-main)
+- **web:** anonymous public catalogue HTML is served gzip-compressed (session-bound, cookie-setting and non-200 responses stay plain; SDD 13 BREACH note); light book accent darkened to oklch 0.5 for AA contrast (PERF-web-lcp, FIX-lighthouse-budgets-main)
 - **sdk:** Python SDK version and README quota header aligned with the contract (P3.B.1.2)
 - **ui:** Design tokens use the v1 Editorial palette (light and dark) and add primary, ledge, field and on-score tokens; the Android app can follow the system theme or a stored light/dark choice (IMPL-mobile-v1-tokens)
 - **community:** Banning or deleting an account withdraws its open suggestions; merging an item expires the open suggestions on it; account deletion removes the user from community moderation records (P4.B.3.2)
@@ -117,6 +119,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **ci:** the bun:test SDK workflow tests run with `bun test` instead of Vitest, so `bun run test` is green again (P3.B.1.3)
+- **ingest:** a redelivered run resumes from the locked cursor, only the breaker probe closes an open breaker, a resume whose QID left the selection restarts, and an outage no longer parks targets (P6.A review)
 - **api:** /problems/{code} answers 301; docs and SDK READMEs use meta.next_cursor; SDK READMEs list listChanges and webhook operations (FIX-problems-redirect-301)
 - **sdk:** TypeScript SDK pinned to typescript 6.0.3 so regeneration works; version and README header sync (P3.B.1.1)
 - **api:** the API host serves only the API: `/v1/*`, `/api/v1/*`, `/up`, a JSON index at `/`, and a 404 problem+json for everything else; it no longer renders the web frontend (FIX-api-host-only-api)
