@@ -87,6 +87,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - The Android home shows the v1 trending sections: three ranked cards and a grid of six per type, with covers and a see-all link (IMPL-mobile-v1-home)
 - The Android section listing uses the v1 catalogue page: title, filter panel with sort and genre chips, Previous/Next pager, rows with year, rating count and score (IMPL-mobile-v1-listing)
 - The Android item screen uses the v1 item page (kicker, score badge with verdict, genre chips, category bars, synopsis, people, editions, attribution); Rate opens the rating sheet (IMPL-mobile-v1-item)
+- Login, signup, password recovery and reset follow design v1, with a "Sign in with Google" / "Sign up with Google" button in Google's branding (IMPL-web-v1-auth)
+- The search page follows design v1: grouped results with section accents, filter chips, a people and companies panel, and a no-results state with section links (IMPL-web-v1-search-page)
+- The library, your lists and public list pages follow design v1: status sections and shelf cards with your score (IMPL-web-v1-library-lists)
 
 ### Fixed
 
