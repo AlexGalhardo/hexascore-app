@@ -24,8 +24,8 @@ func TestDocsPages(t *testing.T) {
 			HasProp("toc")
 	}
 
-	app.Client(t).Get("/docs/no-such-doc").AssertStatus(404).AssertInertia("Error")
-	app.Client(t).Get("/docs/index").AssertStatus(404)
+	app.Client(t).Get("/docs/no-such-doc").AssertStatus(301).AssertHeader("Location", "/")
+	app.Client(t).Get("/docs/index").AssertStatus(301)
 }
 
 // TestAboutPage: owner round 2026-11-01 item 25, served in every locale with only its own namespace.

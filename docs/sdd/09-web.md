@@ -20,7 +20,7 @@ In (v1): shell, SSR, routing/i18n, §6.2 pages, components, tokens, budgets, acc
 - FR-09-6: Star widget meets §7.4. Verify: Vitest + Playwright + axe.
 - FR-09-7: Rating/status saves are optimistic for the user's own value, rolled back with a toast on failure; aggregates only from the server; suggestions never optimistic. Verify: Playwright with a forced 429.
 - FR-09-8: `props.errors` shown per field; focus moves to the first invalid field. Verify: Playwright.
-- FR-09-9: Unknown URLs and missing records render `Error` 404 under SSR; 5xx use localised `errors/500.html` (<https://vukem.dev/docs/basics/error-handling#custom-error-pages>). Verify: `not-found.spec.ts`.
+- FR-09-9: Unknown URLs and missing records (item, entity, document, hidden list, unknown profile) on a GET HTML page answer 301 to the home page of the locale (`/`, `/pt-br/`, `/es/`; owner decision 2026-11-01, item 14; `controllers.NotFound`). JSON requests, `/api`, `/app`, `/v1`, asset prefixes (`/build`, `/covers`, `/og`, `/sitemaps`, `/.well-known`), paths with a file extension and non-GET requests keep a real 404 (problem+json for the APIs, the `Error` component on Inertia visits); auth and validation errors are unchanged. Full-page 5xx keep their status with `resources/views/errors/500.html` and `503.html`, localised, with a link home (<https://vukem.dev/docs/basics/error-handling#custom-error-pages>). Verify: `TestMissingPage_RedirectsHome`, `TestServerError_PageLinksHome`, `not-found.spec.ts`.
 - FR-09-10: Item JSON-LD per type; `aggregateRating` only when `score` is not null (SDD 02 FR-02-6). Verify: Go test on SSR HTML.
 - FR-09-11: `/sitemap.xml` indexes chunks ≤ 40,000 URLs (legacy `SITEMAP_CHUNK`, `lib/seo.ts`) with `xhtml:link` alternates. Verify: XML integration test.
 - FR-09-12: Navbar unread count and a page rendering `user_notifications` (SDD 04 §5) via i18n keys. Verify: Playwright.
@@ -98,7 +98,7 @@ Paths shown without locale prefix; every public path also exists under `/pt-br` 
 | `Catalog/RecentChanges` | `/{section}/{slug}/changes`, `/entities/{kind}/{slug}/changes` | SSR | `target`, `changes` (`Scroll`, 20) (SDD 04 FR-04-13) |
 | `Entity/Show` | `/people`, `/companies`, `/franchises`, `/platforms`, `/genres`, `/game-modes` + `/{slug}`; `/countries/{code}`, `/languages/{code}` | SSR | `entity: EntityDetail`, `roles`, `items` (`Scroll`, grouped by type), `counts`, `avgScore` |
 | `Search/Index` | `/search` | SSR, `noindex, follow` | per SDD 07 §6 |
-| `User/Profile` | `/u/{nickname}` | SSR | per SDD 14 §6.2; private profile → 200 with the nickname only and `noindex` (legacy parity, open issue 14-5); unknown nickname → 404 |
+| `User/Profile` | `/u/{nickname}` | SSR | per SDD 14 §6.2; private profile → 200 with the nickname only and `noindex` (legacy parity, open issue 14-5); unknown nickname → 301 home (FR-09-9) |
 | `User/List` | `/u/{nickname}/lists/{id}` | SSR | `list`, `items`, `canEdit`, `seo{indexable}` (SDD 14 §6.2) |
 | `Library/Index` | `/library` | CSR, `noindex` | SDD 14 §6.2 |
 | `Lists/Index` | `/lists` | CSR, `noindex` | SDD 14 §6.2 |

@@ -1,0 +1,13 @@
+{{/* layout: none */}}{{- /* Full-page 5xx (owner round 2026-11-01 item 14): the status page plus a link to the home page of the locale. Inertia visits render the Error component instead. */ -}}
+{{- $home := "/" -}}
+{{- if eq locale "pt-BR" -}}{{- $home = "/pt-br/" -}}{{- else if eq locale "es" -}}{{- $home = "/es/" -}}{{- end -}}
+<!doctype html>
+<html lang="{{or locale "en"}}"><head><meta charset="utf-8"><title>{{.Status}} {{t "errors.serverTitle"}}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<style{{with .Nonce}} nonce="{{.}}"{{end}}>body{font-family:system-ui,sans-serif;max-width:40rem;margin:4rem auto;padding:0 1rem}</style></head>
+<body>
+<h1>{{.Status}} {{t "errors.serverTitle"}}</h1>
+<p>{{t "errors.serverBody"}}</p>
+<p><a href="{{$home}}">{{t "errors.home"}}</a></p>
+</body></html>

@@ -64,6 +64,7 @@ func TestRedirect_OldSlugAnswers301(t *testing.T) {
 	c().Get("/games/half-life?ref=x").AssertStatus(301).AssertRedirect("/games/half-life-1?ref=x")
 	c().Get("/es/games/half-life-old").AssertStatus(301).AssertRedirect("/es/games/half-life-1")
 	c().Get("/games/" + merged).AssertStatus(301).AssertRedirect("/games/half-life-1")
-	c().Get("/movies/half-life").AssertStatus(404)
-	c().Get("/games/never-existed").AssertStatus(404)
+	// A missing item is a 301 home (owner decision 2026-11-01, item 14), never the redirect of another type.
+	c().Get("/movies/half-life").AssertStatus(301).AssertHeader("Location", "/")
+	c().Get("/es/games/never-existed").AssertStatus(301).AssertHeader("Location", "/es/")
 }

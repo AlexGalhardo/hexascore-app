@@ -109,3 +109,27 @@ VALUES ($1, 'movie', $2, $3, 6, 80)`, id, fmt.Sprintf("movie-%02d", i), fmt.Spri
 	c.Get("/movies?genre=rpg").AssertOK().AssertInertia("Catalog/Index").HasProp("items.data", 3).PropEquals("total", 3)
 	c.Get("/movies?sort=bogus").AssertStatus(400)
 }
+
+// TestServerError_PageLinksHome: a full-page 5xx keeps its status and error page, now with a link to the home page
+// of the locale (owner round 2026-11-01 item 14); an Inertia visit gets the Error component with the status.
+func TestServerError_PageLinksHome(t *testing.T) {
+	app := vukemtest.New(
+		t,
+		bootstrap.New,
+		vukemtest.Options{Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")}},
+	)
+
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// The listing query fails once its table is gone: a real 500 without a test-only route.
+	if _, err := db.ExecContext(t.Context(), `ALTER TABLE items RENAME TO items_gone`); err != nil {
+		t.Fatal(err)
+	}
+
+	app.Client(t).Get("/movies").AssertStatus(500).AssertSee(`<a href="/">Back to home</a>`)
+	app.Client(t).Get("/pt-br/movies").AssertStatus(500).AssertSee(`<a href="/pt-br/">`)
+	app.Client(t).Inertia("").Get("/movies").AssertStatus(500).AssertInertia("Error").PropEquals("status", 500)
+}

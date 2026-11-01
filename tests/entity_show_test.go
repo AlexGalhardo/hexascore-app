@@ -118,6 +118,6 @@ func TestInertiaPages_Entity_Show(t *testing.T) {
 	item("movie", "public", 10, 0, nil, country, "country")
 	client.Inertia("").Get("/movies/movie-10-"+country[:4]).AssertOK().AssertInertia("Catalog/Show").
 		PropEquals("entities.country.0.code", "BR")
-	client.Inertia("").Get("/people/missing").AssertStatus(404)
-	client.Inertia("").Get("/genres/ridley-scott").AssertStatus(404)
+	client.Inertia("").Get("/people/missing").AssertStatus(301).AssertHeader("Location", "/")
+	client.Inertia("").Get("/genres/ridley-scott").AssertStatus(301).AssertHeader("Location", "/")
 }

@@ -80,5 +80,5 @@ func TestInertiaPages_Catalog_Show(t *testing.T) {
 		PropEquals("editionCount", 12).
 		HasProp("editions", 10)
 
-	client.Inertia("").Get("/games/missing").AssertStatus(404)
+	client.Inertia("").Get("/games/missing").AssertStatus(301).AssertHeader("Location", "/")
 }
