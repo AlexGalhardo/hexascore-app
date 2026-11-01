@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **security:** Logs redact password-reset tokens in the request path and the `signature`, `expires` and `X-Amz-*` values of signed links in any message or error (`TestSecurity_A09_SignedURLsNotLogged`)
 - **ui:** Item pages ship the reviews, comments and reactions strings instead of raw keys (P7.B.1.1)
 - **infra:** `qa/k6/moderation.js` keeps one signed-in session per account (admin TOTP included), and `CommunityLoad` dates its load before today so members keep their daily submit quota (P4.B.5.1)
 - **legal:** The delete-account help page links keep the visitor's locale prefix (P5.C.2.1)

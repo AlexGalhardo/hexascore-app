@@ -48,6 +48,7 @@ var (
 	paramRe = regexp.MustCompile(`(?i)\b(password|token|api_key|apikey|secret|email|q|query|search|signature|expires|` +
 		`x-amz-signature|x-amz-credential|x-amz-security-token)=[^&\s"]*`)
 	// The password-reset token travels in the path, which the request line logs.
+	// workaround(vukem): VF-071 (middleware.Logger cannot redact path params).
 	tokenPathRe = regexp.MustCompile(`(/reset-password/)[^/?#\s"]+`)
 )
 
