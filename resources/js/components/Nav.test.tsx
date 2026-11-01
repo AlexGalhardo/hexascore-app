@@ -118,6 +118,9 @@ test("the inline Feed link waits for xl and the account menu carries it below", 
 		// a bare inline-flex would win over hidden in Tailwind's sort and undo the fix
 		expect(inline?.className).not.toMatch(/(^|\s)inline-flex(\s|$)/);
 		expect(inline?.className).toContain("xl:inline-flex");
+		// Feed takes the room of the name next to the avatar (the menu still shows it).
+		const trigger = screen.getAllByRole("button", { name: "nav.account" })[0];
+		expect(trigger.querySelector(".xl\\:inline")).toBeNull();
 	} finally {
 		props.auth.user = null;
 		props.flags = {};

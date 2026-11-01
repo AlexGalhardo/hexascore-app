@@ -250,7 +250,10 @@ export default function Nav() {
 										>
 											{(user.name || "?").slice(0, 1).toUpperCase()}
 										</span>
-										<span className="hidden max-w-32 truncate font-semibold xl:inline">
+										{/* with the inline Feed link the 1152 px bar has no room for the name; the menu still shows it */}
+										<span
+											className={`hidden max-w-32 truncate font-semibold ${feedHref ? "" : "xl:inline"}`}
+										>
 											{user.nickname || user.name}
 										</span>
 									</>
