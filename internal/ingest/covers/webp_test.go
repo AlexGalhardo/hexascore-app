@@ -4,13 +4,16 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"encoding/json"
 	"errors"
 	"hash/crc32"
 	"image"
 	"image/color"
 	"image/jpeg"
 	"image/png"
+	"math"
 	"os"
+	"os/exec"
 	"strings"
 	"testing"
 	"time"
@@ -270,5 +273,48 @@ func TestMissingBinaryIsReported(t *testing.T) {
 	_, err := e.Encode(t.Context(), pngBytes(t, gradient(10, 10, 255)), covers.Full)
 	if !errors.Is(err, covers.ErrNoEncoder) {
 		t.Errorf("err = %v, want ErrNoEncoder", err)
+	}
+}
+
+// TestWebpSizeParity compares the Encoder output with the sizes the pinned cwebp produces on its own for the same
+// fixtures (testdata/covers/reference_sizes.json): ±10 %. It needs the real cwebp, so it skips where there is none;
+// run it in the app image (see the P6.B.2.1 report).
+func TestWebpSizeParity(t *testing.T) {
+	path, err := exec.LookPath("cwebp")
+	if err != nil {
+		t.Skip("cwebp is not installed; run in the app image")
+	}
+
+	raw, err := os.ReadFile("../testdata/covers/reference_sizes.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var ref struct {
+		Sizes map[string]map[string]int `json:"sizes"`
+	}
+	if err := json.Unmarshal(raw, &ref); err != nil {
+		t.Fatal(err)
+	}
+
+	enc := &covers.Cwebp{Path: path, Env: []string{}}
+	variants := map[string]covers.Variant{"full": covers.Full, "thumb": covers.Thumb}
+
+	for name, bySize := range ref.Sizes {
+		src, err := os.ReadFile("../testdata/covers/" + name)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		for tag, want := range bySize {
+			out, err := enc.Encode(t.Context(), src, variants[tag])
+			if err != nil {
+				t.Fatalf("%s %s: %v", name, tag, err)
+			}
+
+			if d := math.Abs(float64(len(out))-float64(want)) / float64(want); d > 0.10 {
+				t.Errorf("%s %s: %d bytes, reference %d (%.1f %% off, limit 10 %%)", name, tag, len(out), want, d*100)
+			}
+		}
 	}
 }
