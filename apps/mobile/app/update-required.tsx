@@ -1,31 +1,33 @@
 import type { ReactElement } from "react";
-import { Linking, Pressable, Text, View } from "react-native";
+import { Linking } from "react-native";
 import { logout } from "../src/auth/logout";
 import { appClient, session } from "../src/auth/runtime";
 import { t } from "../src/i18n";
 import { storeListingUrl } from "../src/platform/store";
 import { useLocale } from "../src/providers/root";
+import { StatePage } from "../src/ui/screens/StatePage";
 
 export default function UpdateRequiredScreen(): ReactElement {
 	const locale = useLocale();
 	return (
-		<View className="flex-1 items-center justify-center gap-4 bg-bg px-4 dark:bg-bg-dark">
-			<Text className="text-20 text-fg dark:text-fg-dark">
-				{t(locale, "account.updateRequired.title")}
-			</Text>
-			<Pressable accessibilityRole="link" onPress={() => void Linking.openURL(storeListingUrl())}>
-				<Text className="text-fg dark:text-fg-dark">{storeListingUrl()}</Text>
-			</Pressable>
-			<Pressable
-				accessibilityRole="button"
-				onPress={() =>
-					void appClient.write(appClient.newIdempotencyKey(), (client) =>
-						logout({ client, session }),
-					)
-				}
-			>
-				<Text className="text-fg dark:text-fg-dark">{t(locale, "account.sessions.revoke")}</Text>
-			</Pressable>
-		</View>
+		<StatePage
+			title={t(locale, "account.updateRequired.title")}
+			body={[]}
+			actions={[
+				{
+					label: storeListingUrl(),
+					role: "link",
+					onPress: () => void Linking.openURL(storeListingUrl()),
+				},
+				{
+					label: t(locale, "account.sessions.revoke"),
+					variant: "secondary",
+					onPress: () =>
+						void appClient.write(appClient.newIdempotencyKey(), (client) =>
+							logout({ client, session }),
+						),
+				},
+			]}
+		/>
 	);
 }
