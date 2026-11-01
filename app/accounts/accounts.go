@@ -31,7 +31,7 @@ import (
 type Accounts struct {
 	DB     *database.DB
 	Mailer *mail.Mailer
-	Users  *auth.ORMProvider[models.User]
+	Users  UserProvider
 	Web    *auth.SessionGuard[models.User]
 	API    *auth.TokenGuard[models.User]
 	Tokens *auth.Tokens
@@ -131,7 +131,7 @@ func New(app *vukem.App) (*Accounts, error) {
 		return nil, err
 	}
 
-	users := auth.NewORMProvider[models.User](db)
+	users := UserProvider{auth.NewORMProvider[models.User](db)}
 	tokens := auth.NewTokens(db)
 	// A recognizable prefix lets secret scanners catch leaked tokens; make
 	// it specific to this app (SDD 03 §6.2).
