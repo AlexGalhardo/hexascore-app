@@ -4,6 +4,7 @@ import * as Haptics from "expo-haptics";
 import type { ReactNode } from "react";
 import { queryKeys } from "../query/keys";
 import type { QueuedWrite, QueueEntry } from "../queue/store";
+import { createStatusCache } from "../status/cache";
 import { createRatingCache } from "./cache";
 import { StarInput } from "./StarInput";
 import { type RatingQueue, RatingQueueProvider, useRateMutation } from "./useRateMutation";
@@ -33,6 +34,7 @@ async function setup(full = false) {
 	const writes: QueuedWrite[] = [];
 	const queue: RatingQueue = {
 		cache,
+		statusCache: createStatusCache(client),
 		enqueue: jest.fn(async (write: QueuedWrite) => {
 			if (full) return null;
 			writes.push(write);

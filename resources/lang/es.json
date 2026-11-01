@@ -109,11 +109,7 @@
       "button": "Pedir exportación",
       "requested": "Exportación solicitada. Pronto recibirás un correo con el enlace.",
       "cooldown": "Puedes pedir una exportación cada 7 días. Inténtalo más tarde.",
-      "failed": "No se pudo pedir la exportación. Inténtalo de nuevo.",
-      "retryIn": {
-        "one": "Puedes intentarlo de nuevo en {count} día.",
-        "other": "Puedes intentarlo de nuevo en {count} días."
-      }
+      "failed": "No se pudo pedir la exportación. Inténtalo de nuevo."
     },
     "notifications": {
       "title": "Avisos por correo",
@@ -146,31 +142,6 @@
       "themeLight": "Claro",
       "themeDark": "Oscuro",
       "crashReports": "Enviar informes de errores"
-    },
-    "inbox": {
-      "title": "Notificaciones",
-      "empty": "No tienes notificaciones.",
-      "markAll": "Marcar todo como leído",
-      "unread": "No leída",
-      "unreadCount": {
-        "one": "{count} no leída",
-        "other": "{count} no leídas"
-      },
-      "kind": {
-        "suggestion_decided": "Tu sugerencia fue revisada.",
-        "suggestion_reverted": "Un cambio que sugeriste fue revertido.",
-        "suggestion_expired": "Tu sugerencia caducó.",
-        "report_resolved": "Tu denuncia fue revisada. Gracias.",
-        "rating_flagged": "Una de tus valoraciones fue marcada para revisión.",
-        "list_hidden": "Un moderador ocultó una de tus listas.",
-        "system": "Aviso del equipo."
-      }
-    },
-    "about": {
-      "title": "Acerca de",
-      "version": "Versión {version}",
-      "tmdb": "Este producto usa la API de TMDB, pero TMDB no lo respalda ni lo certifica.",
-      "igdb": "Los datos de juegos los proporciona IGDB.com."
     }
   },
   "actions": {
@@ -308,9 +279,7 @@
       "show": "Mostrar contraseña",
       "hide": "Ocultar contraseña",
       "confirmPassword": "Confirmar contraseña",
-      "deviceName": "Nombre del dispositivo",
-      "showShort": "Mostrar",
-      "hideShort": "Ocultar"
+      "deviceName": "Nombre del dispositivo"
     },
     "rules": {
       "title": "Tu contraseña debe tener:",
@@ -364,10 +333,7 @@
       "trustDevice": "Confiar en este dispositivo durante 30 días",
       "verify": "Verificar",
       "rememberMe": "Recordarme",
-      "backupCode": "Código de respaldo",
-      "heading": "Entra para puntuar, organizar y crear listas.",
-      "lede": "Una cuenta para el sitio y la app de Android. Tus puntuaciones forman la nota de la comunidad cuando cinco miembros puntúan un título.",
-      "newHere": "¿Eres nuevo?"
+      "backupCode": "Código de respaldo"
     },
     "signup": {
       "metaTitle": "Crear cuenta",
@@ -380,11 +346,7 @@
       "checkBody": "Enviamos un enlace de confirmación a {email}. Ábrelo para activar tu cuenta.",
       "agree": "Al crear la cuenta aceptas los <terms>Términos</terms> y la <privacy>Política de privacidad</privacy>.",
       "checkNotice": "Si la dirección puede usarse, le enviamos un enlace para verificarla. Si ya tiene una cuenta, enviamos un enlace para iniciar sesión o restablecer la contraseña.",
-      "goLogin": "Ir a la página de inicio de sesión",
-      "heading": "Únete y puntúa en seis categorías.",
-      "lede": "Cuenta gratuita. Confirma tu correo y tus puntuaciones empiezan a contar para la nota de la comunidad.",
-      "alreadyMember": "¿Ya eres miembro?",
-      "cardTitle": "Crea tu cuenta"
+      "goLogin": "Ir a la página de inicio de sesión"
     },
     "verify": {
       "metaTitle": "Verificar correo",
@@ -404,9 +366,7 @@
       "body": "Introduce el correo de tu cuenta y te enviaremos un enlace para elegir una nueva contraseña.",
       "submit": "Enviar enlace",
       "sent": "Si existe una cuenta con este correo, un enlace para restablecerla está en camino. Caduca en 1 hora.",
-      "back": "Volver a entrar",
-      "heading": "De vuelta en un minuto.",
-      "lede": "Enviamos un enlace válido por una hora al correo de tu cuenta; nada cambia hasta que lo abras."
+      "back": "Volver a entrar"
     },
     "reset": {
       "metaTitle": "Elige una nueva contraseña",
@@ -435,10 +395,7 @@
       "title": "Elige tu nickname",
       "body": "Tu nickname es tu nombre público en HexaScore. Es único y no se puede cambiar después.",
       "submit": "Guardar nickname"
-    },
-    "members": "Miembros",
-    "googleSignIn": "Iniciar sesión con Google",
-    "googleSignUp": "Registrarse con Google"
+    }
   },
   "billing": {
     "plans": {
@@ -466,10 +423,7 @@
       "notConfigured": "Los pagos en línea aún no están disponibles. Los planes de pago abrirán pronto.",
       "coverageTitle": "Cobertura de datos",
       "coverageBody": "La API solo devuelve campos que podemos republicar, así que algunos son irregulares y otros siempre se omiten (portadas, tráilers). Los porcentajes de cobertura aún no se han publicado.",
-      "coverageLink": "Ver los detalles de la cobertura",
-      "eyebrow": "API pública · solo lectura",
-      "popular": "El más elegido",
-      "lifetime": "de por vida"
+      "coverageLink": "Ver los detalles de la cobertura"
     },
     "checkout": {
       "metaTitle": "Plan y facturación",
@@ -584,7 +538,6 @@
     "next": "Siguiente",
     "previous": "Anterior",
     "pagination": "Páginas",
-    "page": "Página {page}",
     "landing": {
       "topRated": "Mejor valorados",
       "newest": "Estrenos",
@@ -904,7 +857,9 @@
     "serverBody": "Ocurrió un error inesperado de nuestro lado. Inténtalo de nuevo en un momento.",
     "retry": "Intentar de nuevo",
     "home": "Volver al inicio",
-    "reference": "Referencia del error"
+    "reference": "Referencia del error",
+    "status-not-completed": "Marca el juego como completado antes de añadir tu tiempo para terminarlo.",
+    "timeToBeatHours": "Usa de 0,5 a 10.000 horas, de 0,5 en 0,5."
   },
   "item": {
     "metaDescription": "{title} ({type}) — nota de la comunidad y promedios en 6 categorías.",
@@ -1028,7 +983,8 @@
       "save": "Guardar tiempos",
       "delete": "Borrar tiempos",
       "saved": "Tiempos guardados.",
-      "deleted": "Tiempos borrados."
+      "deleted": "Tiempos borrados.",
+      "notSaved": "No se pudieron guardar tus tiempos. Inténtalo de nuevo."
     },
     "confidence": "Confianza: {level}",
     "confidenceLevel": {
@@ -1060,17 +1016,34 @@
       "overallHint": "La media de las categorías que valoraste ({rated} de {total}).",
       "completeHint": "Valora todas las categorías para guardar."
     },
-    "moreLike": {
-      "game": "Más juegos como este",
-      "movie": "Más películas como esta",
-      "series": "Más series como esta",
-      "book": "Más libros como este"
-    },
-    "similarReason": "En común: {entity}",
-    "crossMedia": "En otros medios",
-    "relation": {
-      "based_on": "Obra original",
-      "adapted_as": "Adaptación"
+    "status": {
+      "title": "Estado",
+      "none": "Sin estado",
+      "game": {
+        "want": "Quiero jugar",
+        "in_progress": "Jugando",
+        "completed": "Jugado",
+        "dropped": "Abandonado"
+      },
+      "movie": {
+        "want": "Quiero ver",
+        "in_progress": "Viendo",
+        "completed": "Vista",
+        "dropped": "Abandonada"
+      },
+      "series": {
+        "want": "Quiero ver",
+        "in_progress": "Viendo",
+        "completed": "Vista",
+        "dropped": "Abandonada"
+      },
+      "book": {
+        "want": "Quiero leer",
+        "in_progress": "Leyendo",
+        "completed": "Leído",
+        "dropped": "Abandonado"
+      },
+      "notSaved": "No se pudo guardar tu estado. Inténtalo de nuevo."
     }
   },
   "updatedLabel": "Última actualización",
@@ -1153,10 +1126,7 @@
           "0": "Actualizaremos esta página cuando cambien nuestras prácticas y cambiaremos la fecha de arriba. Los cambios importantes se anuncian en el sitio o por correo antes de entrar en vigor."
         }
       }
-    },
-    "contents": "Contenido",
-    "also": "Ver también",
-    "otherTitle": "Términos de uso y cookies"
+    }
   },
   "terms": {
     "title": "Términos de uso y cookies",
@@ -1241,10 +1211,7 @@
           "0": "Las dudas sobre estos términos, las solicitudes de desistimiento o reembolso y las solicitudes de privacidad pueden enviarse mediante el formulario de contacto."
         }
       }
-    },
-    "contents": "Contenido",
-    "also": "Ver también",
-    "otherTitle": "Política de privacidad"
+    }
   },
   "lists": {
     "addToList": "Añadir a una lista",
@@ -1342,22 +1309,7 @@
       "move": "mover",
       "open": "abrir",
       "esc": "cerrar"
-    },
-    "count": {
-      "one": "{n} resultado",
-      "other": "{n} resultados"
-    },
-    "allIn": {
-      "game": "Los {n} juegos para “{q}”",
-      "movie": "Las {n} películas para “{q}”",
-      "series": "Las {n} series para “{q}”",
-      "book": "Los {n} libros para “{q}”"
-    },
-    "nothingFound": "No encontramos nada para “{q}”.",
-    "checkSpelling": "Revisa la ortografía o prueba otro título.",
-    "didYouMean": "Quisiste decir:",
-    "orBrowse": "O explora una sección",
-    "people": "Personas y empresas"
+    }
   },
   "social": {
     "profile": {
@@ -1554,14 +1506,7 @@
     "editionsError": "No se pudieron cargar las ediciones.",
     "noEditions": "No hay ediciones disponibles.",
     "seeAll": "Ver todos",
-    "score": "Tu puntuación: {stars}",
-    "yourScore": "Tu nota {stars}",
-    "notRated": "Sin nota tuya",
-    "shelvesOf": "Estantes de {name}",
-    "titleCount": {
-      "one": "{count} título",
-      "other": "{count} títulos"
-    }
+    "score": "Tu puntuación: {stars}"
   },
   "entity": {
     "kinds": {
@@ -1582,10 +1527,7 @@
     "showing": "{count} de {total}",
     "avgScore": "Nota media: {score}",
     "seeAll": "Ver todos",
-    "next": "Siguiente",
-    "emptyHint": "Los elementos vinculados a esta página aparecerán aquí cuando estén en el catálogo.",
-    "browse": "Explorar el catálogo",
-    "source": "Fuente"
+    "next": "Siguiente"
   },
   "userLists": {
     "addItem": "Añadir un elemento",
@@ -1740,15 +1682,6 @@
         "deleted": "usuario eliminado",
         "system": "HexaScore",
         "user": "miembro"
-      },
-      "lede": "Todas las ediciones aceptadas de esta página, de la más reciente a la más antigua.",
-      "overview": "Resumen",
-      "columns": {
-        "date": "Fecha",
-        "field": "Campo",
-        "before": "Antes",
-        "after": "Después",
-        "by": "Por"
       }
     },
     "entityKinds": {

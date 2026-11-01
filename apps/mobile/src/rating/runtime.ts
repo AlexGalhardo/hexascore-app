@@ -5,10 +5,16 @@ import type { KeyValueStorage } from "../query/persister";
 import { createDrain, type DrainDeps, type QueueResult } from "../queue/drain";
 import type { SendOutcome } from "../queue/policy";
 import { createMutationStore, type QueueEntry } from "../queue/store";
+import { createStatusCache } from "../status/cache";
 import { createRatingCache } from "./cache";
 import type { RatingQueue } from "./useRateMutation";
 
-export type RatingToast = "ratings.notReleased" | "ratings.notSaved";
+export type RatingToast =
+	| "ratings.notReleased"
+	| "ratings.notSaved"
+	| "item.status.notSaved"
+	| "item.timeToBeat.notSaved"
+	| "errors.status-not-completed";
 
 export type RatingRuntimeDeps = {
 	storage: KeyValueStorage;
@@ -28,17 +34,27 @@ export type RatingRuntime = {
 	drain: () => Promise<void>;
 };
 
-export function toastFor(result: QueueResult): RatingToast | null {
+const NOT_SAVED: Partial<Record<QueueEntry["op"], RatingToast>> = {
+	rating: "ratings.notSaved",
+	status: "item.status.notSaved",
+	timeToBeat: "item.timeToBeat.notSaved",
+};
+
+export function toastFor(result: QueueResult, op: QueueEntry["op"]): RatingToast | null {
+	const notSaved = NOT_SAVED[op] ?? null;
 	if (result.kind === "rollback") {
-		return result.code === "rating-not-released" ? "ratings.notReleased" : "ratings.notSaved";
+		if (result.code === "rating-not-released") return "ratings.notReleased";
+		if (result.code === "status-not-completed") return "errors.status-not-completed";
+		return notSaved;
 	}
-	return result.kind === "drop" && result.toast ? "ratings.notSaved" : null;
+	return result.kind === "drop" && result.toast ? notSaved : null;
 }
 
 export function createRatingRuntime(deps: RatingRuntimeDeps): RatingRuntime {
 	let user: string | null = null;
 	const store = createMutationStore(deps.storage, deps.newKey);
 	const cache = createRatingCache(deps.queryClient);
+	const statusCache = createStatusCache(deps.queryClient);
 	const { drain } = createDrain({
 		store,
 		send: deps.send,
@@ -48,13 +64,15 @@ export function createRatingRuntime(deps: RatingRuntimeDeps): RatingRuntime {
 		schedule: deps.schedule,
 		onResult(entry, result) {
 			cache.onResult(entry, result);
-			const toast = entry.op === "rating" ? toastFor(result) : null;
+			statusCache.onResult(entry, result);
+			const toast = toastFor(result, entry.op);
 			if (toast) deps.notify(toast);
 		},
 	});
 	return {
 		queue: {
 			cache,
+			statusCache,
 			drain,
 			enqueue: (write) => (user === null ? Promise.resolve(null) : store.enqueue(user, write)),
 		},
