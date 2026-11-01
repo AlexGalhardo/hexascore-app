@@ -1,9 +1,10 @@
 import { Link, usePage } from "@inertiajs/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { LOCALE_PREFIXES, localized, unlocalized } from "../lib/route";
 import { useT } from "../lib/useT";
 import type { SharedProps } from "../types";
+import SearchPalette from "./search/SearchPalette";
 import Dropdown from "./ui/Dropdown";
 
 const LOCALE_LABELS: Record<string, string> = { en: "EN", "pt-BR": "PT", es: "ES" };
@@ -98,6 +99,19 @@ export default function Nav() {
 	const scrolled = useScrolled();
 	const hint = useShortcutHint();
 	const searchHref = localized("/search", locale);
+	const [paletteOpen, setPaletteOpen] = useState(false);
+	const searchTrigger = useRef<HTMLAnchorElement>(null);
+
+	useEffect(() => {
+		const onKey = (e: KeyboardEvent) => {
+			if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+				e.preventDefault();
+				setPaletteOpen(true);
+			}
+		};
+		document.addEventListener("keydown", onKey);
+		return () => document.removeEventListener("keydown", onKey);
+	}, []);
 
 	const language = (
 		<Dropdown
@@ -159,8 +173,16 @@ export default function Nav() {
 				<div className="ml-auto flex items-center gap-1 lg:gap-7">
 					{/* A plain link to /search; the command palette takes over the click and Ctrl/⌘ K. */}
 					<a
+						ref={searchTrigger}
 						href={searchHref}
 						data-search-trigger=""
+						aria-haspopup="dialog"
+						onClick={(e) => {
+							// A modified click still opens /search in a new tab.
+							if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;
+							e.preventDefault();
+							setPaletteOpen(true);
+						}}
 						aria-label={t("nav.openSearch")}
 						aria-keyshortcuts="Control+K Meta+K"
 						className={`${iconButton} lg:h-11 lg:w-56 lg:justify-start lg:gap-2 lg:border lg:border-field lg:bg-field-bg lg:px-3 lg:text-muted xl:w-[280px]`}
@@ -304,6 +326,11 @@ export default function Nav() {
 					</Link>
 				))}
 			</nav>
+			<SearchPalette
+				open={paletteOpen}
+				onOpenChange={setPaletteOpen}
+				returnFocus={searchTrigger}
+			/>
 		</header>
 	);
 }

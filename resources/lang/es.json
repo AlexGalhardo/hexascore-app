@@ -1213,7 +1213,12 @@
     "filter": "Filtrar por tipo",
     "pagination": "Páginas",
     "previous": "Anterior",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "palette": {
+      "close": "Cerrar",
+      "recent": "Búsquedas recientes",
+      "seeAll": "Ver todos los resultados de “{q}”"
+    }
   },
   "social": {
     "profile": {
