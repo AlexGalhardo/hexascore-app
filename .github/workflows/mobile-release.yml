@@ -3,7 +3,8 @@ name: Mobile release
 # SDD 10 section 7.8, docs/runbooks/mobile-release.md. Android only until iOS enters.
 # Manual dispatch builds any profile; a `mobile-vX.Y.Z` tag builds `production` and requires X.Y.Z to equal
 # `version` in apps/mobile/app.config.ts.
-# The build job needs the EXPO_TOKEN secret and fails closed without it.
+# The build job waits on the API contract job (same checks as ci.yml), needs the EXPO_TOKEN secret and fails
+# closed without it.
 # The submit job runs for a tag build, or a dispatch with `submit` ticked, and always waits on the `play-store`
 # environment: the owner approves that exact build there, so nothing reaches Play Console without that yes.
 # It refuses to run if the environment has no required reviewer.
@@ -36,8 +37,49 @@ env:
   PROFILE: ${{ inputs.profile || 'production' }}
 
 jobs:
+  contract:
+    # The same API contract checks as ci.yml (lint "OpenAPI goldens" and openapi "App client matches codegen"):
+    # a build whose app-client drifted from the /app/v1 handlers never reaches a store build.
+    name: API contract (OpenAPI goldens, app client codegen)
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:18.6-alpine3.24@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5
+        env:
+          POSTGRES_USER: hexascore
+          POSTGRES_PASSWORD: hexascore
+          POSTGRES_DB: hexascore
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U hexascore" --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      DATABASE_URL: postgres://hexascore:hexascore@127.0.0.1:5432/hexascore?sslmode=disable
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - name: OpenAPI goldens
+        run: bash scripts/openapi-check.sh
+      - name: OpenAPI lint
+        run: bun run openapi:lint
+      - name: App client matches codegen
+        run: |
+          set -euo pipefail
+          export APP_ENV=development APP_KEY="base64:$(openssl rand -base64 32)"
+          unset API_HOST
+          out=$(mktemp)
+          go run ./cmd/app codegen:client -prefix /app/v1 -o - >"$out"
+          git diff --no-index --exit-code packages/app-client/src/api.ts "$out"
+          bun run --filter @hexascore/app-client typecheck test
+
   build:
     name: Check and build (${{ inputs.profile || 'production' }})
+    needs: contract
     runs-on: ubuntu-24.04
     outputs:
       build_id: ${{ steps.build.outputs.build_id }}
