@@ -28,7 +28,7 @@ export function ScoreBadge({ score, locale, label, size = "md" }: ScoreBadgeProp
 			accessibilityLabel={label}
 			className={`${box} items-center justify-center rounded-sm ${FILL[scoreBand(score)]}`}
 		>
-			<Text className={`${text} font-bold tabular-nums text-on-score`}>
+			<Text className={`${text} font-text font-bold tabular-nums text-on-score`}>
 				{formatScore(score, locale)}
 			</Text>
 		</View>

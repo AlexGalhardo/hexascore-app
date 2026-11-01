@@ -1,6 +1,7 @@
 import { type ReactElement, useState } from "react";
 import { type AccessibilityActionEvent, Pressable, Text, View } from "react-native";
 import { formatScore } from "./format";
+import { Icon } from "./Icon";
 
 const STARS = 10;
 const MIN = 0.5;
@@ -24,14 +25,13 @@ export interface RatingInputProps {
 function Star({ fill }: { fill: 0 | 0.5 | 1 }): ReactElement {
 	return (
 		<View className="h-11 flex-1 items-center justify-center">
-			<Text className="text-24 text-star-line dark:text-star-line-dark">☆</Text>
+			<Icon name="star-outline" size={24} className="text-star-line dark:text-star-line-dark" />
 			{fill > 0 && (
 				<View
 					className={`absolute bottom-0 left-0 top-0 items-start justify-center overflow-hidden ${fill === 1 ? "w-full" : "w-1/2"}`}
 				>
-					{/* The glyph box spans the whole star so the clipped half lines up with the outline. */}
-					<View className={`items-center ${fill === 1 ? "w-full" : "w-[200%]"}`}>
-						<Text className="text-24 text-star dark:text-star-dark">★</Text>
+					<View className="w-full items-center">
+						<Icon name="star" size={24} className="text-star dark:text-star-dark" />
 					</View>
 				</View>
 			)}
@@ -70,7 +70,7 @@ export function RatingInput({ label, value, onChange, locale }: RatingInputProps
 					return <Star key={position} fill={filled >= 1 ? 1 : filled >= 0.5 ? 0.5 : 0} />;
 				})}
 			</Pressable>
-			<Text className="w-20 text-right text-16 font-semibold tabular-nums text-fg dark:text-fg-dark">
+			<Text className="w-20 text-right font-text text-16 font-semibold tabular-nums text-fg dark:text-fg-dark">
 				{text}
 			</Text>
 		</View>
