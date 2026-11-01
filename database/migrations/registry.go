@@ -84,5 +84,6 @@ func All() []schema.Migration {
 		m20261101164000CreateActivityEvents(),
 		m20261101170000CreateReviewsTable(),
 		m20261101180000CreateCommentsAndReactions(),
+		m20261101190000ModerateReviewsAndComments(),
 	}
 }

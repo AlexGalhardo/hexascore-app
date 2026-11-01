@@ -106,7 +106,7 @@ JOIN users u ON u.id = v.user_id
 JOIN items i ON i.id = v.item_id
 LEFT JOIN item_translations t ON t.item_id = i.id AND t.locale = $1
 LEFT JOIN item_translations te ON te.item_id = i.id AND te.locale = 'en'
-WHERE ` + filter + `
+WHERE NOT v.hidden AND ` + filter + `
 ORDER BY v.helpful_count DESC, v.created_at DESC LIMIT ` + strconv.Itoa(
 		reviewPage,
 	)

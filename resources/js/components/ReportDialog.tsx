@@ -7,12 +7,19 @@ import Dialog from "./Dialog";
 
 const REASONS = ["spam", "offensive", "harassment", "impersonation", "other"] as const;
 
+const LABELS = {
+	list: "social.report.reportList",
+	user: "social.report.reportUser",
+	review: "social.report.reportReview",
+	comment: "social.report.reportComment",
+} as const;
+
 interface Props {
-	targetType: "list" | "user";
+	targetType: "list" | "user" | "review" | "comment";
 	targetId: string;
 }
 
-// Report button plus dialog for a public list or profile (SDD 14 FR-14-9). The
+// Report button plus dialog for a public list, profile, review or comment (SDD 14 FR-14-9). The
 // server answers 303 with a flash; a repeat report is a silent 200.
 export default function ReportDialog({ targetType, targetId }: Props) {
 	const t = useT();
@@ -38,7 +45,7 @@ export default function ReportDialog({ targetType, targetId }: Props) {
 				onClick={() => setOpen(true)}
 				className="inline-flex min-h-11 items-center text-sm text-muted underline hover:text-fg"
 			>
-				{t(targetType === "list" ? "social.report.reportList" : "social.report.reportUser")}
+				{t(LABELS[targetType])}
 			</button>
 			<Dialog open={open} onOpenChange={setOpen} title={t("social.report.title")} size="sm">
 				<form onSubmit={submit} className="mt-4 grid gap-3">

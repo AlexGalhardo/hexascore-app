@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { useT } from "../../lib/useT";
+import ReportDialog from "../ReportDialog";
 import CommentThread, { type CommentEntry } from "../social/CommentThread";
 import Markdown, { type MdNode } from "../social/Markdown";
 import ReactionBar, { type ReactionKind } from "../social/ReactionBar";
@@ -86,6 +87,9 @@ export default function Reviews({ itemId, reviews, canWrite, rated }: Props) {
 								mine={r.myReaction}
 								canReact={canWrite && r.source === undefined}
 							/>
+							{canWrite && r.source === undefined && (
+								<ReportDialog targetType="review" targetId={r.id} />
+							)}
 							<CommentThread
 								target="review"
 								id={r.id}

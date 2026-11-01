@@ -157,6 +157,8 @@ LEFT JOIN ratings r ON e.kind = 'rating_saved' AND r.user_id = e.actor_id AND r.
 LEFT JOIN lists l ON l.id = e.list_id
 WHERE (e.item_id IS NULL OR i.visibility = 'public')
   AND (e.list_id IS NULL OR (l.is_public AND NOT l.hidden))
+  AND (e.kind <> 'review_published' OR EXISTS (SELECT 1 FROM reviews v
+    WHERE v.user_id = e.actor_id AND v.item_id = e.item_id AND NOT v.hidden))
   AND ($3 = '' OR e.id < $3::uuid)
 ORDER BY e.id DESC LIMIT $4`
 }

@@ -89,13 +89,13 @@ func owner(ctx context.Context, ex database.Executor, viewerID int64, typ, id st
 JOIN ratings r ON r.user_id = v.user_id AND r.item_id = v.item_id
 JOIN items i ON i.id = v.item_id AND i.visibility = 'public'
 JOIN users u ON u.id = v.user_id
-WHERE v.id = $1 AND (v.user_id = $2 OR (` + visible + `))`
+WHERE v.id = $1 AND NOT v.hidden AND (v.user_id = $2 OR (` + visible + `))`
 	case "list":
 		q = `SELECT l.user_id FROM lists l JOIN users u ON u.id = l.user_id
 WHERE l.id = $1 AND (l.user_id = $2 OR (l.is_public AND NOT l.hidden AND ` + visible + `))`
 	default:
 		q = `SELECT c.user_id, c.review_id, c.list_id FROM comments c JOIN users u ON u.id = c.user_id
-WHERE c.id = $1 AND (c.user_id = $2 OR (` + visible + `))`
+WHERE c.id = $1 AND NOT c.hidden AND (c.user_id = $2 OR (` + visible + `))`
 	}
 
 	dest := []any{&author}
@@ -324,7 +324,7 @@ func (s *Follows) Comments(
   coalesce(rx.kind, '')
 FROM comments c JOIN users u ON u.id = c.user_id
 LEFT JOIN reactions rx ON rx.comment_id = c.id AND rx.user_id = $2
-WHERE c.`+col+` = ANY($1::uuid[]) AND (c.user_id = $2 OR (`+visible+`))
+WHERE c.`+col+` = ANY($1::uuid[]) AND NOT c.hidden AND (c.user_id = $2 OR (`+visible+`))
 ORDER BY c.created_at, c.id LIMIT $3`, "{"+strings.Join(ids, ",")+"}", viewerID, commentCap)
 	if err != nil {
 		return nil, fmt.Errorf("social: comments: %w", err)

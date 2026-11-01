@@ -10,6 +10,14 @@ const put = vi.fn();
 const del = vi.fn();
 
 vi.mock("@inertiajs/react", () => ({
+	useForm: (data: Record<string, unknown>) => ({
+		data,
+		setData: vi.fn(),
+		post: vi.fn(),
+		reset: vi.fn(),
+		processing: false,
+		errors: {},
+	}),
 	router: {
 		post: (...args: unknown[]) => post(...args),
 		put: (...args: unknown[]) => put(...args),
@@ -100,4 +108,17 @@ test("reactions are read-only without a signed-in reader", () => {
 
 	expect(screen.queryByRole("button")).toBeNull();
 	expect(screen.getByText("reactions.like 3")).toBeTruthy();
+});
+
+test("offers a report button on other people's comments only", () => {
+	render(
+		<CommentThread
+			target="review"
+			id="r1"
+			canWrite
+			comments={[c({ replies: [c({ id: "c2", body: "mine", mine: true })] })]}
+		/>,
+	);
+
+	expect(screen.getAllByRole("button", { name: "social.report.reportComment" })).toHaveLength(1);
 });
