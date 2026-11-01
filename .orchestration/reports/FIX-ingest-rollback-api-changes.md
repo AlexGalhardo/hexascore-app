@@ -8,3 +8,13 @@ design: rollback writes a `deleted` row for every item it deletes or hides (a hi
 not done (outside the asked scope, still in the row text): a non-wikidata rollback does not requeue the Wikidata record or clear that source's cover; restored IGDB/TMDB payloads keep the bad run's `checked_at`; `entities` (credits) changes are not part of the normalize snapshot, so a credits-only change writes no row.
 changelog: Fixed (ingestion and rollback now feed /changes).
 roadmap: no box (follow-up of P6.B)
+
+## Review (especialista, 2026-11-01)
+verdict: CORRIGIDO_E_APROVADO
+re-run: `go test -tags integration -p 1 ./tests/ingest -run 'TestRollback|TestNormalize|TestCovers|TestAlertA7|TestRecompute|TestLocked|TestSlug|TestCancelled|TestBad|TestResume|TestWiring'` → ok (32 s); `go test ./internal/ingest/covers ./internal/ingest/normalize` → ok; `golangci-lint run --timeout 15m -j 2 --build-tags integration ./tests/ingest/... ./internal/ingest/... ./app/jobs/...` → 0 issues; `golangci-lint fmt --diff` → clean
+fixes (CORRIGIDO): 1. rows.Err() checks in tests/ingest/resume_test.go and wiring_test.go, the two rowserrcheck findings (8d1a251c)
+gate on main after merge: go build ok; targeted tests and lint above (identical tree); full integration suite not run (host short on memory), left to the batch gate
+PRONTO_PARA_MERGE agent/especialista/FIX-ingest-rollback-api-changes-fix (merge 9c366902)
+checked: sdd 05 §7.3 and §8, sdd 01 FR-01-14, authz n/a, secrets n/a, sql bound, i18n n/a, scope ok, tests red→green
+notes: `deleted` for a hidden item is right: FR-01-14 excludes non-public items from the paid API (404), so for a /changes consumer it is gone exactly like a deleted one; SDD 05 "hidden-only changes write nothing" means non-public *fields*, which `changes.Visible` already drops. Snapshot keys are all in the public allowlist. Rows ride the item savepoint, so a failed item writes none.
+gaps (not blocking, follow-up row FIX-ingest-rollback-gaps): 1. non-wikidata rollback does not requeue Wikidata nor clear that source's cover; 2. restored IGDB/TMDB payloads keep the bad run's `checked_at`; 3. `entities` (credits) changes are not in the normalize snapshot; 4. normalize writes `updated` for an item that is already `hidden`/`takedown` (feed names an id the API answers 404 for), and nothing re-announces an item made public again.
