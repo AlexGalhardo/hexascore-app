@@ -66,6 +66,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Android rating data flow: half-star input with selection haptics, ratings queued offline with an optimistic cache update and rollback (P5.B.2.2).
 - Android rate sheet (six categories, offline-queued save and delete, rollback toasts); `GET /app/v1/me` returns the user `id` and `deletionScheduledAt` (P5.B.2.3).
 - Web search command palette (Ctrl K / ⌘K or the navbar trigger) with keyboard navigation, recent searches and a see-all row (IMPL-web-v1-search-palette).
+- App-side alerts A5 (SSR fallback on a public route), A6 (a job kind exhausted twice in a row) and A10 (five consecutive quota flush failures) as structured `alert=` log lines (P2.C.3.3, P2.C.alerts-a5-test).
+- Runbooks R1-R9 under `docs/runbooks/` with an alert-to-runbook map and the monthly cost checklist (P2.C.4.2).
+- `search:reindex` console command: rebuilds the search indexes concurrently, then the suggest table (P2.C.search-reindex).
 
 ### Changed
 
@@ -90,6 +93,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Login, signup, password recovery and reset follow design v1, with a "Sign in with Google" / "Sign up with Google" button in Google's branding (IMPL-web-v1-auth)
 - The search page follows design v1: grouped results with section accents, filter chips, a people and companies panel, and a no-results state with section links (IMPL-web-v1-search-page)
 - The library, your lists and public list pages follow design v1: status sections and shelf cards with your score (IMPL-web-v1-library-lists)
+- `release.yml` manual runs take a `version` input (an existing tag) that drives the checkout, image tags, `APP_VERSION` and release notes (P2.B.2.2).
+- Page-only i18n namespaces (docs, terms, policy, help, billing, ...) are sent only on their pages, with a once-prop key per namespace set (PERF-i18n-page-namespaces).
 
 ### Fixed
 
