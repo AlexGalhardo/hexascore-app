@@ -104,6 +104,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **web:** the mobile menu, the report dialog and the data-fetching code load on first use; first-load script down from 171-184 KB to 135-146 KB, under the 150 KB Lighthouse budget (FIX-lighthouse-script-size)
 - **deps:** vukem v0.36.0 (contrib/stripe v0.5.1, drivers/postgres v0.6.1, drivers/s3 v0.4.1); problem codes, request-line route and user fields, export encoders and the mail Reply-To default now use native vukem APIs (VF-066, VF-067, VF-069, VF-070); `X-Problem-Code` is gone (ADOPT-vukem-0.36.0)
 - **ingest:** a run restricted to `qids` filters the tmdb, igdb, trailers and openlibrary targets in SQL instead of scanning every target (FIX-ingest-qids-pushdown)
 - **ingest:** the two-job ingestion cap is vukem `QUEUE_LIMITS` (default `ingest=2` when unset) instead of an in-process semaphore, which also deadlocked nested chain dispatch on the sync queue; the legacy 2FA import hashes recovery codes with `totp.HashRecoveryCode` (CLEAN-dangling-vf-ids)
