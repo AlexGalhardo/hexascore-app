@@ -21,7 +21,7 @@ export function Attribution({
 }): ReactElement | null {
 	if (!needsAttribution(item)) return null;
 	return (
-		<Text testID="attribution" className="px-4 py-3 text-12 text-muted dark:text-muted-dark">
+		<Text testID="attribution" className="py-3 font-text text-12 text-muted dark:text-muted-dark">
 			{t(locale, "item.attribution")}
 		</Text>
 	);
