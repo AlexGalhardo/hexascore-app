@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactElement, ReactNode } from "react";
 import TabsLayout from "../app/(tabs)/_layout";
@@ -31,6 +32,12 @@ jest.mock("react-native-safe-area-context", () => ({
 	useSafeAreaInsets: () => ({ top: 24, bottom: 0, left: 0, right: 0 }),
 }));
 
+// The layout reads the unread count; queries stay disabled here.
+function Query({ children }: { children: ReactNode }): ReactElement {
+	const client = new QueryClient({ defaultOptions: { queries: { enabled: false } } });
+	return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+}
+
 beforeEach(() => {
 	mockCaptured.screens = [];
 	mockNavigate.mockClear();
@@ -39,7 +46,9 @@ beforeEach(() => {
 test("tabs in round 2 order with translated titles and icons", async () => {
 	await render(
 		<LocaleProvider locale="pt-BR">
-			<TabsLayout />
+			<Query>
+				<TabsLayout />
+			</Query>
 		</LocaleProvider>,
 	);
 	expect(mockCaptured.screens.map((s) => s.name)).toEqual([
@@ -65,7 +74,9 @@ test("tabs in round 2 order with translated titles and icons", async () => {
 test("header search opens the search tab and the theme toggle is labelled", async () => {
 	await render(
 		<LocaleProvider locale="en">
-			<TabsLayout />
+			<Query>
+				<TabsLayout />
+			</Query>
 		</LocaleProvider>,
 	);
 	const header = mockCaptured.screenOptions?.header;
