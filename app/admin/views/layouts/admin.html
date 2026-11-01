@@ -20,6 +20,7 @@
 			{{with .Panel.FlagsURL}}<a href="{{.}}"{{if eq $.Title "Feature flags"}} aria-current="page"{{end}}>Feature flags</a>{{end}}
 			<a href="/admin/moderation"{{if eq $.Title "Moderation"}} aria-current="page"{{end}}>Moderation</a>
 			<a href="/admin/ingestion"{{if eq $.Title "Ingestion"}} aria-current="page"{{end}}>Ingestion</a>
+			<a href="/admin/ingest/reviews"{{if eq $.Title "Match reviews"}} aria-current="page"{{end}}>Match reviews</a>
 			{{with .Panel.AuditURL}}<a class="audit-link" href="{{.}}">Audit log</a>{{end}}
 		</nav>
 		<main id="main">

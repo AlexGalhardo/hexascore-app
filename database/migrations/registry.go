@@ -78,5 +78,6 @@ func All() []schema.Migration {
 		m20261101120000CreateIngestionTables(),
 		m20261101170000AddEntitiesNameNormIndex(),
 		m20261101190000AddEntityMatchReviewsCreatedAt(),
+		m20261101200000FixEntityMatchReviewsResolvedBy(),
 	}
 }

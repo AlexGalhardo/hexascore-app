@@ -49,3 +49,13 @@ func KnownRole(role string) bool {
 
 	return ok
 }
+
+// RoleKind returns the entity kind a role holds, for creating a native entity from a credit.
+func RoleKind(role string) (string, bool) {
+	rule, ok := roleRules[role]
+	if !ok {
+		return "", false
+	}
+
+	return rule.kinds[0], true
+}

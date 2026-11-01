@@ -15,11 +15,13 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/accounts"
 	"github.com/AlexGalhardo/hexascore-app/app/admin"
+	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/community"
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/moderation"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/entities"
 )
 
 // Admin mounts the admin panel at /admin (vukem install:admin). Admins are
@@ -201,6 +203,15 @@ func Admin(r *router.Router, app *vukem.App) error {
 	r.Get("/admin/locks", moderationH.Locks).Name("admin.locks").Use(modMW...)
 	r.Post("/admin/locks", moderationH.CreateLock).Name("admin.locks.create").Use(modMW...)
 	r.Post("/admin/locks/{id}/delete", moderationH.DeleteLock).Name("admin.locks.delete").Use(modMW...)
+	reviewsH := admin.IngestReviewHandlers{
+		Pages:   catalogH,
+		Reviews: entities.ReviewQueue{DB: acc.DB, KindOf: catalog.RoleKind},
+		Authorize: func(c *web.Ctx) error {
+			return gate.Authorize(c.Context(), admin.AbilityRunIngestion, nil)
+		},
+	}
+	r.Get("/admin/ingest/reviews", reviewsH.List).Name("admin.ingest.reviews").Use(modMW...)
+	r.Post("/admin/ingest/reviews/{id}", reviewsH.Resolve).Name("admin.ingest.reviews.resolve").Use(modMW...)
 	r.Get("/admin/ingestion", catalogH.Ingestion).Name("admin.ingestion").Use(auth.Required(acc.Web), csrfMW)
 
 	return nil
