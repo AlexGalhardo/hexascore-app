@@ -19,7 +19,7 @@ export const colors = {
 		"accent-game": { oklch: "oklch(0.48 0.196 286.1)", hex: "#5b3fc4" },
 		"accent-movie": { oklch: "oklch(0.549 0.19 31.05)", hex: "#c8321e" },
 		"accent-series": { oklch: "oklch(0.508 0.086 226.21)", hex: "#1f6f8b" },
-		"accent-book": { oklch: "oklch(0.529 0.106 154.6)", hex: "#2e7d4f" },
+		"accent-book": { oklch: "oklch(0.5 0.1 154.6)", hex: "#2a7449" },
 		"score-low": { oklch: "oklch(0.659 0.19 24.96)", hex: "#f05653" },
 		"score-mid": { oklch: "oklch(0.779 0.16 84.66)", hex: "#e6ad00" },
 		"score-high": { oklch: "oklch(0.619 0.1695 145.058)", hex: "#2f9f3d" },
