@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **mobile:** v1 home sections component (three trending cards and a grid of six per type) (IMPL-mobile-v1-home-ui)
 - **mobile:** v1 full-screen search sheet component (autofocused input, recent and trending, first 8 results with see all) (IMPL-mobile-v1-search-ui)
 - **mobile:** v1 app header (serif wordmark, search, theme toggle) and tab bar theme (IMPL-mobile-v1-shell, part 1)
 - **mobile:** Banned and deletion-scheduled accounts get their own screens (ban reason and end date; cancel deletion on the web) instead of falling through to login or the app (FIX-mobile-blocked-screens)
