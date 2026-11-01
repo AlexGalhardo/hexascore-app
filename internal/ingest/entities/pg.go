@@ -10,6 +10,8 @@ import (
 
 	"github.com/AlexGalhardo/vukem/database"
 	"github.com/AlexGalhardo/vukem/uuid"
+
+	"github.com/AlexGalhardo/hexascore-app/internal/search"
 )
 
 // PG is the Store over the entities, item_entities and entity_match_reviews tables.
@@ -46,10 +48,10 @@ func (p PG) ByExternalID(ctx context.Context, key, id, kind string) ([]Entity, e
 	)
 }
 
-// ByName compares hs_norm(default_name), the expression the entities_name_norm_idx index covers.
+// ByName compares the normalised default_name, the expression the entities_name_norm_idx index covers.
 func (p PG) ByName(ctx context.Context, normalized, kind string) ([]Entity, error) {
 	return p.list(ctx, `SELECT id::text, kind, coalesce(extract(year FROM born_on)::int, founded_year, 0)
-FROM entities WHERE kind = $1 AND hs_norm(default_name) = $2 ORDER BY id`, kind, normalized)
+FROM entities WHERE kind = $1 AND `+search.EntityNameMatch("$2")+` ORDER BY id`, kind, normalized)
 }
 
 func (p PG) list(ctx context.Context, q string, args ...any) ([]Entity, error) {

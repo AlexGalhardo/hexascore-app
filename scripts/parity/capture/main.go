@@ -43,15 +43,27 @@ type recordSet map[string]map[string]json.RawMessage
 
 var (
 	// Labels in a non-Latin script (cyrillic, arabic, kana, han).
-	nonLatin = special{"non-latin", 3, `?item rdfs:label ?l . FILTER(lang(?l) IN ("en","mul") && REGEX(?l, "[Ѐ-ӿ؀-ۿ぀-ヿ一-鿿]"))`}
+	nonLatin = special{
+		"non-latin",
+		3,
+		`?item rdfs:label ?l . FILTER(lang(?l) IN ("en","mul") && REGEX(?l, "[Ѐ-ӿ؀-ۿ぀-ヿ一-鿿]"))`,
+	}
 	// Release date known to the year only (time precision 9).
 	yearOnly = special{"year-precision", 3, `?item p:P577/psv:P577 ?t . ?t wikibase:timePrecision 9 .`}
 
 	specials = map[string][]special{
 		"movie":  {nonLatin, yearOnly},
 		"series": {nonLatin, yearOnly, {"p580", 4, `?item wdt:P580 [] .`}},
-		"game":   {nonLatin, yearOnly, {"steam-only", 4, `?item wdt:P1733 [] . FILTER NOT EXISTS { ?item wdt:P5794 [] }`}},
-		"book":   {nonLatin, yearOnly, {"isbn10-only", 4, `?item wdt:P957 [] . FILTER NOT EXISTS { ?item wdt:P212 [] }`}},
+		"game": {
+			nonLatin,
+			yearOnly,
+			{"steam-only", 4, `?item wdt:P1733 [] . FILTER NOT EXISTS { ?item wdt:P5794 [] }`},
+		},
+		"book": {
+			nonLatin,
+			yearOnly,
+			{"isbn10-only", 4, `?item wdt:P957 [] . FILTER NOT EXISTS { ?item wdt:P212 [] }`},
+		},
 	}
 )
 
@@ -147,7 +159,13 @@ func query(typ, extra, filter, tail string) string {
 }
 
 // selectType returns the 50 picks of a type and stores their Wikidata records.
-func selectType(ctx context.Context, c *ingest.Client, wd *wikidata.Connector, typ string, records recordSet) ([]pick, error) {
+func selectType(
+	ctx context.Context,
+	c *ingest.Client,
+	wd *wikidata.Connector,
+	typ string,
+	records recordSet,
+) ([]pick, error) {
 	var picks []pick
 
 	taken := map[string]bool{}
@@ -284,7 +302,7 @@ func write(dir string, all []pick, records recordSet) error {
 		return cmp.Or(cmp.Compare(a.typ, b.typ), cmp.Compare(a.qid, b.qid))
 	})
 
-	if err := os.MkdirAll(filepath.Join(dir, "records"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(dir, "records"), 0o750); err != nil {
 		return err
 	}
 
@@ -300,10 +318,10 @@ func write(dir string, all []pick, records recordSet) error {
 			return err
 		}
 
-		if err := os.WriteFile(filepath.Join(dir, "records", p.qid+".json"), append(doc, '\n'), 0o644); err != nil {
+		if err := os.WriteFile(filepath.Join(dir, "records", p.qid+".json"), append(doc, '\n'), 0o600); err != nil {
 			return err
 		}
 	}
 
-	return os.WriteFile(filepath.Join(dir, "qids.txt"), []byte(list.String()), 0o644)
+	return os.WriteFile(filepath.Join(dir, "qids.txt"), []byte(list.String()), 0o600)
 }

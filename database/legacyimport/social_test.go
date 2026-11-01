@@ -87,7 +87,7 @@ FROM contact_messages c LEFT JOIN users u ON u.id = c.user_id`,
 			"u01:bug,-:question",
 		},
 		// Follows stay in the legacy dump (SDD 14 §5).
-		{"no follows", `SELECT coalesce(to_regclass('public.follows')::text, 'none')`, "none"},
+		{"no follows imported", `SELECT count(*)::text FROM follows`, "0"},
 	})
 
 	// A second run of the finished stage writes nothing new.
