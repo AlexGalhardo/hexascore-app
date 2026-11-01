@@ -67,6 +67,17 @@ func All() []schema.Migration {
 		flags.Migration("20261031140000_create_feature_flags_table"),
 		webhook.Migrations("")[0],
 		m20261031120000CreatePasskeysTable(),
+		m20261031150000CreateTrendingTables(),
+		m20261031160000AllowModeratorRole(),
+		m20261031173100CreateCatalogChangedDone(),
+		m20261031190000CreateSuggestionReviews(),
+		m20261031190100AddRatingEventsAtIndex(),
+		m20261031190200AddItemStatusUpdatedAtIndex(),
+		m20261031190300AddListItemsAddedAtIndex(),
+		m20261031190400AddSuggestionEventsCreatedAtIndex(),
+		m20261031203100AddCommunityMailOptOut(),
+		m20261031203200CreateSimilarTables(),
+		m20261101120000CreateIngestionTables(),
 		m20261101130000CatalogAuditGuardRowLevel(),
 	}
 }
