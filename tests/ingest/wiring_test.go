@@ -94,6 +94,8 @@ func loadFake(t *testing.T) *fakeSources {
 	mux.HandleFunc("/openlibrary/", f.openlibrary)
 	mux.HandleFunc("/twitch/oauth2/token", f.twitchToken)
 	mux.HandleFunc("/igdb/v4/games", f.igdb)
+	mux.HandleFunc("/steam/appdetails", serveFixture("steam_appdetails.json"))
+	mux.HandleFunc("/gog/catalog", serveFixture("gog_catalog.json"))
 
 	f.srv = httptest.NewServer(mux)
 	t.Cleanup(f.srv.Close)
@@ -177,6 +179,8 @@ func newIngestApp(t *testing.T, f *fakeSources, flagsOn ...string) *vukemtest.Ap
 		OpenLibraryAPI: f.srv.URL + "/openlibrary",
 		TwitchTokenURL: f.srv.URL + "/twitch/oauth2/token",
 		IGDBAPI:        f.srv.URL + "/igdb/v4",
+		SteamAPI:       f.srv.URL + "/steam/appdetails",
+		GOGAPI:         f.srv.URL + "/gog/catalog",
 	}
 
 	env := map[string]string{

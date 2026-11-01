@@ -18,5 +18,7 @@ func DefaultHosts() map[string]HostLimit {
 		"id.twitch.tv":           {PerSecond: 1, InFlight: 1},
 		"api.igdb.com":           {PerSecond: 3.3, InFlight: 4},
 		"images.igdb.com":        {PerSecond: 20, InFlight: 4},
+		"store.steampowered.com": {PerSecond: 1 / 1.6, InFlight: 1},
+		"catalog.gog.com":        {PerSecond: 2, InFlight: 1},
 	}
 }

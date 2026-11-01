@@ -156,8 +156,8 @@ Kill switches (<https://vukem.dev/docs/digging-deeper/feature-flags> "Feature fl
 | Open Library | no rights asserted by the Internet Archive (<https://openlibrary.org/developers/licensing>); legal read cleared by the owner (Q-A16, 2026-11-01); connector behind `ingest_openlibrary`, default off | pages, editions, covers | identifiers and titles only (`limitedSources`) until a licence note widens it | — |
 | TMDB | no commercial use, ≤ 6-month cache | poster, fallback facts, trailers | never | logo + not-endorsed notice on item pages using TMDB fields and `/about` |
 | IGDB | Twitch Developer Services Agreement (<https://www.twitch.tv/p/en/legal/developer-agreement/>) and IGDB API terms (<https://api-docs.igdb.com/>: commercial use through a partnership, visible attribution); owner cleared the read (Q-A16); interim rule D-36 still applies: site-only, refreshed every 24 h, never cached > 7 days | cover, fallback facts, trailers | never | "Game data by IGDB.com" in game page footers and `/about` |
-| Steam `appdetails` | [NOT VERIFIED] | header image, OS platforms | store ID (Wikidata) | — |
-| GOG catalog | [NOT VERIFIED] | store link, cover, OS platforms | store ID (Wikidata) | — |
+| Steam `appdetails` | Steam Web API Terms of Use (<https://steamcommunity.com/dev/apiterms>: data "as is", no implied Valve endorsement); owner cleared the read (Q-A16) | header image, OS platforms | store ID (Wikidata) | — |
+| GOG catalog | no published API terms; GOG User Agreement (<https://www.gog.com/en/user_agreement>) governs the site; owner cleared the read (Q-A16) | store link, cover, OS platforms | store ID (Wikidata) | — |
 | YouTube oEmbed | YouTube ToS | embeddability verdict | IDs (Wikidata) | player |
 
 Steam/GOG images are site-only, store IDs are used for links only, and images stay out of the app until both terms are read (roadmap task, open issue 06-8); affiliate URLs come from store IDs, flag `affiliates` (SDD 01).

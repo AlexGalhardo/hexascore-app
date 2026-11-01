@@ -56,7 +56,7 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	// backup.daily (SDD 11 §7.3 step 1): moves after the SDD 06 asserts once they exist (P6).
 	s.Command("backup:run", "--kind", "daily").DailyAt("06:00").In(saoPaulo).WithoutOverlapping()
 
-	// Ingestion (SDD 06 §7.6). The weekly full runs of Wed-Sat sources join when their connectors exist.
+	// Ingestion (SDD 06 §7.6).
 	// A task starts only the first stage; each finished stage queues the next (ingest.Advance).
 	s.Func("ingest:wikidata-incremental", startChain(app, ingest.WikidataIncremental)).
 		DailyAt("00:30").In(saoPaulo).WithoutOverlapping()
@@ -66,6 +66,10 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 		WeeklyOn(time.Monday, "01:00").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:openlibrary-weekly", startChain(app, ingest.OpenLibraryWeekly)).
 		WeeklyOn(time.Tuesday, "01:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:steam-weekly", startChain(app, ingest.SteamWeekly)).
+		WeeklyOn(time.Wednesday, "01:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:gog-weekly", startChain(app, ingest.GOGWeekly)).
+		WeeklyOn(time.Thursday, "01:00").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:tmdb-weekly", startChain(app, ingest.TMDBWeekly)).
 		WeeklyOn(time.Friday, "01:00").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:trailers-weekly", startChain(app, ingest.TrailersWeekly)).

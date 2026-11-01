@@ -16,12 +16,14 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/backfill"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/dq"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/fetch"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/gog"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/httpx"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/igdb"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/normalize"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/openlibrary"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/rollback"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/steam"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/tmdb"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/trailers"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/wikidata"
@@ -42,6 +44,9 @@ type IngestSources struct {
 	// TwitchTokenURL and IGDBAPI replace the IGDB endpoints.
 	TwitchTokenURL string
 	IGDBAPI        string
+	// SteamAPI and GOGAPI replace the storefront endpoints.
+	SteamAPI string
+	GOGAPI   string
 	// Pressure holds ingestion chunks while the site is busy; bootstrap fills it and feeds it from the Inflight middleware.
 	Pressure *ingest.Pressure
 }
@@ -102,6 +107,8 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 
 	steps := map[string]run.Step{
 		"fetch.igdb":         fetch.Step(ig, client, app.Now),
+		"fetch.steam":        fetch.Step(&steam.Connector{APIURL: src.SteamAPI}, client, app.Now),
+		"fetch.gog":          fetch.Step(&gog.Connector{APIURL: src.GOGAPI}, client, app.Now),
 		igdb.JobName:         igdb.RefreshStep(ig, client, app.Now),
 		"fetch.tmdb":         fetch.Step(tc, client, app.Now),
 		tmdb.JobName:         tmdb.ExpireStep(tc, client, app.Now),
