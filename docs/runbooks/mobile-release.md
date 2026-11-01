@@ -9,7 +9,7 @@ Scope today: **Android only** (SDD 10 §1, iOS is later). Every `--platform` bel
 | App config, `version` | `apps/mobile/app.config.ts` |
 | Build and submit profiles | `apps/mobile/eas.json` (`development`, `preview`, `e2e-test`, `production`) |
 | `versionCode` | EAS remote source, `autoIncrement` on `production` (SDD 10 [E8]); never edit it by hand |
-| CI | `.github/workflows/mobile-release.yml` (EAS build, owner-gated submit); `.github/workflows/mobile-gradle.yml` (Gradle fallback, manual) |
+| CI | `.github/workflows/mobile-release.yml` (manual dispatch or tag `mobile-v*`; EAS build, owner-gated submit); `.github/workflows/mobile-gradle.yml` (Gradle fallback, manual) |
 | CLI | `eas-cli` pinned `27.2.0`, run as `bunx eas-cli@27.2.0` (no global install needed) |
 
 ## Hard rules
@@ -87,6 +87,26 @@ Once it is installed:
 
 3. Ask the owner before publishing to the `production` branch.
 
+## Tag release (`mobile-vX.Y.Z`)
+
+After Step 1 and Step 2, the owner (or an agent with the owner's yes) pushes the tag: `git tag mobile-vX.Y.Z && git push origin mobile-vX.Y.Z`.
+
+1. `mobile-release.yml` runs on the tag: it fails when `X.Y.Z` differs from `version` in `app.config.ts`, then runs lint, typecheck, Jest and `bundle:check`, then `eas build --profile production` (AAB, remote `versionCode`).
+2. The submit job then waits on the `play-store` environment. Nothing is submitted until the owner opens the run, checks the build id in the job summary, and approves the deployment: that approval is the "sim" for that build (Step 4). Rejecting it, or letting it time out, leaves the build unsubmitted.
+3. The submit job refuses to run if `play-store` has no required reviewer, so a missing environment setup never turns into an automatic submission.
+
+## Release checklist (SDD 10 §10)
+
+Before approving a production submission:
+
+- [ ] Target API 36 (`targetSdkVersion` in the build; Expo SDK 58 default, checked by `aapt2 dump badging`).
+- [ ] Data safety answers still match `docs/legal/play-data-safety.md` (a new SDK or new data field means a new answer first).
+- [ ] `https://hexascore.app/.well-known/assetlinks.json` lists the upload and Play signing fingerprints (`ANDROID_CERT_SHA256`).
+- [ ] `https://hexascore.app/help/delete-account` (and `/pt-br/`, `/es/`) answers 200 and states the 30-day grace.
+- [ ] `APP_MIN_SUPPORTED_VERSION` on the server: raise it only after the new build is live for everyone it must reach (older builds get 426).
+- [ ] OTA rule: this change needs a store build (Step 5 list) or is OTA-eligible.
+- [ ] Rollout: internal → closed (≥ 7 days, crashes ≤ 1 % of sessions) → production 20 % → 100 % over ≥ 3 days, in Play Console by the owner.
+
 ## Gradle fallback on GitHub Actions (D-34)
 
 Used only when EAS Build is unavailable or stops being free (SDD 10 §7.8). `.github/workflows/mobile-gradle.yml` is `workflow_dispatch` only. It runs lint, typecheck, Jest and `bundle:check`, then `expo prebuild` and `./gradlew bundleRelease assembleRelease` on `ubuntu-24.04` with Temurin JDK 21, and uploads two artifacts kept for 7 days: `app-release.aab` (Play) and `app-release.apk` (sideload). It never submits to Play.
@@ -120,4 +140,4 @@ Short summary: what ran, `version` and `versionCode`, build links, submission st
 1. Expo account and project: `bunx eas-cli@27.2.0 login`, then `bunx eas-cli@27.2.0 init` in `apps/mobile` (writes `extra.eas.projectId` into the app config; commit it).
 2. Android credentials: `bunx eas-cli@27.2.0 credentials -p android` (upload keystore managed by EAS). Record the SHA-256 fingerprints for `ANDROID_CERT_SHA256` (SDD 10 §7.4).
 3. Play Console app `app.hexascore` and a service account JSON key uploaded to EAS for `eas submit` (never committed).
-4. GitHub: secret `EXPO_TOKEN` (an Expo robot or personal access token), and environment `play-store` with the owner as required reviewer; the submit job waits on it.
+4. GitHub: secret `EXPO_TOKEN` (an Expo robot or personal access token), and environment `play-store` with the owner as required reviewer and deployment tags limited to `mobile-v*` plus branch `main`; the submit job waits on it and refuses to run without a reviewer.

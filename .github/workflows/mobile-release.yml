@@ -1,11 +1,16 @@
 name: Mobile release
 
-# Manual only (SDD 10 section 7.8, docs/runbooks/mobile-release.md). Android only until iOS enters.
+# SDD 10 section 7.8, docs/runbooks/mobile-release.md. Android only until iOS enters.
+# Manual dispatch builds any profile; a `mobile-vX.Y.Z` tag builds `production` and requires X.Y.Z to equal
+# `version` in apps/mobile/app.config.ts.
 # The build job needs the EXPO_TOKEN secret and fails closed without it.
-# The submit job runs only when `submit` is ticked, and waits on the `play-store` environment,
-# whose required reviewer (the owner) approves the exact build before it reaches Play Console.
+# The submit job runs for a tag build, or a dispatch with `submit` ticked, and always waits on the `play-store`
+# environment: the owner approves that exact build there, so nothing reaches Play Console without that yes.
+# It refuses to run if the environment has no required reviewer.
 # Submissions land as a draft on the internal track; promotion and rollout stay in Play Console.
 on:
+  push:
+    tags: ["mobile-v*"]
   workflow_dispatch:
     inputs:
       profile:
@@ -27,10 +32,12 @@ concurrency:
 
 env:
   EAS: bunx eas-cli@27.2.0
+  # A tag push has no inputs.
+  PROFILE: ${{ inputs.profile || 'production' }}
 
 jobs:
   build:
-    name: Check and build (${{ inputs.profile }})
+    name: Check and build (${{ inputs.profile || 'production' }})
     runs-on: ubuntu-24.04
     outputs:
       build_id: ${{ steps.build.outputs.build_id }}
@@ -40,12 +47,22 @@ jobs:
         with:
           bun-version-file: package.json
       - run: bun install --frozen-lockfile
-      - name: Lint, typecheck and tests
+      - name: Tag matches the app version
+        if: github.ref_type == 'tag'
+        working-directory: apps/mobile
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          version=$(bun -e 'console.log((await import("./app.config.ts")).default.version)')
+          [ "$TAG" = "mobile-v$version" ] || { echo "tag $TAG does not match app version $version" >&2; exit 1; }
+      - name: Lint, typecheck, tests and release bundle
         working-directory: apps/mobile
         run: |
           bun run lint
           bun run typecheck
           bun run test -- --runInBand --forceExit
+          bun run bundle:check
       - name: Expo doctor
         working-directory: apps/mobile
         run: bunx expo-doctor
@@ -57,7 +74,7 @@ jobs:
         run: |
           set -euo pipefail
           [ -n "$EXPO_TOKEN" ] || { echo "EXPO_TOKEN secret is not set" >&2; exit 1; }
-          $EAS build --platform android --profile "${{ inputs.profile }}" --non-interactive --wait --json > build.json
+          $EAS build --platform android --profile "$PROFILE" --non-interactive --wait --json > build.json
           id=$(bun -e 'console.log((await Bun.file("build.json").json())[0].id)')
           echo "build_id=$id" >> "$GITHUB_OUTPUT"
           echo "Build: https://expo.dev/builds/$id" >> "$GITHUB_STEP_SUMMARY"
@@ -65,10 +82,20 @@ jobs:
   submit:
     name: Submit to Play internal track (draft)
     needs: build
-    if: inputs.submit && inputs.profile == 'production'
+    if: github.ref_type == 'tag' || (inputs.submit && inputs.profile == 'production')
     runs-on: ubuntu-24.04
     environment: play-store
+    permissions:
+      contents: read
+      actions: read # read the play-store environment protection rules
     steps:
+      - name: Require a reviewer on the play-store environment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          n=$(gh api "repos/$GITHUB_REPOSITORY/environments/play-store"             --jq '[.protection_rules[]? | select(.type == "required_reviewers")] | length')
+          [ "$n" -ge 1 ] || { echo "play-store environment has no required reviewer; not submitting" >&2; exit 1; }
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
