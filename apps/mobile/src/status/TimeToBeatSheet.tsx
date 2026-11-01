@@ -5,7 +5,7 @@ import type { AppLocale } from "../i18n/locale";
 import { Btn } from "../ui/Btn";
 import { TextField } from "../ui/TextField";
 import { parseHours, STYLES, type TimeToBeat } from "./cache";
-import { useStatusWrite } from "./StatusSheet";
+import { SHEET, SHEET_TITLE, useStatusWrite } from "./StatusSheet";
 
 const FG = "text-fg dark:text-fg-dark";
 const LABEL = {
@@ -57,8 +57,8 @@ export function TimeToBeatSheet({
 	};
 
 	return (
-		<View testID="time-to-beat-sheet" className="gap-3 bg-bg px-4 py-4 dark:bg-bg-dark">
-			<Text className={`font-text text-20 font-semibold ${FG}`}>
+		<View testID="time-to-beat-sheet" className={SHEET}>
+			<Text accessibilityRole="header" className={SHEET_TITLE}>
 				{t(locale, "item.timeToBeat.yours")}
 			</Text>
 			<Text className="font-text text-14 text-muted dark:text-muted-dark">
