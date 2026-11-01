@@ -73,6 +73,9 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	s.Func("ingest:tmdb-expire", startChain(app, ingest.TMDBExpire)).
 		DailyAt("03:00").In(saoPaulo).WithoutOverlapping()
 
+	s.Func("ingest:dq-daily", startChain(app, ingest.DQDaily)).
+		DailyAt("05:00").In(saoPaulo).WithoutOverlapping()
+
 	// backup.drill (SDD 11 §7.4): staging only. Staging also runs APP_ENV=production, so the
 	// signal is the source bucket only staging is given. Cron ORs day-of-month with
 	// day-of-week, so the command itself skips Sundays after the 7th.
