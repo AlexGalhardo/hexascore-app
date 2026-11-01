@@ -113,7 +113,7 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 		if err := addReadyChecks(app, heartbeat); err != nil {
 			return err
 		}
-		// workaround(vukem): VF-022. vukem's Logger takes app.Log when routes.Web installs the
+		// workaround(vukem): VF-NEW-REQUEST-LINE-FIELDS. vukem's Logger takes app.Log when routes.Web installs the
 		// default stack, which runs after this callback; wrapping app.Log here keeps
 		// LOG_FORMAT, dedup and trace correlation from vukem's own handler chain.
 		logKey, err := app.DeriveKey("log", 32)

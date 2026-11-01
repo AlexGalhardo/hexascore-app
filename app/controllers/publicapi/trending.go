@@ -99,7 +99,7 @@ func (h *Controller) trending(c *web.Ctx, typ string, in TrendingInput) (Trendin
 	c.SetHeader("Cache-Control", "public, max-age=300")
 
 	if c.NotModified(etag, at) {
-		return TrendingJSON{}, errNotModified
+		return TrendingJSON{}, nil
 	}
 
 	return out, nil
@@ -127,10 +127,10 @@ type ActivityJSON struct {
 
 // ActivityInput is the getItemActivity path and query.
 type ActivityInput struct {
-	Type string `json:"type" validate:"oneof=games movies series books" doc:"games, movies, series or books"`
+	Type string `json:"type" enum:"games,movies,series,books" doc:"games, movies, series or books"`
 	ID   string `json:"id"`
-	From string `json:"from"                                            doc:"first UTC day, YYYY-MM-DD; default 30 days before to"`
-	To   string `json:"to"                                              doc:"last UTC day, YYYY-MM-DD; default today"`
+	From string `json:"from"                                  doc:"first UTC day, YYYY-MM-DD; default 30 days before to"`
+	To   string `json:"to"                                    doc:"last UTC day, YYYY-MM-DD; default today"`
 }
 
 // SectionActivityInput is the get<Type>Activity path and query: the type is in the literal path.

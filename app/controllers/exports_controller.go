@@ -51,8 +51,8 @@ func (h *Exports) Create(c *web.Ctx) error {
 	return c.JSON(http.StatusAccepted, map[string]any{"exportId": id, "status": "queued"})
 }
 
-// cooldown writes the 429 export-cooldown problem. workaround(vukem): VF-016/VF-039: errs.HTTPError has no
-// type or extension members, so the problem is written by hand like the app token problems.
+// cooldown writes the 429 export-cooldown problem. workaround(vukem): VF-NEW-PROBLEM-TYPE: errs.HTTPError cannot
+// set the problem type or title, so the problem is written by hand like the app token problems.
 func (h *Exports) cooldown(c *web.Ctx, cd library.ExportCooldownError) error {
 	raw, err := json.Marshal(map[string]any{
 		"type":       strings.TrimSuffix(h.problemBase, "/") + "/" + library.CodeExportCooldown,
