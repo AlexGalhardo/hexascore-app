@@ -17,6 +17,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/console"
 	"github.com/AlexGalhardo/hexascore-app/bootstrap"
+	"github.com/AlexGalhardo/hexascore-app/internal/search"
 )
 
 type seedFixture struct {
@@ -197,10 +198,11 @@ func TestSeedPurge(t *testing.T) {
 		t.Fatal("SET NULL event not kept")
 	}
 
-	dirty := f.count(t, `SELECT count(*) FROM search_dirty WHERE kind = 'item' AND ref_id IN ($1::uuid, $2::uuid)`,
-		f.sharedItem, f.seedOnlyItem)
-	if dirty != 2 {
-		t.Fatalf("search_dirty items = %d, want 2", dirty)
+	for _, id := range []string{f.sharedItem, f.seedOnlyItem} {
+		dirty, err := search.IsDirty(t.Context(), f.db, id)
+		if err != nil || !dirty {
+			t.Fatalf("item %s queued for search refresh = %v (%v), want true", id, dirty, err)
+		}
 	}
 
 	jobs := 0

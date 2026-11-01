@@ -12,6 +12,7 @@ import (
 	"github.com/AlexGalhardo/vukem/database"
 
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
+	"github.com/AlexGalhardo/hexascore-app/internal/search"
 )
 
 // SeedTable is a column that references a seed user. Rows go by the users FK (cascade), are nulled by it
@@ -335,22 +336,10 @@ func seedRefresh(ctx context.Context, app *vukem.App, db *database.DB, items []s
 		return err
 	}
 
-	for len(items) > 0 {
-		n := min(len(items), scoring.BatchSize)
-		marks := make([]string, n)
-		args := make([]any, n)
-
-		for i, id := range items[:n] {
-			marks[i], args[i] = "("+db.Dialect().Placeholder(i+1)+"::uuid, 'item')", id
-		}
-
-		_, err := db.ExecContext(ctx, "INSERT INTO search_dirty (ref_id, kind) VALUES "+strings.Join(marks, ",")+
-			" ON CONFLICT (ref_id) DO UPDATE SET queued_at = now()", args...)
-		if err != nil {
+	for _, id := range items {
+		if err := search.MarkDirty(ctx, db, "item", id); err != nil {
 			return err
 		}
-
-		items = items[n:]
 	}
 
 	_, _ = fmt.Fprintln(app.Stdout(), "Queued score recompute and search refresh for the affected items")

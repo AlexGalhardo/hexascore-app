@@ -102,7 +102,7 @@ func TestAPIEdgeHostOnlyAPI(t *testing.T) {
 	})
 
 	t.Run("unknown_path_is_problem", func(t *testing.T) {
-		res := r.app.Client(t).Get(api + "/nope").AssertStatus(404).
+		res := r.app.Client(t).Get(api+"/nope").AssertStatus(404).
 			AssertJSONPath("code", "not-found").AssertJSONPath("type", "https://hexascore.app/problems/not-found")
 		if ct := res.Recorder().Header().Get("Content-Type"); !strings.HasPrefix(ct, "application/problem+json") {
 			t.Fatalf("Content-Type = %q", ct)
