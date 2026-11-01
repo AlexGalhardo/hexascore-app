@@ -64,7 +64,7 @@ Source keys, all accessed 2026-10-28. vukem facts cite <https://vukem.dev/docs>.
 - FR-12-3: The SSR `OnFailure` hook logs the fallback with `http.route` and `public`. On public routes it also logs at `telegram.LevelFatal` [V-inertia; VF-002]. Verify: integration test that stops Node. Implemented (P2.C.3.3): a public-route fallback logs `alert=A5` at ERROR, a private one a plain WARN; `alert=A6` (same job kind exhausted its retries twice in a row) and `alert=A10` (5 consecutive failed quota flushes) log at ERROR; no metrics (D-35). Code: `app/alerts`, `app/ssr`, `app/api/quota.go`.
 - FR-12-4: Each app-sourced alert in §7.5 has an in-app check that logs `alert=<code>` and a fixture test that fires and clears it. Verify: the tests of §10.
 - FR-12-5: `/up?checks=1` reports `db`, `ssr`, `storage` and `scheduler`. Verify: `TestReady_ChecksPresent`.
-- FR-12-6: A digest of error fingerprints is sent to Telegram daily at 08:00 America/Sao_Paulo. Verify: fake-clock test.
+- FR-12-6: A digest of error fingerprints is sent to Telegram daily at 08:00 America/Sao_Paulo. Verify: fake-clock test. Implemented (P2.C.1.2): task `errors:digest` posts to the silent error chat; `TestDigestFakeClock` (`app/alerts`).
 - FR-12-7: `POST /app/v1/client-errors` (route in SDD 05 §6.4) takes opt-in mobile crash reports (SDD 10) with no PII. Each is logged as `client.error`, is rate-limited to 10/min per IP, and is kept 7 days (open issue 10-2). Verify: integration test.
 - FR-12-9: `POST /app/v1/client-metrics` (SDD 05 §6.4) takes the opt-in, anonymous web-vitals beacon from SDD 09 (LCP, INP, CLS, TTFB per route pattern and locale) into `client_reports`; raw rows kept 7 days (open issue 09-11). Verify: integration test.
 - FR-12-10: A "projected spend at day 20" alert (A17) fires when month-to-date Railway usage extrapolated to the full month exceeds US$27, so the owner can raise the US$30 hard limit before it stops the service (D-27). Verify: fixture test on the projection.
@@ -96,10 +96,12 @@ create table client_reports (                    -- client-errors and client-met
 create index client_reports_received_idx on client_reports (received_at);
 
 create table error_digest_daily (               -- 60 s in-memory flush (VF-021 pattern)
-  day date not null, fingerprint text not null,  -- sha256(route|error.type|event)[:16]
-  route text not null, error_type text not null, count integer not null,
-  first_request_id text, last_seen timestamptz not null,
-  primary key (day, fingerprint));               -- pruned at 90 days, daily 04:50 UTC
+  hour timestamptz not null,                     -- hour buckets, so the digest sums exactly 24 h
+  fingerprint text not null,                     -- sha256(alert|check|kind|route|error.type|message)[:16]
+  message text not null, alert text not null default '', route text not null default '',
+  request_id text not null default '',           -- one sample
+  count bigint not null,
+  primary key (hour, fingerprint));              -- pruned at 90 days by the 08:00 digest task
 ```
 
 Gauges read from tables owned by other SDDs:
@@ -118,7 +120,7 @@ Gauges read from tables owned by other SDDs:
   - Route name and user id are documented only in [L-sub].
   - `otel.LogHandler` adds `trace_id` and `span_id` [V-otel].
 - Format and level: `LOG_FORMAT=json` in production [V-conf]. `LOG_LEVEL` is `info` in production and `debug` elsewhere.
-- Handler chain: dedup, then JSON to stdout plus `telegram.NewHandler`, passed with `WithLogger`. The "used as given" rule and `logging.NewDedup` are documented only in [L-sub]. The site documents a 1m `LOG_DEDUP_WINDOW` [V-conf].
+- Handler chain (P2.C.1.2): the redacting `app/logging` handler wraps a multi-handler of vukem's own chain (dedup, JSON to stdout), the `alerts.Recorder` (§7.2) and the `alerts.Notifier` (§7.5), so Telegram and `error_digest_daily` only see scrubbed records. vukem's built-in Telegram forwarding is switched off with a `Filter` that returns false (`vukem.WithTelegram`), because one handler has one `Silent` setting and cannot ring one chat and stay quiet in the other [V-tg "Filter and rate limit", "Using the handler without vukem.New"]. The site documents a 1m `LOG_DEDUP_WINDOW` [V-conf].
 - Output goes to stdout because Railway maps stderr to `level.error` [R-logs].
 - `user_hash` = hex(HMAC-SHA256(`app.DeriveKey("log", 32)`, user_id))[:16] [V-conf]. Two changes are [NOT IN VUKEM DOCS] (issue 2): hashing vukem's own user-id attribute and truncating `ip` to /24 or /48.
 - Implementation (P2.C.1.1, VF-022 workaround): `app/logging` wraps `app.Log` before `routes.Web` installs vukem's default stack, so vukem's `Logger` writes through it while `LOG_FORMAT`, dedup and `otel.LogHandler` stay vukem's. On the `request` line it truncates `ip` and `peer`, replaces `duration` with `duration_ms`, and keeps `route` (the matched pattern, added by the vukem router through `web.AddLogAttrs` since v0.36.0; `unmatched` otherwise) and replaces the raw user id that `NotBanned` adds with `web.AddLogAttrs` by `user_hash` (<https://vukem.dev/docs/deployment/logging>, "The request line"). `scripts/ops/check-logs.sh` checks a log stream.
@@ -193,7 +195,8 @@ Railway polls the Healthcheck Path only on deploys and switches traffic after a 
   - fingerprints each error from (`http.route`, `error.type`, `event`);
   - logs the fingerprint with the request id;
   - buffers upserts into `error_digest_daily`.
-- The 08:00 digest posts the top 20 fingerprints with one request id each, via `app.Telegram.SendSync` [V-tg].
+- The 08:00 digest posts the top 20 fingerprints with one request id each, via the silent chat's `SendSync` [V-tg].
+- Implementation (P2.C.1.2, `app/alerts`): the fingerprint is the first 16 hex of SHA-256 over (`alert`, `check`, `kind`, `route`, the Go type of `err`, message); request ids never split it. `alerts.Recorder` counts ERROR records and `alert=A<n>` lines in memory per fingerprint and hour and upserts them into `error_digest_daily` every 60 s (runner `error-digest`; at most 1,000 pending fingerprints, a failed flush keeps its rows). The digest sums the last 24 h: total, alert codes, failed `job_runs`, top 20 with a sample request id. Rows older than 90 days are pruned by the same task, which also runs when Telegram is unset.
 
 ### 7.3 Where data goes
 
@@ -212,7 +215,14 @@ Railway's healthcheck on `/up` (ADR 0002) restarts a failing container and email
 Channels:
 
 - Railway monitors and usage alerts notify by email and webhook [R-alerts].
-- App checks write `alert=` log lines (§6.2). ERROR lines go through the vukem Telegram handler [V-tg] with `TELEGRAM_MIN_LEVEL=error` and `TELEGRAM_RATE_LIMIT=20`. `ChatIDs` sends `LevelFatal` to the page chat; the error chat is `Silent: true`.
+- App checks write `alert=` log lines (§6.2). The `alerts.Notifier` (P2.C.1.2) sends them with two vukem `telegram.Handler`s [V-tg]:
+  - page chat `TELEGRAM_CHAT_ID`, with sound: the `page` codes of the table below (A1, A2, A3, A5, A8, A10, A12; A8 goes silent during quiet hours) and any `LevelFatal` record;
+  - error chat `TELEGRAM_ERROR_CHAT_ID` (falls back to `TELEGRAM_CHAT_ID`), `disable_notification`: every other `alert=A<n>` line from WARN up, and records at `TELEGRAM_MIN_LEVEL` (default `error`); informational keys (`scrape`, `trending_counter_dropped`) are not sent;
+  - dedup: one message per fingerprint (§7.2) per 30 min through the cache (`Increment`, fixed window); a cache error sends;
+  - each chat is capped at `TELEGRAM_RATE_LIMIT` (default 20) records per minute; outbound calls use `httpclient.Safe` with a 5 s timeout and a breaker (5 failures, 1 min cooldown); the handler retries a 429 once;
+  - no "resolved" message: alert lines are fire-only, a check logs while its condition holds and nothing marks the end;
+  - the bot token is a `config.Secret`, redacted from transport errors by vukem and from any message by `logging.Scrub` (`TestSecurity_A09_TelegramTokenNeverLogged`);
+  - with `TELEGRAM_BOT_TOKEN` or `TELEGRAM_CHAT_ID` unset nothing is sent and nothing fails; `./app alerts:test [message]` sends one message to the page chat.
 - A saved Railway log search per `alert=` code is the way to review history.
 
 On-call is the owner. Quiet hours run 23:00-08:00 America/Sao_Paulo: only `page` rings. Ack targets: page within 15 min while awake, warn the same day.

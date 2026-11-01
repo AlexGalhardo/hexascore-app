@@ -80,6 +80,7 @@ Railway rules that override the skill's deploy-from-cwd shortcut: do not run `ra
 | `./app hexascore:cutover-verify [--counts-only] [--sample-pct N]` | read-only cutover check after the import: counts, id-sample md5, cover keys on the `S3_*` bucket, orphan FKs, SQL vs Go scores (SDD 11 §7.6 step 6); exit 1 names the failed tables |
 | `./app seed:mark --email-suffix @example.test --legacy-prefix seed-user- [--dry-run]` / `./app seed:purge [--dry-run] [--batch 500] --confirm` | flag the fake legacy seed users (`users.is_seed`, never able to sign in), later delete them in batches and queue the score recompute and search refresh of the items they touched (SDD 11 §7.6) |
 | `./app backup:restore <key> --target-url <url>` / `./app backup:drill` | restore an encrypted dump and replay newer account deletions; monthly restore drill into `hexascore_drill` (runbook `docs/runbooks/restore.md`; tests need `pg_dump`/`pg_restore`, skipped when absent) |
+| `./app alerts:test [message]` | send one message to the Telegram page chat and report whether the Bot API accepted it (needs `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID`) |
 | `./app backup:offsite` | mail `ADMIN_EMAILS` the 7-day signed link to this month's encrypted monthly dump (day 1, 07:00; runbook `docs/runbooks/restore.md` "Off-site copy") |
 | `./app hexascore:predeploy` | pre-deploy entry point: drop `INVALID` index leftovers, then `migrate` (runbook `docs/runbooks/migrations.md`) |
 | `./app admin:grant <email>` / `admin:revoke <email>` / `user:reset-2fa <email> --reason "<text>"` | role changes and manual 2FA reset (account_events with actor NULL, `data.cli=true`); admins are users with `role = admin`, not `ADMIN_EMAILS` |
@@ -93,6 +94,7 @@ All off while their variables are unset; names in `.env.example`, owner steps in
 - Analytics and verification: `UMAMI_WEBSITE_ID`, `UMAMI_DOMAINS`, `GA_MEASUREMENT_ID`, `GOOGLE_SITE_VERIFICATION`, `BING_SITE_VERIFICATION` render through `{{analytics}}` in `app.html`. GA4 waits for the cookie banner's Accept (ADR 0023); Umami is cookieless.
 - SEO: `INDEXNOW_KEY` (key file `/{key}.txt`, job `seo.indexnow_changes` every minute), `BING_WEBMASTER_API_KEY` (client config only). `/llms.txt` and `/llms-full.txt` are always served.
 - Turnstile: `TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` (+ `TURNSTILE_HOSTNAME`) protect `POST /signup`, `/login`, `/contact` and enable the scrape-guard step-up at `POST /turnstile` (ADR 0016 amendment). Local and tests use Cloudflare's test keys; `TURNSTILE_VERIFY_URL` points siteverify at a fake and refuses to boot in production.
+- Telegram alerts: `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` (page chat, rings) and optional `TELEGRAM_ERROR_CHAT_ID` (silent chat; falls back to the page chat) turn on `app/alerts.Notifier`: page-severity `alert=` codes and `LevelFatal` ring, other alert lines and errors go silently, 30 min dedup per fingerprint, the 08:00 America/Sao_Paulo digest of `error_digest_daily` (SDD 12 §7.2, §7.5). vukem's own Telegram log forwarding is switched off in `bootstrap/app.go`. `./app alerts:test [message]` sends one message to the page chat.
 
 ## Agents
 

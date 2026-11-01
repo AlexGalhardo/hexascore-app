@@ -16,6 +16,7 @@ func Commands() []vukem.Command {
 		console.AdminGrant(),
 		console.AdminRevoke(),
 		console.UserReset2FA(),
+		console.AlertsTest(),
 		console.SearchPurge(),
 		console.SearchReindex(),
 		console.SeedMark(),

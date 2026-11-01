@@ -92,5 +92,6 @@ func All() []schema.Migration {
 		m20261101210000CreateCoverGC(),
 		m20261101220000AddRollbackGapFixes(),
 		m20261102090000AddIndexNowCursor(),
+		m20261102120000CreateErrorDigestDaily(),
 	}
 }
