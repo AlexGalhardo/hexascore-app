@@ -79,6 +79,7 @@ export function verifyWebhook(secret: string, headers: Headers, rawBody: string)
 
 ```python
 import base64
+import binascii
 import hashlib
 import hmac
 import time
@@ -99,7 +100,11 @@ def verify_webhook(secret: str, headers: dict[str, str], raw_body: bytes) -> boo
     expected = hmac.new(key, signed, hashlib.sha256).digest()
     for entry in signatures.split(" "):
         version, _, value = entry.partition(",")
-        if version == "v1" and hmac.compare_digest(base64.b64decode(value), expected):
+        try:
+            got = base64.b64decode(value)
+        except binascii.Error:
+            continue
+        if version == "v1" and hmac.compare_digest(got, expected):
             return True
     return False
 ```
