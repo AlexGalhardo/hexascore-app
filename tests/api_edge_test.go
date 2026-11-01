@@ -143,7 +143,8 @@ func TestSecurity_A05_ApiHostServesNoWebRoutes(t *testing.T) {
 				t.Fatalf("%s answered %q (X-Inertia %q)", tc.path, ct, h.Get("X-Inertia"))
 			}
 
-			if strings.Contains(strings.ToLower(rec.Body.String()), "<html") || strings.Contains(rec.Body.String(), "data-page") {
+			if strings.Contains(strings.ToLower(rec.Body.String()), "<html") ||
+				strings.Contains(rec.Body.String(), "data-page") {
 				t.Fatalf("%s body looks like a page", tc.path)
 			}
 		})
