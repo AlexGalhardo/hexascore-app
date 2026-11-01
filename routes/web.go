@@ -234,6 +234,10 @@ func Web(r *router.Router, app *vukem.App) error {
 	)).Name("wellknown.assetlinks")
 	r.Get("/terms", controllers.Legal("terms")).Name("terms")
 	r.Get("/policy", controllers.Legal("policy")).Name("policy")
+	// SDD 10 §7.8 and the Play listing name /legal/privacy; the policy page lives at /policy.
+	r.Get("/legal/privacy", func(c *web.Ctx) error {
+		return c.RedirectStatus(http.StatusMovedPermanently, i18n.PathPrefix(c.Context())+"/policy")
+	}).Name("legal.privacy")
 	r.Get("/pricing", controllers.Pricing).Name("pricing")
 	r.Get("/docs", docs).Name("docs")
 	r.Get("/docs/{slug}", docs).Name("docs.page")

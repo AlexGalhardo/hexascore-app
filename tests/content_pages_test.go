@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"net/http"
 	"strings"
 	"testing"
 
@@ -39,6 +40,19 @@ func TestLegalPages(t *testing.T) {
 				HasProp("updatedAt").
 				HasProp("messages.updatedLabel")
 		}
+	}
+}
+
+// TestLegalPrivacyRedirect: SDD 10 §7.8 and the Play listing name /legal/privacy; the page is /policy.
+func TestLegalPrivacyRedirect(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+
+	for _, prefix := range []string{"", "/pt-br", "/es"} {
+		app.Client(t).Get(prefix+"/legal/privacy").
+			AssertStatus(http.StatusMovedPermanently).
+			AssertHeader("Location", prefix+"/policy")
 	}
 }
 
