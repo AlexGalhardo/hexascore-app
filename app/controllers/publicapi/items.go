@@ -6,7 +6,9 @@ package publicapi
 
 import (
 	"context"
+	"database/sql"
 	"errors"
+	"fmt"
 	"maps"
 	"net/http"
 	"net/url"
@@ -56,6 +58,10 @@ type Controller struct {
 	Search search.Searcher
 	// Redirects resolves merged item ids (catalog.ResolveID needs a database.Executor).
 	Redirects func(ctx context.Context, typ, id string) (catalog.Target, bool, error)
+	// SlugRedirects, when set, lets getItem take a slug in place of the id and resolves renamed slugs
+	// (catalog.ResolveSlug). Only /app/v1 sets it: web App Links carry the slug (SDD 10 FR-10-7); the paid
+	// API stays id-only.
+	SlugRedirects func(ctx context.Context, typ, slug string) (catalog.Target, bool, error)
 	// Now is the clock for the changes window. Nil means time.Now.
 	Now func() time.Time
 	// Mount is this audience's URL prefix. Empty stays /api/v1 so a merged id
@@ -205,7 +211,15 @@ func (h *Controller) GetItem(c *web.Ctx, in GetItemInput) (ItemJSON, error) {
 		return ItemJSON{}, err
 	}
 	if !uuidRe.MatchString(in.ID) {
-		return ItemJSON{}, errs.ErrNotFound
+		if h.SlugRedirects == nil {
+			return ItemJSON{}, errs.ErrNotFound
+		}
+
+		id, err := h.bySlug(c, typ, in)
+		if err != nil {
+			return ItemJSON{}, err
+		}
+		in.ID = id
 	}
 
 	items, err := catalog.LoadAPIItems(c.Context(), h.DB, []string{in.ID}, locale, h.Policy, true)
@@ -222,6 +236,29 @@ func (h *Controller) GetItem(c *web.Ctx, in GetItemInput) (ItemJSON, error) {
 	out := itemJSON(items[0], locale)
 
 	return out, NotModified(c, out)
+}
+
+// bySlug maps a live slug to its item id; a renamed slug answers 301 to the id, an unknown one 404.
+func (h *Controller) bySlug(c *web.Ctx, typ string, in GetItemInput) (string, error) {
+	var id string
+	err := h.DB.QueryRowContext(c.Context(), `SELECT id::text FROM items WHERE type = $1 AND slug = $2`, typ, in.ID).
+		Scan(&id)
+	if err == nil {
+		return id, nil
+	}
+	if !errors.Is(err, sql.ErrNoRows) {
+		return "", fmt.Errorf("item by slug: %w", err)
+	}
+
+	t, ok, err := h.SlugRedirects(c.Context(), typ, in.ID)
+	if err != nil {
+		return "", err
+	}
+	if !ok {
+		return "", errs.ErrNotFound
+	}
+
+	return "", h.movedTo(c, "/"+in.Type+"/"+t.ID)
 }
 
 // merged answers 301 to the item a merged-away id now points at, else 404.

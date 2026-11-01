@@ -1788,6 +1788,7 @@
       "get": {
         "operationId": "getItem",
         "summary": "getItem",
+        "description": "`id` is the item uuid or its slug (web App Links, SDD 10 FR-10-7). A renamed slug or a merged id answers 301 to the live id.",
         "tags": [
           "catalog"
         ],
