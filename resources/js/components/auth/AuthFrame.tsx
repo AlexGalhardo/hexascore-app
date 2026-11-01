@@ -16,19 +16,22 @@ export default function AuthFrame({ heading, lede, title, children }: Props): Re
 	const t = useT();
 
 	return (
-		<div className="grid gap-8 py-6 md:grid-cols-[1fr_minmax(0,448px)] md:gap-16 md:py-12">
+		<div className="grid gap-6 py-4 md:grid-cols-[1fr_minmax(0,448px)] md:gap-16 md:py-12">
 			<div>
 				<p className="text-xs font-bold tracking-[0.1em] text-primary uppercase">
 					{t("auth.members")}
 				</p>
-				<p className="mt-3 font-display text-4xl leading-[1.05] font-bold tracking-[-0.02em] text-balance md:mt-6 md:text-[64px]">
+				<p className="mt-3 font-display text-[32px] leading-[1.05] font-bold tracking-[-0.02em] text-balance md:mt-6 md:text-[72px]">
 					{heading}
 				</p>
-				{lede && <p className="mt-4 max-w-xl text-lg text-muted md:mt-6">{lede}</p>}
+				{lede && <p className="mt-4 max-w-xl text-muted md:mt-6 md:text-lg">{lede}</p>}
 			</div>
-			<section className="border border-fg px-5 py-7 md:px-8 md:py-9">
-				<h1 className="font-display text-[28px] leading-tight font-bold">{title}</h1>
-				<div className="mt-5">{children}</div>
+			{/* Mobile drops the card for a top rule; the title stays for screen readers and focus. */}
+			<section className="border-t border-fg pt-4 md:border md:px-8 md:py-9">
+				<h1 className="sr-only font-display text-[28px] leading-tight font-bold md:not-sr-only md:mb-5">
+					{title}
+				</h1>
+				{children}
 			</section>
 		</div>
 	);
