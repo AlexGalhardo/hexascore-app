@@ -267,7 +267,10 @@ api   GET    /api/v1/games/trending
 api   GET    /api/v1/movies/trending
 api   GET    /api/v1/series/trending
 api   GET    /api/v1/books/trending
-api   GET    /api/v1/{type}/{id}/activity
+api   GET    /api/v1/games/{id}/activity
+api   GET    /api/v1/movies/{id}/activity
+api   GET    /api/v1/series/{id}/activity
+api   GET    /api/v1/books/{id}/activity
 api   GET    /api/v1/search/entities
 api   GET    /api/v1/search
 api   GET    /api/v1/lookup
@@ -276,6 +279,8 @@ api   GET    /api/v1/webhooks
 api   POST   /api/v1/webhooks
 api   DELETE /api/v1/webhooks/{id}
 api   POST   /api/v1/webhooks/{id}/test
+api   GET    /api/v1/exports
+api   GET    /api/v1/exports/{type}/{day}
 api   GET    /api/v1/{type}/{id}
 api   GET    /api/v1/{type}
 app   GET    /app/v1/books/{id}/editions
