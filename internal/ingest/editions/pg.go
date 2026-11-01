@@ -26,6 +26,18 @@ func (p PG) WorkOfISBN(ctx context.Context, isbn13 string) (string, bool, error)
 	return work, err == nil, err
 }
 
+// WorkOfQID finds the work that holds the edition item qid.
+func (p PG) WorkOfQID(ctx context.Context, qid string) (string, bool, error) {
+	var work string
+
+	err := p.Ex.QueryRowContext(ctx, `SELECT work_id::text FROM editions WHERE wikidata_qid = $1`, qid).Scan(&work)
+	if err == sql.ErrNoRows {
+		return "", false, nil
+	}
+
+	return work, err == nil, err
+}
+
 // Upsert updates the work's edition that carries one of the identifiers, or inserts a new one.
 func (p PG) Upsert(ctx context.Context, work string, c Candidate) error {
 	title, lang := c.Title, c.Language
@@ -86,16 +98,19 @@ ORDER BY isbn13 NULLS LAST LIMIT 1) WHERE id = $1`, work, c.ISBN, c.QID, c.OpenL
 }
 
 // FailureSource is the ingest_failures.source of an edition that could not be saved. It is not the job name, so a
-// standing ISBN conflict never parks the item itself.
+// standing identifier conflict never parks the item itself.
 const FailureSource = "editions"
 
-// SaveAll saves the candidates of one work. An ISBN held by another work moves nothing: it opens an
-// entity_match_reviews row (role "edition", the holder as the candidate, once per ISBN) and is returned, so the
-// caller records the failure.
-func SaveAll(ctx context.Context, ex database.Executor, work string, in []Candidate) ([]string, error) {
+// Clash is an edition identifier held by another work. Class is the ingest_failures.error_class.
+type Clash struct{ ID, Class string }
+
+// SaveAll saves the candidates of one work. An ISBN or edition QID held by another work moves nothing: it opens an
+// entity_match_reviews row (role "edition", the holder as the candidate, once per identifier) and is returned, so
+// the caller records the failure.
+func SaveAll(ctx context.Context, ex database.Executor, work string, in []Candidate) ([]Clash, error) {
 	store := PG{Ex: ex}
 
-	var conflicts []string
+	var clashes []Clash
 
 	for _, c := range in {
 		out, err := Save(ctx, store, work, c)
@@ -107,7 +122,7 @@ func SaveAll(ctx context.Context, ex database.Executor, work string, in []Candid
 			continue
 		}
 
-		owner, _, err := store.WorkOfISBN(ctx, c.ISBN)
+		clash, owner, err := holder(ctx, store, work, c)
 		if err != nil {
 			return nil, err
 		}
@@ -118,14 +133,28 @@ func SaveAll(ctx context.Context, ex database.Executor, work string, in []Candid
 VALUES ($1, 'edition', $2, $3, $3, ARRAY[$4::uuid]) ON CONFLICT (item_id, role, source, raw_name) DO NOTHING`,
 			work,
 			c.Source,
-			c.ISBN,
+			clash.ID,
 			owner,
 		); err != nil {
 			return nil, fmt.Errorf("editions: open review: %w", err)
 		}
 
-		conflicts = append(conflicts, c.ISBN)
+		clashes = append(clashes, clash)
 	}
 
-	return conflicts, nil
+	return clashes, nil
+}
+
+// holder says which identifier of c belongs to another work, and to which. The ISBN is checked first, as Save does.
+func holder(ctx context.Context, store PG, work string, c Candidate) (Clash, string, error) {
+	if c.ISBN != "" {
+		owner, found, err := store.WorkOfISBN(ctx, c.ISBN)
+		if err != nil || found && owner != work {
+			return Clash{c.ISBN, "isbn_conflict"}, owner, err
+		}
+	}
+
+	owner, _, err := store.WorkOfQID(ctx, c.QID)
+
+	return Clash{c.QID, "qid_conflict"}, owner, err
 }

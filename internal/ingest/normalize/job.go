@@ -404,7 +404,7 @@ WHERE s.external_id = $3 AND s.source = v.source AND s.fetched_at = v.fetched_at
 	return nil
 }
 
-// saveEditions stores the editions of a book. An ISBN held by another work is not an item failure: it counts as a
+// saveEditions stores the editions of a book. An ISBN or edition QID held by another work is not an item failure: it counts as a
 // failed target and sits in ingest_failures under the editions source, with a review opened by editions.SaveAll.
 func (Normalizer) saveEditions(
 	ctx context.Context,
@@ -419,7 +419,7 @@ func (Normalizer) saveEditions(
 		return err
 	}
 
-	var conflicts []string
+	var conflicts []editions.Clash
 
 	err = isolate(ctx, tx, func() error {
 		var serr error
@@ -439,11 +439,11 @@ func (Normalizer) saveEditions(
 		return ferr
 	}
 
-	for _, isbn := range conflicts {
+	for _, c := range conflicts {
 		res.Failed++
 
-		if _, err := run.RecordFailure(ctx, tx, r.ID, editions.FailureSource, isbn, "isbn_conflict",
-			fmt.Errorf("isbn %s of %s belongs to another work", isbn, qid)); err != nil {
+		if _, err := run.RecordFailure(ctx, tx, r.ID, editions.FailureSource, c.ID, c.Class,
+			fmt.Errorf("edition %s of %s belongs to another work", c.ID, qid)); err != nil {
 			return err
 		}
 	}

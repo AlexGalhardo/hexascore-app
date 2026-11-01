@@ -110,11 +110,18 @@ func TestPrimaryEdition(t *testing.T) {
 
 type fakeStore struct {
 	owner map[string]string
+	qids  map[string]string
 	saved map[string][]string
 }
 
 func (f *fakeStore) WorkOfISBN(_ context.Context, isbn string) (string, bool, error) {
 	w, ok := f.owner[isbn]
+
+	return w, ok, nil
+}
+
+func (f *fakeStore) WorkOfQID(_ context.Context, qid string) (string, bool, error) {
+	w, ok := f.qids[qid]
 
 	return w, ok, nil
 }
@@ -147,5 +154,22 @@ func TestIsbnOnAnotherWorkIsNotMoved(t *testing.T) {
 
 	if out, _ := Save(t.Context(), f, "work-B", Candidate{QID: "Q9"}); out != Saved {
 		t.Fatalf("no ISBN = %v, want Saved", out)
+	}
+}
+
+func TestQidOnAnotherWorkIsNotMoved(t *testing.T) {
+	f := &fakeStore{qids: map[string]string{"Q9": "work-A"}}
+
+	out, err := Save(t.Context(), f, "work-B", Candidate{QID: "Q9"})
+	if err != nil || out != Conflict {
+		t.Fatalf("outcome %v, err %v, want Conflict", out, err)
+	}
+
+	if len(f.saved) != 0 {
+		t.Fatalf("saved %v, want nothing", f.saved)
+	}
+
+	if out, _ := Save(t.Context(), f, "work-A", Candidate{QID: "Q9"}); out != Saved {
+		t.Fatalf("same work = %v, want Saved", out)
 	}
 }
