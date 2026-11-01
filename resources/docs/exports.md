@@ -9,18 +9,17 @@ Each day, before 08:00 UTC, we write one file per item type: games, movies, seri
 A file is gzip-compressed NDJSON, one JSON object per line:
 
 ```json
-{"id":"0192f3a4-7b1c-7e21-9c55-3f1e2d4a6b71","slug":"hades","wikidata":"Q62640075","popularity":0.82,"updatedAt":"2026-11-02T06:12:44Z"}
+{"id":"0192f3a4-7b1c-7e21-9c55-3f1e2d4a6b71","slug":"hades","wikidata":"Q62640075","updatedAt":"2026-11-02T06:12:44Z"}
 ```
 
 | Field | Meaning |
 | --- | --- |
 | `id` | The HexaScore item id, as used by `GET /v1/{type}/{id}`. |
 | `slug` | The URL slug of the item page. |
-| `wikidata` | The Wikidata entity id, or null when unknown. |
-| `popularity` | Relative popularity, to decide what to fetch first. |
+| `wikidata` | The Wikidata entity id. |
 | `updatedAt` | When the item last changed. |
 
-The files carry ids and ranking hints only. Item data, scores and licence-restricted fields come from the regular endpoints, so the plan's rules always apply.
+The files carry ids only. Item data, scores and licence-restricted fields come from the regular endpoints, so the plan's rules always apply.
 
 ## Download
 
@@ -37,5 +36,5 @@ An unknown day, or one older than 90 days, returns [`not-found`](/docs/errors#no
 ## A good routine
 
 - Download the files once a day and compare with your copy: new ids are creations, missing ids are deletions.
-- Fetch the new ids with `GET /v1/{type}/{id}`, highest `popularity` first, respecting your [rate limits](/docs/rate-limits).
+- Fetch the new ids with `GET /v1/{type}/{id}`, respecting your [rate limits](/docs/rate-limits).
 - Between exports, follow [Changes](/docs/changes) for the minute-by-minute view.

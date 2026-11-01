@@ -87,16 +87,20 @@ INSERT INTO items (id, type, slug, wikidata_qid, popularity_prior, updated_at, v
 	}
 
 	want := map[string]any{
-		"id":         pub,
-		"slug":       "zelda",
-		"wikidata":   "Q1",
-		"popularity": 0.5,
-		"updatedAt":  "2026-11-01T10:00:00Z",
+		"id":        pub,
+		"slug":      "zelda",
+		"wikidata":  "Q1",
+		"updatedAt": "2026-11-01T10:00:00Z",
 	}
 	for k, v := range want {
 		if lines[0][k] != v {
 			t.Errorf("%s = %v, want %v", k, lines[0][k], v)
 		}
+	}
+
+	// popularity_prior stays out of the served files until the owner answers Q-A11 (A-07).
+	if _, ok := lines[0]["popularity"]; ok {
+		t.Errorf("export line carries popularity: %v", lines[0])
 	}
 
 	for k, want := range map[string]bool{
