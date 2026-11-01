@@ -43,15 +43,23 @@ var (
 	emailRe  = regexp.MustCompile(`[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}`)
 	bearerRe = regexp.MustCompile(`(?i)\b(bearer|basic)\s+[^\s,;"]+`)
 	keyRe    = regexp.MustCompile(`\b(hx_live_|hx_app_|sk_live_|sk_test_|rk_live_|whsec_|re_)[A-Za-z0-9_]{8,}`)
-	paramRe  = regexp.MustCompile(`(?i)\b(password|token|api_key|apikey|secret|email|q|query|search)=[^&\s"]*`)
+	// signature and expires make a vukem signed link (storage.TemporaryURL, verify and export mails) a working
+	// credential until it expires; the X-Amz-* ones do the same for presigned S3 URLs.
+	paramRe = regexp.MustCompile(`(?i)\b(password|token|api_key|apikey|secret|email|q|query|search|signature|expires|` +
+		`x-amz-signature|x-amz-credential|x-amz-security-token)=[^&\s"]*`)
+	// The password-reset token travels in the path, which the request line logs.
+	tokenPathRe = regexp.MustCompile(`(/reset-password/)[^/?#\s"]+`)
 )
 
-// Scrub removes emails, bearer credentials, API keys and sensitive query
-// parameters from free text (error messages, URLs).
+// Scrub removes emails, bearer credentials, API keys, sensitive query
+// parameters (link signatures and expiries included) and reset tokens from
+// free text (error messages, URLs, request paths).
 func Scrub(s string) string {
 	s = emailRe.ReplaceAllString(s, Redacted)
 	s = bearerRe.ReplaceAllString(s, "$1 "+Redacted)
 	s = keyRe.ReplaceAllString(s, "${1}"+Redacted)
+
+	s = tokenPathRe.ReplaceAllString(s, "${1}"+Redacted)
 
 	return paramRe.ReplaceAllString(s, "${1}="+Redacted)
 }
