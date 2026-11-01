@@ -14,6 +14,7 @@ const labels: SearchLabels = {
 	removeRecent: (query) => `Remove ${query}`,
 	trending: "Trending this week",
 	trendingEmpty: "Nothing is trending this week yet.",
+	trendingLoading: "Loading…",
 	loading: "Searching…",
 	noResults: (query) => `No results for “${query}”`,
 	firstOf: (shown, total) => `First ${shown} of ${total} matches`,

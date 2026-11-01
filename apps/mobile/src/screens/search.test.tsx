@@ -169,6 +169,16 @@ test("the empty sheet shows the trending empty state", async () => {
 	expect(await screen.findByText("Nothing is trending this week yet.")).toBeTruthy();
 });
 
+test("while trending loads the sheet shows a loading state, not the empty message", async () => {
+	const read = {
+		...reader(() => ({ searchId: "s", data: [], total: 0 })),
+		listGameTrending: jest.fn(() => new Promise<never>(() => {})),
+	};
+	await renderSearch(read);
+	expect(await screen.findByText("Loading…")).toBeTruthy();
+	expect(screen.queryByText("Nothing is trending this week yet.")).toBeNull();
+});
+
 test("trending lists the top items across types by rank and a row opens the item", async () => {
 	const read = reader(() => ({ searchId: "s", data: [], total: 0 }), {
 		game: { data: [entry("game", 1, "Hades"), entry("game", 2, "Celeste")] },
