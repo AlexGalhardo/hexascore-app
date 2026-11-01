@@ -74,8 +74,12 @@ func (h *Entity) Show(kind, param string) web.HandlerFunc {
 			meta.NextPage = strconv.Itoa(page.Groups[0].Next)
 		}
 
+		// The page does not render the Wikidata id; it stays out of the Inertia JSON (ADR 0022).
+		entity := page.Entity
+		entity.WikidataQID = ""
+
 		return inertia.Render(c, "Entity/Show", inertia.Props{
-			"entity":    page.Entity,
+			"entity":    entity,
 			"roles":     page.Roles,
 			"items":     inertia.Scroll(map[string]any{"data": page.Groups}, meta),
 			"counts":    page.Counts,

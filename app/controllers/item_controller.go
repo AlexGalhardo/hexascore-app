@@ -57,8 +57,8 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 		}
 
 		props := inertia.Props{
-			"item":          page.Item,
-			"ratingSummary": page.RatingSummary,
+			"item":          pageItem(page.Item),
+			"ratingSummary": webRatingSummary{RatingSummary: page.RatingSummary},
 			"entities":      page.Entities,
 			"editions":      page.Editions,
 			"editionCount":  page.EditionCount,
@@ -182,4 +182,34 @@ func publicRatingsPage(c *web.Ctx) (int, error) {
 		return 0, errs.New(http.StatusBadRequest, "page must be an integer between 1 and 100.")
 	}
 	return n, nil
+}
+
+// webItem is the part of catalog.ItemDetail the item page renders: the Inertia JSON (and the page JSON
+// in the HTML) carries no more than the page shows (ADR 0022). Wikidata id, external ids, credits,
+// affiliate links and provenance stay with the paid API.
+type webItem struct {
+	ID             string            `json:"id"`
+	Type           string            `json:"type"`
+	Slug           string            `json:"slug"`
+	Title          string            `json:"title,omitempty"`
+	Synopsis       *catalog.Synopsis `json:"synopsis,omitempty"`
+	ReleaseDate    string            `json:"releaseDate,omitempty"`
+	RuntimeMinutes *int              `json:"runtimeMinutes,omitempty"`
+	PageCount      *int              `json:"pageCount,omitempty"`
+	Cover          string            `json:"cover,omitempty"`
+}
+
+func pageItem(d catalog.ItemDetail) webItem {
+	return webItem{
+		ID: d.ID, Type: d.Type, Slug: d.Slug, Title: d.Title, Synopsis: d.Synopsis, ReleaseDate: d.ReleaseDate,
+		RuntimeMinutes: d.RuntimeMinutes, PageCount: d.PageCount, Cover: d.Cover,
+	}
+}
+
+// webRatingSummary hides the formula version the page does not show: the outer, empty field shadows the
+// embedded one in encoding/json and is omitted.
+type webRatingSummary struct {
+	catalog.RatingSummary
+
+	FormulaVersion *int `json:"formulaVersion,omitempty"`
 }

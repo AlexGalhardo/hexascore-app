@@ -68,7 +68,13 @@ func TestInertiaPages_Catalog_Show(t *testing.T) {
 		HasProp("timeToBeat.reports").
 		PropEquals("cover.full", "/covers/zelda-0123456789abcdef.webp").
 		PropEquals("cover.thumb", "/covers/zelda-0123456789abcdef-t.webp").
-		MissingProp("me")
+		MissingProp("me").
+		// ADR 0022: the Inertia JSON carries only what the page renders.
+		MissingProp("item.wikidataQid").
+		MissingProp("item.externalIds").
+		MissingProp("item.entities").
+		MissingProp("item.provenance").
+		MissingProp("ratingSummary.formulaVersion")
 
 	client.Inertia("").Get("/pt-br/books/dune").AssertOK().AssertInertia("Catalog/Show").
 		PropEquals("editionCount", 12).

@@ -33,7 +33,11 @@ func cspNonce(h http.Header) []byte {
 }
 
 // volatileHeaders are per-request and never replayed from a cached response.
-var volatileHeaders = []string{"X-Request-Id", "Date", "Set-Cookie", "Content-Security-Policy"}
+// RateLimit-* belong to the client that filled the entry, not the one being served (ScrapeGuard).
+var volatileHeaders = []string{
+	"X-Request-Id", "Date", "Set-Cookie", "Content-Security-Policy",
+	"RateLimit-Limit", "RateLimit-Remaining", "RateLimit-Reset",
+}
 
 var cacheableSections = map[string]bool{
 	"games": true, "movies": true, "series": true, "books": true,

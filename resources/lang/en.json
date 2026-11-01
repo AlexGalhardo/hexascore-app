@@ -1232,7 +1232,8 @@
       "3": {
         "heading": "4. Acceptable use",
         "body": {
-          "0": "Do not scrape the website — use the public API instead. Do not attempt to bypass rate limits, bot protection or access controls, interfere with the service, or use it for anything illegal."
+          "0": "Do not scrape the website — use the public API instead. Do not attempt to bypass rate limits, bot protection or access controls, interfere with the service, or use it for anything illegal.",
+          "1": "Automated collection of catalogue data from the website (scraping, crawling or bulk downloading by scripts, headless browsers or other tools) is not permitted, except by search engines indexing public pages. If you need data in bulk, use the paid HexaScore API (https://hexascore.app/docs, plans at https://hexascore.app/pricing). We may block, rate limit or ban clients that ignore this."
         }
       },
       "4": {

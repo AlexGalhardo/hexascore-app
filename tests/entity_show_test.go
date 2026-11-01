@@ -84,6 +84,7 @@ func TestInertiaPages_Entity_Show(t *testing.T) {
 		AssertInertia("Entity/Show").
 		PropEquals("entity.name", "Ridley Scott").
 		PropEquals("entity.kind", "person").
+		MissingProp("entity.wikidataQid").
 		PropEquals("counts.movie", 2).
 		PropEquals("indexable", false).
 		PropEquals("roles.0.role", "director").

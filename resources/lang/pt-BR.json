@@ -1232,7 +1232,8 @@
       "3": {
         "heading": "4. Uso aceitável",
         "body": {
-          "0": "Não faça scraping do site — use a API pública. Não tente contornar limites de requisições, proteção contra bots ou controles de acesso, interferir no serviço ou usá-lo para qualquer fim ilegal."
+          "0": "Não faça scraping do site — use a API pública. Não tente contornar limites de requisições, proteção contra bots ou controles de acesso, interferir no serviço ou usá-lo para qualquer fim ilegal.",
+          "1": "A coleta automatizada de dados do catálogo pelo site (scraping, crawling ou download em massa por scripts, navegadores headless ou outras ferramentas) não é permitida, exceto por mecanismos de busca indexando páginas públicas. Se você precisa de dados em volume, use a API paga da HexaScore (https://hexascore.app/docs, planos em https://hexascore.app/pricing). Podemos bloquear, limitar ou banir clientes que ignorarem esta regra."
         }
       },
       "4": {

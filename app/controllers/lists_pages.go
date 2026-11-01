@@ -86,9 +86,21 @@ func (h *Lists) Show(c *web.Ctx) error {
 		c.Writer().Header().Set("X-Robots-Tag", "noindex")
 	}
 
+	// Only what the public list page renders (ADR 0022): no version, timestamps or added dates.
+	entries := make([]publicListEntry, len(items))
+	for i, e := range items {
+		entries[i] = publicListEntry{Position: e.Position, Note: e.Note, Item: publicListItem{ListItemRef: e.Item}}
+	}
+
 	props := inertia.Props{
-		"list": listJSON(l), "owner": map[string]string{"nickname": nick}, "items": items, "canEdit": canEdit,
-		"indexable": indexable,
+		"list": map[string]any{
+			"id":          l.ID,
+			"title":       l.Title,
+			"description": l.Description,
+			"isPublic":    l.IsPublic,
+			"itemCount":   l.ItemCount,
+		},
+		"owner": map[string]string{"nickname": nick}, "items": entries, "canEdit": canEdit, "indexable": indexable,
 	}
 	if l.IsPublic && !l.Hidden && !l.OwnerPrivate && !banned && h.Social.Enabled(ctx) {
 		props["ogImage"] = ogImage("lists", l.ID)
@@ -110,4 +122,19 @@ func (h *Lists) Show(c *web.Ctx) error {
 	}
 
 	return inertia.Render(c, "User/List", props)
+}
+
+// publicListEntry is library.ListEntry without the date the owner added the item.
+type publicListEntry struct {
+	Position int            `json:"position"`
+	Note     *string        `json:"note"`
+	Item     publicListItem `json:"item"`
+}
+
+// publicListItem hides the raw cover key (the page uses cover): the outer, empty field shadows the
+// embedded one in encoding/json and is omitted.
+type publicListItem struct {
+	library.ListItemRef
+
+	CoverThumbKey *string `json:"coverThumbKey,omitempty"`
 }
