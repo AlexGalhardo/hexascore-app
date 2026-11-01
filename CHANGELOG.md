@@ -65,6 +65,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **community:** Moderation is two-step (owner Q-A15): moderators record approve or reject recommendations with a note, and only admins apply or reject suggestions (FIX-moderation-two-step)
 - **community:** The merge form picks both records with the search box instead of raw ids, and relation and merge diffs on the suggestion status page show names (FIX-community-create-ux)
 - **ui:** The library, public lists and profile ratings render shared shelf cards (cover, status, score); the library groups by status with counts (P2.H.1.4)
+- **infra:** Observability is Railway-native only (D-35 amended): service metrics, log search, traces and `alert=` log lines; the policy page no longer lists Grafana Cloud (FIX-observability-railway-native)
 
 ### Fixed
 
@@ -82,6 +83,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **mobile:** The catalogue copy script emits Biome-formatted JSON; committed copies refreshed (P5.A.1.1)
 - **mobile:** The navigation test renders each route in its own test and no longer hits the Jest timeout under load (FIX-mobile-nav-test-timeout)
 - **tests:** `TestReleaseBursts` no longer fails when the Postgres container clock runs ahead of the host (FIX-scoring-burst-clock)
+
+### Removed
+
+- **infra:** App OpenTelemetry metric instruments (`app/metrics`) and the Grafana alert and dashboard artifacts (`ops/grafana`) (FIX-observability-railway-native)
 
 ## [0.12.3] - 2026-10-31
 
