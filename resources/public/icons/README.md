@@ -1,6 +1,6 @@
 # HexaScore app icon candidates
 
-Three hand-written SVG candidates (owner round 2026-11-01, item 4). **Selected: candidate 3** (owner, 2026-11-01), for the web and the Android app. Colours come from the design tokens: primary `#5b3fc4`, dark-mode primary `#a796ff`, dark ledge `#5e4db8`, ink `#13161b`. No fonts, no third-party marks.
+Three hand-written SVG candidates (owner round 2026-11-01, item 4). **Selected: candidate 3** (owner, 2026-11-01), for the web and the Android app. Colours come from the design tokens: primary `#5b3fc4`, dark-mode primary `#a796ff`, dark ledge `#5e4db8`, ink `#16130f` (token `fg`, light). No fonts, no third-party marks.
 
 | Candidate | 512 px | 32 px | 16 px | Idea |
 | --- | --- | --- | --- | --- |
