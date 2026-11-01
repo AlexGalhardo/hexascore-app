@@ -14,24 +14,29 @@ const STAR_PATH = "M12 2.5l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.6 5.9 21.1l1.4-6.
 
 type StarFill = "full" | "half" | "empty";
 
-// Inline SVG so half stars render the same everywhere; the filled layer is clipped to half the box.
-function Star({ fill }: { fill: StarFill }) {
-	const svg = (cls: string) => (
-		<svg viewBox="0 0 24 24" className={`size-6 shrink-0 ${cls}`} aria-hidden="true">
-			<path d={STAR_PATH} strokeWidth="1.5" strokeLinejoin="round" />
+// One shared symbol keeps the 120 stars of a rating panel small in the SSR HTML; render it once
+// per page (RatingPanel does). The filled layer is clipped to the left half for a half star.
+export function StarSymbol() {
+	return (
+		<svg aria-hidden="true" className="absolute size-0">
+			<symbol id="hs-star" viewBox="0 0 24 24">
+				<path d={STAR_PATH} strokeWidth="1.5" strokeLinejoin="round" />
+			</symbol>
 		</svg>
 	);
+}
+
+function Star({ fill }: { fill: StarFill }) {
 	return (
-		<span aria-hidden="true" data-fill={fill} className="relative inline-flex size-6 shrink-0">
-			{svg("fill-none stroke-field")}
+		<svg viewBox="0 0 24 24" aria-hidden="true" data-fill={fill} className="size-6 shrink-0">
+			<use href="#hs-star" className="fill-none stroke-field" />
 			{fill !== "empty" && (
-				<span
-					className={`absolute inset-y-0 left-0 overflow-hidden ${fill === "half" ? "w-1/2" : "w-full"}`}
-				>
-					{svg("fill-star stroke-star-line")}
-				</span>
+				<use
+					href="#hs-star"
+					className={`fill-star stroke-star-line${fill === "half" ? " [clip-path:inset(0_50%_0_0)]" : ""}`}
+				/>
 			)}
-		</span>
+		</svg>
 	);
 }
 
@@ -98,7 +103,7 @@ export default function StarRating({ label, value, onChange, disabled = false }:
 				role="radiogroup"
 				aria-labelledby={`${name}-label`}
 				aria-disabled={disabled || undefined}
-				className="flex w-fit rounded-xs outline-offset-2 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary"
+				className="flex w-fit cursor-pointer rounded-xs outline-offset-2 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary aria-disabled:cursor-not-allowed"
 				onKeyDown={onKeyDown}
 				onPointerLeave={() => setHover(null)}
 			>
@@ -114,7 +119,7 @@ export default function StarRating({ label, value, onChange, disabled = false }:
 						{[i + 0.5, i + 1].map((v) => (
 							<label
 								key={v}
-								className={`absolute inset-y-0 w-1/2 ${v % 1 ? "left-0" : "right-0"} ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
+								className={`absolute inset-y-0 w-1/2 ${v % 1 ? "left-0" : "right-0"}`}
 								onPointerEnter={() => !disabled && setHover(v)}
 							>
 								<input
