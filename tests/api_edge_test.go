@@ -77,3 +77,76 @@ func TestAPIEdge(t *testing.T) {
 		}
 	})
 }
+
+func TestAPIEdgeHostOnlyAPI(t *testing.T) {
+	r := newAPICatalog(t)
+	const api = "http://api.hexascore.app"
+
+	t.Run("index", func(t *testing.T) {
+		res := r.app.Client(t).Get(api + "/").AssertOK()
+		if ct := res.Recorder().Header().Get("Content-Type"); !strings.HasPrefix(ct, "application/json") {
+			t.Fatalf("Content-Type = %q", ct)
+		}
+
+		res.AssertJSONPath("name", "HexaScore API").AssertJSONPath("version", "v1").
+			AssertJSONPath("openapi", "https://api.hexascore.app/v1/openapi.json")
+	})
+
+	t.Run("up_stays", func(t *testing.T) {
+		r.app.Client(t).Get(api + "/up").AssertOK()
+	})
+
+	t.Run("openapi_stays", func(t *testing.T) {
+		r.app.Client(t).Get(api + "/v1/openapi.json").AssertOK()
+		r.app.Client(t).Get(api + "/api/v1/openapi.json").AssertOK()
+	})
+
+	t.Run("unknown_path_is_problem", func(t *testing.T) {
+		res := r.app.Client(t).Get(api+"/nope").AssertStatus(404).
+			AssertJSONPath("code", "not-found").AssertJSONPath("type", "https://hexascore.app/problems/not-found")
+		if ct := res.Recorder().Header().Get("Content-Type"); !strings.HasPrefix(ct, "application/problem+json") {
+			t.Fatalf("Content-Type = %q", ct)
+		}
+	})
+
+	t.Run("web_host_does_not_serve_v1", func(*testing.T) {
+		r.app.Client(t).Get("http://hexascore.app/v1/openapi.json").AssertNotFound()
+		r.app.Client(t).Get("http://hexascore.app/v1/games").AssertNotFound()
+	})
+}
+
+// A05: the API host must never answer with the web stack.
+func TestSecurity_A05_ApiHostServesNoWebRoutes(t *testing.T) {
+	r := newAPICatalog(t)
+
+	for _, tc := range []struct{ name, path, accept string }{
+		{"login", "/login", "text/html"},
+		{"admin", "/admin", "text/html"},
+		{"home_html", "/", "text/html"},
+		{"docs", "/docs/reference", "text/html"},
+		{"inertia", "/games", "text/html"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			c := r.app.Client(t).WithHeader("Accept", tc.accept)
+			if tc.name == "inertia" {
+				c = c.WithHeader("X-Inertia", "true").WithHeader("X-Inertia-Version", "x")
+			}
+
+			rec := c.Get("http://api.hexascore.app" + tc.path).Recorder()
+			h := rec.Header()
+
+			if sc := h.Values("Set-Cookie"); len(sc) != 0 {
+				t.Fatalf("Set-Cookie = %v", sc)
+			}
+
+			if ct := h.Get("Content-Type"); strings.Contains(ct, "html") || h.Get("X-Inertia") != "" {
+				t.Fatalf("%s answered %q (X-Inertia %q)", tc.path, ct, h.Get("X-Inertia"))
+			}
+
+			if strings.Contains(strings.ToLower(rec.Body.String()), "<html") ||
+				strings.Contains(rec.Body.String(), "data-page") {
+				t.Fatalf("%s body looks like a page", tc.path)
+			}
+		})
+	}
+}

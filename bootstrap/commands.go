@@ -17,6 +17,8 @@ func Commands() []vukem.Command {
 		console.AdminRevoke(),
 		console.UserReset2FA(),
 		console.SearchPurge(),
+		console.SeedMark(),
+		console.SeedPurge(),
 		console.BackupRun(),
 		console.BackupRestore(),
 		console.BackupDrill(),
