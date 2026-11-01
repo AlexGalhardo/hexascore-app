@@ -95,6 +95,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - The library, your lists and public list pages follow design v1: status sections and shelf cards with your score (IMPL-web-v1-library-lists)
 - `release.yml` manual runs take a `version` input (an existing tag) that drives the checkout, image tags, `APP_VERSION` and release notes (P2.B.2.2).
 - Page-only i18n namespaces (docs, terms, policy, help, billing, ...) are sent only on their pages, with a once-prop key per namespace set (PERF-i18n-page-namespaces).
+- The legacy `entities` import stage is set-based (about 12 statements per 1,000 items instead of about 5,900) and `hexascore:import-legacy` takes `--workers N` for the entities, social and library stages; the checkpoint only advances past contiguous committed batches (FIX-legacyimport-entities-setbased).
 
 ### Fixed
 
