@@ -116,6 +116,23 @@
       "community": "Não me enviar email sobre minhas sugestões à comunidade",
       "communityHelp": "Você continua vendo cada decisão sobre suas sugestões nas notificações.",
       "save": "Salvar preferências de email"
+    },
+    "updateRequired": {
+      "title": "Atualização necessária"
+    },
+    "offline": "Você está offline. As alterações serão sincronizadas quando a conexão voltar.",
+    "crashReports": {
+      "title": "Enviar relatórios de erro?",
+      "body": "Se o app travar, envie à HexaScore a versão do app, a versão do Android, a tela e os detalhes do erro. Nenhuma conta, e-mail ou token é incluído. Você pode desativar isso nas Configurações.",
+      "allow": "Enviar relatórios",
+      "deny": "Não enviar"
+    },
+    "blocked": {
+      "title": "Sua conta está suspensa",
+      "reason": "Motivo: {reason}",
+      "until": "Até {date}",
+      "permanent": "Sem data de término",
+      "back": "Voltar ao login"
     }
   },
   "actions": {
@@ -252,7 +269,8 @@
       "name": "Nome",
       "show": "Mostrar senha",
       "hide": "Ocultar senha",
-      "confirmPassword": "Confirmar senha"
+      "confirmPassword": "Confirmar senha",
+      "deviceName": "Nome do dispositivo"
     },
     "rules": {
       "title": "Sua senha precisa ter:",
@@ -271,6 +289,7 @@
     },
     "errors": {
       "invalidCredentials": "E-mail/nickname ou senha incorretos.",
+      "emailUnverifiedAtProvider": "O Google não verificou este e-mail. Verifique-o no Google ou entre com sua senha.",
       "emailNotVerified": "Confirme seu e-mail antes de entrar.",
       "rateLimited": "Muitas tentativas. Aguarde um minuto e tente de novo.",
       "network": "Não foi possível falar com o servidor. Verifique sua conexão e tente de novo.",
@@ -595,7 +614,10 @@
     "title": "Todo jogo, filme, série e livro — avaliado pelas pessoas, categoria por categoria.",
     "explore": "Explorar",
     "recent": "Avaliados recentemente pelos membros",
-    "ratedBy": "por {name}"
+    "ratedBy": "por {name}",
+    "trendingWeek": "Em alta esta semana",
+    "popularType": "Populares: {type}",
+    "popular": "Popular"
   },
   "footer": {
     "terms": "Termos",
@@ -949,7 +971,7 @@
       "4": {
         "heading": "5. Com quem compartilhamos",
         "body": {
-          "0": "Não vendemos dados pessoais. Compartilhamos apenas com operadores que tratam dados em nosso nome: Railway (hospedagem e banco de dados), Grafana Cloud (métricas e logs), Resend (e-mails transacionais), Stripe (pagamentos), Google (só se você escolher \"Continuar com Google\") e Telegram (alertas do operador).",
+          "0": "Não vendemos dados pessoais. Compartilhamos apenas com operadores que tratam dados em nosso nome: Railway (hospedagem, banco de dados, métricas e logs), Resend (e-mails transacionais), Stripe (pagamentos), Google (só se você escolher \"Continuar com Google\") e Telegram (alertas do operador).",
           "1": "Alguns desses operadores ficam fora do Brasil, inclusive nos Estados Unidos. As transferências usam as salvaguardas que essas leis permitem.",
           "2": "Metadados de catálogo da IGDB e da TMDB aparecem com a atribuição que essas fontes exigem. Contribuições da comunidade ao catálogo ficam sob a licença A-07."
         }
@@ -1480,7 +1502,7 @@
       "missing": "Não encontrou?",
       "targets": {
         "label": "O que adicionar",
-        "item": "Título",
+        "item": "Jogo, filme, série ou livro",
         "entity": "Pessoa, empresa ou tag",
         "edition": "Edição de livro"
       },
@@ -1540,5 +1562,16 @@
       "platform": "Plataforma",
       "genre": "Gênero"
     }
+  },
+  "forYou": {
+    "title": "Para você",
+    "home": "Para você",
+    "onboarding": "Avalie 3 itens de {type} para receber recomendações. Enquanto isso, veja o que está em alta.",
+    "empty": "Ainda não há recomendações.",
+    "optedOut": "As recomendações personalizadas estão desligadas. Você pode ligá-las nas configurações de privacidade.",
+    "rated": "Porque você avaliou {title} com {stars}/5",
+    "completed": "Porque você completou {title}",
+    "wanted": "Porque você quis {title}",
+    "loading": "Carregando..."
   }
 }
