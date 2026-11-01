@@ -14,6 +14,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/app/recommend/related"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 )
 
@@ -22,11 +23,17 @@ type Item struct {
 	app    *vukem.App
 	writer *scoring.Writer
 	user   func(c *web.Ctx) (models.User, error)
+	reco   *related.Metrics
 }
 
 // NewItem builds the handlers; writer reads the viewer's own rating, status and time to beat.
-func NewItem(app *vukem.App, writer *scoring.Writer, user func(c *web.Ctx) (models.User, error)) *Item {
-	return &Item{app: app, writer: writer, user: user}
+func NewItem(
+	app *vukem.App,
+	writer *scoring.Writer,
+	user func(c *web.Ctx) (models.User, error),
+	reco *related.Metrics,
+) *Item {
+	return &Item{app: app, writer: writer, user: user, reco: reco}
 }
 
 // Show renders Catalog/Show for the item type typ; `me` and `myLists` exist only when logged in.
@@ -54,6 +61,22 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 			"timeToBeat":    page.TimeToBeat,
 			"trailers":      page.Trailers,
 			"cover":         page.Cover,
+		}
+
+		rel, err := related.Load(c.Context(), db, page.Item.ID, typ, i18n.Locale(c.Context()))
+		if err != nil {
+			return err
+		}
+
+		props["similar"], props["crossMedia"] = rel.Similar, rel.CrossMedia
+		if len(rel.Similar) > 0 {
+			h.reco.Impression("similar", typ)
+		}
+		if len(rel.CrossMedia) > 0 {
+			h.reco.Impression("crossmedia", typ)
+		}
+		if from := related.FromSurface(c.Query("from")); from != "" {
+			h.reco.Click(from, typ)
 		}
 
 		if u, err := h.user(c); err == nil {

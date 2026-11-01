@@ -294,6 +294,7 @@ web   GET    /docs/reference/scalar.js
 web   GET    /docs/reference/page.js
 web   POST   /profile/export
 app   POST   /app/v1/me/export
+app   GET    /app/v1/items/{id}/related
 app   GET    /app/v1/me/for-you
 app   GET    /app/v1/me
 app   PATCH  /app/v1/me
