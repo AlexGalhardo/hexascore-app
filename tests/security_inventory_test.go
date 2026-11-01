@@ -29,6 +29,9 @@ func inventoryApp(t *testing.T) (*vukemtest.App, bool) {
 	env := map[string]string{
 		"STRIPE_KEY": stripeKey, "STRIPE_WEBHOOK_SECRET": webhookSecret,
 		"STRIPE_PRICE_PRO": "price_pro", "STRIPE_PRICE_BUSINESS": "price_business",
+		// A bucket compiles the routes that exist only with one (GET /backups/offsite/); nothing dials it.
+		"S3_BUCKET": "inventory", "S3_ENDPOINT": "http://127.0.0.1:1", "S3_USE_PATH_STYLE": "true",
+		"S3_INSECURE_HTTP": "true", "S3_ACCESS_KEY_ID": "k", "S3_SECRET_ACCESS_KEY": "s",
 	}
 
 	full := os.Getenv("TEST_DATABASE_URL") != ""

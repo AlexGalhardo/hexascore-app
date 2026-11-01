@@ -143,7 +143,8 @@ func NewOffsiteSigner(app *vukem.App) (*signed.Signer, error) {
 // path outside backups/postgres/monthly/ is a 404 even with a valid signature, so the link can never
 // reach covers, daily dumps or anything else in the shared bucket.
 func OffsiteHandler(disk storage.Disk, signer *signed.Signer) http.Handler {
-	serve := storage.Handler(disk, signer)
+	// The dump is a secret behind a bearer link: no browser or proxy (Cloudflare) may keep a copy.
+	serve := storage.HandlerWith(disk, signer, storage.Options{CacheControl: "private, no-store"})
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if !strings.HasPrefix(r.URL.Path, monthlyPrefix) || strings.Contains(r.URL.Path, "..") {

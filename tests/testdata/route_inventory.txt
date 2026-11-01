@@ -345,6 +345,7 @@ app   PATCH  /app/v1/me
 app   POST   /app/v1/me/deletion
 app   DELETE /app/v1/me/deletion
 web   GET    /exports/
+web   GET    /backups/offsite/
 app   POST   /app/v1/tokens
 app   POST   /app/v1/tokens/google
 app   POST   /app/v1/tokens/rotate
