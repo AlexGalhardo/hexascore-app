@@ -1203,7 +1203,13 @@
       "emptyShelf": "Nada por aquí todavía.",
       "previous": "Anterior",
       "next": "Siguiente",
-      "summary": "{ratings} puntuaciones · {lists} listas"
+      "summary": "{ratings} puntuaciones · {lists} listas",
+      "contributions": {
+        "title": "Contribuciones",
+        "summary": "{submitted} sugeridas · {approved} aprobadas · {rejected} rechazadas",
+        "rate": "Tasa de aprobación {rate}",
+        "tier": "Nivel: {tier} · precisión {accuracy}"
+      }
     },
     "status": {
       "label": "Estado",
@@ -1498,6 +1504,21 @@
         "edit": "Edición",
         "create": "Nuevo registro",
         "merge": "Informe de duplicado"
+      }
+    },
+    "recent": {
+      "title": "Cambios recientes: {title}",
+      "back": "Volver a la página",
+      "empty": "Todavía no hay cambios.",
+      "merged": "fusionó un duplicado en este registro",
+      "changedTo": "cambiado a",
+      "pages": "Páginas de cambios recientes",
+      "link": "Cambios recientes",
+      "actors": {
+        "team": "Equipo HexaScore",
+        "deleted": "usuario eliminado",
+        "system": "HexaScore",
+        "user": "miembro"
       }
     }
   },
