@@ -11,7 +11,6 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/api/changes"
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
-	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 )
 
 // ChangeJSON is one listChanges row. action is created, updated or deleted (SDD 05 §8).
@@ -122,7 +121,7 @@ func parseSince(raw string, now time.Time) (time.Time, error) {
 	}
 	if since.Before(now.Add(-changes.Window)) {
 		return time.Time{}, errs.New(http.StatusBadRequest, "since is more than 14 days ago").
-			WithHeader(appmiddleware.ProblemCodeHeader, "changes-window-exceeded")
+			WithExtension("code", "changes-window-exceeded")
 	}
 
 	return since, nil

@@ -1,13 +1,13 @@
 package controllers
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 	"strconv"
 	"strings"
 
 	"github.com/AlexGalhardo/vukem/auth"
+	"github.com/AlexGalhardo/vukem/errs"
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/library"
@@ -37,7 +37,7 @@ func (h *Exports) Create(c *web.Ctx) error {
 
 	id, err := h.svc.Request(c.Context(), u.ID)
 	if cd, ok := errors.AsType[library.ExportCooldownError](err); ok {
-		return h.cooldown(c, cd)
+		return h.cooldown(cd)
 	}
 
 	if err != nil {
@@ -51,21 +51,12 @@ func (h *Exports) Create(c *web.Ctx) error {
 	return c.JSON(http.StatusAccepted, map[string]any{"exportId": id, "status": "queued"})
 }
 
-// cooldown writes the 429 export-cooldown problem. workaround(vukem): VF-NEW-PROBLEM-TYPE: errs.HTTPError cannot
-// set the problem type or title, so the problem is written by hand like the app token problems.
-func (h *Exports) cooldown(c *web.Ctx, cd library.ExportCooldownError) error {
-	raw, err := json.Marshal(map[string]any{
-		"type":       strings.TrimSuffix(h.problemBase, "/") + "/" + library.CodeExportCooldown,
-		"title":      "You can request one export every 7 days.",
-		"status":     http.StatusTooManyRequests,
-		"code":       library.CodeExportCooldown,
-		"retryAfter": cd.RetryAfter,
-	})
-	if err != nil {
-		return err
-	}
-
-	c.SetHeader("Retry-After", strconv.Itoa(cd.RetryAfter))
-
-	return c.Blob(http.StatusTooManyRequests, "application/problem+json", raw)
+// cooldown is the 429 export-cooldown problem with its own type and title.
+func (h *Exports) cooldown(cd library.ExportCooldownError) error {
+	return errs.New(http.StatusTooManyRequests, "").
+		WithType(strings.TrimSuffix(h.problemBase, "/")+"/"+library.CodeExportCooldown).
+		WithTitle("You can request one export every 7 days.").
+		WithExtension("code", library.CodeExportCooldown).
+		WithExtension("retryAfter", cd.RetryAfter).
+		WithHeader("Retry-After", strconv.Itoa(cd.RetryAfter))
 }
