@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.12.4] - 2026-11-01
+
+### Fixed
+
+- **auth:** Flag fake seed users and block their sign-in ([f7132f4](https://github.com/AlexGalhardo/hexascore-app/commit/f7132f4d574861e7f599ee5eda75e19dee1532f3))
+- **api:** Serve only the API on the API host ([3256238](https://github.com/AlexGalhardo/hexascore-app/commit/325623806a9100eb6bdb3b043810c0d7af26c42f))
+
 ## [0.12.3] - 2026-10-31
 
 ### Fixed
