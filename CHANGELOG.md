@@ -19,6 +19,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **api:** `qa/sql/api_coverage.sql` measures per-field API coverage with the serialiser's source rules (checked by `TestAPICoverageSQL`); `scripts/api-coverage-json.ts` writes `resources/data/api_coverage.json` from its CSV (P3.A.2.2)
 - **api:** `/pricing` and `/docs/coverage` show the coverage table from `api_coverage.json`, or say the numbers are not measured yet; the pricing statement says film, series and game covers and trailers are never in the API (P3.B.3.2)
 - **ingest:** Wikidata edition records (P747, 50 per work) give each book edition its language, year and ISBN (P6.B.3.1)
+- **ui:** App icon (candidate 3) as navbar mark, SVG favicon, `favicon.ico` and apple-touch icon, with the two other candidates in `resources/public/icons/`; the Android app and Play listing use the same icon (owner round 2026-11-01 item 4)
+- **ui:** Category icons before every games, movies, TV and books label, the item breadcrumb included (item 6)
+- **ui:** `/about` page in the three locales, linked from the footer and listed in the sitemap and `llms.txt` (item 25); footer "Source Code" link to the GitHub repository (item 17)
+- **ui:** Landing blocks show a carousel of the 12 most rated items of the last 30 days (pause control, no autoplay under reduced motion, inactive slides hidden from assistive tech) and a "More" grid of 12 picked at random after hydration from a cached pool (item 26)
+- **ui:** Shared item tile with a two-line title, the year and a full-height score badge (item 22)
+- **auth:** Sign-up asks for the nickname (4-16 letters, stored lowercase, cannot be changed later; a taken one answers the same for new and existing emails) and bounds the email to 12-48 characters (item 8)
+- **auth:** Two-factor settings live in a `/profile` section with every control and rate limit kept; `/user/two-factor` answers 301 to `/profile#two-factor` with the locale prefix (item 21)
+- **ui:** `/contact` shows a live `0/512` counter; signed-in senders are always stored with their account nickname and email (item 9)
+
+### Changed
+
+- **ui:** Every button gets a pressed state with depth and shadow (item G); landing cards read "#N trending" with the primary genre by the year (item 15); the section header centres a larger title count (item 23)
+- **ui:** The account dropdown shows the avatar only and an icon before each link (item 13)
+- **auth:** New passwords are 8 to 32 characters (D-24 edited); logins never check the length (item 8)
+- **ui:** Item page in three columns with icon action buttons, square chips and no mouse text selection (inputs stay selectable); the users' scores modal is wider with 1.5x fonts and full category names; the rating card is headed "Your rating" and keeps its keyboard help for assistive tech only (items 7, 24)
+- **ui:** Narrower centred forms on `/contact` and `/profile` (items 9, 11)
 
 ### Fixed
 
@@ -27,6 +43,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **infra:** `qa/k6/moderation.js` keeps one signed-in session per account (admin TOTP included), and `CommunityLoad` dates its load before today so members keep their daily submit quota (P4.B.5.1)
 - **legal:** The delete-account help page links keep the visitor's locale prefix (P5.C.2.1)
 - **repo:** `scripts/release.sh` starts the range at the commit whose tree matches the highest `vX.Y.Z` tag (not `git describe`), takes `--since <rev>`, and updates the compare links; its test runs under `bun test` in CI and `scripts/ci/local.sh`
+
+### Removed
+
+- **ui:** "Recently rated by members" landing strip (item 5), the trending definition line in the footer (item 16), the navbar notifications bell and unread badge (item 27; `/me/notifications` is unchanged), the "Members" label on `/signup` and `/login` (item 8) and the `/user/two-factor` page (item 21)
 
 ## [0.39.0] - 2026-11-01
 
