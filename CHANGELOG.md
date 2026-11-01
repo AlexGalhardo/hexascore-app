@@ -84,6 +84,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Web catalogue listings in the v1 look: title with the result count, ruled filter row, Reset as a button, score badges with the band colour (IMPL-web-v1-catalog).
 - The web item page follows design v1: score block with band and explanation, genre and platform chips, category averages, ten half stars per category as a keyboard radio group, status toggles, time to beat rows, trailers behind consent; `hover` and `backdrop` colour tokens in packages/tokens (IMPL-web-v1-item).
 - The web home page follows design v1: one block per item type with three cards trending over the last 7 days, six other titles and a see-all link (IMPL-web-v1-home).
+- The Android home shows the v1 trending sections: three ranked cards and a grid of six per type, with covers and a see-all link (IMPL-mobile-v1-home)
+- The Android section listing uses the v1 catalogue page: title, filter panel with sort and genre chips, Previous/Next pager, rows with year, rating count and score (IMPL-mobile-v1-listing)
+- The Android item screen uses the v1 item page (kicker, score badge with verdict, genre chips, category bars, synopsis, people, editions, attribution); Rate opens the rating sheet (IMPL-mobile-v1-item)
 
 ### Fixed
 
@@ -102,6 +105,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **mobile:** The catalogue copy script emits Biome-formatted JSON; committed copies refreshed (P5.A.1.1)
 - **mobile:** The navigation test renders each route in its own test and no longer hits the Jest timeout under load (FIX-mobile-nav-test-timeout)
 - **tests:** `TestReleaseBursts` no longer fails when the Postgres container clock runs ahead of the host (FIX-scoring-burst-clock)
+- **api:** `/app/v1` catalogue items carry `coverThumbUrl` and `coverUrl` (app audience only; the paid API still omits covers) (FIX-app-item-cover-urls)
+- **api:** The app API documents the `/app/v1/search` and `/search/suggest` query parameters, so the generated client can send `q` (FIX-app-search-query-params)
+- **mobile:** The Android app opens web item links that carry only the slug; `GET /app/v1/{type}/{id}` also takes a slug and answers 301 for a renamed one (FIX-app-item-by-slug)
+- **mobile:** The rating input reports its accessibility value in integer half steps (6.5 is 13 of 20) (FIX-mobile-rating-a11y-now)
 
 ### Removed
 
