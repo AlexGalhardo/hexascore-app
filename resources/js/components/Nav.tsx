@@ -106,6 +106,7 @@ export default function Nav() {
 	const searchTrigger = useRef<HTMLAnchorElement>(null);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const burger = useRef<HTMLButtonElement>(null);
+	const sheet = useRef<HTMLDivElement>(null);
 	const unreadBadge = unread > 0 && (
 		<span className="absolute top-1 right-0 min-w-5 rounded-full bg-primary px-1 text-center text-[10px] font-bold leading-[18px] text-on-primary tabular-nums">
 			{unreadLabel}
@@ -122,6 +123,25 @@ export default function Nav() {
 		document.addEventListener("keydown", onKey);
 		return () => document.removeEventListener("keydown", onKey);
 	}, []);
+
+	// Base UI's focus guards and initial focus move focus in a requestAnimationFrame, so a Tab
+	// handled before the next frame (keys right after opening, a busy main thread) reached the
+	// page behind the sheet. Wrapping synchronously keeps focus inside on every keypress.
+	useEffect(() => {
+		if (!menuOpen) return;
+		const onKey = (e: KeyboardEvent) => {
+			const root = sheet.current;
+			if (e.key !== "Tab" || !root) return;
+			const items = [...root.querySelectorAll<HTMLElement>("a[href],button:not([disabled])")];
+			const active = document.activeElement;
+			if (!root.contains(active) || active === (e.shiftKey ? items[0] : items.at(-1))) {
+				e.preventDefault();
+				(e.shiftKey ? items.at(-1) : items[0])?.focus();
+			}
+		};
+		document.addEventListener("keydown", onKey);
+		return () => document.removeEventListener("keydown", onKey);
+	}, [menuOpen]);
 
 	const languageList = (
 		<ul aria-label={t("nav.language")}>
@@ -375,6 +395,7 @@ export default function Nav() {
 				<BaseDialog.Portal>
 					<BaseDialog.Backdrop className="fixed inset-0 z-[55] bg-backdrop/50 transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none lg:hidden" />
 					<BaseDialog.Popup
+						ref={sheet}
 						finalFocus={burger}
 						onClick={(e) => {
 							// Following a link closes the sheet; the theme toggle keeps it open to show the change.
