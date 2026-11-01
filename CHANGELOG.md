@@ -87,6 +87,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **mobile:** v1 look for the status and time-to-beat sheets (IMPL-mobile-v1-status-ui), the account extras with an unread badge on the profile tab (IMPL-mobile-v1-account-ui), and translated search type labels, recent removal and empty trending text (IMPL-mobile-search-i18n)
 - **ui:** client-fetched web data (search suggestions, user-ratings dialog, edition picker, data export) uses TanStack Query 5.105.0 (ADR 0020); the Ctrl+K search palette loads on first open (ADOPT-tanstack-query-web, FIX-lighthouse-budgets-main)
 - **web:** anonymous public catalogue HTML is served gzip-compressed (session-bound, cookie-setting and non-200 responses stay plain; SDD 13 BREACH note); light book accent darkened to oklch 0.5 for AA contrast (PERF-web-lcp, FIX-lighthouse-budgets-main)
 - **sdk:** Python SDK version and README quota header aligned with the contract (P3.B.1.2)
