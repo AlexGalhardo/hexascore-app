@@ -121,6 +121,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **web:** shelf cards on the feed and other users' pages label the score neutrally ("Score 7.0") instead of "Your score" (FIX-shelf-score-label)
 - **ci:** the bun:test SDK workflow tests run with `bun test` instead of Vitest, so `bun run test` is green again (P3.B.1.3)
 - **ingest:** a redelivered run resumes from the locked cursor, only the breaker probe closes an open breaker, a resume whose QID left the selection restarts, and an outage no longer parks targets (P6.A review)
 - **api:** /problems/{code} answers 301; docs and SDK READMEs use meta.next_cursor; SDK READMEs list listChanges and webhook operations (FIX-problems-redirect-301)
