@@ -75,6 +75,7 @@ web   DELETE /profile/deletion
 web   GET    /help/delete-account
 web   GET    /dashboard
 web   GET    /challenge
+web   POST   /turnstile
 web   GET    /auth/{provider}/redirect
 web   GET    /auth/google/confirm
 web   GET    /auth/{provider}/callback

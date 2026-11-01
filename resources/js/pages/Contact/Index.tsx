@@ -2,6 +2,7 @@ import { Head, useForm } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
 
 import Field from "../../components/Field";
+import { useTurnstile } from "../../components/Turnstile";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
@@ -24,13 +25,17 @@ export default function Index({ topics, formToken }: Props) {
 		token: formToken,
 	});
 
+	const turnstile = useTurnstile("contact");
+
 	const submit = (e: FormEvent) => {
 		e.preventDefault();
 		form.post(l("/contact"), {
+			headers: turnstile.headers(),
 			onSuccess: () => {
 				setSent(true);
 				form.reset("message");
 			},
+			onFinish: () => turnstile.reset(),
 		});
 	};
 
@@ -97,6 +102,7 @@ export default function Index({ topics, formToken }: Props) {
 						onChange={(e) => form.setData("website", e.target.value)}
 					/>
 				</div>
+				{turnstile.render((form.errors as Record<string, string | undefined>).challenge)}
 				<button
 					type="submit"
 					disabled={form.processing}

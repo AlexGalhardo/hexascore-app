@@ -5,6 +5,7 @@ package bootstrap
 import (
 	"cmp"
 	"context"
+	"html/template"
 	"log/slog"
 	"os"
 	"strconv"
@@ -82,6 +83,9 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 	pressure := ingest.NewPressure(time.Now)
 	ingestSrc.Pressure = pressure
 
+	// Set by the routes callback below, read at render time by the turnstileScript view function.
+	var turnstile routes.Turnstile
+
 	base := []vukem.Option{
 		vukem.WithEnv(nil, config.WithQueueLimits(os.LookupEnv)),
 		vukem.WithProviders(Providers()...),
@@ -100,6 +104,9 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 				[]flags.AnyFlag{community.SubmissionsFlag, community.TrustedModeratorsFlag, social.Flag},
 				run.All()...)...),
 		vukem.WithViews(resources.Views()),
+		vukem.WithViewFuncs(template.FuncMap{
+			"turnstileScript": func(nonce string) template.HTML { return turnstile.Script(nonce) },
+		}),
 		vukem.WithVite(resources.Public()),
 		vukem.WithTranslations(resources.Lang()),
 		vukem.WithOpenAPI(apiInfo(config.APIHost(os.Getenv))),
@@ -117,6 +124,11 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 	}
 
 	base = append(base, vukem.WithRoutes(func(r *router.Router, app *vukem.App) error {
+		ts, err := routes.LoadTurnstile(app)
+		if err != nil {
+			return err
+		}
+		turnstile = ts
 		appmail.Configure(app.Source.Get("MAIL_FROM"), app.Source.Get("MAIL_SUPPORT_ADDRESS"))
 		// MAIL_REPLY_TO wins; otherwise automatic mail answers to MAIL_SUPPORT_ADDRESS (Q-A17). A mailer error
 		// is not swallowed: Send returns the same error on first use.

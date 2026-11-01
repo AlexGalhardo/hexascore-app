@@ -78,7 +78,9 @@ var (
 	// Page views per IP on HTML and Inertia routes (ADR 0022). A reader opens a page every few seconds:
 	// 60/min allows a quick burst of tabs, 600/h caps a steady crawl at one page per 6 s. A request with a
 	// session cookie gets 5x; verified search crawlers are exempt.
-	PageViews         = Rule{"pages", 60, time.Minute}
+	PageViews = Rule{"pages", 60, time.Minute}
+	// Below PageViews: past it an anonymous client is asked to solve Turnstile once (step-up, ADR 0022).
+	PageViewsSoft     = Rule{"pages.soft", 30, time.Minute}
 	PageViewsHour     = Rule{"pages.hour", 600, time.Hour}
 	PageViewsUser     = Rule{"pages.user", 300, time.Minute}
 	PageViewsUserHour = Rule{"pages.user.hour", 3000, time.Hour}
@@ -140,6 +142,7 @@ func All() []Rule {
 		CommunityUpload,
 		CommunityUploadIP,
 		PageViews,
+		PageViewsSoft,
 		PageViewsHour,
 		PageViewsUser,
 		PageViewsUserHour,

@@ -11,6 +11,7 @@ import (
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/i18n"
 	"github.com/AlexGalhardo/vukem/middleware"
+	vukemmw "github.com/AlexGalhardo/vukem/middleware"
 	"github.com/AlexGalhardo/vukem/ratelimit"
 	"github.com/AlexGalhardo/vukem/router"
 	"github.com/AlexGalhardo/vukem/web"
@@ -50,19 +51,32 @@ func Web(r *router.Router, app *vukem.App) error {
 	// answers 413 from that earlier MaxBytesError (VF-061).
 	r.UseServer(limits.Body)
 
+	ts, err := LoadTurnstile(app)
+	if err != nil {
+		return err
+	}
+
 	// The URL prefix is the only locale source; the locale cookie only drives the redirect (SDD 09 §7.1).
-	err := vukem.DefaultMiddlewareWith(app, r, vukem.MiddlewareOptions{
-		SecureHeaders: appmiddleware.SecureHeaders(
-			appmiddleware.UpgradeInsecure(app.Config.IsProduction(), app.Config.URL),
-			imgHosts...,
-		),
+	secure := appmiddleware.SecureHeaders(
+		appmiddleware.UpgradeInsecure(app.Config.IsProduction(), app.Config.URL),
+		imgHosts...,
+	)
+	err = vukem.DefaultMiddlewareWith(app, r, vukem.MiddlewareOptions{
+		SecureHeaders: func(cfg *vukemmw.SecureHeadersConfig) {
+			secure(cfg)
+			appmiddleware.AddCSPSources(cfg, ts.CSPSources())
+		},
 		// The browser posts violation reports with no session and no CSRF token.
+		// The step-up interstitial is written before the session and CSRF middleware run, so its form carries no
+		// CSRF token; a forged post can only hand the victim a clearance cookie, never act for them.
 		SessionBypass: []string{
+			"POST /turnstile",
 			"POST /csp-reports",
 			"POST /app/v1/client-errors",
 			"POST /app/v1/client-metrics",
 		},
 		CSRFBypass: []string{
+			"POST /turnstile",
 			"POST /csp-reports",
 			"POST /stripe/webhook",
 			"POST /app/v1/client-errors",
@@ -84,14 +98,30 @@ func Web(r *router.Router, app *vukem.App) error {
 	// Outside the view counter, gzip and RenderCache: cached pages are limited too and a denied request
 	// never counts as a view (ADR 0022). Production only (the QA image included): tests and dev tools
 	// fetch pages without a browser User-Agent.
+	clearanceKey, err := app.DeriveKey("challenge.clearance", 32)
+	if err != nil {
+		return err
+	}
+
+	var skipStepUp func(*web.Ctx) bool
+
 	if app.Config.IsProduction() {
-		guard, err := scrapeGuard(app)
+		guard, err := scrapeGuard(app, ts, clearanceKey)
 		if err != nil {
 			return err
 		}
 
+		skipStepUp = guard.VerifiedCrawler
 		r.UseServer(guard.Middleware)
 	}
+
+	stepLimits, err := limits.Factory(app)
+	if err != nil {
+		return err
+	}
+
+	r.Post("/turnstile", ts.stepUp(clearanceKey, skipStepUp).Handle).Name("turnstile").
+		Use(ratelimit.Middleware(limits.Challenge.From(stepLimits), ratelimit.ByIP))
 	// Outside MovePageScript so the cache keeps the rewritten document. vukem's default
 	// session cookie name; the app does not override it (production adds a __Host- prefix).
 	// Outside RenderCache so item pages served from the cache still count as views (SDD 08 §7.1).
@@ -165,6 +195,8 @@ func Web(r *router.Router, app *vukem.App) error {
 			CoversBase: coversBase,
 			SEO:        seoConfig(app),
 			User:       func(c *web.Ctx) (any, error) { return acc.Web.User(c) },
+			// Empty while Turnstile is off: the widget renders nothing.
+			TurnstileSiteKey: ts.SiteKey,
 		}),
 		appmiddleware.NotBanned(acc.Web.User, acc.ProblemBase, app.Now),
 	)
@@ -299,7 +331,7 @@ func seoConfig(app *vukem.App) seo.Config {
 }
 
 // scrapeGuard builds the page guard of ADR 0022 on the shared limiter and cache stores.
-func scrapeGuard(app *vukem.App) (*appmiddleware.ScrapeGuard, error) {
+func scrapeGuard(app *vukem.App, ts Turnstile, clearanceKey []byte) (*appmiddleware.ScrapeGuard, error) {
 	scale, err := appmiddleware.PageLimitScale(app.Source.Get("PAGE_LIMIT_SCALE"))
 	if err != nil {
 		return nil, err
@@ -341,7 +373,7 @@ func scrapeGuard(app *vukem.App) (*appmiddleware.ScrapeGuard, error) {
 		return out
 	}
 
-	return &appmiddleware.ScrapeGuard{
+	g := &appmiddleware.ScrapeGuard{
 		Bots: &botverify.Verifier{
 			Resolver: net.DefaultResolver,
 			Cache:    store,
@@ -352,5 +384,13 @@ func scrapeGuard(app *vukem.App) (*appmiddleware.ScrapeGuard, error) {
 		User:           scaled(limits.PageViewsUser, limits.PageViewsUserHour),
 		SignedIn:       signedIn,
 		LocalePrefixes: localePrefixes,
-	}, nil
+		Soft:           scaled(limits.PageViewsSoft)[0],
+	}
+	// Past the soft budget an anonymous client solves Turnstile once (clearance cookie) before the hard limits.
+	step := ts.stepUp(clearanceKey, g.VerifiedCrawler)
+	g.StepUp = func(w http.ResponseWriter, r *http.Request) bool {
+		return step.Require(web.NewCtx(w, r, web.ServicesFrom(r.Context())))
+	}
+
+	return g, nil
 }

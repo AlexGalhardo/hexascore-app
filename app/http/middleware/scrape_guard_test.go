@@ -287,3 +287,55 @@ func TestPageLimitScale(t *testing.T) {
 		}
 	}
 }
+
+// TestSecurity_A06_ScrapeSoftLimitStepsUp: past the soft budget an anonymous client goes through the Turnstile
+// step-up before the hard limits; a cleared client and a verified crawler are let through.
+func TestSecurity_A06_ScrapeSoftLimitStepsUp(t *testing.T) {
+	t.Parallel()
+
+	c := cache.New(cache.NewMemory(1000), "")
+	stepped := 0
+	g := &middleware.ScrapeGuard{
+		Bots: &botverify.Verifier{Resolver: dnsFake{}, Cache: c, Timeout: 50 * time.Millisecond},
+		Bans: c,
+		Anon: []ratelimit.Limiter{limits.PageViews.From(memLimiter)},
+		Soft: ratelimit.NewMemory(2, time.Minute),
+		StepUp: func(w http.ResponseWriter, r *http.Request) bool {
+			stepped++
+			if ck, err := r.Cookie("clearance"); err == nil && ck.Value == "ok" {
+				return true
+			}
+
+			w.WriteHeader(http.StatusForbidden)
+
+			return false
+		},
+	}
+	h := g.Middleware(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) { w.WriteHeader(http.StatusOK) }))
+
+	for i := range 2 {
+		if rec := get(h, "/games/zelda", browserUA, "198.51.100.7"); rec.Code != http.StatusOK || stepped != 0 {
+			t.Fatalf("request %d under the soft budget: status %d, step-ups %d", i+1, rec.Code, stepped)
+		}
+	}
+
+	if rec := get(h, "/games/zelda", browserUA, "198.51.100.7"); rec.Code != http.StatusForbidden || stepped != 1 {
+		t.Fatalf("over the soft budget: status %d, step-ups %d, want the interstitial", rec.Code, stepped)
+	}
+
+	cleared := func(r *http.Request) { r.AddCookie(&http.Cookie{Name: "clearance", Value: "ok"}) }
+	if rec := get(h, "/games/zelda", browserUA, "198.51.100.7", cleared); rec.Code != http.StatusOK {
+		t.Fatalf("cleared client: status %d", rec.Code)
+	}
+
+	before := stepped
+	for range 5 {
+		if rec := get(h, "/games/zelda", googlebotUA, googleIP); rec.Code != http.StatusOK {
+			t.Fatalf("verified crawler: status %d", rec.Code)
+		}
+	}
+
+	if stepped != before {
+		t.Error("a verified crawler was sent to the step-up")
+	}
+}

@@ -6,6 +6,7 @@ import ChallengeStatus from "../../components/ChallengeStatus";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
 import SubmitButton from "../../components/SubmitButton";
+import { useTurnstile } from "../../components/Turnstile";
 import { challengeHeaders } from "../../lib/challenge";
 import { checkConfirmation, checkPassword, passwordAdvice } from "../../lib/password-policy";
 import { useLocalized } from "../../lib/useLocalized";
@@ -49,13 +50,20 @@ export default function Signup({ formToken }: { formToken: string }) {
 		form_token: formToken,
 	});
 	const [checking, setChecking] = useState(false);
+	const turnstile = useTurnstile("register");
 
 	const submit = async (e: FormEvent) => {
 		e.preventDefault();
-		const headers = await challengeHeaders("signup", setChecking);
+		const headers = {
+			...(await challengeHeaders("signup", setChecking)),
+			...turnstile.headers(),
+		};
 		form.post(l("/signup"), {
 			headers,
-			onFinish: () => form.reset("password", "password_confirmation"),
+			onFinish: () => {
+				form.reset("password", "password_confirmation");
+				turnstile.reset();
+			},
 		});
 	};
 
@@ -120,6 +128,7 @@ export default function Signup({ formToken }: { formToken: string }) {
 					checks={checkConfirmation(form.data.password, form.data.password_confirmation)}
 				/>
 				<Agreement text={t("auth.signup.agree")} l={l} />
+				{turnstile.render((form.errors as Record<string, string | undefined>).challenge)}
 				<SubmitButton pending={form.processing || checking} className="w-full">
 					{t("auth.signup.submit")}
 				</SubmitButton>
