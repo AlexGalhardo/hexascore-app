@@ -34,6 +34,8 @@ type RunParams struct {
 	Since time.Time
 	Types []string
 	Limit int
+	// QIDs restricts the run to these Wikidata QIDs (an admin re-run or the failure retry); empty means no restriction.
+	QIDs []string
 }
 
 // TargetError ties a failed target to its cause for the dead-letter table.
