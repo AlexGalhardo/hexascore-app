@@ -1297,6 +1297,7 @@ Phase-specific conventions:
     - `scripts/infra/region-latency.sh https://<east>.up.railway.app/up https://<west>.up.railway.app/up` → 50 samples per target of `curl -w '%{time_connect} %{time_starttransfer}'`, p50/p95 printed per region
     - ADR 0002 addendum lists p50/p95 from the owner's line and 3 Brazilian probes, and names the chosen region (`us-east4-eqdc4a` unless the numbers say otherwise)
   - Notes: throwaway services run the starter image only (`/up`), in a scratch Railway project, and are deleted the same day (cost). HUMAN GATE: creating the scratch project uses the owner's Railway account.
+  - Status (2026-11-01): owner gate (staging environment): owner either records the production region already in use as the choice (close by decision) or approves throwaway Railway services for the latency script.
 
 - [ ] **P2.A.1.2** Create the Railway project on the Pro plan with environments `production` and `staging`, the `postgres` service per environment, and the spend controls.
   - Files/modules: `docs/sdd/11-infra-deploy.md` (§6.1 plan line, §11 issues 6 and 13 notes), `docs/sdd/12-observability.md` (§11 issue 4 closed: Pro, 30-day logs, monitors available)
@@ -1308,6 +1309,7 @@ Phase-specific conventions:
     - `railway usage limit status` → hard limit US$30; the Railway usage page shows the "Custom email alert" at US$24 (SDD 12 §9 last item)
     - the `postgres` service has no TCP proxy and a volume sized for §5 (6 GB)
   - Notes: HUMAN GATE (spend): the owner upgrades to Pro, enters payment, and sets the alert and the hard limit. Postgres tuning (`shared_buffers=256MB`, `work_mem=8MB`, `maintenance_work_mem=256MB`, `max_connections=60`) is applied in P2.A.4.3 once `ALTER SYSTEM` is verified. Do not add Redis or a worker service (ADR 0003, D-08).
+  - Status (2026-11-01): owner gate (staging environment): production exists; owner approves creating the `staging` environment with its `postgres` service and confirms the spend controls (usage alert US$24, hard limit US$30).
 
 #### P2.A.2 Buckets and domains
 
@@ -1320,6 +1322,7 @@ Phase-specific conventions:
     - Railway shows buckets `hexascore-staging` and `hexascore-production` in the app region, private
     - `go test ./app/storage -run TestStorageHealthSentinel` against RustFS (`docker compose`) → PASS; the same check reports `storage: ok` on staging in P2.A.4.3
   - Notes: buckets are private and have no lifecycle rules, versioning or server-side encryption (11-1, decided): never rely on any of them. HUMAN GATE (secrets): the owner copies the credentials into Railway variables; they never enter git or chat logs.
+  - Status (2026-11-01): owner gate (staging environment): production bucket exists; owner approves the staging bucket (needs the staging environment).
 
 - [ ] **P2.A.2.2** Confirm or move the `hexascore.app` zone to Cloudflare and point the staging hosts at Railway.
   - Files/modules: `docs/runbooks/dns.md` (records, TTLs, who changes them), `docs/runbooks/dns-legacy.txt` (export of the current Vercel-facing records, used by rollback R1)
@@ -1331,6 +1334,7 @@ Phase-specific conventions:
     - `dig +short CNAME staging.hexascore.app` and `dig +short CNAME api.staging.hexascore.app` → the Railway domains of the staging `app` service; Cloudflare proxy off (grey cloud)
     - `docs/runbooks/dns-legacy.txt` lists every current record of apex, `www`, `api`, `dev` with values and TTLs
   - Notes: HUMAN GATE (DNS): a zone move changes name servers at the registrar and must not touch the live apex records; copy them first and compare after. Production hosts (apex with CNAME flattening, `www`, `api`) are switched only in P2.G.3.3. `status.hexascore.app` is added in P2.C.4.1.
+  - Status (2026-11-01): owner gate (staging environment): zone part done: `hexascore.app` is on Cloudflare (`cruz`/`junade.ns.cloudflare.com`, checked 2026-11-01, questions-to-dev item 32); open: the `staging` and `api.staging` CNAMEs (need the staging environment) and `docs/runbooks/dns.md` plus `dns-legacy.txt` (not on main).
 
 #### P2.A.3 Container
 
@@ -1368,6 +1372,7 @@ Phase-specific conventions:
     - `railway config apply` → exit 0; the `app` service shows healthcheck `/up?checks=1` and pre-deploy `/app/hexascore hexascore:predeploy`
     - `grep -c 'preserve()' .railway/railway.ts` ≥ the number of secret rows in §6.4
   - Notes: `railway.json`/`railway.toml` stop being read on 2026-12-01: never add them. Overlap 20 s, draining 35 s, restart `ALWAYS` max 5 are set in service settings until their IaC keys are verified ([NOT VERIFIED], 11-8). Commands are the binary path plus arguments, no shell. Until P2.E.1.1 lands, `hexascore:predeploy` is the `migrate:locked` command from P1.A.4.3 under its final name. `OTEL_METRICS_EXPORTER=none` stays until P2.C.2.1 points metrics at Grafana.
+  - Status (2026-11-01): owner gate (staging environment): owner approves `railway config apply` (it mutates the linked project) once the staging environment exists.
 
 - [ ] **P2.A.4.2** Generate and store the per-environment secrets and keep the owner's offline copy.
   - Files/modules: `docs/runbooks/secrets.md` (inventory: name, environment, provider, rotation, where the offline copy lives; never values)
@@ -1378,6 +1383,7 @@ Phase-specific conventions:
     - `railway ssh` into staging `app`, then `/app/hexascore about` → `APP_ENV=production`, trusted proxies listed, no secret value printed
     - `go test ./... -run TestSecurity_A02_DockerIgnoresSecrets` → PASS; `git grep -nE 'base64:[A-Za-z0-9+/]{40}|sk_live_|re_[A-Za-z0-9]{20}'` → no output
   - Notes: HUMAN GATE (secrets): the owner generates `APP_KEY` per environment (`docker run --rm hx key:generate`), `BACKUP_KEY` (32 bytes, separate from `APP_KEY`), Stripe test keys for staging, Resend, and keeps an encrypted export of the variables offline (SDD 11 §5). Telegram and OTLP secrets come in P2.C. Production Stripe live keys are set only in P2.G.3.1.
+  - Status (2026-11-01): owner gate (staging environment): owner generates the staging secrets (`APP_KEY`, `BACKUP_KEY`, Stripe test keys, Resend) and keeps the encrypted offline copy of both environments.
 
 - [ ] **P2.A.4.3** Deploy `main` to staging through Railway's GitHub autodeploy, then verify the Postgres facts and apply the tuning.
   - Files/modules: `docs/sdd/11-infra-deploy.md` (§5 version and extensions, §9 item "SHOW server_version", §11 issue 6 closed), `docs/sdd/07-search.md` (§11 issue 9), `docs/sdd/open-issues.md` (rows 07-9, 11-6 closed)
@@ -1389,6 +1395,7 @@ Phase-specific conventions:
     - `railway ssh` then `psql "$DATABASE_URL" -c 'SHOW server_version' -c 'SELECT extname FROM pg_extension'` → version ≥ 16 (18 expected), `pg_trgm` and `unaccent` present after migrations
     - `railway logs` → request lines show `peer` in `100.64.0.x` and `ip` with the real client address
   - Notes: if Railway rejects a healthcheck path with a query string ([NOT VERIFIED]), mount `app.ReadyHandler()` at `/ready` (single-binary page) and change §6.2. If `ALTER SYSTEM` is refused, record the parameters that could not be set and their defaults. The private hostname is recorded, never exposed.
+  - Status (2026-11-01): owner gate (staging environment): needs the staging environment (owner yes).
 
 - [ ] **P2.A.4.4** Prove a staging deploy drops no requests and a failing migration aborts the deploy.
   - Files/modules: `qa/k6/deploy-switch.js`, `docs/qa/deploy-switch.md`, `docs/sdd/11-infra-deploy.md` §11 issue 8 (overlap/draining values observed)
@@ -1399,6 +1406,7 @@ Phase-specific conventions:
     - `k6 run -e BASE=https://staging.hexascore.app qa/k6/deploy-switch.js` during `railway redeploy` → 0 non-2xx at 20 rps
     - a test branch with a migration that raises an error, deployed to staging → deployment failed, previous deployment still serving, `migrate:status --json` unchanged
   - Notes: revert the failing migration with a new commit; never force-push. If requests drop, tune overlap/draining before anything else depends on zero-downtime deploys.
+  - Status (2026-11-01): owner gate (staging environment): needs the staging environment (owner yes).
 
 #### P2.A.5 Release
 
@@ -1478,6 +1486,7 @@ Phase-specific conventions:
     - a merge to `main` → Railway deploys staging after CI is green, then `staging-smoke` runs `k6 run qa/k6/smoke.js` → `p(95)<500`, 0 errors
     - `gh api repos/AlexGalhardo/hexascore-app/branches/main/protection` → required checks `lint`, `test`, `vuln`, `openapi`, `build`, `e2e`, `lighthouse`
   - Notes: Railway's "wait for CI" option is [NOT VERIFIED] (11-8); if it does not exist, turn autodeploy off and deploy staging from the workflow with `railway up --detach` after the checks. HUMAN GATE: branch protection is a repository setting the owner applies or approves.
+  - Status (2026-11-01): owner gate (staging environment): needs the staging environment; owner also sets the required checks in branch protection (`e2e` is not a gate since 2026-10-31, so drop it from the list).
 
 - [x] **P2.B.2.2** Write `release.yml`: tag `v*` and `workflow_dispatch(version)` deploy production with notes taken from `CHANGELOG.md`, behind a GitHub environment approval.
   - Files/modules: `.github/workflows/release.yml`, `Taskfile.yml` (`release`), `docs/runbooks/release.md` (release, missed run, rollback by `-f version=vPREV`)
@@ -1535,10 +1544,11 @@ Phase-specific conventions:
     - `go test ./app/errors -run 'TestFingerprint|TestDigestFakeClock'` → PASS: top 20 fingerprints at 08:00 America/Sao_Paulo, one request id each, prune > 90 days
     - on staging, a forced test error → one message in the error chat (silent); a `LevelFatal` test record → the page chat rings
   - Notes: HUMAN GATE (secrets): the owner creates the bot and the two chats and sets `TELEGRAM_BOT_TOKEN` and the chat ids. `TELEGRAM_MIN_LEVEL=error`, `TELEGRAM_RATE_LIMIT=20`. Digest uses `app.Telegram.SendSync`. Buffered upserts every 60 s (VF-021 pattern), never per error.
+  - Status (2026-11-01): owner gate (Telegram): owner creates the bot and the page and error chats and sets `TELEGRAM_BOT_TOKEN` and the chat ids on Railway.
 
 #### P2.C.2 Traces and metrics
 
-- [ ] **P2.C.2.1** Create the Grafana Cloud stack and send traces and metrics there over OTLP, with Railway's receiver as the trace-only fallback.
+- [x] **P2.C.2.1** Create the Grafana Cloud stack and send traces and metrics there over OTLP, with Railway's receiver as the trace-only fallback. Closed 2026-11-01: superseded by D-35 (amended), Railway-native observability; no Grafana/promtool; traces go to Railway's OTLP receiver (SDD 12 §6.3).
   - Files/modules: `bootstrap/app.go` (`otel.New` first in `WithProviders`, `Config.Global`), `.railway/railway.ts` (`OTEL_*`), `docs/sdd/12-observability.md` §6.3, §11 issue 8 (OTLP URL, Telegram contact point, cert checks verified)
   - Refs: SDD 12 §6.2, §6.3, §7.3, §11 issues 1 and 8; SDD 11 §6.4 (`OTEL_*`); D-35; <https://vukem.dev/docs/digging-deeper/opentelemetry> "Configuration", "Outbound HTTP calls", "Security"; <https://vukem.dev/docs/deployment/docker-and-railway> "OpenTelemetry on Railway"; <https://grafana.com/pricing/>
   - Depends on: P2.C.1.1
@@ -1560,7 +1570,7 @@ Phase-specific conventions:
 
 #### P2.C.3 Alerts and dashboards
 
-- [ ] **P2.C.3.1** Write alert rules A3–A16 with `promtool` fixtures and load them into Grafana alerting.
+- [x] **P2.C.3.1** Write alert rules A3–A16 with `promtool` fixtures and load them into Grafana alerting. Closed 2026-11-01: superseded by D-35 (amended), Railway-native observability; no Grafana/promtool; A3–A16 are app checks writing `alert=` log lines (SDD 12 §7.5).
   - Files/modules: `ops/alerts/rules.yaml`, `ops/alerts/tests.yaml`, `.github/workflows/ci.yml` (`alerts` step with a digest-pinned `prom/prometheus` image), `docs/sdd/12-observability.md` §10 (ruler import result)
   - Refs: SDD 12 FR-12-4, §7.5, §9 item 2, §10; SDD 02 (A13), 04 (A9), 06 (A7), 08 (A14) as inactive rules until their metrics exist
   - Depends on: P2.C.2.2
@@ -1570,7 +1580,7 @@ Phase-specific conventions:
     - Grafana alerting lists the A3–A16 rules with severity labels `page`/`warn`
   - Notes: Grafana ruler import of Prometheus-format rules is [NOT VERIFIED]; if it fails, recreate the rules in Grafana from the same YAML and keep the YAML as the tested source. A15 lives in Railway (P2.A.1.2); A1/A2 are synthetic (P2.C.3.2); A17 is P2.C.3.4.
 
-- [ ] **P2.C.3.2** Configure the synthetic probes, the Telegram and e-mail contact points and the quiet-hours policy.
+- [x] **P2.C.3.2** Configure the synthetic probes, the Telegram and e-mail contact points and the quiet-hours policy. Closed 2026-11-01: superseded by D-35 (amended), Railway-native observability; no Grafana/promtool; no external synthetic probe, Railway's `/up` healthcheck covers A1 (SDD 12 §7.4); the Telegram channel stays in P2.C.1.2.
   - Files/modules: `ops/grafana/synthetics.md` (checks, probes, intervals), `ops/grafana/notification-policy.md`, `docs/sdd/12-observability.md` §7.4, §11 issue 8
   - Refs: SDD 12 §7.4, §7.5 (A1, A2, Channels, quiet hours 23:00–08:00), NFR-12-6
   - Depends on: P2.C.3.1
@@ -1599,8 +1609,9 @@ Phase-specific conventions:
     - `bun test scripts/ops/projected-spend.test.ts` → PASS: day 20 with US$19 month-to-date in a 30-day cycle → projected US$28.5 → alert; US$17 → no alert
     - `gh workflow run projected-spend.yml` → reads usage and posts to Telegram only above US$27
   - Notes: programmatic access to Railway usage is [NOT VERIFIED]. If no documented API exists, the job only posts the day-20 reminder and the owner reads the usage page; record which path was taken in SDD 12 §7.5. Bun runs the script with no new dependency.
+  - Status (2026-11-01): owner gate (Telegram): after P2.C.1.2, owner sets the Telegram secrets for `projected-spend.yml` and runs `gh workflow run projected-spend.yml` (formula test passes).
 
-- [ ] **P2.C.3.5** Commit the dashboards and check the series budget and telemetry overhead on staging.
+- [x] **P2.C.3.5** Commit the dashboards and check the series budget and telemetry overhead on staging. Closed 2026-11-01: superseded by D-35 (amended), Railway-native observability; no Grafana/promtool; no Grafana dashboards or app metric series (SDD 12 §6.2).
   - Files/modules: `ops/grafana/dashboards/{service-health,api-customers,scoring-integrity}.json`, `docs/qa/telemetry-overhead.md`
   - Refs: SDD 12 §7.6, NFR-12-2, NFR-12-3, §9 item 6, §11 issue 7; VF-019
   - Depends on: P2.C.3.1
@@ -1621,6 +1632,7 @@ Phase-specific conventions:
     - `curl -fsS https://status.hexascore.app/ | grep -c 'RPO'` → ≥ 1
     - `dig +short CNAME status.hexascore.app` → the GitHub Pages host; HTTPS certificate valid
   - Notes: HUMAN GATE (DNS, new repository): the owner creates the repository and the Cloudflare record. Static HTML only, no build step, no third-party script.
+  - Status (2026-11-01): owner gate (status page): owner creates the repository `AlexGalhardo/hexascore-status` and the `status.hexascore.app` CNAME.
 
 - [x] **P2.C.4.2** Commit runbooks R1–R9 and the monthly cost checklist under `docs/runbooks/`, and rehearse R1 and R7 on staging.
   - Files/modules: `docs/runbooks/{ssr-crash-loop,pg-connections,ingestion-stuck,quota-drift,suggestion-backlog,disk-full,rollback,restore,leaked-secret}.md`, `docs/runbooks/cost.md`, `docs/runbooks/README.md` (index with alert → runbook map)
@@ -1643,6 +1655,7 @@ Phase-specific conventions:
     - `go test ./... -run 'TestMetrics_|TestLog_|TestReady_|TestSecurity_A09_Hexa'` → PASS
     - `gh release view v0.12.0` → non-empty body; production deploy through `release.yml` green
   - Notes: HUMAN GATE (production deploy).
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy.
 
 ### P2.D Security hardening
 
@@ -1737,6 +1750,7 @@ Phase-specific conventions:
     - `bash qa/zap/run.sh staging` (ZAP image pinned by digest) → exit 0, 0 High
     - `zap.yml` weekly → opens a GitHub issue on failure (tested once with a deliberately weakened header on a throwaway branch deployed to a local container, never staging)
   - Notes: the active scan writes data: run it with a dedicated staging test account and the seed catalogue; never against production. Medium findings are triaged in `docs/qa/scans.md`.
+  - Status (2026-11-01): owner gate (staging environment): ZAP scans need a live staging host (owner yes for the staging environment).
 
 - [x] **P2.D.5.3** Write the incident response procedure, the review template and the user notification templates.
   - Files/modules: `docs/runbooks/incident-response.md`, `docs/incidents/TEMPLATE.md`, `lang/{en,pt-BR,es}.json` (`mail.incident_notice`) or `docs/runbooks/incident-notice.{en,pt-BR,es}.md`
@@ -1759,6 +1773,7 @@ Phase-specific conventions:
     - `go test ./... -run 'TestSecurity_'` → PASS; `bash qa/zap/run.sh staging` → 0 High
     - `gh release view v0.13.0` → non-empty body
   - Notes: HUMAN GATE (production deploy).
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy.
 
 ### P2.E Backups and migrations policy
 
@@ -1816,6 +1831,7 @@ Phase-specific conventions:
   - Acceptance:
     - `go test -tags=integration ./tests -run TestBackupOffsiteLinkMailed` → PASS: `storage.TemporaryURL` valid 7 days, `backup_runs(kind='offsite')` written when mailed, mail sent to `ADMIN_EMAILS` only
   - Notes: HUMAN GATE (production data): the owner downloads the file each month to personal storage and keeps `BACKUP_KEY` offline separately; the link is never posted to Telegram. Replaced by an external bucket at the first budget increase.
+  - Status (2026-11-01): open, code-only: code-only and open: `app/backup/offsite.go` and `TestBackupOffsiteLinkMailed` do not exist on main.
 
 #### P2.E.3 Drills
 
@@ -1839,6 +1855,7 @@ Phase-specific conventions:
     - game day following `docs/runbooks/restore.md` steps 1–6 on staging → new Postgres service serving within 60 min; time per step recorded
     - `scripts/ops/migration-rehearsal.sh <candidate-commit>` → prints migration duration and max `ACCESS EXCLUSIVE` wait; exit 1 when > 5 s
   - Notes: until P2.F the dump is staging's own (seed catalogue); the rehearsal re-runs on real data in P2.F.5.2. Delete the scratch Postgres service the same day (cost).
+  - Status (2026-11-01): owner gate (staging environment): the timed RTO game day runs on staging (owner yes for the staging environment).
 
 #### P2.E.4 Release
 
@@ -1851,6 +1868,7 @@ Phase-specific conventions:
     - production: first scheduled `backup.daily` after the deploy → `backup_runs.status='verified'`
     - `gh release view v0.14.0` → non-empty body
   - Notes: HUMAN GATE (production deploy). Production holds no user data yet; the drill on real data is part of the P2.G exit.
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy.
 
 ### P2.F Data migration
 
@@ -1867,6 +1885,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
     - `psql "$NEON_RO_URL" -f scripts/legacy/inventory.sql` → counts for every exported and excluded table, written to `docs/migration/legacy-inventory.md` (counts only, no rows)
     - `scripts/legacy/restore-import-schema.sh <dump> "$STAGING_DATABASE_URL"` → schema `legacy_import` holds the exported tables; `public` untouched
   - Notes: HUMAN GATE (production data): the owner creates a read-only Neon role or a Neon branch and passes its URL through the environment, never in a file. `pg_restore` cannot rename a schema: restore into a scratch database, `ALTER SCHEMA public RENAME TO legacy_import`, dump that schema, restore it into the target. The dump is encrypted with `BACKUP_KEY` before upload to `backups/legacy/`; plaintext stays in a temp directory deleted at the end.
+  - Status (2026-11-01): owner gate (cutover retro-close): the cutover ran on 2026-10-31 without it; owner closes it by decision like P2.G, or provides a Neon read-only URL to write the inventory.
 
 - [ ] **P2.F.1.2** Purge the synthetic users from the legacy production database with the legacy seed script, after a verified full Neon dump, and add the importer guard.
   - Files/modules: `docs/runbooks/legacy-purge.md`, `database/legacyimport/guard.go` (deletes leftovers in `legacy_import`, aborts if markers remain), `database/legacyimport/guard_test.go`, `docs/sdd/11-infra-deploy.md` §7.6 step 4 (purge on Neon first, importer guard after)
@@ -1878,6 +1897,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
     - production: `SEED_TARGET=production bun run db:seed --purge --i-know-this-is-production` → same N; then `SELECT count(*) FROM "user" WHERE id LIKE 'seed-user-%' OR email LIKE '%@example.test'` → 0
     - `go test ./database/legacyimport -run TestGuardRejectsSeedMarkers` → PASS
   - Notes: HUMAN GATE (production data, irreversible): the owner runs the production command only after a full `pg_dump` of Neon is uploaded to `backups/legacy/` and verified with `pg_restore --list`. The legacy purge matches id prefix AND email domain while SDD 11 says OR: the inventory reports both counts; rows matching only one marker are reviewed by the owner before the guard deletes them in `legacy_import`. The purge recomputes legacy stats, so the legacy site stays consistent for the rollback window. Never edit `legacy/` files.
+  - Status (2026-11-01): owner gate (seed:mark production run): owner decision (P2.G.3.2 note) keeps the seed users and flags them: owner runs `./app seed:mark --email-suffix @example.test --legacy-prefix seed-user- --dry-run` on production, then without `--dry-run`, then closes this row.
 
 #### P2.F.2 Import stages
 
@@ -1903,6 +1923,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
   - Notes: `session`, `verification` and `rate_limit` are not imported. Legacy `passkey` rows are imported (ADR 0017, depends on P1.C.7.1); the Better Auth storage encoding (base64 vs base64url, COSE key layout) is [NOT VERIFIED] until proven on a Neon copy. Only if it proves incompatible: passkey-only users are counted and mailed the `passkeys_retired` reset notice 14 days before the window (P2.G.1.2). OAuth tokens dropped. Never log hashes or key material.
   - Status (2026-10-29): `users` stage and the scrypt login proof delivered; `passkeys.go` and `TestPasskeysStage` wait for P1.C.7.1 (no `passkeys` table before the vukem release with VF-001), tracked as P2.F.2.2b.
   - Status (2026-11-01): code done on main: `TestUsersStage` and `TestPasskeysStage` PASS, `TestSecurity_A07_LegacyScryptVerifiesAndRehashes` PASS. Open (owner gate): the staging login with an imported Better Auth 1.7.7 hash.
+  - Status (2026-11-01): owner gate (cutover retro-close): code acceptance PASS; owner confirms a login with an imported Better Auth hash (production holds the imported users since 2026-11-01), or closes it by decision.
 
 - [x] **P2.F.2.3** Export the 2FA secrets with a Bun script using Better Auth's own helpers and import them over stdin.
   - Files/modules: `scripts/legacy/twofactor-export.ts` (run from a temp copy of `legacy/apps/web` with its `node_modules`), `database/legacyimport/twofactor.go`, `database/legacyimport/twofactor_test.go`
@@ -1991,6 +2012,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
     - `scripts/legacy/dry-run.sh "$NEON_BRANCH_URL" "$STAGING_DATABASE_URL"` → each step timed; `hexascore:cutover-verify` exit 0
     - `docs/migration/dry-run-1.md` lists step timings, defects with fix commits, median ratings per type (02-2) and API coverage numbers (05-11)
   - Notes: HUMAN GATE (production data): the source is a Neon branch made by the owner, never the primary. Staging then holds real personal data: confirm the staging mail allowlist, `noindex` and Stripe test keys (SDD 11 §6.4) before the restore.
+  - Status (2026-11-01): owner gate (cutover retro-close): the cutover ran on 2026-10-31 without staging dry runs; owner closes it by decision like P2.G.
 
 - [ ] **P2.F.5.2** Dry run 2 from a new copy within the time budget, then run the full QA gate on staging with real data.
   - Files/modules: `docs/migration/dry-run-2.md`, `docs/qa/staging-gate.md`
@@ -2002,6 +2024,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
     - against staging: `bunx playwright test` (3 locales, axe 0 serious/critical), `k6 run qa/k6/api-v1.js`, Schemathesis `--checks all`, `bash qa/zap/run.sh staging` (0 High), `bunx lhci autorun` → green; results in `docs/qa/staging-gate.md`
     - `scripts/ops/migration-rehearsal.sh` on the restored real data → max `ACCESS EXCLUSIVE` wait ≤ 5 s
   - Notes: failures become fix microtasks before P2.F.6.1; a gate is waived only by an owner decision recorded in `docs/qa/staging-gate.md`.
+  - Status (2026-11-01): owner gate (cutover retro-close): the cutover ran on 2026-10-31 without staging dry runs; owner closes it by decision like P2.G.
 
 #### P2.F.6 Release
 
@@ -2013,6 +2036,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
   - Acceptance:
     - `gh release view v0.15.0` → non-empty body; production deploy green, production database still without user data
   - Notes: HUMAN GATE (production deploy).
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy.
 
 ### P2.G Cutover
 
@@ -2265,6 +2289,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
   - Acceptance:
     - `gh release view v0.16.0` → non-empty body; `bun run e2e` → green; `bunx --bun @lhci/cli@0.15.1 autorun` → green
   - Notes: the owner pushes the tag.
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy.
 
 ## Phase 3: public API
 
@@ -2441,6 +2466,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `curl -s https://staging.hexascore.app/up` → version `v1.1.0`; `curl -s https://staging-api.hexascore.app/v1/openapi.json | jq -r .info.version` → `1.1.0`
     - staging smoke: `/v1/changes`, `/v1/exports`, `/v1/webhooks` answer per SDD 05 §9 with a test key
   - Notes: tag pushed by the owner (commit/push only when asked). Changelog generated, `[Unreleased]` not hand-edited after release.
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy.
 
 ### P3.B SDKs and docs
 
@@ -2486,6 +2512,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - workflow run against TestPyPI → package visible on test.pypi.org; `npm publish --dry-run` and `jsr publish --dry-run` steps green
   - Notes: owner input required once: npm org `hexascore` with 2FA `auth-and-writes`, JSR scope `@hexascore` linked to the repo, PyPI/TestPyPI accounts and trusted-publisher entries (environment `pypi`). Job needs `permissions: id-token: write`; no long-lived tokens in secrets. Actions pinned by commit SHA.
   - Status (2026-11-01): code done on main: `.github/workflows/sdk-release.yml` (manual, dry runs by default, OIDC only) and `docs/runbooks/sdk-release.md`. Open (owner gate): npm org, JSR scope and PyPI/TestPyPI trusted publishers, then the TestPyPI rehearsal run.
+  - Status (2026-11-01): owner gate (SDK registries): owner creates the npm org `hexascore` (2FA), the JSR scope `@hexascore` and the PyPI/TestPyPI trusted publishers (environment `pypi`), then runs the TestPyPI rehearsal of `sdk-release.yml`.
 
 - [ ] **P3.B.2.2** Publish SDK `1.1.0` to npm, JSR and PyPI and run install smoke tests against staging.
   - Files/modules: `qa/sdk-smoke/ts.ts`, `qa/sdk-smoke/py.py`
@@ -2496,10 +2523,11 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `bun add @hexascore/sdk@1.1.0` in a scratch project + `bun qa/sdk-smoke/ts.ts` → three calls 200
     - `uv run --no-project --isolated --with hexascore==1.1.0 python qa/sdk-smoke/py.py` → three calls 200
   - Notes: published versions are immutable on all three registries; a mistake means a patch bump. Smoke key is a staging free key.
+  - Status (2026-11-01): owner gate (SDK registries): after P3.B.2.1, owner approves the real publish of SDK 1.1.0.
 
 #### P3.B.3 Docs pages and pricing
 
-- [ ] **P3.B.3.1** Add the developer guides for changes, exports, webhooks (with Standard Webhooks verification in TS and Python) and the errors page anchors for every problem code.
+- [x] **P3.B.3.1** Add the developer guides for changes, exports, webhooks (with Standard Webhooks verification in TS and Python) and the errors page anchors for every problem code.
   - Files/modules: `resources/js/pages/Docs/{Changes,Exports,Webhooks,Errors}.tsx`, `resources/lang/{en,pt-BR,es}.json` (chrome only), `routes/web.go` (`/problems/{code}` → `/docs/errors#<code>`)
   - Refs: SDD 05 §6.2 "Problems", §6.5 "Docs"; SDD 09 docs pages; open issue 05-7 (English Scalar inside translated shell)
   - Depends on: P3.B.2.2
@@ -2509,6 +2537,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `curl -sI https://staging.hexascore.app/problems/quota-exhausted` → 301 to `/docs/errors#quota-exhausted`
   - Notes: guides in English (D-06), surrounding chrome translated via the `text-editor` subagent. Code samples use the published SDKs, not raw fetch.
   - Status (2026-11-01): code done on main: `TestProblemCatalog` asserts 301 to `/docs/errors#<code>` for every problem code. Open: `docs.spec.ts` (Playwright, not a gate since 2026-10-31) and the live check, which needs a deploy; production still answers 302 (release before this change).
+  - Status (2026-11-01): ticked. `go test ./tests -run TestProblemCatalog` PASS (301 to `/docs/errors#<code>` for every problem code), and production answers `301` with `location: /docs/errors#quota-exhausted` for `/problems/quota-exhausted` (no staging host exists; checked with a browser User-Agent because the scrape guard answers 403 to curl). `docs.spec.ts` is not run: Playwright gates nothing since 2026-10-31 (owner).
 
 - [ ] **P3.B.3.2** Add `/docs/coverage`, the pricing page coverage statement (D-33) and the API changelog page.
   - Files/modules: `resources/js/pages/Docs/Coverage.tsx`, `resources/js/pages/Pricing/Index.tsx`, `resources/js/pages/Docs/Changelog.tsx`, `app/web/pricing.go`
@@ -2527,6 +2556,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Acceptance:
     - `curl -s https://staging.hexascore.app/up` → `v1.2.0`; `npm view @hexascore/sdk version` → `1.1.0`; `pip index versions hexascore` lists `1.1.0`
   - Notes: no API change in this release, so `API_VERSION` stays `1.1.0`.
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy.
 
 ### P3.C First-party app API `/app/v1`
 
@@ -2641,6 +2671,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Acceptance:
     - `curl -s https://staging.hexascore.app/up` → `v1.3.0`; `curl -s -X POST https://staging.hexascore.app/app/v1/tokens -d '{}' -H 'Content-Type: application/json'` → 422 problem+json
   - Notes: `APP_MIN_SUPPORTED_VERSION` starts at `0.0.0` until the first store build (P5).
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy.
 
 ## Phase 4: community edits
 
@@ -2762,6 +2793,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Acceptance:
     - `curl -s https://staging.hexascore.app/up` → `v1.4.0`; production `GET /suggest/item/$ID` → 404 while the flag is off
   - Notes: the flag (`community.submissions`) is not named in SDD 04; owner input: confirm or ship P4.A and P4.B to production together. Without it, users could submit with nobody able to moderate.
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy.
 
 ### P4.B Moderation and application
 
@@ -2917,6 +2949,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - k6 `moderation.js` with 10,000 open suggestions: queue p95 < 500 ms, submit p95 < 300 ms
   - Notes: seeder via `vukem make:seeder`; never run it against production.
   - Status (2026-11-01): parts in main (merge of agent/especialista/P4.B.5.1): `TestSecurity_Community_*` 5 PASS; `community.spec.ts` (axe in three locales, two-admin claim conflict with the new `admin2@example.test`), the dev-only `CommunityLoad` seeder (`db:seed CommunityLoad --count 10000`, refused in production) and `qa/k6/moderation.js` are written. Open: the Playwright, k6 and ZAP runs (long checks, batch run; ZAP needs a live host).
+  - Status (2026-11-01): open, code-only: code on main and `TestSecurity_Community_*` PASS; open: the local k6 `moderation.js` run on 10,000 seeded suggestions (batch run); Playwright is not a gate since 2026-10-31.
 
 - [ ] **P4.B.5.2** Rehearse on staging: process 100 synthetic suggestions (mixed kinds, approvals, rejections, a revert, a lock, a competing pair) and confirm the SLA dashboard and notifications.
   - Files/modules: `app/commands/community_rehearsal.go`, `docs/runbooks/community-rehearsal.md`
@@ -2927,6 +2960,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
     - `./app community:rehearsal --count 100` on staging creates 100 suggestions from synthetic accounts marked as test users
     - after moderation: `psql "$STAGING_DATABASE_URL" -c "select status, count(*) from suggestions where meta->>'rehearsal' = 'true' group by 1"` → no `submitted`/`in_review` rows; nightly asserts green; Moderation dashboard shows decisions and p95 time-to-decision < 24 h
   - Notes: owner input: who moderates (owner alone or with a helper) and when. Rehearsal rows are reverted or deleted afterwards only through revert, never by editing `catalog_audit` (append-only). The command flag names are app code (`vukem make:command`), not vukem flags.
+  - Status (2026-11-01): owner gate (staging environment): the 100-suggestion rehearsal runs on staging (owner yes for the staging environment).
 
 - [ ] **P4.B.5.3** Release `v1.5.0` and turn the community submissions flag on in production.
   - Files/modules: `CHANGELOG.md`
@@ -2936,6 +2970,7 @@ Dependencies on Phases 1–2 are written as group IDs (`P1.H`, `P2.G`) until tho
   - Acceptance:
     - `curl -s https://hexascore.app/up` → `v1.5.0`; `/admin/_flags` shows `community.submissions` on; first production suggestion reaches the queue
   - Notes: alert A9 must be active before the flag goes on.
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy; owner also turns the community submissions flag on in production.
 
 ## Phase 5: mobile
 
@@ -3327,6 +3362,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `rg -c "openlibrary.org/developers/licensing|openlibrary.org/dev/docs/api/covers" docs/legal/open-library.md` → 2, with an access date and quoted text
     - `rg "01 \| 2|06 \| 1" docs/sdd/open-issues.md` → both rows `decided`
   - Notes: apply the rule as written. CC0 or public domain → ingest, API-eligible. Attribution-only → API-eligible with `data_sources.attribution`. Silent, non-commercial or no-redistribution → do not ingest, purge, and drop it from `CATALOG_API_SOURCES`. Covers are API-eligible only with an explicit grant. Architect task; the owner confirms the file before P6.A.2.4 enables the connector.
+  - Status (2026-11-01): open, code-only: the legal gate is cleared (Q-A16, 2026-11-01), but `docs/legal/open-library.md` with the quotes and the open-issues rows 01-2/06-1 are not on main.
 
 - [x] **P6.A.1.2** Create the ingestion tables (`source_records` extensions, `source_record_history`, `job_runs`, `ingest_failures`, `entity_match_reviews`, `dq_results`, `catalog_counts`, `field_coverage`) and the record store: canonical SHA-256, upsert that writes history in the same CTE, and `checked_at`-only on an unchanged hash.
   - Files/modules: `database/migrations/<ts>_create_ingestion_tables.go`, `internal/ingest/store/hash.go`, `internal/ingest/store/records.go`, `internal/ingest/store/records_test.go`
@@ -3468,6 +3504,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `curl -s https://staging.hexascore.app/up` → `v1.9.0`
     - `psql "$STAGING_DATABASE_URL" -c "select job, status, count(*) from job_runs where created_at > now()-interval '7 days' group by 1,2"` → no `failed` rows for `fetch.wikidata` or `normalize`
   - Notes: production flags are turned on by the owner. Asserts arrive in P6.B.4.1, so watch item counts by hand in this window.
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy; 7 days of green daily runs on staging first.
 
 ### P6.B Ingestion extras
 
@@ -3627,6 +3664,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `curl -s https://staging.hexascore.app/up` → `v1.10.0`
     - every SDD 06 §9 box ticked with its decisive output pasted in `docs/PROGRESS.md`
   - Notes: IGDB stays site-only under D-36 until `docs/legal/igdb.md` exists. If it is still missing at release, say so in the changelog.
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy; starts the 30-day green-jobs clock.
 
 ### P6.C Trending
 
@@ -3715,6 +3753,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `psql "$DATABASE_URL" -c "select item_type, count(*) from trending_snapshots where computed_at = date_trunc('hour', now()) group by 1"` (staging) → 4 rows of 10
     - `schemathesis run openapi/api-v1.json --url https://staging-api.hexascore.app -H "Authorization: Bearer $HX_TEST_KEY" --checks all` → 0 failures on `listTrending` and `getItemActivity`, and the responses contain no TMDB/IGDB fields
   - Notes: the "hype" list for unreleased items (open issue 08-13) is post-launch and not part of this release.
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy.
 
 ### P6.D Similar items and personal recommendations
 
@@ -3793,6 +3832,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
     - `curl -s https://hexascore.app/up` → `v1.12.0`
     - `psql "$DATABASE_URL" -c "select job, count(*) from job_runs where status='failed' and created_at > now()-interval '30 days' group by 1"` → no rows for the scheduled jobs
   - Notes: the owner pushes the tag. Every SDD 08 §9 box must be ticked with its decisive output.
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy; also needs 30 green days of daily jobs.
 
 ## Phase 7: social layer (post-1.0)
 
@@ -3833,6 +3873,7 @@ Design principles for the whole phase: every social write is moderated by the P4
   - Depends on: P7.A.1.3
   - Model: Sonnet
   - Acceptance: `gh release view v1.13.0` → non-empty body
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy; flag `social` waits for Q-A5 (legal).
 
 ### P7.B Reviews, comments and reactions
 
@@ -3869,6 +3910,7 @@ Design principles for the whole phase: every social write is moderated by the P4
   - Depends on: P7.B.1.3
   - Model: Sonnet
   - Acceptance: `gh release view v1.14.0` → non-empty body
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy.
 
 ### P7.C Social discovery
 
@@ -3893,3 +3935,4 @@ Design principles for the whole phase: every social write is moderated by the P4
   - Depends on: P7.C.1.2, P7.B.1.4
   - Model: Sonnet
   - Acceptance: `gh release view v1.15.0` → non-empty body; moderation median ≤ 24 h over 30 days
+  - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy; also needs 30 days of moderation SLA.
