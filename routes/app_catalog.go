@@ -49,6 +49,9 @@ func AppCatalog(r *router.Router, app *vukem.App) error {
 		Redirects: func(ctx context.Context, typ, id string) (catalog.Target, bool, error) {
 			return catalog.ResolveID(ctx, acc.DB, catalog.ScopeItem, typ, id)
 		},
+		SlugRedirects: func(ctx context.Context, typ, slug string) (catalog.Target, bool, error) {
+			return catalog.ResolveSlug(ctx, acc.DB, catalog.ScopeItem, typ, slug)
+		},
 		Now: app.Now,
 	}
 
