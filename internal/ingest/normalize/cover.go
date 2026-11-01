@@ -6,6 +6,8 @@ import (
 	"html"
 	"regexp"
 	"strings"
+
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/store"
 )
 
 // Cover is a cover candidate named by a source record; the cover job
@@ -57,6 +59,17 @@ func ParseCommonsCover(raw []byte) (*Cover, error) {
 		"source": "Wikimedia Commons", "license": info.ExtMetadata["LicenseShortName"].Value,
 		"author": author, "url": info.DescriptionURL,
 	}}, nil
+}
+
+// PickCover is the cover the stored records of qid name directly (no request needed), or nil; the covers job
+// uses it so the source order lives in one place.
+func PickCover(qid, itemType string, recs []store.Record) (*Cover, error) {
+	s, err := decodeSources(qid, recs)
+	if err != nil {
+		return nil, err
+	}
+
+	return pickCover(itemType, s), nil
 }
 
 // pickCover is the cover a source record names directly: the Open Library

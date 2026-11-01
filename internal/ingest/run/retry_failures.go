@@ -24,6 +24,8 @@ func retryJob(source string) (job, runSource string, ok bool) {
 		return "normalize", "", true
 	case "wikidata:entity":
 		return "fetch.entities", source, true
+	case "covers":
+		return "covers", source, true
 	case "editions", "backfill.editions":
 		return "", "", false
 	}

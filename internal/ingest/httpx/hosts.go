@@ -20,5 +20,10 @@ func DefaultHosts() map[string]HostLimit {
 		"images.igdb.com":        {PerSecond: 20, InFlight: 4},
 		"store.steampowered.com": {PerSecond: 1 / 1.6, InFlight: 1},
 		"catalog.gog.com":        {PerSecond: 2, InFlight: 1},
+		// Cover image CDNs (the covers job).
+		"image.tmdb.org":                {PerSecond: 10, InFlight: 4},
+		"shared.akamai.steamstatic.com": {PerSecond: 5, InFlight: 2},
+		"cdn.akamai.steamstatic.com":    {PerSecond: 5, InFlight: 2},
+		"images.gog-statics.com":        {PerSecond: 5, InFlight: 2},
 	}
 }

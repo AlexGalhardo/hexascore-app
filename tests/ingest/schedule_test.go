@@ -41,6 +41,9 @@ func TestScheduleTable(t *testing.T) {
 		"ingest:retry-failures":       "30 3 * * *",
 		"ingest:dq-daily":             "0 5 * * *",
 		"ingest:frontend-fields":      "30 5 * * *",
+		"ingest:covers-daily":         "15 4 * * *",
+		"ingest:covers-weekly":        "0 2 * * 0",
+		"ingest:covers-gc":            "30 2 * * *",
 	}
 
 	for _, task := range sched.Tasks() {

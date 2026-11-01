@@ -37,7 +37,7 @@ func fetch(source, mode string) Stage {
 	return Stage{Job: "fetch." + source, Source: source, Mode: mode}
 }
 
-// The chains of the open sources. Covers join them when their job exists (P6.B.2.2); the asserts stage is last.
+// The chains of the open sources; the asserts stage is last.
 var (
 	// Bootstrap is run by hand: Wikidata top-N, referenced entities, then the normaliser.
 	Bootstrap = Chain{"bootstrap", []Stage{
@@ -118,6 +118,17 @@ var (
 		{Job: dq.Job, Mode: run.ModeFull},
 	}}
 
+	// CoversDaily covers the items normalised inside the incremental window, then re-checks the catalogue. Covers
+	// have their own chains because a stage skipped by its kill switch (ingest_covers) stops a chain.
+	CoversDaily = Chain{"covers-daily", []Stage{
+		{Job: "covers", Source: "covers", Mode: run.ModeIncremental},
+		{Job: dq.Job, Mode: run.ModeIncremental},
+	}}
+	// CoversWeekly looks at every item (a better source replaces a lesser one) and drops loose Commons covers.
+	CoversWeekly = Chain{"covers-weekly", []Stage{
+		{Job: "covers", Source: "covers", Mode: run.ModeFull},
+		{Job: dq.Job, Mode: run.ModeFull},
+	}}
 	// DQDaily runs the data-quality asserts on their own (SDD 06 §7.7); every chain above ends with the same stage.
 	DQDaily = Chain{"dq-daily", []Stage{{Job: dq.Job, Mode: run.ModeIncremental}}}
 	// FrontendFields renders a sample of item pages and reports the missing required fields (SDD 06 §7.7).
@@ -146,6 +157,8 @@ var (
 		IGDBRefresh,
 		EditionsBackfill,
 		TrailersWeekly,
+		CoversDaily,
+		CoversWeekly,
 		DQDaily,
 		FrontendFields,
 		Rollback,

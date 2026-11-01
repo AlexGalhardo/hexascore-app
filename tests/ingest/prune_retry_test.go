@@ -92,6 +92,7 @@ func TestRetryFailuresQueuesRunsPerSource(t *testing.T) {
 	rec := &recorder{}
 	ff := newFlags(t, map[string]string{
 		"FLAG_INGEST_ENABLED": "true", "FLAG_INGEST_TMDB": "true", "FLAG_INGEST_WIKIDATA": "true",
+		"FLAG_INGEST_COVERS": "true",
 	})
 
 	var failing int64
@@ -111,6 +112,7 @@ RETURNING id`).
 		{"normalize", "Q3", false},
 		{"wikipedia:en", "Q4", false}, // kill switch off
 		{"editions", "9780000000002", false},
+		{"covers", "Q5", false},
 	} {
 		if _, err := db.ExecContext(
 			ctx,
@@ -135,8 +137,13 @@ VALUES ('wikidata', 'Q3', '{}', repeat('a', 64), now())`); err != nil {
 		t.Fatal(err)
 	}
 
-	if n != 2 {
-		t.Errorf("runs queued = %d, want 2 (tmdb and normalize)", n)
+	if n != 3 {
+		t.Errorf("runs queued = %d, want 3 (tmdb, normalize and covers)", n)
+	}
+
+	if c := count(t, db, `SELECT count(*) FROM job_runs WHERE job = 'covers' AND source = 'covers'
+AND params->'qids' = '["Q5"]'::jsonb`); c != 1 {
+		t.Error("a covers failure must queue a covers run for its QID")
 	}
 
 	var params json.RawMessage
