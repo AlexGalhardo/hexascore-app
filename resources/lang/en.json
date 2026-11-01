@@ -1513,6 +1513,15 @@
       "unfollow": "Unfollow",
       "requested": "Requested · cancel",
       "label": "Follows"
+    },
+    "feed": {
+      "title": "Feed",
+      "empty": "Nothing yet. Follow people to see what they rate and list.",
+      "more": "Older activity",
+      "rating_saved": "rated",
+      "status_changed": "marked as {status}",
+      "list_created": "created the list",
+      "list_item_added": "added to"
     }
   },
   "help": {
