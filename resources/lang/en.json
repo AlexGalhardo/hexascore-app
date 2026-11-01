@@ -1509,8 +1509,14 @@
       "submit": "Save nickname"
     },
     "follow": {
-      "followers": "{count} followers",
-      "following": "{count} following",
+      "followers": {
+        "one": "{count} follower",
+        "other": "{count} followers"
+      },
+      "following": {
+        "one": "{count} following",
+        "other": "{count} following"
+      },
       "follow": "Follow",
       "unfollow": "Unfollow",
       "requested": "Requested · cancel",
@@ -1523,7 +1529,8 @@
       "rating_saved": "rated",
       "status_changed": "marked as {status}",
       "list_created": "created the list",
-      "list_item_added": "added to"
+      "list_item_added": "added to",
+      "score": "Score {score}"
     }
   },
   "help": {

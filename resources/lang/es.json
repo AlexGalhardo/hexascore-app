@@ -1509,8 +1509,14 @@
       "submit": "Guardar nickname"
     },
     "follow": {
-      "followers": "{count} seguidores",
-      "following": "{count} seguidos",
+      "followers": {
+        "one": "{count} seguidor",
+        "other": "{count} seguidores"
+      },
+      "following": {
+        "one": "{count} seguido",
+        "other": "{count} seguidos"
+      },
       "follow": "Seguir",
       "unfollow": "Dejar de seguir",
       "requested": "Solicitado · cancelar",
@@ -1523,7 +1529,8 @@
       "rating_saved": "puntuó",
       "status_changed": "marcó como {status}",
       "list_created": "creó la lista",
-      "list_item_added": "añadió a"
+      "list_item_added": "añadió a",
+      "score": "Puntuación {score}"
     }
   },
   "help": {

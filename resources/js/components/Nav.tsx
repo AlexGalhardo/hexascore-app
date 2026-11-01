@@ -164,7 +164,10 @@ export default function Nav() {
 				>
 					{page.props.appName}
 				</Link>
-				<nav aria-label={t("nav.sections")} className="hidden items-center gap-7 lg:flex">
+				<nav
+					aria-label={t("nav.sections")}
+					className="hidden items-center gap-7 whitespace-nowrap lg:flex"
+				>
 					{SECTIONS.map(([path, key]) => (
 						<Link
 							key={path}

@@ -1,6 +1,7 @@
 import { Link } from "@inertiajs/react";
 import Seo from "../../components/Seo";
 import ActivityCard, { type ActivityEntry } from "../../components/social/ActivityCard";
+import { btnClass } from "../../components/ui/Btn";
 import { useT } from "../../lib/useT";
 
 interface Props {
@@ -14,11 +15,15 @@ export default function Index({ events, nextCursor }: Props) {
 	return (
 		<>
 			<Seo title={t("social.feed.title")} noindex />
-			<h1 className="text-2xl font-semibold">{t("social.feed.title")}</h1>
+			<h1 className="mt-6 font-display text-5xl leading-none font-bold tracking-[-0.02em] md:mt-10 md:text-[64px]">
+				{t("social.feed.title")}
+			</h1>
 			{events.length === 0 ? (
-				<p className="mt-4">{t("social.feed.empty")}</p>
+				<p className="mt-8 max-w-3xl border-t-2 border-fg pt-6 font-display text-2xl italic">
+					{t("social.feed.empty")}
+				</p>
 			) : (
-				<ul className="mt-4 divide-y divide-border">
+				<ul className="mt-8 max-w-3xl divide-y divide-border border-t-2 border-fg">
 					{events.map((e) => (
 						<li key={e.id}>
 							<ActivityCard entry={e} />
@@ -29,7 +34,7 @@ export default function Index({ events, nextCursor }: Props) {
 			{nextCursor && (
 				<Link
 					href={`?cursor=${nextCursor}`}
-					className="mt-4 inline-block underline"
+					className={btnClass("secondary", "mt-6")}
 					preserveScroll
 				>
 					{t("social.feed.more")}

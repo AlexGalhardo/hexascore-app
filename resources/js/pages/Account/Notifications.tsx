@@ -1,5 +1,6 @@
 import { Head, InfiniteScroll, router } from "@inertiajs/react";
 
+import Btn from "../../components/ui/Btn";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
@@ -51,12 +52,11 @@ export default function Notifications({
 							</span>
 							{n.kind === "follow_request" &&
 								typeof n.payload.nickname === "string" && (
-									<span className="flex gap-3 text-sm">
+									<span className="flex w-full gap-2 sm:w-auto">
 										{(["accept", "decline"] as const).map((answer) => (
-											<button
+											<Btn
 												key={answer}
-												type="button"
-												className="underline"
+												kind={answer === "accept" ? "primary" : "secondary"}
 												onClick={() =>
 													router.post(
 														l(
@@ -70,7 +70,7 @@ export default function Notifications({
 														? "notifications.followAccept"
 														: "notifications.followDecline",
 												)}
-											</button>
+											</Btn>
 										))}
 									</span>
 								)}

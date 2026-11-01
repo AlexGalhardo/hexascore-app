@@ -26,28 +26,35 @@ export default function FollowBar({ nickname, social, canFollow }: Props) {
 	return (
 		<section
 			aria-label={t("social.follow.label")}
-			className="flex flex-wrap items-center gap-3 text-sm"
+			className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 border-y border-border py-3"
 		>
 			{social.followers !== undefined && (
-				<span>{t("social.follow.followers", { count: social.followers })}</span>
+				<span className="text-[15px] font-semibold tabular-nums">
+					{t("social.follow.followers", { count: social.followers })}
+				</span>
 			)}
 			{social.following !== undefined && (
-				<span>{t("social.follow.following", { count: social.following })}</span>
+				<span className="text-[15px] font-semibold tabular-nums">
+					{t("social.follow.following", { count: social.following })}
+				</span>
 			)}
-			{canFollow &&
-				(social.state ? (
-					<Btn kind="secondary" onClick={() => router.delete(url, options)}>
-						{t(
-							social.state === "pending"
-								? "social.follow.requested"
-								: "social.follow.unfollow",
-						)}
-					</Btn>
-				) : (
-					<Btn onClick={() => router.put(url, {}, options)}>
-						{t("social.follow.follow")}
-					</Btn>
-				))}
+			{canFollow && (
+				<span className="ml-auto">
+					{social.state ? (
+						<Btn kind="secondary" onClick={() => router.delete(url, options)}>
+							{t(
+								social.state === "pending"
+									? "social.follow.requested"
+									: "social.follow.unfollow",
+							)}
+						</Btn>
+					) : (
+						<Btn onClick={() => router.put(url, {}, options)}>
+							{t("social.follow.follow")}
+						</Btn>
+					)}
+				</span>
+			)}
 		</section>
 	);
 }
