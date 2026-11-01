@@ -1,5 +1,11 @@
 import type { PreferenceStore } from "../platform/preferences";
-import { matchLocale, resolveLocale, writeLocaleOverride } from "./locale";
+import {
+	createLocaleStore,
+	matchLocale,
+	readLocaleOverride,
+	resolveLocale,
+	writeLocaleOverride,
+} from "./locale";
 
 function store(): PreferenceStore {
 	const data = new Map<string, string>();
@@ -29,4 +35,16 @@ test("an in-app override beats the device list", () => {
 	expect(resolveLocale(["fr"], prefs)).toBe("es");
 	writeLocaleOverride("en", prefs);
 	expect(resolveLocale(["pt-PT"], prefs)).toBe("en");
+});
+
+test("setSession switches the locale for subscribers without persisting it", () => {
+	const prefs = store();
+	const locale = createLocaleStore("en", prefs);
+	const listener = jest.fn();
+	locale.subscribe(listener);
+	locale.setSession("es");
+	expect(locale.get()).toBe("es");
+	expect(listener).toHaveBeenCalledTimes(1);
+	expect(readLocaleOverride(prefs)).toBeNull();
+	expect(resolveLocale(["en-US"], prefs)).toBe("en");
 });
