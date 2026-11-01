@@ -409,7 +409,7 @@ Every Inertia page component in `resources/js/pages/` (33 components; `ls resour
 #### Profile/Index
 
 - Route: `GET /profile` (CSR). File: `pages/Profile/Index.tsx`.
-- Purpose: account settings, a single long page of anchored sections (`#details`, `#password`, `#passkeys`, `#two-factor`, `#sessions`, `#privacy`, `#export`, `#delete`).
+- Purpose: account settings, a single long page in a centred `max-w-2xl` column of anchored sections (`#details`, `#password`, `#passkeys`, `#two-factor`, `#sessions`, `#privacy`, `#export`, `#delete`).
 - Blocks: Details (name, nickname, locale), Password (set or change), Passkeys (list, add, remove with last-passkey warning), Two-factor (status and manage link), Sessions (list, revoke, revoke all), Privacy (public profile, personalisation), Data export (`DataExport`), Delete account (`DeleteAccount`, 30-day grace).
 - States: empty sessions and passkeys, failed passkey registration (`role="alert"`), pending form buttons; CSR placeholder before hydration.
 

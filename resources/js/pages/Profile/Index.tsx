@@ -194,7 +194,7 @@ export default function Index({
 	};
 
 	return (
-		<>
+		<div className="mx-auto w-full max-w-2xl" data-testid="profile-page">
 			<Head title={t("account.metaTitle")} />
 			<h1 className="mb-6 text-2xl font-semibold">{t("account.title")}</h1>
 
@@ -401,6 +401,6 @@ export default function Index({
 			<Section id="delete" title={t("account.delete.title")}>
 				<DeleteAccount className={button} />
 			</Section>
-		</>
+		</div>
 	);
 }
