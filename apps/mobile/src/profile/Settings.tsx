@@ -41,6 +41,8 @@ export type ProfileSettingsProps = {
 	/** Local sign-out after this device's own token was revoked. */
 	onCurrentRevoked: () => void;
 	onSignIn: () => void;
+	/** Account actions and links (export, deletion, notifications, About; P5.B.4.3). */
+	extra?: ReactNode;
 };
 
 function LanguagePicker({
@@ -257,6 +259,7 @@ export function ProfileSettings(props: ProfileSettingsProps): ReactElement {
 			{props.signedIn ? (
 				<Devices api={api} locale={locale} onCurrentRevoked={props.onCurrentRevoked} />
 			) : null}
+			{props.extra}
 		</SettingsPage>
 	);
 }

@@ -2,7 +2,9 @@ import { router } from "expo-router";
 import { type ReactElement, useState, useSyncExternalStore } from "react";
 import { logout } from "../../src/auth/logout";
 import { appClient, appLocale, session } from "../../src/auth/runtime";
+import { notificationsApi } from "../../src/notifications/runtime";
 import { memoryPreferences } from "../../src/platform/preferences";
+import { AccountExtras } from "../../src/profile/AccountExtras";
 import type { ProfileApi } from "../../src/profile/me";
 import { ProfileSettings } from "../../src/profile/Settings";
 import { useLocale } from "../../src/providers/root";
@@ -35,6 +37,17 @@ export default function ProfileScreen(): ReactElement {
 			}
 			onCurrentRevoked={() => void session.signOut()}
 			onSignIn={() => router.navigate("/login")}
+			extra={
+				<AccountExtras
+					locale={locale}
+					signedIn={state.kind === "active"}
+					notifications={notificationsApi}
+					write={(call) => appClient.write(appClient.newIdempotencyKey(), call)}
+					// The server revokes every token on schedule; the session shows the cancel screen (SDD 10 §6.2).
+					onScheduled={(deletesAt) => session.observeMe({ deletionScheduledAt: deletesAt })}
+					onOpen={(path) => router.push(path)}
+				/>
+			}
 		/>
 	);
 }
