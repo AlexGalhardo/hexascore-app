@@ -120,7 +120,7 @@ Invariants: `item_count` = row count (DQ assert nightly); positions are dense `1
 
 Migration: lists, list_items (`added_at` := `lists.created_at`, SDD 08 §5), reports (`reason` copied; legacy target ids already text; a `user` target becomes the imported user's numeric id, and reports whose target user or list was not imported are dropped), contact_messages copied 1:1; `list_items.position` renumbered dense `1..n` in legacy order; lists and their rows of users not imported (purged) are skipped; `follows` rows archived in the cutover backup (SDD 11), not imported.
 
-Deferred shape (no table now): `follows(follower_id text, followee_id text, created_at, PK(follower_id, followee_id), CHECK follower <> followee)`, as legacy. A feed reads `ratings.updated_at`, `item_status.updated_at` and `list_items.added_at`; no new columns needed.
+Social tables (`follows`, `activity_events`, the `users.feed_opt_in` column and the new notification kinds) are specified in §12 (Phase 7, after `v1.0.0`).
 
 ## 6. Contracts
 
@@ -244,3 +244,116 @@ List by `id DESC` (UUID v7 ≈ time) with cursor pagination (<https://vukem.dev/
 5. Private profile and pages. Decided (14-5): 200 nickname-only with `noindex`; SDD 09 §6.2 updated with `/library`, `/lists`, `/lists/{id}/edit`.
 6. Writer-only CSV/JSON helpers for jobs are [NOT IN VUKEM DOCS]. Owner: vukem. Closes with a `vukem-feedback.md` answer.
 7. Lists of a deleted user. Owner question (asked with the SDD 13 batch). Current rule until answered: anonymise public lists, delete private ones (§8). Closes with the owner's answer.
+8. Lawful basis for the feed (Q-A5 a). Owner question, with legal review (D-21). D-29 covers aggregates and personalisation, not showing a user's activity to followers. Current rule until answered: the whole social layer is off (`SOCIAL_ENABLED=false`, §12.3), and when it is on, a user's activity reaches followers only after an explicit opt-in (`users.feed_opt_in`, default `false` for every account). Closes with a D-xx in `docs/brainstorming.md`; if the answer is "public profile implies feed", the opt-in column becomes a default-on opt-out in a later migration.
+9. Legacy follows (Q-A5 b). Owner question. Current rule: Phase 7 starts with an empty graph; the legacy rows stay in the cutover archive (§5 migration note, SDD 11 §7.6). Closes with the owner's answer; a restore, if chosen, is a one-off command that inserts `accepted` rows only between users who still exist and are not banned.
+10. Markdown subset for reviews (P7.B.1.1). Open: `go.mod` has no Markdown renderer and <https://vukem.dev/docs> names none [NOT IN VUKEM DOCS]. Default: a stdlib-only subset (bold, italic, links, line breaks, spoiler block) rendered through `html/template`; a library needs the owner's yes and an ADR. Closes in P7.B.1.1.
+11. Letterboxd reference (Q-A9). The research report is partial; §12 does not depend on it. Closes with the owner's answer.
+
+## 12. Social layer
+
+Phase 7 (ROADMAP P7.A–P7.C, D-06 as amended 2026-10-31). This section covers follows and the activity feed (P7.A); reviews, comments and reactions (P7.B) add subsections here in their own microtasks. Outline: `.orchestration/reports/AUDIT-social-sdd.md`.
+
+### 12.1 Scope
+
+In: follow and unfollow, follow requests for private profiles, follower and following counts, the `/feed` page (followed users, newest first), the "recent activity" tab of the public profile. Out: DMs, groups, blocking (later row), push, social data in `/api/v1` (A-07), social routes in `/app/v1` (SDD 10 keeps namespace `social` out of the Android bundle until a mobile row adds it).
+
+### 12.2 Functional requirements
+
+- FR-14-13: `PUT /u/{nickname}/follow` creates a follow; repeating it is a no-op (200 with the current state). Following a public profile gives `accepted`; following a private profile gives `pending` and notifies the followee (`follow_request`). `DELETE /u/{nickname}/follow` removes the row in any state (unfollow or cancel a request). Following yourself is 422 `cannot-follow-self`.
+- FR-14-14: The followee accepts or declines a pending request from `/me/follow-requests`; accept sets `accepted` (no notice to the follower in v1); decline deletes the row. Only `accepted` rows count anywhere.
+- FR-14-15: The public profile shows follower and following counts and a follow button. A private profile keeps FR-14-8: no counts, only nickname and initial, and the follow button (which sends a request).
+- FR-14-16: `/feed` lists activity of users the viewer follows with `accepted` state, 20 per page, newest first, cursor pagination (SDD 09 §7.3). Event kinds: `rating_saved`, `status_changed`, `list_created`, `list_item_added`, `review_published` (P7.B).
+- FR-14-17: The public profile gains a "recent activity" tab with the same cards, restricted to the profile owner's events and the privacy matrix (§12.5).
+- FR-14-18: A user's events are recorded and shown to others only while `users.feed_opt_in` is true (open issue 8). The opt-in is offered at onboarding and in settings, off by default; turning it off hides past events at once (read-time filter) and stops recording new ones.
+
+### 12.3 Feature flag and non-functional requirements
+
+- `SOCIAL_ENABLED` (env, default `false`, read once at boot into `config.Social`): when false, the social routes are not registered (404), no activity event is written, and the profile renders without counts or the follow button. It stays false in production until open issue 8 is answered and the privacy policy is updated (D-21).
+- NFR-14-7: `/feed` p95 ≤ 300 ms at 30 rps with 10k events (k6 `qa/k6/feed.js`, P7.A.1.3); at most 3 queries per page.
+- NFR-14-8: Rate limits (`app/http/limits`): `follows` 60/h per user (`ratelimit.ByUser`); 429 `rate-limited`.
+- NFR-14-9: Retention: `activity_events` older than 180 days deleted daily at 04:40 (the same scheduler as NFR-14-6).
+
+### 12.4 Data model
+
+```sql
+ALTER TABLE users ADD COLUMN feed_opt_in boolean NOT NULL DEFAULT false;
+
+CREATE TABLE follows (
+  follower_id text NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  followee_id text NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  state text NOT NULL CHECK (state IN ('accepted','pending')),
+  created_at timestamptz NOT NULL DEFAULT now(),
+  accepted_at timestamptz,
+  PRIMARY KEY (follower_id, followee_id),
+  CHECK (follower_id <> followee_id));
+CREATE INDEX follows_followee_idx ON follows (followee_id, state);
+
+CREATE TABLE activity_events (
+  id uuid PRIMARY KEY,                                   -- v7, the cursor
+  actor_id text NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  kind text NOT NULL CHECK (kind IN ('rating_saved','status_changed','list_created',
+       'list_item_added','review_published')),
+  item_id uuid REFERENCES items(id) ON DELETE CASCADE,
+  list_id uuid REFERENCES lists(id) ON DELETE CASCADE,
+  payload jsonb NOT NULL DEFAULT '{}',                   -- stars, status; ids only, never text
+  created_at timestamptz NOT NULL DEFAULT now());
+CREATE INDEX activity_events_actor_idx ON activity_events (actor_id, id DESC);
+CREATE INDEX activity_events_created_idx ON activity_events (created_at);
+```
+
+`user_notifications.kind` gains `new_follower` and `follow_request` (dedupe key `follow:<follower_id>`). Rapid repeats collapse: a rating changed twice within 10 minutes updates the actor's last `rating_saved` event for that item instead of inserting a second one (ADR 0020).
+
+### 12.5 Privacy matrix
+
+Who sees what (viewer in rows). "Activity" means feed entries and the profile activity tab; "counts" means follower and following counts.
+
+| Viewer \ target | Public, opted in | Public, not opted in | Private | Banned or anonymised |
+| --- | --- | --- | --- | --- |
+| Anonymous | counts, activity tab | counts | nickname only (FR-14-8) | nothing (404 profile per SDD 03) |
+| Member, not following | counts, activity tab, follow | counts, follow | nickname, request button | nothing |
+| Accepted follower | counts, activity tab, feed | counts | counts, activity tab, feed if opted in | nothing |
+| Owner | everything | everything | everything | n/a |
+
+Rules that apply to every cell: events on a list that is private or `hidden`, or on an item whose visibility is not `public` (SDD 01), are dropped at read time; counts never include private, banned or anonymised users on the other side of the edge; a profile turning private keeps its `accepted` followers (Instagram and Goodreads model) and new follows become requests.
+
+### 12.6 Contracts
+
+| Route | Auth | Response |
+| --- | --- | --- |
+| `PUT /u/{nickname}/follow` | session | 200 `{state}`; 404 unknown or banned target; 422 `cannot-follow-self`; 429 |
+| `DELETE /u/{nickname}/follow` | session | 204 (also when no row existed) |
+| `GET /me/follow-requests` | session | Inertia `Social/Requests` |
+| `POST /me/follow-requests/{nickname}/accept` and `/decline` | session | 204; 404 when no pending row |
+| `GET /feed?cursor=` | session | Inertia `Feed/Index` with `events`, `nextCursor` |
+| `GET /u/{nickname}?tab=activity` | public | the profile page with `activity` deferred in group `personal` |
+
+`FollowPolicy` (`vukem make:policy`): following a banned user is `authz.DenyAsNotFound()`. Writes run in one transaction with `notifications.Send`.
+
+### 12.7 Feed query
+
+ADR 0020: events are written on the write path (no fan-out); the feed reads `activity_events` of followed actors with a keyset cursor:
+
+```sql
+SELECT e.* FROM activity_events e
+JOIN follows f ON f.followee_id = e.actor_id AND f.follower_id = $viewer AND f.state = 'accepted'
+JOIN users u ON u.id = e.actor_id AND u.feed_opt_in AND u.banned_at IS NULL AND u.anonymized_at IS NULL
+WHERE ($cursor IS NULL OR e.id < $cursor)
+ORDER BY e.id DESC LIMIT 21;
+```
+
+The visibility filters of §12.5 apply to the joined items and lists in the same query.
+
+### 12.8 Edge cases
+
+- Item merge (SDD 01 §7.5): `activity_events.item_id` moves to the target.
+- User deletion: `ON DELETE CASCADE` removes follows and events; anonymisation (open issue 7) deletes them explicitly in the purge.
+- Ban: the banned user's edges stay but are filtered out of counts and feeds; unban restores them.
+- Opt-out after events were shown: read-time filter, no backfill delete; retention removes them within 180 days.
+
+### 12.9 LGPD
+
+Basis: open issue 8 (Q-A5). The data export ZIP (§7.4) gains `follows.csv` (both directions, nicknames) and `activity.csv`. The purge (SDD 03 §7.5) covers both tables.
+
+### 12.10 Tests
+
+`TestFollows`, `TestSecurity_A01_PrivateProfileFollowRequiresApproval`, `TestSecurity_A06_HexaLimits` (rule `follows`), `TestFeedPrivacy`, `TestSocialDisabledByDefault` (routes 404 and no events with the flag off), k6 `qa/k6/feed.js`, Playwright `social.spec.ts`.
