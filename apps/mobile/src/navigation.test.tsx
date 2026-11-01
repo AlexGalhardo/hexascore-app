@@ -89,7 +89,7 @@ const routes: [string, Record<string, string>, () => ReactElement, string | null
 	["notifications", {}, () => offline(<NotificationsRoute />), "Notifications"],
 	["update-required", {}, () => <UpdateRequired />, storeListingUrl()],
 	["_layout", {}, () => <RootLayout />, null],
-	["(tabs)/_layout", {}, () => <TabsLayout />, null],
+	["(tabs)/_layout", {}, () => offline(<TabsLayout />), null],
 ];
 
 test.each(routes)("route %s renders its placeholder", async (_name, routeParams, element, text) => {

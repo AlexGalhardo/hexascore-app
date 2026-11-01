@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import { palette } from "../theme";
 import { AppHeader } from "./AppHeader";
-import { tabBarTheme } from "./tabBarTheme";
+import { profileBadge, tabBarTheme } from "./tabBarTheme";
 
 const labels = { search: "Open search", toDark: "Dark theme", toLight: "Light theme" };
 
@@ -51,7 +51,22 @@ describe("tabBarTheme", () => {
 				tabBarInactiveTintColor: colors.muted,
 				tabBarStyle: { backgroundColor: colors.bg, borderTopColor: colors.border },
 				tabBarLabelStyle: { fontFamily: "Inter", fontWeight: "600", fontSize: 12 },
+				tabBarBadgeStyle: {
+					backgroundColor: colors.primary,
+					color: colors["on-primary"],
+					fontFamily: "Inter",
+					fontWeight: "600",
+				},
 			});
 		}
+	});
+});
+
+describe("profileBadge", () => {
+	test("no badge at zero, the count up to 99, then 99+", () => {
+		expect(profileBadge(0)).toBeUndefined();
+		expect(profileBadge(3)).toBe(3);
+		expect(profileBadge(99)).toBe(99);
+		expect(profileBadge(100)).toBe("99+");
 	});
 });
