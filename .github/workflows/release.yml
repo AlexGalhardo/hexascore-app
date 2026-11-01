@@ -54,7 +54,8 @@ jobs:
         run: |
           version="${VERSION#v}"
           awk -v h="## [$version]" 'index($0, h) == 1 {p=1; next} p && index($0, "## [") == 1 {exit} p' CHANGELOG.md > release-notes.md
-          test -s release-notes.md || echo "See CHANGELOG.md" > release-notes.md
+          # A tag without its CHANGELOG section must not publish (ROADMAP P2.B.2.2).
+          test -s release-notes.md || { echo "::error::CHANGELOG.md has no section for $VERSION"; exit 1; }
       - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
           body_path: release-notes.md
