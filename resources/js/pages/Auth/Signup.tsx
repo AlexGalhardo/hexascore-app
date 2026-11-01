@@ -9,6 +9,15 @@ import SubmitButton from "../../components/SubmitButton";
 import { useTurnstile } from "../../components/Turnstile";
 import { challengeHeaders } from "../../lib/challenge";
 import { checkConfirmation, checkPassword, passwordAdvice } from "../../lib/password-policy";
+import {
+	EMAIL_MAX,
+	EMAIL_MIN,
+	NICKNAME_ERRORS,
+	NICKNAME_MAX,
+	NICKNAME_MIN,
+	NICKNAME_PATTERN,
+	normalizeNickname,
+} from "../../lib/signup-policy";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 
@@ -43,6 +52,7 @@ export default function Signup({ formToken }: { formToken: string }) {
 	const l = useLocalized();
 	const form = useForm({
 		name: "",
+		nickname: "",
 		email: "",
 		password: "",
 		password_confirmation: "",
@@ -51,6 +61,9 @@ export default function Signup({ formToken }: { formToken: string }) {
 	});
 	const [checking, setChecking] = useState(false);
 	const turnstile = useTurnstile("register");
+	const nicknameError = form.errors.nickname
+		? t(NICKNAME_ERRORS[form.errors.nickname] ?? "auth.errors.generic")
+		: undefined;
 
 	const submit = async (e: FormEvent) => {
 		e.preventDefault();
@@ -98,11 +111,35 @@ export default function Signup({ formToken }: { formToken: string }) {
 					onChange={(e) => form.setData("name", e.target.value)}
 					error={form.errors.name}
 				/>
+				<div>
+					<Field
+						label={t("auth.fields.nickname")}
+						name="nickname"
+						autoComplete="username"
+						autoCapitalize="none"
+						spellCheck={false}
+						minLength={NICKNAME_MIN}
+						maxLength={NICKNAME_MAX}
+						pattern={NICKNAME_PATTERN}
+						required
+						aria-describedby="signup-nickname-hint"
+						value={form.data.nickname}
+						onChange={(e) =>
+							form.setData("nickname", normalizeNickname(e.target.value))
+						}
+						error={nicknameError}
+					/>
+					<p id="signup-nickname-hint" className="mt-1.5 text-sm text-muted">
+						{t("auth.signup.nicknameHint")}
+					</p>
+				</div>
 				<Field
 					label={t("auth.fields.email")}
 					name="email"
 					type="email"
 					autoComplete="email"
+					minLength={EMAIL_MIN}
+					maxLength={EMAIL_MAX}
 					required
 					value={form.data.email}
 					onChange={(e) => form.setData("email", e.target.value)}

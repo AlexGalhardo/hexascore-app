@@ -1,7 +1,7 @@
 // The server's password policy, mirrored for live feedback in the browser.
 //
 // SOURCE OF TRUTH: app/requests/password.go. RegisterSchema and ResetPasswordSchema
-// both validate the password with PasswordSchema (8 to 128 runes, upper, lower,
+// both validate the password with PasswordSchema (8 to 32 runes, upper, lower,
 // digit, non-alphanumeric) and compare it with `password_confirmation` in their `Refine`. The constants and the checks
 // below are that policy and nothing else: a form that promises rules the server
 // does not enforce (or hides rules it does) is worse than no hint at all.
@@ -21,7 +21,7 @@
 export const PASSWORD_MIN_LENGTH = 8;
 
 /** Maximum password length in runes: `PasswordMax` in app/requests/password.go. */
-export const PASSWORD_MAX_LENGTH = 128;
+export const PASSWORD_MAX_LENGTH = 32;
 
 // PasswordCheck is one rule of the server policy and whether the value meets it.
 export interface PasswordCheck {

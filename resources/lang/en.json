@@ -61,7 +61,11 @@
       "disabled": "Two-factor authentication disabled.",
       "cancel": "Cancel",
       "needPassword": "Set a password above before turning on two-factor authentication.",
-      "manage": "Manage two-factor authentication"
+      "manage": "Manage two-factor authentication",
+      "recoveryLeft": "You have {count} recovery codes left.",
+      "regenerate": "Regenerate recovery codes",
+      "turnOff": "Turn off",
+      "currentPassword": "Current password"
     },
     "passkeys": {
       "title": "Passkeys",
@@ -441,7 +445,6 @@
       "body": "Your nickname is your public handle on HexaScore. It is unique and cannot be changed later.",
       "submit": "Save nickname"
     },
-    "members": "Members",
     "googleSignIn": "Sign in with Google",
     "googleSignUp": "Sign up with Google"
   },
@@ -1103,7 +1106,6 @@
     "breadcrumb": "Breadcrumb",
     "loadTrailerN": "Load trailer {n}",
     "panel": {
-      "title": "Rate {title}",
       "help": "Ten stars per category; each half star is 0.5. Arrow keys move by 0.5, Home and End jump to 0.5 and 10.",
       "helpGuest": "Ten stars per category, half stars allowed (0.5 to 10). Your score counts after you confirm your email.",
       "noAccount": "No account?",

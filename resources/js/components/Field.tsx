@@ -6,7 +6,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const fieldClass =
-	"mt-2 block min-h-12 w-full rounded-none border border-field bg-field-bg px-3.5 text-base text-fg placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-primary aria-invalid:border-danger";
+	"mt-2 block min-h-12 w-full rounded-none border border-field bg-field-bg px-3.5 text-base text-fg placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-primary aria-invalid:border-danger read-only:bg-surface read-only:text-muted";
 
 // Field is a labelled input with its validation error.
 export default function Field({ label, error, ...input }: Props) {

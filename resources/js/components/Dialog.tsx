@@ -1,12 +1,13 @@
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import type { ReactNode } from "react";
 
-export type DialogSize = "sm" | "md" | "lg";
+export type DialogSize = "sm" | "md" | "lg" | "xl";
 
 const WIDTHS: Record<DialogSize, string> = {
 	sm: "sm:max-w-sm",
 	md: "sm:max-w-md",
 	lg: "sm:max-w-2xl",
+	xl: "sm:max-w-5xl",
 };
 
 // Every dialog is centred on both axes, full width minus margins on mobile and

@@ -29,6 +29,13 @@ import (
 func (a *Accounts) Register(ctx context.Context, in requests.Register) (bool, error) {
 	email := strings.ToLower(strings.TrimSpace(in.Email))
 
+	// The nickname is checked before the email: a taken nickname answers 422
+	// for new and existing emails alike, so it reveals no account.
+	nick, err := a.checkSignupNickname(ctx, in.Nickname)
+	if err != nil {
+		return false, err
+	}
+
 	h, err := a.Hasher.Make(in.Password)
 	if err != nil {
 		return false, err
@@ -55,6 +62,14 @@ func (a *Accounts) Register(ctx context.Context, in requests.Register) (bool, er
 
 	if err := a.markPasswordSet(ctx, a.DB, u.ID); err != nil {
 		return true, err
+	}
+
+	if nick != "" {
+		// A race lost on the unique index leaves the account without a nickname;
+		// it picks one at /onboarding, so the sign-up itself still succeeds.
+		if err := a.SetNickname(ctx, u.ID, nick, "nickname"); err != nil && !isNicknameTaken(err) {
+			return true, err
+		}
 	}
 
 	return true, a.SendVerification(ctx, u)

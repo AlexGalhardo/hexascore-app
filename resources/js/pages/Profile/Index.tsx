@@ -1,6 +1,7 @@
 import { Head, Link, router, useForm } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
 
+import TwoFactorSection, { type TwoFactorState } from "../../components/account/TwoFactorSection";
 import DataExport from "../../components/DataExport";
 import DeleteAccount from "../../components/DeleteAccount";
 import Field from "../../components/Field";
@@ -28,7 +29,7 @@ interface PasskeyRow {
 interface Props {
 	details: { name: string; email: string; locale: string };
 	passwordSet: boolean;
-	twoFactor: { enabled: boolean };
+	twoFactor: TwoFactorState;
 	passkeys?: PasskeyRow[];
 	sessions: SessionRow[];
 	privacy: { profilePrivate: boolean; personalizationOptOut: boolean };
@@ -194,7 +195,7 @@ export default function Index({
 	};
 
 	return (
-		<>
+		<div className="mx-auto w-full max-w-2xl" data-testid="profile-page">
 			<Head title={t("account.metaTitle")} />
 			<h1 className="mb-6 text-2xl font-semibold">{t("account.title")}</h1>
 
@@ -268,13 +269,17 @@ export default function Index({
 			</Section>
 
 			<Section id="two-factor" title={t("account.twoFactor.title")}>
-				<p>{twoFactor.enabled ? t("account.twoFactor.on") : t("account.twoFactor.off")}</p>
 				{passwordSet ? (
-					<Link href="/user/two-factor" className="font-medium underline">
-						{t("account.twoFactor.manage")}
-					</Link>
+					<TwoFactorSection state={twoFactor} button={button} />
 				) : (
-					<p role="note">{t("account.twoFactor.needPassword")}</p>
+					<>
+						<p>
+							{twoFactor.enabled
+								? t("account.twoFactor.on")
+								: t("account.twoFactor.off")}
+						</p>
+						<p role="note">{t("account.twoFactor.needPassword")}</p>
+					</>
 				)}
 			</Section>
 
@@ -401,6 +406,6 @@ export default function Index({
 			<Section id="delete" title={t("account.delete.title")}>
 				<DeleteAccount className={button} />
 			</Section>
-		</>
+		</div>
 	);
 }

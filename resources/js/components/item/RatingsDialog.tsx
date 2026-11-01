@@ -1,7 +1,7 @@
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import { abbreviateLabel, pageWindow } from "../../lib/pageWindow";
+import { pageWindow } from "../../lib/pageWindow";
 import { withQueryClient } from "../../lib/queryClient";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
@@ -27,16 +27,21 @@ function isRatingsPage(value: unknown): value is RatingsPage {
 }
 
 const pageButton =
-	"inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border px-3 text-sm hover:bg-surface disabled:cursor-not-allowed disabled:opacity-50";
+	"inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border px-3 text-xl hover:bg-surface disabled:cursor-not-allowed disabled:opacity-50";
 
 function RatingsDialog({
 	itemId,
 	categoryLabels,
 	initialOpen = false,
+	icon,
+	triggerClassName = "inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-surface",
 }: {
 	itemId: string;
 	categoryLabels: string[];
 	initialOpen?: boolean;
+	/** The page's own trigger look, so the button does not change when the lazy dialog replaces it. */
+	icon?: React.ReactNode;
+	triggerClassName?: string;
 }) {
 	const t = useT();
 	const l = useLocalized();
@@ -82,24 +87,25 @@ function RatingsDialog({
 
 	return (
 		<BaseDialog.Root open={open} onOpenChange={setOpen}>
-			<BaseDialog.Trigger className="inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-surface">
+			<BaseDialog.Trigger className={triggerClassName}>
+				{icon}
 				{t("item.seeUserScores")}
 			</BaseDialog.Trigger>
 			<BaseDialog.Portal>
 				<BaseDialog.Backdrop className={dialogBackdrop} />
 				<BaseDialog.Popup
-					className={`${dialogPopup("lg")} flex max-h-[min(40rem,calc(100%-2rem))] flex-col`}
+					className={`${dialogPopup("xl")} flex max-h-[min(48rem,calc(100%-2rem))] flex-col`}
 				>
 					<div className="flex items-start justify-between gap-4">
 						<div>
-							<BaseDialog.Title className="font-serif text-xl font-bold">
+							<BaseDialog.Title className="font-serif text-3xl font-bold">
 								{t("item.userScores")}
 							</BaseDialog.Title>
-							<BaseDialog.Description className="text-sm text-muted">
+							<BaseDialog.Description className="text-xl text-muted">
 								{t("item.userScoresHint")}
 							</BaseDialog.Description>
 						</div>
-						<BaseDialog.Close className="min-h-11 shrink-0 rounded-md border border-border px-3 text-sm">
+						<BaseDialog.Close className="min-h-11 shrink-0 rounded-md border border-border px-3 text-xl">
 							{t("item.close")}
 						</BaseDialog.Close>
 					</div>
@@ -109,8 +115,8 @@ function RatingsDialog({
 						aria-busy={busy}
 					>
 						{rows.length > 0 ? (
-							<table className={`w-full text-sm ${busy ? "opacity-60" : ""}`}>
-								<thead className="sticky top-0 bg-bg text-left text-xs text-muted">
+							<table className={`w-full text-xl ${busy ? "opacity-60" : ""}`}>
+								<thead className="sticky top-0 bg-bg text-left align-bottom text-lg text-muted">
 									<tr>
 										<th className="py-2 pr-2 font-medium">{t("item.user")}</th>
 										<th className="py-2 pr-2 font-medium">
@@ -121,9 +127,7 @@ function RatingsDialog({
 												key={label}
 												className="py-2 pr-2 text-right font-medium"
 											>
-												<abbr title={label} className="no-underline">
-													{abbreviateLabel(label)}
-												</abbr>
+												{label}
 											</th>
 										))}
 									</tr>
@@ -134,7 +138,7 @@ function RatingsDialog({
 											key={`${row.nickname}-${row.ratedAt}`}
 											className="border-t border-border"
 										>
-											<td className="max-w-32 truncate py-2 pr-2">
+											<td className="max-w-48 truncate py-2 pr-2">
 												<a
 													href={l(
 														`/u/${encodeURIComponent(row.nickname)}`,
@@ -161,12 +165,14 @@ function RatingsDialog({
 							</table>
 						) : null}
 						{status === "ready" && rows.length === 0 ? (
-							<p className="py-6 text-center text-muted">
+							<p className="py-6 text-center text-xl text-muted">
 								{t("item.noPublicRatings")}
 							</p>
 						) : null}
 						{status === "loading" && rows.length === 0 ? (
-							<p className="py-3 text-center text-muted">{t("item.loading")}</p>
+							<p className="py-3 text-center text-xl text-muted">
+								{t("item.loading")}
+							</p>
 						) : null}
 						{status === "error" ? (
 							<div
@@ -189,7 +195,7 @@ function RatingsDialog({
 							aria-label={t("item.ratingsPages")}
 							className="mt-3 flex flex-col items-center gap-2"
 						>
-							<p className="text-sm text-muted tabular-nums" aria-live="polite">
+							<p className="text-xl text-muted tabular-nums" aria-live="polite">
 								{t("item.pageOf", { page, count: pageCount })}
 							</p>
 							<div className="flex w-full items-center justify-between gap-2 sm:justify-center">

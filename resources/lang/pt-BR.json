@@ -61,7 +61,11 @@
       "disabled": "Autenticação em dois fatores desativada.",
       "cancel": "Cancelar",
       "needPassword": "Defina uma senha acima antes de ativar a autenticação em duas etapas.",
-      "manage": "Gerenciar autenticação em duas etapas"
+      "manage": "Gerenciar autenticação em duas etapas",
+      "recoveryLeft": "Você tem {count} códigos de recuperação restantes.",
+      "regenerate": "Gerar novos códigos de recuperação",
+      "turnOff": "Desativar",
+      "currentPassword": "Senha atual"
     },
     "passkeys": {
       "title": "Passkeys",
@@ -441,7 +445,6 @@
       "body": "Seu nickname é seu nome público no HexaScore. É único e não pode ser alterado depois.",
       "submit": "Salvar nickname"
     },
-    "members": "Membros",
     "googleSignIn": "Fazer login com o Google",
     "googleSignUp": "Inscrever-se com o Google"
   },
@@ -1103,7 +1106,6 @@
     "breadcrumb": "Trilha de navegação",
     "loadTrailerN": "Carregar trailer {n}",
     "panel": {
-      "title": "Avaliar {title}",
       "help": "Dez estrelas por categoria; cada meia estrela vale 0,5. As setas mudam 0,5; Home e End vão para 0,5 e 10.",
       "helpGuest": "Dez estrelas por categoria, com meias estrelas (0,5 a 10). Sua nota conta depois que você confirmar o e-mail.",
       "noAccount": "Não tem conta?",

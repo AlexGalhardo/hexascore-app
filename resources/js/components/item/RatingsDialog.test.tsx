@@ -56,3 +56,19 @@ test("shows the error and retries on demand", async () => {
 	expect(await screen.findByText("user1")).toBeTruthy();
 	expect(fetchMock).toHaveBeenCalledTimes(2);
 });
+
+test("the users' scores modal is wide, with larger type and full category names", async () => {
+	vi.stubGlobal(
+		"fetch",
+		vi.fn(() => Promise.resolve(page(1, 1))),
+	);
+	render(<RatingsDialog itemId="i1" categoryLabels={["Cinematography"]} initialOpen />);
+	await screen.findByText("user1");
+
+	const dialog = screen.getByRole("dialog");
+	expect(dialog.className).toContain("sm:max-w-5xl");
+	expect(screen.getByRole("columnheader", { name: "Cinematography" }).textContent).toBe(
+		"Cinematography",
+	);
+	expect(screen.getByRole("table").className).toContain("text-xl");
+});

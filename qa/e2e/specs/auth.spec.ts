@@ -77,13 +77,13 @@ test.describe("auth", () => {
 			test.setTimeout(240_000);
 			const account = await createVerifiedAccount(page, prefix, t);
 
-			await open(page, "/user/two-factor");
-			await page.getByRole("button", { name: "Enable two-factor authentication" }).click();
+			await open(page, "/profile#two-factor");
+			await page.getByRole("button", { name: en("account.twoFactor.enable") }).click();
 			const secret = ((await page.locator("code").first().textContent()) ?? "").trim();
 			await expectNoSeriousA11yViolations(page);
 			const step = currentStep();
-			await page.getByLabel("Code").fill(totp(secret, step));
-			await page.getByRole("button", { name: "Confirm" }).click();
+			await page.getByLabel(en("account.twoFactor.code")).fill(totp(secret, step));
+			await page.getByRole("button", { name: en("account.twoFactor.verify") }).click();
 			await expect(
 				page.getByText("Two-factor authentication is on.", { exact: false }).first(),
 			).toBeVisible();

@@ -90,7 +90,7 @@ Asked through the interactive checklist after the SDD drafts; they close every `
 
 - **D-22 Dev and UI dependencies approved**: Biome, Vitest, Testing Library, Playwright, axe-core, Lighthouse CI, Base UI (web), Redocly CLI (OpenAPI lint, dev only; owner yes 2026-10-29, Q-REDOCLY); Expo SQLite for the persisted query cache (mobile). Exact versions pinned at implementation (no `^`, no pre-releases).
 - **D-23 Legacy credit balances** are honoured as extra quota consumed before the plan quota; no refund flow; new credit packs only with PIX in the second release.
-- **D-24 Password maximum 128 characters** (minimum as legacy).
+- **D-24 Password 8 to 32 characters** (owner round 2026-11-01 item 8; was a 128 maximum). New passwords only; login never checks the length. Sign-up email 12 to 48 characters.
 - **D-25 Google-only accounts set a password before managing 2FA** (vukem rule kept; UI explains).
 - **D-26 GitHub Actions is available** for `hexascore-app`; the full pipeline runs there; pre-push mirror kept as a convenience.
 - **D-27 Railway spend**: e-mail alert at US$24, hard limit US$30. Architect note: a hard limit at the ceiling can take the site down at month end during a legitimate spike; SDD 12 adds a "projected spend" alert at day 20 so the owner can raise the limit in time.

@@ -32,6 +32,7 @@ test("signup form posts every field the server reads, including the form token",
 	expect(names(form)).toEqual(
 		expect.arrayContaining([
 			"name",
+			"nickname",
 			"email",
 			"password",
 			"password_confirmation",
@@ -48,4 +49,30 @@ test("login form posts identifier, password and remember", () => {
 	expect(names(container.querySelector("form") as HTMLFormElement)).toEqual(
 		expect.arrayContaining(["identifier", "password", "remember"]),
 	);
+});
+
+test("signup enforces the nickname and email bounds and explains the nickname is permanent", () => {
+	const { container } = render(<Signup formToken="tok" />);
+	const form = container.querySelector("form") as HTMLFormElement;
+	const nickname = form.elements.namedItem("nickname") as HTMLInputElement;
+	const email = form.elements.namedItem("email") as HTMLInputElement;
+
+	expect([nickname.minLength, nickname.maxLength, nickname.pattern, nickname.required]).toEqual([
+		4,
+		16,
+		"[a-z]{4,16}",
+		true,
+	]);
+	expect(
+		document.getElementById(nickname.getAttribute("aria-describedby") ?? "")?.textContent,
+	).toBe("auth.signup.nicknameHint");
+	expect([email.minLength, email.maxLength]).toEqual([12, 48]);
+});
+
+test("the auth pages no longer show the members label", () => {
+	for (const page of [<Signup key="s" formToken="tok" />, <Login key="l" />]) {
+		const { container, unmount } = render(page);
+		expect(container.textContent).not.toContain("auth.members");
+		unmount();
+	}
 });

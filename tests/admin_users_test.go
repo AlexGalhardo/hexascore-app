@@ -293,7 +293,7 @@ func TestAdminCLI(t *testing.T) {
 	}
 
 	// A fresh admin has no 2FA yet: the panel sends them to the setup first.
-	browserFor(t, app, granted).Get("/admin").AssertRedirect("/user/two-factor").
+	browserFor(t, app, granted).Get("/admin").AssertRedirect("/profile#two-factor").
 		AssertFlash("status", "Two-factor authentication is required to open the admin area. Set it up here.")
 
 	db, err := app.DB()

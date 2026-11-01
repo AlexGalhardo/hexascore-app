@@ -14,11 +14,3 @@ export function pageWindow(current: number, count: number): PageSlot[] {
 	}
 	return slots;
 }
-
-/** Short column header: "Gameplay" → "Game", "Qualidade sonora" → "QS". */
-export function abbreviateLabel(label: string): string {
-	const words = label.split(/[\s/]+/).filter(Boolean);
-	return words.length > 1
-		? words.map((w) => w.charAt(0).toUpperCase()).join("")
-		: label.slice(0, 4);
-}

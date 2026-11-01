@@ -16,7 +16,7 @@ func Profile(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	h := profile.New(acc)
+	h := profile.New(acc, app.Config.Name)
 	if acc.DB.Dialect().Name() == "postgres" {
 		if h.Social, err = SocialService(app, acc); err != nil {
 			return err

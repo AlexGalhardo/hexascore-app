@@ -229,7 +229,7 @@ All files are under `resources/js/components/` unless stated. Props are the Type
 - Save is enabled only when all six are set; the label changes to Saving, Update or Save. The local values are optimistic; the aggregate is reloaded from the server. `confidence`, `unusualActivity` and `ratingsLimitedUntil` are in the type but never rendered.
 - Categories per type (`item/types.ts` `CATEGORY_KEYS`, labels in `resources/lang/en.json` `categories`): game gameplay, fun, sound, technical, visual, storytelling; movie screenplay, acting, direction, cinematography, soundtrack, entertainment; series screenplay, acting, characters, pacing, production, entertainment; book plot, characters, writing, pacing, originality, impact.
 
-**RatingsDialog** (`item/RatingsDialog.tsx`). Modal with a per-user score table: columns user, overall, six categories; states loading ("Loading..."), error with retry (`role="alert"`), empty ("No public ratings"), paginated with a labelled page nav (fetches `/api/items/{id}/ratings`).
+**RatingsDialog** (`item/RatingsDialog.tsx`). Wide modal (`Dialog` size `xl`, `sm:max-w-5xl`; type 1.5x the old `text-sm`/`text-xs`) with a per-user score table: columns user, overall, six categories under their full names; states loading ("Loading..."), error with retry (`role="alert"`), empty ("No public ratings"), paginated with a labelled page nav (fetches `/api/items/{id}/ratings`).
 
 **ScoreBadge.** There is no such component. The nearest thing is an inline paragraph on `Catalog/Show.tsx` (`data-testid="score-badge"`, `inline-flex w-fit rounded-md bg-surface px-3 py-1 text-lg font-bold`) that reads "Score 7.8 out of 10" or "Not enough ratings". No band colour, no size variants. Elsewhere the score is raw monospace text (`ItemCard`, `SectionHighlights`, `Home/Index`).
 
@@ -322,7 +322,8 @@ Every Inertia page component in `resources/js/pages/` (33 components; `ls resour
 
 - Route: `GET /{section}/{slug}` (SSR). File: `pages/Catalog/Show.tsx`. Screenshots: [desktop](design-system/diablo-v-desktop-1440.png), [mobile](design-system/diablo-v-mobile-390.png).
 - Purpose: item detail, community score and rating entry.
-- Blocks: header (`CoverThumb lg` priority, `h1`, "Suggest an edit" link, "Game, 2029" meta line, inline score badge); right column `RatingPanel` (sticky at `lg`, first on mobile); left column Synopsis (text, licence, source link), Details (runtime, pages, role lists such as director, developer, publisher, platform, genre as links to entity pages), Trailers (consent gated), Status picker (logged in), Time to beat (games), Editions (books), Add to list (logged in); attribution footer line.
+- Layout (owner round 2026-11-01 item 7): three columns at `lg` (`12rem | 1fr | 19rem`, `14rem | 1fr | 22rem` at `xl`), two at `sm` (rating column below), one on mobile in DOM order. The `article` has `select-none` (owner request) with inputs and textareas kept selectable. Column 1: `CoverThumb lg` priority, then full-width icon buttons (`item/ActionIcons`): see users' scores (opens `RatingsDialog`), rate it (jumps to `#your-rating`), add to list, suggest an edit, recent changes. Column 2: `h1`, meta line, square (`rounded-xs`) genre and platform chips, then Synopsis, Category scores, Details and the rest. Column 3: `ScoreBlock`, friends score, then `RatingPanel` headed "Your rating" (key help visually hidden, linked by `aria-describedby`).
+- Blocks (before the 2026-11-01 layout): header (`CoverThumb lg` priority, `h1`, "Suggest an edit" link, "Game, 2029" meta line, inline score badge); right column `RatingPanel`; left column Synopsis (text, licence, source link), Details (runtime, pages, role lists such as director, developer, publisher, platform, genre as links to entity pages), Trailers (consent gated), Status picker (logged in), Time to beat (games), Editions (books), Add to list (logged in); attribution footer line.
 - Actions: rate (six categories), change status, report time to beat, add to a list, load trailers, open entity pages, suggest an edit, see users' scores.
 - Data: `item`, `ratingSummary`, `entities` by role, `editions`, `editionCount`, `timeToBeat`, `me`, `myLists`, `trailers`, `cover`; JSON-LD per type (`VideoGame`, `Movie`, `TVSeries`, `Book`) with `aggregateRating` only when a score exists.
 - States: no cover (flat placeholder), no synopsis ("No synopsis yet."), no score ("Not enough ratings" twice: badge and panel), logged out ("Log in to rate"), empty "Details" column when no fields exist (production Diablo V shows a bare heading), trailers locked until consent. `SDD 09` mentions a deferred "recent changes" block; it is not implemented.
@@ -413,8 +414,8 @@ Every Inertia page component in `resources/js/pages/` (33 components; `ls resour
 #### Profile/Index
 
 - Route: `GET /profile` (CSR). File: `pages/Profile/Index.tsx`.
-- Purpose: account settings, a single long page of anchored sections (`#details`, `#password`, `#passkeys`, `#two-factor`, `#sessions`, `#privacy`, `#export`, `#delete`).
-- Blocks: Details (name, nickname, locale), Password (set or change), Passkeys (list, add, remove with last-passkey warning), Two-factor (status and manage link), Sessions (list, revoke, revoke all), Privacy (public profile, personalisation), Data export (`DataExport`), Delete account (`DeleteAccount`, 30-day grace).
+- Purpose: account settings, a single long page in a centred `max-w-2xl` column of anchored sections (`#details`, `#password`, `#passkeys`, `#two-factor`, `#sessions`, `#privacy`, `#export`, `#delete`).
+- Blocks: Details (name, nickname, locale), Password (set or change), Passkeys (list, add, remove with last-passkey warning), Two-factor (`account/TwoFactorSection`: enable; QR code with setup key and confirm form; enabled view with recovery codes shown once, regenerate and disable forms that ask for the password; the old `/user/two-factor` page answers 301 here), Sessions (list, revoke, revoke all), Privacy (public profile, personalisation), Data export (`DataExport`), Delete account (`DeleteAccount`, 30-day grace).
 - States: empty sessions and passkeys, failed passkey registration (`role="alert"`), pending form buttons; CSR placeholder before hydration.
 
 #### Developer/ApiKeys
@@ -445,14 +446,13 @@ All Auth pages render `h1` (`text-2xl font-semibold`), a form with `space-y-4` a
 | Component | Route | Purpose and blocks | States |
 | --- | --- | --- | --- |
 | `Auth/Login` | `GET /login` | Email or nickname `Field`, `PasswordField`, remember-me checkbox, `SubmitButton`, `ChallengeStatus`, "Forgot your password?" and "Create account" links, outlined "Sign in with a passkey" button | per-field errors, passkey failure `role="alert"`, pending and "checking" state |
-| `Auth/Signup` | `GET /signup` | Name, email, password with rule checklist and strength meter, confirmation, honeypot form token, `SubmitButton`, "Have an account? Log in" | per-field errors, challenge check |
+| `Auth/Signup` | `GET /signup` | Name, nickname (4 to 16 lowercase letters, lowercased as typed, hint that it cannot change), email (12 to 48 characters), password (8 to 32) with rule checklist and strength meter, confirmation, honeypot form token, `SubmitButton`, "Have an account? Log in" | per-field errors, challenge check |
 | `Auth/CheckEmail` | `GET /signup/check-email` | Notice after sign-up and a login link | static |
 | `Auth/VerifyNotice` | `GET /verify-email` | "Sent to email" notice, resend link | static, flash toast on resend |
 | `Auth/Onboarding` | `GET /onboarding` | Nickname `Field` with hint and submit | error codes `nickname-taken`, `invalid-nickname` mapped to catalogue text |
 | `Auth/Recover` | `GET /recover-password` | Email field, submit, `ChallengeStatus` | generic success via flash |
 | `Auth/Reset` | `GET /reset-password/{token}` | Email, new password, confirmation, submit | per-field errors |
 | `Auth/TwoFactorChallenge` | `GET /two-factor-challenge` | Code or recovery-code `Field`, verify, switch between authenticator and backup code | per-field error |
-| `Auth/TwoFactor` | `GET /user/two-factor` | Enable button; QR code (200 px) with setup key and confirm form; enabled view with recovery codes, regenerate and disable forms (each asks for the password); back to dashboard | three modes (off, pending, on); all copy is hard-coded English |
 
 ### 6.6 Content, help and system pages
 
@@ -481,7 +481,7 @@ All Auth pages render `h1` (`text-2xl font-semibold`), a form with `space-y-4` a
 
 #### Contact/Index
 
-- Route: `GET /contact`, `POST /contact` (SSR). Purpose: contact form. Blocks: `h1`, intro, name, email, topic select, message textarea with hint, hidden honeypot, submit. States: `contact.sent` confirmation (`role="status"`), per-field errors.
+- Route: `GET /contact`, `POST /contact` (SSR). Purpose: contact form in a centred `max-w-xl` column. Blocks: `h1`, intro, name (nickname when signed in), email, topic select, message textarea with hint and a live `n/512` counter, hidden honeypot, submit. Signed in, name and email are prefilled read-only and the server stores the session account's nickname (or name) and email, never the posted ones. States: `contact.sent` confirmation (`role="status"`), per-field errors.
 
 #### Error
 

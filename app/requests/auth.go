@@ -16,9 +16,19 @@ var LoginSchema = z.Struct[Login](z.Shape{
 	"remember":   z.Bool().Optional(),
 })
 
+// Sign-up email length bounds (owner round 2026-11-01 item 8). Login and
+// existing accounts are not checked against them.
+const (
+	EmailMin = 12
+	EmailMax = 48
+)
+
 // Register is the registration form.
 type Register struct {
-	Name                 string `json:"name"                  form:"name"`
+	Name string `json:"name" form:"name"`
+	// Nickname is optional here: when empty the account picks one at /onboarding.
+	// accounts.Register checks it with the onboarding rule.
+	Nickname             string `json:"nickname"              form:"nickname"`
 	Email                string `json:"email"                 form:"email"`
 	Password             string `json:"password"              form:"password"`
 	PasswordConfirmation string `json:"password_confirmation" form:"password_confirmation"`
@@ -31,7 +41,8 @@ type Register struct {
 // RegisterSchema validates Register (password rules live here).
 var RegisterSchema = z.Struct[Register](z.Shape{
 	"name":                  z.String().Trim().Min(2).Max(100),
-	"email":                 z.String().Trim().Email().Max(254),
+	"nickname":              z.String().Trim().Max(64).Default(""),
+	"email":                 z.String().Trim().Email().Min(EmailMin).Max(EmailMax),
 	"password":              PasswordSchema,
 	"password_confirmation": z.String(),
 	"website":               z.String().Max(256).Default(""),

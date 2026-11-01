@@ -106,3 +106,54 @@ test("logged in: enabled stars, overall preview, save and status picker", () => 
 	).toBe("true");
 	expect(screen.queryByRole("link", { name: "item.loginToRate" })).toBeNull();
 });
+
+test("three columns: actions under the cover, synopsis under the chips, score card above the rating form", () => {
+	auth = null;
+	render(
+		<Show
+			{...props}
+			item={{ ...props.item, synopsis: { text: "An online world.", licence: "CC BY-SA" } }}
+		/>,
+	);
+
+	const actions = screen.getByTestId("item-col-actions");
+	const names = [...actions.querySelectorAll("a, button")].map((el) => el.textContent);
+	expect(names).toEqual([
+		"item.seeUserScores",
+		"item.rateIt",
+		"lists.addToList",
+		"community.suggest.link",
+		"community.recent.link",
+	]);
+	for (const el of actions.querySelectorAll("a, button")) {
+		expect(el.querySelector("svg[aria-hidden='true']")).not.toBeNull();
+	}
+	expect(actions.firstElementChild?.matches("img, [data-testid=cover-placeholder]")).toBe(true);
+
+	const main = screen.getByTestId("item-col-main");
+	const chips = screen.getByTestId("item-chips");
+	expect(main.contains(chips)).toBe(true);
+	expect(chips.parentElement?.nextElementSibling?.getAttribute("aria-labelledby")).toBe(
+		"synopsis-heading",
+	);
+	for (const chip of chips.querySelectorAll("a")) {
+		expect(chip.className).toContain("rounded-xs");
+		expect(chip.className).not.toContain("rounded-full");
+	}
+
+	const rating = screen.getByTestId("item-col-rating");
+	const score = screen.getByTestId("score-block");
+	const form = document.getElementById("your-rating") as HTMLElement;
+	expect(rating.contains(score) && rating.contains(form)).toBe(true);
+	expect(score.compareDocumentPosition(form) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+});
+
+test("the item page blocks mouse text selection but keeps fields selectable", () => {
+	auth = null;
+	render(<Show {...props} />);
+
+	const page = screen.getByTestId("item-page");
+	expect(page.className).toContain("select-none");
+	expect(page.className).toContain("[&_input]:select-text");
+	expect(page.className).toContain("[&_textarea]:select-text");
+});

@@ -13,15 +13,10 @@ interface Props {
 
 // The v1 members layout: intro column on the left, the form in a bordered card on the right; stacked on mobile.
 export default function AuthFrame({ heading, lede, title, children }: Props): React.ReactElement {
-	const t = useT();
-
 	return (
 		<div className="grid gap-6 py-4 md:grid-cols-[1fr_minmax(0,448px)] md:gap-16 md:py-12">
 			<div>
-				<p className="text-xs font-bold tracking-[0.1em] text-primary uppercase">
-					{t("auth.members")}
-				</p>
-				<p className="mt-3 font-display text-[32px] leading-[1.05] font-bold tracking-[-0.02em] text-balance md:mt-6 md:text-[72px]">
+				<p className="font-display text-[32px] leading-[1.05] font-bold tracking-[-0.02em] text-balance md:text-[72px]">
 					{heading}
 				</p>
 				{lede && <p className="mt-4 max-w-xl text-muted md:mt-6 md:text-lg">{lede}</p>}
