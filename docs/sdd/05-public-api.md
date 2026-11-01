@@ -151,7 +151,7 @@ Cursors: legacy sorts need keyset on `(sort column, id)`; vukem `req.CursorPagin
 }
 ```
 
-Coverage (published on `/docs/coverage` and stated on `/pricing` per D-33, ADR 0006; percentages measured by `qa/sql/api_coverage.sql` on staging, [NOT VERIFIED] until then):
+Coverage (published on `/docs/coverage` and stated on `/pricing` per D-33, ADR 0006). `qa/sql/api_coverage.sql` returns one row per (type, field) with `pct` 0–100: the share of public items whose value has an allowed source under the serialiser's rules (`TestAPICoverageSQL` keeps both in step). `scripts/api-coverage-json.ts` turns its CSV into `resources/data/api_coverage.json`, which both pages render; the staging percentages are [NOT VERIFIED] until the first run on a staging copy:
 
 | Field | Allowed sources | Expected gap |
 | --- | --- | --- |
