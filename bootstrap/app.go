@@ -8,7 +8,6 @@ import (
 	"log/slog"
 	"os"
 	"strconv"
-	"strings"
 	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
@@ -79,7 +78,7 @@ func NewWithSSRFailures(ssrFailures *ssr.Failures, opts ...vukem.Option) (*vukem
 		vukem.WithViews(resources.Views()),
 		vukem.WithVite(resources.Public()),
 		vukem.WithTranslations(resources.Lang()),
-		vukem.WithOpenAPI(apiInfo(os.Args[1:], config.APIHost(os.Getenv))),
+		vukem.WithOpenAPI(apiInfo(config.APIHost(os.Getenv))),
 		vukem.WithInertia(inertia.Config{
 			Version: version,
 			SSR: &inertia.SSRConfig{
@@ -179,22 +178,14 @@ func addReadyChecks(app *vukem.App, heartbeat *scheduler.Heartbeat) error {
 
 // apiInfo documents the public API the way the api host serves it: server https://<apiHost>/v1 and paths without
 // /api/v1 (APIEdge maps /v1 to the /api/v1 routes; SDD 05 section 6.1). The app document (/app/v1) is first-party,
-// has no such host form and keeps full paths.
-//
-// workaround(vukem): VF-NEW-OPENAPI-DOC-INFO (vukem-feedback.md). openapi.Info is app-wide; a StripPrefix of /api/v1 would leave the
-// /app/v1 document empty, so the document is chosen from the command line (-prefix /app/v1 on openapi:export and
-// codegen:client). Shortcut: a prefix spelled any other way gets the api form.
-func apiInfo(args []string, apiHost string) openapi.Info {
-	info := openapi.Info{Title: "HexaScore API"}
-	for _, a := range args {
-		if a == "/app/v1" || strings.HasSuffix(a, "=/app/v1") {
-			info.Servers = []string{"https://" + apiHost}
-			return info
-		}
+// has no such host form and keeps full paths through its Docs entry.
+func apiInfo(apiHost string) openapi.Info {
+	return openapi.Info{
+		Title:       "HexaScore API",
+		Servers:     []string{"https://" + apiHost + "/v1"},
+		StripPrefix: "/api/v1",
+		Docs: map[string]openapi.DocInfo{
+			"/app/v1": {Servers: []string{"https://" + apiHost}},
+		},
 	}
-
-	info.Servers = []string{"https://" + apiHost + "/v1"}
-	info.StripPrefix = "/api/v1"
-
-	return info
 }
