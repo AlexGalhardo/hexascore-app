@@ -60,6 +60,7 @@ test("the first page shows title, rows with year · rating count and score", asy
 	// The cursor API sends no total, so no "N items found" line.
 	expect(screen.queryByText(/found/)).toBeNull();
 	expect(read.calls[0]).toEqual({ sort: "-popularity", locale: "en" });
+	expect(screen.getByRole("button", { name: /^a 1, .*Score 7\.5 out of 10/ })).toBeTruthy();
 	await fireEvent.press(screen.getByRole("button", { name: /^a 1,/ }));
 	expect(onOpen).toHaveBeenCalledWith(expect.objectContaining({ id: "a1", slug: "a-slug-1" }));
 });
