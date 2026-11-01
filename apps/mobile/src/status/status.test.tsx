@@ -103,6 +103,31 @@ describe("status sheet", () => {
 	});
 });
 
+describe("v1 look", () => {
+	test("status sheet: titled header, the checked option carries a check mark, not colour alone", async () => {
+		const { wrap } = setup(ok({}));
+		await render(wrap(<StatusSheet itemId="g1" type="games" current="completed" locale="en" />));
+		expect(screen.getByRole("header", { name: "Status" })).toBeTruthy();
+		const marks = screen.getAllByTestId("status-checked", { includeHiddenElements: true });
+		expect(marks).toHaveLength(1);
+		expect(screen.getByRole("radio", { name: "Played" })).toContainElement(marks[0] ?? null);
+	});
+
+	test("status sheet without a status shows no check mark", async () => {
+		const { wrap } = setup(ok({}));
+		await render(wrap(<StatusSheet itemId="g1" type="games" current={null} locale="en" />));
+		expect(screen.queryAllByTestId("status-checked", { includeHiddenElements: true })).toHaveLength(
+			0,
+		);
+	});
+
+	test("time-to-beat sheet: titled header", async () => {
+		const { wrap } = setup(ok({}));
+		await render(wrap(<TimeToBeatSheet itemId="g1" current={null} locale="en" />));
+		expect(screen.getByRole("header", { name: "Your time to beat" })).toBeTruthy();
+	});
+});
+
 describe("time-to-beat sheet", () => {
 	test("values outside 0.5–10,000 h are rejected client-side and nothing is queued", async () => {
 		const send = jest.fn(ok({}));
