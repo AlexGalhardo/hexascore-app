@@ -10,6 +10,7 @@ web   GET    /llms-full.txt
 web   GET    /.well-known/assetlinks.json
 web   GET    /terms
 web   GET    /policy
+web   GET    /legal/privacy
 web   GET    /pricing
 web   GET    /docs
 web   GET    /docs/{slug}
