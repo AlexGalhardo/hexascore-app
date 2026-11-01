@@ -25,7 +25,9 @@ func TestCommunityLoad(t *testing.T) {
 		`SELECT count(DISTINCT author_id) FROM suggestions`:                                       50,
 		`SELECT count(*) FROM suggestions WHERE submitted_at IS NULL OR submitted_at > now()`:     0,
 		`SELECT count(*) FROM suggestions s WHERE s.kind = 'create' AND s.target_id IS NOT NULL`:  0,
-		`SELECT count(*) FROM suggestions WHERE submitted_at < now() - interval '30 hours'`:       0,
+		`SELECT count(*) FROM suggestions WHERE submitted_at < now() - interval '54 hours'`:       0,
+		// The load must not spend today's quota of 3 submits of the members qa/k6/moderation.js signs in as.
+		`SELECT count(*) FROM suggestions WHERE submitted_day = (now() AT TIME ZONE 'UTC')::date`: 0,
 	} {
 		if got := count(t, db, query); got != want {
 			t.Errorf("%s = %d, want %d", query, got, want)

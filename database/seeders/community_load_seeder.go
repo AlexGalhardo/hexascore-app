@@ -76,7 +76,8 @@ ins AS (
     (ARRAY['game','movie','series','book'])[1 + (g % 4)],
     (ARRAY['en','pt-BR','es'])[1 + (g % 3)],
     jsonb_build_object('title', jsonb_build_object('after', 'Load suggestion ' || (g + $2))),
-    'submitted', now() - make_interval(secs => g * 10), '{"load":true}'
+    -- Before today's UTC midnight, so the load never spends the members' daily submit quota (3 per UTC day).
+    'submitted', date_trunc('day', now(), 'UTC') - make_interval(secs => g * 10), '{"load":true}'
   FROM authors a, generate_series(1, $1::int) g
   RETURNING id, author_id, submitted_at
 )
