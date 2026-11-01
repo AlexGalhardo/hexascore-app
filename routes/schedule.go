@@ -45,6 +45,8 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	s.Job(jobs.PruneAPIChanges{}).DailyAt("04:50").WithoutOverlapping()
 	// Fan-out reads api_changes after webhook_cursor (SDD 05 §7.3).
 	s.Job(jobs.FanoutWebhooks{}).EveryMinute().WithoutOverlapping()
+	// IndexNow reads the same feed with its own cursor; a no-op while INDEXNOW_KEY is unset.
+	s.Job(jobs.IndexNowChanges{}).EveryMinute().WithoutOverlapping()
 	// webhook_deliveries is kept 30 days (SDD 05 §5). 04:40 stays clear of the 04:50 api_changes prune.
 	s.Job(jobs.PruneWebhookDeliveries{}).DailyAt("04:40").WithoutOverlapping()
 	// activity_events is kept 180 days (SDD 14 NFR-14-9).
