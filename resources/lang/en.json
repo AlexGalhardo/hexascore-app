@@ -1444,6 +1444,10 @@
       "label": "Share my activity with followers",
       "help": "Your ratings, statuses and public lists appear in your followers' feeds and on your profile. Off by default; turning it off hides past activity at once.",
       "saved": "Activity sharing saved."
+    },
+    "share": {
+      "action": "Share",
+      "copied": "Link copied"
     }
   },
   "help": {

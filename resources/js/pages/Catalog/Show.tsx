@@ -18,6 +18,7 @@ import {
 	type RatingSummary,
 } from "../../components/item/types";
 import Seo, { truncate } from "../../components/Seo";
+import ShareButton from "../../components/social/ShareButton";
 import { btnClass } from "../../components/ui/Btn";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
@@ -65,6 +66,8 @@ interface Props {
 	cover?: Cover | null;
 	/** Deferred (group `reviews`) while the feature flag `social` is on (SDD 14 §12.10). */
 	reviews?: { data: ReviewEntry[]; mine: ReviewEntry | null };
+	/** Share-card path while the feature flag `social` is on and the page is public (SDD 14 §11 item 12). */
+	ogImage?: string;
 }
 
 const LD_TYPE: Record<ItemType, string> = {
@@ -119,6 +122,7 @@ export default function Show({
 	trailers = [],
 	cover = null,
 	reviews,
+	ogImage,
 }: Props) {
 	const t = useT();
 	const { locale, auth } = usePage<SharedProps>().props;
@@ -178,6 +182,7 @@ export default function Show({
 					160,
 				)}
 				jsonLd={[jsonLd]}
+				image={ogImage}
 			/>
 			<nav aria-label={t("item.breadcrumb")} className="mb-6 text-sm text-muted">
 				<ol className="flex flex-wrap gap-2">
@@ -202,6 +207,7 @@ export default function Show({
 					</div>
 					<div className="grid min-w-0 content-start gap-2">
 						<h1 className="text-3xl leading-none sm:text-4xl md:text-6xl">{title}</h1>
+						{ogImage && <ShareButton title={title} />}
 						<p className="text-muted md:text-lg">
 							{[
 								t(`itemTypes.${item.type}`),

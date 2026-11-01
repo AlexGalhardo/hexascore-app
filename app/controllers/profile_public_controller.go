@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/AlexGalhardo/vukem/auth"
 	"github.com/AlexGalhardo/vukem/database"
@@ -127,6 +128,9 @@ func (h *PublicProfile) Show(c *web.Ctx) error {
 		}
 		if ok {
 			props["social"] = follow
+			if !p.IsPrivate {
+				props["ogImage"] = ogImage("profiles", strings.ToLower(p.Nickname))
+			}
 		}
 
 		if ok && !hidden && c.Query("tab") == "reviews" {

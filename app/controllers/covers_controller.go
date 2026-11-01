@@ -26,29 +26,31 @@ func Covers(app *vukem.App) web.HandlerFunc {
 	)
 
 	return func(c *web.Ctx) error {
-		once.Do(func() {
-			if app.Source.Get("S3_BUCKET") == "" {
-				h = CoversFrom(nil)
-				return
-			}
-
-			cfg, err := config.Load[s3.Config](app.Source)
-			if err == nil {
-				var disk storage.Disk
-				if disk, err = s3.New(cfg); err == nil {
-					h = CoversFrom(disk)
-					return
-				}
-			}
-
-			app.Log.Error("covers: bucket disk", "error", err)
-			h = CoversFrom(nil)
-		})
+		once.Do(func() { h = CoversFrom(BucketDisk(app)) })
 
 		h.ServeHTTP(c.Writer(), c.Request())
 
 		return nil
 	}
+}
+
+// BucketDisk opens the S3 bucket disk; nil without S3_BUCKET or when the driver fails (logged).
+func BucketDisk(app *vukem.App) storage.Disk {
+	if app.Source.Get("S3_BUCKET") == "" {
+		return nil
+	}
+
+	cfg, err := config.Load[s3.Config](app.Source)
+	if err == nil {
+		var disk storage.Disk
+		if disk, err = s3.New(cfg); err == nil {
+			return disk
+		}
+	}
+
+	app.Log.Error("covers: bucket disk", "error", err)
+
+	return nil
 }
 
 // CoversFrom serves covers from disk (nil disk: always 404) for a route with a {key...} wildcard. The

@@ -219,6 +219,7 @@ func Web(r *router.Router, app *vukem.App) error {
 				return err
 			}
 		}
+		r.Get("/og/{kind}/{file}", controllers.OGImage(app, items.Social)).Name("og.image")
 		changes := controllers.NewRecentChanges(app)
 		for section, typ := range map[string]string{"games": "game", "movies": "movie", "series": "series", "books": "book"} {
 			r.Get("/"+section, listings.Index(typ)).Name("catalog." + typ)

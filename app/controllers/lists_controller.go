@@ -9,6 +9,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/library"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/requests"
+	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
 
 // Lists serves the list write routes for one guard like Ratings: the session guard answers 303 back, the token
@@ -18,6 +19,8 @@ type Lists struct {
 	gate  *authz.Gate[*models.User]
 	guard string
 	api   bool
+	// Social adds the share-card prop on the web list page while the flag `social` is on (SDD 14 §11 item 12).
+	Social *social.Follows
 }
 
 // NewLists builds the handlers; api selects JSON answers.

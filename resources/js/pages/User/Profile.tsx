@@ -6,6 +6,7 @@ import ReportDialog from "../../components/ReportDialog";
 import Seo from "../../components/Seo";
 import ActivityCard, { type ActivityEntry } from "../../components/social/ActivityCard";
 import FollowBar, { type SocialProps } from "../../components/social/FollowBar";
+import ShareButton from "../../components/social/ShareButton";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
@@ -47,6 +48,8 @@ interface Props {
 		tier?: string;
 		accuracy?: number;
 	};
+	/** Share-card path while the feature flag `social` is on and the page is public (SDD 14 §11 item 12). */
+	ogImage?: string;
 }
 
 export default function Profile({
@@ -59,6 +62,7 @@ export default function Profile({
 	activity,
 	reviews,
 	contributions,
+	ogImage,
 }: Props) {
 	const t = useT();
 	const page = usePage<SharedProps>();
@@ -89,7 +93,7 @@ export default function Profile({
 
 	return (
 		<>
-			<Seo title={profile.nickname} noindex={!indexable} />
+			<Seo title={profile.nickname} noindex={!indexable} image={ogImage} />
 			<header className="flex flex-wrap items-center gap-4">
 				<span
 					aria-hidden="true"
@@ -99,6 +103,7 @@ export default function Profile({
 				</span>
 				<div className="min-w-0 flex-1">
 					<h1 className="text-2xl font-semibold">{profile.nickname}</h1>
+					{ogImage && <ShareButton title={profile.nickname} />}
 					{contributions && (
 						<section
 							aria-label={t("social.profile.contributions.title")}
