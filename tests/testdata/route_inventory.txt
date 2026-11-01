@@ -234,6 +234,11 @@ app   PUT    /app/v1/lists/{id}/order
 web   GET    /me/notifications
 web   POST   /me/notifications/read-all
 web   POST   /me/notifications/{id}/read
+web   PUT    /u/{nickname}/follow
+web   DELETE /u/{nickname}/follow
+web   POST   /me/follow-requests/{nickname}/accept
+web   POST   /me/follow-requests/{nickname}/decline
+web   GET    /feed
 app   GET    /app/v1/me/notifications
 app   POST   /app/v1/me/notifications/read
 web   POST   /reports
