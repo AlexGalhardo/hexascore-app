@@ -179,7 +179,8 @@ Keys: IPv6 is bucketed by /64 [RL]. `c.IP()` trusts forwarding headers only from
 - `PAGE_LIMIT_SCALE` multiplies the page limits for the QA stack only. Production leaves it unset, and any value that is not a positive integer refuses to boot.
 - Props: the item, entity and public list pages send only the fields they render, so the page JSON never exposes more than the HTML.
 - Tests: `TestSecurity_A06_ScrapeToolUADenied`, `_ScrapeAPIRoutesUnaffected`, `_ScrapeSpoofedGooglebot`, `_ScrapeVerifiedGooglebot`, `_ScrapePageRateLimit`, `_ScrapeHoneypotBan`, `TestSecurity_A10_ScrapeBanStoreDown503`, `app/botverify` tests (fake resolver, no live DNS), `TestRobots_Production`, `TestTermsParityAndScrapingClause`.
-- Not covered here: Cloudflare bot management and WAF (P2, owner-gated), and Turnstile step-up (no vukem hook, VF-003; keys not issued).
+- Turnstile step-up (ADR 0016 amendment): a soft per-IP budget (`pages.soft`, 30/min, scaled by `PAGE_LIMIT_SCALE`) runs before the hard anonymous limits; past it `challenge.StepUp.Require` writes a 403 `noindex`, `no-store` interstitial whose form posts to `POST /turnstile` (`/challenge` is the proof-of-work route) and sets a 30 min clearance cookie bound to the IP prefix and User-Agent. `Skip` is the botverify verdict, so verified crawlers are never asked. A soft-limiter store error does not challenge (the hard limits fail closed). `POST /turnstile` is outside session and CSRF (the interstitial is written before them; a forged post only grants a clearance) and rate limited like `/challenge`. Tests: `TestSecurity_A06_ScrapeSoftLimitStepsUp`, `TestTurnstileStepUpPath`.
+- Not covered here: Cloudflare bot management and WAF (P2, owner-gated).
 
 ### 7.2 Challenge and form integrity (ADR 0016)
 
@@ -191,7 +192,7 @@ Keys: IPv6 is bucketed by /64 [RL]. `c.IP()` trusts forwarding headers only from
 - Server check order: HMAC, expiry, route, zero bits, then single use via cache `Add("pow:"+c)`. A replay gets 428; a store error gets 503.
 - Accessibility: no puzzle and no image. An `aria-live` region says "Checking your browser…". After 10 s the client may ask once for `bits-2` (1/h per IP): `GET /challenge?route=…&fallback=1`; the gate accepts solutions down to `bits-2`, since only that endpoint hands them out. Without JS, a localised notice offers "Continue with Google", which is never challenged.
 - Honeypot `website` field, plus a minimum fill time of 3 s taken from the render time in the signed form token (`form_token`, `app/forms`; a missing or forged token counts as a violation). A violation gets the normal success answer, stores nothing and logs `security.honeypot`. Suggestions get a 422 instead (SDD 04).
-- Turnstile: app setting `BOT_CHALLENGE=pow|turnstile` (HexaScore config, not vukem). It adds `https://challenges.cloudflare.com` to `script-src`/`frame-src` on challenged pages only. Using it in production needs an ADR 0016 update (issue 12). The framework hook is requested in VF-003.
+- Turnstile (ADR 0016 amendment, vukem `challenge`): on when `TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` are both set. `POST /signup` (action `register`), `/login` and `/contact` need an `X-Challenge-Token` solved for that action, checked before the proof-of-work gate; a missing, invalid or cross-form token gets the validation error `challenge` (422 for JSON). Siteverify gets the client IP and an idempotency key; an outage answers 503. The CSP gains `https://challenges.cloudflare.com` in `script-src` and `frame-src` only when on, and `api.js` loads with the request nonce on the three form pages. `TURNSTILE_VERIFY_URL` (test fake) refuses to boot in production. Tests: `TestSecurity_A07_TurnstileProtectsForms`, `TestTurnstileOnLoginPage`, `TestSecurity_A05_TurnstileFakeVerifyRefusedInProduction`.
 
 ### 7.3 Input handling
 
@@ -368,4 +369,4 @@ Review in `docs/incidents/YYYY-MM-DD-<slug>.md` within 5 working days: UTC timel
 9. No antivirus for uploads (D-08); accepted with §7.3 controls. Owner: owner. Revisit if uploads go beyond moderated images.
 10. HSTS `preload` deferred. Owner: owner. Revisit 2027-06.
 11. The restore runbook must re-apply deletions made after the dump. Owner: architect (SDD 11). Closes when the monthly drill covers it. Status 2026-10-29: `backup:restore` replays deletions, schedules and cancellations from the running database (`TestRestoreReappliesDeletions`, P2.E.3.1, runbook `docs/runbooks/restore.md`); stays open until the first staging drill.
-12. Turnstile in production needs an ADR 0016 update and a policy line. Owner: owner. Closes on the ADR edit.
+12. Closed 2026-11-01: ADR 0016 amendment and §7.2 "Turnstile" (ADOPT-vukem-0.36.0).
