@@ -4,6 +4,7 @@ import CoverThumb, { type Cover } from "../../components/CoverThumb";
 import AddToList, { type ListChoice } from "../../components/item/AddToList";
 import CategoryAverages from "../../components/item/CategoryAverages";
 import Editions from "../../components/item/Editions";
+import MoreLikeThis, { type CrossItem, type SimilarItem } from "../../components/item/MoreLikeThis";
 import RatingPanel from "../../components/item/RatingPanel";
 import ScoreBlock from "../../components/item/ScoreBlock";
 import StatusPicker from "../../components/item/StatusPicker";
@@ -62,6 +63,8 @@ interface Props {
 	myLists?: ListChoice[];
 	trailers?: { youtubeId: string; title?: string }[];
 	cover?: Cover | null;
+	similar?: SimilarItem[];
+	crossMedia?: CrossItem[];
 }
 
 const LD_TYPE: Record<ItemType, string> = {
@@ -115,6 +118,8 @@ export default function Show({
 	myLists,
 	trailers = [],
 	cover = null,
+	similar = [],
+	crossMedia = [],
 }: Props) {
 	const t = useT();
 	const { locale, auth } = usePage<SharedProps>().props;
@@ -384,6 +389,8 @@ export default function Show({
 					{editions && (
 						<Editions slug={item.slug} editions={editions} total={editionCount} />
 					)}
+
+					<MoreLikeThis type={item.type} similar={similar} crossMedia={crossMedia} />
 
 					<p className="text-xs text-muted">{t("item.attribution")}</p>
 				</div>

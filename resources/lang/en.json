@@ -1030,6 +1030,18 @@
       "overall": "Your overall score",
       "overallHint": "The average of the categories you rated ({rated} of {total}).",
       "completeHint": "Rate every category to save."
+    },
+    "moreLike": {
+      "game": "More games like this",
+      "movie": "More movies like this",
+      "series": "More series like this",
+      "book": "More books like this"
+    },
+    "similarReason": "Shares {entity}",
+    "crossMedia": "In other media",
+    "relation": {
+      "based_on": "Original work",
+      "adapted_as": "Adaptation"
     }
   },
   "updatedLabel": "Last updated",
