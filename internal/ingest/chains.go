@@ -79,6 +79,13 @@ var (
 		{Job: "backfill.editions", Mode: run.ModeBackfill},
 	}}
 
+	// TrailersWeekly re-checks every trailer candidate, then re-normalises so the verdicts reach the items. It is its
+	// own chain because a stage skipped by its kill switch (ingest_youtube) stops a chain and must not stop the others.
+	TrailersWeekly = Chain{"trailers-weekly", []Stage{
+		fetch("youtube", run.ModeFull),
+		{Job: "normalize", Mode: run.ModeFull},
+	}}
+
 	// Chains lists every chain by name, which is how a run's params find the next stage.
 	Chains = []Chain{
 		Bootstrap,
@@ -89,6 +96,7 @@ var (
 		TMDBWeekly,
 		TMDBExpire,
 		EditionsBackfill,
+		TrailersWeekly,
 	}
 )
 

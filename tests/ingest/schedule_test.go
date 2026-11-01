@@ -30,6 +30,7 @@ func TestScheduleTable(t *testing.T) {
 		"ingest:wikipedia-weekly":     "0 1 * * 1",
 		"ingest:openlibrary-weekly":   "0 1 * * 2",
 		"ingest:tmdb-weekly":          "0 1 * * 5",
+		"ingest:trailers-weekly":      "0 4 * * 0",
 		"ingest:tmdb-expire":          "0 3 * * *",
 	}
 
