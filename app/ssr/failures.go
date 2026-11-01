@@ -53,6 +53,14 @@ func isPublic(raw string) bool {
 		path = u.Path
 	}
 
+	// SSRError.URL is the localized page URL; SSRConfig.Except sees the path after the prefix is stripped.
+	for _, prefix := range []string{"/pt-br/", "/es/"} {
+		if strings.HasPrefix(path, prefix) {
+			path = path[len(prefix)-1:]
+			break
+		}
+	}
+
 	for _, p := range PrivatePrefixes {
 		if path == p || strings.HasPrefix(path, p+"/") {
 			return false

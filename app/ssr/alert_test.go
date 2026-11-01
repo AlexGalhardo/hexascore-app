@@ -20,6 +20,10 @@ func TestAlert_SSRFallbackPublic(t *testing.T) {
 		{"/profile", false},
 		{"/admin/users?x=1", false},
 		{"/profiles/ana", true},
+		// SSRError.URL keeps the locale prefix (vukem pageURL); Except matches the stripped path.
+		{"/pt-br/profile", false},
+		{"/es/admin", false},
+		{"/es/items/x", true},
 	}
 
 	for _, c := range cases {
