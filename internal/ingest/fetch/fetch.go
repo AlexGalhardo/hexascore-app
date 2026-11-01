@@ -10,9 +10,11 @@ import (
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
+	"github.com/AlexGalhardo/vukem/httpclient"
 	"github.com/AlexGalhardo/vukem/queue"
 
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/httpx"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/store"
 )
@@ -168,6 +170,16 @@ func settle(
 	for _, f := range failures {
 		if errors.Is(f.Err, queue.ErrPermanent) {
 			return f.Err
+		}
+
+		// an open breaker, a missing allowlist entry or a cancelled job say nothing about the target: abort the
+		// chunk (its writes roll back, the job retries) instead of parking every target behind the outage.
+		if errors.Is(f.Err, httpx.ErrHostNotAllowed) {
+			return fmt.Errorf("fetch %s: %w: %w", source, f.Err, queue.ErrPermanent)
+		}
+
+		if ctx.Err() != nil || errors.Is(f.Err, httpclient.ErrCircuitOpen) {
+			return fmt.Errorf("fetch %s: %w", source, f.Err)
 		}
 
 		failed[f.Target.ID] = true

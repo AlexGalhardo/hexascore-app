@@ -115,6 +115,11 @@ func TestTargetsBootstrapAndIncrementalAndResume(t *testing.T) {
 		t.Fatalf("resume after %s: %+v", all[1].ID, rest)
 	}
 
+	gone := collect(ingest.RunParams{Mode: run.ModeBootstrap, Types: []string{"movie", "game"}, Limit: 2}, "Q999999999")
+	if len(gone) != len(all) {
+		t.Fatalf("resume after a QID no longer selected must restart, got %d targets", len(gone))
+	}
+
 	s.queries = nil
 	collect(
 		ingest.RunParams{

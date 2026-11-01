@@ -22,25 +22,30 @@ type breakerState struct {
 	probing     bool
 }
 
-// allow reports whether a request may go; it marks the caller as the probe
-// when the open period has elapsed.
-func (b *breakerState) allow(now time.Time) bool {
+// allow reports whether a request may go and whether it is the probe sent
+// once the open period has elapsed.
+func (b *breakerState) allow(now time.Time) (ok, probe bool) {
 	if b.openFor == 0 {
-		return true
+		return true, false
 	}
 
 	if now.Before(b.openUntil) || b.probing {
-		return false
+		return false, false
 	}
 
 	b.probing = true
 
-	return true
+	return true, true
 }
 
 // record registers an outcome; cancelled requests must not be recorded.
-func (b *breakerState) record(now time.Time, failed bool) {
-	wasProbe := b.probing
+// While open only the probe decides: a request that was already in flight
+// when the breaker opened neither closes it nor frees the probe slot.
+func (b *breakerState) record(now time.Time, failed, probe bool) {
+	if b.openFor != 0 && !probe {
+		return
+	}
+
 	b.probing = false
 
 	if !failed {
@@ -54,7 +59,7 @@ func (b *breakerState) record(now time.Time, failed bool) {
 	b.consecutive++
 	b.push(true)
 
-	if wasProbe {
+	if probe {
 		b.open(now)
 
 		return

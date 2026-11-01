@@ -324,11 +324,46 @@ func TestBreakerOpensOnFailureRatio(t *testing.T) {
 	now := time.Now()
 	// alternating keeps consecutive low; 25 failures of 50 reach 50%.
 	for i := range 50 {
-		b.record(now, i%2 == 1)
+		b.record(now, i%2 == 1, false)
 	}
 
-	if b.allow(now) {
+	if ok, _ := b.allow(now); ok {
 		t.Fatal("breaker should be open at 50% failures")
+	}
+}
+
+func TestBreakerOnlyTheProbeCloses(t *testing.T) {
+	var b breakerState
+
+	now := time.Now()
+	for range breakerConsecutive {
+		b.record(now, true, false)
+	}
+
+	// a request already in flight when the breaker opened succeeds late.
+	b.record(now, false, false)
+
+	if ok, _ := b.allow(now); ok {
+		t.Fatal("a non-probe success must not close an open breaker")
+	}
+
+	later := now.Add(breakerBaseOpen)
+
+	ok, probe := b.allow(later)
+	if !ok || !probe {
+		t.Fatalf("allow after the open period = %v, %v; want the probe", ok, probe)
+	}
+
+	b.record(later, true, false)
+
+	if ok, _ := b.allow(later); ok {
+		t.Fatal("a second probe went out while the first is in flight")
+	}
+
+	b.record(later, false, true)
+
+	if ok, probe := b.allow(later); !ok || probe {
+		t.Fatalf("after a good probe allow = %v, %v; want closed", ok, probe)
 	}
 }
 

@@ -142,7 +142,7 @@ func (p *policy) roundTrip(next http.RoundTripper, req *http.Request) (*http.Res
 
 func (p *policy) once(ctx context.Context, h *host, next http.RoundTripper, req *http.Request) (*http.Response, error) {
 	h.mu.Lock()
-	allowed := h.br.allow(p.clock.Now())
+	allowed, probe := h.br.allow(p.clock.Now())
 	h.mu.Unlock()
 
 	if !allowed {
@@ -156,9 +156,11 @@ func (p *policy) once(ctx context.Context, h *host, next http.RoundTripper, req 
 
 	switch {
 	case ctx.Err() != nil, errors.Is(err, httpclient.ErrBlockedAddress):
-		h.br.probing = false
+		if probe {
+			h.br.probing = false
+		}
 	default:
-		h.br.record(p.clock.Now(), err != nil || resp.StatusCode >= http.StatusInternalServerError)
+		h.br.record(p.clock.Now(), err != nil || resp.StatusCode >= http.StatusInternalServerError, probe)
 	}
 
 	return resp, err

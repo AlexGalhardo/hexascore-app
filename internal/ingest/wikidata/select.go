@@ -10,6 +10,7 @@ import (
 	"iter"
 	"net/http"
 	"net/url"
+	"slices"
 	"strings"
 	"sync"
 	"time"
@@ -236,6 +237,29 @@ func (w *Connector) Targets(
 
 	return func(yield func(ingest.Target, error) bool) {
 		skipping := after != ""
+
+		// a reselection (restarted worker, incremental drift) may no longer hold after; skipping to it would
+		// silently drop every remaining target, so start over instead (writes are hash-idempotent).
+		if skipping {
+			found := false
+
+			for _, itemType := range types {
+				qids, err := w.selection(ctx, itemType, p, since)
+				if err != nil {
+					yield(ingest.Target{}, err)
+
+					return
+				}
+
+				if slices.Contains(qids, after) {
+					found = true
+
+					break
+				}
+			}
+
+			skipping = found
+		}
 
 		for _, itemType := range types {
 			qids, err := w.selection(ctx, itemType, p, since)
