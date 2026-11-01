@@ -64,6 +64,10 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 		WeeklyOn(time.Monday, "01:00").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:openlibrary-weekly", startChain(app, ingest.OpenLibraryWeekly)).
 		WeeklyOn(time.Tuesday, "01:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:tmdb-weekly", startChain(app, ingest.TMDBWeekly)).
+		WeeklyOn(time.Friday, "01:00").In(saoPaulo).WithoutOverlapping()
+	s.Func("ingest:tmdb-expire", startChain(app, ingest.TMDBExpire)).
+		DailyAt("03:00").In(saoPaulo).WithoutOverlapping()
 
 	// backup.drill (SDD 11 §7.4): staging only. Staging also runs APP_ENV=production, so the
 	// signal is the source bucket only staging is given. Cron ORs day-of-month with

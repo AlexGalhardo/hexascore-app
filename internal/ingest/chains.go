@@ -60,8 +60,26 @@ var (
 		{Job: "normalize", Mode: run.ModeFull},
 	}}
 
+	TMDBWeekly = Chain{"tmdb-weekly", []Stage{
+		fetch("tmdb", run.ModeFull),
+		{Job: "normalize", Mode: run.ModeFull},
+	}}
+	// TMDBExpire refreshes records past 150 days and deletes the ones past 180, then re-normalises their items.
+	TMDBExpire = Chain{"tmdb-expire", []Stage{
+		{Job: "tmdb.expire", Source: "tmdb", Mode: run.ModeFull},
+		{Job: "normalize", Mode: run.ModeFull},
+	}}
+
 	// Chains lists every chain by name, which is how a run's params find the next stage.
-	Chains = []Chain{Bootstrap, WikidataIncremental, WikidataWeekly, WikipediaWeekly, OpenLibraryWeekly}
+	Chains = []Chain{
+		Bootstrap,
+		WikidataIncremental,
+		WikidataWeekly,
+		WikipediaWeekly,
+		OpenLibraryWeekly,
+		TMDBWeekly,
+		TMDBExpire,
+	}
 )
 
 // chainParams is the "chain" key of job_runs.params.

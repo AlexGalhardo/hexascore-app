@@ -13,5 +13,6 @@ func DefaultHosts() map[string]HostLimit {
 		"upload.wikimedia.org":   {PerSecond: 2, InFlight: 2},
 		"openlibrary.org":        {PerSecond: 2.5, InFlight: 2},
 		"covers.openlibrary.org": {PerSecond: 10, InFlight: 4},
+		"api.themoviedb.org":     {PerSecond: 20, InFlight: 8},
 	}
 }

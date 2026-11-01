@@ -17,6 +17,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/httpx"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/normalize"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/tmdb"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/wikidata"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/wikipedia"
 )
@@ -29,6 +30,7 @@ type IngestSources struct {
 	WikidataRDF string
 	// WikipediaAPI is a URL prefix; the edition code is appended.
 	WikipediaAPI string
+	TMDBAPI      string
 }
 
 const defaultContactURL = "https://hexascore.app"
@@ -71,7 +73,14 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 	wd.SparqlURL = src.WikidataRDF
 	wd.APIURL = src.WikidataAPI
 
+	tc := tmdb.New(app.Source.Get("THEMOVIEDATABASE_API_READ_ACCESS_TOKEN"))
+	if src.TMDBAPI != "" {
+		tc.APIURL = src.TMDBAPI
+	}
+
 	steps := map[string]run.Step{
+		"fetch.tmdb":     fetch.Step(tc, client, app.Now),
+		tmdb.JobName:     tmdb.ExpireStep(tc, client, app.Now),
 		"fetch.wikidata": fetch.Step(wd, client, app.Now),
 		"fetch.entities": fetch.Step(wd.Entities(), client, app.Now),
 		// The Open Library licence is unverified (A-05): the stage exists so the chain is complete, and the kill switch keeps it skipped.
