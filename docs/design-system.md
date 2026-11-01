@@ -463,6 +463,10 @@ All Auth pages render `h1` (`text-2xl font-semibold`), a form with `space-y-4` a
 - Blocks: left column nav (pages, "API reference", on-page table of contents of `h2`s), prose article (`max-w-3xl`, build-time sanitised Markdown HTML, headings and code styled with arbitrary-variant classes).
 - States: none beyond 404.
 
+#### About/Index
+
+- Route: `GET /about` (all locales, SSR). File: `pages/About/Index.tsx`. Reading width 45rem like the legal pages; sections: categories (with `CategoryIcon`), scores (link `/how-score-works`), community, public API (`/docs`), open source (GitHub, new tab), contact. Copy in the `about.` namespace, shipped only on `/about`; in the sitemap, `llms.txt` and the footer.
+
 #### Legal/Page
 
 - Route: `GET /terms`, `/policy` (SSR). Purpose: legal text. Blocks: `h1`, "Last updated" date, sections with `h2`. Copy comes from the catalogue.

@@ -724,7 +724,29 @@
       "other": "from {n} ratings"
     }
   },
+  "about": {
+    "title": "About HexaScore",
+    "description": "What HexaScore is: community scores for games, movies, TV series and books, a published formula, a public API and open source code.",
+    "intro": "HexaScore is a community catalogue of games, movies, TV series and books. Members rate each item from 0 to 10 in six categories of its type, and the score of the item comes from those ratings through a published formula.",
+    "categoriesTitle": "Four categories",
+    "categoriesBody": "Every item belongs to one category, and each category has its own six rating criteria.",
+    "scoresTitle": "How scores work",
+    "scoresBody": "An item shows a score once it has at least 5 ratings. The score is out of 10 with one decimal, and its colour follows three bands: below 5.0, 5.0 to 7.4, and 7.5 and above.",
+    "scoresLink": "Read how scores work",
+    "communityTitle": "Community",
+    "communityBody": "Members keep a library with a status for each item, build lists, suggest edits to the catalogue data and can see the recent changes of every item.",
+    "apiTitle": "Public API",
+    "apiBody": "A read-only JSON API serves the catalogue and the scores, with paid plans and quotas.",
+    "apiLink": "Read the API docs",
+    "openSourceTitle": "Open source",
+    "openSourceBody": "The source code of the site is public on GitHub.",
+    "openSourceLink": "View the source code",
+    "contactTitle": "Contact",
+    "contactBody": "Questions, corrections and other requests reach the team through the contact form.",
+    "contactLink": "Contact us"
+  },
   "footer": {
+    "about": "About",
     "terms": "Terms",
     "privacy": "Privacy",
     "contact": "Contact",

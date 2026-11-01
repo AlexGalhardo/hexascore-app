@@ -28,6 +28,29 @@ func TestDocsPages(t *testing.T) {
 	app.Client(t).Get("/docs/index").AssertStatus(404)
 }
 
+// TestAboutPage: owner round 2026-11-01 item 25, served in every locale with only its own namespace.
+func TestAboutPage(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New)
+
+	for _, prefix := range []string{"", "/pt-br", "/es"} {
+		res := app.Client(t).Get(prefix + "/about").AssertOK()
+		res.AssertInertia("About/Index")
+
+		body := res.Body()
+		for _, key := range []string{`"about.title"`, `"about.openSourceLink"`, `"footer.about"`} {
+			if !strings.Contains(body, key) {
+				t.Errorf("%s/about: messages lack %s", prefix, key)
+			}
+		}
+	}
+
+	if strings.Contains(app.Client(t).Get("/").AssertOK().Body(), `"about.title"`) {
+		t.Error("the about namespace ships on the home page")
+	}
+}
+
 func TestLegalPages(t *testing.T) {
 	t.Parallel()
 

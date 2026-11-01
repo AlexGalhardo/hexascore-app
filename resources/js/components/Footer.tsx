@@ -13,6 +13,7 @@ export default function Footer() {
 	const link =
 		"inline-flex min-h-11 items-center justify-center rounded-xs text-[15px] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg md:text-[13px]";
 	const links: [string, string][] = [
+		[localized("/about", locale), "footer.about"],
 		[localized("/terms", locale), "footer.terms"],
 		[localized("/policy", locale), "footer.privacy"],
 		[localized("/contact", locale), "footer.contact"],

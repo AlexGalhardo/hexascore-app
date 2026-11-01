@@ -724,7 +724,29 @@
       "other": "de {n} avaliações"
     }
   },
+  "about": {
+    "title": "Sobre o HexaScore",
+    "description": "O que é o HexaScore: notas da comunidade para jogos, filmes, séries e livros, uma fórmula publicada, uma API pública e código aberto.",
+    "intro": "O HexaScore é um catálogo da comunidade de jogos, filmes, séries e livros. Os membros avaliam cada item de 0 a 10 em seis categorias do seu tipo, e a nota do item vem dessas avaliações por meio de uma fórmula publicada.",
+    "categoriesTitle": "Quatro categorias",
+    "categoriesBody": "Cada item pertence a uma categoria, e cada categoria tem seus próprios seis critérios de avaliação.",
+    "scoresTitle": "Como as notas funcionam",
+    "scoresBody": "Um item mostra uma nota quando tem pelo menos 5 avaliações. A nota vai até 10 com uma casa decimal, e a cor segue três faixas: abaixo de 5,0, de 5,0 a 7,4, e 7,5 ou mais.",
+    "scoresLink": "Ler como as notas funcionam",
+    "communityTitle": "Comunidade",
+    "communityBody": "Os membros mantêm uma biblioteca com um status para cada item, montam listas, sugerem edições nos dados do catálogo e podem ver as alterações recentes de cada item.",
+    "apiTitle": "API pública",
+    "apiBody": "Uma API JSON somente leitura oferece o catálogo e as notas, com planos pagos e cotas.",
+    "apiLink": "Ler a documentação da API",
+    "openSourceTitle": "Código aberto",
+    "openSourceBody": "O código-fonte do site é público no GitHub.",
+    "openSourceLink": "Ver o código-fonte",
+    "contactTitle": "Contato",
+    "contactBody": "Dúvidas, correções e outros pedidos chegam à equipe pelo formulário de contato.",
+    "contactLink": "Fale conosco"
+  },
   "footer": {
+    "about": "Sobre",
     "terms": "Termos",
     "privacy": "Privacidade",
     "contact": "Contato",

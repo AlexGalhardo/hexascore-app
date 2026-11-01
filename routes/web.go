@@ -232,6 +232,7 @@ func Web(r *router.Router, app *vukem.App) error {
 		cmp.Or(app.Source.Get("ANDROID_PACKAGE"), "app.hexascore"),
 		app.Source.Get("ANDROID_CERT_SHA256"),
 	)).Name("wellknown.assetlinks")
+	r.Get("/about", controllers.About).Name("about")
 	r.Get("/terms", controllers.Legal("terms")).Name("terms")
 	r.Get("/policy", controllers.Legal("policy")).Name("policy")
 	// SDD 10 §7.8 and the Play listing name /legal/privacy; the policy page lives at /policy.
