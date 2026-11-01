@@ -8,3 +8,11 @@ design: each targetsSQL gets `AND (coalesce(cardinality($n::text[]), 0) = 0 OR <
 note: the Go filter in fetch.collect stays: steam, gog and wikipedia still have no SQL pushdown (out of this row), so removing it would break their qids runs. A comment there says so.
 changelog: Changed (qids runs no longer scan every target of tmdb, igdb, trailers and openlibrary).
 roadmap: no box (follow-up of P6.B review)
+
+## Review (especialista, 2026-11-01)
+verdict: APROVADO
+re-run: `go test -tags integration -p 1 ./tests/ingest -run 'TestConnectorTargetsPushQIDsIntoSQL|QIDs|Trailers|TMDB|IGDB|OpenLibrary'` → ok; unit tests of tmdb, igdb, trailers, openlibrary → ok; `golangci-lint run --timeout 15m -j 2 --build-tags integration ./internal/ingest/... ./tests/ingest/...` → 0 issues after merge (the two rowserrcheck findings on the branch base were already fixed on main); `golangci-lint fmt --diff` → clean
+trailers red observed by the reviewer: with main's trailers.go the subtest fails (`with qids [Q1 Q3] = [Q1 Q2 Q3]`, `qids never reached the SQL`, `after Q1 = [Q2 Q3]`), so the inferred red holds.
+checked: sql bound (`$n::text[]`, nil and empty mean no restriction), keyset/cursor/limit unchanged and LIMIT now applies after the qids filter (a limited qids run no longer loses targets to the Go filter), scope ok, the Go filter in fetch.collect stays for steam, gog and wikipedia
+gate on main after merge: go build ok; lint ok; targeted ingest tests ok; full integration suite left to the batch gate (host short on memory)
+PRONTO_PARA_MERGE agent/senior/FIX-ingest-qids-pushdown (merge f7f78a3c)
