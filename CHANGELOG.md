@@ -6,6 +6,51 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- **community:** `catalog.changed` reindexes the edited item or entity and refreshes its sitemap `lastmod` once per audit row; child sitemaps print `<lastmod>` (P4.B.2.2)
+- **community:** Approving a community edit applies it to the catalogue in one transaction: per-field audit rows, provenance `community`, API change feed rows, stale flags on competing suggestions and a per-target lock with one deadlock retry (P4.B.2.1)
+- **api:** `GET /api/v1/{type}/trending` and `GET /app/v1/{type}/trending` (top 10 over 30 days, ETag, 5-minute public cache) and the business-only `GET /api/v1/{type}/{id}/activity` with raw daily counts; app client and TypeScript and Python SDKs regenerated (P3.A.1.4, P6.C.3.2)
+- **catalog:** Hourly `ComputeTrending` job (rollup, top 10 per type over 30 days with prior fill, cache invalidation), 90-day snapshot prune, item rebuild on user ban and unban, trending metrics and Grafana alert A14 for a snapshot older than 3 h (P6.C.2.2)
+- **catalog:** Trending rollup that recomputes the weighted per-user daily activity (ratings, statuses, list adds, suggestions) for today and yesterday, idempotently, leaving views and search clicks alone (P6.C.1.3)
+- **docs:** Design round 1 in `docs/openpencil/`: three visual directions (v1 editorial, v2 noir, v3 paper), 19 frames each, `ROUND-1.md` with the comparison and WCAG contrast table, the `openpencil-design` skill and the design rule (DESIGN-round-1)
+- **admin:** Moderation queue at `/admin/moderation`, oldest first with keyset pages, filters (status, kind, domain, locale, field, author, assignee, age), ageing, competing, stale and unreachable badges, and claim/release (P4.B.1.2)
+- **admin:** Moderation detail page with the per-field diff, reject with reason and note, clone as new draft (admins) and bulk actions up to 50 ids with per-id results; approve answers 503 until the apply service lands (P4.B.1.3)
+- **catalog:** Item page views and `/app/v1` item reads (deduplicated per visitor and UTC day, at most 50 items per visitor, prefetch, partial reloads and bots excluded) and search clicks are counted in memory and flushed every minute and on shutdown into `item_activity_daily` (P6.C.1.2)
+- **mobile:** Login screen with two-factor (TOTP or backup code) and bot-challenge branches; device name from `expo-device`, editable (P5.A.3.3)
+- **mobile:** Google sign-in token flow (silent cancel, 2FA retry, `auth.errors.emailUnverifiedAtProvider` in en, pt-BR and es); the account picker waits on the Android OAuth client id (P5.A.3.4)
+- **mobile:** Token rotation on foreground (under 15 days left, at most once per 24 h, never two in flight), logout that always wipes locally, and the update-required screen with logout (P5.A.3.5)
+- **catalog:** `item_activity_daily` and `trending_snapshots` tables; merging items sums the source item's daily activity into the target (P6.C.1.1)
+- **mobile:** Token store in SecureStore (this device only) and session state machine (401 sign-out with data wipe, ban, unverified email, scheduled deletion); runtime dependencies approved in Q-B1 recorded in ADR 0019 (P5.A.3.2)
+- **admin:** Moderation gate abilities (`moderate`, `viewCatalogAudit`, `revertCatalog`, `lockCatalog`), the `community_trusted_moderators` flag (default off), the `moderator` role and the `/admin/moderation` page shell (P4.B.1.1)
+- **community:** "Suggest a new `<type>`" links on section listings and empty search results (FIX-community-create-ux)
+- **ui:** Anonymous catalogue HTML (home, listings, items, entities) is cached in process for 60 s, keyed by path, query, display cookies and, on unprefixed pages, `Accept-Language`, and sent with `Cache-Control: public, max-age=60, stale-while-revalidate=300`; the CSP nonce stays per request and session requests stay `private, no-store` (P2.H.3.5)
+- **lists:** List owners add items from the list edit page with a suggest box limited to the list type (P2.H.1.5)
+- **mobile:** Android API client wrapper with auth, version and locale headers, idempotency keys, problem-code mapping and minimum-version detection (P5.A.3.1)
+- **community:** `Community/SuggestEdit` page with draft save and restore, quota, locked-field reasons, "Suggest an edit" links on item, edition and entity pages, and `community.*` strings in en, pt-BR and es (P4.A.3.1c)
+- **community:** `/suggest/new/{domain}` page to propose a new record or report a duplicate (merge request), drafts only (P4.A.3.2)
+- **community:** Suggestion status page, My suggestions list, and submit and withdraw actions for the author; admins can view, others get 404 (P4.A.3.3)
+- **repo:** `scripts/ci/local.sh` runs every `ci.yml` job except e2e locally, in parallel, on a clean checkout of HEAD with isolated databases, ports and compose project; `qa/schemathesis/ci.sh` reads `DATABASE_URL` and works on Docker Desktop (QA-ci-local-script)
+- **community:** SuggestEdit edits the release date (with precision) and relation fields (genres, creators, organizations, franchise, platforms) as typed changes, with translated precision and role names (P4.A.3.1d)
+
+### Changed
+
+- **community:** The merge form picks both records with the search box instead of raw ids, and relation and merge diffs on the suggestion status page show names (FIX-community-create-ux)
+- **ui:** The library, public lists and profile ratings render shared shelf cards (cover, status, score); the library groups by status with counts (P2.H.1.4)
+
+### Fixed
+
+- **admin:** Moderators need confirmed 2FA to open `/admin` and fall under the admin session limits, like admins (FIX-moderator-2fa)
+- **community:** In-page community links and suggestion form posts keep the visitor's locale prefix (FIX-community-create-ux, QA-community-e2e)
+- **auth:** A no-JS form post past the proof-of-work threshold gets an HTML 428 page offering Google sign-in instead of raw problem JSON (FIX-nojs-428-page)
+- **ssr:** The supervisor restart test no longer fails on a wall-clock deadline under load (FIX-ssr-supervise-flake)
+- **mobile:** The login navigation test no longer hits the Jest timeout on a cold cache (FIX-mobile-login-test-timeout)
+- **api:** Community problem codes (`suggestion-*`, `field-locked`, `stale-before`, `invalid-transition`, `community-submissions-closed`, `validation`) resolve at `/problems/{code}` and are documented in the errors page (FIX-community-problem-codes)
+- **auth:** Login and signup forms post their named fields, the signed form token and `remember` without JavaScript (FIX-nojs-auth-post)
+- **mobile:** The catalogue copy script emits Biome-formatted JSON; committed copies refreshed (P5.A.1.1)
+- **mobile:** The navigation test renders each route in its own test and no longer hits the Jest timeout under load (FIX-mobile-nav-test-timeout)
+- **tests:** `TestReleaseBursts` no longer fails when the Postgres container clock runs ahead of the host (FIX-scoring-burst-clock)
+
 ## [0.12.2] - 2026-10-31
 
 ### Fixed
