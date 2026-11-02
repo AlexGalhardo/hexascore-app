@@ -6,7 +6,7 @@ The audit (`docs/audit/00-project-map.md`, `01-web-report.md`, `02-technical-rev
 
 ### P8.A Stabilise (V1-A)
 
-- [x] **P8.A.1** Render cache keyed by locale prefix (B-001 code part): commit 695872f5, test `TestRenderCacheKeysStrippedLocalePrefix`. Status (2026-11-02): deploy and production check pending (B-001).
+- [x] **P8.A.1** Render cache keyed by locale prefix (B-001 code part): commit 695872f5, test `TestRenderCacheKeysStrippedLocalePrefix`. Status (2026-11-02): deployed with 92476b15 (pushed after the local gate); production check: `/pt-br/games/burgertime` answers `lang="pt-BR"` cold and with `x-render-cache: HIT`, `/es/...` answers `lang="es"` (B-001 done).
 - [x] **P8.A.2** Docker build context trimmed, `local.properties` ignored: commit b965c5d5.
 - [ ] **P8.A.3** Nightly jobs with explicit timeouts and a resumable `RecomputeAll` (B-002, B-010). Acceptance: staging log line `recompute scores items=<all>`; `queue:failed` empty the next morning.
 - [x] **P8.A.4** LGPD erasure of scoring and search rows (B-011). Acceptance: `TestSecurity_A03_PurgeRemovesScoringRows` green. Status (2026-11-02): done in local `main` 6bdaa2b8; the user FKs are validated in a separate NoTransaction migration; `rating_flags` stay with the kept ratings.
