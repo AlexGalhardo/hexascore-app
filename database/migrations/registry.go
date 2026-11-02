@@ -102,5 +102,7 @@ func All() []schema.Migration {
 		m20261102230000CreateFieldReviews(),
 		m20261102230100AddFieldReviewsOpenIdx(),
 		m20261102210000CreateIngestHostState(),
+		m20261102220000CreateIngestJobKeys(),
+		m20261102220100AddIngestJobKeysJobIdx(),
 	}
 }

@@ -59,6 +59,8 @@ Retention: `field_reviews` rows are deleted 365 days after they are resolved (`r
 
 Retention: `ingest_host_state` holds one row per key (`web`, `worker`, `host:<name>`), upserted in place, so it stays at a few dozen rows; no prune task needed, no user data.
 
+Retention: `ingest_job_keys` holds one row per automatic ingest dispatch and day; `run.Prune` (ingest prune task) deletes rows older than 7 days; no user data.
+
 Retention of the operational tables without a prune of their own (audit T-17): job `ops.prune_retention` daily at 04:55, batches of 5,000 rows, windows in `config/retention.go`, each overridable with `RETENTION_<TABLE>_DAYS`.
 
 | Table | Kept | Column |
