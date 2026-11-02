@@ -46,3 +46,6 @@ vukem-feedback.md
 questions-to-dev.md
 architect-feedback-and-roadmap.md
 prompt.md
+
+# Android SDK paths of the local machine
+local.properties

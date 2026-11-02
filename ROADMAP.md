@@ -18,21 +18,21 @@ Conventions:
 | --- | --- |
 | Current phase | P0, P1 done; P2–P7 code delivered except the rest of P6.B.3.1; 300 of 343 boxes done, 43 open, almost all owner gates (store, device tests, flags on in production, 30-day gates, decisions Q-A5/Q-A10/Q-A11/Q-A12). Out-of-plan owner round of 27 UI/route/infra items delivered 2026-11-01 (see [architect brief](docs/review/2026-11-01-architect-brief.md)) |
 | Last release | GitHub release series rebuilt 2026-11-02 as v0.1.0–v0.37.0 (sideload APK on v0.37.0), then v0.38.0 on 2026-11-02; production on Railway; vukem v0.37.0 adopted |
-| Next microtask | Land the owner round (direct push under Q-A21) with the one-time history rewrite, then `covers:rekey` in production; code-only: rest of P6.B.3.1; owner gates as listed in each box's dated status line |
+| Next microtask | Architect audit of 2026-11-02 (`docs/audit/`): milestone V1-A of [docs/ROADMAP-V1.md](docs/ROADMAP-V1.md), tasks in [docs/BACKLOG.md](docs/BACKLOG.md) (B-001 deploy the render-cache locale fix, B-002 nightly recompute timeout); code-only remainder of P6.B.3.1; owner gates as listed in the dated status line of each box |
 | v1.0.0 definition | parity with the legacy app and a successful cutover (ADR 0013), plus P2.H done: the audit of 2026-10-31 found the UI at wireframe level, which is not a public launch |
-| Updated | 2026-11-01 |
+| Updated | 2026-11-02 (audit) |
 
 ## Resuming work (read first in a new session)
 
-The work runs through [PROMPT-WORKERS.md](PROMPT-WORKERS.md) (system prompt of the team) and [`.orchestration/`](.orchestration/) (queue, reports, handoffs; versioned in git). Parallel workers need the owner's explicit yes in each new session (global CLAUDE.md rule).
+The work runs through [PROMPT-WORKERS.md](PROMPT-WORKERS.md) (system prompt of the team, local and gitignored) and [`.orchestration/`](.orchestration/) (board, tickets, reports, handoffs; local working state). Parallel workers need the owner's explicit yes in each new session (global CLAUDE.md rule). Priorities come from [docs/ROADMAP-V1.md](docs/ROADMAP-V1.md) and [docs/BACKLOG.md](docs/BACKLOG.md); this file's phase P8 mirrors them.
 
-1. Read [`.orchestration/handoff/orchestrator.md`](.orchestration/handoff/orchestrator.md) (state at pause), then [docs/orchestration/QUESTIONS.md](docs/orchestration/QUESTIONS.md) (owner gates and answers) and `C:\dev\hexascore-app\developer-manual-todos.md` (owner checklist, outside the repo).
-2. `git pull`, `docker compose up -d --wait`, and run the gate once: `go build ./...`, `golangci-lint run --allow-parallel-runners --build-tags integration ./...`, `bun install && bun run lint && bun run typecheck && bun run test`, `TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable go test -tags integration -parallel 4 -timeout 30m ./...`.
-3. Fill `.orchestration/queue/TASKS.md` from the first unchecked microtasks that have no open owner gate (P2.H first), then launch the four workers with the briefs in `.orchestration/briefs/`. Workers stay alive and take the next task from the queue; relaunch only after a context-limit stop.
-4. Orchestrator loop: when the specialist marks a task `PRONTO_PARA_MERGE`, merge the branch with `git merge --no-ff`, run the gate, tick the microtask, renumber `VF-NEW-*` entries (next free: VF-063). `main` is pushed only when the owner asks (the push deploys Railway production).
-5. Releases: `scripts/release.sh vX.Y.Z` on a clean tree (git-cliff), local container smoke test (`hexascore:predeploy` on a fresh database, then `/up?checks=1`), `git push origin main && git push origin vX.Y.Z`; the Release workflow publishes the GitHub release.
+1. Orchestrator: follow `PROMPT-WORKERS.md` §0 (model, parallel yes, reads, services, gate, board). Read [`.orchestration/handoff/orchestrator.md`](.orchestration/handoff/orchestrator.md), [docs/OPEN-QUESTIONS.md](docs/OPEN-QUESTIONS.md) (all 14 answered on 2026-11-02) and [docs/orchestration/QUESTIONS.md](docs/orchestration/QUESTIONS.md) (older gates).
+2. `git pull`, `docker compose up -d --wait`, fast gate: `go build ./...`, `golangci-lint run -j 2 --allow-parallel-runners ./...`, `bun install && bun run lint && bun run typecheck && bun run test`. The full gate (`scripts/ci/local.sh`) runs once per batch and before any push to `main`.
+3. The board `.orchestration/queue/TASKS.md` is pre-filled with batch 1 (milestone V1-A, tickets in `.orchestration/queue/tasks/`). Launch the senior and the intern in one message (`run_in_background: true`) with `briefs/common.md` plus their role brief; they stay in standby and take rows until `STOP`.
+4. Orchestrator loop (`PROMPT-WORKERS.md` §9): review every `review` row with the §3.4 checklist, fix small things yourself, merge `ready` rows with `git merge --no-ff` and the message `chore(scope): merge <branch> into main`, run the fast gate, tick the P8 box and the backlog row, move the row to `.orchestration/done/`. Next free framework feedback id: `VF-079`.
+5. First push of this cycle: `scripts/ci/local.sh` green on `main` with the audit branch merged, then `git push origin main` (deploys production; B-001 verification follows). Releases only on the owner's request (`scripts/release.sh vX.Y.Z`, `v0.39.0` closes V1-A).
 
-Open owner items: real Stripe values on Railway service `app` (Q-H31); the 39 owner-gated P2 boxes (Railway, buckets, DNS, Telegram, secrets, spend, real data, cutover) in `developer-manual-todos.md`; `adotar VF-001` (passkeys); the D-06 amendment for the social layer (Phase 7, question Q-A1 in QUESTIONS.md).
+Open owner items: `TELEGRAM_OPS_CHAT_ID` on Railway (`app` and the future `worker`; local `.env` done 2026-11-02), affiliate programme enrolment (OQ-08), the 38 Temp worktrees (`docs/audit/CLEANUP.md` §E), staging TLS certificate check, older gates in `docs/orchestration/QUESTIONS.md` (Q-A5 social flag, store accounts, device tests).
 
 ## Phase map
 
@@ -86,6 +86,43 @@ Microtasks for each group are in the phase sections below.
 | P7.A | Follows and activity feed: `follows` table, follower counts, activity events, `/feed` page, privacy rules | SDD 14 (new §12), SDD 08 | P2.G, D-06 amendment |
 | P7.B | Reviews, comments and reactions: text review per rating, threaded comments, reactions, reports and moderation for all three | SDD 14, SDD 04, SDD 13 | P7.A, P4.B |
 | P7.C | Social discovery: profile shelves with covers, "friends rated", list collaboration, share cards | SDD 09, SDD 08 | P7.A, P6.C |
+
+## Phase 8: architect audit 2026-11-02 (path to the public v1.0)
+
+The audit (`docs/audit/00-project-map.md`, `01-web-report.md`, `02-technical-review.md`, `CLEANUP.md`) replaced the ad-hoc owner rounds with a milestone plan in [docs/ROADMAP-V1.md](docs/ROADMAP-V1.md) and a prioritised backlog in [docs/BACKLOG.md](docs/BACKLOG.md); RFCs for the catalogue worker, trending and offers live in `docs/rfcs/`; ADR 0024 defers Redis and ADR 0025 rejects MongoDB. The team protocol is `PROMPT-WORKERS.md` (orchestrator reviews and merges; senior and intern in standby). Boxes below mirror the backlog; tick them there first.
+
+### P8.A Stabilise (V1-A)
+
+- [x] **P8.A.1** Render cache keyed by locale prefix (B-001 code part): commit 695872f5, test `TestRenderCacheKeysStrippedLocalePrefix`. Status (2026-11-02): deploy and production check pending (B-001).
+- [x] **P8.A.2** Docker build context trimmed, `local.properties` ignored: commit b965c5d5.
+- [ ] **P8.A.3** Nightly jobs with explicit timeouts and a resumable `RecomputeAll` (B-002, B-010). Acceptance: staging log line `recompute scores items=<all>`; `queue:failed` empty the next morning.
+- [ ] **P8.A.4** LGPD erasure of scoring and search rows (B-011). Acceptance: `TestSecurity_A03_PurgeRemovesScoringRows` green.
+- [ ] **P8.A.5** e2e helper fixed and `desktop-en` green; CI e2e on release candidates (B-012, OQ-14).
+- [ ] **P8.A.6** Retention prunes and `item_status` index (B-024, B-025); dated dependency ignores (B-026); IGDB token cache (B-027).
+- [ ] **P8.A.7** Cleanup execution per `docs/audit/CLEANUP.md` after the backup tag (B-033); board rewrite (B-034). Owner gates: OQ-10, OQ-11.
+- [ ] **P8.A.8** Owner: pre-deploy command `hexascore:predeploy`, staging DNS (OQ-01, OQ-02).
+
+### P8.B Launch polish (V1-B)
+
+- [ ] **P8.B.1** Mobile item page order, 404 pages, `og:image`, server-rendered search results (B-020..B-023, OQ-06).
+- [ ] **P8.B.2** Copy and SEO details, genre labels in pt-BR/es, storage health probe, alert code reconciliation (B-040..B-044).
+- [ ] **P8.B.3** Documentation to English (B-046, intern): `questions-to-dev.md`, `developer-manual-todos.md`, `cloudflare.md` at the workspace root and the Portuguese answers in `docs/orchestration/QUESTIONS.md`; same facts, links intact.
+
+### P8.C Catalogue worker (V1-C, RFC-001)
+
+- [ ] **P8.C.1** Worker service on Railway with the pressure signal and persisted breaker state (CW-01, CW-02). Owner gate: OQ-03.
+- [ ] **P8.C.2** Idempotency keys, jittered retries, refresh-existing job, provenance v2 and field reviews (CW-03..CW-05).
+- [ ] **P8.C.3** Entity resolution rules, cover hashing and rights, 30-minute Telegram digest (CW-06..CW-08). Owner gate: OQ-04.
+- [ ] **P8.C.4** Discovery v2, LLM normaliser behind its budget, storage measures of ADR 0025, SDD 06 update (CW-09..CW-14). Owner gate: OQ-05.
+
+### P8.D Trending and offers (V1-D, RFC-002 and RFC-003)
+
+- [ ] **P8.D.1** Trending v2 score, entry/exit/cooldown/diversity, overrides, home reads snapshots (TR-01..TR-06). Owner gate: OQ-07.
+- [ ] **P8.D.2** Offers model, derivation stages, TMDB providers with attributions, verification job, item page section with disclosure (OF-01..OF-07). Owner gates: OQ-08, OQ-09.
+
+### P8.E v1.0.0
+
+- [ ] **P8.E.1** 30 green days of nightly jobs and worker digests, error budget met, legacy routes and tables removed (B-045), docs synced, tag `v1.0.0`.
 
 ## Phase 0: framework spike
 

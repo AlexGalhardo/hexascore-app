@@ -7,6 +7,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/AlexGalhardo/vukem/i18n"
 )
 
 const (
@@ -116,6 +118,10 @@ func newRenderCache(
 // (theme, consent) or the redirect decision (locale). On an unprefixed path
 // Accept-Language also picks the redirect (SDD 09 FR-09-3), so it is part of
 // the key there; this middleware runs before that redirect.
+//
+// vukem's i18n.StripPathPrefix runs earlier in the server stack and rewrites
+// "/pt-br/games" to "/games", keeping the prefix only in the context, so the
+// key must read it back from there or every locale of a path shares one entry.
 func pageKey(r *http.Request, localePrefixes map[string]string) (string, bool) {
 	var b strings.Builder
 	b.WriteString(r.URL.Path)
@@ -123,7 +129,16 @@ func pageKey(r *http.Request, localePrefixes map[string]string) (string, bool) {
 	b.WriteString(r.URL.RawQuery)
 
 	first, _, _ := strings.Cut(strings.TrimPrefix(r.URL.Path, "/"), "/")
-	if _, prefixed := localePrefixes[first]; !prefixed {
+	_, prefixed := localePrefixes[first]
+
+	if p := i18n.PathPrefix(r.Context()); p != "" {
+		prefixed = true
+
+		b.WriteString("|p=")
+		b.WriteString(p)
+	}
+
+	if !prefixed {
 		al := r.Header.Get("Accept-Language")
 		if len(al) > renderCacheMaxAcceptLanguage {
 			return "", false
