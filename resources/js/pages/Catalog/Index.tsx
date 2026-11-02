@@ -43,12 +43,12 @@ export default function Index({ type, items, filters, facets, pagination, total 
 			{seo && <PagerHead url={url} pagination={pagination} origin={seo.canonical} />}
 			{/* Title alone, the result count on the right (design v1, round 2 item 11). */}
 			<div className="flex items-end gap-6 pb-6">
-				<h1 className="font-display text-5xl leading-none font-bold tracking-[-0.02em] md:text-[88px]">
+				<h1 className="font-display text-4xl leading-none font-bold tracking-[-0.02em] md:text-6xl">
 					{title}
 				</h1>
 				{total !== undefined && (
 					<p className="ml-auto hidden flex-col items-end md:flex">
-						<span className="text-5xl leading-none font-bold tabular-nums">
+						<span className="text-4xl leading-none font-bold tabular-nums">
 							{new Intl.NumberFormat(locale).format(total)}
 						</span>
 						<span className="mt-1 text-[13px] text-muted">
