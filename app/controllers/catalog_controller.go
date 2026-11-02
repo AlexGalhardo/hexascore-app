@@ -110,17 +110,17 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 
 		// Facets ride the first response. A follow-up reload used to widen the
 		// selects after paint and shift the list (CLS on /games).
-		genres, platforms, err := catalog.Facets(c.Context(), db, typ, nil)
+		genres, platforms, err := catalog.Facets(c.Context(), db, typ, i18n.Locale(c.Context()), nil)
 		if err != nil {
 			return err
 		}
 		facets := map[string]any{"genres": genres, "platforms": platforms}
 		if typ == "game" {
-			if facets["modes"], err = catalog.FacetsOf(c.Context(), db, typ, "game_mode", nil); err != nil {
+			if facets["modes"], err = catalog.FacetsOf(c.Context(), db, typ, "game_mode", i18n.Locale(c.Context()), nil); err != nil {
 				return err
 			}
 		}
-		active, err := catalog.ActiveEntityFilters(c.Context(), db, params.Entities)
+		active, err := catalog.ActiveEntityFilters(c.Context(), db, params.Entities, i18n.Locale(c.Context()))
 		if err != nil {
 			return err
 		}

@@ -90,8 +90,8 @@ export function ListingBody({
 	const filter = { sort: SORTS[applied.sort], ...(applied.genre ? { genre: applied.genre } : {}) };
 
 	const genres = useQuery({
-		queryKey: queryKeys.genres(type),
-		queryFn: () => read[GENRE_METHOD[type]](),
+		queryKey: queryKeys.genres(type, locale),
+		queryFn: () => read[GENRE_METHOD[type]]({ query: { locale } }),
 	});
 	// Pages are cached in order; page n needs page n-1's cursor, so Previous never refetches.
 	const listing = useInfiniteQuery({
@@ -182,11 +182,10 @@ export function ListingBody({
 					selected={draft.genre === undefined}
 					onPress={() => setDraft({ ...draft, genre: undefined })}
 				/>
-				{/* shortcut: the genres endpoint sends slugs only; show a name once the API has one. */}
 				{(genres.data?.data ?? []).map((g) => (
 					<Chip
 						key={g.slug}
-						label={g.slug}
+						label={g.name ?? g.slug}
 						selected={draft.genre === g.slug}
 						onPress={() => setDraft({ ...draft, genre: g.slug })}
 					/>

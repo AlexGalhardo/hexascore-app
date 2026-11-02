@@ -114,6 +114,7 @@ export type FieldSource = {
 
 export type GenreJson = {
     count?: number;
+    name?: string;
     slug: string;
 };
 
@@ -253,7 +254,12 @@ export type WebhookTestResult = {
 export type ListBookGenresData = {
     body?: never;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * en, pt-BR or es
+         */
+        locale?: string;
+    };
     url: '/books/genres';
 };
 
@@ -262,6 +268,10 @@ export type ListBookGenresErrors = {
      * Error (RFC 9457 problem details)
      */
     401: Problem;
+    /**
+     * Validation failed; errors maps each field to its messages
+     */
+    422: Problem;
     /**
      * Error (RFC 9457 problem details)
      */
@@ -669,7 +679,12 @@ export type GetFranchiseResponse = GetFranchiseResponses[keyof GetFranchiseRespo
 export type ListGameGenresData = {
     body?: never;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * en, pt-BR or es
+         */
+        locale?: string;
+    };
     url: '/games/genres';
 };
 
@@ -678,6 +693,10 @@ export type ListGameGenresErrors = {
      * Error (RFC 9457 problem details)
      */
     401: Problem;
+    /**
+     * Validation failed; errors maps each field to its messages
+     */
+    422: Problem;
     /**
      * Error (RFC 9457 problem details)
      */
@@ -855,7 +874,12 @@ export type GetUsageResponse = GetUsageResponses[keyof GetUsageResponses];
 export type ListMovieGenresData = {
     body?: never;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * en, pt-BR or es
+         */
+        locale?: string;
+    };
     url: '/movies/genres';
 };
 
@@ -864,6 +888,10 @@ export type ListMovieGenresErrors = {
      * Error (RFC 9457 problem details)
      */
     401: Problem;
+    /**
+     * Validation failed; errors maps each field to its messages
+     */
+    422: Problem;
     /**
      * Error (RFC 9457 problem details)
      */
@@ -1194,7 +1222,12 @@ export type SearchEntitiesResponse = SearchEntitiesResponses[keyof SearchEntitie
 export type ListSeriesGenresData = {
     body?: never;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * en, pt-BR or es
+         */
+        locale?: string;
+    };
     url: '/series/genres';
 };
 
@@ -1203,6 +1236,10 @@ export type ListSeriesGenresErrors = {
      * Error (RFC 9457 problem details)
      */
     401: Problem;
+    /**
+     * Validation failed; errors maps each field to its messages
+     */
+    422: Problem;
     /**
      * Error (RFC 9457 problem details)
      */

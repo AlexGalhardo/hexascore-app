@@ -17,16 +17,20 @@ class GenreJSON:
     Attributes:
         slug (str):
         count (int | Unset):
+        name (str | Unset):
     """
 
     slug: str
     count: int | Unset = UNSET
+    name: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         slug = self.slug
 
         count = self.count
+
+        name = self.name
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -37,6 +41,8 @@ class GenreJSON:
         )
         if count is not UNSET:
             field_dict["count"] = count
+        if name is not UNSET:
+            field_dict["name"] = name
 
         return field_dict
 
@@ -47,9 +53,12 @@ class GenreJSON:
 
         count = d.pop("count", UNSET)
 
+        name = d.pop("name", UNSET)
+
         genre_json = cls(
             slug=slug,
             count=count,
+            name=name,
         )
 
         genre_json.additional_properties = d

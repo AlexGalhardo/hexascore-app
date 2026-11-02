@@ -31,5 +31,6 @@ func Commands() []vukem.Command {
 		console.IngestBootstrap(),
 		console.IngestBackfillEditions(),
 		console.CoversRekey(),
+		console.GenresCanonicalize(),
 	}
 }

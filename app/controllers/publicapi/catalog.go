@@ -22,9 +22,11 @@ type TypeInput struct {
 	Type string `json:"type"`
 }
 
-// GenreJSON is one genre with its public item count (legacy parity).
+// GenreJSON is one genre with its public item count (legacy parity). Name is the canonical genre's translated name
+// (owner 2026-11-02); it is omitted for a source genre the canonicalize command has not replaced yet.
 type GenreJSON struct {
 	Slug  string `json:"slug"  validate:"required"`
+	Name  string `json:"name,omitempty"`
 	Count int    `json:"count"`
 }
 
@@ -33,19 +35,29 @@ type GenreListJSON struct {
 	Data []GenreJSON `json:"data"`
 }
 
-// ListGenres is listGenres for one type: GET /api/v1/{games,movies,series,books}/genres. Genre slugs are HexaScore
-// identifiers; names stay out because default_name carries no source here. The type is part of the path
-// literal because "/{type}/genres" overlaps "/entities/{id}" in the ServeMux.
-func (h *Controller) ListGenres(section string) func(*web.Ctx, struct{}) (GenreListJSON, error) {
-	return func(c *web.Ctx, _ struct{}) (GenreListJSON, error) { return h.genres(c, typeOf[section]) }
+// GenreInput is the listGenres query.
+type GenreInput struct {
+	Locale string `json:"locale" doc:"en, pt-BR or es"`
 }
 
-func (h *Controller) genres(c *web.Ctx, typ string) (GenreListJSON, error) {
-	if err := checkQuery(c); err != nil {
+// ListGenres is listGenres for one type: GET /api/v1/{games,movies,series,books}/genres. The slug is the canonical
+// genre code and the name is HexaScore's own, in the requested locale. The type is part of the path literal because
+// "/{type}/genres" overlaps "/entities/{id}" in the ServeMux.
+func (h *Controller) ListGenres(section string) func(*web.Ctx, GenreInput) (GenreListJSON, error) {
+	return func(c *web.Ctx, in GenreInput) (GenreListJSON, error) { return h.genres(c, typeOf[section], in) }
+}
+
+func (h *Controller) genres(c *web.Ctx, typ string, in GenreInput) (GenreListJSON, error) {
+	if err := checkQuery(c, "locale"); err != nil {
 		return GenreListJSON{}, err
 	}
 
-	genres, _, err := catalog.Facets(c.Context(), h.DB, typ, h.Policy.RelationSources())
+	locale, err := localeOf(in.Locale)
+	if err != nil {
+		return GenreListJSON{}, err
+	}
+
+	genres, _, err := catalog.Facets(c.Context(), h.DB, typ, locale, h.Policy.RelationSources())
 	if err != nil {
 		return GenreListJSON{}, err
 	}
@@ -53,6 +65,9 @@ func (h *Controller) genres(c *web.Ctx, typ string) (GenreListJSON, error) {
 	out := GenreListJSON{Data: make([]GenreJSON, len(genres))}
 	for i, g := range genres {
 		out.Data[i] = GenreJSON{Slug: g.Slug, Count: g.Count}
+		if g.Canonical {
+			out.Data[i].Name = g.Name
+		}
 	}
 
 	return out, NotModified(c, out)

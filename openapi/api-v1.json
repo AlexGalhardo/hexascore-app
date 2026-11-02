@@ -18,6 +18,16 @@
         "tags": [
           "books"
         ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -31,6 +41,9 @@
           },
           "401": {
             "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
           },
           "default": {
             "$ref": "#/components/responses/Problem"
@@ -581,6 +594,16 @@
         "tags": [
           "games"
         ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -594,6 +617,9 @@
           },
           "401": {
             "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
           },
           "default": {
             "$ref": "#/components/responses/Problem"
@@ -817,6 +843,16 @@
         "tags": [
           "movies"
         ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -830,6 +866,9 @@
           },
           "401": {
             "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
           },
           "default": {
             "$ref": "#/components/responses/Problem"
@@ -1276,6 +1315,16 @@
         "tags": [
           "series"
         ],
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "en, pt-BR or es",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1289,6 +1338,9 @@
           },
           "401": {
             "$ref": "#/components/responses/Problem"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
           },
           "default": {
             "$ref": "#/components/responses/Problem"
@@ -2187,6 +2239,9 @@
         "properties": {
           "count": {
             "type": "integer"
+          },
+          "name": {
+            "type": "string"
           },
           "slug": {
             "minLength": 1,

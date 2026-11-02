@@ -40,34 +40,38 @@ type Facet struct {
 	Slug  string `json:"slug"`
 	Name  string `json:"name"`
 	Count int    `json:"count"`
+	// Canonical marks a HexaScore genre (owner 2026-11-02): its translated name is ours, so the API may show it.
+	Canonical bool `json:"-"`
 }
 
-// Facets lists the genres and platforms used by public items of typ, most used first; non-nil sources keeps
-// only relations from those sources (API).
-func Facets(ctx context.Context, db Querier, typ string, sources []string) (genres, platforms []Facet, err error) {
-	if genres, err = FacetsOf(ctx, db, typ, "genre", sources); err != nil {
+// Facets lists the genres and platforms used by public items of typ, most used first, named in locale; non-nil
+// sources keeps only relations from those sources (API).
+func Facets(ctx context.Context, db Querier, typ, locale string, sources []string) (genres, platforms []Facet, err error) {
+	if genres, err = FacetsOf(ctx, db, typ, "genre", locale, sources); err != nil {
 		return nil, nil, err
 	}
-	platforms, err = FacetsOf(ctx, db, typ, "platform", sources)
+	platforms, err = FacetsOf(ctx, db, typ, "platform", locale, sources)
 
 	return genres, platforms, err
 }
 
 // FacetsOf lists the entities of kind used by public items of typ, most used first (Facets per kind; also the
 // game modes select of /games, owner 2026-11-02).
-func FacetsOf(ctx context.Context, db Querier, typ, kind string, sources []string) ([]Facet, error) {
+func FacetsOf(ctx context.Context, db Querier, typ, kind, locale string, sources []string) ([]Facet, error) {
 	var srcArray any // NULL = every source (site)
 	if sources != nil {
 		srcArray = "{" + strings.Join(sources, ",") + "}"
 	}
-	rows, err := db.QueryContext(ctx, `SELECT e.slug, e.default_name, count(*)
+	rows, err := db.QueryContext(ctx, `SELECT e.slug, coalesce(t.name, e.default_name), count(*),
+  e.provenance->>'canonical' IS NOT DISTINCT FROM e.kind
 FROM entities e
 JOIN item_entities ie ON ie.entity_id = e.id AND ie.role = e.kind AND ($3::text[] IS NULL OR ie.source = ANY($3))
 JOIN items i ON i.id = ie.item_id AND i.type = $1 AND i.visibility = 'public'
+LEFT JOIN entity_translations t ON t.entity_id = e.id AND t.locale = $4
 WHERE e.kind = $2
-GROUP BY e.slug, e.default_name
-ORDER BY count(*) DESC, e.default_name
-LIMIT 200`, typ, kind, srcArray)
+GROUP BY e.slug, e.default_name, e.provenance, e.kind, t.name
+ORDER BY count(*) DESC, 2
+LIMIT 200`, typ, kind, srcArray, locale)
 	if err != nil {
 		return nil, fmt.Errorf("facets %s: %w", kind, err)
 	}
@@ -76,7 +80,7 @@ LIMIT 200`, typ, kind, srcArray)
 	out := []Facet{}
 	for rows.Next() {
 		var f Facet
-		if err := rows.Scan(&f.Slug, &f.Name, &f.Count); err != nil {
+		if err := rows.Scan(&f.Slug, &f.Name, &f.Count, &f.Canonical); err != nil {
 			return nil, fmt.Errorf("scan facet: %w", err)
 		}
 		out = append(out, f)
@@ -94,7 +98,7 @@ type ActiveFilter struct {
 
 // ActiveEntityFilters names the entity filters in force (kind -> slug or code); an unknown key keeps its value as
 // the name, so the chip still says what filters the list.
-func ActiveEntityFilters(ctx context.Context, db Querier, filters map[string]string) ([]ActiveFilter, error) {
+func ActiveEntityFilters(ctx context.Context, db Querier, filters map[string]string, locale string) ([]ActiveFilter, error) {
 	out := []ActiveFilter{}
 	for _, kind := range slices.Sorted(maps.Keys(filters)) {
 		if kind == "game_mode" {
@@ -106,8 +110,9 @@ func ActiveEntityFilters(ctx context.Context, db Querier, filters map[string]str
 			key, v = "code = upper($2)", strings.ToUpper(v)
 		}
 		name := v
-		err := db.QueryRowContext(ctx, `SELECT default_name FROM entities WHERE kind = $1 AND `+key+` LIMIT 1`, kind, v).
-			Scan(&name)
+		err := db.QueryRowContext(ctx, `SELECT coalesce(t.name, e.default_name) FROM entities e
+LEFT JOIN entity_translations t ON t.entity_id = e.id AND t.locale = $3
+WHERE e.kind = $1 AND e.`+key+` LIMIT 1`, kind, v, locale).Scan(&name)
 		if err != nil && !errors.Is(err, sql.ErrNoRows) {
 			return nil, fmt.Errorf("active filter %s: %w", kind, err)
 		}

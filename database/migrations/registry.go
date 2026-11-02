@@ -94,5 +94,6 @@ func All() []schema.Migration {
 		m20261102090000AddIndexNowCursor(),
 		m20261102120000CreateErrorDigestDaily(),
 		m20261102130000AddTimeToBeatSpeedrun(),
+		m20261102170000CreateItemGenreSources(),
 	}
 }

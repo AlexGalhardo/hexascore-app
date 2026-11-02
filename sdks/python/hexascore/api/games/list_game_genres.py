@@ -6,14 +6,24 @@ import httpx
 from ...client import AuthenticatedClient, Client
 from ...models.genre_list_json import GenreListJSON
 from ...models.problem import Problem
-from ...types import Response
+from ...types import UNSET, Response, Unset
 
 
-def _get_kwargs() -> dict[str, Any]:
+def _get_kwargs(
+    *,
+    locale: str | Unset = UNSET,
+) -> dict[str, Any]:
+
+    params: dict[str, Any] = {}
+
+    params["locale"] = locale
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     _kwargs: dict[str, Any] = {
         "method": "get",
         "url": "/games/genres",
+        "params": params,
     }
 
     return _kwargs
@@ -29,6 +39,11 @@ def _parse_response(*, client: AuthenticatedClient | Client, response: httpx.Res
         response_401 = Problem.from_dict(response.json())
 
         return response_401
+
+    if response.status_code == 422:
+        response_422 = Problem.from_dict(response.json())
+
+        return response_422
 
     response_default = Problem.from_dict(response.json())
 
@@ -49,10 +64,14 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
+    locale: str | Unset = UNSET,
 ) -> Response[GenreListJSON | Problem]:
     """List game genres
 
      Lists the game genres, for filtering the game listing.
+
+    Args:
+        locale (str | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -62,7 +81,9 @@ def sync_detailed(
         Response[GenreListJSON | Problem]
     """
 
-    kwargs = _get_kwargs()
+    kwargs = _get_kwargs(
+        locale=locale,
+    )
 
     response = client.get_httpx_client().request(
         **kwargs,
@@ -74,10 +95,14 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
+    locale: str | Unset = UNSET,
 ) -> GenreListJSON | Problem | None:
     """List game genres
 
      Lists the game genres, for filtering the game listing.
+
+    Args:
+        locale (str | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -89,16 +114,21 @@ def sync(
 
     return sync_detailed(
         client=client,
+        locale=locale,
     ).parsed
 
 
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
+    locale: str | Unset = UNSET,
 ) -> Response[GenreListJSON | Problem]:
     """List game genres
 
      Lists the game genres, for filtering the game listing.
+
+    Args:
+        locale (str | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -108,7 +138,9 @@ async def asyncio_detailed(
         Response[GenreListJSON | Problem]
     """
 
-    kwargs = _get_kwargs()
+    kwargs = _get_kwargs(
+        locale=locale,
+    )
 
     response = await client.get_async_httpx_client().request(**kwargs)
 
@@ -118,10 +150,14 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
+    locale: str | Unset = UNSET,
 ) -> GenreListJSON | Problem | None:
     """List game genres
 
      Lists the game genres, for filtering the game listing.
+
+    Args:
+        locale (str | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -134,5 +170,6 @@ async def asyncio(
     return (
         await asyncio_detailed(
             client=client,
+            locale=locale,
         )
     ).parsed
