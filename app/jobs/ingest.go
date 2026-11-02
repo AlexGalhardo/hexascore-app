@@ -231,7 +231,10 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		// shortcut: calls_today is flushed when a run ends, transitions are saved at once; upgrade to a ticker if
 		// the worker runs for days without a run ending.
 		After: func(ctx context.Context, id int64) error {
-			_ = client.Flush(ctx)
+			// A failed flush loses only today's call counts; the run's outcome must still advance.
+			if err := client.Flush(ctx); err != nil {
+				app.Log.WarnContext(ctx, "ingest: flushing host state failed", "error", err)
+			}
 
 			return ingest.Advance(ctx, db, q, id)
 		},
