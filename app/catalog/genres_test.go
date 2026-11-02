@@ -88,10 +88,19 @@ func TestGenreFor(t *testing.T) {
 
 	// Labels that fit no canonical genre stay hidden.
 	for _, tc := range []struct{ typ, label string }{
-		{"movie", "flashback film"}, {"movie", "film"}, {"movie", "epic film"}, {"game", "video game"}, {"book", ""},
+		{"movie", "flashback film"},
+		{"movie", "film"},
+		{"movie", "epic film"},
+		{"game", "video game"},
+		{"book", ""},
 		// Formats and production labels, not genres.
-		{"movie", "silent film"}, {"movie", "independent film"}, {"movie", "art film"}, {"movie", "propaganda film"},
-		{"series", "anthology series"}, {"game", "crossover fiction"}, {"game", "casual game"},
+		{"movie", "silent film"},
+		{"movie", "independent film"},
+		{"movie", "art film"},
+		{"movie", "propaganda film"},
+		{"series", "anthology series"},
+		{"game", "crossover fiction"},
+		{"game", "casual game"},
 	} {
 		if code, ok := GenreFor(tc.typ, tc.label); ok {
 			t.Errorf("GenreFor(%q, %q) = %q, want no match", tc.typ, tc.label, code)
