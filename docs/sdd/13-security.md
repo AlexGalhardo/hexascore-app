@@ -130,7 +130,7 @@ Actors: anonymous abusers, score manipulators, scrapers, malicious contributors,
 | --- | --- | --- | --- | --- |
 | A01 | policies fail closed [AUTHZ]; `httpclient.Safe` [BB] "What is blocked"; `os.Root` [OV] A01 | owner filters, abilities, route inventory | `TestSecurity_A01_HexaRouteStackInventory` | 03, 04 |
 | A02 | `SecureHeaders`, refusing `CSPSources` [HDR]; prod needs `APP_KEY` [OV] A02 | §6.2 values | `TestSecurity_A02_HexaHeadersWeb`, `_HexaHeadersAPI`, Playwright `headers.spec.ts` | 09, 13 |
-| A03 | `go.sum`, govulncheck, Dependabot [OV] A03 | §7.7 | CI `vuln`, `deps` | 11 |
+| A03 | `go.sum`, govulncheck, Dependabot [OV] A03 | §7.7 | CI `vuln`, `deps`; account erasure of scoring and search rows: `TestSecurity_A03_PurgeRemovesScoringRows` (SDD 03 §7.5) | 11 |
 | A04 | HKDF sub-keys [ENC]; SHA-256 tokens [TOK] "Security" | rotation §7.4 | `TestSecurity_A04_HexaKeyRotationReadsOldColumns` | 03 |
 | A05 | `z`, bound parameters [VAL] "Security" | search caps (SDD 07), diff escaping | `TestSecurity_A05_HexaSearchControlChars` | 04, 07 |
 | A06 | body cap 10 MiB, `BodyLimit` [OV] A06; limiter fails closed [RL] | §7.1, PoW, server-side quotas | `TestSecurity_A06_HexaLimits` | 02, 05 |

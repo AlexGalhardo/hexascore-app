@@ -347,6 +347,13 @@ func purgeUserData(ctx context.Context, tx database.Executor, userID int64, now 
 			stmt{`DELETE FROM reactions WHERE user_id = $1`, []any{userID}},
 			stmt{`DELETE FROM comments WHERE user_id = $1`, []any{userID}},
 			stmt{`UPDATE users SET feed_opt_in = false WHERE id = $1`, []any{userID}},
+			// Scoring and search rows (B-011, audit T-05). Ratings, statuses and rating_flags keep user_id on purpose:
+			// the flag is part of a kept rating's weight, so deleting it would let a held rating count in full.
+			stmt{`DELETE FROM time_to_beat WHERE user_id = $1`, []any{userID}},
+			stmt{`DELETE FROM search_events WHERE user_id = $1`, []any{userID}},
+			stmt{`UPDATE score_actions SET user_id = NULL WHERE user_id = $1`, []any{userID}},
+			stmt{`UPDATE score_actions SET actor = NULL WHERE actor = $1`, []any{userID}},
+			stmt{`UPDATE score_bursts SET resolved_by = NULL WHERE resolved_by = $1`, []any{userID}},
 		)
 	}
 
