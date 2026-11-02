@@ -3,8 +3,10 @@ package jobs
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"strconv"
 	"sync"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/config"
@@ -242,5 +244,22 @@ func CoversDisk(app *vukem.App) (storage.Disk, error) {
 		return nil, fmt.Errorf("covers disk: %w", err)
 	}
 
-	return s3.New(cfg)
+	return s3.New(cfg, s3.WithHTTPClient(&http.Client{Transport: coversTransport()}))
+}
+
+// coversTransport keeps enough idle connections for covers:rekey's parallel requests. The driver's default inherits
+// net/http's MaxIdleConnsPerHost of 2, so every extra connection closes after one request, and 16 workers ran the
+// container out of ephemeral ports ("connect: cannot assign requested address", 2026-11-02).
+// workaround(vukem): VF-077, drivers/s3 has no idle-pool option.
+func coversTransport() *http.Transport {
+	t, ok := http.DefaultTransport.(*http.Transport)
+	if !ok {
+		t = &http.Transport{Proxy: http.ProxyFromEnvironment, ForceAttemptHTTP2: true}
+	}
+
+	t = t.Clone()
+	t.MaxIdleConnsPerHost = 2 * covers.RekeyWorkers
+	t.ResponseHeaderTimeout = time.Minute // same as the driver's default transport
+
+	return t
 }
