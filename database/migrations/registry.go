@@ -105,5 +105,6 @@ func All() []schema.Migration {
 		m20261102230000CreateFieldReviews(),
 		m20261102230100AddFieldReviewsOpenIdx(),
 		m20261102240000CreateCoverHashes(),
+		m20261102260000PartitionSourceRecordHistory(),
 	}
 }

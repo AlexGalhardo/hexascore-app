@@ -38,6 +38,7 @@ func AllWith(app *vukem.App, ingestSrc IngestSources) []queue.Registration {
 		handleCheckSources(app),
 		handleCoverFetch(app),
 		handleExportIDs(app),
+		handleExportSourceHistory(app),
 		handleComputeSimilar(app),
 		handleRecommendUser(app),
 		handleRecoEvalMonthly(app),
