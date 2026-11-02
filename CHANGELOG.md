@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **ui:** Trending cards are one link each, and landing and listing cards invert their colours on hover like the navbar and footer links
 - **billing:** Stripe settings come in two named sets, `STRIPE_*_SANDBOX` and `STRIPE_*_LIVE` (key, webhook secret, Hobby and PRO prices), and `STRIPE_MODE=sandbox|live` picks one; production refuses to boot without the mode, with a key of the other mode or with a `pk_` key (replaces `STRIPE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_HOBBY`, `STRIPE_PRICE_PRO`)
 - **ui:** Primary buttons (Apply, Subscribe…) take a 3px near-black ledge so their depth reads like the secondary buttons
 - **billing:** Deploy note: production needs `STRIPE_PRICE_HOBBY` and the new `STRIPE_PRICE_PRO` before this release boots; a subscription on an old Business price id no longer maps to a plan and falls back to Free, so convert any live Business subscriber first
