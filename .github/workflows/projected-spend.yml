@@ -1,15 +1,21 @@
 name: projected-spend
 
-# A17 (SDD 12). Usage API is not verified, so a run without USAGE_USD only
-# logs the day-20 reminder. Telegram is posted only when the secret exists
-# and the formula alerts or the reminder is due. P2.C.1.2 owns that secret.
+# A17 (SDD 12 §7.5): hourly read of the Railway billing-period usage; Telegram
+# once per period at US$5, 10, 15 and the US$20 hard limit, plus the day-20
+# projection above US$18. The "already sent" state lives in the Actions cache
+# (one entry per run, newest restored), so GITHUB_TOKEN needs no variables
+# write. A lost cache resends the current threshold once at most.
 on:
   schedule:
-    - cron: "20 12 * * *"
+    - cron: "17 * * * *"
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: projected-spend
+  cancel-in-progress: false
 
 jobs:
   spend:
@@ -21,20 +27,33 @@ jobs:
         with:
           bun-version-file: package.json
       - run: bun test scripts/ops/projected-spend.test.ts
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .spend-state
+          key: spend-state-${{ github.run_id }}
+          restore-keys: spend-state-
       - id: spend
-        run: bun scripts/ops/projected-spend.ts
+        run: mkdir -p .spend-state && bun scripts/ops/projected-spend.ts
         env:
-          USAGE_USD: ${{ vars.RAILWAY_USAGE_USD }}
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+          RAILWAY_WORKSPACE_ID: e1b47a30-b96e-4052-b8d0-67a32e63ceff
       - name: Telegram
-        if: steps.spend.outputs.alert == 'true' || steps.spend.outputs.reminder == 'true'
+        if: steps.spend.outputs.message != ''
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          MESSAGE: ${{ steps.spend.outputs.message }}
         run: |
           if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
-            echo "telegram unset; the reminder stays in this log"
-            exit 0
+            echo "::error::telegram secrets unset; alert not sent: $MESSAGE"
+            exit 1
           fi
-          curl -fsS -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+          curl -fsS -o /dev/null -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
-            --data-urlencode "text=HexaScore A17: check Railway usage. Alert when the day-20 projection exceeds US\$27."
+            --data-urlencode "text=${MESSAGE}"
+      # Saved only after a successful send, so a failed send is retried next hour.
+      - uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        if: hashFiles('.spend-state/state.json') != ''
+        with:
+          path: .spend-state
+          key: spend-state-${{ github.run_id }}

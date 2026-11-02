@@ -67,7 +67,7 @@ Source keys, all accessed 2026-10-28. vukem facts cite <https://vukem.dev/docs>.
 - FR-12-6: A digest of error fingerprints is sent to Telegram daily at 08:00 America/Sao_Paulo. Verify: fake-clock test. Implemented (P2.C.1.2): task `errors:digest` posts to the silent error chat; `TestDigestFakeClock` (`app/alerts`).
 - FR-12-7: `POST /app/v1/client-errors` (route in SDD 05 §6.4) takes opt-in mobile crash reports (SDD 10) with no PII. Each is logged as `client.error`, is rate-limited to 10/min per IP, and is kept 7 days (open issue 10-2). Verify: integration test.
 - FR-12-9: `POST /app/v1/client-metrics` (SDD 05 §6.4) takes the opt-in, anonymous web-vitals beacon from SDD 09 (LCP, INP, CLS, TTFB per route pattern and locale) into `client_reports`; raw rows kept 7 days (open issue 09-11). Verify: integration test.
-- FR-12-10: A "projected spend at day 20" alert (A17) fires when month-to-date Railway usage extrapolated to the full month exceeds US$27, so the owner can raise the US$30 hard limit before it stops the service (D-27). Verify: fixture test on the projection.
+- FR-12-10: A "projected spend at day 20" alert (A17) fires when month-to-date Railway usage extrapolated to the full month exceeds US$18, so the owner can raise the hard limit before it stops the service (D-27). The same job sends Telegram once per billing period when usage crosses US$5, 10, 15 and the US$20 hard limit (owner, 2026-11-01). Verify: fixture tests on the projection and the threshold crossings (`scripts/ops/projected-spend.test.ts`).
 - FR-12-8: Logs never contain passwords, tokens, API keys, emails or raw search text. Verify: `TestSecurity_A09_HexaLogsRedacted`.
 
 ## 4. Non-functional requirements
@@ -243,11 +243,11 @@ On-call is the owner. Quiet hours run 23:00-08:00 America/Sao_Paulo: only `page`
 | A12 | Connections | pool in use / max > 0.8 (8 of 10), read from `db.SQL()` stats | 5 min | page | app check |
 | A13 | Score drift | nightly drift check finds a mismatch (SDD 02) | nightly | warn | app check |
 | A14 | Trending stale | newest snapshot older than 3 h (SDD 08) | 15 min | warn | app check |
-| A15 | Cost | Railway usage >= US$24 (80 % of US$30), "Custom email alert" [R-cost]; hard limit US$30 (D-27) | cycle | warn | Railway |
+| A15 | Cost | Railway usage >= US$15, "Custom email alert" [R-cost]; hard limit US$20 (D-27 as amended 2026-11-01; `railway usage limit set --target workspace --soft 15 --hard 20`) | cycle | warn | Railway |
 | A16 | Logs gone | no `request` line for 10 min while the service is up | 10 min | warn | app check |
-| A17 | Projected spend | on day 20 of the billing cycle (and daily after), month-to-date usage x days in cycle / elapsed days > US$27 (D-27: hard limit US$30) | daily | warn | GitHub Actions cron reading Railway usage [R-cost] (programmatic access [NOT VERIFIED]; fallback: calendar reminder to the owner on day 20) |
+| A17 | Projected spend and thresholds | usage crosses US$5, 10, 15 or 20 (once each per billing period); from day 20 of the billing cycle, usage x days in cycle / elapsed days > US$18 (once per period) | hourly | warn | GitHub Actions `projected-spend.yml` reading the Railway public API, Telegram page chat |
 
-Checked 2026-10-30: no documented Railway usage API was found in the repo, so `projected-spend.yml` takes the fallback. It logs a day-20 reminder and, when `USAGE_USD` is set, evaluates the formula. It posts to Telegram only when that step's secret is present and the formula alerts or the reminder is due.
+Usage source (2026-11-01): `workspace(workspaceId) { customer { currentUsage billingPeriod { start end } } }` on `https://backboard.railway.com/graphql/v2` ([Public API](https://docs.railway.com/integrations/api)), the query `railway usage` itself runs ([CLI usage.rs, `WorkspaceUsageContext`](https://github.com/railwayapp/cli/blob/v5.49.1/src/commands/usage.rs)); checked live with `railway api`. `currentUsage` is in dollars for the current period. The job reads it hourly with the `RAILWAY_API_TOKEN` secret (Railway has no read-only token scope), compares it with the state the previous run saved in the Actions cache (`{period, level, projected}`: highest threshold sent and whether the projection was sent), posts at most one Telegram message per run, and saves the new state only after the message went out, so a failed send retries the next hour. A new billing period resets the state; a lost cache entry resends the current threshold once. Without the token the run logs a warning and alerts nothing (A15's e-mail still applies); without the Telegram secrets a due alert fails the run.
 
 ### 7.6 Views
 
@@ -357,7 +357,7 @@ Budget-increase predictors (the first step is splitting out the worker, D-08):
 - `curl -sI https://staging.hexascore.app/` shows `X-Request-ID` and `X-Trace-ID`, and the trace id opens in Railway's trace view.
 - `railway logs` lines parse as JSON with `level`, `request_id` and `route`, and a scripted grep finds no email pattern.
 - Each in-app check writes its `alert=<code>` line on a fixture that breaches it, and nothing when it does not.
-- The Railway usage page shows the US$24 email alert.
+- The Railway usage page shows the US$15 email alert and the US$20 hard limit.
 
 ## 10. Test strategy
 
@@ -377,7 +377,7 @@ Budget-increase predictors (the first step is splitting out the worker, D-08):
 6. SDD 08 metric names. Decided (12-6): §6.2 names are canonical; SDD 08 aligned.
 7. Metric Views to drop high-cardinality attributes are [NOT IN VUKEM DOCS]. Owner: vukem. Trigger: staging series above 6,000.
 8. Railway monitor options (metrics offered, webhook delivery, plan) are [NOT VERIFIED] until the Pro plan is on. Owner: architect. Closes in the observability roadmap task.
-9. Railway hard usage limit. Decided (D-27): US$30, e-mail alert US$24, plus the day-20 projection alert A17.
+9. Railway hard usage limit. Decided (D-27, amended 2026-11-01): US$20, e-mail alert US$15, Telegram thresholds and the day-20 projection alert A17.
 10. Site documentation gaps, all [SITE PAGE MISSING]. Owner: vukem. Closes when a logging/health page is published.
     - the health check API (`AddHealthCheckTimeout`, `ReadyHandler`, `ok`/`fail` output);
     - route name and user id in request logs;

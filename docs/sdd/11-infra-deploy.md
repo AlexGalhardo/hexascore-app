@@ -28,7 +28,7 @@ Each is verified by the matching §9 item.
 
 ## 4. Non-functional requirements
 
-- NFR-11-1 Cost ≤ US$30/month at launch (D-27): Railway e-mail alert at US$24, hard usage limit US$30; SDD 12 adds a "projected spend at day 20" alert so the owner can raise the limit before a legitimate spike takes the site down (§6.5).
+- NFR-11-1 Cost ≤ US$30/month at launch (D-27): Railway e-mail alert at US$15, hard usage limit US$20 (owner, 2026-11-01); SDD 12 adds a "projected spend at day 20" alert so the owner can raise the limit before a legitimate spike takes the site down (§6.5).
 - NFR-11-2 0 failed requests in a k6 run (20 rps) across a deploy; RPO 24 h, RTO 1 h (ADR 0014).
 - NFR-11-3 Image ≤ 400 MB compressed; boot to ready ≤ 30 s.
 - NFR-11-4 HTTP priority via SDD 06 NFR-06-1/2 (≤ 2 ingest jobs, pressure gate).
@@ -147,7 +147,7 @@ Prices [pricing], [buckets]: RAM US$10/GB-month, CPU US$20/vCPU-month, egress US
 | egress | 60 GB (pages + proxied covers) | 3.00 |
 | **Bill (Pro)** | max(20, usage) | **≈ 27.6** |
 
-Alerts and limit (D-27): Railway "Custom email alert" at US$24 and hard limit US$30 [pricing]; the day-20 projected-spend alert is owned by SDD 12 §7.9. Covers are served by the app with `Cache-Control: public, max-age=31536000, immutable` (buckets are private [buckets]); when cover egress exceeds US$5/month (SDD 12 cost review) the CDN decision is triggered (Cloudflare proxy on the cover host, D-28). Above US$24: stop staging `app` between releases (−3.6). Growth (5× traffic, 300k items): app 20 + Postgres 15.8 + egress 300 GB 15 + staging 7.4 ≈ US$58. First purchases: (1) `worker` service (`queue:work`, `schedule:work`; `QUEUE_IN_SERVE=false`, `SCHEDULE_IN_SERVE=false` [vk-sched], ADR 0007); (2) Redis before a second replica (ADR 0003); (3) WAL archiving, RPO ≤ 1 h (ADR 0014).
+Alerts and limit (D-27, amended 2026-11-01): Railway "Custom email alert" at US$15 and hard limit US$20 [pricing], Telegram at US$5, 10, 15 and 20 (SDD 12 A17); the day-20 projected-spend alert is owned by SDD 12 §7.9. Covers are served by the app with `Cache-Control: public, max-age=31536000, immutable` (buckets are private [buckets]); when cover egress exceeds US$5/month (SDD 12 cost review) the CDN decision is triggered (Cloudflare proxy on the cover host, D-28). Above US$15: stop staging `app` between releases (−3.6). Growth (5× traffic, 300k items): app 20 + Postgres 15.8 + egress 300 GB 15 + staging 7.4 ≈ US$58. First purchases: (1) `worker` service (`queue:work`, `schedule:work`; `QUEUE_IN_SERVE=false`, `SCHEDULE_IN_SERVE=false` [vk-sched], ADR 0007); (2) Redis before a second replica (ADR 0003); (3) WAL archiving, RPO ≤ 1 h (ADR 0014).
 
 ### 6.6 CI/CD (GitHub Actions on `AlexGalhardo/hexascore-app`)
 

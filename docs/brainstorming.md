@@ -93,7 +93,7 @@ Asked through the interactive checklist after the SDD drafts; they close every `
 - **D-24 Password 8 to 32 characters** (owner round 2026-11-01 item 8; was a 128 maximum). New passwords only; login never checks the length. Sign-up email 12 to 48 characters.
 - **D-25 Google-only accounts set a password before managing 2FA** (vukem rule kept; UI explains).
 - **D-26 GitHub Actions is available** for `hexascore-app`; the full pipeline runs there; pre-push mirror kept as a convenience.
-- **D-27 Railway spend**: e-mail alert at US$24, hard limit US$30. Architect note: a hard limit at the ceiling can take the site down at month end during a legitimate spike; SDD 12 adds a "projected spend" alert at day 20 so the owner can raise the limit in time.
+- **D-27 Railway spend**: e-mail alert at US$24, hard limit US$30. Architect note: a hard limit at the ceiling can take the site down at month end during a legitimate spike; SDD 12 adds a "projected spend" alert at day 20 so the owner can raise the limit in time. Amended by the owner 2026-11-01 (chat): hard limit US$20, Railway e-mail alert at US$15, Telegram (A17) at US$5, 10, 15 and 20.
 - **D-28 DNS on Cloudflare**: the `hexascore.app` zone is hosted (or moved before cutover) on Cloudflare for CNAME flattening at the apex; proxy off at launch, available later as a CDN for covers.
 - **D-29 LGPD basis for personalisation**: legitimate interest for aggregates and trending; personalised recommendations on by default with an opt-out in settings; privacy policy updated; legal review before cutover (D-21 gate).
 - **D-30 Catalogue extras deferred**: game engines, edition contributors (translator, illustrator) and episode-level data come after v1.0.0; the relation model leaves room for them.

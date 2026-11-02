@@ -33,6 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **infra:** `projected-spend.yml` runs hourly, reads the billing-period usage from the Railway public API and sends Telegram once per period at US$5, 10, 15 and the US$20 hard limit, plus a day-20 projection alert above US$18; workspace hard limit US$20, e-mail alert US$15 (D-27 amended)
 - **ui:** Every button gets a pressed state with depth and shadow (item G); landing cards read "#N trending" with the primary genre by the year (item 15); the section header centres a larger title count (item 23)
 - **ui:** The account dropdown shows the avatar only and an icon before each link (item 13)
 - **auth:** New passwords are 8 to 32 characters (D-24 edited); logins never check the length (item 8)
