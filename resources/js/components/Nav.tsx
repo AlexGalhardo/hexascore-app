@@ -333,7 +333,7 @@ export default function Nav() {
 							e.preventDefault();
 							setPaletteOpen(true);
 						}}
-						aria-label={t("nav.openSearch")}
+						aria-label={t("nav.searchTrigger")}
 						aria-keyshortcuts="Control+K Meta+K"
 						className={`flex h-11 min-w-0 flex-1 items-center justify-start gap-2 rounded-xs border border-field bg-field-bg px-3 text-muted hover:bg-hover lg:w-56 lg:flex-none xl:w-[280px] ${focus}`}
 					>

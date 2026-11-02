@@ -68,7 +68,7 @@ test("navbar has the search trigger, moon/sun toggle and four sections; footer h
 			<Footer />
 		</>,
 	);
-	const search = screen.getByRole("link", { name: "nav.openSearch" });
+	const search = screen.getByRole("link", { name: "nav.searchTrigger" });
 	expect(search.getAttribute("href")).toBe("/search");
 	expect(search.hasAttribute("data-search-trigger")).toBe(true);
 	expect(screen.getByRole("button", { name: "nav.theme" }).querySelectorAll("svg")).toHaveLength(
@@ -168,7 +168,7 @@ test("the account dropdown shows no user name and every entry starts with an ico
 // everything else lives in the hamburger's sheet (supersedes round 2 item 7 on web mobile).
 test("below lg the bar keeps title, search field and hamburger; the rest is desktop-only", () => {
 	render(<Nav />);
-	const search = screen.getByRole("link", { name: "nav.openSearch" });
+	const search = screen.getByRole("link", { name: "nav.searchTrigger" });
 	expect(search.className).toContain("flex-1");
 	expect(search.querySelector("span")?.className).not.toMatch(/(^|\s)hidden(\s|$)/);
 	const desktop = screen.getByRole("button", { name: "nav.language" }).closest("[data-desktop]");
