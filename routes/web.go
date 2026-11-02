@@ -221,6 +221,14 @@ func Web(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
+	docsByLocale := map[string][]byte{"en": docsJSON}
+
+	for _, locale := range []string{"pt-BR", "es"} {
+		if docsByLocale[locale], err = resources.DocsJSONLocale(locale); err != nil {
+			return err
+		}
+	}
+
 	coverageJSON, err := resources.APICoverage()
 	if err != nil {
 		return err
@@ -231,7 +239,7 @@ func Web(r *router.Router, app *vukem.App) error {
 		return err
 	}
 
-	docs, err := controllers.Docs(docsJSON, coverage)
+	docs, err := controllers.Docs(docsByLocale, coverage)
 	if err != nil {
 		return err
 	}

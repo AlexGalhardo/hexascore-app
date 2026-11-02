@@ -26,6 +26,8 @@ const escapeHtml = (s: string): string =>
 const slugify = (s: string): string =>
 	s
 		.toLowerCase()
+		.normalize("NFD")
+		.replace(/[̀-ͯ]/g, "")
 		.replace(/[^a-z0-9\s-]/g, "")
 		.trim()
 		.replace(/\s+/g, "-");
@@ -123,6 +125,10 @@ export function renderMarkdown(md: string): { title: string; body: string; toc: 
 	return { title, body: html.join("\n"), toc };
 }
 
+// Translated pages live in resources/docs/<locale>/ with the same file names and slugs; en is the
+// top-level folder and the runtime fallback for any page a locale does not have.
+export const DOC_LOCALES = ["pt-BR", "es"] as const;
+
 // index.md is /docs; the rest keep their file name as slug. Order drives the sidebar.
 const ORDER = ["index", "authentication", "pagination", "rate-limits", "changes", "exports", "webhooks", "errors", "coverage", "changelog"];
 
@@ -138,4 +144,5 @@ export const docsJSON = (dir: string): string => `${JSON.stringify(buildDocs(dir
 if (import.meta.main) {
 	const dir = join(dirname(fileURLToPath(import.meta.url)), "..", "resources", "docs");
 	writeFileSync(join(dir, "docs.json"), docsJSON(dir));
+	for (const locale of DOC_LOCALES) writeFileSync(join(dir, `docs.${locale}.json`), docsJSON(join(dir, locale)));
 }

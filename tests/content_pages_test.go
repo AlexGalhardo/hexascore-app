@@ -24,6 +24,10 @@ func TestDocsPages(t *testing.T) {
 			HasProp("toc")
 	}
 
+	for prefix, title := range map[string]string{"": "Errors", "/pt-br": "Erros", "/es": "Errores"} {
+		app.Client(t).Get(prefix+"/docs/errors").AssertOK().AssertInertia("Docs/Page").PropEquals("title", title)
+	}
+
 	app.Client(t).Get("/docs/no-such-doc").AssertStatus(301).AssertHeader("Location", "/")
 	app.Client(t).Get("/docs/index").AssertStatus(301)
 }

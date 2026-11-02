@@ -1,0 +1,342 @@
+[
+	{
+		"slug": "index",
+		"title": "Início rápido",
+		"body": "<h1 id=\"inicio-rapido\">Início rápido</h1>\n<p>Notas da comunidade para jogos, filmes, séries e livros, de 0 a 10 em seis categorias por item, por meio de uma API JSON somente leitura.</p>\n<h2 id=\"1-crie-uma-chave-de-api\">1. Crie uma chave de API</h2>\n<p>Abra o seu <a href=\"/profile/api\">painel da API</a> e crie uma chave. Ela começa com <code>hx_live_</code> e é exibida uma única vez, então guarde-a em uma variável de ambiente e nunca em código do lado do cliente.</p>\n<p>O plano Free inclui 100 requisições no total, o suficiente para desenvolver e testar uma integração.</p>\n<h2 id=\"2-faca-sua-primeira-requisicao\">2. Faça sua primeira requisição</h2>\n<p>A URL base é <code>https://api.hexascore.app/v1</code>. Todo endpoint é um <code>GET</code>. Veja os cinco jogos mais bem avaliados:</p>\n<pre tabindex=\"0\"><code class=\"language-sh\">curl -H &quot;Authorization: Bearer $HEXASCORE_API_KEY&quot; \\\n  &quot;https://api.hexascore.app/v1/games?sort=score&amp;limit=5&quot;</code></pre>\n<h2 id=\"3-leia-a-resposta\">3. Leia a resposta</h2>\n<p>As listas retornam <code>data</code> mais <code>meta.next_cursor</code> para a próxima página. Os nomes dos campos usam snake_case e as datas seguem o formato ISO 8601. <code>score</code> e <code>categories</code> são <code>null</code> até que um item tenha 5 avaliações.</p>\n<h2 id=\"proximos-passos\">Próximos passos</h2>\n<ul><li>Busque um item com <code>GET /v1/games/{id}</code>.</li><li>Mapeie os ids que você já tem com <code>GET /v1/lookup</code>.</li><li>Trate os <a href=\"/docs/errors\">erros</a> e os <a href=\"/docs/rate-limits\">limites de requisições</a> e depois explore a <a href=\"/docs/reference\">referência da API</a>.</li></ul>",
+		"toc": [
+			{
+				"id": "1-crie-uma-chave-de-api",
+				"text": "1. Crie uma chave de API",
+				"level": 2
+			},
+			{
+				"id": "2-faca-sua-primeira-requisicao",
+				"text": "2. Faça sua primeira requisição",
+				"level": 2
+			},
+			{
+				"id": "3-leia-a-resposta",
+				"text": "3. Leia a resposta",
+				"level": 2
+			},
+			{
+				"id": "proximos-passos",
+				"text": "Próximos passos",
+				"level": 2
+			}
+		]
+	},
+	{
+		"slug": "authentication",
+		"title": "Autenticação",
+		"body": "<h1 id=\"autenticacao\">Autenticação</h1>\n<p>Toda requisição é autenticada com uma chave de API secreta enviada como token Bearer.</p>\n<h2 id=\"token-bearer\">Token Bearer</h2>\n<p>Envie a chave no cabeçalho <code>Authorization</code>. As chaves têm o formato <code>hx_live_</code> seguido de 32 letras e dígitos. Chaves na query string não são aceitas, para que nunca apareçam nos logs de acesso nem no histórico do navegador.</p>\n<pre tabindex=\"0\"><code class=\"language-sh\">curl -H &quot;Authorization: Bearer hx_live_...&quot; https://api.hexascore.app/v1/games</code></pre>\n<p>Uma chave ausente, malformada, desconhecida ou revogada retorna <code>401</code> com o código <a href=\"/docs/errors#unauthorized\"><code>unauthorized</code></a> e um cabeçalho <code>WWW-Authenticate: Bearer</code>.</p>\n<h2 id=\"gerenciando-chaves\">Gerenciando chaves</h2>\n<ul><li>Crie e revogue chaves em <a href=\"/profile/api\">/profile/api</a> (é preciso ter o e-mail verificado; até 5 chaves ativas).</li><li>A chave completa é exibida uma única vez. Guardamos apenas um hash SHA-256, então não conseguimos recuperá-la para você.</li><li>A revogação é imediata. Para trocar a chave, crie uma nova, publique-a e só então revogue a antiga.</li><li>Todas as chaves de uma conta compartilham o mesmo plano, a mesma cota e o mesmo limite por segundo.</li></ul>\n<h2 id=\"mantenha-as-chaves-em-segredo\">Mantenha as chaves em segredo</h2>\n<p>Chame a API a partir do seu servidor. Uma chave embutida em uma página web ou em um app móvel pode ser extraída e usada para esgotar a sua cota. Se uma chave vazar, revogue-a imediatamente.</p>",
+		"toc": [
+			{
+				"id": "token-bearer",
+				"text": "Token Bearer",
+				"level": 2
+			},
+			{
+				"id": "gerenciando-chaves",
+				"text": "Gerenciando chaves",
+				"level": 2
+			},
+			{
+				"id": "mantenha-as-chaves-em-segredo",
+				"text": "Mantenha as chaves em segredo",
+				"level": 2
+			}
+		]
+	},
+	{
+		"slug": "pagination",
+		"title": "Paginação",
+		"body": "<h1 id=\"paginacao\">Paginação</h1>\n<p>Os endpoints de lista usam cursores opacos: estáveis diante de inserções e rápidos em qualquer profundidade.</p>\n<h2 id=\"como-funciona\">Como funciona</h2>\n<p><code>GET /v1/games</code>, <code>/v1/movies</code>, <code>/v1/series</code> e <code>/v1/books</code> retornam <code>{ &quot;data&quot;: [...], &quot;meta&quot;: { &quot;next_cursor&quot;: &quot;...&quot; } }</code>. Para obter a próxima página, repita a mesma requisição com <code>cursor=&lt;meta.next_cursor&gt;</code>. Quando <code>meta.next_cursor</code> não estiver presente, você chegou ao fim.</p>\n<ul><li>Mantenha todos os outros parâmetros idênticos. Um cursor de outro <code>sort</code> retorna <code>400</code>.</li><li>Os cursores são opacos: não os interprete nem os construa, o formato pode mudar.</li><li>A ordenação é estável: os empates são desfeitos pelo id do item, e itens sem nota ou sem data sempre vêm por último.</li></ul>\n<h2 id=\"tamanho-da-pagina\">Tamanho da página</h2>\n<p><code>limit</code> tem padrão 10. O máximo depende do seu plano: 10 no Free, 100 no Pro e no Business. Um valor maior retorna <code>400 invalid-query</code>; a API nunca trunca em silêncio. Cada página conta como uma requisição.</p>\n<h2 id=\"exemplo-percorrer-todas-as-paginas\">Exemplo: percorrer todas as páginas</h2>\n<pre tabindex=\"0\"><code class=\"language-js\">let cursor = null;\ndo {\n  const url = new URL(&quot;https://api.hexascore.app/v1/games&quot;);\n  url.searchParams.set(&quot;limit&quot;, &quot;100&quot;);\n  if (cursor) url.searchParams.set(&quot;cursor&quot;, cursor);\n  const res = await fetch(url, { headers: { Authorization: `Bearer ${process.env.HEXASCORE_API_KEY}` } });\n  const page = await res.json();\n  for (const game of page.data) console.log(game.title);\n  cursor = page.meta.next_cursor ?? null;\n} while (cursor);</code></pre>\n<h2 id=\"busca\">Busca</h2>\n<p><code>GET /v1/search</code> não é paginado: retorna as melhores correspondências (até 50) para uma consulta, da melhor para a pior.</p>",
+		"toc": [
+			{
+				"id": "como-funciona",
+				"text": "Como funciona",
+				"level": 2
+			},
+			{
+				"id": "tamanho-da-pagina",
+				"text": "Tamanho da página",
+				"level": 2
+			},
+			{
+				"id": "exemplo-percorrer-todas-as-paginas",
+				"text": "Exemplo: percorrer todas as páginas",
+				"level": 2
+			},
+			{
+				"id": "busca",
+				"text": "Busca",
+				"level": 2
+			}
+		]
+	},
+	{
+		"slug": "rate-limits",
+		"title": "Limites de requisições",
+		"body": "<h1 id=\"limites-de-requisicoes\">Limites de requisições</h1>\n<p>Cada plano tem uma cota de requisições, um limite por segundo e um tamanho máximo de página.</p>\n<h2 id=\"planos\">Planos</h2>\n<table><thead><tr><th scope=\"col\">Plano</th><th scope=\"col\">Cota</th><th scope=\"col\">Requisições / segundo</th><th scope=\"col\">Tamanho máx. da página</th></tr></thead><tbody><tr><td>Free</td><td>100 no total</td><td>1 (rajada de 5)</td><td>10</td></tr><tr><td>Pro</td><td>50.000 / mês</td><td>10</td><td>100</td></tr><tr><td>Business</td><td>500.000 / mês</td><td>50</td><td>100</td></tr></tbody></table>\n<p>Preços e upgrades: <a href=\"/pricing\">/pricing</a>.</p>\n<h2 id=\"o-que-conta\">O que conta</h2>\n<ul><li>Toda requisição autenticada que chega a um endpoint conta como uma, inclusive as que retornam 404.</li><li>Não contam: <code>401</code>, <code>400</code> por parâmetros inválidos, <code>429</code> e qualquer <code>5xx</code> (estornado).</li><li><code>GET /v1/me/usage</code> também conta, então leia os cabeçalhos de resposta das suas chamadas normais sempre que puder.</li><li>As cotas dos planos pagos são renovadas às 00:00 UTC do dia 1º de cada mês. A cota do Free nunca é renovada.</li></ul>\n<h2 id=\"cabecalhos-de-resposta\">Cabeçalhos de resposta</h2>\n<p>As respostas bem-sucedidas informam em que ponto você está (campos de cabeçalho RateLimit do IETF).</p>\n<table><thead><tr><th scope=\"col\">Cabeçalho</th><th scope=\"col\">Significado</th></tr></thead><tbody><tr><td><code>RateLimit-Limit</code></td><td>Requisições no período atual (a cota do seu plano).</td></tr><tr><td><code>RateLimit-Remaining</code></td><td>Requisições restantes antes do 402.</td></tr><tr><td><code>RateLimit-Reset</code></td><td>Segundos até a cota ser renovada; 0 para a cota vitalícia do Free.</td></tr><tr><td><code>Retry-After</code></td><td>Em 429 e 503: segundos de espera antes de tentar de novo.</td></tr></tbody></table>\n<h2 id=\"quando-voce-atinge-um-limite\">Quando você atinge um limite</h2>\n<p>O plano Free aceita uma rajada de 5 requisições de uma vez e depois mantém 1 requisição por segundo; os outros planos permitem rajadas de até o seu limite por segundo.</p>\n<p>Requisições por segundo em excesso retornam <a href=\"/docs/errors#rate-limited\"><code>429 rate-limited</code></a>: aguarde <code>Retry-After</code> segundos. Cota esgotada retorna <a href=\"/docs/errors#quota-exhausted\"><code>402 quota-exhausted</code></a>: faça upgrade do plano; tentar de novo não ajuda até a renovação.</p>",
+		"toc": [
+			{
+				"id": "planos",
+				"text": "Planos",
+				"level": 2
+			},
+			{
+				"id": "o-que-conta",
+				"text": "O que conta",
+				"level": 2
+			},
+			{
+				"id": "cabecalhos-de-resposta",
+				"text": "Cabeçalhos de resposta",
+				"level": 2
+			},
+			{
+				"id": "quando-voce-atinge-um-limite",
+				"text": "Quando você atinge um limite",
+				"level": 2
+			}
+		]
+	},
+	{
+		"slug": "changes",
+		"title": "Mudanças",
+		"body": "<h1 id=\"mudancas\">Mudanças</h1>\n<p>Consulte um único endpoint para manter a sua cópia do catálogo sincronizada, em vez de rastreá-lo inteiro de novo.</p>\n<h2 id=\"como-funciona\">Como funciona</h2>\n<p><code>GET /v1/changes</code> retorna o que mudou desde um ponto no tempo, do mais antigo para o mais recente. Cada entrada diz qual item mudou, o que aconteceu com ele e quais campos se alteraram, nunca os novos valores: busque o item de novo com <code>GET /v1/{type}/{id}</code> para lê-los. Assim, a filtragem por licença e os campos do seu plano sempre se aplicam aos dados que você lê.</p>\n<table><thead><tr><th scope=\"col\">Parâmetro</th><th scope=\"col\">Significado</th></tr></thead><tbody><tr><td><code>since</code></td><td>Obrigatório. Timestamp RFC 3339, de no máximo 14 dias atrás.</td></tr><tr><td><code>type</code></td><td>Opcional. <code>games</code>, <code>movies</code>, <code>series</code> ou <code>books</code>.</td></tr><tr><td><code>cursor</code></td><td>Opcional. O <code>meta.next_cursor</code> da página anterior.</td></tr><tr><td><code>limit</code></td><td>Opcional. De 1 a 1000, padrão 100. Não segue o tamanho de página do seu plano.</td></tr></tbody></table>\n<p>Cada entrada tem este formato:</p>\n<pre tabindex=\"0\"><code class=\"language-json\">{\n  &quot;id&quot;: &quot;chg_1048576&quot;,\n  &quot;action&quot;: &quot;updated&quot;,\n  &quot;itemType&quot;: &quot;games&quot;,\n  &quot;itemId&quot;: &quot;0192f3a4-7b1c-7e21-9c55-3f1e2d4a6b71&quot;,\n  &quot;fields&quot;: [&quot;score&quot;, &quot;ratingCount&quot;],\n  &quot;changedAt&quot;: &quot;2026-11-02T10:14:12Z&quot;\n}</code></pre>\n<ul><li><code>action</code> é <code>created</code>, <code>updated</code> ou <code>deleted</code>.</li><li><code>fields</code> lista os nomes dos campos visíveis na API que mudaram. Mudanças em campos ocultos não são listadas, e uma mudança de nota só é listada quando a nota com uma casa decimal, a confiança ou <code>ratingCount</code> mudou.</li><li>Um duplicado mesclado é informado como <code>deleted</code>, com <code>mergedInto</code> apontando para o id que o substitui.</li></ul>\n<h2 id=\"mantenha-uma-copia-sincronizada\">Mantenha uma cópia sincronizada</h2>\n<p>Comece com um <code>since</code> de no máximo 14 dias atrás, siga <code>meta.next_cursor</code> até que ele esteja vazio, depois guarde o <code>changedAt</code> da última entrada e use-o como o próximo <code>since</code>. As entradas são mantidas por 30 dias, mas só os últimos 14 dias podem ser consultados; um <code>since</code> mais antigo retorna <a href=\"/docs/errors#changes-window-exceeded\"><code>changes-window-exceeded</code></a> e um no futuro retorna <a href=\"/docs/errors#invalid-query\"><code>invalid-query</code></a>. Se você ficou offline por mais de 14 dias, reconstrua a partir das <a href=\"/docs/exports\">exportações diárias de IDs</a>.</p>\n<p>Cada página conta como uma requisição.</p>\n<pre tabindex=\"0\"><code class=\"language-ts\">import { createHexascoreClient, getItem, listChanges } from &quot;@hexascore/sdk&quot;;\n\nconst client = createHexascoreClient({ apiKey: process.env.HEXASCORE_API_KEY! });\n\nlet since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();\nlet cursor: string | undefined;\ndo {\n\tconst { data, error } = await listChanges({ client, query: { since, type: &quot;games&quot;, limit: &quot;500&quot;, cursor } });\n\tif (error) throw new Error(`${error.code}: ${error.detail}`);\n\tfor (const change of data.data ?? []) {\n\t\tif (change.action === &quot;deleted&quot;) continue; // remova o item ou siga mergedInto\n\t\tconst item = await getItem({ client, path: { type: change.itemType, id: change.itemId } });\n\t\t// guarde item.data\n\t\tsince = change.changedAt;\n\t}\n\tcursor = data.meta?.next_cursor || undefined;\n} while (cursor);</code></pre>\n<pre tabindex=\"0\"><code class=\"language-python\">import os\nfrom datetime import datetime, timedelta, timezone\n\nfrom hexascore import AuthenticatedClient\nfrom hexascore.api.catalog import get_item, list_changes\nfrom hexascore.models import Problem\nfrom hexascore.types import UNSET\n\nclient = AuthenticatedClient(base_url=&quot;https://api.hexascore.app/v1&quot;, token=os.environ[&quot;HEXASCORE_API_KEY&quot;])\nsince = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()\n\nwith client as c:\n    cursor = UNSET\n    while True:\n        page = list_changes.sync(client=c, since=since, type_=&quot;games&quot;, limit=&quot;500&quot;, cursor=cursor)\n        if isinstance(page, Problem) or page is None:\n            raise RuntimeError(page.detail if page else &quot;no response&quot;)\n        for change in page.data:\n            if change.action == &quot;deleted&quot;:\n                continue  # remova o item ou siga merged_into\n            item = get_item.sync(change.item_type, client=c, id=change.item_id)\n            since = change.changed_at\n        cursor = page.meta.next_cursor\n        if not cursor:\n            break</code></pre>\n<h2 id=\"webhooks-em-vez-de-polling\">Webhooks em vez de polling</h2>\n<p>Os planos Pro e Business podem receber os mesmos eventos em uma URL. Veja <a href=\"/docs/webhooks\">Webhooks</a>. As entregas de webhook podem falhar, então use <code>/v1/changes</code> para recuperar qualquer lacuna.</p>",
+		"toc": [
+			{
+				"id": "como-funciona",
+				"text": "Como funciona",
+				"level": 2
+			},
+			{
+				"id": "mantenha-uma-copia-sincronizada",
+				"text": "Mantenha uma cópia sincronizada",
+				"level": 2
+			},
+			{
+				"id": "webhooks-em-vez-de-polling",
+				"text": "Webhooks em vez de polling",
+				"level": 2
+			}
+		]
+	},
+	{
+		"slug": "exports",
+		"title": "Exportações",
+		"body": "<h1 id=\"exportacoes\">Exportações</h1>\n<p>Baixe a lista completa de ids de itens uma vez por dia e busque depois apenas o que precisar.</p>\n<h2 id=\"o-que-e-exportado\">O que é exportado</h2>\n<p>Todo dia, antes das 08:00 UTC, geramos um arquivo por tipo de item: games, movies, series e books. Os arquivos são mantidos por 90 dias. As exportações estão disponíveis nos planos Pro e Business; o plano Free recebe <a href=\"/docs/errors#plan-required\"><code>plan-required</code></a>.</p>\n<p>Cada arquivo é um NDJSON compactado com gzip, com um objeto JSON por linha:</p>\n<pre tabindex=\"0\"><code class=\"language-json\">{&quot;id&quot;:&quot;0192f3a4-7b1c-7e21-9c55-3f1e2d4a6b71&quot;,&quot;slug&quot;:&quot;hades&quot;,&quot;wikidata&quot;:&quot;Q62640075&quot;,&quot;updatedAt&quot;:&quot;2026-11-02T06:12:44Z&quot;}</code></pre>\n<table><thead><tr><th scope=\"col\">Campo</th><th scope=\"col\">Significado</th></tr></thead><tbody><tr><td><code>id</code></td><td>O id do item no HexaScore, usado em <code>GET /v1/{type}/{id}</code>.</td></tr><tr><td><code>slug</code></td><td>O slug da URL da página do item.</td></tr><tr><td><code>wikidata</code></td><td>O id da entidade no Wikidata.</td></tr><tr><td><code>updatedAt</code></td><td>Quando o item mudou pela última vez.</td></tr></tbody></table>\n<p>Os arquivos trazem apenas ids. Os dados do item, as notas e os campos com restrição de licença vêm dos endpoints normais, então as regras do plano sempre se aplicam.</p>\n<h2 id=\"download\">Download</h2>\n<p><code>GET /v1/exports</code> lista os arquivos disponíveis. <code>GET /v1/exports/{type}/{day}</code> (por exemplo <code>/v1/exports/games/2026-11-02</code>) responde <code>302</code> para uma URL de download válida por 5 minutos. Siga o redirecionamento imediatamente e não guarde a URL.</p>\n<pre tabindex=\"0\"><code class=\"language-sh\">curl -L -H &quot;Authorization: Bearer $HEXASCORE_API_KEY&quot; \\\n  &quot;https://api.hexascore.app/v1/exports/games/2026-11-02&quot; -o games_ids.json.gz\ngunzip -c games_ids.json.gz | head -n 3</code></pre>\n<p>Um dia desconhecido, ou com mais de 90 dias, retorna <a href=\"/docs/errors#not-found\"><code>not-found</code></a>.</p>\n<h2 id=\"uma-boa-rotina\">Uma boa rotina</h2>\n<ul><li>Baixe os arquivos uma vez por dia e compare com a sua cópia: ids novos são criações, ids ausentes são exclusões.</li><li>Busque os ids novos com <code>GET /v1/{type}/{id}</code>, respeitando os seus <a href=\"/docs/rate-limits\">limites de requisições</a>.</li><li>Entre uma exportação e outra, acompanhe as <a href=\"/docs/changes\">Mudanças</a> para ter a visão minuto a minuto.</li></ul>",
+		"toc": [
+			{
+				"id": "o-que-e-exportado",
+				"text": "O que é exportado",
+				"level": 2
+			},
+			{
+				"id": "download",
+				"text": "Download",
+				"level": 2
+			},
+			{
+				"id": "uma-boa-rotina",
+				"text": "Uma boa rotina",
+				"level": 2
+			}
+		]
+	},
+	{
+		"slug": "webhooks",
+		"title": "Webhooks",
+		"body": "<h1 id=\"webhooks\">Webhooks</h1>\n<p>Receba uma requisição HTTP assinada quando os itens mudarem, em vez de fazer polling.</p>\n<h2 id=\"configuracao\">Configuração</h2>\n<p>Os webhooks estão disponíveis nos planos Pro (2 endpoints) e Business (10 endpoints). Crie um endpoint com <code>POST /v1/webhooks</code>:</p>\n<table><thead><tr><th scope=\"col\">Campo</th><th scope=\"col\">Significado</th></tr></thead><tbody><tr><td><code>url</code></td><td>Uma URL <code>https</code> que responda em poucos segundos. Endereços privados e internos são recusados.</td></tr><tr><td><code>events</code></td><td>Um ou mais entre <code>item.created</code>, <code>item.updated</code>, <code>item.deleted</code>.</td></tr><tr><td><code>itemTypes</code></td><td>Um ou mais entre <code>games</code>, <code>movies</code>, <code>series</code>, <code>books</code>.</td></tr></tbody></table>\n<p>A resposta contém o <code>secret</code> de assinatura, que começa com <code>whsec_</code>. Ele é exibido uma única vez: guarde-o no seu gerenciador de segredos. Use <code>GET /v1/webhooks</code> para listar os endpoints, <code>DELETE /v1/webhooks/{id}</code> para removê-los e <code>POST /v1/webhooks/{id}/test</code> para enviar uma entrega de teste. Gerenciar webhooks não conta na sua cota.</p>\n<h2 id=\"o-que-enviamos\">O que enviamos</h2>\n<p>Enviamos um lote de até 100 eventos em um único <code>POST</code> com corpo JSON. Os payloads trazem apenas ids e nomes de campos; busque o item de novo para ler os dados dele.</p>\n<pre tabindex=\"0\"><code class=\"language-json\">{\n  &quot;type&quot;: &quot;item.batch&quot;,\n  &quot;deliveredAt&quot;: &quot;2026-11-02T10:15:00Z&quot;,\n  &quot;events&quot;: [\n    {\n      &quot;id&quot;: &quot;chg_1048576&quot;,\n      &quot;type&quot;: &quot;item.updated&quot;,\n      &quot;itemType&quot;: &quot;games&quot;,\n      &quot;itemId&quot;: &quot;0192f3a4-7b1c-7e21-9c55-3f1e2d4a6b71&quot;,\n      &quot;fields&quot;: [&quot;score&quot;, &quot;ratingCount&quot;],\n      &quot;changedAt&quot;: &quot;2026-11-02T10:14:12Z&quot;\n    },\n    {\n      &quot;id&quot;: &quot;chg_1048577&quot;,\n      &quot;type&quot;: &quot;item.deleted&quot;,\n      &quot;itemType&quot;: &quot;movies&quot;,\n      &quot;itemId&quot;: &quot;0192f3a4-7b1c-7e21-9c55-3f1e2d4a5521&quot;,\n      &quot;mergedInto&quot;: &quot;0192f3a4-7b1c-7e21-9c55-3f1e2d4a5520&quot;,\n      &quot;changedAt&quot;: &quot;2026-11-02T10:14:30Z&quot;\n    }\n  ]\n}</code></pre>\n<p>Os eventos do mesmo item dentro de uma janela de entrega são agrupados. Os ids de evento são únicos, então use-os para ignorar uma repetição.</p>\n<h2 id=\"verifique-a-assinatura\">Verifique a assinatura</h2>\n<p>As entregas seguem o padrão <a href=\"https://www.standardwebhooks.com\">Standard Webhooks</a>. Toda requisição tem três cabeçalhos: <code>webhook-id</code>, <code>webhook-timestamp</code> (segundos Unix) e <code>webhook-signature</code> (um ou mais valores <code>v1,&lt;base64&gt;</code> separados por espaço).</p>\n<p>Para verificar uma entrega:</p>\n<ul><li>Leia o corpo bruto da requisição. Não o interprete nem o serialize de novo.</li><li>Rejeite a requisição quando <code>webhook-timestamp</code> estiver a mais de 5 minutos do seu relógio.</li><li>Calcule o HMAC-SHA256 em base64 de <code>&lt;webhook-id&gt;.&lt;webhook-timestamp&gt;.&lt;corpo bruto&gt;</code>, usando como chave o segredo sem o prefixo <code>whsec_</code>, decodificado de base64.</li><li>Compare-o com cada valor <code>v1</code> em tempo constante. Aceite a requisição quando um deles coincidir.</li></ul>\n<pre tabindex=\"0\"><code class=\"language-ts\">import { createHmac, timingSafeEqual } from &quot;node:crypto&quot;;\n\nexport function verifyWebhook(secret: string, headers: Headers, rawBody: string): boolean {\n\tconst id = headers.get(&quot;webhook-id&quot;);\n\tconst timestamp = headers.get(&quot;webhook-timestamp&quot;);\n\tconst signatures = headers.get(&quot;webhook-signature&quot;);\n\tif (!id || !timestamp || !signatures) return false;\n\tif (Math.abs(Date.now() / 1000 - Number(timestamp)) &gt; 300) return false;\n\n\tconst key = Buffer.from(secret.replace(/^whsec_/, &quot;&quot;), &quot;base64&quot;);\n\tconst expected = createHmac(&quot;sha256&quot;, key).update(`${id}.${timestamp}.${rawBody}`).digest();\n\treturn signatures.split(&quot; &quot;).some((entry) =&gt; {\n\t\tconst [version, value] = entry.split(&quot;,&quot;);\n\t\tif (version !== &quot;v1&quot; || !value) return false;\n\t\tconst got = Buffer.from(value, &quot;base64&quot;);\n\t\treturn got.length === expected.length &amp;&amp; timingSafeEqual(got, expected);\n\t});\n}</code></pre>\n<pre tabindex=\"0\"><code class=\"language-python\">import base64\nimport binascii\nimport hashlib\nimport hmac\nimport time\n\n\ndef verify_webhook(secret: str, headers: dict[str, str], raw_body: bytes) -&gt; bool:\n    try:\n        msg_id = headers[&quot;webhook-id&quot;]\n        timestamp = headers[&quot;webhook-timestamp&quot;]\n        signatures = headers[&quot;webhook-signature&quot;]\n        if abs(time.time() - int(timestamp)) &gt; 300:\n            return False\n    except (KeyError, ValueError):\n        return False\n\n    key = base64.b64decode(secret.removeprefix(&quot;whsec_&quot;))\n    signed = f&quot;{msg_id}.{timestamp}.&quot;.encode() + raw_body\n    expected = hmac.new(key, signed, hashlib.sha256).digest()\n    for entry in signatures.split(&quot; &quot;):\n        version, _, value = entry.partition(&quot;,&quot;)\n        try:\n            got = base64.b64decode(value)\n        except binascii.Error:\n            continue\n        if version == &quot;v1&quot; and hmac.compare_digest(got, expected):\n            return True\n    return False</code></pre>\n<h2 id=\"novas-tentativas-e-falhas\">Novas tentativas e falhas</h2>\n<p>Responda com qualquer status <code>2xx</code> em poucos segundos e faça o trabalho de verdade depois. Repetimos as outras respostas e os timeouts 8 vezes, com intervalos crescentes a partir de 30 segundos. Um <code>410 Gone</code> interrompe a entrega definitivamente. Depois de três entregas seguidas esgotarem as tentativas, o endpoint é desativado e enviamos um e-mail ao dono da conta. As entregas ficam registradas por 30 dias.</p>\n<p>A entrega é pelo menos uma vez e sem ordem estrita. Os webhooks ainda podem perder eventos, então chame <a href=\"/docs/changes\"><code>/v1/changes</code></a> com o <code>since</code> do último evento processado para preencher qualquer lacuna.</p>",
+		"toc": [
+			{
+				"id": "configuracao",
+				"text": "Configuração",
+				"level": 2
+			},
+			{
+				"id": "o-que-enviamos",
+				"text": "O que enviamos",
+				"level": 2
+			},
+			{
+				"id": "verifique-a-assinatura",
+				"text": "Verifique a assinatura",
+				"level": 2
+			},
+			{
+				"id": "novas-tentativas-e-falhas",
+				"text": "Novas tentativas e falhas",
+				"level": 2
+			}
+		]
+	},
+	{
+		"slug": "errors",
+		"title": "Erros",
+		"body": "<h1 id=\"erros\">Erros</h1>\n<p>Os erros usam os detalhes de problema da RFC 9457, com um código estável legível por máquina.</p>\n<h2 id=\"formato\">Formato</h2>\n<p>Todo erro tem <code>Content-Type: application/problem+json</code>. Trate a resposta pelo <code>code</code> (estável) e não por <code>title</code> ou <code>detail</code> (texto para humanos que pode mudar). <code>type</code> aponta para a seção correspondente abaixo, e <code>request_id</code> é igual ao cabeçalho <code>X-Request-Id</code>: informe-o ao falar com o suporte.</p>\n<pre tabindex=\"0\"><code class=\"language-json\">{\n  &quot;type&quot;: &quot;https://hexascore.app/problems/quota-exhausted&quot;,\n  &quot;title&quot;: &quot;Quota exhausted&quot;,\n  &quot;status&quot;: 402,\n  &quot;detail&quot;: &quot;Monthly quota is exhausted. Upgrade at https://hexascore.app/pricing.&quot;,\n  &quot;instance&quot;: &quot;/api/v1/games&quot;,\n  &quot;request_id&quot;: &quot;01JB7Q4V0Q8M3K2Y7T9H5N6C1D&quot;,\n  &quot;code&quot;: &quot;quota-exhausted&quot;,\n  &quot;plan&quot;: &quot;pro&quot;,\n  &quot;limit&quot;: 50000\n}</code></pre>\n<h2 id=\"codigos\">Códigos</h2>\n<h3 id=\"invalid-query\">invalid-query</h3>\n<p>HTTP 400. Um parâmetro de consulta é desconhecido ou está fora do intervalo, ou <code>limit</code> é maior que o tamanho de página do seu plano (10 no Free). <code>errors</code> lista cada problema com o seu <code>path</code>. Corrija os parâmetros listados. Não conta na sua cota.</p>\n<h3 id=\"invalid-cursor\">invalid-cursor</h3>\n<p>HTTP 400. O <code>cursor</code> foi adulterado ou pertence a outra consulta. Recomece pela primeira página.</p>\n<h3 id=\"changes-window-exceeded\">changes-window-exceeded</h3>\n<p>HTTP 400. A janela <code>since</code> de <code>/v1/changes</code> é maior do que o endpoint permite. Peça um <code>since</code> mais recente.</p>\n<h3 id=\"unauthorized\">unauthorized</h3>\n<p>HTTP 401. Não há cabeçalho <code>Authorization: Bearer</code>, a chave é malformada, ou a chave não existe ou foi revogada. Confira o cabeçalho e a chave em <a href=\"/profile/api\">/profile/api</a>. Nunca é repetida automaticamente.</p>\n<h3 id=\"quota-exhausted\">quota-exhausted</h3>\n<p>HTTP 402. As 100 requisições vitalícias do Free, ou a cota mensal dos planos pagos. O corpo inclui <code>plan</code> e <code>limit</code>. Faça upgrade do plano em <a href=\"/pricing\">/pricing</a>. As cotas pagas são renovadas no dia 1º de cada mês (UTC).</p>\n<h3 id=\"plan-required\">plan-required</h3>\n<p>HTTP 403. O endpoint exige um plano superior. Faça upgrade em <a href=\"/pricing\">/pricing</a>.</p>\n<h3 id=\"account-banned\">account-banned</h3>\n<p>HTTP 403. A conta dona da chave está suspensa. Fale conosco por <a href=\"/contact\">/contact</a> informando o <code>request_id</code>.</p>\n<h3 id=\"not-found\">not-found</h3>\n<p>HTTP 404. Id de item desconhecido, id que pertence a outro tipo (por exemplo, o id de um jogo em <code>/movies</code>), caminho de tipo desconhecido, ou nenhuma correspondência em <code>/lookup</code>. As buscas exigem o id exato.</p>\n<h3 id=\"rate-limited\">rate-limited</h3>\n<p>HTTP 429. Mais requisições por segundo do que o seu plano permite. O cabeçalho <code>Retry-After</code> diz quantos segundos esperar. Não conta na sua cota. Espaçe as rajadas ou faça upgrade para um limite maior.</p>\n<h3 id=\"internal-error\">internal-error</h3>\n<p>HTTP 500. Algo falhou do nosso lado. A requisição é estornada na sua cota. Tente de novo com backoff exponencial; se persistir, envie-nos o <code>request_id</code>.</p>\n<h3 id=\"community-submissions-closed\">community-submissions-closed</h3>\n<p>HTTP 403. As sugestões da comunidade estão desativadas no momento. Tente novamente mais tarde.</p>\n<h3 id=\"suggestion-not-eligible\">suggestion-not-eligible</h3>\n<p>HTTP 403. Sua conta não pode enviar sugestões (e-mail não verificado, conta muito nova, bloqueada para envios, ou a sugestão não é sua).</p>\n<h3 id=\"suggestion-duplicate\">suggestion-duplicate</h3>\n<p>HTTP 409. Já existe uma sugestão aberta para o mesmo item e os mesmos campos. Edite-a ou retire-a em vez de criar outra.</p>\n<h3 id=\"stale-before\">stale-before</h3>\n<p>HTTP 409. O campo mudou desde que você o carregou. Recarregue e aplique a edição de novo.</p>\n<h3 id=\"invalid-transition\">invalid-transition</h3>\n<p>HTTP 409. A sugestão não pode passar do status atual para o solicitado.</p>\n<h3 id=\"field-locked\">field-locked</h3>\n<p>HTTP 423. Um moderador bloqueou este campo; edições da comunidade nele não são aceitas.</p>\n<h3 id=\"suggestion-quota\">suggestion-quota</h3>\n<p>HTTP 429. Você atingiu a cota diária de sugestões. Tente de novo depois da renovação.</p>\n<h3 id=\"suggestion-cooldown\">suggestion-cooldown</h3>\n<p>HTTP 429. Aguarde o fim do intervalo de espera; o cabeçalho <code>Retry-After</code> informa os segundos.</p>\n<h3 id=\"validation\">validation</h3>\n<p>HTTP 422. O envio falhou na validação.</p>\n<h3 id=\"service-unavailable\">service-unavailable</h3>\n<p>HTTP 503. Uma dependência está temporariamente fora do ar. Vem com <code>Retry-After</code>. Tente de novo após o intervalo indicado.</p>\n<h2 id=\"novas-tentativas\">Novas tentativas</h2>\n<p>Repita apenas <code>429</code>, <code>500</code> e <code>503</code>, respeitando <code>Retry-After</code> quando presente e, caso contrário, usando backoff exponencial. Todo endpoint é um <code>GET</code> somente leitura, então repetir a chamada é sempre seguro.</p>",
+		"toc": [
+			{
+				"id": "formato",
+				"text": "Formato",
+				"level": 2
+			},
+			{
+				"id": "codigos",
+				"text": "Códigos",
+				"level": 2
+			},
+			{
+				"id": "invalid-query",
+				"text": "invalid-query",
+				"level": 3
+			},
+			{
+				"id": "invalid-cursor",
+				"text": "invalid-cursor",
+				"level": 3
+			},
+			{
+				"id": "changes-window-exceeded",
+				"text": "changes-window-exceeded",
+				"level": 3
+			},
+			{
+				"id": "unauthorized",
+				"text": "unauthorized",
+				"level": 3
+			},
+			{
+				"id": "quota-exhausted",
+				"text": "quota-exhausted",
+				"level": 3
+			},
+			{
+				"id": "plan-required",
+				"text": "plan-required",
+				"level": 3
+			},
+			{
+				"id": "account-banned",
+				"text": "account-banned",
+				"level": 3
+			},
+			{
+				"id": "not-found",
+				"text": "not-found",
+				"level": 3
+			},
+			{
+				"id": "rate-limited",
+				"text": "rate-limited",
+				"level": 3
+			},
+			{
+				"id": "internal-error",
+				"text": "internal-error",
+				"level": 3
+			},
+			{
+				"id": "community-submissions-closed",
+				"text": "community-submissions-closed",
+				"level": 3
+			},
+			{
+				"id": "suggestion-not-eligible",
+				"text": "suggestion-not-eligible",
+				"level": 3
+			},
+			{
+				"id": "suggestion-duplicate",
+				"text": "suggestion-duplicate",
+				"level": 3
+			},
+			{
+				"id": "stale-before",
+				"text": "stale-before",
+				"level": 3
+			},
+			{
+				"id": "invalid-transition",
+				"text": "invalid-transition",
+				"level": 3
+			},
+			{
+				"id": "field-locked",
+				"text": "field-locked",
+				"level": 3
+			},
+			{
+				"id": "suggestion-quota",
+				"text": "suggestion-quota",
+				"level": 3
+			},
+			{
+				"id": "suggestion-cooldown",
+				"text": "suggestion-cooldown",
+				"level": 3
+			},
+			{
+				"id": "validation",
+				"text": "validation",
+				"level": 3
+			},
+			{
+				"id": "service-unavailable",
+				"text": "service-unavailable",
+				"level": 3
+			},
+			{
+				"id": "novas-tentativas",
+				"text": "Novas tentativas",
+				"level": 2
+			}
+		]
+	},
+	{
+		"slug": "coverage",
+		"title": "Cobertura de dados",
+		"body": "<h1 id=\"cobertura-de-dados\">Cobertura de dados</h1>\n<p>Todo campo que a API retorna vem de uma fonte que temos permissão para republicar. Por isso, alguns campos são irregulares e outros são sempre omitidos. Esta página diz o que esperar antes de você construir algo em cima deles.</p>\n<h2 id=\"campos-e-suas-fontes\">Campos e suas fontes</h2>\n<table><thead><tr><th scope=\"col\">Campo</th><th scope=\"col\">Fonte</th><th scope=\"col\">Lacuna esperada</th></tr></thead><tbody><tr><td><code>id</code>, <code>type</code>, <code>slug</code>, <code>url</code>, campos de nota, <code>trending</code>, <code>timeToBeat</code></td><td>HexaScore (termos da API)</td><td>nenhuma</td></tr><tr><td><code>title</code>, <code>releaseDate</code>, <code>genres</code>, <code>people</code>, <code>organisations</code>, <code>franchises</code>, <code>platforms</code>, <code>countries</code>, duração, páginas, temporadas, episódios</td><td>Wikidata (CC0) e a comunidade</td><td>duração, plataformas e contagem de episódios são irregulares</td></tr><tr><td><code>synopsis</code></td><td>Wikipedia (CC BY-SA 4.0, com <code>sourceUrl</code>)</td><td>itens sem artigo</td></tr><tr><td>edições e capas de livros</td><td>Open Library e Wikidata</td><td>não se aplica a outros tipos</td></tr><tr><td>capas de filmes, séries e jogos, e trailers</td><td>nenhuma</td><td>nunca na API</td></tr><tr><td><code>externalIds</code></td><td>Wikidata, ISBN-13, Open Library</td><td>os ids do TMDB, IGDB e Steam são omitidos</td></tr></tbody></table>\n<p>Toda resposta lista os campos que deixou de fora em <code>meta.omittedFields</code>, e cada valor com fonte traz a sua <code>provenance</code> (fonte e licença).</p>\n<h2 id=\"percentuais-de-cobertura\">Percentuais de cobertura</h2>\n<p>A tabela abaixo mostra, por tipo, a fatia de itens públicos para os quais a API retorna cada campo. Ela é medida com <code>qa/sql/api_coverage.sql</code> em uma cópia do catálogo de produção, usando as mesmas regras de fonte da API, e exibe a data da medição.</p>",
+		"toc": [
+			{
+				"id": "campos-e-suas-fontes",
+				"text": "Campos e suas fontes",
+				"level": 2
+			},
+			{
+				"id": "percentuais-de-cobertura",
+				"text": "Percentuais de cobertura",
+				"level": 2
+			}
+		]
+	},
+	{
+		"slug": "changelog",
+		"title": "Changelog",
+		"body": "<h1 id=\"changelog\">Changelog</h1>\n<p>A versão faz parte do caminho. A v1 só muda de forma retrocompatível.</p>\n<h2 id=\"politica-de-versionamento\">Política de versionamento</h2>\n<p>Dentro de <code>/v1</code> fazemos apenas mudanças aditivas: novos endpoints, novos parâmetros opcionais, novos campos de resposta e novos textos de <code>detail</code> nos erros. Ignore campos desconhecidos e não dependa da ordem dos campos.</p>\n<p>Mudanças incompatíveis (remover ou renomear um campo, mudar um tipo, tornar um parâmetro obrigatório) são lançadas em um novo caminho (<code>/v2</code>). Os valores de <code>code</code> dos erros, as chaves de categoria e os nomes de ordenação fazem parte do contrato.</p>\n<h2 id=\"descontinuacao-e-encerramento\">Descontinuação e encerramento</h2>\n<ul><li>Uma versão descontinuada continua funcionando por pelo menos 6 meses depois do lançamento da sucessora.</li><li>As respostas dela trazem os cabeçalhos <code>Deprecation</code> (RFC 9745) e <code>Sunset</code> (RFC 8594) com a data em que deixa de funcionar, além de um <code>Link</code> para esta página.</li><li>Os donos de conta com tráfego recente na versão antiga recebem e-mail na descontinuação e 30 dias antes do encerramento.</li></ul>\n<h2 id=\"mudancas\">Mudanças</h2>\n<h3 id=\"v1-primeira-versao\">v1: primeira versão</h3>\n<ul><li>Listas, detalhes e gêneros para <code>games</code>, <code>movies</code>, <code>series</code> e <code>books</code>.</li><li><code>/search</code>, <code>/lookup</code> por id externo e <code>/me/usage</code>.</li></ul>",
+		"toc": [
+			{
+				"id": "politica-de-versionamento",
+				"text": "Política de versionamento",
+				"level": 2
+			},
+			{
+				"id": "descontinuacao-e-encerramento",
+				"text": "Descontinuação e encerramento",
+				"level": 2
+			},
+			{
+				"id": "mudancas",
+				"text": "Mudanças",
+				"level": 2
+			},
+			{
+				"id": "v1-primeira-versao",
+				"text": "v1: primeira versão",
+				"level": 3
+			}
+		]
+	}
+]

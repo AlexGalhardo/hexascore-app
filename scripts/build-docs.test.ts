@@ -3,7 +3,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
-import { docsJSON, renderMarkdown } from "./build-docs";
+import { DOC_LOCALES, docsJSON, renderMarkdown } from "./build-docs";
 
 const docsDir = join(dirname(fileURLToPath(import.meta.url)), "..", "resources", "docs");
 
@@ -77,4 +77,26 @@ it("documents the cursor as meta.next_cursor, never top-level", () => {
 		expect(md).toContain("meta.next_cursor");
 		expect(md).not.toMatch(/page.next_cursor|`next_cursor` (for|is `null`)/);
 	}
+});
+
+describe.each(DOC_LOCALES)("%s docs", (locale) => {
+	const dir = join(docsDir, locale);
+	const en = JSON.parse(docsJSON(docsDir)) as { slug: string; body: string }[];
+	const tr = JSON.parse(docsJSON(dir)) as { slug: string; body: string }[];
+	const blocks = (body: string): string[] => body.match(/<pre[\s\S]*?<\/pre>/g) ?? [];
+
+	it("is committed and up to date", () => {
+		expect(readFileSync(join(docsDir, `docs.${locale}.json`), "utf8")).toBe(docsJSON(dir));
+	});
+
+	it("has the same slugs and the same error anchors as English", () => {
+		expect(tr.map((p) => p.slug)).toEqual(en.map((p) => p.slug));
+		const anchors = (body: string): string[] => body.match(/<h3 id="[^"]+"/g) ?? [];
+		const errors = (pages: { slug: string; body: string }[]): string[] => anchors(pages.find((p) => p.slug === "errors")?.body ?? "");
+		expect(errors(tr)).toEqual(errors(en));
+	});
+
+	it("keeps code blocks outside comments identical in count", () => {
+		for (const page of en) expect(blocks(tr.find((p) => p.slug === page.slug)?.body ?? "")).toHaveLength(blocks(page.body).length);
+	});
 });

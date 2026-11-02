@@ -65,7 +65,7 @@ Railway rules that override the skill's deploy-from-cwd shortcut: do not run `ra
 | `golangci-lint run` | Go lint and format check |
 | `golangci-lint run --build-tags integration ./...` | Go lint incl. integration tests (CI pins v2.15.0) |
 | `bunx commitlint --from <base-sha> --to <head-sha>` | Conventional Commits check on a commit range (CI `lint`; PR title via stdin) |
-| `bun run build:docs` | re-render `resources/docs/*.md` into the committed `resources/docs/docs.json` (a vitest test fails when stale) |
+| `bun run build:docs` | re-render `resources/docs/*.md` (and the `pt-BR/`, `es/` translations) into the committed `docs.json`, `docs.pt-BR.json`, `docs.es.json` (a vitest test fails when stale) |
 | `bun run lint` / `bun run typecheck` / `bun run test` | TypeScript lint, types, unit tests |
 | `bun run --cwd apps/mobile lint` / `typecheck` / `test` | Android app (Biome, `tsc`, Jest). `catalogues` recopies the bundled i18n namespaces |
 | `bunx eas-cli@27.2.0 build` / `submit` / `update` (in `apps/mobile`) | mobile release with EAS: follow `docs/runbooks/mobile-release.md` (skill `hexascore-mobile-release`); owner confirms version, every submit and production OTA; CI: manual `mobile-release.yml` |

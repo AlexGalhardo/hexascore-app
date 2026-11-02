@@ -15,7 +15,7 @@ import (
 
 // all: keeps build/.vite/manifest.json (a dot directory) in the binary.
 //
-//go:embed views lang docs/docs.json docs/*.md data/api_coverage.json all:public
+//go:embed views lang docs/docs.json docs/docs.*.json docs/*.md data/api_coverage.json all:public
 var embedded embed.FS
 
 // Views returns the html/template views.
@@ -61,6 +61,11 @@ func production() bool {
 
 // DocsJSON returns the pre-rendered API docs built by scripts/build-docs.ts.
 func DocsJSON() ([]byte, error) { return embedded.ReadFile("docs/docs.json") }
+
+// DocsJSONLocale returns the pre-rendered API docs of a translated locale ("pt-BR", "es"), built by scripts/build-docs.ts.
+func DocsJSONLocale(locale string) ([]byte, error) {
+	return embedded.ReadFile("docs/docs." + locale + ".json")
+}
 
 // DocsMarkdown returns the Markdown source of one API docs page (resources/docs/<slug>.md), for /llms-full.txt.
 func DocsMarkdown(slug string) ([]byte, error) { return embedded.ReadFile("docs/" + slug + ".md") }
