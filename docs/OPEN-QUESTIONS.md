@@ -38,3 +38,5 @@ Each entry: what is blocked, the assumption the audit proceeds with, and the exa
   - Answer (owner, 2026-11-02): delete `vercel-env/` without rotation (nothing there is considered valid). Done in this session.
 - OQ-14 Playwright e2e is excluded from CI and the release gate (`RUN_E2E` unset). The audit recommends running it on every release candidate in CI (it caught nothing new today but is the only check of the browser flows). Re-enable?
   - Answer (owner, 2026-11-02): run the Playwright `desktop-en` project on release candidates in CI after the helper fix (B-012); normal pushes stay without e2e. Recorded as D-42.
+- OQ-15 (2026-11-02, from B-020): the item page at phone width shows cover, actions, details, the score card and the full rating widget before the H1 and synopsis (owner order of 2026-11-02, `Show.tsx`, commit 2b107e2a); the audit (W-02) asks for the title and synopsis first. Keep the owner order or follow the audit?
+  - Answer (owner, 2026-11-02): follow the audit: title and synopsis before the rating widget on phones (B-020).
