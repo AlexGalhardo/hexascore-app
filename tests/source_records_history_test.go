@@ -35,7 +35,11 @@ func (d *putCounter) Put(ctx context.Context, p string, r io.Reader) error {
 }
 
 func TestSourceRecordHistory_PartitionsAndColdExport(t *testing.T) {
-	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")}})
+	app := vukemtest.New(
+		t,
+		bootstrap.New,
+		vukemtest.Options{Env: map[string]string{"DATABASE_URL": pgtest.Database(t, "")}},
+	)
 
 	db, err := app.DB()
 	if err != nil {
@@ -62,7 +66,8 @@ VALUES ('wikidata', $1, 'h', '{"v":1}', $2, $2, 1)`, "Q"+string(rune('1'+i)), at
 
 	for q, want := range map[string]string{"Q1": "source_record_history_2026_07", "Q3": "source_record_history_2026_09", "Q4": "source_record_history_2026_10"} {
 		if err := db.QueryRowContext(ctx, `SELECT tableoid::regclass::text FROM source_record_history WHERE external_id = $1`, q).
-			Scan(&where); err != nil || where != want {
+			Scan(&where); err != nil ||
+			where != want {
 			t.Errorf("%s landed in %q (%v), want %s", q, where, err, want)
 		}
 	}

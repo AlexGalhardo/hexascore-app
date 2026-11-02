@@ -38,7 +38,12 @@ type ExportResult struct {
 // RunExportSourceHistory exports and drops the closed months. Months with no rows write no object. An object that
 // already exists is not written again, so a rerun after a crash (or a second run the same day) is a no-op, and a
 // partition is dropped only when its object exists or it was empty.
-func RunExportSourceHistory(ctx context.Context, db database.Executor, disk storage.Disk, now time.Time) (ExportResult, error) {
+func RunExportSourceHistory(
+	ctx context.Context,
+	db database.Executor,
+	disk storage.Disk,
+	now time.Time,
+) (ExportResult, error) {
 	var res ExportResult
 
 	if err := store.EnsureHistoryPartitions(ctx, db, now, 3); err != nil {
@@ -91,7 +96,13 @@ func RunExportSourceHistory(ctx context.Context, db database.Executor, disk stor
 	return res, nil
 }
 
-func exportPartition(ctx context.Context, db database.Executor, disk storage.Disk, p store.HistoryPartition, key string) error {
+func exportPartition(
+	ctx context.Context,
+	db database.Executor,
+	disk storage.Disk,
+	p store.HistoryPartition,
+	key string,
+) error {
 	pr, pw := io.Pipe()
 	done := make(chan error, 1)
 
