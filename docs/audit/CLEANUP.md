@@ -83,3 +83,5 @@ Method: `release/history-linear-pre-c2` and `build/apk-sideload` are two paralle
 | `release/history-linear-pre-c2` | delete | the pre-rewrite `main` lineage, in `main` by content | none |
 
 The orchestrator deletes all 14 branches after merging B-033 (`manual-access` too, its one change is cherry-picked); `legacy` is untouched.
+
+Executed 2026-11-02 (orchestrator): the 14 branches were saved to `backup-history-2026-11-02/kept-14-branches-2026-11-02.bundle` (outside the repo, `git bundle verify` ok) and deleted locally; `audit/architect-2026-11-02` and `agent/senior/B-012` deleted after their merge. `legacy` exists only on `origin` and was not touched. Still open: the 38 detached Temp worktrees (owner command, §E) and the Docker prune (D1).
