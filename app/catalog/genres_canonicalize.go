@@ -1,7 +1,6 @@
 package catalog
 
 import (
-	"cmp"
 	"context"
 	"database/sql"
 	"errors"
@@ -112,27 +111,9 @@ type sourceGenre struct {
 }
 
 func relinkGenres(ctx context.Context, tx *database.Tx, ids map[string]string, rep *GenreReport) error {
-	rows, err := tx.QueryContext(ctx, `SELECT ie.item_id::text, ie.entity_id::text, i.type, e.default_name, ie.source, ie.position
-FROM item_entities ie
-JOIN entities e ON e.id = ie.entity_id
-JOIN items i ON i.id = ie.item_id
-WHERE ie.role = 'genre' AND e.provenance->>'canonical' IS DISTINCT FROM 'genre'
-ORDER BY ie.item_id, ie.position`)
+	links, err := sourceGenres(ctx, tx)
 	if err != nil {
-		return fmt.Errorf("genres: source links: %w", err)
-	}
-
-	var links []sourceGenre
-	for rows.Next() {
-		var g sourceGenre
-		if err := rows.Scan(&g.item, &g.entity, &g.typ, &g.label, &g.source, &g.position); err != nil {
-			_ = rows.Close()
-			return fmt.Errorf("genres: scan: %w", err)
-		}
-		links = append(links, g)
-	}
-	if err := cmp.Or(rows.Err(), rows.Close()); err != nil {
-		return fmt.Errorf("genres: source links: %w", err)
+		return err
 	}
 
 	rep.Links = len(links)
@@ -157,11 +138,43 @@ VALUES ($1, $2, $3, $4, $5) ON CONFLICT (item_id, entity_id) DO UPDATE SET code 
 			return fmt.Errorf("genres: keep source %s: %w", g.item, err)
 		}
 
-		if _, err := tx.ExecContext(ctx, `DELETE FROM item_entities WHERE item_id = $1 AND entity_id = $2 AND role = 'genre'`,
-			g.item, g.entity); err != nil {
+		if _, err := tx.ExecContext(
+			ctx,
+			`DELETE FROM item_entities WHERE item_id = $1 AND entity_id = $2 AND role = 'genre'`,
+			g.item,
+			g.entity,
+		); err != nil {
 			return fmt.Errorf("genres: unlink %s: %w", g.item, err)
 		}
 	}
 
 	return nil
+}
+
+// sourceGenres reads the genre links that still point at a non-canonical entity.
+func sourceGenres(ctx context.Context, tx *database.Tx) ([]sourceGenre, error) {
+	rows, err := tx.QueryContext(
+		ctx,
+		`SELECT ie.item_id::text, ie.entity_id::text, i.type, e.default_name, ie.source, ie.position
+FROM item_entities ie
+JOIN entities e ON e.id = ie.entity_id
+JOIN items i ON i.id = ie.item_id
+WHERE ie.role = 'genre' AND e.provenance->>'canonical' IS DISTINCT FROM 'genre'
+ORDER BY ie.item_id, ie.position`,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("genres: source links: %w", err)
+	}
+	defer rows.Close()
+
+	var links []sourceGenre
+	for rows.Next() {
+		var g sourceGenre
+		if err := rows.Scan(&g.item, &g.entity, &g.typ, &g.label, &g.source, &g.position); err != nil {
+			return nil, fmt.Errorf("genres: scan: %w", err)
+		}
+		links = append(links, g)
+	}
+
+	return links, rows.Err()
 }

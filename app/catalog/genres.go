@@ -52,7 +52,7 @@ var Genres = map[string]GenreName{
 	"shooter":            {"Shooter", "Tiro", "Disparos"},
 	"short-stories":      {"Short stories", "Contos", "Cuentos"},
 	"simulation":         {"Simulation", "Simulação", "Simulación"},
-	"sports":             {"Sports", "Esportes", "Deportes"},
+	"sports":             {"Sports", "Esportes", "Deportes"}, //nolint:misspell // Portuguese, not "Esports"
 	"stealth":            {"Stealth", "Furtividade", "Sigilo"},
 	"strategy":           {"Strategy", "Estratégia", "Estrategia"},
 	"theatre":            {"Theatre", "Teatro", "Teatro"},
@@ -76,7 +76,10 @@ func rules(pairs ...string) []genreRule {
 		for j, k := range kws {
 			kws[j] = regexp.QuoteMeta(k)
 		}
-		out = append(out, genreRule{pairs[i], regexp.MustCompile(`(^|[^a-z])(` + strings.Join(kws, "|") + `)([^a-z]|$)`)})
+		out = append(
+			out,
+			genreRule{pairs[i], regexp.MustCompile(`(^|[^a-z])(` + strings.Join(kws, "|") + `)([^a-z]|$)`)},
+		)
 	}
 
 	return out

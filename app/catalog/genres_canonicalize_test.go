@@ -70,7 +70,9 @@ WHERE ie.item_id = $1 AND ie.role = 'genre' ORDER BY e.slug`, movie)
 	}
 
 	var kept int
-	if err := db.QueryRowContext(ctx, `SELECT count(*) FROM item_genre_sources WHERE item_id = $1`, movie).Scan(&kept); err != nil || kept != 3 {
+	if err := db.QueryRowContext(ctx, `SELECT count(*) FROM item_genre_sources WHERE item_id = $1`, movie).
+		Scan(&kept); err != nil ||
+		kept != 3 {
 		t.Fatalf("item_genre_sources = %d, %v; want the 3 source links kept", kept, err)
 	}
 

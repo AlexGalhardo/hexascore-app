@@ -46,7 +46,12 @@ type Facet struct {
 
 // Facets lists the genres and platforms used by public items of typ, most used first, named in locale; non-nil
 // sources keeps only relations from those sources (API).
-func Facets(ctx context.Context, db Querier, typ, locale string, sources []string) (genres, platforms []Facet, err error) {
+func Facets(
+	ctx context.Context,
+	db Querier,
+	typ, locale string,
+	sources []string,
+) (genres, platforms []Facet, err error) {
 	if genres, err = FacetsOf(ctx, db, typ, "genre", locale, sources); err != nil {
 		return nil, nil, err
 	}
@@ -98,7 +103,12 @@ type ActiveFilter struct {
 
 // ActiveEntityFilters names the entity filters in force (kind -> slug or code); an unknown key keeps its value as
 // the name, so the chip still says what filters the list.
-func ActiveEntityFilters(ctx context.Context, db Querier, filters map[string]string, locale string) ([]ActiveFilter, error) {
+func ActiveEntityFilters(
+	ctx context.Context,
+	db Querier,
+	filters map[string]string,
+	locale string,
+) ([]ActiveFilter, error) {
 	out := []ActiveFilter{}
 	for _, kind := range slices.Sorted(maps.Keys(filters)) {
 		if kind == "game_mode" {

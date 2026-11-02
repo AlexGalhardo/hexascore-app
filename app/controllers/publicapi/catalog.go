@@ -25,7 +25,7 @@ type TypeInput struct {
 // GenreJSON is one genre with its public item count (legacy parity). Name is the canonical genre's translated name
 // (owner 2026-11-02); it is omitted for a source genre the canonicalize command has not replaced yet.
 type GenreJSON struct {
-	Slug  string `json:"slug"  validate:"required"`
+	Slug  string `json:"slug"           validate:"required"`
 	Name  string `json:"name,omitempty"`
 	Count int    `json:"count"`
 }

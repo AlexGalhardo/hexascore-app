@@ -116,7 +116,14 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 		}
 		facets := map[string]any{"genres": genres, "platforms": platforms}
 		if typ == "game" {
-			if facets["modes"], err = catalog.FacetsOf(c.Context(), db, typ, "game_mode", i18n.Locale(c.Context()), nil); err != nil {
+			if facets["modes"], err = catalog.FacetsOf(
+				c.Context(),
+				db,
+				typ,
+				"game_mode",
+				i18n.Locale(c.Context()),
+				nil,
+			); err != nil {
 				return err
 			}
 		}

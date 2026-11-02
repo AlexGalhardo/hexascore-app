@@ -65,8 +65,9 @@ func TestTwoFactorUsersPassChallenge(t *testing.T) {
 
 	login := func() *vukemtest.Client {
 		c := app.Client(t).Inertia("").WithHeader("Referer", "/login")
+		// The 2FA dialog opens over /login.
 		c.PostJSON("/login", map[string]any{"identifier": "bruno@example.test", "password": "correct horse battery staple"}).
-			AssertRedirect("/login") // the 2FA dialog opens over /login
+			AssertRedirect("/login")
 
 		return c
 	}

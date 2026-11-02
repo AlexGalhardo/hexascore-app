@@ -37,9 +37,16 @@ func GenresCanonicalize() vukem.Command {
 
 			rep, err := catalog.CanonicalizeGenres(ctx, db, *dryRun)
 			out := app.Stdout()
-			_, _ = fmt.Fprintf(out,
+			_, _ = fmt.Fprintf(
+				out,
 				"Canonical genres created: %d\nCanonical genres adopted: %d\nSource links: %d\nMapped: %d\nHidden: %d\nDry run: %t\n",
-				rep.Created, rep.Adopted, rep.Links, rep.Mapped, rep.Hidden, *dryRun)
+				rep.Created,
+				rep.Adopted,
+				rep.Links,
+				rep.Mapped,
+				rep.Hidden,
+				*dryRun,
+			)
 
 			labels := slices.SortedFunc(maps.Keys(rep.Unmapped), func(a, b string) int {
 				return cmp.Or(cmp.Compare(rep.Unmapped[b], rep.Unmapped[a]), cmp.Compare(a, b))
