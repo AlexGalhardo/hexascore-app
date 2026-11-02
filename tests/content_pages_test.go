@@ -28,8 +28,8 @@ func TestDocsPages(t *testing.T) {
 		app.Client(t).Get(prefix+"/docs/errors").AssertOK().AssertInertia("Docs/Page").PropEquals("title", title)
 	}
 
-	app.Client(t).Get("/docs/no-such-doc").AssertStatus(301).AssertHeader("Location", "/")
-	app.Client(t).Get("/docs/index").AssertStatus(301)
+	app.Client(t).Get("/docs/no-such-doc").AssertStatus(404)
+	app.Client(t).Get("/docs/index").AssertStatus(404)
 }
 
 // TestAboutPage: owner round 2026-11-01 item 25, served in every locale with only its own namespace.

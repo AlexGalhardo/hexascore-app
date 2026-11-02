@@ -53,7 +53,11 @@ var SeedTables = []SeedTable{
 	{"reports", "reporter_id", "setnull", false},
 	{"reports", "resolved_by", "setnull", false},
 	{"reviews", "user_id", "cascade", false},
+	{"rating_flags", "user_id", "cascade", false},
+	{"score_actions", "actor", "setnull", false},
+	{"score_actions", "user_id", "setnull", false},
 	{"score_bursts", "resolved_by", "setnull", false},
+	{"search_events", "user_id", "setnull", false},
 	{"social_accounts", "user_id", "cascade", false},
 	{"subscriptions", "user_id", "cascade", false},
 	{"suggestion_events", "actor_id", "setnull", false},
@@ -69,10 +73,7 @@ var SeedTables = []SeedTable{
 	{"access_tokens", "user_id", "loose", true},
 	{"remember_tokens", "user_id", "loose", true},
 	{"rating_events", "user_id", "loose", false},
-	{"rating_flags", "user_id", "loose", false},
 	{"rating_migration_audit", "user_id", "loose", false},
-	{"score_actions", "user_id", "loose", false},
-	{"search_events", "user_id", "loose", false},
 }
 
 // seedItemTables are the tables whose rows move an item's score or counters.

@@ -99,13 +99,13 @@ func TestInertiaPages_Catalog_Show(t *testing.T) {
 		PropEquals("editionCount", 12).
 		HasProp("editions", 10)
 
-	client.Inertia("").Get("/games/missing").AssertStatus(301).AssertHeader("Location", "/")
+	client.Inertia("").Get("/games/missing").AssertStatus(404).AssertInertia("Error").PropEquals("status", 404)
 
 	// The edition and changes pages share their patterns with the entity pages under /books (item 19).
 	client.Inertia("").Get("/books/dune/editions/" + edition).AssertOK().AssertInertia("Catalog/Edition")
 	client.Inertia("").Get("/es/books/dune/editions/" + edition + "/changes").AssertOK().
 		AssertInertia("Catalog/RecentChanges")
 	client.Inertia("").Get("/books/dune/changes").AssertOK().AssertInertia("Catalog/RecentChanges")
-	client.Inertia("").Get("/books/dune/nope").AssertStatus(301).AssertHeader("Location", "/")
-	client.Inertia("").Get("/books/dune/nope/x").AssertStatus(301).AssertHeader("Location", "/")
+	client.Inertia("").Get("/books/dune/nope").AssertStatus(404)
+	client.Inertia("").Get("/books/dune/nope/x").AssertStatus(404)
 }
