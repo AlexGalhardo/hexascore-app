@@ -461,7 +461,10 @@
       "requestsLifetime": "{count} requisições no total",
       "requestsMonthly": "{count} requisições por mês",
       "maxItems": "Até {count} itens por requisição",
-      "rate": "{count} requisições por segundo",
+      "rate": {
+        "one": "{count} requisição por segundo",
+        "other": "{count} requisições por segundo"
+      },
       "quotaLabel": "Cota",
       "pageSizeLabel": "Itens por requisição",
       "rateLabel": "Limite de requisições",
@@ -600,10 +603,10 @@
     },
     "any": "Qualquer",
     "foundLabel": {
-      "game": "Jogos encontrados",
-      "movie": "Filmes encontrados",
-      "series": "Séries encontradas",
-      "book": "Livros encontrados"
+      "game": "jogos encontrados",
+      "movie": "filmes encontrados",
+      "series": "séries encontradas",
+      "book": "livros encontrados"
     },
     "resultCount": {
       "zero": "Nenhum item encontrado",
@@ -665,7 +668,8 @@
     "radarEmpty": "Ainda sem médias por categoria"
   },
   "meta": {
-    "description": "Notas da comunidade para jogos, filmes, séries e livros — avaliados em 6 categorias de 0 a 100."
+    "description": "Notas da comunidade para jogos, filmes, séries e livros — avaliados em 6 categorias de 0 a 100.",
+    "homeTitle": "HexaScore: notas de jogos, filmes, séries e livros"
   },
   "nav": {
     "games": "Jogos",
@@ -685,7 +689,7 @@
     "sections": "Seções",
     "pricing": "Preços",
     "language": "Idioma",
-    "openSearch": "Abrir busca",
+    "openSearch": "Buscar… (Ctrl K)",
     "searchTab": "Buscar",
     "themeDark": "Mudar para o tema escuro",
     "themeLight": "Mudar para o tema claro",

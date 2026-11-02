@@ -461,7 +461,10 @@
       "requestsLifetime": "{count} requests in total",
       "requestsMonthly": "{count} requests per month",
       "maxItems": "Up to {count} items per request",
-      "rate": "{count} requests per second",
+      "rate": {
+        "one": "{count} request per second",
+        "other": "{count} requests per second"
+      },
       "quotaLabel": "Quota",
       "pageSizeLabel": "Items per request",
       "rateLabel": "Rate limit",
@@ -600,10 +603,10 @@
     },
     "any": "Any",
     "foundLabel": {
-      "game": "Games found",
-      "movie": "Movies found",
+      "game": "games found",
+      "movie": "movies found",
       "series": "TV series found",
-      "book": "Books found"
+      "book": "books found"
     },
     "resultCount": {
       "zero": "No items found",
@@ -665,7 +668,8 @@
     "radarEmpty": "No category averages yet"
   },
   "meta": {
-    "description": "Community scores for games, movies, TV series and books — rated in 6 categories from 0 to 100."
+    "description": "Community scores for games, movies, TV series and books — rated in 6 categories from 0 to 100.",
+    "homeTitle": "HexaScore: scores for games, movies, series and books"
   },
   "nav": {
     "games": "Games",
@@ -685,7 +689,7 @@
     "sections": "Sections",
     "pricing": "Pricing",
     "language": "Language",
-    "openSearch": "Open search",
+    "openSearch": "Search… (Ctrl K)",
     "searchTab": "Search",
     "themeDark": "Switch to dark theme",
     "themeLight": "Switch to light theme",
