@@ -20,7 +20,7 @@ const SIZES: Record<CoverSize, string> = {
 	sm: "32px",
 	md: "44px",
 	trend: "(min-width: 48rem) 120px, 100px",
-	lg: "(min-width: 48rem) 240px, 96px",
+	lg: "(min-width: 40rem) 240px, 100vw",
 	card: "(min-width: 48rem) 160px, 30vw",
 };
 
@@ -29,7 +29,7 @@ const BOX: Record<CoverSize, string> = {
 	sm: "w-8 h-12",
 	md: "w-11 h-16",
 	trend: "w-25 h-37.5 md:w-30 md:h-45",
-	lg: "w-24 h-36 sm:w-full sm:h-auto sm:aspect-[2/3]",
+	lg: "w-full h-auto aspect-[2/3]",
 	card: "w-full h-auto aspect-[2/3]",
 };
 

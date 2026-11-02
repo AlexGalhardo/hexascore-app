@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Changed
 
 - **i18n:** Shorter /about intro in en, pt-BR and es
+- **ui:** The item page drops the genre and platform buttons under the title (Details still links them); at phone width the cover fills the width and the rating column follows Details, before the title and synopsis
 
 ## [0.38.0] - 2026-11-02
 

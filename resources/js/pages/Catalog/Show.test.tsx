@@ -135,18 +135,14 @@ test("three columns: actions under the cover, synopsis under the chips, score ca
 	expect(actions.firstElementChild?.matches("img, [data-testid=cover-placeholder]")).toBe(true);
 	expect(actions.querySelector("#details-heading")).not.toBeNull();
 
+	// No genre or platform buttons under the title (owner 2026-11-02); Details still links them.
 	const main = screen.getByTestId("item-col-main");
-	const chips = screen.getByTestId("item-chips");
-	expect(main.contains(chips)).toBe(true);
-	expect(chips.parentElement?.nextElementSibling?.getAttribute("aria-labelledby")).toBe(
+	expect(screen.queryByTestId("item-chips")).toBeNull();
+	expect(main.querySelector("header")?.nextElementSibling?.getAttribute("aria-labelledby")).toBe(
 		"synopsis-heading",
 	);
-	for (const chip of chips.querySelectorAll("a")) {
-		expect(chip.className).toContain("rounded-xs");
-		expect(chip.className).not.toContain("rounded-full");
-		expect(chip.className).toContain("shadow-ledge-secondary");
-		expect(chip.className).toContain("active:translate-y-px");
-	}
+	// Phone width: the rating column comes right after Details, before the title and synopsis.
+	expect(main.className).toContain("max-sm:order-last");
 
 	const rating = screen.getByTestId("item-col-rating");
 	const score = screen.getByTestId("score-block");

@@ -95,9 +95,6 @@ const ENTITY_FILTER: Record<string, string> = {
 	language: "language",
 };
 
-// Chips under the title: genres and platforms, linked to the filtered section listing.
-const CHIP_ROLES = ["genre", "platform"];
-
 const ROLE_ORDER = [
 	"director",
 	"writer",
@@ -143,7 +140,6 @@ export default function Show({
 		l(
 			`/${SECTIONS[item.type]}?${new URLSearchParams({ [ENTITY_FILTER[e.kind]]: e.code ?? e.slug, per: "25", sort: "-popularity" })}`,
 		);
-	const chips = CHIP_ROLES.flatMap((r) => entities[r] ?? []);
 	const release =
 		item.releaseDate?.length === 10
 			? new Intl.DateTimeFormat(locale, { dateStyle: "long", timeZone: "UTC" }).format(
@@ -294,29 +290,16 @@ export default function Show({
 					</Section>
 				</div>
 
-				<div data-testid="item-col-main" className="grid min-w-0 content-start gap-10">
+				{/* Phone width: cover, actions, details, then the rating card before the text (owner 2026-11-02). */}
+				<div
+					data-testid="item-col-main"
+					className="grid min-w-0 content-start gap-10 max-sm:order-last"
+				>
 					<header className="grid content-start gap-4">
 						<h1 className="text-3xl leading-none font-bold sm:text-4xl md:text-5xl">
 							{title}
 						</h1>
 						{ogImage && <ShareButton title={title} />}
-						{chips.length > 0 && (
-							<ul data-testid="item-chips" className="flex flex-wrap gap-2">
-								{chips.map((e) => (
-									<li key={`${e.kind}-${e.id}`}>
-										<Link
-											href={entityHref(e)}
-											className={btnClass(
-												"secondary",
-												"min-h-10 px-3.5 text-sm",
-											)}
-										>
-											{e.name}
-										</Link>
-									</li>
-								))}
-							</ul>
-						)}
 					</header>
 
 					<Section id="synopsis" title={t("item.synopsis")} bold>
