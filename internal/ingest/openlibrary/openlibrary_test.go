@@ -153,3 +153,24 @@ func TestOpenlibraryDropsPlaceholderCovers(t *testing.T) {
 		t.Errorf("pages = %v, want 320", p.Pages)
 	}
 }
+
+// Q-A16 clears Open Library data for the API: an edition document gives its ISBN, MARC language and year.
+func TestOpenlibraryEditionDetails(t *testing.T) {
+	p, err := openlibrary.ParseDoc(fixture(t, "openlibrary_isbn.json"), "Q208460", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if p.ISBN != "0451524934" || p.Language != "eng" || p.Year != 1984 {
+		t.Errorf("edition details = %q %q %d, want 0451524934 eng 1984", p.ISBN, p.Language, p.Year)
+	}
+
+	w, err := openlibrary.ParseDoc(fixture(t, "openlibrary_work.json"), "Q208460", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if w.ISBN != "" || w.Language != "" || w.Year != 0 {
+		t.Errorf("work details = %+v, want none", w)
+	}
+}

@@ -48,8 +48,12 @@ type sources struct {
 		Cover     string   `json:"cover"`
 	}
 	openlibrary struct {
-		Pages  int   `json:"pages"`
-		Covers []int `json:"covers"`
+		Pages    int    `json:"pages"`
+		Covers   []int  `json:"covers"`
+		Key      string `json:"key"`
+		ISBN     string `json:"isbn"`
+		Language string `json:"language"`
+		Year     int    `json:"year"`
 	}
 	youtube *struct {
 		Available []string `json:"available"`

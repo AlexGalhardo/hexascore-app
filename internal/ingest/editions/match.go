@@ -19,6 +19,10 @@ type Candidate struct {
 	Year          int
 	HasCover      bool
 	Source        string
+	// PublisherQID and PublisherName are the edition's P123 publisher; PublisherID is the entity SaveAll resolved.
+	PublisherQID  string
+	PublisherName string
+	PublisherID   string
 }
 
 // Language maps a MARC language code to the editions.language value; anything unknown is "und" (DQ-10).
@@ -86,21 +90,33 @@ func Select(in []Candidate, limit int) ([]Candidate, int) {
 	return out, dropped
 }
 
-// PrimaryEdition returns the index of the earliest edition with a cover in the work's original language, or -1.
+// PrimaryEdition returns the index of the earliest edition in the work's original language, or -1. An edition with a
+// cover beats one without (SDD 06 §7.4); ingest writes no edition covers yet, so until it does the earliest edition in
+// the original language is primary. An undated edition comes after every dated one.
 func PrimaryEdition(in []Candidate, original string) int {
-	best, bestYear := -1, 0
+	best := -1
+
+	var top Candidate
 
 	for i, c := range in {
-		if c.Language != original || !c.HasCover {
+		if c.Language != original {
 			continue
 		}
 
-		if best < 0 || c.Year > 0 && (bestYear == 0 || c.Year < bestYear) {
-			best, bestYear = i, c.Year
+		if best < 0 || better(c, top) {
+			best, top = i, c
 		}
 	}
 
 	return best
+}
+
+func better(a, b Candidate) bool {
+	if a.HasCover != b.HasCover {
+		return a.HasCover
+	}
+
+	return a.Year > 0 && (b.Year == 0 || a.Year < b.Year)
 }
 
 // Store is the persistence Save needs.

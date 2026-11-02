@@ -456,7 +456,7 @@ func (Normalizer) saveEditions(
 	err = isolate(ctx, tx, func() error {
 		var serr error
 
-		conflicts, serr = editions.SaveAll(ctx, tx, id, cands)
+		conflicts, serr = editions.SaveAll(ctx, tx, id, OriginalLanguage(qid, recs), cands)
 
 		return serr
 	})

@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **ingest:** Editions resolve their P123 publisher through the credit matcher (QID, then name; no native entity from a bare QID), the work points at its primary edition (earliest in the original language, a covered one first), the stored Open Library edition fills the ISBN, language and year Wikidata lacks or adds an edition, and backfill runs pause 100 ms between batches through the runner clock (P6.B.3.1)
 - **mobile:** Manual Gradle-on-Actions release build (`mobile-gradle.yml`, D-34): signed AAB and APK, fails closed on missing upload-key secrets or a different signer; `app.config.ts` reads `ANDROID_VERSION_CODE` only when set (P5.C.1.2)
 - **mobile:** `mobile-v*` tag builds production behind the API contract job and the `play-store` environment approval, refusing to submit when the environment has no required reviewer (P5.C.1.3)
 - **legal:** Play data safety answers in `docs/legal/play-data-safety.md` (P5.C.2.1)

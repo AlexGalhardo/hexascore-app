@@ -3,10 +3,12 @@
 package ingest_test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
 
@@ -60,13 +62,26 @@ func TestEditionsSaveIsIdempotentAndNeverMovesAnIsbn(t *testing.T) {
 		t.Errorf("editions of B = %d, want 0", n)
 	}
 
-	if err := s.SetPrimary(t.Context(), workA, c); err != nil {
+	if err := s.SetPrimary(t.Context(), workA, "pt"); err != nil {
 		t.Fatal(err)
 	}
 
 	if n := count(t, db, `SELECT count(*) FROM items i JOIN editions e ON e.id = i.primary_edition_id
 WHERE i.id = $1 AND e.isbn13 = '9780306406157'`, workA); n != 1 {
 		t.Error("primary edition not set")
+	}
+
+	ol := editions.Candidate{OpenLibraryID: "OL1M", Title: "OL Book", Language: "en", Source: "openlibrary"}
+	if out, err := editions.Save(t.Context(), s, workA, ol); err != nil || out != editions.Saved {
+		t.Fatalf("openlibrary save: %v, %v", out, err)
+	}
+
+	if _, err := editions.Save(t.Context(), s, workB, ol); err != nil {
+		t.Fatalf("taken openlibrary id on another work must not fail the save: %v", err)
+	}
+
+	if n := count(t, db, `SELECT count(*) FROM editions WHERE work_id = $1`, workB); n != 0 {
+		t.Errorf("editions of B = %d, want 0", n)
 	}
 }
 
@@ -385,5 +400,112 @@ WHERE wikidata_qid = 'Q701'`).Scan(&lang, &year); err != nil {
 	}
 	if lang != "pt" || year != 1999 {
 		t.Errorf("backfill: edition = %s %d, want pt 1999", lang, year)
+	}
+}
+
+// ADR 0012: an edition's publisher (P123) resolves through the credit matcher (QID first), and the primary edition
+// is the earliest one in the work's original language (P407) while no edition has a cover. Open Library fills the
+// language and year Wikidata lacks; both normalize and backfill.editions do this.
+func TestEditionsResolvePublisherPrimaryAndOpenLibrary(t *testing.T) {
+	db := newDB(t)
+
+	const org = "0192f1c6-0000-7000-8000-0000000000e1"
+	if _, err := db.ExecContext(t.Context(), `INSERT INTO entities (id, kind, slug, wikidata_qid, default_name)
+VALUES ($1, 'organization', 'penguin', 'Q55', 'Penguin')`, org); err != nil {
+		t.Fatal(err)
+	}
+
+	payload := `{"type":"book","id":"Q800","labels":{"en":"Book Q800"},"claims":{
+"P407":[{"value":"Q1860","rank":"normal"}],
+"P212":[{"value":"9780306406157","rank":"normal"}],
+"P747":[{"value":"Q801","rank":"normal"},{"value":"Q802","rank":"normal"}]}}`
+	if _, err := db.ExecContext(t.Context(), `INSERT INTO source_records (source, external_id, payload, hash)
+VALUES ('wikidata', 'Q800', $1::jsonb, encode(sha256('h800'), 'hex')),
+('openlibrary', 'Q800', $2::jsonb, encode(sha256('o800'), 'hex'))`, payload,
+		`{"qid":"Q800","key":"/books/OL9M","isbn":"0306406152","language":"eng","year":1970,"covers":[]}`); err != nil {
+		t.Fatal(err)
+	}
+
+	editionEntity(t, db, "Q802", "Q1860", "1990")
+	if _, err := db.ExecContext(t.Context(), `UPDATE source_records SET payload = jsonb_set(payload, '{claims,P123}',
+'[{"value":"Q55","rank":"normal"}]') WHERE external_id = 'Q802'`); err != nil {
+		t.Fatal(err)
+	}
+
+	check := func(stage string) {
+		t.Helper()
+
+		if n := count(
+			t,
+			db,
+			`SELECT count(*) FROM editions WHERE wikidata_qid = 'Q802' AND publisher_id = $1`,
+			org,
+		); n != 1 {
+			t.Errorf("%s: Q802 publisher not resolved to the Q55 entity", stage)
+		}
+
+		if n := count(t, db, `SELECT count(*) FROM editions WHERE isbn13 = '9780306406157' AND language = 'en'
+AND publication_year = 1970 AND openlibrary_id = 'OL9M'`); n != 1 {
+			t.Errorf("%s: the ISBN edition did not take the Open Library language, year and id", stage)
+		}
+
+		if n := count(t, db, `SELECT count(*) FROM items i JOIN editions e ON e.id = i.primary_edition_id
+WHERE i.wikidata_qid = 'Q800' AND e.isbn13 = '9780306406157'`); n != 1 {
+			t.Errorf("%s: primary edition is not the 1970 English edition", stage)
+		}
+	}
+
+	drain(t, db, (&normSpy{}).job(0))
+	check("normalize")
+
+	if _, err := db.ExecContext(
+		t.Context(),
+		`UPDATE items SET primary_edition_id = NULL; DELETE FROM editions`,
+	); err != nil {
+		t.Fatal(err)
+	}
+
+	err := db.Tx(t.Context(), func(tx *database.Tx) error {
+		_, err := backfill.Editions{}.Step(t.Context(), tx, run.Run{ID: 9})
+
+		return err
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	check("backfill")
+}
+
+// SDD 06 §7.8: a backfill pauses 100 ms between batches, through the runner's clock; other modes do not.
+func TestBackfillPausesBetweenBatches(t *testing.T) {
+	for mode, want := range map[string]int{run.ModeBackfill: 2, run.ModeFull: 0} {
+		t.Run(mode, func(t *testing.T) {
+			db := newDB(t)
+			rec := &recorder{}
+
+			var pauses []time.Duration
+
+			r := newRunner(db, rec, newFlags(t, map[string]string{"FLAG_INGEST_ENABLED": "true"}), run.Limits{},
+				map[string]run.Step{"b": upsertStep(3, 1, nil)})
+			r.Sleep = func(_ context.Context, d time.Duration) error {
+				pauses = append(pauses, d)
+
+				return nil
+			}
+
+			cr, err := run.Create(t.Context(), db, rec, run.Spec{Job: "b", Mode: mode, TriggeredBy: "test"})
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			if out, err := r.Execute(t.Context(), cr.ID); err != nil || out != run.Finished {
+				t.Fatalf("Execute = %v, %v", out, err)
+			}
+
+			if len(pauses) != want || want > 0 && pauses[0] != run.BackfillPause {
+				t.Errorf("pauses = %v, want %d of %v", pauses, want, run.BackfillPause)
+			}
+		})
 	}
 }

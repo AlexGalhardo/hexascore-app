@@ -1,5 +1,5 @@
-// Package openlibrary is the Open Library connector (SDD 06 §7.3): page count, cover ids and the description for
-// books with an ISBN-13 or an Open Library id. Port of legacy connectors/openlibrary.py.
+// Package openlibrary is the Open Library connector (SDD 06 §7.3): page count, cover ids, the description and the
+// edition's ISBN, language and year for books with an ISBN-13 or an Open Library id. Port of legacy connectors/openlibrary.py.
 //
 // Terms: the Internet Archive asserts no new copyright or other rights over the Open Library database
 // (https://openlibrary.org/developers/licensing, read 2026-11-01; owner cleared A-05 in Q-A16). The description
@@ -14,6 +14,7 @@ import (
 	"iter"
 	"net/http"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/AlexGalhardo/vukem/database"
@@ -35,15 +36,20 @@ var (
 	workID    = regexp.MustCompile(`^OL\d+W$`)
 	workKey   = regexp.MustCompile(`^/works/OL\d+W$`)
 	notISBN   = regexp.MustCompile(`[^0-9X]`)
+	yearRe    = regexp.MustCompile(`\b(1[4-9]|20)\d{2}\b`)
 )
 
-// Payload is the stored record body; nil Pages and Overview are stored as null like the legacy records.
+// Payload is the stored record body; nil Pages and Overview are stored as null like the legacy records. ISBN (raw,
+// ISBN-13 first), Language (MARC code) and Year describe the edition and stay empty for a work document.
 type Payload struct {
 	Qid      string  `json:"qid"`
 	Key      string  `json:"key"`
 	Pages    *int    `json:"pages"`
 	Covers   []int   `json:"covers"`
 	Overview *string `json:"overview"`
+	ISBN     string  `json:"isbn,omitempty"`
+	Language string  `json:"language,omitempty"`
+	Year     int     `json:"year,omitempty"`
 }
 
 type doc struct {
@@ -52,6 +58,10 @@ type doc struct {
 	Covers        []int                  `json:"covers"`
 	Works         []struct{ Key string } `json:"works"`
 	Description   json.RawMessage        `json:"description"`
+	ISBN13        []string               `json:"isbn_13"`
+	ISBN10        []string               `json:"isbn_10"`
+	Languages     []struct{ Key string } `json:"languages"`
+	PublishDate   string                 `json:"publish_date"`
 }
 
 func decode(raw []byte) (doc, error) {
@@ -136,6 +146,18 @@ func ParseDoc(raw []byte, qid string, work []byte) (Payload, error) {
 		p.Pages = &d.NumberOfPages
 	}
 
+	if strings.HasPrefix(d.Key, "/books/") {
+		p.ISBN = firstOf(d.ISBN13, d.ISBN10)
+		if len(d.Languages) > 0 {
+			p.Language = strings.TrimPrefix(d.Languages[0].Key, "/languages/")
+		}
+
+		// publish_date is free text ("1984", "October 1, 1988"); the first plausible year is kept.
+		if y := yearRe.FindString(d.PublishDate); y != "" {
+			p.Year, _ = strconv.Atoi(y)
+		}
+	}
+
 	if work != nil {
 		parent, err := decode(work)
 		if err != nil {
@@ -158,6 +180,16 @@ func ParseDoc(raw []byte, qid string, work []byte) (Payload, error) {
 	p.Covers = p.Covers[:min(MaxCovers, len(p.Covers))]
 
 	return p, nil
+}
+
+func firstOf(lists ...[]string) string {
+	for _, l := range lists {
+		if len(l) > 0 {
+			return l[0]
+		}
+	}
+
+	return ""
 }
 
 // Connector fetches Open Library documents for stored books. A Target carries the QID in ID and Ref(...) in Type.

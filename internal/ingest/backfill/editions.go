@@ -3,9 +3,7 @@ package backfill
 
 import (
 	"context"
-	"database/sql"
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/AlexGalhardo/vukem/database"
@@ -69,23 +67,18 @@ func (e Editions) Step(ctx context.Context, tx *database.Tx, r run.Run) (run.Res
 }
 
 func (Editions) one(ctx context.Context, tx *database.Tx, r run.Run, id, qid string, res *run.Result) error {
-	var payload json.RawMessage
+	recs, err := bookRecords(ctx, tx, qid)
+	if err != nil {
+		return err
+	}
 
-	err := tx.QueryRowContext(ctx, `SELECT payload FROM source_records WHERE source = 'wikidata' AND external_id = $1`, qid).
-		Scan(&payload)
-	if errors.Is(err, sql.ErrNoRows) {
+	if len(recs) == 0 {
 		res.Skipped++
 
 		return nil
 	}
 
-	if err != nil {
-		return fmt.Errorf("backfill editions: read record of %s: %w", qid, err)
-	}
-
-	recs, err := normalize.WithEditionRecords(
-		ctx, tx, qid, []store.Record{{Source: "wikidata", ExternalID: qid, Payload: payload}},
-	)
+	recs, err = normalize.WithEditionRecords(ctx, tx, qid, recs)
 
 	var cands []editions.Candidate
 	if err == nil {
@@ -100,7 +93,7 @@ func (Editions) one(ctx context.Context, tx *database.Tx, r run.Run, id, qid str
 		return ferr
 	}
 
-	conflicts, err := editions.SaveAll(ctx, tx, id, cands)
+	conflicts, err := editions.SaveAll(ctx, tx, id, normalize.OriginalLanguage(qid, recs), cands)
 	if err != nil {
 		return err
 	}
@@ -117,6 +110,38 @@ func (Editions) one(ctx context.Context, tx *database.Tx, r run.Run, id, qid str
 	res.Changed += len(cands) - len(conflicts)
 
 	return nil
+}
+
+// bookRecords reads the stored Wikidata and Open Library records of a book; none when it has no Wikidata record.
+func bookRecords(ctx context.Context, tx *database.Tx, qid string) ([]store.Record, error) {
+	rows, err := tx.QueryContext(ctx, `SELECT source, payload FROM source_records
+WHERE source IN ('wikidata', 'openlibrary') AND external_id = $1 ORDER BY source DESC`, qid)
+	if err != nil {
+		return nil, fmt.Errorf("backfill editions: read records of %s: %w", qid, err)
+	}
+	defer func() { _ = rows.Close() }()
+
+	var out []store.Record
+
+	for rows.Next() {
+		r := store.Record{ExternalID: qid}
+		if err := rows.Scan(&r.Source, &r.Payload); err != nil {
+			return nil, fmt.Errorf("backfill editions: read records of %s: %w", qid, err)
+		}
+
+		out = append(out, r)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("backfill editions: read records of %s: %w", qid, err)
+	}
+
+	// ORDER BY source DESC puts wikidata first; an Open Library record alone is not a book to backfill.
+	if len(out) == 0 || out[0].Source != "wikidata" {
+		return nil, nil
+	}
+
+	return out, nil
 }
 
 type book struct{ id, qid string }

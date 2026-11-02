@@ -173,3 +173,22 @@ func TestQidOnAnotherWorkIsNotMoved(t *testing.T) {
 		t.Fatalf("same work = %v, want Saved", out)
 	}
 }
+
+// Ingest writes no edition covers yet, so without any covered edition the earliest one in the original language
+// is primary; a covered edition still wins once covers exist.
+func TestPrimaryEditionWithoutCovers(t *testing.T) {
+	in := []Candidate{
+		{QID: "Q1", Language: "en"},
+		{QID: "Q2", Language: "en", Year: 1985},
+		{QID: "Q3", Language: "pt", Year: 1960},
+		{QID: "Q4", Language: "en", Year: 1980},
+	}
+
+	if got := PrimaryEdition(in, "en"); got != 3 {
+		t.Errorf("primary = %d, want 3 (earliest dated edition in the original language)", got)
+	}
+
+	if got := PrimaryEdition(in[:1], "en"); got != 0 {
+		t.Errorf("primary of an undated edition = %d, want 0", got)
+	}
+}

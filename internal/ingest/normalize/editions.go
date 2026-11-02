@@ -21,7 +21,10 @@ var editionLanguages = map[string]string{"Q5146": "pt", "Q750553": "pt", "Q1860"
 // ExtractEditions lists the editions of a book from its Wikidata record: ISBN-13 (P212) and ISBN-10 (P957) on the
 // work, and the edition items it links (P747). An edition whose entity record (source wikidata:entity) is among recs
 // takes its language (P407), year (P577), ISBN and label from it; without one it is kept by QID only. It returns the
-// selected candidates and how many invalid ISBNs were dropped.
+// selected candidates and how many invalid ISBNs were dropped. An edition's publisher is its first P123, named from
+// the work's referenced labels when it is one of them. The stored Open Library edition (fetched only while the
+// ingest_openlibrary kill switch is on) fills the language and year Wikidata lacks for the same ISBN and adds its id,
+// or becomes an edition of its own.
 func ExtractEditions(qid string, recs []store.Record) ([]editions.Candidate, int, error) {
 	wd, _, err := decode(qid, recs)
 	if err != nil {
@@ -64,6 +67,10 @@ func ExtractEditions(qid string, recs []store.Record) ([]editions.Candidate, int
 			}
 
 			c.ISBN = cmp.Or(firstString(e, "P212"), firstString(e, "P957"))
+
+			if pubs := values(e, "P123"); len(pubs) > 0 {
+				c.PublisherQID, c.PublisherName = pubs[0], wd.Refs[pubs[0]]
+			}
 		}
 
 		in = append(in, c)
@@ -78,9 +85,64 @@ func ExtractEditions(qid string, recs []store.Record) ([]editions.Candidate, int
 		}
 	}
 
+	src, err := decodeSources(qid, recs)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	in = withOpenLibrary(in, src, wd.Labels["en"])
+
 	out, dropped := editions.Select(in, editions.MaxPerWork)
 
 	return out, dropped, nil
+}
+
+// withOpenLibrary merges the stored Open Library edition into the candidate with the same ISBN (Wikidata values
+// win), or appends it. A work document (/works/…) describes no edition and is ignored.
+func withOpenLibrary(in []editions.Candidate, src *sources, title string) []editions.Candidate {
+	ol := src.openlibrary
+
+	olid, ok := strings.CutPrefix(ol.Key, "/books/")
+	if !ok || olid == "" {
+		return in
+	}
+
+	isbn, _ := editions.ToISBN13(ol.ISBN)
+	lang := editions.Language(ol.Language)
+
+	for i, c := range in {
+		if norm, _ := editions.ToISBN13(c.ISBN); isbn == "" || norm != isbn {
+			continue
+		}
+
+		if c.Language == "und" || c.Language == "" {
+			in[i].Language = lang
+		}
+
+		in[i].Year = cmp.Or(c.Year, ol.Year)
+		in[i].OpenLibraryID = cmp.Or(c.OpenLibraryID, olid)
+
+		return in
+	}
+
+	return append(in, editions.Candidate{
+		ISBN: ol.ISBN, OpenLibraryID: olid, Title: title, Language: lang, Year: ol.Year, Source: SourceOpenLibrary,
+	})
+}
+
+// OriginalLanguage is the editions.language of the book's first P407, or "" when it is none of pt, en, es (then
+// no primary edition is picked).
+func OriginalLanguage(qid string, recs []store.Record) string {
+	wd, _, err := decode(qid, recs)
+	if err != nil {
+		return ""
+	}
+
+	if langs := values(wd, "P407"); len(langs) > 0 {
+		return editionLanguages[langs[0]]
+	}
+
+	return ""
 }
 
 // rowQuerier is the part of *database.Tx WithEditionRecords needs.

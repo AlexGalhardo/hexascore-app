@@ -62,6 +62,27 @@ type Runner struct {
 	}
 	// After is called once a run reached a final status (chains queue the next stage here).
 	After func(ctx context.Context, id int64) error
+	// Sleep is the clock's pause; nil waits on a real timer. Tests pass a fake, never time.Sleep.
+	Sleep func(ctx context.Context, d time.Duration) error
+}
+
+// BackfillPause is the wait between two backfill batches, outside their transactions (SDD 06 §7.8).
+const BackfillPause = 100 * time.Millisecond
+
+func (r *Runner) sleep(ctx context.Context, d time.Duration) error {
+	if r.Sleep != nil {
+		return r.Sleep(ctx, d)
+	}
+
+	t := time.NewTimer(d)
+	defer t.Stop()
+
+	select {
+	case <-t.C:
+		return nil
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 }
 
 func (r *Runner) limits() Limits {
@@ -113,8 +134,19 @@ started_at = coalesce(started_at, now()), heartbeat_at = now() WHERE id = $1 AND
 	deadline := r.Now().Add(lim.Duration)
 	processed := 0
 
+	// A resumed backfill (a cursor is saved) pauses before its first chunk too: each successor job is a new batch.
+	pause := run.Mode == ModeBackfill && len(run.Cursor) > 0
+
 	for {
 		var out Outcome
+
+		if pause {
+			if err := r.sleep(ctx, BackfillPause); err != nil {
+				return "", err
+			}
+		}
+
+		pause = run.Mode == ModeBackfill
 
 		if r.Gate != nil {
 			if err := r.Gate.Wait(ctx); err != nil {
