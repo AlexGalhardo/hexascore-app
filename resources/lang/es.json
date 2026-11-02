@@ -603,10 +603,10 @@
     },
     "any": "Cualquiera",
     "foundLabel": {
-      "game": "Juegos encontrados",
-      "movie": "Películas encontradas",
-      "series": "Series encontradas",
-      "book": "Libros encontrados"
+      "game": "juegos encontrados",
+      "movie": "películas encontradas",
+      "series": "series encontradas",
+      "book": "libros encontrados"
     },
     "resultCount": {
       "zero": "Ningún elemento encontrado",
@@ -668,7 +668,8 @@
     "radarEmpty": "Aún sin promedios por categoría"
   },
   "meta": {
-    "description": "Puntuaciones de la comunidad para juegos, películas, series y libros — valorados en 6 categorías de 0 a 100."
+    "description": "Puntuaciones de la comunidad para juegos, películas, series y libros — valorados en 6 categorías de 0 a 100.",
+    "homeTitle": "HexaScore: notas de juegos, películas, series y libros"
   },
   "nav": {
     "games": "Juegos",

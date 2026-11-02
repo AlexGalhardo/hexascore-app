@@ -36,7 +36,7 @@ export default function Index({
 
 	return (
 		<>
-			<Seo />
+			<Seo title={t("meta.homeTitle")} />
 			<h1 className="sr-only">{t("home.title")}</h1>
 			<div className="grid gap-14">
 				{friends && friends.length > 0 && (

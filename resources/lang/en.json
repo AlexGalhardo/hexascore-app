@@ -668,7 +668,8 @@
     "radarEmpty": "No category averages yet"
   },
   "meta": {
-    "description": "Community scores for games, movies, TV series and books — rated in 6 categories from 0 to 100."
+    "description": "Community scores for games, movies, TV series and books — rated in 6 categories from 0 to 100.",
+    "homeTitle": "HexaScore: scores for games, movies, series and books"
   },
   "nav": {
     "games": "Games",
