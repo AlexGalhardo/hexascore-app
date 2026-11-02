@@ -58,7 +58,10 @@ func fake(t *testing.T, env ...string) *covers.Cwebp {
 		t.Fatal(err)
 	}
 
-	return &covers.Cwebp{Path: exe, Timeout: 20 * time.Second, Env: append([]string{"FAKE_CWEBP=1"}, env...)}
+	// The Go runtime reserves more address space than the 512 MiB cap meant for the real cwebp.
+	return &covers.Cwebp{
+		Path: exe, Timeout: 20 * time.Second, AddressSpaceMiB: -1, Env: append([]string{"FAKE_CWEBP=1"}, env...),
+	}
 }
 
 // fed splits the fake's output into the arguments and the PNG that cwebp received.

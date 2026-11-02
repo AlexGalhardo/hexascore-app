@@ -57,6 +57,8 @@ Retention: `job_cursors` holds one row per chunked job (today `scoring.recompute
 
 Retention: `field_reviews` rows are deleted 365 days after they are resolved (`run.Prune`); open ones stay. `resolved_by` is an admin's users.id kept as a bare id (no user content, the purge keeps the users row).
 
+Retention: `cover_hashes` has one row per stored cover key, upserted in place; it grows with the catalogue (about 100 bytes per cover) and is not pruned; no user data.
+
 Retention: `ingest_host_state` holds one row per key (`web`, `worker`, `host:<name>`), upserted in place, so it stays at a few dozen rows; no prune task needed, no user data.
 
 Retention: `ingest_job_keys` holds one row per automatic ingest dispatch and day; `run.Prune` (ingest prune task) deletes rows older than 7 days; no user data.
