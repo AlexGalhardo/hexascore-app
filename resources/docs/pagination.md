@@ -12,7 +12,7 @@ List endpoints use opaque cursors: stable under inserts, fast at any depth.
 
 ## Page size
 
-`limit` defaults to 10. The maximum depends on your plan: 10 on Free, 100 on Pro and Business. A larger value returns `400 invalid-query`; the API never silently truncates. Each page counts as one request.
+`limit` defaults to 10. The maximum depends on your plan: 10 on Free, 20 on Hobby, 50 on PRO. A larger value returns `400 invalid-query`; the API never silently truncates. Each page counts as one request.
 
 ## Example: iterate over every page
 

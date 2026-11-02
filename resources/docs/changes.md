@@ -86,4 +86,4 @@ with client as c:
 
 ## Webhooks instead of polling
 
-Pro and Business plans can have the same events pushed to a URL. See [Webhooks](/docs/webhooks). Webhook deliveries can be missed, so use `/v1/changes` to recover any gap.
+Hobby and PRO plans can have the same events pushed to a URL. See [Webhooks](/docs/webhooks). Webhook deliveries can be missed, so use `/v1/changes` to recover any gap.

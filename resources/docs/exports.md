@@ -4,7 +4,7 @@ Download the whole list of item ids once a day, then fetch only what you need.
 
 ## What is exported
 
-Each day, before 08:00 UTC, we write one file per item type: games, movies, series and books. Files are kept for 90 days. Exports are available on the Pro and Business plans; the Free plan receives [`plan-required`](/docs/errors#plan-required).
+Each day, before 08:00 UTC, we write one file per item type: games, movies, series and books. Files are kept for 90 days. Exports are available on the Hobby and PRO plans; the Free plan receives [`plan-required`](/docs/errors#plan-required).
 
 A file is gzip-compressed NDJSON, one JSON object per line:
 

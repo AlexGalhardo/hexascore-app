@@ -16,7 +16,7 @@ Out of scope: PIX/AbacatePay and credit packs (D-06, D-14; boundary in 7.6); per
 
 - FR-05-1: `/api/v1` requires `Authorization: Bearer hx_live_<32 base62>` (legacy `lib/api/keys.ts`); missing/unknown/revoked → 401 with `WWW-Authenticate: Bearer`. Verify: integration test.
 - FR-05-2: Keys are shown once, stored as SHA-256 hex, listed with `prefix` (14 chars), `name`, `lastUsedAt` (≤ 1 write/min), `revokedAt`; ≤ 10 live keys per user. Verify: integration test.
-- FR-05-3: Limits equal `legacy/apps/web/lib/api/plans.ts` (kept at launch, reviewed 90 days after cutover, D-33): free 100 lifetime, `limit` ≤ 10, 1 rps sustained with a burst of 5 (owner Q-A2, 2026-10-31: the first D-33 review); pro 50,000/month, ≤ 100, 10 rps; business 500,000/month, ≤ 100, 50 rps; UTC calendar months. Legacy `credit_ledger` balances are honoured as extra quota consumed before the plan quota, no refund flow (D-23, 7.2). Verify: table-driven test; credit-before-plan test.
+- FR-05-3: Limits (free equals `legacy/apps/web/lib/api/plans.ts`; reviewed 90 days after cutover, D-33): free 100 lifetime, `limit` ≤ 10, 1 rps sustained with a burst of 5 (owner Q-A2, 2026-10-31: the first D-33 review); hobby 10,000/month, `limit` ≤ 20, 1 rps (burst 5); pro 50,000/month, ≤ 50, 3 rps (burst 15); UTC calendar months (owner, 2026-11-02, D-33: hobby and pro replace the legacy pro and business). Legacy `credit_ledger` balances are honoured as extra quota consumed before the plan quota, no refund flow (D-23, 7.2). Verify: table-driven test; credit-before-plan test.
 - FR-05-4: Counting per `legacy/docs/api.md`: every authenticated request reaching a handler counts (id 404 and 304 included); 401, query 400, unknown route 404, 429, 5xx do not (5xx refunded). Verify: test per status.
 - FR-05-5: Exhausted quota → 402 `quota-exhausted` with `plan`, `limit`; throttle → 429 with `Retry-After`. Verify: quota test.
 - FR-05-6: Only fields whose source is in `CATALOG_API_SOURCES` are emitted (SDD 01 FR-01-9), with `provenance` and `meta.omittedFields`. Verify: contract test with TMDB/IGDB fixtures.
@@ -24,13 +24,13 @@ Out of scope: PIX/AbacatePay and credit packs (D-06, D-14; boundary in 7.6); per
 - FR-05-8: Detail and list responses carry a strong `ETag`; matching `If-None-Match` → 304. Verify: integration test.
 - FR-05-9: `/v1/changes?since=` accepts ≤ 14 days back, else 400 `changes-window-exceeded`. Verify: integration test.
 - FR-05-10: A daily ID export per type exists by 08:00 UTC, kept 90 days. Verify: job test, fake clock + S3 fake.
-- FR-05-11: Pro (2 endpoints) and business (10) can register webhooks for `item.created|updated|deleted`; deliveries are signed and retried. Verify: delivery test.
+- FR-05-11: Hobby (2 endpoints) and pro (10) can register webhooks for `item.created|updated|deleted`; deliveries are signed and retried. Verify: delivery test.
 - FR-05-12: Only Stripe webhooks set the effective plan (7.5). Verify: billing tests with `stripe.SignForTest`.
 - FR-05-13: `/app/v1` accepts only `hx_app_` tokens with the route ability (SDD 03), is not plan-metered, and is rate-limited per token; an API key there → 401, an app token on `/api/v1` → 401. Verify: integration test.
 - FR-05-14: Builds below `APP_MIN_SUPPORTED_VERSION` get 426 `app-upgrade-required`. Verify: integration test.
 - FR-05-15: CI fails on stale OpenAPI documents, SDKs or app client. Verify: CI job.
 - FR-05-16: `lookupItem` accepts third-party ids as input but returns only allowlisted fields and never echoes an external id whose source is restricted (TMDB, IGDB, Steam, GOG); Wikidata-sourced ids are returned (open issue 05-3, ADR 0006). Verify: contract test with a TMDB-id lookup asserting no `tmdb` key in the body.
-- FR-05-17: `GET /api/v1/{type}/{id}/activity` (SDD 08) is business plan only (else 403 `plan-required`) and counts as 1 request (open issue 08-6). Verify: integration test per plan.
+- FR-05-17: `GET /api/v1/{type}/{id}/activity` (SDD 08) is pro plan only (else 403 `plan-required`) and counts as 1 request (open issue 08-6). Verify: integration test per plan.
 - FR-05-18: `POST /app/v1/client-errors` and `POST /app/v1/client-metrics` accept opt-in, anonymous reports (no PII), are rate-limited and retained 7 days (open issues 10-2, 09-11; SDD 12 owns processing). Verify: integration test (429 over limit, PII fields rejected, prune after 7 days with a fake clock).
 
 ## 4. Non-functional requirements
@@ -92,7 +92,7 @@ create table webhook_endpoints (
 create table webhook_cursor (id smallint primary key check (id = 1), last_change_id bigint not null);
 
 alter table subscriptions                   -- install:billing table (https://vukem.dev/docs/digging-deeper/billing "What it adds")
-  add column plan text not null check (plan in ('pro','business')),
+  add column plan text not null check (plan in ('hobby','pro')),
   add column provider text not null default 'stripe' check (provider in ('stripe','abacatepay')),
   add column state text not null check (state in ('active','past_due','canceled','expired'));
 create unique index on subscriptions(user_id) where state in ('active','past_due');
@@ -118,7 +118,7 @@ Headers: `X-Request-Id`; `RateLimit-Limit/Remaining/Reset` = per-second throttle
 | --- | --- | --- |
 | `listItems` | GET `/v1/{type}` | games/movies/series/books; `genre`, `platform` (games), `year` 1800–2100, `min_score`/`max_score` 0–10 step 0.5, `min_<category>` (A-06), legacy `sort`, `limit` 1..cap (default 10), `cursor`, `locale` |
 | `getItem` | GET `/v1/{type}/{id}` | 301 for merged ids (SDD 01); non-`public` items 404 (SDD 01 FR-01-14) |
-| `getGameActivity`, `getMovieActivity`, `getSeriesActivity`, `getBookActivity` | GET `/v1/{games,movies,series,books}/{id}/activity` (literal sections: `/{type}/{id}/activity` overlaps `/exports/{type}/{day}` on the ServeMux) | business plan only (else 403 `plan-required`), counts as 1 request (SDD 08 §6, open issue 08-6) |
+| `getGameActivity`, `getMovieActivity`, `getSeriesActivity`, `getBookActivity` | GET `/v1/{games,movies,series,books}/{id}/activity` (literal sections: `/{type}/{id}/activity` overlaps `/exports/{type}/{day}` on the ServeMux) | pro plan only (else 403 `plan-required`), counts as 1 request (SDD 08 §6, open issue 08-6) |
 | `listGameGenres`, `listMovieGenres`, `listSeriesGenres`, `listBookGenres` | GET `/v1/{type}/genres` | `{data:[{slug,count}]}`; one operation per type because Go's ServeMux rejects `/{type}/genres` next to `/entities/{id}` (2026-10-29, P1.H.2.1b) |
 | `listTrending` | GET `/v1/{type}/trending` | top 10 per type over the last 30 days (owner decision 2026-10-30), no `window=` (400 `invalid-query`); read from the hourly snapshot (SDD 08), `ETag` and `Cache-Control: public, max-age=300`, `computedAt` null before the first snapshot; literal routes `/games`, `/movies`, `/series`, `/books` because `/{type}/trending` overlaps `/entities/{id}`; the home page alone shows 3 per type over 7 days (SDD 08 section 7.2 "Home window") |
 | `listEditions` | GET `/v1/books/{id}/editions` | D-10 |
@@ -127,8 +127,8 @@ Headers: `X-Request-Id`; `RateLimit-Limit/Remaining/Reset` = per-second throttle
 | `searchItems` | GET `/v1/search` | `q` 1–100 chars, `type`, `limit` ≤ 50 (SDD 07); ranks on allowlisted-source text only (07-7) |
 | `lookupItem` | GET `/v1/lookup` | `source`, `id` (legacy sources); returns allowlisted fields only, never echoes restricted-source ids (FR-05-16) |
 | `listChanges` | GET `/v1/changes` | `since` RFC 3339 required, `type`, `cursor`, `limit` ≤ 1000 |
-| `listExports`, `getExport` | GET `/v1/exports` (`{data:[{type,day}]}`, newest first), `/v1/exports/{type}/{day}` (`day` = YYYY-MM-DD; 302 with `Cache-Control: no-store`) | pro/business (else 403 `plan-required`); `getExport` → 302 to `disk.PresignGet(key, 5*time.Minute)` (`https://vukem.dev/docs/digging-deeper/exports` "S3") |
-| `listWebhooks`, `createWebhook`, `deleteWebhook`, `testWebhook` | GET/POST `/v1/webhooks`, DELETE `/v1/webhooks/{id}`, POST `/v1/webhooks/{id}/test` | pro/business; secret returned once; not counted |
+| `listExports`, `getExport` | GET `/v1/exports` (`{data:[{type,day}]}`, newest first), `/v1/exports/{type}/{day}` (`day` = YYYY-MM-DD; 302 with `Cache-Control: no-store`) | hobby/pro (else 403 `plan-required`); `getExport` → 302 to `disk.PresignGet(key, 5*time.Minute)` (`https://vukem.dev/docs/digging-deeper/exports` "S3") |
+| `listWebhooks`, `createWebhook`, `deleteWebhook`, `testWebhook` | GET/POST `/v1/webhooks`, DELETE `/v1/webhooks/{id}`, POST `/v1/webhooks/{id}/test` | hobby/pro; secret returned once; not counted |
 | `getUsage` | GET `/v1/me/usage` | legacy shape without credits; counts |
 
 Cursors: legacy sorts need keyset on `(sort column, id)`; vukem `req.CursorPaginate` pages by primary key and rejects `sort` with a cursor (`https://vukem.dev/docs/rest-apis/pagination` "Query conventions"). Handlers sign their own opaque cursor (HMAC) and answer the vukem envelope `{data, meta:{next_cursor}, links:{next}}` (`https://vukem.dev/docs/rest-apis/pagination` "Envelopes"); tampered → 400 `invalid-cursor`. Unknown or empty params → 400 (legacy `lib/api/handler.ts`).
@@ -190,11 +190,11 @@ IGDB sends the shared secret in `X-Secret` (web-research 3.2); HexaScore signs w
 | Route | Behaviour |
 | --- | --- |
 | `GET /billing` | Inertia page (SDD 09): plans, prices in locale currency, state |
-| `POST /billing/checkout/{plan}` | pro/business, field `currency` brl/usd/eur; Checkout `mode=subscription`, one customer per user |
+| `POST /billing/checkout/{plan}` | hobby/pro, field `currency` brl/usd/eur; Checkout `mode=subscription` with the session `currency` picking the price's currency option, one customer per user; the `/pricing` subscribe buttons post here directly (no confirmation page) |
 | `POST /billing/portal` | plan changes, cancellation |
 | `POST /stripe/webhook` | `stripe.WebhookHandler` outside CSRF (`https://vukem.dev/docs/digging-deeper/billing` "Webhooks keep subscriptions in sync") |
 
-Prices (minor units, `legacy/apps/web/lib/billing/catalog.ts`; kept at launch, reviewed 90 days after cutover, D-33): pro BRL 2900 / USD 600 / EUR 600; business BRL 14900 / USD 2900 / EUR 2700; default pt-BR→BRL, es→EUR, en→USD. Env `STRIPE_KEY` (`rk_`), `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO`, `STRIPE_PRICE_BUSINESS`, each price with `currency_options` (legacy used `lookup_key`, `lib/billing/stripe.ts`). Passing `currency` is an edit of the scaffold code, not a documented option [NOT IN VUKEM DOCS].
+Prices (minor units, D-33, owner 2026-11-02, reviewed 90 days after cutover): hobby BRL 2000 / USD 500 / EUR 500; pro BRL 5000 / USD 1000 / EUR 1000; default pt-BR→BRL, es→EUR, en→USD. Env `STRIPE_KEY` (`rk_`), `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_HOBBY`, `STRIPE_PRICE_PRO`, each price with `currency_options` (legacy used `lookup_key`, `lib/billing/stripe.ts`). Passing `currency` is an edit of the scaffold code, not a documented option [NOT IN VUKEM DOCS].
 
 Events (legacy `lib/billing/stripe-webhook.ts` + scaffold): `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `customer.subscription.created|updated|deleted|paused|resumed`, `invoice.paid`, `invoice.payment_failed`.
 

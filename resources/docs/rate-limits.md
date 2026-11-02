@@ -7,8 +7,8 @@ Each plan has a request quota, a per-second rate limit and a maximum page size.
 | Plan | Quota | Requests / second | Max page size |
 | --- | --- | --- | --- |
 | Free | 100 in total | 1 (burst of 5) | 10 |
-| Pro | 50,000 / month | 10 | 100 |
-| Business | 500,000 / month | 50 | 100 |
+| Hobby | 10,000 / month | 1 (burst of 5) | 20 |
+| PRO | 50,000 / month | 3 (burst of 15) | 50 |
 
 Prices and upgrades: [/pricing](/pricing).
 

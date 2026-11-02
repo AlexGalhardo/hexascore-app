@@ -75,7 +75,7 @@ Every SDD ends with an "Open issues" section. This file is the architect's triag
 | 08 | 3 | `trending_exclusions` vs a general takedown flag | decided | SDD 01 gets `items.visibility` (`public`, `hidden`, `takedown`); trending and search exclude non-public; no separate exclusions table. |
 | 08 | 4 | `users.personalization_opt_out` missing in SDD 03 | decided | Added to SDD 03 §5 in the review pass; exposed in profile privacy settings. |
 | 08 | 5 | `SearchResultClicked` event contract pending SDD 07 | decided | SDD 07 §6 defines it (item id, query hash, position, locale); aligned in the review pass. |
-| 08 | 6 | Business plan name and activity endpoint quota pending SDD 05 | decided | Plan `business`; `/api/v1/{type}/{id}/activity` counts as 1 request, business plan only. |
+| 08 | 6 | Business plan name and activity endpoint quota pending SDD 05 | decided | Plan `pro` (was `business`, D-33 2026-11-02); `/api/v1/{type}/{id}/activity` counts as 1 request, pro plan only. |
 | 08 | 7 | Trend weights and thresholds untuned | roadmap | 90-day post-launch review (same as 02-7). |
 | 08 | 8 | `trending` eager instead of `Defer` because of SSR | decided | Correct reading of D-07: public SEO content is eager; `Defer` only for personalised or below-the-fold non-SEO props. SDD 09 follows this rule. |
 | 08 | 9 | Similar items in `/api/v1` and relation provenance | decided | Similarity computed from allowlisted-source relations only for the API variant; site variant may use all relations (same split as search, 07-7). |

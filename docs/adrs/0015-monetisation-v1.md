@@ -8,7 +8,7 @@ Legacy revenue model: a read-only public API with plans free (100 lifetime reque
 
 ## Decision
 
-- v1: the site and the mobile app are free, without ads. Revenue comes from the paid API with the legacy plans and prices (reviewed by the owner before launch), billed through Stripe subscriptions on vukem's `contrib/stripe` and `install:billing`. Webhook idempotency, plan changes, past-due handling and usage metering are specified in SDD 05.
+- v1: the site and the mobile app are free, without ads. Revenue comes from the paid API with the plans hobby and pro of brainstorming D-33 (owner, 2026-11-02; they replace the legacy pro and business), billed through Stripe subscriptions on vukem's `contrib/stripe` and `install:billing`. Webhook idempotency, plan changes, past-due handling and usage metering are specified in SDD 05.
 - Second release: AbacatePay PIX (one-off payments for 1 or 12 months and credit packs) rebuilt in Go behind the same billing abstraction; credit packs return with it.
 - Not planned: consumer subscriptions, ads.
 

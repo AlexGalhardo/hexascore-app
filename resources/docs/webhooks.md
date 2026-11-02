@@ -4,7 +4,7 @@ Get a signed HTTP request when items change, instead of polling.
 
 ## Set up
 
-Webhooks are available on the Pro (2 endpoints) and Business (10 endpoints) plans. Create an endpoint with `POST /v1/webhooks`:
+Webhooks are available on the Hobby (2 endpoints) and PRO (10 endpoints) plans. Create an endpoint with `POST /v1/webhooks`:
 
 | Field | Meaning |
 | --- | --- |
