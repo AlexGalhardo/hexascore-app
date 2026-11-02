@@ -20,6 +20,7 @@ import (
 	"regexp"
 	"slices"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/AlexGalhardo/vukem/database"
@@ -163,7 +164,17 @@ type Connector struct {
 	clientID, secret string
 	// TokenURL and APIURL override the endpoints; tests only.
 	TokenURL, APIURL string
+
+	mu       sync.Mutex
+	cached   string
+	deadline time.Time
 }
+
+// tokenMargin renews the app token this long before Twitch says it expires (tokens last about 60 days).
+const tokenMargin = time.Hour
+
+// errTokenRejected marks a 401/403 from IGDB: the cached token is dropped and the chunk retried once.
+var errTokenRejected = fmt.Errorf("igdb rejected the access token: %w", queue.ErrPermanent)
 
 // New returns a Connector that authenticates with the Twitch app credentials.
 func New(clientID, secret string) *Connector {
@@ -226,7 +237,16 @@ func (*Connector) Targets(
 }
 
 // token runs the client credentials grant. A 4xx answer means the credentials are wrong, which is permanent.
+// token returns the cached app token while it is valid, otherwise requests a new one and caches it until
+// expires_in minus tokenMargin.
 func (c *Connector) token(ctx context.Context, client *ingest.Client) (string, error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.cached != "" && time.Now().Before(c.deadline) {
+		return c.cached, nil
+	}
+
 	if c.clientID == "" || c.secret == "" {
 		return "", fmt.Errorf(
 			"igdb: IGDB_TWITCH_CLIENT_ID and IGDB_TWITCH_CLIENT_SECRET must be set: %w",
@@ -266,10 +286,14 @@ func (c *Connector) token(ctx context.Context, client *ingest.Client) (string, e
 
 	var tok struct {
 		AccessToken string `json:"access_token"`
+		ExpiresIn   int64  `json:"expires_in"`
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&tok); err != nil || tok.AccessToken == "" {
 		return "", errors.New("twitch token: no access token")
 	}
+
+	c.cached = tok.AccessToken
+	c.deadline = time.Now().Add(time.Duration(tok.ExpiresIn)*time.Second - tokenMargin)
 
 	return tok.AccessToken, nil
 }
@@ -311,7 +335,7 @@ func (c *Connector) games(
 	switch resp.StatusCode {
 	case http.StatusOK:
 	case http.StatusUnauthorized, http.StatusForbidden:
-		return nil, fmt.Errorf("igdb rejected the access token: %w", queue.ErrPermanent)
+		return nil, errTokenRejected
 	default:
 		return nil, fmt.Errorf("igdb games: status %d", resp.StatusCode)
 	}
@@ -324,9 +348,8 @@ func (c *Connector) games(
 	return ParseGames(body, qids)
 }
 
-// Fetch drops unsafe slugs, then queries the rest in batches of Batch with one token per call.
-// shortcut: a new token per Fetch call (one per chunk of targets); cache it until expires_in if the token endpoint
-// ever rate-limits us.
+// Fetch drops unsafe slugs, then queries the rest in batches of Batch with the cached app token; a rejected token is
+// dropped and the chunk retried once with a fresh one.
 func (c *Connector) Fetch(
 	ctx context.Context, client *ingest.Client, batch []ingest.Target,
 ) ([]ingest.Record, []ingest.TargetError) {
@@ -361,6 +384,12 @@ func (c *Connector) Fetch(
 		}
 
 		payloads, err := c.games(ctx, client, token, qids)
+		if errors.Is(err, errTokenRejected) {
+			c.forget(token)
+			if token, err = c.token(ctx, client); err == nil {
+				payloads, err = c.games(ctx, client, token, qids)
+			}
+		}
 		if err != nil {
 			errs = append(errs, failAll(chunk, err)...)
 
@@ -380,4 +409,14 @@ func (c *Connector) Fetch(
 	}
 
 	return records, errs
+}
+
+// forget drops the cached token if it is still the rejected one (another chunk may have renewed it already).
+func (c *Connector) forget(token string) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if c.cached == token {
+		c.cached = ""
+	}
 }

@@ -2,6 +2,7 @@ package igdb_test
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -98,6 +99,10 @@ type fake struct {
 	bodies []string
 	heads  []string
 	status int
+	// expiresIn is the token lifetime the fake reports (default 5000 s); reject401 answers 401 to that many
+	// games calls first.
+	expiresIn int
+	reject401 int
 }
 
 func newFake(t *testing.T, status int) (*ingest.Client, *fake) {
@@ -114,7 +119,11 @@ func newFake(t *testing.T, status int) (*ingest.Client, *fake) {
 		f.grants = append(f.grants, r.PostFormValue("grant_type")+"|"+r.PostFormValue("client_id"))
 		f.mu.Unlock()
 
-		_, _ = w.Write([]byte(`{"access_token": "abc", "expires_in": 5000, "token_type": "bearer"}`))
+		exp := f.expiresIn
+		if exp == 0 {
+			exp = 5000
+		}
+		_, _ = fmt.Fprintf(w, `{"access_token": "abc", "expires_in": %d, "token_type": "bearer"}`, exp)
 	})
 	mux.HandleFunc("/v4/games", func(w http.ResponseWriter, r *http.Request) {
 		body, _ := io.ReadAll(r.Body)
@@ -122,7 +131,17 @@ func newFake(t *testing.T, status int) (*ingest.Client, *fake) {
 		f.mu.Lock()
 		f.bodies = append(f.bodies, string(body))
 		f.heads = append(f.heads, r.Header.Get("Client-ID")+"|"+r.Header.Get("Authorization"))
+		reject := f.reject401 > 0
+		if reject {
+			f.reject401--
+		}
 		f.mu.Unlock()
+
+		if reject {
+			w.WriteHeader(http.StatusUnauthorized)
+
+			return
+		}
 
 		if f.status != 0 {
 			w.WriteHeader(f.status)
@@ -195,5 +214,47 @@ func TestIgdbMissingCredentialsOrRejectedTokenStopTheRun(t *testing.T) {
 		if len(errs) != 1 || !errors.Is(errs[0].Err, queue.ErrPermanent) {
 			t.Errorf("%s: errs = %v, want one permanent error", name, errs)
 		}
+	}
+}
+
+func TestToken_FetchedOncePerExpiry(t *testing.T) {
+	target := []ingest.Target{{ID: "Q4267401", Type: "the-witcher-3-wild-hunt"}}
+
+	client, f := newFake(t, 0)
+	c := connector(f, "id", "secret")
+	for range 3 {
+		if _, errs := c.Fetch(t.Context(), client, target); len(errs) != 0 {
+			t.Fatalf("errs = %v", errs)
+		}
+	}
+	if len(f.grants) != 1 {
+		t.Errorf("token requests over 3 fetches = %d, want 1 (cached until expires_in)", len(f.grants))
+	}
+
+	// A token that expires within the renewal margin is never reused.
+	client, f = newFake(t, 0)
+	f.expiresIn = 60
+	c = connector(f, "id", "secret")
+	for range 2 {
+		if _, errs := c.Fetch(t.Context(), client, target); len(errs) != 0 {
+			t.Fatalf("errs = %v", errs)
+		}
+	}
+	if len(f.grants) != 2 {
+		t.Errorf("token requests with a short-lived token = %d, want 2", len(f.grants))
+	}
+}
+
+func TestToken_RefreshedOn401(t *testing.T) {
+	client, f := newFake(t, 0)
+	f.reject401 = 1
+	c := connector(f, "id", "secret")
+
+	records, errs := c.Fetch(t.Context(), client, []ingest.Target{{ID: "Q4267401", Type: "the-witcher-3-wild-hunt"}})
+	if len(errs) != 0 || len(records) != 1 {
+		t.Fatalf("records = %d, errs = %v; want the chunk retried with a new token", len(records), errs)
+	}
+	if len(f.grants) != 2 {
+		t.Errorf("token requests = %d, want 2 (initial + refresh after 401)", len(f.grants))
 	}
 }
