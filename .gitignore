@@ -35,3 +35,7 @@ playwright-report/
 qa/reports/
 .orchestration/heartbeat/
 __pycache__/
+
+PROGRESS.md
+spike-report.md
+web-research.md

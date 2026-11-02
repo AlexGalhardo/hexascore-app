@@ -13,7 +13,7 @@ import (
 // Better Auth 1.7.7 hashes (@better-auth/utils 0.4.2, password.node.mjs):
 // "<16-byte salt as 32 hex chars>:<64-byte scrypt key as hex>", scrypt
 // N=16384 r=16 p=1 over the NFKC-normalised password. The salt fed to
-// scrypt is the hex TEXT, not the decoded bytes (docs/spike-report.md).
+// scrypt is the hex TEXT, not the decoded bytes.
 var betterAuthHash = regexp.MustCompile(`^[0-9a-f]{32}:[0-9a-f]{128}$`)
 
 const (

@@ -1,6 +1,6 @@
 # Competitive research: IMDb, TMDB, IGDB, Metacritic, Rotten Tomatoes, Goodreads, Skoob
 
-Phase 1 deliverable (see [PROGRESS.md](PROGRESS.md)). Research date: 2026-10-28. Method: public documentation, official API pages, terms of use, engineering blogs, press and papers only; no scraping, no authenticated pages. Each competitor section was produced by a research agent and reviewed by the architect; every claim carries a numbered source, and anything not confirmed by a source is tagged `[NOT VERIFIED]`.
+Phase 1 deliverable. Research date: 2026-10-28. Method: public documentation, official API pages, terms of use, engineering blogs, press and papers only; no scraping, no authenticated pages. Each competitor section was produced by a research agent and reviewed by the architect; every claim carries a numbered source, and anything not confirmed by a source is tagged `[NOT VERIFIED]`.
 
 How to read this document:
 

@@ -266,7 +266,7 @@ Genres are shared across types (genre page has type tabs). The Wikidata property
 | book items | work + one edition per `external_ids.isbn13` | edition language/publisher from Open Library edition data when present, else `language` = `und`, publisher null, flagged by DQ-10; never blocks the migration (01-1); the legacy dump holds no Open Library edition language, so every imported edition starts `und` with source `legacy`; an invalid or already-used ISBN yields no edition |
 | `item_translations` | same + `title_source`, `synopsis_source` | 1:1; `synopsis_license` → `synopsis_licence`; `title_source` = `wikidata` (legacy titles are Wikidata labels); `synopsis_source` inferred from URL host (`*.wikipedia.org` → `wikipedia`; no URL → `hexascore`, own rewritten text, licence `proprietary`; any other host fails the import on the `data_sources` key); the import seeds `data_sources` rows `wikidata`, `wikipedia`, `hexascore` |
 | `external_scores` | dropped (D-09) | not copied; kept only in the final legacy `pg_dump` |
-| `affiliate_links` | kept, optional | rows copied if any (PROGRESS.md notes `affiliate_store` values never written) |
+| `affiliate_links` | kept, optional | rows copied if any (the legacy audit found `affiliate_store` values never written) |
 | `source_records` | SDD 06 | 1:1 in the legacy shape, including records no item points at (P6.A adds `checked_at`, `last_run_id`) |
 
 ## 6. Contracts

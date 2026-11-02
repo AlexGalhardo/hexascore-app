@@ -1,6 +1,6 @@
 # Brainstorming log
 
-Phase 2 deliverable (see [PROGRESS.md](PROGRESS.md)). Records every question, answer, alternative and decision between the owner and the architect. Decisions here are final for the SDDs and ADRs unless this file is updated first.
+Phase 2 deliverable. Records every question, answer, alternative and decision between the owner and the architect. Decisions here are final for the SDDs and ADRs unless this file is updated first.
 
 Format per round: question, options with pros/cons, architect recommendation, owner answer, decision.
 

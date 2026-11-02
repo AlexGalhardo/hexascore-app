@@ -4,7 +4,7 @@ Status: accepted (2026-10-28). Decisions: owner requirement 1; brainstorming D-0
 
 ## Context
 
-The current application (`legacy/`, release 0.0.25) is Next.js 16 on Vercel with Neon Postgres, Upstash Redis, Vercel Blob and Python ingestion run by hand. Pain points recorded in `docs/PROGRESS.md`: every page is dynamic because of the CSP nonce in `proxy.ts`, `unstable_cache` workarounds, Windows build crash, no CI in the cloud, manual ingestion against production, cost drivers tied to Vercel (Web Analytics, Pro plan), and a paid API that re-serves third-party data without a licence.
+The current application (`legacy/`, release 0.0.25) is Next.js 16 on Vercel with Neon Postgres, Upstash Redis, Vercel Blob and Python ingestion run by hand. Pain points found in the legacy audit: every page is dynamic because of the CSP nonce in `proxy.ts`, `unstable_cache` workarounds, Windows build crash, no CI in the cloud, manual ingestion against production, cost drivers tied to Vercel (Web Analytics, Pro plan), and a paid API that re-serves third-party data without a licence.
 
 The owner also develops vukem (`github.com/AlexGalhardo/vukem`, v0.32.0 on 2026-10-25, BETA phase B.5, 352 test files, `TestSecurity_*` gates, OpenAPI 3.1 generation from typed handlers, Inertia v3 adapter, queue, scheduler, rate limiting, admin panel, Stripe contrib, Postgres driver). Using HexaScore as a real product on vukem is a product goal in itself: the framework gets a production consumer and HexaScore gets a stack the owner controls end to end.
 

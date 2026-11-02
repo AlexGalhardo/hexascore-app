@@ -61,7 +61,7 @@ Snapshot for the architect's full review of HexaScore (this repo) and the vukem 
 
 ## 6. Where to look
 
-- Plans and status: `ROADMAP.md` (status lines dated 2026-11-01 on open boxes), `docs/PROGRESS.md`.
+- Plans and status: `ROADMAP.md` (status lines dated 2026-11-01 on open boxes).
 - Decisions: `docs/brainstorming.md`, `docs/adrs/`, `docs/orchestration/QUESTIONS.md`.
 - Designs: `docs/sdd/` (01–14) and `open-issues.md`.
 - Operations: `docs/runbooks/` (mobile release, release range, restore and off-site copy, incidents).

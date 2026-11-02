@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 # Lists every legacy route, Server Action and e2e test title, one per line:
 #   route <path> | action <file> <name> | e2e <spec> <title>
-# Used by docs/parity-checklist.md (P1.I.6.1). Read-only on the legacy tree.
+# Parity inventory (P1.I.6.1). Read-only on the legacy tree.
 set -eu
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

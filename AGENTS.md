@@ -6,7 +6,7 @@ This file is the single source of truth for every coding agent. `CLAUDE.md` only
 
 ## Session start (mandatory)
 
-1. Read this file, [docs/PROGRESS.md](docs/PROGRESS.md), and [ROADMAP.md](ROADMAP.md).
+1. Read this file and [ROADMAP.md](ROADMAP.md) (status table and the dated status lines); the latest state snapshot is in [docs/review/](docs/review/).
 2. Read [.agents/skills/use-railway/SKILL.md](.agents/skills/use-railway/SKILL.md) and follow it for every Railway command. The skill is vendored from [railwayapp/railway-skills](https://github.com/railwayapp/railway-skills) commit `526e95524e964ed326689cbac4464d97a58ab81c` (`use-railway` 1.7.0). Also read [Grok Build + Railway](https://railway.com/agents/grok): Railway MCP is `https://mcp.railway.com`, and a deploy is a plan the owner approves before `railway up`.
 3. If you are one of the team workers (senior, intern, specialist), your system prompt is [PROMPT-WORKERS.md](PROMPT-WORKERS.md) and your brief is `.orchestration/briefs/<role>.md`; claim work only through `.orchestration/queue/TASKS.md`. Otherwise pick the first unchecked microtask of the current phase unless the owner names another.
 4. `graphify` is a CLI (`graphify query "<question>"`) when `graphify-out/graph.json` exists. It is not required to start.
@@ -17,7 +17,6 @@ Railway rules that override the skill's deploy-from-cwd shortcut: do not run `ra
 
 | Path | What |
 | --- | --- |
-| `docs/PROGRESS.md` | programme log per phase; update at the end of every session |
 | `docs/brainstorming.md` | owner decisions D-xx and architect decisions A-xx; final unless edited first |
 | `docs/web-research.md` | competitor research with sources |
 | `docs/sdd/` | one design document per domain; `open-issues.md` is the triage of their open points |

@@ -1,6 +1,6 @@
 # HexaScore roadmap (vukem rewrite)
 
-Execution plan for any coding agent. Read [AGENTS.md](AGENTS.md) first, then [docs/PROGRESS.md](docs/PROGRESS.md). The team that executes it (orchestrator, two seniors, one intern, one specialist) and its queue protocol are defined in [PROMPT-WORKERS.md](PROMPT-WORKERS.md); state lives in `.orchestration/`. A model name on a microtask is an effort hint, not a required runtime. Tick boxes as work lands; update `docs/PROGRESS.md` at the end of each session.
+Execution plan for any coding agent. Read [AGENTS.md](AGENTS.md) first. The team that executes it (orchestrator, two seniors, one intern, one specialist) and its queue protocol are defined in [PROMPT-WORKERS.md](PROMPT-WORKERS.md); state lives in `.orchestration/`. A model name on a microtask is an effort hint, not a required runtime. Tick boxes as work lands; update `docs/PROGRESS.md` at the end of each session.
 
 Ordering principle (owner requirement): (1) foundation and parity with the Next.js app, (2) data migration and infra, (3) public API, (4) community edits, (5) mobile, (6) continuous ingestion and recommendations. Phase 0 is a short framework spike that de-risks everything after it.
 
@@ -284,7 +284,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
 #### P0.F.11 Spike report and closure
 
 - [x] **P0.F.11.1** Consolidate the spike into `docs/spike-report.md` and update every exercised `vukem-feedback.md` entry.
-  - Files/modules: `docs/spike-report.md`, `vukem-feedback.md`, `docs/PROGRESS.md` (Phase 0 entry), `ROADMAP.md` status table
+  - Files/modules: `docs/spike-report.md`, `vukem-feedback.md`, `ROADMAP.md` status table
   - Refs: ROADMAP phase map (P0 exit criteria); VF-002, VF-005, VF-006, VF-009, VF-014 to VF-018, VF-021, VF-024, VF-026 to VF-029
   - Depends on: P0.F.1.3, P0.F.2.2, P0.F.2.3, P0.F.3.1, P0.F.4.1, P0.F.5.2, P0.F.6.1, P0.F.7.2, P0.F.8.1, P0.F.9.1, P0.F.10.1
   - Model: Opus
@@ -298,7 +298,7 @@ vukem facts cited below come from <https://vukem.dev/docs/cli/reference-new>, `/
 Parity baseline (checked by P1.I.6.1):
 
 - Routes: `legacy/apps/web/app/[locale]/` (home, `[section]`, `[section]/[slug]`, `search`, `u/[nickname]`, `u/[nickname]/lists/[id]`, `pricing`, `contact`, `policy`, `terms`, `login`, `signup`, `verify-email`, `recover-password`, `reset-password`, `onboarding`, `profile`, `profile/api`, `profile/api/checkout`, `admin` with `contact`, `reports`, `items`, `items/[id]`, `ingestion`, `docs` with `authentication`, `errors`, `pagination`, `rate-limits`, `changelog`, `reference`, `[...rest]`).
-- The 33 Server Actions in `legacy/apps/web/actions/*.ts`: `account.ts` (`updateName`, `setNickname`, `setPassword`, `setProfilePrivate`, `scheduleDeletion`, `cancelDeletion`); `admin.ts` (`setContactHandled`, `setReportStatus`, `setListHidden`, `banUser`, `saveAffiliateLink`, `deleteAffiliateLink`, `mergeItems`); `api-keys.ts` (`createApiKeyAction`, `revokeApiKeyAction`); `billing.ts` (`startStripeCheckout`, `openBillingPortal`, `createPixCharge`, `simulatePixPaymentAction`); `contact.ts` (`sendContactMessage`); `follows.ts` (`toggleFollow`); `item-status.ts` (`saveItemStatus`); `lists.ts` (`createList`, `updateList`, `deleteList`, `addToList`, `removeFromList`, `moveInList`); `ratings.ts` (`saveRating`, `deleteRating`); `reports.ts` (`report`); `time-to-beat.ts` (`saveTimeToBeat`, `deleteTimeToBeat`). `docs/PROGRESS.md` gives the count; the names come from the files.
+- The 33 Server Actions in `legacy/apps/web/actions/*.ts`: `account.ts` (`updateName`, `setNickname`, `setPassword`, `setProfilePrivate`, `scheduleDeletion`, `cancelDeletion`); `admin.ts` (`setContactHandled`, `setReportStatus`, `setListHidden`, `banUser`, `saveAffiliateLink`, `deleteAffiliateLink`, `mergeItems`); `api-keys.ts` (`createApiKeyAction`, `revokeApiKeyAction`); `billing.ts` (`startStripeCheckout`, `openBillingPortal`, `createPixCharge`, `simulatePixPaymentAction`); `contact.ts` (`sendContactMessage`); `follows.ts` (`toggleFollow`); `item-status.ts` (`saveItemStatus`); `lists.ts` (`createList`, `updateList`, `deleteList`, `addToList`, `removeFromList`, `moveInList`); `ratings.ts` (`saveRating`, `deleteRating`); `reports.ts` (`report`); `time-to-beat.ts` (`saveTimeToBeat`, `deleteTimeToBeat`). The legacy audit gave the count; the names come from the files.
 - The 16 specs in `legacy/qa/e2e/specs/`: `admin`, `api-keys`, `auth`, `catalog`, `contact`, `docs`, `headers`, `item`, `not-found`, `pricing`, `profile`, `public-pages`, `ratings`, `search`, `social`, `time-to-beat`.
 - Deferred by D-06 (out of Phase 1): `createPixCharge`, `simulatePixPaymentAction`, `toggleFollow`, `/feed`, the follow/feed tests of `social.spec.ts`, credit packs, per-locale OpenAPI documents. Critic scores are dropped (D-09). Each microtask below names the legacy actions and routes it replaces.
 
@@ -414,7 +414,7 @@ Releases: ADR 0013 makes each group that ships to staging a `v0.N.0` release. St
   - Acceptance:
     - `gh release view v0.1.0` → non-empty body
     - the tagged image → `curl -s localhost:3000/up?checks=1` shows `ssr: ok`
-  - Notes: owner input needed: the first push of this repository to `main` of `github.com/AlexGalhardo/hexascore-app` replaces the Next.js tree (PROGRESS.md workspace notes); the owner runs or explicitly approves it. Branch `legacy` is never touched.
+  - Notes: owner input needed: the first push of this repository to `main` of `github.com/AlexGalhardo/hexascore-app` replaces the Next.js tree (release notes workspace notes); the owner runs or explicitly approves it. Branch `legacy` is never touched.
 
 ### P1.B Catalogue model and read paths
 
@@ -1247,7 +1247,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
 
 - [x] **P1.I.6.1** Write `docs/parity-checklist.md` mapping every legacy route, Server Action and e2e test to its replacement, test and status.
   - Files/modules: `docs/parity-checklist.md`, `scripts/parity-inventory.sh` (lists legacy routes, actions and test titles)
-  - Refs: ROADMAP phase map (P1 exit criteria); D-06, D-09, D-21; `docs/PROGRESS.md` (33 Server Actions); legacy `apps/web/app/[locale]/`, `apps/web/actions/`, `qa/e2e/specs/`
+  - Refs: ROADMAP phase map (P1 exit criteria); D-06, D-09, D-21; the legacy audit (33 Server Actions); legacy `apps/web/app/[locale]/`, `apps/web/actions/`, `qa/e2e/specs/`
   - Depends on: P1.I.2.4, P1.I.3.1, P1.I.4.1, P1.I.5.1
   - Model: Opus
   - Acceptance:
@@ -1258,7 +1258,7 @@ The gate runs against the built container (`docker compose --profile app up`, se
 #### P1.I.7 Release
 
 - [x] **P1.I.7.1** Release `v0.9.0` (QA parity gate green on the local container). Done 2026-10-30: `gh release view v0.9.0` published; isolated Playwright run `660 passed (5.9m)` (evidence in `developer-manual-todos.md`).
-  - Files/modules: `CHANGELOG.md`, tag `v0.9.0`, `docs/PROGRESS.md`, `ROADMAP.md` status table
+  - Files/modules: `CHANGELOG.md`, tag `v0.9.0`, `ROADMAP.md` status table
   - Refs: ADR 0013; SDD 11 §7.1; D-20, D-21
   - Depends on: P1.I.6.1
   - Model: Sonnet
@@ -1411,7 +1411,7 @@ Phase-specific conventions:
 #### P2.A.5 Release
 
 - [x] **P2.A.5.1** Release `v0.10.0` (Railway staging) and deploy every earlier `v0.x` tag's content as the staging baseline. Done 2026-10-30 as `v0.10.0` on GitHub; staging does not exist (owner, 2026-10-29), production is the single environment, so the staging URL check is void.
-  - Files/modules: `CHANGELOG.md`, tag `v0.10.0`, `docs/PROGRESS.md`, `ROADMAP.md` status table, `AGENTS.md` commands table (`railway config plan|apply`, `scripts/infra/check-image.sh`)
+  - Files/modules: `CHANGELOG.md`, tag `v0.10.0`, `ROADMAP.md` status table, `AGENTS.md` commands table (`railway config plan|apply`, `scripts/infra/check-image.sh`)
   - Refs: ADR 0013; SDD 11 §7.1; D-20; Phase 1 header (staging deploys of Phase 1 tags wait for P2.A)
   - Depends on: P2.A.4.4, P2.A.1.2
   - Model: Sonnet
@@ -1512,7 +1512,7 @@ Phase-specific conventions:
 #### P2.B.3 Release
 
 - [x] **P2.B.3.1** Release `v0.11.0` (CI/CD) and run the first production deploy through `release.yml`. Done 2026-10-31: `gh run list --workflow release.yml` → `Release v0.11.0 success`; GitHub release published from PR #56.
-  - Files/modules: `CHANGELOG.md`, tag `v0.11.0`, `docs/PROGRESS.md`, `AGENTS.md` (commands: `task release`, `gh workflow run release.yml`)
+  - Files/modules: `CHANGELOG.md`, tag `v0.11.0`, `AGENTS.md` (commands: `task release`, `gh workflow run release.yml`)
   - Refs: ADR 0013; SDD 11 §7.1; D-20
   - Depends on: P2.B.2.2, P2.B.2.3
   - Model: Sonnet
@@ -1648,7 +1648,7 @@ Phase-specific conventions:
 #### P2.C.5 Release
 
 - [x] **P2.C.5.1** Release `v0.12.0` (observability). Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
-  - Files/modules: `CHANGELOG.md`, tag `v0.12.0`, `docs/PROGRESS.md`, `docs/sdd/open-issues.md` (rows 12-4, 12-8 closed), `vukem-feedback.md` (VF-019, VF-022, VF-023 notes)
+  - Files/modules: `CHANGELOG.md`, tag `v0.12.0`, `docs/sdd/open-issues.md` (rows 12-4, 12-8 closed), `vukem-feedback.md` (VF-019, VF-022, VF-023 notes)
   - Refs: ADR 0013; SDD 12 §9; SDD 11 §7.1
   - Depends on: P2.C.3.2, P2.C.3.4, P2.C.3.5, P2.C.4.1, P2.C.4.2
   - Model: Sonnet
@@ -1766,7 +1766,7 @@ Phase-specific conventions:
 #### P2.D.6 Release
 
 - [x] **P2.D.6.1** Release `v0.13.0` (security hardening). Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
-  - Files/modules: `CHANGELOG.md`, tag `v0.13.0`, `docs/PROGRESS.md`
+  - Files/modules: `CHANGELOG.md`, tag `v0.13.0`
   - Refs: ADR 0013; SDD 13 §9; SDD 11 §7.1
   - Depends on: P2.D.2.3, P2.D.4.1, P2.D.5.1, P2.D.5.2, P2.D.5.3
   - Model: Sonnet
@@ -1861,7 +1861,7 @@ Phase-specific conventions:
 #### P2.E.4 Release
 
 - [x] **P2.E.4.1** Release `v0.14.0` (backups and migrations policy). Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
-  - Files/modules: `CHANGELOG.md`, tag `v0.14.0`, `docs/PROGRESS.md`, `AGENTS.md` (commands: `backup:run`, `backup:drill`, `backup:restore`, `hexascore:predeploy`, `db:index-concurrently`)
+  - Files/modules: `CHANGELOG.md`, tag `v0.14.0`, `AGENTS.md` (commands: `backup:run`, `backup:drill`, `backup:restore`, `hexascore:predeploy`, `db:index-concurrently`)
   - Refs: ADR 0013, 0014; SDD 11 §7.1, §9
   - Depends on: P2.E.1.2, P2.E.2.3, P2.E.3.2
   - Model: Sonnet
@@ -1873,7 +1873,7 @@ Phase-specific conventions:
 
 ### P2.F Data migration
 
-The importer reads the legacy dump restored into schema `legacy_import` of the target database and writes the new schema; it never connects to Neon. Ids are preserved (SDD 01 §5.4, SDD 03 §5). Stages are idempotent and resumable. Legacy facts: 27 tables in `legacy/apps/web/lib/db/schema/{auth,billing,catalog,social}.ts`; ~10k synthetic users with ~2.1M ratings, marked by id `seed-user-NNNNNN` and email `<id>@example.test` (`legacy/apps/web/lib/db/seed-data.ts`); 78,904 items with covers on Vercel Blob plus orphans of replaced covers (`legacy/docs/backup-local.md`; 20,360 orphans in the 2026-10-10 run, `docs/PROGRESS.md`). The seed script lives at `legacy/apps/web/lib/db/seed.ts` (run as `bun run db:seed` in `apps/web`), not `scripts/seed.ts`.
+The importer reads the legacy dump restored into schema `legacy_import` of the target database and writes the new schema; it never connects to Neon. Ids are preserved (SDD 01 §5.4, SDD 03 §5). Stages are idempotent and resumable. Legacy facts: 27 tables in `legacy/apps/web/lib/db/schema/{auth,billing,catalog,social}.ts`; ~10k synthetic users with ~2.1M ratings, marked by id `seed-user-NNNNNN` and email `<id>@example.test` (`legacy/apps/web/lib/db/seed-data.ts`); 78,904 items with covers on Vercel Blob plus orphans of replaced covers (`legacy/docs/backup-local.md`; 20,360 orphans in the 2026-10-10 run). The seed script lives at `legacy/apps/web/lib/db/seed.ts` (run as `bun run db:seed` in `apps/web`), not `scripts/seed.ts`.
 
 #### P2.F.1 Export and purge
 
@@ -2030,7 +2030,7 @@ The importer reads the legacy dump restored into schema `legacy_import` of the t
 #### P2.F.6 Release
 
 - [x] **P2.F.6.1** Release `v0.15.0` (data migration tooling, two dry runs green). Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
-  - Files/modules: `CHANGELOG.md`, tag `v0.15.0`, `docs/PROGRESS.md`, `AGENTS.md` (commands: `hexascore:import-legacy`, `hexascore:cutover-verify`, `scripts/legacy/*`)
+  - Files/modules: `CHANGELOG.md`, tag `v0.15.0`, `AGENTS.md` (commands: `hexascore:import-legacy`, `hexascore:cutover-verify`, `scripts/legacy/*`)
   - Refs: ADR 0013; SDD 11 §7.1, §7.6
   - Depends on: P2.F.5.2
   - Model: Sonnet
@@ -2131,10 +2131,10 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
   - Acceptance:
     - each day: 5xx < 0.5 %, `hexa.ssr.fallbacks{public="true"}` = 0, login success ≥ 95 % of the legacy baseline, every Stripe event processed, no job kind failing twice
     - first production `backup.daily` → `verified`; the next `backup:drill` on staging from the production dump → pass
-  - Notes: a breach before T+7 d → the owner decides between forward fix and R1–R3. At T+7 d record "rollback window closed, forward-fix only" in `docs/PROGRESS.md`. Neon stays read-only until T+30 d.
+  - Notes: a breach before T+7 d → the owner decides between forward fix and R1–R3. At T+7 d record "rollback window closed, forward-fix only" in the release notes. Neon stays read-only until T+30 d.
 
 - [x] **P2.G.4.2** Release `v1.0.0` (parity and cutover). Closed by owner decision 2026-11-01; actual state: no v1.0.0 tag yet; production runs v0.12.x.
-  - Files/modules: `CHANGELOG.md`, tag `v1.0.0`, `docs/PROGRESS.md`, `ROADMAP.md` (status table, phase map: P2 done), `AGENTS.md`
+  - Files/modules: `CHANGELOG.md`, tag `v1.0.0`, `ROADMAP.md` (status table, phase map: P2 done), `AGENTS.md`
   - Refs: ADR 0013 ("`v1.0.0` = parity with the legacy app and successful cutover"); SDD 11 §7.1; D-20, D-21; ROADMAP phase map (P2 exit criteria)
   - Depends on: P2.G.3.3
   - Model: Sonnet
@@ -2156,7 +2156,7 @@ Timeline (SDD 11 §7.6): T-14 d rehearsal, T-7 d bulk covers, T-24 h TTL 60 s, w
 
 ### P2.H Launch readiness (audit 2026-10-31)
 
-Goal: close the gap between "parity" and "a product people can use in public". Source: the architecture audit of 2026-10-31 (browser test of `v0.11.0`, findings A1–A22 in `docs/PROGRESS.md`). Every item is code-only, needs no owner gate, and ships before `v1.0.0`. Fixed in the audit itself (no box): mobile header, visible category labels on the star widget, cookie banner overlap, brand fallback, onboarding after a late verification, list indexing rule, profile and list 404 with the shell, API `unknown type` message, demo seeder distribution, report dialog on profiles and lists, dashboard page.
+Goal: close the gap between "parity" and "a product people can use in public". Source: the architecture audit of 2026-10-31 (browser test of `v0.11.0`, findings A1–A22, recorded in git history). Every item is code-only, needs no owner gate, and ships before `v1.0.0`. Fixed in the audit itself (no box): mobile header, visible category labels on the star widget, cookie banner overlap, brand fallback, onboarding after a late verification, list indexing rule, profile and list 404 with the shell, API `unknown type` message, demo seeder distribution, report dialog on profiles and lists, dashboard page.
 
 #### P2.H.1 Visual catalogue
 
@@ -2283,7 +2283,7 @@ Goal: close the gap between "parity" and "a product people can use in public". S
     - `k6 run qa/k6/page-ttfb.js` → p75 ≤ 400 ms
 
 - [x] **P2.H.3.6** Release `v0.16.0` (launch readiness). Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
-  - Files/modules: `CHANGELOG.md`, tag `v0.16.0`, `docs/PROGRESS.md`, `ROADMAP.md` status table
+  - Files/modules: `CHANGELOG.md`, tag `v0.16.0`, `ROADMAP.md` status table
   - Refs: ADR 0013
   - Depends on: P2.H.1.1–P2.H.3.5
   - Model: Sonnet
@@ -3104,7 +3104,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 #### P5.A.5 Release
 
 - [x] **P5.A.5.1** Release `v1.6.0`: mobile foundation merged, with a `development` and a `preview` build installable from EAS on the reference device. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
-  - Files/modules: `CHANGELOG.md`, `apps/mobile/app.config.ts` (`version` `0.1.0`), `docs/PROGRESS.md`
+  - Files/modules: `CHANGELOG.md`, `apps/mobile/app.config.ts` (`version` `0.1.0`)
   - Refs: ADR 0013; SDD 10 §7.4, §7.8
   - Depends on: P5.A.4.3, P5.A.3.5, P5.A.3.4
   - Model: Sonnet
@@ -3254,7 +3254,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
 #### P5.B.6 Release
 
 - [x] **P5.B.6.1** Release `v1.7.0` (assetlinks route in production) and build `mobile-v0.9.0` as a preview APK for owner testing. Closed by owner decision 2026-11-01: superseded by the rebuilt release series v0.1.0–v0.39.0 (GitHub releases, CHANGELOG); this version number is no longer used.
-  - Files/modules: `CHANGELOG.md`, `apps/mobile/app.config.ts` (`version`), `docs/PROGRESS.md`
+  - Files/modules: `CHANGELOG.md`, `apps/mobile/app.config.ts` (`version`)
   - Refs: ADR 0013; SDD 10 §7.4, §9
   - Depends on: P5.B.5.2
   - Model: Sonnet
@@ -3275,7 +3275,7 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
   - Acceptance:
     - `bunx eas-cli build --profile preview --platform android --non-interactive` → build finished, APK artifact URL
     - PR workflow run → `e2e-test` build plus Maestro smoke → passed
-  - Notes: EAS free tier (D-34). Record the monthly build quota used in `docs/PROGRESS.md`. The OTA rule document lists what may ship over the air (JS/asset, copy, catalogue fixes) and what forces a store release (fingerprint change, permission, target API, new screen or feature, data collection, min-version raise).
+  - Notes: EAS free tier (D-34). Record the monthly build quota used in the release notes. The OTA rule document lists what may ship over the air (JS/asset, copy, catalogue fixes) and what forces a store release (fingerprint change, permission, target API, new screen or feature, data collection, min-version raise).
 
 - [ ] **P5.C.1.2** Prepare the Gradle-on-GitHub-Actions fallback: `expo prebuild` output, `bundleRelease` signed with the upload key from Actions secrets, AAB uploaded as an artifact. Run it manually.
   - Files/modules: `.github/workflows/mobile-gradle.yml`, `docs/runbooks/mobile-build-fallback.md`
@@ -3334,16 +3334,16 @@ Mobile conventions for every P5 microtask: Expo managed (CNG), no `android/` fol
   - Notes: a budget miss blocks promotion. Record the numbers, open a task, and only then consider FlashList (ADR) or the 2× thumb (open issue 10-3).
 
 - [ ] **P5.C.3.2** Promote to closed testing for ≥ 7 days and track crash-free sessions and `client.errors` by `app_version`.
-  - Files/modules: `docs/release/mobile-release-checklist.md`, `docs/PROGRESS.md`
+  - Files/modules: `docs/release/mobile-release-checklist.md`
   - Refs: SDD 10 §7.8 "Pipeline" (closed ≥ 7 days, crashes ≤ 1 % of sessions); SDD 12 §6.2 (`client.errors`)
   - Depends on: P5.C.3.1
   - Model: Sonnet
   - Acceptance:
-    - Play Console vitals after 7 days → crash-free sessions ≥ 99 %, recorded with the date in `docs/PROGRESS.md`
+    - Play Console vitals after 7 days → crash-free sessions ≥ 99 %, recorded with the date in the release notes
   - Notes: the owner manages the testers list. A crash fix that changes only JS may ship over the air under the OTA rule; anything else needs a new store build.
 
 - [ ] **P5.C.3.3** Release to production with a staged rollout of 20 % → 100 % over ≥ 3 days, raise `APP_MIN_SUPPORTED_VERSION` to `1.0.0`, and release `v1.8.0`. Status (2026-11-01): the version number is superseded by the rebuilt release series v0.1.0–v0.39.0; still open for the Play Store staged rollout (owner gate).
-  - Files/modules: `CHANGELOG.md`, production env `APP_MIN_SUPPORTED_VERSION`, `docs/PROGRESS.md`
+  - Files/modules: `CHANGELOG.md`, production env `APP_MIN_SUPPORTED_VERSION`
   - Refs: SDD 10 §7.4, §7.8; SDD 05 §6.4 (kill switch); ADR 0013
   - Depends on: P5.C.3.2
   - Model: Sonnet
@@ -3505,7 +3505,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
   - Notes: scheduler locks live in `app.Cache()`. Use `CACHE_STORE=database` in production so a restart does not double-run (scheduler page "Overlapping runs"). Registering custom commands is [NOT VERIFIED] in SDD 06 §7.9; confirm it on the vukem CLI docs or expose bootstrap as an admin run only (P6.B.4.3).
 
 - [ ] **P6.A.4.2** Release `v1.9.0` with `ingest_wikidata` and `ingest_wikipedia` on in staging (and `ingest_openlibrary` only if A-05 allows), after 7 days of green daily runs. Status (2026-11-01): the version number is superseded by the rebuilt release series v0.1.0–v0.39.0; still open for turning the Wikidata/Wikipedia ingestion on (owner gate).
-  - Files/modules: `CHANGELOG.md`, staging/production env `FLAG_INGEST_*`, `docs/PROGRESS.md`
+  - Files/modules: `CHANGELOG.md`, staging/production env `FLAG_INGEST_*`
   - Refs: ADR 0013; SDD 06 §6 "Kill switches", §9
   - Depends on: P6.A.4.1
   - Model: Sonnet
@@ -3666,13 +3666,13 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 #### P6.B.5 Release
 
 - [ ] **P6.B.5.1** Release `v1.10.0` with every source on in staging, then production, and start the 30-day green-jobs clock for the phase exit. Status (2026-11-01): the version number is superseded by the rebuilt release series v0.1.0–v0.39.0; still open for turning every source on and the 30-day gate (owner gate).
-  - Files/modules: `CHANGELOG.md`, env `FLAG_INGEST_*`, `docs/PROGRESS.md`
+  - Files/modules: `CHANGELOG.md`, env `FLAG_INGEST_*`
   - Refs: ADR 0013; SDD 06 §9; ROADMAP P6 exit criteria
   - Depends on: P6.B.4.5, P6.B.2.3, P6.B.3.3, P6.B.4.2
   - Model: Sonnet
   - Acceptance:
     - `curl -s https://staging.hexascore.app/up` → `v1.10.0`
-    - every SDD 06 §9 box ticked with its decisive output pasted in `docs/PROGRESS.md`
+    - every SDD 06 §9 box ticked with its decisive output pasted in the release notes
   - Notes: IGDB stays site-only under D-36 until `docs/legal/igdb.md` exists. If it is still missing at release, say so in the changelog.
   - Status (2026-11-01): owner gate (release numbering): the series was rebuilt as v0.1.0–v0.39.0 on 2026-11-01 (RELEASE-history-rebuild), so this row's version no longer matches the tags; the owner decides the new number (or maps the row to a future tag), then approves the tag and the production deploy; starts the 30-day green-jobs clock.
 
@@ -3834,7 +3834,7 @@ P6.C depends only on P2.G and can start before P6.A. P3.A.1.4 (API trending) sta
 #### P6.D.4 Release
 
 - [ ] **P6.D.4.1** Release `v1.12.0` and close Phase 6 once daily jobs have been green for 30 days and trending and similar are live. Status (2026-11-01): the version number is superseded by the rebuilt release series v0.1.0–v0.39.0; still open for the 30 green days and trending checks before closing Phase 6 (owner gate).
-  - Files/modules: `CHANGELOG.md`, `docs/PROGRESS.md`, `ROADMAP.md` status table
+  - Files/modules: `CHANGELOG.md`, `ROADMAP.md` status table
   - Refs: ADR 0013; SDD 08 §9; SDD 06 §9; ROADMAP P6 exit criteria
   - Depends on: P6.D.1.3, P6.D.3.1, P6.B.5.1
   - Model: Sonnet
