@@ -16,7 +16,7 @@ Updated: 2026-11-02 20:06 UTC from `TASKS.md` (batch 1, milestone V1-A, after th
 
 | prio | id | role | status | owner | note |
 | --- | --- | --- | --- | --- | --- |
-| 0 | B-001 | orchestrator | todo | | merge the audit branch into `main`, full local gate, push, production check (W-01) |
+| 0 | B-001 | orchestrator | doing | orchestrator | merge the audit branch into `main`, full local gate, push, production check (W-01) |
 | 0 | B-002 | senior | doing | senior | nightly jobs with explicit timeouts, resumable recompute (T-08) |
 | 1 | B-010 | senior | todo | | Timeout/Retries on every handler, idempotent webhook and cover retries (after B-002) |
 | 1 | B-011 | senior | todo | | LGPD erasure of scoring and search rows (T-05) |
@@ -29,9 +29,9 @@ Updated: 2026-11-02 20:06 UTC from `TASKS.md` (batch 1, milestone V1-A, after th
 | 2 | B-041 | intern | todo | | genre labels translated on item pages (W-08) |
 | 3 | B-033 | senior | todo | | review of the 14 kept pre-rewrite branches |
 | 3 | B-046 | intern | todo | | documents to English |
-| 3 | B-043 | senior | todo | | reserve: `/up?checks=1` storage probe (T-15), ticket pending |
-| 3 | B-044 | senior | todo | | reserve: alert codes reconciliation (T-14), ticket pending |
-| 3 | B-047 | senior | todo | | reserve: VF-NEW entries for vukem-feedback, ticket pending |
+| 3 | B-043 | senior | todo | | reserve: `/up?checks=1` storage probe (T-15) |
+| 3 | B-044 | senior | todo | | reserve: alert codes reconciliation (T-14) |
+| 3 | B-047 | senior | todo | | reserve: VF-NEW entries for vukem-feedback |
 | 3 | QA-sources-verify | intern | todo | | reserve: re-read the "not verified" rows of `docs/data/SOURCES.md` |
 
 ## Done this cycle
