@@ -18,7 +18,7 @@ The audit (`docs/audit/00-project-map.md`, `01-web-report.md`, `02-technical-rev
 ### P8.B Launch polish (V1-B)
 
 - [ ] **P8.B.1** Mobile item page order, 404 pages, `og:image`, server-rendered search results (B-020..B-023, OQ-06).
-- [ ] **P8.B.2** Copy and SEO details, genre labels in pt-BR/es, storage health probe, alert code reconciliation (B-040..B-044).
+- [x] **P8.B.2** Copy and SEO details, genre labels in pt-BR/es, storage health probe, alert code reconciliation (B-040..B-044). Status (2026-11-02): B-040 (link back + canonical filters), B-041 (already translated in production), B-042 (copy and home title), B-043 (bucket readiness probe), B-044 (emitters table; missing checks moved to B-049) merged in local `main`.
 - [x] **P8.B.3** Documentation to English (B-046, intern): `questions-to-dev.md`, `developer-manual-todos.md`, `cloudflare.md` at the workspace root and the Portuguese answers in `docs/orchestration/QUESTIONS.md`; same facts, links intact. Status (2026-11-02): `docs/owner/cloudflare.md` and the QUESTIONS.md owner quotes translated; `questions-to-dev.md` translated to a local copy (gitignored file); `developer-manual-todos.md` does not exist.
 
 ### P8.C Catalogue worker (V1-C, RFC-001)
