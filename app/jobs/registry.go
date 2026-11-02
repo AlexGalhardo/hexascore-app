@@ -32,6 +32,7 @@ func AllWith(app *vukem.App, ingestSrc IngestSources) []queue.Registration {
 		handleWebhookDeliver(app),
 		handlePruneWebhookDeliveries(app),
 		handlePruneActivity(app),
+		handlePruneRetention(app),
 		handleCommunityHourly(app),
 		handleCommunityAsserts(app),
 		handleCheckSources(app),

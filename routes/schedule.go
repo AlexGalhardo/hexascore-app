@@ -51,6 +51,8 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	s.Job(jobs.PruneWebhookDeliveries{}).DailyAt("04:40").WithoutOverlapping()
 	// activity_events is kept 180 days (SDD 14 NFR-14-9).
 	s.Job(jobs.PruneActivity{}).DailyAt("04:40").WithoutOverlapping()
+	// Operational tables without a prune of their own (SDD 11 §5, audit T-17); after the 04:50 api_changes prune.
+	s.Job(jobs.PruneRetention{}).DailyAt("04:55").WithoutOverlapping()
 	s.Job(jobs.ExpireExports{}).Hourly().WithoutOverlapping()
 	s.Job(jobs.CommunityHourly{}).Hourly().WithoutOverlapping()
 	// After the 04:00 score recompute, clear of the 04:30-04:50 prunes.

@@ -98,5 +98,6 @@ func All() []schema.Migration {
 		m20261102180000CreateJobCursorsTable(),
 		m20261102190000AddUserFksToScoringTables(),
 		m20261102190100ValidateUserFksOnScoringTables(),
+		m20261102200000AddItemStatusItemIdx(),
 	}
 }

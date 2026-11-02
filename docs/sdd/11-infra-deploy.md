@@ -55,6 +55,16 @@ CREATE TABLE backup_runs (
 
 Retention: `job_cursors` holds one row per chunked job (today `scoring.recompute_all`), deleted when its pass completes; no prune task needed, no user data.
 
+Retention of the operational tables without a prune of their own (audit T-17): job `ops.prune_retention` daily at 04:55, batches of 5,000 rows, windows in `config/retention.go`, each overridable with `RETENTION_<TABLE>_DAYS`.
+
+| Table | Kept | Column |
+| --- | --- | --- |
+| `contact_messages` | 180 days | `created_at` |
+| `suggestion_events` | 365 days | `created_at` |
+| `ingest_failures` (parked rows only) | 90 days | `last_seen` |
+| `backup_runs` | 365 days | `started_at` |
+| `admin_audit_logs` | 730 days | `created_at` |
+
 Bucket prefixes: `covers/{section}/{slug}[-t].webp` for items, `covers/<id>-<hash16>.webp` for editions and not yet rekeyed items (SDD 06 §7.5), `exports/` (SDD 05), `backups/postgres/{daily,monthly}/`, `backups/legacy/`.
 
 Not backed up: Railway logs (SDD 12), staging data (re-copied), covers (re-derivable by ingestion, issue 1), Railway variables (owner keeps an encrypted export). Sessions and cache are dumped but worthless after a restore.
