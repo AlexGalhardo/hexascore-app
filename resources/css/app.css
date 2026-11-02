@@ -40,10 +40,11 @@
    soft drop for depth, the inset of a pressed flat button, and the soft shadow of the scrolled navbar.
    ledge-secondary is near black in both themes, so the drop reads in light and dark mode. */
 @theme inline {
+	/* Primary buttons take the near-black ledge, 3px: the purple ledge disappeared on the purple face (owner 2026-11-02). */
 	--shadow-ledge-primary:
-		0 2px 0 var(--color-ledge-primary),
-		0 4px 10px -4px color-mix(in oklch, var(--color-ledge-secondary) 45%, transparent);
-	--shadow-ledge-primary-pressed: 0 1px 0 var(--color-ledge-primary);
+		0 3px 0 var(--color-ledge-secondary),
+		0 6px 12px -4px color-mix(in oklch, var(--color-ledge-secondary) 55%, transparent);
+	--shadow-ledge-primary-pressed: 0 1px 0 var(--color-ledge-secondary);
 	--shadow-ledge-secondary:
 		0 2px 0 var(--color-ledge-secondary),
 		0 4px 10px -4px color-mix(in oklch, var(--color-ledge-secondary) 35%, transparent);

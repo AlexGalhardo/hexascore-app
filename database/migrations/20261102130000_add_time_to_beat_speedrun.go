@@ -15,6 +15,9 @@ DECLARE c text;
 BEGIN
   SELECT conname INTO c FROM pg_constraint
    WHERE conrelid = 'time_to_beat'::regclass AND contype = 'c' AND pg_get_constraintdef(oid) ILIKE '%coalesce%';
+  IF c IS NULL THEN
+    RAISE EXCEPTION 'time_to_beat: the at-least-one-style CHECK was not found';
+  END IF;
   EXECUTE format('ALTER TABLE time_to_beat DROP CONSTRAINT %I', c);
 END $$`,
 			`ALTER TABLE time_to_beat ADD CONSTRAINT time_to_beat_has_style

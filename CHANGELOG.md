@@ -36,6 +36,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **ui:** Primary buttons (Apply, Subscribe…) take a 3px near-black ledge so their depth reads like the secondary buttons
+- **billing:** Deploy note: production needs `STRIPE_PRICE_HOBBY` and the new `STRIPE_PRICE_PRO` before this release boots; a subscription on an old Business price id no longer maps to a plan and falls back to Free, so convert any live Business subscriber first
 - **ui:** Carousels keep room for the cards' shadows and raise their pause, previous and next buttons; the ratings dialog's Close button uses the site button style
 - **ui:** Landing and listing item cards, trending cards and the item page score and rating cards get the ledge shadow; the books category border is purple instead of red
 - **ui:** API docs code blocks get a copy button (Clipboard API); /profile lays its sections out in three equal columns from lg up; section listings start closer to the navbar; landing section names are bold
