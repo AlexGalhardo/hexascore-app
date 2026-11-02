@@ -67,11 +67,11 @@ interface Props {
 	myLists?: ListChoice[];
 	trailers?: { youtubeId: string; title?: string }[];
 	cover?: Cover | null;
-	/** Deferred (group `reviews`) while the feature flag `social` is on (SDD 14 Â§12.10). */
+	/** Deferred (group `reviews`) while the feature flag `social` is on (SDD 14 §12.10). */
 	reviews?: { data: ReviewEntry[]; mine: ReviewEntry | null };
 	/** Deferred (group `personal`) for signed-in viewers while the flag `social` is on. */
 	friendsScore?: FriendsScoreData | null;
-	/** Share-card path while the feature flag `social` is on and the page is public (SDD 14 Â§11 item 12). */
+	/** Share-card path while the feature flag `social` is on and the page is public (SDD 14 §11 item 12). */
 	ogImage?: string;
 }
 
