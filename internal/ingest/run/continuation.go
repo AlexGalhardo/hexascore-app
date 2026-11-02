@@ -243,7 +243,8 @@ func HandleAttempt(ctx context.Context, r *Runner, id int64, last bool) error {
 	return err
 }
 
-// Registration is the queue handler of Job: queue ingest, 10 minute timeout, 3 retries (four attempts).
+// Registration is the queue handler of Job: queue ingest, 10 minute timeout, 4 retries (five attempts) with the
+// jittered backoff of JitterBackoff.
 // The NFR-06-2 cap of 2 simultaneous jobs is QUEUE_LIMITS=ingest=2 (config.DefaultQueueLimits).
 func Registration(r *Runner) queue.Registration {
 	return LazyRegistration(func() (*Runner, error) { return r, nil })
@@ -261,7 +262,7 @@ func LazyRegistration(get func() (*Runner, error)) queue.Registration {
 		a, ok := queue.AttemptFrom(ctx)
 
 		return HandleAttempt(ctx, r, j.RunID, !ok || a.Last())
-	}, queue.OnQueue("ingest"), queue.Retries(3), queue.Timeout(10*time.Minute))
+	}, queue.OnQueue("ingest"), queue.Retries(4), queue.Backoff(Backoff()), queue.Timeout(10*time.Minute))
 }
 
 func cursorArg(c json.RawMessage) any {

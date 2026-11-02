@@ -55,6 +55,8 @@ CREATE TABLE backup_runs (
 
 Retention: `job_cursors` holds one row per chunked job (today `scoring.recompute_all`), deleted when its pass completes; no prune task needed, no user data.
 
+Retention: `ingest_job_keys` holds one row per automatic ingest dispatch and day; `run.Prune` (ingest prune task) deletes rows older than 7 days; no user data.
+
 Retention of the operational tables without a prune of their own (audit T-17): job `ops.prune_retention` daily at 04:55, batches of 5,000 rows, windows in `config/retention.go`, each overridable with `RETENTION_<TABLE>_DAYS`.
 
 | Table | Kept | Column |

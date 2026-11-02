@@ -15,7 +15,7 @@ const (
 )
 
 // Pruned counts the rows Prune deleted.
-type Pruned struct{ History, Results, Coverage, Runs int }
+type Pruned struct{ History, Results, Coverage, Runs, Keys int }
 
 // Prune applies the retention windows. dq_results and field_coverage reference job_runs and live longer, so a run
 // older than 180 days stays until its results age out too.
@@ -38,6 +38,7 @@ AND j.created_at < now() - make_interval(days => $1)`, ResultRetention},
 		{&p.Runs, `DELETE FROM job_runs j WHERE j.created_at < now() - make_interval(days => $1)
 AND NOT EXISTS (SELECT 1 FROM dq_results WHERE run_id = j.id)
 AND NOT EXISTS (SELECT 1 FROM field_coverage WHERE run_id = j.id)`, RunRetention},
+		{&p.Keys, `DELETE FROM ingest_job_keys WHERE created_at < now() - make_interval(days => $1)`, KeyRetention},
 	}
 
 	for _, s := range steps {

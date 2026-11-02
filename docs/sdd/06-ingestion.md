@@ -218,6 +218,8 @@ Pressure gate: app middleware counts in-flight requests; batches wait while > 16
 
 ### 7.6 Jobs and schedules
 
+Idempotency and retries (CW-03, RFC-001 section 4; workarounds for VF-079 and VF-080): scheduled, chained and retry-failure dispatches (`triggered_by` `schedule*` or `chain:*`) claim a key in `ingest_job_keys` (sha256 of job, source, mode, canonical params, cursor and the UTC day) in the same transaction as the `job_runs` row. A twin whose key is queued/running, done within 24 h, or queued/running for less than 3 h is refused with `run.ErrDuplicate` (wraps `ErrRunActive`, so callers treat it as "already active") and the transaction rolls back; a failed key, or a stale one, dispatches again. The UTC day in the key keeps the daily chains from blocking each other. Admin, CLI and resume starts never use a key. `run.Finish` settles the key (done for succeeded/partial, failed otherwise), `ReapStale` fails the keys of reaped runs, `Prune` drops keys older than 7 days. The ingest handler retries 4 times (5 attempts) with full-jitter backoff `rand(0, min(30 min, 30 s * 2^(attempt-1)))`.
+
 `SCHEDULE_TIMEZONE=America/Sao_Paulo` (as SDD 02); tasks `WithoutOverlapping()` (<https://vukem.dev/docs/digging-deeper/scheduler> "Scheduler"); a successful stage dispatches the next.
 
 | Job | When | Chain / notes |
