@@ -20,7 +20,7 @@ type Canceller struct {
 	Stripe *stripe.Client
 }
 
-// NewCanceller builds a Canceller; Stripe stays nil while STRIPE_KEY is unset.
+// NewCanceller builds a Canceller; Stripe stays nil while STRIPE_KEY_SANDBOX is unset.
 func NewCanceller(app *vukem.App, db *database.DB) (*Canceller, error) {
 	c, err := newClient(app, config.LoadBilling(app.Source))
 	if err != nil {

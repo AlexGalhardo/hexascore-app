@@ -45,10 +45,11 @@ app_env=(
 	-e DATABASE_URL="$app_db"
 	-e RATE_LIMIT_STORE=cache
 	-e CACHE_STORE=database
-	-e STRIPE_KEY=sk_test_placeholder_ci
-	-e STRIPE_WEBHOOK_SECRET=whsec_placeholder_ci
-	-e STRIPE_PRICE_PRO=price_placeholder_pro
-	-e STRIPE_PRICE_HOBBY=price_placeholder_hobby
+	-e STRIPE_MODE=sandbox
+	-e STRIPE_KEY_SANDBOX=sk_test_placeholder_ci
+	-e STRIPE_WEBHOOK_SECRET_SANDBOX=whsec_placeholder_ci
+	-e STRIPE_PRICE_PRO_SANDBOX=price_placeholder_pro
+	-e STRIPE_PRICE_HOBBY_SANDBOX=price_placeholder_hobby
 	-e MAIL_MAILER=log
 	# Host network sees the scan container on the docker bridge. Without this,
 	# X-Forwarded-For is ignored and every call shares the 120/min IP bucket,

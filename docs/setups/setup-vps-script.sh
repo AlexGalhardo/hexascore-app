@@ -169,10 +169,11 @@ if [ ! -f "$ENV_FILE" ]; then
 		echo "ADMIN_EMAILS="
 		echo "# Third-party secrets: fill these in, then run the script again."
 		echo "RESEND_API_KEY="
-		echo "STRIPE_KEY="
-		echo "STRIPE_WEBHOOK_SECRET="
-		echo "STRIPE_PRICE_PRO="
-		echo "STRIPE_PRICE_HOBBY="
+		echo "STRIPE_MODE=live"
+		echo "STRIPE_KEY_LIVE="
+		echo "STRIPE_WEBHOOK_SECRET_LIVE="
+		echo "STRIPE_PRICE_PRO_LIVE="
+		echo "STRIPE_PRICE_HOBBY_LIVE="
 		echo "# Optional, off while empty (see .env.example):"
 		echo "SOCIAL_GOOGLE_CLIENT_ID="
 		echo "SOCIAL_GOOGLE_CLIENT_SECRET="
@@ -297,7 +298,7 @@ log "postgres and rustfs"
 compose up -d --wait postgres rustfs
 
 missing=()
-for key in STRIPE_KEY STRIPE_WEBHOOK_SECRET STRIPE_PRICE_PRO STRIPE_PRICE_HOBBY; do
+for key in STRIPE_KEY_LIVE STRIPE_WEBHOOK_SECRET_LIVE STRIPE_PRICE_PRO_LIVE STRIPE_PRICE_HOBBY_LIVE; do
 	[ -n "$(env_get "$key")" ] || missing+=("$key")
 done
 if [ "$(env_get MAIL_MAILER)" = resend ] && [ -z "$(env_get RESEND_API_KEY)" ]; then

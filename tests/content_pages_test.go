@@ -108,14 +108,15 @@ func TestRobots_Production(t *testing.T) {
 	t.Parallel()
 
 	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{
-		"APP_ENV":               "production",
-		"APP_URL":               "https://example.test/",
-		"RATE_LIMIT_STORE":      "cache",
-		"CACHE_STORE":           "database",
-		"STRIPE_KEY":            stripeKey,
-		"STRIPE_WEBHOOK_SECRET": webhookSecret,
-		"STRIPE_PRICE_HOBBY":    "price_hobby",
-		"STRIPE_PRICE_PRO":      "price_pro",
+		"APP_ENV":                       "production",
+		"APP_URL":                       "https://example.test/",
+		"RATE_LIMIT_STORE":              "cache",
+		"CACHE_STORE":                   "database",
+		"STRIPE_MODE":                   "sandbox",
+		"STRIPE_KEY_SANDBOX":            stripeKey,
+		"STRIPE_WEBHOOK_SECRET_SANDBOX": webhookSecret,
+		"STRIPE_PRICE_HOBBY_SANDBOX":    "price_hobby",
+		"STRIPE_PRICE_PRO_SANDBOX":      "price_pro",
 	}})
 	// Production redirects any host but APP_URL's, and vukemtest requests default to example.com.
 	res := app.Client(t).Get("https://example.test/robots.txt").AssertOK().
@@ -146,15 +147,16 @@ func TestRobots_ProductionNoindex(t *testing.T) {
 	t.Parallel()
 
 	env := map[string]string{
-		"APP_ENV":               "production",
-		"APP_URL":               "https://example.test/",
-		"RATE_LIMIT_STORE":      "cache",
-		"CACHE_STORE":           "database",
-		"STRIPE_KEY":            stripeKey,
-		"STRIPE_WEBHOOK_SECRET": webhookSecret,
-		"STRIPE_PRICE_HOBBY":    "price_hobby",
-		"STRIPE_PRICE_PRO":      "price_pro",
-		"SEO_NOINDEX":           "true",
+		"APP_ENV":                       "production",
+		"APP_URL":                       "https://example.test/",
+		"RATE_LIMIT_STORE":              "cache",
+		"CACHE_STORE":                   "database",
+		"STRIPE_MODE":                   "sandbox",
+		"STRIPE_KEY_SANDBOX":            stripeKey,
+		"STRIPE_WEBHOOK_SECRET_SANDBOX": webhookSecret,
+		"STRIPE_PRICE_HOBBY_SANDBOX":    "price_hobby",
+		"STRIPE_PRICE_PRO_SANDBOX":      "price_pro",
+		"SEO_NOINDEX":                   "true",
 	}
 	c := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: env}).Client(t)
 
@@ -200,14 +202,15 @@ func TestCanonicalHost_Production(t *testing.T) {
 	t.Parallel()
 
 	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{
-		"APP_ENV":               "production",
-		"APP_URL":               "https://example.test/",
-		"RATE_LIMIT_STORE":      "cache",
-		"CACHE_STORE":           "database",
-		"STRIPE_KEY":            stripeKey,
-		"STRIPE_WEBHOOK_SECRET": webhookSecret,
-		"STRIPE_PRICE_HOBBY":    "price_hobby",
-		"STRIPE_PRICE_PRO":      "price_pro",
+		"APP_ENV":                       "production",
+		"APP_URL":                       "https://example.test/",
+		"RATE_LIMIT_STORE":              "cache",
+		"CACHE_STORE":                   "database",
+		"STRIPE_MODE":                   "sandbox",
+		"STRIPE_KEY_SANDBOX":            stripeKey,
+		"STRIPE_WEBHOOK_SECRET_SANDBOX": webhookSecret,
+		"STRIPE_PRICE_HOBBY_SANDBOX":    "price_hobby",
+		"STRIPE_PRICE_PRO_SANDBOX":      "price_pro",
 	}})
 	c := app.Client(t)
 

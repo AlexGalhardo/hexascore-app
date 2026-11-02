@@ -211,8 +211,12 @@ func billingApp(t *testing.T, f *fakeStripe) *vukemtest.App {
 
 	return vukemtest.New(t, bootstrap.New, vukemtest.Options{
 		Env: map[string]string{
-			"STRIPE_KEY": stripeKey, "STRIPE_WEBHOOK_SECRET": webhookSecret, "STRIPE_API_BASE": f.srv.URL,
-			"STRIPE_PRICE_HOBBY": "price_hobby", "STRIPE_PRICE_PRO": "price_pro",
+			"STRIPE_MODE":                   "sandbox",
+			"STRIPE_KEY_SANDBOX":            stripeKey,
+			"STRIPE_WEBHOOK_SECRET_SANDBOX": webhookSecret,
+			"STRIPE_API_BASE":               f.srv.URL,
+			"STRIPE_PRICE_HOBBY_SANDBOX":    "price_hobby",
+			"STRIPE_PRICE_PRO_SANDBOX":      "price_pro",
 		},
 		AppOptions: []vukem.Option{vukem.WithRoutes(protectedRoutes)},
 	})

@@ -16,10 +16,10 @@ Railway environment `staging` of project `hexascore` (created 2026-11-01, owner 
 Set by name, values never in git or chat:
 
 - `APP_ENV=production` (SDD 11 §6.4: vukem serves the built assets only in production) and `APP_URL=https://staging.hexascore.app`.
-- `APP_KEY` and `STRIPE_WEBHOOK_SECRET`: random, generated in the shell and piped with `--stdin`.
+- `APP_KEY` and `STRIPE_WEBHOOK_SECRET_SANDBOX`: random, generated in the shell and piped with `--stdin`.
 - `SEO_NOINDEX=true`: `robots.txt` disallows everything and every response carries `X-Robots-Tag: noindex, nofollow` (needs the commit that adds it on `main`).
 - `MAIL_MAILER=log`: mail goes to the deploy logs, nothing is sent.
-- Billing off: `STRIPE_KEY=rk_test_staging_billing_disabled` and placeholder prices satisfy the production boot check; any Stripe call fails with an auth error, so no payment can happen. Replace with real Stripe test keys (`rk_test_`/`sk_test_` only) to test checkout.
+- Billing off: `STRIPE_KEY_SANDBOX=rk_test_staging_billing_disabled` and placeholder prices satisfy the production boot check; any Stripe call fails with an auth error, so no payment can happen. Replace with real Stripe test keys (`rk_test_`/`sk_test_` only) to test checkout.
 - Turnstile: Cloudflare's published test keys (always pass); `TURNSTILE_HOSTNAME` unset.
 - `FLAG_INGEST_ENABLED=false`, `FLAG_SOCIAL=false`; every other flag unset (off).
 - Copied from production because they are configuration, not secrets: `APP_NAME`, `CACHE_STORE`, `CLIENT_IP_HEADER`, `LOG_FORMAT`, `RATE_LIMIT_STORE`, `SCHEDULE_TIMEZONE`, `SESSION_DRIVER`, `TRUSTED_PROXIES`, `TRUST_FORWARDED_PROTO`, `OTEL_LOGS_EXPORTER`, `OTEL_METRICS_EXPORTER`, `S3_USE_PATH_STYLE`, `S3_INSECURE_HTTP`.

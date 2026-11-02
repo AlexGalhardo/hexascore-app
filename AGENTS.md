@@ -96,6 +96,10 @@ Railway rules that override the skill's deploy-from-cwd shortcut: do not run `ra
 | `scripts/release.sh vX.Y.Z [--since <rev>]` | changelog section via git-cliff (`.config/cliff.toml`) from the commit whose tree matches the highest tag (not `git describe`; [release-range](docs/runbooks/release-range.md)), compare links, `chore(release)` commit and tag; needs git-cliff installed (`scoop install git-cliff` / `brew install git-cliff`) |
 | `setups/setup-unix.sh` | same setup for Linux and macOS |
 
+## Stripe settings
+
+`STRIPE_MODE=sandbox|live` selects one of two variable sets: `STRIPE_KEY_<MODE>`, `STRIPE_WEBHOOK_SECRET_<MODE>`, `STRIPE_PRICE_HOBBY_<MODE>`, `STRIPE_PRICE_PRO_<MODE>` (owner, 2026-11-02). Production runs `live`, staging and local `sandbox`; production refuses to boot without the mode, with a key of the other mode or with a `pk_` key (`config/billing.go`, `TestSecurity_A05_StripeModeAndKeyMustMatch`).
+
 ## Optional integrations (vukem v0.36.0)
 
 All off while their variables are unset; names in `.env.example`, owner steps in [docs/analytics-acess.md](docs/analytics-acess.md).

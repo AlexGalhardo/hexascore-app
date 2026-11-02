@@ -194,7 +194,7 @@ IGDB sends the shared secret in `X-Secret` (web-research 3.2); HexaScore signs w
 | `POST /billing/portal` | plan changes, cancellation |
 | `POST /stripe/webhook` | `stripe.WebhookHandler` outside CSRF (`https://vukem.dev/docs/digging-deeper/billing` "Webhooks keep subscriptions in sync") |
 
-Prices (minor units, D-33, owner 2026-11-02, reviewed 90 days after cutover): hobby BRL 2000 / USD 500 / EUR 500; pro BRL 5000 / USD 1000 / EUR 1000; default pt-BR→BRL, es→EUR, en→USD. Env `STRIPE_KEY` (`rk_`), `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_HOBBY`, `STRIPE_PRICE_PRO`, each price with `currency_options` (legacy used `lookup_key`, `lib/billing/stripe.ts`). Passing `currency` is an edit of the scaffold code, not a documented option [NOT IN VUKEM DOCS].
+Prices (minor units, D-33, owner 2026-11-02, reviewed 90 days after cutover): hobby BRL 2000 / USD 500 / EUR 500; pro BRL 5000 / USD 1000 / EUR 1000; default pt-BR→BRL, es→EUR, en→USD. `STRIPE_MODE` (`sandbox` or `live`, owner 2026-11-02) selects the `<MODE>` suffix of every Stripe variable; production refuses to boot without it or with a key of the other mode or a `pk_` key. Env `STRIPE_KEY_<MODE>` (`rk_`), `STRIPE_WEBHOOK_SECRET_<MODE>`, `STRIPE_PRICE_HOBBY_<MODE>`, `STRIPE_PRICE_PRO_<MODE>`, each price with `currency_options` (legacy used `lookup_key`, `lib/billing/stripe.ts`). Passing `currency` is an edit of the scaffold code, not a documented option [NOT IN VUKEM DOCS].
 
 Events (legacy `lib/billing/stripe-webhook.ts` + scaffold): `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `customer.subscription.created|updated|deleted|paused|resumed`, `invoice.paid`, `invoice.payment_failed`.
 

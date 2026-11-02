@@ -122,7 +122,7 @@ Railway service variables per environment; `.env` locally; `.env.example` lists 
 | `API_HOST`, `ADMIN_EMAILS` | `api.hexascore.app`, owner | |
 | `MAIL_MAILER` + provider key | `resend` | must be set in production [vk-deploy] |
 | `GOOGLE_*`, session timeouts | per SDD 03 | names [NOT VERIFIED] (SDD 03 issue 7) |
-| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | live / test on staging | SDD 05 |
+| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET_<MODE>` | live / test on staging | SDD 05 |
 | `TMDB_READ_ACCESS_TOKEN`, `IGDB_TWITCH_CLIENT_ID`, `IGDB_TWITCH_CLIENT_SECRET` | | secret (legacy names shortened) |
 | `OTEL_*` | injected by Railway tracing; `OTEL_METRICS_EXPORTER=none` | Railway receiver is trace-only [vk-deploy], [vk-otel] |
 | `FLAG_PIX_CHECKOUT`, `FLAG_PUBLIC_API_SIGNUP`, `FLAG_SEED_DATA` | `false`, `true`, `false` | names must be lowercase + `_` [vk-flags], so `pix-checkout` → `pix_checkout` |

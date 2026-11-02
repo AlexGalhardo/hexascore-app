@@ -39,7 +39,7 @@ import (
 const WebhookPath = "/stripe/webhook"
 
 var (
-	// ErrNotConfigured answers billing requests while STRIPE_KEY is unset
+	// ErrNotConfigured answers billing requests while the STRIPE_KEY_<MODE> of STRIPE_MODE is unset
 	// (development only: production does not boot without it).
 	ErrNotConfigured = errs.New(http.StatusServiceUnavailable, "Billing is not configured.")
 	// ErrSubscriptionRequired answers JSON clients without a subscription.
@@ -57,7 +57,7 @@ var (
 // Billing holds the Stripe client and the billing rules.
 type Billing struct {
 	DB *database.DB
-	// Stripe is nil while STRIPE_KEY is unset (development only).
+	// Stripe is nil while the STRIPE_KEY_<MODE> of STRIPE_MODE is unset (development only).
 	Stripe *stripe.Client
 	Config config.Billing
 	// URL is the public base URL Stripe sends customers back to (APP_URL).
@@ -115,7 +115,7 @@ func New(app *vukem.App) (*Billing, error) {
 	return b, nil
 }
 
-// newClient builds the Stripe client, nil while STRIPE_KEY is unset.
+// newClient builds the Stripe client, nil while the STRIPE_KEY_<MODE> of STRIPE_MODE is unset.
 func newClient(app *vukem.App, cfg config.Billing) (*stripe.Client, error) {
 	if cfg.Key.IsZero() {
 		return nil, nil //nolint:nilnil // no key (development): callers answer ErrNotConfigured
@@ -134,7 +134,9 @@ func newClient(app *vukem.App, cfg config.Billing) (*stripe.Client, error) {
 	}
 
 	if strings.HasPrefix(cfg.Key.Reveal(), "sk_") {
-		app.Log.Warn("STRIPE_KEY is a secret key: use a restricted key (rk_) with only the billing permissions")
+		app.Log.Warn(
+			cfg.Var("STRIPE_KEY") + " is a secret key: use a restricted key (rk_) with only the billing permissions",
+		)
 	}
 
 	return c, nil
