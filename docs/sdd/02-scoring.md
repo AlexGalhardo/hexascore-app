@@ -4,7 +4,7 @@ Status: reviewed (2026-10-28 consistency pass). Decisions: D-00, D-02, D-13, D-1
 
 ## 1. Objective
 
-A score users can trust: one-click half-star input in six categories (D-00), an aggregate shown as stars 0–10 with one decimal, a count and a confidence level (D-13), and a published, versioned formula with published anti-manipulation rules (web-research 9.2). Score is "quality"; trending (D-02, SDD 08) is "interest", fed by primitives emitted here. Legacy baseline: `legacy/apps/web/lib/ratings.ts`, `legacy/apps/web/lib/db/schema/social.ts`, `legacy/apps/web/lib/categories.ts`, `legacy/.claude/skills/hexascore-ratings/SKILL.md`.
+A score users can trust: one-click half-star input in six categories (D-00), an aggregate shown as stars 0–10 with one decimal, a count and a confidence level (D-13), and a published, versioned formula with published anti-manipulation rules (web-research 9.2). Score is "quality"; trending (D-02, SDD 08) is "interest", fed by primitives emitted here. Legacy baseline: `legacy/apps/web/lib/ratings.ts`, `legacy/apps/web/lib/db/schema/social.ts`, `legacy/apps/web/lib/categories.ts`, `legacy/.agents/skills/hexascore-ratings/SKILL.md`.
 
 ## 2. Scope
 

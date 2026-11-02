@@ -5,7 +5,7 @@ description: Release the HexaScore Expo app (apps/mobile) with EAS - environment
 
 # HexaScore mobile release (EAS)
 
-Follow [docs/runbooks/mobile-release.md](../../../docs/runbooks/mobile-release.md) step by step; the rules in `.claude/rules/mobile-release.md` always apply. For EAS concepts load `expo-overview` and `eas-workflows`; prefer the Expo MCP tools when the session has them, with `bunx eas-cli@27.2.0` as the fallback.
+Follow [docs/runbooks/mobile-release.md](../../../docs/runbooks/mobile-release.md) step by step; the rules in `.agents/rules/mobile-release.md` always apply. For EAS concepts load `expo-overview` and `eas-workflows`; prefer the Expo MCP tools when the session has them, with `bunx eas-cli@27.2.0` as the fallback.
 
 ## Flow
 

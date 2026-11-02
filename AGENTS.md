@@ -7,7 +7,7 @@ This file is the single source of truth for every coding agent. `CLAUDE.md` only
 ## Session start (mandatory)
 
 1. Read this file, [docs/PROGRESS.md](docs/PROGRESS.md), and [ROADMAP.md](ROADMAP.md).
-2. Read [.claude/skills/use-railway/SKILL.md](.claude/skills/use-railway/SKILL.md) and follow it for every Railway command. The skill is vendored from [railwayapp/railway-skills](https://github.com/railwayapp/railway-skills) commit `526e95524e964ed326689cbac4464d97a58ab81c` (`use-railway` 1.7.0). Also read [Grok Build + Railway](https://railway.com/agents/grok): Railway MCP is `https://mcp.railway.com`, and a deploy is a plan the owner approves before `railway up`.
+2. Read [.agents/skills/use-railway/SKILL.md](.agents/skills/use-railway/SKILL.md) and follow it for every Railway command. The skill is vendored from [railwayapp/railway-skills](https://github.com/railwayapp/railway-skills) commit `526e95524e964ed326689cbac4464d97a58ab81c` (`use-railway` 1.7.0). Also read [Grok Build + Railway](https://railway.com/agents/grok): Railway MCP is `https://mcp.railway.com`, and a deploy is a plan the owner approves before `railway up`.
 3. If you are one of the team workers (senior, intern, specialist), your system prompt is [PROMPT-WORKERS.md](PROMPT-WORKERS.md) and your brief is `.orchestration/briefs/<role>.md`; claim work only through `.orchestration/queue/TASKS.md`. Otherwise pick the first unchecked microtask of the current phase unless the owner names another.
 4. `graphify` is a CLI (`graphify query "<question>"`) when `graphify-out/graph.json` exists. It is not required to start.
 
@@ -30,14 +30,15 @@ Railway rules that override the skill's deploy-from-cwd shortcut: do not run `ra
 | `legacy/` (sibling folder, not in this repo) | read-only Next.js reference; history on branch `legacy` |
 | `vukem/` (sibling folder, own git) | framework checkout for local `go.work`/`replace` only, never committed |
 | `PROMPT-WORKERS.md` | system prompt of the execution team (orchestrator, 2 seniors, intern, specialist): roles, queue protocol, report formats (local only after the history rewrite, owner item 3) |
-| `.grok/rules/` | language rules, loaded without a vendor compatibility mode |
-| `.claude/` | the same rules and skills, kept so Claude-compatible tools still see them |
+| `.agents/rules/` | coding rules for every agent, whatever the AI provider (owner, 2026-11-01: one provider-agnostic folder instead of `.claude/` and `.grok/`); each file's `paths:` front matter says which files it governs |
+| `.agents/skills/` | skills (`<name>/SKILL.md` plus references), project-owned and vendored |
 | `.orchestration/` | `queue/TASKS.md` (single task board), `briefs/`, `reports/`, `handoff/`; local working state, gitignored and purged from history (owner, 2026-11-01) |
 | `docs/orchestration/` | `BOARD.md` (readable mirror of the queue) and `QUESTIONS.md` (owner gates and answers) |
 | `apps/mobile` | Android Expo app (SDK 58, NativeWind). Do not commit `android/` or `ios/` |
 
 ## Rules
 
+- Rules and skills are not loaded automatically by any tool: before editing a file, read every `.agents/rules/*.md` whose `paths:` front matter matches it (files without `paths:` apply everywhere), and load a skill by reading `.agents/skills/<name>/SKILL.md` when its description fits the task.
 - Language: everything in this repository is English (code, identifiers, comments, docs, commits). Chat with the owner in pt-BR. UI strings in `en`, `pt-BR`, `es` only through the i18n catalogues.
 - Framework facts come from <https://vukem.dev/docs> (cite the page); the local `vukem/docs` folder is not a reference. Never invent a vukem API: write `[NOT IN VUKEM DOCS]` and add an entry to `vukem-feedback.md`.
 - Native vukem subsystems first; a third-party Go or npm dependency needs the owner's yes and an ADR. Pinned exact versions only (no `^`, no `latest`, no pre-releases); Docker images with fixed tags or digests.

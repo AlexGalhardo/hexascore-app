@@ -1,5 +1,5 @@
 #!/bin/sh
-# Conventional Commits 1.0 header check (.claude/rules/commits.md). Enabled by `git config core.hooksPath .githooks`.
+# Conventional Commits 1.0 header check (.agents/rules/commits.md). Enabled by `git config core.hooksPath .githooks`.
 header=$(head -n 1 "$1")
 
 case "$header" in
