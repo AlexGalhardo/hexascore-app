@@ -62,7 +62,7 @@ test("a merged id follows the 301 and rewrites the cache key", async () => {
 test("empty edition and entity groups are hidden", async () => {
 	await renderItem(reader(base));
 	await screen.findByText("Dune");
-	await waitFor(() => expect(screen.queryByText("Category averages")).toBeTruthy());
+	await waitFor(() => expect(screen.queryByText("Scores by category")).toBeTruthy());
 	expect(screen.queryByText("Editions")).toBeNull();
 	expect(screen.queryByText("Author")).toBeNull();
 });
@@ -106,7 +106,7 @@ test("the v1 header shows kicker, score badge with band, verdict and category ba
 	expect(screen.getByTestId("score-band-score-high")).toBeTruthy();
 	expect(screen.getByText("8.5")).toBeTruthy();
 	expect(screen.getByText("Community score · 12 ratings")).toBeTruthy();
-	expect(screen.getByText("Category averages")).toBeTruthy();
+	expect(screen.getByText("Scores by category")).toBeTruthy();
 	expect(screen.getByLabelText("Plot, Score 9.0 out of 10")).toBeTruthy();
 	expect(screen.getByRole("button", { name: "Rate it" })).toBeTruthy();
 });
@@ -133,7 +133,7 @@ test("an unscored item shows the not-enough verdict and no category block", asyn
 	expect(screen.getByTestId("score-band-score-none")).toBeTruthy();
 	expect(screen.getByText("Not enough ratings · 3 ratings")).toBeTruthy();
 	expect(screen.getByText("No synopsis yet.")).toBeTruthy();
-	expect(screen.queryByText("Category averages")).toBeNull();
+	expect(screen.queryByText("Scores by category")).toBeNull();
 });
 
 test("the user's own rating from /items/{id}/me is shown", async () => {
