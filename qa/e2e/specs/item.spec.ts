@@ -50,12 +50,11 @@ test.describe("item page", () => {
 		await expect(page.locator("input[type=radio]:enabled")).toHaveCount(0);
 	});
 
-	test("an unknown slug is a 301 to the home page", async ({ request, prefix }) => {
+	test("an unknown slug is a 404", async ({ request, prefix }) => {
 		const response = await request.get(`${prefix}/games/does-not-exist-0000`, {
 			maxRedirects: 0,
 		});
-		expect(response.status()).toBe(301);
-		expect(response.headers().location).toBe(`${prefix}/`);
+		expect(response.status()).toBe(404);
 	});
 
 	test("shows score, categories and a centered, paginated users' scores modal", async ({

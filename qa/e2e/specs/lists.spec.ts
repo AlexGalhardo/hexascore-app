@@ -102,7 +102,7 @@ test.describe("lists", () => {
 						(await visitor.request.get(publicUrl, { maxRedirects: 0 })).status(),
 					{ timeout: 15_000 },
 				)
-				.toBe(301);
+				.toBe(404);
 			await visitor.context().close();
 
 			// Delete.
