@@ -39,3 +39,10 @@ __pycache__/
 PROGRESS.md
 spike-report.md
 web-research.md
+# Internal working files: kept on the owner's machine, purged from history on 2026-11-02.
+.orchestration/
+PROMPT-WORKERS.md
+vukem-feedback.md
+questions-to-dev.md
+architect-feedback-and-roadmap.md
+prompt.md
