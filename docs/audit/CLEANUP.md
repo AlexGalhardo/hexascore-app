@@ -82,4 +82,4 @@ Method: `release/history-linear-pre-c2` and `build/apk-sideload` are two paralle
 | `fix/item-page-cover-prop` | delete | `"cover": page.Cover` is in `app/controllers/item_controller.go` on `main`; the rest are release commits | none |
 | `release/history-linear-pre-c2` | delete | the pre-rewrite `main` lineage, in `main` by content | none |
 
-The orchestrator deletes the 13 branches marked delete after merging B-033; `legacy` is untouched.
+The orchestrator deletes all 14 branches after merging B-033 (`manual-access` too, its one change is cherry-picked); `legacy` is untouched.
