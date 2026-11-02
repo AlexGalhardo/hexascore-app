@@ -271,12 +271,13 @@ export default function Show({
 							)}
 							{roles.map((role) => (
 								<DetailRow key={role} label={t(`item.roles.${role}`)}>
-									<ul className="grid gap-0.5">
+									{/* min-h-6: each link is a 24 px target (WCAG 2.5.8, Lighthouse target-size). */}
+									<ul className="grid">
 										{entities[role].map((e) => (
 											<li key={e.id}>
 												<Link
 													href={entityHref(e)}
-													className="text-primary hover:underline"
+													className="inline-flex min-h-6 items-center text-primary hover:underline"
 												>
 													{e.name}
 												</Link>

@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **release:** `changelog-sync.yml` checks that CHANGELOG.md and the GitHub releases match and that every released section is the one-commit-per-line git-cliff list (`scripts/release/check-sync.ts`)
 
+### Fixed
+
+- **a11y:** The Details links on the item page are 24 px touch targets again (Lighthouse target-size)
+
 ### Changed
 
 - **catalog:** Canonical genres: one translated list per category (en, pt-BR, es) replaces the Wikidata genre labels; `genres:canonicalize` relinks the items and keeps the source links hidden in `item_genre_sources`; listing filters show the translated names and the public `/{type}/genres` endpoints take `locale` and return `name`
