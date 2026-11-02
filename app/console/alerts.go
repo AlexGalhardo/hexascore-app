@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"html"
+	"slices"
 	"strings"
 	"time"
 
@@ -13,7 +14,8 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/alerts"
 )
 
-// AlertsTest is `alerts:test [message]`: sends one message to the Telegram page chat right away and reports whether
+// AlertsTest is `alerts:test [message]` (or `alerts:test --digest`, which sends the ingestion digest of the last 30
+// minutes to the ops chat even when quiet): sends one message to the Telegram page chat right away and reports whether
 // the Bot API accepted it (SDD 12 §7.5). It fails when TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is unset.
 func AlertsTest() vukem.Command {
 	return vukem.CommandFunc{
@@ -30,6 +32,21 @@ func AlertsTest() vukem.Command {
 			}
 
 			defer func() { _ = n.Close(context.WithoutCancel(ctx)) }()
+
+			if slices.Contains(args, "--digest") {
+				db, err := app.DB()
+				if err != nil {
+					return err
+				}
+
+				if _, err := alerts.SendIngestDigest(ctx, db, n, app.Now(), true); err != nil {
+					return fmt.Errorf("alerts:test --digest: %w", err)
+				}
+
+				_, _ = fmt.Fprintln(app.Stdout(), "Telegram accepted the ingestion digest (sent to the ops chat)")
+
+				return nil
+			}
 
 			msg := strings.Join(args, " ")
 			if msg == "" {

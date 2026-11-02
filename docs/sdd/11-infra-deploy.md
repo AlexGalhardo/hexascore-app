@@ -55,6 +55,8 @@ CREATE TABLE backup_runs (
 
 Retention: `job_cursors` holds one row per chunked job (today `scoring.recompute_all`), deleted when its pass completes; no prune task needed, no user data.
 
+Retention: `ingest_cost_daily` holds one row per day (about 365 a year), no prune task needed, no user data.
+
 Retention: `field_reviews` rows are deleted 365 days after they are resolved (`run.Prune`); open ones stay. `resolved_by` is an admin's users.id kept as a bare id (no user content, the purge keeps the users row).
 
 Retention: `ingest_host_state` holds one row per key (`web`, `worker`, `host:<name>`), upserted in place, so it stays at a few dozen rows; no prune task needed, no user data.
