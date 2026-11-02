@@ -91,8 +91,8 @@ test("trending cards with rank and score on one row, no score explanation, then 
 	expect(within(cards[1]).queryByText(/home.ratingsOfMin/)).toBeNull();
 	// Owner round 2026-11-01 item 15: "#3 trending" even on the prior-week fallback, and the genre, not the type.
 	expect(within(cards[2]).getByText(/home.trendingRank.*"rank":3/)).toBeTruthy();
-	expect(within(cards[0]).getByText("2020 · Action")).toBeTruthy();
-	expect(within(cards[1]).getByText("2020")).toBeTruthy();
+	// Two rows only: title, then rank and score; no year or genre line.
+	expect(within(cards[0]).queryByText("2020 · Action")).toBeNull();
 	expect(screen.queryByText(/itemTypes\./)).toBeNull();
 	expect(cards[0].querySelector("a")?.getAttribute("href")).toBe("/games/slug-t1?from=trending");
 	expect(screen.getByText("home.more.game")).toBeTruthy();

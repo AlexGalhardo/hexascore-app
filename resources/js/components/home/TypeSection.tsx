@@ -158,8 +158,12 @@ function TrendCard({
 				className={`group flex h-full gap-4 border-2 bg-surface p-3 shadow-ledge-secondary hover:bg-fg hover:text-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg ${CATEGORY_BORDER[type]}`}
 			>
 				<CoverThumb cover={item.cover} alt="" size="trend" priority={eager} />
-				<span className="grid min-w-0 flex-1 content-start gap-1">
-					{/* Rank left, score right on one row, so the three cards line their scores up (owner 2026-11-02). */}
+				{/* Two rows (owner 2026-11-02): the title across the column, then the rank at the far left and the
+				score at the far right. */}
+				<span className="grid min-w-0 flex-1 content-between gap-3">
+					<span className="font-display text-2xl leading-tight font-bold md:text-[28px]">
+						{item.title}
+					</span>
 					<span className="flex items-center justify-between gap-3">
 						<span
 							className={`text-2xl font-semibold group-hover:text-bg ${ACCENT_TEXT[type]}`}
@@ -167,12 +171,6 @@ function TrendCard({
 							{t("home.trendingRank", { rank: item.rank })}
 						</span>
 						<ScoreBadge score={item.score} size="md" />
-					</span>
-					<span className="font-display text-2xl leading-tight font-bold md:text-[28px]">
-						{item.title}
-					</span>
-					<span className="text-xs text-muted group-hover:text-bg">
-						{[item.year, item.genre].filter(Boolean).join(" · ")}
 					</span>
 				</span>
 			</Link>
