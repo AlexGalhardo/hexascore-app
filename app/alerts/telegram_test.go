@@ -354,3 +354,12 @@ func TestSecurity_A09_TelegramTokenNeverLogged(t *testing.T) {
 		}
 	}
 }
+
+func testConfig(f *fakeTelegram) vukem.TelegramConfig {
+	return vukem.TelegramConfig{
+		BotToken: config.NewSecret(testToken),
+		ChatID:   pageChat,
+		MinLevel: "error",
+		APIURL:   f.srv.URL,
+	}
+}

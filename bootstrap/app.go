@@ -125,6 +125,8 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 				}
 				return ingest.WriteSignal(ctx, db, pressure.Signal())
 			}).Every(10 * time.Second).WithoutOverlapping()
+			s.Func("ingest:digest", jobs.IngestDigest(app, func() *alerts.Notifier { return notifier })).
+				Cron("*/30 * * * *").WithoutOverlapping()
 			s.Func("errors:digest", func(ctx context.Context) error {
 				db, err := app.DB()
 				if err != nil {

@@ -56,8 +56,11 @@ type TelegramOptions struct {
 	Config vukem.TelegramConfig
 	// ErrorChatID is TELEGRAM_ERROR_CHAT_ID, the silent chat; empty sends silent messages to Config.ChatID.
 	ErrorChatID string
-	AppName     string
-	Env         string
+	// OpsChatID is TELEGRAM_OPS_CHAT_ID, the silent chat of the ingestion digest; empty falls back to ErrorChatID,
+	// then to Config.ChatID.
+	OpsChatID string
+	AppName   string
+	Env       string
 	// Production blocks loopback and private addresses for the Bot API URL (a fake server is local).
 	Production bool
 	// Dedup is the cache; nil sends every record.
@@ -72,12 +75,12 @@ type TelegramOptions struct {
 // error chat without sound. A nil *Notifier sends nothing.
 type Notifier struct {
 	// pageTG and silentTG send and close; page and silent carry the WithAttrs and WithGroup state.
-	pageTG, silentTG *telegram.Handler
-	page, silent     slog.Handler
-	minLevel         slog.Level
-	dedup            Counter
-	now              func() time.Time
-	attrs            []slog.Attr
+	pageTG, silentTG, opsTG *telegram.Handler
+	page, silent            slog.Handler
+	minLevel                slog.Level
+	dedup                   Counter
+	now                     func() time.Time
+	attrs                   []slog.Attr
 }
 
 // NewTelegram returns the notifier, or nil when TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is unset (no sends, no errors).
@@ -120,10 +123,13 @@ func NewTelegram(o TelegramOptions) (*Notifier, error) {
 		now = time.Now
 	}
 
-	pageTG, silentTG := telegram.NewHandler(page), telegram.NewHandler(silent)
+	ops := silent
+	ops.ChatID = cmp.Or(o.OpsChatID, silent.ChatID)
+
+	pageTG, silentTG, opsTG := telegram.NewHandler(page), telegram.NewHandler(silent), telegram.NewHandler(ops)
 
 	return &Notifier{
-		pageTG: pageTG, silentTG: silentTG, page: pageTG, silent: silentTG,
+		pageTG: pageTG, silentTG: silentTG, opsTG: opsTG, page: pageTG, silent: silentTG,
 		minLevel: minLevel, dedup: o.Dedup, now: now,
 	}, nil
 }
@@ -145,9 +151,14 @@ func FromApp(app *vukem.App) (*Notifier, error) {
 	}
 
 	return NewTelegram(TelegramOptions{
-		Config: tc, ErrorChatID: app.Source.Get("TELEGRAM_ERROR_CHAT_ID"),
-		AppName: app.Config.Name, Env: string(app.Config.Env), Production: app.Config.IsProduction(),
-		Dedup: c, Now: app.Now,
+		Config:      tc,
+		ErrorChatID: app.Source.Get("TELEGRAM_ERROR_CHAT_ID"),
+		OpsChatID:   app.Source.Get("TELEGRAM_OPS_CHAT_ID"),
+		AppName:     app.Config.Name,
+		Env:         string(app.Config.Env),
+		Production:  app.Config.IsProduction(),
+		Dedup:       c,
+		Now:         app.Now,
 		// Logged at WARN without an alert key, so it never comes back to Telegram.
 		OnError: func(err error) { app.Log.Warn("telegram delivery failed", "err", err) },
 	})
@@ -171,13 +182,22 @@ func (n *Notifier) SendSilent(ctx context.Context, htmlText string) error {
 	return n.silentTG.SendSync(ctx, htmlText)
 }
 
-// Close drains both send queues.
+// SendOps delivers htmlText to the ops chat now, without sound (the ingestion digest).
+func (n *Notifier) SendOps(ctx context.Context, htmlText string) error {
+	if n == nil {
+		return telegram.ErrDisabled
+	}
+
+	return n.opsTG.SendSync(ctx, htmlText)
+}
+
+// Close drains the send queues.
 func (n *Notifier) Close(ctx context.Context) error {
 	if n == nil {
 		return nil
 	}
 
-	return errors.Join(n.pageTG.Close(ctx), n.silentTG.Close(ctx))
+	return errors.Join(n.pageTG.Close(ctx), n.silentTG.Close(ctx), n.opsTG.Close(ctx))
 }
 
 // Enabled implements slog.Handler.
