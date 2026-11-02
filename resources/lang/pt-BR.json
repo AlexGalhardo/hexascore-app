@@ -461,7 +461,10 @@
       "requestsLifetime": "{count} requisições no total",
       "requestsMonthly": "{count} requisições por mês",
       "maxItems": "Até {count} itens por requisição",
-      "rate": "{count} requisições por segundo",
+      "rate": {
+        "one": "{count} requisição por segundo",
+        "other": "{count} requisições por segundo"
+      },
       "quotaLabel": "Cota",
       "pageSizeLabel": "Itens por requisição",
       "rateLabel": "Limite de requisições",
@@ -685,7 +688,7 @@
     "sections": "Seções",
     "pricing": "Preços",
     "language": "Idioma",
-    "openSearch": "Abrir busca",
+    "openSearch": "Buscar… (Ctrl K)",
     "searchTab": "Buscar",
     "themeDark": "Mudar para o tema escuro",
     "themeLight": "Mudar para o tema claro",
