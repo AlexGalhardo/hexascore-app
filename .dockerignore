@@ -14,3 +14,21 @@ storage/
 # Vite: dev server marker; the image builds its own assets
 /resources/public/hot
 /resources/public/build/
+
+# Not needed by the Dockerfile (audit 2026-11-02): tool state, worktrees, QA output,
+# Python venvs (their Linux-style links break the Windows build context) and nested env files.
+**/.env
+**/.env.*
+**/.venv/
+**/node_modules/
+wt/
+.ci-local/
+.hypothesis/
+.lighthouseci/
+.playwright-mcp/
+.orchestration/
+.agents/
+apps/mobile/android/
+apps/mobile/ios/
+qa/reports/
+docs/
