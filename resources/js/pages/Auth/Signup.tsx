@@ -51,7 +51,6 @@ export default function Signup({ formToken }: { formToken: string }) {
 	const t = useT();
 	const l = useLocalized();
 	const form = useForm({
-		name: "",
 		nickname: "",
 		email: "",
 		password: "",
@@ -102,15 +101,6 @@ export default function Signup({ formToken }: { formToken: string }) {
 					onChange={(e) => form.setData("website", e.target.value)}
 				/>
 				<input type="hidden" name="form_token" value={form.data.form_token} />
-				<Field
-					label={t("auth.fields.name")}
-					name="name"
-					autoComplete="name"
-					required
-					value={form.data.name}
-					onChange={(e) => form.setData("name", e.target.value)}
-					error={form.errors.name}
-				/>
 				<div>
 					<Field
 						label={t("auth.fields.nickname")}

@@ -31,7 +31,6 @@ test("signup form posts every field the server reads, including the form token",
 
 	expect(names(form)).toEqual(
 		expect.arrayContaining([
-			"name",
 			"nickname",
 			"email",
 			"password",

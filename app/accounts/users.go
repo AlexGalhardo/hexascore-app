@@ -1,6 +1,7 @@
 package accounts
 
 import (
+	"cmp"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -50,7 +51,13 @@ func (a *Accounts) Register(ctx context.Context, in requests.Register) (bool, er
 		return false, err
 	}
 
-	u := models.User{Name: in.Name, Email: email, Password: h}
+	// The form no longer asks for a name (owner 2026-11-02): the display name starts as the nickname, else the
+	// email's local part.
+	u := models.User{
+		Name:     cmp.Or(strings.TrimSpace(in.Name), nick, strings.SplitN(email, "@", 2)[0]),
+		Email:    email,
+		Password: h,
+	}
 	if err := orm.Create(ctx, a.DB, &u); err != nil {
 		// A concurrent sign-up with the same email won the unique index.
 		if existing, findErr := orm.QueryOf[models.User](a.DB).Where("email", email).First(ctx); findErr == nil {

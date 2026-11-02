@@ -102,3 +102,25 @@ func TestSecurity_A07_SignupNicknameStoredLowercaseAndEnumerationSafe(t *testing
 	app.Client(t).PostJSON("/login", map[string]any{"identifier": "carla@example.com", "password": testPassword}).
 		AssertRedirect("/onboarding")
 }
+
+// TestSignupWithoutNameTakesTheNickname: the sign-up form asks only for the nickname (owner 2026-11-02); the
+// account's display name starts as that nickname.
+func TestSignupWithoutNameTakesTheNickname(t *testing.T) {
+	app := newSignupApp(t)
+	c := app.Client(t)
+
+	f := signUpWithNickname(app, "noname@example.com", "nonameuser")
+	delete(f, "name")
+	postSignup(t, c, f).AssertRedirect("/signup/check-email")
+
+	db, err := app.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var name string
+	if err := db.QueryRowContext(t.Context(), `SELECT name FROM users WHERE email = 'noname@example.com'`).
+		Scan(&name); err != nil || name != "nonameuser" {
+		t.Fatalf("name = %q, %v; want the nickname", name, err)
+	}
+}

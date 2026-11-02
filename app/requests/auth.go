@@ -25,8 +25,9 @@ const (
 
 // Register is the registration form.
 type Register struct {
+	// Name is optional (the sign-up form only asks for the nickname, owner 2026-11-02); empty takes the nickname.
 	Name string `json:"name" form:"name"`
-	// Nickname is optional here: when empty the account picks one at /onboarding.
+	// Nickname: the sign-up form requires it; when empty (API callers) the account picks one at /onboarding.
 	// accounts.Register checks it with the onboarding rule.
 	Nickname             string `json:"nickname"              form:"nickname"`
 	Email                string `json:"email"                 form:"email"`
@@ -40,7 +41,7 @@ type Register struct {
 
 // RegisterSchema validates Register (password rules live here).
 var RegisterSchema = z.Struct[Register](z.Shape{
-	"name":                  z.String().Trim().Min(2).Max(100),
+	"name":                  z.String().Trim().Max(100).Default(""),
 	"nickname":              z.String().Trim().Max(64).Default(""),
 	"email":                 z.String().Trim().Email().Min(EmailMin).Max(EmailMax),
 	"password":              PasswordSchema,
