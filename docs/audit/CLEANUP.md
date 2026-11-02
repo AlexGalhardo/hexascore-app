@@ -60,3 +60,26 @@ Backup first: `git tag backup/pre-cleanup-2026-11-02 main` plus `git bundle crea
 - B5/B6 NOT executed: deleting the 38 `C:\Users\aleex\AppData\Local\Temp\tmp.*` checkouts was refused by the tool permission classifier ("irreversible local destruction"). Owner command, safe because every entry is clean and bundled: list them with `git -C C:\dev\hexascore-app\hexascore-vukem worktree list --porcelain | findstr Temp`, then `git worktree remove --force <path>` for each (or delete the directories and run `git worktree prune`).
 - 2026-11-02 20:20 (owner answers OQ-10..13): B7 done (81 pre-rewrite branches deleted; 14 of B8 kept for the senior review task B-033); B9 done (both stashes dropped); B10 done (loose changes discarded, brief restored); C2 done (`release/v0.37.0` deleted, changelog commits dropped); C3 done (`fix/railway-otlp-traces` was already squash-merged as vukem PR #104; the duplicate PR #143 opened during reconciliation was closed; both OTLP branches deleted); D4 done (`vercel-env/` deleted without rotation, owner decision).
 - Still open: B5/B6 (owner command above), D1 Docker prune, D2, D3 root files.
+
+### E.1 Review of the 14 kept branches (B-033, 2026-11-02)
+
+Method: `release/history-linear-pre-c2` and `build/apk-sideload` are two parallel copies of the pre-rewrite `main` (identical under `app`, `internal`, `routes`, `resources/js`, `apps/mobile`); `git diff --name-status release/history-linear-pre-c2 main` shows only intended product changes (11 files deleted in `main`: more-like-this, entity pages, the old 2FA page, the Playfair font), so that lineage is in `main` by content. For each other branch the commits not in either copy (`git log --no-merges <branch> --not release/history-linear-pre-c2 build/apk-sideload`) were checked against `main` by file and by trying `git cherry-pick -n`. The bundle `backup-history-2026-11-02/pre-cleanup-branches-hexascore.bundle` keeps every ref.
+
+| Branch | Decision | Reason | Cherry-pick |
+| --- | --- | --- | --- |
+| `agent/especialista/P1.F.4.1-followup-ui-purge-fix` | delete | its one unique commit (4750ae71, export ZIP built after a purge) is in `main` in another form: `app/library/export.go` updates `WHERE status = 'running'` and skips ZIP and mail when the row is gone | none |
+| `agent/especialista/P2.H.2.1-fix` | delete | no commit outside the pre-rewrite `main` lineage | none |
+| `agent/estagiario/DOC-vf-apiproblem-code` | delete | no commit outside the lineage (docs and orchestration notes only) | none |
+| `agent/implementer/P1.C.7.1` | delete | passkeys (register, sign in, UI, legacy import) are in `main` (`app/accounts/passkeys.go`, `database/legacyimport/passkeys.go`) | none |
+| `agent/implementer/P2.F-data-migration` | delete | both cover-retry commits are in `main` (`scripts/legacy/blob-export.ts` has the retry loop and `not seekable`; 656f426a cherry-picks to an empty change) | none |
+| `agent/implementer/P4.A.2.4` | delete | community cover and source-URL guards are in `main` (`app/community/uploads.go`, `allowedCover`); the rest are release-check fixes of v0.11.0 already tagged | none |
+| `agent/implementer/import-allow-no-login` | delete | `IgnoreNoLogin` and its test are in `main`; the `wip` commit only adds two one-off import helpers (`cmd/activity`, `cmd/dbcounts`), the cutover is done | none |
+| `agent/implementer/manual-access` | keep one change | `environment: Production` on the release job (e5cfbfdc) was not in `main`; the rest of the commit was an orchestration report | 4ed184d1 (`release.yml` only). Owner call: the GitHub environment `Production` must exist and may have required reviewers, which makes every release wait for approval |
+| `agent/senior/IMPL-web-v1-recent-changes` | delete | no commit outside the lineage | none |
+| `agent/senior/QA-e2e-speed` | delete | no commit outside the lineage | none |
+| `build/apk-sideload` | delete | copy of the pre-rewrite `main` (see method); the APK build lives on `main` and the sideload APK is a release asset | none |
+| `checkpoint/audit-worktree-2026-10-31` | delete | hydration waits, inert-until-Inertia (`page_script.go`) and the osv-scanner argument order are in `main`; the checkpoint commit is Playwright `test-results` output | none |
+| `fix/item-page-cover-prop` | delete | `"cover": page.Cover` is in `app/controllers/item_controller.go` on `main`; the rest are release commits | none |
+| `release/history-linear-pre-c2` | delete | the pre-rewrite `main` lineage, in `main` by content | none |
+
+The orchestrator deletes the 13 branches marked delete after merging B-033; `legacy` is untouched.
