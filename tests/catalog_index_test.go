@@ -66,25 +66,24 @@ VALUES ($1, 'movie', $2, $3, 6, 80)`, id, fmt.Sprintf("movie-%02d", i), fmt.Spri
 	if !ok || fmt.Sprint(count) != "3" {
 		t.Fatalf("first paint facet count = %#v", count)
 	}
-	// Paged with buttons, not infinite scroll (owner round 2026-11-01 items 12 and 20): signed cursors both
-	// ways, page size from ?per= (25, 50, 75 or 100; anything else is 25).
-	first.PropEquals("pagination.prev", "")
-	cursorOf := func(r *vukemtest.InertiaPage, name string) string {
-		t.Helper()
+	// Paged with buttons, not infinite scroll (owner round 2026-11-01 items 12 and 20), by readable page numbers
+	// with the total on every page (owner 2026-11-02); page size from ?per= (25, 50, 75 or 100; anything else is 25).
+	first.PropEquals("pagination.prev", "").PropEquals("pagination.next", "2")
 
-		v, _ := r.Prop("pagination." + name)
-		s, _ := v.(string)
-		if s == "" {
-			t.Fatalf("no %s cursor", name)
-		}
+	c.Get("/movies?per=50&page=2").AssertOK().AssertInertia("Catalog/Index").
+		HasProp("items.data", 10).PropEquals("pagination.prev", "1").PropEquals("pagination.next", "").
+		PropEquals("total", 60).PropEquals("filters.per", 50)
+	c.Get("/movies?page=2").AssertOK().AssertInertia("Catalog/Index").
+		HasProp("items.data", 25).PropEquals("pagination.next", "3").PropEquals("total", 60)
+	c.Get("/movies?page=9").AssertOK().AssertInertia("Catalog/Index").HasProp("items.data", 0).PropEquals("total", 60)
 
-		return s
+	for _, bad := range []string{"0", "-3", "abc"} {
+		c.Get("/movies?page="+bad).AssertOK().AssertInertia("Catalog/Index").PropEquals("pagination.prev", "")
 	}
 
-	second := c.Get("/movies?per=50&cursor="+cursorOf(first, "next")).AssertOK().AssertInertia("Catalog/Index").
-		HasProp("items.data", 35).PropEquals("pagination.next", "").PropEquals("filters.per", 50)
-	c.Get("/movies?cursor="+cursorOf(second, "prev")).AssertOK().AssertInertia("Catalog/Index").
-		HasProp("items.data", 25).PropEquals("pagination.prev", "")
+	c.Get("/movies?page=10001").AssertStatus(400)
+	// An old cursor link no longer pages; it lands on page 1.
+	c.Get("/movies?cursor=forged").AssertOK().AssertInertia("Catalog/Index").PropEquals("pagination.prev", "")
 
 	for _, tc := range []struct {
 		per          string
@@ -103,8 +102,6 @@ VALUES ($1, 'movie', $2, $3, 6, 80)`, id, fmt.Sprintf("movie-%02d", i), fmt.Spri
 		c.Get("/movies?per="+tc.per).AssertOK().AssertInertia("Catalog/Index").
 			HasProp("items.data", tc.items).PropEquals("filters.per", tc.given)
 	}
-
-	c.Get("/movies?cursor=forged").AssertStatus(400)
 
 	c.Get("/movies?genre=rpg").AssertOK().AssertInertia("Catalog/Index").HasProp("items.data", 3).PropEquals("total", 3)
 	c.Get("/movies?sort=bogus").AssertStatus(400)

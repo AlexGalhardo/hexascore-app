@@ -558,11 +558,6 @@
     "year": "Año",
     "minScore": "Nota mín.",
     "minCategories": "Nota Mínima Por Categoría",
-    "resultCount": {
-      "zero": "Ningún elemento encontrado",
-      "one": "{count} elemento encontrado",
-      "other": "{count} elementos encontrados"
-    },
     "sort": "Ordenar por",
     "apply": "Aplicar",
     "reset": "Limpiar",
@@ -606,9 +601,12 @@
       "popular": "Popular",
       "empty": "Todavía no hay tendencias."
     },
-    "itemsFoundLabel": {
-      "one": "elemento encontrado",
-      "other": "elementos encontrados"
+    "any": "Cualquiera",
+    "foundLabel": {
+      "game": "Juegos encontrados",
+      "movie": "Películas encontradas",
+      "series": "Series encontradas",
+      "book": "Libros encontrados"
     }
   },
   "categories": {

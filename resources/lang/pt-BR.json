@@ -558,11 +558,6 @@
     "year": "Ano",
     "minScore": "Nota mín.",
     "minCategories": "Nota Mínima Por Categoria",
-    "resultCount": {
-      "zero": "Nenhum item encontrado",
-      "one": "{count} item encontrado",
-      "other": "{count} itens encontrados"
-    },
     "sort": "Ordenar por",
     "apply": "Aplicar",
     "reset": "Limpar",
@@ -606,9 +601,12 @@
       "popular": "Popular",
       "empty": "Nada em alta ainda."
     },
-    "itemsFoundLabel": {
-      "one": "item encontrado",
-      "other": "itens encontrados"
+    "any": "Qualquer",
+    "foundLabel": {
+      "game": "Jogos encontrados",
+      "movie": "Filmes encontrados",
+      "series": "Séries encontradas",
+      "book": "Livros encontrados"
     }
   },
   "categories": {

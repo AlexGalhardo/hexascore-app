@@ -41,8 +41,6 @@ var sitemapSources = []sitemapSource{
 	{"entities", "person", "people", "slug"},
 	{"entities", "organization", "companies", "slug"},
 	{"entities", "franchise", "franchises", "slug"},
-	{"entities", "platform", "platforms", "slug"},
-	{"entities", "genre", "genres", "slug"},
 	{"entities", "game_mode", "game-modes", "slug"},
 	{"entities", "country", "countries", "code"},
 	{"entities", "language", "languages", "code"},

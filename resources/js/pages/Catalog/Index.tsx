@@ -58,7 +58,7 @@ export default function Index({ type, items, filters, facets, pagination, total 
 							{new Intl.NumberFormat(locale).format(total)}
 						</span>
 						<span className="mt-1 text-[13px] text-muted">
-							{t("catalog.itemsFoundLabel", { count: total })}
+							{t(`catalog.foundLabel.${type}`)}
 						</span>
 					</p>
 				)}
@@ -77,7 +77,8 @@ export default function Index({ type, items, filters, facets, pagination, total 
 				<div className="min-w-0">
 					{total !== undefined && (
 						<p className="mt-4 text-sm text-muted md:sr-only">
-							{t("catalog.resultCount", { count: total })}
+							{new Intl.NumberFormat(locale).format(total)}{" "}
+							{t(`catalog.foundLabel.${type}`)}
 						</p>
 					)}
 					{items.data.length === 0 ? (
@@ -90,7 +91,7 @@ export default function Index({ type, items, filters, facets, pagination, total 
 								label={t("catalog.pagination")}
 							/>
 							{/* The landing's grid card (ItemTile), so category pages and the landing match. */}
-							<ul className="mt-2 grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 md:gap-x-5 xl:grid-cols-5">
+							<ul className="mt-2 grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 md:gap-x-5">
 								{items.data.map((item) => (
 									<ItemTile
 										key={item.id}
@@ -113,13 +114,13 @@ export default function Index({ type, items, filters, facets, pagination, total 
 }
 
 /**
- * The canonical of a listing page: the shared canonical plus the page's own `cursor` and a non-default `per`
- * (the size the server applied, so an invalid ?per= never leaks in); filters stay out.
+ * The canonical of a listing page: the shared canonical plus the page's own `page` (from 2) and a non-default
+ * `per` (the size the server applied, so an invalid ?per= never leaks in); filters stay out.
  */
 export function pageCanonical(canonical: string, url: string, per: number): string {
 	const u = new URL(canonical);
-	const cursor = new URL(url, "http://x").searchParams.get("cursor");
-	if (cursor) u.searchParams.set("cursor", cursor);
+	const page = new URL(url, "http://x").searchParams.get("page");
+	if (page && /^[1-9]\d*$/.test(page) && page !== "1") u.searchParams.set("page", page);
 	if (per !== PAGE_SIZES[0]) u.searchParams.set("per", String(per));
 	return u.href;
 }

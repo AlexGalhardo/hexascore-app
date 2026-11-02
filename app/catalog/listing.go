@@ -88,17 +88,22 @@ type ListParams struct {
 	Sort            string             // "[-]popularity|score|release_date|rating_count"
 	Limit           int
 	Cursor          string
+	// Page > 0 switches to numbered pages (?page=N on the web listings, owner 2026-11-02): OFFSET paging with
+	// the total on every page and no cursors. The API keeps the keyset cursors.
+	Page int
 }
 
 // ListedItem is one listing row; summaries join translations elsewhere.
 type ListedItem struct{ ID, Type, Slug string }
 
-// ListPage is one page plus signed cursors; Total is set on the first page only.
+// ListPage is one page plus signed cursors; Total is set on the first cursor page and on every numbered page.
+// HasMore says whether a numbered page has a next page.
 type ListPage struct {
 	Items      []ListedItem
 	NextCursor string
 	PrevCursor string
 	Total      *int
+	HasMore    bool
 }
 
 // Querier is the subset of *database.DB the listing needs.
@@ -228,6 +233,10 @@ func List(ctx context.Context, db Querier, codec *CursorCodec, p ListParams) (Li
 		expr = spec.desc
 	}
 
+	if p.Page > 0 {
+		return listPage(ctx, db, p, b, expr, desc, total)
+	}
+
 	var cur *Cursor
 	backwards := false
 	if p.Cursor != "" {
@@ -302,6 +311,56 @@ func List(ctx context.Context, db Querier, codec *CursorCodec, p ListParams) (Li
 	if (backwards && hasMore) || (!backwards && cur != nil) {
 		page.PrevCursor = mk(first, DirPrev)
 	}
+	return page, nil
+}
+
+// MaxPage bounds ?page= so a crafted number cannot ask Postgres to skip millions of rows.
+const MaxPage = 10000
+
+// listPage is List's numbered-page mode: the same filters and order, OFFSET (page-1)*limit.
+func listPage(
+	ctx context.Context,
+	db Querier,
+	p ListParams,
+	b *queryBuilder,
+	expr string,
+	desc bool,
+	total *int,
+) (ListPage, error) {
+	if p.Page > MaxPage {
+		return ListPage{}, fmt.Errorf("%w: page must be 1-%d", ErrInvalidQuery, MaxPage)
+	}
+
+	dir := "ASC"
+	if desc {
+		dir = "DESC"
+	}
+
+	q := fmt.Sprintf("SELECT i.id, i.type, i.slug FROM items i WHERE %s ORDER BY %s %s, i.id %s LIMIT %d OFFSET %d",
+		strings.Join(b.where, " AND "), expr, dir, dir, p.Limit+1, (p.Page-1)*p.Limit)
+
+	rows, err := db.QueryContext(ctx, q, b.args...)
+	if err != nil {
+		return ListPage{}, fmt.Errorf("list items: %w", err)
+	}
+	defer rows.Close()
+
+	page := ListPage{Total: total}
+	for rows.Next() {
+		var it ListedItem
+		if err := rows.Scan(&it.ID, &it.Type, &it.Slug); err != nil {
+			return ListPage{}, fmt.Errorf("scan listing: %w", err)
+		}
+		page.Items = append(page.Items, it)
+	}
+	if err := rows.Err(); err != nil {
+		return ListPage{}, fmt.Errorf("list items: %w", err)
+	}
+
+	if len(page.Items) > p.Limit {
+		page.Items, page.HasMore = page.Items[:p.Limit], true
+	}
+
 	return page, nil
 }
 

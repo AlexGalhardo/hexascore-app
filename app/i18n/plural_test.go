@@ -30,7 +30,7 @@ func TestPluralGolden(t *testing.T) {
 
 	app := vukemtest.New(t, bootstrap.New)
 	keys := []string{
-		"api.profile.plan.rate", "billing.checkout.closeIn", "catalog.resultCount", "catalog.ratingCount",
+		"api.profile.plan.rate", "billing.checkout.closeIn", "catalog.ratingCount",
 		"item.timeToBeat.reports", "lists.itemCount", "social.profile.counts.game",
 		"social.profile.counts.movie", "social.profile.counts.series", "social.profile.counts.book",
 	}

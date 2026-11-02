@@ -23,6 +23,14 @@ const SORTS = ["popularity", "score", "release_date", "rating_count"] as const;
 /** The page sizes the server honours for ?per= (catalog_controller.go); the first is the default. */
 export const PAGE_SIZES = [25, 50, 75, 100] as const;
 
+// Release years offered by the year select: this year back to 1895, the first film screenings (owner 2026-11-02).
+const YEARS = Array.from(
+	{ length: new Date().getFullYear() - 1894 },
+	(_, i) => new Date().getFullYear() - i,
+);
+// Minimum score steps: 0 to 10 by 0.5, the server's only accepted values.
+const MIN_SCORES = Array.from({ length: 21 }, (_, i) => i / 2);
+
 /** Filters other than sort that differ from their default. */
 export function activeCount(f: ActiveFilters): number {
 	return [f.genre, f.platform, f.year, f.minScore].filter(
@@ -133,26 +141,29 @@ export default function Filters({
 				)}
 				<label className={label}>
 					{t("catalog.year")}
-					<input
-						name="year"
-						type="number"
-						min={1800}
-						max={2100}
-						defaultValue={filters.year || ""}
-						className={field}
-					/>
+					<select name="year" defaultValue={filters.year || ""} className={field}>
+						<option value="">{t("catalog.any")}</option>
+						{YEARS.map((y) => (
+							<option key={y} value={y}>
+								{y}
+							</option>
+						))}
+					</select>
 				</label>
 				<label className={label}>
 					{t("catalog.minScore")}
-					<input
+					<select
 						name="min_score"
-						type="number"
-						min={0}
-						max={10}
-						step={0.5}
 						defaultValue={filters.minScore ?? ""}
 						className={field}
-					/>
+					>
+						<option value="">{t("catalog.any")}</option>
+						{MIN_SCORES.map((s) => (
+							<option key={s} value={s}>
+								{s.toFixed(1)}
+							</option>
+						))}
+					</select>
 				</label>
 				<div className="grid grid-cols-2 gap-3">
 					<button type="submit" className={btnClass("primary")}>

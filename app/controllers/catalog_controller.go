@@ -28,6 +28,28 @@ func catalogPageSize(raw string) int {
 	}
 }
 
+// catalogPage reads ?page=; anything but a positive integer is page 1.
+func catalogPage(raw string) int {
+	if n, err := strconv.Atoi(raw); err == nil && n > 0 {
+		return n
+	}
+
+	return 1
+}
+
+// pageLinks are the prev/next page numbers of a numbered listing page ("" at either end).
+func pageLinks(page int, hasMore bool) map[string]string {
+	links := map[string]string{"prev": "", "next": ""}
+	if page > 1 {
+		links["prev"] = strconv.Itoa(page - 1)
+	}
+	if hasMore {
+		links["next"] = strconv.Itoa(page + 1)
+	}
+
+	return links
+}
+
 // Catalog serves the section listings Catalog/Index.
 type Catalog struct {
 	app   *vukem.App
@@ -63,6 +85,9 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 		if err != nil {
 			return badListing(err)
 		}
+		// Numbered pages replace the opaque cursors on the web listings (owner 2026-11-02); an old ?cursor= link
+		// lands on page 1.
+		params.Cursor, params.Page = "", catalogPage(c.Query("page"))
 		page, err := catalog.List(c.Context(), db, h.codec, params)
 		if err != nil {
 			return badListing(err)
@@ -87,7 +112,7 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 		props := inertia.Props{
 			"type":       typ,
 			"items":      map[string]any{"data": cards},
-			"pagination": map[string]string{"prev": page.PrevCursor, "next": page.NextCursor},
+			"pagination": pageLinks(params.Page, page.HasMore),
 			"filters": map[string]any{
 				"genre": params.Genre, "platform": params.Platform, "year": params.Year,
 				"minScore": params.MinScore, "sort": params.Sort, "per": params.Limit,

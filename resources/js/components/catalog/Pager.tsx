@@ -3,16 +3,21 @@ import { Head, Link } from "@inertiajs/react";
 import { useT } from "../../lib/useT";
 import { btnClass } from "../ui/Btn";
 
+/** Page numbers of the previous and next pages ("" at either end). */
 export interface Pagination {
 	prev: string;
 	next: string;
 }
 
-/** The URL of the page at cursor: the current path and query with `cursor` replaced ("" drops it). */
-export function pageHref(url: string, cursor: string): string {
+/**
+ * The URL of page number `page`: the current path and query with `page` replaced. Page 1 drops it, and an old
+ * `cursor` from before numbered pages is dropped too.
+ */
+export function pageHref(url: string, page: string): string {
 	const u = new URL(url, "http://x");
-	if (cursor) u.searchParams.set("cursor", cursor);
-	else u.searchParams.delete("cursor");
+	u.searchParams.delete("cursor");
+	if (page && page !== "1") u.searchParams.set("page", page);
+	else u.searchParams.delete("page");
 	return u.pathname + u.search;
 }
 
@@ -23,15 +28,15 @@ interface Props {
 	label?: string;
 }
 
-// Previous/next buttons of a cursor-paged listing; a missing end renders as a disabled look-alike so the row
+// Previous/next buttons of a numbered listing; a missing end renders as a disabled look-alike so the row
 // keeps its size. Shown above and below the list (owner round 2026-11-01 item 12).
 export default function Pager({ url, pagination, label }: Props) {
 	const t = useT();
 	if (!pagination.prev && !pagination.next) return null;
 
-	const button = (cursor: string, text: string, rel: "prev" | "next") =>
-		cursor ? (
-			<Link href={pageHref(url, cursor)} rel={rel} className={btnClass("secondary")}>
+	const button = (page: string, text: string, rel: "prev" | "next") =>
+		page ? (
+			<Link href={pageHref(url, page)} rel={rel} className={btnClass("secondary")}>
 				{text}
 			</Link>
 		) : (
@@ -60,7 +65,7 @@ export function PagerHead({
 	pagination: Pagination;
 	origin: string;
 }) {
-	const abs = (cursor: string) => new URL(pageHref(url, cursor), origin).href;
+	const abs = (page: string) => new URL(pageHref(url, page), origin).href;
 	return (
 		<Head>
 			{pagination.prev && <link head-key="rel-prev" rel="prev" href={abs(pagination.prev)} />}

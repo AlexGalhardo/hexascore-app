@@ -558,11 +558,6 @@
     "year": "Year",
     "minScore": "Min. score",
     "minCategories": "Minimum Score Per Category",
-    "resultCount": {
-      "zero": "No items found",
-      "one": "{count} item found",
-      "other": "{count} items found"
-    },
     "sort": "Sort by",
     "apply": "Apply",
     "reset": "Reset",
@@ -606,9 +601,12 @@
       "popular": "Popular",
       "empty": "Nothing is trending yet."
     },
-    "itemsFoundLabel": {
-      "one": "item found",
-      "other": "items found"
+    "any": "Any",
+    "foundLabel": {
+      "game": "Games found",
+      "movie": "Movies found",
+      "series": "TV series found",
+      "book": "Books found"
     }
   },
   "categories": {

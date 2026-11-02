@@ -27,11 +27,24 @@ func NewEntity(app *vukem.App) *Entity {
 	return &Entity{app: app}
 }
 
+// listingFilters maps the entity kinds that redirect to a filtered section listing to the listing's query key.
+var listingFilters = map[string]string{"genre": "genre", "platform": "platform"}
+
 // Show renders Entity/Show for the entity kind under the section of item type typ
 // (/{section}/{entity path}/{key}, owner round 2026-11-01 item 19); param names the path parameter holding the
 // slug (or the code for countries and languages). `?cursor=` pages the type's items.
 func (h *Entity) Show(kind, param, typ string) web.HandlerFunc {
 	return func(c *web.Ctx) error {
+		// Genres and platforms are tags without content of their own: their page is the section listing filtered
+		// by them (owner 2026-11-02). People, companies and the other kinds keep their pages.
+		if filter, ok := listingFilters[kind]; ok {
+			q := url.Values{"sort": {"-popularity"}, "per": {"25"}, filter: {c.Param(param)}}
+			to := path.Dir(path.Dir(c.Request().URL.Path)) + "?" + q.Encode()
+			http.Redirect(c.Writer(), c.Request(), to, http.StatusMovedPermanently)
+
+			return nil
+		}
+
 		db, err := h.app.DB()
 		if err != nil {
 			return err
