@@ -68,7 +68,8 @@ func Social(r *router.Router, app *vukem.App) error {
 		}
 
 		if pending {
-			return c.Redirect("/two-factor-challenge")
+			// A full-page return from Google: the login page opens the code dialog (owner 2026-11-02).
+			return c.Redirect("/login")
 		}
 
 		if err := acc.Web.Login(c, u); err != nil {

@@ -53,8 +53,11 @@ func RegisterThrottleKey(r *http.Request) string {
 // loginEmail is the normalized email of the request, shared with the login throttle.
 func loginEmail(r *http.Request) string { return auth.RequestEmail(r, "email") }
 
-// ShowLogin renders the login page.
-func (*Handlers) ShowLogin(c *web.Ctx) error { return inertia.Render(c, "Auth/Login", nil) }
+// ShowLogin renders the login page; twoFactor opens the code dialog while a password-checked login waits for its
+// two-factor code (owner 2026-11-02).
+func (*Handlers) ShowLogin(c *web.Ctx) error {
+	return inertia.Render(c, "Auth/Login", inertia.Props{"twoFactor": accounts.PendingTwoFactorID(c.Request()) != ""})
+}
 
 // Login signs the user in and goes to the page they wanted.
 func (h *Handlers) Login(c *web.Ctx) error {

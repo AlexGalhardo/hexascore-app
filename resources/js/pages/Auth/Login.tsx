@@ -1,7 +1,7 @@
 import { Head, Link, useForm } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
-
 import AuthFrame, { authLink, GoogleButton, OrRule } from "../../components/auth/AuthFrame";
+import TwoFactorDialog from "../../components/auth/TwoFactorDialog";
 import ChallengeStatus from "../../components/ChallengeStatus";
 import Field from "../../components/Field";
 import PasswordField from "../../components/PasswordField";
@@ -72,7 +72,7 @@ export function PasskeySignIn(): React.ReactElement {
 	);
 }
 
-export default function Login() {
+export default function Login({ twoFactor = false }: { twoFactor?: boolean }) {
 	const t = useT();
 	const l = useLocalized();
 	const form = useForm({ identifier: "", password: "", remember: false });
@@ -152,6 +152,7 @@ export default function Login() {
 					{t("auth.login.createAccount")}
 				</Link>
 			</p>
+			<TwoFactorDialog open={twoFactor} />
 		</AuthFrame>
 	);
 }

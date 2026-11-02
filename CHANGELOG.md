@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **auth:** The two-factor step is a dialog on the login page with six one-digit boxes that accept a pasted code and submit on their own; logins with JavaScript off still use /two-factor-challenge, and a Google sign-in with two-factor lands on the dialog too
 - **auth:** The sign-up form asks only for the nickname (no name field); the display name starts as the nickname, and the server still accepts an optional name
 - **ui:** Trending cards are one link each, and landing and listing cards invert their colours on hover like the navbar and footer links
 - **billing:** Stripe settings come in two named sets, `STRIPE_*_SANDBOX` and `STRIPE_*_LIVE` (key, webhook secret, Hobby and PRO prices), and `STRIPE_MODE=sandbox|live` picks one; production refuses to boot without the mode, with a key of the other mode or with a `pk_` key (replaces `STRIPE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_HOBBY`, `STRIPE_PRICE_PRO`)
