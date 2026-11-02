@@ -30,7 +30,8 @@ const SECTIONS = [
 export const APP_ICON = "/icons/app-icon.svg";
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
-const item = `inline-flex min-h-11 items-center rounded-xs hover:text-primary ${focus}`;
+// A square background on hover makes the target explicit in both themes (owner 2026-11-02).
+const item = `inline-flex min-h-11 items-center rounded-xs px-2.5 hover:bg-hover hover:text-primary ${focus}`;
 // Pressed: 1 px down onto an inset shadow (the move is dropped under prefers-reduced-motion).
 export const iconButton = `inline-flex size-11 shrink-0 items-center justify-center rounded-xs transition-[background-color,box-shadow,translate] duration-100 hover:bg-hover active:translate-y-px active:bg-surface active:shadow-pressed motion-reduce:transition-none motion-reduce:active:translate-y-0 ${focus}`;
 const menuItem = `flex min-h-11 w-full items-center gap-2.5 px-3 text-left text-[15px] hover:bg-hover ${focus}`;
@@ -288,7 +289,7 @@ export default function Nav() {
 				</Link>
 				<nav
 					aria-label={t("nav.sections")}
-					className="hidden items-center gap-7 whitespace-nowrap lg:flex"
+					className="hidden items-center gap-3 whitespace-nowrap lg:flex"
 				>
 					{SECTIONS.map(([path, key, , type]) => (
 						<Link
@@ -304,7 +305,7 @@ export default function Nav() {
 						<Link
 							href={feedHref}
 							aria-current={here === "/feed" ? "page" : undefined}
-							className={`hidden min-h-11 items-center rounded-xs border-l border-border pl-7 text-[15px] font-medium hover:text-primary aria-[current=page]:font-bold xl:inline-flex ${focus}`}
+							className={`hidden min-h-11 items-center rounded-xs border-l border-border pl-7 pr-2.5 text-[15px] font-medium hover:bg-hover hover:text-primary aria-[current=page]:font-bold xl:inline-flex ${focus}`}
 						>
 							{t("social.feed.title")}
 						</Link>

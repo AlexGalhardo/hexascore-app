@@ -62,7 +62,8 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 					</Link>
 				</div>
 			)}
-			<main id="main" className="shell py-4">
+			{/* Room under the navbar so the content never touches it (owner 2026-11-02). */}
+			<main id="main" className="shell pt-12 pb-4">
 				{children}
 			</main>
 			<Footer />
