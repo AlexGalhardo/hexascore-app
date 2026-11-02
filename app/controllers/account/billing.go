@@ -88,7 +88,15 @@ func (h *BillingHandlers) Checkout(c *web.Ctx) error {
 		return err
 	}
 
-	target, err := h.b.Checkout(c.Context(), u, c.Param("plan"), c.FormValue("currency"))
+	// Input, not FormValue: the /pricing buttons post through Inertia as JSON, and FormValue only reads forms.
+	in, err := c.Input()
+	if err != nil {
+		return err
+	}
+
+	currency, _ := in["currency"].(string)
+
+	target, err := h.b.Checkout(c.Context(), u, c.Param("plan"), currency)
 	if err != nil {
 		return backWithError(c, err)
 	}

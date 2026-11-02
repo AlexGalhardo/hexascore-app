@@ -62,6 +62,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **billing:** Checkout reads the chosen currency from the Inertia JSON body too, so /pricing subscribes in BRL and EUR instead of falling back to USD
 - **i18n:** The web catalogues keep the keys the Android app still reads (`item.attribution`, `item.rateIt`, `catalog.resultCount`, `catalog.itemsFoundLabel`) and the app's bundled copy is resynced
 - **ci:** The Windows setup retries `bun install` once when Windows holds a just-written file (EBUSY)
 - **security:** Logs redact password-reset tokens in the request path and the `signature`, `expires` and `X-Amz-*` values of signed links in any message or error (`TestSecurity_A09_SignedURLsNotLogged`)

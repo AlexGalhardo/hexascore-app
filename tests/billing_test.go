@@ -564,13 +564,19 @@ func TestBillingCheckoutCurrency(t *testing.T) {
 	c.PostForm("/billing/checkout/hobby", nil).AssertStatus(http.StatusSeeOther)
 	c.PostForm("/billing/checkout/hobby", url.Values{"currency": {"eur"}}).AssertStatus(http.StatusSeeOther)
 	c.PostForm("/billing/checkout/hobby", url.Values{"currency": {"gbp"}}).AssertStatus(http.StatusUnprocessableEntity)
+	// The /pricing buttons post through Inertia, which sends JSON: the currency must still reach Stripe.
+	c.Inertia("").
+		PostJSON("/billing/checkout/pro", map[string]string{"currency": "eur"}).
+		AssertStatus(http.StatusConflict)
 
 	_, _, checkouts, _ := f.stats()
-	if len(checkouts) != 3 {
-		t.Fatalf("checkouts = %d, want 3 (unsupported currency must not reach Stripe)", len(checkouts))
+	if len(checkouts) != 4 {
+		t.Fatalf("checkouts = %d, want 4 (unsupported currency must not reach Stripe)", len(checkouts))
 	}
 
-	for i, want := range []struct{ price, currency string }{{"price_pro", "brl"}, {"price_hobby", "usd"}, {"price_hobby", "eur"}} {
+	for i, want := range []struct{ price, currency string }{
+		{"price_pro", "brl"}, {"price_hobby", "usd"}, {"price_hobby", "eur"}, {"price_pro", "eur"},
+	} {
 		if got := checkouts[i].Get("currency"); got != want.currency {
 			t.Errorf("checkout %d currency = %q, want %q", i, got, want.currency)
 		}
