@@ -123,3 +123,15 @@ html[inert] [data-submit] {
 		animation-duration: 3s;
 	}
 }
+
+/* No italics anywhere on the site, including the browser defaults for em, i, cite, dfn, var and address (owner 2026-11-02). */
+@layer base {
+	em,
+	i,
+	cite,
+	dfn,
+	var,
+	address {
+		font-style: normal;
+	}
+}

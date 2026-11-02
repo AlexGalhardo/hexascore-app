@@ -162,7 +162,7 @@ function TrendCard({
 				</p>
 				<Link
 					href={`${base}/${item.slug}?from=trending`}
-					className="font-display text-xl leading-tight font-bold hover:text-primary"
+					className="font-display text-2xl leading-tight font-bold hover:text-primary md:text-[28px]"
 				>
 					{item.title}
 				</Link>
@@ -170,8 +170,8 @@ function TrendCard({
 					{[item.year, item.genre].filter(Boolean).join(" · ")}
 				</p>
 				<div className="mt-2 flex items-center gap-3">
-					<ScoreBadge score={item.score} size="sm" />
-					<p className="text-xs">
+					<ScoreBadge score={item.score} size="md" />
+					<p className="text-sm">
 						<span className="block font-semibold">
 							{item.score === null
 								? t("item.notEnough")

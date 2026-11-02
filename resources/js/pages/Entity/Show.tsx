@@ -182,7 +182,7 @@ export default function Show({
 			</header>
 			{items.data.length === 0 ? (
 				<section className="mt-10 grid justify-items-center gap-3 border-t-2 border-fg pt-14 pb-6 text-center">
-					<h2 className="text-3xl font-normal text-muted italic">{t("entity.empty")}</h2>
+					<h2 className="text-3xl font-normal text-muted">{t("entity.empty")}</h2>
 					<p className="text-sm text-muted">{t("entity.emptyHint")}</p>
 					<Link href={localized("/", locale)} className={btnClass("secondary", "mt-3")}>
 						{t("entity.browse")}

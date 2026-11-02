@@ -137,7 +137,7 @@ export default function Index({
 						})}
 					</nav>
 					{notice && (
-						<p className="mt-8 border-t-2 border-fg pt-6 font-display text-2xl italic md:text-[28px]">
+						<p className="mt-8 border-t-2 border-fg pt-6 font-display text-2xl md:text-[28px]">
 							{notice}
 						</p>
 					)}
@@ -157,7 +157,7 @@ export default function Index({
 									{t("search.didYouMean")}
 									<Link
 										href={href(query.type, 1, didYouMean)}
-										className="inline-flex min-h-11 items-center font-display text-xl font-bold text-primary italic hover:underline"
+										className="inline-flex min-h-11 items-center font-display text-xl font-bold text-primary hover:underline"
 									>
 										{didYouMean}
 									</Link>

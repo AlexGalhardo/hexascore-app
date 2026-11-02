@@ -40,6 +40,7 @@ test("the about page has a contents list and links categories, scores, docs, sou
 		"about.apiTitle",
 		"about.openSourceTitle",
 		"about.contactTitle",
+		"about.creditsTitle",
 	]);
 	const href = (name: string) => screen.getByRole("link", { name }).getAttribute("href");
 	expect(href("catalog.title.game")).toBe("/pt-br/games");

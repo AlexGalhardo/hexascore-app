@@ -759,7 +759,9 @@
     "contactTitle": "Contato",
     "contactBody": "Dúvidas, correções e outros pedidos chegam à equipe pelo formulário de contato.",
     "contactLink": "Fale conosco",
-    "contents": "Sumário"
+    "contents": "Sumário",
+    "creditsTitle": "Créditos dos dados",
+    "creditsBody": "Dados de jogos do IGDB.com. Dados de filmes e séries do TMDB; este produto usa a API do TMDB, mas não é endossado nem certificado pelo TMDB."
   },
   "footer": {
     "about": "Sobre",
@@ -771,7 +773,6 @@
     "apiDocs": "Docs da API",
     "pricing": "Preços",
     "howScores": "Como as notas funcionam",
-    "attribution": "Dados de jogos do IGDB.com. Dados de filmes e séries do TMDB; este produto usa a API do TMDB, mas não é endossado nem certificado pelo TMDB.",
     "cookieSettings": "Configurações de cookies",
     "sourceCode": "Código-fonte"
   },

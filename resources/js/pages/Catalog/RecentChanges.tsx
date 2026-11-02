@@ -93,7 +93,7 @@ export default function RecentChanges({ target, entries, page, nextPage }: Props
 				</span>
 			</div>
 			{entries.length === 0 ? (
-				<p className="mt-10 text-center font-display text-2xl text-muted italic">
+				<p className="mt-10 text-center font-display text-2xl text-muted">
 					{t("community.recent.empty")}
 				</p>
 			) : (

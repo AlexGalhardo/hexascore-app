@@ -19,7 +19,7 @@ export default function Index({ events, nextCursor }: Props) {
 				{t("social.feed.title")}
 			</h1>
 			{events.length === 0 ? (
-				<p className="mt-8 max-w-3xl border-t-2 border-fg pt-6 font-display text-2xl italic">
+				<p className="mt-8 max-w-3xl border-t-2 border-fg pt-6 font-display text-2xl">
 					{t("social.feed.empty")}
 				</p>
 			) : (

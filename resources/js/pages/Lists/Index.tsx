@@ -44,7 +44,7 @@ export default function Index({ lists, limits }: Props) {
 				{t("userLists.limit", { limit: limits.perType })}
 			</p>
 			{lists.length === 0 ? (
-				<p className="mt-8 border-t-2 border-fg pt-6 font-display text-2xl italic">
+				<p className="mt-8 border-t-2 border-fg pt-6 font-display text-2xl">
 					{t("lists.noLists")}
 				</p>
 			) : (

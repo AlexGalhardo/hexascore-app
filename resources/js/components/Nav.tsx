@@ -28,6 +28,8 @@ const SECTIONS = [
 
 // The owner picks one of resources/public/icons/hexascore-icon-{1,2,3}; app-icon.svg is a copy of the pick (see its README).
 export const APP_ICON = "/icons/app-icon.svg";
+// The brand as written, whatever the casing of APP_NAME in the environment (owner 2026-11-02).
+export const BRAND = "HexaScore";
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
 // A square background on hover makes the target explicit in both themes (owner 2026-11-02).
@@ -70,6 +72,10 @@ const ICONS = {
 	shield: "M12 3 L19.5 6 V11.5 C19.5 16 16.5 19.5 12 21 C7.5 19.5 4.5 16 4.5 11.5 V6 Z M9 12 L11 14 L15 10",
 	feed: "M5 5 a14 14 0 0 1 14 14 M5 11 a8 8 0 0 1 8 8 M5.5 18.5 h.01",
 	logout: "M14 4 H19 V20 H14 M10 8 L6 12 L10 16 M6 12 H16",
+	login: "M10 4 H5 V20 H10 M14 8 L18 12 L14 16 M18 12 H8",
+	signup: "M10 4 a4 4 0 1 0 0 8 a4 4 0 1 0 0-8 M3 20 a7 7 0 0 1 12.5-4.3 M19 14 V20 M16 17 H22",
+	pricing: "M4 12 V4.5 H11.5 L20 13 L13 20 Z M8 8 h.01",
+	docs: "M6 3 H14 L19 8 V21 H6 Z M14 3 V8 H19 M9 13 H16 M9 17 H16",
 } as const;
 
 // Icons from the v1 set; the label lives in aria-label or next to the icon.
@@ -233,12 +239,15 @@ export default function Nav() {
 	const guestLinks = (
 		<>
 			<Link href={localized("/signup", locale)} className={menuItem}>
+				<Icon name="signup" />
 				{t("auth.signup.title")}
 			</Link>
 			<Link href={localized("/pricing", locale)} className={menuItem}>
+				<Icon name="pricing" />
 				{t("nav.pricing")}
 			</Link>
 			<Link href="/docs" className={menuItem}>
+				<Icon name="docs" />
 				{t("nav.apiDocs")}
 			</Link>
 		</>
@@ -285,7 +294,7 @@ export default function Nav() {
 						height={32}
 						className="size-7 lg:size-8"
 					/>
-					<span className="sr-only lg:not-sr-only">{page.props.appName}</span>
+					<span className="sr-only lg:not-sr-only">{BRAND}</span>
 				</Link>
 				<nav
 					aria-label={t("nav.sections")}
@@ -384,6 +393,7 @@ export default function Nav() {
 											href={localized("/login", locale)}
 											className={`${menuItem} font-semibold text-primary`}
 										>
+											<Icon name="login" />
 											{t("nav.login")}
 										</Link>
 										{guestLinks}
@@ -453,6 +463,7 @@ export default function Nav() {
 										href={localized("/login", locale)}
 										className={`${menuItem} font-semibold text-primary`}
 									>
+										<Icon name="login" />
 										{t("nav.login")}
 									</Link>
 									{guestLinks}

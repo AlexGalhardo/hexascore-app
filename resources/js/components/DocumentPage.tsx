@@ -69,10 +69,10 @@ export default function DocumentPage({
 	const current = useCurrentSection(sections.map((s) => s.id));
 
 	return (
-		<div className="grid gap-12 lg:grid-cols-[18.75rem_minmax(0,45rem)] lg:justify-between">
+		<div className="mx-auto grid max-w-[66rem] gap-12 lg:grid-cols-[15rem_minmax(0,45rem)] lg:justify-center lg:gap-16">
 			<Seo title={title} description={description} />
 			<aside className="lg:sticky lg:top-24 lg:self-start">
-				<nav aria-labelledby="document-contents" className="border-t-2 border-fg pt-3">
+				<nav aria-labelledby="document-contents">
 					<p id="document-contents" className={eyebrow}>
 						{contentsLabel}
 					</p>
@@ -107,7 +107,7 @@ export default function DocumentPage({
 						</time>
 					</p>
 				)}
-				<p className="mt-6 font-display text-2xl leading-snug italic">{intro}</p>
+				<p className="mt-6 font-display text-2xl leading-snug">{intro}</p>
 				{sections.map((s) => (
 					<section
 						key={s.id}

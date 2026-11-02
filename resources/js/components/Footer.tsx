@@ -1,15 +1,15 @@
 import { Link, usePage } from "@inertiajs/react";
-
 import { openCookieSettings } from "../lib/preferences";
 import { localized } from "../lib/route";
 import { useT } from "../lib/useT";
 import type { SharedProps } from "../types";
+import { BRAND } from "./Nav";
 
 const SOURCE_URL = "https://github.com/AlexGalhardo/hexascore-app";
 
 export default function Footer() {
 	const t = useT();
-	const { appName, locale } = usePage<SharedProps>().props;
+	const { locale } = usePage<SharedProps>().props;
 	const link =
 		"inline-flex min-h-11 items-center justify-center rounded-xs px-2.5 text-[15px] hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg md:text-[13px]";
 	const links: [string, string][] = [
@@ -53,9 +53,8 @@ export default function Footer() {
 					</ul>
 				</nav>
 				<div className="grid gap-1 text-[13px] text-muted md:ml-auto md:text-right">
-					<p className="text-xs">{t("footer.attribution")}</p>
 					<p>
-						© {new Date().getFullYear()} {appName}
+						© {new Date().getFullYear()} {BRAND}
 					</p>
 				</div>
 			</div>

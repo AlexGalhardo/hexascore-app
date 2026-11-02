@@ -132,7 +132,7 @@ export default function Index({ counts, groups, filters }: Props) {
 				</button>
 			</form>
 			{groups.data.length === 0 ? (
-				<p className="mt-8 border-t-2 border-fg pt-6 font-display text-2xl italic">
+				<p className="mt-8 border-t-2 border-fg pt-6 font-display text-2xl">
 					{t("library.empty")}
 				</p>
 			) : (

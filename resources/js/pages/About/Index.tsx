@@ -80,6 +80,8 @@ export default function Index(): ReactElement {
 			href: localized("/contact", locale),
 			label: t("about.contactLink"),
 		}),
+		// IGDB and TMDB attribution (ADR 0006); TMDB accepts it in an About or Credits section (owner 2026-11-02).
+		section("credits", null),
 	];
 
 	return (

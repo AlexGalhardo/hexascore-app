@@ -759,7 +759,9 @@
     "contactTitle": "Contact",
     "contactBody": "Questions, corrections and other requests reach the team through the contact form.",
     "contactLink": "Contact us",
-    "contents": "Contents"
+    "contents": "Contents",
+    "creditsTitle": "Data credits",
+    "creditsBody": "Game data from IGDB.com. Movie and series data from TMDB; this product uses the TMDB API but is not endorsed or certified by TMDB."
   },
   "footer": {
     "about": "About",
@@ -771,7 +773,6 @@
     "apiDocs": "API docs",
     "pricing": "Pricing",
     "howScores": "How scores work",
-    "attribution": "Game data from IGDB.com. Movie and series data from TMDB; this product uses the TMDB API but is not endorsed or certified by TMDB.",
     "cookieSettings": "Cookie settings",
     "sourceCode": "Source Code"
   },
