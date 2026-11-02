@@ -51,6 +51,35 @@ func TestGenreFor(t *testing.T) {
 		{"book", "children's literature", "children"},
 		{"book", "autobiography", "biography"},
 		{"book", "Science Fiction", "science-fiction"},
+		// The 2026-11-02 production dry run's most used unmapped labels.
+		{"series", "telenovela", "drama"},
+		{"movie", "LGBTQ-related film", "lgbtq"},
+		{"series", "LGBT-related television series", "lgbtq"},
+		{"game", "science fiction video game", "science-fiction"},
+		{"game", "post-apocalyptic video game", "science-fiction"},
+		{"game", "eroge", "visual-novel"},
+		{"movie", "Christmas film", "family"},
+		{"book", "fable", "short-stories"},
+		{"movie", "ghost film", "horror"},
+		{"game", "cyberpunk video game", "science-fiction"},
+		{"game", "maze video game", "puzzle"},
+		{"series", "tokusatsu", "action"},
+		{"game", "vehicular combat game", "action"},
+		{"movie", "speculative fiction film", "science-fiction"},
+		{"game", "Arcade", "action"},
+		{"game", "video game with LGBT character", "lgbtq"},
+		{"game", "fantasy video game", "fantasy"},
+		{"movie", "trial film", "crime"},
+		{"game", "educational video game", "educational"},
+		{"book", "LGBT-related literature", "lgbtq"},
+		{"book", "chronicle", "history"},
+		{"movie", "sword-and-sandal film", "history"},
+		{"movie", "pirate film", "adventure"},
+		{"movie", "medieval film", "history"},
+		{"game", "mecha video game", "action"},
+		{"movie", "time-travel film", "science-fiction"},
+		{"movie", "vigilante film", "action"},
+		{"game", "action role-playing game", "rpg"},
 	} {
 		if got, _ := GenreFor(tc.typ, tc.label); got != tc.want {
 			t.Errorf("GenreFor(%q, %q) = %q, want %q", tc.typ, tc.label, got, tc.want)
@@ -60,6 +89,9 @@ func TestGenreFor(t *testing.T) {
 	// Labels that fit no canonical genre stay hidden.
 	for _, tc := range []struct{ typ, label string }{
 		{"movie", "flashback film"}, {"movie", "film"}, {"movie", "epic film"}, {"game", "video game"}, {"book", ""},
+		// Formats and production labels, not genres.
+		{"movie", "silent film"}, {"movie", "independent film"}, {"movie", "art film"}, {"movie", "propaganda film"},
+		{"series", "anthology series"}, {"game", "crossover fiction"}, {"game", "casual game"},
 	} {
 		if code, ok := GenreFor(tc.typ, tc.label); ok {
 			t.Errorf("GenreFor(%q, %q) = %q, want no match", tc.typ, tc.label, code)
