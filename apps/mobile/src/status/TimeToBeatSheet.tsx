@@ -12,6 +12,7 @@ const LABEL = {
 	mainHours: "item.timeToBeat.styles.main",
 	extrasHours: "item.timeToBeat.styles.extras",
 	completionistHours: "item.timeToBeat.styles.completionist",
+	speedrunHours: "item.timeToBeat.styles.speedrun",
 } as const;
 
 export type TimeToBeatSheetProps = {

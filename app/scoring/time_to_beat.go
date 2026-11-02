@@ -21,6 +21,7 @@ type TimeToBeatHours struct {
 	Main          *float64 `json:"mainHours"`
 	Extras        *float64 `json:"extrasHours"`
 	Completionist *float64 `json:"completionistHours"`
+	Speedrun      *float64 `json:"speedrunHours"`
 }
 
 func minutes(h *float64) any {
@@ -44,15 +45,17 @@ func (w *Writer) SaveTimeToBeat(ctx context.Context, userID int64, itemID string
 
 			if _, err := tx.ExecContext(
 				ctx,
-				`INSERT INTO time_to_beat (user_id, item_id, main_minutes, extras_minutes, completionist_minutes, created_at, updated_at)
-VALUES ($1, $2, $3, $4, $5, $6, $6)
+				`INSERT INTO time_to_beat (user_id, item_id, main_minutes, extras_minutes, completionist_minutes, speedrun_minutes, created_at, updated_at)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $7)
 ON CONFLICT (user_id, item_id) DO UPDATE SET main_minutes = EXCLUDED.main_minutes,
-  extras_minutes = EXCLUDED.extras_minutes, completionist_minutes = EXCLUDED.completionist_minutes, updated_at = EXCLUDED.updated_at`,
+  extras_minutes = EXCLUDED.extras_minutes, completionist_minutes = EXCLUDED.completionist_minutes, speedrun_minutes = EXCLUDED.speedrun_minutes,
+  updated_at = EXCLUDED.updated_at`,
 				userID,
 				itemID,
 				minutes(h.Main),
 				minutes(h.Extras),
 				minutes(h.Completionist),
+				minutes(h.Speedrun),
 				now,
 			); err != nil {
 				return nil, err
@@ -138,9 +141,11 @@ func (w *Writer) Me(ctx context.Context, userID int64, itemID string) (Me, error
 		return out, err
 	}
 
-	var m, e, cm sql.NullInt64
-	err = w.DB.SQL().QueryRowContext(ctx, `SELECT main_minutes, extras_minutes, completionist_minutes FROM time_to_beat
-WHERE user_id = $1 AND item_id = $2`, userID, itemID).Scan(&m, &e, &cm)
+	var m, e, cm, sp sql.NullInt64
+	err = w.DB.SQL().
+		QueryRowContext(ctx, `SELECT main_minutes, extras_minutes, completionist_minutes, speedrun_minutes FROM time_to_beat
+WHERE user_id = $1 AND item_id = $2`, userID, itemID).
+		Scan(&m, &e, &cm, &sp)
 	switch {
 	case err == nil:
 		hours := func(n sql.NullInt64) *float64 {
@@ -151,7 +156,12 @@ WHERE user_id = $1 AND item_id = $2`, userID, itemID).Scan(&m, &e, &cm)
 
 			return &v
 		}
-		out.TimeToBeat = &TimeToBeatHours{Main: hours(m), Extras: hours(e), Completionist: hours(cm)}
+		out.TimeToBeat = &TimeToBeatHours{
+			Main:          hours(m),
+			Extras:        hours(e),
+			Completionist: hours(cm),
+			Speedrun:      hours(sp),
+		}
 	case !errors.Is(err, sql.ErrNoRows):
 		return out, err
 	}

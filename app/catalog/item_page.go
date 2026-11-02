@@ -60,6 +60,7 @@ type TimeToBeat struct {
 	Main          *float64 `json:"mainHours"`
 	Extras        *float64 `json:"extrasHours"`
 	Completionist *float64 `json:"completionistHours"`
+	Speedrun      *float64 `json:"speedrunHours"`
 	Reports       int      `json:"reports"`
 }
 
@@ -343,16 +344,17 @@ func LoadEdition(ctx context.Context, db Querier, workID, editionID string) (Edi
 func loadTimeToBeat(ctx context.Context, db Querier, itemID string) (*TimeToBeat, error) {
 	var (
 		t       TimeToBeat
-		counts  [3]int
-		medians [3]sql.NullFloat64
+		counts  [4]int
+		medians [4]sql.NullFloat64
 	)
-	err := db.QueryRowContext(ctx, `SELECT count(*), count(main_minutes), count(extras_minutes), count(completionist_minutes),
+	err := db.QueryRowContext(ctx, `SELECT count(*), count(main_minutes), count(extras_minutes), count(completionist_minutes), count(speedrun_minutes),
   percentile_cont(0.5) WITHIN GROUP (ORDER BY main_minutes),
   percentile_cont(0.5) WITHIN GROUP (ORDER BY extras_minutes),
-  percentile_cont(0.5) WITHIN GROUP (ORDER BY completionist_minutes)
+  percentile_cont(0.5) WITHIN GROUP (ORDER BY completionist_minutes),
+  percentile_cont(0.5) WITHIN GROUP (ORDER BY speedrun_minutes)
 FROM time_to_beat WHERE item_id = $1`, itemID).
 		Scan(
-			&t.Reports, &counts[0], &counts[1], &counts[2], &medians[0], &medians[1], &medians[2])
+			&t.Reports, &counts[0], &counts[1], &counts[2], &counts[3], &medians[0], &medians[1], &medians[2], &medians[3])
 	if err != nil {
 		return nil, fmt.Errorf("load time to beat: %w", err)
 	}
@@ -365,7 +367,7 @@ FROM time_to_beat WHERE item_id = $1`, itemID).
 
 		return &h
 	}
-	t.Main, t.Extras, t.Completionist = hours(0), hours(1), hours(2)
+	t.Main, t.Extras, t.Completionist, t.Speedrun = hours(0), hours(1), hours(2), hours(3)
 
 	return &t, nil
 }

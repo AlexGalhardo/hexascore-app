@@ -71,7 +71,8 @@ func TestInertiaPages_Catalog_Show(t *testing.T) {
 			fmt.Sprintf("ttb%d@example.com", i)).Scan(&uid); err != nil {
 			t.Fatal(err)
 		}
-		exec(`INSERT INTO time_to_beat (user_id, item_id, main_minutes) VALUES ($1, $2, $3)`, uid, game, minutes)
+		exec(`INSERT INTO time_to_beat (user_id, item_id, main_minutes, speedrun_minutes) VALUES ($1, $2, $3, $4)`,
+			uid, game, minutes, minutes/2)
 	}
 
 	client := app.Client(t)
@@ -83,6 +84,7 @@ func TestInertiaPages_Catalog_Show(t *testing.T) {
 		PropEquals("timeToBeat.reports", 2).
 		PropEquals("timeToBeat.mainHours", 2.0).
 		PropEquals("timeToBeat.extrasHours", nil).
+		PropEquals("timeToBeat.speedrunHours", 1.0).
 		PropEquals("cover.full", "/covers/zelda-0123456789abcdef.webp").
 		PropEquals("cover.thumb", "/covers/zelda-0123456789abcdef-t.webp").
 		MissingProp("me").

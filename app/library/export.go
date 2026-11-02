@@ -304,7 +304,7 @@ WHERE s.user_id = $1::bigint`,
 	{
 		"time_to_beat",
 		`SELECT coalesce(json_agg(json_build_object('itemId', i.id, 'type', i.type, 'title', ` + exportTitle + `,
-  'mainMinutes', b.main_minutes, 'extrasMinutes', b.extras_minutes, 'completionistMinutes', b.completionist_minutes,
+  'mainMinutes', b.main_minutes, 'extrasMinutes', b.extras_minutes, 'completionistMinutes', b.completionist_minutes, 'speedrunMinutes', b.speedrun_minutes,
   'createdAt', b.created_at, 'updatedAt', b.updated_at) ORDER BY b.created_at), '[]')
 FROM time_to_beat b JOIN items i ON i.id = b.item_id ` + exportTitleJn + `
 WHERE b.user_id = $1::bigint`,
@@ -528,7 +528,7 @@ Your personal records on HexaScore, read at one instant. Dates are ISO 8601. Sco
 - profile.json: account profile (id, email, name, username, locale, privacy settings, createdAt).
 - ratings.json: your ratings with item id, type, title, year, external ids, overall, c1..c6, ratedAt, updatedAt.
 - statuses.json: your library statuses per item.
-- time_to_beat.json: the play times you reported (mainMinutes, extrasMinutes, completionistMinutes).
+- time_to_beat.json: the play times you reported (mainMinutes, extrasMinutes, completionistMinutes, speedrunMinutes).
 - editions.json: the edition you chose per book (empty until editions can be chosen).
 - lists.json: your lists with their items, positions and notes.
 - suggestions.json: your catalog edit suggestions (empty until suggestions open).

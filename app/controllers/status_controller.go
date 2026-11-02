@@ -74,14 +74,19 @@ func (h *Status) PutTimeToBeat(c *web.Ctx) error {
 	if err != nil {
 		return err
 	}
-	if in.Main == nil && in.Extras == nil && in.Completionist == nil {
+	if in.Main == nil && in.Extras == nil && in.Completionist == nil && in.Speedrun == nil {
 		v := errs.NewValidation()
 		v.Append("mainHours", "required")
 
 		return v
 	}
 
-	hours := scoring.TimeToBeatHours{Main: in.Main, Extras: in.Extras, Completionist: in.Completionist}
+	hours := scoring.TimeToBeatHours{
+		Main:          in.Main,
+		Extras:        in.Extras,
+		Completionist: in.Completionist,
+		Speedrun:      in.Speedrun,
+	}
 	sum, err := h.w.SaveTimeToBeat(c.Context(), u.ID, c.Param("id"), hours)
 	if err != nil {
 		return err

@@ -55,15 +55,29 @@ func TestTimeToBeat(t *testing.T) {
 	for _, bad := range []any{0.25, 0.0, 1000.5, 12.3, "x"} {
 		c.PutJSON(ttb, body(bad)).AssertUnprocessable()
 	}
+	c.PutJSON(ttb, map[string]any{"speedrunHours": 2.0}).AssertOK()
+	c.PutJSON(ttb, map[string]any{"speedrunHours": 1000.5}).AssertUnprocessable()
 	c.PutJSON(ttb, map[string]any{}).AssertUnprocessable()
 	c.PutJSON(ttb, map[string]any{"mainHours": nil, "extrasHours": nil}).AssertUnprocessable()
 
-	c.PutJSON(ttb, map[string]any{"mainHours": 12.5, "extrasHours": 0.5, "completionistHours": 1000.0}).AssertOK()
-	vukemtest.AssertDatabaseHas(t, r.app, "time_to_beat",
-		map[string]any{"item_id": game, "main_minutes": 750, "extras_minutes": 30, "completionist_minutes": 60000})
+	c.PutJSON(ttb, map[string]any{"mainHours": 12.5, "extrasHours": 0.5, "completionistHours": 1000.0, "speedrunHours": 0.5}).
+		AssertOK()
+	vukemtest.AssertDatabaseHas(
+		t,
+		r.app,
+		"time_to_beat",
+		map[string]any{
+			"item_id":               game,
+			"main_minutes":          750,
+			"extras_minutes":        30,
+			"completionist_minutes": 60000,
+			"speedrun_minutes":      30,
+		},
+	)
 	me := c.Get("/app/v1/items/" + game + "/me").AssertOK()
 	me.AssertJSONPath("status", "completed")
 	me.AssertJSONPath("timeToBeat.mainHours", 12.5)
+	me.AssertJSONPath("timeToBeat.speedrunHours", 0.5)
 	me.AssertJSONPath("rating", nil)
 
 	// The report is independent of the status.

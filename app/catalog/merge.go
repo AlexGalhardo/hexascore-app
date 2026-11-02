@@ -293,7 +293,7 @@ WHERE s.item_id = $1 AND r.item_id = $2 AND r.user_id = s.user_id AND s.updated_
 		`UPDATE item_status r SET status = s.status, updated_at = s.updated_at FROM item_status s
 WHERE s.item_id = $1 AND r.item_id = $2 AND r.user_id = s.user_id AND s.updated_at > r.updated_at`,
 		`UPDATE time_to_beat r SET main_minutes = s.main_minutes, extras_minutes = s.extras_minutes,
-completionist_minutes = s.completionist_minutes, updated_at = s.updated_at FROM time_to_beat s
+completionist_minutes = s.completionist_minutes, speedrun_minutes = s.speedrun_minutes, updated_at = s.updated_at FROM time_to_beat s
 WHERE s.item_id = $1 AND r.item_id = $2 AND r.user_id = s.user_id AND s.updated_at > r.updated_at`,
 	}
 	for _, q := range stmts {

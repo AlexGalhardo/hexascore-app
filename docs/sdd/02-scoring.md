@@ -82,6 +82,8 @@ CREATE TABLE time_to_beat (         -- legacy parity: minutes, games only, only 
          (completionist_minutes IS NULL OR completionist_minutes BETWEEN 30 AND 600000)),
   CHECK (coalesce(main_minutes, extras_minutes, completionist_minutes) IS NOT NULL));
 CREATE INDEX time_to_beat_item_idx ON time_to_beat (item_id);
+-- 2026-11-02 (owner): fourth style, same bounds; migration 20261102130000 adds `speedrun_minutes int` with its own
+-- 30..600000 CHECK and widens the "at least one style" CHECK to include it.
 
 -- Create after score_bursts. Keyed by (user, item), not FK to ratings: survives delete + re-create, so deleting does not launder a flag.
 CREATE TABLE rating_flags (
@@ -168,7 +170,7 @@ Input is in stars on every surface; the server multiplies by 10. Errors are RFC 
 | `DELETE /app/v1/items/{id}/rating` | same | none | 204 | 404 |
 | `GET /app/v1/items/{id}/me` | token | none | `{rating, status, timeToBeat}` | 404 |
 | `PUT/DELETE /app/v1/items/{id}/status` | token, `status:write` | `{"status":"completed"}` | 200/204 | 422, 404 |
-| `PUT/DELETE /app/v1/items/{id}/time-to-beat` | token, `status:write` | `{"mainHours":12.5,...}` 0.5 h steps, 0.5–1,000 h | 200/204 | 422 `not-a-game` |
+| `PUT/DELETE /app/v1/items/{id}/time-to-beat` | token, `status:write` | `{"mainHours":12.5,...}` (`mainHours`, `extrasHours`, `completionistHours`, `speedrunHours`) 0.5 h steps, 0.5–1,000 h | 200/204 | 422 `not-a-game` |
 
 Web (Inertia) uses the same handlers on session routes (SDD 09); validation failures return 303 with `props.errors`. Per-user rate limit: `ratelimit.Middleware(limiters("rating", 30, time.Minute), ratelimit.ByUser(guard))` (vukem `https://vukem.dev/docs/security/rate-limiting` "Rate limiting"), legacy parity with `hitRateLimit("rating:<userId>", 30, 60s)`.
 

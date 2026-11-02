@@ -6,7 +6,7 @@ import type { QueueEntry } from "../queue/store";
 export const STATUSES = ["want", "in_progress", "completed", "dropped"] as const;
 export type ItemStatus = (typeof STATUSES)[number];
 
-export const STYLES = ["mainHours", "extrasHours", "completionistHours"] as const;
+export const STYLES = ["mainHours", "extrasHours", "completionistHours", "speedrunHours"] as const;
 export type TimeToBeat = Partial<Record<(typeof STYLES)[number], number>>;
 
 type Field = "status" | "timeToBeat";

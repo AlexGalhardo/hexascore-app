@@ -17,6 +17,7 @@ type TimeToBeat struct {
 	Main          *float64 `json:"mainHours"          form:"mainHours"`
 	Extras        *float64 `json:"extrasHours"        form:"extrasHours"`
 	Completionist *float64 `json:"completionistHours" form:"completionistHours"`
+	Speedrun      *float64 `json:"speedrunHours"      form:"speedrunHours"`
 }
 
 var hours = z.Float().Min(0.5).Max(1000).MultipleOf(0.5).Nullable().Optional()
@@ -26,4 +27,5 @@ var TimeToBeatSchema = z.Struct[TimeToBeat](z.Shape{
 	"mainHours":          hours,
 	"extrasHours":        hours,
 	"completionistHours": hours,
+	"speedrunHours":      hours,
 })
