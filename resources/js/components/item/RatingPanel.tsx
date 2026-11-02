@@ -50,7 +50,7 @@ export default function RatingPanel({ itemId, type, mine, canWrite, children }: 
 		<section
 			id="your-rating"
 			aria-labelledby="rating-heading"
-			className="grid scroll-mt-20 gap-4 bg-surface p-5"
+			className="grid scroll-mt-20 gap-4 bg-surface shadow-ledge-secondary p-5"
 		>
 			<h2 id="rating-heading" className="text-2xl leading-tight font-bold">
 				{t("item.rate")}

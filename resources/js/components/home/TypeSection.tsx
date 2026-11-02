@@ -151,7 +151,10 @@ function TrendCard({
 }): ReactElement {
 	const t = useT();
 	return (
-		<li key={item.id} className={`flex gap-4 border-2 bg-surface p-3 ${CATEGORY_BORDER[type]}`}>
+		<li
+			key={item.id}
+			className={`flex gap-4 border-2 bg-surface p-3 shadow-ledge-secondary ${CATEGORY_BORDER[type]}`}
+		>
 			<CoverThumb cover={item.cover} alt="" size="trend" priority={eager} />
 			<div className="grid min-w-0 flex-1 content-start gap-1">
 				{/* Rank left, score right on one row, so the three cards line their scores up (owner 2026-11-02). */}
