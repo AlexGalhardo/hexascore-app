@@ -31,13 +31,30 @@ afterEach(() => {
 	del.mockClear();
 });
 
-const medians = { mainHours: 12, extrasHours: null, completionistHours: 40, reports: 5 };
+const medians = {
+	mainHours: 12,
+	extrasHours: null,
+	completionistHours: 40,
+	speedrunHours: 3,
+	reports: 5,
+};
 
-test("shows the median per style with the report count, skipping empty styles", () => {
+test("shows a table with one column per style, a dash for empty ones, and the report count", () => {
 	render(<TimeToBeat itemId="i1" medians={medians} mine={null} canEdit={false} />);
-	expect(screen.getByText("item.timeToBeat.hours 12")).toBeTruthy();
-	expect(screen.getByText("item.timeToBeat.hours 40")).toBeTruthy();
-	expect(screen.queryByText("item.timeToBeat.styles.extras")).toBeNull();
+	const headers = screen.getAllByRole("columnheader").map((h) => h.textContent);
+	expect(headers).toEqual([
+		"item.timeToBeat.styles.main",
+		"item.timeToBeat.styles.extras",
+		"item.timeToBeat.styles.completionist",
+		"item.timeToBeat.styles.speedrun",
+	]);
+	const cells = screen.getAllByRole("cell").map((c) => c.textContent);
+	expect(cells).toEqual([
+		"item.timeToBeat.hours 12",
+		"–",
+		"item.timeToBeat.hours 40",
+		"item.timeToBeat.hours 3",
+	]);
 	expect(screen.getByText(/item.timeToBeat.reports 5/)).toBeTruthy();
 });
 
@@ -50,12 +67,18 @@ test("signed out: no form, a log in link", () => {
 });
 
 test("no reports: empty message; signed in can still submit, and clear their own entry", async () => {
-	const empty = { mainHours: null, extrasHours: null, completionistHours: null, reports: 0 };
+	const empty = {
+		mainHours: null,
+		extrasHours: null,
+		completionistHours: null,
+		speedrunHours: null,
+		reports: 0,
+	};
 	render(
 		<TimeToBeat
 			itemId="i1"
 			medians={empty}
-			mine={{ mainHours: 10, extrasHours: null, completionistHours: null }}
+			mine={{ mainHours: 10, extrasHours: null, completionistHours: null, speedrunHours: 2 }}
 			canEdit
 		/>,
 	);
@@ -64,7 +87,7 @@ test("no reports: empty message; signed in can still submit, and clear their own
 	await userEvent.click(screen.getByRole("button", { name: "item.timeToBeat.save" }));
 	expect(put).toHaveBeenCalledWith(
 		"/items/i1/time-to-beat",
-		{ mainHours: 10, extrasHours: null, completionistHours: null },
+		{ mainHours: 10, extrasHours: null, completionistHours: null, speedrunHours: 2 },
 		expect.anything(),
 	);
 

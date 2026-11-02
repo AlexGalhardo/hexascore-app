@@ -14,6 +14,7 @@ const STYLES = [
 	["main", "mainHours"],
 	["extras", "extrasHours"],
 	["completionist", "completionistHours"],
+	["speedrun", "speedrunHours"],
 ] as const;
 
 interface Props {
@@ -45,29 +46,34 @@ export default function TimeToBeat({ itemId, medians, mine, canEdit }: Props) {
 
 	return (
 		<section aria-labelledby="ttb-heading" className="grid content-start gap-3">
-			<h2 id="ttb-heading" className="text-2xl">
+			<h2 id="ttb-heading" className="text-2xl font-bold">
 				{t("item.timeToBeat.title")}
 			</h2>
 			{none ? (
 				<p>{t("item.timeToBeat.none")}</p>
 			) : (
-				<dl className="grid">
-					{STYLES.map(([style, k]) =>
-						medians[k] === null ? null : (
-							<div
-								key={style}
-								className="grid grid-cols-[8rem_1fr] gap-4 border-b border-border py-2.5 text-sm"
-							>
-								<dt className="text-muted">
+				<table className="w-full text-sm">
+					<thead>
+						<tr className="border-b border-border text-left text-muted">
+							{STYLES.map(([style]) => (
+								<th key={style} scope="col" className="py-2.5 pr-3 font-semibold">
 									{t(`item.timeToBeat.styles.${style}`)}
-								</dt>
-								<dd className="tabular-nums">
-									{t("item.timeToBeat.hours", { hours: medians[k] })}
-								</dd>
-							</div>
-						),
-					)}
-				</dl>
+								</th>
+							))}
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							{STYLES.map(([style, k]) => (
+								<td key={style} className="py-2.5 pr-3 tabular-nums">
+									{medians[k] === null
+										? "–"
+										: t("item.timeToBeat.hours", { hours: medians[k] })}
+								</td>
+							))}
+						</tr>
+					</tbody>
+				</table>
 			)}
 			{!none && (
 				<p className="text-xs text-muted">
@@ -87,7 +93,7 @@ export default function TimeToBeat({ itemId, medians, mine, canEdit }: Props) {
 						{t("item.timeToBeat.yours")}
 					</h3>
 					<p className="text-xs text-muted">{t("item.timeToBeat.yoursHint")}</p>
-					<div className="grid grid-cols-3 gap-2">
+					<div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
 						{STYLES.map(([style, k]) => (
 							<label
 								key={style}

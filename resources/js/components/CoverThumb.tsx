@@ -29,11 +29,11 @@ const BOX: Record<CoverSize, string> = {
 	sm: "w-8 h-12",
 	md: "w-11 h-16",
 	trend: "w-25 h-37.5 md:w-30 md:h-45",
-	lg: "w-24 h-36 md:w-60 md:h-90",
+	lg: "w-24 h-36 sm:w-full sm:h-auto sm:aspect-[2/3]",
 	card: "w-full h-auto aspect-[2/3]",
 };
 
-// CoverThumb is the list-row cover (32×48 or 44×64; "lg" 144×208 for the item page header), 96w/600w sources, lazy.
+// CoverThumb is the list-row cover (32×48 or 44×64; "lg" for the item page, shown whole (object-contain)), 96w/600w sources, lazy.
 // The item page cover passes priority for eager loading with high fetch priority.
 // Without a cover it keeps the same box so the row does not shift.
 export default function CoverThumb({
@@ -71,7 +71,7 @@ export default function CoverThumb({
 			loading={priority ? "eager" : "lazy"}
 			fetchPriority={priority ? "high" : "auto"}
 			decoding="async"
-			className={`shrink-0 rounded-sm bg-surface object-cover ${BOX[size]}`}
+			className={`shrink-0 rounded-sm bg-surface ${size === "lg" ? "object-contain" : "object-cover"} ${BOX[size]}`}
 		/>
 	);
 }

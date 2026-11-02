@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
+import { btnClass } from "../ui/Btn";
 import type { ItemType } from "./types";
 
 const STATUSES = ["want", "in_progress", "completed", "dropped"] as const;
@@ -48,7 +49,7 @@ export default function StatusPicker({
 						aria-pressed={value === s}
 						disabled={busy}
 						onClick={() => change(value === s ? "" : s)}
-						className="min-h-11 rounded-xs border border-fg px-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary aria-pressed:bg-fg aria-pressed:text-bg not-aria-pressed:bg-bg not-aria-pressed:hover:bg-hover disabled:cursor-wait"
+						className={btnClass(value === s ? "primary" : "secondary", "px-2 text-sm")}
 					>
 						{t(`social.status.${type}.${s}`)}
 					</button>

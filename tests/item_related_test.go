@@ -117,28 +117,16 @@ func (r *relatedRig) link(item, entity, role string) {
 		item, entity, role)
 }
 
-func TestItemRelated_ShowProps(t *testing.T) {
+func TestItemRelated_ShowHasNoRecommendationProps(t *testing.T) {
 	t.Parallel()
 
-	r, ids := newRelatedRig(t)
+	r, _ := newRelatedRig(t)
 	c := r.app.Client(t)
 
-	// 9 stored, one hidden: the page shows the 8 public ones, in stored order, each with its top shared feature.
+	// The web page dropped "More like this" (owner request 2026-11-02); /app/v1 still serves the lists (TestAppRelated).
 	c.Inertia("").Get("/games/rel-1").AssertOK().AssertInertia("Catalog/Show").
-		HasProp("similar", 8).
-		PropEquals("similar.0.id", ids[0]).
-		PropEquals("similar.0.reason.kind", "franchise").
-		PropEquals("similar.0.reason.entity", "Saga").
-		PropEquals("similar.1.reason.kind", "genre").
-		PropEquals("similar.1.reason.entity", "RPG").
-		HasProp("crossMedia", 2).
-		PropEquals("crossMedia.0.relation", "adapted_as").
-		PropEquals("crossMedia.1.relation", "based_on")
-
-	// An item with no item_similar row and no links gets empty lists, never null.
-	c.Inertia("").Get("/games/rel-2").AssertOK().AssertInertia("Catalog/Show").
-		HasProp("similar", 0).
-		HasProp("crossMedia", 0)
+		MissingProp("similar").
+		MissingProp("crossMedia")
 }
 
 func TestAppRelated(t *testing.T) {

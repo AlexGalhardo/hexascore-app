@@ -52,7 +52,7 @@ export default function RatingPanel({ itemId, type, mine, canWrite, children }: 
 			aria-labelledby="rating-heading"
 			className="grid scroll-mt-20 gap-4 bg-surface p-5"
 		>
-			<h2 id="rating-heading" className="text-2xl leading-tight">
+			<h2 id="rating-heading" className="text-2xl leading-tight font-bold">
 				{t("item.rate")}
 			</h2>
 			{/* Hidden from sight, not from assistive tech: each star group points here for the keys. */}

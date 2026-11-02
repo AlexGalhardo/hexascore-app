@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - **docs:** The public API documentation pages are translated into pt-BR and es (`resources/docs/pt-BR/`, `resources/docs/es/`, built into `docs.pt-BR.json` and `docs.es.json`); the docs controller picks the request locale and falls back to English per page, slugs unchanged
+- **catalog:** Time to beat gains a fourth, user-reported style, Speedrun (`speedrun_minutes`, `speedrunHours` in the web form, `/app/v1/items/{id}/time-to-beat`, `/me`, the user data export and the Android sheet; same 0.5–1,000 h bounds), shown beside the other three in a table with Main story, Main + extras, Completionist and Speedrun columns
 - **ingest:** Editions resolve their P123 publisher through the credit matcher (QID, then name; no native entity from a bare QID), the work points at its primary edition (earliest in the original language, a covered one first), the stored Open Library edition fills the ISBN, language and year Wikidata lacks or adds an edition, and backfill runs pause 100 ms between batches through the runner clock (P6.B.3.1)
 - **mobile:** Manual Gradle-on-Actions release build (`mobile-gradle.yml`, D-34): signed AAB and APK, fails closed on missing upload-key secrets or a different signer; `app.config.ts` reads `ANDROID_VERSION_CODE` only when set (P5.C.1.2)
 - **mobile:** `mobile-v*` tag builds production behind the API contract job and the `play-store` environment approval, refusing to submit when the environment has no required reviewer (P5.C.1.3)
@@ -38,6 +39,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **ui:** API docs code blocks get a copy button (Clipboard API); /profile lays its sections out in three equal columns from lg up; section listings start closer to the navbar; landing section names are bold
 - **billing:** Paid API plans are now `hobby` (10,000 requests per month, 20 items per request, 1 request per second with a burst of 5, US$5 / R$20 / €5) and `pro` (50,000 per month, 50 items, 3 per second with a burst of 15, US$10 / R$50 / €10), recorded in D-33, ADR 0015 and SDD 05; env `STRIPE_PRICE_HOBBY` replaces `STRIPE_PRICE_BUSINESS`; webhooks and exports open to both plans (2 and 10 endpoints), item activity is pro only
 - **ui:** `/pricing` subscribe buttons post straight to Stripe Checkout in the selected currency (signed-out visitors still go to sign-up); the subtitle and the data coverage block are gone, only the coverage link stays
+- **ui:** Item page: the first column is 20% wider and shows the whole cover (no cropping); the title and the Synopsis, Time to beat, Details, Your rating, Scores by category (was "Category averages") and Trailers headings are bold; Details lists one fact per row, heading first and one linked value per line; the Your rating status buttons use the standard button look; toasts on item pages appear top-right under the navbar (`Flash` takes a `position`); the synopsis shows only a Source link, the licence line is gone (credits are on /about)
 - **ui:** Hover on navbar, menu and footer links inverts the colours (ink background, page-coloured text) in both themes; item page sections lose their top rules; trending cards put the score on the rank row and drop the score band and rating count
 - **catalog:** `covers:rekey` handles 16 items at a time and reuses bucket connections (VF-077 workaround), so a full dry run finishes in minutes instead of exhausting the container's ports
 - **ui:** No italics anywhere; the navbar and footer write the brand as "HexaScore"; signed-out menu items carry icons; trending card titles and scores are larger; the about, terms and privacy layout is narrower and centred without the rule above the contents; the IGDB and TMDB credits moved from the footer to a "Data credits" section on /about (ADR 0006)
@@ -75,6 +77,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Removed
 
 - **billing:** The legacy `pro` (US$6) and `business` plans and the `STRIPE_PRICE_BUSINESS` variable; subscriptions on a retired price id no longer map to a plan
+- **ui:** "More like this" and "In other media" blocks on item pages, with the `similar` and `crossMedia` Inertia props, the reco impression and click log lines and `app/recommend/related/events.go`; `/app/v1` related lists and the Android app keep them
 - **ui:** "Recently rated by members" landing strip (item 5), the trending definition line in the footer (item 16), the navbar notifications bell and unread badge (item 27; `/me/notifications` is unchanged), the "Members" label on `/signup` and `/login` (item 8) and the `/user/two-factor` page (item 21)
 - **ui:** Intro paragraph removed from `/contact`
 

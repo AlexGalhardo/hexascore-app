@@ -7,7 +7,6 @@ import AddToList, { type ListChoice } from "../../components/item/AddToList";
 import CategoryAverages from "../../components/item/CategoryAverages";
 import Editions from "../../components/item/Editions";
 import FriendsScore, { type FriendsScoreData } from "../../components/item/FriendsScore";
-import MoreLikeThis, { type CrossItem, type SimilarItem } from "../../components/item/MoreLikeThis";
 import RatingPanel from "../../components/item/RatingPanel";
 import Reviews, { type ReviewEntry } from "../../components/item/Reviews";
 import ScoreBlock from "../../components/item/ScoreBlock";
@@ -42,7 +41,7 @@ interface Item {
 	type: ItemType;
 	slug: string;
 	title?: string;
-	synopsis?: { text: string; licence: string; sourceUrl?: string };
+	synopsis?: { text: string; licence?: string; sourceUrl?: string };
 	releaseDate?: string;
 	runtimeMinutes?: number;
 	pageCount?: number;
@@ -74,8 +73,6 @@ interface Props {
 	friendsScore?: FriendsScoreData | null;
 	/** Share-card path while the feature flag `social` is on and the page is public (SDD 14 §11 item 12). */
 	ogImage?: string;
-	similar?: SimilarItem[];
-	crossMedia?: CrossItem[];
 }
 
 const LD_TYPE: Record<ItemType, string> = {
@@ -130,8 +127,6 @@ export default function Show({
 	reviews,
 	friendsScore,
 	ogImage,
-	similar = [],
-	crossMedia = [],
 }: Props) {
 	const t = useT();
 	const { locale, auth } = usePage<SharedProps>().props;
@@ -215,7 +210,7 @@ export default function Show({
 			    selectable; keyboard focus and screen readers are unaffected by user-select. */}
 			<article
 				data-testid="item-page"
-				className="grid gap-8 select-none [&_input]:select-text [&_textarea]:select-text sm:grid-cols-[12rem_minmax(0,1fr)] lg:grid-cols-[12rem_minmax(0,1fr)_19rem] lg:gap-x-10 xl:grid-cols-[14rem_minmax(0,1fr)_22rem]"
+				className="grid gap-8 select-none [&_input]:select-text [&_textarea]:select-text sm:grid-cols-[14.4rem_minmax(0,1fr)] lg:grid-cols-[14.4rem_minmax(0,1fr)_19rem] lg:gap-x-10 xl:grid-cols-[16.8rem_minmax(0,1fr)_22rem]"
 			>
 				<div data-testid="item-col-actions" className="grid content-start gap-4">
 					<CoverThumb cover={cover} alt={title} size="lg" priority />
@@ -258,7 +253,7 @@ export default function Show({
 							{t("community.recent.link")}
 						</Link>
 					</div>
-					<Section id="details" title={t("item.details")}>
+					<Section id="details" title={t("item.details")} bold>
 						<dl className="grid">
 							{release && (
 								<DetailRow label={t("item.fields.releaseDate")}>
@@ -277,18 +272,19 @@ export default function Show({
 							)}
 							{roles.map((role) => (
 								<DetailRow key={role} label={t(`item.roles.${role}`)}>
-									{entities[role].map((e, i) => (
-										<span key={e.id}>
-											{i > 0 && ", "}
-											<Link
-												href={entityHref(e)}
-												className="text-primary hover:underline"
-											>
-												{e.name}
-											</Link>
-											{e.character && ` (${e.character})`}
-										</span>
-									))}
+									<ul className="grid gap-0.5">
+										{entities[role].map((e) => (
+											<li key={e.id}>
+												<Link
+													href={entityHref(e)}
+													className="text-primary hover:underline"
+												>
+													{e.name}
+												</Link>
+												{e.character && ` (${e.character})`}
+											</li>
+										))}
+									</ul>
 								</DetailRow>
 							))}
 						</dl>
@@ -297,7 +293,9 @@ export default function Show({
 
 				<div data-testid="item-col-main" className="grid min-w-0 content-start gap-10">
 					<header className="grid content-start gap-4">
-						<h1 className="text-3xl leading-none sm:text-4xl md:text-5xl">{title}</h1>
+						<h1 className="text-3xl leading-none font-bold sm:text-4xl md:text-5xl">
+							{title}
+						</h1>
 						{ogImage && <ShareButton title={title} />}
 						{chips.length > 0 && (
 							<ul data-testid="item-chips" className="flex flex-wrap gap-2">
@@ -318,25 +316,22 @@ export default function Show({
 						)}
 					</header>
 
-					<Section id="synopsis" title={t("item.synopsis")}>
+					<Section id="synopsis" title={t("item.synopsis")} bold>
 						{item.synopsis ? (
 							<>
 								<p className="text-lg/relaxed">{item.synopsis.text}</p>
-								<p className="text-xs text-muted">
-									{t("item.license", { license: item.synopsis.licence })}
-									{item.synopsis.sourceUrl && (
-										<>
-											{" · "}
-											<a
-												href={item.synopsis.sourceUrl}
-												rel="noopener noreferrer nofollow"
-												className="text-primary hover:underline"
-											>
-												{t("item.source")}
-											</a>
-										</>
-									)}
-								</p>
+								{/* CC BY-SA (ADR 0006) still needs the link to the source; the licence name lives on /about. */}
+								{item.synopsis.sourceUrl && (
+									<p className="text-xs">
+										<a
+											href={item.synopsis.sourceUrl}
+											rel="noopener noreferrer nofollow"
+											className="text-primary hover:underline"
+										>
+											{t("item.source")}
+										</a>
+									</p>
+								)}
 							</>
 						) : (
 							<p className="text-muted">{t("item.noSynopsis")}</p>
@@ -352,7 +347,7 @@ export default function Show({
 						/>
 					)}
 
-					<Section id="averages" title={t("item.categoryScores")}>
+					<Section id="averages" title={t("item.categoryScores")} bold>
 						<CategoryAverages
 							keys={keys}
 							labels={categoryLabels}
@@ -364,6 +359,7 @@ export default function Show({
 						<Section
 							id="trailers"
 							title={t("item.trailers")}
+							bold
 							count={Math.min(trailers.length, 3)}
 						>
 							<Trailers trailers={trailers.slice(0, 3)} />
@@ -388,8 +384,6 @@ export default function Show({
 							/>
 						</Section>
 					)}
-
-					<MoreLikeThis type={item.type} similar={similar} crossMedia={crossMedia} />
 				</div>
 
 				<aside
@@ -426,16 +420,18 @@ function Section({
 	id,
 	title,
 	count,
+	bold = false,
 	children,
 }: {
 	id: string;
 	title: string;
 	count?: number;
+	bold?: boolean;
 	children: ReactNode;
 }) {
 	return (
 		<section aria-labelledby={`${id}-heading`} className="grid content-start gap-4">
-			<h2 id={`${id}-heading`} className="text-2xl">
+			<h2 id={`${id}-heading`} className={bold ? "text-2xl font-bold" : "text-2xl"}>
 				{title}
 				{count !== undefined && (
 					<span className="ml-2 align-middle font-sans text-xs font-normal text-muted">
@@ -450,8 +446,8 @@ function Section({
 
 function DetailRow({ label, children }: { label: string; children: ReactNode }) {
 	return (
-		<div className="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-3 border-b border-border py-2.5 text-sm">
-			<dt className="text-muted">{label}</dt>
+		<div className="grid gap-1 border-b border-border py-2.5 text-sm">
+			<dt className="font-semibold text-muted">{label}</dt>
 			<dd>{children}</dd>
 		</div>
 	);

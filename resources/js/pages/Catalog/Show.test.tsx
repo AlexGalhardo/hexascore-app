@@ -164,3 +164,61 @@ test("the item page blocks mouse text selection but keeps fields selectable", ()
 	expect(page.className).toContain("[&_input]:select-text");
 	expect(page.className).toContain("[&_textarea]:select-text");
 });
+
+test("synopsis shows no licence line, only the source link; no recommendations block", () => {
+	auth = null;
+	render(
+		<Show
+			{...props}
+			item={{
+				...props.item,
+				synopsis: {
+					text: "An online world.",
+					licence: "CC BY-SA",
+					sourceUrl: "https://en.wikipedia.org/wiki/WoW",
+				},
+			}}
+		/>,
+	);
+	expect(screen.queryByText(/item.license/)).toBeNull();
+	expect(screen.getByRole("link", { name: "item.source" }).getAttribute("href")).toBe(
+		"https://en.wikipedia.org/wiki/WoW",
+	);
+	expect(screen.queryByText(/item.moreLike/)).toBeNull();
+});
+
+test("details: each fact is a heading with its values below, one linked genre per line", () => {
+	auth = null;
+	render(
+		<Show
+			{...props}
+			entities={{
+				...props.entities,
+				genre: [
+					{ id: "g1", kind: "genre", slug: "mmorpg", name: "MMORPG" },
+					{ id: "g2", kind: "genre", slug: "rpg", name: "RPG" },
+				],
+			}}
+		/>,
+	);
+	const details = screen.getByTestId("item-col-actions").querySelector("dl") as HTMLElement;
+	const genres = [...details.querySelectorAll("dt")].find(
+		(d) => d.textContent === "item.roles.genre",
+	);
+	const items = genres?.nextElementSibling?.querySelectorAll("li a");
+	expect([...(items ?? [])].map((a) => a.textContent)).toEqual(["MMORPG", "RPG"]);
+});
+
+test("headings of the key sections are bold", () => {
+	auth = null;
+	render(<Show {...props} />);
+	for (const id of [
+		"details-heading",
+		"synopsis-heading",
+		"averages-heading",
+		"rating-heading",
+	]) {
+		expect(document.getElementById(id)?.className).toContain("font-bold");
+	}
+	expect(screen.getByRole("heading", { level: 1 }).className).toContain("font-bold");
+});

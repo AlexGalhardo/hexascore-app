@@ -14,6 +14,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 	const page = usePage<SharedProps>();
 	const { auth } = page.props;
 	const [announcement, setAnnouncement] = useState("");
+	const toastPosition = page.component === "Catalog/Show" ? "top" : "bottom";
 
 	// Client-side visits keep the server-rendered <html>, so follow the locale of the page (SDD 09 §7.6).
 	useEffect(() => {
@@ -67,8 +68,12 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 				{children}
 			</main>
 			<Footer />
-			{typeof success === "string" && <Flash message={success} kind="status" />}
-			{typeof flash?.error === "string" && <Flash message={flash.error} kind="error" />}
+			{typeof success === "string" && (
+				<Flash message={success} kind="status" position={toastPosition} />
+			)}
+			{typeof flash?.error === "string" && (
+				<Flash message={flash.error} kind="error" position={toastPosition} />
+			)}
 			<div aria-live="polite" role="status" className="sr-only">
 				{announcement}
 			</div>

@@ -5,8 +5,17 @@ import { useT } from "../lib/useT";
 const DISMISS_MS = 6000;
 
 // Flash shows a flash message as a toast: role=status, or role=alert for
-// errors; it closes after 6 s, paused while hovered or focused (SDD 09 §7.9).
-export default function Flash({ message, kind }: { message: string; kind: "status" | "error" }) {
+// errors; it closes after 6 s, paused while hovered or focused (SDD 09 §7.9). It sits bottom-right unless
+// position="top" (top-right, under the sticky navbar), which the item page asks for.
+export default function Flash({
+	message,
+	kind,
+	position = "bottom",
+}: {
+	message: string;
+	kind: "status" | "error";
+	position?: "top" | "bottom";
+}) {
 	const t = useT();
 	const [open, setOpen] = useState(true);
 	const [paused, setPaused] = useState(false);
@@ -35,7 +44,7 @@ export default function Flash({ message, kind }: { message: string; kind: "statu
 			onMouseLeave={() => setPaused(false)}
 			onFocus={() => setPaused(true)}
 			onBlur={() => setPaused(false)}
-			className={`fixed right-4 bottom-4 z-[70] flex max-w-sm items-start gap-3 rounded-md border bg-surface px-4 py-3 shadow-lg ${tone}`}
+			className={`fixed right-4 ${position === "top" ? "top-20" : "bottom-4"} z-[70] flex max-w-sm items-start gap-3 rounded-md border bg-surface px-4 py-3 shadow-lg ${tone}`}
 		>
 			<p>{message}</p>
 			<button

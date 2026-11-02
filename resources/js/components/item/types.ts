@@ -4,6 +4,7 @@ export interface Hours {
 	mainHours: number | null;
 	extrasHours: number | null;
 	completionistHours: number | null;
+	speedrunHours: number | null;
 }
 
 export interface Me {

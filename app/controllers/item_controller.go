@@ -15,7 +15,6 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
-	"github.com/AlexGalhardo/hexascore-app/app/recommend/related"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
@@ -27,7 +26,6 @@ type Item struct {
 	user   func(c *web.Ctx) (models.User, error)
 	// Social adds the deferred `reviews` prop while the feature flag `social` is on (SDD 14 §12.10); nil on SQLite.
 	Social *social.Follows
-	reco   related.Events
 }
 
 // NewItem builds the handlers; writer reads the viewer's own rating, status and time to beat.
@@ -35,9 +33,8 @@ func NewItem(
 	app *vukem.App,
 	writer *scoring.Writer,
 	user func(c *web.Ctx) (models.User, error),
-	reco related.Events,
 ) *Item {
-	return &Item{app: app, writer: writer, user: user, reco: reco}
+	return &Item{app: app, writer: writer, user: user}
 }
 
 // Show renders Catalog/Show for the item type typ; `me` and `myLists` exist only when logged in.
@@ -65,22 +62,6 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 			"timeToBeat":    page.TimeToBeat,
 			"trailers":      page.Trailers,
 			"cover":         page.Cover,
-		}
-
-		rel, err := related.Load(c.Context(), db, page.Item.ID, typ, i18n.Locale(c.Context()))
-		if err != nil {
-			return err
-		}
-
-		props["similar"], props["crossMedia"] = rel.Similar, rel.CrossMedia
-		if len(rel.Similar) > 0 {
-			h.reco.Impression(c.Context(), "similar", typ, page.Item.ID)
-		}
-		if len(rel.CrossMedia) > 0 {
-			h.reco.Impression(c.Context(), "crossmedia", typ, page.Item.ID)
-		}
-		if from := related.FromSurface(c.Query("from")); from != "" {
-			h.reco.Click(c.Context(), from, typ, page.Item.ID)
 		}
 
 		var viewerID int64

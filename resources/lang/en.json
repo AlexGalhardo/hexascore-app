@@ -973,7 +973,7 @@
     "coverAlt": "Cover of {title}",
     "notEnough": "Not enough ratings",
     "notEnoughHint": "The score appears after {min} ratings.",
-    "categoryScores": "Category averages",
+    "categoryScores": "Scores by category",
     "seeUserScores": "See users' scores",
     "userScores": "Users' scores",
     "userScoresHint": "Only public profiles are listed.",
@@ -1022,7 +1022,6 @@
     },
     "synopsis": "Synopsis",
     "noSynopsis": "No synopsis yet.",
-    "license": "Text license: {license}",
     "source": "Source",
     "coverCredit": "Cover: {credit}",
     "fallbackNotice": "Not available in your language yet — showing the English version.",
@@ -1072,7 +1071,8 @@
       "styles": {
         "main": "Main story",
         "extras": "Main + extras",
-        "completionist": "Completionist"
+        "completionist": "Completionist",
+        "speedrun": "Speedrun"
       },
       "hours": "{hours} h",
       "reports": {
@@ -1257,7 +1257,7 @@
         "heading": "1. The service",
         "body": {
           "0": "We run a database of games, movies, TV series and books where registered users score each work in six categories from 0 to 100. Community scores are averages of user ratings and are shown only after an item has at least 5 ratings.",
-          "1": "Item metadata comes from open sources and public store data: Wikidata (CC0), Wikipedia, Open Library, Steam and GOG. Synopses from Wikipedia are licensed under CC BY-SA 4.0 and are shown with their license and a link to the original article. Covers come from Open Library, Steam, GOG or Wikimedia Commons; when the license requires it, the item page credits the source, author and license. Links to external scores (such as IMDb or Metacritic) are provided for reference; those scores, the cover art and all trademarks belong to their owners."
+          "1": "Item metadata comes from open sources and public store data: Wikidata (CC0), Wikipedia, Open Library, Steam and GOG. Synopses from Wikipedia are licensed under CC BY-SA 4.0 and are shown with a link to the original article. Covers come from Open Library, Steam, GOG or Wikimedia Commons; when the license requires it, the item page credits the source, author and license. Links to external scores (such as IMDb or Metacritic) are provided for reference; those scores, the cover art and all trademarks belong to their owners."
         }
       },
       "1": {

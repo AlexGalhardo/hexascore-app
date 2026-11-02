@@ -973,7 +973,7 @@
     "coverAlt": "Capa de {title}",
     "notEnough": "Avaliações insuficientes",
     "notEnoughHint": "A nota aparece a partir de {min} avaliações.",
-    "categoryScores": "Médias por categoria",
+    "categoryScores": "Notas por categoria",
     "seeUserScores": "Ver notas dos usuários",
     "userScores": "Notas dos usuários",
     "userScoresHint": "Só aparecem perfis públicos.",
@@ -1022,7 +1022,6 @@
     },
     "synopsis": "Sinopse",
     "noSynopsis": "Ainda sem sinopse.",
-    "license": "Licença do texto: {license}",
     "source": "Fonte",
     "coverCredit": "Capa: {credit}",
     "fallbackNotice": "Ainda não disponível em português — exibindo a versão em inglês.",
@@ -1072,7 +1071,8 @@
       "styles": {
         "main": "História principal",
         "extras": "Principal + extras",
-        "completionist": "Completista"
+        "completionist": "Completista",
+        "speedrun": "Speedrun"
       },
       "hours": "{hours} h",
       "reports": {
@@ -1257,7 +1257,7 @@
         "heading": "1. O serviço",
         "body": {
           "0": "Mantemos uma base de jogos, filmes, séries e livros em que usuários cadastrados avaliam cada obra em seis categorias, de 0 a 100. As notas da comunidade são médias das avaliações e só aparecem quando o item tem pelo menos 5 avaliações.",
-          "1": "Os metadados dos itens vêm de fontes abertas e de dados públicos de lojas: Wikidata (CC0), Wikipedia, Open Library, Steam e GOG. Sinopses da Wikipedia são licenciadas sob CC BY-SA 4.0 e aparecem com a licença e um link para o artigo original. As capas vêm da Open Library, Steam, GOG ou Wikimedia Commons; quando a licença exige, a página do item credita a fonte, o autor e a licença. Links para notas externas (como IMDb ou Metacritic) servem de referência; essas notas, as capas e todas as marcas pertencem aos seus donos."
+          "1": "Os metadados dos itens vêm de fontes abertas e de dados públicos de lojas: Wikidata (CC0), Wikipedia, Open Library, Steam e GOG. Sinopses da Wikipedia são licenciadas sob CC BY-SA 4.0 e aparecem com um link para o artigo original. As capas vêm da Open Library, Steam, GOG ou Wikimedia Commons; quando a licença exige, a página do item credita a fonte, o autor e a licença. Links para notas externas (como IMDb ou Metacritic) servem de referência; essas notas, as capas e todas as marcas pertencem aos seus donos."
         }
       },
       "1": {

@@ -973,7 +973,7 @@
     "coverAlt": "Portada de {title}",
     "notEnough": "Valoraciones insuficientes",
     "notEnoughHint": "La nota aparece a partir de {min} valoraciones.",
-    "categoryScores": "Promedios por categoría",
+    "categoryScores": "Notas por categoría",
     "seeUserScores": "Ver notas de usuarios",
     "userScores": "Notas de usuarios",
     "userScoresHint": "Solo se muestran perfiles públicos.",
@@ -1022,7 +1022,6 @@
     },
     "synopsis": "Sinopsis",
     "noSynopsis": "Aún sin sinopsis.",
-    "license": "Licencia del texto: {license}",
     "source": "Fuente",
     "coverCredit": "Portada: {credit}",
     "fallbackNotice": "Aún no disponible en español — se muestra la versión en inglés.",
@@ -1072,7 +1071,8 @@
       "styles": {
         "main": "Historia principal",
         "extras": "Principal + extras",
-        "completionist": "Completista"
+        "completionist": "Completista",
+        "speedrun": "Speedrun"
       },
       "hours": "{hours} h",
       "reports": {
@@ -1257,7 +1257,7 @@
         "heading": "1. El servicio",
         "body": {
           "0": "Mantenemos una base de datos de juegos, películas, series y libros en la que los usuarios registrados puntúan cada obra en seis categorías de 0 a 100. Las puntuaciones de la comunidad son medias de las puntuaciones de los usuarios y solo se muestran cuando la obra tiene al menos 5 puntuaciones.",
-          "1": "Los metadatos de los elementos provienen de fuentes abiertas y de datos públicos de tiendas: Wikidata (CC0), Wikipedia, Open Library, Steam y GOG. Las sinopsis de Wikipedia tienen licencia CC BY-SA 4.0 y se muestran con su licencia y un enlace al artículo original. Las portadas provienen de Open Library, Steam, GOG o Wikimedia Commons; cuando la licencia lo exige, la página del elemento acredita la fuente, el autor y la licencia. Los enlaces a notas externas (como IMDb o Metacritic) son de referencia; esas notas, las portadas y todas las marcas pertenecen a sus dueños."
+          "1": "Los metadatos de los elementos provienen de fuentes abiertas y de datos públicos de tiendas: Wikidata (CC0), Wikipedia, Open Library, Steam y GOG. Las sinopsis de Wikipedia tienen licencia CC BY-SA 4.0 y se muestran con un enlace al artículo original. Las portadas provienen de Open Library, Steam, GOG o Wikimedia Commons; cuando la licencia lo exige, la página del elemento acredita la fuente, el autor y la licencia. Los enlaces a notas externas (como IMDb o Metacritic) son de referencia; esas notas, las portadas y todas las marcas pertenecen a sus dueños."
         }
       },
       "1": {

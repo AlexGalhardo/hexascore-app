@@ -23,7 +23,6 @@ import (
 	appmiddleware "github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/notifications"
 	"github.com/AlexGalhardo/hexascore-app/app/recommend/primitives"
-	"github.com/AlexGalhardo/hexascore-app/app/recommend/related"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 	"github.com/AlexGalhardo/hexascore-app/app/seo"
 	"github.com/AlexGalhardo/hexascore-app/app/social"
@@ -310,12 +309,10 @@ func Web(r *router.Router, app *vukem.App) error {
 		if err != nil {
 			return err
 		}
-		reco := related.Events{Log: app.Log, ImpressionEvery: 10}
 		items := controllers.NewItem(
 			app,
 			&scoring.Writer{DB: acc.DB, Events: app.Events, Now: app.Now},
 			acc.Web.User,
-			reco,
 		)
 		if acc.DB.Dialect().Name() == "postgres" {
 			if items.Social, err = SocialService(app, acc); err != nil {
