@@ -1,19 +1,25 @@
 import type { AppLocale } from "./i18n/locale";
 
-/** SDD 10 §7.6: the paths `android.intentFilters` verifies on hexascore.app. */
-export const APP_LINK_PREFIXES = [
-	"/games",
-	"/movies",
-	"/series",
-	"/books",
-	"/entities",
-	"/lists",
-	"/pt-br",
-	"/es",
-] as const;
+const SCREEN_LIST = ["games", "movies", "series", "books", "entities", "lists"] as const;
+const LOCALE_PREFIXES = ["", "/pt-br", "/es"] as const;
+
+/**
+ * SDD 10 §7.6: the paths `android.intentFilters` verifies on hexascore.app, as Android
+ * `pathAdvancedPattern`s (API 31+; older devices open the browser). `pathPrefix` would also claim the
+ * entity pages under a category (`/games/platforms/playstation-5`) that the app has no screen for,
+ * so only the single-segment pages are listed. app.config.ts inlines the same list (Expo loads it
+ * without TS module resolution); linking.test.ts keeps both equal.
+ */
+export const APP_LINK_PATTERNS: readonly string[] = [
+	...LOCALE_PREFIXES.flatMap((prefix) =>
+		SCREEN_LIST.map((screen) => `${prefix}/${screen}/[^/]+/?`),
+	),
+	"/pt-br/?",
+	"/es/?",
+];
 
 const LOCALE_SEGMENTS: Record<string, AppLocale> = { "pt-br": "pt-BR", es: "es" };
-const SCREENS = new Set(["games", "movies", "series", "books", "entities", "lists"]);
+const SCREENS = new Set<string>(SCREEN_LIST);
 
 export type DeepLink = { path: string; locale: AppLocale | null };
 

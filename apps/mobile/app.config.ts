@@ -25,24 +25,23 @@ const config: ExpoConfig = {
 			: {}),
 		// Verified App Links (SDD 10 §7.6); the Go app serves /.well-known/assetlinks.json.
 		// Expo loads this file without TS module resolution, so the list is inlined;
-		// src/linking.test.ts keeps it equal to APP_LINK_PREFIXES.
+		// src/linking.test.ts keeps it equal to APP_LINK_PATTERNS.
 		intentFilters: [
 			{
 				action: "VIEW",
 				autoVerify: true,
 				data: [
-					"/games",
-					"/movies",
-					"/series",
-					"/books",
-					"/entities",
-					"/lists",
-					"/pt-br",
-					"/es",
-				].map((pathPrefix) => ({
+					...["", "/pt-br", "/es"].flatMap((prefix) =>
+						["games", "movies", "series", "books", "entities", "lists"].map(
+							(screen) => `${prefix}/${screen}/[^/]+/?`,
+						),
+					),
+					"/pt-br/?",
+					"/es/?",
+				].map((pathAdvancedPattern) => ({
 					scheme: "https",
 					host: "hexascore.app",
-					pathPrefix,
+					pathAdvancedPattern,
 				})),
 				category: ["BROWSABLE", "DEFAULT"],
 			},
