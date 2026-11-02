@@ -177,11 +177,18 @@ func TestRobots_ProductionNoindex(t *testing.T) {
 	}
 }
 
+// Outside production robots.txt disallows everything, but only SEO_NOINDEX=true adds the header to every response.
 func TestRobots_NonProductionHeader(t *testing.T) {
 	t.Parallel()
 
-	app := vukemtest.New(t, bootstrap.New)
-	app.Client(t).Get("/robots.txt").AssertHeader("X-Robots-Tag", "noindex, nofollow")
+	c := vukemtest.New(t, bootstrap.New).Client(t)
+	c.Get("/robots.txt").AssertSee("Disallow: /" + nl)
+	if got := c.Get("/robots.txt").Header("X-Robots-Tag"); got != "" {
+		t.Errorf("non-production X-Robots-Tag = %q, want none", got)
+	}
+
+	forced := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{"SEO_NOINDEX": "true"}}).Client(t)
+	forced.Get("/robots.txt").AssertHeader("X-Robots-Tag", "noindex, nofollow")
 }
 
 func TestCanonicalHost_Production(t *testing.T) {
