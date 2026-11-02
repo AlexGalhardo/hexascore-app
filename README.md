@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1><a href="https://hexascore.app" target="_blank">HexaScore.app</a></h1>
+<h1><strong><a href="https://hexascore.app" target="_blank">HexaScore.app</a></strong></h1>
 
 [![CI](https://github.com/AlexGalhardo/hexascore-app/actions/workflows/ci.yml/badge.svg)](https://github.com/AlexGalhardo/hexascore-app/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -8,13 +8,15 @@
 <a href="https://github.com/AlexGalhardo/hexascore-app/releases"><img src="https://img.shields.io/github/v/release/AlexGalhardo/hexascore-app?include_prereleases&label=version" alt="Version"></a>
 <a href="https://scorecard.dev/viewer/?uri=github.com/AlexGalhardo/hexascore-app"><img src="https://api.scorecard.dev/projects/github.com/AlexGalhardo/hexascore-app/badge" alt="OpenSSF Scorecard"></a>
 
-Movies, TV Shows, Books and Games Open Source Almanac
+<h3><strong>Movies, TV Shows, Books and Games Open Source Almanac</strong></h3>
 
 </div>
 
 ## Introduction
 
-HexaScore is an open source almanac and community score platform for games, movies, TV shows and books. Each item is rated by the community in six categories per type, and the ratings combine into a published score. The application is built on the [vukem](https://vukem.dev) Go framework.
+HexaScore is an open source almanac and community score platform for games, movies, TV shows and books. Each item is rated by the community in six categories per type, and the ratings combine into a published score.
+
+This application is built using the [Vukem Go framework](https://vukem.dev).
 
 ## Summary
 
