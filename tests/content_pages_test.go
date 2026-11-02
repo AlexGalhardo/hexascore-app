@@ -187,7 +187,8 @@ func TestRobots_NonProductionHeader(t *testing.T) {
 		t.Errorf("non-production X-Robots-Tag = %q, want none", got)
 	}
 
-	forced := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{"SEO_NOINDEX": "true"}}).Client(t)
+	forced := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{"SEO_NOINDEX": "true"}}).
+		Client(t)
 	forced.Get("/robots.txt").AssertHeader("X-Robots-Tag", "noindex, nofollow")
 }
 
