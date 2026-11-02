@@ -4,21 +4,17 @@ import (
 	"errors"
 	"net/http"
 	"net/url"
-	"path"
-	"strconv"
-	"strings"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/i18n"
-	"github.com/AlexGalhardo/vukem/inertia"
 	"github.com/AlexGalhardo/vukem/web"
 
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
-	"github.com/AlexGalhardo/hexascore-app/app/library"
 )
 
-// Entity serves Entity/Show for people, companies, franchises, platforms, genres, game modes, countries and
-// languages (SDD 09 §6.2).
+// Entity answers the old entity pages (people, companies, franchises, platforms, genres, game modes, countries and
+// languages): no entity has a page of its own any more, each one is a filter of the section listings (owner
+// 2026-11-02).
 type Entity struct {
 	app *vukem.App
 }
@@ -28,80 +24,23 @@ func NewEntity(app *vukem.App) *Entity {
 	return &Entity{app: app}
 }
 
-// listingFilters maps the entity kinds that redirect to a filtered section listing to the listing's query key.
-var listingFilters = map[string]string{"genre": "genre", "platform": "platform"}
+// listingURL is the section listing of item type typ filtered by the entity key, with the locale prefix.
+func listingURL(prefix, typ, kind, key string) string {
+	q := url.Values{"sort": {"-popularity"}, "per": {"25"}, catalog.ListingFilters[kind]: {key}}
 
-// Show renders Entity/Show for the entity kind under the section of item type typ
-// (/{section}/{entity path}/{key}, owner round 2026-11-01 item 19); param names the path parameter holding the
-// slug (or the code for countries and languages). `?cursor=` pages the type's items.
+	return prefix + "/" + catalog.Sections[typ] + "?" + q.Encode()
+}
+
+// Show answers /{section}/{entity path}/{key} with one 301 to that section's listing filtered by the entity.
 func (h *Entity) Show(kind, param, typ string) web.HandlerFunc {
 	return func(c *web.Ctx) error {
-		// Genres and platforms are tags without content of their own: their page is the section listing filtered
-		// by them (owner 2026-11-02). People, companies and the other kinds keep their pages.
-		if filter, ok := listingFilters[kind]; ok {
-			q := url.Values{"sort": {"-popularity"}, "per": {"25"}, filter: {c.Param(param)}}
-			to := path.Dir(path.Dir(strings.TrimSuffix(c.Request().URL.Path, "/"))) + "?" + q.Encode()
-			http.Redirect(c.Writer(), c.Request(), to, http.StatusMovedPermanently)
-
-			return nil
-		}
-
-		db, err := h.app.DB()
-		if err != nil {
-			return err
-		}
-
-		page, err := catalog.LoadEntityPage(
-			c.Context(),
-			db,
-			kind,
-			c.Param(param),
-			i18n.Locale(c.Context()),
-			typ,
-			library.ParseOffset(c.Query("cursor")),
-		)
-		if errors.Is(err, catalog.ErrItemNotFound) {
-			return NotFound(c)
-		}
-		if err != nil {
-			return err
-		}
-
-		if code := page.Entity.Code; code != "" && code != c.Param(param) {
-			u := *c.Request().URL
-			u.Path = path.Join(path.Dir(u.Path), code)
-			http.Redirect(c.Writer(), c.Request(), u.String(), http.StatusMovedPermanently)
-
-			return nil
-		}
-
-		if !page.Indexable {
-			c.Writer().Header().Set("X-Robots-Tag", "noindex, follow")
-		}
-
-		meta := inertia.ScrollMeta{PageName: "cursor"}
-		if len(page.Groups) == 1 && page.Groups[0].Next >= 0 {
-			meta.NextPage = strconv.Itoa(page.Groups[0].Next)
-		}
-
-		// The page does not render the Wikidata id; it stays out of the Inertia JSON (ADR 0022).
-		entity := page.Entity
-		entity.WikidataQID = ""
-
-		return inertia.Render(c, "Entity/Show", inertia.Props{
-			"entity":    entity,
-			"roles":     page.Roles,
-			"items":     inertia.Scroll(map[string]any{"data": page.Groups}, meta),
-			"counts":    page.Counts,
-			"avgScore":  page.AvgScore,
-			"filters":   map[string]string{"type": typ},
-			"indexable": page.Indexable,
-		})
+		return c.RedirectStatus(http.StatusMovedPermanently,
+			listingURL(i18n.PathPrefix(c.Context()), typ, kind, c.Param(param)))
 	}
 }
 
-// Home answers the old top-level entity path (/{entity path}/{key} plus suffix, "" or "/changes") with one 301
-// to the same page under the entity's category: `?type=` when it names an item type, else the type with the
+// Home answers the old top-level entity path (/{entity path}/{key} plus suffix, "" or "/changes") with one 301:
+// the bare path to the filtered listing of the entity's category, /changes to the changes page under it; `?type=` when it names an item type, else the type with the
 // most public items. The canonical code and the other query parameters travel along.
 func (h *Entity) Home(kind, param, suffix string) web.HandlerFunc {
 	return func(c *web.Ctx) error {
@@ -124,10 +63,14 @@ func (h *Entity) Home(kind, param, suffix string) web.HandlerFunc {
 		}
 		q.Del("type")
 
+		prefix := i18n.PathPrefix(c.Context())
+		if suffix == "" {
+			// The entity has no page: one 301 straight to the section listing filtered by it (owner 2026-11-02).
+			return c.RedirectStatus(http.StatusMovedPermanently, listingURL(prefix, typ, kind, key))
+		}
+
 		u := url.URL{
-			Path: i18n.PathPrefix(
-				c.Context(),
-			) + "/" + catalog.Sections[typ] + "/" + catalog.EntityPaths[kind] + "/" + key + suffix,
+			Path:     prefix + "/" + catalog.Sections[typ] + "/" + catalog.EntityPaths[kind] + "/" + key + suffix,
 			RawQuery: q.Encode(),
 		}
 

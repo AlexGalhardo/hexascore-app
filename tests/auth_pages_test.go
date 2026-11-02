@@ -62,7 +62,12 @@ func TestInertiaPages(t *testing.T) {
 			owner.PostJSON("/logout", nil).AssertRedirect("/")
 
 			pending := app.Client(t).Inertia("")
-			passwordStep(pending, email, false).AssertRedirect("/two-factor-challenge")
+			passwordStep(
+				pending,
+				email,
+				false,
+			).AssertRedirect("/login")
+			// Inertia: the login page opens the code dialog
 			pending.Get(l.prefix+"/two-factor-challenge").AssertOK().AssertInertia("Auth/TwoFactorChallenge").
 				PropEquals("locale", l.locale).HasProp("messages")
 		})

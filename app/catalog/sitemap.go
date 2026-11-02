@@ -38,12 +38,6 @@ var sitemapSources = []sitemapSource{
 	{"items", "movie", "movies", ""},
 	{"items", "series", "series", ""},
 	{"items", "book", "books", ""},
-	{"entities", "person", "people", "slug"},
-	{"entities", "organization", "companies", "slug"},
-	{"entities", "franchise", "franchises", "slug"},
-	{"entities", "game_mode", "game-modes", "slug"},
-	{"entities", "country", "countries", "code"},
-	{"entities", "language", "languages", "code"},
 }
 
 var staticPaths = []string{"/", "/games", "/movies", "/series", "/books", "/about"}

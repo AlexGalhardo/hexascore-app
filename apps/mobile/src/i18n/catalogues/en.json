@@ -344,6 +344,9 @@
 		"one": "item found",
 		"other": "items found"
 	},
+	"catalog.gameMode": "Game mode",
+	"catalog.anyGameMode": "Any game mode",
+	"catalog.removeFilter": "Remove filter {name}",
 	"categories.game.gameplay": "Gameplay",
 	"categories.game.fun": "Fun",
 	"categories.game.sound": "Sound",

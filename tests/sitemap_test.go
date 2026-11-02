@@ -68,8 +68,8 @@ func TestSitemaps(t *testing.T) {
 
 	index := app.Client(t).Get("/sitemap.xml").AssertOK().AssertHeaderContains("Content-Type", "application/xml").
 		AssertHeaderContains("Cache-Control", "max-age=3600").AssertSee("https://example.test/sitemaps/static.xml").
-		AssertSee("https://example.test/sitemaps/items-game-1.xml").AssertSee("entities-organization-1.xml").
-		AssertDontSee("items-movie").AssertDontSee("entities-person")
+		AssertSee("https://example.test/sitemaps/items-game-1.xml").AssertDontSee("entities-").
+		AssertDontSee("items-movie")
 	index.AssertDontSee("example.test//")
 	// No CSP on the XML: Chrome's XML tree viewer needs its own styles, and a sitemap runs nothing (owner
 	// 2026-11-02). Entries are indented one tab, like the reference sitemap the owner pointed at.
@@ -93,12 +93,8 @@ func TestSitemaps(t *testing.T) {
 		t.Fatalf("item url without lastmod: %s", items.Body())
 	}
 
-	// Entities need 3 public linked items: hidden and takedown links do not count.
-	ent := app.Client(t).Get("/sitemaps/entities-organization-1.xml").AssertOK()
-	// One URL per category with enough items, under that category (owner round 2026-11-01 item 19).
-	ent.AssertSee("<loc>https://example.test/games/companies/big-studio</loc>")
-	ent.AssertDontSee("example.test/companies/")
-	ent.AssertDontSee("small-studio") // 3 links, but one is hidden
+	// Entities have no page of their own (owner 2026-11-02): no entity sitemap at all.
+	app.Client(t).Get("/sitemaps/entities-organization-1.xml").AssertNotFound()
 }
 
 func TestSitemapsWellFormedAndMissing(t *testing.T) {

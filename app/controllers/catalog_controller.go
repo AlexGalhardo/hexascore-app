@@ -4,6 +4,8 @@ import (
 	"errors"
 	"net/http"
 	"strconv"
+	"strings"
+	"unicode/utf8"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/errs"
@@ -89,6 +91,9 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 		// Numbered pages replace the opaque cursors on the web listings (owner 2026-11-02); an old ?cursor= link
 		// lands on page 1.
 		params.Cursor, params.Page = "", catalogPage(c.Query("page"))
+		if params.Entities, err = entityFilters(c.Query); err != nil {
+			return badListing(err)
+		}
 		page, err := catalog.List(c.Context(), db, h.codec, params)
 		if err != nil {
 			return badListing(err)
@@ -109,16 +114,34 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 		if err != nil {
 			return err
 		}
+		facets := map[string]any{"genres": genres, "platforms": platforms}
+		if typ == "game" {
+			if facets["modes"], err = catalog.FacetsOf(c.Context(), db, typ, "game_mode", nil); err != nil {
+				return err
+			}
+		}
+		active, err := catalog.ActiveEntityFilters(c.Context(), db, params.Entities)
+		if err != nil {
+			return err
+		}
 
 		props := inertia.Props{
 			"type":       typ,
 			"items":      map[string]any{"data": cards},
 			"pagination": pageLinks(params.Page, page.HasMore),
 			"filters": map[string]any{
-				"genre": params.Genre, "platform": params.Platform, "year": params.Year,
-				"minScore": params.MinScore, "sort": params.Sort, "per": params.Limit,
+				"genre":    params.Genre,
+				"platform": params.Platform,
+				"year":     params.Year,
+				"minScore": params.MinScore,
+				"sort":     params.Sort,
+				"per":      params.Limit,
+				"mode":     params.Entities["game_mode"],
 			},
-			"facets": map[string]any{"genres": genres, "platforms": platforms},
+			"facets": facets,
+			// The entity filters other than genre, platform and game mode come from links (the old entity pages):
+			// they show as removable chips with the entity's name.
+			"active": active,
 		}
 		if page.Total != nil {
 			props["total"] = *page.Total
@@ -126,6 +149,27 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 
 		return inertia.Render(c, "Catalog/Index", props)
 	}
+}
+
+// entityFilters reads the entity filters of the listings beyond genre and platform (catalog.ListingFilters).
+func entityFilters(get func(string) string) (map[string]string, error) {
+	out := map[string]string{}
+	for kind, param := range catalog.ListingFilters {
+		if kind == "genre" || kind == "platform" {
+			continue
+		}
+		v := strings.TrimSpace(get(param))
+		if v == "" {
+			continue
+		}
+		// PostgreSQL rejects NUL and invalid UTF-8 (a 500); a slug or code is short.
+		if !utf8.ValidString(v) || strings.ContainsRune(v, 0) || len(v) > 200 {
+			return nil, catalog.ErrInvalidQuery
+		}
+		out[kind] = v
+	}
+
+	return out, nil
 }
 
 // badListing maps bad filters and forged cursors to 400.

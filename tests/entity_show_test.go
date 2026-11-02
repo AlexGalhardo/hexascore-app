@@ -80,95 +80,46 @@ func TestInertiaPages_Entity_Show(t *testing.T) {
 
 	client := app.Client(t)
 
-	// Entity pages live under their category (owner round 2026-11-01 item 19): /{section}/{entity path}/{key}.
-	client.Inertia("").Get("/movies/people/ridley-scott").AssertOK().
-		AssertHeader("X-Robots-Tag", "noindex, follow").
-		AssertInertia("Entity/Show").
-		PropEquals("entity.name", "Ridley Scott").
-		PropEquals("entity.kind", "person").
-		MissingProp("entity.wikidataQid").
-		PropEquals("counts.movie", 2).
-		PropEquals("indexable", false).
-		PropEquals("roles.0.role", "director").
-		PropEquals("roles.0.count", 2).
-		PropEquals("filters.type", "movie").
-		HasProp("items.data", 1).
-		HasProp("items.data.0.items", 2).
-		PropEquals("items.data.0.type", "movie")
+	// No entity has a page of its own (owner 2026-11-02): every entity path answers one 301 to the section listing
+	// filtered by the entity, whatever the kind and the locale.
+	for path, target := range map[string]string{
+		"/movies/people/ridley-scott":       "/movies?per=25&person=ridley-scott&sort=-popularity",
+		"/pt-br/games/franchises/rpg":       "/pt-br/games?franchise=rpg&per=25&sort=-popularity",
+		"/es/games/countries/br":            "/es/games?country=br&per=25&sort=-popularity",
+		"/games/game-modes/multiplayer":     "/games?mode=multiplayer&per=25&sort=-popularity",
+		"/games/companies/wright-systems":   "/games?company=wright-systems&per=25&sort=-popularity",
+		"/games/genres/action-role-playing": "/games?genre=action-role-playing&per=25&sort=-popularity",
+	} {
+		client.Get(path).AssertStatus(301).AssertHeader("Location", target)
+	}
 
-	client.Inertia("").Get("/pt-br/games/franchises/rpg").AssertOK().AssertHeaderMissing("X-Robots-Tag").
-		AssertInertia("Entity/Show").
-		PropEquals("indexable", true).
-		PropEquals("counts.game", 5).
-		PropEquals("counts.movie", 1).
-		PropEquals("avgScore.game", 8.0).
-		HasProp("items.data", 1).
-		PropEquals("items.data.0.type", "game").
-		MissingProp("avgScore.movie")
-
-	// Indexable counts the category's own items: one movie is below the threshold.
-	client.Inertia("").Get("/movies/franchises/rpg").AssertOK().AssertHeader("X-Robots-Tag", "noindex, follow").
-		AssertInertia("Entity/Show").PropEquals("indexable", false).HasProp("items.data.0.items", 1)
-
-	client.Inertia("").Get("/games/franchises/rpg?cursor=3").AssertOK().AssertInertia("Entity/Show").
-		HasProp("items.data", 1).
-		HasProp("items.data.0.items", 2)
-
-	// No linked items yet: the group list is an empty array, never null (the page reads its length).
-	client.Inertia("").Get("/games/countries/BR").AssertOK().AssertInertia("Entity/Show").
-		PropEquals("entity.code", "BR").
-		PropEquals("items.data", []any{})
-	client.Inertia("").Get("/games/countries/br").AssertStatus(301).AssertHeader("Location", "/games/countries/BR")
-
-	// The old top-level paths answer one 301 to the category with the most public items of the entity, or to
-	// ?type= when it names one; the canonical code and the other query parameters travel along.
+	// The old top-level paths go straight to the listing of the category with the most public items of the entity,
+	// or to ?type= when it names one, with the canonical code for countries and languages.
 	for _, prefix := range []string{"", "/pt-br", "/es"} {
 		for old, target := range map[string]string{
-			"/people/ridley-scott":                "/movies/people/ridley-scott",
-			"/franchises/rpg":                     "/games/franchises/rpg",
-			"/franchises/rpg?type=movie&cursor=0": "/movies/franchises/rpg?cursor=0",
-			"/franchises/rpg?type=bogus":          "/games/franchises/rpg",
-			"/countries/br?type=series":           "/series/countries/BR",
-			"/countries/br":                       "/games/countries/BR",
+			"/people/ridley-scott":       "/movies?per=25&person=ridley-scott&sort=-popularity",
+			"/franchises/rpg":            "/games?franchise=rpg&per=25&sort=-popularity",
+			"/franchises/rpg?type=movie": "/movies?franchise=rpg&per=25&sort=-popularity",
+			"/countries/br?type=series":  "/series?country=BR&per=25&sort=-popularity",
+			"/countries/br":              "/games?country=BR&per=25&sort=-popularity",
 		} {
 			client.Get(prefix+old).AssertStatus(301).AssertHeader("Location", prefix+target)
 		}
 	}
 
-	// The entity's recent changes live under the category too; the old path keeps its /changes.
+	// The listing filters by any role of the entity and names it in a chip; hidden items stay out.
+	client.Inertia("").Get("/movies?person=ridley-scott").AssertOK().AssertInertia("Catalog/Index").
+		PropEquals("total", 2).PropEquals("active.0.param", "person").PropEquals("active.0.name", "Ridley Scott")
+	client.Inertia("").Get("/games?franchise=rpg").AssertOK().AssertInertia("Catalog/Index").PropEquals("total", 5)
+	item("movie", "public", 10, 0, nil, country, "country")
+	client.Inertia("").Get("/movies?country=br").AssertOK().AssertInertia("Catalog/Index").PropEquals("total", 1).
+		PropEquals("active.0.name", "Brazil")
+
+	// The entity's recent changes keep their page under the category.
 	client.Inertia("").Get("/movies/people/ridley-scott/changes").AssertOK().AssertInertia("Catalog/RecentChanges")
 	client.Get("/pt-br/people/ridley-scott/changes").AssertStatus(301).
 		AssertHeader("Location", "/pt-br/movies/people/ridley-scott/changes")
 
-	// The item page links countries and languages by code, the key their entity route matches.
-	item("movie", "public", 10, 0, nil, country, "country")
-	client.Inertia("").Get("/movies/movie-10-"+country[:4]).AssertOK().AssertInertia("Catalog/Show").
-		PropEquals("entities.country.0.code", "BR")
-	client.Get("/countries/BR").AssertStatus(301).AssertHeader("Location", "/movies/countries/BR")
-
-	// Missing entities, unknown entity paths and a kind mismatch are missing pages (item 14).
-	for _, p := range []string{
-		"/people/missing", "/movies/people/missing", "/games/franchises/ridley-scott", "/games/no-such-kind/rpg",
-		"/games/no-such-kind/rpg/changes",
-	} {
-		client.Inertia("").Get(p).AssertStatus(301).AssertHeader("Location", "/")
-	}
-
-	// Genres and platforms have no page of their own: they open the section listing filtered by them (owner
-	// 2026-11-02), whatever the locale.
-	client.Get("/pt-br/games/genres/action-role-playing-game").AssertStatus(301).
-		AssertHeader("Location", "/pt-br/games?genre=action-role-playing-game&per=25&sort=-popularity")
-	client.Get("/movies/genres/drama").AssertStatus(301).
-		AssertHeader("Location", "/movies?genre=drama&per=25&sort=-popularity")
-	client.Get("/games/platforms/playstation-5").AssertStatus(301).
-		AssertHeader("Location", "/games?per=25&platform=playstation-5&sort=-popularity")
-
-	// A renamed entity slug answers 301 under its category too (SDD 01 §7.1).
-	if err := catalog.RenameSlug(t.Context(), db, catalog.ScopeEntity, "franchise", genre, "role-playing"); err != nil {
-		t.Fatal(err)
-	}
-
-	client.Get("/es/games/franchises/rpg?cursor=3").
-		AssertStatus(301).
-		AssertHeader("Location", "/es/games/franchises/role-playing?cursor=3")
+	// A missing entity on an old top-level path is a missing page.
+	client.Inertia("").Get("/people/missing").AssertStatus(301).AssertHeader("Location", "/")
 }

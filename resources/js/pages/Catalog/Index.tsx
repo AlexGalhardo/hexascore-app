@@ -1,5 +1,6 @@
 import { usePage } from "@inertiajs/react";
 import Filters, {
+	type ActiveEntity,
 	type ActiveFilters,
 	type Facet,
 	PAGE_SIZES,
@@ -21,12 +22,21 @@ interface Props {
 	type: Section["type"];
 	items: { data: Highlight[] };
 	filters: ActiveFilters;
-	facets: { genres: Facet[]; platforms: Facet[] };
+	facets: { genres: Facet[]; platforms: Facet[]; modes?: Facet[] };
+	active?: ActiveEntity[];
 	pagination: Pagination;
 	total?: number;
 }
 
-export default function Index({ type, items, filters, facets, pagination, total }: Props) {
+export default function Index({
+	type,
+	items,
+	filters,
+	facets,
+	pagination,
+	total,
+	active = [],
+}: Props) {
 	const t = useT();
 	const { url, props } = usePage<SharedProps>();
 	const { locale, seo } = props;
@@ -66,9 +76,26 @@ export default function Index({ type, items, filters, facets, pagination, total 
 						filters={filters}
 						genres={facets.genres}
 						platforms={facets.platforms}
+						modes={facets.modes}
+						active={active}
 					/>
 				</aside>
 				<div className="min-w-0">
+					{active.length > 0 && (
+						<ul className="mb-2 flex flex-wrap gap-2">
+							{active.map((a) => (
+								<li key={a.param}>
+									<a
+										href={withoutParam(url, a.param)}
+										className="inline-flex min-h-11 items-center gap-2 rounded-xs border-2 border-fg bg-surface px-3 text-sm font-semibold shadow-ledge-secondary hover:bg-fg hover:text-bg"
+										aria-label={t("catalog.removeFilter", { name: a.name })}
+									>
+										{a.name} <span aria-hidden="true">×</span>
+									</a>
+								</li>
+							))}
+						</ul>
+					)}
 					{total !== undefined && (
 						<p className="mt-4 text-sm text-muted md:sr-only">
 							{new Intl.NumberFormat(locale).format(total)}{" "}
@@ -117,4 +144,12 @@ export function pageCanonical(canonical: string, url: string, per: number): stri
 	if (page && /^[1-9]\d*$/.test(page) && page !== "1") u.searchParams.set("page", page);
 	if (per !== PAGE_SIZES[0]) u.searchParams.set("per", String(per));
 	return u.href;
+}
+
+/** The listing URL without one filter and without the page number (the result set changes). */
+export function withoutParam(url: string, param: string): string {
+	const u = new URL(url, "http://x");
+	u.searchParams.delete(param);
+	u.searchParams.delete("page");
+	return u.pathname + u.search;
 }

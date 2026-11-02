@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **catalog:** No entity has a page of its own any more: people, companies, franchises, platforms, genres, game modes, countries and languages are filters of the four section listings (`person`, `company`, `franchise`, `platform`, `genre`, `mode`, `country`, `language`); every old entity URL answers one 301 to the filtered listing, /games gets a game mode select, filters from links show as removable chips, item pages link straight to the filtered listing and the sitemap drops the entity files
 - **auth:** /login and /signup show only the form card, centred, without the intro column
 - **search:** The Ctrl+K palette suggests up to 8 items (was 6) plus up to 2 people or companies
 - **auth:** The two-factor step is a dialog on the login page with six one-digit boxes that accept a pasted code and submit on their own; logins with JavaScript off still use /two-factor-challenge, and a Google sign-in with two-factor lands on the dialog too
@@ -87,6 +88,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Removed
 
+- **catalog:** The Entity/Show page and its loader (replaced by the listing filters)
 - **billing:** The legacy `pro` (US$6) and `business` plans and the `STRIPE_PRICE_BUSINESS` variable; subscriptions on a retired price id no longer map to a plan
 - **ui:** "More like this" and "In other media" blocks on item pages, with the `similar` and `crossMedia` Inertia props, the reco impression and click log lines and `app/recommend/related/events.go`; `/app/v1` related lists and the Android app keep them
 - **ui:** "Recently rated by members" landing strip (item 5), the trending definition line in the footer (item 16), the navbar notifications bell and unread badge (item 27; `/me/notifications` is unchanged), the "Members" label on `/signup` and `/login` (item 8) and the `/user/two-factor` page (item 21)

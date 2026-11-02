@@ -56,3 +56,10 @@ test("the canonical keeps the page number and a non-default page size, never the
 test("page links keep the page size", () => {
 	expect(pageHref("/games?per=75&page=2", "3")).toBe("/games?per=75&page=3");
 });
+
+test("removing a filter chip drops that parameter and the page number, keeping the others", async () => {
+	const { withoutParam } = await import("../../pages/Catalog/Index");
+	expect(withoutParam("/pt-br/games?company=big-studio&genre=rpg&page=3", "company")).toBe(
+		"/pt-br/games?genre=rpg",
+	);
+});

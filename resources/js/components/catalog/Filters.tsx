@@ -16,6 +16,15 @@ export interface ActiveFilters {
 	minScore: number | null;
 	sort: string;
 	per: number;
+	/** Game mode slug (games only). */
+	mode?: string;
+}
+
+/** An entity filter in force that has no select (company, person, franchise, country, language): a removable chip. */
+export interface ActiveEntity {
+	param: string;
+	value: string;
+	name: string;
 }
 
 const SORTS = ["popularity", "score", "release_date", "rating_count"] as const;
@@ -33,7 +42,7 @@ const MIN_SCORES = Array.from({ length: 21 }, (_, i) => i / 2);
 
 /** Filters other than sort that differ from their default. */
 export function activeCount(f: ActiveFilters): number {
-	return [f.genre, f.platform, f.year, f.minScore].filter(
+	return [f.genre, f.platform, f.mode ?? "", f.year, f.minScore].filter(
 		(v) => v !== "" && v !== 0 && v !== null,
 	).length;
 }
@@ -47,12 +56,16 @@ export default function Filters({
 	filters,
 	genres,
 	platforms,
+	modes = [],
+	active = [],
 }: {
 	action: string;
 	type: string;
 	filters: ActiveFilters;
 	genres: Facet[];
 	platforms: Facet[];
+	modes?: Facet[];
+	active?: ActiveEntity[];
 }) {
 	const t = useT();
 	const [open, setOpen] = useState(false);
@@ -69,6 +82,10 @@ export default function Filters({
 			action={action}
 			className="grid grid-cols-[auto_minmax(0,1fr)] items-end gap-2 border-b border-fg py-3 lg:grid-cols-1 lg:gap-4 lg:border-b-0 lg:py-4"
 		>
+			{/* Entity filters from links ride along when the form is applied. */}
+			{active.map((a) => (
+				<input key={a.param} type="hidden" name={a.param} value={a.value} />
+			))}
 			<button
 				type="button"
 				aria-expanded={open}
@@ -134,6 +151,19 @@ export default function Filters({
 							{platforms.map((p) => (
 								<option key={p.slug} value={p.slug}>
 									{p.name} ({p.count})
+								</option>
+							))}
+						</select>
+					</label>
+				)}
+				{type === "game" && modes.length > 0 && (
+					<label className={label}>
+						{t("catalog.gameMode")}
+						<select name="mode" defaultValue={filters.mode ?? ""} className={field}>
+							<option value="">{t("catalog.anyGameMode")}</option>
+							{modes.map((m) => (
+								<option key={m.slug} value={m.slug}>
+									{m.name} ({m.count})
 								</option>
 							))}
 						</select>

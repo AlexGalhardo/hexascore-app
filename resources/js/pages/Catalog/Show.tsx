@@ -82,18 +82,20 @@ const LD_TYPE: Record<ItemType, string> = {
 	book: "Book",
 };
 
-const ENTITY_PATH: Record<string, string> = {
-	person: "people",
-	organization: "companies",
-	franchise: "franchises",
-	platform: "platforms",
-	genre: "genres",
-	game_mode: "game-modes",
-	country: "countries",
-	language: "languages",
+// The listing filter of each entity kind (catalog.ListingFilters): entities have no page of their own, a link opens
+// the item's section filtered by the entity (owner 2026-11-02).
+const ENTITY_FILTER: Record<string, string> = {
+	person: "person",
+	organization: "company",
+	franchise: "franchise",
+	platform: "platform",
+	genre: "genre",
+	game_mode: "mode",
+	country: "country",
+	language: "language",
 };
 
-// Chips under the title: genres and platforms, linked to their entity pages.
+// Chips under the title: genres and platforms, linked to the filtered section listing.
 const CHIP_ROLES = ["genre", "platform"];
 
 const ROLE_ORDER = [
@@ -137,9 +139,10 @@ export default function Show({
 	const keys = CATEGORY_KEYS[item.type];
 	const categoryLabels = keys.map((k) => t(`categories.${item.type}.${k}`));
 	const [scoresOpen, setScoresOpen] = useState(false);
-	// Entity pages live under the item's own category (owner round 2026-11-01 item 19).
 	const entityHref = (e: EntityLink) =>
-		l(`/${SECTIONS[item.type]}/${ENTITY_PATH[e.kind]}/${e.code ?? e.slug}`);
+		l(
+			`/${SECTIONS[item.type]}?${new URLSearchParams({ [ENTITY_FILTER[e.kind]]: e.code ?? e.slug, per: "25", sort: "-popularity" })}`,
+		);
 	const chips = CHIP_ROLES.flatMap((r) => entities[r] ?? []);
 	const release =
 		item.releaseDate?.length === 10

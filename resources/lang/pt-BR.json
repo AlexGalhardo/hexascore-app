@@ -613,7 +613,10 @@
     "itemsFoundLabel": {
       "one": "item encontrado",
       "other": "itens encontrados"
-    }
+    },
+    "gameMode": "Modo de jogo",
+    "anyGameMode": "Qualquer modo de jogo",
+    "removeFilter": "Remover filtro {name}"
   },
   "categories": {
     "game": {

@@ -5,7 +5,9 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"maps"
 	"math"
+	"slices"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -88,6 +90,9 @@ type ListParams struct {
 	Sort            string             // "[-]popularity|score|release_date|rating_count"
 	Limit           int
 	Cursor          string
+	// Entities filters by entity kind (keys of ListingFilters) to the entity's slug, or its code for countries and
+	// languages: the web listings replace the entity pages with these filters (owner 2026-11-02).
+	Entities map[string]string
 	// Page > 0 switches to numbered pages (?page=N on the web listings, owner 2026-11-02): OFFSET paging with
 	// the total on every page and no cursors. The API keeps the keyset cursors.
 	Page int
@@ -159,6 +164,19 @@ WHERE ie.item_id = i.id AND ie.role = ? AND e.kind = ? AND e.slug = ?`+srcCond+"
 	}
 	if p.Genre != "" {
 		entity("genre", p.Genre)
+	}
+	for _, kind := range slices.Sorted(maps.Keys(p.Entities)) {
+		v := p.Entities[kind]
+		if _, ok := ListingFilters[kind]; !ok || v == "" {
+			continue
+		}
+		key := "e.slug = ?"
+		if kind == "country" || kind == "language" {
+			key, v = "e.code = ?", strings.ToUpper(v)
+		}
+		// Any role: a company may be the developer or the publisher, a person the director or an actor.
+		b.add(`EXISTS (SELECT 1 FROM item_entities ie JOIN entities e ON e.id = ie.entity_id
+WHERE ie.item_id = i.id AND e.kind = ? AND `+key+srcCond+")", append([]any{kind, v}, srcArgs...)...)
 	}
 	if p.Platform != "" {
 		entity("platform", p.Platform)
@@ -312,6 +330,13 @@ func List(ctx context.Context, db Querier, codec *CursorCodec, p ListParams) (Li
 		page.PrevCursor = mk(first, DirPrev)
 	}
 	return page, nil
+}
+
+// ListingFilters maps each entity kind the section listings filter by to its query parameter (owner 2026-11-02:
+// no entity has a page of its own any more). Genre and platform keep their ListParams fields.
+var ListingFilters = map[string]string{
+	"genre": "genre", "platform": "platform", "game_mode": "mode", "franchise": "franchise",
+	"organization": "company", "person": "person", "country": "country", "language": "language",
 }
 
 // MaxPage bounds ?page= so a crafted number cannot ask Postgres to skip millions of rows.

@@ -344,6 +344,9 @@
 		"one": "item encontrado",
 		"other": "itens encontrados"
 	},
+	"catalog.gameMode": "Modo de jogo",
+	"catalog.anyGameMode": "Qualquer modo de jogo",
+	"catalog.removeFilter": "Remover filtro {name}",
 	"categories.game.gameplay": "Gameplay",
 	"categories.game.fun": "Diversão",
 	"categories.game.sound": "Qualidade sonora",
