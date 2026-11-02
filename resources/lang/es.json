@@ -778,7 +778,7 @@
   },
   "cookies": {
     "label": "Configuración de cookies",
-    "text": "Usamos cookies esenciales (sesión y preferencias). Si aceptas, también cargamos vídeos de YouTube y Google Analytics, que usa cookies. Umami cuenta las visitas sin cookies en cualquier caso.",
+    "text": "Usamos cookies esenciales (sesión y preferencias). Si aceptas, también cargamos vídeos de YouTube y Google Analytics, que usa cookies.",
     "accept": "Aceptar",
     "decline": "Rechazar"
   },

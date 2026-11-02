@@ -367,12 +367,6 @@ export default function Nav() {
 						) : (
 							auth && (
 								<div className="flex items-center gap-4">
-									<Link
-										href={localized("/login", locale)}
-										className={`${item} whitespace-nowrap px-1 text-[15px] font-semibold text-primary hover:underline`}
-									>
-										{t("nav.login")}
-									</Link>
 									<Dropdown
 										label={t("nav.more")}
 										triggerClassName={`inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-xs px-2 hover:bg-hover ${focus}`}
@@ -385,6 +379,12 @@ export default function Nav() {
 											</>
 										}
 									>
+										<Link
+											href={localized("/login", locale)}
+											className={`${menuItem} font-semibold text-primary`}
+										>
+											{t("nav.login")}
+										</Link>
 										{guestLinks}
 									</Dropdown>
 								</div>

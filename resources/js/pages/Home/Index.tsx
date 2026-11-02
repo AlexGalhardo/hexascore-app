@@ -40,10 +40,7 @@ export default function Index({
 			<h1 className="sr-only">{t("home.title")}</h1>
 			<div className="grid gap-14">
 				{friends && friends.length > 0 && (
-					<section
-						aria-labelledby="home-friends"
-						className="grid gap-4 border-t-2 border-fg pt-4"
-					>
+					<section aria-labelledby="home-friends" className="grid gap-4">
 						<h2 id="home-friends" className="text-3xl">
 							{t("friendsScore.home")}
 						</h2>
@@ -78,7 +75,7 @@ export default function Index({
 					<section
 						key={`foryou-${type}`}
 						aria-labelledby={`home-foryou-${type}`}
-						className="grid gap-4 border-t-2 border-fg pt-4"
+						className="grid gap-4"
 					>
 						<h2 id={`home-foryou-${type}`} className="text-3xl">
 							{t("forYou.home")}: {t(`catalog.title.${type}`)}

@@ -74,7 +74,7 @@ export default function TypeSection({
 	if (trending.length === 0 && others.length === 0) return null;
 
 	return (
-		<section aria-labelledby={`home-${type}`} className="grid gap-5 border-t-2 border-fg pt-4">
+		<section aria-labelledby={`home-${type}`} className="grid gap-5">
 			{/* Three zones (owner round 2026-11-01 item 23): 1fr auto 1fr keeps the count centred whatever
 			    the name and link widths; below sm the zones stack. */}
 			<div
