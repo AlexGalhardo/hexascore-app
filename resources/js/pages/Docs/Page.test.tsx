@@ -17,6 +17,21 @@ afterEach(cleanup);
 
 const pages = ["index", "authentication", "pagination"];
 
+test("links inside the docs prose are underlined, not told apart by colour only", () => {
+	const { container } = render(
+		<Page
+			slug="authentication"
+			title="Authentication"
+			body='<p>See <a href="/docs/errors">the errors page</a>.</p>'
+			toc={[]}
+			pages={pages}
+		/>,
+	);
+	const article = container.querySelector("article");
+	expect(article?.querySelector("a")).not.toBeNull();
+	expect(article?.className.split(" ")).toContain("[&_a]:underline");
+});
+
 test("marks the current page and links the previous and next pages", () => {
 	render(
 		<Page

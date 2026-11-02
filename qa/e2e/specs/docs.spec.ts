@@ -28,10 +28,6 @@ test.describe("API docs", () => {
 	});
 
 	test("the docs index has no serious accessibility violations", async ({ page, prefix }) => {
-		test.fixme(
-			true,
-			"FIX-docs-link-in-text-block: links in docs prose are told apart by colour only",
-		);
 		await open(page, `${prefix}/docs`);
 		await expectNoSeriousA11yViolations(page);
 	});
