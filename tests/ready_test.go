@@ -62,3 +62,30 @@ func TestReady_SchedulerCheckOnlyInServe(t *testing.T) {
 		t.Errorf("checks = %v, want no scheduler check", body.Checks)
 	}
 }
+
+// TestReady_StorageDownWhenBucketUnreachable: with S3_BUCKET set the storage check probes the bucket, not the
+// local disk, so an unreachable endpoint reports storage down (audit T-15). /up without checks stays 200.
+func TestReady_StorageDownWhenBucketUnreachable(t *testing.T) {
+	t.Parallel()
+
+	app := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: map[string]string{
+		"S3_BUCKET":            "covers",
+		"S3_REGION":            "us-east-1",
+		"S3_ENDPOINT":          "http://127.0.0.1:1",
+		"S3_ACCESS_KEY_ID":     "test",
+		"S3_SECRET_ACCESS_KEY": "test-secret",
+		"S3_USE_PATH_STYLE":    "true",
+		"S3_INSECURE_HTTP":     "true",
+	}})
+
+	var body struct {
+		Checks map[string]string `json:"checks"`
+	}
+	app.Client(t).Get("/up?checks=1").AssertStatus(503).JSON(&body)
+
+	if body.Checks["storage"] != "fail" {
+		t.Errorf("storage check = %q, want fail (all: %v)", body.Checks["storage"], body.Checks)
+	}
+
+	app.Client(t).Get("/up").AssertOK()
+}
