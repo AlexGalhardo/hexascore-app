@@ -8,7 +8,7 @@ import CategoryIcon from "../CategoryIcon";
 import CoverThumb from "../CoverThumb";
 import ItemTile, { CATEGORY_BORDER } from "../catalog/ItemTile";
 import { type Highlight, SECTION_PATHS, type Section } from "../catalog/SectionHighlights";
-import ScoreBadge, { scoreBand } from "../ui/ScoreBadge";
+import ScoreBadge from "../ui/ScoreBadge";
 import Carousel from "./Carousel";
 
 export interface TrendingEntry extends Highlight {
@@ -28,7 +28,6 @@ export const ACCENT_TEXT: Record<ItemType, string> = {
 	book: "text-accent-book",
 };
 
-const MIN_RATINGS = 5;
 const PER_SLIDE = 3;
 const MORE = 12;
 
@@ -58,13 +57,13 @@ export default function TypeSection({
 	const { locale } = usePage<SharedProps>().props;
 	const type = section.type;
 	const base = localized(`/${SECTION_PATHS[type]}`, locale);
+	const num = new Intl.NumberFormat(locale);
 	const candidates = useMemo(() => {
 		const shown = new Set(trending.map((i) => i.id));
 		return section.pool.filter((i) => !shown.has(i.id));
 	}, [section.pool, trending]);
 	const [others, setOthers] = useState(() => candidates.slice(0, MORE));
 	useEffect(() => setOthers(pickRandom(candidates, MORE)), [candidates]);
-	const num = new Intl.NumberFormat(locale);
 	if (trending.length === 0 && others.length === 0) return null;
 
 	return (
@@ -151,8 +150,6 @@ function TrendCard({
 	eager: boolean;
 }): ReactElement {
 	const t = useT();
-	const { locale } = usePage<SharedProps>().props;
-	const num = new Intl.NumberFormat(locale);
 	return (
 		<li key={item.id} className={`flex gap-4 border-2 bg-surface p-3 ${CATEGORY_BORDER[type]}`}>
 			<CoverThumb cover={item.cover} alt="" size="trend" priority={eager} />
@@ -172,24 +169,6 @@ function TrendCard({
 				</Link>
 				<p className="text-xs text-muted">
 					{[item.year, item.genre].filter(Boolean).join(" · ")}
-				</p>
-				<p className="mt-2 text-sm">
-					<span className="block font-semibold">
-						{item.score === null
-							? t("item.notEnough")
-							: t(`item.band.${scoreBand(item.score)}`)}
-					</span>
-					<span className="text-muted">
-						{item.score === null
-							? t("home.ratingsOfMin", {
-									count: item.ratingCount,
-									min: MIN_RATINGS,
-								})
-							: t("home.fromRatings", {
-									count: item.ratingCount,
-									n: num.format(item.ratingCount),
-								})}
-					</span>
 				</p>
 			</div>
 		</li>

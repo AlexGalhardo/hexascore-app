@@ -81,13 +81,14 @@ test("the More grid shows 12 tiles from the pool without the trending ones", () 
 	expect(grid.className).toContain("md:grid-cols-6");
 });
 
-test("trending cards with rank, score explanation, then more titles and see all", () => {
+test("trending cards with rank and score on one row, no score explanation, then more titles and see all", () => {
 	render(<TypeSection section={section} trending={trending} />);
 	const carousel = screen.getByRole("region", { name: /home.carousel.label/ });
 	const cards = within(carousel).getAllByRole("listitem").slice(0, 3);
 	expect(within(cards[0]).getByText(/home.trendingRank.*"rank":1/)).toBeTruthy();
-	expect(within(cards[0]).getByText("item.band.high")).toBeTruthy();
-	expect(within(cards[1]).getByText(/home.ratingsOfMin.*"count":3,"min":5/)).toBeTruthy();
+	// Owner 2026-11-02: the band and the rating count left the trending cards.
+	expect(within(cards[0]).queryByText("item.band.high")).toBeNull();
+	expect(within(cards[1]).queryByText(/home.ratingsOfMin/)).toBeNull();
 	// Owner round 2026-11-01 item 15: "#3 trending" even on the prior-week fallback, and the genre, not the type.
 	expect(within(cards[2]).getByText(/home.trendingRank.*"rank":3/)).toBeTruthy();
 	expect(within(cards[0]).getByText("2020 · Action")).toBeTruthy();
