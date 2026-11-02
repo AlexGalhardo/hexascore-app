@@ -128,6 +128,17 @@ VALUES ($1, NULLIF($2, ''), $3, 'queued', $4::jsonb, $5::jsonb, $6) ON CONFLICT 
 			return fmt.Errorf("ingest run: insert: %w", err)
 		}
 
+		if keyed(s.TriggeredBy) {
+			ok, err := claimKey(ctx, tx, s, id)
+			if err != nil {
+				return err
+			}
+
+			if !ok {
+				return ErrDuplicate
+			}
+		}
+
 		return d.DispatchTx(ctx, tx, Job{RunID: id})
 	})
 	if err != nil {
@@ -146,8 +157,11 @@ func Finish(ctx context.Context, ex database.Executor, id int64, status string, 
 
 	_, err := ex.ExecContext(ctx, `UPDATE job_runs SET status = $2, error = $3, finished_at = now()
 WHERE id = $1 AND status IN ('queued', 'running')`, id, status, msg)
+	if err != nil {
+		return err
+	}
 
-	return err
+	return settleKey(ctx, ex, id, status)
 }
 
 // StaleAfter is how long a running run may go without a heartbeat (SDD 06 §7.6).
@@ -167,8 +181,17 @@ WHERE status = 'running' AND heartbeat_at < now() - $1::interval`,
 	}
 
 	n, err := res.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
 
-	return int(n), err
+	// A reaped run never reaches Finish, so its key would stay queued until KeyStaleAfter.
+	if _, err := ex.ExecContext(ctx, `UPDATE ingest_job_keys k SET state = 'failed', done_at = now()
+FROM job_runs j WHERE j.id = k.job_id AND j.status = 'failed' AND k.state IN ('queued', 'running')`); err != nil {
+		return 0, err
+	}
+
+	return int(n), nil
 }
 
 // Resume queues a followup run that continues a failed run from its saved cursor.
