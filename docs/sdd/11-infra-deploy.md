@@ -53,6 +53,8 @@ CREATE TABLE backup_runs (
 );
 ```
 
+Retention: `job_cursors` holds one row per chunked job (today `scoring.recompute_all`), deleted when its pass completes; no prune task needed, no user data.
+
 Bucket prefixes: `covers/{section}/{slug}[-t].webp` for items, `covers/<id>-<hash16>.webp` for editions and not yet rekeyed items (SDD 06 §7.5), `exports/` (SDD 05), `backups/postgres/{daily,monthly}/`, `backups/legacy/`.
 
 Not backed up: Railway logs (SDD 12), staging data (re-copied), covers (re-derivable by ingestion, issue 1), Railway variables (owner keeps an encrypted export). Sessions and cache are dumped but worthless after a restore.

@@ -246,6 +246,8 @@ One `db.Tx` (vukem `https://vukem.dev/docs/database/orm` "Query builder", transa
 
 Status and time-to-beat writes lock the item row, then the status row (legacy locked only the latter; status now changes weights), then recompute; so does the nightly job, per item. One lock order (item first; several items by id ascending, legacy `mergeItems`) prevents deadlocks. Item merge (SDD 01) moves ratings, statuses, reports and `rating_flags` (`ON CONFLICT DO NOTHING`, target wins) and recomputes the target in the same transaction.
 
+Nightly pass in chunks (B-002): `scoring.recompute_scores` registers `queue.Timeout(3h)` and `queue.Retries(1)`, runs `scoring.RecomputeChunk` for at most 15 minutes (`ChunkBudget`), saves the last item id, item and chunk counts in `job_cursors` (`job = 'scoring.recompute_all'`) after every page of 500 and, when items remain, re-dispatches itself with `queue.Delay(1s)`. A retry, timeout or redeploy resumes from the cursor and loses at most one page; the priors are rebuilt only when no cursor exists; the cursor row is deleted when the pass completes and one `recompute scores` line logs `items`, `chunks`, `duration_ms`. `similar` has `Timeout(2h)` and the monthly evaluation `Timeout(1h)`, both `Retries(1)`.
+
 Why transactional recompute: incremental counters cannot express time-varying weights and drift on any missed path; periodic-only breaks read-your-own-write. The row lock serialises writers per item (correct under concurrency) and the nightly full pass repairs any out-of-band edit (self-healing).
 
 ### 7.3 Edit and delete
