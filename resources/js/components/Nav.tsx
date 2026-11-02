@@ -284,7 +284,7 @@ export default function Nav() {
 						height={32}
 						className="size-7 lg:size-8"
 					/>
-					{page.props.appName}
+					<span className="sr-only lg:not-sr-only">{page.props.appName}</span>
 				</Link>
 				<nav
 					aria-label={t("nav.sections")}
