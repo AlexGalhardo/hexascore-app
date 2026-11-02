@@ -98,7 +98,7 @@ func writeURL(w io.Writer, base, path string, lastmod time.Time) error {
 		mod = "<lastmod>" + lastmod.UTC().Format(time.DateOnly) + "</lastmod>"
 	}
 
-	_, err := fmt.Fprintf(w, `<url><loc>%[1]s</loc>%[4]s`+
+	_, err := fmt.Fprintf(w, "\t"+`<url><loc>%[1]s</loc>%[4]s`+
 		`<xhtml:link rel="alternate" hreflang="en" href="%[1]s"/>`+
 		`<xhtml:link rel="alternate" hreflang="pt-br" href="%[2]s"/>`+
 		`<xhtml:link rel="alternate" hreflang="es" href="%[3]s"/>`+
@@ -117,7 +117,7 @@ func WriteSitemapIndex(ctx context.Context, ex database.Executor, w io.Writer, b
 	bw := bufio.NewWriter(w)
 	_, _ = io.WriteString(bw, `<?xml version="1.0" encoding="UTF-8"?>`+"\n"+
 		`<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`+"\n")
-	_, _ = fmt.Fprintf(bw, "<sitemap><loc>%s/sitemaps/static.xml</loc></sitemap>\n", esc(base))
+	_, _ = fmt.Fprintf(bw, "\t<sitemap><loc>%s/sitemaps/static.xml</loc></sitemap>\n", esc(base))
 
 	for _, s := range sitemapSources {
 		total, err := s.count(ctx, ex)
@@ -126,7 +126,7 @@ func WriteSitemapIndex(ctx context.Context, ex database.Executor, w io.Writer, b
 		}
 
 		for n := 1; n <= (total+SitemapChunk-1)/SitemapChunk; n++ {
-			_, _ = fmt.Fprintf(bw, "<sitemap><loc>%s/sitemaps/%s</loc></sitemap>\n", esc(base), s.name(n))
+			_, _ = fmt.Fprintf(bw, "\t<sitemap><loc>%s/sitemaps/%s</loc></sitemap>\n", esc(base), s.name(n))
 		}
 	}
 

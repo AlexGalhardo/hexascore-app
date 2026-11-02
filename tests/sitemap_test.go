@@ -71,8 +71,12 @@ func TestSitemaps(t *testing.T) {
 		AssertSee("https://example.test/sitemaps/items-game-1.xml").AssertSee("entities-organization-1.xml").
 		AssertDontSee("items-movie").AssertDontSee("entities-person")
 	index.AssertDontSee("example.test//")
+	// No CSP on the XML: Chrome's XML tree viewer needs its own styles, and a sitemap runs nothing (owner
+	// 2026-11-02). Entries are indented one tab, like the reference sitemap the owner pointed at.
+	index.AssertHeaderMissing("Content-Security-Policy").
+		AssertSee("	<sitemap><loc>https://example.test/sitemaps/static.xml")
 
-	items := app.Client(t).Get("/sitemaps/items-game-1.xml").AssertOK()
+	items := app.Client(t).Get("/sitemaps/items-game-1.xml").AssertOK().AssertHeaderMissing("Content-Security-Policy")
 	if n := strings.Count(items.Body(), "<url>"); n != 3 {
 		t.Fatalf("game urls = %d, want only the 3 public items", n)
 	}
