@@ -35,11 +35,12 @@ const baseProps = {
 	notifications: { communityMailOptOut: false },
 };
 
-test("the profile forms sit in a narrow centred column", () => {
+test("the profile sections sit in three equal columns from lg up", () => {
 	render(<Profile {...baseProps} />);
 
-	expect(screen.getByTestId("profile-page").className).toContain("max-w-2xl");
-	expect(screen.getByTestId("profile-page").className).toContain("mx-auto");
+	const grid = document.getElementById("details")?.parentElement as HTMLElement;
+	expect(grid.className).toContain("lg:grid-cols-3");
+	expect(grid.contains(document.getElementById("delete"))).toBe(true);
 });
 
 const section = (): HTMLElement => document.getElementById("two-factor") as HTMLElement;

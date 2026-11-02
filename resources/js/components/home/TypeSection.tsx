@@ -76,7 +76,7 @@ export default function TypeSection({
 			>
 				<div className="flex min-w-0 items-center gap-3">
 					<CategoryIcon type={type} className={`size-7 ${ACCENT_TEXT[type]}`} />
-					<h2 id={`home-${type}`} className="text-3xl">
+					<h2 id={`home-${type}`} className="text-3xl font-bold">
 						<Link href={base}>{t(`catalog.title.${type}`)}</Link>
 					</h2>
 				</div>

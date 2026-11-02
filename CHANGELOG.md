@@ -34,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **ui:** API docs code blocks get a copy button (Clipboard API); /profile lays its sections out in three equal columns from lg up; section listings start closer to the navbar; landing section names are bold
 - **ui:** Hover on navbar, menu and footer links inverts the colours (ink background, page-coloured text) in both themes; item page sections lose their top rules; trending cards put the score on the rank row and drop the score band and rating count
 - **catalog:** `covers:rekey` handles 16 items at a time and reuses bucket connections (VF-077 workaround), so a full dry run finishes in minutes instead of exhausting the container's ports
 - **ui:** No italics anywhere; the navbar and footer write the brand as "HexaScore"; signed-out menu items carry icons; trending card titles and scores are larger; the about, terms and privacy layout is narrower and centred without the rule above the contents; the IGDB and TMDB credits moved from the footer to a "Data credits" section on /about (ADR 0006)

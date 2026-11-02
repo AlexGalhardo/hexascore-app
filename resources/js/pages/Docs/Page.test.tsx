@@ -49,3 +49,23 @@ test("the first page has no previous link", () => {
 	render(<Page slug="index" title="Quickstart" body="" toc={[]} pages={pages} />);
 	expect(screen.getAllByRole("link", { name: /docs\.nav\.index/ })).toHaveLength(1);
 });
+
+test("every code block gets a copy button that copies the code and confirms", async () => {
+	const writeText = vi.fn(() => Promise.resolve());
+	Object.defineProperty(navigator, "clipboard", { value: { writeText }, configurable: true });
+	render(
+		<Page
+			slug="pagination"
+			title="Pagination"
+			body={
+				"<h1>Pagination</h1><pre><code>curl https://api.hexascore.app/v1/items</code></pre>"
+			}
+			toc={[]}
+			pages={pages}
+		/>,
+	);
+	const button = screen.getByRole("button", { name: "docs.copy" });
+	button.click();
+	expect(writeText).toHaveBeenCalledWith("curl https://api.hexascore.app/v1/items");
+	expect(await screen.findByRole("button", { name: "docs.copied" })).toBeTruthy();
+});

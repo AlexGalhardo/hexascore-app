@@ -1,6 +1,8 @@
 import { Link, usePage } from "@inertiajs/react";
+import { useRef } from "react";
 
 import CoverageTable, { type Coverage } from "../../components/docs/CoverageTable";
+import { useCopyButtons } from "../../components/docs/useCopyButtons";
 import Seo from "../../components/Seo";
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
@@ -36,6 +38,8 @@ export default function Page({ slug, body, toc, pages, coverage }: Props) {
 	const prev = at > 0 ? pages[at - 1] : null;
 	const next = at >= 0 && at < pages.length - 1 ? pages[at + 1] : null;
 	const sections = toc.filter((e) => e.level === 2);
+	const article = useRef<HTMLElement>(null);
+	useCopyButtons(article, { copy: t("docs.copy"), copied: t("docs.copied") }, body);
 
 	return (
 		<>
@@ -88,6 +92,7 @@ export default function Page({ slug, body, toc, pages, coverage }: Props) {
 				<div className="min-w-0">
 					<p className={`${eyebrow} mb-4 text-muted`}>{t("docs.title")}</p>
 					<article
+						ref={article}
 						className={prose}
 						// biome-ignore lint/security/noDangerouslySetInnerHtml: build-time escaped Markdown, see Props.body
 						dangerouslySetInnerHTML={{ __html: body }}

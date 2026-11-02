@@ -42,7 +42,7 @@ export default function Index({ type, items, filters, facets, pagination, total 
 			/>
 			{seo && <PagerHead url={url} pagination={pagination} origin={seo.canonical} />}
 			{/* Title alone, the result count on the right (design v1, round 2 item 11). */}
-			<div className="flex items-end gap-6 pt-6 pb-6 md:pt-8">
+			<div className="flex items-end gap-6 pb-6">
 				<h1 className="font-display text-5xl leading-none font-bold tracking-[-0.02em] md:text-[88px]">
 					{title}
 				</h1>
