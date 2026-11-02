@@ -1,6 +1,6 @@
 # HexaScore roadmap (vukem rewrite)
 
-Execution plan for any coding agent. Read [AGENTS.md](AGENTS.md) first. The team that executes it (orchestrator, two seniors, one intern, one specialist) and its queue protocol are defined in [PROMPT-WORKERS.md](PROMPT-WORKERS.md); state lives in `.orchestration/`. A model name on a microtask is an effort hint, not a required runtime. Tick boxes as work lands; update `docs/PROGRESS.md` at the end of each session.
+Execution plan for any coding agent. Read [AGENTS.md](AGENTS.md) first. The team that executes it (orchestrator, two seniors, one intern, one specialist) and its queue protocol are defined in [PROMPT-WORKERS.md](PROMPT-WORKERS.md); state lives in `.orchestration/`. A model name on a microtask is an effort hint, not a required runtime. Tick boxes as work lands and add a dated status line to open boxes.
 
 Ordering principle (owner requirement): (1) foundation and parity with the Next.js app, (2) data migration and infra, (3) public API, (4) community edits, (5) mobile, (6) continuous ingestion and recommendations. Phase 0 is a short framework spike that de-risks everything after it.
 
