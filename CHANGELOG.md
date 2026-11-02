@@ -34,6 +34,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **ui:** Hover on navbar, menu and footer links inverts the colours (ink background, page-coloured text) in both themes; item page sections lose their top rules; trending cards put the score on the rank row and drop the score band and rating count
+- **catalog:** `covers:rekey` handles 16 items at a time and reuses bucket connections (VF-077 workaround), so a full dry run finishes in minutes instead of exhausting the container's ports
 - **ui:** No italics anywhere; the navbar and footer write the brand as "HexaScore"; signed-out menu items carry icons; trending card titles and scores are larger; the about, terms and privacy layout is narrower and centred without the rule above the contents; the IGDB and TMDB credits moved from the footer to a "Data credits" section on /about (ADR 0006)
 - **ui:** Navbar, menu and footer links show a square background on hover (stronger hover token in both themes), the content starts 3rem below the navbar, and the favicon URLs carry a version so browsers drop the cached old icon
 - **ui:** Inter is the only font (headings and logo included; Playfair Display font and face removed); the page container is 20% wider; trending carousel rank numbers are twice as large and covers 25% bigger; item cards get a per-category border (games green, movies blue, series orange, books red, `--color-cat-*` tokens), drop the year and show title and score on one row, on the landing and the category pages (owner decisions 2026-11-02)
@@ -56,6 +58,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **i18n:** The web catalogues keep the keys the Android app still reads (`item.attribution`, `item.rateIt`, `catalog.resultCount`, `catalog.itemsFoundLabel`) and the app's bundled copy is resynced
+- **ci:** The Windows setup retries `bun install` once when Windows holds a just-written file (EBUSY)
 - **security:** Logs redact password-reset tokens in the request path and the `signature`, `expires` and `X-Amz-*` values of signed links in any message or error (`TestSecurity_A09_SignedURLsNotLogged`)
 - **ui:** Item pages ship the reviews, comments and reactions strings instead of raw keys (P7.B.1.1)
 - **infra:** `qa/k6/moderation.js` keeps one signed-in session per account (admin TOTP included), and `CommunityLoad` dates its load before today so members keep their daily submit quota (P4.B.5.1)
