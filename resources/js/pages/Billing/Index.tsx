@@ -56,7 +56,9 @@ export default function Billing({ plans, subscription, subscribed, checkout, cur
 					<p>
 						{t("billing.checkout.current")}: <strong>{subscription.plan}</strong> (
 						{t(`billing.checkout.status.${subscription.state}`)})
+						{/* A canceled subscription neither renews nor ends later: no date (owner 2026-11-02). */}
 						{subscription.currentPeriodEnd &&
+							subscription.state !== "canceled" &&
 							` - ${t(
 								subscription.cancelAtPeriodEnd
 									? "billing.checkout.ends"

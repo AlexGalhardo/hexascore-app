@@ -79,6 +79,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **billing:** A canceled subscription no longer shows "Renews on" on /billing
 - **seo:** /sitemap.xml and /sitemaps/* no longer send a Content-Security-Policy, which kept Chrome from showing them as a formatted XML tree; entries are indented one tab
 - **billing:** Checkout reads the chosen currency from the Inertia JSON body too, so /pricing subscribes in BRL and EUR instead of falling back to USD
 - **i18n:** The web catalogues keep the keys the Android app still reads (`item.attribution`, `item.rateIt`, `catalog.resultCount`, `catalog.itemsFoundLabel`) and the app's bundled copy is resynced
