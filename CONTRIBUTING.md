@@ -14,6 +14,15 @@ Thank you for considering a contribution. HexaScore is a Go application on the [
 2. Start the app with `vukem serve` (Go server with Vite HMR).
 3. Optional integrations (analytics, Turnstile, Telegram, IndexNow) stay off while their variables are unset.
 
+Setup guides, step by step:
+
+- [Windows 11 with Docker](docs/setups/setup-local-with-docker-windows.md)
+- [Linux and macOS with Docker](docs/setups/setup-local-with-docker-unix.md)
+- [Windows 11 without Docker](docs/setups/setup-local-without-docker-windows.md)
+- [Linux and macOS without Docker](docs/setups/setup-local-without-docker-unix.md)
+
+Self-hosting: [Ubuntu 24.04 VPS guide](docs/setups/setup-vps-ubuntu.md) and its [setup script](docs/setups/setup-vps-script.sh), an alternative to Railway.
+
 ## Making a change
 
 - Write the test first and keep the change focused on one concern.
@@ -56,7 +65,7 @@ The commit-msg hook checks the header locally and commitlint checks it in CI.
 ## Reporting bugs and security issues
 
 - Bugs and feature ideas: open a [GitHub issue](https://github.com/AlexGalhardo/hexascore-app/issues) with steps to reproduce.
-- Security vulnerabilities: do not open a public issue; follow [SECURITY.md](SECURITY.md).
+- Security vulnerabilities: do not open a public issue; follow [SECURITY.md](.github/SECURITY.md).
 
 ## License
 

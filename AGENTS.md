@@ -22,6 +22,7 @@ Railway rules that override the skill's deploy-from-cwd shortcut: do not run `ra
 | `docs/web-research.md` | competitor research with sources |
 | `docs/sdd/` | one design document per domain; `open-issues.md` is the triage of their open points |
 | `docs/adrs/` | architecture decision records (MADR) |
+| `docs/setups/` | setup guides: local with and without Docker (Windows, Linux/macOS), Ubuntu VPS self-hosting guide and script |
 | `architect-feedback-and-roadmap.md` | architect's assessment and executive summary (local only: being moved out of git, owner item 3 of 2026-11-01) |
 | `docs/review/` | state snapshots for architect reviews (latest: [2026-11-01](docs/review/2026-11-01-architect-brief.md)) |
 | `ROADMAP.md` | phases, tasks, subtasks, microtasks with acceptance criteria |
