@@ -8,13 +8,28 @@ Decision legend: **use** · **use with caveats** (conditions listed) · **do not
 
 | Source | Access | Licence / ToS | Rate limits and cost | Fields | Reliability | Attribution | Decision |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| TMDB | REST API with key (connector exists) | No commercial use without a written agreement; cache ≤ 6 months; no redistribution (themoviedb.org/api-terms-of-use, 2026-11-02) | ~40 req/s practical; free | poster, facts, trailers, external IDs, watch providers (`/watch/providers`, JustWatch data) | high | "This product uses the TMDB API but is not endorsed or certified by TMDB" + logo; watch providers also need the JustWatch attribution | **use with caveats**: display-only (ADR 0006), never in `/api/v1`; `tmdb.expire` keeps the 6-month rule; watch providers only with both attributions (RFC-003) |
+| TMDB | REST API with key (connector exists) | No commercial use without a written agreement; cache: the "≤ 6 months" figure is not stated on the terms page read 2026-11-02 (purge on termination only); no redistribution (themoviedb.org/api-terms-of-use, 2026-11-02) | ~40 req/s practical; free | poster, facts, trailers, external IDs, watch providers (`/watch/providers`, JustWatch data) | high | notice "…uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB" + TMDB logo (terms §3, 2026-11-02); watch providers also need the JustWatch attribution (not stated, see Attribution rules) | **use with caveats**: display-only (ADR 0006), never in `/api/v1`; `tmdb.expire` keeps the 6-month rule; watch providers only with both attributions (RFC-003) |
 | IMDb non-commercial datasets | TSV dumps | Personal, non-commercial only; commercial via AWS Data Exchange (listed US$150k/year, ADR 0006) | free | ratings, titles, crew | high | — | **do not use** (ADR 0006 §5) |
 | Wikidata | API + weekly dumps (connector exists) | CC0 | 1 query/s SPARQL, 5/s entity API, maxlag, identified User-Agent; free | QID, titles, dates, credits, external IDs, posters P3383, trailers P1651, sitelinks | medium (coverage gaps on runtime, platforms) | none required | **use** (primary key for entity resolution) |
 | Wikipedia en/pt/es | API (connector exists) | CC BY-SA 4.0; API etiquette (serial requests, User-Agent policy) | 5/s per language; free | synopses, entity descriptions | high | "From Wikipedia, CC BY-SA 4.0" + link per text | **use** (already in SDD 06) |
 | JustWatch | no public or partner API found | Terms forbid scraping and commercial use (support.justwatch.com terms, 2026-11-02) | — | availability per country | — | — | **do not use** directly; its data arrives through TMDB watch providers under TMDB's terms |
 | Watchmode | REST API with key | Paid tiers allow commercial use; Developer tier non-commercial with attribution; caching: paid plans keep data while subscribed; free plan must refresh or delete within 30 days, "should refresh or delete cached data within 30 days" (FAQ <https://api.watchmode.com/>, read 2026-11-02; the terms page <https://watchmode.com/tc> returned 404, so the T&C wording stays unverified) | Free 2,500 credits/month; Startup US$349/month (40k); Business US$599/month (100k) | streaming availability, deep links, prices per country | high (claimed) | required on the free tier | **use with caveats**: only if the owner funds it; outside the US$20 infra cap, so RFC-003 starts with TMDB providers and keeps Watchmode as the paid upgrade |
 | Rotten Tomatoes / Metacritic | licensed products only (Fabric Origin) | no public API; licence required | ~US$60k/year (secondary source, not verified) | critic scores | — | link-back | **do not use** (ADR 0006 §4) |
+
+### Attribution rules (TMDB and JustWatch, read 2026-11-02)
+
+Each rule: source, date read, quote of at most 15 words. "Not stated" means the page read did not say it; nothing is inferred.
+
+- TMDB notice text: "is not endorsed, certified, or otherwise approved by TMDB." (<https://www.themoviedb.org/api-terms-of-use>, §3, 2026-11-02). The notice names the product in brackets and starts "This [website, program, service, application, product] uses TMDB".
+- TMDB logo required: "You must use the TMDB logo to identify Your use of TMDB" (same URL, §3, 2026-11-02). Logo is "less prominent" than the app's own mark: "must be less prominent than the logos or marks" (same URL, §3).
+- Notice placement: "must place the following notice prominently" (same URL, §3). Minimum logo size: not stated on <https://www.themoviedb.org/api-terms-of-use> or <https://developer.themoviedb.org/docs/faq> (2026-11-02). The logos page <https://www.themoviedb.org/about/logos-attribution> was not read.
+- Logo modification (FAQ, <https://developer.themoviedb.org/docs/faq>, 2026-11-02): "Our logo should not be modified in color, aspect ratio, flipped or rotated" (13 words).
+- Link target (same FAQ, 2026-11-02): "please point your link to:" followed by <https://www.themoviedb.org>.
+- Attribution condition (same FAQ, 2026-11-02): "as long as you attribute TMDB as the source of the data" (11 words), applies to non-commercial use.
+- Commercial use: "Charging users a fee for Your Application" is listed as commercial use (same URL, §2, 2026-11-02); commercial use needs a written agreement.
+- Caching limit: "cache ≤ 6 months" is not stated on <https://www.themoviedb.org/api-terms-of-use> (2026-11-02). The terms say on termination: "promptly delete or otherwise purge all TMDB Content, including any cached content" (same URL, §1.D).
+- Watch-provider endpoint: the endpoint page <https://developer.themoviedb.org/reference/watch-providers-movie> returned 404 on 2026-11-02, so its attribution wording is not stated.
+- JustWatch attribution for TMDB-sourced data: not stated on <https://www.justwatch.com/us/terms> (updated 5 May 2026, read 2026-11-02) or on <https://www.justwatch.com/> (2026-11-02). Logo rules for JustWatch: not stated on those pages.
 
 ## Games
 
