@@ -55,6 +55,10 @@ type host struct {
 	hits        int
 	sem         chan struct{}
 	br          breakerState
+	name        string
+	last429     time.Time
+	calls       int
+	callsDay    string
 }
 
 func newHost(l HostLimit) *host {
@@ -114,15 +118,22 @@ func (h *host) pause(c Clock, d time.Duration) {
 	}
 }
 
-// rateLimited counts a 429 and halves the rate on every 20th.
-func (h *host) rateLimited() {
+// rateLimited counts a 429 and halves the rate on every 20th. It reports whether the state is worth persisting:
+// the rate changed or no 429 was seen in the last minute (a storm must not write once per response).
+func (h *host) rateLimited(now time.Time) (persist bool) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
+
+	persist = now.Sub(h.last429) > time.Minute
+	h.last429 = now
 
 	h.hits++
 	if h.hits%halveAfter == 0 && h.rate > 0 {
 		h.rate = max(h.rate/2, minRate)
+		persist = true
 	}
+
+	return persist
 }
 
 func (h *host) acquire(ctx context.Context) (release func(), err error) {
