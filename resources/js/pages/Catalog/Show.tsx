@@ -67,11 +67,11 @@ interface Props {
 	myLists?: ListChoice[];
 	trailers?: { youtubeId: string; title?: string }[];
 	cover?: Cover | null;
-	/** Deferred (group `reviews`) while the feature flag `social` is on (SDD 14 §12.10). */
+	/** Deferred (group `reviews`) while the feature flag `social` is on (SDD 14 Â§12.10). */
 	reviews?: { data: ReviewEntry[]; mine: ReviewEntry | null };
 	/** Deferred (group `personal`) for signed-in viewers while the flag `social` is on. */
 	friendsScore?: FriendsScoreData | null;
-	/** Share-card path while the feature flag `social` is on and the page is public (SDD 14 §11 item 12). */
+	/** Share-card path while the feature flag `social` is on and the page is public (SDD 14 Â§11 item 12). */
 	ogImage?: string;
 }
 
@@ -291,11 +291,8 @@ export default function Show({
 					</Section>
 				</div>
 
-				{/* Phone width: cover, actions, details, then the rating card before the text (owner 2026-11-02). */}
-				<div
-					data-testid="item-col-main"
-					className="grid min-w-0 content-start gap-10 max-sm:order-last"
-				>
+				{/* Phone width follows DOM order: title and synopsis before the score card and rating (OQ-15, 2026-11-02). */}
+				<div data-testid="item-col-main" className="grid min-w-0 content-start gap-10">
 					<header className="grid content-start gap-4">
 						<h1 className="text-3xl leading-none font-bold sm:text-4xl md:text-5xl">
 							{title}
