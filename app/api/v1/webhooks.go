@@ -144,7 +144,7 @@ func (h *Webhooks) Test(c *web.Ctx, in WebhookID) (WebhookTestResult, error) {
 		return WebhookTestResult{}, api.Unavailable(err)
 	}
 
-	if plan.ID != api.PlanPro && plan.ID != api.PlanBusiness {
+	if plan.ID != api.PlanHobby && plan.ID != api.PlanPro {
 		return WebhookTestResult{}, errs.New(http.StatusForbidden, "plan required").
 			WithExtension("code", "plan-required")
 	}

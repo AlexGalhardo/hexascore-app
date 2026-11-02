@@ -1,5 +1,5 @@
 // k6: public API /api/v1 list and detail at 50 rps combined (SDD 05 NFR-05-1, §9). 60 s by default; DURATION=10m for the full NFR.
-// Needs API_KEYS: comma-separated Business keys (50 rps each), seeded by qa/k6/seed.sh. Each request sends a distinct
+// Needs API_KEYS: comma-separated PRO keys (3 rps each), seeded by qa/k6/seed.sh. Each request sends a distinct
 // X-Forwarded-For so the 120/min per-IP limit does not mask latency (the app must trust the proxy, see docker-compose.yml).
 // Env: BASE_URL, API_KEYS, DURATION, LIST_RPS (25), DETAIL_RPS (25). Run:
 // docker run --rm --network host -e BASE_URL -e API_KEYS -v "$PWD/qa:/qa" grafana/k6:2.3.0 run /qa/k6/api-v1.js

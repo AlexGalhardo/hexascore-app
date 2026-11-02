@@ -110,8 +110,8 @@ func TestRobots_Production(t *testing.T) {
 		"CACHE_STORE":           "database",
 		"STRIPE_KEY":            stripeKey,
 		"STRIPE_WEBHOOK_SECRET": webhookSecret,
+		"STRIPE_PRICE_HOBBY":    "price_hobby",
 		"STRIPE_PRICE_PRO":      "price_pro",
-		"STRIPE_PRICE_BUSINESS": "price_business",
 	}})
 	// Production redirects any host but APP_URL's, and vukemtest requests default to example.com.
 	res := app.Client(t).Get("https://example.test/robots.txt").AssertOK().
@@ -148,8 +148,8 @@ func TestRobots_ProductionNoindex(t *testing.T) {
 		"CACHE_STORE":           "database",
 		"STRIPE_KEY":            stripeKey,
 		"STRIPE_WEBHOOK_SECRET": webhookSecret,
+		"STRIPE_PRICE_HOBBY":    "price_hobby",
 		"STRIPE_PRICE_PRO":      "price_pro",
-		"STRIPE_PRICE_BUSINESS": "price_business",
 		"SEO_NOINDEX":           "true",
 	}
 	c := vukemtest.New(t, bootstrap.New, vukemtest.Options{Env: env}).Client(t)
@@ -202,8 +202,8 @@ func TestCanonicalHost_Production(t *testing.T) {
 		"CACHE_STORE":           "database",
 		"STRIPE_KEY":            stripeKey,
 		"STRIPE_WEBHOOK_SECRET": webhookSecret,
+		"STRIPE_PRICE_HOBBY":    "price_hobby",
 		"STRIPE_PRICE_PRO":      "price_pro",
-		"STRIPE_PRICE_BUSINESS": "price_business",
 	}})
 	c := app.Client(t)
 

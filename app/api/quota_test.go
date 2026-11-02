@@ -113,16 +113,17 @@ func TestPlans(t *testing.T) {
 	t.Parallel()
 
 	for _, tc := range []struct {
-		id                   string
-		quota, pageSize, rps int
-		lifetime             bool
+		id                          string
+		quota, pageSize, rps, burst int
+		lifetime                    bool
 	}{
-		{PlanFree, 100, 10, 1, true},
-		{PlanPro, 50_000, 100, 10, false},
-		{PlanBusiness, 500_000, 100, 50, false},
+		{PlanFree, 100, 10, 1, 5, true},
+		{PlanHobby, 10_000, 20, 1, 5, false},
+		{PlanPro, 50_000, 50, 3, 15, false},
 	} {
 		p, ok := PlanByID(tc.id)
-		if !ok || p.Quota != tc.quota || p.MaxPageSize != tc.pageSize || p.RPS != tc.rps || p.Lifetime != tc.lifetime {
+		if !ok || p.Quota != tc.quota || p.MaxPageSize != tc.pageSize || p.RPS != tc.rps || p.Burst != tc.burst ||
+			p.Lifetime != tc.lifetime {
 			t.Errorf("PlanByID(%q) = %+v, %v", tc.id, p, ok)
 		}
 	}
@@ -131,7 +132,7 @@ func TestPlans(t *testing.T) {
 		t.Error("unknown plan accepted")
 	}
 
-	pro, _ := PlanByID(PlanPro)
+	pro, _ := PlanByID(PlanHobby)
 	now := time.Date(2026, 10, 31, 23, 59, 0, 0, time.UTC)
 
 	if got := pro.Period(now); got != "202610" {
@@ -291,7 +292,7 @@ func TestQuotaMonthRollover(t *testing.T) {
 	st := newMemStore()
 	clk := &clock{time.Date(2026, 10, 31, 23, 59, 59, 0, time.UTC)}
 	m := &Meter{Store: st, Now: clk.now}
-	pro, _ := PlanByID(PlanPro)
+	pro, _ := PlanByID(PlanHobby)
 
 	_, _ = m.Admit(t.Context(), 7, "", pro)
 	clk.t = clk.t.Add(2 * time.Second)

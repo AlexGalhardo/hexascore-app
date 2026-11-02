@@ -63,10 +63,10 @@ func TestAPIActivityPlan(t *testing.T) {
 
 	free.GetJSON(path).AssertForbidden().AssertJSONPath("code", "plan-required")
 
-	_, pro := webhookClient(t, "act-pro@example.com", "pro")
+	_, pro := webhookClient(t, "act-pro@example.com", "hobby")
 	pro.GetJSON(path).AssertForbidden().AssertJSONPath("code", "plan-required")
 
-	r2, biz := webhookClient(t, "act-biz@example.com", "business")
+	r2, biz := webhookClient(t, "act-biz@example.com", "pro")
 	item2 := seedTrending(t, r2)
 	path = "/api/v1/games/" + item2 + "/activity"
 

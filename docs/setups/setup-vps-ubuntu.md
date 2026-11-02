@@ -104,7 +104,7 @@ Required in production:
 | `APP_URL` | `https://your.domain` | every other host is redirected here (except `/up`) |
 | `DATABASE_URL` | `postgres://hexascore:<password>@postgres:5432/hexascore?sslmode=disable` | the password from `openssl rand -hex 24` |
 | `MAIL_MAILER`, `RESEND_API_KEY` | `resend` and the Resend key | `log` only writes mail to the log; also set `MAIL_FROM` and `MAIL_SUPPORT_ADDRESS` to addresses of your domain |
-| `STRIPE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO`, `STRIPE_PRICE_BUSINESS` | from your Stripe account | billing refuses to boot in production without them; the webhook endpoint is `https://your.domain/stripe/webhook` |
+| `STRIPE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_HOBBY`, `STRIPE_PRICE_PRO` | from your Stripe account | billing refuses to boot in production without them; the webhook endpoint is `https://your.domain/stripe/webhook` |
 | `TRUSTED_PROXIES`, `CLIENT_IP_HEADER`, `TRUST_FORWARDED_PROTO` | Caddy's network, `X-Real-IP`, `true` | see [Reverse proxy](#reverse-proxy-with-caddy) |
 | `RATE_LIMIT_STORE`, `CACHE_STORE`, `SESSION_DRIVER` | `cache`, `database`, `database` | the app refuses to boot in production without the cache rate-limit store |
 | `S3_*` | your bucket | covers, ID exports and backups |

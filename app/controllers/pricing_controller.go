@@ -79,7 +79,7 @@ func pricing(c *web.Ctx, coverage APICoverage) error {
 
 	plans := make([]pricingPlan, 0, 3)
 
-	for _, id := range []string{api.PlanFree, api.PlanPro, api.PlanBusiness} {
+	for _, id := range []string{api.PlanFree, api.PlanHobby, api.PlanPro} {
 		p, _ := api.PlanByID(id)
 		plans = append(plans, pricingPlan{
 			ID: id, Amounts: amounts[id], Quota: p.Quota, Lifetime: p.Lifetime, MaxPageSize: p.MaxPageSize, RPS: p.RPS,

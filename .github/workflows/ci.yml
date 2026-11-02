@@ -254,7 +254,7 @@ jobs:
             -e STRIPE_KEY=sk_test_placeholder_ci \
             -e STRIPE_WEBHOOK_SECRET=whsec_placeholder_ci \
             -e STRIPE_PRICE_PRO=price_placeholder_pro \
-            -e STRIPE_PRICE_BUSINESS=price_placeholder_business \
+            -e STRIPE_PRICE_HOBBY=price_placeholder_hobby \
             hexascore:ci
           for i in $(seq 1 30); do curl -fsS localhost:3000/up && break; sleep 1; done
           # No database in this job, so readiness is 503 on "db"; only the ssr check matters here.

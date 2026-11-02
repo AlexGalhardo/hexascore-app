@@ -15,17 +15,17 @@ func TestBillingPage(t *testing.T) {
 
 	c.Get("/billing").AssertInertia("Billing/Index").
 		HasProp("plans", 2).
-		PropEquals("plans.1.name", "business").
+		PropEquals("plans.1.name", "pro").
 		PropEquals("subscribed", false).
 		PropEquals("subscription", nil)
 
 	setCustomer(t, app, u)
-	f.setSubscription("active", "price_business")
+	f.setSubscription("active", "price_pro")
 	postWebhook(t, app, "evt_1", "customer.subscription.created", map[string]any{"id": "sub_1"}).AssertOK()
 
 	c.Get("/billing").AssertInertia("Billing/Index").
 		PropEquals("subscribed", true).
-		PropEquals("subscription.plan", "Business").
+		PropEquals("subscription.plan", "PRO").
 		PropEquals("subscription.status", "active").
 		PropEquals("plans.1.current", true)
 

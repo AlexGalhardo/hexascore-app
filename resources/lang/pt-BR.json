@@ -450,13 +450,12 @@
   "billing": {
     "plans": {
       "free": "Free",
-      "pro": "Pro",
-      "business": "Business"
+      "hobby": "Hobby",
+      "pro": "PRO"
     },
     "pricing": {
       "metaTitle": "Preços da API",
       "title": "Preços da API",
-      "subtitle": "Comece grátis e faça upgrade quando precisar de mais. O valor é calculado no servidor, na moeda que você escolher.",
       "currency": "Moeda",
       "perMonth": "/mês",
       "requestsLifetime": "{count} requisições no total",
@@ -471,8 +470,6 @@
       "ctaPaid": "Assinar {plan}",
       "ctaSignup": "Crie sua conta para assinar",
       "notConfigured": "Pagamentos online ainda não estão disponíveis. Os planos pagos abrem em breve.",
-      "coverageTitle": "Cobertura de dados",
-      "coverageBody": "A API só retorna campos que podemos republicar, então alguns são irregulares. Capas de filmes, séries e jogos, e trailers, nunca estão na API.",
       "coverageLink": "Ver os detalhes da cobertura",
       "eyebrow": "API pública · somente leitura",
       "popular": "Mais escolhido",

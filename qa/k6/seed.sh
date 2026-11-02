@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Seeds a LOCAL load-test database (never production): K6_KEYS Business-plan users with one hx_live_ key each, and
+# Seeds a LOCAL load-test database (never production): K6_KEYS PRO-plan users with one hx_live_ key each, and
 # K6_LISTS users with one public list of 25 games each. Idempotent per run through a random suffix.
 #   PSQL="docker exec -i hx-senior-postgres-1 psql -U hexascore -d hexascore" qa/k6/seed.sh > /tmp/k6.env
 # Prints shell exports for the k6 scripts: API_KEYS (comma separated) and LIST_PATHS (comma separated /u/<nick>/lists/<id>).
@@ -24,7 +24,7 @@ for i in $(seq 1 "$KEYS"); do
 		VALUES ('k6 api $i', 'k6-api-$RUN-$i@example.test', 'x', now(), 'kapi$LET$(letter "$i")', now(), now()) RETURNING id
 	), s AS (
 		INSERT INTO subscriptions (user_id, stripe_subscription_id, status, price_id, plan, state, current_period_end, created_at, updated_at)
-		SELECT id, 'sub_k6_$RUN$i', 'active', 'price_k6', 'business', 'active', now() + interval '30 days', now(), now() FROM u
+		SELECT id, 'sub_k6_$RUN$i', 'active', 'price_k6', 'pro', 'active', now() + interval '30 days', now(), now() FROM u
 	) INSERT INTO api_keys (id, user_id, name, prefix, hash) SELECT gen_random_uuid(), id, 'k6', '${key:0:12}', '$hash' FROM u" >/dev/null
 	keys+=("$key")
 done

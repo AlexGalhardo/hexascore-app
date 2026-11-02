@@ -16,7 +16,7 @@ import (
 
 // Billing registers the billing page, Stripe Checkout, the Billing Portal
 // and the Stripe webhook (vukem install:billing). Protect your own routes
-// with b.Subscribed() or b.OnPlan("business") after auth.Required.
+// with b.Subscribed() or b.OnPlan("pro") after auth.Required.
 func Billing(r *router.Router, app *vukem.App) error {
 	acc, err := accounts.New(app)
 	if err != nil {

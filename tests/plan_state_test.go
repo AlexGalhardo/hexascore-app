@@ -36,12 +36,16 @@ func TestPlanStateMachine(t *testing.T) {
 		sub  models.Subscription
 		want string
 	}{
-		{"active in period", models.Subscription{Plan: "pro", State: "active", CurrentPeriodEnd: future}, api.PlanPro},
-		{"active no end", models.Subscription{Plan: "business", State: "active"}, api.PlanBusiness},
-		{"period ended", models.Subscription{Plan: "pro", State: "active", CurrentPeriodEnd: past}, api.PlanFree},
-		{"past due", models.Subscription{Plan: "pro", State: "past_due", CurrentPeriodEnd: future}, api.PlanFree},
-		{"canceled", models.Subscription{Plan: "pro", State: "canceled"}, api.PlanFree},
-		{"expired", models.Subscription{Plan: "pro", State: "expired"}, api.PlanFree},
+		{
+			"active in period",
+			models.Subscription{Plan: "hobby", State: "active", CurrentPeriodEnd: future},
+			api.PlanHobby,
+		},
+		{"active no end", models.Subscription{Plan: "pro", State: "active"}, api.PlanPro},
+		{"period ended", models.Subscription{Plan: "hobby", State: "active", CurrentPeriodEnd: past}, api.PlanFree},
+		{"past due", models.Subscription{Plan: "hobby", State: "past_due", CurrentPeriodEnd: future}, api.PlanFree},
+		{"canceled", models.Subscription{Plan: "hobby", State: "canceled"}, api.PlanFree},
+		{"expired", models.Subscription{Plan: "hobby", State: "expired"}, api.PlanFree},
 		{"unknown plan", models.Subscription{Plan: "", State: "active"}, api.PlanFree},
 	}
 	for _, tc := range cases {
@@ -78,7 +82,7 @@ func TestPlanResolverFollowsWebhooks(t *testing.T) {
 		t.Fatalf("no subscription: plan = %q", got)
 	}
 
-	f.setSubscription("active", "price_business")
+	f.setSubscription("active", "price_pro")
 	postWebhook(
 		t,
 		app,
@@ -87,11 +91,11 @@ func TestPlanResolverFollowsWebhooks(t *testing.T) {
 		map[string]any{"id": "sub_1", "customer": "cus_1"},
 	).AssertOK()
 
-	if got := plan(); got != api.PlanBusiness {
+	if got := plan(); got != api.PlanPro {
 		t.Fatalf("active business: plan = %q", got)
 	}
 
-	f.setSubscription("past_due", "price_business")
+	f.setSubscription("past_due", "price_pro")
 	postWebhook(
 		t,
 		app,
@@ -122,7 +126,7 @@ func TestCancelLiveOnDeletion(t *testing.T) {
 	app := billingApp(t, f)
 	u := newUser(t, app, "bye@example.com")
 	setCustomer(t, app, u)
-	f.setSubscription("active", "price_pro")
+	f.setSubscription("active", "price_hobby")
 	postWebhook(
 		t,
 		app,
@@ -132,7 +136,7 @@ func TestCancelLiveOnDeletion(t *testing.T) {
 	).AssertOK()
 
 	// Known only to Stripe (no local row): the hook reads the customer's subscriptions from Stripe.
-	f.addSubscription("sub_old", "active", "price_pro", 1_600_000_000)
+	f.addSubscription("sub_old", "active", "price_hobby", 1_600_000_000)
 
 	acc, err := accounts.New(app.App)
 	if err != nil {

@@ -1,6 +1,5 @@
 import { Link, usePage } from "@inertiajs/react";
 
-import CoverageTable, { type Coverage } from "../../components/docs/CoverageTable";
 import Seo from "../../components/Seo";
 import { btnClass } from "../../components/ui/Btn";
 import { localized } from "../../lib/route";
@@ -8,7 +7,7 @@ import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
 
 interface Plan {
-	id: "free" | "pro" | "business";
+	id: "free" | "hobby" | "pro";
 	amounts: Record<string, number>;
 	quota: number;
 	lifetime: boolean;
@@ -20,7 +19,7 @@ interface Props {
 	plans: Plan[];
 	currency: string;
 	currencies: string[];
-	coverage: Coverage & { docsPath: string };
+	coverage: { docsPath: string };
 }
 
 const eyebrow = "text-xs font-bold tracking-[0.1em] uppercase";
@@ -48,7 +47,6 @@ export default function Index({ plans, currency, currencies, coverage }: Props) 
 					<h1 className="mt-3 text-5xl leading-none md:text-7xl">
 						{t("billing.pricing.title")}
 					</h1>
-					<p className="mt-3 text-lg text-muted">{t("billing.pricing.subtitle")}</p>
 				</header>
 				<nav aria-labelledby="currency-label">
 					<p id="currency-label" className="mb-2 text-xs font-semibold">
@@ -135,9 +133,12 @@ export default function Index({ plans, currency, currencies, coverage }: Props) 
 									<Link
 										href={
 											user
-												? localized("/billing", locale)
+												? `/billing/checkout/${plan.id}`
 												: localized("/signup", locale)
 										}
+										method={user ? "post" : "get"}
+										data={user ? { currency } : undefined}
+										as={user ? "button" : "a"}
 										className={btnClass(
 											featured ? "primary" : "secondary",
 											"w-full",
@@ -167,19 +168,12 @@ export default function Index({ plans, currency, currencies, coverage }: Props) 
 				})}
 			</ul>
 
-			<aside aria-labelledby="coverage-h" className="mt-10 border-t-2 border-fg pt-4">
-				<h2 id="coverage-h" className="text-3xl">
-					{t("billing.pricing.coverageTitle")}
-				</h2>
-				<p className="mt-2">{t("billing.pricing.coverageBody")}</p>
-				<CoverageTable coverage={coverage} />
-				<a
-					href={localized(coverage.docsPath, locale)}
-					className="mt-3 inline-flex min-h-11 items-center gap-1 font-semibold text-primary hover:underline"
-				>
-					{t("billing.pricing.coverageLink")} <span aria-hidden="true">→</span>
-				</a>
-			</aside>
+			<a
+				href={localized(coverage.docsPath, locale)}
+				className="mt-10 inline-flex min-h-11 items-center gap-1 font-semibold text-primary hover:underline"
+			>
+				{t("billing.pricing.coverageLink")} <span aria-hidden="true">→</span>
+			</a>
 		</section>
 	);
 }

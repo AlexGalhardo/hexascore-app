@@ -172,7 +172,7 @@ if [ ! -f "$ENV_FILE" ]; then
 		echo "STRIPE_KEY="
 		echo "STRIPE_WEBHOOK_SECRET="
 		echo "STRIPE_PRICE_PRO="
-		echo "STRIPE_PRICE_BUSINESS="
+		echo "STRIPE_PRICE_HOBBY="
 		echo "# Optional, off while empty (see .env.example):"
 		echo "SOCIAL_GOOGLE_CLIENT_ID="
 		echo "SOCIAL_GOOGLE_CLIENT_SECRET="
@@ -297,7 +297,7 @@ log "postgres and rustfs"
 compose up -d --wait postgres rustfs
 
 missing=()
-for key in STRIPE_KEY STRIPE_WEBHOOK_SECRET STRIPE_PRICE_PRO STRIPE_PRICE_BUSINESS; do
+for key in STRIPE_KEY STRIPE_WEBHOOK_SECRET STRIPE_PRICE_PRO STRIPE_PRICE_HOBBY; do
 	[ -n "$(env_get "$key")" ] || missing+=("$key")
 done
 if [ "$(env_get MAIL_MAILER)" = resend ] && [ -z "$(env_get RESEND_API_KEY)" ]; then

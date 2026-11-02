@@ -164,7 +164,7 @@ func (h covered) trending(section string) func(*web.Ctx, publicapi.TrendingInput
 }
 
 // Catalog registers the site-audience catalogue reads on an /app/v1 group. coversBase is the normalised
-// COVERS_BASE_URL. Trending is the same snapshot as /api/v1 (SDD 08 section 6); item activity is business-only
+// COVERS_BASE_URL. Trending is the same snapshot as /api/v1 (SDD 08 section 6); item activity is pro-only
 // and stays off this audience.
 func Catalog(g *router.Group, items *publicapi.Controller, coversBase string) {
 	cov := covered{items: items, base: coversBase}

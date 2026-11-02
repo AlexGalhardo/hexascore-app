@@ -17,7 +17,7 @@ import (
 )
 
 func TestAPIWebhookTest(t *testing.T) {
-	r, client := webhookClient(t, "hooks-ping@example.com", "pro")
+	r, client := webhookClient(t, "hooks-ping@example.com", "hobby")
 	created := client.PostJSON("/api/v1/webhooks", map[string]any{
 		"url": "https://1.1.1.1/hook", "events": []string{"item.updated"}, "itemTypes": []string{"games"},
 	}).AssertCreated()
@@ -68,7 +68,7 @@ func TestAPIWebhookTest(t *testing.T) {
 		t.Fatalf("quota %d → %d, want +1 from the usage read only", before, after)
 	}
 
-	_, other := webhookClient(t, "hooks-ping-other@example.com", "pro")
+	_, other := webhookClient(t, "hooks-ping-other@example.com", "hobby")
 	other.PostJSON("/api/v1/webhooks/"+one.ID+"/test", map[string]any{}).AssertNotFound()
 
 	if _, err := r.acc.DB.ExecContext(

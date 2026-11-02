@@ -261,7 +261,7 @@ job_build() {
 	docker run -d --name "$name" -p "$port:3000" \
 		-e APP_KEY="$(app_key)" -e APP_URL="http://localhost:$port" \
 		-e STRIPE_KEY=sk_test_placeholder_ci -e STRIPE_WEBHOOK_SECRET=whsec_placeholder_ci \
-		-e STRIPE_PRICE_PRO=price_placeholder_pro -e STRIPE_PRICE_BUSINESS=price_placeholder_business "$IMG" >/dev/null
+		-e STRIPE_PRICE_PRO=price_placeholder_pro -e STRIPE_PRICE_HOBBY=price_placeholder_hobby "$IMG" >/dev/null
 	local i
 	for i in $(seq 1 30); do curl -fsS "localhost:$port/up" >/dev/null && break; sleep 1; done
 	# No database here, so readiness is 503 on "db"; only the ssr check matters.

@@ -67,7 +67,7 @@ services:
       STRIPE_KEY: sk_test_placeholder_e2e
       STRIPE_WEBHOOK_SECRET: whsec_placeholder_e2e
       STRIPE_PRICE_PRO: price_placeholder_pro
-      STRIPE_PRICE_BUSINESS: price_placeholder_business
+      STRIPE_PRICE_HOBBY: price_placeholder_hobby
       # Community submissions flag (vukem feature flag, env FLAG_<NAME>); off unless the shell opens it.
       FLAG_COMMUNITY_SUBMISSIONS: ${FLAG_COMMUNITY_SUBMISSIONS:-false}
       # Social layer flag (SDD 14 §12.3); off unless the shell opens it (E2E_SOCIAL_OPEN=true for qa/e2e/specs/social.spec.ts).

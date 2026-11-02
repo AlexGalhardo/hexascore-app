@@ -7,12 +7,12 @@ import (
 
 // Plan IDs (SDD 05 FR-05-3).
 const (
-	PlanFree     = "free"
-	PlanPro      = "pro"
-	PlanBusiness = "business"
+	PlanFree  = "free"
+	PlanHobby = "hobby"
+	PlanPro   = "pro"
 )
 
-// Plan is a public API plan's limits, equal to legacy lib/api/plans.ts (D-33).
+// Plan is a public API plan's limits (D-33).
 type Plan struct {
 	ID string
 	// Quota is requests per UTC calendar month, or over the account lifetime when Lifetime is set.
@@ -30,10 +30,11 @@ func PlanByID(id string) (Plan, bool) {
 	switch id {
 	case PlanFree:
 		return Plan{ID: PlanFree, Quota: 100, Lifetime: true, MaxPageSize: 10, RPS: 1, Burst: 5}, true
+	// Paid bursts are five times the rate, as for free (Q-A2).
+	case PlanHobby:
+		return Plan{ID: PlanHobby, Quota: 10_000, MaxPageSize: 20, RPS: 1, Burst: 5}, true
 	case PlanPro:
-		return Plan{ID: PlanPro, Quota: 50_000, MaxPageSize: 100, RPS: 10, Burst: 10}, true
-	case PlanBusiness:
-		return Plan{ID: PlanBusiness, Quota: 500_000, MaxPageSize: 100, RPS: 50, Burst: 50}, true
+		return Plan{ID: PlanPro, Quota: 50_000, MaxPageSize: 50, RPS: 3, Burst: 15}, true
 	}
 
 	return Plan{}, false

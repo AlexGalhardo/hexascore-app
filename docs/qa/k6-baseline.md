@@ -8,7 +8,7 @@ Measured 2026-10-30 on a developer laptop (Docker Desktop, Windows 11), app cont
 export APP_KEY="base64:$(openssl rand -base64 32)"
 docker compose --profile app up -d --build --wait app
 PSQL="docker exec -i <project>-postgres-1 psql -U hexascore -d hexascore" qa/k6/seed.sh > /tmp/k6.env
-. /tmp/k6.env   # API_KEYS (10 Business keys), LIST_PATHS (10 public lists of 25 games)
+. /tmp/k6.env   # API_KEYS (10 PRO keys), LIST_PATHS (10 public lists of 25 games)
 docker run --rm --network host -e BASE_URL=http://127.0.0.1:3000 -e API_KEYS -e API_KEY="${API_KEYS%%,*}" -e LIST_PATHS \
   -v "$PWD/qa:/qa" grafana/k6:2.3.0 run /qa/k6/api-v1.js   # or public-lists.js, pages-ttfb.js
 ```

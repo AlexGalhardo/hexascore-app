@@ -37,8 +37,8 @@ func Currency(c string) (string, bool) {
 // STRIPE_PRICE_<NAME> to a recurring price id from the Stripe Dashboard.
 func plans() []Plan {
 	return []Plan{
-		{Name: "pro", Label: "Pro", Amounts: map[string]int{"brl": 2900, "usd": 600, "eur": 600}},
-		{Name: "business", Label: "Business", Amounts: map[string]int{"brl": 14900, "usd": 2900, "eur": 2700}},
+		{Name: "hobby", Label: "Hobby", Amounts: map[string]int{"brl": 2000, "usd": 500, "eur": 500}},
+		{Name: "pro", Label: "PRO", Amounts: map[string]int{"brl": 5000, "usd": 1000, "eur": 1000}},
 	}
 }
 

@@ -14,7 +14,7 @@ import (
 )
 
 func TestAPIWebhooks(t *testing.T) {
-	r, client := webhookClient(t, "hooks-pro@example.com", "pro")
+	r, client := webhookClient(t, "hooks-pro@example.com", "hobby")
 
 	body := map[string]any{
 		"url": "https://1.1.1.1/hook", "events": []string{"item.updated"}, "itemTypes": []string{"games"},
@@ -52,7 +52,7 @@ func TestAPIWebhooks(t *testing.T) {
 	listed.AssertDontSee(one.Secret).AssertDontSee("whsec_")
 	listed.AssertJSONPath("data.0.url", "https://1.1.1.1/hook")
 
-	_, other := webhookClient(t, "hooks-other@example.com", "pro")
+	_, other := webhookClient(t, "hooks-other@example.com", "hobby")
 	other.Delete("/api/v1/webhooks/" + two.ID).AssertNotFound()
 	client.GetJSON("/api/v1/webhooks").AssertOK().AssertJSONCount("data", 2)
 
@@ -62,7 +62,7 @@ func TestAPIWebhooks(t *testing.T) {
 	_, free := webhookClient(t, "hooks-free@example.com", "")
 	free.PostJSON("/api/v1/webhooks", body).AssertForbidden().AssertJSONPath("code", "plan-required")
 
-	_, biz := webhookClient(t, "hooks-biz@example.com", "business")
+	_, biz := webhookClient(t, "hooks-biz@example.com", "pro")
 	biz.PostJSON("/api/v1/webhooks", body).AssertCreated()
 	biz.PostJSON("/api/v1/webhooks", map[string]any{
 		"url": "https://1.0.0.1/hook", "events": []string{"item.updated"}, "itemTypes": []string{"series"},
@@ -75,7 +75,7 @@ func TestAPIWebhooks(t *testing.T) {
 }
 
 func TestSecurity_A10_WebhookSSRF(t *testing.T) {
-	_, client := webhookClient(t, "hooks-ssrf@example.com", "pro")
+	_, client := webhookClient(t, "hooks-ssrf@example.com", "hobby")
 	for _, raw := range []string{
 		"https://127.0.0.1/hook",
 		"https://10.1.2.3/hook",
@@ -88,7 +88,7 @@ func TestSecurity_A10_WebhookSSRF(t *testing.T) {
 }
 
 func TestSecurity_A02_WebhookSecretEncrypted(t *testing.T) {
-	r, client := webhookClient(t, "hooks-secret@example.com", "pro")
+	r, client := webhookClient(t, "hooks-secret@example.com", "hobby")
 	res := client.PostJSON("/api/v1/webhooks", map[string]any{
 		"url": "https://1.1.1.1/hook", "events": []string{"item.updated"}, "itemTypes": []string{"games"},
 	}).AssertCreated()

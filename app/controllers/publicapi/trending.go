@@ -140,7 +140,7 @@ type SectionActivityInput struct {
 	To   string `json:"to"   doc:"last UTC day, YYYY-MM-DD; default today"`
 }
 
-// GetItemActivity is get<Type>Activity: GET /api/v1/{games,movies,series,books}/{id}/activity, business plan only
+// GetItemActivity is get<Type>Activity: GET /api/v1/{games,movies,series,books}/{id}/activity, pro plan only
 // (SDD 05 FR-05-17). Literal sections because "/{type}/{id}/activity" overlaps "/exports/{type}/{day}" on the
 // ServeMux. It is one request on the quota, like any read.
 func (h *Controller) GetItemActivity(section string) func(*web.Ctx, SectionActivityInput) (ActivityJSON, error) {
@@ -164,7 +164,7 @@ func (h *Controller) activity(c *web.Ctx, in ActivityInput) (ActivityJSON, error
 		return ActivityJSON{}, err
 	}
 
-	if plan.ID != hxapi.PlanBusiness {
+	if plan.ID != hxapi.PlanPro {
 		return ActivityJSON{}, errs.New(http.StatusForbidden, "plan required").WithExtension("code", "plan-required")
 	}
 

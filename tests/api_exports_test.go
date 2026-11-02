@@ -104,7 +104,7 @@ func TestAPIExports(t *testing.T) {
 	free.GetJSON("/api/v1/exports").AssertForbidden().AssertJSONPath("code", "plan-required")
 	free.GetJSON("/api/v1/exports/games/2026-11-02").AssertForbidden().AssertJSONPath("code", "plan-required")
 
-	pro := exportsClient(t, srv, "exp-pro@example.com", "pro")
+	pro := exportsClient(t, srv, "exp-pro@example.com", "hobby")
 
 	t.Run("list", func(*testing.T) {
 		pro.GetJSON("/api/v1/exports").AssertOK().AssertMatchesOpenAPI().
@@ -135,7 +135,7 @@ func TestAPIExports(t *testing.T) {
 	})
 
 	t.Run("business is allowed", func(*testing.T) {
-		biz := exportsClient(t, srv, "exp-biz@example.com", "business")
+		biz := exportsClient(t, srv, "exp-biz@example.com", "pro")
 		biz.GetJSON("/api/v1/exports/games/2026-11-01").AssertStatus(http.StatusFound)
 	})
 }

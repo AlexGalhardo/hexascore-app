@@ -139,7 +139,7 @@ func (h *Exports) requirePlan(c *web.Ctx) error {
 		return api.Unavailable(err)
 	}
 
-	if plan.ID != api.PlanPro && plan.ID != api.PlanBusiness {
+	if plan.ID != api.PlanHobby && plan.ID != api.PlanPro {
 		return errs.New(http.StatusForbidden, "plan required").WithExtension("code", "plan-required")
 	}
 

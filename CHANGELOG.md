@@ -35,6 +35,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Changed
 
 - **ui:** API docs code blocks get a copy button (Clipboard API); /profile lays its sections out in three equal columns from lg up; section listings start closer to the navbar; landing section names are bold
+- **billing:** Paid API plans are now `hobby` (10,000 requests per month, 20 items per request, 1 request per second with a burst of 5, US$5 / R$20 / €5) and `pro` (50,000 per month, 50 items, 3 per second with a burst of 15, US$10 / R$50 / €10), recorded in D-33, ADR 0015 and SDD 05; env `STRIPE_PRICE_HOBBY` replaces `STRIPE_PRICE_BUSINESS`; webhooks and exports open to both plans (2 and 10 endpoints), item activity is pro only
+- **ui:** `/pricing` subscribe buttons post straight to Stripe Checkout in the selected currency (signed-out visitors still go to sign-up); the subtitle and the data coverage block are gone, only the coverage link stays
 - **ui:** Hover on navbar, menu and footer links inverts the colours (ink background, page-coloured text) in both themes; item page sections lose their top rules; trending cards put the score on the rank row and drop the score band and rating count
 - **catalog:** `covers:rekey` handles 16 items at a time and reuses bucket connections (VF-077 workaround), so a full dry run finishes in minutes instead of exhausting the container's ports
 - **ui:** No italics anywhere; the navbar and footer write the brand as "HexaScore"; signed-out menu items carry icons; trending card titles and scores are larger; the about, terms and privacy layout is narrower and centred without the rule above the contents; the IGDB and TMDB credits moved from the footer to a "Data credits" section on /about (ADR 0006)
@@ -70,6 +72,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Removed
 
+- **billing:** The legacy `pro` (US$6) and `business` plans and the `STRIPE_PRICE_BUSINESS` variable; subscriptions on a retired price id no longer map to a plan
 - **ui:** "Recently rated by members" landing strip (item 5), the trending definition line in the footer (item 16), the navbar notifications bell and unread badge (item 27; `/me/notifications` is unchanged), the "Members" label on `/signup` and `/login` (item 8) and the `/user/two-factor` page (item 21)
 - **ui:** Intro paragraph removed from `/contact`
 

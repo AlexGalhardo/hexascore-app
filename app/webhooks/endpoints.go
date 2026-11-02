@@ -259,9 +259,9 @@ func httpsURL(raw string) (string, error) {
 
 func planCap(plan string) (int, bool) {
 	switch plan {
-	case "pro":
+	case "hobby":
 		return 2, true
-	case "business":
+	case "pro":
 		return 10, true
 	default:
 		return 0, false
