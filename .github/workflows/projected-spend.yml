@@ -2,7 +2,7 @@ name: projected-spend
 
 # A17 (SDD 12 §7.5): hourly read of the Railway billing-period usage; Telegram
 # once per period at US$5, 10, 15 and the US$20 hard limit, plus the day-20
-# projection above US$27. The "already sent" state lives in the Actions cache
+# projection above US$18. The "already sent" state lives in the Actions cache
 # (one entry per run, newest restored), so GITHUB_TOKEN needs no variables
 # write. A lost cache resends the current threshold once at most.
 on:

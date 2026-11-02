@@ -2,18 +2,23 @@ import { expect, test } from "bun:test";
 
 import { evaluate, parseState, projectedUsd, shouldAlert } from "./projected-spend.ts";
 
-test("day 20 with US$19 in a 30-day cycle projects US$28.5 and alerts", () => {
-	expect(projectedUsd(19, 20, 30)).toBe(28.5);
-	expect(shouldAlert(19, 20, 30)).toBe(true);
+test("day 20 with US$13 in a 30-day cycle projects US$19.5 and alerts", () => {
+	expect(projectedUsd(13, 20, 30)).toBe(19.5);
+	expect(shouldAlert(13, 20, 30)).toBe(true);
 });
 
-test("day 20 with US$17 in a 30-day cycle does not alert", () => {
-	expect(projectedUsd(17, 20, 30)).toBe(25.5);
-	expect(shouldAlert(17, 20, 30)).toBe(false);
+test("day 20 with US$11 in a 30-day cycle does not alert", () => {
+	expect(projectedUsd(11, 20, 30)).toBe(16.5);
+	expect(shouldAlert(11, 20, 30)).toBe(false);
 });
 
-test("a projection above US$27 before day 20 does not alert", () => {
-	expect(shouldAlert(19, 19, 30)).toBe(false);
+test("a projection of exactly US$18 does not alert", () => {
+	expect(projectedUsd(12, 20, 30)).toBe(18);
+	expect(shouldAlert(12, 20, 30)).toBe(false);
+});
+
+test("a projection above US$18 before day 20 does not alert", () => {
+	expect(shouldAlert(13, 19, 30)).toBe(false);
 });
 
 const start = "2026-10-17T12:47:54.000Z";
@@ -59,11 +64,11 @@ test("under US$5 sends nothing", () => {
 });
 
 test("the projection alert uses the billing period and is sent once", () => {
-	// 30-day period, day 20, US$19 -> US$28.5
-	const first = evaluate(usage(19), { period: start, level: 15, projected: false }, day(20));
-	expect(first.messages).toEqual(["HexaScore A17: projected Railway spend US$28.50 for this period is above US$27."]);
+	// 30-day period, day 20, US$13 -> US$19.5
+	const first = evaluate(usage(13), { period: start, level: 10, projected: false }, day(20));
+	expect(first.messages).toEqual(["HexaScore A17: projected Railway spend US$19.50 for this period is above US$18."]);
 	expect(first.state.projected).toBe(true);
-	const again = evaluate(usage(19.2), first.state, day(20.5));
+	const again = evaluate(usage(13.2), first.state, day(20.5));
 	expect(again.messages).toEqual([]);
 });
 

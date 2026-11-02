@@ -4,7 +4,8 @@
 
 import { appendFileSync, existsSync, readFileSync, writeFileSync } from "node:fs";
 
-export const alertThresholdUsd = 27;
+// Below the US$20 hard limit, so the owner hears of a projected overrun while there is time to act.
+export const alertThresholdUsd = 18;
 export const alertFromDay = 20;
 export const hardLimitUsd = 20;
 export const thresholdsUsd = [5, 10, 15, hardLimitUsd];
@@ -19,7 +20,7 @@ export function projectedUsd(monthToDateUsd: number, elapsedDays: number, cycleD
 	return (monthToDateUsd * cycleDays) / elapsedDays;
 }
 
-// Alerts from day 20 onward when the projection is above US$27. US$27 itself does not alert.
+// Alerts from day 20 onward when the projection is above alertThresholdUsd; the threshold itself does not alert.
 export function shouldAlert(monthToDateUsd: number, elapsedDays: number, cycleDays: number): boolean {
 	if (elapsedDays < alertFromDay) {
 		return false;
