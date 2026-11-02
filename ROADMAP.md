@@ -9,11 +9,11 @@ The audit (`docs/audit/00-project-map.md`, `01-web-report.md`, `02-technical-rev
 - [x] **P8.A.1** Render cache keyed by locale prefix (B-001 code part): commit 695872f5, test `TestRenderCacheKeysStrippedLocalePrefix`. Status (2026-11-02): deploy and production check pending (B-001).
 - [x] **P8.A.2** Docker build context trimmed, `local.properties` ignored: commit b965c5d5.
 - [ ] **P8.A.3** Nightly jobs with explicit timeouts and a resumable `RecomputeAll` (B-002, B-010). Acceptance: staging log line `recompute scores items=<all>`; `queue:failed` empty the next morning.
-- [ ] **P8.A.4** LGPD erasure of scoring and search rows (B-011). Acceptance: `TestSecurity_A03_PurgeRemovesScoringRows` green.
+- [x] **P8.A.4** LGPD erasure of scoring and search rows (B-011). Acceptance: `TestSecurity_A03_PurgeRemovesScoringRows` green. Status (2026-11-02): done in local `main` 6bdaa2b8; the user FKs are validated in a separate NoTransaction migration; `rating_flags` stay with the kept ratings.
 - [ ] **P8.A.5** e2e helper fixed and `desktop-en` green; CI e2e on release candidates (B-012, OQ-14).
 - [ ] **P8.A.6** Retention prunes and `item_status` index (B-024, B-025); dated dependency ignores (B-026); IGDB token cache (B-027).
 - [ ] **P8.A.7** Cleanup execution per `docs/audit/CLEANUP.md` after the backup tag (B-033); board rewrite (B-034). Owner gates: OQ-10, OQ-11.
-- [ ] **P8.A.8** Owner: pre-deploy command `hexascore:predeploy`, staging DNS (OQ-01, OQ-02).
+- [x] **P8.A.8** Owner: pre-deploy command `hexascore:predeploy`, staging DNS (OQ-01, OQ-02). Status (2026-11-02): pre-deploy `/app/app hexascore:predeploy` in production and staging (Railway `get-service-config`); `staging.hexascore.app` CNAME to the custom-domain target plus `_railway-verify` TXT, certificate VALID, `/up` 200, `X-Robots-Tag: noindex, nofollow`.
 
 ### P8.B Launch polish (V1-B)
 
