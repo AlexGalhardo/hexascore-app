@@ -67,7 +67,12 @@ type recomputeCursor struct {
 // RecomputeChunk continues the nightly pass from the cursor in job_cursors (a fresh pass rebuilds the priors first)
 // and stops after the page that crosses budget, saving the cursor so a timeout, redeploy or retry loses at most one
 // page. The cursor row is deleted when the pass completes.
-func RecomputeChunk(ctx context.Context, db *database.DB, now time.Time, budget time.Duration) (RecomputeProgress, error) {
+func RecomputeChunk(
+	ctx context.Context,
+	db *database.DB,
+	now time.Time,
+	budget time.Duration,
+) (RecomputeProgress, error) {
 	cur := recomputeCursor{Last: nilUUID, StartedAt: now}
 	var raw []byte
 	err := db.QueryRowContext(ctx, `SELECT cursor FROM job_cursors WHERE job = $1`, recomputeCursorJob).Scan(&raw)
@@ -101,7 +106,11 @@ func RecomputeChunk(ctx context.Context, db *database.DB, now time.Time, budget 
 		}
 		cur.Items += len(ids)
 		if len(ids) < BatchSize {
-			_, err := db.ExecContext(context.WithoutCancel(ctx), `DELETE FROM job_cursors WHERE job = $1`, recomputeCursorJob)
+			_, err := db.ExecContext(
+				context.WithoutCancel(ctx),
+				`DELETE FROM job_cursors WHERE job = $1`,
+				recomputeCursorJob,
+			)
 
 			return progress(true), err
 		}
