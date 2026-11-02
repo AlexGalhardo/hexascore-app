@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { dbContainer } from "./db";
+import { DEMO_ADMIN_EMAIL, dbContainer } from "./db";
 import { escapeRegExp } from "./t";
 
 // The container logs mail bodies at debug level (docker-compose.yml, LOG_LEVEL). Against an environment
@@ -71,4 +71,33 @@ export function seedNotification(email: string, kind: string, dedupeKey: string)
 		{ encoding: "utf8" },
 	);
 	if (out.status !== 0) throw new Error(`seedNotification failed: ${out.stderr}`);
+}
+
+// Inserts a verified user with a nickname, copying the password hash of the DemoCatalog admin (password DEMO_PASSWORD).
+export function insertVerifiedUser(account: {
+	name: string;
+	email: string;
+	nickname: string;
+}): void {
+	const sql = `INSERT INTO users (name, email, password, email_verified_at, password_set_at, username, display_username, created_at, updated_at)
+		SELECT '${account.name}', '${account.email}', password, now(), now(), '${account.nickname}', '${account.nickname}', now(), now()
+		FROM users WHERE email = '${DEMO_ADMIN_EMAIL}'`;
+	const out = spawnSync(
+		"docker",
+		[
+			"exec",
+			dbContainer(),
+			"psql",
+			"-U",
+			"hexascore",
+			"-d",
+			process.env.E2E_DB_NAME ?? "hexascore",
+			"-v",
+			"ON_ERROR_STOP=1",
+			"-c",
+			sql,
+		],
+		{ encoding: "utf8" },
+	);
+	if (out.status !== 0) throw new Error(`insertVerifiedUser failed: ${out.stderr}`);
 }

@@ -1,6 +1,20 @@
+import type { Locator, Page } from "@playwright/test";
 import { open } from "../helpers/account";
 import { expectNoSeriousA11yViolations } from "../helpers/axe";
 import { expect, test } from "../helpers/fixtures";
+
+// The header search is a link to /search that the command palette takes over once React has hydrated.
+async function openPalette(page: Page, label: string | RegExp): Promise<Locator> {
+	const input = page.getByRole("combobox", { name: label });
+	await expect(async () => {
+		await page
+			.getByRole("banner")
+			.getByRole("link", { name: /^Search/ })
+			.click();
+		await expect(input).toBeVisible({ timeout: 3_000 });
+	}).toPass();
+	return input;
+}
 
 test.describe("search", () => {
 	test("autocomplete is keyboard operable and opens the highlighted item", async ({
@@ -9,7 +23,7 @@ test.describe("search", () => {
 		t,
 	}) => {
 		await open(page, `${prefix}/`);
-		const input = page.getByRole("combobox", { name: t("nav.search") });
+		const input = await openPalette(page, t("nav.search"));
 		await input.click();
 		await input.pressSequentially("labore", { delay: 30 });
 		const options = page.getByRole("option");
@@ -28,7 +42,7 @@ test.describe("search", () => {
 		t,
 	}) => {
 		await open(page, `${prefix}/`);
-		const input = page.getByRole("combobox", { name: t("nav.search") });
+		const input = await openPalette(page, t("nav.search"));
 		await input.fill("labore");
 		await input.press("Enter");
 		await expect(page).toHaveURL(

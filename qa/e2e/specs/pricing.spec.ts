@@ -1,5 +1,6 @@
 import { expectNoSeriousA11yViolations } from "../helpers/axe";
 import { expect, test } from "../helpers/fixtures";
+import { escapeRegExp } from "../helpers/t";
 
 test.describe("pricing", () => {
 	test("lists the three plans, the coverage link and switches currency on the server", async ({
@@ -10,7 +11,9 @@ test.describe("pricing", () => {
 		await page.goto(`${prefix}/pricing`);
 		for (const plan of ["free", "hobby", "pro"]) {
 			await expect(
-				page.getByRole("heading", { name: t(`billing.plans.${plan}`), exact: true }),
+				page.getByRole("heading", {
+					name: new RegExp(`^${escapeRegExp(String(t(`billing.plans.${plan}`)))}\\b`),
+				}),
 			).toBeVisible();
 		}
 		await expect(
@@ -30,7 +33,9 @@ test.describe("pricing", () => {
 		const response = await page.goto(`${prefix}/pricing?currency=XXX`);
 		expect(response?.status()).toBe(200);
 		await expect(
-			page.getByRole("heading", { name: t("billing.plans.pro"), exact: true }),
+			page.getByRole("heading", {
+				name: new RegExp(`^${escapeRegExp(String(t("billing.plans.pro")))}\\b`),
+			}),
 		).toBeVisible();
 	});
 

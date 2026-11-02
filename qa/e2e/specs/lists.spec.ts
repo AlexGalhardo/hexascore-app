@@ -3,6 +3,7 @@ import { expectNoSeriousA11yViolations } from "../helpers/axe";
 import { openTopItem } from "../helpers/catalog";
 import { expect, test } from "../helpers/fixtures";
 import { canReadMail } from "../helpers/mail";
+import { escapeRegExp } from "../helpers/t";
 
 test.describe("lists", () => {
 	test("lists require login", async ({ page, prefix }) => {
@@ -39,18 +40,29 @@ test.describe("lists", () => {
 
 			// Add two games from their pages.
 			const added: string[] = [];
+			const hrefs: string[] = [];
 			for (const nth of [0, 1]) {
-				await openTopItem(page, prefix, "games", nth);
+				hrefs.push(await openTopItem(page, prefix, "games", nth));
 				added.push(((await page.locator("h1").textContent()) ?? "").trim());
-				const row = page.locator("li", { hasText: title }).filter({
-					has: page.getByRole("button", { name: t("lists.addToList") }),
-				});
-				await row.getByRole("button", { name: t("lists.addToList") }).click();
-				await expect(
-					page
-						.locator("li", { hasText: title })
-						.getByRole("button", { name: t("lists.remove") }),
-				).toBeVisible();
+				const row = page.getByRole("button", { name: new RegExp(escapeRegExp(title)) });
+				// The menu trigger is dead until React hydrates; click it again until the menu is open.
+				await expect(async () => {
+					await page
+						.getByRole("button", { name: t("lists.addToList"), exact: true })
+						.first()
+						.click();
+					await expect(row).toBeVisible({ timeout: 2_000 });
+				}).toPass();
+				// The menu closes on the click, so the PUT response is the proof the item was added.
+				const [saved] = await Promise.all([
+					page.waitForResponse(
+						(r) =>
+							r.request().method() === "PUT" &&
+							/\/lists\/[^/]+\/items\//.test(r.url()),
+					),
+					row.click(),
+				]);
+				expect(saved.status()).toBeLessThan(400);
 			}
 
 			// Reorder: move the second item up and save.
@@ -66,9 +78,11 @@ test.describe("lists", () => {
 			await page.getByRole("button", { name: t("userLists.saveOrder") }).click();
 			await saved;
 			await page.reload();
-			const names = await page.locator("main li a[href*='/games/']").allInnerTexts();
-			const first = names.findIndex((n) => n.includes(added[1]));
-			const second = names.findIndex((n) => n.includes(added[0]));
+			const links = await page
+				.locator("main li a[href*='/games/']")
+				.evaluateAll((els) => els.map((a) => a.getAttribute("href")));
+			const first = links.indexOf(hrefs[1] ?? "");
+			const second = links.indexOf(hrefs[0] ?? "");
 			expect(first).toBeGreaterThanOrEqual(0);
 			expect(first).toBeLessThan(second);
 
@@ -88,7 +102,7 @@ test.describe("lists", () => {
 						(await visitor.request.get(publicUrl, { maxRedirects: 0 })).status(),
 					{ timeout: 15_000 },
 				)
-				.toBe(301);
+				.toBe(404);
 			await visitor.context().close();
 
 			// Delete.

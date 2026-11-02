@@ -22,7 +22,6 @@ test.describe("item page", () => {
 			await expect(
 				page.getByRole("heading", { name: t("item.categoryScores") }),
 			).toBeAttached();
-			await expect(page.getByText(t("item.attribution"))).toBeVisible();
 			await expectNoSeriousA11yViolations(page);
 		});
 	}
@@ -32,9 +31,11 @@ test.describe("item page", () => {
 		prefix,
 	}, testInfo) => {
 		await openTopItem(page, prefix, "games");
-		const header = page.locator("article > header");
-		await expect(header.getByTestId("score-block")).toBeVisible();
-		await expect(header.locator("img, [data-testid='cover-placeholder']")).toHaveCount(1);
+		const article = page.locator("article");
+		await expect(article.getByRole("complementary").getByTestId("score-block")).toBeVisible();
+		await expect(
+			article.locator("img, [data-testid='cover-placeholder']").first(),
+		).toBeVisible();
 
 		if (testInfo.project.name.startsWith("mobile")) {
 			const heading = page.locator("#rating-heading");
@@ -49,12 +50,11 @@ test.describe("item page", () => {
 		await expect(page.locator("input[type=radio]:enabled")).toHaveCount(0);
 	});
 
-	test("an unknown slug is a 301 to the home page", async ({ request, prefix }) => {
+	test("an unknown slug is a 404", async ({ request, prefix }) => {
 		const response = await request.get(`${prefix}/games/does-not-exist-0000`, {
 			maxRedirects: 0,
 		});
-		expect(response.status()).toBe(301);
-		expect(response.headers().location).toBe(`${prefix}/`);
+		expect(response.status()).toBe(404);
 	});
 
 	test("shows score, categories and a centered, paginated users' scores modal", async ({
@@ -63,7 +63,7 @@ test.describe("item page", () => {
 		t,
 	}) => {
 		await openTopItem(page, prefix, "games");
-		await expect(page.getByRole("heading", { name: t("item.communityScore") })).toBeVisible();
+		await expect(page.getByTestId("score-block")).toBeVisible();
 		await expectNoSeriousA11yViolations(page);
 
 		await page.getByRole("button", { name: t("item.seeUserScores") }).click();

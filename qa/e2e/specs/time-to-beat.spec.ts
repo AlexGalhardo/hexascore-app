@@ -4,11 +4,11 @@ import { openTopItem, projectSlot } from "../helpers/catalog";
 import { expect, test } from "../helpers/fixtures";
 import { canReadMail } from "../helpers/mail";
 
-// Only a player who marked the game completed can report hours; a save redirects to an unprefixed URL.
+// Any signed-in player can report hours (e5894c99); a save redirects to an unprefixed URL.
 test.describe("time to beat", () => {
 	test.skip(!canReadMail(), "needs docker access to the app container logs (E2E_APP_CONTAINER)");
 
-	test("report hours on a completed game, then lose the form when the status changes", async ({
+	test("report hours as a signed-in player and keep them when the status changes", async ({
 		page,
 		prefix,
 		t,
@@ -20,11 +20,6 @@ test.describe("time to beat", () => {
 		const block = page.locator("section[aria-labelledby=ttb-heading]");
 		await expect(block).toBeVisible();
 		const main = block.getByLabel(t("item.timeToBeat.styles.main"));
-		await expect(main).toHaveCount(0);
-
-		const status = page.locator("select:has(option[value=completed])");
-		await status.selectOption("completed");
-		await expect(main).toBeVisible();
 		await main.fill("12");
 		await expectNoSeriousA11yViolations(page);
 		const saved = page.waitForResponse(
@@ -36,7 +31,12 @@ test.describe("time to beat", () => {
 		await reload(page);
 		await expect(block.getByLabel(any("item.timeToBeat.styles.main"))).toHaveValue("12");
 
-		await page.locator("select:has(option[value=completed])").selectOption("dropped");
-		await expect(block.getByLabel(any("item.timeToBeat.styles.main"))).toHaveCount(0);
+		const dropped = page
+			.getByRole("group", { name: t("social.status.label") })
+			.getByRole("button", { name: t("social.status.game.dropped") });
+		await dropped.click();
+		await expect(dropped).toHaveAttribute("aria-pressed", "true");
+		await reload(page);
+		await expect(block.getByLabel(any("item.timeToBeat.styles.main"))).toHaveValue("12");
 	});
 });
