@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"path"
 	"strconv"
+	"strings"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/i18n"
@@ -39,7 +40,7 @@ func (h *Entity) Show(kind, param, typ string) web.HandlerFunc {
 		// by them (owner 2026-11-02). People, companies and the other kinds keep their pages.
 		if filter, ok := listingFilters[kind]; ok {
 			q := url.Values{"sort": {"-popularity"}, "per": {"25"}, filter: {c.Param(param)}}
-			to := path.Dir(path.Dir(c.Request().URL.Path)) + "?" + q.Encode()
+			to := path.Dir(path.Dir(strings.TrimSuffix(c.Request().URL.Path, "/"))) + "?" + q.Encode()
 			http.Redirect(c.Writer(), c.Request(), to, http.StatusMovedPermanently)
 
 			return nil

@@ -67,7 +67,7 @@ export default function Filters({
 		<form
 			method="get"
 			action={action}
-			className="grid grid-cols-[auto_minmax(0,1fr)] items-end gap-2 border-t-2 border-b border-fg py-3 lg:grid-cols-1 lg:gap-4 lg:border-b-0 lg:py-4"
+			className="grid grid-cols-[auto_minmax(0,1fr)] items-end gap-2 border-b border-fg py-3 lg:grid-cols-1 lg:gap-4 lg:border-b-0 lg:py-4"
 		>
 			<button
 				type="button"

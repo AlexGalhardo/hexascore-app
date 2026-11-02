@@ -81,7 +81,7 @@ VALUES ($1, 'movie', $2, $3, 6, 80)`, id, fmt.Sprintf("movie-%02d", i), fmt.Spri
 		c.Get("/movies?page="+bad).AssertOK().AssertInertia("Catalog/Index").PropEquals("pagination.prev", "")
 	}
 
-	c.Get("/movies?page=10001").AssertStatus(400)
+	c.Get("/movies?page=10001").AssertOK().AssertInertia("Catalog/Index").HasProp("items.data", 0)
 	// An old cursor link no longer pages; it lands on page 1.
 	c.Get("/movies?cursor=forged").AssertOK().AssertInertia("Catalog/Index").PropEquals("pagination.prev", "")
 

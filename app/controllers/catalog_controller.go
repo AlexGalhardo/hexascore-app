@@ -28,10 +28,11 @@ func catalogPageSize(raw string) int {
 	}
 }
 
-// catalogPage reads ?page=; anything but a positive integer is page 1.
+// catalogPage reads ?page=; anything but a positive integer is page 1, and a page past catalog.MaxPage is the last
+// one allowed (an old link or a crawler gets an empty page, not a 400).
 func catalogPage(raw string) int {
 	if n, err := strconv.Atoi(raw); err == nil && n > 0 {
-		return n
+		return min(n, catalog.MaxPage)
 	}
 
 	return 1
