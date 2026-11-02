@@ -55,7 +55,13 @@ if ((Get-GolangciLintVersion) -ne $golangciLintVersion) {
 if (-not $NoServices) {
 	Invoke-Checked 'docker' @('compose', 'up', '-d', '--wait')
 }
-Invoke-Checked 'bun' @('install', '--frozen-lockfile')
+# Windows can hold a just-written file open (antivirus scan, indexer), and bun then fails linking binaries with
+# EBUSY; a second install finishes the link (seen on GitHub's Windows runner, 2026-11-02). One retry only.
+& bun install --frozen-lockfile
+if ($LASTEXITCODE -ne 0) {
+	Write-Warning "setup: bun install failed with exit code $LASTEXITCODE, retrying once"
+	Invoke-Checked 'bun' @('install', '--frozen-lockfile')
+}
 if (-not $NoServices) {
 	Invoke-Checked 'vukem' @('migrate')
 }
