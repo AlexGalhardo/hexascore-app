@@ -31,7 +31,7 @@ test.describe("auth", () => {
 	test("signup refuses a weak password and stays on the form", async ({ page, prefix, t }) => {
 		await fillSignup(page, prefix, t, { ...newAccount(), password: "short" });
 		await page.getByRole("button", { name: t("auth.signup.submit") }).click();
-		await expect(page.locator("main p.text-red-600").first()).toBeVisible({
+		await expect(page.locator("main p.text-danger").first()).toBeVisible({
 			timeout: POW_TIMEOUT,
 		});
 		await expect(page).toHaveURL(/\/signup$/);
@@ -41,7 +41,7 @@ test.describe("auth", () => {
 		await logIn(page, prefix, t, "admin@example.test", "Wrong-Passw0rd!", {
 			expectFailure: true,
 		});
-		await expect(page.locator("main p.text-red-600")).toBeVisible({ timeout: POW_TIMEOUT });
+		await expect(page.locator("main p.text-danger")).toBeVisible({ timeout: POW_TIMEOUT });
 		await expect(page).toHaveURL(/\/login$/);
 	});
 
@@ -89,17 +89,18 @@ test.describe("auth", () => {
 			).toBeVisible();
 
 			await signOut(page);
-			await logIn(page, prefix, t, account.email, account.password);
-			await expect(page).toHaveURL(/two-factor-challenge/, { timeout: POW_TIMEOUT });
+			// The code is asked in a dialog on the login page; the first box takes the whole code and submits it.
+			await logIn(page, prefix, t, account.email, account.password, { expectFailure: true });
+			const dialog = page.getByRole("dialog", { name: t("auth.login.twoFactorTitle") });
+			await expect(dialog).toBeVisible({ timeout: POW_TIMEOUT });
 			await expectNoSeriousA11yViolations(page);
-			await page.locator("input[autocomplete=one-time-code]").fill("000000");
-			await page.getByRole("button", { name: t("auth.login.verify") }).click();
-			await expect(page.locator("main p.text-red-600")).toBeVisible({ timeout: POW_TIMEOUT });
-			await page
-				.locator("input[autocomplete=one-time-code]")
-				.fill(await codeAfter(secret, step));
-			await page.getByRole("button", { name: t("auth.login.verify") }).click();
-			await page.waitForURL((url) => !url.pathname.includes("two-factor-challenge"));
+			const firstBox = dialog.getByLabel(`${t("auth.login.code")} 1`);
+			await firstBox.fill("000000");
+			await expect(dialog.getByRole("alert")).toBeVisible({ timeout: POW_TIMEOUT });
+			await firstBox.fill(await codeAfter(secret, step));
+			await page.waitForURL((url) => !/\/login$/.test(url.pathname), {
+				timeout: POW_TIMEOUT,
+			});
 			await expectSignedIn(page, prefix);
 		});
 

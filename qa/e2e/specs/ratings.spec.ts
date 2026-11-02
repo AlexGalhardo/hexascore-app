@@ -59,14 +59,25 @@ test.describe("ratings", () => {
 		const status = page.getByRole("group", { name: t("social.status.label") });
 		for (const value of ["want", "in_progress", "completed", "dropped"]) {
 			const button = status.getByRole("button", { name: t(`social.status.movie.${value}`) });
-			await button.click();
+			await Promise.all([
+				page.waitForResponse(
+					(r) => r.request().method() === "PUT" && /\/status$/.test(r.url()),
+				),
+				button.click(),
+			]);
 			await expect(button).toHaveAttribute("aria-pressed", "true");
 		}
 		const dropped = status.getByRole("button", { name: t("social.status.movie.dropped") });
 		await reload(page);
 		await expect(dropped).toHaveAttribute("aria-pressed", "true");
 
-		await dropped.click();
+		// Reloading before the DELETE settles would show the old status again.
+		await Promise.all([
+			page.waitForResponse(
+				(r) => r.request().method() === "DELETE" && /\/status$/.test(r.url()),
+			),
+			dropped.click(),
+		]);
 		await expect(dropped).toHaveAttribute("aria-pressed", "false");
 		await reload(page);
 		await expect(status.locator("[aria-pressed=true]")).toHaveCount(0);

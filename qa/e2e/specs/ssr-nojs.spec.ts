@@ -60,7 +60,8 @@ test.describe("ssr without javascript", () => {
 		await page.goto(await firstHref(page, new RegExp(`^${prefix}/games/[^/?#]+$`)));
 		const entity = await firstHref(
 			page,
-			new RegExp(`^${prefix}/(people|companies|franchises|platforms|genres)/[^/?#]+$`),
+			// Entity pages are filters of the section listing since 9fac6665.
+			new RegExp(`^${prefix}/games\\?(company|genre|platform)=[^&#]+`),
 		);
 		const response = await page.goto(entity);
 		expect(response?.status(), entity).toBe(200);

@@ -12,7 +12,7 @@ test.describe("catalog", () => {
 
 			const form = page.locator("main form[method=get]").first();
 			await form.getByLabel(t("catalog.sort")).selectOption({ value: "-score" });
-			await form.getByLabel(t("catalog.minScore")).fill("1");
+			await form.getByLabel(t("catalog.minScore")).selectOption({ value: "1" });
 			await form.getByRole("button", { name: t("catalog.apply") }).click();
 			await expect(page).toHaveURL(/sort=-score/);
 			await expect(page).toHaveURL(/min_score=1/);

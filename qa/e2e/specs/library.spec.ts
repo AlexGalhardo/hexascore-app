@@ -17,16 +17,23 @@ test.describe("library", () => {
 		await openTopItem(page, prefix, "movies", projectSlot(testInfo));
 		const title = ((await page.locator("h1").textContent()) ?? "").trim();
 
-		const status = page.locator("select:has(option[value=completed])");
-		await status.selectOption("completed");
-		await expect(status).toBeEnabled();
+		const completed = page
+			.getByRole("group", { name: t("social.status.label") })
+			.getByRole("button", { name: t("social.status.movie.completed") });
+		await Promise.all([
+			page.waitForResponse(
+				(r) => r.request().method() === "PUT" && /\/status$/.test(r.url()),
+			),
+			completed.click(),
+		]);
+		await expect(completed).toHaveAttribute("aria-pressed", "true");
 
 		await page.goto(`${prefix}/library`);
 		const shelf = page.getByRole("region", {
 			name: new RegExp(t("social.status.shelves.completed")),
 		});
 		await expect(shelf.getByRole("link", { name: title })).toBeVisible();
-		await expect(shelf.getByText("—")).toBeVisible();
+		await expect(shelf.getByText(t("library.notRated"))).toBeVisible();
 		await expectNoSeriousA11yViolations(page);
 	});
 });

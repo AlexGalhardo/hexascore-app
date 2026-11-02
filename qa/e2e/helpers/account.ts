@@ -1,5 +1,6 @@
 import { expect, type Page } from "@playwright/test";
-import { mailLink } from "./mail";
+import { DEMO_PASSWORD } from "./db";
+import { insertVerifiedUser, mailLink } from "./mail";
 import { translator } from "./t";
 
 export interface Account {
@@ -70,7 +71,6 @@ export async function fillSignup(
 	await open(page, `${prefix}/signup`);
 	// Inputs intermittently lose a value filled right after hydration on narrow viewports; retry until each sticks.
 	const fields = [
-		[page.getByLabel(t("auth.fields.name")).first(), account.name],
 		[page.locator("input[name=nickname]"), account.nickname],
 		[page.getByLabel(t("auth.fields.email")), account.email],
 		[page.locator("input[name=password]"), account.password],
@@ -95,18 +95,26 @@ export async function logIn(
 	password: string,
 	{ expectFailure = false } = {},
 ): Promise<void> {
-	if (!/\/login$/.test(new URL(page.url(), "http://x").pathname))
-		await open(page, `${prefix}/login`);
-	await page.getByLabel(t("auth.fields.identifier")).fill(identifier);
-	await page.locator("input[name=password]").fill(password);
-	await page.getByRole("button", { name: t("auth.login.submit"), exact: true }).click();
-	if (!expectFailure)
-		await page.waitForURL((url) => !/\/login$/.test(url.pathname), { timeout: POW_TIMEOUT });
+	let attempt = 0;
+	const submit = async () => {
+		if (attempt++ > 0 || !/\/login$/.test(new URL(page.url(), "http://x").pathname))
+			await open(page, `${prefix}/login`);
+		await page.getByLabel(t("auth.fields.identifier")).fill(identifier);
+		await page.locator("input[name=password]").fill(password);
+		await page.getByRole("button", { name: t("auth.login.submit"), exact: true }).click();
+	};
+	if (expectFailure) return submit();
+	// Login is limited to 10 per minute per IP across identifiers: when parallel workers hit it (429), wait and retry.
+	await expect(async () => {
+		await submit();
+		await page.waitForURL((url) => !/\/login$/.test(url.pathname), { timeout: 20_000 });
+	}).toPass({ intervals: [10_000], timeout: POW_TIMEOUT * 3 });
 }
 
 // Signs up through the UI, follows the mailed link (the guard sends a guest to /login and back to it),
 // then picks the nickname on the onboarding page; the account ends up verified and signed in.
-export async function createVerifiedAccount(
+// Sign-up is limited to 10 per 10 minutes per IP, so only specs that test sign-up itself use this one.
+export async function signUpVerifiedAccount(
 	page: Page,
 	prefix: string,
 	t: Translate,
@@ -125,6 +133,21 @@ export async function createVerifiedAccount(
 	await page.getByLabel(en("auth.fields.identifier")).fill(account.email);
 	await page.locator("input[name=password]").fill(account.password);
 	await page.getByRole("button", { name: en("auth.login.submit"), exact: true }).click();
+	await completeOnboarding(page, en, account);
+	return account;
+}
+
+// A verified account with a nickname, inserted into the QA database with the password hash of the DemoCatalog
+// admin (so the app, not the suite, produced the hash), then signed in through the login form. Keeps the
+// 10-per-10-minutes sign-up limit for the specs that test sign-up.
+export async function createVerifiedAccount(
+	page: Page,
+	prefix: string,
+	t: Translate,
+): Promise<Account> {
+	const account = { ...newAccount(), password: DEMO_PASSWORD };
+	insertVerifiedUser(account);
+	await logIn(page, prefix, t, account.email, account.password);
 	await completeOnboarding(page, en, account);
 	return account;
 }
