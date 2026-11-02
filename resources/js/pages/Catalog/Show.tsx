@@ -291,11 +291,8 @@ export default function Show({
 					</Section>
 				</div>
 
-				{/* Phone width: cover, actions, details, then the rating card before the text (owner 2026-11-02). */}
-				<div
-					data-testid="item-col-main"
-					className="grid min-w-0 content-start gap-10 max-sm:order-last"
-				>
+				{/* Phone width follows DOM order: title and synopsis before the score card and rating (OQ-15, 2026-11-02). */}
+				<div data-testid="item-col-main" className="grid min-w-0 content-start gap-10">
 					<header className="grid content-start gap-4">
 						<h1 className="text-3xl leading-none font-bold sm:text-4xl md:text-5xl">
 							{title}

@@ -115,7 +115,7 @@ test("logged in: enabled stars, overall preview, save and status picker", () => 
 	expect(screen.queryByRole("link", { name: "item.loginToRate" })).toBeNull();
 });
 
-test("three columns: actions under the cover, synopsis under the chips, score card above the rating form", () => {
+test("three columns: actions under the cover, title and synopsis before the score card and rating form", () => {
 	auth = null;
 	render(
 		<Show
@@ -148,10 +148,11 @@ test("three columns: actions under the cover, synopsis under the chips, score ca
 	expect(main.querySelector("header")?.nextElementSibling?.getAttribute("aria-labelledby")).toBe(
 		"synopsis-heading",
 	);
-	// Phone width: the rating column comes right after Details, before the title and synopsis.
-	expect(main.className).toContain("max-sm:order-last");
-
+	// Phone width (OQ-15, 2026-11-02): title and synopsis come right after Details, before the score card and rating.
+	expect(main.className).not.toContain("max-sm:order-last");
 	const rating = screen.getByTestId("item-col-rating");
+	expect(actions.compareDocumentPosition(main) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+	expect(main.compareDocumentPosition(rating) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 	const score = screen.getByTestId("score-block");
 	const form = document.getElementById("your-rating") as HTMLElement;
 	expect(rating.contains(score) && rating.contains(form)).toBe(true);
