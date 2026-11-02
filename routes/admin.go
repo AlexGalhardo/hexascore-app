@@ -213,6 +213,10 @@ func Admin(r *router.Router, app *vukem.App) error {
 	}
 	r.Get("/admin/ingest/reviews", reviewsH.List).Name("admin.ingest.reviews").Use(modMW...)
 	r.Post("/admin/ingest/reviews/{id}", reviewsH.Resolve).Name("admin.ingest.reviews.resolve").Use(modMW...)
+	fieldReviewsH := admin.FieldReviewHandlers{Pages: catalogH, DB: acc.DB, Authorize: reviewsH.Authorize}
+	r.Get("/admin/ingest/field-reviews", fieldReviewsH.List).Name("admin.ingest.field_reviews").Use(modMW...)
+	r.Post("/admin/ingest/field-reviews/{id}", fieldReviewsH.Resolve).
+		Name("admin.ingest.field_reviews.resolve").Use(modMW...)
 	ingestH := admin.IngestHandlers{
 		Pages: catalogH, DB: acc.DB, Queue: q, Flags: ff, Now: app.Now,
 		AuthorizeView: func(c *web.Ctx) error {

@@ -99,6 +99,8 @@ func All() []schema.Migration {
 		m20261102190000AddUserFksToScoringTables(),
 		m20261102190100ValidateUserFksOnScoringTables(),
 		m20261102200000AddItemStatusItemIdx(),
+		m20261102230000CreateFieldReviews(),
+		m20261102230100AddFieldReviewsOpenIdx(),
 		m20261102210000CreateIngestHostState(),
 	}
 }

@@ -28,6 +28,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/moderation"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/entities"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/store"
 )
 
 //go:embed views
@@ -110,6 +111,7 @@ type pageData struct {
 	Metrics       moderation.Metrics
 	LockTargets   []string
 	Reviews       []entities.OpenReviewRow
+	FieldReviews  []store.OpenReview
 	Ingest        IngestStatus
 }
 
