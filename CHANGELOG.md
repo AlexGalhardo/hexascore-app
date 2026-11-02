@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.40.0] - 2026-11-02
+
 ### Added
 
 - **docs:** The public API documentation pages are translated into pt-BR and es (`resources/docs/pt-BR/`, `resources/docs/es/`, built into `docs.pt-BR.json` and `docs.es.json`); the docs controller picks the request locale and falls back to English per page, slugs unchanged
@@ -1077,7 +1079,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **web:** Match localized routes in proxy and keep PGlite out of the server bundle ([898655b](https://github.com/AlexGalhardo/hexascore-app/commit/898655b310acd2680cf2c5b75406d2ef7e26ff96))
 - **web:** Route locale-less paths through the i18n proxy and run PGlite under Next ([1e216b1](https://github.com/AlexGalhardo/hexascore-app/commit/1e216b1085f189903d2eb72c344e6d9b1a0fa5dd))
 
-[Unreleased]: https://github.com/AlexGalhardo/hexascore-app/compare/v0.39.0...HEAD
+[Unreleased]: https://github.com/AlexGalhardo/hexascore-app/compare/v0.40.0...HEAD
+[0.40.0]: https://github.com/AlexGalhardo/hexascore-app/compare/v0.37.0...v0.40.0
 [0.39.0]: https://github.com/AlexGalhardo/hexascore-app/compare/v0.38.0...v0.39.0
 [0.38.0]: https://github.com/AlexGalhardo/hexascore-app/compare/v0.37.0...v0.38.0
 [0.37.0]: https://github.com/AlexGalhardo/hexascore-app/compare/v0.36.0...v0.37.0
