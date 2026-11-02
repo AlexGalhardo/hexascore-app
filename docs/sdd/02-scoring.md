@@ -24,7 +24,7 @@ Out of scope: written reviews, critic scores (D-09), feed/follows (D-06), collab
 - FR-02-8: Per-user daily caps (7.6) → 429 with `Retry-After`. Verified: fake-clock test.
 - FR-02-9: The burst detector (7.5) runs on every insert and, when tripped, activates the limiter and the public notice. Verified: seeded-burst test.
 - FR-02-10: Anti-abuse never deletes ratings: it sets a shadow weight in `rating_flags`; every action is reversible and logged in `score_actions`. Verified: flag → restore yields the original aggregate exactly.
-- FR-02-11: Status is `want | in_progress | completed | dropped`; time-to-beat only for games and only while `completed`; leaving `completed` deletes it in the same transaction (parity). Verified: tests ported from legacy `lib/time-to-beat.ts`.
+- FR-02-11: Status is `want | in_progress | completed | dropped`; time-to-beat only for games, for any signed-in user whatever the status (owner decision 2026-11-02; no longer tied to `completed`, and leaving `completed` keeps it). Verified: tests ported from legacy `lib/time-to-beat.ts`.
 - FR-02-12: Each write appends one `rating_events` row in the transaction and dispatches a typed event after commit. Verified: `events.NewFake()` + row count.
 - FR-02-13: Legacy migration rounds to the nearest multiple of 5 (clamped 5–100), one audit row per changed rating plus one summary row. Verified: fixture test (9).
 - FR-02-14: Category labels in en, pt-BR, es; widget `role="slider"`, `aria-valuetext` "7.5 of 10 stars" localised. Verified: key-completeness test; Playwright + axe.
@@ -168,7 +168,7 @@ Input is in stars on every surface; the server multiplies by 10. Errors are RFC 
 | `DELETE /app/v1/items/{id}/rating` | same | none | 204 | 404 |
 | `GET /app/v1/items/{id}/me` | token | none | `{rating, status, timeToBeat}` | 404 |
 | `PUT/DELETE /app/v1/items/{id}/status` | token, `status:write` | `{"status":"completed"}` | 200/204 | 422, 404 |
-| `PUT/DELETE /app/v1/items/{id}/time-to-beat` | token, `status:write` | `{"mainHours":12.5,...}` 0.5 h steps, 0.5–10,000 h | 200/204 | 409 `status-not-completed`, 422 `not-a-game` |
+| `PUT/DELETE /app/v1/items/{id}/time-to-beat` | token, `status:write` | `{"mainHours":12.5,...}` 0.5 h steps, 0.5–1,000 h | 200/204 | 422 `not-a-game` |
 
 Web (Inertia) uses the same handlers on session routes (SDD 09); validation failures return 303 with `props.errors`. Per-user rate limit: `ratelimit.Middleware(limiters("rating", 30, time.Minute), ratelimit.ByUser(guard))` (vukem `https://vukem.dev/docs/security/rate-limiting` "Rate limiting"), legacy parity with `hitRateLimit("rating:<userId>", 30, 60s)`.
 
@@ -274,7 +274,7 @@ Counted from `rating_events` per UTC day (not from `ratings`, so delete + re-cre
 
 ### 7.7 Time-to-beat
 
-Legacy parity (`legacy/docs/data-model.md`): medians via `percentile_cont(0.5)` per style, computed on read and cached with the item; `null` below 3 reports. Input in hours, 0.5 h steps, stored in minutes.
+Medians via `percentile_cont(0.5)` per style, computed on read; `null` only while nobody reported that style (owner decision 2026-11-02: the legacy floor of 3 reports is gone, the card shows the report count instead). Input in hours, 0.5 h steps, stored in minutes.
 
 ## 8. Edge cases
 
@@ -284,7 +284,7 @@ Legacy parity (`legacy/docs/data-model.md`): medians via `percentile_cont(0.5)` 
 - Item type change or cross-type merge (SDD 01): rejected while ratings exist (category keys differ).
 - Formula activated mid-run: the job reads the active version once per run; each item carries `score_formula_version`, so the API is correct per item.
 - Account deleted: anonymised, ratings kept, age weight from the original `created_at`.
-- `completed` → `dropped`: time-to-beat deleted, `v_u` 1.0 → 0.85, recomputed in the same transaction.
+- `completed` → `dropped`: `v_u` 1.0 → 0.85, recomputed in the same transaction; the time-to-beat report stays.
 - New release, no baseline: `b = 1`, volume trigger `max(30, 8)`; a launch rush from established accounts with statuses passes the limiter.
 
 ## 9. Acceptance criteria

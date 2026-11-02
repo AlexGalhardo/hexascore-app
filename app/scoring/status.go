@@ -121,8 +121,8 @@ VALUES ($1, $2::rating_event_kind, $3, $4, $5)`, at, kind, userID, itemID, typ)
 	return err
 }
 
-// SetStatus sets userID's status of itemID; "" clears it. Leaving "completed" deletes the time-to-beat report
-// (legacy parity), and the recompute follows because the status changes the rating weight.
+// SetStatus sets userID's status of itemID; "" clears it. The recompute follows because the status changes
+// the rating weight; the time-to-beat report is independent of the status (owner decision 2026-11-02).
 func (w *Writer) SetStatus(ctx context.Context, userID int64, itemID, status string) (Summary, error) {
 	return w.mutateItem(
 		ctx,
@@ -159,12 +159,6 @@ ON CONFLICT (user_id, item_id) DO UPDATE SET status = EXCLUDED.status, updated_a
 					return nil, err
 				}
 				evs = append(evs, StatusChanged{UserID: userID, ItemID: itemID, Status: status, At: now})
-			}
-
-			if status != "completed" {
-				if _, err := deleteTimeToBeat(ctx, tx, userID, itemID, typ, now); err != nil {
-					return nil, err
-				}
 			}
 
 			return evs, nil

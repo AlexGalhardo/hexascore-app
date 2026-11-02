@@ -1,4 +1,4 @@
-import { router } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import { useState } from "react";
 
 import { useLocalized } from "../../lib/useLocalized";
@@ -20,11 +20,10 @@ interface Props {
 	itemId: string;
 	medians: Medians;
 	mine: Hours | null | undefined;
-	// The server accepts reports only while the viewer's status is "completed".
-	canReport: boolean;
+	canEdit: boolean;
 }
 
-export default function TimeToBeat({ itemId, medians, mine, canReport }: Props) {
+export default function TimeToBeat({ itemId, medians, mine, canEdit }: Props) {
 	const t = useT();
 	const l = useLocalized();
 	const [draft, setDraft] = useState<Record<string, string>>(
@@ -53,7 +52,7 @@ export default function TimeToBeat({ itemId, medians, mine, canReport }: Props) 
 				{t("item.timeToBeat.title")}
 			</h2>
 			{none ? (
-				<p>{t("item.timeToBeat.notEnough", { min: 3 })}</p>
+				<p>{t("item.timeToBeat.none")}</p>
 			) : (
 				<dl className="grid">
 					{STYLES.map(([style, k]) =>
@@ -79,7 +78,7 @@ export default function TimeToBeat({ itemId, medians, mine, canReport }: Props) 
 					{t("item.timeToBeat.reports", { count: medians.reports })}
 				</p>
 			)}
-			{canReport && (
+			{canEdit ? (
 				<form
 					className="grid gap-2"
 					onSubmit={(e) => {
@@ -101,7 +100,7 @@ export default function TimeToBeat({ itemId, medians, mine, canReport }: Props) 
 								<input
 									type="number"
 									min={0.5}
-									max={10000}
+									max={1000}
 									step={0.5}
 									className="min-h-11 w-full rounded-xs border border-field bg-field-bg px-2 text-sm text-fg"
 									placeholder={t("item.timeToBeat.hoursPlaceholder")}
@@ -132,6 +131,10 @@ export default function TimeToBeat({ itemId, medians, mine, canReport }: Props) 
 						)}
 					</div>
 				</form>
+			) : (
+				<Link href={l("/login")} className="text-sm text-primary hover:underline">
+					{t("item.timeToBeat.loginToReport")}
+				</Link>
 			)}
 		</section>
 	);

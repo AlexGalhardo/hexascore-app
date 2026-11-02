@@ -75,7 +75,8 @@ test("logged out: score block with explanation, chips, disabled stars and a log 
 	expect(screen.getAllByRole("link", { name: "MMORPG" })[0].getAttribute("href")).toBe(
 		"/games/genres/mmorpg",
 	);
-	expect(screen.getByText("itemTypes.game · 2004 · Blizzard Entertainment")).toBeTruthy();
+	expect(screen.queryByText(/itemTypes.game · 2004/)).toBeNull();
+	expect(screen.queryByText(/item.attribution/)).toBeNull();
 	expect(screen.getAllByRole("radiogroup")).toHaveLength(6);
 	expect(screen.getAllByRole("radio").every((r) => (r as HTMLInputElement).disabled)).toBe(true);
 	expect(screen.getByRole("link", { name: "item.loginToRate" }).getAttribute("href")).toBe(
@@ -117,18 +118,22 @@ test("three columns: actions under the cover, synopsis under the chips, score ca
 	);
 
 	const actions = screen.getByTestId("item-col-actions");
-	const names = [...actions.querySelectorAll("a, button")].map((el) => el.textContent);
+	const names = [...actions.querySelectorAll("a, button")]
+		.filter((el) => !el.closest("section"))
+		.map((el) => el.textContent);
 	expect(names).toEqual([
 		"item.seeUserScores",
-		"item.rateIt",
 		"lists.addToList",
 		"community.suggest.link",
 		"community.recent.link",
 	]);
-	for (const el of actions.querySelectorAll("a, button")) {
+	for (const el of [...actions.querySelectorAll("a, button")].filter(
+		(e) => !e.closest("section"),
+	)) {
 		expect(el.querySelector("svg[aria-hidden='true']")).not.toBeNull();
 	}
 	expect(actions.firstElementChild?.matches("img, [data-testid=cover-placeholder]")).toBe(true);
+	expect(actions.querySelector("#details-heading")).not.toBeNull();
 
 	const main = screen.getByTestId("item-col-main");
 	const chips = screen.getByTestId("item-chips");
@@ -139,6 +144,8 @@ test("three columns: actions under the cover, synopsis under the chips, score ca
 	for (const chip of chips.querySelectorAll("a")) {
 		expect(chip.className).toContain("rounded-xs");
 		expect(chip.className).not.toContain("rounded-full");
+		expect(chip.className).toContain("shadow-ledge-secondary");
+		expect(chip.className).toContain("active:translate-y-px");
 	}
 
 	const rating = screen.getByTestId("item-col-rating");

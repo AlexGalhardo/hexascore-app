@@ -13,13 +13,10 @@ import (
 	"github.com/AlexGalhardo/vukem/uuid"
 )
 
-// Problem codes of the time-to-beat writes (SDD 02 §6).
-const (
-	CodeStatusNotCompleted = "status-not-completed"
-	CodeNotAGame           = "not-a-game"
-)
+// CodeNotAGame is the problem code of a time-to-beat write on a non-game item (SDD 02 §6).
+const CodeNotAGame = "not-a-game"
 
-// TimeToBeatHours is one user's report in hours (0.5 steps, 0.5–10,000); nil styles are not reported.
+// TimeToBeatHours is one user's report in hours (0.5 steps, 0.5–1,000); nil styles are not reported.
 type TimeToBeatHours struct {
 	Main          *float64 `json:"mainHours"`
 	Extras        *float64 `json:"extrasHours"`
@@ -34,8 +31,7 @@ func minutes(h *float64) any {
 	return int(math.Round(*h * 60))
 }
 
-// SaveTimeToBeat upserts userID's report. Only games qualify (422 not-a-game) and only while the user's status
-// is "completed" (409 status-not-completed). Lock order: item row, then the status row (SDD 02 §7.2).
+// SaveTimeToBeat upserts userID's report. Only games qualify (422 not-a-game); the status does not matter.
 func (w *Writer) SaveTimeToBeat(ctx context.Context, userID int64, itemID string, h TimeToBeatHours) (Summary, error) {
 	return w.mutateItem(
 		ctx,
@@ -44,22 +40,6 @@ func (w *Writer) SaveTimeToBeat(ctx context.Context, userID int64, itemID string
 			if typ != "game" {
 				return nil, errs.NewKey(http.StatusUnprocessableEntity, "time_to_beat.not_a_game",
 					"Time to beat is only available for games.", nil).WithExtension("code", CodeNotAGame)
-			}
-
-			var status string
-			err := tx.QueryRowContext(ctx, `SELECT status::text FROM item_status WHERE user_id = $1 AND item_id = $2 FOR UPDATE`,
-				userID, itemID).
-				Scan(&status)
-			if err != nil && !errors.Is(err, sql.ErrNoRows) {
-				return nil, err
-			}
-			if status != "completed" {
-				return nil, errs.NewKey(
-					http.StatusConflict,
-					"time_to_beat.status_not_completed",
-					"Mark the game as completed before reporting a time.",
-					nil,
-				).WithExtension("code", CodeStatusNotCompleted)
 			}
 
 			if _, err := tx.ExecContext(

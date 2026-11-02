@@ -44,7 +44,7 @@ func TestTimeToBeat(t *testing.T) {
 	ttb := "/app/v1/items/" + game + "/time-to-beat"
 	body := func(m any) map[string]any { return map[string]any{"mainHours": m} }
 
-	c.PutJSON(ttb, body(10.0)).AssertStatus(409).AssertJSONPath("title", "Conflict")
+	c.PutJSON(ttb, body(10.0)).AssertOK()
 
 	c.PutJSON("/app/v1/items/"+movie+"/status", map[string]any{"status": "completed"}).AssertOK()
 	c.PutJSON("/app/v1/items/"+movie+"/time-to-beat", body(10.0)).
@@ -52,29 +52,23 @@ func TestTimeToBeat(t *testing.T) {
 		AssertJSONPath("title", "Unprocessable Entity")
 
 	c.PutJSON("/app/v1/items/"+game+"/status", map[string]any{"status": "completed"}).AssertOK()
-	for _, bad := range []any{0.25, 0.0, 10000.5, 12.3, "x"} {
+	for _, bad := range []any{0.25, 0.0, 1000.5, 12.3, "x"} {
 		c.PutJSON(ttb, body(bad)).AssertUnprocessable()
 	}
 	c.PutJSON(ttb, map[string]any{}).AssertUnprocessable()
 	c.PutJSON(ttb, map[string]any{"mainHours": nil, "extrasHours": nil}).AssertUnprocessable()
 
-	c.PutJSON(ttb, map[string]any{"mainHours": 12.5, "extrasHours": 0.5, "completionistHours": 10000.0}).AssertOK()
+	c.PutJSON(ttb, map[string]any{"mainHours": 12.5, "extrasHours": 0.5, "completionistHours": 1000.0}).AssertOK()
 	vukemtest.AssertDatabaseHas(t, r.app, "time_to_beat",
-		map[string]any{"item_id": game, "main_minutes": 750, "extras_minutes": 30, "completionist_minutes": 600000})
+		map[string]any{"item_id": game, "main_minutes": 750, "extras_minutes": 30, "completionist_minutes": 60000})
 	me := c.Get("/app/v1/items/" + game + "/me").AssertOK()
 	me.AssertJSONPath("status", "completed")
 	me.AssertJSONPath("timeToBeat.mainHours", 12.5)
 	me.AssertJSONPath("rating", nil)
 
-	// Leaving "completed" drops the report.
+	// The report is independent of the status.
 	c.PutJSON("/app/v1/items/"+game+"/status", map[string]any{"status": "dropped"}).AssertOK()
-	vukemtest.AssertDatabaseMissing(t, r.app, "time_to_beat", map[string]any{"item_id": game})
-	vukemtest.AssertDatabaseHas(
-		t,
-		r.app,
-		"rating_events",
-		map[string]any{"item_id": game, "kind": "time_to_beat_cleared"},
-	)
+	vukemtest.AssertDatabaseHas(t, r.app, "time_to_beat", map[string]any{"item_id": game})
 
 	c.Delete(ttb).AssertNoContent()
 	c.Get("/app/v1/items/00000000-0000-7000-8000-000000000000/me").AssertNotFound()
@@ -160,5 +154,26 @@ func TestSecurity_A04_StatusWritesRespectVisibilityAndBurst(t *testing.T) {
 
 	if n := r.countOf(`SELECT count(*) FROM items WHERE id = $1 AND score_computed_at IS NOT NULL`, limited); n != 0 {
 		t.Errorf("score recomputed during the burst limit")
+	}
+}
+
+// A-01: the time-to-beat route writes only the caller's own row; there is no way to address another user's entry.
+func TestSecurity_A01_TimeToBeatOwnEntryOnly(t *testing.T) {
+	r := newRig(t)
+	a, b := r.token(1, "status:write"), r.token(2, "status:write")
+	game := r.item("game", "2020-01-01", "day", "released")
+	ttb := "/app/v1/items/" + game + "/time-to-beat"
+
+	r.app.Client(t).PutJSON(ttb, map[string]any{"mainHours": 5.0}).AssertUnauthorized()
+
+	a.PutJSON(ttb, map[string]any{"mainHours": 5.0}).AssertOK()
+	b.PutJSON(ttb, map[string]any{"mainHours": 9.0}).AssertOK()
+	if n := r.countOf(`SELECT count(*) FROM time_to_beat WHERE item_id = $1`, game); n != 2 {
+		t.Fatalf("rows = %d, want one per user", n)
+	}
+
+	b.Delete(ttb).AssertNoContent()
+	if n := r.countOf(`SELECT count(*) FROM time_to_beat WHERE item_id = $1 AND main_minutes = 300`, game); n != 1 {
+		t.Fatalf("user A's entry changed by user B: %d", n)
 	}
 }

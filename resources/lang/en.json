@@ -771,6 +771,7 @@
     "apiDocs": "API docs",
     "pricing": "Pricing",
     "howScores": "How scores work",
+    "attribution": "Game data from IGDB.com. Movie and series data from TMDB; this product uses the TMDB API but is not endorsed or certified by TMDB.",
     "cookieSettings": "Cookie settings",
     "sourceCode": "Source Code"
   },
@@ -1059,7 +1060,6 @@
       "year": "Year",
       "format": "Format"
     },
-    "attribution": "Attribution: data from TMDB and IGDB where shown.",
     "timeToBeat": {
       "title": "Time to beat",
       "styles": {
@@ -1073,8 +1073,9 @@
         "one": "{count} report",
         "other": "{count} reports"
       },
-      "notEnough": "Not enough reports yet (needs {min})",
-      "hint": "Median of the hours reported by players who completed the game.",
+      "none": "No reports yet. Be the first to add your time.",
+      "loginToReport": "Log in to add your time to beat.",
+      "hint": "Median of the hours reported by players.",
       "yours": "Your time to beat",
       "yoursHint": "Optional. Hours, in steps of 0.5; leave a style empty if you did not play it that way.",
       "hoursPlaceholder": "Hours",
@@ -1100,8 +1101,6 @@
       "other": "from {n} ratings · six categories, one formula"
     },
     "howScoreWorks": "How the score works",
-    "rateIt": "Rate it",
-    "goToRating": "Go to your rating",
     "breadcrumb": "Breadcrumb",
     "loadTrailerN": "Load trailer {n}",
     "panel": {

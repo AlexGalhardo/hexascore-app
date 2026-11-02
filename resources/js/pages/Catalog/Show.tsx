@@ -2,13 +2,7 @@ import { Link, usePage } from "@inertiajs/react";
 import { lazy, type ReactNode, Suspense, useState } from "react";
 import CategoryIcon from "../../components/CategoryIcon";
 import CoverThumb, { type Cover } from "../../components/CoverThumb";
-import {
-	ChartIcon,
-	HistoryIcon,
-	ListIcon,
-	PencilIcon,
-	StarIcon,
-} from "../../components/item/ActionIcons";
+import { ChartIcon, HistoryIcon, ListIcon, PencilIcon } from "../../components/item/ActionIcons";
 import AddToList, { type ListChoice } from "../../components/item/AddToList";
 import CategoryAverages from "../../components/item/CategoryAverages";
 import Editions from "../../components/item/Editions";
@@ -104,8 +98,6 @@ const ENTITY_PATH: Record<string, string> = {
 
 // Chips under the title: genres and platforms, linked to their entity pages.
 const CHIP_ROLES = ["genre", "platform"];
-// The first of these credits completes the meta line under the title.
-const CREDIT_ROLES = ["developer", "author", "director", "creator", "network"];
 
 const ROLE_ORDER = [
 	"director",
@@ -153,7 +145,6 @@ export default function Show({
 	// Entity pages live under the item's own category (owner round 2026-11-01 item 19).
 	const entityHref = (e: EntityLink) =>
 		l(`/${SECTIONS[item.type]}/${ENTITY_PATH[e.kind]}/${e.code ?? e.slug}`);
-	const credit = CREDIT_ROLES.map((r) => entities[r]?.[0]).find(Boolean);
 	const chips = CHIP_ROLES.flatMap((r) => entities[r] ?? []);
 	const release =
 		item.releaseDate?.length === 10
@@ -242,13 +233,6 @@ export default function Show({
 						) : (
 							seeScores
 						)}
-						<a
-							href="#your-rating"
-							className={btnClass("primary", "w-full justify-start")}
-						>
-							<StarIcon />
-							{loggedIn && me?.rating ? t("item.goToRating") : t("item.rateIt")}
-						</a>
 						{loggedIn && myLists ? (
 							<AddToList
 								itemId={item.id}
@@ -274,28 +258,57 @@ export default function Show({
 							{t("community.recent.link")}
 						</Link>
 					</div>
+					<Section id="details" title={t("item.details")}>
+						<dl className="grid">
+							{release && (
+								<DetailRow label={t("item.fields.releaseDate")}>
+									{release}
+								</DetailRow>
+							)}
+							{item.runtimeMinutes !== undefined && (
+								<DetailRow label={t("item.fields.runtime")}>
+									{t("item.runtimeValue", { minutes: item.runtimeMinutes })}
+								</DetailRow>
+							)}
+							{item.pageCount !== undefined && (
+								<DetailRow label={t("item.fields.pages")}>
+									{item.pageCount}
+								</DetailRow>
+							)}
+							{roles.map((role) => (
+								<DetailRow key={role} label={t(`item.roles.${role}`)}>
+									{entities[role].map((e, i) => (
+										<span key={e.id}>
+											{i > 0 && ", "}
+											<Link
+												href={entityHref(e)}
+												className="text-primary hover:underline"
+											>
+												{e.name}
+											</Link>
+											{e.character && ` (${e.character})`}
+										</span>
+									))}
+								</DetailRow>
+							))}
+						</dl>
+					</Section>
 				</div>
 
 				<div data-testid="item-col-main" className="grid min-w-0 content-start gap-10">
 					<header className="grid content-start gap-4">
 						<h1 className="text-3xl leading-none sm:text-4xl md:text-5xl">{title}</h1>
 						{ogImage && <ShareButton title={title} />}
-						<p className="text-muted md:text-lg">
-							{[
-								t(`itemTypes.${item.type}`),
-								item.releaseDate?.slice(0, 4),
-								credit?.name,
-							]
-								.filter(Boolean)
-								.join(" · ")}
-						</p>
 						{chips.length > 0 && (
 							<ul data-testid="item-chips" className="flex flex-wrap gap-2">
 								{chips.map((e) => (
 									<li key={`${e.kind}-${e.id}`}>
 										<Link
 											href={entityHref(e)}
-											className="inline-flex min-h-10 items-center rounded-xs border border-fg px-3.5 text-sm hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+											className={btnClass(
+												"secondary",
+												"min-h-10 px-3.5 text-sm",
+											)}
 										>
 											{e.name}
 										</Link>
@@ -330,6 +343,15 @@ export default function Show({
 						)}
 					</Section>
 
+					{timeToBeat && (
+						<TimeToBeat
+							itemId={item.id}
+							medians={timeToBeat}
+							mine={me?.timeToBeat}
+							canEdit={loggedIn}
+						/>
+					)}
+
 					<Section id="averages" title={t("item.categoryScores")}>
 						<CategoryAverages
 							keys={keys}
@@ -337,53 +359,6 @@ export default function Show({
 							averages={ratingSummary.scoreByCategory}
 						/>
 					</Section>
-
-					<div className="grid gap-12 md:grid-cols-2 md:gap-8">
-						<Section id="details" title={t("item.details")}>
-							<dl className="grid">
-								{release && (
-									<DetailRow label={t("item.fields.releaseDate")}>
-										{release}
-									</DetailRow>
-								)}
-								{item.runtimeMinutes !== undefined && (
-									<DetailRow label={t("item.fields.runtime")}>
-										{t("item.runtimeValue", { minutes: item.runtimeMinutes })}
-									</DetailRow>
-								)}
-								{item.pageCount !== undefined && (
-									<DetailRow label={t("item.fields.pages")}>
-										{item.pageCount}
-									</DetailRow>
-								)}
-								{roles.map((role) => (
-									<DetailRow key={role} label={t(`item.roles.${role}`)}>
-										{entities[role].map((e, i) => (
-											<span key={e.id}>
-												{i > 0 && ", "}
-												<Link
-													href={entityHref(e)}
-													className="text-primary hover:underline"
-												>
-													{e.name}
-												</Link>
-												{e.character && ` (${e.character})`}
-											</span>
-										))}
-									</DetailRow>
-								))}
-							</dl>
-						</Section>
-
-						{timeToBeat && (
-							<TimeToBeat
-								itemId={item.id}
-								medians={timeToBeat}
-								mine={me?.timeToBeat}
-								canReport={me?.status === "completed"}
-							/>
-						)}
-					</div>
 
 					{trailers.length > 0 && (
 						<Section
@@ -415,8 +390,6 @@ export default function Show({
 					)}
 
 					<MoreLikeThis type={item.type} similar={similar} crossMedia={crossMedia} />
-
-					<p className="text-xs text-muted">{t("item.attribution")}</p>
 				</div>
 
 				<aside
@@ -480,7 +453,7 @@ function Section({
 
 function DetailRow({ label, children }: { label: string; children: ReactNode }) {
 	return (
-		<div className="grid grid-cols-[7rem_minmax(0,1fr)] gap-4 border-b border-border py-2.5 text-sm">
+		<div className="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-3 border-b border-border py-2.5 text-sm">
 			<dt className="text-muted">{label}</dt>
 			<dd>{children}</dd>
 		</div>

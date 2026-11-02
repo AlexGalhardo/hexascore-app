@@ -21,7 +21,7 @@ export default function Trailers({ trailers }: { trailers: Trailer[] }) {
 	}, [trailers]);
 
 	return (
-		<ul className="grid gap-3 sm:grid-cols-2">
+		<ul className="grid gap-3">
 			{trailers.map((trailer, i) => {
 				const title = trailer.title || t("item.trailerTitle", { n: i + 1 });
 				return (

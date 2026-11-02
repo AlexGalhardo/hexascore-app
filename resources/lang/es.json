@@ -771,6 +771,7 @@
     "apiDocs": "Docs de la API",
     "pricing": "Precios",
     "howScores": "Cómo funcionan las notas",
+    "attribution": "Datos de juegos de IGDB.com. Datos de películas y series de TMDB; este producto usa la API de TMDB, pero TMDB no lo respalda ni certifica.",
     "cookieSettings": "Configuración de cookies",
     "sourceCode": "Código fuente"
   },
@@ -1059,7 +1060,6 @@
       "year": "Año",
       "format": "Formato"
     },
-    "attribution": "Atribución: datos de TMDB e IGDB donde se muestran.",
     "timeToBeat": {
       "title": "Tiempo para terminar",
       "styles": {
@@ -1073,8 +1073,9 @@
         "one": "{count} reporte",
         "other": "{count} reportes"
       },
-      "notEnough": "Aún no hay suficientes reportes (mínimo {min})",
-      "hint": "Mediana de las horas que informaron quienes completaron el juego.",
+      "none": "Aún no hay reportes. Sé el primero en añadir tu tiempo.",
+      "loginToReport": "Inicia sesión para añadir tu tiempo para terminarlo.",
+      "hint": "Mediana de las horas que informaron los jugadores.",
       "yours": "Tu tiempo para terminar",
       "yoursHint": "Opcional. Horas, de 0,5 en 0,5; deja vacío el estilo que no jugaste.",
       "hoursPlaceholder": "Horas",
@@ -1100,8 +1101,6 @@
       "other": "de {n} valoraciones · seis categorías, una fórmula"
     },
     "howScoreWorks": "Cómo funciona la puntuación",
-    "rateIt": "Valorar",
-    "goToRating": "Ir a tu valoración",
     "breadcrumb": "Ruta de navegación",
     "loadTrailerN": "Cargar tráiler {n}",
     "panel": {

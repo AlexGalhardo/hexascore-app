@@ -64,13 +64,25 @@ func TestInertiaPages_Catalog_Show(t *testing.T) {
 		)
 	}
 
+	for i, minutes := range []int{60, 180} {
+		var uid int64
+		if err := db.SQL().QueryRowContext(t.Context(),
+			`INSERT INTO users (name, email, password) VALUES ('U', $1, 'x') RETURNING id`,
+			fmt.Sprintf("ttb%d@example.com", i)).Scan(&uid); err != nil {
+			t.Fatal(err)
+		}
+		exec(`INSERT INTO time_to_beat (user_id, item_id, main_minutes) VALUES ($1, $2, $3)`, uid, game, minutes)
+	}
+
 	client := app.Client(t)
 
 	client.Inertia("").Get("/games/zelda").AssertOK().AssertInertia("Catalog/Show").
 		PropEquals("item.title", "Zelda").
 		PropEquals("ratingSummary.score", 8.7).
 		PropEquals("ratingSummary.ratingCount", 9).
-		HasProp("timeToBeat.reports").
+		PropEquals("timeToBeat.reports", 2).
+		PropEquals("timeToBeat.mainHours", 2.0).
+		PropEquals("timeToBeat.extrasHours", nil).
 		PropEquals("cover.full", "/covers/zelda-0123456789abcdef.webp").
 		PropEquals("cover.thumb", "/covers/zelda-0123456789abcdef-t.webp").
 		MissingProp("me").

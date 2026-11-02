@@ -17,9 +17,6 @@ import (
 // EditionPageSize is how many editions the item page lists inline.
 const EditionPageSize = 10
 
-// ttbMinReports is the legacy floor for showing a time-to-beat median (SDD 02 §7.7).
-const ttbMinReports = 3
-
 // ErrItemNotFound means no public item matches the type and slug.
 var ErrItemNotFound = errors.New("catalog: item not found")
 
@@ -58,8 +55,7 @@ type Edition struct {
 	ISBN13          *string `json:"isbn13"`
 }
 
-// TimeToBeat holds the community medians in hours; a style is null below
-// three reports (legacy parity).
+// TimeToBeat holds the community medians in hours; a style is null while nobody reported it.
 type TimeToBeat struct {
 	Main          *float64 `json:"mainHours"`
 	Extras        *float64 `json:"extrasHours"`
@@ -362,7 +358,7 @@ FROM time_to_beat WHERE item_id = $1`, itemID).
 	}
 
 	hours := func(i int) *float64 {
-		if counts[i] < ttbMinReports || !medians[i].Valid {
+		if counts[i] == 0 || !medians[i].Valid {
 			return nil
 		}
 		h := math.Round(medians[i].Float64/60*10) / 10

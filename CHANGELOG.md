@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- **catalog:** Item page layout: Details moved under the cover buttons, "Rate it" and the type/year/credit line removed, sub-category chips are pressable ledge buttons, trailers take the full column width one per row, and the IGDB/TMDB attribution moved from the page bottom to the site footer (ADR 0006 keeps it satisfied)
+- **scoring:** Time to beat (games) is editable by any signed-in user, no longer only while `completed`, stays when the status changes, accepts 0.5-1,000 h, and the card shows the median from the first report with the report count (the 3-report floor and the 409 `status-not-completed` are gone)
+
 ### Added
 
 - **ingest:** Editions resolve their P123 publisher through the credit matcher (QID, then name; no native entity from a bare QID), the work points at its primary edition (earliest in the original language, a covered one first), the stored Open Library edition fills the ISBN, language and year Wikidata lacks or adds an edition, and backfill runs pause 100 ms between batches through the runner clock (P6.B.3.1)

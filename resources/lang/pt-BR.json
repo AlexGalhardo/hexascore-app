@@ -771,6 +771,7 @@
     "apiDocs": "Docs da API",
     "pricing": "Preços",
     "howScores": "Como as notas funcionam",
+    "attribution": "Dados de jogos do IGDB.com. Dados de filmes e séries do TMDB; este produto usa a API do TMDB, mas não é endossado nem certificado pelo TMDB.",
     "cookieSettings": "Configurações de cookies",
     "sourceCode": "Código-fonte"
   },
@@ -1059,7 +1060,6 @@
       "year": "Ano",
       "format": "Formato"
     },
-    "attribution": "Atribuição: dados do TMDB e do IGDB onde exibidos.",
     "timeToBeat": {
       "title": "Tempo para zerar",
       "styles": {
@@ -1073,8 +1073,9 @@
         "one": "{count} relato",
         "other": "{count} relatos"
       },
-      "notEnough": "Relatos insuficientes (mínimo {min})",
-      "hint": "Mediana das horas informadas por quem concluiu o jogo.",
+      "none": "Ainda sem relatos. Seja o primeiro a informar seu tempo.",
+      "loginToReport": "Entre para informar seu tempo para zerar.",
+      "hint": "Mediana das horas informadas pelos jogadores.",
       "yours": "Seu tempo para zerar",
       "yoursHint": "Opcional. Horas, de 0,5 em 0,5; deixe em branco o estilo que você não jogou.",
       "hoursPlaceholder": "Horas",
@@ -1100,8 +1101,6 @@
       "other": "de {n} avaliações · seis categorias, uma fórmula"
     },
     "howScoreWorks": "Como a nota funciona",
-    "rateIt": "Avaliar",
-    "goToRating": "Ir para sua avaliação",
     "breadcrumb": "Trilha de navegação",
     "loadTrailerN": "Carregar trailer {n}",
     "panel": {

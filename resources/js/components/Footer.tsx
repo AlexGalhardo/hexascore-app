@@ -52,9 +52,12 @@ export default function Footer() {
 						</li>
 					</ul>
 				</nav>
-				<p className="text-[13px] text-muted md:ml-auto">
-					© {new Date().getFullYear()} {appName}
-				</p>
+				<div className="grid gap-1 text-[13px] text-muted md:ml-auto md:text-right">
+					<p className="text-xs">{t("footer.attribution")}</p>
+					<p>
+						© {new Date().getFullYear()} {appName}
+					</p>
+				</div>
 			</div>
 		</footer>
 	);
