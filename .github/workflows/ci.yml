@@ -275,7 +275,7 @@ jobs:
           path: image.tar
 
   openapi:
-    name: OpenAPI (export diff, Redocly, Schemathesis)
+    name: OpenAPI (export diff, Redocly, client codegen)
     needs: build
     runs-on: ubuntu-24.04
     env:
@@ -322,8 +322,7 @@ jobs:
           fi
           rm -f "$out"
           bun run --filter @hexascore/app-client typecheck test
-      - name: Schemathesis against the loaded image
-        run: bash qa/schemathesis/ci.sh hexascore:ci
+      # Schemathesis left CI (owner, 2026-11-02): run qa/schemathesis/ci.sh by hand when the API changes.
 
   e2e:
     name: Playwright (desktop-en on release candidates; full matrix with RUN_E2E=true)
