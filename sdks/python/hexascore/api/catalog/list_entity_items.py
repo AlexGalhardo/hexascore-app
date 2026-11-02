@@ -93,6 +93,9 @@ def sync_detailed(
 ) -> Response[ItemPageJSON | Problem]:
     """List entity items
 
+     Lists the items linked to an entity, for example the movies of a director or the games of a
+    platform.
+
     Args:
         id (str):
         type_ (str | Unset):
@@ -140,6 +143,9 @@ def sync(
 ) -> ItemPageJSON | Problem | None:
     """List entity items
 
+     Lists the items linked to an entity, for example the movies of a director or the games of a
+    platform.
+
     Args:
         id (str):
         type_ (str | Unset):
@@ -181,6 +187,9 @@ async def asyncio_detailed(
     locale: str | Unset = UNSET,
 ) -> Response[ItemPageJSON | Problem]:
     """List entity items
+
+     Lists the items linked to an entity, for example the movies of a director or the games of a
+    platform.
 
     Args:
         id (str):
@@ -226,6 +235,9 @@ async def asyncio(
     locale: str | Unset = UNSET,
 ) -> ItemPageJSON | Problem | None:
     """List entity items
+
+     Lists the items linked to an entity, for example the movies of a director or the games of a
+    platform.
 
     Args:
         id (str):

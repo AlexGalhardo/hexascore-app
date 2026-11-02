@@ -75,6 +75,8 @@ def sync_detailed(
 ) -> Response[ItemJSON | Problem]:
     """Get item
 
+     Returns one item of a category by its ID or slug, with its score, details and credits.
+
     Args:
         type_ (GetItemType):
         id (str):
@@ -110,6 +112,8 @@ def sync(
 ) -> ItemJSON | Problem | None:
     """Get item
 
+     Returns one item of a category by its ID or slug, with its score, details and credits.
+
     Args:
         type_ (GetItemType):
         id (str):
@@ -139,6 +143,8 @@ async def asyncio_detailed(
     locale: str | Unset = UNSET,
 ) -> Response[ItemJSON | Problem]:
     """Get item
+
+     Returns one item of a category by its ID or slug, with its score, details and credits.
 
     Args:
         type_ (GetItemType):
@@ -172,6 +178,8 @@ async def asyncio(
     locale: str | Unset = UNSET,
 ) -> ItemJSON | Problem | None:
     """Get item
+
+     Returns one item of a category by its ID or slug, with its score, details and credits.
 
     Args:
         type_ (GetItemType):

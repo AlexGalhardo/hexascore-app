@@ -84,6 +84,8 @@ def sync_detailed(
 ) -> Response[ItemPageJSON | Problem]:
     """Search items
 
+     Searches item titles across the four categories and returns the best matches first.
+
     Args:
         q (str | Unset):
         type_ (str | Unset):
@@ -125,6 +127,8 @@ def sync(
 ) -> ItemPageJSON | Problem | None:
     """Search items
 
+     Searches item titles across the four categories and returns the best matches first.
+
     Args:
         q (str | Unset):
         type_ (str | Unset):
@@ -160,6 +164,8 @@ async def asyncio_detailed(
     page: str | Unset = UNSET,
 ) -> Response[ItemPageJSON | Problem]:
     """Search items
+
+     Searches item titles across the four categories and returns the best matches first.
 
     Args:
         q (str | Unset):
@@ -199,6 +205,8 @@ async def asyncio(
     page: str | Unset = UNSET,
 ) -> ItemPageJSON | Problem | None:
     """Search items
+
+     Searches item titles across the four categories and returns the best matches first.
 
     Args:
         q (str | Unset):

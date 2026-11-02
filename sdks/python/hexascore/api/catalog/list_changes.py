@@ -80,6 +80,9 @@ def sync_detailed(
 ) -> Response[ChangePageJSON | Problem]:
     """List changes
 
+     Lists catalogue changes (created, updated and removed items) since a cursor, for keeping a copy in
+    sync.
+
     Args:
         since (str | Unset):
         type_ (str | Unset):
@@ -118,6 +121,9 @@ def sync(
 ) -> ChangePageJSON | Problem | None:
     """List changes
 
+     Lists catalogue changes (created, updated and removed items) since a cursor, for keeping a copy in
+    sync.
+
     Args:
         since (str | Unset):
         type_ (str | Unset):
@@ -150,6 +156,9 @@ async def asyncio_detailed(
     limit: str | Unset = UNSET,
 ) -> Response[ChangePageJSON | Problem]:
     """List changes
+
+     Lists catalogue changes (created, updated and removed items) since a cursor, for keeping a copy in
+    sync.
 
     Args:
         since (str | Unset):
@@ -186,6 +195,9 @@ async def asyncio(
     limit: str | Unset = UNSET,
 ) -> ChangePageJSON | Problem | None:
     """List changes
+
+     Lists catalogue changes (created, updated and removed items) since a cursor, for keeping a copy in
+    sync.
 
     Args:
         since (str | Unset):

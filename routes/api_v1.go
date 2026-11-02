@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"cmp"
 	"context"
 	"net/http"
 
@@ -124,7 +125,8 @@ func APIV1(r *router.Router, app *vukem.App) error {
 
 		read := func(name string) vapi.Op {
 			return vapi.Op{
-				Name: name, Summary: v1Summaries[name], Tags: []string{"catalog"}, Security: []string{"bearer"},
+				Name: name, Summary: v1Summaries[name], Description: v1Descriptions[name],
+				Tags: []string{cmp.Or(v1Tags[name], "catalog")}, Security: []string{"bearer"},
 				ValidateResponse: true,
 			}
 		}
@@ -163,7 +165,8 @@ func APIV1(r *router.Router, app *vukem.App) error {
 		hooks := &apiv1.Webhooks{App: app, DB: acc.DB, Crypt: app.Crypt, Plans: plans}
 		hook := func(name string) vapi.Op {
 			return vapi.Op{
-				Name: name, Summary: v1Summaries[name], Tags: []string{"webhooks"}, Security: []string{"bearer"},
+				Name: name, Summary: v1Summaries[name], Description: v1Descriptions[name],
+				Tags: []string{"webhooks"}, Security: []string{"bearer"},
 				ValidateResponse: true,
 			}
 		}
@@ -201,6 +204,51 @@ func exportsBucket(app *vukem.App) (apiv1.Bucket, error) {
 	}
 
 	return s3.New(cfg)
+}
+
+// v1Tags groups the operations of one category under its own section of the API reference (owner 2026-11-02);
+// operations shared by the four categories stay under "catalog".
+var v1Tags = map[string]string{
+	"listGameGenres": "games", "listGameTrending": "games", "getGameActivity": "games",
+	"listMovieGenres": "movies", "listMovieTrending": "movies", "getMovieActivity": "movies",
+	"listSeriesGenres": "series", "listSeriesTrending": "series", "getSeriesActivity": "series",
+	"listBookGenres": "books", "listBookTrending": "books", "getBookActivity": "books", "listEditions": "books",
+}
+
+// v1Descriptions say in one sentence what each operation does; the API reference shows it under the title.
+var v1Descriptions = map[string]string{
+	"getUsage":           "Returns the requests your API key used this month, its monthly quota and when the quota resets.",
+	"listItems":          "Lists the items of one category (games, movies, series or books), with filters, sorting and pagination.",
+	"getItem":            "Returns one item of a category by its ID or slug, with its score, details and credits.",
+	"lookupItem":         "Finds an item by an external ID, such as a Wikidata QID, an IGDB or TMDB ID, or an ISBN.",
+	"searchItems":        "Searches item titles across the four categories and returns the best matches first.",
+	"searchEntities":     "Searches people, organizations, franchises, platforms and genres by name.",
+	"getEntity":          "Returns one entity (person, organization, franchise, platform, genre and so on) by its ID.",
+	"listEntityItems":    "Lists the items linked to an entity, for example the movies of a director or the games of a platform.",
+	"getPerson":          "Returns one person (director, writer, author, actor and so on) by ID.",
+	"getOrganization":    "Returns one organization (studio, publisher, network and so on) by ID.",
+	"getFranchise":       "Returns one franchise by ID.",
+	"getPlatform":        "Returns one game platform by ID.",
+	"listChanges":        "Lists catalogue changes (created, updated and removed items) since a cursor, for keeping a copy in sync.",
+	"listGameGenres":     "Lists the game genres, for filtering the game listing.",
+	"listMovieGenres":    "Lists the movie genres, for filtering the movie listing.",
+	"listSeriesGenres":   "Lists the series genres, for filtering the series listing.",
+	"listBookGenres":     "Lists the book genres, for filtering the book listing.",
+	"listGameTrending":   "Lists the games trending now, ranked by recent community activity.",
+	"listMovieTrending":  "Lists the movies trending now, ranked by recent community activity.",
+	"listSeriesTrending": "Lists the series trending now, ranked by recent community activity.",
+	"listBookTrending":   "Lists the books trending now, ranked by recent community activity.",
+	"getGameActivity":    "Returns the recent community activity of one game: ratings, reviews and list additions over time.",
+	"getMovieActivity":   "Returns the recent community activity of one movie: ratings, reviews and list additions over time.",
+	"getSeriesActivity":  "Returns the recent community activity of one series: ratings, reviews and list additions over time.",
+	"getBookActivity":    "Returns the recent community activity of one book: ratings, reviews and list additions over time.",
+	"listEditions":       "Lists the editions of one book (formats, languages, publishers and ISBNs).",
+	"listWebhooks":       "Lists the webhooks of your API key.",
+	"createWebhook":      "Creates a webhook that receives catalogue change events at your URL, signed with a secret.",
+	"deleteWebhook":      "Deletes one of your webhooks.",
+	"testWebhook":        "Sends a test event to one of your webhooks and reports the response.",
+	"listExports":        "Lists the daily ID exports your plan can download.",
+	"getExport":          "Returns a short-lived download link for one daily ID export.",
 }
 
 // v1Summaries are the readable operation titles of the API reference sidebar ("List items", not "listItems";

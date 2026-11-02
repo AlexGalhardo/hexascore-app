@@ -5,7 +5,7 @@ from urllib.parse import quote
 import httpx
 
 from ...client import AuthenticatedClient, Client
-from ...models.activity_json import ActivityJSON
+from ...models.edition_page_json import EditionPageJSON
 from ...models.problem import Problem
 from ...types import UNSET, Response, Unset
 
@@ -13,21 +13,21 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     id: str,
     *,
-    from_: str | Unset = UNSET,
-    to: str | Unset = UNSET,
+    limit: str | Unset = UNSET,
+    cursor: str | Unset = UNSET,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
 
-    params["from"] = from_
+    params["limit"] = limit
 
-    params["to"] = to
+    params["cursor"] = cursor
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/games/{id}/activity".format(
+        "url": "/books/{id}/editions".format(
             id=quote(str(id), safe=""),
         ),
         "params": params,
@@ -36,9 +36,9 @@ def _get_kwargs(
     return _kwargs
 
 
-def _parse_response(*, client: AuthenticatedClient | Client, response: httpx.Response) -> ActivityJSON | Problem:
+def _parse_response(*, client: AuthenticatedClient | Client, response: httpx.Response) -> EditionPageJSON | Problem:
     if response.status_code == 200:
-        response_200 = ActivityJSON.from_dict(response.json())
+        response_200 = EditionPageJSON.from_dict(response.json())
 
         return response_200
 
@@ -59,7 +59,7 @@ def _parse_response(*, client: AuthenticatedClient | Client, response: httpx.Res
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ActivityJSON | Problem]:
+) -> Response[EditionPageJSON | Problem]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -72,28 +72,30 @@ def sync_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    from_: str | Unset = UNSET,
-    to: str | Unset = UNSET,
-) -> Response[ActivityJSON | Problem]:
-    """Get game activity
+    limit: str | Unset = UNSET,
+    cursor: str | Unset = UNSET,
+) -> Response[EditionPageJSON | Problem]:
+    """List book editions
+
+     Lists the editions of one book (formats, languages, publishers and ISBNs).
 
     Args:
         id (str):
-        from_ (str | Unset):
-        to (str | Unset):
+        limit (str | Unset):
+        cursor (str | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ActivityJSON | Problem]
+        Response[EditionPageJSON | Problem]
     """
 
     kwargs = _get_kwargs(
         id=id,
-        from_=from_,
-        to=to,
+        limit=limit,
+        cursor=cursor,
     )
 
     response = client.get_httpx_client().request(
@@ -107,29 +109,31 @@ def sync(
     id: str,
     *,
     client: AuthenticatedClient,
-    from_: str | Unset = UNSET,
-    to: str | Unset = UNSET,
-) -> ActivityJSON | Problem | None:
-    """Get game activity
+    limit: str | Unset = UNSET,
+    cursor: str | Unset = UNSET,
+) -> EditionPageJSON | Problem | None:
+    """List book editions
+
+     Lists the editions of one book (formats, languages, publishers and ISBNs).
 
     Args:
         id (str):
-        from_ (str | Unset):
-        to (str | Unset):
+        limit (str | Unset):
+        cursor (str | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ActivityJSON | Problem
+        EditionPageJSON | Problem
     """
 
     return sync_detailed(
         id=id,
         client=client,
-        from_=from_,
-        to=to,
+        limit=limit,
+        cursor=cursor,
     ).parsed
 
 
@@ -137,28 +141,30 @@ async def asyncio_detailed(
     id: str,
     *,
     client: AuthenticatedClient,
-    from_: str | Unset = UNSET,
-    to: str | Unset = UNSET,
-) -> Response[ActivityJSON | Problem]:
-    """Get game activity
+    limit: str | Unset = UNSET,
+    cursor: str | Unset = UNSET,
+) -> Response[EditionPageJSON | Problem]:
+    """List book editions
+
+     Lists the editions of one book (formats, languages, publishers and ISBNs).
 
     Args:
         id (str):
-        from_ (str | Unset):
-        to (str | Unset):
+        limit (str | Unset):
+        cursor (str | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ActivityJSON | Problem]
+        Response[EditionPageJSON | Problem]
     """
 
     kwargs = _get_kwargs(
         id=id,
-        from_=from_,
-        to=to,
+        limit=limit,
+        cursor=cursor,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -170,29 +176,31 @@ async def asyncio(
     id: str,
     *,
     client: AuthenticatedClient,
-    from_: str | Unset = UNSET,
-    to: str | Unset = UNSET,
-) -> ActivityJSON | Problem | None:
-    """Get game activity
+    limit: str | Unset = UNSET,
+    cursor: str | Unset = UNSET,
+) -> EditionPageJSON | Problem | None:
+    """List book editions
+
+     Lists the editions of one book (formats, languages, publishers and ISBNs).
 
     Args:
         id (str):
-        from_ (str | Unset):
-        to (str | Unset):
+        limit (str | Unset):
+        cursor (str | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ActivityJSON | Problem
+        EditionPageJSON | Problem
     """
 
     return (
         await asyncio_detailed(
             id=id,
             client=client,
-            from_=from_,
-            to=to,
+            limit=limit,
+            cursor=cursor,
         )
     ).parsed

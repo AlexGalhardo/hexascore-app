@@ -52,6 +52,8 @@ def sync_detailed(
 ) -> Response[Problem | WebhookList]:
     """List webhooks
 
+     Lists the webhooks of your API key.
+
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
@@ -75,6 +77,8 @@ def sync(
 ) -> Problem | WebhookList | None:
     """List webhooks
 
+     Lists the webhooks of your API key.
+
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
@@ -93,6 +97,8 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
 ) -> Response[Problem | WebhookList]:
     """List webhooks
+
+     Lists the webhooks of your API key.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -114,6 +120,8 @@ async def asyncio(
     client: AuthenticatedClient,
 ) -> Problem | WebhookList | None:
     """List webhooks
+
+     Lists the webhooks of your API key.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

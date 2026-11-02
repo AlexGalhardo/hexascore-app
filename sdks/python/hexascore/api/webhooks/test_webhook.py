@@ -73,6 +73,8 @@ def sync_detailed(
 ) -> Response[Problem | WebhookTestResult]:
     """Test webhook
 
+     Sends a test event to one of your webhooks and reports the response.
+
     Args:
         id (str):
         body (TestWebhookBody):
@@ -105,6 +107,8 @@ def sync(
 ) -> Problem | WebhookTestResult | None:
     """Test webhook
 
+     Sends a test event to one of your webhooks and reports the response.
+
     Args:
         id (str):
         body (TestWebhookBody):
@@ -131,6 +135,8 @@ async def asyncio_detailed(
     body: TestWebhookBody,
 ) -> Response[Problem | WebhookTestResult]:
     """Test webhook
+
+     Sends a test event to one of your webhooks and reports the response.
 
     Args:
         id (str):
@@ -161,6 +167,8 @@ async def asyncio(
     body: TestWebhookBody,
 ) -> Problem | WebhookTestResult | None:
     """Test webhook
+
+     Sends a test event to one of your webhooks and reports the response.
 
     Args:
         id (str):

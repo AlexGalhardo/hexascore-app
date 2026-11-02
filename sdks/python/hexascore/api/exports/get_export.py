@@ -63,6 +63,8 @@ def sync_detailed(
 ) -> Response[Any | Problem]:
     """Get export
 
+     Returns a short-lived download link for one daily ID export.
+
     Args:
         type_ (GetExportType):
         day (str):
@@ -95,6 +97,8 @@ def sync(
 ) -> Any | Problem | None:
     """Get export
 
+     Returns a short-lived download link for one daily ID export.
+
     Args:
         type_ (GetExportType):
         day (str):
@@ -121,6 +125,8 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
 ) -> Response[Any | Problem]:
     """Get export
+
+     Returns a short-lived download link for one daily ID export.
 
     Args:
         type_ (GetExportType):
@@ -151,6 +157,8 @@ async def asyncio(
     client: AuthenticatedClient,
 ) -> Any | Problem | None:
     """Get export
+
+     Returns a short-lived download link for one daily ID export.
 
     Args:
         type_ (GetExportType):

@@ -50,6 +50,8 @@ def sync_detailed(
 ) -> Response[Problem | UsageJSON]:
     """Get usage
 
+     Returns the requests your API key used this month, its monthly quota and when the quota resets.
+
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
@@ -73,6 +75,8 @@ def sync(
 ) -> Problem | UsageJSON | None:
     """Get usage
 
+     Returns the requests your API key used this month, its monthly quota and when the quota resets.
+
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
@@ -91,6 +95,8 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
 ) -> Response[Problem | UsageJSON]:
     """Get usage
+
+     Returns the requests your API key used this month, its monthly quota and when the quota resets.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -112,6 +118,8 @@ async def asyncio(
     client: AuthenticatedClient,
 ) -> Problem | UsageJSON | None:
     """Get usage
+
+     Returns the requests your API key used this month, its monthly quota and when the quota resets.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

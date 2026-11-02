@@ -68,6 +68,8 @@ def sync_detailed(
 ) -> Response[Problem | WebhookCreated]:
     """Create webhook
 
+     Creates a webhook that receives catalogue change events at your URL, signed with a secret.
+
     Args:
         body (CreateWebhookBody):
 
@@ -97,6 +99,8 @@ def sync(
 ) -> Problem | WebhookCreated | None:
     """Create webhook
 
+     Creates a webhook that receives catalogue change events at your URL, signed with a secret.
+
     Args:
         body (CreateWebhookBody):
 
@@ -120,6 +124,8 @@ async def asyncio_detailed(
     body: CreateWebhookBody,
 ) -> Response[Problem | WebhookCreated]:
     """Create webhook
+
+     Creates a webhook that receives catalogue change events at your URL, signed with a secret.
 
     Args:
         body (CreateWebhookBody):
@@ -147,6 +153,8 @@ async def asyncio(
     body: CreateWebhookBody,
 ) -> Problem | WebhookCreated | None:
     """Create webhook
+
+     Creates a webhook that receives catalogue change events at your URL, signed with a secret.
 
     Args:
         body (CreateWebhookBody):

@@ -20,6 +20,8 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 
 /**
  * List book genres
+ *
+ * Lists the book genres, for filtering the book listing.
  */
 export const listBookGenres = <ThrowOnError extends boolean = false>(options?: Options<ListBookGenresData, ThrowOnError>): RequestResult<ListBookGenresResponses, ListBookGenresErrors, ThrowOnError> => (options?.client ?? client).get<ListBookGenresResponses, ListBookGenresErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -29,6 +31,8 @@ export const listBookGenres = <ThrowOnError extends boolean = false>(options?: O
 
 /**
  * List trending books
+ *
+ * Lists the books trending now, ranked by recent community activity.
  */
 export const listBookTrending = <ThrowOnError extends boolean = false>(options?: Options<ListBookTrendingData, ThrowOnError>): RequestResult<ListBookTrendingResponses, ListBookTrendingErrors, ThrowOnError> => (options?.client ?? client).get<ListBookTrendingResponses, ListBookTrendingErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -38,6 +42,8 @@ export const listBookTrending = <ThrowOnError extends boolean = false>(options?:
 
 /**
  * Get book activity
+ *
+ * Returns the recent community activity of one book: ratings, reviews and list additions over time.
  */
 export const getBookActivity = <ThrowOnError extends boolean = false>(options: Options<GetBookActivityData, ThrowOnError>): RequestResult<GetBookActivityResponses, GetBookActivityErrors, ThrowOnError> => (options.client ?? client).get<GetBookActivityResponses, GetBookActivityErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -47,6 +53,8 @@ export const getBookActivity = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * List book editions
+ *
+ * Lists the editions of one book (formats, languages, publishers and ISBNs).
  */
 export const listEditions = <ThrowOnError extends boolean = false>(options: Options<ListEditionsData, ThrowOnError>): RequestResult<ListEditionsResponses, ListEditionsErrors, ThrowOnError> => (options.client ?? client).get<ListEditionsResponses, ListEditionsErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -56,6 +64,8 @@ export const listEditions = <ThrowOnError extends boolean = false>(options: Opti
 
 /**
  * List changes
+ *
+ * Lists catalogue changes (created, updated and removed items) since a cursor, for keeping a copy in sync.
  */
 export const listChanges = <ThrowOnError extends boolean = false>(options?: Options<ListChangesData, ThrowOnError>): RequestResult<ListChangesResponses, ListChangesErrors, ThrowOnError> => (options?.client ?? client).get<ListChangesResponses, ListChangesErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -65,6 +75,8 @@ export const listChanges = <ThrowOnError extends boolean = false>(options?: Opti
 
 /**
  * Get entity
+ *
+ * Returns one entity (person, organization, franchise, platform, genre and so on) by its ID.
  */
 export const getEntity = <ThrowOnError extends boolean = false>(options: Options<GetEntityData, ThrowOnError>): RequestResult<GetEntityResponses, GetEntityErrors, ThrowOnError> => (options.client ?? client).get<GetEntityResponses, GetEntityErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -74,6 +86,8 @@ export const getEntity = <ThrowOnError extends boolean = false>(options: Options
 
 /**
  * List entity items
+ *
+ * Lists the items linked to an entity, for example the movies of a director or the games of a platform.
  */
 export const listEntityItems = <ThrowOnError extends boolean = false>(options: Options<ListEntityItemsData, ThrowOnError>): RequestResult<ListEntityItemsResponses, ListEntityItemsErrors, ThrowOnError> => (options.client ?? client).get<ListEntityItemsResponses, ListEntityItemsErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -83,6 +97,8 @@ export const listEntityItems = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * List exports
+ *
+ * Lists the daily ID exports your plan can download.
  */
 export const listExports = <ThrowOnError extends boolean = false>(options?: Options<ListExportsData, ThrowOnError>): RequestResult<ListExportsResponses, ListExportsErrors, ThrowOnError> => (options?.client ?? client).get<ListExportsResponses, ListExportsErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -92,6 +108,8 @@ export const listExports = <ThrowOnError extends boolean = false>(options?: Opti
 
 /**
  * Get export
+ *
+ * Returns a short-lived download link for one daily ID export.
  */
 export const getExport = <ThrowOnError extends boolean = false>(options: Options<GetExportData, ThrowOnError>): RequestResult<GetExportResponses, GetExportErrors, ThrowOnError> => (options.client ?? client).get<GetExportResponses, GetExportErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -101,6 +119,8 @@ export const getExport = <ThrowOnError extends boolean = false>(options: Options
 
 /**
  * Get franchise
+ *
+ * Returns one franchise by ID.
  */
 export const getFranchise = <ThrowOnError extends boolean = false>(options: Options<GetFranchiseData, ThrowOnError>): RequestResult<GetFranchiseResponses, GetFranchiseErrors, ThrowOnError> => (options.client ?? client).get<GetFranchiseResponses, GetFranchiseErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -110,6 +130,8 @@ export const getFranchise = <ThrowOnError extends boolean = false>(options: Opti
 
 /**
  * List game genres
+ *
+ * Lists the game genres, for filtering the game listing.
  */
 export const listGameGenres = <ThrowOnError extends boolean = false>(options?: Options<ListGameGenresData, ThrowOnError>): RequestResult<ListGameGenresResponses, ListGameGenresErrors, ThrowOnError> => (options?.client ?? client).get<ListGameGenresResponses, ListGameGenresErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -119,6 +141,8 @@ export const listGameGenres = <ThrowOnError extends boolean = false>(options?: O
 
 /**
  * List trending games
+ *
+ * Lists the games trending now, ranked by recent community activity.
  */
 export const listGameTrending = <ThrowOnError extends boolean = false>(options?: Options<ListGameTrendingData, ThrowOnError>): RequestResult<ListGameTrendingResponses, ListGameTrendingErrors, ThrowOnError> => (options?.client ?? client).get<ListGameTrendingResponses, ListGameTrendingErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -128,6 +152,8 @@ export const listGameTrending = <ThrowOnError extends boolean = false>(options?:
 
 /**
  * Get game activity
+ *
+ * Returns the recent community activity of one game: ratings, reviews and list additions over time.
  */
 export const getGameActivity = <ThrowOnError extends boolean = false>(options: Options<GetGameActivityData, ThrowOnError>): RequestResult<GetGameActivityResponses, GetGameActivityErrors, ThrowOnError> => (options.client ?? client).get<GetGameActivityResponses, GetGameActivityErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -137,6 +163,8 @@ export const getGameActivity = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * Look up item
+ *
+ * Finds an item by an external ID, such as a Wikidata QID, an IGDB or TMDB ID, or an ISBN.
  */
 export const lookupItem = <ThrowOnError extends boolean = false>(options?: Options<LookupItemData, ThrowOnError>): RequestResult<LookupItemResponses, LookupItemErrors, ThrowOnError> => (options?.client ?? client).get<LookupItemResponses, LookupItemErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -146,6 +174,8 @@ export const lookupItem = <ThrowOnError extends boolean = false>(options?: Optio
 
 /**
  * Get usage
+ *
+ * Returns the requests your API key used this month, its monthly quota and when the quota resets.
  */
 export const getUsage = <ThrowOnError extends boolean = false>(options?: Options<GetUsageData, ThrowOnError>): RequestResult<GetUsageResponses, GetUsageErrors, ThrowOnError> => (options?.client ?? client).get<GetUsageResponses, GetUsageErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -155,6 +185,8 @@ export const getUsage = <ThrowOnError extends boolean = false>(options?: Options
 
 /**
  * List movie genres
+ *
+ * Lists the movie genres, for filtering the movie listing.
  */
 export const listMovieGenres = <ThrowOnError extends boolean = false>(options?: Options<ListMovieGenresData, ThrowOnError>): RequestResult<ListMovieGenresResponses, ListMovieGenresErrors, ThrowOnError> => (options?.client ?? client).get<ListMovieGenresResponses, ListMovieGenresErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -164,6 +196,8 @@ export const listMovieGenres = <ThrowOnError extends boolean = false>(options?: 
 
 /**
  * List trending movies
+ *
+ * Lists the movies trending now, ranked by recent community activity.
  */
 export const listMovieTrending = <ThrowOnError extends boolean = false>(options?: Options<ListMovieTrendingData, ThrowOnError>): RequestResult<ListMovieTrendingResponses, ListMovieTrendingErrors, ThrowOnError> => (options?.client ?? client).get<ListMovieTrendingResponses, ListMovieTrendingErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -173,6 +207,8 @@ export const listMovieTrending = <ThrowOnError extends boolean = false>(options?
 
 /**
  * Get movie activity
+ *
+ * Returns the recent community activity of one movie: ratings, reviews and list additions over time.
  */
 export const getMovieActivity = <ThrowOnError extends boolean = false>(options: Options<GetMovieActivityData, ThrowOnError>): RequestResult<GetMovieActivityResponses, GetMovieActivityErrors, ThrowOnError> => (options.client ?? client).get<GetMovieActivityResponses, GetMovieActivityErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -182,6 +218,8 @@ export const getMovieActivity = <ThrowOnError extends boolean = false>(options: 
 
 /**
  * Get organization
+ *
+ * Returns one organization (studio, publisher, network and so on) by ID.
  */
 export const getOrganization = <ThrowOnError extends boolean = false>(options: Options<GetOrganizationData, ThrowOnError>): RequestResult<GetOrganizationResponses, GetOrganizationErrors, ThrowOnError> => (options.client ?? client).get<GetOrganizationResponses, GetOrganizationErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -191,6 +229,8 @@ export const getOrganization = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * Get person
+ *
+ * Returns one person (director, writer, author, actor and so on) by ID.
  */
 export const getPerson = <ThrowOnError extends boolean = false>(options: Options<GetPersonData, ThrowOnError>): RequestResult<GetPersonResponses, GetPersonErrors, ThrowOnError> => (options.client ?? client).get<GetPersonResponses, GetPersonErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -200,6 +240,8 @@ export const getPerson = <ThrowOnError extends boolean = false>(options: Options
 
 /**
  * Get platform
+ *
+ * Returns one game platform by ID.
  */
 export const getPlatform = <ThrowOnError extends boolean = false>(options: Options<GetPlatformData, ThrowOnError>): RequestResult<GetPlatformResponses, GetPlatformErrors, ThrowOnError> => (options.client ?? client).get<GetPlatformResponses, GetPlatformErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -209,6 +251,8 @@ export const getPlatform = <ThrowOnError extends boolean = false>(options: Optio
 
 /**
  * Search items
+ *
+ * Searches item titles across the four categories and returns the best matches first.
  */
 export const searchItems = <ThrowOnError extends boolean = false>(options?: Options<SearchItemsData, ThrowOnError>): RequestResult<SearchItemsResponses, SearchItemsErrors, ThrowOnError> => (options?.client ?? client).get<SearchItemsResponses, SearchItemsErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -218,6 +262,8 @@ export const searchItems = <ThrowOnError extends boolean = false>(options?: Opti
 
 /**
  * Search entities
+ *
+ * Searches people, organizations, franchises, platforms and genres by name.
  */
 export const searchEntities = <ThrowOnError extends boolean = false>(options?: Options<SearchEntitiesData, ThrowOnError>): RequestResult<SearchEntitiesResponses, SearchEntitiesErrors, ThrowOnError> => (options?.client ?? client).get<SearchEntitiesResponses, SearchEntitiesErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -227,6 +273,8 @@ export const searchEntities = <ThrowOnError extends boolean = false>(options?: O
 
 /**
  * List series genres
+ *
+ * Lists the series genres, for filtering the series listing.
  */
 export const listSeriesGenres = <ThrowOnError extends boolean = false>(options?: Options<ListSeriesGenresData, ThrowOnError>): RequestResult<ListSeriesGenresResponses, ListSeriesGenresErrors, ThrowOnError> => (options?.client ?? client).get<ListSeriesGenresResponses, ListSeriesGenresErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -236,6 +284,8 @@ export const listSeriesGenres = <ThrowOnError extends boolean = false>(options?:
 
 /**
  * List trending series
+ *
+ * Lists the series trending now, ranked by recent community activity.
  */
 export const listSeriesTrending = <ThrowOnError extends boolean = false>(options?: Options<ListSeriesTrendingData, ThrowOnError>): RequestResult<ListSeriesTrendingResponses, ListSeriesTrendingErrors, ThrowOnError> => (options?.client ?? client).get<ListSeriesTrendingResponses, ListSeriesTrendingErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -245,6 +295,8 @@ export const listSeriesTrending = <ThrowOnError extends boolean = false>(options
 
 /**
  * Get series activity
+ *
+ * Returns the recent community activity of one series: ratings, reviews and list additions over time.
  */
 export const getSeriesActivity = <ThrowOnError extends boolean = false>(options: Options<GetSeriesActivityData, ThrowOnError>): RequestResult<GetSeriesActivityResponses, GetSeriesActivityErrors, ThrowOnError> => (options.client ?? client).get<GetSeriesActivityResponses, GetSeriesActivityErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -254,6 +306,8 @@ export const getSeriesActivity = <ThrowOnError extends boolean = false>(options:
 
 /**
  * List webhooks
+ *
+ * Lists the webhooks of your API key.
  */
 export const listWebhooks = <ThrowOnError extends boolean = false>(options?: Options<ListWebhooksData, ThrowOnError>): RequestResult<ListWebhooksResponses, ListWebhooksErrors, ThrowOnError> => (options?.client ?? client).get<ListWebhooksResponses, ListWebhooksErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -263,6 +317,8 @@ export const listWebhooks = <ThrowOnError extends boolean = false>(options?: Opt
 
 /**
  * Create webhook
+ *
+ * Creates a webhook that receives catalogue change events at your URL, signed with a secret.
  */
 export const createWebhook = <ThrowOnError extends boolean = false>(options: Options<CreateWebhookData, ThrowOnError>): RequestResult<CreateWebhookResponses, CreateWebhookErrors, ThrowOnError> => (options.client ?? client).post<CreateWebhookResponses, CreateWebhookErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -276,6 +332,8 @@ export const createWebhook = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Delete webhook
+ *
+ * Deletes one of your webhooks.
  */
 export const deleteWebhook = <ThrowOnError extends boolean = false>(options: Options<DeleteWebhookData, ThrowOnError>): RequestResult<DeleteWebhookResponses, DeleteWebhookErrors, ThrowOnError> => (options.client ?? client).delete<DeleteWebhookResponses, DeleteWebhookErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -285,6 +343,8 @@ export const deleteWebhook = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Test webhook
+ *
+ * Sends a test event to one of your webhooks and reports the response.
  */
 export const testWebhook = <ThrowOnError extends boolean = false>(options: Options<TestWebhookData, ThrowOnError>): RequestResult<TestWebhookResponses, TestWebhookErrors, ThrowOnError> => (options.client ?? client).post<TestWebhookResponses, TestWebhookErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -298,6 +358,8 @@ export const testWebhook = <ThrowOnError extends boolean = false>(options: Optio
 
 /**
  * List items
+ *
+ * Lists the items of one category (games, movies, series or books), with filters, sorting and pagination.
  */
 export const listItems = <ThrowOnError extends boolean = false>(options: Options<ListItemsData, ThrowOnError>): RequestResult<ListItemsResponses, ListItemsErrors, ThrowOnError> => (options.client ?? client).get<ListItemsResponses, ListItemsErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
@@ -307,6 +369,8 @@ export const listItems = <ThrowOnError extends boolean = false>(options: Options
 
 /**
  * Get item
+ *
+ * Returns one item of a category by its ID or slug, with its score, details and credits.
  */
 export const getItem = <ThrowOnError extends boolean = false>(options: Options<GetItemData, ThrowOnError>): RequestResult<GetItemResponses, GetItemErrors, ThrowOnError> => (options.client ?? client).get<GetItemResponses, GetItemErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],

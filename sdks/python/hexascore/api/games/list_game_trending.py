@@ -1,44 +1,37 @@
 from http import HTTPStatus
 from typing import Any
-from urllib.parse import quote
 
 import httpx
 
 from ...client import AuthenticatedClient, Client
-from ...models.activity_json import ActivityJSON
 from ...models.problem import Problem
+from ...models.trending_json import TrendingJSON
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
-    id: str,
     *,
-    from_: str | Unset = UNSET,
-    to: str | Unset = UNSET,
+    locale: str | Unset = UNSET,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
 
-    params["from"] = from_
-
-    params["to"] = to
+    params["locale"] = locale
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/series/{id}/activity".format(
-            id=quote(str(id), safe=""),
-        ),
+        "url": "/games/trending",
         "params": params,
     }
 
     return _kwargs
 
 
-def _parse_response(*, client: AuthenticatedClient | Client, response: httpx.Response) -> ActivityJSON | Problem:
+def _parse_response(*, client: AuthenticatedClient | Client, response: httpx.Response) -> Problem | TrendingJSON:
     if response.status_code == 200:
-        response_200 = ActivityJSON.from_dict(response.json())
+        response_200 = TrendingJSON.from_dict(response.json())
 
         return response_200
 
@@ -59,7 +52,7 @@ def _parse_response(*, client: AuthenticatedClient | Client, response: httpx.Res
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ActivityJSON | Problem]:
+) -> Response[Problem | TrendingJSON]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -69,31 +62,27 @@ def _build_response(
 
 
 def sync_detailed(
-    id: str,
     *,
     client: AuthenticatedClient,
-    from_: str | Unset = UNSET,
-    to: str | Unset = UNSET,
-) -> Response[ActivityJSON | Problem]:
-    """Get series activity
+    locale: str | Unset = UNSET,
+) -> Response[Problem | TrendingJSON]:
+    """List trending games
+
+     Lists the games trending now, ranked by recent community activity.
 
     Args:
-        id (str):
-        from_ (str | Unset):
-        to (str | Unset):
+        locale (str | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ActivityJSON | Problem]
+        Response[Problem | TrendingJSON]
     """
 
     kwargs = _get_kwargs(
-        id=id,
-        from_=from_,
-        to=to,
+        locale=locale,
     )
 
     response = client.get_httpx_client().request(
@@ -104,61 +93,53 @@ def sync_detailed(
 
 
 def sync(
-    id: str,
     *,
     client: AuthenticatedClient,
-    from_: str | Unset = UNSET,
-    to: str | Unset = UNSET,
-) -> ActivityJSON | Problem | None:
-    """Get series activity
+    locale: str | Unset = UNSET,
+) -> Problem | TrendingJSON | None:
+    """List trending games
+
+     Lists the games trending now, ranked by recent community activity.
 
     Args:
-        id (str):
-        from_ (str | Unset):
-        to (str | Unset):
+        locale (str | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ActivityJSON | Problem
+        Problem | TrendingJSON
     """
 
     return sync_detailed(
-        id=id,
         client=client,
-        from_=from_,
-        to=to,
+        locale=locale,
     ).parsed
 
 
 async def asyncio_detailed(
-    id: str,
     *,
     client: AuthenticatedClient,
-    from_: str | Unset = UNSET,
-    to: str | Unset = UNSET,
-) -> Response[ActivityJSON | Problem]:
-    """Get series activity
+    locale: str | Unset = UNSET,
+) -> Response[Problem | TrendingJSON]:
+    """List trending games
+
+     Lists the games trending now, ranked by recent community activity.
 
     Args:
-        id (str):
-        from_ (str | Unset):
-        to (str | Unset):
+        locale (str | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ActivityJSON | Problem]
+        Response[Problem | TrendingJSON]
     """
 
     kwargs = _get_kwargs(
-        id=id,
-        from_=from_,
-        to=to,
+        locale=locale,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -167,32 +148,28 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    id: str,
     *,
     client: AuthenticatedClient,
-    from_: str | Unset = UNSET,
-    to: str | Unset = UNSET,
-) -> ActivityJSON | Problem | None:
-    """Get series activity
+    locale: str | Unset = UNSET,
+) -> Problem | TrendingJSON | None:
+    """List trending games
+
+     Lists the games trending now, ranked by recent community activity.
 
     Args:
-        id (str):
-        from_ (str | Unset):
-        to (str | Unset):
+        locale (str | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ActivityJSON | Problem
+        Problem | TrendingJSON
     """
 
     return (
         await asyncio_detailed(
-            id=id,
             client=client,
-            from_=from_,
-            to=to,
+            locale=locale,
         )
     ).parsed

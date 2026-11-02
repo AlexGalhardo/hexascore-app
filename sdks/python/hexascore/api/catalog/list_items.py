@@ -106,6 +106,9 @@ def sync_detailed(
 ) -> Response[ItemPageJSON | Problem]:
     """List items
 
+     Lists the items of one category (games, movies, series or books), with filters, sorting and
+    pagination.
+
     Args:
         type_ (ListItemsType):
         genre (str | Unset):
@@ -162,6 +165,9 @@ def sync(
 ) -> ItemPageJSON | Problem | None:
     """List items
 
+     Lists the items of one category (games, movies, series or books), with filters, sorting and
+    pagination.
+
     Args:
         type_ (ListItemsType):
         genre (str | Unset):
@@ -212,6 +218,9 @@ async def asyncio_detailed(
     locale: str | Unset = UNSET,
 ) -> Response[ItemPageJSON | Problem]:
     """List items
+
+     Lists the items of one category (games, movies, series or books), with filters, sorting and
+    pagination.
 
     Args:
         type_ (ListItemsType):
@@ -266,6 +275,9 @@ async def asyncio(
     locale: str | Unset = UNSET,
 ) -> ItemPageJSON | Problem | None:
     """List items
+
+     Lists the items of one category (games, movies, series or books), with filters, sorting and
+    pagination.
 
     Args:
         type_ (ListItemsType):

@@ -47,8 +47,13 @@ the parsed body; the `_detailed` ones return a `Response` with `status_code`, `h
 
 | Package | Modules |
 | --- | --- |
-| `hexascore.api.catalog` | `list_items`, `get_item`, `list_editions`, `list_game_genres`, `list_movie_genres`, `list_series_genres`, `list_book_genres`, `get_entity`, `list_entity_items`, `get_franchise`, `get_organization`, `get_person`, `get_platform`, `search_items`, `search_entities`, `lookup_item`, `get_usage`, `list_changes` |
+| `hexascore.api.catalog` | `list_items`, `get_item`, `get_entity`, `list_entity_items`, `get_franchise`, `get_organization`, `get_person`, `get_platform`, `search_items`, `search_entities`, `lookup_item`, `get_usage`, `list_changes` |
+| `hexascore.api.games` | `list_game_genres`, `list_game_trending`, `get_game_activity` |
+| `hexascore.api.movies` | `list_movie_genres`, `list_movie_trending`, `get_movie_activity` |
+| `hexascore.api.series` | `list_series_genres`, `list_series_trending`, `get_series_activity` |
+| `hexascore.api.books` | `list_book_genres`, `list_book_trending`, `get_book_activity`, `list_editions` |
 | `hexascore.api.webhooks` | `list_webhooks`, `create_webhook`, `delete_webhook`, `test_webhook` |
+| `hexascore.api.exports` | `list_exports`, `get_export` |
 
 Models (`ItemSummary`, `ItemDetail`, `ItemList`, `Problem`, `Usage`, the `…Sort` and `…Locale` enums) are in
 `hexascore.models`.

@@ -73,6 +73,8 @@ def sync_detailed(
 ) -> Response[EntityJSON | Problem]:
     """Get franchise
 
+     Returns one franchise by ID.
+
     Args:
         id (str):
         locale (str | Unset):
@@ -105,6 +107,8 @@ def sync(
 ) -> EntityJSON | Problem | None:
     """Get franchise
 
+     Returns one franchise by ID.
+
     Args:
         id (str):
         locale (str | Unset):
@@ -131,6 +135,8 @@ async def asyncio_detailed(
     locale: str | Unset = UNSET,
 ) -> Response[EntityJSON | Problem]:
     """Get franchise
+
+     Returns one franchise by ID.
 
     Args:
         id (str):
@@ -161,6 +167,8 @@ async def asyncio(
     locale: str | Unset = UNSET,
 ) -> EntityJSON | Problem | None:
     """Get franchise
+
+     Returns one franchise by ID.
 
     Args:
         id (str):

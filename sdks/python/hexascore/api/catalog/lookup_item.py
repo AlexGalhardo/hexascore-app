@@ -74,6 +74,8 @@ def sync_detailed(
 ) -> Response[ItemJSON | Problem]:
     """Look up item
 
+     Finds an item by an external ID, such as a Wikidata QID, an IGDB or TMDB ID, or an ISBN.
+
     Args:
         source (str | Unset):
         id (str | Unset):
@@ -109,6 +111,8 @@ def sync(
 ) -> ItemJSON | Problem | None:
     """Look up item
 
+     Finds an item by an external ID, such as a Wikidata QID, an IGDB or TMDB ID, or an ISBN.
+
     Args:
         source (str | Unset):
         id (str | Unset):
@@ -138,6 +142,8 @@ async def asyncio_detailed(
     locale: str | Unset = UNSET,
 ) -> Response[ItemJSON | Problem]:
     """Look up item
+
+     Finds an item by an external ID, such as a Wikidata QID, an IGDB or TMDB ID, or an ISBN.
 
     Args:
         source (str | Unset):
@@ -171,6 +177,8 @@ async def asyncio(
     locale: str | Unset = UNSET,
 ) -> ItemJSON | Problem | None:
     """Look up item
+
+     Finds an item by an external ID, such as a Wikidata QID, an IGDB or TMDB ID, or an ISBN.
 
     Args:
         source (str | Unset):

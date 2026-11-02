@@ -14,8 +14,9 @@
       "get": {
         "operationId": "listBookGenres",
         "summary": "List book genres",
+        "description": "Lists the book genres, for filtering the book listing.",
         "tags": [
-          "catalog"
+          "books"
         ],
         "responses": {
           "200": {
@@ -46,8 +47,9 @@
       "get": {
         "operationId": "listBookTrending",
         "summary": "List trending books",
+        "description": "Lists the books trending now, ranked by recent community activity.",
         "tags": [
-          "catalog"
+          "books"
         ],
         "parameters": [
           {
@@ -91,8 +93,9 @@
       "get": {
         "operationId": "getBookActivity",
         "summary": "Get book activity",
+        "description": "Returns the recent community activity of one book: ratings, reviews and list additions over time.",
         "tags": [
-          "catalog"
+          "books"
         ],
         "parameters": [
           {
@@ -152,8 +155,9 @@
       "get": {
         "operationId": "listEditions",
         "summary": "List book editions",
+        "description": "Lists the editions of one book (formats, languages, publishers and ISBNs).",
         "tags": [
-          "catalog"
+          "books"
         ],
         "parameters": [
           {
@@ -213,6 +217,7 @@
       "get": {
         "operationId": "listChanges",
         "summary": "List changes",
+        "description": "Lists catalogue changes (created, updated and removed items) since a cursor, for keeping a copy in sync.",
         "tags": [
           "catalog"
         ],
@@ -282,6 +287,7 @@
       "get": {
         "operationId": "getEntity",
         "summary": "Get entity",
+        "description": "Returns one entity (person, organization, franchise, platform, genre and so on) by its ID.",
         "tags": [
           "catalog"
         ],
@@ -335,6 +341,7 @@
       "get": {
         "operationId": "listEntityItems",
         "summary": "List entity items",
+        "description": "Lists the items linked to an entity, for example the movies of a director or the games of a platform.",
         "tags": [
           "catalog"
         ],
@@ -428,6 +435,7 @@
       "get": {
         "operationId": "listExports",
         "summary": "List exports",
+        "description": "Lists the daily ID exports your plan can download.",
         "tags": [
           "exports"
         ],
@@ -460,6 +468,7 @@
       "get": {
         "operationId": "getExport",
         "summary": "Get export",
+        "description": "Returns a short-lived download link for one daily ID export.",
         "tags": [
           "exports"
         ],
@@ -514,6 +523,7 @@
       "get": {
         "operationId": "getFranchise",
         "summary": "Get franchise",
+        "description": "Returns one franchise by ID.",
         "tags": [
           "catalog"
         ],
@@ -567,8 +577,9 @@
       "get": {
         "operationId": "listGameGenres",
         "summary": "List game genres",
+        "description": "Lists the game genres, for filtering the game listing.",
         "tags": [
-          "catalog"
+          "games"
         ],
         "responses": {
           "200": {
@@ -599,8 +610,9 @@
       "get": {
         "operationId": "listGameTrending",
         "summary": "List trending games",
+        "description": "Lists the games trending now, ranked by recent community activity.",
         "tags": [
-          "catalog"
+          "games"
         ],
         "parameters": [
           {
@@ -644,8 +656,9 @@
       "get": {
         "operationId": "getGameActivity",
         "summary": "Get game activity",
+        "description": "Returns the recent community activity of one game: ratings, reviews and list additions over time.",
         "tags": [
-          "catalog"
+          "games"
         ],
         "parameters": [
           {
@@ -705,6 +718,7 @@
       "get": {
         "operationId": "lookupItem",
         "summary": "Look up item",
+        "description": "Finds an item by an external ID, such as a Wikidata QID, an IGDB or TMDB ID, or an ISBN.",
         "tags": [
           "catalog"
         ],
@@ -766,6 +780,7 @@
       "get": {
         "operationId": "getUsage",
         "summary": "Get usage",
+        "description": "Returns the requests your API key used this month, its monthly quota and when the quota resets.",
         "tags": [
           "catalog"
         ],
@@ -798,8 +813,9 @@
       "get": {
         "operationId": "listMovieGenres",
         "summary": "List movie genres",
+        "description": "Lists the movie genres, for filtering the movie listing.",
         "tags": [
-          "catalog"
+          "movies"
         ],
         "responses": {
           "200": {
@@ -830,8 +846,9 @@
       "get": {
         "operationId": "listMovieTrending",
         "summary": "List trending movies",
+        "description": "Lists the movies trending now, ranked by recent community activity.",
         "tags": [
-          "catalog"
+          "movies"
         ],
         "parameters": [
           {
@@ -875,8 +892,9 @@
       "get": {
         "operationId": "getMovieActivity",
         "summary": "Get movie activity",
+        "description": "Returns the recent community activity of one movie: ratings, reviews and list additions over time.",
         "tags": [
-          "catalog"
+          "movies"
         ],
         "parameters": [
           {
@@ -936,6 +954,7 @@
       "get": {
         "operationId": "getOrganization",
         "summary": "Get organization",
+        "description": "Returns one organization (studio, publisher, network and so on) by ID.",
         "tags": [
           "catalog"
         ],
@@ -989,6 +1008,7 @@
       "get": {
         "operationId": "getPerson",
         "summary": "Get person",
+        "description": "Returns one person (director, writer, author, actor and so on) by ID.",
         "tags": [
           "catalog"
         ],
@@ -1042,6 +1062,7 @@
       "get": {
         "operationId": "getPlatform",
         "summary": "Get platform",
+        "description": "Returns one game platform by ID.",
         "tags": [
           "catalog"
         ],
@@ -1095,6 +1116,7 @@
       "get": {
         "operationId": "searchItems",
         "summary": "Search items",
+        "description": "Searches item titles across the four categories and returns the best matches first.",
         "tags": [
           "catalog"
         ],
@@ -1172,6 +1194,7 @@
       "get": {
         "operationId": "searchEntities",
         "summary": "Search entities",
+        "description": "Searches people, organizations, franchises, platforms and genres by name.",
         "tags": [
           "catalog"
         ],
@@ -1249,8 +1272,9 @@
       "get": {
         "operationId": "listSeriesGenres",
         "summary": "List series genres",
+        "description": "Lists the series genres, for filtering the series listing.",
         "tags": [
-          "catalog"
+          "series"
         ],
         "responses": {
           "200": {
@@ -1281,8 +1305,9 @@
       "get": {
         "operationId": "listSeriesTrending",
         "summary": "List trending series",
+        "description": "Lists the series trending now, ranked by recent community activity.",
         "tags": [
-          "catalog"
+          "series"
         ],
         "parameters": [
           {
@@ -1326,8 +1351,9 @@
       "get": {
         "operationId": "getSeriesActivity",
         "summary": "Get series activity",
+        "description": "Returns the recent community activity of one series: ratings, reviews and list additions over time.",
         "tags": [
-          "catalog"
+          "series"
         ],
         "parameters": [
           {
@@ -1387,6 +1413,7 @@
       "get": {
         "operationId": "listWebhooks",
         "summary": "List webhooks",
+        "description": "Lists the webhooks of your API key.",
         "tags": [
           "webhooks"
         ],
@@ -1417,6 +1444,7 @@
       "post": {
         "operationId": "createWebhook",
         "summary": "Create webhook",
+        "description": "Creates a webhook that receives catalogue change events at your URL, signed with a secret.",
         "tags": [
           "webhooks"
         ],
@@ -1485,6 +1513,7 @@
       "delete": {
         "operationId": "deleteWebhook",
         "summary": "Delete webhook",
+        "description": "Deletes one of your webhooks.",
         "tags": [
           "webhooks"
         ],
@@ -1524,6 +1553,7 @@
       "post": {
         "operationId": "testWebhook",
         "summary": "Test webhook",
+        "description": "Sends a test event to one of your webhooks and reports the response.",
         "tags": [
           "webhooks"
         ],
@@ -1581,6 +1611,7 @@
       "get": {
         "operationId": "listItems",
         "summary": "List items",
+        "description": "Lists the items of one category (games, movies, series or books), with filters, sorting and pagination.",
         "tags": [
           "catalog"
         ],
@@ -1705,6 +1736,7 @@
       "get": {
         "operationId": "getItem",
         "summary": "Get item",
+        "description": "Returns one item of a category by its ID or slug, with its score, details and credits.",
         "tags": [
           "catalog"
         ],

@@ -51,6 +51,13 @@ func TestAPIReference_PublicInProduction(t *testing.T) {
 			if id, _ := op["operationId"].(string); sum == "" || sum == id {
 				t.Errorf("%s %s: summary %q, want a readable title, not the operationId", method, path, sum)
 			}
+			// Each operation says what it does and sits under its category or a shared section.
+			if d, _ := op["description"].(string); d == "" {
+				t.Errorf("%s %s: no description", method, path)
+			}
+			if tags, _ := op["tags"].([]any); len(tags) != 1 {
+				t.Errorf("%s %s: tags %v, want exactly one", method, path, tags)
+			}
 		}
 	}
 

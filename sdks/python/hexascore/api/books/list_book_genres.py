@@ -13,7 +13,7 @@ def _get_kwargs() -> dict[str, Any]:
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/series/genres",
+        "url": "/books/genres",
     }
 
     return _kwargs
@@ -50,7 +50,9 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[GenreListJSON | Problem]:
-    """List series genres
+    """List book genres
+
+     Lists the book genres, for filtering the book listing.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -73,7 +75,9 @@ def sync(
     *,
     client: AuthenticatedClient,
 ) -> GenreListJSON | Problem | None:
-    """List series genres
+    """List book genres
+
+     Lists the book genres, for filtering the book listing.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -92,7 +96,9 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[GenreListJSON | Problem]:
-    """List series genres
+    """List book genres
+
+     Lists the book genres, for filtering the book listing.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -113,7 +119,9 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
 ) -> GenreListJSON | Problem | None:
-    """List series genres
+    """List book genres
+
+     Lists the book genres, for filtering the book listing.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

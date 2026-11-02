@@ -84,6 +84,8 @@ def sync_detailed(
 ) -> Response[EntityPageJSON | Problem]:
     """Search entities
 
+     Searches people, organizations, franchises, platforms and genres by name.
+
     Args:
         q (str | Unset):
         kind (str | Unset):
@@ -125,6 +127,8 @@ def sync(
 ) -> EntityPageJSON | Problem | None:
     """Search entities
 
+     Searches people, organizations, franchises, platforms and genres by name.
+
     Args:
         q (str | Unset):
         kind (str | Unset):
@@ -160,6 +164,8 @@ async def asyncio_detailed(
     page: str | Unset = UNSET,
 ) -> Response[EntityPageJSON | Problem]:
     """Search entities
+
+     Searches people, organizations, franchises, platforms and genres by name.
 
     Args:
         q (str | Unset):
@@ -199,6 +205,8 @@ async def asyncio(
     page: str | Unset = UNSET,
 ) -> EntityPageJSON | Problem | None:
     """Search entities
+
+     Searches people, organizations, franchises, platforms and genres by name.
 
     Args:
         q (str | Unset):
