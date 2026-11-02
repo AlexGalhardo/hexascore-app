@@ -46,6 +46,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **ui:** A missing HTML page (GET/HEAD, unknown route, item, entity, doc, hidden list, unknown profile, `/feed` while off) answers 301 to the localized home; APIs, JSON requests, assets and paths with an extension keep their 404 (item 14)
 - **catalog:** Entity pages live under their category (`/games/platforms/playstation-5`, also `/changes`); the old top-level paths answer one 301 to the category with the most public items, and the sitemap lists one URL per entity and category with at least 3 items (item 19)
 - **catalog:** Item covers are served at `/covers/{section}/{slug}[-t].webp` with a one-day cache plus ETag; old `/covers/<id>-<hash>.webp` item URLs answer 301 there and replaced covers are overwritten in place (ADR 0014 amended, item 18)
+- **ui:** `/terms`, `/privacy`, `/how-score-works` and `/about` share one layout: contents sidebar on the left (above the text on mobile), current section highlighted; `/about` uses the shared `DocumentPage`
 
 ### Fixed
 
@@ -54,10 +55,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **infra:** `qa/k6/moderation.js` keeps one signed-in session per account (admin TOTP included), and `CommunityLoad` dates its load before today so members keep their daily submit quota (P4.B.5.1)
 - **legal:** The delete-account help page links keep the visitor's locale prefix (P5.C.2.1)
 - **repo:** `scripts/release.sh` starts the range at the commit whose tree matches the highest `vX.Y.Z` tag (not `git describe`), takes `--since <rev>`, and updates the compare links; its test runs under `bun test` in CI and `scripts/ci/local.sh`
+- **ui:** `/contact` subject list readable in dark theme (black on white options, closed select follows the theme)
 
 ### Removed
 
 - **ui:** "Recently rated by members" landing strip (item 5), the trending definition line in the footer (item 16), the navbar notifications bell and unread badge (item 27; `/me/notifications` is unchanged), the "Members" label on `/signup` and `/login` (item 8) and the `/user/two-factor` page (item 21)
+- **ui:** Intro paragraph removed from `/contact`
 
 ## [0.39.0] - 2026-11-01
 

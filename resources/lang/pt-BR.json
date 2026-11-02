@@ -291,7 +291,6 @@
   "contact": {
     "metaTitle": "Contato",
     "title": "Fale conosco",
-    "body": "Envie uma dúvida, sugestão ou relato de bug. Respondemos por e-mail. Você também pode escrever para support@hexascore.app.",
     "name": "Nome",
     "email": "E-mail",
     "subject": "Assunto",
@@ -761,7 +760,8 @@
     "openSourceLink": "Ver o código-fonte",
     "contactTitle": "Contato",
     "contactBody": "Dúvidas, correções e outros pedidos chegam à equipe pelo formulário de contato.",
-    "contactLink": "Fale conosco"
+    "contactLink": "Fale conosco",
+    "contents": "Sumário"
   },
   "footer": {
     "about": "Sobre",

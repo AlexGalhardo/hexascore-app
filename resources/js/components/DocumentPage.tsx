@@ -1,5 +1,5 @@
 import { Link, usePage } from "@inertiajs/react";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 
 import type { SharedProps } from "../types";
 import Seo from "./Seo";
@@ -23,7 +23,38 @@ interface Props {
 
 const eyebrow = "text-xs font-bold tracking-[0.1em] text-muted uppercase";
 
-// The long-form page layout of /terms, /privacy and /how-score-works: article on the left, sticky contents on the right.
+// The first section that intersects the reading band (top 20% to 30% of the viewport) is the current one.
+// Without IntersectionObserver (old browsers, jsdom) no section is highlighted and the links still work.
+function useCurrentSection(ids: string[]): string | undefined {
+	const [current, setCurrent] = useState<string>();
+	const key = ids.join(" ");
+
+	useEffect(() => {
+		if (typeof IntersectionObserver === "undefined") return;
+		const order = key.split(" ");
+		const visible = new Set<string>();
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) visible.add(entry.target.id);
+					else visible.delete(entry.target.id);
+				}
+				setCurrent(order.find((id) => visible.has(id)));
+			},
+			{ rootMargin: "-20% 0px -70% 0px" },
+		);
+		for (const id of order) {
+			const el = document.getElementById(id);
+			if (el) observer.observe(el);
+		}
+		return () => observer.disconnect();
+	}, [key]);
+
+	return current;
+}
+
+// The long-form page layout of /terms, /privacy, /how-score-works and /about: sticky contents on the left
+// (above the text below the lg breakpoint), article at reading width on the right.
 export default function DocumentPage({
 	title,
 	description,
@@ -35,10 +66,34 @@ export default function DocumentPage({
 	also,
 }: Props) {
 	const { locale } = usePage<SharedProps>().props;
+	const current = useCurrentSection(sections.map((s) => s.id));
 
 	return (
-		<div className="grid gap-12 lg:grid-cols-[minmax(0,45rem)_18.75rem] lg:justify-between">
+		<div className="grid gap-12 lg:grid-cols-[18.75rem_minmax(0,45rem)] lg:justify-between">
 			<Seo title={title} description={description} />
+			<aside className="lg:sticky lg:top-24 lg:self-start">
+				<nav aria-labelledby="document-contents" className="border-t-2 border-fg pt-3">
+					<p id="document-contents" className={eyebrow}>
+						{contentsLabel}
+					</p>
+					<ol className="mt-3 text-[15px]">
+						{sections.map((s) => {
+							const isCurrent = s.id === current;
+							return (
+								<li key={s.id}>
+									<a
+										href={`#${s.id}`}
+										aria-current={isCurrent ? "location" : undefined}
+										className={`flex min-h-11 items-center hover:text-fg hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg ${isCurrent ? "font-semibold text-fg underline underline-offset-4" : "text-muted"}`}
+									>
+										{s.heading}
+									</a>
+								</li>
+							);
+						})}
+					</ol>
+				</nav>
+			</aside>
 			<article className="min-w-0">
 				<h1 className="text-5xl leading-none md:text-6xl">{title}</h1>
 				{updatedAt && (
@@ -66,37 +121,18 @@ export default function DocumentPage({
 						{s.body}
 					</section>
 				))}
-			</article>
-			<aside className="max-lg:order-first lg:sticky lg:top-24 lg:self-start">
-				<nav aria-labelledby="document-contents" className="border-t-2 border-fg pt-3">
-					<p id="document-contents" className={eyebrow}>
-						{contentsLabel}
-					</p>
-					<ol className="mt-3 text-[15px] text-muted">
-						{sections.map((s) => (
-							<li key={s.id}>
-								<a
-									href={`#${s.id}`}
-									className="flex min-h-9 items-center hover:text-fg hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
-								>
-									{s.heading}
-								</a>
-							</li>
-						))}
-					</ol>
-				</nav>
 				{also && (
-					<>
-						<p className={`${eyebrow} mt-8`}>{also.label}</p>
+					<div className="mt-10 border-t-2 border-fg pt-4">
+						<p className={eyebrow}>{also.label}</p>
 						<Link
 							href={also.href}
 							className="inline-flex min-h-11 items-center font-medium text-primary hover:underline"
 						>
 							{also.title}
 						</Link>
-					</>
+					</div>
 				)}
-			</aside>
+			</article>
 		</div>
 	);
 }

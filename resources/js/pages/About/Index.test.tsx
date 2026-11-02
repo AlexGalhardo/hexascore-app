@@ -27,10 +27,11 @@ vi.mock("@inertiajs/react", () => ({
 	usePage: () => ({ url: "/pt-br/about", props }),
 }));
 
-// Owner round 2026-11-01 item 25.
-test("the about page reads at legal width and links categories, scores, docs, source and contact", () => {
+// Owner round 2026-11-01 item 25; the sections are DocumentPage sections (owner round 2026-11-02).
+test("the about page has a contents list and links categories, scores, docs, source and contact", () => {
 	const { container } = render(<Index />);
-	expect(container.querySelector("article")?.className).toContain("max-w-[45rem]");
+	expect(container.querySelector("article")).toBeTruthy();
+	expect(screen.getByRole("navigation", { name: "about.contents" })).toBeTruthy();
 	expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("about.title");
 	expect(screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent)).toEqual([
 		"about.categoriesTitle",

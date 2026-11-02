@@ -1,7 +1,7 @@
 import { Head, useForm, usePage } from "@inertiajs/react";
 import { type FormEvent, useState } from "react";
 
-import Field from "../../components/Field";
+import Field, { fieldClass } from "../../components/Field";
 import { useTurnstile } from "../../components/Turnstile";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
@@ -49,7 +49,6 @@ export default function Index({ topics, formToken }: Props) {
 		<div className="mx-auto w-full max-w-xl">
 			<Head title={t("contact.metaTitle")} />
 			<h1 className="mb-2 text-2xl font-semibold">{t("contact.title")}</h1>
-			<p className="mb-4 text-zinc-600 dark:text-zinc-400">{t("contact.body")}</p>
 			{sent && <p role="status">{t("contact.sent")}</p>}
 			<form onSubmit={submit} className="space-y-4">
 				<Field
@@ -76,10 +75,10 @@ export default function Index({ topics, formToken }: Props) {
 					<select
 						value={form.data.subject}
 						onChange={(e) => form.setData("subject", e.target.value)}
-						className="mt-1 block w-full rounded-md border border-zinc-300 bg-transparent px-3 py-2 dark:border-zinc-700"
+						className={`${fieldClass} [color-scheme:light] dark:[color-scheme:dark]`}
 					>
 						{topics.map((topic) => (
-							<option key={topic} value={topic}>
+							<option key={topic} value={topic} className="bg-white text-black">
 								{t(`contact.topics.${topic}`)}
 							</option>
 						))}

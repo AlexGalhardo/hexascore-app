@@ -291,7 +291,6 @@
   "contact": {
     "metaTitle": "Contacto",
     "title": "Contáctanos",
-    "body": "Envíanos una pregunta, comentario o reporte de error. Respondemos por correo. También puedes escribir a support@hexascore.app.",
     "name": "Nombre",
     "email": "Correo electrónico",
     "subject": "Asunto",
@@ -761,7 +760,8 @@
     "openSourceLink": "Ver el código fuente",
     "contactTitle": "Contacto",
     "contactBody": "Las preguntas, correcciones y otras solicitudes llegan al equipo mediante el formulario de contacto.",
-    "contactLink": "Contáctanos"
+    "contactLink": "Contáctanos",
+    "contents": "Contenido"
   },
   "footer": {
     "about": "Acerca de",
