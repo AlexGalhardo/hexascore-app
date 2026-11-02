@@ -5,29 +5,35 @@ import CoverThumb from "../CoverThumb";
 import ScoreBadge from "../ui/ScoreBadge";
 import type { Highlight } from "./SectionHighlights";
 
+// Full class names so Tailwind keeps them: one border colour per category (theme tokens in app.css).
+export const CATEGORY_BORDER: Record<Highlight["type"], string> = {
+	game: "border-cat-game",
+	movie: "border-cat-movie",
+	series: "border-cat-series",
+	book: "border-cat-book",
+};
+
 /**
- * Vertical item card for grids (landing "More …" rows, category grids): the cover, then a footer of
- * fixed minimum height so tiles never shift: title (two lines at most) and year on the left two thirds,
- * the score badge filling the right third.
+ * Vertical item card for grids (landing "More …" rows, category grids), bordered in its category colour:
+ * the cover, then one row of fixed height so tiles never shift: title (one line, truncated) on the left,
+ * the score badge on the right.
  */
 export default function ItemTile({ item, href }: { item: Highlight; href: string }): ReactElement {
 	return (
 		<li className="grid content-start">
 			<Link
 				href={href}
-				className="group grid gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
+				className={`group grid gap-2 border-2 p-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg ${CATEGORY_BORDER[item.type]}`}
 			>
 				<CoverThumb cover={item.cover} alt="" size="card" />
-				<span data-tile-footer="" className="grid min-h-16 grid-cols-[2fr_1fr] gap-2">
-					<span className="grid min-w-0 content-start gap-0.5">
-						<span className="line-clamp-2 font-display text-sm leading-snug font-bold group-hover:text-primary">
-							{item.title}
-						</span>
-						{item.year !== null && (
-							<span className="text-xs text-muted tabular-nums">{item.year}</span>
-						)}
+				<span
+					data-tile-footer=""
+					className="grid h-8 grid-cols-[1fr_auto] items-center gap-2"
+				>
+					<span className="truncate font-display text-sm font-bold group-hover:text-primary">
+						{item.title}
 					</span>
-					<ScoreBadge score={item.score} size="fill" />
+					<ScoreBadge score={item.score} size="xs" />
 				</span>
 			</Link>
 		</li>

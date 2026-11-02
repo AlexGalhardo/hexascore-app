@@ -34,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **ui:** Inter is the only font (headings and logo included; Playfair Display font and face removed); the page container is 20% wider; trending carousel rank numbers are twice as large and covers 25% bigger; item cards get a per-category border (games green, movies blue, series orange, books red, `--color-cat-*` tokens), drop the year and show title and score on one row, on the landing and the category pages (owner decisions 2026-11-02)
 - **infra:** `projected-spend.yml` runs hourly, reads the billing-period usage from the Railway public API and sends Telegram once per period at US$5, 10, 15 and the US$20 hard limit, plus a day-20 projection alert above US$18; workspace hard limit US$20, e-mail alert US$15 (D-27 amended)
 - **ui:** Every button gets a pressed state with depth and shadow (item G); landing cards read "#N trending" with the primary genre by the year (item 15); the section header centres a larger title count (item 23)
 - **ui:** The account dropdown shows the avatar only and an icon before each link (item 13)

@@ -11,7 +11,7 @@ export interface Cover {
 const DIMENSIONS: Record<CoverSize, { width: number; height: number }> = {
 	sm: { width: 32, height: 48 },
 	md: { width: 44, height: 64 },
-	trend: { width: 96, height: 144 },
+	trend: { width: 120, height: 180 },
 	lg: { width: 240, height: 360 },
 	card: { width: 160, height: 240 },
 };
@@ -19,7 +19,7 @@ const DIMENSIONS: Record<CoverSize, { width: number; height: number }> = {
 const SIZES: Record<CoverSize, string> = {
 	sm: "32px",
 	md: "44px",
-	trend: "(min-width: 48rem) 96px, 80px",
+	trend: "(min-width: 48rem) 120px, 100px",
 	lg: "(min-width: 48rem) 240px, 96px",
 	card: "(min-width: 48rem) 160px, 30vw",
 };
@@ -28,7 +28,7 @@ const SIZES: Record<CoverSize, string> = {
 const BOX: Record<CoverSize, string> = {
 	sm: "w-8 h-12",
 	md: "w-11 h-16",
-	trend: "w-20 h-30 md:w-24 md:h-36",
+	trend: "w-25 h-37.5 md:w-30 md:h-45",
 	lg: "w-24 h-36 md:w-60 md:h-90",
 	card: "w-full h-auto aspect-[2/3]",
 };

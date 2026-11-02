@@ -1,4 +1,4 @@
-import { cleanup, render, screen, within } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, expect, test, vi } from "vitest";
 
@@ -39,8 +39,8 @@ const item: Highlight = {
 	cover: null,
 };
 
-// Owner round 2026-11-01 item 22: title and year on the left 2/3, the badge fills the right 1/3.
-test("the tile footer holds title and year on the left and a full-height score on the right", () => {
+// Owner decisions 2026-11-02: no year, title and score on one row, category-coloured border.
+test("the tile footer holds the truncating title and the score on one row, with a category border", () => {
 	render(
 		<ul>
 			<ItemTile item={item} href="/movies/bigbug" />
@@ -48,24 +48,22 @@ test("the tile footer holds title and year on the left and a full-height score o
 	);
 	const link = screen.getByRole("link");
 	expect(link.getAttribute("href")).toBe("/movies/bigbug");
+	expect(link.className).toContain("border-cat-movie");
 	const footer = link.querySelector("[data-tile-footer]");
-	expect(footer?.className).toContain("grid-cols-[2fr_1fr]");
-	expect(footer?.className).toContain("min-h-16");
-	const [left, badge] = [...(footer?.children ?? [])];
-	expect(within(left as HTMLElement).getByText(item.title).className).toContain("line-clamp-2");
-	expect(within(left as HTMLElement).getByText("2022")).toBeTruthy();
-	const score = screen.getByRole("img", { name: /score.outOf.*8\.4/ });
-	expect(score).toBe(badge);
-	expect(score.className).toContain("size-full");
-	expect(score.className).toContain("justify-center");
+	expect(footer?.className).toContain("grid-cols-[1fr_auto]");
+	const [title, badge] = [...(footer?.children ?? [])];
+	expect(title.textContent).toBe(item.title);
+	expect(title.className).toContain("truncate");
+	expect(screen.queryByText("2022")).toBeNull();
+	expect(screen.getByRole("img", { name: /score.outOf.*8\.4/ })).toBe(badge);
 });
 
-test("an item without score or year keeps the footer and the accessible no-score label", () => {
+test("an item without a score keeps the footer and the accessible no-score label", () => {
 	render(
 		<ul>
-			<ItemTile item={{ ...item, score: null, year: null }} href="/movies/bigbug" />
+			<ItemTile item={{ ...item, score: null, type: "book" }} href="/books/bigbug" />
 		</ul>,
 	);
 	expect(screen.getByRole("img", { name: "score.none" }).textContent).toBe("–");
-	expect(screen.queryByText("2022")).toBeNull();
+	expect(screen.getByRole("link").className).toContain("border-cat-book");
 });

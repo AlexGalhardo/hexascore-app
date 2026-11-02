@@ -6,7 +6,7 @@ import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
 import CategoryIcon from "../CategoryIcon";
 import CoverThumb from "../CoverThumb";
-import ItemTile from "../catalog/ItemTile";
+import ItemTile, { CATEGORY_BORDER } from "../catalog/ItemTile";
 import { type Highlight, SECTION_PATHS, type Section } from "../catalog/SectionHighlights";
 import ScoreBadge, { scoreBand } from "../ui/ScoreBadge";
 import Carousel from "./Carousel";
@@ -26,12 +26,6 @@ export const ACCENT_TEXT: Record<ItemType, string> = {
 	movie: "text-accent-movie",
 	series: "text-accent-series",
 	book: "text-accent-book",
-};
-const ACCENT_BORDER: Record<ItemType, string> = {
-	game: "border-accent-game",
-	movie: "border-accent-movie",
-	series: "border-accent-series",
-	book: "border-accent-book",
 };
 
 const MIN_RATINGS = 5;
@@ -160,10 +154,10 @@ function TrendCard({
 	const { locale } = usePage<SharedProps>().props;
 	const num = new Intl.NumberFormat(locale);
 	return (
-		<li key={item.id} className={`flex gap-4 border-t-2 bg-surface p-3 ${ACCENT_BORDER[type]}`}>
+		<li key={item.id} className={`flex gap-4 border-2 bg-surface p-3 ${CATEGORY_BORDER[type]}`}>
 			<CoverThumb cover={item.cover} alt="" size="trend" priority={eager} />
 			<div className="grid min-w-0 content-start gap-1">
-				<p className={`text-xs font-semibold ${ACCENT_TEXT[type]}`}>
+				<p className={`text-2xl font-semibold ${ACCENT_TEXT[type]}`}>
 					{t("home.trendingRank", { rank: item.rank })}
 				</p>
 				<Link
