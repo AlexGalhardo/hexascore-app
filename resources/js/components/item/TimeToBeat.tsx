@@ -44,10 +44,7 @@ export default function TimeToBeat({ itemId, medians, mine, canEdit }: Props) {
 	};
 
 	return (
-		<section
-			aria-labelledby="ttb-heading"
-			className="grid content-start gap-3 border-t-2 border-fg pt-4"
-		>
+		<section aria-labelledby="ttb-heading" className="grid content-start gap-3">
 			<h2 id="ttb-heading" className="text-2xl">
 				{t("item.timeToBeat.title")}
 			</h2>

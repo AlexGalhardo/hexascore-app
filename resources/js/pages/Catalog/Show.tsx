@@ -434,10 +434,7 @@ function Section({
 	children: ReactNode;
 }) {
 	return (
-		<section
-			aria-labelledby={`${id}-heading`}
-			className="grid content-start gap-4 border-t-2 border-fg pt-4"
-		>
+		<section aria-labelledby={`${id}-heading`} className="grid content-start gap-4">
 			<h2 id={`${id}-heading`} className="text-2xl">
 				{title}
 				{count !== undefined && (
