@@ -2,6 +2,7 @@ package jobs
 
 import (
 	"context"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/queue"
@@ -40,5 +41,5 @@ func handleRetainPersonalData(app *vukem.App) queue.Registration {
 			"sessions", res.SessionsCleared, "reports", res.ReportsDeleted, "exports", res.ExportsExpired)
 
 		return err
-	})
+	}, queue.Timeout(10*time.Minute), queue.Retries(1))
 }

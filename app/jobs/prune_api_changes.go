@@ -2,6 +2,7 @@ package jobs
 
 import (
 	"context"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/queue"
@@ -26,5 +27,5 @@ func handlePruneAPIChanges(app *vukem.App) queue.Registration {
 		app.Log.InfoContext(ctx, "prune api changes", "deleted", n)
 
 		return err
-	})
+	}, queue.Timeout(10*time.Minute), queue.Retries(1))
 }

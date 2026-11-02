@@ -2,6 +2,7 @@ package jobs
 
 import (
 	"context"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/queue"
@@ -29,7 +30,7 @@ func handleFanoutWebhooks(app *vukem.App) queue.Registration {
 		}
 
 		return svc.Fanout(ctx, q)
-	})
+	}, queue.Timeout(1*time.Minute), queue.Retries(1))
 }
 
 func handleWebhookDeliver(app *vukem.App) queue.Registration {

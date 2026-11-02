@@ -2,6 +2,7 @@ package jobs
 
 import (
 	"context"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/queue"
@@ -17,5 +18,5 @@ func handleRecomputeItemScore(app *vukem.App) queue.Registration {
 		}
 
 		return scoring.RecomputeItem(ctx, db, j.ItemID, app.Now().UTC())
-	})
+	}, queue.Timeout(1*time.Minute), queue.Retries(3))
 }

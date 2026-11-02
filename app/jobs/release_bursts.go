@@ -2,6 +2,7 @@ package jobs
 
 import (
 	"context"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/queue"
@@ -25,5 +26,5 @@ func handleReleaseBursts(app *vukem.App) queue.Registration {
 		app.Log.InfoContext(ctx, "release bursts", "resolved", n)
 
 		return err
-	})
+	}, queue.Timeout(10*time.Minute), queue.Retries(1))
 }

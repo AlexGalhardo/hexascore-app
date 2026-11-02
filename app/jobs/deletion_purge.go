@@ -3,6 +3,7 @@ package jobs
 import (
 	"context"
 	"errors"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/queue"
@@ -33,5 +34,5 @@ func handleDeletionPurge(app *vukem.App) queue.Registration {
 
 		// Sweeps every anonymised user, not only today's ids, so a failed purge is retried next run.
 		return errors.Join(err, svc.PurgeAnonymised(ctx))
-	})
+	}, queue.Timeout(10*time.Minute), queue.Retries(2))
 }

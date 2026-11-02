@@ -3,6 +3,7 @@ package jobs
 import (
 	"context"
 	"fmt"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/database"
@@ -28,5 +29,5 @@ func handleItemsChanged(app *vukem.App) queue.Registration {
 
 			return nil
 		})
-	})
+	}, queue.Timeout(1*time.Minute), queue.Retries(3))
 }

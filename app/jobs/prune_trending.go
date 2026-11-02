@@ -2,6 +2,7 @@ package jobs
 
 import (
 	"context"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/queue"
@@ -30,5 +31,5 @@ func handlePruneTrending(app *vukem.App) queue.Registration {
 		app.Log.InfoContext(ctx, "prune trending", "deleted", n)
 
 		return nil
-	})
+	}, queue.Timeout(10*time.Minute), queue.Retries(1))
 }

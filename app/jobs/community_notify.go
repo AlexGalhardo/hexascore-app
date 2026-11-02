@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"sync"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/database"
@@ -36,7 +37,7 @@ func handleCommunityNotify(app *vukem.App) queue.Registration {
 		}
 
 		return RunCommunityNotify(ctx, acc.DB, acc, j)
-	}, queue.Retries(3))
+	}, queue.Retries(3), queue.Timeout(time.Minute))
 }
 
 // RunCommunityNotify sends the notice of j in one transaction: the inbox row keyed suggestion:<id>:<state>, and the

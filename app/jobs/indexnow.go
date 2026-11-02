@@ -48,7 +48,7 @@ func handleIndexNowChanges(app *vukem.App) queue.Registration {
 				return q.Dispatch(ctx, indexnow.Job{URLs: urls})
 			},
 		)
-	})
+	}, queue.Timeout(2*time.Minute), queue.Retries(1))
 }
 
 // indexNowHandlers is vukem's indexnow.Job handler, or nothing while INDEXNOW_KEY is unset.
