@@ -583,6 +583,8 @@
       "other": "{count} ratings"
     },
     "empty": "No items match these filters.",
+    "pastLastPage": "No items on this page.",
+    "lastPageLink": "Go to the last page",
     "next": "Next",
     "previous": "Previous",
     "pagination": "Pages",
