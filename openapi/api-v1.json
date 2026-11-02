@@ -13,7 +13,7 @@
     "/books/genres": {
       "get": {
         "operationId": "listBookGenres",
-        "summary": "listBookGenres",
+        "summary": "List book genres",
         "tags": [
           "catalog"
         ],
@@ -45,7 +45,7 @@
     "/books/trending": {
       "get": {
         "operationId": "listBookTrending",
-        "summary": "listBookTrending",
+        "summary": "List trending books",
         "tags": [
           "catalog"
         ],
@@ -90,7 +90,7 @@
     "/books/{id}/activity": {
       "get": {
         "operationId": "getBookActivity",
-        "summary": "getBookActivity",
+        "summary": "Get book activity",
         "tags": [
           "catalog"
         ],
@@ -151,7 +151,7 @@
     "/books/{id}/editions": {
       "get": {
         "operationId": "listEditions",
-        "summary": "listEditions",
+        "summary": "List book editions",
         "tags": [
           "catalog"
         ],
@@ -212,7 +212,7 @@
     "/changes": {
       "get": {
         "operationId": "listChanges",
-        "summary": "listChanges",
+        "summary": "List changes",
         "tags": [
           "catalog"
         ],
@@ -281,7 +281,7 @@
     "/entities/{id}": {
       "get": {
         "operationId": "getEntity",
-        "summary": "getEntity",
+        "summary": "Get entity",
         "tags": [
           "catalog"
         ],
@@ -334,7 +334,7 @@
     "/entities/{id}/items": {
       "get": {
         "operationId": "listEntityItems",
-        "summary": "listEntityItems",
+        "summary": "List entity items",
         "tags": [
           "catalog"
         ],
@@ -427,7 +427,7 @@
     "/exports": {
       "get": {
         "operationId": "listExports",
-        "summary": "listExports",
+        "summary": "List exports",
         "tags": [
           "exports"
         ],
@@ -459,7 +459,7 @@
     "/exports/{type}/{day}": {
       "get": {
         "operationId": "getExport",
-        "summary": "getExport",
+        "summary": "Get export",
         "tags": [
           "exports"
         ],
@@ -513,7 +513,7 @@
     "/franchises/{id}": {
       "get": {
         "operationId": "getFranchise",
-        "summary": "getFranchise",
+        "summary": "Get franchise",
         "tags": [
           "catalog"
         ],
@@ -566,7 +566,7 @@
     "/games/genres": {
       "get": {
         "operationId": "listGameGenres",
-        "summary": "listGameGenres",
+        "summary": "List game genres",
         "tags": [
           "catalog"
         ],
@@ -598,7 +598,7 @@
     "/games/trending": {
       "get": {
         "operationId": "listGameTrending",
-        "summary": "listGameTrending",
+        "summary": "List trending games",
         "tags": [
           "catalog"
         ],
@@ -643,7 +643,7 @@
     "/games/{id}/activity": {
       "get": {
         "operationId": "getGameActivity",
-        "summary": "getGameActivity",
+        "summary": "Get game activity",
         "tags": [
           "catalog"
         ],
@@ -704,7 +704,7 @@
     "/lookup": {
       "get": {
         "operationId": "lookupItem",
-        "summary": "lookupItem",
+        "summary": "Look up item",
         "tags": [
           "catalog"
         ],
@@ -765,7 +765,7 @@
     "/me/usage": {
       "get": {
         "operationId": "getUsage",
-        "summary": "getUsage",
+        "summary": "Get usage",
         "tags": [
           "catalog"
         ],
@@ -797,7 +797,7 @@
     "/movies/genres": {
       "get": {
         "operationId": "listMovieGenres",
-        "summary": "listMovieGenres",
+        "summary": "List movie genres",
         "tags": [
           "catalog"
         ],
@@ -829,7 +829,7 @@
     "/movies/trending": {
       "get": {
         "operationId": "listMovieTrending",
-        "summary": "listMovieTrending",
+        "summary": "List trending movies",
         "tags": [
           "catalog"
         ],
@@ -874,7 +874,7 @@
     "/movies/{id}/activity": {
       "get": {
         "operationId": "getMovieActivity",
-        "summary": "getMovieActivity",
+        "summary": "Get movie activity",
         "tags": [
           "catalog"
         ],
@@ -935,7 +935,7 @@
     "/organizations/{id}": {
       "get": {
         "operationId": "getOrganization",
-        "summary": "getOrganization",
+        "summary": "Get organization",
         "tags": [
           "catalog"
         ],
@@ -988,7 +988,7 @@
     "/people/{id}": {
       "get": {
         "operationId": "getPerson",
-        "summary": "getPerson",
+        "summary": "Get person",
         "tags": [
           "catalog"
         ],
@@ -1041,7 +1041,7 @@
     "/platforms/{id}": {
       "get": {
         "operationId": "getPlatform",
-        "summary": "getPlatform",
+        "summary": "Get platform",
         "tags": [
           "catalog"
         ],
@@ -1094,7 +1094,7 @@
     "/search": {
       "get": {
         "operationId": "searchItems",
-        "summary": "searchItems",
+        "summary": "Search items",
         "tags": [
           "catalog"
         ],
@@ -1171,7 +1171,7 @@
     "/search/entities": {
       "get": {
         "operationId": "searchEntities",
-        "summary": "searchEntities",
+        "summary": "Search entities",
         "tags": [
           "catalog"
         ],
@@ -1248,7 +1248,7 @@
     "/series/genres": {
       "get": {
         "operationId": "listSeriesGenres",
-        "summary": "listSeriesGenres",
+        "summary": "List series genres",
         "tags": [
           "catalog"
         ],
@@ -1280,7 +1280,7 @@
     "/series/trending": {
       "get": {
         "operationId": "listSeriesTrending",
-        "summary": "listSeriesTrending",
+        "summary": "List trending series",
         "tags": [
           "catalog"
         ],
@@ -1325,7 +1325,7 @@
     "/series/{id}/activity": {
       "get": {
         "operationId": "getSeriesActivity",
-        "summary": "getSeriesActivity",
+        "summary": "Get series activity",
         "tags": [
           "catalog"
         ],
@@ -1386,7 +1386,7 @@
     "/webhooks": {
       "get": {
         "operationId": "listWebhooks",
-        "summary": "listWebhooks",
+        "summary": "List webhooks",
         "tags": [
           "webhooks"
         ],
@@ -1416,7 +1416,7 @@
       },
       "post": {
         "operationId": "createWebhook",
-        "summary": "createWebhook",
+        "summary": "Create webhook",
         "tags": [
           "webhooks"
         ],
@@ -1484,7 +1484,7 @@
     "/webhooks/{id}": {
       "delete": {
         "operationId": "deleteWebhook",
-        "summary": "deleteWebhook",
+        "summary": "Delete webhook",
         "tags": [
           "webhooks"
         ],
@@ -1523,7 +1523,7 @@
     "/webhooks/{id}/test": {
       "post": {
         "operationId": "testWebhook",
-        "summary": "testWebhook",
+        "summary": "Test webhook",
         "tags": [
           "webhooks"
         ],
@@ -1580,7 +1580,7 @@
     "/{type}": {
       "get": {
         "operationId": "listItems",
-        "summary": "listItems",
+        "summary": "List items",
         "tags": [
           "catalog"
         ],
@@ -1704,7 +1704,7 @@
     "/{type}/{id}": {
       "get": {
         "operationId": "getItem",
-        "summary": "getItem",
+        "summary": "Get item",
         "tags": [
           "catalog"
         ],

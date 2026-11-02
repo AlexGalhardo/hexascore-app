@@ -66,7 +66,7 @@ def sync_detailed(
     client: AuthenticatedClient,
     locale: str | Unset = UNSET,
 ) -> Response[Problem | TrendingJSON]:
-    """listSeriesTrending
+    """List trending series
 
     Args:
         locale (str | Unset):
@@ -95,7 +95,7 @@ def sync(
     client: AuthenticatedClient,
     locale: str | Unset = UNSET,
 ) -> Problem | TrendingJSON | None:
-    """listSeriesTrending
+    """List trending series
 
     Args:
         locale (str | Unset):
@@ -119,7 +119,7 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     locale: str | Unset = UNSET,
 ) -> Response[Problem | TrendingJSON]:
-    """listSeriesTrending
+    """List trending series
 
     Args:
         locale (str | Unset):
@@ -146,7 +146,7 @@ async def asyncio(
     client: AuthenticatedClient,
     locale: str | Unset = UNSET,
 ) -> Problem | TrendingJSON | None:
-    """listSeriesTrending
+    """List trending series
 
     Args:
         locale (str | Unset):

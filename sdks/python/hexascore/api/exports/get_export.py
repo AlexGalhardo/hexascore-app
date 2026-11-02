@@ -61,7 +61,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[Any | Problem]:
-    """getExport
+    """Get export
 
     Args:
         type_ (GetExportType):
@@ -93,7 +93,7 @@ def sync(
     *,
     client: AuthenticatedClient,
 ) -> Any | Problem | None:
-    """getExport
+    """Get export
 
     Args:
         type_ (GetExportType):
@@ -120,7 +120,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[Any | Problem]:
-    """getExport
+    """Get export
 
     Args:
         type_ (GetExportType):
@@ -150,7 +150,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
 ) -> Any | Problem | None:
-    """getExport
+    """Get export
 
     Args:
         type_ (GetExportType):

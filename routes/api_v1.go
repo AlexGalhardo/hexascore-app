@@ -123,7 +123,10 @@ func APIV1(r *router.Router, app *vukem.App) error {
 		)
 
 		read := func(name string) vapi.Op {
-			return vapi.Op{Name: name, Tags: []string{"catalog"}, Security: []string{"bearer"}, ValidateResponse: true}
+			return vapi.Op{
+				Name: name, Summary: v1Summaries[name], Tags: []string{"catalog"}, Security: []string{"bearer"},
+				ValidateResponse: true,
+			}
 		}
 		vapi.Register(g, "GET /me/usage", read("getUsage"), items.GetUsage)
 		vapi.Register(g, "GET /books/{id}/editions", read("listEditions"), items.ListEditions)
@@ -159,7 +162,10 @@ func APIV1(r *router.Router, app *vukem.App) error {
 		// Literal /webhooks before /{type}, same reason as /{type}/genres.
 		hooks := &apiv1.Webhooks{App: app, DB: acc.DB, Crypt: app.Crypt, Plans: plans}
 		hook := func(name string) vapi.Op {
-			return vapi.Op{Name: name, Tags: []string{"webhooks"}, Security: []string{"bearer"}, ValidateResponse: true}
+			return vapi.Op{
+				Name: name, Summary: v1Summaries[name], Tags: []string{"webhooks"}, Security: []string{"bearer"},
+				ValidateResponse: true,
+			}
 		}
 		vapi.Register(g, "GET /webhooks", hook("listWebhooks"), hooks.List)
 		vapi.Register(g, "POST /webhooks", hook("createWebhook"), hooks.Create)
@@ -195,4 +201,22 @@ func exportsBucket(app *vukem.App) (apiv1.Bucket, error) {
 	}
 
 	return s3.New(cfg)
+}
+
+// v1Summaries are the readable operation titles of the API reference sidebar ("List items", not "listItems";
+// owner 2026-11-02). TestAPIReference_EveryOperationHasASummary keeps every operation covered.
+var v1Summaries = map[string]string{
+	"getUsage": "Get usage", "listEditions": "List book editions", "listEntityItems": "List entity items",
+	"getEntity": "Get entity", "getPerson": "Get person", "getOrganization": "Get organization",
+	"getFranchise": "Get franchise", "getPlatform": "Get platform",
+	"listGameGenres": "List game genres", "listMovieGenres": "List movie genres",
+	"listSeriesGenres": "List series genres", "listBookGenres": "List book genres",
+	"listGameTrending": "List trending games", "listMovieTrending": "List trending movies",
+	"listSeriesTrending": "List trending series", "listBookTrending": "List trending books",
+	"getGameActivity": "Get game activity", "getMovieActivity": "Get movie activity",
+	"getSeriesActivity": "Get series activity", "getBookActivity": "Get book activity",
+	"searchEntities": "Search entities", "searchItems": "Search items", "lookupItem": "Look up item",
+	"listChanges": "List changes", "listWebhooks": "List webhooks", "createWebhook": "Create webhook",
+	"deleteWebhook": "Delete webhook", "testWebhook": "Test webhook", "listExports": "List exports",
+	"getExport": "Get export", "getItem": "Get item", "listItems": "List items",
 }

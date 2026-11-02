@@ -75,7 +75,7 @@ def sync_detailed(
     limit: str | Unset = UNSET,
     cursor: str | Unset = UNSET,
 ) -> Response[EditionPageJSON | Problem]:
-    """listEditions
+    """List book editions
 
     Args:
         id (str):
@@ -110,7 +110,7 @@ def sync(
     limit: str | Unset = UNSET,
     cursor: str | Unset = UNSET,
 ) -> EditionPageJSON | Problem | None:
-    """listEditions
+    """List book editions
 
     Args:
         id (str):
@@ -140,7 +140,7 @@ async def asyncio_detailed(
     limit: str | Unset = UNSET,
     cursor: str | Unset = UNSET,
 ) -> Response[EditionPageJSON | Problem]:
-    """listEditions
+    """List book editions
 
     Args:
         id (str):
@@ -173,7 +173,7 @@ async def asyncio(
     limit: str | Unset = UNSET,
     cursor: str | Unset = UNSET,
 ) -> EditionPageJSON | Problem | None:
-    """listEditions
+    """List book editions
 
     Args:
         id (str):

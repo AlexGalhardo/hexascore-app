@@ -57,7 +57,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[Any | Problem]:
-    """deleteWebhook
+    """Delete webhook
 
     Args:
         id (str):
@@ -86,7 +86,7 @@ def sync(
     *,
     client: AuthenticatedClient,
 ) -> Any | Problem | None:
-    """deleteWebhook
+    """Delete webhook
 
     Args:
         id (str):
@@ -110,7 +110,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[Any | Problem]:
-    """deleteWebhook
+    """Delete webhook
 
     Args:
         id (str):
@@ -137,7 +137,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
 ) -> Any | Problem | None:
-    """deleteWebhook
+    """Delete webhook
 
     Args:
         id (str):

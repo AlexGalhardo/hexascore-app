@@ -82,7 +82,7 @@ def sync_detailed(
     limit: str | Unset = UNSET,
     page: str | Unset = UNSET,
 ) -> Response[ItemPageJSON | Problem]:
-    """searchItems
+    """Search items
 
     Args:
         q (str | Unset):
@@ -123,7 +123,7 @@ def sync(
     limit: str | Unset = UNSET,
     page: str | Unset = UNSET,
 ) -> ItemPageJSON | Problem | None:
-    """searchItems
+    """Search items
 
     Args:
         q (str | Unset):
@@ -159,7 +159,7 @@ async def asyncio_detailed(
     limit: str | Unset = UNSET,
     page: str | Unset = UNSET,
 ) -> Response[ItemPageJSON | Problem]:
-    """searchItems
+    """Search items
 
     Args:
         q (str | Unset):
@@ -198,7 +198,7 @@ async def asyncio(
     limit: str | Unset = UNSET,
     page: str | Unset = UNSET,
 ) -> ItemPageJSON | Problem | None:
-    """searchItems
+    """Search items
 
     Args:
         q (str | Unset):

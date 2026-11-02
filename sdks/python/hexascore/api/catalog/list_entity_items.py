@@ -91,7 +91,7 @@ def sync_detailed(
     cursor: str | Unset = UNSET,
     locale: str | Unset = UNSET,
 ) -> Response[ItemPageJSON | Problem]:
-    """listEntityItems
+    """List entity items
 
     Args:
         id (str):
@@ -138,7 +138,7 @@ def sync(
     cursor: str | Unset = UNSET,
     locale: str | Unset = UNSET,
 ) -> ItemPageJSON | Problem | None:
-    """listEntityItems
+    """List entity items
 
     Args:
         id (str):
@@ -180,7 +180,7 @@ async def asyncio_detailed(
     cursor: str | Unset = UNSET,
     locale: str | Unset = UNSET,
 ) -> Response[ItemPageJSON | Problem]:
-    """listEntityItems
+    """List entity items
 
     Args:
         id (str):
@@ -225,7 +225,7 @@ async def asyncio(
     cursor: str | Unset = UNSET,
     locale: str | Unset = UNSET,
 ) -> ItemPageJSON | Problem | None:
-    """listEntityItems
+    """List entity items
 
     Args:
         id (str):

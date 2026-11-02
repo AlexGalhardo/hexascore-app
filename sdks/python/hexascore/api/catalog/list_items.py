@@ -104,7 +104,7 @@ def sync_detailed(
     cursor: str | Unset = UNSET,
     locale: str | Unset = UNSET,
 ) -> Response[ItemPageJSON | Problem]:
-    """listItems
+    """List items
 
     Args:
         type_ (ListItemsType):
@@ -160,7 +160,7 @@ def sync(
     cursor: str | Unset = UNSET,
     locale: str | Unset = UNSET,
 ) -> ItemPageJSON | Problem | None:
-    """listItems
+    """List items
 
     Args:
         type_ (ListItemsType):
@@ -211,7 +211,7 @@ async def asyncio_detailed(
     cursor: str | Unset = UNSET,
     locale: str | Unset = UNSET,
 ) -> Response[ItemPageJSON | Problem]:
-    """listItems
+    """List items
 
     Args:
         type_ (ListItemsType):
@@ -265,7 +265,7 @@ async def asyncio(
     cursor: str | Unset = UNSET,
     locale: str | Unset = UNSET,
 ) -> ItemPageJSON | Problem | None:
-    """listItems
+    """List items
 
     Args:
         type_ (ListItemsType):

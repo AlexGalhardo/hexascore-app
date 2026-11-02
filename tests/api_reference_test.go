@@ -27,9 +27,9 @@ func TestAPIReference_PublicInProduction(t *testing.T) {
 	app.Client(t).Get("https://example.test/docs/reference/scalar.js").AssertOK()
 
 	var doc struct {
-		OpenAPI string            `json:"openapi"`
-		Paths   map[string]any    `json:"paths"`
-		Info    map[string]string `json:"info"`
+		OpenAPI string                               `json:"openapi"`
+		Paths   map[string]map[string]map[string]any `json:"paths"`
+		Info    map[string]string                    `json:"info"`
 	}
 	app.Client(t).GetJSON("https://example.test/api/v1/openapi.json").AssertOK().JSON(&doc)
 
@@ -41,6 +41,16 @@ func TestAPIReference_PublicInProduction(t *testing.T) {
 	for path := range doc.Paths {
 		if strings.HasPrefix(path, "/api/") || strings.HasPrefix(path, "/v1/") || !strings.HasPrefix(path, "/") {
 			t.Errorf("path %q is not relative to the /v1 server", path)
+		}
+	}
+
+	// The reference sidebar shows readable titles ("List items"), never the operationId (owner 2026-11-02).
+	for path, ops := range doc.Paths {
+		for method, op := range ops {
+			sum, _ := op["summary"].(string)
+			if id, _ := op["operationId"].(string); sum == "" || sum == id {
+				t.Errorf("%s %s: summary %q, want a readable title, not the operationId", method, path, sum)
+			}
 		}
 	}
 

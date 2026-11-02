@@ -72,7 +72,7 @@ def sync_detailed(
     id: str | Unset = UNSET,
     locale: str | Unset = UNSET,
 ) -> Response[ItemJSON | Problem]:
-    """lookupItem
+    """Look up item
 
     Args:
         source (str | Unset):
@@ -107,7 +107,7 @@ def sync(
     id: str | Unset = UNSET,
     locale: str | Unset = UNSET,
 ) -> ItemJSON | Problem | None:
-    """lookupItem
+    """Look up item
 
     Args:
         source (str | Unset):
@@ -137,7 +137,7 @@ async def asyncio_detailed(
     id: str | Unset = UNSET,
     locale: str | Unset = UNSET,
 ) -> Response[ItemJSON | Problem]:
-    """lookupItem
+    """Look up item
 
     Args:
         source (str | Unset):
@@ -170,7 +170,7 @@ async def asyncio(
     id: str | Unset = UNSET,
     locale: str | Unset = UNSET,
 ) -> ItemJSON | Problem | None:
-    """lookupItem
+    """Look up item
 
     Args:
         source (str | Unset):

@@ -66,7 +66,7 @@ def sync_detailed(
     client: AuthenticatedClient,
     body: CreateWebhookBody,
 ) -> Response[Problem | WebhookCreated]:
-    """createWebhook
+    """Create webhook
 
     Args:
         body (CreateWebhookBody):
@@ -95,7 +95,7 @@ def sync(
     client: AuthenticatedClient,
     body: CreateWebhookBody,
 ) -> Problem | WebhookCreated | None:
-    """createWebhook
+    """Create webhook
 
     Args:
         body (CreateWebhookBody):
@@ -119,7 +119,7 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     body: CreateWebhookBody,
 ) -> Response[Problem | WebhookCreated]:
-    """createWebhook
+    """Create webhook
 
     Args:
         body (CreateWebhookBody):
@@ -146,7 +146,7 @@ async def asyncio(
     client: AuthenticatedClient,
     body: CreateWebhookBody,
 ) -> Problem | WebhookCreated | None:
-    """createWebhook
+    """Create webhook
 
     Args:
         body (CreateWebhookBody):

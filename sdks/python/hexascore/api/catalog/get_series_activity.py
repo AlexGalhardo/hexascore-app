@@ -75,7 +75,7 @@ def sync_detailed(
     from_: str | Unset = UNSET,
     to: str | Unset = UNSET,
 ) -> Response[ActivityJSON | Problem]:
-    """getSeriesActivity
+    """Get series activity
 
     Args:
         id (str):
@@ -110,7 +110,7 @@ def sync(
     from_: str | Unset = UNSET,
     to: str | Unset = UNSET,
 ) -> ActivityJSON | Problem | None:
-    """getSeriesActivity
+    """Get series activity
 
     Args:
         id (str):
@@ -140,7 +140,7 @@ async def asyncio_detailed(
     from_: str | Unset = UNSET,
     to: str | Unset = UNSET,
 ) -> Response[ActivityJSON | Problem]:
-    """getSeriesActivity
+    """Get series activity
 
     Args:
         id (str):
@@ -173,7 +173,7 @@ async def asyncio(
     from_: str | Unset = UNSET,
     to: str | Unset = UNSET,
 ) -> ActivityJSON | Problem | None:
-    """getSeriesActivity
+    """Get series activity
 
     Args:
         id (str):

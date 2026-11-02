@@ -71,7 +71,7 @@ def sync_detailed(
     client: AuthenticatedClient,
     locale: str | Unset = UNSET,
 ) -> Response[EntityJSON | Problem]:
-    """getOrganization
+    """Get organization
 
     Args:
         id (str):
@@ -103,7 +103,7 @@ def sync(
     client: AuthenticatedClient,
     locale: str | Unset = UNSET,
 ) -> EntityJSON | Problem | None:
-    """getOrganization
+    """Get organization
 
     Args:
         id (str):
@@ -130,7 +130,7 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     locale: str | Unset = UNSET,
 ) -> Response[EntityJSON | Problem]:
-    """getOrganization
+    """Get organization
 
     Args:
         id (str):
@@ -160,7 +160,7 @@ async def asyncio(
     client: AuthenticatedClient,
     locale: str | Unset = UNSET,
 ) -> EntityJSON | Problem | None:
-    """getOrganization
+    """Get organization
 
     Args:
         id (str):

@@ -73,7 +73,7 @@ def sync_detailed(
     client: AuthenticatedClient,
     locale: str | Unset = UNSET,
 ) -> Response[ItemJSON | Problem]:
-    """getItem
+    """Get item
 
     Args:
         type_ (GetItemType):
@@ -108,7 +108,7 @@ def sync(
     client: AuthenticatedClient,
     locale: str | Unset = UNSET,
 ) -> ItemJSON | Problem | None:
-    """getItem
+    """Get item
 
     Args:
         type_ (GetItemType):
@@ -138,7 +138,7 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     locale: str | Unset = UNSET,
 ) -> Response[ItemJSON | Problem]:
-    """getItem
+    """Get item
 
     Args:
         type_ (GetItemType):
@@ -171,7 +171,7 @@ async def asyncio(
     client: AuthenticatedClient,
     locale: str | Unset = UNSET,
 ) -> ItemJSON | Problem | None:
-    """getItem
+    """Get item
 
     Args:
         type_ (GetItemType):

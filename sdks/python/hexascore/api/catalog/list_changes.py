@@ -78,7 +78,7 @@ def sync_detailed(
     cursor: str | Unset = UNSET,
     limit: str | Unset = UNSET,
 ) -> Response[ChangePageJSON | Problem]:
-    """listChanges
+    """List changes
 
     Args:
         since (str | Unset):
@@ -116,7 +116,7 @@ def sync(
     cursor: str | Unset = UNSET,
     limit: str | Unset = UNSET,
 ) -> ChangePageJSON | Problem | None:
-    """listChanges
+    """List changes
 
     Args:
         since (str | Unset):
@@ -149,7 +149,7 @@ async def asyncio_detailed(
     cursor: str | Unset = UNSET,
     limit: str | Unset = UNSET,
 ) -> Response[ChangePageJSON | Problem]:
-    """listChanges
+    """List changes
 
     Args:
         since (str | Unset):
@@ -185,7 +185,7 @@ async def asyncio(
     cursor: str | Unset = UNSET,
     limit: str | Unset = UNSET,
 ) -> ChangePageJSON | Problem | None:
-    """listChanges
+    """List changes
 
     Args:
         since (str | Unset):
