@@ -141,6 +141,18 @@ func DeliveryRegistration(app *vukem.App) queue.Registration {
 }
 
 func (s *Service) deliver(ctx context.Context, d vwebhook.Delivery) error {
+	// A job redelivered after a crash between the 2xx and the queue ack must not send again: the delivery id is the
+	// log's event_id. The window is bounded so the lookup stays on the (endpoint, attempted_at) index range.
+	var sent bool
+	if err := s.db.QueryRowContext(ctx, `SELECT EXISTS (SELECT 1 FROM webhook_deliveries
+WHERE endpoint = $1 AND attempted_at >= $2 AND event_id = $3 AND status BETWEEN 200 AND 299)`,
+		d.Endpoint, s.now().Add(-24*time.Hour).UnixMilli(), d.ID).Scan(&sent); err != nil {
+		return fmt.Errorf("webhook: check delivered: %w", err)
+	}
+	if sent {
+		return nil
+	}
+
 	err := s.sender.Deliver(ctx, d)
 	if err == nil {
 		if resetErr := resetStreak(ctx, s.db, d.Endpoint); resetErr != nil {

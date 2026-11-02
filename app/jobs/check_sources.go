@@ -2,6 +2,7 @@ package jobs
 
 import (
 	"context"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/queue"
@@ -26,5 +27,5 @@ func handleCheckSources(app *vukem.App) queue.Registration {
 		}
 
 		return community.CheckSources(ctx, db, job.SuggestionID)
-	})
+	}, queue.Timeout(2*time.Minute), queue.Retries(2))
 }

@@ -64,5 +64,5 @@ func handleExpireExports(app *vukem.App) queue.Registration {
 		app.Log.InfoContext(ctx, "expire exports", "expired", n)
 
 		return err
-	})
+	}, queue.Timeout(5*time.Minute), queue.Retries(1))
 }

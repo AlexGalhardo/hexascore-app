@@ -4,6 +4,7 @@ import (
 	"cmp"
 	"context"
 	"sync"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/queue"
@@ -43,5 +44,5 @@ func handleCommunityHourly(app *vukem.App) queue.Registration {
 		}
 
 		return community.Hourly(ctx, db, app.Now(), disk)
-	})
+	}, queue.Timeout(5*time.Minute), queue.Retries(1))
 }

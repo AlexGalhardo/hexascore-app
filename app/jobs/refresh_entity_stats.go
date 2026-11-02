@@ -2,6 +2,7 @@ package jobs
 
 import (
 	"context"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/queue"
@@ -22,5 +23,5 @@ func handleRefreshEntityStats(app *vukem.App) queue.Registration {
 			return err
 		}
 		return catalog.RefreshEntityStats(ctx, db)
-	})
+	}, queue.Timeout(15*time.Minute), queue.Retries(1))
 }

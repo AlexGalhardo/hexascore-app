@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/database"
@@ -33,7 +34,7 @@ func handleCommunityAsserts(app *vukem.App) queue.Registration {
 		}
 
 		return err
-	})
+	}, queue.Timeout(5*time.Minute), queue.Retries(1))
 }
 
 var communityChecks = []struct{ name, sql string }{

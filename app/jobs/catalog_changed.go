@@ -27,7 +27,7 @@ func handleCatalogChanged(app *vukem.App) queue.Registration {
 		_, err = RunCatalogChanged(ctx, db, j, app.Now().UTC())
 
 		return err
-	})
+	}, queue.Timeout(1*time.Minute), queue.Retries(3))
 }
 
 // RunCatalogChanged runs the side effects of one `catalog.changed` job (SDD 04 section 6 "Jobs") and reports whether

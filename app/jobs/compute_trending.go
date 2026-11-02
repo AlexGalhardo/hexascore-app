@@ -2,6 +2,7 @@ package jobs
 
 import (
 	"context"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/queue"
@@ -46,7 +47,7 @@ func handleComputeTrending(app *vukem.App) queue.Registration {
 		}
 
 		return nil
-	})
+	}, queue.Timeout(15*time.Minute), queue.Retries(1))
 }
 
 // TrendingRebuild runs the queued trending_rebuild (kind shared with app/recommend/trending.Rebuild).
@@ -58,5 +59,5 @@ func handleTrendingRebuild(app *vukem.App) queue.Registration {
 		}
 
 		return j.Run(ctx, db, app.Now().UTC())
-	})
+	}, queue.Timeout(15*time.Minute), queue.Retries(1))
 }
