@@ -49,7 +49,7 @@ export default function Index({ plans, currency, currencies, coverage }: Props) 
 					</h1>
 				</header>
 				<nav aria-labelledby="currency-label">
-					<p id="currency-label" className="mb-2 text-xs font-semibold">
+					<p id="currency-label" className="sr-only">
 						{t("billing.pricing.currency")}
 					</p>
 					<ul className="flex">

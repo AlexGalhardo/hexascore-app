@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **ui:** /pricing hides the "Currency" label (kept for screen readers)
 - **ui:** Trending cards keep the cover on the left and two rows on the right: the title across, then the rank at the far left and the score at the far right (the year and genre line is gone)
 - **api:** Every public API operation has a readable summary ("List items", not `listItems`), shown as its title in the API reference sidebar and in the generated SDK docstrings
 - **ui:** Landing carousels advance every 2 s (was 4 s); the whole-cover letterbox on item pages is transparent, so it takes the colour around the cover
