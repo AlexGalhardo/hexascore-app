@@ -34,16 +34,31 @@ func TestSecurity_A03_PurgeRemovesScoringRows(t *testing.T) {
 		}
 	}
 
-	exec(`INSERT INTO data_sources (code, name, licence, url) VALUES ('wikidata','Wikidata','CC0-1.0','https://wikidata.org')`)
-	exec(`INSERT INTO items (id, type, slug, wikidata_qid) VALUES ('00000000-0000-7000-8000-0000000000a1', 'game', 'g', 'Q1')`)
+	exec(
+		`INSERT INTO data_sources (code, name, licence, url) VALUES ('wikidata','Wikidata','CC0-1.0','https://wikidata.org')`,
+	)
+	exec(
+		`INSERT INTO items (id, type, slug, wikidata_qid) VALUES ('00000000-0000-7000-8000-0000000000a1', 'game', 'g', 'Q1')`,
+	)
 	const item = "00000000-0000-7000-8000-0000000000a1"
-	exec(`INSERT INTO score_bursts (id, item_id, started_at, limited_until, trigger, stats, resolution, resolved_at, resolved_by)
-OVERRIDING SYSTEM VALUE VALUES (1, $1, now(), now(), 'volume', '{}', 'approved', now(), $2)`, item, gone)
+	exec(
+		`INSERT INTO score_bursts (id, item_id, started_at, limited_until, trigger, stats, resolution, resolved_at, resolved_by)
+OVERRIDING SYSTEM VALUE VALUES (1, $1, now(), now(), 'volume', '{}', 'approved', now(), $2)`,
+		item,
+		gone,
+	)
 	for _, u := range []int64{gone, other} {
 		exec(`INSERT INTO time_to_beat (user_id, item_id, main_minutes) VALUES ($1, $2, 120)`, u, item)
-		exec(`INSERT INTO rating_flags (user_id, item_id, shadow_weight, reason) VALUES ($1, $2, 0.5, 'admin_downweight')`, u, item)
+		exec(
+			`INSERT INTO rating_flags (user_id, item_id, shadow_weight, reason) VALUES ($1, $2, 0.5, 'admin_downweight')`,
+			u,
+			item,
+		)
 		exec(`INSERT INTO score_actions (kind, item_id, user_id, actor) VALUES ('status_changed', $2, $1, $1)`, u, item)
-		exec(`INSERT INTO search_events (search_id, surface, query_norm, user_id) VALUES (gen_random_uuid(), 'web', 'zelda', $1)`, u)
+		exec(
+			`INSERT INTO search_events (search_id, surface, query_norm, user_id) VALUES (gen_random_uuid(), 'web', 'zelda', $1)`,
+			u,
+		)
 	}
 	exec(`UPDATE users SET deletion_scheduled_at = $1 WHERE id = $2`, time.Now().UTC().AddDate(0, 0, -31), gone)
 

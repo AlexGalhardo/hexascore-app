@@ -6,6 +6,7 @@ import (
 	"cmp"
 	"context"
 	"html/template"
+	"io"
 	"log/slog"
 	"os"
 	"strconv"
@@ -24,6 +25,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/alerts"
 	"github.com/AlexGalhardo/hexascore-app/app/community"
+	"github.com/AlexGalhardo/hexascore-app/app/controllers"
 	"github.com/AlexGalhardo/hexascore-app/app/http/middleware"
 	"github.com/AlexGalhardo/hexascore-app/app/i18nhash"
 	"github.com/AlexGalhardo/hexascore-app/app/jobs"
@@ -236,13 +238,21 @@ func addReadyChecks(app *vukem.App, heartbeat *scheduler.Heartbeat) error {
 	app.AddHealthCheckTimeout("db", ReadyCheckTimeout, db.Ping)
 	app.AddHealthCheckTimeout("ssr", ReadyCheckTimeout, app.Inertia.SSRHealthy)
 
-	// shortcut: probes the local exports disk until the bucket lands (P2.A.2.1), then check that disk instead.
-	disk, err := storage.NewLocal(library.ExportsDir(app.Source.Get), "")
-	if err != nil {
-		return err
+	// The bucket holds covers and backups, so it is the disk readiness must prove (audit T-15); without S3_BUCKET
+	// (local runs without RustFS) the exports disk stands in. storage.Check writes, reads back and deletes one object.
+	disk := controllers.BucketDisk(app)
+	if disk == nil {
+		local, err := storage.NewLocal(library.ExportsDir(app.Source.Get), "")
+		if err != nil {
+			return err
+		}
+
+		disk = local
 	}
 
-	app.OnShutdown(func(context.Context) error { return disk.Close() })
+	if c, ok := disk.(io.Closer); ok {
+		app.OnShutdown(func(context.Context) error { return c.Close() })
+	}
 	app.AddHealthCheckTimeout("storage", ReadyCheckTimeout, func(ctx context.Context) error {
 		return storage.Check(ctx, disk)
 	})
