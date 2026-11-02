@@ -22,7 +22,9 @@ const (
 )
 
 // StaleAfter is the age after which a pressure signal says nothing: the web process is down or not writing.
-const StaleAfter = time.Minute
+// The signal is written every minute (the scheduler has whole-minute resolution), so three minutes tolerate one
+// missed tick before the reading counts as unknown.
+const StaleAfter = 3 * time.Minute
 
 // Signal is what the web process publishes about its own load.
 type Signal struct {
