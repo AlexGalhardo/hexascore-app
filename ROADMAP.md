@@ -1546,6 +1546,7 @@ Phase-specific conventions:
   - Notes: HUMAN GATE (secrets): the owner creates the bot and the two chats and sets `TELEGRAM_BOT_TOKEN` and the chat ids. `TELEGRAM_MIN_LEVEL=error`, `TELEGRAM_RATE_LIMIT=20`. Digest uses `app.Telegram.SendSync`. Buffered upserts every 60 s (VF-021 pattern), never per error.
   - Status (2026-11-01): owner gate (Telegram): owner creates the bot and the page and error chats and sets `TELEGRAM_BOT_TOKEN` and the chat ids on Railway.
   - Status (2026-11-01, merged to main 4f24c27f): code done, the `go test` acceptance passes and `alerts:test` reached the chat from local; open: the staging acceptance (forced error silent, `LevelFatal` rings) after the owner sets `TELEGRAM_*` on staging or production (commands in the P2.C.1.2 report).
+  - Status (2026-11-01, late): `TELEGRAM_*` set on production by the owner; `railway ssh ... -- /app/app alerts:test` in production → "Telegram accepted the message (sendMessage 200, ok:true)". Open (owner): the forced-error (silent) and `LevelFatal` (rings) checks in the chats.
 
 #### P2.C.2 Traces and metrics
 
