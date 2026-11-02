@@ -5,6 +5,8 @@
 [![CI](https://github.com/AlexGalhardo/hexascore-app/actions/workflows/ci.yml/badge.svg)](https://github.com/AlexGalhardo/hexascore-app/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Go 1.27.3](https://img.shields.io/badge/go-1.27.3-00ADD8?logo=go&logoColor=white)](go.mod)
+<a href="https://github.com/AlexGalhardo/hexascore-app/releases"><img src="https://img.shields.io/github/v/release/AlexGalhardo/hexascore-app?include_prereleases&label=version" alt="Version"></a>
+<a href="https://scorecard.dev/viewer/?uri=github.com/AlexGalhardo/hexascore-app"><img src="https://api.scorecard.dev/projects/github.com/AlexGalhardo/hexascore-app/badge" alt="OpenSSF Scorecard"></a>
 
 Movies, TV Shows, Books and Games Open Source Almanac
 
@@ -38,14 +40,7 @@ Thank you for considering a contribution to HexaScore.
 - Security-relevant behaviour needs a test named `TestSecurity_<Axx>_<Behaviour>`.
 - Update the relevant SDD, `CHANGELOG.md` (under `[Unreleased]`) and the documentation in the same change when behaviour, commands or conventions change.
 
-### Commits
-
-Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) in English: `type(scope): description`.
-
-- Types: `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`, `ci`, `chore`, `style`, `revert`.
-- Scopes: `auth`, `catalog`, `ratings`, `lists`, `billing`, `api`, `admin`, `ui`, `infra`, `deps`, `repo`, `docs`.
-
-The commit-msg hook enabled by the setup script checks the header locally, and commitlint checks the commits and the PR title in CI.
+The full guide (setup, checks, commit style) is in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### Pull requests
 
@@ -55,15 +50,22 @@ The commit-msg hook enabled by the setup script checks the header locally, and c
 
 `main` accepts changes only through a pull request with green required checks and linear history.
 
-The full guide (setup, checks, commit style) is in [CONTRIBUTING.md](CONTRIBUTING.md).
+### Commits
+
+Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) in English: `type(scope): description`.
+
+- Types: `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`, `ci`, `chore`, `style`, `revert`.
+- Scopes: `auth`, `catalog`, `ratings`, `lists`, `billing`, `api`, `admin`, `ui`, `infra`, `deps`, `repo`, `docs`.
+
+The commit-msg hook enabled by the setup script checks the header locally, and commitlint checks the commits and the PR title in CI.
 
 ## Code of conduct
 
-Keep discussions respectful and constructive. This repository does not publish a separate code of conduct file yet.
+To keep the community welcoming to everyone, please review and follow the [Code of Conduct](.github/CODE_OF_CONDUCT.md).
 
 ## Security vulnerabilities
 
-Please do not open a public issue for a security vulnerability. Report it privately as described in [SECURITY.md](SECURITY.md).
+If you discover a security vulnerability, please follow the [security policy](.github/SECURITY.md) instead of opening a public issue.
 
 ## License
 
