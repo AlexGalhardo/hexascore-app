@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **release:** `changelog-sync.yml` checks that CHANGELOG.md and the GitHub releases match and that every released section is the one-commit-per-line git-cliff list (`scripts/release/check-sync.ts`)
+- **config:** `TELEGRAM_OPS_CHAT_ID` declared in `.env.example` for the catalogue worker digest (read by the app once RFC-001 CW-08 lands)
 - **docs:** Architect audit 2026-11-02: project map, web test report, technical review and cleanup ledger in `docs/audit/`; RFC-001 catalogue worker, RFC-002 trending, RFC-003 offers; ADR 0024 (Redis deferred) and ADR 0025 (MongoDB rejected); `docs/data/SOURCES.md`, `docs/ROADMAP-V1.md`, `docs/BACKLOG.md`, `docs/OPEN-QUESTIONS.md`; ROADMAP phase P8
 
 ### Fixed

@@ -24,15 +24,15 @@ Conventions:
 
 ## Resuming work (read first in a new session)
 
-The work runs through [PROMPT-WORKERS.md](PROMPT-WORKERS.md) (system prompt of the team) and [`.orchestration/`](.orchestration/) (queue, reports, handoffs; versioned in git). Parallel workers need the owner's explicit yes in each new session (global CLAUDE.md rule).
+The work runs through [PROMPT-WORKERS.md](PROMPT-WORKERS.md) (system prompt of the team, local and gitignored) and [`.orchestration/`](.orchestration/) (board, tickets, reports, handoffs; local working state). Parallel workers need the owner's explicit yes in each new session (global CLAUDE.md rule). Priorities come from [docs/ROADMAP-V1.md](docs/ROADMAP-V1.md) and [docs/BACKLOG.md](docs/BACKLOG.md); this file's phase P8 mirrors them.
 
-1. Read [`.orchestration/handoff/orchestrator.md`](.orchestration/handoff/orchestrator.md) (state at pause), then [docs/orchestration/QUESTIONS.md](docs/orchestration/QUESTIONS.md) (owner gates and answers) and `C:\dev\hexascore-app\developer-manual-todos.md` (owner checklist, outside the repo).
-2. `git pull`, `docker compose up -d --wait`, and run the gate once: `go build ./...`, `golangci-lint run --allow-parallel-runners --build-tags integration ./...`, `bun install && bun run lint && bun run typecheck && bun run test`, `TEST_DATABASE_URL=postgres://hexascore:hexascore@127.0.0.1:5433/postgres?sslmode=disable go test -tags integration -parallel 4 -timeout 30m ./...`.
-3. Fill `.orchestration/queue/TASKS.md` from the first unchecked microtasks that have no open owner gate (P2.H first), then launch the four workers with the briefs in `.orchestration/briefs/`. Workers stay alive and take the next task from the queue; relaunch only after a context-limit stop.
-4. Orchestrator loop: when the specialist marks a task `PRONTO_PARA_MERGE`, merge the branch with `git merge --no-ff`, run the gate, tick the microtask, renumber `VF-NEW-*` entries (next free: VF-063). `main` is pushed only when the owner asks (the push deploys Railway production).
-5. Releases: `scripts/release.sh vX.Y.Z` on a clean tree (git-cliff), local container smoke test (`hexascore:predeploy` on a fresh database, then `/up?checks=1`), `git push origin main && git push origin vX.Y.Z`; the Release workflow publishes the GitHub release.
+1. Orchestrator: follow `PROMPT-WORKERS.md` §0 (model, parallel yes, reads, services, gate, board). Read [`.orchestration/handoff/orchestrator.md`](.orchestration/handoff/orchestrator.md), [docs/OPEN-QUESTIONS.md](docs/OPEN-QUESTIONS.md) (all 14 answered on 2026-11-02) and [docs/orchestration/QUESTIONS.md](docs/orchestration/QUESTIONS.md) (older gates).
+2. `git pull`, `docker compose up -d --wait`, fast gate: `go build ./...`, `golangci-lint run -j 2 --allow-parallel-runners ./...`, `bun install && bun run lint && bun run typecheck && bun run test`. The full gate (`scripts/ci/local.sh`) runs once per batch and before any push to `main`.
+3. The board `.orchestration/queue/TASKS.md` is pre-filled with batch 1 (milestone V1-A, tickets in `.orchestration/queue/tasks/`). Launch the senior and the intern in one message (`run_in_background: true`) with `briefs/common.md` plus their role brief; they stay in standby and take rows until `STOP`.
+4. Orchestrator loop (`PROMPT-WORKERS.md` §9): review every `review` row with the §3.4 checklist, fix small things yourself, merge `ready` rows with `git merge --no-ff` and the message `chore(scope): merge <branch> into main`, run the fast gate, tick the P8 box and the backlog row, move the row to `.orchestration/done/`. Next free framework feedback id: `VF-079`.
+5. First push of this cycle: `scripts/ci/local.sh` green on `main` with the audit branch merged, then `git push origin main` (deploys production; B-001 verification follows). Releases only on the owner's request (`scripts/release.sh vX.Y.Z`, `v0.39.0` closes V1-A).
 
-Open owner items: real Stripe values on Railway service `app` (Q-H31); the 39 owner-gated P2 boxes (Railway, buckets, DNS, Telegram, secrets, spend, real data, cutover) in `developer-manual-todos.md`; `adotar VF-001` (passkeys); the D-06 amendment for the social layer (Phase 7, question Q-A1 in QUESTIONS.md).
+Open owner items: `TELEGRAM_OPS_CHAT_ID` on Railway (`app` and the future `worker`; local `.env` done 2026-11-02), affiliate programme enrolment (OQ-08), the 38 Temp worktrees (`docs/audit/CLEANUP.md` §E), staging TLS certificate check, older gates in `docs/orchestration/QUESTIONS.md` (Q-A5 social flag, store accounts, device tests).
 
 ## Phase map
 
