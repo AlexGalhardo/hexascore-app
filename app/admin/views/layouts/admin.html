@@ -21,6 +21,7 @@
 			<a href="/admin/moderation"{{if eq $.Title "Moderation"}} aria-current="page"{{end}}>Moderation</a>
 			<a href="/admin/ingestion"{{if eq $.Title "Ingestion"}} aria-current="page"{{end}}>Ingestion</a>
 			<a href="/admin/ingest/reviews"{{if eq $.Title "Match reviews"}} aria-current="page"{{end}}>Match reviews</a>
+			<a href="/admin/ingest/field-reviews"{{if eq $.Title "Field reviews"}} aria-current="page"{{end}}>Field reviews</a>
 			{{with .Panel.AuditURL}}<a class="audit-link" href="{{.}}">Audit log</a>{{end}}
 		</nav>
 		<main id="main">

@@ -9,6 +9,8 @@ import (
 	"slices"
 	"strings"
 	"time"
+
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/store"
 )
 
 // APIItem is one public item for the paid API: the licence-filtered read
@@ -37,7 +39,7 @@ func LoadAPIItems(
 	}
 
 	rows, err := db.QueryContext(ctx, `SELECT i.id::text, i.type, i.slug, i.wikidata_qid, i.release_date,
-  i.release_precision, i.runtime_minutes, i.page_count, i.provenance, i.external_ids, i.cover_key IS NOT NULL,
+  i.release_precision, i.runtime_minutes, i.page_count, i.provenance, i.provenance_v2, i.external_ids, i.cover_key IS NOT NULL,
   coalesce(t.title, te.title, i.original_title, i.slug),
   CASE WHEN t.title IS NOT NULL THEN t.title_source WHEN te.title IS NOT NULL THEN te.title_source
     WHEN i.original_title IS NOT NULL THEN i.provenance->>'original_title' ELSE 'hexascore' END,
@@ -62,7 +64,7 @@ ORDER BY o.n`, "{"+strings.Join(ids, ",")+"}", locale)
 			src                         ItemSource
 			release                     sql.NullTime
 			runtime, pages              sql.NullInt64
-			provRaw, extRaw             []byte
+			provRaw, provV2Raw, extRaw  []byte
 			hasCover                    bool
 			title, tsrc                 sql.NullString
 			syn, synSrc, synLic, synURL sql.NullString
@@ -73,7 +75,7 @@ ORDER BY o.n`, "{"+strings.Join(ids, ",")+"}", locale)
 			version                     sql.NullInt64
 		)
 		if err := rows.Scan(&src.ID, &src.Type, &src.Slug, &src.WikidataQID, &release, &src.ReleasePrecision,
-			&runtime, &pages, &provRaw, &extRaw, &hasCover, &title, &tsrc, &syn, &synSrc, &synLic, &synURL,
+			&runtime, &pages, &provRaw, &provV2Raw, &extRaw, &hasCover, &title, &tsrc, &syn, &synSrc, &synLic, &synURL,
 			&count, &score, &cats[0], &cats[1], &cats[2], &cats[3], &cats[4], &cats[5], &conf, &version); err != nil {
 			return nil, fmt.Errorf("scan api item: %w", err)
 		}
@@ -81,6 +83,9 @@ ORDER BY o.n`, "{"+strings.Join(ids, ",")+"}", locale)
 		prov := map[string]string{}
 		if err := json.Unmarshal(provRaw, &prov); err != nil {
 			return nil, fmt.Errorf("item %s provenance: %w", src.ID, err)
+		}
+		if err := hideLowConfidence(prov, provV2Raw); err != nil {
+			return nil, fmt.Errorf("item %s provenance v2: %w", src.ID, err)
 		}
 		if src.ExternalIDs, err = externalIDs(extRaw); err != nil {
 			return nil, fmt.Errorf("item %s external ids: %w", src.ID, err)
@@ -333,4 +338,24 @@ ORDER BY id LIMIT 1`, args...).Scan(&out)
 	}
 
 	return out, true, nil
+}
+
+// hideLowConfidence blanks the source of every field whose provenance_v2 confidence is under store.MinConfidence:
+// a field without a known source is hidden by the policy (fail closed, RFC-001 section 5 D). Fields without a v2
+// entry keep the legacy behaviour.
+func hideLowConfidence(prov map[string]string, v2Raw []byte) error {
+	var v2 map[string]struct {
+		Confidence *int `json:"confidence"`
+	}
+	if err := json.Unmarshal(v2Raw, &v2); err != nil {
+		return err
+	}
+
+	for field, e := range v2 {
+		if e.Confidence != nil && *e.Confidence < store.MinConfidence {
+			prov[field] = ""
+		}
+	}
+
+	return nil
 }
