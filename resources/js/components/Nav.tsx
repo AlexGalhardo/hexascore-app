@@ -32,11 +32,11 @@ export const APP_ICON = "/icons/app-icon.svg";
 export const BRAND = "HexaScore";
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg";
-// A square background on hover makes the target explicit in both themes (owner 2026-11-02).
-const item = `inline-flex min-h-11 items-center rounded-xs px-2.5 hover:bg-hover hover:text-primary ${focus}`;
+// Hover inverts the colours, a square of the ink colour with page-coloured text, in both themes (owner 2026-11-02).
+const item = `inline-flex min-h-11 items-center rounded-xs px-2.5 hover:bg-fg hover:text-bg ${focus}`;
 // Pressed: 1 px down onto an inset shadow (the move is dropped under prefers-reduced-motion).
-export const iconButton = `inline-flex size-11 shrink-0 items-center justify-center rounded-xs transition-[background-color,box-shadow,translate] duration-100 hover:bg-hover active:translate-y-px active:bg-surface active:shadow-pressed motion-reduce:transition-none motion-reduce:active:translate-y-0 ${focus}`;
-const menuItem = `flex min-h-11 w-full items-center gap-2.5 px-3 text-left text-[15px] hover:bg-hover ${focus}`;
+export const iconButton = `inline-flex size-11 shrink-0 items-center justify-center rounded-xs transition-[background-color,box-shadow,translate] duration-100 hover:bg-fg hover:text-bg active:translate-y-px active:bg-surface active:shadow-pressed motion-reduce:transition-none motion-reduce:active:translate-y-0 ${focus}`;
+const menuItem = `flex min-h-11 w-full items-center gap-2.5 px-3 text-left text-[15px] hover:bg-fg hover:text-bg ${focus}`;
 
 function setCookie(name: string, value: string) {
 	// biome-ignore lint/suspicious/noDocumentCookie: a plain preference cookie, read server-side
@@ -265,7 +265,7 @@ export default function Nav() {
 	const language = (
 		<Dropdown
 			label={t("nav.language")}
-			triggerClassName={`inline-flex min-h-11 items-center gap-1 rounded-xs px-2 text-sm font-bold hover:bg-hover aria-expanded:bg-hover ${focus}`}
+			triggerClassName={`inline-flex min-h-11 items-center gap-1 rounded-xs px-2 text-sm font-bold hover:bg-fg hover:text-bg aria-expanded:bg-fg aria-expanded:text-bg ${focus}`}
 			trigger={
 				<>
 					{LOCALE_LABELS[locale] ?? "EN"}
@@ -285,7 +285,7 @@ export default function Nav() {
 			<div className="shell flex h-14 items-center gap-2 lg:h-[72px] lg:gap-7">
 				<Link
 					href={localized("/", locale)}
-					className={`${item} shrink-0 gap-2 font-display text-2xl font-bold hover:text-fg lg:text-[28px]`}
+					className={`${item} shrink-0 gap-2 font-display text-2xl font-bold lg:text-[28px]`}
 				>
 					<img
 						src={APP_ICON}
@@ -314,7 +314,7 @@ export default function Nav() {
 						<Link
 							href={feedHref}
 							aria-current={here === "/feed" ? "page" : undefined}
-							className={`hidden min-h-11 items-center rounded-xs border-l border-border pl-7 pr-2.5 text-[15px] font-medium hover:bg-hover hover:text-primary aria-[current=page]:font-bold xl:inline-flex ${focus}`}
+							className={`hidden min-h-11 items-center rounded-xs border-l border-border pl-7 pr-2.5 text-[15px] font-medium hover:bg-fg hover:text-bg aria-[current=page]:font-bold xl:inline-flex ${focus}`}
 						>
 							{t("social.feed.title")}
 						</Link>
@@ -361,7 +361,7 @@ export default function Nav() {
 							<div className="flex items-center gap-1">
 								<Dropdown
 									label={t("nav.account")}
-									triggerClassName={`inline-flex min-h-11 items-center gap-2 rounded-xs pl-1 pr-1 hover:bg-hover ${focus}`}
+									triggerClassName={`inline-flex min-h-11 items-center gap-2 rounded-xs pl-1 pr-1 hover:bg-fg hover:text-bg ${focus}`}
 									panelClassName="w-64"
 									trigger={avatar}
 								>
@@ -379,7 +379,7 @@ export default function Nav() {
 								<div className="flex items-center gap-4">
 									<Dropdown
 										label={t("nav.more")}
-										triggerClassName={`inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-xs px-2 hover:bg-hover ${focus}`}
+										triggerClassName={`inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-xs px-2 hover:bg-fg hover:text-bg ${focus}`}
 										trigger={
 											<>
 												<Icon name="menu" />
