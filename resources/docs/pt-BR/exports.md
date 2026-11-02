@@ -4,7 +4,7 @@ Baixe a lista completa de ids de itens uma vez por dia e busque depois apenas o 
 
 ## O que é exportado
 
-Todo dia, antes das 08:00 UTC, geramos um arquivo por tipo de item: games, movies, series e books. Os arquivos são mantidos por 90 dias. As exportações estão disponíveis nos planos Pro e Business; o plano Free recebe [`plan-required`](/docs/errors#plan-required).
+Todo dia, antes das 08:00 UTC, geramos um arquivo por tipo de item: games, movies, series e books. Os arquivos são mantidos por 90 dias. As exportações estão disponíveis nos planos Hobby e PRO; o plano Free recebe [`plan-required`](/docs/errors#plan-required).
 
 Cada arquivo é um NDJSON compactado com gzip, com um objeto JSON por linha:
 

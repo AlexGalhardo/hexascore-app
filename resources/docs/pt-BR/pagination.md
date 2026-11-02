@@ -12,7 +12,7 @@ Os endpoints de lista usam cursores opacos: estáveis diante de inserções e r�
 
 ## Tamanho da página
 
-`limit` tem padrão 10. O máximo depende do seu plano: 10 no Free, 100 no Pro e no Business. Um valor maior retorna `400 invalid-query`; a API nunca trunca em silêncio. Cada página conta como uma requisição.
+`limit` tem padrão 10. O máximo depende do seu plano: 10 no Free, 20 no Hobby, 50 no PRO. Um valor maior retorna `400 invalid-query`; a API nunca trunca em silêncio. Cada página conta como uma requisição.
 
 ## Exemplo: percorrer todas as páginas
 

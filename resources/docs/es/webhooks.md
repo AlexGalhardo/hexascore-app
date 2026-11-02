@@ -4,7 +4,7 @@ Recibe una solicitud HTTP firmada cuando cambien los ítems, en lugar de hacer p
 
 ## Configuración
 
-Los webhooks están disponibles en los planes Pro (2 endpoints) y Business (10 endpoints). Crea un endpoint con `POST /v1/webhooks`:
+Los webhooks están disponibles en los planes Hobby (2 endpoints) y PRO (10 endpoints). Crea un endpoint con `POST /v1/webhooks`:
 
 | Campo | Significado |
 | --- | --- |

@@ -4,7 +4,7 @@ Receba uma requisição HTTP assinada quando os itens mudarem, em vez de fazer p
 
 ## Configuração
 
-Os webhooks estão disponíveis nos planos Pro (2 endpoints) e Business (10 endpoints). Crie um endpoint com `POST /v1/webhooks`:
+Os webhooks estão disponíveis nos planos Hobby (2 endpoints) e PRO (10 endpoints). Crie um endpoint com `POST /v1/webhooks`:
 
 | Campo | Significado |
 | --- | --- |

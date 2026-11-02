@@ -86,4 +86,4 @@ with client as c:
 
 ## Webhooks em vez de polling
 
-Os planos Pro e Business podem receber os mesmos eventos em uma URL. Veja [Webhooks](/docs/webhooks). As entregas de webhook podem falhar, então use `/v1/changes` para recuperar qualquer lacuna.
+Os planos Hobby e PRO podem receber os mesmos eventos em uma URL. Veja [Webhooks](/docs/webhooks). As entregas de webhook podem falhar, então use `/v1/changes` para recuperar qualquer lacuna.

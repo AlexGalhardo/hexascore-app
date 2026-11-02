@@ -7,8 +7,8 @@ Cada plano tem uma cota de requisições, um limite por segundo e um tamanho má
 | Plano | Cota | Requisições / segundo | Tamanho máx. da página |
 | --- | --- | --- | --- |
 | Free | 100 no total | 1 (rajada de 5) | 10 |
-| Pro | 50.000 / mês | 10 | 100 |
-| Business | 500.000 / mês | 50 | 100 |
+| Hobby | 10.000 / mês | 1 (rajada de 5) | 20 |
+| PRO | 50.000 / mês | 3 (rajada de 15) | 50 |
 
 Preços e upgrades: [/pricing](/pricing).
 

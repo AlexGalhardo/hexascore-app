@@ -4,7 +4,7 @@ Descarga la lista completa de ids de ítems una vez al día y luego obtén solo 
 
 ## Qué se exporta
 
-Cada día, antes de las 08:00 UTC, generamos un archivo por tipo de ítem: games, movies, series y books. Los archivos se conservan 90 días. Las exportaciones están disponibles en los planes Pro y Business; el plan Free recibe [`plan-required`](/docs/errors#plan-required).
+Cada día, antes de las 08:00 UTC, generamos un archivo por tipo de ítem: games, movies, series y books. Los archivos se conservan 90 días. Las exportaciones están disponibles en los planes Hobby y PRO; el plan Free recibe [`plan-required`](/docs/errors#plan-required).
 
 Cada archivo es un NDJSON comprimido con gzip, con un objeto JSON por línea:
 
