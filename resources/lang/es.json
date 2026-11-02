@@ -607,6 +607,15 @@
       "movie": "Películas encontradas",
       "series": "Series encontradas",
       "book": "Libros encontrados"
+    },
+    "resultCount": {
+      "zero": "Ningún elemento encontrado",
+      "one": "{count} elemento encontrado",
+      "other": "{count} elementos encontrados"
+    },
+    "itemsFoundLabel": {
+      "one": "elemento encontrado",
+      "other": "elementos encontrados"
     }
   },
   "categories": {
@@ -1153,7 +1162,9 @@
         "dropped": "Abandonado"
       },
       "notSaved": "No se pudo guardar tu estado. Inténtalo de nuevo."
-    }
+    },
+    "attribution": "Atribución: datos de TMDB e IGDB donde se muestran.",
+    "rateIt": "Valorar"
   },
   "updatedLabel": "Última actualización",
   "policy": {

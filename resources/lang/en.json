@@ -607,6 +607,15 @@
       "movie": "Movies found",
       "series": "TV series found",
       "book": "Books found"
+    },
+    "resultCount": {
+      "zero": "No items found",
+      "one": "{count} item found",
+      "other": "{count} items found"
+    },
+    "itemsFoundLabel": {
+      "one": "item found",
+      "other": "items found"
     }
   },
   "categories": {
@@ -1153,7 +1162,9 @@
         "dropped": "Dropped"
       },
       "notSaved": "Your status could not be saved. Try again."
-    }
+    },
+    "attribution": "Attribution: data from TMDB and IGDB where shown.",
+    "rateIt": "Rate it"
   },
   "updatedLabel": "Last updated",
   "policy": {

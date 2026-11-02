@@ -295,11 +295,6 @@
 	"catalog.year": "Ano",
 	"catalog.minScore": "Nota mín.",
 	"catalog.minCategories": "Nota Mínima Por Categoria",
-	"catalog.resultCount": {
-		"zero": "Nenhum item encontrado",
-		"one": "{count} item encontrado",
-		"other": "{count} itens encontrados"
-	},
 	"catalog.sort": "Ordenar por",
 	"catalog.apply": "Aplicar",
 	"catalog.reset": "Limpar",
@@ -335,6 +330,16 @@
 	"catalog.trending.allPrior": "{type} populares",
 	"catalog.trending.popular": "Popular",
 	"catalog.trending.empty": "Nada em alta ainda.",
+	"catalog.any": "Qualquer",
+	"catalog.foundLabel.game": "Jogos encontrados",
+	"catalog.foundLabel.movie": "Filmes encontrados",
+	"catalog.foundLabel.series": "Séries encontradas",
+	"catalog.foundLabel.book": "Livros encontrados",
+	"catalog.resultCount": {
+		"zero": "Nenhum item encontrado",
+		"one": "{count} item encontrado",
+		"other": "{count} itens encontrados"
+	},
 	"catalog.itemsFoundLabel": {
 		"one": "item encontrado",
 		"other": "itens encontrados"
@@ -481,7 +486,6 @@
 	"item.editionFields.publisher": "Editora",
 	"item.editionFields.year": "Ano",
 	"item.editionFields.format": "Formato",
-	"item.attribution": "Atribuição: dados do TMDB e do IGDB onde exibidos.",
 	"item.timeToBeat.title": "Tempo para zerar",
 	"item.timeToBeat.styles.main": "História principal",
 	"item.timeToBeat.styles.extras": "Principal + extras",
@@ -492,8 +496,9 @@
 		"one": "{count} relato",
 		"other": "{count} relatos"
 	},
-	"item.timeToBeat.notEnough": "Relatos insuficientes (mínimo {min})",
-	"item.timeToBeat.hint": "Mediana das horas informadas por quem concluiu o jogo.",
+	"item.timeToBeat.none": "Ainda sem relatos. Seja o primeiro a informar seu tempo.",
+	"item.timeToBeat.loginToReport": "Entre para informar seu tempo para zerar.",
+	"item.timeToBeat.hint": "Mediana das horas informadas pelos jogadores.",
 	"item.timeToBeat.yours": "Seu tempo para zerar",
 	"item.timeToBeat.yoursHint": "Opcional. Horas, de 0,5 em 0,5; deixe em branco o estilo que você não jogou.",
 	"item.timeToBeat.hoursPlaceholder": "Horas",
@@ -514,8 +519,6 @@
 		"other": "de {n} avaliações · seis categorias, uma fórmula"
 	},
 	"item.howScoreWorks": "Como a nota funciona",
-	"item.rateIt": "Avaliar",
-	"item.goToRating": "Ir para sua avaliação",
 	"item.breadcrumb": "Trilha de navegação",
 	"item.loadTrailerN": "Carregar trailer {n}",
 	"item.panel.help": "Dez estrelas por categoria; cada meia estrela vale 0,5. As setas mudam 0,5; Home e End vão para 0,5 e 10.",
@@ -552,6 +555,8 @@
 	"item.status.book.completed": "Li",
 	"item.status.book.dropped": "Abandonei",
 	"item.status.notSaved": "Não foi possível salvar seu status. Tente novamente.",
+	"item.attribution": "Atribuição: dados do TMDB e do IGDB onde exibidos.",
+	"item.rateIt": "Avaliar",
 	"entity.alsoIn": "Também em",
 	"entity.kinds.person": "Pessoa",
 	"entity.kinds.organization": "Empresa",

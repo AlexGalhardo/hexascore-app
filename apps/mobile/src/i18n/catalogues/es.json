@@ -295,11 +295,6 @@
 	"catalog.year": "Año",
 	"catalog.minScore": "Nota mín.",
 	"catalog.minCategories": "Nota Mínima Por Categoría",
-	"catalog.resultCount": {
-		"zero": "Ningún elemento encontrado",
-		"one": "{count} elemento encontrado",
-		"other": "{count} elementos encontrados"
-	},
 	"catalog.sort": "Ordenar por",
 	"catalog.apply": "Aplicar",
 	"catalog.reset": "Limpiar",
@@ -335,6 +330,16 @@
 	"catalog.trending.allPrior": "{type} populares",
 	"catalog.trending.popular": "Popular",
 	"catalog.trending.empty": "Todavía no hay tendencias.",
+	"catalog.any": "Cualquiera",
+	"catalog.foundLabel.game": "Juegos encontrados",
+	"catalog.foundLabel.movie": "Películas encontradas",
+	"catalog.foundLabel.series": "Series encontradas",
+	"catalog.foundLabel.book": "Libros encontrados",
+	"catalog.resultCount": {
+		"zero": "Ningún elemento encontrado",
+		"one": "{count} elemento encontrado",
+		"other": "{count} elementos encontrados"
+	},
 	"catalog.itemsFoundLabel": {
 		"one": "elemento encontrado",
 		"other": "elementos encontrados"
@@ -481,7 +486,6 @@
 	"item.editionFields.publisher": "Editorial",
 	"item.editionFields.year": "Año",
 	"item.editionFields.format": "Formato",
-	"item.attribution": "Atribución: datos de TMDB e IGDB donde se muestran.",
 	"item.timeToBeat.title": "Tiempo para terminar",
 	"item.timeToBeat.styles.main": "Historia principal",
 	"item.timeToBeat.styles.extras": "Principal + extras",
@@ -492,8 +496,9 @@
 		"one": "{count} reporte",
 		"other": "{count} reportes"
 	},
-	"item.timeToBeat.notEnough": "Aún no hay suficientes reportes (mínimo {min})",
-	"item.timeToBeat.hint": "Mediana de las horas que informaron quienes completaron el juego.",
+	"item.timeToBeat.none": "Aún no hay reportes. Sé el primero en añadir tu tiempo.",
+	"item.timeToBeat.loginToReport": "Inicia sesión para añadir tu tiempo para terminarlo.",
+	"item.timeToBeat.hint": "Mediana de las horas que informaron los jugadores.",
 	"item.timeToBeat.yours": "Tu tiempo para terminar",
 	"item.timeToBeat.yoursHint": "Opcional. Horas, de 0,5 en 0,5; deja vacío el estilo que no jugaste.",
 	"item.timeToBeat.hoursPlaceholder": "Horas",
@@ -514,8 +519,6 @@
 		"other": "de {n} valoraciones · seis categorías, una fórmula"
 	},
 	"item.howScoreWorks": "Cómo funciona la puntuación",
-	"item.rateIt": "Valorar",
-	"item.goToRating": "Ir a tu valoración",
 	"item.breadcrumb": "Ruta de navegación",
 	"item.loadTrailerN": "Cargar tráiler {n}",
 	"item.panel.help": "Diez estrellas por categoría; cada media estrella vale 0,5. Las flechas mueven 0,5; Inicio y Fin saltan a 0,5 y 10.",
@@ -552,6 +555,8 @@
 	"item.status.book.completed": "Leído",
 	"item.status.book.dropped": "Abandonado",
 	"item.status.notSaved": "No se pudo guardar tu estado. Inténtalo de nuevo.",
+	"item.attribution": "Atribución: datos de TMDB e IGDB donde se muestran.",
+	"item.rateIt": "Valorar",
 	"entity.alsoIn": "También en",
 	"entity.kinds.person": "Persona",
 	"entity.kinds.organization": "Empresa",

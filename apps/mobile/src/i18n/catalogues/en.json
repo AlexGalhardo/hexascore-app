@@ -295,11 +295,6 @@
 	"catalog.year": "Year",
 	"catalog.minScore": "Min. score",
 	"catalog.minCategories": "Minimum Score Per Category",
-	"catalog.resultCount": {
-		"zero": "No items found",
-		"one": "{count} item found",
-		"other": "{count} items found"
-	},
 	"catalog.sort": "Sort by",
 	"catalog.apply": "Apply",
 	"catalog.reset": "Reset",
@@ -335,6 +330,16 @@
 	"catalog.trending.allPrior": "Popular {type}",
 	"catalog.trending.popular": "Popular",
 	"catalog.trending.empty": "Nothing is trending yet.",
+	"catalog.any": "Any",
+	"catalog.foundLabel.game": "Games found",
+	"catalog.foundLabel.movie": "Movies found",
+	"catalog.foundLabel.series": "TV series found",
+	"catalog.foundLabel.book": "Books found",
+	"catalog.resultCount": {
+		"zero": "No items found",
+		"one": "{count} item found",
+		"other": "{count} items found"
+	},
 	"catalog.itemsFoundLabel": {
 		"one": "item found",
 		"other": "items found"
@@ -481,7 +486,6 @@
 	"item.editionFields.publisher": "Publisher",
 	"item.editionFields.year": "Year",
 	"item.editionFields.format": "Format",
-	"item.attribution": "Attribution: data from TMDB and IGDB where shown.",
 	"item.timeToBeat.title": "Time to beat",
 	"item.timeToBeat.styles.main": "Main story",
 	"item.timeToBeat.styles.extras": "Main + extras",
@@ -492,8 +496,9 @@
 		"one": "{count} report",
 		"other": "{count} reports"
 	},
-	"item.timeToBeat.notEnough": "Not enough reports yet (needs {min})",
-	"item.timeToBeat.hint": "Median of the hours reported by players who completed the game.",
+	"item.timeToBeat.none": "No reports yet. Be the first to add your time.",
+	"item.timeToBeat.loginToReport": "Log in to add your time to beat.",
+	"item.timeToBeat.hint": "Median of the hours reported by players.",
 	"item.timeToBeat.yours": "Your time to beat",
 	"item.timeToBeat.yoursHint": "Optional. Hours, in steps of 0.5; leave a style empty if you did not play it that way.",
 	"item.timeToBeat.hoursPlaceholder": "Hours",
@@ -514,8 +519,6 @@
 		"other": "from {n} ratings · six categories, one formula"
 	},
 	"item.howScoreWorks": "How the score works",
-	"item.rateIt": "Rate it",
-	"item.goToRating": "Go to your rating",
 	"item.breadcrumb": "Breadcrumb",
 	"item.loadTrailerN": "Load trailer {n}",
 	"item.panel.help": "Ten stars per category; each half star is 0.5. Arrow keys move by 0.5, Home and End jump to 0.5 and 10.",
@@ -552,6 +555,8 @@
 	"item.status.book.completed": "Read",
 	"item.status.book.dropped": "Dropped",
 	"item.status.notSaved": "Your status could not be saved. Try again.",
+	"item.attribution": "Attribution: data from TMDB and IGDB where shown.",
+	"item.rateIt": "Rate it",
 	"entity.alsoIn": "Also in",
 	"entity.kinds.person": "Person",
 	"entity.kinds.organization": "Company",
