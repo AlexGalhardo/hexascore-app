@@ -10,10 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **release:** `changelog-sync.yml` checks that CHANGELOG.md and the GitHub releases match and that every released section is the one-commit-per-line git-cliff list (`scripts/release/check-sync.ts`)
+- **docs:** Architect audit 2026-11-02: project map, web test report, technical review and cleanup ledger in `docs/audit/`; RFC-001 catalogue worker, RFC-002 trending, RFC-003 offers; ADR 0024 (Redis deferred) and ADR 0025 (MongoDB rejected); `docs/data/SOURCES.md`, `docs/ROADMAP-V1.md`, `docs/BACKLOG.md`, `docs/OPEN-QUESTIONS.md`; ROADMAP phase P8
 
 ### Fixed
 
 - **a11y:** The Details links on the item page are 24 px touch targets again (Lighthouse target-size)
+- **web:** The render cache keys pages by their locale prefix again: `/pt-br/...` and `/es/...` no longer serve the English (or Spanish) copy rendered first
 
 ### Changed
 
@@ -22,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **ui:** Category listings page 40, 80 or 120 items (default 40); the landing's "More" grid shows two cards per row at phone width
 - **i18n:** Shorter /about intro in en, pt-BR and es
 - **ui:** The item page drops the genre and platform buttons under the title (Details still links them); at phone width the cover fills the width and the rating column follows Details, before the title and synopsis
+- **build:** `.dockerignore` keeps worktrees, tool state, venvs, nested env files and `node_modules` out of the Docker build context; `local.properties` is gitignored
+- **agents:** `PROMPT-WORKERS.md` rewritten: orchestrator reviews and merges, senior and intern in standby, ticket and report formats, autonomy limits
 
 ## [0.38.0] - 2026-11-02
 

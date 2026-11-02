@@ -27,3 +27,5 @@ Format: [MADR](https://adr.github.io/madr/) (title, status, context, decision, a
 | [0021](0021-social-feed.md) | Activity feed built from the write path, no fan-out until 10k followers | accepted |
 | [0022](0022-anti-scraping.md) | Server-side anti-scraping: verified crawlers, tool UA deny, per-IP page limits, honeypot | accepted |
 | [0023](0023-analytics-consent.md) | Analytics with one cookie banner: GA4 only after consent, cookieless Umami for everyone | accepted |
+| [0024](0024-redis-deferred.md) | Redis deferred: Postgres and process memory stay the only stores until a named trigger fires | accepted |
+| [0025](0025-mongodb-rejected.md) | MongoDB rejected: raw source payloads stay in Postgres `jsonb` | accepted |
