@@ -152,6 +152,8 @@ func (h *Catalog) Index(typ string) web.HandlerFunc {
 		}
 		if page.Total != nil {
 			props["total"] = *page.Total
+			// A page past the end (an old link, a filter that shrank) shows a link back instead of an empty grid.
+			props["lastPage"] = max(1, (*page.Total+params.Limit-1)/params.Limit)
 		}
 
 		return inertia.Render(c, "Catalog/Index", props)

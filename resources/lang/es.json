@@ -583,6 +583,8 @@
       "other": "{count} valoraciones"
     },
     "empty": "Ningún elemento coincide con estos filtros.",
+    "pastLastPage": "No hay elementos en esta página.",
+    "lastPageLink": "Ir a la última página",
     "next": "Siguiente",
     "previous": "Anterior",
     "pagination": "Páginas",

@@ -40,13 +40,21 @@ test("one page renders no pager", () => {
 
 test("the canonical keeps the page number and a non-default page size, never the filters", () => {
 	expect(pageCanonical("https://hexascore.app/games", "/games?genre=rpg&page=3", 40)).toBe(
-		"https://hexascore.app/games?page=3",
+		"https://hexascore.app/games?genre=rpg&page=3",
 	);
+	// Filters in a fixed order, unknown keys dropped (W-07).
+	expect(
+		pageCanonical(
+			"https://hexascore.app/games",
+			"/games?sort=-score&utm_source=x&platform=xbox&genre=horror&page=2&per=80",
+			80,
+		),
+	).toBe("https://hexascore.app/games?genre=horror&platform=xbox&sort=-score&page=2&per=80");
 	expect(pageCanonical("https://hexascore.app/games", "/games?page=1&cursor=x", 40)).toBe(
 		"https://hexascore.app/games",
 	);
 	expect(pageCanonical("https://hexascore.app/games", "/games?genre=rpg&per=80", 80)).toBe(
-		"https://hexascore.app/games?per=80",
+		"https://hexascore.app/games?genre=rpg&per=80",
 	);
 	expect(pageCanonical("https://hexascore.app/games", "/games?per=7", 40)).toBe(
 		"https://hexascore.app/games",

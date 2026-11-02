@@ -1,4 +1,4 @@
-import { usePage } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import Filters, {
 	type ActiveEntity,
 	type ActiveFilters,
@@ -6,7 +6,7 @@ import Filters, {
 	PAGE_SIZES,
 } from "../../components/catalog/Filters";
 import ItemTile from "../../components/catalog/ItemTile";
-import Pager, { PagerHead, type Pagination } from "../../components/catalog/Pager";
+import Pager, { PagerHead, type Pagination, pageHref } from "../../components/catalog/Pager";
 import {
 	type Highlight,
 	SECTION_PATHS,
@@ -26,6 +26,8 @@ interface Props {
 	active?: ActiveEntity[];
 	pagination: Pagination;
 	total?: number;
+	/** The last page holding items (with total); a page past it shows a link back. */
+	lastPage?: number;
 }
 
 export default function Index({
@@ -35,6 +37,7 @@ export default function Index({
 	facets,
 	pagination,
 	total,
+	lastPage,
 	active = [],
 }: Props) {
 	const t = useT();
@@ -102,7 +105,17 @@ export default function Index({
 							{t(`catalog.foundLabel.${type}`)}
 						</p>
 					)}
-					{items.data.length === 0 ? (
+					{items.data.length === 0 &&
+					total !== undefined &&
+					total > 0 &&
+					lastPage !== undefined ? (
+						<p className="mt-8 text-[15px]">
+							{t("catalog.pastLastPage")}{" "}
+							<Link href={pageHref(url, String(lastPage))} className="underline">
+								{t("catalog.lastPageLink")}
+							</Link>
+						</p>
+					) : items.data.length === 0 ? (
 						<p className="mt-8 text-[15px]">{t("catalog.empty")}</p>
 					) : (
 						<>
@@ -134,13 +147,34 @@ export default function Index({
 	);
 }
 
+/** Query keys that change a listing's result set (catalog.ParseListQuery and catalog.ListingFilters), in canonical order. */
+const FILTER_PARAMS = [
+	"genre",
+	"platform",
+	"mode",
+	"franchise",
+	"company",
+	"person",
+	"country",
+	"language",
+	"year",
+	"min_score",
+	"sort",
+] as const;
+
 /**
- * The canonical of a listing page: the shared canonical plus the page's own `page` (from 2) and a non-default
- * `per` (the size the server applied, so an invalid ?per= never leaks in); filters stay out.
+ * The canonical of a listing page: the shared canonical plus the filters that change the result set (in a fixed
+ * order, other keys dropped), the page's own `page` (from 2) and a non-default `per` (the size the server applied,
+ * so an invalid ?per= never leaks in). Page 2 of a filtered list is not page 2 of the unfiltered one (audit W-07).
  */
 export function pageCanonical(canonical: string, url: string, per: number): string {
 	const u = new URL(canonical);
-	const page = new URL(url, "http://x").searchParams.get("page");
+	const query = new URL(url, "http://x").searchParams;
+	for (const key of FILTER_PARAMS) {
+		const value = query.get(key);
+		if (value) u.searchParams.set(key, value);
+	}
+	const page = query.get("page");
 	if (page && /^[1-9]\d*$/.test(page) && page !== "1") u.searchParams.set("page", page);
 	if (per !== PAGE_SIZES[0]) u.searchParams.set("per", String(per));
 	return u.href;

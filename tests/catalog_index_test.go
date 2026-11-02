@@ -72,10 +72,12 @@ VALUES ($1, 'movie', $2, $3, 6, 80)`, id, fmt.Sprintf("movie-%02d", i), fmt.Spri
 
 	c.Get("/movies?per=80&page=2").AssertOK().AssertInertia("Catalog/Index").
 		HasProp("items.data", 0).PropEquals("pagination.prev", "1").PropEquals("pagination.next", "").
-		PropEquals("total", 60).PropEquals("filters.per", 80)
+		PropEquals("total", 60).PropEquals("filters.per", 80).PropEquals("lastPage", 1)
 	c.Get("/movies?page=2").AssertOK().AssertInertia("Catalog/Index").
 		HasProp("items.data", 20).PropEquals("pagination.next", "").PropEquals("total", 60)
-	c.Get("/movies?page=9").AssertOK().AssertInertia("Catalog/Index").HasProp("items.data", 0).PropEquals("total", 60)
+	// Past the end: no items, and lastPage lets the page link back (W-06).
+	c.Get("/movies?page=9").AssertOK().AssertInertia("Catalog/Index").HasProp("items.data", 0).
+		PropEquals("total", 60).PropEquals("lastPage", 2)
 
 	for _, bad := range []string{"0", "-3", "abc"} {
 		c.Get("/movies?page="+bad).AssertOK().AssertInertia("Catalog/Index").PropEquals("pagination.prev", "")
