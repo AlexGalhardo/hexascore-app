@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **auth:** /login and /signup show only the form card, centred, without the intro column
 - **search:** The Ctrl+K palette suggests up to 8 items (was 6) plus up to 2 people or companies
 - **auth:** The two-factor step is a dialog on the login page with six one-digit boxes that accept a pasted code and submit on their own; logins with JavaScript off still use /two-factor-challenge, and a Google sign-in with two-factor lands on the dialog too
 - **auth:** The sign-up form asks only for the nickname (no name field); the display name starts as the nickname, and the server still accepts an optional name

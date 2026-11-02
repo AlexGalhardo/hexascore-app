@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 import { useT } from "../../lib/useT";
 
 interface Props {
-	/** Large serif line on the left column. */
-	heading: string;
+	/** Large line on the left column; without it the form card stands alone, centred (login and sign-up, owner 2026-11-02). */
+	heading?: string;
 	lede?: string;
 	/** Form card title; it is the page h1 so focus lands on it after a visit. */
 	title: string;
@@ -13,6 +13,15 @@ interface Props {
 
 // The v1 members layout: intro column on the left, the form in a bordered card on the right; stacked on mobile.
 export default function AuthFrame({ heading, lede, title, children }: Props): React.ReactElement {
+	if (!heading) {
+		return (
+			<section className="mx-auto my-4 w-full max-w-md border-t border-fg pt-4 md:my-12 md:border md:px-8 md:py-9">
+				<h1 className="mb-5 font-display text-[28px] leading-tight font-bold">{title}</h1>
+				{children}
+			</section>
+		);
+	}
+
 	return (
 		<div className="grid gap-6 py-4 md:grid-cols-[1fr_minmax(0,448px)] md:gap-16 md:py-12">
 			<div>

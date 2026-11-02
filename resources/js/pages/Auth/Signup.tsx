@@ -80,11 +80,7 @@ export default function Signup({ formToken }: { formToken: string }) {
 	};
 
 	return (
-		<AuthFrame
-			heading={t("auth.signup.heading")}
-			lede={t("auth.signup.lede")}
-			title={t("auth.signup.cardTitle")}
-		>
+		<AuthFrame title={t("auth.signup.cardTitle")}>
 			<Head title={t("auth.signup.metaTitle")} />
 			<GoogleButton mode="signUp" />
 			<OrRule />

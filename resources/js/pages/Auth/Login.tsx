@@ -95,11 +95,7 @@ export default function Login({ twoFactor = false }: { twoFactor?: boolean }) {
 	};
 
 	return (
-		<AuthFrame
-			heading={t("auth.login.heading")}
-			lede={t("auth.login.lede")}
-			title={t("auth.login.title")}
-		>
+		<AuthFrame title={t("auth.login.title")}>
 			<Head title={t("auth.login.metaTitle")} />
 			<GoogleButton mode="signIn" />
 			<OrRule />
