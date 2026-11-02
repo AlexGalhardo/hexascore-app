@@ -100,7 +100,7 @@ func TestIngestPressure_PausesAboveThresholds(t *testing.T) {
 	if err := ingest.WriteSignal(
 		t.Context(),
 		db,
-		ingest.Signal{InFlight: 99, P95MS: 900, At: clk.now.Add(-2 * time.Minute)},
+		ingest.Signal{InFlight: 99, P95MS: 900, At: clk.now.Add(-ingest.StaleAfter - time.Minute)},
 	); err != nil {
 		t.Fatal(err)
 	}
