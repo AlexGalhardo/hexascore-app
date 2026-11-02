@@ -9,6 +9,8 @@ import (
 	"sync/atomic"
 	"testing"
 	"time"
+
+	"github.com/AlexGalhardo/vukem/i18n"
 )
 
 func TestRenderCache(t *testing.T) {
@@ -245,5 +247,49 @@ func TestRenderCacheKeysUnprefixedByAcceptLanguage(t *testing.T) {
 		Get("X-Render-Cache") ==
 		"HIT" {
 		t.Fatal("oversized Accept-Language served from the cache")
+	}
+}
+
+// In the real server stack vukem's i18n.StripPathPrefix rewrites "/pt-br/games" to "/games" before the
+// cache keys the request, so without the context prefix every locale of a path shared one entry and
+// production served English on /pt-br/... (audit 2026-11-02, W-01).
+func TestRenderCacheKeysStrippedLocalePrefix(t *testing.T) {
+	prefixes := map[string]string{"pt-br": "pt-BR", "es": "es"}
+
+	var renders atomic.Int32
+
+	h := i18n.StripPathPrefix(prefixes)(RenderCache("vukem_session", prefixes)(
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			renders.Add(1)
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			_, _ = w.Write([]byte("page " + i18n.PathPrefix(r.Context()) + r.URL.Path))
+		}),
+	))
+	get := func(path string) *httptest.ResponseRecorder {
+		req := httptest.NewRequest(http.MethodGet, path, nil)
+		req.Header.Set("Accept-Language", "en-US")
+		rec := httptest.NewRecorder()
+		h.ServeHTTP(rec, req)
+
+		return rec
+	}
+
+	for _, path := range []string{"/games", "/pt-br/games", "/es/games"} {
+		if rec := get(path); rec.Header().Get("X-Render-Cache") == "HIT" {
+			t.Fatalf("%s must render its own entry, got a HIT: %q", path, rec.Body.String())
+		}
+	}
+
+	if got := renders.Load(); got != 3 {
+		t.Fatalf("renders = %d, want one per locale", got)
+	}
+
+	rec := get("/pt-br/games")
+	if rec.Header().Get("X-Render-Cache") != "HIT" || rec.Body.String() != "page /pt-br/games" {
+		t.Fatalf(
+			"second pt-BR request = %q (%s), want the pt-BR entry",
+			rec.Body.String(),
+			rec.Header().Get("X-Render-Cache"),
+		)
 	}
 }
