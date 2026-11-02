@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/queue"
@@ -49,5 +50,5 @@ func handleRecoEvalMonthly(app *vukem.App) queue.Registration {
 		defer func() { _ = root.Close() }()
 
 		return root.WriteFile("reco-eval-"+now.Format("2006-01")+".csv", []byte(w.String()), 0o600)
-	})
+	}, queue.Timeout(time.Hour), queue.Retries(1))
 }

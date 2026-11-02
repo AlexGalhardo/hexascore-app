@@ -3,8 +3,10 @@ package scoring
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 	"time"
@@ -42,25 +44,93 @@ func RecomputeItem(ctx context.Context, db *database.DB, itemID string, now time
 	})
 }
 
-// RecomputeAll recomputes every item that has ratings or a stale counter, one transaction per item,
-// ascending by id (SDD 02 §7.2), and returns how many it touched.
-func RecomputeAll(ctx context.Context, db *database.DB, now time.Time) (int, error) {
-	total, last := 0, nilUUID
+// ChunkBudget is how long one queued recompute execution runs before it saves its cursor and re-dispatches itself.
+const ChunkBudget = 15 * time.Minute
+
+const recomputeCursorJob = "scoring.recompute_all"
+
+// RecomputeProgress reports a pass across chunks: Items and Chunks accumulate in the cursor until Done.
+type RecomputeProgress struct {
+	Items     int
+	Chunks    int
+	Done      bool
+	StartedAt time.Time
+}
+
+type recomputeCursor struct {
+	Last      string    `json:"last"`
+	Items     int       `json:"items"`
+	Chunks    int       `json:"chunks"`
+	StartedAt time.Time `json:"started_at"`
+}
+
+// RecomputeChunk continues the nightly pass from the cursor in job_cursors (a fresh pass rebuilds the priors first)
+// and stops after the page that crosses budget, saving the cursor so a timeout, redeploy or retry loses at most one
+// page. The cursor row is deleted when the pass completes.
+func RecomputeChunk(ctx context.Context, db *database.DB, now time.Time, budget time.Duration) (RecomputeProgress, error) {
+	cur := recomputeCursor{Last: nilUUID, StartedAt: now}
+	var raw []byte
+	err := db.QueryRowContext(ctx, `SELECT cursor FROM job_cursors WHERE job = $1`, recomputeCursorJob).Scan(&raw)
+	switch {
+	case errors.Is(err, sql.ErrNoRows):
+		if err := RebuildPriors(ctx, db, now); err != nil {
+			return RecomputeProgress{}, err
+		}
+	case err != nil:
+		return RecomputeProgress{}, err
+	default:
+		if err := json.Unmarshal(raw, &cur); err != nil {
+			return RecomputeProgress{}, fmt.Errorf("decode recompute cursor: %w", err)
+		}
+	}
+	cur.Chunks++
+	progress := func(done bool) RecomputeProgress {
+		return RecomputeProgress{Items: cur.Items, Chunks: cur.Chunks, Done: done, StartedAt: cur.StartedAt}
+	}
+
+	deadline := time.Now().Add(budget)
 	for {
-		ids, err := itemPage(ctx, db, last)
+		ids, err := itemPage(ctx, db, cur.Last)
 		if err != nil {
-			return total, err
+			return progress(false), err
 		}
 		for _, id := range ids {
 			if err := RecomputeItem(ctx, db, id, now); err != nil {
-				return total, fmt.Errorf("recompute item %s: %w", id, err)
+				return progress(false), fmt.Errorf("recompute item %s: %w", id, err)
 			}
 		}
-		total += len(ids)
+		cur.Items += len(ids)
 		if len(ids) < BatchSize {
-			return total, nil
+			_, err := db.ExecContext(context.WithoutCancel(ctx), `DELETE FROM job_cursors WHERE job = $1`, recomputeCursorJob)
+
+			return progress(true), err
 		}
-		last = ids[len(ids)-1]
+		cur.Last = ids[len(ids)-1]
+		b, err := json.Marshal(cur)
+		if err != nil {
+			return progress(false), err
+		}
+		if _, err := db.ExecContext(context.WithoutCancel(ctx), `INSERT INTO job_cursors (job, cursor, updated_at)
+VALUES ($1, $2::jsonb, now()) ON CONFLICT (job) DO UPDATE SET cursor = EXCLUDED.cursor, updated_at = EXCLUDED.updated_at`,
+			recomputeCursorJob, string(b)); err != nil {
+			return progress(false), err
+		}
+		if err := ctx.Err(); err != nil {
+			return progress(false), err
+		}
+		if !time.Now().Before(deadline) {
+			return progress(false), nil
+		}
+	}
+}
+
+// RecomputeAll runs the whole pass in this call (resuming a saved cursor) and returns how many items it touched.
+func RecomputeAll(ctx context.Context, db *database.DB, now time.Time) (int, error) {
+	for {
+		p, err := RecomputeChunk(ctx, db, now, time.Duration(math.MaxInt64))
+		if err != nil || p.Done {
+			return p.Items, err
+		}
 	}
 }
 

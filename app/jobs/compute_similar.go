@@ -2,6 +2,7 @@ package jobs
 
 import (
 	"context"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/queue"
@@ -26,5 +27,5 @@ func handleComputeSimilar(app *vukem.App) queue.Registration {
 		app.Log.InfoContext(ctx, "compute similar", "written", n)
 
 		return err
-	})
+	}, queue.Timeout(2*time.Hour), queue.Retries(1))
 }

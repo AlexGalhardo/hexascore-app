@@ -2,6 +2,7 @@ package jobs
 
 import (
 	"context"
+	"time"
 
 	vukem "github.com/AlexGalhardo/vukem"
 	"github.com/AlexGalhardo/vukem/queue"
@@ -21,13 +22,21 @@ func handleRecomputeScores(app *vukem.App) queue.Registration {
 		if err != nil {
 			return err
 		}
-		now := app.Now().UTC()
-		if err := scoring.RebuildPriors(ctx, db, now); err != nil {
+		p, err := scoring.RecomputeChunk(ctx, db, app.Now().UTC(), scoring.ChunkBudget)
+		if err != nil {
 			return err
 		}
-		n, err := scoring.RecomputeAll(ctx, db, now)
-		app.Log.InfoContext(ctx, "recompute scores", "items", n)
+		if !p.Done {
+			q, err := app.Queue()
+			if err != nil {
+				return err
+			}
 
-		return err
-	})
+			return q.Dispatch(ctx, RecomputeScores{}, queue.Delay(time.Second))
+		}
+		app.Log.InfoContext(ctx, "recompute scores",
+			"items", p.Items, "chunks", p.Chunks, "duration_ms", app.Now().Sub(p.StartedAt).Milliseconds())
+
+		return nil
+	}, queue.Timeout(3*time.Hour), queue.Retries(1))
 }
