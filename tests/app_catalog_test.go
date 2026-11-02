@@ -53,7 +53,7 @@ func TestAppCatalog(t *testing.T) {
 
 	client.GetJSON("/app/v1/games").AssertOK().AssertJSONPath("data.0.id", r.game)
 	client.GetJSON("/app/v1/games?limit=11").AssertOK()
-	client.GetJSON("/app/v1/games?limit=101").AssertStatus(http.StatusBadRequest)
+	client.GetJSON("/app/v1/games?limit=121").AssertStatus(http.StatusBadRequest)
 	client.GetJSON("/app/v1/games/genres").AssertOK().AssertJSONPath("data.0.slug", "metroidvania")
 	client.GetJSON("/app/v1/books/"+r.book+"/editions").AssertOK().
 		AssertJSONPath("data.0.title", "Dune").
