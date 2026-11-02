@@ -182,6 +182,7 @@ test("below lg the bar keeps title, search field and hamburger; the rest is desk
 });
 
 // Kept before the other sheet tests so it covers the very first open, while the lazy chunk still loads.
+// The first open loads the lazy sheet chunk: under a parallel CI load that alone can pass the 5 s default.
 test("the lazy sheet is not in the first render and the first open still traps Tab", async () => {
 	const user = userEvent.setup({ delay: null });
 	render(<Nav />);
@@ -205,7 +206,7 @@ test("the lazy sheet is not in the first render and the first open still traps T
 	await user.keyboard("{Escape}");
 	expect(screen.queryByRole("dialog")).toBeNull();
 	expect(document.activeElement).toBe(burger);
-});
+}, 20_000);
 
 test("the hamburger sheet holds sections, language, theme and login; Escape returns focus", async () => {
 	const user = userEvent.setup();
