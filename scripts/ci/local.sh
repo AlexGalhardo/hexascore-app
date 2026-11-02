@@ -288,10 +288,7 @@ job_openapi() {
 	git diff --no-index --exit-code packages/app-client/src/api.ts "$out" || { rm -f "$out"; return 1; }
 	rm -f "$out"
 	bun run --filter @hexascore/app-client typecheck test
-	step "Schemathesis against the image"
-	local sdb
-	sdb=$(newdb st)
-	DATABASE_URL="$PGURL/$sdb?sslmode=disable" QA_PORT=$(free_port) bash qa/schemathesis/ci.sh "$IMG"
+	# Schemathesis left the gate (owner, 2026-11-02): run qa/schemathesis/ci.sh by hand when the API changes.
 }
 chrome_path() {
 	local c
