@@ -1,4 +1,4 @@
-// CHANGELOG.md and the GitHub releases must say the same thing (owner, 2026-11-02): every vX.Y.Z
+// CHANGELOG.md and the GitHub releases must say the same thing in the git-cliff format (owner, 2026-11-02): every vX.Y.Z
 // release has a `## [X.Y.Z]` section with the same body, and every section has a release.
 //   bun scripts/release/check-sync.ts            (needs gh, authenticated or GH_TOKEN)
 // Exit 1 lists each mismatch. Fix it by editing CHANGELOG.md and running
@@ -30,9 +30,21 @@ export function normalize(body: string): string {
 		.trim();
 }
 
+// A released section is the minimal git-cliff list (owner, 2026-11-02): group headings and one line per
+// commit ending in its linked short hash, nothing hand-written.
+const ENTRY = /^- .+ \(\[[0-9a-f]{7}\]\(https:\/\/github\.com\/AlexGalhardo\/hexascore-app\/commit\/[0-9a-f]{40}\)\)$/;
+
+export function formatProblems(version: string, body: string): string[] {
+	const lines = body.split("\n").filter((l) => l !== "" && !/^### \S/.test(l) && !ENTRY.test(l));
+	return lines.length === 0
+		? []
+		: [`v${version}: CHANGELOG.md section is not one commit per line: ${JSON.stringify(lines[0].slice(0, 80))}`];
+}
+
 export function mismatches(changelog: string, releases: Release[]): string[] {
 	const secs = sections(changelog);
 	const problems: string[] = [];
+	for (const [v, body] of secs) problems.push(...formatProblems(v, body));
 	const seen = new Set<string>();
 	for (const r of releases) {
 		const v = r.tag.replace(/^v/, "");

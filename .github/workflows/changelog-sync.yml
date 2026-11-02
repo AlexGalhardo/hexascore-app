@@ -2,7 +2,7 @@ name: Changelog sync
 
 # CHANGELOG.md and the GitHub releases stay identical (owner, 2026-11-02): every vX.Y.Z release
 # has a CHANGELOG section with the same body and every section has a release
-# (scripts/release/check-sync.ts, docs/runbooks/release-range.md "Keeping releases in sync"). It runs
+# and is the one-commit-per-line git-cliff list (scripts/release/check-sync.ts, docs/runbooks/release-range.md). It runs
 # on release events, not on CHANGELOG pushes: the release commit lands before its tag and release.
 on:
   release:
