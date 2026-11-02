@@ -130,7 +130,8 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 		vukem.WithTranslations(resources.Lang()),
 		vukem.WithOpenAPI(apiInfo(config.APIHost(os.Getenv))),
 		vukem.WithInertia(inertia.Config{
-			Version: version,
+			Version:     version,
+			ClientShell: controllers.SearchShell,
 			SSR: &inertia.SSRConfig{
 				Bundle: "bootstrap/ssr/ssr.js",
 				OnFailure: func(ctx context.Context, err inertia.SSRError) {
