@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **ui:** Carousels keep room for the cards' shadows and raise their pause, previous and next buttons; the ratings dialog's Close button uses the site button style
 - **ui:** Landing and listing item cards, trending cards and the item page score and rating cards get the ledge shadow; the books category border is purple instead of red
 - **ui:** API docs code blocks get a copy button (Clipboard API); /profile lays its sections out in three equal columns from lg up; section listings start closer to the navbar; landing section names are bold
 - **billing:** Paid API plans are now `hobby` (10,000 requests per month, 20 items per request, 1 request per second with a burst of 5, US$5 / R$20 / €5) and `pro` (50,000 per month, 50 items, 3 per second with a burst of 15, US$10 / R$50 / €10), recorded in D-33, ADR 0015 and SDD 05; env `STRIPE_PRICE_HOBBY` replaces `STRIPE_PRICE_BUSINESS`; webhooks and exports open to both plans (2 and 10 endpoints), item activity is pro only

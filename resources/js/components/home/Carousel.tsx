@@ -3,6 +3,8 @@ import { type ReactElement, type ReactNode, useEffect, useRef, useState } from "
 import { useT } from "../../lib/useT";
 import { iconButton } from "../Nav";
 
+// Pause, previous and next are raised like the site buttons; the dots stay flat.
+const raised = `${iconButton} border border-border bg-surface shadow-ledge-secondary active:shadow-ledge-secondary-pressed`;
 /** Time each slide stays before the next one while auto-advancing. */
 export const SLIDE_MS = 4000;
 
@@ -98,7 +100,8 @@ export default function Carousel({
 				go(end < start ? index + 1 : index - 1);
 			}}
 		>
-			<div className="overflow-hidden">
+			{/* Inner room so the cards' ledge shadows are not clipped by overflow-hidden (owner 2026-11-02). */}
+			<div className="overflow-hidden px-1 pt-1 pb-3">
 				<div
 					aria-live={auto ? "off" : "polite"}
 					className={`flex transition-transform duration-500 motion-reduce:transition-none ${OFFSET[index]}`}
@@ -123,7 +126,7 @@ export default function Carousel({
 				<div className="flex items-center justify-center gap-1">
 					<button
 						type="button"
-						className={iconButton}
+						className={raised}
 						aria-label={playing ? t("home.carousel.pause") : t("home.carousel.play")}
 						onClick={() => setChoice(!playing)}
 					>
@@ -131,7 +134,7 @@ export default function Carousel({
 					</button>
 					<button
 						type="button"
-						className={iconButton}
+						className={raised}
 						aria-label={t("home.carousel.previous")}
 						onClick={() => go(index - 1)}
 					>
@@ -151,7 +154,7 @@ export default function Carousel({
 					))}
 					<button
 						type="button"
-						className={iconButton}
+						className={raised}
 						aria-label={t("home.carousel.next")}
 						onClick={() => go(index + 1)}
 					>

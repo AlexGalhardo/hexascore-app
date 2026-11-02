@@ -6,6 +6,7 @@ import { withQueryClient } from "../../lib/queryClient";
 import { useLocalized } from "../../lib/useLocalized";
 import { useT } from "../../lib/useT";
 import { dialogBackdrop, dialogPopup } from "../Dialog";
+import { btnClass } from "../ui/Btn";
 
 type Row = {
 	nickname: string;
@@ -105,7 +106,7 @@ function RatingsDialog({
 								{t("item.userScoresHint")}
 							</BaseDialog.Description>
 						</div>
-						<BaseDialog.Close className="min-h-11 shrink-0 rounded-md border border-border px-3 text-xl">
+						<BaseDialog.Close className={`${btnClass("secondary")} shrink-0`}>
 							{t("item.close")}
 						</BaseDialog.Close>
 					</div>
