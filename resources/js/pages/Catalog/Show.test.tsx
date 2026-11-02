@@ -12,7 +12,14 @@ vi.mock("../../lib/useT", () => ({
 	useT: () => (key: string, p?: Record<string, string | number>) =>
 		p ? `${key} ${JSON.stringify(p)}` : key,
 }));
-vi.mock("../../components/Seo", () => ({ default: () => null, truncate: (s: string) => s }));
+const seoImages = vi.hoisted((): (string | undefined)[] => []);
+vi.mock("../../components/Seo", () => ({
+	default: ({ image }: { image?: string }) => {
+		seoImages.push(image);
+		return null;
+	},
+	truncate: (s: string) => s,
+}));
 vi.mock("@inertiajs/react", () => ({
 	Link: ({
 		href,
@@ -217,4 +224,16 @@ test("headings of the key sections are bold", () => {
 		expect(document.getElementById(id)?.className).toContain("font-bold");
 	}
 	expect(screen.getByRole("heading", { level: 1 }).className).toContain("font-bold");
+});
+
+test("share image: the cover when no share card is set, the share card when it is", () => {
+	const cover = { thumb: "/covers/games/wow-t.webp", full: "/covers/games/wow.webp" };
+	seoImages.length = 0;
+	render(<Show {...props} cover={cover} />);
+	expect(seoImages.at(-1)).toBe(cover.full);
+	cleanup();
+
+	seoImages.length = 0;
+	render(<Show {...props} cover={cover} ogImage="/og/items/i1.png" />);
+	expect(seoImages.at(-1)).toBe("/og/items/i1.png");
 });

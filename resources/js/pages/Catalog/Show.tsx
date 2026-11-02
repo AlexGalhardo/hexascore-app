@@ -186,7 +186,7 @@ export default function Show({
 					160,
 				)}
 				jsonLd={[jsonLd]}
-				image={ogImage}
+				image={ogImage ?? cover?.full}
 			/>
 			<nav aria-label={t("item.breadcrumb")} className="mb-6 text-sm text-muted">
 				<ol className="flex flex-wrap gap-2">
