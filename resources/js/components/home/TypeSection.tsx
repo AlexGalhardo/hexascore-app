@@ -156,10 +156,14 @@ function TrendCard({
 	return (
 		<li key={item.id} className={`flex gap-4 border-2 bg-surface p-3 ${CATEGORY_BORDER[type]}`}>
 			<CoverThumb cover={item.cover} alt="" size="trend" priority={eager} />
-			<div className="grid min-w-0 content-start gap-1">
-				<p className={`text-2xl font-semibold ${ACCENT_TEXT[type]}`}>
-					{t("home.trendingRank", { rank: item.rank })}
-				</p>
+			<div className="grid min-w-0 flex-1 content-start gap-1">
+				{/* Rank left, score right on one row, so the three cards line their scores up (owner 2026-11-02). */}
+				<div className="flex items-center justify-between gap-3">
+					<p className={`text-2xl font-semibold ${ACCENT_TEXT[type]}`}>
+						{t("home.trendingRank", { rank: item.rank })}
+					</p>
+					<ScoreBadge score={item.score} size="md" />
+				</div>
 				<Link
 					href={`${base}/${item.slug}?from=trending`}
 					className="font-display text-2xl leading-tight font-bold hover:text-primary md:text-[28px]"
@@ -169,27 +173,24 @@ function TrendCard({
 				<p className="text-xs text-muted">
 					{[item.year, item.genre].filter(Boolean).join(" · ")}
 				</p>
-				<div className="mt-2 flex items-center gap-3">
-					<ScoreBadge score={item.score} size="md" />
-					<p className="text-sm">
-						<span className="block font-semibold">
-							{item.score === null
-								? t("item.notEnough")
-								: t(`item.band.${scoreBand(item.score)}`)}
-						</span>
-						<span className="text-muted">
-							{item.score === null
-								? t("home.ratingsOfMin", {
-										count: item.ratingCount,
-										min: MIN_RATINGS,
-									})
-								: t("home.fromRatings", {
-										count: item.ratingCount,
-										n: num.format(item.ratingCount),
-									})}
-						</span>
-					</p>
-				</div>
+				<p className="mt-2 text-sm">
+					<span className="block font-semibold">
+						{item.score === null
+							? t("item.notEnough")
+							: t(`item.band.${scoreBand(item.score)}`)}
+					</span>
+					<span className="text-muted">
+						{item.score === null
+							? t("home.ratingsOfMin", {
+									count: item.ratingCount,
+									min: MIN_RATINGS,
+								})
+							: t("home.fromRatings", {
+									count: item.ratingCount,
+									n: num.format(item.ratingCount),
+								})}
+					</span>
+				</p>
 			</div>
 		</li>
 	);
