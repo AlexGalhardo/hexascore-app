@@ -20,7 +20,7 @@ Counted from the day the advisory is first reported by Dependabot, `osv-scanner`
 | High | 7 days |
 | Medium | 30 days |
 
-Low severity is fixed with the regular weekly Dependabot PRs. If no fixed version exists, record a dated exception in `questions-to-dev.md` with the mitigation and review it weekly. Pin versions exactly; never use `latest` or pre-releases.
+Low severity is fixed with the regular weekly Dependabot PRs. If no fixed version exists, add a dated exception to `osv-scanner.toml` (see "Adding an ignore") and review it weekly. Pin versions exactly; never use `latest` or pre-releases.
 
 ## Checking alerts
 
@@ -31,3 +31,11 @@ gh api repos/AlexGalhardo/hexascore-app/dependabot/alerts --jq '.[] | [.security
 ## Overrides
 
 - `sdks/ts`: `js-yaml` forced to 4.3.2 (GHSA-52cp-r559-cp3m, GHSA-5p4m-2wfm-xmqj, GHSA-2883-xcg3-v3hh). `@hey-api/json-schema-ref-parser` 1.4.4 pins 4.2.0; remove the override once a release depends on a patched version.
+
+## Adding an ignore
+
+`osv-scanner.toml` is the only allowlist. Each `[[IgnoredVulns]]` entry needs `id`, `ignoreUntil` (a date at most three months out) and `reason` (why it is safe and what upstream change ends it).
+
+- `osv-scanner` stops ignoring an entry after its `ignoreUntil`, so the scan fails again.
+- `bun scripts/ci/deps-allowlist.ts` prints the `--ignore` flags for `bun audit` from the `GHSA-*` entries and exits 1 when any entry has passed its date or lacks a date or reason; the CI `deps` job and `scripts/ci/local.sh` run it, and `bun test scripts/ci/deps-allowlist.test.ts` covers it.
+- To renew, change the date and rewrite the reason with what was checked that day; never only move the date.

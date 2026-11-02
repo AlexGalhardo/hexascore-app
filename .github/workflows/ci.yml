@@ -218,8 +218,12 @@ jobs:
           chmod +x osv-scanner
       - run: ./osv-scanner scan source --config=osv-scanner.toml -L go.mod -L bun.lock -L sdks/ts/bun.lock
       - run: bun install --frozen-lockfile --ignore-scripts
-      # Same four advisories as osv-scanner.toml. No compatible patched release.
-      - run: bun audit --audit-level=high --ignore GHSA-mrhx-c7xc-m3w5 --ignore GHSA-gcqx-w48m-w2h4 --ignore GHSA-3g3m-2fjr-6pw4 --ignore GHSA-g3hv-75wg-m249
+      # The GHSA ignores come from osv-scanner.toml; an entry past its ignoreUntil fails here (B-026).
+      - run: bun test scripts/ci/deps-allowlist.test.ts
+      - run: |
+          flags=$(bun scripts/ci/deps-allowlist.ts)
+          # shellcheck disable=SC2086 # one word per flag
+          bun audit --audit-level=high $flags
 
   setup-windows:
     name: Windows setup script and unit tests

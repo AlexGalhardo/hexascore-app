@@ -237,7 +237,11 @@ job_deps() {
 	docker run --rm -v "$(W "$TREE"):/src:ro" -v "$(W "$bin"):/osv-scanner:ro" -w /src "$PG_IMAGE" \
 		/osv-scanner scan source --config=osv-scanner.toml -L go.mod -L bun.lock -L sdks/ts/bun.lock
 	step "bun audit"
-	bun audit --audit-level=high --ignore GHSA-mrhx-c7xc-m3w5 --ignore GHSA-gcqx-w48m-w2h4 --ignore GHSA-3g3m-2fjr-6pw4 --ignore GHSA-g3hv-75wg-m249
+	bun test scripts/ci/deps-allowlist.test.ts
+	local flags
+	flags=$(bun scripts/ci/deps-allowlist.ts)
+	# shellcheck disable=SC2086 # one word per flag
+	bun audit --audit-level=high $flags
 }
 job_setup_windows() {
 	is_windows || { echo "windows-only job (CI runs it on windows-2025); skipped on $(uname -s)"; return 77; }
