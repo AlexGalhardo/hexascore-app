@@ -250,6 +250,26 @@ On-call is the owner. Quiet hours run 23:00-08:00 America/Sao_Paulo: only `page`
 
 Usage source (2026-11-01): `workspace(workspaceId) { customer { currentUsage billingPeriod { start end } } }` on `https://backboard.railway.com/graphql/v2` ([Public API](https://docs.railway.com/integrations/api)), the query `railway usage` itself runs ([CLI usage.rs, `WorkspaceUsageContext`](https://github.com/railwayapp/cli/blob/v5.49.1/src/commands/usage.rs)); checked live with `railway api`. `currentUsage` is in dollars for the current period. The job reads it hourly with the `RAILWAY_API_TOKEN` secret (Railway has no read-only token scope), compares it with the state the previous run saved in the Actions cache (`{period, level, projected}`: highest threshold sent and whether the projection was sent), posts at most one Telegram message per run, and saves the new state only after the message went out, so a failed send retries the next hour. A new billing period resets the state; a lost cache entry resends the current threshold once. Without the token the run logs a warning and alerts nothing (A15's e-mail still applies); without the Telegram secrets a due alert fails the run.
 
+#### Emitters (reconciled 2026-11-02, B-044)
+
+Each code above, where its line comes from in the code (`grep -rnE 'alert=A[0-9]+|alerts\.A[0-9]+|"A[0-9]+"' app internal bootstrap routes`). "External" codes are raised by Railway, the deploy smoke test or the billing alerts, not by an app log line. "Not implemented" codes have no emitter yet: nothing pages or warns for them until backlog row B-049 lands.
+
+| Code | Emitter |
+| --- | --- |
+| A1, A2 | external: Railway healthcheck and deploy email; post-deploy smoke test (`pageCodes` in `app/alerts/telegram.go` still pages if a line ever carries them) |
+| A3 | not implemented (B-049) |
+| A4 | not implemented (B-049) |
+| A5 | `app/ssr/failures.go` (`alerts.Error(..., alerts.A5, ...)`) |
+| A6 | `app/alerts/jobs.go` (`JobFailures`, registered in `bootstrap/alerts_provider.go`) |
+| A7 | `internal/ingest/alerts.go`; scheduled from `routes/schedule.go` |
+| A8 | not implemented (B-049); page routing with quiet hours exists in `app/alerts/telegram.go` |
+| A9 | not implemented (B-049) |
+| A10 | `app/api/quota.go` (`alerts.A10`) |
+| A11 | external: Railway volume monitor |
+| A12 | not implemented (B-049) |
+| A13, A14, A16 | not implemented (B-049) |
+| A15, A17 | external: Railway usage alerts and limit |
+
 ### 7.6 Views
 
 No external dashboards. Service health is the Railway service-metrics page; the rest are saved Railway log searches per `alert=` code and the admin screens (moderation queue, API customers, ingestion runs from `job_runs`).
