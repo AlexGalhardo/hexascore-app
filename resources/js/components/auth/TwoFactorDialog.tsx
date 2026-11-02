@@ -110,7 +110,6 @@ export default function TwoFactorDialog({ open }: { open: boolean }) {
 								aria-label={`${t("auth.login.code")} ${i + 1}`}
 								inputMode="numeric"
 								autoComplete={i === 0 ? "one-time-code" : "off"}
-								// biome-ignore lint/a11y/noAutofocus: the dialog exists to take this code
 								autoFocus={i === 0}
 								maxLength={DIGITS}
 								value={d}
