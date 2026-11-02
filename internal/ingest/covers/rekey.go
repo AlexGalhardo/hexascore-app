@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"sync"
 
 	"github.com/AlexGalhardo/vukem/database"
 	"github.com/AlexGalhardo/vukem/storage"
@@ -13,6 +14,9 @@ import (
 
 // RekeyBatch is the default item page of Rekey.
 const RekeyBatch = 500
+
+// RekeyWorkers is how many items of a page Rekey handles at once.
+const RekeyWorkers = 16
 
 // RekeyResult counts one Rekey pass: Items looked at, Moved (rows pointed at their slug keys, or that would be
 // with a dry run), Copied objects, Current rows already on their slug keys, and Missing rows whose old object is
@@ -55,12 +59,8 @@ func Rekey(ctx context.Context, db *database.DB, disk storage.Disk, dryRun bool,
 			return res, err
 		}
 
-		for _, r := range rows {
-			res.Items++
-
-			if err := rekeyOne(ctx, db, disk, r, dryRun, &res); err != nil {
-				return res, fmt.Errorf("covers rekey %s: %w", r.id, err)
-			}
+		if err := rekeyRows(ctx, db, disk, rows, dryRun, &res); err != nil {
+			return res, err
 		}
 
 		if len(rows) < batch {
@@ -69,6 +69,61 @@ func Rekey(ctx context.Context, db *database.DB, disk storage.Disk, dryRun bool,
 
 		after = rows[len(rows)-1].id
 	}
+}
+
+// rekeyRows runs rekeyOne over one page, RekeyWorkers items at a time: each call is bound by bucket round trips,
+// and rows never share keys (slugs are unique per type), so they are independent. The first error stops the page.
+func rekeyRows(
+	ctx context.Context,
+	db *database.DB,
+	disk storage.Disk,
+	rows []rekeyRow,
+	dryRun bool,
+	res *RekeyResult,
+) error {
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	var (
+		mu       sync.Mutex
+		wg       sync.WaitGroup
+		firstErr error
+	)
+
+	sem := make(chan struct{}, RekeyWorkers)
+
+	for _, r := range rows {
+		sem <- struct{}{}
+
+		wg.Go(func() {
+			defer func() { <-sem }()
+
+			if ctx.Err() != nil {
+				return
+			}
+
+			var one RekeyResult
+			err := rekeyOne(ctx, db, disk, r, dryRun, &one)
+
+			mu.Lock()
+			defer mu.Unlock()
+
+			res.Items++
+			res.Moved += one.Moved
+			res.Copied += one.Copied
+			res.Current += one.Current
+			res.Missing += one.Missing
+
+			if err != nil && firstErr == nil {
+				firstErr = fmt.Errorf("covers rekey %s: %w", r.id, err)
+				cancel()
+			}
+		})
+	}
+
+	wg.Wait()
+
+	return firstErr
 }
 
 func rekeyPage(ctx context.Context, db *database.DB, after string, limit int) ([]rekeyRow, error) {
