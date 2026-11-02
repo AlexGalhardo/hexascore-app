@@ -106,6 +106,9 @@ Asked through the interactive checklist after the SDD drafts; they close every `
 - **D-38 Lists of deleted accounts**: public lists are anonymised (author shown as "deleted user") and stay reachable; private lists are deleted (SDD 14).
 - **D-39 Data protection officer**: the owner is the LGPD "encarregado"; public contact `privacy@hexascore.app` (mailbox created on the domain); named in the privacy policy (SDD 13).
 - **D-36 IGDB terms**: the owner reads the Twitch Developer Services Agreement and records the decision in `docs/legal/igdb.md` before the ingestion milestone; until then IGDB fields are site-only, refreshed every 24 h, never cached longer than 7 days.
+- **D-40 Catalogue worker as a second Railway service** (owner, 2026-11-02, OQ-03; amends D-08): ingestion runs in a service `worker` built from the same image (`/app/app queue:work`, `QUEUE_NAMES=ingest`), the web service keeps HTTP, the scheduler and the `default` queue; budget and plan B in RFC-001 §6. Telegram operational digest every 30 min to a silent chat `TELEGRAM_OPS_CHAT_ID` (OQ-04); LLM normalisation only behind `FLAG_INGEST_LLM` with a US$3/month ceiling (OQ-05); seed accounts excluded from trending and recommendation signals, purge only on request (OQ-07); affiliate programmes Amazon BR, Amazon US, then game stores (OQ-08); where-to-watch from TMDB watch providers, display-only with TMDB and JustWatch attributions (OQ-09).
+- **D-41 Unknown pages answer 404** (owner, 2026-11-02, OQ-06; replaces the 2026-11-01 round item that redirected to the home): unknown items, users and lists get a real 404 page, removed items 410; catalogue merges keep their 301 through `catalog_redirects`.
+- **D-42 Playwright on release candidates** (owner, 2026-11-02, OQ-14): the `desktop-en` project runs in CI on release candidates once the account helper is fixed (B-012); ordinary pushes stay without e2e.
 
 ## Closure
 
