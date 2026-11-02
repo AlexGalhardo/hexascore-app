@@ -216,6 +216,8 @@ Trailers (port of `trailers.py`): P1651 (preferred first), then TMDB/IGDB; oEmbe
 
 Pressure gate: app middleware counts in-flight requests; batches wait while > 16 or last-minute item-page p95 > 300 ms. Heavy runs start 00:00–06:00 America/Sao_Paulo.
 
+Host state (CW-02, RFC-001 section 3): table `ingest_host_state(key, data jsonb, updated_at)`. Key `web` holds the pressure signal `{inflight, p95_ms, at}`, upserted every 10 s by the scheduled task `ingest:pressure_signal` in the web process, only while the master flag `ingest_enabled` is on. The runner's gate (`ingest.SignalGate`) reads it before each chunk (one query) and, like the in-process gauges, waits while it says busy and fails open after 2 minutes; a signal older than 60 s or a failed read counts as "unknown" and does not wait. Keys `host:<name>` hold `httpx.HostState` (`rate`, breaker `open_for_ns`/`open_until`, `last_429_at`, `calls_today`): saved when a breaker opens or closes, when the rate halves or a 429 arrives after a quiet minute, and flushed when a run ends; `Client.Restore` loads them when the runner is built, so a restart keeps a backoff. Key `worker` (heartbeat) is reserved for the worker heartbeat (RFC-001 section 8).
+
 ### 7.6 Jobs and schedules
 
 `SCHEDULE_TIMEZONE=America/Sao_Paulo` (as SDD 02); tasks `WithoutOverlapping()` (<https://vukem.dev/docs/digging-deeper/scheduler> "Scheduler"); a successful stage dispatches the next.

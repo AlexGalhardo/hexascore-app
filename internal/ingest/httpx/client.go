@@ -48,6 +48,8 @@ type Config struct {
 	Base http.RoundTripper
 	// Timeout bounds one attempt; zero means 60 s. Tests only.
 	Timeout time.Duration
+	// State persists breaker and throttle state across restarts; nil keeps it in memory only.
+	State StateStore
 }
 
 // Client holds one client per body cap, sharing throttle and breaker state.
@@ -69,17 +71,25 @@ type policy struct {
 	clock Clock
 	// timeout bounds one attempt, from the moment it is sent until its body is closed.
 	timeout time.Duration
+	store   StateStore
 }
 
 // New builds the client.
 func New(cfg Config) *Client {
-	p := &policy{hosts: map[string]*host{}, ua: UserAgent(cfg.ContactURL), clock: cfg.Clock, timeout: cfg.Timeout}
+	p := &policy{
+		hosts:   map[string]*host{},
+		ua:      UserAgent(cfg.ContactURL),
+		clock:   cfg.Clock,
+		timeout: cfg.Timeout,
+		store:   cfg.State,
+	}
 	if p.clock == nil {
 		p.clock = realClock{}
 	}
 
 	for name, l := range cfg.Hosts {
 		p.hosts[name] = newHost(l)
+		p.hosts[name].name = name
 	}
 
 	if p.timeout <= 0 {
@@ -165,7 +175,16 @@ func (p *policy) once(ctx context.Context, h *host, next http.RoundTripper, req 
 	resp, err := p.send(ctx, h, next, req)
 
 	h.mu.Lock()
-	defer h.mu.Unlock()
+	before := h.br.openUntil
+	changed := false
+
+	defer func() {
+		h.mu.Unlock()
+
+		if changed {
+			p.saveSoon(h.name, h)
+		}
+	}()
 
 	switch {
 	case ctx.Err() != nil, errors.Is(err, httpclient.ErrBlockedAddress):
@@ -174,6 +193,7 @@ func (p *policy) once(ctx context.Context, h *host, next http.RoundTripper, req 
 		}
 	default:
 		h.br.record(p.clock.Now(), err != nil || resp.StatusCode >= http.StatusInternalServerError, probe)
+		changed = !h.br.openUntil.Equal(before) || (probe && h.br.openFor == 0)
 	}
 
 	return resp, err
@@ -188,6 +208,10 @@ func (p *policy) send(ctx context.Context, h *host, next http.RoundTripper, req 
 	if err != nil {
 		return nil, err
 	}
+
+	h.mu.Lock()
+	h.count(p.clock.Now())
+	h.mu.Unlock()
 
 	actx, cancel := context.WithTimeout(ctx, p.timeout)
 
@@ -226,7 +250,9 @@ func (p *policy) verdict(
 
 	switch resp.StatusCode {
 	case http.StatusTooManyRequests:
-		h.rateLimited()
+		if h.rateLimited(p.clock.Now()) {
+			p.saveSoon(h.name, h)
+		}
 	case http.StatusInternalServerError,
 		http.StatusBadGateway,
 		http.StatusServiceUnavailable,

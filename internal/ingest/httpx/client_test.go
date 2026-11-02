@@ -259,7 +259,7 @@ func TestRateHalvesAfterTwentyHits(t *testing.T) {
 	h := c.policyHost("api.test")
 
 	for range 20 {
-		h.rateLimited()
+		h.rateLimited(time.Now())
 	}
 
 	if h.rate != 2.5 {

@@ -110,6 +110,21 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 		vukem.WithSchedule(func(s *schedule.Schedule, app *vukem.App) {
 			routes.Schedule(s, app)
 			s.Func("heartbeat", heartbeat.Beat).EveryMinute()
+			// The ingestion worker reads this row before each batch; it is written only while ingestion is on.
+			s.Func("ingest:pressure_signal", func(ctx context.Context) error {
+				ff, err := app.Flags()
+				if err != nil {
+					return err
+				}
+				if !run.Allowed(ctx, ff, "") {
+					return nil
+				}
+				db, err := app.DB()
+				if err != nil {
+					return err
+				}
+				return ingest.WriteSignal(ctx, db, pressure.Signal())
+			}).Every(10 * time.Second).WithoutOverlapping()
 			s.Func("errors:digest", func(ctx context.Context) error {
 				db, err := app.DB()
 				if err != nil {

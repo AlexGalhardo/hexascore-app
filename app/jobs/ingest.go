@@ -122,7 +122,14 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 			contact = defaultContactURL
 		}
 
-		client = httpx.New(httpx.Config{ContactURL: contact, Hosts: httpx.DefaultHosts()})
+		client = httpx.New(httpx.Config{
+			ContactURL: contact, Hosts: httpx.DefaultHosts(), State: ingest.HostStore{DB: db},
+		})
+
+		// A failed load only means a restart forgets the backoff; ingestion must still start.
+		if err := client.Restore(context.Background()); err != nil {
+			app.Log.Warn("ingest: restoring host state failed", "error", err)
+		}
 	}
 
 	wd := wikidata.New(client)
@@ -221,10 +228,18 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		Flags: ff,
 		Steps: steps,
 		Now:   app.Now,
-		After: func(ctx context.Context, id int64) error { return ingest.Advance(ctx, db, q, id) },
-	}
-	if src.Pressure != nil {
-		runner.Gate = src.Pressure
+		// shortcut: calls_today is flushed when a run ends, transitions are saved at once; upgrade to a ticker if
+		// the worker runs for days without a run ending.
+		After: func(ctx context.Context, id int64) error {
+			// A failed flush loses only today's call counts; the run's outcome must still advance.
+			if err := client.Flush(ctx); err != nil {
+				app.Log.WarnContext(ctx, "ingest: flushing host state failed", "error", err)
+			}
+
+			return ingest.Advance(ctx, db, q, id)
+		},
+		// The signal table lets a separate worker process see the web's load (RFC-001 section 3).
+		Gate: &ingest.SignalGate{DB: db, Local: src.Pressure, Now: app.Now},
 	}
 
 	return runner, nil
