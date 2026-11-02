@@ -4,7 +4,7 @@ This guide runs HexaScore on Linux or macOS with a native PostgreSQL 18 install 
 
 ## Prerequisites
 
-Install Go 1.27.3, bun 1.4.3, the vukem CLI v0.36.0 and git as described in the [Docker guide's prerequisites](setup-local-with-docker-unix.md#prerequisites). Docker is not needed.
+Install Go 1.27.3, bun 1.4.3, the vukem CLI v0.37.0 and git as described in the [Docker guide's prerequisites](setup-local-with-docker-unix.md#prerequisites). Docker is not needed.
 
 ## Install PostgreSQL 18.6
 

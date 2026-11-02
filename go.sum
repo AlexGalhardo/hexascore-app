@@ -1,11 +1,11 @@
-github.com/AlexGalhardo/vukem v0.36.0 h1:hIczHruZ1mK7+DQMOjEgm1pbrnBRePwLItRg63OK5xI=
-github.com/AlexGalhardo/vukem v0.36.0/go.mod h1:o/gWXZ/j4pgc/zpjQ50cQSj52Mh+xSZKEronjUBtOhg=
+github.com/AlexGalhardo/vukem v0.37.0 h1:WmYkc6CtwYebhhh5bFkbuogZ22dkh/6pA0UFsb1STvg=
+github.com/AlexGalhardo/vukem v0.37.0/go.mod h1:o/gWXZ/j4pgc/zpjQ50cQSj52Mh+xSZKEronjUBtOhg=
 github.com/AlexGalhardo/vukem/contrib/stripe v0.5.1 h1:rTdTzwWro00GUlqn9zm4XSiogwsgnqc48v256p4sXoQ=
 github.com/AlexGalhardo/vukem/contrib/stripe v0.5.1/go.mod h1:gU80Ag91PwVI/rZY6RoB3ByL1Tgfx8YbmEyZ0MSa1x4=
 github.com/AlexGalhardo/vukem/drivers/postgres v0.6.1 h1:mOVkumnlHCdPMxeHm4GWvGx9u6hkHCRJX0F5J81369c=
 github.com/AlexGalhardo/vukem/drivers/postgres v0.6.1/go.mod h1:vfE9YxdL69wP5pwNQIbWtZCCz8mE8WnEQF8KcdB6PuY=
-github.com/AlexGalhardo/vukem/drivers/s3 v0.4.1 h1:YaEw4+4a/RYKhn5gfimQi5qdU5HUbyEbKNISDrQ7tvM=
-github.com/AlexGalhardo/vukem/drivers/s3 v0.4.1/go.mod h1:Z8i9KGhbkxPGLdKhlNBxIOmwGC0fYTV0L9qUSHSZdvw=
+github.com/AlexGalhardo/vukem/drivers/s3 v0.4.2 h1:aP54E6Q6MNPz2EohI5VaSsLUXhSgppLftAJe1AdTyDc=
+github.com/AlexGalhardo/vukem/drivers/s3 v0.4.2/go.mod h1:Eu51hKWjjXEzIyZMCwQ/sFuxGxwzbKhELW2orHvmBtg=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dustin/go-humanize v1.1.0 h1:dbKTrvD0klcbBV/h4AWJdMuZogJACoMlvWIWZ5b2xWg=
 github.com/dustin/go-humanize v1.1.0/go.mod h1:hc1CvRkJMsgxqjmjMQF3QNRAZBwY8AXBAzKYoSX9sFI=

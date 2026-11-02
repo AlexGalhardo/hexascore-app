@@ -8,7 +8,7 @@ This guide runs HexaScore on Linux or macOS with Postgres and RustFS in Docker c
 | --- | --- | --- | --- |
 | Go | 1.27.3 | `go` directive in `go.mod` | <https://go.dev/dl/> |
 | bun | 1.4.3 | `packageManager` in `package.json` | `curl -fsSL https://bun.sh/install \| bash -s "bun-v1.4.3"` ([bun docs](https://bun.sh/docs/installation)) |
-| vukem CLI | v0.36.0 | `github.com/AlexGalhardo/vukem` in `go.mod` | `go install github.com/AlexGalhardo/vukem/cmd/vukem@v0.36.0` |
+| vukem CLI | v0.37.0 | `github.com/AlexGalhardo/vukem` in `go.mod` | `go install github.com/AlexGalhardo/vukem/cmd/vukem@v0.37.0` |
 | golangci-lint | 2.15.0 | `GOLANGCI_LINT_VERSION` in `.github/workflows/ci.yml` | installed by the setup script |
 | git | not pinned by the repo | | your package manager |
 | Docker | not pinned by the repo; Compose v2 plugin required | | Linux: Docker Engine, <https://docs.docker.com/engine/install/>; macOS: Docker Desktop, <https://docs.docker.com/desktop/setup/install/mac-install/> |

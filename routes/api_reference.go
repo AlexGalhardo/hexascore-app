@@ -16,6 +16,12 @@ func APIReference(r *router.Router, app *vukem.App) error {
 	})
 	apidocs.Serve(app, r, "/docs/reference", apidocs.Config{
 		SpecURL: "/api/v1/openapi.json", Title: "HexaScore API", InProduction: true, Name: "apidocs",
+		// Resend-style sidebar (owner 2026-11-02): every group open, no Models section, method badge first.
+		Options: map[string]any{
+			"defaultOpenAllTags": true,
+			"hideModels":         true,
+			"customCss":          ".sidebar-heading-type{order:-1}",
+		},
 	})
 
 	return nil

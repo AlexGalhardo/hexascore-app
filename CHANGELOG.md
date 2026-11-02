@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **deps:** Require vukem v0.37.0 and drivers/s3 v0.4.2; the API reference opens every group, hides Models and puts the method badge first (`apidocs.Config.Options`); the scrape guard uses `web.ClientIP` (VF-065) and the covers disk drops its own transport now that the S3 driver keeps 100 idle connections per host (VF-077)
 - **ui:** /pricing hides the "Currency" label (kept for screen readers)
 - **ui:** Trending cards keep the cover on the left and two rows on the right: the title across, then the rank at the far left and the score at the far right (the year and genre line is gone)
 - **api:** Every public API operation has a readable summary ("List items", not `listItems`), shown as its title in the API reference sidebar and in the generated SDK docstrings

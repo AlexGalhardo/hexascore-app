@@ -4,7 +4,7 @@ This guide runs HexaScore on Windows 11 with a native PostgreSQL install and no 
 
 ## Prerequisites
 
-Install Go 1.27.3, bun 1.4.3, the vukem CLI v0.36.0 and git as described in the [Docker guide's prerequisites](setup-local-with-docker-windows.md#prerequisites), and enable long paths ([Troubleshooting](setup-local-with-docker-windows.md#paths-longer-than-260-characters)). Docker Desktop is not needed.
+Install Go 1.27.3, bun 1.4.3, the vukem CLI v0.37.0 and git as described in the [Docker guide's prerequisites](setup-local-with-docker-windows.md#prerequisites), and enable long paths ([Troubleshooting](setup-local-with-docker-windows.md#paths-longer-than-260-characters)). Docker Desktop is not needed.
 
 ## Install PostgreSQL 18.6
 
