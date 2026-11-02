@@ -55,6 +55,8 @@ CREATE TABLE backup_runs (
 
 Retention: `job_cursors` holds one row per chunked job (today `scoring.recompute_all`), deleted when its pass completes; no prune task needed, no user data.
 
+Retention: `cover_hashes` has one row per stored cover key, upserted in place; it grows with the catalogue (about 100 bytes per cover) and is not pruned; no user data.
+
 Retention: `ingest_host_state` holds one row per key (`web`, `worker`, `host:<name>`), upserted in place, so it stays at a few dozen rows; no prune task needed, no user data.
 
 Retention: `ingest_job_keys` holds one row per automatic ingest dispatch and day; `run.Prune` (ingest prune task) deletes rows older than 7 days; no user data.
