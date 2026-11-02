@@ -24,8 +24,8 @@ const (
 	maxReachable = 200
 	maxPage      = 10
 	suggestFetch = 24
-	suggestCap   = 8
-	suggestItems = 6
+	suggestCap   = 10
+	suggestItems = 8 // owner 2026-11-02: eight items in the Ctrl+K palette (was six)
 	suggestEnts  = 2
 	searchTO     = 800 * time.Millisecond
 	suggestTO    = 150 * time.Millisecond

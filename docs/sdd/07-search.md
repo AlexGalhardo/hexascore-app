@@ -23,7 +23,7 @@ Out: facet counts (ADR 0011 "Negative"); vector search; personalised ranking (A-
 - FR-07-7: With a type filter: one list, 20 per page, ≤ 200 results reachable; beyond → 400 `invalid-query`. Integration test.
 - FR-07-8: Editions match by title and exact ISBN-13; the work is returned with `matchedEdition` (D-10). Integration test.
 - FR-07-9: Alternative/transliterated titles match: `gojira` finds "Godzilla". Golden set.
-- FR-07-10: `Suggest` returns ≤ 8 entries (≤ 6 items, ≤ 2 entities) for ≥ 2 characters, prefix before trigram. Integration test.
+- FR-07-10: `Suggest` returns ≤ 10 entries (≤ 8 items, ≤ 2 entities; owner 2026-11-02, was 6 items) for ≥ 2 characters, prefix before trigram. Integration test.
 - FR-07-11: Zero results with ≥ 3 characters return `didYouMean` or null. Integration test.
 - FR-07-12: Searches and clicks emit events (§7.8); no raw query older than 30 days survives. Integration test with fake clock.
 - FR-07-13: Paid API output obeys ADR 0006 through SDD 01's audience filter. Schemathesis + unit test.
@@ -230,7 +230,7 @@ Same E/P/S tiers (no FTS) over `entity_translations.name_norm` and `entities.nam
 
 ### 7.5 Suggest
 
-Query 1: `label_norm ^@ hs_norm($1) and locale in ($ui, '*')`, `order by popularity desc limit 24`. Under 8 distinct refs: query 2 with `label_norm % hs_norm($1)` (similarity threshold 0.3), `order by similarity desc, popularity desc limit 24`. Go dedupes by `ref_id` (UI-locale label preferred), caps 6 items + 2 entities. Job `search:suggest-sync` (`EveryMinute`, `WithoutOverlapping`, <https://vukem.dev/docs/digging-deeper/scheduler> "Scheduler") drains ≤ 5,000 `search_dirty` rows with `FOR UPDATE SKIP LOCKED` (<https://vukem.dev/docs/database/orm> "Lock" row), upserts/deletes suggest rows and the dirty rows in one transaction; idempotent. `search:rebuild` builds `search_suggest_new` and swaps by rename; weekly and after backfills (SDD 06).
+Query 1: `label_norm ^@ hs_norm($1) and locale in ($ui, '*')`, `order by popularity desc limit 24`. Under 10 distinct refs: query 2 with `label_norm % hs_norm($1)` (similarity threshold 0.3), `order by similarity desc, popularity desc limit 24`. Go dedupes by `ref_id` (UI-locale label preferred), caps 8 items + 2 entities. Job `search:suggest-sync` (`EveryMinute`, `WithoutOverlapping`, <https://vukem.dev/docs/digging-deeper/scheduler> "Scheduler") drains ≤ 5,000 `search_dirty` rows with `FOR UPDATE SKIP LOCKED` (<https://vukem.dev/docs/database/orm> "Lock" row), upserts/deletes suggest rows and the dirty rows in one transaction; idempotent. `search:rebuild` builds `search_suggest_new` and swaps by rename; weekly and after backfills (SDD 06).
 
 ### 7.6 Caching
 
