@@ -49,7 +49,7 @@ func (h *Status) PutStatus(c *web.Ctx) error {
 	return c.JSON(200, map[string]any{"status": in.Status, "item": sum})
 }
 
-// DeleteStatus clears the signed-in user's status (and time-to-beat report) of the item in {id}.
+// DeleteStatus clears the signed-in user's status of the item in {id}; the time-to-beat report stays (owner 2026-11-02).
 func (h *Status) DeleteStatus(c *web.Ctx) error {
 	u, err := auth.User[models.User](c, h.guard)
 	if err != nil {

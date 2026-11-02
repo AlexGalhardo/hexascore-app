@@ -39,12 +39,12 @@ export function timeToBeatOf(me: unknown): TimeToBeat | null {
 	return out;
 }
 
-/** Hours as typed (dot or comma); null when empty, "invalid" outside 0.5–10,000 or off the 0.5 step (SDD 02 §6). */
+/** Hours as typed (dot or comma); null when empty, "invalid" outside 0.5–1,000 or off the 0.5 step (SDD 02 §6). */
 export function parseHours(text: string): number | null | "invalid" {
 	const trimmed = text.trim().replace(",", ".");
 	if (trimmed === "") return null;
 	const hours = Number(trimmed);
-	if (!Number.isFinite(hours) || hours < 0.5 || hours > 10_000 || (hours * 2) % 1 !== 0) {
+	if (!Number.isFinite(hours) || hours < 0.5 || hours > 1000 || (hours * 2) % 1 !== 0) {
 		return "invalid";
 	}
 	return hours;

@@ -940,7 +940,7 @@
       "deprecationTitle": "Cabeçalhos em uma versão descontinuada",
       "changesHeading": "Mudanças",
       "timeToBeatTitle": "v1 — tempo para zerar (aditivo)",
-      "timeToBeatBody": "<code>ItemDetail.time_to_beat</code>: mediana de horas e número de relatos da comunidade para <code>main</code>, <code>extras</code> e <code>completionist</code> em jogos (<code>median_hours</code> é <code>null</code> com menos de 3 relatos); <code>null</code> para filmes, séries e livros.",
+      "timeToBeatBody": "<code>ItemDetail.time_to_beat</code>: mediana de horas e número de relatos da comunidade para <code>main</code>, <code>extras</code> e <code>completionist</code> em jogos (<code>median_hours</code> é <code>null</code> enquanto ninguém relatou); <code>null</code> para filmes, séries e livros.",
       "firstTitle": "v1 — primeira versão",
       "firstLists": "Listas, detalhes e gêneros para <code>games</code>, <code>movies</code>, <code>series</code> e <code>books</code>.",
       "firstEndpoints": "<code>/search</code>, <code>/lookup</code> por id externo e <code>/me/usage</code>."

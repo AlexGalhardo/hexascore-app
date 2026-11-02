@@ -940,7 +940,7 @@
       "deprecationTitle": "Headers on a deprecated version",
       "changesHeading": "Changes",
       "timeToBeatTitle": "v1 — time to beat (additive)",
-      "timeToBeatBody": "<code>ItemDetail.time_to_beat</code>: crowdsourced median hours and report count for <code>main</code>, <code>extras</code> and <code>completionist</code> on games (<code>median_hours</code> is <code>null</code> under 3 reports); <code>null</code> for movies, series and books.",
+      "timeToBeatBody": "<code>ItemDetail.time_to_beat</code>: crowdsourced median hours and report count for <code>main</code>, <code>extras</code> and <code>completionist</code> on games (<code>median_hours</code> is <code>null</code> while nobody reported it); <code>null</code> for movies, series and books.",
       "firstTitle": "v1 — first release",
       "firstLists": "Lists, details and genres for <code>games</code>, <code>movies</code>, <code>series</code> and <code>books</code>.",
       "firstEndpoints": "<code>/search</code>, <code>/lookup</code> by external id and <code>/me/usage</code>."

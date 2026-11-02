@@ -940,7 +940,7 @@
       "deprecationTitle": "Cabeceras en una versión obsoleta",
       "changesHeading": "Cambios",
       "timeToBeatTitle": "v1 — tiempo para completar (aditivo)",
-      "timeToBeatBody": "<code>ItemDetail.time_to_beat</code>: mediana de horas y número de informes de la comunidad para <code>main</code>, <code>extras</code> y <code>completionist</code> en juegos (<code>median_hours</code> es <code>null</code> con menos de 3 informes); <code>null</code> para películas, series y libros.",
+      "timeToBeatBody": "<code>ItemDetail.time_to_beat</code>: mediana de horas y número de informes de la comunidad para <code>main</code>, <code>extras</code> y <code>completionist</code> en juegos (<code>median_hours</code> es <code>null</code> mientras nadie lo informó); <code>null</code> para películas, series y libros.",
       "firstTitle": "v1 — primera versión",
       "firstLists": "Listados, detalles y géneros para <code>games</code>, <code>movies</code>, <code>series</code> y <code>books</code>.",
       "firstEndpoints": "<code>/search</code>, <code>/lookup</code> por id externo y <code>/me/usage</code>."

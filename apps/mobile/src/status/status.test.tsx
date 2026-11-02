@@ -46,15 +46,15 @@ function setup(send: (entry: QueueEntry) => Promise<SendOutcome>) {
 const ok = (body: unknown) => async (): Promise<SendOutcome> => ({ ok: true, body });
 
 describe("parseHours", () => {
-	test("accepts 0.5 h steps within 0.5–10,000, with a dot or a comma", () => {
+	test("accepts 0.5 h steps within 0.5–1,000, with a dot or a comma", () => {
 		expect(parseHours("12.5")).toBe(12.5);
 		expect(parseHours("12,5")).toBe(12.5);
-		expect(parseHours("10000")).toBe(10000);
+		expect(parseHours("1000")).toBe(1000);
 		expect(parseHours("")).toBeNull();
 	});
 
 	test("rejects values outside the bounds or off the 0.5 step", () => {
-		for (const bad of ["0", "0.25", "10000.5", "12.3", "-1", "abc"]) {
+		for (const bad of ["0", "0.25", "1000.5", "10000", "12.3", "-1", "abc"]) {
 			expect(parseHours(bad)).toBe("invalid");
 		}
 	});
