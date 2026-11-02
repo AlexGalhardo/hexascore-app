@@ -32,7 +32,7 @@ const current = () =>
 		.findIndex((g) => g.getAttribute("aria-hidden") === "false");
 const tick = () => act(() => vi.advanceTimersByTime(SLIDE_MS));
 
-test("auto-advances every 4 s and wraps; inactive slides are hidden and inert", () => {
+test("auto-advances every 2 s and wraps; inactive slides are hidden and inert", () => {
 	render(<Carousel label="Trending games" slides={slides} />);
 	const region = screen.getByRole("region", { name: "Trending games" });
 	expect(region.getAttribute("aria-roledescription")).toBe("carousel");

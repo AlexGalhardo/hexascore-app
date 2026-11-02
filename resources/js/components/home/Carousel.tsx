@@ -6,7 +6,7 @@ import { iconButton } from "../Nav";
 // Pause, previous and next are raised like the site buttons; the dots stay flat.
 const raised = `${iconButton} border border-border bg-surface shadow-ledge-secondary active:shadow-ledge-secondary-pressed`;
 /** Time each slide stays before the next one while auto-advancing. */
-export const SLIDE_MS = 4000;
+export const SLIDE_MS = 2000;
 
 // Full class names so Tailwind keeps them; the landing carousel has at most 4 slides (12 items, 3 per slide).
 const OFFSET = ["translate-x-0", "-translate-x-full", "-translate-x-[200%]", "-translate-x-[300%]"];

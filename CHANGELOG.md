@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **ui:** Landing carousels advance every 2 s (was 4 s); the whole-cover letterbox on item pages is transparent, so it takes the colour around the cover
 - **catalog:** No entity has a page of its own any more: people, companies, franchises, platforms, genres, game modes, countries and languages are filters of the four section listings (`person`, `company`, `franchise`, `platform`, `genre`, `mode`, `country`, `language`); every old entity URL answers one 301 to the filtered listing, /games gets a game mode select, filters from links show as removable chips, item pages link straight to the filtered listing and the sitemap drops the entity files
 - **auth:** /login and /signup show only the form card, centred, without the intro column
 - **search:** The Ctrl+K palette suggests up to 8 items (was 6) plus up to 2 people or companies
