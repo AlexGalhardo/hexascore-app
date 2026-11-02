@@ -121,5 +121,5 @@ func TestInertiaPages_Entity_Show(t *testing.T) {
 		AssertHeader("Location", "/pt-br/movies/people/ridley-scott/changes")
 
 	// A missing entity on an old top-level path is a missing page.
-	client.Inertia("").Get("/people/missing").AssertStatus(301).AssertHeader("Location", "/")
+	client.Inertia("").Get("/people/missing").AssertStatus(404).AssertInertia("Error").PropEquals("status", 404)
 }

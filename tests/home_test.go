@@ -52,19 +52,25 @@ func TestShell_SEO(t *testing.T) {
 
 // TestMissingPage_RedirectsHome: an unknown HTML page answers 301 to the home page of its locale (owner decision
 // 2026-11-01, item 14); the APIs keep problem+json and asset misses keep a real 404.
-func TestMissingPage_RedirectsHome(t *testing.T) {
+// TestMissingPage_NotFound pins D-41: a missing page answers 404 with the localised error page, not a redirect.
+func TestMissingPage_NotFound(t *testing.T) {
 	t.Parallel()
 
 	app := vukemtest.New(t, bootstrap.New)
 	c := app.Client(t)
 
 	for _, prefix := range []string{"", "/pt-br", "/es"} {
-		c.Get(prefix+"/no-such-page").AssertStatus(301).AssertHeader("Location", prefix+"/")
-		c.Get(prefix+"/docs/no-such-doc").AssertStatus(301).AssertHeader("Location", prefix+"/")
-		app.Client(t).Inertia("").Get(prefix+"/no/such/page").AssertStatus(301).AssertHeader("Location", prefix+"/")
+		c.Get(prefix + "/no-such-page").AssertStatus(404).AssertSee(`<a href="` + prefix + `/">`)
+		c.Get(prefix + "/docs/no-such-doc").AssertStatus(404)
+		app.Client(t).
+			Inertia("").
+			Get(prefix+"/no/such/page").
+			AssertStatus(404).
+			AssertInertia("Error").
+			PropEquals("status", 404)
 	}
 
-	c.Do(http.MethodHead, "/no-such-page", nil, "").AssertStatus(301)
+	c.Do(http.MethodHead, "/no-such-page", nil, "").AssertStatus(404)
 
 	for _, p := range []string{
 		"/api/no-such", "/app/v1/no-such", "/build/assets/missing.js", "/covers/missing.webp",
