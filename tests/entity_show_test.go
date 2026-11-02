@@ -83,12 +83,12 @@ func TestInertiaPages_Entity_Show(t *testing.T) {
 	// No entity has a page of its own (owner 2026-11-02): every entity path answers one 301 to the section listing
 	// filtered by the entity, whatever the kind and the locale.
 	for path, target := range map[string]string{
-		"/movies/people/ridley-scott":       "/movies?per=25&person=ridley-scott&sort=-popularity",
-		"/pt-br/games/franchises/rpg":       "/pt-br/games?franchise=rpg&per=25&sort=-popularity",
-		"/es/games/countries/br":            "/es/games?country=br&per=25&sort=-popularity",
-		"/games/game-modes/multiplayer":     "/games?mode=multiplayer&per=25&sort=-popularity",
-		"/games/companies/wright-systems":   "/games?company=wright-systems&per=25&sort=-popularity",
-		"/games/genres/action-role-playing": "/games?genre=action-role-playing&per=25&sort=-popularity",
+		"/movies/people/ridley-scott":       "/movies?per=40&person=ridley-scott&sort=-popularity",
+		"/pt-br/games/franchises/rpg":       "/pt-br/games?franchise=rpg&per=40&sort=-popularity",
+		"/es/games/countries/br":            "/es/games?country=br&per=40&sort=-popularity",
+		"/games/game-modes/multiplayer":     "/games?mode=multiplayer&per=40&sort=-popularity",
+		"/games/companies/wright-systems":   "/games?company=wright-systems&per=40&sort=-popularity",
+		"/games/genres/action-role-playing": "/games?genre=action-role-playing&per=40&sort=-popularity",
 	} {
 		client.Get(path).AssertStatus(301).AssertHeader("Location", target)
 	}
@@ -97,11 +97,11 @@ func TestInertiaPages_Entity_Show(t *testing.T) {
 	// or to ?type= when it names one, with the canonical code for countries and languages.
 	for _, prefix := range []string{"", "/pt-br", "/es"} {
 		for old, target := range map[string]string{
-			"/people/ridley-scott":       "/movies?per=25&person=ridley-scott&sort=-popularity",
-			"/franchises/rpg":            "/games?franchise=rpg&per=25&sort=-popularity",
-			"/franchises/rpg?type=movie": "/movies?franchise=rpg&per=25&sort=-popularity",
-			"/countries/br?type=series":  "/series?country=BR&per=25&sort=-popularity",
-			"/countries/br":              "/games?country=BR&per=25&sort=-popularity",
+			"/people/ridley-scott":       "/movies?per=40&person=ridley-scott&sort=-popularity",
+			"/franchises/rpg":            "/games?franchise=rpg&per=40&sort=-popularity",
+			"/franchises/rpg?type=movie": "/movies?franchise=rpg&per=40&sort=-popularity",
+			"/countries/br?type=series":  "/series?country=BR&per=40&sort=-popularity",
+			"/countries/br":              "/games?country=BR&per=40&sort=-popularity",
 		} {
 			client.Get(prefix+old).AssertStatus(301).AssertHeader("Location", prefix+target)
 		}

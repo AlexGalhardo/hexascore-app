@@ -30,7 +30,7 @@ export interface ActiveEntity {
 const SORTS = ["popularity", "score", "release_date", "rating_count"] as const;
 
 /** The page sizes the server honours for ?per= (catalog_controller.go); the first is the default. */
-export const PAGE_SIZES = [25, 50, 75, 100] as const;
+export const PAGE_SIZES = [40, 80, 120] as const;
 
 // Release years offered by the year select: this year back to 1895, the first film screenings (owner 2026-11-02).
 const YEARS = Array.from(

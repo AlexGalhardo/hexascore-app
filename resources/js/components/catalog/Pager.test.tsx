@@ -39,22 +39,22 @@ test("one page renders no pager", () => {
 });
 
 test("the canonical keeps the page number and a non-default page size, never the filters", () => {
-	expect(pageCanonical("https://hexascore.app/games", "/games?genre=rpg&page=3", 25)).toBe(
+	expect(pageCanonical("https://hexascore.app/games", "/games?genre=rpg&page=3", 40)).toBe(
 		"https://hexascore.app/games?page=3",
 	);
-	expect(pageCanonical("https://hexascore.app/games", "/games?page=1&cursor=x", 25)).toBe(
+	expect(pageCanonical("https://hexascore.app/games", "/games?page=1&cursor=x", 40)).toBe(
 		"https://hexascore.app/games",
 	);
-	expect(pageCanonical("https://hexascore.app/games", "/games?genre=rpg&per=50", 50)).toBe(
-		"https://hexascore.app/games?per=50",
+	expect(pageCanonical("https://hexascore.app/games", "/games?genre=rpg&per=80", 80)).toBe(
+		"https://hexascore.app/games?per=80",
 	);
-	expect(pageCanonical("https://hexascore.app/games", "/games?per=7", 25)).toBe(
+	expect(pageCanonical("https://hexascore.app/games", "/games?per=7", 40)).toBe(
 		"https://hexascore.app/games",
 	);
 });
 
 test("page links keep the page size", () => {
-	expect(pageHref("/games?per=75&page=2", "3")).toBe("/games?per=75&page=3");
+	expect(pageHref("/games?per=120&page=2", "3")).toBe("/games?per=120&page=3");
 });
 
 test("removing a filter chip drops that parameter and the page number, keeping the others", async () => {

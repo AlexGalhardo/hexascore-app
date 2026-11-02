@@ -73,7 +73,7 @@ test("logged out: score block with explanation, chips, disabled stars and a log 
 	expect(screen.getByText(/item.band.high/)).toBeTruthy();
 	expect(screen.getByText(/item.scoreFrom.*1,482/)).toBeTruthy();
 	expect(screen.getAllByRole("link", { name: "MMORPG" })[0].getAttribute("href")).toBe(
-		"/games?genre=mmorpg&per=25&sort=-popularity",
+		"/games?genre=mmorpg&per=40&sort=-popularity",
 	);
 	expect(screen.queryByText(/itemTypes.game · 2004/)).toBeNull();
 	expect(screen.queryByText(/item.attribution/)).toBeNull();

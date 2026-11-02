@@ -150,7 +150,7 @@ VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
 		"score range":   {Type: "game", MaxScore: new(float64(10.5))},
 		"category type": {Type: "game", MinCategory: map[string]float64{"plot": 5}},
 		"sort":          {Type: "game", Sort: "title"},
-		"limit":         {Type: "game", Limit: 101},
+		"limit":         {Type: "game", Limit: 121},
 	}
 	for name, p := range bad {
 		if _, err := catalog.List(ctx, db, codec, p); !errors.Is(err, catalog.ErrInvalidQuery) {

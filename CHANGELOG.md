@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **catalog:** Canonical genres: one translated list per category (en, pt-BR, es) replaces the Wikidata genre labels; `genres:canonicalize` relinks the items and keeps the source links hidden in `item_genre_sources`; listing filters show the translated names and the public `/{type}/genres` endpoints take `locale` and return `name`
 - **api:** The API reference groups operations under games, movies, series, books and catalog, and every operation has a one-sentence description; the Python SDK modules follow the new tags
+- **ui:** Category listings page 40, 80 or 120 items (default 40); the landing's "More" grid shows two cards per row at phone width
 - **i18n:** Shorter /about intro in en, pt-BR and es
 - **ui:** The item page drops the genre and platform buttons under the title (Details still links them); at phone width the cover fills the width and the rating column follows Details, before the title and synopsis
 

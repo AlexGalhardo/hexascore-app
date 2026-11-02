@@ -7,17 +7,17 @@ vi.mock("../../lib/useT", () => ({ useT: () => (key: string) => key }));
 
 afterEach(cleanup);
 
-const filters = { genre: "", platform: "", year: 0, minScore: null, sort: "-popularity", per: 50 };
+const filters = { genre: "", platform: "", year: 0, minScore: null, sort: "-popularity", per: 80 };
 
-test("the page size is a GET field with the four sizes the server honours", () => {
+test("the page size is a GET field with the three sizes the server honours", () => {
 	render(<Filters action="/games" type="game" filters={filters} genres={[]} platforms={[]} />);
 	const per = screen.getByRole("combobox", {
 		name: "catalog.perPage",
 		hidden: true,
 	}) as HTMLSelectElement;
 	expect(per.name).toBe("per");
-	expect(per.value).toBe("50");
-	expect([...per.options].map((o) => o.value)).toEqual(["25", "50", "75", "100"]);
+	expect(per.value).toBe("80");
+	expect([...per.options].map((o) => o.value)).toEqual(["40", "80", "120"]);
 });
 
 test("below lg the fields sit behind a disclosure button", () => {

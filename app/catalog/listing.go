@@ -20,7 +20,7 @@ var ErrInvalidQuery = errors.New("invalid-query")
 // Listing limits and defaults (SDD 01 FR-01-10).
 const (
 	DefaultLimit = 20
-	MaxLimit     = 100
+	MaxLimit     = 120 // the web listing's largest page (owner 2026-11-02); the API caps by plan
 	DefaultSort  = "-popularity"
 )
 

@@ -138,7 +138,7 @@ export default function Show({
 	const [scoresOpen, setScoresOpen] = useState(false);
 	const entityHref = (e: EntityLink) =>
 		l(
-			`/${SECTIONS[item.type]}?${new URLSearchParams({ [ENTITY_FILTER[e.kind]]: e.code ?? e.slug, per: "25", sort: "-popularity" })}`,
+			`/${SECTIONS[item.type]}?${new URLSearchParams({ [ENTITY_FILTER[e.kind]]: e.code ?? e.slug, per: "40", sort: "-popularity" })}`,
 		);
 	const release =
 		item.releaseDate?.length === 10

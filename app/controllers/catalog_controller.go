@@ -16,14 +16,14 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 )
 
-// CatalogPageSize is the default item count of one Catalog/Index page; ?per= picks 25, 50, 75 or 100
-// (owner round 2026-11-01 item 20).
-const CatalogPageSize = 25
+// CatalogPageSize is the default item count of one Catalog/Index page; ?per= picks 40, 80 or 120
+// (owner 2026-11-02).
+const CatalogPageSize = 40
 
-// catalogPageSize reads ?per=; any value but the four offered sizes is the default.
+// catalogPageSize reads ?per=; any value but the three offered sizes is the default.
 func catalogPageSize(raw string) int {
 	switch n, _ := strconv.Atoi(raw); n {
-	case 25, 50, 75, 100:
+	case 40, 80, 120:
 		return n
 	default:
 		return CatalogPageSize

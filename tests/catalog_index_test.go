@@ -57,7 +57,7 @@ VALUES ($1, 'movie', $2, $3, 6, 80)`, id, fmt.Sprintf("movie-%02d", i), fmt.Spri
 	c := app.Client(t).Inertia("")
 
 	first := c.Get("/movies").AssertOK().AssertInertia("Catalog/Index").
-		HasProp("items.data", 25).PropEquals("total", 60).PropEquals("filters.per", 25)
+		HasProp("items.data", 40).PropEquals("total", 60).PropEquals("filters.per", 40)
 	slug, ok := first.Prop("facets.genres.0.slug")
 	if !ok || slug != "rpg" {
 		t.Fatalf("first paint facets slug = %#v", slug)
@@ -67,14 +67,14 @@ VALUES ($1, 'movie', $2, $3, 6, 80)`, id, fmt.Sprintf("movie-%02d", i), fmt.Spri
 		t.Fatalf("first paint facet count = %#v", count)
 	}
 	// Paged with buttons, not infinite scroll (owner round 2026-11-01 items 12 and 20), by readable page numbers
-	// with the total on every page (owner 2026-11-02); page size from ?per= (25, 50, 75 or 100; anything else is 25).
+	// with the total on every page (owner 2026-11-02); page size from ?per= (40, 80 or 120; anything else is 40).
 	first.PropEquals("pagination.prev", "").PropEquals("pagination.next", "2")
 
-	c.Get("/movies?per=50&page=2").AssertOK().AssertInertia("Catalog/Index").
-		HasProp("items.data", 10).PropEquals("pagination.prev", "1").PropEquals("pagination.next", "").
-		PropEquals("total", 60).PropEquals("filters.per", 50)
+	c.Get("/movies?per=80&page=2").AssertOK().AssertInertia("Catalog/Index").
+		HasProp("items.data", 0).PropEquals("pagination.prev", "1").PropEquals("pagination.next", "").
+		PropEquals("total", 60).PropEquals("filters.per", 80)
 	c.Get("/movies?page=2").AssertOK().AssertInertia("Catalog/Index").
-		HasProp("items.data", 25).PropEquals("pagination.next", "3").PropEquals("total", 60)
+		HasProp("items.data", 20).PropEquals("pagination.next", "").PropEquals("total", 60)
 	c.Get("/movies?page=9").AssertOK().AssertInertia("Catalog/Index").HasProp("items.data", 0).PropEquals("total", 60)
 
 	for _, bad := range []string{"0", "-3", "abc"} {
@@ -89,15 +89,14 @@ VALUES ($1, 'movie', $2, $3, 6, 80)`, id, fmt.Sprintf("movie-%02d", i), fmt.Spri
 		per          string
 		items, given int
 	}{
-		{"50", 50, 50},
-		{"75", 60, 75},
-		{"100", 60, 100},
-		{"25", 25, 25},
-		{"20", 25, 25},
-		{"7", 25, 25},
-		{"abc", 25, 25},
-		{"-1", 25, 25},
-		{"1000", 25, 25},
+		{"80", 60, 80},
+		{"120", 60, 120},
+		{"40", 40, 40},
+		{"25", 40, 40},
+		{"100", 40, 40},
+		{"abc", 40, 40},
+		{"-1", 40, 40},
+		{"1000", 40, 40},
 	} {
 		c.Get("/movies?per="+tc.per).AssertOK().AssertInertia("Catalog/Index").
 			HasProp("items.data", tc.items).PropEquals("filters.per", tc.given)

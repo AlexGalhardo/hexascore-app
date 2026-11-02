@@ -26,7 +26,7 @@ func NewEntity(app *vukem.App) *Entity {
 
 // listingURL is the section listing of item type typ filtered by the entity key, with the locale prefix.
 func listingURL(prefix, typ, kind, key string) string {
-	q := url.Values{"sort": {"-popularity"}, "per": {"25"}, catalog.ListingFilters[kind]: {key}}
+	q := url.Values{"sort": {"-popularity"}, "per": {"40"}, catalog.ListingFilters[kind]: {key}}
 
 	return prefix + "/" + catalog.Sections[typ] + "?" + q.Encode()
 }

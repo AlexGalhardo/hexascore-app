@@ -126,7 +126,7 @@ export default function TypeSection({
 					<h3 className="text-xs font-semibold tracking-widest text-muted uppercase">
 						{t(`home.more.${type}`)}
 					</h3>
-					<ul className="grid grid-cols-3 gap-x-4 gap-y-6 md:grid-cols-6 md:gap-x-5">
+					<ul className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-6 md:gap-x-5">
 						{others.map((item) => (
 							<ItemTile key={item.id} item={item} href={`${base}/${item.slug}`} />
 						))}
