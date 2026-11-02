@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"time"
 )
@@ -55,11 +56,8 @@ type Encoder interface {
 // encodeSlot lets one cwebp run at a time (NFR-06-2).
 var encodeSlot = make(chan struct{}, 1)
 
-// Cwebp is the Encoder that runs the pinned cwebp binary (Alpine libwebp-tools) as a child process.
-//
-// shortcut: the child gets a 30 s timeout, a scratch directory and an empty environment, but no address-space or
-// CPU limit. contrib/engine (Limits{CPUTime, AddressSpace}) does that and is a separate module the app does not
-// require yet; swap run for engine.Tool.Run once the owner approves the dependency.
+// Cwebp is the Encoder that runs the pinned cwebp binary (Alpine libwebp-tools) as a child process with a timeout,
+// a scratch directory, an empty environment and, on Linux, CPU-time and address-space limits.
 type Cwebp struct {
 	// Path is the binary; empty means "cwebp" on PATH.
 	Path string
@@ -67,6 +65,43 @@ type Cwebp struct {
 	Timeout time.Duration
 	// Env is the whole environment of the child (tests); nil means empty.
 	Env []string
+	// CPUSeconds and AddressSpaceMiB bound the child on Linux (RFC-001 section 5 E: 30 s, 512 MiB); zero means
+	// those defaults, negative disables the limit. Other systems run the child unlimited.
+	CPUSeconds, AddressSpaceMiB int
+}
+
+const (
+	defaultCPUSeconds      = 30
+	defaultAddressSpaceMiB = 512
+)
+
+// limitPrefix is the shell prefix that applies the rlimits, or "" when none apply. workaround: contrib/engine does
+// this natively but is a separate module the app does not require (new dependency, owner's yes); setrlimit through
+// the shell needs no code or dependency.
+func (c *Cwebp) limitPrefix() string {
+	if runtime.GOOS != "linux" {
+		return ""
+	}
+
+	cpu, mem := c.CPUSeconds, c.AddressSpaceMiB
+	if cpu == 0 {
+		cpu = defaultCPUSeconds
+	}
+
+	if mem == 0 {
+		mem = defaultAddressSpaceMiB
+	}
+
+	var p string
+	if cpu > 0 {
+		p += fmt.Sprintf("ulimit -t %d; ", cpu)
+	}
+
+	if mem > 0 {
+		p += fmt.Sprintf("ulimit -v %d; ", mem*1024)
+	}
+
+	return p
 }
 
 // Encode fits src into v and returns the WebP bytes.
@@ -139,9 +174,15 @@ func (c *Cwebp) run(ctx context.Context, bin string, img image.Image, v Variant)
 	defer cancel()
 
 	// bin is operator configuration and every argument is built here, none from the image.
-	cmd := exec.CommandContext( //nolint:gosec // see above
-		ctx, bin, "-q", strconv.Itoa(v.Quality), "-m", "6", "-metadata", "none", inPath, "-o", outPath,
-	)
+	args := []string{"-q", strconv.Itoa(v.Quality), "-m", "6", "-metadata", "none", inPath, "-o", outPath}
+	name := bin
+
+	if lim := c.limitPrefix(); lim != "" {
+		// $0 is bin and "$@" the arguments, so nothing is interpolated into the script.
+		name, args = "/bin/sh", append([]string{"-c", lim + `exec "$0" "$@"`, bin}, args...)
+	}
+
+	cmd := exec.CommandContext(ctx, name, args...)
 	cmd.Dir = dir
 	cmd.Env = append([]string{}, c.Env...)
 

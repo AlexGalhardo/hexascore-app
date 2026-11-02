@@ -2,6 +2,7 @@ package covers
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 	"time"
@@ -37,22 +38,8 @@ func GC(ctx context.Context, db *database.DB, disk storage.Disk, now time.Time) 
 		return 0, fmt.Errorf("covers gc: list: %w", err)
 	}
 
-	var keys []string
-
-	for rows.Next() {
-		var k string
-		if err := rows.Scan(&k); err != nil {
-			_ = rows.Close()
-
-			return 0, err
-		}
-
-		keys = append(keys, k)
-	}
-
-	_ = rows.Close()
-
-	if err := rows.Err(); err != nil {
+	keys, err := scanKeys(rows)
+	if err != nil {
 		return 0, err
 	}
 
@@ -67,4 +54,21 @@ func GC(ctx context.Context, db *database.DB, disk storage.Disk, now time.Time) 
 	}
 
 	return len(keys), nil
+}
+
+func scanKeys(rows *sql.Rows) ([]string, error) {
+	defer func() { _ = rows.Close() }()
+
+	var keys []string
+
+	for rows.Next() {
+		var k string
+		if err := rows.Scan(&k); err != nil {
+			return nil, err
+		}
+
+		keys = append(keys, k)
+	}
+
+	return keys, rows.Err()
 }

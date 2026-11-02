@@ -53,6 +53,11 @@ type Job struct {
 	// Reserve records a key in cover_gc outside the step's transaction before its object is written, so an
 	// object whose transaction rolls back is still reaped by GC (which forgets reserved keys an item points at).
 	Reserve func(ctx context.Context, key string) error
+	// Hashes skips re-encoding a picture the item already holds and records what is stored (RFC-001 section 5 E);
+	// nil disables it.
+	Hashes Hashes
+	// Rights refuses sources whose data_sources licence grants no right to display images; nil allows all.
+	Rights Rights
 }
 
 // Reserver is the Reserve func that writes cover_gc through db, a handle outside the step's transaction.
@@ -99,9 +104,25 @@ func Key(id string, source []byte, suffix string) string {
 // 2026-11-01, item 18), overwriting the previous cover in place. With sameSource the variants t already has are
 // kept, so a cover stored before thumbnails existed only gets its thumbnail.
 func (j *Job) Store(ctx context.Context, t Target, src string, sameSource bool) (key, thumb string, err error) {
+	return j.storeFrom(ctx, t, src, "", "", sameSource)
+}
+
+// storeFrom is Store that also records source and licence in cover_hashes.
+func (j *Job) storeFrom(
+	ctx context.Context, t Target, src, source, licence string, sameSource bool,
+) (key, thumb string, err error) {
 	body, err := j.get(ctx, src)
 	if err != nil {
 		return "", "", err
+	}
+
+	fp, err := j.fingerprint(ctx, t, body)
+	if err != nil {
+		return "", "", err
+	}
+
+	if fp.same {
+		return t.Key, t.ThumbKey, nil
 	}
 
 	thumbKey := catalog.CoverKey(t.Type, t.Slug, true)
@@ -139,7 +160,45 @@ func (j *Job) Store(ctx context.Context, t Target, src string, sameSource bool) 
 		}
 	}
 
+	if j.Hashes != nil {
+		row := HashRow{
+			Key: out[0], SHA256: sha256.Sum256(body), DHash: fp.dhash, Width: fp.w, Height: fp.h, Bytes: len(body),
+			Source: source, Licence: licence,
+		}
+		if err := j.Hashes.Put(ctx, row); err != nil {
+			return "", "", err
+		}
+	}
+
 	return out[0], out[1], nil
+}
+
+type fingerprint struct {
+	dhash uint64
+	w, h  int
+	// same: the item already holds this picture under both keys, so nothing is encoded or written.
+	same bool
+}
+
+// fingerprint hashes body and compares it with the picture stored under the item's current full key.
+func (j *Job) fingerprint(ctx context.Context, t Target, body []byte) (fingerprint, error) {
+	var fp fingerprint
+	if j.Hashes == nil {
+		return fp, nil
+	}
+
+	var err error
+	if fp.dhash, fp.w, fp.h, err = Fingerprint(body); err != nil {
+		return fp, err
+	}
+
+	if t.Key != "" && t.ThumbKey != "" {
+		if fp.same, err = j.Hashes.Same(ctx, t.Key, fp.dhash); err != nil {
+			return fp, err
+		}
+	}
+
+	return fp, nil
 }
 
 // Cover decides and stores the cover of one target. Source order: Open Library (books), TMDB/IGDB, Steam, GOG,
@@ -167,7 +226,22 @@ func (j *Job) Cover(ctx context.Context, t Target) (*Patch, error) {
 		return nil, nil //nolint:nilnil // current cover
 	}
 
-	key, thumb, err := j.Store(ctx, t, c.URL, c.Source == t.Source)
+	licence := ""
+
+	if j.Rights != nil {
+		l, ok, err := j.Rights.Allowed(ctx, c.Source)
+		if err != nil {
+			return nil, err
+		}
+
+		if !ok {
+			return nil, nil //nolint:nilnil // no right to display this source's images: keep the current cover
+		}
+
+		licence = l
+	}
+
+	key, thumb, err := j.storeFrom(ctx, t, c.URL, c.Source, licence, c.Source == t.Source)
 	if err != nil {
 		return nil, err
 	}
