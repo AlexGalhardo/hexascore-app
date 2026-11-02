@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- **release:** CHANGELOG.md and the GitHub releases stay in sync: `scripts/release.sh` keeps the hand-written `[Unreleased]` notes as the new section, and `changelog-sync.yml` checks every release against its section (`scripts/release/check-sync.ts`)
+
+### Changed
+
+- **i18n:** Shorter /about intro in en, pt-BR and es
+
 ## [0.38.0] - 2026-11-02
 
 ### Added

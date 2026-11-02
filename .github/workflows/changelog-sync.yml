@@ -1,0 +1,33 @@
+name: Changelog sync
+
+# CHANGELOG.md and the GitHub releases stay identical (owner, 2026-11-02): every vX.Y.Z release
+# has a CHANGELOG section with the same body and every section has a release
+# (scripts/release/check-sync.ts, docs/runbooks/release-range.md "Keeping releases in sync"). It runs
+# on release events, not on CHANGELOG pushes: the release commit lands before its tag and release.
+on:
+  release:
+    types: [published, edited, deleted]
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: changelog-sync
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      - run: bun scripts/release/check-sync.ts
+        env:
+          GH_TOKEN: ${{ github.token }}

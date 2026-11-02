@@ -138,4 +138,19 @@ describe("scripts/release.sh range", () => {
 		expect(r.code).toBe(0);
 		expect(r.cliff).toContain(`${three}..HEAD`);
 	});
+
+	it("keeps hand-written [Unreleased] notes as the new section", () => {
+		writeFileSync(
+			join(repo, "CHANGELOG.md"),
+			changelog().replace("## [Unreleased]\n", "## [Unreleased]\n\n### Fixed\n\n- curated note\n"),
+		);
+		commit("fix: six", "six.txt");
+
+		const r = release("v0.4.1");
+		expect(r.code).toBe(0);
+		expect(changelog()).toMatch(
+			/## \[Unreleased\]\n\n## \[0\.4\.1\] - \d{4}-\d{2}-\d{2}\n\n### Fixed\n\n- curated note\n\n## \[0\.4\.0\]/,
+		);
+		expect(changelog()).not.toContain("- stub\n\n## [0.4.0]");
+	});
 });

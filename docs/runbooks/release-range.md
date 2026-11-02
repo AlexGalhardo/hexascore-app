@@ -23,3 +23,15 @@ git-cliff --config .config/cliff.toml --tag vX.Y.Z "$base..HEAD"
 ```
 
 Tests: `bun test scripts/release.test.ts`. The test uses a scratch repository that reproduces the squash, the merge-back and an unreachable tag, plus a fake git-cliff that records its arguments. Vitest also runs it as part of `bun run test`.
+
+## Keeping releases in sync
+
+CHANGELOG.md and the GitHub releases say the same thing (owner, 2026-11-02).
+
+1. Write the release notes under `[Unreleased]` while working. `scripts/release.sh vX.Y.Z` turns them into the `## [X.Y.Z]` section; only an empty `[Unreleased]` falls back to the git-cliff list of the range above.
+2. Push `main`, then the tag. `release.yml` publishes the section as the release body and fails when the section is missing.
+3. `changelog-sync.yml` runs `bun scripts/release/check-sync.ts` on every release event (published, edited, deleted), every Monday and on demand. It fails on a release whose body differs from its section, a release without a section and a section without a release. GitHub's `**Full Changelog**` line and CRLF line endings are ignored.
+4. To fix a released section, edit CHANGELOG.md and run `gh release edit vX.Y.Z --notes-file <section>` in the same change. Deleting or renumbering a release also removes or renames its section and compare link.
+5. A release workflow that is still running recreates its release after a manual delete: wait for it to finish (`gh run list --workflow release.yml`) before deleting a release or its tag.
+
+Tests: `bunx vitest run scripts/release/check-sync.test.ts`; locally, `bun scripts/release/check-sync.ts` (needs `gh`).

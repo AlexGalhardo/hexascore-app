@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Usage: scripts/release.sh vX.Y.Z [--since <rev>]
-# Replaces the body of [Unreleased] in CHANGELOG.md with the git-cliff section for the new tag, adds its
-# compare link, commits `chore(release): vX.Y.Z` and creates the tag. Push separately (PROMPT-WORKERS 8.1).
+# Turns [Unreleased] in CHANGELOG.md into the section for the new tag (its hand-written notes, or the git-cliff
+# list when it is empty), adds its compare link, commits `chore(release): vX.Y.Z` and creates the tag. Push
+# separately (PROMPT-WORKERS 8.1); release.yml publishes the section as the GitHub release.
 #
 # Range: the previous release is the highest vX.Y.Z tag, not `git describe`. Releases land on GitHub as a
 # squash commit and the tag can sit on a branch main never reaches, so the range starts after the newest
@@ -46,6 +47,17 @@ else
 	git-cliff --config .config/cliff.toml --unreleased --tag "$version" >"$section"
 fi
 grep -q "^## \[${version#v}\]" "$section" || { echo "release: no releasable commits since ${prev:-the first commit}" >&2; exit 1; }
+
+# Hand-written [Unreleased] notes win over the generated list: they are what the release says
+# (owner, 2026-11-02). release.yml publishes this same section, so CHANGELOG.md and the GitHub release match.
+notes=$(awk '/^## \[Unreleased\]/ { f = 1; next } f && /^## \[/ { exit } f' CHANGELOG.md)
+if [ -n "$(printf '%s' "$notes" | tr -d '[:space:]')" ]; then
+	{
+		printf '## [%s] - %s\n\n' "${version#v}" "$(date +%F)"
+		# $(...) already dropped the trailing blank lines; sed drops the leading ones.
+		printf '%s\n' "$notes" | sed -e '/./,$!d'
+	} >"$section"
+fi
 
 # The [Unreleased] link moves to the new tag and the new version's link compares it with the previous tag.
 awk -v sec="$section" -v new="$version" -v prev="$prev" '
