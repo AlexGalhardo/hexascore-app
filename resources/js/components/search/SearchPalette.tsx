@@ -115,7 +115,7 @@ function SearchPalette({ open, onOpenChange, returnFocus }: Props) {
 				<BaseDialog.Popup
 					initialFocus={input}
 					finalFocus={returnFocus}
-					className="fixed inset-0 z-[60] flex flex-col bg-bg text-fg outline-none sm:inset-x-0 sm:top-[12vh] sm:bottom-auto sm:mx-auto sm:max-h-[76vh] sm:w-[calc(100%-2rem)] sm:max-w-[640px] sm:border sm:border-fg sm:shadow-[0_4px_0_var(--color-border)]"
+					className="fixed inset-0 z-[60] flex flex-col bg-bg text-fg outline-none sm:inset-x-0 sm:top-[12vh] sm:bottom-auto sm:mx-auto sm:max-h-[76vh] sm:w-[calc(100%-2rem)] sm:max-w-[640px] sm:rounded-md sm:border sm:border-fg sm:shadow-[0_4px_0_var(--color-border)]"
 				>
 					<BaseDialog.Title className="sr-only">{t("search.title")}</BaseDialog.Title>
 					<search className="flex items-center gap-2 border-b border-fg px-4">

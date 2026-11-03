@@ -12,6 +12,7 @@ export interface Facet {
 export interface ActiveFilters {
 	genre: string;
 	platform: string;
+	watch?: string;
 	year: number;
 	minScore: number | null;
 	sort: string;
@@ -42,7 +43,7 @@ const MIN_SCORES = Array.from({ length: 21 }, (_, i) => i / 2);
 
 /** Filters other than sort that differ from their default. */
 export function activeCount(f: ActiveFilters): number {
-	return [f.genre, f.platform, f.mode ?? "", f.year, f.minScore].filter(
+	return [f.genre, f.platform, f.watch ?? "", f.mode ?? "", f.year, f.minScore].filter(
 		(v) => v !== "" && v !== 0 && v !== null,
 	).length;
 }
@@ -56,6 +57,7 @@ export default function Filters({
 	filters,
 	genres,
 	platforms,
+	watch = [],
 	modes = [],
 	active = [],
 }: {
@@ -64,6 +66,7 @@ export default function Filters({
 	filters: ActiveFilters;
 	genres: Facet[];
 	platforms: Facet[];
+	watch?: Facet[];
 	modes?: Facet[];
 	active?: ActiveEntity[];
 }) {
@@ -73,7 +76,7 @@ export default function Filters({
 	const count = activeCount(filters);
 	// Full-width fields: a select sized to its longest option used to shift the list when facets arrived (CLS).
 	const field =
-		"min-h-11 w-full min-w-0 rounded-md border border-field bg-field-bg px-3 text-[15px] text-fg focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary";
+		"min-h-11 w-full min-w-0 rounded-sm border border-field bg-field-bg px-3 text-[15px] text-fg focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary";
 	const label = "grid gap-1.5 text-[13px] font-semibold";
 
 	return (
@@ -164,6 +167,19 @@ export default function Filters({
 							{modes.map((m) => (
 								<option key={m.slug} value={m.slug}>
 									{m.name} ({m.count})
+								</option>
+							))}
+						</select>
+					</label>
+				)}
+				{(type === "movie" || type === "series") && (
+					<label className={label}>
+						{t("catalog.whereToWatch")}
+						<select name="watch" defaultValue={filters.watch ?? ""} className={field}>
+							<option value="">{t("catalog.anyWatchProvider")}</option>
+							{watch.map((provider) => (
+								<option key={provider.slug} value={provider.slug}>
+									{provider.name} ({provider.count})
 								</option>
 							))}
 						</select>

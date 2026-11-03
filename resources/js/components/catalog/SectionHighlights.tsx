@@ -7,6 +7,8 @@ export interface Highlight {
 	slug: string;
 	title: string;
 	year: number | null;
+	releaseDate?: string;
+	releasePrecision: "day" | "month" | "year" | "unknown";
 	score: number | null;
 	ratingCount: number;
 	cover: Cover | null;

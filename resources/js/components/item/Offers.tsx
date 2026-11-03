@@ -4,6 +4,7 @@ import { useT } from "../../lib/useT";
 
 export interface OfferView {
 	id: string;
+	store?: string;
 	name: string;
 	kind: string;
 	/** Day (UTC, YYYY-MM-DD) the offer was last confirmed. */

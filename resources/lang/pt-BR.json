@@ -555,6 +555,8 @@
     "anyGenre": "Qualquer gênero",
     "platform": "Plataforma",
     "anyPlatform": "Qualquer plataforma",
+    "whereToWatch": "Onde assistir",
+    "anyWatchProvider": "Qualquer serviço",
     "year": "Ano",
     "minScore": "Nota mín.",
     "minCategories": "Nota Mínima Por Categoria",
@@ -718,9 +720,12 @@
   },
   "home": {
     "title": "Todo jogo, filme, série e livro — avaliado pelas pessoas, categoria por categoria.",
+    "noUpcoming": "Ainda não há lançamentos confirmados para os próximos três meses.",
     "explore": "Explorar",
     "ratedBy": "por {name}",
     "trendingWeek": "Em alta esta semana",
+    "mostWaited": "{type} mais aguardados nas próximas semanas",
+    "trending30Days": "{type} em alta nos últimos 30 dias",
     "popularType": "Populares: {type}",
     "popular": "Popular",
     "trendingRank": "#{rank} em alta",
@@ -739,10 +744,10 @@
       "other": "{n} títulos"
     },
     "seeAll": {
-      "game": "Ver todos os jogos",
-      "movie": "Ver todos os filmes",
-      "series": "Ver todas as séries",
-      "book": "Ver todos os livros"
+      "game": "Ver todos os {count} jogos →",
+      "movie": "Ver todos os {count} filmes →",
+      "series": "Ver todas as {count} séries →",
+      "book": "Ver todos os {count} livros →"
     },
     "more": {
       "game": "Mais jogos",
@@ -781,6 +786,17 @@
     "creditsBody": "Dados de jogos do IGDB.com. Dados de filmes e séries do TMDB; este produto usa a API do TMDB, mas não é endossado nem certificado pelo TMDB."
   },
   "footer": {
+    "description": "Um catálogo de jogos, filmes, séries e livros avaliados pela comunidade.",
+    "categoriesTitle": "Categorias",
+    "companyTitle": "Empresa",
+    "legalTitle": "Legal",
+    "apiTitle": "API",
+    "apiReference": "Referência da API",
+    "newsletterTitle": "Newsletter",
+    "newsletterPlaceholder": "Seu e-mail",
+    "newsletterSubmit": "Inscrever-se",
+    "newsletterSoon": "Receba notícias e novidades a cada 15 dias no seu email",
+    "affiliateDisclosure": "Podemos receber comissão por links de compra, sem custo adicional para você.",
     "about": "Sobre",
     "terms": "Termos",
     "privacy": "Privacidade",
@@ -984,6 +1000,8 @@
     "coverAlt": "Capa de {title}",
     "notEnough": "Avaliações insuficientes",
     "notEnoughHint": "A nota aparece a partir de {min} avaliações.",
+    "unreleased": "Ainda não lançado",
+    "unreleasedHint": "Você poderá avaliar após o lançamento.",
     "categoryScores": "Notas por categoria",
     "seeUserScores": "Ver notas dos usuários",
     "userScores": "Notas dos usuários",
@@ -1021,7 +1039,16 @@
       "episodes": "Episódios",
       "countries": "Países"
     },
+    "verdict": {
+      "low": "Baixa",
+      "good": "Boa",
+      "veryGood": "Muito boa",
+      "excellent": "Excelente",
+      "masterpiece": "Obra-prima"
+    },
     "runtimeValue": "{minutes} min",
+    "runtimeHoursMinutes": "{hours}h {minutes} min",
+    "runtimeHours": "{hours}h",
     "moreCount": "+{count} mais",
     "whereToBuy": "Onde comprar",
     "affiliateNotice": "Links de afiliado: podemos receber comissão, sem custo extra para você.",
@@ -1115,8 +1142,8 @@
       "low": "Nota baixa"
     },
     "scoreFrom": {
-      "one": "de {n} avaliação · seis categorias, uma fórmula",
-      "other": "de {n} avaliações · seis categorias, uma fórmula"
+      "one": "de {n} avaliação",
+      "other": "de {n} avaliações"
     },
     "howScoreWorks": "Como a nota funciona",
     "breadcrumb": "Trilha de navegação",

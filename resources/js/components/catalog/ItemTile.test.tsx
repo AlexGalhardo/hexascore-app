@@ -34,13 +34,13 @@ const item: Highlight = {
 	slug: "bigbug",
 	title: "A title long enough to need a second line on a narrow tile",
 	year: 2022,
+	releasePrecision: "day",
 	score: 8.4,
 	ratingCount: 12,
 	cover: null,
 };
 
-// Owner decisions 2026-11-02: no year, title and score on one row. 2026-11-03: soft grey edge, not a category colour.
-test("the tile footer holds the truncating title and the score on one row, with a soft grey edge", () => {
+test("the cover fills a flat card with score and title overlaid", () => {
 	render(
 		<ul>
 			<ItemTile item={item} href="/movies/bigbug" />
@@ -48,19 +48,18 @@ test("the tile footer holds the truncating title and the score on one row, with 
 	);
 	const link = screen.getByRole("link");
 	expect(link.getAttribute("href")).toBe("/movies/bigbug");
-	expect(link.className).toContain("rounded-lg");
+	expect(link.className).toContain("rounded-sm");
 	expect(link.className).toContain("border-border");
-	expect(link.className).not.toContain("border-cat-");
-	const footer = link.querySelector("[data-tile-footer]");
-	expect(footer?.className).toContain("grid-cols-[1fr_auto]");
-	const [title, badge] = [...(footer?.children ?? [])];
-	expect(title.textContent).toBe(item.title);
-	expect(title.className).toContain("truncate");
+	expect(link.className).not.toContain("shadow-");
+	expect(link.querySelector("[data-tile-footer]")).toBeNull();
+	expect(screen.getByText(item.title).className).toContain("absolute");
 	expect(screen.queryByText("2022")).toBeNull();
-	expect(screen.getByRole("img", { name: /score.outOf.*8\.4/ })).toBe(badge);
+	expect(
+		screen.getByRole("img", { name: /score.outOf.*8\.4/ }).parentElement?.className,
+	).toContain("top-2");
 });
 
-test("an item without a score keeps the footer and the accessible no-score label", () => {
+test("an item without a score keeps the accessible no-score label", () => {
 	render(
 		<ul>
 			<ItemTile item={{ ...item, score: null, type: "book" }} href="/books/bigbug" />

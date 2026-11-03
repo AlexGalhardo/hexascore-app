@@ -15,7 +15,7 @@ export default function FriendsScore({ data }: { data: FriendsScoreData | null |
 	return (
 		<div
 			data-testid="friends-score"
-			className="flex items-center gap-4 border border-border bg-surface shadow-ledge-secondary p-4"
+			className="flex items-center gap-4 border border-border bg-surface p-4"
 		>
 			<ScoreBadge score={data.average} size="md" />
 			<div className="grid gap-1">

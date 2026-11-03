@@ -72,7 +72,7 @@ export default function CoverThumb({
 			fetchPriority={priority ? "high" : "auto"}
 			decoding="async"
 			// The whole cover (lg) leaves letterbox bands: transparent, so they take the colour around the box (owner 2026-11-02).
-			className={`shrink-0 rounded-sm ${size === "lg" ? "bg-transparent object-contain" : "bg-surface object-cover"} ${BOX[size]}`}
+			className={`shrink-0 rounded-sm bg-surface object-cover ${BOX[size]}`}
 		/>
 	);
 }

@@ -40,10 +40,10 @@
 	--shadow-nav-dark: 0 4px 12px oklch(0 0 0);
 }
 
-/* One content container for navbar, pages and footer: 1382 px of content (20% wider than the original 1152 px) plus 16 px gutters. */
+/* One content container for navbar, pages and footer, narrowed by 10%. */
 @utility shell {
 	width: 100%;
-	max-width: calc(86.4rem + 2rem);
+	max-width: calc(77.76rem + 2rem);
 	margin-inline: auto;
 	padding-inline: 1rem;
 }

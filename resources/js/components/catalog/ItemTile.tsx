@@ -15,15 +15,14 @@ export default function ItemTile({ item, href }: { item: Highlight; href: string
 		<li className="grid content-start">
 			<Link
 				href={href}
-				className="group grid gap-2 rounded-lg border border-border bg-surface p-2 shadow-ledge-secondary hover:bg-fg hover:text-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
+				className="group relative block overflow-hidden rounded-sm border border-border bg-surface hover:border-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
 			>
 				<CoverThumb cover={item.cover} alt="" size="card" />
-				<span
-					data-tile-footer=""
-					className="grid h-8 grid-cols-[1fr_auto] items-center gap-2"
-				>
-					<span className="truncate font-display text-sm font-bold">{item.title}</span>
+				<span className="absolute top-2 right-2">
 					<ScoreBadge score={item.score} size="xs" />
+				</span>
+				<span className="absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-black/85 to-transparent p-2 pt-7 font-display text-sm font-bold text-white">
+					{item.title}
 				</span>
 			</Link>
 		</li>

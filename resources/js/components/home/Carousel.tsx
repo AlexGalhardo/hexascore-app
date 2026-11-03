@@ -1,12 +1,9 @@
-import { type ReactElement, type ReactNode, useEffect, useRef, useState } from "react";
+import { type ReactElement, type ReactNode, useRef, useState } from "react";
 
 import { useT } from "../../lib/useT";
 import { iconButton } from "../Nav";
 
-// Pause, previous and next are raised like the site buttons; the dots stay flat.
-const raised = `${iconButton} border border-border bg-surface shadow-ledge-secondary active:shadow-ledge-secondary-pressed`;
-/** Time each slide stays before the next one while auto-advancing. */
-export const SLIDE_MS = 2000;
+const raised = `${iconButton} border border-border bg-surface`;
 
 // Full class names so Tailwind keeps them; the landing carousel has at most 4 slides (12 items, 3 per slide).
 const OFFSET = ["translate-x-0", "-translate-x-full", "-translate-x-[200%]", "-translate-x-[300%]"];
@@ -14,8 +11,6 @@ const OFFSET = ["translate-x-0", "-translate-x-full", "-translate-x-[200%]", "-t
 const PATHS = {
 	previous: "M15 6 L9 12 L15 18",
 	next: "M9 6 L15 12 L9 18",
-	pause: "M9 6 V18 M15 6 V18",
-	play: "M8 5 L19 12 L8 19 Z",
 } as const;
 
 function Glyph({ name }: { name: keyof typeof PATHS }): ReactElement {
@@ -33,9 +28,8 @@ function Glyph({ name }: { name: keyof typeof PATHS }): ReactElement {
 }
 
 /**
- * Hand-written carousel (WAI-ARIA APG pattern, WCAG 2.2.2): auto-advances every SLIDE_MS unless the visitor paused
- * it, prefers reduced motion, hovers it or has focus inside; previous/next buttons, labelled indicators, arrow keys
- * and touch swipe; inactive slides are inert and hidden from assistive tech.
+ * Manual carousel: previous/next buttons, labelled indicators, arrow keys and touch swipe.
+ * Inactive slides are inert and hidden from assistive tech.
  */
 export default function Carousel({
 	label,
@@ -47,30 +41,7 @@ export default function Carousel({
 	const t = useT();
 	const count = Math.min(slides.length, OFFSET.length);
 	const [index, setIndex] = useState(0);
-	// null = follow the motion preference; true/false = the visitor's explicit choice.
-	const [choice, setChoice] = useState<boolean | null>(null);
-	// Until the effect reads the media query (and on the server) nothing moves.
-	const [reduced, setReduced] = useState(true);
-	const [hovered, setHovered] = useState(false);
-	const [focused, setFocused] = useState(false);
 	const touchX = useRef<number | null>(null);
-
-	useEffect(() => {
-		const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-		const sync = () => setReduced(mq.matches);
-		sync();
-		mq.addEventListener("change", sync);
-		return () => mq.removeEventListener("change", sync);
-	}, []);
-
-	const playing = choice ?? !reduced;
-	const auto = playing && !hovered && !focused && count > 1;
-
-	useEffect(() => {
-		if (!auto) return;
-		const id = window.setInterval(() => setIndex((i) => (i + 1) % count), SLIDE_MS);
-		return () => window.clearInterval(id);
-	}, [auto, count]);
 
 	const go = (i: number) => setIndex((i + count) % count);
 
@@ -79,12 +50,6 @@ export default function Carousel({
 			aria-roledescription="carousel"
 			aria-label={label}
 			className="grid gap-3"
-			onMouseEnter={() => setHovered(true)}
-			onMouseLeave={() => setHovered(false)}
-			onFocus={() => setFocused(true)}
-			onBlur={(e) => {
-				if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false);
-			}}
 			onKeyDown={(e) => {
 				if (e.key === "ArrowRight") go(index + 1);
 				else if (e.key === "ArrowLeft") go(index - 1);
@@ -100,10 +65,9 @@ export default function Carousel({
 				go(end < start ? index + 1 : index - 1);
 			}}
 		>
-			{/* Inner room so the cards' ledge shadows are not clipped by overflow-hidden (owner 2026-11-02). */}
-			<div className="overflow-hidden px-1 pt-1 pb-3">
+			<div className="overflow-hidden">
 				<div
-					aria-live={auto ? "off" : "polite"}
+					aria-live="polite"
 					className={`flex transition-transform duration-500 motion-reduce:transition-none ${OFFSET[index]}`}
 				>
 					{slides.slice(0, count).map((slide, i) => (
@@ -124,14 +88,6 @@ export default function Carousel({
 			</div>
 			{count > 1 && (
 				<div className="flex items-center justify-center gap-1">
-					<button
-						type="button"
-						className={raised}
-						aria-label={playing ? t("home.carousel.pause") : t("home.carousel.play")}
-						onClick={() => setChoice(!playing)}
-					>
-						<Glyph name={playing ? "pause" : "play"} />
-					</button>
 					<button
 						type="button"
 						className={raised}

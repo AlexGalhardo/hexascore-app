@@ -14,12 +14,20 @@ interface Props {
 	type: ItemType;
 	mine: Record<string, number> | null | undefined;
 	canWrite: boolean;
+	unreleased?: boolean;
 	children?: ReactNode;
 }
 
 // The viewer's six-category rating (design v1 "Your rating" panel). Values are local until saved;
 // the server needs every category, so Save stays disabled until all six are set.
-export default function RatingPanel({ itemId, type, mine, canWrite, children }: Props) {
+export default function RatingPanel({
+	itemId,
+	type,
+	mine,
+	canWrite,
+	unreleased = false,
+	children,
+}: Props) {
 	const t = useT();
 	const { locale } = usePage<SharedProps>().props;
 	const l = (path: string) => localized(path, locale);
@@ -37,6 +45,7 @@ export default function RatingPanel({ itemId, type, mine, canWrite, children }: 
 
 	const visit = { preserveScroll: true, onFinish: () => setBusy(false) };
 	const save = () => {
+		if (unreleased) return;
 		setBusy(true);
 		router.put(l(`/items/${itemId}/rating`), { scores: values }, visit);
 	};
@@ -50,14 +59,18 @@ export default function RatingPanel({ itemId, type, mine, canWrite, children }: 
 		<section
 			id="your-rating"
 			aria-labelledby="rating-heading"
-			className="grid scroll-mt-20 gap-4 bg-surface shadow-ledge-secondary p-5"
+			className="grid scroll-mt-20 gap-4 bg-surface p-5"
 		>
 			<h2 id="rating-heading" className="text-2xl leading-tight font-bold">
 				{t("item.rate")}
 			</h2>
 			{/* Hidden from sight, not from assistive tech: each star group points here for the keys. */}
 			<p id="rating-help" className="sr-only">
-				{canWrite ? t("item.panel.help") : t("item.panel.helpGuest")}
+				{unreleased
+					? t("item.unreleasedHint")
+					: canWrite
+						? t("item.panel.help")
+						: t("item.panel.helpGuest")}
 			</p>
 			<div className="grid gap-2">
 				<StarSymbol />
@@ -67,7 +80,7 @@ export default function RatingPanel({ itemId, type, mine, canWrite, children }: 
 						label={t(`categories.${type}.${k}`)}
 						value={values[k]}
 						onChange={(v) => setValues((s) => ({ ...s, [k]: v }))}
-						disabled={!canWrite || busy}
+						disabled={!canWrite || busy || unreleased}
 						describedBy="rating-help"
 					/>
 				))}
@@ -88,7 +101,11 @@ export default function RatingPanel({ itemId, type, mine, canWrite, children }: 
 						<ScoreBadge score={overall} size="md" />
 					</div>
 					<div className="grid gap-2">
-						<Btn disabled={!complete || busy} onClick={save} className="w-full">
+						<Btn
+							disabled={!complete || busy || unreleased}
+							onClick={save}
+							className="w-full"
+						>
 							{busy
 								? t("ratings.saving")
 								: mine
@@ -105,18 +122,26 @@ export default function RatingPanel({ itemId, type, mine, canWrite, children }: 
 				</>
 			) : (
 				<div className="grid gap-2">
-					<Link href={l("/login")} className={btnClass("primary", "w-full")}>
-						{t("item.loginToRate")}
-					</Link>
-					<p className="text-sm text-muted">
-						{t("item.panel.noAccount")}{" "}
-						<Link
-							href={l("/signup")}
-							className="font-semibold text-primary hover:underline"
-						>
-							{t("item.panel.signupFree")}
-						</Link>
-					</p>
+					{unreleased ? (
+						<Btn disabled className="w-full">
+							{t("item.loginToRate")}
+						</Btn>
+					) : (
+						<>
+							<Link href={l("/login")} className={btnClass("primary", "w-full")}>
+								{t("item.loginToRate")}
+							</Link>
+							<p className="text-sm text-muted">
+								{t("item.panel.noAccount")}{" "}
+								<Link
+									href={l("/signup")}
+									className="font-semibold text-primary hover:underline"
+								>
+									{t("item.panel.signupFree")}
+								</Link>
+							</p>
+						</>
+					)}
 				</div>
 			)}
 		</section>

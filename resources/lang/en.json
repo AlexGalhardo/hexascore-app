@@ -555,6 +555,8 @@
     "anyGenre": "Any genre",
     "platform": "Platform",
     "anyPlatform": "Any platform",
+    "whereToWatch": "Where to watch",
+    "anyWatchProvider": "Any provider",
     "year": "Year",
     "minScore": "Min. score",
     "minCategories": "Minimum Score Per Category",
@@ -718,9 +720,12 @@
   },
   "home": {
     "title": "Every game, movie, series and book — scored by people, category by category.",
+    "noUpcoming": "No confirmed releases in the next three months yet.",
     "explore": "Explore",
     "ratedBy": "by {name}",
     "trendingWeek": "Trending this week",
+    "mostWaited": "Most anticipated {type} in the coming weeks",
+    "trending30Days": "Trending {type} in the last 30 days",
     "popularType": "Popular {type}",
     "popular": "Popular",
     "trendingRank": "#{rank} trending",
@@ -739,10 +744,10 @@
       "other": "{n} titles"
     },
     "seeAll": {
-      "game": "See all games",
-      "movie": "See all movies",
-      "series": "See all TV series",
-      "book": "See all books"
+      "game": "See all {count} games →",
+      "movie": "See all {count} movies →",
+      "series": "See all {count} TV series →",
+      "book": "See all {count} books →"
     },
     "more": {
       "game": "More games",
@@ -781,6 +786,17 @@
     "creditsBody": "Game data from IGDB.com. Movie and series data from TMDB; this product uses the TMDB API but is not endorsed or certified by TMDB."
   },
   "footer": {
+    "description": "A catalogue of games, movies, TV series and books, rated by the community.",
+    "categoriesTitle": "Categories",
+    "companyTitle": "Company",
+    "legalTitle": "Legal",
+    "apiTitle": "API",
+    "apiReference": "API reference",
+    "newsletterTitle": "Newsletter",
+    "newsletterPlaceholder": "Your email address",
+    "newsletterSubmit": "Subscribe",
+    "newsletterSoon": "Get news and updates in your inbox every 15 days",
+    "affiliateDisclosure": "We may earn a commission from purchase links, at no extra cost to you.",
     "about": "About",
     "terms": "Terms",
     "privacy": "Privacy",
@@ -984,6 +1000,8 @@
     "coverAlt": "Cover of {title}",
     "notEnough": "Not enough ratings",
     "notEnoughHint": "The score appears after {min} ratings.",
+    "unreleased": "Not released yet",
+    "unreleasedHint": "You can rate this title after its release.",
     "categoryScores": "Scores by category",
     "seeUserScores": "See users' scores",
     "userScores": "Users' scores",
@@ -1021,7 +1039,16 @@
       "episodes": "Episodes",
       "countries": "Countries"
     },
+    "verdict": {
+      "low": "Low",
+      "good": "Good",
+      "veryGood": "Very good",
+      "excellent": "Excellent",
+      "masterpiece": "Masterpiece"
+    },
     "runtimeValue": "{minutes} min",
+    "runtimeHoursMinutes": "{hours}h {minutes} min",
+    "runtimeHours": "{hours}h",
     "moreCount": "+{count} more",
     "whereToBuy": "Where to buy",
     "affiliateNotice": "Affiliate links: we may earn a commission, at no extra cost to you.",
@@ -1115,8 +1142,8 @@
       "low": "Low score"
     },
     "scoreFrom": {
-      "one": "from {n} rating · six categories, one formula",
-      "other": "from {n} ratings · six categories, one formula"
+      "one": "from {n} rating",
+      "other": "from {n} ratings"
     },
     "howScoreWorks": "How the score works",
     "breadcrumb": "Breadcrumb",

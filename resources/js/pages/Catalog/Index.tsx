@@ -22,7 +22,7 @@ interface Props {
 	type: Section["type"];
 	items: { data: Highlight[] };
 	filters: ActiveFilters;
-	facets: { genres: Facet[]; platforms: Facet[]; modes?: Facet[] };
+	facets: { genres: Facet[]; platforms: Facet[]; modes?: Facet[]; watch?: Facet[] };
 	active?: ActiveEntity[];
 	pagination: Pagination;
 	total?: number;
@@ -54,31 +54,27 @@ export default function Index({
 				canonical={seo && pageCanonical(seo.canonical, url, filters.per)}
 			/>
 			{seo && <PagerHead url={url} pagination={pagination} origin={seo.canonical} />}
-			{/* Title alone, the result count on the right (design v1, round 2 item 11). */}
-			<div className="flex items-end gap-6 pb-6">
-				<h1 className="font-display text-4xl leading-none font-bold tracking-[-0.02em] md:text-6xl">
-					{title}
-				</h1>
-				{total !== undefined && (
-					<p className="ml-auto hidden flex-col items-end md:flex">
-						<span className="text-4xl leading-none font-bold tabular-nums">
-							{new Intl.NumberFormat(locale).format(total)}
-						</span>
-						<span className="mt-1 text-[13px] text-muted">
-							{t(`catalog.foundLabel.${type}`)}
-						</span>
-					</p>
-				)}
-			</div>
+			<h1 className="sr-only">{title}</h1>
 			{/* E-commerce layout from lg up: sticky filter sidebar left, results right (owner round 2026-11-01 item 20). */}
 			<div className="lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10">
 				<aside className="lg:sticky lg:top-24 lg:self-start">
+					{total !== undefined && (
+						<p className="mb-3 rounded-sm border border-border bg-surface p-4">
+							<span className="block text-3xl font-bold tabular-nums">
+								{new Intl.NumberFormat(locale).format(total)}
+							</span>
+							<span className="text-sm text-muted">
+								{t(`catalog.foundLabel.${type}`)}
+							</span>
+						</p>
+					)}
 					<Filters
 						action={path}
 						type={type}
 						filters={filters}
 						genres={facets.genres}
 						platforms={facets.platforms}
+						watch={facets.watch}
 						modes={facets.modes}
 						active={active}
 					/>
@@ -98,12 +94,6 @@ export default function Index({
 								</li>
 							))}
 						</ul>
-					)}
-					{total !== undefined && (
-						<p className="mt-4 text-sm text-muted md:sr-only">
-							{new Intl.NumberFormat(locale).format(total)}{" "}
-							{t(`catalog.foundLabel.${type}`)}
-						</p>
 					)}
 					{items.data.length === 0 &&
 					total !== undefined &&
@@ -151,6 +141,7 @@ export default function Index({
 const FILTER_PARAMS = [
 	"genre",
 	"platform",
+	"watch",
 	"mode",
 	"franchise",
 	"company",
