@@ -263,14 +263,7 @@ export default function Show({
 						)}
 					</div>
 					<Section id="details" title={t("item.details")} bold>
-						{offers && (item.type === "movie" || item.type === "series") && (
-							<Offers
-								offers={offers}
-								type={item.type}
-								title={title}
-								locale={locale}
-							/>
-						)}
+						{offers && <Offers offers={offers} type={item.type} title={title} />}
 						<dl className="grid">
 							{release && (
 								<DetailRow label={t("item.fields.releaseDate")}>
