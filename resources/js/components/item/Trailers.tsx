@@ -56,7 +56,7 @@ export default function Trailers({ trailers }: { trailers: Trailer[] }) {
 									onClick={() =>
 										setLoaded((prev) => new Set(prev).add(trailer.youtubeId))
 									}
-									className="min-h-11 rounded-xs bg-bg px-4 font-semibold text-fg hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bg"
+									className="min-h-11 rounded-md bg-bg px-4 font-semibold text-fg hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-bg"
 								>
 									{t("item.loadTrailerN", { n: i + 1 })}
 								</button>

@@ -7,7 +7,7 @@ export type BtnKind = "primary" | "secondary" | "ghost";
 // an inset shadow). With
 // prefers-reduced-motion the button does not move; only the ledge shrinks.
 const base =
-	"inline-flex min-h-11 items-center justify-center gap-2 rounded-xs border px-5 text-[15px] font-semibold leading-tight transition-[background-color,box-shadow,translate] duration-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg active:translate-y-px motion-reduce:transition-none motion-reduce:active:translate-y-0 disabled:cursor-not-allowed disabled:translate-y-0 disabled:border-border disabled:bg-surface disabled:text-muted disabled:shadow-none aria-disabled:cursor-not-allowed aria-disabled:translate-y-0 aria-disabled:border-border aria-disabled:bg-surface aria-disabled:text-muted aria-disabled:shadow-none";
+	"inline-flex min-h-11 items-center justify-center gap-2 rounded-md border px-5 text-[15px] font-semibold leading-tight transition-[background-color,box-shadow,translate] duration-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg active:translate-y-px motion-reduce:transition-none motion-reduce:active:translate-y-0 disabled:cursor-not-allowed disabled:translate-y-0 disabled:border-border disabled:bg-surface disabled:text-muted disabled:shadow-none aria-disabled:cursor-not-allowed aria-disabled:translate-y-0 aria-disabled:border-border aria-disabled:bg-surface aria-disabled:text-muted aria-disabled:shadow-none";
 
 const kinds: Record<BtnKind, string> = {
 	primary:

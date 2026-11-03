@@ -70,7 +70,7 @@ export default function ApiKeys({ keys, maxKeys }: Props) {
 						{t("api.profile.keys.createdTitle")}
 					</h2>
 					<p role="alert">{t("api.profile.keys.createdWarning")}</p>
-					<code className="block break-all rounded bg-black/5 p-2 dark:bg-white/10">
+					<code className="block break-all rounded-sm bg-black/5 p-2 dark:bg-white/10">
 						{newKey}
 					</code>
 					<div className="flex gap-3">

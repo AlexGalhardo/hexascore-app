@@ -116,7 +116,7 @@ export default function TwoFactorDialog({ open }: { open: boolean }) {
 								onChange={(e) => fill(i, e.target.value.slice(-DIGITS))}
 								onKeyDown={(e) => onKeyDown(i, e)}
 								onPaste={(e) => onPaste(i, e)}
-								className="size-12 rounded-xs border-2 border-field bg-field-bg text-center text-2xl font-bold tabular-nums text-fg shadow-ledge-secondary focus-visible:border-primary focus-visible:outline-none"
+								className="size-12 rounded-md border-2 border-field bg-field-bg text-center text-2xl font-bold tabular-nums text-fg shadow-ledge-secondary focus-visible:border-primary focus-visible:outline-none"
 							/>
 						))}
 					</div>

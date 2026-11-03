@@ -73,7 +73,7 @@ export default function Filters({
 	const count = activeCount(filters);
 	// Full-width fields: a select sized to its longest option used to shift the list when facets arrived (CLS).
 	const field =
-		"min-h-11 w-full min-w-0 rounded-xs border border-field bg-field-bg px-3 text-[15px] text-fg focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary";
+		"min-h-11 w-full min-w-0 rounded-md border border-field bg-field-bg px-3 text-[15px] text-fg focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary";
 	const label = "grid gap-1.5 text-[13px] font-semibold";
 
 	return (

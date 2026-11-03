@@ -105,7 +105,7 @@ export default function TimeToBeat({ itemId, medians, mine, canEdit }: Props) {
 									min={0.5}
 									max={1000}
 									step={0.5}
-									className="min-h-11 w-full rounded-xs border border-field bg-field-bg px-2 text-sm text-fg"
+									className="min-h-11 w-full rounded-md border border-field bg-field-bg px-2 text-sm text-fg"
 									placeholder={t("item.timeToBeat.hoursPlaceholder")}
 									value={draft[k]}
 									onChange={(e) =>
