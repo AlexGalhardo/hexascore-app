@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **catalog:** Upcoming releases within 90 days on the landing, 30-day activity ranking for released items, and a where-to-watch provider filter for movie and series listings
+- **ui:** A grouped footer with a disabled newsletter preview and a catalogue demo seed with future releases for each category
 - **catalog:** Where to watch or buy on every item page: streaming, rent, buy and free-with-ads providers from TMDB (display only, with the JustWatch credit), Steam, GOG, Epic, Google Play, App Store and Amazon links derived from the catalogue ids, a country switch that follows the locale, and `/go/{id}` as the only exit (rate limited, uncached, no user id or IP counted); affiliate tags are added at the redirect when `AFFILIATE_*_TAG` is set
 - **admin:** The item manage page lists, deactivates, restores and adds offers, and pins or bans an item on the trending lists; `/admin/ingest/conflicts` holds items that duplicate another until an admin allows or dismisses them
 - **catalog:** The normaliser no longer creates an item whose external id another item owns or whose English title and year match another item; unique indexes on the external ids back the rule
@@ -19,13 +21,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **ratings:** Unreleased item pages explain when ratings open and disable guest and member rating controls; the existing server gate remains authoritative
+- **ui:** The navbar bottom border uses the same light border token as the catalogue cards
+- **ingest:** A cancelled refresh stops before opening a batch and between cover checks
 - **trending:** Flagged seed accounts no longer count in the trending signals or in the collaborative-filtering gate (OQ-07)
 - **a11y:** The Details links on the item page are 24 px touch targets again (Lighthouse target-size)
 - **web:** The render cache keys pages by their locale prefix again: `/pt-br/...` and `/es/...` no longer serve the English (or Spanish) copy rendered first
 
 ### Changed
 
-- **trending:** The landing carousel is the 7-day snapshot of score v2 (12 per type, entry and exit rules with a 72-hour cooldown, at most 2 per franchise and 4 per genre, a quality floor, admin pins and bans from the item page); `FLAG_TRENDING_V2=false` restores the most-rated list; quiet slots are labelled "Popular" and the formula is explained on /how-score-works
+- **item:** On unreleased items, logged-in users can only use "want" and "add to list"; the other status buttons and the time-to-beat form are disabled. Clearing an existing status stays allowed.
+
+- **trending:** The landing carousels show upcoming announcements with their known release-date precision instead of scores and advance only when a visitor navigates; the released 30-day ranking fills the grids below them. The 7-day score v2 snapshots remain available to the API
+- **ui:** Narrower site container, flatter and squarer catalogue cards, permanent navbar shadow, item verdict labels, shorter runtime display, and Amazon links below eligible book and game covers
 - **ui:** Cards (landing rows, category grids, trending) have a soft grey edge instead of a category colour, and buttons, inputs and cards share one radius scale (`rounded-md` controls, `rounded-lg` cards, `rounded-sm` covers and badges); native controls follow the theme, text selection uses the brand colour and headings balance their line breaks
 - **catalog:** Canonical genres: one translated list per category (en, pt-BR, es) replaces the Wikidata genre labels; `genres:canonicalize` relinks the items and keeps the source links hidden in `item_genre_sources`; the rules cover the most used labels of the production dry run (85% of links before, more now: LGBTQ+, educational, telenovela, tokusatsu, science fiction and fantasy games); listing filters show the translated names and the public `/{type}/genres` endpoints take `locale` and return `name`
 - **api:** The API reference groups operations under games, movies, series, books and catalog, and every operation has a one-sentence description; the Python SDK modules follow the new tags

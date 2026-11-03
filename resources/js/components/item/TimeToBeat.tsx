@@ -22,9 +22,11 @@ interface Props {
 	medians: Medians;
 	mine: Hours | null | undefined;
 	canEdit: boolean;
+	unreleased?: boolean;
 }
 
-export default function TimeToBeat({ itemId, medians, mine, canEdit }: Props) {
+// Unreleased items cannot be played yet, so the owner's time entry is locked; clearing an old entry stays allowed.
+export default function TimeToBeat({ itemId, medians, mine, canEdit, unreleased = false }: Props) {
 	const t = useT();
 	const l = useLocalized();
 	const [draft, setDraft] = useState<Record<string, string>>(
@@ -108,6 +110,7 @@ export default function TimeToBeat({ itemId, medians, mine, canEdit }: Props) {
 									className="min-h-11 w-full rounded-md border border-field bg-field-bg px-2 text-sm text-fg"
 									placeholder={t("item.timeToBeat.hoursPlaceholder")}
 									value={draft[k]}
+									disabled={unreleased}
 									onChange={(e) =>
 										setDraft((d) => ({ ...d, [k]: e.target.value }))
 									}
@@ -116,7 +119,7 @@ export default function TimeToBeat({ itemId, medians, mine, canEdit }: Props) {
 						))}
 					</div>
 					<div className="flex flex-wrap gap-2">
-						<Btn type="submit" kind="secondary" disabled={busy}>
+						<Btn type="submit" kind="secondary" disabled={busy || unreleased}>
 							{t("item.timeToBeat.save")}
 						</Btn>
 						{mine && (

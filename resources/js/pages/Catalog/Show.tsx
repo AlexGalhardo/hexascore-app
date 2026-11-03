@@ -2,7 +2,7 @@ import { Link, usePage } from "@inertiajs/react";
 import { lazy, type ReactNode, Suspense, useState } from "react";
 import CategoryIcon from "../../components/CategoryIcon";
 import CoverThumb, { type Cover } from "../../components/CoverThumb";
-import { ChartIcon, HistoryIcon, ListIcon, PencilIcon } from "../../components/item/ActionIcons";
+import { ChartIcon, ListIcon } from "../../components/item/ActionIcons";
 import AddToList, { type ListChoice } from "../../components/item/AddToList";
 import CategoryAverages from "../../components/item/CategoryAverages";
 import Editions from "../../components/item/Editions";
@@ -59,6 +59,7 @@ interface EntityLink {
 
 interface Props {
 	item: Item;
+	unreleased?: boolean;
 	ratingSummary: RatingSummary;
 	entities: Record<string, EntityLink[]>;
 	editions: EditionRow[] | null;
@@ -117,6 +118,7 @@ const ROLE_ORDER = [
 
 export default function Show({
 	item,
+	unreleased = false,
 	ratingSummary,
 	entities,
 	editions,
@@ -150,6 +152,18 @@ export default function Show({
 					new Date(`${item.releaseDate}T00:00:00Z`),
 				)
 			: item.releaseDate;
+	const amazon =
+		item.type === "book" || item.type === "game"
+			? offers?.byCountry[offers.defaultCountry]?.find((offer) =>
+					offer.store?.startsWith("amazon"),
+				)
+			: undefined;
+	const watch =
+		item.type === "movie" || item.type === "series"
+			? (offers?.byCountry[offers.defaultCountry]?.filter((offer) =>
+					["stream", "free", "rent"].includes(offer.kind),
+				) ?? [])
+			: [];
 
 	const jsonLd: object = {
 		"@context": "https://schema.org",
@@ -217,6 +231,16 @@ export default function Show({
 			>
 				<div data-testid="item-col-actions" className="grid content-start gap-4">
 					<CoverThumb cover={cover} alt={title} size="lg" priority />
+					{amazon && (
+						<a
+							href={`/go/${amazon.id}`}
+							target="_blank"
+							rel="sponsored nofollow noopener noreferrer"
+							className={btnClass("secondary", "w-full")}
+						>
+							Amazon <span className="sr-only">{t("offers.newTab")}</span>
+						</a>
+					)}
 					<div className="grid grid-cols-1 gap-2 min-[400px]:grid-cols-2 sm:grid-cols-1">
 						{scoresOpen ? (
 							<Suspense fallback={seeScores}>
@@ -244,17 +268,6 @@ export default function Show({
 								{t("lists.addToList")}
 							</Link>
 						)}
-						<Link href={l(`/suggest/item/${item.id}`)} className={action}>
-							<PencilIcon />
-							{t("community.suggest.link")}
-						</Link>
-						<Link
-							href={l(`/${SECTIONS[item.type]}/${item.slug}/changes`)}
-							className={action}
-						>
-							<HistoryIcon />
-							{t("community.recent.link")}
-						</Link>
 					</div>
 					<Section id="details" title={t("item.details")} bold>
 						<dl className="grid">
@@ -265,7 +278,36 @@ export default function Show({
 							)}
 							{item.runtimeMinutes !== undefined && (
 								<DetailRow label={t("item.fields.runtime")}>
-									{t("item.runtimeValue", { minutes: item.runtimeMinutes })}
+									{(item.type === "movie" || item.type === "series") &&
+									item.runtimeMinutes >= 60
+										? t(
+												item.runtimeMinutes % 60 === 0
+													? "item.runtimeHours"
+													: "item.runtimeHoursMinutes",
+												{
+													hours: Math.floor(item.runtimeMinutes / 60),
+													minutes: item.runtimeMinutes % 60,
+												},
+											)
+										: t("item.runtimeValue", { minutes: item.runtimeMinutes })}
+								</DetailRow>
+							)}
+							{watch.length > 0 && (
+								<DetailRow label={t("offers.titleWatch")}>
+									<ul className="flex flex-wrap gap-x-3">
+										{watch.map((offer) => (
+											<li key={offer.id}>
+												<a
+													href={`/go/${offer.id}`}
+													target="_blank"
+													rel="nofollow noopener noreferrer"
+													className="text-primary hover:underline"
+												>
+													{offer.name}
+												</a>
+											</li>
+										))}
+									</ul>
 								</DetailRow>
 							)}
 							{item.pageCount !== undefined && (
@@ -332,6 +374,7 @@ export default function Show({
 							medians={timeToBeat}
 							mine={me?.timeToBeat}
 							canEdit={loggedIn}
+							unreleased={unreleased}
 						/>
 					)}
 
@@ -354,16 +397,8 @@ export default function Show({
 						</Section>
 					)}
 
-					{offers && (
-						<Section
-							id="offers"
-							title={
-								item.type === "movie" || item.type === "series"
-									? t("offers.titleWatch")
-									: t("offers.titleBuy")
-							}
-							bold
-						>
+					{offers && (item.type === "movie" || item.type === "series") && (
+						<Section id="offers" title={t("offers.titleWatch")} bold>
 							<Offers
 								offers={offers}
 								type={item.type}
@@ -400,6 +435,7 @@ export default function Show({
 					<ScoreBlock
 						score={ratingSummary.score}
 						ratingCount={ratingSummary.ratingCount}
+						unreleased={unreleased}
 					/>
 					<FriendsScore data={friendsScore} />
 					<RatingPanel
@@ -408,11 +444,13 @@ export default function Show({
 						type={item.type}
 						mine={me?.rating}
 						canWrite={loggedIn}
+						unreleased={unreleased}
 					>
 						<StatusPicker
 							itemId={item.id}
 							type={item.type}
 							status={me?.status ?? null}
+							unreleased={unreleased}
 						/>
 						{myLists && <AddToList itemId={item.id} lists={myLists} full />}
 					</RatingPanel>

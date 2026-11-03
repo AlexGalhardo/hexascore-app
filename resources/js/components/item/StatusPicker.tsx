@@ -9,14 +9,17 @@ import type { ItemType } from "./types";
 const STATUSES = ["want", "in_progress", "completed", "dropped"] as const;
 
 // Four toggle buttons (design v1 status picker); pressing the active one clears the status.
+// Unreleased items only allow "want"; an already-set status can still be cleared so it is not stuck.
 export default function StatusPicker({
 	itemId,
 	type,
 	status,
+	unreleased = false,
 }: {
 	itemId: string;
 	type: ItemType;
 	status: string | null;
+	unreleased?: boolean;
 }) {
 	const t = useT();
 	const l = useLocalized();
@@ -47,7 +50,7 @@ export default function StatusPicker({
 						key={s}
 						type="button"
 						aria-pressed={value === s}
-						disabled={busy}
+						disabled={busy || (unreleased && s !== "want" && value !== s)}
 						onClick={() => change(value === s ? "" : s)}
 						className={btnClass(value === s ? "primary" : "secondary", "px-2 text-sm")}
 					>
