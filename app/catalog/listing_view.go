@@ -20,7 +20,7 @@ func Summaries(ctx context.Context, db Querier, ids []string, locale string) ([]
 
 	rows, err := db.QueryContext(ctx, `SELECT i.id, i.type, i.slug,
   coalesce(t.title, te.title, i.original_title, i.slug),
-  extract(year FROM i.release_date)::int,
+  extract(year FROM i.release_date)::int, to_char(i.release_date, 'YYYY-MM-DD'), i.release_precision,
   `+starsScore+`,
   i.rating_count, i.cover_key, i.cover_thumb_key
 FROM unnest($1::uuid[]) WITH ORDINALITY AS o(id, n)
