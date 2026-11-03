@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **catalog:** Item cards in the grids and category pages no longer show the title on the cover; the score stays in the top-right corner, and the title is kept for screen readers.
+
 - **home:** Landing carousel covers fill their box (cropped to cover), and each card's footer shows only the release date; the title stays available to screen readers.
 
 - **home:** Landing carousels show four cards per slide in a four-column grid, with the twelve upcoming cards spread over three slides.

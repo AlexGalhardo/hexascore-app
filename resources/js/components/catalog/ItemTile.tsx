@@ -7,8 +7,8 @@ import type { Highlight } from "./SectionHighlights";
 
 /**
  * Vertical item card for grids (landing "More …" rows, category grids): the cover, then one row of fixed
- * height so tiles never shift: title (one line, truncated) on the left, the score badge on the right
- * (or the given badge, e.g. a release date on upcoming cards).
+ * height so tiles never shift. The score badge sits in the top-right corner; the title is screen-reader text only,
+ * unless a footer is given (upcoming cards show the release date there).
  * The edge is a soft grey hairline (owner 2026-11-03): the category is shown by its icon, not the border.
  */
 export default function ItemTile({
@@ -38,9 +38,13 @@ export default function ItemTile({
 						{badge ?? <ScoreBadge score={item.score} size="xs" />}
 					</span>
 				)}
-				<span className="absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-black/85 to-transparent p-2 pt-7 font-display text-sm font-bold text-white">
-					{footer ?? item.title}
-				</span>
+				{footer ? (
+					<span className="absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-black/85 to-transparent p-2 pt-7 font-display text-sm font-bold text-white">
+						{footer}
+					</span>
+				) : (
+					<span className="sr-only">{item.title}</span>
+				)}
 			</Link>
 		</li>
 	);

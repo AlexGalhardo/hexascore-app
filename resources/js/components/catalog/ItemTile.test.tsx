@@ -40,7 +40,7 @@ const item: Highlight = {
 	cover: null,
 };
 
-test("the cover fills a flat card with score and title overlaid", () => {
+test("the cover fills a flat card, the score sits in the corner and the title is screen-reader only", () => {
 	render(
 		<ul>
 			<ItemTile item={item} href="/movies/bigbug" />
@@ -52,7 +52,7 @@ test("the cover fills a flat card with score and title overlaid", () => {
 	expect(link.className).toContain("border-border");
 	expect(link.className).not.toContain("shadow-");
 	expect(link.querySelector("[data-tile-footer]")).toBeNull();
-	expect(screen.getByText(item.title).className).toContain("absolute");
+	expect(screen.getByText(item.title).className).toContain("sr-only");
 	expect(screen.queryByText("2022")).toBeNull();
 	expect(
 		screen.getByRole("img", { name: /score.outOf.*8\.4/ }).parentElement?.className,
