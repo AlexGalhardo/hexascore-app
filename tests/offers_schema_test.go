@@ -43,14 +43,26 @@ func TestOffersMigrationCopiesAffiliateLinks(t *testing.T) {
 		}
 	}
 
-	// back out the data migration, add links as an admin would have, run it again
-	if step, err := m.Rollback(
-		ctx,
-		1,
-	); err != nil || len(step) != 1 ||
-		step[0] != "20261103010100_migrate_affiliate_links_to_offers" {
-		t.Fatalf("rollback: %v %v", step, err)
+	// back out everything after the data migration and the migration itself, add links as an admin would have, and
+	// run them again
+	rollTo := func(id string) {
+		t.Helper()
+
+		for range 20 { // upper bound only: every newer migration is rolled back first
+			step, err := m.Rollback(ctx, 1)
+			if err != nil || len(step) != 1 {
+				t.Fatalf("rollback: %v %v", step, err)
+			}
+
+			if step[0] == id {
+				return
+			}
+		}
+
+		t.Fatalf("%s was never rolled back", id)
 	}
+
+	rollTo("20261103010100_migrate_affiliate_links_to_offers")
 
 	const item = "0197f3a0-0000-7000-8000-0000000000a1"
 
@@ -134,11 +146,7 @@ VALUES ($1, 'ZZ', 'steam', 'buy_digital', 'https://store.steampowered.com/app/2'
 	}
 
 	// round trip: roll the offers tables back and forward
-	for range 2 {
-		if step, err := m.Rollback(ctx, 1); err != nil || len(step) != 1 {
-			t.Fatalf("rollback: %v %v", step, err)
-		}
-	}
+	rollTo("20261103010000_create_offers")
 
 	if _, err := m.Up(ctx); err != nil {
 		t.Fatal(err)

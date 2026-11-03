@@ -110,5 +110,6 @@ func All() []schema.Migration {
 		m20261103000000AddTrendingV2(),
 		m20261103010000CreateOffers(),
 		m20261103010100MigrateAffiliateLinksToOffers(),
+		m20261103010200CreateOfferSourceChecks(),
 	}
 }

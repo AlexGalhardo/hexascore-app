@@ -192,6 +192,7 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		"fetch.youtube":      fetch.Step(&trailers.Connector{}, client, app.Now),
 		backfill.EditionsJob: backfill.Editions{}.Step,
 		offers.DeriveJob:     offers.Derive{}.Step,
+		tmdb.ProvidersJob:    tmdb.ProvidersStep(tc, client, app.Now),
 		// workaround: Serialise (DQ-I-12) stays nil until the API probe exists; Stat is nil without a bucket.
 		dq.Job:       dq.Asserts{Stat: stat}.Step,
 		rollback.Job: rollback.Step,

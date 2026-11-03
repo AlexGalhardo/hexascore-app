@@ -135,6 +135,12 @@ var (
 	OffersDaily = Chain{"offers-daily", []Stage{
 		{Job: offers.DeriveJob, Mode: run.ModeFull},
 	}}
+	// OffersTMDB asks TMDB where each film and series can be watched (RFC-003). Its source is tmdb, so the
+	// ingest_tmdb kill switch gates it; only items not asked about in the last 30 days are due, so a daily run is
+	// cheap after the first. Its own chain: a skipped stage stops a chain and must not stop another.
+	OffersTMDB = Chain{"offers-tmdb", []Stage{
+		{Job: "offers.tmdb", Source: "tmdb", Mode: run.ModeFull},
+	}}
 	// DQDaily runs the data-quality asserts on their own (SDD 06 §7.7); every chain above ends with the same stage.
 	DQDaily = Chain{"dq-daily", []Stage{{Job: dq.Job, Mode: run.ModeIncremental}}}
 	// FrontendFields renders a sample of item pages and reports the missing required fields (SDD 06 §7.7).
@@ -166,6 +172,7 @@ var (
 		CoversDaily,
 		CoversWeekly,
 		OffersDaily,
+		OffersTMDB,
 		DQDaily,
 		FrontendFields,
 		Rollback,
