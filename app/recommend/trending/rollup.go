@@ -32,9 +32,10 @@ func tier(created, at string) string {
 		"WHEN " + age + " < interval '90 days' THEN 0.75 ELSE 1.0 END)"
 }
 
-// weigh scales a base weight by the shadow weight of (user, item) and zeroes banned accounts. $1 and $2 bound the day.
+// weigh scales a base weight by the shadow weight of (user, item) and zeroes banned accounts and flagged seed
+// accounts (OQ-07, 2026-11-02). $1 and $2 bound the day.
 func weigh(base string) string {
-	return base + " * coalesce(f.shadow_weight, 1) * (CASE WHEN u.banned_at IS NULL THEN 1 ELSE 0 END)"
+	return base + " * coalesce(f.shadow_weight, 1) * (CASE WHEN u.banned_at IS NULL AND NOT u.is_seed THEN 1 ELSE 0 END)"
 }
 
 // contributions yields (item_id, user_id, prim, w) for the day [$1, $2): one row per qualifying event.
