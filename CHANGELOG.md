@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **item:** On unreleased items, logged-in users can only use "want" and "add to list"; the other status buttons and the time-to-beat form are disabled. Clearing an existing status stays allowed.
+- **item:** On unreleased items, logged-in users can only use "want" and "add to list"; the other status buttons are disabled and the time-to-beat block is hidden. Clearing an existing status stays allowed.
 
 - **trending:** The landing carousels show upcoming announcements with their known release-date precision instead of scores and advance only when a visitor navigates; the released 30-day ranking fills the grids below them. The 7-day score v2 snapshots remain available to the API
 - **ui:** Narrower site container, flatter and squarer catalogue cards, permanent navbar shadow, item verdict labels, shorter runtime display, and Amazon links below eligible book and game covers

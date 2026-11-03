@@ -368,13 +368,12 @@ export default function Show({
 						)}
 					</Section>
 
-					{timeToBeat && (
+					{timeToBeat && !unreleased && (
 						<TimeToBeat
 							itemId={item.id}
 							medians={timeToBeat}
 							mine={me?.timeToBeat}
 							canEdit={loggedIn}
-							unreleased={unreleased}
 						/>
 					)}
 
