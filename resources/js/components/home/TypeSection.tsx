@@ -89,6 +89,7 @@ export default function TypeSection({
 												key={item.id}
 												item={item}
 												href={`${base}/${item.slug}`}
+												coverSize="compact"
 												badge={
 													<span
 														className={`rounded-sm bg-surface px-1.5 py-0.5 text-xs font-bold ${ACCENT_TEXT[type]}`}

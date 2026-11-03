@@ -1,7 +1,7 @@
 import { Link } from "@inertiajs/react";
 import type { ReactElement, ReactNode } from "react";
 
-import CoverThumb from "../CoverThumb";
+import CoverThumb, { type CoverSize } from "../CoverThumb";
 import ScoreBadge from "../ui/ScoreBadge";
 import type { Highlight } from "./SectionHighlights";
 
@@ -15,10 +15,12 @@ export default function ItemTile({
 	item,
 	href,
 	badge,
+	coverSize = "card",
 }: {
 	item: Highlight;
 	href: string;
 	badge?: ReactNode;
+	coverSize?: CoverSize;
 }): ReactElement {
 	return (
 		<li className="grid content-start">
@@ -26,7 +28,7 @@ export default function ItemTile({
 				href={href}
 				className="group relative block overflow-hidden rounded-sm border border-border bg-surface hover:border-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
 			>
-				<CoverThumb cover={item.cover} alt="" size="card" />
+				<CoverThumb cover={item.cover} alt="" size={coverSize} />
 				<span className="absolute top-2 right-2">
 					{badge ?? <ScoreBadge score={item.score} size="xs" />}
 				</span>

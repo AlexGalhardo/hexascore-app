@@ -1,7 +1,7 @@
 import { usePage } from "@inertiajs/react";
 import type { SharedProps } from "../types";
 
-export type CoverSize = "sm" | "md" | "trend" | "lg" | "card";
+export type CoverSize = "sm" | "md" | "trend" | "lg" | "card" | "compact";
 
 export interface Cover {
 	thumb: string;
@@ -14,6 +14,7 @@ const DIMENSIONS: Record<CoverSize, { width: number; height: number }> = {
 	trend: { width: 120, height: 180 },
 	lg: { width: 240, height: 360 },
 	card: { width: 160, height: 240 },
+	compact: { width: 160, height: 213 },
 };
 
 const SIZES: Record<CoverSize, string> = {
@@ -22,6 +23,7 @@ const SIZES: Record<CoverSize, string> = {
 	trend: "(min-width: 48rem) 120px, 100px",
 	lg: "(min-width: 40rem) 240px, 100vw",
 	card: "(min-width: 48rem) 160px, 30vw",
+	compact: "(min-width: 48rem) 25vw, 45vw",
 };
 
 // Tailwind classes instead of a style prop: SSR would emit a style attribute, blocked by style-src.
@@ -31,6 +33,8 @@ const BOX: Record<CoverSize, string> = {
 	trend: "w-25 h-37.5 md:w-30 md:h-45",
 	lg: "w-full h-auto aspect-[2/3]",
 	card: "w-full h-auto aspect-[2/3]",
+	// Shorter than the poster ratio, for the landing carousels; the whole cover still shows (object-contain).
+	compact: "w-full h-auto aspect-[3/4]",
 };
 
 // CoverThumb is the list-row cover (32×48 or 44×64; "lg" for the item page), shown whole at every size, 96w/600w sources, lazy.
