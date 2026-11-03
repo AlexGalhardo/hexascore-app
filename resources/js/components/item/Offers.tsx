@@ -50,20 +50,18 @@ export function worldwideOffers(offers: OffersData): OfferView[] {
 	);
 }
 
-/** Where to watch (films and series) or where to play (games), the same worldwide list for every visitor. */
+/** Where to watch (films and series) or where to play (games), the same worldwide list for every visitor. Renders nothing without offers. */
 export default function Offers({
 	offers,
 	type,
-	title,
 }: {
 	offers: OffersData;
 	type: "game" | "movie" | "series" | "book";
-	title: string;
-}): ReactElement {
+}): ReactElement | null {
 	const t = useT();
 	const list = worldwideOffers(offers);
+	if (list.length === 0) return null;
 	const kinds = [...new Set(list.map((o) => o.kind))];
-	const canSearch = type === "movie" || type === "series";
 
 	return (
 		<div className="grid gap-4">
@@ -100,21 +98,6 @@ export default function Offers({
 					</ul>
 				</fieldset>
 			))}
-
-			{list.length === 0 && (
-				<p className="text-muted">
-					{t("offers.noneWorldwide")}{" "}
-					{canSearch && (
-						<a
-							href={`https://www.justwatch.com/${offers.defaultCountry.toLowerCase()}/search?q=${encodeURIComponent(title)}`}
-							rel="noopener noreferrer nofollow"
-							className="text-primary hover:underline"
-						>
-							{t("offers.searchJustWatch")}
-						</a>
-					)}
-				</p>
-			)}
 
 			{offers.commission && <p className="text-sm text-muted">{t("offers.commission")}</p>}
 			{offers.amazonAssociate && <p className="text-sm text-muted">{t("offers.amazon")}</p>}

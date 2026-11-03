@@ -1968,7 +1968,6 @@
   "offers": {
       "titleWatch": "Onde assistir",
       "titlePlay": "Onde jogar",
-      "noneWorldwide": "Nenhuma fonte oficial conhecida.",
       "titleBuy": "Onde comprar",
       "country": "País",
       "none": "Nenhuma fonte oficial conhecida em {country}.",
