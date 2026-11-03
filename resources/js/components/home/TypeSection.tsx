@@ -155,7 +155,7 @@ function TrendCard({
 			{/* The whole card is the link; hover inverts it like the navbar and footer links (owner 2026-11-02). */}
 			<Link
 				href={`${base}/${item.slug}?from=trending`}
-				className="group flex h-full gap-4 rounded-lg border border-border bg-surface p-3 shadow-ledge-secondary hover:bg-fg hover:text-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
+				className="group flex h-full gap-4 rounded-lg border border-border bg-surface p-3 shadow-ledge-secondary hover:bg-hover outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
 			>
 				<CoverThumb cover={item.cover} alt="" size="trend" priority={eager} />
 				{/* Two rows (owner 2026-11-02): the title across the column, then the rank at the far left and the
@@ -165,9 +165,7 @@ function TrendCard({
 						{item.title}
 					</span>
 					<span className="flex items-center justify-between gap-3">
-						<span
-							className={`text-2xl font-semibold group-hover:text-bg ${ACCENT_TEXT[type]}`}
-						>
+						<span className={`text-2xl font-semibold  ${ACCENT_TEXT[type]}`}>
 							{item.basis === "prior"
 								? t("home.trendingPopular")
 								: t("home.trendingRank", { rank: item.rank })}

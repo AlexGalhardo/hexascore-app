@@ -84,7 +84,7 @@ export default function DocumentPage({
 									<a
 										href={`#${s.id}`}
 										aria-current={isCurrent ? "location" : undefined}
-										className={`flex min-h-11 items-center hover:text-fg hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg ${isCurrent ? "font-semibold text-fg underline underline-offset-4" : "text-muted"}`}
+										className={`flex min-h-11 items-center hover:text-fg hover:underline outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 ${isCurrent ? "font-semibold text-fg underline underline-offset-4" : "text-muted"}`}
 									>
 										{s.heading}
 									</a>
@@ -113,7 +113,7 @@ export default function DocumentPage({
 						key={s.id}
 						id={s.id}
 						aria-labelledby={`${s.id}-h`}
-						className="mt-8 scroll-mt-24 border-t-2 border-fg pt-4"
+						className="mt-8 scroll-mt-24 border-t border-border pt-4"
 					>
 						<h2 id={`${s.id}-h`} className="mb-3 text-3xl">
 							{s.heading}
@@ -122,7 +122,7 @@ export default function DocumentPage({
 					</section>
 				))}
 				{also && (
-					<div className="mt-10 border-t-2 border-fg pt-4">
+					<div className="mt-10 border-t border-border pt-4">
 						<p className={eyebrow}>{also.label}</p>
 						<Link
 							href={also.href}

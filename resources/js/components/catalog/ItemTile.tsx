@@ -15,7 +15,7 @@ export default function ItemTile({ item, href }: { item: Highlight; href: string
 		<li className="grid content-start">
 			<Link
 				href={href}
-				className="group grid gap-2 rounded-lg border border-border bg-surface p-2 shadow-ledge-secondary hover:bg-fg hover:text-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
+				className="group grid gap-2 rounded-lg border border-border bg-surface p-2 shadow-ledge-secondary hover:bg-hover outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
 			>
 				<CoverThumb cover={item.cover} alt="" size="card" />
 				<span
