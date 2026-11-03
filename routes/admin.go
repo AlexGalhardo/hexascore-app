@@ -239,6 +239,10 @@ func Admin(r *router.Router, app *vukem.App) error {
 			return gate.Authorize(c.Context(), admin.AbilityRollbackIngestion, nil)
 		},
 	}
+	// The React dashboard (ADR 0026) sits behind the panel's own guard (IP list, session age, 2FA, CSRF, ability).
+	overviewH := admin.OverviewHandlers{DB: acc.DB, Now: app.Now, Authorize: bans.Authorize}
+	r.Get("/admin/overview", overviewH.Index).Name("admin.overview").Use(panel.Guard())
+	r.Get("/admin/overview/data", overviewH.Data).Name("admin.overview.data").Use(panel.Guard())
 	r.Get("/admin/ingest", ingestH.Index).Name("admin.ingest").Use(modMW...)
 	r.Post("/admin/ingest/runs", ingestH.Trigger).Name("admin.ingest.runs").Use(modMW...)
 	r.Post("/admin/ingest/runs/{id}/cancel", ingestH.Cancel).Name("admin.ingest.runs.cancel").Use(modMW...)

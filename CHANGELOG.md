@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **admin:** A new React admin dashboard at `/admin/overview` (Inertia, TanStack Query, shadcn-style components over Base UI) with a sidebar, light and dark themes, headline counts, worker heartbeat and recent ingestion runs. It sits behind the panel guard (2FA, CSRF, ability) and refreshes every 30 seconds. The other admin screens still use the framework templates until `vadmin` exposes JSON (ADR 0026, VF-083).
+
 - **catalog:** Upcoming releases within 90 days on the landing, 30-day activity ranking for released items, and a where-to-watch provider filter for movie and series listings
 - **ui:** A grouped footer with a disabled newsletter preview and a catalogue demo seed with future releases for each category
 - **catalog:** Where to watch or buy on every item page: streaming, rent, buy and free-with-ads providers from TMDB (display only, with the JustWatch credit), Steam, GOG, Epic, Google Play, App Store and Amazon links derived from the catalogue ids, a country switch that follows the locale, and `/go/{id}` as the only exit (rate limited, uncached, no user id or IP counted); affiliate tags are added at the redirect when `AFFILIATE_*_TAG` is set
