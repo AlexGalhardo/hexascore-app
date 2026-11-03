@@ -158,13 +158,6 @@ export default function Show({
 					offer.store?.startsWith("amazon"),
 				)
 			: undefined;
-	const watch =
-		item.type === "movie" || item.type === "series"
-			? (offers?.byCountry[offers.defaultCountry]?.filter((offer) =>
-					["stream", "free", "rent"].includes(offer.kind),
-				) ?? [])
-			: [];
-
 	const jsonLd: object = {
 		"@context": "https://schema.org",
 		"@type": LD_TYPE[item.type],
@@ -270,6 +263,14 @@ export default function Show({
 						)}
 					</div>
 					<Section id="details" title={t("item.details")} bold>
+						{offers && (item.type === "movie" || item.type === "series") && (
+							<Offers
+								offers={offers}
+								type={item.type}
+								title={title}
+								locale={locale}
+							/>
+						)}
 						<dl className="grid">
 							{release && (
 								<DetailRow label={t("item.fields.releaseDate")}>
@@ -290,24 +291,6 @@ export default function Show({
 												},
 											)
 										: t("item.runtimeValue", { minutes: item.runtimeMinutes })}
-								</DetailRow>
-							)}
-							{watch.length > 0 && (
-								<DetailRow label={t("offers.titleWatch")}>
-									<ul className="flex flex-wrap gap-x-3">
-										{watch.map((offer) => (
-											<li key={offer.id}>
-												<a
-													href={`/go/${offer.id}`}
-													target="_blank"
-													rel="nofollow noopener noreferrer"
-													className="text-primary hover:underline"
-												>
-													{offer.name}
-												</a>
-											</li>
-										))}
-									</ul>
 								</DetailRow>
 							)}
 							{item.pageCount !== undefined && (
@@ -393,17 +376,6 @@ export default function Show({
 							count={Math.min(trailers.length, 3)}
 						>
 							<Trailers trailers={trailers.slice(0, 3)} />
-						</Section>
-					)}
-
-					{offers && (item.type === "movie" || item.type === "series") && (
-						<Section id="offers" title={t("offers.titleWatch")} bold>
-							<Offers
-								offers={offers}
-								type={item.type}
-								title={title}
-								locale={locale}
-							/>
 						</Section>
 					)}
 
