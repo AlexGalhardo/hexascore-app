@@ -27,6 +27,9 @@ env:
 jobs:
   lint:
     name: Lint (golangci-lint, format, vet, Biome, tsc, markdownlint, commit messages)
+    # Paused for fast iteration (owner, 2026-11-03): the slowest jobs run only when the repo variable
+    # RUN_SLOW_CI is 'true'. Unset, they are skipped; lighthouse and openapi also need the build job.
+    if: vars.RUN_SLOW_CI == 'true'
     runs-on: ubuntu-24.04
     services:
       postgres:
@@ -81,6 +84,9 @@ jobs:
 
   test:
     name: Tests (Go unit and integration on Postgres, TypeScript)
+    # Paused for fast iteration (owner, 2026-11-03): the slowest jobs run only when the repo variable
+    # RUN_SLOW_CI is 'true'. Unset, they are skipped; lighthouse and openapi also need the build job.
+    if: vars.RUN_SLOW_CI == 'true'
     runs-on: ubuntu-24.04
     services:
       postgres:
@@ -227,6 +233,9 @@ jobs:
 
   setup-windows:
     name: Windows setup script and unit tests
+    # Paused for fast iteration (owner, 2026-11-03): the slowest jobs run only when the repo variable
+    # RUN_SLOW_CI is 'true'. Unset, they are skipped; lighthouse and openapi also need the build job.
+    if: vars.RUN_SLOW_CI == 'true'
     runs-on: windows-2025
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -243,6 +252,9 @@ jobs:
 
   build:
     name: Docker image (build, checks, /up smoke test, artifact)
+    # Paused for fast iteration (owner, 2026-11-03): the slowest jobs run only when the repo variable
+    # RUN_SLOW_CI is 'true'. Unset, they are skipped; lighthouse and openapi also need the build job.
+    if: vars.RUN_SLOW_CI == 'true'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -365,6 +377,9 @@ jobs:
 
   lighthouse:
     name: Lighthouse (SDD 09 budgets)
+    # Paused for fast iteration (owner, 2026-11-03): the slowest jobs run only when the repo variable
+    # RUN_SLOW_CI is 'true'. Unset, they are skipped; lighthouse and openapi also need the build job.
+    if: vars.RUN_SLOW_CI == 'true'
     needs: build
     runs-on: ubuntu-24.04
     steps:
