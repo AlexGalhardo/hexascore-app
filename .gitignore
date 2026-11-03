@@ -22,6 +22,8 @@ coverage/
 .env.*.local
 .env.local
 .vukem/
+.ci-tmp/
+.local-seeds/
 /bin/
 /resources/public/build/
 /resources/public/hot

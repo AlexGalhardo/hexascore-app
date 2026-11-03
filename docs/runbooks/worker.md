@@ -1,6 +1,8 @@
 # Ingestion worker (second Railway service)
 
-RFC-001 section 3, task CW-01, owner decision OQ-03 / D-40: the ingest queue runs in its own Railway service built from the same image. **Status: code ready, service not created.** Creating it, setting its variables and turning ingestion on are owner actions (agents cannot write production variables or deploy). Do staging first, then production.
+RFC-001 section 3, task CW-01, owner decision OQ-03 / D-40: the ingest queue runs in its own Railway service built from the same image. **Status checked 2026-11-03 via Railway MCP: staging worker deployed; no worker deployment or configuration in production.** Creating it, setting its variables and turning ingestion on are owner actions (agents cannot write production variables or deploy). Do staging first, then production.
+
+The staging worker's latest deployment was `ff53eda9-2e88-461f-9914-354a37b5ca0d` (SUCCESS, 14:01 UTC). Its logs show `queue worker started` with queue `ingest`, concurrency 3 and limit 2; they do not establish completed ingestion batches or seven healthy days. The web follows branch `staging`, while the worker follows `main`: align their tested revisions before collecting the M0 evidence. Production worker promotion remains pending that evidence and owner approval.
 
 ## What changes
 
@@ -10,7 +12,7 @@ RFC-001 section 3, task CW-01, owner decision OQ-03 / D-40: the ingest queue run
 | Queues | `default` | `ingest` |
 | Scheduler | yes, dispatches the chain starts to `ingest` | none |
 | HTTP | yes | no (Railway cannot health-check it; the web reports it, see "Check") |
-| Source | `AlexGalhardo/hexascore-app`, branch `main` | the same repo and branch: a push to `main` deploys both |
+| Source | `AlexGalhardo/hexascore-app`, environment's release branch | the same repo and tested revision as the web; verify both source branches before promotion |
 
 The scheduler stays in the web process: a chain start is already a queue job, so the worker only needs the queue. The worker never serves traffic, so it carries no domain.
 
@@ -38,6 +40,7 @@ Worker only:
 
 | Variable | Value | Why |
 | --- | --- | --- |
+| `QUEUE_CONNECTION` | `database` | required: `sync` runs jobs inside dispatch and `queue:work` exits without consuming anything |
 | `QUEUE_NAMES` | `ingest` | it consumes only the ingest queue |
 | `QUEUE_CONCURRENCY` | `3` | RFC-001 section 3 |
 | `QUEUE_LIMITS` | `ingest=2` | the running-job cap that already applies to ingestion |
@@ -57,8 +60,10 @@ On `app` (web):
 
 | Variable | Value | Why |
 | --- | --- | --- |
+| `QUEUE_CONNECTION` | `database` | required on the producer too, so dispatch persists jobs for the separate worker |
 | `QUEUE_NAMES` | `default` | the web stops consuming `ingest` (or set `QUEUE_LIMITS=ingest=0`) |
-| `FLAG_INGEST_ENABLED` | `true` | **required**: the web task `ingest:pressure_signal` writes the load signal only while the master switch is on in the web too, and the worker reads that signal before every batch. The per-source flags stay on the worker only |
+| `FLAG_INGEST_ENABLED` | `true` | **required**: the web task `ingest:pressure_signal` writes the load signal only while the master switch is on in the web too, and the worker reads that signal before every batch |
+| `FLAG_INGEST_<SOURCE>` | same enabled sources as the worker | **required**: `routes/schedule.go` checks each chain's source flag before enqueueing its first stage; flags only on the worker leave scheduled source chains idle. Persisted `/admin/_flags` overrides also apply |
 | `WORKER_HEARTBEAT_CHECK` | `true` | set it only after the worker has beaten once; it adds the `worker` entry to `/up?checks=1` |
 
 Never put a production secret in a variable of the staging environment or the reverse.
@@ -69,6 +74,8 @@ Never put a production secret in a variable of the staging environment or the re
 2. `curl -s "https://staging.hexascore.app/up?checks=1"` lists `worker: ok` once `WORKER_HEARTBEAT_CHECK=true` is set on the web. A worker that stopped consuming the queue shows `worker: fail` within three minutes (the heartbeat is a queued job, so a running process that is stuck is caught too).
 3. Run a small chain by hand from `/admin/ingest` with `limit` 100, watch it finish, then let the schedule take over. Seven green days on staging come before production (P6.A.4.2).
 4. The 30-minute Telegram digest (`ingest:digest`, silent ops chat) shows the worker's items, failures and heartbeat age.
+
+Record the seven-day window, failed queue count, refresh run totals (at least 1,000 items), cover coverage over 14 days, accuracy sample (at least 97%) and spend (at most US$12) before M0 promotion (RFC-001 section 10). A successful deployment or a fresh heartbeat alone does not prove source ingestion. New discovery towards 250k, 500k and 1M follows the later milestone gates; M0 is refresh only.
 
 ## Roll back
 
