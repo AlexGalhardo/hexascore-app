@@ -114,6 +114,9 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	// RFC-003: watch providers from TMDB, between the 01:00 weekly chains and the 03:00 expiry run.
 	s.Func("ingest:offers-tmdb", startChain(app, ingest.OffersTMDB)).
 		DailyAt("01:40").In(saoPaulo).WithoutOverlapping()
+	// RFC-001 section 5 A: cover and quality check of the least recently verified items; the bucket is its only outside call.
+	s.Func("ingest:refresh-existing", startChain(app, ingest.RefreshExisting)).
+		DailyAt("01:30").In(saoPaulo).WithoutOverlapping()
 	// RFC-001 section 5 F: after the 03:00 TMDB expiry run; the monthly budget (LLM_MONTHLY_BUDGET_USD) bounds the cost.
 	s.Func("ingest:llm-normalise", startChain(app, ingest.LLMNormalise)).
 		DailyAt("03:20").In(saoPaulo).WithoutOverlapping()

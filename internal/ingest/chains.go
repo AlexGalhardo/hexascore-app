@@ -147,6 +147,11 @@ var (
 	LLMNormalise = Chain{"llm-normalise", []Stage{
 		{Job: "llm.normalise", Source: "llm", Mode: run.ModeFull},
 	}}
+	// RefreshExisting verifies the items the least recently verified first: the cover is still in the bucket, the quality
+	// score is current (RFC-001 section 5 A). It touches no outside host, so only the master switch gates it.
+	RefreshExisting = Chain{"refresh-existing", []Stage{
+		{Job: "refresh.existing", Mode: run.ModeFull},
+	}}
 	// DQDaily runs the data-quality asserts on their own (SDD 06 §7.7); every chain above ends with the same stage.
 	DQDaily = Chain{"dq-daily", []Stage{{Job: dq.Job, Mode: run.ModeIncremental}}}
 	// FrontendFields renders a sample of item pages and reports the missing required fields (SDD 06 §7.7).
@@ -180,6 +185,7 @@ var (
 		OffersDaily,
 		OffersTMDB,
 		LLMNormalise,
+		RefreshExisting,
 		DQDaily,
 		FrontendFields,
 		Rollback,

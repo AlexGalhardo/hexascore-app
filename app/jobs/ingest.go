@@ -28,6 +28,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/normalize"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/offers"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/openlibrary"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/refresh"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/rollback"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/steam"
@@ -62,6 +63,15 @@ type IngestSources struct {
 }
 
 const defaultContactURL = "https://hexascore.app"
+
+// refreshStat adapts the dq bucket check (nil without a bucket) to the refresh step.
+func refreshStat(stat dq.Stat) func(context.Context, string) (bool, error) {
+	if stat == nil {
+		return nil
+	}
+
+	return stat
+}
 
 // defaultContact is INGEST_CONTACT_URL, or the site when unset.
 func defaultContact(app *vukem.App) string {
@@ -210,6 +220,7 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		backfill.EditionsJob: backfill.Editions{}.Step,
 		offers.DeriveJob:     offers.Derive{}.Step,
 		tmdb.ProvidersJob:    tmdb.ProvidersStep(tc, client, app.Now),
+		refresh.Job:          refresh.Step(refresh.Config{Stat: refreshStat(stat), Now: app.Now}),
 		llm.Job:              llm.NormaliseStep(llmClient, llm.Ceiling(app.Source.Get), app.Now),
 		// workaround: Serialise (DQ-I-12) stays nil until the API probe exists; Stat is nil without a bucket.
 		dq.Job:       dq.Asserts{Stat: stat}.Step,
