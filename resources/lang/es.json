@@ -1,4 +1,97 @@
 {
+  "admin": {
+    "title": "Admin",
+    "dashboard": {
+      "title": "Panel",
+      "subtitle": "Una vista en vivo del catálogo y del worker de ingesta.",
+      "updated": "Actualizado {time}",
+      "refresh": "Actualizar",
+      "refreshError": "No se pudieron actualizar las cifras. Se muestra la última vista.",
+      "stats": {
+        "items": "Elementos",
+        "users": "Usuarios",
+        "openReports": "Denuncias abiertas",
+        "runningRuns": "Ejecuciones en curso",
+        "failedRuns": "Ejecuciones fallidas (24 h)",
+        "parkedFailures": "Fallos aparcados",
+        "approx": "Estimación"
+      },
+      "worker": {
+        "title": "Worker de ingesta",
+        "ok": "Saludable",
+        "stale": "Detenido",
+        "never": "Nunca iniciado",
+        "age": "Último latido hace {age}",
+        "neverHint": "Aún no se ha registrado ningún latido.",
+        "staleHint": "El worker dejó de latir. Revisa sus logs en Railway."
+      },
+      "runs": {
+        "title": "Ejecuciones de ingesta recientes",
+        "empty": "Aún no hay ejecuciones.",
+        "viewAll": "Todas las ejecuciones",
+        "job": "Tarea",
+        "source": "Fuente",
+        "mode": "Modo",
+        "status": "Estado",
+        "seen": "Vistos",
+        "changed": "Cambiados",
+        "failed": "Fallos",
+        "started": "Inicio",
+        "duration": "Duración",
+        "statuses": {
+          "queued": "En cola",
+          "running": "En curso",
+          "succeeded": "Completada",
+          "partial": "Parcial",
+          "failed": "Falló",
+          "skipped": "Omitida",
+          "cancelled": "Cancelada"
+        }
+      }
+    },
+    "groups": {
+      "overview": "Resumen",
+      "catalogue": "Catálogo",
+      "moderation": "Moderación",
+      "operations": "Operaciones",
+      "people": "Personas",
+      "system": "Sistema"
+    },
+    "nav": {
+      "dashboard": "Panel",
+      "items": "Elementos",
+      "ingestion": "Ingesta",
+      "matchReviews": "Revisiones de coincidencias",
+      "fieldReviews": "Revisiones de campos",
+      "itemConflicts": "Conflictos de elementos",
+      "catalogueAudit": "Auditoría del catálogo",
+      "locks": "Bloqueos",
+      "moderationQueue": "Cola de moderación",
+      "moderationMetrics": "Métricas de moderación",
+      "reports": "Denuncias",
+      "ratingFlags": "Señalizaciones de valoraciones",
+      "scoreActions": "Acciones de puntuación",
+      "scoreBursts": "Picos de puntuación",
+      "formulaVersions": "Versiones de la fórmula de puntuación",
+      "jobRuns": "Ejecuciones de tareas",
+      "ingestFailures": "Fallos de ingesta",
+      "dqResults": "Resultados de calidad de datos",
+      "featureFlags": "Feature flags",
+      "users": "Usuarios",
+      "contactMessages": "Mensajes de contacto",
+      "auditLog": "Registro de auditoría",
+      "backToSite": "Volver al sitio"
+    },
+    "topbar": {
+      "toggleTheme": "Cambiar tema",
+      "openMenu": "Abrir menú",
+      "closeMenu": "Cerrar menú",
+      "navLabel": "Navegación del admin",
+      "skip": "Saltar al contenido",
+      "account": "Cuenta",
+      "signedInAs": "Sesión iniciada como {name}"
+    }
+  },
   "coverage": {
     "caption": "Proporción de ítems públicos cuyo campo devuelve la API, medida el {date}.",
     "field": "Campo",

@@ -187,6 +187,7 @@ func Web(r *router.Router, app *vukem.App) error {
 			"reactions.",
 			"notifications.",
 			"offers.",
+			"admin.",
 			"library.",
 			"forYou.",
 			"userLists.",

@@ -1,4 +1,97 @@
 {
+  "admin": {
+    "title": "Admin",
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "A live snapshot of the catalogue and the ingestion worker.",
+      "updated": "Updated {time}",
+      "refresh": "Refresh",
+      "refreshError": "Could not refresh the numbers. Showing the last snapshot.",
+      "stats": {
+        "items": "Items",
+        "users": "Users",
+        "openReports": "Open reports",
+        "runningRuns": "Runs in progress",
+        "failedRuns": "Failed runs (24h)",
+        "parkedFailures": "Parked failures",
+        "approx": "Estimate"
+      },
+      "worker": {
+        "title": "Ingestion worker",
+        "ok": "Healthy",
+        "stale": "Stale",
+        "never": "Never started",
+        "age": "Last heartbeat {age} ago",
+        "neverHint": "No heartbeat has been recorded yet.",
+        "staleHint": "The worker stopped beating. Check its logs on Railway."
+      },
+      "runs": {
+        "title": "Recent ingestion runs",
+        "empty": "No runs yet.",
+        "viewAll": "All runs",
+        "job": "Job",
+        "source": "Source",
+        "mode": "Mode",
+        "status": "Status",
+        "seen": "Seen",
+        "changed": "Changed",
+        "failed": "Failed",
+        "started": "Started",
+        "duration": "Duration",
+        "statuses": {
+          "queued": "Queued",
+          "running": "Running",
+          "succeeded": "Succeeded",
+          "partial": "Partial",
+          "failed": "Failed",
+          "skipped": "Skipped",
+          "cancelled": "Cancelled"
+        }
+      }
+    },
+    "groups": {
+      "overview": "Overview",
+      "catalogue": "Catalogue",
+      "moderation": "Moderation",
+      "operations": "Operations",
+      "people": "People",
+      "system": "System"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "items": "Items",
+      "ingestion": "Ingestion",
+      "matchReviews": "Match reviews",
+      "fieldReviews": "Field reviews",
+      "itemConflicts": "Item conflicts",
+      "catalogueAudit": "Catalogue audit",
+      "locks": "Locks",
+      "moderationQueue": "Moderation queue",
+      "moderationMetrics": "Moderation metrics",
+      "reports": "Reports",
+      "ratingFlags": "Rating flags",
+      "scoreActions": "Score actions",
+      "scoreBursts": "Score bursts",
+      "formulaVersions": "Score formula versions",
+      "jobRuns": "Job runs",
+      "ingestFailures": "Ingest failures",
+      "dqResults": "Data quality results",
+      "featureFlags": "Feature flags",
+      "users": "Users",
+      "contactMessages": "Contact messages",
+      "auditLog": "Audit log",
+      "backToSite": "Back to site"
+    },
+    "topbar": {
+      "toggleTheme": "Toggle theme",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "navLabel": "Admin navigation",
+      "skip": "Skip to content",
+      "account": "Account",
+      "signedInAs": "Signed in as {name}"
+    }
+  },
   "coverage": {
     "caption": "Share of public items whose field the API returns, measured on {date}.",
     "field": "Field",

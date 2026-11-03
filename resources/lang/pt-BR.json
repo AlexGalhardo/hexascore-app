@@ -1,4 +1,97 @@
 {
+  "admin": {
+    "title": "Admin",
+    "dashboard": {
+      "title": "Painel",
+      "subtitle": "Um retrato ao vivo do catálogo e do worker de ingestão.",
+      "updated": "Atualizado {time}",
+      "refresh": "Atualizar",
+      "refreshError": "Não foi possível atualizar os números. Mostrando o último retrato.",
+      "stats": {
+        "items": "Itens",
+        "users": "Usuários",
+        "openReports": "Denúncias abertas",
+        "runningRuns": "Execuções em andamento",
+        "failedRuns": "Execuções com falha (24h)",
+        "parkedFailures": "Falhas estacionadas",
+        "approx": "Estimativa"
+      },
+      "worker": {
+        "title": "Worker de ingestão",
+        "ok": "Saudável",
+        "stale": "Parado",
+        "never": "Nunca iniciou",
+        "age": "Último batimento há {age}",
+        "neverHint": "Nenhum batimento foi registrado ainda.",
+        "staleHint": "O worker parou de bater. Veja os logs dele no Railway."
+      },
+      "runs": {
+        "title": "Execuções de ingestão recentes",
+        "empty": "Nenhuma execução ainda.",
+        "viewAll": "Todas as execuções",
+        "job": "Job",
+        "source": "Fonte",
+        "mode": "Modo",
+        "status": "Status",
+        "seen": "Vistos",
+        "changed": "Alterados",
+        "failed": "Falhas",
+        "started": "Início",
+        "duration": "Duração",
+        "statuses": {
+          "queued": "Na fila",
+          "running": "Em andamento",
+          "succeeded": "Concluída",
+          "partial": "Parcial",
+          "failed": "Falhou",
+          "skipped": "Ignorada",
+          "cancelled": "Cancelada"
+        }
+      }
+    },
+    "groups": {
+      "overview": "Visão geral",
+      "catalogue": "Catálogo",
+      "moderation": "Moderação",
+      "operations": "Operações",
+      "people": "Pessoas",
+      "system": "Sistema"
+    },
+    "nav": {
+      "dashboard": "Painel",
+      "items": "Itens",
+      "ingestion": "Ingestão",
+      "matchReviews": "Revisões de correspondência",
+      "fieldReviews": "Revisões de campos",
+      "itemConflicts": "Conflitos de itens",
+      "catalogueAudit": "Auditoria do catálogo",
+      "locks": "Bloqueios",
+      "moderationQueue": "Fila de moderação",
+      "moderationMetrics": "Métricas de moderação",
+      "reports": "Denúncias",
+      "ratingFlags": "Sinalizações de notas",
+      "scoreActions": "Ações de nota",
+      "scoreBursts": "Picos de notas",
+      "formulaVersions": "Versões da fórmula de nota",
+      "jobRuns": "Execuções de jobs",
+      "ingestFailures": "Falhas de ingestão",
+      "dqResults": "Resultados de qualidade de dados",
+      "featureFlags": "Feature flags",
+      "users": "Usuários",
+      "contactMessages": "Mensagens de contato",
+      "auditLog": "Log de auditoria",
+      "backToSite": "Voltar ao site"
+    },
+    "topbar": {
+      "toggleTheme": "Alternar tema",
+      "openMenu": "Abrir menu",
+      "closeMenu": "Fechar menu",
+      "navLabel": "Navegação do admin",
+      "skip": "Pular para o conteúdo",
+      "account": "Conta",
+      "signedInAs": "Conectado como {name}"
+    }
+  },
   "coverage": {
     "caption": "Parcela dos itens públicos cujo campo a API retorna, medida em {date}.",
     "field": "Campo",

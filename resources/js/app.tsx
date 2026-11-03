@@ -1,5 +1,6 @@
 import { createInertiaApp } from "@inertiajs/react";
 
+import AdminLayout from "./layouts/AdminLayout";
 import AppLayout from "./layouts/AppLayout";
 
 // Dark mode follows the "dark" class on <html>: the saved choice
@@ -24,7 +25,8 @@ try {
 try {
 	void Promise.resolve(
 		createInertiaApp({
-			layout: () => AppLayout,
+			// The admin screens (pages/Admin/**) use their own shell (ADR 0026).
+			layout: (name) => (name.startsWith("Admin/") ? AdminLayout : AppLayout),
 			nonce: document.querySelector<HTMLMetaElement>('meta[property="csp-nonce"]')?.nonce,
 			progress: { color: "#4f46e5" },
 		}),
