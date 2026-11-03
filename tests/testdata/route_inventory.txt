@@ -182,6 +182,8 @@ admin POST   /admin/reports/{id}/resolve
 admin GET    /admin/items/{id}/manage
 admin POST   /admin/items/{id}/affiliate-links
 admin POST   /admin/items/{id}/affiliate-links/{store}/delete
+admin POST   /admin/items/{id}/offers
+admin POST   /admin/items/{id}/offers/{offer}/toggle
 admin POST   /admin/items/{id}/trending
 admin POST   /admin/items/{id}/trending/{override}/delete
 admin POST   /admin/items/{id}/merge

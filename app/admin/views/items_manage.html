@@ -43,6 +43,35 @@
 	<button type="submit" class="button">Save link</button>
 </form>
 
+<h2>Offers</h2>
+<p class="muted">Where to watch or buy. A source other than <code>admin</code> is kept up to date by its stage; deactivating one hides it until you restore it. Adding one by hand replaces the offer with the same country, store and kind. Tags are added when a visitor clicks, never stored here.</p>
+{{if not .Offers}}<p class="muted">No offers.</p>{{end}}
+<table>
+	<thead><tr><th>Store</th><th>Country</th><th>Kind</th><th>Source</th><th>Check</th><th>URL</th><th>Active</th><th></th></tr></thead>
+	<tbody>
+	{{range .Offers}}
+	<tr>
+		<td>{{.StoreName}}</td><td>{{.Country}}</td><td>{{.Kind}}</td><td>{{.Source}}</td><td>{{.Status}}</td><td>{{.URL}}</td><td>{{if .Active}}yes{{else}}no{{end}}</td>
+		<td><form method="post" action="/admin/items/{{$.Item.ID}}/offers/{{.ID}}/toggle">{{csrfField}}<button type="submit" class="button">{{if .Active}}Deactivate{{else}}Restore{{end}}</button></form></td>
+	</tr>
+	{{end}}
+	</tbody>
+</table>
+<form method="post" action="/admin/items/{{.Item.ID}}/offers" class="stack">
+	{{csrfField}}
+	<label>Store
+		<select name="store">{{range .Stores}}<option value="{{.Code}}">{{.Name}}</option>{{end}}</select>
+	</label>
+	<label>Country
+		<select name="country">{{range .OfferCountries}}<option>{{.}}</option>{{end}}</select>
+	</label>
+	<label>Kind
+		<select name="kind">{{range .OfferKinds}}<option>{{.}}</option>{{end}}</select>
+	</label>
+	<label>URL <input type="url" name="url" required maxlength="2048" placeholder="https://"></label>
+	<button type="submit" class="button">Save offer</button>
+</form>
+
 <h2>Trending</h2>
 <p class="muted">A pin puts the item first on the landing page of its type; a ban removes it from every trending list and the API. Both apply at the next hourly run. An empty date has no end.</p>
 {{if not .Trending}}<p class="muted">No pin or ban.</p>{{end}}

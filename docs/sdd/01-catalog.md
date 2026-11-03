@@ -250,6 +250,10 @@ create table offers (id uuid primary key, item_id uuid not null references items
   unique nulls not distinct (item_id, edition_id, country, store, kind));
 create table offer_clicks (day date not null, offer_id uuid not null references offers(id) on delete cascade,
   country char(2) not null, clicks int not null default 0, primary key (day, offer_id, country));  -- no user id, no IP
+-- Admin: /admin/items/{id}/manage lists the item's offers (every source, active or not), deactivates or restores one
+-- (POST .../offers/{offer}/toggle) and adds one by hand (POST .../offers: store, country or ZZ, kind, https URL
+-- without credentials). A hand entry has source 'admin' and replaces the offer with the same country, store and kind.
+-- Both are audited in admin_audit_logs (resource 'offers').
 ```
 
 Role compatibility (enforced in Go on write and by DQ-08):

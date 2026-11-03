@@ -214,3 +214,95 @@ func TestTrendingOverrides(t *testing.T) {
 		t.Fatalf("audit rows = %d, want create, update and delete", n)
 	}
 }
+
+// TestAdminOffers: an admin lists the offers of an item, deactivates or restores one and adds one by hand (RFC-003
+// OF-07). Every change is audited; invalid input writes nothing; another item's offer is a 404.
+func TestAdminOffers(t *testing.T) {
+	t.Parallel()
+
+	app := catalogAdminApp(t)
+	plain := browserFor(t, app, makeUser(t, app, "plain@example.com", "user", true))
+	admin := browserFor(t, app, makeUser(t, app, adminEmail, "admin", true))
+	db, _ := app.DB()
+	base := "/admin/items/" + itemA
+
+	count := func(q string, args ...any) int {
+		t.Helper()
+
+		var n int
+		if err := db.SQL().QueryRowContext(t.Context(), q, args...).Scan(&n); err != nil {
+			t.Fatal(err)
+		}
+
+		return n
+	}
+
+	good := url.Values{
+		"store":   {"steam"},
+		"country": {"BR"},
+		"kind":    {"buy_digital"},
+		"url":     {"https://store.steampowered.com/app/1"},
+	}
+	plain.PostForm(base+"/offers", good).AssertNotFound()
+
+	for name, bad := range map[string]url.Values{
+		"unknown store":   {"store": {"nope"}, "country": {"BR"}, "kind": {"buy"}, "url": {"https://a.example/x"}},
+		"unknown country": {"store": {"steam"}, "country": {"BRA"}, "kind": {"buy"}, "url": {"https://a.example/x"}},
+		"unknown kind":    {"store": {"steam"}, "country": {"BR"}, "kind": {"gift"}, "url": {"https://a.example/x"}},
+		"http url":        {"store": {"steam"}, "country": {"BR"}, "kind": {"buy"}, "url": {"http://a.example/x"}},
+		"no host":         {"store": {"steam"}, "country": {"BR"}, "kind": {"buy"}, "url": {"https:///x"}},
+		"credentials":     {"store": {"steam"}, "country": {"BR"}, "kind": {"buy"}, "url": {"https://user:pw@a.example/x"}},
+		"javascript url":  {"store": {"steam"}, "country": {"BR"}, "kind": {"buy"}, "url": {"javascript:alert(1)"}},
+	} {
+		admin.PostForm(base+"/offers", bad).AssertStatus(303)
+
+		if n := count(`SELECT count(*) FROM offers`); n != 0 {
+			t.Fatalf("%s wrote %d rows", name, n)
+		}
+	}
+
+	admin.PostForm(base+"/offers", good).AssertRedirect(base + "/manage")
+
+	var id, source string
+	if err := db.SQL().
+		QueryRowContext(t.Context(), `SELECT id::text, source FROM offers WHERE item_id = $1`, itemA).
+		Scan(&id, &source); err != nil ||
+		source != "admin" {
+		t.Fatalf("offer = %q source = %q, %v", id, source, err)
+	}
+
+	admin.Get(base + "/manage").AssertOK().AssertSee("https://store.steampowered.com/app/1")
+
+	// the same key again replaces the url and keeps one row
+	good.Set("url", "https://store.steampowered.com/app/2")
+	admin.PostForm(base+"/offers", good).AssertRedirect(base + "/manage")
+
+	if n := count(
+		`SELECT count(*) FROM offers WHERE item_id = $1 AND url = 'https://store.steampowered.com/app/2'`,
+		itemA,
+	); n != 1 {
+		t.Fatalf("rows with the new url = %d", n)
+	}
+
+	admin.PostForm("/admin/items/"+itemB+"/offers/"+id+"/toggle", url.Values{}).
+		AssertNotFound()
+		// not that item's offer
+	plain.PostForm(base+"/offers/"+id+"/toggle", url.Values{}).AssertNotFound()
+	admin.PostForm(base+"/offers/not-a-uuid/toggle", url.Values{}).AssertNotFound()
+
+	admin.PostForm(base+"/offers/"+id+"/toggle", url.Values{}).AssertRedirect(base + "/manage")
+
+	if n := count(`SELECT count(*) FROM offers WHERE id = $1 AND NOT active`, id); n != 1 {
+		t.Fatal("toggle did not deactivate the offer")
+	}
+
+	admin.PostForm(base+"/offers/"+id+"/toggle", url.Values{}).AssertRedirect(base + "/manage")
+
+	if n := count(`SELECT count(*) FROM offers WHERE id = $1 AND active`, id); n != 1 {
+		t.Fatal("a second toggle did not restore the offer")
+	}
+
+	if n := count(`SELECT count(*) FROM admin_audit_logs WHERE resource = 'offers'`); n != 4 {
+		t.Fatalf("audit rows = %d, want create, update and two toggles", n)
+	}
+}

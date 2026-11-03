@@ -158,6 +158,9 @@ func Admin(r *router.Router, app *vukem.App) error {
 		Name("admin.items.affiliate.save").Use(moderator...)
 	r.Post("/admin/items/{id}/affiliate-links/{store}/delete", catalogH.DeleteAffiliateLink).
 		Name("admin.items.affiliate.delete").Use(moderator...)
+	r.Post("/admin/items/{id}/offers", catalogH.SaveOffer).Name("admin.items.offers.save").Use(moderator...)
+	r.Post("/admin/items/{id}/offers/{offer}/toggle", catalogH.ToggleOffer).
+		Name("admin.items.offers.toggle").Use(moderator...)
 	r.Post("/admin/items/{id}/trending", catalogH.SaveTrendingOverride).
 		Name("admin.items.trending.save").Use(moderator...)
 	r.Post("/admin/items/{id}/trending/{override}/delete", catalogH.DeleteTrendingOverride).
