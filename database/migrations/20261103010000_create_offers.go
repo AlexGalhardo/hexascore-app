@@ -12,7 +12,9 @@ import "github.com/AlexGalhardo/vukem/schema"
 // offers is keyed by item × edition × country × store × kind. country is an ISO 3166 alpha-2 code, or 'ZZ' for an
 // offer that is valid everywhere (admin links, digital stores). edition_id is set only for book offers. URLs are
 // canonical (no affiliate tag); source 'admin' rows migrated from affiliate_links keep the URL the admin entered.
-// verify_status follows the offers.verify state machine (RFC-003 section 3); expires_at is set for TMDB data
+// verify_status follows the offers.verify state machine (RFC-003 section 3): last_verified_at is the last definitive
+// answer, last_checked_at the last attempt (a timeout moves only this one, so a run never picks the same offer
+// twice); expires_at is set for TMDB data
 // (last_verified_at + 180 days, ADR 0006). Written by the offers stages, the verify job and the admin item page.
 //
 // offer_clicks counts outbound clicks per day, offer and country with no user id and no IP (LGPD); written by
@@ -45,6 +47,7 @@ func m20261103010000CreateOffers() schema.Migration {
   confidence smallint NOT NULL DEFAULT 80 CHECK (confidence BETWEEN 0 AND 100),
   first_seen timestamptz NOT NULL DEFAULT now(),
   last_verified_at timestamptz,
+  last_checked_at timestamptz,
   verify_status text NOT NULL DEFAULT 'unverified'
     CHECK (verify_status IN ('unverified', 'ok', 'redirected', 'broken', 'gone')),
   verify_http_status int,
@@ -55,8 +58,8 @@ func m20261103010000CreateOffers() schema.Migration {
 )`,
 			// serves the item page: the active offers of an item in the visitor's country (and 'ZZ')
 			`CREATE INDEX offers_item_country_idx ON offers (item_id, country) WHERE active`,
-			// serves offers.verify: the least recently verified active offers first
-			`CREATE INDEX offers_verify_idx ON offers (last_verified_at NULLS FIRST) WHERE active`,
+			// serves offers.verify: the least recently checked active offers first
+			`CREATE INDEX offers_verify_idx ON offers (last_checked_at NULLS FIRST) WHERE active`,
 			// serves the expiry sweep of TMDB data
 			`CREATE INDEX offers_expires_idx ON offers (expires_at) WHERE expires_at IS NOT NULL AND active`,
 			`CREATE TABLE offer_clicks (
