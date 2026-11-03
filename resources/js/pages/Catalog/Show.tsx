@@ -7,6 +7,7 @@ import AddToList, { type ListChoice } from "../../components/item/AddToList";
 import CategoryAverages from "../../components/item/CategoryAverages";
 import Editions from "../../components/item/Editions";
 import FriendsScore, { type FriendsScoreData } from "../../components/item/FriendsScore";
+import Offers, { type OffersData } from "../../components/item/Offers";
 import RatingPanel from "../../components/item/RatingPanel";
 import Reviews, { type ReviewEntry } from "../../components/item/Reviews";
 import ScoreBlock from "../../components/item/ScoreBlock";
@@ -67,6 +68,8 @@ interface Props {
 	myLists?: ListChoice[];
 	trailers?: { youtubeId: string; title?: string }[];
 	cover?: Cover | null;
+	/** Where to watch or buy (RFC-003): every country, so the cached HTML is the same for all visitors. */
+	offers?: OffersData;
 	/** Deferred (group `reviews`) while the feature flag `social` is on (SDD 14 §12.10). */
 	reviews?: { data: ReviewEntry[]; mine: ReviewEntry | null };
 	/** Deferred (group `personal`) for signed-in viewers while the flag `social` is on. */
@@ -123,6 +126,7 @@ export default function Show({
 	myLists,
 	trailers = [],
 	cover = null,
+	offers,
 	reviews,
 	friendsScore,
 	ogImage,
@@ -347,6 +351,25 @@ export default function Show({
 							count={Math.min(trailers.length, 3)}
 						>
 							<Trailers trailers={trailers.slice(0, 3)} />
+						</Section>
+					)}
+
+					{offers && (
+						<Section
+							id="offers"
+							title={
+								item.type === "movie" || item.type === "series"
+									? t("offers.titleWatch")
+									: t("offers.titleBuy")
+							}
+							bold
+						>
+							<Offers
+								offers={offers}
+								type={item.type}
+								title={title}
+								locale={locale}
+							/>
 						</Section>
 					)}
 

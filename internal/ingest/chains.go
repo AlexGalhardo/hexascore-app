@@ -12,6 +12,7 @@ import (
 	"github.com/AlexGalhardo/vukem/database"
 
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/dq"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/offers"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/rollback"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 )
@@ -129,6 +130,28 @@ var (
 		{Job: "covers", Source: "covers", Mode: run.ModeFull},
 		{Job: dq.Job, Mode: run.ModeFull},
 	}}
+	// OffersDaily derives the store and Amazon offers from the catalogue ids (RFC-003); it touches no network, so it
+	// needs only the master switch, and it is its own chain so the other chains never wait for it.
+	OffersDaily = Chain{"offers-daily", []Stage{
+		{Job: offers.DeriveJob, Mode: run.ModeFull},
+	}}
+	// OffersTMDB asks TMDB where each film and series can be watched (RFC-003). Its source is tmdb, so the
+	// ingest_tmdb kill switch gates it; only items not asked about in the last 30 days are due, so a daily run is
+	// cheap after the first. Its own chain: a skipped stage stops a chain and must not stop another.
+	OffersTMDB = Chain{"offers-tmdb", []Stage{
+		{Job: "offers.tmdb", Source: "tmdb", Mode: run.ModeFull},
+	}}
+	// LLMNormalise asks the model for the few facts the Wikipedia introductions state and Wikidata lacks (RFC-001
+	// section 5 F). Source llm: FLAG_INGEST_LLM (default off) and the master switch gate it, the monthly budget bounds it,
+	// and every value waits in field_reviews. Its own chain so a skipped stage never stops another.
+	LLMNormalise = Chain{"llm-normalise", []Stage{
+		{Job: "llm.normalise", Source: "llm", Mode: run.ModeFull},
+	}}
+	// RefreshExisting verifies the items the least recently verified first: the cover is still in the bucket, the quality
+	// score is current (RFC-001 section 5 A). It touches no outside host, so only the master switch gates it.
+	RefreshExisting = Chain{"refresh-existing", []Stage{
+		{Job: "refresh.existing", Mode: run.ModeFull},
+	}}
 	// DQDaily runs the data-quality asserts on their own (SDD 06 §7.7); every chain above ends with the same stage.
 	DQDaily = Chain{"dq-daily", []Stage{{Job: dq.Job, Mode: run.ModeIncremental}}}
 	// FrontendFields renders a sample of item pages and reports the missing required fields (SDD 06 §7.7).
@@ -159,6 +182,10 @@ var (
 		TrailersWeekly,
 		CoversDaily,
 		CoversWeekly,
+		OffersDaily,
+		OffersTMDB,
+		LLMNormalise,
+		RefreshExisting,
 		DQDaily,
 		FrontendFields,
 		Rollback,

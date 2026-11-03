@@ -107,5 +107,13 @@ func All() []schema.Migration {
 		m20261102240000CreateCoverHashes(),
 		m20261102250000CreateIngestCostDaily(),
 		m20261102260000PartitionSourceRecordHistory(),
+		m20261103000000AddTrendingV2(),
+		m20261103010000CreateOffers(),
+		m20261103010100MigrateAffiliateLinksToOffers(),
+		m20261103010200CreateOfferSourceChecks(),
+		m20261103020000CreateItemConflicts(),
+		m20261103030000CreateLLMUsage(),
+		m20261103040000AddItemVerification(),
+		m20261103040100AddItemsVerifyIdx(),
 	}
 }

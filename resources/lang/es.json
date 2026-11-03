@@ -724,6 +724,7 @@
     "popularType": "Populares: {type}",
     "popular": "Popular",
     "trendingRank": "#{rank} en tendencia",
+    "trendingPopular": "Popular",
     "carousel": {
       "label": "{type} en tendencia",
       "previous": "Diapositiva anterior",
@@ -1656,6 +1657,8 @@
       "burst": "Un pico repentino de valoraciones en un título limita temporalmente las nuevas valoraciones de cuentas recientes y muestra un aviso. El equipo revisa el pico y aprueba o excluye las valoraciones afectadas.",
       "capsTitle": "Límites diarios",
       "caps": "Cada cuenta puede añadir un número limitado de valoraciones nuevas y ediciones por día.",
+      "trendingTitle": "Cómo funcionan las tendencias",
+      "trending": "La página de inicio muestra, para cada categoría, los 12 elementos que más atención ganan esta semana. Cada día suma puntos por nuevas valoraciones (6 cada una), terminados (5), en curso (4), añadidos a listas públicas (3,2), quiero probar (3) y visitas y clics de búsqueda, que valen la mitad y crecen según un logaritmo para que el tráfico por sí solo no lleve lejos a un elemento. Los días más antiguos pesan menos, a la mitad cada 3,5 días, y los lanzamientos de los últimos 90 días reciben una pequeña bonificación, igual que la popularidad creciente en TMDB, IGDB, Open Library y Wikidata. Los elementos se comparan con los de su misma categoría, así que una categoría lenta también llena su fila. Un elemento entra con actividad de al menos 5 cuentas y una puntuación claramente por encima del nivel habitual de su categoría, conserva su lugar hasta 72 horas después de calificar por última vez, y aparecen como máximo 2 elementos por franquicia y 4 por género. Las cuentas con menos de 7 días pesan poco; las cuentas bloqueadas y las cuentas internas de prueba no pesan nada. Cuando menos de 12 elementos califican, el resto se marca como Popular. El equipo puede fijar u ocultar un elemento.",
       "versionsTitle": "Historial de versiones",
       "versions": "Los cambios en la fórmula se anuncian con al menos 14 días de antelación. La versión activa es la versión 1."
     }
@@ -1935,6 +1938,36 @@
     "wanted": "Porque querías {title}",
     "loading": "Cargando..."
   },
+  "offers": {
+      "titleWatch": "Dónde ver",
+      "titleBuy": "Dónde comprar",
+      "country": "País",
+      "none": "No se conoce ninguna fuente oficial en {country}.",
+      "searchJustWatch": "Buscar en JustWatch",
+      "kinds": {
+        "stream": "Streaming",
+        "free": "Gratis con anuncios",
+        "rent": "Alquilar",
+        "buy": "Comprar",
+        "buy_digital": "Tiendas digitales",
+        "mobile": "Aplicaciones",
+        "physical": "Ediciones físicas",
+        "read": "Leer en línea"
+      },
+      "countryNames": {
+        "BR": "Brasil",
+        "US": "Estados Unidos",
+        "PT": "Portugal",
+        "ES": "España",
+        "MX": "México",
+        "AR": "Argentina"
+      },
+      "verified": "Verificado el {date}",
+      "newTab": "(se abre en una pestaña nueva)",
+      "commission": "HexaScore puede recibir una comisión por las compras hechas a través de estos enlaces.",
+      "amazon": "Como Asociado de Amazon, ganamos con las compras que reúnan los requisitos.",
+      "justwatch": "Datos de disponibilidad de streaming proporcionados por JustWatch."
+    },
   "reviews": {
     "title": "Reseñas",
     "body": "Tu reseña",

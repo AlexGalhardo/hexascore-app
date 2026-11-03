@@ -223,7 +223,8 @@ type Trigger struct {
 // Thresholds override the CF trigger for tests; the zero value is the SDD one.
 type Thresholds struct{ MinUsers, MinRatings int }
 
-// CheckTrigger counts the users with at least MinRatings ratings. Below MinUsers it computes nothing else.
+// CheckTrigger counts the users with at least MinRatings ratings, leaving out flagged seed accounts (OQ-07). Below
+// MinUsers it computes nothing else.
 func CheckTrigger(ctx context.Context, db *database.DB, now time.Time, th Thresholds) (Trigger, error) {
 	if th.MinUsers == 0 {
 		th.MinUsers = CFMinUsers
@@ -236,7 +237,8 @@ func CheckTrigger(ctx context.Context, db *database.DB, now time.Time, th Thresh
 	t := Trigger{At: now.UTC()}
 
 	err := db.QueryRowContext(ctx,
-		`SELECT count(*) FROM (SELECT user_id FROM ratings GROUP BY user_id HAVING count(*) >= $1) x`,
+		`SELECT count(*) FROM (SELECT r.user_id FROM ratings r JOIN users u ON u.id = r.user_id AND NOT u.is_seed
+			GROUP BY r.user_id HAVING count(*) >= $1) x`,
 		th.MinRatings).Scan(&t.Users)
 	t.Triggered = t.Users >= th.MinUsers
 

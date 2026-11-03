@@ -158,6 +158,13 @@ func Admin(r *router.Router, app *vukem.App) error {
 		Name("admin.items.affiliate.save").Use(moderator...)
 	r.Post("/admin/items/{id}/affiliate-links/{store}/delete", catalogH.DeleteAffiliateLink).
 		Name("admin.items.affiliate.delete").Use(moderator...)
+	r.Post("/admin/items/{id}/offers", catalogH.SaveOffer).Name("admin.items.offers.save").Use(moderator...)
+	r.Post("/admin/items/{id}/offers/{offer}/toggle", catalogH.ToggleOffer).
+		Name("admin.items.offers.toggle").Use(moderator...)
+	r.Post("/admin/items/{id}/trending", catalogH.SaveTrendingOverride).
+		Name("admin.items.trending.save").Use(moderator...)
+	r.Post("/admin/items/{id}/trending/{override}/delete", catalogH.DeleteTrendingOverride).
+		Name("admin.items.trending.delete").Use(moderator...)
 	r.Post("/admin/items/{id}/merge", catalogH.Merge).Name("admin.items.merge").Use(moderator...)
 	applier := community.Applier{DB: acc.DB, Queue: q, Now: app.Now}
 	catalogH.Editor = &applier
@@ -217,6 +224,9 @@ func Admin(r *router.Router, app *vukem.App) error {
 	r.Get("/admin/ingest/field-reviews", fieldReviewsH.List).Name("admin.ingest.field_reviews").Use(modMW...)
 	r.Post("/admin/ingest/field-reviews/{id}", fieldReviewsH.Resolve).
 		Name("admin.ingest.field_reviews.resolve").Use(modMW...)
+	conflictsH := admin.ItemConflictHandlers{Pages: catalogH, DB: acc.DB, Authorize: reviewsH.Authorize}
+	r.Get("/admin/ingest/conflicts", conflictsH.List).Name("admin.ingest.conflicts").Use(modMW...)
+	r.Post("/admin/ingest/conflicts/{id}", conflictsH.Resolve).Name("admin.ingest.conflicts.resolve").Use(modMW...)
 	ingestH := admin.IngestHandlers{
 		Pages: catalogH, DB: acc.DB, Queue: q, Flags: ff, Now: app.Now,
 		AuthorizeView: func(c *web.Ctx) error {

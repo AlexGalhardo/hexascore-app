@@ -1,0 +1,39 @@
+{
+  "id": 603,
+  "results": {
+    "BR": {
+      "link": "https://www.themoviedb.org/movie/603-the-matrix/watch?locale=BR",
+      "flatrate": [
+        {"provider_id": 8, "provider_name": "Netflix", "display_priority": 1},
+        {"provider_id": 119, "provider_name": "  Amazon Prime Video  ", "display_priority": 2}
+      ],
+      "rent": [{"provider_id": 2, "provider_name": "Apple TV", "display_priority": 3}],
+      "buy": [{"provider_id": 2, "provider_name": "Apple TV", "display_priority": 3}]
+    },
+    "US": {
+      "link": "https://www.themoviedb.org/movie/603-the-matrix/watch?locale=US",
+      "ads": [{"provider_id": 73, "provider_name": "Tubi TV"}],
+      "free": [{"provider_id": 300, "provider_name": "Pluto TV"}]
+    },
+    "DE": {
+      "link": "https://www.themoviedb.org/movie/603-the-matrix/watch?locale=DE",
+      "flatrate": [{"provider_id": 8, "provider_name": "Netflix"}]
+    },
+    "ES": {
+      "link": "http://www.themoviedb.org/movie/603-the-matrix/watch?locale=ES",
+      "flatrate": [{"provider_id": 8, "provider_name": "Netflix"}]
+    },
+    "PT": {
+      "link": "https://evil.example/watch",
+      "flatrate": [{"provider_id": 8, "provider_name": "Netflix"}]
+    },
+    "MX": {
+      "link": "https://www.themoviedb.org/movie/603-the-matrix/watch?locale=MX",
+      "flatrate": [
+        {"provider_id": 0, "provider_name": "No id"},
+        {"provider_id": 15, "provider_name": ""},
+        {"provider_id": 337, "provider_name": "Disney Plus"}
+      ]
+    }
+  }
+}

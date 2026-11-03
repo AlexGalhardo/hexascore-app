@@ -252,3 +252,25 @@ FROM item_activity_daily t`).Scan(&s)
 		t.Fatalf("views must survive the rollup: %d, %v", views, err)
 	}
 }
+
+// OQ-07 (owner, 2026-11-02): flagged seed accounts weigh nothing in any trending signal, like banned ones.
+func TestRollupExcludesSeedUsers(t *testing.T) {
+	r := newRig(t)
+	item := r.item()
+	seed, genuine := r.user(400, false), r.user(400, false)
+	r.exec(`UPDATE users SET is_seed = true WHERE id = $1`, seed)
+
+	at := now.Add(-time.Hour)
+	for _, u := range []int64{seed, genuine} {
+		r.event("rating_created", u, item, at, nil)
+		r.list(u, true, false, item, at.Add(-24*time.Hour*8))
+	}
+
+	r.exec(`INSERT INTO item_status (user_id, item_id, status, updated_at) VALUES ($1, $3, 'completed', $4),
+($2, $3, 'completed', $4)`, seed, genuine, item, at)
+
+	r.rollup()
+
+	r.want(item, today, "ratings_new", 1, 1)
+	r.want(item, today, "status_completed", 1, 1)
+}

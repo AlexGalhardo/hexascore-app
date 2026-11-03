@@ -33,6 +33,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/listeners"
 	"github.com/AlexGalhardo/hexascore-app/app/logging"
 	appmail "github.com/AlexGalhardo/hexascore-app/app/mail"
+	"github.com/AlexGalhardo/hexascore-app/app/recommend/trending"
 	"github.com/AlexGalhardo/hexascore-app/app/scheduler"
 	"github.com/AlexGalhardo/hexascore-app/app/social"
 	"github.com/AlexGalhardo/hexascore-app/app/ssr"
@@ -40,6 +41,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/database/migrations"
 	"github.com/AlexGalhardo/hexascore-app/database/seeders"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/offers"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 	"github.com/AlexGalhardo/hexascore-app/resources"
 	"github.com/AlexGalhardo/hexascore-app/routes"
@@ -137,7 +139,13 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 		}),
 		vukem.WithFlags(
 			append(
-				[]flags.AnyFlag{community.SubmissionsFlag, community.TrustedModeratorsFlag, social.Flag},
+				[]flags.AnyFlag{
+					community.SubmissionsFlag,
+					community.TrustedModeratorsFlag,
+					social.Flag,
+					trending.V2Flag,
+					offers.VerifyFlag,
+				},
 				run.All()...)...),
 		vukem.WithViews(resources.Views()),
 		vukem.WithViewFuncs(template.FuncMap{
@@ -283,6 +291,14 @@ func addReadyChecks(app *vukem.App, heartbeat *scheduler.Heartbeat) error {
 
 	if inServe {
 		app.AddHealthCheckTimeout("scheduler", ReadyCheckTimeout, heartbeat.Check)
+	}
+
+	// With the ingest queue on a separate worker service (RFC-001 section 3) the web cannot see the worker's process,
+	// only its heartbeat row. Off by default: before the worker exists this process consumes the queue itself.
+	if on, _ := strconv.ParseBool(app.Source.Get("WORKER_HEARTBEAT_CHECK")); on {
+		app.AddHealthCheckTimeout("worker", ReadyCheckTimeout, func(ctx context.Context) error {
+			return ingest.CheckWorker(ctx, db, app.Now())
+		})
 	}
 
 	return nil

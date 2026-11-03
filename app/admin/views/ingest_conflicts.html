@@ -1,0 +1,21 @@
+{{define "content"}}
+<div class="toolbar"><h1>{{.Title}}</h1><a href="/admin/ingestion">Ingestion</a></div>
+<p class="muted">Items the ingestion did not create because they look like an item that already exists. Allow creates the item on the next run (without the contested id when the conflict is an external id); dismiss keeps it out. Merging two existing items is done from the item page, never by the worker.</p>
+{{if not .Conflicts}}<p class="muted">No open conflicts.</p>{{else}}
+{{range .Conflicts}}
+<section>
+	<h2>{{.QID}} <small>{{.Type}}</small></h2>
+	{{if eq .Kind "external_id"}}
+	<p>Carries the {{.Key}} id <code>{{.Value}}</code>, which belongs to <a href="/admin/items/{{.OtherID}}">{{.OtherTitle}}</a>.</p>
+	{{else}}
+	<p>Titled <code>{{.Value}}</code>, within a year of <a href="/admin/items/{{.OtherID}}">{{.OtherTitle}}</a> (similarity {{printf "%.2f" .Similarity}}).</p>
+	{{end}}
+	<form method="post" action="/admin/ingest/conflicts/{{.ID}}" class="stack">
+		{{csrfField}}
+		<button type="submit" name="action" value="allow" class="button">Allow</button>
+		<button type="submit" name="action" value="dismiss" class="button danger">Dismiss</button>
+	</form>
+</section>
+{{end}}
+{{end}}
+{{end}}

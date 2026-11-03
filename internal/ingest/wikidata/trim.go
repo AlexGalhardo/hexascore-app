@@ -43,7 +43,7 @@ var ScalarProps = []string{
 	"P2047", "P1104", "P2437", "P1113", // runtime, pages, seasons, episodes
 	"P1651", "P18", "P3383", // trailers, images
 	"P345", "P5794", "P1733", "P4947", "P4983", "P212", "P648", "P2816",
-	"P8383", "P1712", "P1258", "P6278", "P2725",
+	"P8383", "P1712", "P1258", "P6278", "P2725", "P3418", "P3861", // store ids (RFC-003 offers)
 	"P1476", "P1448", "P2561", // original title, official name, name (alt titles)
 	"P957", // ISBN-10
 }

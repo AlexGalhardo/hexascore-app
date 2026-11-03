@@ -94,6 +94,10 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	s.Func("ingest:prune", pruneIngest(app)).DailyAt("02:30").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:retry-failures", retryFailures(app)).DailyAt("03:30").In(saoPaulo).WithoutOverlapping()
 
+	// RFC-001 section 8: the heartbeat of whichever process consumes the ingest queue. A worker that stops consuming
+	// goes quiet, and /up?checks=1 reports it once WORKER_HEARTBEAT_CHECK is on.
+	s.Job(jobs.WorkerHeartbeat{}).EveryMinute().WithoutOverlapping()
+
 	// Alert A7 reads the ingestion tables once an hour and logs alert=A7 lines (SDD 12 §6.2, §7.5).
 	s.Func("ingest:alerts", ingestAlerts(app)).Hourly().WithoutOverlapping()
 
@@ -102,6 +106,24 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	s.Func("ingest:covers-weekly", startChain(app, ingest.CoversWeekly)).
 		WeeklyOn(time.Sunday, "02:00").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:covers-gc", coversGC(app)).DailyAt("02:30").In(saoPaulo).WithoutOverlapping()
+
+	// RFC-003: no network, so any quiet hour; before the 04:00-05:30 window of scores, prunes and asserts.
+	s.Func("ingest:offers-daily", startChain(app, ingest.OffersDaily)).
+		DailyAt("03:45").In(saoPaulo).WithoutOverlapping()
+
+	// RFC-003: watch providers from TMDB, between the 01:00 weekly chains and the 03:00 expiry run.
+	s.Func("ingest:offers-tmdb", startChain(app, ingest.OffersTMDB)).
+		DailyAt("01:40").In(saoPaulo).WithoutOverlapping()
+	// RFC-001 section 5 A: cover and quality check of the least recently verified items; the bucket is its only outside call.
+	s.Func("ingest:refresh-existing", startChain(app, ingest.RefreshExisting)).
+		DailyAt("01:30").In(saoPaulo).WithoutOverlapping()
+	// RFC-001 section 5 F: after the 03:00 TMDB expiry run; the monthly budget (LLM_MONTHLY_BUDGET_USD) bounds the cost.
+	s.Func("ingest:llm-normalise", startChain(app, ingest.LLMNormalise)).
+		DailyAt("03:20").In(saoPaulo).WithoutOverlapping()
+	// RFC-003: the verify job requests store pages at 1 request per second per host and checks up to 5,000 offers
+	// (behind FLAG_OFFERS_VERIFY); the prune runs after it.
+	s.Job(jobs.VerifyOffers{}).DailyAt("02:45").In(saoPaulo).WithoutOverlapping()
+	s.Job(jobs.PruneOffers{}).DailyAt("03:05").In(saoPaulo).WithoutOverlapping()
 
 	s.Func("ingest:dq-daily", startChain(app, ingest.DQDaily)).
 		DailyAt("05:00").In(saoPaulo).WithoutOverlapping()

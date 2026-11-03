@@ -335,6 +335,10 @@ func Web(r *router.Router, app *vukem.App) error {
 			r.Get("/"+section+"/{first}/{second}", sub).Name("section." + typ + ".sub")
 			r.Get("/"+section+"/{first}/{second}/{third}", sub).Name("section." + typ + ".subsub")
 		}
+		// RFC-003: the only exit of an offer link. 60 a minute per IP; no locale prefix, no page, no cache.
+		r.Get("/go/{id}", controllers.OfferGo(app)).
+			Name("offers.go").
+			Use(ratelimit.Middleware(limits.OfferGo.From(limiters), ratelimit.ByIP))
 		r.Get("/books/{slug}/editions/{id}/changes", changes.Edition()).Name("item.edition.changes")
 		r.Get("/api/items/{id}/ratings", items.Ratings).Name("item.ratings")
 		// The old top-level entity paths answer one 301 to the entity under its category.

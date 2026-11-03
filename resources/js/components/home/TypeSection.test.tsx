@@ -90,7 +90,9 @@ test("trending cards with rank and score on one row, no score explanation, then 
 	expect(within(cards[0]).queryByText("item.band.high")).toBeNull();
 	expect(within(cards[1]).queryByText(/home.ratingsOfMin/)).toBeNull();
 	// Owner round 2026-11-01 item 15: "#3 trending" even on the prior-week fallback, and the genre, not the type.
-	expect(within(cards[2]).getByText(/home.trendingRank.*"rank":3/)).toBeTruthy();
+	// RFC-002: a slot the trend did not fill is labelled "Popular", not with a trending rank
+	expect(within(cards[2]).getByText("home.trendingPopular")).toBeTruthy();
+	expect(within(cards[2]).queryByText(/home.trendingRank/)).toBeNull();
 	// Two rows only: title, then rank and score; no year or genre line.
 	expect(within(cards[0]).queryByText("2020 · Action")).toBeNull();
 	expect(screen.queryByText(/itemTypes\./)).toBeNull();

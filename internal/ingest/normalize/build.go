@@ -40,7 +40,7 @@ var (
 var externalIDProps = map[string]string{
 	"imdb": "P345", "igdb": "P5794", "steam": "P1733", "isbn13": "P212", "openlibrary": "P648",
 	"hltb": "P2816", "goodreads": "P8383", "metacritic": "P1712", "rottentomatoes": "P1258",
-	"epic": "P6278", "gog": "P2725",
+	"epic": "P6278", "gog": "P2725", "google_play": "P3418", "app_store": "P3861",
 }
 
 var (

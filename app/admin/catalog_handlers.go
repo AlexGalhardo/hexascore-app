@@ -27,7 +27,9 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/app/community"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
 	"github.com/AlexGalhardo/hexascore-app/app/moderation"
+	"github.com/AlexGalhardo/hexascore-app/app/offers"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/entities"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/resolve"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/store"
 )
 
@@ -90,17 +92,22 @@ type runRow struct {
 
 // pageData feeds the panel layout (same field names as vukem's admin page) and the pages below.
 type pageData struct {
-	Title         string
-	Panel         panelData
-	Item          models.Item
-	Affiliates    []affiliateRow
-	Ready         bool
-	Sources       []sourceRow
-	Runs          []runRow
-	Queue         queueView
-	Detail        moderation.Detail
-	BulkResults   []moderation.BulkResult
-	RejectReasons []string
+	Title          string
+	Panel          panelData
+	Item           models.Item
+	Affiliates     []affiliateRow
+	Trending       []trendingRow
+	Offers         []offerRow
+	Stores         []storeOption
+	OfferKinds     []string
+	OfferCountries []string
+	Ready          bool
+	Sources        []sourceRow
+	Runs           []runRow
+	Queue          queueView
+	Detail         moderation.Detail
+	BulkResults    []moderation.BulkResult
+	RejectReasons  []string
 	// CanApply shows the admin-only approve and reject controls (owner Q-A15).
 	CanApply bool
 	Audit    auditView
@@ -112,6 +119,7 @@ type pageData struct {
 	LockTargets   []string
 	Reviews       []entities.OpenReviewRow
 	FieldReviews  []store.OpenReview
+	Conflicts     []resolve.OpenConflict
 	Ingest        IngestStatus
 }
 
@@ -215,6 +223,20 @@ func (h CatalogHandlers) Manage(c *web.Ctx) error {
 		return err
 	}
 
+	if d.Trending, err = h.trendingOverrides(c.Context(), id); err != nil {
+		return err
+	}
+
+	if d.Offers, err = h.offerRows(c.Context(), id); err != nil {
+		return err
+	}
+
+	if d.Stores, err = h.storeOptions(c.Context()); err != nil {
+		return err
+	}
+
+	d.OfferKinds, d.OfferCountries = offerKinds, append([]string{offers.Everywhere}, offers.Countries...)
+
 	return h.render(c, "items_manage", d)
 }
 
@@ -230,7 +252,8 @@ func audit(ctx context.Context, ex database.Executor, actor models.User, record,
 func validAffiliateURL(raw string) bool {
 	u, err := url.Parse(raw)
 
-	return err == nil && len(raw) <= maxAffiliateURL && u.Scheme == "https" && u.Host != ""
+	// No credentials in the URL: the link is a redirect target, and user:pass@host reads as another host.
+	return err == nil && len(raw) <= maxAffiliateURL && u.Scheme == "https" && u.Host != "" && u.User == nil
 }
 
 // SaveAffiliateLink handles POST /admin/items/{id}/affiliate-links (upsert) and audits it.

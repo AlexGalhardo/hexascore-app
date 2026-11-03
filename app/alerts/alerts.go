@@ -13,6 +13,7 @@ const (
 	A5  = "A5"  // SSR fallback on a public route
 	A6  = "A6"  // same job kind failed two runs in a row
 	A10 = "A10" // quota flush failing
+	A18 = "A18" // the LLM normaliser spent its monthly budget
 )
 
 // Error logs msg at ERROR with the alert key first (log nil uses slog.Default).

@@ -20,13 +20,16 @@ type Row struct {
 	ItemID string
 }
 
-// Latest returns the newest snapshot of the type, and the zero time when there is none. Only public items are
-// returned: a snapshot row of an item hidden since then is dropped.
-func Latest(ctx context.Context, q Querier, typ string) (time.Time, []Row, error) {
+// Latest returns the newest snapshot of the type and window (APIWindow or HomeWindow), and the zero time when there is
+// none. Only public, unbanned items are returned: a snapshot row of an item hidden or banned since then is dropped.
+func Latest(ctx context.Context, q Querier, typ string, window int) (time.Time, []Row, error) {
 	rows, err := q.QueryContext(ctx, `SELECT s.computed_at, s.rank, s.basis, s.trend_score, s.item_id::text
 FROM trending_snapshots s JOIN items i ON i.id = s.item_id AND i.visibility = 'public'
-WHERE s.item_type = $1 AND s.computed_at = (SELECT max(computed_at) FROM trending_snapshots WHERE item_type = $1)
-ORDER BY s.rank`, typ)
+WHERE s.item_type = $1 AND s.window_days = $2
+  AND s.computed_at = (SELECT max(computed_at) FROM trending_snapshots WHERE item_type = $1 AND window_days = $2)
+  AND NOT EXISTS (SELECT 1 FROM trending_overrides o WHERE o.item_id = s.item_id AND o.kind = 'banned'
+    AND (o.until IS NULL OR o.until > now()))
+ORDER BY s.rank`, typ, window)
 	if err != nil {
 		return time.Time{}, nil, fmt.Errorf("trending latest: %w", err)
 	}

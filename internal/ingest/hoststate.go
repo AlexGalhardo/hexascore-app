@@ -18,6 +18,7 @@ import (
 // "worker" the worker heartbeat, key "host:<name>" the persisted httpx.HostState of an outbound host.
 const (
 	KeyWeb     = "web"
+	KeyWorker  = "worker"
 	hostPrefix = "host:"
 )
 
@@ -81,6 +82,52 @@ func ReadSignal(ctx context.Context, ex database.Executor) (s Signal, ok bool, e
 	}
 
 	return s, true, nil
+}
+
+// WorkerStaleAfter is the age at which the worker heartbeat counts as missing: the worker beats once a minute, so three
+// minutes tolerate one missed tick.
+const WorkerStaleAfter = 3 * time.Minute
+
+// ErrWorkerStale is returned by CheckWorker when no worker beat recently.
+var ErrWorkerStale = errors.New("ingest: no recent worker heartbeat")
+
+// WriteWorkerHeartbeat marks the worker alive. It runs in the worker process, through a queued job, so a worker that
+// stopped consuming the ingest queue goes quiet even while its host is up.
+func WriteWorkerHeartbeat(ctx context.Context, ex database.Executor) error {
+	return putState(ctx, ex, KeyWorker, struct{}{})
+}
+
+// ReadWorkerHeartbeat returns when the worker last beat; ok is false when it never did.
+func ReadWorkerHeartbeat(ctx context.Context, ex database.Executor) (at time.Time, ok bool, err error) {
+	err = ex.QueryRowContext(ctx, `SELECT updated_at FROM ingest_host_state WHERE key = $1`, KeyWorker).Scan(&at)
+	if errors.Is(err, sql.ErrNoRows) {
+		return time.Time{}, false, nil
+	}
+
+	if err != nil {
+		return time.Time{}, false, fmt.Errorf("ingest worker heartbeat: %w", err)
+	}
+
+	return at.UTC(), true, nil
+}
+
+// CheckWorker is the readiness check of the worker service: nil while the heartbeat is younger than WorkerStaleAfter
+// as of now. A heartbeat that never existed fails too, so a worker service that was never started shows up.
+func CheckWorker(ctx context.Context, ex database.Executor, now time.Time) error {
+	at, ok, err := ReadWorkerHeartbeat(ctx, ex)
+	if err != nil {
+		return err
+	}
+
+	if !ok {
+		return fmt.Errorf("%w: it never beat", ErrWorkerStale)
+	}
+
+	if age := now.Sub(at); age >= WorkerStaleAfter {
+		return fmt.Errorf("%w: last beat %s ago", ErrWorkerStale, age.Round(time.Second))
+	}
+
+	return nil
 }
 
 // SignalGate holds a batch while the signal in the table says the site is busy. A missing or stale signal

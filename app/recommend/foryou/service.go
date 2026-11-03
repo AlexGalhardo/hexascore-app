@@ -210,7 +210,7 @@ func (s *Service) render(ctx context.Context, userID int64, typ, locale string, 
 func (s *Service) onboarding(ctx context.Context, typ, locale string) (List, error) {
 	out := List{Basis: BasisOnboarding, Data: []Item{}}
 
-	_, rows, err := trending.Latest(ctx, s.DB, typ)
+	_, rows, err := trending.Latest(ctx, s.DB, typ, trending.APIWindow)
 	if err != nil {
 		return out, err
 	}

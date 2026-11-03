@@ -8,7 +8,9 @@ import (
 	"github.com/AlexGalhardo/vukem/queue"
 )
 
-// PruneTrending deletes trending snapshots older than 90 days; scheduled daily at 04:45 in routes/schedule.go.
+// PruneTrending deletes trending snapshots older than 90 days, external popularity values older than 35 days (the
+// score reads today and 7 days back) and pin/ban overrides that expired more than a year ago; scheduled daily at 04:45 in
+// routes/schedule.go.
 type PruneTrending struct{}
 
 // Kind names the job on the queue.
@@ -28,7 +30,27 @@ func handlePruneTrending(app *vukem.App) queue.Registration {
 		}
 
 		n, _ := res.RowsAffected()
-		app.Log.InfoContext(ctx, "prune trending", "deleted", n)
+
+		now := app.Now().UTC()
+
+		ext, err := db.ExecContext(
+			ctx,
+			`DELETE FROM item_popularity_external WHERE day < $1::date`,
+			now.AddDate(0, 0, -35),
+		)
+		if err != nil {
+			return err
+		}
+
+		over, err := db.ExecContext(ctx, `DELETE FROM trending_overrides WHERE until IS NOT NULL AND until < $1`,
+			now.AddDate(-1, 0, 0))
+		if err != nil {
+			return err
+		}
+
+		e, _ := ext.RowsAffected()
+		o, _ := over.RowsAffected()
+		app.Log.InfoContext(ctx, "prune trending", "snapshots", n, "external", e, "overrides", o)
 
 		return nil
 	}, queue.Timeout(10*time.Minute), queue.Retries(1))
