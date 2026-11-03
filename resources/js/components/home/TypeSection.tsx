@@ -24,7 +24,7 @@ export const ACCENT_TEXT: Record<ItemType, string> = {
 	book: "text-accent-book",
 };
 
-const PER_SLIDE = 6;
+const PER_SLIDE = 4;
 const MORE = 12;
 
 // One block per type: upcoming releases in the carousel and released 30-day trending in the grid.
@@ -80,7 +80,7 @@ export default function TypeSection({
 							node: (
 								<ol
 									start={n * PER_SLIDE + 1}
-									className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-6 md:gap-x-5"
+									className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-4 md:gap-x-6 lg:gap-x-8"
 								>
 									{upcoming
 										.slice(n * PER_SLIDE, Math.min((n + 1) * PER_SLIDE, MORE))

@@ -54,7 +54,7 @@ test("upcoming carousel and released trending grid use separate ordered lists", 
 		.find(
 			(region) => region.getAttribute("aria-roledescription") === "carousel",
 		) as HTMLElement;
-	expect(within(carousel).getAllByRole("listitem")).toHaveLength(6);
+	expect(within(carousel).getAllByRole("listitem")).toHaveLength(4);
 	expect(
 		within(carousel)
 			.getByRole("link", { name: /Title upcoming-0/ })
