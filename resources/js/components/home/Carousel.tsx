@@ -1,4 +1,4 @@
-import { type ReactElement, type ReactNode, useRef, useState } from "react";
+import { type ReactElement, type ReactNode, useEffect, useRef, useState } from "react";
 
 import { useT } from "../../lib/useT";
 import { iconButton } from "../Nav";
@@ -9,6 +9,8 @@ const reveal =
 
 // Full class names so Tailwind keeps them; the landing carousel has at most 2 slides (12 items, 6 per slide).
 const OFFSET = ["translate-x-0", "-translate-x-full", "-translate-x-[200%]", "-translate-x-[300%]"];
+
+const AUTO_MS = 6000;
 
 const PATHS = {
 	previous: "M15 6 L9 12 L15 18",
@@ -44,13 +46,28 @@ export default function Carousel({
 	const count = Math.min(slides.length, OFFSET.length);
 	const [index, setIndex] = useState(0);
 	const touchX = useRef<number | null>(null);
+	const [paused, setPaused] = useState(false);
 
 	const go = (i: number) => setIndex((i + count) % count);
+
+	// Pauses while hovered or focused so a visitor reading a card is not moved away; reduced motion disables it.
+	useEffect(() => {
+		if (count < 2 || paused) return;
+		if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+		const id = window.setInterval(() => setIndex((i) => (i + 1) % count), AUTO_MS);
+		return () => window.clearInterval(id);
+	}, [count, paused]);
 
 	return (
 		<section
 			aria-roledescription="carousel"
 			aria-label={label}
+			onMouseEnter={() => setPaused(true)}
+			onMouseLeave={() => setPaused(false)}
+			onFocus={() => setPaused(true)}
+			onBlur={(e) => {
+				if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPaused(false);
+			}}
 			tabIndex={0}
 			className="group grid gap-3 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
 			onKeyDown={(e) => {

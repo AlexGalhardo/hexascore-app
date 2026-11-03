@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, test, vi } from "vitest";
 
 import Carousel from "./Carousel";
@@ -16,15 +16,20 @@ const current = () =>
 		.getAllByRole("group", { hidden: true })
 		.findIndex((group) => group.getAttribute("aria-hidden") === "false");
 
-test("slides stay still until a visitor navigates, without pause or play buttons", () => {
+test("slides advance on their own every six seconds and pause while the carousel is hovered", () => {
 	vi.useFakeTimers();
 	try {
 		render(<Carousel label="Upcoming games" slides={slides} />);
 		expect(current()).toBe(0);
-		vi.advanceTimersByTime(12000);
-		expect(current()).toBe(0);
-		expect(screen.queryByRole("button", { name: /home.carousel.(pause|play)/ })).toBeNull();
-		expect(screen.getAllByRole("group", { hidden: true })[1].hasAttribute("inert")).toBe(true);
+		act(() => vi.advanceTimersByTime(6000));
+		expect(current()).toBe(1);
+		const region = screen.getByRole("region", { name: "Upcoming games" });
+		fireEvent.mouseEnter(region);
+		act(() => vi.advanceTimersByTime(12000));
+		expect(current()).toBe(1);
+		fireEvent.mouseLeave(region);
+		act(() => vi.advanceTimersByTime(6000));
+		expect(current()).toBe(2);
 	} finally {
 		vi.useRealTimers();
 	}
