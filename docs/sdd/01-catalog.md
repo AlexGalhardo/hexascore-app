@@ -232,6 +232,24 @@ create table affiliate_links (            -- kept, optional (feature flag "affil
   url text not null, active boolean not null default true,
   primary key (item_id, store)
 );
+
+-- RFC-003 offers (migrations 20261103010000, 20261103010100). Expand/contract for affiliate_links:
+--   release N (this one): `offers` and `stores` are created and every affiliate_links row is copied into
+--     offers (source 'admin'); the admin item page still writes affiliate_links and reads both.
+--   release N+1: the admin item page writes offers only; affiliate_links is read-only.
+--   release N+2: affiliate_links is dropped (contract), after a dry run shows it equals the admin offers.
+create table stores (code text primary key, name text not null, kind text not null, url_template text,
+  affiliate_program text, affiliate_param text, logo_key text, attribution text, active boolean not null default true);
+create table offers (id uuid primary key, item_id uuid not null references items(id) on delete cascade,
+  edition_id uuid references editions(id) on delete cascade, country char(2) not null,   -- 'ZZ' = everywhere
+  store text not null references stores(code), kind text not null, url text not null, external_id text,
+  source text not null, licence text not null, confidence smallint not null default 80,
+  first_seen timestamptz not null default now(), last_verified_at timestamptz,
+  verify_status text not null default 'unverified', verify_http_status int, broken_runs smallint not null default 0,
+  expires_at timestamptz, active boolean not null default true,
+  unique nulls not distinct (item_id, edition_id, country, store, kind));
+create table offer_clicks (day date not null, offer_id uuid not null references offers(id) on delete cascade,
+  country char(2) not null, clicks int not null default 0, primary key (day, offer_id, country));  -- no user id, no IP
 ```
 
 Role compatibility (enforced in Go on write and by DQ-08):

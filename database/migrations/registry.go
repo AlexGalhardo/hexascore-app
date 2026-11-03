@@ -108,5 +108,7 @@ func All() []schema.Migration {
 		m20261102250000CreateIngestCostDaily(),
 		m20261102260000PartitionSourceRecordHistory(),
 		m20261103000000AddTrendingV2(),
+		m20261103010000CreateOffers(),
+		m20261103010100MigrateAffiliateLinksToOffers(),
 	}
 }
