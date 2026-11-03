@@ -216,6 +216,8 @@ admin GET    /admin/ingest-failures/{id}/edit
 admin POST   /admin/ingest-failures/{id}
 admin GET    /admin/ingest-failures/{id}/delete
 admin POST   /admin/ingest-failures/{id}/delete
+admin GET    /admin/ingest/field-reviews
+admin POST   /admin/ingest/field-reviews/{id}
 admin GET    /admin/dq-results
 admin GET    /admin/dq-results/create
 admin POST   /admin/dq-results
