@@ -280,7 +280,7 @@ export default function Nav() {
 	return (
 		<header
 			data-scrolled={scrolled || undefined}
-			className="sticky top-0 z-50 border-b border-border bg-footer-bg text-footer-fg shadow-nav dark:shadow-nav-dark"
+			className="sticky top-0 z-50 border-b border-border bg-bg shadow-nav dark:shadow-nav-dark"
 		>
 			<div className="shell flex h-14 items-center gap-2 lg:h-[72px] lg:gap-7">
 				<Link

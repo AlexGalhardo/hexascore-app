@@ -32,7 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **item:** The where-to-watch and where-to-play block is hidden when an item has no offers, instead of showing an empty message.
 
-- **nav:** The navbar uses the footer's background and text colours in light and dark themes.
 
 - **item:** Where to watch (films and series) and where to play (games) show offers from every country at once, with no country selector, so a service listed in one country appears for every visitor.
 
