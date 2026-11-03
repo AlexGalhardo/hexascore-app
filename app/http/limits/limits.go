@@ -65,6 +65,7 @@ var (
 	Challenge      = Rule{"challenge", 30, time.Minute}
 	Exports        = Rule{"exports", 10, time.Hour}
 	CSPReports     = Rule{"csp-reports", 30, time.Minute}
+	OfferGo        = Rule{"offers.go", 60, time.Minute} // IP: outbound offer links (RFC-003)
 	ClientErrors   = Rule{"client-errors", 10, time.Minute}
 	ClientMetrics  = Rule{"client-metrics", 60, time.Minute}
 	// Community bursts (SDD 04 §7.3). The IP rule sits in front of the user
@@ -133,6 +134,7 @@ func All() []Rule {
 		Challenge,
 		Exports,
 		CSPReports,
+		OfferGo,
 		ClientErrors,
 		ClientMetrics,
 		CommunityDraft,

@@ -43,7 +43,7 @@ type Config struct {
 // privatePrefixes mirror the robots.txt Disallow list (SDD 09 §7.7).
 var privatePrefixes = []string{
 	"/admin", "/profile", "/me", "/billing", "/suggest", "/suggestions",
-	"/library", "/lists", "/login", "/signup",
+	"/library", "/lists", "/login", "/signup", "/go",
 }
 
 // Split returns the locale named by the first path segment and the path

@@ -1938,6 +1938,36 @@
     "wanted": "Because you wanted {title}",
     "loading": "Loading..."
   },
+  "offers": {
+      "titleWatch": "Where to watch",
+      "titleBuy": "Where to buy",
+      "country": "Country",
+      "none": "No official source known in {country}.",
+      "searchJustWatch": "Search on JustWatch",
+      "kinds": {
+        "stream": "Streaming",
+        "free": "Free with ads",
+        "rent": "Rent",
+        "buy": "Buy",
+        "buy_digital": "Digital stores",
+        "mobile": "Mobile apps",
+        "physical": "Physical copies",
+        "read": "Read online"
+      },
+      "countryNames": {
+        "BR": "Brazil",
+        "US": "United States",
+        "PT": "Portugal",
+        "ES": "Spain",
+        "MX": "Mexico",
+        "AR": "Argentina"
+      },
+      "verified": "Verified {date}",
+      "newTab": "(opens in a new tab)",
+      "commission": "HexaScore may earn a commission from purchases made through these links.",
+      "amazon": "As an Amazon Associate we earn from qualifying purchases.",
+      "justwatch": "Streaming availability data provided by JustWatch."
+    },
   "reviews": {
     "title": "Reviews",
     "body": "Your review",

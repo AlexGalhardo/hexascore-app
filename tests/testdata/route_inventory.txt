@@ -24,6 +24,7 @@ web   GET    /sitemap.xml
 web   GET    /sitemaps/{file}
 web   GET    /search
 web   GET    /search/suggest
+web   GET    /go/{id}
 web   POST   /search/events
 web   GET    /movies
 web   GET    /movies/{slug}

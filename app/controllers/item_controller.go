@@ -15,6 +15,7 @@ import (
 
 	"github.com/AlexGalhardo/hexascore-app/app/catalog"
 	"github.com/AlexGalhardo/hexascore-app/app/models"
+	"github.com/AlexGalhardo/hexascore-app/app/offers"
 	"github.com/AlexGalhardo/hexascore-app/app/scoring"
 	"github.com/AlexGalhardo/hexascore-app/app/social"
 )
@@ -62,6 +63,15 @@ func (h *Item) Show(typ string) web.HandlerFunc {
 			"timeToBeat":    page.TimeToBeat,
 			"trailers":      page.Trailers,
 			"cover":         page.Cover,
+		}
+
+		// Where to watch or buy (RFC-003). It is a secondary section: a failed read leaves it out and logs, it does
+		// not take the page down.
+		if sec, err := offers.Load(c.Context(), db, page.Item.ID, h.app.Now().UTC(),
+			offers.EnvTagger(h.app.Source.Get), i18n.Locale(c.Context())); err != nil {
+			h.app.Log.WarnContext(c.Context(), "item offers not loaded", "item", page.Item.ID, "error", err)
+		} else {
+			props["offers"] = sec
 		}
 
 		var viewerID int64

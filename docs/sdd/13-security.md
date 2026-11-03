@@ -163,6 +163,7 @@ Keys: IPv6 is bucketed by /64 [RL]. `c.IP()` trusts forwarding headers only from
 | `/app/v1` | reads 120/min, writes 30/min; 600/min | token; IP |
 | `client-errors` / `client-metrics` | 10/min / 60/min | IP |
 | `/csp-reports` | 30/min, body ≤ 16 KiB ([HDR] "Collecting violation reports") | IP |
+| `GET /go/{id}` | 60/min (`offers.go`); redirects only to a stored, active offer URL, never to a parameter (`TestSecurity_A10_OfferRedirectOnlyKnownURLs`); `Cache-Control: no-store`, `Referrer-Policy: no-referrer`, `X-Robots-Tag: noindex` | IP |
 | `/stripe/webhook` | 600/min, signature checked first | IP |
 | Export | 1 per 7 days (SDD 14) | user |
 | Pages and Inertia visits (production) | anonymous 60/min and 600/h; with a session cookie 300/min and 3000/h; verified search crawlers exempt (§7.1.1) | IP |
