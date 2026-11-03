@@ -43,7 +43,8 @@ type Executor interface {
 
 // View is one link of the section. The target URL never leaves the server: the page links to /go/{ID}.
 type View struct {
-	ID string `json:"id"`
+	ID    string `json:"id"`
+	Store string `json:"store"`
 	// Name is the store, for example "Netflix" or "Amazon Brasil".
 	Name string `json:"name"`
 	// Kind is the offers.kind: stream, free, rent, buy, buy_digital, mobile, physical or read.
@@ -167,6 +168,7 @@ func Load(ctx context.Context, q Querier, itemID string, now time.Time, tag Tagg
 		}
 
 		v.Kind = offerKind
+		v.Store = store
 		if verified.Valid {
 			v.VerifiedAt = verified.Time.UTC().Format(time.DateOnly)
 		}

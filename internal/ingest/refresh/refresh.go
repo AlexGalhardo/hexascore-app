@@ -63,6 +63,10 @@ WHERE i.id = q.id`
 // Step verifies one page of due items. Verified items leave the due set, so no cursor is needed.
 func Step(c Config) run.Step {
 	return func(ctx context.Context, tx *database.Tx, r run.Run) (run.Result, error) {
+		if err := ctx.Err(); err != nil {
+			return run.Result{}, err
+		}
+
 		batch := c.Batch
 		if batch <= 0 {
 			batch = BatchSize
@@ -84,6 +88,10 @@ func Step(c Config) run.Step {
 		missing := []string{}
 
 		for i, it := range items {
+			if err := ctx.Err(); err != nil {
+				return run.Result{}, err
+			}
+
 			ids[i] = it.id
 
 			if it.cover == "" || c.Stat == nil {

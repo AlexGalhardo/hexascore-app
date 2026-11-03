@@ -44,6 +44,29 @@ type Facet struct {
 	Canonical bool `json:"-"`
 }
 
+// WatchFacets lists official services with live movie or series viewing offers.
+func WatchFacets(ctx context.Context, db Querier, typ string) ([]Facet, error) {
+	rows, err := db.QueryContext(ctx, `SELECT s.code, s.name, count(DISTINCT o.item_id)
+FROM stores s JOIN offers o ON o.store = s.code AND o.active
+JOIN items i ON i.id = o.item_id AND i.type = $1 AND i.visibility = 'public'
+WHERE s.active AND o.kind IN ('stream','free','rent')
+  AND (o.expires_at IS NULL OR o.expires_at > now()) AND o.verify_status <> 'gone'
+GROUP BY s.code, s.name ORDER BY count(DISTINCT o.item_id) DESC, s.name LIMIT 100`, typ)
+	if err != nil {
+		return nil, fmt.Errorf("watch facets: %w", err)
+	}
+	defer rows.Close()
+	out := []Facet{}
+	for rows.Next() {
+		var f Facet
+		if err := rows.Scan(&f.Slug, &f.Name, &f.Count); err != nil {
+			return nil, fmt.Errorf("scan watch facet: %w", err)
+		}
+		out = append(out, f)
+	}
+	return out, rows.Err()
+}
+
 // Facets lists the genres and platforms used by public items of typ, most used first, named in locale; non-nil
 // sources keeps only relations from those sources (API).
 func Facets(

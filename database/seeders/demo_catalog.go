@@ -294,6 +294,13 @@ var links = map[string][]struct {
 func seedDemoItems(ctx context.Context, tx *database.Tx, rng *factory.Faker, typ string, entities demoEntities) error {
 	for n, item := range factories.Item(typ).Seed(demoSeed).Count(demoItemsPerTyp).Make() {
 		title := item.OriginalTitle.String
+		if n < 12 {
+			item.ReleaseDate.Null.V = time.Now().UTC().Truncate(24*time.Hour).AddDate(0, 0, 7+n*6)
+			if n%3 == 1 {
+				item.ReleasePrecision = "month"
+			}
+			item.ReleaseStatus = "announced"
+		}
 
 		slug, err := catalog.UniqueSlug(ctx, tx, catalog.ScopeItem, typ, title, item.ReleaseDate.V.Year())
 		if err != nil {

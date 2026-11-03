@@ -75,7 +75,8 @@ func TestDemoCatalog(t *testing.T) {
 	db := seededDB(t)
 
 	for query, want := range map[string]int{
-		`SELECT count(*) FROM items`:                      300,
+		`SELECT count(*) FROM items`: 300,
+		`SELECT count(*) FROM items WHERE release_status = 'announced' AND release_date > CURRENT_DATE AND release_date <= CURRENT_DATE + 90`: 48,
 		`SELECT count(DISTINCT type) FROM items`:          4,
 		`SELECT count(*) FROM item_translations`:          900,
 		`SELECT count(*) FROM ratings`:                    2000,
