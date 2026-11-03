@@ -181,6 +181,7 @@ Checks are registered with `app.AddHealthCheckTimeout` [L-sub], each with a 2 s 
 - `ssr`: `GET 127.0.0.1:13714/health`, the same probe as `vukem ssr:check` [V-rt].
 - `storage`: `storage.Check` (write, read back, delete) [V-storage], the vukem-recommended probe; an existence `HEAD` passes with credentials that cannot write. It probes the `S3_*` bucket when `S3_BUCKET` is set (covers and backups live there; B-043) and the local exports disk otherwise. Railway's healthcheck calls `/up` without `checks`, so a bucket outage marks the app unready without blocking a deploy.
 - `scheduler`: heartbeat age under 180 s. The heartbeat is written by `s.Func("heartbeat").EveryMinute()` [V-sched], kept in memory and seeded at boot; the check exists only with `SCHEDULE_IN_SERVE=true`.
+- `worker` (optional): the ingest worker's heartbeat row (`ingest_host_state` key `worker`, written every minute by the queued job `ingest.worker_heartbeat`) is younger than 180 s; the check exists only with `WORKER_HEARTBEAT_CHECK=true`, set on the web once the separate worker service of RFC-001 runs (`docs/runbooks/worker.md`). A heartbeat that never existed fails.
 
 Railway polls the Healthcheck Path only on deploys and switches traffic after a 200 [R-roll]. vukem's guide uses `/up` from host `healthcheck.railway.app` [V-rail]. HexaScore uses `/up?checks=1`, so a deploy with broken SSR or DB never takes traffic. If query strings are rejected [NOT VERIFIED], mount `app.ReadyHandler()` at `/ready` [L-sub]. Runtime health comes from §7.4.
 

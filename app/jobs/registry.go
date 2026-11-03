@@ -51,6 +51,7 @@ func AllWith(app *vukem.App, ingestSrc IngestSources) []queue.Registration {
 		handleCommunityNotify(app),
 		handleItemsChanged(app),
 		handleIngest(app, ingestSrc),
+		handleWorkerHeartbeat(app),
 		handleIndexNowChanges(app),
 	}
 

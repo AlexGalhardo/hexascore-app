@@ -94,6 +94,10 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	s.Func("ingest:prune", pruneIngest(app)).DailyAt("02:30").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:retry-failures", retryFailures(app)).DailyAt("03:30").In(saoPaulo).WithoutOverlapping()
 
+	// RFC-001 section 8: the heartbeat of whichever process consumes the ingest queue. A worker that stops consuming
+	// goes quiet, and /up?checks=1 reports it once WORKER_HEARTBEAT_CHECK is on.
+	s.Job(jobs.WorkerHeartbeat{}).EveryMinute().WithoutOverlapping()
+
 	// Alert A7 reads the ingestion tables once an hour and logs alert=A7 lines (SDD 12 §6.2, §7.5).
 	s.Func("ingest:alerts", ingestAlerts(app)).Hourly().WithoutOverlapping()
 

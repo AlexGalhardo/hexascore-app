@@ -293,6 +293,14 @@ func addReadyChecks(app *vukem.App, heartbeat *scheduler.Heartbeat) error {
 		app.AddHealthCheckTimeout("scheduler", ReadyCheckTimeout, heartbeat.Check)
 	}
 
+	// With the ingest queue on a separate worker service (RFC-001 section 3) the web cannot see the worker's process,
+	// only its heartbeat row. Off by default: before the worker exists this process consumes the queue itself.
+	if on, _ := strconv.ParseBool(app.Source.Get("WORKER_HEARTBEAT_CHECK")); on {
+		app.AddHealthCheckTimeout("worker", ReadyCheckTimeout, func(ctx context.Context) error {
+			return ingest.CheckWorker(ctx, db, app.Now())
+		})
+	}
+
 	return nil
 }
 

@@ -28,6 +28,8 @@ Operator procedures from SDD 12 §7.8 and §7.9. Alerts are `alert=<code>` lines
 | R6 | [disk-full](disk-full.md) |
 | R7 | [rollback](rollback.md) |
 | R8 | [restore](restore.md) |
+
+The ingestion worker service (RFC-001) has its own procedure: [worker](worker.md).
 | R9 | [leaked-secret](leaked-secret.md) |
 
 Search the logs with the code, for example `alert=A10`. Alert lines carry counts and names, never ids, emails or raw paths.
