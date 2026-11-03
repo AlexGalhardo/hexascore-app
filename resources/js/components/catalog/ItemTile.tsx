@@ -35,7 +35,7 @@ export default function ItemTile({
 				<CoverThumb cover={item.cover} alt="" size={coverSize} />
 				{badge !== null && (
 					<span className="absolute top-2 right-2">
-						{badge ?? <ScoreBadge score={item.score} size="xs" />}
+						{badge ?? <ScoreBadge score={item.score} size="sm" />}
 					</span>
 				)}
 				{footer ? (

@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **catalog:** Grid and category cover images fill their card, and the score badge is slightly larger.
+
 - **home:** Upcoming carousel cards show the release date as a bright orange badge with black text in the top-right corner.
 
 - **catalog:** Item cards in the grids and category pages no longer show the title on the cover; the score stays in the top-right corner, and the title is kept for screen readers.

@@ -75,8 +75,8 @@ export default function CoverThumb({
 			loading={priority ? "eager" : "lazy"}
 			fetchPriority={priority ? "high" : "auto"}
 			decoding="async"
-			// Every cover is shown whole (object-contain); the transparent letterbox takes the colour of the card around it.
-			className={`shrink-0 rounded-sm ${size === "compact" ? "object-cover" : "object-contain"} ${BOX[size]}`}
+			// Grid and carousel cards fill their box (object-cover); the item page cover stays whole (object-contain).
+			className={`shrink-0 rounded-sm ${size === "lg" ? "object-contain" : "object-cover"} ${BOX[size]}`}
 		/>
 	);
 }
