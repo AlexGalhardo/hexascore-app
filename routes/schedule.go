@@ -114,6 +114,9 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	// RFC-003: watch providers from TMDB, between the 01:00 weekly chains and the 03:00 expiry run.
 	s.Func("ingest:offers-tmdb", startChain(app, ingest.OffersTMDB)).
 		DailyAt("01:40").In(saoPaulo).WithoutOverlapping()
+	// RFC-001 section 5 F: after the 03:00 TMDB expiry run; the monthly budget (LLM_MONTHLY_BUDGET_USD) bounds the cost.
+	s.Func("ingest:llm-normalise", startChain(app, ingest.LLMNormalise)).
+		DailyAt("03:20").In(saoPaulo).WithoutOverlapping()
 	// RFC-003: the verify job requests store pages at 1 request per second per host and checks up to 5,000 offers
 	// (behind FLAG_OFFERS_VERIFY); the prune runs after it.
 	s.Job(jobs.VerifyOffers{}).DailyAt("02:45").In(saoPaulo).WithoutOverlapping()

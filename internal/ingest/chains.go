@@ -141,6 +141,12 @@ var (
 	OffersTMDB = Chain{"offers-tmdb", []Stage{
 		{Job: "offers.tmdb", Source: "tmdb", Mode: run.ModeFull},
 	}}
+	// LLMNormalise asks the model for the few facts the Wikipedia introductions state and Wikidata lacks (RFC-001
+	// section 5 F). Source llm: FLAG_INGEST_LLM (default off) and the master switch gate it, the monthly budget bounds it,
+	// and every value waits in field_reviews. Its own chain so a skipped stage never stops another.
+	LLMNormalise = Chain{"llm-normalise", []Stage{
+		{Job: "llm.normalise", Source: "llm", Mode: run.ModeFull},
+	}}
 	// DQDaily runs the data-quality asserts on their own (SDD 06 §7.7); every chain above ends with the same stage.
 	DQDaily = Chain{"dq-daily", []Stage{{Job: dq.Job, Mode: run.ModeIncremental}}}
 	// FrontendFields renders a sample of item pages and reports the missing required fields (SDD 06 §7.7).
@@ -173,6 +179,7 @@ var (
 		CoversWeekly,
 		OffersDaily,
 		OffersTMDB,
+		LLMNormalise,
 		DQDaily,
 		FrontendFields,
 		Rollback,

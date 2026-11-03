@@ -28,7 +28,16 @@ const defaultRateLimit = 20
 
 // pageCodes ring the page chat (Sev "page" in SDD 12 §7.5). A1 and A2 come from Railway and the smoke test; they are
 // listed so a line carrying them would page too.
-var pageCodes = map[string]bool{"A1": true, "A2": true, "A3": true, "A5": true, "A8": true, "A10": true, "A12": true}
+var pageCodes = map[string]bool{
+	"A1":  true,
+	"A2":  true,
+	"A3":  true,
+	"A5":  true,
+	"A8":  true,
+	"A10": true,
+	"A12": true,
+	"A18": true,
+}
 
 // alertCode matches the codes of the SDD 12 §7.5 table; informational keys (scrape, trending_counter_dropped) do not.
 var alertCode = regexp.MustCompile(`^A\d+$`)

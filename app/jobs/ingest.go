@@ -24,6 +24,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/gog"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/httpx"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/igdb"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/llm"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/normalize"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/offers"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/openlibrary"
@@ -61,6 +62,15 @@ type IngestSources struct {
 }
 
 const defaultContactURL = "https://hexascore.app"
+
+// defaultContact is INGEST_CONTACT_URL, or the site when unset.
+func defaultContact(app *vukem.App) string {
+	if c := app.Source.Get("INGEST_CONTACT_URL"); c != "" {
+		return c
+	}
+
+	return defaultContactURL
+}
 
 // handleIngest registers the ingestion run job (queue ingest). The Runner is built on first use because it
 // needs the queue, which is built from this very list.
@@ -163,6 +173,13 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		disk = src.Covers
 	}
 
+	llmClient := &llm.Client{
+		APIKey: app.Source.Get("ANTHROPIC_API_KEY"),
+		HTTP: httpx.New(httpx.Config{
+			ContactURL: defaultContact(app), Hosts: llm.HostLimits(),
+		}).JSON,
+	}
+
 	var stat dq.Stat
 	if disk != nil {
 		stat = disk.Exists
@@ -193,6 +210,7 @@ func newIngestRunner(app *vukem.App, src IngestSources) (*run.Runner, error) {
 		backfill.EditionsJob: backfill.Editions{}.Step,
 		offers.DeriveJob:     offers.Derive{}.Step,
 		tmdb.ProvidersJob:    tmdb.ProvidersStep(tc, client, app.Now),
+		llm.Job:              llm.NormaliseStep(llmClient, llm.Ceiling(app.Source.Get), app.Now),
 		// workaround: Serialise (DQ-I-12) stays nil until the API probe exists; Stat is nil without a bucket.
 		dq.Job:       dq.Asserts{Stat: stat}.Step,
 		rollback.Job: rollback.Step,

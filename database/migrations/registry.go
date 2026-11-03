@@ -112,5 +112,6 @@ func All() []schema.Migration {
 		m20261103010100MigrateAffiliateLinksToOffers(),
 		m20261103010200CreateOfferSourceChecks(),
 		m20261103020000CreateItemConflicts(),
+		m20261103030000CreateLLMUsage(),
 	}
 }

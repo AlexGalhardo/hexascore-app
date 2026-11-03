@@ -14,7 +14,7 @@ var (
 
 	bySource = func() map[string]flags.Flag[bool] {
 		m := map[string]flags.Flag[bool]{}
-		for _, s := range []string{"wikidata", "wikipedia", "openlibrary", "tmdb", "igdb", "steam", "gog", "synopsis", "covers", "youtube"} {
+		for _, s := range []string{"wikidata", "wikipedia", "openlibrary", "tmdb", "igdb", "steam", "gog", "synopsis", "covers", "youtube", "llm"} {
 			m[s] = flags.Bool("ingest_"+s, false).Describe("Ingestion kill switch for " + s + ".")
 		}
 

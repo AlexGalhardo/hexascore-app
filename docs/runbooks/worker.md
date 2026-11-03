@@ -49,6 +49,9 @@ Worker only:
 | `THEMOVIEDATABASE_API_READ_ACCESS_TOKEN` | secret | TMDB (also the watch providers of RFC-003) |
 | `IGDB_TWITCH_CLIENT_ID`, `IGDB_TWITCH_CLIENT_SECRET` | secrets | IGDB |
 | `FLAG_OFFERS_VERIFY` | `true` later | the daily offer-link check (off until the owner wants it) |
+| `FLAG_INGEST_LLM` | `true` later | the model normaliser of RFC-001 section 5 F (off until the owner wants it; check the provider's current prices first) |
+| `ANTHROPIC_API_KEY` | secret | only read when `FLAG_INGEST_LLM` is on |
+| `LLM_MONTHLY_BUDGET_USD` | `3` | hard ceiling per UTC month; at the ceiling the job stops and `alert=A18` pages once |
 
 On `app` (web):
 

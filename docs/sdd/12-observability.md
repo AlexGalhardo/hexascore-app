@@ -248,6 +248,7 @@ On-call is the owner. Quiet hours run 23:00-08:00 America/Sao_Paulo: only `page`
 | A15 | Cost | Railway usage >= US$15, "Custom email alert" [R-cost]; hard limit US$20 (D-27 as amended 2026-11-01; `railway usage limit set --target workspace --soft 15 --hard 20`) | cycle | warn | Railway |
 | A16 | Logs gone | no `request` line for 10 min while the service is up | 10 min | warn | app check |
 | A17 | Projected spend and thresholds | usage crosses US$5, 10, 15 or 20 (once each per billing period); from day 20 of the billing cycle, usage x days in cycle / elapsed days > US$18 (once per period) | hourly | warn | GitHub Actions `projected-spend.yml` reading the Railway public API, Telegram page chat |
+| A18 | LLM budget | the LLM normaliser refuses a call because the month's spend reached `LLM_MONTHLY_BUDGET_USD` (RFC-001 section 5 F); once per UTC month | per run | page | app (`internal/ingest/llm`) |
 
 Usage source (2026-11-01): `workspace(workspaceId) { customer { currentUsage billingPeriod { start end } } }` on `https://backboard.railway.com/graphql/v2` ([Public API](https://docs.railway.com/integrations/api)), the query `railway usage` itself runs ([CLI usage.rs, `WorkspaceUsageContext`](https://github.com/railwayapp/cli/blob/v5.49.1/src/commands/usage.rs)); checked live with `railway api`. `currentUsage` is in dollars for the current period. The job reads it hourly with the `RAILWAY_API_TOKEN` secret (Railway has no read-only token scope), compares it with the state the previous run saved in the Actions cache (`{period, level, projected}`: highest threshold sent and whether the projection was sent), posts at most one Telegram message per run, and saves the new state only after the message went out, so a failed send retries the next hour. A new billing period resets the state; a lost cache entry resends the current threshold once. Without the token the run logs a warning and alerts nothing (A15's e-mail still applies); without the Telegram secrets a due alert fails the run.
 
@@ -270,6 +271,7 @@ Each code above, where its line comes from in the code (`grep -rnE 'alert=A[0-9]
 | A12 | not implemented (B-049) |
 | A13, A14, A16 | not implemented (B-049) |
 | A15, A17 | external: Railway usage alerts and limit |
+| A18 | `internal/ingest/llm.budgetReached` through `alerts.A18`: one `refused` row in `llm_usage` per UTC month is the marker, so the line is logged once |
 
 ### 7.6 Views
 
