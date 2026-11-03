@@ -218,3 +218,25 @@ func TestResolveDropsAContestedIDFromAnExistingItem(t *testing.T) {
 		t.Fatal("the contested id was not recorded for review")
 	}
 }
+
+// A hidden item does not own its ids: a public item with the same id is created (FR-01-14).
+func TestResolveAHiddenItemDoesNotOwnItsIDs(t *testing.T) {
+	db := newDB(t)
+	loadWikidata(t, db)
+	mustExec(t, db, `INSERT INTO items (id, type, slug, wikidata_qid, external_ids, visibility)
+VALUES ($1, 'movie', 'owner', 'Q1', '{"imdb":"tt0133093"}'::jsonb, 'hidden')`, otherItem)
+
+	drain(t, db, (&normSpy{}).job(0))
+
+	if n := count(
+		t,
+		db,
+		`SELECT count(*) FROM items WHERE wikidata_qid = '`+matrixQID+`' AND external_ids->>'imdb' = 'tt0133093'`,
+	); n != 1 {
+		t.Fatal("a hidden item blocked the public one")
+	}
+
+	if n := count(t, db, `SELECT count(*) FROM item_conflicts`); n != 0 {
+		t.Fatalf("conflicts = %d, want none", n)
+	}
+}

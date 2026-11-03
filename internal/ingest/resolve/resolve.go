@@ -117,9 +117,13 @@ func Evaluate(ctx context.Context, ex database.Executor, in Input) (Decision, er
 	return d, nil
 }
 
-// owner finds the other item that holds the external id. The TMDB id is scoped to the media type.
+// owner finds the other public item that holds the external id; a hidden or taken-down item does not own it. The TMDB
+// id is scoped to the media type.
 func owner(ctx context.Context, ex database.Executor, key, val string, in Input) (string, bool, error) {
-	q := fmt.Sprintf(`SELECT id::text FROM items WHERE (external_ids->>'%s') = $1 AND wikidata_qid <> $2`, key)
+	q := fmt.Sprintf(
+		`SELECT id::text FROM items WHERE (external_ids->>'%s') = $1 AND wikidata_qid <> $2 AND visibility = 'public'`,
+		key,
+	)
 	args := []any{val, in.QID}
 
 	if key == "tmdb" {

@@ -7,7 +7,7 @@ import (
 )
 
 // uniqueExternalIDs are the external ids that identify one item (RFC-001 section 5 C): one value maps to at most one
-// item. The TMDB id is per media type (a film and a series may share a number), so its index includes the type.
+// public item. The TMDB id is per media type (a film and a series may share a number), so its index includes the type.
 var uniqueExternalIDs = []struct {
 	key    string
 	byType bool
@@ -21,8 +21,8 @@ var uniqueExternalIDs = []struct {
 	{"tmdb", true},
 }
 
-// externalIDIndex builds the DO block that creates the unique partial index of one external id, but only when the
-// table has no duplicate yet: a unique index over data that already breaks the rule would fail the deploy, so the
+// externalIDIndex builds the DO block that creates the unique partial index of one external id over public items (a
+// hidden or taken-down duplicate may keep the id, FR-01-14), but only when the table has no duplicate yet: a unique index over data that already breaks the rule would fail the deploy, so the
 // migration notes it and leaves the index to be created after the duplicates are merged (the normaliser enforces
 // the rule in code meanwhile). The index is not CONCURRENT because the check and the create must share one
 // transaction; items holds about 100 thousand rows, which build in well under a second.
@@ -36,10 +36,10 @@ func externalIDIndex(key string, byType bool) string {
 
 	return fmt.Sprintf(`DO $$
 BEGIN
-  IF EXISTS (SELECT 1 FROM items WHERE (external_ids->>'%[1]s') <> '' GROUP BY %[2]s(external_ids->>'%[1]s') HAVING count(*) > 1) THEN
+  IF EXISTS (SELECT 1 FROM items WHERE visibility = 'public' AND (external_ids->>'%[1]s') <> '' GROUP BY %[2]s(external_ids->>'%[1]s') HAVING count(*) > 1) THEN
     RAISE NOTICE '%[3]s not created: items share a %[1]s id; merge them, then create the index';
   ELSE
-    CREATE UNIQUE INDEX IF NOT EXISTS %[3]s ON items (%[4]s) WHERE (external_ids->>'%[1]s') <> '';
+    CREATE UNIQUE INDEX IF NOT EXISTS %[3]s ON items (%[4]s) WHERE visibility = 'public' AND (external_ids->>'%[1]s') <> '';
   END IF;
 END $$`, key, scope, name, cols)
 }

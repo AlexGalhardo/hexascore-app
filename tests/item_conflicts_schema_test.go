@@ -71,6 +71,12 @@ func TestExternalIDsAreUnique(t *testing.T) {
 	if err := insert("f", "Q6", "book", `{"imdb":""}`); err != nil {
 		t.Fatalf("two empty ids must not collide: %v", err)
 	}
+
+	// FR-01-14: a hidden or taken-down item may keep an id a public item has (an admin hid the duplicate)
+	if _, err := db.ExecContext(ctx, `INSERT INTO items (id, type, slug, wikidata_qid, external_ids, visibility)
+VALUES (gen_random_uuid(), 'movie', 'g', 'Q7', '{"imdb":"tt1"}', 'hidden')`); err != nil {
+		t.Fatalf("a hidden item may share the id of a public one: %v", err)
+	}
 }
 
 // Data that already breaks the rule must not break the deploy: the migration notes it and leaves that index out.

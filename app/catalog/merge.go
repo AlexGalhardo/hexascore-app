@@ -188,12 +188,24 @@ VALUES ($1, $2, $3, $4, jsonb_build_object('source', $5::jsonb, 'target', $6::js
 		return err
 	}
 
+	// The union is read first and the source gives up its ids before the target takes them: an external id is unique
+	// among public items (items_ext_*_uidx), so for a moment both would hold it. The target's value wins a clash.
+	var union string
+	if err := tx.QueryRowContext(ctx, `SELECT ((SELECT external_ids FROM items WHERE id = $1)
+  || (SELECT external_ids FROM items WHERE id = $2))::text`, from, into).Scan(&union); err != nil {
+		return fmt.Errorf("union external ids: %w", err)
+	}
+
+	if _, err := tx.ExecContext(ctx, `UPDATE items SET external_ids = '{}'::jsonb WHERE id = $1`, from); err != nil {
+		return fmt.Errorf("release source external ids: %w", err)
+	}
+
 	// Primary edition: keep the target's, else adopt the source's (already moved).
 	if _, err := tx.ExecContext(ctx, `UPDATE items SET
-external_ids = (SELECT external_ids FROM items WHERE id = $3) || external_ids,
+external_ids = $3::jsonb,
 primary_edition_id = coalesce(primary_edition_id, $4::uuid),
 updated_at = now() WHERE id = $1 AND type = $2`,
-		into, dst.typ, from, src.primary); err != nil {
+		into, dst.typ, union, src.primary); err != nil {
 		return fmt.Errorf("update target: %w", err)
 	}
 
