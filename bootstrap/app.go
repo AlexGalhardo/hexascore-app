@@ -41,6 +41,7 @@ import (
 	"github.com/AlexGalhardo/hexascore-app/database/migrations"
 	"github.com/AlexGalhardo/hexascore-app/database/seeders"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest"
+	"github.com/AlexGalhardo/hexascore-app/internal/ingest/offers"
 	"github.com/AlexGalhardo/hexascore-app/internal/ingest/run"
 	"github.com/AlexGalhardo/hexascore-app/resources"
 	"github.com/AlexGalhardo/hexascore-app/routes"
@@ -143,6 +144,7 @@ func build(ssrFailures *ssr.Failures, ingestSrc jobs.IngestSources, opts ...vuke
 					community.TrustedModeratorsFlag,
 					social.Flag,
 					trending.V2Flag,
+					offers.VerifyFlag,
 				},
 				run.All()...)...),
 		vukem.WithViews(resources.Views()),

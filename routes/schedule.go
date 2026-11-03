@@ -107,6 +107,11 @@ func Schedule(s *schedule.Schedule, app *vukem.App) {
 	s.Func("ingest:offers-daily", startChain(app, ingest.OffersDaily)).
 		DailyAt("03:45").In(saoPaulo).WithoutOverlapping()
 
+	// RFC-003: the verify job requests store pages at 1 request per second per host and checks up to 5,000 offers
+	// (behind FLAG_OFFERS_VERIFY); the prune runs after it.
+	s.Job(jobs.VerifyOffers{}).DailyAt("02:45").In(saoPaulo).WithoutOverlapping()
+	s.Job(jobs.PruneOffers{}).DailyAt("03:05").In(saoPaulo).WithoutOverlapping()
+
 	s.Func("ingest:dq-daily", startChain(app, ingest.DQDaily)).
 		DailyAt("05:00").In(saoPaulo).WithoutOverlapping()
 	s.Func("ingest:frontend-fields", startChain(app, ingest.FrontendFields)).

@@ -45,6 +45,8 @@ func AllWith(app *vukem.App, ingestSrc IngestSources) []queue.Registration {
 		handleComputeTrending(app),
 		handleTrendingRebuild(app),
 		handlePruneTrending(app),
+		handleVerifyOffers(app),
+		handlePruneOffers(app),
 		handleCatalogChanged(app),
 		handleCommunityNotify(app),
 		handleItemsChanged(app),
