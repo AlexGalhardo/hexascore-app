@@ -33,7 +33,7 @@ const BOX: Record<CoverSize, string> = {
 	trend: "w-25 h-37.5 md:w-30 md:h-45",
 	lg: "w-full h-auto aspect-[2/3]",
 	card: "w-full h-auto aspect-[2/3]",
-	// Shorter than the poster ratio, for the landing carousels; the whole cover still shows (object-contain).
+	// Shorter than the poster ratio, for the landing carousels; the cover fills the box (object-cover).
 	compact: "w-full h-auto aspect-[3/4]",
 };
 
@@ -76,7 +76,7 @@ export default function CoverThumb({
 			fetchPriority={priority ? "high" : "auto"}
 			decoding="async"
 			// Every cover is shown whole (object-contain); the transparent letterbox takes the colour of the card around it.
-			className={`shrink-0 rounded-sm object-contain ${BOX[size]}`}
+			className={`shrink-0 rounded-sm ${size === "compact" ? "object-cover" : "object-contain"} ${BOX[size]}`}
 		/>
 	);
 }

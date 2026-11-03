@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **home:** Landing carousel covers fill their box (cropped to cover), and each card's footer shows only the release date; the title stays available to screen readers.
+
 - **home:** Landing carousels show four cards per slide in a four-column grid, with the twelve upcoming cards spread over three slides.
 
 - **item:** The where-to-watch and where-to-play block is hidden when an item has no offers, instead of showing an empty message.

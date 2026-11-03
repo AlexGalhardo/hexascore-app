@@ -90,12 +90,16 @@ export default function TypeSection({
 												item={item}
 												href={`${base}/${item.slug}`}
 												coverSize="compact"
-												badge={
-													<span
-														className={`rounded-sm bg-surface px-1.5 py-0.5 text-xs font-bold ${ACCENT_TEXT[type]}`}
-													>
-														{formatUpcomingRelease(item, locale)}
-													</span>
+												badge={null}
+												footer={
+													<>
+														<span className="sr-only">
+															{item.title}
+														</span>
+														<span className="font-semibold">
+															{formatUpcomingRelease(item, locale)}
+														</span>
+													</>
 												}
 											/>
 										))}
