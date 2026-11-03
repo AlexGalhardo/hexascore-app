@@ -173,16 +173,18 @@ Per-host throttle shared across goroutines (slot reservation, legacy `common/htt
 | Host | Rate | In flight | Batch | Budget |
 | --- | --- | --- | --- | --- |
 | query.wikidata.org | 1/s | 1 | 1 query/type | ≤ 50/day |
-| [www.wikidata.org](https://www.wikidata.org) | 5/s | 2 | 50 ids | ≤ 1,000/day; full ≈ 8,000 |
-| {en,pt,es}.wikipedia.org | 5/s each | 4 | 20 titles | ≈ 15,000/week |
+| [www.wikidata.org](https://www.wikidata.org) | 5/s | 2 | 50 ids | ≤ 2,000 requests/day, which is 100,000 entities/day (RFC-001 section 6 corrects the earlier 1,000/day) |
+| {en,pt,es}.wikipedia.org | 5/s each, 2/s serially per language in practice | 4 | 20 titles | ≈ 50,000 synopses/day/language (RFC-001 section 6; the earlier ≈ 15,000/week would take 60 weeks at 1 M) |
 | commons / upload.wikimedia.org | 5/s / 2/s | 2 | 1 | ≤ 2,000/day |
-| openlibrary.org / covers.openlibrary.org | 2.5/s / 10/s | 2 / 4 | 1 | ≈ 50,000/week |
-| api.themoviedb.org | 20/s ("~40", respect 429) | 8 | 1 | ≈ 75,000/week |
-| api.igdb.com | 3.3/s, cap 4/s | 4 (limit 8) | 200 slugs | ≈ 150/week |
+| openlibrary.org / covers.openlibrary.org | 2.5/s / 10/s | 2 / 4 | 1 | ≈ 50,000/week through the API; bulk catalogue growth is meant to use the Open Library dumps, not the API (RFC-001, not built) |
+| api.themoviedb.org | 20/s ("~40", respect 429) | 8 | 1 | ≤ 20,000/day for `/find`, details and watch providers together (RFC-001 section 6) |
+| api.igdb.com | 3.3/s, cap 4/s | 4 (limit 8) | 200 slugs | ≈ 150/week for the current selection; 4/s allows far more |
 | store.steampowered.com | 1 per 1.6 s | 1 | 1 | ≈ 15,000/week |
 | catalog.gog.com | 2/s | 1 | 1 | ≈ 3,000/week |
 | [www.youtube.com](https://www.youtube.com) oEmbed | 10/s | 4 | 1 | ≤ 20,000/week |
 | image.tmdb.org / images.igdb.com | 20/s | 4 | 1 | covers |
+| store pages of the offer verify job (`offers.VerifyHosts`: Steam, GOG, Epic, Google Play, App Store, Internet Archive and Mercado Livre hosts) | 1/s per host | 1 | 1 | ≤ 5,000/day in total (RFC-003 section 3); Amazon is never probed |
+| api.anthropic.com (`llm.normalise`) | 5/s | 2 | 1 | bounded by the US$ 3 monthly ceiling: about 8,500 requests a month at 2,000 tokens in and 300 out |
 
 User-Agent `HexaScoreBot/1.0 (+$INGEST_CONTACT_URL)`; timeout 60 s; retry transport errors and 429/500/502/503/504, 5 attempts, `2^n` s ≤ 60 s, `Retry-After` ≤ 300 s applied to the whole host; other 4xx final (legacy `test_http.py`). After 20 rate-limit hits a run halves the host rate. Breaker per host: opens after 10 consecutive failures or ≥ 50 % of the last 50; open 5 min doubling to 1 h; one half-open probe; ends the run `partial` with its cursor.
 
