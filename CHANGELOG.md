@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **home:** Release date badges on the landing carousel are larger, with bigger text, for easier reading.
+
 - **catalog:** Grid and category cover images fill their card, and the score badge is slightly larger.
 
 - **home:** Upcoming carousel cards show the release date as a bright orange badge with black text in the top-right corner.
