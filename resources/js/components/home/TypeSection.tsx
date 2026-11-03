@@ -27,7 +27,7 @@ export const ACCENT_TEXT: Record<ItemType, string> = {
 	book: "text-accent-book",
 };
 
-const PER_SLIDE = 3;
+const PER_SLIDE = 6;
 const MORE = 12;
 
 // One block per type: upcoming releases in the carousel and released 30-day trending in the grid.
@@ -54,7 +54,10 @@ export default function TypeSection({
 			>
 				<div className="flex min-w-0 items-center gap-3">
 					<CategoryIcon type={type} className={`size-7 ${ACCENT_TEXT[type]}`} />
-					<h2 id={`home-${type}`} className="text-3xl font-bold">
+					<h2
+						id={`home-${type}`}
+						className="text-xs font-semibold tracking-widest text-muted uppercase"
+					>
 						<Link href={base}>
 							{t("home.mostWaited", { type: t(`catalog.title.${type}`) })}
 						</Link>
@@ -75,16 +78,16 @@ export default function TypeSection({
 				<Carousel
 					label={t("home.mostWaited", { type: t(`catalog.title.${type}`) })}
 					slides={Array.from(
-						{ length: Math.ceil(upcoming.length / PER_SLIDE) },
+						{ length: Math.ceil(upcoming.slice(0, MORE).length / PER_SLIDE) },
 						(_, n) => ({
 							key: upcoming[n * PER_SLIDE].id,
 							node: (
 								<ol
 									start={n * PER_SLIDE + 1}
-									className="grid gap-4 md:grid-cols-3 md:gap-5"
+									className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5"
 								>
 									{upcoming
-										.slice(n * PER_SLIDE, (n + 1) * PER_SLIDE)
+										.slice(n * PER_SLIDE, Math.min((n + 1) * PER_SLIDE, MORE))
 										.map((item) => (
 											<TrendCard
 												key={item.id}
@@ -146,12 +149,12 @@ function TrendCard({
 				className="group flex h-full gap-3 rounded-sm border border-border bg-surface p-2 hover:border-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
 			>
 				<CoverThumb cover={item.cover} alt="" size="trend" priority={eager} />
-				<span className="grid min-w-0 flex-1 content-between gap-3">
-					<span className="font-display text-2xl leading-tight font-bold md:text-[28px]">
-						{item.title}
-					</span>
+				<span className="grid min-w-0 flex-1 content-start gap-2">
 					<span className={`text-right text-sm font-semibold ${ACCENT_TEXT[type]}`}>
 						{release}
+					</span>
+					<span className="font-display text-2xl leading-tight font-bold md:text-[28px]">
+						{item.title}
 					</span>
 				</span>
 			</Link>

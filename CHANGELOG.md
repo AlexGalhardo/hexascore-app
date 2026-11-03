@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **home:** Landing carousels show 6 upcoming cards per slide (12 in total) without arrow or dot controls; navigation is by swipe and arrow keys. Each carousel heading uses the trending label style, and each card shows its release date in the top-right corner.
+
 - **item:** On unreleased items, logged-in users can only use "want" and "add to list"; the other status buttons are disabled and the time-to-beat block is hidden. Clearing an existing status stays allowed.
 
 - **trending:** The landing carousels show upcoming announcements with their known release-date precision instead of scores and advance only when a visitor navigates; the released 30-day ranking fills the grids below them. The 7-day score v2 snapshots remain available to the API
