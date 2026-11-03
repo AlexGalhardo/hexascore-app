@@ -30,15 +30,18 @@ test("slides stay still until a visitor navigates, without pause or play buttons
 	}
 });
 
-test("arrow keys and swipes navigate the slides, with no visible controls", () => {
+test("arrow keys, swipes and the revealed arrow buttons navigate the slides", () => {
 	render(<Carousel label="Upcoming games" slides={slides} />);
 	const region = screen.getByRole("region", { name: "Upcoming games" });
-	expect(screen.queryByRole("button")).toBeNull();
 	fireEvent.keyDown(region, { key: "ArrowRight" });
 	expect(current()).toBe(1);
 	fireEvent.keyDown(region, { key: "ArrowLeft" });
 	expect(current()).toBe(0);
 	fireEvent.touchStart(region, { touches: [{ clientX: 300 }] });
 	fireEvent.touchEnd(region, { changedTouches: [{ clientX: 200 }] });
+	expect(current()).toBe(1);
+	fireEvent.click(screen.getByRole("button", { name: "home.carousel.next" }));
+	expect(current()).toBe(2);
+	fireEvent.click(screen.getByRole("button", { name: "home.carousel.previous" }));
 	expect(current()).toBe(1);
 });

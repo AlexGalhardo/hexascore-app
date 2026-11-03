@@ -30,7 +30,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **home:** Landing carousels show 6 upcoming cards per slide (12 in total) without arrow or dot controls; navigation is by swipe and arrow keys. Each carousel heading uses the trending label style, and each card shows its release date in the top-right corner.
+- **item:** Where to watch moved into the Details card, below the action buttons, and its labels are now served to the page (the `offers.` namespace was missing from the page translations).
+
+- **home:** Landing carousels show 6 upcoming poster cards per row (12 in total); arrow buttons appear on hover or focus, with arrow keys and swipe too. Each carousel heading uses the trending label style, and each card shows its release date in the top-right corner.
 
 - **item:** On unreleased items, logged-in users can only use "want" and "add to list"; the other status buttons are disabled and the time-to-beat block is hidden. Clearing an existing status stays allowed.
 

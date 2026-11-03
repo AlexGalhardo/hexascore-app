@@ -1,11 +1,8 @@
 import { Link, usePage } from "@inertiajs/react";
-import type { ReactElement } from "react";
 
 import { localized } from "../../lib/route";
 import { useT } from "../../lib/useT";
 import type { SharedProps } from "../../types";
-import CategoryIcon from "../CategoryIcon";
-import CoverThumb from "../CoverThumb";
 import ItemTile from "../catalog/ItemTile";
 import { type Highlight, SECTION_PATHS, type Section } from "../catalog/SectionHighlights";
 import Carousel from "./Carousel";
@@ -53,7 +50,6 @@ export default function TypeSection({
 				className="flex min-w-0 flex-wrap items-center justify-between gap-3"
 			>
 				<div className="flex min-w-0 items-center gap-3">
-					<CategoryIcon type={type} className={`size-7 ${ACCENT_TEXT[type]}`} />
 					<h2
 						id={`home-${type}`}
 						className="text-xs font-semibold tracking-widest text-muted uppercase"
@@ -84,18 +80,22 @@ export default function TypeSection({
 							node: (
 								<ol
 									start={n * PER_SLIDE + 1}
-									className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5"
+									className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-6 md:gap-x-5"
 								>
 									{upcoming
 										.slice(n * PER_SLIDE, Math.min((n + 1) * PER_SLIDE, MORE))
 										.map((item) => (
-											<TrendCard
+											<ItemTile
 												key={item.id}
 												item={item}
-												type={type}
-												base={base}
-												locale={locale}
-												eager={n === 0}
+												href={`${base}/${item.slug}`}
+												badge={
+													<span
+														className={`rounded-sm bg-surface px-1.5 py-0.5 text-xs font-bold ${ACCENT_TEXT[type]}`}
+													>
+														{formatUpcomingRelease(item, locale)}
+													</span>
+												}
 											/>
 										))}
 								</ol>
@@ -123,42 +123,6 @@ export default function TypeSection({
 				</div>
 			)}
 		</section>
-	);
-}
-
-function TrendCard({
-	item,
-	type,
-	base,
-	locale,
-	eager,
-}: {
-	item: Highlight;
-	type: ItemType;
-	base: string;
-	locale: string;
-	/** Only the first slide's covers load eagerly (the LCP candidate). */
-	eager: boolean;
-}): ReactElement {
-	const release = formatUpcomingRelease(item, locale);
-	return (
-		<li key={item.id}>
-			{/* The whole card is the link; hover inverts it like the navbar and footer links (owner 2026-11-02). */}
-			<Link
-				href={`${base}/${item.slug}`}
-				className="group flex h-full gap-3 rounded-sm border border-border bg-surface p-2 hover:border-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
-			>
-				<CoverThumb cover={item.cover} alt="" size="trend" priority={eager} />
-				<span className="grid min-w-0 flex-1 content-start gap-2">
-					<span className={`text-right text-sm font-semibold ${ACCENT_TEXT[type]}`}>
-						{release}
-					</span>
-					<span className="font-display text-2xl leading-tight font-bold md:text-[28px]">
-						{item.title}
-					</span>
-				</span>
-			</Link>
-		</li>
 	);
 }
 
